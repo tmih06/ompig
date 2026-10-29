@@ -1,5 +1,5 @@
 // Command sdk-example is a minimal demonstration of embedding the
-// pig coding agent as a Go library via the public `coding` package.
+// ompig coding agent as a Go library via the public `coding` package.
 //
 // What it does:
 //
@@ -12,9 +12,9 @@
 //
 // Prerequisites:
 //
-//   - You must have authed at least once with the standalone pig
-//     binary so a valid auth.json exists at $PIG_HOME/agent/auth.json
-//     (or ~/.pig/agent/auth.json on macOS/Linux).
+//   - You must have authed at least once with the standalone ompig
+//     binary so a valid auth.json exists at $OMPIG_HOME/agent/auth.json
+//     (or ~/.ompig/agent/auth.json on macOS/Linux).
 //   - The model "github-copilot/gpt-4o-mini" must be available in
 //     your environment. Adjust the modelID const below to use a
 //     different provider/model combo.
@@ -37,9 +37,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 const (
@@ -50,16 +50,16 @@ const (
 
 func main() {
 	// 1. Working directory: where this session's JSONL transcript will
-	//    live (./.pig/sessions/<id>.jsonl). Use a tempdir so the
+	//    live (./.ompig/sessions/<id>.jsonl). Use a tempdir so the
 	//    example doesn't litter your repo.
-	cwd, err := os.MkdirTemp("", "pig-sdk-example-")
+	cwd, err := os.MkdirTemp("", "ompig-sdk-example-")
 	if err != nil {
 		log.Fatalf("mkdir cwd: %v", err)
 	}
 	defer func() { _ = os.RemoveAll(cwd) }()
 
 	// 2. Auth directory: where the persistent auth.json lives. Default
-	//    is ~/.pig/agent (or $PIG_HOME/agent).
+	//    is ~/.ompig/agent (or $OMPIG_HOME/agent).
 	agentDir := coding.DefaultAgentDir()
 
 	// 3. Build the dependency container.
@@ -88,13 +88,13 @@ func main() {
 	model, err := coding.BuildModel(modelID, svcs)
 	if err != nil {
 		log.Fatalf("BuildModel(%q): %v\n\n"+
-			"Hint: run `pig --print --model %s hi` once with the\n"+
+			"Hint: run `ompig --print --model %s hi` once with the\n"+
 			"standalone binary to verify auth + provider availability.",
 			modelID, err, modelID)
 	}
 
 	// 6. Create a fresh session. SystemPrompt is intentionally minimal
-	//    here; for real use, consider pig's prompts.BuildDefaultPrompt
+	//    here; for real use, consider ompig's prompts.BuildDefaultPrompt
 	//    which assembles a far richer prompt (tool descriptions, agent
 	//    persona, skill instructions, etc.).
 	sess, err := rt.New(coding.SessionStartOptions{

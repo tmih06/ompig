@@ -2,7 +2,7 @@
 
 ## Contract and scope
 
-Pi 0.87.1 is the oracle. This change restores upstream behavior, not an additive PiG product feature. `interactive-mode.ts` handles exactly `/arminsayshi` and `/dementedelves` before compaction queues and model dispatch. Neither command belongs in the builtin command registry, autocomplete, or help. Arguments and case variants remain ordinary prompts. Only the editor submit handler recognizes the commands: they never enter editor history, and an initial message or compaction-queued replay of the same text reaches `session.prompt` as ordinary model input (`interactive-mode.ts:1164-1166`, `4616-4690`). The displayed content is transient and does not enter Session history.
+Pi 0.87.1 is the oracle. This change restores upstream behavior, not an additive Ompig product feature. `interactive-mode.ts` handles exactly `/arminsayshi` and `/dementedelves` before compaction queues and model dispatch. Neither command belongs in the builtin command registry, autocomplete, or help. Arguments and case variants remain ordinary prompts. Only the editor submit handler recognizes the commands: they never enter editor history, and an initial message or compaction-queued replay of the same text reaches `session.prompt` as ordinary model input (`interactive-mode.ts:1164-1166`, `4616-4690`). The displayed content is transient and does not enter Session history.
 
 `armin.ts` packs the 31×36 LSB-first XBM into eighteen half-block rows. The port preserves effect selection, random-call order, Fisher–Yates shuffling, all seven frame transitions, accent styling, clipping, padding, and the untruncated label. Node truncates the timer delay to 33 ms, or 16 ms for glitch. Pi's rain effect never reports completion because empty columns never settle. Its rendered image still converges to the final bitmap. The port retains that behavior while its component is mounted.
 
@@ -10,9 +10,9 @@ Pi 0.87.1 is the oracle. This change restores upstream behavior, not an additive
 
 There are no upstream test cases referencing either component or command in the pinned coding-agent test tree. The new differential tests execute the exact pinned component sources. The unchanged covering interactive-mode tests continue to run with the owning Go package.
 
-## PiG's art (D87)
+## Ompig's art (D87)
 
-Since 2026-10-01 `/arminsayshi` draws PiG's pig head labeled `pigsayhi`, and `/pigsayhi` is a second name for it (D87). The effects and their timing stay Pi's: `TestArminFramesMatchPinnedPi` now runs the pinned `armin.ts` with the pig head's XBM bits and label substituted, and `TestArminSaysHiDrawsThePigHead` pins the art. `/dementedelves` keeps Pi's announcement unchanged.
+Since 2026-10-01 `/arminsayshi` draws Ompig's ompig head labeled `pigsayhi`, and `/pigsayhi` is a second name for it (D87). The effects and their timing stay Pi's: `TestArminFramesMatchPinnedPi` now runs the pinned `armin.ts` with the ompig head's XBM bits and label substituted, and `TestArminSaysHiDrawsThePigHead` pins the art. `/dementedelves` keeps Pi's announcement unchanged.
 
 ## Regressions and proof
 
@@ -24,7 +24,7 @@ Since 2026-10-01 `/arminsayshi` draws PiG's pig head labeled `pigsayhi`, and `/p
 - `TestEarendilInvalidationRefreshesImageCapabilities` was red before propagating invalidation to the image: the announcement incorrectly retained its text fallback after Kitty capability negotiation.
 - The existing `TestNoRetainedRendererBoundMethodValues` found a captured renderer callback in the first implementation. The callback now resolves the current renderer through `requestRender`. `TestArminAnimationFollowsRendererReplacement` exercises the queued frame after replacement.
 - Timer tests cover frame publication, completion, repeated disposal, rejection of a queued frame after disposal, and clear-time draining. The worker owns a ticker and allows at most one queued frame. Only the UI owner mutates the bitmap. Clear, Session rebuild, compaction replacement, and mode shutdown cancel and join the worker.
-- `slash-commands/12-earendil-announcement` and `13-armin-bitmap` pass three Pi/PiG pairs each with both `output_equal` and `escaped_output_equal`. They fail with the pre-fix submit handler restored through a compiling Go overlay. The bitmap scenario waits for every source-derived row rather than sleeping through a random animation.
+- `slash-commands/12-earendil-announcement` and `13-armin-bitmap` pass three Pi/Ompig pairs each with both `output_equal` and `escaped_output_equal`. They fail with the pre-fix submit handler restored through a compiling Go overlay. The bitmap scenario waits for every source-derived row rather than sleeping through a random animation.
 - Cross-checks `slash-commands/03-new-session` and `09-hotkeys-styled-tables` pass their declared runs with unchanged assertions.
 
 ## Verification
@@ -46,9 +46,9 @@ The following pass:
 
 `go test ./...` is not green. Broader failures include missing TypeScript/esbuild/upstream-test dependencies, Cargo's unresolved mise shim inside isolated homes, missing XCB development headers, and the Node URL oracle's `file://xn--a.b/x` mismatch. These are outside D35. The active-divergence header mismatch introduced by removing D35 was fixed, and the complete upstream-parity package now passes. The complete coding-agent and TUI packages pass after supplying the already installed exact Pi 0.87.1 package through ignored local dependency links.
 
-The installed Go version is 1.27.1. Node 26.7.0 and tmux 3.4 differ from the qualified development versions. No global toolchain settings are changed. The parity runner cleans its private tmux sessions and keeper; no owned tmux server remains. No command writes to the user's PiG home.
+The installed Go version is 1.27.1. Node 26.7.0 and tmux 3.4 differ from the qualified development versions. No global toolchain settings are changed. The parity runner cleans its private tmux sessions and keeper; no owned tmux server remains. No command writes to the user's Ompig home.
 
-`make generate` passes in a disposable checkout containing this change. The lane leaves generated files untouched as requested. Integration must regenerate `AGENTS.md`, `test/parity/coverage.md`, `test/parity/interfaces/pig-go.json`, and `test/parity/interfaces/recommendations-v0.87.1.json`, then refresh the scenario normalization inventory. The generated port denominator is 422/557, with 406 behaviorally verified entries. No hand-edited inventory or coverage claim is included here.
+`make generate` passes in a disposable checkout containing this change. The lane leaves generated files untouched as requested. Integration must regenerate `AGENTS.md`, `test/parity/coverage.md`, `test/parity/interfaces/ompig-go.json`, and `test/parity/interfaces/recommendations-v0.87.1.json`, then refresh the scenario normalization inventory. The generated port denominator is 422/557, with 406 behaviorally verified entries. No hand-edited inventory or coverage claim is included here.
 
 ## Resource measurement
 

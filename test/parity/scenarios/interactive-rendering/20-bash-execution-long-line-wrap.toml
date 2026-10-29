@@ -17,7 +17,7 @@
 #     ...
 #     \e[39m \e[38;2;157;165;169m00000000000000000000000000TAIL\e[39m
 #
-# Red: PiG at main 50e81255d closed the color on every row (" \e[38;2;157;165;169m000…000\e[39m"), which the normalized comparator hid. Green with the block port, whose Text wraps the styled line as Pi does.
+# Red: Ompig at main 50e81255d closed the color on every row (" \e[38;2;157;165;169m000…000\e[39m"), which the normalized comparator hid. Green with the block port, whose Text wraps the styled line as Pi does.
 
 name = "20-bash-execution-long-line-wrap"
 description = "A long Bash output line wraps, and the collapsed preview retains its last 20 visual rows."
@@ -31,16 +31,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 40
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/bash-wrap-cwd"

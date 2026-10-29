@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // openai@7.19.0 client.js makeRequest (lines 820-834): a timeout whose fetch rejection cause has code UND_ERR_HEADERS_TIMEOUT, which undici

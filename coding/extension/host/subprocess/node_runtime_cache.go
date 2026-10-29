@@ -12,21 +12,21 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/fspublish"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/fspublish"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
-// materializeNodeRuntime publishes one immutable tree per runtime content and version. Each launcher keeps a self-contained hard-linked tree, so cache pruning and Piglet artifact copies never depend on a shared path surviving. Filesystems without hard links receive ordinary copies.
+// materializeNodeRuntime publishes one immutable tree per runtime content and version. Each launcher keeps a self-contained hard-linked tree, so cache pruning and Ompiglet artifact copies never depend on a shared path surviving. Filesystems without hard links receive ordinary copies.
 func materializeNodeRuntime(ctx context.Context, cacheDir, destination string) (err error) {
-	// pig additive (D92): a Piglet that strips node-extensions has no runtime to publish.
+	// ompig additive (D92): a Ompiglet that strips node-extensions has no runtime to publish.
 	if err := nodeRuntimeUnavailable(); err != nil {
 		return err
 	}
 	digest := sha256.Sum256(append([]byte(nodeRuntimeVersion), nodeRuntimeDigest()...))
 	hash := hex.EncodeToString(digest[:])
 	root := filepath.Join(cacheDir, "node-runtime-"+hash)
-	// pig additive (D20): content-addressed runtime materialization shares the governed cell cache.
+	// ompig additive (D20): content-addressed runtime materialization shares the governed cell cache.
 	entry, err := runtimecell.PublishArtifact(ctx, root, "content.sha256", hash, "node", func(scratch string) (string, error) {
 		runtimeDir := filepath.Join(scratch, "runtime")
 		if err := os.Mkdir(runtimeDir, 0o755); err != nil {
@@ -85,7 +85,7 @@ func linkInWalkOrder(ctx context.Context, n int, link func(int) error) error {
 	var firstFailed atomic.Int64
 	firstFailed.Store(int64(n))
 	if n > 1 {
-		// pig additive (D174): a Node extension's launch waits on these links; they run at the runtime default width.
+		// ompig additive (D174): a Node extension's launch waits on these links; they run at the runtime default width.
 		defer procpolicy.Widen()()
 	}
 	var workers sync.WaitGroup

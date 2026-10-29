@@ -1,4 +1,4 @@
-//go:build !race && linux && !pig_strip_mistral_conversations
+//go:build !race && linux && !ompig_strip_mistral_conversations
 
 package ai
 
@@ -10,7 +10,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // toolSizes are the declared-tool counts N, 10N and 100N of the tool scaling gates.

@@ -1,14 +1,14 @@
 """session-replaced-2860.py runs the bodies of Pi's 2860-replaced-session-context.test.ts cases as Python SDK commands.
 
-Each line goes to the file named by PIG_TEST_2860_LOG; process ids name the extension instances, because each Session's extensions run in their own process here."""
+Each line goes to the file named by OMPIG_TEST_2860_LOG; process ids name the extension instances, because each Session's extensions run in their own process here."""
 import json
 import os
 
-import pig_sdk
+import ompig_sdk
 
 
 def _log(line):
-    with open(os.environ["PIG_TEST_2860_LOG"], "a") as report:
+    with open(os.environ["OMPIG_TEST_2860_LOG"], "a") as report:
         report.write(line + "\n")
 
 
@@ -30,14 +30,14 @@ def _conversation(manager):
 
 def _marks():
     try:
-        with open(os.environ["PIG_TEST_2860_MARKS"]) as marks:
+        with open(os.environ["OMPIG_TEST_2860_MARKS"]) as marks:
             return json.load(marks)
     except OSError:
         return {}
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("session-replaced-2860")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("session-replaced-2860")
     pid = os.getpid()
     ext.on_event("session_start", lambda ctx, data: _log(f"start:{pid}"))
     ext.on_event("session_shutdown", lambda ctx, data: _log(f"shutdown:{pid}"))
@@ -104,7 +104,7 @@ def new_extension() -> pig_sdk.Extension:
     def mark(ctx, name):
         marks = _marks()
         marks[name] = ctx.session_manager.get_session_file()
-        with open(os.environ["PIG_TEST_2860_MARKS"], "w") as out:
+        with open(os.environ["OMPIG_TEST_2860_MARKS"], "w") as out:
             json.dump(marks, out)
 
     def switch_it(ctx, args):

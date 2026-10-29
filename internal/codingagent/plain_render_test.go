@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // OSC 8 hyperlinks end in BEL or ST: Pi 1.0.1's sign-in URLs use pi-tui hyperlink(), which ends in ST.

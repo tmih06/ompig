@@ -10,21 +10,21 @@ import (
 
 // FaithfulnessReminder is appended verbatim to the failure log of every
 // scenario that failed at least one assertion. It exists because agents
-// repeatedly rationalize away from fixing real pig bugs by treating
-// failing scenarios as constraints on pig behavior. They are not.
+// repeatedly rationalize away from fixing real ompig bugs by treating
+// failing scenarios as constraints on ompig behavior. They are not.
 // Scenarios are claims about upstream behavior. If they disagree with
 // upstream, the scenario is wrong, not the fix.
 const FaithfulnessReminder = `
 ─── faithfulness reminder ───────────────────────────────────────────
 Scenarios serve faithfulness. Faithfulness does not serve scenarios.
 
-If a pig observable diverges from real upstream behavior, the pig
+If a ompig observable diverges from real upstream behavior, the ompig
 code is wrong: even if some existing scenario currently asserts the
 divergent output.
 
 Do NOT:
   • weaken a comparator (output_equal → output_normalized_equal → substring)
-  • add a # lint-known-gap: for a difference you have diagnosed as a pig bug
+  • add a # lint-known-gap: for a difference you have diagnosed as a ompig bug
   • narrow a crop window to dodge the diff
   • revert a faithfulness fix to make a scenario pass
 
@@ -42,20 +42,20 @@ DO:
 // Format (when the strings differ):
 //
 //	first diff at line N
-//	─── pig ───
+//	─── ompig ───
 //	  N-1: <context line>
-//	! N:   <pig line>
+//	! N:   <ompig line>
 //	  N+1: <context line>
 //	─── pi ───
 //	  N-1: <context line>
 //	! N:   <pi line>
 //	  N+1: <context line>
 //	(M more differing lines)
-func LineDiff(pig, pi string) string {
-	if pig == pi {
+func LineDiff(ompig, pi string) string {
+	if ompig == pi {
 		return ""
 	}
-	gl := strings.Split(pig, "\n")
+	gl := strings.Split(ompig, "\n")
 	pl := strings.Split(pi, "\n")
 
 	// Find first differing line.
@@ -104,7 +104,7 @@ func LineDiff(pig, pi string) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "first diff at line %d (of %d differing lines)\n", first+1, differing)
 
-	b.WriteString("─── pig ───\n")
+	b.WriteString("─── ompig ───\n")
 	writeWindow(&b, gl, lo, hi, first)
 	b.WriteString("─── pi ───\n")
 	writeWindow(&b, pl, lo, hi, first)

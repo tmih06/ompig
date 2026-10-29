@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/engine"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/jsstring"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/engine"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/jsstring"
 )
 
 // ImageProtocol is pi-tui's ImageProtocol: "kitty", "iterm2", or "" for upstream's null.

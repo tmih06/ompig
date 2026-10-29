@@ -5,7 +5,7 @@ package ai
 import (
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/profiling"
+	"github.com/tmih06/ompig/internal/profiling"
 )
 
 // fileRevision is the identity authFileRevision reads. It is comparable, so a read that finds the file unchanged allocates nothing; the zero value is "no revision read".

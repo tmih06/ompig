@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/configschema"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/configschema"
 )
 
-// The artifacts Pig renders are byte-equal to the schemas the pinned Pi package ships (its generate-schemas.ts output), so a pin bump that
+// The artifacts Ompig renders are byte-equal to the schemas the pinned Pi package ships (its generate-schemas.ts output), so a pin bump that
 // changes a TypeBox schema fails here until the Go trees follow.
 func TestRenderedSchemasAreByteEqualToThePinnedPiPackage(t *testing.T) {
 	pi := filepath.Join(repoRoot(t), "extensions", "sdk-ts", "node_modules", "@earendil-works", "pi-coding-agent")

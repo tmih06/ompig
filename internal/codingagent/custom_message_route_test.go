@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream sendCustomMessage (agent-session.ts:2323-2359) branches in a fixed order:

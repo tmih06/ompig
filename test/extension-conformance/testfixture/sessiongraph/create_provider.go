@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // createProviderScript is pi-ai's createProvider over the parts of testdata/session-graph.mjs createProviderScript; the report is Pi's own run's.

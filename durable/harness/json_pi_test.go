@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // pi: packages/durable/src/harness/json.ts

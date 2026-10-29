@@ -4,11 +4,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/toolsearch"
+	"github.com/tmih06/ompig/coding/extension/builtin/toolsearch"
 )
 
 // earendil-works/pi#10816 (D173): Pi's tokenizer splits on /[^a-z0-9]+/, so every Chinese, Japanese and Korean character is dropped, `tokenize("记录")` is [] and a query
-// in those scripts never matches a tool whose metadata holds the same words. PiG makes each such character a term; text without them tokenizes as in Pi.
+// in those scripts never matches a tool whose metadata holds the same words. Ompig makes each such character a term; text without them tokenizes as in Pi.
 func TestTokenizeKeepsCJKCharactersAsTerms(t *testing.T) {
 	for _, test := range []struct {
 		text string

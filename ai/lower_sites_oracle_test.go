@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -18,7 +18,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type lowerSiteProbe struct {
@@ -135,7 +135,7 @@ func TestJSLowerCaseSitesMatchPi(t *testing.T) {
 		wantValue := reflect.ValueOf(want).Elem().Interface()
 		if !reflect.DeepEqual(got, wantValue) {
 			if differing++; differing <= 12 {
-				t.Errorf("%s %q %q: Pig %v, Pi %v", probe.Op, probe.Name, probe.Names, got, wantValue)
+				t.Errorf("%s %q %q: Ompig %v, Pi %v", probe.Op, probe.Name, probe.Names, got, wantValue)
 			}
 		}
 		if text := string(expected[i]); text == "true" || (probe.Op == "toCC" || probe.Op == "fromCC") && text != string(lowerSiteJSON(probe.Name)) {

@@ -1,7 +1,7 @@
 package tsruntime
 
-// LockEntry pins one executable PiG runs as a Bun runtime. A Bun runtime whose executable digest is not in the lock for its version
-// and platform does not run: the lock, not the manifest, decides which Bun binaries PiG trusts.
+// LockEntry pins one executable Ompig runs as a Bun runtime. A Bun runtime whose executable digest is not in the lock for its version
+// and platform does not run: the lock, not the manifest, decides which Bun binaries Ompig trusts.
 type LockEntry struct {
 	Runtime  string
 	Version  string

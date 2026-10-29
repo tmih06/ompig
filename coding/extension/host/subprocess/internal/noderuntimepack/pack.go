@@ -17,7 +17,7 @@ import (
 
 	"github.com/klauspost/compress/zstd"
 
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // ErrTruncated reports an archive whose block lengths run past its end.
@@ -116,7 +116,7 @@ func Extract(archive string, visit func(name string, data []byte) error) error {
 		rest = rest[n+int(length):]
 	}
 	if len(blocks) > 1 {
-		// pig additive (D174): the first start of a Node extension waits on this decode; it runs at the runtime default width.
+		// ompig additive (D174): the first start of a Node extension waits on this decode; it runs at the runtime default width.
 		defer procpolicy.Widen()()
 	}
 	var (
@@ -187,8 +187,8 @@ func uvarint(s string) (uint64, int) {
 //   - Source maps (*.map): Node reads one only under --enable-source-maps, which the host never passes; without the file the option is a no-op.
 //   - Declaration files (*.d.ts): they are type information for a TypeScript compiler. Extensions load through jiti, which strips types and checks none, and the host runs no tsc.
 //   - shims/vendor-manifest.json: the provenance record the vendoring tests compare with the source tree; no runtime code opens it.
-//   - shims/pi-dist/pi-coding-agent/docs/images/: the screenshots the package docs embed. The documentation Pi's system prompt advertises is its Markdown (docs/*.md, README.md and examples/), which stays; PiG's own documentation bundle (internal/pigdocs) carries no images either.
-//   - shims/pi-dist/pi-coding-agent/modes/interactive/assets/clankolas.png: the announcement image of Pi's Node InteractiveMode, which PiG never runs (its own copy is embedded by internal/codingagent); the loader reads it in a try/catch and shows the announcement without the picture when it is missing.
+//   - shims/pi-dist/pi-coding-agent/docs/images/: the screenshots the package docs embed. The documentation Pi's system prompt advertises is its Markdown (docs/*.md, README.md and examples/), which stays; Ompig's own documentation bundle (internal/pigdocs) carries no images either.
+//   - shims/pi-dist/pi-coding-agent/modes/interactive/assets/clankolas.png: the announcement image of Pi's Node InteractiveMode, which Ompig never runs (its own copy is embedded by internal/codingagent); the loader reads it in a try/catch and shows the announcement without the picture when it is missing.
 //   - shims/undici/docs/: undici's API documentation (Markdown) that its npm package ships. undici's code never opens it, and no Pi documentation links to it.
 func UnreadAtRuntime(relative string) bool {
 	return strings.HasSuffix(relative, ".map") ||

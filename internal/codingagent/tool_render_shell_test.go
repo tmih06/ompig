@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // shellRows returns rendered rows padded like upstream Text.render output.
@@ -60,34 +60,34 @@ func TestShellBodyRendererTruncationWarnings(t *testing.T) {
 	th := tui.ActiveTheme()
 	out := func(s string) string { return th.ToolOutput + s + tui.SGRFgReset }
 	warn := func(s string) string { return th.Warning + s + tui.SGRFgReset }
-	content := "a\nb\n\n[Showing lines 4-5 of 5. Full output: /tmp/pig-bash-1.log]"
+	content := "a\nb\n\n[Showing lines 4-5 of 5. Full output: /tmp/ompig-bash-1.log]"
 
 	byLines := &tools.BashDetails{
 		Truncation:     &tools.TruncationResult{Truncated: true, TruncatedBy: "lines", OutputLines: 2, TotalLines: 5},
-		FullOutputPath: "/tmp/pig-bash-1.log",
+		FullOutputPath: "/tmp/ompig-bash-1.log",
 	}
 	assertRows(t, toolBodyRenderer("bash", agent.AgentToolResult{Content: []ai.ToolResultMessageContent{ai.TextContent{Text: content}}, Details: byLines}, nil)(90, true),
-		shellRows(90, out("a"), out("b"), "", warn("[Full output: /tmp/pig-bash-1.log. Truncated: showing 2 of 5 lines]")))
+		shellRows(90, out("a"), out("b"), "", warn("[Full output: /tmp/ompig-bash-1.log. Truncated: showing 2 of 5 lines]")))
 
 	byBytes := &tools.BashDetails{
 		Truncation:     &tools.TruncationResult{Truncated: true, TruncatedBy: "bytes", OutputLines: 2, TotalLines: 5},
-		FullOutputPath: "/tmp/pig-bash-1.log",
+		FullOutputPath: "/tmp/ompig-bash-1.log",
 	}
 	assertRows(t, toolBodyRenderer("bash", agent.AgentToolResult{Content: []ai.ToolResultMessageContent{ai.TextContent{Text: content}}, Details: byBytes}, nil)(90, true),
-		shellRows(90, out("a"), out("b"), "", warn("[Full output: /tmp/pig-bash-1.log. Truncated: 2 lines shown (50.0KB limit)]")))
+		shellRows(90, out("a"), out("b"), "", warn("[Full output: /tmp/ompig-bash-1.log. Truncated: 2 lines shown (50.0KB limit)]")))
 
 	// Persisted and extension-supplied results carry the upstream JSON shape.
 	persisted := map[string]any{
 		"truncation":     map[string]any{"truncated": true, "truncatedBy": "lines", "outputLines": float64(2), "totalLines": float64(5)},
-		"fullOutputPath": "/tmp/pig-bash-1.log",
+		"fullOutputPath": "/tmp/ompig-bash-1.log",
 	}
 	assertRows(t, toolBodyRenderer("powershell", agent.AgentToolResult{Content: []ai.ToolResultMessageContent{ai.TextContent{Text: content}}, Details: persisted}, nil)(90, true),
-		shellRows(90, out("a"), out("b"), "", warn("[Full output: /tmp/pig-bash-1.log. Truncated: showing 2 of 5 lines]")))
+		shellRows(90, out("a"), out("b"), "", warn("[Full output: /tmp/ompig-bash-1.log. Truncated: showing 2 of 5 lines]")))
 
 	// A partial update keeps the footer text and shows no Took footer.
 	assertRows(t, makeShellBodyRenderer(content, byLines, true, new(5*time.Second))(90, true),
-		shellRows(90, out("a"), out("b"), out(""), out("[Showing lines 4-5 of 5. Full output: /tmp/pig-bash-1.log]"),
-			"", warn("[Full output: /tmp/pig-bash-1.log. Truncated: showing 2 of 5 lines]")))
+		shellRows(90, out("a"), out("b"), out(""), out("[Showing lines 4-5 of 5. Full output: /tmp/ompig-bash-1.log]"),
+			"", warn("[Full output: /tmp/ompig-bash-1.log. Truncated: showing 2 of 5 lines]")))
 }
 
 // A finished shell card shows Took whenever its start was recorded, even when

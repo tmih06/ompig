@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // equalUpToGoEscapes accepts an encoding/json text only where canonicalizing it gives the JSON.stringify text, and accepts the escapes encoding/json writes for characters JSON.stringify writes raw.

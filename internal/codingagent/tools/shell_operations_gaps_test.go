@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 type recordingShellOperations struct {

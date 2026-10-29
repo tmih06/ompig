@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/piglet"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/ompiglet"
 )
 
 // The lock digest of a local Go replacement is the module's Go source set, as `go build` reads it. A checkout used as a replacement (the Porter extension replaces the whole repository) holds build output and documentation that other processes create and delete while the lock is computed; neither belongs in the digest.
@@ -28,9 +28,9 @@ func TestBuildInputsLocalGoReplacementDigestIsItsGoSourceSet(t *testing.T) {
 	write(filepath.Join(extension, "go.mod"), "module example.com/ext\n\ngo 1.26\n\nreplace example.com/checkout => ../checkout\n")
 	write(filepath.Join(replacement, "go.mod"), "module example.com/checkout\n\ngo 1.26\n")
 	write(filepath.Join(replacement, "checkout.go"), "package checkout\n")
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	write(pigletPath, "name: release\nextensions:\n  - name: ext\n    origins: [local:extension]\n")
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,9 +82,9 @@ func TestBuildInputsFrontendDigestCoversItsModuleGraph(t *testing.T) {
 	write(filepath.Join(member, "mine.go"), "package mine\n")
 	write(filepath.Join(shared, "go.mod"), "module example.com/shared\n\ngo 1.26\n")
 	write(filepath.Join(shared, "shared.go"), "package shared\n")
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	write(pigletPath, "name: release\nslots:\n  frontend:\n    member: ./mine\n")
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -115,7 +115,7 @@ func TestBuildInputsFrontendDigestCoversItsModuleGraph(t *testing.T) {
 	}
 }
 
-// A Piglet Binary carries a single-file extension (a lone .ts file) as that file (docs/site/docs/piglet-binaries.md, "TypeScript and
+// A Ompiglet Binary carries a single-file extension (a lone .ts file) as that file (docs/site/docs/ompiglet-binaries.md, "TypeScript and
 // JavaScript extensions"). Locking it must not look for "<file>/go.mod": that read fails with ENOTDIR, which stopped the whole build.
 func TestBuildInputsLocksASingleFileExtension(t *testing.T) {
 	root := t.TempDir()
@@ -123,11 +123,11 @@ func TestBuildInputsLocksASingleFileExtension(t *testing.T) {
 	if err := os.WriteFile(file, []byte("export default function (pi: any) {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	if err := os.WriteFile(pigletPath, []byte("name: lone\nextensions:\n  - name: lone\n    origins: [local:lone.ts]\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -10,23 +10,23 @@ import (
 	"testing"
 )
 
-const npmLauncherPackage = "@pi-in-go/pig"
+const npmLauncherPackage = "@ompig/ompig"
 
 // The npm platform packages, listed independently of the production table:
 // automation/release/npm/pack_npm.py TARGETS emits exactly these names.
 var npmPlatformPackages = []string{
-	"@pi-in-go/pig-android-arm64",
-	"@pi-in-go/pig-darwin-arm64",
-	"@pi-in-go/pig-darwin-x64",
-	"@pi-in-go/pig-linux-arm64",
-	"@pi-in-go/pig-linux-x64",
-	"@pi-in-go/pig-win32-arm64",
-	"@pi-in-go/pig-win32-x64",
+	"@ompig/ompig-android-arm64",
+	"@ompig/ompig-darwin-arm64",
+	"@ompig/ompig-darwin-x64",
+	"@ompig/ompig-linux-arm64",
+	"@ompig/ompig-linux-x64",
+	"@ompig/ompig-win32-arm64",
+	"@ompig/ompig-win32-x64",
 }
 
 // PackageName is Pi's PACKAGE_NAME (config.ts): the npm package a global
-// install owns and the release manifest names. PiG's npm package is the
-// scoped launcher, not the unrelated unscoped "pig" package.
+// install owns and the release manifest names. Ompig's npm package is the
+// scoped launcher, not the unrelated unscoped "ompig" package.
 func TestPackageNameIsTheNpmLauncherPackage(t *testing.T) {
 	if PackageName != npmLauncherPackage {
 		t.Fatalf("PackageName = %q, want %q", PackageName, npmLauncherPackage)
@@ -72,11 +72,11 @@ func TestUpdateManifestScriptDefaultsToNpmLauncherPackage(t *testing.T) {
 		t.Skip("python3 is unavailable")
 	}
 	dir := t.TempDir()
-	name := "pig-" + runtime.GOOS + "-" + runtime.GOARCH
+	name := "ompig-" + runtime.GOOS + "-" + runtime.GOARCH
 	if runtime.GOOS == "windows" {
 		name += ".exe"
 	}
-	if err := os.WriteFile(filepath.Join(dir, name), []byte("pig-binary"), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, name), []byte("ompig-binary"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	script := filepath.Join("..", "..", "automation", "release", "gen-update-manifest.py")
@@ -103,27 +103,27 @@ func TestOwningPackageOfNpmPlatformBinaryIsTheLauncher(t *testing.T) {
 	type layout struct {
 		name string
 		goos string
-		// exe builds the executable path for a platform package "@pi-in-go/pig-<os>-<cpu>".
+		// exe builds the executable path for a platform package "@ompig/ompig-<os>-<cpu>".
 		exe func(platform string) string
 		// dir is the launcher package directory the manager replaces.
 		dir string
 	}
 	layouts := []layout{
 		{"npm nested", "linux", func(p string) string {
-			return "/home/u/.npm/lib/node_modules/@pi-in-go/pig/node_modules/" + p + "/pig"
-		}, "/home/u/.npm/lib/node_modules/@pi-in-go/pig"},
+			return "/home/u/.npm/lib/node_modules/@ompig/ompig/node_modules/" + p + "/ompig"
+		}, "/home/u/.npm/lib/node_modules/@ompig/ompig"},
 		{"termux npm nested", "android", func(p string) string {
-			return "/data/data/com.termux/files/usr/lib/node_modules/@pi-in-go/pig/node_modules/" + p + "/pig"
-		}, "/data/data/com.termux/files/usr/lib/node_modules/@pi-in-go/pig"},
+			return "/data/data/com.termux/files/usr/lib/node_modules/@ompig/ompig/node_modules/" + p + "/ompig"
+		}, "/data/data/com.termux/files/usr/lib/node_modules/@ompig/ompig"},
 		{"hoisted sibling", "linux", func(p string) string {
-			return "/home/u/.bun/install/global/node_modules/" + p + "/pig"
-		}, "/home/u/.bun/install/global/node_modules/@pi-in-go/pig"},
+			return "/home/u/.bun/install/global/node_modules/" + p + "/ompig"
+		}, "/home/u/.bun/install/global/node_modules/@ompig/ompig"},
 		{"pnpm virtual store", "linux", func(p string) string {
-			return "/home/u/.local/share/pnpm/global/5/node_modules/.pnpm/" + strings.Replace(p, "/", "+", 1) + "@0.3.1/node_modules/" + p + "/pig"
-		}, "/home/u/.local/share/pnpm/global/5/node_modules/@pi-in-go/pig"},
+			return "/home/u/.local/share/pnpm/global/5/node_modules/.pnpm/" + strings.Replace(p, "/", "+", 1) + "@0.3.1/node_modules/" + p + "/ompig"
+		}, "/home/u/.local/share/pnpm/global/5/node_modules/@ompig/ompig"},
 		{"windows npm nested", "windows", func(p string) string {
-			return `C:\Users\u\AppData\Roaming\npm\node_modules\@pi-in-go\pig\node_modules\` + strings.ReplaceAll(p, "/", `\`) + `\pig.exe`
-		}, `C:/Users/u/AppData/Roaming/npm/node_modules/@pi-in-go/pig`},
+			return `C:\Users\u\AppData\Roaming\npm\node_modules\@ompig\ompig\node_modules\` + strings.ReplaceAll(p, "/", `\`) + `\ompig.exe`
+		}, `C:/Users/u/AppData/Roaming/npm/node_modules/@ompig/ompig`},
 	}
 	for _, l := range layouts {
 		for _, platform := range npmPlatformPackages {
@@ -143,9 +143,9 @@ func TestOwningPackageOfNpmPlatformBinaryIsTheLauncher(t *testing.T) {
 // Windows paths compare without case, as ownershipPathLiteral does: a launcher
 // directory spelled in another case still owns its nested platform package.
 func TestOwningPackageOfNpmPlatformBinaryIgnoresWindowsCase(t *testing.T) {
-	exe := `C:\Users\u\AppData\Roaming\npm\NODE_MODULES\@Pi-In-Go\PIG\node_modules\@pi-in-go\pig-win32-x64\pig.exe`
+	exe := `C:\Users\u\AppData\Roaming\npm\NODE_MODULES\@OMPIG\OMPIG\node_modules\@ompig\ompig-win32-x64\ompig.exe`
 	name, dir := owningPackageFromExecutable("windows", exe)
-	if want := filepath.FromSlash("C:/Users/u/AppData/Roaming/npm/NODE_MODULES/@Pi-In-Go/PIG"); name != npmLauncherPackage || dir != want {
+	if want := filepath.FromSlash("C:/Users/u/AppData/Roaming/npm/NODE_MODULES/@OMPIG/OMPIG"); name != npmLauncherPackage || dir != want {
 		t.Fatalf("owning package = %q in %q, want %q in %q", name, dir, npmLauncherPackage, want)
 	}
 }
@@ -154,9 +154,9 @@ func TestOwningPackageOfNpmPlatformBinaryIgnoresWindowsCase(t *testing.T) {
 // an unrelated nested package keeps the innermost-package rule.
 func TestOwningPackageKeepsNonLauncherPackages(t *testing.T) {
 	for _, tc := range []struct{ exe, name string }{
-		{"/g/node_modules/@pi-in-go/pig-linux-mips/pig", "@pi-in-go/pig-linux-mips"},
-		{"/g/node_modules/@other/pig-linux-x64/pig", "@other/pig-linux-x64"},
-		{"/g/node_modules/outer/node_modules/inner/bin/pig", "inner"},
+		{"/g/node_modules/@ompig/ompig-linux-mips/ompig", "@ompig/ompig-linux-mips"},
+		{"/g/node_modules/@other/ompig-linux-x64/ompig", "@other/ompig-linux-x64"},
+		{"/g/node_modules/outer/node_modules/inner/bin/ompig", "inner"},
 	} {
 		if name, _ := owningPackageFromExecutable("linux", tc.exe); name != tc.name {
 			t.Errorf("%s: owning package = %q, want %q", tc.exe, name, tc.name)
@@ -165,14 +165,14 @@ func TestOwningPackageKeepsNonLauncherPackages(t *testing.T) {
 }
 
 // End to end with the real npm layout on disk: ownership detection, then the
-// exact command `pig update` hands npm for the signed release.
+// exact command `ompig update` hands npm for the signed release.
 func TestNpmLauncherLayoutUpdatesTheScopedPackage(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	for _, platform := range npmPlatformPackages {
 		t.Run(platform, func(t *testing.T) {
 			prefix := t.TempDir()
 			root := filepath.Join(prefix, "lib", "node_modules")
-			dir := filepath.Join(root, "@pi-in-go", "pig", "node_modules", filepath.FromSlash(platform))
+			dir := filepath.Join(root, "@ompig", "ompig", "node_modules", filepath.FromSlash(platform))
 			if err := os.MkdirAll(dir, 0o755); err != nil {
 				t.Fatal(err)
 			}
@@ -184,7 +184,7 @@ func TestNpmLauncherLayoutUpdatesTheScopedPackage(t *testing.T) {
 			if prov.PackageName != npmLauncherPackage {
 				t.Fatalf("PackageName = %q, want %q", prov.PackageName, npmLauncherPackage)
 			}
-			if want := realPathForTest(t, filepath.Join(root, "@pi-in-go", "pig")); realPathForTest(t, prov.PackageDir) != want {
+			if want := realPathForTest(t, filepath.Join(root, "@ompig", "ompig")); realPathForTest(t, prov.PackageDir) != want {
 				t.Fatalf("PackageDir = %q, want the launcher directory %q", prov.PackageDir, want)
 			}
 			command := prov.GetSelfUpdateCommand(nil, SelfUpdatePackageTarget{PackageName: PackageName, InstallSpec: PackageName + "@0.3.1"})
@@ -194,7 +194,7 @@ func TestNpmLauncherLayoutUpdatesTheScopedPackage(t *testing.T) {
 			if len(command.Steps) != 0 {
 				t.Fatalf("update uninstalls before installing: %s", command.Display)
 			}
-			if want := "npm --prefix " + prov.NpmPrefix + " install -g --ignore-scripts --min-release-age=0 @pi-in-go/pig@0.3.1"; prov.NpmPrefix == "" || command.Display != want {
+			if want := "npm --prefix " + prov.NpmPrefix + " install -g --ignore-scripts --min-release-age=0 @ompig/ompig@0.3.1"; prov.NpmPrefix == "" || command.Display != want {
 				t.Fatalf("command = %q, want %q", command.Display, want)
 			}
 		})

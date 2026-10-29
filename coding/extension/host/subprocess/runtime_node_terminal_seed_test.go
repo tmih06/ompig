@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-// Pi resolves terminal capabilities once per process, and the extensions it loads share that cache (packages/tui/src/terminal-image.ts:34,53-67,160-169; packages/coding-agent/src/main.ts:853,887). PiG's host owns the terminal, so a Node extension process starts with the host's resolved capabilities. It must not repeat the terminal probe: Pi's theme initialization reads the capabilities, and under tmux the repeated probe is a synchronous tmux subprocess on every Node extension's startup path.
+// Pi resolves terminal capabilities once per process, and the extensions it loads share that cache (packages/tui/src/terminal-image.ts:34,53-67,160-169; packages/coding-agent/src/main.ts:853,887). Ompig's host owns the terminal, so a Node extension process starts with the host's resolved capabilities. It must not repeat the terminal probe: Pi's theme initialization reads the capabilities, and under tmux the repeated probe is a synchronous tmux subprocess on every Node extension's startup path.
 func TestNodeRuntimeStartsWithHostTerminalCapabilities(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("the recording tmux stand-in is a POSIX shell script")
@@ -98,7 +98,7 @@ func TestPackedNodeCellStartsWithHostTerminalCapabilities(t *testing.T) {
 		entry := filepath.Join(root, name+".mjs")
 		src := `import { getCapabilities } from "@earendil-works/pi-tui";
 export default function (pi) {
-  const report = JSON.stringify({ atFactory: getCapabilities(), leaked: process.env.PIG_TERMINAL_CAPABILITIES !== undefined });
+  const report = JSON.stringify({ atFactory: getCapabilities(), leaked: process.env.OMPIG_TERMINAL_CAPABILITIES !== undefined });
   pi.registerTool({
     name: ` + strconv.Quote(name) + `,
     label: ` + strconv.Quote(name) + `,
@@ -189,7 +189,7 @@ const { theme } = await import(new URL("runtime-node/shims/pi-dist/pi-coding-age
 new Runtime("/ext/seed.mjs");
 assert.deepEqual(getCapabilities(), { images: "kitty", trueColor: true, hyperlinks: true });
 assert.equal(theme.getColorMode(), "truecolor");
-assert.equal(process.env.PIG_TERMINAL_CAPABILITIES, undefined);
+assert.equal(process.env.OMPIG_TERMINAL_CAPABILITIES, undefined);
 new Runtime("/ext/packed-sibling.mjs");
 assert.deepEqual(getCapabilities(), { images: "kitty", trueColor: true, hyperlinks: true });
 `

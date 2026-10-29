@@ -3,7 +3,7 @@
 //! travels as a `tool_update` before the answer, and the host's release drops the object.
 #![cfg(unix)]
 
-use pig_sdk::{BashOperations, Extension};
+use ompig_sdk::{BashOperations, Extension};
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -36,7 +36,7 @@ struct Host {
 
 impl Host {
     fn start(ext: Extension) -> Host {
-        let root = std::env::temp_dir().join(format!("pig-user-bash-{}-{}", std::process::id(), NEXT.fetch_add(1, Ordering::Relaxed)));
+        let root = std::env::temp_dir().join(format!("ompig-user-bash-{}-{}", std::process::id(), NEXT.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir(&root).unwrap();
         let socket = root.join("sock");
         let listener = UnixListener::bind(&socket).unwrap();

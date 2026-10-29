@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/engine"
+import "github.com/tmih06/ompig/extensions/sdk/tui/internal/engine"
 
 // KeyID is pi-tui's KeyId: a key name such as "enter", "ctrl+c" or "ctrl+shift+f5".
 type KeyID = engine.KeyID

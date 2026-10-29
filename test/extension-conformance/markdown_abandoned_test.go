@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's chain finishes a transformer body before it starts the next one (markdown-transform.ts:18-29). The host abandons a request

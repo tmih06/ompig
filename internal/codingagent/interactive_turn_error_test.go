@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactive-mode.ts:1228-1250 shows a failed prompt() through showError (4583-4587): a spacer, then `Error: <message>` in the theme's error color. prompt() throws formatNoModelSelectedMessage() when no model is selected, so that guidance also reads `Error: ...`, not a bare warning-colored line.

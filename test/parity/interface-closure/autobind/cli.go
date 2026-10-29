@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// ruleCLI decides a command-line row. A flag is Pig's when the command's parser names the flag and every alias in one function of its parser file, and an asserting
+// ruleCLI decides a command-line row. A flag is Ompig's when the command's parser names the flag and every alias in one function of its parser file, and an asserting
 // Go test of that parser's test files names the flag too. The command's parser file is the Go counterpart of the upstream file the inventory records.
 const ruleCLI = "C1"
 
@@ -161,7 +161,7 @@ func (d *detector) cliDecision(id string) *decision {
 		call = s.File + "#" + s.Qualified()
 	}
 	if len(tests) == 0 && call == "" {
-		return gap(reasonExercise, "no asserting test of "+strings.TrimSuffix(filepath.Base(parser), ".go")+" names "+flag.Flag+" and "+s.Target()+" is not reachable from cmd/pig", s.Target())
+		return gap(reasonExercise, "no asserting test of "+strings.TrimSuffix(filepath.Base(parser), ".go")+" names "+flag.Flag+" and "+s.Target()+" is not reachable from cmd/ompig", s.Target())
 	}
 	tests = appendNew(tests, helpTests)
 	return &decision{Sym: s, Evidence: ruleCLI, Info: &exerciseInfo{Tests: tests, Call: call}, Layers: cliLayers, Targets: []string{helpFile + "#" + helpFn}}

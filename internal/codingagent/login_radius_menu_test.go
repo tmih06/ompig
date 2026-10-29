@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 1.0.0 interactive-mode.ts:5809-5925: the top-level /login menu offers Radius as its last option, and cancelling a

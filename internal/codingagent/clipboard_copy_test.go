@@ -16,7 +16,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // These tests cover command, WSL interop, and OSC 52 paths from packages/coding-agent/test/clipboard.test.ts. Command-failure fixtures do not assert NativeClipboard.setText behavior.
@@ -471,7 +471,7 @@ func BenchmarkClipboardCopyUTF8(b *testing.B) {
 
 // clipboardHelperEnv makes this test binary, run as TestClipboardHelperProcess,
 // the child runClipboardCommand starts, so every platform runs the same child.
-const clipboardHelperEnv = "PIG_TEST_CLIPBOARD_HELPER"
+const clipboardHelperEnv = "OMPIG_TEST_CLIPBOARD_HELPER"
 
 // TestClipboardHelperProcess is the child TestRunClipboardCommand runs. After
 // "--" it takes a mode: print <text>, exit <code>, stdin <want> (succeeds only

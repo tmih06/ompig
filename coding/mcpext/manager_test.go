@@ -15,12 +15,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/coding/mcpext/mcptui"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/coding/mcpext/mcptui"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // The manager view (.upstream/v0.99.1/packages/coding-agent/src/extensions/mcp/ui.ts) and the manager of

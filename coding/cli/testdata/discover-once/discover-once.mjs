@@ -4,10 +4,10 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-// Each resources_discover call appends its reason to PIG_TEST_DISCOVER_LOG and contributes one prompt template.
+// Each resources_discover call appends its reason to OMPIG_TEST_DISCOVER_LOG and contributes one prompt template.
 export default function (pi) {
   pi.on("resources_discover", (event) => {
-    appendFileSync(process.env.PIG_TEST_DISCOVER_LOG, `${event.reason}\n`);
+    appendFileSync(process.env.OMPIG_TEST_DISCOVER_LOG, `${event.reason}\n`);
     return { promptPaths: [join(here, "prompts")] };
   });
 }

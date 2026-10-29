@@ -3,11 +3,11 @@ package sessionentry
 import (
 	"bytes"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/orderedjson"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // FileEntry is session-manager.ts FileEntry, `SessionHeader | SessionEntry`: one record of a session file. The members are SessionHeader and
@@ -459,7 +459,7 @@ func DecodeSessionHeader(raw json.RawMessage) (SessionHeader, error) {
 }
 
 // NewDecodedMessageEntry is the entry DecodeSessionEntry(raw) returns for the record raw, which encodes base and message, when decoded is the message that record decodes to. The record is not parsed again. It reports false for a base whose id or parent id stands for a JavaScript value, which decoding reads from the record.
-// pig additive (D112): see agent.AgentMessage.DecodedForm.
+// ompig additive (D112): see agent.AgentMessage.DecodedForm.
 func NewDecodedMessageEntry(base SessionEntryBase, decoded agent.AgentMessage, raw json.RawMessage) (MessageEntry, bool) {
 	if base.ID == "" || IsJSValue(base.ID) || (base.ParentID != nil && IsJSValue(*base.ParentID)) {
 		return MessageEntry{}, false

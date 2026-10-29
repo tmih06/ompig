@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // headerFrameProbe is the interactive component tree with the built-in header mounted, and a transcript of children

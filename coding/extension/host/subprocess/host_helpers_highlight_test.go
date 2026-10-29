@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // highlightCode over the host: the lines the host's highlight.js port draws with a palette are the lines Pi's highlightCode returned under that palette

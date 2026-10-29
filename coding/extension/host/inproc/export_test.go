@@ -1,6 +1,6 @@
 package inproc
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // FireErrorForTest exposes the package-private emitError method to
 // _test.go files in the inproc_test package. Test-only seam.

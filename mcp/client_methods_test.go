@@ -6,10 +6,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
-// PiG-only: packages/mcp/test/client.test.ts drives the client through listTools, callTool and friends but never calls
+// Ompig-only: packages/mcp/test/client.test.ts drives the client through listTools, callTool and friends but never calls
 // request, notify, ping, setRequestHandler, listResourceTemplatesPage or reads options directly.
 func lastRecorded(t *testing.T, server *testServer, method string) mcp.JSONRPCMessage {
 	t.Helper()

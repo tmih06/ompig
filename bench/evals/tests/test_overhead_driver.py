@@ -143,13 +143,13 @@ class RatioTest(unittest.TestCase):
         self.assertAlmostEqual(r["ratio"], 2.0 / 1.0)  # medians 2.0 and 1.0
         self.assertLess(r["ci"][0], 2.0)
         self.assertGreater(r["ci"][1], 2.0)
-        groups = {"pi-1.1.0": [{"wall_ms": 100.0 + i} for i in range(6)], "pig-0.5": [{"wall_ms": 50.0 + i} for i in range(6)],
-                  "pig-0.5-b": [{"wall_ms": 50.0 + i} for i in range(6)]}
+        groups = {"pi-1.1.0": [{"wall_ms": 100.0 + i} for i in range(6)], "ompig-0.5": [{"wall_ms": 50.0 + i} for i in range(6)],
+                  "ompig-0.5-b": [{"wall_ms": 50.0 + i} for i in range(6)]}
         text = report.aa_table(groups, ["wall_ms"], 1)
-        self.assertIn("pig-0.5 / pig-0.5-b", text)
+        self.assertIn("ompig-0.5 / ompig-0.5-b", text)
         self.assertIn("1.00 [", text)  # identical samples: the point estimate is exactly 1
         self.assertIn("equivalent", text)
-        shifted = dict(groups, **{"pig-0.5-b": [{"wall_ms": 80.0 + i} for i in range(6)]})
+        shifted = dict(groups, **{"ompig-0.5-b": [{"wall_ms": 80.0 + i} for i in range(6)]})
         self.assertIn("noisy", report.aa_table(shifted, ["wall_ms"], 1))
         self.assertIn("0.51", report.ratio_table(groups, ["wall_ms"], 1))
 
@@ -245,7 +245,7 @@ class DialectTest(unittest.TestCase):
         from pigbench import arms
         loaded = arms.load()
         self.assertTrue(overhead.native(loaded["pi-1.1.0"]))
-        self.assertTrue(overhead.native(loaded["pig-0.5"]))
+        self.assertTrue(overhead.native(loaded["ompig-0.5"]))
         self.assertFalse(overhead.native(loaded["rpi"]))  # Pi family, but scored as a third-party CLI
 
     def test_the_readme_fixture_has_the_same_bytes_on_every_host(self):
@@ -439,7 +439,7 @@ class StartupReportTest(unittest.TestCase):
         self.assertEqual(len(spec["assets"]["linux-amd64"]["sha256"]), 64)
         raw = {"kind": "startup", "options": {"rounds": 1, "runs_per_round": 3}, "counters": False, "counters_reason": "unavailable (perf_event_paranoid)",
                "env": {"arms": {}, "seed": 1, "arms_lock_sha256": "x", "tools": {"hyperfine": {"version_line": "hyperfine 2.0.0", "sha256": "ab" * 32, "source_url": "u"}}},
-               "samples": {"pi-1.1.0": [{"wall_ms": 300.0, "cpu_ms": 400.0, "peak_rss_mib": 90.0}] * 3, "pig-0.5": [{"wall_ms": 15.0, "cpu_ms": 16.0, "peak_rss_mib": 24.0}] * 3},
+               "samples": {"pi-1.1.0": [{"wall_ms": 300.0, "cpu_ms": 400.0, "peak_rss_mib": 90.0}] * 3, "ompig-0.5": [{"wall_ms": 15.0, "cpu_ms": 16.0, "peak_rss_mib": 24.0}] * 3},
                "failures": {}, "limitations": {}, "skipped": {}}
         text = durable_report.startup(raw, "/tmp", 1, [])
         self.assertIn("Instruction counters were not available", text)
@@ -450,26 +450,26 @@ class StartupReportTest(unittest.TestCase):
         raw = {"kind": "startup", "options": {"rounds": 1, "runs_per_round": 3}, "counters": False, "counters_reason": "Error: Metric 'instructions' is unavailable on this platform",
                "memory_reason": "hyperfine 2.0 has no memory metric on Windows",
                "env": {"arms": {}, "seed": 1, "arms_lock_sha256": "x", "cpu_tick_ms": 15.625, "tools": {"hyperfine": {"version_line": "hyperfine 2.0.0", "sha256": "ab" * 32, "source_url": "u"}}},
-               "samples": {"pi-1.1.0": [{"wall_ms": 300.0, "cpu_ms": 312.5}] * 3, "pig-0.5": [{"wall_ms": 15.0, "cpu_ms": 0.0}, {"wall_ms": 15.0, "cpu_ms": 15.625}, {"wall_ms": 15.0, "cpu_ms": 15.625}]},
+               "samples": {"pi-1.1.0": [{"wall_ms": 300.0, "cpu_ms": 312.5}] * 3, "ompig-0.5": [{"wall_ms": 15.0, "cpu_ms": 0.0}, {"wall_ms": 15.0, "cpu_ms": 15.625}, {"wall_ms": 15.0, "cpu_ms": 15.625}]},
                "failures": {"rpi": ["Error: boom", "exit code 1"]}, "limitations": {}, "skipped": {}}
         text = durable_report.startup(raw, "/tmp", 1, [])
         self.assertNotIn("peak_rss_mib", text)
         self.assertIn("Peak memory is not reported: hyperfine 2.0 has no memory metric on Windows", text)
         self.assertIn("whole clock ticks of 15.625 ms", text)
-        self.assertIn("`cpu_ms` pig-0.5 10.4, pi-1.1.0 312.", text)  # pooled means; 10.4 is the mean of 0, 15.625 and 15.625
+        self.assertIn("`cpu_ms` ompig-0.5 10.4, pi-1.1.0 312.", text)  # pooled means; 10.4 is the mean of 0, 15.625 and 15.625
         self.assertIn("**FAILURE** rpi in `startup` (2x): Error: boom", text)
 
     def test_a_windows_overhead_report_names_the_job_meter_and_the_cpu_tick(self):
         raw = {"kind": "overhead", "options": {"runs": 3, "warmup": 0, "rpc_turns": 2, "long_turns": 0, "scenarios": ["rpc"]},
                "env": {"arms": {}, "seed": 1, "arms_lock_sha256": "x", "cpu_tick_ms": 15.625}, "egress": {"mode": "none", "reason": "r", "by_arm": {}, "violations": []},
-               "samples": {"rpc": {"pig-0.5": [{"turn_cpu_ms": 0.0, "turn_cpu_mean_ms": 3.0, "cpu_ms": 46.875, "ready_pss_mib": 60.0, "meter": "windows-job"},
+               "samples": {"rpc": {"ompig-0.5": [{"turn_cpu_ms": 0.0, "turn_cpu_mean_ms": 3.0, "cpu_ms": 46.875, "ready_pss_mib": 60.0, "meter": "windows-job"},
                                                {"turn_cpu_ms": 0.0, "turn_cpu_mean_ms": 5.0, "cpu_ms": 46.875, "ready_pss_mib": 60.0, "meter": "windows-job"}]}},
                "failures": {}, "limitations": {}, "skipped": {}}
         text = report.overhead(raw, "/tmp", 1, [])
         self.assertIn("The meter is a Windows Job Object", text)
         self.assertIn("`ready_pss_mib` is the tree's private bytes", text)
         # A run's turn_cpu_ms is a median of 0-or-one-tick turns, so its mean says nothing; the mean over the turns does.
-        self.assertIn("The pooled mean is finer (ms): `turn_cpu_mean_ms` pig-0.5 4.0; `cpu_ms` pig-0.5 46.9.", text)
+        self.assertIn("The pooled mean is finer (ms): `turn_cpu_mean_ms` ompig-0.5 4.0; `cpu_ms` ompig-0.5 46.9.", text)
 
 
 # hyperfine 2.0.0's --export-json measurement record, as the pinned release writes it (captured from
@@ -553,7 +553,7 @@ class StartupMeasureTest(unittest.TestCase):
         from types import SimpleNamespace
         from pigbench import startup
         out = os.path.join(self.tmp, "hf.json")
-        for binary in (r"C:\Users\u\AppData\Local\Temp\pigbench-1\arms\pig-0.4.1\pig.exe", r"C:\Program Files\pig\pig.exe", "/tmp/pigbench-1/arms/pig-0.5/pig"):
+        for binary in (r"C:\Users\u\AppData\Local\Temp\pigbench-1\arms\ompig-0.4.1\ompig.exe", r"C:\Program Files\ompig\ompig.exe", "/tmp/pigbench-1/arms/ompig-0.5/ompig"):
             rows, error = startup.measure(self.hf, SimpleNamespace(binary=binary), self.env, self.tmp, 1, 0, False, out)
             self.assertIsNone(error)
             with open(out) as f:
@@ -655,11 +655,11 @@ class SoakAACopyTest(unittest.TestCase):
     def test_each_aa_id_gets_one_copy_with_its_own_id_and_the_same_binary(self):
         from types import SimpleNamespace
         from pigbench import soak
-        arms = [SimpleNamespace(id="pig-0.5", name="PiG", binary="/x/pig"), SimpleNamespace(id="pi-1.1.0", name="Pi", binary="/x/pi")]
-        out = soak.with_aa_copies(arms, ["pig-0.5"])
-        self.assertEqual([a.id for a in out], ["pig-0.5", "pi-1.1.0", "pig-0.5-b"])
-        self.assertEqual(out[2].binary, "/x/pig")
-        self.assertEqual(arms[0].id, "pig-0.5")  # the original is not renamed
+        arms = [SimpleNamespace(id="ompig-0.5", name="Ompig", binary="/x/ompig"), SimpleNamespace(id="pi-1.1.0", name="Pi", binary="/x/pi")]
+        out = soak.with_aa_copies(arms, ["ompig-0.5"])
+        self.assertEqual([a.id for a in out], ["ompig-0.5", "pi-1.1.0", "ompig-0.5-b"])
+        self.assertEqual(out[2].binary, "/x/ompig")
+        self.assertEqual(arms[0].id, "ompig-0.5")  # the original is not renamed
         with self.assertRaises(SystemExit):
             soak.with_aa_copies(arms, ["codex"])
 

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // registryDump renders what the registry holds as comparable text: exported fields only, a function as "func" or "nil", so two builds differ exactly

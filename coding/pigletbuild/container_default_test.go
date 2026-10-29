@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
 )
 
 func lookPathTable(found ...string) executableLookup {
@@ -62,7 +62,7 @@ func TestDefaultContainerEngineSelection(t *testing.T) {
 		{name: "prefers podman", found: []string{"docker", "podman"}, want: "podman"},
 		{name: "docker only", found: []string{"docker"}, want: "docker"},
 		{name: "env selects docker", env: "docker", found: []string{"docker", "podman"}, want: "docker"},
-		{name: "env engine missing", env: "podman", found: []string{"docker"}, errHas: "PIG_CONTAINER_ENGINE=podman"},
+		{name: "env engine missing", env: "podman", found: []string{"docker"}, errHas: "OMPIG_CONTAINER_ENGINE=podman"},
 		{name: "env engine invalid", env: "nerdctl", found: []string{"docker", "podman"}, errHas: "must be docker or podman"},
 		{name: "none", errHas: "neither podman nor docker"},
 	}
@@ -155,19 +155,19 @@ func TestSelectBuilderAutoUsesContainerWhenNativeIsNotReady(t *testing.T) {
 }
 
 func TestDefaultContainerBuildInstallsRunningRelease(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv(containerEngineEnv, "")
 	pigletPath := filepath.Join(t.TempDir(), "release.yaml")
 	if err := os.WriteFile(pigletPath, []byte("name: release\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
 	target := Target{OS: "linux", Arch: "arm64"}
 	opts := Options{Targets: []Target{target}, Sandbox: Sandbox{Native: target}, Version: "1.0.0", BakedSettings: []byte("name: release\n")}
-	output := filepath.Join(t.TempDir(), "pig-release")
+	output := filepath.Join(t.TempDir(), "ompig-release")
 	cacheDir := filepath.Join(t.TempDir(), "container-go")
 	var runArgs []string
 	var runEngine string
@@ -177,7 +177,7 @@ func TestDefaultContainerBuildInstallsRunningRelease(t *testing.T) {
 		return nil, writeFakeContainerOutputs(args, output, opts, target)
 	}
 	builder := testDefaultContainer("v9.8.7", lookPathTable("docker", "podman"), run, cacheDir)
-	result, err := builder.Build(context.Background(), BuilderRequest{Piglet: parsed, Options: opts, Output: output, Stdout: io.Discard, Stderr: io.Discard})
+	result, err := builder.Build(context.Background(), BuilderRequest{Ompiglet: parsed, Options: opts, Output: output, Stdout: io.Discard, Stderr: io.Discard})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -190,11 +190,11 @@ func TestDefaultContainerBuildInstallsRunningRelease(t *testing.T) {
 	joined := strings.Join(runArgs, " ")
 	for _, required := range []string{
 		"run --rm --pull=missing --platform linux/arm64",
-		"src=" + cacheDir + ",dst=/pig-go-cache",
-		"GOMODCACHE=/pig-go-cache/mod",
+		"src=" + cacheDir + ",dst=/ompig-go-cache",
+		"GOMODCACHE=/ompig-go-cache/mod",
 		"--entrypoint sh " + defaultContainerImage + " -c",
-		"go install github.com/MichaelKinsy/PiG/cmd/pig@\"$0\"",
-		"v9.8.7 piglet build /input/piglet.yaml --format binary --builder native",
+		"go install github.com/tmih06/ompig/cmd/ompig@\"$0\"",
+		"v9.8.7 ompiglet build /input/ompiglet.yaml --format binary --builder native",
 		"--targets linux/arm64",
 	} {
 		if !strings.Contains(joined, required) {
@@ -237,9 +237,9 @@ func writeFakeContainerOutputs(args []string, output string, opts Options, targe
 		return err
 	}
 	binary, err := pigletartifact.NewBinaryRecord("release", opts.Version, time.Unix(2, 0), resolution, pigletartifact.BinaryInput{
-		Target: target.String(), PigVersion: "test", PigSourceRevision: "revision", PigSourceDigest: "sha256:" + strings.Repeat("c", 64),
+		Target: target.String(), OmpigVersion: "test", OmpigSourceRevision: "revision", OmpigSourceDigest: "sha256:" + strings.Repeat("c", 64),
 		Builder: "native", BuilderIdentity: "native:revision", Toolchains: map[string]string{"go": "go version test"},
-		Artifact:     pigletartifact.Artifact{Digest: digestBytes(artifactData), Size: int64(len(artifactData)), FileName: "pig-release"},
+		Artifact:     pigletartifact.Artifact{Digest: digestBytes(artifactData), Size: int64(len(artifactData)), FileName: "ompig-release"},
 		Verification: pigletartifact.Verification{Policy: "basic", Passed: true, Checks: []string{"artifact-sha256", "artifact-version-smoke"}},
 	})
 	if err != nil {
@@ -250,7 +250,7 @@ func writeFakeContainerOutputs(args []string, output string, opts Options, targe
 		if err != nil {
 			return err
 		}
-		path := filepath.Join(recordHome, "receipts", "piglets", name)
+		path := filepath.Join(recordHome, "receipts", "ompiglets", name)
 		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 			return err
 		}
@@ -292,15 +292,15 @@ func TestCreateContainerMountpointsUnderReadOnlyInput(t *testing.T) {
 // createContainerMountpoints. A local extension is bind-mounted below the read-only /input mount,
 // so its mountpoint must already exist in the host input directory when the engine runs.
 func TestDefaultContainerBuildCreatesNestedInputMountpoints(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv(containerEngineEnv, "")
-	parsed, err := piglet.Parse(writeSmallPiglet(t, t.TempDir()))
+	parsed, err := ompiglet.Parse(writeSmallPiglet(t, t.TempDir()))
 	if err != nil {
 		t.Fatal(err)
 	}
 	target := Target{OS: "linux", Arch: "amd64"}
 	opts := Options{Targets: []Target{target}, Sandbox: Sandbox{Native: target}, Version: "1.0.0", BakedSettings: []byte("name: small\n")}
-	output := filepath.Join(t.TempDir(), "pig-release")
+	output := filepath.Join(t.TempDir(), "ompig-release")
 	var nested []string
 	run := func(_ context.Context, _ string, args ...string) ([]byte, error) {
 		inputDir := hostMountSource(args, "/input,")
@@ -325,7 +325,7 @@ func TestDefaultContainerBuildCreatesNestedInputMountpoints(t *testing.T) {
 		return nil, writeFakeContainerOutputs(args, output, opts, target)
 	}
 	builder := testDefaultContainer("v9.8.7", lookPathTable("podman"), run, filepath.Join(t.TempDir(), "container-go"))
-	if _, err := builder.Build(context.Background(), BuilderRequest{Piglet: parsed, Options: opts, Output: output, Stdout: io.Discard, Stderr: io.Discard}); err != nil {
+	if _, err := builder.Build(context.Background(), BuilderRequest{Ompiglet: parsed, Options: opts, Output: output, Stdout: io.Discard, Stderr: io.Discard}); err != nil {
 		t.Fatal(err)
 	}
 	if len(nested) == 0 {

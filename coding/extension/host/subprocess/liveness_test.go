@@ -17,8 +17,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 type manualLivenessTimer struct {
@@ -402,7 +402,7 @@ func TestRequestCancellationWinsOverLateResponse(t *testing.T) {
 	assertLateResponseDropped(t, conn, peer, request.ID)
 }
 
-// pig divergence (D111): a cancelled tool_call keeps waiting ToolAbortGrace for the tool's own answer, as Pi awaits
+// ompig divergence (D111): a cancelled tool_call keeps waiting ToolAbortGrace for the tool's own answer, as Pi awaits
 // tool.execute after its signal aborts (agent-loop.ts:831-853). An answer within the grace period is the call's result;
 // when the grace period ends the call fails with ErrToolAborted and a later answer is dropped.
 func TestCancelledToolCallWaitsTheGraceForItsAnswer(t *testing.T) {
@@ -655,7 +655,7 @@ func TestSlowPackedMemberDoesNotKillHealthySibling(t *testing.T) {
 	}
 }
 
-const packedProcessExitHelperEnv = "PIG_TEST_PACKED_PROCESS_EXIT_HELPER"
+const packedProcessExitHelperEnv = "OMPIG_TEST_PACKED_PROCESS_EXIT_HELPER"
 
 // TestPackedProcessExitHelper re-executes the Go test binary as a portable
 // packed process that exits unexpectedly. The parent test owns its lifecycle.
@@ -1083,7 +1083,7 @@ func TestPackedMemberTransportClosureDoesNotProveProcessDeath(t *testing.T) {
 		}
 	})
 	process := &packedProcessState{key: "cell-live"}
-	memberA := withConn(&managedExt{config: ExtConfig{Name: "member-a"}, host: host, packedCellKey: "cell-live", packedProcess: process, stderrLogPath: "/tmp/pig-packed-cell-live-fake.log"}, connA)
+	memberA := withConn(&managedExt{config: ExtConfig{Name: "member-a"}, host: host, packedCellKey: "cell-live", packedProcess: process, stderrLogPath: "/tmp/ompig-packed-cell-live-fake.log"}, connA)
 	memberB := withConn(&managedExt{config: ExtConfig{Name: "member-b"}, host: host, packedCellKey: "cell-live", packedProcess: process}, connB)
 	host.exts["member-a"] = memberA
 	host.exts["member-b"] = memberB
@@ -1104,7 +1104,7 @@ func TestPackedMemberTransportClosureDoesNotProveProcessDeath(t *testing.T) {
 	// die and this handler won the race against watchPackedProcess). It must
 	// also surface the stderr log path (ATTACK-POINTS #9) instead of leaving
 	// it undiscoverable.
-	const want = "packed member connection closed; /reload restarts it (stderr: /tmp/pig-packed-cell-live-fake.log)"
+	const want = "packed member connection closed; /reload restarts it (stderr: /tmp/ompig-packed-cell-live-fake.log)"
 	if got.reason != want {
 		t.Fatalf("crash reason = %q, want %q", got.reason, want)
 	}

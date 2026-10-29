@@ -23,7 +23,7 @@ Go test Output events follow verbatim; top-level completion events retain elapse
 --- PASS: TestHarnessPicoJSONLPublicationRecovery/torn-sticky-tail (0.00s)
 --- FAIL: TestHarnessPicoJSONLPublicationRecovery (0.01s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/agent/harness/pico3	0.038s
+FAIL	github.com/tmih06/ompig/agent/harness/pico3	0.038s
 
 Top-level completion events:
-{"Time": "2026-09-24T22:01:25.326543726-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/agent/harness/pico3", "Test": "TestHarnessPicoJSONLPublicationRecovery", "Elapsed": 0.01}
+{"Time": "2026-09-24T22:01:25.326543726-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/agent/harness/pico3", "Test": "TestHarnessPicoJSONLPublicationRecovery", "Elapsed": 0.01}

@@ -3,8 +3,8 @@ package harness
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Document drafts are Chord overlay handles (packages/chord/src/delta/tracker.ts), so the operations a commit emits

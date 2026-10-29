@@ -13,7 +13,7 @@ Describe the user-visible problem and the required result. State what remains un
 - Pinned upstream Pi version reviewed:
 - Upstream source files or behavior probes reviewed:
 - Observable contract exercised:
-- PiG behavior:
+- Ompig behavior:
   - [ ] Matches upstream Pi.
   - [ ] Uses an existing numbered divergence: `D<number>`.
   - [ ] Introduces a reviewed numbered divergence: `D<number>`.

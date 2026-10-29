@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // checkTmuxKeyboardSetup mirrors Pi's concurrent, best-effort keyboard check

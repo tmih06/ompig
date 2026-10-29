@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # The nightly wall-clock run (plan 2 item 9): the newest integrated core, measured as the deck measures it, judged against
-# the last nights (lib/nightly.mjs). Rule A is track-row.sh: PiG TinyGo at SIZE turns in Miniflare, pi-durable main and the
+# the last nights (lib/nightly.mjs). Rule A is track-row.sh: Ompig TinyGo at SIZE turns in Miniflare, pi-durable main and the
 # empty floor in the same rotated rounds (108 warm turns), net of the floor. Rule B is the native build's own bench (its
 # scripted model, no request path, no floor) on the same history: ROUNDS fresh processes of 10 turns, 108 warm turns.
 # Appends the night to $OUT/nightly.jsonl and prints one line; the line starts with DRIFT when a metric is slower than its
@@ -9,20 +9,20 @@
 #
 #   nightly.sh
 #   BRANCH=<branch of the integrated core on the staging remote>  BENCH=<durable-bench with the runner patches>
-#   PIG_SOURCE=<PiG worktree>  OUT=<dir>  BASELINE=<json file, as track-row.sh>  NATIVE_FIXTURES=<dir of pi-main-<n>.sqlite>
+#   OMPIG_SOURCE=<Ompig worktree>  OUT=<dir>  BASELINE=<json file, as track-row.sh>  NATIVE_FIXTURES=<dir of pi-main-<n>.sqlite>
 #   [CPU=23] [SIZE=3500] [ROUNDS=12] [HISTORY: as track-row.sh]
 #   [CONTRACT_PI_SOURCE DURABLE_CONTRACT_CACHE: the contract environment, for time travel] [TT_IMPLS=wasm-tinygo,native] [TT_RUNS=5]
 set -euo pipefail
-: "${BRANCH:?}" "${BENCH:?}" "${PIG_SOURCE:?}" "${OUT:?}" "${BASELINE:?}" "${NATIVE_FIXTURES:?}"
+: "${BRANCH:?}" "${BENCH:?}" "${OMPIG_SOURCE:?}" "${OUT:?}" "${BASELINE:?}" "${NATIVE_FIXTURES:?}"
 CPU=${CPU:-23}
 SIZE=${SIZE:-3500}
 ROUNDS=${ROUNDS:-12}
 here=$(cd "$(dirname "$0")" && pwd)
 # track-row.sh reads these from its environment: a value set in the caller's shell but not exported would pass the check above.
-export BENCH PIG_SOURCE BASELINE
+export BENCH OMPIG_SOURCE BASELINE
 
-git -C "$PIG_SOURCE" fetch -q staging
-SHA=$(git -C "$PIG_SOURCE" rev-parse --short=10 "staging/$BRANCH")
+git -C "$OMPIG_SOURCE" fetch -q staging
+SHA=$(git -C "$OMPIG_SOURCE" rev-parse --short=10 "staging/$BRANCH")
 night="$OUT/nights/$(date -u +%Y%m%dT%H%M%SZ)-$SHA"
 mkdir -p "$night"
 
@@ -34,10 +34,10 @@ exec 9>"$OUT/.lock"
 flock 9
 # The native build uses the tree's own Go release (.go-version) and workspace (go.work), whatever the caller exports: with
 # GOWORK=off it links the published extensions/sdk module instead of the tree's and does not compile.
-git -C "$PIG_SOURCE" checkout -q --detach "$SHA" || { echo "nightly.sh: cannot check out $SHA in $PIG_SOURCE" >&2; exit 1; }
-(cd "$PIG_SOURCE" && env -u GOWORK -u GOTOOLCHAIN sh durable/core/budget/build-native.sh > "$night/native-build.log" 2>&1) ||
+git -C "$OMPIG_SOURCE" checkout -q --detach "$SHA" || { echo "nightly.sh: cannot check out $SHA in $OMPIG_SOURCE" >&2; exit 1; }
+(cd "$OMPIG_SOURCE" && env -u GOWORK -u GOTOOLCHAIN sh durable/core/budget/build-native.sh > "$night/native-build.log" 2>&1) ||
 	{ echo "nightly.sh: the native build of $SHA failed: $(tail -1 "$night/native-build.log")" >&2; exit 1; }
-bin="$PIG_SOURCE/durable/core/sqlhost/bin/bench"
+bin="$OMPIG_SOURCE/durable/core/sqlhost/bin/bench"
 for r in $(seq 0 $((ROUNDS - 1))); do
 	db="$night/native-$r.sqlite"
 	for x in "" -wal; do [[ ! -f "$NATIVE_FIXTURES/pi-main-$SIZE.sqlite$x" ]] || cp "$NATIVE_FIXTURES/pi-main-$SIZE.sqlite$x" "$db$x"; done
@@ -50,9 +50,9 @@ done
 # SIZE-turn history; pi first, each build must equal it. TT_RUNS runs (about 10 s each at 3,500 turns); each operation's
 # median is judged night to night against pi's same operation. A failing build is reported in the line and does not stop
 # the night.
-if [[ -f "$PIG_SOURCE/durable/contract/scenarios/time-travel.mjs" && -n "${CONTRACT_PI_SOURCE:-}" && -n "${DURABLE_CONTRACT_CACHE:-}" ]]; then
+if [[ -f "$OMPIG_SOURCE/durable/contract/scenarios/time-travel.mjs" && -n "${CONTRACT_PI_SOURCE:-}" && -n "${DURABLE_CONTRACT_CACHE:-}" ]]; then
 	for r in $(seq 1 "${TT_RUNS:-5}"); do
-		(cd "$PIG_SOURCE" && taskset -c "$CPU" node durable/contract/cli/robust.mjs timetravel --impls "${TT_IMPLS:-wasm-tinygo,native}" --size "$SIZE" --out "$night/timetravel" --json "$night/timetravel-$r.json" > "$night/timetravel-$r.txt" 2>&1) || true
+		(cd "$OMPIG_SOURCE" && taskset -c "$CPU" node durable/contract/cli/robust.mjs timetravel --impls "${TT_IMPLS:-wasm-tinygo,native}" --size "$SIZE" --out "$night/timetravel" --json "$night/timetravel-$r.json" > "$night/timetravel-$r.txt" 2>&1) || true
 	done
 fi
 

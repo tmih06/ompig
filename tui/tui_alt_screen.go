@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // TuiAltScreen renders an application-owned alternate-screen viewport.

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // deviceIDRecorder is an OAuth provider whose login records the device ID its callbacks offer.
@@ -55,10 +55,10 @@ func (p idRecordingProvider) RefreshToken(ai.OAuthCredentials) (ai.OAuthCredenti
 }
 func (p idRecordingProvider) GetAPIKey(c ai.OAuthCredentials) string { return c.Access }
 
-// pig login <provider> reaches each provider's Login with the settings.json device ID (#146).
+// ompig login <provider> reaches each provider's Login with the settings.json device ID (#146).
 func TestRunLoginCommandPassesSettingsDeviceID(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", dir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", dir)
 	const seeded = "0b8f3f84-4c1a-4f0e-9e57-6f1d2b2c9a10"
 	if err := os.WriteFile(filepath.Join(dir, "settings.json"), []byte(`{"deviceId":"`+seeded+`"}`), 0o600); err != nil {
 		t.Fatal(err)

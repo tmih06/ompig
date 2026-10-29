@@ -2,7 +2,7 @@ package tui
 
 import "testing"
 
-// extension-input.ts:61-76 handleInput: confirm submits the input's value and cancel cancels, with the callbacks the host gave; Pig's host-polled state is
+// extension-input.ts:61-76 handleInput: confirm submits the input's value and cancel cancels, with the callbacks the host gave; Ompig's host-polled state is
 // completed once, so input after an answer is ignored and a late Cancel or countdown expiry does not turn a submitted input into a cancelled one.
 // mutation-checked: dropping the done guard in HandleInput, Cancel or expire fails.
 func TestExtensionInputComponentIgnoresInputAndCancelAfterItIsAnswered(t *testing.T) {

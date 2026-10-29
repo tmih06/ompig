@@ -3,8 +3,8 @@
 //
 //	patchdata <module.wasm> <linker.map>
 //
-// The fork's findGlobals scans the globals from the address stored after the 8-byte marker "PiGDDATA" (runtime
-// pigDataStart) instead of from __global_base, so the GC does not take .rodata words for heap pointers. wasm-ld defines no
+// The fork's findGlobals scans the globals from the address stored after the 8-byte marker "OmpigDDATA" (runtime
+// ompigDataStart) instead of from __global_base, so the GC does not take .rodata words for heap pointers. wasm-ld defines no
 // symbol for the start of .data, so build-wasm.sh links with --Map and this command takes the address of the .data output
 // section from the map. It fails when the map has no .data section, when a memory section other than .rodata starts below
 // .data, when the module holds the marker other than exactly once, or when the word is already set: a build cannot fall
@@ -29,10 +29,10 @@ import (
 	"strings"
 )
 
-// marker is the runtime's pigDataStart[0:2] in memory order; the data-start word follows it, then skipPairs pairs.
-var marker = []byte("PiGDDATA")
+// marker is the runtime's ompigDataStart[0:2] in memory order; the data-start word follows it, then skipPairs pairs.
+var marker = []byte("OmpigDDATA")
 
-// skipPairs is the runtime's pigSkips: the [start, end) pairs after the data-start word, each word ^0 until patched.
+// skipPairs is the runtime's ompigSkips: the [start, end) pairs after the data-start word, each word ^0 until patched.
 const skipPairs = 12
 
 // pointerFreeGlobals matches the .data and .bss symbols the GC need not scan, whose words are not pointers but read as

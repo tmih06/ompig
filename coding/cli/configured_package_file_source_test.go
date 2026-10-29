@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // upstream: packages/coding-agent/src/core/package-manager.ts:1368-1372 resolveLocalExtensionSource: a local package source that is a file is one enabled extension (baseDir is the file's directory). The settings entry packages:["/x/ext.ts"] therefore loads that file as an extension at startup.
@@ -35,7 +35,7 @@ func TestSingleFileLocalPackageSourceLoadsAsAnExtension(t *testing.T) {
 	}
 }
 
-// The same source reaches `pig auth`'s extension inventory; it must list the file as an extension, not fail the whole inventory as an invalid Package.
+// The same source reaches `ompig auth`'s extension inventory; it must list the file as an extension, not fail the whole inventory as an invalid Package.
 func TestSingleFileLocalPackageSourceIsInTheAuthExtensionInventory(t *testing.T) {
 	root := t.TempDir()
 	cwd, agentDir := filepath.Join(root, "work"), filepath.Join(root, "agent")

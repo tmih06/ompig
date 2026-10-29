@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const sessionWritesExtension = `export default function (pi) {
@@ -32,7 +32,7 @@ const sessionWritesExtension = `export default function (pi) {
 // Pi 1.1.0 appends the session_info and label entries to the in-process log inside pi.setSessionName and pi.setLabel (agent-session.ts setSessionName, session-manager.ts appendLabelChange), runs session_info_changed handlers inside setSessionName, and throws "Entry <id> not found" for an unknown label target. Pi prints exactly the lines below for this extension; the Node runtime sent both writes fire-and-forget, so reads in the same handler did not see them and an unknown entry only reached stderr.
 func TestExtensionSessionWritesAreVisibleInTheSameHandlerAsPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	extPath := filepath.Join(t.TempDir(), "probe.mjs")
@@ -43,15 +43,15 @@ func TestExtensionSessionWritesAreVisibleInTheSameHandlerAsPi(t *testing.T) {
 	ctx := testbudget.Context(t)
 	cmd := exec.CommandContext(ctx, bin, "-p", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1", "/probe")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err := cmd.Run()
 	if ctx.Err() != nil {
-		t.Fatalf("pig did not finish\nstderr: %s", stderr.String())
+		t.Fatalf("ompig did not finish\nstderr: %s", stderr.String())
 	}
 	if err != nil {
-		t.Fatalf("pig: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig: %v\nstderr: %s", err, stderr.String())
 	}
 	want := `event "spaced"
 name="spaced" sm="spaced" branch+1 leaf=session_info

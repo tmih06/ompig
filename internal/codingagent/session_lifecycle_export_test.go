@@ -4,7 +4,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ReplaceSession drives the interactive built-in callbacks on the owner loop.

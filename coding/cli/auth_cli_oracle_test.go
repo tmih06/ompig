@@ -10,10 +10,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// cli/auth-command.ts, cli/credential-print.ts and cli/auth-check.ts end to end: the pinned Pi CLI (`pi auth ...`) and Pig's auth command
+// cli/auth-command.ts, cli/credential-print.ts and cli/auth-check.ts end to end: the pinned Pi CLI (`pi auth ...`) and Ompig's auth command
 // run against the same agent directory (auth.json, models.json) and environment, and must agree on exit code, stdout and stderr.
 func TestAuthCommandsMatchPiEndToEnd(t *testing.T) {
 	cli := filepath.Join("..", "..", "extensions", "sdk-ts", "node_modules", "@earendil-works", "pi-coding-agent", "dist", "cli.js")
@@ -138,7 +138,7 @@ func TestAuthCommandsMatchPiEndToEnd(t *testing.T) {
 
 	for _, name := range os.Environ() {
 		key, _, _ := strings.Cut(name, "=")
-		if strings.HasSuffix(key, "_API_KEY") || strings.HasSuffix(key, "_TOKEN") || strings.HasSuffix(key, "_AUTH_TOKEN") || strings.HasPrefix(key, "PIG_") || strings.HasPrefix(key, "PI_") {
+		if strings.HasSuffix(key, "_API_KEY") || strings.HasSuffix(key, "_TOKEN") || strings.HasSuffix(key, "_AUTH_TOKEN") || strings.HasPrefix(key, "OMPIG_") || strings.HasPrefix(key, "PI_") {
 			t.Setenv(key, "")
 		}
 	}
@@ -155,11 +155,11 @@ func TestAuthCommandsMatchPiEndToEnd(t *testing.T) {
 		}
 		code, stdout, stderr := runAuthForTest(t, dirs[p.setup], p.args...)
 		want := piResults[i]
-		// Pi's messages name the program `pi` (APP_NAME); this program is `pig`.
-		want.stdout, want.stderr = strings.ReplaceAll(want.stdout, `"pi auth`, `"pig auth`), strings.ReplaceAll(want.stderr, `"pi auth`, `"pig auth`)
+		// Pi's messages name the program `pi` (APP_NAME); this program is `ompig`.
+		want.stdout, want.stderr = strings.ReplaceAll(want.stdout, `"pi auth`, `"ompig auth`), strings.ReplaceAll(want.stderr, `"pi auth`, `"ompig auth`)
 		if code != want.code || stdout != want.stdout || stderr != want.stderr {
 			if failures++; failures <= 12 {
-				t.Errorf("%s auth %v:\n  Pig %d %q %q\n  Pi  %d %q %q", setups[p.setup].name, p.args, code, stdout, stderr, want.code, want.stdout, want.stderr)
+				t.Errorf("%s auth %v:\n  Ompig %d %q %q\n  Pi  %d %q %q", setups[p.setup].name, p.args, code, stdout, stderr, want.code, want.stdout, want.stderr)
 			}
 		}
 	}

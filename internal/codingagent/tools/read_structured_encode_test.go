@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // encoderReadStructuredContent is readStructuredContent as it was before it wrote into one buffer of the exact size: a json.Encoder with

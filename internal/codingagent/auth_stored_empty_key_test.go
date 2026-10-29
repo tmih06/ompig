@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's configured-provider snapshot is models.checkAuth (model-runtime.ts:340-355). For an api_key credential it runs the

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 type listModelsProbe struct {
@@ -81,13 +81,13 @@ func TestListModelsOutputMatchesPi(t *testing.T) {
 		if len(probe.Models) == 0 {
 			// The message ends with documentation paths of the running installation, which differ by installation.
 			if len(got) != 1 || len(expected[i]) != 1 || !strings.HasPrefix(got[0], "No models available. Use /login") || !strings.HasPrefix(expected[i][0], "No models available. Use /login") {
-				t.Errorf("no models: Pig %q, Pi %q", got, expected[i])
+				t.Errorf("no models: Ompig %q, Pi %q", got, expected[i])
 			}
 			continue
 		}
 		if !reflect.DeepEqual(got, expected[i]) {
 			if failures++; failures <= 3 {
-				t.Errorf("search %q over %+v:\n  Pig %q\n  Pi  %q", probe.Search, probe.Models, got, expected[i])
+				t.Errorf("search %q over %+v:\n  Ompig %q\n  Pi  %q", probe.Search, probe.Models, got, expected[i])
 			}
 		}
 	}

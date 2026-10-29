@@ -1,4 +1,4 @@
-// parity-exec-after-load: the factory makes no host call and returns; a callback it scheduled calls pi.exec on a later turn of the event loop, while PiG's runtime opens the connection it registers on. Pi's exec spawns the child whenever it is called (loader.ts:411-414). The tool_result handler reports the outcome through the bash result: "[parity-modified]" when the child printed what it should, the outcome otherwise.
+// parity-exec-after-load: the factory makes no host call and returns; a callback it scheduled calls pi.exec on a later turn of the event loop, while Ompig's runtime opens the connection it registers on. Pi's exec spawns the child whenever it is called (loader.ts:411-414). The tool_result handler reports the outcome through the bash result: "[parity-modified]" when the child printed what it should, the outcome otherwise.
 export default function (pi) {
   let afterLoad = Promise.resolve("not-called");
   setImmediate(() => {

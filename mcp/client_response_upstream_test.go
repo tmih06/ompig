@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // upstream: packages/mcp/src/client.ts:476-484 handleResponse(JsonRpcResponse) resolves the pending request with a success response's result and

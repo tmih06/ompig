@@ -157,7 +157,7 @@ func TestXAIResponsesUserAgentUpstream(t *testing.T) {
 					t.Fatalf("result = %+v", got)
 				}
 			}
-			// D65 preserves the Pi header contract with PiG's approved product identity.
+			// D65 preserves the Pi header contract with Ompig's approved product identity.
 			want := tc.override
 			if want == "" {
 				want = FormatUserAgent(nil)

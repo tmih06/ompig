@@ -14,7 +14,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestLiveRenderingAdvancesWithoutInput drives the release-shaped binary through
@@ -50,8 +50,8 @@ func TestLiveRenderingAdvancesWithoutInput(t *testing.T) {
 		}
 		cwd := t.TempDir()
 		paths := []string{
-			filepath.Join(cwd, ".pig-live-parallel-a"),
-			filepath.Join(cwd, ".pig-live-parallel-b"),
+			filepath.Join(cwd, ".ompig-live-parallel-a"),
+			filepath.Join(cwd, ".ompig-live-parallel-b"),
 		}
 		for _, path := range paths {
 			if output, err := exec.Command("mkfifo", path).CombinedOutput(); err != nil {
@@ -74,7 +74,7 @@ func TestLiveRenderingAdvancesWithoutInput(t *testing.T) {
 
 		h := startLiveRenderHarnessAt(t, "regular", "{}", cwd, nil)
 		h.send("Run: tui live parallel tools\r")
-		h.expectContains(10*time.Second, ".pig-live-parallel-a", ".pig-live-parallel-b")
+		h.expectContains(10*time.Second, ".ompig-live-parallel-a", ".ompig-live-parallel-b")
 		for range paths {
 			select {
 			case err := <-opened:
@@ -156,7 +156,7 @@ func startLiveRenderHarnessAt(t *testing.T, mode, settings, cwd string, extraArg
 	}
 
 	h := newHarness(t)
-	env := append([]string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1"}, extraEnv...)
+	env := append([]string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1"}, extraEnv...)
 	args := []string{"--model", "test-faux/faux-1", "--no-extensions"}
 	if extraArgs == nil {
 		args = append(args, "--no-session")

@@ -175,7 +175,7 @@ func TestUpstreamClipboardPrivateWorker(t *testing.T) {
 		ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
 		defer cancel()
 		command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestClipboardPrivateWorkerProcessFixture$")
-		command.Env = append(os.Environ(), "PIG_CLIPBOARD_PROCESS_FIXTURE=1")
+		command.Env = append(os.Environ(), "OMPIG_CLIPBOARD_PROCESS_FIXTURE=1")
 		output, err := command.CombinedOutput()
 		if err != nil || string(output) != "passed\nPASS\n" {
 			t.Fatalf("process exit: %v %q", err, output)
@@ -238,7 +238,7 @@ func TestClipboardWorkerReleasesPrivateResults(t *testing.T) {
 }
 
 func TestClipboardPrivateWorkerProcessFixture(t *testing.T) {
-	if os.Getenv("PIG_CLIPBOARD_PROCESS_FIXTURE") != "1" {
+	if os.Getenv("OMPIG_CLIPBOARD_PROCESS_FIXTURE") != "1" {
 		return
 	}
 	linuxClipboardWorker.read = func(context.Context, bool) clipboardReadResult { select {} }

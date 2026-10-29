@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-import pig_sdk
+import ompig_sdk
 
 
 def test_provider_superseded_keeps_the_callbacks_the_host_still_calls():
@@ -8,7 +8,7 @@ def test_provider_superseded_keeps_the_callbacks_the_host_still_calls():
 
     After another extension's partial re-registration, the host's merged registration still calls this extension's stream_simple, operations and OAuth closures, and a retained Provider object keeps its callbacks until provider_release, so provider_superseded drops none of them (TestLateProviderSupersededByAnotherExtensionKeepsOperationsAcrossSDKs runs the cross-process path).
     """
-    ext = pig_sdk.Extension("superseded-probe")
+    ext = ompig_sdk.Extension("superseded-probe")
     ext._provider_streams = {"gone": lambda *a: None}
     ext._provider_operations = {"gone": {"images": {}}}
     ext._oauth_providers = {"gone": object()}

@@ -1,6 +1,6 @@
 package tools
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // These converters expose the typed extension details contract. Absent details stay nil, and renderer-only state never becomes extension metadata.
 

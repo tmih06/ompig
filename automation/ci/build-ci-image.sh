@@ -60,7 +60,7 @@ build_image() {
   if [ -n "$resolve_lock" ]; then
     result_args=(--target apk-resolved --output "type=local,dest=$resolved_dir")
   else
-    result_args=(--label "org.opencontainers.image.revision=$revision" --label "org.opencontainers.image.source=https://github.com/MichaelKinsy/PiG" -t "$ref")
+    result_args=(--label "org.opencontainers.image.revision=$revision" --label "org.opencontainers.image.source=https://github.com/tmih06/ompig" -t "$ref")
     load_args=(--load)
   fi
   if [ -n "${CI_BASE_DIR:-}" ]; then
@@ -78,21 +78,21 @@ build_image() {
       mapped_hosts[$host]=1
     done
 
-    builder="pig-ci-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-0}-${image}-$$"
+    builder="ompig-ci-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-0}-${image}-$$"
 
     case "$image" in
       go)
         build_args+=(
-          --build-arg GO_IMAGE=pig-ci-go-base
-          --build-context "pig-ci-go-base=oci-layout://$CI_BASE_DIR/go"
+          --build-arg GO_IMAGE=ompig-ci-go-base
+          --build-context "ompig-ci-go-base=oci-layout://$CI_BASE_DIR/go"
         )
         ;;
       parity)
         build_args+=(
-          --build-arg GO_BUILDER=pig-ci-go-builder
-          --build-arg WOLFI_BASE=pig-ci-wolfi-base
-          --build-context "pig-ci-go-builder=oci-layout://$CI_BASE_DIR/go-builder"
-          --build-context "pig-ci-wolfi-base=oci-layout://$CI_BASE_DIR/wolfi"
+          --build-arg GO_BUILDER=ompig-ci-go-builder
+          --build-arg WOLFI_BASE=ompig-ci-wolfi-base
+          --build-context "ompig-ci-go-builder=oci-layout://$CI_BASE_DIR/go-builder"
+          --build-context "ompig-ci-wolfi-base=oci-layout://$CI_BASE_DIR/wolfi"
         )
         ;;
     esac
@@ -101,7 +101,7 @@ build_image() {
       --name "$builder" \
       --driver docker-container \
       --driver-opt network=host \
-      --driver-opt image=pig-ci-base-buildkit:0.32.2 >/dev/null
+      --driver-opt image=ompig-ci-base-buildkit:0.32.2 >/dev/null
     docker buildx inspect --bootstrap "$builder" >/dev/null
     docker buildx build --builder "$builder" --platform "$platform" \
       "${build_args[@]}" \

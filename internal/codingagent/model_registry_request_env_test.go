@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi model-runtime.ts:615-631 carries credential-scoped env into request options for every registry-backed provider, not only custom model definitions.

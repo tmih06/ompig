@@ -23,9 +23,9 @@ import (
 
 	"golang.org/x/mod/semver"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/pigletbuild"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/pigletbuild"
+	"github.com/tmih06/ompig/internal/npmpublish"
 )
 
 // tarballRegistry is a read-only npm registry over tarballs made by `npm pack`. It serves the packument and tarball
@@ -134,8 +134,8 @@ func tarballManifest(t *testing.T, data []byte) map[string]any {
 }
 
 // TestPigletNPMSourceRoundTripsThroughRealNPM checks publication against the real npm CLI rather than the stand-in:
-// npm's own 404 output for an unpublished Package and version, the dry run of `pig piglet publish --to npm` and
-// `pig package publish --to npm`, the tarball `npm pack` makes from the generated source, and `pig piglet add npm:`
+// npm's own 404 output for an unpublished Package and version, the dry run of `ompig ompiglet publish --to npm` and
+// `ompig package publish --to npm`, the tarball `npm pack` makes from the generated source, and `ompig ompiglet add npm:`
 // installing that tarball and its Packages from a registry. Two npm scopes and an unscoped Package keep names out of the
 // code path. Nothing is published: the registry serves only what `npm pack` produced.
 func TestPigletNPMSourceRoundTripsThroughRealNPM(t *testing.T) {
@@ -143,10 +143,10 @@ func TestPigletNPMSourceRoundTripsThroughRealNPM(t *testing.T) {
 		t.Fatalf("npm is required: %v", err)
 	}
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "agent"))
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	t.Setenv(npmpublish.TrustedPublishingEnv, "")
 	registry := newTarballRegistry(t)
@@ -158,9 +158,9 @@ func TestPigletNPMSourceRoundTripsThroughRealNPM(t *testing.T) {
 
 	author := t.TempDir()
 	for name, body := range map[string]string{
-		"pkgs/review/package.json":               `{"name":"@alpha-co/review","version":"1.2.0","description":"Review tools","keywords":["pig-package"],"license":"MIT","pi":{"extensions":["extensions/runner"]}}`,
+		"pkgs/review/package.json":               `{"name":"@alpha-co/review","version":"1.2.0","description":"Review tools","keywords":["ompig-package"],"license":"MIT","pi":{"extensions":["extensions/runner"]}}`,
 		"pkgs/review/extensions/runner/index.js": "export default function extension(pi) {}\n",
-		"pkgs/helpers/package.json":              `{"name":"zeta-helpers","version":"0.3.1","description":"Helper skills","keywords":["pig-package"],"license":"MIT","pi":{"skills":["skills/haul"]}}`,
+		"pkgs/helpers/package.json":              `{"name":"zeta-helpers","version":"0.3.1","description":"Helper skills","keywords":["ompig-package"],"license":"MIT","pi":{"skills":["skills/haul"]}}`,
 		"pkgs/helpers/skills/haul/SKILL.md":      "---\nname: haul\ndescription: Haul things\n---\nHaul.\n",
 		"porter.yaml":                            "name: porter\ndescription: Hauls things\nrelease:\n  version: 1.0.0\nsystemPrompt:\n  file: prompts/system.md\npackages:\n  review: local:./pkgs/review\n  helpers: local:./pkgs/helpers\nextensions:\n  - name: runner\n    origins: [package:review]\nskills:\n  - name: haul\n    origins: [package:helpers]\n",
 		"prompts/system.md":                      "You haul things.\n",
@@ -190,7 +190,7 @@ func TestPigletNPMSourceRoundTripsThroughRealNPM(t *testing.T) {
 		t.Fatalf("dry run: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 	for _, want := range []string{
-		"Piglet: @beta-org/porter@1.0.0 (not on npm yet)",
+		"Ompiglet: @beta-org/porter@1.0.0 (not on npm yet)",
 		`Warning: Package "helpers" (npm:zeta-helpers@^0.3.1) is not on npm`,
 		`Warning: Package "review" (npm:@alpha-co/review@^1.2.0) is not on npm`,
 		"Dry run only; rerun with --yes to publish.",
@@ -199,7 +199,7 @@ func TestPigletNPMSourceRoundTripsThroughRealNPM(t *testing.T) {
 			t.Fatalf("dry run lacks %q:\n%s", want, stdout.String())
 		}
 	}
-	if !strings.Contains(stderr.String(), "piglet.yaml") || !strings.Contains(stderr.String(), "prompts/system.md") {
+	if !strings.Contains(stderr.String(), "ompiglet.yaml") || !strings.Contains(stderr.String(), "prompts/system.md") {
 		t.Fatalf("npm's dry-run listing lacks the generated files:\n%s", stderr.String())
 	}
 
@@ -217,32 +217,32 @@ func TestPigletNPMSourceRoundTripsThroughRealNPM(t *testing.T) {
 		t.Fatalf("Satisfiable for an unpublished version = %v, %v", ok, err)
 	}
 
-	// The generated source, packed by npm, is what `pig piglet add npm:` installs.
-	source, err := piglet.BuildNPMSource(piglet.NPMSourceOptions{Path: pigletPath, Workspace: author})
+	// The generated source, packed by npm, is what `ompig ompiglet add npm:` installs.
+	source, err := ompiglet.BuildNPMSource(ompiglet.NPMSourceOptions{Path: pigletPath, Workspace: author})
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer func() { _ = os.RemoveAll(source.Dir) }()
 	manifest := registry.pack(source.Dir)
-	if pig, _ := manifest["pig"].(map[string]any); pig["piglet"] != "piglet.yaml" || manifest["scripts"] != nil || manifest["name"] != "@beta-org/porter" {
+	if ompig, _ := manifest["ompig"].(map[string]any); ompig["ompiglet"] != "ompiglet.yaml" || manifest["scripts"] != nil || manifest["name"] != "@beta-org/porter" {
 		t.Fatalf("packed package.json = %v", manifest)
 	}
 
 	stdout.Reset()
 	stderr.Reset()
-	if code := piglet.RunCommand([]string{"piglet", "add", "npm:@beta-org/porter", "--no-input"}, &stdout, &stderr); code != 0 {
+	if code := ompiglet.RunCommand([]string{"ompiglet", "add", "npm:@beta-org/porter", "--no-input"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("add: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 	if !strings.Contains(stdout.String(), "Added porter (1 extensions, 1 skills)") {
 		t.Fatalf("add output: %s", stdout.String())
 	}
-	registered, err := os.ReadFile(filepath.Join(home, "piglets", "porter.yaml"))
+	registered, err := os.ReadFile(filepath.Join(home, "ompiglets", "porter.yaml"))
 	if err != nil || !strings.Contains(string(registered), "review: npm:@alpha-co/review@^1.2.0") || !strings.Contains(string(registered), "helpers: npm:zeta-helpers@^0.3.1") {
-		t.Fatalf("registered Piglet = %s, %v", registered, err)
+		t.Fatalf("registered Ompiglet = %s, %v", registered, err)
 	}
 	stdout.Reset()
 	stderr.Reset()
-	if code := piglet.RunCommand([]string{"piglet", "validate", "porter"}, &stdout, &stderr); code != 0 {
+	if code := ompiglet.RunCommand([]string{"ompiglet", "validate", "porter"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("validate: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 

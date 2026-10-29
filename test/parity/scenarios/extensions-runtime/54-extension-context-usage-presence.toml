@@ -9,16 +9,16 @@ driver = "interactive-tmux"
 model = "usage-probe/0"
 
 [env]
-pig_args = ["--no-extensions", "--fork", "registry-session.jsonl"]
+ompig_args = ["--no-extensions", "--fork", "registry-session.jsonl"]
 pi_args = ["--fork", "registry-session.jsonl"]
-pig_extensions = ["testdata/ext/usage-state.mjs"]
+ompig_extensions = ["testdata/ext/usage-state.mjs"]
 pi_extensions = ["testdata/ext/usage-state.mjs"]
 
 [tmux]
 cwd = "../testdata"
 width = 200
 height = 40
-ready_pattern_pig = "USAGE READY"
+ready_pattern_ompig = "USAGE READY"
 ready_pattern_pi = "USAGE READY"
 ready_timeout_seconds = 30
 capture_start = "USAGE TRACE"

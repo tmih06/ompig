@@ -34,7 +34,7 @@ if '--baseline' in sys.argv:
 HERE = os.path.dirname(os.path.abspath(__file__))
 os.makedirs(OUT, exist_ok=True)
 # The ledger of the effective pin (a commit pin's version is <release>+<commit[:8]>, which a release-only pattern never names).
-ver = os.environ.get('PIG_UPSTREAM_VERSION') or subprocess.check_output([sys.executable, 'automation/pin/pin.py', 'get', 'version'], text=True, timeout=120).strip()
+ver = os.environ.get('OMPIG_UPSTREAM_VERSION') or subprocess.check_output([sys.executable, 'automation/pin/pin.py', 'get', 'version'], text=True, timeout=120).strip()
 H = {x['id']: x for x in json.load(open(f'test/parity/interfaces/mapping-v{ver}.json'))['mappings']}
 INV = {x['id']: x for x in json.load(open(f'test/parity/interfaces/upstream-v{ver}.json'))['interfaces']}
 
@@ -74,7 +74,7 @@ WIRE_TOP = {'ExtensionAPI', 'ExtensionContext', 'ExtensionCommandContext', 'Exte
 WIRE_EVENT_PKGS = {'coding-agent', 'agent', 'ai', 'tui'}
 REG_RE = re.compile(r'(Registration|Definition|Declaration|Registered\w*|ProviderConfig|ProviderModelConfig|ExtensionFlag|ExtensionShortcut)$')
 # coding/rpcclient holds the RPC surface's wire proofs: ports of upstream test/rpc.test.ts and the Pi-oracle wire tests, which drive RpcClient
-# against a real `pig --mode rpc` subprocess (rpc_mode_test.go) and compare every command method with Pi's wire (rpc_client_upstream_wire_test.go).
+# against a real `ompig --mode rpc` subprocess (rpc_mode_test.go) and compare every command method with Pi's wire (rpc_client_upstream_wire_test.go).
 EXT_DIRS = ('test/extension-conformance', 'test/wiring', 'extensions/', 'coding/extension/host', 'coding/extension', 'coding/rpcclient')
 
 
@@ -122,7 +122,7 @@ def kind(i, r):
 
 
 def idents(i, r):
-    tgt = (r.get('pigTargets') or [''])[0]
+    tgt = (r.get('ompigTargets') or [''])[0]
     sym = tgt.partition('#')[2]
     top, _, member = sym.partition('.')
     _, ptop, rest = split(i)

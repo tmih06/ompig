@@ -21,13 +21,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	codingcompaction "github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	codingcompaction "github.com/tmih06/ompig/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // fakeProvider is a minimal ai.Provider for tests that don't actually
@@ -119,7 +119,7 @@ func fakeModel() *ai.Model {
 // newTestServicesWithSettings is newTestServices over in-memory settings, as the upstream tests build with SettingsManager.inMemory(settings). Settings applied to Services with ApplyOverrides do not survive the reload createAgentSession runs.
 func newTestServicesWithSettings(t *testing.T, settings icodingagent.Settings) *AgentSessionServices {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	srv, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir(), SettingsManager: NewInMemorySettingsManager(settings)})
 	if err != nil {
 		t.Fatal(err)
@@ -131,7 +131,7 @@ func newTestServicesWithSettings(t *testing.T, settings icodingagent.Settings) *
 func newTestServices(t *testing.T) *AgentSessionServices {
 	t.Helper()
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	srv, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -150,8 +150,8 @@ func sessionManagerFixture(t *testing.T) (*AgentSessionServices, *ai.Model, stri
 		}
 	}
 	t.Setenv("HOME", root)
-	t.Setenv("PIG_HOME", filepath.Join(root, "ambient"))
-	t.Setenv("PIG_CODING_AGENT_DIR", "")
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ambient"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", "")
 	t.Setenv("PI_CODING_AGENT_DIR", "")
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: cwd, AgentDir: agentDir})
 	if err != nil {
@@ -185,7 +185,7 @@ func createSessionWithServicesOptions(t *testing.T, serviceOptions CreateAgentSe
 
 func printSessionManagerProbe(t *testing.T, index int, value any) {
 	t.Helper()
-	if os.Getenv("PIG_SDK_MANAGER_PROBE") != "1" {
+	if os.Getenv("OMPIG_SDK_MANAGER_PROBE") != "1" {
 		return
 	}
 	raw, err := json.Marshal([]any{index, value})
@@ -226,7 +226,7 @@ func executeSessionBash(t *testing.T, session *Session, command string) string {
 func newTestServicesSmallKeep(t *testing.T) *AgentSessionServices {
 	t.Helper()
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	agentDir := filepath.Join(tmp, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -343,7 +343,7 @@ func TestNewSessionRejectsNilServices(t *testing.T) {
 
 func TestNewSessionAcceptsNilModel(t *testing.T) {
 	// Upstream pi's main.ts tolerates a nil model for interactive mode
-	// (degraded "No models available" startup). pig mirrors that
+	// (degraded "No models available" startup). ompig mirrors that
 	// behavior: NewSession must accept Model: nil and let the caller
 	// (interactive TUI) wire SetModel later via /login or /model.
 	svcs := newTestServices(t)
@@ -451,7 +451,8 @@ func TestNewSessionPowerShellIsOptIn(t *testing.T) {
 		want []string
 	}{
 		// .upstream/v0.87.1/packages/coding-agent/src/core/sdk.ts:258 defines the SDK default, not all registered builtins.
-		{"default", SessionOptions{}, []string{"read", "bash", "edit", "write"}},
+		// ompig divergence (D-SUBAGENT-4): the subagent tools join the default set.
+		{"default", SessionOptions{}, []string{"read", "bash", "edit", "write", "task", "wait", "agents"}},
 		{"cli default active set", SessionOptions{InitialActiveToolNames: []string{"read", "bash", "edit", "write"}},
 			[]string{"read", "bash", "edit", "write"}},
 		{"allowlist", SessionOptions{AllowedTools: map[string]struct{}{"powershell": {}, "bash": {}}}, []string{"bash", "powershell"}},
@@ -2131,7 +2132,7 @@ func TestOverflowRecoveryFlagResetsOnNewTurn(t *testing.T) {
 // _checkCompaction(lastAssistant, skipAbortedCheck=false).
 //
 // Scenario: user Ctrl+C'd an overflow turn, then types a new message.
-// Without the pre-send check, pig would send into another overflow.
+// Without the pre-send check, ompig would send into another overflow.
 // With it, compaction runs first.
 func TestPreSendCompactionCheck(t *testing.T) {
 	svcs := newTestServicesSmallKeep(t)
@@ -2383,7 +2384,7 @@ func TestIsRetryableError(t *testing.T) {
 // (agent-session.ts:2501).
 func TestAutoRetryUsesContinueNotSend(t *testing.T) {
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	svcs := newTestServices(t)
 	sess, err := NewSession(svcs, SessionOptions{Model: fakeModel()})
 	if err != nil {

@@ -58,7 +58,7 @@ const Tolerance = 0.35
 
 // ReportEnv names a file each measured case appends one JSON line to, for
 // building the complexity inventory.
-const ReportEnv = "PIG_SCALING_REPORT"
+const ReportEnv = "OMPIG_SCALING_REPORT"
 
 // Cost is the cost of one run of a measured operation.
 type Cost struct {

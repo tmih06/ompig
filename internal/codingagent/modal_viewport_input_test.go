@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestEditorSlotSelectorPageKeyMovesSelectionInEveryMode: model-selector.ts is shown in the editor slot, not as an overlay. In fullscreen

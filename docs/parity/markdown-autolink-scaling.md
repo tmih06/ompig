@@ -14,7 +14,7 @@ A render-local scanner now records the next word boundary and possible email suf
 
 ## Red and green evidence
 
-Toolchain: Go 1.27.1, Node 24.19.0, Linux amd64, Intel Xeon 6746E. All runs use private HOME, Pi/PiG agent directories, and TMPDIR.
+Toolchain: Go 1.27.1, Node 24.19.0, Linux amd64, Intel Xeon 6746E. All runs use private HOME, Pi/Ompig agent directories, and TMPDIR.
 
 `TestMarkdownUnbrokenLinearScaling` runs cold `NewMarkdown(strings.Repeat("x", size)).Render(80)` calls. It checks complete retained text, a one-second ceiling, and allocation growth below 2.5x when input doubles. The allocation ratio avoids a timing-ratio assertion that depends on CPU scheduling. Repeated benchmarks independently measure time scaling.
 
@@ -34,24 +34,24 @@ Commands:
 
 ```sh
 go test ./tui/... -race -count=1
-go test ./tui/... ./test/parity/testdata/markdown-unbroken-pig -count=1
+go test ./tui/... ./test/parity/testdata/markdown-unbroken-ompig -count=1
 go test ./tui -run '^$' -bench 'Benchmark(AutoLinkScanUnbroken|MarkdownUnbroken)$' -benchmem -count=5 -benchtime=100ms
 go test ./tui -run '^$' -bench '^BenchmarkMarkdownUnbroken$' -benchtime=3x -benchmem -cpuprofile parse.cpu -memprofile parse.mem
 make parity-family FAMILY=tui-components
 make parity-family FAMILY=interactive-rendering
 go vet ./...
-GOOS=windows go vet ./tui/... ./test/parity/testdata/markdown-unbroken-pig
+GOOS=windows go vet ./tui/... ./test/parity/testdata/markdown-unbroken-ompig
 go tool golangci-lint config verify
 go tool golangci-lint run ./tui/...
-go tool golangci-lint run --build-tags parity ./test/parity/testdata/markdown-unbroken-pig
+go tool golangci-lint run --build-tags parity ./test/parity/testdata/markdown-unbroken-ompig
 make generate
 make coverage
-go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/pig-go.json
+go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/ompig-go.json
 python3 test/parity/probes/normalization_inventory.py
 make -k ci-contracts ci-drift
 ```
 
-TUI tests, race tests, fixture tests, native/Windows vet, lint, and the complete tui-components family pass. The interactive-rendering family has one unrelated failure: `37-auto-theme-dark-modal-notification` cannot find `Pick a color` on either Pi or PiG. Rebuilding with the original Markdown production file reproduces the same failure on both sides. Other family scenarios pass, including assistant/user text, LaTeX, Mermaid, and resumed thinking Markdown.
+TUI tests, race tests, fixture tests, native/Windows vet, lint, and the complete tui-components family pass. The interactive-rendering family has one unrelated failure: `37-auto-theme-dark-modal-notification` cannot find `Pick a color` on either Pi or Ompig. Rebuilding with the original Markdown production file reproduces the same failure on both sides. Other family scenarios pass, including assistant/user text, LaTeX, Mermaid, and resumed thinking Markdown.
 
 After merging stable integration `fbcc3a7d5`, the complete TUI race suite, native/Windows vet, touched/tagged lint, tui-components family, and focused cross-family Markdown scenarios pass again. Scenario 13 completes all three Pi pairs.
 

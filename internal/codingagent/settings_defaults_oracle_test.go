@@ -10,14 +10,14 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
-// settingsDefaultsCase is one leaf of SETTINGS_DEFAULTS: the Pi getter expression that reads it on an empty settings manager and the PiG getter.
+// settingsDefaultsCase is one leaf of SETTINGS_DEFAULTS: the Pi getter expression that reads it on an empty settings manager and the Ompig getter.
 type settingsDefaultsCase struct {
-	path string
-	pi   string
-	pig  func(*SettingsManager) any
+	path  string
+	pi    string
+	ompig func(*SettingsManager) any
 }
 
 func jsonValue(t *testing.T, v any) any {
@@ -34,7 +34,7 @@ func jsonValue(t *testing.T, v any) any {
 }
 
 // Every leaf of Pi's SETTINGS_DEFAULTS, the runtime defaults "shared by settings accessors and the published JSON Schema", is what Pi's accessor returns on
-// an empty settings manager and what PiG's accessor returns. The leaves come from Pi's module, so a default Pi adds, removes or changes fails here.
+// an empty settings manager and what Ompig's accessor returns. The leaves come from Pi's module, so a default Pi adds, removes or changes fails here.
 func TestSettingsDefaultsMatchPiOnAnEmptySettingsManager(t *testing.T) {
 	t.Setenv("PI_CLEAR_ON_SHRINK", "")
 	t.Setenv("PI_TELEMETRY", "")
@@ -166,8 +166,8 @@ emit({ leaves, rows, errors });`, exprs, &pi, "PI_CLEAR_ON_SHRINK=", "PI_TELEMET
 		if !reflect.DeepEqual(row.Getter, row.Default) {
 			t.Errorf("%s: Pi's getter %v is not Pi's SETTINGS_DEFAULTS value %v", c.path, row.Getter, row.Default)
 		}
-		if got := jsonValue(t, c.pig(sm)); !reflect.DeepEqual(got, row.Default) {
-			t.Errorf("%s: PiG default %v (%T), Pi %v (%T)", c.path, got, got, row.Default, row.Default)
+		if got := jsonValue(t, c.ompig(sm)); !reflect.DeepEqual(got, row.Default) {
+			t.Errorf("%s: Ompig default %v (%T), Pi %v (%T)", c.path, got, got, row.Default, row.Default)
 		}
 	}
 	// codemode.mode and codemode.inlineBudget are read by the codemode extension; its test compares them.
@@ -177,6 +177,6 @@ emit({ leaves, rows, errors });`, exprs, &pi, "PI_CLEAR_ON_SHRINK=", "PI_TELEMET
 	have := append(slices.Clone(covered), elsewhere...)
 	slices.Sort(have)
 	if !slices.Equal(want, have) {
-		t.Errorf("SETTINGS_DEFAULTS leaves\n Pi    %v\n tests %v\na new Pi default needs a PiG accessor and a row", want, have)
+		t.Errorf("SETTINGS_DEFAULTS leaves\n Pi    %v\n tests %v\na new Pi default needs a Ompig accessor and a row", want, have)
 	}
 }

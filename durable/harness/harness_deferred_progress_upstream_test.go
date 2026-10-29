@@ -14,10 +14,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // Deferred progress commits (ProgressCommit): the partial answer and tool output reach watches at once and Storage at the next

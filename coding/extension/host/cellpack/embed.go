@@ -14,20 +14,20 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/execfile"
-	"github.com/MichaelKinsy/PiG/internal/fsretry"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/execfile"
+	"github.com/tmih06/ompig/internal/fsretry"
 )
 
 // cells holds this binary's embedded packed-cell binaries and their manifest.
-// Stock pig commits only an empty manifest; a Piglet Binary build stages the built
+// Stock ompig commits only an empty manifest; a Ompiglet Binary build stages the built
 // binaries and a populated manifest into this directory before building.
 //
 //go:embed cells
 var cells embed.FS
 
-// LoadedCell is an embedded cell extracted from the Piglet Binary binary and ready to
+// LoadedCell is an embedded cell extracted from the Ompiglet Binary binary and ready to
 // start without source or a language toolchain.
 type LoadedCell struct {
 	Language   string
@@ -51,7 +51,7 @@ func LoadedCells() []LoadedCell {
 
 // Register wires this binary's embedded cells into the host prebuilt-cell seam
 // and records source-free cell entries that startup can load directly. It is a
-// no-op when the embedded manifest is empty (stock pig), so it never changes
+// no-op when the embedded manifest is empty (stock ompig), so it never changes
 // stock behavior.
 func Register() error {
 	return registerFrom(cells)
@@ -114,7 +114,7 @@ func loadManifest(fsys fs.FS) (Manifest, error) {
 // extract writes each embedded cell binary (addressed under cells/<Binary>) to
 // dest/<Binary> with the executable bit set, unless the file already holds
 // exactly those bytes. A cell binary that is already in place is left alone:
-// another Piglet Binary instance may be executing it, and Windows refuses to
+// another Ompiglet Binary instance may be executing it, and Windows refuses to
 // replace the file of a running image ("Access is denied"), so rewriting an
 // identical file at every start would stop a second instance from starting.
 // A file that differs is replaced through a temp file in the destination
@@ -233,9 +233,9 @@ func atomicWriteFile(path string, content io.Reader, mode os.FileMode) error {
 	return renameFile(staged, path)
 }
 
-// extractDir is the absolute piglet-binary-cells directory under the PiG configuration root ($PIG_HOME, else $XDG_CONFIG_HOME/pig, else ~/.pig). It is absolute because the host starts a cell binary in the session's working directory, which a relative path would be resolved against.
+// extractDir is the absolute ompiglet-binary-cells directory under the Ompig configuration root ($OMPIG_HOME, else $XDG_CONFIG_HOME/ompig, else ~/.ompig). It is absolute because the host starts a cell binary in the session's working directory, which a relative path would be resolved against.
 func extractDir() (string, error) {
-	dir, err := filepath.Abs(filepath.Join(codingagent.ConfigRoot(), "piglet-binary-cells"))
+	dir, err := filepath.Abs(filepath.Join(codingagent.ConfigRoot(), "ompiglet-binary-cells"))
 	if err != nil {
 		return "", err
 	}

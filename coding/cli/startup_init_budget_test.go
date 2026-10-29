@@ -14,14 +14,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// Every package-level regexp in a package linked into pig compiles when the process starts, whether or not the run reaches its user. internal/lazyregexp moves that work to the first use. This test walks the packages of this binary and rejects a regexp.MustCompile in a package-level variable, so a new one cannot bring the start-up cost back.
+// Every package-level regexp in a package linked into ompig compiles when the process starts, whether or not the run reaches its user. internal/lazyregexp moves that work to the first use. This test walks the packages of this binary and rejects a regexp.MustCompile in a package-level variable, so a new one cannot bring the start-up cost back.
 func TestLinkedPackagesCompileNoRegexpAtInit(t *testing.T) {
 	command := exec.CommandContext(testbudget.Context(t), "go", "list", "-deps", "-f",
-		`{{if and (not .Standard) .Module}}{{if eq .Module.Path "github.com/MichaelKinsy/PiG"}}{{.Dir}}{{range .GoFiles}}|{{.}}{{end}}{{end}}{{end}}`, ".")
+		`{{if and (not .Standard) .Module}}{{if eq .Module.Path "github.com/tmih06/ompig"}}{{.Dir}}{{range .GoFiles}}|{{.}}{{end}}{{end}}{{end}}`, ".")
 	var stderr bytes.Buffer
 	command.Stderr = &stderr
 	out, err := command.Output()
@@ -69,7 +69,7 @@ func TestLinkedPackagesCompileNoRegexpAtInit(t *testing.T) {
 		}
 	}
 	if packages < 20 {
-		t.Fatalf("go list reported %d PiG packages; the walk does not cover the binary", packages)
+		t.Fatalf("go list reported %d Ompig packages; the walk does not cover the binary", packages)
 	}
 	if len(offenders) != 0 {
 		t.Fatalf("package-level regexp.MustCompile runs at process start; use lazyregexp.New:\n%s", strings.Join(offenders, "\n"))
@@ -95,11 +95,11 @@ const (
 func TestPackageInitWorkBudget(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
 	command := exec.CommandContext(testbudget.Context(t), binary, "--version")
-	command.Env = append(os.Environ(), "GODEBUG=inittrace=1", "PIG_HOME="+t.TempDir())
+	command.Env = append(os.Environ(), "GODEBUG=inittrace=1", "OMPIG_HOME="+t.TempDir())
 	var stderr bytes.Buffer
 	command.Stderr = &stderr
 	if err := command.Run(); err != nil {
-		t.Fatalf("pig --version: %v\n%s", err, stderr.String())
+		t.Fatalf("ompig --version: %v\n%s", err, stderr.String())
 	}
 	line := regexp.MustCompile(`^init (\S+) @[\d.]+ ms, [\d.]+ ms clock, (\d+) bytes, (\d+) allocs$`)
 	type initWork struct {
@@ -117,7 +117,7 @@ func TestPackageInitWorkBudget(t *testing.T) {
 		count, _ := strconv.Atoi(match[3])
 		linkedBytes += bytes
 		linkedAllocs += count
-		if !strings.HasPrefix(match[1], "github.com/MichaelKinsy/PiG") {
+		if !strings.HasPrefix(match[1], "github.com/tmih06/ompig") {
 			continue
 		}
 		work = append(work, initWork{match[1], bytes, count})
@@ -125,7 +125,7 @@ func TestPackageInitWorkBudget(t *testing.T) {
 		totalAllocs += count
 	}
 	if len(work) < 20 {
-		t.Fatalf("parsed %d PiG package initializers from:\n%s", len(work), stderr.String())
+		t.Fatalf("parsed %d Ompig package initializers from:\n%s", len(work), stderr.String())
 	}
 	if linkedBytes > linkedInitBytesBudget || linkedAllocs > linkedInitAllocsBudget {
 		t.Fatalf("package initializers of the binary and its dependencies use %d bytes in %d allocations, budget %d bytes in %d allocations", linkedBytes, linkedAllocs, linkedInitBytesBudget, linkedInitAllocsBudget)
@@ -136,7 +136,7 @@ func TestPackageInitWorkBudget(t *testing.T) {
 		for _, item := range work[:min(8, len(work))] {
 			report.WriteString("\n  " + item.pkg + ": " + strconv.Itoa(item.bytes) + " bytes, " + strconv.Itoa(item.count) + " allocs")
 		}
-		t.Fatalf("PiG package initializers use %d bytes in %d allocations, budget %d bytes in %d allocations. Largest:%s",
+		t.Fatalf("Ompig package initializers use %d bytes in %d allocations, budget %d bytes in %d allocations. Largest:%s",
 			totalBytes, totalAllocs, packageInitBytesBudget, packageInitAllocsBudget, report.String())
 	}
 }

@@ -6,9 +6,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Ports wrapRegisteredTool (packages/coding-agent/src/core/extensions/wrapper.ts:17-21), which is

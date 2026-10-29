@@ -7,8 +7,8 @@ reply back, and appends one JSON line per request to the log: arm, path, status,
 duration, and the token usage found in the reply. It is generic HTTP; run it as a container on the benchmark's internal network so
 the task containers have no other route out (Harbor `network_mode: allowlist` with only this host allowed).
 
-Environment: PIGBENCH_GATEWAY_UPSTREAM (for example https://api.example.com), PIGBENCH_GATEWAY_KEY, PIGBENCH_GATEWAY_LOG,
-PIGBENCH_GATEWAY_KEY_HEADER (default Authorization with a Bearer scheme; x-api-key for Anthropic-style upstreams).
+Environment: OMPIGBENCH_GATEWAY_UPSTREAM (for example https://api.example.com), OMPIGBENCH_GATEWAY_KEY, OMPIGBENCH_GATEWAY_LOG,
+OMPIGBENCH_GATEWAY_KEY_HEADER (default Authorization with a Bearer scheme; x-api-key for Anthropic-style upstreams).
 """
 import http.client
 import json
@@ -163,9 +163,9 @@ def make_handler():
 
 
 def main():
-    upstream, key, log = os.environ["PIGBENCH_GATEWAY_UPSTREAM"], os.environ["PIGBENCH_GATEWAY_KEY"], os.environ.get("PIGBENCH_GATEWAY_LOG", "gateway.jsonl")
-    host, port = os.environ.get("PIGBENCH_GATEWAY_HOST", "0.0.0.0"), int(os.environ.get("PIGBENCH_GATEWAY_PORT", "8080"))
-    Gateway((host, port), upstream, key, log, os.environ.get("PIGBENCH_GATEWAY_KEY_HEADER", "authorization")).serve_forever()
+    upstream, key, log = os.environ["OMPIGBENCH_GATEWAY_UPSTREAM"], os.environ["OMPIGBENCH_GATEWAY_KEY"], os.environ.get("OMPIGBENCH_GATEWAY_LOG", "gateway.jsonl")
+    host, port = os.environ.get("OMPIGBENCH_GATEWAY_HOST", "0.0.0.0"), int(os.environ.get("OMPIGBENCH_GATEWAY_PORT", "8080"))
+    Gateway((host, port), upstream, key, log, os.environ.get("OMPIGBENCH_GATEWAY_KEY_HEADER", "authorization")).serve_forever()
 
 
 if __name__ == "__main__":

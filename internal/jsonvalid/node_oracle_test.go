@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // JSON.parse of Node accepts exactly the texts Valid does, for texts of well-formed UTF-8 that nest no deeper than Node's stack allows: the session loader skips a line when JSON.parse throws.

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/utils/shell.ts sanitizeBinaryOutput, against pinned Pi over every control character, the C1 range, the U+FFF9..U+FFFB annotation characters and their neighbours, astral characters, and random mixtures of them.

@@ -8,19 +8,19 @@ import (
 	"os"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/logincreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/ssocreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/stscreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/signin"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/sso"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/ssooidc"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/sts"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go-v2/credentials/endpointcreds"
 	"github.com/aws/aws-sdk-go-v2/credentials/processcreds"
 	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/logincreds"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/ssocreds"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/stscreds"
+	"github.com/tmih06/ompig/third_party/awssdk/service/signin"
+	"github.com/tmih06/ompig/third_party/awssdk/service/sso"
+	"github.com/tmih06/ompig/third_party/awssdk/service/ssooidc"
+	"github.com/tmih06/ompig/third_party/awssdk/service/sts"
 )
 
 const (

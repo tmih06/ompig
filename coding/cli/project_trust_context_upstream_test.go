@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi 1.0.4 types.ts ProjectTrustContext ({cwd, mode, hasUI, ui: select/confirm/input/notify}) is the second argument of a
@@ -49,10 +49,10 @@ export default function(pi) {
 	}
 	command := exec.CommandContext(testbudget.Context(t), binary, "--model", "test-faux/faux-1", "--no-session", "-e", fixture, "--print", "What is 20+22?")
 	command.Dir = project
-	command.Env = append(os.Environ(), "PIG_HOME="+home, "PI_HOME=", "PIG_CODING_AGENT_DIR=", "PI_CODING_AGENT_DIR=", "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	command.Env = append(os.Environ(), "OMPIG_HOME="+home, "PI_HOME=", "OMPIG_CODING_AGENT_DIR=", "PI_CODING_AGENT_DIR=", "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	output, err := command.CombinedOutput()
 	if err != nil {
-		t.Fatalf("pig: %v\n%s", err, output)
+		t.Fatalf("ompig: %v\n%s", err, output)
 	}
 	observed, err := os.ReadFile(marker)
 	if err != nil {

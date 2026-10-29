@@ -47,7 +47,7 @@ func TestNativeClipboardProcessExitWithBlockedAuthority(t *testing.T) {
 	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestBlockedClipboardAuthorityProcessFixture$")
-	cmd.Env = append(os.Environ(), "DISPLAY=:"+display, "XAUTHORITY="+authority, "PIG_BLOCKED_CLIPBOARD_AUTHORITY=1")
+	cmd.Env = append(os.Environ(), "DISPLAY=:"+display, "XAUTHORITY="+authority, "OMPIG_BLOCKED_CLIPBOARD_AUTHORITY=1")
 	out, err := cmd.CombinedOutput()
 	if err != nil || string(out) != "passed\nPASS\n" {
 		t.Fatalf("natural exit after blocked authority: %v\n%s", err, out)
@@ -55,7 +55,7 @@ func TestNativeClipboardProcessExitWithBlockedAuthority(t *testing.T) {
 }
 
 func TestBlockedClipboardAuthorityProcessFixture(t *testing.T) {
-	if os.Getenv("PIG_BLOCKED_CLIPBOARD_AUTHORITY") == "" {
+	if os.Getenv("OMPIG_BLOCKED_CLIPBOARD_AUTHORITY") == "" {
 		return
 	}
 	defer ShutdownClipboard()

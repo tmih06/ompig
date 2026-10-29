@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi applies the whole transformer chain before Markdown parses or paints it (components/markdown-transform.ts:18-29). A slow subprocess must not expose raw or half-transformed Markdown or block the owner loop.

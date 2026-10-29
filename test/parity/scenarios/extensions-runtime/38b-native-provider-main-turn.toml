@@ -9,7 +9,7 @@ driver = "cli-mode"
 args = ["--model", "parity-native/native-model", "--no-session", "-p", "hello"]
 timeout_seconds = 30
 [env]
-pig_extensions = ["../testdata/extension-native-provider.mjs"]
+ompig_extensions = ["../testdata/extension-native-provider.mjs"]
 pi_extensions = ["../testdata/extension-native-provider.mjs"]
 [assert]
 exit_code = 0

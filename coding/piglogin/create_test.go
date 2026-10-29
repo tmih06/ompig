@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // createUI answers the dialogs the sprite commands ask for. Its custom call reports no component, so the picker falls
@@ -54,7 +54,7 @@ func createContext(t *testing.T, ui *createUI, model extension.Model, providers 
 // /sprite create with a model that has credentials sends the guided sprite turn; without one it tells the user to log in
 // and run /sprite create again, and sends nothing. The picker offers only sprites.
 func TestSpriteCreate(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	Refresh()
 	var nilModel *ai.Model
 	for _, tc := range []struct {
@@ -85,14 +85,14 @@ func TestSpriteCreate(t *testing.T) {
 	}
 }
 
-// The prompt carries the default pig's 14 rows of 16 cells and a color for each non-transparent symbol, and the template
+// The prompt carries the default ompig's 14 rows of 16 cells and a color for each non-transparent symbol, and the template
 // it shows is a sprite registerSprite accepts: a palette entry for '.' fails with "'.' is reserved for transparency".
 func TestCreatePromptCarriesTheStandardPig(t *testing.T) {
 	prompt, err := CreatePrompt()
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, row := range pigMascot {
+	for _, row := range ompigMascot {
 		if !strings.Contains(prompt, `"`+row+`",`) {
 			t.Fatalf("prompt omits mascot row %q", row)
 		}
@@ -110,7 +110,7 @@ func TestCreatePromptCarriesTheStandardPig(t *testing.T) {
 	if !found || !ok {
 		t.Fatalf("prompt template has no palette:\n%s", prompt)
 	}
-	definition := extension.SpriteDefinition{ID: "my-pig", Name: "My PiG", Tagline: "One line about my pig.", Palette: map[string]string{}}
+	definition := extension.SpriteDefinition{ID: "my-ompig", Name: "My Ompig", Tagline: "One line about my ompig.", Palette: map[string]string{}}
 	for _, match := range regexp.MustCompile(`"([^"]{16})",`).FindAllStringSubmatch(mascotPart, -1) {
 		definition.Mascot = append(definition.Mascot, match[1])
 	}
@@ -125,7 +125,7 @@ func TestCreatePromptCarriesTheStandardPig(t *testing.T) {
 // The picker's last item, "Create your own...", shows how to create a sprite and returns: it sends no turn, even with a
 // model, and changes no sprite.
 func TestSpritePickerCreateYourOwnShowsTheHint(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	Refresh()
 	for _, providers := range []int{0, 1} {
 		ui := &createUI{selected: CreateOption}

@@ -1,14 +1,14 @@
 # SPDX-License-Identifier: MIT
 cff-version: 1.2.0
-message: If you use PiG in research or benchmarks, please cite it as below, and cite Pi, the upstream it translates.
-title: "PiG: Pi in Go"
+message: If you use Ompig in research or benchmarks, please cite it as below, and cite Pi, the upstream it translates.
+title: "Ompig: Pi in Go"
 type: software
 authors:
   - family-names: Kinsy
     given-names: Michael
-  - name: PiG contributors
-repository-code: https://github.com/MichaelKinsy/PiG
-url: https://github.com/MichaelKinsy/PiG
+  - name: Ompig contributors
+repository-code: https://github.com/tmih06/ompig
+url: https://github.com/tmih06/ompig
 license: MIT
 keywords:
   - coding agent

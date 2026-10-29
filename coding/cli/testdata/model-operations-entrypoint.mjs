@@ -12,6 +12,6 @@ export default function (pi) {
     if (result.stopReason !== "stop") throw new Error(`stream failed: ${JSON.stringify(result)}`);
     const completed = await ctx.modelRegistry.complete(model, request);
     if (completed.stopReason !== "stop") throw new Error(`complete failed: ${JSON.stringify(completed)}`);
-    writeFileSync(process.env.PIG_MODEL_OPERATIONS_MARKER, String(ctx.mode));
+    writeFileSync(process.env.OMPIG_MODEL_OPERATIONS_MARKER, String(ctx.mode));
   });
 }

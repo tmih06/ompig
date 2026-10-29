@@ -20,8 +20,8 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/images"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/images"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // recorder is an ImageProcessor that counts how many Prepare calls run at once and what bytes each saw.

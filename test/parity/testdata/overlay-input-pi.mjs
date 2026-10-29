@@ -1,4 +1,4 @@
-// Pi 0.87.1 TuiBase.handleTerminalInput owns the same focus boundary as Pig's interactive driver.
+// Pi 0.87.1 TuiBase.handleTerminalInput owns the same focus boundary as Ompig's interactive driver.
 import { PI_PACKAGE_VERSION } from "./pi-version.mjs";
 import assert from 'node:assert/strict';
 import { readFileSync, realpathSync } from 'node:fs';

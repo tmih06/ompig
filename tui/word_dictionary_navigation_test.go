@@ -1,14 +1,14 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 package tui
 
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// Pi 0.87.1 Intl.Segmenter splits 学生/です with ICU's CJK dictionary; cursor columns are UTF-16 units. A Piglet that
+// Pi 0.87.1 Intl.Segmenter splits 学生/です with ICU's CJK dictionary; cursor columns are UTF-16 units. A Ompiglet that
 // strips word-dictionaries moves over the whole run, as a Binary built without the dictionaries does.
 func TestEditor_WordBoundaryDictionary(t *testing.T) {
 	e := NewEditor()

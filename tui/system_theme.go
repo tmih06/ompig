@@ -15,7 +15,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // SystemThemeName is the reserved name of the theme generated from the terminal's own colors.

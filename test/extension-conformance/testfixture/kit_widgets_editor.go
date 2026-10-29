@@ -2,8 +2,8 @@ package testfixture
 
 import (
 	// The Go SDK: the ledger counts a Go fixture that imports it.
-	_ "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	_ "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 func init() {

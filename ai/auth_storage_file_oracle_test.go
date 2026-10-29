@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type authFileOp struct {
@@ -25,7 +25,7 @@ type authFileCase struct {
 	Ops     []authFileOp `json:"ops"`
 }
 
-// TestAuthStorageFileMatchesPi runs core/auth-storage.ts AuthStorage.create(path) and PiG's NewAuthStorage over the same auth.json files and operation
+// TestAuthStorageFileMatchesPi runs core/auth-storage.ts AuthStorage.create(path) and Ompig's NewAuthStorage over the same auth.json files and operation
 // sequences (read, list, modify that stores a credential or declines, delete): absent, empty, valid, byte-order-marked, corrupt and non-object files;
 // api-key credentials whose key is a literal, a `$VAR`, a `${VAR}` reference resolved against the credential's own env, or a `!command`; OAuth and unknown
 // credential types; entries that are not objects; and provider ids that are integer indexes, which Object.entries lists first. Every result (the credential

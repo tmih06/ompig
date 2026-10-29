@@ -27,7 +27,7 @@ func TestRPCResumeKeepsDynamicallyActivatedTools(t *testing.T) {
 	run := func(extra []string, steps func(p *rpcProcess)) {
 		t.Helper()
 		args := append([]string{"--offline", "--model", "test-faux/faux-1", "--system-prompt", "x", "--no-context-files", "--no-skills", "--session-dir", sessionDir, "-e", extension}, extra...)
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + filepath.Join(root, "home")}, args...)
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + filepath.Join(root, "home")}, args...)
 		steps(p)
 	}
 	// loadout folds the branch's system messages, which record tool changes as toolsAdded/toolsRemoved deltas, into the tools the last request declared.

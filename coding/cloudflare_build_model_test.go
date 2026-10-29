@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A model from BuildModel streams through its own per-model provider, which holds the stored credential's env as the auth resolution

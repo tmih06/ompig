@@ -14,15 +14,15 @@ import (
 	"sync/atomic"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/configschema"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/configschema"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // ─── Model Registry ──────────────────────────────────────────────────────────
@@ -102,7 +102,7 @@ type providerConfig struct {
 	oauthCallbacks *extension.ProviderOAuth
 	// Insecure skips TLS verification for this provider's endpoint. Opt-in,
 	// for self-signed/internal-CA on-prem gateways.
-	// pig additive (D36): additive optional field; no upstream equivalent.
+	// ompig additive (D36): additive optional field; no upstream equivalent.
 	Insecure bool `json:"insecure,omitempty"`
 }
 
@@ -303,7 +303,7 @@ func decodeOrderedHeaderObject(decoder *json.Decoder) ([]orderedHeaderEntry, err
 // providerCompat mirrors upstream ProviderCompatSchema.
 type providerCompat ai.OpenAICompat
 
-// UnmarshalJSON keeps the members PiG does not model, as ProviderCompatSchema's additionalProperties does (ai.OpenAICompat.UnmarshalJSON).
+// UnmarshalJSON keeps the members Ompig does not model, as ProviderCompatSchema's additionalProperties does (ai.OpenAICompat.UnmarshalJSON).
 func (compat *providerCompat) UnmarshalJSON(data []byte) error {
 	return (*ai.OpenAICompat)(compat).UnmarshalJSON(data)
 }
@@ -1031,7 +1031,7 @@ func (r *ModelRegistry) upsertRegisteredProviderLocked(name string, incoming pro
 	if incoming.AuthHeader != nil {
 		existing.AuthHeader = incoming.AuthHeader
 	}
-	// pig additive (D36): Pi merges a re-registration's defined values and keeps the undefined ones (model-runtime.ts:921-933); an opt-in sets it, an omitted (false) one keeps the earlier value.
+	// ompig additive (D36): Pi merges a re-registration's defined values and keeps the undefined ones (model-runtime.ts:921-933); an opt-in sets it, an omitted (false) one keeps the earlier value.
 	existing.Insecure = existing.Insecure || incoming.Insecure
 	if incoming.Models != nil {
 		existing.Models = incoming.Models

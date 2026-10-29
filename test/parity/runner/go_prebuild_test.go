@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// A timed pig run starts the probe binary, not the Go toolchain: the scenario's PATH puts a failing go first, and only
+// A timed ompig run starts the probe binary, not the Go toolchain: the scenario's PATH puts a failing go first, and only
 // the runner's build before the timed runs uses the real one.
 func TestRunScenarioBuildsGoProbesBeforeTheTimedRun(t *testing.T) {
 	if runtime.GOOS == "windows" {
@@ -53,13 +53,13 @@ func TestRunScenarioBuildsGoProbesBeforeTheTimedRun(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, tc := range []struct {
-		name, want                                             string
-		pigArgs, goTests, piArgs, piGoTests, pigProgs, piProgs []string
+		name, want                                                 string
+		ompigArgs, goTests, piArgs, piGoTests, ompigProgs, piProgs []string
 	}{
-		{name: "go-run", want: "PROGRAM a b", pigArgs: []string{"go", "run", fixtures + "program", "a", "b"}},
-		{name: "go-test", want: "PROBE ok", pigArgs: []string{"bash", script}, goTests: []string{fixtures + "probe"}},
-		{name: "go-program-from-a-script", want: "PROGRAM a b", pigArgs: []string{"bash", programScript}, pigProgs: []string{fixtures + "program"}},
-		{name: "pi-side-node-script", want: "PROBE ok\nPROGRAM a b", pigArgs: []string{"echo", "PROBE ok\nPROGRAM a b"}, piArgs: []string{"node", nodeScript}, piGoTests: []string{fixtures + "probe"}, piProgs: []string{fixtures + "program"}},
+		{name: "go-run", want: "PROGRAM a b", ompigArgs: []string{"go", "run", fixtures + "program", "a", "b"}},
+		{name: "go-test", want: "PROBE ok", ompigArgs: []string{"bash", script}, goTests: []string{fixtures + "probe"}},
+		{name: "go-program-from-a-script", want: "PROGRAM a b", ompigArgs: []string{"bash", programScript}, ompigProgs: []string{fixtures + "program"}},
+		{name: "pi-side-node-script", want: "PROBE ok\nPROGRAM a b", ompigArgs: []string{"echo", "PROBE ok\nPROGRAM a b"}, piArgs: []string{"node", nodeScript}, piGoTests: []string{fixtures + "probe"}, piProgs: []string{fixtures + "program"}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			piArgs := tc.piArgs
@@ -69,22 +69,22 @@ func TestRunScenarioBuildsGoProbesBeforeTheTimedRun(t *testing.T) {
 			scenario := &Scenario{
 				Name: "go-prebuild-" + tc.name, Driver: "cli-mode", SourcePath: filepath.Join(repoRoot, "test/parity/scenarios/go-prebuild.toml"),
 				Env: EnvOverrides{
-					OverrideBaseArgs: true, PigBin: posixEnvLauncher, PiBin: posixEnvLauncher,
-					PigArgs: tc.pigArgs, PiArgs: piArgs, PigGoTests: tc.goTests, PiGoTests: tc.piGoTests,
-					PigGoPrograms: tc.pigProgs, PiGoPrograms: tc.piProgs,
-					Pig: []string{"PATH=" + failingGo + string(os.PathListSeparator) + os.Getenv("PATH")},
-					Pi:  []string{"PATH=" + failingGo + string(os.PathListSeparator) + os.Getenv("PATH")},
+					OverrideBaseArgs: true, OmpigBin: posixEnvLauncher, PiBin: posixEnvLauncher,
+					OmpigArgs: tc.ompigArgs, PiArgs: piArgs, OmpigGoTests: tc.goTests, PiGoTests: tc.piGoTests,
+					OmpigGoPrograms: tc.ompigProgs, PiGoPrograms: tc.piProgs,
+					Ompig: []string{"PATH=" + failingGo + string(os.PathListSeparator) + os.Getenv("PATH")},
+					Pi:    []string{"PATH=" + failingGo + string(os.PathListSeparator) + os.Getenv("PATH")},
 				},
 				CLI:    CLIDriverConfig{CWD: repoRoot, TimeoutSeconds: 60},
 				Assert: AssertSpec{ExitCode: new(int), OutputEqual: true, Runs: 2},
 			}
-			outcome := RunScenario(t.Context(), t, scenario, BinaryRef{Label: "pig"}, BinaryRef{Label: "pi"}, false)
+			outcome := RunScenario(t.Context(), t, scenario, BinaryRef{Label: "ompig"}, BinaryRef{Label: "pi"}, false)
 			if !outcome.Passed() {
 				var output string
-				if runs := outcome.Pig.Runs; len(runs) > 0 {
+				if runs := outcome.Ompig.Runs; len(runs) > 0 {
 					output = runs[len(runs)-1].Output
 				}
-				t.Fatalf("failures=%q pig output=%q", outcome.Failures, output)
+				t.Fatalf("failures=%q ompig output=%q", outcome.Failures, output)
 			}
 		})
 	}
@@ -113,9 +113,9 @@ var prebuiltHelperList = regexp.MustCompile(`\[\s*['"][^'"]*prebuilt-go-(test|ru
 // quotedPackage matches a ./-relative package in a quoted string of a list.
 var quotedPackage = regexp.MustCompile(`['"](\./[A-Za-z0-9_./-]*[A-Za-z0-9_])['"]`)
 
-// Every cli-mode scenario keeps the Go toolchain out of its timed runs, on both sides: a pig side may be `go run ./PACKAGE ARGS`, which
+// Every cli-mode scenario keeps the Go toolchain out of its timed runs, on both sides: a ompig side may be `go run ./PACKAGE ARGS`, which
 // RunScenario builds first; a script of either side, in any language, runs Go tests only through prebuilt-go-test.sh and Go programs only
-// through prebuilt-go-run.sh, for exactly the packages its side lists in pig_go_tests, pi_go_tests, pig_go_programs or pi_go_programs.
+// through prebuilt-go-run.sh, for exactly the packages its side lists in ompig_go_tests, pi_go_tests, ompig_go_programs or pi_go_programs.
 func TestParityGoProbesAreBuiltBeforeTheTimedRun(t *testing.T) {
 	repoRoot, err := findRepoRoot()
 	if err != nil {
@@ -131,9 +131,9 @@ func TestParityGoProbesAreBuiltBeforeTheTimedRun(t *testing.T) {
 			continue
 		}
 		cwd := resolveScenarioCWD(sc.SourcePath, sc.CLI.CWD)
-		pigCLI, piCLI := sc.CLI.Args, sc.CLI.Args
-		if sc.CLI.PigArgs != nil {
-			pigCLI = sc.CLI.PigArgs
+		ompigCLI, piCLI := sc.CLI.Args, sc.CLI.Args
+		if sc.CLI.OmpigArgs != nil {
+			ompigCLI = sc.CLI.OmpigArgs
 		}
 		if sc.CLI.PiArgs != nil {
 			piCLI = sc.CLI.PiArgs
@@ -143,23 +143,23 @@ func TestParityGoProbesAreBuiltBeforeTheTimedRun(t *testing.T) {
 			argv             []string
 			goTests, goProgs []string
 		}{
-			{"pig", sc.Env.PigBin, slices.Concat(sc.Env.PigArgs, pigCLI), sc.Env.PigGoTests, sc.Env.PigGoPrograms},
+			{"ompig", sc.Env.OmpigBin, slices.Concat(sc.Env.OmpigArgs, ompigCLI), sc.Env.OmpigGoTests, sc.Env.OmpigGoPrograms},
 			{"pi", sc.Env.PiBin, slices.Concat(sc.Env.PiArgs, piCLI), sc.Env.PiGoTests, sc.Env.PiGoPrograms},
 		} {
 			argv := side.argv
 			run := -1
-			if side.label == "pig" {
+			if side.label == "ompig" {
 				runArgs, index := goRunArgs(sc)
 				run = index
-				if runArgs == &sc.CLI.PigArgs {
-					run += len(sc.Env.PigArgs)
+				if runArgs == &sc.CLI.OmpigArgs {
+					run += len(sc.Env.OmpigArgs)
 				}
 			}
 			if filepath.Base(side.bin) == "go" || (slices.Contains(argv, "go") && slices.Index(argv, "go") != run) {
 				t.Errorf("%s: %s_bin %q with args %q starts the Go toolchain inside the timed run", sc.SourcePath, side.label, side.bin, argv)
 			}
 			if run >= 0 && (run+2 >= len(argv) || !isLocalGoPackage(argv[run+2])) {
-				t.Errorf("%s: pig args %q: write `go run ./PACKAGE ARGS`, which the runner builds before the timed runs", sc.SourcePath, argv)
+				t.Errorf("%s: ompig args %q: write `go run ./PACKAGE ARGS`, which the runner builds before the timed runs", sc.SourcePath, argv)
 			}
 			tested, programs := map[string]bool{}, map[string]bool{}
 			// A side may run a helper directly: pi_args = ["./test/parity/testdata/prebuilt-go-run.sh", "./PACKAGE", ARGS...].
@@ -274,19 +274,19 @@ func TestGoRunArgsFindsEnvLaunchedGoRun(t *testing.T) {
 		inCLI            bool
 		want             int
 	}{
-		{name: "env pig_args", bin: posixEnvLauncher, envArgs: []string{"go", "run", "./x", "arg"}, want: 0},
+		{name: "env ompig_args", bin: posixEnvLauncher, envArgs: []string{"go", "run", "./x", "arg"}, want: 0},
 		{name: "env -u operand", bin: posixEnvLauncher, envArgs: []string{"-u", "AWS_BEARER_TOKEN_BEDROCK", "go", "run", "./x"}, want: 2},
 		{name: "env assignment", bin: posixEnvLauncher, envArgs: []string{"NAME=value", "go", "run", "./x"}, want: 1},
-		{name: "cli pig_args", bin: posixEnvLauncher, cliArgs: []string{"go", "run", "./x", "arg"}, inCLI: true, want: 0},
+		{name: "cli ompig_args", bin: posixEnvLauncher, cliArgs: []string{"go", "run", "./x", "arg"}, inCLI: true, want: 0},
 		{name: "cli after env operand", bin: posixEnvLauncher, envArgs: []string{"-u", "NAME"}, cliArgs: []string{"go", "run", "./x"}, inCLI: true, want: 0},
 		{name: "go test", bin: posixEnvLauncher, envArgs: []string{"go", "test", "./x"}, want: -1},
 		{name: "script", bin: posixEnvLauncher, envArgs: []string{"bash", "./probe.sh"}, cliArgs: []string{"go", "run", "./x"}, want: -1},
 		{name: "other launcher", bin: "/bin/sh", envArgs: []string{"go", "run", "./x"}, want: -1},
 	} {
-		sc := &Scenario{Driver: "cli-mode", Env: EnvOverrides{OverrideBaseArgs: true, PigBin: tc.bin, PigArgs: tc.envArgs}, CLI: CLIDriverConfig{PigArgs: tc.cliArgs}}
+		sc := &Scenario{Driver: "cli-mode", Env: EnvOverrides{OverrideBaseArgs: true, OmpigBin: tc.bin, OmpigArgs: tc.envArgs}, CLI: CLIDriverConfig{OmpigArgs: tc.cliArgs}}
 		args, got := goRunArgs(sc)
-		if got != tc.want || (got >= 0 && (args == &sc.CLI.PigArgs) != tc.inCLI) {
-			t.Errorf("%s: goRunArgs = (cli %t, %d), want (cli %t, %d)", tc.name, args == &sc.CLI.PigArgs, got, tc.inCLI, tc.want)
+		if got != tc.want || (got >= 0 && (args == &sc.CLI.OmpigArgs) != tc.inCLI) {
+			t.Errorf("%s: goRunArgs = (cli %t, %d), want (cli %t, %d)", tc.name, args == &sc.CLI.OmpigArgs, got, tc.inCLI, tc.want)
 		}
 	}
 }
@@ -309,17 +309,17 @@ func TestValidateRejectsPigGoTestsOutsideCLIMode(t *testing.T) {
 		"print-mode":     func(sc *Scenario) { sc.Driver = "print-mode" },
 		"no cwd":         func(sc *Scenario) { sc.CLI.CWD = "" },
 		"temporary cwd":  func(sc *Scenario) { sc.CLI.CWD = "{{TEMP}}" },
-		"module pattern": func(sc *Scenario) { sc.Env.PigGoTests = []string{"./..."} },
+		"module pattern": func(sc *Scenario) { sc.Env.OmpigGoTests = []string{"./..."} },
 	} {
 		sc := base
-		sc.Env.PigGoTests = []string{"./coding"}
+		sc.Env.OmpigGoTests = []string{"./coding"}
 		edit(&sc)
 		if err := validate(&sc); err == nil {
-			t.Errorf("%s: validate accepted pig_go_tests %q", name, sc.Env.PigGoTests)
+			t.Errorf("%s: validate accepted ompig_go_tests %q", name, sc.Env.OmpigGoTests)
 		}
 	}
 	sc := base
-	sc.Env.PigGoTests = []string{"./coding"}
+	sc.Env.OmpigGoTests = []string{"./coding"}
 	if err := validate(&sc); err != nil {
 		t.Fatalf("validate: %v", err)
 	}

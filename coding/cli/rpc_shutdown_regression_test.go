@@ -8,7 +8,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A resources_discover path failure occurs before the RPC event forwarder starts. Disposal cannot wait for an event acknowledgment that no consumer can produce.

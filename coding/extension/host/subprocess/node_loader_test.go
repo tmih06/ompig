@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -288,8 +288,8 @@ if (missing.length) { console.log(missing.join(" ")); process.exit(1); }`
 // Every specifier in Pi's own VIRTUAL_MODULES table (the pinned dist's core/extensions/virtual-modules.js) serves the same
 // export names, with the same kinds of values, through the loader as through Pi, in both directions: a missing name fails
 // an extension's ESM link, and an extra one is visible to `import * as` enumeration. Pi's namespaces are read in a
-// process without the loader hooks: with them, the pinned dist's own `@earendil-works/*` imports resolve to Pig's shims
-// and the comparison would be Pig against itself. The pinned package is the oracle's source build of the pinned commit, so
+// process without the loader hooks: with them, the pinned dist's own `@earendil-works/*` imports resolve to Ompig's shims
+// and the comparison would be Ompig against itself. The pinned package is the oracle's source build of the pinned commit, so
 // its table has the pi-ai/models entries Pi added in 22dc6c26 (#11156) and the comparison covers them.
 func TestNodeRuntimeVirtualModulesMatchPiNamespaces(t *testing.T) {
 	node, err := exec.LookPath("node")
@@ -351,7 +351,7 @@ func TestNodeRuntimeParseFrontmatterMatchesPi(t *testing.T) {
 	}
 	script := `import { pathToFileURL } from "node:url";
 const pi = await import(pathToFileURL(process.argv[1]).href);
-const pig = await import("@earendil-works/pi-coding-agent");
+const ompig = await import("@earendil-works/pi-coding-agent");
 const inputs = [
   "---\nname: skill\ndescription: Does things\n---\nBody text\n",
   "---\ntags: [a, b, \"c d\"]\nitems:\n  - one\n  - two: 2\nmeta:\n  nested:\n    deep: true\n  n: 1.5\n---\nbody",
@@ -368,7 +368,7 @@ const run = (fn, input) => { try { return { ok: fn(input) }; } catch (e) { retur
 for (const input of inputs) {
   for (const name of ["parseFrontmatter", "stripFrontmatter"]) {
     const want = JSON.stringify(run(pi[name], input));
-    const got = JSON.stringify(run(pig[name], input));
+    const got = JSON.stringify(run(ompig[name], input));
     if (want !== got) { console.log(name + " " + JSON.stringify(input) + "\npi:  " + want + "\npig: " + got); process.exitCode = 1; }
   }
 }`

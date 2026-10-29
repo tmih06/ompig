@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // CompactionReason is the union "manual" | "threshold" | "overflow" (packages/durable/src/harness/types.ts); each constant is the exact wire value that the compaction input, the compaction events and the pi.compaction entry carry.

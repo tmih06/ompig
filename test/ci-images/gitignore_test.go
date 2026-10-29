@@ -29,14 +29,14 @@ func TestRepositoryIgnorePolicyProtectsLocalState(t *testing.T) {
 	for _, path := range []string{
 		"coding/extension/host/cellpack/cells/manifest.json",
 		"test/parity/scenarios/footer/testdata/multi-pi-agent/auth.json",
-		"test/parity/scenarios/footer/testdata/multi-pig-agent/auth.json",
+		"test/parity/scenarios/footer/testdata/multi-ompig-agent/auth.json",
 		"test/parity/scenarios/footer/testdata/pi-agent/auth.json",
-		"test/parity/scenarios/footer/testdata/pig-agent/auth.json",
+		"test/parity/scenarios/footer/testdata/ompig-agent/auth.json",
 		"test/parity/scenarios/model-resolver-selector/testdata/pi-agent-expired/auth.json",
-		"test/parity/scenarios/model-resolver-selector/testdata/pig-agent-expired/auth.json",
+		"test/parity/scenarios/model-resolver-selector/testdata/ompig-agent-expired/auth.json",
 		"test/parity/scenarios/providers-registry/testdata/oauth-agent/auth.json",
 		"test/parity/scenarios/selectors/testdata/pi-agent/auth.json",
-		"test/parity/scenarios/selectors/testdata/pig-home/agent/auth.json",
+		"test/parity/scenarios/selectors/testdata/ompig-home/agent/auth.json",
 		"test/parity/scenarios/project-trust/testdata/session-target-cwd/target/README.txt",
 	} {
 		cmd := exec.Command("git", "check-ignore", "--no-index", "-q", filepath.FromSlash(path))

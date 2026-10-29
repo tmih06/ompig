@@ -13,7 +13,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 // resumeHistoryTurns and resumeKeptTurns size the resumed fixtures: longsession turns of about 20 KB each (four entries: a prompt, a read
@@ -189,7 +189,7 @@ func measureResume(t *testing.T, historyTurns, keptTurns int) resumeMeasure {
 }
 
 // A session resumed from a file whose history a compaction left behind retains what its active context needs, not that history: Pi's
-// session-manager.ts holds every entry, and PiG reads entries outside the context back from its snapshot of the file, so what the session keeps
+// session-manager.ts holds every entry, and Ompig reads entries outside the context back from its snapshot of the file, so what the session keeps
 // is bounded by the context window, by the owner's bar. Each further byte of context retains its decode and no copy of its record, each further
 // byte of history at most a compact index entry, and the whole stays within twice the context's records plus a constant.
 func TestResumedSessionRetainsItsContextNotItsHistory(t *testing.T) {

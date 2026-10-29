@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 func BenchmarkManagedToolStartup(b *testing.B) {
 	b.Setenv("PATH", b.TempDir())
-	b.Setenv("PIG_OFFLINE", "1")
+	b.Setenv("OMPIG_OFFLINE", "1")
 	tm := tools.NewToolsManager(b.TempDir())
 	b.ReportAllocs()
 	for b.Loop() {

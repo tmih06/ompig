@@ -11,8 +11,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // rpcUIResponse is an extension_ui_response as Pi reads it: `value` and `confirmed` are whatever JSON the client sent (rpc-mode.ts:137-150 `"value" in r ? r.value : undefined`,

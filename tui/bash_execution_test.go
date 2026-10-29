@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func TestBashExecutionBlock_RunningHeader(t *testing.T) {
@@ -40,7 +40,7 @@ func TestBashExecutionBlock_AppendsOutputLines(t *testing.T) {
 // TestBashExecutionBlock_PreservesTrailingNewlineRow locks the parity
 // behavior fixed in the interactive-rendering loop. Upstream renders
 // `echo hi\n` as output producing TWO logical lines (content + blank)
-// because `"hi\n".split("\n")` returns ["hi", ""]. Previously pig
+// because `"hi\n".split("\n")` returns ["hi", ""]. Previously ompig
 // `TrimRight("\n")`-stripped the trailing newline, losing the blank.
 func TestBashExecutionBlock_PreservesTrailingNewlineRow(t *testing.T) {
 	b := NewBashExecutionComponent("echo hi", nil, false, 1)

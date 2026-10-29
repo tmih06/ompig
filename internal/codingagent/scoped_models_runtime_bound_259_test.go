@@ -7,19 +7,19 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Issue #259: the selector's scope update installed registry catalog descriptors (no backend), so a model cycled to afterwards failed prompt
 // validation with "No model selected". Pi installs the Session ModelRuntime's available snapshot (interactive-mode.ts:5397,5421-5431).
 func TestScopedSelectionKeepsRuntimeBoundModelsForCycling259(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

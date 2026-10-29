@@ -1,6 +1,6 @@
 package main
 
-import "github.com/MichaelKinsy/PiG/internal/modelgen"
+import "github.com/tmih06/ompig/internal/modelgen"
 
 type modelsDevReasoningOption = modelgen.ModelsDevReasoningOption
 

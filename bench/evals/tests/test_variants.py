@@ -15,7 +15,7 @@ class ParseArmTest(unittest.TestCase):
     def test_flags_and_environment(self):
         arm = variants.parse_arm("pgo=/bin/true,noext,own,GOGC=200", {"GOMEMLIMIT": "256MiB"})
         self.assertEqual(arm.id, "pgo")
-        self.assertEqual(arm.family, "pig")
+        self.assertEqual(arm.family, "ompig")
         self.assertTrue(arm.no_extensions)
         self.assertTrue(arm.spec["own_extensions"])
         self.assertEqual(arm.spec["env"], {"GOMEMLIMIT": "256MiB", "GOGC": "200"})
@@ -41,7 +41,7 @@ class ParseArmTest(unittest.TestCase):
 class InstallTest(unittest.TestCase):
     def test_a_variant_runs_its_own_executable_and_is_unpinned(self):
         with tempfile.TemporaryDirectory() as d:
-            exe = os.path.join(d, "pig")
+            exe = os.path.join(d, "ompig")
             with open(exe, "w") as f:
                 f.write("#!/bin/sh\n")
             os.chmod(exe, 0o755)

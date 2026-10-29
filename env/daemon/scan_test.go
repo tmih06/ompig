@@ -7,7 +7,7 @@ package daemon
 import (
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 func scan(t *testing.T, file []byte, start int64, end *int64, chunk int) durableenv.LineScan {

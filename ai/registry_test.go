@@ -10,7 +10,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // TestImageCatalogPin binds the image catalog to @earendil-works/pi-ai's IMAGE_MODELS at the pinned version.

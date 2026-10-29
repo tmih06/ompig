@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func TestExtensionLoadDiagnosticsMatchUpstreamFormat(t *testing.T) {
@@ -60,7 +60,7 @@ func runPigStartup(t *testing.T, binary, home, agentDir, cwd, stdin string, args
 	t.Helper()
 	cmd := exec.Command(binary, append([]string{"--model", "test-faux/faux-1", "--offline"}, args...)...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	cmd.Stdin = strings.NewReader(stdin)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
@@ -75,7 +75,7 @@ func requireUpstreamExtensionFailure(t *testing.T, run startupRun, wantErrors ..
 		t.Fatalf("startup error = %v, want exit status 1\nstderr:\n%s", run.err, run.stderr)
 	}
 	lines := strings.Split(strings.TrimSpace(run.stderr), "\n")
-	if lines[len(lines)-1] != `Hint: Start without extensions using "pig -ne".` {
+	if lines[len(lines)-1] != `Hint: Start without extensions using "ompig -ne".` {
 		t.Fatalf("stderr does not end with the -ne hint:\n%s", run.stderr)
 	}
 	for _, want := range wantErrors {
@@ -89,7 +89,7 @@ func requireUpstreamExtensionFailure(t *testing.T, run startupRun, wantErrors ..
 // auto-discovered extension fails to register, when a -e path
 // does not exist, and when a -e directory is not an extension, printing
 // `Error: Failed to load extension "<path>": ...` lines and the -ne hint.
-// `-ne` skips discovered extensions but still loads -e paths. PiG used to warn
+// `-ne` skips discovered extensions but still loads -e paths. Ompig used to warn
 // and continue in all three cases.
 func TestStartupExtensionLoadFailureMatchesUpstream(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
@@ -130,7 +130,7 @@ func TestStartupExtensionLoadFailureMatchesUpstream(t *testing.T) {
 }
 
 // Upstream discovers <dir>/index.js as the extension path and names that file
-// in load errors. PiG loads the directory but reports the discovered file.
+// in load errors. Ompig loads the directory but reports the discovered file.
 func TestAutoDiscoveredIndexExtensionReportsEntryFile(t *testing.T) {
 	agentDir := t.TempDir()
 	broken := filepath.Join(agentDir, "extensions", "brokendir")
@@ -152,7 +152,7 @@ func TestAutoDiscoveredIndexExtensionReportsEntryFile(t *testing.T) {
 
 // A broken -e extension in a project that needs a trust decision is loaded by
 // the pre-trust pass. Upstream loadFinalExtensionSet does not retry a failed
-// preload and reports its error once; PiG used to load it again and print the
+// preload and reports its error once; Ompig used to load it again and print the
 // failure twice, from two processes.
 func TestStartupReportsFailedPreTrustExtensionOnce(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
@@ -230,7 +230,7 @@ func TestStartupDuplicateExtensionCopiesMatchUpstream(t *testing.T) {
 				t.Fatalf("tool conflict startup error = %v, want exit 1\nstderr:\n%s", run.err, run.stderr)
 			}
 			want := `Error: Failed to load extension "` + extensions[1] + `": Tool "ask_user" conflicts with ` + extensions[0]
-			if !strings.Contains(run.stderr, want) || !strings.Contains(run.stderr, `Hint: Start without extensions using "pig -ne".`) {
+			if !strings.Contains(run.stderr, want) || !strings.Contains(run.stderr, `Hint: Start without extensions using "ompig -ne".`) {
 				t.Fatalf("stderr lacks %q and the hint:\n%s", want, run.stderr)
 			}
 			continue

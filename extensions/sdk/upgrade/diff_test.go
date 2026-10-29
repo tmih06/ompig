@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 func TestDiffShowsOnlyTheChange(t *testing.T) {

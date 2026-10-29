@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package core is PiG's synchronous Durable core (docs/plan/durable-core, ADR-0001): one deterministic state machine
+// Package core is Ompig's synchronous Durable core (docs/plan/durable-core, ADR-0001): one deterministic state machine
 // per Session that takes an ABI 1 event and returns a step of commits, reads, notices and effects. The same source
 // builds natively, as a Go wasip1 reactor and as a TinyGo wasip1 reactor (-scheduler=none); cmd/corewasm is the Wasm
 // binding and sqlhost the native host.
@@ -29,8 +29,8 @@ package core
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 // ABIID is abi_id (ABI section 1).
@@ -65,7 +65,7 @@ func NewSession(uuidv7 func() string) *Session {
 	}
 }
 
-// Reader runs one read statement of the SQL table at once and returns its rows (ABI section 4.2, import pig.read). The
+// Reader runs one read statement of the SQL table at once and returns its rows (ABI section 4.2, import ompig.read). The
 // rows' text and blob values must not alias host memory the next call reuses.
 type Reader = func(sql uint16, params []abi.Value) ([][]abi.Value, error)
 

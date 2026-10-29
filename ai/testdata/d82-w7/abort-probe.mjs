@@ -48,7 +48,7 @@ async function run(phase) {
 	mkdirSync(agent);
 	writeFileSync(join(agent, 'models.json'), JSON.stringify({ providers: { p: { api, baseUrl: baseUrlFor(server.address().port), apiKey: 'k', models: [{ id: 'strict', name: 'strict', reasoning: false, input: ['text'], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 128000, maxTokens: 1000 }] } } }));
 	const isScript = bin.endsWith('.js');
-	const child = spawn(isScript ? nodeBin : bin, [...(isScript ? [bin] : []), '--mode', 'rpc', '--offline', '--no-extensions', '--model', 'p/strict', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], { cwd: dir, env: { ...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, PIG_CODING_AGENT_DIR: agent, PIG_HOME: join(dir, 'pighome') }, stdio: ['pipe', 'pipe', 'inherit'] });
+	const child = spawn(isScript ? nodeBin : bin, [...(isScript ? [bin] : []), '--mode', 'rpc', '--offline', '--no-extensions', '--model', 'p/strict', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], { cwd: dir, env: { ...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, OMPIG_CODING_AGENT_DIR: agent, OMPIG_HOME: join(dir, 'pighome') }, stdio: ['pipe', 'pipe', 'inherit'] });
 	child.stdin.on('error', () => { /* a CLI that exited is reported by gone below */ });
 	const result = { phase, types: [] };
 	const observers = new Set();

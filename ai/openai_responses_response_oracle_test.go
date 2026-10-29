@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/openai-responses.ts, openai-responses-shared.ts processResponsesStream
 
 // Scripted Responses-API SSE streams (reasoning summaries, assistant messages with output text and refusals, function calls with fragmented
-// arguments, completed/incomplete/failed responses with usage, error events, truncated streams) read by the pinned pi-ai and by PiG; the stream
+// arguments, completed/incomplete/failed responses with usage, error events, truncated streams) read by the pinned pi-ai and by Ompig; the stream
 // events and the final message must be equal.
 func TestOpenAIResponsesResponseMatchesPi(t *testing.T) {
 	checkResponsesResponse(t, "openai-responses")

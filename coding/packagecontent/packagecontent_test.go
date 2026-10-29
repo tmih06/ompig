@@ -13,16 +13,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
 func TestDiscoverPigPackageMembers(t *testing.T) {
 	root := t.TempDir()
 	writeTestFile(t, filepath.Join(root, "package.json"), `{
   "name": "pkg",
-  "pig": {
+  "ompig": {
     "hooks": ["hooks/validate.json"],
     "mcpServers": ["mcp/source-control.json"],
     "agentEnvironments": [".devcontainer/go/devcontainer.json"]
@@ -50,7 +50,7 @@ func TestDiscoverPigPackageMembers(t *testing.T) {
 
 func TestValidateRejectsUnsupportedHookDeclaration(t *testing.T) {
 	root := t.TempDir()
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"hooks":["hooks/hooks.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"hooks":["hooks/hooks.json"]}}`)
 	writeTestFile(t, filepath.Join(root, "hooks", "hooks.json"), `{"hooks":{"PreToolUse":[{"hooks":[{"type":"command","command":"true"}]}]}}`)
 	_, err := ValidatePackage(root)
 	if err == nil || !strings.Contains(err.Error(), "PreToolUse is not supported") {
@@ -60,7 +60,7 @@ func TestValidateRejectsUnsupportedHookDeclaration(t *testing.T) {
 
 func TestValidateRejectsMissingDeclaredResource(t *testing.T) {
 	root := t.TempDir()
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"hooks":["hooks/missing.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"hooks":["hooks/missing.json"]}}`)
 	_, err := ValidatePackage(root)
 	if err == nil || !strings.Contains(err.Error(), "hooks/missing.json") || !errors.Is(err, fs.ErrNotExist) {
 		t.Fatalf("error = %v", err)
@@ -86,7 +86,7 @@ func TestValidatePackageRequiresManifestAndName(t *testing.T) {
 	if _, err := ValidatePackage(root); err == nil || !strings.Contains(err.Error(), "does not exist") {
 		t.Fatalf("missing manifest error = %v", err)
 	}
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"pig":{}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"ompig":{}}`)
 	if _, err := ValidatePackage(root); err == nil || !strings.Contains(err.Error(), "non-empty name") {
 		t.Fatalf("missing name error = %v", err)
 	}
@@ -111,7 +111,7 @@ func TestValidateRejectsSymlinkEscape(t *testing.T) {
 	parent := t.TempDir()
 	root := filepath.Join(parent, "package")
 	outside := filepath.Join(parent, "outside")
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"hooks":["hooks/escape/hook.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"hooks":["hooks/escape/hook.json"]}}`)
 	writeTestFile(t, filepath.Join(outside, "hook.json"), `{"hooks":{"SessionStart":[{"hooks":[{"type":"command","command":"true"}]}]}}`)
 	if err := os.MkdirAll(filepath.Join(root, "hooks"), 0o755); err != nil {
 		t.Fatal(err)
@@ -127,7 +127,7 @@ func TestValidateRejectsSymlinkedBuildContextEscape(t *testing.T) {
 	parent := t.TempDir()
 	root := filepath.Join(parent, "package")
 	outside := filepath.Join(parent, "outside")
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
 	writeTestFile(t, filepath.Join(root, ".devcontainer", "devcontainer.json"), `{"build":{"context":"context","dockerfile":"Dockerfile"}}`)
 	writeTestFile(t, filepath.Join(outside, "Dockerfile"), "FROM scratch\n")
 	testenv.RequireDirectoryLink(t, outside, filepath.Join(root, ".devcontainer", "context"))
@@ -165,7 +165,7 @@ func TestValidateRejectsRelativeBindAndMissingComposeService(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			root := t.TempDir()
-			writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
+			writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
 			writeTestFile(t, filepath.Join(root, ".devcontainer", "devcontainer.json"), tc.definition)
 			if tc.compose != "" {
 				writeTestFile(t, filepath.Join(root, ".devcontainer", "compose.yaml"), tc.compose)
@@ -180,7 +180,7 @@ func TestValidateRejectsRelativeBindAndMissingComposeService(t *testing.T) {
 
 func TestRootAgentEnvironmentUsesPackageName(t *testing.T) {
 	root := t.TempDir()
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"@acme/dev","pig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"@acme/dev","ompig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
 	writeTestFile(t, filepath.Join(root, ".devcontainer", "devcontainer.json"), `{"image":"alpine:3.20"}`)
 	resources, err := ValidatePackage(root)
 	if err != nil {
@@ -194,7 +194,7 @@ func TestRootAgentEnvironmentUsesPackageName(t *testing.T) {
 func TestValidateRejectsManifestResourceOutsidePackage(t *testing.T) {
 	parent := t.TempDir()
 	root := filepath.Join(parent, "package")
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"hooks":["../outside.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"hooks":["../outside.json"]}}`)
 	writeTestFile(t, filepath.Join(parent, "outside.json"), `{}`)
 	_, err := Validate(root)
 	if err == nil || !strings.Contains(err.Error(), "escapes package root") {
@@ -204,7 +204,7 @@ func TestValidateRejectsManifestResourceOutsidePackage(t *testing.T) {
 
 func TestValidateDevContainerClosure(t *testing.T) {
 	root := t.TempDir()
-	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
+	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
 	writeTestFile(t, filepath.Join(root, ".devcontainer", "devcontainer.json"), `{
   "name": "compose",
   "dockerComposeFile": "compose.yaml",
@@ -249,7 +249,7 @@ func TestValidateRejectsNonPortableDevContainer(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			root := t.TempDir()
-			writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
+			writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","ompig":{"agentEnvironments":[".devcontainer/devcontainer.json"]}}`)
 			writeTestFile(t, filepath.Join(root, ".devcontainer", "devcontainer.json"), tc.definition)
 			_, err := Validate(root)
 			if err == nil || !strings.Contains(err.Error(), tc.want) || tc.notExist && !errors.Is(err, fs.ErrNotExist) {
@@ -389,17 +389,17 @@ func TestDiscoverMergesPiAndPigPluginManifests(t *testing.T) {
 func TestDiscoverPigPluginAugmentationOverridesSharedPluginKind(t *testing.T) {
 	root := t.TempDir()
 	shared := filepath.Join(root, "extensions", "shared")
-	pig := filepath.Join(root, "extensions", "pig")
+	ompig := filepath.Join(root, "extensions", "ompig")
 	writeTestFile(t, filepath.Join(shared, "index.js"), "export default function extension(pi) {}\n")
-	writeTestFile(t, filepath.Join(pig, "index.js"), "export default function extension(pi) {}\n")
+	writeTestFile(t, filepath.Join(ompig, "index.js"), "export default function extension(pi) {}\n")
 	writeTestFile(t, filepath.Join(root, "plugin.json"), `{"extensions":["extensions/shared"]}`)
-	writeTestFile(t, filepath.Join(root, ".pig-plugin", "plugin.json"), `{"extensions":["extensions/pig"]}`)
+	writeTestFile(t, filepath.Join(root, ".ompig-plugin", "plugin.json"), `{"extensions":["extensions/ompig"]}`)
 
 	resources, err := Discover(root)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assertContains(t, resources.ExtensionEntries, filepath.Join(pig, "index.js"))
+	assertContains(t, resources.ExtensionEntries, filepath.Join(ompig, "index.js"))
 	assertNotContains(t, resources.ExtensionEntries, filepath.Join(shared, "index.js"))
 }
 
@@ -591,9 +591,9 @@ func assertNotContains(t *testing.T, paths []string, unwanted string) {
 func TestValidateRejectsPigletPackageMembership(t *testing.T) {
 	root := t.TempDir()
 	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg"}`)
-	writeTestFile(t, filepath.Join(root, "plugin.json"), `{"name":"pkg","piglets":["review.piglet.yaml"]}`)
-	writeTestFile(t, filepath.Join(root, "review.piglet.yaml"), "name: review\n")
-	if _, err := ValidatePackage(root); err == nil || !strings.Contains(err.Error(), "Piglets are independent") {
+	writeTestFile(t, filepath.Join(root, "plugin.json"), `{"name":"pkg","ompiglets":["review.ompiglet.yaml"]}`)
+	writeTestFile(t, filepath.Join(root, "review.ompiglet.yaml"), "name: review\n")
+	if _, err := ValidatePackage(root); err == nil || !strings.Contains(err.Error(), "Ompiglets are independent") {
 		t.Fatalf("error = %v", err)
 	}
 }
@@ -692,7 +692,7 @@ func TestValidateConfiguredForStartupReportsEveryUnresolvableExtension(t *testin
 		writeTestFile(t, filepath.Join(dir, "extension.go"), "package "+filepath.Base(dir)+"\n\nfunc NotAFactory() {}\n")
 	}
 	writeTestFile(t, filepath.Join(good, "go.mod"), "module example.com/good\n\ngo 1.26\n")
-	writeTestFile(t, filepath.Join(good, "extension.go"), "package good\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"good\") }\n")
+	writeTestFile(t, filepath.Join(good, "extension.go"), "package good\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"good\") }\n")
 	prompt := filepath.Join(root, "prompts", "p.md")
 	writeTestFile(t, prompt, "prompt\n")
 
@@ -736,7 +736,7 @@ func TestValidateConfiguredForStartupReportsEveryUnresolvableExtension(t *testin
 		t.Fatalf("escaping Package error = %v", err)
 	}
 	hooks := t.TempDir()
-	writeTestFile(t, filepath.Join(hooks, "package.json"), `{"name":"pkg","pig":{"hooks":["hooks/missing.json"]}}`)
+	writeTestFile(t, filepath.Join(hooks, "package.json"), `{"name":"pkg","ompig":{"hooks":["hooks/missing.json"]}}`)
 	if _, _, _, err := ValidateConfiguredForStartup(hooks, nil); err == nil || !strings.Contains(err.Error(), "hooks/missing.json") {
 		t.Fatalf("missing hook error = %v", err)
 	}
@@ -777,7 +777,7 @@ func TestValidateConfiguredForStartupKeepsLinkedGoExtensionDirectory(t *testing.
 			writeTestFile(t, filepath.Join(root, "package.json"), tc.manifest)
 			target := filepath.Join(root, "x", "extension")
 			writeTestFile(t, filepath.Join(target, "go.mod"), "module example.com/x\n\ngo 1.26\n")
-			writeTestFile(t, filepath.Join(target, "extension.go"), "package x\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+			writeTestFile(t, filepath.Join(target, "extension.go"), "package x\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 			link := filepath.Join(root, "extensions", "x")
 			if err := os.MkdirAll(filepath.Dir(link), 0o755); err != nil {
 				t.Fatal(err)
@@ -802,7 +802,7 @@ func TestValidateConfiguredForStartupResolvesEachEnabledExtensionOnce(t *testing
 	for _, name := range []string{"a", "b", "off"} {
 		dir := filepath.Join(root, "extensions", name)
 		writeTestFile(t, filepath.Join(dir, "go.mod"), "module example.com/"+name+"\n\ngo 1.26\n")
-		writeTestFile(t, filepath.Join(dir, "extension.go"), "package "+name+"\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\""+name+"\") }\n")
+		writeTestFile(t, filepath.Join(dir, "extension.go"), "package "+name+"\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\""+name+"\") }\n")
 	}
 	bad := filepath.Join(root, "extensions", "bad")
 	writeTestFile(t, filepath.Join(bad, "go.mod"), "module example.com/bad\n\ngo 1.26\n")
@@ -902,9 +902,9 @@ func TestStartupAcceptsPiPackageResourceShapes(t *testing.T) {
 
 // A package with a "pi" manifest loads from what it declares, as upstream does.
 // @dietrichgebert/ponytail ships Claude Code, Codex and Cursor hook configs in
-// hooks/ beside a pi manifest; PiG must neither read them as its own Hooks
+// hooks/ beside a pi manifest; Ompig must neither read them as its own Hooks
 // nor refuse the Package over events it does not support. Without a pi
-// manifest, PiG's conventional directories still apply.
+// manifest, Ompig's conventional directories still apply.
 func TestPiManifestPackageSkipsPigConventionDirectories(t *testing.T) {
 	root := t.TempDir()
 	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pi":{"extensions":["./pi-extension/index.js"],"skills":["./skills"]}}`)
@@ -933,7 +933,7 @@ func TestPiManifestPackageSkipsPigConventionDirectories(t *testing.T) {
 
 // Upstream resolveExtensionEntries loads each existing entry an extension
 // directory's Pi manifest declares as its own extension, falls back to the
-// index when none exists, and loads nothing when neither exists. PiG used to
+// index when none exists, and loads nothing when neither exists. Ompig used to
 // return the directory itself, which then failed to resolve to one entry.
 func TestDiscoverAutomaticLoadsEachDeclaredEntryOfAnExtensionDirectory(t *testing.T) {
 	dir := t.TempDir()

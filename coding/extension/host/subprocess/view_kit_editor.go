@@ -18,12 +18,12 @@ import (
 	"slices"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // viewEditorMaxSlashCommands bounds an editor's autocomplete command list.
-// pig additive (D107): Pi's CombinedAutocompleteProvider takes any number of commands; the wire node is validated before the host builds it, so a frontend cannot make the host hold an unbounded list.
+// ompig additive (D107): Pi's CombinedAutocompleteProvider takes any number of commands; the wire node is validated before the host builds it, so a frontend cannot make the host hold an unbounded list.
 const viewEditorMaxSlashCommands = 1000
 
 func init() {
@@ -62,7 +62,7 @@ var editorViewBuilder atomic.Pointer[editorBuildFunc]
 
 type editorBuildFunc func(*viewBuilder, *ViewNode, *frontend.ViewNode) (tui.Component, error)
 
-// EnableEditorViews lets the view kit build `editor` nodes. The `pig` command calls it where it creates the extension host, so
+// EnableEditorViews lets the view kit build `editor` nodes. The `ompig` command calls it where it creates the extension host, so
 // every mode serves editor views as before. An embedder that never draws an extension's editor leaves it out and
 // does not link the terminal editor; one that serves views to its own terminal calls it once before the first view
 // is built. It is safe to call more than once and from any goroutine.

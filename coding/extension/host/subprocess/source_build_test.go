@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // TestHost_Integration_SourceBuild proves the full source→build→load→execute
@@ -96,9 +96,9 @@ import (
 )
 
 func main() {
-	sockPath := os.Getenv("PIG_EXT_SOCKET")
+	sockPath := os.Getenv("OMPIG_EXT_SOCKET")
 	if sockPath == "" {
-		fmt.Fprintln(os.Stderr, "PIG_EXT_SOCKET not set")
+		fmt.Fprintln(os.Stderr, "OMPIG_EXT_SOCKET not set")
 		os.Exit(1)
 	}
 	conn, err := net.Dial("unix", sockPath)

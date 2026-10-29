@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // execAbortHelperLifetime outlives every wait of the tests below: a helper that is still running after its call returned, or that no

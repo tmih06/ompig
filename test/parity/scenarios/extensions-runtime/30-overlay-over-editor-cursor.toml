@@ -9,7 +9,7 @@
 #
 # Upstream evidence (pi 0.87.1, tmux 100x35): the editor row reads
 #   "\x1b[7m \x1b[0m" then 39 plain cells before the overlay's left border;
-# PiG before the fix painted all 40 cells inverse. Re-probed with Pi 0.99.2 at
+# Ompig before the fix painted all 40 cells inverse. Re-probed with Pi 0.99.2 at
 # 52x35: the editor row (overlay row 18) reads "\x1b[0;7m \x1b[0m" then 15
 # plain cells before the overlay's left border.
 
@@ -24,14 +24,14 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-# 256 colors in both binaries: PiG's header then takes Pi's two logo lines with
-# the PiG. text mark (D2), so the transcript behind the centered overlay has the
-# same rows in both binaries. In truecolor PiG's 7-line pig head makes the
+# 256 colors in both binaries: Ompig's header then takes Pi's two logo lines with
+# the Ompig. text mark (D2), so the transcript behind the centered overlay has the
+# same rows in both binaries. In truecolor Ompig's 7-line ompig head makes the
 # header 2 rows taller and the overlay covers different rows.
-pig = ["PIG_TEST_FAUX=1", "COLORTERM="]
+ompig = ["OMPIG_TEST_FAUX=1", "COLORTERM="]
 pi = ["COLORTERM="]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/overlay-editor-cursor.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/overlay-editor-cursor.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/overlay-editor-cursor.mjs",
@@ -40,7 +40,7 @@ pi_extensions = [
 [tmux]
 width = 52
 height = 35
-ready_pattern_pig = "COVER-PROBE-READY"
+ready_pattern_ompig = "COVER-PROBE-READY"
 ready_pattern_pi = "COVER-PROBE-READY"
 ready_timeout_seconds = 30
 # The crop is the editor frame (overlay rows 17-19 at 52x35): the startup

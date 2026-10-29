@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/MichaelKinsy/PiG/main/test/parity/interface-extractor/schema/recommendations.schema.json",
-  "title": "Non-authoritative Pig porting recommendations",
+  "$id": "https://raw.githubusercontent.com/tmih06/ompig/main/test/parity/interface-extractor/schema/recommendations.schema.json",
+  "title": "Non-authoritative Ompig porting recommendations",
   "type": "object",
   "additionalProperties": false,
   "required": ["upstreamVersion", "generatedBy", "recommendations"],
@@ -13,7 +13,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "upstreamShapeHash", "recommendedDisposition", "confidence", "basis", "alternatives", "pigCandidates", "missingClosure", "provenance"],
+        "required": ["id", "upstreamShapeHash", "recommendedDisposition", "confidence", "basis", "alternatives", "ompigCandidates", "missingClosure", "provenance"],
         "properties": {
           "id": { "type": "string" },
           "upstreamShapeHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
@@ -21,8 +21,8 @@
           "confidence": { "enum": ["low", "medium", "high"] },
           "basis": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "alternatives": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["ported", "partial", "deferred", "designed-out", "divergence", "pending"] } },
-          "pigCandidates": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
-          "missingClosure": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["pig-cli-shape", "pig-go-shape", "candidate-disambiguation", "shape-translation-review", "production-reachability", "required-layers", "behavioral-evidence", "async-contract", "wire-shape", "host-dispatch", "sdk-go", "sdk-rust", "sdk-python", "isolated-conformance", "packed-conformance"] } },
+          "ompigCandidates": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "missingClosure": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["ompig-cli-shape", "ompig-go-shape", "candidate-disambiguation", "shape-translation-review", "production-reachability", "required-layers", "behavioral-evidence", "async-contract", "wire-shape", "host-dispatch", "sdk-go", "sdk-rust", "sdk-python", "isolated-conformance", "packed-conformance"] } },
           "provenance": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
         }
       }

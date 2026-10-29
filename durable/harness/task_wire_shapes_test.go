@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // The built-in tasks persist their input, checkpoint and result as JSON, so the member names and order are the Pi object literals'. Each case cites

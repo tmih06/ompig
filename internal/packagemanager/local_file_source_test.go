@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // packages/coding-agent/src/core/package-manager.ts:1360-1376 resolveLocalExtensionSource: a local Package source that is a file is

@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestFindExtensionStackMatches(t *testing.T) {
@@ -84,7 +84,7 @@ func TestFindExtensionStackMatches(t *testing.T) {
 // panic source frames. It does not claim recover intercepts runtime.throw or
 // other unrecoverable Go runtime fatals.
 func TestCrashAttributionFromSacrificialProcess(t *testing.T) {
-	const helperEnv = "PIG_TEST_SACRIFICIAL_CRASH"
+	const helperEnv = "OMPIG_TEST_SACRIFICIAL_CRASH"
 	if os.Getenv(helperEnv) == "1" {
 		panic("sacrificial crash")
 	}
@@ -126,9 +126,9 @@ func TestFormatCrashExtensionHint(t *testing.T) {
 	}{
 		{nil, ""},
 		{[]string{""}, ""},
-		{[]string{"npm:memory"}, "A stack frame came from loaded extension `npm:memory`, which may be involved. Try disabling it with `pig config`, or run `pig -ne` to confirm."},
-		{[]string{"one", "two"}, "A stack frame came from loaded extensions `one` and `two`, which may be involved. Try disabling them with `pig config`, or run `pig -ne` to confirm."},
-		{[]string{"one", "two", "three"}, "A stack frame came from loaded extensions `one`, `two`, and `three`, which may be involved. Try disabling them with `pig config`, or run `pig -ne` to confirm."},
+		{[]string{"npm:memory"}, "A stack frame came from loaded extension `npm:memory`, which may be involved. Try disabling it with `ompig config`, or run `ompig -ne` to confirm."},
+		{[]string{"one", "two"}, "A stack frame came from loaded extensions `one` and `two`, which may be involved. Try disabling them with `ompig config`, or run `ompig -ne` to confirm."},
+		{[]string{"one", "two", "three"}, "A stack frame came from loaded extensions `one`, `two`, and `three`, which may be involved. Try disabling them with `ompig config`, or run `ompig -ne` to confirm."},
 	}
 	for _, test := range tests {
 		if got := FormatCrashExtensionHint(test.matches); got != test.want {
@@ -225,13 +225,13 @@ func TestTakeUnnotifiedCrashAnnouncesOnce(t *testing.T) {
 func TestCrashMessagesMatchUpstream(t *testing.T) {
 	at := time.Date(2026, 9, 23, 15, 4, 5, 0, time.Local)
 	notice := crashNotice(CrashRecord{Timestamp: isoTimestamp(at), Message: "boom"})
-	if want := "pig crashed on 9/23/2026, 3:04:05 PM (boom). Run /bug to report it; the crash details are attached automatically."; notice != want {
+	if want := "ompig crashed on 9/23/2026, 3:04:05 PM (boom). Run /bug to report it; the crash details are attached automatically."; notice != want {
 		t.Fatalf("notice = %q, want %q", notice, want)
 	}
-	if got := crashReportInstructions("/s.jsonl"); got != "To report this crash: run `pig -r` to resume the session, then run /bug. The crash details are attached automatically." {
+	if got := crashReportInstructions("/s.jsonl"); got != "To report this crash: run `ompig -r` to resume the session, then run /bug. The crash details are attached automatically." {
 		t.Fatalf("instructions = %q", got)
 	}
-	if got := crashReportInstructions(""); got != "To report this crash: start pig and run /bug. The crash details are attached automatically." {
+	if got := crashReportInstructions(""); got != "To report this crash: start ompig and run /bug. The crash details are attached automatically." {
 		t.Fatalf("instructions = %q", got)
 	}
 	if crashMessage(errors.New("bad")) != "bad" || crashMessage("text") != "text" || crashMessage(errors.New("")) != "*errors.errorString" {
@@ -242,13 +242,13 @@ func TestCrashMessagesMatchUpstream(t *testing.T) {
 // Upstream uncaughtCrash prints the crash, records it, and prints the /bug
 // instructions only when the record was written.
 func TestUncaughtCrashPrintsRecordsAndInstructs(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	agentDir := t.TempDir()
 	m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: "/work", AgentDir: agentDir, AppVersion: "9.9.9"})
 	var stderr strings.Builder
 	m.uncaughtCrash(errors.New("kaboom"), []byte("goroutine 1 [running]:\n"), &stderr)
 	out := stderr.String()
-	if !strings.HasPrefix(out, "pig exiting due to uncaughtException:\nkaboom\ngoroutine 1 [running]:\n") || !strings.HasSuffix(out, "start pig and run /bug. The crash details are attached automatically.\n") {
+	if !strings.HasPrefix(out, "ompig exiting due to uncaughtException:\nkaboom\ngoroutine 1 [running]:\n") || !strings.HasSuffix(out, "start ompig and run /bug. The crash details are attached automatically.\n") {
 		t.Fatalf("stderr = %q", out)
 	}
 	records := ReadCrashLog(CrashLogPath(agentDir))
@@ -269,7 +269,7 @@ func TestUncaughtCrashPrintsRecordsAndInstructs(t *testing.T) {
 }
 
 func TestUncaughtCrashAttributesLoadedExtension(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	root := filepath.Join(t.TempDir(), "memory")
 	entry := filepath.Join(root, "index.ts")
 	m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: "/work", AgentDir: t.TempDir(), AppVersion: "9.9.9"})
@@ -285,7 +285,7 @@ func TestUncaughtCrashAttributesLoadedExtension(t *testing.T) {
 }
 
 func TestHandleFatalRuntimeErrorRecordsAndRequestsFailureExit(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	m, _ := newExtensionDialogProbe(t)
 	m.opts.AgentDir = t.TempDir()
 	m.opts.AppVersion = "fatal-test"
@@ -381,13 +381,13 @@ func TestReviewBuiltinForkFailureIsNotFatal(t *testing.T) {
 }
 
 func TestShowCrashNoticeAnnouncesPendingCrash(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	m, _ := newExtensionDialogProbe(t)
 	m.opts.AgentDir = t.TempDir()
 	RecordCrash(crashInput("startup-boom"), CrashLogPath(m.opts.AgentDir), time.Now())
 	m.showCrashNotice()
 	rendered := stripANSITest(strings.Join(m.chatContainer.Render(200), "\n"))
-	if !strings.Contains(rendered, "pig crashed on ") || !strings.Contains(rendered, "(startup-boom). Run /bug to report it") {
+	if !strings.Contains(rendered, "ompig crashed on ") || !strings.Contains(rendered, "(startup-boom). Run /bug to report it") {
 		t.Fatalf("chat = %q", rendered)
 	}
 }
@@ -406,7 +406,7 @@ func TestBugReportAttachesAndClearsTheCrashLog(t *testing.T) {
 	if err := bugHandler(sc); err != nil {
 		t.Fatal(err)
 	}
-	matches, _ := filepath.Glob(filepath.Join(dir, "pig-bug-report-*.zip"))
+	matches, _ := filepath.Glob(filepath.Join(dir, "ompig-bug-report-*.zip"))
 	if len(matches) != 1 {
 		t.Fatalf("archives = %v", matches)
 	}
@@ -434,7 +434,7 @@ func TestBugReportAttachesAndClearsTheCrashLog(t *testing.T) {
 func TestRunRecordsACrashAndReportsErrInteractiveCrashed(t *testing.T) {
 	// Run applies the theme setting, which selects the process-wide active theme.
 	restoreStartupTheme(t)
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	agentDir := t.TempDir()
 	m := NewInteractiveMode(nil, InteractiveModeOptions{
 		CWD:         t.TempDir(),
@@ -455,13 +455,13 @@ func TestRunRecordsACrashAndReportsErrInteractiveCrashed(t *testing.T) {
 // A renderer overflow is upstream's thrown Error: Node prints it as
 // "Error: <message>", and the crash record keeps the bare message.
 func TestUncaughtCrashPrintsRenderOverflowAsError(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	agentDir := t.TempDir()
 	m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: "/work", AgentDir: agentDir, AppVersion: "9.9.9"})
 	overflow := &tui.RenderOverflowError{Line: 3, LineWidth: 126, TerminalWidth: 100, LogPath: filepath.Join(agentDir, tui.TUICrashLogName)}
 	var stderr strings.Builder
 	m.uncaughtCrash(overflow, []byte("goroutine 1 [running]:\n"), &stderr)
-	want := "pig exiting due to uncaughtException:\nError: Rendered line 3 exceeds terminal width (126 > 100).\n\n" +
+	want := "ompig exiting due to uncaughtException:\nError: Rendered line 3 exceeds terminal width (126 > 100).\n\n" +
 		"This is likely caused by a custom TUI component not truncating its output.\n" +
 		"Use visibleWidth() to measure and truncateToWidth() to truncate lines.\n\n" +
 		"Debug log written to: " + overflow.LogPath + "\ngoroutine 1 [running]:\n"

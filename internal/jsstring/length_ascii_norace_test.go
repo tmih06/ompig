@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // PF1 N6: JavaScript's .length is O(1); a 50 KB ASCII tool result must not cost a rune decode per byte. The word scan is about 10x the rune loop; the test asks for 3x.

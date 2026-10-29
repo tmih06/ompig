@@ -395,7 +395,7 @@ func trialFixture(t *testing.T, agent, testScript string) (trialPlan, trialDirs,
 	if err := copyFile(filepath.Join(staged, "instruction.md"), filepath.Join(d.root, "task", "instruction.md")); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(d.root, "bin", "pig"), []byte(agent), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(d.root, "bin", "ompig"), []byte(agent), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	t.Setenv("FAKE_WORK", filepath.Join(base, "answer"))
@@ -436,7 +436,7 @@ const fakeAgent = `#!/bin/sh
 [ "$1" = --version ] && exit 0
 # the tests must not be visible while the agent runs
 [ -e "$FAKE_LOGS/../tests" ] && { echo "tests visible" >&2; exit 9; }
-grep -q '"baseUrl": "http://m.bench.svc:8000/v1"' "$PIG_CODING_AGENT_DIR/models.json" || exit 8
+grep -q '"baseUrl": "http://m.bench.svc:8000/v1"' "$OMPIG_CODING_AGENT_DIR/models.json" || exit 8
 echo '{"type":"message_end","message":{"role":"assistant","usage":{"input":3,"output":4,"totalTokens":7}}}'
 echo answer > "$FAKE_WORK"
 `
@@ -604,7 +604,7 @@ func TestPrepareCopiesTheArmAndTheInstructionOnly(t *testing.T) {
 		base := t.TempDir()
 		bundle, root := filepath.Join(base, "bundle"), filepath.Join(base, "root")
 		writeTask(t, filepath.Join(bundle, "tasks", "one"), "#!/bin/sh\n")
-		for _, f := range []string{"bin/k8sbench", "bin/pig", nodeBinary, piAgentCLI} {
+		for _, f := range []string{"bin/k8sbench", "bin/ompig", nodeBinary, piAgentCLI} {
 			p := filepath.Join(bundle, filepath.FromSlash(f))
 			if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
 				t.Fatal(err)
@@ -626,7 +626,7 @@ func TestPrepareCopiesTheArmAndTheInstructionOnly(t *testing.T) {
 			}
 			return err
 		})
-		want := []string{"bin/k8sbench", "bin/pig", "task/instruction.md"}
+		want := []string{"bin/k8sbench", "bin/ompig", "task/instruction.md"}
 		if arm == armPi {
 			want = []string{"bin/k8sbench", nodeBinary, piAgentCLI, "task/instruction.md"}
 		}

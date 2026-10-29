@@ -9,7 +9,7 @@ import (
 	"errors"
 	"hash/maphash"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // requestMessageSplicer marks a payload whose messages the encoder takes from the message cache: spliceMessages is the marshaler that writes the token of a message in its place. The payload must also be a requestStringEncoder, and a message must write each of its strings as the JSON string of that string, so that a message encoded on its own is the bytes it is in the request.

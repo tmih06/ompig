@@ -1,10 +1,10 @@
-use pig_sdk::kit::{
+use ompig_sdk::kit::{
     Box as KitBox, Container, DynamicBorder, EventKind, HStack, Image, Lines, ListItem, Loader,
     LoaderIndicator, Markdown, SelectItem, SelectList, SettingItem, SettingsList, Spacer, StackEntry, Text,
     TruncatedText, VStack,
 };
-use pig_sdk::kit;
-use pig_sdk::{
+use ompig_sdk::kit;
+use ompig_sdk::{
     AutocompleteItem, CommandResult, ConstrainedSampling, Extension, LoginDefinition, MouseEvent,
     OAuthCredentialStatus,
     OAuthCredentialStore, OAuthCredentials, OAuthDeviceCodeInfo, OAuthPrompt, OAuthProvider,
@@ -12,7 +12,7 @@ use pig_sdk::{
     RemoteComponentResult, SpriteDefinition, TerminalInputResult, TerminalInputSubscription, ToolDefinition,
     ToolRenderShell, ToolResult, ViewComponent,
 };
-use pig_sdk::{EditorBase, EditorComponent, JsString};
+use ompig_sdk::{EditorBase, EditorComponent, JsString};
 use serde_json::{Value, json};
 use std::sync::{
     Arc, Mutex,
@@ -36,7 +36,7 @@ impl RemoteComponent for FocusedList {
         lines
     }
 
-    fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+    fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
         match data.to_string().as_deref() {
             Ok("\u{1b}[A") => self.selected = (self.selected + self.items.len() - 1) % self.items.len(),
             Ok("\u{1b}[B") => self.selected = (self.selected + 1) % self.items.len(),
@@ -114,7 +114,7 @@ impl RemoteComponent for TimerFocused {
         )]
     }
 
-    fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+    fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
         if data == "\r" {
             return Ok(RemoteComponentResult::done(Some(json!(
                 *self.frame.lock().unwrap()
@@ -139,11 +139,11 @@ impl RemoteComponent for TimerFocused {
 
 /// Subscribes `handler` to the event `name`. A before_agent_start handler registers with `on_before_agent_start` and receives the event as Pi's object (`BeforeAgentStartEvent::snapshot`).
 fn subscribe(
-    subscriber: &pig_sdk::EventSubscriber,
+    subscriber: &ompig_sdk::EventSubscriber,
     name: &str,
-    handler: impl Fn(&pig_sdk::Context, &mut Value) -> Result<Option<Value>, String> + Send + Sync + 'static,
-) -> pig_sdk::EventSubscription {
-    if name == pig_sdk::EVENT_BEFORE_AGENT_START {
+    handler: impl Fn(&ompig_sdk::Context, &mut Value) -> Result<Option<Value>, String> + Send + Sync + 'static,
+) -> ompig_sdk::EventSubscription {
+    if name == ompig_sdk::EVENT_BEFORE_AGENT_START {
         return subscriber.on_before_agent_start(move |ctx, event| {
             let mut data = event.snapshot().map_err(|err| err.to_string())?;
             handler(ctx, &mut data)
@@ -160,7 +160,7 @@ fn conformance_login_definition() -> LoginDefinition {
         palette: [("A".to_string(), "#123ABC".to_string())]
             .into_iter()
             .collect(),
-        name: "Conformance Pig".to_string(),
+        name: "Conformance Ompig".to_string(),
         description: "Cross-language login fixture".to_string(),
         tagline: "One canonical definition across every SDK".to_string(),
     }
@@ -168,8 +168,8 @@ fn conformance_login_definition() -> LoginDefinition {
 
 fn conformance_sprite_definition() -> SpriteDefinition {
     SpriteDefinition {
-        id: "conformance-pig".to_string(),
-        name: "Conformance Pig".to_string(),
+        id: "conformance-ompig".to_string(),
+        name: "Conformance Ompig".to_string(),
         tagline: "One canonical sprite across every SDK".to_string(),
         mascot: vec!["A".repeat(16); 14],
         palette: [("A".to_string(), "#123ABC".to_string())]
@@ -213,7 +213,7 @@ impl ViewComponent for KitProbe {
         kit_probe_view()
     }
 
-    fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+    fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
         self.log.push(format!("input:{}", data.to_string_lossy()));
         Ok(RemoteComponentResult::pending())
     }
@@ -247,7 +247,7 @@ impl RemoteComponent for MouseProbe {
         ["mouse probe", "row 1", "row 2", "row 3"].map(str::to_string).to_vec()
     }
 
-    fn handle_input(&mut self, _data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+    fn handle_input(&mut self, _data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
         Ok(RemoteComponentResult::pending())
     }
 
@@ -578,7 +578,7 @@ fn kit_widget_case(key: &str) -> Option<kit::View> {
 /// callbacks, and a probe that closed after the callbacks Pi fired would drop
 /// the steps still to come.
 struct KitWidgetProbe {
-    ctx: pig_sdk::Context,
+    ctx: ompig_sdk::Context,
     view: kit::View,
 }
 
@@ -587,7 +587,7 @@ impl ViewComponent for KitWidgetProbe {
         self.view.clone()
     }
 
-    fn handle_input(&mut self, _data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+    fn handle_input(&mut self, _data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
         Ok(RemoteComponentResult::pending())
     }
 
@@ -629,12 +629,12 @@ fn kit_event_name(kind: EventKind) -> &'static str {
 fn main() {
     let mut ext = Extension::new("rust-sdk-fixture");
     // factory_agent_dir is get_agent_dir() while the factory runs, where Pi's extensions call it (TestConformance_HostConfigurationAgreesAcrossSDKs).
-    let factory_agent_dir = pig_sdk::get_agent_dir().unwrap_or_else(|err| format!("error: {err}"));
+    let factory_agent_dir = ompig_sdk::get_agent_dir().unwrap_or_else(|err| format!("error: {err}"));
     let schema_rejected = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         ext.tool("schema-invalid", "Must not register", Value::Null, |_, _| ToolResult::text("bad"));
     })).is_err();
     {
-        use pig_sdk::Type;
+        use ompig_sdk::Type;
         let parameters = Type::object(
             [
                 ("query", Type::string(json!({"description": "What to look up"}).as_object())),
@@ -649,7 +649,7 @@ fn main() {
     }
     {
         // type-engine-tool (TestConformance_TypeEngineMembersAgreeAcrossSDKs): one property per member of Type that the host's type engine serves.
-        use pig_sdk::{TSchema, TValue, Type};
+        use ompig_sdk::{TSchema, TValue, Type};
         let (s, n, i, b) = (Type::string(None), Type::number(None), Type::integer(None), Type::boolean(None));
         let lit = |text: &str| Type::literal(text, None).unwrap();
         let obj = |pairs: Vec<(&str, TSchema)>| Type::object(pairs, None);
@@ -705,7 +705,7 @@ fn main() {
     }
     {
         // refine-probe (TestConformance_RefinedToolArgumentsAgreeAcrossSDKs): the schema of the "probe" cases of validateToolArguments.json; every predicate and message function logs its call.
-        use pig_sdk::Type;
+        use ompig_sdk::Type;
         use std::sync::{Arc, Mutex};
         let log: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
         let checked = |tag: &'static str, log: Arc<Mutex<Vec<String>>>, check: Box<dyn Fn(&Value) -> Result<bool, String> + Send + Sync>| {
@@ -746,18 +746,18 @@ fn main() {
     }
     ext.command("language_probe", "Report the highlight language of a path", |ctx, args| {
         let case: serde_json::Value = match serde_json::from_str(args) { Ok(case) => case, Err(err) => return CommandResult::Error(err.to_string()) };
-        let language = pig_sdk::get_language_from_path(case["path"].as_str().unwrap_or(""));
+        let language = ompig_sdk::get_language_from_path(case["path"].as_str().unwrap_or(""));
         ctx.notify(&format!("language:{}:end", json!({"lang": language})), "info");
         CommandResult::Ok
     });
     ext.command("convert_probe", "Run convertToLlm or formatDimensionNote on a JSON case and report the result", |ctx, args| {
         let case: serde_json::Value = match serde_json::from_str(args) { Ok(case) => case, Err(err) => return CommandResult::Error(err.to_string()) };
         let result = if case["fn"] == "convert" {
-            json!(pig_sdk::convert_to_llm(case["messages"].as_array().map(Vec::as_slice).unwrap_or(&[])))
+            json!(ompig_sdk::convert_to_llm(case["messages"].as_array().map(Vec::as_slice).unwrap_or(&[])))
         } else {
             let i = &case["image"];
-            let image = pig_sdk::ResizedImage { original_width: i["originalWidth"].as_f64().unwrap_or(0.0), original_height: i["originalHeight"].as_f64().unwrap_or(0.0), width: i["width"].as_f64().unwrap_or(0.0), height: i["height"].as_f64().unwrap_or(0.0), was_resized: i["wasResized"].as_bool().unwrap_or(false), ..Default::default() };
-            json!(pig_sdk::format_dimension_note(&image))
+            let image = ompig_sdk::ResizedImage { original_width: i["originalWidth"].as_f64().unwrap_or(0.0), original_height: i["originalHeight"].as_f64().unwrap_or(0.0), width: i["width"].as_f64().unwrap_or(0.0), height: i["height"].as_f64().unwrap_or(0.0), was_resized: i["wasResized"].as_bool().unwrap_or(false), ..Default::default() };
+            json!(ompig_sdk::format_dimension_note(&image))
         };
         ctx.notify(&format!("convert:{}:end", json!({"result": result})), "info");
         CommandResult::Ok
@@ -773,7 +773,7 @@ fn main() {
             _ => {}
         }
     }
-    fn frontmatter_report(parsed: std::io::Result<pig_sdk::ParsedFrontmatter>) -> serde_json::Value {
+    fn frontmatter_report(parsed: std::io::Result<ompig_sdk::ParsedFrontmatter>) -> serde_json::Value {
         match parsed {
             Ok(parsed) => {
                 let mut keys = Vec::new();
@@ -790,10 +790,10 @@ fn main() {
         }
     }
     let factory_helpers = json!({
-        "frontmatter": frontmatter_report(pig_sdk::parse_frontmatter("---\nz: 1\n10: a\n2: b\nnested:\n  y: 1\n  3: x\n  \"q r\": [1, 2]\n---\nbody text\n")),
-        "error": frontmatter_report(pig_sdk::parse_frontmatter("---\na: [\n---\nx")),
-        "date": date_report(pig_sdk::parse_date("2020-01-02T03:04:05.678Z")),
-        "strip": match pig_sdk::strip_frontmatter("---\nz: 1\n---\nbody text\n") { Ok(body) => json!({"body": body}), Err(_) => json!({"error": true}) },
+        "frontmatter": frontmatter_report(ompig_sdk::parse_frontmatter("---\nz: 1\n10: a\n2: b\nnested:\n  y: 1\n  3: x\n  \"q r\": [1, 2]\n---\nbody text\n")),
+        "error": frontmatter_report(ompig_sdk::parse_frontmatter("---\na: [\n---\nx")),
+        "date": date_report(ompig_sdk::parse_date("2020-01-02T03:04:05.678Z")),
+        "strip": match ompig_sdk::strip_frontmatter("---\nz: 1\n---\nbody text\n") { Ok(body) => json!({"body": body}), Err(_) => json!({"error": true}) },
     });
     ext.command("helper_probe", "Run parseFrontmatter, stripFrontmatter or Date.parse on its argument", |ctx, args| {
         let case: serde_json::Value = match serde_json::from_str(args) { Ok(case) => case, Err(err) => return CommandResult::Error(err.to_string()) };
@@ -815,14 +815,14 @@ fn main() {
         let case: std::collections::HashMap<String, Box<serde_json::value::RawValue>> = match serde_json::from_str(args) { Ok(case) => case, Err(err) => return CommandResult::Error(err.to_string()) };
         let messages = case.get("messages").map(|messages| messages.get()).unwrap_or("[]");
         // A conversation a serde_json::Value can hold runs through the typed serialize_conversation; one with an unpaired surrogate, which a Value refuses, through the JSON-text form. Both answer Pi's text.
-        let exact = pig_sdk::serialize_conversation_json(messages);
+        let exact = ompig_sdk::serialize_conversation_json(messages);
         // A conversation a serde_json::Value can hold also runs through the typed serialize_conversation: it must fail where the JSON-text form fails and, where both succeed, give the same text with each unpaired unit written as U+FFFD (a String cannot hold one).
         let out = match (&exact, serde_json::from_str::<Vec<serde_json::Value>>(messages)) {
-            (Ok(text), Ok(typed)) => match pig_sdk::serialize_conversation(&typed) {
+            (Ok(text), Ok(typed)) => match ompig_sdk::serialize_conversation(&typed) {
                 Ok(lossy) if lossy == text.to_string_lossy() => None,
                 _ => Some("{\"error\":\"typed serialize_conversation differs from serialize_conversation_json\"}".to_string()),
             },
-            (Err(_), Ok(typed)) => match pig_sdk::serialize_conversation(&typed) {
+            (Err(_), Ok(typed)) => match ompig_sdk::serialize_conversation(&typed) {
                 Err(_) => None,
                 Ok(_) => Some("{\"error\":\"typed serialize_conversation succeeded where serialize_conversation_json failed\"}".to_string()),
             },
@@ -838,7 +838,7 @@ fn main() {
     });
     ext.command("branch_probe", "Run a branch summarization helper on a JSON case and report the result", |ctx, args| {
         struct EntrySession(std::collections::HashMap<String, serde_json::Value>);
-        impl pig_sdk::SessionReader for EntrySession {
+        impl ompig_sdk::SessionReader for EntrySession {
             fn get_entry(&self, id: &str) -> std::io::Result<serde_json::Value> { Ok(self.0.get(id).cloned().unwrap_or(serde_json::Value::Null)) }
             fn get_branch(&self, from_id: Option<&str>) -> std::io::Result<serde_json::Value> {
                 let mut path = Vec::new();
@@ -864,18 +864,18 @@ fn main() {
         let report: String = if case["fn"] == "prepare" {
             let budget = case["budget"].as_i64().unwrap_or(0);
             let entries_json = raw.get("entries").map_or("[]", |entries| entries.get());
-            match pig_sdk::prepare_branch_entries_json(entries_json, budget) {
+            match ompig_sdk::prepare_branch_entries_json(entries_json, budget) {
                 Err(_) => json!({"error": true}).to_string(),
                 Ok(text) if case["lone"] == true => text,
                 // Where a Value can hold the input, the Value path must answer what the text path answers.
                 Ok(text) => {
-                    let plain = pig_sdk::prepare_branch_entries(&entries, budget).map(|r| json!({"messages": r.messages, "fileOps": {"read": r.file_ops.read, "written": r.file_ops.written, "edited": r.file_ops.edited}, "totalTokens": r.total_tokens}));
+                    let plain = ompig_sdk::prepare_branch_entries(&entries, budget).map(|r| json!({"messages": r.messages, "fileOps": {"read": r.file_ops.read, "written": r.file_ops.written, "edited": r.file_ops.edited}, "totalTokens": r.total_tokens}));
                     if plain.is_ok_and(|plain| serde_json::from_str::<serde_json::Value>(&text).ok() == Some(plain)) { text } else { json!({"error": "the Value path and the text path differ"}).to_string() }
                 }
             }
         } else {
             let session = EntrySession(entries.iter().filter_map(|entry| Some((entry["id"].as_str()?.to_string(), entry.clone()))).collect());
-            match pig_sdk::collect_entries_for_branch_summary(&session, case["old"].as_str(), case["target"].as_str().unwrap_or("")) {
+            match ompig_sdk::collect_entries_for_branch_summary(&session, case["old"].as_str(), case["target"].as_str().unwrap_or("")) {
                 Ok(r) => json!({"entries": r.entries, "commonAncestorId": r.common_ancestor_id}),
                 Err(_) => json!({"error": true}),
             }
@@ -888,34 +888,34 @@ fn main() {
         let case: serde_json::Value = match serde_json::from_str(args) { Ok(case) => case, Err(err) => return CommandResult::Error(err.to_string()) };
         let result = match case["fn"].as_str().unwrap_or("") {
             "calc" => {
-                let usage: pig_sdk::UsageInfo = match serde_json::from_value(case["usage"].clone()) { Ok(usage) => usage, Err(err) => return CommandResult::Error(err.to_string()) };
-                json!({"tokens": pig_sdk::calculate_context_tokens(&usage)})
+                let usage: ompig_sdk::UsageInfo = match serde_json::from_value(case["usage"].clone()) { Ok(usage) => usage, Err(err) => return CommandResult::Error(err.to_string()) };
+                json!({"tokens": ompig_sdk::calculate_context_tokens(&usage)})
             }
             "should" => {
                 let s = &case["settings"];
-                let settings = pig_sdk::CompactionSettings { enabled: s["enabled"].as_bool().unwrap_or(false), reserve_tokens: s["reserveTokens"].as_i64().unwrap_or(0), keep_recent_tokens: s["keepRecentTokens"].as_i64().unwrap_or(0) };
-                json!({"result": pig_sdk::should_compact(case["tokens"].as_i64().unwrap_or(0), case["window"].as_i64().unwrap_or(0), &settings)})
+                let settings = ompig_sdk::CompactionSettings { enabled: s["enabled"].as_bool().unwrap_or(false), reserve_tokens: s["reserveTokens"].as_i64().unwrap_or(0), keep_recent_tokens: s["keepRecentTokens"].as_i64().unwrap_or(0) };
+                json!({"result": ompig_sdk::should_compact(case["tokens"].as_i64().unwrap_or(0), case["window"].as_i64().unwrap_or(0), &settings)})
             }
             "last" => {
                 let entries: Vec<serde_json::Value> = case["entries"].as_array().cloned().unwrap_or_default();
-                match pig_sdk::get_last_assistant_usage(&entries) {
+                match ompig_sdk::get_last_assistant_usage(&entries) {
                     Some(u) => json!({"usage": {"input": u.input, "output": u.output, "cacheRead": u.cache_read, "cacheWrite": u.cache_write, "totalTokens": u.total_tokens}}),
                     None => json!({"usage": null}),
                 }
             }
             "cut" => {
                 let entries: Vec<serde_json::Value> = case["entries"].as_array().cloned().unwrap_or_default();
-                let cut = pig_sdk::find_cut_point(&entries, case["start"].as_u64().unwrap_or(0) as usize, case["end"].as_u64().unwrap_or(0) as usize, case["keep"].as_i64().unwrap_or(0));
+                let cut = ompig_sdk::find_cut_point(&entries, case["start"].as_u64().unwrap_or(0) as usize, case["end"].as_u64().unwrap_or(0) as usize, case["keep"].as_i64().unwrap_or(0));
                 json!({"firstKeptEntryIndex": cut.first_kept_entry_index, "turnStartIndex": cut.turn_start_index.map_or(-1, |i| i as i64), "isSplitTurn": cut.is_split_turn})
             }
             "turn" => {
                 let entries: Vec<serde_json::Value> = case["entries"].as_array().cloned().unwrap_or_default();
-                let found = pig_sdk::find_turn_start_index(&entries, case["index"].as_u64().unwrap_or(0) as usize, case["start"].as_u64().unwrap_or(0) as usize);
+                let found = ompig_sdk::find_turn_start_index(&entries, case["index"].as_u64().unwrap_or(0) as usize, case["start"].as_u64().unwrap_or(0) as usize);
                 json!({"index": found.map_or(-1, |i| i as i64)})
             }
-            "estimate" => json!({"tokens": pig_sdk::estimate_tokens(&case["message"])}),
+            "estimate" => json!({"tokens": ompig_sdk::estimate_tokens(&case["message"])}),
             _ => {
-                let d = pig_sdk::DEFAULT_COMPACTION_SETTINGS;
+                let d = ompig_sdk::DEFAULT_COMPACTION_SETTINGS;
                 json!({"enabled": d.enabled, "reserveTokens": d.reserve_tokens, "keepRecentTokens": d.keep_recent_tokens})
             }
         };
@@ -927,17 +927,17 @@ fn main() {
         let result = match case["fn"].as_str().unwrap_or("") {
             "latest" => {
                 let entries: Vec<serde_json::Value> = case["entries"].as_array().cloned().unwrap_or_default();
-                json!({"entry": pig_sdk::get_latest_compaction_entry(&entries)})
+                json!({"entry": ompig_sdk::get_latest_compaction_entry(&entries)})
             }
             "parse" => {
-                let block = pig_sdk::parse_skill_block(case["text"].as_str().unwrap_or(""));
+                let block = ompig_sdk::parse_skill_block(case["text"].as_str().unwrap_or(""));
                 json!({"block": block.map(|b| json!({"name": b.name, "location": b.location, "content": b.content, "userMessage": b.user_message}))})
             }
             "format" => {
                 let skills: Vec<serde_json::Value> = case["skills"].as_array().cloned().unwrap_or_default();
-                json!({"text": pig_sdk::format_skills_for_prompt(&skills, case["tool"].as_str().unwrap_or("read"))})
+                json!({"text": ompig_sdk::format_skills_for_prompt(&skills, case["tool"].as_str().unwrap_or("read"))})
             }
-            _ => json!({"version": pig_sdk::CURRENT_SESSION_VERSION, "virtual": pig_sdk::VIRTUAL_MODEL_STATE_ENTRY}),
+            _ => json!({"version": ompig_sdk::CURRENT_SESSION_VERSION, "virtual": ompig_sdk::VIRTUAL_MODEL_STATE_ENTRY}),
         };
         ctx.notify(&format!("skills:{result}:end"), "info");
         CommandResult::Ok
@@ -948,7 +948,7 @@ fn main() {
     });
     // The factory get_editor_component answered right after this extension's install: the editor-get-probe reports "installed" only for
     // that same Arc, so a getter that builds another factory fails TestConformance_EditorComponentGetterAgreesAcrossSDKs.
-    let installed_factory: Arc<Mutex<Option<pig_sdk::EditorFactory>>> = Arc::new(Mutex::new(None));
+    let installed_factory: Arc<Mutex<Option<ompig_sdk::EditorFactory>>> = Arc::new(Mutex::new(None));
     let installed = installed_factory.clone();
     ext.command("editor-install", "Install a custom editor component", move |ctx, _args| {
         match ctx.set_editor_component(|base| Box::new(ConformanceEditor { base })) {
@@ -977,21 +977,21 @@ fn main() {
             Err(err) => return CommandResult::Error(err.to_string()),
         };
         let limit = |key: &str| case.get(key).and_then(Value::as_u64).map(|n| n as usize);
-        let options = pig_sdk::TruncationOptions { max_lines: limit("maxLines"), max_bytes: limit("maxBytes") };
+        let options = ompig_sdk::TruncationOptions { max_lines: limit("maxLines"), max_bytes: limit("maxBytes") };
         let content = case["content"].as_str().unwrap_or("");
         let result = match case["fn"].as_str().unwrap_or("") {
             fn_name @ ("head" | "tail") => {
-                let r = if fn_name == "head" { pig_sdk::truncate_head(content, options) } else { pig_sdk::truncate_tail(content, options) };
+                let r = if fn_name == "head" { ompig_sdk::truncate_head(content, options) } else { ompig_sdk::truncate_tail(content, options) };
                 json!({"content": r.content, "truncated": r.truncated, "truncatedBy": r.truncated_by.map(|by| by.as_str()), "totalLines": r.total_lines,
                     "totalBytes": r.total_bytes, "outputLines": r.output_lines, "outputBytes": r.output_bytes, "lastLinePartial": r.last_line_partial,
                     "firstLineExceedsLimit": r.first_line_exceeds_limit, "maxLines": r.max_lines, "maxBytes": r.max_bytes})
             }
             "line" => {
-                let (text, was) = pig_sdk::truncate_line(content, limit("maxChars").unwrap_or(pig_sdk::GREP_MAX_LINE_LENGTH));
+                let (text, was) = ompig_sdk::truncate_line(content, limit("maxChars").unwrap_or(ompig_sdk::GREP_MAX_LINE_LENGTH));
                 json!({"text": text, "wasTruncated": was})
             }
-            "limits" => json!({"maxLines": pig_sdk::DEFAULT_MAX_LINES, "maxBytes": pig_sdk::DEFAULT_MAX_BYTES}),
-            _ => json!({"text": pig_sdk::format_size(limit("bytes").unwrap_or(0))}),
+            "limits" => json!({"maxLines": ompig_sdk::DEFAULT_MAX_LINES, "maxBytes": ompig_sdk::DEFAULT_MAX_BYTES}),
+            _ => json!({"text": ompig_sdk::format_size(limit("bytes").unwrap_or(0))}),
         };
         ctx.notify(&format!("truncate:{result}:end"), "info");
         CommandResult::Ok
@@ -1016,7 +1016,7 @@ fn main() {
             Ok(data) => data,
             Err(err) => return CommandResult::Error(err.to_string()),
         };
-        let result = json!({"role": pig_sdk::message_role(&data).unwrap_or_default(), "text": pig_sdk::message_text(&data)});
+        let result = json!({"role": ompig_sdk::message_role(&data).unwrap_or_default(), "text": ompig_sdk::message_text(&data)});
         ctx.notify(&format!("message:{result}:end"), "info");
         CommandResult::Ok
     });
@@ -1071,7 +1071,7 @@ fn main() {
                     await_stage("called", &wait_called);
                     settle(&wait_called);
                     mark("called", id);
-                    let outcome = pig_sdk::with_file_mutation_queue(task["path"].as_str().unwrap_or(""), || {
+                    let outcome = ompig_sdk::with_file_mutation_queue(task["path"].as_str().unwrap_or(""), || {
                         log.lock().unwrap().push(format!("start:{id}"));
                         mark("started", id);
                         await_stage("ended", &hold_ended);
@@ -1100,7 +1100,7 @@ fn main() {
     // in args ("<existing>|<missing>") (TestConformance_HostPathsAgreeAcrossSDKs).
     ext.command("host_paths_probe", "Report getPackageDir and getShellConfig", |ctx, args| {
         let (existing, missing) = args.split_once('|').unwrap_or((args, ""));
-        let shell = |custom: Option<&str>| match pig_sdk::get_shell_config(custom) {
+        let shell = |custom: Option<&str>| match ompig_sdk::get_shell_config(custom) {
             Ok(config) => {
                 let mut report = json!({"shell": config.shell, "args": config.args});
                 if let Some(transport) = config.command_transport {
@@ -1110,7 +1110,7 @@ fn main() {
             }
             Err(err) => json!({"error": err.to_string()}),
         };
-        match pig_sdk::get_package_dir() {
+        match ompig_sdk::get_package_dir() {
             Ok(package_dir) => {
                 ctx.notify(&format!("host_paths:{}:end", json!({"packageDir": package_dir, "default": shell(None), "custom": shell(Some(existing)), "missing": shell(Some(missing))})), "info");
                 CommandResult::Ok
@@ -1139,7 +1139,7 @@ fn main() {
     // host_info_probe reports Pi's getAgentDir(), CONFIG_DIR_NAME and VERSION as this SDK answers them (TestConformance_HostConfigurationAgreesAcrossSDKs).
     ext.command("host_info_probe", "Report getAgentDir, CONFIG_DIR_NAME and VERSION", move |ctx, _args| {
         let report = (|| -> std::io::Result<Value> {
-            Ok(json!({"agentDir": pig_sdk::get_agent_dir()?, "configDirName": pig_sdk::get_config_dir_name()?, "version": pig_sdk::get_version()?, "factoryAgentDir": factory_agent_dir}))
+            Ok(json!({"agentDir": ompig_sdk::get_agent_dir()?, "configDirName": ompig_sdk::get_config_dir_name()?, "version": ompig_sdk::get_version()?, "factoryAgentDir": factory_agent_dir}))
         })();
         match report {
             Ok(report) => {
@@ -1292,7 +1292,7 @@ fn main() {
                 mark(&self.0, "rust:custom");
                 vec!["rust:custom".to_string()]
             }
-            fn handle_input(&mut self, _data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+            fn handle_input(&mut self, _data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
                 mark(&self.0, "rust:custom");
                 Ok(RemoteComponentResult::done(Some(json!("closed"))))
             }
@@ -1322,11 +1322,11 @@ fn main() {
         }
         CommandResult::Ok
     });
-    ext.flag("flag-true", pig_sdk::FlagOptions::boolean("", true));
-    ext.flag("flag-false", pig_sdk::FlagOptions::boolean("", false));
-    ext.flag("flag-string", pig_sdk::FlagOptions::string("", "default"));
-    ext.flag("flag-empty", pig_sdk::FlagOptions::string("", ""));
-    ext.flag("flag-unset", pig_sdk::FlagOptions { description: String::new(), flag_type: pig_sdk::FlagType::String, default: None });
+    ext.flag("flag-true", ompig_sdk::FlagOptions::boolean("", true));
+    ext.flag("flag-false", ompig_sdk::FlagOptions::boolean("", false));
+    ext.flag("flag-string", ompig_sdk::FlagOptions::string("", "default"));
+    ext.flag("flag-empty", ompig_sdk::FlagOptions::string("", ""));
+    ext.flag("flag-unset", ompig_sdk::FlagOptions { description: String::new(), flag_type: ompig_sdk::FlagType::String, default: None });
     ext.command("flag-probe", "Report registered flag values", |ctx, _args| {
         let values: Vec<_> = ["flag-true", "flag-false", "flag-string", "flag-empty", "flag-unset", "unregistered"].iter().map(|name| ctx.get_flag(name).unwrap()).collect();
         ctx.notify(&serde_json::to_string(&values).unwrap(), "info");
@@ -1334,11 +1334,11 @@ fn main() {
     });
     ext.command("timeout-probe", "Send JavaScript-number timeouts", |ctx, _| {
         for timeout in [0.5, 4294967296.5, 1e21] {
-            if let Err(err) = ctx.exec_with_options("timeout-command", &[], &pig_sdk::ExecOptions { timeout: Some(timeout), ..Default::default() }) {
+            if let Err(err) = ctx.exec_with_options("timeout-command", &[], &ompig_sdk::ExecOptions { timeout: Some(timeout), ..Default::default() }) {
                 return CommandResult::Error(err);
             }
         }
-        match ctx.select_with_options("timeout", &["a"], &pig_sdk::DialogOptions { timeout: Some(1500.5) }) {
+        match ctx.select_with_options("timeout", &["a"], &ompig_sdk::DialogOptions { timeout: Some(1500.5) }) {
             Ok(_) => CommandResult::Ok,
             Err(err) => CommandResult::Error(err.to_string()),
         }
@@ -1363,7 +1363,7 @@ fn main() {
         };
         let command = probe["command"].as_str().unwrap_or_default().to_string();
         let argv: Vec<String> = probe["args"].as_array().into_iter().flatten().filter_map(|arg| arg.as_str().map(str::to_string)).collect();
-        let signal = pig_sdk::ProviderSignal::new();
+        let signal = ompig_sdk::ProviderSignal::new();
         if probe["pre"].as_bool() == Some(true) {
             signal.cancel();
         } else {
@@ -1380,7 +1380,7 @@ fn main() {
             });
         }
         let argv: Vec<&str> = argv.iter().map(String::as_str).collect();
-        match ctx.exec_with_options(&command, &argv, &pig_sdk::ExecOptions { signal: Some(signal), ..Default::default() }) {
+        match ctx.exec_with_options(&command, &argv, &ompig_sdk::ExecOptions { signal: Some(signal), ..Default::default() }) {
             Ok(result) => ctx.notify(&format!("exec-abort:killed={};code={};stdout={}", result.killed, result.exit_code, result.stdout.trim()), "info"),
             Err(err) => ctx.notify(&format!("rejected:{err}"), "info"),
         }
@@ -1576,9 +1576,9 @@ fn main() {
             context.message_type, context.is_streaming, context.available_width
         ))
     });
-    fn resolved_line(prefix: &'static str, tool: &str) -> pig_sdk::ToolRendererSet {
+    fn resolved_line(prefix: &'static str, tool: &str) -> ompig_sdk::ToolRendererSet {
         let tool = tool.to_string();
-        pig_sdk::ToolRendererSet::with_call(move |_ctx, args, _render, _width| {
+        ompig_sdk::ToolRendererSet::with_call(move |_ctx, args, _render, _width| {
             let q = args.get("q").and_then(Value::as_str).unwrap_or("");
             Ok(vec![format!("{prefix}:{tool}:{q}")])
         })
@@ -1587,7 +1587,7 @@ fn main() {
         "conformance_tool_renderer" => Some(resolved_line("resolved", tool)),
         "kit_resolved_tool" => {
             // The resolver draws a call and its result as the kit probe (D107): the view forms of ToolRendererSet.
-            let mut set = pig_sdk::ToolRendererSet::default();
+            let mut set = ompig_sdk::ToolRendererSet::default();
             set.call_view = Some(Arc::new(|_ctx, _args, _render, _width| Ok(kit_probe_view())));
             set.result_view = Some(Arc::new(|_ctx, _result, _options, _render, _width| Ok(kit_probe_view())));
             Some(set)
@@ -1779,7 +1779,7 @@ fn main() {
     );
     // A tool that notifies inline and, from a thread timer_release releases, after its handler returned (D189).
     static TIMER_GATE: (std::sync::Mutex<usize>, std::sync::Condvar) = (std::sync::Mutex::new(0), std::sync::Condvar::new());
-    static STALE_CTX: std::sync::Mutex<Option<pig_sdk::Context>> = std::sync::Mutex::new(None);
+    static STALE_CTX: std::sync::Mutex<Option<ompig_sdk::Context>> = std::sync::Mutex::new(None);
     ext.tool(
         "timer_defer",
         "Notify inline and from deferred work",
@@ -1844,7 +1844,7 @@ fn main() {
         |_, params: Value| {
             let file = params["file"].as_str().unwrap_or_default().to_string();
             let tag = params["tag"].as_str().unwrap_or_default().to_string();
-            let result = pig_sdk::with_file_mutation_queue(&file, || {
+            let result = ompig_sdk::with_file_mutation_queue(&file, || {
                 let before = std::fs::read_to_string(&file).unwrap_or_default();
                 std::fs::write(&file, format!("{before}{tag}\n"))
             });
@@ -1910,8 +1910,8 @@ fn main() {
         vec!["Use sourced_tool to test per-tool source attribution.".to_string()],
         |_ctx, _params: Value| ToolResult::Json(json!({"content": "sourced"})),
     );
-    let mut disabled = pig_sdk::ToolDefinition::new("sampling_disabled", "sampling_disabled", "Disable constrained sampling", json!({"type":"object"}), |_, _| ToolResult::text("disabled"));
-    disabled.constrained_sampling = Some(pig_sdk::ToolConstrainedSampling::Disabled);
+    let mut disabled = ompig_sdk::ToolDefinition::new("sampling_disabled", "sampling_disabled", "Disable constrained sampling", json!({"type":"object"}), |_, _| ToolResult::text("disabled"));
+    disabled.constrained_sampling = Some(ompig_sdk::ToolConstrainedSampling::Disabled);
     ext.register_tool(disabled);
     ext.tool_with_constrained_sampling(
         "grammar_tool",
@@ -2022,7 +2022,7 @@ fn main() {
             fn render(&self, _width: u32) -> Vec<String> {
                 vec!["overlay".to_string()]
             }
-            fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+            fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
                 if data == "q" {
                     return Ok(RemoteComponentResult::done(Some(json!("closed"))));
                 }
@@ -2031,7 +2031,7 @@ fn main() {
         }
         let failures: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
         let recorded = failures.clone();
-        let on_handle = move |handle: pig_sdk::OverlayHandle| {
+        let on_handle = move |handle: ompig_sdk::OverlayHandle| {
             let mut expect = |label: &str, ok: bool, detail: String| {
                 if !ok {
                     recorded.lock().unwrap().push(format!("{label}: {detail}"));
@@ -2039,7 +2039,7 @@ fn main() {
             };
             expect("initial focused", handle.is_focused(), format!("{}", handle.is_focused()));
             expect("initial hidden", !handle.is_hidden(), format!("{}", handle.is_hidden()));
-            expect("initial bounds", handle.bounds() == Some(pig_sdk::OverlayBounds { row: 3, col: 4, width: 20, height: 5 }), format!("{:?}", handle.bounds()));
+            expect("initial bounds", handle.bounds() == Some(ompig_sdk::OverlayBounds { row: 3, col: 4, width: 20, height: 5 }), format!("{:?}", handle.bounds()));
             let _ = handle.focus();
             expect("focus", handle.is_focused(), format!("{}", handle.is_focused()));
             let _ = handle.set_hidden(true);
@@ -2050,7 +2050,7 @@ fn main() {
             expect("refocus", handle.is_focused(), format!("{}", handle.is_focused()));
             let _ = handle.unfocus();
             expect("unfocus", !handle.is_focused(), format!("{}", handle.is_focused()));
-            let _ = handle.unfocus_target(pig_sdk::UnfocusTarget::Nothing);
+            let _ = handle.unfocus_target(ompig_sdk::UnfocusTarget::Nothing);
         };
         if let Err(err) = ctx.custom_component_with_handle(HandleProbe, json!({"overlay": true}), on_handle) {
             return CommandResult::Error(err.to_string());
@@ -2063,7 +2063,7 @@ fn main() {
         CommandResult::Ok
     });
     ext.command("overlay-focus-probe", "Render the focus the host publishes to a mounted overlay", |ctx, _args| {
-        struct FocusProbe(Arc<Mutex<Option<pig_sdk::OverlayHandle>>>);
+        struct FocusProbe(Arc<Mutex<Option<ompig_sdk::OverlayHandle>>>);
         impl RemoteComponent for FocusProbe {
             fn render(&self, _width: u32) -> Vec<String> {
                 match self.0.lock().unwrap().as_ref() {
@@ -2071,16 +2071,16 @@ fn main() {
                     None => vec!["focused=pending".to_string()],
                 }
             }
-            fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+            fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
                 if data == "q" {
                     return Ok(RemoteComponentResult::done(Some(json!("closed"))));
                 }
                 Ok(RemoteComponentResult::pending())
             }
         }
-        let handle: Arc<Mutex<Option<pig_sdk::OverlayHandle>>> = Arc::new(Mutex::new(None));
+        let handle: Arc<Mutex<Option<ompig_sdk::OverlayHandle>>> = Arc::new(Mutex::new(None));
         let mounted = handle.clone();
-        let on_handle = move |overlay: pig_sdk::OverlayHandle| {
+        let on_handle = move |overlay: ompig_sdk::OverlayHandle| {
             *mounted.lock().unwrap() = Some(overlay);
         };
         if let Err(err) = ctx.custom_component_with_handle(FocusProbe(handle), json!({"overlay": true}), on_handle) {
@@ -2095,11 +2095,11 @@ fn main() {
         let request = json!({"systemPrompt":"fetch","messages":[{"role":"user","content":"hello","timestamp":1}]});
         let seen: Arc<Mutex<Option<(String, String, Option<String>, String)>>> = Arc::new(Mutex::new(None));
         let recorded = seen.clone();
-        let callbacks = pig_sdk::ModelStreamCallbacks::new().fetch(move |call| {
+        let callbacks = ompig_sdk::ModelStreamCallbacks::new().fetch(move |call| {
             let host = call.headers.iter().find(|(name, _)| name == "X-Host").map(|(_, value)| value.clone());
             *recorded.lock().unwrap() = Some((call.url, call.method, host, String::from_utf8_lossy(&call.body.unwrap_or_default()).to_string()));
             let body: Vec<u8> = (0..70000u32).map(|index| (index % 251) as u8).collect();
-            Ok(pig_sdk::ModelFetchResponse {
+            Ok(ompig_sdk::ModelFetchResponse {
                 status: 207,
                 status_text: "Answered".to_string(),
                 headers: vec![("x-sdk-fetch".to_string(), "answered".to_string())],
@@ -2122,7 +2122,7 @@ fn main() {
         let request = json!({"systemPrompt":"callbacks","messages":[{"role":"user","content":"hello","timestamp":1}]});
         let seen: Arc<Mutex<(Value, String, Value)>> = Arc::new(Mutex::new((Value::Null, String::new(), Value::Null)));
         let (payload_seen, response_seen) = (seen.clone(), seen.clone());
-        let callbacks = pig_sdk::ModelStreamCallbacks::new()
+        let callbacks = ompig_sdk::ModelStreamCallbacks::new()
             .on_payload(move |payload, callback_model| {
                 let mut marked = payload.clone();
                 marked["mark"] = json!("on-payload");
@@ -2222,7 +2222,7 @@ fn main() {
     });
     // pi.on called after the extension connected returns an unsubscribe (conformance TestConformance_EventUnsubscribe): the
     // handler reports the event's own message entry id, which no SDK fallback produces.
-    let event_probe: Arc<Mutex<Option<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(None));
+    let event_probe: Arc<Mutex<Option<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(None));
     let event_probe_for_subscribe = event_probe.clone();
     let event_subscriber = ext.event_subscriber();
     ext.command(
@@ -2292,11 +2292,11 @@ fn main() {
         "Subscribe to raw terminal input",
         move |ctx, _args| {
             let input_ctx = ctx.clone();
-            match ctx.on_terminal_input(move |data: &pig_sdk::JsString| {
+            match ctx.on_terminal_input(move |data: &ompig_sdk::JsString| {
                 if matches!(data.as_units(), [0xd83d] | [0xde00] | [0xd83d, 0xde00]) {
                     let mut units: Vec<u16> = "seen:".encode_utf16().collect();
                     units.extend_from_slice(data.as_units());
-                    return TerminalInputResult { consume: false, data: Some(pig_sdk::JsString::from_units(units)) };
+                    return TerminalInputResult { consume: false, data: Some(ompig_sdk::JsString::from_units(units)) };
                 }
                 match data.to_string().as_deref() {
                 Ok("\x1b[96~") => TerminalInputResult {
@@ -2409,7 +2409,7 @@ fn main() {
         },
     );
     let event_field_subscriber = ext.event_subscriber();
-    let event_field_subscriptions: Arc<Mutex<Vec<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
+    let event_field_subscriptions: Arc<Mutex<Vec<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
     ext.command(
         "event_field_probe",
         "Report a field of the events named by the argument `<event> <field>`",
@@ -2512,7 +2512,7 @@ fn main() {
         },
     );
     let rw_settled_subscriber = ext.event_subscriber();
-    let rw_settled_subscriptions: Arc<Mutex<Vec<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
+    let rw_settled_subscriptions: Arc<Mutex<Vec<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
     let rw_settled_once = Arc::new(AtomicBool::new(false));
     ext.command(
         "rw_idle_in_settled",
@@ -2545,7 +2545,7 @@ fn main() {
         },
     );
     let event_probe_on_subscriber = ext.event_subscriber();
-    let event_probe_on_subscriptions: Arc<Mutex<Vec<(String, pig_sdk::EventSubscription)>>> = Arc::new(Mutex::new(Vec::new()));
+    let event_probe_on_subscriptions: Arc<Mutex<Vec<(String, ompig_sdk::EventSubscription)>>> = Arc::new(Mutex::new(Vec::new()));
     let event_probe_off_subscriptions = event_probe_on_subscriptions.clone();
     let event_probe_results: Arc<Mutex<std::collections::HashMap<String, Vec<Value>>>> = Arc::new(Mutex::new(std::collections::HashMap::new()));
     let event_probe_result_setter = event_probe_results.clone();
@@ -2592,7 +2592,7 @@ fn main() {
         "Unsubscribe the event_probe_on handlers of the event named by the argument",
         move |_ctx, args| {
             let name = args.trim();
-            let removed: Vec<(String, pig_sdk::EventSubscription)> = {
+            let removed: Vec<(String, ompig_sdk::EventSubscription)> = {
                 let mut subscriptions = event_probe_off_subscriptions.lock().unwrap();
                 let (removed, kept) = subscriptions.drain(..).partition(|(event, _)| event == name);
                 *subscriptions = kept;
@@ -2605,7 +2605,7 @@ fn main() {
         },
     );
     let event_probe_result_subscriber = ext.event_subscriber();
-    let event_probe_result_subscriptions: Arc<Mutex<Vec<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
+    let event_probe_result_subscriptions: Arc<Mutex<Vec<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
     ext.command(
         "event_result_probe",
         "Subscribe to an event with a handler that returns the given JSON",
@@ -2634,21 +2634,21 @@ fn main() {
         },
     );
     let tool_result_guards_subscriber = ext.event_subscriber();
-    let tool_result_guards_subscriptions: Arc<Mutex<Vec<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
+    let tool_result_guards_subscriptions: Arc<Mutex<Vec<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
     ext.command(
         "tool_result_guards_probe",
         "Report the tool_result guards that accept each tool_result event",
         move |_ctx, _args| {
             let subscription = tool_result_guards_subscriber.on_event("tool_result", move |ctx, data| {
                 let guards: [(&str, fn(&Value) -> bool); 8] = [
-                    ("bash", pig_sdk::is_bash_tool_result),
-                    ("edit", pig_sdk::is_edit_tool_result),
-                    ("find", pig_sdk::is_find_tool_result),
-                    ("grep", pig_sdk::is_grep_tool_result),
-                    ("ls", pig_sdk::is_ls_tool_result),
-                    ("powershell", pig_sdk::is_powershell_tool_result),
-                    ("read", pig_sdk::is_read_tool_result),
-                    ("write", pig_sdk::is_write_tool_result),
+                    ("bash", ompig_sdk::is_bash_tool_result),
+                    ("edit", ompig_sdk::is_edit_tool_result),
+                    ("find", ompig_sdk::is_find_tool_result),
+                    ("grep", ompig_sdk::is_grep_tool_result),
+                    ("ls", ompig_sdk::is_ls_tool_result),
+                    ("powershell", ompig_sdk::is_powershell_tool_result),
+                    ("read", ompig_sdk::is_read_tool_result),
+                    ("write", ompig_sdk::is_write_tool_result),
                 ];
                 let matched: Vec<&str> = guards.iter().filter(|(_, guard)| guard(&*data)).map(|(name, _)| *name).collect();
                 ctx.notify(&format!("tool_result_guards:{}:end", matched.join(",")), "info");
@@ -2660,10 +2660,10 @@ fn main() {
     );
     // tool_call_guard_probe reports which tool names isToolCallEventType accepts for each tool_call event it receives (TestConformance_ToolCallGuardAgreesAcrossSDKs).
     let tool_call_guard_subscriber = ext.event_subscriber();
-    let tool_call_guard_subscriptions: Arc<Mutex<Vec<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
+    let tool_call_guard_subscriptions: Arc<Mutex<Vec<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
     ext.command("tool_call_guard_probe", "Report the tool names the tool_call guard accepts", move |_ctx, _args| {
         let subscription = tool_call_guard_subscriber.on_event("tool_call", move |ctx, data| {
-            let accepted: Vec<&str> = ["bash", "read", "probe", "other"].into_iter().filter(|name| pig_sdk::is_tool_call_event_type(name, &*data)).collect();
+            let accepted: Vec<&str> = ["bash", "read", "probe", "other"].into_iter().filter(|name| ompig_sdk::is_tool_call_event_type(name, &*data)).collect();
             ctx.notify(&format!("tool_call_guard:{}:end", accepted.join(",")), "info");
             Ok(None)
         });
@@ -2671,7 +2671,7 @@ fn main() {
         CommandResult::Ok
     });
     let event_payload_subscriber = ext.event_subscriber();
-    let event_payload_subscriptions: Arc<Mutex<Vec<pig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
+    let event_payload_subscriptions: Arc<Mutex<Vec<ompig_sdk::EventSubscription>>> = Arc::new(Mutex::new(Vec::new()));
     ext.command(
         "event_payload_probe",
         "Subscribe and report the payload of the event named by the argument",
@@ -2766,9 +2766,9 @@ fn main() {
                 assert_eq!(ctx.editor("Editor", "prefill")?, (serde_json::Value::Null, false));
                 assert_eq!(ctx.confirm("Confirm", "message")?, json!(false));
                 struct NoUIComponent;
-                impl pig_sdk::RemoteComponent for NoUIComponent {
+                impl ompig_sdk::RemoteComponent for NoUIComponent {
                     fn render(&self, _: u32) -> Vec<String> { panic!("headless render") }
-                    fn handle_input(&mut self, _: &pig_sdk::JsString) -> Result<pig_sdk::RemoteComponentResult, String> { panic!("headless input") }
+                    fn handle_input(&mut self, _: &ompig_sdk::JsString) -> Result<ompig_sdk::RemoteComponentResult, String> { panic!("headless input") }
                     fn dispose(&mut self) { panic!("headless disposal") }
                 }
                 assert!(ctx.custom_component(NoUIComponent, json!({}))?.is_none());
@@ -2807,7 +2807,7 @@ fn main() {
                     let calls = std::sync::atomic::AtomicUsize::new(0);
                     let get = current.clone();
                     let apply = current.clone();
-                    Ok(std::sync::Arc::new(pig_sdk::AutocompleteProvider {
+                    Ok(std::sync::Arc::new(ompig_sdk::AutocompleteProvider {
                         trigger_characters: if tag == "A" { vec!["$".into()] } else { vec!["#".into(), "$".into()] },
                         get_suggestions: std::sync::Arc::new(move |ctx, lines, line, col, force| {
                             let count = calls.fetch_add(1, std::sync::atomic::Ordering::SeqCst) + 1;
@@ -2815,7 +2815,7 @@ fn main() {
                             if tag == "A" {
                                 result.items.retain(|item| item.value != "drop");
                                 for item in &mut result.items { item.label = Some(format!("{}:{count}", item.value)); }
-                            } else { result.items.push(pig_sdk::AutocompleteItem { value: "tail".into(), label: Some(format!("tail:{count}")), description: None }); }
+                            } else { result.items.push(ompig_sdk::AutocompleteItem { value: "tail".into(), label: Some(format!("tail:{count}")), description: None }); }
                             Ok(Some(result))
                         }),
                         apply_completion: std::sync::Arc::new(move |ctx, lines, line, col, item, prefix| {
@@ -3169,7 +3169,7 @@ fn main() {
     // conversation kind (D107, spec §2.1, §10); "next" updates the nodes
     // with an id as a Pi author updates kept components.
     ext.command("kit-conversation", "Show Pi's conversation components (D107)", |ctx, args| {
-        use pig_sdk::kit::{
+        use ompig_sdk::kit::{
             AssistantMessage, BashExecution, ContentBlock, Diff, Message, ToolDefinition, ToolExecution, ToolResult,
             ToolResultContent, UserMessage,
         };
@@ -3253,7 +3253,7 @@ fn main() {
     // durationMs 1234 (F7); "next" calls setOutputPad(2) on both and gives
     // the result durationMs 61500.
     ext.command("kit-output-pad", "Show Pi's outputPad and durationMs (D107)", |ctx, args| {
-        use pig_sdk::kit::{BashExecution, ToolExecution, ToolResult, ToolResultContent};
+        use ompig_sdk::kit::{BashExecution, ToolExecution, ToolResult, ToolResultContent};
         let next = args == "next";
         let mut tool = ToolExecution::new("bash", "call-p1", json!({"command": "echo kit"}), "/work/kit").id("kit-p1");
         tool.set_output_pad(3);
@@ -3390,14 +3390,14 @@ fn main() {
             return None;
         }
         let held: Vec<&str> = [
-            ("bash", pig_sdk::is_bash_tool_result as fn(&Value) -> bool),
-            ("powershell", pig_sdk::is_powershell_tool_result),
-            ("read", pig_sdk::is_read_tool_result),
-            ("edit", pig_sdk::is_edit_tool_result),
-            ("write", pig_sdk::is_write_tool_result),
-            ("grep", pig_sdk::is_grep_tool_result),
-            ("find", pig_sdk::is_find_tool_result),
-            ("ls", pig_sdk::is_ls_tool_result),
+            ("bash", ompig_sdk::is_bash_tool_result as fn(&Value) -> bool),
+            ("powershell", ompig_sdk::is_powershell_tool_result),
+            ("read", ompig_sdk::is_read_tool_result),
+            ("edit", ompig_sdk::is_edit_tool_result),
+            ("write", ompig_sdk::is_write_tool_result),
+            ("grep", ompig_sdk::is_grep_tool_result),
+            ("find", ompig_sdk::is_find_tool_result),
+            ("ls", ompig_sdk::is_ls_tool_result),
         ]
         .into_iter()
         .filter(|(_, is)| is(data))
@@ -3740,7 +3740,7 @@ fn register_state_push_probe(ext: &mut Extension) {
 }
 
 /// The read of one replicated accessor as a string, or an error for a kind the Rust SDK does not replicate: its thinking level is a host call, which is live.
-fn state_push_reader(ctx: &pig_sdk::Context, kind: &str) -> Result<Box<dyn Fn() -> String + Send>, String> {
+fn state_push_reader(ctx: &ompig_sdk::Context, kind: &str) -> Result<Box<dyn Fn() -> String + Send>, String> {
     let ctx = ctx.clone();
     if kind == "model" {
         return Ok(Box::new(move || ctx.model()));
@@ -3982,7 +3982,7 @@ fn io_message(err: std::io::Error) -> String {
 
 impl HooksEditor {
     fn new(base: EditorBase) -> Self {
-        let say = |what: &'static str| -> pig_sdk::EditorHook {
+        let say = |what: &'static str| -> ompig_sdk::EditorHook {
             let base = base.clone();
             Arc::new(move || base.set_text(&JsString::from(format!("raw:hook={what}"))).map_err(io_message))
         };
@@ -4021,7 +4021,7 @@ impl EditorComponent for HooksEditor {
         let disabled = base.disable_submit().map_err(io_message)?;
         base.set_focused(true).map_err(io_message)?;
         let focused = base.focused().map_err(io_message)?;
-        let provider = pig_sdk::kit::Autocomplete::new([pig_sdk::kit::SlashCommand::new("help").description("Show help")]).base_path("/work");
+        let provider = ompig_sdk::kit::Autocomplete::new([ompig_sdk::kit::SlashCommand::new("help").description("Show help")]).base_path("/work");
         base.set_autocomplete_provider(Some(&provider)).map_err(io_message)?;
         base.on_submit(&JsString::from("sub")).map_err(io_message)?;
         base.on_change(&JsString::from("chg")).map_err(io_message)?;
@@ -4034,7 +4034,7 @@ impl EditorComponent for HooksEditor {
     fn render(&mut self, width: u32) -> Result<Vec<JsString>, String> {
         self.0.render(width)
     }
-    fn set_working_status_indicator(&mut self, status: Option<&pig_sdk::EditorStatus>) -> Result<(), String> {
+    fn set_working_status_indicator(&mut self, status: Option<&ompig_sdk::EditorStatus>) -> Result<(), String> {
         let text = match status {
             None => "raw:status=none".to_string(),
             Some(status) => format!("raw:status={}/{}/{}", status.kind, status.message, status.frame),
@@ -4052,23 +4052,23 @@ struct OverlayWidthProbe {
     width: std::sync::atomic::AtomicU32,
 }
 
-impl pig_sdk::RemoteComponent for OverlayWidthProbe {
+impl ompig_sdk::RemoteComponent for OverlayWidthProbe {
     fn render(&self, width: u32) -> Vec<String> {
         self.width.store(width, std::sync::atomic::Ordering::Release);
         vec![format!("overlay width={width}")]
     }
 
-    fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<pig_sdk::RemoteComponentResult, String> {
+    fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<ompig_sdk::RemoteComponentResult, String> {
         if *data == "\r" {
-            return Ok(pig_sdk::RemoteComponentResult::done(Some(json!(self.width.load(std::sync::atomic::Ordering::Acquire)))));
+            return Ok(ompig_sdk::RemoteComponentResult::done(Some(json!(self.width.load(std::sync::atomic::Ordering::Acquire)))));
         }
-        Ok(pig_sdk::RemoteComponentResult::pending())
+        Ok(ompig_sdk::RemoteComponentResult::pending())
     }
 }
 
 /// The BashOperations every SDK fixture returns for the user_bash command "operations" (TestConformance_UserBashOperationsRunInTheExtension).
-fn conformance_bash_operations() -> pig_sdk::BashOperations {
-    pig_sdk::BashOperations {
+fn conformance_bash_operations() -> ompig_sdk::BashOperations {
+    ompig_sdk::BashOperations {
         exec: std::sync::Arc::new(|command, cwd, options| match command {
             "echo" => {
                 (options.on_data)(format!("cmd:{command}\n").as_bytes());
@@ -4114,51 +4114,51 @@ fn pi_ai_helpers_call(name: &str, args: &[Value]) -> Result<Option<Value>, Strin
     Ok(Some(match name {
         "StringEnum" => {
             let values: Vec<&str> = a(0).as_array().unwrap().iter().filter_map(Value::as_str).collect();
-            let options = args.get(1).map(|o| pig_sdk::StringEnumOptions { description: o.get("description").and_then(Value::as_str).map(String::from), default: o.get("default").and_then(Value::as_str).map(String::from) });
-            pig_sdk::string_enum(&values, options.as_ref())
+            let options = args.get(1).map(|o| ompig_sdk::StringEnumOptions { description: o.get("description").and_then(Value::as_str).map(String::from), default: o.get("default").and_then(Value::as_str).map(String::from) });
+            ompig_sdk::string_enum(&values, options.as_ref())
         }
-        "getSupportedThinkingLevels" => json!(pig_sdk::get_supported_thinking_levels(a(0))),
-        "clampThinkingLevel" => json!(pig_sdk::clamp_thinking_level(a(0), a(1).as_str().unwrap_or_default())),
-        "calculateCost" => pig_sdk::calculate_cost(a(0), &mut a(1).clone())?,
-        "contentText" => json!(pig_sdk::content_text(Some(a(0)), args.get(1).and_then(Value::as_str).unwrap_or("\n"))?),
-        "getCurrentTools" => json!(pig_sdk::get_current_tools(&messages(0))),
-        "getCurrentSystemMessage" => return pig_sdk::get_current_system_message(&messages(0)),
-        "getCurrentSystemPrompt" => json!(pig_sdk::get_current_system_prompt(&messages(0))?),
-        "getInitialSystemMessage" => return Ok(pig_sdk::get_initial_system_message(&messages(0)).cloned()),
-        "getDeclaredTools" => json!(pig_sdk::get_declared_tools(&messages(0))),
-        "hasNonAdditiveToolChanges" => json!(pig_sdk::has_non_additive_tool_changes(&messages(0))),
+        "getSupportedThinkingLevels" => json!(ompig_sdk::get_supported_thinking_levels(a(0))),
+        "clampThinkingLevel" => json!(ompig_sdk::clamp_thinking_level(a(0), a(1).as_str().unwrap_or_default())),
+        "calculateCost" => ompig_sdk::calculate_cost(a(0), &mut a(1).clone())?,
+        "contentText" => json!(ompig_sdk::content_text(Some(a(0)), args.get(1).and_then(Value::as_str).unwrap_or("\n"))?),
+        "getCurrentTools" => json!(ompig_sdk::get_current_tools(&messages(0))),
+        "getCurrentSystemMessage" => return ompig_sdk::get_current_system_message(&messages(0)),
+        "getCurrentSystemPrompt" => json!(ompig_sdk::get_current_system_prompt(&messages(0))?),
+        "getInitialSystemMessage" => return Ok(ompig_sdk::get_initial_system_message(&messages(0)).cloned()),
+        "getDeclaredTools" => json!(ompig_sdk::get_declared_tools(&messages(0))),
+        "hasNonAdditiveToolChanges" => json!(ompig_sdk::has_non_additive_tool_changes(&messages(0))),
         "resolveTranscriptTools" => {
             let support = match a(1).as_str().unwrap_or_default() {
-                "none" => pig_sdk::TranscriptToolSupport::None,
-                "additions" => pig_sdk::TranscriptToolSupport::Additions,
-                "changes" => pig_sdk::TranscriptToolSupport::Changes,
+                "none" => ompig_sdk::TranscriptToolSupport::None,
+                "additions" => ompig_sdk::TranscriptToolSupport::Additions,
+                "changes" => ompig_sdk::TranscriptToolSupport::Changes,
                 other => return Err(format!("unknown transcript tool support {other:?}")),
             };
-            let resolved = pig_sdk::resolve_transcript_tools(&messages(0), support);
+            let resolved = ompig_sdk::resolve_transcript_tools(&messages(0), support);
             json!({ "requestTools": resolved.request_tools, "foldedSystemMessages": resolved.folded_system_messages })
         }
-        "collapseSystemMessages" => pig_sdk::collapse_system_messages(a(0))?,
-        "resolveTranscript" => pig_sdk::resolve_transcript(a(0), flag(1))?,
-        "withoutInitialSystemMessage" => json!(pig_sdk::without_initial_system_message(&messages(0))),
-        "normalizeContext" => pig_sdk::normalize_context(a(0)),
+        "collapseSystemMessages" => ompig_sdk::collapse_system_messages(a(0))?,
+        "resolveTranscript" => ompig_sdk::resolve_transcript(a(0), flag(1))?,
+        "withoutInitialSystemMessage" => json!(ompig_sdk::without_initial_system_message(&messages(0))),
+        "normalizeContext" => ompig_sdk::normalize_context(a(0)),
         "createInitialSystemMessage" => {
             let tools = args.get(1).filter(|tools| !tools.is_null()).map(|tools| tools.as_array().cloned().unwrap_or_default());
-            return Ok(pig_sdk::create_initial_system_message(a(0).as_str(), tools.as_deref()));
+            return Ok(ompig_sdk::create_initial_system_message(a(0).as_str(), tools.as_deref()));
         }
-        "getSystemMessageText" => json!(pig_sdk::get_system_message_text(a(0))?),
-        "renderSystemMessageUpdate" => json!(pig_sdk::render_system_message_update(a(0))?),
-        "getModelType" => json!(pig_sdk::get_model_type(a(0))),
-        "isModelType" => json!(pig_sdk::is_model_type(a(0), a(1).as_str().unwrap_or_default())),
-        "hasApi" => json!(pig_sdk::has_api(a(0), a(1).as_str().unwrap_or_default())),
-        "modelsAreEqual" => json!(pig_sdk::models_are_equal(Some(a(0)).filter(|first| !first.is_null()), Some(a(1)).filter(|other| !other.is_null()))),
-        "isRetryableAssistantError" => json!(pig_sdk::is_retryable_assistant_error(a(0))),
-        "isContextOverflow" => json!(pig_sdk::is_context_overflow(a(0), args.get(1).and_then(Value::as_f64))),
-        "isRecoverableLength" => json!(pig_sdk::is_recoverable_length(a(0), a(1).as_f64().unwrap_or_default())),
+        "getSystemMessageText" => json!(ompig_sdk::get_system_message_text(a(0))?),
+        "renderSystemMessageUpdate" => json!(ompig_sdk::render_system_message_update(a(0))?),
+        "getModelType" => json!(ompig_sdk::get_model_type(a(0))),
+        "isModelType" => json!(ompig_sdk::is_model_type(a(0), a(1).as_str().unwrap_or_default())),
+        "hasApi" => json!(ompig_sdk::has_api(a(0), a(1).as_str().unwrap_or_default())),
+        "modelsAreEqual" => json!(ompig_sdk::models_are_equal(Some(a(0)).filter(|first| !first.is_null()), Some(a(1)).filter(|other| !other.is_null()))),
+        "isRetryableAssistantError" => json!(ompig_sdk::is_retryable_assistant_error(a(0))),
+        "isContextOverflow" => json!(ompig_sdk::is_context_overflow(a(0), args.get(1).and_then(Value::as_f64))),
+        "isRecoverableLength" => json!(ompig_sdk::is_recoverable_length(a(0), a(1).as_f64().unwrap_or_default())),
         "retryDelayMs" => {
-            let policy = pig_sdk::RetryPolicy { base_delay_ms: a(0)["baseDelayMs"].as_f64().unwrap_or_default(), max_agent_delay_ms: a(0).get("maxAgentDelayMs").and_then(Value::as_f64) };
-            json!(pig_sdk::retry_delay_ms(&policy, a(1).as_i64().unwrap_or_default()))
+            let policy = ompig_sdk::RetryPolicy { base_delay_ms: a(0)["baseDelayMs"].as_f64().unwrap_or_default(), max_agent_delay_ms: a(0).get("maxAgentDelayMs").and_then(Value::as_f64) };
+            json!(ompig_sdk::retry_delay_ms(&policy, a(1).as_i64().unwrap_or_default()))
         }
-        "DEFAULT_MAX_AGENT_RETRY_DELAY_MS" => json!(pig_sdk::DEFAULT_MAX_AGENT_RETRY_DELAY_MS),
+        "DEFAULT_MAX_AGENT_RETRY_DELAY_MS" => json!(ompig_sdk::DEFAULT_MAX_AGENT_RETRY_DELAY_MS),
         other => return Err(format!("no Rust counterpart for {other}")),
     }))
 }
@@ -4177,8 +4177,8 @@ fn pi_ai_helpers_probe(path: &str) -> Result<Value, String> {
         let env = case["env"].clone();
         let seen = Arc::new(Mutex::new(Vec::new()));
         let seen_in = seen.clone();
-        let input = pig_sdk::APIKeyAuthInput {
-            ctx: pig_sdk::AuthContext {
+        let input = ompig_sdk::APIKeyAuthInput {
+            ctx: ompig_sdk::AuthContext {
                 env: Arc::new(move |name| {
                     seen_in.lock().unwrap().push(name.clone());
                     Ok(env.get(&name).and_then(Value::as_str).map(String::from))
@@ -4186,15 +4186,15 @@ fn pi_ai_helpers_probe(path: &str) -> Result<Value, String> {
                 file_exists: Arc::new(|_| Ok(false)),
             },
             credential: case.get("credential").filter(|c| !c.is_null()).cloned(),
-            signal: pig_sdk::ProviderSignal::default(),
+            signal: ompig_sdk::ProviderSignal::default(),
         };
-        let result = (pig_sdk::env_api_key_auth(case["name"].as_str().unwrap_or_default(), &vars).resolve)(input)?;
+        let result = (ompig_sdk::env_api_key_auth(case["name"].as_str().unwrap_or_default(), &vars).resolve)(input)?;
         auth.push(json!({ "result": result.map(|r| serde_json::to_value(r).unwrap()), "seen": *seen.lock().unwrap() }));
     }
     let prompts = Arc::new(Mutex::new(Vec::new()));
     let prompts_in = prompts.clone();
-    let credential = (pig_sdk::env_api_key_auth("Name", &["FIRST", "SECOND"]).login.unwrap())(pig_sdk::AuthInteraction {
-        signal: pig_sdk::ProviderSignal::default(),
+    let credential = (ompig_sdk::env_api_key_auth("Name", &["FIRST", "SECOND"]).login.unwrap())(ompig_sdk::AuthInteraction {
+        signal: ompig_sdk::ProviderSignal::default(),
         prompt: Arc::new(move |request| {
             prompts_in.lock().unwrap().push(request);
             Ok("typed-key".to_string())
@@ -4204,7 +4204,7 @@ fn pi_ai_helpers_probe(path: &str) -> Result<Value, String> {
     let now = || std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |elapsed| elapsed.as_millis() as u64);
     let mut timing = Vec::new();
     for case in golden["timing"].as_array().ok_or("no timing")? {
-        let stream = pig_sdk::create_assistant_message_event_stream();
+        let stream = ompig_sdk::create_assistant_message_event_stream();
         let kind = case["kind"].as_str().unwrap_or_default();
         let message = |is_later: bool| {
             let mut message = json!({ "role": "assistant", "content": [], "stopReason": if kind == "error" { "error" } else { "stop" } });
@@ -4246,7 +4246,7 @@ fn pi_ai_helpers_probe(path: &str) -> Result<Value, String> {
     Ok(json!({ "cases": cases, "timing": timing, "auth": auth, "login": { "prompts": *prompts.lock().unwrap(), "result": credential } }))
 }
 
-fn host_helpers_probe(ctx: &pig_sdk::Context, args: &str) -> Result<Value, String> {
+fn host_helpers_probe(ctx: &ompig_sdk::Context, args: &str) -> Result<Value, String> {
     let mut parts = args.splitn(3, '|');
     let (golden_path, auth_path, text) = (parts.next().unwrap_or_default(), parts.next().unwrap_or_default(), parts.next().unwrap_or_default());
     let golden: Value = serde_json::from_str(&std::fs::read_to_string(golden_path).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
@@ -4265,21 +4265,21 @@ fn host_helpers_probe(ctx: &pig_sdk::Context, args: &str) -> Result<Value, Strin
     }
     let mut entries = Vec::new();
     for case in golden["entries"].as_array().ok_or("no entries")? {
-        entries.push(json!(pig_sdk::session_entry_to_context_messages(&case["entry"]).map_err(io)?));
+        entries.push(json!(ompig_sdk::session_entry_to_context_messages(&case["entry"]).map_err(io)?));
     }
     let mut contexts = Vec::new();
     for case in golden["contexts"].as_array().ok_or("no contexts")? {
         let args = case["args"].as_array().ok_or("no args")?;
         let entries: Vec<Value> = args[0].as_array().cloned().unwrap_or_default();
         let leaf = match args.get(1) {
-            None => pig_sdk::SessionLeaf::Last,
-            Some(Value::Null) => pig_sdk::SessionLeaf::None,
-            Some(id) => pig_sdk::SessionLeaf::At(id.as_str().ok_or("leaf is not a string")?),
+            None => ompig_sdk::SessionLeaf::Last,
+            Some(Value::Null) => ompig_sdk::SessionLeaf::None,
+            Some(id) => ompig_sdk::SessionLeaf::At(id.as_str().ok_or("leaf is not a string")?),
         };
         let by_id: Option<serde_json::Map<String, Value>> = args.get(2).map(|pairs| {
             pairs.as_array().into_iter().flatten().filter_map(|pair| Some((pair[0].as_str()?.to_string(), pair[1].clone()))).collect()
         });
-        contexts.push(match pig_sdk::build_session_context(&entries, leaf, by_id.as_ref()) {
+        contexts.push(match ompig_sdk::build_session_context(&entries, leaf, by_id.as_ref()) {
             Ok(result) => json!({"result": result}),
             Err(error) => json!({"throws": error.to_string().trim_start_matches("TypeError: ")}),
         });
@@ -4294,7 +4294,7 @@ fn host_helpers_probe(ctx: &pig_sdk::Context, args: &str) -> Result<Value, Strin
             });
             continue;
         }
-        let options = case.get("options").filter(|o| o.is_object()).map(|o| pig_sdk::ImageResizeOptions {
+        let options = case.get("options").filter(|o| o.is_object()).map(|o| ompig_sdk::ImageResizeOptions {
             max_width: o.get("maxWidth").and_then(Value::as_u64).map(|v| v as u32),
             max_height: o.get("maxHeight").and_then(Value::as_u64).map(|v| v as u32),
             max_bytes: o.get("maxBytes").and_then(Value::as_u64),
@@ -4306,7 +4306,7 @@ fn host_helpers_probe(ctx: &pig_sdk::Context, args: &str) -> Result<Value, Strin
             None => Value::Null,
         });
     }
-    let credential = |provider: &str, path: Option<&str>| pig_sdk::read_stored_credential(provider, path).ok().flatten().unwrap_or(Value::Null);
+    let credential = |provider: &str, path: Option<&str>| ompig_sdk::read_stored_credential(provider, path).ok().flatten().unwrap_or(Value::Null);
     let creds = json!({
         "explicit": credential("anthropic", Some(auth_path)), "default": credential("anthropic", None), "absentProvider": credential("nobody", Some(auth_path)),
         "missingFile": credential("anthropic", Some(&format!("{auth_path}.missing"))), "notJSON": credential("anthropic", Some(&format!("{auth_path}.bad"))),
@@ -4345,7 +4345,7 @@ fn log_call(log: &CallLog, entry: String) {
     log.lock().unwrap().push(entry);
 }
 
-fn builtin_report(result: &pig_sdk::AgentToolResult) -> Value {
+fn builtin_report(result: &ompig_sdk::AgentToolResult) -> Value {
     let blocks: Vec<Value> = result
         .content
         .iter()
@@ -4367,7 +4367,7 @@ fn builtin_report(result: &pig_sdk::AgentToolResult) -> Value {
     report
 }
 
-fn path_op<R: 'static>(log: &CallLog, label: &'static str, result: impl Fn(&str) -> Result<R, String> + Send + Sync + 'static) -> pig_sdk::PathOperation<R> {
+fn path_op<R: 'static>(log: &CallLog, label: &'static str, result: impl Fn(&str) -> Result<R, String> + Send + Sync + 'static) -> ompig_sdk::PathOperation<R> {
     let log = log.clone();
     Arc::new(move |path| {
         log_call(&log, format!("{label}:{path}"));
@@ -4375,7 +4375,7 @@ fn path_op<R: 'static>(log: &CallLog, label: &'static str, result: impl Fn(&str)
     })
 }
 
-fn write_op(log: &CallLog) -> pig_sdk::WriteOperation {
+fn write_op(log: &CallLog) -> ompig_sdk::WriteOperation {
     let log = log.clone();
     Arc::new(move |path, content| {
         log_call(&log, format!("writeFile:{path}:{content}"));
@@ -4385,67 +4385,67 @@ fn write_op(log: &CallLog) -> pig_sdk::WriteOperation {
 
 /// The options of the case for `tool`, with callbacks that log into `log`; one value per tool kind so the factories take the right type.
 struct ProbeOptions {
-    read: pig_sdk::ReadToolOptions,
-    write: pig_sdk::WriteToolOptions,
-    edit: pig_sdk::EditToolOptions,
-    ls: pig_sdk::LsToolOptions,
-    grep: pig_sdk::GrepToolOptions,
-    find: pig_sdk::FindToolOptions,
-    bash: pig_sdk::BashToolOptions,
-    powershell: pig_sdk::PowerShellToolOptions,
+    read: ompig_sdk::ReadToolOptions,
+    write: ompig_sdk::WriteToolOptions,
+    edit: ompig_sdk::EditToolOptions,
+    ls: ompig_sdk::LsToolOptions,
+    grep: ompig_sdk::GrepToolOptions,
+    find: ompig_sdk::FindToolOptions,
+    bash: ompig_sdk::BashToolOptions,
+    powershell: ompig_sdk::PowerShellToolOptions,
 }
 
 fn builtin_options(case: &Value, log: &CallLog) -> ProbeOptions {
     let custom = case["ops"].as_str() == Some("custom");
     let expose = case["exposeSessionEnvironment"].as_bool();
     let mut options = ProbeOptions {
-        read: pig_sdk::ReadToolOptions { auto_resize_images: case["autoResizeImages"].as_bool(), ..Default::default() },
+        read: ompig_sdk::ReadToolOptions { auto_resize_images: case["autoResizeImages"].as_bool(), ..Default::default() },
         write: Default::default(),
         edit: Default::default(),
         ls: Default::default(),
         grep: Default::default(),
         find: Default::default(),
-        bash: pig_sdk::BashToolOptions {
+        bash: ompig_sdk::BashToolOptions {
             command_prefix: case["commandPrefix"].as_str().filter(|prefix| !prefix.is_empty()).map(str::to_string),
             expose_session_environment: expose,
             ..Default::default()
         },
-        powershell: pig_sdk::PowerShellToolOptions { expose_session_environment: expose, ..Default::default() },
+        powershell: ompig_sdk::PowerShellToolOptions { expose_session_environment: expose, ..Default::default() },
     };
     if case["hook"].as_bool() == Some(true) {
         let hook_log = log.clone();
-        options.bash.spawn_hook = Some(Arc::new(move |spawn: pig_sdk::BashSpawnContext| {
+        options.bash.spawn_hook = Some(Arc::new(move |spawn: ompig_sdk::BashSpawnContext| {
             log_call(&hook_log, format!("spawnHook:{}", spawn.command));
             let mut env = spawn.env.clone();
             env.insert("HOOK_VAR".to_string(), "hook-env".to_string());
-            Ok(pig_sdk::BashSpawnContext { command: "printf '%s|%s' \"$HOOK_VAR\" \"$PI_SESSION_ID\"".to_string(), cwd: spawn.cwd, env })
+            Ok(ompig_sdk::BashSpawnContext { command: "printf '%s|%s' \"$HOOK_VAR\" \"$PI_SESSION_ID\"".to_string(), cwd: spawn.cwd, env })
         }));
     }
     if !custom {
         return options;
     }
-    options.read.operations = Some(pig_sdk::ReadOperations {
+    options.read.operations = Some(ompig_sdk::ReadOperations {
         read_file: path_op(log, "readFile", |path| Ok(format!("OPS:{path}").into_bytes())),
         access: path_op(log, "access", |_| Ok(())),
         detect_image_mime_type: None,
     });
-    options.write.operations = Some(pig_sdk::WriteOperations { write_file: write_op(log), mkdir: path_op(log, "mkdir", |_| Ok(())) });
-    options.edit.operations = Some(pig_sdk::EditOperations {
+    options.write.operations = Some(ompig_sdk::WriteOperations { write_file: write_op(log), mkdir: path_op(log, "mkdir", |_| Ok(())) });
+    options.edit.operations = Some(ompig_sdk::EditOperations {
         read_file: path_op(log, "readFile", |_| Ok(b"hello world\n".to_vec())),
         write_file: write_op(log),
         access: path_op(log, "access", |_| Ok(())),
     });
-    options.ls.operations = Some(pig_sdk::LsOperations {
+    options.ls.operations = Some(ompig_sdk::LsOperations {
         exists: path_op(log, "exists", |_| Ok(true)),
-        stat: path_op(log, "stat", |path| Ok(pig_sdk::LsStat { is_directory: !path.contains('.') })),
+        stat: path_op(log, "stat", |path| Ok(ompig_sdk::LsStat { is_directory: !path.contains('.') })),
         readdir: path_op(log, "readdir", |_| Ok(vec!["b.txt".to_string(), "a.txt".to_string(), "sub".to_string()])),
     });
-    options.grep.operations = Some(pig_sdk::GrepOperations {
+    options.grep.operations = Some(ompig_sdk::GrepOperations {
         is_directory: path_op(log, "isDirectory", |_| Err("no such path for the probe".to_string())),
         read_file: None,
     });
     let glob_log = log.clone();
-    options.find.operations = Some(pig_sdk::FindOperations {
+    options.find.operations = Some(ompig_sdk::FindOperations {
         exists: path_op(log, "exists", |_| Ok(false)),
         glob: Arc::new(move |pattern, _cwd, _options| {
             log_call(&glob_log, format!("glob:{pattern}"));
@@ -4453,7 +4453,7 @@ fn builtin_options(case: &Value, log: &CallLog) -> ProbeOptions {
         }),
     });
     let exec_log = log.clone();
-    options.bash.operations = Some(pig_sdk::BashOperations {
+    options.bash.operations = Some(ompig_sdk::BashOperations {
         exec: Arc::new(move |command, cwd, exec_options| {
             log_call(&exec_log, format!("exec:{command}|cwd={cwd}"));
             (exec_options.on_data)(format!("custom:{command}").as_bytes());
@@ -4463,7 +4463,7 @@ fn builtin_options(case: &Value, log: &CallLog) -> ProbeOptions {
     options
 }
 
-fn builtin_probe(ctx: &pig_sdk::Context, case: &Value) -> Result<Value, String> {
+fn builtin_probe(ctx: &ompig_sdk::Context, case: &Value) -> Result<Value, String> {
     let kind = case["kind"].as_str().unwrap_or("");
     let factory_cwd = case["factoryCwd"].as_str().unwrap_or("").to_string();
     match kind {
@@ -4472,9 +4472,9 @@ fn builtin_probe(ctx: &pig_sdk::Context, case: &Value) -> Result<Value, String> 
         "registerEdit" => return builtin_register_edit(ctx, &factory_cwd),
         "local" => return Ok(builtin_local(case)),
         "sets" => {
-            let names = |tools: Vec<pig_sdk::BuiltinTool>| tools.into_iter().map(|tool| tool.name).collect::<Vec<_>>();
-            let coding = names(pig_sdk::create_coding_tools(&factory_cwd, None).map_err(|e| e.to_string())?);
-            let read_only = names(pig_sdk::create_read_only_tools(&factory_cwd, None).map_err(|e| e.to_string())?);
+            let names = |tools: Vec<ompig_sdk::BuiltinTool>| tools.into_iter().map(|tool| tool.name).collect::<Vec<_>>();
+            let coding = names(ompig_sdk::create_coding_tools(&factory_cwd, None).map_err(|e| e.to_string())?);
+            let read_only = names(ompig_sdk::create_read_only_tools(&factory_cwd, None).map_err(|e| e.to_string())?);
             return Ok(json!({"coding": coding, "readOnly": read_only}));
         }
         _ => {}
@@ -4484,7 +4484,7 @@ fn builtin_probe(ctx: &pig_sdk::Context, case: &Value) -> Result<Value, String> 
     let tool = case["tool"].as_str().unwrap_or("bash");
     macro_rules! create {
         ($definition:ident, $tool:ident, $options:expr) => {
-            if kind == "definition" || kind == "prepare" { Created::Definition(pig_sdk::$definition(&factory_cwd, Some($options)).map_err(|e| e.to_string())?) } else if case["noContext"].as_bool() == Some(true) { Created::Tool(pig_sdk::$tool(&factory_cwd, Some($options)).map_err(|e| e.to_string())?) } else { Created::Executor(pig_sdk::$definition(&factory_cwd, Some($options)).map_err(|e| e.to_string())?) }
+            if kind == "definition" || kind == "prepare" { Created::Definition(ompig_sdk::$definition(&factory_cwd, Some($options)).map_err(|e| e.to_string())?) } else if case["noContext"].as_bool() == Some(true) { Created::Tool(ompig_sdk::$tool(&factory_cwd, Some($options)).map_err(|e| e.to_string())?) } else { Created::Executor(ompig_sdk::$definition(&factory_cwd, Some($options)).map_err(|e| e.to_string())?) }
         };
     }
     let created = match tool {
@@ -4512,8 +4512,8 @@ fn builtin_probe(ctx: &pig_sdk::Context, case: &Value) -> Result<Value, String> 
         let Created::Definition(built) = created else { unreachable!() };
         let d = &built.definition;
         let sampling = d.constrained_sampling.as_ref().map(|sampling| match sampling {
-            pig_sdk::ToolConstrainedSampling::Config(config) => serde_json::to_value(config).unwrap_or(Value::Null),
-            pig_sdk::ToolConstrainedSampling::Disabled => json!(false),
+            ompig_sdk::ToolConstrainedSampling::Config(config) => serde_json::to_value(config).unwrap_or(Value::Null),
+            ompig_sdk::ToolConstrainedSampling::Disabled => json!(false),
         });
         return Ok(json!({"definition": {
             "name": d.name, "label": d.label, "description": d.description, "promptSnippet": d.prompt_snippet.clone().unwrap_or_default(),
@@ -4522,22 +4522,22 @@ fn builtin_probe(ctx: &pig_sdk::Context, case: &Value) -> Result<Value, String> 
             "executionMode": d.execution_mode.clone().unwrap_or_default(), "renderShell": if d.render_shell == ToolRenderShell::SelfShell { "self" } else { "" },
         }}));
     }
-    let signal = pig_sdk::ProviderSignal::new();
+    let signal = ompig_sdk::ProviderSignal::new();
     if case["preAborted"].as_bool() == Some(true) {
         signal.cancel();
     }
     let updates: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
     let abort_on_output = case["abortOnOutput"].as_bool() == Some(true);
-    let on_update: Option<pig_sdk::ExecuteToolUpdate> = (case["updates"].as_bool() == Some(true) || abort_on_output).then(|| {
+    let on_update: Option<ompig_sdk::ExecuteToolUpdate> = (case["updates"].as_bool() == Some(true) || abort_on_output).then(|| {
         let updates = updates.clone();
         let signal = signal.clone();
-        Arc::new(move |partial: pig_sdk::AgentToolResult| {
+        Arc::new(move |partial: ompig_sdk::AgentToolResult| {
             let text = partial.text();
             if abort_on_output && !text.is_empty() {
                 signal.cancel();
             }
             updates.lock().unwrap().push(text);
-        }) as pig_sdk::ExecuteToolUpdate
+        }) as ompig_sdk::ExecuteToolUpdate
     });
     let params = case.get("params").cloned().unwrap_or_else(|| json!({}));
     let outcome = match created {
@@ -4558,12 +4558,12 @@ fn builtin_probe(ctx: &pig_sdk::Context, case: &Value) -> Result<Value, String> 
 }
 
 enum Created {
-    Definition(pig_sdk::BuiltinToolDefinition),
-    Executor(pig_sdk::BuiltinToolDefinition),
-    Tool(pig_sdk::BuiltinTool),
+    Definition(ompig_sdk::BuiltinToolDefinition),
+    Executor(ompig_sdk::BuiltinToolDefinition),
+    Tool(ompig_sdk::BuiltinTool),
 }
 
-fn wrap_first_text(result: &mut pig_sdk::AgentToolResult, wrap: impl Fn(&str) -> String) {
+fn wrap_first_text(result: &mut ompig_sdk::AgentToolResult, wrap: impl Fn(&str) -> String) {
     if let Some(block) = result.content.first_mut() {
         let text = block["text"].as_str().unwrap_or("").to_string();
         block["text"] = json!(wrap(&text));
@@ -4572,8 +4572,8 @@ fn wrap_first_text(result: &mut pig_sdk::AgentToolResult, wrap: impl Fn(&str) ->
 
 /// Overrides the read and bash tools with wrapped built-ins, as Pi's `pi.registerTool({ ...definition, execute })` does: the wrapper runs the built-in through
 /// the SDK and post-processes its result, so only a tool that really ran on the host can produce the sentinel text.
-fn builtin_register(ctx: &pig_sdk::Context, factory_cwd: &str) -> Result<Value, String> {
-    let mut read = pig_sdk::create_read_tool_definition(factory_cwd, None).map_err(|e| e.to_string())?;
+fn builtin_register(ctx: &ompig_sdk::Context, factory_cwd: &str) -> Result<Value, String> {
+    let mut read = ompig_sdk::create_read_tool_definition(factory_cwd, None).map_err(|e| e.to_string())?;
     let run_read = read.executor();
     read.definition.execute = Box::new(move |ctx, params| match run_read.execute(ctx, params) {
         Ok(mut result) => {
@@ -4585,7 +4585,7 @@ fn builtin_register(ctx: &pig_sdk::Context, factory_cwd: &str) -> Result<Value, 
     });
     let read_name = read.definition.name.clone();
     ctx.register_tool(read.definition).map_err(|e| e.to_string())?;
-    let mut bash = pig_sdk::create_bash_tool_definition(factory_cwd, None).map_err(|e| e.to_string())?;
+    let mut bash = ompig_sdk::create_bash_tool_definition(factory_cwd, None).map_err(|e| e.to_string())?;
     let run_bash = bash.executor();
     bash.definition.execute = Box::new(move |ctx, params| match run_bash.execute(ctx, params) {
         Ok(mut result) => {
@@ -4601,8 +4601,8 @@ fn builtin_register(ctx: &pig_sdk::Context, factory_cwd: &str) -> Result<Value, 
 
 /// Overrides the edit tool with a wrapped built-in, as `pi.registerTool({ ...createEditToolDefinition(cwd), execute })` does: the definition carries the
 /// built-in's prepareArguments, so the model's legacy shapes reach the wrapper normalised, and only an edit the host really applied can produce the sentinel text.
-fn builtin_register_edit(ctx: &pig_sdk::Context, factory_cwd: &str) -> Result<Value, String> {
-    let mut edit = pig_sdk::create_edit_tool_definition(factory_cwd, None).map_err(|e| e.to_string())?;
+fn builtin_register_edit(ctx: &ompig_sdk::Context, factory_cwd: &str) -> Result<Value, String> {
+    let mut edit = ompig_sdk::create_edit_tool_definition(factory_cwd, None).map_err(|e| e.to_string())?;
     let run_edit = edit.executor();
     edit.definition.execute = Box::new(move |ctx, params| match run_edit.execute(ctx, params) {
         Ok(mut result) => {
@@ -4617,14 +4617,14 @@ fn builtin_register_edit(ctx: &pig_sdk::Context, factory_cwd: &str) -> Result<Va
 }
 
 fn builtin_local(case: &Value) -> Value {
-    let operations = if case["shell"].as_str() == Some("powershell") { pig_sdk::create_local_powershell_operations() } else { pig_sdk::create_local_bash_operations(None) };
-    let signal = pig_sdk::ProviderSignal::new();
+    let operations = if case["shell"].as_str() == Some("powershell") { ompig_sdk::create_local_powershell_operations() } else { ompig_sdk::create_local_bash_operations(None) };
+    let signal = ompig_sdk::ProviderSignal::new();
     let chunks: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
     let sink = chunks.clone();
     let abort_signal = signal.clone();
     let abort_on_output = case["abortOnOutput"].as_bool() == Some(true);
     let env = case["env"].as_object().map(|object| object.iter().map(|(name, value)| (name.clone(), value.as_str().unwrap_or("").to_string())).collect());
-    let options = pig_sdk::BashExecOptions {
+    let options = ompig_sdk::BashExecOptions {
         on_data: Arc::new(move |data| {
             sink.lock().unwrap().push(String::from_utf8_lossy(data).into_owned());
             if abort_on_output {

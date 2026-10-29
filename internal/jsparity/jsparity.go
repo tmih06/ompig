@@ -1,5 +1,5 @@
 // Package jsparity writes JSON exactly as JavaScript's JSON.stringify writes it. Its primitives are those of durable/core/jv, which the TinyGo
-// Durable core builds; this package is their one entry point for the rest of PiG and adds the forms jv does not need (non-finite numbers,
+// Durable core builds; this package is their one entry point for the rest of Ompig and adds the forms jv does not need (non-finite numbers,
 // 64-bit integers, booleans, three-state members).
 //
 // A string is a sequence of UTF-16 code units held as WTF-8: a lone surrogate is its three-byte generalized UTF-8 form, as jv defines.
@@ -9,7 +9,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // AppendString appends JSON.stringify(s) (ECMA-262 QuoteJSONString): the quote, the backslash and C0 controls are escaped (\b \f \n \r \t, other

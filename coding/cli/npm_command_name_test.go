@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 func npmCommandProbe(t *testing.T) string {

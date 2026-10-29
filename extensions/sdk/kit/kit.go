@@ -1,5 +1,5 @@
 // Package kit describes an extension surface as Pi's tui components (D107):
-// a declarative tree, the view, that PiG's host renders with its Go ports of
+// a declarative tree, the view, that Ompig's host renders with its Go ports of
 // pi-tui, so the terminal shows what Pi's components draw.
 //
 // Each node mirrors the upstream component of the same name. Constructors take
@@ -341,7 +341,7 @@ func NewVStack(children ...StackChild) *VStack { return &VStack{Children: childr
 func (s *VStack) AddChild(child StackChild) { s.Children = append(s.Children, child) }
 
 // Lines is rows a component of its own drew, rendered verbatim. Image,
-// Progress and List are PiG's frontend-only annotations: the SDK sends them,
+// Progress and List are Ompig's frontend-only annotations: the SDK sends them,
 // and the image's bytes, only while a frontend draws the session.
 type Lines struct {
 	Lines []string

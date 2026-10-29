@@ -17,8 +17,8 @@ import (
 	"time"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/durable"
 )
 
 type observersProgressState struct {

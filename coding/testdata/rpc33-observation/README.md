@@ -10,10 +10,10 @@ Run from the repository root with the pinned Node toolchain and installed Pi dep
 
 ```bash
 private=$(mktemp -d)
-mkdir -p "$private/home" "$private/pig" "$private/pi" "$EVIDENCE"
+mkdir -p "$private/home" "$private/ompig" "$private/pi" "$EVIDENCE"
 export PI_PACKAGE_ROOT="$(realpath extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent)"
 for run in 1 2 3; do
-  env HOME="$private/home" PIG_CODING_AGENT_DIR="$private/pig" PI_CODING_AGENT_DIR="$private/pi" \
+  env HOME="$private/home" OMPIG_CODING_AGENT_DIR="$private/ompig" PI_CODING_AGENT_DIR="$private/pi" \
     node coding/testdata/rpc33-observation/probe.mjs \
     "$EVIDENCE/pi-$run.json" "$EVIDENCE/inputs-$run.json" \
     >"$EVIDENCE/pi-$run.log" 2>&1
@@ -29,8 +29,8 @@ Use private HOME and agent directories for the outer Go process as well. The tes
 
 ```bash
 private=$(mktemp -d)
-mkdir -p "$private/home" "$private/pig" "$private/pi"
-env HOME="$private/home" PIG_CODING_AGENT_DIR="$private/pig" PI_CODING_AGENT_DIR="$private/pi" \
+mkdir -p "$private/home" "$private/ompig" "$private/pi"
+env HOME="$private/home" OMPIG_CODING_AGENT_DIR="$private/ompig" PI_CODING_AGENT_DIR="$private/pi" \
   go test ./coding -run '^TestRPC33Observation' -parallel 8 -count=3 -timeout=240s \
   -rpc33-observation-output="$EVIDENCE/go"
 rm -rf "$private"

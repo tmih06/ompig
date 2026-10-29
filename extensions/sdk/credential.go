@@ -9,7 +9,7 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Credential is Pi's Credential: the object a provider object's login or refresh returns and auth.json stores. Pi writes that object with JSON.stringify (packages/coding-agent/src/core/auth-storage.ts:465-467), so its keys, and the keys of every object inside it, keep the order the provider gave them. A decoded Credential reads nested objects as *OrderedObject for the same reason. A nil *Credential is an absent credential: Get finds nothing and Keys is empty.

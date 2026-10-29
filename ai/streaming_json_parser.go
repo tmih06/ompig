@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Incremental, tolerant parsing of JSON text that arrives in pieces, such as streamed tool-call arguments. It ports Pi's

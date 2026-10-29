@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi ea448f45 scheduler.ts #loadScopes (:680-693) returns only the conversations of queued inputs, and #reconcile withdraws

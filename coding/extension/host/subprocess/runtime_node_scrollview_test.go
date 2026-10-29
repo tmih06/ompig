@@ -6,7 +6,7 @@ import "testing"
 func TestPiScrollViewMatchesThePinnedPackage(t *testing.T) {
 	runPinnedComparison(t, []string{"node_modules", "@earendil-works", "pi-tui", "dist", "index.js"}, "pi-tui.mjs", `
 import assert from "node:assert/strict";
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 function scene(m) {
   const out = [];
   const child = new m.Text("one\n\x1b[31m界 two\x1b[39m\nthree", 0, 0);
@@ -43,14 +43,14 @@ function scene(m) {
   return out;
 }
 const want = scene(pi);
-assert.deepEqual(scene(pig), want);
+assert.deepEqual(scene(ompig), want);
 `)
 }
 
 func TestPiTuiPublicExportsAreRealImplementations(t *testing.T) {
 	runPinnedComparison(t, []string{"node_modules", "@earendil-works", "pi-tui", "dist", "index.js"}, "pi-tui.mjs", `
 import assert from "node:assert/strict";
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 function scene(m) {
   m.resetCapabilitiesCache();
   const detected = m.detectCapabilities();
@@ -78,7 +78,7 @@ function scene(m) {
   return out;
 }
 const want = scene(pi);
-assert.deepEqual(scene(pig), want);
-assert.deepEqual(Object.keys(pig), Object.keys(pi)); // TypeScript-only types must not become fabricated classes.
+assert.deepEqual(scene(ompig), want);
+assert.deepEqual(Object.keys(ompig), Object.keys(pi)); // TypeScript-only types must not become fabricated classes.
 `)
 }

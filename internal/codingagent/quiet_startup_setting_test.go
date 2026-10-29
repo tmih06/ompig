@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // settings-manager.ts:111-112 and 1089-1098 (Pi 1.0.0): quietStartup is true, "header" or false. getQuietStartup keeps true and "header" and reads every other value as false, and a project value replaces the global one even when it is null or invalid (deepMergeObjects skips only undefined). Pi has no test for these reads; the expectations are a probe of the pinned Pi 1.0.0 SettingsManager.create over the same global and project files: true, "header", false, false, "header", false, false, false, false, and setQuietStartup("header") writes {"quietStartup": "header"}.

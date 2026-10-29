@@ -6,7 +6,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // normalizeMistralChunkJS rewrites a Mistral chunk the typed decode rejects for a member's type as consumeChatStream reads it

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // IsSpace reports whether r is JavaScript whitespace or a line terminator (the characters String.prototype.trim removes).

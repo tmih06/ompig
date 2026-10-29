@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-// stringSplice lets any provider payload keep the encoding of its large strings across requests. rewrite copies the payload with each large string replaced by a token string; the provider marshals that small payload as it marshals the real one, and join puts each string's cached encoding where its token landed. The body is the bytes marshalRequestBody gives the real payload. pig additive (D112): see requestSpliceMinBytes.
+// stringSplice lets any provider payload keep the encoding of its large strings across requests. rewrite copies the payload with each large string replaced by a token string; the provider marshals that small payload as it marshals the real one, and join puts each string's cached encoding where its token landed. The body is the bytes marshalRequestBody gives the real payload. ompig additive (D112): see requestSpliceMinBytes.
 type stringSplice struct {
 	cache  *quotedStringCache
 	nonce  string

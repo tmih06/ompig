@@ -9,7 +9,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // DefaultStaleRuntimeMessage is the error an invalidated runtime reports when Invalidate gets no message.

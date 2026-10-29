@@ -7,8 +7,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A request whose signal is aborted before its provider starts fails inside lazyStream's setup: auth resolution throws the signal's reason (packages/ai/src/auth/resolve.ts:53 signal.throwIfAborted(), raced by raceWithAbortSignal), and packages/ai/src/api/lazy.ts createSetupErrorMessage reports every setup rejection as stopReason "error" with the error's message. A plain abort()'s reason is Node's DOMException AbortError, "This operation was aborted". Pi 1.1.0 shows it after an abort during a tool call: the next turn's request ends with {stopReason:"error", errorMessage:"This operation was aborted"}, never "context canceled".

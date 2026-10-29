@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // Test dispositions report file-level porting, not executed tests or passing cases.

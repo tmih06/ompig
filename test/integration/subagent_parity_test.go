@@ -1,7 +1,7 @@
 //go:build integration
 
 // Subagent parity tests: run the same subagent operations against both
-// pig and upstream pi, compare behavior.
+// ompig and upstream pi, compare behavior.
 //
 // Run with:
 //   go test -tags=integration ./test/integration/ -run TestParity -v -timeout 300s
@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // upstreamPiBin is the Pi built from source at the pinned commit (make parity-deps), checked against its build stamp.
@@ -48,23 +48,23 @@ type systemConfig struct {
 	prompt string // what to grep for to detect readiness
 }
 
-func pigConfig(t *testing.T) systemConfig {
+func ompigConfig(t *testing.T) systemConfig {
 	t.Helper()
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	subSrc := subagentSourceDir(t)
-	writeTestExtensionSettings(t, pigHome, subSrc)
-	return pigConfigWithHome(t, pigHome)
+	writeTestExtensionSettings(t, ompigHome, subSrc)
+	return ompigConfigWithHome(t, ompigHome)
 }
 
-func pigConfigWithHome(t *testing.T, pigHome string) systemConfig {
+func ompigConfigWithHome(t *testing.T, ompigHome string) systemConfig {
 	t.Helper()
-	trustIntegrationProject(t, pigHome)
+	trustIntegrationProject(t, ompigHome)
 	// Loaded resources follow the awaited session_start handlers; the footer paints earlier.
 	return systemConfig{
-		name:   "pig",
+		name:   "ompig",
 		bin:    buildBinary(t),
 		args:   []string{"--model", "github-copilot/gpt-5-mini"},
-		env:    []string{"PIG_HOME=" + pigHome, "PIG_QUIET_STARTUP=1"},
+		env:    []string{"OMPIG_HOME=" + ompigHome, "OMPIG_QUIET_STARTUP=1"},
 		prompt: "[Extensions]",
 	}
 }
@@ -101,7 +101,7 @@ func upstreamIsolatedHome(t *testing.T) string {
 		t.Fatal(err)
 	}
 
-	for _, root := range []string{filepath.Join(home, ".pi"), filepath.Join(home, ".pig")} {
+	for _, root := range []string{filepath.Join(home, ".pi"), filepath.Join(home, ".ompig")} {
 		src := filepath.Join(root, "agents")
 		entries, err := os.ReadDir(src)
 		if err != nil {
@@ -191,10 +191,10 @@ func sendSlashAndCapture(t *testing.T, session, cmd string, wait time.Duration) 
 // TestParity_SubagentCheckTool runs check_subagent on both systems and
 // compares that both return a sensible result (no active dispatches).
 func TestParity_SubagentCheckTool(t *testing.T) {
-	pig := pigConfig(t)
+	ompig := ompigConfig(t)
 	upstream := upstreamConfig(t)
 
-	for _, cfg := range []systemConfig{pig, upstream} {
+	for _, cfg := range []systemConfig{ompig, upstream} {
 		cfg := cfg
 		t.Run(cfg.name, func(t *testing.T) {
 			session, cleanup := launchSystem(t, cfg)
@@ -223,10 +223,10 @@ func TestParity_SubagentCheckTool(t *testing.T) {
 
 // TestParity_SubsCommand runs /subs on both systems and compares output.
 func TestParity_SubsCommand(t *testing.T) {
-	pig := pigConfig(t)
+	ompig := ompigConfig(t)
 	upstream := upstreamConfig(t)
 
-	for _, cfg := range []systemConfig{pig, upstream} {
+	for _, cfg := range []systemConfig{ompig, upstream} {
 		cfg := cfg
 		t.Run(cfg.name, func(t *testing.T) {
 			session, cleanup := launchSystem(t, cfg)
@@ -251,10 +251,10 @@ func TestParity_SubsCommand(t *testing.T) {
 
 // TestParity_AgentsCommand runs /agents on both systems.
 func TestParity_AgentsCommand(t *testing.T) {
-	pig := pigConfig(t)
+	ompig := ompigConfig(t)
 	upstream := upstreamConfig(t)
 
-	for _, cfg := range []systemConfig{pig, upstream} {
+	for _, cfg := range []systemConfig{ompig, upstream} {
 		cfg := cfg
 		t.Run(cfg.name, func(t *testing.T) {
 			session, cleanup := launchSystem(t, cfg)
@@ -281,18 +281,18 @@ func TestParity_AgentsCommand(t *testing.T) {
 // extension loaded on both systems. Uses installed binaries (not test-built)
 // for accurate timing: test-built binaries lack codesign on macOS.
 func TestParity_SubagentStartupPerf(t *testing.T) {
-	// Use installed pig binary for accurate startup measurement.
+	// Use installed ompig binary for accurate startup measurement.
 	home, _ := os.UserHomeDir()
-	pigBin := filepath.Join(home, ".local", "bin", "pig")
-	if _, err := os.Stat(pigBin); err != nil {
-		t.Skipf("installed pig not found at %s", pigBin)
+	ompigBin := filepath.Join(home, ".local", "bin", "ompig")
+	if _, err := os.Stat(ompigBin); err != nil {
+		t.Skipf("installed ompig not found at %s", ompigBin)
 	}
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	subSrc := subagentSourceDir(t)
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
-	pigCfg := pigConfigWithHome(t, pigHome)
-	pigCfg.bin = pigBin
+	ompigCfg := ompigConfigWithHome(t, ompigHome)
+	ompigCfg.bin = ompigBin
 	upstream := upstreamConfig(t)
 
 	now := func() int64 {
@@ -305,7 +305,7 @@ func TestParity_SubagentStartupPerf(t *testing.T) {
 		return ms
 	}
 
-	for _, cfg := range []systemConfig{pigCfg, upstream} {
+	for _, cfg := range []systemConfig{ompigCfg, upstream} {
 		cfg := cfg
 		t.Run(cfg.name, func(t *testing.T) {
 			start := now()

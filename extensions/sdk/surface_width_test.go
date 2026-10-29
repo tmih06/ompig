@@ -44,7 +44,7 @@ func startWidthSurfaceHostIn(t *testing.T, mode string, hasUI bool, register fun
 	host := newMockHost(t)
 	ext := New("surface-width")
 	register(ext)
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	s := &widthSurfaceHost{t: t, host: host, calls: make(chan callMsg, 64), done: make(chan error, 1)}
 	go func() { s.done <- ext.Run() }()
 	host.accept(t)

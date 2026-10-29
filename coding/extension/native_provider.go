@@ -3,7 +3,7 @@ package extension
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // NativeProvider is a session-owned carrier for Pi's native Provider callbacks.

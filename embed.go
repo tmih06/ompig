@@ -1,4 +1,4 @@
-// Package pig exposes build-time-embedded resources for the pig binary.
+// Package ompig exposes build-time-embedded resources for the ompig binary.
 //
 // This is the only file at module root; runtime code lives in cmd/, internal/,
 // coding/. Its sole purpose is to host `//go:embed` directives that need
@@ -7,7 +7,7 @@
 //
 // Currently embeds:
 // - CHANGELOG.md, surfaced via the `/changelog` slash command.
-package pig
+package ompig
 
 import (
 	"bytes"
@@ -29,11 +29,11 @@ var changelogGzip []byte
 func inflateChangelog() string {
 	reader, err := gzip.NewReader(bytes.NewReader(changelogGzip))
 	if err != nil {
-		panic("pig: embedded CHANGELOG.md.gz: " + err.Error())
+		panic("ompig: embedded CHANGELOG.md.gz: " + err.Error())
 	}
 	text, err := io.ReadAll(reader)
 	if err != nil {
-		panic("pig: embedded CHANGELOG.md.gz: " + err.Error())
+		panic("ompig: embedded CHANGELOG.md.gz: " + err.Error())
 	}
 	return string(text)
 }

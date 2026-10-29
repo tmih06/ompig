@@ -12,8 +12,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // SetCommandLine does nothing outside Windows, where Node's spawn and os/exec
@@ -23,7 +23,7 @@ func SetCommandLine(*exec.Cmd) {}
 // start is cmd.Start: SetProgram arranges the trampoline for an environment
 // that os/exec would change. Node's spawn without an env option passes
 // process.env as it is (normalizeSpawnArguments in lib/child_process.js), so a
-// child that start gives cmd.Dir keeps PiG's PWD; os/exec, given no Env, would
+// child that start gives cmd.Dir keeps Ompig's PWD; os/exec, given no Env, would
 // set PWD to cmd.Dir instead, and a shell's pwd would print that name rather
 // than the physical directory.
 func start(cmd *exec.Cmd) error {
@@ -39,12 +39,12 @@ func HideWindow(*exec.Cmd, ...Stdio) {}
 // SetProgram makes Start return the *Error that Node's spawn(cmd.Args[0],
 // cmd.Args[1:], { cwd: cmd.Dir, env: cmd.Env }) throws for its arguments, and
 // makes cmd start what libuv's execvp starts: the program it finds in the PATH
-// of cmd.Env (PiG's PATH when cmd.Env is nil), or the file with a slash, run
+// of cmd.Env (Ompig's PATH when cmd.Env is nil), or the file with a slash, run
 // with /bin/sh when the kernel does not recognize it, as lookPathIn describes.
 // Call it after the last change to cmd.Args, cmd.Dir, and cmd.Env.
 func SetProgram(cmd *exec.Cmd) {
 	setProgram(cmd)
-	// The linker starts a program and, for a trampoline, the copy of PiG that
+	// The linker starts a program and, for a trampoline, the copy of Ompig that
 	// starts it.
 	linkerexec.Prepare(cmd)
 	useTrampoline(cmd)
@@ -121,7 +121,7 @@ func startName(name string) string {
 	return "./" + name
 }
 
-// childEnvironment is the environment libuv's child searches: env, or PiG's
+// childEnvironment is the environment libuv's child searches: env, or Ompig's
 // when the spawn has none.
 func childEnvironment(env []string) []string {
 	if env == nil {
@@ -136,8 +136,8 @@ func SetDirectory(*exec.Cmd) {}
 
 // LookPath returns the program that Node's child_process.spawn(file, args)
 // starts after the argument checks of Node's spawn for file, cwd, and env,
-// where "" is PiG's working directory and env is the spawn's env option. A nil
-// env is PiG's environment. A file with a slash is the file itself; otherwise
+// where "" is Ompig's working directory and env is the spawn's env option. A nil
+// env is Ompig's environment. A file with a slash is the file itself; otherwise
 // libuv searches the PATH of the environment, as lookPathIn describes.
 func LookPath(file, cwd string, env []string) (string, error) {
 	if err := checkArguments(file, nil, cwd, env); err != nil {
@@ -255,7 +255,7 @@ const binprmBufSize = 256
 // systems start every executable regular file.
 //
 // The kernel reads the head of a file that the user may execute but not read.
-// PiG cannot, so it asks the kernel with probeExecve.
+// Ompig cannot, so it asks the kernel with probeExecve.
 func execveErrno(path, cwd string, depth int) syscall.Errno {
 	return execveLevelErrno(path, cwd, depth, false)
 }

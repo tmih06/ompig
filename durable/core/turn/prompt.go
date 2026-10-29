@@ -3,7 +3,7 @@
 
 package turn
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // System prompt preparation of src/harness/prompt.ts: replay the sections and tools the context's system messages show,
 // and plan the pi.system entries that make them equal the desired sections and tools in values and order.

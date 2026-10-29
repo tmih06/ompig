@@ -13,7 +13,7 @@ import (
 
 // commandLineHelper makes the test binary report the command line
 // CreateProcessW gave it, before any C runtime parsing.
-const commandLineHelper = "PIG_CROSSSPAWN_COMMAND_LINE_HELPER"
+const commandLineHelper = "OMPIG_CROSSSPAWN_COMMAND_LINE_HELPER"
 
 func receivedCommandLine(t *testing.T, cmd *exec.Cmd) string {
 	t.Helper()

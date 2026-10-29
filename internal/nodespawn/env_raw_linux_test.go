@@ -22,9 +22,9 @@ func TestSetEnvPropertiesPassesTheBlockNodePasses(t *testing.T) {
 		name string
 		env  []EnvProperty
 	}{
-		{"names share their text", []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"PIG_A", "one"}, {"PIG_A=B", "two"}, {"PIG_A=B=C", "three"}, {"PIG_Z", "z"}}},
-		{"the longer name comes first", []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"PIG_A=B", "two"}, {"PIG_A", "one"}}},
-		{"no name shares its text", []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"PIG_A=B", "two"}, {"PIG_C", "c"}}},
+		{"names share their text", []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"OMPIG_A", "one"}, {"OMPIG_A=B", "two"}, {"OMPIG_A=B=C", "three"}, {"OMPIG_Z", "z"}}},
+		{"the longer name comes first", []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"OMPIG_A=B", "two"}, {"OMPIG_A", "one"}}},
+		{"no name shares its text", []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"OMPIG_A=B", "two"}, {"OMPIG_C", "c"}}},
 	} {
 		t.Run(c.name, func(t *testing.T) {
 			node := exec.CommandContext(t.Context(), nodeBinary, "-e", `
@@ -74,7 +74,7 @@ func TestSetEnvPropertiesTrampolineKeepsTheSpawn(t *testing.T) {
 	}
 	path := EnvProperty{"PATH", "/usr/bin:/bin"}
 	plainOut, plainErr, plainCode := run([]EnvProperty{path, {"PWD", dir}})
-	out, errOut, code := run([]EnvProperty{path, {"PWD", dir}, {"PIG_A", "one"}, {"PIG_A=B", "two"}})
+	out, errOut, code := run([]EnvProperty{path, {"PWD", dir}, {"OMPIG_A", "one"}, {"OMPIG_A=B", "two"}})
 	if out != plainOut || errOut != plainErr || code != plainCode || code != 7 {
 		t.Errorf("through the trampoline: %q, %q, %d\nwithout it: %q, %q, %d", out, errOut, code, plainOut, plainErr, plainCode)
 	}

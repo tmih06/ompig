@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // orderedMap is a string map that keeps its JSON key order, as a JavaScript object does. A repeated key keeps its first position and its last value.

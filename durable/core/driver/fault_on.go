@@ -8,8 +8,8 @@ package driver
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // OpenHarnessFault is OpenHarness with a hook that runs on the owner goroutine before the store applies each commit of a step.

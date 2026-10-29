@@ -1,8 +1,8 @@
 package extension
 
 import (
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // SessionHeader is the session log's header line (session-manager.ts SessionHeader).

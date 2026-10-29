@@ -1,6 +1,6 @@
 package ai
 
-// Covers .upstream/current/packages/ai/src/utils/sleep.ts, which PiG
+// Covers .upstream/current/packages/ai/src/utils/sleep.ts, which Ompig
 // implements as abortableSleep (ai/provider_retry.go): reject at once when
 // already aborted, resolve after the delay, reject when aborted mid-wait.
 

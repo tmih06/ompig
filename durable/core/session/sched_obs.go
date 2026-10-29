@@ -4,7 +4,7 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 func (s *Scheduler) scheduleReconcile() {

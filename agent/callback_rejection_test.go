@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent-loop.ts awaits prepareRequest and finishTurn; agent.ts:519-553 catches their rejection and emits the same synthetic failed-turn lifecycle.

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // Pi 42a3497d types.ts ToolExecutionApi.retainedOutput: the output retained so far, as the model will see it, and whether

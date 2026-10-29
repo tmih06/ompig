@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 
 # Third-Party Notices
 
-This file records third-party software that PiG distributes in its source tree or embeds in its output. The release SBOM records dependencies compiled or packaged for each release.
+This file records third-party software that Ompig distributes in its source tree or embeds in its output. The release SBOM records dependencies compiled or packaged for each release.
 
 The canonical license texts for the components below are in `LICENSES/`.
 
@@ -19,7 +19,7 @@ Distributed files: `internal/wordsegmenter/cjk.go` and `internal/wordsegmenter/c
 - The dictionary includes the Google, TaBE, Academia Sinica, and IPADIC notices reproduced in `LICENSES/LicenseRef-ICU-CJK.txt`.
 - License texts: `LICENSES/Unicode-3.0.txt` and `LICENSES/LicenseRef-ICU-CJK.txt`.
 
-PiG translates ICU's weighted CJK word-boundary algorithm to Go. The embedded index is generated from the exact ICU 78.3 `cjdict.txt` data used by the pinned Node oracle. Its source SHA256 is `e73fd72048981d0cc13e9dc436a7eaba07ffb6eff58c8a59dc75c1df746663a0`.
+Ompig translates ICU's weighted CJK word-boundary algorithm to Go. The embedded index is generated from the exact ICU 78.3 `cjdict.txt` data used by the pinned Node oracle. Its source SHA256 is `e73fd72048981d0cc13e9dc436a7eaba07ffb6eff58c8a59dc75c1df746663a0`.
 
 
 ## ICU 78.3 Southeast Asian word segmentation
@@ -36,7 +36,7 @@ Distributed files: `internal/wordsegmenter/sea.go`, `internal/wordsegmenter/segm
 - Complete dictionary notices and redistribution terms: `LICENSES/LicenseRef-ICU-SEA.txt`.
 - ICU algorithm and Unicode 17.0.0 property-data terms: `LICENSES/Unicode-3.0.txt`.
 
-PiG translates ICU's `DictionaryBreakEngine`, `PossibleWord`, `ThaiBreakEngine`, `LaoBreakEngine`, `KhmerBreakEngine`, `BurmeseBreakEngine`, `DictionaryCache::populateDictionary` engine selection, `UnhandledEngine`, and word-rule tailoring to Go. `internal/wordsegmenter/generate_sea_dictionary.py` verifies each source hash and preserves ICU's byte-offset transform in a sorted embedded index. The generator and `internal/wordsegmenter/README.md` record the exact source hashes and regeneration procedure.
+Ompig translates ICU's `DictionaryBreakEngine`, `PossibleWord`, `ThaiBreakEngine`, `LaoBreakEngine`, `KhmerBreakEngine`, `BurmeseBreakEngine`, `DictionaryCache::populateDictionary` engine selection, `UnhandledEngine`, and word-rule tailoring to Go. `internal/wordsegmenter/generate_sea_dictionary.py` verifies each source hash and preserves ICU's byte-offset transform in a sorted embedded index. The generator and `internal/wordsegmenter/README.md` record the exact source hashes and regeneration procedure.
 
 ## Go gopher artwork
 
@@ -46,9 +46,9 @@ The project banner contains an adaptation of the Go gopher, which was designed b
 
 - License: CC-BY-4.0
 - License text: `LICENSES/CC-BY-4.0.txt`
-- Distributed files: `docs/assets/pig-project-banner.png`
+- Distributed files: `docs/assets/ompig-project-banner.png`
 
-The remaining PiG artwork and composition are licensed under MIT.
+The remaining Ompig artwork and composition are licensed under MIT.
 
 ## Contributor Covenant 2.1
 
@@ -59,7 +59,7 @@ Distributed file: `.github/CODE_OF_CONDUCT.md`
 - Copyright Contributor Covenant contributors
 - License: CC-BY-4.0
 
-PiG customizes the enforcement contact and preserves the required source and license attribution in the document.
+Ompig customizes the enforcement contact and preserves the required source and license attribution in the document.
 
 ## grok-mermaid 0.2.2
 
@@ -84,7 +84,7 @@ Reviewed source revision: `79eab0d9fc2060783b43046f9611648dcd35172f`
 Distributed file: `internal/mermaid/width_data.go`
 
 - Copyright (c) 2015 The Rust Project Developers
-- License: Apache-2.0 OR MIT; PiG uses the MIT option for this derived data
+- License: Apache-2.0 OR MIT; Ompig uses the MIT option for this derived data
 
 The width table is generated through `grok-mermaid` from the exact `unicode-width` 0.2.0 crate pinned by `grok-mermaid`'s width oracle. The required MIT copyright and permission notice is preserved here, and the canonical MIT text is in `LICENSES/MIT.txt`.
 
@@ -96,7 +96,7 @@ Distributed file: `durable/images/png.go`
 
 - png: Copyright (c) 2015 nwin; The image-rs Developers
 - fdeflate: The image-rs Developers
-- License: MIT OR Apache-2.0; PiG uses the MIT option for this derived code
+- License: MIT OR Apache-2.0; Ompig uses the MIT option for this derived code
 
 `durable/images/png.go` ports the PNG encoder that Photon 0.3.3 runs: png's `write_image_data` with `Compression::Fast` and adaptive filtering, and fdeflate's `Compressor` and `StoredOnlyCompressor` with its Huffman and length tables. The required MIT copyright and permission notice is preserved here, and the canonical MIT text is in `LICENSES/MIT.txt`.
 
@@ -121,7 +121,7 @@ Distributed file: `internal/codingagent/stdin_buffer.go`
 - Copyright (c) 2025 opentui
 - License: MIT
 
-Upstream Pi identifies its `stdin-buffer.ts` implementation as based on OpenTUI. PiG ports that implementation to Go.
+Upstream Pi identifies its `stdin-buffer.ts` implementation as based on OpenTUI. Ompig ports that implementation to Go.
 
 ## ansi-regex and strip-ansi
 
@@ -138,7 +138,7 @@ Distributed files:
 - Copyright (c) Sindre Sorhus (<https://sindresorhus.com>)
 - License: MIT
 
-Upstream Pi identifies portions of its ANSI utility as derived from these projects. PiG ports that behavior to Go.
+Upstream Pi identifies portions of its ANSI utility as derived from these projects. Ompig ports that behavior to Go.
 
 ## Highlight.js 11.9.0
 
@@ -227,7 +227,7 @@ This software is provided by the copyright holders and contributors “as is” 
 
 Source: <https://github.com/tats-u/markdown-cjk-friendly/tree/main/packages/marked-cjk-friendly>
 
-Distributed files: `internal/codingagent/export/assets/vendor/marked-cjk-friendly.min.js`, which the exported HTML embeds, and `coding/extension/host/subprocess/runtime-node/shims/marked-cjk-friendly/`, the unmodified `dist/index.js`, `package.json` and `LICENSE` that pi-tui's Markdown component imports in Node extensions. PiG's Markdown renderer ports the package's `emStrong` rules to Go in `tui/markdown_marked.go` and `tui/markdown_cjk.go`.
+Distributed files: `internal/codingagent/export/assets/vendor/marked-cjk-friendly.min.js`, which the exported HTML embeds, and `coding/extension/host/subprocess/runtime-node/shims/marked-cjk-friendly/`, the unmodified `dist/index.js`, `package.json` and `LICENSE` that pi-tui's Markdown component imports in Node extensions. Ompig's Markdown renderer ports the package's `emStrong` rules to Go in `tui/markdown_marked.go` and `tui/markdown_cjk.go`.
 
 ```text
 MIT License
@@ -308,7 +308,7 @@ THIS SOFTWARE.
 
 The Node extension runtime highlights code for Pi 0.87.1's `highlightCode` and `getMarkdownTheme` with the same highlighter Pi 0.87.1 uses. `coding/extension/host/subprocess/runtime-node/shims/highlight.js/` holds the unmodified CommonJS build (`lib/`), `package.json` and `LICENSE` of the npm package `highlight.js@10.7.3` (integrity `sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==`), copied by `automation/gen/vendor-pi-dist.sh`.
 
-`tui/internal/hljs/` ports the same highlighter to Go for PiG's own `highlightCode`: its `.go` files translate `lib/core.js` and the language callbacks, `grammars_eager.json.gz` and `grammars_all.json.gz` serialize the language definitions Pi 1.0.0 registers (`automation/gen/generate-highlight-grammars.mjs`), and `testdata/corpus.json` holds the test inputs of highlight.js's repository at tag 10.7.3 (`automation/gen/import-highlight-corpus.mjs`).
+`tui/internal/hljs/` ports the same highlighter to Go for Ompig's own `highlightCode`: its `.go` files translate `lib/core.js` and the language callbacks, `grammars_eager.json.gz` and `grammars_all.json.gz` serialize the language definitions Pi 1.0.0 registers (`automation/gen/generate-highlight-grammars.mjs`), and `testdata/corpus.json` holds the test inputs of highlight.js's repository at tag 10.7.3 (`automation/gen/import-highlight-corpus.mjs`).
 
 ```text
 BSD 3-Clause License
@@ -557,7 +557,7 @@ The generated `tui/widthx/unicode_tables.go` derives character properties and em
 
 ## quickjs-wasi 3.6.2 and the codemode prelude
 
-`codemode/assets/quickjs.wasm` is the unmodified `quickjs.wasm` of the npm package `quickjs-wasi@3.6.2` (SHA-256 `d4c9375f2b1ca4dc95f72c8aa2982a7a9951ac8011490d79c6582df732b4bbd9`), the engine that upstream's codemode package runs. The module contains QuickJS-NG (MIT, copyright Ben Noordhuis, Saúl Ibarra Corretgé, Fabrice Bellard and Charlie Gordon) and wasi-libc from wasi-sdk 30. PiG hosts it with wazero (Apache-2.0, `LICENSES/Apache-2.0.txt`). `codemode/assets/prelude.js` is upstream's `PRELUDE_SOURCE` (MIT, copyright (c) 2025 Mario Zechner). `codemode/assets/PROVENANCE.md` records the source and the refresh procedure.
+`codemode/assets/quickjs.wasm` is the unmodified `quickjs.wasm` of the npm package `quickjs-wasi@3.6.2` (SHA-256 `d4c9375f2b1ca4dc95f72c8aa2982a7a9951ac8011490d79c6582df732b4bbd9`), the engine that upstream's codemode package runs. The module contains QuickJS-NG (MIT, copyright Ben Noordhuis, Saúl Ibarra Corretgé, Fabrice Bellard and Charlie Gordon) and wasi-libc from wasi-sdk 30. Ompig hosts it with wazero (Apache-2.0, `LICENSES/Apache-2.0.txt`). `codemode/assets/prelude.js` is upstream's `PRELUDE_SOURCE` (MIT, copyright (c) 2025 Mario Zechner). `codemode/assets/PROVENANCE.md` records the source and the refresh procedure.
 
 ```text
 MIT License
@@ -589,7 +589,7 @@ Source: <https://github.com/modelcontextprotocol/typescript-sdk/blob/v1.29.0/src
 
 `mcp/oauth` translates, through upstream's `packages/mcp/src/oauth`, the SDK's OAuth client subset (discovery, PKCE authorization code flow, dynamic client registration, token refresh) into Go. It retains the notice Copyright (c) 2024 Anthropic, PBC, under the MIT license reproduced in `LICENSES/MIT.txt`.
 
-## santhosh-tekuri/jsonschema v6.0.2 (JSON Schema validator, PiG fork)
+## santhosh-tekuri/jsonschema v6.0.2 (JSON Schema validator, Ompig fork)
 
 Source: <https://github.com/santhosh-tekuri/jsonschema/tree/v6.0.2>
 
@@ -598,7 +598,7 @@ Distributed files: `third_party/jsonschema/`, a package of the root module. The 
 - Copyright the santhosh-tekuri/jsonschema authors.
 - License: Apache-2.0, in `third_party/jsonschema/LICENSE` and `LICENSES/Apache-2.0.txt`.
 
-## yuin/goldmark v1.8.5 (Markdown parser, PiG fork)
+## yuin/goldmark v1.8.5 (Markdown parser, Ompig fork)
 
 Source: <https://github.com/yuin/goldmark/tree/v1.8.5>
 
@@ -607,7 +607,7 @@ Distributed files: `third_party/goldmark/{ast,parser,text,util}`, packages of th
 - Copyright (c) 2019 Yusuke Inuzuka.
 - License: MIT, in `third_party/goldmark/LICENSE` and `LICENSES/MIT.txt`.
 
-## Masterminds/semver v3.5.0 (semantic versioning, PiG fork)
+## Masterminds/semver v3.5.0 (semantic versioning, Ompig fork)
 
 Source: <https://github.com/Masterminds/semver/tree/v3.5.0>
 

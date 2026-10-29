@@ -11,10 +11,10 @@ driver = "rpc-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/warning-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/warning-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/warning-agent"]
 override_base_args = true
 pi_args = ["--offline", "--no-extensions", "--no-session", "--model", "openai/gpt-4.1"]
-pig_args = ["--offline", "--no-extensions", "--no-session", "--model", "openai/gpt-4.1"]
+ompig_args = ["--offline", "--no-extensions", "--no-session", "--model", "openai/gpt-4.1"]
 
 [rpc]
 cwd = "testdata/warning-project"

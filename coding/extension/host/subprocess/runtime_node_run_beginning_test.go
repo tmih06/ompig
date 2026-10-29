@@ -23,7 +23,7 @@ export default function (pi) {
 }
 `
 
-// Pig 74-print-input-run: Pi's run makes a loop turn at the bash tool's I/O, so the immediate a print prompt's input handler queued runs during the run, before session_shutdown. The host sends the run beginning as the step that ends the runtime's wait after the input, and a runtime the OS scheduled late reads the run's end and the shutdown request in the same pass (a macOS runner running eight copies of the scenario lost the immediate in half of the runs). A fake host writes the three frames in one write, so they arrive in one read: the shutdown request must still wait for the immediate.
+// Ompig 74-print-input-run: Pi's run makes a loop turn at the bash tool's I/O, so the immediate a print prompt's input handler queued runs during the run, before session_shutdown. The host sends the run beginning as the step that ends the runtime's wait after the input, and a runtime the OS scheduled late reads the run's end and the shutdown request in the same pass (a macOS runner running eight copies of the scenario lost the immediate in half of the runs). A fake host writes the three frames in one write, so they arrive in one read: the shutdown request must still wait for the immediate.
 func TestNodeRunBeginningRunsTheInputsImmediateBeforeTheFramesReadWithIt(t *testing.T) {
 	t.Parallel()
 	node, err := exec.LookPath("node")
@@ -34,7 +34,7 @@ func TestNodeRunBeginningRunsTheInputsImmediateBeforeTheFramesReadWithIt(t *test
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	root, err := os.MkdirTemp(parent, "pig-run-beginning-")
+	root, err := os.MkdirTemp(parent, "ompig-run-beginning-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func TestNodeRunBeginningRunsTheInputsImmediateBeforeTheFramesReadWithIt(t *test
 	}
 	t.Cleanup(func() { _ = listener.Close() })
 	cmd := exec.CommandContext(t.Context(), node, filepath.Join("runtime-node", "cli.mjs"), entry)
-	cmd.Env = append(os.Environ(), "PIG_EXT_SOCKET="+address, "PIG_EXT_NAME=run-beginning")
+	cmd.Env = append(os.Environ(), "OMPIG_EXT_SOCKET="+address, "OMPIG_EXT_NAME=run-beginning")
 	peer := startAndAccept(t, cmd, listener)
 	t.Cleanup(func() { _ = peer.Close() })
 	register := readLivenessEnvelope(t, peer)

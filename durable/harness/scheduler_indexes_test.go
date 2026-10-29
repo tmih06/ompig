@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // commitCounter records the commit, by count, that wrote each terminal task record.

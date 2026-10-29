@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -17,8 +17,8 @@ import (
 	"testing"
 )
 
-// The two places Bedrock's bearer token and PiG differ from Pi, D195 and D196. Each case runs Pi's bedrock-converse-stream (pinned Pi, through the Node oracle) and
-// PiG's provider against a loopback server and records what reached it: the Authorization header, or the error the stream ended with when no request was sent.
+// The two places Bedrock's bearer token and Ompig differ from Pi, D195 and D196. Each case runs Pi's bedrock-converse-stream (pinned Pi, through the Node oracle) and
+// Ompig's provider against a loopback server and records what reached it: the Authorization header, or the error the stream ended with when no request was sent.
 // The divergence cases pin both outcomes, so the record is wrong the day either side changes; the controls (an unset token, a token without skip-auth) must agree.
 //
 // pi: packages/ai/src/api/bedrock-converse-stream.ts:185-191 (getProviderEnvValue treats an empty variable as unset, so skipAuth stays on and config.token is not set);
@@ -34,18 +34,18 @@ func TestBedrockBearerTokenDivergencesFromPi(t *testing.T) {
 	cases := []struct {
 		name string
 		env  map[string]string
-		// Pi and PiG are what the case must produce; ErrorContains matches a request that was never sent.
-		pi, pig          outcome
-		piErrorContains  string
-		pigErrorContains string
-		same             bool
+		// Pi and Ompig are what the case must produce; ErrorContains matches a request that was never sent.
+		pi, ompig          outcome
+		piErrorContains    string
+		ompigErrorContains string
+		same               bool
 	}{
 		{name: "D195 empty token with skip-auth", env: map[string]string{"AWS_BEDROCK_SKIP_AUTH": "1", "AWS_BEARER_TOKEN_BEDROCK": ""},
-			pi: outcome{}, piErrorContains: "could not be signed with `token`", pig: outcome{Authorization: "SigV4 dummy-access-key", Error: "Unknown: stop"}},
+			pi: outcome{}, piErrorContains: "could not be signed with `token`", ompig: outcome{Authorization: "SigV4 dummy-access-key", Error: "Unknown: stop"}},
 		{name: "D195 empty token with static keys", env: map[string]string{"AWS_ACCESS_KEY_ID": "AKIAEXAMPLE", "AWS_SECRET_ACCESS_KEY": "secret", "AWS_BEARER_TOKEN_BEDROCK": ""},
-			pi: outcome{}, piErrorContains: "could not be signed with `token`", pig: outcome{Authorization: "SigV4 AKIAEXAMPLE", Error: "Unknown: stop"}},
+			pi: outcome{}, piErrorContains: "could not be signed with `token`", ompig: outcome{Authorization: "SigV4 AKIAEXAMPLE", Error: "Unknown: stop"}},
 		{name: "D196 skip-auth with a token over http", env: map[string]string{"AWS_BEDROCK_SKIP_AUTH": "1", "AWS_BEARER_TOKEN_BEDROCK": "tok"},
-			pi: outcome{Authorization: "Bearer tok", Error: "Unknown: stop"}, pig: outcome{}, pigErrorContains: "requires HTTPS"},
+			pi: outcome{Authorization: "Bearer tok", Error: "Unknown: stop"}, ompig: outcome{}, ompigErrorContains: "requires HTTPS"},
 		{name: "control unset token with static keys", env: map[string]string{"AWS_ACCESS_KEY_ID": "AKIAEXAMPLE", "AWS_SECRET_ACCESS_KEY": "secret"}, same: true,
 			pi: outcome{Authorization: "SigV4 AKIAEXAMPLE", Error: "Unknown: stop"}},
 		{name: "control token without skip-auth over http", env: map[string]string{"AWS_BEARER_TOKEN_BEDROCK": "tok"}, same: true,
@@ -149,25 +149,25 @@ func TestBedrockBearerTokenDivergencesFromPi(t *testing.T) {
 			mu.Lock()
 			got := outcome{Authorization: authorization, Error: stream.Result().ErrorMessage}
 			mu.Unlock()
-			if tc.pigErrorContains != "" {
-				if got.Authorization != "" || !strings.Contains(got.Error, tc.pigErrorContains) {
-					t.Fatalf("PiG: %+v, want no request and an error containing %q", got, tc.pigErrorContains)
+			if tc.ompigErrorContains != "" {
+				if got.Authorization != "" || !strings.Contains(got.Error, tc.ompigErrorContains) {
+					t.Fatalf("Ompig: %+v, want no request and an error containing %q", got, tc.ompigErrorContains)
 				}
 				got.Error = ""
 			} else {
-				want := tc.pig
+				want := tc.ompig
 				if tc.same {
 					want = tc.pi
 				}
 				if got != want {
-					t.Fatalf("PiG: %+v, want %+v", got, want)
+					t.Fatalf("Ompig: %+v, want %+v", got, want)
 				}
 			}
 			if tc.same && (got.Authorization != pi.Authorization) {
-				t.Fatalf("PiG sent %q, Pi sent %q: not a divergence", got.Authorization, pi.Authorization)
+				t.Fatalf("Ompig sent %q, Pi sent %q: not a divergence", got.Authorization, pi.Authorization)
 			}
 			if !tc.same && got.Authorization == pi.Authorization {
-				t.Fatalf("PiG and Pi both produced %q: the divergence is gone, remove its record", got.Authorization)
+				t.Fatalf("Ompig and Pi both produced %q: the divergence is gone, remove its record", got.Authorization)
 			}
 		})
 	}

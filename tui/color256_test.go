@@ -28,7 +28,7 @@ func TestRGBTo256(t *testing.T) {
 }
 
 func TestFgBgSeq_TrueColorVsDownsample(t *testing.T) {
-	green := color.RGBA{0x16, 0xA3, 0x6A, 0xFF} // Green PiG accent
+	green := color.RGBA{0x16, 0xA3, 0x6A, 0xFF} // Green Ompig accent
 	if got := FgSeq(green, true); got != "\x1b[38;2;22;163;106m" {
 		t.Errorf("truecolor fg = %q, want 24-bit 38;2 form", got)
 	}

@@ -4,16 +4,16 @@
 # relative to its Package root. Probed on upstream 0.99.1 at 220x60 (no [Themes] section is listed):
 #   [Skills]
 #     user
-#       git:github.com/pig-parity/entry-shapes
+#       git:github.com/ompig-parity/entry-shapes
 #         skills/planner/SKILL.md
 #         suite/listed.md
 #         suite/nested/SKILL.md
 #   [Extensions]
 #     user
-#       git:github.com/pig-parity/entry-shapes
+#       git:github.com/ompig-parity/entry-shapes
 #         entry-shapes
 # A file skill keeps its own path, a Package theme loaded from its file lists
-# that file, and the "./" extension is the package directory. PiG failed the
+# that file, and the "./" extension is the package directory. Ompig failed the
 # Package before listing anything.
 name = "08-startup-package-entry-shapes-expanded"
 description = "Ctrl+O lists a Package's file skills, root Markdown skills and extension at Pi's package-relative paths."
@@ -25,7 +25,7 @@ tags = ["fast", "hermetic", "tui"]
 driver = "interactive-tmux"
 
 [env]
-pig = ["PIG_OFFLINE=1", "PIG_CODING_AGENT_DIR=testdata/entry-shapes/pig-agent"]
+ompig = ["OMPIG_OFFLINE=1", "OMPIG_CODING_AGENT_DIR=testdata/entry-shapes/ompig-agent"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/entry-shapes/pi-agent"]
 override_base_args = true
 
@@ -33,14 +33,14 @@ override_base_args = true
 # Wide enough that no listed absolute snapshot path wraps.
 width = 220
 height = 60
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "[Skills]"
-capture_end_regex = 'git:github.com/pig-parity/entry-shapes\n\s+entry-shapes'
+capture_end_regex = 'git:github.com/ompig-parity/entry-shapes\n\s+entry-shapes'
 
 [[tmux.steps]]
-wait_visible_contains = ["pig-parity/entry-shapes:entry-shapes"]
+wait_visible_contains = ["ompig-parity/entry-shapes:entry-shapes"]
 
 [[tmux.steps]]
 keys = ["C-o"]
@@ -48,7 +48,7 @@ wait_contains = ["paste files on macOS"]
 
 [assert]
 both_reach_ready = true
-both_contain = ["git:github.com/pig-parity/entry-shapes", "skills/planner/SKILL.md", "suite/listed.md", "suite/nested/SKILL.md"]
+both_contain = ["git:github.com/ompig-parity/entry-shapes", "skills/planner/SKILL.md", "suite/listed.md", "suite/nested/SKILL.md"]
 both_not_contain = ["claude-only", "SUITE.md", "Failed to load"]
 output_normalized_equal = true
 runs = 3

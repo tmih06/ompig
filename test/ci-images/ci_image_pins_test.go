@@ -16,7 +16,7 @@ import (
 
 	"go.yaml.in/yaml/v3"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 var digestPinned = regexp.MustCompile(`@sha256:[0-9a-f]{64}$`)
@@ -63,7 +63,7 @@ func TestCIImageBasesArePinnedByDigest(t *testing.T) {
 		if strings.Contains(match[1], "@sha256:") && digestPinned.MatchString(match[1]) {
 			continue
 		}
-		if strings.HasPrefix(match[1], "pig-ci-base-") {
+		if strings.HasPrefix(match[1], "ompig-ci-base-") {
 			continue // the local tag a pinned pull is loaded as
 		}
 		t.Errorf("seed-ci-image-bases.sh loads %s, which is not pinned by digest", match[1])
@@ -242,7 +242,7 @@ func proposalRun(t *testing.T, failPR bool, args ...string) (string, string, err
 		fail = "1"
 	}
 	cmd.Env = append(os.Environ(), "PATH="+dir+string(os.PathListSeparator)+os.Getenv("PATH"), "GH_LOG="+log, "FAKE_PR_FAILS="+fail,
-		"REPO=MichaelKinsy/PiG", "BASE_SHA="+strings.Repeat("b", 40), "RUN_ID=77")
+		"REPO=tmih06/ompig", "BASE_SHA="+strings.Repeat("b", 40), "RUN_ID=77")
 	output, err := cmd.CombinedOutput()
 	logged, _ := os.ReadFile(log)
 	return string(output), string(logged), err
@@ -257,18 +257,18 @@ func TestLockProposalIsOneSignedCommitOnANewBranch(t *testing.T) {
 	}
 	evidence := t.TempDir()
 	resolved := strings.Replace(string(committed), "libcurl=", "libcurl=9.", 1)
-	writeCIFixture(t, evidence, "pig-ci-go-evidence/packages.lock", resolved)
+	writeCIFixture(t, evidence, "ompig-ci-go-evidence/packages.lock", resolved)
 	// The parity image's evidence holds the committed lock: nothing to propose for it.
 	parity, err := os.ReadFile(filepath.Join(root, "automation/images/ci-parity/packages.lock"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	writeCIFixture(t, evidence, "pig-ci-parity-evidence/packages.lock", string(parity))
+	writeCIFixture(t, evidence, "ompig-ci-parity-evidence/packages.lock", string(parity))
 	output, log, err := proposalRun(t, false, "lock", "--evidence", evidence)
 	if err != nil {
 		t.Fatalf("%v\n%s\n%s", err, output, log)
 	}
-	if !strings.Contains(log, "ARGS:api repos/MichaelKinsy/PiG/git/refs -f ref=refs/heads/ci-images/lock-") || !strings.Contains(log, "sha="+strings.Repeat("b", 40)) {
+	if !strings.Contains(log, "ARGS:api repos/tmih06/ompig/git/refs -f ref=refs/heads/ci-images/lock-") || !strings.Contains(log, "sha="+strings.Repeat("b", 40)) {
 		t.Errorf("the branch was not created from the base commit:\n%s", log)
 	}
 	_, body, _ := strings.Cut(log, "ARGS:api graphql --input -\n")
@@ -312,7 +312,7 @@ func TestLockProposalDoesNothingWhenLocksAreCurrent(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		writeCIFixture(t, evidence, "pig-ci-"+image+"-evidence/packages.lock", string(data))
+		writeCIFixture(t, evidence, "ompig-ci-"+image+"-evidence/packages.lock", string(data))
 	}
 	output, log, err := proposalRun(t, false, "lock", "--evidence", evidence)
 	if err != nil || log != "" || !strings.Contains(output, "locks are current") {
@@ -322,12 +322,12 @@ func TestLockProposalDoesNothingWhenLocksAreCurrent(t *testing.T) {
 
 func TestProposalsRefuseMalformedInput(t *testing.T) {
 	evidence := t.TempDir()
-	writeCIFixture(t, evidence, "pig-ci-go-evidence/packages.lock", "not a lock line\n")
+	writeCIFixture(t, evidence, "ompig-ci-go-evidence/packages.lock", "not a lock line\n")
 	if _, log, err := proposalRun(t, false, "lock", "--evidence", evidence); err == nil || log != "" {
 		t.Errorf("a malformed lock was proposed: %v\n%s", err, log)
 	}
 	publication := t.TempDir()
-	writeCIFixture(t, publication, "pig-ci-go-publication/image-ref.txt", "ghcr.io/michaelkinsy/pig-ci-go:go1.27.3-tools1-abc\n")
+	writeCIFixture(t, publication, "ompig-ci-go-publication/image-ref.txt", "ghcr.io/michaelkinsy/ompig-ci-go:go1.27.3-tools1-abc\n")
 	if _, log, err := proposalRun(t, false, "pin", "--publication", publication); err == nil || log != "" {
 		t.Errorf("a pin without a digest was proposed: %v\n%s", err, log)
 	}
@@ -336,8 +336,8 @@ func TestProposalsRefuseMalformedInput(t *testing.T) {
 func TestPinProposalRecordsDigestAndInputs(t *testing.T) {
 	requireShebangRunner(t)
 	publication := t.TempDir()
-	ref := "ghcr.io/michaelkinsy/pig-ci-go@sha256:" + strings.Repeat("d", 64)
-	writeCIFixture(t, publication, "pig-ci-go-publication/image-ref.txt", ref+"\n")
+	ref := "ghcr.io/michaelkinsy/ompig-ci-go@sha256:" + strings.Repeat("d", 64)
+	writeCIFixture(t, publication, "ompig-ci-go-publication/image-ref.txt", ref+"\n")
 	output, log, err := proposalRun(t, false, "pin", "--publication", publication)
 	if err != nil {
 		t.Fatalf("%v\n%s\n%s", err, output, log)

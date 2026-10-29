@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // A line job waits while something outside the Loop holds the Session line, runs after Kick, and a job queued behind it

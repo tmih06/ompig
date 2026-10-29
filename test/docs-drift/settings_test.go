@@ -12,11 +12,11 @@ import (
 	"testing"
 )
 
-// The settings reference lists the keys of settings.json. Each key it names must be a key PiG's Settings type reads, and each key the type reads must be in the reference or on the list of keys that are deliberately not documented.
+// The settings reference lists the keys of settings.json. Each key it names must be a key Ompig's Settings type reads, and each key the type reads must be in the reference or on the list of keys that are deliberately not documented.
 
 var settingsRow = regexp.MustCompile("(?m)^\\| `([A-Za-z][A-Za-z0-9.]*)` \\|")
 
-// settingsKeys reads the members of settings.json from the declarations of internal/codingagent/settings.go: the struct settingsWire is what PiG decodes, and the structs its members name give the nested keys. Reading the source keeps the list from drifting from the type.
+// settingsKeys reads the members of settings.json from the declarations of internal/codingagent/settings.go: the struct settingsWire is what Ompig decodes, and the structs its members name give the nested keys. Reading the source keeps the list from drifting from the type.
 type settingsKeys struct {
 	structs map[string]*ast.StructType
 }
@@ -127,7 +127,7 @@ func TestDocumentedSettingsKeysExist(t *testing.T) {
 		}
 		for _, m := range rows {
 			if !keys.has(strings.Split(m[1], ".")) {
-				t.Errorf("%s documents the setting %q, which PiG does not read (settingsWire in internal/codingagent/settings.go)", page.Rel, m[1])
+				t.Errorf("%s documents the setting %q, which Ompig does not read (settingsWire in internal/codingagent/settings.go)", page.Rel, m[1])
 			}
 		}
 	}
@@ -142,13 +142,13 @@ func TestEverySettingsKeyIsDocumented(t *testing.T) {
 		}
 		for key := range top {
 			if !documented[key] && undocumentedSettings[key] == "" {
-				t.Errorf("%s does not document the setting %q, which PiG reads (settingsWire in internal/codingagent/settings.go)", page.Rel, key)
+				t.Errorf("%s does not document the setting %q, which Ompig reads (settingsWire in internal/codingagent/settings.go)", page.Rel, key)
 			}
 		}
 	}
 }
 
-// A JSON sample that is a settings.json file (its top-level keys include a setting PiG reads) must use only keys PiG reads, so an example cannot teach a key that does nothing.
+// A JSON sample that is a settings.json file (its top-level keys include a setting Ompig reads) must use only keys Ompig reads, so an example cannot teach a key that does nothing.
 func TestSettingsSamplesUseKnownKeys(t *testing.T) {
 	keys := loadSettingsKeys(t)
 	checked := 0
@@ -183,14 +183,14 @@ func TestSettingsSamplesUseKnownKeys(t *testing.T) {
 		checked++
 		for k, raw := range obj {
 			if !keys.has([]string{k}) {
-				t.Errorf("%s:%d: the settings sample uses %q, which PiG does not read", s.Src, s.Line, k)
+				t.Errorf("%s:%d: the settings sample uses %q, which Ompig does not read", s.Src, s.Line, k)
 				continue
 			}
 			var nested map[string]json.RawMessage
 			if json.Unmarshal(raw, &nested) == nil {
 				for n := range nested {
 					if keys.members("settingsWire")[k] != "" && !keys.has([]string{k, n}) && keys.structs[keys.members("settingsWire")[k]] != nil {
-						t.Errorf("%s:%d: the settings sample uses %q, which PiG does not read", s.Src, s.Line, k+"."+n)
+						t.Errorf("%s:%d: the settings sample uses %q, which Ompig does not read", s.Src, s.Line, k+"."+n)
 					}
 				}
 			}

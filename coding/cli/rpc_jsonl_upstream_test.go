@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
+	"github.com/tmih06/ompig/coding/rpcclient"
 )
 
 func TestRPCJSONLUpstream(t *testing.T) {
@@ -53,7 +53,7 @@ func TestRPCJSONLUpstream(t *testing.T) {
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/5868-rpc-unknown-command-id.test.ts:93
 func TestRPCUnknownCommandPreservesRequestID(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--no-extensions", "--offline", "--no-session")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--no-extensions", "--offline", "--no-session")
 	p.send(`{"id":"test","type":"foobar"}`)
 	p.await("unknown command response", func(record rpcRecord) bool {
 		if record["type"] != "response" {

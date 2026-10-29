@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type stdinProbeOp struct {
@@ -50,7 +50,7 @@ type stdinProbeState struct {
 	CountOf   *int                `json:"countOf,omitempty"`
 }
 
-// runStdinProbe drives a Pig StdinBuffer with the same program the Pi oracle ran.
+// runStdinProbe drives a Ompig StdinBuffer with the same program the Pi oracle ran.
 func runStdinProbe(t *testing.T, probe stdinProbe) []stdinProbeState {
 	t.Helper()
 	buffer := NewStdinBuffer(StdinBufferOptions{Timeout: 10000000000, EscapeTimeout: 10000000000})
@@ -210,7 +210,7 @@ func TestStdinBufferEventsMatchPi(t *testing.T) {
 		if !reflect.DeepEqual(got, expected[i].States) {
 			for j := range got {
 				if !reflect.DeepEqual(got[j], expected[i].States[j]) {
-					t.Errorf("probe %d op %d %+v:\n  Pig %+v\n  Pi  %+v", i, j, probe.Ops[j], got[j], expected[i].States[j])
+					t.Errorf("probe %d op %d %+v:\n  Ompig %+v\n  Pi  %+v", i, j, probe.Ops[j], got[j], expected[i].States[j])
 					break
 				}
 			}

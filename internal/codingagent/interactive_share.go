@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // upstream: tui/src/components/loader.ts:DEFAULT_INTERVAL_MS
@@ -23,7 +23,7 @@ func (m *InteractiveMode) shareSessionWithLoader(parent context.Context, session
 		return shareSession(parent, session, state, shareGatewayURL(), nil, showStatus)
 	}
 
-	// pig divergence (D64): keep PiG's gateway privacy notice in transcript history.
+	// ompig divergence (D64): keep Ompig's gateway privacy notice in transcript history.
 	m.appendChatBlock(tui.NewText(tui.ActiveTheme().Muted + sharePrivacyNotice + "\x1b[0m"))
 	loader := tui.NewBorderedLoader(m.tuiInst, tui.ActiveTheme(), "Uploading session...")
 	uploadCtx, cancel := context.WithCancel(parent)

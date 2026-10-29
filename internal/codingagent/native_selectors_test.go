@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // nativeDock docks component in a slot of a started surface, as the editor

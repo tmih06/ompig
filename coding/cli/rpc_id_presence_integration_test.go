@@ -4,7 +4,7 @@ import "testing"
 
 // Correlation belongs to the common RPC envelope, not to Bash updates alone. Exercise immediate, queued, catalog, and rejected commands through the real process.
 func TestRPCResponseIDsAcrossCommandPaths(t *testing.T) {
-	process := startRPCProcessAt(t, t.TempDir(), []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
+	process := startRPCProcessAt(t, t.TempDir(), []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
 	for _, id := range []*string{nil, new(""), new("request-1")} {
 		for _, command := range []map[string]any{
 			{"type": "get_state"},

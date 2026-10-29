@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 func execOutput(t *testing.T, env *RemoteExecutionEnv, command any, options *durableenv.ShellExecOptions) string {
@@ -42,13 +42,13 @@ func TestRemoteExecutionEnvShellEnvReachesInheritingCommands(t *testing.T) {
 	t.Cleanup(connection.Close)
 	env := NewRemoteExecutionEnv(RemoteExecutionEnvOptions{
 		Connection: connection, ID: "pi-env:shell-env", Cwd: t.TempDir(),
-		ShellEnv: map[string]string{"PIG_SHELL_ENV_PROBE": "from-shell-env", "PIG_SHELL_ENV_OTHER": "kept"},
+		ShellEnv: map[string]string{"OMPIG_SHELL_ENV_PROBE": "from-shell-env", "OMPIG_SHELL_ENV_OTHER": "kept"},
 	})
-	probe := `printf '%s|%s' "$PIG_SHELL_ENV_PROBE" "$PIG_SHELL_ENV_OTHER"`
+	probe := `printf '%s|%s' "$OMPIG_SHELL_ENV_PROBE" "$OMPIG_SHELL_ENV_OTHER"`
 	if got := execOutput(t, env, probe, nil); got != "from-shell-env|kept" {
 		t.Fatalf("inheriting command saw %q", got)
 	}
-	override := execOutput(t, env, probe, &durableenv.ShellExecOptions{Env: map[string]string{"PIG_SHELL_ENV_PROBE": "per-command"}})
+	override := execOutput(t, env, probe, &durableenv.ShellExecOptions{Env: map[string]string{"OMPIG_SHELL_ENV_PROBE": "per-command"}})
 	if override != "per-command|kept" {
 		t.Fatalf("per-command env did not win: %q", override)
 	}

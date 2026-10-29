@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 0.87.1 agent-session.ts:1371-1394 (_rebuildSystemPrompt) builds the base options from the tool registry and the resource loader. The expected values below were observed from the Pi oracle running before_agent_start with `--append-system-prompt APPENDED` and one AGENTS.md in the working directory.

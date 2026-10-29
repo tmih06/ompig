@@ -6,19 +6,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip/leakgate"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip/leakgate"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The strip leak gate of the interactive surfaces. It derives its cases from the generated strip ID table
 // (pigstrip.Lists, pigstrip.Known), so a new ID is covered without an edit here. For every ID it records a runtime strip
-// of that ID in pigstrip, the one strip state a Piglet Binary's OFF shims also record, rebuilds each surface from its
-// registry and fails when the surface still names the ID (the names are leakgate's tables). cmd/pig's TestStripLeakGate
+// of that ID in pigstrip, the one strip state a Ompiglet Binary's OFF shims also record, rebuilds each surface from its
+// registry and fails when the surface still names the ID (the names are leakgate's tables). cmd/ompig's TestStripLeakGate
 // covers the CLI, extension API, RPC and system prompt surfaces with the same tables.
 //
-// pig additive (D92): Stock PiG strips nothing, so every surface here is Pi's.
+// ompig additive (D92): Stock Ompig strips nothing, so every surface here is Pi's.
 
 // leakSurface renders one user-visible surface as plain text. lists names the strip lists whose IDs the surface can show.
 type leakSurface struct {
@@ -109,7 +109,7 @@ func leakSurfaces() []leakSurface {
 			return strings.Join(out, "\n")
 		}},
 		{name: "system prompt docs section", lists: []string{pigstrip.ListExtensions, pigstrip.ListFeatures}, render: func(*testing.T) string {
-			return prompts.BuildDefaultPrompt(prompts.Options{Cwd: "/work", Tools: []string{}, PigDocsPath: "/pig/docs"})
+			return prompts.BuildDefaultPrompt(prompts.Options{Cwd: "/work", Tools: []string{}, OmpigDocsPath: "/ompig/docs"})
 		}},
 		{name: "provider login help", lists: []string{pigstrip.ListCommands, pigstrip.ListFeatures}, render: func(*testing.T) string {
 			return FormatNoModelsAvailableMessage() + "\n" + FormatNoModelSelectedMessage() + "\n" + FormatNoAPIKeyFoundMessage("openai")

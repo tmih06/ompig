@@ -30,11 +30,11 @@ class AADelta(unittest.TestCase):
 
 
 class ReleaseColumn(unittest.TestCase):
-    H = ["metric", "pig-0.4.1", "pig-0.4.1-aa", "pig-tip", "pig-tip-aa", "pibolt"]
+    H = ["metric", "ompig-0.4.1", "ompig-0.4.1-aa", "ompig-tip", "ompig-tip-aa", "pibolt"]
 
     def col(self, row):
         h, rows = report.release_column(self.H, report.aa_delta(self.H, [row]))
-        self.assertTrue(h[-1].startswith("0.4.1 -> pig-tip"))
+        self.assertTrue(h[-1].startswith("0.4.1 -> ompig-tip"))
         return rows[0][-1]
 
     def test_loss_and_win_outside_the_floor_inside_is_no_difference(self):
@@ -47,13 +47,13 @@ class ReleaseColumn(unittest.TestCase):
         self.assertEqual(self.col(["CPU", "cannot run", "-", "50 (n=5)", "-", "1"]), "-")
 
     def test_no_release_arm_no_column(self):
-        h, rows = report.release_column(["metric", "pig-tip"], [["x", "1"]])
-        self.assertEqual((h, rows), (["metric", "pig-tip"], [["x", "1"]]))
+        h, rows = report.release_column(["metric", "ompig-tip"], [["x", "1"]])
+        self.assertEqual((h, rows), (["metric", "ompig-tip"], [["x", "1"]]))
 
 
 class CleanEnv(unittest.TestCase):
     def test_go_runtime_lane_and_agent_variables_are_dropped_and_the_rest_kept(self):
-        env = {"GOMAXPROCS": "24", "GOMEMLIMIT": "1GiB", "GOGC": "50", "GOFLAGS": "-x", "PIG_LANE_SLICE": "x", "PIG_CODING_AGENT_DIR": "/a", "PI_MODEL": "m",
+        env = {"GOMAXPROCS": "24", "GOMEMLIMIT": "1GiB", "GOGC": "50", "GOFLAGS": "-x", "OMPIG_LANE_SLICE": "x", "OMPIG_CODING_AGENT_DIR": "/a", "PI_MODEL": "m",
                "NODE_OPTIONS": "o", "BUN_JSC_x": "1", "COPILOT_TOKEN": "t", "PATH": "/bin", "HOME": "/h", "LANG": "C", "TMPDIR": "/t", "TERM": "xterm"}
         got = cleanenv.clean_env(env)
         self.assertEqual({k: v for k, v in got.items() if k != "PATH"}, {"HOME": "/h", "LANG": "C", "TMPDIR": "/t", "TERM": "xterm"})
@@ -81,7 +81,7 @@ class CleanEnv(unittest.TestCase):
 
 class ReleaseVerdictPrecision(unittest.TestCase):
     """The verdict reads medians as displayed: a difference inside their rounding, or inside an A/A floor that rounds to 0%, is not a WIN or LOSE."""
-    H = ["metric", "pig-0.4.1", "pig-0.4.1-aa", "pig-tip", "pig-tip-aa"]
+    H = ["metric", "ompig-0.4.1", "ompig-0.4.1-aa", "ompig-tip", "ompig-tip-aa"]
 
     def col(self, row):
         return report.release_column(self.H, report.aa_delta(self.H, [row]))[1][0][-1]
@@ -105,7 +105,7 @@ class RunSuiteAA(unittest.TestCase):
         self.assertEqual(spec, {"a": "cmd-a", "a-aa": "cmd-a", "b": "cmd-b", "b-aa": "cmd-b"})
 
     def test_a_copy_cannot_run_what_its_arm_cannot_run(self):
-        self.assertEqual(run_suite.runnable(["gi", "gi-aa", "pig-tip", "pig-tip-aa"], "headless"), ["pig-tip", "pig-tip-aa"])
+        self.assertEqual(run_suite.runnable(["gi", "gi-aa", "ompig-tip", "ompig-tip-aa"], "headless"), ["ompig-tip", "ompig-tip-aa"])
         self.assertEqual(run_suite.runnable(["gi", "gi-aa"]), ["gi", "gi-aa"])
 
 
@@ -115,7 +115,7 @@ class ReportCannotRunCopy(unittest.TestCase):
         import tempfile
         from unittest import mock
         with tempfile.TemporaryDirectory() as d:
-            rows = [{"build": b, "scenario": "interactive", "run": 0, "ok": True, "tti_ms": 100, "turns_ms": 1, "cpu_ms": 1, "peak_mb": 1} for b in ("pig-0.4.1", "gi", "gi-aa")]
+            rows = [{"build": b, "scenario": "interactive", "run": 0, "ok": True, "tti_ms": 100, "turns_ms": 1, "cpu_ms": 1, "peak_mb": 1} for b in ("ompig-0.4.1", "gi", "gi-aa")]
             Path(d, "benchmark.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
             with mock.patch.object(sys, "argv", ["report.py", "--out", d]), mock.patch("builtins.print"):
                 report.main()
@@ -133,7 +133,7 @@ class IdleSettled(unittest.TestCase):
                 f"class Tty:\n    calls = []\n    buf = b'frame fake-model'\n    pumps = 0\n    title_at = {pumps_before_title!r}\n"
                 "    def wait_for(self, text, since, deadline):\n        Tty.calls.append(('wait', text, since))\n        return True\n"
                 "    def pump(self, timeout):\n        Tty.pumps += 1\n"
-                "        if Tty.pumps == Tty.title_at:\n            Tty.buf += b'\\x1b]0;PiG - work\\x07'\n        return True\n"
+                "        if Tty.pumps == Tty.title_at:\n            Tty.buf += b'\\x1b]0;Ompig - work\\x07'\n        return True\n"
                 "    def settle(self, quiet, deadline):\n        Tty.calls.append(('settle', quiet))\n        return True\n")
             Path(d, "idle.py").write_text(
                 "import sys\nfrom harness import Tty\nt = Tty()\n"
@@ -168,7 +168,7 @@ class ScreenReady(unittest.TestCase):
                 "    if args[0] == 'kill-server':\n        state['polls'] = 0\n"
                 "    if args[0] == 'capture-pane':\n        state['polls'] += 1\n"
                 "    titled = state['polls'] >= 4\n"
-                "    out = {'capture-pane': 'footer fake-model', 'display-message': 'PiG - work' if titled else 'host'}.get(args[0], '')\n"
+                "    out = {'capture-pane': 'footer fake-model', 'display-message': 'Ompig - work' if titled else 'host'}.get(args[0], '')\n"
                 "    return types.SimpleNamespace(stdout=out)\n"
                 "def main():\n"
                 "    for run in range(2):\n        tmux('kill-server')\n        tmux('new-session', '-d')\n"

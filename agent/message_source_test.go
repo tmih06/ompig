@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// Pi holds the object JSON.parse returned for a session line or an extension result and writes it with JSON.stringify, so its member order, members PiG does not model and its spellings reach every writer. The expected texts are node's JSON.stringify(JSON.parse(line)).
+// Pi holds the object JSON.parse returned for a session line or an extension result and writes it with JSON.stringify, so its member order, members Ompig does not model and its spellings reach every writer. The expected texts are node's JSON.stringify(JSON.parse(line)).
 func TestDecodedMessageWritesTheObjectItWasDecodedFrom(t *testing.T) {
 	cases := []struct {
 		name, line, want string

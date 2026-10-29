@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
-// PiG-only: packages/codemode/test only checks that an oversized write fails, with values far from the limits. These
+// Ompig-only: packages/codemode/test only checks that an oversized write fails, with values far from the limits. These
 // tests pin the exported limits to the boundary the prelude enforces and to the literals it embeds.
 func TestPreludeEmbedsTheExportedLimits(t *testing.T) {
 	for _, literal := range []string{

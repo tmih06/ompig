@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/src/modes/rpc/rpc-mode.ts createDialogPromise keeps every open dialog in pendingExtensionRequests, keyed by request id, so

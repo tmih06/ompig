@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // QUALITY-AUDIT-050 item 12: BuildContext spent three allocations per entry in GetSessionContextSettings alone, on entries

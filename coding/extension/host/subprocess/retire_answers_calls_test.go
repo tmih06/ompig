@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // readRetiringPeerFrame reads the next frame the host wrote to peer, failing with what the host did not do when none arrives.
@@ -32,7 +32,7 @@ func readRetiringPeerFrame(t *testing.T, peer net.Conn, what string) Envelope {
 	return env
 }
 
-// A peer that shares its process with a live generation is retired, not closed: the host waits for it to close, and until it does the peer's calls still need their results. A Node runtime blocks its event loop in a synchronous host call (xref.hello, made while it handles its first `ready`) and reads no shutdown frame until the result arrives, so a connection that refused the result left the peer waiting for the host and the host waiting for the peer to close: `pig --list-models` with a project_trust handler never exited (parity project-trust 08, 6 of 60 runs at GOMAXPROCS=1).
+// A peer that shares its process with a live generation is retired, not closed: the host waits for it to close, and until it does the peer's calls still need their results. A Node runtime blocks its event loop in a synchronous host call (xref.hello, made while it handles its first `ready`) and reads no shutdown frame until the result arrives, so a connection that refused the result left the peer waiting for the host and the host waiting for the peer to close: `ompig --list-models` with a project_trust handler never exited (parity project-trust 08, 6 of 60 runs at GOMAXPROCS=1).
 func TestRetiringConnSendsTheResultOfACallTheShutdownFrameDidNotBeat(t *testing.T) {
 	t.Parallel()
 	hostEnd, peerEnd := net.Pipe()

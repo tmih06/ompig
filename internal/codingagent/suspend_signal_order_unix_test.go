@@ -15,7 +15,7 @@ import (
 
 // TestSuspendSignalOrderChild is the Go endpoint for the real-signal differential probe. Only SIGTSTP is replaced; SIGINT/SIGCONT travel through os/signal and the production interrupt handler.
 func TestSuspendSignalOrderChild(t *testing.T) {
-	if os.Getenv("PIG_SUSPEND_SIGNAL_CHILD") != "1" {
+	if os.Getenv("OMPIG_SUSPEND_SIGNAL_CHILD") != "1" {
 		return
 	}
 	runSuspendSignalOrderChild(t)

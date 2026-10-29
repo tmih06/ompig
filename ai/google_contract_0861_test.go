@@ -58,7 +58,7 @@ func TestGeminiToolResultImageOrderingMatchesUpstream(t *testing.T) {
 		ToolResultMessage{ToolCallID: "two", ToolName: "second", Content: []ToolResultMessageContent{ImageContent{MimeType: "image/png", Data: "BBBB"}}},
 	}
 	gemini2 := geminiConvertMessages(results, "google", "gemini-2.5-pro", true)
-	// pig divergence (D115): Pi's order is [response, image turn, response, image turn] (google-shared-image-tool-result-routing.test.ts:80-88); PiG keeps both responses in one turn and the image turns after it, in result order.
+	// ompig divergence (D115): Pi's order is [response, image turn, response, image turn] (google-shared-image-tool-result-routing.test.ts:80-88); Ompig keeps both responses in one turn and the image turns after it, in result order.
 	if len(gemini2) != 3 {
 		t.Fatalf("Gemini 2 content count = %d, want 3: %#v", len(gemini2), gemini2)
 	}

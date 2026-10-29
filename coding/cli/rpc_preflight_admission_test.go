@@ -41,7 +41,7 @@ func TestRPCPreflightRejectionYieldsToStateResponse(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(dir, "models.json"), []byte(models), 0600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + dir}, "--offline", "--no-extensions", "--no-session", "--model", "fake-provider/fake-model")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + dir}, "--offline", "--no-extensions", "--no-session", "--model", "fake-provider/fake-model")
 	p.send("{\"id\":\"prompt\",\"type\":\"prompt\",\"message\":\"Hello\"}\n{\"id\":\"state\",\"type\":\"get_state\"}")
 	var records []rpcRecord
 	p.await("state and preflight failure", func(r rpcRecord) bool { records = append(records, r); return len(records) == 2 })

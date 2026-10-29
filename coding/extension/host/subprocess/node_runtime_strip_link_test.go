@@ -11,7 +11,7 @@ import (
 func stripGoList(t *testing.T, tags string, args ...string) []string {
 	t.Helper()
 	if testing.Short() {
-		t.Skip("go list of cmd/pig in -short mode")
+		t.Skip("go list of cmd/ompig in -short mode")
 	}
 	cmd := []string{"list"}
 	if tags != "" {
@@ -33,18 +33,18 @@ func skipWithoutNodeExtensions(t testing.TB) {
 	}
 }
 
-// D92: a pig_strip_node_extensions build of cmd/pig links neither the
+// D92: a ompig_strip_node_extensions build of cmd/ompig links neither the
 // embedded Node runtime archive nor the zstd decoder that unpacks it; the
 // stock build links both.
 func TestStripNodeExtensionsBuildOmitsRuntimeAndZstd(t *testing.T) {
-	const tag = "pig_strip_node_extensions"
+	const tag = "ompig_strip_node_extensions"
 	const zstd = "github.com/klauspost/compress/zstd"
-	const pkg = "github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	if stock := stripGoList(t, "", "-deps", "github.com/MichaelKinsy/PiG/cmd/pig"); !slices.Contains(stock, zstd) {
-		t.Errorf("the stock cmd/pig does not link %s", zstd)
+	const pkg = "github.com/tmih06/ompig/coding/extension/host/subprocess"
+	if stock := stripGoList(t, "", "-deps", "github.com/tmih06/ompig/cmd/ompig"); !slices.Contains(stock, zstd) {
+		t.Errorf("the stock cmd/ompig does not link %s", zstd)
 	}
-	if stripped := stripGoList(t, tag, "-deps", "github.com/MichaelKinsy/PiG/cmd/pig"); slices.ContainsFunc(stripped, func(p string) bool { return p == zstd || strings.HasPrefix(p, zstd+"/") }) {
-		t.Errorf("a %s build of cmd/pig links %s", tag, zstd)
+	if stripped := stripGoList(t, tag, "-deps", "github.com/tmih06/ompig/cmd/ompig"); slices.ContainsFunc(stripped, func(p string) bool { return p == zstd || strings.HasPrefix(p, zstd+"/") }) {
+		t.Errorf("a %s build of cmd/ompig links %s", tag, zstd)
 	}
 	if stock := stripGoList(t, "", "-f", `{{join .EmbedFiles " "}}`, pkg); !slices.Contains(stock, "runtime-node.pack") {
 		t.Errorf("the stock subprocess package does not embed runtime-node.pack: %v", stock)

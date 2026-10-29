@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 type editorBindingsOp struct {
@@ -30,7 +30,7 @@ type editorBindingsProbe struct {
 
 // Pi's Editor resolves every key through the configured keybindings (editor.ts handleInput); the stock fixture
 // (editor-oracle.json.gz) only exercises the defaults. These live probes rebind editor, input and select actions, including keys shared by two
-// actions, and run seeded random sequences of those keys, text, pastes, setText, history and renders through Pi and Pig.
+// actions, and run seeded random sequences of those keys, text, pastes, setText, history and renders through Pi and Ompig.
 func TestEditorRebindingsMatchPi(t *testing.T) {
 	compareEditorProbesWithPi(t, editorRebindingProbes())
 }
@@ -119,7 +119,7 @@ func editorRebindingProbes() []editorBindingsProbe {
 	return probes
 }
 
-// compareEditorProbesWithPi runs each probe through Pi's Editor and Pig's under the probe's bindings and requires every op's text, cursor, lines, callbacks and rendering to agree.
+// compareEditorProbesWithPi runs each probe through Pi's Editor and Ompig's under the probe's bindings and requires every op's text, cursor, lines, callbacks and rendering to agree.
 func compareEditorProbesWithPi(t *testing.T, probes []editorBindingsProbe) {
 	t.Helper()
 	input, err := json.Marshal(probes)
@@ -140,7 +140,7 @@ func compareEditorProbesWithPi(t *testing.T, probes []editorBindingsProbe) {
 	}
 	failures, ops := 0, 0
 	for index, probe := range probes {
-		got := pigEditorLog(t, probe)
+		got := ompigEditorLog(t, probe)
 		for step, op := range probe.Ops {
 			ops++
 			want, have := expected[index][step], got[step]
@@ -187,8 +187,8 @@ func compareEditorProbesWithPi(t *testing.T, probes []editorBindingsProbe) {
 	t.Logf("%d probes, %d ops", len(probes), ops)
 }
 
-// pigEditorLog runs a probe through PiG's Editor under the probe's bindings and returns what the Pi oracle logs after every op.
-func pigEditorLog(t *testing.T, probe editorBindingsProbe) []editorOracleLog {
+// ompigEditorLog runs a probe through Ompig's Editor under the probe's bindings and returns what the Pi oracle logs after every op.
+func ompigEditorLog(t *testing.T, probe editorBindingsProbe) []editorOracleLog {
 	t.Helper()
 	previous, previousKitty := GetKeybindings(), IsKittyProtocolActive()
 	// Pi runs without the Kitty keyboard protocol, which changes how LF and other legacy keys match; pin it against a leaked global.
@@ -241,7 +241,7 @@ func TestEditorRebindingProbesDump(t *testing.T) {
 	fmt.Printf("editor-probes:%s\n", line)
 }
 
-// TestEditorRebindingProbesParity prints PiG's editor log of each rebinding probe as one JSON line, in the shape Pi's oracle logs, for the tui-components/38 parity scenario.
+// TestEditorRebindingProbesParity prints Ompig's editor log of each rebinding probe as one JSON line, in the shape Pi's oracle logs, for the tui-components/38 parity scenario.
 func TestEditorRebindingProbesParity(t *testing.T) {
 	for _, probe := range editorRebindingProbes() {
 		type cursor struct {
@@ -257,7 +257,7 @@ func TestEditorRebindingProbesParity(t *testing.T) {
 			Rendered  []string    `json:"rendered"`
 		}
 		var entries []entry
-		for _, log := range pigEditorLog(t, probe) {
+		for _, log := range ompigEditorLog(t, probe) {
 			callbacks := log.Callbacks
 			if callbacks == nil {
 				callbacks = [][2]string{}

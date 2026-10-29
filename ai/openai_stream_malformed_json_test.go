@@ -7,7 +7,7 @@ import (
 
 // openai 7.19.0 (Pi 1.1.0's SDK) core/streaming.ts Stream.fromSSEResponse: a record whose data is not JSON throws
 // SyntaxError("Error reading response: malformed server-sent event JSON."), not the JSON.parse error. Probed: Pi 1.1.0 ends an
-// openai-responses (gpt-4o) and an openai-completions (groq) stream with that errorMessage; PiG gave Go's "invalid character 'b'
+// openai-responses (gpt-4o) and an openai-completions (groq) stream with that errorMessage; Ompig gave Go's "invalid character 'b'
 // looking for beginning of object key string".
 func TestOpenAIStreamMalformedRecordIsTheSDKsSyntaxErrorText(t *testing.T) {
 	decoder := newOpenAIStreamDecoder(strings.NewReader("data: {\"ok\":1}\n\ndata: {bad json\n\n"), nil, nil)
@@ -24,7 +24,7 @@ func TestOpenAIStreamMalformedRecordIsTheSDKsSyntaxErrorText(t *testing.T) {
 
 // fromSSEResponse throws `new APIError(undefined, data?.error ?? data)` for a record whose event is "error", before the provider sees
 // it, so Pi's errorMessage is the record's message. Probed (Pi 1.1.0, openai-responses): `event: error` with
-// {"type":"error","code":"rate_limit_exceeded","message":"Rate limit reached"} gives "Rate limit reached"; PiG passed the record to
+// {"type":"error","code":"rate_limit_exceeded","message":"Rate limit reached"} gives "Rate limit reached"; Ompig passed the record to
 // processResponsesStream, whose error branch gave "Error Code rate_limit_exceeded: Rate limit reached".
 func TestOpenAIStreamErrorEventIsTheSDKsAPIError(t *testing.T) {
 	for _, tc := range []struct{ data, want string }{

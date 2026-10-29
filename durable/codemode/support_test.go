@@ -16,16 +16,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 var testContext = context.Background()

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Pi storage/memory.ts PreparedMemoryCommit.apply (:207-): preparing validates and detaches without changing what storage shows; apply performs the mutation once

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // extensionFileLoaderFixture is a loader over a temporary project and agent directory whose user settings list one extension file that holds
@@ -451,7 +451,7 @@ func failingNpmCommand(t *testing.T) string {
 func installFailureLoader(t *testing.T, settings map[string]string, options DefaultResourceLoaderOptions) *DefaultResourceLoader {
 	t.Helper()
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	root := t.TempDir()
 	options.CWD, options.AgentDir = filepath.Join(root, "project"), filepath.Join(root, "agent")
 	files := map[string]string{filepath.Join(options.CWD, "keep"): ""}
@@ -472,8 +472,8 @@ func TestDefaultResourceLoaderWarnsAndKeepsLoadingWhenAConfiguredPackageCannotBe
 	}
 	warnings := loader.GetExtensions().Warnings
 	if len(warnings) != 1 || warnings[0].Path != "npm:broken-package" || !strings.HasPrefix(warnings[0].Warning, "failed to install (") ||
-		!strings.Contains(warnings[0].Warning, `Run "pig remove npm:broken-package" to remove it from settings.json.`) {
-		t.Fatalf("warnings = %+v, want one failed-to-install warning naming pig remove", warnings)
+		!strings.Contains(warnings[0].Warning, `Run "ompig remove npm:broken-package" to remove it from settings.json.`) {
+		t.Fatalf("warnings = %+v, want one failed-to-install warning naming ompig remove", warnings)
 	}
 }
 
@@ -492,16 +492,16 @@ func TestDefaultResourceLoaderPointsTemporaryExtensionSourcesAtTheSource(t *test
 // Pi 6dfb54678 resource-loader.test.ts "should point project extension packages at pi remove --local".
 func TestDefaultResourceLoaderPointsProjectPackagesAtRemoveLocal(t *testing.T) {
 	loader := installFailureLoader(t, map[string]string{
-		"agent/settings.json":        `{` + failingNpmCommand(t) + `}`,
-		"project/.pig/settings.json": `{"packages": ["npm:broken-package"]}`,
+		"agent/settings.json":          `{` + failingNpmCommand(t) + `}`,
+		"project/.ompig/settings.json": `{"packages": ["npm:broken-package"]}`,
 	}, DefaultResourceLoaderOptions{})
 	trusted := func(context.Context, ResolveProjectTrustInput) (bool, error) { return true, nil }
 	if err := loader.Reload(ResourceLoaderReloadOptions{ResolveProjectTrust: trusted}); err != nil {
 		t.Fatal(err)
 	}
 	warnings := loader.GetExtensions().Warnings
-	if len(warnings) != 1 || !strings.Contains(warnings[0].Warning, `Run "pig remove npm:broken-package --local"`) {
-		t.Fatalf("warnings = %+v, want one warning naming pig remove --local", warnings)
+	if len(warnings) != 1 || !strings.Contains(warnings[0].Warning, `Run "ompig remove npm:broken-package --local"`) {
+		t.Fatalf("warnings = %+v, want one warning naming ompig remove --local", warnings)
 	}
 }
 

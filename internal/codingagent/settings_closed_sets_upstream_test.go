@@ -7,12 +7,12 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi derives the setting value types from its TypeBox settings schema (settings-schema.ts:464-470: NonNullable<SettingsInput[key]>), so
 // each type's closed set is the anyOf of that setting in the schema the pinned Pi publishes (packages/coding-agent/schemas/settings.schema.json).
-// The Go types are separate declarations from the schema Pig renders (configschema/settings.go), so this ties each Go value set to Pi's.
+// The Go types are separate declarations from the schema Ompig renders (configschema/settings.go), so this ties each Go value set to Pi's.
 func TestSettingValueTypesAreThePinnedPiSchemaSets(t *testing.T) {
 	data, err := os.ReadFile(filepath.Join("..", "..", ".upstream", "current", "packages", "coding-agent", "schemas", "settings.schema.json"))
 	if err != nil {

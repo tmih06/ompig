@@ -158,7 +158,7 @@ export function encodeRows(answers: Rows[], reserve: (n: number) => Uint8Array):
   return size
 }
 
-/** Decode a pig.read request (ABI section 4.2): u16 sqlId, u8 nParams, value*. */
+/** Decode a ompig.read request (ABI section 4.2): u16 sqlId, u8 nParams, value*. */
 export function decodeReadRequest(mem: Uint8Array, at: number, length: number): { sql: number; params: Param[] } {
   const dv = new DataView(mem.buffer, mem.byteOffset + at, length)
   let off = 0
@@ -181,7 +181,7 @@ export function decodeReadRequest(mem: Uint8Array, at: number, length: number): 
   return { sql, params }
 }
 
-/** Encode a pig.read answer (ABI section 4.2): u32 nRows, u8 nCols, value{nRows*nCols}; one rows-event answer without its counts and ID. */
+/** Encode a ompig.read answer (ABI section 4.2): u32 nRows, u8 nCols, value{nRows*nCols}; one rows-event answer without its counts and ID. */
 export function encodeAnswer(rows: unknown[][]): Uint8Array {
   let whole!: Uint8Array
   encodeRows([{ id: 0, cols: rows[0]?.length ?? 0, rows }], n => (whole = new Uint8Array(n)))

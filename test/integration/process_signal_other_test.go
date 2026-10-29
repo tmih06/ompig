@@ -17,7 +17,7 @@ func processRunning(p *os.Process) bool {
 func prepareTermination(*exec.Cmd) {}
 
 // requestTermination asks p to stop the way a supervisor does, with SIGTERM,
-// and returns the exit status pig reports for it: 128 plus the signal number.
+// and returns the exit status ompig reports for it: 128 plus the signal number.
 func requestTermination(p *os.Process) (int, error) {
 	return 128 + int(syscall.SIGTERM), p.Signal(syscall.SIGTERM)
 }

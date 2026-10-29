@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type hintProbe struct {
@@ -91,7 +91,7 @@ func TestKeybindingHintsMatchPi(t *testing.T) {
 		}
 		if got != expected[i] {
 			if failures++; failures <= 6 {
-				t.Errorf("probe %d %+v:\n  Pig %+v\n  Pi  %+v", i, probe, got, expected[i])
+				t.Errorf("probe %d %+v:\n  Ompig %+v\n  Pi  %+v", i, probe, got, expected[i])
 			}
 		}
 	}

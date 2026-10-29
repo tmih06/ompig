@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// Pi's ctx.reload() reloads every extension against a fresh runtime, and the reloaded extensions see an active ctx at session_start(reload) (agent-session.ts:3660-3699, loader.ts:689). Pig's CLI loader hands the rebuilt runner the build's host runtime, which the compiled-in extensions registered against; Session.Reload must leave it active, or the built-in extensions' session_start(reload) handlers read a stale ctx and RPC reports extension_error.
+// Pi's ctx.reload() reloads every extension against a fresh runtime, and the reloaded extensions see an active ctx at session_start(reload) (agent-session.ts:3660-3699, loader.ts:689). Ompig's CLI loader hands the rebuilt runner the build's host runtime, which the compiled-in extensions registered against; Session.Reload must leave it active, or the built-in extensions' session_start(reload) handlers read a stale ctx and RPC reports extension_error.
 // mutation-checked: invalidating the old runtime even when the rebuilt runner keeps it (coding/session_tool_registry.go keepsRuntime) emits extension_error from builtin:mcp before the reload's response.
 func TestRPCReloadKeepsTheBuiltinExtensionsRuntimeActive(t *testing.T) {
 	home := t.TempDir()
@@ -18,8 +18,8 @@ func TestRPCReloadKeepsTheBuiltinExtensionsRuntimeActive(t *testing.T) {
 		t.Fatal(err)
 	}
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"HOME=" + home, "USERPROFILE=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR=",
-		"PIG_TEST_FAUX=1", "PIG_OFFLINE=1",
+		"HOME=" + home, "USERPROFILE=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR=",
+		"OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1",
 	}, "--no-session", "--model", "test-faux/faux-1", "-e", fixture)
 	p.send(`{"id":"reload","type":"prompt","message":"/doreload"}`)
 	p.await("the reload's response", func(record rpcRecord) bool {

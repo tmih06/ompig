@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations && !pig_strip_openai_codex_responses
+//go:build !ompig_strip_mistral_conversations && !ompig_strip_openai_codex_responses
 
 package ai
 

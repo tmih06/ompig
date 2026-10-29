@@ -8,15 +8,15 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// `pig update --extensions` over two Git Packages of one repository (different subdirectories and tags) and one other repository.
+// `ompig update --extensions` over two Git Packages of one repository (different subdirectories and tags) and one other repository.
 // Pi races the two (package-manager.ts:1171-1181 starts a task per source and :2160 names one checkout for both), and Pigpen's CI
 // failed with `fatal: Unable to create '.../.git/index.lock': File exists`, then `git reset --hard FETCH_HEAD^{commit} failed with
-// code 128`. PiG finishes one package's update before it starts the next one of that checkout, in settings order.
+// code 128`. Ompig finishes one package's update before it starts the next one of that checkout, in settings order.
 //
 // The first git process in the shared checkout waits until the other repository's clone has finished, which is not ordered with
 // it. By then the pool has taken every task that can run beside the first package, so an "Updating" line for the second package
@@ -33,7 +33,7 @@ func TestUpdateExtensionsRunsThePackagesOfOneCheckoutOneAtATime(t *testing.T) {
 			f := newPackageResourceFixture(t)
 			// A managed checkout sits at <agent>/git/<host>/<origin path>, and on Windows git cannot create the sample hooks of a clone whose path passes 260 characters, so the agent directory is short instead of named for this test.
 			f.agent = testenv.ShortTempDir(t, "a")
-			t.Setenv("PIG_CODING_AGENT_DIR", f.agent)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", f.agent)
 			f.settings = codingagent.NewSettingsManager(f.cwd, f.agent)
 			testenv.IsolateGit(t)
 			shared := testenv.NewSubdirectoryOrigin(t, "shared")
@@ -110,7 +110,7 @@ func TestUpdateExtensionsRunsThePackagesOfOneCheckoutOneAtATime(t *testing.T) {
 				t.Errorf("git processes started inside a checkout another process was still using: %v", overlaps)
 			}
 			if code != 0 {
-				t.Fatalf("pig update --extensions exit code = %d, want 0", code)
+				t.Fatalf("ompig update --extensions exit code = %d, want 0", code)
 			}
 			if head := testenv.RunGit(t, checkout, "rev-parse", "HEAD"); head != shared.Commits[2] {
 				t.Errorf("checkout HEAD = %s, want %s: the last package in settings order decides the commit", head, shared.Commits[2])

@@ -17,8 +17,8 @@ func TestSlashHelpRoundTrip(t *testing.T) {
 		for _, quiet := range []bool{false, true} {
 			t.Run(fmt.Sprintf("%s/quiet=%t", mode, quiet), func(t *testing.T) {
 				h := newHarness(t)
-				pigHome := t.TempDir()
-				agentDir := filepath.Join(pigHome, "agent")
+				ompigHome := t.TempDir()
+				agentDir := filepath.Join(ompigHome, "agent")
 				if err := os.MkdirAll(agentDir, 0o700); err != nil {
 					t.Fatal(err)
 				}
@@ -26,7 +26,7 @@ func TestSlashHelpRoundTrip(t *testing.T) {
 				if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(settings), 0o600); err != nil {
 					t.Fatal(err)
 				}
-				h.startArgsAt([]string{"--model", "test-faux/faux-1"}, t.TempDir(), "PIG_HOME="+pigHome, "PIG_TEST_FAUX=1")
+				h.startArgsAt([]string{"--model", "test-faux/faux-1"}, t.TempDir(), "OMPIG_HOME="+ompigHome, "OMPIG_TEST_FAUX=1")
 				pane := h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
 				if strings.Contains(pane, "Press ctrl+o to show full startup help") == quiet {
 					t.Fatalf("startup help does not respect quietStartup=%t:\n%s", quiet, pane)
@@ -47,7 +47,7 @@ func TestSlashHelpRoundTrip(t *testing.T) {
 // TestShiftEnterInsertsNewline exercises Kitty's ESC+CR Shift+Enter mapping. Pi's keys.ts treats ESC+CR as Shift+Enter only after Kitty negotiation; without it CustomEditor handles Alt+Enter as a follow-up/submit action. The logical tmux key path is tested separately below.
 func TestShiftEnterInsertsNewline(t *testing.T) {
 	h := newHarness(t)
-	h.startArgs([]string{"--model", "test-faux/faux-1"}, "PIG_TEST_FAUX=1")
+	h.startArgs([]string{"--model", "test-faux/faux-1"}, "OMPIG_TEST_FAUX=1")
 	h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
 
 	h.send("\x1b[?1u") // Terminal response to the Kitty protocol query.
@@ -75,22 +75,22 @@ func TestShiftEnterInsertsNewline(t *testing.T) {
 // that actually broke for the user:
 //
 //	tmux Shift+Enter event → (extended-keys protocol enabled by
-//	pig via modifyOtherKeys mode 1) → tmux encodes as CSI-u
+//	ompig via modifyOtherKeys mode 1) → tmux encodes as CSI-u
 //	`\x1b[13;2u` (because user's tmux has
-//	`extended-keys-format csi-u`) → pig classifyKey routes to
+//	`extended-keys-format csi-u`) → ompig classifyKey routes to
 //	actionNewline.
 //
 // Without the protocol enable in tui.go::EnterRawMode, tmux falls
 // back to legacy mode and S-Enter arrives as plain `\r`, which
-// pig treats as submit. That's the user-reported regression.
+// ompig treats as submit. That's the user-reported regression.
 func TestShiftEnterViaKeystroke(t *testing.T) {
 	h := newHarness(t)
-	h.startArgs([]string{"--model", "test-faux/faux-1"}, "PIG_TEST_FAUX=1")
+	h.startArgs([]string{"--model", "test-faux/faux-1"}, "OMPIG_TEST_FAUX=1")
 	h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
 
 	h.send("line one")
 	// Logical keystroke: Shift+Enter. Tmux encodes it according to
-	// the protocol the running app has signalled for. When pig
+	// the protocol the running app has signalled for. When ompig
 	// has enabled modifyOtherKeys mode 1, tmux 3.2+ with
 	// extended-keys on translates this to a CSI-u sequence.
 	// Without the protocol enable, tmux strips the modifier and
@@ -119,10 +119,10 @@ func assertMultilineEditor(t *testing.T, pane string) {
 
 func TestEditorNewlineShrinkDoesNotFullRedraw(t *testing.T) {
 	h := newHarness(t)
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	h.startArgs([]string{"--model", "test-faux/faux-1"},
-		"PIG_HOME="+pigHome,
-		"PIG_TEST_FAUX=1",
+		"OMPIG_HOME="+ompigHome,
+		"OMPIG_TEST_FAUX=1",
 		"PI_TUI_DEBUG_REDRAW=1",
 	)
 	h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
@@ -140,7 +140,7 @@ func TestEditorNewlineShrinkDoesNotFullRedraw(t *testing.T) {
 	}
 	time.Sleep(300 * time.Millisecond)
 
-	redrawLog := filepath.Join(pigHome, "agent", "pig-debug.log")
+	redrawLog := filepath.Join(ompigHome, "agent", "ompig-debug.log")
 	before, err := os.ReadFile(redrawLog)
 	if err != nil && !os.IsNotExist(err) {
 		t.Fatal(err)
@@ -175,8 +175,8 @@ func TestFullscreenExitOutputPublicPath(t *testing.T) {
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			h := newHarness(t)
-			pigHome := t.TempDir()
-			agentDir := filepath.Join(pigHome, "agent")
+			ompigHome := t.TempDir()
+			agentDir := filepath.Join(ompigHome, "agent")
 			if err := os.MkdirAll(agentDir, 0o700); err != nil {
 				t.Fatal(err)
 			}
@@ -186,8 +186,8 @@ func TestFullscreenExitOutputPublicPath(t *testing.T) {
 			}
 			sessionDir := filepath.Join(t.TempDir(), "sessions")
 			h.startArgs([]string{"--model", "test-faux/faux-1", "--session-dir", sessionDir},
-				"PIG_HOME="+pigHome,
-				"PIG_TEST_FAUX=1",
+				"OMPIG_HOME="+ompigHome,
+				"OMPIG_TEST_FAUX=1",
 			)
 			h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
 
@@ -196,7 +196,7 @@ func TestFullscreenExitOutputPublicPath(t *testing.T) {
 			h.expectContains(10*time.Second, marker, "Took", "42")
 			time.Sleep(300 * time.Millisecond)
 			h.sendKey("C-d")
-			pane := h.expectContains(5*time.Second, "To resume this session:", "pig --session")
+			pane := h.expectContains(5*time.Second, "To resume this session:", "ompig --session")
 			if strings.Contains(pane, marker) != test.wantTranscript {
 				t.Fatalf("exit output contains transcript marker = %t, want %t:\n%s", strings.Contains(pane, marker), test.wantTranscript, pane)
 			}
@@ -212,16 +212,16 @@ func TestFullscreenExitOutputPublicPath(t *testing.T) {
 }
 
 // TestExitCleanShutdown verifies the documented exit paths return to
-// the shell without leaving pig or the tmux session in a wedged state.
+// the shell without leaving ompig or the tmux session in a wedged state.
 //
-// Both pig and upstream pi expose /quit; neither has /exit. Both
+// Both ompig and upstream pi expose /quit; neither has /exit. Both
 // systems also accept Ctrl+D as a quick-exit. We test both paths.
 //
-// The "did pig exit?" check is intentionally NOT a substring match
+// The "did ompig exit?" check is intentionally NOT a substring match
 // against the full pane: tmux capture-pane returns scrollback, so the
-// pig banner is still visible after exit. We instead inspect the last
+// ompig banner is still visible after exit. We instead inspect the last
 // non-empty line of the pane: it should be a shell prompt, not the
-// pig status line. (Kaizen 2026-05-10: the previous heuristic
+// ompig status line. (Kaizen 2026-05-10: the previous heuristic
 // `Contains("Ctrl+D to exit") && Contains("Ready...")` flagged a
 // successful exit as a failure because both strings remained in
 // scrollback.)
@@ -253,11 +253,11 @@ func TestExitCleanShutdown(t *testing.T) {
 			// Inspect the last non-empty line. After clean exit it is
 			// either the user's shell prompt (`❯`, `$`, `%`, `›`) or
 			// blank (if the shell scrolled the pane). After failure
-			// it's the pig status line containing the model name and
+			// it's the ompig status line containing the model name and
 			// "(sub)" / "(auto)" tokens.
 			last := lastNonEmptyLine(pane)
 			if isGopiStatusLine(last) {
-				t.Fatalf("%s: pig appears still running: last line is pig status:\n  last=%q\n  full pane:\n%s",
+				t.Fatalf("%s: ompig appears still running: last line is ompig status:\n  last=%q\n  full pane:\n%s",
 					tc.name, last, pane)
 			}
 			t.Logf("%s: clean exit, last line = %q", tc.name, last)
@@ -278,11 +278,11 @@ func lastNonEmptyLine(pane string) string {
 	return ""
 }
 
-// isGopiStatusLine returns true when `line` looks like the running pig
+// isGopiStatusLine returns true when `line` looks like the running ompig
 // status line. The status line carries cost, model, and percentage
 // tokens that don't appear in any normal shell prompt.
 func isGopiStatusLine(line string) bool {
-	// Tokens unique to pig's status footer:
+	// Tokens unique to ompig's status footer:
 	//   "$0.000 (sub)" or "$X.YYY (sub)"
 	//   "(auto)"
 	//   GPT model labels rendered to the right

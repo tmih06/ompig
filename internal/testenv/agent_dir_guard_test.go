@@ -76,10 +76,10 @@ func TestAgentDirGuardFailsWhenATestTouchesTheSeededDirectories(t *testing.T) {
 			}
 		}, "modified: ./agent/auth.json"},
 		{"home written", func(t *testing.T, root string) {
-			if err := os.WriteFile(filepath.Join(root, "pig-home", "new"), []byte("x"), 0o600); err != nil {
+			if err := os.WriteFile(filepath.Join(root, "ompig-home", "new"), []byte("x"), 0o600); err != nil {
 				t.Fatal(err)
 			}
-		}, "pig-home/new"},
+		}, "ompig-home/new"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			root := filepath.Join(t.TempDir(), "guard")
@@ -87,7 +87,7 @@ func TestAgentDirGuardFailsWhenATestTouchesTheSeededDirectories(t *testing.T) {
 			if err != nil {
 				t.Fatalf("seed: %v: %s", err, exports)
 			}
-			for _, key := range []string{"PIG_CODING_AGENT_DIR=", "PI_CODING_AGENT_DIR=", "PIG_HOME=", "PI_HOME="} {
+			for _, key := range []string{"OMPIG_CODING_AGENT_DIR=", "PI_CODING_AGENT_DIR=", "OMPIG_HOME=", "PI_HOME="} {
 				if !strings.Contains(exports, key) {
 					t.Errorf("seed output lacks %s: %s", key, exports)
 				}

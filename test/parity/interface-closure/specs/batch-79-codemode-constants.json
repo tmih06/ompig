@@ -63,7 +63,7 @@
    "test:codemode/upstream_oracle_test.go#TestExportedConstantsMatchPi",
    "test:codemode/limits_test.go#TestPreludeEmbedsTheExportedLimits"
   ],
-  "rationale": "MaxOutputChars is the Go const with Pi's value; the embedded prelude enforces it as a literal, and a test pins the literal to the const. Closed as public-api-tested: no PiG function reads the const."
+  "rationale": "MaxOutputChars is the Go const with Pi's value; the embedded prelude enforces it as a literal, and a test pins the literal to the const. Closed as public-api-tested: no Ompig function reads the const."
  },
  {
   "ids": [

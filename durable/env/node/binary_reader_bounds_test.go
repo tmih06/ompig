@@ -5,7 +5,7 @@ import (
 	"context"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // abortAfterContext reports no cancellation for its first failFrom-1 Err calls and cancellation from the failFrom-th on, so a test can cancel a

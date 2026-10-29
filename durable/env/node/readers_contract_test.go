@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 func fileErrorCode(t *testing.T, err error) durableenv.FileErrorCode {

@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 type deliveryRecord struct {

@@ -1,11 +1,11 @@
-// Package coding is the public SDK for embedding the pig coding
+// Package coding is the public SDK for embedding the ompig coding
 // agent as a Go library.
 //
 // # Quick start
 //
 //	import (
 //	    "context"
-//	    "github.com/MichaelKinsy/PiG/coding"
+//	    "github.com/tmih06/ompig/coding"
 //	)
 //
 //	svcs, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{
@@ -50,7 +50,7 @@
 //     streaming, plus session-management methods (Fork, Clone,
 //     Tree, SetName).
 //
-// Sessions persist as JSONL files at <CWD>/.pig/sessions/<id>.jsonl.
+// Sessions persist as JSONL files at <CWD>/.ompig/sessions/<id>.jsonl.
 // Resuming a session via Runtime.Resume / Runtime.Continue rebuilds
 // the agent's in-memory message history from the on-disk transcript.
 //

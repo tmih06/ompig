@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Number.prototype.toPrecision over ties, powers of ten and their neighbours, the exponent-form boundaries (1e-7, 1e21), subnormals, negatives, zero and every precision from 1 to 100, against Node's result.

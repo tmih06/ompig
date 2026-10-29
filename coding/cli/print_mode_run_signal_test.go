@@ -5,8 +5,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Pi binds ctx.signal to `() => this.agent.signal` (agent-session.ts:3368) in every mode, and the getter is live at every read (runner.ts:917-920). Print and JSON mode report each run their Session's agent begins or ends to the extension host's UI bridge, so every runtime sees it at once, and the signal the host reads then is the run's: present when the run began, gone when it ended.

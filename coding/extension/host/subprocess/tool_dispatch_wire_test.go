@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream agent-loop.ts:707-716 (prepareToolCall) calls tool.prepareArguments and only then validateToolArguments, so a

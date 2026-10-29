@@ -4,8 +4,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // Pi: types.ts:335 (ExtensionContext.sessionManager: ReadonlySessionManager) and session-manager.ts:245 (the Pick of 15 getters).

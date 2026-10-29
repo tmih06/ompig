@@ -8,7 +8,7 @@ kernel charged to the tree, and can kill the tree without matching names.
 Modes, chosen by `detect()` and recorded in every result:
 
   cgroup-direct   mkdir a child under a delegated cgroup that has the memory and cpu controllers
-                  (a container or pod with its own cgroup namespace, or PIGBENCH_CGROUP_ROOT)
+                  (a container or pod with its own cgroup namespace, or OMPIGBENCH_CGROUP_ROOT)
   cgroup-systemd  a transient scope from `systemd-run --user --scope` holds the tree; needs a user manager
   rusage          wait4 rusage for CPU and the largest process RSS after exit; while the tree runs, /proc
                   (Linux: CPU from each process's CPU-time clock, peak memory the sum of VmHWM) or ps (macOS)
@@ -523,14 +523,14 @@ def available_mode():
 
 
 def new_meter(force=None):
-    """A fresh meter for one process tree. `force` or PIGBENCH_METER pins the mode."""
-    force = force or os.environ.get("PIGBENCH_METER")
+    """A fresh meter for one process tree. `force` or OMPIGBENCH_METER pins the mode."""
+    force = force or os.environ.get("OMPIGBENCH_METER")
     if sys.platform == "win32":
         from . import winplat
         return winplat.JobMeter()
     if force != "rusage" and sys.platform.startswith("linux") and os.path.isdir(CGROUP_ROOT) and os.path.exists(os.path.join(CGROUP_ROOT, "cgroup.controllers")):
         if force in (None, "cgroup-direct"):
-            meter = _try_direct(os.environ.get("PIGBENCH_CGROUP_ROOT") or _own_cgroup())
+            meter = _try_direct(os.environ.get("OMPIGBENCH_CGROUP_ROOT") or _own_cgroup())
             if meter:
                 return meter
         if force in (None, "cgroup-systemd"):

@@ -57,7 +57,7 @@ type stdinListeners struct {
 
 // addRegistration appends or prepends registration l for event (EventEmitter._addListener without the newListener event).
 //
-// pig divergence (D114): Node also warns once per event past getMaxListeners() (default 10); no limit is checked here.
+// ompig divergence (D114): Node also warns once per event past getMaxListeners() (default 10); no limit is checked here.
 func (b *StdinBuffer) addRegistration(event StdinBufferEvent, l *StdinBufferListener, prepend bool) *StdinBuffer {
 	if l == nil || l.call == nil {
 		return b

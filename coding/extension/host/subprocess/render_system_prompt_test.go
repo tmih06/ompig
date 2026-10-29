@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi 1.2.0 runner.ts:1426-1450: a before_agent_start handler's event.systemPrompt and ctx.getSystemPrompt() render the

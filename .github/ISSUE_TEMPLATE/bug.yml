@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 
 name: Bug report
-description: Report a reproducible PiG defect
+description: Report a reproducible Ompig defect
 title: "bug: "
 labels:
   - bug
@@ -14,8 +14,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: PiG and upstream Pi versions
-      description: Run `pig version` and provide both reported versions.
+      label: Ompig and upstream Pi versions
+      description: Run `ompig version` and provide both reported versions.
     validations:
       required: true
   - type: input

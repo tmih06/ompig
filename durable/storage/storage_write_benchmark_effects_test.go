@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/durabletest"
 )
 
 // STORAGE_WRITE_BENCHMARKS (packages/durable/src/testing/storage-benchmark.ts:409-470) measure writes, so each must really write what it names on a storage seeded by

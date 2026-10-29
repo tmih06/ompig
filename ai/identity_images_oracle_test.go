@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/ai/src/api/openrouter-images.ts createClient (providerHeadersToRecord(getIdentityHeaders(model, identity), model.headers, optionsHeaders))
 
-// The headers the OpenRouter image API sends, from the pinned pi-ai and from PiG, for identities and for model and request headers that override or remove
+// The headers the OpenRouter image API sends, from the pinned pi-ai and from Ompig, for identities and for model and request headers that override or remove
 // them: the headers are three sources merged one after the other, and a null request header removes a header of any letter case that an earlier source set.
 func TestOpenRouterImagesHeadersMatchPi(t *testing.T) {
 	type probe struct {
@@ -107,7 +107,7 @@ func TestOpenRouterImagesHeadersMatchPi(t *testing.T) {
 		for name, value := range p.Headers {
 			if strings.EqualFold(name, "user-agent") && value == nil {
 				if gotWatched["user-agent"] == "acme/1.0" || wantWatched["user-agent"] == "acme/1.0" {
-					t.Errorf("probe %d: a null User-Agent kept the identity's (PiG %q, Pi %q)", i, gotWatched["user-agent"], wantWatched["user-agent"])
+					t.Errorf("probe %d: a null User-Agent kept the identity's (Ompig %q, Pi %q)", i, gotWatched["user-agent"], wantWatched["user-agent"])
 				}
 				delete(gotWatched, "user-agent")
 				delete(wantWatched, "user-agent")
@@ -115,7 +115,7 @@ func TestOpenRouterImagesHeadersMatchPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(gotWatched, wantWatched) {
 			one, _ := json.Marshal(p)
-			t.Errorf("probe %d %s: PiG sent %v, Pi sent %v", i, one, gotWatched, wantWatched)
+			t.Errorf("probe %d %s: Ompig sent %v, Pi sent %v", i, one, gotWatched, wantWatched)
 		}
 	}
 }

@@ -183,7 +183,7 @@ func TestAnsiCodeTrackerProcessDoesNotAllocate(t *testing.T) {
 	}
 }
 
-// BenchmarkAnsiCodeTrackerProcess processes the codes of one half-block row of the pig head: a truecolor foreground and
+// BenchmarkAnsiCodeTrackerProcess processes the codes of one half-block row of the ompig head: a truecolor foreground and
 // background per cell, then a reset.
 func BenchmarkAnsiCodeTrackerProcess(b *testing.B) {
 	codes := []string{"\x1b[38;2;24;48;44m", "\x1b[48;2;232;244;240m", "\x1b[39;49m", "\x1b[38;2;91;141;239m", "\x1b[0m", "\x1b[1;38;5;196m"}

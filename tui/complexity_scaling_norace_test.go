@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // Complexity gates for the per-frame and per-keystroke rendering paths. n is the number of transcript messages unless a case says otherwise.
@@ -25,7 +25,7 @@ func scalingMainScreen(n int) (*TuiMainScreen, *Container) {
 }
 
 func TestScalingMainScreenFrames(t *testing.T) {
-	// Pi's TUI.render (tui.ts doRender) renders every child and compares every line with the previous frame, so its frame is linear in the transcript. PiG's frame keeps the lines before the first child that changed (Container window) and starts the line resets and the differential scan there, so a frame that changes the end of the transcript allocates the same at any length; TestWindowedFramesEqualWholeFrames proves the bytes equal. Each case renders warm frames first: the first frame after a whole render allocates the arrays later frames reuse.
+	// Pi's TUI.render (tui.ts doRender) renders every child and compares every line with the previous frame, so its frame is linear in the transcript. Ompig's frame keeps the lines before the first child that changed (Container window) and starts the line resets and the differential scan there, so a frame that changes the end of the transcript allocates the same at any length; TestWindowedFramesEqualWholeFrames proves the bytes equal. Each case renders warm frames first: the first frame after a whole render allocates the arrays later frames reuse.
 	testscaling.Check(t, testscaling.Case{Name: "main screen streaming delta frame at transcript n", Size: 200, Bound: testscaling.Constant, Prepare: func(n int) func() {
 		ui, chat := scalingMainScreen(n)
 		tail := NewAssistantMessageComponent(nil, false, nil, "", nil, nil, "", "")
@@ -91,7 +91,7 @@ func scalingAltScreen(n int) (*TuiAltScreen, *Container) {
 }
 
 func TestScalingAltScreenFrames(t *testing.T) {
-	// Fullscreen (Pi's default) lays the transcript out in a scroll view: RenderLayoutFrame asks the container for its lines each frame (tui-alt-screen.ts doRender renders the whole document). PiG's container keeps the lines before the first child that changed, so a streaming frame allocates the same at any transcript length; the time that still grows is the dirty poll of every child.
+	// Fullscreen (Pi's default) lays the transcript out in a scroll view: RenderLayoutFrame asks the container for its lines each frame (tui-alt-screen.ts doRender renders the whole document). Ompig's container keeps the lines before the first child that changed, so a streaming frame allocates the same at any transcript length; the time that still grows is the dirty poll of every child.
 	testscaling.Check(t, testscaling.Case{Name: "fullscreen streaming delta frame at transcript n", Size: 150, Bound: testscaling.Constant, Prepare: func(n int) func() {
 		ui, chat := scalingAltScreen(n)
 		tail := NewAssistantMessageComponent(nil, false, nil, "", nil, nil, "", "")
@@ -123,7 +123,7 @@ func TestScalingAltScreenFrames(t *testing.T) {
 }
 
 func TestScalingStreamingMessage(t *testing.T) {
-	// Pi's Markdown component re-lexes and re-wraps the whole text on each change (markdown.ts render), so each streamed delta costs O(text) and a streamed message is quadratic in its length. PiG resumes a render from the last block start the new text cannot have changed (markdown_resume.go), so a streamed message is linear.
+	// Pi's Markdown component re-lexes and re-wraps the whole text on each change (markdown.ts render), so each streamed delta costs O(text) and a streamed message is quadratic in its length. Ompig resumes a render from the last block start the new text cannot have changed (markdown_resume.go), so a streamed message is linear.
 	testscaling.Check(t, testscaling.Case{Name: "markdown streaming of n deltas", Size: 100, Bound: testscaling.Linear, BytesBound: linearWithFrameCopy, Prepare: func(n int) func() {
 		markdown := NewMarkdown("")
 		return func() {

@@ -12,13 +12,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type viewItem struct {
@@ -293,7 +293,7 @@ func TestConversationViewsMatchPi(t *testing.T) {
 			if (gotErr == nil) != (want.Err == nil) || (want.Err != nil && op.Op != "attach" && gotErr.Error() != *want.Err) {
 				differing++
 				if differing <= 5 {
-					t.Errorf("program %d step %d (%s): Pig err %v, Pi %s", i, step, op.Op, gotErr, expected[i][step])
+					t.Errorf("program %d step %d (%s): Ompig err %v, Pi %s", i, step, op.Op, gotErr, expected[i][step])
 				}
 			}
 		}
@@ -330,7 +330,7 @@ func TestConversationViewsMatchPi(t *testing.T) {
 					progJSON, _ := json.Marshal(program)
 					gotJSON, _ := json.Marshal(map[string]any{"initial": log.Initial, "events": gotEvents})
 					wantJSON, _ := json.Marshal(wantLog)
-					t.Errorf("program %d view %s\n  program %.1800s\n  Pi  %.1500s\n  Pig %.1500s", i, label, progJSON, wantJSON, gotJSON)
+					t.Errorf("program %d view %s\n  program %.1800s\n  Pi  %.1500s\n  Ompig %.1500s", i, label, progJSON, wantJSON, gotJSON)
 				}
 			}
 		}

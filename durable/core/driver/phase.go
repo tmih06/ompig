@@ -9,8 +9,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // PhaseEffect is a phase effect (ABI effect 8): the core asks the host to run one phase of a custom task, or its abort

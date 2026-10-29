@@ -5,14 +5,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // An extension that runs inside Pi runs in Pi's own Node process, so
 // process.argv[1] is Pi's CLI entry and the arguments after it are the ones Pi
 // was started with. Extensions re-launch the harness from that entry
 // (`process.execPath process.argv[1] ...`: @henryqw/pi-subagent, pi-subagents).
-// A PiG Node extension runs in its own process, whose runtime
+// A Ompig Node extension runs in its own process, whose runtime
 // (runtime-node/process-identity.mjs) rebuilds that argv: argv[1] is
 // runtime-node/harness/cli.mjs, which runs the binary named by
 // harnessBinaryEnv, and the arguments are read from the file named by
@@ -20,8 +20,8 @@ import (
 // environment so a long prompt argument cannot exceed the per-variable limit
 // of exec, and so they do not leak into every process an extension starts.
 const (
-	harnessBinaryEnv   = "PIG_HARNESS_BINARY"
-	harnessArgvFileEnv = "PIG_HARNESS_ARGV_FILE"
+	harnessBinaryEnv   = "OMPIG_HARNESS_BINARY"
+	harnessArgvFileEnv = "OMPIG_HARNESS_ARGV_FILE"
 )
 
 // harnessExecutable is the running binary, the harness an extension re-launch

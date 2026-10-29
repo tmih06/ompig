@@ -66,7 +66,7 @@
     "production": [
      "public-api:tui/markdown_options.go#Markdown.SetText"
     ],
-    "rationale": "Markdown.setText is the Go method tui.Markdown.SetText; signature reviewed against the upstream declaration. Closed as public-api-tested: the method is exported from the public tui package and no PiG binary calls it; test callers (go/types) are the proof."
+    "rationale": "Markdown.setText is the Go method tui.Markdown.SetText; signature reviewed against the upstream declaration. Closed as public-api-tested: the method is exported from the public tui package and no Ompig binary calls it; test callers (go/types) are the proof."
    }
   }
  }

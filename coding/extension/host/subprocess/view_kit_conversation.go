@@ -2,7 +2,7 @@ package subprocess
 
 // view_kit_conversation.go: the component kit's conversation kinds (D107,
 // docs/plan/extension-component-kit.md §2.1). Each renders with the Go port
-// PiG's main transcript draws the same Pi component with, and reports the
+// Ompig's main transcript draws the same Pi component with, and reports the
 // nodes the main transcript reports for it to a D91 frontend.
 
 import (
@@ -14,10 +14,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ConversationRenderers are the coding agent's parts of the conversation
@@ -198,7 +198,7 @@ func updateAssistantContent(block *tui.AssistantMessageComponent, message *ViewA
 		}
 	}
 	stopReason := message.StopReason
-	// pig additive (D107): the kit wire's stopReason defaults to "stop"
+	// ompig additive (D107): the kit wire's stopReason defaults to "stop"
 	// (spec §2.1 table); a node describes a finished message, not a stream.
 	if stopReason == "" {
 		stopReason = "stop"

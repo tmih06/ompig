@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
-// Pi runs every extension in one event loop, so the loop drains only after a command awaiting ctx.newSession() has written its output, in whichever extension it runs. PiG runs an isolated Node extension in its own process: that process reports its window closed while the host builds the replacement, and the drain report of another process (a quit handler that never settles) has no ordering with the command's response. From the drain checkpoint the host must therefore count the command as able to answer.
+// Pi runs every extension in one event loop, so the loop drains only after a command awaiting ctx.newSession() has written its output, in whichever extension it runs. Ompig runs an isolated Node extension in its own process: that process reports its window closed while the host builds the replacement, and the drain report of another process (a quit handler that never settles) has no ordering with the command's response. From the drain checkpoint the host must therefore count the command as able to answer.
 func TestDrainAwaitsIsolatedNodeCommandThatWaitsForSessionChange(t *testing.T) {
 	nodeCellRequireNode(t)
 	entry := filepath.Join(t.TempDir(), "ns2.mjs")

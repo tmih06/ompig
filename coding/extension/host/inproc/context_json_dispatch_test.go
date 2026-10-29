@@ -6,10 +6,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // jsonContextExtension is an extension of count subprocess-style handlers (AddJSONEventHandler: they read their event only as JSON) for event, each answering reply.
@@ -32,7 +32,7 @@ func contextText(message extension.AgentMessage) string {
 // Source: runner.ts emitContext structuredClones the conversation for the handlers, so no handler's edit reaches the caller's messages, and a handler that returns nothing or the list it was given leaves the conversation as it was. A subprocess handler reads its event only as JSON: when every handler is one and none replied with a list, the runner has nothing to copy and hands the caller's own list back.
 func TestContextDispatchOfUnchangedSubprocessHandlersCopiesNothing(t *testing.T) {
 	messages := []extension.AgentMessage{contextUser("one"), contextUser("two")}
-	runner := inproc.NewRunner([]extension.Extension{jsonContextExtension("context", 2, `{"_pigContextUnchanged":true}`)}, "")
+	runner := inproc.NewRunner([]extension.Extension{jsonContextExtension("context", 2, `{"_ompigContextUnchanged":true}`)}, "")
 	got, replaced, err := runner.EmitContextTracked(t.Context(), messages)
 	if err != nil {
 		t.Fatal(err)
@@ -45,7 +45,7 @@ func TestContextDispatchOfUnchangedSubprocessHandlersCopiesNothing(t *testing.T)
 // A handler that reads Go values after subprocess handlers still gets a copy: its in-place edit never reaches the caller (structuredClone), and a subprocess handler's decoded list replaces the working list for the handlers after it.
 func TestContextGoHandlerAfterSubprocessHandlersEditsACopy(t *testing.T) {
 	messages := []extension.AgentMessage{contextUser("one"), contextUser("two")}
-	exts := []extension.Extension{jsonContextExtension("context", 1, `{"_pigContextUnchanged":true}`)}
+	exts := []extension.Extension{jsonContextExtension("context", 1, `{"_ompigContextUnchanged":true}`)}
 	goExt := newFakeExtension("go")
 	goExt.Handlers["context"] = []extension.HandlerFn{func(args ...any) (any, error) {
 		event := args[0].(extension.ContextEvent)
@@ -72,13 +72,13 @@ func TestContextSubprocessReplyListIsUsedAndAnUnchangedReplyKeepsIt(t *testing.T
 	ext := newFakeExtension("json-context")
 	var seen []string
 	ext.AddJSONEventHandler("context", 1, func(...any) (any, error) {
-		return json.RawMessage(`{"messages":[{"role":"user","content":"kept","timestamp":0}],"_pigContextUnchanged":false}`), nil
+		return json.RawMessage(`{"messages":[{"role":"user","content":"kept","timestamp":0}],"_ompigContextUnchanged":false}`), nil
 	})
 	ext.AddJSONEventHandler("context", 2, func(args ...any) (any, error) {
 		for _, message := range args[0].(extension.ContextEvent).Messages {
 			seen = append(seen, contextText(message))
 		}
-		return json.RawMessage(`{"_pigContextUnchanged":true}`), nil
+		return json.RawMessage(`{"_ompigContextUnchanged":true}`), nil
 	})
 	runner := inproc.NewRunner([]extension.Extension{ext}, "")
 	got, replaced, err := runner.EmitContextTracked(context.Background(), messages)

@@ -9,16 +9,16 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Complete path: Session -> Agent listener -> extension runner -> subprocess bridge -> a real Node handler that awaits a timer. Pi's in-process handler awaits while the provider keeps running, so the first subscriber to see message_start afterwards observes the content the provider streamed during the wait, with the stop reason pinned at the Agent's copy (agent-loop.ts:408-433).
 func TestSessionNodeExtensionAwaitLetsProviderAdvance(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	// The first Load materializes the Node runtime (about 1,800 files) into this test's own PIG_HOME, so the bound must cover a cold build on a loaded Windows runner as well as the run.
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	// The first Load materializes the Node runtime (about 1,800 files) into this test's own OMPIG_HOME, so the bound must cover a cold build on a loaded Windows runner as well as the run.
 	ctx := testbudget.Context(t)
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.Copy(io.Discard, r.Body)

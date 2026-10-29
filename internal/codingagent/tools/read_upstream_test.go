@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 func readFileTool(t *testing.T, name string, data []byte, params map[string]any) agent.AgentToolResult {

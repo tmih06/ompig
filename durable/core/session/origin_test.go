@@ -4,9 +4,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/sessiontest"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/sessiontest"
 )
 
 // The Loop makes the origin a microtask or a line job was queued in current again when it runs it (ABI section 5.4), as a promise

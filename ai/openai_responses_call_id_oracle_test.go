@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/openai-responses-shared.ts createSlot, openai-completions.ts normalizeToolCallId, google-shared.ts convertMessages
 
 // Pi stores a streamed function_call or custom_tool_call under `${item.call_id}|${item.id}`: an absent member is "undefined" and null is
-// "null". The pinned pi-ai and PiG read the same streams and must store the same ids. An empty call_id is D129 and is tested in
+// "null". The pinned pi-ai and Ompig read the same streams and must store the same ids. An empty call_id is D129 and is tested in
 // TestResponsesToolCallWithoutCallIDDoesNotWedgeReplay.
 func TestOpenAIResponsesToolCallIDPartsMatchPi(t *testing.T) {
 	stream := func(itemType, members string, added bool) string {
@@ -61,7 +61,7 @@ func TestStoredEmptyCallPartReplaysToOtherTargetsAsPi(t *testing.T) {
 			stream.Result()
 		}
 		if got == "" {
-			t.Fatal("PiG produced no payload")
+			t.Fatal("Ompig produced no payload")
 		}
 		return got
 	}

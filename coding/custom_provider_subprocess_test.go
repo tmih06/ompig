@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/8964-extension-provider-streaming.test.ts:7 (stream and streamSimple), through separate producer and consumer extension processes.

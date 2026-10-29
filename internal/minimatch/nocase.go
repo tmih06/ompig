@@ -6,7 +6,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // A case-insensitive JavaScript regular expression without the u flag compares the Canonicalize of each code unit: its toUpperCase, unless that

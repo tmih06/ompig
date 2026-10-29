@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestPackageManagementSurfaceIsListValidateAndPublishOnly(t *testing.T) {
@@ -43,8 +43,8 @@ func TestPackageManagementHelpListsOnlyListValidateAndPublish(t *testing.T) {
 func TestPackageListJSONUsesConfiguredAgentDirectory(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	root := filepath.Join(t.TempDir(), "pkg")
 	if err := os.MkdirAll(root, 0o755); err != nil {

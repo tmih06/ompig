@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-// Ports of upstream test/rpc.test.ts against a real `pig --mode rpc`
+// Ports of upstream test/rpc.test.ts against a real `ompig --mode rpc`
 // subprocess. Upstream drives anthropic/claude-sonnet-4-5 with an API key;
-// these drive PiG's hermetic test-faux provider, whose "reply with exactly:"
+// these drive Ompig's hermetic test-faux provider, whose "reply with exactly:"
 // prompt returns the requested text. A tiny keepRecentTokens lets a single
 // exchange compact, as upstream's live model output does.
 
@@ -39,9 +39,9 @@ func newRpcModeFixture(t *testing.T, provider, model string, files map[string]st
 		}
 	}
 	fixture.client = NewRpcClient(RpcClientOptions{
-		CliPath:  pigBinary,
+		CliPath:  ompigBinary,
 		Cwd:      fixture.cwd,
-		Env:      map[string]string{"HOME": home, "PIG_CODING_AGENT_DIR": fixture.agentDir, "PIG_TEST_FAUX": "1"},
+		Env:      map[string]string{"HOME": home, "OMPIG_CODING_AGENT_DIR": fixture.agentDir, "OMPIG_TEST_FAUX": "1"},
 		Provider: provider,
 		Model:    model,
 		Args:     []string{"--no-extensions", "--offline"},

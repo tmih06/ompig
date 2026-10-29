@@ -3,7 +3,7 @@
 
 A Workspace creates one temporary directory per bench invocation, installs every selected arm into it, points HOME,
 config and cache directories into it, and deletes it on exit. Installation fails when a checksum or version does not
-match the lock. PIGBENCH_BIN_<ARM> overrides a path for development; the report marks such an arm as unpinned.
+match the lock. OMPIGBENCH_BIN_<ARM> overrides a path for development; the report marks such an arm as unpinned.
 """
 import json
 import os
@@ -55,7 +55,7 @@ class Arm:
         self.name = spec["name"]
         self.family = spec["family"]
         self.no_extensions = spec.get("no_extensions", False)
-        self.piglet = spec.get("piglet")
+        self.ompiglet = spec.get("ompiglet")
         self.source = pin["source"]
         self.version = pin["version"]
         self.binary = None
@@ -89,11 +89,11 @@ def select(arms, ids):
     return out
 
 
-def build_pig(out, pgo=None):
+def build_ompig(out, pgo=None):
     """Build this checkout the way `make install` does: stripped, trimpath, CGO off. Profile-guided only when a profile is named; otherwise `-pgo=off`, so a stray default.pgo cannot change what is measured."""
     sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO, capture_output=True, text=True, timeout=30).stdout.strip() or "dev"
     env = dict(os.environ, CGO_ENABLED="0")
-    lock.run(["go", "build", "-buildvcs=false", "-trimpath", f"-pgo={pgo or 'off'}", "-ldflags", f"-s -w -X github.com/MichaelKinsy/PiG/coding/cli.Build={sha}", "-o", out, "./cmd/pig"], cwd=REPO, timeout=3600, env=env)
+    lock.run(["go", "build", "-buildvcs=false", "-trimpath", f"-pgo={pgo or 'off'}", "-ldflags", f"-s -w -X github.com/tmih06/ompig/coding/cli.Build={sha}", "-o", out, "./cmd/ompig"], cwd=REPO, timeout=3600, env=env)
     return out
 
 
@@ -112,7 +112,7 @@ class Workspace:
 
     def __init__(self, keep=False):
         self.root = tempfile.mkdtemp(prefix="pigbench-")
-        self.keep = keep or bool(os.environ.get("PIGBENCH_KEEP"))
+        self.keep = keep or bool(os.environ.get("OMPIGBENCH_KEEP"))
         self.work = os.path.join(self.root, "work")
         os.makedirs(self.work)
         self.env = dict(os.environ, npm_config_cache=os.path.join(self.root, "npm-cache"), npm_config_update_notifier="false", npm_config_fund="false", npm_config_audit="false")
@@ -127,7 +127,7 @@ class Workspace:
 
     def install(self, arm):
         """Install one arm; sets arm.binary or arm.skip. Raises SystemExit on a checksum or version mismatch."""
-        override = arm.spec.get("binary") or os.environ.get("PIGBENCH_BIN_" + arm.id.upper().replace(".", "_").replace("-", "_"))
+        override = arm.spec.get("binary") or os.environ.get("OMPIGBENCH_BIN_" + arm.id.upper().replace(".", "_").replace("-", "_"))
         if override:
             arm.binary, arm.unpinned = override, True
             if not os.access(override, os.X_OK):
@@ -147,14 +147,14 @@ class Workspace:
         elif arm.source == "release":
             self._install_release(arm, dest, key)
         elif arm.source == "checkout":
-            if arm.piglet:
+            if arm.ompiglet:
                 self._install_piglet(arm, dest)
             else:
                 build = arm.pin.get("build", {})
                 pgo = os.path.join(lock.EVALS, build["pgo"]) if build.get("pgo") else None
                 if pgo and lock.sha256_file(pgo) != build.get("pgo_sha256"):
                     raise SystemExit(f"{arm.id}: {build['pgo']} does not match the locked sha256")
-                arm.binary = build_pig(os.path.join(dest, "pig"), pgo)
+                arm.binary = build_ompig(os.path.join(dest, "ompig"), pgo)
                 arm.record = {"install_method": "go build" + (f" -pgo={build['pgo']}" if pgo else " -pgo=off"), "pgo_sha256": build.get("pgo_sha256")}
         else:
             raise SystemExit(f"{arm.id}: unknown source {pin['source']}")
@@ -227,19 +227,19 @@ class Workspace:
         builder = self.installed.get(arm.pin["builder"])
         if builder is None or not builder.binary:
             raise SystemExit(f"{arm.id}: the builder arm {arm.pin['builder']} must be installed first")
-        path = os.path.join(dest, "pig")
+        path = os.path.join(dest, "ompig")
         home = os.path.join(self.root, "build-home")
         os.makedirs(home, exist_ok=True)
-        env = dict(os.environ, PIG_HOME=home, PIG_SOURCE_ROOT=REPO)
-        lock.run([builder.binary, "piglet", "build", os.path.join(lock.EVALS, arm.piglet), "--format", "binary", "--builder", "native", "--out", path], cwd=REPO, timeout=3600, env=env)
+        env = dict(os.environ, OMPIG_HOME=home, OMPIG_SOURCE_ROOT=REPO)
+        lock.run([builder.binary, "ompiglet", "build", os.path.join(lock.EVALS, arm.ompiglet), "--format", "binary", "--builder", "native", "--out", path], cwd=REPO, timeout=3600, env=env)
         arm.binary = path
 
     def install_all(self, arms):
         """Install every arm (builders first). Arms that cannot run on this host get arm.skip."""
-        ordered = sorted(arms, key=lambda a: bool(a.piglet))
+        ordered = sorted(arms, key=lambda a: bool(a.ompiglet))
         for arm in ordered:
             self.installed[arm.id] = arm
-            if arm.piglet and arm.pin["builder"] not in self.installed:
+            if arm.ompiglet and arm.pin["builder"] not in self.installed:
                 builder = load()[arm.pin["builder"]]
                 self.installed[builder.id] = self.install(builder)
             self.install(arm)
@@ -250,8 +250,8 @@ class Workspace:
     def _plain_env(self):
         home = os.path.join(self.root, "version-home")
         os.makedirs(home, exist_ok=True)
-        return dict(os.environ, HOME=home, PIG_HOME=os.path.join(home, ".pig"), CODEX_HOME=os.path.join(home, ".codex"), CLAUDE_CONFIG_DIR=os.path.join(home, ".claude"),
-                    XDG_CONFIG_HOME=os.path.join(home, ".config"), PI_OFFLINE="1", PIG_OFFLINE="1", PI_SKIP_VERSION_CHECK="1")
+        return dict(os.environ, HOME=home, OMPIG_HOME=os.path.join(home, ".ompig"), CODEX_HOME=os.path.join(home, ".codex"), CLAUDE_CONFIG_DIR=os.path.join(home, ".claude"),
+                    XDG_CONFIG_HOME=os.path.join(home, ".config"), PI_OFFLINE="1", OMPIG_OFFLINE="1", PI_SKIP_VERSION_CHECK="1")
 
 
 def footprint(arm):

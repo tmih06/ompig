@@ -1,5 +1,5 @@
-// pig divergence (D74): the provider-bridge client. A process that imports pi-ai's builtin APIs but has no extension runtime (a detached helper an extension starts, a forked child or
-// a worker thread that inherited the loader) cannot reach the host over the extension connection. It starts `pig provider-bridge`, a pig process this one owns, and speaks JSON
+// ompig divergence (D74): the provider-bridge client. A process that imports pi-ai's builtin APIs but has no extension runtime (a detached helper an extension starts, a forked child or
+// a worker thread that inherited the loader) cannot reach the host over the extension connection. It starts `ompig provider-bridge`, a ompig process this one owns, and speaks JSON
 // Lines to it: {id, type: "stream", simple, model, request} and {id, type: "cancel"} out; {id, type: "event" | "result" | "error"} back, in provider order, then exactly one of
 // result or error for each id. The bridge's lifetime is this process's: its stdin closes when this process exits and the bridge ends and aborts what is in flight. Nothing of the
 // extension connection (socket, token) is shared. onPayload, onResponse and transformHeaders run in this process: the bridge sends {id, type: "callback", callbackId, callback, value} and waits for
@@ -7,13 +7,13 @@
 import { spawn } from "node:child_process";
 import { AssistantMessageEventStream } from "./pi-dist/pi-ai/sdk-bundle/index.js";
 
-const HARNESS_BINARY_ENV = "PIG_HARNESS_BINARY";
+const HARNESS_BINARY_ENV = "OMPIG_HARNESS_BINARY";
 let bridge;
 let nextId = 1;
 
 function startBridge() {
   const binary = process.env[HARNESS_BINARY_ENV];
-  if (!binary) throw new Error(`${HARNESS_BINARY_ENV} is not set: pi-ai cannot reach PiG's provider implementations from a process with no extension runtime`);
+  if (!binary) throw new Error(`${HARNESS_BINARY_ENV} is not set: pi-ai cannot reach Ompig's provider implementations from a process with no extension runtime`);
   const child = spawn(binary, ["provider-bridge"], { stdio: ["pipe", "pipe", "inherit"], env: process.env });
   const state = { child, streams: new Map(), buffer: "", dead: false };
   const finish = (message) => {
@@ -82,7 +82,7 @@ function release(state) {
 export function bridgeStream(model, context, options, simple, failedStream) {
   const { signal, onPayload, onResponse, transformHeaders, fetch, ...requestOptions } = options ?? {};
   // fetch replaces the provider's HTTP client with a function of this process; it has no wire form.
-  if (typeof fetch === "function") return failedStream(model, "pi-ai: fetch cannot be used outside an extension runtime (PiG provider bridge)", options);
+  if (typeof fetch === "function") return failedStream(model, "pi-ai: fetch cannot be used outside an extension runtime (Ompig provider bridge)", options);
   const callbacks = { onPayload, onResponse, transformHeaders };
   let state;
   try {

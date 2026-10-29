@@ -3,7 +3,7 @@ package codemode
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // RemoteExchange is the function the client passes to Remote.Execute; the remote calls it to report what its VM did

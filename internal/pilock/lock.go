@@ -17,7 +17,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // Pi 1.2.0 auth-storage.ts:81-95,117-155, settings-manager.ts:195-215 and trust-manager.ts:137-164.
@@ -54,8 +54,8 @@ var (
 // ErrLocked reports contention under Pi's directory protocol. Its text is proper-lockfile 4.1.2's ELOCKED message (lib/lockfile.js:53,68), which Pi's stores rethrow unchanged.
 var ErrLocked = errors.New("Lock file is already being held")
 
-// ErrLegacyLocked reports an older PiG writer; acquisition uses the same retry budget as directory contention.
-var ErrLegacyLocked = fmt.Errorf("%w by an older PiG process; stop the older PiG before upgrading", ErrLocked)
+// ErrLegacyLocked reports an older Ompig writer; acquisition uses the same retry budget as directory contention.
+var ErrLegacyLocked = fmt.Errorf("%w by an older Ompig process; stop the older Ompig before upgrading", ErrLocked)
 var errCompromised = errors.New("lock compromised")
 
 // Lock owns a directory and its mtime heartbeat. Compromise cancels its operation context; Release joins the heartbeat and removes only the owned directory.
@@ -274,7 +274,7 @@ func mkdir(path string, stale time.Duration) error {
 		if !info.ModTime().Before(time.Now().Add(-stale)) {
 			return ErrLocked
 		}
-		// pig divergence (D73): reclaim stale PiG-owned sidecars under their old OS lock before entering Pi's directory protocol.
+		// ompig divergence (D73): reclaim stale Ompig-owned sidecars under their old OS lock before entering Pi's directory protocol.
 		observed, err := observeLegacy(path, info)
 		if errors.Is(err, fs.ErrNotExist) {
 			return mkdir(path, 0)
@@ -287,7 +287,7 @@ func mkdir(path string, stale time.Duration) error {
 	return removeIfStale(path, info, stale)
 }
 
-// mkdirOverLink continues proper-lockfile 4.1.2 acquireLock for a lock path that is a link. Its fs.stat follows the link (lib/lockfile.js:56-65), a dangling link stats ENOENT, and only the target's mtime is judged (lib/lockfile.js:67-69). A link is never a PiG legacy sidecar.
+// mkdirOverLink continues proper-lockfile 4.1.2 acquireLock for a lock path that is a link. Its fs.stat follows the link (lib/lockfile.js:56-65), a dangling link stats ENOENT, and only the target's mtime is judged (lib/lockfile.js:67-69). A link is never a Ompig legacy sidecar.
 func mkdirOverLink(path string, stale time.Duration) error {
 	info, err := statLock(path)
 	if errors.Is(err, fs.ErrNotExist) {

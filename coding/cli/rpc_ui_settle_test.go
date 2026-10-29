@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi resolves an RPC dialog's promise on the stdin line that answers it (rpc-mode.ts createDialogPromise), so the dialogs a chunk

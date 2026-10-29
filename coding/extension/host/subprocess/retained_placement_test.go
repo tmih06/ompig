@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// PiG's isolation setting has no Pi counterpart: Pi loads every extension into one runtime. A process holds module state only for the extensions placed in it, so an extension whose placement changes (isolated to shared-ok or back) or that Host.Load started outside the plan gets a new process and a new module on the next reload, and its old process ends. An unchanged placement keeps the process (TestNodeReloadReinvokesFactoriesInTheRetainedProcessWithPiLoaderRules).
+// Ompig's isolation setting has no Pi counterpart: Pi loads every extension into one runtime. A process holds module state only for the extensions placed in it, so an extension whose placement changes (isolated to shared-ok or back) or that Host.Load started outside the plan gets a new process and a new module on the next reload, and its old process ends. An unchanged placement keeps the process (TestNodeReloadReinvokesFactoriesInTheRetainedProcessWithPiLoaderRules).
 func TestReloadAcrossAPlacementChangeStartsAFreshProcess(t *testing.T) {
 	t.Parallel()
 	cases := []struct {

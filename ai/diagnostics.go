@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // DiagnosticCoder is implemented by an error that carries a JavaScript-style `error.code`: a string or a number.
@@ -39,7 +39,7 @@ func errorName(err error) string {
 }
 
 // ExtractDiagnosticError summarizes a thrown value for a diagnostic. A value that is not an error is reported as a `ThrownValue`. An error reports its name (an empty name is omitted, like upstream's `error.name || undefined`), its message (its name when the message is empty), and a string or numeric code from DiagnosticCoder. Go errors carry no stack, so Stack stays empty (utils/diagnostics.ts extractDiagnosticError).
-// pig divergence (D103): JS Error.stack is not modelled; a Go stack would persist build-machine paths.
+// ompig divergence (D103): JS Error.stack is not modelled; a Go stack would persist build-machine paths.
 func ExtractDiagnosticError(value any) DiagnosticErrorInfo {
 	err, ok := value.(error)
 	if !ok {

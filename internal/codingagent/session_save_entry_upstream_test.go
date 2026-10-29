@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/session-manager/save-entry.test.ts:5

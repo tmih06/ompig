@@ -46,7 +46,7 @@ func TestRPCUserBashFailurePort(t *testing.T) {
 			if err := os.WriteFile(fixture, []byte(source), 0o600); err != nil {
 				t.Fatal(err)
 			}
-			process := startRPCProcessAt(t, dir, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + home, "PORT_USER_BASH=" + tc.mode, "PORT_BASH_COUNTER=" + counter}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
+			process := startRPCProcessAt(t, dir, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + home, "PORT_USER_BASH=" + tc.mode, "PORT_BASH_COUNTER=" + counter}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
 			process.sendJSON(map[string]any{"id": "bash-request", "type": "bash", "command": "pwd"})
 			var response rpcRecord
 			sawError := false

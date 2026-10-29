@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -719,7 +719,7 @@ func TestAppendBashExecution_RoundTrip(t *testing.T) {
 
 // proves the on-disk JSON matches upstream's wire shape:
 // outer `type:"message"` wrapping inner `message.role:"bashExecution"`
-// with flat command/output/exitCode/... fields: NOT pig's pre-shape
+// with flat command/output/exitCode/... fields: NOT ompig's pre-shape
 // of top-level `type:"bash_execution"` with flat fields.
 func TestAppendBashExecution_UpstreamWireShape(t *testing.T) {
 	sm := tempSessionMgr(t)
@@ -766,7 +766,7 @@ func TestAppendBashExecution_UpstreamWireShape(t *testing.T) {
 	}
 }
 
-// proves backwards-compat: legacy pig sessions with
+// proves backwards-compat: legacy ompig sessions with
 // top-level `type:"bash_execution"` still load and decode.
 func TestBashExecutionEntry_LegacyShapeStillLoads(t *testing.T) {
 	legacy := `{"type":"bash_execution","id":"abc","parentId":null,"timestamp":"2026-05-11T00:00:00Z","role":"bashExecution","command":"echo hi","output":"hi\n","exitCode":0,"cancelled":false,"truncated":false}`
@@ -962,7 +962,7 @@ func TestAppendBranchSummary(t *testing.T) {
 	}
 
 	// Pass idA explicitly as the parent (upstream branchWithSummary passes
-	// newLeafId explicitly; pig no longer auto-wires nil → current leaf).
+	// newLeafId explicitly; ompig no longer auto-wires nil → current leaf).
 	bsID, err := sess.BranchWithSummary(&idA, "branch summary text", nil, false, nil)
 	if err != nil {
 		t.Fatalf("AppendBranchSummary: %v", err)
@@ -1202,7 +1202,7 @@ func TestBuildContextCompactionOrder(t *testing.T) {
 //	"\n\n<summary>\n" + text + "\n</summary>"
 //
 // Reference: messages.ts COMPACTION_SUMMARY_PREFIX/SUFFIX.
-// Previously pig used "[Compacted summary]\n": divergence fixed in F/B pass
+// Previously ompig used "[Compacted summary]\n": divergence fixed in F/B pass
 // after 3.2l.
 func TestBuildContextCompactionPrefix(t *testing.T) {
 	sm := tempSessionMgr(t)
@@ -1245,7 +1245,7 @@ func TestBuildContextCompactionPrefix(t *testing.T) {
 //	"\n\n<summary>\n" + text + "</summary>"
 //
 // Reference: messages.ts BRANCH_SUMMARY_PREFIX/SUFFIX.
-// Previously pig used "[Branch summary]\n": divergence fixed in F/B pass
+// Previously ompig used "[Branch summary]\n": divergence fixed in F/B pass
 // after 3.2l.
 func TestBuildContextBranchSummaryPrefix(t *testing.T) {
 	sm := tempSessionMgr(t)

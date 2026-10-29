@@ -7,8 +7,8 @@
 #   output: "No packages installed."
 #   exit: 0
 #
-#   PIG_HOME=/tmp/parity-nopackages-pig PIG_CODING_AGENT_DIR=/tmp/parity-nopackages-pig/agent \
-#     pig package list
+#   OMPIG_HOME=/tmp/parity-nopackages-ompig OMPIG_CODING_AGENT_DIR=/tmp/parity-nopackages-ompig/agent \
+#     ompig package list
 #   output: "No packages installed."
 #   exit: 0
 
@@ -23,11 +23,11 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_HOME=testdata/empty-home", "PI_CODING_AGENT_DIR=testdata/empty-home/agent", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_HOME=testdata/empty-home", "PIG_CODING_AGENT_DIR=testdata/empty-home/agent"]
+ompig = ["OMPIG_HOME=testdata/empty-home", "OMPIG_CODING_AGENT_DIR=testdata/empty-home/agent"]
 override_base_args = true
 
 [cli]
-pig_args = ["package", "list"]
+ompig_args = ["package", "list"]
 pi_args = ["list"]
 timeout_seconds = 25
 

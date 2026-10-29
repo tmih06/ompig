@@ -14,11 +14,11 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // exitIfDeadTerminal bypasses terminal restoration on a disconnected terminal. A PTY master close can surface as EOF from the input reader; querying the terminal then reports the dead-device error without writing restore sequences.
@@ -31,7 +31,7 @@ func (m *InteractiveMode) exitIfDeadTerminal(err error) {
 		// host: read(0)=EIO, POLLHUP, ioctl(1,TIOCGWINSZ)=0): the size probe below saw a live terminal, the session kept
 		// running without input, and the parity probe timed out (10-terminal-disconnect-exit). Pi exits 129 on that
 		// terminal's EIO. Input that ended while output still goes to a live terminal keeps the session running (#165).
-		// pig divergence (D186): Pi exits 0 at the hangup when its event loop holds nothing; PiG always exits 129 and records it in exit.log.
+		// ompig divergence (D186): Pi exits 0 at the hangup when its event loop holds nothing; Ompig always exits 129 and records it in exit.log.
 		if tui.OutputTerminalHungUp() {
 			m.emergencyTerminalExit("terminal gone: " + cause.Error() + " (hung up)")
 			return
@@ -50,12 +50,12 @@ func (m *InteractiveMode) exitIfDeadTerminal(err error) {
 // restore sequences and fail again. Pi's process.exit(129) still runs the TUI's exit handler, which writes the mode resets
 // synchronously and swallows the write errors (9df819de, #11170); tui.RestoreTerminalOnExit does the same here.
 // It kills the tracked detached children first, as upstream does, so a running shell command does not outlive the exit
-// in its own process group. Pi's extensions run inside the exiting process and die with it; pig's run as child
+// in its own process group. Pi's extensions run inside the exiting process and die with it; ompig's run as child
 // processes in their own process groups, so it kills them too, or they would keep writing into the session's
 // directories.
 // Ports packages/coding-agent/src/modes/interactive/interactive-mode.ts (emergencyTerminalExit).
 func (m *InteractiveMode) emergencyTerminalExit(reason string) {
-	// pig additive (D102): Pi exits here with no trace.
+	// ompig additive (D102): Pi exits here with no trace.
 	RecordExit(m.opts.AgentDir, reason+" (exit 129)")
 	tools.KillTrackedDetachedChildren()
 	if m.opts.TerminateExtensionProcesses != nil {
@@ -207,7 +207,7 @@ func (m *InteractiveMode) inputLoopUntil(ctx context.Context, source io.Reader, 
 func (m *InteractiveMode) dispatchRoutedInput(ctx context.Context, input inputChunk) (<-chan struct{}, error) {
 	defer input.ticket.settle()
 	if chunk := string(input.data); chunk != "" {
-		if os.Getenv("PIG_DEBUG_KEYS") != "" {
+		if os.Getenv("OMPIG_DEBUG_KEYS") != "" {
 			debugLog("key %s -> %d", redactKeyChunk(chunk), classifyKeyWithBindings(chunk, m.keybindings))
 		}
 		if err := m.dispatchInputChunk(ctx, chunk, input.ticket); err != nil {
@@ -247,7 +247,7 @@ func (m *InteractiveMode) dispatchTerminalRead(ctx context.Context, input inputC
 	for {
 		m.frontendTookInput = false
 		changed, dispatchErr := m.dispatchRoutedInput(ctx, input)
-		// pig additive (D91): a sequence a frontend session took, such as
+		// ompig additive (D91): a sequence a frontend session took, such as
 		// a protocol acknowledgement, paints nothing; the actions it asks
 		// for request their own frames. Painting after each one would
 		// render once per acknowledged frame, and an animation then runs
@@ -624,9 +624,9 @@ func (m *InteractiveMode) dispatchKey(ctx context.Context, data string) error {
 // dispatchInputChunk processes one keystroke routed with ticket. When a
 // subprocess terminal-input listener must answer first, it returns before the
 // keystroke is handled, and handling resumes on the main loop with the verdict.
-// pig divergence (D105): the driver owns the terminal reader; extension input listeners run asynchronously around the renderer's listener chain.
+// ompig divergence (D105): the driver owns the terminal reader; extension input listeners run asynchronously around the renderer's listener chain.
 func (m *InteractiveMode) dispatchInputChunk(ctx context.Context, data string, ticket *inputTicket) error {
-	// pig additive (D91): frontend protocol replies and events never reach
+	// ompig additive (D91): frontend protocol replies and events never reach
 	// key handling.
 	if m.frontendInput(data) {
 		return nil
@@ -921,7 +921,7 @@ func (m *InteractiveMode) handleEditorAction(ctx context.Context, action keyActi
 		// Upstream does not render a separate abort banner: the
 		// assistant message block's SetTerminalError("aborted", ...)
 		// handles the visual feedback ("Operation aborted" in error
-		// color). Removed the Pig-specific "⚠  aborted by user" text
+		// color). Removed the Ompig-specific "⚠  aborted by user" text
 		// block to match upstream.
 		m.tuiInst.Render()
 
@@ -937,7 +937,7 @@ func (m *InteractiveMode) handleEditorAction(ctx context.Context, action keyActi
 		}
 		m.lastSigintTime = now
 		// Upstream clearEditor() just clears the text and re-renders; it
-		// shows no "cleared" status (interactive-mode.ts:3629). Pig used
+		// shows no "cleared" status (interactive-mode.ts:3629). Ompig used
 		// to flash "cleared" here, which diverged.
 		m.ClearEditor()
 
@@ -1005,6 +1005,11 @@ func (m *InteractiveMode) handleEditorAction(ctx context.Context, action keyActi
 	case outcomeSessionResume:
 		// app.session.resume: mirrors upstream onAction("app.session.resume")
 		m.dispatchSlash(ctx, "/resume")
+		return nil
+
+	case outcomeAgentsHub:
+		// app.agents.hub: open the subagent roster overlay.
+		m.openAgentHub(ctx)
 		return nil
 
 	case outcomeBracketedPaste:
@@ -1226,7 +1231,7 @@ func (m *InteractiveMode) restoreQueuedMessagesToEditor(abort bool) int {
 	texts := slices.Concat(steeringTexts, followUpTexts)
 	if len(texts) > 0 {
 		if m.agent != nil {
-			// pig divergence (D135): queued extension custom messages are not restored to the editor and stay queued.
+			// ompig divergence (D135): queued extension custom messages are not restored to the editor and stay queued.
 			m.agent.ClearQueuedUserMessages()
 		}
 		m.compactionQueue = nil
@@ -1334,7 +1339,7 @@ func (m *InteractiveMode) hasActiveAgentTurn() bool {
 	// A turn is active from the synchronous commit in runPromptTurn until the
 	// run goroutine returns, not merely while the provider streams tokens.
 	// Upstream derives both isStreaming and isIdle from one _isAgentRunActive
-	// flag set synchronously in prompt() (agent-session.ts:874). pig's
+	// flag set synchronously in prompt() (agent-session.ts:874). ompig's
 	// Agent.streaming flips true only once the goroutine reaches runLoop, so a
 	// submit in the window before that (goroutine dispatch, before_agent_start
 	// hook, pre-prompt auto-compaction) saw IsStreaming()==false and started a

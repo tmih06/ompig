@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Upstream mcp-servers.ts: `toolExposure` patterns match in object order ("among patterns the first match in the object wins") and `env` and `headers` keep their key order, so the wire must not sort them.

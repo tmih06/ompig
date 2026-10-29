@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func resourceExtensionFixture(t *testing.T) (root, cwd, agentDir string) {
@@ -23,8 +23,8 @@ func resourceExtensionFixture(t *testing.T) (root, cwd, agentDir string) {
 			t.Fatal(err)
 		}
 	}
-	t.Setenv("PIG_HOME", filepath.Join(root, "config"))
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "config"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	return root, cwd, agentDir
 }
 
@@ -39,7 +39,7 @@ export default function(pi) {
  pi.on("project_trust", () => ({ trusted: "yes" }));
  pi.registerCommand("user-trust", {description:"user trust",handler:async()=>{}});
 }`, trace),
-		"project/.pig/extensions/project.ts": `export default function(pi) { pi.registerCommand("project-trusted", {description:"project trusted",handler:async()=>{}}); }`,
+		"project/.ompig/extensions/project.ts": `export default function(pi) { pi.registerCommand("project-trusted", {description:"project trusted",handler:async()=>{}}); }`,
 	})
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
 	registry := codingagent.NewModelRegistry(agentDir)
@@ -57,7 +57,7 @@ export default function(pi) {
 	for _, ext := range loaded {
 		paths = append(paths, ext.Path)
 	}
-	want := []string{filepath.Join(cwd, ".pig", "extensions", "project.ts"), filepath.Join(agentDir, "extensions", "user.ts")}
+	want := []string{filepath.Join(cwd, ".ompig", "extensions", "project.ts"), filepath.Join(agentDir, "extensions", "user.ts")}
 	if len(errs) != 0 || !slices.Equal(paths, want) {
 		t.Fatalf("final paths=%q errors=%v; want %q", paths, errs, want)
 	}
@@ -82,8 +82,8 @@ export default function(pi) {
 			switch kind {
 			case "command collisions":
 				writeResourceTestFiles(t, root, map[string]string{
-					"project/.pig/extensions/project.ts": `export default function(pi) { pi.registerCommand("deploy",{description:"project deploy",handler:async()=>{}}); pi.registerCommand("project-only",{description:"project only",handler:async()=>{}}); }`,
-					"agent/extensions/user.ts":           `export default function(pi) { pi.registerCommand("deploy",{description:"user deploy",handler:async()=>{}}); pi.registerCommand("user-only",{description:"user only",handler:async()=>{}}); }`,
+					"project/.ompig/extensions/project.ts": `export default function(pi) { pi.registerCommand("deploy",{description:"project deploy",handler:async()=>{}}); pi.registerCommand("project-only",{description:"project only",handler:async()=>{}}); }`,
+					"agent/extensions/user.ts":             `export default function(pi) { pi.registerCommand("deploy",{description:"user deploy",handler:async()=>{}}); pi.registerCommand("user-only",{description:"user only",handler:async()=>{}}); }`,
 				})
 			case "tool conflicts":
 				writeResourceTestFiles(t, root, map[string]string{"agent/extensions/ext1/index.ts": toolFactory("First", "1"), "agent/extensions/ext2/index.ts": toolFactory("Second", "2")})

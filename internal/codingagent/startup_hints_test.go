@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestStartupKeybindHintsShowsCoreBindings(t *testing.T) {

@@ -5,7 +5,7 @@ package configvalue
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 func TestPortWave11ResolveConfigValueWindows(t *testing.T) {

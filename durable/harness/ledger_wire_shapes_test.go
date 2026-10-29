@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 func mustJSON(t *testing.T, value any) string {

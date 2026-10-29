@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // fakeModelRuntime is Pi's ModelRuntime as the selector reads it. refresh decides what Refresh returns; it runs off the owner loop.

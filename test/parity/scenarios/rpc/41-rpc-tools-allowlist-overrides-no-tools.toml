@@ -4,10 +4,10 @@
 # noTools "all" and tools together; sdk.ts:258-265 computes allowedToolNames = tools ?? (noTools === "all"
 # ? [] : undefined) and initialActiveToolNames = tools ?? (noTools ? [] : defaults), so `--no-tools
 # --tools bash` leaves bash active. In `--mode rpc` the faux "Run: expr 20 + 22" call prints 42.
-# PiG let --no-tools win in every mode and answered "Tool bash not found".
+# Ompig let --no-tools win in every mode and answered "Tool bash not found".
 #
 # Full JSON records are compared (canonical_json sorts keys only): the initial system message's toolsAdded, the tool_execution_end
-# result and the persisted messages must equal Pi's. An explicit system prompt removes the pig/pi naming difference.
+# result and the persisted messages must equal Pi's. An explicit system prompt removes the ompig/pi naming difference.
 
 name = "41-rpc-tools-allowlist-overrides-no-tools"
 description = "RPC --no-tools --tools bash keeps bash declared and callable"
@@ -34,8 +34,8 @@ wait_contains = ['"command":"get_messages","success":true']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--offline", "--model", "test-faux/faux-1", "--no-tools", "--tools", "bash", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--offline", "--model", "test-faux/faux-1", "--no-tools", "--tools", "bash", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--offline", "--model", "test-faux/faux-1", "--no-tools", "--tools", "bash", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 

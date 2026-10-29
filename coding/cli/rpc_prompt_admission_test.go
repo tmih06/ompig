@@ -10,7 +10,7 @@ import (
 // Pi 1.2.0 agent-session.ts:1832-1837 (_startRun awaits the async _prepareRun) yields prompt preflight while both queue operations advance; rpc-mode.ts:416-424 awaits their replies, which come before agent_start (parity rpc/13-rpc-steering-queue sends the same batch to Pi 1.2.0). agent-loop.ts yields between agent_start and turn_start.
 func TestRPCPromptPreflightAdmitsQueueBatch(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
 	p.send(strings.Join([]string{
 		`{"id":"prompt","type":"prompt","message":"TUI_LIVE_STREAM"}`,
 		`{"id":"steer","type":"steer","message":"What is 20+22?"}`,

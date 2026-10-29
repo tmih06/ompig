@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // replaceLogLines returns the fixture's log with the per-process random instance
@@ -54,17 +54,17 @@ func sessionReplaceFixture(t *testing.T) string {
 // replacement's session_start reaches a fresh instance B.
 func TestPrintModeNewSessionBuildsFreshExtensionInstances(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	log := filepath.Join(t.TempDir(), "replace.log")
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--print", "-e", sessionReplaceFixture(t), "/replace-new")
 	cmd.Dir = t.TempDir()
 	home := t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_REPLACE_LOG="+log)
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_REPLACE_LOG="+log)
 	if out, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("pig --print: %v\n%s", err, out)
+		t.Fatalf("ompig --print: %v\n%s", err, out)
 	}
 	got := replaceLogLines(t, log)
 	// The old instance finishes /replace-new after its own shutdown, as in Pi;
@@ -101,14 +101,14 @@ func rpcResponseData(t *testing.T, p *rpcProcess, id string) map[string]any {
 // Pi rpc-mode.ts routes new_session, switch_session, fork and clone through runtimeHost, so each builds the replacement Session and its extensions through the Session factory. It then calls rebindSession() a second time after the command returns, which is why a replacement's extensions see session_start twice. Extension processes are fresh instances: A, B, C, D, E below.
 func TestRPCSessionCommandsReplaceThroughTheRuntimeFactory(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	log := filepath.Join(t.TempDir(), "replace.log")
 	home := t.TempDir()
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_TEST_REPLACE_LOG=" + log,
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_TEST_REPLACE_LOG=" + log,
 	}, "--model", "test-faux/faux-1", "-e", sessionReplaceFixture(t))
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	rpcResponseData(t, p, "commands")
@@ -171,7 +171,7 @@ func TestRPCSessionCommandsReplaceThroughTheRuntimeFactory(t *testing.T) {
 // Pi's switchSession creates the replacement's services, resources, system prompt and tools for the destination Session's cwd (agent-session-runtime.ts:197-226 passes sessionManager.getCwd() to createRuntime). A resumed Session from another project therefore carries that project's context files and runs tools in its directory.
 func TestRPCSwitchSessionRebuildsServicesForTheDestinationCWD(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	t.Parallel()
 	home := t.TempDir()
@@ -206,8 +206,8 @@ func TestRPCSwitchSessionRebuildsServicesForTheDestinationCWD(t *testing.T) {
 	}
 	log := filepath.Join(t.TempDir(), "cwd.log")
 	p := startRPCProcessAt(t, startup, []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_CWD_LOG=" + log,
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_CWD_LOG=" + log,
 	}, "--model", "test-faux/faux-1", "--session-dir", sessionDir, "-e", fixture)
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	rpcResponseData(t, p, "commands")
@@ -247,7 +247,7 @@ const piStaleMessage = "This extension ctx is stale after session replacement or
 // Pi agent-session-runtime.ts:167-177 invalidates the outgoing runner during teardown, so a captured pi or ctx throws runner.ts's stale message and never acts on the replacement Session (2860-replaced-session-context.test.ts:147-205). The replaced Session's extension process stays alive until its command returns, so its host calls must fail with that message, and the host's invalidate notification makes the Node runtime's pi and ctx members throw it at the call site, including the fire-and-forget pi.sendUserMessage. Reads the Go, Rust and Python SDKs answer from their own state are recorded in D30.
 func TestPrintModeReplacedSessionHostCallsFailWithThePiStaleMessage(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	log := filepath.Join(t.TempDir(), "stale.log")
@@ -258,11 +258,11 @@ func TestPrintModeReplacedSessionHostCallsFailWithThePiStaleMessage(t *testing.T
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--mode", "json", "-e", fixture, "/stale-probe")
 	cmd.Dir = t.TempDir()
 	home := t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_STALE_LOG="+log)
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_STALE_LOG="+log)
 	stdout, err := cmd.Output()
 	if err != nil {
-		t.Fatalf("pig --mode json: %v", err)
+		t.Fatalf("ompig --mode json: %v", err)
 	}
 	got := replaceLogLines(t, log)
 	want := []string{
@@ -282,7 +282,7 @@ func TestPrintModeReplacedSessionHostCallsFailWithThePiStaleMessage(t *testing.T
 // Pi agent-session.ts:2941 discovers resources with reason "startup" for every Session start that is not a reload, so a Session created by ctx.newSession() reports "startup" to resources_discover handlers, not the session_start reason.
 func TestPrintModeReplacementDiscoversResourcesWithStartupReason(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	log := filepath.Join(t.TempDir(), "resources.log")
@@ -293,10 +293,10 @@ func TestPrintModeReplacementDiscoversResourcesWithStartupReason(t *testing.T) {
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--print", "-e", fixture, "/replace-new")
 	cmd.Dir = t.TempDir()
 	home := t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_REPLACE_LOG="+log)
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_REPLACE_LOG="+log)
 	if out, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("pig --print: %v\n%s", err, out)
+		t.Fatalf("ompig --print: %v\n%s", err, out)
 	}
 	got := replaceLogLines(t, log)
 	want := []string{
@@ -313,7 +313,7 @@ func TestPrintModeReplacementDiscoversResourcesWithStartupReason(t *testing.T) {
 // A replacement Session keeps the process's --session-dir, so its extensions read the same directory from ctx.sessionManager.getSessionDir() as the first Session's do (Pi's SessionManager.create(cwd, sessionDir) keeps it, agent-session-runtime.ts:240-247).
 func TestPrintModeReplacementKeepsTheSessionDirForExtensionReads(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	log := filepath.Join(t.TempDir(), "dir.log")
@@ -325,10 +325,10 @@ func TestPrintModeReplacementKeepsTheSessionDirForExtensionReads(t *testing.T) {
 	sessionDir := filepath.Join(home, "chosen-sessions")
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--print", "--session-dir", sessionDir, "-e", fixture, "/replace-new")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_REPLACE_LOG="+log)
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_REPLACE_LOG="+log)
 	if out, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("pig --print: %v\n%s", err, out)
+		t.Fatalf("ompig --print: %v\n%s", err, out)
 	}
 	got := replaceLogLines(t, log)
 	want := []string{
@@ -343,7 +343,7 @@ func TestPrintModeReplacementKeepsTheSessionDirForExtensionReads(t *testing.T) {
 // Pi's switchSession calls createRuntime for the destination cwd, and createRuntime loads the destination's settings and resolves its packages, so fileURLToPath's error for an invalid local file: URL in the destination project fails the switch (package-manager.ts:912-926). The startup project is valid, so only the replacement build can raise it.
 func TestRPCSwitchSessionFailsForADestinationWithAnInvalidFileURLPackage(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary")
+		t.Skip("starts the ompig binary")
 	}
 	home := t.TempDir()
 	startup, destination := filepath.Join(home, "startup"), filepath.Join(home, "destination")
@@ -371,7 +371,7 @@ func TestRPCSwitchSessionFailsForADestinationWithAnInvalidFileURLPackage(t *test
 		t.Fatal(err)
 	}
 	p := startRPCProcessAt(t, startup, []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1",
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1",
 	}, "--model", "test-faux/faux-1", "--session-dir", sessionDir, "--approve")
 	p.sendJSON(map[string]any{"id": "switch", "type": "switch_session", "sessionPath": other.Path()})
 	var failure string

@@ -54,9 +54,9 @@ func TestFillContentHashGivesCellBuildsACheckOfTheSourceTheyHashed(t *testing.T)
 
 // A hash the caller supplied is not ours to check, and a source the cargo build writes into (Cargo.lock) is still the same source.
 func TestFillContentHashChecksOnlyWhatItHashedAndIgnoresALockfileTheBuildWrites(t *testing.T) {
-	supplied := ExtConfig{Name: "pinned", Source: t.TempDir(), ContentHash: "pinned-by-a-piglet"}
+	supplied := ExtConfig{Name: "pinned", Source: t.TempDir(), ContentHash: "pinned-by-a-ompiglet"}
 	fillContentHash(&supplied)
-	if supplied.ContentHash != "pinned-by-a-piglet" || supplied.sourceCheck != nil {
+	if supplied.ContentHash != "pinned-by-a-ompiglet" || supplied.sourceCheck != nil {
 		t.Fatalf("a supplied hash became %q with a check %t", supplied.ContentHash, supplied.sourceCheck != nil)
 	}
 

@@ -17,7 +17,7 @@ function write(root, name, text) {
 
 // fixture builds a one-package upstream tree and an empty Go module.
 function fixture(t) {
-  const root = scratchDir("pig-go-stubs-");
+  const root = scratchDir("ompig-go-stubs-");
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const upstream = path.join(root, "upstream");
   write(upstream, "packages/demo/package.json", JSON.stringify({ name: "@x/demo", exports: { ".": { types: "./dist/index.d.ts" } } }));

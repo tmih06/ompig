@@ -75,7 +75,7 @@ class MockServerTest(unittest.TestCase):
 class RegistryTest(unittest.TestCase):
     def test_repository_registry_pins_every_package(self):
         harnesses = registry.load()
-        self.assertTrue({"pig", "pi", "codex", "claude", "opencode", "copilot", "omp"} <= set(harnesses))
+        self.assertTrue({"ompig", "pi", "codex", "claude", "opencode", "copilot", "omp"} <= set(harnesses))
         for h in harnesses.values():
             for spec in h.npm:
                 self.assertTrue(registry.npm_spec(spec)[1], f"{h.id}: {spec} is not pinned")
@@ -117,7 +117,7 @@ class OverheadTest(unittest.TestCase):
         with open(toml, "w") as f:
             f.write(f'[fake]\nname = "Fake"\nbin = "{fake}"\napi = "openai-completions"\nconfig = "pi-models"\nconfig_dir = ".fake/agent"\nprint = ["-p", "{{prompt}}"]\n')
         out = os.path.join(work, "o.json")
-        args = argparse.Namespace(registry=toml, harnesses="fake", pig=None, runs=2, warmup=0, prompt="hi", session_exchanges=3, out=out, timeout=30)
+        args = argparse.Namespace(registry=toml, harnesses="fake", ompig=None, runs=2, warmup=0, prompt="hi", session_exchanges=3, out=out, timeout=30)
         self.assertEqual(overhead.run(args), 0)
         rows = {row["scenario"]: row["by"] for row in json.load(open(out))["results"]}
         self.assertEqual(rows["round-trip"]["fake"]["runs"], 2)
@@ -143,29 +143,29 @@ class OverheadTest(unittest.TestCase):
     def test_report_labels_both_versions(self):
         base = {"generated": "t", "host": {"platform": "p", "machine": "m", "cpus": 1}, "warmup": 0, "runs": 1, "prompt": "hi",
                 "session_exchanges": 1, "results": []}
-        pig = {"name": "PiG", "version": "2.0", "version_output": "1.0", "version_command": "pig --version", "own_version_command": "pig version"}
+        ompig = {"name": "Ompig", "version": "2.0", "version_output": "1.0", "version_command": "ompig --version", "own_version_command": "ompig version"}
         pi = {"name": "Pi", "version": "1.0", "version_output": "1.0", "version_command": "pi --version"}
-        page = report.overhead(dict(base, harnesses={"pig": pig, "pi": pi}))
-        self.assertIn("| PiG | `2.0` | `pig --version`: `1.0` | measured |", page)
+        page = report.overhead(dict(base, harnesses={"ompig": ompig, "pi": pi}))
+        self.assertIn("| Ompig | `2.0` | `ompig --version`: `1.0` | measured |", page)
         self.assertIn("| Pi | `1.0` | `pi --version`: `1.0` | measured |", page)
-        pig["version"] = None
-        page = report.overhead(dict(base, harnesses={"pig": pig}))
-        self.assertIn("| PiG | not recorded | `pig --version`: `1.0` | measured |", page)
+        ompig["version"] = None
+        page = report.overhead(dict(base, harnesses={"ompig": ompig}))
+        self.assertIn("| Ompig | not recorded | `ompig --version`: `1.0` | measured |", page)
 
-    def test_report_version_note_matches_recorded_pig_output(self):
+    def test_report_version_note_matches_recorded_ompig_output(self):
         base = {"generated": "t", "host": {"platform": "p", "machine": "m", "cpus": 1}, "warmup": 0, "runs": 1, "prompt": "hi",
                 "session_exchanges": 1, "results": []}
-        pig = {"name": "PiG", "version": None, "version_output": "1.0", "version_command": "pig --version"}
-        page = report.overhead(dict(base, harnesses={"pig": pig}))
+        ompig = {"name": "Ompig", "version": None, "version_output": "1.0", "version_command": "ompig --version"}
+        page = report.overhead(dict(base, harnesses={"ompig": ompig}))
         self.assertIn("predates the composite version string and printed only the pinned Pi release", page)
-        pig["version_output"] = "2.0+1.0"
-        page = report.overhead(dict(base, harnesses={"pig": pig}))
+        ompig["version_output"] = "2.0+1.0"
+        page = report.overhead(dict(base, harnesses={"ompig": ompig}))
         self.assertNotIn("predates", page)
-        self.assertIn("PiG's `--version` prints its composite version, `<PiG release>+<Pi release>` (D63).", page)
+        self.assertIn("Ompig's `--version` prints its composite version, `<Ompig release>+<Pi release>` (D63).", page)
 
 
-    def test_repository_registry_reads_pig_own_version(self):
-        self.assertEqual(registry.load()["pig"].own_version_args, ["version"])
+    def test_repository_registry_reads_ompig_own_version(self):
+        self.assertEqual(registry.load()["ompig"].own_version_args, ["version"])
 
 
 class LiveTest(unittest.TestCase):
@@ -208,11 +208,11 @@ class PerfTest(unittest.TestCase):
     def test_budgets_and_parity_allowance(self):
         work = tempfile.mkdtemp()
         results = os.path.join(work, "r.json")
-        json.dump({"results": [{"scenario": "round-trip", "by": {"pig": {"wall_ms_median": 10, "request_bytes": 1300}, "pi": {"request_bytes": 1000}}}]}, open(results, "w"))
+        json.dump({"results": [{"scenario": "round-trip", "by": {"ompig": {"wall_ms_median": 10, "request_bytes": 1300}, "pi": {"request_bytes": 1000}}}]}, open(results, "w"))
         budgets = os.path.join(work, "b.toml")
-        open(budgets, "w").write('[pig.round-trip]\nwall_ms_median = 20\n[parity]\nrequest_bytes_over_pi = 256\n')
+        open(budgets, "w").write('[ompig.round-trip]\nwall_ms_median = 20\n[parity]\nrequest_bytes_over_pi = 256\n')
         self.assertEqual(perf.check(argparse.Namespace(results=results, budgets=budgets)), 1)
-        open(budgets, "w").write('[pig.round-trip]\nwall_ms_median = 20\n[parity]\nrequest_bytes_over_pi = 400\n')
+        open(budgets, "w").write('[ompig.round-trip]\nwall_ms_median = 20\n[parity]\nrequest_bytes_over_pi = 400\n')
         self.assertEqual(perf.check(argparse.Namespace(results=results, budgets=budgets)), 0)
 
 
@@ -247,8 +247,8 @@ class TranscriptTest(unittest.TestCase):
         s = live.summarize([mk(0, True, 0.1), mk(0, False, 0.3), mk(1, True, 0.2), mk(1, True, 0.2)])
         self.assertEqual((s["passed"], s["pass_rate"]), (3, 75.0))
         self.assertAlmostEqual(s["cost_per_passing_task"], 0.8 / 3)
-        text = report.live({"model": "m", "runs": 2, "tasks": ["t"], "generated": "now", "harnesses": {"pig": {"name": "PiG"}}, "summary": {"pig": s}})
-        self.assertIn("| PiG | 75% ± 25% (3/4) |", text)
+        text = report.live({"model": "m", "runs": 2, "tasks": ["t"], "generated": "now", "harnesses": {"ompig": {"name": "Ompig"}}, "summary": {"ompig": s}})
+        self.assertIn("| Ompig | 75% ± 25% (3/4) |", text)
 
 
 @unittest.skipUnless(shutil.which("gofmt"), "gofmt not installed")

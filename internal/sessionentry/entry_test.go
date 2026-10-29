@@ -83,7 +83,7 @@ func TestBranchSummaryEntryKeepsTheMemberOrderOfDetails(t *testing.T) {
 	}
 }
 
-// session-manager.ts:1604-1621 branchWithSummary builds the entry literal {type, id, parentId, timestamp, fromId, summary, details, usage, fromHook}; navigateTree passes fromExtension=false (agent-session.ts:4110-4114), so a summary PiG writes carries "fromHook":false after the usage member, exactly as Pi's file does. Found by the tree-navigate-branch-summary journey, whose session comparison showed the member missing.
+// session-manager.ts:1604-1621 branchWithSummary builds the entry literal {type, id, parentId, timestamp, fromId, summary, details, usage, fromHook}; navigateTree passes fromExtension=false (agent-session.ts:4110-4114), so a summary Ompig writes carries "fromHook":false after the usage member, exactly as Pi's file does. Found by the tree-navigate-branch-summary journey, whose session comparison showed the member missing.
 func TestBranchSummaryEntryWritesFromHookFalseInPiMemberOrder(t *testing.T) {
 	entry := BranchSummaryEntry{
 		SessionEntryBase: SessionEntryBase{Type: "branch_summary", ID: "b1", Timestamp: "t"},
@@ -101,7 +101,7 @@ func TestBranchSummaryEntryWritesFromHookFalseInPiMemberOrder(t *testing.T) {
 
 // messages.ts:39 declares excludeFromContext optional, and agent-session.ts:3889 assigns options?.excludeFromContext, so the recorded message has the
 // member exactly when the caller passed a boolean: interactive ! commands write false (interactive-mode.ts:7029,7058), an RPC bash command without the
-// member writes none (rpc-mode.ts:571,577). PiG omitted a false value. Found by the bash journey (session file diff against Pi).
+// member writes none (rpc-mode.ts:571,577). Ompig omitted a false value. Found by the bash journey (session file diff against Pi).
 func TestBashExecutionEntryKeepsExcludeFromContextFalseAndOmitsUnset(t *testing.T) {
 	for _, tc := range []struct {
 		name    string

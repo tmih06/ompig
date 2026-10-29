@@ -94,11 +94,11 @@ func TestParity_MarkdownTmuxCapture(t *testing.T) {
 	}
 
 	up := results["upstream"]
-	gp := results["pig"]
+	gp := results["ompig"]
 	if gp.plainBlock != up.plainBlock {
-		t.Errorf("visible markdown tmux capture mismatch\n--- pig ---\n%s\n--- upstream ---\n%s", gp.plainBlock, up.plainBlock)
+		t.Errorf("visible markdown tmux capture mismatch\n--- ompig ---\n%s\n--- upstream ---\n%s", gp.plainBlock, up.plainBlock)
 	}
 	if gp.escBlock != up.escBlock {
-		t.Errorf("escaped markdown tmux capture mismatch\n--- pig ---\n%s\n--- upstream ---\n%s", gp.escBlock, up.escBlock)
+		t.Errorf("escaped markdown tmux capture mismatch\n--- ompig ---\n%s\n--- upstream ---\n%s", gp.escBlock, up.escBlock)
 	}
 }

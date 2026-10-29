@@ -3,8 +3,8 @@ package extension
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // ─── Action payload + option types ───────────────────────────────────────
@@ -476,7 +476,7 @@ type API interface {
 
 	// Events returns the shared event bus for extension communication.
 	//
-	// pig translation rule (interface property → method): upstream exposes
+	// ompig translation rule (interface property → method): upstream exposes
 	// this as the property `events: EventBus`. Go interfaces cannot have
 	// fields, so the API surfaces a method that returns the host's single
 	// shared instance. See docs/parity/DIVERGENCES.md "TS→Go translation rituals".

@@ -14,15 +14,15 @@ import (
 	"golang.org/x/mod/module"
 	"golang.org/x/mod/semver"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
-// fusedModuleGraph is the module graph fused members add to Pig's main module.
+// fusedModuleGraph is the module graph fused members add to Ompig's main module.
 type fusedModuleGraph struct {
 	// roots are the member and workspace module roots whose go.sum entries the
 	// build reads, sorted and unique.
 	roots []string
-	// raised names each Pig requirement a member raised, for the build log.
+	// raised names each Ompig requirement a member raised, for the build log.
 	raised []string
 	// unvetted names, sorted, each external module a member or workspace
 	// module requires as "path@version" at the version the build selects,
@@ -31,26 +31,26 @@ type fusedModuleGraph struct {
 	unvetted []string
 }
 
-// mergeFusedModules adds the fused members' module graph to pig, the build's
-// view of Pig's go.mod. A dependency module's requirements and replacements do
+// mergeFusedModules adds the fused members' module graph to ompig, the build's
+// view of Ompig's go.mod. A dependency module's requirements and replacements do
 // not reach a main module's go.mod, so with GOWORK=off and -mod=readonly a
 // member's external dependencies would otherwise need go.mod updates.
 //
 // The rule is Go's minimum version selection: each module gets the highest
-// version Pig or any member requires, so a member never downgrades Pig and may
-// raise a Pig requirement, which is reported. Pig itself and its extension SDK
+// version Ompig or any member requires, so a member never downgrades Ompig and may
+// raise a Ompig requirement, which is reported. Ompig itself and its extension SDK
 // are host modules: the source being built is the version that is linked, so a
-// member requiring a newer SDK than Pig pins cannot be fused into it. Member
+// member requiring a newer SDK than Ompig pins cannot be fused into it. Member
 // replacements are promoted; two different targets for one module are an error.
-func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph, error) {
-	if pig.Module == nil {
-		return fusedModuleGraph{}, errors.New("pig go.mod has no module directive")
+func mergeFusedModules(ompig *modfile.File, fused []fusedEntry) (fusedModuleGraph, error) {
+	if ompig.Module == nil {
+		return fusedModuleGraph{}, errors.New("ompig go.mod has no module directive")
 	}
-	pigPath := pig.Module.Mod.Path
+	ompigPath := ompig.Module.Mod.Path
 	sdkPin := ""
-	pigVersions := make(map[string]string, len(pig.Require))
-	for _, requirement := range pig.Require {
-		pigVersions[requirement.Mod.Path] = requirement.Mod.Version
+	ompigVersions := make(map[string]string, len(ompig.Require))
+	for _, requirement := range ompig.Require {
+		ompigVersions[requirement.Mod.Path] = requirement.Mod.Version
 		if requirement.Mod.Path == extsource.GoSDKModulePath {
 			sdkPin = requirement.Mod.Version
 		}
@@ -114,12 +114,12 @@ func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph,
 		for _, requirement := range file.Require {
 			path, version := requirement.Mod.Path, requirement.Mod.Version
 			switch {
-			case path == pigPath:
+			case path == ompigPath:
 				// The main module is always the source being built.
 				continue
 			case path == extsource.GoSDKModulePath:
 				if sdkPin != "" && semver.Compare(version, sdkPin) > 0 {
-					return fusedModuleGraph{}, fmt.Errorf("fuse %q: %s requires %s %s, newer than the %s this Pig source pins; a fused member links the SDK of the Pig it is fused into, so build with a Pig source at %s or later", member, filepath.Join(root, "go.mod"), path, version, sdkPin, version)
+					return fusedModuleGraph{}, fmt.Errorf("fuse %q: %s requires %s %s, newer than the %s this Ompig source pins; a fused member links the SDK of the Ompig it is fused into, so build with a Ompig source at %s or later", member, filepath.Join(root, "go.mod"), path, version, sdkPin, version)
 				}
 				continue
 			case extsource.IsGoSDKModulePath(path):
@@ -131,7 +131,7 @@ func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph,
 			}
 		}
 		for _, r := range file.Replace {
-			if r.Old.Path == pigPath || extsource.IsGoSDKModulePath(r.Old.Path) || extsource.IsGoSDKModulePath(r.New.Path) {
+			if r.Old.Path == ompigPath || extsource.IsGoSDKModulePath(r.Old.Path) || extsource.IsGoSDKModulePath(r.New.Path) {
 				continue
 			}
 			if _, ok := local[r.Old.Path]; ok {
@@ -154,19 +154,19 @@ func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph,
 		localPaths = append(localPaths, path)
 	}
 	slices.Sort(localPaths)
-	// A local member module keeps the highest version Pig or any member
+	// A local member module keeps the highest version Ompig or any member
 	// requires, so its source replacement satisfies every minimum.
 	for _, path := range localPaths {
 		version := "v0.0.0"
-		for _, required := range []string{want[path], pigVersions[path]} {
+		for _, required := range []string{want[path], ompigVersions[path]} {
 			if semver.Compare(required, version) > 0 {
 				version = required
 			}
 		}
-		if err := pig.AddRequire(path, version); err != nil {
+		if err := ompig.AddRequire(path, version); err != nil {
 			return fusedModuleGraph{}, err
 		}
-		if err := pig.AddReplace(path, "", local[path], ""); err != nil {
+		if err := ompig.AddReplace(path, "", local[path], ""); err != nil {
 			return fusedModuleGraph{}, err
 		}
 		delete(want, path)
@@ -177,15 +177,15 @@ func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph,
 	}
 	slices.Sort(paths)
 	for _, path := range paths {
-		version, current := want[path], pigVersions[path]
+		version, current := want[path], ompigVersions[path]
 		switch {
 		case current == "":
-			pig.AddNewRequire(path, version, true)
+			ompig.AddNewRequire(path, version, true)
 		case semver.Compare(version, current) > 0:
-			if err := pig.AddRequire(path, version); err != nil {
+			if err := ompig.AddRequire(path, version); err != nil {
 				return fusedModuleGraph{}, err
 			}
-			graph.raised = append(graph.raised, fmt.Sprintf("fused member %q raises Pig's %s %s to %s (minimum version selection)", wantFrom[path], path, current, version))
+			graph.raised = append(graph.raised, fmt.Sprintf("fused member %q raises Ompig's %s %s to %s (minimum version selection)", wantFrom[path], path, current, version))
 		}
 	}
 	olds := make([]module.Version, 0, len(replaces))
@@ -200,27 +200,27 @@ func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph,
 	})
 	for _, old := range olds {
 		promoted := replaces[old]
-		if existing := pigReplacement(pig, old); existing != nil {
+		if existing := ompigReplacement(ompig, old); existing != nil {
 			if existing.New != promoted.target {
-				return fusedModuleGraph{}, fmt.Errorf("fuse %q: %s replaces %s with %s, but Pig replaces it with %s", owner[promoted.root], filepath.Join(promoted.root, "go.mod"), formatModule(old), formatModule(promoted.target), formatModule(existing.New))
+				return fusedModuleGraph{}, fmt.Errorf("fuse %q: %s replaces %s with %s, but Ompig replaces it with %s", owner[promoted.root], filepath.Join(promoted.root, "go.mod"), formatModule(old), formatModule(promoted.target), formatModule(existing.New))
 			}
 			continue
 		}
-		if err := pig.AddReplace(old.Path, old.Version, promoted.target.Path, promoted.target.Version); err != nil {
+		if err := ompig.AddReplace(old.Path, old.Version, promoted.target.Path, promoted.target.Version); err != nil {
 			return fusedModuleGraph{}, err
 		}
 	}
-	// pig additive (D31): name every external module the fused vet skipped,
+	// ompig additive (D31): name every external module the fused vet skipped,
 	// as the merged go.mod links it.
 	for _, path := range paths {
 		selected := module.Version{Path: path, Version: want[path]}
-		if semver.Compare(pigVersions[path], selected.Version) > 0 {
-			selected.Version = pigVersions[path]
+		if semver.Compare(ompigVersions[path], selected.Version) > 0 {
+			selected.Version = ompigVersions[path]
 		}
 		entry := selected.Path + "@" + selected.Version
-		replacement := pigReplacement(pig, selected)
+		replacement := ompigReplacement(ompig, selected)
 		if replacement == nil {
-			replacement = pigReplacement(pig, module.Version{Path: path})
+			replacement = ompigReplacement(ompig, module.Version{Path: path})
 		}
 		if replacement != nil {
 			entry += " => " + replacement.New.Path
@@ -233,9 +233,9 @@ func mergeFusedModules(pig *modfile.File, fused []fusedEntry) (fusedModuleGraph,
 	return graph, nil
 }
 
-// pigReplacement returns Pig's replacement of old, if any.
-func pigReplacement(pig *modfile.File, old module.Version) *modfile.Replace {
-	for _, r := range pig.Replace {
+// ompigReplacement returns Ompig's replacement of old, if any.
+func ompigReplacement(ompig *modfile.File, old module.Version) *modfile.Replace {
+	for _, r := range ompig.Replace {
 		if r.Old == old {
 			return r
 		}

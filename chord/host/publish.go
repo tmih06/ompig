@@ -26,7 +26,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // publisher is one publication queue: the guard covers the queue state, tasks run outside it, and the goroutine that is

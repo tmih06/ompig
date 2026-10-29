@@ -17,8 +17,8 @@ import (
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/bodyreadhook/readbarrier"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/bodyreadhook/readbarrier"
 )
 
 const azureTicksOracle = "testdata/rpc33-observation/providers/azure-openai-responses/ticks.json"
@@ -43,7 +43,7 @@ type azureTickOracle struct {
 // upstream: packages/ai/src/api/azure-openai-responses.ts:127-131 (await onResponse, then push start);
 // upstream: packages/ai/src/api/openai-responses-shared.ts:432 (processResponsesStream); openai 6.40.0 core/streaming.mjs:28-48,191-245.
 func TestRPC33AzureTickOrder(t *testing.T) {
-	for _, key := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+	for _, key := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 		t.Setenv(key, t.TempDir())
 	}
 	var oracle azureTickOracle

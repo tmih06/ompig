@@ -76,7 +76,7 @@ const xrefRealm = new Realm(() => {
 });
 installCloneHooks(xrefRealm);
 installTestCollect(xrefRealm);
-const sharedBus = new SharedBus(xrefRealm, process.env.PIG_EVENT_BUS === "routed");
+const sharedBus = new SharedBus(xrefRealm, process.env.OMPIG_EVENT_BUS === "routed");
 const XREF_REQUESTS = new Set(["xref.op", "events.dispatch", "events.migrate"]);
 // Emissions whose foreign listener prefix ran while this process was idle. Pi runs such a listener's continuations only after the emitter's synchronous run, so this process waits for the emitter's first microtask (events.proceed) before its own microtasks run.
 const lockstep = new Set();
@@ -108,7 +108,7 @@ function refinementSites(schema) {
   return sites;
 }
 
-const builtInToolRenderer = Symbol.for("pig.builtInToolRenderer");
+const builtInToolRenderer = Symbol.for("ompig.builtInToolRenderer");
 
 // A host call the runtime cancels (its parent request was cancelled, or its connection closed on shutdown, reload or session replacement) rejects with an error made here. Pi never rejects a host call that way: its calls are in-process and outlive the command that started them (interactive-mode.ts showExtensionCustom 2858-2940 settles only through done() or a factory failure). An extension that dropped the call's promise, as pi-mcp-adapter drops ctx.ui.custom's, owns nothing that can observe this rejection, so it must not end the process, which a packed cell shares with the successor generation of a reload. Every other unhandled rejection keeps Node's default (lib/internal/process/promises.js, --unhandled-rejections=throw): an extension listener handles it, and with none it raises as an uncaught exception, as in Pi, whose process the extension shares.
 const hostCancellations = new WeakSet();
@@ -737,7 +737,7 @@ class RuntimeModelRegistry {
     if (!entry?.config) return undefined;
     const foreign = this.host.foreignProviderConfig(providerName);
     if (foreign) return foreign;
-    // pig divergence (D78): a registration from a native SDK author is snapshot data, not the author's live configuration object.
+    // ompig divergence (D78): a registration from a native SDK author is snapshot data, not the author's live configuration object.
     return entry.config;
   }
   // Native Providers remain local when their owner shares the cell; other owners expose connection-bound method handles.
@@ -958,7 +958,7 @@ export class ThemeShim {
   getBashModeBorderColor() { return (text) => this.fg("bashMode", text); }
 }
 
-// pig additive (D19): after RPC stdin ends, the transport must not keep an otherwise drained Node event loop alive. Report the drain to the process owner without resolving any pending extension Promise. A process reports when its loop drained with a pending quit session_shutdown handler (runtime_drained: Pi's exit when its loop empties), and, when it has none, with an unanswered command it has not reported yet (runtime_commands_drained: the host then knows the process cannot answer the commands it had started, as Pi's single loop would not either). A command that arrives after a report makes the loop reportable again.
+// ompig additive (D19): after RPC stdin ends, the transport must not keep an otherwise drained Node event loop alive. Report the drain to the process owner without resolving any pending extension Promise. A process reports when its loop drained with a pending quit session_shutdown handler (runtime_drained: Pi's exit when its loop empties), and, when it has none, with an unanswered command it has not reported yet (runtime_commands_drained: the host then knows the process cannot answer the commands it had started, as Pi's single loop would not either). A command that arrives after a report makes the loop reportable again.
 const quitDrain = { active: false, inputEnded: false, reported: false, listening: false, tailCheck: false, runtimes: new Set() };
 
 function quitDrainState() {
@@ -996,7 +996,7 @@ function refreshQuitDrain() {
   }
 }
 
-// pig additive (D19): Pi reads the prompt line, and stdin's end one event-loop iteration later; then shutdown() exits within microtasks and one tick unless a session_shutdown handler awaits a timer or I/O (rpc-mode.ts:728-744, output-guard.ts:105-108). A command therefore answers after stdin ended only if it settles inside its own window: its microtasks and the setImmediate queued behind its handler's synchronous prefix. The runtime measures that window from the invocation and reports the request suspended (request_state) when the window closes unresponded; the host decides what stdin's end makes of that: it holds a suspended command's response unless a quit session_shutdown handler is suspended too, which keeps Pi's process alive. Only a host call that settles synchronously or through microtasks in Pi keeps a window open; these host calls are I/O, a child process, a dialog or a session change there.
+// ompig additive (D19): Pi reads the prompt line, and stdin's end one event-loop iteration later; then shutdown() exits within microtasks and one tick unless a session_shutdown handler awaits a timer or I/O (rpc-mode.ts:728-744, output-guard.ts:105-108). A command therefore answers after stdin ended only if it settles inside its own window: its microtasks and the setImmediate queued behind its handler's synchronous prefix. The runtime measures that window from the invocation and reports the request suspended (request_state) when the window closes unresponded; the host decides what stdin's end makes of that: it holds a suspended command's response unless a quit session_shutdown handler is suspended too, which keeps Pi's process alive. Only a host call that settles synchronously or through microtasks in Pi keeps a window open; these host calls are I/O, a child process, a dialog or a session change there.
 const WINDOW_CLOSING_CALLS = new Set([
   ...USER_BLOCKING_CALLS, "exec", "modelStream", "getModelAuth", "getProviderAuth", "getAvailableOfType", "classify", "generateImages", "refreshModelRegistry", "compact", "waitForIdle",
   "setModel", "newSession", "fork", "navigateTree", "switchSession", "reload", "oauth.cb.onSelect", "oauth.cb.onPrompt", "oauth.cb.onManualCodeInput",
@@ -1010,7 +1010,7 @@ function windowPending(owner) {
 }
 
 // armRequestWindow closes the window of a command or of a quit session_shutdown handler at the next check phase after its handler's synchronous prefix, or once its pending short host calls settle. A command arms it before its handler runs with early set: its immediate is then queued ahead of every immediate the handler and its microtask continuations queue in this iteration, and it closes a MessagePort, whose close callback runs in this iteration's closing phase, after the check phase and before the next poll phase. A threadpool completion, a nested immediate and a timer therefore land after the window closes.
-// pig divergence (D85): a continuation that runs after this window closes can still execute in this runtime process until the host stops it, and the window cannot see a suspended session_shutdown handler of another runtime process; Pi runs everything on one event loop and exits.
+// ompig divergence (D85): a continuation that runs after this window closes can still execute in this runtime process until the host stops it, and the window cannot see a suspended session_shutdown handler of another runtime process; Pi runs everything on one event loop and exits.
 function armRequestWindow(owner, early = false) {
   const close = () => {
     if (owner.responded || owner.turned) return;
@@ -1036,7 +1036,7 @@ function hostCallEpoch(owner) {
   return owner.connection?.callEpochs?.get(owner.id) ?? 0;
 }
 
-// pig additive (D19): Pi's commands share one event loop with stdin, so it has no report to defer; this runtime is a separate process and must tell the host what Pi's loop would have done at stdin's end.
+// ompig additive (D19): Pi's commands share one event loop with stdin, so it has no report to defer; this runtime is a separate process and must tell the host what Pi's loop would have done at stdin's end.
 // releaseCommandSuspensions applies runtime_input_end to the commands whose window closed unresponded earlier. Pi reads stdin's end in the iteration after the line that starts a command only when the client closes stdin at once; a client that closes it later (on seeing the handler's notification, say) finds every continuation that ran in between answered. A command that started or finished a host call since its window closed ran meanwhile, so it gets a fresh window from here: it is suspended again only if it still waits when that window closes. A command that did nothing since is suspended now.
 function releaseCommandSuspensions() {
   for (const runtime of quitDrain.runtimes) {
@@ -1417,7 +1417,7 @@ export class Connection {
   call(method, args = {}, parentRequestId = "") {
     if (this.closed) return Promise.reject(new Error("extension connection closed"));
     const id = uuid();
-    // pig additive (D189): a call made by a timer's or an immediate's callback after its request's handler returned (the call has no parent) says so, and the host holds it until Pi's loop would have run the callback. A callback that runs while the handler still awaits is a turn of Pi's loop already.
+    // ompig additive (D189): a call made by a timer's or an immediate's callback after its request's handler returned (the call has no parent) says so, and the host holds it until Pi's loop would have run the callback. A callback that runs while the handler still awaits is a turn of Pi's loop already.
     const kind = parentRequestId ? undefined : originKind();
     // Pi's loop turns while a sibling tool awaits real work, so a timer callback runs right after the tool that queued it ends, with its process.nextTick callbacks; the host releases a "tick" call there.
     const timer = kind !== undefined;
@@ -1577,7 +1577,7 @@ function bindOwnMethods(target) {
 }
 
 // requestSignal keys a request's own AbortSignal on its context. Pi's ctx.signal is the run's (runner.ts:917-920), so the request's cancellation travels under this key, which no extension can enumerate or collide with.
-export const requestSignal = Symbol("pig.requestSignal");
+export const requestSignal = Symbol("ompig.requestSignal");
 
 // Pi's createContext (runner.ts:868-960) and createCommandContext (runner.ts:981-1016) guard every member with runner.assertActive(), so a context kept past a stale runtime throws the runner's message instead of answering. Here a member throws once extensionRuntime is stale; the runtime's own code reads the values it holds in runtime.contextValues, which no guard stands in front of.
 class RuntimeContext {
@@ -1617,7 +1617,7 @@ class RuntimeContext {
   get width() { return Number(this.runtime.ready?.width || 0); }
   get height() { return Number(this.runtime.ready?.height || 0); }
 
-  // pig additive (D19): the provenance the loader stamped on this extension (types.ts SourceInfo: path, source, scope, origin, baseDir), the value ExtensionRunner.getExtensionPaths reads; undefined when the host holds none.
+  // ompig additive (D19): the provenance the loader stamped on this extension (types.ts SourceInfo: path, source, scope, origin, baseDir), the value ExtensionRunner.getExtensionPaths reads; undefined when the host holds none.
   extensionSourceInfo() {
     this.runtime.extensionRuntime.assertActive();
     const info = this.runtime.ready?.sourceInfo;
@@ -1727,9 +1727,9 @@ function createNoOpUI(ui) {
     setTheme: () => ({ success: false, error: "UI not available" }),
     getToolsExpanded: () => false,
     setToolsExpanded: () => {},
-    // pig additive (D60): login validation remains owned by the host.
+    // ompig additive (D60): login validation remains owned by the host.
     setLogin: ui.setLogin,
-    // pig divergence (D2): sprite validation remains owned by the host.
+    // ompig divergence (D2): sprite validation remains owned by the host.
     registerSprite: ui.registerSprite,
     onWidthChange: ui.onWidthChange,
     onThemeChange: ui.onThemeChange,
@@ -1775,7 +1775,7 @@ class RuntimeUI {
     return this.runtime.addTerminalInputHandler(handler);
   }
   // Upstream Pi installs headers and footers as component factories whose
-  // render(width) runs every frame, so they follow a resize on their own. A pig
+  // render(width) runs every frame, so they follow a resize on their own. A ompig
   // extension is a subprocess and sends static lines, so a footer keeps the
   // width it was built for until something re-pushes it. This is that trigger.
   // The handler runs after `width` is updated, so it observes the new value.
@@ -1785,21 +1785,21 @@ class RuntimeUI {
     }
     return this.runtime.addWidthChangeHandler(handler);
   }
-  // pig additive (D19): Pi calls a widget component's invalidate() on a theme change and the component reads ui.theme at its next render; a subprocess extension that pushes rows colored when it built them re-renders from this. The handler receives ui.theme after it took the new palette.
+  // ompig additive (D19): Pi calls a widget component's invalidate() on a theme change and the component reads ui.theme at its next render; a subprocess extension that pushes rows colored when it built them re-renders from this. The handler receives ui.theme after it took the new palette.
   onThemeChange(handler) {
     if (typeof handler !== "function") {
       throw new TypeError("onThemeChange requires a handler function");
     }
     return this.runtime.addChangeHandler(this.runtime.themeChangeHandlers, handler);
   }
-  // pig additive (D19): the original of a widget reads ui.getToolsExpanded() at every frame and Pi redraws on its expand key; the handler receives the new state after getToolsExpanded() reports it.
+  // ompig additive (D19): the original of a widget reads ui.getToolsExpanded() at every frame and Pi redraws on its expand key; the handler receives the new state after getToolsExpanded() reports it.
   onToolsExpandedChange(handler) {
     if (typeof handler !== "function") {
       throw new TypeError("onToolsExpandedChange requires a handler function");
     }
     return this.runtime.addChangeHandler(this.runtime.toolsExpandedChangeHandlers, handler);
   }
-  // pig additive (D19): a Pi extension rings the bell by writing BEL to process.stdout, which in this subprocess is not the terminal.
+  // ompig additive (D19): a Pi extension rings the bell by writing BEL to process.stdout, which in this subprocess is not the terminal.
   bell() { this.runtime.fireAndForget("ui.bell", {}); }
   setStatus(key, text) {
     // Upstream mutates FooterDataProvider synchronously before requesting a
@@ -1859,9 +1859,9 @@ class RuntimeUI {
     if (this.runtime.headerFactory) this.runtime.renderSpecialSurface("header", true);
     else this.runtime.fireAndForget("ui.setHeader", { clear: true });
   }
-  // pig additive (D60): Pig accepts typed login data across the subprocess wire.
+  // ompig additive (D60): Ompig accepts typed login data across the subprocess wire.
   async setLogin(definition) { return this.runtime.call("ui.setLogin", definition); }
-  // pig divergence (D2): an extension's sprite joins /sprite.
+  // ompig divergence (D2): an extension's sprite joins /sprite.
   async registerSprite(definition) { return this.runtime.call("ui.registerSprite", definition); }
   setTitle(title) { this.runtime.fireAndForget("ui.setTitle", { title }); }
   async custom(factory, options = {}) {
@@ -2082,10 +2082,10 @@ export class ModelEventStream {
   }
 }
 
-// Pi resolves terminal capabilities once per process and its extensions share that cache (terminal-image.ts getCapabilities). The host owns the terminal and has resolved them, so seed pi-tui's cache before Pi's theme reads it instead of probing the terminal again (under tmux, a synchronous subprocess). The seed belongs to PiG, not to the extension's environment.
+// Pi resolves terminal capabilities once per process and its extensions share that cache (terminal-image.ts getCapabilities). The host owns the terminal and has resolved them, so seed pi-tui's cache before Pi's theme reads it instead of probing the terminal again (under tmux, a synchronous subprocess). The seed belongs to Ompig, not to the extension's environment.
 function seedHostTerminalCapabilities() {
-  const encoded = process.env.PIG_TERMINAL_CAPABILITIES;
-  delete process.env.PIG_TERMINAL_CAPABILITIES;
+  const encoded = process.env.OMPIG_TERMINAL_CAPABILITIES;
+  delete process.env.OMPIG_TERMINAL_CAPABILITIES;
   if (encoded) applyTerminalCapabilities(JSON.parse(encoded));
 }
 
@@ -2121,8 +2121,8 @@ export class Runtime {
     // Pi initializes the process theme before loading extension factories.
     if (!globalThis[Symbol.for("@earendil-works/pi-coding-agent:theme")]) initTheme();
     this.entry = entry;
-    this.name = name || process.env.PIG_EXT_NAME || basename(entry).replace(/\.[^.]+$/, "");
-    this.socketPath = socket || process.env.PIG_EXT_SOCKET;
+    this.name = name || process.env.OMPIG_EXT_NAME || basename(entry).replace(/\.[^.]+$/, "");
+    this.socketPath = socket || process.env.OMPIG_EXT_SOCKET;
     this.version = "0.0.0";
     // Pi's per-extension API state (loader.ts createExtensionAPI): event-bus
     // subscriptions made while the factory runs are dropped if it throws.
@@ -2168,7 +2168,7 @@ export class Runtime {
     // waits for a consume decision. Empty means the host never round-trips.
     this.terminalInputHandlers = [];
     this.widthChangeHandlers = [];
-    // pig additive (D19): subscribers to the host's theme and tool-expansion changes, and the pi.onLoaded handlers. themeSignature and toolsExpandedKnown say the host has sent a first value, so a later different one is a change.
+    // ompig additive (D19): subscribers to the host's theme and tool-expansion changes, and the pi.onLoaded handlers. themeSignature and toolsExpandedKnown say the host has sent a first value, so a later different one is a change.
     this.themeChangeHandlers = [];
     this.toolsExpandedChangeHandlers = [];
     this.themeSignature = undefined;
@@ -2199,7 +2199,7 @@ export class Runtime {
       if (!this.conn || this.conn.closed) return;
       this.conn.send({ type: "call", call: { method: "provider.release", args: reference } });
     });
-    // pig additive (D19): members of one Node cell retain native Provider identity without serializing callbacks.
+    // ompig additive (D19): members of one Node cell retain native Provider identity without serializing callbacks.
     this.nativeProviderObjects = nativeProviderObjects;
     // Pi keeps one effective registered configuration root per provider (model-runtime.ts:438-443,753-766). Members of one Node cell share that root and its original children, functions and descriptors.
     this.providerConfigObjects = providerConfigObjects;
@@ -2265,14 +2265,14 @@ export class Runtime {
       systemPromptOptions: {},
       flags: {},
       hasUI: false,
-      // pig additive (D107): a D91 frontend draws the interactive mode (StatePayload.frontend); surfaces derive views only then.
+      // ompig additive (D107): a D91 frontend draws the interactive mode (StatePayload.frontend); surfaces derive views only then.
       frontend: false,
       // Replicated by the Host: pi.getSettings() reads it (StatePayload.settings). The MCP server registry and ctx.tools are read from the Host when they are read.
       settings: undefined,
       footerData: { gitBranch: null, extensionStatuses: {}, availableProviderCount: 0 },
     };
     this.autocomplete = new AutocompleteRuntime(this);
-    // pig additive (D107): image refs whose bytes this connection has sent; ui.view.evicted forgets them.
+    // ompig additive (D107): image refs whose bytes this connection has sent; ui.view.evicted forgets them.
     this.viewImageRefs = new Set();
     this.ui = new RuntimeUI(this);
     // 0.3.0: replaced by Pi runner wiring
@@ -2305,7 +2305,7 @@ export class Runtime {
       registerCommand: (name, definition) => this.registerCommand(name, definition),
       registerShortcut: (key, definition) => this.registerShortcut(key, definition),
       registerFlag: (name, definition) => this.registerFlag(name, definition),
-      // pig additive (D19): runs handler(ctx) once the runtime registered and has its state, before it serves a request.
+      // ompig additive (D19): runs handler(ctx) once the runtime registered and has its state, before it serves a request.
       onLoaded: (handler) => {
         if (typeof handler !== "function") throw new TypeError("onLoaded requires a handler function");
         this.loadedHandlers.push(handler);
@@ -2328,7 +2328,7 @@ export class Runtime {
           try { this.writeSync("sendMessage", { message, options }); }
           catch (err) {
             if (!isHostCancellation(err)) {
-              try { process.stderr.write(`pig: host call sendMessage failed: ${err && err.message ? err.message : String(err)}\n`); } catch {}
+              try { process.stderr.write(`ompig: host call sendMessage failed: ${err && err.message ? err.message : String(err)}\n`); } catch {}
             }
             return;
           }
@@ -2339,7 +2339,7 @@ export class Runtime {
         try { this.writeSync("sendMessage", { message, options }); }
         catch (err) {
           if (!isHostCancellation(err)) {
-            try { process.stderr.write(`pig: host call sendMessage failed: ${err && err.message ? err.message : String(err)}\n`); } catch {}
+            try { process.stderr.write(`ompig: host call sendMessage failed: ${err && err.message ? err.message : String(err)}\n`); } catch {}
           }
           return;
         }
@@ -2371,7 +2371,7 @@ export class Runtime {
       },
       getActiveTools: action(() => this.callSync("getActiveTools")?.tools || []),
       // Tool registries can change in another extension while this handler is running.
-      // The host call also carries PiG's legacy per-tool "source" for the Go,
+      // The host call also carries Ompig's legacy per-tool "source" for the Go,
       // Rust and Python SDKs; Pi's ToolInfo has only sourceInfo, so drop it.
       // A function cannot cross the wire, so the host marks a tool whose definition has reachesTools (agent-session.ts:1507), and
       // the mark becomes a function, in the mark's member position, that runs the hook through the host.
@@ -2406,7 +2406,7 @@ export class Runtime {
       // returning the unsubscribe function.
       events: {
         emit: active((channel, data) => {
-          // pig divergence (D83): listeners in other realms reach the original payload through xref proxies; independent tasks across realms are ordered by timing.
+          // ompig divergence (D83): listeners in other realms reach the original payload through xref proxies; independent tasks across realms are ordered by timing.
           sharedBus.emit(this, channel, data);
         }),
         on: active((channel, handler) => {
@@ -2584,7 +2584,7 @@ export class Runtime {
     return this.earlyConn.callAppliedOnReceipt("exec.loading", args);
   }
 
-  // pig additive (D19): a file mutation queue call (shims/file-mutation-queue-bridge.mjs). Pi's queue is a module-level map every extension shares, so a factory may use it while it loads: like exec, the call opens the loading connection and is applied when its reply arrives. The call is detached from the request that makes it: an aborted request does not end the wait for the file or the release of its turn, as Pi's queue does not.
+  // ompig additive (D19): a file mutation queue call (shims/file-mutation-queue-bridge.mjs). Pi's queue is a module-level map every extension shares, so a factory may use it while it loads: like exec, the call opens the loading connection and is applied when its reply arrives. The call is detached from the request that makes it: an aborted request does not end the wait for the file or the release of its turn, as Pi's queue does not.
   fileMutation(method, args) {
     const owner = method === "fileMutation.enter" ? this.activeRequest() : undefined;
     if (owner?.windowSettled) {
@@ -2672,9 +2672,9 @@ export class Runtime {
   addToolContext(ctx, toolCallId, toolCallIndex, params) {
     const runtime = this;
     return Object.defineProperties(ctx, {
-      // pig additive (D19): the call's position among the tool calls of the assistant message that issued it (its batch); undefined for a call no assistant message issued, such as a nested executeTool call.
+      // ompig additive (D19): the call's position among the tool calls of the assistant message that issued it (its batch); undefined for a call no assistant message issued, such as a nested executeTool call.
       toolCallIndex: { value: typeof toolCallIndex === "number" ? toolCallIndex : undefined, enumerable: true },
-      // pig additive (D19): the JSON text of the call's arguments, members in the order the model wrote them. Pi's execute params is that object; this is its JSON.stringify.
+      // ompig additive (D19): the JSON text of the call's arguments, members in the order the model wrote them. Pi's execute params is that object; this is its JSON.stringify.
       toolInput: { value: JSON.stringify(params), enumerable: true },
       tools: {
         get() {
@@ -2835,7 +2835,7 @@ export class Runtime {
     if (this.conn) this.notify("tool_renderers", { count: this.toolRendererResolvers.length });
   }
 
-  // resolve_tool_renderers: the host evaluated next() and sends what it draws. pig divergence (D89): next() returns a
+  // resolve_tool_renderers: the host evaluated next() and sends what it draws. ompig divergence (D89): next() returns a
   // marker the host recognizes, so a resolver can keep next()'s renderers but not call them.
   resolveToolRenderers(payload) {
     const marker = payload?.next ? { renderShell: payload.next.render_shell || undefined } : undefined;
@@ -2865,7 +2865,7 @@ export class Runtime {
   ensureConnectionSync() {
     if (this.connection()) return;
     const sockPath = this.socketPath;
-    if (!sockPath) throw new Error("PIG_EXT_SOCKET not set");
+    if (!sockPath) throw new Error("OMPIG_EXT_SOCKET not set");
     const socket = new ProviderSocket(sockPath);
     let failure;
     socket.once("error", error => { failure ??= error; });
@@ -2919,7 +2919,7 @@ export class Runtime {
       request.settled = true;
     }
     // The emitter's settle waits until the microtasks this prefix queued have run. A prefix reached while this process already waits in a synchronous call cannot run them first, so it reports at once rather than wait on its own waiter.
-    // pig divergence (D83): only the first post-await generation is ordered with the emitter's microtasks.
+    // ompig divergence (D83): only the first post-await generation is ordered with the emitter's microtasks.
     const quiesce = () => { if (!conn.closed) conn.notify("events.quiesce", { emission }); };
     const waitForEmitter = emission !== undefined && failure === null && !isWaiting();
     if (waitForEmitter) lockstep.add(emission);
@@ -2992,7 +2992,7 @@ export class Runtime {
         this.conn.loading = false;
       } else {
         const sockPath = this.socketPath;
-        if (!sockPath) throw new Error("PIG_EXT_SOCKET not set");
+        if (!sockPath) throw new Error("OMPIG_EXT_SOCKET not set");
         this.conn = this.attachConnection(await ProviderSocket.connect(sockPath));
       }
       this.earlyConn = undefined;
@@ -3510,7 +3510,7 @@ export class Runtime {
     const owner = this.activeRequest();
     let operation;
     operation = this.syncSessionLog(entries.length, this.sessionLogGeneration).catch((error) => {
-      try { process.stderr.write(`pig: session synchronization failed: ${error?.message || String(error)}\n`); } catch {}
+      try { process.stderr.write(`ompig: session synchronization failed: ${error?.message || String(error)}\n`); } catch {}
     }).finally(() => {
       owner?.pendingHostCalls.delete(operation);
     });
@@ -3860,7 +3860,7 @@ export class Runtime {
       return mountedOverlayHandle(this, overlay, { hidden: false, focused: false, visible: false });
     }
     this.attachOverlayFrames(overlay, termWidth => resolveOverlayWidth(layout, termWidth), () => true, error => {
-      // pig divergence (D73): Pi's TUI throws a component's render or input error out of its render loop; here the overlay leaves
+      // ompig divergence (D73): Pi's TUI throws a component's render or input error out of its render loop; here the overlay leaves
       // the screen and the error is reported, since the component cannot draw or take keys any more.
       this.fireAndForget("ui.notify", { message: error?.message || String(error), level: "error" });
       overlay.handle?.hide();
@@ -4589,7 +4589,7 @@ export class Runtime {
         return;
       }
       case "ui.view.evicted": {
-        // pig additive (D107): the host dropped these image bytes.
+        // ompig additive (D107): the host dropped these image bytes.
         try {
           const args = typeof notify.args === "string" ? JSON.parse(notify.args) : notify.args;
           this.evictViewImages(args?.refs);
@@ -4762,7 +4762,7 @@ export class Runtime {
     try {
       switch (request.method) {
         case "event_loop_turn": {
-          // pig additive (D19): the host's tool ran outside this event loop. One turn runs the immediates the process queued, and the notify reaches the host behind every call they sent, before the response.
+          // ompig additive (D19): the host's tool ran outside this event loop. One turn runs the immediates the process queued, and the notify reaches the host behind every call they sent, before the response.
           await new Promise(resolve => setImmediate(resolve));
           this.notify("event_loop_turned", { turn: request.args?.turn ?? 0 });
           await this.respond(id, {});
@@ -5010,7 +5010,7 @@ export class Runtime {
           if (fileOps) {
             for (const key of ["read", "written", "edited"]) fileOps[key] = new Set(fileOps[key] ?? []);
           }
-          // pig additive (D19): preserve boundary mutations alongside handler errors.
+          // ompig additive (D19): preserve boundary mutations alongside handler errors.
           if (request.event === "agent_before_settle" || request.event === "turn_end") {
             const entries = event.entries;
             let result;
@@ -5022,7 +5022,7 @@ export class Runtime {
             } catch (err) {
               error = err instanceof Error ? err : new Error(String(err));
             }
-            await this.respond(id, { _pigBoundaryEntries: entries, _pigBoundaryResult: result }, error);
+            await this.respond(id, { _ompigBoundaryEntries: entries, _ompigBoundaryResult: result }, error);
             return;
           }
           // Pi hands every tool_call handler the one event object, and a handler edits event.input in place (runner.ts emitToolCall). The host cannot share the object, so the reply carries the input the handler left, when it differs from the one it received, even if the handler failed. The tool runs with the object the event carried (agent-loop.ts prepareToolCall passes the same args to beforeToolCall and execute), so a handler that assigns a new object to event.input changes nothing the tool receives.
@@ -5038,7 +5038,7 @@ export class Runtime {
               error = err instanceof Error ? err : new Error(`Extension failed, blocking execution: ${String(err)}`);
             }
             const edited = JSON.stringify(input) !== before;
-            await this.respond(id, { ...(edited ? { _pigToolCallInput: input } : {}), _pigToolCallResult: result }, error);
+            await this.respond(id, { ...(edited ? { _ompigToolCallInput: input } : {}), _ompigToolCallResult: result }, error);
             return;
           }
           if (request.event === "before_agent_start") {
@@ -5070,7 +5070,7 @@ export class Runtime {
             } catch (err) {
               error = err instanceof Error ? err : new Error(String(err));
             }
-            await this.respond(id, { _pigPromptSections: options.sections, _pigPromptSelectedTools: options.selectedTools, _pigPromptOptions: options, _pigPromptResult: result }, error);
+            await this.respond(id, { _ompigPromptSections: options.sections, _ompigPromptSelectedTools: options.selectedTools, _ompigPromptOptions: options, _ompigPromptResult: result }, error);
             return;
           }
           const messages = event.messages;
@@ -5092,7 +5092,7 @@ export class Runtime {
           if ((request.event === "context" || request.event === "context_with_system") && snapshot) {
             const returned = result?.messages ?? messages;
             const unchanged = returned.length === snapshot.length && returned.every((message, i) => message === snapshot[i]);
-            result = unchanged && encodedBefore !== undefined && contextMessagesEncoding(returned) === encodedBefore ? { _pigContextUnchanged: true } : { messages: returned, _pigContextUnchanged: unchanged };
+            result = unchanged && encodedBefore !== undefined && contextMessagesEncoding(returned) === encodedBefore ? { _ompigContextUnchanged: true } : { messages: returned, _ompigContextUnchanged: unchanged };
           }
           // before_provider_headers handlers mutate event.headers in place and
           // their return value is ignored (runner.ts emitBeforeProviderHeaders);
@@ -5104,8 +5104,8 @@ export class Runtime {
           if (request.event === "user_bash" && result !== undefined) {
             if (result === null) throw new Error('Invalid user_bash handler result: return undefined for local execution or exactly one valid { operations } or { result } object');
             const undefinedExitCode = result.result && Object.hasOwn(result.result, "exitCode") && result.result.exitCode === undefined;
-            result = { ...result, _pigUserBashExitCodeUndefined: Boolean(undefinedExitCode) };
-            // pig additive (D19): functions cannot cross the socket, so the reply names the operations object and the host calls it with user_bash_exec.
+            result = { ...result, _ompigUserBashExitCodeUndefined: Boolean(undefinedExitCode) };
+            // ompig additive (D19): functions cannot cross the socket, so the reply names the operations object and the host calls it with user_bash_exec.
             if (typeof result === "object" && result.operations !== undefined && result.result === undefined && typeof result.operations?.exec === "function") {
               const handle = `bash-${++this.bashOperationsSeq}`;
               this.bashOperations.set(handle, result.operations);
@@ -5221,7 +5221,7 @@ export class Runtime {
             try {
               result = handler(current);
             } catch (error) {
-              try { process.stderr.write(`pig: terminal input handler failed: ${error?.stack || String(error)}\n`); } catch {}
+              try { process.stderr.write(`ompig: terminal input handler failed: ${error?.stack || String(error)}\n`); } catch {}
               continue;
             }
             if (result?.consume) {
@@ -5246,7 +5246,7 @@ export class Runtime {
     }
   }
 
-  // pig additive (D19): normal completion retires async-local request ownership before its response; cancellation never promotes that owner.
+  // ompig additive (D19): normal completion retires async-local request ownership before its response; cancellation never promotes that owner.
   async respond(id, result = null, error = null) {
     const owner = this.requestContext.getStore();
     if (owner?.id === id) {
@@ -5573,7 +5573,7 @@ export class Runtime {
     return out;
   }
 
-  // pig additive (D19): Pi emits agent_settled in the microtasks after agent_end unless a handler on that tail waits on a timer, I/O or another real wait, during which Pi reads stdin (agent-session.ts:1044-1058,1752-1777; rpc-mode.ts:808-810). The host holds stdin through the tail, so a tail handler reports request_state suspended when its window closes unresponded, and the host then serves stdin until the handler answers.
+  // ompig additive (D19): Pi emits agent_settled in the microtasks after agent_end unless a handler on that tail waits on a timer, I/O or another real wait, during which Pi reads stdin (agent-session.ts:1044-1058,1752-1777; rpc-mode.ts:808-810). The host holds stdin through the tail, so a tail handler reports request_state suspended when its window closes unresponded, and the host then serves stdin until the handler answers.
   armSettleTailWindow(id, ctx) {
     const owner = this.requestContext.getStore();
     if (owner?.id === id && ctx.mode === "rpc") armRequestWindow(owner);
@@ -5635,7 +5635,7 @@ export class Runtime {
       if (isHostCancellation(err) || conn.closed) return;
       const reason = err && err.message ? err.message : String(err);
       try {
-        process.stderr.write(`pig: host call ${method} failed: ${reason}\n`);
+        process.stderr.write(`ompig: host call ${method} failed: ${reason}\n`);
       } catch {
         // A closed stderr during shutdown must not escalate into an unhandled
         // rejection in a path the caller never awaits.
@@ -5685,7 +5685,7 @@ export class Runtime {
 // the whole load error (loader.ts loadExtension).
 export function invalidFactory(entry) {
   const error = new Error(`Extension does not export a valid factory function: ${entry}`);
-  error.pigLoaderError = true;
+  error.ompigLoaderError = true;
   return error;
 }
 
@@ -5695,7 +5695,7 @@ export function invalidFactory(entry) {
 // was called and "import" before, so the host retries on another runtime only
 // a load that ran no extension code past module evaluation.
 export function loadFailure(err, phase) {
-  if (err?.pigLoaderError) return { error: err.message, stack: err.stack || "", phase };
+  if (err?.ompigLoaderError) return { error: err.message, stack: err.stack || "", phase };
   const message = err instanceof Error ? err.message : String(err);
   return { error: `Failed to load extension: ${message}`, stack: err instanceof Error ? err.stack || "" : "", phase };
 }

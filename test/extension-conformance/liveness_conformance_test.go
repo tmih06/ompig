@@ -14,12 +14,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/fusepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/typebox/engine"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture"
+	"github.com/tmih06/ompig/coding/extension/host/fusepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/typebox/engine"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture"
 )
 
 type livenessRecording struct {
@@ -160,7 +160,7 @@ func startLivenessSubprocess(t *testing.T, command func(string) *exec.Cmd, node 
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	socketDir, err := os.MkdirTemp(parent, "pig-sdk-live-")
+	socketDir, err := os.MkdirTemp(parent, "ompig-sdk-live-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -171,7 +171,7 @@ func startLivenessSubprocess(t *testing.T, command func(string) *exec.Cmd, node 
 	}
 	t.Cleanup(func() { _ = listener.Close() })
 	cmd := command(address)
-	cmd.Env = append(os.Environ(), "PIG_EXT_SOCKET="+address, "PIG_EXT_NAME=liveness-conformance")
+	cmd.Env = append(os.Environ(), "OMPIG_EXT_SOCKET="+address, "OMPIG_EXT_NAME=liveness-conformance")
 	if err := cmd.Start(); err != nil {
 		t.Fatal(err)
 	}

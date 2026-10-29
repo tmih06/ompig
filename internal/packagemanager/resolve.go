@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // ResolvedPaths are the resources a resolution found, one list per resource type, in precedence order, each with the PathMetadata of its source (package-manager.ts ResolvedPaths).

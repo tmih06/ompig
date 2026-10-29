@@ -1,12 +1,12 @@
-// Startup timing instrumentation for pig.
+// Startup timing instrumentation for ompig.
 //
-// Activated by setting PIG_STARTUP_TRACE=1. Prints structured timing
+// Activated by setting OMPIG_STARTUP_TRACE=1. Prints structured timing
 // to stderr showing wall-clock elapsed from process start for each
 // startup. Uses Go's monotonic clock via time.Since.
 //
 // Usage:
 //
-//	PIG_STARTUP_TRACE=1 pig --model github-copilot/gpt-5-mini
+//	OMPIG_STARTUP_TRACE=1 ompig --model github-copilot/gpt-5-mini
 //
 // Output:
 //
@@ -27,7 +27,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 // startupTrace records from process start.
@@ -39,7 +39,7 @@ type startupTrace struct {
 }
 
 var trace = startupTrace{
-	enabled: os.Getenv("PIG_STARTUP_TRACE") != "",
+	enabled: os.Getenv("OMPIG_STARTUP_TRACE") != "",
 	t0:      time.Now(), // captures process init time
 }
 

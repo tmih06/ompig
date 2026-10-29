@@ -19,12 +19,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // The mistral-conversations row of the D82 multi-provider oracle. coding/testdata/rpc33-observation/providers/mistral-conversations/pi.json is the raw
 // output of Pi 0.87.1's real `pi --mode rpc` binary (probe.mjs in that directory). This test serves the same wire bytes to the real
-// cmd/pig binary and requires the first assistant turn's RPC records to equal Pi's.
+// cmd/ompig binary and requires the first assistant turn's RPC records to equal Pi's.
 
 const mistralOracleDir = "coding/testdata/rpc33-observation/providers/mistral-conversations"
 
@@ -259,7 +259,7 @@ func mistralWithoutTimestamps(value any) any {
 	return value
 }
 
-// runMistralRPC runs one pig RPC session in dir against baseURL and returns the first assistant turn's records in probe.mjs's
+// runMistralRPC runs one ompig RPC session in dir against baseURL and returns the first assistant turn's records in probe.mjs's
 // runRPC() shape: message_start/message_end carry the message, message_update its cumulative usage and assistantMessageEvent
 // (toJsonEvent drops the message).
 func runMistralRPC(ctx context.Context, bin, dir, baseURL string, pace *mistralPace) ([]string, error) {
@@ -277,7 +277,7 @@ func runMistralRPC(ctx context.Context, bin, dir, baseURL string, pace *mistralP
 	defer cancel()
 	cmd := exec.CommandContext(ctx, bin, "--mode", "rpc", "--offline", "--no-extensions", "--model", "p/strict", "--no-context-files", "--no-skills", "--session-dir", filepath.Join(dir, "s"))
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "HOME="+dir, "PIG_HOME="+filepath.Join(dir, "pighome"), "PIG_CODING_AGENT_DIR="+agent)
+	cmd.Env = append(os.Environ(), "HOME="+dir, "OMPIG_HOME="+filepath.Join(dir, "pighome"), "OMPIG_CODING_AGENT_DIR="+agent)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		return nil, err
@@ -341,14 +341,14 @@ func runMistralRPC(ctx context.Context, bin, dir, baseURL string, pace *mistralP
 // delivery shape, in every one of the runs. -mistral-conversations-runs raises the run count (the D82 evidence uses 200).
 func TestRPCMistralMatchesPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and runs the pig binary")
+		t.Skip("builds and runs the ompig binary")
 	}
 	t.Parallel()
 	runs := 3
-	if value := os.Getenv("PIG_D82_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_D82_RUNS"); value != "" {
 		parsed, err := strconv.Atoi(value)
 		if err != nil || parsed < 1 {
-			t.Fatalf("PIG_D82_RUNS=%q", value)
+			t.Fatalf("OMPIG_D82_RUNS=%q", value)
 		}
 		runs = parsed
 	}
@@ -362,12 +362,12 @@ func TestRPCMistralMatchesPi(t *testing.T) {
 // mistralPieceGap is the time probe.mjs leaves between two writes of a split or chunked delivery.
 const mistralPieceGap = 25 * time.Millisecond
 
-// TestRPCMistralDeliveryIsPacedByTheClientNotTheClock is what keeps TestRPCMistralMatchesPi independent of how fast the host schedules pig. With no time between the pieces at all, the case a client that was
+// TestRPCMistralDeliveryIsPacedByTheClientNotTheClock is what keeps TestRPCMistralMatchesPi independent of how fast the host schedules ompig. With no time between the pieces at all, the case a client that was
 // not scheduled for a whole gap is in, the first assistant turn's RPC records still equal Pi's recorded ones for every fixture of the split and chunked deliveries, because the server writes a piece only
 // after the client has delivered every event of the records the earlier pieces completed.
 func TestRPCMistralDeliveryIsPacedByTheClientNotTheClock(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and runs the pig binary")
+		t.Skip("builds and runs the ompig binary")
 	}
 	t.Parallel()
 	bin := buildPigBinaryForSignalTest(t)
@@ -380,7 +380,7 @@ func TestRPCMistralDeliveryIsPacedByTheClientNotTheClock(t *testing.T) {
 	}
 }
 
-// runMistralCase runs pig runs times against the delivery c records, pieces written gap apart, and requires every run's first assistant turn to equal Pi's recorded RPC records.
+// runMistralCase runs ompig runs times against the delivery c records, pieces written gap apart, and requires every run's first assistant turn to equal Pi's recorded RPC records.
 func runMistralCase(t *testing.T, bin string, oracle mistralOracle, c mistralCase, runs int, gap time.Duration) {
 	var want []string
 	for _, raw := range c.RPC {

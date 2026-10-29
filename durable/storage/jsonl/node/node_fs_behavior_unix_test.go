@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // Pi: packages/durable/src/storage/jsonl/node.ts opens storage over `new NodeExecutionEnv({ cwd })`, so NodeFileSystem must behave as that env's file calls do

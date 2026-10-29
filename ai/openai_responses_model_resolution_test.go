@@ -5,7 +5,7 @@ import "testing"
 // TestOpenAIResponses_ImageAndReasoningResolveOneCatalogEntry pins the unified
 // model-resolution precedence for the responses provider. Upstream carries a
 // single resolved `model` object and reads both image support
-// (model.input.includes("image")) and the reasoning/thinking limits off it. pig
+// (model.input.includes("image")) and the reasoning/thinking limits off it. ompig
 // reconstructs that one entry in resolveResponsesModel and derives every
 // capability from it, so image gating and thinking clamping can never resolve
 // two different catalog entries.

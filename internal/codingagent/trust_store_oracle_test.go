@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/trust-manager.ts ProjectTrustStore. A trust.json that is corrupted, holds wrong-typed values or is missing gives the same decisions, nearest entries, error messages and final bytes through get, getEntry, set and setMany.

@@ -1,5 +1,5 @@
-// pig additive (D19): Pi's withFileMutationQueue (core/tools/file-mutation-queue.ts) is one module-level queue in one process, shared by the built-in edit and write
-// tools and every extension. Here the built-in tools run in PiG's host, so the queue is the host's: the vendored edit and write tools and every extension that imports
+// ompig additive (D19): Pi's withFileMutationQueue (core/tools/file-mutation-queue.ts) is one module-level queue in one process, shared by the built-in edit and write
+// tools and every extension. Here the built-in tools run in Ompig's host, so the queue is the host's: the vendored edit and write tools and every extension that imports
 // withFileMutationQueue from Pi load this module in place of Pi's (automation/gen/vendor-pi-dist.sh lists the override), which asks the host's queue for the file's
 // turn (fileMutation.enter, answered once the file's earlier mutations completed) and gives it back (fileMutation.exit). The path is resolved here, against this
 // process's working directory, as Pi's `resolve(filePath)` does; the host takes its real path as the key. A process with no extension runtime (a forked child or

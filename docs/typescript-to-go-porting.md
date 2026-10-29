@@ -1,6 +1,6 @@
-# TypeScript-to-Go porting for Pig
+# TypeScript-to-Go porting for Ompig
 
-Pig ports the observable behavior of the exact Pi release pinned by `.upstream/pin`; it does not transliterate TypeScript syntax. Read the upstream implementation, its callers, tests, and published declarations before choosing a Go representation. If idiomatic Go and exact Pi behavior conflict, preserve behavior unless `docs/parity/DIVERGENCES.md` records an approved exception.
+Ompig ports the observable behavior of the exact Pi release pinned by `.upstream/pin`; it does not transliterate TypeScript syntax. Read the upstream implementation, its callers, tests, and published declarations before choosing a Go representation. If idiomatic Go and exact Pi behavior conflict, preserve behavior unless `docs/parity/DIVERGENCES.md` records an approved exception.
 
 This guide complements the async-specific rules in [Extension authoring](extension-authoring.md) and the parity process in `AGENTS.md`.
 
@@ -43,7 +43,7 @@ Prefer a concrete struct when:
 - an interface would exist only to mirror a TypeScript declaration or to make a mock;
 - a hot loop can use the concrete type without weakening a real boundary.
 
-Large Pig interfaces need case-specific treatment:
+Large Ompig interfaces need case-specific treatment:
 
 - `coding/extension.API` and `coding/extension.UIContext` represent an upstream extension protocol. Splitting or replacing them may change the public API and must follow the semantic inventory, protocol, SDK, and conformance process.
 - `tui.Component` is a one-method heterogeneous component contract. Replacing it with a closed struct union would make the renderer less extensible and is not justified without profile evidence.
@@ -56,7 +56,7 @@ An interface call is normally an indirect call with a small dispatch cost. The l
 3. inspect allocation and inlining effects, not only nanoseconds per dispatch;
 4. change a parity-facing API only when behavior remains exact and the measured gain is material.
 
-`iface` is a lint gate for unused or duplicate interface declarations, opaque interface returns with a single concrete implementation, and unexported interfaces leaked through exported APIs. It does not forbid useful interfaces. `ireturn` and `interfacebloat` are intentionally not repository gates: Pig has legitimate factory/union/protocol interface returns, and the upstream extension API is intentionally broad. Their findings may be used as review inventories, not automatic refactoring instructions.
+`iface` is a lint gate for unused or duplicate interface declarations, opaque interface returns with a single concrete implementation, and unexported interfaces leaked through exported APIs. It does not forbid useful interfaces. `ireturn` and `interfacebloat` are intentionally not repository gates: Ompig has legitimate factory/union/protocol interface returns, and the upstream extension API is intentionally broad. Their findings may be used as review inventories, not automatic refactoring instructions.
 
 ## Porting lint gates
 
@@ -82,33 +82,33 @@ Correctness comes first. Optimize only a representative path with an independent
 6. Mutate or revert the proposed optimization and use `benchstat` or equivalent repeated measurements to prove the benchmark can detect it.
 7. Re-run byte-faithful parity and TUI path tests. A faster renderer with different bytes, width, cursor placement, or event ordering is a regression.
 
-For the distributed CLI, a representative CPU profile is required before committing `default.pgo`. Official Go guidance warns that microbenchmarks are usually poor PGO inputs. Pig's parity runtime ratios protect startup/user-path performance; package benchmarks locate Go-specific CPU and allocation costs. Neither substitutes for the other. `PIG_PROFILE=metrics` writes allocation, GC, heap, RSS, and leaked-resource counts at exit, and `make perf-scoreboard` renders the performance metrics with their ratchet gates. See [Go practices for performance work](performance/go-practices.md).
+For the distributed CLI, a representative CPU profile is required before committing `default.pgo`. Official Go guidance warns that microbenchmarks are usually poor PGO inputs. Ompig's parity runtime ratios protect startup/user-path performance; package benchmarks locate Go-specific CPU and allocation costs. Neither substitutes for the other. `OMPIG_PROFILE=metrics` writes allocation, GC, heap, RSS, and leaked-resource counts at exit, and `make perf-scoreboard` renders the performance metrics with their ratchet gates. See [Go practices for performance work](performance/go-practices.md).
 
 ## No grandfathered port debt
 
 Treat old comments, version annotations, phase labels, placeholders, manual API lists, compatibility readers, test-only implementations, and divergence records as hypotheses to verify, not architecture. For the exact current pin:
 
 1. read the current upstream source and callers;
-2. locate the current Pig production caller, not only declarations/tests;
+2. locate the current Ompig production caller, not only declarations/tests;
 3. probe behavior and applicable resource/performance consequences;
 4. retain with current rationale/evidence, replace with generated closure, reclassify as additive/translation mechanics, or delete.
 
-Do not preserve old Pi internals merely because Pig already copied them, but do not use cleanup as permission to redesign the observable contract. Remove history scars while keeping current public source, wire, Session, ordering, errors, and TUI behavior exact. One current production mechanism is preferable to compatibility layers or parallel old/new paths unless current upstream has the same compatibility contract.
+Do not preserve old Pi internals merely because Ompig already copied them, but do not use cleanup as permission to redesign the observable contract. Remove history scars while keeping current public source, wire, Session, ordering, errors, and TUI behavior exact. One current production mechanism is preferable to compatibility layers or parallel old/new paths unless current upstream has the same compatibility contract.
 
 ## Differential porting loop
 
-The public `microsoft/typescript-go` port provides useful process precedent: it pins the TypeScript source as a submodule, imports upstream test baselines, treats reductions in difference baselines as convergence, and keeps intentional changes explicit. Pig uses the same principles with a frozen Pi oracle, `.upstream/current`, byte-faithful scenarios, semantic mappings, and `docs/parity/DIVERGENCES.md` because Pi's interactive/network surfaces cannot all be imported as compiler golden files.
+The public `microsoft/typescript-go` port provides useful process precedent: it pins the TypeScript source as a submodule, imports upstream test baselines, treats reductions in difference baselines as convergence, and keeps intentional changes explicit. Ompig uses the same principles with a frozen Pi oracle, `.upstream/current`, byte-faithful scenarios, semantic mappings, and `docs/parity/DIVERGENCES.md` because Pi's interactive/network surfaces cannot all be imported as compiler golden files.
 
-For each Pig family:
+For each Ompig family:
 
 1. Read complete upstream source, callers, tests, docs, and published types.
 2. Inventory every semantic member/overload and every async, persistence, wire, command, setting, keybinding, and TUI-state contract in scope. Compiler-generated input-handler facets are the denominator for event branches, callbacks, mutations, delegates, and boundary operators. They are review prompts, not semantic proof: `%` can implement wraparound or an unrelated calculation, and a keybinding's presence does not prove its state transition. Compiler-generated render facets similarly inventory theme calls, glyph and spacing literals, width/truncation operations, positioning numbers, and referenced constants. They detect source drift but do not prove terminal cells, ANSI reset scope, wrapping, ordering, or visual equivalence; those require byte/cell-faithful render tests and production TUI scenarios.
 3. Probe exact Pi first and preserve the raw difference as evidence.
-4. Make the current Pig failure red, or mutation-prove an already matching path.
+4. Make the current Ompig failure red, or mutation-prove an already matching path.
 5. Port the smallest behavior unit. Keep data concrete; introduce an interface only for a named consumer contract.
 6. Re-probe affected callers and tighten the strongest stable comparator.
 7. Reduce parity differences. Never accept or normalize a difference merely because the Go implementation is internally cleaner.
-8. Close reviewed mappings only when production reachability and behavioral evidence exist. Generated recommendations remain non-authoritative. A public library API that Pi exports and no PiG binary calls closes as `public-api-tested` (production reference `public-api:<file>#<Symbol>`), never as production; `docs/parity/gap-closure/gap-interface-ledger.md` describes the two statuses and the reachability audit.
+8. Close reviewed mappings only when production reachability and behavioral evidence exist. Generated recommendations remain non-authoritative. A public library API that Pi exports and no Ompig binary calls closes as `public-api-tested` (production reference `public-api:<file>#<Symbol>`), never as production; `docs/parity/gap-closure/gap-interface-ledger.md` describes the two statuses and the reachability audit.
 9. Run family durability and performance gates proportionately, then the full suite at shared-boundary or campaign milestones.
 
 A TypeScript patch can be useful navigation evidence during an upstream leap, but identifiers and file paths are not a port. Search split Go files, inspect callers, and account for the changed behavior rather than mechanically applying syntax.

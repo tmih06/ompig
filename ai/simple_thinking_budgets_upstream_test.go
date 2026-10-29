@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
 )
 
 // simpleThinkingCases are packages/ai/src/api/simple-options.ts adjustMaxTokensForThinking driven through the streamSimple of anthropic-messages.ts:928-973 and bedrock-converse-stream.ts:531-580. The model has maxTokens 64000 unless a case says otherwise. Expected values follow the TypeScript: base = options.maxTokens ?? model.maxTokens; adjusted = adjustMaxTokensForThinking(options.maxTokens, model.maxTokens, reasoning, options.thinkingBudgets); the request max_tokens is adjusted.maxTokens; the budget is min(adjusted.thinkingBudget, max(0, maxTokens - 1024)); xhigh and max use the high budget; a custom budget replaces the default for its level.

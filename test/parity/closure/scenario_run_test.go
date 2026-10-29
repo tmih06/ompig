@@ -14,12 +14,12 @@ func scenarioRunFixture(t *testing.T, outcome string, runs int) ([]Record, strin
 	hash := HashBytes([]byte("scenario-run"))
 	path := "test/parity/scenarios/selectors/01-behavior.toml"
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:sr", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash}
-	pin := &Pin{Kind: KindPin, ID: "pin:sr", SnapshotID: snapshot.ID, Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/scenarios/selectors", SemanticID: "denominator:scenario", StartLine: 1, EndLine: 10, QuoteHash: hash}
+	pin := &Pin{Kind: KindPin, ID: "pin:sr", SnapshotID: snapshot.ID, Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/scenarios/selectors", SemanticID: "denominator:scenario", StartLine: 1, EndLine: 10, QuoteHash: hash}
 	fact := &Fact{Kind: KindFact, ID: "fact:sr", SnapshotID: snapshot.ID, FactType: "denominator:scenario", SubjectID: path, Resolution: "observed", PinIDs: []string{pin.ID}, Value: json.RawMessage(`{"description":"behavior","covers":["packages/a.ts"],"tags":[]}`)}
 	run := &ScenarioRun{
 		Kind: KindScenarioRun, SnapshotID: snapshot.ID, ScenarioFactID: fact.ID,
 		Outcome: outcome, Runs: runs, Comparator: "output_equal", CommandHash: hash,
-		Artifacts: []EvidenceArtifact{{Path: "pig.stdout", Hash: hash}},
+		Artifacts: []EvidenceArtifact{{Path: "ompig.stdout", Hash: hash}},
 	}
 	id, err := scenarioRunContentID(run)
 	if err != nil {

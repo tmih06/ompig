@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // .upstream/v0.99.2/packages/coding-agent/src/core/extensions/runner.ts:1411-1462 hands every before_agent_start handler

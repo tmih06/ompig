@@ -5,7 +5,7 @@ package storage_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
+	"github.com/tmih06/ompig/durable/durabletest"
 )
 
 // Stored telemetry carriers and creation-time links persist as plain record members on every backend, with no migration.

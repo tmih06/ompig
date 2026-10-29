@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // types.ts LoadExtensionsResult.runtime ("Shared runtime"): the extensions a load returns share one runtime, and the runner the Session builds over

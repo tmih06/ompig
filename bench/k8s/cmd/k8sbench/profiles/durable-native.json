@@ -1,7 +1,7 @@
 {
 	"name": "durable-native",
 	"rule": "native",
-	"about": "durable-bench's workload (a scripted model calls a lookup tool; ten measured eight-tool turns on a seeded store) on PiG's Go Durable (bench/durableperf, native process, walk model and faux provider as published) and on pi-durable at PiG's pinned Pi version on Node (durable/interop/bench.mjs, node:sqlite). Both seed their own store from zero and must reproduce durable-bench's history fingerprint.",
+	"about": "durable-bench's workload (a scripted model calls a lookup tool; ten measured eight-tool turns on a seeded store) on Ompig's Go Durable (bench/durableperf, native process, walk model and faux provider as published) and on pi-durable at Ompig's pinned Pi version on Node (durable/interop/bench.mjs, node:sqlite). Both seed their own store from zero and must reproduce durable-bench's history fingerprint.",
 	"fingerprints": {
 		"50": "b017b487524e44a4",
 		"250": "dcea9f30b0917245",
@@ -10,8 +10,8 @@
 	},
 	"targets": [
 		{
-			"name": "pig",
-			"role": "pig",
+			"name": "ompig",
+			"role": "ompig",
 			"seed": ["durableperf", "seed", "-dir", "{dir}", "-sizes", "{turns}"],
 			"seedMeta": "{dir}/go-{turns}.sqlite.json",
 			"sample": ["durableperf", "sample", "-fixture", "{dir}/go-{turns}.sqlite", "-turns", "{turns}", "-sample", "{sample}"]

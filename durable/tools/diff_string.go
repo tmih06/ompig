@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsdiff"
+	"github.com/tmih06/ompig/internal/jsdiff"
 )
 
 // GenerateDiffString returns the line-numbered display diff and the first

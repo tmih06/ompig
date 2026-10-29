@@ -37,7 +37,7 @@ func TestStagedSDKDirRejectsUnregisteredLanguage(t *testing.T) {
 	if err == nil {
 		t.Fatalf("StagedSDKDir = %q, want error", dir)
 	}
-	if want := "this program links no test-unregistered extension SDK; import github.com/MichaelKinsy/PiG/coding/extension/pigsdk to embed and stage the SDKs"; err.Error() != want {
+	if want := "this program links no test-unregistered extension SDK; import github.com/tmih06/ompig/coding/extension/pigsdk to embed and stage the SDKs"; err.Error() != want {
 		t.Fatalf("error = %q, want %q", err, want)
 	}
 }

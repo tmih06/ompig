@@ -10,7 +10,7 @@ import (
 // backoff with a circuit breaker. After too many crashes in a window, the
 // extension is disabled until manually re-enabled via /reload.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type Supervisor struct {
 	mu sync.Mutex
 
@@ -38,7 +38,7 @@ type SupervisorConfig struct {
 }
 
 // DefaultSupervisorConfig returns production defaults.
-// pig divergence (D56): crash-restart window and backoff supervise the
+// ompig divergence (D56): crash-restart window and backoff supervise the
 // subprocess boundary; every restart and disable is reported through onCrash.
 func DefaultSupervisorConfig() SupervisorConfig {
 	return SupervisorConfig{

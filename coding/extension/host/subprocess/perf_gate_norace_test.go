@@ -11,7 +11,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // perfResponder answers every request frame it reads with an empty response for the same id. It reuses its buffers, so after warm-up it allocates nothing and the measured allocations are the host's.

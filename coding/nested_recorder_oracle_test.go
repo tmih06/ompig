@@ -10,16 +10,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // pi: packages/coding-agent/src/core/nested-tool-calls.ts
 
 // NestedCallRecorder (nested-tool-calls.ts:25-80): the argument size limits (8 KiB per call, 32 KiB in total, counted as UTF-8 bytes of
 // JSON.stringify), the 256-call cap, the incomplete marker, the 500-unit error slice and the summed usage, over scripted call sequences with
-// arguments of every size class and JSON shape (U+2028, lone surrogates, large numbers, nesting). The pinned Pi and PiG give the same snapshot.
+// arguments of every size class and JSON shape (U+2028, lone surrogates, large numbers, nesting). The pinned Pi and Ompig give the same snapshot.
 func TestNestedCallRecorderMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(17))
 	quote := func(s string) string { b, _ := json.Marshal(s); return string(b) }
@@ -179,7 +179,7 @@ func TestNestedCallRecorderMatchesPi(t *testing.T) {
 	}
 }
 
-// collapseReplacement folds each run of U+FFFD in every string into one: Node writes a lone surrogate as a single U+FFFD, PiG's WTF-8 unit is three
+// collapseReplacement folds each run of U+FFFD in every string into one: Node writes a lone surrogate as a single U+FFFD, Ompig's WTF-8 unit is three
 // invalid bytes that the JSON round trip replaces one by one.
 func collapseReplacement(value any) any {
 	switch v := value.(type) {
@@ -212,7 +212,7 @@ func firstDiff(path string, got, want any) string {
 		if w, ok := want.(map[string]any); ok {
 			for key, value := range g {
 				if other, present := w[key]; !present {
-					return fmt.Sprintf("%s.%s: PiG has it", path, key)
+					return fmt.Sprintf("%s.%s: Ompig has it", path, key)
 				} else if !reflect.DeepEqual(value, other) {
 					return firstDiff(path+"."+key, value, other)
 				}
@@ -230,7 +230,7 @@ func firstDiff(path string, got, want any) string {
 					return firstDiff(fmt.Sprintf("%s[%d]", path, i), g[i], w[i])
 				}
 			}
-			return fmt.Sprintf("%s: PiG %d items, Pi %d", path, len(g), len(w))
+			return fmt.Sprintf("%s: Ompig %d items, Pi %d", path, len(g), len(w))
 		}
 	}
 	a, _ := json.Marshal(got)
@@ -241,5 +241,5 @@ func firstDiff(path string, got, want any) string {
 	if len(b) > 160 {
 		b = append(b[:160:160], "..."...)
 	}
-	return fmt.Sprintf("%s: PiG %s, Pi %s", path, a, b)
+	return fmt.Sprintf("%s: Ompig %s, Pi %s", path, a, b)
 }

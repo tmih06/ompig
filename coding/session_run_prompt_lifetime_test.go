@@ -5,9 +5,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // agent-session.ts:1874-1881 clears the run's prompt options (`_runSystemPromptOptions = undefined`) before it flushes the bash and custom messages held during the run, so a listener or handler that reads the system prompt while those messages end sees the base prompt, not the run's forced one.

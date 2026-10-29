@@ -8,9 +8,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type thinkingProbe struct {
@@ -33,7 +33,7 @@ type thinkingResult struct {
 
 // randomThinkingProbes draws a subset of the levels in order, a current and a default level (or none), widths from 8 to 100, bindings and key
 // scripts mixing list keys, search text, cursor and word editing, paste, and the save key. PageUp and PageDown stay out: Pi 1.1.0 has no select
-// page keys and Pig pages the selection (D155, Pi PR #7680).
+// page keys and Ompig pages the selection (D155, Pi PR #7680).
 func randomThinkingProbes(bindings []map[string][]string) []thinkingProbe {
 	rng := rand.New(rand.NewSource(20261028))
 	all := []string{"off", "minimal", "low", "medium", "high", "xhigh"}

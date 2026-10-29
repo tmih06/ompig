@@ -11,12 +11,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Ports packages/durable/test/harness-reports.test.ts (Pi 482c1381a0) over both engines: what each report to OnReport says

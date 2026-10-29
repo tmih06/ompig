@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // registerPiAiHelpersFixture adds pi_ai_helpers_probe: it runs every call of the vector calls (test/parity/sdk-vectors, Pi's own answers at the pin, listed in one file by the test)

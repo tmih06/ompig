@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi: packages/coding-agent/src/modes/interactive/components/settings-selector.ts:62 (SettingsConfig.currentModel).

@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ValidateToolCall finds the tool the call names and validates the call's arguments against its schema. It returns an error when no tool has the name or validation fails.

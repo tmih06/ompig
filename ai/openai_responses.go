@@ -17,11 +17,11 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsnumber"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // ─── Config ──────────────────────────────────────────────────────────────────
@@ -516,7 +516,7 @@ type respOutputContent struct {
 // resolveResponsesModel resolves the one catalog entry backing this responses
 // provider, using a single precedence for every capability lookup. Upstream
 // carries a single resolved `model` object and reads both image support and the
-// reasoning/thinking limits off it; pig reconstructs that entry from the
+// reasoning/thinking limits off it; ompig reconstructs that entry from the
 // provider config here so image gating (ToCapabilities) and thinking clamping
 // (ToModel) never resolve two different entries. Codex models are cataloged
 // under the `openai-codex/` prefix, so a codex-responses provider tries that
@@ -1124,7 +1124,7 @@ func prepareResponsesTranscript(model *Model, transcript TranscriptContext, allo
 }
 
 // omitEmptyResponsesCallIDs omits, with the tool results that name it, a tool call whose {call_id}|{item_id} id still has an empty
-// call_id part after ID normalization. pig divergence (D129): Pi replays it as `call_id: ""`, which the API rejects on every later
+// call_id part after ID normalization. ompig divergence (D129): Pi replays it as `call_id: ""`, which the API rejects on every later
 // request (pi-mono #10299). Only the Responses replay splits the id this way: other targets normalize the whole id ("|fc_1" becomes
 // "_fc_1" for Chat Completions and Anthropic) or send it as is (Gemini), and replay it as Pi does.
 func omitEmptyResponsesCallIDs(messages []Message) []Message {
@@ -1250,7 +1250,7 @@ func (p *responsesTemplatePart) UnmarshalJSON(data []byte) error {
 }
 
 // responsesStreamedToolCallID is the `${item.call_id}|${item.id}` id of a streamed function_call or custom_tool_call item
-// (openai-responses-shared.ts createSlot). pig divergence (D129): a call streamed with an empty call_id gets the generated id D120
+// (openai-responses-shared.ts createSlot). ompig divergence (D129): a call streamed with an empty call_id gets the generated id D120
 // gives any id-less call, because an empty call_id replays as `call_id: ""` and the API rejects every later request (pi-mono #10299).
 func responsesStreamedToolCallID(rawItem json.RawMessage, name string) string {
 	parts := struct {
@@ -1395,7 +1395,7 @@ func (p *openAIResponsesProvider) Stream(ctx context.Context, transcript Transcr
 		p = p.cfg.azure.resolve(p, opts)
 	}
 	ctx = withProviderRequestOptions(ctx, opts)
-	// pig divergence (D48): the agent loop asks for the tool-flow repair.
+	// ompig divergence (D48): the agent loop asks for the tool-flow repair.
 	if opts.RepairToolFlow {
 		transcript = transcript.withRepairedToolFlow()
 	}
@@ -1679,7 +1679,7 @@ func (p *openAIResponsesProvider) Stream(ctx context.Context, transcript Transcr
 	httpReq.Header.Set("Accept", "application/json")
 	if p.cfg.Codex {
 		httpReq.Header.Set("Accept", "text/event-stream")
-		// pig divergence (D26): PiG names itself as the Codex originator. Like the User-Agent it is a default: model and caller headers override it (openai-codex-responses.ts buildBaseCodexHeaders, #10429).
+		// ompig divergence (D26): Ompig names itself as the Codex originator. Like the User-Agent it is a default: model and caller headers override it (openai-codex-responses.ts buildBaseCodexHeaders, #10429).
 		httpReq.Header.Set("originator", pigidentity.CodexOriginator)
 	}
 	if apiKey != "" {

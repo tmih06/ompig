@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent.ts:503-517,561-610 clears run error before agent_start and commits prompt messages only at message_end. Splitting admission from execution must preserve both boundaries.

@@ -18,27 +18,27 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/timings"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/handleryield"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/internal/codingagent/timings"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/handleryield"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
-	"github.com/MichaelKinsy/PiG/internal/eventwire"
-	"github.com/MichaelKinsy/PiG/internal/installchange"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/boundarywire"
+	"github.com/tmih06/ompig/internal/eventwire"
+	"github.com/tmih06/ompig/internal/installchange"
+	"github.com/tmih06/ompig/internal/jsloop"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/toolchain"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 // ExtConfig describes a subprocess extension to load.
@@ -48,7 +48,7 @@ type ExtConfig struct {
 	Name string
 
 	// Path is the path to the extension binary. Resolved relative to
-	// the extension directory (~/.pig/extensions/) if not absolute.
+	// the extension directory (~/.ompig/extensions/) if not absolute.
 	// Mutually exclusive with Source.
 	Path string
 
@@ -250,7 +250,7 @@ func extensionSourcePaths(config ExtConfig) (path, resolvedPath string) {
 // registeredIdentityMismatch is the load error for an extension whose register frame names an identity other than the one its selection gave it, isolated or packed.
 func registeredIdentityMismatch(config ExtConfig, registered string) *LoadError {
 	return newLoadError(config.Name, "register", "name_mismatch", fmt.Errorf(
-		"selected identity %q does not match registered identity %q for source %s; a direct directory must be renamed/reselected under %q, or selected through a Package/Piglet declaration with that exact member identity",
+		"selected identity %q does not match registered identity %q for source %s; a direct directory must be renamed/reselected under %q, or selected through a Package/Ompiglet declaration with that exact member identity",
 		config.Name, registered, extConfigOrigin(config), registered,
 	))
 }
@@ -272,7 +272,7 @@ func extConfigOrigin(config ExtConfig) string {
 // connections, handles the register handshake, and produces
 // [extension.Extension] structs suitable for feeding to [inproc.Runner].
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type Host struct {
 	// slotCalls keeps UI replacements in the order the extensions sent them (runSlotCall).
 	slotCalls          pendingSlotCalls
@@ -311,7 +311,7 @@ type Host struct {
 	configSourceInfo map[string]extension.SourceInfo
 	// configSelectedPath preserves the authored extension path for packed and isolated members.
 	configSelectedPath map[string]string
-	// embeddedCells is the immutable source-free cell set supplied by a Piglet
+	// embeddedCells is the immutable source-free cell set supplied by a Ompiglet
 	// Binary. Reload reconstructs these cells alongside source extensions.
 	embeddedCells []EmbeddedCell
 
@@ -321,7 +321,7 @@ type Host struct {
 
 	cwd       string
 	mode      string   // run mode: tui|rpc|json|print, sent in ReadyPayload (ctx.mode)
-	hostInfo  HostInfo // getAgentDir, CONFIG_DIR_NAME and VERSION, sent to extension processes in PIG_EXT_HOST_INFO
+	hostInfo  HostInfo // getAgentDir, CONFIG_DIR_NAME and VERSION, sent to extension processes in OMPIG_EXT_HOST_INFO
 	socketDir string
 
 	// harnessBinary and harnessArgs are the executable and command-line
@@ -336,7 +336,7 @@ type Host struct {
 
 	// sockRuntime is a per-Host directory holding this instance's extension
 	// sockets, created lazily under socketDir. Isolating sockets per Host keeps
-	// parallel Pig instances (same user, same extensions) from computing the same
+	// parallel Ompig instances (same user, same extensions) from computing the same
 	// socket path and deleting each other's live sockets. Removed on Shutdown.
 	sockRuntimeOnce sync.Once
 	sockRuntimeDir  string
@@ -591,16 +591,16 @@ func standaloneRebuildHint(cfg ExtConfig) string {
 	if cfg.Source != "" {
 		return ""
 	}
-	return fmt.Sprintf("%q ships a prebuilt binary; if you updated pig, rebuild it against the current pig SDK", cfg.Name)
+	return fmt.Sprintf("%q ships a prebuilt binary; if you updated ompig, rebuild it against the current ompig SDK", cfg.Name)
 }
 
 // registerDecodeHint explains a registration this host could not decode. For
-// a runner pig builds from source, that happens when pig or its staged SDK
-// changed after the runner was built, and `pig reload` restages the SDKs and
+// a runner ompig builds from source, that happens when ompig or its staged SDK
+// changed after the runner was built, and `ompig reload` restages the SDKs and
 // drops the stale builds so the next load rebuilds it.
 func registerDecodeHint(err error) string {
 	if transport, ok := errors.AsType[*TransportError](err); ok && transport.Operation == "decode frame" {
-		return "if pig or its SDK changed since this extension was built, run `pig reload` to rebuild it"
+		return "if ompig or its SDK changed since this extension was built, run `ompig reload` to rebuild it"
 	}
 	return ""
 }
@@ -613,12 +613,12 @@ func frameSkewHint(cfg ExtConfig, size uint64, recent bool) string {
 	if !recent {
 		return ""
 	}
-	msg := fmt.Sprintf("%q disconnected just after pig sent a %.1f MiB frame; a binary built against a pig SDK older than the current %d MiB frame cap silently rejects frames above %d MiB",
+	msg := fmt.Sprintf("%q disconnected just after ompig sent a %.1f MiB frame; a binary built against a ompig SDK older than the current %d MiB frame cap silently rejects frames above %d MiB",
 		cfg.Name, float64(size)/(1<<20), MaxFrameSize/(1<<20), legacyFrameSize/(1<<20))
 	if cfg.Source == "" {
-		return msg + ". Rebuild this prebuilt extension against the current pig SDK"
+		return msg + ". Rebuild this prebuilt extension against the current ompig SDK"
 	}
-	return msg + ". pig will rebuild it on next load"
+	return msg + ". ompig will rebuild it on next load"
 }
 
 type managedExt struct {
@@ -737,7 +737,7 @@ type stagedManagedExt struct {
 	me   *managedExt
 }
 
-// NewHost creates an extension host using the process environment's Pig config
+// NewHost creates an extension host using the process environment's Ompig config
 // root. Product assembly should prefer [NewHostWithConfigRoot].
 func NewHost(cwd string) *Host {
 	return NewHostWithConfigRoot(cwd, configroot.Dir())
@@ -745,7 +745,7 @@ func NewHost(cwd string) *Host {
 
 // NewHostWithConfigRoot creates an extension host pinned to configRoot. The
 // socketDir is where Unix sockets are created (for example
-// $XDG_RUNTIME_DIR/pig/ or $TMPDIR/pig-<uid>/).
+// $XDG_RUNTIME_DIR/ompig/ or $TMPDIR/ompig-<uid>/).
 func NewHostWithConfigRoot(cwd, configRoot string) *Host {
 	if strings.TrimSpace(configRoot) == "" {
 		configRoot = configroot.Dir()
@@ -807,7 +807,7 @@ func (h *Host) markExtension(name, phase string) {
 // default) observes nothing at no cost. Must be called before [Host.Load],
 // [Host.LoadInProcess] or [Host.Reload].
 //
-// pig additive (D107): conformance uses it to read the component kit's image
+// ompig additive (D107): conformance uses it to read the component kit's image
 // transport (docs/plan/extension-component-kit.md §7, §10).
 func (h *Host) SetInboundObserver(fn func(extName string, env *Envelope)) {
 	h.inboundObserver = fn
@@ -815,7 +815,7 @@ func (h *Host) SetInboundObserver(fn func(extName string, env *Envelope)) {
 
 // SetOutboundObserver registers a diagnostic observer of the JSON of every frame the host writes to an extension, in write order, for every load mode (isolated, packed, fused). It runs on the connection's write loop before the frame is written, so it must not block and must neither modify nor retain frame. Nil (the default) observes nothing at no cost. Must be called before [Host.Load], [Host.LoadInProcess] or [Host.Reload].
 //
-// pig additive (D107): conformance uses it to prove that every frame is the encoder's json.Marshal of its envelope.
+// ompig additive (D107): conformance uses it to prove that every frame is the encoder's json.Marshal of its envelope.
 func (h *Host) SetOutboundObserver(fn func(extName string, frame []byte)) {
 	h.outboundObserver = fn
 }
@@ -1041,7 +1041,7 @@ func (h *Host) SetMode(mode string) {
 }
 
 // HostInfo is the host's answer to Pi's getAgentDir(), CONFIG_DIR_NAME, VERSION, getPackageDir() and the default getShellConfig() (config.ts, utils/shell.ts). Every
-// extension process receives it in PIG_EXT_HOST_INFO, so an SDK returns the host's own values instead of rederiving them from an environment it may not share.
+// extension process receives it in OMPIG_EXT_HOST_INFO, so an SDK returns the host's own values instead of rederiving them from an environment it may not share.
 type HostInfo struct {
 	AgentDir      string
 	ConfigDirName string
@@ -1071,7 +1071,7 @@ func (h *Host) SetHostInfo(info HostInfo) {
 	h.hostInfo = info
 }
 
-// hostInfoEnv is the PIG_EXT_HOST_INFO environment entry every extension process starts with: Pi's getAgentDir(), CONFIG_DIR_NAME, VERSION, getPackageDir() and
+// hostInfoEnv is the OMPIG_EXT_HOST_INFO environment entry every extension process starts with: Pi's getAgentDir(), CONFIG_DIR_NAME, VERSION, getPackageDir() and
 // getShellConfig() are callable while an extension's factory runs, before the host's ready message, so the process needs them at start. An empty HostInfo sends no entry.
 func (h *Host) hostInfoEnv() []string {
 	value, ok := h.hostInfoValue()
@@ -1081,7 +1081,7 @@ func (h *Host) hostInfoEnv() []string {
 	return []string{hostInfoEnvName + "=" + value}
 }
 
-// hostInfoValue is the PIG_EXT_HOST_INFO value, or false for an empty HostInfo.
+// hostInfoValue is the OMPIG_EXT_HOST_INFO value, or false for an empty HostInfo.
 func (h *Host) hostInfoValue() (string, bool) {
 	if h.hostInfo.empty() {
 		return "", false
@@ -1096,7 +1096,7 @@ func (h *Host) hostInfoValue() (string, bool) {
 	if h.hostInfo.Shell != nil {
 		wire.Shell = h.hostInfo.Shell()
 	}
-	data, err := json.Marshal(wire) //portlint:allow jsonescape PiG-only env entry; every SDK's JSON parser decodes \u003c and \u0026 to the same path text
+	data, err := json.Marshal(wire) //portlint:allow jsonescape Ompig-only env entry; every SDK's JSON parser decodes \u003c and \u0026 to the same path text
 	if err != nil {
 		return "", false
 	}
@@ -1104,7 +1104,7 @@ func (h *Host) hostInfoValue() (string, bool) {
 }
 
 // hostInfoEnvName is the environment variable that carries [HostInfo] to an extension process.
-const hostInfoEnvName = "PIG_EXT_HOST_INFO"
+const hostInfoEnvName = "OMPIG_EXT_HOST_INFO"
 
 // SetWidthFunc registers a callback that returns the current terminal
 // width. The host uses this to populate the ready payload with the real
@@ -1227,7 +1227,7 @@ func geometryEnvelope(method, field string, value int) *Envelope {
 // holding its lock, so fn must not call back into the Host. fn runs on host
 // goroutines, so it must read the height without the owner loop; later calls
 // replace it atomically.
-// pig additive (D52): expose height to extension SDKs.
+// ompig additive (D52): expose height to extension SDKs.
 func (h *Host) SetHeightFunc(fn func() int) {
 	h.heightFunc.Store(&fn)
 }
@@ -1345,9 +1345,9 @@ func (h *Host) Load(ctx context.Context, cfg ExtConfig) (*extension.Extension, e
 
 // LoadInProcess loads an extension whose factory runs inside the host process,
 // served over an in-memory pipe with no subprocess and no runtime build. A fused
-// Piglet Binary supplies serve as factory().RunWithConn. Registration, handshake, and
+// Ompiglet Binary supplies serve as factory().RunWithConn. Registration, handshake, and
 // lifecycle are otherwise identical to Load.
-// pig additive (D31): fused in-process extension runtime.
+// ompig additive (D31): fused in-process extension runtime.
 func (h *Host) LoadInProcess(ctx context.Context, cfg ExtConfig, serve func(net.Conn) error) (*extension.Extension, error) {
 	h.recordLoadOrder([]ExtConfig{cfg}, false)
 	staged, err := h.stageInProcess(ctx, cfg, serve)
@@ -1456,8 +1456,8 @@ func (h *Host) LoadAll(ctx context.Context, configs []ExtConfig) ([]extension.Ex
 	configs = DisambiguateIdentities(configs)
 	var loaded []extension.Extension
 	errs := unresolved
-	// Fused extensions (Piglet Binary fused, D31) run in-process over a pipe; the rest
-	// plan into subprocess cells. fusedResolver is nil in stock pig, so cellConfigs
+	// Fused extensions (Ompiglet Binary fused, D31) run in-process over a pipe; the rest
+	// plan into subprocess cells. fusedResolver is nil in stock ompig, so cellConfigs
 	// aliases configs and every extension takes the unchanged cell path.
 	cellConfigs := configs
 	if fusedResolver != nil {
@@ -1733,7 +1733,7 @@ func (h *Host) runtimeStateMutated(extName string) {
 
 // pushStateTo sends me's state on conn, one of me's connections.
 //
-//pig:hotpath
+//ompig:hotpath
 func (h *Host) pushStateTo(ctx context.Context, me *managedExt, conn *Conn) error {
 	if h.uiBridge == nil || me == nil || conn == nil {
 		return nil
@@ -2155,7 +2155,7 @@ func (h *Host) notifyCommandSuspended() {
 	h.commandNotifyMu.Lock()
 	defer h.commandNotifyMu.Unlock()
 	h.commandFlightMu.Lock()
-	// pig additive (D19): the window count (see SetCommandWindowHandler) accompanies the suspended count.
+	// ompig additive (D19): the window count (see SetCommandWindowHandler) accompanies the suspended count.
 	suspended, windowSuspended := 0, 0
 	for f := range h.commandFlights {
 		if h.countsSuspended(f) {
@@ -2257,7 +2257,7 @@ func (h *Host) quitSuspended() chan struct{} {
 }
 
 // setQuitHandlerSuspended records that a quit session_shutdown handler is suspended after its event-loop window: in Pi its wait keeps the process alive, so suspended commands can still settle and respond.
-// pig divergence (D85): the suspended quit handler keeps only this runtime process's commands alive; Pi's single process keeps every extension's command alive.
+// ompig divergence (D85): the suspended quit handler keeps only this runtime process's commands alive; Pi's single process keeps every extension's command alive.
 func (h *Host) setQuitHandlerSuspended() {
 	h.commandFlightMu.Lock()
 	defer h.commandFlightMu.Unlock()
@@ -2298,7 +2298,7 @@ func (h *Host) SetCommandSuspendHandler(fn func(suspended int)) {
 	h.commandFlightMu.Unlock()
 }
 
-// pig additive (D19): Pi has no window count because it exits only after the microtasks of the commands it read; the host counts them for runtimes that are other processes.
+// ompig additive (D19): Pi has no window count because it exits only after the microtasks of the commands it read; the host counts them for runtimes that are other processes.
 // tailFlight is one in-flight agent_before_settle or agent_settled handler request.
 type tailFlight struct {
 	node      bool
@@ -2367,7 +2367,7 @@ func (h *Host) notifySettleTail() {
 	}
 }
 
-// pig additive (D19): Pi reads stdin while a settle-tail handler waits on a timer or I/O; only the host sees that wait in a runtime that is another process.
+// ompig additive (D19): Pi reads stdin while a settle-tail handler waits on a timer or I/O; only the host sees that wait in a runtime that is another process.
 // SetSettleTailHandler installs the process-owner callback that receives how many in-flight agent_before_settle and agent_settled handlers wait on something during which Pi's event loop reads stdin: a Node handler whose window closed unresponded and, after EndInput, a still-running handler of a runtime with no microtask continuation. The callback runs on host goroutines and must not block.
 func (h *Host) SetSettleTailHandler(fn func(suspended int)) {
 	h.commandFlightMu.Lock()
@@ -2431,7 +2431,7 @@ func (h *Host) awaitTimerDefer(ctx context.Context) {
 
 // FlushCommands is the stdout-flush checkpoint of an RPC shutdown. Pi's flush follows stdin's end within microtasks and one tick, so a runtime with no microtask continuation has nothing that can still settle: its command still running counts as suspended. A Node runtime reports its own commands as their windows close. A command that settled or answered before the checkpoint responds normally. It does not cancel requests or synthesize responses.
 func (h *Host) FlushCommands() {
-	// pig additive (D19): only the host can apply Pi's flushRawStdout boundary (output-guard.ts:105-108) to a runtime that reports no event-loop window.
+	// ompig additive (D19): only the host can apply Pi's flushRawStdout boundary (output-guard.ts:105-108) to a runtime that reports no event-loop window.
 	h.commandFlightMu.Lock()
 	for f := range h.commandFlights {
 		if !f.node && !f.answered {
@@ -2444,7 +2444,7 @@ func (h *Host) FlushCommands() {
 
 // EndInput records that no further terminal or RPC input can arrive and tells each hosted Node runtime with runtime_input_end, which releases its command-suspension and loop-drain reports. The host applies stdin's end to other runtimes' commands itself (FlushCommands). This does not cancel requests or synthesize responses.
 func (h *Host) EndInput() {
-	// pig additive (D19): the subprocess transport is not an upstream event-loop keepalive after stdin ends.
+	// ompig additive (D19): the subprocess transport is not an upstream event-loop keepalive after stdin ends.
 	h.commandFlightMu.Lock()
 	h.inputEnded = true
 	h.commandFlightMu.Unlock()
@@ -2467,7 +2467,7 @@ func (h *Host) EndInput() {
 
 // TerminateProcesses kills hosted processes without running extension callbacks or waiting for their handlers. It is only for a host process that is about to exit; ordinary owners use Shutdown to release all resources.
 func (h *Host) TerminateProcesses() {
-	// pig additive (D19): subprocess runtimes must not outlive a forced host exit.
+	// ompig additive (D19): subprocess runtimes must not outlive a forced host exit.
 	h.shuttingDown.Store(true)
 	h.mu.Lock()
 	processes := make(map[*os.Process]struct{})
@@ -2567,7 +2567,7 @@ func (h *Host) Shutdown(reason string) {
 
 // ensureSockRuntimeDir lazily creates this Host's private socket directory under
 // socketDir (or the short per-user directory socketRuntimeBase falls back to when a socket path below socketDir
-// could exceed the platform limit, on Windows %LOCALAPPDATA%\pig\s) and returns it. The base must be a private directory the current user owns
+// could exceed the platform limit, on Windows %LOCALAPPDATA%\ompig\s) and returns it. The base must be a private directory the current user owns
 // (secureSocketRuntimeBase). os.MkdirTemp guarantees a unique name even across concurrent Hosts, so no two instances
 // share a socket path.
 func (h *Host) ensureSockRuntimeDir() (string, error) {
@@ -2802,8 +2802,8 @@ func (h *Host) Reload(ctx context.Context) ([]extension.Extension, error) {
 		rep.Error = err.Error()
 		return nil, fmt.Errorf("reload config: %w", err)
 	}
-	// pig additive (D18): a Piglet Binary's Node cells reload from their
-	// extracted sources the way Stock PiG reloads the same extensions.
+	// ompig additive (D18): a Ompiglet Binary's Node cells reload from their
+	// extracted sources the way Stock Ompig reloads the same extensions.
 	h.mu.Lock()
 	allEmbedded := cloneEmbeddedCells(h.embeddedCells)
 	h.mu.Unlock()
@@ -2948,7 +2948,7 @@ func (h *Host) Reload(ctx context.Context) ([]extension.Extension, error) {
 			BinaryPath: cell.BinaryPath,
 			Cached:     true,
 			Replaced:   anyExisting(embeddedCellConfigs([]EmbeddedCell{cell}), oldByName),
-			Reason:     "embedded Piglet Binary cell",
+			Reason:     "embedded Ompiglet Binary cell",
 		})
 	}
 
@@ -3029,7 +3029,7 @@ func (h *Host) commitStaged(staged []stagedManagedExt, removed []*managedExt, re
 // performs the register handshake, and builds the extension.Extension struct.
 func (h *Host) startExt(ctx context.Context, me *managedExt, isRestart bool) (*extension.Extension, error) {
 	ext, err := h.startExtOnce(ctx, me, isRestart)
-	// pig additive (D19): a TypeScript extension that failed to start on a slot runtime starts again on the next runtime, ending on Node.
+	// ompig additive (D19): a TypeScript extension that failed to start on a slot runtime starts again on the next runtime, ending on Node.
 	for h.retryOnNextRuntime(ctx, me.config.Name, err) {
 		ext, err = h.startExtOnce(ctx, me, isRestart)
 	}
@@ -3106,7 +3106,7 @@ func (h *Host) ensureNodeRuntime(ctx context.Context) error {
 func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc, me *managedExt) (net.Conn, error) {
 	if me.inProcServe != nil {
 		// A fused extension's factory runs in this process, so this process's environment is the extension process's: it gets
-		// PIG_EXT_HOST_INFO as a spawned extension process does, before the factory runs. Later children of this process inherit the entry.
+		// OMPIG_EXT_HOST_INFO as a spawned extension process does, before the factory runs. Later children of this process inherit the entry.
 		if value, ok := h.hostInfoValue(); ok {
 			if err := os.Setenv(hostInfoEnvName, value); err != nil {
 				return nil, newLoadError(me.config.Name, "spawn", "host_info_failed", err)
@@ -3149,7 +3149,7 @@ func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc
 	}
 
 	// Create the socket path inside this Host's private runtime directory, so a
-	// parallel Pig instance running the same extension cannot collide on it.
+	// parallel Ompig instance running the same extension cannot collide on it.
 	sockPath, err := h.sockPathFor(me.config.Name)
 	if err != nil {
 		return nil, newLoadError(me.config.Name, "spawn", "socket_dir_failed", fmt.Errorf("create socket dir: %w", err))
@@ -3169,7 +3169,7 @@ func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc
 	defer func() { _ = listener.Close() }()
 
 	if me.procOwner != nil {
-		// pig additive (D20): the process that already holds this extension's modules re-invokes the factory, as Pi's loader does inside one runtime.
+		// ompig additive (D20): the process that already holds this extension's modules re-invokes the factory, as Pi's loader does inside one runtime.
 		entry, _ := nodeLauncherEntry(binPath)
 		if err := me.share.send(factoryAdmission{Name: me.config.Name, Entry: entry, Socket: address, ReloadPass: reloadPass(ctx), Cwd: h.cwd}); err != nil {
 			return nil, newLoadError(me.config.Name, "spawn", "admit_failed", fmt.Errorf("admit %s to the running extension process: %w", me.config.Name, err))
@@ -3186,8 +3186,8 @@ func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc
 	var cmd = buildExtCommandSelected(extCtx, binPath, me.config.RuntimeLanguage, runtime.GOOS, exec.LookPath, tsSelection)
 	nodeOutput := usesNodeRuntime(binPath, me.config.RuntimeLanguage)
 	cmd.Env = append(append(os.Environ(), harnessEnv...),
-		fmt.Sprintf("PIG_EXT_SOCKET=%s", address),
-		fmt.Sprintf("PIG_EXT_NAME=%s", me.config.Name),
+		fmt.Sprintf("OMPIG_EXT_SOCKET=%s", address),
+		fmt.Sprintf("OMPIG_EXT_NAME=%s", me.config.Name),
 	)
 	cmd.Env = append(cmd.Env, h.hostInfoEnv()...)
 	cmd.Env = append(cmd.Env, typeScriptRuntimeEnv(tsSelection, tsSet)...)
@@ -3210,7 +3210,7 @@ func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc
 	}
 	cmd.Dir = h.cwd
 	cmd.Stdout = nil // Extensions shouldn't write to stdout
-	// pig divergence (D56): after the host stops an extension, its output
+	// ompig divergence (D56): after the host stops an extension, its output
 	// pipes get this long to drain before they are closed; it never bounds
 	// extension work.
 	cmd.WaitDelay = 5 * time.Second
@@ -3219,7 +3219,7 @@ func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc
 	entry, factoryLauncher := nodeLauncherEntry(binPath)
 	if factoryLauncher {
 		// The first generation keys Pi's factory cache by this Host's configured cwd, as every later admission does; the process's own cwd is the physical path.
-		cmd.Env = append(cmd.Env, "PIG_EXT_CWD="+h.cwd)
+		cmd.Env = append(cmd.Env, "OMPIG_EXT_CWD="+h.cwd)
 		if admissionWriter, err = cmd.StdinPipe(); err != nil {
 			cancel()
 			return nil, newLoadError(me.config.Name, "spawn", "spawn_failed", fmt.Errorf("spawn %s: %w", binPath, err))
@@ -3232,11 +3232,11 @@ func (h *Host) connectExt(ctx, extCtx context.Context, cancel context.CancelFunc
 	}
 	me.cacheLease = cacheLease
 	if cacheLease != nil {
-		// pig additive (D95): remember the cache cell this process runs, so an error can report that another pig pruned it.
+		// ompig additive (D95): remember the cache cell this process runs, so an error can report that another ompig pruned it.
 		installchange.TrackFile(binPath)
 	}
-	// pig divergence (D56): retain stderr only when a subprocess failure diagnostic references it.
-	stderrFile, _ := os.CreateTemp("", fmt.Sprintf("pig-ext-%s-*.log", fileNameComponent(me.config.Name)))
+	// ompig divergence (D56): retain stderr only when a subprocess failure diagnostic references it.
+	stderrFile, _ := os.CreateTemp("", fmt.Sprintf("ompig-ext-%s-*.log", fileNameComponent(me.config.Name)))
 	var stderrSink io.Writer
 	if stderrFile != nil {
 		me.stderrLogPath = stderrFile.Name()
@@ -3875,7 +3875,7 @@ func (h *Host) buildExtension(me *managedExt, reg *RegisterPayload) *extension.E
 		ext.AddJSONEventHandler(h.Event, h.HandlerID, me.makeEventHandler(h.Event, h.HandlerID))
 	}
 	if me.hostsNodeRuntime() {
-		// pig additive (D19): Pi runs its tools on the extensions' event loop; a Node process takes one turn of its own before a tool's result reaches it.
+		// ompig additive (D19): Pi runs its tools on the extensions' event loop; a Node process takes one turn of its own before a tool's result reaches it.
 		ext.EventLoopTurn = func(ctx context.Context) error {
 			conn := me.connection()
 			if conn == nil {
@@ -3890,7 +3890,7 @@ func (h *Host) buildExtension(me *managedExt, reg *RegisterPayload) *extension.E
 	return ext
 }
 
-// pig divergence (D56): renderer inactivity and transport heartbeat are separate host policy.
+// ompig divergence (D56): renderer inactivity and transport heartbeat are separate host policy.
 const rendererInactivity = 5 * time.Second
 
 // makeEntryRenderer returns an extension.EntryRenderer that renders a custom
@@ -4234,7 +4234,7 @@ func (h *Host) invocationError(err error) error {
 	}
 	_, transport := errors.AsType[*TransportError](err)
 	_, heartbeat := errors.AsType[*ExtensionUnresponsiveError](err)
-	// pig divergence (D56): the lifecycle handler owns a connection failure's diagnostic, while callers still receive the typed error.
+	// ompig divergence (D56): the lifecycle handler owns a connection failure's diagnostic, while callers still receive the typed error.
 	if transport || heartbeat {
 		return &invocation.LifecycleError{Err: err}
 	}
@@ -4285,7 +4285,7 @@ func (h *Host) makeCommandHandler(me *managedExt, cmdName string) extension.Comm
 		}
 
 		if h.heldAfterInputEnd(flight) {
-			// pig additive (D19): Pi exits before a suspended command's continuation can respond once stdin ended, unless a suspended session_shutdown handler keeps it alive.
+			// ompig additive (D19): Pi exits before a suspended command's continuation can respond once stdin ended, unless a suspended session_shutdown handler keeps it alive.
 			h.commandFlightMu.Lock()
 			alive := h.quitSuspended()
 			h.commandFlightMu.Unlock()
@@ -4405,7 +4405,7 @@ func (h *Host) handleEventSubscription(me *managedExt, call *CallPayload) (*Call
 
 // makeEventHandler returns a HandlerFn that dispatches events over the socket.
 //
-//pig:hotpath
+//ompig:hotpath
 func (me *managedExt) makeEventHandler(event string, handlerID int) extension.HandlerFn {
 	return func(args ...any) (any, error) {
 		conn := me.connection()
@@ -4581,11 +4581,11 @@ func (me *managedExt) makeEventHandler(event string, handlerID int) extension.Ha
 				}
 				resp.Response.Result = reply.Result
 			}
-			// pig additive (D19): both actionable boundaries return mutated proposals even when their handler fails.
+			// ompig additive (D19): both actionable boundaries return mutated proposals even when their handler fails.
 			if (event == "agent_before_settle" || event == "turn_end") && len(args) > 0 && len(resp.Response.Result) > 0 && strings.TrimSpace(string(resp.Response.Result)) != "null" {
 				var boundary struct {
-					Entries []extension.SessionBoundaryDraft `json:"_pigBoundaryEntries"`
-					Result  json.RawMessage                  `json:"_pigBoundaryResult"`
+					Entries []extension.SessionBoundaryDraft `json:"_ompigBoundaryEntries"`
+					Result  json.RawMessage                  `json:"_ompigBoundaryResult"`
 				}
 				if err := json.Unmarshal(resp.Response.Result, &boundary); err != nil {
 					return nil, fmt.Errorf("decode boundary response: %w", err)
@@ -4673,7 +4673,7 @@ func (h *Host) handleIncoming(me *managedExt, conn *Conn) {
 		}
 		switch env.Type {
 		case MsgRequestState:
-			// pig additive (D19): Pi applies a command's calls, such as writing a dialog request, before the process can exit, so the command counts as suspended only after the calls received before its report applied their synchronous parts. The wait runs off the read loop because those calls can need later frames.
+			// ompig additive (D19): Pi applies a command's calls, such as writing a dialog request, before the process can exit, so the command counts as suspended only after the calls received before its report applied their synchronous parts. The wait runs off the read loop because those calls can need later frames.
 			if env.RequestState != nil {
 				state := *env.RequestState
 				// A report that ends a tool's start window waits for the calls the extension sent before it, not for the call its handler sends after it: the calls
@@ -4761,7 +4761,7 @@ func (h *Host) handleIncoming(me *managedExt, conn *Conn) {
 			if env.Notify == nil {
 				continue
 			}
-			// pig additive (D19): a subprocess event-loop drain is a process-exit observation, not a completed handler.
+			// ompig additive (D19): a subprocess event-loop drain is a process-exit observation, not a completed handler.
 			if isRuntimeDrainNotify(env.Notify.Method) {
 				if h.runtimeCommandsDrained(conn, lanes, env) {
 					continue
@@ -4774,7 +4774,7 @@ func (h *Host) handleIncoming(me *managedExt, conn *Conn) {
 				continue
 			}
 			if env.Notify.Method == NotifyEventLoopTurned {
-				// pig additive (D19): a turn counts once the calls the runtime sent before it applied their synchronous parts, as for a request_state report. The wait runs off the read loop because those calls can need later frames.
+				// ompig additive (D19): a turn counts once the calls the runtime sent before it applied their synchronous parts, as for a request_state report. The wait runs off the read loop because those calls can need later frames.
 				args := env.Notify.Args
 				h.goDrainTask(func() {
 					lanes.barrier()
@@ -4917,7 +4917,7 @@ func (h *Host) awaitClosedProcess(me *managedExt) {
 		return
 	default:
 	}
-	// pig divergence (D56): the heartbeat deadline also bounds how long a
+	// ompig divergence (D56): the heartbeat deadline also bounds how long a
 	// process may outlive its closed connection.
 	timer := time.NewTimer(defaultHeartbeatTimeout)
 	defer timer.Stop()
@@ -5074,7 +5074,7 @@ func (h *Host) attemptRestart(me *managedExt) {
 
 // resolveSocketDir returns the platform-appropriate socket directory. Windows
 // uses its per-user temporary directory without a Unix uid. Unix prefers
-// $XDG_RUNTIME_DIR/pig and otherwise uses $TMPDIR/pig-<uid>.
+// $XDG_RUNTIME_DIR/ompig and otherwise uses $TMPDIR/ompig-<uid>.
 func resolveSocketDir() string {
 	return resolveSocketDirForGOOS(
 		runtime.GOOS,
@@ -5091,9 +5091,9 @@ func resolveSocketDir() string {
 // taken stdout over for its own output (main.ts takeOverStdout). Stderr also
 // goes to the extension's log, which load and crash diagnostics read.
 //
-// Both are writers rather than PiG's own files, so the process gets pipes
+// Both are writers rather than Ompig's own files, so the process gets pipes
 // the host copies from: Node makes its stdio pipes non-blocking, which on a
-// descriptor shared with PiG would turn PiG's own writes into EAGAIN errors.
+// descriptor shared with Ompig would turn Ompig's own writes into EAGAIN errors.
 func (h *Host) nodeExtensionOutput(log io.Writer) (stdout, stderr io.Writer) {
 	terminal := os.Stderr
 	if h.mode == "tui" {
@@ -5111,7 +5111,7 @@ func (h *Host) nodeExtensionOutput(log io.Writer) (stdout, stderr io.Writer) {
 	return stdout, stderr
 }
 
-// extensionConsole copies an extension's output to PiG's terminal and, for
+// extensionConsole copies an extension's output to Ompig's terminal and, for
 // stderr, its log. A failed write drops that copy and keeps the pipe
 // draining, so an unwritable terminal never blocks or kills the extension.
 type extensionConsole struct {
@@ -5130,7 +5130,7 @@ func (c extensionConsole) Write(p []byte) (int, error) {
 // buildExtCommand constructs the exec.Cmd for launching an extension process.
 // Python extensions are launched via an explicit interpreter rather than
 // relying on the shebang line. When uv is available, "uv run" provides
-// faster startup and deterministic Python resolution; otherwise Pig uses the
+// faster startup and deterministic Python resolution; otherwise Ompig uses the
 // interpreter toolchain.PythonExecutable resolves: python or python3 on Windows,
 // preferring either over the Microsoft Store alias shim, and python3 on Unix.
 // Go and Rust extensions are

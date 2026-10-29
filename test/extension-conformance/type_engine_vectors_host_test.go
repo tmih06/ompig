@@ -14,14 +14,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/typebox/engine"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/typebox/engine"
 )
 
 // TestTypeEngineVectorsThroughTheHost runs every vector case the host's type engine answers (about 360 in test/parity/sdk-vectors/pi-ai/Type.json: Pick, Omit, Partial, KeyOf,
 // Mapped, Conditional, Extends, Instantiate, Cyclic, Module, Script, ...) through the Python and the Rust SDK's own `Type` members, one case at a time, against Pi's answer: the
-// schema's JSON text, its hidden members, the message TypeBox throws, or the JSON.stringify failure of a schema that holds a bigint. Each SDK dials this test's socket (PIG_EXT_SOCKET)
+// schema's JSON text, its hidden members, the message TypeBox throws, or the JSON.stringify failure of a schema that holds a bigint. Each SDK dials this test's socket (OMPIG_EXT_SOCKET)
 // for every type.engine call, as an extension dials the host's, and the socket is answered by the host's handler for the call (engine.Serve, what the subprocess host runs for
 // CallTypeEngine). The Go SDK has the same cases in TestTypeEngineMembersMatchPi (fused path) and TestConformance_TypeEngineMembersAgreeAcrossSDKs covers all three SDKs through the real
 // host with one tool; this is the case-by-case proof for Rust and Python through a socket.
@@ -59,7 +59,7 @@ func TestTypeEngineVectorsThroughTheHost(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 			defer cancel()
 			cmd := tc.cmd(ctx)
-			cmd.Env = append(append([]string(nil), os.Environ()...), "PIG_EXT_SOCKET="+socket)
+			cmd.Env = append(append([]string(nil), os.Environ()...), "OMPIG_EXT_SOCKET="+socket)
 			if tc.name == "python" {
 				cmd.Env = append(cmd.Env, "PYTHONPATH="+cmd.Dir)
 			}
@@ -83,7 +83,7 @@ func TestTypeEngineVectorsThroughTheHost(t *testing.T) {
 // SDKs expect while a call waits); it stops with the test.
 func serveTypeEngineSocket(t testing.TB) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "pig-te-")
+	dir, err := os.MkdirTemp("", "ompig-te-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -132,7 +132,7 @@ func serveTypeEngineSocket(t testing.TB) string {
 // decode of an isolated extension (a packed one dials the same socket protocol; the fused path has no socket, see BenchmarkTypeBuildThroughEngine in fusepack).
 func BenchmarkTypePickRoundTrip(b *testing.B) {
 	socket := serveTypeEngineSocket(b)
-	b.Setenv("PIG_EXT_SOCKET", socket)
+	b.Setenv("OMPIG_EXT_SOCKET", socket)
 	base := sdk.Type.Object(sdk.NewOrderedObject("id", sdk.Type.String(), "name", sdk.Type.Optional(sdk.Type.String()), "n", sdk.Type.Integer(), "tags", sdk.Type.Array(sdk.Type.String())))
 	_ = sdk.Type.Pick(base, []string{"id", "name"})
 	b.ReportAllocs()
@@ -142,10 +142,10 @@ func BenchmarkTypePickRoundTrip(b *testing.B) {
 	}
 }
 
-// TestTypePickRoundTripReport times the Python and Rust SDKs' `Type.pick` over the same socket (PIG_BENCH_TYPE_ENGINE=1, not part of the gates) and logs microseconds per call.
+// TestTypePickRoundTripReport times the Python and Rust SDKs' `Type.pick` over the same socket (OMPIG_BENCH_TYPE_ENGINE=1, not part of the gates) and logs microseconds per call.
 func TestTypePickRoundTripReport(t *testing.T) {
-	if os.Getenv("PIG_BENCH_TYPE_ENGINE") != "1" {
-		t.Skip("set PIG_BENCH_TYPE_ENGINE=1 to time the Python and Rust SDKs")
+	if os.Getenv("OMPIG_BENCH_TYPE_ENGINE") != "1" {
+		t.Skip("set OMPIG_BENCH_TYPE_ENGINE=1 to time the Python and Rust SDKs")
 	}
 	root := findModuleRoot(t)
 	for name, build := range map[string]func() *exec.Cmd{
@@ -162,7 +162,7 @@ func TestTypePickRoundTripReport(t *testing.T) {
 		},
 	} {
 		cmd := build()
-		cmd.Env = append(append([]string(nil), cmd.Environ()...), "PIG_EXT_SOCKET="+serveTypeEngineSocket(t))
+		cmd.Env = append(append([]string(nil), cmd.Environ()...), "OMPIG_EXT_SOCKET="+serveTypeEngineSocket(t))
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatalf("%s: %v\n%s", name, err, out)

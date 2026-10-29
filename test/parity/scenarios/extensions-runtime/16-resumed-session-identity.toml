@@ -4,7 +4,7 @@
 #
 # Upstream evidence (Pi 0.83.0): with the staged parity-continue session,
 # the first agent_start after /reload observes id `parity-continue` plus the
-# resolved absolute JSONL basename. Pig must publish the replacement runner's
+# resolved absolute JSONL basename. Ompig must publish the replacement runner's
 # state snapshot before dispatching that same lifecycle request.
 
 name = "16-resumed-session-identity"
@@ -19,10 +19,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--session-dir", "sessions", "-c"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--session-dir", "sessions", "-c"]
 pi_args = ["--session-dir", "sessions", "-c"]
-pig_extensions = ["testdata/ext/session-identity.mjs"]
+ompig_extensions = ["testdata/ext/session-identity.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/session-identity.mjs",
@@ -32,7 +32,7 @@ pi_extensions = [
 width = 100
 height = 35
 cwd = "../session/testdata/continue-session"
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "identity:agent_start"

@@ -4,8 +4,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // agent-session.ts sendUserMessage: an array content joins its text parts with "\n" and passes its image parts as the prompt images; a string is the text unchanged.

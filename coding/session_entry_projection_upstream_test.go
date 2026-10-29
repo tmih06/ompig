@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports session-manager.ts sessionEntryToContextMessages (:439-466) for the entry types the lax-content test does not reach: a branch summary becomes a branchSummary message (an empty

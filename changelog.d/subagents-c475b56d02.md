@@ -1,0 +1,6 @@
+### Added
+
+- Subagent runtime: the `task` tool spawns one subagent or a batch with shared `context`; `wait` blocks for the next settled result exactly once; `agents` lists, reads, messages, revives and kills them. Each spawn runs a real child session with its own transcript, tools, model and token accounting, writes `agent://<id>` output plus a structured sidecar, and can be steered while running or revived from its transcript after being parked or killed.
+- Agent definitions from `.ompig/agents/*.md` and `<agent dir>/agents/*.md`, with `tools`, `spawns`, `model`, `thinking-level` and `blocking` frontmatter, overriding five bundled agents (`task`, `scout`, `sonic`, `reviewer`, `security-reviewer`).
+- Agent Hub (`alt+a`): a roster ordered running, idle, parked, then aborted, with per-agent status, current tool, model, elapsed time, tokens, requests, tool calls and cost, an inspector pane on wide terminals, a parent/child tree view, a combined activity log and a filter. Keys: `j`/`k` select, `enter` opens the transcript, `m` messages, `r` revives, `x` kills, `1`/`2` switch panes, `/` filters, `esc` closes.
+- [Subagents](subagents.md) documents spawning, definitions, artifacts, background execution and the hub.

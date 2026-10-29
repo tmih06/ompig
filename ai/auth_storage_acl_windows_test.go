@@ -9,8 +9,8 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/ownerfile"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/ownerfile"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func authFileSDDL(t *testing.T, path string) string {
@@ -23,7 +23,7 @@ func authFileSDDL(t *testing.T, path string) string {
 	return descriptor.String()
 }
 
-// Pi auth-storage.ts:24-25 applies its 0600 mode only when writeFileSync creates auth.json and rewrites an existing file in place, so administrator-managed ACLs remain intact. On Windows Node maps that mode to no DACL (libuv sets only the read-only attribute), while PiG creates the file through ownerfile.CreateNew with a protected current-user DACL (D68). Every write path must leave the DACL as it found it, both PiG's creation-time DACL and an administrator's replacement.
+// Pi auth-storage.ts:24-25 applies its 0600 mode only when writeFileSync creates auth.json and rewrites an existing file in place, so administrator-managed ACLs remain intact. On Windows Node maps that mode to no DACL (libuv sets only the read-only attribute), while Ompig creates the file through ownerfile.CreateNew with a protected current-user DACL (D68). Every write path must leave the DACL as it found it, both Ompig's creation-time DACL and an administrator's replacement.
 func TestAuthStoragePreservesExistingACL(t *testing.T) {
 	cases := []struct {
 		name      string

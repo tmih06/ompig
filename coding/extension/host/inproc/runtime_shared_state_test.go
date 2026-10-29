@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: runner.ts:666-670 setFlagValue/getFlagValues read and write runtime.flagValues, the map the loader fills with flag defaults and every runner sharing the runtime sees.
@@ -99,7 +99,7 @@ func (s *providerRegistryStub) UnregisterProvider(name string) {
 	s.unregistred = append(s.unregistred, name)
 }
 
-// A host binds its own provider actions to the shared runtime (cmd/pig wraps the registry calls so each registration starts the registry refresh). Runner.BindCore on that runtime composes with them: the model registry never replaces a host-bound action, so the host's work after each registration still runs.
+// A host binds its own provider actions to the shared runtime (cmd/ompig wraps the registry calls so each registration starts the registry refresh). Runner.BindCore on that runtime composes with them: the model registry never replaces a host-bound action, so the host's work after each registration still runs.
 func TestBindCoreKeepsTheActionsAHostBoundToTheSharedRuntime(t *testing.T) {
 	runtime := extension.CreateExtensionRuntime()
 	var hostCalls []string

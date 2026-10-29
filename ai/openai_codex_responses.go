@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 const defaultCodexBaseURL = "https://chatgpt.com/backend-api"
@@ -48,7 +48,7 @@ func NewOpenAICodexResponsesProvider(cfg OpenAICodexResponsesConfig) Provider {
 	// Defaults first so model and caller headers can override them (openai-codex-responses.ts buildBaseCodexHeaders, #10429).
 	extraHeaders := map[string]string{
 		"OpenAI-Beta": "responses=experimental",
-		// pig divergence (D26): PiG names itself as the Codex originator.
+		// ompig divergence (D26): Ompig names itself as the Codex originator.
 		"originator": pigidentity.CodexOriginator,
 	}
 	for name, value := range cfg.ExtraHeaders {

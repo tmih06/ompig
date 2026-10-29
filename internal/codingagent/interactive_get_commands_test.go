@@ -5,9 +5,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi agent-session.ts:3361-3384 (_bindExtensionCore getCommands) is bound to the runtime every extension context reads (runner.ts:433, types.ts:2170) in every mode. Interactive mode binds it to the published catalog: the runner's extension commands, then the prompt templates, then the skills, each with its own sourceInfo.

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 // nselNode returns c's node as a selector.

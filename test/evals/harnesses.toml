@@ -4,7 +4,7 @@
 #
 #   name        display name
 #   npm         packages that `make setup SETUP_ARGS=--harnesses=<id>` installs
-#   bin         executable under the install prefix; "{pig}" is this checkout's bin/pig
+#   bin         executable under the install prefix; "{ompig}" is this checkout's bin/ompig
 #   api         protocol the harness speaks to the mock model:
 #               openai-completions, openai-responses, anthropic-messages, or none
 #   config      how pigeval points the harness at the mock: pi-models, opencode, or none
@@ -22,17 +22,17 @@
 # Placeholders: {prompt}, {model} (provider/id), {model_id}, {session},
 # {base_url}, {home}. Versions are pinned so results stay comparable.
 
-[pig]
-name = "PiG"
-bin = "{pig}"
+[ompig]
+name = "Ompig"
+bin = "{ompig}"
 own_version = ["version"]
 api = "openai-completions"
 config = "pi-models"
-config_dir = ".pig/agent"
+config_dir = ".ompig/agent"
 print = ["--provider", "bench", "--model", "bench-1", "--no-session", "-p", "{prompt}"]
 session = ["--provider", "bench", "--model", "bench-1", "--session", "{session}", "-p", "{prompt}"]
 live = ["--mode", "json", "--no-session", "--model", "{model}", "-p", "{prompt}"]
-env = { PIG_HOME = "{home}/.pig", PIG_OFFLINE = "1", PI_OFFLINE = "1" }
+env = { OMPIG_HOME = "{home}/.ompig", OMPIG_OFFLINE = "1", PI_OFFLINE = "1" }
 
 [pi]
 name = "Pi"

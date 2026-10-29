@@ -9,11 +9,11 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // answering is a Models whose only provider is a faux one answering every request with text.

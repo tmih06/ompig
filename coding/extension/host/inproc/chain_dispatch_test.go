@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // extWithContextHandler wraps a typed context handler.
@@ -209,7 +209,7 @@ func TestEmitContext_SubprocessMessagesNotAListIsHandlerError(t *testing.T) {
 	}}
 	replacing := newFakeExtension("/ext/replacing")
 	replacing.Handlers["context"] = []extension.HandlerFn{func(...any) (any, error) {
-		return json.RawMessage(`{"messages":[{"role":"custom","content":"replaced"}],"_pigContextUnchanged":false}`), nil
+		return json.RawMessage(`{"messages":[{"role":"custom","content":"replaced"}],"_ompigContextUnchanged":false}`), nil
 	}}
 	r := inproc.NewRunner([]extension.Extension{malformed, replacing}, ".")
 	var failures []string
@@ -234,11 +234,11 @@ func TestEmitContext_SubprocessMessagesNotAListIsHandlerError(t *testing.T) {
 // handlerResult.messages as they are: a returned message without a role is no handler error, the
 // next handler sees it, and convertToLlm (messages.ts:189-195) drops it from the request later.
 // Probed with Pi 1.1.0: a Node context handler returning [{content:"no role"}, ...messages] gives
-// the next handler roles [null, "user"] in both Pi and PiG.
+// the next handler roles [null, "user"] in both Pi and Ompig.
 func TestEmitContext_SubprocessMessageWithoutRoleIsKeptLikePi(t *testing.T) {
 	roleless := newFakeExtension("/ext/roleless")
 	roleless.Handlers["context"] = []extension.HandlerFn{func(...any) (any, error) {
-		return json.RawMessage(`{"messages":[{"content":"no role"}],"_pigContextUnchanged":false}`), nil
+		return json.RawMessage(`{"messages":[{"content":"no role"}],"_ompigContextUnchanged":false}`), nil
 	}}
 	var seen []string
 	observer := newFakeExtension("/ext/observer")

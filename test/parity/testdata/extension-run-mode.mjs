@@ -1,4 +1,4 @@
-// extension-run-mode.mjs records the ctx.mode its session_start handler reads, for the run-mode scenario that runs Pi and PiG alike.
+// extension-run-mode.mjs records the ctx.mode its session_start handler reads, for the run-mode scenario that runs Pi and Ompig alike.
 import { appendFileSync } from "node:fs";
 
 export default function extensionRunMode(pi) {

@@ -1,7 +1,7 @@
 {
  "from": "0.99.2",
  "note": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review.",
- "noteWhenChanged": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface.",
+ "noteWhenChanged": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface.",
  "changedModules": [
   "models#"
  ],

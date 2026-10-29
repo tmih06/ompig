@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi packages/codemode/src/runtime/inline.ts:39 DEFAULT_INTERRUPT_BUDGET = 100_000 and :42 INLINE_MAX_STACK_SIZE = 256 * 1024: the

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:471 createLoopConfig copies `model: this._state.model` and `reasoning` into the run's config once, and agent-loop.ts:403 streams every request of the run with that config.model. Assigning state.model during a run (from a tool here) does not change the run's later requests; the next run starts with the assigned model. Only prepareNextTurn/prepareRequest updates (agent-loop.ts:192,231) change the model mid-run.

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type reloadOracleCase struct {

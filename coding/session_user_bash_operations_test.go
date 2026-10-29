@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // recordingOperations stands in for an extension's remote execution.

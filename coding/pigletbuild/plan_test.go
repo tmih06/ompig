@@ -62,8 +62,8 @@ func TestBuildPlanUsesBuilderCrossToolchains(t *testing.T) {
 	}
 }
 
-// A Piglet whose listed extensions resolve to none still fails with the old
-// error; a Piglet that lists none (an empty base) builds.
+// A Ompiglet whose listed extensions resolve to none still fails with the old
+// error; a Ompiglet that lists none (an empty base) builds.
 func TestValidateRejectsUnresolvedPigletsAndAcceptsEmptyBases(t *testing.T) {
 	host := Target{OS: "darwin", Arch: "arm64"}
 	plan := BuildPlan([]ExtensionInput{{Name: "go", Language: Go, Fusible: true}}, Options{
@@ -77,10 +77,10 @@ func TestValidateRejectsUnresolvedPigletsAndAcceptsEmptyBases(t *testing.T) {
 	}
 	empty := BuildPlan(nil, Options{Targets: []Target{host}, Sandbox: Sandbox{Native: host}})
 	verdict := Validate(empty, []string{`extension "missing": no origin resolved`}, 1, 0, false, false)
-	if verdict.OK || !slices.Equal(verdict.Blockers, []string{`unresolved extension: extension "missing": no origin resolved`, "piglet resolves to no extensions"}) {
+	if verdict.OK || !slices.Equal(verdict.Blockers, []string{`unresolved extension: extension "missing": no origin resolved`, "ompiglet resolves to no extensions"}) {
 		t.Fatalf("listed but unresolved verdict = %#v", verdict)
 	}
-	if verdict := Validate(empty, nil, 1, 0, false, false); verdict.OK || !slices.Equal(verdict.Blockers, []string{"piglet resolves to no extensions"}) {
+	if verdict := Validate(empty, nil, 1, 0, false, false); verdict.OK || !slices.Equal(verdict.Blockers, []string{"ompiglet resolves to no extensions"}) {
 		t.Fatalf("listed scoping-only verdict = %#v", verdict)
 	}
 	if verdict := Validate(empty, nil, 0, 0, false, false); !verdict.OK {

@@ -12,20 +12,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // An extension's `await ctx.reload()` in the TUI of the real binary: the same log as the headless modes (TestExtensionReloadIsWiredInEveryHeadlessMode), where the old instance's command resolves after the reload and the new instance's session_start sees the reloaded state. Interactive quits through its own shutdown, so the log ends at "returned".
 func TestExtensionReloadResolvesInInteractiveMode(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and extensions")
+		t.Skip("builds the ompig binary and extensions")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	for _, language := range []string{"node", "go"} {
 		t.Run(language, func(t *testing.T) {
 			extension := writeReloadProbe(t, language)
 			home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-			agentDir := filepath.Join(home, "pig")
+			agentDir := filepath.Join(home, "ompig")
 			if err := os.MkdirAll(agentDir, 0o755); err != nil {
 				t.Fatal(err)
 			}
@@ -33,7 +33,7 @@ func TestExtensionReloadResolvesInInteractiveMode(t *testing.T) {
 				t.Fatal(err)
 			}
 			logPath := filepath.Join(t.TempDir(), "reload.log")
-			env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath, "TERM=xterm-256color"}
+			env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath, "TERM=xterm-256color"}
 			master, slave := openPTY(t, 40, 160)
 			ctx, cancel := context.WithTimeout(t.Context(), testbudget.Wait(t))
 			defer cancel()
@@ -78,7 +78,7 @@ func TestExtensionReloadResolvesInInteractiveMode(t *testing.T) {
 				select {
 				case <-done:
 					data, _ := os.ReadFile(logPath)
-					t.Fatalf("pig exited early; log:\n%s\nscreen:\n%s", data, output.since(0))
+					t.Fatalf("ompig exited early; log:\n%s\nscreen:\n%s", data, output.since(0))
 				case <-time.After(50 * time.Millisecond):
 				}
 			}

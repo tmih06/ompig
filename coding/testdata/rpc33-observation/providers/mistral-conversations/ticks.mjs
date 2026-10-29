@@ -12,8 +12,8 @@
 // a body that ends without a terminal event.
 //
 // usage: node ticks.mjs <out.json>     (env PI_PACKAGE_ROOT = the installed pi-coding-agent package)
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
@@ -128,4 +128,4 @@ async function run(name, { chunks, end }) {
 
 const out = [];
 for (const [name, scenario] of Object.entries(scenarios)) out.push(await run(name, scenario));
-await writeFile(process.argv[2], JSON.stringify({ piVersion: PIG_UPSTREAM_VERSION, node: process.version, scenarios: out }, null, 2) + '\n');
+await writeFile(process.argv[2], JSON.stringify({ piVersion: OMPIG_UPSTREAM_VERSION, node: process.version, scenarios: out }, null, 2) + '\n');

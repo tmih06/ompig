@@ -10,7 +10,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A source tree is thousands of small files and a few large ones. Hashing it for a build lock must not allocate per
@@ -98,16 +98,16 @@ func TestPigSourceIdentityStreamsEveryFile(t *testing.T) {
 	var revision, digest string
 	var err error
 	allocated := allocatedBy(func() {
-		revision, digest, err = pigSourceIdentity(pigSource{Root: root, ModuleVersion: "v0.0.0-test"})
+		revision, digest, err = ompigSourceIdentity(ompigSource{Root: root, ModuleVersion: "v0.0.0-test"})
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if revision != "v0.0.0-test" || digest != want {
-		t.Fatalf("pigSourceIdentity = %q, %q; want v0.0.0-test, %s", revision, digest, want)
+		t.Fatalf("ompigSourceIdentity = %q, %q; want v0.0.0-test, %s", revision, digest, want)
 	}
 	if allocated > treeAllocBudget {
-		t.Errorf("pigSourceIdentity allocated %d bytes for a %d-file tree; it must stream through one buffer (budget %d)", allocated, len(paths), treeAllocBudget)
+		t.Errorf("ompigSourceIdentity allocated %d bytes for a %d-file tree; it must stream through one buffer (budget %d)", allocated, len(paths), treeAllocBudget)
 	}
 }
 
@@ -153,11 +153,11 @@ func TestPigSourceIdentityHashesASymlinkByItsTarget(t *testing.T) {
 		_, _ = hash.Write([]byte(entry.name + "\x00" + entry.mode + "\x00" + entry.content + "\x00"))
 	}
 	want := "sha256:" + hex.EncodeToString(hash.Sum(nil))
-	_, got, err := pigSourceIdentity(pigSource{Root: root, ModuleVersion: "v0.0.0-test"})
+	_, got, err := ompigSourceIdentity(ompigSource{Root: root, ModuleVersion: "v0.0.0-test"})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if got != want {
-		t.Fatalf("pigSourceIdentity = %s; want %s", got, want)
+		t.Fatalf("ompigSourceIdentity = %s; want %s", got, want)
 	}
 }

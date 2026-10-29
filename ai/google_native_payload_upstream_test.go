@@ -1,4 +1,4 @@
-//go:build !pig_strip_google_vertex
+//go:build !ompig_strip_google_vertex
 
 package ai
 

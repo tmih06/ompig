@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func TestUIBridge_Snapshot_ReadsCallbacks(t *testing.T) {
@@ -100,7 +100,7 @@ func TestStatePayload_RoundTrip(t *testing.T) {
 	}
 }
 
-// The getAllTools host call carries PiG's per-tool source, which the Go, Rust and Python SDKs' ToolInfo exposed before sourceInfo existed.
+// The getAllTools host call carries Ompig's per-tool source, which the Go, Rust and Python SDKs' ToolInfo exposed before sourceInfo existed.
 func TestGetAllToolsHostCallKeepsTheSDKSourceField(t *testing.T) {
 	b := NewUIBridge(func() {})
 	b.SetActions(&HostCallbacks{GetAllTools: func() []ToolInfo {

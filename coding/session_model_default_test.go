@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // AgentSession.setModel defaults persist to false, including the cycle path.

@@ -10,7 +10,7 @@ import (
 // retry; only a removal that succeeds, or finds nothing, is final.
 func TestPackedStderrLogRemoveRetriesAfterFailure(t *testing.T) {
 	// A non-empty directory makes os.Remove fail on every platform.
-	path := filepath.Join(t.TempDir(), "pig-packed-cell.log")
+	path := filepath.Join(t.TempDir(), "ompig-packed-cell.log")
 	if err := os.Mkdir(path, 0o700); err != nil {
 		t.Fatal(err)
 	}

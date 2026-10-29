@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/src/core/model-registry.ts getAll, getAvailable, hasConfiguredAuth (the registry facade delegates to ModelRuntime and returns pi-ai Model objects, whose cost is part of the model).

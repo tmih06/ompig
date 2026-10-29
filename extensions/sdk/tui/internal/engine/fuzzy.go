@@ -10,7 +10,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/jsstring"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/jsstring"
 )
 
 // FuzzyMatch is the result of matching a single query against a text.

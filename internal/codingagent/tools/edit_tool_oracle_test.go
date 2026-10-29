@@ -13,8 +13,8 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type editToolScenario struct {
@@ -195,7 +195,7 @@ func TestEditToolMatchesPi(t *testing.T) {
 		args, _ := json.Marshal(scenario.Args)
 		files, _ := json.Marshal(scenario.Files)
 		e, _ := json.Marshal(expected[i])
-		t.Errorf("scenario %d\n  args %.600s\n  files %.400s\n  Pig %.900s\n  Pi  %.900s", i, args, files, raw, e)
+		t.Errorf("scenario %d\n  args %.600s\n  files %.400s\n  Ompig %.900s\n  Pi  %.900s", i, args, files, raw, e)
 	}
 	if failures > 6 {
 		t.Errorf("%d of %d scenarios differ from Pi", failures, len(scenarios))

@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent-session.ts _installAgentRequestProjection preserves the Session projection even when compaction places a summary before its retained instruction entry.

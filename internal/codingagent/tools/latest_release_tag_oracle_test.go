@@ -3,7 +3,7 @@ package tools
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // getLatestVersion's redirect parsing (utils/tools-manager.ts:133-139) is not exported by Pi's module, so the oracle body transcribes it and runs it on Node's own URL and decodeURIComponent: the Location header is resolved against https://github.com, its last path segment is the tag.

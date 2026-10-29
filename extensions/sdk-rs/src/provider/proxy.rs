@@ -173,7 +173,7 @@ impl Proxy {
         state.workers.start();
         let workers = state.workers.clone();
         if let Err(err) = std::thread::Builder::new()
-            .name("pig-provider-stream".into())
+            .name("ompig-provider-stream".into())
             .spawn(move || {
                 let error =
                     std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| operation.wait()))

@@ -23,8 +23,8 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/env/node"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/env/node"
 )
 
 // deployedName is what a daemon with this content is called on the remote machine.

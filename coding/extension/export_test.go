@@ -3,7 +3,7 @@ package extension
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/internal/childwait"
+	"github.com/tmih06/ompig/internal/childwait"
 )
 
 // WithExecDrainHooks returns ctx carrying hooks for the ExecCommand call that

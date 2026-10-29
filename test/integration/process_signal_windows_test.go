@@ -35,7 +35,7 @@ func prepareTermination(cmd *exec.Cmd) {
 // requestTermination sends Ctrl+Break to p's process group. Go reports Ctrl+C
 // and Ctrl+Break as SIGINT, and a new process group receives only Ctrl+Break,
 // so this is the interrupt a user's Ctrl+C delivers. It returns the exit
-// status pig reports for it: 128 plus SIGINT's number.
+// status ompig reports for it: 128 plus SIGINT's number.
 func requestTermination(p *os.Process) (int, error) {
 	return 128 + int(syscall.SIGINT), windows.GenerateConsoleCtrlEvent(windows.CTRL_BREAK_EVENT, uint32(p.Pid))
 }

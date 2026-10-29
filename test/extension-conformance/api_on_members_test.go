@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_ExtensionAPIOnMembersCoverEverySubscribedEvent pins the Go reference API to the conformance event list (Pi types.ts:1558-1642,

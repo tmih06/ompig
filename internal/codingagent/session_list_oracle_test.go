@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type listedSession struct {
@@ -85,7 +85,7 @@ func TestListSessionsMatchesPi(t *testing.T) {
 		"note.txt":            hdr(""),
 	}
 	maps.Copy(files, randomSessionListFiles(cwd))
-	dirs := [2]string{filepath.Join(work, "pig"), filepath.Join(work, "pi")}
+	dirs := [2]string{filepath.Join(work, "ompig"), filepath.Join(work, "pi")}
 	for _, d := range dirs {
 		if err := os.MkdirAll(d, 0o755); err != nil {
 			t.Fatal(err)
@@ -151,7 +151,7 @@ emit(infos.map((s) => ({ file: path.basename(s.path), id: typeof s.id === "strin
 	}
 	for i := 0; i < len(got) && i < len(want); i++ {
 		if !reflect.DeepEqual(got[i], want[i]) {
-			t.Errorf("session %d:\n  Pig %s %s", i, describeListed(got[i]), "\n  Pi  "+describeListed(want[i]))
+			t.Errorf("session %d:\n  Ompig %s %s", i, describeListed(got[i]), "\n  Pi  "+describeListed(want[i]))
 		}
 	}
 }

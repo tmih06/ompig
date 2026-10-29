@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
-// hostPython is the interpreter PiG itself launches: python3, or on Windows
+// hostPython is the interpreter Ompig itself launches: python3, or on Windows
 // the python.exe that actions/setup-python installs and no python3.
 func hostPython() string {
 	return toolchain.PythonExecutable(runtime.GOOS, exec.LookPath)
@@ -55,7 +55,7 @@ func TestNpmRuntimeRemovesAdvisoryOverridesFromBundledNpm(t *testing.T) {
 		t.Fatal(err)
 	}
 	for dependency := range manifest.Overrides {
-		bundledPath := "/opt/pig/npm/node_modules/npm/node_modules/" + dependency
+		bundledPath := "/opt/ompig/npm/node_modules/npm/node_modules/" + dependency
 		if !strings.Contains(string(dockerfile), bundledPath) {
 			t.Errorf("parity image does not remove npm's bundled %s", dependency)
 		}

@@ -3,8 +3,8 @@ package codemode_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	codemode "github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/coding/extension"
+	codemode "github.com/tmih06/ompig/coding/extension/builtin/codemode"
 )
 
 // mustDescription is CreateDescription for tests whose schemas hold only decodable references.

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // tree-selector.ts:862-885 formatLabelTimestamp against the pinned Pi TreeList for ISO timestamps across the whole Date range (same day, same year, other

@@ -21,7 +21,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // Polling bounds: the first poll after grace, then backoff doubling up to maxDelay.

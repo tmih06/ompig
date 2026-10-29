@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/session/sessiontest"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/session/sessiontest"
 )
 
 // session.ts watchDoc (268-302): the address is resolved before the job is queued (271), and the job re-checks the Session's health (281) and the

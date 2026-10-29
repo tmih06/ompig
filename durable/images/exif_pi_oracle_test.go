@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/images"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable/images"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's own tools-images.test.ts exercises exifOrientation on well-formed JPEG and WebP inputs. The inputs below are the
@@ -257,14 +257,14 @@ func TestExifOrientationMatchesPiOnMalformedAndBoundaryInputs(t *testing.T) {
 		got := func() (orientation int) {
 			defer func() {
 				if recovered := recover(); recovered != nil {
-					t.Errorf("%s: PiG panicked (%v), Pi answers %d", c.name, recovered, pi[i])
+					t.Errorf("%s: Ompig panicked (%v), Pi answers %d", c.name, recovered, pi[i])
 					orientation = -1
 				}
 			}()
 			return images.ExifOrientation(c.data)
 		}()
 		if got != -1 && got != pi[i] {
-			t.Errorf("%s: PiG orientation %d, Pi %d", c.name, got, pi[i])
+			t.Errorf("%s: Ompig orientation %d, Pi %d", c.name, got, pi[i])
 		}
 	}
 	// The corpus has to reach every orientation Pi can answer, or it would pass on a constant.

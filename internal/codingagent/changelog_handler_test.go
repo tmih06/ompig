@@ -1,4 +1,4 @@
-//go:build !pig_strip_changelog
+//go:build !ompig_strip_changelog
 
 package codingagent
 

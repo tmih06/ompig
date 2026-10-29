@@ -11,8 +11,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // BuildModel constructs an *ai.Model from a "provider/model" spec
@@ -200,7 +200,7 @@ func buildLeafProviderForEntry(providerID, modelID string, apiKind ai.API, entry
 	extraHeaders := cloneStringMap(entry.Headers)
 
 	if providerID == "test-faux" && !resolvedAuth {
-		if os.Getenv("PIG_TEST_FAUX") != "1" {
+		if os.Getenv("OMPIG_TEST_FAUX") != "1" {
 			return nil, fmt.Errorf("coding: BuildModel: test-faux is disabled")
 		}
 		return svcs.testFauxProvider(), nil
@@ -338,7 +338,7 @@ func buildLeafProviderForEntry(providerID, modelID string, apiKind ai.API, entry
 			ThinkingLevelMap: cloneThinkingLevelMap(entry.ThinkingLevelMap),
 		}), nil
 	case ai.APIGoogleVertex:
-		// pig additive (D92): the google-vertex, bedrock-converse-stream and mistral-conversations constructors report a stripped API (strip.apis).
+		// ompig additive (D92): the google-vertex, bedrock-converse-stream and mistral-conversations constructors report a stripped API (strip.apis).
 		return ai.NewGoogleVertexAPIProvider(ai.GoogleVertexConfig{
 			ModelMetadata:    modelFromEntry(entry, nil),
 			BaseURL:          baseURL,

@@ -71,7 +71,7 @@ func signalMask(line, field string) (uint64, error) {
 // through 31), not the launcher's state.
 func TestTerminalProgramGetsDefaultSignalsWhenTheDaemonStartedIgnoringThem(t *testing.T) {
 	// resetSignals is the signals 1 through 31, the ones pty.rs's pre_exec hook sets to their default (`for signal in 1..32`).
-	// A signal above them keeps the disposition the program's ancestry gave it, in Pi's daemon as in PiG's: glibc's posix_spawn,
+	// A signal above them keeps the disposition the program's ancestry gave it, in Pi's daemon as in Ompig's: glibc's posix_spawn,
 	// which GNU make 4.4 runs its recipes with, leaves SIGCANCEL (32) and SIGSETXID (33), signals glibc keeps for itself and
 	// sigaction refuses to change, ignored in every process below a recipe, so a test run by `make test` sees 0x80000000.
 	const resetSignals = 1<<31 - 1 // bit n-1 is signal n

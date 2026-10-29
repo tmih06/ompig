@@ -7,9 +7,9 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // The pinned Pi CodemodeSandbox and codemode.Sandbox run the same scripts: the returned value, the output items and the error kind, name and message must be equal.
@@ -50,7 +50,7 @@ func TestScriptOutcomesMatchPi(t *testing.T) {
 		`(async () => { throw new Error("late") })(); return 1`, `let r; await new Promise((res) => { r = res }); `, `return await (async function* () { yield 1 })().next()`,
 		`return ["a", "B", "c"].sort((x, y) => x.localeCompare(y))`, `return (1234567.891).toLocaleString()`, `return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(1234.5)`,
 	}
-	// Returning an Error is left out: D145 records that PiG's prelude serializes an Error's name and message where Pi's gives {}.
+	// Returning an Error is left out: D145 records that Ompig's prelude serializes an Error's name and message where Pi's gives {}.
 	wasmPath, err := filepath.Abs("assets/quickjs.wasm")
 	if err != nil {
 		t.Fatal(err)
@@ -111,7 +111,7 @@ emit(JSON.parse(child.stdout));
 			return false
 		}() {
 			if bad++; bad <= 12 {
-				t.Errorf("%s\n  PiG %+v\n  Pi  %+v", script, got, want[i])
+				t.Errorf("%s\n  Ompig %+v\n  Pi  %+v", script, got, want[i])
 			}
 		}
 	}

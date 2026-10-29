@@ -354,7 +354,7 @@ go = "Context.GetFlag"
 
 [[row]]
 key = "pi.on(\"after_provider_response\")"
-partial = "subscribable, but PiG's host does not emit after_provider_response yet (host gap shared with in-process extensions)"
+partial = "subscribable, but Ompig's host does not emit after_provider_response yet (host gap shared with in-process extensions)"
 
 [[row]]
 key = "session_before_compact event.signal"
@@ -703,7 +703,7 @@ go = "DialogOptions.Timeout"
 rust = "DialogOptions.timeout"
 python = "Context.select(timeout)"
 wire = "literal:timeout"
-partial = "RPC mode honors the timeout; PiG's interactive dialogs ignore it for every extension (host gap shared with in-process extensions)"
+partial = "RPC mode honors the timeout; Ompig's interactive dialogs ignore it for every extension (host gap shared with in-process extensions)"
 
 [[row]]
 key = "ctx.ui.confirm(opts.signal)"
@@ -723,7 +723,7 @@ go = "DialogOptions.Timeout"
 rust = "DialogOptions.timeout"
 python = "Context.confirm(timeout)"
 wire = "literal:timeout"
-partial = "RPC mode honors the timeout; PiG's interactive dialogs ignore it for every extension (host gap shared with in-process extensions)"
+partial = "RPC mode honors the timeout; Ompig's interactive dialogs ignore it for every extension (host gap shared with in-process extensions)"
 
 [[row]]
 key = "ctx.ui.input(opts.signal)"
@@ -743,7 +743,7 @@ go = "DialogOptions.Timeout"
 rust = "DialogOptions.timeout"
 python = "Context.input(timeout)"
 wire = "literal:timeout"
-partial = "RPC mode honors the timeout; PiG's interactive dialogs ignore it for every extension (host gap shared with in-process extensions)"
+partial = "RPC mode honors the timeout; Ompig's interactive dialogs ignore it for every extension (host gap shared with in-process extensions)"
 
 [[row]]
 key = "ctx.ui.setWorkingIndicator(options.frames)"
@@ -830,7 +830,7 @@ key = "ctx.ui.addAutocompleteProvider"
 
 [[row]]
 key = "ctx.ui.setEditorComponent"
-node_partial = "the factory runs once inside the extension; its CustomEditor decoration (border color, mode label, history) is forwarded to PiG's editor (D73)"
+node_partial = "the factory runs once inside the extension; its CustomEditor decoration (border color, mode label, history) is forwarded to Ompig's editor (D73)"
 
 [[row]]
 key = "ctx.ui.getEditorComponent"
@@ -963,7 +963,7 @@ go = "UITheme.GetBashModeBorderColor"
 [[row]]
 key = "tool.promptSnippet"
 wire = "subprocess.ToolDecl.prompt_snippet"
-partial = "reaches the host's tool definition, but PiG's system prompt does not yet list extension tools' snippets (host gap shared with in-process extensions)"
+partial = "reaches the host's tool definition, but Ompig's system prompt does not yet list extension tools' snippets (host gap shared with in-process extensions)"
 
 [[row]]
 key = "tool.execute"
@@ -1486,7 +1486,7 @@ node = "read:payload.options"
 python = "Extension.entry_renderer"
 wire = "literal:expanded"
 
-# ── PiG additive: component kit (D107) ─────────────────────────────────────
+# ── Ompig additive: component kit (D107) ─────────────────────────────────────
 #
 # docs/plan/extension-component-kit.md §9: the kit's author API in each SDK.
 # Node authors use Pi's own components, from which the runtime derives the

@@ -19,19 +19,19 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/changeobservers"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
-	"github.com/MichaelKinsy/PiG/internal/text"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/changeobservers"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/text"
+	"github.com/tmih06/ompig/tui"
 )
 
 // PackageSource mirrors upstream settings-manager.ts PackageSource.
@@ -503,7 +503,7 @@ func (q *QuietStartup) UnmarshalJSON(data []byte) error {
 type Settings struct {
 	// ignored names each setting dropped for its wrong JSON type, with the type it expects. Loading reports it once (D158).
 	ignored []string
-	// extra holds the top-level members PiG does not model, as written, after migrateSettings: Pi keeps every member of the file, so
+	// extra holds the top-level members Ompig does not model, as written, after migrateSettings: Pi keeps every member of the file, so
 	// getGlobalSettings returns them, deepMergeSettings merges them and JSON.stringify writes them.
 	extra                map[string]json.RawMessage
 	DefaultProvider      string `json:"defaultProvider,omitempty"`
@@ -631,12 +631,12 @@ type Settings struct {
 	// MaskSecretInput controls configurable login-input privacy. Nil means true; false restores Pi's plain-text prompts.
 	MaskSecretInput *bool `json:"maskSecretInput,omitempty"`
 
-	// ExtensionsAutoUpgrade runs the Go extension upgrade rules without asking when an extension fails to build for an older SDK, and after `pig update`. Global setting only; nil means false.
-	// pig additive (D109): Pi loads extension source in process and has no SDK to drift from. Pi's `extensions` setting is an array, so the key cannot nest under it.
+	// ExtensionsAutoUpgrade runs the Go extension upgrade rules without asking when an extension fails to build for an older SDK, and after `ompig update`. Global setting only; nil means false.
+	// ompig additive (D109): Pi loads extension source in process and has no SDK to drift from. Pi's `extensions` setting is an array, so the key cannot nest under it.
 	ExtensionsAutoUpgrade *bool `json:"extensionsAutoUpgrade,omitempty"`
 
-	// ExtensionsTypescriptRuntime names the runtime that runs TypeScript and JavaScript extensions: "node" (the default) or a runtime an extension or Piglet installed into the runtime slot. PIG_TS_RUNTIME overrides it. Global setting only.
-	// pig additive (D19): Pi runs extensions inside its own Node process. Pi's `extensions` setting is an array, so the key cannot nest under it.
+	// ExtensionsTypescriptRuntime names the runtime that runs TypeScript and JavaScript extensions: "node" (the default) or a runtime an extension or Ompiglet installed into the runtime slot. OMPIG_TS_RUNTIME overrides it. Global setting only.
+	// ompig additive (D19): Pi runs extensions inside its own Node process. Pi's `extensions` setting is an array, so the key cannot nest under it.
 	ExtensionsTypescriptRuntime *string `json:"extensionsTypescriptRuntime,omitempty"`
 
 	// CollapseChangelog shows condensed startup update notices. The /changelog command always shows every released entry.
@@ -657,7 +657,7 @@ type Settings struct {
 	EnableSkillCommands *bool `json:"enableSkillCommands,omitempty"`
 
 	// EnableInstallTelemetry controls whether package-install telemetry may be sent
-	// by pig-specific install telemetry hooks when they are configured.
+	// by ompig-specific install telemetry hooks when they are configured.
 	// Default: true.
 	// Mirrors upstream settings.enableInstallTelemetry (settings-manager.ts), but
 	// the transport itself is a separate implementation concern.
@@ -1061,7 +1061,7 @@ func (s Settings) themeSetting() *string {
 	return new(s.Theme)
 }
 
-// MarshalJSON emits upstream's settings wire shape while preserving pig's
+// MarshalJSON emits upstream's settings wire shape while preserving ompig's
 // internal flattened representation.
 func (s Settings) MarshalJSON() ([]byte, error) {
 	w := settingsWire{
@@ -1371,7 +1371,7 @@ func (s *Settings) UnmarshalJSON(data []byte) error {
 // reads settings with JSON.parse, which never rejects a file for one field's
 // type, so a field whose JSON type does not match is dropped and the rest of
 // the file still loads.
-// pig divergence (D158): a value of the wrong JSON type is dropped here instead of reaching code that throws, as Pi's does.
+// ompig divergence (D158): a value of the wrong JSON type is dropped here instead of reaching code that throws, as Pi's does.
 func decodeSettingsWire(raw map[string]any) (settingsWire, []string, error) {
 	sanitized := false
 	var ignored []string
@@ -1522,7 +1522,7 @@ func (s Settings) GetCommandPrefix() string      { return s.CommandPrefix }
 
 // GetMaskSecretInput returns the login-input privacy setting, enabled by default.
 func (s Settings) GetMaskSecretInput() bool {
-	// pig divergence (D80): the user can restore Pi's plain-text input behavior with false.
+	// ompig divergence (D80): the user can restore Pi's plain-text input behavior with false.
 	return s.MaskSecretInput == nil || *s.MaskSecretInput
 }
 
@@ -1857,8 +1857,8 @@ func NewSettingsManagerWithOptions(cwd, agentDir string, options SettingsManager
 	return sm
 }
 
-// DefaultAgentDir is Pi's getAgentDir (config.ts): the directory named by the agent directory variable (PIG_CODING_AGENT_DIR, or PI_CODING_AGENT_DIR when
-// PIG_USE_PI_DIRS=1) with a leading tilde expanded, else Pi's ~/.pi/agent in shared mode, else <ConfigRoot>/agent. It panics with a [configroot.UnresolvedError]
+// DefaultAgentDir is Pi's getAgentDir (config.ts): the directory named by the agent directory variable (OMPIG_CODING_AGENT_DIR, or PI_CODING_AGENT_DIR when
+// OMPIG_USE_PI_DIRS=1) with a leading tilde expanded, else Pi's ~/.pi/agent in shared mode, else <ConfigRoot>/agent. It panics with a [configroot.UnresolvedError]
 // when the home directory is needed and unavailable; [ResolveDefaultAgentDir] reports that as an error.
 func DefaultAgentDir() string {
 	dir, err := ResolveDefaultAgentDir()
@@ -1978,7 +1978,7 @@ func readGlobal[T any](sm *SettingsManager, read func(*Settings) T) T {
 func (sm *SettingsManager) Reload() { sm.Load() }
 
 // noteIgnoredSettings records one warning for a settings file that held settings of the wrong JSON type, naming each and the type it expects.
-// pig divergence (D158): Pi 1.1.0 throws on these; PiG ignores them and says so once.
+// ompig divergence (D158): Pi 1.1.0 throws on these; Ompig ignores them and says so once.
 func (sm *SettingsManager) noteIgnoredSettings(scope, path string, loaded Settings) {
 	if len(loaded.ignored) == 0 {
 		return
@@ -2062,7 +2062,7 @@ func ThemeOverride(theme string) Settings {
 	return Settings{Theme: theme, themeEmpty: theme == ""}
 }
 
-// Flush waits for queued writes. pig writes settings synchronously, so this is a no-op.
+// Flush waits for queued writes. ompig writes settings synchronously, so this is a no-op.
 // Mirrors upstream SettingsManager.flush() API for parity.
 func (sm *SettingsManager) Flush() error { return nil }
 
@@ -2641,7 +2641,7 @@ func (sm *SettingsManager) GetTransport() string {
 }
 
 // GetSessionShareDestination returns the configured /share destination. Values other than "gist" and "radius" read as "auto" (settings-manager.ts getSessionShareDestination).
-// pig divergence (D64): /share uploads to the PiG gateway for every value; the setting is kept for shared settings files and the SDK.
+// ompig divergence (D64): /share uploads to the Ompig gateway for every value; the setting is kept for shared settings files and the SDK.
 func (sm *SettingsManager) GetSessionShareDestination() SessionShareDestination {
 	switch destination := sm.Get().SessionShareDestination; destination {
 	case SessionShareDestinationGist, SessionShareDestinationRadius:
@@ -2718,7 +2718,7 @@ func (sm *SettingsManager) GetEnableInstallTelemetry() bool {
 // isInstallTelemetryEnabled (telemetry.ts:8): when PI_TELEMETRY is set its
 // truthiness wins; otherwise the setting decides. Gates provider attribution
 // headers (provider-attribution.ts) in addition to package-install telemetry.
-// pig divergence (D26): gates the OpenRouter/NVIDIA/Cloudflare attribution headers in coding/model.go.
+// ompig divergence (D26): gates the OpenRouter/NVIDIA/Cloudflare attribution headers in coding/model.go.
 func (sm *SettingsManager) IsInstallTelemetryEnabled() bool {
 	if env, ok := os.LookupEnv("PI_TELEMETRY"); ok {
 		return isTruthyTelemetryEnvFlag(env)
@@ -2729,7 +2729,7 @@ func (sm *SettingsManager) IsInstallTelemetryEnabled() bool {
 // isTruthyTelemetryEnvFlag mirrors upstream isTruthyEnvFlag (telemetry.ts:3):
 // "1", "true", or "yes" (case-insensitive) are truthy; everything else, including
 // empty, is falsy.
-// pig divergence (D26): telemetry gate feeding the attribution-header decision.
+// ompig divergence (D26): telemetry gate feeding the attribution-header decision.
 func isTruthyTelemetryEnvFlag(value string) bool {
 	if value == "" {
 		return false
@@ -3159,7 +3159,7 @@ func (sm *SettingsManager) SetEnabledModels(patterns []string) error {
 }
 
 // GetExtensionsTypescriptRuntime returns the global extensionsTypescriptRuntime setting, or "" when it is unset. A project file cannot set it.
-// pig additive (D19): see Settings.ExtensionsTypescriptRuntime.
+// ompig additive (D19): see Settings.ExtensionsTypescriptRuntime.
 func (sm *SettingsManager) GetExtensionsTypescriptRuntime() string {
 	if runtime := sm.GetGlobalSettings().ExtensionsTypescriptRuntime; runtime != nil {
 		return *runtime
@@ -3168,14 +3168,14 @@ func (sm *SettingsManager) GetExtensionsTypescriptRuntime() string {
 }
 
 // GetExtensionsAutoUpgrade reports whether the global settings turn on the automatic Go extension upgrade. It is off unless set, and a project file cannot turn it on.
-// pig additive (D109): see Settings.ExtensionsAutoUpgrade.
+// ompig additive (D109): see Settings.ExtensionsAutoUpgrade.
 func (sm *SettingsManager) GetExtensionsAutoUpgrade() bool {
 	enabled := sm.GetGlobalSettings().ExtensionsAutoUpgrade
 	return enabled != nil && *enabled
 }
 
-// SetMaskSecretInput sets the PiG-only login-input privacy setting.
-// pig divergence (D80): configurable input privacy leaves the upstream setting order intact.
+// SetMaskSecretInput sets the Ompig-only login-input privacy setting.
+// ompig divergence (D80): configurable input privacy leaves the upstream setting order intact.
 func (sm *SettingsManager) SetMaskSecretInput(enabled bool) error {
 	return sm.UpdateGlobal(func(s *Settings) { s.MaskSecretInput = &enabled })
 }
@@ -3239,7 +3239,7 @@ func (sm *SettingsManager) updateGlobalOrdered(order []string, fn func(*Settings
 }
 
 // updateGlobalReplacing is updateGlobalOrdered for a setter that assigns whole top-level objects: the keys in replace are written as the setter left
-// them, dropping members the file holds that PiG does not model (setWarnings assigns `{ ...warnings }`), where other setters patch their nested objects.
+// them, dropping members the file holds that Ompig does not model (setWarnings assigns `{ ...warnings }`), where other setters patch their nested objects.
 func (sm *SettingsManager) updateGlobalReplacing(order, replace []string, fn func(*Settings)) error {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
@@ -3742,7 +3742,7 @@ func unmodeledSettings(data []byte, migrated map[string]any) (map[string]json.Ra
 	return extra, nil
 }
 
-// mergeSettingsExtra is deepMergeObjects (settings-manager.ts:63-80) on the members PiG does not model: a project member replaces the global
+// mergeSettingsExtra is deepMergeObjects (settings-manager.ts:63-80) on the members Ompig does not model: a project member replaces the global
 // one unless both are objects, which merge member by member.
 func mergeSettingsExtra(global, project map[string]json.RawMessage) map[string]json.RawMessage {
 	if len(project) == 0 {

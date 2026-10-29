@@ -7,15 +7,15 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/startup-input/whitespace.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/startup-input/whitespace.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/startup-input/whitespace.mjs"]
 
 [tmux]
 width = 150
 height = 35
-ready_pattern_pig = "SUBMIT WHITESPACE READY"
+ready_pattern_ompig = "SUBMIT WHITESPACE READY"
 ready_pattern_pi = "SUBMIT WHITESPACE READY"
 ready_timeout_seconds = 30
 capture_start = "SUBMIT_POINTS [[116"

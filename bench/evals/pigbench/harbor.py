@@ -2,13 +2,13 @@
 """Harbor integration, prepared and not run: job configs, a converter-compatibility check, and the paired analysis of finished jobs.
 
 Nothing here starts a model job. `plan` writes job configs and validates them against Harbor's own schema; `compat` checks, with no model and
-no key, that PiG writes what Harbor's Pi converter needs; `analyze` turns the trial results of a finished Harbor job into the paired report.
+no key, that Ompig writes what Harbor's Pi converter needs; `analyze` turns the trial results of a finished Harbor job into the paired report.
 Running a job costs money and needs an explicit decision to spend it: the commands are printed, never executed.
 
 Design: same model snapshot, context window, reasoning effort and tool set for the
 arms of a comparison; MCP and web tools off; one fixed timeout; one gateway for all arms; arms interleaved; a Pi-vs-Pi A/A run for the noise
-floor; the infrastructure-error rate per arm. Pairs: PiG against Claude Code on one Claude snapshot, PiG against Codex on one GPT snapshot, and
-PiG against Copilot CLI (BYOK) and Pi on both. SWE-bench Pro public split (history-pruned, network blocked, k=3) and Terminal-Bench 2.1 (k=5).
+floor; the infrastructure-error rate per arm. Pairs: Ompig against Claude Code on one Claude snapshot, Ompig against Codex on one GPT snapshot, and
+Ompig against Copilot CLI (BYOK) and Pi on both. SWE-bench Pro public split (history-pruned, network blocked, k=3) and Terminal-Bench 2.1 (k=5).
 """
 import json
 import os
@@ -28,9 +28,9 @@ GATEWAY_PORT = 8080
 # and without it Harbor resolves the key from the host environment (model_connection.py, resolve_model_connection) and passes the real key in.
 GATEWAY_PLACEHOLDER_KEY = "pigbench-gateway-replaces-this-key"
 HARBOR_PROVIDER = "harbor-endpoint"  # the provider name Harbor's Pi adapter writes into models.json (pi.py, _CUSTOM_PROVIDER)
-# What PigAgent adds to every command (pigharbor/agents.py, PIG_ENV): PiG divergence D2 makes PiG read PIG_CODING_AGENT_DIR unless
-# PIG_USE_PI_DIRS=1 selects the PI_CODING_AGENT_DIR that Harbor's Pi adapter sets.
-PIG_ENV = {"PIG_USE_PI_DIRS": "1"}
+# What OmpigAgent adds to every command (pigharbor/agents.py, OMPIG_ENV): Ompig divergence D2 makes Ompig read OMPIG_CODING_AGENT_DIR unless
+# OMPIG_USE_PI_DIRS=1 selects the PI_CODING_AGENT_DIR that Harbor's Pi adapter sets.
+OMPIG_ENV = {"OMPIG_USE_PI_DIRS": "1"}
 
 # The registry names below are the ones to confirm with `harbor datasets list` before the first run; `plan` does not need them to validate.
 DATASETS = {
@@ -38,28 +38,28 @@ DATASETS = {
     "terminal-bench-2.1": {"dataset": {"name": "terminal-bench", "version": "2.1"}, "n_attempts": 5, "note": "89 tasks"},
 }
 PAIRS = {
-    "claude": {"provider": "anthropic", "model_api": "anthropic-messages", "base_env": "ANTHROPIC_BASE_URL", "key_env": "ANTHROPIC_API_KEY", "arms": ["pig-0.5", "pig-0.4.1", "pi-1.1.0", "claude", "copilot"]},
-    "gpt": {"provider": "openai", "model_api": "openai-responses", "base_env": "OPENAI_BASE_URL", "key_env": "OPENAI_API_KEY", "arms": ["pig-0.5", "pig-0.4.1", "pi-1.1.0", "codex", "copilot"]},
+    "claude": {"provider": "anthropic", "model_api": "anthropic-messages", "base_env": "ANTHROPIC_BASE_URL", "key_env": "ANTHROPIC_API_KEY", "arms": ["ompig-0.5", "ompig-0.4.1", "pi-1.1.0", "claude", "copilot"]},
+    "gpt": {"provider": "openai", "model_api": "openai-responses", "base_env": "OPENAI_BASE_URL", "key_env": "OPENAI_API_KEY", "arms": ["ompig-0.5", "ompig-0.4.1", "pi-1.1.0", "codex", "copilot"]},
 }
 
 
-def agent_config(arm_id, pair, model, pig_binary=None, label=None):
+def agent_config(arm_id, pair, model, ompig_binary=None, label=None):
     """One Harbor AgentConfig (as a dict) for an arm, pointed at the gateway, with no key in it."""
     pins = lock.read()["arms"]
     p = PAIRS[pair]
     base = f"http://{GATEWAY_HOST}:{GATEWAY_PORT}/{label or arm_id}"
-    env = {"PIGBENCH_ARM": label or arm_id, p["base_env"]: base, p["key_env"]: GATEWAY_PLACEHOLDER_KEY}
+    env = {"OMPIGBENCH_ARM": label or arm_id, p["base_env"]: base, p["key_env"]: GATEWAY_PLACEHOLDER_KEY}
     cfg = {"model_name": f"{p['provider']}/{model}", "env": env, "extra_allowed_hosts": [GATEWAY_HOST], "kwargs": {}}
     if arm_id in ("pi-1.1.0",):
         cfg.update(name="pi")
         cfg["kwargs"].update(version=pins[arm_id]["version"], model_api=p["model_api"])
-    elif arm_id == "pig-0.5":
-        cfg.update(import_path="pigharbor.agents:PigAgent")
-        cfg["kwargs"].update(pig_binary=pig_binary or "<path to a static linux/amd64 build of this checkout>", model_api=p["model_api"])
-    elif arm_id == "pig-0.4.1":
+    elif arm_id == "ompig-0.5":
+        cfg.update(import_path="pigharbor.agents:OmpigAgent")
+        cfg["kwargs"].update(ompig_binary=ompig_binary or "<path to a static linux/amd64 build of this checkout>", model_api=p["model_api"])
+    elif arm_id == "ompig-0.4.1":
         e = pins[arm_id]
-        cfg.update(import_path="pigharbor.agents:PigAgent")
-        cfg["kwargs"].update(pig_url=e["release"]["base"].format(version=e["version"]) + e["assets"]["linux-amd64"]["name"], pig_sha256=e["assets"]["linux-amd64"]["sha256"], model_api=p["model_api"])
+        cfg.update(import_path="pigharbor.agents:OmpigAgent")
+        cfg["kwargs"].update(ompig_url=e["release"]["base"].format(version=e["version"]) + e["assets"]["linux-amd64"]["name"], ompig_sha256=e["assets"]["linux-amd64"]["sha256"], model_api=p["model_api"])
     elif arm_id == "claude":
         cfg.update(name="claude-code")
         cfg["kwargs"].update(version=pins[arm_id]["version"])
@@ -83,13 +83,13 @@ def job_config(name, dataset, agents, jobs_dir="jobs", concurrency=4):
             "datasets": [d["dataset"]], "agents": agents}
 
 
-def plan(out_dir, claude_model, gpt_model, pig_binary=None):
+def plan(out_dir, claude_model, gpt_model, ompig_binary=None):
     """Write one job config per pairing and dataset, plus the Pi-vs-Pi A/A configs. Returns the list of written paths."""
     os.makedirs(out_dir, exist_ok=True)
     written = []
     for dataset in DATASETS:
         for pair, model in (("claude", claude_model), ("gpt", gpt_model)):
-            agents = [agent_config(a, pair, model, pig_binary) for a in PAIRS[pair]["arms"]]
+            agents = [agent_config(a, pair, model, ompig_binary) for a in PAIRS[pair]["arms"]]
             path = os.path.join(out_dir, f"{dataset}-{pair}.json")
             write_json(path, job_config(f"{dataset}-{pair}", dataset, agents))
             written.append(path)
@@ -129,11 +129,11 @@ def validate(paths):
 
 
 def compat(opts):
-    """Run PiG and Pi with Harbor's exact print/JSON flags against the mock and convert their logs with Harbor's own Pi adapter."""
+    """Run Ompig and Pi with Harbor's exact print/JSON flags against the mock and convert their logs with Harbor's own Pi adapter."""
     py = harbor_python()
     if not py:
         raise SystemExit("HARBOR_PYTHON must name a Python with harbor installed (pip install harbor==%s)" % HARBOR_VERSION)
-    wanted = [a for a in armlib.select(armlib.load(), ["pig-0.5", "pig-0.4.1", "pi-1.1.0"]) if not opts.arms or opts.arms == ["all"] or a.id in opts.arms]
+    wanted = [a for a in armlib.select(armlib.load(), ["ompig-0.5", "ompig-0.4.1", "pi-1.1.0"]) if not opts.arms or opts.arms == ["all"] or a.id in opts.arms]
     result = {"kind": "harbor-compat", "harbor": HARBOR_VERSION, "arms": {}, "problems": []}
     dirs = {}
     with armlib.Workspace() as ws:
@@ -153,10 +153,10 @@ def compat(opts):
                 os.makedirs(agent_dir)
                 write_json(os.path.join(agent_dir, "models.json"), {"providers": {HARBOR_PROVIDER: {"baseUrl": server.base_url, "apiKey": "$ANTHROPIC_API_KEY", "api": "anthropic-messages",
                                                                                                     "models": [{"id": "bench-1"}]}}})
-                env = {k: v for k, v in h.env.items() if k not in ("PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR")}
+                env = {k: v for k, v in h.env.items() if k not in ("OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR")}
                 env.update(PI_CODING_AGENT_DIR=agent_dir, ANTHROPIC_API_KEY=DUMMY_KEY)
-                if arm.family == "pig":
-                    env.update(PIG_ENV)
+                if arm.family == "ompig":
+                    env.update(OMPIG_ENV)
                 meter = cgroup.new_meter()
                 try:
                     res = procio.Batch([arm.binary, "--print", "--mode", "json", "--session-dir", sessions, "--provider", HARBOR_PROVIDER, "--model", "bench-1", "Read README.md and report."], env, h.cwd, meter, 120).run()
@@ -208,7 +208,7 @@ def trial_row(result):
     if "task_name" not in result or "agent_info" not in result:
         return None
     cfg_env = ((result.get("config") or {}).get("agent") or {}).get("env") or {}
-    arm = cfg_env.get("PIGBENCH_ARM") or result["agent_info"].get("name")
+    arm = cfg_env.get("OMPIGBENCH_ARM") or result["agent_info"].get("name")
     rewards = (result.get("verifier_result") or {}).get("rewards") or {}
     reward = rewards.get("reward", (sum(rewards.values()) / len(rewards)) if rewards else None)
     ag = result.get("agent_result") or {}

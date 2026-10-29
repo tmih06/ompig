@@ -14,15 +14,15 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
-// The pinned Pi runtime (serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox, CodemodeSandboxBase.start) and PiG run
+// The pinned Pi runtime (serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox, CodemodeSandboxBase.start) and Ompig run
 // the same cases, and what each does at its seams must be equal: the frames of the remote exchange (the VM's messages and the
 // client's replies, protocol.ts and remote.ts), the requests a remote sandbox sends, the events and refusals of a deterministic
 // run (execution.ts), and the outcomes. testdata/wire_oracle.mjs is the Pi side; its toolBehavior and replyFor hold the same tool
-// table as newWireTool and replyFor below. Every case runs twice: on PiG's prelude, whose fingerprint differs from Pi's by the prelude
+// table as newWireTool and replyFor below. Every case runs twice: on Ompig's prelude, whose fingerprint differs from Pi's by the prelude
 // hash alone (divergence D145 patches the prelude), and on Pi's own prelude, which the oracle returns, where nothing may differ.
 
 // wireTool is a tool or global of a case: its behavior is named by Kind, as in testdata/wire_oracle.mjs toolBehavior.
@@ -101,7 +101,7 @@ type wireCase struct {
 	CloseOnCall bool `json:"closeOnCall,omitempty"`
 	// Backend of a start case: "remote" runs the VM behind a remote sandbox, anything else inline.
 	Backend string `json:"backend,omitempty"`
-	// prelude replaces the prelude the VM runs, when set: Pi's own, which PiG's differs from by D145.
+	// prelude replaces the prelude the VM runs, when set: Pi's own, which Ompig's differs from by D145.
 	prelude string
 }
 
@@ -1226,12 +1226,12 @@ emit(await run(input, root, process.env.QUICKJS_WASM));
 		if !reflect.DeepEqual(got, want) {
 			gotJSON, _ := json.MarshalIndent(got, "", " ")
 			wantJSON, _ := json.MarshalIndent(want, "", " ")
-			t.Errorf("%s\nPiG %s\nPi  %s", c.Mode, clip(gotJSON), clip(wantJSON))
+			t.Errorf("%s\nOmpig %s\nPi  %s", c.Mode, clip(gotJSON), clip(wantJSON))
 		}
 	}
 	for i, c := range cases {
 		t.Run(c.Name, func(t *testing.T) {
-			// PiG's prelude is Pi's with divergence D145 applied, so the fingerprint of a deterministic run names another prelude hash:
+			// Ompig's prelude is Pi's with divergence D145 applied, so the fingerprint of a deterministic run names another prelude hash:
 			// the hash is the only thing masked here, and the run below with Pi's own prelude compares the whole fingerprint.
 			compare(t, c, maskPreludeHash(canonical(t, c.run(t))), maskPreludeHash(canonical(t, want.Cases[i])))
 			// With Pi's own prelude nothing differs, the fingerprint included.

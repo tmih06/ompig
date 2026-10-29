@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // TestRulesFamilyAudit is trust check 1 for the optionality and union rule families: it applies the rules to the rows closed by hand

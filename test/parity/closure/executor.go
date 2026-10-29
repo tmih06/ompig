@@ -342,7 +342,7 @@ func executeAutomaticMutant(ctx context.Context, root, commit, outputDirectory s
 }
 
 func createMutationCheckout(ctx context.Context, root, commit string) (string, error) {
-	checkout, err := os.MkdirTemp("", "pig-mutation-*")
+	checkout, err := os.MkdirTemp("", "ompig-mutation-*")
 	if err != nil {
 		return "", err
 	}

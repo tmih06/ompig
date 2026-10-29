@@ -99,8 +99,8 @@
      "tui/tui.go#OverlayHandle.Hide"
     ],
     "evidence": [
-     "test:internal/codingagent/pig_egg3d_test.go#TestPig3dPlaysOnlyInFullscreen",
-     "test:internal/codingagent/pig_logo_animation_test.go#TestHeaderPigClickIgnoredWhileAnOverlayOrTheAnimationIsOpen"
+     "test:internal/codingagent/ompig_egg3d_test.go#TestPig3dPlaysOnlyInFullscreen",
+     "test:internal/codingagent/ompig_logo_animation_test.go#TestHeaderPigClickIgnoredWhileAnOverlayOrTheAnimationIsOpen"
     ],
     "production": [
      "call:internal/codingagent/custom_overlay_control.go#ExtUIContext.bindOverlayControls"

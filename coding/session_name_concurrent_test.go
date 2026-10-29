@@ -6,8 +6,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi agent-session.ts:3559-3563 appends, reads, and publishes one name with no await between them, so every setSessionName call publishes the name it appended. Concurrent Go callers must each publish their own name to subscribers, the wire, and extensions.

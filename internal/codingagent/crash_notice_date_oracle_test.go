@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // interactive-mode.ts:1222 formats a crash record's time with `new Date(crash.timestamp).toLocaleString()`. The notice's time against Node's en-US

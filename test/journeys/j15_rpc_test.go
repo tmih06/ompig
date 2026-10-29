@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 const agentEnd = `"type":"agent_end"`
@@ -68,7 +68,7 @@ func init() {
 	register(&harness.Journey{
 		Name:    "rpc-session",
 		Doc:     "A long `--mode rpc` session over standard input and output: prompt, tool turn, steer, follow-up, abort, bash (kept and excluded), compaction, every query, every setter, new session, fork, clone, switch, export, and malformed or unknown commands. The wire bytes, provider requests and session files are compared with Pi.",
-		Touches: []string{"cmd/pig/", "coding/", "agent/", "internal/codingagent/", "internal/sessionentry/"},
+		Touches: []string{"cmd/ompig/", "coding/", "agent/", "internal/codingagent/", "internal/sessionentry/"},
 		Env: func(harness.Kind) harness.Env {
 			return harness.Env{Pipe: true, Args: []string{"--mode", "rpc"}}
 		},

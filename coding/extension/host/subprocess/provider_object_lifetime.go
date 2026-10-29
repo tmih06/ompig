@@ -5,7 +5,7 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func (h *Host) collectProviderObjectLocked(provider *nativeProviderProxy) []*nativeProviderProxy {

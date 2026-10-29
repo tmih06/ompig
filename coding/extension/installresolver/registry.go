@@ -1,12 +1,12 @@
-// Package installresolver is Pig's product-neutral seam for contributed
+// Package installresolver is Ompig's product-neutral seam for contributed
 // package-source behavior. Optional catalog/product packages register through
-// it so generic Pig packages (for example the piglet schema package) and the
+// it so generic Ompig packages (for example the ompiglet schema package) and the
 // plugin-update path do not import a concrete product package.
 //
-// The registry carries product-neutral piglet-origin, materialization, and
+// The registry carries product-neutral ompiglet-origin, materialization, and
 // package-reinstall callbacks.
 //
-// pig additive (D18): product-neutral install and Piglet source resolver seams.
+// ompig additive (D18): product-neutral install and Ompiglet source resolver seams.
 package installresolver
 
 import (
@@ -16,7 +16,7 @@ import (
 	"sync"
 )
 
-// PigletSourceResolver acquires one typed Piglet source. The resolver is
+// PigletSourceResolver acquires one typed Ompiglet source. The resolver is
 // registered by source scheme and receives the opaque locator after the colon.
 type PigletSourceResolver func(cwd, locator string) (root string, err error)
 
@@ -26,12 +26,12 @@ type MaterializeOptions struct {
 	// an npm or Git Package and of its dependencies. The zero value installs
 	// with scripts disabled.
 	//
-	// pig additive (D194): Piglet resolution installs Packages without running lifecycle scripts unless the user opts in.
+	// ompig additive (D194): Ompiglet resolution installs Packages without running lifecycle scripts unless the user opts in.
 	AllowInstallScripts bool
 }
 
 // Materializer resolves one source to a local root without adding it to Package
-// settings or activating any resources. Piglets use this path for dependencies.
+// settings or activating any resources. Ompiglets use this path for dependencies.
 type Materializer func(cwd, source, scope string, options MaterializeOptions, stdout, stderr io.Writer) (root string, err error)
 
 // Installer reinstalls one recorded package source through the core install
@@ -46,7 +46,7 @@ var registry struct {
 	materializer  Materializer
 }
 
-// RegisterSourceScheme claims one explicit package/piglet source scheme.
+// RegisterSourceScheme claims one explicit package/ompiglet source scheme.
 // Duplicate claims are rejected so a source never depends on import order.
 func RegisterSourceScheme(scheme string) error {
 	scheme = strings.TrimSpace(scheme)
@@ -82,18 +82,18 @@ func SupportsSourceScheme(scheme string) bool {
 func RegisterPigletSourceResolver(scheme string, resolver PigletSourceResolver) error {
 	scheme = strings.TrimSpace(scheme)
 	if resolver == nil {
-		return fmt.Errorf("Piglet source resolver %q is nil", scheme)
+		return fmt.Errorf("Ompiglet source resolver %q is nil", scheme)
 	}
 	registry.Lock()
 	defer registry.Unlock()
 	if _, supported := registry.sourceSchemes[scheme]; !supported {
-		return fmt.Errorf("Piglet source scheme %q is not registered", scheme)
+		return fmt.Errorf("Ompiglet source scheme %q is not registered", scheme)
 	}
 	if registry.pigletSource == nil {
 		registry.pigletSource = map[string]PigletSourceResolver{}
 	}
 	if _, exists := registry.pigletSource[scheme]; exists {
-		return fmt.Errorf("Piglet source resolver %q is already registered", scheme)
+		return fmt.Errorf("Ompiglet source resolver %q is already registered", scheme)
 	}
 	registry.pigletSource[scheme] = resolver
 	return nil
@@ -103,13 +103,13 @@ func RegisterPigletSourceResolver(scheme string, resolver PigletSourceResolver) 
 func ResolvePigletSource(cwd, source string) (string, error) {
 	scheme, locator, ok := strings.Cut(strings.TrimSpace(source), ":")
 	if !ok || scheme == "" || locator == "" {
-		return "", fmt.Errorf("Piglet source %q must use an explicit registered scheme", source)
+		return "", fmt.Errorf("Ompiglet source %q must use an explicit registered scheme", source)
 	}
 	registry.RLock()
 	resolver := registry.pigletSource[scheme]
 	registry.RUnlock()
 	if resolver == nil {
-		return "", fmt.Errorf("Piglet source scheme %q has no installed resolver", scheme)
+		return "", fmt.Errorf("Ompiglet source scheme %q has no installed resolver", scheme)
 	}
 	return resolver(cwd, locator)
 }

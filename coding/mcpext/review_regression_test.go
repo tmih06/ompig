@@ -13,13 +13,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/mcptest"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/mcptest"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // config.ts readConfigFile reports `${path}: ${error.message}` for a file
@@ -220,5 +220,5 @@ func TestConnectionIdentifiesItselfWithTheRunningVersion(t *testing.T) {
 	if _, err := connection.GetClient(t.Context()); err != nil {
 		t.Fatal(err)
 	}
-	jsonEqual(t, <-clientInfo, `{"name":"pig","version":"`+coding.Version+`"}`)
+	jsonEqual(t, <-clientInfo, `{"name":"ompig","version":"`+coding.Version+`"}`)
 }

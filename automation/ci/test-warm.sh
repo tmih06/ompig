@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 #
 # make test-warm: build every fixture cache once so later test runs are warm.
-#   - the Go build cache for the flag sets test children use (go test, pig build, packed cells, the Porter extension)
+#   - the Go build cache for the flag sets test children use (go test, ompig build, packed cells, the Porter extension)
 #   - the persistent Cargo targets of the packages that build Rust SDK cells, and the pinned Pi's env daemon
 # Node oracle dependencies are handled by make parity-deps, which test-prereqs already runs; there are no Python venvs
 # under go test (make test-sdk-py owns its own). Safe to rerun: a warm run only revalidates.
@@ -14,7 +14,7 @@ echo "[test-warm] Go build cache"
 go list -export -f '' ./... >/dev/null
 go list -trimpath -export -f '' ./... >/dev/null
 CGO_ENABLED=0 go list -trimpath -export -f '' ./... >/dev/null
-(cd piglets/porter/extensions/pig-porter && GOWORK=off CGO_ENABLED=0 go list -trimpath -export -f '' ./... >/dev/null)
+(cd ompiglets/porter/extensions/ompig-porter && GOWORK=off CGO_ENABLED=0 go list -trimpath -export -f '' ./... >/dev/null)
 
 if ! command -v cargo >/dev/null 2>&1; then
   echo "[test-warm] cargo not found; skipping Rust caches" >&2

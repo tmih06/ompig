@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // refreshRig answers each oauth_refresh with fresh credentials and reports every later frame the host writes.

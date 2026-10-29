@@ -1,6 +1,6 @@
 //! Fixture for the session graph conformance rows (test/extension-conformance/session_graph_test.go): the script of testfixture/sessiongraph (Go), testdata/session-graph.mjs (Node, Pi's own classes) and testdata/session_graph_python.py.
 
-use pig_sdk::{AuthCheck, ModelRegistry, McpAuthProvider, McpLoadConfigContext, McpOAuthCredentialStore, McpOAuthServerStore, McpSendSignal, McpTransport, McpTransportEvents, create_codemode_extension, create_tool_search_extension, create_mcp_extension, CodemodeExtensionOptions, McpExtensionOptions, ExtensionFactory, create_provider, CreateProviderOptions, ProviderApi, ProviderStreams, ProviderAuth, APIKeyAuth, AuthResult, ProviderStreamFn, ProviderOperationFn, ProviderOperationOptions, ProviderStreamOptions, RefreshModelsContext, ModelsPublication, create_assistant_message_event_stream, ProviderSignal, create_agent_session_from_services, create_agent_session_services, CreateAgentSessionFromServicesOptions, CreateAgentSessionServicesOptions, SessionStartEvent, CreateAgentSessionOptions, ModelRuntime, ModelRuntimeCreateOptions, ModelRoute, VirtualModel, DefaultPackageManager, PackageManagerOptions, DefaultResourceLoader, DefaultResourceLoaderOptions, empty_schema, Context, Extension, NewSessionOptions, SessionInfo, SessionManager, SettingsManager, SettingsManagerCreateOptions, ToolResult, has_trust_requiring_project_resources, ProjectTrustStore, ProjectTrustStoreEntry, ProjectTrustUpdate};
+use ompig_sdk::{AuthCheck, ModelRegistry, McpAuthProvider, McpLoadConfigContext, McpOAuthCredentialStore, McpOAuthServerStore, McpSendSignal, McpTransport, McpTransportEvents, create_codemode_extension, create_tool_search_extension, create_mcp_extension, CodemodeExtensionOptions, McpExtensionOptions, ExtensionFactory, create_provider, CreateProviderOptions, ProviderApi, ProviderStreams, ProviderAuth, APIKeyAuth, AuthResult, ProviderStreamFn, ProviderOperationFn, ProviderOperationOptions, ProviderStreamOptions, RefreshModelsContext, ModelsPublication, create_assistant_message_event_stream, ProviderSignal, create_agent_session_from_services, create_agent_session_services, CreateAgentSessionFromServicesOptions, CreateAgentSessionServicesOptions, SessionStartEvent, CreateAgentSessionOptions, ModelRuntime, ModelRuntimeCreateOptions, ModelRoute, VirtualModel, DefaultPackageManager, PackageManagerOptions, DefaultResourceLoader, DefaultResourceLoaderOptions, empty_schema, Context, Extension, NewSessionOptions, SessionInfo, SessionManager, SettingsManager, SettingsManagerCreateOptions, ToolResult, has_trust_requiring_project_resources, ProjectTrustStore, ProjectTrustStoreEntry, ProjectTrustUpdate};
 use serde_json::{json, Value};
 use std::io;
 use std::path::Path;
@@ -284,7 +284,7 @@ struct MemoryStorage {
     fail: bool,
 }
 
-impl pig_sdk::SettingsStorage for MemoryStorage {
+impl ompig_sdk::SettingsStorage for MemoryStorage {
     fn with_lock(&self, scope: &str, f: &mut dyn FnMut(Option<String>) -> Result<Option<String>, String>) -> Result<(), String> {
         if self.fail {
             return Err("disk full".into());
@@ -651,14 +651,14 @@ fn child_entry_kinds(manager: &SessionManager) -> io::Result<Vec<String>> {
     }).collect())
 }
 
-fn child_last_text(session: &pig_sdk::AgentSession) -> io::Result<String> {
+fn child_last_text(session: &ompig_sdk::AgentSession) -> io::Result<String> {
     let messages = session.messages()?;
     let last = messages.last().cloned().unwrap_or(Value::Null);
     Ok(last["content"].as_array().map(Vec::as_slice).unwrap_or_default().iter().filter(|block| block["type"] == "text").map(|block| text(&block["text"]).to_string()).collect::<String>())
 }
 
 /// Creates a session with options over manager and settings, binds extensions when bind is set, prompts it and reports what Pi's createAgentSession run reports.
-fn observe_child(ctx: &Context, mut options: CreateAgentSessionOptions, manager: &SessionManager, settings: &SettingsManager, bind: bool) -> io::Result<(pig_sdk::AgentSession, Value)> {
+fn observe_child(ctx: &Context, mut options: CreateAgentSessionOptions, manager: &SessionManager, settings: &SettingsManager, bind: bool) -> io::Result<(ompig_sdk::AgentSession, Value)> {
     options.session_manager = Some(manager.handle().to_string());
     options.settings_manager = Some(settings.handle().to_string());
     let session = ctx.create_agent_session(options)?;
@@ -691,7 +691,7 @@ fn observe_child(ctx: &Context, mut options: CreateAgentSessionOptions, manager:
     Ok((session, report))
 }
 
-type ChildrenBuilt = (pig_sdk::AgentSession, pig_sdk::AgentSession, SessionManager, SessionManager);
+type ChildrenBuilt = (ompig_sdk::AgentSession, ompig_sdk::AgentSession, SessionManager, SessionManager);
 
 /// Builds the objects and creates two sessions over them; the runtime, settings and loaders are dropped when it returns.
 fn child_handles_build(ctx: &Context, args: &Value, r: &mut serde_json::Map<String, Value>) -> io::Result<ChildrenBuilt> {
@@ -766,7 +766,7 @@ fn services_script(ctx: &Context, args: &Value) -> io::Result<Value> {
         "registered": own.model_runtime.get_registered_provider_ids()?,
     }));
     let defaulted = create_agent_session_services(ctx, CreateAgentSessionServicesOptions { cwd: cwd.into(), settings_manager: Some(settings.clone()), model_runtime: Some(rt.clone()), resource_loader_options: Some(quiet()), ..Default::default() })?;
-    r.insert("defaulted".into(), json!({"agentDir": defaulted.agent_dir == pig_sdk::get_agent_dir()?, "cwd": defaulted.cwd}));
+    r.insert("defaulted".into(), json!({"agentDir": defaulted.agent_dir == ompig_sdk::get_agent_dir()?, "cwd": defaulted.cwd}));
     let memory = SessionManager::in_memory(ctx, Some(cwd), None, None)?;
     let session = create_agent_session_from_services(ctx, CreateAgentSessionFromServicesOptions {
         services: &services, session_manager: &memory, session_start_event: Some(SessionStartEvent { reason: "fork".into(), previous_session_file: Some("/previous.jsonl".into()) }),
@@ -817,7 +817,7 @@ fn create_provider_script() -> Result<Value, String> {
         })
     };
     let impl_ = |tag: &str| ProviderStreams { stream: scripted(format!("{tag}.stream")), stream_simple: scripted(format!("{tag}.simple")), fetch_deferred: None, cancel_deferred: None };
-    let drain = |stream: Arc<pig_sdk::ModelEventStream>| -> Value {
+    let drain = |stream: Arc<ompig_sdk::ModelEventStream>| -> Value {
         let mut types = Vec::new();
         while let Some(event) = stream.next() {
             types.push(event["type"].clone());
@@ -859,7 +859,7 @@ fn create_provider_script() -> Result<Value, String> {
         "noApi": drain((p.stream_simple)(Arc::new(json!({"id": "c8", "provider": "cp"})), json!({}), options.clone())?),
         "single": drain((sp.stream)(Arc::new(m("x", "anything")), json!({}), options.clone())?),
     }));
-    let failed = |result: Result<pig_sdk::Provider, String>| match result { Ok(_) => "no error".to_string(), Err(error) => error };
+    let failed = |result: Result<ompig_sdk::Provider, String>| match result { Ok(_) => "no error".to_string(), Err(error) => error };
     let mut empty = options_for(Some(ProviderApi::ByApi(vec![])), "e2", vec![]);
     empty.images = vec![];
     r.insert("invalid".into(), json!({"none": failed(create_provider(options_for(None, "e1", vec![]))), "empty": failed(create_provider(empty))}));
@@ -881,7 +881,7 @@ fn create_provider_script() -> Result<Value, String> {
     let handle = |id: &str| json!({"id": id});
     let message_of = |result: Result<(), String>| match result { Ok(()) => "no error".to_string(), Err(error) => error };
     let cancel = |model: Value, id: &str| message_of((d.cancel_deferred.as_ref().unwrap())(Arc::new(model), handle(id), options.clone()));
-    let fetch = |provider: &pig_sdk::Provider, model: Value, id: &str| -> Result<Value, String> { Ok(drain((provider.fetch_deferred.as_ref().unwrap())(Arc::new(model), handle(id), options.clone())?)) };
+    let fetch = |provider: &ompig_sdk::Provider, model: Value, id: &str| -> Result<Value, String> { Ok(drain((provider.fetch_deferred.as_ref().unwrap())(Arc::new(model), handle(id), options.clone())?)) };
     let cancel_ok = cancel(m("c1", "api-a"), "h1");
     r.insert("deferred".into(), json!({
         "fetched": fetch(&d, m("c1", "api-a"), "h1")?, "unsupported": fetch(&d, m("c2", "api-b"), "h2")?, "noApi": fetch(&d, m("c3", "api-z"), "h3")?, "thrown": fetch(&broken, m("c1", "api-a"), "h4")?,
@@ -1337,7 +1337,7 @@ fn model_registry_script(ctx: &Context, args: &Value) -> io::Result<Value> {
     }).map_err(io::Error::other)?);
     registry.register_native_provider(provider.clone())?;
     let conversation = json!({"systemPrompt": "Be brief.", "messages": [{"role": "user", "content": "say hello", "timestamp": 1}]});
-    let drain = |stream: Arc<pig_sdk::ModelEventStream>| -> (Vec<Value>, Value) {
+    let drain = |stream: Arc<ompig_sdk::ModelEventStream>| -> (Vec<Value>, Value) {
         let mut events = Vec::new();
         while let Some(event) = stream.next() {
             events.push(event["type"].clone());
@@ -1346,7 +1346,7 @@ fn model_registry_script(ctx: &Context, args: &Value) -> io::Result<Value> {
     };
     let (native_events, native_message) = drain(registry.stream_simple(native_model.clone(), conversation.clone(), json!({})));
     registry.refresh(json!({"allowNetwork": false}))?;
-    let provider_id = |found: Option<Arc<pig_sdk::Provider>>| found.map_or(Value::Null, |found| json!(found.id));
+    let provider_id = |found: Option<Arc<ompig_sdk::Provider>>| found.map_or(Value::Null, |found| json!(found.id));
     let registered_native = registry.get_registered_native_provider("nreg")?;
     r.insert("native".into(), json!({
         "registered": provider_id(registered_native.clone()), "same": registered_native.as_ref().is_some_and(|found| Arc::ptr_eq(found, &provider)), "viaGetProvider": provider_id(registry.get_provider("nreg")?), "viaRuntime": provider_id(rt.get_provider("nreg")?),

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The refresh projects the same context as an owned projection of the session, for every entry kind that reaches the model, and a

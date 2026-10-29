@@ -15,11 +15,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 type runtimeFileSpec struct {
@@ -300,14 +300,14 @@ func TestAgentSessionRuntimeMatchesPi(t *testing.T) {
 		if !reflect.DeepEqual(normalized.Initial, expected[i].Initial) {
 			g, _ := json.Marshal(normalized.Initial)
 			e, _ := json.Marshal(expected[i].Initial)
-			report += fmt.Sprintf("\n  initial\n  Pig %s\n  Pi  %s", g, e)
+			report += fmt.Sprintf("\n  initial\n  Ompig %s\n  Pi  %s", g, e)
 		}
 		for k := range scenario.Ops {
 			if k < len(normalized.Outs) && !reflect.DeepEqual(normalized.Outs[k], expected[i].Outs[k]) {
 				ops, _ := json.Marshal(scenario.Ops[:k+1])
 				g, _ := json.Marshal(normalized.Outs[k])
 				e, _ := json.Marshal(expected[i].Outs[k])
-				report += fmt.Sprintf("\n  ops %s\n  Pig %.800s\n  Pi  %.800s", ops, g, e)
+				report += fmt.Sprintf("\n  ops %s\n  Ompig %.800s\n  Pi  %.800s", ops, g, e)
 				break
 			}
 		}

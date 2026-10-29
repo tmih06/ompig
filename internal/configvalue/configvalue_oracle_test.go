@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's template parsing in resolve-config-value.ts (getConfigValueEnvVarName(s), getMissingConfigValueEnvVarNames, isConfigValueConfigured, resolveConfigValueUncached for non-command values) runs against the vendored Pi module for the same config strings and provider-scoped env.

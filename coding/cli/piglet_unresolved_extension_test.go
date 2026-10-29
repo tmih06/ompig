@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
+	"github.com/tmih06/ompig/coding/ompiglet"
 )
 
 func writeUnresolvedExtensionPiglet(t *testing.T, dir string) string {
@@ -16,7 +16,7 @@ func writeUnresolvedExtensionPiglet(t *testing.T, dir string) string {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	path := filepath.Join(dir, "unresolved.piglet.yaml")
+	path := filepath.Join(dir, "unresolved.ompiglet.yaml")
 	source := "name: unresolved\nextensions:\n  - name: missing-ext\n    origins:\n      - local:./does-not-exist\n"
 	if err := os.WriteFile(path, []byte(source), 0o600); err != nil {
 		t.Fatal(err)
@@ -24,11 +24,11 @@ func writeUnresolvedExtensionPiglet(t *testing.T, dir string) string {
 	return path
 }
 
-// A Piglet extension whose origins do not resolve is an extension that fails to
+// A Ompiglet extension whose origins do not resolve is an extension that fails to
 // load. Pi reports every failed extension as a startup error, not a warning
 // (main.ts:799-802 `Failed to load extension "<path>": <error>`).
 func TestResolvePigletExtConfigsKeepsUnresolvedExtensionAsFailure(t *testing.T) {
-	parsed, err := piglet.Parse(writeUnresolvedExtensionPiglet(t, t.TempDir()))
+	parsed, err := ompiglet.Parse(writeUnresolvedExtensionPiglet(t, t.TempDir()))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,16 +58,16 @@ func TestPigletUnresolvedExtensionFailsStartupLikeBrokenExtension(t *testing.T) 
 			t.Fatal(err)
 		}
 	}
-	pigletPath := writeUnresolvedExtensionPiglet(t, filepath.Join(home, "piglets"))
+	pigletPath := writeUnresolvedExtensionPiglet(t, filepath.Join(home, "ompiglets"))
 	binary := buildPigBinaryForSignalTest(t)
 
-	failed := runRPCStartup(t, binary, home, agentDir, cwd, "--piglet", pigletPath)
+	failed := runRPCStartup(t, binary, home, agentDir, cwd, "--ompiglet", pigletPath)
 	var exitErr *exec.ExitError
 	if !errors.As(failed.err, &exitErr) || exitErr.ExitCode() != 1 {
 		t.Fatalf("startup error = %v, want exit status 1\nstderr:\n%s", failed.err, failed.stderr)
 	}
 	lines := strings.Split(strings.TrimSpace(failed.stderr), "\n")
-	wantHint := `Hint: Start without extensions using "pig -ne".`
+	wantHint := `Hint: Start without extensions using "ompig -ne".`
 	if len(lines) < 2 || !strings.HasPrefix(lines[len(lines)-2], "Error: Failed to load extension ") || !strings.Contains(lines[len(lines)-2], "missing-ext") || lines[len(lines)-1] != wantHint {
 		t.Fatalf("stderr does not end with the extension failure and hint:\n%s", failed.stderr)
 	}
@@ -78,7 +78,7 @@ func TestPigletUnresolvedExtensionFailsStartupLikeBrokenExtension(t *testing.T) 
 
 // Pi's loadExtensions records every failed extension in path order
 // (packages/coding-agent/src/core/extensions/loader.ts:684-696), and main.ts
-// reports each one (main.ts:799-802). Two unresolved Piglet extensions are two
+// reports each one (main.ts:799-802). Two unresolved Ompiglet extensions are two
 // load errors, in declaration order around the extensions that resolved; the
 // startup merge must not collapse them into one.
 func TestResolvePigletExtConfigsKeepsEveryUnresolvedExtensionInOrder(t *testing.T) {
@@ -86,7 +86,7 @@ func TestResolvePigletExtConfigsKeepsEveryUnresolvedExtensionInOrder(t *testing.
 	if err := os.WriteFile(filepath.Join(dir, "present.mjs"), []byte("export default function () {}\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	path := filepath.Join(dir, "order.piglet.yaml")
+	path := filepath.Join(dir, "order.ompiglet.yaml")
 	source := "name: order\nextensions:\n" +
 		"  - name: missing-a\n    origins:\n      - local:./does-not-exist-a\n" +
 		"  - name: present\n    origins:\n      - local:./present.mjs\n" +
@@ -94,7 +94,7 @@ func TestResolvePigletExtConfigsKeepsEveryUnresolvedExtensionInOrder(t *testing.
 	if err := os.WriteFile(path, []byte(source), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(path)
+	parsed, err := ompiglet.Parse(path)
 	if err != nil {
 		t.Fatal(err)
 	}

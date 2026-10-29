@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // A wrapper that returns no value makes upstream's nameOf(wrapped) throw inside applyWrap's try (agent.ts:240-246), so the target is dropped and the failure reported; resolution itself never fails.

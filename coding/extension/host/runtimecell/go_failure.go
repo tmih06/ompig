@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 type goFailureKind int
@@ -160,10 +160,10 @@ func buildDirSource(dir string) func(path string) ([]byte, error) {
 }
 
 // olderSDKFailure reports an extension whose compile errors are SDK changes
-// as one line that says so, and keeps the changes for `pig extension upgrade`
+// as one line that says so, and keeps the changes for `ompig extension upgrade`
 // and the startup prompt.
 //
-// pig additive (D109): PiG compiles extensions against its own SDK, which Pi does not have.
+// ompig additive (D109): Ompig compiles extensions against its own SDK, which Pi does not have.
 func olderSDKFailure(drifts []Drift, dir string) *BuildFailure {
 	// The go command prints a path relative to the generated build directory; keep the path that names the extension's file.
 	for i := range drifts {

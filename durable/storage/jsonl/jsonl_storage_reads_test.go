@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi storage/jsonl/storage.ts:277-380 (commit, conversation, scanConversations, entry, findLatestHeadMarker, scanEntries, task,

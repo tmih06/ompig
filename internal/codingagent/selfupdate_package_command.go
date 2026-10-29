@@ -5,7 +5,7 @@ import "fmt"
 
 // GetSelfUpdateCommand builds a command only for the proven package-manager owner. An unconfigured npm command retains the prefix of its proven lib/node_modules root.
 func (p *SelfUpdateProvenance) GetSelfUpdateCommand(npmCommand []string, target SelfUpdatePackageTarget) *SelfUpdateCommand {
-	// pig divergence (D39): native provenance selects the one mutation owner before command construction.
+	// ompig divergence (D39): native provenance selects the one mutation owner before command construction.
 	if p == nil || p.Tier != TierPackageManager {
 		return nil
 	}
@@ -18,7 +18,7 @@ func (p *SelfUpdateProvenance) GetSelfUpdateCommand(npmCommand []string, target 
 
 // GetSelfUpdateUnavailableInstruction reports a concrete native ownership or permission failure instead of inventing an unproven package-manager command.
 func (p *SelfUpdateProvenance) GetSelfUpdateUnavailableInstruction() string {
-	// pig divergence (D39): native ownership diagnostics identify the running executable and its owning directory.
+	// ompig divergence (D39): native ownership diagnostics identify the running executable and its owning directory.
 	if p == nil {
 		return UnsupportedRemediation("")
 	}

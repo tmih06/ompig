@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/tui/src/autocomplete.ts
@@ -43,7 +43,7 @@ func TestCombinedAutocompleteMatchesPi(t *testing.T) {
 		}
 	}
 	t.Setenv("HOME", home)
-	t.Setenv("USERPROFILE", home) // the home directory is USERPROFILE on Windows, for Node and for PiG
+	t.Setenv("USERPROFILE", home) // the home directory is USERPROFILE on Windows, for Node and for Ompig
 	pick := func(items ...string) string { return items[rng.Intn(len(items))] }
 	stem := func() string {
 		return pick("", "\u0130", "i", "\u0130s", "a", "al", "A", "b", "be", "g", "s", "src/", "src/a", "my", "my docs/", "my\\ docs/", ".", "./", "./s", "../", "../b", "~/", "~/d", "~", "docs/", "/", base+"/", base+"/s", home+"/", "日", "e", "é", ".h", ".g", "-", "(", "[", "u", "ü", "zeta", "UP", "a\\", "a b", "a#", "~x", "~/..", "~//", "..", "a//", "src//", "./src/../", "src/./", "//", "/.", "./.", ".//s", "..//", "src\\a", "src\\", "~\\", "~/src/../d")
@@ -145,7 +145,7 @@ emit(out);`, map[string]any{"base": base, "cases": cases}, &want, "HOME="+home, 
 		}
 		if !reflect.DeepEqual(got, want[i]) {
 			if failures++; failures <= 6 {
-				t.Errorf("before=%q after=%q force=%v:\n  PiG %+v\n  Pi  %+v", c.Before, c.After, c.Force, summarize(got.Items, got.Prefix, got.Applied, got.Col), summarize(want[i].Items, want[i].Prefix, want[i].Applied, want[i].Col))
+				t.Errorf("before=%q after=%q force=%v:\n  Ompig %+v\n  Pi  %+v", c.Before, c.After, c.Force, summarize(got.Items, got.Prefix, got.Applied, got.Col), summarize(want[i].Items, want[i].Prefix, want[i].Applied, want[i].Col))
 			}
 		}
 	}
@@ -197,7 +197,7 @@ func TestCombinedAutocompleteAtSearchMatchesPi(t *testing.T) {
 		}
 	}
 	t.Setenv("HOME", home)
-	t.Setenv("USERPROFILE", home) // the home directory is USERPROFILE on Windows, for Node and for PiG
+	t.Setenv("USERPROFILE", home) // the home directory is USERPROFILE on Windows, for Node and for Ompig
 	pick := func(items ...string) string { return items[rng.Intn(len(items))] }
 	queries := []string{"", "r", "re", "read", "readme", "READ", "m", "ma", "main", "go", ".go", "_test", "test", "app", "but", "button", "comp", "components", "src", "src/", "src/c", "src/comp", "src/components/", "src/components/b", "src/u", "docs/", "docs/g", "docs/guide/", "doc", "guide", "intro", "adv", "my", "my ", "my d", "my docs/", "gamma", "日", "日本", "pkg", "internal/p", "internal/pkg/", "deep", "a/b", "a/b/c/", "node", "lib", "index", ".", ".h", ".env", ".git", "ts", "x", "zzz", "~/", "~/s", "~/src/", "~/src/c", "~/docs/g", "~", "src/../", "./", "./s", "./src/", "src//", "src/../c", "/nonexistent/x", "UPPER", "upper", "P", "pa", "path", "pathx", "s/a", "c/b", "u/p", "t_t", "m.g", "r.m"}
 	type atCase struct {
@@ -277,7 +277,7 @@ emit(out);`, map[string]any{"base": base, "fd": fd, "cases": cases}, &want, "HOM
 		}
 		if !reflect.DeepEqual(got, want[i]) {
 			if failures++; failures <= 6 {
-				t.Errorf("before=%q after=%q:\n  PiG %+v\n  Pi  %+v", c.Before, c.After, summarize(got.Items, got.Prefix, got.Applied, got.Col), summarize(want[i].Items, want[i].Prefix, want[i].Applied, want[i].Col))
+				t.Errorf("before=%q after=%q:\n  Ompig %+v\n  Pi  %+v", c.Before, c.After, summarize(got.Items, got.Prefix, got.Applied, got.Col), summarize(want[i].Items, want[i].Prefix, want[i].Applied, want[i].Col))
 			}
 		}
 	}

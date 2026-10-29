@@ -6,7 +6,7 @@ The complete evidence contains 2,250 measured process starts, plus seeding and c
 
 ## Native extensions
 
-`factory` uses PiG's packed-cell planner with one conventional factory. `isolated` uses an exact standalone. Each is the ordinary `pig extension init` fixture for its language. This compares supported source forms, not an artificial isolation switch on identical source. All registrations reach their handshake checkpoint. Pi does not load Go, Rust, or Python extensions, so there is no truthful native-language Pi column; the TS control in the main report is the reference-language comparison. This extension mechanism is D19/D20.
+`factory` uses Ompig's packed-cell planner with one conventional factory. `isolated` uses an exact standalone. Each is the ordinary `ompig extension init` fixture for its language. This compares supported source forms, not an artificial isolation switch on identical source. All registrations reach their handshake checkpoint. Pi does not load Go, Rust, or Python extensions, so there is no truthful native-language Pi column; the TS control in the main report is the reference-language comparison. This extension mechanism is D19/D20.
 
 | Source form | Build | Print cold / warm | RPC cold / warm | Interactive cold / warm |
 |---|---|---:|---:|---:|
@@ -41,7 +41,7 @@ The huge fixture contains 50,000 linked message entries, including 500 approxima
 | Resume among 1,000 | 0.2.0 | 47.6 / 39.8 | 54.1 / 44.2 | 73.7 / 74.4 |
 | Resume among 1,000 | Pi | 734.0 / 354.1 | 736.8 / 345.1 | 414.0 / 299.8 |
 
-These are startup observations, not a claim that PiG's long-history rendering or compaction is equivalent because it is faster. The earlier Go startup lane owns the already-identified duplicate Session open, settings projection, and price-binding work absent from this base. No competing Session repair is introduced here.
+These are startup observations, not a claim that Ompig's long-history rendering or compaction is equivalent because it is faster. The earlier Go startup lane owns the already-identified duplicate Session open, settings projection, and price-binding work absent from this base. No competing Session repair is introduced here.
 
 ## Slow factory and failure boundaries
 
@@ -97,11 +97,11 @@ A loopback Radius catalog returns HTTP 503. The slow case delays that response b
 | partial cache | interactive | cold | 599.9 | contract not reached | 789.9 |
 | partial cache | interactive | warm | 375.6 | contract not reached | 401.1 |
 
-The 0.2.0 process exits successfully without reaching the newer refresh-result contract, so its times are not comparable successful measurements. For slow-network interactive Pi, the first frame is visible but the harness sends Ctrl+D before the awaited marker is reported. Those cells remain unqualified. They are not evidence that Pi's refresh failed or that PiG is faster at completing it. Print and RPC supply the completed slow-refresh evidence.
+The 0.2.0 process exits successfully without reaching the newer refresh-result contract, so its times are not comparable successful measurements. For slow-network interactive Pi, the first frame is visible but the harness sends Ctrl+D before the awaited marker is reported. Those cells remain unqualified. They are not evidence that Pi's refresh failed or that Ompig is faster at completing it. Print and RPC supply the completed slow-refresh evidence.
 
 ### Open RPC ordering discrepancy
 
-All ten cold/warm RPC trials for each unavailable/slow catalog make two loopback catalog requests in PiG and one in Pi. Print makes one on both. `cmd/pig/rpc_mode.go:278` launches background refresh before loading extensions and creating the Session. Pi's `packages/coding-agent/src/main.ts:920-928` launches it after runtime and Session validation, immediately before `runRpcMode`. The extension's later refresh therefore supersedes different work. PiG also lacks an explicit join for that goroutine.
+All ten cold/warm RPC trials for each unavailable/slow catalog make two loopback catalog requests in Ompig and one in Pi. Print makes one on both. `cmd/ompig/rpc_mode.go:278` launches background refresh before loading extensions and creating the Session. Pi's `packages/coding-agent/src/main.ts:920-928` launches it after runtime and Session validation, immediately before `runRpcMode`. The extension's later refresh therefore supersedes different work. Ompig also lacks an explicit join for that goroutine.
 
 This is reported to the lead as an unresolved startup/RPC lifecycle defect. The earlier RPC lane's pane is unavailable, so no handoff to that owner is assumed. This investigation does not delete the background refresh or change its timeout. A repair needs a deterministic ordering/cancellation guard and a full RPC caller probe. The two fixes in this report do not close this discrepancy.
 
@@ -145,7 +145,7 @@ The JSONL rows retain sampled parent-process VmHWM. They do not include every ex
 The evidence retains early invalid calibration runs separately from the completed matrix:
 
 - Long temporary directory names exceeded Linux's Unix socket path limit. The corrected driver uses short, hashed temporary home names.
-- A parity make target rebuilt a candidate path during a calibration batch. Accepted controls use a separate immutable `pig-ignore` executable.
+- A parity make target rebuilt a candidate path during a calibration batch. Accepted controls use a separate immutable `ompig-ignore` executable.
 - The first resume-picker detector waited for an escape hint that the picker does not render. The corrected detector requires an actual session row.
 - An early huge-session warm print batch reused history modified by the previous turn. The accepted `session-final` batch restores the fixture before each launch.
 - An advisory helper named `queue.py` shadowed Python's standard `queue` module during the concurrent-start setup and started an unintended measurement batch. The helper is renamed. Its outputs and cancellation record are retained; the accepted `session-final`, frozen native control, and `stress-shared` batches are separate.

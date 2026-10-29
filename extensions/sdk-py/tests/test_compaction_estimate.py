@@ -2,8 +2,8 @@ import random
 
 import pytest
 
-import pig_sdk
-from pig_sdk.compaction_estimate import _js_number_string, _utf16_length
+import ompig_sdk
+from ompig_sdk.compaction_estimate import _js_number_string, _utf16_length
 
 # Pi's estimateTokens (core/compaction/compaction.ts) counts UTF-16 units and the JSON.stringify length of a tool call's arguments; the cases
 # below are ECMA-262 7.1.12.1 Number::toString and V8 output.
@@ -33,7 +33,7 @@ def test_number_to_string_matches_javascript(value, want):
     ],
 )
 def test_estimate_tokens_counts_utf16_units_and_stringify_length(message, want):
-    assert pig_sdk.estimate_tokens(message) == want
+    assert ompig_sdk.estimate_tokens(message) == want
 
 
 def test_utf16_length_is_the_sum_of_the_utf16_lengths_of_the_characters():

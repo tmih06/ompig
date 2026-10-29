@@ -31,7 +31,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // commandExecutor is the indirection point for tests. Production uses

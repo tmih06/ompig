@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func BenchmarkCollectAncestorSkillInputs(b *testing.B) {
@@ -89,8 +89,8 @@ func TestRPCAncestorSkillTrustAndPrecedence(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			home := t.TempDir()
 			p := startRPCProcessAt(t, cwd, []string{
-				"HOME=" + home, "USERPROFILE=" + home, "PIG_HOME=" + home,
-				"PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_OFFLINE=1",
+				"HOME=" + home, "USERPROFILE=" + home, "OMPIG_HOME=" + home,
+				"OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1",
 			}, append([]string{"--no-session", "--no-extensions", "--skill", cli}, tt.flags...)...)
 			p.send(`{"id":"skills","type":"get_commands"}`)
 			p.await("ancestor skill catalog", func(record rpcRecord) bool {

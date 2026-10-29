@@ -10,12 +10,12 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodepath"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // windowsShellDrivePath matches /c, /c/rest, /mnt/c/rest and /cygdrive/c/rest. The JavaScript source is /^\/(?:mnt\/|cygdrive\/)?([a-z])(?:\/(.*))?$/i: its "." does not

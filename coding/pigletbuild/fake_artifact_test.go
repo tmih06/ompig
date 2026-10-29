@@ -16,7 +16,7 @@ func writeFakePigArtifact(t *testing.T, dir, name string) string {
 	t.Helper()
 	if runtime.GOOS != "windows" {
 		path := filepath.Join(dir, name)
-		if err := os.WriteFile(path, []byte("#!/bin/sh\necho pig-test\n"), 0o755); err != nil {
+		if err := os.WriteFile(path, []byte("#!/bin/sh\necho ompig-test\n"), 0o755); err != nil {
 			t.Fatal(err)
 		}
 		return path
@@ -25,7 +25,7 @@ func writeFakePigArtifact(t *testing.T, dir, name string) string {
 	if err := os.WriteFile(filepath.Join(src, "go.mod"), []byte("module fakepig\n\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(src, "main.go"), []byte("package main\n\nimport \"fmt\"\n\nfunc main() { fmt.Println(\"pig-test\") }\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(src, "main.go"), []byte("package main\n\nimport \"fmt\"\n\nfunc main() { fmt.Println(\"ompig-test\") }\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	path := filepath.Join(dir, name+".exe")
@@ -38,7 +38,7 @@ func writeFakePigArtifact(t *testing.T, dir, name string) string {
 	return path
 }
 
-// A native build's default output is pig-<name>, with .exe for a Windows
+// A native build's default output is ompig-<name>, with .exe for a Windows
 // target; an explicit Windows output without an extension is refused before
 // the build, since Windows could not start it.
 func TestNativeArtifactPath(t *testing.T) {
@@ -49,10 +49,10 @@ func TestNativeArtifactPath(t *testing.T) {
 		target Target
 		want   string
 	}{
-		{"", linux, "pig-review"},
-		{"", windows, "pig-review.exe"},
-		{"pig-small", linux, "pig-small"},
-		{"pig-small.exe", windows, "pig-small.exe"},
+		{"", linux, "ompig-review"},
+		{"", windows, "ompig-review.exe"},
+		{"ompig-small", linux, "ompig-small"},
+		{"ompig-small.exe", windows, "ompig-small.exe"},
 	} {
 		got, err := nativeArtifactPath(tc.out, "review", tc.target)
 		if err != nil {
@@ -63,7 +63,7 @@ func TestNativeArtifactPath(t *testing.T) {
 			t.Errorf("nativeArtifactPath(%q, %s) = %q, want an absolute path to %s", tc.out, tc.target, got, tc.want)
 		}
 	}
-	if _, err := nativeArtifactPath("pig-small", "review", windows); err == nil {
+	if _, err := nativeArtifactPath("ompig-small", "review", windows); err == nil {
 		t.Error("nativeArtifactPath accepted a Windows output without an executable extension")
 	}
 }

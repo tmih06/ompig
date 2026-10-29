@@ -10,18 +10,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
 func TestBuildCommandPlainOutputPathFailure(t *testing.T) {
 	root := t.TempDir()
 	t.Chdir(root)
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+pigModulePath+"\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+ompigModulePath+"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	// This component exceeds native filename limits and contains invalid Windows characters, so every platform fails before invoking a compiler.
 	blocked := filepath.Join(root, "\x1b[31mblocked"+strings.Repeat("x", 512)+"\x1b[0m")
-	t.Setenv("PIG_BIN", filepath.Join(blocked, "pig"))
+	t.Setenv("OMPIG_BIN", filepath.Join(blocked, "ompig"))
 	var stdout, stderr bytes.Buffer
 	if code := runBuildCommand([]string{"build"}, &stdout, &stderr); code != 1 {
 		t.Fatalf("exit=%d: %s", code, &stderr)
@@ -33,24 +33,24 @@ func TestBuildCommandPlainOutputPathFailure(t *testing.T) {
 
 func TestBuildCommandReportsRelativeTargetFromNestedCheckout(t *testing.T) {
 	root := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(root, "cmd", "pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, "cmd", "ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+pigModulePath+"\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+ompigModulePath+"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "cmd", "pig", "main.go"), []byte("package main\nfunc main() {}\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "cmd", "ompig", "main.go"), []byte("package main\nfunc main() {}\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	t.Chdir(filepath.Join(root, "cmd"))
-	t.Setenv("PIG_BIN", filepath.Join("out", "pig"))
+	t.Setenv("OMPIG_BIN", filepath.Join("out", "ompig"))
 	t.Setenv("GOFLAGS", "")
 	var stdout, stderr bytes.Buffer
 	if code := runBuildCommand([]string{"build"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("exit=%d: %s", code, &stderr)
 	}
 	// The build reports the canonical long path; on Windows t.TempDir can be an 8.3 short path (RUNNER~1).
-	if !strings.Contains(stderr.String(), "Built "+filepath.Join(canonicalTestPath(t, root), "out", "pig")) {
+	if !strings.Contains(stderr.String(), "Built "+filepath.Join(canonicalTestPath(t, root), "out", "ompig")) {
 		t.Fatalf("wrong output path: %s", &stderr)
 	}
 }
@@ -73,7 +73,7 @@ func TestBuildSigningFailureIsVisibleAndBestEffort(t *testing.T) {
 	progress := buildprogress.New(&diagnostic, false)
 	defer progress.Close()
 	ctx := buildprogress.Observe(context.Background(), progress.Handle, false)
-	signPigBuild(ctx, progress, "pig", &diagnostic)
+	signPigBuild(ctx, progress, "ompig", &diagnostic)
 	for _, want := range []string{"warning: Signing binary failed", "signer denied", "hint:"} {
 		if !strings.Contains(diagnostic.String(), want) {
 			t.Errorf("missing %q in %q", want, diagnostic.String())
@@ -84,15 +84,15 @@ func TestBuildSigningFailureIsVisibleAndBestEffort(t *testing.T) {
 func TestBuildCommandReportsCompilerFailureAndPhase(t *testing.T) {
 	root := t.TempDir()
 	t.Chdir(root)
-	t.Setenv("PIG_BIN", filepath.Join(root, "pig"))
+	t.Setenv("OMPIG_BIN", filepath.Join(root, "ompig"))
 	t.Setenv("GOFLAGS", "")
-	if err := os.MkdirAll(filepath.Join(root, "cmd", "pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, "cmd", "ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+pigModulePath+"\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+ompigModulePath+"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "cmd", "pig", "main.go"), []byte("package main\nfunc main() { missingBuildSymbol() }\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "cmd", "ompig", "main.go"), []byte("package main\nfunc main() { missingBuildSymbol() }\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	var out, diagnostic bytes.Buffer

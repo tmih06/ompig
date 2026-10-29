@@ -42,7 +42,7 @@ Under load, `Error: context canceled` (`code: ''`) killed Node in `TestNodeCance
 ## Evidence
 
 - Load: `go test -c -race` binary, `GOMAXPROCS=4 taskset -c 0-3`, 4 CPU burners, `-count=24` on the new tests plus `TestParentCancellation*` and `TestHostCall*`: PASS.
-- `go test -race ./coding/extension/...`: green except `TestNodeVendoredTuiUpstreamTests/native-clipboard-linux` (needs Xvfb, absent on this host; unrelated). `./coding/pigletbuild ./coding/extension/pigsdk ./internal/experimental` race; `./internal/codingagent ./cmd/pig` green.
+- `go test -race ./coding/extension/...`: green except `TestNodeVendoredTuiUpstreamTests/native-clipboard-linux` (needs Xvfb, absent on this host; unrelated). `./coding/pigletbuild ./coding/extension/pigsdk ./internal/experimental` race; `./internal/codingagent ./cmd/ompig` green.
 - `make parity-family FAMILY=extensions-runtime` and `extension-host`: ok.
 - Not run: the real pi-mcp-adapter 3.3.0 in a TUI (the pinned red reproduces its exact stack with the same call pattern, `commands.ts:771`). Windows/macOS are not exercised here; the fixes are in platform-independent Node and Go code, `GOOS=windows go vet` is clean.
 - Deferred: a per-provider wrapper of `Runtime.call` and the pre-check in `Runtime.call` are covered by the same tagged-error filter; no other deferral. No stubs for other families.

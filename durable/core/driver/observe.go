@@ -7,10 +7,10 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // Ports packages/durable/src/harness/harness.ts observeConversation and observeTaskGraph over the core's watch frames: the

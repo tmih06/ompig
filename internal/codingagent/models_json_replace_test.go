@@ -6,12 +6,12 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi docs/models.md: "A `models` entry adds or replaces a model with the same ID on that provider. Use `modelOverrides` to change metadata
 // for an existing built-in or extension-provided model without replacing the provider's model list." Pi #9566 asked for the replaced model's
-// values to carry over; the maintainer answered with modelOverrides, so PiG keeps Pi's replacement (provider-composer.ts modelFromJson defaults).
+// values to carry over; the maintainer answered with modelOverrides, so Ompig keeps Pi's replacement (provider-composer.ts modelFromJson defaults).
 func TestModelsJSONEntryForAnExposedModelReplacesItAndModelOverridesKeepItsFields(t *testing.T) {
 	load := func(t *testing.T, provider string) *ai.Model {
 		t.Helper()

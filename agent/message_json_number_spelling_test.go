@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // JSON.parse reads every number spelling as one JavaScript number, so Pi keeps a session message whose integer member is written 1.767225603e12 or 1767225603000.0 (hand-edited

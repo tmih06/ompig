@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/extensiontest"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/extensiontest"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // runtimeBackedAPI is an extension.API whose registration members call the runtime the runner binds (loader.ts createExtensionAPI); every other member is the recording double's. It carries only members whose behaviour is the runtime's own queueing and validation: it holds no answer the test assigns.

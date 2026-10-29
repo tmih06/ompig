@@ -8,19 +8,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Pi's StdioTransport spawns the server with the env {...options.env} when
 // inheritEnv is false (packages/mcp/src/transports/stdio.ts:94). Node's spawn
-// writes each property into the block as "name=value", so "PIG_A" and
-// "PIG_A=B" both reach the server, although their entries share the text
+// writes each property into the block as "name=value", so "OMPIG_A" and
+// "OMPIG_A=B" both reach the server, although their entries share the text
 // before the first "=". Node's spawnSync of the same fixture with the same env
-// object, whose keys PiG applies in sorted order as JSON gives them, is the
+// object, whose keys Ompig applies in sorted order as JSON gives them, is the
 // oracle; the fixture reports its environment in block order.
 func TestStdioTransportPassesEveryPropertyWhoseNameHoldsAnEqualsSign(t *testing.T) {
 	command, args, _ := fixtureStdioOptions("environ")
-	env := map[string]string{fixtureEnv: "environ", "GORACE": "atexit_sleep_ms=0", "PIG_A": "one", "PIG_A=B": "two"}
+	env := map[string]string{fixtureEnv: "environ", "GORACE": "atexit_sleep_ms=0", "OMPIG_A": "one", "OMPIG_A=B": "two"}
 	off := false
 	transport := mcp.NewStdioTransport(mcp.StdioTransportOptions{Command: command, Args: args, Env: env, InheritEnv: &off})
 	closed := make(chan struct{})
@@ -57,8 +57,8 @@ process.stdout.write(result.stderr);
 	if err := json.Unmarshal(out, &want); err != nil {
 		t.Fatalf("decode %q: %v", out, err)
 	}
-	if !slices.Contains(want, "PIG_A=one") {
-		t.Fatalf("Node's child environment %q lacks PIG_A=one", want)
+	if !slices.Contains(want, "OMPIG_A=one") {
+		t.Fatalf("Node's child environment %q lacks OMPIG_A=one", want)
 	}
 	if !slices.Equal(got, want) {
 		t.Errorf("server environment\n got %q\nwant %q", got, want)

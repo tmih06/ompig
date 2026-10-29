@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/test/llama-extension.test.ts: the provider object createLlamaProvider returns, run by pi-ai's Models as

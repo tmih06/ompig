@@ -56,14 +56,14 @@ func TestEditUniqueMatchSuccess(t *testing.T) {
 	et := &EditTool{CWD: dir}
 	args, _ := json.Marshal(editParams{
 		Path:  "x.txt",
-		Edits: []editEntry{{OldText: "world", NewText: "pig"}},
+		Edits: []editEntry{{OldText: "world", NewText: "ompig"}},
 	})
 	res, err := et.Execute(context.Background(), "", args, nil)
 	if err != nil || res.IsError {
 		t.Fatalf("unique edit failed: err=%v res=%s", err, res.Text())
 	}
 	got, _ := os.ReadFile(path)
-	if string(got) != "hello pig\n" {
+	if string(got) != "hello ompig\n" {
 		t.Errorf("got %q", got)
 	}
 }

@@ -15,13 +15,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Ports packages/coding-agent/src/extensions/mcp/runtime.ts.
@@ -136,7 +136,7 @@ func resolveHeaders(headers *extension.OrderedStrings, description string) (map[
 func CreateDefaultTransport(entry McpServerEntry, cwd string, authProvider mcp.AuthProvider) (mcp.Transport, error) {
 	config, name := entry.Config, entry.Name
 	if config.IsHTTP() {
-		// pig divergence (D156): the transport connects to the expanded URL (Pi #10654).
+		// ompig divergence (D156): the transport connects to the expanded URL (Pi #10654).
 		headers, err := resolveHeaders(config.Headers, fmt.Sprintf(`MCP server "%s"`, name))
 		if err != nil {
 			return nil, err
@@ -201,7 +201,7 @@ type ConnectionOptions struct {
 	// Log receives the server's log messages (`notifications/message`).
 	Log *McpServerLog
 	// ClientName and ClientVersion identify this client to servers. Defaults:
-	// "pig" and the PiG version (upstream sends its VERSION).
+	// "ompig" and the Ompig version (upstream sends its VERSION).
 	ClientName    string
 	ClientVersion string
 }
@@ -264,7 +264,7 @@ func NewConnection(options ConnectionOptions) (*Connection, error) {
 	}
 	c.lifetime, c.endLifetime = context.WithCancel(context.Background())
 	if c.clientName == "" {
-		c.clientName = "pig"
+		c.clientName = "ompig"
 	}
 	if c.clientVersion == "" {
 		c.clientVersion = pigversion.Version
@@ -369,7 +369,7 @@ func (a providerTokenAuth) Token(ctx context.Context) (string, error) {
 // OAuthURL is the server URL when the server authenticates with OAuth, or "".
 func (c *Connection) OAuthURL() string {
 	if usesOAuth(c.Entry) {
-		// pig divergence (D156): the URL is expanded like headers and env values (Pi #10654).
+		// ompig divergence (D156): the URL is expanded like headers and env values (Pi #10654).
 		return extension.ExpandMcpURL(c.Entry.Config.URL)
 	}
 	return ""

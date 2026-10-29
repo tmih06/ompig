@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/proxy.ts:343-398 reconstructs one live partial while tool JSON advances. The proxy reader does not yet run under the JavaScript-order executor, so each delivered partial is its emission-time snapshot (D82) and stays unchanged after later pushes.

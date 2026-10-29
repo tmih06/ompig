@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// ripgrep --json spells a path or a line that is not valid UTF-8 as {"bytes": base64} with no "text" member. Pi's grep counts the match toward the limit, drops it when the path has no text, and reads a line without text back from the file when it formats a block (core/tools/grep.ts). Pig must list the same rows for the same bytes.
+// ripgrep --json spells a path or a line that is not valid UTF-8 as {"bytes": base64} with no "text" member. Pi's grep counts the match toward the limit, drops it when the path has no text, and reads a line without text back from the file when it formats a block (core/tools/grep.ts). Ompig must list the same rows for the same bytes.
 func TestGrepOnBytesThatAreNotValidUTF8MatchesPi(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skip("file names are arbitrary bytes only on Linux")
@@ -89,7 +89,7 @@ func TestGrepOnBytesThatAreNotValidUTF8MatchesPi(t *testing.T) {
 			got, want.Text = sortedRows(got), sortedRows(want.Text)
 		}
 		if got != want.Text {
-			t.Errorf("%s in %s\n  Pig %q\n  Pi  %q", r.args, filepath.Base(r.dir), got, want.Text)
+			t.Errorf("%s in %s\n  Ompig %q\n  Pi  %q", r.args, filepath.Base(r.dir), got, want.Text)
 		}
 	}
 }

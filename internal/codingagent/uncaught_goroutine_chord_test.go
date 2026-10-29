@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // A replicated-state listener failure that no onError handles reaches the interactive uncaught handler, as Pi's

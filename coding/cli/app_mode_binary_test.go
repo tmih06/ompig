@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// runPigForModeTest runs the pig binary with the faux provider and returns its
+// runPigForModeTest runs the ompig binary with the faux provider and returns its
 // stdout, stderr, and exit code. stdin and stdout are the given files; a nil
 // stdout captures into a pipe. A nil stdin is the null device.
 func runPigForModeTest(t *testing.T, bin string, stdin, stdout *os.File, args ...string) (string, string, int) {
@@ -43,19 +43,19 @@ func runPigForModeTestIn(t *testing.T, bin, agentDir string, stdin, stdout *os.F
 	cmd.Stderr = &errBuf
 	err := testenv.Run(t, cmd)
 	if ctx.Err() != nil {
-		t.Fatalf("pig %v did not exit (interactive mode waiting for keys?)\nstdout: %q\nstderr: %s", args, outBuf.String(), errBuf.String())
+		t.Fatalf("ompig %v did not exit (interactive mode waiting for keys?)\nstdout: %q\nstderr: %s", args, outBuf.String(), errBuf.String())
 	}
 	code := 0
 	if exitErr, ok := errors.AsType[*exec.ExitError](err); ok {
 		code = exitErr.ExitCode()
 	} else if err != nil {
-		t.Fatalf("run pig: %v", err)
+		t.Fatalf("run ompig: %v", err)
 	}
 	return outBuf.String(), errBuf.String(), code
 }
 
-// modePigCommand builds the pig command that runPigForModeTestIn runs: the
-// faux provider, a private PIG_HOME, and the agent directory's work
+// modePigCommand builds the ompig command that runPigForModeTestIn runs: the
+// faux provider, a private OMPIG_HOME, and the agent directory's work
 // directory as the working directory.
 func modePigCommand(ctx context.Context, t *testing.T, bin, agentDir string, args ...string) *exec.Cmd {
 	t.Helper()
@@ -66,25 +66,25 @@ func modePigCommand(ctx context.Context, t *testing.T, bin, agentDir string, arg
 	cmd := exec.CommandContext(ctx, bin, append([]string{"--model", "test-faux/faux-1", "--no-extensions"}, args...)...)
 	cmd.Dir = workDir
 	cmd.Env = append(os.Environ(),
-		"PIG_HOME="+t.TempDir(),
-		"PIG_CODING_AGENT_DIR="+agentDir,
-		"PIG_TEST_FAUX=1",
-		"PIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_HOME="+t.TempDir(),
+		"OMPIG_CODING_AGENT_DIR="+agentDir,
+		"OMPIG_TEST_FAUX=1",
+		"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 	)
 	return cmd
 }
 
-// TestAppModeFollowsStandardStreams runs the pig binary the way a shell does
+// TestAppModeFollowsStandardStreams runs the ompig binary the way a shell does
 // and pins upstream main.ts mode selection end to end: a stdout that is not a
 // terminal, or a stdin that is not a terminal, selects print mode even when
 // the other stream is a terminal.
 func TestAppModeFollowsStandardStreams(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 
-	// `pig "q" > out.txt` from a terminal: stdin is a terminal, stdout a file.
+	// `ompig "q" > out.txt` from a terminal: stdin is a terminal, stdout a file.
 	t.Run("stdout redirected to a file", func(t *testing.T) {
 		outPath := filepath.Join(t.TempDir(), "out.txt")
 		stderr, code := runPigOnTerminalStdinToFile(t, bin, outPath, "reply with exactly: redirected-ok")
@@ -97,7 +97,7 @@ func TestAppModeFollowsStandardStreams(t *testing.T) {
 		}
 	})
 
-	// `pig < /dev/null`: no message, stdin not a terminal. Upstream runs print
+	// `ompig < /dev/null`: no message, stdin not a terminal. Upstream runs print
 	// mode, sends nothing, and exits 0.
 	t.Run("stdin not a terminal without a message", func(t *testing.T) {
 		devNull, err := os.Open(os.DevNull)
@@ -114,11 +114,11 @@ func TestAppModeFollowsStandardStreams(t *testing.T) {
 
 // TestPrintModeWithoutMessageReportsLastMessage ports upstream
 // print-mode.test.ts "returns non-zero on assistant error": text mode reports
-// the session's last message even when no prompt is sent, so `pig -c -p` on a
+// the session's last message even when no prompt is sent, so `ompig -c -p` on a
 // session that ended in an error prints that error and exits 1.
 func TestPrintModeWithoutMessageReportsLastMessage(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	devNull, err := os.Open(os.DevNull)
@@ -141,10 +141,10 @@ func TestPrintModeWithoutMessageReportsLastMessage(t *testing.T) {
 // TestPrintModeSendsEveryPositionalMessage pins upstream main.ts, which
 // passes every positional message after the first to print mode, and
 // print-mode.ts, which sends each as its own prompt after the initial message.
-// Pig sent only the first and exited 0.
+// Ompig sent only the first and exited 0.
 func TestPrintModeSendsEveryPositionalMessage(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	devNull, err := os.Open(os.DevNull)
@@ -184,7 +184,7 @@ func TestPrintModeSendsEveryPositionalMessage(t *testing.T) {
 	})
 
 	// Upstream json mode with no message writes the session header and sends
-	// nothing; pig refused to start.
+	// nothing; ompig refused to start.
 	t.Run("json without a message", func(t *testing.T) {
 		stdout, stderr, code := runPigForModeTest(t, bin, devNull, nil, "--mode", "json")
 		lines := jsonModeLines(t, stdout)
@@ -197,11 +197,11 @@ func TestPrintModeSendsEveryPositionalMessage(t *testing.T) {
 // TestPrintModeWaitsForExtensionPromptFromAgentSettled pins upstream print
 // mode, which binds the session to extensions: a prompt an agent_settled
 // handler sends runs before the initial prompt resolves, so the printed
-// answer is that run's. Pig bound no session actions in print mode, so
+// answer is that run's. Ompig bound no session actions in print mode, so
 // sendUserMessage failed and the first answer was printed.
 func TestPrintModeWaitsForExtensionPromptFromAgentSettled(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	fixture, err := filepath.Abs(filepath.Join("testdata", "session-actions.mjs"))
@@ -218,19 +218,19 @@ func TestPrintModeWaitsForExtensionPromptFromAgentSettled(t *testing.T) {
 	cmd := exec.CommandContext(ctx, bin, "--model", "test-faux/faux-1", "-e", fixture, "-p", "reply with exactly: loop-start")
 	cmd.Dir = t.TempDir()
 	home := t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	cmd.Stdin = devNull
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("pig: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig: %v\nstderr: %s", err, stderr.String())
 	}
 	if stdout.String() != "loop-done\n" {
 		t.Fatalf("stdout = %q, want the extension-sent prompt's answer %q\nstderr: %s", stdout.String(), "loop-done\n", stderr.String())
 	}
 }
 
-// pig --fork <id> --no-session exits 1 with Pi's error before any session
+// ompig --fork <id> --no-session exits 1 with Pi's error before any session
 // work (main.ts validateForkFlags).
 func TestForkWithNoSessionExitsWithUpstreamError(t *testing.T) {
 	bin := buildPigBinaryForSignalTest(t)

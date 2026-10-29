@@ -29,9 +29,9 @@ func TestInstalledLocalDirectoryWithoutPackageResourcesLoadsAsAnExtension(t *tes
 	}
 	install := exec.Command(binary, "install", extensionDir)
 	install.Dir = cwd
-	install.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+filepath.Join(root, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	install.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+filepath.Join(root, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	if output, err := install.CombinedOutput(); err != nil {
-		t.Fatalf("pig install: %v\n%s", err, output)
+		t.Fatalf("ompig install: %v\n%s", err, output)
 	}
 	run := runPigStartup(t, binary, root, agentDir, cwd, "{\"id\":\"commands\",\"type\":\"get_commands\"}\n", "--mode", "rpc", "--no-session")
 	if run.err != nil {

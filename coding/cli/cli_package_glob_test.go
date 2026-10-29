@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/coding"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // cliGlobThrowMessage is the SyntaxError Node's globSync throws for "prompts/[[:alpha:]]*,md": minimatch escapes the ",", and the u flag rejects the escape. Node globs case-insensitively on Windows and macOS.
@@ -62,10 +62,10 @@ const (
 	cliGitSource       = "git:https://example.com/owner/eprobe"
 )
 
-// Pi resolves the -e sources after the settings, in the reload and in the pre-trust extension load, outside any catch (resource-loader.ts:525-528, 676-680). An npm or git source's Package is collected without a catch (package-manager.ts:1315-1342), so a manifest glob that globSync throws for stops startup; a local source's throw is caught (:1372-1389) and keeps the kinds collected before it, and a glob in PiG's own "pig" block, which Pi never reads, throws nothing. Probed with Pi 1.1.0 (r24): the npm source exits 1 with this SyntaxError.
+// Pi resolves the -e sources after the settings, in the reload and in the pre-trust extension load, outside any catch (resource-loader.ts:525-528, 676-680). An npm or git source's Package is collected without a catch (package-manager.ts:1315-1342), so a manifest glob that globSync throws for stops startup; a local source's throw is caught (:1372-1389) and keeps the kinds collected before it, and a glob in Ompig's own "ompig" block, which Pi never reads, throws nothing. Probed with Pi 1.1.0 (r24): the npm source exits 1 with this SyntaxError.
 func TestCLIPackageSourceGlobThrowFollowsPi(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	for _, tc := range []struct {
 		name, source, fields string
 		fails                bool
@@ -73,7 +73,7 @@ func TestCLIPackageSourceGlobThrowFollowsPi(t *testing.T) {
 		{"npm source", "npm:eprobe", cliThrowingPrompts, true},
 		{"git source", cliGitSource, cliThrowingPrompts, true},
 		{"local source", "", cliThrowingPrompts, false},
-		{"npm source, glob in the pig block", "npm:eprobe", `"pi":{"extensions":["extensions/a.js"]},"pig":{"hooks":["hooks/[[:alpha:]]*,json"]}`, false},
+		{"npm source, glob in the ompig block", "npm:eprobe", `"pi":{"extensions":["extensions/a.js"]},"ompig":{"hooks":["hooks/[[:alpha:]]*,json"]}`, false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			cwd, agentDir := t.TempDir(), t.TempDir()
@@ -103,7 +103,7 @@ func TestCLIPackageSourceGlobThrowFollowsPi(t *testing.T) {
 // Pi's resolveExtensionSources resolves the -e sources in order and rejects at the first throw (package-manager.ts:1293-1342), so of two throwing sources the earlier one's error is reported.
 func TestCLIPackageSourceGlobThrowFirstSourceWins(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	cwd, agentDir := t.TempDir(), t.TempDir()
 	writeCLIGlobPackage(t, cliGlobPackageRoot(t, agentDir, "npm:eprobe"), cliThrowingPrompts)
 	writeCLIGlobPackage(t, cliGlobPackageRoot(t, agentDir, cliGitSource), `"pi":{"prompts":["prompts/[[:alpha:]]*,txt"]}`)
@@ -126,7 +126,7 @@ func TestCLIPackageSourceGlobThrowFirstSourceWins(t *testing.T) {
 // The snapshot provider is /reload's resourceLoader.reload() (interactive-mode.ts:6222-6255): the settings errors come first, then the -e sources' throw, which becomes `Reload failed: <message>`.
 func TestReloadSnapshotReportsCLIPackageGlobThrow(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	for _, tc := range []struct {
 		name, settings, want string
 	}{
@@ -294,7 +294,7 @@ func releaseCLIBuildAtCleanup(t *testing.T, build *cliBuild) {
 // newCLIGlobTestBuilder is the startup builder of a faux-model run with args in f's agent dir.
 func newCLIGlobTestBuilder(t *testing.T, f packageProcessFixture, args ...string) *cliRuntimeBuilder {
 	t.Helper()
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	flags := parseArgs(append([]string{"--model", "test-faux/faux-1"}, args...))
 	return &cliRuntimeBuilder{
 		mode: processAppMode(flags), flags: flags, agentDir: f.agent, launchCWD: f.cwd,

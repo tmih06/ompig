@@ -11,11 +11,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/npmpublish"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/internal/npmpublish"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
-// An npmCommand with a relative path names a file relative to the directory PiG runs in. A Package publishes in its own directory, so resolving the path there would run an npm the repository ships with the author's npm credentials.
+// An npmCommand with a relative path names a file relative to the directory Ompig runs in. A Package publishes in its own directory, so resolving the path there would run an npm the repository ships with the author's npm credentials.
 func TestPublishResolvesARelativeNPMCommandInPiGsDirectory(t *testing.T) {
 	fake := npmtest.Install(t)
 	npm, err := exec.LookPath("npm")

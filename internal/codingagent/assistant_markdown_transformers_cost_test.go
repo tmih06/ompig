@@ -5,7 +5,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The assistant Markdown transform runs on every Markdown render of a changed assistant block, which is every streaming

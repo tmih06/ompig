@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's ctx.modelRegistry.stream(model, context, options) takes the provider request callbacks onPayload, onResponse and transformHeaders

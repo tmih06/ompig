@@ -3,8 +3,8 @@ package jsonl_test
 import (
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // The read API of JsonlStorage, asked of one seeded store: packages/durable/src/storage/jsonl/storage.ts:277-377 (commit, conversation, scanConversations, entry, findLatestHeadMarker, scanEntries, task, scanTasks, submission, scanSubmissions, submissionByRequest, findDocument, document, scanDocuments, close) delegates to the shared storage contract that packages/durable/src/storage/memory.ts implements, so each result below is the contract's: lookups return the latest complete record or undefined, scans are ordered and paged by a backend cursor, and every call after close fails.

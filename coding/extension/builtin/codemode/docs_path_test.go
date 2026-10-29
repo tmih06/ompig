@@ -5,16 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
-// upstream CODEMODE_DOCS_PATH is join(getDocsPath(), "codemode.md"), the codemode page of the docs Pi installs. PiG
+// upstream CODEMODE_DOCS_PATH is join(getDocsPath(), "codemode.md"), the codemode page of the docs Pi installs. Ompig
 // (D22) names the codemode page of the bundle it materializes under its config root, the directory the system prompt's
 // docs section names, so the page the description and the argument errors point to must ship in that bundle.
 func TestDocsPathIsTheCodemodePageOfTheMaterializedBundle(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	if got, want := codemode.DocsPath(), filepath.Join(pigdocs.DocsDir(root), "codemode.md"); got != want {
 		t.Fatalf("DocsPath() = %q, want %q", got, want)
 	}

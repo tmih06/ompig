@@ -8,11 +8,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // oauth.ts createMcpAuthProvider: a refresh after a 401 loads the configured authorization server metadata document

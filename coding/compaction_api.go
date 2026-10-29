@@ -1,9 +1,9 @@
 package coding
 
 import (
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
 // CompactionSettings is upstream CompactionSettings (compaction.ts:115), exported with the compaction helpers upstream's index.ts exports.

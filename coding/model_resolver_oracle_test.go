@@ -10,8 +10,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type resolverProbe struct {
@@ -140,7 +140,7 @@ func TestResolveCliModelAndScopeMatchPi(t *testing.T) {
 			}
 			p, _ := json.Marshal(probe)
 			e, _ := json.Marshal(expected[set][i])
-			t.Errorf("credentials %v probe %d %s\n  Pig %s\n  Pi  %s", authed, i, p, raw, e)
+			t.Errorf("credentials %v probe %d %s\n  Ompig %s\n  Pi  %s", authed, i, p, raw, e)
 		}
 		if failures > 5 {
 			t.Errorf("credentials %v: %d of %d probes differ from Pi", authed, failures, len(probes))

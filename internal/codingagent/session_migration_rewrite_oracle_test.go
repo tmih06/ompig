@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/session-manager.ts
@@ -73,7 +73,7 @@ emit(out);`, map[string]any{"names": names, "root": root, "piDir": t.TempDir()},
 			t.Fatal(err)
 		}
 		if g, w := renumberIDs(string(got)), renumberIDs(want[name]); g != w {
-			t.Errorf("%s:\nPiG %s\nPi  %s", name, g, w)
+			t.Errorf("%s:\nOmpig %s\nPi  %s", name, g, w)
 		}
 	}
 }

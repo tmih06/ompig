@@ -5,7 +5,7 @@
 // policy blocks the execution of an app data file. Termux works around it with
 // termux-exec, an LD_PRELOAD library that rewrites a libc execve into
 // "/system/bin/linker64 <program> <args>", where the linker maps a PIE
-// executable itself. PiG's Go runtime issues the execve system call without
+// executable itself. Ompig's Go runtime issues the execve system call without
 // libc, so the library never sees it; this package makes the same rewrite
 // before os/exec starts a program. The rewrite also covers a script: the kernel
 // cannot run its "#!" line either, so the script starts through its

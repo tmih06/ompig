@@ -7,9 +7,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // scanToolCallCount counts the blocks of a validated JSON array whose "type" member is "toolCall" or "tool_use", as decoding the array into

@@ -33,7 +33,7 @@ func TestCodexWebSocketMessageKeepsTheRequestBodyMemberOrder(t *testing.T) {
 }
 
 // anthropic-messages.ts hands the SDK the object a payload hook returned; the SDK moves params.betas into the anthropic-beta header and serializes the rest in the
-// object's own member order. PiG forces stream on a replacement body (anthropic-messages.ts:652) but does not sort the members.
+// object's own member order. Ompig forces stream on a replacement body (anthropic-messages.ts:652) but does not sort the members.
 func TestAnthropicReplacementBodyKeepsItsMemberOrder(t *testing.T) {
 	payload := json.RawMessage(`{"zeta":1,"model":"m","betas":["b1","b2"],"messages":[{"role":"user","content":"x"}],"alpha":{"y":2,"x":1},"stream":false,"max_tokens":5}`)
 	body, betas, err := anthropicWireBody(payload)

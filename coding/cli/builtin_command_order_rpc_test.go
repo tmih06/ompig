@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -10,13 +10,13 @@ import (
 
 // Pi 0.99.2 `pi --mode rpc` get_commands lists the built-in extension commands in builtInExtensions order, llama then mcp
 // (probed with the 0.99.2 binary: `llama extension builtin:llama.cpp`, `mcp extension builtin:mcp`).
-// pig divergence (D2): PiG's own built-in `pig-login` follows them and registers /sprite.
+// ompig divergence (D2): Ompig's own built-in `ompig-login` follows them and registers /sprite.
 // Ports .upstream/v0.99.2/packages/coding-agent/src/extensions/index.ts:7-14 with src/modes/rpc/rpc-mode.ts:683.
 func TestRPCGetCommandsListsBuiltinExtensionCommandsInIndexOrder(t *testing.T) {
 	home := t.TempDir()
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"HOME=" + home, "USERPROFILE=" + home, "PIG_HOME=" + home,
-		"PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_OFFLINE=1",
+		"HOME=" + home, "USERPROFILE=" + home, "OMPIG_HOME=" + home,
+		"OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1",
 	}, "--no-session")
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	p.await("the command catalog", func(record rpcRecord) bool {

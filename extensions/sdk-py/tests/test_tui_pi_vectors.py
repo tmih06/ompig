@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from pig_sdk import tui
+from ompig_sdk import tui
 
 VECTORS = Path(__file__).resolve().parents[3] / "test" / "parity" / "sdk-vectors" / "pi-tui"
 

@@ -3,7 +3,7 @@ package delta
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // Apply applies one batch without mutating target. The result shares

@@ -3,12 +3,12 @@ package sdk
 import (
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/internal/kitwire"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/internal/kitwire"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
-// pig additive (D107): the extension component kit. A surface may describe
+// ompig additive (D107): the extension component kit. A surface may describe
 // itself as Pi's tui components, a [kit.View], instead of drawing lines. The
 // host renders the view with its tui ports at the width it lays the surface
 // out at, so a view frame carries no lines. See

@@ -13,11 +13,11 @@ import (
 	"testing"
 )
 
-// The Python and Rust extension SDKs carry the property tables of unicode_tables.go as source (extensions/sdk-py/pig_sdk/tui/_tables.py and
+// The Python and Rust extension SDKs carry the property tables of unicode_tables.go as source (extensions/sdk-py/ompig_sdk/tui/_tables.py and
 // extensions/sdk-rs/src/tui/tables.rs), so a pi-tui helper there measures with the data Pi measures with. This test is the generator and
 // the freshness check:
 //
-//	PIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent
+//	OMPIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent
 func sdkPythonTables() string {
 	var b strings.Builder
 	b.WriteString("# Code generated from tui/widthx/unicode_tables.go by tui/widthx/sdk_tables_test.go; DO NOT EDIT.\n")
@@ -117,10 +117,10 @@ func gunzipTables(data []byte) (string, error) {
 
 func TestSDKTablesAreCurrent(t *testing.T) {
 	for _, c := range []struct{ path, want string }{
-		{"../../extensions/sdk-py/pig_sdk/tui/_tables.py", sdkPythonTables()},
+		{"../../extensions/sdk-py/ompig_sdk/tui/_tables.py", sdkPythonTables()},
 		{"../../extensions/sdk-rs/src/tui/tables.rs", sdkRustTables()},
 	} {
-		if os.Getenv("PIG_UPDATE_SDK_TUI") != "" {
+		if os.Getenv("OMPIG_UPDATE_SDK_TUI") != "" {
 			if err := os.MkdirAll(filepath.Dir(c.path), 0o755); err != nil {
 				t.Fatal(err)
 			}
@@ -134,16 +134,16 @@ func TestSDKTablesAreCurrent(t *testing.T) {
 		}
 		got, err := os.ReadFile(c.path)
 		if err != nil || string(got) != c.want {
-			t.Errorf("%s is stale: run PIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent", c.path)
+			t.Errorf("%s is stale: run OMPIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent", c.path)
 		}
 		// The embed carries the compressed copy: it must hold the same text, whatever compressor wrote it.
 		compressed, err := os.ReadFile(c.path + ".gz")
 		if err != nil {
-			t.Errorf("%s.gz is missing: run PIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent", c.path)
+			t.Errorf("%s.gz is missing: run OMPIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent", c.path)
 			continue
 		}
 		if text, err := gunzipTables(compressed); err != nil || text != c.want {
-			t.Errorf("%s.gz is stale: run PIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent", c.path)
+			t.Errorf("%s.gz is stale: run OMPIG_UPDATE_SDK_TUI=1 go test ./tui/widthx -run TestSDKTablesAreCurrent", c.path)
 		}
 	}
 }

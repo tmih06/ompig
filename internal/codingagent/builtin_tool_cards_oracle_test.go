@@ -15,12 +15,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 // builtinToolCardsScript is the Pi oracle's absolute path, taken before a test changes its working directory.
@@ -64,7 +64,7 @@ func TestBuiltinToolCardsMatchPi(t *testing.T) {
 	compareToolCards(t, probes, names)
 }
 
-// compareToolCards renders each probe with Pi and with Pig and reports the first rows that differ.
+// compareToolCards renders each probe with Pi and with Ompig and reports the first rows that differ.
 func compareToolCards(t *testing.T, probes []toolCardProbe, names []string) {
 	t.Helper()
 	input, err := json.Marshal(probes)
@@ -91,17 +91,17 @@ func compareToolCards(t *testing.T, probes []toolCardProbe, names []string) {
 				for row < min(len(got), len(expected[i])) && got[row] == expected[i][row] {
 					row++
 				}
-				var pigRow, piRow string
+				var ompigRow, piRow string
 				if row < len(got) {
-					pigRow = got[row]
+					ompigRow = got[row]
 				}
 				if row < len(expected[i]) {
 					piRow = expected[i][row]
 				}
 				for r := max(0, row-2); r < min(len(got), len(expected[i])) && r <= row+2; r++ {
-					t.Logf("row %d\n  Pig %q\n  Pi  %q", r, got[r], expected[i][r])
+					t.Logf("row %d\n  Ompig %q\n  Pi  %q", r, got[r], expected[i][r])
 				}
-				t.Errorf("%s (width %d, %d vs %d rows), first difference at row %d:\n  Pig %q\n  Pi  %q", names[i], probes[i].Width, len(got), len(expected[i]), row, pigRow, piRow)
+				t.Errorf("%s (width %d, %d vs %d rows), first difference at row %d:\n  Ompig %q\n  Pi  %q", names[i], probes[i].Width, len(got), len(expected[i]), row, ompigRow, piRow)
 			}
 		}
 	}
@@ -111,7 +111,7 @@ func compareToolCards(t *testing.T, probes []toolCardProbe, names []string) {
 }
 
 // edit.ts renderCall once its diff preview has settled: a Box in the success background holding the path and the diff the edits would make, or in the error background holding the error text, against pinned Pi
-// (the pending card, before the preview lands, is the "edit pending" probes of TestBuiltinToolCardsMatchPi). The Pi probe waits for the preview and PiG's card draws once it lands.
+// (the pending card, before the preview lands, is the "edit pending" probes of TestBuiltinToolCardsMatchPi). The Pi probe waits for the preview and Ompig's card draws once it lands.
 func TestBuiltinEditCallPreviewMatchesPi(t *testing.T) {
 	dir := t.TempDir()
 	t.Chdir(dir)
@@ -149,7 +149,7 @@ func TestBuiltinToolCardsProbeDump(t *testing.T) {
 	fmt.Printf("toolcard-probes:%s\n", line)
 }
 
-// TestBuiltinToolCardsParity prints Pig's rows, one JSON line per probe, for the tools/24 parity scenario.
+// TestBuiltinToolCardsParity prints Ompig's rows, one JSON line per probe, for the tools/24 parity scenario.
 func TestBuiltinToolCardsParity(t *testing.T) {
 	probes, _ := builtinToolCardProbes(t)
 	for _, rows := range renderBuiltinToolCards(t, probes) {

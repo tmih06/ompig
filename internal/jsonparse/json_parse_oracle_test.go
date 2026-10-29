@@ -9,7 +9,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // pi: JSON.parse is what Pi calls on provider streams, session files and settings; V8's SyntaxError message is shown to users.

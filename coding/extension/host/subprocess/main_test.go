@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 const (
-	nodePreflightHelperFIFOEnv  = "PIG_TEST_NODE_PREFLIGHT_FIFO"
-	fakeProviderBridgeNodeEnv   = "PIG_TEST_FAKE_PROVIDER_BRIDGE_NODE"
-	fakeProviderBridgeScriptEnv = "PIG_TEST_FAKE_PROVIDER_BRIDGE_SCRIPT"
+	nodePreflightHelperFIFOEnv  = "OMPIG_TEST_NODE_PREFLIGHT_FIFO"
+	fakeProviderBridgeNodeEnv   = "OMPIG_TEST_FAKE_PROVIDER_BRIDGE_NODE"
+	fakeProviderBridgeScriptEnv = "OMPIG_TEST_FAKE_PROVIDER_BRIDGE_SCRIPT"
 )
 
 var fixtureRoot string
@@ -37,7 +37,7 @@ func TestMain(m *testing.M) {
 		}
 	}
 	if nodePath := os.Getenv(fakeProviderBridgeNodeEnv); nodePath != "" {
-		// `pig provider-bridge` stand-in: the shim spawns PIG_HARNESS_BINARY directly, and Windows runs only executables, not `#!/bin/sh` scripts.
+		// `ompig provider-bridge` stand-in: the shim spawns OMPIG_HARNESS_BINARY directly, and Windows runs only executables, not `#!/bin/sh` scripts.
 		script := os.Getenv(fakeProviderBridgeScriptEnv)
 		_ = os.Unsetenv(fakeProviderBridgeNodeEnv)
 		bridge := exec.Command(nodePath, script)
@@ -52,7 +52,7 @@ func TestMain(m *testing.M) {
 		}
 		os.Exit(0)
 	}
-	testRoot, err := os.MkdirTemp("", "pig-sp-")
+	testRoot, err := os.MkdirTemp("", "ompig-sp-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "create isolated test home:", err)
 		os.Exit(2)
@@ -63,7 +63,7 @@ func TestMain(m *testing.M) {
 		os.Exit(2)
 	}
 	for key, value := range map[string]string{
-		"PIG_HOME": filepath.Join(testRoot, "pig"),
+		"OMPIG_HOME": filepath.Join(testRoot, "ompig"),
 	} {
 		if err := os.Setenv(key, value); err != nil {
 			fmt.Fprintf(os.Stderr, "set isolated %s: %v\n", key, err)
@@ -78,9 +78,9 @@ func TestMain(m *testing.M) {
 		os.Exit(2)
 	}
 	for key, path := range map[string]string{
-		"PIG_SDK_GO_ROOT": filepath.Join(root, "extensions", "sdk"),
-		"PIG_SDK_PY_ROOT": filepath.Join(root, "extensions", "sdk-py"),
-		"PIG_SDK_RS_ROOT": filepath.Join(root, "extensions", "sdk-rs"),
+		"OMPIG_SDK_GO_ROOT": filepath.Join(root, "extensions", "sdk"),
+		"OMPIG_SDK_PY_ROOT": filepath.Join(root, "extensions", "sdk-py"),
+		"OMPIG_SDK_RS_ROOT": filepath.Join(root, "extensions", "sdk-rs"),
 	} {
 		if err := os.Setenv(key, path); err != nil {
 			fmt.Fprintf(os.Stderr, "set %s: %v\n", key, err)

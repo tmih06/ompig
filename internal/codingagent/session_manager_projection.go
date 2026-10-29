@@ -9,16 +9,16 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // marshalSessionLine encodes one JSONL record the way JSON.stringify does ('<', '>', '&' and the line and paragraph separators stay literal, a
-// negative zero is 0), so Pig writes the bytes Pi writes. The session keeps a message entry's record for its life, so the record holds no
+// negative zero is 0), so Ompig writes the bytes Pi writes. The session keeps a message entry's record for its life, so the record holds no
 // spare room: a line is encoded in the encoder's pooled buffer and copied out at its length. A message entry whose text outgrows that buffer
 // is encoded into one buffer sized for its text and its escapes instead, where the room reserved beyond the record is a small part of it: a
 // buffer the encoder outgrows is replaced by one of twice its size, which the session would keep.
@@ -406,7 +406,7 @@ func sessionEntryToContextMessagesInto(entry SessionEntry, decode messageDecoder
 
 // bashExecutionContextMessages returns a `!cmd` entry's bashExecution message
 // as persisted. Provider conversion renders it to text and drops `!!cmd`
-// (excludeFromContext) messages, as Pi's convertToLlm does. Entries in Pig's
+// (excludeFromContext) messages, as Pi's convertToLlm does. Entries in Ompig's
 // legacy flat shape are rebuilt into the same message.
 func bashExecutionContextMessages(entry SessionEntry) []agent.AgentMessage {
 	var wire struct {

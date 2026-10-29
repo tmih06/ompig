@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // buildFixture writes a tiny repo whose inventory, PORT_MAP, and Go tree exercise
@@ -151,11 +151,11 @@ func TestDesignedOutNoteNeverGap(t *testing.T) {
 func TestCoverageSplitsImplemented(t *testing.T) {
 	root := buildFixture(t)
 	// agent.go (Agent ⬜) is covered; ai/oauth_registry.go (AuthType ⬜) is not.
-	piglet := "mode: set\n" +
+	ompiglet := "mode: set\n" +
 		modulePrefix + "agent/agent.go:1.1,2.1 1 1\n" +
 		modulePrefix + "ai/oauth_registry.go:1.1,2.1 1 0\n"
 	profPath := filepath.Join(root, "cover.out")
-	if err := os.WriteFile(profPath, []byte(piglet), 0o644); err != nil {
+	if err := os.WriteFile(profPath, []byte(ompiglet), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	covered, err := coveredFiles(profPath)

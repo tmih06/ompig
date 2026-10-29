@@ -8,8 +8,8 @@ import (
 	"slices"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // plain is a value as the JSON of its type reads back, nil for a nil value.

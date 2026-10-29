@@ -2,7 +2,7 @@ package docsdrift
 
 // legacyLayout is the reason recorded for pages that keep their own section layout against the Pi 1.2.0 restructure.
 // The entries are a baseline to shrink: restore a section on the page and delete its line (a stale line fails the test).
-const legacyLayout = "the PiG page keeps its own section layout; this upstream 1.2.0 section is not adopted yet"
+const legacyLayout = "the Ompig page keeps its own section layout; this upstream 1.2.0 section is not adopted yet"
 
 func init() {
 	intentionalOmissions["cli-integration.md"] = omit(legacyLayout,

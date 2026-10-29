@@ -1,4 +1,4 @@
-use pig_sdk::{Extension, ToolResult};
+use ompig_sdk::{Extension, ToolResult};
 use serde_json::{Value, json};
 
 /// new_extension is the conventional factory entry point.

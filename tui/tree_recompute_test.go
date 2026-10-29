@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // recomputeNode is a TreeNode with filter tags and searchable text, the shape of the session adapter's nodes.

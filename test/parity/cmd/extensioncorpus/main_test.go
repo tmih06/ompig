@@ -53,7 +53,7 @@ func TestCorpusEnvironmentIsolatesHomesAndProxies(t *testing.T) {
 			t.Fatalf("environment retained %q", forbidden)
 		}
 	}
-	for _, required := range []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig")} {
+	for _, required := range []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig")} {
 		if !slices.Contains(environment, required) {
 			t.Fatalf("environment missing %q", required)
 		}
@@ -70,7 +70,7 @@ func TestValidateExampleRecordsFailedRegistration(t *testing.T) {
 	if err := os.WriteFile(source, []byte("export default () => {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	binary := filepath.Join(root, "pig")
+	binary := filepath.Join(root, "ompig")
 	if runtime.GOOS == "windows" {
 		binary += ".exe"
 	}
@@ -99,7 +99,7 @@ func TestValidateExampleCancelledRemovesScratchHome(t *testing.T) {
 	if err := os.WriteFile(source, []byte("export default () => {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	binary := filepath.Join(root, "pig")
+	binary := filepath.Join(root, "ompig")
 	if runtime.GOOS == "windows" {
 		binary += ".exe"
 	}

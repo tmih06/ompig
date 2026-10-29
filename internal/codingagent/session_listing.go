@@ -14,9 +14,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // SessionListProgress receives completed-file counts. A nil partial means no snapshot was published; a non-nil empty slice is an empty published snapshot.
@@ -134,7 +134,7 @@ func summarizeSessionFilesWithOptions(files []string, options SessionListOptions
 		return []SessionInfo{}, nil
 	}
 	if len(files) > 1 {
-		// pig additive (D174): the summary workers stat, read and decode at the runtime default width. The section closes after the
+		// ompig additive (D174): the summary workers stat, read and decode at the runtime default width. The section closes after the
 		// deferred join below, so it outlives every worker.
 		defer procpolicy.Widen()()
 	}

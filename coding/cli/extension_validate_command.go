@@ -14,20 +14,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
-// extensionValidationReport is the JSON contract emitted by `pig install
+// extensionValidationReport is the JSON contract emitted by `ompig install
 // --validate-only --json`.
 //
-// pig additive (D28): downstream-only extension validation report surface;
+// ompig additive (D28): downstream-only extension validation report surface;
 // upstream pi has no validate-only install mode or machine-readable extension
 // validation output. External controllers can consume it to gate publication.
 type extensionValidationReport struct {
@@ -210,9 +210,9 @@ func validateResolvedInstallSources(cwd string, sm *codingagent.SettingsManager,
 	if packagemanager.DetectSourceKind(source) != "local" {
 		//perf:ok once per validate command, which fetches and loads a Package
 		if _, statErr := os.Stat(root); errors.Is(statErr, os.ErrNotExist) {
-			// pig additive (D28): an uninstalled source is fetched into a scratch
+			// ompig additive (D28): an uninstalled source is fetched into a scratch
 			// install root that never touches installed packages or settings.
-			scratch, err := os.MkdirTemp("", "pig-validate-*")
+			scratch, err := os.MkdirTemp("", "ompig-validate-*")
 			if err != nil {
 				return nil, err
 			}
@@ -261,7 +261,7 @@ func printValidationError(message string, jsonOut bool) int {
 const validationLoadTimeout = 2 * time.Minute
 
 // validationTimeout bounds validation: the build budget, which
-// PIG_CELL_BUILD_TIMEOUT sets, then the time to load what was built. A fixed
+// OMPIG_CELL_BUILD_TIMEOUT sets, then the time to load what was built. A fixed
 // bound shorter than the build budget kills a slow build, such as a Rust cell
 // on a phone, that the variable allows.
 func validationTimeout() time.Duration {
@@ -317,7 +317,7 @@ func validateExtensionRuntimes(input string) ([]extensionValidationReport, error
 // (label, description, prompt snippet, guidelines) in deterministic name order
 // so a downstream validator can scan it for prompt injection.
 //
-// pig additive (D28): the toolDetails/commandDetails scannable-text surface
+// ompig additive (D28): the toolDetails/commandDetails scannable-text surface
 // has no upstream equivalent.
 func toolDetailsFromExtension(ext *extension.Extension) []toolDetailReport {
 	names := mapKeys(ext.Tools)
@@ -351,7 +351,7 @@ func commandDetailsFromExtension(ext *extension.Extension) []commandDetailReport
 }
 
 // extensionConfigsFromPath resolves what an install of abs would load. A
-// Package root (a "pi" or "pig" package.json block, plugin metadata, or a
+// Package root (a "pi" or "ompig" package.json block, plugin metadata, or a
 // conventional resource directory) loads every extension its discovery names,
 // in any language, as startup does; any other directory or file is itself one
 // extension.

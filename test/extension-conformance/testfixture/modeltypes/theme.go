@@ -3,7 +3,7 @@ package modeltypes
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // colorFrom reads a pi-tui Color from its JSON object.

@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_SetLabelAndShortcut pins two ExtensionAPI members in every SDK. Pi's `pi.setLabel(entryId, label)`

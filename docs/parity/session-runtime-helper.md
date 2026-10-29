@@ -11,7 +11,7 @@ All test paths below are under `packages/coding-agent/test/`.
 | File | Original sites | Current evidence |
 | --- | --- | --- |
 | `suite/agent-session-runtime.test.ts` | 125, 166, 216, 249, 294, 329, 378, 391, 431, 543, 548, 620 | All 12 native cases pass through real Runtime/Session construction. Session25 passes three exact-output pairs. Print, JSON, RPC and interactive mode replace through the factory-owned Runtime (Production modes below). |
-| `suite/regressions/2860-replaced-session-context.test.ts` | 147, 211, 243 | All three native cases pass through real new/fork/switch replacement. Session27 pairs the original assertions. `TestReplacedSession2860AcrossSDKs` runs the same bodies through the pig binary for Node, Go, Python and Rust extensions. |
+| `suite/regressions/2860-replaced-session-context.test.ts` | 147, 211, 243 | All three native cases pass through real new/fork/switch replacement. Session27 pairs the original assertions. `TestReplacedSession2860AcrossSDKs` runs the same bodies through the ompig binary for Node, Go, Python and Rust extensions. |
 | `suite/regressions/5943-session-start-notify.test.ts` | 256, 276, 313, 368, 418, 451, 475 | All seven native cases pass. Session24 pairs resource ordering, Session28 pairs reload, and Session29 pairs replacement notification/message ordering. Production factory wiring is closed. |
 | `suite/regressions/startup-session-rebind-duplicate-subscription.test.ts` | 23 | The native overlapping-bind case passes through real Runtime replacement and the production startup/rebind owner. Session29 pairs the original assertions; The CLI now builds its startup Session through the same factory. |
 | `agent-session-branching.test.ts` | 90, 110, 131 | All three native prompt/selection cases pass through actual Runtime replacement. Session25 compares the implementation-based roles and file presence. The CLI modes replace through the factory-owned Runtime. |
@@ -72,7 +72,7 @@ The four native original cases use actual `CreateAgentSessionRuntime` factories 
 
 These four cases were added with the production implementation and initially passed. They are mutation-proven, not pre-fix red-proven. Omitting runtime apply, rendering, pre-bind subscription, or the stale guard each compiles and fails both native tests and the strict Session29 pair. A deliberately missing subscription initially made the failing test block in its subsequent `FlushEvents`; the guard now fails immediately after its failed pre-bind assertion instead of waiting for a consumer it has already proved absent. This changes failure cleanup, not successful assertions or production timing.
 
-The shared owner-call helper is extracted from the already guarded extension reload path. The clean-base replay preserves the current input owner and `initScopedModels`; it does not restore the older input pump or model-scope representation. The complete Session family passes at declared durability. Startup09's existing package-collision diagnostic compares different randomly named Pi/PiG agent roots; a compiling pre-rebind Run overlay reproduces that same path-only failure. Its comparator is unchanged, and the resource/scenario owner must resolve the environment/provenance boundary. Other startup scenarios pass. Full coding/internal-codingagent tests and focused race tests pass; no full repository pass is claimed.
+The shared owner-call helper is extracted from the already guarded extension reload path. The clean-base replay preserves the current input owner and `initScopedModels`; it does not restore the older input pump or model-scope representation. The complete Session family passes at declared durability. Startup09's existing package-collision diagnostic compares different randomly named Pi/Ompig agent roots; a compiling pre-rebind Run overlay reproduces that same path-only failure. Its comparator is unchanged, and the resource/scenario owner must resolve the environment/provenance boundary. Other startup scenarios pass. Full coding/internal-codingagent tests and focused race tests pass; no full repository pass is claimed.
 
 `BenchmarkRuntimeInteractiveRebind` measures fresh destination Services/Session construction, optional setup history, projection refresh, UI rendering/binding, and outgoing Session shutdown. It supplies the actual factory ModelRegistry/settings and retains only the current factory metadata. Empty replacements take approximately 9.8–10.7ms, 19.8MB, and 19.5–19.9K allocations; replacements with 1000 restored assistant entries take approximately 45.2–52.7ms, 29.4MB, and 95.8K allocations. About 78% of allocation space is in `ModelRegistry.RuntimeModels`, mostly `ai.ListModels`; this work makes no optimization or bounded-latency claim. Subprocess startup and physical retirement are not measured.
 
@@ -113,7 +113,7 @@ Two additional compiling unit mutations cover the root-memory fork fallback and 
 
 The original tests expect zero messages at `agent-session-branching.test.ts:105` and `:127`, and two messages at `:152-154`. The pinned implementation retains native system messages. `src/core/agent-session-runtime.ts:291-349` branches at the selected user's parent. `src/core/session-manager.ts:1625-1750` retains the selected branch and defers persistence when it contains no assistant.
 
-The mapping records: **upstream test expectation disagrees with the pinned implementation; PiG matches the implementation**.
+The mapping records: **upstream test expectation disagrees with the pinned implementation; Ompig matches the implementation**.
 
 `test/parity/testdata/session-branching-oracle-pi.mjs` preserves the original prompt texts and selection positions. It substitutes deterministic faux responses for the credential-gated Anthropic responses. It verifies actual Runtime identity replacement and observes:
 
@@ -135,7 +135,7 @@ This measures native memory-only replacement without extension subprocesses or l
 
 ### Replacement latency with extension subprocesses
 
-`BenchmarkSessionReplacementCycle` in `coding/cli/session_replacement_bench_test.go` drives print mode's production path: `Runtime.NewSession`, then `cliSessionFactory.create` with `cliRuntimeBuilder.rebuild`, then the Session's `Dispose` and retirement. `BenchmarkSessionReplacementPhases` times `buildResources`, `buildSession` and the host release of one build. `PIG_STARTUP_TRACE=1` prints the extension spawn and handshake marks. The fixture is `coding/cli/testdata/session-replace.mjs`, copied once per extension.
+`BenchmarkSessionReplacementCycle` in `coding/cli/session_replacement_bench_test.go` drives print mode's production path: `Runtime.NewSession`, then `cliSessionFactory.create` with `cliRuntimeBuilder.rebuild`, then the Session's `Dispose` and retirement. `BenchmarkSessionReplacementPhases` times `buildResources`, `buildSession` and the host release of one build. `OMPIG_STARTUP_TRACE=1` prints the extension spawn and handshake marks. The fixture is `coding/cli/testdata/session-replace.mjs`, copied once per extension.
 
 On the lane host (i9-9900K, load 4-12 from other workers, Go 1.27.1, Node 24.19.0), one replacement measures 205-400 ms with one Node extension (median about 300 ms; 4 MB and 34k allocations) and 0.6-1.0 s with four. On the scenario harness, five replacements took 765 ms on rc2 before this branch and 2191 ms with it. Pi took 695 ms.
 
@@ -170,7 +170,7 @@ RPC commands rebind twice, as Pi 0.87.1's rpc-mode does: `runtimeHost.newSession
 
 ## Reproduction
 
-Run every command with disposable `HOME`, `TMPDIR`, and effective Pi/PiG agent roots. Resolve installed toolchain paths before changing `HOME`. Use `go test -p 2`, not `go test -p2`: the latter invocation on this toolchain did not run the requested packages and is not evidence of a package pass.
+Run every command with disposable `HOME`, `TMPDIR`, and effective Pi/Ompig agent roots. Resolve installed toolchain paths before changing `HOME`. Use `go test -p 2`, not `go test -p2`: the latter invocation on this toolchain did not run the requested packages and is not evidence of a package pass.
 
 ```sh
 node --experimental-import-meta-resolve test/parity/testdata/session-runtime-pi.mjs runtime
@@ -182,7 +182,7 @@ node --experimental-import-meta-resolve test/parity/testdata/session-branching-o
 go test -p 2 ./coding ./internal/codingagent
 go test -race ./coding -run '^(TestRuntimeOriginal|TestRuntimeImportFileURLAndMissingInput|TestRuntimeMissingCWDPrecedesFactory)' -count=3
 
-PIG_PARITY_PIG_BIN="$PWD/bin/pig-parity" PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi" go test -tags=parity ./test/parity/runner -count=1 -run '^TestParity/(24-runtime-cost-and-resource-order|25-runtime-replacements)$' -pig-parity.dir="$PWD/test/parity/scenarios/session" -pig-parity.allow-stale
+OMPIG_PARITY_OMPIG_BIN="$PWD/bin/ompig-parity" OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi" go test -tags=parity ./test/parity/runner -count=1 -run '^TestParity/(24-runtime-cost-and-resource-order|25-runtime-replacements)$' -ompig-parity.dir="$PWD/test/parity/scenarios/session" -ompig-parity.allow-stale
 ```
 
 The lane handoff identifies the retained evidence directory. Mutation scripts record compilation, unit, and paired exits separately. A merged-tip release-gate pass is not claimed.

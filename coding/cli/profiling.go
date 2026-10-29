@@ -5,12 +5,12 @@ package cli
 import (
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
-// stopProfiles writes the PIG_PROFILE profiles that main started. It is a no-op
-// when PIG_PROFILE is unset.
+// stopProfiles writes the OMPIG_PROFILE profiles that main started. It is a no-op
+// when OMPIG_PROFILE is unset.
 var stopProfiles = func() {}
 
 // stopModelServices cancels and drains Services-owned model work while extension transports are still available.
@@ -24,7 +24,7 @@ func exitProcess(code int) {
 	stopStartupExtensions()
 	codingagent.RestoreStdout()
 	stopProfiles()
-	// pig additive (D102): every exit through here is requested or prints its reason, so the session marker goes.
+	// ompig additive (D102): every exit through here is requested or prints its reason, so the session marker goes.
 	codingagent.EndSessionMarker()
 	// Pi's process 'exit' handler restores the terminal modes of a TUI that exits without stop() (9df819de, #11170); os.Exit runs no handlers.
 	tui.RestoreTerminalOnExit()

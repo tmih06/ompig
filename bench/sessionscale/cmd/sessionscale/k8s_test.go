@@ -29,7 +29,7 @@ func TestK8sSeedFingerprintIsThePinnedOne(t *testing.T) {
 	for _, size := range []int{7, 65} {
 		want := prof.Fingerprints[strconv.Itoa(size)]
 		var metas []k8sMeta
-		for _, target := range []string{"pig", "pi"} {
+		for _, target := range []string{"ompig", "pi"} {
 			dir := filepath.Join(t.TempDir(), target+"-"+strconv.Itoa(size))
 			var out bytes.Buffer
 			if err := k8sSeed([]string{"-size", strconv.Itoa(size), "-bytes", strconv.Itoa(size) + "M", "-dir", dir}, &out); err != nil {
@@ -88,17 +88,17 @@ func TestK8sFingerprintCoversTheBody(t *testing.T) {
 	}
 }
 
-const k8sPoints = `{"arm":"pig","label":"resume","prompts":0,"rssKiB":2048,"pssKiB":1536,"anonKiB":1024,"hwmKiB":3072,"cpuMs":900,"wallMs":2500}
-{"arm":"pig","label":"prompts-3","prompts":3,"rssKiB":4096,"pssKiB":4000,"anonKiB":2048,"hwmKiB":5120,"cpuMs":1200,"wallMs":7000,"promptCpuMs":[40,30,20],"promptWallMs":[1400,1300,1350],"requests":[{"n":1,"bytes":5000,"messages":12,"messagesHash":"aa"},{"n":2,"bytes":5100,"messages":14,"messagesHash":"bb"}]}
-{"arm":"pig","label":"quit","quitMs":71,"error":"<nil>"}
+const k8sPoints = `{"arm":"ompig","label":"resume","prompts":0,"rssKiB":2048,"pssKiB":1536,"anonKiB":1024,"hwmKiB":3072,"cpuMs":900,"wallMs":2500}
+{"arm":"ompig","label":"prompts-3","prompts":3,"rssKiB":4096,"pssKiB":4000,"anonKiB":2048,"hwmKiB":5120,"cpuMs":1200,"wallMs":7000,"promptCpuMs":[40,30,20],"promptWallMs":[1400,1300,1350],"requests":[{"n":1,"bytes":5000,"messages":12,"messagesHash":"aa"},{"n":2,"bytes":5100,"messages":14,"messagesHash":"bb"}]}
+{"arm":"ompig","label":"quit","quitMs":71,"error":"<nil>"}
 `
 
 func TestK8sLine(t *testing.T) {
-	line, err := k8sLine([]byte(k8sPoints), "pig", 7, 4, "c031303a10133dde", 3)
+	line, err := k8sLine([]byte(k8sPoints), "ompig", 7, 4, "c031303a10133dde", 3)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := map[string]any{"t": "sample", "target": "pig", "turns": 7, "sample": 4, "fingerprint": "c031303a10133dde",
+	want := map[string]any{"t": "sample", "target": "ompig", "turns": 7, "sample": 4, "fingerprint": "c031303a10133dde",
 		"open": int64(2500), "openCpu": int64(900), "turn": []int64{1400, 1300, 1350}, "turnCpu": []int64{40, 30, 20},
 		"peakRss": 5.0, "resumeRss": 2.0, "resumePss": 1.5, "resumeAnon": 1.0, "promptRss": 4.0, "promptAnon": 2.0,
 		"quitMs": int64(71), "requestBytes": 5000, "requestMessages": 12}
@@ -111,7 +111,7 @@ func TestK8sLine(t *testing.T) {
 		{strings.Replace(k8sPoints, `"prompts-3"`, `"prompts-2"`, 1), "no point after 3 prompts"},
 		{k8sPoints + "not json\n", "run wrote"},
 	} {
-		if _, err := k8sLine([]byte(c.points), "pig", 7, 4, "fp", 3); err == nil || !strings.Contains(err.Error(), c.want) {
+		if _, err := k8sLine([]byte(c.points), "ompig", 7, 4, "fp", 3); err == nil || !strings.Contains(err.Error(), c.want) {
 			t.Errorf("want %q, got %v", c.want, err)
 		}
 	}
@@ -119,7 +119,7 @@ func TestK8sLine(t *testing.T) {
 
 // A sample refuses a fixture whose session file changed after the seed, and a sample of fewer than two prompts.
 func TestK8sSampleChecksTheFixture(t *testing.T) {
-	dir := filepath.Join(t.TempDir(), "pig-7")
+	dir := filepath.Join(t.TempDir(), "ompig-7")
 	if err := k8sSeed([]string{"-size", "7", "-bytes", "64K", "-dir", dir}, &bytes.Buffer{}); err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +133,7 @@ func TestK8sSampleChecksTheFixture(t *testing.T) {
 	if err := f.Close(); err != nil {
 		t.Fatal(err)
 	}
-	args := []string{"-target", "pig", "-size", "7", "-dir", dir, "-cmd", "/bin/false", "-timeout", "5s"}
+	args := []string{"-target", "ompig", "-size", "7", "-dir", dir, "-cmd", "/bin/false", "-timeout", "5s"}
 	if err := k8sSample(args, &bytes.Buffer{}); err == nil || !strings.Contains(err.Error(), "changed since it was generated") {
 		t.Errorf("changed fixture: %v", err)
 	}

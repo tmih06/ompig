@@ -7,7 +7,7 @@ import (
 
 // Upstream prints CLI errors and warnings with chalk.red / chalk.yellow from the default chalk instance (main.ts, model-resolver.ts), whose
 // applyStyle closes and re-opens the color around each line break. formatNoModelsAvailableMessage and the extension load hint span several lines.
-// PiG wrapped the whole text once, so a terminal that resets attributes per line lost the color after the first line.
+// Ompig wrapped the whole text once, so a terminal that resets attributes per line lost the color after the first line.
 func TestCLIErrorsAndWarningsStyleEachLineLikeChalk(t *testing.T) {
 	var stderr bytes.Buffer
 	writeCLIError(&stderr, "first\nsecond", true)

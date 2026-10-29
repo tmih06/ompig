@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 func TestToolSystemPromptContributionsPort(t *testing.T) {

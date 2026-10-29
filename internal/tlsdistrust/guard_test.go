@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	hookPackage   = "github.com/MichaelKinsy/PiG/internal/tlsdistrust"
-	helperPackage = "github.com/MichaelKinsy/PiG/internal/tlsdistrust/tlsdistrusttest"
+	hookPackage   = "github.com/tmih06/ompig/internal/tlsdistrust"
+	helperPackage = "github.com/tmih06/ompig/internal/tlsdistrust/tlsdistrusttest"
 )
 
 // Outbound TLS that takes its configuration from the default transport: a package that does this must link the hook, whose init
@@ -37,8 +37,8 @@ var ownConfigLiterals = map[string]bool{
 	"crypto/tls.Config": true, "net/http.Transport": true, "github.com/gorilla/websocket.Dialer": true,
 }
 
-// Directories that are not PiG's own runtime: the repository's test, benchmark, tooling and documentation trees, and the vendored
-// AWS fork, whose clients PiG builds in ai/bedrock.go.
+// Directories that are not Ompig's own runtime: the repository's test, benchmark, tooling and documentation trees, and the vendored
+// AWS fork, whose clients Ompig builds in ai/bedrock.go.
 var skippedTrees = map[string]string{
 	"test": "test fixtures", "bench": "benchmarks", "docs": "documentation", "examples": "examples", "plans": "plans",
 	"research": "research", "handoffs": "handoffs", "automation": "CI tooling", "third_party": "vendored forks; the AWS fork's clients are built and hardened in ai/bedrock.go",
@@ -143,7 +143,7 @@ func TestEveryOutboundTLSClientIsBehindTheHook(t *testing.T) {
 			if _, skipped := skippedTrees[name]; skipped && (filepath.Dir(rel) == "." || name == "tlsdistrusttest") {
 				return filepath.SkipDir
 			}
-			if rel == "extensions" || rel == "piglets" {
+			if rel == "extensions" || rel == "ompiglets" {
 				return filepath.SkipDir // separate modules; see TestPigletModulesCarryTheirOwnCopy
 			}
 			if _, statErr := os.Stat(filepath.Join(path, "go.mod")); statErr == nil && path != root {
@@ -221,7 +221,7 @@ func TestNoProductionCodeImportsTheTestHelper(t *testing.T) {
 	}
 }
 
-// Piglet modules depend on the SDK alone and cannot import the root module's internal packages, so each one that dials TLS
+// Ompiglet modules depend on the SDK alone and cannot import the root module's internal packages, so each one that dials TLS
 // carries a byte-identical copy of this package.
 func TestPigletModulesCarryAnIdenticalCopy(t *testing.T) {
 	want, err := os.ReadFile("tlsdistrust.go")
@@ -229,22 +229,22 @@ func TestPigletModulesCarryAnIdenticalCopy(t *testing.T) {
 		t.Fatal(err)
 	}
 	for module, user := range map[string]string{
-		"standard": filepath.Join("piglets", "standard", "extensions", "bunruntime", "extension.go"),
-		"aot":      filepath.Join("piglets", "aot", "extensions", "aotruntime", "worker.go"),
+		"standard": filepath.Join("ompiglets", "standard", "extensions", "bunruntime", "extension.go"),
+		"aot":      filepath.Join("ompiglets", "aot", "extensions", "aotruntime", "worker.go"),
 	} {
 		root := filepath.Join("..", "..")
-		got, err := os.ReadFile(filepath.Join(root, "piglets", module, "internal", "tlsdistrust", "tlsdistrust.go"))
+		got, err := os.ReadFile(filepath.Join(root, "ompiglets", module, "internal", "tlsdistrust", "tlsdistrust.go"))
 		if err != nil {
 			t.Fatal(err)
 		}
 		if !bytes.Equal(got, want) {
-			t.Errorf("piglets/%s/internal/tlsdistrust/tlsdistrust.go differs from internal/tlsdistrust/tlsdistrust.go: copy it again", module)
+			t.Errorf("ompiglets/%s/internal/tlsdistrust/tlsdistrust.go differs from internal/tlsdistrust/tlsdistrust.go: copy it again", module)
 		}
 		source, err := os.ReadFile(filepath.Join(root, user))
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !strings.Contains(string(source), `_ "github.com/MichaelKinsy/PiG/piglets/`+module+`/internal/tlsdistrust"`) {
+		if !strings.Contains(string(source), `_ "github.com/tmih06/ompig/ompiglets/`+module+`/internal/tlsdistrust"`) {
 			t.Errorf("%s does not import its module's copy", user)
 		}
 	}

@@ -9,8 +9,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 type managedToolTransport func(*http.Request) (*http.Response, error)
@@ -20,7 +20,7 @@ func (f managedToolTransport) RoundTrip(r *http.Request) (*http.Response, error)
 // Pi init awaits both ensureTool calls, but each onStatus renders before its download finishes.
 func TestManagedToolsRenderProgressBeforeDownloadsFinish(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	original := http.DefaultTransport
 	t.Cleanup(func() { http.DefaultTransport = original })
@@ -71,7 +71,7 @@ func TestManagedToolsRenderProgressBeforeDownloadsFinish(t *testing.T) {
 
 func TestManagedToolsCancellationJoinsDownloads(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	original := http.DefaultTransport
 	t.Cleanup(func() { http.DefaultTransport = original })

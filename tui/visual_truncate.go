@@ -4,7 +4,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // visual_truncate.go: visual line truncation utility.

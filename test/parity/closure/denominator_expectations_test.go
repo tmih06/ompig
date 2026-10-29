@@ -11,7 +11,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-// Reviewed Pig-owned denominators that no generated ledger records.
+// Reviewed Ompig-owned denominators that no generated ledger records.
 const (
 	reviewedPortMapRows      = 462 // docs/parity/PORT_MAP.md rows; every row carries a status and is provisional.
 	reviewedFixedSourceFiles = 4   // families.toml, docs/parity/PORT_MAP.md, test/parity/coverage.md, docs/parity/DIVERGENCES.md.

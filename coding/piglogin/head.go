@@ -7,11 +7,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
-// The pig head the startup header draws in Pi's logo slot is the sprite's 16-by-14 pig (MascotSpriteFor), the same pixels
+// The ompig head the startup header draws in Pi's logo slot is the sprite's 16-by-14 ompig (MascotSpriteFor), the same pixels
 // /sprite preview draws beside the wordmark: two pixel rows per line in half blocks, so HeadCells cells by HeadRows lines.
 const (
 	HeadWidth  = extension.LoginMascotWidth
@@ -20,10 +20,10 @@ const (
 	HeadRows   = HeadHeight / 2
 )
 
-// HeadFor returns the variant's pig head: its 16-by-14 pig.
+// HeadFor returns the variant's ompig head: its 16-by-14 ompig.
 func HeadFor(variant Variant) []string { return MascotSpriteFor(variant) }
 
-// HeadPixel is one opaque pixel of a pig head: its column and row in the HeadWidth by HeadHeight grid, its symbol and its
+// HeadPixel is one opaque pixel of a ompig head: its column and row in the HeadWidth by HeadHeight grid, its symbol and its
 // color.
 type HeadPixel struct {
 	X, Y   int
@@ -31,7 +31,7 @@ type HeadPixel struct {
 	Color  color.RGBA
 }
 
-// HeadPixels returns the opaque pixels of the variant's pig head in row-major order, the pixels HeadLines draws.
+// HeadPixels returns the opaque pixels of the variant's ompig head in row-major order, the pixels HeadLines draws.
 func HeadPixels(variant Variant) []HeadPixel {
 	palette := paletteFor(variant)
 	head := HeadFor(variant)
@@ -46,14 +46,14 @@ func HeadPixels(variant Variant) []HeadPixel {
 	return pixels
 }
 
-// SameHead reports whether two variants draw the same pig head: the same grid in the same colors.
-// pig additive (D91): a frontend's mark is the active sprite's head, rebuilt only when the head changes.
+// SameHead reports whether two variants draw the same ompig head: the same grid in the same colors.
+// ompig additive (D91): a frontend's mark is the active sprite's head, rebuilt only when the head changes.
 func SameHead(a, b Variant) bool {
 	return slices.Equal(HeadFor(a), HeadFor(b)) && a.Body == b.Body && a.Highlight == b.Highlight && a.Snout == b.Snout &&
 		a.Blush == b.Blush && a.InnerEar == b.InnerEar && maps.Equal(a.PaletteOverrides, b.PaletteOverrides)
 }
 
-// HeadLines draws the variant's pig head in half blocks, HeadCells cells wide on each of HeadRows lines: the upper half
+// HeadLines draws the variant's ompig head in half blocks, HeadCells cells wide on each of HeadRows lines: the upper half
 // block in the top pixel's color over the bottom pixel's, the lower half block where only the bottom pixel is opaque.
 // Every cell ends in a reset, so a transparent pixel shows the terminal's background.
 func HeadLines(variant Variant, mode tui.TerminalColorMode) []string {
@@ -91,15 +91,15 @@ func halfBlockLines(grid [][]*color.RGBA, mode tui.TerminalColorMode) []string {
 	return lines
 }
 
-// ArtWidth and ArtRows are the cells of a sprite's full art: the 32-pixel "PiG." wordmark, a 3-pixel gap and the
-// 16-pixel pig, 14 pixels tall, at two pixel rows per line.
+// ArtWidth and ArtRows are the cells of a sprite's full art: the 32-pixel "Ompig." wordmark, a 3-pixel gap and the
+// 16-pixel ompig, 14 pixels tall, at two pixel rows per line.
 const (
 	ArtWidth = extension.LoginHeroWidth + artGap + extension.LoginMascotWidth
 	ArtRows  = extension.LoginHeroHeight / 2
 	artGap   = 3
 )
 
-// ArtLines draws the variant's full art, the wordmark and the pig of its login definition (LoginDefinitionFor), the
+// ArtLines draws the variant's full art, the wordmark and the ompig of its login definition (LoginDefinitionFor), the
 // scene the native login template draws, in half blocks.
 func ArtLines(variant Variant, mode tui.TerminalColorMode) []string {
 	definition := LoginDefinitionFor(variant)

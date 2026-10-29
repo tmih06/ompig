@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // PendingVirtualModelRegistration retains a virtual model and its owning extension until the runner binds.

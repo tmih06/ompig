@@ -6,12 +6,12 @@ package core
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // The context of a model request, derived by the host (ABI section 4.2, context reads). A host that answers the core's reads
@@ -41,7 +41,7 @@ type hostContext struct {
 	tokensRead                   bool
 }
 
-// hostRead runs one host context read. A failed read makes the handle fatal, like any other failed pig.read.
+// hostRead runs one host context read. A failed read makes the handle fatal, like any other failed ompig.read.
 func (h *handler) hostRead(sql uint16, params ...abi.Value) ([][]abi.Value, bool) {
 	return h.mir.lazyRead(sql, params...)
 }

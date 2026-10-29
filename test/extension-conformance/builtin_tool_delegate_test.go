@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // TestConformance_BuiltinToolDelegationAcrossSDKs: Pi's create<Tool>ToolDefinition(cwd, options) and create<Tool>Tool factories (core/tools/*.ts, exported from the

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // upstream: packages/durable/src/env/node-watch.ts excluded()/scan: a recursive watch skips names starting with "." when exclude.hidden is set and names listed in exclude.names, at every depth, and reports every other change.

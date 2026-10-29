@@ -13,7 +13,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientAbortCommandsAreAcceptedWhileIdle"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.abort is the exported Go method rpcclient.RpcClient.Abort; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.abort is the exported Go method rpcclient.RpcClient.Abort; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -29,7 +29,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientAbortCommandsAreAcceptedWhileIdle"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.abortBash is the exported Go method rpcclient.RpcClient.AbortBash; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.abortBash is the exported Go method rpcclient.RpcClient.AbortBash; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -45,7 +45,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientAbortCommandsAreAcceptedWhileIdle"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.abortRetry is the exported Go method rpcclient.RpcClient.AbortRetry; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.abortRetry is the exported Go method rpcclient.RpcClient.AbortRetry; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -62,7 +62,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldExecuteBashCommand"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.bash is the exported Go method rpcclient.RpcClient.Bash; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.bash is the exported Go method rpcclient.RpcClient.Bash; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -78,7 +78,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientClearQueueSendsTheClearQueueCommand"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.clearQueue is the exported Go method rpcclient.RpcClient.ClearQueue; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.clearQueue is the exported Go method rpcclient.RpcClient.ClearQueue; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -94,7 +94,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientCloneSendsTheCloneCommand"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.clone is the exported Go method rpcclient.RpcClient.Clone; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.clone is the exported Go method rpcclient.RpcClient.Clone; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -111,7 +111,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientCollectEventsTimesOutWithoutARun"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.collectEvents is the exported Go method rpcclient.RpcClient.CollectEvents; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.collectEvents is the exported Go method rpcclient.RpcClient.CollectEvents; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -128,7 +128,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldRetainPreCompactionEntriesInGetEntries"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.compact is the exported Go method rpcclient.RpcClient.Compact; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.compact is the exported Go method rpcclient.RpcClient.Compact; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -144,7 +144,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientCycleModelReportsNoOtherModelWithASingleModel"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.cycleModel is the exported Go method rpcclient.RpcClient.CycleModel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.cycleModel is the exported Go method rpcclient.RpcClient.CycleModel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -161,7 +161,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetAvailableThinkingLevels"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.cycleThinkingLevel is the exported Go method rpcclient.RpcClient.CycleThinkingLevel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.cycleThinkingLevel is the exported Go method rpcclient.RpcClient.CycleThinkingLevel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -178,7 +178,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientSerializesCommandsLikeJSONStringify"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.exportHtml is the exported Go method rpcclient.RpcClient.ExportHtml; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.exportHtml is the exported Go method rpcclient.RpcClient.ExportHtml; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -195,7 +195,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientPromptSteerAndFollowUpReturnTheDisposition"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.followUp is the exported Go method rpcclient.RpcClient.FollowUp; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.followUp is the exported Go method rpcclient.RpcClient.FollowUp; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -211,7 +211,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientForkMessagesForkAndSwitchSession"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.fork is the exported Go method rpcclient.RpcClient.Fork; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.fork is the exported Go method rpcclient.RpcClient.Fork; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -227,7 +227,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetAvailableModels"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getAvailableModels is the exported Go method rpcclient.RpcClient.GetAvailableModels; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getAvailableModels is the exported Go method rpcclient.RpcClient.GetAvailableModels; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -243,7 +243,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetAvailableThinkingLevels"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getAvailableThinkingLevels is the exported Go method rpcclient.RpcClient.GetAvailableThinkingLevels; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getAvailableThinkingLevels is the exported Go method rpcclient.RpcClient.GetAvailableThinkingLevels; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -259,7 +259,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientRejectsInFlightRequestWhenChildExits"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getCommands is the exported Go method rpcclient.RpcClient.GetCommands; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getCommands is the exported Go method rpcclient.RpcClient.GetCommands; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -276,7 +276,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetSessionTree"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getEntries is the exported Go method rpcclient.RpcClient.GetEntries; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getEntries is the exported Go method rpcclient.RpcClient.GetEntries; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -292,7 +292,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientForkMessagesForkAndSwitchSession"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getForkMessages is the exported Go method rpcclient.RpcClient.GetForkMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getForkMessages is the exported Go method rpcclient.RpcClient.GetForkMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -308,7 +308,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetLastAssistantText"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getLastAssistantText is the exported Go method rpcclient.RpcClient.GetLastAssistantText; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getLastAssistantText is the exported Go method rpcclient.RpcClient.GetLastAssistantText; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -324,7 +324,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldIncludeBashOutputInLLMContext"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getMessages is the exported Go method rpcclient.RpcClient.GetMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getMessages is the exported Go method rpcclient.RpcClient.GetMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -340,7 +340,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetSessionStats"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getSessionStats is the exported Go method rpcclient.RpcClient.GetSessionStats; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getSessionStats is the exported Go method rpcclient.RpcClient.GetSessionStats; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -357,7 +357,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldCycleThinkingLevel"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getState is the exported Go method rpcclient.RpcClient.GetState; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getState is the exported Go method rpcclient.RpcClient.GetState; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -373,7 +373,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetSessionTree"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.getTree is the exported Go method rpcclient.RpcClient.GetTree; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.getTree is the exported Go method rpcclient.RpcClient.GetTree; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -390,7 +390,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientSerializesCommandsLikeJSONStringify"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.newSession is the exported Go method rpcclient.RpcClient.NewSession; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.newSession is the exported Go method rpcclient.RpcClient.NewSession; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -407,7 +407,7 @@
    "test:coding/rpcclient/jsonl_test.go#TestRpcClientReadStdoutParsesSplitInvalidBlankAndUnterminatedRecords"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.onEvent is the exported Go method rpcclient.RpcClient.OnEvent; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.onEvent is the exported Go method rpcclient.RpcClient.OnEvent; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -423,7 +423,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientPromptAndWaitReturnsEventsThroughSettled"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.promptAndWait is the exported Go method rpcclient.RpcClient.PromptAndWait; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.promptAndWait is the exported Go method rpcclient.RpcClient.PromptAndWait; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -439,7 +439,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientSerializesCommandsLikeJSONStringify"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setAutoCompaction is the exported Go method rpcclient.RpcClient.SetAutoCompaction; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setAutoCompaction is the exported Go method rpcclient.RpcClient.SetAutoCompaction; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -455,7 +455,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientSetModesAndAutoRetryAreVisibleInState"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setAutoRetry is the exported Go method rpcclient.RpcClient.SetAutoRetry; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setAutoRetry is the exported Go method rpcclient.RpcClient.SetAutoRetry; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -471,7 +471,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientSetModesAndAutoRetryAreVisibleInState"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setFollowUpMode is the exported Go method rpcclient.RpcClient.SetFollowUpMode; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setFollowUpMode is the exported Go method rpcclient.RpcClient.SetFollowUpMode; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -487,7 +487,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientSerializesCommandsLikeJSONStringify"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setModel is the exported Go method rpcclient.RpcClient.SetModel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setModel is the exported Go method rpcclient.RpcClient.SetModel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -503,7 +503,7 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldSetAndGetSessionName"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setSessionName is the exported Go method rpcclient.RpcClient.SetSessionName; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setSessionName is the exported Go method rpcclient.RpcClient.SetSessionName; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -519,7 +519,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientSetModesAndAutoRetryAreVisibleInState"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setSteeringMode is the exported Go method rpcclient.RpcClient.SetSteeringMode; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setSteeringMode is the exported Go method rpcclient.RpcClient.SetSteeringMode; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -536,7 +536,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientSerializesCommandsLikeJSONStringify"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.setThinkingLevel is the exported Go method rpcclient.RpcClient.SetThinkingLevel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.setThinkingLevel is the exported Go method rpcclient.RpcClient.SetThinkingLevel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -553,7 +553,7 @@
    "test:coding/rpcclient/ownership_test.go#TestRPCRestartDoesNotRetargetOldRequestWrite"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.start is the exported Go method rpcclient.RpcClient.Start; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.start is the exported Go method rpcclient.RpcClient.Start; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -570,7 +570,7 @@
    "test:coding/rpcclient/rpc_client_test.go#TestRpcClientPromptSteerAndFollowUpReturnTheDisposition"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.steer is the exported Go method rpcclient.RpcClient.Steer; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.steer is the exported Go method rpcclient.RpcClient.Steer; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -587,7 +587,7 @@
    "test:coding/rpcclient/ownership_test.go#TestRPCRestartDoesNotRetargetOldRequestWrite"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.stop is the exported Go method rpcclient.RpcClient.Stop; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.stop is the exported Go method rpcclient.RpcClient.Stop; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -603,7 +603,7 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientForkMessagesForkAndSwitchSession"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.switchSession is the exported Go method rpcclient.RpcClient.SwitchSession; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.switchSession is the exported Go method rpcclient.RpcClient.SwitchSession; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -619,6 +619,6 @@
    "test:coding/rpcclient/rpc_client_methods_test.go#TestRpcClientWaitForIdleResolvesOnTheNextSettledEventAndTimesOutWithoutOne"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. A timeout argument is a time.Duration. No detached goroutine.",
-  "rationale": "RpcClient.waitForIdle is the exported Go method rpcclient.RpcClient.WaitForIdle; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and PiG's Go counterpart is the public coding/rpcclient package, which no PiG binary calls, so test callers (go/types) are the proof."
+  "rationale": "RpcClient.waitForIdle is the exported Go method rpcclient.RpcClient.WaitForIdle; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; null is nil; a timeout is a time.Duration). Closed as public-api-tested: Pi exports RpcClient and Ompig's Go counterpart is the public coding/rpcclient package, which no Ompig binary calls, so test callers (go/types) are the proof."
  }
 ]

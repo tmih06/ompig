@@ -3,8 +3,8 @@ package storage_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // storage/memory.ts:471-488 entry(): both overloads call assertOpen() first, so a closed store throws for the global lookup and for the lookup through a

@@ -7,19 +7,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 func installedVersionFixture(t *testing.T, source, manifest string, local bool) (string, *codingagent.SettingsManager, string) {
 	t.Helper()
 	cwd, agent := t.TempDir(), t.TempDir()
 	t.Setenv("HOME", t.TempDir())
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
-	t.Setenv("PIG_NPM_TEST_FAIL", "0")
+	t.Setenv("OMPIG_OFFLINE", "")
+	t.Setenv("OMPIG_NPM_TEST_FAIL", "0")
 	settings := codingagent.NewSettingsManager(cwd, agent)
 	root := filepath.Join(agent, "npm")
 	setPackages := settings.SetPackages
@@ -38,9 +38,9 @@ func installedVersionFixture(t *testing.T, source, manifest string, local bool) 
 		writeNpmTrustFile(t, filepath.Join(path, "package.json"), []byte(manifest))
 	}
 	log := filepath.Join(cwd, "commands")
-	t.Setenv("PIG_PM_COMMANDS", log)
+	t.Setenv("OMPIG_PM_COMMANDS", log)
 	bin := t.TempDir()
-	writeStubScript(t, filepath.Join(bin, "npm"), "#!/bin/sh\nprintf '%s\\n' \"$*\" >> \"$PIG_PM_COMMANDS\"\nexit \"$PIG_NPM_TEST_FAIL\"\n")
+	writeStubScript(t, filepath.Join(bin, "npm"), "#!/bin/sh\nprintf '%s\\n' \"$*\" >> \"$OMPIG_PM_COMMANDS\"\nexit \"$OMPIG_NPM_TEST_FAIL\"\n")
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
 	return cwd, settings, log
 }
@@ -127,7 +127,7 @@ func TestEnsureConfiguredNpmMismatchOfflineAndFailure(t *testing.T) {
 			if offline {
 				t.Setenv("PI_OFFLINE", "1")
 			} else {
-				t.Setenv("PIG_NPM_TEST_FAIL", "1")
+				t.Setenv("OMPIG_NPM_TEST_FAIL", "1")
 			}
 			reinstalled, missing := packagemanager.EnsureConfiguredPackagesInstalled(cwd, settings.AgentDir(), settings)
 			if len(reinstalled) != 0 || !slices.Equal(missing, []string{source}) {

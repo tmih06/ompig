@@ -9,7 +9,7 @@ import (
 	"testing/synctest"
 )
 
-const codexEncoderBubbleProbeEnv = "PIG_CODEX_ENCODER_BUBBLE_PROBE"
+const codexEncoderBubbleProbeEnv = "OMPIG_CODEX_ENCODER_BUBBLE_PROBE"
 
 // The Codex request encoder is one process-wide value built on first use, and the zstd library creates the channel that hands its encoder out at that
 // first EncodeAll. A channel made inside a testing/synctest bubble belongs to that bubble: the next EncodeAll from outside it, or from another bubble,

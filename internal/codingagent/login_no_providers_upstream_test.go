@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Implementation-derived (Pi 1.0.0 adds no test for the wording): with no provider of the chosen auth type, /login

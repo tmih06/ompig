@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // model-registry.ts getAvailable: the available catalog is the composed catalog restricted to providers with configured auth, in catalog order.

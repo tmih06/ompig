@@ -11,13 +11,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Runs Pi's Models auth operations and InMemoryModelsStore (models.ts checkAuth/getAvailable/getAvailableOfType/getAllAvailable/
-// logout, models-store.ts read/write/delete, Node, types stripped) and PiG's AuthOperationOptions and ModelsStoreOperationOptions
+// logout, models-store.ts read/write/delete, Node, types stripped) and Ompig's AuthOperationOptions and ModelsStoreOperationOptions
 // methods over one matrix: no signal, a signal already cancelled (default cause, or a cause), and a signal cancelled while the
-// provider's auth check blocks. Pi and PiG must return the same value without a signal, reject with the signal's reason when it is
+// provider's auth check blocks. Pi and Ompig must return the same value without a signal, reject with the signal's reason when it is
 // cancelled, leave the credential and the stored catalog untouched when the operation is rejected up front, and treat an empty
 // provider id as every provider.
 type operationOptionsCase struct {
@@ -88,7 +88,7 @@ func TestOperationOptionsMatchPiOnAMatrix(t *testing.T) {
 		want := pi[i]
 		name := c.Op + "/" + c.ProviderID + "/" + c.Signal
 		if got.Outcome != want.Outcome {
-			t.Errorf("%s: PiG %s (%s), Pi %s (%s: %s)", name, got.Outcome, got.Message, want.Outcome, want.Name, want.Message)
+			t.Errorf("%s: Ompig %s (%s), Pi %s (%s: %s)", name, got.Outcome, got.Message, want.Outcome, want.Name, want.Message)
 			continue
 		}
 		if got.Outcome == "rejected" && (got.Name != want.Name || got.Message != want.Message && want.Name != "AbortError") {

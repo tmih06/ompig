@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 func TestEncodeCwdForSessionDir_TableDriven(t *testing.T) {
@@ -123,7 +123,7 @@ func TestSessionManager_Create_WithParent(t *testing.T) {
 	}
 }
 
-// ForkFromFile (upstream `pig --fork`) copies the FULL entry tree from a
+// ForkFromFile (upstream `ompig --fork`) copies the FULL entry tree from a
 // source file into a fresh session file recording parentSession: unlike
 // Clone, which keeps only the linear path to a chosen leaf.
 func TestSessionManagerForkFromFile_CopiesFullTreeToNewFile(t *testing.T) {
@@ -560,9 +560,9 @@ func TestSummarizeSessionFilePreservesStringContentAndLatestName(t *testing.T) {
 }
 
 func BenchmarkListSessionsRecorded(b *testing.B) {
-	dir := os.Getenv("PIG_BENCH_SESSION_DIR")
+	dir := os.Getenv("OMPIG_BENCH_SESSION_DIR")
 	if dir == "" {
-		b.Skip("set PIG_BENCH_SESSION_DIR to a private Session directory")
+		b.Skip("set OMPIG_BENCH_SESSION_DIR to a private Session directory")
 	}
 	entries, err := os.ReadDir(dir)
 	if err != nil {
@@ -581,7 +581,7 @@ func BenchmarkListSessionsRecorded(b *testing.B) {
 	}
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
-	cwd := os.Getenv("PIG_BENCH_SESSION_CWD")
+	cwd := os.Getenv("OMPIG_BENCH_SESSION_CWD")
 	if cwd == "" {
 		cwd = "."
 	}

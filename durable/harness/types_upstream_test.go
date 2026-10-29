@@ -15,15 +15,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 var harnessImports = map[string]string{
 	"context": "context",
-	"d":       "github.com/MichaelKinsy/PiG/durable",
-	"h":       "github.com/MichaelKinsy/PiG/durable/harness",
+	"d":       "github.com/tmih06/ompig/durable",
+	"h":       "github.com/tmih06/ompig/durable/harness",
 }
 
 // stepper is the case's task: narrowed input, several phases and custom hooks.

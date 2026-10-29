@@ -58,11 +58,11 @@ func preserveCapabilityState(t testing.TB) {
 
 func TestIsolateCapabilityEnvPreservesUnrelatedEnvironment(t *testing.T) {
 	preserveCapabilityState(t)
-	t.Setenv("PIG_TEST_UNRELATED_CAPABILITY_ENV", "keep")
+	t.Setenv("OMPIG_TEST_UNRELATED_CAPABILITY_ENV", "keep")
 	t.Setenv("TERM", "outer-terminal")
 	t.Run("isolated", func(t *testing.T) {
 		isolateCapabilityEnv(t)
-		if got := os.Getenv("PIG_TEST_UNRELATED_CAPABILITY_ENV"); got != "keep" {
+		if got := os.Getenv("OMPIG_TEST_UNRELATED_CAPABILITY_ENV"); got != "keep" {
 			t.Errorf("unrelated environment variable = %q, want keep", got)
 		}
 		if got := os.Getenv("TERM"); got != "" {

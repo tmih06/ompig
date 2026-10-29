@@ -1,0 +1,19 @@
+name: ompig-porter
+description: "Local interactive and headless workbench for upstream-first Pi-to-Ompig porting and parity verification."
+
+tools: [read, write, edit, bash, grep, find, ls]
+
+extensions:
+  - name: ompig-porter
+    origins:
+      - local:extensions/ompig-porter
+    tools: [ompig_porter]
+
+skills:
+  - name: ompig-porter
+    origins:
+      - local:skills/ompig-porter
+
+discovery:
+  extensions: []
+  skills: []

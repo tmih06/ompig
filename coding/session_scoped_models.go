@@ -4,9 +4,9 @@ import (
 	"slices"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Ports packages/coding-agent/src/core/agent-session.ts.

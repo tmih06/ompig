@@ -9,8 +9,8 @@ import threading
 
 import pytest
 
-from pig_sdk import _ModelFetchTransport
-from pig_sdk.provider import ProviderSignal
+from ompig_sdk import _ModelFetchTransport
+from ompig_sdk.provider import ProviderSignal
 
 CALL = {"id": "1", "url": "https://fetch.invalid/v1", "method": "POST", "headers": {"X-Host": ["1"]}, "body": base64.b64encode(b"ping").decode()}
 

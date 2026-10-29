@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // A chunk of an openai-completions stream that is valid JSON but holds a member of an unexpected type is read by Pi's JavaScript member by member, so the turn

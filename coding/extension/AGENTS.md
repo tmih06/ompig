@@ -10,7 +10,7 @@
 
 ## Contract
 
-Every SDK exposes one extension contract. Isolated, packed, and fused extension realizations preserve that contract. External components keep their declared protocol and lifecycle. One Piglet can combine extension realizations and external components. Registration owns extension identity and capabilities. Reload and shutdown remove owned handlers and work.
+Every SDK exposes one extension contract. Isolated, packed, and fused extension realizations preserve that contract. External components keep their declared protocol and lifecycle. One Ompiglet can combine extension realizations and external components. Registration owns extension identity and capabilities. Reload and shutdown remove owned handlers and work.
 
 ## Failure modes
 

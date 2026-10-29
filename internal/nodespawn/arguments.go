@@ -32,7 +32,7 @@ func CheckArguments(file string, args []string) error {
 // runs on every platform before anything starts, and spawn throws its
 // ERR_INVALID_ARG_VALUE: a file with a NUL, an empty file, then the first
 // argument with a NUL, a cwd with a NUL (getValidatedPath), and the first env
-// name or value with a NUL. An empty cwd is valid and inherits PiG's.
+// name or value with a NUL. An empty cwd is valid and inherits Ompig's.
 func checkArguments(file string, args []string, cwd string, env []string) *Error {
 	if strings.IndexByte(file, 0) >= 0 {
 		return invalidArgValue("file", file, withoutNullBytes)

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // upstream: packages/coding-agent/src/core/tools/{read,bash,edit,write,grep,find,ls,powershell}.ts (create<Tool>ToolDefinition): each built-in tool is declared to the model with
@@ -90,7 +90,7 @@ func TestBuiltInToolDefinitionsMatchPisOwn(t *testing.T) {
 }
 
 // agent-session.ts getAllTools returns each registered definition's TypeBox parameters, so an extension's JSON.stringify(tool.parameters) shows Pi's member order. Probed
-// (Pi 1.1.0 and PiG, an extension writing getAllTools() at session_start): Pi gives {"type":"object","required":["path"],"properties":{"path":…,"offset":…,"limit":…}} for read; PiG
+// (Pi 1.1.0 and Ompig, an extension writing getAllTools() at session_start): Pi gives {"type":"object","required":["path"],"properties":{"path":…,"offset":…,"limit":…}} for read; Ompig
 // gave sorted members, {"properties":{"limit":…,"offset":…,"path":…},"required":["path"],"type":"object"}.
 func TestGetAllToolsKeepsPisParameterMemberOrder(t *testing.T) {
 	data, err := os.ReadFile("testdata/pi_tool_definitions.json")

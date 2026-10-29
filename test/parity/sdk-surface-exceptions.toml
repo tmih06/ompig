@@ -70,7 +70,7 @@ reason = "Pi's published root index.d.ts re-exports KeybindingsManager as a type
 [[exception]]
 prefix = "pi-coding-agent: KeybindingsManager."
 sdks = ["node"]
-reason = "Members of the type-only root re-export have no runtime receiver. Both Pi and PiG omit the value; the actual class remains in the private core/keybindings module."
+reason = "Members of the type-only root re-export have no runtime receiver. Both Pi and Ompig omit the value; the actual class remains in the private core/keybindings module."
 
 # Optional platform/library hooks are absent in the exact Pi runtime too.
 [[exception]]

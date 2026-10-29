@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // sdk.ts:190-232 createAgentSession's model selection: an explicit model wins; an existing session restores its saved model when that model still

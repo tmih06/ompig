@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Upstream puts sendUserMessage on ExtensionAPI, the object handed to every
-// extension, so an upstream event handler can send a user message. Pig attached
+// extension, so an upstream event handler can send a user message. Ompig attached
 // only the base Context to event dispatch and kept the action on the command
 // context, so an in-process extension could observe a turn ending and had no way
 // to tell the agent anything about it. The subprocess SDK could, from the same

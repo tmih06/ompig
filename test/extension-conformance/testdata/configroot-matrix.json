@@ -1,126 +1,126 @@
 {
- "comment": "Shared env matrix for the PiG config root policy: PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig. Env values: absent = unset, \"\" = set and empty. <HOME> stands for the HOME (USERPROFILE on Windows) of the run; HOME \"\" makes the home directory unavailable. want null = resolution fails. Read by internal/configroot, the Go, Python and Rust SDK tests, the Node getter test and the cross-language comparison in test/extension-conformance. A tilde expansion and the XDG and default joins are lexically cleaned as Go's filepath.Join cleans them (repeated, trailing and . separators, name/..), and an absolute remainder after ~/ stays under the home directory; a literal PIG_HOME is never cleaned.",
+ "comment": "Shared env matrix for the Ompig config root policy: OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig. Env values: absent = unset, \"\" = set and empty. <HOME> stands for the HOME (USERPROFILE on Windows) of the run; HOME \"\" makes the home directory unavailable. want null = resolution fails. Read by internal/configroot, the Go, Python and Rust SDK tests, the Node getter test and the cross-language comparison in test/extension-conformance. A tilde expansion and the XDG and default joins are lexically cleaned as Go's filepath.Join cleans them (repeated, trailing and . separators, name/..), and an absolute remainder after ~/ stays under the home directory; a literal OMPIG_HOME is never cleaned.",
  "cases": [
   {
-   "name": "pig-home-absolute",
+   "name": "ompig-home-absolute",
    "env": {
-    "PIG_HOME": "/srv/pig"
+    "OMPIG_HOME": "/srv/ompig"
    },
-   "want": "/srv/pig"
+   "want": "/srv/ompig"
   },
   {
-   "name": "pig-home-beats-xdg",
+   "name": "ompig-home-beats-xdg",
    "env": {
-    "PIG_HOME": "/srv/pig",
+    "OMPIG_HOME": "/srv/ompig",
     "XDG_CONFIG_HOME": "/srv/xdg"
    },
-   "want": "/srv/pig"
+   "want": "/srv/ompig"
   },
   {
-   "name": "pig-home-empty-falls-to-xdg",
+   "name": "ompig-home-empty-falls-to-xdg",
    "env": {
-    "PIG_HOME": "",
+    "OMPIG_HOME": "",
     "XDG_CONFIG_HOME": "/srv/xdg"
    },
-   "want": "/srv/xdg/pig"
+   "want": "/srv/xdg/ompig"
   },
   {
-   "name": "pig-home-unset-xdg-set",
+   "name": "ompig-home-unset-xdg-set",
    "env": {
     "XDG_CONFIG_HOME": "/srv/xdg"
    },
-   "want": "/srv/xdg/pig"
+   "want": "/srv/xdg/ompig"
   },
   {
    "name": "both-empty-falls-to-home",
    "env": {
-    "PIG_HOME": "",
+    "OMPIG_HOME": "",
     "XDG_CONFIG_HOME": ""
    },
-   "want": "<HOME>/.pig"
+   "want": "<HOME>/.ompig"
   },
   {
    "name": "both-unset-falls-to-home",
    "env": {},
-   "want": "<HOME>/.pig"
+   "want": "<HOME>/.ompig"
   },
   {
-   "name": "pig-home-empty-xdg-unset",
+   "name": "ompig-home-empty-xdg-unset",
    "env": {
-    "PIG_HOME": ""
+    "OMPIG_HOME": ""
    },
-   "want": "<HOME>/.pig"
+   "want": "<HOME>/.ompig"
   },
   {
-   "name": "pig-home-tilde",
+   "name": "ompig-home-tilde",
    "env": {
-    "PIG_HOME": "~"
+    "OMPIG_HOME": "~"
    },
    "want": "<HOME>"
   },
   {
-   "name": "pig-home-tilde-slash",
+   "name": "ompig-home-tilde-slash",
    "env": {
-    "PIG_HOME": "~/p"
+    "OMPIG_HOME": "~/p"
    },
    "want": "<HOME>/p"
   },
   {
-   "name": "pig-home-tilde-user-literal",
+   "name": "ompig-home-tilde-user-literal",
    "env": {
-    "PIG_HOME": "~user/p"
+    "OMPIG_HOME": "~user/p"
    },
    "want": "~user/p"
   },
   {
-   "name": "pig-home-tilde-inside-literal",
+   "name": "ompig-home-tilde-inside-literal",
    "env": {
-    "PIG_HOME": "a/~/b"
+    "OMPIG_HOME": "a/~/b"
    },
    "want": "a/~/b"
   },
   {
-   "name": "pig-home-relative-literal",
+   "name": "ompig-home-relative-literal",
    "env": {
-    "PIG_HOME": "rel/pig"
+    "OMPIG_HOME": "rel/ompig"
    },
-   "want": "rel/pig"
+   "want": "rel/ompig"
   },
   {
-   "name": "pig-home-dot-pig-literal",
+   "name": "ompig-home-dot-ompig-literal",
    "env": {
-    "PIG_HOME": ".pig"
+    "OMPIG_HOME": ".ompig"
    },
-   "want": ".pig"
+   "want": ".ompig"
   },
   {
    "name": "xdg-tilde-slash",
    "env": {
     "XDG_CONFIG_HOME": "~/cfg"
    },
-   "want": "<HOME>/cfg/pig"
+   "want": "<HOME>/cfg/ompig"
   },
   {
    "name": "xdg-tilde",
    "env": {
     "XDG_CONFIG_HOME": "~"
    },
-   "want": "<HOME>/pig"
+   "want": "<HOME>/ompig"
   },
   {
    "name": "xdg-relative-literal",
    "env": {
     "XDG_CONFIG_HOME": "rel"
    },
-   "want": "rel/pig"
+   "want": "rel/ompig"
   },
   {
-   "name": "pig-home-empty-xdg-tilde",
+   "name": "ompig-home-empty-xdg-tilde",
    "env": {
-    "PIG_HOME": "",
+    "OMPIG_HOME": "",
     "XDG_CONFIG_HOME": "~/x"
    },
-   "want": "<HOME>/x/pig"
+   "want": "<HOME>/x/ompig"
   },
   {
    "name": "home-failure-default",
@@ -130,10 +130,10 @@
    "want": null
   },
   {
-   "name": "home-failure-pig-home-tilde",
+   "name": "home-failure-ompig-home-tilde",
    "env": {
     "HOME": "",
-    "PIG_HOME": "~/p"
+    "OMPIG_HOME": "~/p"
    },
    "want": null
   },
@@ -149,18 +149,18 @@
    "name": "home-failure-empty-overrides",
    "env": {
     "HOME": "",
-    "PIG_HOME": "",
+    "OMPIG_HOME": "",
     "XDG_CONFIG_HOME": ""
    },
    "want": null
   },
   {
-   "name": "home-failure-literal-pig-home-needs-no-home",
+   "name": "home-failure-literal-ompig-home-needs-no-home",
    "env": {
     "HOME": "",
-    "PIG_HOME": "/srv/pig"
+    "OMPIG_HOME": "/srv/ompig"
    },
-   "want": "/srv/pig"
+   "want": "/srv/ompig"
   },
   {
    "name": "home-failure-literal-xdg-needs-no-home",
@@ -168,70 +168,70 @@
     "HOME": "",
     "XDG_CONFIG_HOME": "/srv/xdg"
    },
-   "want": "/srv/xdg/pig"
+   "want": "/srv/xdg/ompig"
   },
   {
-   "name": "pig-home-tilde-slash-only",
+   "name": "ompig-home-tilde-slash-only",
    "env": {
-    "PIG_HOME": "~/"
+    "OMPIG_HOME": "~/"
    },
    "want": "<HOME>"
   },
   {
-   "name": "pig-home-tilde-trailing-slash",
+   "name": "ompig-home-tilde-trailing-slash",
    "env": {
-    "PIG_HOME": "~/p/"
+    "OMPIG_HOME": "~/p/"
    },
    "want": "<HOME>/p"
   },
   {
-   "name": "pig-home-tilde-double-slash-stays-under-home",
+   "name": "ompig-home-tilde-double-slash-stays-under-home",
    "env": {
-    "PIG_HOME": "~//p/"
+    "OMPIG_HOME": "~//p/"
    },
    "want": "<HOME>/p"
   },
   {
-   "name": "pig-home-tilde-dotdot",
+   "name": "ompig-home-tilde-dotdot",
    "env": {
-    "PIG_HOME": "~/a/./../p"
+    "OMPIG_HOME": "~/a/./../p"
    },
    "want": "<HOME>/p"
   },
   {
-   "name": "pig-home-literal-not-cleaned",
+   "name": "ompig-home-literal-not-cleaned",
    "env": {
-    "PIG_HOME": "/srv//pig/./"
+    "OMPIG_HOME": "/srv//ompig/./"
    },
-   "want": "/srv//pig/./"
+   "want": "/srv//ompig/./"
   },
   {
    "name": "xdg-trailing-slash",
    "env": {
     "XDG_CONFIG_HOME": "/srv/xdg/"
    },
-   "want": "/srv/xdg/pig"
+   "want": "/srv/xdg/ompig"
   },
   {
    "name": "xdg-dotdot-and-double-slash",
    "env": {
     "XDG_CONFIG_HOME": "/srv//a/../xdg"
    },
-   "want": "/srv/xdg/pig"
+   "want": "/srv/xdg/ompig"
   },
   {
    "name": "xdg-relative-dot",
    "env": {
     "XDG_CONFIG_HOME": "./rel/"
    },
-   "want": "rel/pig"
+   "want": "rel/ompig"
   },
   {
    "name": "gopi-home-is-not-read",
    "env": {
     "GOPI_HOME": "/srv/gopi"
    },
-   "want": "<HOME>/.pig"
+   "want": "<HOME>/.ompig"
   }
  ]
 }

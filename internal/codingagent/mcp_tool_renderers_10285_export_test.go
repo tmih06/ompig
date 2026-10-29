@@ -1,4 +1,4 @@
-//go:build !pig_strip_export_html
+//go:build !ompig_strip_export_html
 
 package codingagent
 
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestRegression10285RendersThemInHTMLExportsToo(t *testing.T) {

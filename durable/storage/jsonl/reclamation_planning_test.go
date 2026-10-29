@@ -5,9 +5,9 @@ import (
 	"errors"
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
 )
 
 // pi: packages/durable/src/storage/jsonl/storage.ts planReclamations (:450-490), adoptSidecarState (:494-503), resolveFile (:825-828).

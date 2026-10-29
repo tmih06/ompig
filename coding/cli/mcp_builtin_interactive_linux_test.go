@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // driveInteractivePrompts runs cmd on a pseudo-terminal, types each prompt, and waits until the scripted model has

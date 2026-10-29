@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // models decodes the provider object's model records. A record without a provider id belongs to this provider, as the registration's own records do; the id

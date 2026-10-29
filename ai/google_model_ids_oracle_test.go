@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type googleModelIDResult struct {
@@ -40,7 +40,7 @@ func googleModelIDProbes() []string {
 }
 
 // The Gemini id helpers cut from Pi's google-shared.ts run in Node on the same ids: the thinking-level family test, the major version (parseInt, so a huge number stays large), the tool-call-id, multimodal
-// and strict-sampling decisions must match Pig's UsesGoogleThinkingLevel, getGeminiMajorVersion, requiresToolCallId, supportsMultimodalFunctionResponse and supportsGoogleStrictToolSampling.
+// and strict-sampling decisions must match Ompig's UsesGoogleThinkingLevel, getGeminiMajorVersion, requiresToolCallId, supportsMultimodalFunctionResponse and supportsGoogleStrictToolSampling.
 func TestGoogleModelIDHelpersMatchPi(t *testing.T) {
 	ids := googleModelIDProbes()
 	payload, err := json.Marshal(ids)
@@ -96,7 +96,7 @@ func TestGoogleModelIDHelpersMatchPi(t *testing.T) {
 		wantJSON, _ := json.Marshal(want)
 		if !bytes.Equal(gotJSON, wantJSON) {
 			if differing++; differing <= 12 {
-				t.Errorf("%q\n  Pig %s\n  Pi  %s", id, gotJSON, wantJSON)
+				t.Errorf("%q\n  Ompig %s\n  Pi  %s", id, gotJSON, wantJSON)
 			}
 		}
 	}

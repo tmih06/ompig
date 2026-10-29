@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Ports packages/coding-agent/test/export-html-skill-block.test.ts with the same source assertions.
@@ -96,7 +96,7 @@ func TestCustomToolResultHTMLTrimsSpacing(t *testing.T) {
 	}
 }
 
-// These are the reviewed upstream Pi source assets, not hashes of Pig's generated output.
+// These are the reviewed upstream Pi source assets, not hashes of Ompig's generated output.
 // Refresh from .upstream/current/packages/coding-agent/src/core/export-html with sha256sum when the upstream pin changes.
 func TestExportHTMLPinnedAssets(t *testing.T) {
 	for name, want := range map[string]string{

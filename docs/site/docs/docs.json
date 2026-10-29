@@ -1,50 +1,50 @@
 {
   "provenance": {
-    "applied-use-cases.md": "pig-authored",
-    "benchmarking.md": "pig-authored",
-    "bug-ledger.md": "pig-authored",
+    "applied-use-cases.md": "ompig-authored",
+    "benchmarking.md": "ompig-authored",
+    "bug-ledger.md": "ompig-authored",
     "cli-integration.md": "adapted-pi",
-    "cli-examples.md": "pig-authored",
+    "cli-examples.md": "ompig-authored",
     "cli.md": "adapted-pi",
     "codemode.md": "adapted-pi",
     "compaction.md": "adapted-pi",
-    "concepts.md": "pig-authored",
+    "concepts.md": "ompig-authored",
     "configuration.md": "adapted-pi",
-    "containerization.md": "pig-authored",
+    "containerization.md": "ompig-authored",
     "custom-provider.md": "adapted-pi",
-    "derivative-harnesses.md": "pig-authored",
-    "development.md": "pig-authored",
+    "derivative-harnesses.md": "ompig-authored",
+    "development.md": "ompig-authored",
     "environment-variables.md": "adapted-pi",
-    "evals.md": "pig-authored",
+    "evals.md": "ompig-authored",
     "extensions.md": "adapted-pi",
-    "first-extension.md": "pig-authored",
-    "first-run.md": "pig-authored",
-    "how-pig-works.md": "adapted-pi",
-    "index.md": "pig-authored",
-    "install-troubleshooting.md": "pig-authored",
+    "first-extension.md": "ompig-authored",
+    "first-run.md": "ompig-authored",
+    "how-ompig-works.md": "adapted-pi",
+    "index.md": "ompig-authored",
+    "install-troubleshooting.md": "ompig-authored",
     "json.md": "adapted-pi",
     "keybindings.md": "adapted-pi",
-    "knowledge-graph.md": "pig-authored",
+    "knowledge-graph.md": "ompig-authored",
     "llama-cpp.md": "adapted-pi",
     "mcp.md": "adapted-pi",
     "message-types.md": "adapted-pi",
     "models.md": "adapted-pi",
     "nvidia-rtx-llama-cpp.md": "adapted-pi",
     "packages.md": "adapted-pi",
-    "piglet-binaries.md": "pig-authored",
-    "piglets.md": "pig-authored",
-    "publishing.md": "pig-authored",
+    "ompiglet-binaries.md": "ompig-authored",
+    "ompiglets.md": "ompig-authored",
+    "publishing.md": "ompig-authored",
     "prompt-templates.md": "adapted-pi",
     "providers.md": "adapted-pi",
-    "quickstart.md": "pig-authored",
+    "quickstart.md": "ompig-authored",
     "rpc-commands.md": "adapted-pi",
     "rpc-extension-ui.md": "adapted-pi",
     "rpc.md": "adapted-pi",
-    "sdk.md": "pig-authored",
-    "security.md": "pig-authored",
+    "sdk.md": "ompig-authored",
+    "security.md": "ompig-authored",
     "session-format.md": "adapted-pi",
     "sessions.md": "adapted-pi",
-    "settings-examples.md": "pig-authored",
+    "settings-examples.md": "ompig-authored",
     "settings.md": "adapted-pi",
     "shell-aliases.md": "adapted-pi",
     "skills.md": "adapted-pi",
@@ -54,13 +54,13 @@
     "themes.md": "adapted-pi",
     "tmux.md": "adapted-pi",
     "tui.md": "adapted-pi",
-    "typescript-runtimes.md": "pig-authored",
+    "typescript-runtimes.md": "ompig-authored",
     "usage.md": "adapted-pi",
-    "usecase-clean-spreadsheet.md": "pig-authored",
-    "usecase-draft-document.md": "pig-authored",
-    "usecase-organise-files.md": "pig-authored",
-    "usecase-summarise-pdfs.md": "pig-authored",
-    "usecase-weekly-report.md": "pig-authored",
+    "usecase-clean-spreadsheet.md": "ompig-authored",
+    "usecase-draft-document.md": "ompig-authored",
+    "usecase-organise-files.md": "ompig-authored",
+    "usecase-summarise-pdfs.md": "ompig-authored",
+    "usecase-weekly-report.md": "ompig-authored",
     "virtual-models.md": "adapted-pi",
     "windows.md": "adapted-pi"
   },
@@ -81,8 +81,8 @@
           "path": "first-run.md"
         },
         {
-          "title": "How PiG Works",
-          "path": "how-pig-works.md"
+          "title": "How Ompig Works",
+          "path": "how-ompig-works.md"
         }
       ]
     },
@@ -119,10 +119,10 @@
       "title": "Guides",
       "items": [
         {
-          "title": "Run PiG",
+          "title": "Run Ompig",
           "items": [
             {
-              "title": "Use PiG in the Terminal",
+              "title": "Use Ompig in the Terminal",
               "path": "usage.md"
             },
             {
@@ -142,11 +142,11 @@
               "path": "sessions.md"
             },
             {
-              "title": "Run PiG Safely",
+              "title": "Run Ompig Safely",
               "path": "security.md"
             },
             {
-              "title": "Isolate PiG",
+              "title": "Isolate Ompig",
               "path": "containerization.md"
             },
             {
@@ -166,24 +166,24 @@
               "path": "shell-aliases.md"
             },
             {
-              "title": "Run PiG in tmux",
+              "title": "Run Ompig in tmux",
               "path": "tmux.md"
             },
             {
-              "title": "Run PiG on Windows",
+              "title": "Run Ompig on Windows",
               "path": "windows.md"
             },
             {
-              "title": "Run PiG on Android",
+              "title": "Run Ompig on Android",
               "path": "termux.md"
             }
           ]
         },
         {
-          "title": "Customize PiG",
+          "title": "Customize Ompig",
           "items": [
             {
-              "title": "Configure PiG",
+              "title": "Configure Ompig",
               "path": "configuration.md"
             },
             {
@@ -199,11 +199,11 @@
               "path": "themes.md"
             },
             {
-              "title": "Use PiG Packages",
+              "title": "Use Ompig Packages",
               "path": "packages.md"
             },
             {
-              "title": "Publish a Package or Piglet",
+              "title": "Publish a Package or Ompiglet",
               "path": "publishing.md"
             },
             {
@@ -213,7 +213,7 @@
           ]
         },
         {
-          "title": "Build on PiG",
+          "title": "Build on Ompig",
           "items": [
             {
               "title": "Your First Extension",
@@ -309,19 +309,19 @@
       ]
     },
     {
-      "title": "PiG",
+      "title": "Ompig",
       "items": [
         {
-          "title": "PiG Concepts",
+          "title": "Ompig Concepts",
           "path": "concepts.md"
         },
         {
-          "title": "Piglets",
-          "path": "piglets.md"
+          "title": "Ompiglets",
+          "path": "ompiglets.md"
         },
         {
-          "title": "Piglet Binaries",
-          "path": "piglet-binaries.md"
+          "title": "Ompiglet Binaries",
+          "path": "ompiglet-binaries.md"
         },
         {
           "title": "TypeScript Extension Runtimes",
@@ -352,7 +352,7 @@
           "path": "bug-ledger.md"
         },
         {
-          "title": "Develop PiG",
+          "title": "Develop Ompig",
           "path": "development.md"
         }
       ]
@@ -376,8 +376,8 @@
       "to": "cli.md#generic-subcommands"
     },
     {
-      "from": "usage.md#pig-docs",
-      "to": "cli.md#pig-docs"
+      "from": "usage.md#ompig-docs",
+      "to": "cli.md#ompig-docs"
     },
     {
       "from": "usage.md#slash-commands-tui",
@@ -388,12 +388,12 @@
       "to": "slash-commands.md#core"
     },
     {
-      "from": "usage.md#piglet-composition",
-      "to": "slash-commands.md#piglet-composition"
+      "from": "usage.md#ompiglet-composition",
+      "to": "slash-commands.md#ompiglet-composition"
     },
     {
-      "from": "usage.md#parity-harness-only-when-pig_parity_harness1",
-      "to": "slash-commands.md#parity-harness-only-when-pig_parity_harness1"
+      "from": "usage.md#parity-harness-only-when-ompig_parity_harness1",
+      "to": "slash-commands.md#parity-harness-only-when-ompig_parity_harness1"
     },
     {
       "from": "rpc.md#supported-commands",

@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // extensionScopedModels reads the Session's already-resolved scope; SDK queries do not resolve catalogs or credentials.
 func (m *InteractiveMode) extensionScopedModels() []extension.ScopedModel {

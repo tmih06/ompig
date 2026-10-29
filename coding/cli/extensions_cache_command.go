@@ -11,11 +11,11 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/bytesize"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/bytesize"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func runExtensionsCommand(args []string) int {
@@ -43,37 +43,37 @@ func runExtensionsCommand(args []string) int {
 			jsonOutput = true
 		case "--dry-run":
 			if command != "prune" {
-				fmt.Fprintln(os.Stderr, "pig extensions cache stats: --dry-run is only valid for prune")
+				fmt.Fprintln(os.Stderr, "ompig extensions cache stats: --dry-run is only valid for prune")
 				return 2
 			}
 			dryRun = true
 		case "--failures":
 			if command != "prune" {
-				fmt.Fprintln(os.Stderr, "pig extensions cache stats: --failures is only valid for prune")
+				fmt.Fprintln(os.Stderr, "ompig extensions cache stats: --failures is only valid for prune")
 				return 2
 			}
 			failures = true
 		case "--retention":
 			if command != "prune" || index+1 >= len(args) {
-				fmt.Fprintln(os.Stderr, "pig extensions cache: --retention requires a duration on prune")
+				fmt.Fprintln(os.Stderr, "ompig extensions cache: --retention requires a duration on prune")
 				return 2
 			}
 			index++
 			parsed, err := time.ParseDuration(args[index])
 			if err != nil || parsed <= 0 {
-				fmt.Fprintf(os.Stderr, "pig extensions cache prune: invalid retention %q\n", args[index])
+				fmt.Fprintf(os.Stderr, "ompig extensions cache prune: invalid retention %q\n", args[index])
 				return 2
 			}
 			retention = parsed
 		case "--max-size":
 			if command != "prune" || index+1 >= len(args) {
-				fmt.Fprintln(os.Stderr, "pig extensions cache: --max-size requires a byte size on prune")
+				fmt.Fprintln(os.Stderr, "ompig extensions cache: --max-size requires a byte size on prune")
 				return 2
 			}
 			index++
 			parsed, err := bytesize.Parse(args[index])
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "pig extensions cache prune:", err)
+				fmt.Fprintln(os.Stderr, "ompig extensions cache prune:", err)
 				return 2
 			}
 			maxSize = &parsed
@@ -81,7 +81,7 @@ func runExtensionsCommand(args []string) int {
 			printExtensionsCacheHelp()
 			return 0
 		default:
-			fmt.Fprintf(os.Stderr, "pig extensions cache %s: unknown option %s\n", command, args[index])
+			fmt.Fprintf(os.Stderr, "ompig extensions cache %s: unknown option %s\n", command, args[index])
 			return 2
 		}
 	}
@@ -90,7 +90,7 @@ func runExtensionsCommand(args []string) int {
 	current, resolutionErrors := currentExtensionCacheRoots(cacheRoot)
 	if command == "prune" {
 		if err := requireCompleteCurrentCacheRoots(resolutionErrors); err != nil {
-			fmt.Fprintln(os.Stderr, "pig extensions cache:", err)
+			fmt.Fprintln(os.Stderr, "ompig extensions cache:", err)
 			return 1
 		}
 	}
@@ -111,7 +111,7 @@ func runExtensionsCommand(args []string) int {
 	if jsonOutput {
 		data, encodeErr := json.Marshal(report)
 		if encodeErr != nil {
-			fmt.Fprintln(os.Stderr, "pig extensions cache: encode report:", encodeErr)
+			fmt.Fprintln(os.Stderr, "ompig extensions cache: encode report:", encodeErr)
 			return 1
 		}
 		fmt.Println(string(data))
@@ -127,14 +127,14 @@ func runExtensionsCommand(args []string) int {
 			}
 		}
 		for _, reportErr := range report.Errors {
-			fmt.Fprintln(os.Stderr, "pig extensions cache:", reportErr)
+			fmt.Fprintln(os.Stderr, "ompig extensions cache:", reportErr)
 		}
 		if failure := readAutomaticCacheGCFailure(); failure != "" {
-			fmt.Fprintln(os.Stderr, "pig extensions cache: the last automatic prune failed:", failure)
+			fmt.Fprintln(os.Stderr, "ompig extensions cache: the last automatic prune failed:", failure)
 		}
 	}
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "pig extensions cache:", err)
+		fmt.Fprintln(os.Stderr, "ompig extensions cache:", err)
 		return 1
 	}
 	if len(report.Errors) > 0 || maxSize != nil && !report.LimitSatisfied {
@@ -163,7 +163,7 @@ func currentExtensionCacheRoots(cacheRoot string) (map[string]struct{}, []error)
 	return subprocess.CurrentCacheEntries(configs, cacheRoot)
 }
 
-// currentSDKFingerprints returns the fingerprints of every SDK staged under the config root, by this build or another one sharing it, so a collection keeps every build some PiG can still select. It is nil when the staged SDKs cannot be listed, which classifies no build by its SDK.
+// currentSDKFingerprints returns the fingerprints of every SDK staged under the config root, by this build or another one sharing it, so a collection keeps every build some Ompig can still select. It is nil when the staged SDKs cannot be listed, which classifies no build by its SDK.
 func currentSDKFingerprints() map[string]struct{} {
 	fingerprints, err := pigsdk.LiveFingerprints(codingagent.ConfigRoot())
 	if err != nil {
@@ -174,12 +174,12 @@ func currentSDKFingerprints() map[string]struct{} {
 
 // automaticCacheLimit bounds the extension cache the daily automatic prune leaves behind. Entries the current
 // extensions use, and entries in use, are never removed to meet it, so the cache can exceed it.
-// pig additive (D20): the packed-runtime cache has no upstream equivalent.
+// ompig additive (D20): the packed-runtime cache has no upstream equivalent.
 var automaticCacheLimit int64 = 5 << 30
 
 // runAutomaticExtensionCacheGC collects the shared extension cache once a day. A collection that skipped
 // entries that were in use still records its marker; a failed or cancelled one does not, and runs again at
-// the next start. It runs in the background (startAutomaticExtensionCacheGC), never before pig accepts input.
+// the next start. It runs in the background (startAutomaticExtensionCacheGC), never before ompig accepts input.
 func runAutomaticExtensionCacheGC(ctx context.Context, configs []subprocess.ExtConfig) error {
 	cacheRoot := filepath.Join(codingagent.ConfigRoot(), "cache")
 	if err := os.MkdirAll(cacheRoot, 0o755); err != nil {
@@ -188,7 +188,7 @@ func runAutomaticExtensionCacheGC(ctx context.Context, configs []subprocess.ExtC
 	marker := filepath.Join(cacheRoot, ".last-auto-gc")
 	autoGCDue := func() bool {
 		info, err := os.Stat(marker)
-		// pig additive (D20): bound automatic cleanup of packed-runtime caches to once daily.
+		// ompig additive (D20): bound automatic cleanup of packed-runtime caches to once daily.
 		return err != nil || automaticCacheGCNow().Sub(info.ModTime()) >= 24*time.Hour
 	}
 	if !autoGCDue() {
@@ -236,5 +236,5 @@ func runAutomaticExtensionCacheGC(ctx context.Context, configs []subprocess.ExtC
 }
 
 func printExtensionsCacheHelp() {
-	fmt.Print("Usage:\n  pig extensions runtime status [--json]\n  pig extensions cache stats [--json]\n  pig extensions cache prune [--retention <duration>] [--max-size <bytes>] [--failures] [--dry-run] [--json]\n\n--failures removes recorded build failures so the next start compiles those extensions again.\n")
+	fmt.Print("Usage:\n  ompig extensions runtime status [--json]\n  ompig extensions cache stats [--json]\n  ompig extensions cache prune [--retention <duration>] [--max-size <bytes>] [--failures] [--dry-run] [--json]\n\n--failures removes recorded build failures so the next start compiles those extensions again.\n")
 }

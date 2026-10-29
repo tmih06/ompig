@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/storehost"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/rec"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/contracttest"
+	"github.com/tmih06/ompig/durable/core/contracttest/storehost"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/rec"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 const (

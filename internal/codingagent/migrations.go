@@ -1,4 +1,4 @@
-// migrations.go provides one-time startup migrations for pig configuration.
+// migrations.go provides one-time startup migrations for ompig configuration.
 //
 // Ports packages/coding-agent/src/migrations.ts.
 
@@ -14,12 +14,12 @@ import (
 	"strconv"
 	"strings"
 
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/text"
-	"github.com/MichaelKinsy/PiG/tui"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/text"
+	"github.com/tmih06/ompig/tui"
 )
 
 const (
@@ -307,7 +307,7 @@ func migrateSessionsFromAgentRoot(agentDir string) {
 		// Compute correct session directory.
 		// Same encoding as session-manager.ts (one leading separator stripped).
 		correctDir := filepath.Join(agentDir, "sessions", encodeCwdForSessionDir(header.CWD))
-		// pig divergence (D132): session directories are 0700.
+		// ompig divergence (D132): session directories are 0700.
 		_ = MkdirSessionDir(correctDir) // upstream: coding-agent/src/migrations.ts:migrateSessionsFromAgentRoot
 
 		// Pi names the file `file.split("/").pop() || file.split("\\").pop()` where file is the joined path. The first split is the whole path wherever the

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -27,9 +27,9 @@ func withTopLevelEvent(bodies [][][]byte, value string, count int) [][][]byte {
 
 // TestProviderStreamNonObjectEventsMatchPi sends an event whose JSON is not an object (a number, string, boolean, array or null) in the middle of each
 // provider's stream. Each SDK and provider treats it its own way: the OpenAI SDK yields it and processResponsesStream reads `event.type` (null throws),
-// @google/genai maps it to an empty response, the Anthropic, completions and Mistral readers skip or reject it, and Pig must do the same.
+// @google/genai maps it to an empty response, the Anthropic, completions and Mistral readers skip or reject it, and Ompig must do the same.
 func TestProviderStreamNonObjectEventsMatchPi(t *testing.T) {
-	t.Setenv("PIG_ORACLE_KEY_CASE", "float")
+	t.Setenv("OMPIG_ORACLE_KEY_CASE", "float")
 	for _, value := range []string{"5", "null", "[1]", `"x"`, "false"} {
 		t.Run("anthropic "+value, func(t *testing.T) {
 			providerStreamOracle(t, [4]string{"anthropic-messages", "anthropicMessagesApi", "anthropic-messages", "anthropic"}, true, withTopLevelEvent(anthropicStreamBodies(), value, 20), func(baseURL string) Provider {

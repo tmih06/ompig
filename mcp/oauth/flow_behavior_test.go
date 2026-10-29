@@ -15,7 +15,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 func TestStartAuthorizationSendsTheS256ChallengeOfTheReturnedVerifier(t *testing.T) {

@@ -1,6 +1,6 @@
 # Pi 0.87.1 constrained-sampling.test.ts:201,271 preserves native custom IDs and starts arguments with initial input.
 # Probe full API streams, then replay their result through onPayload. Also replay a foreign fc-prefixed item to prove source identity controls normalization.
-# Pig consumes the stream in the producer's synchronous prefix (RunStreamContinuation owns the turn), as Pi's caller attaches before any provider I/O completes; an unowned goroutine attached late under CPU load and read the later partial. Pi's oracle observes at publication. runs = 20 keeps a load-dependent ordering visible.
+# Ompig consumes the stream in the producer's synchronous prefix (RunStreamContinuation owns the turn), as Pi's caller attaches before any provider I/O completes; an unowned goroutine attached late under CPU load and read the later partial. Pi's oracle observes at publication. runs = 20 keeps a load-dependent ordering visible.
 # The strict-schema case at line129 preserves JSON declaration order through decoding, transcript cloning and provider conversion.
 name = "15-grammar-tool-stream-and-replay"
 description = "Grammar tool arguments initialize and grow correctly, and replay IDs follow source provider/API/model identity."
@@ -10,9 +10,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/constrained-sampling/pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/constrained-sampling/ompig"]
 pi_args = ["node", "./test/parity/testdata/constrained-sampling/pi.mjs"]
 
 [cli]

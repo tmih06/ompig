@@ -22,8 +22,8 @@ wait_contains = ["child-artifact-written"]
 wait_timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["testdata/ext/child-session.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["testdata/ext/child-session.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/child-session.mjs"]
 
 [assert]

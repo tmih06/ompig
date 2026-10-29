@@ -24,7 +24,7 @@ export interface CoreHandle {
   stats?(): { steps: number; msStep: number; msDecode: number }
   /** Optional: the core's mem_stats counters. */
   memStats?(): object
-  /** Set by the host loop: answers the core's synchronous reads (ABI section 4.2, pig.read) with the encoded answer. */
+  /** Set by the host loop: answers the core's synchronous reads (ABI section 4.2, ompig.read) with the encoded answer. */
   reader?: (sql: number, params: Param[]) => Uint8Array
   /**
    * Optional fast path for a `hopped` event (ABI section 4.1, `hop`): the event is its effect ID, and the answer is an integer
@@ -284,7 +284,7 @@ export class HostSession {
     this.sqlTable = opts.sqlTable
     this.reader = (sql, params) => {
       const text = this.sqlTable[sql]
-      if (text === undefined) throw new Error(`pig.read: no statement ${sql}`)
+      if (text === undefined) throw new Error(`ompig.read: no statement ${sql}`)
       const derived = answerContextRead(this.contexts, text, params)
       if (derived !== undefined) { this.counters.reads++; return encodeAnswer(derived) }
       const rows = this.store.all(text, params)

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // updateCheckConcurrency limits parallel npm/git remote queries.
@@ -150,7 +150,7 @@ func FormatPackageUpdates(updates []PackageUpdate) string {
 	}
 	var b strings.Builder
 	b.WriteString("Package Updates Available\n")
-	b.WriteString("Package updates are available. Run `pig update`\n")
+	b.WriteString("Package updates are available. Run `ompig update`\n")
 	b.WriteString("Packages:\n")
 	for _, u := range updates {
 		fmt.Fprintf(&b, "- %s\n", u.DisplayName)

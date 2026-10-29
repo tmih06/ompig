@@ -14,11 +14,11 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // ModelsStoreEntry mirrors pi-ai ModelsStoreEntry (models-store.ts:3-15). Models are typed and lossless: a model decoded from a catalog keeps the

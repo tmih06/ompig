@@ -4,15 +4,15 @@
 """Extension-profile scenario (ADDENDUM 2 row 3): the same extension set on every arm that can load it.
 
 Profiles: none; ts (Pi 1.1.0's own todo.ts and subagent example plus ext/ts/heavy-tool-call.ts, a tool_call handler doing ~2 ms of work per call);
-go (PiG: ext/go); multi (PiG only: Go + Rust + Python + TypeScript, each with the same ~2 ms tool_call handler). Every handler appends a line to
+go (Ompig: ext/go); multi (Ompig only: Go + Rust + Python + TypeScript, each with the same ~2 ms tool_call handler). Every handler appends a line to
 $BENCHEXT_COUNTER, so "loaded" is proven by invocations (5 prompts x 4 tool calls = 20 per handler), not by the absence of an error. An arm whose
 session cannot start, shows a load error, or never invokes the handlers is recorded as "cannot load" with the reason.
 
 Per (profile, arm), --rounds interleaved interactive sessions of --prompts prompts: time to interactive, per-prompt p50/p95 and CPU, PSS/RSS/private dirty at
-ready and after the prompts (process tree: a Node, Python or Rust runner counts), handler invocations. The first session of a PiG profile that compiles an
+ready and after the prompts (process tree: a Node, Python or Rust runner counts), handler invocations. The first session of a Ompig profile that compiles an
 extension is a cold build and is recorded separately (cold_ms), not pooled.
 
-  ext_profiles.py --root ROOT --arms pig-tip,pi-node,pibolt-0.7.4,omp --profiles none,ts,go,multi --rounds 5 --out FILE.jsonl
+  ext_profiles.py --root ROOT --arms ompig-tip,pi-node,pibolt-0.7.4,omp --profiles none,ts,go,multi --rounds 5 --out FILE.jsonl
 """
 import argparse
 import json
@@ -37,8 +37,8 @@ import fake_server  # noqa: E402
 
 
 def stage(root: Path):
-    """Copy the extension sources into the pig-tip tree (their go.mod / Cargo.toml / sys.path reach the SDK by relative path) and return profile -> {arm kind: args}."""
-    tip = root / "src" / "pig-tip" / "examples" / "extensions"
+    """Copy the extension sources into the ompig-tip tree (their go.mod / Cargo.toml / sys.path reach the SDK by relative path) and return profile -> {arm kind: args}."""
+    tip = root / "src" / "ompig-tip" / "examples" / "extensions"
     for name, src in (("bench-go", "go"), ("bench-py", "py"), ("bench-rs", "rs")):
         dst = tip / name
         shutil.rmtree(dst, ignore_errors=True)
@@ -48,14 +48,14 @@ def stage(root: Path):
     return {
         "none": {"all": []},
         "ts": {"all": ts},
-        "go": {"pig": ["-e", str(tip / "bench-go")]},
-        "multi": {"pig": ["-e", str(tip / "bench-go"), "-e", str(tip / "bench-py"), "-e", str(tip / "bench-rs"), *ts]},
+        "go": {"ompig": ["-e", str(tip / "bench-go")]},
+        "multi": {"ompig": ["-e", str(tip / "bench-go"), "-e", str(tip / "bench-py"), "-e", str(tip / "bench-rs"), *ts]},
     }
 
 
 def session(h, argv, extra, n, cpus, counter):
     with fake_server.fake_model(h) as port, h.pi_home(port) as home, h.workdir() as cwd:
-        # A persistent HOME for PiG (its extension build cache lives under it) and the real toolchain homes, so a session does not rebuild or refetch.
+        # A persistent HOME for Ompig (its extension build cache lives under it) and the real toolchain homes, so a session does not rebuild or refetch.
         keep = {"BENCH_HOME": str(KEEP_HOME), "CARGO_HOME": os.environ.get("CARGO_HOME", os.path.expanduser("~/.cargo")), "RUSTUP_HOME": os.environ.get("RUSTUP_HOME", os.path.expanduser("~/.rustup")),
                 "GOPATH": os.environ.get("GOPATH", os.path.expanduser("~/go"))}
         env = h.pi_env(home, {"BENCHEXT_COUNTER": counter, **keep})
@@ -112,10 +112,10 @@ def main():
         for r in range(-1, a.rounds):  # round -1: warm-up / cold build, not pooled
             for prof in a.profiles.split(","):
                 for name in arms[r % len(arms):] + arms[:r % len(arms)] if r >= 0 else arms:
-                    kind = "pig" if name.startswith("pig") else "other"
+                    kind = "ompig" if name.startswith("ompig") else "other"
                     args = profiles[prof].get("all") if "all" in profiles[prof] else profiles[prof].get(kind)
                     if args is None:
-                        row = {"profile": prof, "arm": name, "round": r, "ok": False, "reason": "cannot load: the profile needs PiG's Go/Rust/Python extension runtime"}
+                        row = {"profile": prof, "arm": name, "round": r, "ok": False, "reason": "cannot load: the profile needs Ompig's Go/Rust/Python extension runtime"}
                         if r == 0:
                             open(a.out, "a").write(json.dumps(row) + "\n")
                         continue

@@ -10,7 +10,7 @@ Fixtures: `tool` (the RPC33 tool call with finish and usage in one chunk), `mixe
 
 `realticks.mjs` writes `realticks.json`: the same counter over Pi's real `stream()` against a loopback server that writes headers and the whole body in one write, so the first read goes through undici's byte stream instead of a scripted one. It records the tick of every push and every delivery for the fixtures that finish inside the microtask domain. A scripted body settles its first read one generation earlier than a fetch body, which is why `ticks.json` alone cannot pin the provider's timeline against an RPC client.
 
-`pi.json`, `ticks.json` and `realticks.json` are identical across repeated runs and across Node 24.19.0 (`.node-version`) and 26.7.0 (except the recorded `node` field). The Go replays are `TestMistralDirectMatchesPiTickOrder`, `TestMistralCancelMatchesPi`, `TestMistralBodyPathTicksMatchPi` and `TestMistralRealBodyTicksMatchPi` in `ai`, and `TestRPCMistralMatchesPi` in `cmd/pig` (the real binary; `PIG_D82_RUNS=200` for the D82 evidence).
+`pi.json`, `ticks.json` and `realticks.json` are identical across repeated runs and across Node 24.19.0 (`.node-version`) and 26.7.0 (except the recorded `node` field). The Go replays are `TestMistralDirectMatchesPiTickOrder`, `TestMistralCancelMatchesPi`, `TestMistralBodyPathTicksMatchPi` and `TestMistralRealBodyTicksMatchPi` in `ai`, and `TestRPCMistralMatchesPi` in `cmd/ompig` (the real binary; `OMPIG_D82_RUNS=200` for the D82 evidence).
 
 ## Reproduce
 

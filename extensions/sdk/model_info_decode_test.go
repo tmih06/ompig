@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The same replies as the Rust SDK's model_info_tests.rs: both typed views read them alike.

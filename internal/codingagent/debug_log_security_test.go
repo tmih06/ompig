@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// PIG_DEBUG_KEYS logs the key a diagnosis needs, never the text typed or pasted into a masked login prompt.
+// OMPIG_DEBUG_KEYS logs the key a diagnosis needs, never the text typed or pasted into a masked login prompt.
 func TestRedactKeyChunkHidesTypedAndPastedText(t *testing.T) {
 	for chunk, want := range map[string]string{
 		"sk-secret-key":               "text(13 chars)",

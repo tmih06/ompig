@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable/internal/ordered"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable/internal/ordered"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ToJsonValue returns a detached strict JSON copy of value: nil, bool, float64, string, []any, or *delta.JsonObject. It

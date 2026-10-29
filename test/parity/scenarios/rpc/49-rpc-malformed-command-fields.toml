@@ -5,7 +5,7 @@
 # (undefined, null, numbers, arrays, objects), session.prompt/steer/followUp call text.startsWith on the message, set_session_name calls
 # command.name.trim(), switch_session calls startsWith on its path, bash runs `${command}`, fork rejects a non-string entry id, get_entries looks the
 # `since` value up by id, set_thinking_level treats a non-string as an unavailable level, and set_auto_compaction/set_auto_retry read truthiness.
-# Pig decoded these into typed structs and answered with a Go decoder message, or started a run with an empty prompt. Not probed because Pig differs
+# Ompig decoded these into typed structs and answered with a Go decoder message, or started a run with an empty prompt. Not probed because Ompig differs
 # and the cause is Pi storing the raw JSON value: non-string steering and follow-up modes, and non-boolean enabled flags echoed by get_state (the
 # scenario restores booleans before each get_state); compact with a non-string customInstructions (Pi's TypeError depends on session state).
 
@@ -452,9 +452,9 @@ wait_contains = ['"id":"q36","type":"response"']
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_HOME=testdata/model-thinking"]
+ompig = ["OMPIG_HOME=testdata/model-thinking"]
 pi = ["PI_CODING_AGENT_DIR=testdata/model-thinking/agent"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/plain"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/plain"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/plain"]
 
 [assert]

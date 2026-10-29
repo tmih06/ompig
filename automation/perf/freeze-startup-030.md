@@ -23,13 +23,13 @@ The answering-terminal control uses the same method and sets the pane's `window-
 | Same smoke method, OSC answered | Frozen base | 71.313 | 58.160 | 1.2261 | 242.270 | 258.816 | 0.9361 |
 | Same smoke method, OSC answered | Fixed | 60.056 | 59.069 | **1.0167** | 237.189 | 252.090 | **0.9409** |
 
-Pi's fixed-series print/interactive medians are 394.704/760.958 ms without a reply and 398.875/685.513 ms with a reply. These values do not waive regression versus PiG v0.2.0.
+Pi's fixed-series print/interactive medians are 394.704/760.958 ms without a reply and 398.875/685.513 ms with a reply. These values do not waive regression versus Ompig v0.2.0.
 
 **Result: print passes both methods; answered-terminal interactive passes; original no-reply interactive remains FAIL.** Do not mark the original release smoke gate green. All samples remain visible. The base binary build completes before timing. The short test/fixed-binary build overlaps the beginning of the base timing invocation; measured ratios are same-run controls on a shared host, not dedicated-host latency guarantees.
 
 ## Why the original interactive gate still fails
 
-Pi 0.87.1 `packages/coding-agent/src/modes/interactive/theme/theme-controller.ts:57-83` awaits terminal background detection with a 100 ms deadline. `interactive-mode.ts:954` awaits that operation before extension startup. PiG v0.2.0 did not implement this required query. The accepted `1aba738c6` fix restored it. Removing the query, proceeding before it settles, or persisting the unconfirmed fallback changes visible appearance and extension ordering.
+Pi 0.87.1 `packages/coding-agent/src/modes/interactive/theme/theme-controller.ts:57-83` awaits terminal background detection with a 100 ms deadline. `interactive-mode.ts:954` awaits that operation before extension startup. Ompig v0.2.0 did not implement this required query. The accepted `1aba738c6` fix restored it. Removing the query, proceeding before it settles, or persisting the unconfirmed fallback changes visible appearance and extension ordering.
 
 Fresh-home startup traces locate the wait:
 
@@ -49,7 +49,7 @@ A separate direct-PTY control removes shell/tmux launch overhead and answers the
 | No OSC reply | 72.467 / 182.720 | 62.991 / 168.019 | 61.926 / 76.191 | 412.258 / 574.693 |
 | OSC answered | 68.067 / 74.482 | 61.298 / 72.632 | 61.273 / 76.947 | 390.717 / 472.622 |
 
-PiG's fixed direct-PTY no-reply penalty is approximately 95 ms; Pi's is approximately 102 ms. PiG is not waiting longer than Pi. The exact original smoke numbers differ from the smoke owner's earlier run because shell/tmux launch overhead and host contention vary. They are reported without normalization or sample rejection.
+Ompig's fixed direct-PTY no-reply penalty is approximately 95 ms; Pi's is approximately 102 ms. Ompig is not waiting longer than Pi. The exact original smoke numbers differ from the smoke owner's earlier run because shell/tmux launch overhead and host contention vary. They are reported without normalization or sample rejection.
 
 ## Profiles and verification
 
@@ -61,7 +61,7 @@ Passed:
 - Focused CLI model selection, scope, registry/catalog, and native Model Runtime boundary tests.
 - Race detector for both new `TestRuntimeModels` guards.
 - Existing concurrent independent-build, admission-bound/cancellation, and same-artifact publication tests, confirming the freeze already contains that fix.
-- `go vet ./cmd/pig ./internal/codingagent`.
+- `go vet ./cmd/ompig ./internal/codingagent`.
 - `go tool golangci-lint config verify` and `make lint-changed LINT_BASE=c00a3e15d`.
 - Seven scenarios at all three declared pairs: headless scoped models; stock light/dark 256-color; model direct switch, thinking suffix, save default, and saved scope order. No comparator or coverage change.
 

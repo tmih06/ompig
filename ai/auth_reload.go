@@ -6,7 +6,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 type authFileReload struct {

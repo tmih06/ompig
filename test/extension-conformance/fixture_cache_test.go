@@ -10,8 +10,8 @@ func TestSDKFixtureBuildsHavePackageLifetime(t *testing.T) {
 		name, env string
 		build     func(*testing.T) string
 	}{
-		{"go", "PIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN", buildSDKFixture},
-		{"rust", "PIG_TEST_RUST_SDK_FIXTURE_BIN", buildRustSDKFixture},
+		{"go", "OMPIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN", buildSDKFixture},
+		{"rust", "OMPIG_TEST_RUST_SDK_FIXTURE_BIN", buildRustSDKFixture},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Setenv(tc.env, "")

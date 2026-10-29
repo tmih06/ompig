@@ -3,7 +3,7 @@ package subprocess
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // A runtime reports a handler's suspension on a host call before it sends the call. The acknowledgment that report makes waits for the call the report

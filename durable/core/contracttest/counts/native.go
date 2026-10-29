@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // ReplayError is a replay that stopped because the core did not do what the recorded run did.
@@ -83,11 +83,11 @@ func ReplayNative(rec *Recording) ([]Interval, error) {
 	reads := 0
 	s.SetReader(func(sql uint16, params []abi.Value) ([][]abi.Value, error) {
 		if reads >= len(answers) {
-			failure = "the core made a pig.read call the recorded run did not make"
+			failure = "the core made a ompig.read call the recorded run did not make"
 			return nil, errors.New(failure)
 		}
 		if !bytes.Equal(abi.AppendReadRequest(nil, sql, params), requests[reads]) {
-			failure = "the core asked a different pig.read than the recorded run"
+			failure = "the core asked a different ompig.read than the recorded run"
 			return nil, errors.New(failure)
 		}
 		rows := answers[reads]

@@ -10,10 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type programStatusOp struct {
@@ -90,7 +90,7 @@ func TestProgramStatusReporterRandomSequencesMatchPi(t *testing.T) {
 		if !reflect.DeepEqual(got, expected[i]) && (len(got) != 0 || len(expected[i]) != 0) {
 			if failures++; failures <= 3 {
 				ops, _ := json.Marshal(ops)
-				t.Errorf("sequence %d differs from Pi\n ops %s\n Pig %+v\n Pi  %+v", i, ops, got, expected[i])
+				t.Errorf("sequence %d differs from Pi\n ops %s\n Ompig %+v\n Pi  %+v", i, ops, got, expected[i])
 			}
 		}
 	}
@@ -108,7 +108,7 @@ func TestProgramStatusReporterProbeDump(t *testing.T) {
 	fmt.Printf("program-status-probes:%s\n", line)
 }
 
-// TestProgramStatusReporterParity prints PiG's reports, one JSON line per sequence, for the interactive-rendering/56 parity scenario.
+// TestProgramStatusReporterParity prints Ompig's reports, one JSON line per sequence, for the interactive-rendering/56 parity scenario.
 func TestProgramStatusReporterParity(t *testing.T) {
 	for _, ops := range programStatusCorpus() {
 		reports := runProgramStatusSequence(ops)
@@ -178,7 +178,7 @@ func programStatusCorpus() [][]programStatusOp {
 	return sequences
 }
 
-// runProgramStatusSequence drives PiG's reporter through ops and returns what it reported to its terminal.
+// runProgramStatusSequence drives Ompig's reporter through ops and returns what it reported to its terminal.
 func runProgramStatusSequence(ops []programStatusOp) []programStatusReport {
 	var got []programStatusReport
 	terminal := &programStatusTerminal{}

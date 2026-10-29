@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // abortAfterStartProvider streams a start event + partial text, then the

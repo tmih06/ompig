@@ -11,7 +11,7 @@ import (
 func TestNodeJitiCachePersistsWithoutStaleSource(t *testing.T) {
 	root := filepath.Join(findModuleRoot(t), "coding", "extension", "host", "subprocess", "runtime-node")
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	t.Setenv("JITI_FS_CACHE", "true")
 	dir := t.TempDir()
 	entry := filepath.Join(dir, "entry.ts")
@@ -52,7 +52,7 @@ if (process.argv[3] === "reject") {
 	run("miss", "entry1:before")
 	cache := filepath.Join(home, "cache", "jiti")
 	if entries, err := os.ReadDir(cache); err != nil || len(entries) == 0 {
-		t.Fatalf("persistent PiG transform cache missing: %v", err)
+		t.Fatalf("persistent Ompig transform cache missing: %v", err)
 	}
 	run("hit", "entry1:before")
 	// Same-sized changes with restored timestamps must invalidate both the entry and an imported dependency.
@@ -88,7 +88,7 @@ if (process.argv[3] === "reject") {
 
 	// Change the loader and the pinned compiler identity independently. Neither may consume the prior release's transform, even with identical extension bytes.
 	changedRoot := t.TempDir()
-	for _, name := range []string{"jiti-loader.mjs", "runtime-modules.mjs", "loader.mjs", "compile-cache.mjs", "shims/pig-config.mjs", "shims/jiti/package.json", "shims/jiti/lib/jiti.cjs", "shims/jiti/dist/jiti.cjs", "shims/jiti/dist/babel.cjs"} {
+	for _, name := range []string{"jiti-loader.mjs", "runtime-modules.mjs", "loader.mjs", "compile-cache.mjs", "shims/ompig-config.mjs", "shims/jiti/package.json", "shims/jiti/lib/jiti.cjs", "shims/jiti/dist/jiti.cjs", "shims/jiti/dist/babel.cjs"} {
 		data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(name)))
 		if err != nil {
 			t.Fatal(err)

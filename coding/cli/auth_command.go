@@ -1,8 +1,8 @@
 package cli
 
 // Mirrors upstream packages/coding-agent/src/cli/auth-command.ts: parsing,
-// usage, and argument validation for `pig auth check`, `pig auth
-// print-api-key`, and `pig auth print-bearer-token`.
+// usage, and argument validation for `ompig auth check`, `ompig auth
+// print-api-key`, and `ompig auth print-bearer-token`.
 
 import (
 	"fmt"
@@ -10,11 +10,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/tui/widthx"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // AuthCommandKind mirrors upstream AuthCommandKind.
@@ -77,12 +77,12 @@ func IsAuthCommandHelp(args []string) bool {
 	return len(args) < 2 || args[1] == "help" || slices.Contains(args, "--help") || slices.Contains(args, "-h")
 }
 
-// authCommandHelp is upstream printAuthCommandHelp's text, with PiG's command
+// authCommandHelp is upstream printAuthCommandHelp's text, with Ompig's command
 // name (D2) where upstream prints the literal `pi`.
 const authCommandHelp = `Usage:
-  pig auth print-api-key [--provider <provider>] [--model <model>]
-  pig auth print-bearer-token [--provider <provider>] [--model <model>] [--min-expiry <duration>]
-  pig auth check [--provider <provider>] [--model <model>] [--json] [--credentials] [--no-refresh]
+  ompig auth print-api-key [--provider <provider>] [--model <model>]
+  ompig auth print-bearer-token [--provider <provider>] [--model <model>] [--min-expiry <duration>]
+  ompig auth check [--provider <provider>] [--model <model>] [--json] [--credentials] [--no-refresh]
 
 Auth commands require at least one of --provider or --model. Checks refresh expired OAuth credentials by default; --no-refresh prevents this. --credentials emits the credential, or includes it in JSON output.`
 

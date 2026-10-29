@@ -33,7 +33,7 @@ func (h *scriptedQueueHost) recorded() []queueCall {
 // startScriptedQueueHost adopts a connection to a scripted host as the running extension's, so the SDK's helper calls use it.
 func startScriptedQueueHost(t *testing.T) *scriptedQueueHost {
 	t.Helper()
-	t.Setenv("PIG_EXT_SOCKET", "")
+	t.Setenv("OMPIG_EXT_SOCKET", "")
 	return adoptScriptedQueueHost(t, "")
 }
 
@@ -215,7 +215,7 @@ func TestWithFileMutationQueueUsesTheFusedHostHook(t *testing.T) {
 // extension stops while another member's task still holds the turn, the turn is the process's, not the stopped connection's: the exit goes to a connection that
 // still runs, or the file stays held for as long as the process lives (the host releases a stopped connection's turns only with the process's last one).
 func TestWithFileMutationQueueExitReachesTheHostWhenTheCarryingConnectionStopped(t *testing.T) {
-	t.Setenv("PIG_EXT_SOCKET", "")
+	t.Setenv("OMPIG_EXT_SOCKET", "")
 	carrier := adoptScriptedQueueHost(t, "/s/e-0.sock")
 	peer := adoptScriptedQueueHost(t, "/s/e-1.sock")
 	file := filepath.Join(t.TempDir(), "a.txt")

@@ -21,7 +21,7 @@ const results = JSON.parse(input).map((ops) => {
       case "name": name = op.value; break;
     }
   }
-  // The app name is the program's own (pi, pig); every other field is compared.
+  // The app name is the program's own (pi, ompig); every other field is compared.
   return reports.map(({ app, ...rest }) => rest);
 });
 process.stdout.write(JSON.stringify(results), () => process.exit(0));

@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi: packages/coding-agent/src/core/model-registry.ts:64 (ModelRegistry.getAll).

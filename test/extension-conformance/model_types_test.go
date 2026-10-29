@@ -14,12 +14,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/modeltypes"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/modeltypes"
 )
 
 // The typed model operations of Pi 0.99.1 for every SDK against the real subprocess Host: ctx.modelRegistry's typed reads, getAvailableOfType, classify and registerVirtualModel (.upstream/v0.99.1/packages/coding-agent/src/core/model-registry.ts:71-79,135-177), and the image and classifier implementations of a provider config and of a Provider object (core/extensions/types.ts:1896-1898, core/provider-composer.ts:632-663).
@@ -354,7 +354,7 @@ func loadModelTypesGo(placement string) modelTypesLoader {
 		t.Helper()
 		root := findModuleRoot(t)
 		if placement == "fused" {
-			// A fused Piglet Binary serves a factory over the host's pipe, and the pipe is the factory's own connection while it runs (fusepack.registerFactory).
+			// A fused Ompiglet Binary serves a factory over the host's pipe, and the pipe is the factory's own connection while it runs (fusepack.registerFactory).
 			serve := func(conn net.Conn) (err error) {
 				defer func() {
 					if recovered := recover(); recovered != nil {
@@ -374,7 +374,7 @@ func loadModelTypesGo(placement string) modelTypesLoader {
 		cfg := subprocess.ExtConfig{
 			Name: modeltypes.Name, Source: filepath.Join(root, "test/extension-conformance/testdata/model-types-go"), Enabled: true, Isolation: "strict",
 			RuntimeKind: "subprocess", RuntimeLanguage: "go", EntrypointKind: "factory", Factory: "Extension",
-			SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/model-types-go", Package: "example.com/model-types-go",
+			SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/model-types-go", Package: "example.com/model-types-go",
 			SourceInfo: hostSurfaceSource,
 		}
 		configs := []subprocess.ExtConfig{cfg}
@@ -475,7 +475,7 @@ func loadModelTypesRust(packed bool) modelTypesLoader {
 
 const modelTypesPython = `import json
 import time
-import pig_sdk
+import ompig_sdk
 
 CANCELLED = {"n": 0}
 ZERO = {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0}
@@ -529,7 +529,7 @@ def tui_theme_probe(ctx, args):
 
     op = args.get("op")
     if op == "markdown":
-        theme = pig_sdk.get_markdown_theme()
+        theme = ompig_sdk.get_markdown_theme()
         styles = {
             "heading": apply(theme.heading), "link": apply(theme.link), "linkUrl": apply(theme.link_url), "code": apply(theme.code), "codeBlock": apply(theme.code_block),
             "codeBlockBorder": apply(theme.code_block_border), "quote": apply(theme.quote), "quoteBorder": apply(theme.quote_border), "hr": apply(theme.hr),
@@ -538,25 +538,25 @@ def tui_theme_probe(ctx, args):
         }
         return json.dumps({"styles": styles, "highlight": [theme.highlight_code(code, lang) for code, lang in args.get("highlight", [])]})
     if op == "select":
-        theme = pig_sdk.get_select_list_theme()
+        theme = ompig_sdk.get_select_list_theme()
         return json.dumps({"styles": {"selectedPrefix": apply(theme.selected_prefix), "selectedText": apply(theme.selected_text), "description": apply(theme.description),
                                       "scrollInfo": apply(theme.scroll_info), "noMatch": apply(theme.no_match)}})
     if op == "settings":
-        theme = pig_sdk.get_settings_list_theme()
+        theme = ompig_sdk.get_settings_list_theme()
         return json.dumps({"styles": {"label": [[theme.label(s, False), theme.label(s, True)] for s in samples], "value": [[theme.value(s, False), theme.value(s, True)] for s in samples],
                                       "description": apply(theme.description), "cursor": theme.cursor, "hint": apply(theme.hint)}})
     if op == "highlight":
         if args.get("theme"):
-            pig_sdk.init_theme(args["theme"])
-        return json.dumps({"lines": pig_sdk.highlight_code(args.get("code", ""), args.get("lang"))})
+            ompig_sdk.init_theme(args["theme"])
+        return json.dumps({"lines": ompig_sdk.highlight_code(args.get("code", ""), args.get("lang"))})
     if op == "init_theme":
-        pig_sdk.init_theme(args.get("theme"))
-        theme = pig_sdk.get_markdown_theme()
+        ompig_sdk.init_theme(args.get("theme"))
+        theme = ompig_sdk.get_markdown_theme()
         return json.dumps({"bold": apply(theme.bold), "heading": apply(theme.heading)})
     if op == "key_hint":
-        return json.dumps({"keyHint": pig_sdk.key_hint(args["id"], args["description"]), "keyText": pig_sdk.key_text(args["id"])})
+        return json.dumps({"keyHint": ompig_sdk.key_hint(args["id"], args["description"]), "keyText": ompig_sdk.key_text(args["id"])})
     if op == "raw_key_hint":
-        return json.dumps({"rawKeyHint": pig_sdk.raw_key_hint(args["key"], args["description"])})
+        return json.dumps({"rawKeyHint": ompig_sdk.raw_key_hint(args["key"], args["description"])})
     raise RuntimeError("unknown op " + str(op))
 
 
@@ -664,18 +664,18 @@ def register_host_surface(ext):
         "c3_loaded": lambda ctx, args: json.dumps({"loaded": log["loaded"], "factoryHeard": log["heard"], "heardAtEmit": log["heard_at_emit"], "errorEmitFailed": log["error_emit_failed"], "crossOwnAt": log["cross_own_at"], "crossReturnedAt": log["cross_returned_at"], "ackHeard": log["ack_heard"], "ackAtCross": log["ack_at_cross"]}),
     }
     for name, handler in handlers.items():
-        ext.register_tool(pig_sdk.ToolDefinition(name=name, label=name, description=name, parameters={"type": "object"}, execute=handler))
+        ext.register_tool(ompig_sdk.ToolDefinition(name=name, label=name, description=name, parameters={"type": "object"}, execute=handler))
 
 
 def ctx_json(value):
     # JSON.stringify of a decoded value, as the Node fixture's JSON.stringify(params.meta).
-    from pig_sdk.serialize_conversation import _json_stringify
+    from ompig_sdk.serialize_conversation import _json_stringify
 
     return _json_stringify(value)
 
 
 def new_extension():
-    ext = pig_sdk.Extension("model-types")
+    ext = ompig_sdk.Extension("model-types")
     ext.register_provider("ops", {
         "baseUrl": "https://ops.test/v1", "apiKey": "ops-key",
         "models": [
@@ -685,9 +685,9 @@ def new_extension():
         "images": {"test-images": image_impl},
         "classifiers": {"test-classifier": classify_impl},
     })
-    ext.register_provider(pig_sdk.Provider(
+    ext.register_provider(ompig_sdk.Provider(
         id="pixels", name="Pixels",
-        auth=pig_sdk.ProviderAuth(api_key=pig_sdk.APIKeyAuth(name="Pixels key", resolve=lambda _input: pig_sdk.AuthResult(auth={"apiKey": "pixels-key"}))),
+        auth=ompig_sdk.ProviderAuth(api_key=ompig_sdk.APIKeyAuth(name="Pixels key", resolve=lambda _input: ompig_sdk.AuthResult(auth={"apiKey": "pixels-key"}))),
         get_models=lambda: [
             {"id": "flux", "name": "Flux", "type": "image", "api": "test-images", "input": ["text"], "output": ["image"], "cost": ZERO, "baseUrl": "https://pixels.test/v1"},
             {"id": "cls", "name": "Cls", "type": "classifier", "api": "test-classifier", "input": ["text"], "contextWindow": 1000, "cost": ZERO, "baseUrl": "https://pixels.test/v1"}],
@@ -726,10 +726,10 @@ def new_extension():
 
     def virtual_probe(ctx, args):
         registry = ctx.model_registry
-        registry.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="late", name="Late", route=route, context_window=1000))
+        registry.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="late", name="Late", route=route, context_window=1000))
         refused = ""
         try:
-            registry.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="claimed", name="Claimed", route=route))
+            registry.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="claimed", name="Claimed", route=route))
         except Exception as error:
             refused = str(error).strip()
         registry.unregister_virtual_model("router", "late")
@@ -737,7 +737,7 @@ def new_extension():
 
     def virtual_visible(ctx, args):
         registry = ctx.model_registry
-        registry.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="seen", name="Seen", route=route, context_window=1000))
+        registry.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="seen", name="Seen", route=route, context_window=1000))
         def listed():
             return any(model.get("provider") == "router" and model.get("id") == "seen" for model in registry.get_all())
         registered, is_listed = registry.find("router", "seen") is not None, listed()
@@ -759,7 +759,7 @@ def new_extension():
         registry = ctx.model_registry
 
         def stream_simple(stream_ctx, model, request, options):
-            stream = pig_sdk.ModelEventStream()
+            stream = ompig_sdk.ModelEventStream()
             message = {"role": "assistant", "api": model["api"], "provider": model["provider"], "model": model["id"], "content": [{"type": "text", "text": "late:" + model["id"] + ":" + str(options["apiKey"])}], "stopReason": "stop", "timestamp": 1}
             stream.push({"type": "done", "reason": "stop", "message": message})
             return stream
@@ -782,7 +782,7 @@ def new_extension():
         return json.dumps({"mode": args.get("mode")})
 
     def tui_probe(ctx, args):
-        from pig_sdk import tui
+        from ompig_sdk import tui
 
         def as_list(keys):
             if keys is None:
@@ -837,7 +837,7 @@ def new_extension():
         return json.dumps(report)
 
     for name, handler in (("late_provider", late_provider), ("typed_reads", typed_reads), ("classify_probe", classify_probe), ("images_probe", images_probe), ("virtual_probe", virtual_probe), ("virtual_visible", virtual_visible), ("theme_probe", theme_probe), ("tui_probe", tui_probe), ("tui_theme_probe", tui_theme_probe), ("ops_status", lambda ctx, args: json.dumps({"cancelled": CANCELLED["n"]}))):
-        ext.register_tool(pig_sdk.ToolDefinition(name=name, label=name, description=name, parameters={"type": "object"}, execute=handler))
+        ext.register_tool(ompig_sdk.ToolDefinition(name=name, label=name, description=name, parameters={"type": "object"}, execute=handler))
     register_host_surface(ext)
     return ext
 `

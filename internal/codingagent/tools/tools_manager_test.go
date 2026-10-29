@@ -73,8 +73,8 @@ func TestToolsTable_AssetNames(t *testing.T) {
 }
 
 func TestIsOfflineModeEnabled(t *testing.T) {
-	for _, key := range []string{"PIG_OFFLINE", "PI_OFFLINE"} {
-		t.Setenv("PIG_OFFLINE", "")
+	for _, key := range []string{"OMPIG_OFFLINE", "PI_OFFLINE"} {
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", "")
 		t.Setenv(key, "1")
 		if !IsOfflineModeEnabled() {
@@ -102,7 +102,7 @@ func TestIsOfflineModeEnabledComparesExactly(t *testing.T) {
 		{"1", true}, {"true", true}, {"TRUE", true}, {"Yes", true}, {"yes", true},
 		{" 1", false}, {"1 ", false}, {"\ttrue", false}, {"yes\n", false}, {"\u00a0yes", false}, {"0", false}, {"2", false}, {"\u017fes", false}, {"yeS", true}, {"", false},
 	} {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", tc.value)
 		if got := IsOfflineModeEnabled(); got != tc.want {
 			t.Errorf("PI_OFFLINE=%q: IsOfflineModeEnabled() = %v, want %v", tc.value, got, tc.want)
@@ -350,7 +350,7 @@ func TestDownloadTool_GitHubAPIFailure(t *testing.T) {
 }
 
 func TestDownloadTool_OfflineMode(t *testing.T) {
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	t.Setenv("PATH", t.TempDir()) // hide system fd so GetToolPath returns ""
 	tm := NewToolsManager(t.TempDir())
 	tm.platformOverride = "darwin"

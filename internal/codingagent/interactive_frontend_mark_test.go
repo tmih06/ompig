@@ -9,14 +9,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/tui"
 )
 
-// headCell is one half-block cell of a pig head as HeadLines draws it: a space, or the foreground and optional
+// headCell is one half-block cell of a ompig head as HeadLines draws it: a space, or the foreground and optional
 // background SGR colors and the half block, then a reset.
 var headCell = regexp.MustCompile(`^(?: |\x1b\[38;(2;\d+;\d+;\d+|5;\d+)m(?:\x1b\[48;(2;\d+;\d+;\d+|5;\d+)m)?([▀▄])\x1b\[0m)`)
 
@@ -47,7 +47,7 @@ func sgrHex(t *testing.T, arg string) string {
 	return ""
 }
 
-// drawnHeadMark reads a pig head back out of the half-block lines the startup header draws (piglogin.HeadLines): each
+// drawnHeadMark reads a ompig head back out of the half-block lines the startup header draws (piglogin.HeadLines): each
 // opaque pixel, in row-major order, in the color its SGR sequence selects.
 func drawnHeadMark(t *testing.T, variant piglogin.Variant, mode tui.TerminalColorMode) frontend.Mark {
 	t.Helper()
@@ -84,11 +84,11 @@ func drawnHeadMark(t *testing.T, variant piglogin.Variant, mode tui.TerminalColo
 	return mark
 }
 
-// markTestSprite is an extension's sprite: a blue pig.
+// markTestSprite is an extension's sprite: a blue ompig.
 func markTestSprite(t *testing.T) extension.ValidatedSpriteDefinition {
 	t.Helper()
 	definition, err := extension.ValidateSpriteDefinition(extension.SpriteDefinition{
-		ID: "mark-test-pig", Name: "Mark Test PiG", Tagline: "Registered by an extension.",
+		ID: "mark-test-ompig", Name: "Mark Test Ompig", Tagline: "Registered by an extension.",
 		Mascot: []string{
 			"................", "...OOOO..OOOO...", "...OeeO..OeeO...", "..OeePPPPPPeeO..",
 			".OPPPpPPPPpPPPO.", ".OPPWWPPPPWWPPO.", ".OPPWKPPPPKWPPO.", ".OPbbPssssPbbPO.",
@@ -106,7 +106,7 @@ func markTestSprite(t *testing.T) extension.ValidatedSpriteDefinition {
 	return definition
 }
 
-// The first frame carries the pig head of the sprite the startup header draws as the mark, in the colors the header
+// The first frame carries the ompig head of the sprite the startup header draws as the mark, in the colors the header
 // draws it in, and a later frame only when the mark changed: an extension registering the saved sprite and
 // unregistering it, /sprite picking another one, and a theme in 256-color mode, which draws the head in the xterm
 // palette. An edit or a theme switch that leaves the head's colors carries none.
@@ -115,7 +115,7 @@ func TestFrontendFramesCarryTheActiveSpritesMark(t *testing.T) {
 	pinHeaderTerminal(t, tui.TerminalColorModeTrueColor)
 	t.Cleanup(func() { piglogin.Unregister("mark-test-ext") })
 	// The saved sprite is the extension's, drawn as the default until the extension registers it.
-	if err := piglogin.SaveVariant(configroot.Dir(), "mark-test-pig"); err != nil {
+	if err := piglogin.SaveVariant(configroot.Dir(), "mark-test-ompig"); err != nil {
 		t.Fatal(err)
 	}
 	piglogin.Refresh()
@@ -156,7 +156,7 @@ func TestFrontendFramesCarryTheActiveSpritesMark(t *testing.T) {
 			t.Fatal(err)
 		}
 	}, &blueMark)
-	if got := piglogin.Active().ID; got != "mark-test-pig" {
+	if got := piglogin.Active().ID; got != "mark-test-ompig" {
 		t.Fatalf("active sprite = %q, want the registered one", got)
 	}
 	step("registering it again", func() {

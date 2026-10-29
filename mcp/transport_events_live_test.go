@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // packages/mcp/src/transports/transport.ts:20-55 TransportEvents keeps its listeners in Sets and emits with `for (const listener of set)`: a Set iteration

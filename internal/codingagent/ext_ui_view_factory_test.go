@@ -5,9 +5,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // headerFooterView is a view surface whose structure a frontend can read.
@@ -20,7 +20,7 @@ func (v headerFooterView) FrontendView(int) *frontend.View {
 	return &frontend.View{Root: frontend.ViewNode{Kind: frontend.ViewKindText, Text: v.text}}
 }
 
-// pig additive (D107): a header or footer an extension draws from a view
+// ompig additive (D107): a header or footer an extension draws from a view
 // reaches the host through Pi's typed factory and keeps its structure: the
 // slot installs the view, so a D91 frontend reads it, and the footer
 // replaces the built-in one.

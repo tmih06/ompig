@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // jsObject is a JSON object as JSON.parse builds it: members in insertion order, a duplicate key keeping the position of its first occurrence and the

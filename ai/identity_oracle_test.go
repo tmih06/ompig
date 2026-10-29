@@ -6,14 +6,14 @@ import (
 	"maps"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/utils/identity.ts getIdentityHeaders, applied by every packages/ai/src/api/*.ts createClient
 
-// The request each API module sends for a request identity, read through the pinned pi-ai's options.fetch and PiG's HTTP client: the custom
+// The request each API module sends for a request identity, read through the pinned pi-ai's options.fetch and Ompig's HTTP client: the custom
 // User-Agent, the attribution headers of the OpenRouter, NVIDIA and OpenCode targets, and the Codex originator, which no identity changes. The
-// identity names acme, so both sides spell the same values; PiG's own product and attribution values are D26 and D65, locked in identity_test.go.
+// identity names acme, so both sides spell the same values; Ompig's own product and attribution values are D26 and D65, locked in identity_test.go.
 func TestProviderIdentityHeadersMatchPi(t *testing.T) {
 	codexToken := "x." + base64.RawURLEncoding.EncodeToString([]byte(`{"https://api.openai.com/auth":{"chatgpt_account_id":"acc"}}`)) + ".y"
 	identities := []map[string]any{
@@ -21,7 +21,7 @@ func TestProviderIdentityHeadersMatchPi(t *testing.T) {
 		{"userAgent": map[string]any{"custom": "acme/1.0"}, "attribution": map[string]any{"name": "acme", "url": "https://acme.example", "categories": []string{"cli-agent", "cloud-agent"}}},
 		{"userAgent": map[string]any{"custom": "acme/1.0"}, "attribution": map[string]any{"name": "acme", "url": "https://acme.example", "categories": []string{}}},
 		{"userAgent": map[string]any{"custom": "acme/1.0"}, "attribution": nil},
-		// Pi's own attribution values, which PiG's default attribution replaces (D26): the headers they map to are the same code on both sides.
+		// Pi's own attribution values, which Ompig's default attribution replaces (D26): the headers they map to are the same code on both sides.
 		{"userAgent": map[string]any{"custom": "acme/1.0"}, "attribution": map[string]any{"name": "pi", "url": "https://pi.dev", "categories": []string{"cli-agent"}}},
 	}
 	type target struct {

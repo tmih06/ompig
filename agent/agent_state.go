@@ -1,7 +1,7 @@
 package agent
 
 import (
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // AgentState is the live view of the agent's state that Pi exposes as `agent.state` (types.ts:382-421). Reads see the agent's current values and the writable properties write through: SetModel, SetThinkingLevel, SetTools and SetMessages are Pi's `state.model = ...`, `state.thinkingLevel = ...`, `state.tools = ...` and `state.messages = ...`.

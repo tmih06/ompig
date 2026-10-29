@@ -6,10 +6,10 @@ package store
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/rec"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/rec"
 )
 
 // maxSafe is JavaScript's Number.MAX_SAFE_INTEGER, the "current" upper bound of a revision read.

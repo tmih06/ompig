@@ -5,7 +5,7 @@ package sqlite
 import (
 	"strings"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // SqliteMigration is Chord's migration type, re-exported as Pi's durable migrations entry point re-exports it.

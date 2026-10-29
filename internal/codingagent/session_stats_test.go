@@ -6,10 +6,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 func TestLoadedSessionStatsIncludeAllEntriesAndUsage(t *testing.T) {
@@ -111,9 +111,9 @@ func BenchmarkSessionStatsSnapshot(b *testing.B) {
 }
 
 func BenchmarkSessionCommandRecorded(b *testing.B) {
-	path := os.Getenv("PIG_BENCH_SESSION_FILE")
+	path := os.Getenv("OMPIG_BENCH_SESSION_FILE")
 	if path == "" {
-		b.Skip("set PIG_BENCH_SESSION_FILE to a private Session JSONL path")
+		b.Skip("set OMPIG_BENCH_SESSION_FILE to a private Session JSONL path")
 	}
 	session, err := loadSessionFile(path)
 	if err != nil {
@@ -130,9 +130,9 @@ func BenchmarkSessionCommandRecorded(b *testing.B) {
 }
 
 func BenchmarkLoadSessionStatsRecorded(b *testing.B) {
-	path := os.Getenv("PIG_BENCH_SESSION_FILE")
+	path := os.Getenv("OMPIG_BENCH_SESSION_FILE")
 	if path == "" {
-		b.Skip("set PIG_BENCH_SESSION_FILE to a private Session JSONL path")
+		b.Skip("set OMPIG_BENCH_SESSION_FILE to a private Session JSONL path")
 	}
 	info, err := os.Stat(path)
 	if err != nil {

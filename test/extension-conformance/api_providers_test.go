@@ -3,12 +3,12 @@ package extensionconformance
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // providerServicesRegistryAPI is the Go reference for extension.API.RegisterProvider and UnregisterProvider: the production model registry that every mode's host
-// callbacks write to (cmd/pig bindProviderRegistry).
+// callbacks write to (cmd/ompig bindProviderRegistry).
 type providerServicesRegistryAPI struct {
 	extension.API
 	services *coding.AgentSessionServices

@@ -1,4 +1,4 @@
-// Package bytesize parses the byte sizes PiG commands accept, such as 5GiB.
+// Package bytesize parses the byte sizes Ompig commands accept, such as 5GiB.
 package bytesize
 
 import (

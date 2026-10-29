@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Durable bench: the durable-bench workload on PiG Durable and on pi-durable, with durable-bench's cold/warm definitions and CPU-idle gate.
+"""Durable bench: the durable-bench workload on Ompig Durable and on pi-durable, with durable-bench's cold/warm definitions and CPU-idle gate.
 
 The workload is defined in workloads/durable-bench.json: histories of 50, 250, 1000 and 3500 turns (a one-tool, one-tool, zero-tool pattern),
 then ten measured turns of eight tool calls each on a fresh copy of the seeded store. Cold is the open plus the first measured turn; warm is
@@ -11,8 +11,8 @@ Samples run as rounds: rounds are the outer loop, the sizes the inner one (rotat
 sees the whole session's load. The warm turns of all samples are pooled for the reported median, p95 and maximum. `--rounds 12` gives the
 100 warm turns per cell that durable-report's rules require; the default of 3 is durable-bench's own and is marked as below that rule.
 
-Runtimes: `pig-durable` is bench/durableperf built from this checkout; `pi-durable` is durable/interop/bench.mjs on Node with the locked pi-durable
-packages. The PiG 0.4.1, Pi, Claude Code, Codex and Copilot CLIs have no Durable layer, so they are not arms of this bench.
+Runtimes: `ompig-durable` is bench/durableperf built from this checkout; `pi-durable` is durable/interop/bench.mjs on Node with the locked pi-durable
+packages. The Ompig 0.4.1, Pi, Claude Code, Codex and Copilot CLIs have no Durable layer, so they are not arms of this bench.
 """
 import json
 import os
@@ -104,7 +104,7 @@ def run(opts):
     samples = opts.rounds or work["samples"]
     cpus = parse_cpus(opts.cpus)
     prefix = ["taskset", "-c", opts.cpus] if opts.cpus else []
-    cache = os.environ.get("PIGBENCH_DURABLE_CACHE") or os.path.join(armlib.REPO, "tmp", "bench", "durable-fixtures")
+    cache = os.environ.get("OMPIGBENCH_DURABLE_CACHE") or os.path.join(armlib.REPO, "tmp", "bench", "durable-fixtures")
     result = {"kind": "durable", "workload": work, "options": {"sizes": sizes, "rounds": samples, "cpus": opts.cpus, "gate": not opts.no_gate}, "samples": {}, "failures": {}, "gate": []}
     with armlib.Workspace() as ws:
         binary = os.path.join(ws.root, "durableperf")
@@ -124,11 +124,11 @@ def run(opts):
             shift = i % len(sizes)
             for size in sizes[shift:] + sizes[:shift]:
                 fixture = os.path.join(cache, f"pi-{size}.sqlite")
-                order = ["pig-durable", "pi-durable"] if i % 2 == 0 else ["pi-durable", "pig-durable"]
+                order = ["ompig-durable", "pi-durable"] if i % 2 == 0 else ["pi-durable", "ompig-durable"]
                 for rt in order:
                     gate = wait_idle(work["cpu_idle_gate"], cpus) if not opts.no_gate else {"passed": None}
                     result["gate"].append({"runtime": rt, "size": size, "sample": i, **gate})
-                    if rt == "pig-durable":
+                    if rt == "ompig-durable":
                         argv = [*prefix, binary, "sample", "-model", "walk", "-provider", "faux", "-fixture", fixture, "-turns", str(size), "-sample", str(i)]
                     else:
                         argv = [*prefix, "node", "--no-warnings", "durable/interop/bench.mjs", "sample", fixture, str(size), str(i)]
@@ -148,7 +148,7 @@ def run(opts):
         merged = {rt: sorted(v) for rt, v in by.items()}
         by.clear()
         by.update(merged)
-        if len(merged) == 2 and (len(merged["pig-durable"]) != 1 or merged["pig-durable"] != merged["pi-durable"]):
+        if len(merged) == 2 and (len(merged["ompig-durable"]) != 1 or merged["ompig-durable"] != merged["pi-durable"]):
             result["failures"].setdefault(size, {}).setdefault("fingerprint", []).append(f"transcript fingerprints differ between runtimes: {merged}")
     check_seed_fingerprints(result, work, cache, sizes)
     result["ok"] = not result["failures"] and all(g["passed"] is not False for g in result["gate"])

@@ -1,12 +1,12 @@
 //! session-replaced-2860-rs runs the bodies of Pi's 2860-replaced-session-context.test.ts cases as Rust SDK commands.
-//! Each line goes to the file named by PIG_TEST_2860_LOG; process ids name the extension instances, because each
+//! Each line goes to the file named by OMPIG_TEST_2860_LOG; process ids name the extension instances, because each
 //! Session's extensions run in their own process here.
-use pig_sdk::{CommandResult, Extension, ReplacedSessionContext};
+use ompig_sdk::{CommandResult, Extension, ReplacedSessionContext};
 use serde_json::{Value, json};
 use std::io::Write;
 
 fn record(line: &str) {
-    if let Ok(path) = std::env::var("PIG_TEST_2860_LOG")
+    if let Ok(path) = std::env::var("OMPIG_TEST_2860_LOG")
         && let Ok(mut file) = std::fs::OpenOptions::new()
             .create(true)
             .append(true)
@@ -28,7 +28,7 @@ fn text(content: &Value) -> String {
     }
 }
 
-fn conversation(ctx: &pig_sdk::Context) -> String {
+fn conversation(ctx: &ompig_sdk::Context) -> String {
     let branch = match ctx.session_manager().get_branch(None) {
         Ok(branch) => branch,
         Err(error) => return format!("error:{error}"),
@@ -50,14 +50,14 @@ fn conversation(ctx: &pig_sdk::Context) -> String {
 }
 
 fn marks() -> serde_json::Map<String, Value> {
-    std::env::var("PIG_TEST_2860_MARKS")
+    std::env::var("OMPIG_TEST_2860_MARKS")
         .ok()
         .and_then(|path| std::fs::read_to_string(path).ok())
         .and_then(|data| serde_json::from_str(&data).ok())
         .unwrap_or_default()
 }
 
-fn session_file(ctx: &pig_sdk::Context) -> Option<String> {
+fn session_file(ctx: &ompig_sdk::Context) -> Option<String> {
     ctx.session_manager()
         .get_session_file()
         .ok()
@@ -114,7 +114,7 @@ fn main() {
     ext.command("seed-it", "seed-it", |ctx, _| {
         result(ctx.new_session_setup(
             json!({}),
-            |manager: &pig_sdk::SetupSessionManager| {
+            |manager: &ompig_sdk::SetupSessionManager| {
                 let first = manager.append_custom_message_entry("seed-msg", json!("from setup"), true, Value::Null)?;
                 let second = manager.append_session_info("seeded-session")?;
                 record(&format!(
@@ -202,7 +202,7 @@ fn main() {
             session_file(ctx).map(Value::String).unwrap_or(Value::Null),
         );
         match std::fs::write(
-            std::env::var("PIG_TEST_2860_MARKS").unwrap_or_default(),
+            std::env::var("OMPIG_TEST_2860_MARKS").unwrap_or_default(),
             Value::Object(values).to_string(),
         ) {
             Ok(()) => CommandResult::Ok,

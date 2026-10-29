@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 const notifyTypeExtension = `export default function (pi) {
@@ -23,7 +23,7 @@ const notifyTypeExtension = `export default function (pi) {
 // ExtensionUIContext.notify's type is optional, and Pi 1.1.0's RPC mode writes it as given (rpc-mode.ts notify: notifyType: type), so a notify without a type has no notifyType member. The Node runtime defaulted it to "info".
 func TestRPCNotifyWithoutATypeHasNoNotifyType(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	dir := t.TempDir()
@@ -43,12 +43,12 @@ func TestRPCNotifyWithoutATypeHasNoNotifyType(t *testing.T) {
 	agentDir := t.TempDir()
 	cmd := exec.Command(bin, "--mode", "rpc", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	cmd.Stdin = stdin
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := testenv.Run(t, cmd); err != nil {
-		t.Fatalf("pig --mode rpc: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig --mode rpc: %v\nstderr: %s", err, stderr.String())
 	}
 	var notifies []map[string]any
 	for line := range strings.SplitSeq(strings.TrimSpace(stdout.String()), "\n") {

@@ -9,10 +9,10 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // extWithToolCallHandler wraps a typed tool_call handler into the
@@ -324,7 +324,7 @@ func TestEmitToolResult_IsErrorPropagates(t *testing.T) {
 
 // TestEmitToolResult_HandlerErrorRoutesViaEmitErrorAndContinues:
 // upstream EXPLICITLY catches throws here (runner.ts:733-740) and
-// continues. pig mirrors via emitError.
+// continues. ompig mirrors via emitError.
 func TestEmitToolResult_HandlerErrorRoutesViaEmitErrorAndContinues(t *testing.T) {
 	var subsequentRan atomic.Int32
 	exts := []extension.Extension{

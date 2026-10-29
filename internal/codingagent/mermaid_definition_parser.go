@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -7,11 +7,11 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/ast"
-	gmparser "github.com/MichaelKinsy/PiG/third_party/goldmark/parser"
-	gmtext "github.com/MichaelKinsy/PiG/third_party/goldmark/text"
+	"github.com/tmih06/ompig/third_party/goldmark/ast"
+	gmparser "github.com/tmih06/ompig/third_party/goldmark/parser"
+	gmtext "github.com/tmih06/ompig/third_party/goldmark/text"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // A Marked definition owns its entire multiline title before contained HTML or fences are parsed. Post-parse masking cannot recover the blocks those contained openers would otherwise swallow.

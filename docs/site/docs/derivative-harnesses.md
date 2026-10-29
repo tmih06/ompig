@@ -1,28 +1,28 @@
 # Build a derivative harness
 
-A derivative PiG harness is normally an agent application built from a Piglet and ordinary Resources. It should not require a fork of Stock PiG.
+A derivative Ompig harness is normally an agent application built from a Ompiglet and ordinary Resources. It should not require a fork of Stock Ompig.
 
 Use this model when a product, team, or workflow needs its own identity and capabilities.
 
 ## Architecture
 
 ```text
-Stock PiG
+Stock Ompig
    |
    +-- Package A -------- extensions and skills
    |
    +-- Package B -------- prompts and themes
    |
-   +-- Piglet ----------- one agent application
+   +-- Ompiglet ----------- one agent application
           |
           +-- source execution
           |
-          +-- Piglet Binary
+          +-- Ompiglet Binary
 ```
 
-Stock PiG owns generic execution. Packages distribute capabilities. The Piglet selects one application. The Piglet Binary is an optional delivery form.
+Stock Ompig owns generic execution. Packages distribute capabilities. The Ompiglet selects one application. The Ompiglet Binary is an optional delivery form.
 
-## Why use a Piglet instead of a new harness
+## Why use a Ompiglet instead of a new harness
 
 A new harness executable often duplicates:
 
@@ -37,7 +37,7 @@ A new harness executable often duplicates:
 
 The duplicate then drifts from its base project.
 
-A Piglet keeps application choices in one explicit composition while reusing the verified PiG engine.
+A Ompiglet keeps application choices in one explicit composition while reusing the verified Ompig engine.
 
 ## What belongs in the application
 
@@ -49,28 +49,28 @@ Put application-specific behavior in ordinary Resources:
 | Task procedures | Skill |
 | Application instructions | `systemPrompt` or Prompt Resource |
 | Visual identity | Login or theme extension Resource |
-| Built-in tool policy | Piglet `tools` |
-| Model preference | Piglet `model` |
-| Ambient Resource policy | Piglet `discovery` |
-| Runtime requirements | Piglet `agentEnv` and `secrets` |
-| Built-ins the application does not offer | Piglet `strip`, in deny mode or keep mode (D92) |
-| A custom interactive renderer | Piglet `slots.frontend`, a Go frontend member fused into the Binary (D91) |
+| Built-in tool policy | Ompiglet `tools` |
+| Model preference | Ompiglet `model` |
+| Ambient Resource policy | Ompiglet `discovery` |
+| Runtime requirements | Ompiglet `agentEnv` and `secrets` |
+| Built-ins the application does not offer | Ompiglet `strip`, in deny mode or keep mode (D92) |
+| A custom interactive renderer | Ompiglet `slots.frontend`, a Go frontend member fused into the Binary (D91) |
 
-Do not add these choices to `cmd/pig` or Stock PiG startup.
+Do not add these choices to `cmd/ompig` or Stock Ompig startup.
 
-Pi lets a source fork rename its command and configuration directory through a `piConfig` block in `package.json`. PiG has no such block: the command name `pig` and the `~/.pig` directory are part of the binary (D2). Use a Piglet to give an application its own name and identity.
+Pi lets a source fork rename its command and configuration directory through a `piConfig` block in `package.json`. Ompig has no such block: the command name `ompig` and the `~/.ompig` directory are part of the binary (D2). Use a Ompiglet to give an application its own name and identity.
 
-## What belongs in Stock PiG
+## What belongs in Stock Ompig
 
-Change Stock PiG only for a generic requirement such as:
+Change Stock Ompig only for a generic requirement such as:
 
 - behavior required for Pi compatibility;
 - a stable public extension capability;
-- Package, Piglet, or Binary infrastructure;
+- Package, Ompiglet, or Binary infrastructure;
 - provider or session behavior used by all compositions;
 - generic lifecycle, security, or verification support.
 
-A product command, product login, private API, or application workflow does not belong in Stock PiG.
+A product command, product login, private API, or application workflow does not belong in Stock Ompig.
 
 ## Build the application
 
@@ -79,18 +79,18 @@ A product command, product login, private API, or application workflow does not 
 Create one focused Go factory for each executable capability:
 
 ```bash
-pig extension init ./extensions/review --lang go
+ompig extension init ./extensions/review --lang go
 ```
 
 Validate it without installing it:
 
 ```bash
-pig install ./extensions/review --validate-only --json
+ompig install ./extensions/review --validate-only --json
 ```
 
 Use more than one extension when the capabilities have independent state, release, or failure ownership. Do not split one cohesive capability only to create more packages.
 
-### 2. Create the Piglet
+### 2. Create the Ompiglet
 
 ```yaml
 name: review-agent
@@ -119,8 +119,8 @@ Explicit empty discovery lists prevent user or workspace Resources from changing
 ### 3. Run from source
 
 ```bash
-pig piglet validate ./review-agent.yaml
-pig --piglet ./review-agent.yaml
+ompig ompiglet validate ./review-agent.yaml
+ompig --ompiglet ./review-agent.yaml
 ```
 
 Use source execution during development. It provides normal extension validation, process isolation, and reload behavior.
@@ -128,15 +128,15 @@ Use source execution during development. It provides normal extension validation
 ### 4. Build a Binary
 
 ```bash
-pig piglet build ./review-agent.yaml \
+ompig ompiglet build ./review-agent.yaml \
   --format binary \
-  --out ./pig-review-agent
+  --out ./ompig-review-agent
 ```
 
 Run the resulting agent application directly:
 
 ```bash
-./pig-review-agent
+./ompig-review-agent
 ```
 
 ## Native derivative applications
@@ -154,9 +154,9 @@ The build fails if any selected extension cannot fuse. It does not silently prod
 
 ## Mixed derivative applications
 
-Omit `extensionRealization` when the application intentionally uses another language, a native subprocess, or an external service. A Piglet Binary can carry TypeScript and JavaScript extensions; it runs them with the installed Node, version 22.13 or newer.
+Omit `extensionRealization` when the application intentionally uses another language, a native subprocess, or an external service. A Ompiglet Binary can carry TypeScript and JavaScript extensions; it runs them with the installed Node, version 22.13 or newer.
 
-The component plan then records each realization and materialization. The application remains one Piglet even when its implementation spans processes.
+The component plan then records each realization and materialization. The application remains one Ompiglet even when its implementation spans processes.
 
 ## Package the Resources
 
@@ -170,15 +170,15 @@ review-resources/
 └── prompts/
 ```
 
-A Package makes the Resources available. Each Piglet still selects the members it needs.
+A Package makes the Resources available. Each Ompiglet still selects the members it needs.
 
-Do not put Piglet activation in Package installation. Installing a capability must not change which agent application starts.
+Do not put Ompiglet activation in Package installation. Installing a capability must not change which agent application starts.
 
 ## Application identity
 
-An application can select an extension that sets its login or header identity. Stock PiG provides the generic host API but does not own the derivative artwork.
+An application can select an extension that sets its login or header identity. Stock Ompig provides the generic host API but does not own the derivative artwork.
 
-PiG Standard follows this rule. Its `piglogin` extension owns the PiG Standard identity and `/sprite` command. Its `pigrunner` and `angrypigs` extensions own the `/runner`, `/pig-runner` and `/angry-pigs` games and their state, and `bunruntime` owns `/bun-runtime`.
+Ompig Standard follows this rule. Its `piglogin` extension owns the Ompig Standard identity and `/sprite` command. Its `pigrunner` and `angrypigs` extensions own the `/runner`, `/ompig-runner` and `/angry-pigs` games and their state, and `bunruntime` owns `/bun-runtime`.
 
 ## Failure boundaries
 
@@ -186,9 +186,9 @@ Choose realization with the failure model in mind.
 
 ### Subprocess
 
-Use a subprocess when you need language portability or process isolation. PiG can detect transport loss, cancel pending calls, quarantine failed cells, and retain a previous working extension set during failed reload.
+Use a subprocess when you need language portability or process isolation. Ompig can detect transport loss, cancel pending calls, quarantine failed cells, and retain a previous working extension set during failed reload.
 
-The current operation fails. PiG does not replay it automatically.
+The current operation fails. Ompig does not replay it automatically.
 
 ### Fused
 
@@ -196,42 +196,42 @@ Use fusion when you need one native executable and accept a shared process bound
 
 ### External
 
-Use an external component when another service owns deployment, scaling, credentials, and availability. Keep its endpoint and secret values outside portable Piglet source.
+Use an external component when another service owns deployment, scaling, credentials, and availability. Keep its endpoint and secret values outside portable Ompiglet source.
 
 ## Avoid these patterns
 
 Do not:
 
-- fork PiG only to register application extensions;
-- add a product switch to Stock PiG;
-- make Package installation select a Piglet;
+- fork Ompig only to register application extensions;
+- add a product switch to Stock Ompig;
+- make Package installation select a Ompiglet;
 - hide application behavior in a launcher script;
 - discover every installed Resource implicitly;
 - call an external component “embedded”;
 - claim a Binary is self-contained when it still has external requirements;
 - replay interrupted tool calls automatically.
 
-## PiG Standard as the reference composition
+## Ompig Standard as the reference composition
 
-PiG Standard is the repository's derivative-harness example. It uses:
+Ompig Standard is the repository's derivative-harness example. It uses:
 
-- an explicit Piglet;
+- an explicit Ompiglet;
 - ordinary public extension contracts;
 - application-owned identity;
 - application-owned games with timer-driven UI;
-- no automatic Stock PiG activation;
+- no automatic Stock Ompig activation;
 - an all-fused Binary requirement.
 
-New PiG Standard capabilities follow the same boundary. They do not become built-in Stock PiG commands.
+New Ompig Standard capabilities follow the same boundary. They do not become built-in Stock Ompig commands.
 
 ## Share the application
 
-Publish the Piglet's source to npm with `pig piglet publish <name> --to npm`, and its signed Binaries to GitHub Releases with `pig piglet publish <name> --to github`. Recipients add the source with `pig piglet add npm:<name>` or pull a Binary with `pig piglet pull`. See [Publish a Package or Piglet](/docs/latest/publishing).
+Publish the Ompiglet's source to npm with `ompig ompiglet publish <name> --to npm`, and its signed Binaries to GitHub Releases with `ompig ompiglet publish <name> --to github`. Recipients add the source with `ompig ompiglet add npm:<name>` or pull a Binary with `ompig ompiglet pull`. See [Publish a Package or Ompiglet](/docs/latest/publishing).
 
 ## Related documentation
 
-- [PiG concepts](/docs/latest/concepts)
+- [Ompig concepts](/docs/latest/concepts)
 - [Extensions](/docs/latest/extensions)
 - [Packages](/docs/latest/packages)
-- [Piglets](/docs/latest/piglets)
-- [Piglet Binaries](/docs/latest/piglet-binaries)
+- [Ompiglets](/docs/latest/ompiglets)
+- [Ompiglet Binaries](/docs/latest/ompiglet-binaries)

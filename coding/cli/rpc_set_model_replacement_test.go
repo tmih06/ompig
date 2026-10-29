@@ -32,7 +32,7 @@ func TestRPCSetModelAnswersSuccessWhenANewSessionIsInItsBatch(t *testing.T) {
 			if err := os.WriteFile(current, source, 0o600); err != nil {
 				t.Fatal(err)
 			}
-			p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+			p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 			if _, err := io.WriteString(p.stdin, tc.lines[0]+"\n"+tc.lines[1]+"\n"); err != nil {
 				t.Fatal(err)
 			}

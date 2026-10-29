@@ -6,9 +6,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
-	internaldocument "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/internal/document"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
 	"github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream"
 	"github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream/eventstreamapi"
 	smithy "github.com/aws/smithy-go"
@@ -18,6 +15,9 @@ import (
 	smithytime "github.com/aws/smithy-go/time"
 	"github.com/aws/smithy-go/tracing"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
+	internaldocument "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/internal/document"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 	"math"
 )
 

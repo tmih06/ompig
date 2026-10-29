@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Not compared: a top-level value that is not an object (null, an array, a number, a boolean, a string; Pi spreads or throws a TypeError on them) an api_key credential whose key is not a string (Pi's resolveConfigValue throws "config.startsWith is not a function") and a null credential (Pi's list throws "Cannot read properties of null (reading 'type')").

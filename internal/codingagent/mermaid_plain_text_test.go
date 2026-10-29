@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A streaming transformer remembers the last text it found plain (mermaidPlainText) and checks only what follows it. Every

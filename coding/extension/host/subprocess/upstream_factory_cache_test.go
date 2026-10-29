@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -32,9 +32,9 @@ func TestUpstreamExtensionFactoryCache(t *testing.T) {
 			for _, isolation := range []string{"", "isolated"} {
 				t.Run("isolation="+isolation, func(t *testing.T) {
 					root := t.TempDir()
-					t.Setenv("PIG_FACTORY_CACHE_ROOT", root)
-					t.Setenv("PIG_FACTORY_CACHE_CASE", tc.mode)
-					t.Setenv("PIG_FACTORY_CACHE_DIST", "")
+					t.Setenv("OMPIG_FACTORY_CACHE_ROOT", root)
+					t.Setenv("OMPIG_FACTORY_CACHE_CASE", tc.mode)
+					t.Setenv("OMPIG_FACTORY_CACHE_DIST", "")
 					host := NewHost(root)
 					t.Cleanup(func() { host.Shutdown("test done") })
 					loaded, failures := host.LoadAll(t.Context(), []ExtConfig{{
@@ -72,9 +72,9 @@ func BenchmarkFactoryCacheThroughNodeHost(b *testing.B) {
 	for _, mode := range []string{"same-cwd", "direct", "reload", "cross-cwd"} {
 		b.Run(mode, func(b *testing.B) {
 			root, cache := b.TempDir(), b.TempDir()
-			b.Setenv("PIG_FACTORY_CACHE_ROOT", root)
-			b.Setenv("PIG_FACTORY_CACHE_CASE", mode)
-			b.Setenv("PIG_FACTORY_CACHE_DIST", "")
+			b.Setenv("OMPIG_FACTORY_CACHE_ROOT", root)
+			b.Setenv("OMPIG_FACTORY_CACHE_CASE", mode)
+			b.Setenv("OMPIG_FACTORY_CACHE_DIST", "")
 			run := func() {
 				host := NewHostWithConfigRoot(root, cache)
 				loaded, failures := host.LoadAll(b.Context(), []ExtConfig{{Name: "cache-probe", Source: entry, Enabled: true}})

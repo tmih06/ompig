@@ -18,9 +18,9 @@ Reference: Pi 0.87.1, upstream commit `f07218c4d4bbc12bef056a7058c3dd49dfe41abe`
 
 ## Source fixes and regression evidence
 
-1. PiG consumed scheme replies only through the settled startup detector, so it never enabled DEC 2031 or changed the live theme. `TestInteractiveAutomaticThemeNotifications` failed first with missing `ESC[?2031h` and `theme = dark, want light`. `TestInteractiveFixedThemeConsumesSchemeReports` also failed first because a report reached an extension shortcut. The input driver now owns the live controller, applies reports before editor/modal/listener delivery, and shares query handling across startup, settings, and reload.
+1. Ompig consumed scheme replies only through the settled startup detector, so it never enabled DEC 2031 or changed the live theme. `TestInteractiveAutomaticThemeNotifications` failed first with missing `ESC[?2031h` and `theme = dark, want light`. `TestInteractiveFixedThemeConsumesSchemeReports` also failed first because a report reached an extension shortcut. The input driver now owns the live controller, applies reports before editor/modal/listener delivery, and shares query handling across startup, settings, and reload.
 2. Settings previews re-resolved pairs against COLORFGBG and forced a destructive repaint. They now use the last terminal scheme and ordinary invalidation. `TestInteractiveThemeStateTransitions` covers preview restoration, duplicate suppression, explicit opt-out, and retained selection. These assertions were added after implementation; the former preview path would restore dark despite the test's last light report.
-3. The extension name API accepted a pair as a setting and preserved the previous theme on a failed name. The named path now matches the controller. The existing `TestExtensionThemeAPIsAreWired` assertion was corrected against the exact Pi implementation and a direct installed-Pi probe; it now checks the failure text and dark fallback, rather than requiring PiG's old incorrect behavior. `TestInteractiveThemeStateTransitions` rejects a pair passed as a name and checks immediate automatic opt-out.
+3. The extension name API accepted a pair as a setting and preserved the previous theme on a failed name. The named path now matches the controller. The existing `TestExtensionThemeAPIsAreWired` assertion was corrected against the exact Pi implementation and a direct installed-Pi probe; it now checks the failure text and dark fallback, rather than requiring Ompig's old incorrect behavior. `TestInteractiveThemeStateTransitions` rejects a pair passed as a name and checks immediate automatic opt-out.
 4. The new shutdown regression exposed an existing race between `TUI.StopWithOptions` and the render timer. `TestTUIStopCancelsRacingRenderTimer` failed first with `stopped timer dispatched a render`. Stop now uses the same locked cancellation and generation invalidation as ordinary render cancellation. The initial lock change deadlocked the existing overflow path, which already owns the render lock. The final implementation shares a lock-held stop helper with that path. `TestOverflowDifferentialTerminatesWithCrashLog` and `TestPushedWidgetFrameFromOldWidthIsNeverPaintedAfterResize` both pass with the final code.
 
 Additional guards:
@@ -37,7 +37,7 @@ Additional guards:
 
 Both scenarios use the real Pi binary, an isolated tmux server, a resumed conversation, and `escaped_output_equal` for the complete conversation crop. No ANSI normalization or comparator weakening is used.
 
-- `interactive-rendering/36-auto-theme-light-notification`: black initial background, `TERM=screen-256color`, then a light notification. Before the fix, PiG retained thinking foreground index 244 while Pi switched to 242.
+- `interactive-rendering/36-auto-theme-light-notification`: black initial background, `TERM=screen-256color`, then a light notification. Before the fix, Ompig retained thinking foreground index 244 while Pi switched to 242.
 - `interactive-rendering/37-auto-theme-dark-modal-notification`: white initial background, `TERM=tmux-256color`, `COLORTERM=truecolor`, then a dark notification while `/settings` owns focus. The final transcript matches Pi after leaving settings.
 
 A compiling mutation that omits `applyTerminalTheme` delivery fails both scenarios: scenario 36 at 244 versus 242, and scenario 37 at RGB `108;108;108` versus `128;128;128`. The same mutation fails the automatic-notification, state-transition, and renderer-rebind unit tests. Each final scenario passes its three declared pairs.
@@ -54,7 +54,7 @@ The existing terminal decoder remains the only input decoder. Live notifications
 
 Passed on the final production code:
 
-- `go test ./...` with the harness's ambient `PIG_CODING_AGENT_DIR` removed. This includes the extension conformance suite and the overflow caller regression.
+- `go test ./...` with the harness's ambient `OMPIG_CODING_AGENT_DIR` removed. This includes the extension conformance suite and the overflow caller regression.
 - `go test -race ./internal/codingagent ./tui`.
 - `go vet ./...` and `GOOS=windows go vet ./internal/codingagent ./tui ./test/parity/correspondence`.
 - `go tool golangci-lint config verify`, touched-package lint, `make lint-changed LINT_BASE=1aba738c69`, and `make lint`.

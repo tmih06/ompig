@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func startupNameSessionFixture(t *testing.T, projectDir, sessionFile string) {
@@ -107,7 +107,7 @@ func TestRPCStartupNameIsInitialMetadata(t *testing.T) {
 	defer cancel()
 	cmd := exec.CommandContext(ctx, binary, "--mode", "rpc", "--no-session", "--name", "  CLI Named Session  ", "--model", "test-faux/faux-1")
 	cmd.Dir = root
-	cmd.Env = append(os.Environ(), "PIG_HOME="+root, "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+root, "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	cmd.Stdin = bytes.NewBufferString("{\"type\":\"get_state\",\"id\":\"state\"}\n")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
@@ -159,7 +159,7 @@ func TestUpstreamStartupSessionName(t *testing.T) {
 	defer cancel()
 	cmd := exec.CommandContext(ctx, binary, "--session", sessionFile, "--name", "  CLI Named Session  ", "--model", "missing-model", "-p", "hi")
 	cmd.Dir = projectDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+root, "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_OFFLINE=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+root, "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_OFFLINE=1")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	err := cmd.Run()

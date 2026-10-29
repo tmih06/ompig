@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 func TestUnavailableNpmPackagesUseInheritedVersionForDeltas(t *testing.T) {
@@ -72,7 +72,7 @@ func TestUnavailableNpmPackagesDoNotProvideResources(t *testing.T) {
 				if tc.offline {
 					t.Setenv("PI_OFFLINE", "1")
 				} else {
-					t.Setenv("PIG_NPM_TEST_FAIL", "1")
+					t.Setenv("OMPIG_NPM_TEST_FAIL", "1")
 				}
 				_, missing := packagemanager.EnsureConfiguredPackagesInstalled(cwd, settings.AgentDir(), settings)
 				if (len(missing) == 0) != tc.available {

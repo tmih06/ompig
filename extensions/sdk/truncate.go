@@ -91,7 +91,7 @@ func tenths(bytes, unit int) string {
 // byte limit the content is empty and FirstLineExceedsLimit is set.
 //
 // The kept lines are contiguous, so the result is a prefix of content: the walk finds where it ends and nothing is split or joined. The module cannot
-// import PiG's internal/truncate, which holds the same walk for the host.
+// import Ompig's internal/truncate, which holds the same walk for the host.
 func TruncateHead(content string, options TruncationOptions) TruncationResult {
 	maxLines, maxBytes := options.limits()
 	totalBytes, totalLines := len(content), countLines(content)

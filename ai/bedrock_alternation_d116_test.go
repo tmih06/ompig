@@ -1,14 +1,14 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
 import (
 	"testing"
 
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
-// D116: Bedrock Converse requires the roles of a conversation to alternate (it rejects two consecutive user messages with a ValidationException). Pi 1.1.0 (bedrock-converse-stream.ts convertMessages) pushes every user message and every run of tool results as a message of its own, so a user prompt right after tool results (the usual shape after an abort) or after a dropped assistant turn gives two user messages. PiG merges adjacent messages of one role into one message with the blocks in order.
+// D116: Bedrock Converse requires the roles of a conversation to alternate (it rejects two consecutive user messages with a ValidationException). Pi 1.1.0 (bedrock-converse-stream.ts convertMessages) pushes every user message and every run of tool results as a message of its own, so a user prompt right after tool results (the usual shape after an abort) or after a dropped assistant turn gives two user messages. Ompig merges adjacent messages of one role into one message with the blocks in order.
 func TestBedrockMergesAdjacentSameRoleMessagesD116(t *testing.T) {
 	call := AssistantMessage{API: APIBedrockConverseStream, Provider: "amazon-bedrock", Model: "us.anthropic.claude-sonnet-4-5-20250929-v1:0", StopReason: StopReasonToolUse, Content: []AssistantContentBlock{ToolCall{ID: "tool-1", Name: "read", Arguments: JsonObject{}}}}
 	result := ToolResultMessage{ToolCallID: "tool-1", ToolName: "read", Content: []ToolResultMessageContent{TextContent{Text: "done"}}}

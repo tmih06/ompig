@@ -134,7 +134,7 @@ func UnmarshalTrusted(data []byte, v any) error {
 // decodeStatePool keeps the decode state of Unmarshal, with its scanner's
 // parse-state stack and error context, so a decode of a small message does not
 // allocate them.
-// pig additive (D19): the host and Go SDK decode every wire frame here.
+// ompig additive (D19): the host and Go SDK decode every wire frame here.
 var decodeStatePool = sync.Pool{New: func() any { return new(decodeState) }}
 
 // releaseDecodeState clears d, so it holds neither the input nor a decoded
@@ -1246,7 +1246,7 @@ func unquoteBytes(s []byte) (t []byte, ok bool) {
 		rr, size := utf8.DecodeRune(s[r:])
 		if rr == utf8.RuneError && size == 1 {
 			if isWTF8Surrogate(s[r:]) {
-				// pig: a lone surrogate in internal/jsstring's WTF-8 form is one JavaScript string unit, kept as is.
+				// ompig: a lone surrogate in internal/jsstring's WTF-8 form is one JavaScript string unit, kept as is.
 				r += 3
 				continue
 			}
@@ -1337,7 +1337,7 @@ func unquoteBytes(s []byte) (t []byte, ok bool) {
 			r++
 			w++
 
-		// pig: keep a lone surrogate in WTF-8 form (one JavaScript string unit); coerce anything else to well-formed UTF-8.
+		// ompig: keep a lone surrogate in WTF-8 form (one JavaScript string unit); coerce anything else to well-formed UTF-8.
 		case isWTF8Surrogate(s[r:]):
 			w += copy(b[w:], s[r:r+3])
 			r += 3

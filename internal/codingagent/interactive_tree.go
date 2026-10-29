@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // copySelectedTreeMessage owns the clipboard write off-loop and reports completion on the UI loop.

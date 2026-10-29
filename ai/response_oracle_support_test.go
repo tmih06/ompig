@@ -18,11 +18,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/bodyreadhook/readbarrier"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/bodyreadhook/readbarrier"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // responseProbe is one scripted provider response: the SSE body a model of the given provider is answered with, and the stream options.
@@ -50,13 +50,13 @@ type responseProbe struct {
 	KeepUserAgent bool `json:"-"`
 	// MessageOnly compares the final message without the stream events: Pi's delta events carry a mistyped delta raw, which a Go string cannot hold.
 	MessageOnly bool `json:"-"`
-	// StrayAt names the side ("pi" or "pig") whose server a client other than the provider's requests before the probe runs: a process polling a port
+	// StrayAt names the side ("pi" or "ompig") whose server a client other than the provider's requests before the probe runs: a process polling a port
 	// that another server held before reaches whichever server holds it now (on the Linux lab host a Go client outside the tests sends GET /readyz to
 	// 127.0.0.1 ports).
 	StrayAt string `json:"strayAt,omitempty"`
 }
 
-// checkResponses runs every probe through the pinned pi-ai API module (its fetch answers with the SSE body) and through PiG (a local server does), and
+// checkResponses runs every probe through the pinned pi-ai API module (its fetch answers with the SSE body) and through Ompig (a local server does), and
 // requires the stream events and the final assistant message to be equal as parsed JSON, partial snapshots, the timestamp and the duration aside.
 func checkResponses(t *testing.T, module, apiName string, api ai.API, run func(context.Context, *ai.Model, ai.TranscriptContext, ai.StreamOptions) (*ai.AssistantMessageEventStream, error), probes []responseProbe) {
 	t.Helper()
@@ -144,7 +144,7 @@ func compareResponses(t *testing.T, module, apiName string, api ai.API, run func
 		} else {
 			server = httptest.NewServer(handler)
 		}
-		if p.StrayAt == "pig" {
+		if p.StrayAt == "ompig" {
 			strayRequest(t, server.URL)
 		}
 		id := p.ModelID
@@ -185,7 +185,7 @@ func compareResponses(t *testing.T, module, apiName string, api ai.API, run func
 			var cancel context.CancelFunc
 			runCtx, cancel = context.WithCancel(runCtx)
 			defer cancel()
-			// Pi reads and parses the in-memory body in microtasks, before its abort timer can fire. PiG reads a real socket, so a wall-clock
+			// Pi reads and parses the in-memory body in microtasks, before its abort timer can fire. Ompig reads a real socket, so a wall-clock
 			// abort could land before the client has read the whole prefix on a loaded host: the request is aborted when the client asks for
 			// more of the held-open body after reading all of it, by which time every complete record has been handled.
 			// The Google adapters reject a custom fetch (google-generative-ai.ts:36), so the server aborts them through the read barrier instead.
@@ -226,7 +226,7 @@ func compareResponses(t *testing.T, module, apiName string, api ai.API, run func
 			gotParts["attempts"], wantParts["attempts"] = attempts, want[i].Attempts
 		}
 		gotJSON, _ := json.Marshal(gotParts)
-		// D120: PiG gives a tool call streamed without an id a generated "<name>_<epoch ms>_<counter>" id where Pi stores "".
+		// D120: Ompig gives a tool call streamed without an id a generated "<name>_<epoch ms>_<counter>" id where Pi stores "".
 		// The Google adapters generate the id themselves in Pi (google-generative-ai.ts:195-200), so both sides carry a generated id there.
 		if !strings.HasPrefix(apiName, "google") {
 			gotJSON = generatedToolCallID.ReplaceAll(gotJSON, []byte(`"id":""`))
@@ -245,12 +245,12 @@ func compareResponses(t *testing.T, module, apiName string, api ai.API, run func
 				var diff []string
 				for name, value := range wantHeaders {
 					if gotHeaders[name] != value {
-						diff = append(diff, fmt.Sprintf("%s: Pi %v PiG %v", name, value, gotHeaders[name]))
+						diff = append(diff, fmt.Sprintf("%s: Pi %v Ompig %v", name, value, gotHeaders[name]))
 					}
 				}
 				for name, value := range gotHeaders {
 					if _, ok := wantHeaders[name]; !ok {
-						diff = append(diff, fmt.Sprintf("%s: Pi none PiG %v", name, value))
+						diff = append(diff, fmt.Sprintf("%s: Pi none Ompig %v", name, value))
 					}
 				}
 				slices.Sort(diff)
@@ -267,7 +267,7 @@ func compareResponses(t *testing.T, module, apiName string, api ai.API, run func
 	if failures > 0 {
 		t.Errorf("%d of %d probes differ from Pi", failures, len(probes))
 	}
-	// A script that Pi never answers would match PiG's errors vacuously.
+	// A script that Pi never answers would match Ompig's errors vacuously.
 	if needContent && answered*10 < len(probes)*5 {
 		t.Fatalf("Pi built content for only %d of %d probes", answered, len(probes))
 	}
@@ -280,7 +280,7 @@ func firstDifference(got, want []byte) string {
 		i++
 	}
 	from := max(0, i-60)
-	return fmt.Sprintf(" PiG …%.400s\n Pi  …%.400s", got[from:], want[from:])
+	return fmt.Sprintf(" Ompig …%.400s\n Pi  …%.400s", got[from:], want[from:])
 }
 
 // probeClient tells the requests of the client a probe drives from any other request its server receives. A loopback port belongs to the host: a
@@ -343,7 +343,7 @@ func comparableRequest(request map[string]any, keepUserAgent bool) map[string]an
 			kept[name] = value
 		}
 	}
-	// pig divergence (D26): PiG names itself as the Codex originator where Pi sends `pi`.
+	// ompig divergence (D26): Ompig names itself as the Codex originator where Pi sends `pi`.
 	if keepUserAgent && kept["originator"] == "pi" {
 		kept["originator"] = pigidentity.CodexOriginator
 	}

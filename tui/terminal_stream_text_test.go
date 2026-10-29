@@ -6,7 +6,7 @@ import (
 )
 
 // terminal.ts write(data) is process.stdout.write(data): Node encodes the JavaScript string as UTF-8 and writes U+FFFD for a lone surrogate
-// (`node -e "process.stdout.write('a\ud83db')" | xxd` prints 61 ef bf bd 62). PiG carries that unit as WTF-8 (ED A0 BD), which no terminal decodes, so the
+// (`node -e "process.stdout.write('a\ud83db')" | xxd` prints 61 ef bf bd 62). Ompig carries that unit as WTF-8 (ED A0 BD), which no terminal decodes, so the
 // terminal sink converts it; a String.slice that splits an astral character (a prompt-template description, an MCP summary) reaches the screen this way.
 func TestProcessTerminalWritesALoneSurrogateAsNodeDoes(t *testing.T) {
 	for _, tc := range []struct{ name, in, want string }{

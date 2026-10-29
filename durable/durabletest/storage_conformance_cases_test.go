@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/testing/storage-conformance.ts createStorageConformance: the same 26 named cases, each Run returning the provider's failure when the provider fails.

@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // TestEmptyMessagesUpstream ports the four helpers at .upstream/v0.99.1/packages/ai/test/empty.test.ts:19-144 for every case site in that file.

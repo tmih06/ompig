@@ -11,11 +11,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/tools"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable/tools"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// D165: runs Pi's images/index.ts createPhotonImages (Photon 0.3.3 under Node, types stripped) and PiG's CreatePhotonImages over
+// D165: runs Pi's images/index.ts createPhotonImages (Photon 0.3.3 under Node, types stripped) and Ompig's CreatePhotonImages over
 // one corpus and compares what the model receives: whether an image can be prepared, its format, the resized and convertedFrom
 // records, the decoded size, byte-exact output when Pi passes the image through, and the pixels within the D165 tolerance
 // (PNG: Lanczos3 differences only; JPEG: two encoders). The limits of every case leave the choice of PNG or JPEG and the
@@ -114,7 +114,7 @@ func askPi(t *testing.T, corpus []oracleCase) []*piResult {
 	return pi
 }
 
-// comparePhotonToPi prepares every case on Pi (images/index.ts under Node) and on PiG and compares the two.
+// comparePhotonToPi prepares every case on Pi (images/index.ts under Node) and on Ompig and compares the two.
 func comparePhotonToPi(t *testing.T, corpus []oracleCase) {
 	t.Helper()
 	pi := askPi(t, corpus)
@@ -122,38 +122,38 @@ func comparePhotonToPi(t *testing.T, corpus []oracleCase) {
 		want := pi[i]
 		got := prepare(t, c.data, c.mime, c.limits)
 		if (want == nil) != (got == nil) {
-			t.Errorf("%s: Pi prepared=%v, PiG prepared=%v", c.name, want != nil, got != nil)
+			t.Errorf("%s: Pi prepared=%v, Ompig prepared=%v", c.name, want != nil, got != nil)
 			continue
 		}
 		if want == nil {
 			continue
 		}
 		if got.MimeType != want.MimeType || got.ConvertedFrom != want.ConvertedFrom {
-			t.Errorf("%s: PiG %s (from %q), Pi %s (from %q)", c.name, got.MimeType, got.ConvertedFrom, want.MimeType, want.ConvertedFrom)
+			t.Errorf("%s: Ompig %s (from %q), Pi %s (from %q)", c.name, got.MimeType, got.ConvertedFrom, want.MimeType, want.ConvertedFrom)
 		}
 		switch {
 		case (want.Resized == nil) != (got.Resized == nil):
-			t.Errorf("%s: PiG resized=%v, Pi resized=%v", c.name, got.Resized, want.Resized)
+			t.Errorf("%s: Ompig resized=%v, Pi resized=%v", c.name, got.Resized, want.Resized)
 		case want.Resized != nil && (got.Resized.From != (tools.ImageSize{Width: want.Resized.From.Width, Height: want.Resized.From.Height}) ||
 			got.Resized.To != (tools.ImageSize{Width: want.Resized.To.Width, Height: want.Resized.To.Height})):
-			t.Errorf("%s: PiG resized %+v, Pi resized %+v", c.name, *got.Resized, *want.Resized)
+			t.Errorf("%s: Ompig resized %+v, Pi resized %+v", c.name, *got.Resized, *want.Resized)
 		}
 		if c.quantized {
 			ours, theirs := jpegQuantizationTable(t, got.Data), jpegQuantizationTable(t, want.Data)
-			t.Logf("%s: first quantization table entries PiG %v, Pi %v (%d bytes, %d bytes)", c.name, ours[:2], theirs[:2], len(got.Data), len(want.Data))
+			t.Logf("%s: first quantization table entries Ompig %v, Pi %v (%d bytes, %d bytes)", c.name, ours[:2], theirs[:2], len(got.Data), len(want.Data))
 			if !slices.Equal(ours, theirs) {
-				t.Errorf("%s: PiG encoded at the quantization table %v, Pi at %v", c.name, ours, theirs)
+				t.Errorf("%s: Ompig encoded at the quantization table %v, Pi at %v", c.name, ours, theirs)
 			}
 		}
 		if c.tolerance == 0 && !c.skipPix {
 			if got.Data != want.Data {
-				t.Errorf("%s: Pi passed the image through; PiG's data differs", c.name)
+				t.Errorf("%s: Pi passed the image through; Ompig's data differs", c.name)
 			}
 			continue
 		}
 		ours, theirs := decode(t, got.Data), decode(t, want.Data)
 		if ours.Bounds() != theirs.Bounds() {
-			t.Errorf("%s: decoded size PiG %v, Pi %v", c.name, ours.Bounds(), theirs.Bounds())
+			t.Errorf("%s: decoded size Ompig %v, Pi %v", c.name, ours.Bounds(), theirs.Bounds())
 			continue
 		}
 		if c.skipPix {

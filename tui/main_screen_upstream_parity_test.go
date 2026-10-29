@@ -213,41 +213,41 @@ func TestMainScreenFramesMatchPi084LogicalHistory(t *testing.T) {
 	width, height := initialWidth, initialHeight
 	lines := []string{"START", "H1", "H2", "H3", "H4", "H5", "ASSIST-0", "EDITOR", "FOOT"}
 	component := renderFuncComponent(func(int) []string { return lines })
-	var pigOut bytes.Buffer
-	pig := NewWithOutput(&pigOut, width, height)
-	pig.Add(component)
+	var ompigOut bytes.Buffer
+	ompig := NewWithOutput(&ompigOut, width, height)
+	ompig.Add(component)
 	pi := &piMainScreenModel{}
-	pigTerminal := newScrollVT(width, height)
+	ompigTerminal := newScrollVT(width, height)
 	piTerminal := newScrollVT(width, height)
 	fullReplays := 0
 
 	render := func(name string, force bool) {
 		t.Helper()
-		pigOut.Reset()
+		ompigOut.Reset()
 		if force {
-			pig.ForceFullRender()
+			ompig.ForceFullRender()
 		}
-		pig.Render()
-		pigFrame := pigOut.String()
+		ompig.Render()
+		ompigFrame := ompigOut.String()
 		piFrame := pi.render(lines, width, height, force)
-		for label, frame := range map[string]string{"Pig": pigFrame, "Pi": piFrame} {
+		for label, frame := range map[string]string{"Ompig": ompigFrame, "Pi": piFrame} {
 			if starts, ends := strings.Count(frame, "\x1b[?2026h"), strings.Count(frame, "\x1b[?2026l"); starts != 1 || ends != 1 {
 				t.Fatalf("%s %s synchronized-output frame = %d starts, %d ends", name, label, starts, ends)
 			}
 		}
-		pigTerminal.apply(pigFrame)
+		ompigTerminal.apply(ompigFrame)
 		piTerminal.apply(piFrame)
-		if strings.Contains(pigFrame, "\x1b[3J") {
+		if strings.Contains(ompigFrame, "\x1b[3J") {
 			fullReplays++
 		}
-		pigVisible := make([]string, height)
+		ompigVisible := make([]string, height)
 		piVisible := make([]string, height)
 		for i := range height {
-			pigVisible[i] = pigTerminal.visibleLine(i)
+			ompigVisible[i] = ompigTerminal.visibleLine(i)
 			piVisible[i] = piTerminal.visibleLine(i)
 		}
-		if !slices.Equal(pigVisible, piVisible) {
-			t.Fatalf("%s visible Pig=%q Pi=%q", name, pigVisible, piVisible)
+		if !slices.Equal(ompigVisible, piVisible) {
+			t.Fatalf("%s visible Ompig=%q Pi=%q", name, ompigVisible, piVisible)
 		}
 		wantViewport := lines[max(0, len(lines)-height):]
 		for i := range height {
@@ -255,19 +255,19 @@ func TestMainScreenFramesMatchPi084LogicalHistory(t *testing.T) {
 			if i < len(wantViewport) {
 				want = wantViewport[i]
 			}
-			if got := pigTerminal.visibleLine(i); got != want {
+			if got := ompigTerminal.visibleLine(i); got != want {
 				t.Fatalf("%s visible row %d=%q want %q", name, i, got, want)
 			}
 		}
-		if got := pigTerminal.logicalRows(); !slices.Equal(got, lines) {
+		if got := ompigTerminal.logicalRows(); !slices.Equal(got, lines) {
 			t.Fatalf("%s scrollable transcript=%q want %q", name, got, lines)
 		}
 		if got := piTerminal.logicalRows(); !slices.Equal(got, lines) {
 			t.Fatalf("%s Pi scrollable transcript=%q want %q", name, got, lines)
 		}
 		for _, marker := range lines {
-			if marker != "" && strings.Count(strings.Join(pigTerminal.logicalRows(), "\n"), marker) != 1 {
-				t.Fatalf("%s marker %q does not survive exactly once: %q", name, marker, pigTerminal.logicalRows())
+			if marker != "" && strings.Count(strings.Join(ompigTerminal.logicalRows(), "\n"), marker) != 1 {
+				t.Fatalf("%s marker %q does not survive exactly once: %q", name, marker, ompigTerminal.logicalRows())
 			}
 		}
 	}
@@ -298,20 +298,20 @@ func TestMainScreenFramesMatchPi084LogicalHistory(t *testing.T) {
 	render("editor-shrink", false)
 
 	width = 48
-	pig.width = width
-	pigTerminal.resize(width, height)
+	ompig.width = width
+	ompigTerminal.resize(width, height)
 	piTerminal.resize(width, height)
 	render("width-change", false)
 	height = 8
-	pig.height = height
-	pigTerminal.resize(width, height)
+	ompig.height = height
+	ompigTerminal.resize(width, height)
 	piTerminal.resize(width, height)
 	render("height-change", false)
 
 	lines = []string{"COMPACTION-SUMMARY", "KEPT-TAIL", "EDITOR", "FOOT"}
 	render("semantic-compaction", true)
 	for _, obsolete := range []string{"START", "H1-CHANGED", "TOOL-DONE"} {
-		if strings.Contains(strings.Join(pigTerminal.logicalRows(), "\n"), obsolete) {
+		if strings.Contains(strings.Join(ompigTerminal.logicalRows(), "\n"), obsolete) {
 			t.Fatalf("semantic compaction retained obsolete marker %q", obsolete)
 		}
 	}

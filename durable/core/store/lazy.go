@@ -6,12 +6,12 @@ package store
 // The texts of the context reads. A host that answers them from the context it derived compares a statement's text with these,
 // as it reads the table the core published (a probe core publishes its own).
 const (
-	TextContextSummary  = "SELECT pig_context_summary(?, ?, ?, ?, ?)"
-	TextContextMessages = "SELECT pig_context_messages(?, ?, ?, ?)"
-	TextContextRelease  = "SELECT pig_context_release(?)"
+	TextContextSummary  = "SELECT ompig_context_summary(?, ?, ?, ?, ?)"
+	TextContextMessages = "SELECT ompig_context_messages(?, ?, ?, ?)"
+	TextContextRelease  = "SELECT ompig_context_release(?)"
 )
 
-// The statements a core with a synchronous host read (ABI section 4.2, pig.read) runs when a step needs a record it did
+// The statements a core with a synchronous host read (ABI section 4.2, ompig.read) runs when a step needs a record it did
 // not load at open. Each reads the columns its dump statement reads, so one row decoder serves both.
 const (
 	// SQLTaskByID reads one task's record. Parameters: id.

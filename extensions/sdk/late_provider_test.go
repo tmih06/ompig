@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A provider registered after the factory finished, through ctx.modelRegistry.registerProvider, carries the same implementations a factory registration does. Pi's pi.registerProvider takes the whole ProviderConfig, callbacks included, at any time (.upstream/v0.99.2/packages/coding-agent/src/core/extensions/types.ts:1766-1803,1875-1903, loader.ts:449-457, runner.ts:517-523). The callbacks stay in the extension; the host call names them as the register payload does (image_apis, classifier_apis, stream_simple) and the host runs each through a provider_operation or provider_stream_simple request.

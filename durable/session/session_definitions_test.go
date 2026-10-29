@@ -3,13 +3,13 @@ package session_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-var definitionImports = map[string]string{"d": "github.com/MichaelKinsy/PiG/durable"}
+var definitionImports = map[string]string{"d": "github.com/tmih06/ompig/durable"}
 
 // Ports packages/durable/test/session-definitions.test.ts
 //

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func registryEdgesHarnessCases() []harnessCase {
@@ -118,7 +118,7 @@ func TestRegistryProviderStateReadsAcrossSDKs(t *testing.T) {
 	}
 }
 
-// Pi's find is a synchronous lookup that answers undefined only when no model matches. PiG's native SDKs ask the host, and a
+// Pi's find is a synchronous lookup that answers undefined only when no model matches. Ompig's native SDKs ask the host, and a
 // host that cannot answer is not "no such model": every SDK reports the failure (the rule of
 // extensions/sdk/getter_state_test.go: a failed host call is never an empty value). The same holds for a session read:
 // a host with no session to read answers an error, so a list-typed read is never a null where an empty list would be believed.

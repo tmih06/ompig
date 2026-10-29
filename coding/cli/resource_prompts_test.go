@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/test/resource-loader.test.ts:499-577. The CLI resolver feeds both startup and reload; file sources are listed separately from literal prompt text.
@@ -17,20 +17,20 @@ func TestResourceLoaderUpstreamSystemPromptSources(t *testing.T) {
 		wantCustom          string
 		wantAppend          string
 	}{
-		{name: "SYSTEM.md discovery", path: "project/.pig/SYSTEM.md", content: "You are a helpful assistant.", wantCustom: "You are a helpful assistant."},
-		{name: "APPEND_SYSTEM.md discovery", path: "project/.pig/APPEND_SYSTEM.md", content: "Additional instructions.", wantAppend: "Additional instructions."},
-		{name: "discovered project SYSTEM.md", path: "project/.pig/SYSTEM.md", content: "Project system prompt.", wantCustom: "Project system prompt."},
+		{name: "SYSTEM.md discovery", path: "project/.ompig/SYSTEM.md", content: "You are a helpful assistant.", wantCustom: "You are a helpful assistant."},
+		{name: "APPEND_SYSTEM.md discovery", path: "project/.ompig/APPEND_SYSTEM.md", content: "Additional instructions.", wantAppend: "Additional instructions."},
+		{name: "discovered project SYSTEM.md", path: "project/.ompig/SYSTEM.md", content: "Project system prompt.", wantCustom: "Project system prompt."},
 		{name: "discovered global SYSTEM.md", path: "agent/SYSTEM.md", content: "Global system prompt.", wantCustom: "Global system prompt."},
 		{name: "literal system prompt", flags: Args{SystemPrompt: "Literal system prompt."}, wantCustom: "Literal system prompt."},
 		{name: "file-backed system prompt", path: "custom-system.md", content: "Custom system prompt.", flags: Args{SystemPrompt: "@file"}, wantCustom: "Custom system prompt."},
-		{name: "discovered APPEND_SYSTEM.md", path: "project/.pig/APPEND_SYSTEM.md", content: "Project append prompt.", wantAppend: "Project append prompt."},
+		{name: "discovered APPEND_SYSTEM.md", path: "project/.ompig/APPEND_SYSTEM.md", content: "Project append prompt.", wantAppend: "Project append prompt."},
 		{name: "literal append prompt", flags: Args{AppendSystemPrompt: []string{"Literal append prompt."}}, wantAppend: "Literal append prompt."},
 		{name: "mixed append prompts", path: "custom-append.md", content: "Custom append prompt.", flags: Args{AppendSystemPrompt: []string{"@file", "Literal append prompt."}}, wantAppend: "Custom append prompt.\n\nLiteral append prompt."},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			root := t.TempDir()
 			cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
-			t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+			t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 			for _, dir := range []string{cwd, agentDir} {
 				if err := os.MkdirAll(dir, 0o755); err != nil {
 					t.Fatal(err)
@@ -100,7 +100,7 @@ func TestResourceLoaderUpstreamNoContextFiles(t *testing.T) {
 
 func TestResolvePromptInputsUsesTrustedProjectBeforeGlobal(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	projectDir := filepath.Join(cwd, ".pig")
+	projectDir := filepath.Join(cwd, ".ompig")
 	if err := os.MkdirAll(projectDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -126,7 +126,7 @@ func TestResolvePromptInputsUsesTrustedProjectBeforeGlobal(t *testing.T) {
 
 func TestResolvePromptInputsReadsExplicitFilesAndSuppressesDiscoveredAppend(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	projectDir := filepath.Join(cwd, ".pig")
+	projectDir := filepath.Join(cwd, ".ompig")
 	if err := os.MkdirAll(projectDir, 0o755); err != nil {
 		t.Fatal(err)
 	}

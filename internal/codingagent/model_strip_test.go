@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // stripResolverRuntime resolves against the registry's composed runtime models, as startup does.
@@ -85,7 +85,7 @@ func TestModelRegistryOmitsStrippedAPIModels(t *testing.T) {
 				}
 			}
 
-			want := "Provider " + tc.provider + ": API " + string(tc.api) + " is stripped from this Piglet (strip.apis: " + string(tc.api) + ")"
+			want := "Provider " + tc.provider + ": API " + string(tc.api) + " is stripped from this Ompiglet (strip.apis: " + string(tc.api) + ")"
 			runtime := stripResolverRuntime{registry}
 			for _, selection := range [][2]string{{"", catalogRef}, {tc.provider, tc.model}, {tc.provider, catalogRef}, {tc.provider, "not-in-the-catalog"}} {
 				if got := ResolveCliModel(selection[0], selection[1], "", false, runtime); got.Model != nil || got.Error != want {
@@ -100,8 +100,8 @@ func TestModelRegistryOmitsStrippedAPIModels(t *testing.T) {
 }
 
 // A models.json custom model under a built-in provider whose API is stripped takes its base URL from the full catalog, as
-// in Stock PiG (provider-composer.ts modelFromJson findModelDefaults): the offered catalog omits that provider's models,
-// but the strip must not turn the entry into a "baseUrl is required" models.json error. cmd/pig
+// in Stock Ompig (provider-composer.ts modelFromJson findModelDefaults): the offered catalog omits that provider's models,
+// but the strip must not turn the entry into a "baseUrl is required" models.json error. cmd/ompig
 // TestStrippedProviderCustomModelIsNeitherOfferedNorALoadError pins that the model stays unoffered.
 func TestModelsJSONCustomModelUnderAStrippedProviderIsNoBaseURLError(t *testing.T) {
 	for _, tc := range []struct {

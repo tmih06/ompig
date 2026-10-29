@@ -108,13 +108,13 @@ func writeModelsJSON(t *testing.T, dir, content string) {
 // Mirrors upstream model-registry.ts (v0.78.1), where bare names are
 // literals and env references require the "$" sigil.
 func TestModelRegistryResolvesAPIKeyFromEnv(t *testing.T) {
-	t.Setenv("PIG_TEST_REG_KEY", "sk-from-env-via-registry")
+	t.Setenv("OMPIG_TEST_REG_KEY", "sk-from-env-via-registry")
 
 	dir := t.TempDir()
 	writeModelsJSON(t, dir, `{
 		"providers": {
 			"openai": {
-				"apiKey": "$PIG_TEST_REG_KEY",
+				"apiKey": "$OMPIG_TEST_REG_KEY",
 				"models": [{"id": "gpt-4o"}]
 			}
 		}
@@ -206,7 +206,7 @@ func TestSettingsManager_SetProjectPackages(t *testing.T) {
 	if got[0].Source != "npm:@foo/bar" || got[1].Source != "git:https://example.com/repo" {
 		t.Fatalf("got = %+v", got)
 	}
-	data, err := os.ReadFile(filepath.Join(cwd, ".pig", "settings.json"))
+	data, err := os.ReadFile(filepath.Join(cwd, ".ompig", "settings.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -582,10 +582,10 @@ func TestSettingsManager_DrainErrorsOnInvalidSettingsFiles(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(`{"defaultModel":`), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.MkdirAll(filepath.Join(cwd, ".pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(cwd, ".ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(cwd, ".pig", "settings.json"), []byte(`{"theme":`), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(cwd, ".ompig", "settings.json"), []byte(`{"theme":`), 0o644); err != nil {
 		t.Fatal(err)
 	}
 

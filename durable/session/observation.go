@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/durable"
 )
 
 // NewSessionWatch returns a Chord Watch whose deliveries run on the Session's delivery scheduler and whose listener

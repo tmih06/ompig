@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi keeps one widget map per side keyed by the widget key alone (interactive-mode.ts setExtensionWidget removes the key from both maps,

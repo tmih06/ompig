@@ -8,19 +8,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 const nodeRuntimeVersion = "v2"
 
-// minimumNodeRuntimeVersion is the oldest Node release PiG supports for the extension runtime. Pi 0.87.1 itself declares Node 22.19 or newer.
+// minimumNodeRuntimeVersion is the oldest Node release Ompig supports for the extension runtime. Pi 0.87.1 itself declares Node 22.19 or newer.
 const minimumNodeRuntimeVersion = "v22.13.0"
 
 // nodeLauncherFormat identifies the generated launcher shape, including the
 // entry file recorded beside the runtime. It is part of the cache key so a
-// format change never reuses a launcher built by a prior pig for the same
+// format change never reuses a launcher built by a prior ompig for the same
 // source.
 const nodeLauncherFormat = "direct-node-v3"
 
@@ -30,7 +30,7 @@ const nodeEntryFile = "entry"
 
 var nodeRuntimeDigest = func() []byte { return []byte(nodeRuntimeHash) }
 
-// pig additive (D92): the embedded Node runtime (nodeRuntimeFS, ensureNodeRuntime) lives in node_runtime_on.go, which a Piglet Binary compiles out with pig_strip_node_extensions.
+// ompig additive (D92): the embedded Node runtime (nodeRuntimeFS, ensureNodeRuntime) lives in node_runtime_on.go, which a Ompiglet Binary compiles out with ompig_strip_node_extensions.
 func errNodeExtensionsStripped() error {
 	return pigstrip.Error("The TypeScript and JavaScript extension runtime", pigstrip.ListFeatures, pigstrip.NodeExtensions)
 }
@@ -71,7 +71,7 @@ func resolveNodeEntrypoint(src string) (string, error) {
 	}
 	// A pi package names its entry files in package.json "pi.extensions", and
 	// upstream resolveExtensionEntries (core/extensions/loader.ts) consults
-	// that before the conventional file names. Without this pig cannot load a
+	// that before the conventional file names. Without this ompig cannot load a
 	// package in its published form, only one that happens to keep an index at
 	// the root.
 	declared, missing, hasManifest, err := extsource.NodeManifestEntries(src)
@@ -178,7 +178,7 @@ func buildNode(ctx context.Context, cacheRoot, srcPath, outPath string) error {
 	// The host reads the sibling runtime tree and starts Node directly. Keep a
 	// small platform-neutral primary artifact so cache publication retains the
 	// same single-artifact shape without requiring /bin/sh or a shebang runner.
-	launcher := []byte("pig-node-launcher:" + nodeLauncherFormat + "\n")
+	launcher := []byte("ompig-node-launcher:" + nodeLauncherFormat + "\n")
 	tmpPath := outPath + ".tmp"
 	if err := os.WriteFile(tmpPath, launcher, 0o644); err != nil {
 		return err

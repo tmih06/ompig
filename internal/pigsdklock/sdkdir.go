@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
+	"github.com/tmih06/ompig/internal/contentdirs"
 )
 
 type registeredSDK struct {
@@ -31,7 +31,7 @@ func StagedSDKDir(configRoot, lang string) (string, error) {
 	sdk, ok := sdks[lang]
 	sdkMu.RUnlock()
 	if !ok {
-		return "", fmt.Errorf("this program links no %s extension SDK; import github.com/MichaelKinsy/PiG/coding/extension/pigsdk to embed and stage the SDKs", lang)
+		return "", fmt.Errorf("this program links no %s extension SDK; import github.com/tmih06/ompig/coding/extension/pigsdk to embed and stage the SDKs", lang)
 	}
 	hash, err := sdk.hash()
 	if err != nil {

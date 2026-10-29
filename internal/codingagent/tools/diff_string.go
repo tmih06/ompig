@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsdiff"
+	"github.com/tmih06/ompig/internal/jsdiff"
 )
 
 // DiffStringResult is upstream's `{ diff: string; firstChangedLine: number | undefined }`.

@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestAC10PigletRecords(t *testing.T) {
@@ -75,11 +75,11 @@ func TestBuildBinaryRecordsContainsNoPigletContents(t *testing.T) {
 	if err := os.WriteFile(pigletPath, pigletData, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	p, err := piglet.Parse(pigletPath)
+	p, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	artifactPath := writeFakePigArtifact(t, root, "pig-release")
+	artifactPath := writeFakePigArtifact(t, root, "ompig-release")
 	host := Target{OS: runtime.GOOS, Arch: runtime.GOARCH}
 	lock, err := buildNativeLock(p, nil, Options{Targets: []Target{host}, Sandbox: Sandbox{Native: host}, Version: "1.2.0", BakedSettings: []byte("name: release\n")}, checkoutPigSource(t))
 	if err != nil {
@@ -97,7 +97,7 @@ func TestBuildBinaryRecordsContainsNoPigletContents(t *testing.T) {
 		t.Fatal(err)
 	}
 	if strings.Contains(string(data), "TOP-SECRET-VALUE") || strings.Contains(string(data), string(pigletData)) {
-		t.Fatalf("records leaked Piglet contents: %s", data)
+		t.Fatalf("records leaked Ompiglet contents: %s", data)
 	}
 	if records.Binary.Binary == nil || !strings.HasPrefix(records.Binary.Binary.BuilderIdentity, "native:") || records.Binary.Binary.Artifact.FileName != filepath.Base(artifactPath) || !records.Binary.Binary.Verification.Passed {
 		t.Fatalf("binary record = %#v", records.Binary)
@@ -106,8 +106,8 @@ func TestBuildBinaryRecordsContainsNoPigletContents(t *testing.T) {
 
 func TestWriteBinaryRecordsWritesOnlyManagedRecordsAndArtifact(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	artifactPath := filepath.Join(t.TempDir(), "pig-release")
+	t.Setenv("OMPIG_HOME", home)
+	artifactPath := filepath.Join(t.TempDir(), "ompig-release")
 	artifactData := []byte("binary")
 	if err := os.WriteFile(artifactPath, artifactData, 0o755); err != nil {
 		t.Fatal(err)
@@ -146,7 +146,7 @@ func TestWriteBinaryRecordsWritesOnlyManagedRecordsAndArtifact(t *testing.T) {
 	}
 	managedArtifact := filepath.Join(
 		codingagent.PigletArtifactsDir(), "release", strings.Repeat("a", 64), "1.2.0", "linux-amd64",
-		strings.TrimPrefix(records.Binary.Binary.Artifact.Digest, "sha256:"), "pig-release",
+		strings.TrimPrefix(records.Binary.Binary.Artifact.Digest, "sha256:"), "ompig-release",
 	)
 	managedData, err := os.ReadFile(managedArtifact)
 	if err != nil || !bytes.Equal(managedData, artifactData) {
@@ -173,9 +173,9 @@ func testBinaryRecords(t *testing.T, artifactDigest string, artifactSize int64) 
 		t.Fatal(err)
 	}
 	binary, err := pigletartifact.NewBinaryRecord("release", "1.2.0", time.Unix(2, 0), resolution, pigletartifact.BinaryInput{
-		Target: "linux/amd64", PigVersion: "1", PigSourceRevision: "revision", PigSourceDigest: "sha256:" + strings.Repeat("c", 64),
+		Target: "linux/amd64", OmpigVersion: "1", OmpigSourceRevision: "revision", OmpigSourceDigest: "sha256:" + strings.Repeat("c", 64),
 		Builder: "native", BuilderIdentity: "native:revision", Toolchains: map[string]string{"go": "go version test"},
-		Artifact:     pigletartifact.Artifact{Digest: artifactDigest, Size: artifactSize, FileName: "pig-release"},
+		Artifact:     pigletartifact.Artifact{Digest: artifactDigest, Size: artifactSize, FileName: "ompig-release"},
 		Verification: pigletartifact.Verification{Policy: "basic", Passed: true, Checks: []string{"artifact-sha256", "artifact-version-smoke"}},
 	})
 	if err != nil {
@@ -214,12 +214,12 @@ func TestBuildInputsLocksLocalGoReplacements(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(replacement, "sdk.go"), []byte("package sdk\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	pigletYAML := "name: release\nextensions:\n  - name: ext\n    origins: [local:extension]\n"
 	if err := os.WriteFile(pigletPath, []byte(pigletYAML), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -290,7 +290,7 @@ func TestAC4ExtendsLineageIsPinnedInRecord(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(inputs) != 1 || inputs[0].Kind != "piglet-base" || inputs[0].Source != "local:base.yaml" || inputs[0].Version != "1.4.0" || !strings.HasPrefix(inputs[0].Digest, "sha256:") {
+	if len(inputs) != 1 || inputs[0].Kind != "ompiglet-base" || inputs[0].Source != "local:base.yaml" || inputs[0].Version != "1.4.0" || !strings.HasPrefix(inputs[0].Digest, "sha256:") {
 		t.Fatalf("inputs = %#v", inputs)
 	}
 }

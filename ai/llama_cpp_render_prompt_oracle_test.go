@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // llamaPromptProbe is one classify request: the state message the prompt content carries and the raw JSON body the
@@ -56,7 +56,7 @@ func TestLlamaCppRenderPromptMatchesPi(t *testing.T) {
 	for i, probe := range probes {
 		if got := goLlamaPrompt(t, i, probe); got != want[i] {
 			if failures++; failures <= 3 {
-				t.Errorf("probe %d %q differs from Pi\n Pig %s\n Pi  %s", i, probe.Template, got, want[i])
+				t.Errorf("probe %d %q differs from Pi\n Ompig %s\n Pi  %s", i, probe.Template, got, want[i])
 			}
 		}
 	}
@@ -75,7 +75,7 @@ func TestLlamaCppRenderPromptDump(t *testing.T) {
 	fmt.Printf("llama-prompt-oracle:%s\n", marshalJSONString(llamaPromptOracle))
 }
 
-// TestLlamaCppRenderPromptParity prints PiG's line for each probe for the providers-registry/08 parity scenario.
+// TestLlamaCppRenderPromptParity prints Ompig's line for each probe for the providers-registry/08 parity scenario.
 func TestLlamaCppRenderPromptParity(t *testing.T) {
 	for i, probe := range llamaPromptProbes() {
 		fmt.Printf("llama-prompt-observation:%s\n", goLlamaPrompt(t, i, probe))

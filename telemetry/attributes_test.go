@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 func attributeNames(attributes telemetry.SpanAttributes) []string {

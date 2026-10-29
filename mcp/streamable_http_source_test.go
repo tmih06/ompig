@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Behaviour of StreamableHttpTransport (packages/mcp/src/transports/streamable-http.ts, Pi 1.1.0) that streamable-http.test.ts

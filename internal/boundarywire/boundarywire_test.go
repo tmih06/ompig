@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 func sourcePreview(n int) extension.BoundaryContextPreview {

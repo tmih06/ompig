@@ -42,7 +42,7 @@ func newSSEDecoder(reader io.Reader) *sseDecoder {
 // sseLineLimit bounds one SSE line. Pi's readers have no cap of their own, but every one of them holds the line in a JavaScript string, which Node
 // cannot make longer than buffer.constants.MAX_STRING_LENGTH (2^29-24 on 64-bit V8): the OpenAI SDK's LineDecoder then throws "Cannot create a string
 // longer than 0x1fffffe8 characters" and a string buffer throws "RangeError: Invalid string length", ending the stream. Go strings have no such limit.
-// pig divergence (D134): a longer line ends the stream with bufio.ErrTooLong at the same bound, so a server that never ends a line cannot exhaust memory.
+// ompig divergence (D134): a longer line ends the stream with bufio.ErrTooLong at the same bound, so a server that never ends a line cannot exhaust memory.
 var sseLineLimit = 1<<29 - 24
 
 func (decoder *sseDecoder) Next() bool {

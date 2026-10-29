@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/usagetotals"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/usagetotals"
 )
 
 // Pi's combineUsage builds the summed usage as one literal with cacheWrite1h and reasoning before totalTokens (usage-totals.ts:31-51), and

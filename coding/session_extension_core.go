@@ -6,8 +6,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // ExtensionSetModel is the setModel action Pi binds for extensions in every mode. A provider without configured credentials answers false and changes nothing; otherwise the Session switches to model as SetModel does and answers true.

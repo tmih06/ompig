@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// getLanguageFromPath (theme.ts) against pinned Pi over every extension in Pig's table (plus its case variants and the ones Pi might map but Pig does not) and seeded paths: extensions after the last dot of the whole path, mixed case, no dot, a trailing dot, dotfiles, directories with dots, wide and special-casing characters (U+0130, U+212A).
+// getLanguageFromPath (theme.ts) against pinned Pi over every extension in Ompig's table (plus its case variants and the ones Pi might map but Ompig does not) and seeded paths: extensions after the last dot of the whole path, mixed case, no dot, a trailing dot, dotfiles, directories with dots, wide and special-casing characters (U+0130, U+212A).
 func TestLanguageFromPathMatchesPi(t *testing.T) {
 	extensions := []string{"", "x", "TS", "Py", "jsX", "d.ts", "tar.gz", "min.js", "ɪ", "İ", "K", "\u212a", "tsx\u0130", "日本語", " ", "ts ", "MAKEFILE", "Dockerfile", "dockerfile", "cmake", "graphql", "proto", "vue", "svelte", "astro", "zig", "nim", "dart", "jl", "tf", "hcl", "ini", "conf", "env", "lock", "csv", "txt", "log", "diff", "patch", "gradle", "groovy", "kts", "mm", "m", "vb", "fs", "fsx", "pas", "asm", "s", "wasm", "wat", "nix", "bzl", "bazel", "sol", "v", "sv", "vhd", "tex", "bib", "rst", "adoc", "org"}
 	for ext := range extToLang() {

@@ -9,8 +9,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type userAgentVersionCase struct {
@@ -23,7 +23,7 @@ type userAgentVersionCase struct {
 
 // Pi's detailed User-Agent is `pi/<version> (...)` where <version> is identity.version when the caller gives one (an empty string included, since the
 // default applies only to null and undefined, `identity?.version ?? PI_AI_VERSION`), and the PI_AI_VERSION constant of version.ts otherwise. The short
-// and custom forms carry no version. PiG's product name and its composite release version stand in for `pi` and PI_AI_VERSION (D65), so the version
+// and custom forms carry no version. Ompig's product name and its composite release version stand in for `pi` and PI_AI_VERSION (D65), so the version
 // token is compared as a field: an explicit version is Pi's token, and the default is ProductVersion, which is not Pi's constant.
 func TestUserAgentVersionFieldFollowsPi(t *testing.T) {
 	custom := "acme/1.0"
@@ -64,7 +64,7 @@ func TestUserAgentVersionFieldFollowsPi(t *testing.T) {
 		t.Fatalf("Pi answered %d of %d cases", len(pi), len(cases))
 	}
 	piToken := regexp.MustCompile(`^pi/(.*?) \(`)
-	pigToken := regexp.MustCompile(`^` + regexp.QuoteMeta(pigidentity.UserAgentProduct) + `/(.*?) \(`)
+	ompigToken := regexp.MustCompile(`^` + regexp.QuoteMeta(pigidentity.UserAgentProduct) + `/(.*?) \(`)
 	for i, c := range cases {
 		identity := &ClientIdentity{Version: c.Version}
 		switch {
@@ -80,16 +80,16 @@ func TestUserAgentVersionFieldFollowsPi(t *testing.T) {
 		switch {
 		case c.Short:
 			if want != "pi" || got != pigidentity.UserAgentProduct {
-				t.Errorf("%s: short form PiG %q, Pi %q", c.Name, got, want)
+				t.Errorf("%s: short form Ompig %q, Pi %q", c.Name, got, want)
 			}
 		case c.Custom != nil:
 			if got != want {
-				t.Errorf("%s: custom form PiG %q, Pi %q", c.Name, got, want)
+				t.Errorf("%s: custom form Ompig %q, Pi %q", c.Name, got, want)
 			}
 		default:
-			piMatch, pigMatch := piToken.FindStringSubmatch(want), pigToken.FindStringSubmatch(got)
-			if piMatch == nil || pigMatch == nil {
-				t.Fatalf("%s: user agents PiG %q, Pi %q have no version token", c.Name, got, want)
+			piMatch, ompigMatch := piToken.FindStringSubmatch(want), ompigToken.FindStringSubmatch(got)
+			if piMatch == nil || ompigMatch == nil {
+				t.Fatalf("%s: user agents Ompig %q, Pi %q have no version token", c.Name, got, want)
 			}
 			wantVersion := piMatch[1]
 			if c.Version == nil {
@@ -98,8 +98,8 @@ func TestUserAgentVersionFieldFollowsPi(t *testing.T) {
 				}
 				wantVersion = ProductVersion
 			}
-			if pigMatch[1] != wantVersion {
-				t.Errorf("%s: version token PiG %q, want %q (Pi %q)", c.Name, pigMatch[1], wantVersion, want)
+			if ompigMatch[1] != wantVersion {
+				t.Errorf("%s: version token Ompig %q, want %q (Pi %q)", c.Name, ompigMatch[1], wantVersion, want)
 			}
 		}
 	}

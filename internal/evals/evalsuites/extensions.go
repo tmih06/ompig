@@ -2,7 +2,7 @@ package evalsuites
 
 // Ports packages/evals/evals/extensions.docs.eval.ts.
 //
-// Pi's output reads session.resourceLoader.getExtensions(). A PiG Session runs in a pig process, so the output
+// Pi's output reads session.resourceLoader.getExtensions(). A Ompig Session runs in a ompig process, so the output
 // reports what that process exposes: extension_error events, and the tool as loaded when it returned a successful
 // result in the Session (a tool that never loaded cannot return one).
 
@@ -10,7 +10,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/internal/evals"
+	"github.com/tmih06/ompig/internal/evals"
 )
 
 const (
@@ -56,7 +56,7 @@ func Extensions() evals.Suite {
 		},
 		NoJudgeThreshold: true,
 		Cases: []evals.Case{singleCase("creates, reloads, and invokes the extension", evals.PiCodingAgentInput{
-			{Type: evals.PiCodingAgentStepPrompt, Content: "Configure this running PiG installation with an extension containing a hello tool that takes a name and returns a greeting. Do not create project source. For example, passing Bob should return `Hello, Bob!`."},
+			{Type: evals.PiCodingAgentStepPrompt, Content: "Configure this running Ompig installation with an extension containing a hello tool that takes a name and returns a greeting. Do not create project source. For example, passing Bob should return `Hello, Bob!`."},
 			{Type: evals.PiCodingAgentStepReload},
 			{Type: evals.PiCodingAgentStepPrompt, Content: "Use the hello tool to greet Bob. Respond with exactly the tool's greeting and nothing else."},
 		})},

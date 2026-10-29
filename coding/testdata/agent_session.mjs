@@ -76,7 +76,7 @@ try {
               const entries = session.sessionManager.getEntries();
               const target = entries.length ? entries[op.index % entries.length] : undefined;
               const r = await session.navigateTree(target ? target.id : "missing", { summarize: false, ...(op.label ? { label: op.label } : {}) });
-              result = { cancelled: r.cancelled, aborted: r.aborted ?? null, editorText: r.editorText || null, // Pig's EditorText is a string, so an empty text and an absent one are the same; callers only test it for truthiness.
+              result = { cancelled: r.cancelled, aborted: r.aborted ?? null, editorText: r.editorText || null, // Ompig's EditorText is a string, so an empty text and an absent one are the same; callers only test it for truthiness.
                  summary: r.summaryEntry ? true : null };
               break;
             }

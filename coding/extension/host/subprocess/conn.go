@@ -15,19 +15,19 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // ToolAbortGrace is how long an aborted extension tool call waits for the tool to settle after its AbortSignal fires.
 //
-// pig divergence (D111): Pi awaits an aborted tool indefinitely (agent-loop.ts:831-853); a subprocess call must not block the agent loop forever.
+// ompig divergence (D111): Pi awaits an aborted tool indefinitely (agent-loop.ts:831-853); a subprocess call must not block the agent loop forever.
 const ToolAbortGrace = 3 * time.Second
 
 // readBufferBytes sizes the connection's read buffer: a burst of small frames costs one socket read.
-// pig additive (D112): Pi loads extensions in process and has no IPC reads; a frame longer than the buffer is read across refills with the same bytes.
+// ompig additive (D112): Pi loads extensions in process and has no IPC reads; a frame longer than the buffer is read across refills with the same bytes.
 const readBufferBytes = 64 << 10
 
 // ErrToolAborted fails an aborted extension tool call that did not settle within ToolAbortGrace. Its text is Pi's abort tool result (agent-loop.ts:623).
@@ -56,7 +56,7 @@ func (t realLivenessTimer) C() <-chan time.Time   { return t.timer.C }
 func (t realLivenessTimer) Stop() bool            { return t.timer.Stop() }
 func (t realLivenessTimer) Reset(d time.Duration) { t.timer.Reset(d) }
 
-// pig divergence (D56): heartbeat interval and pong deadline are the host's
+// ompig divergence (D56): heartbeat interval and pong deadline are the host's
 // only liveness bound on a subprocess; upstream extensions run in process.
 const (
 	defaultHeartbeatInterval = 2 * time.Second
@@ -115,7 +115,7 @@ func (e *TransportError) Unwrap() error { return e.Err }
 
 // Conn manages one extension socket with reader, writer, and heartbeat
 // goroutines. Only the reader reads the socket, and only the writer writes it.
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type Conn struct {
 	// toolOrder keeps the tool_call requests of one batch in source order on the wire.
 	toolOrder jsloop.Lane
@@ -245,7 +245,7 @@ type Conn struct {
 	lastLargeSize atomic.Uint64
 	lastLargeAtNs atomic.Int64
 
-	// pig divergence (D56): subprocess liveness has no upstream in-process equivalent.
+	// ompig divergence (D56): subprocess liveness has no upstream in-process equivalent.
 	// Liveness state machine:
 	// idle --work/live-state--> waiting --interval--> awaiting-pong
 	// awaiting-pong --matching-pong--> waiting
@@ -897,7 +897,7 @@ func (c *Conn) requestWithOrder(ctx context.Context, env *Envelope, inactivity t
 			if c.beforeCancel != nil {
 				c.beforeCancel()
 			}
-			// pig additive (D19): the cancel is queued before the request's calls are cancelled, so a call's cancellation result follows it on the wire. The extension cancels its own pending calls on the cancel, and the result finds none.
+			// ompig additive (D19): the cancel is queued before the request's calls are cancelled, so a call's cancellation result follows it on the wire. The extension cancels its own pending calls on the cancel, and the result finds none.
 			_ = c.Send(&Envelope{
 				Type: MsgCancel,
 				ID:   env.ID,
@@ -916,7 +916,7 @@ func (c *Conn) requestWithOrder(ctx context.Context, env *Envelope, inactivity t
 				continue
 			}
 			if env.Request != nil && env.Request.Method == MethodToolCall {
-				// pig divergence (D111): the call waits ToolAbortGrace for the tool to settle, as Pi awaits tool.execute after its signal aborts (agent-loop.ts:831-853), and then fails as aborted instead of awaiting a tool that ignores its signal forever.
+				// ompig divergence (D111): the call waits ToolAbortGrace for the tool to settle, as Pi awaits tool.execute after its signal aborts (agent-loop.ts:831-853), and then fails as aborted instead of awaiting a tool that ignores its signal forever.
 				cancelled = nil
 				grace := c.clock.NewTimer(ToolAbortGrace)
 				defer grace.Stop()

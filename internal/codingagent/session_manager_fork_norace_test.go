@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // writeHTMLSession writes a session whose tool results are source code with <, > and &, which encoding/json's HTML escaping rewrites.

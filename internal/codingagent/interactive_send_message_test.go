@@ -5,11 +5,11 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // newSendMessageHarness is an interactive mode whose agent streams for the test (turnActive is what the mode reads as upstream isStreaming) and the registered sendMessage host action, the entry point of every SDK's pi.sendMessage.

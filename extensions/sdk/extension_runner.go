@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ExtensionRunner is Pi's `ExtensionRunner` class (core/extensions/runner.ts): the dispatcher and registry over the extensions a [DefaultResourceLoader] loaded. The host owns the runner and the extensions stay in their own processes, as a loader's do; the runner dispatches events to them in extension order with Pi's chaining and error isolation, and answers the registries (tools, commands, flags, shortcuts, handlers) from them.

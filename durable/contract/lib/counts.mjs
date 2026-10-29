@@ -5,7 +5,7 @@
 //   rowsWritten                 row changes the store committed to Pi's tables (the session changeset of each commit)
 //   commits                     transactions that changed Pi's tables
 //   crossings                   calls across the core boundary: export and import calls of a Wasm core (an instance that
-//                               imports `pig`), messages to and from a native core
+//                               imports `ompig`), messages to and from a native core
 //   allocBytes, mallocs         what the core's runtime allocated (TotalAlloc and Mallocs; the core's alloc_stats). For a
 //                               Go build allocBytes is runtime/metrics' /gc/heap/allocs:bytes, read after ReadMemStats
 //                               flushes the cached spans (cmd/corenative main_test.go)
@@ -33,7 +33,7 @@ import { appendFileSync, readdirSync, readFileSync, writeFileSync } from "node:f
 import { join } from "node:path"
 import { pathToFileURL } from "node:url"
 
-const KEY = Symbol.for("pig.contract.counts")
+const KEY = Symbol.for("ompig.contract.counts")
 export const COUNTERS = ["statements", "reads", "writes", "rowsRead", "rowsWritten", "commits", "crossings", "allocBytes", "mallocs", "gcs", "bytesCrossed"]
 export const FINALS = ["heap", "heapNet", "linear", "ir"]
 /** End-of-run figures reported beside the cells, never part of the baseline (raw `heap` too, where heapNet is gated). */
@@ -60,13 +60,13 @@ export async function install() {
 		return out
 	}
 	const Base = WebAssembly.Instance
-	// Only a core counts: an instance that imports the `pig` module (ABI section 4.2). A dependency's own Wasm (the reference
+	// Only a core counts: an instance that imports the `ompig` module (ABI section 4.2). A dependency's own Wasm (the reference
 	// loads some too) is not a crossing of the core boundary.
 	class CountedInstance extends Base {
 		#exports
 		#core
 		constructor(module, imports) {
-			const core = Boolean(imports?.pig)
+			const core = Boolean(imports?.ompig)
 			super(module, core ? wrapImports(imports) : imports)
 			this.#core = core
 		}
@@ -124,7 +124,7 @@ export function coreStats(cores, { final = false } = {}) {
 /** bench.mjs: one cumulative sample per measured turn, then the final line. */
 export function sampler(file) {
 	writeFileSync(file, "")
-	const cores = () => globalThis[Symbol.for("pig.contract")]?.cores
+	const cores = () => globalThis[Symbol.for("ompig.contract")]?.cores
 	return {
 		turn: turn => appendFileSync(file, JSON.stringify({ turn, ...counters(), ...coreStats(cores()) }) + "\n"),
 		final: () => appendFileSync(file, JSON.stringify({ final: true, ...coreStats(cores(), { final: true }) }) + "\n"),
@@ -222,7 +222,7 @@ export function irWrapper(exe, valgrind, file) {
  * A source file belongs to a package by its directory (`-trimpath` names: `runtime/proc.go`); every subpackage of `runtime`
  * and `internal/runtime` is the runtime's.
  */
-export const IR_CLOCKED = ["runtime", "internal/runtime", "internal/poll", "internal/syscall", "syscall", "os", "time", "bufio", "sync", "internal/sync", "math/bits", "internal/chacha8rand", "github.com/MichaelKinsy/PiG/durable/core/contracttest/guard"]
+export const IR_CLOCKED = ["runtime", "internal/runtime", "internal/poll", "internal/syscall", "syscall", "os", "time", "bufio", "sync", "internal/sync", "math/bits", "internal/chacha8rand", "github.com/tmih06/ompig/durable/core/contracttest/guard"]
 
 /** Whether the instructions of source file `file` (a cachegrind `fl=` name) are clocked: in a package of IR_CLOCKED. */
 export function irClocked(file) {

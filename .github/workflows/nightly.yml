@@ -21,7 +21,7 @@ jobs:
   race:
     name: Race / ${{ matrix.os }} / ${{ matrix.group }}${{ matrix.shard && format(' / {0}', matrix.shard) || '' }}
     runs-on: ${{ matrix.os }}
-    # automation/ci/race-packages.txt names the packages of each group. The cli group is one package whose whole -race run took 38 minutes on a 56-core slice, so it runs as four shards of its tests (PIG_RACE_SHARD).
+    # automation/ci/race-packages.txt names the packages of each group. The cli group is one package whose whole -race run took 38 minutes on a 56-core slice, so it runs as four shards of its tests (OMPIG_RACE_SHARD).
     timeout-minutes: 90
     strategy:
       fail-fast: false
@@ -54,7 +54,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install a current bash for the shard selection script
-        # automation/ci/test-shard-pattern.sh needs bash 4 and macOS ships 3.2 as /bin/bash, so the cli shards (PIG_RACE_SHARD) died there with "declare: -A: invalid option". The same step as ci.yml's macOS job: only the bash keg goes on PATH, as the Homebrew bin directory also holds the image's default node and npm, which would shadow the pinned toolchain.
+        # automation/ci/test-shard-pattern.sh needs bash 4 and macOS ships 3.2 as /bin/bash, so the cli shards (OMPIG_RACE_SHARD) died there with "declare: -A: invalid option". The same step as ci.yml's macOS job: only the bash keg goes on PATH, as the Homebrew bin directory also holds the image's default node and npm, which would shadow the pinned toolchain.
         if: runner.os == 'macOS' && matrix.shard
         run: |
           set -euo pipefail
@@ -86,8 +86,8 @@ jobs:
       - name: Race and goroutine-leak gate
         env:
           CI: '1'
-          PIG_RACE_GROUP: ${{ matrix.group }}
-          PIG_RACE_SHARD: ${{ matrix.shard }}
+          OMPIG_RACE_GROUP: ${{ matrix.group }}
+          OMPIG_RACE_SHARD: ${{ matrix.shard }}
         run: make test-race-nightly
 
   fuzz:
@@ -105,7 +105,7 @@ jobs:
       - name: Fuzz every target
         env:
           CI: '1'
-          PIG_FUZZ_TIME: 30s
+          OMPIG_FUZZ_TIME: 30s
         run: make fuzz-nightly
       - name: Keep failing inputs
         if: failure()

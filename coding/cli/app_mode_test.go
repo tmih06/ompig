@@ -3,7 +3,7 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestResolveAppModeTruthTable pins upstream main.ts resolveAppMode:
@@ -13,7 +13,7 @@ import (
 //	if (parsed.print || !stdinIsTTY || !stdoutIsTTY) return "print";
 //	return "interactive";
 //
-// pig ignored stdout, so `pig "q" > file` drew the TUI into the file.
+// ompig ignored stdout, so `ompig "q" > file` drew the TUI into the file.
 func TestResolveAppModeTruthTable(t *testing.T) {
 	for _, tc := range []struct {
 		mode        string

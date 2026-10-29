@@ -1,4 +1,4 @@
-//go:build !pig_strip_llama_cpp
+//go:build !ompig_strip_llama_cpp
 
 package cli
 
@@ -14,11 +14,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/llama"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/llama"
 )
 
 // RPC lists /llama where the loader placed the built-in llama.cpp extension: llama.cpp is the first entry of builtInExtensions
@@ -189,7 +189,7 @@ func TestConfigListsHostedBuiltinLlamaExtension(t *testing.T) {
 		t.Fatalf("after the toggle extensions = %q, want [-builtin:llama.cpp]", got)
 	}
 	if llamaLoads(t, cwd, agentDir) {
-		t.Fatal("the llama.cpp provider stays enabled after pig config disabled builtin:llama.cpp")
+		t.Fatal("the llama.cpp provider stays enabled after ompig config disabled builtin:llama.cpp")
 	}
 }
 

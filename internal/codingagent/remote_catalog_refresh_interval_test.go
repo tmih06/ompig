@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // remote-catalog-provider.ts:15,93 (REMOTE_CATALOG_REFRESH_INTERVAL_MS = 4 * 60 * 60 * 1000): a checked catalog that

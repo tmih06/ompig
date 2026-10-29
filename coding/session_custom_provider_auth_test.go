@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A caller-supplied Go Provider is the custom request implementation. Its identity metadata does not turn it into a registry-built provider or require unrelated registry credentials.

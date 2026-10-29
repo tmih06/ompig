@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/jsjson"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // A Gemini stream chunk that is valid JSON but holds a member of an unexpected type is read by Pi's JavaScript member by member (google-generative-ai.ts

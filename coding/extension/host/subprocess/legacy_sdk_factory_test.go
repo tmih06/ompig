@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
-// writeLegacySDKAskModule writes a factory shaped like the owner's Pig 0.84
+// writeLegacySDKAskModule writes a factory shaped like the owner's Ompig 0.84
 // ask extension: it imports the legacy SDK module path and replaces it with a
 // sibling .sdk directory that holds an old, incompatible SDK.
 func writeLegacySDKAskModule(t *testing.T) string {
@@ -22,7 +22,7 @@ func writeLegacySDKAskModule(t *testing.T) string {
 		filepath.Join(extensionRoot, "go.mod"): "module example.com/legacy/ask\n\ngo 1.26\n\nrequire " + extsource.LegacyGoSDKModulePath + " v0.0.0\n\nreplace " + extsource.LegacyGoSDKModulePath + " => ../.sdk\n",
 		filepath.Join(extensionRoot, "main.go"): `package ask
 
-import "github.com/mainstai/pig/extensions/sdk"
+import "github.com/mainstai/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	ext := sdk.New("ask")
@@ -45,14 +45,14 @@ func Extension() *sdk.Extension {
 }
 
 // TestHost_LegacySDKFactoryLoadsBesideCurrentSDKFactory pins AK-001 through
-// the full startup path: a Pig 0.84 factory resolves as a factory, plans into
+// the full startup path: a Ompig 0.84 factory resolves as a factory, plans into
 // its own cell (never packed with current-SDK factories), builds against the
 // current SDK, registers, and executes.
 func TestHost_LegacySDKFactoryLoadsBesideCurrentSDKFactory(t *testing.T) {
 	keepGoBuildCaches(t)
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
 	legacy, legacyDefinition, err := ResolveExtConfigWithIdentity(writeLegacySDKAskModule(t), "ask")
 	if err != nil {
 		t.Fatalf("resolve legacy factory: %v", err)

@@ -1,5 +1,5 @@
 // Probe the three original branching inputs with deterministic provider replies.
-// This establishes the pinned implementation's native system entries; it is not a PiG port of the three tests.
+// This establishes the pinned implementation's native system entries; it is not a Ompig port of the three tests.
 import assert from "node:assert/strict";
 import {existsSync, mkdtempSync, rmSync} from "node:fs";
 import {tmpdir} from "node:os";

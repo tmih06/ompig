@@ -28,9 +28,9 @@ wait_contains = ['"message":"selected:B"']
 wait_timeout_seconds = 5
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["../../../../coding/cli/testdata/rpc-ui.mjs"]
-pig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["../../../../coding/cli/testdata/rpc-ui.mjs"]
+ompig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../../../coding/cli/testdata/rpc-ui.mjs", "../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 

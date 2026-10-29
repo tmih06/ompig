@@ -3,8 +3,8 @@ package session
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // NeedRead is the error a Store returns when the loaded state cannot answer a

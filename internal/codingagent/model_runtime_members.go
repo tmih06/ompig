@@ -6,7 +6,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // CompatibilityRequestConfig is the request configuration a model falls back to when its provider auth is unconfigured (provider-composer.ts CompatibilityRequestConfig).

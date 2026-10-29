@@ -15,8 +15,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type registryOracleOp struct {
@@ -237,7 +237,7 @@ func registryOracleScenarios() []registryOracleScenario {
 					config.Models = append(config.Models, registryModelConfig{ID: fmt.Sprintf("r%d", i+1), Name: pick([]string{"R", "Réponse"}), Reasoning: rng.IntN(2) == 0, Input: []string{"text"}, Cost: registryModelPrice{Input: float64(rng.IntN(5)), Output: float64(rng.IntN(5))}, ContextWindow: 1000 * (1 + rng.IntN(5)), MaxTokens: 100 * (1 + rng.IntN(5))})
 				}
 				name := pick([]string{"registered", "registered", "openai", "anthropic"})
-				// Pi starts the refresh of a registration unawaited, so a read before it settles depends on how long a command-backed key takes to resolve (D84 records Pig's counterpart); an awaited refresh follows every registration and removal.
+				// Pi starts the refresh of a registration unawaited, so a read before it settles depends on how long a command-backed key takes to resolve (D84 records Ompig's counterpart); an awaited refresh follows every registration and removal.
 				scenario.Ops = append(scenario.Ops, registryOracleOp{Op: "register", Name: name, Config: &config}, registryOracleOp{Op: "refresh"})
 			case 12:
 				unregistered = true
@@ -368,7 +368,7 @@ func runRegistryOracleWithPig(t *testing.T, scenario registryOracleScenario) []a
 	refs := func(models []*ai.Model) []string {
 		out := make([]string, 0, len(models))
 		for _, model := range models {
-			// OpenRouter's :nitro and :floor variants are PiG's addition (D199); Pi's lists have none.
+			// OpenRouter's :nitro and :floor variants are Ompig's addition (D199); Pi's lists have none.
 			if _, _, variant := ai.OpenRouterRoutingVariant(model.ProviderID(), model.ID); variant {
 				continue
 			}
@@ -541,7 +541,7 @@ func runRegistryOracleWithPig(t *testing.T, scenario registryOracleScenario) []a
 				if models, err := provider.GetModels(); err == nil {
 					ids := make([]string, 0, len(models))
 					for _, model := range models {
-						// OpenRouter's :nitro and :floor variants are PiG's addition (D199); Pi's provider lists have none.
+						// OpenRouter's :nitro and :floor variants are Ompig's addition (D199); Pi's provider lists have none.
 						if _, _, variant := ai.OpenRouterRoutingVariant(provider.ID, model.ID); variant {
 							continue
 						}
@@ -738,7 +738,7 @@ func runRegistryOracleWithPig(t *testing.T, scenario registryOracleScenario) []a
 func anyModelRefs(models []ai.AnyModel) []string {
 	refs := make([]string, 0, len(models))
 	for _, model := range models {
-		// OpenRouter's :nitro and :floor variants are PiG's addition (D199); Pi's lists have none.
+		// OpenRouter's :nitro and :floor variants are Ompig's addition (D199); Pi's lists have none.
 		if _, _, variant := ai.OpenRouterRoutingVariant(model.ProviderID(), model.ModelID()); variant {
 			continue
 		}
@@ -844,20 +844,20 @@ func TestModelRegistryMatchesPi(t *testing.T) {
 						diff := []string{}
 						for key, n := range seen {
 							if n != 0 {
-								diff = append(diff, fmt.Sprintf("%s:%+d(Pi-Pig)", key, n))
+								diff = append(diff, fmt.Sprintf("%s:%+d(Pi-Ompig)", key, n))
 							}
 						}
 						slices.Sort(diff)
-						t.Logf("list diff: %.600s (Pig %d, Pi %d)", strings.Join(diff, " "), len(gl), len(el))
+						t.Logf("list diff: %.600s (Ompig %d, Pi %d)", strings.Join(diff, " "), len(gl), len(el))
 						for at := range min(len(gl), len(el)) {
 							if fmt.Sprint(gl[at]) != fmt.Sprint(el[at]) {
-								t.Logf("first order difference at %d: Pig %v, Pi %v", at, gl[at], el[at])
+								t.Logf("first order difference at %d: Ompig %v, Pi %v", at, gl[at], el[at])
 								break
 							}
 						}
 					}
 				}
-				t.Errorf("scenario %d op %d %s\n  ops %.1500s\n  env %s\n  models.json %s\n  auth.json %s\n  Pig %.300s\n  Pi  %.300s", i, k, opJSON, allOps, env, models, auth, g, e)
+				t.Errorf("scenario %d op %d %s\n  ops %.1500s\n  env %s\n  models.json %s\n  auth.json %s\n  Ompig %.300s\n  Pi  %.300s", i, k, opJSON, allOps, env, models, auth, g, e)
 				break
 			}
 		}

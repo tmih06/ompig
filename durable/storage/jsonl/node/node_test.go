@@ -10,8 +10,8 @@ import (
 	"runtime"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
 )
 
 // resolvePath (packages/durable/src/env/node.ts:58-71) expands "~" and "~/", converts a file:// URL with

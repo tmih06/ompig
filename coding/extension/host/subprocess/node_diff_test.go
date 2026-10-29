@@ -34,7 +34,7 @@ comparePackage(fileURLToPath(process.argv[1]), fileURLToPath(process.argv[2]));
 // Pi core/tools/edit-diff.ts:373-516 preserves context, line numbers, CRLF and missing final newlines. These exports are synchronous utilities, not session-bound operations.
 func TestPiDiffHelpersMatchThePinnedPackage(t *testing.T) {
 	runPinnedComparison(t, []string{"dist", "core", "tools", "edit-diff.js"}, "pi-coding-agent.mjs", `
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 const assert = await import("node:assert/strict");
 const long = Array.from({length: 120}, (_, i) => "line " + i).join("\n");
 for (const [before, after] of [
@@ -45,8 +45,8 @@ for (const [before, after] of [
   [long, long.replace("line 10\n", "changed ten\n").replace("line 99\n", "changed ninety-nine\n")],
 ]) {
   for (const context of [undefined, 0, 1, 4, 20]) {
-    assert.deepEqual(pig.generateDiffString(before, after, context), pi.generateDiffString(before, after, context));
-    assert.equal(pig.generateUnifiedPatch("space path/é.txt", before, after, context), pi.generateUnifiedPatch("space path/é.txt", before, after, context));
+    assert.deepEqual(ompig.generateDiffString(before, after, context), pi.generateDiffString(before, after, context));
+    assert.equal(ompig.generateUnifiedPatch("space path/é.txt", before, after, context), pi.generateUnifiedPatch("space path/é.txt", before, after, context));
   }
 }
 `)

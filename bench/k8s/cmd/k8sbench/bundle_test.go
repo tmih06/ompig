@@ -22,7 +22,7 @@ import (
 
 	"go.yaml.in/yaml/v3"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // writeELF writes the smallest ELF64 header debug/elf accepts, for the given machine.
@@ -209,7 +209,7 @@ func TestRenderBundleMode(t *testing.T) {
 		m := e.(map[string]any)
 		env[m["name"].(string)] = m["value"]
 	}
-	if env["K8SBENCH_BUNDLE_SHA256"] != sum || env["K8SBENCH_BUNDLE_ARCH"] != "arm64" || env["K8SBENCH_ROOT"] != "/bundle/pig" || env["K8SBENCH_DELIVERY"] != deliveryBundle || !strings.HasPrefix(env["PATH"].(string), "/bundle/pig/bin:") {
+	if env["K8SBENCH_BUNDLE_SHA256"] != sum || env["K8SBENCH_BUNDLE_ARCH"] != "arm64" || env["K8SBENCH_ROOT"] != "/bundle/ompig" || env["K8SBENCH_DELIVERY"] != deliveryBundle || !strings.HasPrefix(env["PATH"].(string), "/bundle/ompig/bin:") {
 		t.Errorf("env %v", env)
 	}
 	if at(t, c, "volumeMounts", 1, "mountPath") != "/bundle" || at(t, spec, "volumes", 1, "emptyDir", "sizeLimit") != "2Gi" {
@@ -303,11 +303,11 @@ func TestPodBundleScript(t *testing.T) {
 	}
 
 	target, sum := build(t, nil)
-	if out := runScript(target, sum, true, "5"); strings.TrimSpace(out) != "session pod "+target+"/pig" {
+	if out := runScript(target, sum, true, "5"); strings.TrimSpace(out) != "session pod "+target+"/ompig" {
 		t.Errorf("good bundle: %q", out)
 	}
-	if _, err := os.Stat(filepath.Join(target, "pig", "dist", "core-tinygo.wasm")); err != nil {
-		t.Error("the bundle unpacks into pig/")
+	if _, err := os.Stat(filepath.Join(target, "ompig", "dist", "core-tinygo.wasm")); err != nil {
+		t.Error("the bundle unpacks into ompig/")
 	}
 
 	target, _ = build(t, nil)
@@ -347,7 +347,7 @@ func runScriptArch(t *testing.T, target, sum string, ready bool, timeout, arch s
 		}
 	}
 	cmd := exec.Command("sh", "-c", podBundleScript)
-	cmd.Env = append(os.Environ(), "K8SBENCH_BUNDLE_DIR="+target, "K8SBENCH_BUNDLE_SHA256="+sum, "K8SBENCH_DELIVERY_TIMEOUT="+timeout, "K8SBENCH_ROOT="+target+"/pig", "K8SBENCH_BUNDLE_ARCH="+arch)
+	cmd.Env = append(os.Environ(), "K8SBENCH_BUNDLE_DIR="+target, "K8SBENCH_BUNDLE_SHA256="+sum, "K8SBENCH_DELIVERY_TIMEOUT="+timeout, "K8SBENCH_ROOT="+target+"/ompig", "K8SBENCH_BUNDLE_ARCH="+arch)
 	out, _ := cmd.CombinedOutput()
 	return string(out)
 }
@@ -398,7 +398,7 @@ func TestBundleCarriesTheDurableCorePrograms(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(dir, "core"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	for _, f := range []string{"bench-pi.mjs", "bench-pig.mjs"} {
+	for _, f := range []string{"bench-pi.mjs", "bench-ompig.mjs"} {
 		if err := os.WriteFile(filepath.Join(dir, "core", f), []byte("// "+f+"\n"), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -415,15 +415,15 @@ func TestBundleCarriesTheDurableCorePrograms(t *testing.T) {
 	for _, a := range b.artifacts {
 		paths = append(paths, a[0])
 	}
-	for _, want := range []string{"core/bench-pi.mjs", "core/bench-pig.mjs", "bin/sqlhost-bench"} {
+	for _, want := range []string{"core/bench-pi.mjs", "core/bench-ompig.mjs", "bin/sqlhost-bench"} {
 		if !slices.Contains(paths, want) {
 			t.Errorf("ARTIFACTS.sha256 lists %v, without %s", paths, want)
 		}
 	}
-	if err := os.WriteFile(filepath.Join(dir, "core", "bench-pig.mjs"), []byte("changed"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "core", "bench-ompig.mjs"), []byte("changed"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := inspectBundle(dir); err == nil || !strings.Contains(err.Error(), "core/bench-pig.mjs has sha256") {
+	if _, err := inspectBundle(dir); err == nil || !strings.Contains(err.Error(), "core/bench-ompig.mjs has sha256") {
 		t.Errorf("a changed program must be refused: %v", err)
 	}
 	writeELF(t, filepath.Join(dir, "bin", "sqlhost-bench"), elf.EM_AARCH64)
@@ -524,12 +524,12 @@ func TestBundleBuildsThroughTheWorkspace(t *testing.T) {
 	}
 }
 
-// fakeAgentBundle is fakeBundle with the agents: PiG, the interpreter, and Pi's coding agent CLI and another of Pi's
+// fakeAgentBundle is fakeBundle with the agents: Ompig, the interpreter, and Pi's coding agent CLI and another of Pi's
 // packages beside its lockfile and a third-party package. The pins are the fixture's.
 func fakeAgentBundle(t *testing.T) string {
 	t.Helper()
 	dir := fakeAgentInstall(t)
-	writeELF(t, filepath.Join(dir, "bin", "pig"), elf.EM_X86_64)
+	writeELF(t, filepath.Join(dir, "bin", "ompig"), elf.EM_X86_64)
 	writeELF(t, filepath.Join(dir, "bin", "sessionscale"), elf.EM_X86_64)
 	if err := os.MkdirAll(filepath.Join(dir, filepath.Dir(cpythonPython)), 0o755); err != nil {
 		t.Fatal(err)
@@ -589,7 +589,7 @@ func fakeAgentInstall(t *testing.T) string {
 	return dir
 }
 
-// An agent bundle lists both agents, so a profile that runs PiG and Pi's coding agent can check it before a Job is
+// An agent bundle lists both agents, so a profile that runs Ompig and Pi's coding agent can check it before a Job is
 // submitted; half of one is refused, and a Durable bundle cannot run an agent profile.
 func TestInspectAgentBundle(t *testing.T) {
 	dir := fakeAgentBundle(t)
@@ -601,31 +601,31 @@ func TestInspectAgentBundle(t *testing.T) {
 	for _, a := range b.artifacts {
 		paths = append(paths, a[0])
 	}
-	if !slices.Contains(paths, "bin/pig") || !slices.Contains(paths, "pi-agent/package-lock.json") || !slices.Contains(paths, piAgentCLI) || !slices.Contains(paths, cpythonPython) {
+	if !slices.Contains(paths, "bin/ompig") || !slices.Contains(paths, "pi-agent/package-lock.json") || !slices.Contains(paths, piAgentCLI) || !slices.Contains(paths, cpythonPython) {
 		t.Errorf("artifacts: %v", paths)
 	}
 	prof := &profile{Name: "agents", Rule: "agents", Targets: []target{
-		{Name: "pig", Role: rolePig, Seed: []string{"k8sbench", "x"}, SeedMeta: "{dir}/m.json", Sample: []string{"pig", "--mode", "rpc"}},
+		{Name: "ompig", Role: rolePig, Seed: []string{"k8sbench", "x"}, SeedMeta: "{dir}/m.json", Sample: []string{"ompig", "--mode", "rpc"}},
 		{Name: "pi", Role: roleReference, Seed: []string{"k8sbench", "x"}, SeedMeta: "{dir}/m.json", Sample: []string{"node", "{root}/" + piAgentCLI, "--mode", "rpc"}},
 	}}
-	if err := checkBundlePrograms(prof, []string{"pig", "pi"}, b); err != nil {
+	if err := checkBundlePrograms(prof, []string{"ompig", "pi"}, b); err != nil {
 		t.Errorf("an agent bundle runs an agent profile: %v", err)
 	}
 	plain, err := inspectBundle(fakeBundle(t, elf.EM_X86_64))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := checkBundlePrograms(prof, []string{"pig", "pi"}, plain); err == nil || !strings.Contains(err.Error(), "pig needs bin/pig") || !strings.Contains(err.Error(), "pi needs "+piAgentCLI) {
+	if err := checkBundlePrograms(prof, []string{"ompig", "pi"}, plain); err == nil || !strings.Contains(err.Error(), "ompig needs bin/ompig") || !strings.Contains(err.Error(), "pi needs "+piAgentCLI) {
 		t.Errorf("a Durable bundle cannot run an agent profile: %v", err)
 	}
 
 	half := fakeBundle(t, elf.EM_X86_64)
-	writeELF(t, filepath.Join(half, "bin", "pig"), elf.EM_X86_64)
+	writeELF(t, filepath.Join(half, "bin", "ompig"), elf.EM_X86_64)
 	if err := writeArtifactList(half); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := inspectBundle(half); err == nil || !strings.Contains(err.Error(), "must list pi-agent/package-lock.json") {
-		t.Errorf("PiG without Pi's coding agent: %v", err)
+		t.Errorf("Ompig without Pi's coding agent: %v", err)
 	}
 
 	// Any one agent file makes it an agent bundle, which must then carry the rest.
@@ -644,7 +644,7 @@ func TestInspectAgentBundle(t *testing.T) {
 		if err := os.WriteFile(filepath.Join(partial, "ARTIFACTS.sha256"), []byte(strings.Join(keep, "")), 0o644); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := inspectBundle(partial); err == nil || !strings.Contains(err.Error(), "an agent bundle must list bin/pig") {
+		if _, err := inspectBundle(partial); err == nil || !strings.Contains(err.Error(), "an agent bundle must list bin/ompig") {
 			t.Errorf("a bundle that lists only %s: %v", only, err)
 		}
 	}
@@ -877,9 +877,9 @@ func TestImageCarriesTheAgents(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"-o /opt/pig/bin/pig ./cmd/pig", "-o /opt/pig/bin/sessionscale ./bench/sessionscale/cmd/sessionscale", "/pi/pi-agent/package-lock.json /opt/pig/pi-agent/", "pi-agent/package-lock.json", piAgentCLI,
-		"cp bench/k8s/image/pigbench.py /opt/pig/" + pigbenchLauncher, "cp bench/evals/pigbench/*.py /opt/pig/" + pigbenchDir + "/", pigbenchLauncher + " " + pigbenchDir + "/*.py",
-		"cp bench/evals/arms.toml bench/evals/arms.lock /opt/pig/evals/", pigbenchDir + "/*.py " + strings.Join(pigbenchArmFiles, " ")} {
+	for _, want := range []string{"-o /opt/ompig/bin/ompig ./cmd/ompig", "-o /opt/ompig/bin/sessionscale ./bench/sessionscale/cmd/sessionscale", "/pi/pi-agent/package-lock.json /opt/ompig/pi-agent/", "pi-agent/package-lock.json", piAgentCLI,
+		"cp bench/k8s/image/pigbench.py /opt/ompig/" + pigbenchLauncher, "cp bench/evals/pigbench/*.py /opt/ompig/" + pigbenchDir + "/", pigbenchLauncher + " " + pigbenchDir + "/*.py",
+		"cp bench/evals/arms.toml bench/evals/arms.lock /opt/ompig/evals/", pigbenchDir + "/*.py " + strings.Join(pigbenchArmFiles, " ")} {
 		if !strings.Contains(string(dockerfile), want) {
 			t.Errorf("bench/k8s/image/Dockerfile does not carry %s", want)
 		}
@@ -906,19 +906,19 @@ func TestBuiltinProfilesLoad(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := checkBundlePrograms(prof, []string{"pig", "pi"}, agents); err != nil {
+	if err := checkBundlePrograms(prof, []string{"ompig", "pi"}, agents); err != nil {
 		t.Errorf("an agent bundle runs longhistory: %v", err)
 	}
 	durable, err := inspectBundle(fakeBundle(t, elf.EM_X86_64))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := checkBundlePrograms(prof, []string{"pig", "pi"}, durable); err == nil || !strings.Contains(err.Error(), "pig needs pigbench.py") || !strings.Contains(err.Error(), "pi needs "+piAgentCLI) {
+	if err := checkBundlePrograms(prof, []string{"ompig", "pi"}, durable); err == nil || !strings.Contains(err.Error(), "ompig needs pigbench.py") || !strings.Contains(err.Error(), "pi needs "+piAgentCLI) {
 		t.Errorf("a Durable bundle runs longhistory: %v", err)
 	}
 }
 
-// The session-scale profiles run sessionscale and PiG from an agent bundle, which builds both, and Pi's coding agent; a
+// The session-scale profiles run sessionscale and Ompig from an agent bundle, which builds both, and Pi's coding agent; a
 // Durable bundle is refused before a Job is submitted.
 func TestSessionScaleProfilesRunAnAgentBundle(t *testing.T) {
 	agents, err := inspectBundle(fakeAgentBundle(t))
@@ -938,10 +938,10 @@ func TestSessionScaleProfilesRunAnAgentBundle(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := checkBundlePrograms(prof, []string{"pig", "pi"}, agents); err != nil {
+		if err := checkBundlePrograms(prof, []string{"ompig", "pi"}, agents); err != nil {
 			t.Errorf("an agent bundle runs %s: %v", name, err)
 		}
-		if err := checkBundlePrograms(prof, []string{"pig", "pi"}, durable); err == nil || !strings.Contains(err.Error(), "pig needs bin/sessionscale") {
+		if err := checkBundlePrograms(prof, []string{"ompig", "pi"}, durable); err == nil || !strings.Contains(err.Error(), "ompig needs bin/sessionscale") {
 			t.Errorf("a Durable bundle runs %s: %v", name, err)
 		}
 		for _, tg := range prof.Targets {
@@ -958,7 +958,7 @@ func TestSessionScaleProfilesRunAnAgentBundle(t *testing.T) {
 			if !slices.Equal(tg.Seed, prof.Targets[0].Seed) {
 				t.Errorf("%s %s seeds with %q, %s with %q", name, tg.Name, tg.Seed, prof.Targets[0].Name, prof.Targets[0].Seed)
 			}
-			if run := tg.Sample[len(tg.Sample)-1]; !strings.HasSuffix(run, " -ne") || (tg.Role == "pig" && (!strings.HasPrefix(run, "{root}/bin/pig ") || !built["/out/bin/pig"])) {
+			if run := tg.Sample[len(tg.Sample)-1]; !strings.HasSuffix(run, " -ne") || (tg.Role == "ompig" && (!strings.HasPrefix(run, "{root}/bin/ompig ") || !built["/out/bin/ompig"])) {
 				t.Errorf("%s %s resumes with %q", name, tg.Name, run)
 			}
 		}

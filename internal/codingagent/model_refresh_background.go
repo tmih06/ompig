@@ -6,7 +6,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 type backgroundRefreshKey struct{}
@@ -28,7 +28,7 @@ type registrationRefresh struct {
 }
 
 // deferRegistrationRefresh queues the local refresh of a registration or removal. It performs no work.
-// pig divergence (D84): a direct Go registration starts no refresh; the caller's next awaited model-runtime call or an extension host callback starts it.
+// ompig divergence (D84): a direct Go registration starts no refresh; the caller's next awaited model-runtime call or an extension host callback starts it.
 func (r *ModelRegistry) deferRegistrationRefresh(providerID string) {
 	state := &r.registrationRefresh
 	state.mu.Lock()

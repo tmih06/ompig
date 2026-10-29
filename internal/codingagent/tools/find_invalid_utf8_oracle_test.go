@@ -10,11 +10,11 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// fd prints a path as its bytes and Pi's find (core/tools/find.ts) decodes each line as UTF-8, so a name that is not valid UTF-8 appears with U+FFFD for each ill-formed subpart. Pig must print the same rows. Single-file directories keep fd's order.
+// fd prints a path as its bytes and Pi's find (core/tools/find.ts) decodes each line as UTF-8, so a name that is not valid UTF-8 appears with U+FFFD for each ill-formed subpart. Ompig must print the same rows. Single-file directories keep fd's order.
 func TestFindOnNamesThatAreNotValidUTF8MatchesPi(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skip("file names are arbitrary bytes only on Linux")
@@ -48,7 +48,7 @@ func TestFindOnNamesThatAreNotValidUTF8MatchesPi(t *testing.T) {
 				got = result.Content[0].(ai.TextContent).Text
 			}
 			if got != want.Text {
-				t.Errorf("%q %s\n  Pig %q\n  Pi  %q", name, args, got, want.Text)
+				t.Errorf("%q %s\n  Ompig %q\n  Pi  %q", name, args, got, want.Text)
 			}
 		}
 	}

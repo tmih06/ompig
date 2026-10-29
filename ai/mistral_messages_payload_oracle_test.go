@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/mistral-conversations.ts
@@ -15,7 +15,7 @@ import (
 // The request payload mistral-conversations builds (toChatMessages, tools, tool choice, sampling) over random transcripts: text and image user content,
 // thinking, errored and aborted turns, tool calls of this and another model, tool results with images, and mid-conversation system messages, with the
 // stream options temperature, maxTokens, toolChoice and the thinking level of streamSimple. The payload handed to onPayload by the pinned pi-ai and by
-// PiG must be equal as parsed JSON.
+// Ompig must be equal as parsed JSON.
 func TestMistralMessagesPayloadMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(127))
 	g := &payloadGen{rng: rng, api: "mistral-conversations", provider: "mistral", model: "m", thinkingSignatures: []string{"", `,"thinkingSignature":"sig"`}}
@@ -120,7 +120,7 @@ func TestMistralMessagesPayloadMatchesPi(t *testing.T) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d reasoning=%v simple=%v levels=%s options=%v", i, p.Reasoning, p.Simple, p.Levels, p.Options), got, want[i], &failures, classes)
 	}

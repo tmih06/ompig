@@ -9,12 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // interactive-mode.ts setupEditorSubmitHandler against pinned Pi: which built-in command (and which argument) a submitted line runs, or whether it
-// is sent as a prompt. Pi's onSubmit runs over a recording `this`; Pig's pipeline is isUserBashCommand, resolvableSlashCommand and the slash registry
+// is sent as a prompt. Pi's onSubmit runs over a recording `this`; Ompig's pipeline is isUserBashCommand, resolvableSlashCommand and the slash registry
 // with its handlers replaced by recorders.
 func TestSubmitDispatchMatchesPi(t *testing.T) {
 	commands := map[string]string{
@@ -31,6 +31,11 @@ func TestSubmitDispatchMatchesPi(t *testing.T) {
 	registry := NewSlashRegistry()
 	names := map[string]bool{}
 	for _, command := range BuiltinSlashCommands() {
+		// ompig divergence (D206): /agents is ompig-only, so Pi has no behavior
+		// to compare against and the oracle skips it.
+		if command.Name == "agents" {
+			continue
+		}
 		names[command.Name] = true
 		for _, alias := range command.Aliases {
 			names[alias] = true
@@ -125,7 +130,7 @@ func TestSubmitDispatchMatchesPi(t *testing.T) {
 			}
 		}
 
-		// What Pig's pipeline does.
+		// What Ompig's pipeline does.
 		text := widthx.JSTrim(raw)
 		gotAction, gotArg := "none", ""
 		last = nil
@@ -148,7 +153,7 @@ func TestSubmitDispatchMatchesPi(t *testing.T) {
 		}
 		if gotAction != wantAction || gotArg != wantArg {
 			if failures++; failures <= 25 {
-				t.Errorf("%q: Pig %s %q, Pi %s %q", raw, gotAction, gotArg, wantAction, wantArg)
+				t.Errorf("%q: Ompig %s %q, Pi %s %q", raw, gotAction, gotArg, wantAction, wantArg)
 			}
 		}
 	}
@@ -179,7 +184,7 @@ func TestSubmitDispatchMatchesPi(t *testing.T) {
 			}
 		}
 		if viaExtension != want.Ran || (want.Ran && (gotArgs == nil || want.Args == nil || *gotArgs != *want.Args)) {
-			t.Errorf("extension line %q: Pig ran=%v args=%v, Pi ran=%v args=%v", text, viaExtension, gotArgs, want.Ran, want.Args)
+			t.Errorf("extension line %q: Ompig ran=%v args=%v, Pi ran=%v args=%v", text, viaExtension, gotArgs, want.Ran, want.Args)
 		}
 	}
 }
@@ -224,7 +229,7 @@ func TestPathCommandArgumentMatchesPi(t *testing.T) {
 	registry := NewSlashRegistry()
 	failures := 0
 	for i, p := range probes {
-		// Pig reaches the argument through the registry's match; a line that is not the command has none.
+		// Ompig reaches the argument through the registry's match; a line that is not the command has none.
 		got := ""
 		if match, ok := registry.Match(p.Text); ok && match.Builtin != nil && "/"+match.Builtin.Name == p.Command {
 			got = pathCommandArgument(match.Args)
@@ -236,7 +241,7 @@ func TestPathCommandArgumentMatchesPi(t *testing.T) {
 		}
 		if got != wantValue {
 			if failures++; failures <= 15 {
-				t.Errorf("%q: Pig %q, Pi %q", p.Text, got, wantValue)
+				t.Errorf("%q: Ompig %q, Pi %q", p.Text, got, wantValue)
 			}
 		}
 	}
@@ -245,7 +250,7 @@ func TestPathCommandArgumentMatchesPi(t *testing.T) {
 	}
 }
 
-// Pi runs /reload and /fork only for their exact text; PiG's approved additive arguments are /reload --explain (D21) and, for Session.DispatchSlash,
+// Pi runs /reload and /fork only for their exact text; Ompig's approved additive arguments are /reload --explain (D21) and, for Session.DispatchSlash,
 // the entry id of /fork. A mutant that drops either additive rule, or that lets /fork take an argument interactively, fails here.
 func TestSlashAdditiveArgumentsStayOutsidePiLines(t *testing.T) {
 	registry := NewSlashRegistry()

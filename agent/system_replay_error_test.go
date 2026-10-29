@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi's getCurrentSystemMessage throws a TypeError when a system message read from a session holds a content, toolsAdded or toolsRemoved member it cannot read, and AgentSession.prompt fails with it (agent-session.ts _preparePromptAndToolLoadout). Each case is a transcript; the installed Pi replays the same messages, and SystemReplayError must report the message Pi throws, or nil where Pi replays without one.

@@ -6,14 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestConformance_HostConfigurationAgreesAcrossSDKs: Pi exports getAgentDir(), CONFIG_DIR_NAME and VERSION (coding-agent index.ts, config.ts) and its extensions
-// call them while their factory runs, so an SDK needs them before the host's ready message. The Node SDK answers from its environment (shims/pig-config.mjs); the
-// other SDKs return what the host resolved and started them with in PIG_EXT_HOST_INFO. Every SDK, isolated and packed, must give the same three values, and the
-// host's own values must be the ones a Node extension sees (PiG's tree, D2). factoryAgentDir is getAgentDir() as each factory saw it while it ran; a fused
+// call them while their factory runs, so an SDK needs them before the host's ready message. The Node SDK answers from its environment (shims/ompig-config.mjs); the
+// other SDKs return what the host resolved and started them with in OMPIG_EXT_HOST_INFO. Every SDK, isolated and packed, must give the same three values, and the
+// host's own values must be the ones a Node extension sees (Ompig's tree, D2). factoryAgentDir is getAgentDir() as each factory saw it while it ran; a fused
 // extension's factory runs in this process, so the host must have put the entry in this process's environment by then.
 func TestConformance_HostConfigurationAgreesAcrossSDKs(t *testing.T) {
 	if testing.Short() {
@@ -21,9 +21,9 @@ func TestConformance_HostConfigurationAgreesAcrossSDKs(t *testing.T) {
 	}
 	// Not parallel: it owns conformanceHostInfo and the process environment while it runs.
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_USE_PI_DIRS", "")
-	info := subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".pig", Version: coding.UpstreamPackageVersion}
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_USE_PI_DIRS", "")
+	info := subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".ompig", Version: coding.UpstreamPackageVersion}
 	conformanceHostInfo = info
 	t.Cleanup(func() { conformanceHostInfo = subprocess.HostInfo{} })
 	wantJSON, err := json.Marshal(map[string]string{"agentDir": info.AgentDir, "configDirName": info.ConfigDirName, "version": info.Version, "factoryAgentDir": info.AgentDir})
@@ -36,7 +36,7 @@ func TestConformance_HostConfigurationAgreesAcrossSDKs(t *testing.T) {
 			if tc.name == "fused-go" {
 				// The fused extension runs in this process, so the host must put the entry in this process's environment before the factory runs.
 				// The empty value restores the variable after the run and leaves the SDK nothing to read unless the host delivers it.
-				t.Setenv("PIG_EXT_HOST_INFO", "")
+				t.Setenv("OMPIG_EXT_HOST_INFO", "")
 			}
 			h := tc.make(t)
 			t.Cleanup(func() {

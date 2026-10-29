@@ -4,7 +4,7 @@ import "testing"
 
 // Pi d2e7d8b7 (#11121): packages/ai/scripts/generate-models.ts adds MiniMax-M3.1-Flash to the direct minimax and minimax-cn
 // providers with its models.dev effort levels as thinkingLevelMap and compat.forceAdaptiveThinking, and hides only the older
-// M2, M2.1, M2.5 and M2.5-highspeed models (it dropped the allowlist that kept M2.7, M2.7-highspeed and M3 alone). PiG's
+// M2, M2.1, M2.5 and M2.5-highspeed models (it dropped the allowlist that kept M2.7, M2.7-highspeed and M3 alone). Ompig's
 // catalog is generated from the pinned Pi's own catalog data (cmd/gen-models), so the generator's stage is tested through
 // the catalog it produces and the request the model sends.
 func TestMiniMaxDirectProvidersFollowTheUpstreamGeneratorStage(t *testing.T) {

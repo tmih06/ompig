@@ -9,8 +9,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/shellconfig"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestMain lets the test binary stand in for the shell and report how it was
@@ -25,7 +25,7 @@ func TestMain(m *testing.M) {
 // "ignore"] (["pipe", "pipe", "ignore"] for the stdin transport) and
 // windowsHide: true, so libuv starts the shell with SW_HIDE and
 // CREATE_NO_WINDOW. Node runs that call with the test binary as the shell;
-// PiG's runConfiguredShell runs the same shell.
+// Ompig's runConfiguredShell runs the same shell.
 func TestRunConfiguredShellHidesTheWindowAsPiDoes(t *testing.T) {
 	exe, err := os.Executable()
 	if err != nil {

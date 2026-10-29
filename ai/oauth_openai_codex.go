@@ -19,9 +19,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 const (
@@ -456,7 +456,7 @@ func LoginOpenAICodex(ctx context.Context, callbacks OAuthLoginCallbacks) (OAuth
 		defer callback.Close()
 	}
 
-	// pig divergence (D26): PiG names itself as the OpenAI login's originator. An app-supplied agentName replaces the default, as createAuthorizationFlow(options?.agentName) does (openai-codex.ts:363); an empty name is kept.
+	// ompig divergence (D26): Ompig names itself as the OpenAI login's originator. An app-supplied agentName replaces the default, as createAuthorizationFlow(options?.agentName) does (openai-codex.ts:363); an empty name is kept.
 	originator := pigidentity.CodexOriginator
 	if callbacks.AgentName != nil {
 		originator = *callbacks.AgentName

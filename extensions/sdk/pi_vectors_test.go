@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui"
+	"github.com/tmih06/ompig/extensions/sdk/tui"
 )
 
 // The Pi vectors of pi-coding-agent's theme, keybinding-hint and visual-truncation helpers: what the pinned package's own functions return

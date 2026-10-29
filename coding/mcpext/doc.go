@@ -3,7 +3,7 @@
 // It connects the servers from `mcp.json` and the servers extensions register
 // with registerMcpServer, and registers their tools as `mcp__<server>__<tool>`.
 // The package depends on the MCP client (package mcp) and on a small
-// [Host] interface, not on the extension runner, so a Piglet can leave the
+// [Host] interface, not on the extension runner, so a Ompiglet can leave the
 // package out of its build or disable it at startup without touching any
 // other code: one registration seam links it, and nothing else imports it.
 //

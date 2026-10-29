@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // A message_end replacement replaces the message's members with the replacement's, in its order (agent-session.ts _replaceMessageInPlace deletes every key, then assigns the replacement's); null content becomes [] in its place ({ ...replacement, content: [] }).

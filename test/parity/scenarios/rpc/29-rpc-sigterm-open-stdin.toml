@@ -15,7 +15,7 @@ wait_event = '{"type":"response","id":"ready","command":"foobar","success":false
 wait_timeout_seconds = 10
 
 [env]
-pig_args = ["--offline", "--no-extensions", "--no-session"]
+ompig_args = ["--offline", "--no-extensions", "--no-session"]
 pi_args = ["--offline", "--no-extensions", "--no-session"]
 
 [assert]

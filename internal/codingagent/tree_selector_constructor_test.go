@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // tree-selector.ts constructor takes SessionTreeNode[] and its currentLeafId: flattenTree reads the tool-call arguments for tool-result rows from the tree

@@ -46,7 +46,7 @@ export const shims = new Map([
 // Pi imports an ES module extension (an .mjs file, or a .js file under "type": "module") through Node's own import, which keeps the module for the life of the process, so Pi runs an edited ES module extension's old code after /reload. The hooks below record which extension module imports which and the source each evaluation loaded, so that a reload evaluates the edited ES modules of the extensions, and the extension modules that import them, again.
 
 const runtimeURL = new URL("./", import.meta.url).href;
-const reloadParam = "pig-reload";
+const reloadParam = "ompig-reload";
 // Node evaluates a module of these formats again under a new URL; it keeps a CommonJS module in its require cache by file name.
 const reevaluable = new Set(["module", "module-typescript", "json", "wasm"]);
 
@@ -87,7 +87,7 @@ function track(result, parentURL) {
   }
   const url = latest.get(key);
   if (!url || result.url !== key) return result;
-  // pig divergence (D93): an import of an extension module that a reload evaluated again resolves to that evaluation, from every importer, the extension's entry included.
+  // ompig divergence (D93): an import of an extension module that a reload evaluated again resolves to that evaluation, from every importer, the extension's entry included.
   return { ...result, url };
 }
 
@@ -139,7 +139,7 @@ export { extensionModule };
 
 const onBun = typeof globalThis.Bun !== "undefined";
 
-// pig divergence (D93): when a reload pass starts, each extension ES module whose source changed since Node loaded it, and each extension ES module that imports one, directly or through others, gets a URL carrying the pass, so the reload evaluates them again; every other module keeps its instance and its state. A CommonJS module keeps its module, so an edit of one, or of a module only it imports, is not evaluated again. The asynchronous hooks of a Node release without module.registerHooks run in their own thread, so there the maps stay empty and every module keeps its instance, as in Pi. On Bun the runtime plugin of register-loader.mjs fills the maps, and a module evaluated again keeps its URL.
+// ompig divergence (D93): when a reload pass starts, each extension ES module whose source changed since Node loaded it, and each extension ES module that imports one, directly or through others, gets a URL carrying the pass, so the reload evaluates them again; every other module keeps its instance and its state. A CommonJS module keeps its module, so an edit of one, or of a module only it imports, is not evaluated again. The asynchronous hooks of a Node release without module.registerHooks run in their own thread, so there the maps stay empty and every module keeps its instance, as in Pi. On Bun the runtime plugin of register-loader.mjs fills the maps, and a module evaluated again keeps its URL.
 export function reevaluateEdited(pass) {
   const stale = new Set();
   for (const [key, loaded] of loads) {
@@ -163,7 +163,7 @@ export function reevaluateEdited(pass) {
     }
   }
   for (const key of stale) {
-    // pig divergence (D93): Bun keeps every module, ES modules included, in the registry its require.cache exposes; a module removed from it is evaluated again, from its own URL, by the next import.
+    // ompig divergence (D93): Bun keeps every module, ES modules included, in the registry its require.cache exposes; a module removed from it is evaluated again, from its own URL, by the next import.
     if (onBun) {
       delete moduleRegistry()[fileURLToPath(key)];
       recorded.delete(key);

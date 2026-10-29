@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 func decodeOps(t *testing.T, text string) []durable.Op {

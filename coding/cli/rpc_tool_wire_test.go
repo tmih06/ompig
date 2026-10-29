@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // Pi 0.87.1 coding-agent/src/core/tools/bash.ts:301-302 emits content:[] before execution.
@@ -177,12 +177,12 @@ func TestRPCToolExecutionEndWritesResultIsErrorUsageAndTerminateInPiOrder(t *tes
 	}
 }
 
-// The real `pig --mode rpc` binary against the test-faux twin of the Pi 0.99.1 probe: a bash call that exits 3 returns an error result, so
+// The real `ompig --mode rpc` binary against the test-faux twin of the Pi 0.99.1 probe: a bash call that exits 3 returns an error result, so
 // tool_execution_end.result carries isError (bash.ts:403-409, agent-loop.ts:912-919); a read of a missing file throws, so its result is
 // createErrorToolResult without isError (read.ts, agent-loop.ts:906-910). Both events carry the call's flag.
 func TestRPCProcessToolExecutionEndKeepsReturnedIsErrorApartFromThrown(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
 	for _, tc := range []struct {
 		prompt, tool  string
 		resultIsError bool

@@ -5,11 +5,11 @@ package codemode
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // SETTINGS_DEFAULTS.codemode is what the codemode extension uses when no setting is given: mode `on` (index.ts readMode, tool.ts getMode ?? default) and the
-// inline budget Pi exports as DEFAULT_CODEMODE_INLINE_BUDGET. PiG's Options with no settings and no overrides must resolve the same mode, and its default
+// inline budget Pi exports as DEFAULT_CODEMODE_INLINE_BUDGET. Ompig's Options with no settings and no overrides must resolve the same mode, and its default
 // budget must be Pi's.
 func TestCodemodeDefaultsAreThePinnedPiSettingsDefaults(t *testing.T) {
 	var pi struct {

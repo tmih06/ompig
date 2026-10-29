@@ -17,9 +17,9 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // reloadTrustSession starts the real binary in a project without trust-requiring resources and with legacy credentials,
@@ -29,8 +29,8 @@ func reloadTrustSession(t *testing.T, extraArgs ...string) (startup, reload, age
 	t.Helper()
 	binary := buildPigBinaryForSignalTest(t)
 	root := t.TempDir()
-	home, pigHome := filepath.Join(root, "home"), filepath.Join(root, "pighome")
-	cwd, agentDir = filepath.Join(root, "project"), filepath.Join(pigHome, "agent")
+	home, ompigHome := filepath.Join(root, "home"), filepath.Join(root, "pighome")
+	cwd, agentDir = filepath.Join(root, "project"), filepath.Join(ompigHome, "agent")
 	for _, dir := range []string{home, cwd, agentDir} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
@@ -45,9 +45,9 @@ func reloadTrustSession(t *testing.T, extraArgs ...string) (startup, reload, age
 	}
 	env := slices.DeleteFunc(os.Environ(), func(value string) bool {
 		name, _, _ := strings.Cut(value, "=")
-		return slices.Contains([]string{"HOME", "PIG_HOME", "XDG_CONFIG_HOME", "PI_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PI_PACKAGE_DIR", "PIG_USE_PI_DIRS", "PI_EXPERIMENTAL", "PIG_TEST_FAUX", "PIG_TEST_FAUX_SCENARIO", "PIG_STARTUP_TRACE", "PIG_OFFLINE", "PI_OFFLINE"}, name)
+		return slices.Contains([]string{"HOME", "OMPIG_HOME", "XDG_CONFIG_HOME", "PI_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PI_PACKAGE_DIR", "OMPIG_USE_PI_DIRS", "PI_EXPERIMENTAL", "OMPIG_TEST_FAUX", "OMPIG_TEST_FAUX_SCENARIO", "OMPIG_STARTUP_TRACE", "OMPIG_OFFLINE", "PI_OFFLINE"}, name)
 	})
-	env = append(env, "HOME="+home, "PIG_HOME="+pigHome, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color", "PIG_STARTUP_TRACE=1")
+	env = append(env, "HOME="+home, "OMPIG_HOME="+ompigHome, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color", "OMPIG_STARTUP_TRACE=1")
 	master, slave := openPTY(t, 60, 200)
 	defer func() { _ = master.Close() }()
 	defer func() { _ = slave.Close() }()
@@ -103,7 +103,7 @@ func reloadTrustSession(t *testing.T, extraArgs ...string) (startup, reload, age
 			}
 			select {
 			case err := <-done:
-				t.Fatalf("PiG exited before %s: %v\n%s", what, err, text)
+				t.Fatalf("Ompig exited before %s: %v\n%s", what, err, text)
 			case <-ctx.Done():
 				t.Fatalf("no %s: %v\n%s", what, ctx.Err(), text)
 			case <-tick.C:

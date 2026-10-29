@@ -5,10 +5,10 @@ package ssooidc
 import (
 	"context"
 	"fmt"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/ssooidc/types"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	"github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/service/ssooidc/types"
 )
 
 // Creates and returns access and refresh tokens for authorized client

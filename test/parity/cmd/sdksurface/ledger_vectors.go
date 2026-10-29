@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 const vectorsDir = "test/parity/sdk-vectors"

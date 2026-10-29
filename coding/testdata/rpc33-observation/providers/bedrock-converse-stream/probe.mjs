@@ -14,8 +14,8 @@
 // Bedrock specifics. `http` is the transport: "h2" is Pi's default (NodeHttp2Handler over cleartext prior-knowledge HTTP/2 to the loopback server),
 // "h1" is `AWS_BEDROCK_FORCE_HTTP1=1` (NodeHttpHandler). The SDK's ConverseStream deserializer reads the first event inside `client.send`,
 // so a `pending` delivery still writes the response headers together with the first frame; a headers-only response would never reach `start`.
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { fork, spawn } from 'node:child_process';
 import net from 'node:net';
@@ -31,7 +31,7 @@ import { createInterface } from 'node:readline';
 
 const root = process.env.PI_PACKAGE_ROOT;
 const base = root + '/node_modules/@earendil-works/';
-const versions = {piVersion: PIG_UPSTREAM_VERSION, awsSdkClientBedrockRuntime: '3.1127.0', smithyCore: '3.37.0', smithyNodeHttpHandler: '4.12.1'};
+const versions = {piVersion: OMPIG_UPSTREAM_VERSION, awsSdkClientBedrockRuntime: '3.1127.0', smithyCore: '3.37.0', smithyNodeHttpHandler: '4.12.1'};
 for (const [path, version] of [[root + '/package.json', PI_PACKAGE_VERSION], [base + 'pi-ai/package.json', PI_PACKAGE_VERSION], [base + 'pi-agent-core/package.json', PI_PACKAGE_VERSION],
   [root + '/node_modules/@aws-sdk/client-bedrock-runtime/package.json', '3.1127.0'], [root + '/node_modules/@smithy/core/package.json', '3.37.0'], [root + '/node_modules/@smithy/node-http-handler/package.json', '4.12.1']]) {
   assert.equal(JSON.parse(await readFile(path, 'utf8')).version, version, path);
@@ -367,5 +367,5 @@ if (process.argv[3]) {
 // One case per line keeps diffs reviewable.
 const lines = outputs.map(o => '  ' + JSON.stringify(o));
 const rpcLines = rpc.map(o => '  ' + JSON.stringify(o));
-await writeFile(process.argv[2], `{"piVersion":${JSON.stringify(PIG_UPSTREAM_VERSION)},"awsSdkClientBedrockRuntime":"3.1127.0","smithyCore":"3.36.2","smithyNodeHttpHandler":"4.12.1","cases":[\n${lines.join(',\n')}\n],"rpc":[\n${rpcLines.join(',\n')}\n]}\n`);
+await writeFile(process.argv[2], `{"piVersion":${JSON.stringify(OMPIG_UPSTREAM_VERSION)},"awsSdkClientBedrockRuntime":"3.1127.0","smithyCore":"3.36.2","smithyNodeHttpHandler":"4.12.1","cases":[\n${lines.join(',\n')}\n],"rpc":[\n${rpcLines.join(',\n')}\n]}\n`);
 process.exit(0);

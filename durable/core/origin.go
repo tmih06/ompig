@@ -3,7 +3,7 @@
 
 package core
 
-import "github.com/MichaelKinsy/PiG/durable/core/abi"
+import "github.com/tmih06/ompig/durable/core/abi"
 
 // Origins (ABI section 5.4). A host call that reaches the core carries the tag of the async context (an AsyncLocalStorage
 // snapshot) it was made in. Pi runs each continuation in the context it was queued in: a microtask in the context of the code that

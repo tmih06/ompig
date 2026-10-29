@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // A BOM that completes after earlier calls produced no output is left out of the corpus: Node's TextDecoder (ICU) then drops further U+FEFF code points
 // in ways that depend on where its converter consumed the pending bytes ([e6] then [ef bb bf 42] decodes to U+FFFD 42, [e6] then [c3 ef bb bf] keeps the
-// BOM), which the WHATWG decoder PiG follows does not do; the difference is numbered in the divergence question of the handoff.
+// BOM), which the WHATWG decoder Ompig follows does not do; the difference is numbered in the divergence question of the handoff.
 //
 // utf8StreamDecoder{stripBOM: true} against Node's TextDecoder with { stream: true }, chunk by chunk: random byte strings built from BOM bytes, partial and
 // complete sequences, invalid lead and continuation bytes and ASCII, split at random points, then the final flush. The BOM handling is Node's (ICU-backed),
@@ -23,7 +23,7 @@ func TestUTF8StreamDecoderMatchesNodeTextDecoder(t *testing.T) {
 		Chunks [][]int `json:"chunks"`
 	}
 	var probes []probe
-	// Excluded awaiting owner sign-off (handoffs/owner-signoff.md, "bash/tool output UTF-8 stream decoding of a split byte-order mark"): Node's ICU decoder sometimes drops this BOM and sometimes keeps it, PiG follows WHATWG. No D record or marker until the owner decides.
+	// Excluded awaiting owner sign-off (handoffs/owner-signoff.md, "bash/tool output UTF-8 stream decoding of a split byte-order mark"): Node's ICU decoder sometimes drops this BOM and sometimes keeps it, Ompig follows WHATWG. No D record or marker until the owner decides.
 	// pendingBOM reports whether a call starts with bytes pending from earlier calls that produced no output and carries the bytes of a BOM.
 	pendingBOM := func(chunks [][]int) bool {
 		d := utf8StreamDecoder{stripBOM: true}

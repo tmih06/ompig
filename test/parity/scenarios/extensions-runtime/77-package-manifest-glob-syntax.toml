@@ -37,9 +37,9 @@ settle_seconds = 1
 
 [env]
 override_base_args = true
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/package-glob-syntax/pig-agent"]
-pig_args = ["--no-extensions", "--model", "test-faux/faux-1", "--no-session"]
-pig_extensions = ["testdata/package-glob-syntax/syntax", "testdata/package-glob-syntax/throws"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/package-glob-syntax/ompig-agent"]
+ompig_args = ["--no-extensions", "--model", "test-faux/faux-1", "--no-session"]
+ompig_extensions = ["testdata/package-glob-syntax/syntax", "testdata/package-glob-syntax/throws"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/package-glob-syntax/pi-agent"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/package-glob-syntax/syntax", "testdata/package-glob-syntax/throws"]
 pi_args = ["--no-extensions", "--model", "test-faux/faux-1", "--no-session"]

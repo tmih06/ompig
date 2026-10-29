@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // dispatchToolCalls has the model issue calls in one assistant message and returns the tool results in source order, through

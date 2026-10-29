@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // sessionActionsAPI is the Go reference for the host actions of extension.API: each member runs the production Session operation the

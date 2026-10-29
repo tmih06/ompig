@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type imageRenderProbe struct {
@@ -155,7 +155,7 @@ func TestImageRenderMatchesPi(t *testing.T) {
 	failures := 0
 	for i, probe := range probes {
 		got := renderImageProbe(probe)
-		// Pi allocates the kitty id from Math.random (stubbed to 0.5) and Pig from its own source, so an allocated id is compared only by being set.
+		// Pi allocates the kitty id from Math.random (stubbed to 0.5) and Ompig from its own source, so an allocated id is compared only by being set.
 		if probe.Protocol == "kitty" && probe.ImageID == nil {
 			for f := range got.Frames {
 				if got.Frames[f] != nil {
@@ -172,7 +172,7 @@ func TestImageRenderMatchesPi(t *testing.T) {
 			if failures++; failures <= 4 {
 				p := probe
 				p.Data = fmt.Sprintf("%.12s", p.Data)
-				t.Errorf("%+v:\n  Pig %s\n  Pi  %s", p, imageResultString(got), imageResultString(expected[i]))
+				t.Errorf("%+v:\n  Ompig %s\n  Pi  %s", p, imageResultString(got), imageResultString(expected[i]))
 			}
 		}
 	}
@@ -203,7 +203,7 @@ func TestImageRenderProbeDump(t *testing.T) {
 	fmt.Printf("image-probes:%s\n", line)
 }
 
-// TestImageRenderParity prints Pig's renders of the corpus, one JSON line per probe, with the kitty image id normalised like the oracle test.
+// TestImageRenderParity prints Ompig's renders of the corpus, one JSON line per probe, with the kitty image id normalised like the oracle test.
 func TestImageRenderParity(t *testing.T) {
 	previousCaps, previousCells := GetCapabilities(), GetCellDimensions()
 	t.Cleanup(func() {

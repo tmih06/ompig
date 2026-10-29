@@ -16,7 +16,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // DocumentationVariant selects whether the Pi documentation section stays in the system prompt.

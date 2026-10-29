@@ -58,7 +58,7 @@ func TestRPCCompactionEmitsOnlyProviderHeadersEvent(t *testing.T) {
 		t.Fatal(err)
 	}
 	report := filepath.Join(dir, "report.log")
-	p := startRPCProcessAt(t, dir, []string{"PIG_CODING_AGENT_DIR=" + agentDir, "PI_CODING_AGENT_DIR=" + agentDir, "PIG_HOME=" + dir, "WIRING_REPORT=" + report}, "--offline", "--no-extensions", "-e", extension, "--session", current, "--model", "mock/qwen")
+	p := startRPCProcessAt(t, dir, []string{"OMPIG_CODING_AGENT_DIR=" + agentDir, "PI_CODING_AGENT_DIR=" + agentDir, "OMPIG_HOME=" + dir, "WIRING_REPORT=" + report}, "--offline", "--no-extensions", "-e", extension, "--session", current, "--model", "mock/qwen")
 	await := func(id string) {
 		t.Helper()
 		var response rpcRecord

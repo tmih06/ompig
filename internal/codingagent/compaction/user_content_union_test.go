@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi core/messages.ts:163-168 wraps custom strings, but :185-188 retains ordinary user strings.

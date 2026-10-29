@@ -18,12 +18,12 @@
 # policyModelIds empty and loginGitHubCopilot never prints "Enabling
 # models...": it only does so when a catalog model's policy is
 # "unconfigured" (github-copilot.ts:471-480). v0.81.1 evidence recorded the
-# line because pi (and pig, until it matched this) posted a policy update to
+# line because pi (and ompig, until it matched this) posted a policy update to
 # a fixed model list unconditionally.
 #
-# pig now exposes the same login surface as a first-class subcommand and the
+# ompig now exposes the same login surface as a first-class subcommand and the
 # parity harness stubs the same Copilot device-code endpoints locally via
-# PIG_PARITY_HARNESS=1, so this surface is behaviorally assertable.
+# OMPIG_PARITY_HARNESS=1, so this surface is behaviorally assertable.
 
 name = "07-login-github-copilot"
 description = "GitHub Copilot CLI login saves OAuth credentials to auth.json with matching prompt/output flow."
@@ -34,7 +34,7 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=.", "PIG_PARITY_HARNESS=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=.", "OMPIG_PARITY_HARNESS=1"]
 pi = ["PI_SKIP_VERSION_CHECK=1"]
 pi_bin = "../../testdata/pi-ai-copilot-wrapper.mjs"
 override_base_args = true

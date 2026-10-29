@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
-// pig additive (D91): a frontend session that cannot report where the pointer
+// ompig additive (D91): a frontend session that cannot report where the pointer
 // is clicks the part of a node that takes clicks, and one that can cover its
 // view shows fullscreen overlays. Pi has neither; with no frontend session
 // nothing here runs.

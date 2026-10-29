@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // upstream: packages/chord/test/json.test.ts "copies strict JSON without retaining aliases".

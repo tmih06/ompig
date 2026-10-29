@@ -3,8 +3,8 @@ package tui
 // Ports packages/coding-agent/src/modes/interactive/components/user-message.ts.
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/coding/extension/markdowntransform"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 const (
@@ -42,7 +42,7 @@ func NewUserMessageComponent(text string, markdownTheme *MarkdownTheme, outputPa
 
 // SetImages records the image blocks the message carries. The terminal
 // renderer draws none, as Pi's UserMessageComponent; a frontend session
-// receives them on the message's MarkdownText (pig additive, D91).
+// receives them on the message's MarkdownText (ompig additive, D91).
 func (u *UserMessageComponent) SetImages(images []ImageBlock) {
 	u.images, u.decoded = images, nil
 	u.invalidatable.Invalidate()

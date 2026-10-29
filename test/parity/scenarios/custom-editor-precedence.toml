@@ -19,10 +19,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=clipboard-images/testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=clipboard-images/testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=clipboard-images/testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/custom-editor-precedence.mjs"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/custom-editor-precedence.mjs"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = [
   "../testdata/test-faux-provider.ts",
@@ -36,7 +36,7 @@ height = 35
 # bound (interactive-mode.ts:951-1036, 1983-1984). The [Extensions] listing
 # follows setupExtensionShortcuts in both binaries, so Ctrl+V is sent only
 # once the extension shortcut can take precedence over paste-image.
-ready_pattern_pig = "custom-editor-precedence.mjs"
+ready_pattern_ompig = "custom-editor-precedence.mjs"
 ready_pattern_pi = "custom-editor-precedence.mjs"
 ready_timeout_seconds = 30
 capture_start = "CTRL-D-NONEMPTY-AX"

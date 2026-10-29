@@ -11,7 +11,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ModelType is what a model is for: "chat", "image" or "classifier" (upstream ModelType).

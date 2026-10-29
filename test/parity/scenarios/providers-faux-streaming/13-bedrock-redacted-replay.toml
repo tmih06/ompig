@@ -10,12 +10,12 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
 # Unset bearer-token discovery: AWS's Node SDK treats a defined empty token as a selected bearer scheme.
-pig_args = ["-u", "AWS_BEARER_TOKEN_BEDROCK", "go", "run", "./test/parity/testdata/bedrock-reasoning-pig"]
+ompig_args = ["-u", "AWS_BEARER_TOKEN_BEDROCK", "go", "run", "./test/parity/testdata/bedrock-reasoning-ompig"]
 pi_args = ["-u", "AWS_BEARER_TOKEN_BEDROCK", "node", "./test/parity/testdata/bedrock-reasoning-pi.mjs"]
-pig = ["AWS_PROFILE=", "AWS_DEFAULT_PROFILE=", "AWS_CONFIG_FILE={{TEMP}}/config", "AWS_SHARED_CREDENTIALS_FILE={{TEMP}}/credentials", "AWS_EC2_METADATA_DISABLED=true"]
+ompig = ["AWS_PROFILE=", "AWS_DEFAULT_PROFILE=", "AWS_CONFIG_FILE={{TEMP}}/config", "AWS_SHARED_CREDENTIALS_FILE={{TEMP}}/credentials", "AWS_EC2_METADATA_DISABLED=true"]
 pi = ["AWS_PROFILE=", "AWS_DEFAULT_PROFILE=", "AWS_CONFIG_FILE={{TEMP}}/config", "AWS_SHARED_CREDENTIALS_FILE={{TEMP}}/credentials", "AWS_EC2_METADATA_DISABLED=true"]
 
 [cli]

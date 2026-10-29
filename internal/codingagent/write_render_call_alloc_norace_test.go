@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A write card redraws on every streamed delta of its arguments, and the arguments arrive whole each time. Decoding them once costs about 2.6 times their size in allocations, with the copy of the content and its lines

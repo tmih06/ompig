@@ -9,11 +9,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Pi 1.2.0 test/harness-structured-output.test.ts: what callers of a tool (executeTool) get as structured output.

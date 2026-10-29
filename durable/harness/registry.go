@@ -8,7 +8,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 var sectionKeyPattern = regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)

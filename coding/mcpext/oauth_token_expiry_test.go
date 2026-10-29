@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // oauth.ts token(): `expired = state.tokensExpireAt !== undefined && state.tokensExpireAt - REFRESH_SKEW_MS <= Date.now()`, and only an expired token

@@ -1,10 +1,10 @@
 package session_test
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/sessiontest"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/sessiontest"
 )
 
 func errorMessage(err error) string { return err.Error() }

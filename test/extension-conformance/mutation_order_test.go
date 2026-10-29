@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // Pi has one withFileMutationQueue that the built-in edit and write tools and every extension share, and it registers a call in the order the calls were made
 // (core/tools/file-mutation-queue.ts: registrationQueue). Promise.all(calls.map(...)) runs each call's synchronous prefix in call order
 // (agent-loop.ts:619-647), so an extension tool that takes the queue in its first statement registers before the write call that follows it in the batch, and
-// after the one that precedes it. PiG's extension runs in another process, so the host's queue sees the extension's registration a hop after it started the call.
+// after the one that precedes it. Ompig's extension runs in another process, so the host's queue sees the extension's registration a hop after it started the call.
 // Each case is a batch of a mutation_order_probe call (the extension appends its tag to the file inside the queue) and a built-in write call (it replaces the
 // file); the file shows which registered first: the write replaced the tag when the extension was first, and the tag follows the written text when the write was.
 //

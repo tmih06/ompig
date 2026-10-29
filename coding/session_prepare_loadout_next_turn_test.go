@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // twoTurnLoadoutRun runs a prompt whose first response calls `watch` and whose second answers, over a session that registers `watch` with hook and `other`. watched runs when the tool executes, between the two turns. It returns what each request declared and the system prompt it carried.

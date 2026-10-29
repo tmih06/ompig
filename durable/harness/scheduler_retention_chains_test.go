@@ -10,9 +10,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 type spawnerInput struct {

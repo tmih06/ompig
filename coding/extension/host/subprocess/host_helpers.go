@@ -11,14 +11,14 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/frontmatter"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/nodebase64"
-	"github.com/MichaelKinsy/PiG/internal/yaml12"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/frontmatter"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/nodebase64"
+	"github.com/tmih06/ompig/internal/yaml12"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ParseFrontmatterJSON is Pi's parseFrontmatter over the host's parser: the JSON of the parsed header (see ParseFrontmatterResult) and the body. A

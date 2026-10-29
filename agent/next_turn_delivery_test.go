@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream holds deliverAs "nextTurn" messages apart from the steering and
 // follow-up queues and injects them beside the user message before the first
-// model call (agent-session.ts:1226). Pig routed them into FollowUp, which
+// model call (agent-session.ts:1226). Ompig routed them into FollowUp, which
 // continues the running turn instead, so a message meant as context for the
 // next prompt reached the model a call too late: and on an idle agent sat in a
 // queue with no goroutine to drain it.

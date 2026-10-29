@@ -14,11 +14,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // admitStep is one commit of a seeded program: a Session commit that creates a conversation, appends an entry, admits a submission, ends a run, applies an inbox boundary or withdraws queued inputs.
@@ -387,7 +387,7 @@ func TestAdmitSubmissionMatchesPiOnSeededPrograms(t *testing.T) {
 				!reflect.DeepEqual(canonicalAdmission(t, got[k].State), canonicalAdmission(t, want.State)) {
 				differing++
 				if differing <= 4 {
-					t.Errorf("program %d step %d (%s)\n  Pi  %s\n  Pig %s", i, k, stepName(program, k), brief(t, want, got[k]), brief(t, got[k], want))
+					t.Errorf("program %d step %d (%s)\n  Pi  %s\n  Ompig %s", i, k, stepName(program, k), brief(t, want, got[k]), brief(t, got[k], want))
 				}
 			}
 			if want.Err != "" {
@@ -487,7 +487,7 @@ func inputEntryProgramFor(seed int64) []admitStep {
 	return program
 }
 
-// TestAdmitInputEntryMatchesPiOnSeededPrograms drives Pi's admitSubmission and applyBoundary and Pig's over inputs that carry
+// TestAdmitInputEntryMatchesPiOnSeededPrograms drives Pi's admitSubmission and applyBoundary and Ompig's over inputs that carry
 // an InputEntry: the entry kind and data a placed input is stored with, the queued inbox item, and the rejection of a kind
 // that is empty or starts with "pi." must equal Pi's.
 func TestAdmitInputEntryMatchesPiOnSeededPrograms(t *testing.T) {
@@ -511,7 +511,7 @@ func TestAdmitInputEntryMatchesPiOnSeededPrograms(t *testing.T) {
 				!reflect.DeepEqual(canonicalAdmission(t, got[k].State), canonicalAdmission(t, want.State)) {
 				differing++
 				if differing <= 4 {
-					t.Errorf("program %d step %d (%s)\n  Pi  %s\n  Pig %s", i, k, stepName(program, k), brief(t, want, got[k]), brief(t, got[k], want))
+					t.Errorf("program %d step %d (%s)\n  Pi  %s\n  Ompig %s", i, k, stepName(program, k), brief(t, want, got[k]), brief(t, got[k], want))
 				}
 			}
 			if strings.Contains(want.Err, "An input entry's kind must be") {

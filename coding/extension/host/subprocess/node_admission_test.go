@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi loader.ts awaits factories in configured order while resource-loader.ts hands them one bus. A native factory between two Node factories must not split their bus.
@@ -44,12 +44,12 @@ export default function(pi) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	mod := fmt.Sprintf("module example.com/admission\n\ngo 1.26.0\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v%s\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", pigversion.PigVersion, filepath.ToSlash(sdk))
+	mod := fmt.Sprintf("module example.com/admission\n\ngo 1.26.0\n\nrequire github.com/tmih06/ompig/extensions/sdk v%s\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", pigversion.OmpigVersion, filepath.ToSlash(sdk))
 	if err := os.WriteFile(filepath.Join(goRoot, "go.mod"), []byte(mod), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	source := fmt.Sprintf(`package admission
-import ("os"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("os"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension() *sdk.Extension {
  b,err:=os.ReadFile(%q); if err!=nil || string(b)!="A\n" {panic("B admitted out of order")}
  f,err:=os.OpenFile(%q,os.O_APPEND|os.O_WRONLY,0600); if err!=nil {panic(err)}

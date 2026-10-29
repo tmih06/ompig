@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // theme.ts getMarkdownTheme(): every span function and highlightCode on plain, nested-SGR, multi-line and empty text
@@ -60,7 +60,7 @@ func TestGetMarkdownThemeMatchesPi(t *testing.T) {
 		for field, value := range got {
 			if value != expected[i][field] {
 				if failures++; failures <= 8 {
-					t.Errorf("%s %s(%q): Pig %q, Pi %q", p.Theme, field, p.Text, value, expected[i][field])
+					t.Errorf("%s %s(%q): Ompig %q, Pi %q", p.Theme, field, p.Text, value, expected[i][field])
 				}
 			}
 		}
@@ -70,7 +70,7 @@ func TestGetMarkdownThemeMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(highlighted, expected[i]["highlight"]) {
 			if failures++; failures <= 8 {
-				t.Errorf("%s highlightCode(%q, %q): Pig %q, Pi %v", p.Theme, p.Text, lang, highlighted, expected[i]["highlight"])
+				t.Errorf("%s highlightCode(%q, %q): Ompig %q, Pi %v", p.Theme, p.Text, lang, highlighted, expected[i]["highlight"])
 			}
 		}
 	}

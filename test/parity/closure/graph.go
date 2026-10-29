@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 type Graph struct {
@@ -1110,7 +1110,7 @@ func expectedIDPrefix(kind Kind) string {
 // nothing about production and is inadmissible.
 func isWorkerScratchPath(path string) bool {
 	clean := filepath.ToSlash(path)
-	for _, root := range []string{"tmp", "pig/tmp"} {
+	for _, root := range []string{"tmp", "ompig/tmp"} {
 		if clean == root || strings.HasPrefix(clean, root+"/") {
 			return true
 		}

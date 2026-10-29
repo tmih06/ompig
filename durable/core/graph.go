@@ -6,10 +6,10 @@ package core
 import (
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // taskGraph is the Harness's task graph mount (harness/task-graph.ts TaskGraphView): built from the committed tasks by

@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // hydrationGeneratedAt is the manifest stamp of hydrated data. Public catalogs have no generation timestamp, so a fixed

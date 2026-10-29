@@ -7,8 +7,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.87.1 interactive-mode.ts:4138-4157,4231-4246 shuts down independently of selector focus.

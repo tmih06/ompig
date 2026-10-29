@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
+	"github.com/tmih06/ompig/internal/jsparity"
 )
 
 // ParseInt is Number.parseInt(text, 10): after JavaScript whitespace and an optional sign it reads the longest run of ASCII digits, and is NaN when none follows.

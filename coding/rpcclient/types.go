@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 )
 
-// RpcClientOptions mirrors upstream RpcClientOptions. CliPath names the pig
-// executable to run (upstream runs `node <cliPath>`); it defaults to "pig",
+// RpcClientOptions mirrors upstream RpcClientOptions. CliPath names the ompig
+// executable to run (upstream runs `node <cliPath>`); it defaults to "ompig",
 // resolved through PATH.
 type RpcClientOptions struct {
-	// CliPath is the agent executable. Default: "pig".
+	// CliPath is the agent executable. Default: "ompig".
 	CliPath string
 	// Cwd is the working directory for the agent.
 	Cwd string

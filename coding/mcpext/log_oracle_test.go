@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // formatMcpLogMessage against Pi's log.js: params of every JSON shape (object, array, scalar, null, absent), level and logger of the wrong type, data of every JSON type with line breaks, repeated members,

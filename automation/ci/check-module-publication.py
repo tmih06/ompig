@@ -48,7 +48,7 @@ def check(root: Path, remote: str):
 
     sums = set((root / "go.sum").read_text().splitlines())
     # Downloads read a copy of the consumer's checksums and cannot repair the checkout or reuse a cached SDK.
-    with tempfile.TemporaryDirectory(prefix="pig-module-publication-") as directory:
+    with tempfile.TemporaryDirectory(prefix="ompig-module-publication-") as directory:
         scratch = Path(directory)
         for name in ("go.mod", "go.sum"):
             shutil.copyfile(root / name, scratch / name)
@@ -67,7 +67,7 @@ def check(root: Path, remote: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path("."))
-    parser.add_argument("--remote", default="https://github.com/MichaelKinsy/PiG.git")
+    parser.add_argument("--remote", default="https://github.com/tmih06/ompig.git")
     args = parser.parse_args()
     try:
         check(args.root.resolve(), args.remote)

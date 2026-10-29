@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// runPrintPromptEndFixture runs pig --print prompt with the Node extension fixture, an extensions-runtime parity fixture that appends its record to the file named by logEnv, and returns that record.
+// runPrintPromptEndFixture runs ompig --print prompt with the Node extension fixture, an extensions-runtime parity fixture that appends its record to the file named by logEnv, and returns that record.
 func runPrintPromptEndFixture(t *testing.T, fixture, logEnv, prompt string, extra ...string) string {
 	t.Helper()
 	entry, err := filepath.Abs(filepath.Join("..", "..", "test", "parity", "scenarios", "extensions-runtime", "testdata", "ext", fixture))
@@ -20,11 +20,11 @@ func runPrintPromptEndFixture(t *testing.T, fixture, logEnv, prompt string, extr
 	args := append([]string{"--model", "test-faux/faux-1", "--no-session", "-e", entry}, extra...)
 	cmd := exec.CommandContext(t.Context(), buildPigBinaryForSignalTest(t), append(args, "--print", prompt)...)
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_TEST_FAUX=1", logEnv+"="+log)
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_TEST_FAUX=1", logEnv+"="+log)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("pig --print: %v\nstdout:\n%s\nstderr:\n%s", err, stdout.String(), stderr.String())
+		t.Fatalf("ompig --print: %v\nstdout:\n%s\nstderr:\n%s", err, stdout.String(), stderr.String())
 	}
 	if !strings.Contains(stdout.String(), "42") || stderr.Len() != 0 {
 		t.Fatalf("the run did not complete cleanly; stdout:\n%s\nstderr:\n%s", stdout.String(), stderr.String())

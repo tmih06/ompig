@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // /cost lists the tools of one timing snapshot in the same order every time. Go randomizes map iteration, so the same snapshot printed in a different order on each call.

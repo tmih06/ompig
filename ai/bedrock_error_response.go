@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -12,10 +12,10 @@ import (
 	"sync"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // bedrockErrorResponse is the status, error-type header and body of a non-2xx ConverseStream response, copied while the SDK reads the body.

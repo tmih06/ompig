@@ -2,7 +2,7 @@ package tui
 
 import "testing"
 
-// pi: packages/tui/src/components/editor.ts wordWrapLine. Pi re-wraps a one-grapheme segment wider than maxWidth with the same input and exhausts the stack; PiG keeps it as one chunk (D159).
+// pi: packages/tui/src/components/editor.ts wordWrapLine. Pi re-wraps a one-grapheme segment wider than maxWidth with the same input and exhausts the stack; Ompig keeps it as one chunk (D159).
 func TestEditorWrapsOverWideGraphemeWithoutRecursion(t *testing.T) {
 	for _, tc := range []struct {
 		name, line string

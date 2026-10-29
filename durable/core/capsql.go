@@ -3,7 +3,7 @@
 
 package core
 
-import "github.com/MichaelKinsy/PiG/durable/core/session/hopcost"
+import "github.com/tmih06/ompig/durable/core/session/hopcost"
 
 // The conformance gate's Storage runs every statement through one capsql serial queue (hopcost.Queue), so a statement that
 // finds it busy waits: the status read of a busy line queues behind the off-line range scan of the turn's context read.

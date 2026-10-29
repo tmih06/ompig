@@ -11,8 +11,8 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Pi source: packages/durable/src/harness/types.ts
@@ -47,8 +47,8 @@ func TestHarnessOptionsTelemetryAcceptsOneAdapterWithOptionalPropagationAndMetri
 	}
 
 	imports := map[string]string{
-		"h":   "github.com/MichaelKinsy/PiG/durable/harness",
-		"tel": "github.com/MichaelKinsy/PiG/telemetry",
+		"h":   "github.com/tmih06/ompig/durable/harness",
+		"tel": "github.com/tmih06/ompig/telemetry",
 	}
 	testenv.ExpectCompiles(t, "context-only, full and omitted adapters", imports, `
 _ = h.HarnessOptions{Telemetry: tel.NoopTelemetryContext}

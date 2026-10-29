@@ -49,7 +49,7 @@ jobs:
       - name: Restore the Pi oracle build
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/.cache/pig-dev/pi-builds
+          path: ~/.cache/ompig-dev/pi-builds
           key: pi-oracle-${{ runner.os }}-${{ hashFiles('.upstream/pin', 'automation/pin/frozen/**', 'automation/pin/*.py', '.node-version', 'automation/ci/npm-toolchain/package-lock.json') }}
       - name: Build the pinned Pi oracle
         shell: bash
@@ -84,7 +84,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path (Join-Path $env:RUNNER_TEMP 'go-tmp') | Out-Null
           "GOCACHE=$(Join-Path $env:RUNNER_TEMP 'go-build')" >> $env:GITHUB_ENV
           "GOTMPDIR=$(Join-Path $env:RUNNER_TEMP 'go-tmp')" >> $env:GITHUB_ENV
-          "PIG_PI_BUILD_STORE=$(Join-Path $env:RUNNER_TEMP 'pi-builds')" >> $env:GITHUB_ENV
+          "OMPIG_PI_BUILD_STORE=$(Join-Path $env:RUNNER_TEMP 'pi-builds')" >> $env:GITHUB_ENV
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: .go-version
@@ -149,7 +149,7 @@ jobs:
       - name: Restore the Pi oracle build
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/.cache/pig-dev/pi-builds
+          path: ~/.cache/ompig-dev/pi-builds
           key: pi-oracle-${{ runner.os }}-${{ hashFiles('.upstream/pin', 'automation/pin/frozen/**', 'automation/pin/*.py', '.node-version', 'automation/ci/npm-toolchain/package-lock.json') }}
       - name: Build the pinned Pi oracle
         shell: bash

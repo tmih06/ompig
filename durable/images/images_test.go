@@ -15,8 +15,8 @@ import (
 
 	_ "golang.org/x/image/bmp"
 
-	"github.com/MichaelKinsy/PiG/durable/images"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/images"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // The cases of packages/durable/test/tools-images.test.ts that exercise the processor, "read of images, with the Photon image

@@ -16,9 +16,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/childwait"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/childwait"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi's execCommand (core/exec.ts) waits with waitForChildProcess

@@ -1,12 +1,12 @@
 """Pi 1.2.0 runner.ts:1426-1450 renderCurrentSystemPrompt: in a before_agent_start handler, event.systemPrompt and
 ctx.getSystemPrompt() render the emission's shared options when read, so the handler sees its own edit at once."""
 
-import pig_sdk
+import ompig_sdk
 from test_request_lifetime import connected_extension
 
 
 def test_before_agent_start_prompt_renders_the_current_options():
-    ext = pig_sdk.Extension("render-prompt")
+    ext = ompig_sdk.Extension("render-prompt")
     seen = []
 
     def handler(ctx, data):
@@ -25,20 +25,20 @@ def test_before_agent_start_prompt_renders_the_current_options():
         send({"type": "call_result", "id": call["id"], "call_result": {"result": {"prompt": "RENDERED"}}})
         response = receive("response")
         assert response["response"].get("error") is None
-        assert response["response"]["result"]["_pigPromptOptions"]["appendSystemPrompt"] == "EDITED"
+        assert response["response"]["result"]["_ompigPromptOptions"]["appendSystemPrompt"] == "EDITED"
     # The unedited options read the prompt the host sent without a call; the edit renders once and is then reused.
     assert seen == [("RECEIVED", "RECEIVED"), ("RENDERED", "RENDERED", "RENDERED")]
 
 
 def test_before_agent_start_prompt_render_error_raises_in_the_handler():
-    ext = pig_sdk.Extension("render-prompt-error")
+    ext = ompig_sdk.Extension("render-prompt-error")
     errors = []
 
     def handler(ctx, data):
         data["systemPromptOptions"]["sections"]["preamble"] = "x"
         try:
             ctx.get_system_prompt()
-        except pig_sdk.HostCallError as exc:
+        except ompig_sdk.HostCallError as exc:
             errors.append(str(exc))
 
     ext.on_event("before_agent_start", handler)

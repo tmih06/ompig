@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Ports packages/coding-agent/src/core/extensions/types.ts (ToolExposure, ToolAnnotations, ToolNamespace, ToolLoadout, ToolLoadoutChanges, ExecuteToolOptions, ExtensionToolContext).
@@ -66,7 +66,7 @@ type ToolNamespace struct {
 // ToolNamespaceAliases is the aliases of a [ToolNamespace], made with [NewToolNamespaceAliases] and read with [ToolNamespaceAliases.Names].
 // It encodes as upstream's `aliases` array of strings. The zero value is no aliases.
 //
-// pig Go mechanic (not a divergence): upstream's `readonly string[]` is held in a string (each name after its length as a uvarint), so
+// ompig Go mechanic (not a divergence): upstream's `readonly string[]` is held in a string (each name after its length as a uvarint), so
 // ToolNamespace stays comparable as it was before aliases existed.
 //
 // upstream: types.ts:537-541 (ToolNamespace.aliases)
@@ -433,7 +433,7 @@ func (e *Extension) dispatchExecuteToolUpdate(args json.RawMessage) (failure err
 
 // ToolReach is the result of a tool's ReachesTools: every tool, or the words of the input that may name them, where a word refers to a tool or namespace whose name contains it, so words may over-match.
 //
-// pig Go mechanic (not a divergence): a struct stands for upstream's `"all" | readonly string[]`.
+// ompig Go mechanic (not a divergence): a struct stands for upstream's `"all" | readonly string[]`.
 //
 // upstream: types.ts:621 (reachesTools)
 type ToolReach struct {

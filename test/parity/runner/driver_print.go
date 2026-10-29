@@ -22,7 +22,7 @@ func (printModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc 
 
 	// Snapshot agent dirs so binary writes never mutate committed testdata.
 	preserveAuth, injectAuth := scenarioAuthModes(sc)
-	pigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Pig, sc.Env.Pi, preserveAuth, injectAuth)
+	ompigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Ompig, sc.Env.Pi, preserveAuth, injectAuth)
 
 	args := []string{}
 	if !sc.Env.OverrideBaseArgs {
@@ -32,10 +32,10 @@ func (printModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc 
 	// Apply per-binary env overrides from the scenario's [env] section.
 	env := snapshotBinaryEnv(t, sc.SourcePath, bin.Env, preserveAuth, injectAuth)
 	switch bin.Label {
-	case "pig":
-		env = append(env, resolveScenarioEnvVars(sc.SourcePath, pigEnv)...)
-		args = append(args, sc.Env.PigArgs...)
-		for _, ext := range sc.Env.PigExtensions {
+	case "ompig":
+		env = append(env, resolveScenarioEnvVars(sc.SourcePath, ompigEnv)...)
+		args = append(args, sc.Env.OmpigArgs...)
+		for _, ext := range sc.Env.OmpigExtensions {
 			resolved := resolveExtensionPath(sc.SourcePath, ext)
 			args = append(args, "-e", resolved)
 		}

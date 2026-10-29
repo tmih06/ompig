@@ -11,7 +11,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/5208-late-bash-output.test.ts:14. A saved callback gives the same post-resolution ordering without a wall-clock timer.

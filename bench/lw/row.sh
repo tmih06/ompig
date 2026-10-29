@@ -2,33 +2,33 @@
 # SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
 # SPDX-License-Identifier: MIT
 #
-# The LW benchmark rows: Pi-Bolt's own bench tools (bolt-v0.8.5) run against pig (built from this tree) and the Pi-Bolt 0.8.5
+# The LW benchmark rows: Pi-Bolt's own bench tools (bolt-v0.8.5) run against ompig (built from this tree) and the Pi-Bolt 0.8.5
 # release, interleaved, with every arm twice per round (A/A: two replicas of the same binary, so the table shows the noise
 # beside the difference), for N rounds. Each tool invocation runs under the global bench lock. Raw logs and one normalized
 # JSONL go to tmp/lw-bench/<wave>/, then bench/lw/rows.py prints the table and checks the ratio ceilings
 # (lw.row.*.ratio_vs_bolt in automation/perf/ratchet.toml).
 #
 #   bench/lw/row.sh [--wave W] [--rounds N] [--rows large_write,long_answer,interactive,long_session,headless,startup] [--quick]
-#                   [--pig PATH] [--out DIR] [--no-check]
+#                   [--ompig PATH] [--out DIR] [--no-check]
 #
-#   large_write   large_write.py --sizes 50,200            pig -p writing a 50 / 200 KB file through 16-character argument deltas
+#   large_write   large_write.py --sizes 50,200            ompig -p writing a 50 / 200 KB file through 16-character argument deltas
 #   long_answer   long_answer.py --sizes 20000,60000       Markdown answers streamed into the TUI at a fast model's pace
 #   interactive   benchmark.py --scenarios interactive     TUI start, five turns, exit
 #   long_session  long_session.py --prompts 75 --every 25  one TUI process, 75 prompts (about 4.2M tokens)
-#   headless      benchmark.py --scenarios headless        pig -p: one prompt, four read tool calls on 47-239 KB files, the answer
-#   startup       benchmark.py --scenarios startup         pig --version
+#   headless      benchmark.py --scenarios headless        ompig -p: one prompt, four read tool calls on 47-239 KB files, the answer
+#   startup       benchmark.py --scenarios startup         ompig --version
 #
 # The default --rows are the first four; headless and startup are run by name.
 # interactive, headless and startup also record each run's peak RSS (benchmark.py's ru_maxrss, as peak_rss_mb in runs.jsonl,
-# for pig and Pi-Bolt alike); rows.py check holds the headless and interactive ratios on linux.
+# for ompig and Pi-Bolt alike); rows.py check holds the headless and interactive ratios on linux.
 #
-# --quick shrinks every row for a smoke run (50 KB, 5,000 characters, 10 prompts). --pig takes a built pig instead of
-# building ./cmd/pig. The rounds rotate the order of the arms.
+# --quick shrinks every row for a smoke run (50 KB, 5,000 characters, 10 prompts). --ompig takes a built ompig instead of
+# building ./cmd/ompig. The rounds rotate the order of the arms.
 #
 # Environment:
 #   LW_BENCH_LOCK      command prefix that runs a command under the global bench lock (default: the LW fan-out's
 #                      `lw-fanout.sh lock` when it exists, else a lock directory, LW_BENCH_LOCKDIR or /tmp/lw-bench.lock)
-#   LW_BENCH_CACHE     where the Pi-Bolt checkout and release are kept (default ~/.cache/pig-lw-bench)
+#   LW_BENCH_CACHE     where the Pi-Bolt checkout and release are kept (default ~/.cache/ompig-lw-bench)
 #   LW_BENCH_MAX_LOAD  when set, wait before each invocation until the 1-minute load average is below it
 set -euo pipefail
 
@@ -44,14 +44,14 @@ bolt_sha256() {
 	esac
 }
 
-WAVE=adhoc ROUNDS=12 ROWS=large_write,long_answer,interactive,long_session QUICK=0 PIG='' OUT='' CHECK=1
+WAVE=adhoc ROUNDS=12 ROWS=large_write,long_answer,interactive,long_session QUICK=0 OMPIG='' OUT='' CHECK=1
 while [[ $# -gt 0 ]]; do
 	case $1 in
 	--wave) WAVE=$2; shift 2 ;;
 	--rounds) ROUNDS=$2; shift 2 ;;
 	--rows) ROWS=$2; shift 2 ;;
 	--quick) QUICK=1; shift ;;
-	--pig) PIG=$2; shift 2 ;;
+	--ompig) OMPIG=$2; shift 2 ;;
 	--out) OUT=$2; shift 2 ;;
 	--no-check) CHECK=0; shift ;;
 	-h | --help) sed -n '4,30p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 OUT=${OUT:-$ROOT/tmp/lw-bench/$WAVE}
-CACHE=${LW_BENCH_CACHE:-$HOME/.cache/pig-lw-bench}
+CACHE=${LW_BENCH_CACHE:-$HOME/.cache/ompig-lw-bench}
 mkdir -p "$OUT/raw" "$OUT/bin" "$OUT/homes" "$CACHE"
 OUT="$(cd "$OUT" && pwd)"
 
@@ -76,7 +76,7 @@ sha256() { if command -v sha256sum >/dev/null; then sha256sum "$1" | cut -d' ' -
 load1() { if [[ -r /proc/loadavg ]]; then cut -d' ' -f1 /proc/loadavg; else sysctl -n vm.loadavg | awk '{print $2}'; fi; }
 
 # The global bench lock: one benchmark process at a time on the host.
-FANOUT=$HOME/PiG-launch-newer/lead-tern/lw/lw-fanout.sh
+FANOUT=$HOME/Ompig-launch-newer/lead-tern/lw/lw-fanout.sh
 if [[ -n ${LW_BENCH_LOCK:-} ]]; then
 	read -r -a LOCK <<<"$LW_BENCH_LOCK"
 elif [[ -x $FANOUT ]]; then
@@ -126,26 +126,26 @@ fi
 BOLT=$BOLT_DIR/pi-bolt-$PLATFORM/pi
 [[ -x $BOLT ]] || die "no $BOLT in the release archive"
 
-# pig: this tree's build unless --pig names one.
-PIG_SHA=$(git -C "$ROOT" rev-parse --short=10 HEAD)
-git -C "$ROOT" diff --quiet HEAD -- . ':!tmp' || PIG_SHA="$PIG_SHA-dirty"
-if [[ -z $PIG ]]; then
-	PIG=$OUT/bin/pig-bin
-	log "building pig $PIG_SHA"
-	(cd "$ROOT" && GOFLAGS=-p=2 "${LOCK[@]}" go build -p 2 -o "$PIG" ./cmd/pig)
+# ompig: this tree's build unless --ompig names one.
+OMPIG_SHA=$(git -C "$ROOT" rev-parse --short=10 HEAD)
+git -C "$ROOT" diff --quiet HEAD -- . ':!tmp' || OMPIG_SHA="$OMPIG_SHA-dirty"
+if [[ -z $OMPIG ]]; then
+	OMPIG=$OUT/bin/ompig-bin
+	log "building ompig $OMPIG_SHA"
+	(cd "$ROOT" && GOFLAGS=-p=2 "${LOCK[@]}" go build -p 2 -o "$OMPIG" ./cmd/ompig)
 else
-	PIG_SHA="given:$PIG"
+	OMPIG_SHA="given:$OMPIG"
 fi
-[[ -x $PIG ]] || die "no pig at $PIG"
+[[ -x $OMPIG ]] || die "no ompig at $OMPIG"
 
 # Each launch gets a fresh HOME, so neither build reads the user's configuration or caches; the tools give each run its own
-# agent directory (PI_CODING_AGENT_DIR, PIG_HOME). Inside the host bench slot (lane-run --bench sets PIG_BENCH_SLOT=1), benchcpu.py
-# confine moves every process off the bench CPUs unless its environment carries PIG_BENCH_SLOT=1, and Pi-Bolt's harness strips
-# PIG_* from the arms' environment, so each launcher restores the marker; without it a long row runs partly on the lane CPUs.
+# agent directory (PI_CODING_AGENT_DIR, OMPIG_HOME). Inside the host bench slot (lane-run --bench sets OMPIG_BENCH_SLOT=1), benchcpu.py
+# confine moves every process off the bench CPUs unless its environment carries OMPIG_BENCH_SLOT=1, and Pi-Bolt's harness strips
+# OMPIG_* from the arms' environment, so each launcher restores the marker; without it a long row runs partly on the lane CPUs.
 mark=''
-[[ ${PIG_BENCH_SLOT:-} == 1 ]] && mark='export PIG_BENCH_SLOT=1'
-for arm in pig bolt; do
-	bin=$PIG
+[[ ${OMPIG_BENCH_SLOT:-} == 1 ]] && mark='export OMPIG_BENCH_SLOT=1'
+for arm in ompig bolt; do
+	bin=$OMPIG
 	[[ $arm == bolt ]] && bin=$BOLT
 	cat >"$OUT/bin/$arm.sh" <<EOF
 #!/bin/sh
@@ -159,7 +159,7 @@ done
 {
 	echo "date: $(date -u +%Y-%m-%dT%H:%MZ)"
 	echo "host: $(uname -srm), $(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu) cpus, load $(load1)"
-	echo "pig: $PIG_SHA ($("$PIG" --version 2>/dev/null | head -1))"
+	echo "ompig: $OMPIG_SHA ($("$OMPIG" --version 2>/dev/null | head -1))"
 	echo "pi-bolt: $BOLT_TAG $BOLT_COMMIT, release sha256 $(bolt_sha256 "$PLATFORM") ($("$BOLT" --version 2>/dev/null | head -1))"
 	echo "rounds: $ROUNDS, rows: $ROWS, quick: $QUICK"
 } >>"$OUT/environment.txt"
@@ -169,7 +169,7 @@ if ((QUICK)); then
 else
 	LARGE=50,200 ANSWERS=20000,60000 PROMPTS=75 EVERY=25
 fi
-ARMS=(pig-a bolt-a pig-b bolt-b)
+ARMS=(ompig-a bolt-a ompig-b bolt-b)
 RUNS=$OUT/runs.jsonl
 
 gate_load() {
@@ -200,7 +200,7 @@ run_row() {
 	(cd "$HARNESS" && "${LOCK[@]}" "${cmd[@]}" "${builds[@]}") >"$raw" 2>&1 || status=$?
 	((status == 0)) || log "$row round $round exited $status (see $raw)"
 	python3 "$ROOT/bench/lw/rows.py" collect --out "$RUNS" --row "$row" --round "$round" --raw "$raw" --jsonl "$jsonl" \
-		--meta "wave=$WAVE" --meta "platform=$PLATFORM" --meta "pig=$PIG_SHA" --meta "bolt=$BOLT_TAG" --meta "load1_before=$l0" --meta "load1_after=$(load1)" \
+		--meta "wave=$WAVE" --meta "platform=$PLATFORM" --meta "ompig=$OMPIG_SHA" --meta "bolt=$BOLT_TAG" --meta "load1_before=$l0" --meta "load1_after=$(load1)" \
 		--meta "order=${ORDER[*]}" --meta "exit=$status" || log "$row round $round: nothing to collect"
 }
 

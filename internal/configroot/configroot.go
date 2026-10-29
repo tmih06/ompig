@@ -1,9 +1,9 @@
-// Package configroot resolves PiG's config root, the directory PiG keeps its settings, documentation bundle and state under. It is a leaf package so
+// Package configroot resolves Ompig's config root, the directory Ompig keeps its settings, documentation bundle and state under. It is a leaf package so
 // that code the coding agent imports (the system prompt builder) and the coding agent itself name one directory through one implementation.
 //
-// The policy is the same in the host and in every extension SDK (Go, Python, Rust, Node): PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig. An empty
+// The policy is the same in the host and in every extension SDK (Go, Python, Rust, Node): OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig. An empty
 // variable falls through to the next choice. A leading ~ or ~/ expands to the home directory. Any other value stays literal. When the home directory
-// is needed and cannot be found, resolution fails; it never yields a relative path. Pi-sharing mode (PIG_USE_PI_DIRS=1) moves only the agent and
+// is needed and cannot be found, resolution fails; it never yields a relative path. Pi-sharing mode (OMPIG_USE_PI_DIRS=1) moves only the agent and
 // project directories (D2), so nothing here reads it.
 package configroot
 
@@ -15,12 +15,12 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // ExpandTilde expands a leading ~ in a filesystem path, as upstream expandTildePath (utils/paths.ts normalizePath) does. It has no error result:
 // when os.UserHomeDir fails, the home directory is the empty string. Node's os.homedir() instead falls back to the passwd database and throws when
-// that fails too. A PiG-owned root uses [ExpandHome] instead, which reports the failure.
+// that fails too. A Ompig-owned root uses [ExpandHome] instead, which reports the failure.
 func ExpandTilde(path string) string {
 	expanded, _ := expandHome(path, true)
 	return expanded
@@ -45,10 +45,10 @@ func expandHome(path string, lenient bool) (string, error) {
 	return filepath.Join(home, rest), nil
 }
 
-// Resolve is the config root: PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig. An empty variable is ignored and a leading ~ in either is expanded. It
+// Resolve is the config root: OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig. An empty variable is ignored and a leading ~ in either is expanded. It
 // returns an error, never a relative path, when the home directory is needed and cannot be found.
 func Resolve() (string, error) {
-	if v := os.Getenv("PIG_HOME"); v != "" {
+	if v := os.Getenv("OMPIG_HOME"); v != "" {
 		return ExpandHome(v)
 	}
 	if v := os.Getenv("XDG_CONFIG_HOME"); v != "" {
@@ -56,26 +56,26 @@ func Resolve() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return filepath.Join(base, "pig"), nil
+		return filepath.Join(base, "ompig"), nil
 	}
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("locate home directory: %w", err)
 	}
-	return filepath.Join(home, ".pig"), nil
+	return filepath.Join(home, ".ompig"), nil
 }
 
-// UnresolvedError is the value [Dir] panics with. The pig command recovers it, prints the message and exits 1.
+// UnresolvedError is the value [Dir] panics with. The ompig command recovers it, prints the message and exits 1.
 type UnresolvedError struct{ Err error }
 
 func (e *UnresolvedError) Error() string {
-	return "cannot resolve PiG's config directories: " + e.Err.Error() + "; set PIG_HOME"
+	return "cannot resolve Ompig's config directories: " + e.Err.Error() + "; set OMPIG_HOME"
 }
 
 func (e *UnresolvedError) Unwrap() error { return e.Err }
 
 // Dir is [Resolve] for a caller that has no way to report a failure. It panics with an [*UnresolvedError] instead of returning a path relative to the
-// working directory; the pig command reports that panic as an error and exits.
+// working directory; the ompig command reports that panic as an error and exits.
 func Dir() string {
 	root, err := Resolve()
 	if err != nil {
@@ -92,7 +92,7 @@ var docsBundle struct {
 
 // RegisterDocsBundle names, under <config root>/docs, the directory of the documentation bundle this binary embeds. internal/pigdocs registers
 // it; a Binary that strips docs links no pigdocs and registers none.
-// pig additive (D22): each build's bundle has its own content-addressed directory, so builds that share a config root never rewrite each other's.
+// ompig additive (D22): each build's bundle has its own content-addressed directory, so builds that share a config root never rewrite each other's.
 func RegisterDocsBundle(name func() (string, error)) {
 	docsBundle.mu.Lock()
 	defer docsBundle.mu.Unlock()
@@ -100,8 +100,8 @@ func RegisterDocsBundle(name func() (string, error)) {
 }
 
 // DocsDir is the absolute directory of this binary's documentation bundle under the config root, and false when the binary embeds none. Pi's
-// config.ts getDocsPath is resolve(join(<package dir>, "docs")); PiG has no installed package directory, so its bundle lives under the config root
-// (D22). A relative PIG_HOME resolves against the working directory, as Node's resolve does.
+// config.ts getDocsPath is resolve(join(<package dir>, "docs")); Ompig has no installed package directory, so its bundle lives under the config root
+// (D22). A relative OMPIG_HOME resolves against the working directory, as Node's resolve does.
 func DocsDir() (string, bool) {
 	docsBundle.mu.Lock()
 	name := docsBundle.name
@@ -113,8 +113,8 @@ func DocsDir() (string, bool) {
 	if err != nil {
 		return "", false
 	}
-	// pig additive (D22): PiG has no installed package directory; its documentation bundle lives under the config root.
-	// pig additive (D92): the literal "docs" is pigdocs.SubDir, so a Binary that strips docs does not link pigdocs.
+	// ompig additive (D22): Ompig has no installed package directory; its documentation bundle lives under the config root.
+	// ompig additive (D92): the literal "docs" is pigdocs.SubDir, so a Binary that strips docs does not link pigdocs.
 	dir := filepath.Join(Dir(), "docs", bundle)
 	if resolved, err := nodepath.Resolve(dir); err == nil {
 		return resolved, true
@@ -127,14 +127,14 @@ var docsMissing atomic.Bool
 
 // SetDocsPresent records whether [DocsDir] holds this build's documentation bundle. Startup sets it once, after it tries to write the bundle; until
 // then a registered bundle counts as present.
-// pig additive (D22): Pi's package docs exist wherever Pi runs. PiG's bundle exists only once written, so no text may name it after a failed write.
+// ompig additive (D22): Pi's package docs exist wherever Pi runs. Ompig's bundle exists only once written, so no text may name it after a failed write.
 func SetDocsPresent(present bool) { docsMissing.Store(!present) }
 
 // docsWriter writes a bundle whose write startup deferred; nil when nothing is deferred.
 var docsWriter atomic.Pointer[func()]
 
 // SetDocsWriter registers write as the function that writes the bundle startup deferred; it must update [SetDocsPresent] when the write fails.
-// pig additive (D22): PiG writes its bundle before the first reader, not at every start.
+// ompig additive (D22): Ompig writes its bundle before the first reader, not at every start.
 func SetDocsWriter(write func()) {
 	if write == nil {
 		docsWriter.Store(nil)

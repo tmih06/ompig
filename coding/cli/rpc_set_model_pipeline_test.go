@@ -26,7 +26,7 @@ func TestRPCPipelinedSetModelsApplyInInputOrder(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(home, "agent", "models.json"), models, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_HOME=" + home}, "--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one")
+	p := startRPCProcess(t, []string{"OMPIG_HOME=" + home}, "--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one")
 	// The last command selects model-three, which is neither the start model nor the one before it.
 	targets := []string{"model-one", "model-two", "model-three"}
 	const count = 30

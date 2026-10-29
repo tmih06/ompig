@@ -16,8 +16,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ResourceType identifies the kind of package resource.
@@ -108,7 +108,7 @@ func NewConfigSelector(groups []*ResourceGroup, terminalRows int) *ConfigSelecto
 	return NewScopedConfigSelector(groups, groups, terminalRows, "global", true)
 }
 
-// NewScopedConfigSelector creates the global/project selector used by pig config.
+// NewScopedConfigSelector creates the global/project selector used by ompig config.
 func NewScopedConfigSelector(global, project []*ResourceGroup, terminalRows int, writeScope string, projectModeAvailable bool) *ConfigSelectorComponent {
 	if writeScope != "project" {
 		writeScope = "global"
@@ -156,7 +156,7 @@ func (cs *ConfigSelectorComponent) buildFlatList() {
 	}
 	// Mirrors upstream buildFlatList (config-selector.ts): start selection
 	// on the first item entry (skipping group/subgroup headers). Earlier
-	// pig called selectFirstItem here, which iterated cs.filtered: empty
+	// ompig called selectFirstItem here, which iterated cs.filtered: empty
 	// at construction time: so the initial cursor never landed on an
 	// item and the overlay opened without a visible `>` pointer.
 	cs.cursor = 0
@@ -269,11 +269,11 @@ func (h configSelectorHeader) Render(width int) []string {
 	var lines []string
 	// Header mirrors upstream global/project write-scope ownership.
 	titleText := "Global Resources"
-	scopeHint := "~/.pig/agent/settings.json"
+	scopeHint := "~/.ompig/agent/settings.json"
 	action := "toggle"
 	if cs.writeScope == "project" {
 		titleText = "Project Local Resources"
-		scopeHint = ".pig/settings.json · inherited global resources are dimmed"
+		scopeHint = ".ompig/settings.json · inherited global resources are dimmed"
 		action = "cycle inherit/+/-"
 	}
 	title := "\x1b[1m" + titleText + "\x1b[22m"
@@ -596,9 +596,9 @@ func groupLabel(res *ResourceItem) string {
 			return "Project (" + formatBaseDir(res.BaseDir) + ")"
 		}
 		if res.Scope == "user" {
-			return "User (~/.pig/agent/)"
+			return "User (~/.ompig/agent/)"
 		}
-		return "Project (.pig/)"
+		return "Project (.ompig/)"
 	}
 	if res.Scope == "user" {
 		return "User settings"

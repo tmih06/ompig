@@ -1,16 +1,16 @@
-# PiG extensions
+# Ompig extensions
 
-PiG extensions are external programs that add tools, commands, events,
-providers, renderers, and UI behavior. PiG hosts them through the current
-subprocess wire. A Piglet Binary can fuse a compatible Go factory, but fused
+Ompig extensions are external programs that add tools, commands, events,
+providers, renderers, and UI behavior. Ompig hosts them through the current
+subprocess wire. A Ompiglet Binary can fuse a compatible Go factory, but fused
 behavior must match subprocess behavior.
 
-PiG does not use PigScript, embedded JavaScript, WASM, dynamic Go plugins, or an
+Ompig does not use OmpigScript, embedded JavaScript, WASM, dynamic Go plugins, or an
 authored extension manifest.
 
 ## Source forms
 
-PiG accepts exactly two forms.
+Ompig accepts exactly two forms.
 
 ### Conventional factory
 
@@ -21,7 +21,7 @@ Use one standard factory for the language:
 - Python: `def new_extension() -> Extension` in one module
 - Node: one Pi-compatible default export
 
-PiG generates the runner. Go, Rust, and Python factories can share a
+Ompig generates the runner. Go, Rust, and Python factories can share a
 language-specific runtime cell. Node factories run in isolated Node processes.
 
 ### Exact standalone
@@ -36,15 +36,15 @@ Use an exact executable or conventional executable source:
 
 Every standalone runs in an isolated process.
 
-PiG rejects mixed languages, an ambiguous root with several factories,
+Ompig rejects mixed languages, an ambiguous root with several factories,
 factory-plus-standalone roots, nonstandard factory symbols, missing entrypoints,
 and identity mismatches. Select one exact factory package inside a containing Go
-module or workspace. PiG uses the containing module or workspace as the build
+module or workspace. Ompig uses the containing module or workspace as the build
 closure.
 
 ## Native login identity
 
-An extension can call `SetLogin` during `session_start`. PiG validates the typed
+An extension can call `SetLogin` during `session_start`. Ompig validates the typed
 definition and renders it through the shared header slot. Widths below 66
 columns use compact text. Quiet startup keeps the login hidden. Rendering uses
 local cached data and performs no per-render IPC.
@@ -52,14 +52,14 @@ local cached data and performs no per-render IPC.
 Preview the result before loading a session:
 
 ```bash
-pig extension preview-login <path>
+ompig extension preview-login <path>
 ```
 
 The preview requires exactly one extension. Use `/reload` after an edit. A
-login remains an extension Resource. Activate it through a Piglet `extensions`
-entry, user extension policy, or `pig -e <path>`. Verify activation by starting
+login remains an extension Resource. Activate it through a Ompiglet `extensions`
+entry, user extension policy, or `ompig -e <path>`. Verify activation by starting
 or reloading through that path and checking the identity name. Keep product
-identities outside Stock Pig and select them through an ordinary Piglet
+identities outside Stock Ompig and select them through an ordinary Ompiglet
 extension entry. See `extension-api.md` for the exact grids, palette,
 validation errors, and SDK calls.
 
@@ -75,7 +75,7 @@ draining.
 
 ## Identity and capabilities
 
-The selecting Package or Piglet name supplies the expected extension identity.
+The selecting Package or Ompiglet name supplies the expected extension identity.
 Direct directory selections use the directory name, and direct files use the
 file stem. Runtime registration must match that identity. Runtime registration is the only source for tools, commands,
 events, providers, renderers, descriptions, and other capabilities.
@@ -85,34 +85,34 @@ markers at an arbitrary Package root do not make that Package an extension.
 
 ## Discovery
 
-PiG collects extensions from these sources:
+Ompig collects extensions from these sources:
 
-1. `~/.pig/agent/extensions`
-2. trusted `<cwd>/.pig/extensions`
+1. `~/.ompig/agent/extensions`
+2. trusted `<cwd>/.ompig/extensions`
 3. configured Package extension members
-4. selected Piglet composition
+4. selected Ompiglet composition
 5. exact paths in settings
 6. explicit `-e` paths
-7. embedded or fused Piglet Binary components
+7. embedded or fused Ompiglet Binary components
 
 `--no-extensions` disables ambient discovery and settings, but it preserves
 explicit `-e` paths. Project discovery requires trust. Startup and `/reload`
 use the same normalized resolver.
 
-PiG does not discover `~/.pig/extensions`.
+Ompig does not discover `~/.ompig/extensions`.
 
 ## Scaffold
 
 Create a factory:
 
 ```bash
-pig extension init ./my-extension --lang go
+ompig extension init ./my-extension --lang go
 ```
 
 Create a Go login factory with a neutral example definition:
 
 ```bash
-pig extension init ./my-pig --lang go --login
+ompig extension init ./my-ompig --lang go --login
 ```
 
 The login scaffold contains a valid neutral grid, palette, and `SetLogin`
@@ -121,24 +121,24 @@ session-start handler. Replace its art and identity text for your extension.
 Create a standalone:
 
 ```bash
-pig extension init ./my-extension --lang go --isolated
+ompig extension init ./my-extension --lang go --isolated
 ```
 
 Supported scaffold languages are Go, Python, and Rust. The scaffold writes no
-YAML file. PiG stages the matching SDK under the active config root.
+YAML file. Ompig stages the matching SDK under the active config root.
 
 ## Validation
 
 Validate one source:
 
 ```bash
-pig install ./my-extension --validate-only --json
+ompig install ./my-extension --validate-only --json
 ```
 
 Validate a set:
 
 ```bash
-pig install --validate-only --json ./ext-a ./ext-b
+ompig install --validate-only --json ./ext-a ./ext-b
 ```
 
 Validation resolves the source form, builds or launches it, accepts runtime
@@ -148,10 +148,10 @@ placement plan. It does not install the source.
 ## Authentication inspection
 
 An extension declares OAuth through runtime provider registration. Before a
-session, `pig login --list` inspects each enabled extension independently. For a
+session, `ompig login --list` inspects each enabled extension independently. For a
 source extension, a valid projection for the exact source configuration and
 immutable artifact digest avoids startup. A projection miss starts registration
-inspection. Factory construction executes extension code, but PiG dispatches no
+inspection. Factory construction executes extension code, but Ompig dispatches no
 session, tool, command, event, shortcut, or renderer handler. One broken
 extension produces a diagnostic and does not remove healthy OAuth targets.
 Embedded packed members are inspected independently through the complete
@@ -172,14 +172,14 @@ See `docs/extension-authoring.md` and `docs/extension-api-parity.md`.
 
 ## Session context
 
-PiG loads session history for an extension only when the extension reads it. A
+Ompig loads session history for an extension only when the extension reads it. A
 persisted session is read from its local JSONL file and reconciled with the host
 cursor. If the file is unavailable, the host sends ordered pages of at most 4
 MB. Later appends use the same bounded path.
 
 ## Reload
 
-`/reload` resolves the same extension inputs as startup and preserves their first-seen order. PiG reuses valid build artifacts, but it constructs a fresh factory and runtime for every configured, embedded, fused, and built-in extension so module and closure state reset as they do in Pi. It starts and validates replacements, checks registration, and publishes the successful set. A failed extension is removed and reported while other extensions load.
+`/reload` resolves the same extension inputs as startup and preserves their first-seen order. Ompig reuses valid build artifacts, but it constructs a fresh factory and runtime for every configured, embedded, fused, and built-in extension so module and closure state reset as they do in Pi. It starts and validates replacements, checks registration, and publishes the successful set. A failed extension is removed and reported while other extensions load.
 
 ## MCP servers, virtual models and tool exposure
 
@@ -189,25 +189,25 @@ An extension in any supported language can register MCP servers (`registerMcpSer
 
 ## Product boundary
 
-`plugin.json` is cross-tool marketplace metadata. It does not contain PiG
+`plugin.json` is cross-tool marketplace metadata. It does not contain Ompig
 runtime fields. A deployment resource can point at extension source or
-artifacts and calls the same PiG validation path. It does not define the local
-PiG runtime source contract.
+artifacts and calls the same Ompig validation path. It does not define the local
+Ompig runtime source contract.
 
 ## Upgrade a Go extension written for an older SDK
 
-PiG compiles a Go extension against the SDK of the pig that runs it, so an SDK release can break an extension written for an earlier one (D109). Pi has no equivalent: it loads extension source in process. When a build fails on a changed SDK symbol, pig reports `go build: written for an older SDK` and names each changed API with its old and new shape, instead of printing only the compiler log:
+Ompig compiles a Go extension against the SDK of the ompig that runs it, so an SDK release can break an extension written for an earlier one (D109). Pi has no equivalent: it loads extension source in process. When a build fails on a changed SDK symbol, ompig reports `go build: written for an older SDK` and names each changed API with its old and new shape, instead of printing only the compiler log:
 
 ```text
 Extension "ask" was written for an older SDK:
   Context.GetSessionID: func() string -> func() (string, error) (SDK 0.3.0)
   SendMessageOptions.TriggerTurn: bool -> *bool (SDK 0.2.0)
-Run: pig extension upgrade /home/me/.pig/agent/extensions/ask
+Run: ompig extension upgrade /home/me/.ompig/agent/extensions/ask
 ```
 
 A build that also fails on an error that is not an SDK change, in the extension or in another extension of the same packed cell, keeps the plain build message.
 
-`pig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]` rewrites the extension with the rules in `extensions/sdk/upgrade`. The rules parse and type-check the Go source, edit only the SDK uses they recognize, and format the result with `go/format`. The command copies the original files to `<config root>/state/extension-upgrade/<time>-<name>/` first (`<time>-<name>-2/` and so on when that directory exists), prints a unified diff, rebuilds the extension, and reports one status per extension: `upgraded`, `up to date`, `needs manual changes`, `failed` or `skipped`. `--dry-run` prints the diff and changes nothing. `--summary` prints one line per extension. With no argument, the command upgrades every Go extension that settings, packages, the agent directory and a trusted project directory load.
+`ompig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]` rewrites the extension with the rules in `extensions/sdk/upgrade`. The rules parse and type-check the Go source, edit only the SDK uses they recognize, and format the result with `go/format`. The command copies the original files to `<config root>/state/extension-upgrade/<time>-<name>/` first (`<time>-<name>-2/` and so on when that directory exists), prints a unified diff, rebuilds the extension, and reports one status per extension: `upgraded`, `up to date`, `needs manual changes`, `failed` or `skipped`. `--dry-run` prints the diff and changes nothing. `--summary` prints one line per extension. With no argument, the command upgrades every Go extension that settings, packages, the agent directory and a trusted project directory load.
 
 Before, written for SDK 0.2.0:
 
@@ -218,7 +218,7 @@ ext.OnSessionStart(func(ctx sdk.Context, _ map[string]any) (any, error) {
 })
 ```
 
-After `pig extension upgrade`:
+After `ompig extension upgrade`:
 
 ```go
 ext.OnSessionStart(func(ctx sdk.Context, _ map[string]any) (any, error) {
@@ -230,10 +230,10 @@ ext.OnSessionStart(func(ctx sdk.Context, _ map[string]any) (any, error) {
 })
 ```
 
-The rules rewrite the host-backed getters, the optional boolean fields, and `ContextUsage.Tokens` and `Percent`. A getter call moves out of its statement, including an `if` or `switch` init statement, together with any `Cwd`, `Mode`, `HasUI`, `Width`, `Height` or `ToolCallID` call before it so the calls keep their order. A `ConfigHome` call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`, still compiles because its value and its error both become arguments, so the error is printed or passed on instead of handled. When the extension's `go.mod` requires an SDK older than 0.5.0, the rules find that call and rewrite it the same way, and list it rather than discard its error. A call whose parameter for the error has the type `error`, such as `check(home string, errs ...error)`, already receives the error and stays. A function that returns an error returns the getter's error. In a function that does not, a host-backed getter's error is discarded with a comment, which keeps the old SDK's empty value on failure, while a `ConfigHome` call is listed for you instead: the old `ConfigHome` could not fail, and an empty configuration root would make its paths relative to the working directory. A use that cannot move without changing the order of evaluation, such as one in a `select` case, and a getter's method value passed where the old signature is wanted, are listed with the reason. A change with no safe rewrite, such as the typed `SetEditorComponent` factory, the `ToolConstrainedSampling` union, the `AutocompleteProviderFactory` type or a provider object's `*sdk.Credential`, is reported with its remedy and the file stays as it was. An upgrade is all or nothing: if writing a file or the rebuild of the upgraded extension fails, pig restores every file it changed and the report says so.
+The rules rewrite the host-backed getters, the optional boolean fields, and `ContextUsage.Tokens` and `Percent`. A getter call moves out of its statement, including an `if` or `switch` init statement, together with any `Cwd`, `Mode`, `HasUI`, `Width`, `Height` or `ToolCallID` call before it so the calls keep their order. A `ConfigHome` call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`, still compiles because its value and its error both become arguments, so the error is printed or passed on instead of handled. When the extension's `go.mod` requires an SDK older than 0.5.0, the rules find that call and rewrite it the same way, and list it rather than discard its error. A call whose parameter for the error has the type `error`, such as `check(home string, errs ...error)`, already receives the error and stays. A function that returns an error returns the getter's error. In a function that does not, a host-backed getter's error is discarded with a comment, which keeps the old SDK's empty value on failure, while a `ConfigHome` call is listed for you instead: the old `ConfigHome` could not fail, and an empty configuration root would make its paths relative to the working directory. A use that cannot move without changing the order of evaluation, such as one in a `select` case, and a getter's method value passed where the old signature is wanted, are listed with the reason. A change with no safe rewrite, such as the typed `SetEditorComponent` factory, the `ToolConstrainedSampling` union, the `AutocompleteProviderFactory` type or a provider object's `*sdk.Credential`, is reported with its remedy and the file stays as it was. An upgrade is all or nothing: if writing a file or the rebuild of the upgraded extension fails, ompig restores every file it changed and the report says so.
 
-Interactive startup lists a drifted extension and asks `Run pig extension upgrade <path>... now? [y/N]` before it exits. Yes upgrades and rebuilds them, then loads the extensions again in the same process and continues startup, so a `--fork`, `--session-id` or `--name` takes effect once. No exits as Pi does on an extension load error. Print, JSON and RPC modes print the command to standard error and exit 1, and write nothing to standard output.
+Interactive startup lists a drifted extension and asks `Run ompig extension upgrade <path>... now? [y/N]` before it exits. Yes upgrades and rebuilds them, then loads the extensions again in the same process and continues startup, so a `--fork`, `--session-id` or `--name` takes effect once. No exits as Pi does on an extension load error. Print, JSON and RPC modes print the command to standard error and exit 1, and write nothing to standard output.
 
-Set `extensionsAutoUpgrade` to `true` in the global settings file to run the rules at startup and after `pig update` without the question. Each upgraded extension gets a backup and one line on standard error. The setting is off by default, a project settings file cannot turn it on, and only the rules run; no agent edits an extension.
+Set `extensionsAutoUpgrade` to `true` in the global settings file to run the rules at startup and after `ompig update` without the question. Each upgraded extension gets a backup and one line on standard error. The setting is off by default, a project settings file cannot turn it on, and only the rules run; no agent edits an extension.
 
-When two loaded extensions register the same tool and one directory is a copy of the other, pig names both directories and suggests removing the older copy. Pi's tool-conflict error stays as it is.
+When two loaded extensions register the same tool and one directory is a copy of the other, ompig names both directories and suggests removing the older copy. Pi's tool-conflict error stays as it is.

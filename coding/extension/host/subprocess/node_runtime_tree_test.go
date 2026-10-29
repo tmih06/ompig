@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -15,7 +15,7 @@ var nodeRuntimeFS extractedRuntimeFS
 type extractedRuntimeFS struct{}
 
 var extractedRuntime = sync.OnceValues(func() (fs.FS, error) {
-	parent, err := os.MkdirTemp("", "pig-node-runtime-")
+	parent, err := os.MkdirTemp("", "ompig-node-runtime-")
 	if err != nil {
 		return nil, err
 	}

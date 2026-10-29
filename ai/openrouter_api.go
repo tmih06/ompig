@@ -9,7 +9,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // OpenRouterRate is one of OpenRouter's per-token prices, a decimal string. A JSON number reads as its text, as String(value) does for

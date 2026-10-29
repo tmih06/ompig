@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-const corePrefix = "github.com/MichaelKinsy/PiG/durable/core"
+const corePrefix = "github.com/tmih06/ompig/durable/core"
 
 // repoRoot is the module root: this package lives at durable/core/contracttest/boundary.
 func repoRoot(t *testing.T) string {

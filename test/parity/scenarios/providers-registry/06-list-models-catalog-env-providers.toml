@@ -3,14 +3,14 @@
 #
 # Upstream evidence: re-probed pinned Pi 0.87.1 with OPENCODE_API_KEY=x,
 # DEEPSEEK_API_KEY=x, XAI_API_KEY=x, and CEREBRAS_API_KEY=x. Pi lists the
-# opencode, opencode-go, deepseek, xai, and cerebras rows. PiG now matches
+# opencode, opencode-go, deepseek, xai, and cerebras rows. Ompig now matches
 # byte for byte (verified with an env-cleared regular-file capture).
 #
 # This locks the env-auth availability filter: upstream derives the available
 # set from checkAuth() over the whole provider catalog
 # (model-runtime.ts:runAvailabilityRefresh), so an env-key provider such as
 # opencode-go appears even though it is neither OAuth-backed nor one of the
-# historically hand-listed providers. PiG must derive the same filter from the
+# historically hand-listed providers. Ompig must derive the same filter from the
 # catalog rather than a hand-maintained allowlist.
 
 name = "06-list-models-catalog-env-providers"
@@ -34,8 +34,8 @@ pi = [
   "XAI_API_KEY=x",
   "CEREBRAS_API_KEY=x",
 ]
-pig = [
-  "PIG_CODING_AGENT_DIR=testdata/env-agent",
+ompig = [
+  "OMPIG_CODING_AGENT_DIR=testdata/env-agent",
   "OPENCODE_API_KEY=x",
   "DEEPSEEK_API_KEY=x",
   "XAI_API_KEY=x",

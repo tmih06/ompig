@@ -18,13 +18,13 @@
 #     provider default, whose 1.0M window moves the percent below the
 #     threshold. The usage moved from 96000 to 150000 with the window,
 #     keeping the asserted 75.0%.)
-#   - testdata/{multi-pig,multi-pi}-agent provides fake OAuth
+#   - testdata/{multi-ompig,multi-pi}-agent provides fake OAuth
 #     credentials so the model resolves without any network probe.
 #
 # Promoted from `deferred` 2026-05-21. The previous header speculated
-# that pig used truecolor while pi used basic SGR; re-probing upstream
+# that ompig used truecolor while pi used basic SGR; re-probing upstream
 # theme dark.json showed warning="yellow" / error="red", both rendered
-# as basic SGR. The real divergence was that pig only coloured the
+# as basic SGR. The real divergence was that ompig only coloured the
 # percent digits while upstream coloured the entire `pct%/window (auto)`
 # display string. Fixed in status_line.go::colorContextDisplay.
 #
@@ -46,7 +46,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "75.0%/200k"
+ready_pattern_ompig = "75.0%/200k"
 ready_pattern_pi = "75.0%/200k"
 ready_timeout_seconds = 25
 capture_start = "75.0%"
@@ -55,15 +55,15 @@ settle_seconds = 2
 cwd = "testdata/context-session"
 
 [env]
-pig = [
-  "PIG_CODING_AGENT_DIR=testdata/multi-pig-agent",
+ompig = [
+  "OMPIG_CODING_AGENT_DIR=testdata/multi-ompig-agent",
   "PATH={{FAKE_BIN}}:{{PATH}}",
 ]
 pi = [
   "PI_CODING_AGENT_DIR=testdata/multi-pi-agent",
   "PATH={{FAKE_BIN}}:{{PATH}}",
 ]
-pig_args = ["--no-extensions", "--model", "github-copilot/claude-haiku-4.5", "--session-dir", "sessions", "-c"]
+ompig_args = ["--no-extensions", "--model", "github-copilot/claude-haiku-4.5", "--session-dir", "sessions", "-c"]
 pi_args = ["--no-extensions", "--model", "github-copilot/claude-haiku-4.5", "--session-dir", "sessions", "-c"]
 
 [assert]

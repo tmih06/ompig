@@ -48,7 +48,7 @@ for (const installed of [false, true]) {
     transport: {
       invoke: async (call, context) => copy(await endpoint.invoke(copy(call), () => {}, context)),
       async subscribe(id, mode, listener, context) {
-        // This test adapter copies JSON and buffers endpoint publications until activation, like PiG's JSON-copy transport.
+        // This test adapter copies JSON and buffers endpoint publications until activation, like Ompig's JSON-copy transport.
         const buffered = [];
         let active = false;
         const snapshot = copy(await endpoint.invoke(createServiceSubscribeCall('s1', id, mode), (_id, update, updateContext) => {

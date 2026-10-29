@@ -14,13 +14,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// pig additive (D91): TuiSurface is a renderer Pi does not have. It keeps
-// Pi's component tree and reports each frame to a Piglet frontend session as
+// ompig additive (D91): TuiSurface is a renderer Pi does not have. It keeps
+// Pi's component tree and reports each frame to a Ompiglet frontend session as
 // retained-tree ops instead of painting the terminal.
 
 // TuiSurface draws the interactive layout through a [frontend.Session]. The
@@ -38,7 +38,7 @@ type TuiSurface struct {
 	tuiBase
 
 	session frontend.Session
-	// terminal is where the session draws, which takes PiG's terminal
+	// terminal is where the session draws, which takes Ompig's terminal
 	// queries; the surface paints nothing there.
 	terminal io.Writer
 	document Component
@@ -210,7 +210,7 @@ func newTuiSurface(out io.Writer, session frontend.Session, onApplyError func(er
 // Session returns the frontend session the renderer draws through.
 func (t *TuiSurface) Session() frontend.Session { return t.session }
 
-// pig additive (D91): PiG reads the terminal's colors and appearance under a
+// ompig additive (D91): Ompig reads the terminal's colors and appearance under a
 // frontend session as it does under its ANSI renderer, from the terminal's
 // replies to its own query and its light/dark reports.
 
@@ -219,7 +219,7 @@ func (t *TuiSurface) Session() frontend.Session { return t.session }
 // nowhere and times out.
 func (t *TuiSurface) SetTerminalOut(out io.Writer) { t.terminal = out }
 
-// TerminalOut returns the terminal SetTerminalOut set, for PiG's other
+// TerminalOut returns the terminal SetTerminalOut set, for Ompig's other
 // writes while the session draws.
 func (t *TuiSurface) TerminalOut() io.Writer { return t.terminal }
 
@@ -329,7 +329,7 @@ func (t *TuiSurface) StopWithOptions(StopOptions) {
 	t.statusTerminal.pause()
 }
 
-// pig additive (D91): PiG lends the terminal to an external editor or, on a
+// ompig additive (D91): Ompig lends the terminal to an external editor or, on a
 // job-control stop, to the shell without ending the frontend session, and
 // the frame after the handoff carries only what changed meanwhile.
 
@@ -356,7 +356,7 @@ func (t *TuiSurface) Suspend() {
 	t.session.Suspend()
 }
 
-// Resume tells the session that PiG owns the terminal again and draws what
+// Resume tells the session that Ompig owns the terminal again and draws what
 // changed since Suspend, which is no frame when nothing changed. It does
 // nothing unless suspended; after a Stop it only resumes the session.
 func (t *TuiSurface) Resume() {
@@ -497,7 +497,7 @@ func (t *TuiSurface) doRender() {
 	}
 }
 
-// pig additive (D91): a frame carries the palette of the theme PiG draws
+// ompig additive (D91): a frame carries the palette of the theme Ompig draws
 // with when it changed, for a frontend that draws in colors of its own.
 
 // framePalette returns the active theme's palette when it differs from the
@@ -519,7 +519,7 @@ func (t *TuiSurface) framePalette() *frontend.Theme {
 	return &sent
 }
 
-// pig additive (D91): a frame carries the application's mark when it
+// ompig additive (D91): a frame carries the application's mark when it
 // changed, for a frontend that shows a brand of its own.
 
 // frameMark returns the mark the Mark hook reports when it differs from the
@@ -586,7 +586,7 @@ func (t *TuiSurface) dockEntries(width int, capturing bool) []surfaceEntry {
 		lines := t.resolveFakeCursors(t.dock.Render(width))
 		node := frontend.Lines{Lines: surfaceLines(lines)}
 		if !capturing {
-			// pig additive (D91): a component in the editor's place, such
+			// ompig additive (D91): a component in the editor's place, such
 			// as an extension's ui.custom without overlay, keeps its view.
 			node.View = t.dockBlobView("dock", lines, width)
 		}
@@ -690,7 +690,7 @@ func (t *TuiSurface) overlayEntries(width, height int) (entries []surfaceEntry, 
 		if !entry.visible() {
 			continue
 		}
-		// pig additive (D91): a fullscreen overlay covers the session's
+		// ompig additive (D91): a fullscreen overlay covers the session's
 		// screen, and only a session that shows one gets it.
 		fullscreen := entry.opts.Fullscreen && hasScreen
 		layoutWidth, layoutHeight := width, height
@@ -715,7 +715,7 @@ func (t *TuiSurface) overlayEntries(width, height int) (entries []surfaceEntry, 
 			t.recordViewSource(id, entry.component, layout.width)
 		}
 		entries = append(entries, surfaceEntry{id: id, node: node})
-		// pig additive (D91): the session draws its own dock under a
+		// ompig additive (D91): the session draws its own dock under a
 		// fullscreen overlay, so the dock keeps its editor and footer nodes.
 		capturing = capturing || (!entry.opts.nonCapturing && (!fullscreen || !screen.ShowsDock))
 	}
@@ -734,7 +734,7 @@ func mountsEditor(root Component, editor *Editor) bool {
 	return false
 }
 
-// pig additive (D91): a frontend session renders the editor's text natively
+// ompig additive (D91): a frontend session renders the editor's text natively
 // and edits it through Env.Edit and Env.Undo.
 
 // frontendParts renders the editor as Render does and returns its text as an
@@ -872,7 +872,7 @@ func (u *UserMessageComponent) frontendNode() (frontend.MarkdownText, bool) {
 
 // frontendImages decodes the message's images on a frontend's first use,
 // so the terminal renderer never pays for them, and returns the same slice
-// after. pig additive (D91): Pi draws no user message images.
+// after. ompig additive (D91): Pi draws no user message images.
 func (u *UserMessageComponent) frontendImages() []frontend.ViewImage {
 	if u.decoded == nil && len(u.images) > 0 {
 		u.decoded = make([]frontend.ViewImage, len(u.images))
@@ -886,7 +886,7 @@ func (u *UserMessageComponent) frontendImages() []frontend.ViewImage {
 // linesNode returns the Lines node of a component's rendered lines and Click
 // area, and reuses the node built last frame while both are unchanged. The
 // state keeps its own copy of the lines, so a component that rewrites its
-// slice in place still gets a new node. pig additive (D91): the Click area
+// slice in place still gets a new node. ompig additive (D91): the Click area
 // is a [Clickable] component's.
 func linesNode(state *surfaceComponent, lines []string, click *frontend.Area, view *frontend.View) frontend.Lines {
 	if state == nil {
@@ -985,7 +985,7 @@ func (c *ToolExecutionComponent) frontendTool(width int, toolDiff func(string, m
 	if tool.Status == frontend.ToolDone && toolDiff != nil {
 		tool.Diff = toolDiff(c.Name, tool.Arguments, c.definitionResult)
 	}
-	tool.Images = c.frontendImagesAt(width) // pig additive (D91): a frontend draws the result's images natively
+	tool.Images = c.frontendImagesAt(width) // ompig additive (D91): a frontend draws the result's images natively
 	return tool
 }
 

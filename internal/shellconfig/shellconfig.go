@@ -1,4 +1,4 @@
-// Package shellconfig resolves the bash shell PiG runs commands through,
+// Package shellconfig resolves the bash shell Ompig runs commands through,
 // mirroring upstream packages/coding-agent/src/utils/shell.ts getShellConfig
 // and getBashShellConfig. Upstream never consults $SHELL: commands use bash
 // syntax, so a login shell such as zsh or fish is not a substitute.
@@ -7,9 +7,9 @@ package shellconfig
 import (
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // Config is the resolved shell binary and its leading arguments. The command

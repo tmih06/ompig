@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 
 	"github.com/google/uuid"
 )
@@ -107,7 +107,7 @@ func TestHeadlessExtensionSessionIdentity(t *testing.T) {
 				var previous string
 				for range 2 {
 					report, raw := filepath.Join(t.TempDir(), "report.jsonl"), filepath.Join(t.TempDir(), "raw.jsonl")
-					env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "pig"), "PI_CODING_AGENT_DIR=" + filepath.Join(home, "pi"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "SESSION_ID_REPORT=" + report, "SESSION_ID_RAW=" + raw}
+					env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "ompig"), "PI_CODING_AGENT_DIR=" + filepath.Join(home, "pi"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "SESSION_ID_REPORT=" + report, "SESSION_ID_RAW=" + raw}
 					args := []string{"--no-extensions", "--no-skills", "--no-prompt-templates", "--model", "test-faux/faux-1", "--session-dir", dir, "-e", fixture}
 					if noSession {
 						args = append(args, "--no-session")

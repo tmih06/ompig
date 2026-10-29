@@ -5,22 +5,22 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // buildStripRuntime runs the print-mode startup build with the given active
-// Piglet and returns the finished build.
-func buildStripRuntime(t *testing.T, p *piglet.Piglet) *cliBuild {
+// Ompiglet and returns the finished build.
+func buildStripRuntime(t *testing.T, p *ompiglet.Ompiglet) *cliBuild {
 	t.Helper()
 	home := t.TempDir()
 	agentDir := home + "/agent"
 	cwd := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	flags := parseArgs([]string{"--model", "test-faux/faux-1", "--print"})
 	t.Cleanup(applyPigletStrip(p, &flags))
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
@@ -77,7 +77,7 @@ func TestPigletStripRemovesToolsAndBuiltinExtensions(t *testing.T) {
 		t.Fatalf("stock build lacks the default built-in extensions: %v", stockPaths)
 	}
 
-	p, err := piglet.ParseBytes([]byte("name: lean\nstrip:\n  tools: [bash]\n  extensions: [mcp]\n"))
+	p, err := ompiglet.ParseBytes([]byte("name: lean\nstrip:\n  tools: [bash]\n  extensions: [mcp]\n"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -115,12 +115,12 @@ func TestApplyPigletStripFeatures(t *testing.T) {
 	flags := parseArgs([]string{"--skill", "a", "--prompt-template", "b", "--theme", "c", "--exclude-tools", "read"})
 	before := flags
 	applyPigletStrip(nil, &flags)
-	applyPigletStrip(&piglet.Piglet{Name: "plain"}, &flags)
+	applyPigletStrip(&ompiglet.Ompiglet{Name: "plain"}, &flags)
 	if !slices.Equal(flags.Skills, before.Skills) || flags.NoSkills || flags.NoThemes || flags.NoPromptTemplates || !slices.Equal(flags.ExcludeTools, []string{"read"}) || pigstrip.Active() {
 		t.Fatalf("no strip list changed the flags: %#v", flags)
 	}
 
-	p, err := piglet.ParseBytes([]byte("name: lean\nstrip:\n  tools: [read, grep]\n  features: [skills, prompt-templates, themes]\n"))
+	p, err := ompiglet.ParseBytes([]byte("name: lean\nstrip:\n  tools: [read, grep]\n  features: [skills, prompt-templates, themes]\n"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -145,7 +145,7 @@ func TestApplyPigletStripRecordsEveryList(t *testing.T) {
 			t.Skipf("this build compiles %s out", name)
 		}
 	}
-	p, err := piglet.ParseBytes([]byte("name: lean\nstrip:\n  tools: [grep]\n  commands: [/share]\n  extensions: [mcp, llama.cpp]\n  apis: [mistral-conversations]\n  features: [themes]\n"))
+	p, err := ompiglet.ParseBytes([]byte("name: lean\nstrip:\n  tools: [grep]\n  commands: [/share]\n  extensions: [mcp, llama.cpp]\n  apis: [mistral-conversations]\n  features: [themes]\n"))
 	if err != nil {
 		t.Fatal(err)
 	}

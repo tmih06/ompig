@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type containerOp struct {
@@ -23,7 +23,7 @@ type containerOp struct {
 
 // Container.render and MouseRegion.render against the pinned pi-tui (tui.ts Container, components/mouse-region.ts): the children's rows in order at the given
 // width, after children are added, edited, removed and cleared, with a nested container and a mouse region, across widths and an explicit invalidate.
-// Pig's Container caches the flattened rows; Pi concatenates on every render, so every edit sequence must show the same rows.
+// Ompig's Container caches the flattened rows; Pi concatenates on every render, so every edit sequence must show the same rows.
 // Pi source: packages/tui/src/tui.ts, packages/tui/src/components/mouse-region.ts
 func TestContainerRenderMatchesPi(t *testing.T) {
 	scripts := loadContainerScripts(t)
@@ -56,7 +56,7 @@ func TestContainerRenderMatchesPi(t *testing.T) {
 	}
 }
 
-// loadContainerScripts reads the edit scripts both Pi and Pig replay (testdata/container_scripts.json).
+// loadContainerScripts reads the edit scripts both Pi and Ompig replay (testdata/container_scripts.json).
 func loadContainerScripts(t *testing.T) [][]containerOp {
 	t.Helper()
 	data, err := os.ReadFile("testdata/container_scripts.json")

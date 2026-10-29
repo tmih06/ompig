@@ -5,8 +5,8 @@ package coding
 import (
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // ExtensionBindings supplies mode-owned UI, command actions and handlers before session_start dispatch (upstream ExtensionBindings, agent-session.ts:300-307). A field left at its zero value is Pi's undefined: BindExtensions keeps the earlier value for it.

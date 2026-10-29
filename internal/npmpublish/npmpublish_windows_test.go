@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/npmpublish"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/internal/npmpublish"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
 // npmCmdShim writes dir\npm.cmd, which runs target with its arguments as Node's npm.cmd runs npm-cli.js, and returns its path. npm on Windows is such a shim, and cmd.exe runs it.
@@ -46,11 +46,11 @@ func callArgs(calls []npmtest.Call) [][]string {
 	return args
 }
 
-// The npmCommand setting may name npm.cmd by a path with spaces, as Node's installer puts it in C:\Program Files\nodejs, and a Piglet's generated source is a folder argument. cmd.exe runs the shim, so the arguments must reach it escaped as cross-spawn escapes them; with Go's own quoting cmd.exe splits the shim's path at its first space once another argument is quoted.
+// The npmCommand setting may name npm.cmd by a path with spaces, as Node's installer puts it in C:\Program Files\nodejs, and a Ompiglet's generated source is a folder argument. cmd.exe runs the shim, so the arguments must reach it escaped as cross-spawn escapes them; with Go's own quoting cmd.exe splits the shim's path at its first space once another argument is quoted.
 func TestPublishRunsAnNPMShimAtAPathWithSpaces(t *testing.T) {
 	fake := npmtest.Install(t)
 	shim := npmCmdShim(t, filepath.Join(t.TempDir(), "Program Files", "nodejs"), fakeNPM(t))
-	dir := filepath.Join(t.TempDir(), "Tom & Jerry", "piglet source")
+	dir := filepath.Join(t.TempDir(), "Tom & Jerry", "ompiglet source")
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatal(err)
 	}

@@ -8,18 +8,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // stderrCauseLimit bounds how much of an extension's stderr log is read to
 // find the cause of a failed start.
-// pig additive (D19): subprocess stderr diagnostics remain memory-bounded.
+// ompig additive (D19): subprocess stderr diagnostics remain memory-bounded.
 const stderrCauseLimit = 64 << 10
 
 // maxStderrCauseLength bounds the cause copied into a load error message.
-// pig additive (D19): subprocess stderr diagnostics remain display-bounded.
+// ompig additive (D19): subprocess stderr diagnostics remain display-bounded.
 const maxStderrCauseLength = 500
 
 // stderrCausePattern matches the line that states an error in the output of
@@ -30,7 +30,7 @@ const maxStderrCauseLength = 500
 var stderrCausePattern = lazyregexp.New(`^([A-Za-z_][A-Za-z0-9_.]*(Error|Exception)(\s*\[[A-Z0-9_]+\])?:\s|panic:\s|fatal error:\s|thread '.*'( \(\d+\))? panicked at\s|Error:\s)`)
 
 // stderrDrainWait bounds how long a failed start waits for the extension process to exit before its log is read for the cause. The host copies the process's stderr into the log, and the copy ends only when the process has exited, so a log read earlier can miss the lines the failing process wrote last.
-// pig divergence (D56): the wait bounds only a load-failure diagnostic, never extension work.
+// ompig divergence (D56): the wait bounds only a load-failure diagnostic, never extension work.
 const stderrDrainWait = 2 * time.Second
 
 // awaitStderrDrained returns when the process behind the log has exited and its stderr is in the log, after stderrDrainWait, or when the load is cancelled. A load with no process of its own has nothing to wait for.

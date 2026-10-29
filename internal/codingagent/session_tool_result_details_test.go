@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi's session manager writes each entry with JSON.stringify (session-manager.ts appendFileSync), so a toolResult

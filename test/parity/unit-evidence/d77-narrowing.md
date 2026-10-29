@@ -73,7 +73,7 @@ Each crash invalidates the old process generation before replacement can registe
 
 ## Verification
 
-Focused admission, recovery, bisection, stack attribution, cancellation, stale-generation and log-lifetime tests pass under `-race`. The mixed-native scenario is red-proven against a compiling baseline and green against Pi. Final touched-package tests pass: subprocess 264.511 s, cmd/pig 236.991 s, codingagent 17.545 s, and SDK conformance 34.658 s. The full extensions-runtime family and the cross-family footer scenarios pass with declared durability. Linux/Windows vet, `golangci-lint config verify`, changed/full lint, `go fix -diff`, generated Go interface checks, and `ci-contracts` pass. The other drift gates pass independently.
+Focused admission, recovery, bisection, stack attribution, cancellation, stale-generation and log-lifetime tests pass under `-race`. The mixed-native scenario is red-proven against a compiling baseline and green against Pi. Final touched-package tests pass: subprocess 264.511 s, cmd/ompig 236.991 s, codingagent 17.545 s, and SDK conformance 34.658 s. The full extensions-runtime family and the cross-family footer scenarios pass with declared durability. Linux/Windows vet, `golangci-lint config verify`, changed/full lint, `go fix -diff`, generated Go interface checks, and `ci-contracts` pass. The other drift gates pass independently.
 
 D77 deliberately remained pending during implementation. The divergence-quality gate and the existing closure assertions rejected that unapproved record. No approval was inferred from implementing the narrowing.
 

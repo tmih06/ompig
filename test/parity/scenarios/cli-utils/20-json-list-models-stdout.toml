@@ -7,7 +7,7 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/metadata-routing/agent", "FORCE_COLOR=0"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/metadata-routing/agent", "FORCE_COLOR=0"]
 pi = ["PI_CODING_AGENT_DIR=testdata/metadata-routing/agent", "FORCE_COLOR=0"]
 
 [cli]

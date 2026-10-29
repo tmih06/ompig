@@ -9,13 +9,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func recordReplacedOriginal(t *testing.T, site int, title string) {
 	t.Helper()
-	if os.Getenv("PIG_REPLACED_2860_PROBE") == "" {
+	if os.Getenv("OMPIG_REPLACED_2860_PROBE") == "" {
 		return
 	}
 	t.Cleanup(func() {

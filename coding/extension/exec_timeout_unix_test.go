@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // execTimerScript is testdata/exec_timer.mjs, which a test that changes its working directory still finds.
@@ -23,7 +23,7 @@ var execTimerScript, _ = filepath.Abs("testdata/exec_timer.mjs")
 
 // exec.ts:75 starts the timeout once spawn has returned, so the time spawn takes to find and start the program does not
 // count against it. A PATH of many directories that each cost a long symlink walk makes finding the program take seconds,
-// in Node's spawn (libuv searches the PATH before spawn returns) and in PiG; a timeout of one second must then end the
+// in Node's spawn (libuv searches the PATH before spawn returns) and in Ompig; a timeout of one second must then end the
 // program a second after spawn returned, not while spawn was still finding it. The program outlives the timeout many
 // times over, so the timer ends it, and the test reads when spawn returned and how long after that the call resolved: a
 // lower bound that a loaded host can only lengthen. A program that had to finish inside the timeout would fail whenever
@@ -31,7 +31,7 @@ var execTimerScript, _ = filepath.Abs("testdata/exec_timer.mjs")
 func TestExecCommandStartsTheTimeoutAfterTheSpawnAsPiDoes(t *testing.T) {
 	dir := t.TempDir()
 	// Relative PATH entries resolve in the working directory, which is dir in
-	// PiG, in Node, and in the child, and keep the environment small.
+	// Ompig, in Node, and in the child, and keep the environment small.
 	t.Chdir(dir)
 	if err := os.Mkdir("d", 0o755); err != nil {
 		t.Fatal(err)
@@ -104,7 +104,7 @@ func TestExecCommandStartsTheTimeoutAfterTheSpawnAsPiDoes(t *testing.T) {
 			afterSpawn: time.Duration(report.AfterSpawnMs * float64(time.Millisecond)),
 		}
 	}
-	runPiG := func() timeline {
+	runOmpig := func() timeline {
 		// ExecCommand reports the end of the spawn to the initiation mark of its context, before it starts the timer.
 		var spawned time.Time
 		ctx := WithCallInitiation(context.Background(), func() { spawned = time.Now() })
@@ -129,7 +129,7 @@ func TestExecCommandStartsTheTimeoutAfterTheSpawnAsPiDoes(t *testing.T) {
 		// early is how much sooner than its delay the side's timer can fire: Node's timers count whole milliseconds.
 		early time.Duration
 	}
-	pending := []side{{"Pi", runPi, time.Millisecond}, {"PiG", runPiG, 0}}
+	pending := []side{{"Pi", runPi, time.Millisecond}, {"Ompig", runOmpig, 0}}
 	for len(pending) > 0 {
 		setPath(entries)
 		var waiting []side

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // ToolRenderShell mirrors upstream ToolDefinition.renderShell.

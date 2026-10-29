@@ -1,17 +1,17 @@
 package piglogin
 
-// The character sprite tests of the owner's earlier PiG piglogin (definition_test.go and render_test.go), with its inputs
-// and expectations. Not ported: the HPE wordmark and the hpe-agentic default (PiG draws no HPE branding), the shared-hero
-// assertion (the hero here is the website "PiG." wordmark, pinned by TestDefaultHeaderGoldenRenders and the per-sprite
-// goldens below), and the "dark-vader" alias (a settings value of that PiG, never written to this login state). The
-// sheriff keeps PiG Standard's name, "Sheriff PiG".
+// The character sprite tests of the owner's earlier Ompig piglogin (definition_test.go and render_test.go), with its inputs
+// and expectations. Not ported: the HPE wordmark and the hpe-agentic default (Ompig draws no HPE branding), the shared-hero
+// assertion (the hero here is the website "Ompig." wordmark, pinned by TestDefaultHeaderGoldenRenders and the per-sprite
+// goldens below), and the "dark-vader" alias (a settings value of that Ompig, never written to this login state). The
+// sheriff keeps Ompig Standard's name, "Sheriff Ompig".
 
 import (
 	"image/color"
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func TestCustomVariantsUseApprovedMetadataAndColors(t *testing.T) {
@@ -32,7 +32,7 @@ func TestCustomVariantsUseApprovedMetadataAndColors(t *testing.T) {
 			wantColors: map[byte]color.RGBA{'E': rgb(0xD1, 0xC7, 0xB5), 'e': rgb(0xAD, 0xA1, 0x91), 's': rgb(0xA6, 0x48, 0x32), 'R': rgb(0x91, 0x1F, 0x1F), 'W': rgb(0xB5, 0xBE, 0xBE), 'O': rgb(0x16, 0x12, 0x11), 'K': rgb(0x16, 0x12, 0x11)},
 		},
 		{
-			id: "piglet", name: "Piglet", tagline: "A Very Small Animal with very large diffs.",
+			id: "ompiglet", name: "Ompiglet", tagline: "A Very Small Animal with very large diffs.",
 			wantColors: map[byte]color.RGBA{'P': rgb(0xF6, 0xA6, 0xB6), 's': rgb(0xE8, 0x6F, 0x88), 'e': rgb(0xF0, 0x6A, 0x8A), 'R': rgb(0xD9, 0x1F, 0x4E), 'r': rgb(0xA8, 0x0F, 0x38)},
 		},
 		{
@@ -40,7 +40,7 @@ func TestCustomVariantsUseApprovedMetadataAndColors(t *testing.T) {
 			wantColors: map[byte]color.RGBA{'R': rgb(0xE6, 0x24, 0x29), 'r': rgb(0x7A, 0x11, 0x18), 's': rgb(0xA9, 0x13, 0x1B), 'W': rgb(0xFF, 0xFF, 0xFF), 'O': rgb(0x12, 0x0B, 0x0D), 'K': rgb(0x12, 0x0B, 0x0D)},
 		},
 		{
-			id: "sheriff", name: "Sheriff PiG", tagline: "Laying down the law, one commit at a time.",
+			id: "sheriff", name: "Sheriff Ompig", tagline: "Laying down the law, one commit at a time.",
 			wantColors: map[byte]color.RGBA{'P': rgb(0xF2, 0xB8, 0xA8), 'H': rgb(0x6B, 0x4C, 0x3A), 'h': rgb(0x8B, 0x6F, 0x47), 'S': rgb(0xFF, 0xD7, 0x00)},
 		},
 	}
@@ -80,18 +80,18 @@ func TestPiGroguVisualAnchors(t *testing.T) {
 }
 
 func TestPigletVisualAnchors(t *testing.T) {
-	piglet := FindVariant("piglet").Sprite
-	if piglet[0] != "..OOOO....OOOO.." || piglet[1] != ".OeeeO....OeeeO." {
-		t.Fatalf("Piglet tall ear anchors changed: %q / %q", piglet[0], piglet[1])
+	ompiglet := FindVariant("ompiglet").Sprite
+	if ompiglet[0] != "..OOOO....OOOO.." || ompiglet[1] != ".OeeeO....OeeeO." {
+		t.Fatalf("Ompiglet tall ear anchors changed: %q / %q", ompiglet[0], ompiglet[1])
 	}
-	if piglet[5] != ".OPPWWPPPPWWPPO." || piglet[6] != ".OPPWKPPPPKWPPO." {
-		t.Fatalf("Piglet standard eye anchors changed: %q / %q", piglet[5], piglet[6])
+	if ompiglet[5] != ".OPPWWPPPPWWPPO." || ompiglet[6] != ".OPPWKPPPPKWPPO." {
+		t.Fatalf("Ompiglet standard eye anchors changed: %q / %q", ompiglet[5], ompiglet[6])
 	}
-	if piglet[9] != ".OPPPPPPPPPPPPO." || piglet[10] != "..OPPPPKKPPPPO.." {
-		t.Fatalf("Piglet nose gap or centered mouth changed: %q / %q", piglet[9], piglet[10])
+	if ompiglet[9] != ".OPPPPPPPPPPPPO." || ompiglet[10] != "..OPPPPKKPPPPO.." {
+		t.Fatalf("Ompiglet nose gap or centered mouth changed: %q / %q", ompiglet[9], ompiglet[10])
 	}
-	if piglet[11] != "..ORRRRRRRRRRO.." || piglet[12] != ".OrrrrrrrrrrrrO." || piglet[13] != "ORRRRRRRRRRRRRRO" {
-		t.Fatalf("Piglet horizontal shirt bands changed: %q / %q / %q", piglet[11], piglet[12], piglet[13])
+	if ompiglet[11] != "..ORRRRRRRRRRO.." || ompiglet[12] != ".OrrrrrrrrrrrrO." || ompiglet[13] != "ORRRRRRRRRRRRRRO" {
+		t.Fatalf("Ompiglet horizontal shirt bands changed: %q / %q / %q", ompiglet[11], ompiglet[12], ompiglet[13])
 	}
 }
 
@@ -99,8 +99,8 @@ func TestSpiderHamVisualContracts(t *testing.T) {
 	spiderHam := FindVariant("spider-ham").Sprite
 	for y, row := range spiderHam {
 		for x := range len(row) {
-			if (row[x] == '.') != (pigMascot[y][x] == '.') {
-				t.Fatalf("Spider-Ham silhouette differs from standard Pig at row %d column %d", y, x)
+			if (row[x] == '.') != (ompigMascot[y][x] == '.') {
+				t.Fatalf("Spider-Ham silhouette differs from standard Ompig at row %d column %d", y, x)
 			}
 		}
 	}
@@ -146,8 +146,8 @@ func TestSpiderHamVisualContracts(t *testing.T) {
 
 func TestSheriffVisualAnchors(t *testing.T) {
 	sheriff := FindVariant("sheriff").Sprite
-	if got := sheriff[6]; got != pigMascot[6] {
-		t.Fatalf("Sheriff gaze row = %q, want standard Pig gaze %q", got, pigMascot[6])
+	if got := sheriff[6]; got != ompigMascot[6] {
+		t.Fatalf("Sheriff gaze row = %q, want standard Ompig gaze %q", got, ompigMascot[6])
 	}
 	if sheriff[0] != ".....HHHHHH....." || sheriff[1] != "..OeHHHHHHHHeO.." {
 		t.Fatalf("Sheriff crown and ear anchors changed: %q / %q", sheriff[0], sheriff[1])

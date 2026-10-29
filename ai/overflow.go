@@ -3,7 +3,7 @@ package ai
 import (
 	"regexp"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // jsSpaceClass is the JavaScript \s class; Go's \s is ASCII-only and lacks \v and the Unicode spaces.

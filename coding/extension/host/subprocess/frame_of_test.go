@@ -1,7 +1,7 @@
 package subprocess
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // frameOf builds the component of a header or footer factory the way a host does and returns it, or nil for a cleared surface.

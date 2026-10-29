@@ -2,7 +2,7 @@ package codingagent
 
 // bug_report.go ports the export side of upstream core/bug-report.ts: the
 // report metadata, redaction, failed-turn diagnostics, the bundle files, and
-// the zip archive. PiG never uploads a report (D62); see slash_bug.go.
+// the zip archive. Ompig never uploads a report (D62); see slash_bug.go.
 
 import (
 	"archive/zip"
@@ -19,24 +19,24 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // BugReportCustomEntryType is the session custom-entry type recorded after a
-// report is written. It matches upstream so Pi and PiG read the same history.
+// report is written. It matches upstream so Pi and Ompig read the same history.
 const BugReportCustomEntryType = "pi.bug-report"
 
 const (
 	bugReportSchemaVersion = 1
 	bugReportRedacted      = "<redacted>"
-	// BugReportIssueURL is the PiG issue form that /bug links to. PiG
-	// reports go to the PiG repository, never to Pi's report gateway (D62).
-	BugReportIssueURL = "https://github.com/MichaelKinsy/PiG/issues/new"
+	// BugReportIssueURL is the Ompig issue form that /bug links to. Ompig
+	// reports go to the Ompig repository, never to Pi's report gateway (D62).
+	BugReportIssueURL = "https://github.com/tmih06/ompig/issues/new"
 	// bugReportIssueTemplate is .github/ISSUE_TEMPLATE/bug.yml.
 	bugReportIssueTemplate = "bug.yml"
 	// bugReportIssueTitleRunes bounds the title taken from the description.
@@ -194,7 +194,7 @@ func redactBugReportSettings(settings Settings) (any, error) {
 	return redacted, nil
 }
 
-// BugReportEnvironment describes the running PiG process without secrets.
+// BugReportEnvironment describes the running Ompig process without secrets.
 type BugReportEnvironment struct {
 	Version   string               `json:"version"`
 	UserAgent string               `json:"userAgent"`
@@ -206,9 +206,9 @@ type BugReportEnvironment struct {
 	Shell     *string              `json:"shell"`
 	Terminal  BugReportTerminalEnv `json:"terminal"`
 	// PiEnvironmentVariables lists PI_* names only; values never leave the
-	// machine. PigEnvironmentVariables lists PiG's own PIG_* names.
-	PiEnvironmentVariables  []string `json:"piEnvironmentVariables"`
-	PigEnvironmentVariables []string `json:"pigEnvironmentVariables"`
+	// machine. OmpigEnvironmentVariables lists Ompig's own OMPIG_* names.
+	PiEnvironmentVariables    []string `json:"piEnvironmentVariables"`
+	OmpigEnvironmentVariables []string `json:"ompigEnvironmentVariables"`
 }
 
 // BugReportTerminalEnv records terminal identification variables.
@@ -230,7 +230,7 @@ func optionalEnv(getenv func(string) string, name string) *string {
 }
 
 // nodePlatform and nodeArch report the same names as Pi's process.platform
-// and process.arch, so PiG and Pi reports describe a machine identically.
+// and process.arch, so Ompig and Pi reports describe a machine identically.
 func nodePlatform(goos string) string {
 	if goos == "windows" {
 		return "win32"
@@ -250,7 +250,7 @@ func nodeArch(goarch string) string {
 }
 
 func codingAgentUserAgent(version, platform, release, arch string) string {
-	// pig divergence (D65): use the one owner-approved PiG product identity
+	// ompig divergence (D65): use the one owner-approved Ompig product identity
 	// instead of coding-agent's separate runtime-based pi/<version> shape.
 	return AppName + "/" + version + " (" + platform + " " + release + "; " + arch + ")"
 }
@@ -282,20 +282,20 @@ func collectBugReportEnvironment(version string, getenv func(string) string, env
 			SSH:            getenv("SSH_CONNECTION") != "" || getenv("SSH_CLIENT") != "" || getenv("SSH_TTY") != "",
 			CI:             getenv("CI") != "",
 		},
-		PiEnvironmentVariables:  []string{},
-		PigEnvironmentVariables: []string{},
+		PiEnvironmentVariables:    []string{},
+		OmpigEnvironmentVariables: []string{},
 	}
 	for _, entry := range environ {
 		name, _, _ := strings.Cut(entry, "=")
 		switch {
 		case strings.HasPrefix(name, "PI_"):
 			env.PiEnvironmentVariables = append(env.PiEnvironmentVariables, name)
-		case strings.HasPrefix(name, "PIG_"):
-			env.PigEnvironmentVariables = append(env.PigEnvironmentVariables, name)
+		case strings.HasPrefix(name, "OMPIG_"):
+			env.OmpigEnvironmentVariables = append(env.OmpigEnvironmentVariables, name)
 		}
 	}
 	slices.Sort(env.PiEnvironmentVariables)
-	slices.Sort(env.PigEnvironmentVariables)
+	slices.Sort(env.OmpigEnvironmentVariables)
 	return env
 }
 
@@ -428,7 +428,7 @@ type BugReportExtension struct {
 	Path string `json:"path"`
 }
 
-// BugReportExtensionError is one extension load failure. PiG's subprocess
+// BugReportExtensionError is one extension load failure. Ompig's subprocess
 // host reports failures as messages without a separate path.
 type BugReportExtensionError struct {
 	Error string `json:"error"`
@@ -704,14 +704,14 @@ func WriteBugReportArchive(bundle BugReportBundle, path string) (err error) {
 }
 
 // BugReportArchiveFileName names a report archive. Mirrors upstream
-// bugReportArchiveFileName with PiG's command name (D2).
+// bugReportArchiveFileName with Ompig's command name (D2).
 func BugReportArchiveFileName(id string) string {
 	return AppName + "-bug-report-" + id + ".zip"
 }
 
-// BugReportIssueLink returns a prefilled PiG bug-form URL. It carries only the
+// BugReportIssueLink returns a prefilled Ompig bug-form URL. It carries only the
 // form's own fields: a title from the first line of the description (bounded),
-// the PiG and Pi versions, the platform, and the archive name to attach. It
+// the Ompig and Pi versions, the platform, and the archive name to attach. It
 // never carries session content, settings, or paths.
 func BugReportIssueLink(metadata BugReportMetadata, archiveName, upstreamVersion string) string {
 	title := "bug: "

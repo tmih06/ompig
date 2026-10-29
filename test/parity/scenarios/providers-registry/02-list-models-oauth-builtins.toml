@@ -1,7 +1,7 @@
 # Behavior family: providers-registry
 # Surface: --list-models honors staged agent-dir auth.json for OAuth-backed built-ins.
 #
-# Upstream evidence (pi v0.79.1, verified pig==pi this loop):
+# Upstream evidence (pi v0.79.1, verified ompig==pi this loop):
 #   command:
 #     PI_CODING_AGENT_DIR=testdata/oauth-agent pi --list-models 2>&1
 #   testdata/oauth-agent/auth.json stages a non-secret openai-codex OAuth
@@ -35,7 +35,7 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/oauth-agent"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/oauth-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/oauth-agent"]
 
 [cli]
 args = ["--list-models"]

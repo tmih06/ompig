@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // runner.ts:1437-1471: every handler's event carries the one shared options object (`systemPromptOptions: currentOptions`), so a later handler sees the forced prompt an

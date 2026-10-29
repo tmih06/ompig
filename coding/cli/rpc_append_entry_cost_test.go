@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 const appendEntryCostExtension = `export default function (pi) {
@@ -50,7 +50,7 @@ func TestRPCNodeAppendEntryCostIsLinearInTheAppends(t *testing.T) {
 	if err := os.WriteFile(fixture, []byte(appendEntryCostExtension), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, cwd, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"},
+	p := startRPCProcessAt(t, cwd, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"},
 		"--model", "test-faux/faux-1", "--session", session.Path(), "-e", fixture)
 	p.send(fmt.Sprintf(`{"id":"append","type":"prompt","message":"/append_many %d"}`, appends))
 	var report string

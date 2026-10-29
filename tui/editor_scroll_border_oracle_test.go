@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type editorScrollProbe struct {
@@ -77,7 +77,7 @@ func TestEditorScrollBordersMatchPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got, expected[i]) {
 			if failures++; failures <= 5 {
-				t.Errorf("%+v:\n  Pig %q\n  Pi  %q", probe, got, expected[i])
+				t.Errorf("%+v:\n  Ompig %q\n  Pi  %q", probe, got, expected[i])
 			}
 		}
 	}
@@ -89,7 +89,7 @@ func TestEditorScrollBordersMatchPi(t *testing.T) {
 	}
 }
 
-// TestEditorScrollBordersParity prints Pig's renders of the corpus, one JSON line per probe, for the editor-scroll-borders parity scenario.
+// TestEditorScrollBordersParity prints Ompig's renders of the corpus, one JSON line per probe, for the editor-scroll-borders parity scenario.
 func TestEditorScrollBordersParity(t *testing.T) {
 	for _, probe := range editorScrollProbes(t) {
 		line, err := json.Marshal(renderEditorScrollProbe(probe))

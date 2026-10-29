@@ -11,15 +11,15 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports the interactive half of upstream regressions/9068: handleBashCommand
-// returns without running the command when emitUserBash rejects. Pig ran the
+// returns without running the command when emitUserBash rejects. Ompig ran the
 // `!cmd` locally after a failing user_bash handler.
 func TestInteractiveBashDoesNotRunWhenUserBashHandlerFails(t *testing.T) {
 	dir := t.TempDir()
@@ -109,7 +109,7 @@ func TestInteractiveBashShowsAndRecordsUserBashResult(t *testing.T) {
 
 // Upstream handleBashCommand awaits session.executeBash, which records the result through recordBashResult; when
 // that throws, the catch completes the block with setComplete(undefined, false) and shows
-// showError(`Bash command failed: ${message}`) (interactive-mode.ts handleBashCommand). PiG appended to the inner
+// showError(`Bash command failed: ${message}`) (interactive-mode.ts handleBashCommand). Ompig appended to the inner
 // Session itself, kept the block's result and printed a hard-coded yellow "bash session persist warning".
 func TestInteractiveBashRecordFailureShowsBashCommandFailed(t *testing.T) {
 	dir := t.TempDir()
@@ -143,7 +143,7 @@ func TestInteractiveBashRecordFailureShowsBashCommandFailed(t *testing.T) {
 		t.Fatalf("the recording failure is not shown as upstream's showError:\n%s", chat)
 	}
 	if strings.Contains(chat, "persist warning") || strings.Contains(chat, "(exit 3)") {
-		t.Fatalf("the block kept its result or a PiG-only warning after the recording failure:\n%s", chat)
+		t.Fatalf("the block kept its result or a Ompig-only warning after the recording failure:\n%s", chat)
 	}
 }
 

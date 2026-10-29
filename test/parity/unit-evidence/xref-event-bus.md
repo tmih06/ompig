@@ -9,7 +9,7 @@ Design: `plans/0.3.x/gap-xproc.md`. Pi contract: `packages/coding-agent/src/core
 
 ## Evidence (all on Linux, Node 26.7, Go 1.27.1)
 
-Differential tests run each scenario against Pi's own vendored `createEventBus` in one heap and against packed, strict-isolation and mixed PiG topologies, with exact string equality:
+Differential tests run each scenario against Pi's own vendored `createEventBus` in one heap and against packed, strict-isolation and mixed Ompig topologies, with exact string equality:
 
 - `TestXrefEventBusForeignPrefixMutationMatchesPi` (the checkpoint's red `{n:0}` versus `{n:1}` assertion), `TestXrefEventBusMatchesPiAcrossRealms` (identity, cycles, functions with receivers, private fields, accessors, Map/Date, symbols, non-configurable properties, first-generation post-await ordering, retained aliases, reentrant emit), `TestXrefEventBusListenerOrderMatchesPi`, `TestXrefEventBusReentrantDispatchMatchesPi` (four levels, three runs), `TestXrefEventBusCrossingEmittersDoNotDeadlock`, `TestXrefEventBusPayloadLifetimeMatchesPi` (forced GC; Host ledger empty), `TestXrefOwnerExitFailsRetainedAlias`.
 - Mutation checks: skipping removed listeners in a routed snapshot fails the two routed topologies of the order test; suppressing importer releases fails the lifetime test.

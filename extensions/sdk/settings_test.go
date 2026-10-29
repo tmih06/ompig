@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Upstream types.ts:1708 and loader.ts:411-414: getSettings returns a copy of the effective settings object (global and project merged, with overrides). The host replicates it with each state.

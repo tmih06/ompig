@@ -1,6 +1,6 @@
 package ai
 
-import "github.com/MichaelKinsy/PiG/internal/stackprime"
+import "github.com/tmih06/ompig/internal/stackprime"
 
 func (builder *assistantStreamBuilder) runResponse(run func() error) {
 	stackprime.Prime()

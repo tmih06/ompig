@@ -1,6 +1,6 @@
 //! The extension_runner script of the session graph rows: createExtensionRuntime and ExtensionRunner over two probe extensions, as testdata/extension-runner.mjs does with Pi's own classes; the report is Pi's own run's.
 
-use pig_sdk::{
+use ompig_sdk::{
     create_extension_runtime, CancelledResult, CommandNewSessionOptions, CompactOptions, Context, DefaultResourceLoader, DefaultResourceLoaderOptions, ExtensionActions, ExtensionCommandContextActions,
     ExtensionContextActions, ExtensionRunner, ExtensionRuntime, ExtensionUIContext, ForkOptions, ModelRuntime, ModelRuntimeCreateOptions, SessionManager, SettingsManager,
 };

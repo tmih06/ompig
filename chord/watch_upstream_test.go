@@ -11,8 +11,8 @@ import (
 	"testing"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // Ports packages/chord/test/watch.test.ts: the shared lifecycle through Watch, and what NativeWatch does differently.

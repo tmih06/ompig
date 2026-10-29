@@ -192,7 +192,7 @@ var constraintOps map[string]cfunc
 
 const constraintOpsPattern = `=||!=|>|<|>=|=>|<=|=<|~|~>|\^`
 
-// PiG fork: the regular expressions compile on first use (see lazy.go), not in init.
+// Ompig fork: the regular expressions compile on first use (see lazy.go), not in init.
 var constraintRegex = lazyRegexp(fmt.Sprintf(
 	`^\s*(%s)\s*(%s)\s*$`,
 	constraintOpsPattern,

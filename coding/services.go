@@ -18,12 +18,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/stackprime"
+	"github.com/tmih06/ompig/internal/stackprime"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // Settings is the merged user-settings view. Global settings are overlaid by
@@ -96,18 +96,18 @@ type AgentSessionRuntimeDiagnostic = icodingagent.AgentSessionRuntimeDiagnostic
 
 // CreateAgentSessionServicesOptions configures CreateAgentSessionServices. All fields are optional;
 // empty values resolve to sensible defaults (current working directory,
-// $PIG_HOME/agent or ~/.pig/agent).
+// $OMPIG_HOME/agent or ~/.ompig/agent).
 type CreateAgentSessionServicesOptions struct {
 	// CWD is the project directory used to discover per-project
-	// settings (.pig/settings.json) and to anchor session storage.
+	// settings (.ompig/settings.json) and to anchor session storage.
 	// Empty uses SessionManager.GetCwd when supplied, otherwise os.Getwd().
 	CWD string
 
 	// SessionManager supplies the CWD default when CWD is empty. It remains caller-owned; SessionOptions selects the log used by a Session.
 	SessionManager *SessionManager
 
-	// AgentDir is the global pig config directory (typically
-	// ~/.pig/agent). Empty → DefaultAgentDir().
+	// AgentDir is the global ompig config directory (typically
+	// ~/.ompig/agent). Empty → DefaultAgentDir().
 	AgentDir string
 
 	// ProjectTrusted controls whether project-local settings are loaded. nil
@@ -251,7 +251,7 @@ func newConfiguredServices(cwd, agentDir string, auth *ai.AuthStorage, credentia
 		settings:    sm,
 		registry:    &ModelRegistry{ModelRegistry: reg},
 		testFauxProvider: sync.OnceValue(func() *ai.TestFauxProvider {
-			return &ai.TestFauxProvider{Scenario: os.Getenv("PIG_TEST_FAUX_SCENARIO")}
+			return &ai.TestFauxProvider{Scenario: os.Getenv("OMPIG_TEST_FAUX_SCENARIO")}
 		}),
 	}
 	modelRuntime, err := NewModelRuntime(services)
@@ -260,7 +260,7 @@ func newConfiguredServices(cwd, agentDir string, auth *ai.AuthStorage, credentia
 	}
 	services.modelRuntime = modelRuntime
 	services.registry = NewModelRegistry(modelRuntime)
-	if os.Getenv("PIG_TEST_FAUX") == "1" { //perf:ok once per Services construction, test-only registration
+	if os.Getenv("OMPIG_TEST_FAUX") == "1" { //perf:ok once per Services construction, test-only registration
 		if err := registerHarnessTestFaux(reg); err != nil {
 			return nil, err
 		}
@@ -297,7 +297,7 @@ func (s *AgentSessionServices) Diagnostics() []AgentSessionRuntimeDiagnostic {
 func (s *AgentSessionServices) CWD() string { return s.cwd }
 
 // AgentDir returns the global agent config directory (typically
-// ~/.pig/agent or $PIG_HOME/agent).
+// ~/.ompig/agent or $OMPIG_HOME/agent).
 func (s *AgentSessionServices) AgentDir() string { return s.agentDir }
 
 // Auth returns the credential storage backing auth.json. Read-mostly;
@@ -340,8 +340,8 @@ func (s *AgentSessionServices) Registry() *ModelRegistry { return s.registry }
 // registry facade created from these Services.
 func (s *AgentSessionServices) ModelRuntime() *ModelRuntime { return s.modelRuntime }
 
-// DefaultAgentDir is Pi's getAgentDir: the global agent config directory the pig binary uses. PIG_CODING_AGENT_DIR (PI_CODING_AGENT_DIR when
-// PIG_USE_PI_DIRS=1) names it with a leading tilde expanded; otherwise it is $PIG_HOME/agent if PIG_HOME is set, else ~/.pig/agent.
+// DefaultAgentDir is Pi's getAgentDir: the global agent config directory the ompig binary uses. OMPIG_CODING_AGENT_DIR (PI_CODING_AGENT_DIR when
+// OMPIG_USE_PI_DIRS=1) names it with a leading tilde expanded; otherwise it is $OMPIG_HOME/agent if OMPIG_HOME is set, else ~/.ompig/agent.
 func DefaultAgentDir() string {
 	return icodingagent.DefaultAgentDir()
 }

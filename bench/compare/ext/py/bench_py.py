@@ -12,7 +12,7 @@ import sys
 _SDK_ROOT = pathlib.Path(__file__).resolve().parents[3] / "extensions" / "sdk-py"
 sys.path.insert(0, str(_SDK_ROOT))
 
-import pig_sdk  # noqa: E402
+import ompig_sdk  # noqa: E402
 
 _BLOCK = bytes(65536)
 
@@ -28,8 +28,8 @@ def _on_tool_call(ctx, data):
     return None
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("bench-py")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("bench-py")
     ext.tool("hello_py", "Return a hello greeting", {"type": "object"}, lambda ctx, args: {"content": "hello from python"})
     ext.on_event("tool_call", _on_tool_call)
     return ext

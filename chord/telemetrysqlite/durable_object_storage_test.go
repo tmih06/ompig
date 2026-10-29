@@ -13,7 +13,7 @@ import (
 	// Registers the pure-Go "sqlite" database/sql driver.
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/chord/sqlite/cloudflare"
+	"github.com/tmih06/ompig/chord/sqlite/cloudflare"
 )
 
 type durableObjectStorage struct{ conn *sql.Conn }

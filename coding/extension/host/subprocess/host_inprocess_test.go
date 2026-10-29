@@ -14,13 +14,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // greetExt is a minimal real SDK extension whose "greet" tool returns a known
@@ -51,7 +51,7 @@ func assertGreet(t *testing.T, ext extension.Extension) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	result, err := tool.Definition.Execute(ctx, "tc-1", json.RawMessage(`{"name":"Piglet Binary"}`), nil)
+	result, err := tool.Definition.Execute(ctx, "tc-1", json.RawMessage(`{"name":"Ompiglet Binary"}`), nil)
 	if err != nil {
 		t.Fatalf("fused tool execute: %v", err)
 	}
@@ -62,8 +62,8 @@ func assertGreet(t *testing.T, ext extension.Extension) {
 	if err := json.Unmarshal(b, &got); err != nil {
 		t.Fatal(err)
 	}
-	if len(got.Content) != 1 || got.Content[0].Text != "fused hello, Piglet Binary" {
-		t.Errorf("fused tool content = %q, want %q", got.Content, "fused hello, Piglet Binary")
+	if len(got.Content) != 1 || got.Content[0].Text != "fused hello, Ompiglet Binary" {
+		t.Errorf("fused tool content = %q, want %q", got.Content, "fused hello, Ompiglet Binary")
 	}
 }
 

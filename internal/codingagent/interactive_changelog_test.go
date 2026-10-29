@@ -1,4 +1,4 @@
-//go:build !pig_strip_changelog
+//go:build !ompig_strip_changelog
 
 package codingagent
 
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestChangelogCommandRetainsContentBeyondViewport(t *testing.T) {

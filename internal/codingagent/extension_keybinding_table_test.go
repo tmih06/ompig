@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // builtExtensionKeybindingTable is ExtensionKeybindingTable as it was when it built the definitions on every call: the reference the shared definitions must match.

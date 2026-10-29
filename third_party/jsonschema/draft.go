@@ -127,7 +127,7 @@ var (
 	draftLatest = Draft2020
 )
 
-// compileMeta compiles the draft's metaschema and vocabulary schemas, once, on the draft's first use. PiG fork: v6.0.2 compiled every draft's in a package init().
+// compileMeta compiles the draft's metaschema and vocabulary schemas, once, on the draft's first use. Ompig fork: v6.0.2 compiled every draft's in a package init().
 func (d *Draft) compileMeta() {
 	d.metaOnce.Do(func() {
 		c := NewCompiler()

@@ -183,7 +183,7 @@ func TestBuildLedgerFromHistory(t *testing.T) {
 	r.commit("loop: exit the loop\n\nThe loop hung.\n\nRoot cause: the loop never checked the stop flag.\n\nTestLoopExits fails without the fix.", "loop.go", "loop_test.go", "changelog.d/loop.md")
 	r.write("quick.go", "package x\n")
 	quick := r.commit("Fix a quick crash", "quick.go")
-	r.write("docs/parity/DIVERGENCES.md", divergenceFixture+"\n## D2 Aborted tools\n\nWhat: PiG stops.\n\nPi bug: Pi waits forever.\n\nPi issue: https://example.com/pi/issues/1\n\nRemove when: Pi stops waiting.\n\nEvidence: `TestLoopExits`.\n\nSCRUTINIZED:approved\n")
+	r.write("docs/parity/DIVERGENCES.md", divergenceFixture+"\n## D2 Aborted tools\n\nWhat: Ompig stops.\n\nPi bug: Pi waits forever.\n\nPi issue: https://example.com/pi/issues/1\n\nRemove when: Pi stops waiting.\n\nEvidence: `TestLoopExits`.\n\nSCRUTINIZED:approved\n")
 	r.commit("Record D2", "docs/parity/DIVERGENCES.md")
 
 	l, err := build(r.root, "0.4.1")
@@ -332,7 +332,7 @@ func TestTheLedgerRefusesToAttributeTheTestsOfASquash(t *testing.T) {
 	r.write("a_test.go", "package x\n\nfunc TestAFixed(t *testing.T) {}\n")
 	r.writeFiles(maxCommitFiles)
 	r.write("changelog.d/a.md", "### Fixed\n\n- Empty input no longer crashes.\n")
-	squashed := r.commit("PiG 0.5.0 (#213)", ".")
+	squashed := r.commit("Ompig 0.5.0 (#213)", ".")
 
 	// No marker: the note is located at the squash, which wrote it.
 	_, err := build(r.root, "0.4.1")
@@ -422,7 +422,7 @@ func TestReleaseNotesDraftComesFromTheLedgers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"# PiG 0.5.0 release notes (draft)", "Draft. Not published.", "## Upgrading from 0.4.x", "- Change your call.", "- A new flag.", "- A fragment change.", "PiG 0.5.0 follows Pi 1.1.0", "Crash, hang or runaway process: 1", "- D2: New"} {
+	for _, want := range []string{"# Ompig 0.5.0 release notes (draft)", "Draft. Not published.", "## Upgrading from 0.4.x", "- Change your call.", "- A new flag.", "- A fragment change.", "Ompig 0.5.0 follows Pi 1.1.0", "Crash, hang or runaway process: 1", "- D2: New"} {
 		if !strings.Contains(notes, want) {
 			t.Errorf("the draft lacks %q:\n%s", want, notes)
 		}
@@ -482,8 +482,8 @@ func TestEveryNewDivergenceIsAccountedFor(t *testing.T) {
 	r := newFixture(t)
 	r.write("loop_test.go", "package x\n\nfunc TestNoStdin(t *testing.T) {}\n")
 	r.write("docs/parity/DIVERGENCES.md", divergenceFixture+
-		"\n## D3 `--no-stdin` skips the startup read (Pi #10415)\n\nWhat: PiG adds the flag.\n\nWhy: Pi waits for the end of an open pipe.\n\nObservable effect: PiG starts; Pi hangs.\n\nLocked by: `TestNoStdin`.\n\nRemove when: Pi fixes #10415.\n\nSCRUTINIZED:approved\n"+
-		"\n## D5 A streamed call without an id (pi-mono #10299)\n\nWhat: PiG gives it an id.\n\nWhy: the session wedges.\n\nRemove when: Pi fixes it.\n\nSCRUTINIZED:approved\n"+
+		"\n## D3 `--no-stdin` skips the startup read (Pi #10415)\n\nWhat: Ompig adds the flag.\n\nWhy: Pi waits for the end of an open pipe.\n\nObservable effect: Ompig starts; Pi hangs.\n\nLocked by: `TestNoStdin`.\n\nRemove when: Pi fixes #10415.\n\nSCRUTINIZED:approved\n"+
+		"\n## D5 A streamed call without an id (pi-mono #10299)\n\nWhat: Ompig gives it an id.\n\nWhy: the session wedges.\n\nRemove when: Pi fixes it.\n\nSCRUTINIZED:approved\n"+
 		"\n## D4 Terminal input\n\nWhat: the driver owns input.\n\nWhy: no blocking call on the loop.\n\nRemove when: never.\n\nSCRUTINIZED:approved\n")
 	r.commit("Record D3 and D4", "docs/parity/DIVERGENCES.md", "loop_test.go")
 	l, err := build(r.root, "0.4.1")
@@ -499,7 +499,7 @@ func TestEveryNewDivergenceIsAccountedFor(t *testing.T) {
 	}
 	for _, e := range l.Entries {
 		if e.Divergence == "D3" {
-			if e.PiIssue != "https://github.com/earendil-works/pi/issues/10415" || e.Class != ClassAheadOfPi || e.Symptom != "PiG starts; Pi hangs." || !slices.Equal(e.Tests, []string{"loop_test.go::TestNoStdin"}) {
+			if e.PiIssue != "https://github.com/earendil-works/pi/issues/10415" || e.Class != ClassAheadOfPi || e.Symptom != "Ompig starts; Pi hangs." || !slices.Equal(e.Tests, []string{"loop_test.go::TestNoStdin"}) {
 				t.Errorf("D3 entry = %+v", e)
 			}
 			return
@@ -642,8 +642,8 @@ func TestADivergenceJoinsTheNoteThatCitesItAlone(t *testing.T) {
 	r.commit("tool: abandon a stuck tool", "tool.go", "changelog.d/tool.md")
 	r.write("changelog.d/docs.md", "### Fixed\n\n- The divergence page lists D2 and D3.\n")
 	r.write("docs/parity/DIVERGENCES.md", divergenceFixture+
-		"\n## D2 Aborted tools\n\nWhat: PiG stops.\n\nPi bug: Pi waits forever.\n\nRemove when: Pi stops waiting.\n\nSCRUTINIZED:approved\n"+
-		"\n## D3 Queued messages (Pi #9886)\n\nWhat: PiG keeps queued custom messages.\n\nRemove when: Pi keeps them.\n\nSCRUTINIZED:approved\n")
+		"\n## D2 Aborted tools\n\nWhat: Ompig stops.\n\nPi bug: Pi waits forever.\n\nRemove when: Pi stops waiting.\n\nSCRUTINIZED:approved\n"+
+		"\n## D3 Queued messages (Pi #9886)\n\nWhat: Ompig keeps queued custom messages.\n\nRemove when: Pi keeps them.\n\nSCRUTINIZED:approved\n")
 	r.commit("Document D2 and D3", "changelog.d/docs.md", "docs/parity/DIVERGENCES.md")
 	l, err := build(r.root, "0.4.1")
 	if err != nil {
@@ -663,7 +663,7 @@ func TestADivergenceJoinsTheNoteThatCitesItAlone(t *testing.T) {
 	if e := byNote["The divergence page lists D2 and D3."]; e.Class != ClassOwn || e.Divergence != "" {
 		t.Errorf("a note that lists several divergences took one: %+v", e)
 	}
-	if d3 == nil || d3.Class != ClassAheadOfPi || d3.PiIssue != piRepo+"/issues/9886" || d3.Title != "Queued messages (Pi #9886)" || d3.Symptom != "PiG keeps queued custom messages." {
+	if d3 == nil || d3.Class != ClassAheadOfPi || d3.PiIssue != piRepo+"/issues/9886" || d3.Title != "Queued messages (Pi #9886)" || d3.Symptom != "Ompig keeps queued custom messages." {
 		t.Errorf("a record whose heading names a Pi issue is a Pi defect fixed first: %+v", d3)
 	}
 }
@@ -857,7 +857,7 @@ func TestAFixTitledCommitOutsideShippedCodeHasNoEntry(t *testing.T) {
 func TestVerifyFailsWhenADeliberateDifferenceBecomesAPiDefect(t *testing.T) {
 	r := newFixture(t)
 	r.write("tool.go", "package x\n")
-	record := "\n## D2 Aborted tools\n\nWhat: PiG stops.\n\nRemove when: Pi stops waiting.\n\nSCRUTINIZED:approved\n"
+	record := "\n## D2 Aborted tools\n\nWhat: Ompig stops.\n\nRemove when: Pi stops waiting.\n\nSCRUTINIZED:approved\n"
 	r.write("docs/parity/DIVERGENCES.md", divergenceFixture+record)
 	r.commit("tool: stop an aborted tool (D2)", "tool.go", "docs/parity/DIVERGENCES.md")
 	if err := run(r.root, "0.4.1", false, false); err != nil {
@@ -1614,7 +1614,7 @@ func TestARetiredDivergenceEndsTheAheadOfPiClassOfAKeptNote(t *testing.T) {
 	dev.write("tool.go", "package x\n")
 	dev.write("changelog.d/tool.md", "### Fixed\n\n- "+note+"\n")
 	dev.commit("tool: abandon a stuck tool", "tool.go", "changelog.d/tool.md")
-	dev.write("docs/parity/DIVERGENCES.md", divergenceFixture+"\n## D2 Aborted tools\n\nWhat: PiG stops.\n\nPi bug: Pi waits forever.\n\nPi issue: https://example.com/pi/issues/1\n\nRemove when: Pi stops waiting.\n\nSCRUTINIZED:approved\n")
+	dev.write("docs/parity/DIVERGENCES.md", divergenceFixture+"\n## D2 Aborted tools\n\nWhat: Ompig stops.\n\nPi bug: Pi waits forever.\n\nPi issue: https://example.com/pi/issues/1\n\nRemove when: Pi stops waiting.\n\nSCRUTINIZED:approved\n")
 	dev.commit("Record D2", "docs/parity/DIVERGENCES.md")
 	if err := run(dev.root, "0.4.1", false, false); err != nil {
 		t.Fatal(err)

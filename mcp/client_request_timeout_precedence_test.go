@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // client.ts:418 arms a request's timeout from `options.timeoutMs ?? this.options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS` (38: 30_000):

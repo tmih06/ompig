@@ -16,7 +16,7 @@ test("every sandbox.test.ts behavior test passes on the Worker host backend", { 
   const result = spawnSync("go", ["test", "-count=1", "-tags", "codemodeworker", "-run", "TestSandboxBehaviorOnTheWorkerHostBackend", "./codemode"], {
     cwd: repo,
     encoding: "utf8",
-    env: { ...process.env, CODEMODE_WORKER_WASM: codemodeWasmPath(), PIG_CODING_AGENT_DIR: agentDir, PI_CODING_AGENT_DIR: agentDir, PIG_HOME: agentDir, PI_HOME: agentDir },
+    env: { ...process.env, CODEMODE_WORKER_WASM: codemodeWasmPath(), OMPIG_CODING_AGENT_DIR: agentDir, PI_CODING_AGENT_DIR: agentDir, OMPIG_HOME: agentDir, PI_HOME: agentDir },
   })
   assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`)
 })

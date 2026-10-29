@@ -142,7 +142,7 @@ for (const [content, options] of [["one\ntwo\nthree", { maxLines: 2 }], ["ééé
 }
 
 const runtimeModule = await import(pathToFileURL(join(repositoryRoot, "coding", "extension", "host", "subprocess", "runtime-node", "runtime.mjs")));
-const sessionDir = await mkdtemp(join(tmpdir(), "pig-node-session-"));
+const sessionDir = await mkdtemp(join(tmpdir(), "ompig-node-session-"));
 try {
   const sessionPath = join(sessionDir, "session.jsonl");
   await writeFile(sessionPath, '{"type":"session","id":"s"}\n{"type":"message","id":"e1"}\n{"type":"message","id":"e2","parentId":"e1"}\n');
@@ -161,7 +161,7 @@ try {
 const { setRuntime } = await import(pathToFileURL(join(repositoryRoot, "coding", "extension", "host", "subprocess", "runtime-node", "state.mjs")));
 setRuntime(null);
 
-const queueDir = await mkdtemp(join(tmpdir(), "pig-node-queue-"));
+const queueDir = await mkdtemp(join(tmpdir(), "ompig-node-queue-"));
 try {
   const order = [];
   let releaseFirst;

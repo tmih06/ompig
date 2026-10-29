@@ -18,7 +18,7 @@ func TestScenarioSchedulingGroup_DefaultsByDriver(t *testing.T) {
 		{"rpc", Scenario{Driver: "rpc-mode"}, "rpc"},
 		{"cli", Scenario{Driver: "cli-mode"}, "process"},
 		{"print", Scenario{Driver: "print-mode"}, "process"},
-		{"print-extension", Scenario{Driver: "print-mode", Env: EnvOverrides{PigExtensions: []string{"ext.mjs"}}}, "process-ext"},
+		{"print-extension", Scenario{Driver: "print-mode", Env: EnvOverrides{OmpigExtensions: []string{"ext.mjs"}}}, "process-ext"},
 		{"print-faux-fixture-is-plain", Scenario{Driver: "print-mode", Env: EnvOverrides{PiExtensions: []string{"../../testdata/test-faux-provider.ts"}}}, "process"},
 		{"serial-tag-wins", Scenario{Driver: "interactive-tmux", Tags: []string{"serial"}}, "exclusive"},
 		{"explicit-override", Scenario{Driver: "interactive-tmux", Group: "slow-io"}, "slow-io"},

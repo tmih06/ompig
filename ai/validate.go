@@ -12,10 +12,10 @@ import (
 	"strings"
 	"sync"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/typebox"
-	"github.com/MichaelKinsy/PiG/third_party/jsonschema"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/typebox"
+	"github.com/tmih06/ompig/third_party/jsonschema"
 )
 
 // validateToolArgs clones, normalizes optional nulls, converts, and validates arguments.
@@ -123,10 +123,10 @@ var toolArgumentSchemas argumentSchemaCache
 
 const (
 	// argumentSchemaCacheEntries bounds how many distinct tool schemas stay parsed and compiled; the oldest is dropped first. A session carries a few dozen tools, so 256 holds every tool of a session with room for extension churn; a dropped schema is parsed again on its next call.
-	// pig additive (D112): Pi's validator cache is a WeakMap with no bound (validation.ts:6); the bound keeps a long-lived process from retaining a schema per tool definition it ever saw.
+	// ompig additive (D112): Pi's validator cache is a WeakMap with no bound (validation.ts:6); the bound keeps a long-lived process from retaining a schema per tool definition it ever saw.
 	argumentSchemaCacheEntries = 256
 	// argumentSchemaCacheMaxBytes is the size of schema text above which a schema is validated without being kept: 1 MiB is far above any tool schema, and one oversized schema must not displace the small ones.
-	// pig additive (D112): see argumentSchemaCacheEntries.
+	// ompig additive (D112): see argumentSchemaCacheEntries.
 	argumentSchemaCacheMaxBytes = 1 << 20
 )
 

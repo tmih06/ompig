@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // agent-session-services.ts:147 preserves a supplied SettingsManager; sdk.ts:237 uses its defaults for the Session.

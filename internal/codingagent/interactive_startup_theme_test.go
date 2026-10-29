@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // upstream 0.99.1 interactive-mode.ts:631-637 and theme-controller.ts constructor: Run registers the resource themes, marks the terminal colors pending, and applies the initial theme, so the system theme renders in grayscale until the terminal reports its colors.

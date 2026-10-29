@@ -15,11 +15,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TrailingEntries builds export-only entries appended after the branch. It

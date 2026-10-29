@@ -24,7 +24,7 @@ func startRPCShutdownGoFixtureWith(t *testing.T, extraEnv ...string) *rpcProcess
 	}
 	home := t.TempDir()
 	report := filepath.Join(t.TempDir(), "report.txt")
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "RPC_SHUTDOWN_REPORT=" + report, "RPC_SHUTDOWN_BLOCK_QUIT=1"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "RPC_SHUTDOWN_REPORT=" + report, "RPC_SHUTDOWN_BLOCK_QUIT=1"}
 	env = append(env, extraEnv...)
 	return startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1", "-e", fixture, "-e", goExt)
 }
@@ -45,14 +45,14 @@ func TestRPCInputEndDrainExitCountsGoSDKCommandAwaitingDialogSuspended(t *testin
 	}
 }
 
-// Pi 0.87.1: a command awaiting pi.exec keeps the event loop alive through its child process, so the response is written before the loop drains, although a quit session_shutdown handler never settles. The Pi leg runs the TypeScript /exec row; the pig leg runs a Go SDK command that awaits ctx.Exec, which the drain checkpoint must not count suspended.
+// Pi 0.87.1: a command awaiting pi.exec keeps the event loop alive through its child process, so the response is written before the loop drains, although a quit session_shutdown handler never settles. The Pi leg runs the TypeScript /exec row; the ompig leg runs a Go SDK command that awaits ctx.Exec, which the drain checkpoint must not count suspended.
 func TestRPCInputEndDrainExitKeepsGoSDKCommandAwaitingExecComparedWithPi(t *testing.T) {
 	for _, leg := range []struct {
 		name    string
 		start   func(t *testing.T) *rpcProcess
 		command string
 	}{
-		{"pig", startRPCShutdownGoFixture, "/goexec"},
+		{"ompig", startRPCShutdownGoFixture, "/goexec"},
 		{"pi", func(t *testing.T) *rpcProcess {
 			p, _ := startPiRPCShutdownFixture(t, "RPC_SHUTDOWN_BLOCK_QUIT=1")
 			return p

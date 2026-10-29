@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // /changelog parser + handler.
@@ -122,17 +122,17 @@ func TestParseChangelog_Empty(t *testing.T) {
 }
 
 func TestParseChangelog_RealFile(t *testing.T) {
-	pigChangelog := readBundledChangelog(t)
-	if !strings.Contains(pigChangelog, "## [Unreleased]") {
+	ompigChangelog := readBundledChangelog(t)
+	if !strings.Contains(ompigChangelog, "## [Unreleased]") {
 		t.Fatal("bundled CHANGELOG.md must keep an [Unreleased] section")
 	}
-	got := ParseChangelog(pigChangelog)
+	got := ParseChangelog(ompigChangelog)
 	if len(got) < 2 {
 		t.Fatalf("bundled CHANGELOG.md needs the current release and the 0.0.0 baseline: %#v", got)
 	}
 	newest := got[0] // file order: newest first
-	if v := fmt.Sprintf("%d.%d.%d", newest.Major, newest.Minor, newest.Patch); v != pigversion.PigVersion {
-		t.Fatalf("newest CHANGELOG.md entry is %s, want the current PigVersion %s", v, pigversion.PigVersion)
+	if v := fmt.Sprintf("%d.%d.%d", newest.Major, newest.Minor, newest.Patch); v != pigversion.OmpigVersion {
+		t.Fatalf("newest CHANGELOG.md entry is %s, want the current OmpigVersion %s", v, pigversion.OmpigVersion)
 	}
 	baseline := got[len(got)-1]
 	if baseline.Major != 0 || baseline.Minor != 0 || baseline.Patch != 0 {

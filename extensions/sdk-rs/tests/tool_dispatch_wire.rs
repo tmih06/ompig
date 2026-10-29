@@ -2,7 +2,7 @@
 //! `prepareArguments` runs before the host validates, and a parallel batch starts in source order.
 #![cfg(unix)]
 
-use pig_sdk::{Extension, ToolDefinition, ToolResult, empty_schema};
+use ompig_sdk::{Extension, ToolDefinition, ToolResult, empty_schema};
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -35,7 +35,7 @@ struct Host {
 
 impl Host {
     fn start(ext: Extension) -> Host {
-        let root = std::env::temp_dir().join(format!("pig-dispatch-{}-{}", std::process::id(), NEXT.fetch_add(1, Ordering::Relaxed)));
+        let root = std::env::temp_dir().join(format!("ompig-dispatch-{}-{}", std::process::id(), NEXT.fetch_add(1, Ordering::Relaxed)));
         std::fs::create_dir(&root).unwrap();
         let socket = root.join("sock");
         let listener = UnixListener::bind(&socket).unwrap();
@@ -315,7 +315,7 @@ fn a_long_call_of_one_batch_does_not_hold_the_dialogs_of_another_batch() {
 fn an_event_or_command_that_ends_before_its_handler_hands_on_its_place() {
     let mut ext = Extension::new("dispatch");
     ext.on_event("tool_result", |_, _| None);
-    ext.command("probe", "Probe", |_, _| pig_sdk::CommandResult::Ok);
+    ext.command("probe", "Probe", |_, _| ompig_sdk::CommandResult::Ok);
     let mut host = Host::start(ext);
     for round in 0..8 {
         send(

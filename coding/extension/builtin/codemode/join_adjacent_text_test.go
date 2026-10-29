@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // referenceJoinAdjacentText is upstream execute.ts joinAdjacentText: it rebuilds the joined text for every item.

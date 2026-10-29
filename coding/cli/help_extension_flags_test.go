@@ -33,7 +33,7 @@ func TestHelpListsExtensionFlagsAfterSettingsDiagnostics(t *testing.T) {
 		t.Helper()
 		cmd := exec.CommandContext(t.Context(), binary, append([]string{"--offline", "--no-extensions", "-e", first, "-e", second}, args...)...)
 		cmd.Dir = root
-		cmd.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+filepath.Join(root, "home"), "PIG_CODING_AGENT_DIR="+agentDir, "FORCE_COLOR=0")
+		cmd.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+filepath.Join(root, "home"), "OMPIG_CODING_AGENT_DIR="+agentDir, "FORCE_COLOR=0")
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &stdout, &stderr
 		if err := cmd.Run(); err != nil {

@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:1493-1508 consumes the just-finished assistant saved by message_end, not an older assistant selected from the edited projection.
@@ -38,7 +38,7 @@ func TestUpstreamSessionBoundariesOmittedLatestDoesNotRetryHistoricalError(t *te
 	if !retained {
 		t.Error("historical error was omitted instead of the current response")
 	}
-	if os.Getenv("PIG_BOUNDARY_PROBE") == "1" && !t.Failed() {
+	if os.Getenv("OMPIG_BOUNDARY_PROBE") == "1" && !t.Failed() {
 		fmt.Println("SESSION_BOUNDARY_BRIDGE " + boundaryJSON(t, []any{h.provider.callCount(), retained}))
 	}
 }

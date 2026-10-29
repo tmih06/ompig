@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // 512x512 solid PNGs from the TypeSafe SDK's live image tests (packages/ai/test/classifier-images-live.test.ts:12-15).

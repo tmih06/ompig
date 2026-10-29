@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // A real provider may use the id "unknown"; only the Agent's absent-selection sentinel lacks a provider. Pi does not reserve that provider id (agent.ts:57-97).
@@ -72,7 +72,7 @@ func TestPrintUnknownModelPreflightFollowsExtensionInput(t *testing.T) {
 }
 
 // AgentSession.prompt (agent-session.ts:2037-2050) checks the selected provider's auth before the request: print and JSON mode
-// fail with Pi's "No API key found" guidance and never start a turn, where PiG used to run the turn and let the provider fail
+// fail with Pi's "No API key found" guidance and never start a turn, where Ompig used to run the turn and let the provider fail
 // with "provider is not configured".
 func TestPrintModeRejectsAProviderWithoutAuthBeforeTheTurn(t *testing.T) {
 	for _, mode := range []string{"text", "json"} {

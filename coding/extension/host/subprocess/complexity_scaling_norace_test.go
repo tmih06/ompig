@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // Complexity gate for the message_update frames the host sends one extension process once per streamed delta (message_update_delta.go). The payload carries the whole partial message twice, as message and as the assistant event's partial (agent-session.ts:641-647); the host sends the first whole and each later one as the operations that turn the previous into it, so a streamed message of n deltas costs O(n) allocations and bytes. Pi hands in-process handlers the same objects by reference.

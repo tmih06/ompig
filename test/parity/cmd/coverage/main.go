@@ -4,7 +4,7 @@
 // Usage:
 //
 //	# 1. Run the suite with JSON output
-//	go test -tags=parity ./test/parity/runner -v -args -pig-parity.results=/tmp/parity.json
+//	go test -tags=parity ./test/parity/runner -v -args -ompig-parity.results=/tmp/parity.json
 //
 //	# 2. Generate the report
 //	go run ./test/parity/cmd/coverage \
@@ -39,7 +39,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 type scenarioFile struct {
@@ -56,24 +56,24 @@ type scenarioFile struct {
 }
 
 type jsonOutcome struct {
-	Name      string   `json:"name"`
-	Covers    []string `json:"covers"`
-	PigMedian int64    `json:"pig_median_ms"`
-	PiMedian  int64    `json:"pi_median_ms"`
-	Passed    bool     `json:"passed"`
-	Failures  []string `json:"failures,omitempty"`
+	Name        string   `json:"name"`
+	Covers      []string `json:"covers"`
+	OmpigMedian int64    `json:"ompig_median_ms"`
+	PiMedian    int64    `json:"pi_median_ms"`
+	Passed      bool     `json:"passed"`
+	Failures    []string `json:"failures,omitempty"`
 }
 
 type portMapEntry struct {
 	UpstreamPath string
-	PigPath      string
+	OmpigPath    string
 	Status       string
 	LineNum      int
 }
 
 func main() {
 	out := flag.String("out", "-", "output Markdown path or - for stdout")
-	results := flag.String("results", "", "JSON results from `go test -pig-parity.results=...`")
+	results := flag.String("results", "", "JSON results from `go test -ompig-parity.results=...`")
 	portMap := flag.String("port-map", "docs/parity/PORT_MAP.md", "path to docs/parity/PORT_MAP.md")
 	scenariosDir := flag.String("scenarios", "test/parity/scenarios", "scenarios directory")
 	agentsMd := flag.String("agents-md", "", "if set, patch the coverage block in this AGENTS.md in place")
@@ -298,7 +298,7 @@ func loadResults(path, expectedVersion string) (map[string]jsonOutcome, error) {
 // PORT_MAP is a minimal markdown table grouped by package:
 //
 //	## `packages/ai/src/`
-//	| upstream | pig | status |
+//	| upstream | ompig | status |
 //	|---|---|---|
 //	| `packages/ai/src/models.ts` | `ai/registry.go` | ✅ |
 //
@@ -313,7 +313,7 @@ func parsePortMap(path string) ([]portMapEntry, error) {
 		return nil, err
 	}
 
-	// The Pig cell is everything between the upstream code span and the status: empty, comma-separated code spans (portmap-check -fix-cells), or code spans followed by prose. PigPath keeps the trimmed cell without one pair of outer backticks.
+	// The Ompig cell is everything between the upstream code span and the status: empty, comma-separated code spans (portmap-check -fix-cells), or code spans followed by prose. OmpigPath keeps the trimmed cell without one pair of outer backticks.
 	rowRE := regexp.MustCompile("^\\|\\s+`([^`]+)`\\s+\\|(.*)\\|\\s+(✅|🟡|⬜|⏸|🔴|n/a)\\s+\\|\\s*$")
 	separatorRE := regexp.MustCompile(`^\|[\s:|-]+\|\s*$`)
 	headerRE := regexp.MustCompile(`^\|\s+[Uu]pstream\s+\|`)
@@ -325,7 +325,7 @@ func parsePortMap(path string) ([]portMapEntry, error) {
 		}
 		m := rowRE.FindStringSubmatch(line)
 		if m == nil {
-			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | pig cell | status |): %s", path, i+1, line)
+			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | ompig cell | status |): %s", path, i+1, line)
 		}
 		cell := strings.TrimSpace(m[2])
 		if len(cell) >= 2 && strings.HasPrefix(cell, "`") && strings.HasSuffix(cell, "`") {
@@ -333,7 +333,7 @@ func parsePortMap(path string) ([]portMapEntry, error) {
 		}
 		entries = append(entries, portMapEntry{
 			UpstreamPath: m[1],
-			PigPath:      cell,
+			OmpigPath:    cell,
 			Status:       m[3],
 			LineNum:      i + 1,
 		})
@@ -537,7 +537,7 @@ func writeCoverageBadge(path string, stats statusStats) error {
 	return os.WriteFile(path, []byte(stats.coverageBadge()), 0o644)
 }
 
-// intendedPortable is the porting denominator: every row PiG means to port.
+// intendedPortable is the porting denominator: every row Ompig means to port.
 func (s statusStats) intendedPortable() int {
 	return s.Ported + s.Partial + s.Broken + s.NotStarted
 }

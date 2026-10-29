@@ -10,11 +10,11 @@ import sys
 import tempfile
 
 
-def verify(pig):
+def verify(ompig):
     goroot = subprocess.check_output(["go", "env", "GOROOT"], text=True).strip()
     gocache = subprocess.check_output(["go", "env", "GOCACHE"], text=True).strip()
     gopath = subprocess.check_output(["go", "env", "GOPATH"], text=True).strip()
-    work = Path(tempfile.mkdtemp(prefix="pig-quickstart-check."))
+    work = Path(tempfile.mkdtemp(prefix="ompig-quickstart-check."))
     home = work / "home"
     demo = home / "demo"
     demo.mkdir(parents=True)
@@ -22,14 +22,14 @@ def verify(pig):
         "HOME": str(home), "PATH": f"{goroot}/bin:/usr/local/bin:/usr/bin:/bin",
         "GOROOT": goroot, "GOCACHE": gocache, "GOPATH": gopath,
         "GOTOOLCHAIN": "local", "GOPROXY": "off", "GOSUMDB": "off",
-        "PIG_OFFLINE": "1", "PI_OFFLINE": "1", "PI_TELEMETRY": "0", "PIG_TEST_FAUX": "1",
+        "OMPIG_OFFLINE": "1", "PI_OFFLINE": "1", "PI_TELEMETRY": "0", "OMPIG_TEST_FAUX": "1",
     }
 
     def run(name, *args, expected=0):
-        result = subprocess.run([str(pig), *args], cwd=demo, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=120)
+        result = subprocess.run([str(ompig), *args], cwd=demo, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=120)
         (work / f"{name}.stdout").write_text(result.stdout)
         (work / f"{name}.stderr").write_text(result.stderr)
-        print(f"$ pig {shlex.join(args)}\nexit={result.returncode}")
+        print(f"$ ompig {shlex.join(args)}\nexit={result.returncode}")
         assert result.returncode == expected, result.stderr
         return result.stdout, result.stderr
 
@@ -60,12 +60,12 @@ def verify(pig):
     tools = [tool["name"] for event in events for tool in event.get("message", {}).get("toolsAdded", [])]
     assert "hello_ping" in tools, "explicit -e did not activate the scaffold's tool"
     print("PASS: hello_ping is in the active model tool schemas")
-    before = hashlib.sha256(pig.read_bytes()).digest()
+    before = hashlib.sha256(ompig.read_bytes()).digest()
     output, errors = run("update", "update", expected=1)
     print(output + errors, end="")
     assert "cannot self-update this installation" in output + errors
-    assert hashlib.sha256(pig.read_bytes()).digest() == before, "update changed the source binary"
-    assert list((home / ".pig/agent/sessions").rglob("*.jsonl")), "no persisted sessions"
+    assert hashlib.sha256(ompig.read_bytes()).digest() == before, "update changed the source binary"
+    assert list((home / ".ompig/agent/sessions").rglob("*.jsonl")), "no persisted sessions"
     print(f"PASS: local quickstart; evidence retained in {work}")
 
 

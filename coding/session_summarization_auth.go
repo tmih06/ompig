@@ -7,10 +7,10 @@ import (
 	"errors"
 	"maps"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
 // Ports packages/coding-agent/src/core/agent-session.ts (_getSummarizationRequestAuth).

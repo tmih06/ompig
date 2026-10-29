@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi 42a3497d types.ts ToolExecutionApi.retainedOutput and harness/tool.ts: the output retained so far, as the model will see

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // A context edit replaces content in place: { ...message, content } keeps every other member and the content member's position (session-manager.ts applyContextEditReplacement); an assistant's string content becomes one text block.

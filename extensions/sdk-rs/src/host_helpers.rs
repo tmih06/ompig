@@ -321,7 +321,7 @@ pub(crate) fn helper_call(method: &str, args: Value) -> io::Result<Option<Value>
 pub(crate) fn dial_loading() -> io::Result<Arc<Connection>> {
     let path = match socket_path() {
         Some(path) if !path.is_empty() => path,
-        _ => return Err(io::Error::new(io::ErrorKind::NotConnected, "not connected to the host: PIG_EXT_SOCKET is not set, so this extension was not launched by pig")),
+        _ => return Err(io::Error::new(io::ErrorKind::NotConnected, "not connected to the host: OMPIG_EXT_SOCKET is not set, so this extension was not launched by ompig")),
     };
     let mut dialled = locked(&DIALLED);
     if let Some((_, conn)) = dialled.iter().find(|(dialled_path, _)| *dialled_path == path) {
@@ -359,9 +359,9 @@ fn finish(result: crate::protocol::CallResultMsg) -> io::Result<Option<Value>> {
     Ok(result.result)
 }
 
-/// The socket a helper dials: `PIG_EXT_SOCKET`, which a packed cell's runner sets to the member's socket while the member's factory runs.
+/// The socket a helper dials: `OMPIG_EXT_SOCKET`, which a packed cell's runner sets to the member's socket while the member's factory runs.
 fn socket_path() -> Option<String> {
-    std::env::var("PIG_EXT_SOCKET").or_else(|_| std::env::var("GOPI_EXT_SOCKET")).ok()
+    std::env::var("OMPIG_EXT_SOCKET").or_else(|_| std::env::var("GOPI_EXT_SOCKET")).ok()
 }
 
 /// The connection a helper opened to `path`, for `run` to serve on.
@@ -377,7 +377,7 @@ pub(crate) fn adopt(conn: &Arc<Connection>, path: &str) {
     add_running(&mut locked(&RUNNING), conn, path);
 }
 
-/// The connection a helper uses among `running`. A runner that names a socket (`PIG_EXT_SOCKET`, set to the member's own while its factory runs) means the
+/// The connection a helper uses among `running`. A runner that names a socket (`OMPIG_EXT_SOCKET`, set to the member's own while its factory runs) means the
 /// extension that socket belongs to, so a helper called by one member's factory never rides another member's connection, which the host serves only after
 /// it has accepted this member's: that is the running extension on `path`, and none while this member has not connected (the helper dials it). With no
 /// socket named, the first extension that is still running answers.

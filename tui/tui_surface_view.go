@@ -3,8 +3,8 @@ package tui
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ViewSource is a component whose lines an extension's view of Pi's tui

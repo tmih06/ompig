@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // withPublicationsHeld holds host's publications, in a section of its loop on another goroutine, while during runs.

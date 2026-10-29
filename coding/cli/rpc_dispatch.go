@@ -4,7 +4,7 @@ package cli
 import (
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // rpcResponseTurn is the jsloop.Loop that serializes RPC input callbacks and awaited continuations, with the writer a completed response goes to. A completion from any earlier request waits for the currently admitted input batch, not just its original batch. Continuations never wait for future input.

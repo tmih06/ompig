@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // warmingProvider answers every request with a 100k-token prompt and records
@@ -59,7 +59,7 @@ func warmingModel(provider ai.Provider) *ai.Model {
 func warmingServices(t *testing.T, mode string) *AgentSessionServices {
 	t.Helper()
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	agentDir := filepath.Join(tmp, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

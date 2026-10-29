@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nativeplatform"
+	"github.com/tmih06/ompig/internal/nativeplatform"
 )
 
 // mouse-region.ts render/invalidate: a region renders its child's rows and invalidates its child.

@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-// PiG fork: each draft's metaschema compiles on its first use, not every draft's at package initialisation or on the first Compiler.
+// Ompig fork: each draft's metaschema compiles on its first use, not every draft's at package initialisation or on the first Compiler.
 
 var allDrafts = []*Draft{Draft4, Draft6, Draft7, Draft2019, Draft2020}
 
@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 }
 
 // freshChildEnv names the test a child process runs; the child is this test binary, so it inherits -race.
-const freshChildEnv = "PIG_JSONSCHEMA_FRESH_CHILD"
+const freshChildEnv = "OMPIG_JSONSCHEMA_FRESH_CHILD"
 
 // freshChild reports whether this process is the child started for the named test.
 func freshChild(name string) bool { return os.Getenv(freshChildEnv) == name }
@@ -48,7 +48,7 @@ func runFresh(t testing.TB, name string) string {
 	return string(out)
 }
 
-// readToolParameters is the read tool's parameter schema as PiG declares it (internal/codingagent/tools/read.go): no $schema, so the default draft.
+// readToolParameters is the read tool's parameter schema as Ompig declares it (internal/codingagent/tools/read.go): no $schema, so the default draft.
 const readToolParameters = `{"type":"object","required":["path"],"properties":{"path":{"type":"string","description":"Path to the file to read (relative or absolute)"},"offset":{"type":"number","description":"Line number to start reading from (1-indexed)"},"limit":{"type":"number","description":"Maximum number of lines to read"}}}`
 
 // validateReadArguments compiles the read tool's parameters as ai/validate.go does and validates one call's arguments.

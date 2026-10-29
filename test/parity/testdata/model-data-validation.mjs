@@ -34,7 +34,7 @@ try {
     if (name === "missing-data") rmSync(dir, { recursive: true });
     if (name === "directory-file") { rmSync(join(dir, "test-provider.json")); mkdirSync(join(dir, "test-provider.json")); }
     let result;
-    if (process.argv[2] === "pig") {
+    if (process.argv[2] === "ompig") {
       try { result = { status: 0, output: execFileSync(repository + "/test/parity/testdata/prebuilt-go-run.sh", ["./cmd/check-model-data", "-root", "."], { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }) }; }
       catch (error) { result = { status: error.status, output: error.stderr }; }
     } else {

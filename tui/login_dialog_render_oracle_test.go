@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type ldRenderLink struct {
@@ -220,7 +220,7 @@ func TestLoginDialogRenderMatchesPi(t *testing.T) {
 				steps, _ := json.Marshal(probe.Steps[:k+1])
 				g, _ := json.Marshal(normalized[k])
 				e, _ := json.Marshal(expected[i][k])
-				t.Errorf("probe %d (%s %q %q)\n  steps %.900s\n  Pig %.900s\n  Pi  %.900s", i, probe.Theme, probe.ProviderName, probe.Title, steps, g, e)
+				t.Errorf("probe %d (%s %q %q)\n  steps %.900s\n  Ompig %.900s\n  Pi  %.900s", i, probe.Theme, probe.ProviderName, probe.Title, steps, g, e)
 				break
 			}
 		}

@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // types.ts ToolExecutionApi extends DocumentReader (harness/types.ts), and tool.ts:247 wires `snapshotAsOf` to the

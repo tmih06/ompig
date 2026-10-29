@@ -11,7 +11,7 @@ import (
 	"testing"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The palette an extension receives for ctx.ui.theme carries what Theme.appearance and Theme.colors answer, resolved by the host (.upstream/v0.99.2/packages/coding-agent/src/modes/interactive/theme/theme.ts:311-336): the declared or detected appearance, and a concrete color for every token, with a token set to the terminal default resolved from the terminal's reported colors and the theme's color mode as its own.

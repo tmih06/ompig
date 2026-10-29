@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // fauxAnswer is pi-ai fauxAssistantMessage(text) as a faux response step.

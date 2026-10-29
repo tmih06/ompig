@@ -6,10 +6,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// PiG-only: packages/mcp/test/oauth.test.ts drives McpOAuthProvider through the flow and tests its failure
+// Ompig-only: packages/mcp/test/oauth.test.ts drives McpOAuthProvider through the flow and tests its failure
 // semantics, but never reads back the state, code verifier, discovery state, invalidation kinds, configured client,
 // metadata defaults or redirect hook that packages/mcp/src/oauth/provider.ts defines.
 func newStateProvider(t *testing.T, options oauth.McpOAuthProviderOptions) (*oauth.McpOAuthProvider, *oauth.MemoryOAuthStateStore) {

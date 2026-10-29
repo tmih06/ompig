@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Upstream AgentSessionServices (core/agent-session-services.ts) carries cwd, agentDir, modelRuntime and settingsManager; AgentSessionServices exposes them as CWD, AgentDir, ModelRuntime and SettingsManager.

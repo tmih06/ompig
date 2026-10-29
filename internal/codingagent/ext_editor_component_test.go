@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // factoryEditor is a Pi editor component of the host process (a pi-tui EditorComponent): it keeps its own text, renders it and reports changes and

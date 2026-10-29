@@ -1,6 +1,6 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
-// Upstream resource-loader tests whose built-in extension is named `mcp`: a pig_strip_mcp build filters `builtin:mcp` out
+// Upstream resource-loader tests whose built-in extension is named `mcp`: a ompig_strip_mcp build filters `builtin:mcp` out
 // (enabledBuiltinExtensionPaths), so they run only in a build with MCP.
 
 package cli
@@ -10,9 +10,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports .upstream/v0.99.1/packages/coding-agent/test/resource-loader.test.ts:1107-1124 ("should load built-in extensions after file
@@ -20,8 +20,8 @@ import (
 func TestUpstreamResourceLoaderLoadsBuiltinExtensionsAfterFileExtensions(t *testing.T) {
 	root, cwd, agentDir := resourceExtensionFixture(t)
 	writeResourceTestFiles(t, root, map[string]string{
-		"agent/extensions/user.ts":   "export default function() {}",
-		"project/.pig/settings.json": `{"extensions":["+builtin:mcp"]}`,
+		"agent/extensions/user.ts":     "export default function() {}",
+		"project/.ompig/settings.json": `{"extensions":["+builtin:mcp"]}`,
 	})
 	loader := newExtensionSetTestLoader(t, cwd, agentDir, Args{}, extension.NamedInlineExtension{Name: "mcp", Builtin: true, Factory: commandFactory("", "", nil)})
 	want := []string{filepath.Join(agentDir, "extensions", "user.ts"), "builtin:mcp"}
@@ -60,8 +60,8 @@ func TestUpstreamResourceLoaderNoExtensionsDisablesBuiltinsUnlessLoadedExplicitl
 func TestUpstreamResourceLoaderAppliesProjectBuiltinOverridesAfterTrust(t *testing.T) {
 	root, cwd, agentDir := resourceExtensionFixture(t)
 	writeResourceTestFiles(t, root, map[string]string{
-		"agent/settings.json":        `{"extensions":["-builtin:mcp"]}`,
-		"project/.pig/settings.json": `{"extensions":["+builtin:mcp","-builtin:llama"]}`,
+		"agent/settings.json":          `{"extensions":["-builtin:mcp"]}`,
+		"project/.ompig/settings.json": `{"extensions":["+builtin:mcp","-builtin:llama"]}`,
 	})
 	var loaded []string
 	record := func(name string) func() { return func() { loaded = append(loaded, name) } }
@@ -98,7 +98,7 @@ func TestBuiltinExtensionSourceInfoIsSynthetic(t *testing.T) {
 				files["agent/settings.json"] = tc.global
 			}
 			if tc.project != "" {
-				files["project/.pig/settings.json"] = tc.project
+				files["project/.ompig/settings.json"] = tc.project
 			}
 			writeResourceTestFiles(t, root, files)
 			loader := newExtensionSetTestLoader(t, cwd, agentDir, Args{}, extension.NamedInlineExtension{Name: "mcp", Builtin: true, Factory: commandFactory("mcp", "built-in mcp", nil)})

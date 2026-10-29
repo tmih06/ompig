@@ -1,6 +1,6 @@
 //! The Rust SDK version of rpc/testdata/command-send-wait-idle.mjs: a command that sends a user message and then waits for the Session to be idle.
 
-use pig_sdk::{CommandResult, Extension};
+use ompig_sdk::{CommandResult, Extension};
 
 pub fn new_extension() -> Extension {
     let mut ext = Extension::new("rust");

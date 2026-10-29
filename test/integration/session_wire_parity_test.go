@@ -1,10 +1,10 @@
 //go:build integration
 
-// session_wire_parity_test.go: proves pig and upstream pi write
+// session_wire_parity_test.go: proves ompig and upstream pi write
 // structurally compatible session JSONL for the same conversation.
 //
 // Why this test exists. TestParity_MultiTurn proves the *LLM* remembers
-// "ALPHA-7749" across turns; it does NOT prove pig's wire format
+// "ALPHA-7749" across turns; it does NOT prove ompig's wire format
 // (session entries on disk, message arrays sent to the provider) is
 // shape-equivalent to upstream pi. Both systems could be writing
 // totally different JSON and the multi-turn test would still pass as
@@ -24,7 +24,7 @@
 //   - exact tool-result formatting (tool output bodies differ)
 //   - token counts (usage objects differ legitimately)
 //
-// Kaizen 2026-05-10: closes the "tests verify LLM behavior, not pig
+// Kaizen 2026-05-10: closes the "tests verify LLM behavior, not ompig
 // wire format" gap surfaced when reviewing parity test quality.
 
 package integration
@@ -130,7 +130,7 @@ func TestSessionMessageContentShape(t *testing.T) {
 func readLatestSession(t *testing.T, sessionsRoot, cwdDir string) ([]sessionEntry, string) {
 	t.Helper()
 
-	// upstream pi and pig both encode cwd into the directory name by
+	// upstream pi and ompig both encode cwd into the directory name by
 	// replacing slashes with dashes, prefixed with "--". We don't
 	// reconstruct it here: we just walk and pick the newest file.
 	entries, err := os.ReadDir(sessionsRoot)
@@ -225,7 +225,7 @@ func encodedCwdVariants(cwd string) []string {
 	return out
 }
 
-// encodeCwdSegment mirrors the upstream/pig convention of encoding a
+// encodeCwdSegment mirrors the upstream/ompig convention of encoding a
 // path as the directory name by replacing each "/" with "-" and
 // prefixing with "--".
 func encodeCwdSegment(cwd string) string {
@@ -264,11 +264,11 @@ func firstAssistantMessage(rows []sessionEntry) (*sessionMessage, *sessionEntry)
 }
 
 // TestParity_SessionWireFormat drives a one-turn conversation through
-// both pig and upstream pi in deterministic print mode, then reads the
+// both ompig and upstream pi in deterministic print mode, then reads the
 // resulting session JSONL and asserts structural compatibility.
 func TestParity_SessionWireFormat(t *testing.T) {
 	upstream := deterministicPrintUpstream(t)
-	pig := deterministicPrintGopi(t)
+	ompig := deterministicPrintGopi(t)
 
 	type result struct {
 		rows  []sessionEntry
@@ -306,19 +306,19 @@ func TestParity_SessionWireFormat(t *testing.T) {
 		t.Fatalf("upstream did not persist a session file for the deterministic scenario")
 	}
 
-	gp := runDeterministicPrint(t, pig, "--print", "What is 20+22? Reply with ONLY the number.")
+	gp := runDeterministicPrint(t, ompig, "--print", "What is 20+22? Reply with ONLY the number.")
 	if gp != up {
-		t.Fatalf("pig deterministic session-wire print output = %q, want upstream %q", gp, up)
+		t.Fatalf("ompig deterministic session-wire print output = %q, want upstream %q", gp, up)
 	}
-	results["pig"] = readResult(t, pig)
-	if results["pig"] == nil {
-		t.Fatalf("pig did not persist a session file after upstream succeeded")
+	results["ompig"] = readResult(t, ompig)
+	if results["ompig"] == nil {
+		t.Fatalf("ompig did not persist a session file after upstream succeeded")
 	}
 
 	for _, sys := range []struct {
 		name string
 		r    *result
-	}{{"pig", results["pig"]}, {"pi", results["pi"]}} {
+	}{{"ompig", results["ompig"]}, {"pi", results["pi"]}} {
 		// Per-system shape checks.
 		head := sys.r.rows[0]
 		if head.Type != "session" {
@@ -379,20 +379,20 @@ func TestParity_SessionWireFormat(t *testing.T) {
 	// session header version and message-row shape. Other entry types
 	// (model_change, thinking_level_change, etc.) are allowed to differ
 	// We only require the *intersection* contains the essentials.
-	if results["pig"] == nil || results["pi"] == nil {
+	if results["ompig"] == nil || results["pi"] == nil {
 		return
 	}
-	g := results["pig"]
+	g := results["ompig"]
 	p := results["pi"]
 
-	t.Logf("pig entry types: %v", g.types)
+	t.Logf("ompig entry types: %v", g.types)
 	t.Logf("pi   entry types: %v", p.types)
 
 	mustHave := []string{"session", "message"}
 	for _, sys := range []struct {
 		name string
 		r    *result
-	}{{"pig", g}, {"pi", p}} {
+	}{{"ompig", g}, {"pi", p}} {
 		got := map[string]struct{}{}
 		for _, ty := range sys.r.types {
 			got[ty] = struct{}{}
@@ -412,7 +412,7 @@ func TestParity_SessionWireFormat(t *testing.T) {
 	}
 	for _, ty := range p.types {
 		if _, ok := gset[ty]; !ok {
-			t.Logf("note: pi has entry type %q pig did not produce in this run (may be optional)", ty)
+			t.Logf("note: pi has entry type %q ompig did not produce in this run (may be optional)", ty)
 		}
 	}
 	pset := map[string]struct{}{}
@@ -421,7 +421,7 @@ func TestParity_SessionWireFormat(t *testing.T) {
 	}
 	for _, ty := range g.types {
 		if _, ok := pset[ty]; !ok {
-			t.Logf("note: pig has entry type %q pi did not produce in this run (may be pig-only: verify in docs/parity/DIVERGENCES.md)", ty)
+			t.Logf("note: ompig has entry type %q pi did not produce in this run (may be ompig-only: verify in docs/parity/DIVERGENCES.md)", ty)
 		}
 	}
 }

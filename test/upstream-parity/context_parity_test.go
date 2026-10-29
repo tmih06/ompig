@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstreamContextMembers lists the pinned upstream ExtensionContext surface.
@@ -65,12 +65,12 @@ var deferredContextMembers = map[string]string{}
 // or deferred.
 var translatedContextMembers = map[string]string{}
 
-// pigOnlyContextMembers records Go Context members without a direct upstream
+// ompigOnlyContextMembers records Go Context members without a direct upstream
 // Context member.
-var pigOnlyContextMembers = map[string]string{
-	// D23: Piglet-scoped active-tool Context API.
-	// Upstream has no piglet-driven tool scoping. These methods enable the
-	// piglet extension (D18) to read flags, inspect all tools with source
+var ompigOnlyContextMembers = map[string]string{
+	// D23: Ompiglet-scoped active-tool Context API.
+	// Upstream has no ompiglet-driven tool scoping. These methods enable the
+	// ompiglet extension (D18) to read flags, inspect all tools with source
 	// metadata, and apply per-source scoping via SetActiveTools.
 	"GetFlagValue":   "D23",
 	"GetAllTools":    "D23",
@@ -138,8 +138,8 @@ func TestContext_AllUpstreamMembersAccounted(t *testing.T) {
 	}
 }
 
-// TestContext_NoUnclassifiedPiGMembers rejects unclassified Go members.
-func TestContext_NoUnclassifiedPiGMembers(t *testing.T) {
+// TestContext_NoUnclassifiedOmpigMembers rejects unclassified Go members.
+func TestContext_NoUnclassifiedOmpigMembers(t *testing.T) {
 	expected := map[string]bool{}
 	for _, upstreamName := range upstreamContextMembers {
 		if _, translated := translatedContextMembers[upstreamName]; translated {
@@ -155,15 +155,15 @@ func TestContext_NoUnclassifiedPiGMembers(t *testing.T) {
 		if expected[goName] {
 			continue
 		}
-		if div, documented := pigOnlyContextMembers[goName]; documented {
-			t.Logf("extension.Context.%s → documented pig-only member (%s)", goName, div)
+		if div, documented := ompigOnlyContextMembers[goName]; documented {
+			t.Logf("extension.Context.%s → documented ompig-only member (%s)", goName, div)
 			continue
 		}
 
 		t.Errorf("extension.Context.%s has no upstream counterpart "+
-			"and is not in pigOnlyContextMembers. "+
+			"and is not in ompigOnlyContextMembers. "+
 			"Either remove it (preferred: keeps sync surface minimal), "+
-			"or add it to pigOnlyContextMembers with a numbered docs/parity/DIVERGENCES.md entry.",
+			"or add it to ompigOnlyContextMembers with a numbered docs/parity/DIVERGENCES.md entry.",
 			goName)
 	}
 }
@@ -223,9 +223,9 @@ func TestContext_UpstreamMemberListIsAlphabeticallyDistinct(t *testing.T) {
 func TestContextParityGate_DivergenceRefsResolve(t *testing.T) {
 	known := loadAllLedgerNumbers(t)
 
-	for member, ref := range pigOnlyContextMembers {
+	for member, ref := range ompigOnlyContextMembers {
 		if divergenceRefRE.MatchString(ref) && !known[ref] {
-			t.Errorf("pigOnlyContextMembers[%q] = %q, but no `## %s` section exists in docs/parity/DIVERGENCES.md or ADDITIVE_FEATURES.md",
+			t.Errorf("ompigOnlyContextMembers[%q] = %q, but no `## %s` section exists in docs/parity/DIVERGENCES.md or ADDITIVE_FEATURES.md",
 				member, ref, ref)
 		}
 	}

@@ -6,7 +6,7 @@ import (
 	"maps"
 	"slices"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // modelRegistryScript is `new ModelRegistry(runtime)` over the parts of testdata/session-graph.mjs modelRegistryScript; the report is Pi's own run's, except `builtin` (D78: Pi answers a builtin provider's Provider object, this SDK fails with the D78 error and the test expects that).

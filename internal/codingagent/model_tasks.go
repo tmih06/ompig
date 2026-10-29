@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // modelTaskOwner separates public Promise settlement from the lifetime of its remaining work. Services owns the registry and closes this one task group.
@@ -176,7 +176,7 @@ func (r *ModelRegistry) AwaitModelTasks(ctx context.Context, tasks ...func(conte
 	return ctx.Err()
 }
 
-// awaitProviderTasks awaits one task per provider of an availability pass. A pass that runs no extension code and reads only PiG's own stores
+// awaitProviderTasks awaits one task per provider of an availability pass. A pass that runs no extension code and reads only Ompig's own stores
 // (ai.ProvidersRunOnCaller) runs them one after another on the caller: they do no I/O but reads of the pass's one auth.json view, so they settle
 // in provider order, as Pi's checks settle at one await depth, and the first rejection in that order is the one Promise.all reports. A check
 // writes nothing, so the providers after a rejection are not run.

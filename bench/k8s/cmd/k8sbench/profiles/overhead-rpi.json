@@ -1,14 +1,14 @@
 {
 	"name": "overhead-rpi",
 	"rule": "overhead-rpi",
-	"about": "bench/evals' overhead bench (pigbench overhead): what the harness itself costs, against pigbench's local mock model that answers at once. A size is N tool rounds; -turns 8 is the local bench's print-tools. One sample runs each scenario as a fresh process: version, print, print-tools, rpc, pty. open and turn[] are print-tools': spawn to the first model request, and the N gaps between a reply's end and the next request (the harness's added time per turn, its tool run included); openCpu/turnCpu[] their CPU, peakRss print-tools' peak RSS. PiG built from the commit against rpi, the Rust port of Pi (arms.lock's arm rpi, a pinned release binary; measured as that arm, with its own agent directory and RPC prompt field). rpi's binary needs glibc 2.39, so the profile runs from an agent bundle with the arm (k8sbench bundle -agents -arms rpi) on its Debian trixie base image.",
+	"about": "bench/evals' overhead bench (pigbench overhead): what the harness itself costs, against pigbench's local mock model that answers at once. A size is N tool rounds; -turns 8 is the local bench's print-tools. One sample runs each scenario as a fresh process: version, print, print-tools, rpc, pty. open and turn[] are print-tools': spawn to the first model request, and the N gaps between a reply's end and the next request (the harness's added time per turn, its tool run included); openCpu/turnCpu[] their CPU, peakRss print-tools' peak RSS. Ompig built from the commit against rpi, the Rust port of Pi (arms.lock's arm rpi, a pinned release binary; measured as that arm, with its own agent directory and RPC prompt field). rpi's binary needs glibc 2.39, so the profile runs from an agent bundle with the arm (k8sbench bundle -agents -arms rpi) on its Debian trixie base image.",
 	"fingerprints": {
 		"8": "13a870eb85bf000f"
 	},
 	"targets": [
 		{
-			"name": "pig",
-			"role": "pig",
+			"name": "ompig",
+			"role": "ompig",
 			"seed": [
 				"{root}/python/bin/python3.12",
 				"{root}/pigbench.py",
@@ -28,11 +28,11 @@
 				"k8s",
 				"overhead-sample",
 				"--target",
-				"pig",
+				"ompig",
 				"--family",
-				"pig",
+				"ompig",
 				"--binary",
-				"{root}/bin/pig",
+				"{root}/bin/ompig",
 				"--rounds",
 				"{turns}",
 				"--scenarios",

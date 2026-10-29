@@ -17,7 +17,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // piPin is the Pi build the reference packages come from: .upstream/pin, as pigversion records it.
@@ -53,21 +53,21 @@ var (
 )
 
 // packPrefix marks a frozen closure entry that the pinned source packs (automation/pin/oracle.py PACK_PREFIX).
-const packPrefix = "pig-pack:"
+const packPrefix = "ompig-pack:"
 
 // piBuildStore is where `pin.py install-oracle` builds pinned commits (automation/pin/oracle.py store).
 func piBuildStore(getenv func(string) string) string {
-	if store := getenv("PIG_PI_BUILD_STORE"); store != "" {
+	if store := getenv("OMPIG_PI_BUILD_STORE"); store != "" {
 		return store
 	}
-	base := getenv("PIG_DEV_HOME")
+	base := getenv("OMPIG_DEV_HOME")
 	if base == "" {
 		cache := getenv("XDG_CACHE_HOME")
 		if cache == "" {
 			home, _ := os.UserHomeDir()
 			cache = filepath.Join(home, ".cache")
 		}
-		base = filepath.Join(cache, "pig-dev")
+		base = filepath.Join(cache, "ompig-dev")
 	}
 	return filepath.Join(base, "pi-builds")
 }
@@ -251,7 +251,7 @@ func cmdPiPackages(args []string, stdout io.Writer, getenv func(string) string) 
 	fs := flag.NewFlagSet("pi-packages", flag.ContinueOnError)
 	out := fs.String("out", "", "directory to write pi-durable/ and pi-agent/ to")
 	check := fs.String("check", "", "check pi-durable and the coding agent installed under this root's pi-durable/ and pi-agent/")
-	store := fs.String("pi-builds", "", "the build store of `pin.py install-oracle` (default: $PIG_PI_BUILD_STORE, else $PIG_DEV_HOME/pi-builds, else ~/.cache/pig-dev/pi-builds)")
+	store := fs.String("pi-builds", "", "the build store of `pin.py install-oracle` (default: $OMPIG_PI_BUILD_STORE, else $OMPIG_DEV_HOME/pi-builds, else ~/.cache/ompig-dev/pi-builds)")
 	repo := fs.String("repo", ".", "repository root")
 	if err := fs.Parse(args); err != nil {
 		return err

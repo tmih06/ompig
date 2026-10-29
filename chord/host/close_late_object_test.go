@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // A hold that a link delivers while Close runs creates an object after Close took its snapshot of the objects. Close disposes it once the links are closed. Without that, its resource open, which waits for the abort a disposal raises, kept waitTasks blocked for good (the portmap-3 chord/host evidence run that timed out after 10 minutes; `go test -count=1000 -cpu 2,4 -run Awaiting ./chord/host` hung on 3ee123c6 as well).

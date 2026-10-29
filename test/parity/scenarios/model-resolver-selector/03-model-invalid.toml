@@ -43,7 +43,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 15
 keys = ["/model nonexistent/fake-model-xyz", "Enter"]
@@ -52,9 +52,9 @@ capture_start = "Only showing models"
 capture_end = "No matching models"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/pig-agent-hermetic"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/ompig-agent-hermetic"]
 pi = ["PI_CODING_AGENT_DIR=../model-resolver-selector/testdata/pi-agent-hermetic"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

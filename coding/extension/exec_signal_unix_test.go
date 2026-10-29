@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // execSignalScript writes its output, records its pid, and becomes `sleep 60`.

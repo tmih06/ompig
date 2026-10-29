@@ -16,12 +16,12 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func signedManifestServer(t *testing.T, handler http.Handler) *httptest.Server {
 	t.Helper()
-	t.Setenv("PIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
+	t.Setenv("OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
 	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
 		t.Fatal(err)
@@ -34,7 +34,7 @@ func signedManifestServer(t *testing.T, handler http.Handler) *httptest.Server {
 	if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: encoded}), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", trustPath)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", trustPath)
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, r)
@@ -61,7 +61,7 @@ func signedManifestServer(t *testing.T, handler http.Handler) *httptest.Server {
 func upToDateManifest(t *testing.T) *httptest.Server {
 	t.Helper()
 	ver := selfUpdateVersion()
-	body := `{"version":"` + ver + `","packageName":"@pi-in-go/pig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"u","sha256":"s"}}}`
+	body := `{"version":"` + ver + `","packageName":"@ompig/ompig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"u","sha256":"s"}}}`
 	return signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(body))
 	}))
@@ -75,7 +75,7 @@ func newerManifest(t *testing.T, payload []byte) (*httptest.Server, *httptest.Se
 	binSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write(payload)
 	}))
-	manifest := `{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + binSrv.URL + `","sha256":"` + hex.EncodeToString(sum[:]) + `"}}}`
+	manifest := `{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + binSrv.URL + `","sha256":"` + hex.EncodeToString(sum[:]) + `"}}}`
 	manSrv := signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(manifest))
 	}))
@@ -84,7 +84,7 @@ func newerManifest(t *testing.T, payload []byte) (*httptest.Server, *httptest.Se
 
 // requireStandaloneSelfUpdateTier skips a test of the standalone tier on
 // Windows. There ResolveSelfUpdateTier selects the unsupported tier for a
-// standalone pig.exe and applyStandaloneUpdate refuses in-place replacement
+// standalone ompig.exe and applyStandaloneUpdate refuses in-place replacement
 // (D39). TestSelfUpdateOnWindowsRefusesReceiptedStandalone covers the Windows
 // behavior.
 func requireStandaloneSelfUpdateTier(t *testing.T) {
@@ -96,11 +96,11 @@ func requireStandaloneSelfUpdateTier(t *testing.T) {
 
 func seedRunningStandaloneReceipt(t *testing.T, source string) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", source)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", source)
 	originalVersion := codingagent.InstalledPigVersion
 	t.Cleanup(func() { codingagent.InstalledPigVersion = originalVersion })
-	codingagent.InstalledPigVersion = PigVersion
+	codingagent.InstalledPigVersion = OmpigVersion
 	exe, err := os.Executable()
 	if err != nil {
 		t.Fatal(err)
@@ -108,7 +108,7 @@ func seedRunningStandaloneReceipt(t *testing.T, source string) {
 	if resolved, err := filepath.EvalSymlinks(exe); err == nil {
 		exe = resolved
 	}
-	if err := codingagent.WriteStandaloneReceipt(exe, PigVersion, source); err != nil {
+	if err := codingagent.WriteStandaloneReceipt(exe, OmpigVersion, source); err != nil {
 		t.Fatalf("write standalone receipt: %v", err)
 	}
 }

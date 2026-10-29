@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's single beforeToolCall/afterToolCall functions (agent.ts:123-124, 201-206; types.ts:326, 341), driven through

@@ -12,7 +12,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/unitchecker"
 
-	"github.com/MichaelKinsy/PiG/automation/ci/portlint/checks"
+	"github.com/tmih06/ompig/automation/ci/portlint/checks"
 )
 
 func main() {

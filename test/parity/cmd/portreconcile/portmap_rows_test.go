@@ -11,7 +11,7 @@ import (
 func TestParsePortMapKeepsEveryPigCellShapeAndRejectsMalformedRows(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "PORT_MAP.md")
-	rows := "| Upstream | PiG | Status |\n|---|---|---|\n" +
+	rows := "| Upstream | Ompig | Status |\n|---|---|---|\n" +
 		"| _(downstream: Go SDK bridge)_ | `extensions/sdk/...` | 🔀 D19 |\n" +
 		"| `a/one.ts` | `x/one.go` | ✅ |\n" +
 		"| `a/many.ts` | `x/a.go`, `x/b.go` | ✅ |\n" +
@@ -45,7 +45,7 @@ func TestParsePortMapKeepsEveryPigCellShapeAndRejectsMalformedRows(t *testing.T)
 	}
 }
 
-// A ⬜ row whose Pig cell lists several code spans is a row too: it flips when a target is covered.
+// A ⬜ row whose Ompig cell lists several code spans is a row too: it flips when a target is covered.
 func TestFlipPortMapFlipsARowWithSeveralPigSpans(t *testing.T) {
 	root := t.TempDir()
 	for _, f := range []string{"a.go", "b.go"} {
@@ -54,7 +54,7 @@ func TestFlipPortMapFlipsARowWithSeveralPigSpans(t *testing.T) {
 		}
 	}
 	pm := filepath.Join(root, "PORT_MAP.md")
-	if err := os.WriteFile(pm, []byte("| upstream | pig | status |\n|---|---|---|\n| `a/m.ts` | `a.go`, `b.go` | ⬜ |\n"), 0o644); err != nil {
+	if err := os.WriteFile(pm, []byte("| upstream | ompig | status |\n|---|---|---|\n| `a/m.ts` | `a.go`, `b.go` | ⬜ |\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	var buf bytes.Buffer

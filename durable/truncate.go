@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/chord/output"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/truncate"
+	"github.com/tmih06/ompig/chord/output"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/truncate"
 )
 
 // Ports packages/durable/src/truncate.ts

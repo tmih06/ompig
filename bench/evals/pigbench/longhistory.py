@@ -475,14 +475,14 @@ MODE_PHASES = ("tui", "resume-tui")  # phases whose result depends on the TUI mo
 
 def run(opts):
     """Generate the sessions, run every phase for every arm and case, interleaving arms, and write raw.json."""
-    arm_list = [a for a in armlib.select(armlib.load(), opts.arms) if a.family in ("pig", "pi")]
+    arm_list = [a for a in armlib.select(armlib.load(), opts.arms) if a.family in ("ompig", "pi")]
     result = {"kind": "long-history", "options": {"runs": opts.runs, "cases": opts.cases, "seed": opts.seed, "modes": opts.modes, "history_timeout": opts.history_timeout, "phases": opts.phases},
               "samples": {}, "failures": {}, "sessions": {}, "egress": dict(egress.describe(), violations=[])}
     with armlib.Workspace() as ws:
         ws.install_all(arm_list)
         result["env"] = envinfo.collect(arm_list, seed=opts.seed)
         runnable = [a for a in arm_list if a.binary]
-        cache = os.environ.get("PIGBENCH_HISTORY_CACHE") or os.path.join(armlib.REPO, "tmp", "bench", "history")
+        cache = os.environ.get("OMPIGBENCH_HISTORY_CACHE") or os.path.join(armlib.REPO, "tmp", "bench", "history")
         from .overhead import Ctx
         # Outside the checkout: project resources and an AGENTS.md above the working directory would raise a trust dialog and change the prompt.
         project = os.path.join(tempfile.gettempdir(), "pigbench-history-project")

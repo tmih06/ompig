@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/stackprime"
+	"github.com/tmih06/ompig/internal/stackprime"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsloop"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // Tool-call execution for one assistant message. Mirrors upstream
@@ -163,7 +163,7 @@ func (r *loopRun) executeToolCallsParallel(ctx context.Context, calls []pendingT
 		}
 	}
 	failure := func() error {
-		// pig additive (D174): two or more prepared calls run in a procpolicy parallel section, so their in-process tool work runs at the
+		// ompig additive (D174): two or more prepared calls run in a procpolicy parallel section, so their in-process tool work runs at the
 		// runtime default width rather than on the capped Ps. The section closes once the last call has settled.
 		if prepared >= 2 {
 			defer procpolicy.Widen()()

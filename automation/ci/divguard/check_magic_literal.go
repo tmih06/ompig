@@ -18,7 +18,7 @@ import (
 // (limits, sizes, retries, buffer and queue lengths) in the hot packages.
 // Pi has very few of either, so each one is an invented behavior until a
 // `// upstream: <file>:<symbol>` comment shows where Pi uses the same value or
-// a `// pig divergence (D<N>)` marker records it. It is how the silent
+// a `// ompig divergence (D<N>)` marker records it. It is how the silent
 // `opts.MaxTurns = 100` default would have been caught.
 const magicLiteralName = "magic-literal"
 
@@ -38,10 +38,10 @@ var durationUnits = map[string]int64{
 	"Nanosecond": 1, "Microsecond": 1e3, "Millisecond": 1e6, "Second": 1e9, "Minute": 60e9, "Hour": 3600e9,
 }
 
-// additiveOnly reports packages that implement a PiG-only feature with no Pi
-// counterpart at all (D18 Piglets), so no literal there diverges from Pi.
+// additiveOnly reports packages that implement a Ompig-only feature with no Pi
+// counterpart at all (D18 Ompiglets), so no literal there diverges from Pi.
 func additiveOnly(rel string) bool {
-	return strings.HasPrefix(rel, "coding/piglet/") || strings.HasPrefix(rel, "coding/pigletbuild/")
+	return strings.HasPrefix(rel, "coding/ompiglet/") || strings.HasPrefix(rel, "coding/pigletbuild/")
 }
 
 // testSupport reports non-_test.go files that only tests and the parity

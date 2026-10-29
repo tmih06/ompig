@@ -11,13 +11,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's createLocalShellOperations (core/tools/bash.ts) spawns the shell with
 // windowsHide: true and stdio that inherits nothing, so libuv starts it with
 // SW_HIDE and CREATE_NO_WINDOW. The test binary stands in for the shell under
-// both command transports and reports how Pi's operations and PiG's started
+// both command transports and reports how Pi's operations and Ompig's started
 // it.
 func TestLocalShellOperationsHideTheShellWindowAsPiDoes(t *testing.T) {
 	exe, err := os.Executable()

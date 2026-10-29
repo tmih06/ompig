@@ -11,7 +11,7 @@ import (
 
 	"go.yaml.in/yaml/v3"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func writeCIFixture(t *testing.T, root, path, content string) {
@@ -41,8 +41,8 @@ func mockedBash(t *testing.T, mocks string, args ...string) *exec.Cmd {
 // this bash exports.
 func requireBashMake(t *testing.T) {
 	t.Helper()
-	probe := mockedBash(t, t.TempDir(), "-c", `printf 'probe:\n\t@test "$$PIG_MAKE_PROBE" = visible\n' | make -f - probe`)
-	probe.Env = append(os.Environ(), "PIG_MAKE_PROBE=visible")
+	probe := mockedBash(t, t.TempDir(), "-c", `printf 'probe:\n\t@test "$$OMPIG_MAKE_PROBE" = visible\n' | make -f - probe`)
+	probe.Env = append(os.Environ(), "OMPIG_MAKE_PROBE=visible")
 	if output, err := probe.CombinedOutput(); err != nil {
 		t.Skipf("no make that receives the environment of %s is on its PATH: %v\n%s", testenv.Bash(t), err, output)
 	}

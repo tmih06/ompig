@@ -2,11 +2,11 @@
 set -euo pipefail
 root=$(cd "$(dirname "$0")/../../.." && pwd)
 kind=$1
-if [[ $kind == pig ]]; then
-  binary=${PIG_PARITY_PIG_BIN:-${PIG_BIN:?set PIG_PARITY_PIG_BIN or PIG_BIN}}
+if [[ $kind == ompig ]]; then
+  binary=${OMPIG_PARITY_OMPIG_BIN:-${OMPIG_BIN:?set OMPIG_PARITY_OMPIG_BIN or OMPIG_BIN}}
   args=(--no-extensions --model test-faux/faux-1)
 else
-  binary=${PIG_PARITY_PI_BIN:-$(command -v pi)}
+  binary=${OMPIG_PARITY_PI_BIN:-$(command -v pi)}
   pinned=$(sed -n 's/^const UpstreamPackageVersion = "\([^"]*\)"$/\1/p' "$root/internal/coding/pigversion/pigversion.go")
   [[ -n $pinned && $("$binary" --version) == "$pinned" ]] || { printf 'expected pinned Pi %s\n' "$pinned" >&2; exit 1; }
   args=(--no-extensions -e "$root/test/parity/testdata/test-faux-provider.ts" --model test-faux/faux-1)
@@ -32,8 +32,8 @@ trap cleanup EXIT
 {
   printf 'set -m\n'
   printf 'trap '\''printf "\\nSUSPEND_JOB_EXIT:%%s\\n" "$?"; read -r _'\'' EXIT\n'
-  printf 'export PIG_TEST_FAUX=1 PI_SKIP_VERSION_CHECK=1 COLORTERM=truecolor\n'
-  for key in PIG_CODING_AGENT_DIR PI_CODING_AGENT_DIR; do
+  printf 'export OMPIG_TEST_FAUX=1 PI_SKIP_VERSION_CHECK=1 COLORTERM=truecolor\n'
+  for key in OMPIG_CODING_AGENT_DIR PI_CODING_AGENT_DIR; do
     if [[ -n ${!key:-} ]]; then printf 'export %s=%q\n' "$key" "${!key}"; fi
   done
   printf 'cd %q\n' "$work"

@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // RPC mode reads the extension host from the Session it serves (coding.Session.ExtensionHost), not from the factory that built it: each Session reaches its own build's bridge, and the process controls of any Session reach the hosts of the whole process, including the hosts of Sessions created after input ended.

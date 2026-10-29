@@ -11,9 +11,9 @@ Go test Output events follow verbatim; top-level completion events retain elapse
     team_harness_text_test.go:34: update = "Updated system prompt section \"a\\\"b\":\n\nnew\n\nRemoved system prompt section \"x\\ny\".", want "Updated system prompt section \"a\"b\":\n\nnew\n\nRemoved system prompt section \"x\ny\"."
 --- FAIL: TestHarnessTextSystemUpdateLiteralNames (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/agent	0.058s
+FAIL	github.com/tmih06/ompig/agent	0.058s
 
 Top-level completion events:
-{"Time": "2026-09-24T21:59:51.060748138-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/agent", "Test": "TestHarnessTextSystemBlockSeparator", "Elapsed": 0}
-{"Time": "2026-09-24T21:59:51.060797784-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/agent", "Test": "TestHarnessTextEmptySystemSection", "Elapsed": 0}
-{"Time": "2026-09-24T21:59:51.060832045-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/agent", "Test": "TestHarnessTextSystemUpdateLiteralNames", "Elapsed": 0}
+{"Time": "2026-09-24T21:59:51.060748138-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/agent", "Test": "TestHarnessTextSystemBlockSeparator", "Elapsed": 0}
+{"Time": "2026-09-24T21:59:51.060797784-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/agent", "Test": "TestHarnessTextEmptySystemSection", "Elapsed": 0}
+{"Time": "2026-09-24T21:59:51.060832045-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/agent", "Test": "TestHarnessTextSystemUpdateLiteralNames", "Elapsed": 0}

@@ -12,7 +12,7 @@ func TestIsOfflineModeEnabledMatchesPiExactly(t *testing.T) {
 		{"1", true}, {"true", true}, {"TRUE", true}, {"Yes", true}, {"yes", true}, {" 1", false}, {"\ttrue", false}, {"yes\n", false},
 		{"0", false}, {"no", false}, {"ye\u017f", false}, {"TRUE\u017f", false},
 	} {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", tc.value)
 		if got := IsOfflineModeEnabled(); got != tc.want {
 			t.Errorf("PI_OFFLINE=%q: IsOfflineModeEnabled() = %v, want %v", tc.value, got, tc.want)

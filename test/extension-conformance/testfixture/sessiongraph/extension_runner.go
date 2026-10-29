@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // errorOf is Pi's failure(): "no error", or the error's message.

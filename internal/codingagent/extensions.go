@@ -10,8 +10,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ─── Event Names ─────────────────────────────────────────────────────────────
@@ -136,14 +136,14 @@ func NewTUIUIContext(t tui.TUI) *TUIUIContext {
 // renderer returns the renderer to paint through. When wired to an
 // InteractiveMode it resolves m.tuiInst dynamically, so a live tui-mode switch
 // (switchTuiMode) that replaces the renderer paints through the new one rather
-// than the stopped renderer captured at construction. This is pig's equivalent
+// than the stopped renderer captured at construction. This is ompig's equivalent
 // of upstream's createInteractiveTuiReference stable reference for the extension
 // UI context. Falls back to the captured renderer when standalone (tests).
 // withRenderer runs op against the current renderer. When wired to an
 // InteractiveMode it resolves m.tuiInst dynamically AND holds m.rendererMu across
 // op, so a live tui-mode switch (which holds the write lock across stop+swap)
 // cannot let an extension-goroutine paint land on a renderer after its
-// preserve-screen stop. This is pig's race-safe equivalent of upstream's
+// preserve-screen stop. This is ompig's race-safe equivalent of upstream's
 // createInteractiveTuiReference stable reference for the extension UI context.
 // Falls back to the captured renderer when standalone (tests).
 func (u *TUIUIContext) withRenderer(op func(tui.TUI)) {

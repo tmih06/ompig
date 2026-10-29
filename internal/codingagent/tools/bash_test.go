@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // bashParams marshals shell tool input in tests; a zero timeout is omitted.
@@ -479,7 +479,7 @@ func TestBashAbortReturnsBufferedOutput(t *testing.T) {
 }
 
 func TestBashCwdDoesNotPersistMatchingUpstream(t *testing.T) {
-	// Locked decision A on row 2.14: pig matches upstream by spawning
+	// Locked decision A on row 2.14: ompig matches upstream by spawning
 	// one shell per call. cd between invocations must NOT persist.
 	bt := &BashTool{CWD: t.TempDir()}
 
@@ -500,7 +500,7 @@ func TestBashCwdDoesNotPersistMatchingUpstream(t *testing.T) {
 	args2, _ := json.Marshal(bashParams{Command: pwd})
 	res2, _ := bt.Execute(context.Background(), "", args2, nil)
 	if strings.Contains(strings.TrimSpace(res2.Text()), "/tmp\n") || strings.TrimSpace(res2.Text()) == "/tmp" {
-		t.Errorf("second call cwd persisted from first (pig must match upstream's one-shot semantics); got %q", res2.Text())
+		t.Errorf("second call cwd persisted from first (ompig must match upstream's one-shot semantics); got %q", res2.Text())
 	}
 	if !strings.Contains(res2.Text(), wantCWD) {
 		t.Errorf("second call should report tool's CWD %q; got %q", wantCWD, res2.Text())

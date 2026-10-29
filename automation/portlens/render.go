@@ -339,7 +339,7 @@ func buildBugsView(rep *Report) bugsView {
 		plat[e.Platform] = true
 		rel[e.FixedIn] = true
 	}
-	for _, n := range []string{"PiG's own defect", "Fixed ahead of Pi", "Pi fix ported"} {
+	for _, n := range []string{"Ompig's own defect", "Fixed ahead of Pi", "Pi fix ported"} {
 		v.Classes = append(v.Classes, nameCount{n, cls[n]})
 	}
 	for p := range plat {
@@ -366,9 +366,9 @@ func commitHashes(e BugEntry) string {
 
 func cellText(c BarCell) string {
 	if c.PiVal == 0 {
-		return fmt.Sprintf("PiG %s %s", trimFloat(c.PigVal), c.Unit)
+		return fmt.Sprintf("Ompig %s %s", trimFloat(c.OmpigVal), c.Unit)
 	}
-	return fmt.Sprintf("PiG %s %s, Pi %s %s", trimFloat(c.PigVal), c.Unit, trimFloat(c.PiVal), c.Unit)
+	return fmt.Sprintf("Ompig %s %s, Pi %s %s", trimFloat(c.OmpigVal), c.Unit, trimFloat(c.PiVal), c.Unit)
 }
 
 func trimFloat(f float64) string {
@@ -527,7 +527,7 @@ func renderFragment(t *template.Template, name string, data any) (string, error)
 }
 
 // generatorMeta marks an index.html this tool wrote; WriteReport replaces files only in a directory that holds one.
-const generatorMeta = `<meta name="generator" content="PiG port lens">`
+const generatorMeta = `<meta name="generator" content="Ompig port lens">`
 
 // checkOutputDir accepts a missing or empty directory or the directory of an earlier report. WriteReport deletes the data, views and samples subdirectories of its output, so any other directory is refused.
 func checkOutputDir(dir string) error {

@@ -5,7 +5,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // upstream: packages/durable/src/session/transaction.ts settleSubmission: this.#assertOpen(); this.#hasTableWrite = true; then copyJson(settlement).

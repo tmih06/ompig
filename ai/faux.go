@@ -955,7 +955,7 @@ func writeFauxPromptRest(builder *bytes.Buffer, messages []fauxPromptMessage, fo
 // sameFauxText reports whether b's prompt text is a's because every field the text reads holds the same value: a string by its data
 // and length, as a Go string never changes, and tool call arguments by their map. It is false for a system message, whose text reads
 // its sections and tool schemas, and whenever it cannot tell; the caller then writes the texts out.
-// pig additive (D112): Pi compares the texts; a transcript's messages, arguments included, do not change once sent (TranscriptContext),
+// ompig additive (D112): Pi compares the texts; a transcript's messages, arguments included, do not change once sent (TranscriptContext),
 // so the same fields have the same text.
 func sameFauxText(a, b Message) bool {
 	switch a := a.(type) {

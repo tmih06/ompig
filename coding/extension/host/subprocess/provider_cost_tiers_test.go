@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess_test
 
@@ -8,9 +8,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func TestNodePostBindProviderRegistrationRetainsCostTiers(t *testing.T) {

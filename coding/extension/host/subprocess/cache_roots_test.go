@@ -5,12 +5,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 func TestCurrentCacheEntriesProtectsStartupArtifactAndReusesSecondBuild(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	source := filepath.Join(t.TempDir(), "standalone")
 	if err := os.MkdirAll(source, 0o755); err != nil {
 		t.Fatal(err)

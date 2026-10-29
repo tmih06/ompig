@@ -10,7 +10,7 @@
 #   pi --no-extensions -e test-faux-provider.ts -e extension-api-info.mjs \
 #     --model test-faux/faux-1 --no-session -p "/api-info <file>"
 #
-# writes <file> and exits 0 with no output. pig sent "/api-info <file>" to the
+# writes <file> and exits 0 with no output. ompig sent "/api-info <file>" to the
 # model, so the faux provider answered `test-faux: unhandled request` and the
 # run exited 1 without running the command.
 #
@@ -34,8 +34,8 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/api-info.json"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["../testdata/extension-api-info.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["../testdata/extension-api-info.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "../testdata/extension-api-info.mjs",

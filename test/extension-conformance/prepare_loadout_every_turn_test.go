@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 const (
@@ -186,7 +186,7 @@ pi.registerTool({name:"other",label:"other",description:"Other.",parameters:{typ
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		code = fmt.Sprintf(`package flags
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension()*sdk.Extension{
 e:=sdk.New(%q)
 executed:=false
@@ -200,9 +200,9 @@ return e
 }`, name, loadoutBefore, loadoutAfter)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		code = fmt.Sprintf(`import pig_sdk
+		code = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  state={"executed":False}
  def prepare(loadout):
   if not state["executed"]:
@@ -211,13 +211,13 @@ def new_extension():
  def execute(ctx,args):
   state["executed"]=True
   return "watched"
- e.register_tool(pig_sdk.ToolDefinition(name="watch",label="watch",description="Watch.",parameters={"type":"object"},prepare_loadout=prepare,execute=execute))
+ e.register_tool(ompig_sdk.ToolDefinition(name="watch",label="watch",description="Watch.",parameters={"type":"object"},prepare_loadout=prepare,execute=execute))
  e.tool("other","Other.",{"type":"object"},lambda ctx,args:"other")
  return e
 `, name, loadoutBefore, loadoutAfter)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		code = fmt.Sprintf(`use pig_sdk::{Extension,ToolDefinition,ToolLoadoutChanges,ToolResult,Schema};
+		code = fmt.Sprintf(`use ompig_sdk::{Extension,ToolDefinition,ToolLoadoutChanges,ToolResult,Schema};
 use std::sync::{Arc,atomic::{AtomicBool,Ordering}};
 pub fn new_extension()->Extension{
  let mut e=Extension::new(%q);

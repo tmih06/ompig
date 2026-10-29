@@ -9,16 +9,16 @@ import (
 )
 
 // The debug log sits in the temporary directory every local user can write: a symlink another user planted there must not
-// redirect it, and the file PiG creates is private.
+// redirect it, and the file Ompig creates is private.
 func TestDebugLogRefusesASymlinkAndIsPrivate(t *testing.T) {
 	tmp := t.TempDir()
 	t.Setenv("TMPDIR", tmp)
-	t.Setenv("PIG_DEBUG", "1")
+	t.Setenv("OMPIG_DEBUG", "1")
 	victim := filepath.Join(t.TempDir(), "victim")
 	if err := os.WriteFile(victim, []byte("keep\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	log := filepath.Join(tmp, "pig-debug.log")
+	log := filepath.Join(tmp, "ompig-debug.log")
 	if err := os.Symlink(victim, log); err != nil {
 		t.Fatal(err)
 	}
@@ -45,12 +45,12 @@ func TestDebugLogRefusesASymlinkAndIsPrivate(t *testing.T) {
 func TestDebugLogRefusesAHardLinkAndTightensAnOpenLog(t *testing.T) {
 	tmp := t.TempDir()
 	t.Setenv("TMPDIR", tmp)
-	t.Setenv("PIG_DEBUG", "1")
+	t.Setenv("OMPIG_DEBUG", "1")
 	victim := filepath.Join(t.TempDir(), "victim")
 	if err := os.WriteFile(victim, []byte("keep\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	log := filepath.Join(tmp, "pig-debug.log")
+	log := filepath.Join(tmp, "ompig-debug.log")
 	if err := os.Link(victim, log); err != nil {
 		t.Skipf("hard link: %v", err)
 	}

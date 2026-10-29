@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // The document cache is bounded by use (session.ts SessionImpl): a document with no watch attached

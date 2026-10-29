@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // The reconnect policy of streamable-http.ts (consumeResponseStream, runGetStream, isRetryable, reconnectDelay) is not

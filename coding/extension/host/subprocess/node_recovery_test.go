@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Each fixture owns its sources, trace, Host, and recovery processes. Equal member names in concurrent fixtures still use the Host's private socket directory.

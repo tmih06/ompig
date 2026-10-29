@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 // handoffSurface is a started surface with a transcript line and the input
@@ -24,7 +24,7 @@ func handoffSurface(t *testing.T) (*TuiSurface, *recordingSession, *Text, *Edito
 	return surface, session, text, editor
 }
 
-// While PiG lends the terminal, a change draws no frame, even when a render
+// While Ompig lends the terminal, a change draws no frame, even when a render
 // is asked for. Resume tells the session first and then sends one frame with
 // only the changes made meanwhile: an update of the changed transcript node
 // and of the editor node, no full resend. A second Suspend changes nothing.
@@ -271,7 +271,7 @@ func TestTuiSurfaceThemePaletteOmitsTheTerminalsAnsiColors(t *testing.T) {
 
 // The surface paints nothing on the terminal the session draws on, but it
 // writes the terminal color query there, as the ANSI renderer writes it to
-// its own, and consumes the replies, so PiG reads that terminal's colors.
+// its own, and consumes the replies, so Ompig reads that terminal's colors.
 func TestTuiSurfaceQueriesTheTerminalColorsOnItsTerminal(t *testing.T) {
 	surface, session, text, _ := handoffSurface(t)
 	var terminal bytes.Buffer

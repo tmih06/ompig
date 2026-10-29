@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// TestConformance_MessageHelpersAgreeAcrossSDKs: messageRole and messageText are PiG's reading aid over Pi's flat, role-discriminated message payload (docs/extension-api-parity.md: identical in
+// TestConformance_MessageHelpersAgreeAcrossSDKs: messageRole and messageText are Ompig's reading aid over Pi's flat, role-discriminated message payload (docs/extension-api-parity.md: identical in
 // every SDK). Each case below is an event payload and the pinned answer; all SDKs must give it, so a payload the four implementations read differently (a non-string role, a block that is
 // not an object, a text field that is not a string) shows up as one SDK disagreeing with the table.
 func TestConformance_MessageHelpersAgreeAcrossSDKs(t *testing.T) {

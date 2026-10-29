@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Re-record the exact-Pi observation fixtures (coding/testdata/rpc33-observation, ai/testdata/google-tick-order) from the
-# pinned Pi build. Each probe stamps the pin's display version (PIG_UPSTREAM_VERSION), so a fixture recorded by another
+# pinned Pi build. Each probe stamps the pin's display version (OMPIG_UPSTREAM_VERSION), so a fixture recorded by another
 # pin fails its Go test until this runs. Review the diff against the Pi source before accepting it; never edit a fixture.
 set -euo pipefail
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
@@ -9,8 +9,8 @@ eval "$(python3 automation/pin/pin.py env)"
 export PI_PACKAGE_ROOT="$root/extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent"
 private=$(mktemp -d)
 trap 'rm -rf "$private"' EXIT
-mkdir -p "$private/home" "$private/pig" "$private/pi"
-export HOME="$private/home" PIG_CODING_AGENT_DIR="$private/pig" PI_CODING_AGENT_DIR="$private/pi"
+mkdir -p "$private/home" "$private/ompig" "$private/pi"
+export HOME="$private/home" OMPIG_CODING_AGENT_DIR="$private/ompig" PI_CODING_AGENT_DIR="$private/pi"
 dir=coding/testdata/rpc33-observation
 run() { # <probe> <args...>: runs in the probe's directory so relative outputs land beside it
   local probe=$1; shift

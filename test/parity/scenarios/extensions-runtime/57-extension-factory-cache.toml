@@ -1,5 +1,5 @@
 # Original extension-factory-cache.test.ts:69,83,95,115. Installed Pi0.87.1 produces module/factory counts1/2,2/2,2/2,2/3 and distinct cached-load extension/runtime identities.
-# The tests import private loader modules. Drivers map their compiled paths (Pi dist/core, PiG core in the shipped Node graph); this is harness file navigation, not package-root import-layout coverage. Complete result records are compared without normalization.
+# The tests import private loader modules. Drivers map their compiled paths (Pi dist/core, Ompig core in the shipped Node graph); this is harness file navigation, not package-root import-layout coverage. Complete result records are compared without normalization.
 name = "57-extension-factory-cache"
 description = "Cached Node modules rerun factories with fresh runtimes, while direct loads, reload and cwd changes reimport"
 covers = ["packages/coding-agent/src/core/extensions/loader.ts", "packages/coding-agent/src/core/resource-loader.ts"]
@@ -8,9 +8,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/factory-cache"]
+ompig_args = ["go", "run", "./test/parity/testdata/factory-cache"]
 pi_args = ["node", "./test/parity/testdata/factory-cache-pi.mjs"]
 
 [cli]

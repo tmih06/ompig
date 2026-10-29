@@ -1,6 +1,6 @@
 # Upgrade plan: Pi 0.87.1 → 0.99.1
 
-Status: read-only plan, awaiting owner approval. No source, generated evidence, pin, or Git state has been changed. Mode: `upgrade v0.99.1` of the `pig-porter` skill. Constraints applied: `porter-0.99-LESSONS.md` (cited below as L1–L15) and the skill's upgrade workflow.
+Status: read-only plan, awaiting owner approval. No source, generated evidence, pin, or Git state has been changed. Mode: `upgrade v0.99.1` of the `ompig-porter` skill. Constraints applied: `porter-0.99-LESSONS.md` (cited below as L1–L15) and the skill's upgrade workflow.
 
 ## 1. Target and provenance
 
@@ -8,7 +8,7 @@ Status: read-only plan, awaiting owner approval. No source, generated evidence, 
 |---|---|
 | current pin | `0.87.1`, commit `f07218c4d4bbc12bef056a7058c3dd49dfe41abe` |
 | target tag | `v0.99.1`, `git ls-remote` → `d86654abb8862e201933517d6f1fce9f88dd117f` |
-| PiG release line | `0.3.0` (independent of the pin; the owner decides whether this upgrade ships as a new line, see D-F) |
+| Ompig release line | `0.3.0` (independent of the pin; the owner decides whether this upgrade ships as a new line, see D-F) |
 | release range | tags between the two: `v0.99.0` (2026-09-29 17:21Z) and `v0.99.1` (2026-09-29 18:23Z). The changelogs list no 0.88–0.98 entries: this is one leap. 0.99.1 itself is small (GPT-6.1 Sol, default Codex model, a bundled-release `/login openai` fix). 0.99.0 carries almost everything. |
 | files changed | 711 across the monorepo (242 added, 55 removed, 414 modified, `node_modules` excluded). In the four tracked packages the source-file delta that `upstreamdelta` audits is **216 files** (168 modified, 44 added, 4 removed). |
 
@@ -16,10 +16,10 @@ Only two tags exist in the range, so no intermediate shape needs to be preserved
 
 ### Read-only steps performed (side effects listed)
 
-- `./automation/gen/mirror-upstream.sh --version v0.99.1`: extracted the release into `.upstream/v0.99.1/` (gitignored; the `current` symlink still points at `v0.87.1`) and cached the tarball under `~/.cache/checkouts/github.com/earendil-works/pi/tarballs/`. The script stopped at its last check (`published pi-ai data version 0.87.1 does not match 0.99.1`, expected before the pin moves), so `.upstream/v0.99.1/.pig-upstream-source.json` is not written yet. It is written by `make upstream-mirror` after the pin changes.
+- `./automation/gen/mirror-upstream.sh --version v0.99.1`: extracted the release into `.upstream/v0.99.1/` (gitignored; the `current` symlink still points at `v0.87.1`) and cached the tarball under `~/.cache/checkouts/github.com/earendil-works/pi/tarballs/`. The script stopped at its last check (`published pi-ai data version 0.87.1 does not match 0.99.1`, expected before the pin moves), so `.upstream/v0.99.1/.ompig-upstream-source.json` is not written yet. It is written by `make upstream-mirror` after the pin changes.
 - Ran the repo's TypeScript extractors against the mirror, writing to `/tmp` only: `extract-test-inventory.mjs`, `extract-cli.mjs`, `extract.mjs --origin source` (both versions, same method), `upstreamdelta -generate -from 0.87.1 -to 0.99.1`.
 - Ran `make upstream-delta`, `make test-porting-release`, `make known-gaps-drift`, `make port-map-drift`, `go build ./...` on the unchanged tree. `git status --short` is empty after every step.
-- Did not read `auth.json`, did not write to `~/.pig`, made no commit, branch, or stage.
+- Did not read `auth.json`, did not write to `~/.ompig`, made no commit, branch, or stage.
 
 ## 2. Baseline
 
@@ -43,13 +43,13 @@ Nothing below is assumed. Each item blocks the workstreams named.
 
 **D-A. Comparator and published package inside the npm cooldown.** `~/.npmrc` sets `min-release-age=3`. the `@earendil-works/pi-coding-agent` 0.99.1 package was published 2026-09-29T18:23Z, so `npm install` refuses it until 2026-10-02 (`ETARGET … before 9/26/2026`). Everything that needs the published package is blocked until then: the exact `pi` comparator (`make parity-deps` checks `pi --version`), the published-origin interface inventory, `model-catalogs`, and every paired parity scenario. Options: (1) start after 2026-10-02; (2) approve a one-time install of exactly 0.99.1 (and its locked transitive set) with the cooldown lifted for that command, integrity checked against the lockfile; (3) start only the workstreams that need source alone (tests, docs, Go-only design) and hold the pin change. I recommend (3) until (1), because a supply-chain cooldown is the owner's policy to waive, not mine. Note that `undici`/`openai` are dependency-proof inputs (see D-I).
 
-**D-B. Built-in MCP, codemode and tool-search.** 0.99.0's headline feature is new built-in extensions (`packages/coding-agent/src/extensions/{mcp,codemode,tool-search}`) over two new packages (`packages/mcp`, `packages/codemode`). `codemode` runs model-written JavaScript in a QuickJS WASM sandbox in a worker (`quickjs-wasi 3.6.2`). `AGENTS.md` forbids adding a WASM or embedded-JS runtime without an approved spec, and requires classifying each additive capability (required substrate / inert capability / Standard or Piglet / delete / divergence). PORT_MAP currently scopes the denominator to four packages and treats `mcp` only through the additive `pig-mcp-adapter` (`docs/additive-features.md`), which overlaps with upstream's new native `mcp.json`, `/mcp`, `pi mcp …` and `mcp__<server>__<tool>` naming. I need a decision on: (a) port native MCP into Stock PiG (client, stdio and streamable-HTTP transports, OAuth, `mcp.json`, `/mcp`, `pi mcp`, the new `registerMcpServer` API); (b) port codemode with which sandbox (needs a written spec, Go engine choice, and its resource bounds), or record a numbered divergence that omits codemode; (c) how `pig-mcp-adapter` and `builtin:mcp` coexist. Until decided, the `mcp`, `codemode` and `tool-search` files and their new test files (Appendix B: `mcp`, `codemode`, `tool-search`, `agent-session-mcp*`, `agent-session-codemode`, `codemode-renderer`) cannot be mapped honestly, and the shared surfaces they touch (`ToolDefinition.exposure`, `ctx.executeTool`, nested tool calls, `--no-extensions` semantics, `defaultTools` `+name/-name`) cannot be closed.
+**D-B. Built-in MCP, codemode and tool-search.** 0.99.0's headline feature is new built-in extensions (`packages/coding-agent/src/extensions/{mcp,codemode,tool-search}`) over two new packages (`packages/mcp`, `packages/codemode`). `codemode` runs model-written JavaScript in a QuickJS WASM sandbox in a worker (`quickjs-wasi 3.6.2`). `AGENTS.md` forbids adding a WASM or embedded-JS runtime without an approved spec, and requires classifying each additive capability (required substrate / inert capability / Standard or Ompiglet / delete / divergence). PORT_MAP currently scopes the denominator to four packages and treats `mcp` only through the additive `ompig-mcp-adapter` (`docs/additive-features.md`), which overlaps with upstream's new native `mcp.json`, `/mcp`, `pi mcp …` and `mcp__<server>__<tool>` naming. I need a decision on: (a) port native MCP into Stock Ompig (client, stdio and streamable-HTTP transports, OAuth, `mcp.json`, `/mcp`, `pi mcp`, the new `registerMcpServer` API); (b) port codemode with which sandbox (needs a written spec, Go engine choice, and its resource bounds), or record a numbered divergence that omits codemode; (c) how `ompig-mcp-adapter` and `builtin:mcp` coexist. Until decided, the `mcp`, `codemode` and `tool-search` files and their new test files (Appendix B: `mcp`, `codemode`, `tool-search`, `agent-session-mcp*`, `agent-session-codemode`, `codemode-renderer`) cannot be mapped honestly, and the shared surfaces they touch (`ToolDefinition.exposure`, `ctx.executeTool`, nested tool calls, `--no-extensions` semantics, `defaultTools` `+name/-name`) cannot be closed.
 
 **D-C. Extension API growth across four SDKs.** 0.99.0 adds, to the Pi extension API: `registerMcpServer/unregisterMcpServer/getMcpServers`, `registerVirtualModel/unregisterVirtualModel`, `getSettings`, the `provider_stream_event` and `mcp_servers_change` events, `ToolDefinition.{exposure,namespace,annotations,outputSchema,prepareLoadout,defaultActive}`, `ctx.executeTool()`/`getCallableTools()`, `parentToolCallId` on tool events, `structuredContent`/`isError` results, `Extension.replaceable`, and `ExtensionToolContext`. `AGENTS.md` requires each capability to land in Go, Rust, Python and TypeScript with a conformance row bound to a value that differs from each SDK's fallback, plus `docs/extension-api-parity.md` rows and async contracts. Confirm this is in scope for this leap, or approve deferring named APIs with numbered, owner-approved gaps.
 
 **D-D. System theme becomes the default.** The `system` theme derives colors from the terminal's reported foreground, background and ANSI palette (OSC 10/11/4), and light/dark now come from the reported background first. The startup header shows the pi logo plus version, the `[Themes]` banner section is gone, `dark.json`/`light.json` are rewritten in OKHSL, and `TUI.queryTerminalColorScheme/queryTerminalBackgroundColor` are replaced by `queryTerminalColors()`. This changes pixels in most interactive scenarios (`interactive-rendering`, `footer`, `startup`, `fullscreen`, `tui-components`, `selectors`, `slash-commands`, `tree`). Decide the deterministic terminal-color stimulus the parity harness answers with for both sides, and confirm scenario byte-comparators are re-derived from upstream 0.99.1 rather than normalized (AGENTS "Loop smells").
 
-**D-E. Model data schema 6 and the image-model API break.** `ImagesModels`, `createImagesModels`, `createImagesProvider`, `openrouterImagesProvider`, `builtinImagesProviders/Models` and the plural image type names are removed; image and classifier models join `Models`/`Provider` with a `type` field; `image-models.generated.{ts,js}` and `generate-image-models.ts` are deleted; the model JSON is hydrated (`npm run hydrate-model-data`) rather than generated into a tracked `.ts` file. PiG's `make model-catalogs` (`automation/gen/generate-model-catalogs.sh`) hard-requires `image-models.generated.js`, and `cmd/gen-image-models`, `ai/images_models.go`, `ai/image_models_generated.go` are built on it. This is a rebuild of the catalog pipeline plus a breaking change to PiG's Go `ai` API (no compatibility shim, L14). Approve the rebuild and the resulting Go API change, or name a narrower target.
+**D-E. Model data schema 6 and the image-model API break.** `ImagesModels`, `createImagesModels`, `createImagesProvider`, `openrouterImagesProvider`, `builtinImagesProviders/Models` and the plural image type names are removed; image and classifier models join `Models`/`Provider` with a `type` field; `image-models.generated.{ts,js}` and `generate-image-models.ts` are deleted; the model JSON is hydrated (`npm run hydrate-model-data`) rather than generated into a tracked `.ts` file. Ompig's `make model-catalogs` (`automation/gen/generate-model-catalogs.sh`) hard-requires `image-models.generated.js`, and `cmd/gen-image-models`, `ai/images_models.go`, `ai/image_models_generated.go` are built on it. This is a rebuild of the catalog pipeline plus a breaking change to Ompig's Go `ai` API (no compatibility shim, L14). Approve the rebuild and the resulting Go API change, or name a narrower target.
 
 **D-F. Release line and test-porting policy.** The approved `deferred-0.3.x` known-gap exception (`docs/parity/KNOWN-GAPS-0.3.x.md`, owner approval 2026-09-28) is bound to 0.3.x, to `test-porting-policy-v0.87.1.json`, and to the exact 0.87.1 hashes. 112 of the 116 changed upstream test files carry the `hot-path` tag, and 0.99.1 hashes invalidate their reviewed mappings. If this ships as 0.4.x, the gate (`make test-porting-release`) rejects every pending or partial hot-path port, and the exception does not carry over. Decide the release line and whether any new gap approval will be requested (this plan requests none).
 
@@ -188,12 +188,12 @@ Each candidate is a hypothesis to probe against the 0.99.1 executable first. The
 | candidate | cause | if approved |
 |---|---|---|
 | codemode sandbox engine | QuickJS WASM in a worker has no drop-in Go equivalent; embedded-JS runtime is forbidden without an approved spec (D-B) | numbered divergence or approved spec |
-| MCP client stack | native Go client for stdio and streamable HTTP with OAuth, versus `pig-mcp-adapter`; naming and `builtin:mcp` coexistence (D-B) | possible additive-features entry, not a divergence, if `builtin:mcp` is exact |
+| MCP client stack | native Go client for stdio and streamable HTTP with OAuth, versus `ompig-mcp-adapter`; naming and `builtin:mcp` coexistence (D-B) | possible additive-features entry, not a divergence, if `builtin:mcp` is exact |
 | `Sign in with ChatGPT` | live-account behavior cannot be a hermetic oracle; device-ID storage in settings (D-G) | test limitation, not a divergence, unless the flow differs |
 | system theme terminal queries | Windows console and non-tty paths; timing of OSC replies (D-D) | verify per platform, then decide |
 | session file created at first user message | Go session persistence and the Pico3/JSONL storage layers must match the new crash-before-reply state | expected to be exact; probe first |
 | nested-call `nestedCalls` bounds and cost roll-up | concurrency ownership across tool workers | expected to be exact; race-test |
-| `getFilePaths()` native clipboard | Pi uses a macOS N-API module; PiG's native clipboard path differs by platform (`docs/parity/native-clipboard-linux.md`) | Linux/Windows paths likely n/a for Pi too; record per platform |
+| `getFilePaths()` native clipboard | Pi uses a macOS N-API module; Ompig's native clipboard path differs by platform (`docs/parity/native-clipboard-linux.md`) | Linux/Windows paths likely n/a for Pi too; record per platform |
 | Node/Bun-only build changes | TypeScript 7, `tsx` removal, bundling (`/login openai` `openai-chatgpt.js` missing) | designed-out with upstream reason |
 | existing D-entries | re-probe every active divergence against 0.99.1 (`AGENTS.md`: a prior approval is evidence, not permission); D82/D83 touch stream observation and share code with `onProviderStreamEvent` and `runToolCall` | keep, reclassify, or delete |
 
@@ -202,7 +202,7 @@ Each candidate is a hypothesis to probe against the 0.99.1 executable first. The
 New in 0.99.x and requiring oracle isolation before any scenario is derived from Pi:
 
 - `PI_SKIP_VERSION_CHECK` still governs the version check (`utils/version-check.ts`); confirm no additional startup network call. The catalog request now carries `types=chat,image,classifier` (`model-catalog-protocol.test.ts` shows the shape).
-- Terminal colors: the default theme now depends on OSC 10/11/4 replies and the light/dark report; the oracle terminal (tmux) must answer identically for Pi and PiG (D-D).
+- Terminal colors: the default theme now depends on OSC 10/11/4 replies and the light/dark report; the oracle terminal (tmux) must answer identically for Pi and Ompig (D-D).
 - `PI_OAUTH_CALLBACK_HOST` (new): local callback servers for Anthropic, Codex, OpenRouter, Radius, ChatGPT and MCP OAuth. Tests bind loopback ports; use ephemeral ports and fake authorization servers.
 - `deviceId`: random per install, written to global settings and omitted from bug reports; fix the source for tests.
 - MCP: stdio servers spawn processes, `mcp.log` rotation at 5 MB, retry backoff on 408/429/5xx (two retries), 10 s startup wait. Each is a bounded process/time contract needing cancellation and cleanup evidence (L4, L5: a killed but unreaped stdio server must be marked dead on the first unexpected close).
@@ -215,7 +215,7 @@ Ordered by dependency: contracts before code, foundations before callers, and jo
 **Phase 0: baseline (before approval-dependent changes).** Run `make check` and `make test-race` on the unchanged tree; record the result. Resolve D-A.
 
 **Phase 1: pin and evidence generation** (after approval; branch-neutral, no commits).
-1. Change the upstream pin in `internal/coding/pigversion/pigversion.go` (`UpstreamVersion`, `UpstreamCommit`) and the exact Pi dependency in `extensions/sdk-ts` (peer and dev dependency plus lock). `make set-version` changes the PiG line, not the pin, and waits for D-F.
+1. Change the upstream pin in `internal/coding/pigversion/pigversion.go` (`UpstreamVersion`, `UpstreamCommit`) and the exact Pi dependency in `extensions/sdk-ts` (peer and dev dependency plus lock). `make set-version` changes the Ompig line, not the pin, and waits for D-F.
 2. `make upstream-mirror`, `make model-catalogs` (after D-E work), `make interface-proposals`, `make test-inventory-generate`, `make behavior-input-inventory` (after fixing the extractor), `go run ./test/parity/cmd/upstreamdelta -generate -from 0.87.1 -to 0.99.1`, `make interface-delta` (L12: generated files are regenerated centrally, never hand-edited).
 3. Add PORT_MAP rows for the 44 added source files and remove the rows of the 4 removed ones, then run `make port-map-drift` and `make upstream-delta` (expected red until every row has a non-pending disposition and evidence).
 
@@ -303,7 +303,7 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 | `src/auth/resolve.ts` | modified | ✅ | providers-registry, startup | `ai/auth.go + ai/auth_store.go + ai/auth_resolve.go + ai/auth_providers.go + ai/oauth_*.go |
 | `src/auth/types.ts` | modified | ✅ | ai-sdk, oauth, providers-faux-streaming, providers-registry | `ai/auth.go + ai/auth_store.go + ai/auth_resolve.go + ai/auth_interaction.go + ai/auth_pro |
 | `src/bun-oauth.ts` | modified | n/a | - | `(Bun-only OAuth flow registration; Go links OAuth implementations directly)` |
-| `src/cli.ts` | modified | ✅ | cli-utils | `cmd/pig/auth_commands.go (login/logout)` |
+| `src/cli.ts` | modified | ✅ | cli-utils | `cmd/ompig/auth_commands.go (login/logout)` |
 | `src/env-api-keys.ts` | modified | ✅ | oauth, providers-registry | `ai/auth_env_keys.go` |
 | `src/image-models.generated.ts` | removed | ✅ | ai-sdk | `ai/image_models_generated.go` |
 | `src/image-models.ts` | modified | ✅ | ai-sdk | `ai/images_registry.go` |
@@ -311,7 +311,7 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 | `src/images-models.ts` | removed | ✅ | ai-sdk, model-runtime-store-catalog | `ai/images_models.go (provider lifecycle, coalesced refresh, auth/options merging and gene |
 | `src/images.ts` | modified | ✅ | ai-sdk | `ai/images.go` |
 | `src/index.ts` | modified | n/a | - | `ai/doc.go` |
-| `src/model-catalog.ts` | modified | n/a | - | `designed out: pig flattens the API-grouped catalog at cmd/gen-models codegen into models_ |
+| `src/model-catalog.ts` | modified | n/a | - | `designed out: ompig flattens the API-grouped catalog at cmd/gen-models codegen into models_ |
 | `src/models-store.ts` | modified | ✅ | providers-faux-streaming | `ai/models_store.go (ModelsStoreEntry, ModelsStore, InMemoryModelsStore; ai/models_store_t |
 | `src/models.generated.ts` | modified | ✅ | ai-sdk | `ai/models_generated.go` |
 | `src/models.ts` | modified | ✅ | ai-sdk, model-resolver-selector, model-runtime-store-catalog, providers-faux-streaming | `ai/models_runtime*.go + ai/models_provider.go + ai/models_catalog_codec.go + ai/models_op |
@@ -381,7 +381,7 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 |---|---|---|---|---|
 | `src/bun/quickjs-wasm.d.ts` | added | (none) | - |  |
 | `src/bun/runtime-setup.ts` | modified | n/a | - | `(Bun-only runtime setup)` |
-| `src/cli/args.ts` | modified | ✅ | cli-utils, model-resolver-selector, project-trust | `cmd/pig/args.go` |
+| `src/cli/args.ts` | modified | ✅ | cli-utils, model-resolver-selector, project-trust | `cmd/ompig/args.go` |
 | `src/cli/startup-ui.ts` | modified | ✅ | cli-utils, project-trust, session | `internal/codingagent/startup_ui.go (ShowStartupSelector/ShowStartupInput/SelectStartupSes |
 | `src/config.ts` | modified | ✅ | cli-utils, selectors, settings | `internal/codingagent/paths.go + internal/codingagent/selfupdate_package_command.go + inte |
 | `src/core/agent-session-runtime.ts` | modified | 🟡 | extensions-runtime, project-trust, rpc, session | `partial: coding/runtime.go, coding/runtime_replacement.go, coding/session_bind.go, coding |
@@ -392,24 +392,24 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 | `src/core/compaction/utils.ts` | modified | ✅ | compaction | `internal/codingagent/compaction/utils.go + agent/harness/compaction/utils.go (shared file |
 | `src/core/crash-log.ts` | modified | 🟡 | - | `internal/codingagent/crash_log.go + interactive_crash.go (crash persistence, startup noti |
 | `src/core/extensions/index.ts` | modified | n/a | - | `(barrel)` |
-| `src/core/extensions/loader.ts` | modified | 🟡 | extension-host, extensions-runtime | `cmd/pig/extensions.go + coding/extension/provider_runtime.go (shared ordered provider que |
+| `src/core/extensions/loader.ts` | modified | 🟡 | extension-host, extensions-runtime | `cmd/ompig/extensions.go + coding/extension/provider_runtime.go (shared ordered provider que |
 | `src/core/extensions/runner.ts` | modified | 🟡 | extensions-runtime, json, print, project-trust, providers-faux-streaming, rpc | `coding/extension/host/inproc/runner.go + coding/extension/provider_runtime.go + coding/ex |
 | `src/core/extensions/types.ts` | modified | 🟡 | extension-host, extensions-runtime, rpc | `partial: coding/extension/*.go (Layer 0, including synchronized late tool registrations i |
 | `src/core/extensions/wrapper.ts` | modified | ✅ | extensions-runtime, tools | `coding/extension_bridge.go + coding/session_tool_registry.go` |
 | `src/core/keybindings.ts` | modified | ✅ | extensions-runtime, tree | `internal/codingagent/keybindings.go` |
 | `src/core/mcp-servers.ts` | added | (none) | - |  |
 | `src/core/model-registry.ts` | modified | ✅ | extensions-runtime, model-runtime-store-catalog, providers-registry | `internal/codingagent/model_registry.go + internal/codingagent/extension_model_registry.go |
-| `src/core/model-resolver.ts` | modified | ✅ | model-resolver-selector, model-runtime-store-catalog, oauth, startup | `cmd/pig/model.go + cmd/pig/startup_model.go + cmd/pig/resolve_cli_model.go + coding/exten |
+| `src/core/model-resolver.ts` | modified | ✅ | model-resolver-selector, model-runtime-store-catalog, oauth, startup | `cmd/ompig/model.go + cmd/ompig/startup_model.go + cmd/ompig/resolve_cli_model.go + coding/exten |
 | `src/core/model-runtime.ts` | modified | ✅ | extensions-runtime, model-resolver-selector, model-runtime-store-catalog, providers-faux-streaming, providers-registry, selectors | `internal/codingagent/model_registry.go + internal/codingagent/provider_registration_valid |
 | `src/core/nested-tool-calls.ts` | added | (none) | - |  |
 | `src/core/package-manager.ts` | modified | ✅ | cli-utils, extensions-runtime, project-trust, startup | `coding/packagecontent/packagecontent.go, coding/packagecontent/glob.go, coding/packagecon |
 | `src/core/provider-composer.ts` | modified | ✅ | footer, model-runtime-store-catalog, providers-faux-streaming | `coding/extension/provider.go + coding/registered_stream_provider.go + coding/model_stream |
-| `src/core/remote-catalog-provider.ts` | modified | ⬜ | - | `(not implemented: owner-approved remote catalog refresh through PiG's own endpoint; runti |
+| `src/core/remote-catalog-provider.ts` | modified | ⬜ | - | `(not implemented: owner-approved remote catalog refresh through Ompig's own endpoint; runti |
 | `src/core/resource-loader.ts` | modified | ✅ | extensions-runtime, project-trust, rpc, settings, slash-commands | `coding/resource_loader.go (native DefaultResourceLoader for skills, prompt templates, con |
 | `src/core/sdk.ts` | modified | 🟡 | extensions-runtime, footer, model-runtime-store-catalog, providers-faux-streaming, rpc, session, tools | `coding/session.go + coding/resource_loader.go (resourceLoader option; DefaultResourceLoad |
 | `src/core/session-manager.ts` | modified | 🟡 | compaction, extensions-runtime, print, rpc, session, slash-commands | `internal/codingagent/session_manager.go + internal/codingagent/session_manager_accessors. |
 | `src/core/settings-manager.ts` | modified | ✅ | compaction, extensions-runtime, project-trust, settings | `coding/settings.go + internal/codingagent/settings.go + internal/codingagent/settings_com |
-| `src/core/source-info.ts` | modified | ✅ | extensions-runtime, selectors | `internal/codingagent/resource_source_info.go + cmd/pig/resource_source_info.go + cmd/pig/ |
+| `src/core/source-info.ts` | modified | ✅ | extensions-runtime, selectors | `internal/codingagent/resource_source_info.go + cmd/ompig/resource_source_info.go + cmd/ompig/ |
 | `src/core/system-prompt.ts` | modified | ✅ | extensions-runtime, session, slash-commands, tools | `internal/codingagent/prompts/coding.go (default/explicit-empty tools and opaque forced pr |
 | `src/core/tools/bash.ts` | modified | ✅ | interactive-rendering, rpc, session, tools | `internal/codingagent/tools/bash.go + internal/codingagent/tools/bash_operations.go + inte |
 | `src/core/tools/output-accumulator.ts` | modified | ✅ | tools | `internal/codingagent/tools/output_accumulator.go + truncate.go` |
@@ -430,7 +430,7 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 | `src/extensions/codemode/renderer.ts` | added | (none) | - |  |
 | `src/extensions/codemode/tool.ts` | added | (none) | - |  |
 | `src/extensions/codemode/worker.ts` | added | (none) | - |  |
-| `src/extensions/index.ts` | modified | ✅ | - | `cmd/pig/llama.go + internal/codingagent/llama/host.go (built-in llama.cpp provider and /l |
+| `src/extensions/index.ts` | modified | ✅ | - | `cmd/ompig/llama.go + internal/codingagent/llama/host.go (built-in llama.cpp provider and /l |
 | `src/extensions/llama/provider.ts` | modified | ✅ | - | `internal/codingagent/llama/provider.go + internal/codingagent/llama/host.go` |
 | `src/extensions/mcp/cli.lazy.ts` | added | (none) | - |  |
 | `src/extensions/mcp/cli.ts` | added | (none) | - |  |
@@ -446,7 +446,7 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 | `src/extensions/tool-search/index.ts` | added | (none) | - |  |
 | `src/extensions/tool-search/tool.ts` | added | (none) | - |  |
 | `src/index.ts` | modified | 🟡 | - | `coding/extension/host/subprocess/runtime-node/shims/pi-coding-agent.mjs (pinned Node barr |
-| `src/main.ts` | modified | ✅ | cli-utils, clipboard-images, extensions-runtime, model-resolver-selector, project-trust, providers-registry, session, startup | `cmd/pig/main.go + cmd/pig/startup_session.go + cmd/pig/extensions.go (mode/metadata routi |
+| `src/main.ts` | modified | ✅ | cli-utils, clipboard-images, extensions-runtime, model-resolver-selector, project-trust, providers-registry, session, startup | `cmd/ompig/main.go + cmd/ompig/startup_session.go + cmd/ompig/extensions.go (mode/metadata routi |
 | `src/modes/interactive/components/config-selector.ts` | modified | ✅ | selectors | `tui/config_selector.go` |
 | `src/modes/interactive/components/first-time-setup.ts` | modified | n/a | - | `(designed out: upstream gates this component to the upstream package identity; Stock P |
 | `src/modes/interactive/components/footer.ts` | modified | ✅ | extensions-runtime, footer | `internal/codingagent/status_line.go + internal/codingagent/interactive_auth.go` |
@@ -461,9 +461,9 @@ Columns: change, current PORT_MAP status, scenario families whose `covers` name 
 | `src/modes/interactive/theme/theme.ts` | modified | ✅ | extensions-runtime, interactive-rendering, selectors, settings | `tui/theme.go + tui/theme_loader.go + tui/theme_watcher.go (indexed-color load/var/ANSI/CS |
 | `src/modes/interactive/tui-renderer.ts` | modified | ✅ | - | `internal/codingagent/interactive_tui.go (createInteractiveTui, fullscreenTuiOptions), int |
 | `src/modes/rpc/rpc-client.ts` | modified | ✅ | - | `coding/rpcclient/rpc_client.go + commands.go + types.go + process_unix.go/process_windows |
-| `src/modes/rpc/rpc-mode.ts` | modified | ✅ | extensions-runtime, rpc | `cmd/pig/rpc_mode.go + cmd/pig/rpc_dispatch.go + cmd/pig/rpc_admission.go + cmd/pig/rpc_js |
-| `src/modes/rpc/rpc-types.ts` | modified | ✅ | rpc | `cmd/pig/rpc_types.go` |
-| `src/package-manager-cli.ts` | modified | ✅ | cli-utils, project-trust | `cmd/pig/package_commands.go + cmd/pig/cli_error.go + cmd/pig/package_command_trust.go + c |
+| `src/modes/rpc/rpc-mode.ts` | modified | ✅ | extensions-runtime, rpc | `cmd/ompig/rpc_mode.go + cmd/ompig/rpc_dispatch.go + cmd/ompig/rpc_admission.go + cmd/ompig/rpc_js |
+| `src/modes/rpc/rpc-types.ts` | modified | ✅ | rpc | `cmd/ompig/rpc_types.go` |
+| `src/package-manager-cli.ts` | modified | ✅ | cli-utils, project-trust | `cmd/ompig/package_commands.go + cmd/ompig/cli_error.go + cmd/ompig/package_command_trust.go + c |
 | `src/utils/clipboard-image.ts` | modified | 🟡 | clipboard-images | `internal/codingagent/clipboard.go + internal/codingagent/clipboard_paste.go (backend read |
 | `src/utils/clipboard.ts` | modified | ✅ | clipboard-images | `internal/codingagent/clipboard.go + internal/codingagent/clipboard_copy.go + internal/cod |
 | `src/utils/paths.ts` | modified | ✅ | cli-utils, extensions-runtime | `internal/resolvepath/resolvepath.go; internal/codingagent/paths.go, canonical_path_other. |
@@ -683,7 +683,7 @@ Files whose SHA changed with an identical case list (`+0 -0`) changed an asserti
 
 Approved as recommended, plus red-green-refactor:
 - **D-A:** start the source-only workstreams now (tests, Go design, docs). The npm cooldown is **not** waived. Move the pin, the exact `pi` comparator and published-origin evidence on or after 2026-10-02.
-- **D-B:** port native MCP into core PiG faithfully (client, stdio and streamable-HTTP transports, OAuth, `mcp.json`, `/mcp`, `pi mcp`, `registerMcpServer`). Retire `pig-mcp-adapter` in favor of `builtin:mcp`, with a migration note. Codemode and tool-search: run Pi's own extension code in PiG's existing Node runtime (the 0.3.0 "Pi's own code" approach), with no Go sandbox; write the short spec AGENTS.md requires (resource bounds and worker lifetime) before code. Design their boundaries so a Piglet can later disable or strip them (issue #92).
+- **D-B:** port native MCP into core Ompig faithfully (client, stdio and streamable-HTTP transports, OAuth, `mcp.json`, `/mcp`, `pi mcp`, `registerMcpServer`). Retire `ompig-mcp-adapter` in favor of `builtin:mcp`, with a migration note. Codemode and tool-search: run Pi's own extension code in Ompig's existing Node runtime (the 0.3.0 "Pi's own code" approach), with no Go sandbox; write the short spec AGENTS.md requires (resource bounds and worker lifetime) before code. Design their boundaries so a Ompiglet can later disable or strip them (issue #92).
 - **D-C:** in scope, in all four SDKs, with conformance rows and parity docs.
 - **D-D:** the harness answers OSC 10/11/4 with one fixed, deterministic palette for both sides. Re-derive scenario expectations from upstream 0.99.1, with no normalizing.
 - **D-E:** approve the catalog-pipeline rebuild and the Go `ai` API change (pre-1.0, with migration notes, no shim).

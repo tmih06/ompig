@@ -7,12 +7,12 @@ import (
 	"io"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/test/parity/porter"
+	"github.com/tmih06/ompig/test/parity/porter"
 )
 
 func main() {
 	if err := run(context.Background(), os.Stdin, os.Stdout); err != nil {
-		fmt.Fprintln(os.Stderr, "pig-porter:", err)
+		fmt.Fprintln(os.Stderr, "ompig-porter:", err)
 		os.Exit(1)
 	}
 }

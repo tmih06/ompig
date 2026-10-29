@@ -17,7 +17,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 type conformanceTest func(context.Context, TelemetryAdapterFixture) error

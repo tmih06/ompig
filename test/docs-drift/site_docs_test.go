@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-// siteDocsDir holds the user documentation that https://pi-in-go.dev renders.
+// siteDocsDir holds the user documentation that https://ompig.dev renders.
 // The site's build lives in the private hosting repository and builds from
 // this directory, so this repository checks the manifest rules its build
 // enforces (scripts/build-docs.mjs there) on every change here.
@@ -48,9 +48,9 @@ func TestSiteDocsManifestClassifiesAndNavigatesEveryPage(t *testing.T) {
 			t.Errorf("docs/site/docs/%s must contain a level-one heading", name)
 		}
 		switch manifest.Provenance[name] {
-		case "pig-authored", "adapted-pi", "upstream-pi":
+		case "ompig-authored", "adapted-pi", "upstream-pi":
 		default:
-			t.Errorf("docs/site/docs/%s must have a valid provenance classification (pig-authored, adapted-pi, or upstream-pi)", name)
+			t.Errorf("docs/site/docs/%s must have a valid provenance classification (ompig-authored, adapted-pi, or upstream-pi)", name)
 		}
 	}
 
@@ -132,8 +132,8 @@ func TestSiteDocsRedirectsResolve(t *testing.T) {
 }
 
 func TestSiteDocAnchorsMatchSiteSlugs(t *testing.T) {
-	got := siteDocAnchors("# Title\n\n## Parity harness (only when `PIG_PARITY_HARNESS=1`)\n\n```\n## not a heading\n```\n\n### `pig docs`\n")
-	for _, want := range []string{"title", "parity-harness-only-when-pig_parity_harness1", "pig-docs"} {
+	got := siteDocAnchors("# Title\n\n## Parity harness (only when `OMPIG_PARITY_HARNESS=1`)\n\n```\n## not a heading\n```\n\n### `ompig docs`\n")
+	for _, want := range []string{"title", "parity-harness-only-when-ompig_parity_harness1", "ompig-docs"} {
 		if !got[want] {
 			t.Errorf("siteDocAnchors missing %q in %v", want, got)
 		}

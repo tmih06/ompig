@@ -10,10 +10,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/interactive-mode.ts

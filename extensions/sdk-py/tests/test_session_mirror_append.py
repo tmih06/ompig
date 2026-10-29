@@ -8,7 +8,7 @@ from __future__ import annotations
 import random
 from typing import Any
 
-from pig_sdk import SessionMirror
+from ompig_sdk import SessionMirror
 
 
 def _entry(entry_id: str, parent: str | None) -> dict[str, Any]:

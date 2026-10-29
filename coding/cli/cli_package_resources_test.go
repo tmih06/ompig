@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // cliPackageFixture builds a local -e Package (prompts/, skills/, themes/ by convention) whose
@@ -26,7 +26,7 @@ func newCLIPackageFixture(t *testing.T) cliPackageFixture {
 	home := filepath.Join(root, "home")
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
 	f := cliPackageFixture{cwd: filepath.Join(root, "project"), agentDir: filepath.Join(root, "agent"), pkg: filepath.Join(root, "cli-pkg")}
 	write := func(path, content string) string {
 		t.Helper()

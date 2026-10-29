@@ -119,7 +119,7 @@ pkg:durable/.#DocToken::property:%5BSymbol.docType%5D	RULE	durable/types.go#DocT
 pkg:durable/.#DocToken::property:definition	RULE	durable/types.go#DocToken.definition	phantom brand Symbol key and private definition field; exercised by every typed document access in durable/session tests
 pkg:durable/.#ConversationOwnership	RULE	durable/types.go#ConversationOwnership	discriminated union [U5]
 pkg:durable/.#CompactionInput	RULE	durable/harness/compaction.go#CompactionInput	alias body object literal [A3]
-pkg:coding-agent/.#runRpcMode::call:0	RULE	cmd/pig/rpc_mode.go#runRPCMode	runRpcMode(runtimeHost) vs Go RunRPCMode(ctx, in, out): process I/O and cancellation are explicit parameters
+pkg:coding-agent/.#runRpcMode::call:0	RULE	cmd/ompig/rpc_mode.go#runRPCMode	runRpcMode(runtimeHost) vs Go RunRPCMode(ctx, in, out): process I/O and cancellation are explicit parameters
 pkg:coding-agent/.#keyText	RULE		rename: keyText -> tui.ActionKeyText
 pkg:coding-agent/.#getSettingsListTheme	CLOSED		SettingsList takes an injected SettingsListTheme (tui/settings_list.go:55-75); getSettingsListTheme itself is the nil-theme default; rename rule for the factory
 pkg:coding-agent/.#formatDimensionNote::call:0	RULE	internal/imageprocessing/images.go#formatDimensionNote	named type ResizedImage vs unexported preparedImageResult [T9]

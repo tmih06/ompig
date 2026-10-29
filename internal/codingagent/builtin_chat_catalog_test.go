@@ -6,13 +6,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 var builtinChatCatalogSink []ai.GeneratedModel
 
-// piListedModels is the part of models that Pi's catalog lists: it leaves out the OpenRouter routing variants PiG derives when it lists models (D199),
+// piListedModels is the part of models that Pi's catalog lists: it leaves out the OpenRouter routing variants Ompig derives when it lists models (D199),
 // which builtinChatCatalog leaves out and builtinChatCatalogListed adds.
 func piListedModels(models []ai.GeneratedModel) []ai.GeneratedModel {
 	listed := make([]ai.GeneratedModel, 0, len(models))
@@ -50,7 +50,7 @@ func checkBuiltinChatCatalog(t *testing.T, stage string) int {
 	return listed
 }
 
-// builtinChatCatalog lists what ai.ListModels lists for every provider, in order, shares one clipped list per provider, and follows a change of the stripped APIs (a Piglet's strip list is applied at startup).
+// builtinChatCatalog lists what ai.ListModels lists for every provider, in order, shares one clipped list per provider, and follows a change of the stripped APIs (a Ompiglet's strip list is applied at startup).
 func TestBuiltinChatCatalogListsWhatListModelsLists(t *testing.T) {
 	all := checkBuiltinChatCatalog(t, "stock")
 	if allocs := testing.AllocsPerRun(20, func() { builtinChatCatalogSink = builtinChatCatalog("anthropic") }); allocs != 0 {

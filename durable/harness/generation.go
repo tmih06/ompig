@@ -9,10 +9,10 @@ import (
 	"math"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // GenerationInput is the input of the built-in generation task, Pi's Record<string, never> (generation.ts:49): an object
@@ -1091,7 +1091,7 @@ func startToolRound(ctx context.Context, runtime generationRuntime, request gene
 				slots = append(slots, ToolSlot{CallId: call.ID, Name: call.Name, Status: ToolSlotPending})
 				continue
 			}
-			// pig divergence (D177): the tool tasks of a parallel round run concurrently, so the order in which their calls
+			// ompig divergence (D177): the tool tasks of a parallel round run concurrently, so the order in which their calls
 			// start within the round is unspecified; Pi's event loop runs each execute's synchronous prefix in call order.
 			taskId, err := createToolTask(tx, runtime.TaskId(), entry.Id, call.ID)
 			if err != nil {
@@ -1117,7 +1117,7 @@ func finishToolRound(ctx context.Context, runtime generationRuntime, assistant d
 	conversationId := runtime.ConversationId()
 	controls := make(map[durable.TaskId]*durable.ToolControl, len(tools))
 	var ordered []*durable.ToolControl
-	// pig divergence (D181): this read and the commits after it race the commits of a job started in the round and not awaited
+	// ompig divergence (D181): this read and the commits after it race the commits of a job started in the round and not awaited
 	// (see TaskScheduler.start); their order against each other is unspecified, where Pi's microtask hops fix it.
 	outcomes, err := runtime.Outcomes(ctx, tools)
 	if err != nil {

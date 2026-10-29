@@ -13,21 +13,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Startup allocation budgets, from PIG_PROFILE=metrics (runtime/metrics /gc/heap/allocs:*) of the built binary. They only
+// Startup allocation budgets, from OMPIG_PROFILE=metrics (runtime/metrics /gc/heap/allocs:*) of the built binary. They only
 // ratchet down: a change that lowers the measurement lowers its budget in the same commit.
 //
-// versionAlloc* is `pig --version`: runtime start, package initializers and argument parsing, no session.
+// versionAlloc* is `ompig --version`: runtime start, package initializers and argument parsing, no session.
 // firstPromptAlloc* is a warm print-mode run of one prompt against the faux provider, from process start to exit: the
 // model registry, resources, the system prompt, the session file and one provider round trip. The first run of a fresh
 // agent directory also stages the embedded docs and SDKs, so the measurement starts from a second run and takes the
 // smallest of three.
 //
-// The measured process runs with GOMAXPROCS=1. With several Ps the runtime/metrics totals at exit move with goroutine scheduling, while a heap profile of the same runs holds the same allocations: on a 24-thread host a warm first prompt measured 5.63-5.95 MB and 34,369-37,097 objects in single runs, about 6% apart. With one P the totals repeat to within 0.5%: pig --version measured 790,752 bytes in 4,982 objects before the metric was corrected, and the first prompt 2,476,912 bytes in 18,418 objects.
+// The measured process runs with GOMAXPROCS=1. With several Ps the runtime/metrics totals at exit move with goroutine scheduling, while a heap profile of the same runs holds the same allocations: on a 24-thread host a warm first prompt measured 5.63-5.95 MB and 34,369-37,097 objects in single runs, about 6% apart. With one P the totals repeat to within 0.5%: ompig --version measured 790,752 bytes in 4,982 objects before the metric was corrected, and the first prompt 2,476,912 bytes in 18,418 objects.
 //
 // Re-measured on 2026-10-13 (owner decision) after the metric was corrected: CollectMetrics now flushes per-P allocation caches with runtime.ReadMemStats (commit 8b9e467f20), so allocations the old figure missed are counted. Building e876a97f8a with and without only that change moved the warm first prompt from 2,444,736 bytes / 18,104 objects to 3,039,144-3,073,904 bytes / 20,434-20,621 objects, and --version from 790,752 / 4,982 to 1,273,520 / 7,128. The budgets are the in-test measurement at the tip (--version 1,010,880 / 6,572; warm first prompt 3,185,400 / 22,222) plus under 2% headroom. The AWS SDK fork (third_party/awssdk/FORK.md) compiles the endpoint partition expressions on first use, which lowered them to --version 746,056 / 4,152 and warm first prompt 2,913,624 / 19,816 (max of three test runs); the budgets are those plus under 2%.
 //
@@ -50,21 +50,21 @@ import (
 // The Windows runner then read 827,800 bytes / 5,744 objects (every run of ten, 827,800-828,280), over its 824,000, on main and on the train alike.
 // internal/nodeerrno built libuv's code table and the errno names at every start, 9,480 bytes in 16 allocations
 // (GODEBUG=inittrace=1, Windows build under Wine) of a table only an error path reads. They are built on first use: init 616,296 -> 607,112
-// bytes, pig --version 756.5-761.9 KB -> 747.8-753.2 KB under Wine, Linux 717,952-723,688 bytes / 3,794-3,802 objects in two runs, so the
+// bytes, ompig --version 756.5-761.9 KB -> 747.8-753.2 KB under Wine, Linux 717,952-723,688 bytes / 3,794-3,802 objects in two runs, so the
 // linux byte budget is 723,688 plus under 2%.
 //
-// Owner-approved raise (2026-10-25) of the linux warm-first-prompt object budgets, 16,820 -> 17,700 and (models.json) 18,830 -> 21,800: PIG_TEST_FAUX now registers the
+// Owner-approved raise (2026-10-25) of the linux warm-first-prompt object budgets, 16,820 -> 17,700 and (models.json) 18,830 -> 21,800: OMPIG_TEST_FAUX now registers the
 // harness's test-faux provider through the model registry, as Pi's parity harness registers it from an extension (registerHarnessTestFaux), so the measured run carries one
 // more registered provider. Measured on the Linux lab host, warm first prompt: 17,659 objects / 2,490,176 bytes (main 15,197 / 2,570,920), with models.json 21,771 / 2,924,904
 // (main 18,688 / 2,914,688). The extra objects are Pi-equivalent work: the deferred registration refresh pass (Models.Refresh about 640 objects, refresh signals about 345,
 // provider refresh phase about 165, availability reload about 250) and the cold json type caches for the registered provider's config (about 525). The registered object's catalog
 // record is composed once per registration (it was once per read: 1,569 -> 746 allocs for a registration and six reads, BenchmarkRegisterExtensionProviderAndRead). Byte budgets and
-// production (no PIG_TEST_FAUX) budgets are unchanged. Profiles: xd670 ~/tern-v5/trees/faux-reg/tmp/prof1 against ~/tern-v5/trees/faux-main/tmp/prof0.
+// production (no OMPIG_TEST_FAUX) budgets are unchanged. Profiles: xd670 ~/tern-v5/trees/faux-reg/tmp/prof1 against ~/tern-v5/trees/faux-main/tmp/prof0.
 //
 // Platform siblings of that raise (the same owner approval, 2026-10-25): darwin models.json 18,950 -> 21,850, windows warm first prompt 18,950 -> 21,100 and windows models.json
 // 22,370 -> 25,200, each about 0.5% over the measured value, as the Linux raises are. Measured on the hosted runners, min of 3, main f2f028f845 against the batch 4a384df786 (diag runs 40304098670
 // and 40305356345; the 0.6.0 CI run 40287205705 read 21,756 on macOS and 20,980 / 25,098 on Windows): warm first prompt Windows 18,363 -> 21,001, macOS 15,236 -> 17,658 (the darwin budget of 20,200 already
-// holds it), Linux 15,204 -> 17,596; with models.json Windows 21,843 -> 25,100, macOS 18,724 -> 21,752, Linux 18,703 -> 21,732. A control run without PIG_TEST_FAUX (a models.json local provider, print mode,
+// holds it), Linux 15,204 -> 17,596; with models.json Windows 21,843 -> 25,100, macOS 18,724 -> 21,752, Linux 18,703 -> 21,732. A control run without OMPIG_TEST_FAUX (a models.json local provider, print mode,
 // --no-extensions) is identical on main and the batch within noise (Windows 45,381-45,391 against 45,374-45,390 objects, macOS 42,004-42,022 against 42,007-42,013, Linux 41,912-41,916 against 41,919-41,921) and
 // the macOS and Windows allocation profiles of the two differ by 14 objects at most in any function, so the whole delta is the registration. Its parts match the Linux profile: Models.Refresh 644-656, refresh signals 344, provider
 // refresh phase 166-175, json type caches 523-527. Windows is about 245 objects above Linux because the availability reload checks every provider's auth once more (env lookups 456 -> 684 objects) and an
@@ -90,19 +90,19 @@ func startupAllocBudgetFor(goos string) startupAllocBudget {
 func TestStartupAllocationBudget(t *testing.T) {
 	budget := startupAllocBudgetFor(runtime.GOOS)
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	fixture := newStartupFixture(t)
 	ctx := testbudget.Context(t)
 
 	version := fixture.version(ctx, t, fixture.cwd, budget)
 	if version.AllocBytes > budget.versionBytes || version.AllocObjects > budget.versionObjects {
-		startupBudgetError(t, "pig --version allocated %d bytes in %d objects, budget %d bytes in %d objects", version.AllocBytes, version.AllocObjects, budget.versionBytes, budget.versionObjects)
+		startupBudgetError(t, "ompig --version allocated %d bytes in %d objects, budget %d bytes in %d objects", version.AllocBytes, version.AllocObjects, budget.versionBytes, budget.versionObjects)
 	}
 
 	fixture.measure(ctx, t, fixture.cwd, startupPrompt...) // stages the embedded docs and SDKs
 	best := fixture.warmPrompt(ctx, t, fixture.cwd)
-	t.Logf("cwd %s; pig --version: %d bytes, %d objects; first prompt (warm, min of 3): %d bytes, %d objects, %d GC cycles", fixture.cwd, version.AllocBytes, version.AllocObjects, best.AllocBytes, best.AllocObjects, best.GCCycles)
+	t.Logf("cwd %s; ompig --version: %d bytes, %d objects; first prompt (warm, min of 3): %d bytes, %d objects, %d GC cycles", fixture.cwd, version.AllocBytes, version.AllocObjects, best.AllocBytes, best.AllocObjects, best.GCCycles)
 	if best.AllocBytes > budget.promptBytes || best.AllocObjects > budget.promptObjects {
 		startupBudgetError(t, "a warm first prompt allocated %d bytes in %d objects, budget %d bytes in %d objects", best.AllocBytes, best.AllocObjects, budget.promptBytes, budget.promptObjects)
 	}
@@ -149,7 +149,7 @@ func startupModelsAllocBudgetFor(goos string) (bytes, objects uint64) {
 func TestStartupAllocationBudgetWithModelsJSON(t *testing.T) {
 	budgetBytes, budgetObjects := startupModelsAllocBudgetFor(runtime.GOOS)
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	fixture := newStartupFixture(t)
 	if err := os.WriteFile(filepath.Join(fixture.agentDir, "models.json"), []byte(startupModelsJSON), 0o600); err != nil {
@@ -169,7 +169,7 @@ func TestStartupAllocationBudgetWithModelsJSON(t *testing.T) {
 // (trust-manager.ts:196-207, run from main.ts:722 and :742) and once for skill discovery (package-manager.ts:2505-2519), <dir>/.git
 // for the git root of that discovery (package-manager.ts:460-472) and for the worktree shadow check of context files
 // (footer-data-provider.ts:16-48), and the five context file candidates (resource-loader.ts:184-203). The trust check also
-// realpaths the working directory twice, an lstat per component. PiG makes the same probes and realpaths, each for the system
+// realpaths the working directory twice, an lstat per component. Ompig makes the same probes and realpaths, each for the system
 // call's copy of the path and no FileInfo, path string or error value, plus the one path string per level of the ancestor
 // .agents/skills list that skill discovery returns. Its skill inputs and source infos share one walk (codingagent.AgentsSkillScan),
 // and the session directory takes getcwd's physical path as it is. That is 13 objects per level, 2.3 KB over 32 levels (each copy
@@ -200,14 +200,14 @@ const (
 	windowsLevelBytesCeiling   = 6_690
 )
 
-// startupVersionRuns is how many `pig --version` runs the budget may measure to find one within budget. The Go runtime starts one more OS
+// startupVersionRuns is how many `ompig --version` runs the budget may measure to find one within budget. The Go runtime starts one more OS
 // thread in some Windows process starts than in others: runtime.main locks the main goroutine to the main thread and blocks it in gcenable
 // waiting for the GC workers, and when no idle M is parked yet schedule -> stoplockedm -> handoffp -> startm -> newm hands its P to a new M.
-// That M costs 6 objects and 5,096 bytes (m, g0, gsignal and the profiling stack), whatever pig does. Under Wine on a Linux host, a Go program
-// that only reads runtime.MemStats measured 190 objects / 47,616 bytes in 21 of 30 starts and 196 / 52,712 in the other 8; pig --version
+// That M costs 6 objects and 5,096 bytes (m, g0, gsignal and the profiling stack), whatever ompig does. Under Wine on a Linux host, a Go program
+// that only reads runtime.MemStats measured 190 objects / 47,616 bytes in 21 of 30 starts and 196 / 52,712 in the other 8; ompig --version
 // measured 756.6-756.8 KB or 761.6-761.9 KB the same way, with the same binary, and a heap profile put the doubled allocations under
 // runtime.newm <- startm <- handoffp <- stoplockedm. The GitHub runner read 822,488 bytes at the 0.5.2 batch head and 827,800 at its merge,
-// 5,312 apart, with no pig change that allocates at startup between them. The budget gates pig's own allocations, so a run over budget is
+// 5,312 apart, with no ompig change that allocates at startup between them. The budget gates ompig's own allocations, so a run over budget is
 // measured again, up to this many times, and the test judges one whole run (never the minimum bytes of one run with the minimum objects of
 // another). Noise passes in a later run; a regression is over budget in every run and fails with the smallest run's numbers.
 const startupVersionRuns = 10
@@ -229,7 +229,7 @@ const startupLevelRuns = 10
 
 func TestStartupAllocationPerDirectoryLevel(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	fixture := newStartupFixture(t)
 	ctx := testbudget.Context(t)
@@ -241,7 +241,7 @@ func TestStartupAllocationPerDirectoryLevel(t *testing.T) {
 		t.Fatal(err)
 	}
 	if runtime.GOOS != "windows" {
-		// measuredEnvironment passes no HOME, so pig asks the system's user database for the home directory, and the per-level work depends on the answer: with no entry for the user (a container run as a uid its
+		// measuredEnvironment passes no HOME, so ompig asks the system's user database for the home directory, and the per-level work depends on the answer: with no entry for the user (a container run as a uid its
 		// passwd file does not list) there is no home, the user's ~/.agents/skills becomes the relative ".agents/skills", and every level's comparison against it resolves that path again, 17 objects a level
 		// instead of 13. The fixture's home states the home directory, as it does for every user who has one. Windows always has one, and its budgets were measured without HOME.
 		fixture.env = []string{"HOME=" + fixture.home}
@@ -302,7 +302,7 @@ var startupPrompt = []string{"--model", "test-faux/faux-1", "--no-extensions", "
 // root, so the measurement moves with the depth of the working directory: under a host TMPDIR two levels deeper than /tmp, a warm
 // first prompt measured 2,734,056 bytes instead of 2,675,184 (TestStartupAllocationPerDirectoryLevel gates that cost). The
 // fixture's root is testenv.ShortTempDir, directly in /tmp whatever TMPDIR names, and holds the working directory (<root>/w,
-// three components deep on Linux), PIG_HOME, the agent directory and the process's TMPDIR. On Windows ShortTempDir is in the
+// three components deep on Linux), OMPIG_HOME, the agent directory and the process's TMPDIR. On Windows ShortTempDir is in the
 // host temp directory.
 type startupFixture struct {
 	binary, cwd, home, agentDir, tmp string
@@ -312,7 +312,7 @@ type startupFixture struct {
 
 func newStartupFixture(t *testing.T) *startupFixture {
 	t.Helper()
-	root := testenv.ShortTempDir(t, "pig-startup-")
+	root := testenv.ShortTempDir(t, "ompig-startup-")
 	f := &startupFixture{binary: buildPigBinaryForSignalTest(t), cwd: filepath.Join(root, "w"), home: filepath.Join(root, "home"), agentDir: filepath.Join(root, "agent"), tmp: filepath.Join(root, "tmp")}
 	for _, dir := range []string{f.cwd, f.home, f.agentDir, f.tmp} {
 		if err := os.Mkdir(dir, 0o755); err != nil {
@@ -322,7 +322,7 @@ func newStartupFixture(t *testing.T) *startupFixture {
 	return f
 }
 
-// measure runs pig with args from cwd and returns its PIG_PROFILE=metrics record.
+// measure runs ompig with args from cwd and returns its OMPIG_PROFILE=metrics record.
 func (f *startupFixture) measure(ctx context.Context, t *testing.T, cwd string, args ...string) profiling.ProcessMetrics {
 	t.Helper()
 	dir, err := os.MkdirTemp(f.tmp, "profile-")
@@ -331,12 +331,12 @@ func (f *startupFixture) measure(ctx context.Context, t *testing.T, cwd string, 
 	}
 	command := exec.CommandContext(ctx, f.binary, args...)
 	command.Dir = cwd
-	command.Env = append(append(measuredEnvironment(os.Environ()), f.env...), "TMPDIR="+f.tmp, "PIG_HOME="+f.home, "PIG_CODING_AGENT_DIR="+f.agentDir, "PIG_PROFILE=metrics", "PIG_PROFILE_DIR="+dir, "GOMAXPROCS=1",
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	command.Env = append(append(measuredEnvironment(os.Environ()), f.env...), "TMPDIR="+f.tmp, "OMPIG_HOME="+f.home, "OMPIG_CODING_AGENT_DIR="+f.agentDir, "OMPIG_PROFILE=metrics", "OMPIG_PROFILE_DIR="+dir, "GOMAXPROCS=1",
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	if output, err := command.CombinedOutput(); err != nil {
-		t.Fatalf("pig %v: %v\n%s", args, err, output)
+		t.Fatalf("ompig %v: %v\n%s", args, err, output)
 	}
-	files, _ := filepath.Glob(filepath.Join(dir, "pig-*-metrics.json"))
+	files, _ := filepath.Glob(filepath.Join(dir, "ompig-*-metrics.json"))
 	if len(files) != 1 {
 		t.Fatalf("want one metrics file, got %v", files)
 	}
@@ -363,7 +363,7 @@ func (f *startupFixture) warmPrompt(ctx context.Context, t *testing.T, cwd strin
 	return best
 }
 
-// version measures pig --version from cwd and returns one whole run: the first whose bytes and objects are both within budget, else the run
+// version measures ompig --version from cwd and returns one whole run: the first whose bytes and objects are both within budget, else the run
 // with the fewest bytes (its own objects with it), after startupVersionRuns runs. A run over budget is measured again because the Go runtime's
 // start moves the count (see startupVersionRuns). Every run is logged, so the two modes stay visible in CI logs.
 func (f *startupFixture) version(ctx context.Context, t *testing.T, cwd string, budget startupAllocBudget) profiling.ProcessMetrics {
@@ -371,7 +371,7 @@ func (f *startupFixture) version(ctx context.Context, t *testing.T, cwd string, 
 	var best profiling.ProcessMetrics
 	for run := 1; run <= startupVersionRuns; run++ {
 		current := f.measure(ctx, t, cwd, "--version")
-		t.Logf("pig --version run %d: %d bytes, %d objects", run, current.AllocBytes, current.AllocObjects)
+		t.Logf("ompig --version run %d: %d bytes, %d objects", run, current.AllocBytes, current.AllocObjects)
 		if run == 1 || current.AllocBytes < best.AllocBytes {
 			best = current
 		}
@@ -382,7 +382,7 @@ func (f *startupFixture) version(ctx context.Context, t *testing.T, cwd string, 
 	return best
 }
 
-// measuredEnvironment keeps only the variables a process needs to start on the host: the runtime copies and indexes every environment variable at start, so an inherited development or CI environment (a lane shell measured 100 more objects for pig --version than a clean one) would move the measurement away from the committed source it gates.
+// measuredEnvironment keeps only the variables a process needs to start on the host: the runtime copies and indexes every environment variable at start, so an inherited development or CI environment (a lane shell measured 100 more objects for ompig --version than a clean one) would move the measurement away from the committed source it gates.
 func measuredEnvironment(environ []string) []string {
 	var kept []string
 	for _, entry := range environ {

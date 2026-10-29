@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func (m *InteractiveMode) onTerminalResize() {
@@ -86,7 +86,7 @@ func (m *InteractiveMode) mountInteractiveTui(start bool) {
 	}
 	m.layout = tui.NewContainer(layoutChildren...)
 	if m.surface != nil {
-		// pig additive (D91): the frontend draws the transcript and the
+		// ompig additive (D91): the frontend draws the transcript and the
 		// dock as separate regions of the same component tree.
 		m.surface.SetLayout(
 			tui.NewContainer(m.headerContainer(), m.loadedResourcesContainer, m.chatContainer),
@@ -141,7 +141,7 @@ func (m *InteractiveMode) switchTuiMode(mode string, restoreProgress, startRende
 	if mode == current {
 		return true
 	}
-	// pig additive (D91): a frontend session owns the screen, so the run
+	// ompig additive (D91): a frontend session owns the screen, so the run
 	// keeps it until the session falls back.
 	if m.surface != nil {
 		return false
@@ -321,7 +321,7 @@ func (m *InteractiveMode) createInteractiveTui(ctx context.Context) interactiveT
 	m.clipboardCtx, m.clipboardReads = uiCtx, reads
 	// The first renderer draws on options.terminal (interactive-mode.ts:626); a renderer switch draws on the previous renderer's terminal (:897 `terminal = previousUi.terminal`).
 	terminal := m.opts.Terminal
-	// pig additive (D91): a frontend's surface draws on the frontend's terminal, not the process terminal, so the ANSI renderer that replaces it
+	// ompig additive (D91): a frontend's surface draws on the frontend's terminal, not the process terminal, so the ANSI renderer that replaces it
 	// when the frontend falls back draws on the options terminal.
 	if _, isSurface := m.tuiInst.(*tui.TuiSurface); m.tuiInst != nil && !isSurface {
 		terminal = m.tuiInst.Terminal()
@@ -392,7 +392,7 @@ func (m *InteractiveMode) stopInteractiveTui() {
 		// upstream: interactive-mode.ts:7098 (stop() disposes the footer)
 		m.statusLine.Dispose()
 	}
-	// pig additive (D91): the frontend closes its surface before input
+	// ompig additive (D91): the frontend closes its surface before input
 	// pauses, so the drain below discards its in-flight replies.
 	m.closeFrontend()
 	if m.inputReader != nil {
@@ -449,7 +449,7 @@ func (m *InteractiveMode) stopInteractiveTui() {
 // tty and must not be skipped if a later terminal-restore write fails
 // (interactive-mode.ts shutdown({fromSignal: true})).
 //
-// Ordering matters in pig for a second reason: extension subprocesses are
+// Ordering matters in ompig for a second reason: extension subprocesses are
 // spawned with the root context, so cancelling it kills them. If SIGTERM
 // cancelled the context first, the shutdown event would be delivered to
 // processes that no longer exist and extensions would silently never clean up.
@@ -479,9 +479,9 @@ func (m *InteractiveMode) handleInterruptSignal() {
 	if m.suspended.Load() {
 		return
 	}
-	// pig additive (D102): Pi dies on SIGINT with no trace.
+	// ompig additive (D102): Pi dies on SIGINT with no trace.
 	RecordExit(m.opts.AgentDir, "received SIGINT (exit 130)")
-	// pig divergence (D51): restore terminal state before exit 130.
+	// ompig divergence (D51): restore terminal state before exit 130.
 	done := make(chan struct{})
 	go func() {
 		m.ShutdownFromSignal()
@@ -504,7 +504,7 @@ func (m *InteractiveMode) handleInterruptSignal() {
 
 // requestExtensionShutdown ends the session at an extension's request. The user did not ask for it, so it leaves a line
 // in exit.log; an extension's timer can end an idle session this way.
-// pig additive (D102): Pi leaves no trace.
+// ompig additive (D102): Pi leaves no trace.
 func (m *InteractiveMode) requestExtensionShutdown() {
 	RecordExit(m.opts.AgentDir, "extension requested shutdown (ctx.shutdown())")
 	m.requestShutdown()

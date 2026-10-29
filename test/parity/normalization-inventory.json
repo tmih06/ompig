@@ -46,7 +46,7 @@
       "reason": "This numeric-renderer probe selects the complete warning-bracket text from Pi's actual renderResult output under an explicit unstyled fixture theme. It claims number/notice text only, not terminal layout or ANSI styling; full themed body rows are checked by the Go caller regression."
     },
     {
-      "source": "test/parity/testdata/list-limit-number-pig.sh",
+      "source": "test/parity/testdata/list-limit-number-ompig.sh",
       "sha256": "996e52623f00d4b71647232da9016847c076eae17f2d49087a008dab24b2ff1e",
       "reason": "The wrapper retains every numeric warning observation and removes only Go test-framework framing after requiring successful test completion. Failed tests retain their diagnostics and nonzero exit status."
     },
@@ -61,7 +61,7 @@
       "reason": "Legacy role/key/auth summaries are diagnostic only: wireBody now compares the entire captured HTTP request body alongside them. Aggregated provider response summaries do not prove mode events; real-provider RPC/JSON scenarios compare those separately."
     },
     {
-      "source": "test/parity/testdata/provider-wire-pig/main.go",
+      "source": "test/parity/testdata/provider-wire-ompig/main.go",
       "sha256": "655543c20ca024ef74ec392531c1472e99fc928e216ad114e0a1b2c85ad3a798",
       "reason": "Legacy role/key/auth summaries are diagnostic only: wireBody now compares the entire captured HTTP request body alongside them. Aggregated provider response summaries do not prove mode events; real-provider RPC/JSON scenarios compare those separately."
     },
@@ -76,7 +76,7 @@
       "reason": "This entry-allocation probe controls seed/duplicate/fresh entropy in the real Pi SessionManager and compares IDs, parent links, retained indexed content and generator calls. It makes no timestamp or whole-record claim; those contracts are covered by the Session wire probe."
     },
     {
-      "source": "test/parity/testdata/session-collision-pig.sh",
+      "source": "test/parity/testdata/session-collision-ompig.sh",
       "sha256": "92b2617bc97d5dc0124640d4d29f10d97d217e6bc6321f660623341a2847777c",
       "reason": "The wrapper requires the production Session collision test to succeed and retains its complete observation line. It removes only Go test-framework framing; a mutation failure remains a nonzero process result."
     },
@@ -401,7 +401,7 @@
           "kind": "normalize_replace",
           "pattern": "\\bpig\\b",
           "with": "pi",
-          "reason": "D2: PiG uses the pig executable name instead of pi."
+          "reason": "D2: Ompig uses the ompig executable name instead of pi."
         }
       ]
     },
@@ -412,7 +412,7 @@
           "kind": "normalize_replace",
           "pattern": "\\bpig\\b",
           "with": "pi",
-          "reason": "D2: PiG uses the pig executable name instead of pi."
+          "reason": "D2: Ompig uses the ompig executable name instead of pi."
         }
       ]
     },
@@ -454,7 +454,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\"[^\"\\r\\n]*/parity-snap-(PI|PIG)_CODING_AGENT_DIR-[^/\"\\r\\n]+/npm\"",
+          "pattern": "\"[^\"\\r\\n]*/parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[^/\"\\r\\n]+/npm\"",
           "with": "\"AGENT/npm\"",
           "reason": "The binaries receive separate temporary agent directories."
         }
@@ -465,7 +465,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-cli-[0-9a-z-]+-(pig|pi)-[0-9]+",
+          "pattern": "parity-cli-[0-9a-z-]+-(ompig|pi)-[0-9]+",
           "with": "parity-cli-run",
           "reason": "D2: replace only this scenario's allocated temporary root."
         }
@@ -476,7 +476,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-cli-[0-9a-z-]+-(pig|pi)-[0-9]+",
+          "pattern": "parity-cli-[0-9a-z-]+-(ompig|pi)-[0-9]+",
           "with": "parity-cli-run",
           "reason": "D2: replace only this scenario's allocated temporary root."
         }
@@ -487,7 +487,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-cli-[0-9a-z-]+-(pig|pi)-[0-9]+",
+          "pattern": "parity-cli-[0-9a-z-]+-(ompig|pi)-[0-9]+",
           "with": "parity-cli-run",
           "reason": "D2: replace only this scenario's allocated temporary root."
         }
@@ -498,7 +498,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-cli-[0-9a-z-]+-(pig|pi)-[0-9]+",
+          "pattern": "parity-cli-[0-9a-z-]+-(ompig|pi)-[0-9]+",
           "with": "parity-cli-run",
           "reason": "D2: replace only this scenario's allocated temporary root."
         }
@@ -509,7 +509,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-cli-[0-9a-z-]+-(pig|pi)-[0-9]+",
+          "pattern": "parity-cli-[0-9a-z-]+-(ompig|pi)-[0-9]+",
           "with": "parity-cli-run",
           "reason": "D2: replace only this scenario's allocated temporary root."
         }
@@ -576,7 +576,7 @@
           "kind": "normalize_replace",
           "pattern": "\\(1/35\\)",
           "with": "(1/34)",
-          "reason": "D80 adds exactly one visible PiG-only settings row; raw assertions require 35 PiG rows and 34 Pi rows before this replacement."
+          "reason": "D80 adds exactly one visible Ompig-only settings row; raw assertions require 35 Ompig rows and 34 Pi rows before this replacement."
         },
         {
           "kind": "output_normalized_equal",
@@ -776,7 +776,7 @@
           "kind": "normalize_replace",
           "pattern": "/docs/bundle-[0-9a-f]{16}/",
           "with": "/docs/",
-          "reason": "D22: PiG's per-build docs bundle directory sits where Pi's package docs directory does; retain the root and the page names."
+          "reason": "D22: Ompig's per-build docs bundle directory sits where Pi's package docs directory does; retain the root and the page names."
         }
       ]
     },
@@ -803,7 +803,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-01-export-cli-plain-(pig|pi)-[0-9]+",
+          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-01-export-cli-plain-(ompig|pi)-[0-9]+",
           "with": "${1}<TEMP>",
           "reason": "D2: replace only this scenario's allocated temporary root, preserving the entire destination suffix and status line."
         }
@@ -814,7 +814,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-02-export-cli-ansi-(pig|pi)-[0-9]+",
+          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-02-export-cli-ansi-(ompig|pi)-[0-9]+",
           "with": "${1}<TEMP>",
           "reason": "D2: replace only this scenario's allocated temporary root, preserving the entire destination suffix and status line."
         }
@@ -825,7 +825,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-03-export-cli-tools-(pig|pi)-[0-9]+",
+          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-03-export-cli-tools-(ompig|pi)-[0-9]+",
           "with": "${1}<TEMP>",
           "reason": "D2: replace only this scenario's allocated temporary root, preserving the destination suffix and the full HTML artifact."
         }
@@ -836,7 +836,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-04-export-cli-full-mix-(pig|pi)-[0-9]+",
+          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-04-export-cli-full-mix-(ompig|pi)-[0-9]+",
           "with": "${1}<TEMP>",
           "reason": "D2: replace only this scenario's allocated temporary root, preserving the destination suffix and the full HTML artifact."
         }
@@ -876,7 +876,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-06-export-cli-skills-(pig|pi)-[0-9]+",
+          "pattern": "(?m)^(Exported to: )/[^\\r\\n]*/parity-cli-06-export-cli-skills-(ompig|pi)-[0-9]+",
           "with": "${1}<TEMP>",
           "reason": "D2: replace only this scenario's allocated temporary root, preserving the destination suffix and the full HTML artifact."
         }
@@ -1327,21 +1327,21 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "/[^\"]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent>",
           "reason": "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.pig?",
+          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.ompig?",
           "with": "<project>",
-          "reason": "D2: the isolated project configuration root is .pig versus .pi; preserve all resource-relative paths."
+          "reason": "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the PiG login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:pig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the PiG login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:pig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
+          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the Ompig login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:ompig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the Ompig login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:ompig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
         },
         {
           "kind": "output_normalized_equal",
@@ -1373,21 +1373,21 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "/[^\"]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent>",
           "reason": "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.pig?",
+          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.ompig?",
           "with": "<project>",
-          "reason": "D2: the isolated project configuration root is .pig versus .pi; preserve all resource-relative paths."
+          "reason": "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the PiG login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:pig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the PiG login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:pig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
+          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the Ompig login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:ompig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the Ompig login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:ompig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
         },
         {
           "kind": "output_normalized_equal",
@@ -1446,7 +1446,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\"pig? -ne\"",
+          "pattern": "\"ompig? -ne\"",
           "with": "\"<bin> -ne\"",
           "reason": "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."
         },
@@ -1854,15 +1854,15 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\" ]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "/[^\" ]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent>",
           "reason": "Isolated agent roots differ; preserve each resource path and its metadata."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the PiG login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:pig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the PiG login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:pig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
+          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the Ompig login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:ompig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the Ompig login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:ompig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
         },
         {
           "kind": "canonical_json",
@@ -1973,7 +1973,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\"pig? -ne\"",
+          "pattern": "\"ompig? -ne\"",
           "with": "\"<bin> -ne\"",
           "reason": "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."
         },
@@ -2044,7 +2044,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "pig? --session [0-9a-f-]{36}",
+          "pattern": "ompig? --session [0-9a-f-]{36}",
           "with": "<bin> --session <session-id>",
           "reason": "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."
         },
@@ -2072,7 +2072,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "pig? --session [0-9a-f-]{36}",
+          "pattern": "ompig? --session [0-9a-f-]{36}",
           "with": "<bin> --session <session-id>",
           "reason": "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."
         },
@@ -2100,7 +2100,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "pig? --session [0-9a-f-]{36}",
+          "pattern": "ompig? --session [0-9a-f-]{36}",
           "with": "<bin> --session <session-id>",
           "reason": "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."
         },
@@ -2213,21 +2213,21 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "/[^\"]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent>",
           "reason": "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.pig?",
+          "pattern": "/[^\"]*parity-snap-cwd-[0-9]+/\\.ompig?",
           "with": "<project>",
-          "reason": "D2: the isolated project configuration root is .pig versus .pi; preserve all resource-relative paths."
+          "reason": "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the PiG login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:pig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the PiG login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:pig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
+          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the Ompig login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:ompig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the Ompig login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:ompig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
         },
         {
           "kind": "output_normalized_equal",
@@ -2371,15 +2371,15 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\" ]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "/[^\" ]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent>",
           "reason": "Isolated agent roots differ; preserve each resource path and its metadata."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the PiG login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:pig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the PiG login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:pig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
+          "pattern": "\\{\"(?:name\":\"sprite\",\"description\":\"Select the Ompig login sprite\\.\",\"source\":\"extension\",\"sourceInfo\":\\{\"path\":\"builtin:ompig-login\",\"source\":\"builtin\",\"scope\":\"temporary\",\"origin\":\"top-level\"\\}|description\":\"Select the Ompig login sprite\\.\",\"name\":\"sprite\",\"source\":\"extension\",\"sourceInfo\":\\{\"origin\":\"top-level\",\"path\":\"builtin:ompig-login\",\"scope\":\"temporary\",\"source\":\"builtin\"\\})\\},?",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
         },
         {
           "kind": "canonical_json",
@@ -2676,7 +2676,7 @@
             "capture_start": "Run: expr 20 + 22",
             "capture_end_regex": "faux-1\\s*$"
           },
-          "reason": "Owned visible surface: Fullscreen Ctrl+Home/Ctrl+End keyboard scrolling returns the viewport to the identical conversation bottom in pig and pi.",
+          "reason": "Owned visible surface: Fullscreen Ctrl+Home/Ctrl+End keyboard scrolling returns the viewport to the identical conversation bottom in ompig and pi.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -2944,7 +2944,7 @@
           "kind": "normalize_replace",
           "pattern": "(?m)^[^\\n]*?│ expr",
           "with": "│ expr",
-          "reason": "Startup-content text left of the search box differs because pig runs with --no-extensions; the box row itself is retained."
+          "reason": "Startup-content text left of the search box differs because ompig runs with --no-extensions; the box row itself is retained."
         },
         {
           "kind": "normalize_replace",
@@ -2958,7 +2958,7 @@
             "capture_start": "┌────",
             "capture_end_regex": "└────"
           },
-          "reason": "Owned visible surface: Fullscreen transcript search: Ctrl+Shift+F opens the search box and typed text edits the query, with the match counter, identically in pig and pi.",
+          "reason": "Owned visible surface: Fullscreen transcript search: Ctrl+Shift+F opens the search box and typed text edits the query, with the match counter, identically in ompig and pi.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -3750,9 +3750,9 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "If this looks like a pig bug",
+          "pattern": "If this looks like a ompig bug",
           "with": "If this looks like a pi bug",
-          "reason": "The hint uses upstream APP_NAME; pig and pi are the documented executable names."
+          "reason": "The hint uses upstream APP_NAME; ompig and pi are the documented executable names."
         },
         {
           "kind": "terminal_crop",
@@ -5318,7 +5318,7 @@
             "capture_start": "copilot-env:match=",
             "capture_end": "githubcopilot.com"
           },
-          "reason": "Owned visible surface: GitHub Copilot env-token fallback yields the same bearer + base URL on pig and pi.",
+          "reason": "Owned visible surface: GitHub Copilot env-token fallback yields the same bearer + base URL on ompig and pi.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -5854,7 +5854,7 @@
         },
         {
           "kind": "normalize_replace",
-          "pattern": "[^ \\n(]*pig-parity-skill-[A-Za-z0-9]+",
+          "pattern": "[^ \\n(]*ompig-parity-skill-[A-Za-z0-9]+",
           "with": "<SKILL-ROOT>",
           "reason": "The skill's temporary directory is created per run and its prefix differs by platform."
         },
@@ -5898,13 +5898,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\\.pig",
+          "pattern": "\\.ompig",
           "with": ".pi",
           "reason": "D2: the complete warning crop contains only the product-owned project configuration name, not user content."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "restart pig\\.",
+          "pattern": "restart ompig\\.",
           "with": "restart pi.",
           "reason": "D2: only the warning's restart command names the host executable."
         },
@@ -5938,13 +5938,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "allows pig ",
+          "pattern": "allows ompig ",
           "with": "allows pi ",
           "reason": "D2: the trust prompt names the host executable; all permissions and choices remain compared."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\.pig",
+          "pattern": "\\.ompig",
           "with": ".pi",
           "reason": "D2: the complete trust prompt contains the product-owned configuration name, not user content."
         },
@@ -6012,13 +6012,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\\.pig",
+          "pattern": "\\.ompig",
           "with": ".pi",
           "reason": "D2: this fixture's warning names the project configuration directory; its fixed history contains no product names."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "restart pig\\.",
+          "pattern": "restart ompig\\.",
           "with": "restart pi.",
           "reason": "D2: only the warning's restart command names the host executable."
         },
@@ -6043,13 +6043,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\\.pig",
+          "pattern": "\\.ompig",
           "with": ".pi",
           "reason": "D2: the warning names the project configuration directory; the crop holds no user content."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "restart pig\\.",
+          "pattern": "restart ompig\\.",
           "with": "restart pi.",
           "reason": "D2: only the warning's restart command names the host executable."
         },
@@ -6074,13 +6074,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "\\.pig",
+          "pattern": "\\.ompig",
           "with": ".pi",
           "reason": "D2: the complete warning crop contains only the product-owned project configuration name, not user content."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "restart pig\\.",
+          "pattern": "restart ompig\\.",
           "with": "restart pi.",
           "reason": "D2: only the warning's restart command names the host executable."
         },
@@ -6443,14 +6443,14 @@
             "docs",
             "examples"
           ],
-          "reason": "D2/D22: compare Pi's package README/docs/examples destinations with PiG's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
+          "reason": "D2/D22: compare Pi's package README/docs/examples destinations with Ompig's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
         },
         {
           "kind": "literal",
           "paths": [
             "/**/sections/preamble"
           ],
-          "pig": "operating inside pig,",
+          "ompig": "operating inside ompig,",
           "pi": "operating inside pi,",
           "reason": "D2: only the host command identity differs in the preamble; retain the rest of the complete sentence."
         },
@@ -6459,7 +6459,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "PiG documentation (",
+          "ompig": "Ompig documentation (",
           "pi": "Pi documentation (",
           "reason": "D2/D22: the documentation heading names the product; all usage conditions and topic wording remain compared."
         },
@@ -6468,7 +6468,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "asks about pig itself,",
+          "ompig": "asks about ompig itself,",
           "pi": "asks about pi itself,",
           "reason": "D2: this exact heading clause names the host command; no other words in the read-only condition are aliased."
         },
@@ -6477,7 +6477,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "When reading pig docs or examples,",
+          "ompig": "When reading ompig docs or examples,",
           "pi": "When reading pi docs or examples,",
           "reason": "D2/D22: the path-resolution instruction names its product; retain its complete resolution rule and relative paths."
         },
@@ -6486,7 +6486,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "pig packages (docs/packages.md)",
+          "ompig": "ompig packages (docs/packages.md)",
           "pi": "pi packages (docs/packages.md)",
           "reason": "D2: only the product name in the Package topic differs; the packages.md destination and every other topic remain literal."
         },
@@ -6495,7 +6495,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "When working on pig topics,",
+          "ompig": "When working on ompig topics,",
           "pi": "When working on pi topics,",
           "reason": "D2: this exact instruction prefix names the host product; retain its complete-read and cross-reference requirements."
         },
@@ -6504,7 +6504,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "Always read pig .md files",
+          "ompig": "Always read ompig .md files",
           "pi": "Always read pi .md files",
           "reason": "D2/D22: this exact instruction prefix names the product documentation; retain completely, link-following instructions, and the TUI example."
         },
@@ -6703,7 +6703,7 @@
           ],
           "group": "call",
           "pattern": "^read_[0-9]+_[0-9]+$",
-          "reason": "Pi and PiG generate Google tool-call IDs as name_<Date.now()>_<counter> (google-generative-ai.ts:199); the clock differs per process. Preserve one bijection between the toolCall id, the tool execution id and the toolResult reference."
+          "reason": "Pi and Ompig generate Google tool-call IDs as name_<Date.now()>_<counter> (google-generative-ai.ts:199); the clock differs per process. Preserve one bijection between the toolCall id, the tool execution id and the toolResult reference."
         },
         {
           "kind": "duration",
@@ -6847,7 +6847,7 @@
           ],
           "group": "cwd",
           "pattern": "^/.+/rpc-wire-[a-z0-9_]{8}$",
-          "reason": "rpc-wire-drift.py runs each side in its own tempfile.mkdtemp(prefix='rpc-wire-') directory, which has the same length on both sides; only its 8 random characters differ. Pi and PiG estimate tokens from the system prompt's cwd characters, so an equal-length cwd is what makes estimatedTokensAfter comparable (a cwd under {{TEMP}} differed by the -pig-/-pi- infix and the random digits: 786 against 787 in 3-5 of 150 pairs, 2026-10-18). Preserve the cwd's shape and every reference to it."
+          "reason": "rpc-wire-drift.py runs each side in its own tempfile.mkdtemp(prefix='rpc-wire-') directory, which has the same length on both sides; only its 8 random characters differ. Pi and Ompig estimate tokens from the system prompt's cwd characters, so an equal-length cwd is what makes estimatedTokensAfter comparable (a cwd under {{TEMP}} differed by the -ompig-/-pi- infix and the random digits: 786 against 787 in 3-5 of 150 pairs, 2026-10-18). Preserve the cwd's shape and every reference to it."
         },
         {
           "kind": "path",
@@ -6927,7 +6927,7 @@
           ],
           "group": "cwd",
           "pattern": "^/.+/rpc-wire-[a-z0-9_]{8}$",
-          "reason": "rpc-wire-drift.py runs each side in its own tempfile.mkdtemp(prefix='rpc-wire-') directory, which has the same length on both sides; only its 8 random characters differ. Pi and PiG estimate tokens from the system prompt's cwd characters, so an equal-length cwd is what makes estimatedTokensAfter comparable (a cwd under {{TEMP}} differed by the -pig-/-pi- infix and the random digits: 786 against 787 in 3-5 of 150 pairs, 2026-10-18). Preserve the cwd's shape and every reference to it."
+          "reason": "rpc-wire-drift.py runs each side in its own tempfile.mkdtemp(prefix='rpc-wire-') directory, which has the same length on both sides; only its 8 random characters differ. Pi and Ompig estimate tokens from the system prompt's cwd characters, so an equal-length cwd is what makes estimatedTokensAfter comparable (a cwd under {{TEMP}} differed by the -ompig-/-pi- infix and the random digits: 786 against 787 in 3-5 of 150 pairs, 2026-10-18). Preserve the cwd's shape and every reference to it."
         },
         {
           "kind": "id",
@@ -7347,7 +7347,7 @@
         },
         {
           "kind": "normalize_replace",
-          "pattern": "parity-rpc-[0-9a-z-]+-(pi|pig)-[0-9]+",
+          "pattern": "parity-rpc-[0-9a-z-]+-(pi|ompig)-[0-9]+",
           "with": "parity-rpc-run",
           "reason": "Each run's isolated temp directory is named for its binary and a random suffix; keep the path suffix and every other byte."
         },
@@ -7413,7 +7413,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?:/|([A-Za-z]):\\\\\\\\)[^\"]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "(?:/|([A-Za-z]):\\\\\\\\)[^\"]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "${1}<agent>",
           "reason": "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
         },
@@ -7430,7 +7430,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "(?:/|([A-Za-z]):\\\\\\\\)[^\"]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "(?:/|([A-Za-z]):\\\\\\\\)[^\"]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+",
           "with": "${1}<agent>",
           "reason": "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
         }
@@ -7456,7 +7456,7 @@
             "/26/data/messages/4/durationMs"
           ],
           "optional": true,
-          "reason": "The next request's setup-error message, at every record that carries it: Pi sets its durationMs only when the millisecond did not tick between lazy.ts's startedAt and the stream's own #startedAt (event-stream.ts #time returns early when message.timestamp < #startedAt), so Pi's own presence varies from run to run (absent in 19 of 2,300 Pi runs, 2026-10-18); PiG times it the same way (dd68b1609c)."
+          "reason": "The next request's setup-error message, at every record that carries it: Pi sets its durationMs only when the millisecond did not tick between lazy.ts's startedAt and the stream's own #startedAt (event-stream.ts #time returns early when message.timestamp < #startedAt), so Pi's own presence varies from run to run (absent in 19 of 2,300 Pi runs, 2026-10-18); Ompig times it the same way (dd68b1609c)."
         },
         {
           "kind": "duration",
@@ -7532,7 +7532,7 @@
         },
         {
           "kind": "normalize_replace",
-          "pattern": "Read /[^ \"]*/parity-(?:snap-PIG_HOME-[0-9]+|pi-pkg-[0-9]+/pi-coding-pkg(?:-with-bundle-pad)?)/docs/(?:bundle-[0-9a-f]+/)?codemode\\.md",
+          "pattern": "Read /[^ \"]*/parity-(?:snap-OMPIG_HOME-[0-9]+|pi-pkg-[0-9]+/pi-coding-pkg(?:-with-bundle-pad)?)/docs/(?:bundle-[0-9a-f]+/)?codemode\\.md",
           "with": "Read <docs>/codemode.md",
           "reason": "D2: each binary points the codemode description at its own installed docs root; retain the docs file name and every other description byte."
         }
@@ -7604,14 +7604,14 @@
             "docs",
             "examples"
           ],
-          "reason": "D2/D22: compare Pi's package README/docs/examples destinations with PiG's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
+          "reason": "D2/D22: compare Pi's package README/docs/examples destinations with Ompig's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
         },
         {
           "kind": "literal",
           "paths": [
             "/**/sections/preamble"
           ],
-          "pig": "operating inside pig,",
+          "ompig": "operating inside ompig,",
           "pi": "operating inside pi,",
           "reason": "D2: only the host command identity differs in the preamble; retain the rest of the complete sentence."
         },
@@ -7620,7 +7620,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "PiG documentation (",
+          "ompig": "Ompig documentation (",
           "pi": "Pi documentation (",
           "reason": "D2/D22: the documentation heading names the product; all usage conditions and topic wording remain compared."
         },
@@ -7629,7 +7629,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "asks about pig itself,",
+          "ompig": "asks about ompig itself,",
           "pi": "asks about pi itself,",
           "reason": "D2: this exact heading clause names the host command; no other words in the read-only condition are aliased."
         },
@@ -7638,7 +7638,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "When reading pig docs or examples,",
+          "ompig": "When reading ompig docs or examples,",
           "pi": "When reading pi docs or examples,",
           "reason": "D2/D22: the path-resolution instruction names its product; retain its complete resolution rule and relative paths."
         },
@@ -7647,7 +7647,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "pig packages (docs/packages.md)",
+          "ompig": "ompig packages (docs/packages.md)",
           "pi": "pi packages (docs/packages.md)",
           "reason": "D2: only the product name in the Package topic differs; the packages.md destination and every other topic remain literal."
         },
@@ -7656,7 +7656,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "When working on pig topics,",
+          "ompig": "When working on ompig topics,",
           "pi": "When working on pi topics,",
           "reason": "D2: this exact instruction prefix names the host product; retain its complete-read and cross-reference requirements."
         },
@@ -7665,7 +7665,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "Always read pig .md files",
+          "ompig": "Always read ompig .md files",
           "pi": "Always read pi .md files",
           "reason": "D2/D22: this exact instruction prefix names the product documentation; retain completely, link-following instructions, and the TUI example."
         },
@@ -7843,14 +7843,14 @@
             "docs",
             "examples"
           ],
-          "reason": "D2/D22: compare Pi's package README/docs/examples destinations with PiG's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
+          "reason": "D2/D22: compare Pi's package README/docs/examples destinations with Ompig's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
         },
         {
           "kind": "literal",
           "paths": [
             "/**/sections/preamble"
           ],
-          "pig": "operating inside pig,",
+          "ompig": "operating inside ompig,",
           "pi": "operating inside pi,",
           "reason": "D2: only the host command identity differs in the preamble; retain the rest of the complete sentence."
         },
@@ -7859,7 +7859,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "PiG documentation (",
+          "ompig": "Ompig documentation (",
           "pi": "Pi documentation (",
           "reason": "D2/D22: the documentation heading names the product; all usage conditions and topic wording remain compared."
         },
@@ -7868,7 +7868,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "asks about pig itself,",
+          "ompig": "asks about ompig itself,",
           "pi": "asks about pi itself,",
           "reason": "D2: this exact heading clause names the host command; no other words in the read-only condition are aliased."
         },
@@ -7877,7 +7877,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "When reading pig docs or examples,",
+          "ompig": "When reading ompig docs or examples,",
           "pi": "When reading pi docs or examples,",
           "reason": "D2/D22: the path-resolution instruction names its product; retain its complete resolution rule and relative paths."
         },
@@ -7886,7 +7886,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "pig packages (docs/packages.md)",
+          "ompig": "ompig packages (docs/packages.md)",
           "pi": "pi packages (docs/packages.md)",
           "reason": "D2: only the product name in the Package topic differs; the packages.md destination and every other topic remain literal."
         },
@@ -7895,7 +7895,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "When working on pig topics,",
+          "ompig": "When working on ompig topics,",
           "pi": "When working on pi topics,",
           "reason": "D2: this exact instruction prefix names the host product; retain its complete-read and cross-reference requirements."
         },
@@ -7904,7 +7904,7 @@
           "paths": [
             "/**/sections/docs"
           ],
-          "pig": "Always read pig .md files",
+          "ompig": "Always read ompig .md files",
           "pi": "Always read pi .md files",
           "reason": "D2/D22: this exact instruction prefix names the product documentation; retain completely, link-following instructions, and the TUI example."
         }
@@ -8410,15 +8410,15 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "~/\\.pig/agent/",
+          "pattern": "~/\\.ompig/agent/",
           "with": "~/.pi/agent/",
           "reason": "D2: only the configuration-root product name differs in the selector subtitle."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\n {6}\\[x\\] pig-login *",
+          "pattern": "\\n {6}\\[x\\] ompig-login *",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
         },
         {
           "kind": "output_normalized_equal",
@@ -8445,13 +8445,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "~/\\.pig/agent/",
+          "pattern": "~/\\.ompig/agent/",
           "with": "~/.pi/agent/",
           "reason": "D2: the selector subtitle names the host configuration directory."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:PIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
+          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:OMPIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
           "with": "${1}<agent>/",
           "reason": "D2: separate agent roots vary by host and run. Preserve the complete label suffix, row structure and resource names."
         },
@@ -8480,13 +8480,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "~/\\.pig/agent/",
+          "pattern": "~/\\.ompig/agent/",
           "with": "~/.pi/agent/",
           "reason": "D2: the selector subtitle names the host configuration directory."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:PIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
+          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:OMPIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
           "with": "${1}<agent>/",
           "reason": "D2: separate agent roots vary by host and run. Preserve the complete label suffix, row structure and resource names."
         },
@@ -8711,25 +8711,25 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "~/\\.pig/agent/",
+          "pattern": "~/\\.ompig/agent/",
           "with": "~/.pi/agent/",
           "reason": "D2: the selector subtitle names the host configuration directory."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:PIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
+          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:OMPIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
           "with": "${1}<agent>/",
           "reason": "D2: separate agent roots vary by host and run. Preserve the complete label suffix, row structure and resource names."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\n {6}\\[x\\] pig-login *",
+          "pattern": "\\n {6}\\[x\\] ompig-login *",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
         },
         {
           "kind": "output_normalized_equal",
-          "reason": "Declared plain-text/layout surface: Ctrl-C closes pi config / pig config with status 0 and leaves the same screen.",
+          "reason": "Declared plain-text/layout surface: Ctrl-C closes pi config / ompig config with status 0 and leaves the same screen.",
           "limitations": "ANSI, CR, trailing spaces and outer blank rows are not equality evidence."
         },
         {
@@ -8737,7 +8737,7 @@
           "configuration": {
             "capture_start": "Global Resources"
           },
-          "reason": "Owned visible surface: Ctrl-C closes pi config / pig config with status 0 and leaves the same screen.",
+          "reason": "Owned visible surface: Ctrl-C closes pi config / ompig config with status 0 and leaves the same screen.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -8751,25 +8751,25 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "~/\\.pig/agent/",
+          "pattern": "~/\\.ompig/agent/",
           "with": "~/.pi/agent/",
           "reason": "D2: the selector subtitle names the host configuration directory."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:PIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
+          "pattern": "(User \\()/[^\\n)]*/parity-snap-(?:OMPIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/",
           "with": "${1}<agent>/",
           "reason": "D2: separate agent roots vary by host and run. Preserve the complete label suffix, row structure and resource names."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "\\n {6}\\[x\\] pig-login *",
+          "pattern": "\\n {6}\\[x\\] ompig-login *",
           "with": "",
-          "reason": "D2: PiG's built-in pig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
+          "reason": "D2: Ompig's built-in ompig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
         },
         {
           "kind": "output_normalized_equal",
-          "reason": "Declared plain-text/layout surface: Escape closes pi config / pig config with status 0 and leaves the same screen.",
+          "reason": "Declared plain-text/layout surface: Escape closes pi config / ompig config with status 0 and leaves the same screen.",
           "limitations": "ANSI, CR, trailing spaces and outer blank rows are not equality evidence."
         },
         {
@@ -8777,7 +8777,7 @@
           "configuration": {
             "capture_start": "Global Resources"
           },
-          "reason": "Owned visible surface: Escape closes pi config / pig config with status 0 and leaves the same screen.",
+          "reason": "Owned visible surface: Escape closes pi config / ompig config with status 0 and leaves the same screen.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -9542,7 +9542,7 @@
             "capture_start": "Session name set: armin-anchor",
             "capture_end": "Session name set: armin-end"
           },
-          "reason": "Owned visible surface: Hidden Armin command converges to the complete accent-colored half-block bitmap: Pi's Armin, PiG's pig head (D87)",
+          "reason": "Owned visible surface: Hidden Armin command converges to the complete accent-colored half-block bitmap: Pi's Armin, Ompig's ompig head (D87)",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -9793,13 +9793,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "extend PiG\\.",
+          "pattern": "extend Ompig\\.",
           "with": "extend Pi.",
-          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary PiG text."
+          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary Ompig text."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "PiG can explain its own features",
+          "pattern": "Ompig can explain its own features",
           "with": "Pi can explain its own features",
           "reason": "D2: the same onboarding sentence starts with the host product name; all remaining words, ANSI and spaces stay literal."
         },
@@ -9835,13 +9835,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "extend PiG\\.",
+          "pattern": "extend Ompig\\.",
           "with": "extend Pi.",
-          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary PiG text."
+          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary Ompig text."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "PiG can explain its own features",
+          "pattern": "Ompig can explain its own features",
           "with": "Pi can explain its own features",
           "reason": "D2: the same onboarding sentence starts with the host product name; all remaining words, ANSI and spaces stay literal."
         },
@@ -9889,13 +9889,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "extend PiG\\.",
+          "pattern": "extend Ompig\\.",
           "with": "extend Pi.",
-          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary PiG text."
+          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary Ompig text."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "PiG can explain its own features",
+          "pattern": "Ompig can explain its own features",
           "with": "Pi can explain its own features",
           "reason": "D2: the same onboarding sentence starts with the host product name; all remaining words, ANSI and spaces stay literal."
         },
@@ -9949,7 +9949,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "parity-snap-PIG?_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "parity-snap-OMPIG?_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent-dir>",
           "reason": "D2: the runner allocates independent agent-root names. Keep all resource-relative paths and their order."
         },
@@ -9980,7 +9980,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "[Skills]",
-            "capture_end": "pig-parity/entry-shapes:entry-shapes"
+            "capture_end": "ompig-parity/entry-shapes:entry-shapes"
           },
           "reason": "Owned visible surface: A Package's file and directory entries, dot-directory theme and Claude plugin manifest load and list as in Pi.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -10003,7 +10003,7 @@
           "kind": "terminal_crop",
           "configuration": {
             "capture_start": "[Skills]",
-            "capture_end_regex": "git:github.com/pig-parity/entry-shapes\\n\\s+entry-shapes"
+            "capture_end_regex": "git:github.com/ompig-parity/entry-shapes\\n\\s+entry-shapes"
           },
           "reason": "Owned visible surface: Ctrl+O lists a Package's file skills, root Markdown skills and extension at Pi's package-relative paths.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
@@ -10019,7 +10019,7 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "/[^\\s\\x1b]*/parity-snap-(?:PIG|PI)_CODING_AGENT_DIR-[0-9]+",
+          "pattern": "/[^\\s\\x1b]*/parity-snap-(?:OMPIG|PI)_CODING_AGENT_DIR-[0-9]+",
           "with": "<agent>",
           "reason": "D2: only the independently allocated agent-root prefix differs. Keep the complete skipped skill path and warning."
         },
@@ -10097,13 +10097,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "extend PiG\\.",
+          "pattern": "extend Ompig\\.",
           "with": "extend Pi.",
-          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary PiG text."
+          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary Ompig text."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "PiG can explain its own",
+          "pattern": "Ompig can explain its own",
           "with": "Pi can explain its own",
           "reason": "D2: the same onboarding sentence starts with the host product name; all remaining words, ANSI and spaces stay literal."
         },
@@ -10113,7 +10113,7 @@
             "capture_start": "escape",
             "capture_end_regex": "extend Pi(G)?\\."
           },
-          "reason": "Owned visible surface: Below the pig head's width PiG's one-line text mark leaves Pi's header wrapping unchanged.",
+          "reason": "Owned visible surface: Below the ompig head's width Ompig's one-line text mark leaves Pi's header wrapping unchanged.",
           "limitations": "No claim about output outside this crop or transient terminal bytes."
         },
         {
@@ -10127,13 +10127,13 @@
       "transforms": [
         {
           "kind": "normalize_replace",
-          "pattern": "extend PiG\\.",
+          "pattern": "extend Ompig\\.",
           "with": "extend Pi.",
-          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary PiG text."
+          "reason": "D2: the onboarding sentence names the host product. Match only that sentence fragment, not arbitrary Ompig text."
         },
         {
           "kind": "normalize_replace",
-          "pattern": "PiG can explain its own features",
+          "pattern": "Ompig can explain its own features",
           "with": "Pi can explain its own features",
           "reason": "D2: the same onboarding sentence starts with the host product name; all remaining words, ANSI and spaces stay literal."
         },

@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 type projectTrustResolutionOptions struct {
@@ -25,7 +25,7 @@ type projectTrustResolutionOptions struct {
 	// LiveUI marks UI as the live UI of a replacement that interactive mode drives (interactive-mode.ts:2609 createProjectTrustContext).
 	LiveUI           bool
 	OnExtensionError func(string)
-	// ShadowedPiglet names a Piglet the project defines under the name this run selected and that project trust withheld.
+	// ShadowedPiglet names a Ompiglet the project defines under the name this run selected and that project trust withheld.
 	ShadowedPiglet string
 }
 
@@ -105,11 +105,11 @@ func resolveProjectTrusted(ctx context.Context, opts projectTrustResolutionOptio
 }
 
 func formatProjectTrustPrompt(cwd, shadowedPiglet string) string {
-	// pig divergence (D2): the prompt names PiG's command and configuration directory.
-	prompt := fmt.Sprintf("Trust project folder?\n%s\n\nThis allows pig to load %s settings and resources, install missing project packages, and execute project extensions.", cwd, codingagent.ConfigDirName())
+	// ompig divergence (D2): the prompt names Ompig's command and configuration directory.
+	prompt := fmt.Sprintf("Trust project folder?\n%s\n\nThis allows ompig to load %s settings and resources, install missing project packages, and execute project extensions.", cwd, codingagent.ConfigDirName())
 	if shadowedPiglet != "" {
-		// A Piglet is chosen before startup can ask, so the prompt says what trusting the project changes for it (Pi has no Piglets).
-		prompt += fmt.Sprintf("\n\nThis project also defines the Piglet %q in %s/piglets. It was not used for this run; once you trust the project it replaces the Piglet of that name.", shadowedPiglet, codingagent.ConfigDirName())
+		// A Ompiglet is chosen before startup can ask, so the prompt says what trusting the project changes for it (Pi has no Ompiglets).
+		prompt += fmt.Sprintf("\n\nThis project also defines the Ompiglet %q in %s/ompiglets. It was not used for this run; once you trust the project it replaces the Ompiglet of that name.", shadowedPiglet, codingagent.ConfigDirName())
 	}
 	return prompt
 }

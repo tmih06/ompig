@@ -1,7 +1,7 @@
 //! Fixture for the Pi 0.99.1 extension API conformance rows (test/extension-conformance/extension_api_rust_test.go).
 //! Every value a row asserts is one the host or the fixture produces and no SDK fallback can: a constant would fail.
 
-use pig_sdk::{
+use ompig_sdk::{
     AgentToolResult, ExecuteToolOptions, Extension, ModelRoute, ToolAnnotations, ToolDefinition, ToolExposure,
     ToolLoadoutChanges, ToolNamespace, ToolReach, ToolResult, VirtualModel, empty_schema,
 };

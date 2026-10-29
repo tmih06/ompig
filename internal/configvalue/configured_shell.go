@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 // Ports packages/coding-agent/src/core/resolve-config-value.ts.

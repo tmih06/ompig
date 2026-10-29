@@ -4,8 +4,8 @@
 // Package counts is the Durable core's deterministic count gate (Durable plan 2, item 9) and its flight recorder format.
 //
 // A run of the production native stack (sqlhost on SQLite, the driver, the bench workload on a fixture of N turns) is
-// recorded as the stream of everything the core was given: its events, the answers to its pig.read calls and the ids
-// pig.uuidv7 returned. The core is a pure function of that stream (ABI section 3, ADR D8: the clock and randomness are inputs),
+// recorded as the stream of everything the core was given: its events, the answers to its ompig.read calls and the ids
+// ompig.uuidv7 returned. The core is a pure function of that stream (ABI section 3, ADR D8: the clock and randomness are inputs),
 // so Replay drives the same core again with no storage, no model and no goroutines, as the native build and as the Go and
 // TinyGo Wasm builds, and counts what it costs: rows read and written, crossings, bytes allocated, mallocs, the live set, the
 // Wasm linear memory high-water and, on an instrumented module, Wasm instructions. Every count is a function of the stream
@@ -27,8 +27,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // Item kinds of a recording. A recording is a sequence of items, each u8 kind, u32 body length, body (little endian).
@@ -37,10 +37,10 @@ const (
 	ItemABI byte = iota + 1
 	// ItemEvent is one event delivered to the core: u8 event kind, f64 now, the wire payload (abi.Event.Wire).
 	ItemEvent
-	// ItemRead is one pig.read call the core made during the step of the last event: u32 request length, the request
+	// ItemRead is one ompig.read call the core made during the step of the last event: u32 request length, the request
 	// (abi.AppendReadRequest), the answer (abi.AppendAnswer).
 	ItemRead
-	// ItemUUID is one pig.uuidv7 value the core asked for during the step: 36 ASCII bytes.
+	// ItemUUID is one ompig.uuidv7 value the core asked for during the step: 36 ASCII bytes.
 	ItemUUID
 	// ItemStep is the SHA-256 of the step the core returned for the last event, in its wire form (abi.AppendStep).
 	ItemStep
@@ -148,7 +148,7 @@ func (s *RecordingStepper) SetReader(read core.Reader) {
 		if err != nil {
 			s.r.mu.Lock()
 			if s.r.err == nil {
-				s.r.err = fmt.Errorf("counts: a pig.read failed and cannot be replayed: %w", err)
+				s.r.err = fmt.Errorf("counts: a ompig.read failed and cannot be replayed: %w", err)
 			}
 			s.r.mu.Unlock()
 			return nil, err
@@ -201,7 +201,7 @@ type Entry struct {
 	RowsChanged uint64
 }
 
-// ReadCall is one pig.read call and the host's answer.
+// ReadCall is one ompig.read call and the host's answer.
 type ReadCall struct {
 	Request []byte
 	Answer  []byte

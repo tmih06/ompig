@@ -1,8 +1,8 @@
 package codemode
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 )
 
 // loadExtension runs the codemode factory through the production loader, as a Session's extension set does.

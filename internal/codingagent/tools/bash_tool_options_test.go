@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: bash.ts createBashTool(cwd, options): the prefix is applied first, then spawnHook rewrites command, cwd and env, and operations.exec receives the rewritten context.

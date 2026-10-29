@@ -18,7 +18,7 @@
 #
 # Upstream rule: renderSessionEntries (interactive-mode.ts:4053) passes every bashExecution message, a `!!` one included, to addMessageToChat, whose case "bashExecution" (:3847-3859) builds BashExecutionComponent(command, ui, excludeFromContext), appends a non-empty output, and calls setComplete(exitCode, cancelled, truncated ? {truncated} : undefined, fullOutputPath). A `!!` block keeps its dim borders and, after setComplete's updateDisplay, a bashMode header.
 # The fixture covers success, a non-zero exit, a cancelled command, truncated output with its full-output path, and two `!!` commands (one non-zero).
-# Red: PiG at main 50e81255d and with only the block port drew no block, only the trailing user message. Green with the shared renderSessionEntryList case.
+# Red: Ompig at main 50e81255d and with only the block port drew no block, only the trailing user message. Green with the shared renderSessionEntryList case.
 
 name = "52-resumed-bash-execution"
 description = "A resumed session draws each persisted ! and !! command as Pi's bash block: success, non-zero exit, cancelled, truncated with its full-output path, and excluded from context."
@@ -31,16 +31,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--session", "sessions/resumed-bash.jsonl"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--session", "sessions/resumed-bash.jsonl"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions", "--session", "sessions/resumed-bash.jsonl"]
 
 [tmux]
 width = 100
 height = 60
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/resumed-bash-cwd"

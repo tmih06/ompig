@@ -52,8 +52,8 @@ impl ToolResult {
         self.with_field("details", details)
     }
 
-    // pig additive (D160): the collapsed-view preview of a tool result.
-    /// Sets the PiG-only `preview` of a tool result (no upstream equivalent; `docs/additive-features.md`): a short summary the TUI shows while the result is collapsed, instead of the default tail of the output. The model still receives the content.
+    // ompig additive (D160): the collapsed-view preview of a tool result.
+    /// Sets the Ompig-only `preview` of a tool result (no upstream equivalent; `docs/additive-features.md`): a short summary the TUI shows while the result is collapsed, instead of the default tail of the output. The model still receives the content.
     pub fn with_preview(self, preview: impl Into<String>) -> Self {
         self.with_field("preview", Value::String(preview.into()))
     }
@@ -461,7 +461,7 @@ impl FlagOptions {
 /// runners. Factory-style crates should expose a function such as:
 ///
 /// ```ignore
-/// pub fn new_extension() -> pig_sdk::Extension
+/// pub fn new_extension() -> ompig_sdk::Extension
 /// ```
 pub type Factory = fn() -> Extension;
 
@@ -557,7 +557,7 @@ impl WidthDeliveries {
         threads.start();
         let (deliveries, finished) = (self.clone(), threads.clone());
         let spawned = thread::Builder::new()
-            .name("pig-width-change".to_string())
+            .name("ompig-width-change".to_string())
             .spawn(move || {
                 deliveries.run();
                 finished.finish();
@@ -680,7 +680,7 @@ impl Context {
     }
 }
 
-/// Extension is the main builder for a pig subprocess extension.
+/// Extension is the main builder for a ompig subprocess extension.
 pub struct Extension {
     name: String,
     tools: Vec<ToolDef>,
@@ -1073,7 +1073,7 @@ impl Extension {
     }
 
     /// Register a tool with an explicit source identifier. Panics before registration if the schema is not an object.
-    /// Source overrides the default extension-name attribution Piglet tool
+    /// Source overrides the default extension-name attribution Ompiglet tool
     /// scoping reads, allowing extensions that wrap external tool sources
     /// (e.g. MCP servers) to provide per-tool provenance. `get_all_tools()`
     /// reports upstream's `sourceInfo` for the tool, not this source.
@@ -1243,12 +1243,12 @@ impl Extension {
     /// The queue methods (`register_provider`, `register_provider_operations`, `register_provider_stream`, `register_oauth_provider`, `register_native_provider` and `unregister_provider`) take `&mut self`, and [`Extension::run`] consumes the extension, so no handler can reach the queue once the extension is loaded: a registration after load is a compile error, never a silent no-op. Pi's `pi.registerProvider` and `pi.unregisterProvider` after load take effect at once (types.ts:1766-1819, runner.ts:517-523); in this SDK a handler makes them through [`crate::Context::model_registry`] with `register_provider_operations`, `register_provider` and `unregister_provider`, which keep the same callbacks.
     ///
     /// ```no_run
-    /// let mut ext = pig_sdk::Extension::new("late");
+    /// let mut ext = ompig_sdk::Extension::new("late");
     /// ext.register_provider("queued", serde_json::json!({"baseUrl": "https://queued.test"}));
     /// ext.command("late", "register a provider after load", |ctx, _args| {
     ///     match ctx.model_registry().register_provider("late", serde_json::json!({"baseUrl": "https://late.test"})) {
-    ///         Ok(()) => pig_sdk::CommandResult::Ok,
-    ///         Err(error) => pig_sdk::CommandResult::Error(error.to_string()),
+    ///         Ok(()) => ompig_sdk::CommandResult::Ok,
+    ///         Err(error) => ompig_sdk::CommandResult::Error(error.to_string()),
     ///     }
     /// });
     /// ext.run().unwrap();
@@ -1257,7 +1257,7 @@ impl Extension {
     /// The same queue call after `run` does not compile:
     ///
     /// ```compile_fail
-    /// let mut ext = pig_sdk::Extension::new("late");
+    /// let mut ext = ompig_sdk::Extension::new("late");
     /// ext.run().unwrap();
     /// ext.register_provider("late", serde_json::json!({"baseUrl": "https://late.test"}));
     /// ```
@@ -1469,7 +1469,7 @@ impl Extension {
     }
 
     /// Connect to the host and run until shutdown.
-    /// Reads PIG_EXT_SOCKET from environment. GOPI_EXT_SOCKET is accepted as a
+    /// Reads OMPIG_EXT_SOCKET from environment. GOPI_EXT_SOCKET is accepted as a
     /// legacy fallback for older local launchers built before the rename.
     pub fn run(self) -> io::Result<()> {
         let sock_path = resolve_socket_path_from_env()?;
@@ -1640,11 +1640,11 @@ impl Extension {
         if !ext.loaded_fns.is_empty() {
             request_threads.start();
             let (loaded_ext, loaded_ctx, opening_gate, loaded_threads) = (ext.clone(), base_ctx.clone(), loaded_gate.clone(), request_threads.clone());
-            let spawned = thread::Builder::new().name("pig-on-loaded".to_string()).spawn(move || {
+            let spawned = thread::Builder::new().name("ompig-on-loaded".to_string()).spawn(move || {
                 for handler in &loaded_ext.loaded_fns {
                     if let Err(payload) = catch_unwind(AssertUnwindSafe(|| handler(&loaded_ctx))) {
                         let detail = payload.downcast_ref::<String>().cloned().or_else(|| payload.downcast_ref::<&str>().map(|s| s.to_string()));
-                        eprintln!("pig: on_loaded handler panicked: {}", detail.unwrap_or_default());
+                        eprintln!("ompig: on_loaded handler panicked: {}", detail.unwrap_or_default());
                     }
                 }
                 opening_gate.open();
@@ -1737,7 +1737,7 @@ impl Extension {
                         let failed_active = active.clone();
                         let failed_threads = threads.clone();
                         if let Err(err) = thread::Builder::new()
-                            .name(format!("pig-request-{id}"))
+                            .name(format!("ompig-request-{id}"))
                             .spawn(move || {
                                 if req.method != "events.dispatch" {
                                     loaded_gate.wait();
@@ -2724,7 +2724,7 @@ impl Extension {
                 if matches!(req.event.as_deref(), Some("context" | "context_with_system")) && error.is_none() {
                     let asserted = value
                         .as_ref()
-                        .and_then(|result| result.get("_pigContextUnchanged"))
+                        .and_then(|result| result.get("_ompigContextUnchanged"))
                         .and_then(Value::as_bool)
                         .unwrap_or(false);
                     let explicit = value
@@ -2738,34 +2738,34 @@ impl Extension {
                         let as_received = context_messages_before.as_ref().and_then(Option::as_ref) == Some(&messages);
                         let unchanged = asserted || (in_place && as_received);
                         value = Some(if unchanged && as_received {
-                            serde_json::json!({ "_pigContextUnchanged": true })
+                            serde_json::json!({ "_ompigContextUnchanged": true })
                         } else {
-                            serde_json::json!({ "messages": messages, "_pigContextUnchanged": unchanged })
+                            serde_json::json!({ "messages": messages, "_ompigContextUnchanged": unchanged })
                         });
                     }
                 }
                 if let Some(options) = prompt_state.as_ref().map(|state| state.options()) {
                     value = Some(serde_json::json!({
-                        "_pigPromptSections": options.get("sections"),
-                        "_pigPromptSelectedTools": options.get("selectedTools"),
-                        "_pigPromptOptions": options,
-                        "_pigPromptResult": value,
+                        "_ompigPromptSections": options.get("sections"),
+                        "_ompigPromptSelectedTools": options.get("selectedTools"),
+                        "_ompigPromptOptions": options,
+                        "_ompigPromptResult": value,
                     }));
                 }
                 if let Some(before) = tool_call_input_before {
                     let after = data.get("input").cloned();
-                    let mut reply = serde_json::json!({ "_pigToolCallResult": value });
+                    let mut reply = serde_json::json!({ "_ompigToolCallResult": value });
                     // serde_json compares maps without their member order, and moving a member is an edit in Pi (the tool runs with the object in its new order), so compare the JSON text.
                     if serde_json::to_string(&after).ok() != serde_json::to_string(&before).ok() {
-                        reply["_pigToolCallInput"] = after.unwrap_or(Value::Null);
+                        reply["_ompigToolCallInput"] = after.unwrap_or(Value::Null);
                     }
                     value = Some(reply);
                 }
-                // pig additive (D19): preserve boundary mutations alongside handler errors.
+                // ompig additive (D19): preserve boundary mutations alongside handler errors.
                 if matches!(req.event.as_deref(), Some("agent_before_settle" | "turn_end")) {
                     value = Some(serde_json::json!({
-                        "_pigBoundaryEntries": data.get("entries"),
-                        "_pigBoundaryResult": value,
+                        "_ompigBoundaryEntries": data.get("entries"),
+                        "_ompigBoundaryResult": value,
                     }));
                 }
                 let _ = conn.respond(id, value, error);
@@ -2992,23 +2992,23 @@ impl Extension {
 /// or an in-place edit that leaves the conversation different from the one it received, is a replacement, and the host then
 /// replaces every system message by one leading system message. Return `None` for a conversation left as it was.
 pub fn context_unchanged() -> Option<Value> {
-    Some(serde_json::json!({ "_pigContextUnchanged": true }))
+    Some(serde_json::json!({ "_ompigContextUnchanged": true }))
 }
 
 /// Connect and close a failed packed member's socket so the host stops waiting for registration.
 /// Uses the same transport as `Extension::run_with_socket` and sends no registration frame.
-// pig additive (D20): generated packed runners report factory failures independently of live siblings.
+// ompig additive (D20): generated packed runners report factory failures independently of live siblings.
 pub fn report_load_failure(sock_path: &str) -> io::Result<()> {
     UnixStream::connect(sock_path).map(drop)
 }
 
 fn resolve_socket_path_from_env() -> io::Result<String> {
-    std::env::var("PIG_EXT_SOCKET")
+    std::env::var("OMPIG_EXT_SOCKET")
         .or_else(|_| std::env::var("GOPI_EXT_SOCKET"))
         .map_err(|_| {
             io::Error::new(
                 io::ErrorKind::NotFound,
-                "PIG_EXT_SOCKET not set: extension must be launched by pig",
+                "OMPIG_EXT_SOCKET not set: extension must be launched by ompig",
             )
         })
 }
@@ -3096,25 +3096,25 @@ pub(crate) mod registration_tests {
     }
 
     #[test]
-    fn resolves_pig_ext_socket_first() {
+    fn resolves_ompig_ext_socket_first() {
         let _guard = env_lock().lock().unwrap();
         unsafe {
-            std::env::set_var("PIG_EXT_SOCKET", "/tmp/pig.sock");
+            std::env::set_var("OMPIG_EXT_SOCKET", "/tmp/ompig.sock");
             std::env::set_var("GOPI_EXT_SOCKET", "/tmp/legacy.sock");
         }
         let got = resolve_socket_path_from_env().unwrap();
         unsafe {
-            std::env::remove_var("PIG_EXT_SOCKET");
+            std::env::remove_var("OMPIG_EXT_SOCKET");
             std::env::remove_var("GOPI_EXT_SOCKET");
         }
-        assert_eq!(got, "/tmp/pig.sock");
+        assert_eq!(got, "/tmp/ompig.sock");
     }
 
     #[test]
     fn falls_back_to_legacy_gopi_ext_socket() {
         let _guard = env_lock().lock().unwrap();
         unsafe {
-            std::env::remove_var("PIG_EXT_SOCKET");
+            std::env::remove_var("OMPIG_EXT_SOCKET");
             std::env::set_var("GOPI_EXT_SOCKET", "/tmp/legacy.sock");
         }
         let got = resolve_socket_path_from_env().unwrap();
@@ -3128,12 +3128,12 @@ pub(crate) mod registration_tests {
     fn errors_when_socket_env_missing() {
         let _guard = env_lock().lock().unwrap();
         unsafe {
-            std::env::remove_var("PIG_EXT_SOCKET");
+            std::env::remove_var("OMPIG_EXT_SOCKET");
             std::env::remove_var("GOPI_EXT_SOCKET");
         }
         let err = resolve_socket_path_from_env().unwrap_err();
         assert_eq!(err.kind(), std::io::ErrorKind::NotFound);
-        assert!(err.to_string().contains("PIG_EXT_SOCKET not set"));
+        assert!(err.to_string().contains("OMPIG_EXT_SOCKET not set"));
     }
 }
 
@@ -3181,7 +3181,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let sock = dir.join(format!("pig-sdk-rs-decls-{unique}.sock"));
+        let sock = dir.join(format!("ompig-sdk-rs-decls-{unique}.sock"));
         let _ = std::fs::remove_file(&sock);
         let listener = UnixListener::bind(&sock).unwrap();
 
@@ -3270,7 +3270,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let sock = dir.join(format!("pig-sdk-rs-cancel-{unique}.sock"));
+        let sock = dir.join(format!("ompig-sdk-rs-cancel-{unique}.sock"));
         let _ = std::fs::remove_file(&sock);
         let listener = UnixListener::bind(&sock).unwrap();
         let (started_tx, started_rx) = mpsc::channel();
@@ -3398,7 +3398,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let sock = dir.join(format!("pig-sdk-rs-oauth-{unique}.sock"));
+        let sock = dir.join(format!("ompig-sdk-rs-oauth-{unique}.sock"));
         let _ = std::fs::remove_file(&sock);
         let listener = UnixListener::bind(&sock).unwrap();
 
@@ -3668,7 +3668,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let sock = std::env::temp_dir().join(format!("pig-sdk-rs-liveness-{unique}.sock"));
+        let sock = std::env::temp_dir().join(format!("ompig-sdk-rs-liveness-{unique}.sock"));
         let _ = std::fs::remove_file(&sock);
         let listener = UnixListener::bind(&sock).unwrap();
         let mut ext = Extension::new("rust-liveness");
@@ -3937,7 +3937,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let sock = std::env::temp_dir().join(format!("pig-sdk-rs-label-{unique}.sock"));
+        let sock = std::env::temp_dir().join(format!("ompig-sdk-rs-label-{unique}.sock"));
         let _ = std::fs::remove_file(&sock);
         let listener = UnixListener::bind(&sock).unwrap();
         let mut ext = Extension::new("rust-label");
@@ -4078,7 +4078,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
-        let sock = std::env::temp_dir().join(format!("pig-sdk-rs-regtool-{unique}.sock"));
+        let sock = std::env::temp_dir().join(format!("ompig-sdk-rs-regtool-{unique}.sock"));
         let _ = std::fs::remove_file(&sock);
         let listener = UnixListener::bind(&sock).unwrap();
 

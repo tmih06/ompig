@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	sockPath := os.Getenv("PIG_EXT_SOCKET")
+	sockPath := os.Getenv("OMPIG_EXT_SOCKET")
 	if sockPath == "" {
 		os.Exit(1)
 	}

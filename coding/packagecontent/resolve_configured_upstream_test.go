@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
+	"github.com/tmih06/ompig/coding/packagecontent"
 )
 
 // The error-bearing API is additive: the original function remains assignable

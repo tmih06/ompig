@@ -15,8 +15,8 @@
 #   [Prompts]
 #     /visible
 #   [Extensions]
-#     pig-parity/entry-shapes:entry-shapes
-# PiG failed the Package: it read <file>/SKILL.md for the file entry, parsed
+#     ompig-parity/entry-shapes:entry-shapes
+# Ompig failed the Package: it read <file>/SKILL.md for the file entry, parsed
 # the Claude manifest's mcpServers object as a path list, and imported the
 # "./" directory, which Node refuses; it also listed no Package theme, and
 # a packed Node extension reported its entry file rather than its path.
@@ -31,7 +31,7 @@ tags = ["fast", "hermetic", "tui"]
 driver = "interactive-tmux"
 
 [env]
-pig = ["PIG_OFFLINE=1", "PIG_CODING_AGENT_DIR=testdata/entry-shapes/pig-agent"]
+ompig = ["OMPIG_OFFLINE=1", "OMPIG_CODING_AGENT_DIR=testdata/entry-shapes/ompig-agent"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/entry-shapes/pi-agent"]
 # The base arguments pass --no-extensions, which also drops Packages from the
 # listing under test.
@@ -40,18 +40,18 @@ override_base_args = true
 [tmux]
 width = 100
 height = 45
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "[Skills]"
-capture_end = "pig-parity/entry-shapes:entry-shapes"
+capture_end = "ompig-parity/entry-shapes:entry-shapes"
 
 [[tmux.steps]]
-wait_visible_contains = ["pig-parity/entry-shapes:entry-shapes"]
+wait_visible_contains = ["ompig-parity/entry-shapes:entry-shapes"]
 
 [assert]
 both_reach_ready = true
-both_contain = ["listed, nested, planner", "/visible", "pig-parity/entry-shapes:entry-shapes"]
+both_contain = ["listed, nested, planner", "/visible", "ompig-parity/entry-shapes:entry-shapes"]
 both_not_contain = ["claude-only", "/ignored", "/.hidden", "SUITE", "Failed to load"]
 escaped_output_equal = true
 runs = 3

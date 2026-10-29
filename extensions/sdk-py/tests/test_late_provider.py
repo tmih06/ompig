@@ -10,23 +10,23 @@ from typing import Any
 import pytest
 from test_extension_api_099 import _command_ext, _drive, _host
 
-import pig_sdk
+import ompig_sdk
 
 ZERO = {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0}
 
 
 def _config(ran: list[str]) -> dict[str, Any]:
-    def images(model: dict[str, Any], request: dict[str, Any], options: pig_sdk.ProviderOperationOptions) -> dict[str, Any]:
+    def images(model: dict[str, Any], request: dict[str, Any], options: ompig_sdk.ProviderOperationOptions) -> dict[str, Any]:
         ran.append(f"images:{model['id']}:{options.values['apiKey']}")
         return {"api": "late-images", "provider": "late", "model": "flux", "output": [], "stopReason": "stop", "timestamp": 1}
 
-    def classify(model: dict[str, Any], request: dict[str, Any], options: pig_sdk.ProviderOperationOptions) -> dict[str, Any]:
+    def classify(model: dict[str, Any], request: dict[str, Any], options: ompig_sdk.ProviderOperationOptions) -> dict[str, Any]:
         ran.append("classifier")
         return {"api": "late-classifier", "provider": "late", "model": "cls", "answers": {}, "stopReason": "stop", "timestamp": 2}
 
-    def stream_simple(ctx: pig_sdk.Context, model: dict[str, Any], request: dict[str, Any], options: dict[str, Any]) -> pig_sdk.ModelEventStream:
+    def stream_simple(ctx: ompig_sdk.Context, model: dict[str, Any], request: dict[str, Any], options: dict[str, Any]) -> ompig_sdk.ModelEventStream:
         ran.append(f"stream:{model['id']}:{options['apiKey']}")
-        stream = pig_sdk.ModelEventStream()
+        stream = ompig_sdk.ModelEventStream()
         message = {"role": "assistant", "api": model["api"], "provider": model["provider"], "model": model["id"], "content": [{"type": "text", "text": "late"}], "stopReason": "stop", "timestamp": 1}
         stream.push({"type": "done", "reason": "stop", "message": message})
         return stream
@@ -85,7 +85,7 @@ def test_model_registry_register_provider_merges_operations_like_the_factory() -
     """model-runtime.ts:753-766: a late registration that defines no operation keeps the implementations of the one before."""
     ran: list[str] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         ctx.model_registry.register_provider("late", _config(ran))
         ctx.model_registry.register_provider("late", {"baseUrl": "https://late.test/v2"})
 
@@ -106,7 +106,7 @@ def test_model_registry_unregister_provider_drops_its_operations() -> None:
     """types.ts:1805-1819: after unregisterProvider no request finds a callable the extension held for it."""
     ran: list[str] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         ctx.model_registry.register_provider("late", _config(ran))
         ctx.model_registry.unregister_provider("late")
 
@@ -128,7 +128,7 @@ def test_model_registry_register_provider_refuses_a_non_callable_before_the_host
     """The factory registration refuses a value that cannot run (TypeError); the late call does the same and sends nothing."""
     seen: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         for name, config in (("images", {"images": {"late-images": "not callable"}}), ("classifiers", {"classifiers": {"late-classifier": 3}}), ("streamSimple", {"streamSimple": "no"})):
             with pytest.raises(TypeError, match="callable"):
                 ctx.model_registry.register_provider("late", config)
@@ -148,7 +148,7 @@ def test_model_registry_refused_registration_keeps_the_held_callables() -> None:
     ran: list[str] = []
     outcome: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         ctx.model_registry.register_provider("late", _config(ran))
         second = _config(ran)
         second["images"] = {"late-images": lambda model, request, options: ran.append("refused images") or {"stopReason": "stop"}}
@@ -182,7 +182,7 @@ def test_model_registry_refused_registration_keeps_the_held_callables() -> None:
 def test_extension_register_provider_after_run_sends_the_host_call() -> None:
     """Pi's pi.registerProvider takes effect at once after the factory (types.ts:1766-1803, runner.ts:517-523): Extension.register_provider called once the extension runs sends the call ModelRegistry sends, instead of queueing a registration nothing sends."""
     ran: list[str] = []
-    ext = pig_sdk.Extension("py-late-ext")
+    ext = ompig_sdk.Extension("py-late-ext")
     ext.command("go", "run", lambda ctx, _args: ext.register_provider("late", _config(ran)))
     host = _host(ext)
     try:
@@ -200,9 +200,9 @@ def test_extension_register_provider_after_run_raises_a_refusal_and_keeps_the_he
     """A late registration the host refuses throws in Pi (model-runtime.ts registerProvider validates before it stores) and leaves the provider as it was."""
     ran: list[str] = []
     outcome: dict[str, Any] = {}
-    ext = pig_sdk.Extension("py-late-ext-refused")
+    ext = ompig_sdk.Extension("py-late-ext-refused")
 
-    def handler(_ctx: pig_sdk.Context, _args: str) -> None:
+    def handler(_ctx: ompig_sdk.Context, _args: str) -> None:
         ext.register_provider("late", _config(ran))
         second = _config(ran)
         second["images"] = {"late-images": lambda model, request, options: ran.append("refused images") or {"stopReason": "stop"}}
@@ -235,9 +235,9 @@ def test_extension_register_provider_after_run_raises_a_refusal_and_keeps_the_he
 def test_extension_unregister_provider_after_run_sends_the_host_call() -> None:
     """Pi's pi.unregisterProvider also takes effect at once after the factory (types.ts:1805-1819)."""
     ran: list[str] = []
-    ext = pig_sdk.Extension("py-late-ext-gone")
+    ext = ompig_sdk.Extension("py-late-ext-gone")
 
-    def handler(_ctx: pig_sdk.Context, _args: str) -> None:
+    def handler(_ctx: ompig_sdk.Context, _args: str) -> None:
         ext.register_provider("late", _config(ran))
         ext.unregister_provider("late")
 
@@ -255,8 +255,8 @@ def test_extension_unregister_provider_after_run_sends_the_host_call() -> None:
 
 def test_extension_register_oauth_provider_after_run_sends_the_host_call() -> None:
     """An OAuth registration after run takes effect at once too; the closures stay here and the host asks for them by provider name."""
-    ext = pig_sdk.Extension("py-late-oauth")
-    oauth = pig_sdk.OAuthProvider(name="Late SSO", login=lambda callbacks: {"access": "a", "refresh": "r", "expires": 1}, get_api_key=lambda credentials: "key-" + credentials["access"])
+    ext = ompig_sdk.Extension("py-late-oauth")
+    oauth = ompig_sdk.OAuthProvider(name="Late SSO", login=lambda callbacks: {"access": "a", "refresh": "r", "expires": 1}, get_api_key=lambda credentials: "key-" + credentials["access"])
     ext.command("go", "run", lambda ctx, _args: ext.register_oauth_provider("late-oauth", {"baseUrl": "https://late.test"}, oauth))
     host = _host(ext)
     try:
@@ -271,7 +271,7 @@ def test_extension_register_oauth_provider_after_run_sends_the_host_call() -> No
 
 def test_extension_register_provider_before_run_queues() -> None:
     """Before run the registration is queued for the register payload."""
-    ext = pig_sdk.Extension("py-queued")
+    ext = ompig_sdk.Extension("py-queued")
     ext.register_provider("queued", _config([]))
     ext.register_provider("dropped", {"baseUrl": "https://dropped.test"})
     ext.unregister_provider("dropped")

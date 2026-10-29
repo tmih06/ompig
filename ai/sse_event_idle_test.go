@@ -12,7 +12,7 @@ import (
 
 // pi-mono #10761 / #10762: an OpenAI-compatible gateway that keeps the connection alive with comment lines but sends no event left `pi -p`
 // parked forever, because the idle timeout only measures bytes.
-// pig divergence (D131): a text/event-stream response with no semantic event for httpIdleTimeoutMs ends with an error.
+// ompig divergence (D131): a text/event-stream response with no semantic event for httpIdleTimeoutMs ends with an error.
 func TestSSEStreamWithOnlyKeepalivesEndsAfterTheIdleTimeout(t *testing.T) {
 	testSSEKeepalivesEndAfterIdleTimeout(t, StreamOptions{})
 }

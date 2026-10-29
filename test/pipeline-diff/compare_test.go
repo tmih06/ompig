@@ -36,11 +36,11 @@ func projection(api string, body []byte) (map[string]any, error) {
 }
 
 // difference describes where two projections first differ, or "" when equal.
-func difference(pi, pig map[string]any) string {
-	if reflect.DeepEqual(pi, pig) {
+func difference(pi, ompig map[string]any) string {
+	if reflect.DeepEqual(pi, ompig) {
 		return ""
 	}
-	return firstDifference("", pi, pig)
+	return firstDifference("", pi, ompig)
 }
 
 func firstDifference(path string, a, b any) string {
@@ -48,7 +48,7 @@ func firstDifference(path string, a, b any) string {
 	case map[string]any:
 		b, ok := b.(map[string]any)
 		if !ok {
-			return fmt.Sprintf("%s: pi %s, pig %s", path, short(a), short(b))
+			return fmt.Sprintf("%s: pi %s, ompig %s", path, short(a), short(b))
 		}
 		keys := map[string]bool{}
 		for k := range a {
@@ -62,9 +62,9 @@ func firstDifference(path string, a, b any) string {
 			bv, bok := b[k]
 			switch {
 			case !aok:
-				return fmt.Sprintf("%s.%s: pi absent, pig %s", path, k, short(bv))
+				return fmt.Sprintf("%s.%s: pi absent, ompig %s", path, k, short(bv))
 			case !bok:
-				return fmt.Sprintf("%s.%s: pi %s, pig absent", path, k, short(av))
+				return fmt.Sprintf("%s.%s: pi %s, ompig absent", path, k, short(av))
 			}
 			if d := firstDifference(path+"."+k, av, bv); d != "" {
 				return d
@@ -74,7 +74,7 @@ func firstDifference(path string, a, b any) string {
 	case []any:
 		b, ok := b.([]any)
 		if !ok {
-			return fmt.Sprintf("%s: pi %s, pig %s", path, short(a), short(b))
+			return fmt.Sprintf("%s: pi %s, ompig %s", path, short(a), short(b))
 		}
 		for i := 0; i < len(a) && i < len(b); i++ {
 			if d := firstDifference(fmt.Sprintf("%s[%d]", path, i), a[i], b[i]); d != "" {
@@ -82,14 +82,14 @@ func firstDifference(path string, a, b any) string {
 			}
 		}
 		if len(a) != len(b) {
-			return fmt.Sprintf("%s: pi has %d entries, pig has %d (pi %s | pig %s)", path, len(a), len(b), short(a), short(b))
+			return fmt.Sprintf("%s: pi has %d entries, ompig has %d (pi %s | ompig %s)", path, len(a), len(b), short(a), short(b))
 		}
 		return ""
 	default:
 		if reflect.DeepEqual(a, b) {
 			return ""
 		}
-		return fmt.Sprintf("%s: pi %s, pig %s", path, short(a), short(b))
+		return fmt.Sprintf("%s: pi %s, ompig %s", path, short(a), short(b))
 	}
 }
 

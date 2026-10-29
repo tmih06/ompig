@@ -7,7 +7,7 @@ so the faint run ends at the text instead of leaking into the cells a Text compo
 
 from __future__ import annotations
 
-import pig_sdk
+import ompig_sdk
 
 _PALETTE = {
     "name": "faint",
@@ -24,7 +24,7 @@ _PALETTE = {
 
 
 def test_fg_closes_a_faint_token_with_sgr_22_39() -> None:
-    theme = pig_sdk.Theme()
+    theme = ompig_sdk.Theme()
     theme._set_palette(_PALETTE)
     assert theme.fg("muted", "x") == "\x1b[39m\x1b[2mx\x1b[22;39m"
     assert theme.fg("accent", "x") == "\x1b[38;5;5mx\x1b[39m"

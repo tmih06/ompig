@@ -1,22 +1,22 @@
 # Built-in codemode and tool-search extensions
 
-Status: approved by the owner on 2026-09-29. This is decision D-B of `docs/plan/upgrade-0.99.1.md` (section 13) as revised the same day: the first approved design ran Pi's own extension code in the Node runtime; the owner then withdrew Node for these two extensions. This specification is the written spec that `AGENTS.md` requires before PiG hosts a WebAssembly sandbox.
+Status: approved by the owner on 2026-09-29. This is decision D-B of `docs/plan/upgrade-0.99.1.md` (section 13) as revised the same day: the first approved design ran Pi's own extension code in the Node runtime; the owner then withdrew Node for these two extensions. This specification is the written spec that `AGENTS.md` requires before Ompig hosts a WebAssembly sandbox.
 
 Upstream reference: `.upstream/v0.99.1/packages/coding-agent/src/extensions/{codemode,tool-search}` and `.upstream/v0.99.1/packages/codemode`.
 
 ## Decision
 
 1. Everything upstream's `codemode` and `tool-search` extensions own is native Go: the execution lifecycle, the nested-tool bridge, the tool declarations, the prelude, the limits, the result formatting, the renderer, tool exposure, and tool search. A Go extension registers them; no Node process is involved. `node` need not be on `PATH`.
-2. Only the model-written JavaScript runs in a JavaScript engine: QuickJS compiled to WebAssembly, hosted by `github.com/tetratelabs/wazero` (pure Go, no cgo). This is the sole embedded JavaScript execution in PiG. It does not extend to extensions: the `AGENTS.md` ban on a WASM or embedded-JS *extension runtime* still holds, because the sandbox runs one untrusted script per VM and no extension code.
+2. Only the model-written JavaScript runs in a JavaScript engine: QuickJS compiled to WebAssembly, hosted by `github.com/tetratelabs/wazero` (pure Go, no cgo). This is the sole embedded JavaScript execution in Ompig. It does not extend to extensions: the `AGENTS.md` ban on a WASM or embedded-JS *extension runtime* still holds, because the sandbox runs one untrusted script per VM and no extension code.
 3. The engine is Pi's own: `quickjs-wasi` 3.6.2, the exact `quickjs.wasm` that upstream loads (`packages/codemode/src/wasm.ts`). The engine spike (`docs/plan/evidence/port-99-f8-engine-spike/README.md`) compared it with `github.com/fastschema/qjs` v0.0.6 and chose it on faithfulness (same engine build, same limit calls, upstream's unmodified prelude), then robustness and speed.
 
 Classification under the product-extension boundary in `AGENTS.md`:
 
 | Piece | Class |
 |---|---|
-| `builtin:<name>` registry, selection, and provenance | required substrate (Stock PiG) |
-| `codemode`, `tool-search` behavior and the sandbox that serves it | upstream-parity behavior (Stock PiG); registered inactive, so it changes no request until a user, setting, or extension activates the tool |
-| Any Standard preset that activates them | PiG Standard, not this specification |
+| `builtin:<name>` registry, selection, and provenance | required substrate (Stock Ompig) |
+| `codemode`, `tool-search` behavior and the sandbox that serves it | upstream-parity behavior (Stock Ompig); registered inactive, so it changes no request until a user, setting, or extension activates the tool |
+| Any Standard preset that activates them | Ompig Standard, not this specification |
 
 No new divergence: upstream's observable behavior is preserved, and the engine is upstream's. The choice of host (wazero instead of a Node worker thread) is internal. It has the resource consequences described below, and the performance difference is recorded in the evidence, not hidden.
 
@@ -31,7 +31,7 @@ No new divergence: upstream's observable behavior is preserved, and the engine i
 
 One execution owns one wasm instance, as upstream's worker owns one QuickJS VM (`runtime/worker.ts`). The Go host is a port of `runtime/{host,worker,protocol}.ts`:
 
-- The compiled module is shared. It compiles once per process (`wasm.ts:15-35`), and wazero's on-disk compilation cache makes later processes start in about 22 ms instead of about 430 ms (spike numbers). The cache directory is `cache/wazero` under `PIG_HOME` when it is set, else under the user cache directory (`os.UserCacheDir()/pig/wazero`). The cache is an optimization: a missing, unwritable, or corrupt cache is ignored and the module compiles in memory.
+- The compiled module is shared. It compiles once per process (`wasm.ts:15-35`), and wazero's on-disk compilation cache makes later processes start in about 22 ms instead of about 430 ms (spike numbers). The cache directory is `cache/wazero` under `OMPIG_HOME` when it is set, else under the user cache directory (`os.UserCacheDir()/ompig/wazero`). The cache is an optimization: a missing, unwritable, or corrupt cache is ignored and the module compiles in memory.
 - Per execution: instantiate, initialize the engine, apply the limits below, evaluate the prelude, then drive `settle`, `run`, and `stalled` and drain pending jobs exactly as `worker.ts` does. Tool arguments and results cross as JSON strings.
 - The instance's standard output and error are discarded (`worker.ts`), and its WASI clock, random source, and no file system are the only system access. The guest has no network, no file, no environment, and no host function except the one `bridge`.
 - Instance memory is released when the execution ends. wazero grows the linear memory; QuickJS's own memory limit (below) bounds the heap.
@@ -48,11 +48,11 @@ Upstream lists the built-ins in `src/extensions/index.ts:6-14`. This specificati
 - An extension path `builtin:<name>` names no file. Its source info is `path: "builtin:<name>"`, `source: "builtin"`, `scope: "temporary"`, `origin: "top-level"` (`core/source-info.ts:14-56`). Errors, diagnostics, and RPC source info use `builtin:<name>`.
 - `builtin:<name>` loads by default, is hidden from the startup Extensions list, and loads after project trust is resolved (`core/extensions/types.ts:1985-2013`, `core/resource-loader.ts:706-738`).
 - `replaceable` follows `core/resource-loader.ts:120-153`: when another extension registers the tool `codemode` or `tool_search`, the built-in is left out and a warning names both paths. An unknown name fails with `Unknown built-in extension: builtin:<name>` (`resource-loader.ts:716-720`).
-- The registry is a Go table in `coding/extension/builtin`. Each row carries the name, `Replaceable`, and a Go factory `func() (extension.Extension, error)` that returns the extension with its tool registered inactive (`defaultActive: false`, exposure `model-only`). `cmd/pig` (`nativeBuiltInExtensions`) turns the rows into the loader's `builtin:<name>` entries, passing the settings manager (`codemode.mode`, `codemode.inlineBudget`, read on every use) and the compilation cache directory. Other families (resource loader, CLI, `pi config`) consume the entries; they do not restate the names. `coding/cli/llama.go` is the precedent for a native Go built-in.
+- The registry is a Go table in `coding/extension/builtin`. Each row carries the name, `Replaceable`, and a Go factory `func() (extension.Extension, error)` that returns the extension with its tool registered inactive (`defaultActive: false`, exposure `model-only`). `cmd/ompig` (`nativeBuiltInExtensions`) turns the rows into the loader's `builtin:<name>` entries, passing the settings manager (`codemode.mode`, `codemode.inlineBudget`, read on every use) and the compilation cache directory. Other families (resource loader, CLI, `pi config`) consume the entries; they do not restate the names. `coding/cli/llama.go` is the precedent for a native Go built-in.
 - The factories run in the in-process extension host. They add no process, socket, or Node cell.
 - A built-in tool reaches the session through consumer-owned interfaces that it type-asserts from `ToolContext.SessionManager()`: the branch (for `load()`) and `AppendCustomEntry` (for `store()`, which also emits `entry_appended`). The extension context is not widened. Nested calls use `ToolContext.ExecuteTool` and `Tools()`; tool search uses the context's `GetAllTools`, `GetActiveTools` and `SetActiveTools`.
 
-## How a build, a user, or a Piglet disables or strips them
+## How a build, a user, or a Ompiglet disables or strips them
 
 Disable (no code runs):
 
@@ -60,18 +60,18 @@ Disable (no code runs):
 2. `--no-extensions` disables every built-in. `-e builtin:<name>` loads one explicitly (`docs/cli.md:195-197`).
 3. A disabled built-in registers nothing. An enabled but unused built-in costs one registered tool definition: the sandbox is created on the first script, so no wasm compiles and no VM starts until then (`execute.lazy.ts:2`).
 
-Piglet selection (issue #92):
+Ompiglet selection (issue #92):
 
-4. An active Piglet takes no ambient extensions unless `discovery.extensions` allows them (`docs/pig-piglet-spec.md`, Discovery). A built-in is an ambient extension, so an active Piglet loads none. A Piglet enables one with the explicit extension origin `builtin:codemode` or `builtin:tool-search`. No new Piglet field is needed.
-5. Selecting a built-in through the Piglet activates the tool only if the Piglet's tool ceiling allows it. Effective tools remain `runtime registration ∩ Piglet allowlists ∩ CLI narrowing ∩ platform authorization`.
+4. An active Ompiglet takes no ambient extensions unless `discovery.extensions` allows them (`docs/ompig-ompiglet-spec.md`, Discovery). A built-in is an ambient extension, so an active Ompiglet loads none. A Ompiglet enables one with the explicit extension origin `builtin:codemode` or `builtin:tool-search`. No new Ompiglet field is needed.
+5. Selecting a built-in through the Ompiglet activates the tool only if the Ompiglet's tool ceiling allows it. Effective tools remain `runtime registration ∩ Ompiglet allowlists ∩ CLI narrowing ∩ platform authorization`.
 
 Strip (the code is absent from an artifact):
 
-6. The sandbox, the wasm, and the wazero dependency live in their own packages (`codemode`, `coding/extension/builtin/codemode`). A build with the Go build tag `pig_strip_codemode` (a Piglet Binary that strips the `codemode` extension, D92) links neither: the registry row for `codemode` is absent, the `tool_search` row remains (it has no engine), and `builtin:codemode` is then skipped silently, as Pi skips a disabled built-in. `TestStripCodemodeBuildOmitsCodemodeAndItsEngine` proves the tagged `cmd/pig` links neither `codemode` nor wazero. This is the supported way to remove the code from an artifact: about 640 KiB of wasm plus wazero.
+6. The sandbox, the wasm, and the wazero dependency live in their own packages (`codemode`, `coding/extension/builtin/codemode`). A build with the Go build tag `ompig_strip_codemode` (a Ompiglet Binary that strips the `codemode` extension, D92) links neither: the registry row for `codemode` is absent, the `tool_search` row remains (it has no engine), and `builtin:codemode` is then skipped silently, as Pi skips a disabled built-in. `TestStripCodemodeBuildOmitsCodemodeAndItsEngine` proves the tagged `cmd/ompig` links neither `codemode` nor wazero. This is the supported way to remove the code from an artifact: about 640 KiB of wasm plus wazero.
 
 ## Resource bounds
 
-Upstream defines the bounds. PiG adds none and raises none, and states the Go-side cost of each.
+Upstream defines the bounds. Ompig adds none and raises none, and states the Go-side cost of each.
 
 | Resource | Bound | Source |
 |---|---|---|
@@ -113,10 +113,10 @@ Go-side rules:
 |---|---|---|
 | Script throws or fails to parse | `done` with `ok: false` | tool result `isError: true`, header `Script failed`, partial output kept, then `Script error:` and the stack |
 | Script spins (`while (true) {}`, `while (true) await null`) | timeout or abort sets the interrupt flag | VM closed; `Script timed out` or `Script aborted`; the host stays responsive |
-| Heap exhausted | QuickJS out-of-memory | script-level `InternalError: out of memory`; PiG and other extensions keep running |
+| Heap exhausted | QuickJS out-of-memory | script-level `InternalError: out of memory`; Ompig and other extensions keep running |
 | Deep recursion | stack guard | script-level `RangeError` |
 | Wasm trap | wazero error from a call into the instance | `kind: "sandbox"`; `Script sandbox failed:` result; a later call works |
-| `quickjs.wasm` missing, corrupt, or fails to compile | compile error at first use | `kind: "sandbox"` result naming the cause; PiG does not crash; the next call retries the compile |
+| `quickjs.wasm` missing, corrupt, or fails to compile | compile error at first use | `kind: "sandbox"` result naming the cause; Ompig does not crash; the next call retries the compile |
 | Compilation cache unusable | cache open or write error | ignored; the module compiles in memory |
 | Nested tool fails, is blocked, or has invalid input | nested `isError` outcome | the script's promise rejects with the tool's error text; the call row shows `error` |
 | Parent aborted with nested calls pending | context | pending children cancelled, rows `cancelled`, no late write to the result |

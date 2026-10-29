@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 1.0.4 passes `hiddenTools: [...this._hiddenDeclarations]` to the system prompt options (agent-session.ts

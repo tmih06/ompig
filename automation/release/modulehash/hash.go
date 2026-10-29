@@ -99,7 +99,7 @@ func Hashes(root, dir string, mod module.Version, overlay map[string][]byte) (zi
 	if err != nil {
 		return "", "", err
 	}
-	out, err := os.CreateTemp("", "pig-module-*.zip")
+	out, err := os.CreateTemp("", "ompig-module-*.zip")
 	if err != nil {
 		return "", "", err
 	}

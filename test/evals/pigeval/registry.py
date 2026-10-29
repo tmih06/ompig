@@ -78,7 +78,7 @@ def select(harnesses, spec):
 
 
 def dev_home():
-    return os.environ.get("PIG_DEV_HOME") or os.path.expanduser("~/.cache/pig-dev")
+    return os.environ.get("OMPIG_DEV_HOME") or os.path.expanduser("~/.cache/ompig-dev")
 
 
 def substitute(values, args):
@@ -90,10 +90,10 @@ def substitute(values, args):
     return out
 
 
-def resolve(harness, pig=None, prefix=None):
+def resolve(harness, ompig=None, prefix=None):
     """Return the executable for harness, or None when it is not installed."""
-    if harness.bin == "{pig}":
-        candidate = os.path.abspath(pig or os.path.join(REPO_ROOT, "bin", "pig"))
+    if harness.bin == "{ompig}":
+        candidate = os.path.abspath(ompig or os.path.join(REPO_ROOT, "bin", "ompig"))
         return candidate if os.access(candidate, os.X_OK) else None
     candidate = os.path.join(prefix or os.path.join(dev_home(), "harnesses"), harness.id, "node_modules", ".bin", harness.bin)
     return candidate if os.access(candidate, os.X_OK) else shutil.which(harness.bin)
@@ -120,7 +120,7 @@ def install(harnesses, prefix, check=False):
     """Install each harness's pinned npm packages into prefix/<id>. Return True when all are present."""
     ok = True
     for h in harnesses:
-        if h.bin == "{pig}":
+        if h.bin == "{ompig}":
             print(f"install: {h.id:9} built from this checkout by make build")
             continue
         target = os.path.join(prefix, h.id)

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream types.ts:1315-1338 (isBashToolResult ... isLsToolResult): every runtime's guards tell the tool that ran from the tool_result event's toolName.

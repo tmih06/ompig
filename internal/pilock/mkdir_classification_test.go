@@ -67,7 +67,7 @@ func TestAcquireRetriesEEXISTUntilHolderReleases(t *testing.T) {
 	}
 }
 
-// Windows returns ERROR_ACCESS_DENIED from mkdir while a just-released lock directory is pending deletion; Node reports it as EPERM and proper-lockfile passes it through (only EEXIST is contention). Pi's auth loops rethrow every code but ELOCKED, and since Pi 1.2.0 (#10801) retry EPERM on Windows (auth-storage.ts:24-29). PiG classifies the same: the injected error is surfaced after exactly one attempt and leaves no lock behind, except Windows EPERM, whose retry finds the removal finished and takes the lock.
+// Windows returns ERROR_ACCESS_DENIED from mkdir while a just-released lock directory is pending deletion; Node reports it as EPERM and proper-lockfile passes it through (only EEXIST is contention). Pi's auth loops rethrow every code but ELOCKED, and since Pi 1.2.0 (#10801) retry EPERM on Windows (auth-storage.ts:24-29). Ompig classifies the same: the injected error is surfaced after exactly one attempt and leaves no lock behind, except Windows EPERM, whose retry finds the removal finished and takes the lock.
 func TestAcquireRetriesOnlyWindowsEPERMAmongNonEEXISTMkdirErrors(t *testing.T) {
 	for name, injected := range nonEEXISTMkdirErrors {
 		retried := runtime.GOOS == "windows" && strings.HasPrefix(nonEEXISTMkdirMessages[name], "EPERM:")

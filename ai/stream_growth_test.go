@@ -12,7 +12,7 @@ import (
 
 // Provider stream accumulation is linear in the number of deltas. Quadratic accumulation (re-copying the whole text or the whole
 // tool-argument string on each delta) once cost 2.6 GB for 16,000 OpenAI text deltas and 10 GB for 8,000 Anthropic input_json_delta
-// events (comb-audit row 7, audit-go-pig H2). Quadruple the deltas: linear growth allocates about 4x, quadratic about 16x.
+// events (comb-audit row 7, audit-go-ompig H2). Quadruple the deltas: linear growth allocates about 4x, quadratic about 16x.
 func TestProviderStreamAllocationsGrowLinearlyWithDeltas(t *testing.T) {
 	const growthLimit = 6.0
 	run := func(t *testing.T, serve func(w *bufio.Writer, n int), provider func(url string) Provider) {

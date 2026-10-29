@@ -11,10 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// PiG-only: packages/mcp/test/oauth.test.ts exercises the callback server's pages and extra paths but not its other
+// Ompig-only: packages/mcp/test/oauth.test.ts exercises the callback server's pages and extra paths but not its other
 // options (host, redirectHost, port, path, timeoutMs), the code/state/iss it delivers, or the waits it rejects when
 // it times out, closes, or already has the state pending.
 func TestOAuthCallbackServerOptionsShapeTheRedirectURL(t *testing.T) {

@@ -35,7 +35,7 @@ func TestBuilderReadinessJSONHasNoFormatVersion(t *testing.T) {
 		t.Fatal(err)
 	}
 	if strings.Contains(string(encoded), `"version"`) {
-		t.Fatalf("readiness exposed a Pig-owned format version: %s", encoded)
+		t.Fatalf("readiness exposed a Ompig-owned format version: %s", encoded)
 	}
 }
 
@@ -87,9 +87,9 @@ func TestExecuteBuildDoesNotFallbackAfterExecutionFailure(t *testing.T) {
 
 func TestSelectBuilderReportsAllAutoRemediation(t *testing.T) {
 	container := &fakeBuilder{name: "container", readiness: BuilderReadiness{Code: "engine", Message: "engine stopped", Remedy: "start engine"}}
-	native := &fakeBuilder{name: "native", readiness: BuilderReadiness{Code: "source", Message: "source missing", Remedy: "set PIG_SOURCE_ROOT"}}
+	native := &fakeBuilder{name: "native", readiness: BuilderReadiness{Code: "source", Message: "source missing", Remedy: "set OMPIG_SOURCE_ROOT"}}
 	_, _, err := selectBuilder(context.Background(), []BuilderBackend{container, native}, "auto", BuilderRequest{})
-	if err == nil || !strings.Contains(err.Error(), "start engine") || !strings.Contains(err.Error(), "set PIG_SOURCE_ROOT") {
+	if err == nil || !strings.Contains(err.Error(), "start engine") || !strings.Contains(err.Error(), "set OMPIG_SOURCE_ROOT") {
 		t.Fatalf("error = %v", err)
 	}
 }

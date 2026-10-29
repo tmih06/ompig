@@ -10,8 +10,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // upstream: packages/coding-agent/src/core/session-manager.ts appendCustomEntry (pushes the entry on the log, sets byId and moves the leaf) and agent-session.ts:3406-3411 (pi.appendEntry calls it): in Pi an append is in-process and always lands, so the session an extension reads is the session the host holds.

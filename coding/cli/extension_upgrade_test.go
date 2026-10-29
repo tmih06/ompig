@@ -14,15 +14,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 // oldExtensionSource is an extension written for SDK 0.2.0: its getter returns one value and its option is a bool.
 const oldExtensionSource = `package ask
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	ext := sdk.New("ask")
@@ -37,7 +37,7 @@ func Extension() *sdk.Extension {
 func writeOldExtension(t *testing.T, dir string) {
 	t.Helper()
 	writeStartupFixtureFile(t, filepath.Join(dir, "extension.go"), oldExtensionSource)
-	writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/ask\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.4.1\n")
+	writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/ask\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.4.1\n")
 }
 
 func driftFailure(files ...string) error {
@@ -93,7 +93,7 @@ func TestSDKDriftNoticeNamesChangesAndTheExactCommand(t *testing.T) {
 		`Extension "ask" was written for an older SDK:`,
 		"Context.GetSessionID: func() string -> func() (string, error) (SDK 0.3.0)",
 		"Context.SetEditorComponent: func(any) error -> func(EditorFactory) error (SDK 0.4.2): needs a manual change",
-		"Run: pig extension upgrade " + commandWord(ask) + "\n",
+		"Run: ompig extension upgrade " + commandWord(ask) + "\n",
 	} {
 		if !strings.Contains(notice, want) {
 			t.Errorf("notice lacks %q:\n%s", want, notice)
@@ -367,12 +367,12 @@ func readFile(t *testing.T, path string) string {
 // The real analysis and rebuild: an extension written for an old SDK upgrades, builds, and is then current.
 func TestUpgraderUpgradesAnOldGoExtensionEndToEnd(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	root, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SDK_GO_ROOT", root)
+	t.Setenv("OMPIG_SDK_GO_ROOT", root)
 	dir := filepath.Join(t.TempDir(), "ask")
 	writeOldExtension(t, dir)
 	configs := pathToExtConfigs(dir)
@@ -400,13 +400,13 @@ func TestUpgraderUpgradesAnOldGoExtensionEndToEnd(t *testing.T) {
 // With no mechanical rewrite the extension is reported, not edited.
 func TestUpgraderLeavesAnExtensionItCannotRewrite(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	root, _ := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk"))
-	t.Setenv("PIG_SDK_GO_ROOT", root)
+	t.Setenv("OMPIG_SDK_GO_ROOT", root)
 	dir := filepath.Join(t.TempDir(), "editor")
 	source := strings.Replace(oldExtensionSource, "id := ctx.GetSessionID()\n\t\treturn ctx.SendMessage(\"id\", id, true, sdk.SendMessageOptions{TriggerTurn: true})", "return ctx.SetEditorComponent(42)", 1)
 	writeStartupFixtureFile(t, filepath.Join(dir, "extension.go"), source)
-	writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/ask\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.4.1\n")
+	writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/ask\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.4.1\n")
 	configs := pathToExtConfigs(dir)
 	report := newExtensionUpgrader(configRoot).upgrade(t.Context(), configs[0], false)
 	if report.Status != upgradeManual || report.Ok() || report.Backup != "" || readFile(t, filepath.Join(dir, "extension.go")) != source {
@@ -422,13 +422,13 @@ func TestUpgraderLeavesAnExtensionItCannotRewrite(t *testing.T) {
 // A real run applies every rewrite that has one safe form and lists the rest with file, line and the form to write. The extension then builds only once the listed uses are changed, so the report says so and exits non-zero; it does not restore the files it rewrote. (Before, one use with no safe form restored every file, and the next attempt met the next class of change.)
 func TestUpgraderKeepsTheSafeRewritesAndListsWhatItCannotChange(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	root, _ := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk"))
-	t.Setenv("PIG_SDK_GO_ROOT", root)
+	t.Setenv("OMPIG_SDK_GO_ROOT", root)
 	dir := filepath.Join(t.TempDir(), "home")
 	source := `package home
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func save(cwd, home string) error { return nil }
 
@@ -451,7 +451,7 @@ func Extension() *sdk.Extension {
 }
 `
 	writeStartupFixtureFile(t, filepath.Join(dir, "extension.go"), source)
-	writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/home\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.4.1\n")
+	writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/home\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.4.1\n")
 	configs := pathToExtConfigs(dir)
 	upgrader := newExtensionUpgrader(configRoot)
 	loopLine := 0
@@ -461,7 +461,7 @@ func Extension() *sdk.Extension {
 		}
 	}
 	wantListed := []string{
-		fmt.Sprintf("extension.go:%d: edit by hand (Context.ConfigHome): the statement is not one pig moves a call out of", loopLine),
+		fmt.Sprintf("extension.go:%d: edit by hand (Context.ConfigHome): the statement is not one ompig moves a call out of", loopLine),
 		"write: configHome, err := ctx.ConfigHome(); handle err",
 		"still to change by hand: Context.SetEditorComponent: func(any) error -> func(EditorFactory) error",
 	}
@@ -523,7 +523,7 @@ func TestExtensionUpgradeCommandOnADirectory(t *testing.T) {
 	run := func(args ...string) (string, string, error) {
 		cmd := exec.Command(binary, append([]string{"extension", "upgrade"}, args...)...)
 		cmd.Dir = home
-		cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PI_HOME="+filepath.Join(home, "pi"), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_SDK_GO_ROOT="+root)
+		cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "PI_HOME="+filepath.Join(home, "pi"), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_SDK_GO_ROOT="+root)
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &stdout, &stderr
 		err := cmd.Run()
@@ -570,7 +570,7 @@ func TestUpgradeSummaryLines(t *testing.T) {
 		{u.upgrade(t.Context(), config, true), `would be upgraded`},
 		{u.upgrade(t.Context(), subprocess.ExtConfig{Name: "py", Source: t.TempDir(), RuntimeLanguage: "python"}, false), `extension "py" skipped: not a Go source extension`},
 		{extensionUpgradeReport{Name: "ask", Status: upgradeUpToDate}, `extension "ask" needs no upgrade`},
-		{extensionUpgradeReport{Name: "ask", Status: upgradeManual, Source: "/x/ask", Result: &upgrade.Result{Remaining: []upgrade.Drift{{Symbol: "Context.SetEditorComponent"}}}}, `1 SDK change(s) need a manual edit; run pig extension upgrade /x/ask`},
+		{extensionUpgradeReport{Name: "ask", Status: upgradeManual, Source: "/x/ask", Result: &upgrade.Result{Remaining: []upgrade.Drift{{Symbol: "Context.SetEditorComponent"}}}}, `1 SDK change(s) need a manual edit; run ompig extension upgrade /x/ask`},
 	} {
 		if got := upgradeSummaryLine(tc.report); !strings.Contains(got, tc.want) || strings.Contains(got, "\n") {
 			t.Errorf("summary = %q, want %q", got, tc.want)
@@ -579,7 +579,7 @@ func TestUpgradeSummaryLines(t *testing.T) {
 }
 
 // --all finds the extensions the settings and the agent directory load, and
-// --summary prints one line each, as the upgrade after `pig update` does.
+// --summary prints one line each, as the upgrade after `ompig update` does.
 func TestExtensionUpgradeAllDiscoversAgentExtensions(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
 	home := t.TempDir()
@@ -588,7 +588,7 @@ func TestExtensionUpgradeAllDiscoversAgentExtensions(t *testing.T) {
 	writeOldExtension(t, ask)
 	cmd := exec.Command(binary, "extension", "upgrade", "--all", "--summary")
 	cmd.Dir = home
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PI_HOME="+filepath.Join(home, "pi"), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir)
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "PI_HOME="+filepath.Join(home, "pi"), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := cmd.Run(); err != nil {

@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/tools/read.ts, write.ts, ls.ts
@@ -239,7 +239,7 @@ func firstDiffOf(got, want []byte) string {
 	}
 	from := max(i-60, 0)
 	cut := func(b []byte) string { return string(b[min(from, len(b)):min(i+240, len(b))]) }
-	return " PiG ..." + cut(got) + "\n Pi  ..." + cut(want)
+	return " Ompig ..." + cut(got) + "\n Pi  ..." + cut(want)
 }
 
 // sortLines puts the lines of each text block in order: rg and fd walk files in parallel, so the order of their results varies between runs.

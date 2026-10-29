@@ -7,11 +7,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	envnode "github.com/tmih06/ompig/durable/env/node"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // Pi 1.2.0 test/harness-structured-output.test.ts:370 runs the real bash tool, so it lives in the external test package

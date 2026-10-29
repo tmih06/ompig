@@ -2,7 +2,7 @@
 
 import threading
 
-import pig_sdk
+import ompig_sdk
 from test_request_lifetime import connected_extension
 
 
@@ -25,7 +25,7 @@ def test_tool_prepare_arguments_runs_the_hook_for_the_host():
             raise RuntimeError("prepare exploded")
         return {"text": args["legacy"]}
 
-    ext = pig_sdk.Extension("py-prepare")
+    ext = ompig_sdk.Extension("py-prepare")
     ext.tool("legacy", "Echo", {"type": "object", "required": ["text"]}, lambda ctx, args: "ok", prepare_arguments=prepare)
     ext.tool("plain", "Plain", {"type": "object"}, lambda ctx, args: "ok")
     with connected_extension(ext) as (send, receive):
@@ -43,7 +43,7 @@ def test_tool_prepare_arguments_runs_the_hook_for_the_host():
 def test_tool_call_does_not_prepare_the_arguments_again():
     # The host sent the prepared arguments, so preparing them again would apply the hook twice (once in the host's prepareToolCall, once here).
     handled = []
-    ext = pig_sdk.Extension("py-prepare-once")
+    ext = ompig_sdk.Extension("py-prepare-once")
     ext.tool("legacy", "Echo", {"type": "object"}, lambda ctx, args: handled.append(args) or "ok", prepare_arguments=lambda args: {"text": args["legacy"]})
     with connected_extension(ext) as (send, receive):
         send(request("c1", "tool_call", "legacy", {"text": "prepared", "legacy": "raw"}, "tc1"))
@@ -62,7 +62,7 @@ def test_tool_call_handlers_start_in_arrival_order():
             started.append(args["n"])
         return "ok"
 
-    ext = pig_sdk.Extension("py-start-order")
+    ext = ompig_sdk.Extension("py-start-order")
     ext.tool("probe", "Record the start order", {"type": "object"}, probe)
     with connected_extension(ext) as (send, receive):
         for round_number in range(rounds):
@@ -77,7 +77,7 @@ def test_tool_call_handlers_start_in_arrival_order():
 
 def test_a_tool_call_that_ends_without_its_handler_keeps_the_earlier_ones_ahead():
     # agent-loop.ts:619-647: handlers start in source order. A request that ends before its handler hands its place on only after the requests ahead of it began, so a later handler cannot overtake an earlier one.
-    order = pig_sdk._RequestStartOrder()
+    order = ompig_sdk._RequestStartOrder()
     ahead, skipped, after = order.reserve(), order.reserve(), order.reserve()
     skipped_ended = threading.Event()
     after_began = threading.Event()
@@ -110,7 +110,7 @@ def test_event_and_command_handlers_start_in_arrival_order():
         with lock:
             started.append(n)
 
-    ext = pig_sdk.Extension("py-request-start-order")
+    ext = ompig_sdk.Extension("py-request-start-order")
     ext.tool("probe", "Record the start order", {"type": "object"}, lambda ctx, args: record(args["n"]) or "ok")
     ext.on_event("tool_result", lambda ctx, data: record(data["n"]))
     ext.command("probe", "Record the start order", lambda ctx, args: record(int(args)))
@@ -142,7 +142,7 @@ def test_a_request_thread_that_runs_late_does_not_let_a_later_handler_start_firs
         with lock:
             started.append(n)
 
-    ext = pig_sdk.Extension("py-late-thread")
+    ext = ompig_sdk.Extension("py-late-thread")
     ext.tool("probe", "Record the start order", {"type": "object"}, lambda ctx, args: record(args["n"]) or "ok")
     ext.on_event("tool_result", lambda ctx, data: record(data["n"]))
     ext.command("probe", "Record the start order", lambda ctx, args: record(int(args)))

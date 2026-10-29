@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // field reads a member of a decoded JSON object (input, args).

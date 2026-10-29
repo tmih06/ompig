@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 type testComponent struct{ lines []string }
@@ -161,7 +161,7 @@ func TestExportFromFile_WritesSPAHTML(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ExportFromFile: %v", err)
 	}
-	if !strings.Contains(out, "pig-session-session.html") {
+	if !strings.Contains(out, "ompig-session-session.html") {
 		t.Fatalf("out = %q", out)
 	}
 	data, err := os.ReadFile(out)

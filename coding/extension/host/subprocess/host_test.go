@@ -15,15 +15,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // ── Protocol framing tests ───────────────────────────────────────────────────
 
 func TestConn_SendAndReceive(t *testing.T) {
 	// Create a Unix socket pair.
-	sockDir := testenv.ShortTempDir(t, "pig-conn-")
+	sockDir := testenv.ShortTempDir(t, "ompig-conn-")
 	sockPath := filepath.Join(sockDir, "test.sock")
 
 	listener, err := net.Listen("unix", sockPath)
@@ -106,7 +106,7 @@ func TestHostReload_UsesConfigLoader(t *testing.T) {
 }
 
 func TestConn_RequestResponse(t *testing.T) {
-	sockDir := testenv.ShortTempDir(t, "pig-conn-")
+	sockDir := testenv.ShortTempDir(t, "ompig-conn-")
 	sockPath := filepath.Join(sockDir, "test.sock")
 
 	listener, err := net.Listen("unix", sockPath)
@@ -208,7 +208,7 @@ func TestConn_RequestResponse(t *testing.T) {
 }
 
 func TestConn_IncomingCallMessages(t *testing.T) {
-	sockDir := testenv.ShortTempDir(t, "pig-conn-")
+	sockDir := testenv.ShortTempDir(t, "ompig-conn-")
 	sockPath := filepath.Join(sockDir, "test.sock")
 
 	listener, err := net.Listen("unix", sockPath)
@@ -465,14 +465,14 @@ func TestValidateHandlerDeclarationsRequiresUniquePositiveIDs(t *testing.T) {
 // directory.
 func TestResolveSocketDir_XDGRuntime(t *testing.T) {
 	dir := resolveSocketDirForGOOS("linux", "/run/user/1000", "/tmp/should-not-use", os.TempDir(), 1000)
-	if want := filepath.Join("/run/user/1000", "pig"); dir != want {
+	if want := filepath.Join("/run/user/1000", "ompig"); dir != want {
 		t.Errorf("dir = %q, want %q", dir, want)
 	}
 }
 
 func TestResolveSocketDir_TMPDIRFallback(t *testing.T) {
 	dir := resolveSocketDirForGOOS("darwin", "", "/var/folders/xx/T", os.TempDir(), 501)
-	if want := filepath.Join("/var/folders/xx/T", "pig-501"); dir != want {
+	if want := filepath.Join("/var/folders/xx/T", "ompig-501"); dir != want {
 		t.Errorf("dir = %q, want %q", dir, want)
 	}
 }
@@ -482,7 +482,7 @@ func TestResolveSocketDir_TMPDIRFallback(t *testing.T) {
 func TestResolveSocketDir_TermuxUsesTMPDIRAndKeepsItWithinTheSocketLimit(t *testing.T) {
 	const termuxTmp = "/data/data/com.termux/files/usr/tmp"
 	dir := resolveSocketDirForGOOS("linux", "", termuxTmp, "/tmp", 10234)
-	if want := filepath.Join(termuxTmp, "pig-10234"); dir != want {
+	if want := filepath.Join(termuxTmp, "ompig-10234"); dir != want {
 		t.Fatalf("dir = %q, want %q", dir, want)
 	}
 	if got := socketRuntimeBase("linux", dir, 10234, ""); got != dir {
@@ -495,7 +495,7 @@ func TestResolveSocketDir_TermuxUsesTMPDIRAndKeepsItWithinTheSocketLimit(t *test
 
 func TestResolveSocketDir_WindowsUsesSystemTemp(t *testing.T) {
 	dir := resolveSocketDirForGOOS("windows", "/run/user/1000", "/tmp/should-not-use", `C:\Temp`, 0)
-	if want := filepath.Join(`C:\Temp`, "pig"); dir != want {
+	if want := filepath.Join(`C:\Temp`, "ompig"); dir != want {
 		t.Errorf("dir = %q, want %q", dir, want)
 	}
 }
@@ -641,7 +641,7 @@ func TestHostStartupTraceAttributesExtensionLifecycle(t *testing.T) {
 
 // Upstream /reload clears its extension factory cache and invokes every
 // extension factory again, so an unchanged extension gets a fresh instance
-// (new closure state, new session_start) exactly like a changed one. Pig's
+// (new closure state, new session_start) exactly like a changed one. Ompig's
 // extension instance is its process, so an unchanged extension must be
 // restarted, not kept running from before the reload.
 func TestHost_Reload_UnchangedExtensionStartsFreshInstance(t *testing.T) {
@@ -914,7 +914,7 @@ func TestHostLoadRejectsRegisteredIdentityMismatch(t *testing.T) {
 	defer host.Shutdown("test done")
 	_, err := host.Load(t.Context(), ExtConfig{Name: "selected-name", Path: binary, Enabled: true})
 	message := fmt.Sprint(err)
-	for _, want := range []string{"name_mismatch", `selected identity "selected-name"`, `registered identity "fixture"`, binary, "renamed/reselected", "Package/Piglet declaration"} {
+	for _, want := range []string{"name_mismatch", `selected identity "selected-name"`, `registered identity "fixture"`, binary, "renamed/reselected", "Package/Ompiglet declaration"} {
 		if !strings.Contains(message, want) {
 			t.Fatalf("Load error = %v, want actionable identity detail %q", err, want)
 		}

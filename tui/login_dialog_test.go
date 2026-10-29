@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func TestLoginDialogSecretValueNeverRendered(t *testing.T) {
@@ -52,7 +52,7 @@ func TestLoginDialogMaskedPreview(t *testing.T) {
 			answer := d.ShowSecretInput("API key", "")
 			d.HandleInput(tc.value)
 			got := strings.Join(d.Render(150), "\n")
-			for _, want := range []string{tc.preview, tc.count, "Input hidden (PiG default). Show like Pi: /settings → Mask secret input"} {
+			for _, want := range []string{tc.preview, tc.count, "Input hidden (Ompig default). Show like Pi: /settings → Mask secret input"} {
 				if !strings.Contains(got, want) {
 					t.Errorf("missing %q in masked editing frame", want)
 				}

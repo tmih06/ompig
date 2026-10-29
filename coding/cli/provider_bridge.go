@@ -9,10 +9,10 @@ import (
 	"io"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // providerBridgeRequest is one line of the provider bridge's input. Type "stream" starts the stream named by ID; "cancel" aborts it.
@@ -20,7 +20,7 @@ type providerBridgeRequest struct {
 	ID      string          `json:"id"`
 	Type    string          `json:"type"`
 	Simple  bool            `json:"simple,omitempty"`
-	Model   map[string]any  `json:"model,omitempty"` //portlint:allow emptydrop request lines are only decoded here (the caller writes them); PiG never encodes this type
+	Model   map[string]any  `json:"model,omitempty"` //portlint:allow emptydrop request lines are only decoded here (the caller writes them); Ompig never encodes this type
 	Request json.RawMessage `json:"request,omitempty"`
 	// OnPayload, OnResponse and TransformHeaders name the callbacks the caller holds. The bridge calls them with a "callback" reply and waits for the "callbackResult" request that carries CallbackID.
 	OnPayload        bool            `json:"onPayload,omitempty"`
@@ -74,12 +74,12 @@ func (c *bridgeCallbacks) answer(request providerBridgeRequest) {
 	}
 }
 
-// runProviderBridge serves `pig provider-bridge`: JSON Lines on stdin and stdout, a process owned by the one that started it. A process with no extension runtime (a detached
-// helper or a forked worker that imports Pi's packages) reaches PiG's provider implementations through it; its lifetime is the starter's, so stdin end of file cancels every stream
+// runProviderBridge serves `ompig provider-bridge`: JSON Lines on stdin and stdout, a process owned by the one that started it. A process with no extension runtime (a detached
+// helper or a forked worker that imports Pi's packages) reaches Ompig's provider implementations through it; its lifetime is the starter's, so stdin end of file cancels every stream
 // and ends the process. Streams run concurrently; cancellation reaches the provider request, and the stream still delivers its terminal aborted event, as handleModelStream does.
 func runProviderBridge(in io.Reader, out io.Writer, transport ai.Transport) int {
 	var writeMu sync.Mutex
-	//portlint:allow jsonescape PiG-only `pig provider-bridge` JSONL with no Pi counterpart; the caller's JSON.parse reads \u003c and \u0026 as the same text
+	//portlint:allow jsonescape Ompig-only `ompig provider-bridge` JSONL with no Pi counterpart; the caller's JSON.parse reads \u003c and \u0026 as the same text
 	encoder := json.NewEncoder(out)
 	send := func(reply providerBridgeReply) bool {
 		writeMu.Lock()
@@ -99,7 +99,7 @@ func runProviderBridge(in io.Reader, out io.Writer, transport ai.Transport) int 
 		if len(line) == 0 {
 			return true
 		}
-		// The request line has one strict shape: an unknown field is an error, as for every Pig-owned subprocess format.
+		// The request line has one strict shape: an unknown field is an error, as for every Ompig-owned subprocess format.
 		var request providerBridgeRequest
 		decoder := json.NewDecoder(bytes.NewReader(line))
 		decoder.DisallowUnknownFields()

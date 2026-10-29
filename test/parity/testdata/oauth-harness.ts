@@ -41,11 +41,11 @@ const loadHeaders = () => import(pathToFileURL(join(piAIRoot, "dist/utils/header
 const loadEnvApiKeys = () => import(pathToFileURL(join(piAIRoot, "dist/env-api-keys.js")).href);
 const loadBuiltinProviders = () => import(pathToFileURL(join(piAIRoot, "dist/providers/all.js")).href);
 
-// PiG's probe prints its OAuth registry ids under these short aliases.
+// Ompig's probe prints its OAuth registry ids under these short aliases.
 const OAUTH_PROBE_ALIASES: Record<string, string> = { "github-copilot": "copilot", "openai-codex": "codex" };
 
 // Derive every built-in OAuth flow from the pinned package, including the
-// default Radius gateway. PiG uses short aliases for Copilot and Codex.
+// default Radius gateway. Ompig uses short aliases for Copilot and Codex.
 const builtinOAuthProviderIds = async (): Promise<string> => {
   const { builtinProviders } = await loadBuiltinProviders();
   return builtinProviders()

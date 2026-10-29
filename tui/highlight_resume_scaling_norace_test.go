@@ -1,4 +1,4 @@
-//go:build !race && !pig_strip_syntax_highlight
+//go:build !race && !ompig_strip_syntax_highlight
 
 package tui
 
@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 func TestScalingStreamedCodeBlockHighlight(t *testing.T) {
 	// A streamed code block is highlighted again on every frame. highlight.js scans the whole block (Pi's highlightCode), so a
-	// stream is quadratic in the block. PiG resumes a language whose patterns cannot read across lines from the last recorded
+	// stream is quadratic in the block. Ompig resumes a language whose patterns cannot read across lines from the last recorded
 	// state (highlightResumable), so the scan of a frame is the new text; each frame still returns a slice of one header per
 	// line. Every run streams a block with a first line of its own, so neither the highlight memo nor a resume state of an
 	// earlier run serves it.

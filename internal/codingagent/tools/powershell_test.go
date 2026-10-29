@@ -17,8 +17,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports upstream test/powershell-tool.test.ts "uses process-local execution
@@ -218,7 +218,7 @@ func TestShellToolMissingWorkingDirectory(t *testing.T) {
 	}
 }
 
-// Full output of an overflowing PowerShell run lands in a pig-powershell temp
+// Full output of an overflowing PowerShell run lands in a ompig-powershell temp
 // file (upstream tempFilePrefix "pi-powershell").
 func TestShellToolTempFilePrefix(t *testing.T) {
 	cfg := posixShellConfig(t, "powershell", "PowerShell")
@@ -234,7 +234,7 @@ func TestShellToolTempFilePrefix(t *testing.T) {
 }
 
 // Mirrors upstream allToolNames / createAllTools: powershell sits between bash
-// and edit in the registry, which CreateCodingTools (PiG's default set) omits.
+// and edit in the registry, which CreateCodingTools (Ompig's default set) omits.
 func TestCreateAllToolsMirrorsUpstreamRegistry(t *testing.T) {
 	want := []string{"read", "bash", "powershell", "edit", "write", "grep", "find", "ls"}
 	if got := BuiltinToolNames(); !slices.Equal(got, want) {

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestReleaseCandidatePublishesADraftGitHubRelease checks the shape of the
@@ -39,7 +39,7 @@ func TestReleaseCandidatePublishesADraftGitHubRelease(t *testing.T) {
 		}
 	}
 
-	// The tag pattern matches RELEASING.md's "PiG uses semantic versions and
+	// The tag pattern matches RELEASING.md's "Ompig uses semantic versions and
 	// annotated tags in the form vMAJOR.MINOR.PATCH."
 	if !regexp.MustCompile(`gh release create "v\$\{VERSION}"`).MatchString(workflow) {
 		t.Error("release-candidate.yml does not tag the release v<version>")
@@ -74,11 +74,11 @@ func TestCombineChecksumsMatchesInstallShFormat(t *testing.T) {
 	dir := t.TempDir()
 
 	archives := map[string]string{
-		"pig-0.2.0-linux-amd64.tar.gz":  "linux amd64 fixture bytes",
-		"pig-0.2.0-linux-arm64.tar.gz":  "linux arm64 fixture bytes",
-		"pig-0.2.0-darwin-amd64.tar.gz": "darwin amd64 fixture bytes",
-		"pig-0.2.0-darwin-arm64.tar.gz": "darwin arm64 fixture bytes",
-		"pig-0.2.0-windows-amd64.zip":   "windows amd64 fixture bytes",
+		"ompig-0.2.0-linux-amd64.tar.gz":  "linux amd64 fixture bytes",
+		"ompig-0.2.0-linux-arm64.tar.gz":  "linux arm64 fixture bytes",
+		"ompig-0.2.0-darwin-amd64.tar.gz": "darwin amd64 fixture bytes",
+		"ompig-0.2.0-darwin-arm64.tar.gz": "darwin arm64 fixture bytes",
+		"ompig-0.2.0-windows-amd64.zip":   "windows amd64 fixture bytes",
 	}
 	for name, content := range archives {
 		if err := os.WriteFile(filepath.Join(dir, name), []byte(content), 0o600); err != nil {
@@ -137,7 +137,7 @@ func TestCombineChecksumsMatchesInstallShFormat(t *testing.T) {
 	END {
 		if (count == 1 && digest ~ /^[0-9a-f]+$/ && length(digest) == 64) print digest
 	}`
-	target := "pig-0.2.0-linux-amd64.tar.gz"
+	target := "ompig-0.2.0-linux-amd64.tar.gz"
 	// Through sh, as install.sh runs it; Git for Windows keeps awk off PATH.
 	out, err := exec.Command(testenv.Sh(t), "-c", `awk -v name="$1" "$2" "$3"`, "sh", target, awk, filepath.Join(dir, "SHA256SUMS")).CombinedOutput()
 	if err != nil {

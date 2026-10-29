@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# automation/dev/login-copilot.sh: interactive helper for setting up a pig
+# automation/dev/login-copilot.sh: interactive helper for setting up a ompig
 # auth.json so live tests have a credential to use.
 #
 # Live integration tests look for an OAuth credential at
-# $PIG_HOME/agent/auth.json (or ~/.pig/agent/auth.json). This script
+# $OMPIG_HOME/agent/auth.json (or ~/.ompig/agent/auth.json). This script
 # runs the github-copilot device-code flow if no credential is
 # present, or prints the existing credential's expiry if one exists.
 #
@@ -18,8 +18,8 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-PIG_HOME="${PIG_HOME:-$HOME/.pig}"
-AUTH_FILE="$PIG_HOME/agent/auth.json"
+OMPIG_HOME="${OMPIG_HOME:-$HOME/.ompig}"
+AUTH_FILE="$OMPIG_HOME/agent/auth.json"
 
 show_status() {
   if [[ ! -f "$AUTH_FILE" ]]; then
@@ -81,11 +81,11 @@ if [[ -f "$AUTH_FILE" && $force -eq 0 ]]; then
   exit 0
 fi
 
-# Build pig if needed.
-BIN="$REPO_ROOT/bin/pig"
+# Build ompig if needed.
+BIN="$REPO_ROOT/bin/ompig"
 mkdir -p "$REPO_ROOT/bin"
-echo "Building pig…"
-(cd "$REPO_ROOT" && go build -o "$BIN" ./cmd/pig)
+echo "Building ompig…"
+(cd "$REPO_ROOT" && go build -o "$BIN" ./cmd/ompig)
 
 echo
 echo "Running github-copilot device-code flow."

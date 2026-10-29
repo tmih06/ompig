@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: MIT
 #
-# PiG's command interface. Developers, CI, and coding agents run make targets
+# Ompig's command interface. Developers, CI, and coding agents run make targets
 # instead of ad hoc shell commands. `make help` lists the targets by group.
 #
 # Every script behind these targets lives in automation/ (see its README):
 # dev/ for setup and local tools, ci/ for gates and test runners, gen/ for
 # generators and the upstream mirror, release/ for release checks, porter/ for
-# Pig Porter, images/ for CI images, and make/ for the parity targets included
+# Ompig Porter, images/ for CI images, and make/ for the parity targets included
 # at the end of this file.
 #
 # Reward function: `make coverage` should print three numbers going up
@@ -16,20 +16,20 @@
 .DEFAULT_GOAL := help
 # Caches follow XDG_CACHE_HOME; temporary files follow TMPDIR. Sandboxes,
 # devcontainers, and hosted runners often forbid writes elsewhere.
-PIG_CACHE_HOME ?= $(or $(XDG_CACHE_HOME),$(HOME)/.cache)
+OMPIG_CACHE_HOME ?= $(or $(XDG_CACHE_HOME),$(HOME)/.cache)
 # golangci-lint caches absolute package paths. Isolate each checkout so parallel worktrees retain warm results without serving findings from another tree.
-GOLANGCI_LINT_CACHE ?= $(PIG_CACHE_HOME)/golangci-lint/$(notdir $(CURDIR))
+GOLANGCI_LINT_CACHE ?= $(OMPIG_CACHE_HOME)/golangci-lint/$(notdir $(CURDIR))
 export GOLANGCI_LINT_CACHE
-PIG_TMP ?= $(patsubst %/,%,$(or $(TMPDIR),/tmp))
+OMPIG_TMP ?= $(patsubst %/,%,$(or $(TMPDIR),/tmp))
 # macOS mktemp ignores TMPDIR without a template, so recipes always pass one.
-MKTEMP = mktemp "$(PIG_TMP)/pig.XXXXXXXX"
-MKTEMP_DIR = mktemp -d "$(PIG_TMP)/pig.XXXXXXXX"
-PIG_DEV_HOME ?= $(PIG_CACHE_HOME)/pig-dev
+MKTEMP = mktemp "$(OMPIG_TMP)/ompig.XXXXXXXX"
+MKTEMP_DIR = mktemp -d "$(OMPIG_TMP)/ompig.XXXXXXXX"
+OMPIG_DEV_HOME ?= $(OMPIG_CACHE_HOME)/ompig-dev
 # CI restores the Go build cache, test results included, from earlier commits; the cache key misses inputs child processes read, so CI reruns every test. Elsewhere unchanged packages replay their cached results.
 GO_TEST_CI_COUNT := $(if $(CI),-count=1)
 # Machine-local toolchain and module-proxy settings written by `make setup`.
 # Absent on machines that need neither.
--include $(PIG_DEV_HOME)/env.mk
+-include $(OMPIG_DEV_HOME)/env.mk
 # Development gates select the local SDK through go.work, regardless of env.mk. Standalone-module and publication recipes set GOWORK=off on their own commands.
 ifeq ($(GOWORK),off)
 unexport GOWORK
@@ -39,18 +39,18 @@ ifneq ($(filter -mod=mod,$(GOFLAGS)),)
 export GOFLAGS := $(strip $(filter-out -mod=mod,$(GOFLAGS)))
 endif
 
-PIG_BIN ?= $(HOME)/.local/bin/pig
-# Gate-only pig binary. It is built through go.work to exercise the developing SDK, then runs with GOWORK=off so the extensions it validates build as standalone modules. module-publication separately verifies the published dependency pins.
-CHECK_PIG_BIN := $(CURDIR)/tmp/check-bin/pig
+OMPIG_BIN ?= $(HOME)/.local/bin/ompig
+# Gate-only ompig binary. It is built through go.work to exercise the developing SDK, then runs with GOWORK=off so the extensions it validates build as standalone modules. module-publication separately verifies the published dependency pins.
+CHECK_OMPIG_BIN := $(CURDIR)/tmp/check-bin/ompig
 
 # Default parity to a freshly built in-tree binary. If callers explicitly set
-# PIG_BIN in the environment/command line, honor it for compatibility with the
+# OMPIG_BIN in the environment/command line, honor it for compatibility with the
 # older parity workflow.
-PARITY_PIG_BIN ?= $(if $(filter command line environment,$(origin PIG_BIN)),$(PIG_BIN),$(CURDIR)/bin/pig-parity)
+PARITY_OMPIG_BIN ?= $(if $(filter command line environment,$(origin OMPIG_BIN)),$(OMPIG_BIN),$(CURDIR)/bin/ompig-parity)
 
-RESULTS  ?= $(PIG_TMP)/parity-results.json
+RESULTS  ?= $(OMPIG_TMP)/parity-results.json
 
-EXTENSION_CORPUS_RESULTS ?= $(PIG_TMP)/pig-typescript-extension-corpus.json
+EXTENSION_CORPUS_RESULTS ?= $(OMPIG_TMP)/ompig-typescript-extension-corpus.json
 
 PARITY_TIMEOUT ?= 20m
 
@@ -87,29 +87,29 @@ UPSTREAM_OVERRIDE := $(call pin_word,override)
 ifneq ($(call pin_word,goflags),)
 export GOFLAGS := $(strip $(GOFLAGS) $(call pin_word,goflags))
 endif
-PIG_UPSTREAM_REF := $(UPSTREAM_REF)
-PIG_UPSTREAM_COMMIT := $(UPSTREAM_COMMIT)
-PIG_UPSTREAM_VERSION := $(UPSTREAM_VERSION)
-PIG_UPSTREAM_PACKAGE_VERSION := $(UPSTREAM_PACKAGE_VERSION)
-PIG_UPSTREAM_KIND := $(UPSTREAM_KIND)
-PIG_UPSTREAM_MIRROR_DIR := $(call pin_word,mirror_dir)
-PIG_UPSTREAM_OVERRIDE := $(UPSTREAM_OVERRIDE)
-export PIG_UPSTREAM_REF PIG_UPSTREAM_COMMIT PIG_UPSTREAM_VERSION PIG_UPSTREAM_PACKAGE_VERSION PIG_UPSTREAM_KIND PIG_UPSTREAM_MIRROR_DIR PIG_UPSTREAM_OVERRIDE
+OMPIG_UPSTREAM_REF := $(UPSTREAM_REF)
+OMPIG_UPSTREAM_COMMIT := $(UPSTREAM_COMMIT)
+OMPIG_UPSTREAM_VERSION := $(UPSTREAM_VERSION)
+OMPIG_UPSTREAM_PACKAGE_VERSION := $(UPSTREAM_PACKAGE_VERSION)
+OMPIG_UPSTREAM_KIND := $(UPSTREAM_KIND)
+OMPIG_UPSTREAM_MIRROR_DIR := $(call pin_word,mirror_dir)
+OMPIG_UPSTREAM_OVERRIDE := $(UPSTREAM_OVERRIDE)
+export OMPIG_UPSTREAM_REF OMPIG_UPSTREAM_COMMIT OMPIG_UPSTREAM_VERSION OMPIG_UPSTREAM_PACKAGE_VERSION OMPIG_UPSTREAM_KIND OMPIG_UPSTREAM_MIRROR_DIR OMPIG_UPSTREAM_OVERRIDE
 export PI_UPSTREAM_REF
 
 UPSTREAM_REVIEWED_VERSION := $(shell awk -F'"' '/^const UpstreamReviewedVersion = "/ { print $$2; exit }' coding/upstream.go)
 
 PI_PACKAGE_ROOT := $(CURDIR)/extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent
 
-PIG_PARITY_PI_BIN := $(CURDIR)/extensions/sdk-ts/node_modules/.bin/pi
+OMPIG_PARITY_PI_BIN := $(CURDIR)/extensions/sdk-ts/node_modules/.bin/pi
 
 CARGO_TARGET_DIR ?= $(CURDIR)/tmp/test-fixtures/rust-target
 
-export PI_PACKAGE_ROOT PIG_PARITY_PI_BIN CARGO_TARGET_DIR
+export PI_PACKAGE_ROOT OMPIG_PARITY_PI_BIN CARGO_TARGET_DIR
 
 SETUP_ARGS ?=
 COMPLIANCE_ARGS ?=
-HARNESSES ?= pig,pi
+HARNESSES ?= ompig,pi
 RUNS ?= 10
 MODEL ?=
 EVAL_RESULTS ?= tmp/evals/overhead.json
@@ -123,12 +123,12 @@ BENCH_PKGS ?= ./agent/... ./ai/... ./tui/... ./internal/codingagent/...
 BENCH_COUNT ?= 6
 SLOP_MAX_VERBOSITY = $(shell sed -n 's/^max_verbosity *= *//p' test/evals/budgets.toml)
 SLOP_MAX_EROSION = $(shell sed -n 's/^max_erosion *= *//p' test/evals/budgets.toml)
-PIGEVAL := PYTHONPATH=$(CURDIR)/test/evals python3 -m pigeval
+OMPIGEVAL := PYTHONPATH=$(CURDIR)/test/evals python3 -m pigeval
 HELP_AWK := BEGIN {FS = ":.*\#\# "} /^\#\#@ / {printf "\n%s\n", substr($$0, 5); next} /^[a-zA-Z0-9_%-]+:.*\#\# / {printf "  %-24s %s\n", $$1, $$2}
 
 ##@ Start here
 
-setup: ## Install pinned Go, a module-proxy fallback when needed, and bin/pig (SETUP_ARGS=--all adds Node and eval harnesses)
+setup: ## Install pinned Go, a module-proxy fallback when needed, and bin/ompig (SETUP_ARGS=--all adds Node and eval harnesses)
 	@./automation/dev/setup.sh $(SETUP_ARGS)
 
 doctor: ## Report every development prerequisite without changing anything
@@ -146,20 +146,20 @@ help-parity: ## List the parity and porting targets (automation/make/parity.mk)
 
 .PHONY: set-version module-publication module-size
 set-version: ## Update the release identity; preserve dependencies unless SET_VERSION_ARGS=--release-modules
-	@./automation/ci/with-isolated-pig-home.sh go run ./automation/release/set-version -version "$(VERSION)" $(SET_VERSION_ARGS)
+	@./automation/ci/with-isolated-ompig-home.sh go run ./automation/release/set-version -version "$(VERSION)" $(SET_VERSION_ARGS)
 
 module-publication: ## Verify nested Go dependency tags and checksums against their public source
-	@./automation/ci/with-isolated-pig-home.sh python3 -B -m unittest automation/ci/test_module_publication.py
+	@./automation/ci/with-isolated-ompig-home.sh python3 -B -m unittest automation/ci/test_module_publication.py
 	@python3 automation/ci/check-module-publication.py
 
-module-size: ## Fail when the root module zip exceeds the committed byte budget; prove go install of cmd/pig from that zip through a file:// GOPROXY
-	@./automation/ci/with-isolated-pig-home.sh go run ./automation/release/modulesize -install
+module-size: ## Fail when the root module zip exceeds the committed byte budget; prove go install of cmd/ompig from that zip through a file:// GOPROXY
+	@./automation/ci/with-isolated-ompig-home.sh go run ./automation/release/modulesize -install
 
 ##@ Build
 
-pig: node-runtime ## Build bin/pig from this checkout, with symbols for profiling
+ompig: node-runtime ## Build bin/ompig from this checkout, with symbols for profiling
 	@mkdir -p bin
-	CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags "-X github.com/MichaelKinsy/PiG/coding/cli.Build=$$(git rev-parse --short HEAD 2>/dev/null || echo dev)" -o bin/pig ./cmd/pig
+	CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags "-X github.com/tmih06/ompig/coding/cli.Build=$$(git rev-parse --short HEAD 2>/dev/null || echo dev)" -o bin/ompig ./cmd/ompig
 
 clean: ## Remove bin/ and tmp/ (builds, eval results, profiles, benchmarks)
 	rm -rf bin tmp
@@ -170,13 +170,13 @@ node-runtime: ## Regenerate the embedded Node runtime archive and content digest
 build: node-runtime ## Compile every package (go build ./...)
 	go build -buildvcs=false ./...
 
-# install: build pig binary → ~/.local/bin/pig (or PIG_BIN override)
+# install: build ompig binary → ~/.local/bin/ompig (or OMPIG_BIN override)
 # with embedded git sha + macOS ad-hoc codesign.
-install: node-runtime ## Install a stripped pig to PIG_BIN (default ~/.local/bin/pig)
-	@mkdir -p $(dir $(PIG_BIN))
-	CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/MichaelKinsy/PiG/coding/cli.Build=$$(git rev-parse --short HEAD 2>/dev/null || echo dev)" -o $(PIG_BIN) ./cmd/pig
-	@[ "$$(uname -s)" = "Darwin" ] && command -v codesign >/dev/null 2>&1 && codesign --force --sign - $(PIG_BIN) >/dev/null 2>&1 || true
-	@echo "installed: $$($(PIG_BIN) --version) → $(PIG_BIN)"
+install: node-runtime ## Install a stripped ompig to OMPIG_BIN (default ~/.local/bin/ompig)
+	@mkdir -p $(dir $(OMPIG_BIN))
+	CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/tmih06/ompig/coding/cli.Build=$$(git rev-parse --short HEAD 2>/dev/null || echo dev)" -o $(OMPIG_BIN) ./cmd/ompig
+	@[ "$$(uname -s)" = "Darwin" ] && command -v codesign >/dev/null 2>&1 && codesign --force --sign - $(OMPIG_BIN) >/dev/null 2>&1 || true
+	@echo "installed: $$($(OMPIG_BIN) --version) → $(OMPIG_BIN)"
 
 # build-env-daemons: one static pi-env daemon per remote system the SSH bootstrap supports, laid out as the bootstrap
 # looks for them: $(ENV_DAEMON_DIR)/pi-env-<platform>-<arch>/pi-env[.exe]. Go links GOOS=android only with cgo, except on
@@ -187,7 +187,7 @@ build-env-daemons: ## Cross-build the pi-env daemon for every remote system SshC
 	@set -eu; for target in $(ENV_DAEMON_TARGETS); do \
 		goos=$${target%%/*}; rest=$${target#*/}; goarch=$${rest%%/*}; name=$${rest#*/}; \
 		exe=pi-env; [ "$$goos" = windows ] && exe=pi-env.exe; \
-		target_os=""; case "$$name" in android-*) target_os="-X github.com/MichaelKinsy/PiG/env/daemon.targetOS=android";; esac; \
+		target_os=""; case "$$name" in android-*) target_os="-X github.com/tmih06/ompig/env/daemon.targetOS=android";; esac; \
 		mkdir -p "$(ENV_DAEMON_DIR)/pi-env-$$name"; \
 		echo "pi-env-$$name"; \
 		CGO_ENABLED=0 GOOS=$$goos GOARCH=$$goarch go build -buildvcs=false -trimpath -ldflags "-s -w $$target_os" -o "$(ENV_DAEMON_DIR)/pi-env-$$name/$$exe" ./env/cmd/pi-env; \
@@ -201,7 +201,7 @@ generate help-text: export FORCE_COLOR := 0
 
 generate: ## Regenerate committed inventories, coverage, catalogs, help, and docs mirrors
 	@$(MAKE) divergences
-	@$(MAKE) piglet-strip-ids
+	@$(MAKE) ompiglet-strip-ids
 	@$(MAKE) model-catalogs
 	@$(MAKE) node-runtime
 	@$(MAKE) highlight-grammars
@@ -215,7 +215,7 @@ generate: ## Regenerate committed inventories, coverage, catalogs, help, and doc
 	@$(MAKE) coverage RESULTS=
 	@echo "Generated files refreshed. Review and commit the diff; CI compares these files."
 
-help-text: parity-deps ## Regenerate the pinned upstream CLI help with PiG's identity
+help-text: parity-deps ## Regenerate the pinned upstream CLI help with Ompig's identity
 	@./automation/gen/gen-help.sh
 
 highlight-grammars: parity-deps ## Snapshot Pi's highlight.js grammars into tui/internal/hljs and re-record Pi's highlighting oracle
@@ -244,16 +244,16 @@ changelog-fold: ## Fold the changelog.d fragments into the VERSION section of CH
 	@test -n "$(VERSION)" || { echo "usage: make changelog-fold VERSION=x.y.z" >&2; exit 2; }
 	@go run ./automation/ci/changelogfrag -fold=$(VERSION)
 
-piglet-strip-ids: ## Regenerate the Piglet strip ID table and the strip ID enums of the Piglet JSON Schema from the tool, command, extension and feature registrations
-	@go run ./coding/piglet/internal/genstripids
+ompiglet-strip-ids: ## Regenerate the Ompiglet strip ID table and the strip ID enums of the Ompiglet JSON Schema from the tool, command, extension and feature registrations
+	@go run ./coding/ompiglet/internal/genstripids
 
-piglet-strip-ids-drift: ## Fail when the Piglet strip ID table or the schema strip ID enums differ from the registrations
-	@go run ./coding/piglet/internal/genstripids -check
+ompiglet-strip-ids-drift: ## Fail when the Ompiglet strip ID table or the schema strip ID enums differ from the registrations
+	@go run ./coding/ompiglet/internal/genstripids -check
 
-piglet-strip-build: ## Vet every package and build cmd/pig with every Piglet strip build tag (D92)
-	@tags=$$(go run ./coding/piglet/internal/genstripids -print-tags) && go vet -tags "$$tags" ./... && CGO_ENABLED=0 go build -tags "$$tags" -o /dev/null ./cmd/pig
+ompiglet-strip-build: ## Vet every package and build cmd/ompig with every Ompiglet strip build tag (D92)
+	@tags=$$(go run ./coding/ompiglet/internal/genstripids -print-tags) && go vet -tags "$$tags" ./... && CGO_ENABLED=0 go build -tags "$$tags" -o /dev/null ./cmd/ompig
 
-.PHONY: generate divergences divergences-drift help-text highlight-grammars zone-names windows-zones piglet-strip-ids piglet-strip-ids-drift piglet-strip-build changelog-unreleased changelog-check changelog-fold
+.PHONY: generate divergences divergences-drift help-text highlight-grammars zone-names windows-zones ompiglet-strip-ids ompiglet-strip-ids-drift ompiglet-strip-build changelog-unreleased changelog-check changelog-fold
 
 ##@ Test and lint
 
@@ -301,9 +301,9 @@ test-changed: test-prereqs interface-deps parity-deps durable-interop-deps ## Te
 
 .PHONY: test-changed
 
-# Long real-PTY sessions run on PiG and Pi; see docs/testing/journeys.md.
+# Long real-PTY sessions run on Ompig and Pi; see docs/testing/journeys.md.
 JOURNEY_BASE ?= @{upstream}
-journeys: parity-deps ## Run every PTY journey against PiG and Pi (CI); timings in tmp/journeys/timing.json
+journeys: parity-deps ## Run every PTY journey against Ompig and Pi (CI); timings in tmp/journeys/timing.json
 	go test -timeout 30m -tags parity ./test/journeys -run TestJourneys -count=1
 
 journeys-changed: parity-deps ## Run only the PTY journeys whose Touches prefixes contain a file changed since JOURNEY_BASE (default @{upstream}); lane gate
@@ -323,15 +323,15 @@ test-go-modules: test-sdk-go ## Test every maintained nested Go module with GOWO
 		coding/cli/testdata/login-preview \
 		coding/extension/host/subprocess/testdata/sdk-fixture \
 		examples/extensions/go-factory \
-		piglets/aot \
-		piglets/porter/extensions/pig-porter \
-		piglets/standard; do \
+		ompiglets/aot \
+		ompiglets/porter/extensions/ompig-porter \
+		ompiglets/standard; do \
 		echo "testing Go module: $$module"; \
 		(cd "$$module" && GOWORK=off go test $(GO_TEST_CI_COUNT) ./...); \
 	done
 
-test-aot-conformance: ## Run the extension conformance suite on the compiled aot host (needs PIG_AOT_TEST_COMPILER, the Pi-Bolt 0.7.4 runtime executable)
-	@piglets/aot/conformance.sh
+test-aot-conformance: ## Run the extension conformance suite on the compiled aot host (needs OMPIG_AOT_TEST_COMPILER, the Pi-Bolt 0.7.4 runtime executable)
+	@ompiglets/aot/conformance.sh
 
 # The Rust SDK's own unit tests. `test` builds the Rust conformance fixtures,
 # which compiles the SDK library but not its test targets, so a test-only break
@@ -343,7 +343,7 @@ test-sdk-rs: ## Run the Rust extension SDK's unit tests
 # The Python SDK's pytest suite, in a cached venv holding the hash-locked dev dependencies. Regenerate the lock after
 # changing the dev group in extensions/sdk-py/pyproject.toml with the command at the top of requirements-dev.txt.
 test-sdk-py: ## Run the Python extension SDK's pytest suite with its hash-locked dev dependencies
-	@PIG_CACHE_HOME="$(PIG_CACHE_HOME)" ./automation/ci/test-sdk-py.sh
+	@OMPIG_CACHE_HOME="$(OMPIG_CACHE_HOME)" ./automation/ci/test-sdk-py.sh
 
 .PHONY: test-sdk-py
 
@@ -352,7 +352,7 @@ test-sdk-conformance: ## Run the SDK conformance scenario table against every ex
 	@go test ./test/extension-conformance -run '^TestSDKScenarios$$' $(GO_TEST_CI_COUNT)
 	@go test ./test/wiring -run 'TestScenarioCoversNameRealWireMethods|TestEveryAuthObjectMethodIsExercisedByAScenario' $(GO_TEST_CI_COUNT)
 
-test-mcp-conformance: ## Run the official MCP client conformance suite against PiG's MCP client (needs network the first time; see test/mcp-conformance/README.md)
+test-mcp-conformance: ## Run the official MCP client conformance suite against Ompig's MCP client (needs network the first time; see test/mcp-conformance/README.md)
 	@go run ./test/mcp-conformance/run $(MCP_CONFORMANCE_ARGS)
 
 test-sdk-ts: parity-deps ## Check the pinned TypeScript extension declarations and runtime helpers
@@ -373,7 +373,7 @@ examples-check: test-prereqs parity-bin ## Build and validate every example exte
 			examples/extensions/node-factory; do \
 			name=$$(basename "$$extension"); \
 			echo "validating example extension: $$extension"; \
-			./automation/ci/with-isolated-pig-home.sh "$(PARITY_PIG_BIN)" install --validate-only --json "$$extension" >"$$tmp/$$name.json"; \
+			./automation/ci/with-isolated-ompig-home.sh "$(PARITY_OMPIG_BIN)" install --validate-only --json "$$extension" >"$$tmp/$$name.json"; \
 			python3 -c 'import json,sys; data=json.load(open(sys.argv[1])); assert data["valid"], data; assert not data.get("diagnostics"), data.get("diagnostics")' "$$tmp/$$name.json"; \
 		done
 
@@ -383,7 +383,7 @@ test-prereqs: ## Require every toolchain the core suite exercises
 		command -v "$$tool" >/dev/null 2>&1 || missing="$$missing $$tool"; \
 	done; \
 	if [ -n "$$missing" ]; then \
-		echo "missing required Pig test toolchains:$$missing" >&2; \
+		echo "missing required Ompig test toolchains:$$missing" >&2; \
 		exit 1; \
 	fi
 	@echo "test prerequisites: go, git, node, npm, python3, cargo, rustc, tmux"
@@ -404,17 +404,17 @@ test-fma-arm64: ## Run the float-sensitive Pi oracle tests as linux/arm64 under 
 test-stress: ## Stress the grouped Go test scheduler under higher contention
 	@./automation/ci/test-grouped.sh stress
 
-# Deterministic tmux-driven integration tier: real pig in a real pty, faux
+# Deterministic tmux-driven integration tier: real ompig in a real pty, faux
 # provider, no network. Carries the signal guards, which cover shutdown paths
 # no unit test reaches (extension cleanup on SIGTERM, SIGINT aborting the
 # operation rather than the session). Tests needing external extension sources
 # skip themselves.
-test-integration: ## Deterministic tmux tier: real pig, faux provider, no network
+test-integration: ## Deterministic tmux tier: real ompig, faux provider, no network
 	@./automation/ci/integration-tests.sh fast
 
 # The message pipeline against the pinned Pi with a large budget (cases per target and mode, PIPELINE_CASES). make test already runs it with the cheap-gate budget.
 test-pipeline-fuzz: parity-deps ## Differential fuzz of the message pipeline against Pi with 1000 seeded cases per target and mode
-	@PIG_PIPELINE_CASES=$${PIPELINE_CASES:-1000} go test ./test/pipeline-diff -timeout 30m
+	@OMPIG_PIPELINE_CASES=$${PIPELINE_CASES:-1000} go test ./test/pipeline-diff -timeout 30m
 
 .PHONY: test-pipeline-fuzz
 
@@ -424,11 +424,11 @@ test-pipeline-fuzz: parity-deps ## Differential fuzz of the message pipeline aga
 test-race: ## Race and goroutine-leak gate for the TUI concurrency model
 	@./automation/ci/test-race.sh
 
-# The nightly workflow runs these outside make check: whole-package -race on the concurrency owners, and every Fuzz target for PIG_FUZZ_TIME.
+# The nightly workflow runs these outside make check: whole-package -race on the concurrency owners, and every Fuzz target for OMPIG_FUZZ_TIME.
 test-race-nightly: ## Whole-package -race and goroutine-leak gate (nightly)
 	@./automation/ci/test-race-nightly.sh
 
-fuzz-nightly: ## Run every Fuzz target for PIG_FUZZ_TIME, default 30s (nightly)
+fuzz-nightly: ## Run every Fuzz target for OMPIG_FUZZ_TIME, default 30s (nightly)
 	@./automation/ci/fuzz-nightly.sh
 
 .PHONY: test-race-nightly fuzz-nightly
@@ -464,7 +464,7 @@ compliance: ## Check badge and OpenSSF evidence: files, pins, workflow hardening
 	@./automation/ci/check-compliance.py $(COMPLIANCE_ARGS)
 
 # divergence-consistency enforces AGENTS.md rule #4. Every divergence
-# numbered in docs/parity/DIVERGENCES.md must have a matching `// pig divergence (DN):`
+# numbered in docs/parity/DIVERGENCES.md must have a matching `// ompig divergence (DN):`
 # call-site comment in a .go file, and vice versa. Catches silent drift.
 divergence-consistency: ## Match every docs/parity/DIVERGENCES.md entry to its call-site marker
 	@./automation/ci/check-divergence-consistency.sh
@@ -526,9 +526,9 @@ bug-ledger-refresh: ## Recompute every bug ledger entry from the history, as a r
 bug-ledger-check: ## Fail when a fix has no ledger entry, an entry names a missing test, or the committed ledger is stale
 	@go run ./automation/ci/bugledger -check
 
-# release-notes-draft prints draft release notes for NOTES_VERSION (default: the current PiG release) from CHANGELOG.md, changelog.d, the bug fix ledger and the divergence records. It writes docs/release/<version>-release-notes-draft.md only when that file is absent, so it never overwrites an owner's edits; remove the file to regenerate it.
-NOTES_VERSION ?= $(shell sed -n 's/^const PigVersion = "\(.*\)"/\1/p' internal/coding/pigversion/pigversion.go)
-release-notes-draft: ## Write the draft release notes for the current PiG release from the changelog, bug ledger and divergence records (never overwrites an existing draft)
+# release-notes-draft prints draft release notes for NOTES_VERSION (default: the current Ompig release) from CHANGELOG.md, changelog.d, the bug fix ledger and the divergence records. It writes docs/release/<version>-release-notes-draft.md only when that file is absent, so it never overwrites an owner's edits; remove the file to regenerate it.
+NOTES_VERSION ?= $(shell sed -n 's/^const OmpigVersion = "\(.*\)"/\1/p' internal/coding/pigversion/pigversion.go)
+release-notes-draft: ## Write the draft release notes for the current Ompig release from the changelog, bug ledger and divergence records (never overwrites an existing draft)
 	@out=docs/release/$(NOTES_VERSION)-release-notes-draft.md; \
 	if [ -e "$$out" ]; then echo "$$out exists; remove it to regenerate the draft"; exit 1; fi; \
 	go run ./automation/ci/bugledger -notes $(NOTES_VERSION) > "$$out.tmp" && mv "$$out.tmp" "$$out" && echo "wrote $$out"
@@ -537,21 +537,21 @@ npm-dist-test: ## Unit-test the npm package generator and launcher
 	@python3 -m unittest automation/release/npm/test_pack_npm.py
 	@node --test automation/release/npm/launcher.test.js
 
-npm-dist-e2e: ## Cross-build, npm pack, install and run pig through the npm launcher
+npm-dist-e2e: ## Cross-build, npm pack, install and run ompig through the npm launcher
 	@automation/release/npm/e2e-local.sh
 
-standard-check: ## Verify PiG Standard requires and resolves only fused extensions
+standard-check: ## Verify Ompig Standard requires and resolves only fused extensions
 	@# -count=1: these tests build extensions in child go processes, whose source reads the go test cache cannot see.
-	@go test ./coding/cli -run '^TestPiGStandardRequiresAndResolvesOnlyFusedExtensions$$' -count=1
+	@go test ./coding/cli -run '^TestOmpigStandardRequiresAndResolvesOnlyFusedExtensions$$' -count=1
 	@go test ./coding/pigletbuild -run '^TestRunBuildRejectsRequiredFusedFallback$$' -count=1
 	@go test ./coding/extension/host/subprocess -run '^TestHost_MixedFusedPackedAndIsolatedExtensions$$' -count=1
-	@go build -buildvcs=false -o $(CHECK_PIG_BIN) ./cmd/pig
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" install --validate-only --json piglets/standard/extensions/piglogin >/dev/null
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" install --validate-only --json piglets/standard/extensions/pigrunner >/dev/null
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" install --validate-only --json piglets/standard/extensions/angrypigs >/dev/null
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" install --validate-only --json piglets/standard/extensions/bunruntime >/dev/null
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" piglet validate piglets/standard/pig-standard.yaml >/dev/null
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" piglet validate piglets/aot/pig-aot.yaml >/dev/null
+	@go build -buildvcs=false -o $(CHECK_OMPIG_BIN) ./cmd/ompig
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" install --validate-only --json ompiglets/standard/extensions/piglogin >/dev/null
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" install --validate-only --json ompiglets/standard/extensions/pigrunner >/dev/null
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" install --validate-only --json ompiglets/standard/extensions/angrypigs >/dev/null
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" install --validate-only --json ompiglets/standard/extensions/bunruntime >/dev/null
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" ompiglet validate ompiglets/standard/ompig-standard.yaml >/dev/null
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" ompiglet validate ompiglets/aot/ompig-aot.yaml >/dev/null
 
 ##@ Gates
 
@@ -572,8 +572,8 @@ verify: check-core check-contracts parity ## End-of-loop gate: check-core, contr
 	@echo "make verify: dashboard refreshed deterministically from"
 	@echo "docs/parity/PORT_MAP.md + test/parity/scenarios. Commit the diff if any."
 
-qc: parity-bin ## Build a fresh pig, then run the smoke and focused parity QC
-	@PIG_BIN="$(PARITY_PIG_BIN)" ./automation/ci/qc-smoke.sh
+qc: parity-bin ## Build a fresh ompig, then run the smoke and focused parity QC
+	@OMPIG_BIN="$(PARITY_OMPIG_BIN)" ./automation/ci/qc-smoke.sh
 
 # Release gate. Tighter than `check`: parity-live must pass, coverage
 # must not regress, no new entries in docs/parity/DIVERGENCES.md without justification.
@@ -583,38 +583,38 @@ release-check: parity-live parity-perf test-timing ## Release gate: live, perf a
 	@./automation/ci/check-coverage-delta.sh
 
 startup-proxies: ## Run deterministic startup allocation, cache, encoding, and artifact guards
-	@automation/ci/with-isolated-pig-home.sh python3 automation/perf/startup_proxies.py
-	@automation/ci/with-isolated-pig-home.sh python3 -m unittest discover -s automation/perf -p 'test_*.py'
+	@automation/ci/with-isolated-ompig-home.sh python3 automation/perf/startup_proxies.py
+	@automation/ci/with-isolated-ompig-home.sh python3 -m unittest discover -s automation/perf -p 'test_*.py'
 
 .PHONY: startup-proxies
 
 ##@ Evals and performance
 
-evals: pig ## Measure harness overhead against the mock model (HARNESSES=all for every installed harness)
-	@$(PIGEVAL) overhead --harnesses $(HARNESSES) --runs $(RUNS) --pig bin/pig --out $(EVAL_RESULTS)
-	@$(PIGEVAL) report $(EVAL_RESULTS) --out $(EVAL_RESULTS:.json=.md)
+evals: ompig ## Measure harness overhead against the mock model (HARNESSES=all for every installed harness)
+	@$(OMPIGEVAL) overhead --harnesses $(HARNESSES) --runs $(RUNS) --ompig bin/ompig --out $(EVAL_RESULTS)
+	@$(OMPIGEVAL) report $(EVAL_RESULTS) --out $(EVAL_RESULTS:.json=.md)
 
-evals-requests: pig ## Save every request body and diff the first two HARNESSES (default: pig against pi)
-	@$(PIGEVAL) requests --harnesses $(HARNESSES) --pig bin/pig --diff
+evals-requests: ompig ## Save every request body and diff the first two HARNESSES (default: ompig against pi)
+	@$(OMPIGEVAL) requests --harnesses $(HARNESSES) --ompig bin/ompig --diff
 
-evals-live: pig ## Run test/evals/tasks with a real model: make evals-live MODEL=provider/model
+evals-live: ompig ## Run test/evals/tasks with a real model: make evals-live MODEL=provider/model
 	@test -n "$(MODEL)" || { echo "evals-live: set MODEL, for example MODEL=anthropic/claude-sonnet-5" >&2; exit 2; }
-	@$(PIGEVAL) live --harnesses $(HARNESSES) --pig bin/pig --model "$(MODEL)" --runs $(LIVE_RUNS) $(if $(EVAL_TASKS_DIR),--tasks-dir $(EVAL_TASKS_DIR)) --out tmp/evals/live.json
-	@$(PIGEVAL) report tmp/evals/live.json --out tmp/evals/live.md
+	@$(OMPIGEVAL) live --harnesses $(HARNESSES) --ompig bin/ompig --model "$(MODEL)" --runs $(LIVE_RUNS) $(if $(EVAL_TASKS_DIR),--tasks-dir $(EVAL_TASKS_DIR)) --out tmp/evals/live.json
+	@$(OMPIGEVAL) report tmp/evals/live.json --out tmp/evals/live.md
 
 evals-mutate: ## Generate seeded bug-fix tasks from real Go files (MUTATIONS=30 SEED=1) into tmp/evals/mutation-tasks
-	@$(PIGEVAL) mutate --count $(MUTATIONS) --seed $(SEED) --out tmp/evals/mutation-tasks
+	@$(OMPIGEVAL) mutate --count $(MUTATIONS) --seed $(SEED) --out tmp/evals/mutation-tasks
 
 evals-publish: ## Copy a reviewed EVAL_RESULTS run to test/evals/results/latest.json and regenerate docs/site/docs/evals.md
 	@test -f "$(EVAL_RESULTS)" || { echo "evals-publish: $(EVAL_RESULTS) not found; run make evals first" >&2; exit 2; }
 	@cp "$(EVAL_RESULTS)" test/evals/results/latest.json
-	@$(PIGEVAL) report test/evals/results/latest.json --out docs/site/docs/evals.md
+	@$(OMPIGEVAL) report test/evals/results/latest.json --out docs/site/docs/evals.md
 
 evals-test: ## Unit-test pigeval, the eval harness
 	@PYTHONPATH=$(CURDIR)/test/evals python3 -m unittest discover -s test/evals/tests -q
 
 perf-check: ## Apply test/evals/budgets.toml (latency, memory, and request-size ceilings) to EVAL_RESULTS
-	@$(PIGEVAL) check $(EVAL_RESULTS)
+	@$(OMPIGEVAL) check $(EVAL_RESULTS)
 
 perf-scoreboard: ## Render docs/performance/scoreboard.md from automation/perf/scoreboard.toml, ratchet.toml and the last measurement
 	@python3 automation/perf/scoreboard.py render
@@ -623,7 +623,7 @@ perf-scoreboard-check: ## Fail when the scoreboard registry names a missing test
 	@python3 automation/perf/scoreboard.py render --check
 
 perf-scoreboard-measure: ## Run every count gate, record the counts in automation/perf/scoreboard-measured.json and render the scoreboard
-	@automation/ci/with-isolated-pig-home.sh python3 automation/perf/scoreboard.py measure
+	@automation/ci/with-isolated-ompig-home.sh python3 automation/perf/scoreboard.py measure
 
 PERF_RATCHET_BASE ?= @{upstream}
 perf-ratchet-check: ## Fail when a ceiling in automation/perf/ratchet.toml rose or vanished since PERF_RATCHET_BASE without a Perf-Ratchet-Raise/Retire trailer
@@ -631,11 +631,11 @@ perf-ratchet-check: ## Fail when a ceiling in automation/perf/ratchet.toml rose 
 
 .PHONY: perf-scoreboard perf-scoreboard-check perf-scoreboard-measure perf-ratchet-check
 
-profile: pig ## Profile one prompt round trip (PROFILE=cpu,heap,allocs,block,mutex,trace) into tmp/profile
-	@$(PIGEVAL) profile --pig bin/pig --kinds $(PROFILE) --out tmp/profile
+profile: ompig ## Profile one prompt round trip (PROFILE=cpu,heap,allocs,block,mutex,trace) into tmp/profile
+	@$(OMPIGEVAL) profile --ompig bin/ompig --kinds $(PROFILE) --out tmp/profile
 
-pgo: pig ## Merge CPU profiles from repeated round trips into tmp/pgo/default.pgo for a profile-guided build
-	@$(PIGEVAL) profile --pig bin/pig --kinds cpu --runs 20 --out tmp/pgo --merge tmp/pgo/default.pgo
+pgo: ompig ## Merge CPU profiles from repeated round trips into tmp/pgo/default.pgo for a profile-guided build
+	@$(OMPIGEVAL) profile --ompig bin/ompig --kinds cpu --runs 20 --out tmp/pgo --merge tmp/pgo/default.pgo
 
 slop: ## Measure erosion and clone verbosity (SlopCodeBench metrics) and list the heaviest functions
 	@go run ./automation/ci/slopmetrics -top 15
@@ -651,7 +651,7 @@ bench-base: ## Keep the last benchmark run as the base for bench-compare
 	@cp tmp/bench/current.txt tmp/bench/base.txt
 
 bench-compare: ## Compare the last benchmark run with the base by median; fails above a 5% regression
-	@$(PIGEVAL) benchcmp tmp/bench/base.txt tmp/bench/current.txt --fail
+	@$(OMPIGEVAL) benchcmp tmp/bench/base.txt tmp/bench/current.txt --fail
 
 ##@ Benchmarks (bench/evals: pinned arms, no live key outside task-completion benches)
 
@@ -690,7 +690,7 @@ bench-aggregate: ## One report from several machines' raw.json files: make bench
 	@test -n "$(DIRS)" || { echo "bench-aggregate: set DIRS" >&2; exit 2; }
 	@$(BENCH_PY) aggregate $(abspath $(DIRS)) --out $(BENCH_OUT)/aggregate $(BENCH_AGGREGATE_ARGS)
 
-bench-soak: ## Steady scripted turns for BENCH_SOAK_HOURS (default 24) on PiG and Pi at once; processes, threads, descriptors and memory sampled each minute and judged flat
+bench-soak: ## Steady scripted turns for BENCH_SOAK_HOURS (default 24) on Ompig and Pi at once; processes, threads, descriptors and memory sampled each minute and judged flat
 	@$(BENCH_PY) soak --hours $(or $(BENCH_SOAK_HOURS),24) --seed $(BENCH_SEED) --out $(BENCH_OUT)/soak $(BENCH_SOAK_ARGS)
 
 bench-local: ## Harness cost against a pinned local llama.cpp server and model (BENCH_LOCAL_ARGS; see bench/local/README.md); results are provisional
@@ -700,12 +700,12 @@ bench-local: ## Harness cost against a pinned local llama.cpp server and model (
 bench-longhistory: ## Sessions of ~1M tokens, and ~3M across 3 compactions: open, resume, RSS, frames, keystrokes, resize, append
 	@$(BENCH_PY) longhistory --arms $(BENCH_ARMS) --seed $(BENCH_SEED) --out $(BENCH_OUT)/longhistory $(BENCH_LONGHISTORY_ARGS)
 
-bench-durable: durable-interop-deps ## The durable-bench workload (50/250/1000/3500 turns) on PiG Durable and pi-durable, with the CPU-idle gate
+bench-durable: durable-interop-deps ## The durable-bench workload (50/250/1000/3500 turns) on Ompig Durable and pi-durable, with the CPU-idle gate
 	@$(BENCH_PY) durable --seed $(BENCH_SEED) --out $(BENCH_OUT)/durable $(BENCH_DURABLE_ARGS)
 
-bench-harbor: ## Harbor: write and validate job configs and check the Pi converter against PiG (needs HARBOR_PYTHON); runs no job
+bench-harbor: ## Harbor: write and validate job configs and check the Pi converter against Ompig (needs HARBOR_PYTHON); runs no job
 	@$(BENCH_PY) harbor-plan --out $(BENCH_OUT)/harbor/jobs $(BENCH_HARBOR_ARGS)
-	@$(BENCH_PY) harbor-compat --arms pig-0.5 pig-0.4.1 pi-1.1.0 --seed $(BENCH_SEED) --out $(BENCH_OUT)/harbor
+	@$(BENCH_PY) harbor-compat --arms ompig-0.5 ompig-0.4.1 pi-1.1.0 --seed $(BENCH_SEED) --out $(BENCH_OUT)/harbor
 
 bench-report: ## Re-render report.md and summary.csv from a raw.json: make bench-report DIR=tmp/bench/overhead
 	@test -n "$(DIR)" || { echo "bench-report: set DIR" >&2; exit 2; }
@@ -713,7 +713,7 @@ bench-report: ## Re-render report.md and summary.csv from a raw.json: make bench
 
 ##@ Docs
 
-knowledge-graph: ## Regenerate the knowledge graph page, JSON-LD, and Mermaid from docs/knowledge-graph/pig.graph.json
+knowledge-graph: ## Regenerate the knowledge graph page, JSON-LD, and Mermaid from docs/knowledge-graph/ompig.graph.json
 	@python3 automation/gen/gen-knowledge-graph.py
 
 # port-lens renders the static port health report from the repository's own ledgers (automation/portlens/README.md). PORT_LENS_SERVE=127.0.0.1:8650 also serves it; PORT_LENS_TOTALS_LOG=<file> adds a ledger totals log to the trend.
@@ -801,15 +801,15 @@ durable-counts-update: durable-contract-setup ## Rewrite durable/contract/counts
 durable-contract: durable-contract-setup ## Run the Durable core conformance gate (CONTRACT sections 5-7) against the TinyGo, Go and native builds; per-lane pass/fail
 	@cd durable/contract && node cli/contract.mjs all $(DURABLE_CONTRACT_ARGS)
 
-parity-deps: interface-deps ## Build the Pi comparator from source at the pin (PIG_PARITY_PI_PUBLISHED=1 installs the published release of a tag pin) and the TypeScript compiler its scenarios import
+parity-deps: interface-deps ## Build the Pi comparator from source at the pin (OMPIG_PARITY_PI_PUBLISHED=1 installs the published release of a tag pin) and the TypeScript compiler its scenarios import
 	@$(PIN_TOOL) install-oracle
 	@python3 automation/ci/npm-locked.py internal/typebox/testdata/npm
 	@python3 automation/ci/npm-locked.py ai/testdata/sdk
-	@test -x "$(PIG_PARITY_PI_BIN)" || { echo "exact Pi comparator not found: $(PIG_PARITY_PI_BIN)" >&2; exit 1; }
+	@test -x "$(OMPIG_PARITY_PI_BIN)" || { echo "exact Pi comparator not found: $(OMPIG_PARITY_PI_BIN)" >&2; exit 1; }
 	@test -d "$(PI_PACKAGE_ROOT)" || { echo "exact Pi package not found: $(PI_PACKAGE_ROOT)" >&2; exit 1; }
 	@$(PIN_TOOL) check-oracle
 
-.PHONY: bug-ledger-refresh port-lens pin-show pin-sync pin-check pin-bump pin-ledgers vendor-pi-dist bench-test bench-lock-verify bench-lock-bump bench-arms bench-overhead bench-reliability bench-longhistory bench-startup bench-aggregate bench-soak bench-local bench-durable bench-harbor bench-report durable-interop-deps durable-contract durable-contract-setup durable-contract-test node-runtime bug-ledger bug-ledger-check release-notes-draft npm-dist-test npm-dist-e2e compliance evals-mutate slop slop-check # Deterministic tmux-driven integration tier # Release gate. Tighter than `check` # The recommended one-shot for end-of-loop verification # docs-drift gates the shipped docs bundle against the code it describes # install # numbered in docs/parity/DIVERGENCES.md must have a matching `// pig divergence (DN) # the single-main-loop ownership invariant bench bench-base bench-compare build build-env-daemons check check-core clean dev divergence-guard divergence-quality doctor port-lint any-trap perf-lint evals evals-live evals-publish evals-requests evals-test examples-check go-fix-clean help help-parity interface-deps knowledge-graph lint lint-changed model-catalogs parity-deps perf-check pgo pig profile qc setup standard-check test test-fixtures test-go-modules test-mcp-conformance test-prereqs test-sdk-conformance test-sdk-go test-sdk-rs test-sdk-ts test-stress upstream-mirror vet durable-counts durable-bar durable-flat durable-counts-update durable-contract-trace durable-core-host-deps durable-core-host-check durable-core-budget
+.PHONY: bug-ledger-refresh port-lens pin-show pin-sync pin-check pin-bump pin-ledgers vendor-pi-dist bench-test bench-lock-verify bench-lock-bump bench-arms bench-overhead bench-reliability bench-longhistory bench-startup bench-aggregate bench-soak bench-local bench-durable bench-harbor bench-report durable-interop-deps durable-contract durable-contract-setup durable-contract-test node-runtime bug-ledger bug-ledger-check release-notes-draft npm-dist-test npm-dist-e2e compliance evals-mutate slop slop-check # Deterministic tmux-driven integration tier # Release gate. Tighter than `check` # The recommended one-shot for end-of-loop verification # docs-drift gates the shipped docs bundle against the code it describes # install # numbered in docs/parity/DIVERGENCES.md must have a matching `// ompig divergence (DN) # the single-main-loop ownership invariant bench bench-base bench-compare build build-env-daemons check check-core clean dev divergence-guard divergence-quality doctor port-lint any-trap perf-lint evals evals-live evals-publish evals-requests evals-test examples-check go-fix-clean help help-parity interface-deps knowledge-graph lint lint-changed model-catalogs parity-deps perf-check pgo ompig profile qc setup standard-check test test-fixtures test-go-modules test-mcp-conformance test-prereqs test-sdk-conformance test-sdk-go test-sdk-rs test-sdk-ts test-stress upstream-mirror vet durable-counts durable-bar durable-flat durable-counts-update durable-contract-trace durable-core-host-deps durable-core-host-check durable-core-budget
 
 include automation/make/parity.mk
 include automation/make/ci.mk

@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // AgentContext is the state a standalone loop starts from. Mirrors upstream AgentContext (types.ts): the transcript visible to the model and the tools available in the run.

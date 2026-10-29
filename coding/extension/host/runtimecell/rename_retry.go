@@ -9,7 +9,7 @@ import (
 
 // Backoff for a transient rename lock: the delay doubles from renameRetryFirstDelay
 // up to renameRetryMaxDelay, and the delays sum to renameRetryBudget.
-// pig additive (D20): the shared cell cache publish retry has no upstream
+// ompig additive (D20): the shared cell cache publish retry has no upstream
 // equivalent.
 const (
 	renameRetryBudget     = 10 * time.Second
@@ -19,7 +19,7 @@ const (
 
 // renameRetry publishes a directory with a rename and retries only the
 // failures retryable classifies as transient.
-// pig additive (D20): the shared cell cache has no upstream equivalent. The
+// ompig additive (D20): the shared cell cache has no upstream equivalent. The
 // retry follows npm's graceful-fs, which retries EPERM/EACCES/EBUSY renames on
 // Windows with backoff, because anti-virus scanners and indexers hold freshly
 // written files open without delete sharing, which makes NTFS refuse to rename

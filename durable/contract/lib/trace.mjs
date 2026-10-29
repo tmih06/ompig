@@ -3,7 +3,7 @@
 // scenario by writing each to its own file.
 import { appendFileSync, closeSync, openSync, writeFileSync } from "node:fs"
 
-const KEY = Symbol.for("pig.contract.trace")
+const KEY = Symbol.for("ompig.contract.trace")
 
 /** Create the trace file and make `emit` write to it. */
 export function openTrace(path) {

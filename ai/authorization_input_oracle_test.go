@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type authorizationPair struct {
@@ -99,7 +99,7 @@ func TestAuthorizationInputParsersMatchPi(t *testing.T) {
 		pi := answer{orEmpty(want.Anthropic.Code), orEmpty(want.Anthropic.State), want.Anthropic.State != nil, orEmpty(want.Codex.Code), orEmpty(want.Codex.State), orEmpty(want.OpenRouter)}
 		if got != pi {
 			if differing++; differing <= 12 {
-				t.Errorf("input %q differs from Pi:\n  Pig %+v\n  Pi  %+v", strings.TrimSpace(input), got, pi)
+				t.Errorf("input %q differs from Pi:\n  Ompig %+v\n  Pi  %+v", strings.TrimSpace(input), got, pi)
 			}
 		}
 	}

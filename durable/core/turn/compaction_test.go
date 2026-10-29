@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // compactionRig has a root conversation with four exchanges and a manual compaction task waiting to run.

@@ -16,12 +16,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 type fakeFrontend struct {
@@ -354,7 +354,7 @@ func TestFrontendFallbackRepaintsWithTheConfiguredRenderer(t *testing.T) {
 	}
 }
 
-// pig additive (D107): extensions learn from StatePayload.frontend that a
+// ompig additive (D107): extensions learn from StatePayload.frontend that a
 // frontend draws, through a state_update when the session opens and when it
 // falls back. A frontend that declines the run never sets it.
 func TestFrontendSessionIsReportedToExtensions(t *testing.T) {
@@ -419,7 +419,7 @@ func TestFrontendKeepsTheScreenAgainstATuiModeSwitch(t *testing.T) {
 	}
 }
 
-// Tern answers the hello while PiG is still starting, when input goes to the
+// Tern answers the hello while Ompig is still starting, when input goes to the
 // startup editor, and sends events once the input loop runs. Neither reaches
 // the editor.
 func TestFrontendInputNeverReachesTheEditor(t *testing.T) {
@@ -503,7 +503,7 @@ func TestFrontendFramesCarryTheThemeAcrossSwitches(t *testing.T) {
 	step("a dark preview", func() { m.previewTheme("dark") }, "dark dark=true accent="+accent("dark"))
 }
 
-// Under a frontend session PiG picks the theme as it does on a plain terminal
+// Under a frontend session Ompig picks the theme as it does on a plain terminal
 // that shows the same appearance: the surface writes the terminal color query
 // to the terminal the session draws on, and the replies decide light or
 // dark. A light/dark report sends the query again, and its replies switch the
@@ -600,8 +600,8 @@ func (term *turnTerminal) Write(data []byte) (int, error) {
 	return term.buf.Write(data)
 }
 
-// A session writes from its own goroutines, and PiG writes its terminal
-// queries while the session draws: PiG's writes wait for a session's Write in
+// A session writes from its own goroutines, and Ompig writes its terminal
+// queries while the session draws: Ompig's writes wait for a session's Write in
 // progress, so a query never lands inside a frame.
 func TestFrontendTerminalWritesTakeTurns(t *testing.T) {
 	term := &turnTerminal{entered: make(chan struct{}, 1), release: make(chan struct{})}
@@ -609,21 +609,21 @@ func TestFrontendTerminalWritesTakeTurns(t *testing.T) {
 	m := newUnmountedSwitchTuiProbe(t, InteractiveModeOptions{Frontend: fe, TuiMode: "regular"}, term)
 	m.openFrontend()
 	t.Cleanup(func() { m.teardownCurrentTui(); m.stopInteractiveTui(); m.backgroundTasks.Wait() })
-	frame := "\x1b_tsp;f;{\"sf\":\"pig\",\"s\":1,\"ops\":[]}\x1b\\"
+	frame := "\x1b_tsp;f;{\"sf\":\"ompig\",\"s\":1,\"ops\":[]}\x1b\\"
 	written := make(chan struct{})
 	go func() {
 		_, _ = fe.env.Out.Write([]byte(frame))
 		close(written)
 	}()
 	<-term.entered
-	var pig sync.WaitGroup
-	pig.Go(func() { m.tuiInst.QueryTerminalColors(tui.TerminalColorQueryOptions{TimeoutMs: 1}) })
-	pig.Go(func() { m.writeThemeNotifications(true) })
-	// Time for PiG's writes to start, if they did not wait.
+	var ompig sync.WaitGroup
+	ompig.Go(func() { m.tuiInst.QueryTerminalColors(tui.TerminalColorQueryOptions{TimeoutMs: 1}) })
+	ompig.Go(func() { m.writeThemeNotifications(true) })
+	// Time for Ompig's writes to start, if they did not wait.
 	time.Sleep(50 * time.Millisecond)
 	close(term.release)
 	<-written
-	pig.Wait()
+	ompig.Wait()
 	query := "\x1b]10;?\x07\x1b]11;?\x07"
 	for i := range 16 {
 		query += fmt.Sprintf("\x1b]4;%d;?\x07", i)

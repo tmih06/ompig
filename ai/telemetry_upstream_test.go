@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsclock"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/internal/jsclock"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 func aiTelemetryModel() *Model {

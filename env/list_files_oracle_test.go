@@ -17,7 +17,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // ignorePatterns are gitignore lines of every syntax the crate's glob parser distinguishes.
@@ -149,13 +149,13 @@ func TestListFilesMatchesPisDaemon(t *testing.T) {
 			want, wantErr := theirs.Request(background, "listFiles", request, RequestOptions{})
 			got, gotErr := ours.Request(background, "listFiles", request, RequestOptions{})
 			if (wantErr == nil) != (gotErr == nil) || (wantErr != nil && wantErr.Error() != gotErr.Error()) {
-				t.Fatalf("seed %d %v: Pi %v, PiG %v", seed, options, wantErr, gotErr)
+				t.Fatalf("seed %d %v: Pi %v, Ompig %v", seed, options, wantErr, gotErr)
 			}
 			if wantErr != nil {
 				continue
 			}
 			if !bytes.Equal(got.Payload, want.Payload) || got.JSON["count"] != want.JSON["count"] || got.JSON["truncated"] != want.JSON["truncated"] {
-				t.Fatalf("seed %d options %v under %s (list %s)\nPi  : %q %v\nPiG : %q %v", seed, options, tree.root, tree.inner, want.Payload, want.JSON, got.Payload, got.JSON)
+				t.Fatalf("seed %d options %v under %s (list %s)\nPi  : %q %v\nOmpig : %q %v", seed, options, tree.root, tree.inner, want.Payload, want.JSON, got.Payload, got.JSON)
 			}
 		}
 	}
@@ -213,11 +213,11 @@ func TestListFilesIgnoreFilesMatchPisDaemon(t *testing.T) {
 			want, wantErr := theirs.Request(background, "listFiles", request, RequestOptions{})
 			got, gotErr := ours.Request(background, "listFiles", request, RequestOptions{})
 			if wantErr != nil || gotErr != nil {
-				t.Fatalf("ignore file %d %q: Pi %v, PiG %v", index, content, wantErr, gotErr)
+				t.Fatalf("ignore file %d %q: Pi %v, Ompig %v", index, content, wantErr, gotErr)
 			}
 			if !bytes.Equal(got.Payload, want.Payload) {
 				wantEntries, gotEntries := strings.Split(string(want.Payload), "\x00"), strings.Split(string(got.Payload), "\x00")
-				t.Fatalf("ignore file %d %q options %v: Pi listed %d entries, PiG %d; first difference %s", index, content, options, len(wantEntries), len(gotEntries), firstDifference(wantEntries, gotEntries))
+				t.Fatalf("ignore file %d %q options %v: Pi listed %d entries, Ompig %d; first difference %s", index, content, options, len(wantEntries), len(gotEntries), firstDifference(wantEntries, gotEntries))
 			}
 		}
 	}
@@ -226,7 +226,7 @@ func TestListFilesIgnoreFilesMatchPisDaemon(t *testing.T) {
 func firstDifference(want, got []string) string {
 	for index := range min(len(want), len(got)) {
 		if want[index] != got[index] {
-			return fmt.Sprintf("at %d: Pi %q, PiG %q", index, want[index], got[index])
+			return fmt.Sprintf("at %d: Pi %q, Ompig %q", index, want[index], got[index])
 		}
 	}
 	return fmt.Sprintf("one list ends at %d", min(len(want), len(got)))
@@ -319,7 +319,7 @@ func TestListFilesExcludeSourcesMatchPisDaemon(t *testing.T) {
 			want := must(theirs.Request(background, "listFiles", Json{"path": root}, RequestOptions{}))
 			got := must(ours.Request(background, "listFiles", Json{"path": root}, RequestOptions{}))
 			if !bytes.Equal(got.Payload, want.Payload) {
-				t.Fatalf("Pi listed %q, PiG %q", want.Payload, got.Payload)
+				t.Fatalf("Pi listed %q, Ompig %q", want.Payload, got.Payload)
 			}
 			if !strings.Contains(t.Name(), "outside") && !strings.Contains(t.Name(), "no_exclude") && !strings.Contains(t.Name(), "Jujutsu") && strings.Contains(string(got.Payload), "a.g") {
 				t.Errorf("the scenario's exclude rule had no effect: %q", got.Payload)
@@ -356,13 +356,13 @@ func TestListFilesErrorsMatchPisDaemon(t *testing.T) {
 		want, wantErr := theirs.Request(background, "listFiles", request, RequestOptions{})
 		got, gotErr := ours.Request(background, "listFiles", request, RequestOptions{})
 		if fmt.Sprint(wantErr) != fmt.Sprint(gotErr) || !bytes.Equal(want.Payload, got.Payload) {
-			t.Errorf("%s: Pi %v %q, PiG %v %q", name, wantErr, want.Payload, gotErr, got.Payload)
+			t.Errorf("%s: Pi %v %q, Ompig %v %q", name, wantErr, want.Payload, gotErr, got.Payload)
 			continue
 		}
 		wantRemote, wantOK := errors.AsType[*RemoteError](wantErr)
 		gotRemote, gotOK := errors.AsType[*RemoteError](gotErr)
 		if wantOK != gotOK || (wantOK && (wantRemote.Code != gotRemote.Code || pathOf(wantRemote) != pathOf(gotRemote))) {
-			t.Errorf("%s: Pi %+v, PiG %+v", name, wantRemote, gotRemote)
+			t.Errorf("%s: Pi %+v, Ompig %+v", name, wantRemote, gotRemote)
 		}
 	}
 }

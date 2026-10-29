@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/6768-copilot-compaction-base-url.test.ts:49

@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/mcp"
 )
 
-// A bash call's shell runs in its own process group, so a hangup or crash of PiG does not reach it. shell.ts
+// A bash call's shell runs in its own process group, so a hangup or crash of Ompig does not reach it. shell.ts
 // trackDetachedChildPid records the shell and killTrackedDetachedChildren (called from the signal handlers, the dead
 // terminal exit and the crash handler) kills each tree. A tracked call is killed without an abort, so it reports the
 // shell's signal exit code, and it is untracked once it ends.

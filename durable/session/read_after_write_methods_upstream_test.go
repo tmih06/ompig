@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // Tx#read (packages/durable/src/session/transaction.ts:918-927) throws `new ReadAfterWrite(method)` for every table read once the transaction has written a table, and

@@ -9,9 +9,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // The `/mcp` command (.upstream/v0.99.1/packages/coding-agent/src/extensions/mcp/index.ts:901-980). Upstream has no

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // pi: packages/env/src/errors.ts

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // SettingsManager is Pi's `SettingsManager` class (core/settings-manager.ts): the global and project settings an extension reads and writes, or in-memory settings it builds for a child session. The host owns the object; a SettingsManager passed to CreateAgentSession is the very settings object the child session reads. Every method is Pi's under its Go name; a nil pointer result is Pi's undefined.

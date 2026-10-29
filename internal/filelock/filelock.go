@@ -1,6 +1,6 @@
 // Package filelock is the advisory file lock the extension cache and the SDK staging take.
 //
-// pig additive (D20): the shared cell cache and its locks have no upstream equivalent. A lock is held through flock(2) (LockFileEx on
+// ompig additive (D20): the shared cell cache and its locks have no upstream equivalent. A lock is held through flock(2) (LockFileEx on
 // Windows); some file systems refuse it, as an NFS mount without a lock manager (ENOLCK), a FUSE file system or an SMB share
 // (ENOSYS, EOPNOTSUPP) do.
 package filelock
@@ -35,11 +35,11 @@ func Unsupported(err error) bool {
 }
 
 // Explain returns err, or, when the file system that holds dir refuses file locks, an error that names dir and the remedy and wraps err.
-// The extension cache cannot run without file locks: its builders, readers and collector exclude each other through them, and pig does
+// The extension cache cannot run without file locks: its builders, readers and collector exclude each other through them, and ompig does
 // not start an extension from a cache it cannot protect. Such a lock failure is permanent, so the remedy is a different file system.
 func Explain(dir string, err error) error {
 	if !Unsupported(err) {
 		return err
 	}
-	return fmt.Errorf("the file system that holds %s does not support file locks (%w); the extension cache and the SDK staging need them to build, share and collect entries safely: point PIG_HOME at a directory on a file system that does, such as a local disk", dir, err)
+	return fmt.Errorf("the file system that holds %s does not support file locks (%w); the extension cache and the SDK staging need them to build, share and collect entries safely: point OMPIG_HOME at a directory on a file system that does, such as a local disk", dir, err)
 }

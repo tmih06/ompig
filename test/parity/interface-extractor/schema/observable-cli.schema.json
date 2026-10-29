@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/MichaelKinsy/PiG/main/test/parity/interface-extractor/schema/observable-cli.schema.json",
-  "title": "Pig upstream observable CLI interface inventory",
+  "$id": "https://raw.githubusercontent.com/tmih06/ompig/main/test/parity/interface-extractor/schema/observable-cli.schema.json",
+  "title": "Ompig upstream observable CLI interface inventory",
   "type": "object",
   "additionalProperties": false,
   "required": ["upstreamVersion", "kind", "interfaces"],

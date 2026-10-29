@@ -12,12 +12,12 @@ FAST_PARALLEL=${TEST_FAST_PARALLEL:-12}
 SUBPROCESS_PARALLEL=${TEST_SUBPROCESS_PARALLEL:-2}
 SERIAL_PARALLEL=${TEST_SERIAL_PARALLEL:-1}
 STRESS_COUNT=${TEST_STRESS_COUNT:-3}
-# cmd/pig runs as CLI_SHARDS separate go test processes (test-shard-pattern.sh), each under go test's 10-minute package timeout. One process for the whole package needs more than 10 minutes on a 4-CPU runner. The Windows cli-1 to cli-8 jobs in .github/workflows/ci.yml run the same shards, one parallel job each; test/ci-images checks that the two agree.
+# cmd/ompig runs as CLI_SHARDS separate go test processes (test-shard-pattern.sh), each under go test's 10-minute package timeout. One process for the whole package needs more than 10 minutes on a 4-CPU runner. The Windows cli-1 to cli-8 jobs in .github/workflows/ci.yml run the same shards, one parallel job each; test/ci-images checks that the two agree.
 CLI_SHARDS=8
 CLI_PKG=./coding/cli
 SUBPROCESS_PKG=./coding/extension/host/subprocess
 CONFORMANCE_PKG=./test/extension-conformance
-# Heavy packages that run as several go test processes, each under its own package timeout and each warm from the shared Go and Cargo caches, like cmd/pig: <package>:<shards>. test-shard-pattern.sh partitions each package's tests by name hash, with the slowest pinned to shards by automation/ci/test-shard-weights.txt for the shard count declared here, and run_sharded_pkg refuses to run a package unless its shard patterns select every listed test exactly once. changed mode runs these packages whole.
+# Heavy packages that run as several go test processes, each under its own package timeout and each warm from the shared Go and Cargo caches, like cmd/ompig: <package>:<shards>. test-shard-pattern.sh partitions each package's tests by name hash, with the slowest pinned to shards by automation/ci/test-shard-weights.txt for the shard count declared here, and run_sharded_pkg refuses to run a package unless its shard patterns select every listed test exactly once. changed mode runs these packages whole.
 SHARDED_SPEC=(
   ./ai:7
   ./coding:4
@@ -47,7 +47,7 @@ HEAVY_PKGS=(
   ./coding/extension/host/subprocess
   ./test/extension-conformance
 )
-# Packages that start real processes and gate what those use, and need the machine to themselves: they run after the parallel groups, one package at a time, each with every CPU. test/perfgate runs pig under a pseudo-terminal and cross-builds the release binaries in one go test process under the default 10-minute package timeout. Beside the 12-way pool of the fast group on a 4-CPU runner it took 390-494 s, 96 s with the machine to itself; a run that cold-built more of the binaries took 597 s, and the hang bounds that testbudget.Wait derives from the package deadline then cut its last tests short and killed their pig children.
+# Packages that start real processes and gate what those use, and need the machine to themselves: they run after the parallel groups, one package at a time, each with every CPU. test/perfgate runs ompig under a pseudo-terminal and cross-builds the release binaries in one go test process under the default 10-minute package timeout. Beside the 12-way pool of the fast group on a 4-CPU runner it took 390-494 s, 96 s with the machine to itself; a run that cold-built more of the binaries took 597 s, and the hang bounds that testbudget.Wait derives from the package deadline then cut its last tests short and killed their ompig children.
 SERIAL_PKGS=(
   ./test/perfgate
 )
@@ -146,14 +146,14 @@ if [[ "$MODE" != "report" ]]; then
 fi
 
 # Warm with go list -export: it compiles every package into the build cache and links nothing, where go build ./... links every command and discards it on each run.
-# Tests that build Pig, a packed extension cell or a Piglet run their own `go build` in a child process. Those builds share no work with the `go test` action graph, so on a cold Go build cache (the first run after go.mod or go.sum changes) each one recompiles the whole dependency graph while the 12-way package pool competes for the same cores, and a build bounded by the 2-minute extension-validation deadline is killed. Compile each flag set once here so every child build links from the cache: -trimpath changes every package's action ID, and CGO_ENABLED changes every package that reaches net or os/user. The default set serves go test itself, the default-CGO -trimpath set serves `pig build` and native Piglet Binary builds (coding/cli/build_command.go, coding/pigletbuild/native_build.go), and the CGO_ENABLED=0 -trimpath set serves extension and packed-cell builds (coding/extension/host/subprocess/builder.go, coding/extension/host/runtimecell/go_packed.go). An extension or packed-cell build compiles PiG as a dependency module, and -trimpath then maps its source directories to github.com/MichaelKinsy/PiG@<version>/... where the main-module builds above map them to github.com/MichaelKinsy/PiG/..., so those builds share no compiled PiG package with them (about 60 packages for the Porter extension). Building the in-repo Porter extension module with GOWORK=off (the packed build's setting) compiles that dependency-module set once.
+# Tests that build Ompig, a packed extension cell or a Ompiglet run their own `go build` in a child process. Those builds share no work with the `go test` action graph, so on a cold Go build cache (the first run after go.mod or go.sum changes) each one recompiles the whole dependency graph while the 12-way package pool competes for the same cores, and a build bounded by the 2-minute extension-validation deadline is killed. Compile each flag set once here so every child build links from the cache: -trimpath changes every package's action ID, and CGO_ENABLED changes every package that reaches net or os/user. The default set serves go test itself, the default-CGO -trimpath set serves `ompig build` and native Ompiglet Binary builds (coding/cli/build_command.go, coding/pigletbuild/native_build.go), and the CGO_ENABLED=0 -trimpath set serves extension and packed-cell builds (coding/extension/host/subprocess/builder.go, coding/extension/host/runtimecell/go_packed.go). An extension or packed-cell build compiles Ompig as a dependency module, and -trimpath then maps its source directories to github.com/tmih06/ompig@<version>/... where the main-module builds above map them to github.com/tmih06/ompig/..., so those builds share no compiled Ompig package with them (about 60 packages for the Porter extension). Building the in-repo Porter extension module with GOWORK=off (the packed build's setting) compiles that dependency-module set once.
 # Only the heavy packages run those child builds, so changed mode warms the cache only when it tests one of them.
 if [[ "$MODE" != "report" && ( "$MODE" != changed || ${#HEAVY_PKGS[@]} -gt 0 ) ]]; then
   echo "[test-grouped] warming the Go build cache"
   go list -export -f '' ./... >/dev/null
   go list -trimpath -export -f '' ./... >/dev/null
   CGO_ENABLED=0 go list -trimpath -export -f '' ./... >/dev/null
-  (cd piglets/porter/extensions/pig-porter && GOWORK=off CGO_ENABLED=0 go list -trimpath -export -f '' ./... >/dev/null)
+  (cd ompiglets/porter/extensions/ompig-porter && GOWORK=off CGO_ENABLED=0 go list -trimpath -export -f '' ./... >/dev/null)
 fi
 
 echo "[test-grouped] mode=$MODE"
@@ -190,9 +190,9 @@ run_group() {
   # Run under a private temporary directory so a test that leaks scratch files or directories fails this group instead of filling the shared one, and remove it on every exit path.
   local status=0
   # The paths are predictable, so each must be a fresh directory this run created: a path another user holds fails the group instead of receiving its files. run_group runs under || in changed mode, where set -e does not apply.
-  SCRATCH="$STABLE_BASE/pig-tests.$STABLE_KEY"
-  # Run under seeded agent directories. A lane or a developer exports PIG_CODING_AGENT_DIR for the pig that is running the tests, and a test that does not replace it writes that real directory. The guard fails the group when any seeded file changes or appears, whether or not the tests passed.
-  AGENT_GUARD="$STABLE_BASE/pig-agent-guard.$STABLE_KEY"
+  SCRATCH="$STABLE_BASE/ompig-tests.$STABLE_KEY"
+  # Run under seeded agent directories. A lane or a developer exports OMPIG_CODING_AGENT_DIR for the ompig that is running the tests, and a test that does not replace it writes that real directory. The guard fails the group when any seeded file changes or appears, whether or not the tests passed.
+  AGENT_GUARD="$STABLE_BASE/ompig-agent-guard.$STABLE_KEY"
   # umask 077 makes mkdir create each directory private without the separate chmod that mkdir -m runs afterwards, which Git Bash on Windows refuses on a directory in the temporary directory ("cannot change permissions: Permission denied").
   if ! { rm -rf "$SCRATCH" "$AGENT_GUARD" "$AGENT_GUARD.manifest" && (umask 077 && mkdir "$SCRATCH" "$AGENT_GUARD"); }; then
     echo "[test-grouped] cannot create the scratch directories $SCRATCH and $AGENT_GUARD for $label" >&2
@@ -230,7 +230,7 @@ run_group() {
   return "$status"
 }
 
-# run_cli_shards <parallel> [<first> <last>]: run the cmd/pig shards first..last (default every shard), continuing past a failing shard so one run reports all of them.
+# run_cli_shards <parallel> [<first> <last>]: run the cmd/ompig shards first..last (default every shard), continuing past a failing shard so one run reports all of them.
 run_cli_shards() {
   local parallel="$1" first="${2:-1}" last="${3:-$CLI_SHARDS}" shard status=0 pattern
   if ! [[ "$first" =~ ^[0-9]+$ && "$last" =~ ^[0-9]+$ ]] || (( first < 1 || last > CLI_SHARDS || first > last )); then
@@ -294,7 +294,7 @@ run_fault_group() {
   return "$status"
 }
 
-# The other heavy packages run as one group; cmd/pig runs in its shards.
+# The other heavy packages run as one group; cmd/ompig runs in its shards.
 OTHER_HEAVY_PKGS=()
 for pkg in "${HEAVY_PKGS_WHOLE[@]}"; do
   [[ "$pkg" == "$CLI_PKG" ]] || OTHER_HEAVY_PKGS+=("$pkg")

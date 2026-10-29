@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // classifyServer is the llama-server stand-in of llama-extension.test.ts:331-373. It answers /tokenize, /apply-template and /completion

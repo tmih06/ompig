@@ -403,7 +403,7 @@ func TestOpenTerminalRunsTheUsersShellAsALoginShellByDefault(t *testing.T) {
 			t.Fatal(err)
 		}
 		terminal.Write("echo \"arg0=$0 term=$TERM home=${HOME-unset}\"; exit 5\n")
-		// On macOS both daemons' login shell gets the user's HOME back (observed for Pi's and PiG's daemon alike); elsewhere it stays unset.
+		// On macOS both daemons' login shell gets the user's HOME back (observed for Pi's and Ompig's daemon alike); elsewhere it stays unset.
 		home := "unset"
 		if runtime.GOOS == "darwin" {
 			home = os.Getenv("HOME")

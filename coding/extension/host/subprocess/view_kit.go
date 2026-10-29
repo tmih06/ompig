@@ -2,7 +2,7 @@ package subprocess
 
 // view_kit.go: the host side of the extension component kit (D107,
 // docs/plan/extension-component-kit.md). A viewSurface turns the views one
-// extension surface sends into a tree of PiG's tui ports, renders it, owns
+// extension surface sends into a tree of Ompig's tui ports, renders it, owns
 // the interactive lists' state, and reports the tree with its layout to a
 // D91 frontend.
 
@@ -17,17 +17,17 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Bounds of one view (§2).
 const (
-	viewMaxNodes = 4096  // pig additive (D107): spec §2 bound
-	viewMaxDepth = 64    // pig additive (D107): spec §2 bound
-	viewMaxItems = 10000 // pig additive (D107): spec §2 bound
+	viewMaxNodes = 4096  // ompig additive (D107): spec §2 bound
+	viewMaxDepth = 64    // ompig additive (D107): spec §2 bound
+	viewMaxItems = 10000 // ompig additive (D107): spec §2 bound
 )
 
 var viewColorPattern = lazyregexp.New(`^#[0-9a-fA-F]{6}$`)

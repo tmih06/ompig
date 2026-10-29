@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestKeybindingsManagerDefaultsResolveCoreAppBindings(t *testing.T) {
@@ -160,7 +160,7 @@ func TestKeybindingsManagerSaveEncodesJSON(t *testing.T) {
 // keys in the user's keybindings.json propagate to the global
 // tui.TUIKeybindingsManager so the Editor / SelectList actually pick
 // them up. Regression marker for the registry-wiring refactor:
-// without syncToTUI, pig would happily parse tui.* keys but ignore
+// without syncToTUI, ompig would happily parse tui.* keys but ignore
 // them at dispatch time.
 // Pi: packages/tui/src/keybindings.ts:270 (KeybindingsManager.matches).
 func TestKeybindingsManagerSyncsTuiOverridesToGlobal(t *testing.T) {

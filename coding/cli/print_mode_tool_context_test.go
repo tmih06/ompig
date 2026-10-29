@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Upstream print mode binds the Session to its extensions with session.bindExtensions (print-mode.ts:74-76), which only adds the mode's UI, command actions and handlers before _bindExtensionCore (agent-session.ts:3173-3194, 3301) binds executeTool, getCallableTools and appendEntry. ctx.sessionManager is the runner's constructor field (runner.ts:362, 398-405, 889-891), which no mode binding replaces. A tool of an in-process extension therefore reaches the Session's own log, its callable tools and pi.appendEntry in print and JSON mode, as codemode's store() and ctx.executeTool() need (codemode/execute.ts:285, 301; codemode/index.ts:35).

@@ -23,10 +23,10 @@ Status values:
 | OpenSSF Scorecard | `.github/workflows/scorecard.yml` with `publish_results: true`; the checks are listed below | Activates when public |
 | OpenSSF Best Practices | Criteria mapped below; the badge is an HTML comment in `README.md` until the project id exists | Owner action: register at bestpractices.dev |
 | REUSE | `REUSE.toml`, `LICENSES/`, SPDX headers; `make compliance` runs `reuse --no-multiprocessing lint` | Verifiable now; badge after registering at api.reuse.software |
-| Go Reference | Package doc comments; `go.mod` module `github.com/MichaelKinsy/PiG` | Activates when public; owner requests the pkg.go.dev fetch |
+| Go Reference | Package doc comments; `go.mod` module `github.com/tmih06/ompig` | Activates when public; owner requests the pkg.go.dev fetch |
 | Go version | `go.mod` `go` directive, shown as the minimum ("Go ≥"). Releases build with the `toolchain` line's newer Go | Active |
 | License | `LICENSE` (MIT); `CITATION.cff` `license: MIT` | Verifiable now |
-| Latest release | GitHub Releases | Owner action: publish the first release, tagged `v` plus `coding.PigVersion` |
+| Latest release | GitHub Releases | Owner action: publish the first release, tagged `v` plus `coding.OmpigVersion` |
 | Pi pin | Static badge naming the pinned Pi release, not a parity result; `make compliance` fails when it differs from `coding.UpstreamVersion` | Verifiable now |
 | Parity coverage | `.github/badges/parity-coverage.svg` from `make coverage`; the badge is the share of ported files with a behavioral parity scenario, not a pass rate; `make coverage-drift` rejects a stale badge | Verifiable now |
 
@@ -53,12 +53,12 @@ Status values:
 
 | Criterion area | Evidence | Status |
 |---|---|---|
-| Project website and description | `README.md`; https://pi-in-go.dev, rendered from `docs/site/docs/` | Activates when public |
+| Project website and description | `README.md`; https://ompig.dev, rendered from `docs/site/docs/` | Activates when public |
 | How to contribute | `.github/CONTRIBUTING.md`; `.github/CODE_OF_CONDUCT.md`; `docs/project/GOVERNANCE.md`; `docs/project/MAINTAINERS.md` | Verifiable now |
 | FLOSS license | `LICENSE` (MIT, OSI-approved); REUSE-compliant headers | Verifiable now |
 | Basic documentation | `README.md`; `docs/site/docs/`; the embedded agent docs under `internal/pigdocs/content/` | Verifiable now |
 | Public version-controlled source | GitHub repository with history | Activates when public |
-| Unique version numbering | `coding.PigVersion`; tags `vX.Y.Z` (`docs/project/RELEASING.md`) | Owner action: tag the first release |
+| Unique version numbering | `coding.OmpigVersion`; tags `vX.Y.Z` (`docs/project/RELEASING.md`) | Owner action: tag the first release |
 | Release notes | `CHANGELOG.md` | Verifiable now |
 | Bug-reporting process | `.github/ISSUE_TEMPLATE/`; `/bug` writes a report archive and links to the bug form (D62) | Activates when public |
 | Vulnerability reporting process | `.github/SECURITY.md` (private vulnerability reporting) | Owner action: enable private vulnerability reporting |
@@ -77,7 +77,7 @@ Status values:
 
 | Item | Evidence | Status |
 |---|---|---|
-| SLSA build provenance | `actions/attest-build-provenance` in `release-candidate.yml` gives SLSA Build Level 2. PiG does not claim Level 3: the build does not run on an isolated, non-falsifiable builder. | Activates at release |
+| SLSA build provenance | `actions/attest-build-provenance` in `release-candidate.yml` gives SLSA Build Level 2. Ompig does not claim Level 3: the build does not run on an isolated, non-falsifiable builder. | Activates at release |
 | SBOMs | SPDX and CycloneDX SBOMs from `anchore/sbom-action`, validated by `automation/release/validate-sbom.py`; source SBOMs in `security.yml` | Activates at release (release SBOMs); verifiable in CI (source SBOMs) |
 | govulncheck | `make compliance` | Verifiable now |
 | Secret scanning | Gitleaks and TruffleHog (`security.yml`); GitHub secret scanning with push protection | Verifiable in CI; owner action to enable GitHub secret scanning and push protection |

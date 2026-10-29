@@ -1,5 +1,5 @@
-// Piglet Binary build implementation. The public entry point is only
-// `pig piglet build`; no standalone build namespace is exposed.
+// Ompiglet Binary build implementation. The public entry point is only
+// `ompig ompiglet build`; no standalone build namespace is exposed.
 package pigletbuild
 
 import (
@@ -13,20 +13,20 @@ import (
 	"runtime"
 	"strings"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/fspublish"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/fspublish"
 )
 
-// RunPigletBuildCommand handles the sole public Piglet output build path.
+// RunPigletBuildCommand handles the sole public Ompiglet output build path.
 func RunPigletBuildCommand(args []string, stdout, stderr io.Writer) int {
 	return runBuild(args, stdout, stderr)
 }
 
 type pigletBuildOutput struct {
 	Success     bool               `json:"success"`
-	Piglet      string             `json:"piglet,omitempty"`
+	Ompiglet    string             `json:"ompiglet,omitempty"`
 	Format      string             `json:"format,omitempty"`
 	Builder     string             `json:"builder,omitempty"`
 	Output      string             `json:"output,omitempty"`
@@ -35,14 +35,14 @@ type pigletBuildOutput struct {
 	Log         string             `json:"log,omitempty"`
 	Error       string             `json:"error,omitempty"`
 	Unavailable []BuilderReadiness `json:"unavailable,omitempty"`
-	//portlint:allow emptydrop PiG-only format with no Pi counterpart (Pi has no Piglets or runtime slot)
+	//portlint:allow emptydrop Ompig-only format with no Pi counterpart (Pi has no Ompiglets or runtime slot)
 	StripDelta []string `json:"stripDelta,omitempty"`
 }
 
 const buildUsage = `Usage:
-  pig piglet build <name> --format script --out <path|->
-  pig piglet build <name> --format binary --out <path>
-  pig piglet build <name> --format image --out <reference>
+  ompig ompiglet build <name> --format script --out <path|->
+  ompig ompiglet build <name> --format binary --out <path>
+  ompig ompiglet build <name> --format image --out <reference>
 
 Options:
   --format <script|binary|image>  Select one output format; image is reserved and currently fails
@@ -50,7 +50,7 @@ Options:
   --targets <os/arch,...>        Select Binary build targets
   --builder <name>               Select auto, native, container, or a configured Binary builder
   --verification <basic>         Select the registered verification policy
-  --workspace <path>             Resolve workspace-bound Piglet inputs from this path
+  --workspace <path>             Resolve workspace-bound Ompiglet inputs from this path
   --locked                       Reserved for Binary and Image artifact locking; currently fails
   --record <path>                Reserved for an explicit artifact record; currently fails
   --verbose                      Stream toolchain output prefixed by member
@@ -72,7 +72,7 @@ func runBuild(args []string, stdout, stderr io.Writer) int {
 		return renderBuildError(jsonMode, pigletName, err, 2, stdout, stderr)
 	}
 	if pigletName == "" {
-		return renderBuildError(jsonMode, "", fmt.Errorf("piglet is required"), 2, stdout, stderr)
+		return renderBuildError(jsonMode, "", fmt.Errorf("ompiglet is required"), 2, stdout, stderr)
 	}
 	if opts.Format == "script" {
 		p, err := loadScriptPiglet(pigletName, opts.Workspace)
@@ -81,7 +81,7 @@ func runBuild(args []string, stdout, stderr io.Writer) int {
 		}
 		return runScriptBuild(args, p, outPath, jsonMode, stdout, stderr)
 	}
-	// pig additive (D18): explicit artifact builds select product-neutral phase diagnostics.
+	// ompig additive (D18): explicit artifact builds select product-neutral phase diagnostics.
 	progress := buildprogress.New(stderr, hasBuildFlag(args, "--verbose"))
 	defer progress.Close()
 	ctx := buildprogress.Observe(context.Background(), progress.Handle, hasBuildFlag(args, "--verbose"))
@@ -97,14 +97,14 @@ func runBinaryBuild(ctx context.Context, progress *buildprogress.Reporter, pigle
 	if err != nil {
 		return fail(pigletName, err)
 	}
-	// pig additive (D92): the strip delta report against the newest Binary
-	// PiG built for this Piglet prints on every build, before the build runs.
-	stripDelta := piglet.StripDeltaReport(p.Name, p.Strip)
+	// ompig additive (D92): the strip delta report against the newest Binary
+	// Ompig built for this Ompiglet prints on every build, before the build runs.
+	stripDelta := ompiglet.StripDeltaReport(p.Name, p.Strip)
 	if len(stripDelta) > 0 {
 		_, _ = io.WriteString(progress, strings.Join(stripDelta, "\n")+"\n")
 	}
 	if opts.Format == "image" {
-		return fail(p.Name, fmt.Errorf("Piglet Image build is not implemented"))
+		return fail(p.Name, fmt.Errorf("Ompiglet Image build is not implemented"))
 	}
 	if err := p.ValidateAgentEnvironmentRuntime(); err != nil {
 		return fail(p.Name, err)
@@ -125,7 +125,7 @@ func runBinaryBuild(ctx context.Context, progress *buildprogress.Reporter, pigle
 	hasFrontend := p.HasFrontend()
 	verdict := Validate(BuildPlan(exts, opts), warnings, len(p.Extensions), len(exts), hasFrontend, requireFused)
 	if !verdict.OK {
-		return fail(p.Name, fmt.Errorf("Piglet will not build: %s", strings.Join(verdict.Blockers, "; ")))
+		return fail(p.Name, fmt.Errorf("Ompiglet will not build: %s", strings.Join(verdict.Blockers, "; ")))
 	}
 	buildprogress.Phase(ctx, "Packing resources", "Inlining prompts and skills")
 	if err := applyBakedPiglet(pigletName, p, &opts); err != nil {
@@ -142,7 +142,7 @@ func runBinaryBuild(ctx context.Context, progress *buildprogress.Reporter, pigle
 		return fail(p.Name, err)
 	}
 	result, err := executeBuild(ctx, builders, opts.Builder, BuilderRequest{
-		Piglet: p, Cells: cells, Options: opts, Output: outPath, Stdout: buildStdout, Stderr: progress,
+		Ompiglet: p, Cells: cells, Options: opts, Output: outPath, Stdout: buildStdout, Stderr: progress,
 	})
 	if err != nil {
 		return fail(p.Name, err)
@@ -154,7 +154,7 @@ func runBinaryBuild(ctx context.Context, progress *buildprogress.Reporter, pigle
 	progress.Success(result.Artifact, info.Size())
 	if jsonMode {
 		writeBuildJSON(pigletBuildOutput{
-			Success: true, Piglet: p.Name, Format: "binary", Builder: result.Builder, Artifact: result.Artifact,
+			Success: true, Ompiglet: p.Name, Format: "binary", Builder: result.Builder, Artifact: result.Artifact,
 			Record: result.Record, Log: strings.TrimSpace(buildLog.String()), StripDelta: stripDelta,
 		}, stdout)
 	}
@@ -163,7 +163,7 @@ func runBinaryBuild(ctx context.Context, progress *buildprogress.Reporter, pigle
 
 func renderBuildError(jsonMode bool, pigletName string, err error, code int, stdout, stderr io.Writer) int {
 	if jsonMode {
-		output := pigletBuildOutput{Success: false, Piglet: pigletName, Error: err.Error()}
+		output := pigletBuildOutput{Success: false, Ompiglet: pigletName, Error: err.Error()}
 		var unavailable *BuilderUnavailableError
 		var noneReady *NoBuilderReadyError
 		switch {
@@ -174,11 +174,11 @@ func renderBuildError(jsonMode bool, pigletName string, err error, code int, std
 		}
 		writeBuildJSON(output, stdout)
 	} else {
-		_, _ = fmt.Fprintf(stderr, "pig piglet build: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig ompiglet build: %v\n", err)
 		var unavailable *BuilderUnavailableError
 		var noneReady *NoBuilderReadyError
 		if errors.As(err, &unavailable) || errors.As(err, &noneReady) {
-			_, _ = fmt.Fprintln(stderr, "Run `pig setup` to see which build toolchains are missing and how to install them.")
+			_, _ = fmt.Fprintln(stderr, "Run `ompig setup` to see which build toolchains are missing and how to install them.")
 		}
 	}
 	return code
@@ -193,47 +193,47 @@ func writeBuildJSON(output pigletBuildOutput, stdout io.Writer) {
 	_, _ = fmt.Fprintln(stdout, string(data))
 }
 
-func loadPiglet(name string, workspaces ...string) (*piglet.Piglet, error) {
+func loadPiglet(name string, workspaces ...string) (*ompiglet.Ompiglet, error) {
 	path, err := resolvePigletPath(name)
 	if err != nil {
-		return nil, fmt.Errorf("piglet %q: %w", name, err)
+		return nil, fmt.Errorf("ompiglet %q: %w", name, err)
 	}
-	authored, err := piglet.Parse(path)
+	authored, err := ompiglet.Parse(path)
 	if err != nil {
-		return nil, fmt.Errorf("piglet %q: %w", name, err)
+		return nil, fmt.Errorf("ompiglet %q: %w", name, err)
 	}
 	workspace := ""
 	if len(workspaces) > 0 {
 		workspace = workspaces[0]
 	}
-	resolution, err := piglet.ResolveEffectiveWithOptions(path, piglet.ResolveOptions{Workspace: workspace})
+	resolution, err := ompiglet.ResolveEffectiveWithOptions(path, ompiglet.ResolveOptions{Workspace: workspace})
 	if err != nil {
-		return nil, fmt.Errorf("piglet %q: %w", name, err)
+		return nil, fmt.Errorf("ompiglet %q: %w", name, err)
 	}
 	// release/build are child-owned orchestration inputs, deliberately absent
 	// from the effective composition (S1 R7). The build loader reattaches only
 	// the selected child source's metadata for build planning.
-	resolution.Piglet.Release = authored.Release
-	resolution.Piglet.Build = authored.Build
-	return resolution.Piglet, nil
+	resolution.Ompiglet.Release = authored.Release
+	resolution.Ompiglet.Build = authored.Build
+	return resolution.Ompiglet, nil
 }
 
-func loadScriptPiglet(name, workspace string) (*piglet.Piglet, error) {
+func loadScriptPiglet(name, workspace string) (*ompiglet.Ompiglet, error) {
 	path, err := resolvePigletPath(name)
 	if err != nil {
-		return nil, fmt.Errorf("piglet %q: %w", name, err)
+		return nil, fmt.Errorf("ompiglet %q: %w", name, err)
 	}
-	resolution, err := piglet.ResolveEffectiveWithOptions(path, piglet.ResolveOptions{Workspace: workspace})
+	resolution, err := ompiglet.ResolveEffectiveWithOptions(path, ompiglet.ResolveOptions{Workspace: workspace})
 	if err != nil {
-		return nil, fmt.Errorf("piglet %q: %w", name, err)
+		return nil, fmt.Errorf("ompiglet %q: %w", name, err)
 	}
-	if resolution.Piglet.SourcePath() == "" {
-		return nil, fmt.Errorf("piglet %q: canonical source path is unavailable", name)
+	if resolution.Ompiglet.SourcePath() == "" {
+		return nil, fmt.Errorf("ompiglet %q: canonical source path is unavailable", name)
 	}
-	return resolution.Piglet, nil
+	return resolution.Ompiglet, nil
 }
 
-func runScriptBuild(args []string, p *piglet.Piglet, outPath string, jsonMode bool, stdout, stderr io.Writer) int {
+func runScriptBuild(args []string, p *ompiglet.Ompiglet, outPath string, jsonMode bool, stdout, stderr io.Writer) int {
 	var artifactFlags []string
 	for _, name := range []string{"--targets", "--builder", "--verification", "--locked", "--record", "--sign-key"} {
 		if hasBuildFlag(args, name) {
@@ -259,9 +259,9 @@ func runScriptBuild(args []string, p *piglet.Piglet, outPath string, jsonMode bo
 		return renderBuildError(jsonMode, p.Name, err, 1, stdout, stderr)
 	}
 	if jsonMode {
-		writeBuildJSON(pigletBuildOutput{Success: true, Piglet: p.Name, Format: "script", Output: absolute}, stdout)
+		writeBuildJSON(pigletBuildOutput{Success: true, Ompiglet: p.Name, Format: "script", Output: absolute}, stdout)
 	} else {
-		_, _ = fmt.Fprintf(stdout, "Piglet script written: %s\n", absolute)
+		_, _ = fmt.Fprintf(stdout, "Ompiglet script written: %s\n", absolute)
 	}
 	return 0
 }
@@ -279,7 +279,7 @@ func writeSourceScript(path string, data []byte) (string, error) {
 	if err := os.MkdirAll(filepath.Dir(absolute), 0o755); err != nil {
 		return "", err
 	}
-	stage, err := os.CreateTemp(filepath.Dir(absolute), ".pig-piglet-script-*.stage")
+	stage, err := os.CreateTemp(filepath.Dir(absolute), ".ompig-ompiglet-script-*.stage")
 	if err != nil {
 		return "", err
 	}
@@ -297,7 +297,7 @@ func writeSourceScript(path string, data []byte) (string, error) {
 		return "", err
 	}
 	if err := fspublish.Publish(stagePath, absolute); err != nil {
-		return "", fmt.Errorf("commit Piglet script %s: %w", absolute, err)
+		return "", fmt.Errorf("commit Ompiglet script %s: %w", absolute, err)
 	}
 	return absolute, nil
 }
@@ -306,12 +306,12 @@ func writeSourceScript(path string, data []byte) (string, error) {
 // shell script, or on Windows a cmd.exe batch file with CRLF line endings.
 func sourceScript(goos, source string) []byte {
 	if goos == "windows" {
-		// pig additive (D69): a Windows Piglet script is a cmd.exe launcher.
+		// ompig additive (D69): a Windows Ompiglet script is a cmd.exe launcher.
 		// setlocal turns off delayed expansion that the calling cmd.exe may
 		// have enabled, so a ! in the source path stays literal.
-		return []byte("@setlocal DisableDelayedExpansion\r\n@pig --piglet " + quoteBatch(source) + " %*\r\n")
+		return []byte("@setlocal DisableDelayedExpansion\r\n@ompig --ompiglet " + quoteBatch(source) + " %*\r\n")
 	}
-	return []byte("#!/bin/sh\nexec pig --piglet " + quotePOSIX(source) + " \"$@\"\n")
+	return []byte("#!/bin/sh\nexec ompig --ompiglet " + quotePOSIX(source) + " \"$@\"\n")
 }
 
 func quotePOSIX(value string) string {
@@ -325,9 +325,9 @@ func quoteBatch(value string) string {
 	return `"` + strings.ReplaceAll(value, "%", "%%") + `"`
 }
 
-func resolvePigletPath(name string) (string, error) { return piglet.Resolve(name) }
+func resolvePigletPath(name string) (string, error) { return ompiglet.Resolve(name) }
 
-// parseArgs reads the Piglet Binary build's positional Piglet name and flags.
+// parseArgs reads the Ompiglet Binary build's positional Ompiglet name and flags.
 func parseArgs(args []string) (pigletName string, opts Options, jsonOut bool, outPath string, err error) {
 	opts.Builder = "auto"
 	opts.Verification = "basic"
@@ -426,7 +426,7 @@ func parseArgs(args []string) (pigletName string, opts Options, jsonOut bool, ou
 		return fail(fmt.Errorf("--format is required: script, binary, or image"))
 	}
 	if opts.Format != "script" && (opts.Locked || opts.Record != "") {
-		return fail(fmt.Errorf("--locked and --record Piglet artifact builds are not implemented"))
+		return fail(fmt.Errorf("--locked and --record Ompiglet artifact builds are not implemented"))
 	}
 	if opts.Format != "script" && opts.Verification != "basic" {
 		return fail(fmt.Errorf("verification policy %q is not registered; available: basic", opts.Verification))
@@ -444,7 +444,7 @@ func parseArgs(args []string) (pigletName string, opts Options, jsonOut bool, ou
 	return pigletName, opts, jsonOut, outPath, nil
 }
 
-func applyPigletBuildDefaults(p *piglet.Piglet, args []string, opts *Options, outPath *string) error {
+func applyPigletBuildDefaults(p *ompiglet.Ompiglet, args []string, opts *Options, outPath *string) error {
 	if p.Release != nil {
 		opts.Version = p.Release.Version
 	}
@@ -454,7 +454,7 @@ func applyPigletBuildDefaults(p *piglet.Piglet, args []string, opts *Options, ou
 	if len(p.Build.Targets) > 0 && !hasBuildFlag(args, "--targets") {
 		targets, err := parseTargets(strings.Join(p.Build.Targets, ","), opts.Sandbox.Native)
 		if err != nil {
-			return fmt.Errorf("piglet build.targets: %w", err)
+			return fmt.Errorf("ompiglet build.targets: %w", err)
 		}
 		opts.Targets = targets
 	}
@@ -495,14 +495,14 @@ func parseTargets(spec string, native Target) ([]Target, error) {
 	return targets, nil
 }
 
-// applyBakedPiglet computes the Piglet definition embedded into the Piglet
-// Binary with piglet.Bake, the same function provenance checks recompute.
-func applyBakedPiglet(pigletName string, p *piglet.Piglet, opts *Options) error {
+// applyBakedPiglet computes the Ompiglet definition embedded into the Ompiglet
+// Binary with ompiglet.Bake, the same function provenance checks recompute.
+func applyBakedPiglet(pigletName string, p *ompiglet.Ompiglet, opts *Options) error {
 	pigletDir := ""
 	if path, err := resolvePigletPath(pigletName); err == nil {
 		pigletDir = filepath.Dir(path)
 	}
-	baked, err := piglet.Bake(p, pigletDir)
+	baked, err := ompiglet.Bake(p, pigletDir)
 	if err != nil {
 		return err
 	}

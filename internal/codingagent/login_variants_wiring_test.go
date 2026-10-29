@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // loginVariantExpectedRed lists known violations open on this branch, keyed by

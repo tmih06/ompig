@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	wirejson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	wirejson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 func TestFrameTooLargeError_Message(t *testing.T) {

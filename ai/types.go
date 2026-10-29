@@ -12,10 +12,10 @@ import (
 	"net/http"
 	"slices"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsparity"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // ─── Provider API kind ────────────────────────────────────────────────────────
@@ -27,7 +27,7 @@ import (
 //	export type Api = KnownApi | (string & {});
 //
 // The string base type allows forward-compatibility for new APIs added
-// upstream without breaking the pig build, while [KnownAPIs] enumerates
+// upstream without breaking the ompig build, while [KnownAPIs] enumerates
 // the values defined as of the pinned UpstreamVersion.
 //
 // Use cases: model catalog (GeneratedModel.API), extension provider
@@ -257,7 +257,7 @@ func (content *ToolCall) UnmarshalJSON(data []byte) error {
 // NewDecodedToolCall returns the tool call that decoding {"id":...,"name":...,"arguments":rawArguments,...} yields: the
 // arguments object and the member order of its objects, which rawArguments, the JSON text of the arguments value, fixes.
 // A caller that has already parsed the object uses it to skip the general decode.
-// pig additive (D104): builds a decoded tool call for the single-pass entry decoder.
+// ompig additive (D104): builds a decoded tool call for the single-pass entry decoder.
 func NewDecodedToolCall(id, name, thoughtSignature, namespace string, arguments JsonObject, rawArguments []byte) (ToolCall, error) {
 	call := ToolCall{ID: id, Name: name, Arguments: arguments, ThoughtSignature: thoughtSignature, Namespace: namespace}
 	if len(rawArguments) > 0 {
@@ -865,7 +865,7 @@ type StreamOptions struct {
 	// with it where upstream providers call calculateCost(model, usage).
 	ModelCost ModelCost
 	// RepairToolFlow makes a real provider repair the tool results of its request before transformMessages: an out-of-order result moves to its call and an orphaned or repeated result is dropped. The agent loop sets it for a model request; a direct provider call keeps Pi's request.
-	// pig divergence (D48): upstream sends such results and the provider rejects the request.
+	// ompig divergence (D48): upstream sends such results and the provider rejects the request.
 	RepairToolFlow bool `json:"-"`
 	// Env contains request-specific provider environment values. Runtime-resolved
 	// values are merged first; request values win.

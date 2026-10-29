@@ -17,7 +17,7 @@ The base already fixes the built-in tool PascalCase detail leaks. Its `tools/15-
 
 ## Red, green, and mutation evidence
 
-Before production edits, the new Session tests fail on obsolete label rows, the unresolved compaction boundary, 16-character IDs, and nanosecond timestamps. The real-process probes report Pi `-2` versus PiG `130` for both active print and JSON SIGINT, Pi `129` versus PiG `1` for PTY disconnect, and Pi `0` versus PiG `129` for SIGHUP on a live terminal. Provider requests and positional extension command completion establish readiness; no sleep substitutes for those barriers.
+Before production edits, the new Session tests fail on obsolete label rows, the unresolved compaction boundary, 16-character IDs, and nanosecond timestamps. The real-process probes report Pi `-2` versus Ompig `130` for both active print and JSON SIGINT, Pi `129` versus Ompig `1` for PTY disconnect, and Pi `0` versus Ompig `129` for SIGHUP on a live terminal. Provider requests and positional extension command completion establish readiness; no sleep substitutes for those barriers.
 
 The complete `get_entries` response records are compared, including `leafId`, all entries and fields, and array order. Generated entry IDs are injectively aliased after checking their exact format and uniqueness. Generated timestamps are checked for millisecond ISO precision before replacing the nondeterministic value. Imported entry IDs and timestamps are fixed and untouched. There are no scenario `normalize_replace` rules or substring-only acceptance checks.
 
@@ -42,21 +42,21 @@ Run with ambient worker Session/model overrides removed:
 
 ```sh
 export PATH="/absolute/toolchain/bin:$PATH"
-unset PIG_CODING_AGENT_DIR PI_MODEL PI_PROVIDER PI_SESSION_ID PI_SESSION_FILE
-export PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
+unset OMPIG_CODING_AGENT_DIR PI_MODEL PI_PROVIDER PI_SESSION_ID PI_SESSION_FILE
+export OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
 export PI_PACKAGE_ROOT="$PWD/extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent"
-go build -o bin/pig ./cmd/pig
+go build -o bin/ompig ./cmd/ompig
 go test ./internal/codingagent -run 'TestClone|TestGeneratedEntryWireIdentity|TestSessionContextEditRoundTrips' -count=1
-go test ./cmd/pig -run 'TestModeWireLifecycle|TestPrintModeSignalExitCodes' -count=1
+go test ./cmd/ompig -run 'TestModeWireLifecycle|TestPrintModeSignalExitCodes' -count=1
 make parity-family FAMILY=session
 make parity-family FAMILY=print
 make parity-family FAMILY=json
 make parity-family FAMILY=tools
 go vet ./...
-GOOS=windows go vet ./internal/codingagent ./cmd/pig
+GOOS=windows go vet ./internal/codingagent ./cmd/ompig
 go tool golangci-lint config verify
-go tool golangci-lint run ./internal/codingagent ./cmd/pig
-go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/pig-go.json
+go tool golangci-lint run ./internal/codingagent ./cmd/ompig
+go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/ompig-go.json
 make coverage RESULTS=
 make -k ci-contracts ci-drift
 ```
@@ -73,7 +73,7 @@ Clone reconstruction scans the selected path and the Session label history. It i
 
 Shared production edits: `coding/cli/main.go` (SIGHUP registration and signal comment), `coding/cli/print_mode.go` (remove SIGINT ownership), `internal/codingagent/session.go` (entry generation and timestamps), `session_manager.go` (clone and rename entry identity), `session_manager_projection.go`, `agent_boundary.go`, `interactive_commands.go`, and `interactive_extensions.go` (entry timestamp producers), `interactive_input.go` (dead-terminal input boundary), `interactive.go`, `interactive_signals_unix.go`, `interactive_signals_windows.go`, and `interactive_tui.go` (remove duplicate SIGHUP ownership and correct shutdown comments).
 
-Shared evidence edits: `CHANGELOG.md` under the current integration release, `docs/parity/DIVERGENCES.md` D51, `docs/parity/PORT_MAP.md`, generated `AGENTS.md`/`test/parity/coverage.md`, generated `test/parity/interfaces/pig-go.json`, test mapping/policy, and the two current-disposition cells in `docs/parity/pending-tests-batches.md`. New tests, the Python real-process probe, and three scenarios are separate files.
+Shared evidence edits: `CHANGELOG.md` under the current integration release, `docs/parity/DIVERGENCES.md` D51, `docs/parity/PORT_MAP.md`, generated `AGENTS.md`/`test/parity/coverage.md`, generated `test/parity/interfaces/ompig-go.json`, test mapping/policy, and the two current-disposition cells in `docs/parity/pending-tests-batches.md`. New tests, the Python real-process probe, and three scenarios are separate files.
 
 The follow-up policy commit advances the frozen ported-test snapshot to the committed fix mapping, including the five already-ported files added since the previous snapshot and this lane's #8989 regression. It changes no hot-path tag. If integration cherry-picks the fix under a different SHA, rebind `baselineCommit` to that integrated commit and verify `baselinePorted` against its committed mapping.
 
@@ -83,7 +83,7 @@ The lane does not approve or mask baseline release blockers. `make -k ci-contrac
 
 | Final check | Result |
 |---|---|
-| `go test ./internal/codingagent ./cmd/pig ./internal/codingagent/tools ./coding` | Pass |
+| `go test ./internal/codingagent ./cmd/ompig ./internal/codingagent/tools ./coding` | Pass |
 | `go test ./test/parity/...` | Three baseline closure assertions fail because they expect all divergence rows to be provisional, while D78 is open. `TestImportCurrentDenominatorsAccountsEveryLedgerRow`, `TestDivergenceDashboardMatchesCurrentHeadingsAndScrutiny`, and `TestFoundationDashboardAccountsCurrentDenominatorsWithoutCredit` report this discrepancy. Other parity packages pass. |
 | Four paired families: session, print, JSON, tools | Pass, declared scenario durability |
 | Linux repository vet and Windows touched-package vet | Pass |

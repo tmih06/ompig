@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // Pi packages/durable/src/testing/env-conformance.ts createEnvConformance: the same 24 named cases (the symlink cases only when symlinks work), watch cases carry the 30 s timeout, and a provider failure is the case's result.

@@ -12,20 +12,20 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/MichaelKinsy/PiG/internal/fsretry"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/fsretry"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // quarantineDirName is the directory, in the node_modules holding the
 // installed package, that holds native images moved out of an installation npm
 // is about to replace.
-const quarantineDirName = ".pig-native-quarantine"
+const quarantineDirName = ".ompig-native-quarantine"
 
-// GetPackageDir is upstream getPackageDir (config.ts:393): PIG_PACKAGE_DIR or PI_PACKAGE_DIR when set, normalized as Pi's normalizePath does (a leading ~ expands, a file:// URL becomes its path); otherwise the installation directory of a compiled pig, the
+// GetPackageDir is upstream getPackageDir (config.ts:393): OMPIG_PACKAGE_DIR or PI_PACKAGE_DIR when set, normalized as Pi's normalizePath does (a leading ~ expands, a file:// URL becomes its path); otherwise the installation directory of a compiled ompig, the
 // directory holding the running executable. It returns "" when the executable cannot be located.
 func GetPackageDir() string {
-	for _, name := range []string{"PIG_PACKAGE_DIR", "PI_PACKAGE_DIR"} {
+	for _, name := range []string{"OMPIG_PACKAGE_DIR", "PI_PACKAGE_DIR"} {
 		if override := os.Getenv(name); override != "" {
 			// normalizePath: ~ expands and a file:// URL becomes its path. Pi throws for an invalid URL, which a string result cannot do, so the directory is reported as unlocated.
 			normalized, err := resolvepath.Normalize(override)
@@ -57,7 +57,7 @@ func normalizeWindowsPath(path string) (string, error) {
 // getQuarantineRoot is the quarantine in the nearest node_modules holding
 // packageDir, as upstream's, except that it skips the node_modules inside the
 // launcher package PackageName. npm nests the platform package that holds
-// pig.exe there and replaces the launcher's whole tree on an update, so a
+// ompig.exe there and replaces the launcher's whole tree on an update, so a
 // quarantine inside it would hold the running image in the tree npm removes.
 // Upstream's packageDir is the installed package itself, whose nearest
 // node_modules is outside it.
@@ -122,7 +122,7 @@ func pathWithin(path, root string) bool {
 }
 
 // CleanupWindowsSelfUpdateQuarantine removes the images an earlier npm
-// self-update quarantined beside packageDir. A previous pig process may still
+// self-update quarantined beside packageDir. A previous ompig process may still
 // be exiting and holding one, so a failure leaves the quarantine for the next
 // start.
 func CleanupWindowsSelfUpdateQuarantine(packageDir string) {
@@ -148,7 +148,7 @@ func QuarantineWindowsNativeDependencies(ctx context.Context, packageDir string)
 var quarantineRenameWait func(context.Context, time.Duration) error
 
 func quarantineNativeDependencies(ctx context.Context, packageDir string, sharedObjects []string) error {
-	// The loaded images carry their long names (loadedSharedObjects), so the package directory must too: a pig started
+	// The loaded images carry their long names (loadedSharedObjects), so the package directory must too: a ompig started
 	// through a short path (C:\Users\RUNNER~1\...) reports that spelling from os.Executable, and the images would never
 	// fall within it.
 	resolvedPackageDir, err := normalizeWindowsPath(longWindowsPath(packageDir))
@@ -176,7 +176,7 @@ func quarantineNativeDependencies(ctx context.Context, packageDir string, shared
 		if err := os.MkdirAll(filepath.Dir(quarantinePath), 0o755); err != nil {
 			return err
 		}
-		// pig divergence (D99): Pi's renameSync (windows-self-update.ts:81) fails while anti-virus or an indexer holds the image open without delete sharing, as it does for a short time after the image is written or started; the rename waits that hold out.
+		// ompig divergence (D99): Pi's renameSync (windows-self-update.ts:81) fails while anti-virus or an indexer holds the image open without delete sharing, as it does for a short time after the image is written or started; the rename waits that hold out.
 		if err := fsretry.Rename(ctx, loadedFile, quarantinePath, quarantineRenameWait); err != nil {
 			return err
 		}
@@ -210,7 +210,7 @@ func copyQuarantinedImage(src, dst string) error {
 
 // PrepareWindowsNpmSelfUpdate readies the npm installation holding exePath
 // for npm to replace: it clears an earlier quarantine and quarantines the
-// images this process loaded from it, which for pig is the running
+// images this process loaded from it, which for ompig is the running
 // executable. It does nothing outside Windows.
 func PrepareWindowsNpmSelfUpdate(ctx context.Context, exePath string) error {
 	if runtime.GOOS != "windows" {

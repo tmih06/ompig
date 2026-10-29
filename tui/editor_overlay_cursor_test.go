@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // inverseCells counts the cells a terminal paints in reverse video for line,
@@ -114,7 +114,7 @@ func TestEditorCursorAfterLineFillingLayoutWidth(t *testing.T) {
 }
 
 // At width 1 without padding Pi 0.87.1's Editor.render returns "g" plus the fake cursor of " ",
-// two cells wide, which its main screen treats as fatal. PiG highlights the
+// two cells wide, which its main screen treats as fatal. Ompig highlights the
 // final grapheme instead so the row fits (D66); an empty editor matches Pi.
 func TestEditorCursorAtWidthOneStaysInBounds(t *testing.T) {
 	for text, want := range map[string]string{"g": widthx.RenderFakeCursor("g"), "": widthx.RenderFakeCursor(" ")} {

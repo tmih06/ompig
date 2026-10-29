@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // shiftingEnv wraps an execution environment so that the reader it opens reports scripted metadata: shift receives the 0-based number of the Info call and the real info.

@@ -3,8 +3,8 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // upstream: packages/coding-agent/src/modes/rpc/rpc-mode.ts:195-206 setWidget sends the widget request only for `undefined` and a string

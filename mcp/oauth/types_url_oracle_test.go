@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's safeUrl (oauth/types.js) through parseProtectedResourceMetadata and parseAuthorizationServerMetadata, run against the vendored Pi module: which URL spellings Node's URL.canParse accepts and which schemes are refused.

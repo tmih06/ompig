@@ -9,12 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 var fixtureRoot, fixtureSourceRoot string
 
-// busBuildRoot is the config root of every event-bus rig's Host, shared the way concurrent PiG sessions share ~/.pig: a fixture compiles once for the package run and its builds are reused by later rigs.
+// busBuildRoot is the config root of every event-bus rig's Host, shared the way concurrent Ompig sessions share ~/.ompig: a fixture compiles once for the package run and its builds are reused by later rigs.
 var busBuildRoot string
 
 func TestMain(m *testing.M) {
@@ -22,7 +22,7 @@ func TestMain(m *testing.M) {
 	if runtime.GOOS != "windows" {
 		parent = "/tmp" // Unix socket paths must also fit macOS's 104-byte limit.
 	}
-	testRoot, err := os.MkdirTemp(parent, "pig-conf-")
+	testRoot, err := os.MkdirTemp(parent, "ompig-conf-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "create isolated test home:", err)
 		os.Exit(2)
@@ -42,11 +42,11 @@ func TestMain(m *testing.M) {
 	busBuildRoot = filepath.Join(testRoot, "bus-builds")
 	// Each Host creates its own socket directory beneath this short package root.
 	for key, value := range map[string]string{
-		"XDG_RUNTIME_DIR": testRoot,
-		"PIG_HOME":        filepath.Join(testRoot, "pig"),
-		"PIG_SDK_GO_ROOT": filepath.Join(sourceRoot, "extensions", "sdk"),
-		"PIG_SDK_PY_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-py"),
-		"PIG_SDK_RS_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-rs"),
+		"XDG_RUNTIME_DIR":   testRoot,
+		"OMPIG_HOME":        filepath.Join(testRoot, "ompig"),
+		"OMPIG_SDK_GO_ROOT": filepath.Join(sourceRoot, "extensions", "sdk"),
+		"OMPIG_SDK_PY_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-py"),
+		"OMPIG_SDK_RS_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-rs"),
 	} {
 		if err := os.Setenv(key, value); err != nil {
 			fmt.Fprintf(os.Stderr, "set isolated %s: %v\n", key, err)
@@ -80,7 +80,7 @@ func TestMain(m *testing.M) {
 // ensureUserToolchainsOnPath appends the per-user toolchain directories (mise shims, rustup's cargo bin) for each SDK tool that PATH does not already resolve. Non-interactive shells such as ssh commands never source the profile that adds them, so a host that has node and cargo installed would otherwise report them missing. A tool already on PATH is never overridden.
 func ensureUserToolchainsOnPath() {
 	// The missing-tool probe runs with a deliberately empty PATH and must see the tools as absent.
-	if os.Getenv("PIG_TEST_MISSING_CONFORMANCE_TOOL") != "" {
+	if os.Getenv("OMPIG_TEST_MISSING_CONFORMANCE_TOOL") != "" {
 		return
 	}
 	home, err := os.UserHomeDir()

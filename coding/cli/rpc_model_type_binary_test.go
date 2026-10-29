@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // piCatalogModelJSON is JSON.stringify of every chat model in Pi's MODELS, keyed by "provider/id": the bytes Pi's RPC
@@ -56,7 +56,7 @@ import(url).then(({ MODELS }) => {
 // member). This holds for the startup model in get_state as for get_available_models and set_model.
 func TestRPCModelObjectsCarryTheRegistryModelType(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	agentDir := t.TempDir()
@@ -68,7 +68,7 @@ func TestRPCModelObjectsCarryTheRegistryModelType(t *testing.T) {
 	t.Setenv("RADIUS_API_KEY", "radius-test")
 	// set_model applies its model only after `await session.setModel(model)` checks the provider's auth (rpc-mode.ts:470-478,
 	// agent-session.ts:2477-2480), so a get_state in the same input batch still reports the previous model, in Pi as in
-	// PiG. The get_state that reads the selected model is sent once the set_model response has arrived.
+	// Ompig. The get_state that reads the selected model is sent once the set_model response has arrived.
 	responses := runRPCRounds(t, bin, agentDir, []string{"--mode", "rpc", "--no-session", "--offline", "--model", "openai/gpt-4o"}, [][]string{{
 		`{"id":"state","type":"get_state"}`,
 		`{"id":"models","type":"get_available_models"}`,
@@ -153,7 +153,7 @@ func TestRPCModelObjectsCarryTheRegistryModelType(t *testing.T) {
 	}
 }
 
-// runRPCRounds runs pig in RPC mode and sends each round of commands once every command of the previous round has its
+// runRPCRounds runs ompig in RPC mode and sends each round of commands once every command of the previous round has its
 // response. It returns the data of each response by command id and fails the test on a failed response.
 func runRPCRounds(t *testing.T, bin, agentDir string, args []string, rounds [][]string) map[string]json.RawMessage {
 	t.Helper()
@@ -216,7 +216,7 @@ func runRPCRounds(t *testing.T, bin, agentDir string, args []string, rounds [][]
 	}
 	_, _ = io.Copy(io.Discard, stdout)
 	if err := child.Wait(); err != nil {
-		t.Fatalf("pig --mode rpc: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig --mode rpc: %v\nstderr: %s", err, stderr.String())
 	}
 	return responses
 }
@@ -226,7 +226,7 @@ func runRPCRounds(t *testing.T, bin, agentDir string, args []string, rounds [][]
 // place, and a merged object keeps the catalog's members first, then the added ones. Pi 1.1.0 sends exactly want.
 func TestRPCOverriddenBuiltinModelKeepsTheCatalogOrder(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	agentDir := t.TempDir()
@@ -246,7 +246,7 @@ func TestRPCOverriddenBuiltinModelKeepsTheCatalogOrder(t *testing.T) {
 	t.Setenv("OPENAI_API_KEY", "sk-test")
 	stdout, stderr, code := runPigForModeTestIn(t, bin, agentDir, stdin, nil, "--mode", "rpc", "--no-session", "--model", "openai/gpt-4o")
 	if code != 0 {
-		t.Fatalf("pig --mode rpc exited %d\nstderr: %s", code, stderr)
+		t.Fatalf("ompig --mode rpc exited %d\nstderr: %s", code, stderr)
 	}
 	var response struct {
 		Data struct {

@@ -15,13 +15,13 @@ from typing import Any
 import pytest
 from test_sdk import _read_frame_raw, _start_fake_host, _write_frame
 
-import pig_sdk
+import ompig_sdk
 
 
 class _BusHost:
     """A fake host that serves calls the extension makes before and after its register frame."""
 
-    def __init__(self, ext: pig_sdk.Extension) -> None:
+    def __init__(self, ext: ompig_sdk.Extension) -> None:
         tmp = tempfile.mkdtemp()
         sock_path = os.path.join(tmp, "ext.sock")
         self.listener = _start_fake_host(sock_path)
@@ -70,7 +70,7 @@ class _BusHost:
 
 def test_factory_listener_is_registered_before_the_register_frame_by_value() -> None:
     """loader.ts:501-509: the factory's pi.events.on runs while the extension loads, so the Host has the listener before it registers the extension; a native listener asks for its payload by value."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: None)
     host = _BusHost(ext)
     try:
@@ -84,7 +84,7 @@ def test_factory_listener_is_registered_before_the_register_frame_by_value() -> 
 
 
 def test_a_listener_unsubscribed_while_the_factory_runs_is_never_sent() -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("gone", lambda ctx, data: None)()
     ext.events.on("kept", lambda ctx, data: None)
     host = _BusHost(ext)
@@ -97,7 +97,7 @@ def test_a_listener_unsubscribed_while_the_factory_runs_is_never_sent() -> None:
 def test_dispatch_runs_the_handler_then_answers() -> None:
     """event-bus.ts:24-30: the listener's work is one unit, and the emitter is released after it."""
     got: list[Any] = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: got.append(data))
     host = _BusHost(ext)
     try:
@@ -111,11 +111,11 @@ def test_dispatch_runs_the_handler_then_answers() -> None:
 
 def test_a_handler_error_fails_only_its_dispatch() -> None:
     """event-bus.ts:24-30: safeHandler catches and reports; the SDK keeps serving and the error is that dispatch's."""
-    def fail(ctx: pig_sdk.Context, data: Any) -> None:
+    def fail(ctx: ompig_sdk.Context, data: Any) -> None:
         raise RuntimeError("listener-failed")
 
     seen: list[Any] = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("fail", fail)
     ext.events.on("ok", lambda ctx, data: seen.append(data))
     host = _BusHost(ext)
@@ -129,7 +129,7 @@ def test_a_handler_error_fails_only_its_dispatch() -> None:
 
 
 def test_an_unknown_handler_id_is_an_error_not_a_hang() -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     host = _BusHost(ext)
     try:
         assert "handler" in host.dispatch("d1", "nope", "ch", None)["error"]["message"]
@@ -140,9 +140,9 @@ def test_an_unknown_handler_id_is_an_error_not_a_hang() -> None:
 def test_emit_sends_json_by_value_with_the_calling_request_as_parent() -> None:
     """event-bus.ts:15-22: emit is synchronous and an unhandled `error` channel throws to the emitter."""
     outcome: list[Any] = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
 
-    def command(ctx: pig_sdk.Context, _args: str) -> None:
+    def command(ctx: ompig_sdk.Context, _args: str) -> None:
         outcome.append(ctx.events.emit("ch", {"a": 1}))
         try:
             ctx.events.emit("error", "boom")
@@ -167,7 +167,7 @@ def test_emit_sends_json_by_value_with_the_calling_request_as_parent() -> None:
 
 
 def test_emit_from_the_extension_has_no_parent_and_rejects_a_payload_without_a_json_form() -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     host = _BusHost(ext)
     try:
         errors: list[Exception] = []
@@ -193,10 +193,10 @@ def test_emit_from_the_extension_has_no_parent_and_rejects_a_payload_without_a_j
 
 def test_unsubscribe_sends_one_off_and_is_idempotent() -> None:
     """event-bus.ts:32 (EventEmitter.off): removing a listener twice removes it once."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     unsubscribed = threading.Event()
 
-    def command(ctx: pig_sdk.Context, _args: str) -> None:
+    def command(ctx: ompig_sdk.Context, _args: str) -> None:
         unsubscribe = ctx.events.on("ch", lambda c, d: None)
         unsubscribe()
         unsubscribe()
@@ -220,7 +220,7 @@ def test_unsubscribe_sends_one_off_and_is_idempotent() -> None:
 
 def test_a_listener_removed_during_a_dispatch_still_runs_for_that_dispatch() -> None:
     """EventEmitter clones its listener array for each emit: the Host dispatches the snapshot, so a listener that was unsubscribed after the snapshot still receives it."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ran: list[Any] = []
     unsubscribe = ext.events.on("ch", lambda ctx, data: ran.append(data))
     host = _BusHost(ext)
@@ -240,7 +240,7 @@ def test_a_listener_removed_during_a_dispatch_still_runs_for_that_dispatch() -> 
 
 def test_a_handler_can_emit_while_the_host_waits_for_its_answer() -> None:
     """event-bus.ts:15-27 (EventEmitter is synchronous and reentrant): the SDK serves host calls while a handler runs, so a nested emit does not deadlock."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("a", lambda ctx, data: ctx.events.emit("b", {"by": "py", "got": data}))
     host = _BusHost(ext)
     try:
@@ -258,7 +258,7 @@ def test_a_handler_can_emit_while_the_host_waits_for_its_answer() -> None:
 
 def test_registration_order_and_distinct_handler_ids() -> None:
     """EventEmitter keeps registration order; the Host orders listeners by their events.on calls, so each on() must complete its call before returning."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     for _ in range(3):
         ext.events.on("ch", lambda ctx, data: None)
     host = _BusHost(ext)
@@ -270,14 +270,14 @@ def test_registration_order_and_distinct_handler_ids() -> None:
 
 
 def test_on_rejects_a_handler_that_is_not_callable() -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     with pytest.raises(TypeError, match="callable"):
         ext.events.on("ch", "nope")  # type: ignore[arg-type]
 
 
 def test_a_released_listener_is_dropped_and_a_live_one_ignores_release() -> None:
     """The host sends events.release once no snapshot can still name an unsubscribed listener; until then the listener stays callable. A release of a listener that is still subscribed changes nothing."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ran: list[Any] = []
     kept_off = ext.events.on("gone", lambda ctx, data: ran.append(("gone", data)))
     ext.events.on("kept", lambda ctx, data: ran.append(("kept", data)))
@@ -306,7 +306,7 @@ def test_a_released_listener_is_dropped_and_a_live_one_ignores_release() -> None
 
 
 def test_a_dispatch_for_another_channel_is_an_unknown_handler() -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: None)
     host = _BusHost(ext)
     try:
@@ -318,8 +318,8 @@ def test_a_dispatch_for_another_channel_is_an_unknown_handler() -> None:
 
 def test_handler_ids_are_unique_across_the_extensions_of_one_process() -> None:
     """The Host keys a listener by realm (the OS process) and handler ID (coding/extension/host/subprocess/event_bus.go busHandlerKey), and a packed cell runs several extensions in one process. Two extensions that each subscribe must send different IDs, or one extension's unsubscribe removes the other's listener."""
-    first = pig_sdk.Extension("bus-a")
-    second = pig_sdk.Extension("bus-b")
+    first = ompig_sdk.Extension("bus-a")
+    second = ompig_sdk.Extension("bus-b")
     first.events.on("ch", lambda ctx, data: None)
     second.events.on("ch", lambda ctx, data: None)
     hosts = [_BusHost(first), _BusHost(second)]
@@ -334,7 +334,7 @@ def test_handler_ids_are_unique_across_the_extensions_of_one_process() -> None:
 def test_a_dispatch_that_arrives_before_the_factory_listener_is_confirmed_is_served() -> None:
     """The Host adds a listener when it receives events.on, so another realm's emit can dispatch to it before the call's result, while the extension still loads. A node runtime serves it during its factory; the SDK serves it and keeps loading."""
     got: list[Any] = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: got.append(data))
     tmp = tempfile.mkdtemp()
     sock_path = os.path.join(tmp, "ext.sock")
@@ -364,10 +364,10 @@ def test_a_dispatch_that_arrives_before_the_factory_listener_is_confirmed_is_ser
 
 def test_a_failed_unsubscribe_is_reported_and_does_not_raise(capsys: pytest.CaptureFixture[str]) -> None:
     """event-bus.ts:27: the unsubscribe function is EventEmitter.off, which never throws. A Host refusal is reported on stderr, as the Go SDK reports it."""
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     outcome: list[Any] = []
 
-    def command(ctx: pig_sdk.Context, _args: str) -> None:
+    def command(ctx: ompig_sdk.Context, _args: str) -> None:
         unsubscribe = ctx.events.on("ch", lambda c, d: None)
         try:
             unsubscribe()

@@ -11,15 +11,15 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/sessionentry"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func (m *InteractiveMode) deliverUserMessage(content any, deliverAs extension.DeliverAs) error {
@@ -83,9 +83,9 @@ func (m *InteractiveMode) deliverUserMessage(content any, deliverAs extension.De
 // add to the agent). If ActiveBuiltinTools is nil, all built-in tools are
 // active. Otherwise, only those in the set are active.
 //
-// This is used by GetAllTools/GetActiveTools host callbacks so that piglet
+// This is used by GetAllTools/GetActiveTools host callbacks so that ompiglet
 // scoping sees built-in tools alongside extension tools. Without this, the
-// piglet extension's applyScoping would build an AllowedTools set from only
+// ompiglet extension's applyScoping would build an AllowedTools set from only
 // extension tools, causing refreshAgentTools to filter out all built-in tools
 // (bash, read, write, edit, grep, find, ls) after a /reload or rescope.
 func (m *InteractiveMode) activeBuiltinToolNames(extTools ...extension.RegisteredTool) []string {
@@ -193,7 +193,7 @@ func (m *InteractiveMode) wireInprocContextActions() {
 					Source:      source,
 				})
 			}
-			// Append built-in tools so piglet scoping sees them. Built-in
+			// Append built-in tools so ompiglet scoping sees them. Built-in
 			// tools live in the agent (not the runner), so without this they
 			// would be invisible to GetAllTools → ScopeTools → SetActiveTools,
 			// causing them to be filtered out after a rescope.

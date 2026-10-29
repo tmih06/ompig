@@ -132,26 +132,26 @@ func AddProviderWireBehaviors(root string, snapshot *Snapshot, records []Record)
 }
 
 func providerWireDefinitions() []providerWireBehavior {
-	openAIRoot := sourceRange{repository: "pig", path: "coding/model.go", semanticID: "coding.buildProviderForEntry.openai-completions", start: "return ai.NewOpenAIProvider(ai.OpenAIConfig{", end: "\t\t}), nil"}
+	openAIRoot := sourceRange{repository: "ompig", path: "coding/model.go", semanticID: "coding.buildProviderForEntry.openai-completions", start: "return ai.NewOpenAIProvider(ai.OpenAIConfig{", end: "\t\t}), nil"}
 	openAISampling := providerWireTarget{
-		id: "openai-completions-sampling", symbol: "ai.openAIProvider.Stream.sampling", goFact: "go:github.com/MichaelKinsy/PiG/ai#openAIProvider.Stream",
-		rangeRef: sourceRange{repository: "pig", path: "ai/openai.go", semanticID: "ai.openAIProvider.Stream.sampling", start: "\tpayload := any(req)", end: "\tif opts.OnPayload != nil"},
+		id: "openai-completions-sampling", symbol: "ai.openAIProvider.Stream.sampling", goFact: "go:github.com/tmih06/ompig/ai#openAIProvider.Stream",
+		rangeRef: sourceRange{repository: "ompig", path: "ai/openai.go", semanticID: "ai.openAIProvider.Stream.sampling", start: "\tpayload := any(req)", end: "\tif opts.OnPayload != nil"},
 		rootRef:  openAIRoot,
 	}
 	basetenTarget := providerWireTarget{
-		id: "openai-baseten-chat-template", symbol: "ai.openAIProvider.Stream.baseten", goFact: "go:github.com/MichaelKinsy/PiG/ai#openAIProvider.Stream",
-		rangeRef: sourceRange{repository: "pig", path: "ai/openai.go", semanticID: "ai.openAIProvider.Stream.baseten", start: "\t\tcase \"baseten\":", end: "\t\tcase \"deepseek\":"},
+		id: "openai-baseten-chat-template", symbol: "ai.openAIProvider.Stream.baseten", goFact: "go:github.com/tmih06/ompig/ai#openAIProvider.Stream",
+		rangeRef: sourceRange{repository: "ompig", path: "ai/openai.go", semanticID: "ai.openAIProvider.Stream.baseten", start: "\t\tcase \"baseten\":", end: "\t\tcase \"deepseek\":"},
 		rootRef:  openAIRoot,
 	}
 	vllmTarget := providerWireTarget{
-		id: "openai-vllm-thinking-budget", symbol: "ai.openAIProvider.Stream.thinkingTokenBudget", goFact: "go:github.com/MichaelKinsy/PiG/ai#openAIProvider.Stream",
-		rangeRef: sourceRange{repository: "pig", path: "ai/openai.go", semanticID: "ai.openAIProvider.Stream.thinkingTokenBudget", start: "\tthinkingBudgetField := \"\"", end: "\t// OpenRouter provider routing preferences."},
+		id: "openai-vllm-thinking-budget", symbol: "ai.openAIProvider.Stream.thinkingTokenBudget", goFact: "go:github.com/tmih06/ompig/ai#openAIProvider.Stream",
+		rangeRef: sourceRange{repository: "ompig", path: "ai/openai.go", semanticID: "ai.openAIProvider.Stream.thinkingTokenBudget", start: "\tthinkingBudgetField := \"\"", end: "\t// OpenRouter provider routing preferences."},
 		rootRef:  openAIRoot,
 	}
 	responsesStream := providerWireTarget{
-		id: "openai-responses-sampling", symbol: "ai.openAIResponsesProvider.Stream.sampling", goFact: "go:github.com/MichaelKinsy/PiG/ai#openAIResponsesProvider.Stream",
-		rangeRef: sourceRange{repository: "pig", path: "ai/openai_responses.go", semanticID: "ai.openAIResponsesProvider.Stream.sampling", start: "\tpayload := any(req)", end: "\tif opts.OnPayload != nil"},
-		rootRef:  sourceRange{repository: "pig", path: "coding/model.go", semanticID: "coding.buildProviderForEntry.openai-responses", start: "return ai.NewOpenAIResponsesProvider(ai.OpenAIResponsesConfig{", end: "\t\t}), nil"},
+		id: "openai-responses-sampling", symbol: "ai.openAIResponsesProvider.Stream.sampling", goFact: "go:github.com/tmih06/ompig/ai#openAIResponsesProvider.Stream",
+		rangeRef: sourceRange{repository: "ompig", path: "ai/openai_responses.go", semanticID: "ai.openAIResponsesProvider.Stream.sampling", start: "\tpayload := any(req)", end: "\tif opts.OnPayload != nil"},
+		rootRef:  sourceRange{repository: "ompig", path: "coding/model.go", semanticID: "coding.buildProviderForEntry.openai-responses", start: "return ai.NewOpenAIResponsesProvider(ai.OpenAIResponsesConfig{", end: "\t\t}), nil"},
 	}
 	return []providerWireBehavior{
 		{
@@ -177,9 +177,9 @@ func providerWireDefinitions() []providerWireBehavior {
 				{repository: "upstream", path: "packages/ai/src/utils/headers.ts", semanticID: "headers.providerHeadersToRecord", start: "export function providerHeadersToRecord(", end: ""},
 			},
 			targets: []providerWireTarget{{
-				id: "model-registry-merge-headers", symbol: "codingagent.mergeHeadersOrdered", goFact: "go:github.com/MichaelKinsy/PiG/internal/codingagent#mergeHeadersOrdered",
-				rangeRef: sourceRange{repository: "pig", path: "internal/codingagent/model_registry.go", semanticID: "codingagent.mergeHeadersOrdered", start: "func mergeHeadersOrdered(", end: "// mergeCompat merges"},
-				rootRef:  sourceRange{repository: "pig", path: "internal/codingagent/model_registry.go", semanticID: "codingagent.composeRequestHeadersLocked", start: "func (r *ModelRegistry) composeRequestHeadersLocked(", end: "func generatedModelEntry("},
+				id: "model-registry-merge-headers", symbol: "codingagent.mergeHeadersOrdered", goFact: "go:github.com/tmih06/ompig/internal/codingagent#mergeHeadersOrdered",
+				rangeRef: sourceRange{repository: "ompig", path: "internal/codingagent/model_registry.go", semanticID: "codingagent.mergeHeadersOrdered", start: "func mergeHeadersOrdered(", end: "// mergeCompat merges"},
+				rootRef:  sourceRange{repository: "ompig", path: "internal/codingagent/model_registry.go", semanticID: "codingagent.composeRequestHeadersLocked", start: "func (r *ModelRegistry) composeRequestHeadersLocked(", end: "func generatedModelEntry("},
 			}},
 		},
 		{
@@ -199,9 +199,9 @@ func providerWireDefinitions() []providerWireBehavior {
 			upstreamFacts:  []string{"semantic-interface\x00pkg:ai/api/openai-completions#stream"},
 			upstreamRanges: []sourceRange{{repository: "upstream", path: "packages/ai/src/api/openai-completions.ts", semanticID: "openai-completions.mapStopReason", start: "function mapStopReason(", end: "function detectCompat("}},
 			targets: []providerWireTarget{{
-				id: "openai-finish-reason", symbol: "ai.mapOAIFinishReason", goFact: "go:github.com/MichaelKinsy/PiG/ai#mapOAIFinishReason",
-				rangeRef: sourceRange{repository: "pig", path: "ai/openai.go", semanticID: "ai.mapOAIFinishReason", start: "func mapOAIFinishReason(", end: ""},
-				rootRef:  sourceRange{repository: "pig", path: "ai/openai.go", semanticID: "ai.openAIProvider.parseSSE.finishReason", start: "stopReason, errorMessage := mapChunkFinishReason(finishReason, finishReasonNotString)", end: "\n\tcase !supportsFinishReason:"},
+				id: "openai-finish-reason", symbol: "ai.mapOAIFinishReason", goFact: "go:github.com/tmih06/ompig/ai#mapOAIFinishReason",
+				rangeRef: sourceRange{repository: "ompig", path: "ai/openai.go", semanticID: "ai.mapOAIFinishReason", start: "func mapOAIFinishReason(", end: ""},
+				rootRef:  sourceRange{repository: "ompig", path: "ai/openai.go", semanticID: "ai.openAIProvider.parseSSE.finishReason", start: "stopReason, errorMessage := mapChunkFinishReason(finishReason, finishReasonNotString)", end: "\n\tcase !supportsFinishReason:"},
 			}},
 		},
 	}
@@ -231,7 +231,7 @@ func makeSourceRangePin(root string, snapshot *Snapshot, reference sourceRange) 
 	if reference.repository == "upstream" {
 		base = filepath.Join(root, ".upstream", "current")
 		commit = snapshot.UpstreamCommit
-	} else if reference.repository != "pig" {
+	} else if reference.repository != "ompig" {
 		return nil, fmt.Errorf("source range %s has invalid repository %s", reference.semanticID, reference.repository)
 	}
 	baseAbsolute, err := filepath.Abs(base)
@@ -254,7 +254,7 @@ func makeSourceRangePin(root string, snapshot *Snapshot, reference sourceRange) 
 	if err != nil {
 		return nil, fmt.Errorf("source range %s: %w", reference.semanticID, err)
 	}
-	if reference.repository == "pig" {
+	if reference.repository == "ompig" {
 		if _, gitErr := repositoryGitOutput(context.Background(), root, "rev-parse", "--show-toplevel"); gitErr == nil {
 			prefix, prefixErr := repositoryGitOutput(context.Background(), root, "rev-parse", "--show-prefix")
 			if prefixErr != nil {

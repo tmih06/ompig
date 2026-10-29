@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // tenMegabyteCommand writes 10 MiB of 41-byte lines as fast as the pipe takes them.
@@ -24,7 +24,7 @@ func selfCPU(b *testing.B) time.Duration {
 	return time.Duration(usage.Utime.Nano() + usage.Stime.Nano())
 }
 
-// BenchmarkBashOutput10MB is the CPU pig spends on 10 MiB of command output (the command's own CPU is not counted): through the bash tool with a
+// BenchmarkBashOutput10MB is the CPU ompig spends on 10 MiB of command output (the command's own CPU is not counted): through the bash tool with a
 // streaming-update observer, and through user bash (`!cmd`) with a chunk observer.
 func BenchmarkBashOutput10MB(b *testing.B) {
 	b.Setenv("TMPDIR", b.TempDir())

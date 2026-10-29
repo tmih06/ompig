@@ -13,7 +13,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // EventBusHandler receives one payload of a channel. It mirrors the handler of upstream's `pi.events.on(channel, handler)`: it runs as one unit of work, its error is reported and reaches neither the emitter nor the listeners after it, and a panic is treated as an error.
@@ -61,7 +61,7 @@ type busRegistry struct {
 	mu   sync.Mutex
 	live bool
 	subs map[string]*busSub
-	// pending holds the listeners subscribed where there is no Host to register them with (no PIG_EXT_SOCKET, as in a unit test), in subscription order. Run registers them before the extension registers.
+	// pending holds the listeners subscribed where there is no Host to register them with (no OMPIG_EXT_SOCKET, as in a unit test), in subscription order. Run registers them before the extension registers.
 	pending []*busSub
 }
 
@@ -89,7 +89,7 @@ func (b EventBus) call(method string, args busCallArgs) error {
 
 // On subscribes handler to channel and returns its idempotent unsubscribe function. A failure to register with the Host is returned, and nothing stays subscribed.
 //
-// Called while the factory runs, On registers the listener with the Host at once, over the connection the factory opened, as Pi's shared emitter holds it from that moment: it hears another extension's emit made while the factory runs. Where there is no Host (no PIG_EXT_SOCKET, as in a unit test) the listener is queued and registered when the extension runs.
+// Called while the factory runs, On registers the listener with the Host at once, over the connection the factory opened, as Pi's shared emitter holds it from that moment: it hears another extension's emit made while the factory runs. Where there is no Host (no OMPIG_EXT_SOCKET, as in a unit test) the listener is queued and registered when the extension runs.
 func (b EventBus) On(channel string, handler EventBusHandler) (unsubscribe func(), err error) {
 	if handler == nil {
 		return func() {}, errors.New("pi.events.on: handler must not be nil")
@@ -164,7 +164,7 @@ func (e *Extension) unsubscribe(sub *busSub) func() {
 
 // Emit delivers data to every listener of channel, in registration order, and returns when each has finished. Like EventEmitter, an emit on "error" with no listener fails.
 //
-// Called through [Extension.Events] while the factory runs (before [Extension.Run]), it does what Pi's synchronous emit does in a factory: the Host delivers it to every listener it holds, in registration order, the listeners of the extensions loaded before this one and then this extension's own, which [EventBus.On] registered with it at once; each finishes before Emit returns, and an emit on "error" that nobody hears fails. The first factory-time bus call connects to the Host, so a factory that runs with no Host (no PIG_EXT_SOCKET, as in a unit test) gets an error. A listener the factory's emit runs has a [Context] with no session state yet (its Cwd and Mode are empty), and until the extension registers the only host calls it can make are pi.events ones and the parse helpers (ParseFrontmatter, ParseDate): a nested [Context.Events] Emit reaches the same listeners. Use [Extension.OnLoaded] for work that needs the live session.
+// Called through [Extension.Events] while the factory runs (before [Extension.Run]), it does what Pi's synchronous emit does in a factory: the Host delivers it to every listener it holds, in registration order, the listeners of the extensions loaded before this one and then this extension's own, which [EventBus.On] registered with it at once; each finishes before Emit returns, and an emit on "error" that nobody hears fails. The first factory-time bus call connects to the Host, so a factory that runs with no Host (no OMPIG_EXT_SOCKET, as in a unit test) gets an error. A listener the factory's emit runs has a [Context] with no session state yet (its Cwd and Mode are empty), and until the extension registers the only host calls it can make are pi.events ones and the parse helpers (ParseFrontmatter, ParseDate): a nested [Context.Events] Emit reaches the same listeners. Use [Extension.OnLoaded] for work that needs the live session.
 func (b EventBus) Emit(channel string, data any) error {
 	encoded, err := json.MarshalJS(data)
 	if err != nil {
@@ -198,7 +198,7 @@ func (b EventBus) Emit(channel string, data any) error {
 	return nil
 }
 
-var errNoFactoryHost = errors.New("PIG_EXT_SOCKET is not set, so this extension was not launched by pig")
+var errNoFactoryHost = errors.New("OMPIG_EXT_SOCKET is not set, so this extension was not launched by ompig")
 
 // errExtensionAlreadyServing is what a second concurrent serve of one Extension returns.
 var errExtensionAlreadyServing = errors.New("this extension is already serving a connection; an Extension serves one connection at a time, so build a new one per connection")

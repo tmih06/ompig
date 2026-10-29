@@ -7,9 +7,9 @@ import (
 	"errors"
 	"testing"
 
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // A transaction that outlives its commit does not keep the caller's telemetry span reachable, however the commit ends.

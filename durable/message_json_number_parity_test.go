@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A stored message goes through DecodeMessage and back through encoding/json on the native path (a model request, a record

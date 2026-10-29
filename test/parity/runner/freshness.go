@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-// FreshnessReport describes whether the pig binary under test was built after
-// the source files that feed cmd/pig. It exists to prevent the most expensive
-// parity failure mode: comparing upstream pi against a stale installed pig while
+// FreshnessReport describes whether the ompig binary under test was built after
+// the source files that feed cmd/ompig. It exists to prevent the most expensive
+// parity failure mode: comparing upstream pi against a stale installed ompig while
 // editing source in this checkout.
 type FreshnessReport struct {
 	BinaryPath     string
@@ -24,18 +24,18 @@ type FreshnessReport struct {
 	CheckedSources []string
 }
 
-// CheckPigFreshness compares pigBin's mtime with the newest Go source file in
-// the production packages compiled into the pig binary. Non-source docs,
+// CheckPigFreshness compares ompigBin's mtime with the newest Go source file in
+// the production packages compiled into the ompig binary. Non-source docs,
 // parity scenarios, examples, and testdata are intentionally ignored.
-func CheckPigFreshness(repoRoot, pigBin string) (FreshnessReport, error) {
-	report := FreshnessReport{BinaryPath: pigBin}
-	info, err := os.Stat(pigBin)
+func CheckPigFreshness(repoRoot, ompigBin string) (FreshnessReport, error) {
+	report := FreshnessReport{BinaryPath: ompigBin}
+	info, err := os.Stat(ompigBin)
 	if err != nil {
-		return report, fmt.Errorf("stat pig binary %s: %w", pigBin, err)
+		return report, fmt.Errorf("stat ompig binary %s: %w", ompigBin, err)
 	}
 	report.BinaryModTime = info.ModTime()
 
-	for _, rel := range pigFreshnessSourceDirs {
+	for _, rel := range ompigFreshnessSourceDirs {
 		root := filepath.Join(repoRoot, rel)
 		if _, err := os.Stat(root); err != nil {
 			continue
@@ -74,23 +74,23 @@ func CheckPigFreshness(repoRoot, pigBin string) (FreshnessReport, error) {
 	return report, nil
 }
 
-var pigFreshnessSourceDirs = []string{
-	"cmd/pig",
+var ompigFreshnessSourceDirs = []string{
+	"cmd/ompig",
 	"agent",
 	"ai",
 	"coding",
 	"internal",
-	"piglets/standard",
+	"ompiglets/standard",
 }
 
-func requireFreshPig(t *testing.T, repoRoot string, pig BinaryRef, allowStale bool) FreshnessReport {
+func requireFreshPig(t *testing.T, repoRoot string, ompig BinaryRef, allowStale bool) FreshnessReport {
 	t.Helper()
-	report, err := CheckPigFreshness(repoRoot, pig.Path)
+	report, err := CheckPigFreshness(repoRoot, ompig.Path)
 	if err != nil {
-		t.Fatalf("pig freshness check failed: %v", err)
+		t.Fatalf("ompig freshness check failed: %v", err)
 	}
 	if !report.Fresh && !allowStale {
-		t.Fatalf("stale pig binary under test: %s\n  binary mtime: %s\n  newest source: %s\n  source mtime: %s\n\nBuild a fresh parity binary and rerun:\n  go build -o /tmp/pig-under-test ./cmd/pig\n  PIG_PARITY_PIG_BIN=/tmp/pig-under-test go test -tags=parity ./test/parity/runner ...\n\nOr use make qc / make parity, which build a fresh bin/pig-parity by default. To inspect an intentionally stale installed binary, pass -pig-parity.allow-stale=true.",
+		t.Fatalf("stale ompig binary under test: %s\n  binary mtime: %s\n  newest source: %s\n  source mtime: %s\n\nBuild a fresh parity binary and rerun:\n  go build -o /tmp/ompig-under-test ./cmd/ompig\n  OMPIG_PARITY_OMPIG_BIN=/tmp/ompig-under-test go test -tags=parity ./test/parity/runner ...\n\nOr use make qc / make parity, which build a fresh bin/ompig-parity by default. To inspect an intentionally stale installed binary, pass -ompig-parity.allow-stale=true.",
 			report.BinaryPath,
 			report.BinaryModTime.Format(time.RFC3339Nano),
 			report.NewestPath,

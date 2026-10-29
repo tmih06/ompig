@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/prompt-templates.ts loadPromptTemplates against pinned Pi over a directory of random prompt files: headers with string and non-string description and argument-hint values, first lines at and around the 60-code-unit truncation point with astral characters, whitespace-only lines, every newline form and a BOM. Files whose YAML Pi rejects are compared by name and warning path only (the message is the YAML library's).
@@ -85,7 +85,7 @@ func TestLoadPromptTemplatesRandomFilesMatchPi(t *testing.T) {
 	}
 }
 
-// asPiJSON is the text as the oracle's JSON delivers Pi's strings: a lone surrogate, which Pig keeps as WTF-8, reads back as U+FFFD.
+// asPiJSON is the text as the oracle's JSON delivers Pi's strings: a lone surrogate, which Ompig keeps as WTF-8, reads back as U+FFFD.
 func asPiJSON(text string) string {
 	encoded, err := jsstring.MarshalJSON(text)
 	if err != nil {

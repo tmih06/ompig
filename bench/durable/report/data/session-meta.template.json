@@ -10,7 +10,7 @@
   "runner": {
     "repo": "badlogic/durable-bench",
     "commit": "e9abffa",
-    "changes": "CPU gate reads the pinned core and its SMT sibling only (gate-cpus.patch); PiG targets added (TODO patch path and sha256)."
+    "changes": "CPU gate reads the pinned core and its SMT sibling only (gate-cpus.patch); Ompig targets added (TODO patch path and sha256)."
   },
   "protocol": { "samples": 12, "turns": 10, "seed": "TODO scratch (every size from an empty store) or chain (fingerprinted segments 0 -> ... -> n)", "cpu_gate": "<= 8% over 1 s on CPU 23 and 87" },
   "model": {
@@ -31,21 +31,21 @@
   },
   "cloudflare": { "status": "none" },
   "targets": {
-    "pig-tinygo": { "label": "PiG Durable", "build": "TinyGo", "kind": "pig", "role": "headline", "version": "TODO core commit", "artifact": { "sha256": "TODO", "bytes": 0, "gzip": 0 } },
+    "ompig-tinygo": { "label": "Ompig Durable", "build": "TinyGo", "kind": "ompig", "role": "headline", "version": "TODO core commit", "artifact": { "sha256": "TODO", "bytes": 0, "gzip": 0 } },
     "pi-head": { "label": "pi-durable main", "kind": "pi", "role": "reference", "version": "da866ada" },
     "tardie": { "label": "Tardigrade", "kind": "tardigrade", "role": "contender", "version": "0.44.0" },
-    "pig-go": { "label": "PiG Durable", "build": "Go", "kind": "pig", "role": "detail", "version": "TODO core commit", "artifact": { "sha256": "TODO", "bytes": 0, "gzip": 0 } },
-    "pig-native": { "label": "PiG Durable", "build": "native", "kind": "pig", "role": "detail", "version": "TODO core commit", "model": "TODO the model the native host ran (RUNNER-SPEC Native build)", "artifact": { "sha256": "TODO", "bytes": 0, "gzip": 0 } },
+    "ompig-go": { "label": "Ompig Durable", "build": "Go", "kind": "ompig", "role": "detail", "version": "TODO core commit", "artifact": { "sha256": "TODO", "bytes": 0, "gzip": 0 } },
+    "ompig-native": { "label": "Ompig Durable", "build": "native", "kind": "ompig", "role": "detail", "version": "TODO core commit", "model": "TODO the model the native host ran (RUNNER-SPEC Native build)", "artifact": { "sha256": "TODO", "bytes": 0, "gzip": 0 } },
     "ts-control": { "label": "Durable core", "build": "TS", "kind": "control", "role": "control", "version": "TODO impls/ts-core version" },
     "empty": { "label": "Empty target", "kind": "floor", "role": "floor", "version": "floor" }
   },
   "bench_targets": {
     "pi-head-compact-big": { "target": "pi-head", "workload": "compact-big" },
-    "pig-tinygo-compact-big": { "target": "pig-tinygo", "workload": "compact-big" },
+    "ompig-tinygo-compact-big": { "target": "ompig-tinygo", "workload": "compact-big" },
     "pi-head-big": { "target": "pi-head", "workload": "big" },
-    "pig-tinygo-big": { "target": "pig-tinygo", "workload": "big" },
+    "ompig-tinygo-big": { "target": "ompig-tinygo", "workload": "big" },
     "pi-head-compact": { "target": "pi-head", "workload": "compact" },
-    "pig-tinygo-compact": { "target": "pig-tinygo", "workload": "compact" }
+    "ompig-tinygo-compact": { "target": "ompig-tinygo", "workload": "compact" }
   },
   "workloads": {
     "standard": { "title": "durable-bench as published", "description": "Compaction off, 256 B tool results (8 KiB every 97th)." },

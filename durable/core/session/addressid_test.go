@@ -6,7 +6,7 @@ package session
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // addressID is documents.ts addressId: JSON.stringify([kind, scope kind, owner or null, key or null]). It is built in place; the

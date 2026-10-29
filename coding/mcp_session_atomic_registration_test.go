@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 // SPDX-License-Identifier: MIT
 
@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi registers a server's tools, the tools it no longer offers as hidden, and the resource tools in one synchronous turn
-// (extensions/mcp/index.ts:387-463), so nothing that runs after it, a prompt included, sees part of them. Pig registers them as one
+// (extensions/mcp/index.ts:387-463), so nothing that runs after it, a prompt included, sees part of them. Ompig registers them as one
 // change: every state of the Session's tools has all of the server's tools and the resource tools, or none of them.
 func TestAgentSessionMCPRegistersAServersToolsAsOneChange(t *testing.T) {
 	const offered = 60

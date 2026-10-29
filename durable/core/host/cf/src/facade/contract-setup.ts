@@ -15,7 +15,7 @@ useStorageProfile({ memory: "gate", "node-sqlite": adapter, jsonl: adapter })
 // Wasm core throws as a trap would, before the core runs it. The host must recycle the instance and the program must finish as if nothing happened.
 if (process.env.CONTRACT_RECYCLE_AFTER !== undefined) {
   const { CoreTrap, WasmSession } = await import("../wasm.ts")
-  const armed = Symbol.for("pig.contract.trapNext")
+  const armed = Symbol.for("ompig.contract.trapNext")
   const proto = WasmSession.prototype as unknown as Record<"step" | "rows", (...args: unknown[]) => unknown>
   for (const name of ["step", "rows"] as const) {
     const real = proto[name]

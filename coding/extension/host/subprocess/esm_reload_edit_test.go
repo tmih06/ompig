@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
-// Pi imports an ES module extension through Node's own import, which keeps the module for the life of the process, so its /reload runs an edited ES module extension's old code (Pi 1.0.2, jiti 2.7.0). PiG evaluates an ES module extension again when a local module it imported was edited, its local imports included, and otherwise keeps the module and its state as Pi does; an installed package keeps its module either way (D93).
+// Pi imports an ES module extension through Node's own import, which keeps the module for the life of the process, so its /reload runs an edited ES module extension's old code (Pi 1.0.2, jiti 2.7.0). Ompig evaluates an ES module extension again when a local module it imported was edited, its local imports included, and otherwise keeps the module and its state as Pi does; an installed package keeps its module either way (D93).
 func TestHostReloadEvaluatesOnlyAnEditedESModuleExtensionAgain(t *testing.T) {
 	t.Parallel()
 	for _, fixture := range []struct {
@@ -178,7 +178,7 @@ export default function (pi) {
 	}
 }
 
-// Packed ES module extensions that import one local module share its instance, in Pi and in PiG. A reload that evaluates one of them again because only its own source changed keeps the shared module's instance and state; an edit of the shared module evaluates it, and every extension that imports it, again, and they share the new instance (D93).
+// Packed ES module extensions that import one local module share its instance, in Pi and in Ompig. A reload that evaluates one of them again because only its own source changed keeps the shared module's instance and state; an edit of the shared module evaluates it, and every extension that imports it, again, and they share the new instance (D93).
 func TestHostReloadKeepsAnUneditedSharedModuleOfPackedESModuleExtensions(t *testing.T) {
 	t.Parallel()
 	nodeCellRequireNode(t)

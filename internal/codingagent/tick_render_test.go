@@ -13,12 +13,12 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // terminalRecorder is the renderer's terminal: it records every byte written
@@ -107,7 +107,7 @@ func TestInteractiveMountPaintsBeforeInput(t *testing.T) {
 // The owner's frozen session: a long bash tool call runs, a steering message
 // is queued behind it, and nobody types. Pi's Loader interval advances the
 // "Working" spinner every 80ms and requests a render, and bash.ts re-renders its
-// "Elapsed" footer on a timer, so both reach the terminal with no input. Pig
+// "Elapsed" footer on a timer, so both reach the terminal with no input. Ompig
 // drives the same frames from tickSpinner through the owner loop. Every tick
 // must write the next spinner frame and the new elapsed time; a spinner that
 // only moves when a key invalidates the editor makes a working session look
@@ -311,9 +311,9 @@ func TestBackgroundFooterChangesReachTerminalWhileIdle(t *testing.T) {
 	})
 }
 
-// A branch switch made outside pig reaches the idle footer. Pi's footer data
+// A branch switch made outside ompig reaches the idle footer. Pi's footer data
 // provider notifies onBranchChange subscribers and interactive mode requests a
-// render; pig's watcher only invalidated the footer, so the new branch showed
+// render; ompig's watcher only invalidated the footer, so the new branch showed
 // on the next keystroke.
 func TestGitBranchChangeReachesTerminalWhileIdle(t *testing.T) {
 	repo := t.TempDir()

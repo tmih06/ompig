@@ -62,7 +62,7 @@ class PublicHygieneTests(unittest.TestCase):
     def test_nested_private_paths(self):
         for name in ['lane/REVIEW.md', 'lane/foo-REPORT.md', 'lane/a.TASK.md',
                      'docs/site/docs/.env.production', 'config/key.env',
-                     'pig-handoff/proof.txt', '.dev' + 'cache/token',
+                     'ompig-handoff/proof.txt', '.dev' + 'cache/token',
                      'docs/media/demo/demo-full.mp4', 'docs/media/demo/evidence/doom-pi.png',
                      'docs/media/demo/demo-a.mp4']:
             with self.subTest(name=name):
@@ -70,9 +70,9 @@ class PublicHygieneTests(unittest.TestCase):
 
     def test_private_contents_in_text_and_binary(self):
         for secret in ['/home/' + 'kin' + 'sy/work', '/Users/' + 'kin' + 'sy/work',
-                       '/var/tmp/' + 'kin' + 'sy-pig/tasks/lane.md', '/tmp/' + 'kin' + 'sy/evidence',
-                       'imla' + 'dris', 'pig' + '-staging', 'node.hpe' + 'corp.net',
-                       '$HOME/pig' + '-lanes', '.dev' + 'cache/scratch/key']:
+                       '/var/tmp/' + 'kin' + 'sy-ompig/tasks/lane.md', '/tmp/' + 'kin' + 'sy/evidence',
+                       'imla' + 'dris', 'ompig' + '-staging', 'node.hpe' + 'corp.net',
+                       '$HOME/ompig' + '-lanes', '.dev' + 'cache/scratch/key']:
             for prefix in [b'', b'\x00\xff']:
                 self.assertTrue(list(hygiene.findings('fixture.bin', prefix + secret.encode())))
 

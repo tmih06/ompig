@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
-// Ports packages/coding-agent/test/resource-loader.test.ts:123-181 at the theme-loading boundary. The CLI collector's matching project/user order is checked by TestResourceLoaderUpstreamProjectPrecedence in cmd/pig.
+// Ports packages/coding-agent/test/resource-loader.test.ts:123-181 at the theme-loading boundary. The CLI collector's matching project/user order is checked by TestResourceLoaderUpstreamProjectPrecedence in cmd/ompig.
 func TestResourceLoaderUpstreamThemePrecedence(t *testing.T) {
 	data, err := os.ReadFile("../../tui/theme_dark.json")
 	if err != nil {
@@ -17,7 +17,7 @@ func TestResourceLoaderUpstreamThemePrecedence(t *testing.T) {
 	}
 	root := t.TempDir()
 	userPath := filepath.Join(root, "agent", "themes", "collision.json")
-	projectPath := filepath.Join(root, "project", ".pig", "themes", "collision.json")
+	projectPath := filepath.Join(root, "project", ".ompig", "themes", "collision.json")
 	for _, path := range []string{userPath, projectPath} {
 		content := strings.Replace(string(data), `"name": "dark"`, `"name": "collision-theme"`, 1)
 		if path == projectPath {
@@ -42,7 +42,7 @@ func TestResourceLoaderUpstreamThemePrecedence(t *testing.T) {
 // Upstream dedupeThemes keeps the first theme of a name in precedence order
 // (resource-loader.ts); loadThemeResources gives the registry the same winner.
 func TestLoadThemePathsKeepsTheFirstThemeOfAName(t *testing.T) {
-	fixture, err := os.ReadFile(filepath.Join("..", "..", "test/parity", "scenarios", "startup", "testdata", "listing", "pig-agent", "themes", "fixture-theme.json"))
+	fixture, err := os.ReadFile(filepath.Join("..", "..", "test/parity", "scenarios", "startup", "testdata", "listing", "ompig-agent", "themes", "fixture-theme.json"))
 	if err != nil {
 		t.Fatal(err)
 	}

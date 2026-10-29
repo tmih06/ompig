@@ -10,8 +10,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // pi: packages/telemetry/src/memory.ts
@@ -240,7 +240,7 @@ func applyOp(recorder *telemetry.InMemoryTelemetryContext, span telemetry.Teleme
 }
 
 // The spans Pi's InMemoryTelemetryContext records for seeded random span programs (attributes with undefined values, array values, events, explicit and automatic statuses,
-// callbacks that return, throw a named Error or throw a non-Error, spans kept and used after they settled, children started under a settled parent) against PiG's, as
+// callbacks that return, throw a named Error or throw a non-Error, spans kept and used after they settled, children started under a settled parent) against Ompig's, as
 // the JSON of getSpans(). Programs await every child, since a Go callback runs to completion before its caller continues.
 func TestInMemoryTelemetryMatchesPiOnRandomPrograms(t *testing.T) {
 	rng := rand.New(rand.NewSource(151))
@@ -289,7 +289,7 @@ func TestInMemoryTelemetryMatchesPiOnRandomPrograms(t *testing.T) {
 		case 0:
 			return outcomeSpec{Kind: "error", Name: pick("Error", "TypeError", "Custom", ""), Message: pick("boom", "", "é")}
 		case 2:
-			// A thrown Error with no assigned name: Pi's `error.name` is "Error", PiG's error has no Name method.
+			// A thrown Error with no assigned name: Pi's `error.name` is "Error", Ompig's error has no Name method.
 			return outcomeSpec{Kind: "plain", Name: "Error", Message: pick("boom", "", "é")}
 		case 1:
 			return outcomeSpec{Kind: "nonError", Value: pick("s", "")}
@@ -423,14 +423,14 @@ func TestInMemoryTelemetryMatchesPiOnRandomPrograms(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		// The recorder's scope is a random UUID: Pi's output prints it as SCOPE, and so does PiG's.
+		// The recorder's scope is a random UUID: Pi's output prints it as SCOPE, and so does Ompig's.
 		gotJSON = scopePattern.ReplaceAll(gotJSON, []byte("SCOPE"))
 		// The texts are compared as written, so member order, attribute order included, is part of the comparison.
 		gotCanonical, wantCanonical := gotJSON, []byte(want[i])
 		if !bytes.Equal(gotCanonical, wantCanonical) {
 			if failures++; failures <= 3 {
 				programJSON, _ := json.Marshal(program)
-				t.Errorf("program %d %s:\n PiG %s\n Pi  %s", i, programJSON, gotCanonical, wantCanonical)
+				t.Errorf("program %d %s:\n Ompig %s\n Pi  %s", i, programJSON, gotCanonical, wantCanonical)
 			}
 		}
 	}

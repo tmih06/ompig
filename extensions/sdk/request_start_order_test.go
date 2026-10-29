@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The dispatch path takes a place for each request that runs extension code (a tool_call, an event, a command) in arrival order and begins it

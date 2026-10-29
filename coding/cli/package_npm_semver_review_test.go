@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // Review GF03-REVIEW-001: Pi package-manager.ts:59-65,1446-1457,1473-1478 derives an npm source's range with node-semver validRange and keeps an installed package whose selector is not a valid npm range. Expectations were read from Pi's locked semver 7.8.5 through that composition: != and comma conjunctions are unsupported, space-separated comparators are ANDed, partial versions expand as npm does, and a prerelease matches only its own major.minor.patch.

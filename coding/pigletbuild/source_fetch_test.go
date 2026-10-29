@@ -20,31 +20,31 @@ import (
 	"golang.org/x/mod/sumdb/dirhash"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
-// checkoutPigSource returns the Pig checkout these tests run from.
-func checkoutPigSource(t *testing.T) pigSource {
+// checkoutPigSource returns the Ompig checkout these tests run from.
+func checkoutPigSource(t *testing.T) ompigSource {
 	t.Helper()
-	root, err := pigSourceRoot()
+	root, err := ompigSourceRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
-	return pigSource{Root: root}
+	return ompigSource{Root: root}
 }
 
 // withoutPigCheckout makes the native builder see a binary-only install: no
-// PIG_SOURCE_ROOT and a working directory outside any Pig checkout. PIG_HOME is a
-// test directory, so staged release source never reaches the user's ~/.pig cache.
+// OMPIG_SOURCE_ROOT and a working directory outside any Ompig checkout. OMPIG_HOME is a
+// test directory, so staged release source never reaches the user's ~/.ompig cache.
 func withoutPigCheckout(t *testing.T) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_SOURCE_ROOT", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_SOURCE_ROOT", "")
 	t.Chdir(t.TempDir())
-	if root, err := pigSourceRoot(); err == nil {
-		t.Fatalf("test working directory is inside Pig checkout %s", root)
+	if root, err := ompigSourceRoot(); err == nil {
+		t.Fatalf("test working directory is inside Ompig checkout %s", root)
 	}
 }
 
@@ -53,7 +53,7 @@ func fakeModuleTree(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
 	files := map[string]string{
-		"go.mod":             "module github.com/MichaelKinsy/PiG\n\ngo 1.26.0\n",
+		"go.mod":             "module github.com/tmih06/ompig\n\ngo 1.26.0\n",
 		"go.work":            "go 1.26.0\n\nuse ./extensions/sdk\n",
 		"coding/cli/main.go": "package main\n\nfunc main() {}\n",
 		"coding/upstream.go": "package coding\n",
@@ -108,7 +108,7 @@ func TestNativeProbeReleaseWithoutCheckoutIsFetchableWithoutDownloading(t *testi
 	withoutPigCheckout(t)
 	download := &fakeModDownload{err: errors.New("probe must not download")}
 	readiness := releaseBuilder("v9.8.7", download).Probe(context.Background(), hostRequest())
-	if !readiness.Ready || readiness.Code != "source-fetchable" || !strings.Contains(readiness.Message, "PiG v9.8.7 source") {
+	if !readiness.Ready || readiness.Code != "source-fetchable" || !strings.Contains(readiness.Message, "Ompig v9.8.7 source") {
 		t.Fatalf("readiness = %+v", readiness)
 	}
 	if len(download.queries) != 0 {
@@ -141,7 +141,7 @@ func TestResolveSourceFetchesExactlyTheRunningRelease(t *testing.T) {
 	withoutPigCheckout(t)
 	dir := fakeModuleTree(t)
 	output, err := json.Marshal(map[string]any{
-		"Path": pigModulePath, "Version": "v9.8.7", "Dir": dir, "Sum": "h1:abc=",
+		"Path": ompigModulePath, "Version": "v9.8.7", "Dir": dir, "Sum": "h1:abc=",
 		"Origin": map[string]string{"VCS": "git", "Hash": "0123456789abcdef0123456789abcdef01234567"},
 	})
 	if err != nil {
@@ -153,19 +153,19 @@ func TestResolveSourceFetchesExactlyTheRunningRelease(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !slices.Equal(download.queries, []string{"github.com/MichaelKinsy/PiG@v9.8.7"}) {
+	if !slices.Equal(download.queries, []string{"github.com/tmih06/ompig@v9.8.7"}) {
 		t.Fatalf("queries = %v", download.queries)
 	}
-	if filepath.Dir(source.Root) != pigSourceCacheDir() || !isPigModule(source.Root) || source.ModuleVersion != "v9.8.7" || source.Revision != "0123456789abcdef0123456789abcdef01234567" {
+	if filepath.Dir(source.Root) != ompigSourceCacheDir() || !isPigModule(source.Root) || source.ModuleVersion != "v9.8.7" || source.Revision != "0123456789abcdef0123456789abcdef01234567" {
 		t.Fatalf("source = %+v", source)
 	}
-	if home := os.Getenv("PIG_HOME"); home == "" || !strings.HasPrefix(source.Root, home+string(filepath.Separator)) {
-		t.Fatalf("staged source %s is outside the test PIG_HOME %q", source.Root, home)
+	if home := os.Getenv("OMPIG_HOME"); home == "" || !strings.HasPrefix(source.Root, home+string(filepath.Separator)) {
+		t.Fatalf("staged source %s is outside the test OMPIG_HOME %q", source.Root, home)
 	}
-	if got := stderr.String(); got != "fetching PiG v9.8.7 source (cached after first build)\n" {
+	if got := stderr.String(); got != "fetching Ompig v9.8.7 source (cached after first build)\n" {
 		t.Fatalf("stderr = %q", got)
 	}
-	revision, digest, err := pigSourceIdentity(source)
+	revision, digest, err := ompigSourceIdentity(source)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -183,8 +183,8 @@ func TestResolveSourceFetchesExactlyTheRunningRelease(t *testing.T) {
 }
 
 func TestResolveSourceRevisionFallsBackToModuleVersion(t *testing.T) {
-	source := pigSource{Root: fakeModuleTree(t), ModuleVersion: "v9.8.7"}
-	revision, _, err := pigSourceIdentity(source)
+	source := ompigSource{Root: fakeModuleTree(t), ModuleVersion: "v9.8.7"}
+	revision, _, err := ompigSourceIdentity(source)
 	if err != nil || revision != "v9.8.7" {
 		t.Fatalf("revision=%q err=%v", revision, err)
 	}
@@ -217,7 +217,7 @@ func TestResolveSourceDevBuildKeepsSourceUnavailableRemedy(t *testing.T) {
 func TestResolveSourceReportsDownloadFailureWithRemedy(t *testing.T) {
 	withoutPigCheckout(t)
 	download := &fakeModDownload{
-		output: []byte(`{"Path":"github.com/MichaelKinsy/PiG","Version":"v9.8.7","Error":"github.com/MichaelKinsy/PiG@v9.8.7: invalid version: unknown revision v9.8.7"}`),
+		output: []byte(`{"Path":"github.com/tmih06/ompig","Version":"v9.8.7","Error":"github.com/tmih06/ompig@v9.8.7: invalid version: unknown revision v9.8.7"}`),
 		err:    errors.New("exit status 1"),
 	}
 	_, err := releaseBuilder("v9.8.7", download).resolveSource(context.Background(), &bytes.Buffer{})
@@ -232,8 +232,8 @@ func TestResolveSourceRejectsAnotherModule(t *testing.T) {
 	// the later missing-sum check.
 	cases := map[string]map[string]any{
 		"path":    {"Path": "example.com/other", "Version": "v9.8.7", "Dir": fakeModuleTree(t), "Sum": "h1:abc="},
-		"version": {"Path": pigModulePath, "Version": "v9.8.6", "Dir": fakeModuleTree(t), "Sum": "h1:abc="},
-		"tree":    {"Path": pigModulePath, "Version": "v9.8.7", "Dir": t.TempDir(), "Sum": "h1:abc="},
+		"version": {"Path": ompigModulePath, "Version": "v9.8.6", "Dir": fakeModuleTree(t), "Sum": "h1:abc="},
+		"tree":    {"Path": ompigModulePath, "Version": "v9.8.7", "Dir": t.TempDir(), "Sum": "h1:abc="},
 	}
 	for name, result := range cases {
 		t.Run(name, func(t *testing.T) {
@@ -242,21 +242,21 @@ func TestResolveSourceRejectsAnotherModule(t *testing.T) {
 				t.Fatal(err)
 			}
 			_, err = releaseBuilder("v9.8.7", &fakeModDownload{output: output}).resolveSource(context.Background(), &bytes.Buffer{})
-			if err == nil || !strings.Contains(err.Error(), "source-unavailable") || !strings.Contains(err.Error(), "not the PiG v9.8.7 source") {
+			if err == nil || !strings.Contains(err.Error(), "source-unavailable") || !strings.Contains(err.Error(), "not the Ompig v9.8.7 source") {
 				t.Fatalf("error = %v", err)
 			}
 		})
 	}
 }
 
-// publishedModuleProxy serves one PiG release from a file:// module proxy in the layout the Go
+// publishedModuleProxy serves one Ompig release from a file:// module proxy in the layout the Go
 // command reads: <escaped path>/@v/<version>.{info,mod,zip}. It returns the proxy URL, the
 // release revision its .info reports, and the h1: module hash of the zip, computed from the zip
 // itself, which is the value a checksum database pins for that release.
 func publishedModuleProxy(t *testing.T, version string) (proxyURL, revision, sum string) {
 	t.Helper()
 	revision = "0123456789abcdef0123456789abcdef01234567"
-	escaped, err := module.EscapePath(pigModulePath)
+	escaped, err := module.EscapePath(ompigModulePath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -267,7 +267,7 @@ func publishedModuleProxy(t *testing.T, version string) (proxyURL, revision, sum
 	}
 	tree := fakeModuleTree(t)
 	var archive bytes.Buffer
-	if err := modzip.CreateFromDir(&archive, module.Version{Path: pigModulePath, Version: version}, tree); err != nil {
+	if err := modzip.CreateFromDir(&archive, module.Version{Path: ompigModulePath, Version: version}, tree); err != nil {
 		t.Fatal(err)
 	}
 	gomod, err := os.ReadFile(filepath.Join(tree, "go.mod"))
@@ -277,7 +277,7 @@ func publishedModuleProxy(t *testing.T, version string) (proxyURL, revision, sum
 	info, err := json.Marshal(map[string]any{
 		"Version": version,
 		"Time":    "2026-01-02T03:04:05Z",
-		"Origin":  map[string]string{"VCS": "git", "URL": "https://" + pigModulePath, "Hash": revision},
+		"Origin":  map[string]string{"VCS": "git", "URL": "https://" + ompigModulePath, "Hash": revision},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -300,7 +300,7 @@ func publishedModuleProxy(t *testing.T, version string) (proxyURL, revision, sum
 }
 
 // TestGoModDownloadFetchesPublishedPigSource runs the real `go mod download` against a local
-// file module proxy that serves one PiG release in the proxy layout. The fetch needs no network,
+// file module proxy that serves one Ompig release in the proxy layout. The fetch needs no network,
 // so the test proves the same path a release binary takes (go mod download -json, the module
 // sum, the origin revision, staging) without waiting on a 50 MB download. The module sum the
 // download reports must equal the h1: hash computed from the served zip, which is the hash a
@@ -327,10 +327,10 @@ func TestGoModDownloadFetchesPublishedPigSource(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(source.Root, "coding", "cli", "main.go")); err != nil {
 		t.Fatalf("fetched source lacks coding/cli: %v", err)
 	}
-	if got, err := os.ReadFile(filepath.Join(source.Root, ".pig-source-sum")); err != nil || string(got) != wantSum {
+	if got, err := os.ReadFile(filepath.Join(source.Root, ".ompig-source-sum")); err != nil || string(got) != wantSum {
 		t.Fatalf("staged module sum = %q, %v; want the served zip's %s", got, err, wantSum)
 	}
-	if !strings.Contains(stderr.String(), "fetching PiG v0.9.8 source") {
+	if !strings.Contains(stderr.String(), "fetching Ompig v0.9.8 source") {
 		t.Fatalf("stderr = %q", stderr.String())
 	}
 }
@@ -338,17 +338,17 @@ func TestGoModDownloadFetchesPublishedPigSource(t *testing.T) {
 // TestPublishedPigReleaseResolvesThroughTheModuleProxy resolves the published v0.3.1 release
 // through the real module proxy and checksum database. It fetches only the release metadata
 // (.info and go.mod, a few KB; a failed go.mod hash check fails the command), not the 50 MB source zip, and checks the go.mod hash against
-// sum.golang.org. An unreachable proxy fails the test; a run that has no network on purpose says so with PIG_TEST_OFFLINE=1 (or -short).
+// sum.golang.org. An unreachable proxy fails the test; a run that has no network on purpose says so with OMPIG_TEST_OFFLINE=1 (or -short).
 func TestPublishedPigReleaseResolvesThroughTheModuleProxy(t *testing.T) {
 	if testing.Short() {
 		t.Skip("network metadata lookup")
 	}
-	if os.Getenv("PIG_TEST_OFFLINE") == "1" {
-		t.Skip("PIG_TEST_OFFLINE=1: no network by request")
+	if os.Getenv("OMPIG_TEST_OFFLINE") == "1" {
+		t.Skip("OMPIG_TEST_OFFLINE=1: no network by request")
 	}
 	conn, err := net.DialTimeout("tcp", "proxy.golang.org:443", 3*time.Second)
 	if err != nil {
-		t.Fatalf("Go module proxy unreachable (set PIG_TEST_OFFLINE=1 to run offline on purpose): %v", err)
+		t.Fatalf("Go module proxy unreachable (set OMPIG_TEST_OFFLINE=1 to run offline on purpose): %v", err)
 	}
 	_ = conn.Close()
 	t.Setenv("GOMODCACHE", t.TempDir())
@@ -362,13 +362,13 @@ func TestPublishedPigReleaseResolvesThroughTheModuleProxy(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	command := linkerexec.CommandContext(ctx, goToolchain.Command, "list", "-m", "-json", pigModulePath+"@"+published)
+	command := linkerexec.CommandContext(ctx, goToolchain.Command, "list", "-m", "-json", ompigModulePath+"@"+published)
 	command.Dir = t.TempDir()
 	command.Env = goToolchain.Environ(moduleSourceBuildEnv(os.Environ()))
 	var stdout, stderr bytes.Buffer
 	command.Stdout, command.Stderr = &stdout, &stderr
 	if err := command.Run(); err != nil {
-		t.Fatalf("go list -m %s@%s: %v\n%s", pigModulePath, published, err, stderr.String())
+		t.Fatalf("go list -m %s@%s: %v\n%s", ompigModulePath, published, err, stderr.String())
 	}
 	var listed struct {
 		Path, Version string
@@ -377,7 +377,7 @@ func TestPublishedPigReleaseResolvesThroughTheModuleProxy(t *testing.T) {
 	if err := json.Unmarshal(stdout.Bytes(), &listed); err != nil {
 		t.Fatal(err)
 	}
-	if listed.Path != pigModulePath || listed.Version != published || listed.Origin == nil || len(listed.Origin.Hash) != 40 {
+	if listed.Path != ompigModulePath || listed.Version != published || listed.Origin == nil || len(listed.Origin.Hash) != 40 {
 		t.Fatalf("listed = %+v", listed)
 	}
 }
@@ -386,7 +386,7 @@ func TestPublishedPigReleaseResolvesThroughTheModuleProxy(t *testing.T) {
 // release. A build whose staging loses the publish race must reuse the winner's tree. It must
 // not delete that tree, because the winner is already compiling from it.
 func TestMaterializeModuleSourceNeverReplacesAPublishedTree(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	moduleDir := fakeModuleTree(t)
 	for i := range 400 {
 		path := filepath.Join(moduleDir, "pkg", fmt.Sprintf("f%03d.go", i))
@@ -414,7 +414,7 @@ func TestMaterializeModuleSourceNeverReplacesAPublishedTree(t *testing.T) {
 				results[i].err = err
 				return
 			}
-			marker, err := os.Stat(filepath.Join(root, ".pig-source-sum"))
+			marker, err := os.Stat(filepath.Join(root, ".ompig-source-sum"))
 			results[i] = published{root: root, marker: marker, err: err}
 		})
 	}
@@ -424,7 +424,7 @@ func TestMaterializeModuleSourceNeverReplacesAPublishedTree(t *testing.T) {
 		if result.err != nil {
 			t.Fatalf("build %d: %v", i, result.err)
 		}
-		current, err := os.Stat(filepath.Join(result.root, ".pig-source-sum"))
+		current, err := os.Stat(filepath.Join(result.root, ".ompig-source-sum"))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -435,38 +435,38 @@ func TestMaterializeModuleSourceNeverReplacesAPublishedTree(t *testing.T) {
 }
 
 func TestMaterializeModuleSourceReplacesAnUnpublishedTarget(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	moduleDir := fakeModuleTree(t)
 	first, err := materializeModuleSource(moduleDir, "v9.8.7", "h1:leftover=")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Remove(filepath.Join(first, ".pig-source-sum")); err != nil {
+	if err := os.Remove(filepath.Join(first, ".ompig-source-sum")); err != nil {
 		t.Fatal(err)
 	}
 	again, err := materializeModuleSource(moduleDir, "v9.8.7", "h1:leftover=")
 	if err != nil || again != first {
 		t.Fatalf("root=%s err=%v, want %s", again, err, first)
 	}
-	if data, err := os.ReadFile(filepath.Join(again, ".pig-source-sum")); err != nil || string(data) != "h1:leftover=" {
+	if data, err := os.ReadFile(filepath.Join(again, ".ompig-source-sum")); err != nil || string(data) != "h1:leftover=" {
 		t.Fatalf("marker = %q, %v", data, err)
 	}
 }
 
 // TestRunningPigReleaseRequiresTheExactStampedVersion checks the release identity the fetch
-// trusts. The test binary is a development build. Only a stamp equal to v<PigVersion> makes it
+// trusts. The test binary is a development build. Only a stamp equal to v<OmpigVersion> makes it
 // a release, so a stale or foreign stamp can never fetch another version's source.
 func TestRunningPigReleaseRequiresTheExactStampedVersion(t *testing.T) {
 	saved := releaseSourceVersion
 	t.Cleanup(func() { releaseSourceVersion = saved })
-	want := "v" + coding.PigVersion
+	want := "v" + coding.OmpigVersion
 	cases := []struct {
 		stamp   string
 		release bool
 	}{
 		{stamp: "", release: false},
 		{stamp: "v0.0.1", release: false},
-		{stamp: coding.PigVersion, release: false},
+		{stamp: coding.OmpigVersion, release: false},
 		{stamp: want + "-dirty", release: false},
 		{stamp: want, release: true},
 		{stamp: " " + want + "\n", release: true},
@@ -483,12 +483,12 @@ func TestRunningPigReleaseRequiresTheExactStampedVersion(t *testing.T) {
 func TestSourceRevisionOutsideGitCheckoutNamesDirectory(t *testing.T) {
 	root := t.TempDir()
 	t.Setenv("GIT_CEILING_DIRECTORIES", filepath.Dir(root))
-	t.Setenv("PIG_SOURCE_ROOT", root)
-	_, err := pigSource{Root: root}.revision()
+	t.Setenv("OMPIG_SOURCE_ROOT", root)
+	_, err := ompigSource{Root: root}.revision()
 	if err == nil {
 		t.Fatal("revision() succeeded outside a Git checkout")
 	}
-	want := "PIG_SOURCE_ROOT " + root + " is not a Git checkout: the Piglet builder records the PiG commit it builds from; clone PiG with git, or unset PIG_SOURCE_ROOT to fetch the release source"
+	want := "OMPIG_SOURCE_ROOT " + root + " is not a Git checkout: the Ompiglet builder records the Ompig commit it builds from; clone Ompig with git, or unset OMPIG_SOURCE_ROOT to fetch the release source"
 	if err.Error() != want {
 		t.Fatalf("error = %q, want %q", err.Error(), want)
 	}

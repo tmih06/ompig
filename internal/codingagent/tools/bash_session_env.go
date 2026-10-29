@@ -8,8 +8,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // sessionVariables are the variables upstream's bash tool controls.
@@ -52,7 +52,7 @@ func GetShellEnv(binDir string) []string {
 }
 
 // sessionEnvironment mirrors upstream resolveSpawnContext: it always removes
-// inherited session variables, so a nested pig never sees its parent's values,
+// inherited session variables, so a nested ompig never sees its parent's values,
 // then adds the current session's values when expose is set.
 func sessionEnvironment(ctx context.Context, expose bool, binDir string) []string {
 	base := GetShellEnv(binDir)

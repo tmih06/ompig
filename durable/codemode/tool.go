@@ -42,11 +42,11 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Sandbox runs the scripts: a *codemode.Sandbox, or anything that starts deterministic runs as it does.

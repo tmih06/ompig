@@ -12,12 +12,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // probeTimeout bounds the --version start check of a slot runtime. Node's own preflight (node --version) has no bound of its own;
 // a runtime that hangs here falls back to Node instead of holding every extension launch.
-// pig additive (D19): the start check is part of the runtime slot, which Pi does not have.
+// ompig additive (D19): the start check is part of the runtime slot, which Pi does not have.
 const probeTimeout = 10 * time.Second
 
 // Verifier checks slot executables against their manifests and the lock, once per executable state for the life of the process.

@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-// pig additive (D19): cross-process references (xref). Each extension OS process is one realm. A realm exports its objects by reference; the Host routes every operation on a foreign reference to the owning realm through the synchronous host call path and keeps the lease ledger that lets owners drop exports no realm can reach. Wire shape and lifetime protocol: plans/0.3.x/gap-xproc.md sections 3-4.
+// ompig additive (D19): cross-process references (xref). Each extension OS process is one realm. A realm exports its objects by reference; the Host routes every operation on a foreign reference to the owning realm through the synchronous host call path and keeps the lease ledger that lets owners drop exports no realm can reach. Wire shape and lifetime protocol: plans/0.3.x/gap-xproc.md sections 3-4.
 
 const (
 	callXrefHello = "xref.hello"

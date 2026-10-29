@@ -1,4 +1,4 @@
-// Package rpcclient is a Go client for `pig --mode rpc`: it spawns the agent
+// Package rpcclient is a Go client for `ompig --mode rpc`: it spawns the agent
 // in RPC mode and provides a typed API for all operations.
 //
 // Upstream reference:
@@ -24,7 +24,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // Upstream's fixed waits: the start settle delay, the per-request response
@@ -137,7 +137,7 @@ func (c *RpcClient) Start() error {
 func (c *RpcClient) spawn() (*agentProcess, io.ReadCloser, io.ReadCloser, error) {
 	cliPath := c.options.CliPath
 	if cliPath == "" {
-		cliPath = "pig"
+		cliPath = "ompig"
 	}
 	args := []string{"--mode", "rpc"}
 	if c.options.Provider != "" {

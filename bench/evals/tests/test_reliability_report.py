@@ -17,14 +17,14 @@ class JudgeTest(unittest.TestCase):
 
     def test_matching_signature_passes(self):
         sig = {"exit": "ok", "reply_printed": 1}
-        r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell(sig)] * 2, "pig-0.5": [cell(sig)] * 2}}))
-        self.assertTrue(r["verdicts"]["f"]["pig-0.5"]["pass"])
+        r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell(sig)] * 2, "ompig-0.5": [cell(sig)] * 2}}))
+        self.assertTrue(r["verdicts"]["f"]["ompig-0.5"]["pass"])
         self.assertTrue(r["ok"])
 
     def test_negative_control_a_different_outcome_fails(self):
-        r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell({"exit": "ok"})], "pig-0.5": [cell({"exit": "error"})]}}))
-        self.assertFalse(r["verdicts"]["f"]["pig-0.5"]["pass"])
-        self.assertIn("differs from pi-1.1.0", r["verdicts"]["f"]["pig-0.5"]["reasons"][0])
+        r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell({"exit": "ok"})], "ompig-0.5": [cell({"exit": "error"})]}}))
+        self.assertFalse(r["verdicts"]["f"]["ompig-0.5"]["pass"])
+        self.assertIn("differs from pi-1.1.0", r["verdicts"]["f"]["ompig-0.5"]["reasons"][0])
         self.assertFalse(r["ok"])
 
     def test_invariant_failure_fails_even_the_oracle(self):
@@ -32,8 +32,8 @@ class JudgeTest(unittest.TestCase):
         self.assertFalse(r["verdicts"]["f"]["pi-1.1.0"]["pass"])
 
     def test_flaky_outcome_fails(self):
-        r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell({"a": 1})] * 2, "pig-0.5": [cell({"a": 1}), cell({"a": 2})]}}))
-        self.assertFalse(r["verdicts"]["f"]["pig-0.5"]["pass"])
+        r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell({"a": 1})] * 2, "ompig-0.5": [cell({"a": 1}), cell({"a": 2})]}}))
+        self.assertFalse(r["verdicts"]["f"]["ompig-0.5"]["pass"])
 
     def test_other_clis_are_scored_on_invariants_only(self):
         r = reliability.judge(self.result({"f": {"pi-1.1.0": [cell({"a": 1})], "claude": [cell({"b": 2})]}}))

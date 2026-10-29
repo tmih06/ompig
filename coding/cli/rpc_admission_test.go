@@ -8,7 +8,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // Pi's prompt awaits command.handler (agent-session.ts:1766-1780) and writes the prompt response from preflightResult (rpc-mode.ts:394-413). A handler that settles without awaiting I/O has queued that response before the next input event, stdin end included (rpc-mode.ts:804-807), which shuts the process down. A subprocess transport's completion report therefore must not admit later input before the handler's result is published, while a blocked report admits it with the handler still pending.

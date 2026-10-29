@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 // scriptedOutcomeProvider ends each request with the next scripted assistant message.
@@ -49,11 +49,11 @@ func (p *scriptedOutcomeProvider) Stream(ctx context.Context, _ ai.TranscriptCon
 
 // Pi 1.1.0 interactive-mode.ts handleEvent forwards the Session's agent_settled to the program status reporter, which then reports the
 // run outcome (program-status-reporter.ts:66-68): done after a successful run, error with the first line of the message after a failed
-// one, and idle after an aborted one. Pig's interactive mode settles the run itself; it emitted agent_settled to extensions only, so the
+// one, and idle after an aborted one. Ompig's interactive mode settles the run itself; it emitted agent_settled to extensions only, so the
 // terminal kept reporting working.
 func TestInteractiveRunsSettleTheProgramStatus(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-const argvHelper = "PIG_CROSSSPAWN_ARGV_HELPER"
+const argvHelper = "OMPIG_CROSSSPAWN_ARGV_HELPER"
 
 func TestMain(m *testing.M) {
 	if os.Getenv(argvHelper) == "1" {

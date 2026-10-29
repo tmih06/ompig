@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // writePackedFileMutationModule writes a Go extension whose tool takes a turn in the file mutation queue with the SDK's free function (WithFileMutationQueue has no
@@ -18,7 +18,7 @@ import (
 func writePackedFileMutationModule(t *testing.T, modulePath, extName, toolName string) string {
 	t.Helper()
 	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	src := fmt.Sprintf(`package ext
@@ -28,7 +28,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func Extension() *sdk.Extension {
@@ -61,14 +61,14 @@ func Extension() *sdk.Extension {
 	return dir
 }
 
-// writePackedPythonFileMutationModule is the Python counterpart of writePackedFileMutationModule: pig_sdk.with_file_mutation_queue is its free function.
+// writePackedPythonFileMutationModule is the Python counterpart of writePackedFileMutationModule: ompig_sdk.with_file_mutation_queue is its free function.
 func writePackedPythonFileMutationModule(t *testing.T, moduleName, extName, toolName string) string {
 	t.Helper()
 	dir := t.TempDir()
 	src := fmt.Sprintf(`import os
 import time
 
-import pig_sdk
+import ompig_sdk
 
 
 def hold(ctx, params):
@@ -83,12 +83,12 @@ def hold(ctx, params):
             time.sleep(0.005)
         raise RuntimeError("the gate never opened")
 
-    pig_sdk.with_file_mutation_queue(params["path"], task)
+    ompig_sdk.with_file_mutation_queue(params["path"], task)
     return {"content": "held"}
 
 
 def new_extension():
-    ext = pig_sdk.Extension(%q)
+    ext = ompig_sdk.Extension(%q)
     ext.tool(%q, "holds a turn in the file mutation queue until its gate opens", {"type": "object"}, hold)
     return ext
 `, extName, toolName)
@@ -98,7 +98,7 @@ def new_extension():
 	return dir
 }
 
-// writePackedRustFileMutationCrate is the Rust counterpart of writePackedFileMutationModule: pig_sdk::with_file_mutation_queue is its free function.
+// writePackedRustFileMutationCrate is the Rust counterpart of writePackedFileMutationModule: ompig_sdk::with_file_mutation_queue is its free function.
 func writePackedRustFileMutationCrate(t *testing.T, packageName, extName, toolName string) string {
 	t.Helper()
 	dir := t.TempDir()
@@ -113,7 +113,7 @@ func writePackedRustFileMutationCrate(t *testing.T, packageName, extName, toolNa
 	if err := os.Mkdir(filepath.Join(dir, "src"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	src := fmt.Sprintf(`use pig_sdk::{empty_schema, Extension, ToolResult};
+	src := fmt.Sprintf(`use ompig_sdk::{empty_schema, Extension, ToolResult};
 use std::time::{Duration, Instant};
 
 pub fn new_extension() -> Extension {
@@ -121,7 +121,7 @@ pub fn new_extension() -> Extension {
     ext.tool(%q, "holds a turn in the file mutation queue until its gate opens", empty_schema(), |_ctx, params| {
         let path = params["path"].as_str().unwrap_or_default().to_string();
         let gate = params["gate"].as_str().unwrap_or_default().to_string();
-        let held = pig_sdk::with_file_mutation_queue(&path, || {
+        let held = ompig_sdk::with_file_mutation_queue(&path, || {
             std::fs::write(format!("{gate}.in"), "").map_err(|e| e.to_string())?;
             let deadline = Instant::now() + Duration::from_secs(60);
             while Instant::now() < deadline {

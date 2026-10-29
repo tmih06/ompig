@@ -4,7 +4,7 @@
 // counts, the entries and the error texts.
 // The sources are imported as-is with types stripped; the packages they import come from the installed pi-durable.
 // A scenario is {name, code, globals?: [name], namespaces?, steps: [step]}; the step ops are listed in the switch below, and
-// durable/codemode/call_restart_pi_test.go runs the same steps against PiG.
+// durable/codemode/call_restart_pi_test.go runs the same steps against Ompig.
 // usage: node codemode_restart_oracle.mjs <packages dir>   stdin: the scenarios (JSON)   (PI_INTEROP_DIR: where pi-durable is installed)
 import { realpathSync } from "node:fs";
 import module from "node:module";

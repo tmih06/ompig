@@ -16,7 +16,7 @@ import (
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/typeutil"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The checks in this package read each side of the extension wire contract from
@@ -25,7 +25,7 @@ import (
 // every piece had Pi's shape, the interface ledger passed, and the production
 // wiring between them was broken.
 
-const module = "github.com/MichaelKinsy/PiG/"
+const module = "github.com/tmih06/ompig/"
 
 var (
 	loadOnce   sync.Once

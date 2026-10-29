@@ -1,7 +1,7 @@
 //go:build integration
 
 // Extension behavioral tests: prove real extensions load, register, and
-// function through the actual pig binary started in tmux.
+// function through the actual ompig binary started in tmux.
 //
 // These tests exist because synthetic fixtures (testdata/fixture-ext/) mask
 // real bugs. The schema→parameters wire format mismatch (2026-05-08) was
@@ -17,7 +17,7 @@
 //	go test -tags=integration ./test/integration/ -run TestExt_Live -v
 //
 // Prerequisites:
-//   - external subagent extension source available via PIG_SUBAGENT_EXTENSION_DIR
+//   - external subagent extension source available via OMPIG_SUBAGENT_EXTENSION_DIR
 
 package integration
 
@@ -31,10 +31,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// extIsolatedHome creates a temporary PIG_HOME with an explicitly supplied Copilot bearer. It never reads the user's auth files.
+// extIsolatedHome creates a temporary OMPIG_HOME with an explicitly supplied Copilot bearer. It never reads the user's auth files.
 func extIsolatedHome(t *testing.T) string {
 	t.Helper()
 	key := testenv.RequireLiveEnv(t, "COPILOT_GITHUB_TOKEN")
@@ -55,7 +55,7 @@ func extIsolatedHome(t *testing.T) string {
 
 	// Copy agent definitions so /agents and dispatch work.
 	for _, root := range []string{
-		filepath.Join(home, ".pig"),
+		filepath.Join(home, ".ompig"),
 		filepath.Join(home, ".pi"),
 	} {
 		src := filepath.Join(root, "agents")
@@ -89,26 +89,26 @@ func extIsolatedHome(t *testing.T) string {
 func subagentSourceDir(t *testing.T) string {
 	t.Helper()
 	var candidates []string
-	if env := os.Getenv("PIG_SUBAGENT_EXTENSION_DIR"); env != "" {
+	if env := os.Getenv("OMPIG_SUBAGENT_EXTENSION_DIR"); env != "" {
 		candidates = append(candidates, env)
 	}
 	if repoRoot, err := findRepoRoot(); err == nil {
-		candidates = append(candidates, filepath.Join(repoRoot, "..", "pig-extensions", "native", "subagent"))
+		candidates = append(candidates, filepath.Join(repoRoot, "..", "ompig-extensions", "native", "subagent"))
 	}
 	for _, dir := range candidates {
 		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
 			return dir
 		}
 	}
-	t.Skipf("external subagent extension not found; set PIG_SUBAGENT_EXTENSION_DIR (checked %v)", candidates)
+	t.Skipf("external subagent extension not found; set OMPIG_SUBAGENT_EXTENSION_DIR (checked %v)", candidates)
 	return ""
 }
 
 // writeTestExtensionSettings selects the external extension through the normal
 // settings-backed exact-path source.
-func writeTestExtensionSettings(t *testing.T, pigHome string, extensionSources ...string) {
+func writeTestExtensionSettings(t *testing.T, ompigHome string, extensionSources ...string) {
 	t.Helper()
-	agentDir := filepath.Join(pigHome, "agent")
+	agentDir := filepath.Join(ompigHome, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -121,17 +121,17 @@ func writeTestExtensionSettings(t *testing.T, pigHome string, extensionSources .
 	}
 }
 
-// TestExt_StartupWithSubagent proves pig starts cleanly with the real
+// TestExt_StartupWithSubagent proves ompig starts cleanly with the real
 // subagent extension loaded. This is the test that would have caught:
 // - The schema→parameters wire format mismatch (extension register timeout)
 // - The nil-deref panic with --no-extensions (typed-nil interface trap)
 func TestExt_StartupWithSubagent(t *testing.T) {
 	subSrc := subagentSourceDir(t)
-	pigHome := t.TempDir()
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	ompigHome := t.TempDir()
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	h := newHarness(t)
-	h.start("PIG_HOME=" + pigHome)
+	h.start("OMPIG_HOME=" + ompigHome)
 
 	// Loaded resources appear after session_start; the footer alone can paint while the extension is still loading.
 	pane := h.expectContains(startupReadyWait, interactiveReadyMarker, "[Extensions]")
@@ -147,11 +147,11 @@ func TestExt_StartupWithSubagent(t *testing.T) {
 // slash commands (/subs, /agents) are registered and executable.
 func TestExt_SubagentCommandsRegistered(t *testing.T) {
 	subSrc := subagentSourceDir(t)
-	pigHome := t.TempDir()
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	ompigHome := t.TempDir()
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	h := newHarness(t)
-	h.start("PIG_HOME=" + pigHome)
+	h.start("OMPIG_HOME=" + ompigHome)
 	h.expectContains(startupReadyWait, interactiveReadyMarker, "[Extensions]")
 
 	// /subs should execute without "unknown command" error.
@@ -174,14 +174,14 @@ func TestExt_SubagentCommandsRegistered(t *testing.T) {
 // TestExt_NoExtensionsFlag proves --no-extensions starts cleanly when settings contain an extension path. Catches the typed-nil interface panic.
 func TestExt_NoExtensionsFlag(t *testing.T) {
 	subSrc := subagentSourceDir(t)
-	pigHome := t.TempDir()
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	ompigHome := t.TempDir()
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	h := newHarness(t)
 	// Override the binary command to include --no-extensions.
 	// We can't use h.start() because it doesn't pass extra flags.
 	bin := buildBinary(t)
-	cmd := fmt.Sprintf("PIG_HOME=%s %s --no-extensions 2>/dev/null", pigHome, bin)
+	cmd := fmt.Sprintf("OMPIG_HOME=%s %s --no-extensions 2>/dev/null", ompigHome, bin)
 	h.send("clear && " + cmd + "\r")
 
 	pane := h.expectContains(startupReadyWait, interactiveReadyMarker)
@@ -194,11 +194,11 @@ func TestExt_NoExtensionsFlag(t *testing.T) {
 // extension commands.
 func TestExt_ReloadPreservesExtensions(t *testing.T) {
 	subSrc := subagentSourceDir(t)
-	pigHome := t.TempDir()
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	ompigHome := t.TempDir()
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	h := newHarness(t)
-	h.start("PIG_HOME=" + pigHome)
+	h.start("OMPIG_HOME=" + ompigHome)
 	h.expectContains(startupReadyWait, interactiveReadyMarker, "[Extensions]")
 
 	// /subs works before reload.
@@ -231,8 +231,8 @@ func TestExt_SessionStartPrecedesLoadedResources(t *testing.T) {
 	source := `import { existsSync, writeFileSync } from "node:fs";
 export default function (pi) {
   pi.on("session_start", async () => {
-    writeFileSync(process.env.PIG_STARTUP_STARTED, "started");
-    while (!existsSync(process.env.PIG_STARTUP_RELEASE)) {
+    writeFileSync(process.env.OMPIG_STARTUP_STARTED, "started");
+    while (!existsSync(process.env.OMPIG_STARTUP_RELEASE)) {
       await new Promise(resolve => setTimeout(resolve, 10));
     }
   });
@@ -248,7 +248,7 @@ export default function (pi) {
 		}
 	})
 	h.startArgsAt([]string{"--model", "test-faux/faux-1", "-e", ext}, dir,
-		"PIG_TEST_FAUX=1", "PIG_STARTUP_STARTED="+started, "PIG_STARTUP_RELEASE="+release)
+		"OMPIG_TEST_FAUX=1", "OMPIG_STARTUP_STARTED="+started, "OMPIG_STARTUP_RELEASE="+release)
 	if !waitFor(startupReadyWait, func() bool {
 		_, err := os.Stat(started)
 		return err == nil
@@ -267,12 +267,12 @@ export default function (pi) {
 	h.expectContains(3*time.Second, "Ctrl+R            : Rename session")
 }
 
-// TestExt_StartupWithoutConfig proves pig starts with no configured or discovered extensions.
+// TestExt_StartupWithoutConfig proves ompig starts with no configured or discovered extensions.
 func TestExt_StartupWithoutConfig(t *testing.T) {
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 
 	h := newHarness(t)
-	h.startArgsAt([]string{"--model", "test-faux/faux-1"}, t.TempDir(), "PIG_HOME="+pigHome, "PIG_TEST_FAUX=1")
+	h.startArgsAt([]string{"--model", "test-faux/faux-1"}, t.TempDir(), "OMPIG_HOME="+ompigHome, "OMPIG_TEST_FAUX=1")
 	pane := h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
 	if strings.Contains(pane, "[Extensions]") {
 		t.Fatalf("empty fixture discovered ambient extensions:\n%s", pane)
@@ -282,21 +282,21 @@ func TestExt_StartupWithoutConfig(t *testing.T) {
 	}
 }
 
-// TestExt_ConventionDirectoryDiscovery proves pig discovers extensions
-// from ~/.pig/agent/extensions/<name>/ convention directories.
+// TestExt_ConventionDirectoryDiscovery proves ompig discovers extensions
+// from ~/.ompig/agent/extensions/<name>/ convention directories.
 func TestExt_ConventionDirectoryDiscovery(t *testing.T) {
 	subSrc := subagentSourceDir(t)
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 
 	// Create convention directory: symlink the subagent source.
-	convDir := filepath.Join(pigHome, "agent", "extensions", "subagent")
+	convDir := filepath.Join(ompigHome, "agent", "extensions", "subagent")
 	if err := os.MkdirAll(filepath.Dir(convDir), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	testenv.RequireDirectoryLink(t, subSrc, convDir)
 
 	h := newHarness(t)
-	h.start("PIG_HOME=" + pigHome)
+	h.start("OMPIG_HOME=" + ompigHome)
 	pane := h.expectContains(startupReadyWait, interactiveReadyMarker, "[Extensions]")
 	if strings.Contains(pane, "panic") {
 		t.Fatalf("convention dir panic:\n%s", pane)
@@ -315,11 +315,11 @@ func TestExt_ConventionDirectoryDiscovery(t *testing.T) {
 // cache works: first startup builds, second startup is faster.
 func TestExt_CachedBinaryUsedOnSecondStartup(t *testing.T) {
 	subSrc := subagentSourceDir(t)
-	pigHome := t.TempDir()
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	ompigHome := t.TempDir()
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
-	// Cache dir now respects PIG_HOME.
-	cacheDir := filepath.Join(pigHome, "cache", "ext")
+	// Cache dir now respects OMPIG_HOME.
+	cacheDir := filepath.Join(ompigHome, "cache", "ext")
 
 	bin := buildBinary(t)
 
@@ -331,7 +331,7 @@ func TestExt_CachedBinaryUsedOnSecondStartup(t *testing.T) {
 	}
 	t.Cleanup(func() { _ = tmuxCommand("kill-session", "-t", s1).Run() })
 	if err := tmuxCommand("send-keys", "-t", s1, "-l",
-		fmt.Sprintf("PIG_HOME=%s %s\r", pigHome, bin)).Run(); err != nil {
+		fmt.Sprintf("OMPIG_HOME=%s %s\r", ompigHome, bin)).Run(); err != nil {
 		t.Fatal(err)
 	}
 	deadline := time.Now().Add(20 * time.Second)
@@ -362,7 +362,7 @@ func TestExt_CachedBinaryUsedOnSecondStartup(t *testing.T) {
 	}
 	t.Cleanup(func() { _ = tmuxCommand("kill-session", "-t", s2).Run() })
 	if err := tmuxCommand("send-keys", "-t", s2, "-l",
-		fmt.Sprintf("PIG_HOME=%s %s\r", pigHome, bin)).Run(); err != nil {
+		fmt.Sprintf("OMPIG_HOME=%s %s\r", ompigHome, bin)).Run(); err != nil {
 		t.Fatal(err)
 	}
 	deadline = time.Now().Add(15 * time.Second)
@@ -392,9 +392,9 @@ func TestExt_CachedBinaryUsedOnSecondStartup(t *testing.T) {
 // LLM → Host → subprocess → SDK handler → result → Host → LLM → output
 func TestExt_Live_SubagentCheckReturnsResult(t *testing.T) {
 	t.Log("live provider: github-copilot")
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	subSrc := subagentSourceDir(t)
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	bin := buildBinary(t)
 	cwd := t.TempDir()
@@ -405,13 +405,13 @@ func TestExt_Live_SubagentCheckReturnsResult(t *testing.T) {
 		"--model", "github-copilot/gpt-5-mini",
 		"--print", "Use the check_subagent tool with no arguments to check if there are any active sub-agents. Report what the tool returned.")
 	cmd.Env = append(os.Environ(),
-		"PIG_HOME="+pigHome,
-		"PIG_QUIET_STARTUP=1",
+		"OMPIG_HOME="+ompigHome,
+		"OMPIG_QUIET_STARTUP=1",
 	)
 	out, err := cmd.CombinedOutput()
 	output := string(out)
 	if err != nil {
-		t.Fatalf("pig --print failed: %v\noutput:\n%s", err, output)
+		t.Fatalf("ompig --print failed: %v\noutput:\n%s", err, output)
 	}
 
 	// The check_subagent handler returns dispatch status.
@@ -437,13 +437,13 @@ func TestExt_Live_SubagentCheckReturnsResult(t *testing.T) {
 // output file → status check.
 func TestExt_Live_SubagentDispatchAndCheck(t *testing.T) {
 	t.Log("live provider: github-copilot")
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	if testing.Short() {
 		t.Skip("skipping long live test in short mode")
 	}
 
 	subSrc := subagentSourceDir(t)
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	bin := buildBinary(t)
 	cwd := t.TempDir()
@@ -461,8 +461,8 @@ func TestExt_Live_SubagentDispatchAndCheck(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	launch := fmt.Sprintf("cd %s && PIG_HOME=%s PIG_QUIET_STARTUP=1 %s --model github-copilot/gpt-5-mini\n",
-		cwd, pigHome, bin)
+	launch := fmt.Sprintf("cd %s && OMPIG_HOME=%s OMPIG_QUIET_STARTUP=1 %s --model github-copilot/gpt-5-mini\n",
+		cwd, ompigHome, bin)
 	if err := tmuxCommand("send-keys", "-t", session, "-l", launch).Run(); err != nil {
 		t.Fatal(err)
 	}

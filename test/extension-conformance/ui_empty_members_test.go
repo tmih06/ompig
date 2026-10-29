@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // emptyMembersUI records the dialog and fire-and-forget UI calls the host forwards, telling an empty member from an absent one: Pi's RPC mode writes `""` and

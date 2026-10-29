@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type radiusURLProbe struct {
@@ -62,7 +62,7 @@ func radiusURLProbes() []radiusURLProbe {
 }
 
 // The URL expressions of radius.ts and radius-config.ts run in Node against the same probes: new URL(path, normalizeRadiusGatewayUrl(gateway)).toString() for the four gateway
-// paths, and new URL(endpoint) with its search set and serialized for the authorization URL. Pig's resolveGatewayPath and radiusAuthorizeURL must give Pi's string, and fail exactly
+// paths, and new URL(endpoint) with its search set and serialized for the authorization URL. Ompig's resolveGatewayPath and radiusAuthorizeURL must give Pi's string, and fail exactly
 // when the URL constructor throws.
 func TestRadiusURLsMatchPiOnSeededProbes(t *testing.T) {
 	probes := radiusURLProbes()
@@ -115,7 +115,7 @@ func TestRadiusURLsMatchPiOnSeededProbes(t *testing.T) {
 				if got != nil {
 					have = *got
 				}
-				t.Errorf("%+v\n  Pig %q\n  Pi  %q", probe, have, want)
+				t.Errorf("%+v\n  Ompig %q\n  Pi  %q", probe, have, want)
 			}
 		}
 	}

@@ -61,7 +61,7 @@ lockfile.lock(file, { realpath: false, fs: hooked, onCompromised() {}, retries: 
 		name string
 		// held attempts find the directory held (ELOCKED); the eperm attempts after them fail with EPERM; later attempts use the real mkdir.
 		held, eperm int
-		// retries is Pi's retry count; for PiG the last failing attempt outlasts Wait instead, so both stop after the same attempts.
+		// retries is Pi's retry count; for Ompig the last failing attempt outlasts Wait instead, so both stop after the same attempts.
 		retries int
 		want    string
 	}{
@@ -105,7 +105,7 @@ lockfile.lock(file, { realpath: false, fs: hooked, onCompromised() {}, retries: 
 			attempts := test.retries + 1
 			calls := stubMkdir(t, func(call int, real func() error) error {
 				if call == attempts && test.want != "acquired" {
-					// The last attempt Pi makes outlasts Wait, so PiG makes no further attempt.
+					// The last attempt Pi makes outlasts Wait, so Ompig makes no further attempt.
 					time.Sleep(options.Wait)
 				}
 				if call > test.held && call <= test.held+test.eperm {

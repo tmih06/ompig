@@ -315,7 +315,7 @@
    "call:internal/codingagent/ext_ui_context.go#ExtensionThemePalette"
   ],
   "evidence": [
-   "test:internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationColors",
+   "test:internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationColors",
    "test:internal/codingagent/theme_controller_native_upstream_test.go#TestThemeControllerNativeUpstream"
   ],
   "rationale": "Theme.appearance is the Go method Theme.Appearance; signature reviewed against the upstream declaration (upstream class Theme is Go Theme); callers and tests attributed by go/types (methodrefs).",

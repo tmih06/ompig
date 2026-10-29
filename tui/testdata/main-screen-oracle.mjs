@@ -67,7 +67,7 @@ for (let i = 0; i < 500; i++) {
 		if (r < 0.12) step.resize = pick(sizes);
 		if (r > 0.9) step.force = true;
 		if (random() < 0.08) step.clearOnShrink = random() < 0.5;
-		if (random() < 0.08 && s > 0) { step.hardwareCursor = random() < 0.5; step.cursorFirst = random() < 0.5; } // before the first frame Pi paints one on request, PiG waits for Start
+		if (random() < 0.08 && s > 0) { step.hardwareCursor = random() < 0.5; step.cursorFirst = random() < 0.5; } // before the first frame Pi paints one on request, Ompig waits for Start
 		if (random() < 0.25 && s > 0) {
 			const sizeValue = () => pick([5, 10, 20, 40, "30%", "50%", "100%", undefined, undefined]);
 			const spec = {
@@ -81,7 +81,7 @@ for (let i = 0; i < 500; i++) {
 			step.overlay = { spec, lines: makeLines(1 + Math.floor(random() * 6), false) };
 		}
 		if (random() < 0.12 && s > 0) step.hideOverlay = true;
-		// The raw frame ends the scenario: it may throw on a line wider than the terminal (which only renderNow may do, a requested frame would throw from a timer), and Pig's D53 full clear of a formerly over-wide row makes a later frame differ on purpose.
+		// The raw frame ends the scenario: it may throw on a line wider than the terminal (which only renderNow may do, a requested frame would throw from a timer), and Ompig's D53 full clear of a formerly over-wide row makes a later frame differ on purpose.
 		if (raw && s === n - 1) { step.raw = true; step.set[touch] = makeLines(1 + count, false).map((l) => l + "x".repeat(Math.floor(random() * 3) * 20)); delete step.overlay; delete step.hideOverlay; delete step.hardwareCursor; delete step.cursorFirst; }
 		steps.push(step);
 	}

@@ -12,9 +12,9 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 type outputCase struct {

@@ -18,9 +18,9 @@
       "print_exit": 0,
       "home": "/tmp/parity-integrate021-corpus-1q55rk97/gentle-pi/pi"
     },
-    "pig": {
+    "ompig": {
       "print_exit": 0,
-      "home": "/tmp/parity-integrate021-corpus-1q55rk97/gentle-pi/pig"
+      "home": "/tmp/parity-integrate021-corpus-1q55rk97/gentle-pi/ompig"
     }
   },
   "terminal": {
@@ -35,7 +35,7 @@
       "escaped_footer_sha256": "c3e8927a0a6552b3aa6d9e141e35522f4319432d0166e7473e94b440b463a0ee",
       "capture_sha256": {
         "pi": "b589bbd64a1a6ef2d846f459c6156808cabf29cf275d6a8e41ac0ae339decb96",
-        "pig": "0fe83b5828eea42bd76d133c51b20e6d244195773fab2a75f2d0425b040ad5ca"
+        "ompig": "0fe83b5828eea42bd76d133c51b20e6d244195773fab2a75f2d0425b040ad5ca"
       }
     },
     {
@@ -44,7 +44,7 @@
       "escaped_footer_sha256": "c3e8927a0a6552b3aa6d9e141e35522f4319432d0166e7473e94b440b463a0ee",
       "capture_sha256": {
         "pi": "e98e848435560fbea9d94dbb30a6dcc28006823e823fe6c47720123fc980f064",
-        "pig": "e534cad5774262ca0acebba0cef45f1b0b12a5c43e883cd664a00f5798818b3f"
+        "ompig": "e534cad5774262ca0acebba0cef45f1b0b12a5c43e883cd664a00f5798818b3f"
       }
     },
     {
@@ -53,7 +53,7 @@
       "escaped_footer_sha256": "c3e8927a0a6552b3aa6d9e141e35522f4319432d0166e7473e94b440b463a0ee",
       "capture_sha256": {
         "pi": "5fe3fddc2f4fda3cb83effc926eae1b542f4bb9fe79789655fbf07931745dad1",
-        "pig": "2987cb9bdf638476c7c44f68d0205f41a35c9412888b525c5dc4974e0f7ab1db"
+        "ompig": "2987cb9bdf638476c7c44f68d0205f41a35c9412888b525c5dc4974e0f7ab1db"
       }
     }
   ],
@@ -90,7 +90,7 @@
     "branch-race.log": "76d669765a628e11f48e3631485aa82cce7a1abdef294be56aad97b3e70460da",
     "startup-bench.log": "03353dc4e46bec031c19289092437adf483f28bfa3f5ebde786da72af257e410",
     "pi-bench.json": "67bf20dce99aa4ae31760bb742fcb7cb5d68985748a4709066eecce8d0150fb9",
-    "pig-bench.json": "eacf2f33e40b9101fbfcf049bc2820f8af3cd29e7f98b7d05fda0899bda0f7e9"
+    "ompig-bench.json": "eacf2f33e40b9101fbfcf049bc2820f8af3cd29e7f98b7d05fda0899bda0f7e9"
   },
   "gate_exit_codes": {
     "ci-final": 2,

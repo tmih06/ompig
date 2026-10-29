@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // newStreamingRoutingMode starts a turn that streams until the returned
@@ -156,7 +156,7 @@ func TestInteractiveSteerAndFollowUpRunInputHandlers(t *testing.T) {
 }
 
 // When input handling itself fails (a stale extension runner), upstream
-// prompt() rejects: the error is shown and the input is not sent. Pig sent
+// prompt() rejects: the error is shown and the input is not sent. Ompig sent
 // the raw text as if no handler had run. A handler that throws is only
 // reported, as upstream's runner.emitInput catches it.
 func TestInteractiveInputHandlerErrorStopsTheInput(t *testing.T) {

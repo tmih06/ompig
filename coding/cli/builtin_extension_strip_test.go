@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // A stripped built-in extension leaves the built-in extension paths silently, as upstream's `--no-mcp` drops a disabled built-in
@@ -26,8 +26,8 @@ func TestStrippedBuiltinExtensionPathsAreFilteredSilently(t *testing.T) {
 	}{
 		{"stock", func(*Args) func() { return func() {} }, []string{"builtin:mcp", "builtin:missing", "builtin:llama.cpp", "builtin:codemode", "builtin:tool-search"}},
 		{"compiled out", func(*Args) func() { return pigstrip.Strip(pigstrip.ListExtensions, "mcp") }, []string{"builtin:missing", "builtin:llama.cpp", "builtin:codemode", "builtin:tool-search"}},
-		{"piglet strip list", func(flags *Args) func() {
-			return applyPigletStrip(&piglet.Piglet{Name: "lean", Strip: &piglet.StripSpec{Extensions: []string{"mcp"}}}, flags)
+		{"ompiglet strip list", func(flags *Args) func() {
+			return applyPigletStrip(&ompiglet.Ompiglet{Name: "lean", Strip: &ompiglet.StripSpec{Extensions: []string{"mcp"}}}, flags)
 		}, []string{"builtin:missing", "builtin:llama.cpp", "builtin:codemode", "builtin:tool-search"}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -51,11 +51,11 @@ func withoutCompiledOutBuiltins(paths []string) []string {
 }
 
 // The production built-in pass loads no stripped built-in and reports no error for `-e builtin:<name>` of one, whether the
-// Piglet strips it at runtime (the inline list still has it; the path filter drops it) or the Binary compiled it out
+// Ompiglet strips it at runtime (the inline list still has it; the path filter drops it) or the Binary compiled it out
 // (absent from the inline list and recorded in pigstrip). An unknown name still fails with Pi's message.
 func TestStrippedExplicitBuiltinLoadsNothingAndReportsNoError(t *testing.T) {
-	strip := &piglet.StripSpec{Extensions: []string{"codemode", "tool-search", "mcp", "pig-login"}}
-	explicit := []string{"builtin:codemode", "builtin:tool-search", "builtin:mcp", "builtin:pig-login", "builtin:missing"}
+	strip := &ompiglet.StripSpec{Extensions: []string{"codemode", "tool-search", "mcp", "ompig-login"}}
+	explicit := []string{"builtin:codemode", "builtin:tool-search", "builtin:mcp", "builtin:ompig-login", "builtin:missing"}
 	unknown := []extensionSetError{{Path: "builtin:missing", Error: "Unknown built-in extension: builtin:missing"}}
 	for _, tc := range []struct {
 		name   string
@@ -64,7 +64,7 @@ func TestStrippedExplicitBuiltinLoadsNothingAndReportsNoError(t *testing.T) {
 		strip  func(*Args) func()
 	}{
 		{"runtime strip", slices.Clone(builtInExtensions), Args{NoExtensions: true, Extensions: explicit}, func(flags *Args) func() {
-			return applyPigletStrip(&piglet.Piglet{Name: "lean", Strip: strip}, flags)
+			return applyPigletStrip(&ompiglet.Ompiglet{Name: "lean", Strip: strip}, flags)
 		}},
 		{"compiled out", slices.DeleteFunc(slices.Clone(builtInExtensions), func(entry extension.InlineExtension) bool {
 			named, ok := entry.(extension.NamedInlineExtension)

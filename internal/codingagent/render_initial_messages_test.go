@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // upstream: interactive-mode.ts:4168-4182 renderInitialMessages paints the session entries and then the project-trust warning: the warning follows the resumed transcript after a separating spacer, a fresh session has no entries to paint, and a trusted project gets no warning.

@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Runs Pi's createContextKey and withContextValue (context/index.ts:7-60) and PiG's NewKey, Key.Token and WithValue over the same
+// Runs Pi's createContextKey and withContextValue (context/index.ts:7-60) and Ompig's NewKey, Key.Token and WithValue over the same
 // descriptions: a key's token carries the description it was created with, equals only itself (two keys with one description are
 // two identities, and one's value is invisible under the other), and the layered context prints `.WithValue(<token description>)`.
 func TestContextKeyTokenMatchesPi(t *testing.T) {
@@ -53,7 +53,7 @@ func TestContextKeyTokenMatchesPi(t *testing.T) {
 			t.Errorf("%q: token identity differs from Pi's (itself %v, equal description %v)", description, token == keys[i].Token(), token == again.Token())
 		}
 		if _, ok := Value(WithValue(Background(), keys[i], 1), again); ok != (want.ValueUnderOtherKey != nil) {
-			t.Errorf("%q: a value is visible under an equal-description key: PiG %v, Pi %v", description, ok, want.ValueUnderOtherKey)
+			t.Errorf("%q: a value is visible under an equal-description key: Ompig %v, Pi %v", description, ok, want.ValueUnderOtherKey)
 		}
 	}
 	if got := fmt.Sprint(ctx); got != pi.Layered {

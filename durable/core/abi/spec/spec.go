@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // Table row types: name, number, layout.
@@ -105,7 +105,7 @@ var exportRows = []exportRow{
 
 // Imports ABI section 4.2 lists. The wasi_snapshot_preview1 set is the closed set the host provides: ten functions a minimal Go
 // wasip1 reactor links, and the six fd_* functions that importing package os adds (measured with Go 1.27.1; tools/wasm-imports.mjs
-// lists the imports of any module and fails on one outside this table). pig.uuidv7 and pig.read are the semantic imports.
+// lists the imports of any module and fails on one outside this table). ompig.uuidv7 and ompig.read are the semantic imports.
 var importRows = []exportRow{
 	{"wasi_snapshot_preview1.args_get", "(argv, buf) -> errno"},
 	{"wasi_snapshot_preview1.args_sizes_get", "(argc, size) -> errno"},
@@ -123,8 +123,8 @@ var importRows = []exportRow{
 	{"wasi_snapshot_preview1.proc_exit", "(code)"},
 	{"wasi_snapshot_preview1.random_get", "(ptr, len) -> errno"},
 	{"wasi_snapshot_preview1.sched_yield", "() -> errno"},
-	{"pig.uuidv7", "(dst ptr)"},
-	{"pig.read", "(req ptr, reqLen u32, dst ptr, cap u32) -> u32"},
+	{"ompig.uuidv7", "(dst ptr)"},
+	{"ompig.read", "(req ptr, reqLen u32, dst ptr, cap u32) -> u32"},
 }
 
 type apiRow struct{ Op, Args, Result, Answered string }

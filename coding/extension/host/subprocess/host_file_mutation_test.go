@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The file mutation queue an extension process asks for is the host's own (tools.WithFileMutationQueue, the queue the built-in edit and write tools use): these

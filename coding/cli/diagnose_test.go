@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// `pig --diagnose` produces a human-readable
+// `ompig --diagnose` produces a human-readable
 // introspection dump. Tests pin section headers + the helper
 // shapes (mask, credential label) so that:
 //   - bug-report consumers can rely on stable section boundaries
@@ -24,7 +24,7 @@ func TestDiagnoseSectionHeaders(t *testing.T) {
 	out := buf.String()
 
 	wantSections := []string{
-		"pig diagnostics",
+		"ompig diagnostics",
 		"\nbuild:",
 		"\npaths\n",
 		"config root:",
@@ -39,7 +39,7 @@ func TestDiagnoseSectionHeaders(t *testing.T) {
 			t.Errorf("missing section %q in:\n%s", want, out)
 		}
 	}
-	// The pin names the Pi release PiG targets, not a parity result.
+	// The pin names the Pi release Ompig targets, not a parity result.
 	if want := "\nupstream-pin:      " + UpstreamVersion + "\n"; !strings.Contains(out, want) || strings.Contains(out, "upstream-parity") {
 		t.Errorf("want %q and no upstream-parity label in:\n%s", want, out)
 	}
@@ -53,8 +53,8 @@ func TestDiagnoseSectionHeaders(t *testing.T) {
 
 func TestDiagnoseIncludesBinaryPath(t *testing.T) {
 	var buf bytes.Buffer
-	runDiagnose(&buf, "/Users/me/.local/bin/pig")
-	if !strings.Contains(buf.String(), "binary:            /Users/me/.local/bin/pig") {
+	runDiagnose(&buf, "/Users/me/.local/bin/ompig")
+	if !strings.Contains(buf.String(), "binary:            /Users/me/.local/bin/ompig") {
 		t.Errorf("binary path not echoed verbatim:\n%s", buf.String())
 	}
 }
@@ -99,10 +99,10 @@ func TestCredentialKindLabel(t *testing.T) {
 
 // Startup warns that extensions may build against a stale SDK and points the
 // user at this report, so the report has to carry that detail. It pointed at
-// "pig doctor", which does not exist, and the section it promised was missing.
+// "ompig doctor", which does not exist, and the section it promised was missing.
 func TestDiagnoseReportsExtensionSDKStaging(t *testing.T) {
 	var buf bytes.Buffer
-	runDiagnose(&buf, "/usr/local/bin/pig")
+	runDiagnose(&buf, "/usr/local/bin/ompig")
 	out := buf.String()
 
 	if !strings.Contains(out, "extension SDKs") {
@@ -115,7 +115,7 @@ func TestDiagnoseReportsExtensionSDKStaging(t *testing.T) {
 	}
 }
 
-// Startup prints nothing on a config root this user cannot write (D157), so `pig diagnose` says what PiG does not write there. A writable root
+// Startup prints nothing on a config root this user cannot write (D157), so `ompig diagnose` says what Ompig does not write there. A writable root
 // gets no note, and diagnose leaves nothing in the config root: its write probe is removed. The agent dir lives elsewhere, because loading the
 // model registry for the report writes auth.json and models-store.json there.
 func TestDiagnoseReportsAReadOnlyConfigRoot(t *testing.T) {
@@ -124,9 +124,9 @@ func TestDiagnoseReportsAReadOnlyConfigRoot(t *testing.T) {
 	}
 	for _, readOnly := range []bool{false, true} {
 		root := t.TempDir()
-		t.Setenv("PIG_HOME", root)
+		t.Setenv("OMPIG_HOME", root)
 		agentDir := t.TempDir()
-		t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+		t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 		t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 		if readOnly {
 			if err := os.Chmod(root, 0o500); err != nil {
@@ -135,7 +135,7 @@ func TestDiagnoseReportsAReadOnlyConfigRoot(t *testing.T) {
 			t.Cleanup(func() { _ = os.Chmod(root, 0o700) })
 		}
 		var buf bytes.Buffer
-		runDiagnose(&buf, "/usr/local/bin/pig")
+		runDiagnose(&buf, "/usr/local/bin/ompig")
 		if got := strings.Contains(buf.String(), "read-only: no docs bundle"); got != readOnly {
 			t.Errorf("read-only %t: the report's read-only note is present = %t", readOnly, got)
 		}
@@ -145,17 +145,17 @@ func TestDiagnoseReportsAReadOnlyConfigRoot(t *testing.T) {
 	}
 }
 
-// The warning must name a command that exists. pig has diagnose, not doctor.
+// The warning must name a command that exists. ompig has diagnose, not doctor.
 func TestStaleSDKWarningNamesARealCommand(t *testing.T) {
 	source, err := os.ReadFile("main.go")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(source, []byte("pig doctor")) {
-		t.Error("main.go tells the user to run 'pig doctor', which is not a pig command")
+	if bytes.Contains(source, []byte("ompig doctor")) {
+		t.Error("main.go tells the user to run 'ompig doctor', which is not a ompig command")
 	}
-	if !bytes.Contains(source, []byte("pig diagnose")) {
-		t.Error("the stale-SDK warning should point at 'pig diagnose'")
+	if !bytes.Contains(source, []byte("ompig diagnose")) {
+		t.Error("the stale-SDK warning should point at 'ompig diagnose'")
 	}
 }
 
@@ -173,7 +173,7 @@ func TestDiagnoseShowsLogPathsAndRecentUnexpectedExits(t *testing.T) {
 	for _, want := range []string{
 		"crash log:         " + codingagent.CrashLogPath(agentDir) + "\n",
 		"exit log:          " + codingagent.ExitLogPath(agentDir) + "\n",
-		"debug log:         " + filepath.Join(os.TempDir(), "pig-debug.log") + " (written when PIG_DEBUG is set)\n",
+		"debug log:         " + filepath.Join(os.TempDir(), "ompig-debug.log") + " (written when OMPIG_DEBUG is set)\n",
 		"\nrecent unexpected exits (newest last)\n",
 		"received SIGHUP\n",
 	} {

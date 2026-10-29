@@ -1,11 +1,11 @@
 """The Python SDK version of rpc/testdata/command-send-wait-idle.mjs: a command that sends a user message and then waits for the Session to be idle."""
 from __future__ import annotations
 
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("python")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("python")
 
     def ask(ctx, _args):
         ctx.send_user_message("Say hello")

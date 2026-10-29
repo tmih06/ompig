@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
 const logLimit = 5 * 1024 * 1024

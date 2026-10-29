@@ -19,12 +19,12 @@ Mechanism: the harness's existing JSON alias table (`kind = id|timestamp|path|li
 
 | Commit | Kind |
 |---|---|
-| 16f0d3770 test(parity): a measured duration is aliased, not pinned (red) | red: `unknown JSON alias kind "duration"`; scenario 17 and 41 `wall_time_seconds: pig=0 pi=0.1`; json/05, json/06, rpc/42 pin the literal |
+| 16f0d3770 test(parity): a measured duration is aliased, not pinned (red) | red: `unknown JSON alias kind "duration"`; scenario 17 and 41 `wall_time_seconds: ompig=0 pi=0.1`; json/05, json/06, rpc/42 pin the literal |
 | 0ada9750d fix(parity): alias bash's measured wall clock instead of pinning it (green) | tests pass; the three guards in `duration_alias_test.go` |
 
 Regression tests: `TestJSONDurationAliasRetainsPresenceAndType` (7 cases + absent, different exit code, no-reason), `TestJSONScenariosAliasMeasuredDurations` (loads the real 17 and 41 aliases), `TestScenarioAssertionsDoNotPinMeasuredDurations` (every scenario). Mutation: removing the 17 alias or restoring a literal fails the matching guard (shown by the red run).
 
-Parity: 17, 41, 42, json/05, json/06 each pass with `-pig-parity.runs=6` under 64 CPU burners (all 6 pairs). Under that load no pair reported 0.1 (bash completes in <50 ms), so the live 0-vs-0.1 case is proved by the unit tests, not by the burner run.
+Parity: 17, 41, 42, json/05, json/06 each pass with `-ompig-parity.runs=6` under 64 CPU burners (all 6 pairs). Under that load no pair reported 0.1 (bash completes in <50 ms), so the live 0-vs-0.1 case is proved by the unit tests, not by the burner run.
 
 Upstream tests: this lane changes harness and probe expectations only; no Pi test is ported.
 

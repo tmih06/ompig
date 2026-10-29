@@ -14,11 +14,11 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // emitSessionInfoChanged dispatches a session_info_changed event.
@@ -33,7 +33,7 @@ func emitSessionInfoChanged(runner *inproc.Runner, name string) {
 
 // emitSessionShutdown dispatches a session_shutdown event.
 // reason is one of "quit" | "reload" | "new" | "resume" | "fork".
-// The pig-specific "slash-quit" reason is collapsed to "quit".
+// The ompig-specific "slash-quit" reason is collapsed to "quit".
 func emitSessionShutdown(runner *inproc.Runner, reason string) {
 	if runner != nil && runner.HasHandlers(EventSessionShutdown) {
 		r := reason

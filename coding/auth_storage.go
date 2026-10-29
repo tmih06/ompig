@@ -3,8 +3,8 @@ package coding
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/src/core/auth-storage.ts (readStoredCredential, exported from the package index, index.ts:26).

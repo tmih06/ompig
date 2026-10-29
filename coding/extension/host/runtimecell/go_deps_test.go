@@ -19,7 +19,7 @@ func TestBuildGoPackedCellImportsMultiPackageFactory(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(root, "internal", "message"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/multi\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/multi\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(root, "internal", "message", "message.go"), []byte("package message\nfunc Text() string { return \"ok\" }\n"), 0o644); err != nil {
@@ -27,7 +27,7 @@ func TestBuildGoPackedCellImportsMultiPackageFactory(t *testing.T) {
 	}
 	source := `package extension
 import (
-  sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+  sdk "github.com/tmih06/ompig/extensions/sdk"
   "example.com/multi/internal/message"
 )
 func Extension() *sdk.Extension {
@@ -53,7 +53,7 @@ func Extension() *sdk.Extension {
 
 // Module roots and local replacements are go.mod paths. A path containing a
 // space must be quoted there, as in a Windows user profile or CI TEMP such as
-// "pig extension acceptance"; unquoted, `go build` rejects the generated
+// "ompig extension acceptance"; unquoted, `go build` rejects the generated
 // module ("usage: replace module/path ...").
 func TestBuildGoPackedCellAcceptsPathsWithSpaces(t *testing.T) {
 	base := filepath.Join(t.TempDir(), "path with spaces")
@@ -62,8 +62,8 @@ func TestBuildGoPackedCellAcceptsPathsWithSpaces(t *testing.T) {
 	for path, content := range map[string]string{
 		filepath.Join(shared, "go.mod"):                  "module example.com/shared\n\ngo 1.26\n",
 		filepath.Join(shared, "shared.go"):               "package shared\nfunc Text() string { return \"ok\" }\n",
-		filepath.Join(root, "go.mod"):                    "module example.com/spaced\n\ngo 1.26\n\nrequire (\n\tgithub.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\texample.com/shared v0.0.0\n)\n\nreplace example.com/shared => \"../shared lib\"\n",
-		filepath.Join(root, "extension", "extension.go"): "package extension\nimport (\n  sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n  \"example.com/shared\"\n)\nfunc Extension() *sdk.Extension {\n  ext := sdk.New(\"spaced\")\n  ext.Command(\"spaced\", shared.Text(), func(sdk.Context, string) error { return nil })\n  return ext\n}\n",
+		filepath.Join(root, "go.mod"):                    "module example.com/spaced\n\ngo 1.26\n\nrequire (\n\tgithub.com/tmih06/ompig/extensions/sdk v0.0.0\n\texample.com/shared v0.0.0\n)\n\nreplace example.com/shared => \"../shared lib\"\n",
+		filepath.Join(root, "extension", "extension.go"): "package extension\nimport (\n  sdk \"github.com/tmih06/ompig/extensions/sdk\"\n  \"example.com/shared\"\n)\nfunc Extension() *sdk.Extension {\n  ext := sdk.New(\"spaced\")\n  ext.Command(\"spaced\", shared.Text(), func(sdk.Context, string) error { return nil })\n  return ext\n}\n",
 	} {
 		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 			t.Fatal(err)
@@ -89,11 +89,11 @@ func TestBuildGoPackedCellIgnoresBrokenParentVCSMetadata(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(root, "extension"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/broken-vcs\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/broken-vcs\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	source := `package extension
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension { return sdk.New("broken-vcs") }
 `
 	if err := os.WriteFile(filepath.Join(root, "extension", "extension.go"), []byte(source), 0o644); err != nil {
@@ -134,10 +134,10 @@ func TestRenderGoModDoesNotDuplicateSDKWorkspaceModule(t *testing.T) {
 	if err := os.MkdirAll(extensionRoot, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkRoot, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\n\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkRoot, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\n\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/extension\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/extension\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -151,10 +151,10 @@ func TestRenderGoModDoesNotDuplicateSDKWorkspaceModule(t *testing.T) {
 	if !strings.Contains(result, "\ngo 1.26.0\n") {
 		t.Fatalf("generated module language version is not normalized:\n%s", result)
 	}
-	if count := strings.Count(result, "require github.com/MichaelKinsy/PiG/extensions/sdk "); count != 1 {
+	if count := strings.Count(result, "require github.com/tmih06/ompig/extensions/sdk "); count != 1 {
 		t.Fatalf("SDK requirement count = %d, want 1:\n%s", count, result)
 	}
-	if count := strings.Count(result, "replace github.com/MichaelKinsy/PiG/extensions/sdk => "); count != 1 {
+	if count := strings.Count(result, "replace github.com/tmih06/ompig/extensions/sdk => "); count != 1 {
 		t.Fatalf("SDK replacement count = %d, want 1:\n%s", count, result)
 	}
 }
@@ -166,7 +166,7 @@ func TestCollectExtensionDeps_ParenthesizedBlocks(t *testing.T) {
 go 1.26
 
 require (
-	github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0
+	github.com/tmih06/ompig/extensions/sdk v0.0.0
 	github.com/mattn/go-runewidth v0.0.23
 	github.com/some/other v1.2.3
 )
@@ -174,7 +174,7 @@ require (
 require github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 
 replace (
-	github.com/MichaelKinsy/PiG/extensions/sdk => /some/path
+	github.com/tmih06/ompig/extensions/sdk => /some/path
 	github.com/some/other => ../local/other
 )
 `
@@ -187,7 +187,7 @@ replace (
 
 	// SDK deps should be filtered out.
 	for _, r := range reqs {
-		if strings.Contains(r, "pig/extensions/sdk") {
+		if strings.Contains(r, "ompig/extensions/sdk") {
 			t.Errorf("SDK should be filtered: %q", r)
 		}
 		if r == "(" {
@@ -217,7 +217,7 @@ replace (
 		"github.com/some/other => " + modfile.AutoQuote(filepath.ToSlash(filepath.Clean(filepath.Join(dir, "..", "local", "other")))): false,
 	}
 	for _, r := range reps {
-		if strings.Contains(r, "pig/extensions/sdk") {
+		if strings.Contains(r, "ompig/extensions/sdk") {
 			t.Errorf("SDK replace should be filtered: %q", r)
 		}
 		if _, ok := wantReps[r]; ok {
@@ -250,11 +250,11 @@ func TestRenderGoModLeavesTransitiveRequirementsOnExtensionModule(t *testing.T) 
 go 1.26
 
 require (
-	github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0
+	github.com/tmih06/ompig/extensions/sdk v0.0.0
 	github.com/mattn/go-runewidth v0.0.23
 )
 
-replace github.com/MichaelKinsy/PiG/extensions/sdk => /sdk
+replace github.com/tmih06/ompig/extensions/sdk => /sdk
 `
 	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)

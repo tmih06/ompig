@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // authorizationURLQuery is `new URL(value).searchParams` for a pasted value. ok is false when `new URL(value)` throws, so the caller treats the

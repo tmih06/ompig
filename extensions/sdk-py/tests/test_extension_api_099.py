@@ -15,10 +15,10 @@ import pytest
 from test_sdk import _write_frame
 from test_sdk_surface import _Host
 
-import pig_sdk
+import ompig_sdk
 
 
-def _host(ext: pig_sdk.Extension, ready: dict[str, Any] | None = None) -> _Host:
+def _host(ext: ompig_sdk.Extension, ready: dict[str, Any] | None = None) -> _Host:
     """Start the extension against a fake host whose reads fail after 15 s, so a missing frame fails the test instead of hanging it."""
     host = _Host(ext, ready)
     host.conn.settimeout(15)
@@ -42,24 +42,24 @@ def _drive(host: _Host, req_id: str, request: dict[str, Any], answers: dict[str,
                 host.answer(env, answer)
 
 
-def _command_ext(name: str, handler: Any, **ready_state: Any) -> tuple[pig_sdk.Extension, dict[str, Any]]:
-    ext = pig_sdk.Extension(name)
+def _command_ext(name: str, handler: Any, **ready_state: Any) -> tuple[ompig_sdk.Extension, dict[str, Any]]:
+    ext = ompig_sdk.Extension(name)
     ext.command("go", "run", lambda ctx, _args: handler(ctx))
     return ext, {"state": ready_state} if ready_state else {}
 
 
 def test_event_constants_of_the_new_events() -> None:
     """types.ts:1562 (mcp_servers_change) and 1580 (provider_stream_event)."""
-    assert pig_sdk.EVENT_PROVIDER_STREAM_EVENT == "provider_stream_event"
-    assert pig_sdk.EVENT_MCP_SERVERS_CHANGE == "mcp_servers_change"
+    assert ompig_sdk.EVENT_PROVIDER_STREAM_EVENT == "provider_stream_event"
+    assert ompig_sdk.EVENT_MCP_SERVERS_CHANGE == "mcp_servers_change"
 
 
 def test_new_event_handlers_are_declared_and_receive_the_event() -> None:
     """types.ts:699-709, 884-890: the handlers register by event name and get the event dict."""
     seen: list[tuple[str, dict[str, Any]]] = []
-    ext = pig_sdk.Extension("py-events")
-    ext.on_event(pig_sdk.EVENT_PROVIDER_STREAM_EVENT, lambda ctx, event: seen.append(("stream", event)))
-    ext.on_event(pig_sdk.EVENT_MCP_SERVERS_CHANGE, lambda ctx, event: seen.append(("mcp", event)))
+    ext = ompig_sdk.Extension("py-events")
+    ext.on_event(ompig_sdk.EVENT_PROVIDER_STREAM_EVENT, lambda ctx, event: seen.append(("stream", event)))
+    ext.on_event(ompig_sdk.EVENT_MCP_SERVERS_CHANGE, lambda ctx, event: seen.append(("mcp", event)))
     host = _host(ext)
     try:
         assert [h["event"] for h in host.register["handlers"]] == ["provider_stream_event", "mcp_servers_change"]
@@ -76,14 +76,14 @@ def test_new_event_handlers_are_declared_and_receive_the_event() -> None:
 # ── Tool definition fields ───────────────────────────────────────────────────
 
 
-def _loadout_hook(loadout: pig_sdk.ToolLoadout) -> dict[str, Any] | None:
+def _loadout_hook(loadout: ompig_sdk.ToolLoadout) -> dict[str, Any] | None:
     return None
 
 
 def test_register_tool_declares_exposure_fields() -> None:
     """types.ts:579-607: outputSchema, exposure, namespace, annotations, defaultActive, prepareLoadout."""
-    ext = pig_sdk.Extension("py-exposure")
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext = ompig_sdk.Extension("py-exposure")
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="search", label="Search", description="Search", parameters={"type": "object"},
         output_schema={"type": "object", "properties": {"n": {"type": "number"}}},
         exposure="codemode",
@@ -93,7 +93,7 @@ def test_register_tool_declares_exposure_fields() -> None:
         prepare_loadout=_loadout_hook,
         execute=lambda ctx, args: "ok",
     ))
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="plain", label="Plain", description="Plain", parameters={"type": "object"}, execute=lambda ctx, args: "ok",
     ))
     host = _host(ext)
@@ -113,8 +113,8 @@ def test_register_tool_declares_exposure_fields() -> None:
 
 
 def test_register_tool_default_active_true_is_declared() -> None:
-    ext = pig_sdk.Extension("py-active")
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext = ompig_sdk.Extension("py-active")
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="t", label="t", description="t", parameters={"type": "object"}, default_active=True, execute=lambda ctx, args: "ok",
     ))
     host = _host(ext)
@@ -125,9 +125,9 @@ def test_register_tool_default_active_true_is_declared() -> None:
 
 
 def test_register_tool_rejects_an_unknown_exposure_before_changing_state() -> None:
-    ext = pig_sdk.Extension("py-bad-exposure")
+    ext = ompig_sdk.Extension("py-bad-exposure")
     with pytest.raises(ValueError, match="exposure"):
-        ext.register_tool(pig_sdk.ToolDefinition(
+        ext.register_tool(ompig_sdk.ToolDefinition(
             name="t", label="t", description="t", parameters={"type": "object"}, exposure="visible", execute=lambda ctx, args: "ok",  # type: ignore[arg-type]
         ))
     host = _host(ext)
@@ -139,8 +139,8 @@ def test_register_tool_rejects_an_unknown_exposure_before_changing_state() -> No
 
 def test_live_register_tool_sends_the_exposure_fields_to_the_host() -> None:
     """loader.ts:288-296: registerTool after load refreshes the running registry with the same declaration."""
-    def handler(ctx: pig_sdk.Context) -> None:
-        ctx.register_tool(pig_sdk.ToolDefinition(
+    def handler(ctx: ompig_sdk.Context) -> None:
+        ctx.register_tool(ompig_sdk.ToolDefinition(
             name="late", label="Late", description="d", parameters={"type": "object"}, exposure="deferred",
             namespace={"name": "ns"}, execute=lambda c, a: "ok",
         ))
@@ -158,17 +158,17 @@ def test_live_register_tool_sends_the_exposure_fields_to_the_host() -> None:
 
 def test_prepare_loadout_request_runs_the_hook_with_the_loadout() -> None:
     """types.ts:541-563, 601-607 and agent-session.ts:1480-1482, 1517-1518: the hook sees declared, callable and registered tools; an unregistered name is direct and has no namespace."""
-    received: list[pig_sdk.ToolLoadout] = []
+    received: list[ompig_sdk.ToolLoadout] = []
     answer: list[Any] = [{"descriptions": {"read": "Read (via codemode)"}, "hiddenDeclarations": ["grep"]}]
 
-    def hook(loadout: pig_sdk.ToolLoadout) -> Any:
+    def hook(loadout: ompig_sdk.ToolLoadout) -> Any:
         received.append(loadout)
         if isinstance(answer[0], Exception):
             raise answer[0]
         return answer[0]
 
-    ext = pig_sdk.Extension("py-loadout")
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext = ompig_sdk.Extension("py-loadout")
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="codemode", label="c", description="c", parameters={"type": "object"}, prepare_loadout=hook, execute=lambda ctx, args: "ok",
     ))
     host = _host(ext)
@@ -205,7 +205,7 @@ def test_prepare_loadout_request_runs_the_hook_with_the_loadout() -> None:
 
 def test_tool_result_carries_structured_content_and_is_error_unchanged() -> None:
     """agent/src/types.ts:424-446 (structuredContent, isError): the result reaches the host as returned."""
-    ext = pig_sdk.Extension("py-structured")
+    ext = ompig_sdk.Extension("py-structured")
     result = {
         "content": "text for the model",
         "structured_content": {"rows": [1, 2, 3], "ok": None},
@@ -226,7 +226,7 @@ def test_tool_result_carries_structured_content_and_is_error_unchanged() -> None
 
 def test_mcp_servers_registered_by_the_factory_travel_in_the_register_frame() -> None:
     """loader.ts:456-462, 259-262: registration during load is queued, in order, and applied when the factory succeeds; unregistering a queued server removes it."""
-    ext = pig_sdk.Extension("py-mcp-load")
+    ext = ompig_sdk.Extension("py-mcp-load")
     ext.register_mcp_server("docs", {"url": "https://mcp.example/docs"})
     ext.register_mcp_server("wiki", {"command": "wiki-mcp", "args": ["--stdio"]})
     ext.register_mcp_server("gone", {"url": "https://mcp.example/gone"})
@@ -244,7 +244,7 @@ def test_mcp_servers_registered_by_the_factory_travel_in_the_register_frame() ->
 
 
 def test_register_mcp_server_config_must_be_json() -> None:
-    ext = pig_sdk.Extension("py-mcp-json")
+    ext = ompig_sdk.Extension("py-mcp-json")
     with pytest.raises(TypeError, match="JSON"):
         ext.register_mcp_server("docs", {"url": object()})
     host = _host(ext)
@@ -259,7 +259,7 @@ def test_live_mcp_registration_calls_the_host_and_replicates_the_list() -> None:
     listed: list[Any] = []
     server = {"name": "jira", "config": {"url": "https://mcp.example/jira"}, "extensionPath": "/ext/py"}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         listed.append(ctx.get_mcp_servers())
         ctx.register_mcp_server("jira", {"url": "https://mcp.example/jira"})
         listed.append(ctx.get_mcp_servers())
@@ -288,10 +288,10 @@ def test_rejected_mcp_registration_raises_and_keeps_the_list() -> None:
     """loader.ts:463-470: an invalid config or a name another extension owns throws to the extension."""
     outcome: list[Any] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         try:
             ctx.register_mcp_server("docs", {"url": ""})
-        except pig_sdk.HostCallError as exc:
+        except ompig_sdk.HostCallError as exc:
             outcome.append(str(exc))
         outcome.append(ctx.get_mcp_servers())
 
@@ -311,7 +311,7 @@ def test_get_mcp_servers_reads_the_replicated_state_without_a_host_call() -> Non
     first = [{"name": "a", "config": {"url": "u"}, "extensionPath": "/a"}]
     second = [{"name": "b", "config": {"command": "c"}, "extensionPath": "/b"}]
     seen: list[Any] = []
-    ext = pig_sdk.Extension("py-mcp-state")
+    ext = ompig_sdk.Extension("py-mcp-state")
     ext.command("go", "run", lambda ctx, _args: seen.append(ctx.get_mcp_servers()))
     host = _host(ext, {"state": {"mcpServers": first}})
     try:
@@ -360,19 +360,19 @@ def test_a_registration_reply_never_replaces_a_later_state_push() -> None:
 # ── Virtual models ───────────────────────────────────────────────────────────
 
 
-def _router(ctx: pig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
+def _router(ctx: ompig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
     return {"model": {"provider": "anthropic", "id": "claude-x"}, "thinkingLevel": "low", "state": {"n": (request.get("state") or {}).get("n", 0) + 1}}
 
 
 def test_virtual_models_registered_by_the_factory_travel_in_the_register_frame() -> None:
     """loader.ts:480-490 and virtual-models.ts:88-101: everything but route is declared."""
-    ext = pig_sdk.Extension("py-vm-load")
-    ext.register_virtual_model(pig_sdk.VirtualModel(
+    ext = ompig_sdk.Extension("py-vm-load")
+    ext.register_virtual_model(ompig_sdk.VirtualModel(
         provider="router", id="auto", name="Auto", route=_router,
         thinking_levels=["off", "low"], context_window=200000, max_tokens=8192, input=["text"],
     ))
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="min", name="Min", route=_router))
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="gone", name="Gone", route=_router))
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="min", name="Min", route=_router))
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="gone", name="Gone", route=_router))
     ext.unregister_virtual_model("router", "gone")
     host = _host(ext)
     try:
@@ -385,15 +385,15 @@ def test_virtual_models_registered_by_the_factory_travel_in_the_register_frame()
 
 
 def test_register_virtual_model_requires_a_callable_route() -> None:
-    ext = pig_sdk.Extension("py-vm-route")
+    ext = ompig_sdk.Extension("py-vm-route")
     with pytest.raises(TypeError, match="route"):
-        ext.register_virtual_model(pig_sdk.VirtualModel(provider="p", id="i", name="n", route="not callable"))  # type: ignore[arg-type]
+        ext.register_virtual_model(ompig_sdk.VirtualModel(provider="p", id="i", name="n", route="not callable"))  # type: ignore[arg-type]
 
 
 def test_live_virtual_model_registration_calls_the_host() -> None:
     """loader.ts:480-497."""
-    def handler(ctx: pig_sdk.Context) -> None:
-        ctx.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=_router, thinking_levels=["off"]))
+    def handler(ctx: ompig_sdk.Context) -> None:
+        ctx.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=_router, thinking_levels=["off"]))
         ctx.unregister_virtual_model("router", "auto")
 
     ext, ready = _command_ext("py-vm-live", handler)
@@ -413,12 +413,12 @@ def test_virtual_model_route_request_runs_the_router_in_the_extension() -> None:
     """loader.ts:485-487, virtual-models.ts:100: the router gets the request and a context, and its route is the response."""
     seen: list[dict[str, Any]] = []
 
-    def route(ctx: pig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
+    def route(ctx: ompig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
         seen.append({**request, "cancelled": request["signal"].is_set()})
         return _router(ctx, request)
 
-    ext = pig_sdk.Extension("py-vm-route")
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=route))
+    ext = ompig_sdk.Extension("py-vm-route")
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=route))
     host = _host(ext)
     try:
         model = {"provider": "router", "id": "auto", "api": "pi-virtual"}
@@ -437,11 +437,11 @@ def test_virtual_model_route_request_runs_the_router_in_the_extension() -> None:
 
 def test_a_route_returning_the_absent_request_state_keeps_the_state() -> None:
     """virtual-models.ts:77-83: returning request.state, or undefined, keeps the current state. Before the first state request.state is undefined, which Python reads as None: the route must not store a null state."""
-    def route(ctx: pig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
+    def route(ctx: ompig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
         return {"model": {"provider": "anthropic", "id": "claude-x"}, "thinkingLevel": "low", "state": request.get("state")}
 
-    ext = pig_sdk.Extension("py-vm-keep")
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=route))
+    ext = ompig_sdk.Extension("py-vm-keep")
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=route))
     host = _host(ext)
     try:
         request = {"model": {"provider": "router", "id": "auto"}, "thinkingLevel": "low", "reason": "user", "messages": []}
@@ -453,15 +453,15 @@ def test_a_route_returning_the_absent_request_state_keeps_the_state() -> None:
 
 def test_virtual_model_route_errors_are_the_requests_error() -> None:
     """virtual-models.ts:100: a router that throws, returns nothing usable, or names no registered model fails only that request."""
-    def bad(ctx: pig_sdk.Context, request: dict[str, Any]) -> Any:
+    def bad(ctx: ompig_sdk.Context, request: dict[str, Any]) -> Any:
         return "not a route"
 
-    def boom(ctx: pig_sdk.Context, request: dict[str, Any]) -> Any:
+    def boom(ctx: ompig_sdk.Context, request: dict[str, Any]) -> Any:
         raise RuntimeError("router exploded")
 
-    ext = pig_sdk.Extension("py-vm-errors")
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="r", id="bad", name="Bad", route=bad))
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="r", id="boom", name="Boom", route=boom))
+    ext = ompig_sdk.Extension("py-vm-errors")
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="r", id="bad", name="Bad", route=bad))
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="r", id="boom", name="Boom", route=boom))
     host = _host(ext)
     try:
         def route(model_id: str) -> dict[str, Any]:
@@ -483,7 +483,7 @@ def test_get_settings_reads_the_replicated_state() -> None:
     """types.ts:1712, loader.ts:411-413: settings are synchronous upstream, so the SDK answers from state."""
     settings = {"theme": "dark", "compaction": {"enabled": True, "reserveTokens": 4096}, "defaultTools": ["+grep"]}
     seen: list[Any] = []
-    ext = pig_sdk.Extension("py-settings")
+    ext = ompig_sdk.Extension("py-settings")
     ext.command("go", "run", lambda ctx, _args: seen.append(ctx.get_settings()))
     host = _host(ext, {"state": {"settings": settings}})
     try:
@@ -501,7 +501,7 @@ def test_get_settings_before_the_host_sent_any_raises() -> None:
     """loader.ts:177: getSettings is `notInitialized` until the runner binds; no constant stands in for the missing settings."""
     outcome: list[str] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         try:
             ctx.get_settings()
         except RuntimeError as exc:
@@ -521,8 +521,8 @@ def test_get_settings_before_the_host_sent_any_raises() -> None:
 _CALLABLE = [{"name": "read", "label": "Read", "description": "Read a file", "parameters": {"type": "object"}}]
 
 
-def _tool_ext(name: str, execute: Any, **state: Any) -> tuple[pig_sdk.Extension, dict[str, Any]]:
-    ext = pig_sdk.Extension(name)
+def _tool_ext(name: str, execute: Any, **state: Any) -> tuple[ompig_sdk.Extension, dict[str, Any]]:
+    ext = ompig_sdk.Extension(name)
     ext.tool("outer", "outer", {"type": "object"}, execute)
     return ext, {"state": state}
 
@@ -531,14 +531,14 @@ def test_ctx_tools_asks_the_host_when_it_is_read_and_only_in_a_tool() -> None:
     """types.ts:385, runner.ts:958-965: the tool context lists the callable tools as the host has them when the getter is read; other contexts have no `tools`."""
     seen: list[Any] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         seen.append(ctx.tools)
         return "ok"
 
     ext, ready = _tool_ext("py-tools", execute)
     outside: list[str] = []
 
-    def command(ctx: pig_sdk.Context) -> None:
+    def command(ctx: ompig_sdk.Context) -> None:
         try:
             _ = ctx.tools
         except RuntimeError as exc:
@@ -573,7 +573,7 @@ def test_execute_tool_runs_the_named_tool_and_returns_the_outcome() -> None:
     """types.ts:386-394, runner.ts:966-983: the call names the calling tool call, and its outcome comes back as the host returned it."""
     outcomes: list[Any] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         outcomes.append(ctx.execute_tool("read", {"path": "a.txt"}))
         outcomes.append(ctx.execute_tool("read", {"path": "b.txt"}))
         return "done"
@@ -598,10 +598,10 @@ def test_execute_tool_runs_the_named_tool_and_returns_the_outcome() -> None:
 def test_execute_tool_marks_an_explicit_signal() -> None:
     """runner.ts:979-981 (`{ ...options, signal: options.signal ?? signal }`): a nested tool runs with the signal its caller passed, and with the calling tool's otherwise, so its `signal` parameter differs only in the first case. The call tells the host which case it is."""
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         ctx.execute_tool("read", {})
-        ctx.execute_tool("read", {}, pig_sdk.ExecuteToolOptions())
-        ctx.execute_tool("read", {}, pig_sdk.ExecuteToolOptions(signal=pig_sdk.ProviderSignal()))
+        ctx.execute_tool("read", {}, ompig_sdk.ExecuteToolOptions())
+        ctx.execute_tool("read", {}, ompig_sdk.ExecuteToolOptions(signal=ompig_sdk.ProviderSignal()))
         return "done"
 
     ext, ready = _tool_ext("py-exec-own", execute, callableTools=_CALLABLE)
@@ -631,7 +631,7 @@ def test_execute_tool_outside_a_tool_call_raises() -> None:
     """runner.ts:952-985: `executeTool` exists only on the tool context."""
     outcome: list[str] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         try:
             ctx.execute_tool("read", {})
         except RuntimeError as exc:
@@ -650,12 +650,12 @@ def test_execute_tool_delivers_updates_in_order_before_the_outcome() -> None:
     """types.ts:367-372 (onUpdate), nested-tool-calls.ts:221: partial results reach the callback in order and before the call returns, and the callback may itself call the host."""
     events: list[Any] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         def on_update(partial: dict[str, Any]) -> None:
             events.append(("update", partial["content"][0]["text"]))
             ctx.notify("saw " + partial["content"][0]["text"])
 
-        outcome = ctx.execute_tool("read", {}, pig_sdk.ExecuteToolOptions(on_update=on_update))
+        outcome = ctx.execute_tool("read", {}, ompig_sdk.ExecuteToolOptions(on_update=on_update))
         events.append(("outcome", outcome["isError"]))
         return "done"
 
@@ -694,12 +694,12 @@ def test_execute_tool_delivers_updates_in_order_before_the_outcome() -> None:
 
 def test_execute_tool_signal_cancels_the_nested_call() -> None:
     """types.ts:367-372 (signal): aborting the option signal cancels only the nested call, named by its executeId."""
-    signal = pig_sdk.ProviderSignal()
+    signal = ompig_sdk.ProviderSignal()
     aborted = dict(_OUTCOME, isError=True)
     got: list[Any] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
-        got.append(ctx.execute_tool("read", {}, pig_sdk.ExecuteToolOptions(signal=signal)))
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
+        got.append(ctx.execute_tool("read", {}, ompig_sdk.ExecuteToolOptions(signal=signal)))
         return "done"
 
     ext, ready = _tool_ext("py-exec-signal", execute, callableTools=_CALLABLE)
@@ -723,9 +723,9 @@ def test_execute_tool_explicit_signal_replaces_the_calling_requests_cancellation
     """runner.ts:980 passes `signal: options.signal ?? signal`: a given signal replaces the calling tool's, so cancelling the calling request leaves the nested call running and executeTool resolves with its outcome."""
     got: list[Any] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         try:
-            got.append(ctx.execute_tool("read", {}, pig_sdk.ExecuteToolOptions(signal=pig_sdk.ProviderSignal())))
+            got.append(ctx.execute_tool("read", {}, ompig_sdk.ExecuteToolOptions(signal=ompig_sdk.ProviderSignal())))
         except Exception as exc:  # noqa: BLE001 - the test records what escaped
             got.append(exc)
         return "done"
@@ -746,9 +746,9 @@ def test_execute_tool_explicit_signal_replaces_the_calling_requests_cancellation
 
 def test_execute_tool_with_an_aborted_signal_cancels_after_the_call_starts() -> None:
     """The host applies a cancel only after the call it names started (extension.CallInitiated), so a signal that is already aborted sends the cancel after the call."""
-    signal = pig_sdk.ProviderSignal()
+    signal = ompig_sdk.ProviderSignal()
     signal.set()
-    ext, ready = _tool_ext("py-exec-preset", lambda ctx, args: ctx.execute_tool("read", {}, pig_sdk.ExecuteToolOptions(signal=signal)) and "done", callableTools=_CALLABLE)
+    ext, ready = _tool_ext("py-exec-preset", lambda ctx, args: ctx.execute_tool("read", {}, ompig_sdk.ExecuteToolOptions(signal=signal)) and "done", callableTools=_CALLABLE)
     host = _host(ext, ready)
     try:
         call = _start_tool(host)
@@ -767,10 +767,10 @@ _EXEC_KILLED = {"stdout": "so far", "stderr": "", "code": 0, "killed": True}
 
 def test_exec_signal_cancels_the_command() -> None:
     """core/exec.ts:46-52 (ExecOptions.signal): the call names itself by an exec id, is sent outside the calling request, and aborting the signal tells the host with exec.cancel after the call."""
-    signal = pig_sdk.ProviderSignal()
+    signal = ompig_sdk.ProviderSignal()
     got: list[Any] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         got.append(ctx.exec("sleep", ["30"], timeout=5000, signal=signal))
         return "done"
 
@@ -796,7 +796,7 @@ def test_exec_signal_cancels_the_command() -> None:
 
 def test_exec_with_a_set_signal_sends_the_cancel_behind_the_call() -> None:
     """The host applies a cancel only after the call it names started the command, so a signal that is set already still sends the call first (exec.ts spawns, then kills)."""
-    signal = pig_sdk.ProviderSignal()
+    signal = ompig_sdk.ProviderSignal()
     signal.set()
     ext, ready = _tool_ext("py-exec-preset-abort", lambda ctx, args: ctx.exec("sleep", ["30"], signal=signal).killed and "killed")
     host = _host(ext, ready)
@@ -815,7 +815,7 @@ def test_exec_with_a_set_signal_sends_the_cancel_behind_the_call() -> None:
 def test_exec_signal_replaces_the_calling_requests_cancellation() -> None:
     """exec.ts has no signal but the caller's: cancelling the calling request neither ends the command nor returns from the call."""
     got: list[Any] = []
-    ext, ready = _tool_ext("py-exec-own-signal-request", lambda ctx, args: got.append(ctx.exec("sleep", [], signal=pig_sdk.ProviderSignal())) or "done")
+    ext, ready = _tool_ext("py-exec-own-signal-request", lambda ctx, args: got.append(ctx.exec("sleep", [], signal=ompig_sdk.ProviderSignal())) or "done")
     host = _host(ext, ready)
     try:
         call = _start_tool(host)
@@ -844,14 +844,14 @@ def test_exec_without_a_signal_stays_tied_to_the_request() -> None:
 
 def test_exec_rejects_a_signal_that_is_not_a_provider_signal() -> None:
     with pytest.raises(TypeError, match="signal must be a ProviderSignal"):
-        pig_sdk.Context.exec(object(), "sleep", [], signal=object())  # type: ignore[arg-type]
+        ompig_sdk.Context.exec(object(), "sleep", [], signal=object())  # type: ignore[arg-type]
 
 
 def test_cancelling_the_calling_request_releases_a_blocked_execute_tool() -> None:
     """runner.ts:983: the nested call's default signal is the calling tool's; here the host cancels the request while the nested call runs."""
     failure: list[str] = []
 
-    def execute(ctx: pig_sdk.Context, args: dict[str, Any]) -> str:
+    def execute(ctx: ompig_sdk.Context, args: dict[str, Any]) -> str:
         try:
             ctx.execute_tool("read", {})
         except RuntimeError as exc:
@@ -880,7 +880,7 @@ def test_provider_config_model_entries_of_every_type_reach_the_host_unchanged() 
             {"type": "classifier", "id": "cls-1", "name": "Classifier", "api": "llama-cpp-classify", "input": ["text"], "contextWindow": 512},
         ],
     }
-    ext = pig_sdk.Extension("py-provider-types")
+    ext = ompig_sdk.Extension("py-provider-types")
     ext.register_provider("multi", config)
     host = _host(ext)
     try:

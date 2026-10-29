@@ -14,11 +14,11 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // Pi's SessionManager keeps every parsed entry of the file in memory (session-manager.ts fileEntries/byId). A persisted Session keeps an index
@@ -99,7 +99,7 @@ func (s *Session) coldLocked(slot *entrySlot) *slotCold {
 
 // The Session's cold parts are numbered in the order slots get them. The first coldSmallChunks chunks hold 8, 16, 32, ... parts, so a
 // session with few costs little; every later chunk holds coldChunkSize.
-// pig additive (D112): Pi keeps every entry as one object in its entries array; how the cold parts are chunked changes allocation, never which part a slot reads.
+// ompig additive (D112): Pi keeps every entry as one object in its entries array; how the cold parts are chunked changes allocation, never which part a slot reads.
 const (
 	coldSmallChunks = 7
 	coldSmallParts  = 8 * (1<<coldSmallChunks - 1)
@@ -130,7 +130,7 @@ func (c *slotCold) blockAt() int64 { return -2 - c.off }
 // recordBlock is the compressed records of the entries one eviction took out of a session without a file, back to back. They are written
 // to the Session's spill file, so a long session without a file holds only where each block lies; data holds them instead when the spill
 // file could not be created or written.
-// pig additive (D112): Pi holds every session entry in memory; a session without a file keeps their records in an unnamed temporary file.
+// ompig additive (D112): Pi holds every session entry in memory; a session without a file keeps their records in an unnamed temporary file.
 type recordBlock struct {
 	data  []byte
 	spill *sessionSnapshot
@@ -509,7 +509,7 @@ func (s *Session) readSlotsLocked(indexes []int32) []SessionEntry {
 }
 
 // parallelReadMinLines is the number of lines each goroutine of a parallel read decodes at least, so a small read stays on the caller.
-// pig additive (D112): Pi holds every entry decoded (session-manager.ts _buildIndex); the split is a Go CPU choice and the result is in append order.
+// ompig additive (D112): Pi holds every entry decoded (session-manager.ts _buildIndex); the split is a Go CPU choice and the result is in append order.
 const parallelReadMinLines = 256
 
 // allEntriesLocked returns every entry in append order, decoded. The caller holds s.mu.
@@ -774,7 +774,7 @@ type recordReader struct {
 }
 
 // recordWindow is the least a windowed recordReader reads from the file at once.
-// pig additive (D112): Pi holds every entry in memory; a record that does not fit in the window is read whole, and every read returns the record's own bytes.
+// ompig additive (D112): Pi holds every entry in memory; a record that does not fit in the window is read whole, and every read returns the record's own bytes.
 const recordWindow = 1 << 20
 
 // record returns the record cold locates, valid until the next call; ok is false when it cannot be read.
@@ -1140,7 +1140,7 @@ func (a *searchTextArena) drop(ref uint32) { a.dead += uint64(len(a.stored(ref))
 
 // maxIndexedSearchText bounds the search text the index keeps per entry. It holds a message's role and its 200 cut characters; a longer
 // text (a bash command or a custom message's string content, which getSearchableText keeps whole) stays in the record, which a search reads.
-// pig additive (D112): Pi computes the text from its in-memory entry on each search (tree-selector.ts getSearchableText); a longer text is read back, so a search finds the same.
+// ompig additive (D112): Pi computes the text from its in-memory entry on each search (tree-selector.ts getSearchableText); a longer text is read back, so a search finds the same.
 const maxIndexedSearchText = 1 << 10
 
 // indexSearchTextLocked gives a message or custom message slot its search text from its record raw, once, when it is at most

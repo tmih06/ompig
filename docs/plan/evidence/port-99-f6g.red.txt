@@ -66,11 +66,11 @@
     --- FAIL: TestTruncateMiddle/does_not_split_a_four-byte_character (0.00s)
     --- FAIL: TestTruncateMiddle/cuts_multi-byte_text_only_at_character_boundaries (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent/tools	1.176s
+FAIL	github.com/tmih06/ompig/internal/codingagent/tools	1.176s
 FAIL
 # go test ./tui -run TestReadHeadersTreatNullRangeAsOmitted -v
 --- PASS: TestReadHeadersTreatNullRangeAsOmitted (0.00s)
-ok  	github.com/MichaelKinsy/PiG/tui	0.035s
+ok  	github.com/tmih06/ompig/tui	0.035s
 
 # Reading the run
 # Failing (new or changed upstream behavior, all for the missing behavior; stubs return zero values):

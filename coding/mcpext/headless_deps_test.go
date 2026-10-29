@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-const modulePath = "github.com/MichaelKinsy/PiG/"
+const modulePath = "github.com/tmih06/ompig/"
 
 func goList(t *testing.T, format string, args ...string) []string {
 	t.Helper()

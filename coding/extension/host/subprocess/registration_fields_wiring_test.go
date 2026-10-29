@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // registrationListsElsewhere names each RegisterPayload declaration list whose fields another wiring test follows, with that test. Every other declaration list goes through registrationPaths.

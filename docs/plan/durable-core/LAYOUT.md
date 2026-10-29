@@ -78,4 +78,4 @@ The core writes the record shapes of pi-durable main da866ada (task `startedAt`/
 | durable-s0 (58b037a23): `abi`, `probe`, `shim`, `contract` | `abi` (done), `probe` and `host/cf` (dcore-host), `durable/contract` (done) |
 | durable-core-ts (de1fac200): TS core, verification harness, X1, handoff | second oracle for every row; record templates of both shapes |
 | durable-perf (407c624b7): `contextCache` and its differential tests | `history` context derivation |
-| PiG `durable/` port | semantic reference for `session` and `turn`; `chord/delta` for `internal/delta` |
+| Ompig `durable/` port | semantic reference for `session` and `turn`; `chord/delta` for `internal/delta` |

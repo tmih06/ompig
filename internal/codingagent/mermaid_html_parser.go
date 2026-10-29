@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -8,13 +8,13 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/ast"
-	gmparser "github.com/MichaelKinsy/PiG/third_party/goldmark/parser"
-	gmtext "github.com/MichaelKinsy/PiG/third_party/goldmark/text"
+	"github.com/tmih06/ompig/third_party/goldmark/ast"
+	gmparser "github.com/tmih06/ompig/third_party/goldmark/parser"
+	gmtext "github.com/tmih06/ompig/third_party/goldmark/text"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Marked's HTML rules use ASCII case-insensitive tag names, space-only attribute separators, and matching raw-text closing tags.

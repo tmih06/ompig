@@ -6,13 +6,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/*.ts stream (options.signal)
 
 // A request aborted while its response stream is open: the events delivered before the abort and the final message (stop reason "aborted", the content
-// so far, the error message) read from the pinned pi-ai (AbortSignal) and from PiG (context cancellation). The server delivers a prefix of a stream at an
+// so far, the error message) read from the pinned pi-ai (AbortSignal) and from Ompig (context cancellation). The server delivers a prefix of a stream at an
 // event boundary and then holds the connection open.
 func TestProviderAbortMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(157))

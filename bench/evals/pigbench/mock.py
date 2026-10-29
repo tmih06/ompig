@@ -197,7 +197,7 @@ def make_handler(server):
         protocol_version = "HTTP/1.1"
         # A streamed response is several small sends. With Nagle on, each send after the first waits for the client's
         # ACK, which Linux delays up to 40 ms once a connection is past its start, so every turn on a reused connection
-        # (PiG's shared transport, Pi's undici dispatcher) idled about 40 ms.
+        # (Ompig's shared transport, Pi's undici dispatcher) idled about 40 ms.
         disable_nagle_algorithm = True
 
         def handle_one_request(self):

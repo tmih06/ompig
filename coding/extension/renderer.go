@@ -1,6 +1,6 @@
 package extension
 
-import "github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
+import "github.com/tmih06/ompig/coding/extension/markdowntransform"
 
 // MarkdownMessageType identifies the transcript message being transformed for display. It is
 // [markdowntransform.MarkdownMessageType], shared with the tui message components.

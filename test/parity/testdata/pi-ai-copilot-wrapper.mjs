@@ -55,10 +55,10 @@ async function resolveCliPath() {
       .reverse();
     // The parity oracle is pinned to coding.UpstreamVersion (binaries.go
     // enforces an exact match for the direct pi path). When the runner
-    // passes that pin via PIG_PARITY_PI_VERSION, require it exactly so a
+    // passes that pin via OMPIG_PARITY_PI_VERSION, require it exactly so a
     // newer pi-ai installed during a bump cannot silently become the
     // oracle. Unpinned, fall back to highest-installed.
-    const pinned = process.env.PIG_PARITY_PI_VERSION;
+    const pinned = process.env.OMPIG_PARITY_PI_VERSION;
     const selectable = pinned ? versions.filter((v) => v === pinned) : versions;
     for (const version of selectable) {
       for (const rel of cliParts) {

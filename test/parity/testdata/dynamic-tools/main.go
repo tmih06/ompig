@@ -7,9 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 }
 func run() error {
 	ctx := context.Background()
-	cwd, err := os.MkdirTemp("", "dynamic-tools-pig-")
+	cwd, err := os.MkdirTemp("", "dynamic-tools-ompig-")
 	if err != nil {
 		return err
 	}

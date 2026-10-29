@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi hands the tool_call handlers the model's arguments object and runs the tool with it (agent-loop.ts prepareToolCall, agent-session.ts:_beforeToolCall), so the members reach the handlers, the tool and the tool_result event in the order the model wrote them, and an edit keeps a retained member in its place and appends a new one. A Go map sorts its keys, so the Session carries the order beside the map.

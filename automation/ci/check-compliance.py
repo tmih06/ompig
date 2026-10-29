@@ -207,9 +207,9 @@ def check_pins() -> list[str]:
     version = r"(\d+(?:\.\d+)*)"
     for path, pattern in [
         ("docs/site/docs/containerization.md", rf"^FROM golang:{version} AS build"),
-        ("docs/site/docs/termux.md", rf"Go {version} builds PiG;"),
+        ("docs/site/docs/termux.md", rf"Go {version} builds Ompig;"),
         ("docs/site/docs/windows.md", rf"Install Git and Go {version}\."),
-        ("internal/pigdocs/content/extension-api.md", rf"Build PiG and Go extensions with Go {version}\."),
+        ("internal/pigdocs/content/extension-api.md", rf"Build Ompig and Go extensions with Go {version}\."),
     ]:
         copies.append(("Go", go, path, search(pattern, path, "Go version")))
     source = {

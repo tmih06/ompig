@@ -6,7 +6,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // .upstream/v0.87.1/packages/agent/test/agent.test.ts:683

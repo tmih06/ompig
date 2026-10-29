@@ -21,49 +21,49 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-var pigBinary = sync.OnceValues(func() (string, error) {
+var ompigBinary = sync.OnceValues(func() (string, error) {
 	root, err := testenv.ModuleRootPath()
 	if err != nil {
 		return "", err
 	}
-	dir, err := os.MkdirTemp("", "pig-perfgate-")
+	dir, err := os.MkdirTemp("", "ompig-perfgate-")
 	if err != nil {
 		return "", err
 	}
-	out := filepath.Join(dir, "pig")
+	out := filepath.Join(dir, "ompig")
 	if strings.HasSuffix(os.Args[0], ".exe") {
 		out += ".exe"
 	}
-	build := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-o", out, "./cmd/pig")
+	build := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-o", out, "./cmd/ompig")
 	build.Dir = root
 	build.Env = append(os.Environ(), "CGO_ENABLED=0")
 	if data, err := build.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("go build ./cmd/pig: %w\n%s", err, data)
+		return "", fmt.Errorf("go build ./cmd/ompig: %w\n%s", err, data)
 	}
 	return out, nil
 })
 
 func TestMain(m *testing.M) {
-	// Every ceiling here was derived with the kernel's transparent huge pages not backing pig's heap; the CI runners' policy is "always", which would make the anonymous-memory gates measure 2 MiB page alignment (see perfgate.DisableTransparentHugePages). The setting is inherited by every pig the tests start.
+	// Every ceiling here was derived with the kernel's transparent huge pages not backing ompig's heap; the CI runners' policy is "always", which would make the anonymous-memory gates measure 2 MiB page alignment (see perfgate.DisableTransparentHugePages). The setting is inherited by every ompig the tests start.
 	if err := perfgate.DisableTransparentHugePages(); err != nil {
 		fmt.Fprintln(os.Stderr, "perfgate:", err)
 		os.Exit(2)
 	}
 	code := m.Run()
-	if path, err := pigBinary(); err == nil {
+	if path, err := ompigBinary(); err == nil {
 		_ = os.RemoveAll(filepath.Dir(path))
 	}
 	os.Exit(code)
 }
 
-// pigHome is an isolated home for one gate: HOME, the config roots and the agent directories are temporary, and the inherited PI_/PIG_ variables and Go runtime tuning are dropped, so the counts depend only on the binary and its inputs.
-type pigHome struct {
+// ompigHome is an isolated home for one gate: HOME, the config roots and the agent directories are temporary, and the inherited PI_/OMPIG_ variables and Go runtime tuning are dropped, so the counts depend only on the binary and its inputs.
+type ompigHome struct {
 	t   *testing.T
 	env []string
 	cwd string
@@ -75,7 +75,7 @@ type pigHome struct {
 	runs int
 }
 
-func newPigHome(t *testing.T) *pigHome {
+func newPigHome(t *testing.T) *ompigHome {
 	t.Helper()
 	root := t.TempDir()
 	home, agent, cwd, tmp := filepath.Join(root, "home"), filepath.Join(root, "agent"), filepath.Join(root, "cwd"), filepath.Join(root, "tmp")
@@ -88,25 +88,25 @@ func newPigHome(t *testing.T) *pigHome {
 	for _, entry := range os.Environ() {
 		name, _, _ := strings.Cut(entry, "=")
 		switch {
-		case strings.HasPrefix(name, "PI_"), strings.HasPrefix(name, "PIG_"), name == "GOGC", name == "GOMEMLIMIT", name == "GODEBUG", name == "GOMAXPROCS", name == "HOME", name == "USERPROFILE", name == "TMPDIR", name == "TMP", name == "TEMP":
+		case strings.HasPrefix(name, "PI_"), strings.HasPrefix(name, "OMPIG_"), name == "GOGC", name == "GOMEMLIMIT", name == "GODEBUG", name == "GOMAXPROCS", name == "HOME", name == "USERPROFILE", name == "TMPDIR", name == "TMP", name == "TEMP":
 			continue
 		}
 		env = append(env, entry)
 	}
 	env = append(env,
 		"HOME="+home, "USERPROFILE="+home,
-		"PIG_HOME="+filepath.Join(home, ".pig"), "PI_HOME="+filepath.Join(home, ".pi"),
-		"PIG_CODING_AGENT_DIR="+agent, "PI_CODING_AGENT_DIR="+agent,
+		"OMPIG_HOME="+filepath.Join(home, ".ompig"), "PI_HOME="+filepath.Join(home, ".pi"),
+		"OMPIG_CODING_AGENT_DIR="+agent, "PI_CODING_AGENT_DIR="+agent,
 		"TMPDIR="+tmp, "TMP="+tmp, "TEMP="+tmp,
-		"PIG_TEST_FAUX=1", "GOMAXPROCS=1",
+		"OMPIG_TEST_FAUX=1", "GOMAXPROCS=1",
 	)
-	return &pigHome{t: t, env: env, cwd: cwd, tmp: tmp}
+	return &ompigHome{t: t, env: env, cwd: cwd, tmp: tmp}
 }
 
-// run starts pig with args and returns its exit record. drive, when set, owns stdin and stdout until it returns; stdin is closed afterwards.
-func (h *pigHome) run(args []string, drive func(pid int, stdin io.Writer, stdout *bufio.Reader)) profiling.ProcessMetrics {
+// run starts ompig with args and returns its exit record. drive, when set, owns stdin and stdout until it returns; stdin is closed afterwards.
+func (h *ompigHome) run(args []string, drive func(pid int, stdin io.Writer, stdout *bufio.Reader)) profiling.ProcessMetrics {
 	h.t.Helper()
-	binary, err := pigBinary()
+	binary, err := ompigBinary()
 	if err != nil {
 		h.t.Fatal(err)
 	}
@@ -114,18 +114,18 @@ func (h *pigHome) run(args []string, drive func(pid int, stdin io.Writer, stdout
 }
 
 // runBinary is run with another binary, such as memProbeBinary, and extra environment entries.
-func (h *pigHome) runBinary(binary string, env []string, args []string, drive func(pid int, stdin io.Writer, stdout *bufio.Reader)) profiling.ProcessMetrics {
+func (h *ompigHome) runBinary(binary string, env []string, args []string, drive func(pid int, stdin io.Writer, stdout *bufio.Reader)) profiling.ProcessMetrics {
 	h.t.Helper()
 	profileDir := h.t.TempDir()
 	ctx, cancel := context.WithTimeout(context.Background(), testbudget.Wait(h.t))
 	defer cancel()
 	command := exec.CommandContext(ctx, binary, args...)
 	command.Dir = h.cwd
-	command.Env = append(append(append([]string(nil), h.env...), env...), "PIG_PROFILE=metrics", "PIG_PROFILE_DIR="+profileDir)
+	command.Env = append(append(append([]string(nil), h.env...), env...), "OMPIG_PROFILE=metrics", "OMPIG_PROFILE_DIR="+profileDir)
 	// PERFGATE_PROFILE_DIR keeps an allocation profile of every run, with every allocation sampled, as <test>-<run>-allocs.pprof: compare two runs with go tool pprof -base. Sampling does not change the gated counts.
 	keep := os.Getenv("PERFGATE_PROFILE_DIR")
 	if keep != "" {
-		command.Env = append(command.Env, "PIG_PROFILE=metrics,allocs", "GODEBUG=memprofilerate=1")
+		command.Env = append(command.Env, "OMPIG_PROFILE=metrics,allocs", "GODEBUG=memprofilerate=1")
 	}
 	var stderr strings.Builder
 	command.Stderr = &stderr
@@ -147,7 +147,7 @@ func (h *pigHome) runBinary(binary string, env []string, args []string, drive fu
 	_ = stdin.Close()
 	_, _ = io.Copy(io.Discard, reader)
 	if err := command.Wait(); err != nil {
-		h.t.Fatalf("pig %s: %v\n%s", strings.Join(args, " "), err, stderr.String())
+		h.t.Fatalf("ompig %s: %v\n%s", strings.Join(args, " "), err, stderr.String())
 	}
 	left, err := os.ReadDir(h.tmp)
 	if err != nil {
@@ -155,11 +155,11 @@ func (h *pigHome) runBinary(binary string, env []string, args []string, drive fu
 	}
 	h.tempLeft = len(left)
 	for _, entry := range left {
-		h.t.Logf("pig %s left %s in TMPDIR", strings.Join(args, " "), entry.Name())
+		h.t.Logf("ompig %s left %s in TMPDIR", strings.Join(args, " "), entry.Name())
 	}
 	if keep != "" {
 		h.runs++
-		profiles, _ := filepath.Glob(filepath.Join(profileDir, "pig-*-allocs.pprof"))
+		profiles, _ := filepath.Glob(filepath.Join(profileDir, "ompig-*-allocs.pprof"))
 		for _, profile := range profiles {
 			data, err := os.ReadFile(profile)
 			if err != nil {
@@ -171,9 +171,9 @@ func (h *pigHome) runBinary(binary string, env []string, args []string, drive fu
 			}
 		}
 	}
-	matches, _ := filepath.Glob(filepath.Join(profileDir, "pig-*-metrics.json"))
+	matches, _ := filepath.Glob(filepath.Join(profileDir, "ompig-*-metrics.json"))
 	if len(matches) != 1 {
-		h.t.Fatalf("pig %s wrote no metrics record (%v)\n%s", strings.Join(args, " "), matches, stderr.String())
+		h.t.Fatalf("ompig %s wrote no metrics record (%v)\n%s", strings.Join(args, " "), matches, stderr.String())
 	}
 	data, err := os.ReadFile(matches[0])
 	if err != nil {
@@ -209,7 +209,7 @@ func rpcTurns(t *testing.T, turns int) func(int, io.Writer, *bufio.Reader) {
 	}
 }
 
-// checkExitState gates what a finished pig still holds when it exits (goroutines, descriptors and child processes) and the temporary entries it left behind. Descriptors count against the process's own start, so descriptors a parent lets it inherit do not count. A field the platform cannot report is -1 and is not gated. Goroutines and descriptors are gated only when the run settled its work before exit: a process that exits during startup, as Pi's process.exit does, still has its background model tasks reading credentials.
+// checkExitState gates what a finished ompig still holds when it exits (goroutines, descriptors and child processes) and the temporary entries it left behind. Descriptors count against the process's own start, so descriptors a parent lets it inherit do not count. A field the platform cannot report is -1 and is not gated. Goroutines and descriptors are gated only when the run settled its work before exit: a process that exits during startup, as Pi's process.exit does, still has its background model tasks reading credentials.
 func checkExitState(t *testing.T, prefix string, record profiling.ProcessMetrics, tempLeft int, settled bool) {
 	t.Helper()
 	perfgate.Check(t, prefix+".temp_entries_at_exit", float64(tempLeft))
@@ -247,7 +247,7 @@ const heapLiveRuns = 16
 
 // heapLiveGrowthSamples returns the per-turn live-heap growth of heapLiveRuns pairs (the first is small/large already run by the caller) and, for each pair, the A/A spread: the difference between its
 // few-turn run and a second few-turn run of the same program, per turn.
-func heapLiveGrowthSamples(home *pigHome, args []string, few, many int, small, large profiling.ProcessMetrics) (growth, floor []float64) {
+func heapLiveGrowthSamples(home *ompigHome, args []string, few, many int, small, large profiling.ProcessMetrics) (growth, floor []float64) {
 	turns := float64(many - few)
 	for i := range heapLiveRuns {
 		if i > 0 {
@@ -314,9 +314,9 @@ func TestRPCTurnProcessGate(t *testing.T) {
 
 // Memory at ready, the metric the Rust port rpi publishes (its "RSS at ready"): RPC mode is ready when it has answered its first command (get_state). The gate is the anonymous memory of the process, ceiling 4.5 MB (process.rpc_ready.anon_bytes); RSS, PSS and the run's peak RSS are reported beside it, not gated.
 //
-// RSS and PSS include every page of the pig binary and of the libraries it maps that the kernel has in its page cache, and how many of them are resident when the process is sampled depends on readahead and on what else read the file, not on pig: 24 runs of one binary on one idle host measured an RSS of 42.5 to 47.4 MB (peak 44.3 to 49.1 MB), and 5 of the 24 failed the former 46 MB RSS ceiling with no change to pig. The anonymous memory (smaps_rollup Anonymous: heap, stacks, written data) is what pig itself allocates and keeps: 80 runs, idle and beside 12 busy loops, measured 3.88 to 4.03 MB, and the 4.5 MB ceiling is the largest of them plus 12%. The owner chose it as the gated figure over RSS.
+// RSS and PSS include every page of the ompig binary and of the libraries it maps that the kernel has in its page cache, and how many of them are resident when the process is sampled depends on readahead and on what else read the file, not on ompig: 24 runs of one binary on one idle host measured an RSS of 42.5 to 47.4 MB (peak 44.3 to 49.1 MB), and 5 of the 24 failed the former 46 MB RSS ceiling with no change to ompig. The anonymous memory (smaps_rollup Anonymous: heap, stacks, written data) is what ompig itself allocates and keeps: 80 runs, idle and beside 12 busy loops, measured 3.88 to 4.03 MB, and the 4.5 MB ceiling is the largest of them plus 12%. The owner chose it as the gated figure over RSS.
 //
-// Anonymous memory is only comparable across hosts when the kernel backs it with 4 KiB pages. On a host whose THP policy is "always" (GitHub's ubuntu-24.04 runners) the Go heap's 3 MB sits in two or three 2 MiB pages, so the same binary measured 5.65 to 7.82 MB there (AnonHugePages 4 to 6 MB) depending on page alignment; TestMain therefore turns THP off for every pig these tests start, and perfgate.CheckAnonymous fails a measured process that still has AnonHugePages. With it, 50 runs on such a runner measured 3.95 to 4.03 MB, the lab host's figure.
+// Anonymous memory is only comparable across hosts when the kernel backs it with 4 KiB pages. On a host whose THP policy is "always" (GitHub's ubuntu-24.04 runners) the Go heap's 3 MB sits in two or three 2 MiB pages, so the same binary measured 5.65 to 7.82 MB there (AnonHugePages 4 to 6 MB) depending on page alignment; TestMain therefore turns THP off for every ompig these tests start, and perfgate.CheckAnonymous fails a measured process that still has AnonHugePages. With it, 50 runs on such a runner measured 3.95 to 4.03 MB, the lab host's figure.
 func TestRPCReadyMemoryGate(t *testing.T) {
 	home := newPigHome(t)
 	args := []string{"-ne", "--no-session", "--mode", "rpc", "--model", "test-faux/faux-1"}

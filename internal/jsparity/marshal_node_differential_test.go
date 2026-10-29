@@ -6,12 +6,12 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/internal/jsparity"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // stringPieces is the adversarial alphabet the fuzz strings are built from: every byte class the escapers branch on (C0 controls, the quote,
@@ -32,7 +32,7 @@ func randomPieces(rng *rand.Rand) string {
 	return b.String()
 }
 
-// The encoders PiG writes JSON.stringify text with agree with Node on every string a JavaScript string can be: jsstring.MarshalJSON (the
+// The encoders Ompig writes JSON.stringify text with agree with Node on every string a JavaScript string can be: jsstring.MarshalJSON (the
 // session-line encoder), jsstring.AppendString and jsparity.AppendString all print what JSON.stringify prints for the same UTF-16 units,
 // including C0 controls, lone and split surrogates, U+2028/U+2029 and HTML characters.
 func TestMarshalJSONMatchesNode(t *testing.T) {

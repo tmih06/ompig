@@ -1,4 +1,4 @@
-//go:build !pig_strip_self_update
+//go:build !ompig_strip_self_update
 
 package cli
 
@@ -23,8 +23,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // upstream: packages/coding-agent/src/utils/version-check.ts:51-72; utils/management-http.ts:3,47-77
@@ -38,7 +38,7 @@ func TestExplicitUpdateManifestRetryBoundary(t *testing.T) {
 				w.WriteHeader(status)
 			}))
 			t.Cleanup(server.Close)
-			t.Setenv("PIG_UPDATE_URL", server.URL)
+			t.Setenv("OMPIG_UPDATE_URL", server.URL)
 			_, stderr, code := capturePackageCommand(t, "update", "--self")
 			assert.Equal(t, 1, code)
 			assert.Contains(t, stderr, http.StatusText(status))
@@ -111,15 +111,15 @@ func TestExplicitUpdateManifestCancellationBudget(t *testing.T) {
 
 // upstream: packages/coding-agent/src/package-manager-cli.ts:171-222; D39 protects native replacement through receipt commit and rollback instead of npm release activation.
 func TestStandaloneUpdateLocksThroughReceiptRollback(t *testing.T) {
-	if target := os.Getenv("PIG_TEST_UPDATE_LOCK_TARGET"); target != "" {
-		bin := codingagent.UpdateBinary{URL: os.Getenv("PIG_TEST_UPDATE_LOCK_URL"), SHA256: os.Getenv("PIG_TEST_UPDATE_LOCK_SHA256")}
+	if target := os.Getenv("OMPIG_TEST_UPDATE_LOCK_TARGET"); target != "" {
+		bin := codingagent.UpdateBinary{URL: os.Getenv("OMPIG_TEST_UPDATE_LOCK_URL"), SHA256: os.Getenv("OMPIG_TEST_UPDATE_LOCK_SHA256")}
 		err := codingagent.SelfReplaceAt(t.Context(), http.DefaultClient, bin, target)
-		require.EqualError(t, err, "another standalone pig update is already running")
+		require.EqualError(t, err, "another standalone ompig update is already running")
 		return
 	}
 	f := newPackageCommandPathsFixture(t)
-	t.Setenv("PIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
-	target := filepath.Join(f.root, "pig")
+	t.Setenv("OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
+	target := filepath.Join(f.root, "ompig")
 	writeStartupFixtureFile(t, target, "old")
 	payload := []byte("new release")
 	digest := sha256.Sum256(payload)
@@ -135,7 +135,7 @@ func TestStandaloneUpdateLocksThroughReceiptRollback(t *testing.T) {
 		assert.Zero(t, downloads.Load())
 		return
 	}
-	alias := filepath.Join(f.root, "pig-alias")
+	alias := filepath.Join(f.root, "ompig-alias")
 	testenv.Symlink(t, target, alias)
 	entered, release := make(chan struct{}), make(chan struct{})
 	unblock := sync.OnceFunc(func() { close(release) })
@@ -165,7 +165,7 @@ func TestStandaloneUpdateLocksThroughReceiptRollback(t *testing.T) {
 	exe, err := os.Executable()
 	require.NoError(t, err)
 	child := exec.CommandContext(t.Context(), exe, "-test.run=^TestStandaloneUpdateLocksThroughReceiptRollback$")
-	child.Env = append(os.Environ(), "PIG_TEST_UPDATE_LOCK_TARGET="+alias, "PIG_TEST_UPDATE_LOCK_URL="+bin.URL, "PIG_TEST_UPDATE_LOCK_SHA256="+bin.SHA256)
+	child.Env = append(os.Environ(), "OMPIG_TEST_UPDATE_LOCK_TARGET="+alias, "OMPIG_TEST_UPDATE_LOCK_URL="+bin.URL, "OMPIG_TEST_UPDATE_LOCK_SHA256="+bin.SHA256)
 	output, err := child.CombinedOutput()
 	require.NoError(t, err, "%s", output)
 	assert.FileExists(t, target+".update.lock", "a refused updater must not remove the live holder's lock")

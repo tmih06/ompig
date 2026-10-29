@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 // packages/telemetry/src/testing/conformance.ts:19-24 createCase `await using fixture = await factory(); await test(fixture)`: when the case body passes, a

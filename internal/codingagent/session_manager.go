@@ -16,11 +16,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // ─── SessionManager ───────────────────────────────────────────────────────────
@@ -63,12 +63,12 @@ func NewSessionManagerWithDir(cwd, dir string) *SessionManager {
 // Mirrors upstream `getDefaultSessionDirPath`
 // (.upstream/current/packages/coding-agent/src/core/session-manager.ts).
 // This keeps the same relative path upstream Pi uses, modulo the config-root
-// rename from ~/.pi to ~/.pig.
+// rename from ~/.pi to ~/.ompig.
 func defaultSessionDir(cwd string) string {
 	return GetDefaultSessionDirPath(cwd, AgentDir())
 }
 
-// MkdirSessionDir creates a session directory and its missing parents with mode 0700. pig divergence (D132): Pi creates them with the umask
+// MkdirSessionDir creates a session directory and its missing parents with mode 0700. ompig divergence (D132): Pi creates them with the umask
 // default (0755), so every other user of the machine can read the sessions (pi-mono #10770). An existing directory keeps its mode.
 func MkdirSessionDir(dir string) error { return os.MkdirAll(dir, 0o700) }
 
@@ -91,7 +91,7 @@ func GetDefaultSessionDirPath(cwd, agentDir string) string {
 //  2. Replace any `/`, `\`, or `:` with `-`.
 //  3. Wrap in `--...--` bookends.
 //
-// Examples (Unix; pig is Unix-only):
+// Examples (Unix; ompig is Unix-only):
 //
 //	/tmp/foo            -> --tmp-foo--
 //	/Users/example/work -> --Users-example-work--
@@ -310,7 +310,7 @@ func (sm *SessionManager) ForkFromFile(sourcePath string, idOption ...string) (*
 		return nil, sessionPersistenceError(err, "open", newPath)
 	}
 	defer func() { _ = f.Close() }()
-	// pig additive (D112): Pi writes the header and every entry with writeFileSync on one fd (session-manager.ts forkFrom, Pi 8ddc44ec8); the buffer batches those writes and is flushed before the file is read back, so the file holds the same bytes.
+	// ompig additive (D112): Pi writes the header and every entry with writeFileSync on one fd (session-manager.ts forkFrom, Pi 8ddc44ec8); the buffer batches those writes and is flushed before the file is read back, so the file holds the same bytes.
 	w := bufio.NewWriterSize(f, 64<<10)
 	headerJSON, _ := json.Marshal(header)
 	// A bufio.Writer keeps its first error, which Flush returns.
@@ -358,7 +358,7 @@ func (sm *SessionManager) DeleteSession(path string) error {
 	return nil
 }
 
-// deleteListedSession deletes a session file the selector listed with Pi's deleteSessionFile. Pi's selector deletes any confirmed path; PiG refuses a path outside the directory the All scope lists, comparing whole path elements (case-insensitively on Windows), so every listed session remains deletable.
+// deleteListedSession deletes a session file the selector listed with Pi's deleteSessionFile. Pi's selector deletes any confirmed path; Ompig refuses a path outside the directory the All scope lists, comparing whole path elements (case-insensitively on Windows), so every listed session remains deletable.
 func (sm *SessionManager) deleteListedSession(path string) sessionDeleteResult {
 	refuse := func(message string) sessionDeleteResult {
 		return sessionDeleteResult{method: sessionDeleteUnlink, error: message}
@@ -396,7 +396,7 @@ func forEachJSONLLine(r io.Reader, fn func(line []byte) error) error {
 	return forEachJSONLLineContext(context.Background(), r, fn)
 }
 
-// pig additive (D112): Pi reads a session file through a 1 MiB buffer (session-manager.ts loadEntriesFromFile) or a line reader; a line longer than this pooled buffer is read into a separate slice, so every line is the same.
+// ompig additive (D112): Pi reads a session file through a 1 MiB buffer (session-manager.ts loadEntriesFromFile) or a line reader; a line longer than this pooled buffer is read into a separate slice, so every line is the same.
 var jsonlReaderPool = sync.Pool{New: func() any { return bufio.NewReaderSize(nil, 64*1024) }}
 
 func forEachJSONLLineContext(ctx context.Context, r io.Reader, fn func(line []byte) error) error {

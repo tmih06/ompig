@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations && !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_mistral_conversations && !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // nonObjectCall is a stored tool call whose arguments parsed to a value that is not an object.

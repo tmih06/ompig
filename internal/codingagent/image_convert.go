@@ -10,9 +10,9 @@ package codingagent
 import (
 	"encoding/base64"
 
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
-	"github.com/MichaelKinsy/PiG/internal/nodebase64"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/nodebase64"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ConvertImageBytesToPng mirrors upstream convertImageBytesToPng: it decodes

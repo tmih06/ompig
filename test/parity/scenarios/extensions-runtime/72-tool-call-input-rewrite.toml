@@ -6,7 +6,7 @@
 # folds the input it sees into the result. Pi hands every handler the one event object and runs the tool
 # with its input (runner.ts emitToolCall; agent-loop.ts prepareToolCall), so the model sees the rewritten
 # output. The faux provider answers "modified:parity-modified" only when "[parity-modified]" reached the
-# history, so a host that drops the edit answers "not-modified" (PiG 0.4.1, issue #165).
+# history, so a host that drops the edit answers "not-modified" (Ompig 0.4.1, issue #165).
 #
 # Upstream evidence (2026-10-06, Pi 1.0.3; re-probed against Pi 1.0.4 on the integration branch, both pass):
 #   PI_CODING_AGENT_DIR=testdata/pi-agent pi --no-extensions \
@@ -25,10 +25,10 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/parity-tool-call-rewriter.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/parity-tool-call-rewriter.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/parity-tool-call-rewriter.mjs",

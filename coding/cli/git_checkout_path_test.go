@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // A Git source checks out to <install root>/<host>/<repository path>; a
@@ -19,12 +19,12 @@ import (
 // NTFS reads name:stream as an alternate data stream (lead answer to Q10).
 func TestGitCheckoutPathOnThisPlatform(t *testing.T) {
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	root := codingagent.GitInstallRoot("", agentDir, false)
 	windows := runtime.GOOS == "windows"
 
-	got, err := packagemanager.GitCheckoutPath(t.TempDir(), agentDir, "git:file://localhost/C:/Users/me/owner/piglet.git", false)
-	if want := filepath.Join(root, "localhost", "a91ac64502db", "piglet"); err != nil || got != want {
+	got, err := packagemanager.GitCheckoutPath(t.TempDir(), agentDir, "git:file://localhost/C:/Users/me/owner/ompiglet.git", false)
+	if want := filepath.Join(root, "localhost", "a91ac64502db", "ompiglet"); err != nil || got != want {
 		t.Fatalf("file URL checkout = %q, %v; want %q", got, err, want)
 	}
 
@@ -53,14 +53,14 @@ func TestGitCheckoutRelativePerPlatform(t *testing.T) {
 		want         []string
 		refused      bool
 	}{
-		{"windows", "git:file://localhost/C:/Users/me/owner/piglet.git", []string{"localhost", "a91ac64502db", "piglet"}, false},
-		{"windows", "git:file://localhost/d:/src/owner/piglet", []string{"localhost", "31ec0c491be0", "piglet"}, false},
+		{"windows", "git:file://localhost/C:/Users/me/owner/ompiglet.git", []string{"localhost", "a91ac64502db", "ompiglet"}, false},
+		{"windows", "git:file://localhost/d:/src/owner/ompiglet", []string{"localhost", "31ec0c491be0", "ompiglet"}, false},
 		{"windows", "git:https://example.com/owner/repo", []string{"example.com", "owner", "repo"}, false},
 		{"windows", "git:https://example.com/owner/repo:stream", nil, true},
 		{"windows", "git:https://example.com/C:/owner/repo", nil, true},
-		{"windows", "git:file://localhost/src/owner/piglet:stream", nil, true},
-		{"linux", "git:file://localhost/C:/Users/me/owner/piglet.git", []string{"localhost", "a91ac64502db", "piglet"}, false},
-		{"linux", "git:file://localhost/tmp/x/piglet", []string{"localhost", "fdb4f8773215", "piglet"}, false},
+		{"windows", "git:file://localhost/src/owner/ompiglet:stream", nil, true},
+		{"linux", "git:file://localhost/C:/Users/me/owner/ompiglet.git", []string{"localhost", "a91ac64502db", "ompiglet"}, false},
+		{"linux", "git:file://localhost/tmp/x/ompiglet", []string{"localhost", "fdb4f8773215", "ompiglet"}, false},
 		{"darwin", "git:https://example.com/owner/repo:stream", []string{"example.com", "owner", "repo:stream"}, false},
 	} {
 		ref, err := sourceref.Parse(tc.source, sourceref.Options{Bare: sourceref.BareReject})
@@ -85,11 +85,11 @@ func TestGitCheckoutRelativePerPlatform(t *testing.T) {
 // other URLs, and every URL elsewhere, pass through unchanged.
 func TestGitCloneRepoPerPlatform(t *testing.T) {
 	for _, tc := range []struct{ goos, repo, want string }{
-		{"windows", "file://localhost/C:/src/owner/piglet.git", "file:///C:/src/owner/piglet.git"},
-		{"windows", "FILE://LOCALHOST/d:/src/owner/piglet", "file:///d:/src/owner/piglet"},
-		{"windows", "file://server/share/owner/piglet.git", "file://server/share/owner/piglet.git"},
+		{"windows", "file://localhost/C:/src/owner/ompiglet.git", "file:///C:/src/owner/ompiglet.git"},
+		{"windows", "FILE://LOCALHOST/d:/src/owner/ompiglet", "file:///d:/src/owner/ompiglet"},
+		{"windows", "file://server/share/owner/ompiglet.git", "file://server/share/owner/ompiglet.git"},
 		{"windows", "https://example.com/owner/repo", "https://example.com/owner/repo"},
-		{"linux", "file://localhost/tmp/owner/piglet.git", "file://localhost/tmp/owner/piglet.git"},
+		{"linux", "file://localhost/tmp/owner/ompiglet.git", "file://localhost/tmp/owner/ompiglet.git"},
 	} {
 		if got := packagemanager.GitCloneRepo(tc.goos, tc.repo); got != tc.want {
 			t.Errorf("gitCloneRepo(%s, %q) = %q, want %q", tc.goos, tc.repo, got, tc.want)

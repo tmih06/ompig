@@ -7,7 +7,7 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // boxRenderCache holds the unpadded child lines and the padding they were rendered with. Upstream box.ts padding is fixed at construction; Box's exported padding fields can change between frames, so the padding is part of the cache key.

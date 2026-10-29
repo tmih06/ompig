@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // TestConformance_ExtensionAPISendMessage pins Pi's pi.sendMessage(message, options)

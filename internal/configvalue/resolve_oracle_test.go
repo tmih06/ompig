@@ -10,7 +10,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/resolve-config-value.ts
@@ -25,9 +25,9 @@ func TestResolveConfigValueMatchesPi(t *testing.T) {
 		}
 		t.Cleanup(func() { _ = os.Setenv("_", previous) })
 	}
-	env := map[string]string{"PIGT_A": "alpha", "PIGT_B": "", "PIGT_C1": "c 1", "PIGT_D": "$PIGT_A"}
-	pieces := []string{"$", "$$", "$!", "!", "{", "}", "${", "${PIGT_A}", "${PIGT_B}", "${PIGT_C1}", "${PIGT_MISSING}", "${1X}", "${}", "${ }", "$PIGT_A", "$PIGT_B", "$PIGT_D", "$PIGT_MISSING",
-		"$PIGT_C1x", "$1", "$_", "$_PIGT_A", "-", " ", "x", "é", "\n", "$PIGT_A$PIGT_A", "$PIGT_A$PIGT_C1", "}$", "$-"}
+	env := map[string]string{"OMPIGT_A": "alpha", "OMPIGT_B": "", "OMPIGT_C1": "c 1", "OMPIGT_D": "$OMPIGT_A"}
+	pieces := []string{"$", "$$", "$!", "!", "{", "}", "${", "${OMPIGT_A}", "${OMPIGT_B}", "${OMPIGT_C1}", "${OMPIGT_MISSING}", "${1X}", "${}", "${ }", "$OMPIGT_A", "$OMPIGT_B", "$OMPIGT_D", "$OMPIGT_MISSING",
+		"$OMPIGT_C1x", "$1", "$_", "$_OMPIGT_A", "-", " ", "x", "é", "\n", "$OMPIGT_A$OMPIGT_A", "$OMPIGT_A$OMPIGT_C1", "}$", "$-"}
 	configs := []string{"", "literal", "$", "!", "$$", "$!x", "!echo", "!printf 'a b  '", "!printf '\\n\\n'", "!exit 3", "!echo hi; exit 1", "!printf  abc", "!  echo   spaced  ", "!!echo hi", "$!echo hi",
 		"!echo '$$'", "!notacommand_pigt_xyz"}
 	rng := rand.New(rand.NewSource(11))
@@ -38,7 +38,7 @@ func TestResolveConfigValueMatchesPi(t *testing.T) {
 		}
 		configs = append(configs, string(s))
 	}
-	headers := map[string]string{"a": "$PIGT_A", "b": "${PIGT_B}", "c": "lit", "d": "!printf out", "e": "$PIGT_MISSING", "f": "!exit 1", "g": "$$"}
+	headers := map[string]string{"a": "$OMPIGT_A", "b": "${OMPIGT_B}", "c": "lit", "d": "!printf out", "e": "$OMPIGT_MISSING", "f": "!exit 1", "g": "$$"}
 	input, err := json.Marshal(map[string]any{"configs": configs, "env": env, "headers": headers})
 	if err != nil {
 		t.Fatal(err)

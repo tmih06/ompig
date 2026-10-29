@@ -17,7 +17,7 @@ import (
 
 	"go.yaml.in/yaml/v3"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type verificationJob struct {
@@ -72,7 +72,7 @@ func gateLeaves(t *testing.T) func(string) []string {
 		switch name {
 		case "check", "check-core", "check-contracts-fast":
 		case "test":
-			// CI runs test-fast and test-cli in halves (fast-parallel and fast-sharded; two cmd/pig shard ranges), which together are make test.
+			// CI runs test-fast and test-cli in halves (fast-parallel and fast-sharded; two cmd/ompig shard ranges), which together are make test.
 			return []string{"test-fast-parallel", "test-fast-sharded", "test-cli-1", "test-cli-2", "test-subprocess", "test-conformance"}
 		case "portmap-check":
 			// CI runs the PORT_MAP evidence check as PORTMAP_SHARDS shards (PORTMAP_SHARD=N/M), which together are portmap-check.
@@ -180,7 +180,7 @@ func TestLinuxShardsRetainEveryCheck(t *testing.T) {
 	if !slices.Equal(got, want) {
 		t.Fatalf("shards must partition all make check gates exactly once\ngot  %v\nwant %v", got, want)
 	}
-	// The two test-cli halves run the cmd/pig shard ranges that together are every shard, each once.
+	// The two test-cli halves run the cmd/ompig shard ranges that together are every shard, each once.
 	shards, _ := cliShards(t)
 	runs := make([]int, shards+1)
 	cliRange := regexp.MustCompile(`(?m)^(test-cli-[12]):[^\n]*\n\t@\./automation/ci/test-grouped\.sh cli ([0-9]+) ([0-9]+)$`)
@@ -193,14 +193,14 @@ func TestLinuxShardsRetainEveryCheck(t *testing.T) {
 		last, _ := strconv.Atoi(half[3])
 		for shard := first; shard <= last; shard++ {
 			if shard < 1 || shard > shards {
-				t.Fatalf("%s runs cmd/pig shard %d of %d", half[1], shard, shards)
+				t.Fatalf("%s runs cmd/ompig shard %d of %d", half[1], shard, shards)
 			}
 			runs[shard]++
 		}
 	}
 	for shard := 1; shard <= shards; shard++ {
 		if runs[shard] != 1 {
-			t.Errorf("cmd/pig shard %d runs in %d test-cli halves, want exactly one", shard, runs[shard])
+			t.Errorf("cmd/ompig shard %d runs in %d test-cli halves, want exactly one", shard, runs[shard])
 		}
 	}
 }
@@ -294,7 +294,7 @@ func groupedTestFixture(t *testing.T) string {
 	copyCIFixture(t, root, "automation/ci/agent-dir-guard.sh")
 	copyCIFixture(t, root, "automation/ci/reap-test-processes.sh")
 	// test-grouped.sh enters the in-repo Porter extension module to warm its dependency-module build cache.
-	writeCIFixture(t, root, "piglets/porter/extensions/pig-porter/.keep", "")
+	writeCIFixture(t, root, "ompiglets/porter/extensions/ompig-porter/.keep", "")
 	// The core-fault group runs exactly the tests that the pigfault-tagged test files of durable/core/driver declare; an untagged file's tests belong to the normal run.
 	writeCIFixture(t, root, "durable/core/driver/fault_core_test.go", "//go:build pigfault\n\npackage driver\n\nfunc TestCoreFaultHeld(t *testing.T) {}\n\nfunc TestCoreFaultReleased(t *testing.T) {}\n")
 	writeCIFixture(t, root, "durable/core/driver/core_test.go", "package driver\n\nfunc TestCoreUntagged(t *testing.T) {}\n")
@@ -335,12 +335,12 @@ case "$1" in
     if [[ -n "$run" ]]; then printf '%s %s\n' "${packages[*]}" "$run" >> "${RUN_LOG:-/dev/null}"; fi
     if [[ -n "${FAIL_TEST:-}" && "$run" == *"$FAIL_TEST"* ]]; then exit 1; fi
     if [[ -n "${FAIL_PACKAGE:-}" ]]; then for package in "${packages[@]}"; do if [[ "$package" == "$FAIL_PACKAGE" ]]; then exit 1; fi; done; fi
-    if [[ -n "${LEAK_TMP:-}" ]]; then : > "$TMPDIR/pig-leak"; fi
+    if [[ -n "${LEAK_TMP:-}" ]]; then : > "$TMPDIR/ompig-leak"; fi
     if [[ -n "${LEAK_PROCESS:-}" ]]; then sleep "$LEAK_PROCESS" </dev/null >/dev/null 2>&1 & fi
-    if [[ -n "${WIPE_AGENT_AUTH:-}" ]]; then printf '{}' > "$PIG_CODING_AGENT_DIR/auth.json"; fi
+    if [[ -n "${WIPE_AGENT_AUTH:-}" ]]; then printf '{}' > "$OMPIG_CODING_AGENT_DIR/auth.json"; fi
     # Under Git Bash this script sees POSIX paths (/tmp/... for the Windows temporary directory) where the Go test, and a real go.exe, see Windows paths. Record each directory in the host's own form: pwd -W prints it there, and is rejected on every other bash.
     native() { (cd "$1" 2>/dev/null && { pwd -W 2>/dev/null || pwd; }) || printf '%s\n' "$1"; }
-    if [[ -n "${RECORD_AGENT_ENV:-}" ]]; then printf '%s\n' "$(native "$PIG_CODING_AGENT_DIR")" "$(native "$PI_CODING_AGENT_DIR")" "$(native "$PIG_HOME")" "$(native "$PI_HOME")" "${PIG_CODING_AGENT_SESSION_DIR-unset}" >> "$RECORD_AGENT_ENV"; fi
+    if [[ -n "${RECORD_AGENT_ENV:-}" ]]; then printf '%s\n' "$(native "$OMPIG_CODING_AGENT_DIR")" "$(native "$PI_CODING_AGENT_DIR")" "$(native "$OMPIG_HOME")" "$(native "$PI_HOME")" "${OMPIG_CODING_AGENT_SESSION_DIR-unset}" >> "$RECORD_AGENT_ENV"; fi
     ;;
   *) exit 99 ;;
 esac
@@ -385,7 +385,7 @@ func TestLinuxTestShardsPartitionPackages(t *testing.T) {
 	}
 }
 
-// cliShards reads the cmd/pig shard count and package that test-grouped.sh runs.
+// cliShards reads the cmd/ompig shard count and package that test-grouped.sh runs.
 func cliShards(t *testing.T) (int, string) {
 	t.Helper()
 	data, err := os.ReadFile(filepath.Join(repoRoot(t), "automation", "ci", "test-grouped.sh"))
@@ -420,7 +420,7 @@ func requireShardPartition(t *testing.T, patterns []string) {
 	}
 }
 
-// make test-cli runs cmd/pig as CLI_SHARDS go test processes, each under its own package timeout, whose -run patterns partition the package's tests. A failing shard does not stop the later ones.
+// make test-cli runs cmd/ompig as CLI_SHARDS go test processes, each under its own package timeout, whose -run patterns partition the package's tests. A failing shard does not stop the later ones.
 func TestCLIShardsPartitionTheCLIPackage(t *testing.T) {
 	shards, pkg := cliShards(t)
 	root := groupedTestFixture(t)
@@ -530,7 +530,7 @@ func TestGroupedTestsFailOnTemporaryLeakAndRemoveScratch(t *testing.T) {
 	requireScratchRemoved()
 	t.Setenv("LEAK_TMP", "1")
 	output, err := run()
-	if err == nil || !strings.Contains(output, "[assert-clean-tmp]") || !strings.Contains(output, "pig-leak") {
+	if err == nil || !strings.Contains(output, "[assert-clean-tmp]") || !strings.Contains(output, "ompig-leak") {
 		t.Fatalf("leaking run: err=%v, want the leak reported\n%s", err, output)
 	}
 	requireScratchRemoved()
@@ -708,7 +708,7 @@ func TestIsUnderDirComparesFileIdentity(t *testing.T) {
 	}
 }
 
-// Each group runs go test with PIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, PIG_HOME and PI_HOME pointing at seeded throwaway directories, whatever the caller exported, and fails when a test run changes them. A lane exports the real agent directory for its own pig, and a test that wrote it emptied the lane's credentials.
+// Each group runs go test with OMPIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, OMPIG_HOME and PI_HOME pointing at seeded throwaway directories, whatever the caller exported, and fails when a test run changes them. A lane exports the real agent directory for its own ompig, and a test that wrote it emptied the lane's credentials.
 func TestGroupedTestsIsolateAndGuardTheAgentDirectories(t *testing.T) {
 	t.Run("temporary directory as the host spells it", func(t *testing.T) {
 		outer := t.TempDir()
@@ -730,8 +730,8 @@ func testGroupedAgentDirectoryIsolation(t *testing.T, outer, tmpdir string) {
 	t.Setenv("TEST_LOG", filepath.Join(root, "packages"))
 	t.Setenv("TMPDIR", tmpdir)
 	realAgent := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", realAgent)
-	t.Setenv("PIG_CODING_AGENT_SESSION_DIR", realAgent)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", realAgent)
+	t.Setenv("OMPIG_CODING_AGENT_SESSION_DIR", realAgent)
 	record := filepath.Join(root, "agent-env")
 	t.Setenv("RECORD_AGENT_ENV", record)
 	run := func() (string, error) {
@@ -755,7 +755,7 @@ func testGroupedAgentDirectoryIsolation(t *testing.T, outer, tmpdir string) {
 		}
 	}
 	if !strings.Contains(string(seen), "unset") {
-		t.Fatalf("PIG_CODING_AGENT_SESSION_DIR reached go test: %q", seen)
+		t.Fatalf("OMPIG_CODING_AGENT_SESSION_DIR reached go test: %q", seen)
 	}
 	if left, err := os.ReadDir(outer); err != nil || len(left) != 0 {
 		t.Fatalf("agent guard directories left in TMPDIR: %v, %v", left, err)
@@ -783,7 +783,7 @@ func TestGroupedTestsDoNotRunWhenTheAgentDirectoriesCannotBeSeeded(t *testing.T)
 	testLog := filepath.Join(root, "packages")
 	t.Setenv("TEST_LOG", testLog)
 	t.Setenv("TMPDIR", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	cmd := exec.CommandContext(t.Context(), testenv.Bash(t), filepath.Join(root, "automation/ci/test-grouped.sh"), "fast")
 	output, err := cmd.CombinedOutput()
 	if err == nil || !strings.Contains(string(output), "could not seed isolated agent directories") {

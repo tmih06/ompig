@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/package-manager.test.ts:2653
@@ -32,16 +32,16 @@ func TestNpmUpdateSkipsExactVersionsAndIncludesBothScopes(t *testing.T) {
 	for _, target := range []string{"", "npm:shared"} {
 		t.Run("target="+target, func(t *testing.T) {
 			cwd, agentDir := t.TempDir(), t.TempDir()
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			t.Setenv("PI_OFFLINE", "")
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			node, err := exec.LookPath("node")
 			if err != nil {
 				t.Fatal(err)
 			}
 			log, script := filepath.Join(t.TempDir(), "calls.jsonl"), filepath.Join(t.TempDir(), "npm.mjs")
-			t.Setenv("PIG_TEST_NPM_LOG", log)
-			if err := os.WriteFile(script, []byte(`import fs from 'node:fs'; fs.appendFileSync(process.env.PIG_TEST_NPM_LOG,JSON.stringify(process.argv.slice(2))+'\n');`), 0o600); err != nil {
+			t.Setenv("OMPIG_TEST_NPM_LOG", log)
+			if err := os.WriteFile(script, []byte(`import fs from 'node:fs'; fs.appendFileSync(process.env.OMPIG_TEST_NPM_LOG,JSON.stringify(process.argv.slice(2))+'\n');`), 0o600); err != nil {
 				t.Fatal(err)
 			}
 			sm := codingagent.NewSettingsManager(cwd, agentDir)
@@ -113,18 +113,18 @@ func TestNpmUpdateVersionReconciliationUpstream(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			cwd, agentDir := t.TempDir(), t.TempDir()
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			t.Setenv("PI_OFFLINE", "")
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			node, err := exec.LookPath("node")
 			if err != nil {
 				t.Fatal(err)
 			}
 			log := filepath.Join(t.TempDir(), "commands.jsonl")
 			script := filepath.Join(t.TempDir(), "npm.mjs")
-			t.Setenv("PIG_TEST_NPM_LOG", log)
-			t.Setenv("PIG_TEST_NPM_VIEW", tc.response)
-			body := `import fs from 'node:fs'; const args=process.argv.slice(2); fs.appendFileSync(process.env.PIG_TEST_NPM_LOG,JSON.stringify(args)+'\n'); if(args[0]==='view')console.log(process.env.PIG_TEST_NPM_VIEW); else if(args[0]!=='install')throw new Error('unexpected command');`
+			t.Setenv("OMPIG_TEST_NPM_LOG", log)
+			t.Setenv("OMPIG_TEST_NPM_VIEW", tc.response)
+			body := `import fs from 'node:fs'; const args=process.argv.slice(2); fs.appendFileSync(process.env.OMPIG_TEST_NPM_LOG,JSON.stringify(args)+'\n'); if(args[0]==='view')console.log(process.env.OMPIG_TEST_NPM_VIEW); else if(args[0]!=='install')throw new Error('unexpected command');`
 			if err := os.WriteFile(script, []byte(body), 0o600); err != nil {
 				t.Fatal(err)
 			}

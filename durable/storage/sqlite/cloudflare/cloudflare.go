@@ -6,8 +6,8 @@ package cloudflare
 // Ports packages/durable/src/storage/sqlite/cloudflare.ts
 
 import (
-	chordcloudflare "github.com/MichaelKinsy/PiG/chord/sqlite/cloudflare"
-	durablesqlite "github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	chordcloudflare "github.com/tmih06/ompig/chord/sqlite/cloudflare"
+	durablesqlite "github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 // The Chord driver's names, re-exported as Pi's durable cloudflare entry point re-exports them.

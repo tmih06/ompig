@@ -15,10 +15,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
-const sdkModule = "github.com/MichaelKinsy/PiG/extensions/sdk"
+const sdkModule = "github.com/tmih06/ompig/extensions/sdk"
 
 func main() {
 	root, err := os.Getwd()
@@ -118,7 +118,7 @@ func apidiffTool(root string) (string, error) {
 	return strings.TrimSpace(out), nil
 }
 
-// upgradePackagePrefix names the symbols of the upgrade package in a module report. The package is the rule table that the pig built from this tree imports, not an API extensions call, so its own changes need no upgrade rule.
+// upgradePackagePrefix names the symbols of the upgrade package in a module report. The package is the rule table that the ompig built from this tree imports, not an API extensions call, so its own changes need no upgrade rule.
 const upgradePackagePrefix = "- ./upgrade"
 
 // incompatibleChanges returns the apidiff lines for incompatible changes between the SDK module in oldDir and the one in newDir. It compares every package of the module: the root package reports `Context.IsIdle`, and a subpackage reports `./json.Marshal`.

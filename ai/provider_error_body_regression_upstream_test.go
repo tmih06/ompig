@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
 	"github.com/aws/smithy-go"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
 	"io"
 )
 

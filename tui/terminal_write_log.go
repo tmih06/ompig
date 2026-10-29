@@ -49,7 +49,7 @@ func terminalWriteLogPath(value string, now time.Time, pid int) string {
 
 var resolvedWriteLogs sync.Map // PI_TUI_WRITE_LOG value -> log path
 
-// newTerminalWriteLog opens the log PI_TUI_WRITE_LOG names, or returns nil when it is unset. PiG's renderer and its terminal
+// newTerminalWriteLog opens the log PI_TUI_WRITE_LOG names, or returns nil when it is unset. Ompig's renderer and its terminal
 // helper are separate objects over one terminal, so a directory value resolves to one file per process, not one per object.
 func newTerminalWriteLog() *terminalWriteLog {
 	value := os.Getenv("PI_TUI_WRITE_LOG")

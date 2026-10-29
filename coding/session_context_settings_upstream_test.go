@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestRestoreSessionRuntimeStateDoesNotProjectMessages(t *testing.T) {

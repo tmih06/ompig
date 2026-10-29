@@ -5,9 +5,9 @@ import (
 	"strings"
 	"sync"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // orderLog records, in wire order, the frames the ordering rows compare: the tool_call and tool_result requests the host writes, the

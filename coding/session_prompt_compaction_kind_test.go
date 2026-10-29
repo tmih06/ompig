@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:1627-1631 — the manual compaction controller rejects prompts; an active run's automatic compaction still accepts queued input.

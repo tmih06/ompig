@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/coding-agent/src/core/provider-composer.ts:122-129 mergeCompat: `{ ...base, ...override }` copies every compat key the
@@ -38,7 +38,7 @@ func TestMergeCompatSpreadsEveryScalarCompatField(t *testing.T) {
 		case reflect.Slice:
 			field.Set(reflect.MakeSlice(field.Type(), salt, salt))
 		case reflect.Map:
-			// Extra, the members PiG does not model: the spread copies an override member and keeps a base member the same way.
+			// Extra, the members Ompig does not model: the spread copies an override member and keeps a base member the same way.
 			field.Set(reflect.ValueOf(map[string]json.RawMessage{"customOption": json.RawMessage(strconv.Itoa(salt))}))
 		default:
 			t.Fatalf("%s: unhandled field type %s", typ.Field(i).Name, field.Type())

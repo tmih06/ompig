@@ -16,9 +16,9 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const pi = await import(process.argv[1]);
-const pig = await import(process.argv[2]);
+const ompig = await import(process.argv[2]);
 async function scene(m) {
-  const dir = mkdtempSync(join(tmpdir(), "pig-child-sdk-"));
+  const dir = mkdtempSync(join(tmpdir(), "ompig-child-sdk-"));
   try {
     const manager = m.SessionManager.inMemory(dir);
     const settings = m.SettingsManager.inMemory({ defaultThinkingLevel: "high", compaction: { enabled: false } });
@@ -51,7 +51,7 @@ async function scene(m) {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 const want = await scene(pi);
-assert.deepEqual(await scene(pig), want);
+assert.deepEqual(await scene(ompig), want);
 `)
 }
 
@@ -70,9 +70,9 @@ import { mkdtempSync, mkdirSync, realpathSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join, sep } from "node:path";
 const pi = await import(process.argv[1]);
-const pig = await import(process.argv[2]);
+const ompig = await import(process.argv[2]);
 const ai = await import(new URL("../node_modules/@earendil-works/pi-ai/dist/compat.js", process.argv[1]));
-for (const m of [pi, pig]) {
+for (const m of [pi, ompig]) {
  const root = mkdtempSync(join(tmpdir(), "sdk-defaults-"));
  const cwd = join(root, "project"), agentDir = join(root, "agent");
  mkdirSync(cwd); mkdirSync(agentDir);
@@ -145,8 +145,8 @@ for (const url of process.argv.slice(1)) {
 // The sentinel scenario of test/extension-conformance (child_session_test.go) run through Pi's own
 // createAgentSession and through the shipped Node SDK: a sentinel provider on the child's model runtime
 // answers from the transcript, an extension-supplied custom tool serves the tool prompt, and the events
-// and transcript roles must equal both each other and the golden every PiG SDK row asserts. The golden
-// is Pi's observation, not PiG's.
+// and transcript roles must equal both each other and the golden every Ompig SDK row asserts. The golden
+// is Pi's observation, not Ompig's.
 func TestNodeCreateAgentSessionSentinelScenarioMatchesPi(t *testing.T) {
 	t.Parallel()
 	golden, err := os.ReadFile(filepath.Join("..", "..", "..", "..", "test", "extension-conformance", "testdata", "child-session-want.json"))
@@ -159,7 +159,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const pi = await import(process.argv[1]);
-const pig = await import(process.argv[2]);
+const ompig = await import(process.argv[2]);
 const ai = await import(new URL("../node_modules/@earendil-works/pi-ai/dist/compat.js", process.argv[1]));
 const golden = JSON.parse(`+"`"+string(golden)+"`"+`);
 function stream(model, context) {
@@ -192,7 +192,7 @@ function stream(model, context) {
   return out;
 }
 async function scene(m) {
-  const dir = mkdtempSync(join(tmpdir(), "pig-child-sentinel-"));
+  const dir = mkdtempSync(join(tmpdir(), "ompig-child-sentinel-"));
   try {
     const runtime = await m.ModelRuntime.create({ authPath: join(dir, "auth.json"), modelsPath: join(dir, "models.json"), allowModelNetwork: false });
     runtime.registerProvider("sentinel", { api: "openai-completions", baseUrl: "https://sentinel.invalid", apiKey: "sentinel-key", models: [{ id: "echo", name: "Echo", reasoning: false, input: ["text"], contextWindow: 32768, maxTokens: 1024, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } }], streamSimple: stream });
@@ -237,11 +237,11 @@ assert.equal(want["stream"].final, chunks);
 assert.equal(want["stream"].lastText, chunks.trim());
 assert.deepEqual(want["plain"].system, golden["system"]);
 assert.deepEqual(want["tool"].system, golden["system"]);
-assert.deepEqual(await scene(pig), want);
+assert.deepEqual(await scene(ompig), want);
 `)
 }
 
-// A session whose model cannot be used says so the way Pi does: the model-resolution and missing-credential messages of Pi's createAgentSession and AgentSession.prompt are the golden every PiG SDK row asserts (test/extension-conformance/testdata/child-session-want.json, "model-errors").
+// A session whose model cannot be used says so the way Pi does: the model-resolution and missing-credential messages of Pi's createAgentSession and AgentSession.prompt are the golden every Ompig SDK row asserts (test/extension-conformance/testdata/child-session-want.json, "model-errors").
 func TestNodeCreateAgentSessionModelErrorsMatchPi(t *testing.T) {
 	t.Parallel()
 	golden, err := os.ReadFile(filepath.Join("..", "..", "..", "..", "test", "extension-conformance", "testdata", "child-session-want.json"))
@@ -254,10 +254,10 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const pi = await import(process.argv[1]);
-const pig = await import(process.argv[2]);
+const ompig = await import(process.argv[2]);
 const golden = JSON.parse(`+"`"+string(golden)+"`"+`);
 async function scene(m) {
-  const dir = mkdtempSync(join(tmpdir(), "pig-child-errors-"));
+  const dir = mkdtempSync(join(tmpdir(), "ompig-child-errors-"));
   try {
     const runtime = await m.ModelRuntime.create({ authPath: join(dir, "auth.json"), modelsPath: join(dir, "models.json"), allowModelNetwork: false });
     runtime.registerProvider("nokey", { api: "openai-completions", baseUrl: "https://nokey.invalid", models: [{ id: "locked", name: "Locked", reasoning: false, input: ["text"], contextWindow: 32768, maxTokens: 1024, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } }], streamSimple: () => { throw new Error("never streamed"); } });
@@ -286,11 +286,11 @@ async function scene(m) {
 const want = await scene(pi);
 console.log("PI-OBSERVED " + JSON.stringify(want));
 assert.deepEqual(want, golden["model-errors"]);
-assert.deepEqual(await scene(pig), want);
+assert.deepEqual(await scene(ompig), want);
 `)
 }
 
-// Aborting a session mid-tool, prompting a session that is already running, and prompting one after dispose, through Pi's own createAgentSession: the observations are the golden of the PiG SDK rows' lifecycle fixtures ("lifecycle" in test/extension-conformance/testdata/child-session-want.json).
+// Aborting a session mid-tool, prompting a session that is already running, and prompting one after dispose, through Pi's own createAgentSession: the observations are the golden of the Ompig SDK rows' lifecycle fixtures ("lifecycle" in test/extension-conformance/testdata/child-session-want.json).
 func TestNodeCreateAgentSessionLifecycleMatchesPi(t *testing.T) {
 	t.Parallel()
 	golden, err := os.ReadFile(filepath.Join("..", "..", "..", "..", "test", "extension-conformance", "testdata", "child-session-want.json"))
@@ -303,7 +303,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const pi = await import(process.argv[1]);
-const pig = await import(process.argv[2]);
+const ompig = await import(process.argv[2]);
 const ai = await import(new URL("../node_modules/@earendil-works/pi-ai/dist/compat.js", process.argv[1]));
 const golden = JSON.parse(`+"`"+string(golden)+"`"+`);
 function stream(model, context) {
@@ -316,7 +316,7 @@ function stream(model, context) {
   return out;
 }
 async function scene(m) {
-  const dir = mkdtempSync(join(tmpdir(), "pig-child-life-"));
+  const dir = mkdtempSync(join(tmpdir(), "ompig-child-life-"));
   try {
     const runtime = await m.ModelRuntime.create({ authPath: join(dir, "auth.json"), modelsPath: join(dir, "models.json"), allowModelNetwork: false });
     runtime.registerProvider("sentinel", { api: "openai-completions", baseUrl: "https://sentinel.invalid", apiKey: "sentinel-key", models: [{ id: "echo", name: "Echo", reasoning: false, input: ["text"], contextWindow: 32768, maxTokens: 1024, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } }], streamSimple: stream });
@@ -351,6 +351,6 @@ const want = await scene(pi);
 console.log("PI-OBSERVED " + JSON.stringify(want));
 // Pi keeps a disposed session callable: prompt resolves and runs the agent, and the native SDKs' rows assert the same.
 assert.deepEqual(want, golden["lifecycle"]);
-assert.deepEqual(await scene(pig), want);
+assert.deepEqual(await scene(ompig), want);
 `)
 }

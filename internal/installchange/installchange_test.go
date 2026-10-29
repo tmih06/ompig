@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/installchange"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/installchange"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 var (
@@ -26,7 +26,7 @@ var (
 func buildProbe(t *testing.T) string {
 	t.Helper()
 	probeOnce.Do(func() {
-		dir, err := os.MkdirTemp("", "pig-installchange-probe-")
+		dir, err := os.MkdirTemp("", "ompig-installchange-probe-")
 		if err != nil {
 			probeErr = err
 			return
@@ -154,7 +154,7 @@ func TestDetectInstallChangeReportsARemovedInstallInsteadOfReadingAFileFurtherUp
 	installDir := filepath.Join(tempDir, "global", "hash")
 	installed := filepath.Join(installDir, "probe"+exeSuffix())
 	copyFile(t, buildProbe(t), installed, nil)
-	// Pi writes a package.json with another version in tempDir. PiG's decoy is a different executable of the same name.
+	// Pi writes a package.json with another version in tempDir. Ompig's decoy is a different executable of the same name.
 	copyFile(t, buildProbe(t), filepath.Join(tempDir, "probe"+exeSuffix()), []byte("decoy"))
 	p := startProbe(t, installed)
 	if got := p.detect(); got != "none" {

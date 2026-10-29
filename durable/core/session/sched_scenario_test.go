@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/hopcost"
-	"github.com/MichaelKinsy/PiG/durable/core/session/sessiontest"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/hopcost"
+	"github.com/tmih06/ompig/durable/core/session/sessiontest"
 )
 
 // The scheduler scenarios run testdata/sched/*.json through the pinned Pi's

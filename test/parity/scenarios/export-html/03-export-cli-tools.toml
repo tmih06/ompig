@@ -14,8 +14,8 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
-pig_args = ["--export", "testdata/sessions/tools.jsonl", "{{TEMP}}/out.html"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--export", "testdata/sessions/tools.jsonl", "{{TEMP}}/out.html"]
 pi_args = ["--export", "testdata/sessions/tools.jsonl", "{{TEMP}}/out.html"]
 
 [cli]
@@ -38,6 +38,6 @@ artifact_both_contain = ["eyJoZWFkZXIiOnsidHlwZSI6InNlc3Npb24iLCJpZCI6InRlc3QtdG
 
 # normalize-rationale: only the status line's isolated root differs under D2; the artifact is untouched.
 [[assert.normalize_replace]]
-pattern = '(?m)^(Exported to: )/[^\r\n]*/parity-cli-03-export-cli-tools-(pig|pi)-[0-9]+'
+pattern = '(?m)^(Exported to: )/[^\r\n]*/parity-cli-03-export-cli-tools-(ompig|pi)-[0-9]+'
 with = '${1}<TEMP>'
 reason = "D2: replace only this scenario's allocated temporary root, preserving the destination suffix and the full HTML artifact."

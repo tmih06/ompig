@@ -59,7 +59,7 @@ func sentences(s string) []string {
 }
 
 var (
-	beforeSentence = regexp.MustCompile(`^(Before\b|Previously\b|PiG (previously|used to)\b|It (used to|had)\b|They (used to|had)\b|The \w[\w ]*? (used to|had)\b|.*\bused to\b)`)
+	beforeSentence = regexp.MustCompile(`^(Before\b|Previously\b|Ompig (previously|used to)\b|It (used to|had)\b|They (used to|had)\b|The \w[\w ]*? (used to|had)\b|.*\bused to\b)`)
 	causeWords     = regexp.MustCompile(`(?i)\b(because|caused by|root cause|the cause|due to|since the|raced|race between|never (re)?(armed|read|checked|set|cleared|called)|was not|did not|never reached)\b`)
 	causeLabel     = regexp.MustCompile(`(?im)^(root cause|cause)\s*:\s*`)
 )

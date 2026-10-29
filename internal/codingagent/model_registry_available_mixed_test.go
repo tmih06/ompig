@@ -7,8 +7,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // A build that strips an API offers none of its models (D92, ai.OfferedModels). The available catalog of a plain bundled provider must

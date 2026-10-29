@@ -16,7 +16,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // providerOracleTransport, when set, is the transport both providers are asked to use (the Codex provider tries a WebSocket first otherwise); PI_ORACLE_TRANSPORT carries it to Pi.
@@ -35,12 +35,12 @@ type providerOracleCase struct {
 
 var generatedFunctionCallID = regexp.MustCompile(`"(\w*)_\d{13}_(\d+)"`)
 
-// providerStreamOracle runs Pi's provider (the installed pi-ai dist, over a replaced global fetch) and Pig's provider over the same response bodies, served by a real HTTP server, and compares the event types and the final message. pi names the Pi api file, its lazy export, the model api and the model provider; newProvider builds Pig's provider against a base URL. d120 compares a tool call id that Pig generated for a call streamed without one (D120) as the empty id Pi keeps.
+// providerStreamOracle runs Pi's provider (the installed pi-ai dist, over a replaced global fetch) and Ompig's provider over the same response bodies, served by a real HTTP server, and compares the event types and the final message. pi names the Pi api file, its lazy export, the model api and the model provider; newProvider builds Ompig's provider against a base URL. d120 compares a tool call id that Ompig generated for a call streamed without one (D120) as the empty id Pi keeps.
 func providerStreamOracle(t *testing.T, pi [4]string, d120 bool, bodies [][][]byte, newProvider func(baseURL string) Provider) {
 	t.Helper()
-	// Every body also runs with its integers written as floats (12.0; jsjson.NormalizeIntegers) with truncated UTF-8 sequences (one U+FFFD per maximal subpart, as TextDecoder) with NUL, solidus, backspace, form-feed and \\u escapes inside strings, with SSE id/retry/comment/unknown fields, with a duplicated type member (the last wins), and with trailing text after the JSON. PIG_ORACLE_KEY_CASE=all|type|number selects other variants instead (member-name case differs from Pi: open question).
+	// Every body also runs with its integers written as floats (12.0; jsjson.NormalizeIntegers) with truncated UTF-8 sequences (one U+FFFD per maximal subpart, as TextDecoder) with NUL, solidus, backspace, form-feed and \\u escapes inside strings, with SSE id/retry/comment/unknown fields, with a duplicated type member (the last wins), and with trailing text after the JSON. OMPIG_ORACLE_KEY_CASE=all|type|number selects other variants instead (member-name case differs from Pi: open question).
 	modes := []string{"float", "utf8", "escapes", "sse", "dup", "garbage"}
-	if mode := os.Getenv("PIG_ORACLE_KEY_CASE"); mode != "" {
+	if mode := os.Getenv("OMPIG_ORACLE_KEY_CASE"); mode != "" {
 		modes = []string{mode}
 	}
 	base := bodies[:len(bodies):len(bodies)]
@@ -54,7 +54,7 @@ var jsonIntPattern = regexp.MustCompile(`:[0-9]+[,}\]]`)
 
 var jsonKeyPattern = regexp.MustCompile(`"([A-Za-z_]+)"\s*:`)
 
-// keyCaseVariants returns a copy of every body with one JSON member name recased everywhere it occurs (ASCII, so chunk boundaries stay put). JavaScript reads members by exact name; Go's encoding/json matches struct fields case-insensitively, so a `TYPE` or `Delta` member must stay unread by Pig as by Pi.
+// keyCaseVariants returns a copy of every body with one JSON member name recased everywhere it occurs (ASCII, so chunk boundaries stay put). JavaScript reads members by exact name; Go's encoding/json matches struct fields case-insensitively, so a `TYPE` or `Delta` member must stay unread by Ompig as by Pi.
 func keyCaseVariants(bodies [][][]byte, mode string) [][][]byte {
 	random := rand.New(rand.NewSource(20261116))
 	variants := make([][][]byte, 0, len(bodies))
@@ -66,7 +66,7 @@ func keyCaseVariants(bodies [][][]byte, mode string) [][][]byte {
 		}
 		variant := make([][]byte, len(chunks))
 		if mode == "extra" || mode == "dup" {
-			// extra: an unknown member holding a number past 2^53 (selectable only: Pi's Object.assign copies an unknown member of a pi-messages toolcall_end onto the block, Pig's typed block does not); dup: a duplicated member, the last one wins on both sides.
+			// extra: an unknown member holding a number past 2^53 (selectable only: Pi's Object.assign copies an unknown member of a pi-messages toolcall_end onto the block, Ompig's typed block does not); dup: a duplicated member, the last one wins on both sides.
 			for i, chunk := range chunks {
 				if mode == "extra" {
 					chunk = bytes.ReplaceAll(chunk, []byte("{\""), []byte(`{"zz":123456789012345678901234567890,"`))
@@ -96,7 +96,7 @@ func keyCaseVariants(bodies [][][]byte, mode string) [][][]byte {
 			continue
 		}
 		if mode == "garbage" {
-			// Trailing text after the JSON of a data line. (A non-object top-level value such as `data: 5` makes Pi's pi-messages provider yield an event without a type; Pig skips it. Not mirrored: no backend sends it.)
+			// Trailing text after the JSON of a data line. (A non-object top-level value such as `data: 5` makes Pi's pi-messages provider yield an event without a type; Ompig skips it. Not mirrored: no backend sends it.)
 			for i, chunk := range chunks {
 				variant[i] = bytes.ReplaceAll(chunk, []byte("}\n\n"), []byte("} x\n\n"))
 			}
@@ -179,7 +179,7 @@ func keyCaseVariants(bodies [][][]byte, mode string) [][][]byte {
 	return variants
 }
 
-// providerResponseOracle is providerStreamOracle with an HTTP status per body (nil: every response is 200 event-stream; otherwise the body is JSON text with that status). drop ends every body with a broken connection (Pi: the body stream errors with undici's "terminated") instead of a clean end; Pig's message for that error is "terminated (cause: <Go error>)" (D144), and every other error text must equal Pi's.
+// providerResponseOracle is providerStreamOracle with an HTTP status per body (nil: every response is 200 event-stream; otherwise the body is JSON text with that status). drop ends every body with a broken connection (Pi: the body stream errors with undici's "terminated") instead of a clean end; Ompig's message for that error is "terminated (cause: <Go error>)" (D144), and every other error text must equal Pi's.
 func providerResponseOracle(t *testing.T, pi [4]string, d120 bool, bodies [][][]byte, statuses []int, drop bool, newProvider func(baseURL string) Provider) {
 	t.Helper()
 	cases := make([]providerOracleCase, len(bodies))
@@ -340,7 +340,7 @@ func providerResponseOracle(t *testing.T, pi [4]string, d120 bool, bodies [][][]
 	}
 }
 
-// providerOracleErrorMatches reports whether Pig's error text is Pi's. For a dropped connection Pi's undici error is "terminated", which Pig reports as "terminated (cause: <Go error>)" (D144).
+// providerOracleErrorMatches reports whether Ompig's error text is Pi's. For a dropped connection Pi's undici error is "terminated", which Ompig reports as "terminated (cause: <Go error>)" (D144).
 func providerOracleErrorMatches(got, want string, drop bool) bool {
 	return got == want || (drop && want == "terminated" && strings.HasPrefix(got, "terminated (cause: "))
 }

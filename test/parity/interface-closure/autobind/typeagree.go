@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // splitTop splits s on sep outside brackets, parentheses, braces, angle brackets and string literals.

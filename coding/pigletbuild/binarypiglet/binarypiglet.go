@@ -1,13 +1,13 @@
-// Package binarypiglet holds the Piglet and resolution record embedded in a
-// Piglet Binary. A Piglet Binary
-// always bakes the piglet fields needed to assemble the agent (extensions,
-// skills, MCP, scoping, discovery) and, for a built Piglet Binary, its
+// Package binarypiglet holds the Ompiglet and resolution record embedded in a
+// Ompiglet Binary. A Ompiglet Binary
+// always bakes the ompiglet fields needed to assemble the agent (extensions,
+// skills, MCP, scoping, discovery) and, for a built Ompiglet Binary, its
 // resolution record so the binary can verify its own build identity at startup.
 // A signed build also embeds its author's signer public keys in signers.txt
 // and carries a signature block after the executable bytes (see
-// coding/piglet/signature). Stock Pig ships piglet.yaml,
+// coding/ompiglet/signature). Stock Ompig ships ompiglet.yaml,
 // resolution-record.json, and signers.txt empty: Default returns nil, Verify
-// is a no-op, and startup resolves the piglet exactly as before.
+// is a no-op, and startup resolves the ompiglet exactly as before.
 package binarypiglet
 
 import (
@@ -22,14 +22,14 @@ import (
 	"runtime"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-//go:embed piglet.yaml
+//go:embed ompiglet.yaml
 var pigletYAML []byte
 
 //go:embed resolution-record.json
@@ -41,53 +41,53 @@ var signersPEM []byte
 // executable locates the running binary whose signature block is checked.
 var executable = os.Executable
 
-// Default returns the baked piglet, or nil when none was baked. It is
-// intentionally conservative: any parse failure, or a baked piglet with only a
-// name and no agent-defining fields, yields nil so the caller's normal piglet
+// Default returns the baked ompiglet, or nil when none was baked. It is
+// intentionally conservative: any parse failure, or a baked ompiglet with only a
+// name and no agent-defining fields, yields nil so the caller's normal ompiglet
 // resolution runs unchanged.
-func Default() *piglet.Piglet { return parse(pigletYAML) }
+func Default() *ompiglet.Ompiglet { return parse(pigletYAML) }
 
-// parse decodes baked piglet YAML, returning nil on any parse failure or when
-// the piglet carries no agent-defining fields.
-func parse(data []byte) *piglet.Piglet {
-	p, err := piglet.ParseBytes(data)
+// parse decodes baked ompiglet YAML, returning nil on any parse failure or when
+// the ompiglet carries no agent-defining fields.
+func parse(data []byte) *ompiglet.Ompiglet {
+	p, err := ompiglet.ParseBytes(data)
 	if err != nil || p == nil {
 		return nil
 	}
-	// pig additive (D92): a strip list alone defines a Piglet Binary's agent.
+	// ompig additive (D92): a strip list alone defines a Ompiglet Binary's agent.
 	if p.Model == nil && p.SystemPrompt == nil && len(p.Extensions) == 0 && len(p.Skills) == 0 && p.BuiltinTools == nil && p.Discovery == nil && p.Strip.IsEmpty() {
 		return nil
 	}
 	return p
 }
 
-// OverlayBase returns the baked Piglet as the base of an overlay when this Piglet Binary accepts one (its Piglet set
-// build.allowOverlays), and nil otherwise, including for stock pig. The flag is part of the baked Piglet, so the digest the
+// OverlayBase returns the baked Ompiglet as the base of an overlay when this Ompiglet Binary accepts one (its Ompiglet set
+// build.allowOverlays), and nil otherwise, including for stock ompig. The flag is part of the baked Ompiglet, so the digest the
 // record and the signed manifest name covers it.
 //
-// pig additive (D202): a Piglet Binary can declare that it accepts overlay Piglets.
-func OverlayBase() *piglet.OverlayBase {
+// ompig additive (D202): a Ompiglet Binary can declare that it accepts overlay Ompiglets.
+func OverlayBase() *ompiglet.OverlayBase {
 	if !IsPigletBinary() {
 		return nil
 	}
-	p, err := piglet.ParseBytes(pigletYAML)
+	p, err := ompiglet.ParseBytes(pigletYAML)
 	if err != nil || p.Build == nil || !p.Build.AllowOverlays {
 		return nil
 	}
-	return &piglet.OverlayBase{Piglet: p, Digest: "sha256:" + hex.EncodeToString(sha256Sum(pigletYAML))}
+	return &ompiglet.OverlayBase{Ompiglet: p, Digest: "sha256:" + hex.EncodeToString(sha256Sum(pigletYAML))}
 }
 
-// Name returns the name of the Piglet baked into this Binary, or "" for stock pig.
+// Name returns the name of the Ompiglet baked into this Binary, or "" for stock ompig.
 func Name() string {
 	record, err := DefaultClosure()
 	if err != nil || record == nil {
 		return ""
 	}
-	return record.Piglet
+	return record.Ompiglet
 }
 
-// DefaultClosure returns the Piglet resolution record baked into this binary,
-// or nil when none was baked (stock pig). A non-empty but malformed closure is
+// DefaultClosure returns the Ompiglet resolution record baked into this binary,
+// or nil when none was baked (stock ompig). A non-empty but malformed closure is
 // a fail-closed condition: it returns an error rather than a nil record so the
 // caller refuses to run a tampered binary.
 func DefaultClosure() (*artifact.Record, error) {
@@ -97,23 +97,23 @@ func DefaultClosure() (*artifact.Record, error) {
 	}
 	var record artifact.Record
 	if err := json.Unmarshal(trimmed, &record); err != nil {
-		return nil, fmt.Errorf("decode baked Piglet closure: %w", err)
+		return nil, fmt.Errorf("decode baked Ompiglet closure: %w", err)
 	}
 	return &record, nil
 }
 
-// IsPigletBinary reports whether this executable was built as a Piglet Binary
-// bound to one baked Piglet. It keys on the presence of a baked closure, so a
-// stock pig build (no closure) is not a Piglet Binary.
+// IsPigletBinary reports whether this executable was built as a Ompiglet Binary
+// bound to one baked Ompiglet. It keys on the presence of a baked closure, so a
+// stock ompig build (no closure) is not a Ompiglet Binary.
 func IsPigletBinary() bool {
 	return len(bytes.TrimSpace(resolutionRecordJSON)) > 0
 }
 
-// Verify checks that the closure baked into a Piglet Binary is a valid,
+// Verify checks that the closure baked into a Ompiglet Binary is a valid,
 // untampered resolution record whose effective digest matches the baked
-// Piglet, and checks its signature. Stock pig (no baked closure) verifies
-// trivially. A built Piglet Binary that fails these checks must not run: its
-// recorded build identity or its embedded Piglet has been altered. A signed
+// Ompiglet, and checks its signature. Stock ompig (no baked closure) verifies
+// trivially. A built Ompiglet Binary that fails these checks must not run: its
+// recorded build identity or its embedded Ompiglet has been altered. A signed
 // Binary whose unchanged file passed before skips re-hashing its executable
 // bytes (see signature.CheckCached). cacheErr reports that a passing check
 // could not be remembered; the Binary still runs, and its next start checks
@@ -127,38 +127,38 @@ func Verify() (cacheErr, err error) {
 		return nil, nil
 	}
 	if record.Kind != artifact.RecordKindResolution || record.Resolution == nil {
-		return nil, fmt.Errorf("baked Piglet closure is not a resolution record")
+		return nil, fmt.Errorf("baked Ompiglet closure is not a resolution record")
 	}
 	if err := artifact.ValidateRecord(*record); err != nil {
-		return nil, fmt.Errorf("baked Piglet closure failed verification: %w", err)
+		return nil, fmt.Errorf("baked Ompiglet closure failed verification: %w", err)
 	}
 	pigletDigest := "sha256:" + hex.EncodeToString(sha256Sum(pigletYAML))
 	if pigletDigest != record.Resolution.EffectiveDigest {
-		return nil, fmt.Errorf("baked Piglet does not match its closure: Piglet digest %s, closure expects %s", pigletDigest, record.Resolution.EffectiveDigest)
+		return nil, fmt.Errorf("baked Ompiglet does not match its closure: Ompiglet digest %s, closure expects %s", pigletDigest, record.Resolution.EffectiveDigest)
 	}
 	return checkSignature(record)
 }
 
-// checkSignature checks this Piglet Binary's signature block against the
-// author's embedded signer keys and the user's Piglet trust store, offline.
+// checkSignature checks this Ompiglet Binary's signature block against the
+// author's embedded signer keys and the user's Ompiglet trust store, offline.
 // An unsigned binary passes unless its author embedded a signer or the user's
 // policy requires a signature. A signed manifest must also name this binary's
-// own record, Piglet, target, and Pig version.
-// pig additive (D18): signed Piglet Binaries refuse to start when altered.
+// own record, Ompiglet, target, and Ompig version.
+// ompig additive (D18): signed Ompiglet Binaries refuse to start when altered.
 func checkSignature(record *artifact.Record) (cacheErr, err error) {
 	embedded, err := signature.ParsePublicKeys(signersPEM)
 	if err != nil {
-		return nil, fmt.Errorf("baked Piglet signer keys: %w", err)
+		return nil, fmt.Errorf("baked Ompiglet signer keys: %w", err)
 	}
 	trust, err := signature.LoadTrust(signature.TrustDir())
 	if err != nil {
-		return nil, fmt.Errorf("Piglet trust store: %w", err)
+		return nil, fmt.Errorf("Ompiglet trust store: %w", err)
 	}
 	self, err := executable()
 	if err != nil {
-		return nil, fmt.Errorf("locate this Piglet Binary to check its signature: %w", err)
+		return nil, fmt.Errorf("locate this Ompiglet Binary to check its signature: %w", err)
 	}
-	// pig additive (D18): the verification cache spares an unchanged Binary the hash of its executable bytes; it is written only after every check passed.
+	// ompig additive (D18): the verification cache spares an unchanged Binary the hash of its executable bytes; it is written only after every check passed.
 	check, err := signature.CheckCached(self, signature.Policy{Trust: trust, Embedded: embedded, RequireKnownSigner: true}, verifyCachePath())
 	if err != nil || !check.Status.Signed {
 		return nil, err
@@ -171,7 +171,7 @@ func checkSignature(record *artifact.Record) (cacheErr, err error) {
 
 // verifyCachePath is the per-user file that remembers passing startup checks.
 func verifyCachePath() string {
-	return filepath.Join(codingagent.StateDir("piglet-verify"), "verified.json")
+	return filepath.Join(codingagent.StateDir("ompiglet-verify"), "verified.json")
 }
 
 // matchManifest binds the verified signed manifest to what this binary
@@ -180,13 +180,13 @@ func matchManifest(manifest signature.Manifest, record *artifact.Record) error {
 	pigletDigest := "sha256:" + hex.EncodeToString(sha256Sum(pigletYAML))
 	for _, check := range []struct{ name, signed, actual string }{
 		{"resolution record", manifest.ResolutionDigest, record.Digest},
-		{"Piglet definition", manifest.PigletDigest, pigletDigest},
+		{"Ompiglet definition", manifest.PigletDigest, pigletDigest},
 		{"component plan", manifest.ComponentPlanDigest, record.Resolution.ComponentPlan.Digest},
 		{"target", manifest.Target, runtime.GOOS + "/" + runtime.GOARCH},
-		{"Pig version", manifest.PigVersion, coding.PigVersion},
+		{"Ompig version", manifest.OmpigVersion, coding.OmpigVersion},
 	} {
 		if check.signed != check.actual {
-			return fmt.Errorf("signed Piglet manifest names %s %q, but this binary has %q", check.name, check.signed, check.actual)
+			return fmt.Errorf("signed Ompiglet manifest names %s %q, but this binary has %q", check.name, check.signed, check.actual)
 		}
 	}
 	return nil
@@ -198,10 +198,10 @@ func sha256Sum(data []byte) []byte {
 }
 
 // VerifyRegisteredClosure checks that the fused and binary-packed extension
-// components a built Piglet Binary actually registers at startup match its
+// components a built Ompiglet Binary actually registers at startup match its
 // baked plan. A tampered fuse registry or cell manifest, or a PATH/ambient
 // substitute for a component the plan says was built in, fails closed. Stock
-// pig (no baked closure) is a no-op. Components the plan supplies from a
+// ompig (no baked closure) is a no-op. Components the plan supplies from a
 // release, agentEnv, or an external service are not carried in the binary and
 // are excluded from this check.
 func VerifyRegisteredClosure(fusedNames, packedNames []string) error {
@@ -213,7 +213,7 @@ func VerifyRegisteredClosure(fusedNames, packedNames []string) error {
 		return nil
 	}
 	if record.Resolution == nil {
-		return fmt.Errorf("baked Piglet closure has no resolution payload")
+		return fmt.Errorf("baked Ompiglet closure has no resolution payload")
 	}
 	var wantFused, wantPacked []string
 	for _, component := range record.Resolution.ComponentPlan.Components {
@@ -260,5 +260,5 @@ func equalNameSets(label string, want, got []string) error {
 	}
 	slices.Sort(missing)
 	slices.Sort(unexpected)
-	return fmt.Errorf("baked Piglet Binary %s extensions do not match its plan: missing %v, unexpected %v", label, missing, unexpected)
+	return fmt.Errorf("baked Ompiglet Binary %s extensions do not match its plan: missing %v, unexpected %v", label, missing, unexpected)
 }

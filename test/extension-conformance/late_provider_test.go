@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // A provider registered after the factory finished behaves like one registered in it: Pi's pi.registerProvider takes the whole ProviderConfig, callbacks included, at any time (.upstream/v0.99.2/packages/coding-agent/src/core/extensions/types.ts:1766-1803,1875-1903, loader.ts:449-457, runner.ts:517-523). Each SDK registers the provider from a tool through ctx.modelRegistry.registerProvider. The host must hold a ProviderConfig whose images, classifiers and streamSimple run in the extension. Every value asserted is one the extension's callbacks produce: the key the host resolved, the prompt, the reversed question order, and the model and key in the streamed text.

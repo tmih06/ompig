@@ -269,7 +269,7 @@ func TestAddGoFunctionCallersRetainsAllReviewedCallSites(t *testing.T) {
 			if got := functions[2].Callers; !reflect.DeepEqual(got, want) {
 				t.Fatalf("callsite pins = %#v, want %#v", got, want)
 			}
-			// resource-loader.ts:399 applies the resolved trust; PiG does so in the cliRuntimeBuilder.buildResources method.
+			// resource-loader.ts:399 applies the resolved trust; Ompig does so in the cliRuntimeBuilder.buildResources method.
 			trustCall := "services.SettingsManager().SetProjectTrusted(true)"
 			wantTrust := []FunctionCaller{{Path: "coding/cli/cli_runtime_build.go", Symbol: "buildResources", Expression: trustCall, StartLine: 3, SourceHash: hashString(trustCall)}}
 			if got := functions[3].Callers; !reflect.DeepEqual(got, wantTrust) {

@@ -37,9 +37,9 @@ export interface CoreOptions {
 
 /** The inputs a core takes during a step besides its event: what a flight recorder (observe.ts) keeps for a deterministic replay. */
 export interface StepTap {
-  /** A pig.uuidv7 value the core asked for. */
+  /** A ompig.uuidv7 value the core asked for. */
   uuid(text: string): void
-  /** A pig.read call: the request bytes as the core wrote them, and the answer the host gave. */
+  /** A ompig.read call: the request bytes as the core wrote them, and the answer the host gave. */
   read(request: Uint8Array, answer: Uint8Array): void
 }
 
@@ -98,7 +98,7 @@ export class WasmCore {
       proc_exit: (code: number) => { throw new CoreTrap(`core called proc_exit(${code})`) },
     }
     const makeUuid = options.uuidv7 ?? (() => uuidv7())
-    const pig = {
+    const ompig = {
       uuidv7: (dst: number) => { const text = makeUuid(); if (text.length !== 36) throw new CoreTrap(`uuidv7 returned ${text.length} bytes`); new Uint8Array(memory.buffer, dst, 36).set(enc.encode(text)); this.activeTap?.uuid(text) },
       // ABI section 4.2: one read statement answered inside the call, by the session whose step is running. An answer longer
       // than the core's buffer is kept for the core's immediate second call with a buffer of its length.
@@ -107,7 +107,7 @@ export class WasmCore {
         this.overflow = undefined
         if (!answer) {
           const reader = this.activeReader
-          if (!reader) throw new CoreTrap("pig.read outside a step")
+          if (!reader) throw new CoreTrap("ompig.read outside a step")
           const { sql, params } = decodeReadRequest(new Uint8Array(memory.buffer), req, reqLen)
           this.bytesCrossed += reqLen
           answer = reader(sql, params)
@@ -119,7 +119,7 @@ export class WasmCore {
         return answer.length
       },
     }
-    const imports: WebAssembly.Imports = { wasi_snapshot_preview1: wasi, pig, ...options.extraImports?.(() => memory) }
+    const imports: WebAssembly.Imports = { wasi_snapshot_preview1: wasi, ompig, ...options.extraImports?.(() => memory) }
     const missing = foreignImports(module).filter(i => !(imports[i.module] && i.name in imports[i.module]!))
     if (missing.length) throw new AbiMismatch(`the module imports ${missing.map(i => `${i.module}.${i.name}`).join(", ")}, which this host does not provide`)
     const instance = new WebAssembly.Instance(module, imports)
@@ -136,7 +136,7 @@ export class WasmCore {
     this.sqlTable = this.readSqlTable()
   }
 
-  /** The pig.read answer of the session whose step is running (WasmSession.run sets it). */
+  /** The ompig.read answer of the session whose step is running (WasmSession.run sets it). */
   activeReader?: (sql: number, params: Param[]) => Uint8Array
   /** The tap of the session whose step is running (WasmSession.run sets it). */
   activeTap?: StepTap
@@ -224,7 +224,7 @@ export class WasmSession {
   steps = 0
   /** Keep the raw bytes of every step on `step.raw` (binding conformance only). */
   keepRaw = false
-  /** Answers the core's pig.read calls (ABI section 4.2) with the encoded answer; the host loop sets it. */
+  /** Answers the core's ompig.read calls (ABI section 4.2) with the encoded answer; the host loop sets it. */
   reader?: (sql: number, params: Param[]) => Uint8Array
   /** Sees the uuids and reads the core takes during each step; the flight recorder sets it. */
   tap?: StepTap

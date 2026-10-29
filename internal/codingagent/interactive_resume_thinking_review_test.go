@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // RRT-001: reuse the persisted-session vector and exact line oracle from

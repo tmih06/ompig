@@ -7,9 +7,9 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/tui"
 )
 
 func newRunOnMainProbe(t *testing.T) *InteractiveMode {

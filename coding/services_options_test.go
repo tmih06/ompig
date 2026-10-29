@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func flagExtension(flags ...extension.ExtensionFlag) extension.Extension {
@@ -107,7 +107,7 @@ func TestServicesShareAnInjectedModelRuntimeAndDoNotCloseIt(t *testing.T) {
 // Pi: packages/coding-agent/src/core/agent-session-services.ts:44 (CreateAgentSessionServicesOptions.resourceLoaderOptions); packages/coding-agent/src/core/agent-session-services.ts:45 (CreateAgentSessionServicesOptions.resourceLoaderReloadOptions).
 func TestServicesLoadResourcesWithTheirOptionsAndTheSessionUsesTheLoader(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	skill := filepath.Join(cwd, ".pig", "skills", "local", "SKILL.md")
+	skill := filepath.Join(cwd, ".ompig", "skills", "local", "SKILL.md")
 	if err := os.MkdirAll(filepath.Dir(skill), 0o755); err != nil {
 		t.Fatal(err)
 	}

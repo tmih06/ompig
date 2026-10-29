@@ -11,9 +11,9 @@ import (
 	"testing"
 )
 
-// Trust-split spec test 8 (docs/specs/extension-factory-trust.md): a build overlay for a Piglet with a fused member and a frontend member writes
+// Trust-split spec test 8 (docs/specs/extension-factory-trust.md): a build overlay for a Ompiglet with a fused member and a frontend member writes
 // exactly the two generated registries (the fuse registry and the frontend registry) beside the module files (go.mod, go.sum, go.work.sum) and the
-// baked Piglet data; nothing else reads as replaced, and the Pig source tree itself is never written.
+// baked Ompiglet data; nothing else reads as replaced, and the Ompig source tree itself is never written.
 func TestWriteBuildOverlayForAFusedAndAFrontendMemberReplacesExactlyTheRegistriesAndModuleFiles(t *testing.T) {
 	f := newFusedModuleFixture(t, true)
 	fused := f.entry()
@@ -43,7 +43,7 @@ func TestWriteBuildOverlayForAFusedAndAFrontendMemberReplacesExactlyTheRegistrie
 		"go.mod", "go.sum", "go.work.sum",
 		filepath.Join("coding", "extension", "host", "fusepack", "registry_generated.go"),
 		filepath.Join("internal", "frontendpack", "registry_generated.go"),
-		filepath.Join(bakedPigletDir, "piglet.yaml"),
+		filepath.Join(bakedPigletDir, "ompiglet.yaml"),
 	} {
 		want = append(want, filepath.Join(f.root, rel))
 	}
@@ -66,13 +66,13 @@ func TestWriteBuildOverlayForAFusedAndAFrontendMemberReplacesExactlyTheRegistrie
 	if registry := read(filepath.Join("internal", "frontendpack", "registry_generated.go")); registry != renderFrontendRegistry(*frontend) {
 		t.Fatalf("frontend registry = %q", registry)
 	}
-	if got := read(filepath.Join(bakedPigletDir, "piglet.yaml")); got != string(baked) {
+	if got := read(filepath.Join(bakedPigletDir, "ompiglet.yaml")); got != string(baked) {
 		t.Fatalf("baked data = %q", got)
 	}
 	if goMod := read("go.mod"); !strings.Contains(goMod, "example.com/extensions") {
 		t.Fatalf("go.mod overlay lacks the fused member's module:\n%s", goMod)
 	}
 	if after := snapshotTree(t, f.root); !maps.Equal(before, after) {
-		t.Fatal("writing the overlay changed the Pig source tree")
+		t.Fatal("writing the overlay changed the Ompig source tree")
 	}
 }

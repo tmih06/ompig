@@ -45,7 +45,7 @@ func TestPlanCellsGroupsGoFactoryAndFissionsQuarantinedCell(t *testing.T) {
 
 // z-packed-first and a-packed-last share a packGroupKey but are not adjacent
 // in configured order (middle-isolated sits between them), so they must NOT
-// merge into one cell (CNEO-001): pig starts a later cell's process only
+// merge into one cell (CNEO-001): ompig starts a later cell's process only
 // after every earlier cell has committed (stageCellsInOrder), so merging them
 // would activate a-packed-last's factory before middle-isolated's, even
 // though a-packed-last was configured after it. This gives up packing them
@@ -175,11 +175,11 @@ func TestPlanCellsSeparatesExplicitGoSDKOverrides(t *testing.T) {
 		if err := os.MkdirAll(sdkRoot, 0o755); err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(filepath.Join(sdkRoot, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(sdkRoot, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 			t.Fatal(err)
 		}
 		extRoot := t.TempDir()
-		goMod := "module example.com/" + name + "\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => " + modfile.AutoQuote(filepath.ToSlash(sdkRoot)) + "\n"
+		goMod := "module example.com/" + name + "\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => " + modfile.AutoQuote(filepath.ToSlash(sdkRoot)) + "\n"
 		if err := os.WriteFile(filepath.Join(extRoot, "go.mod"), []byte(goMod), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -201,7 +201,7 @@ func TestPlanCellsSeparatesExplicitGoSDKOverrides(t *testing.T) {
 func packablePythonConfig(name, hash string) ExtConfig {
 	cfg := packableConfig(name, hash)
 	cfg.RuntimeLanguage = "python"
-	cfg.SDKName = "pig-sdk-py"
+	cfg.SDKName = "ompig-sdk-py"
 	cfg.Package = "example_" + name
 	cfg.Factory = "new_extension"
 	return cfg
@@ -210,7 +210,7 @@ func packablePythonConfig(name, hash string) ExtConfig {
 func packableRustConfig(name, hash string) ExtConfig {
 	cfg := packableConfig(name, hash)
 	cfg.RuntimeLanguage = "rust"
-	cfg.SDKName = "pig-sdk"
+	cfg.SDKName = "ompig-sdk"
 	cfg.Package = "example_" + name
 	cfg.Factory = "new_extension"
 	return cfg
@@ -237,7 +237,7 @@ func packableConfig(name, hash string) ExtConfig {
 		Source:          "/tmp/" + name,
 		RuntimeKind:     "subprocess",
 		RuntimeLanguage: "go",
-		SDKName:         "github.com/MichaelKinsy/PiG/extensions/sdk",
+		SDKName:         "github.com/tmih06/ompig/extensions/sdk",
 		Isolation:       "shared-ok",
 		EntrypointKind:  "factory",
 		Package:         "example.com/" + name,

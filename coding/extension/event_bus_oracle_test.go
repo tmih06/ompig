@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type eventBusOp struct {
@@ -38,7 +38,7 @@ type eventBusOut struct {
 func eventBusScenarios() []eventBusScenario {
 	rng := rand.New(rand.NewPCG(3, 61))
 	pick := func(items []string) string { return items[rng.IntN(len(items))] }
-	// Node's EventEmitter treats the channels error, newListener and removeListener specially (an emit of "error" with no listener throws, subscribing announces itself on "newListener"); Pig's bus does not (Q15), so the scenarios use ordinary channels.
+	// Node's EventEmitter treats the channels error, newListener and removeListener specially (an emit of "error" with no listener throws, subscribing announces itself on "newListener"); Ompig's bus does not (Q15), so the scenarios use ordinary channels.
 	channels := []string{"a", "b", "c", "a:b"}
 	datas := []any{nil, 1, "text", map[string]any{"k": []any{1, 2}}, []any{}, true, "日本語", 1.5}
 	var scenarios []eventBusScenario
@@ -167,7 +167,7 @@ func TestEventBusMatchesPi(t *testing.T) {
 				ops, _ := json.Marshal(scenario.Ops[:k+1])
 				g, _ := json.Marshal(normalized[k])
 				e, _ := json.Marshal(expected[i][k])
-				t.Errorf("scenario %d\n  ops %.900s\n  Pig %s\n  Pi  %s", i, ops, g, e)
+				t.Errorf("scenario %d\n  ops %.900s\n  Ompig %s\n  Pi  %s", i, ops, g, e)
 				break
 			}
 		}

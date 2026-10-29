@@ -3,7 +3,7 @@ package session
 // Ports packages/durable/src/harness/scheduler.ts (the in-memory indexes of upstream cb437549): the ownership tree
 // downward around live work, and the sets that hold each reconcile pass's candidates. No pass visits every live task.
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // orderedSet is a JavaScript Set: insertion order, with an O(1) add, delete, and membership test. Deleting and adding a
 // key again moves it to the end, as Set does.

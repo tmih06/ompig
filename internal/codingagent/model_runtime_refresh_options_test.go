@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // model-runtime.ts refresh(options): AllowNetwork defaults to true, Force and the provider selection reach every provider's refresh, each failing

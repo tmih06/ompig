@@ -4,7 +4,7 @@ import fs from "node:fs";
 // settles that handler, so the host must exit without waiting for it. A
 // session_start handler acts only for SHUTDOWN_REASON (default "startup").
 // The "quit" session_shutdown runs after the TUI has stopped, so it reports on
-// the controlling terminal, which Pi's process and PiG's extension process share.
+// the controlling terminal, which Pi's process and Ompig's extension process share.
 export default function (pi) {
   const at = process.env.SHUTDOWN_AT;
   pi.on("session_shutdown", (event) => {

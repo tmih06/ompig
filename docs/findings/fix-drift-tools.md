@@ -6,35 +6,35 @@ Pi 0.87.1 is the oracle. This slice starts at integration commit `96284e76befed3
 
 This follow-up starts at the integrator's `c249c310c` tree, which already contains the prior tool fixes and the strengthened canonical probe. Pi 0.87.1 `packages/coding-agent/src/core/tools/read.ts:185-188` returns one text block even for an empty file. `packages/agent/src/agent-loop.ts:880-894` preserves those blocks when creating the tool-result message. Pi also constructs a text block for an empty thrown error (`agent-loop.ts:863-867`).
 
-The Go result flattened both explicit empty text and no text to `Content == ""`. The shared message constructor then dropped that string. `TestRPCEmptyReadTextPersistsAndReplays` fails before the fix in all three views: live Session history, the JSONL file and reopened history. The integrator's strict `tools/17-tool-rpc-error-and-bash-wire` comparison fails at `/34/record/message/content` with `pig=0 pi=1`.
+The Go result flattened both explicit empty text and no text to `Content == ""`. The shared message constructor then dropped that string. `TestRPCEmptyReadTextPersistsAndReplays` fails before the fix in all three views: live Session history, the JSONL file and reopened history. The integrator's strict `tools/17-tool-rpc-error-and-bash-wire` comparison fails at `/34/record/message/content` with `ompig=0 pi=1`.
 
 `AgentToolResult.ContentPresent` now retains that otherwise-lost Go representation state without adding a serialized field. The read producer sets it, and the shared message constructor consumes it. Nonempty text remains implicitly present; zero-value results and image-only results do not acquire an empty text block. An explicit hook text replacement remains a text block, while a complete empty content-array replacement clears its presence. The same state survives the shared SDK response decoder, tool-result hooks, execution-end events, render payloads, resumed cards and HTML export reconstruction. The existing SDK payload shape is unchanged for every language. Multiple text blocks still use the existing flattened text representation; this fix does not claim arbitrary block-order fidelity.
 
 The pure conversion guards distinguish empty error text, explicit text overrides, clearing content, empty arrays and image-only results. Additional regressions drive the real subprocess response adapter, hook projection, resumed tool card and export converter. A compiling mutation that removes the message constructor's presence condition fails the pure guards, the Session/disk/reopen regression and the strict scenario at the original JSON path. Removing the read producer's presence marker separately fails the Session/disk/reopen regression. All mutations are removed.
 
-The final canonical tools scenario passes its three real Pi/PiG pairs without weakening its typed comparator or aliases. The entire tools and export-html parity families pass. The whole RPC and JSON families are re-probed; remaining failures are the already-owned RPC retry ordering (`rpc/17`), provider stream snapshots (`rpc/33`) and provider error API (`json/04`), not empty tool-result content. The existing H5 initial-update contract remains intact.
+The final canonical tools scenario passes its three real Pi/Ompig pairs without weakening its typed comparator or aliases. The entire tools and export-html parity families pass. The whole RPC and JSON families are re-probed; remaining failures are the already-owned RPC retry ordering (`rpc/17`), provider stream snapshots (`rpc/33`) and provider error API (`json/04`), not empty tool-result content. The existing H5 initial-update contract remains intact.
 
 All touched-package suites pass, including the complete subprocess suite. The repository-wide `go test ./...` passes every package except the three existing D78 closure-dashboard tests; extension conformance passes too. Focused race tests, Linux vet, Windows vet, full lint, changed-package lint, signature/test inventories and generated coverage pass. `make ci-contracts ci-drift` reaches the existing hot-path test-porting blocker when run with disposable agent/home directories; the initial inherited worker directory had an unrelated trust-lock shape error. Separate `ci-drift` retains D78's pending approval and the existing D79/D78 ordering failure. No approval, test disposition, timeout or suppression changes.
 
 `BenchmarkToolResultMessageEmptyText` measures creation and JSON serialization of an explicit empty-text result: 1979 ns/op, 642 B/op and 15 allocations on Go 1.27.1/linux-amd64. CPU/allocation profiles and red/green logs are retained with the external lane evidence. This is not a speedup claim. The presence state introduces no background work or new queue/lifetime ownership.
 
-Shared integration files for this follow-up are `agent/agent.go`, `agent/tool_execution.go`, `internal/codingagent/tools/read.go`, `cmd/pig/rpc_events.go`, the tool-result hook/event converters, the subprocess result decoder/adapter/renderer, resumed-card and export reconstruction, their regression files, the changelog and the signature/test/coverage ledgers. The strengthened scenario and probe come from the integrator; this change only updates the scenario's closed-boundary comment and read source coverage. The commit does not rewrite historical session files that already lost their text blocks.
+Shared integration files for this follow-up are `agent/agent.go`, `agent/tool_execution.go`, `internal/codingagent/tools/read.go`, `cmd/ompig/rpc_events.go`, the tool-result hook/event converters, the subprocess result decoder/adapter/renderer, resumed-card and export reconstruction, their regression files, the changelog and the signature/test/coverage ledgers. The strengthened scenario and probe come from the integrator; this change only updates the scenario's closed-boundary comment and read source coverage. The commit does not rewrite historical session files that already lost their text blocks.
 
 ## H5 follow-up: initial bash partial content
 
 The strict harness is merged in `149ee14d1`. Its rpc/26 comparator remains `json_output_equal = true` with complete stderr comparison and the existing narrow D2/D22 identity aliases. No output crop, tool-update alias or comparator weakening is added.
 
-Pi 0.87.1 `packages/coding-agent/src/core/tools/bash.ts:301-302` emits `{content: []}` before execution. The shell's existing empty callback represents that snapshot, but `cmd/pig/rpc_events.go` unconditionally inserted a text block while forming `partialResult`. The shared JSON/RPC serializer now represents absent text separately from explicit empty text. Only a partial snapshot without text or details is empty; completed results still retain explicit empty text.
+Pi 0.87.1 `packages/coding-agent/src/core/tools/bash.ts:301-302` emits `{content: []}` before execution. The shell's existing empty callback represents that snapshot, but `cmd/ompig/rpc_events.go` unconditionally inserted a text block while forming `partialResult`. The shared JSON/RPC serializer now represents absent text separately from explicit empty text. Only a partial snapshot without text or details is empty; completed results still retain explicit empty text.
 
 A boundary probe against the actual Pi factory also verifies `bash.ts:270-276`: `printf '\357\273\277'` produces a later BOM-only output snapshot with `content:[{type:"text",text:""}],details:{}`. Dropping every empty string would corrupt that update. The presence of output details retains this text block, as well as ordinary nonempty output. Empty completed read results also remain text blocks (`read.ts:185-188`).
 
-`TestRPCShellInitialUpdateHasEmptyContent` executes real bash through the production event serializer for `true`, `printf hello`, and BOM-only output. It checks the complete initial record, later text/details output, and an empty completed read. Before the fix, the initial-record cases fail with an inserted empty text block. A too-broad empty-string conversion separately fails the BOM boundary. After the fix, the full test passes, including under the race detector. A compiling mutation that always supplies a text pointer fails this regression and strict rpc/26 at `/13/partialResult/content: array/record count pig=1 pi=0`.
+`TestRPCShellInitialUpdateHasEmptyContent` executes real bash through the production event serializer for `true`, `printf hello`, and BOM-only output. It checks the complete initial record, later text/details output, and an empty completed read. Before the fix, the initial-record cases fail with an inserted empty text block. A too-broad empty-string conversion separately fails the BOM boundary. After the fix, the full test passes, including under the race detector. A compiling mutation that always supplies a text pointer fails this regression and strict rpc/26 at `/13/partialResult/content: array/record count ompig=1 pi=0`.
 
-Final strict verification completes three pairs each for rpc/26, rpc/28 tool-result wire, json/01 event output, tools/15 built-in details, and tools/17 error/bash persistence. The full `cmd/pig` suite, Linux vet, Windows vet of `cmd/pig`, lint configuration validation, changed-package/full lint and `go fix -diff ./cmd/pig` pass. `make ci-contracts ci-drift` retains the existing hot-path test-porting blocker; separate `ci-drift` retains pending D78. `go test ./test/parity/...` retains the three D78 closure-dashboard failures. No new waiver or suppression is added.
+Final strict verification completes three pairs each for rpc/26, rpc/28 tool-result wire, json/01 event output, tools/15 built-in details, and tools/17 error/bash persistence. The full `cmd/ompig` suite, Linux vet, Windows vet of `cmd/ompig`, lint configuration validation, changed-package/full lint and `go fix -diff ./cmd/ompig` pass. `make ci-contracts ci-drift` retains the existing hot-path test-porting blocker; separate `ci-drift` retains pending D78. `go test ./test/parity/...` retains the three D78 closure-dashboard failures. No new waiver or suppression is added.
 
 `BenchmarkRPCJSONLToolResult` records 1374 ns/op, 386 B/op and eight allocations per operation, with CPU/allocation profiles retained in the external evidence root. The fix changes only synchronous serialization; it adds no task, timer, queue or resource lifetime. This is a measurement, not a speedup claim.
 
-H5's shared-file edits are `cmd/pig/rpc_events.go`, its wire regression and payload benchmark call site, the rpc/26 source-coverage comment, the changelog, this report, and regenerated signature/coverage ledgers. The broader strict-harness merge is a separate commit, not attributed to the H5 source fix.
+H5's shared-file edits are `cmd/ompig/rpc_events.go`, its wire regression and payload benchmark call site, the rpc/26 source-coverage comment, the changelog, this report, and regenerated signature/coverage ledgers. The broader strict-harness merge is a separate commit, not attributed to the H5 source fix.
 
 ## Findings and source contracts
 
@@ -80,11 +80,11 @@ Only the exact fixture cwd, injective entry/parent IDs and clock values are alia
 
 ```sh
 export PATH="/absolute/toolchain/bin:$PATH"
-go build -o bin/pig ./cmd/pig
+go build -o bin/ompig ./cmd/ompig
 EVIDENCE=$(mktemp -d)
 python3 test/parity/testdata/tool-rpc-wire.py pi --evidence "$EVIDENCE/pi" > "$EVIDENCE/pi.jsonl"
-PIG_PARITY_PIG_BIN="$PWD/bin/pig" python3 test/parity/testdata/tool-rpc-wire.py pig --evidence "$EVIDENCE/pig" > "$EVIDENCE/pig.jsonl"
-cmp "$EVIDENCE/pi.jsonl" "$EVIDENCE/pig.jsonl"
+OMPIG_PARITY_OMPIG_BIN="$PWD/bin/ompig" python3 test/parity/testdata/tool-rpc-wire.py ompig --evidence "$EVIDENCE/ompig" > "$EVIDENCE/ompig.jsonl"
+cmp "$EVIDENCE/pi.jsonl" "$EVIDENCE/ompig.jsonl"
 make parity-family FAMILY=tools
 ```
 
@@ -102,14 +102,14 @@ Cancellation waits for the executor and reaps the process; the probe joins its r
 
 | Gate | Result |
 |---|---|
-| Touched-package tests: `./agent ./coding ./cmd/pig ./internal/codingagent ./internal/codingagent/tools` | Pass |
+| Touched-package tests: `./agent ./coding ./cmd/ompig ./internal/codingagent ./internal/codingagent/tools` | Pass |
 | Focused regression race tests | Pass |
 | `make parity-family` for tools, rpc, json and print | Pass with each scenario's declared durability; clean child environment |
 | `go vet ./...`; Windows vet of all touched packages | Pass; native Windows runtime is not qualified here |
 | `go tool golangci-lint config verify`; touched-package lint; `make lint` | Pass |
 | `make lint-changed LINT_BASE=96284e76be` | Pass against the integration base; the default `main` ref is unavailable in this lane |
 | `go fix -diff` on touched packages | Empty |
-| Interface inventory/drift and test inventory | Pass after regenerating `pig-go.json`; current upstream test hashes are verified |
+| Interface inventory/drift and test inventory | Pass after regenerating `ompig-go.json`; current upstream test hashes are verified |
 | `make ci-contracts ci-drift` | Stops at existing pending/partial hot-path test ports; no tag, disposition or ported baseline is weakened |
 | Separate `make ci-drift` | Stops at existing D78 `SCRUTINIZED:pending`; this slice does not approve it |
 | Separate divergence guard | Pass with the existing baseline unchanged |
@@ -125,7 +125,7 @@ Coverage is regenerated with `make coverage RESULTS=` so an inherited last-run f
 - `internal/codingagent/tools/{read,write,edit,grep,find,ls,shell_tool}.go`: failure constructors only; retain the already-integrated W06/W07 success metadata fixes.
 - `internal/codingagent/tools/{powershell_test,shell_tool_unix_test}.go`: correct old nil-details assertions. `failure_details_test.go` is new.
 - `coding/session.go`: optional bash status, completion timestamp, copied status ownership and typed append; `coding/session_test.go` and `session_user_bash_operations_test.go` adapt numeric-status assertions. `session_bash_wire_test.go` is new.
-- `cmd/pig/rpc_types.go` and `rpc_mode_test.go`: optional status DTO and existing zero-status test. No RPC dispatch or event-ordering code changes.
+- `cmd/ompig/rpc_types.go` and `rpc_mode_test.go`: optional status DTO and existing zero-status test. No RPC dispatch or event-ordering code changes.
 - `internal/codingagent/session.go`: typed append plus timestamp marshal/unmarshal; `interactive_turn.go` supplies the complete message. `session_test.go` and `slash_commands_test.go` adapt existing append calls. `session_bash_wire_test.go` is new.
-- `test/parity/interfaces/pig-go.json`, `test/parity/interfaces/test-mapping-v0.87.1.json`, `test/parity/coverage.md` and the generated `AGENTS.md` block: signature inventory, supplemental test evidence and one scenario. Regenerate after merging, rather than manually reconciling generated counts.
+- `test/parity/interfaces/ompig-go.json`, `test/parity/interfaces/test-mapping-v0.87.1.json`, `test/parity/coverage.md` and the generated `AGENTS.md` block: signature inventory, supplemental test evidence and one scenario. Regenerate after merging, rather than manually reconciling generated counts.
 - `CHANGELOG.md`, this report, the new tools scenario and its Python probe carry the user-facing note and reproducible evidence.

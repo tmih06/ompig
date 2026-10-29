@@ -41,7 +41,7 @@ Measured on `ledger-autobind-int` (L1 and L7) plus `test/extension-conformance/a
 
 ## PathMetadata.packageRoot (placement)
 
-Pi reads `PathMetadata.packageRoot` once, in `collectExtensionPackageWarnings` (resource-loader.ts:71-77). Go's reader is `cmd/pig/extension_set.go#extensionPackageWarnings`, which takes `subprocess.ExtConfig.PackageRoot`; `cmd/pig/configured_resources.go:487` fills it from the resolved package item's `PackageRoot`. `internal/codingagent/resource_paths.go#PathMetadata.PackageRoot` has no non-test reader (L5). Request: a reviewed placement of `PathMetadata::property:packageRoot` onto `subprocess.ExtConfig.PackageRoot` (same concept, wired), or delete the caller-free `PathMetadata.PackageRoot` field and place the row there.
+Pi reads `PathMetadata.packageRoot` once, in `collectExtensionPackageWarnings` (resource-loader.ts:71-77). Go's reader is `cmd/ompig/extension_set.go#extensionPackageWarnings`, which takes `subprocess.ExtConfig.PackageRoot`; `cmd/ompig/configured_resources.go:487` fills it from the resolved package item's `PackageRoot`. `internal/codingagent/resource_paths.go#PathMetadata.PackageRoot` has no non-test reader (L5). Request: a reviewed placement of `PathMetadata::property:packageRoot` onto `subprocess.ExtConfig.PackageRoot` (same concept, wired), or delete the caller-free `PathMetadata.PackageRoot` field and place the row there.
 
 ## mcp JSON-RPC guards and error codes (renames the shape rule must accept)
 
@@ -53,7 +53,7 @@ Go ports these in `mcp/jsonrpc.go`, under other names: `isJsonRpcRequest`, `isJs
 
 ## getCommands production reader (placement)
 
-`ExtensionActions.GetCommands` (host_actions.go:37) has no production caller or setter. Subprocess extensions reach Pi's `runtime.getCommands` (types.ts:2094) through `subprocess.UIBridge`: `ui_bridge.go:245-247` declares `GetCommands func() []CommandInfo`, `:539-540` reads it into the host state and `:959` installs it from the host's actions. Request: a reviewed placement of `ExtensionActions::property:getCommands` and `ExtensionRuntime::property:getCommands` onto `subprocess/ui_bridge.go#UIBridgeActions.GetCommands` (check the type name), or wire `ExtensionActions.GetCommands` in `cmd/pig` and have the bridge read it.
+`ExtensionActions.GetCommands` (host_actions.go:37) has no production caller or setter. Subprocess extensions reach Pi's `runtime.getCommands` (types.ts:2094) through `subprocess.UIBridge`: `ui_bridge.go:245-247` declares `GetCommands func() []CommandInfo`, `:539-540` reads it into the host state and `:959` installs it from the host's actions. Request: a reviewed placement of `ExtensionActions::property:getCommands` and `ExtensionRuntime::property:getCommands` onto `subprocess/ui_bridge.go#UIBridgeActions.GetCommands` (check the type name), or wire `ExtensionActions.GetCommands` in `cmd/ompig` and have the bridge read it.
 
 ## mcp ListToolsResult (census item 4)
 
@@ -71,7 +71,7 @@ Census item 3 counts a data-only schema struct as read through the typed builder
 
 - `Models.getAuth(model: AnyModel, overrides?)` (`models.ts:249,360`): Go splits the overload into `Models.GetAuth(providerID)` and `Models.GetModelAuth(anyModel)` (`ai/models_runtime_auth.go:104,118`). The `getAuth::call:1` rows (Models, MutableModels, compat and models re-exports, `ModelRuntime`) should place the second overload on `GetModelAuth`. The rows carry `reviewed-gaps.json` "port-needed" entries that lg-rules must retire with the placement.
 - `SettingsManagerCreateOptions { projectTrusted?: boolean }` (`settings-manager.ts:292-294,455-465`): Go takes the flag as a constructor choice, `NewSettingsManager` or `NewSettingsManagerWithProjectTrust(cwd, agentDir, projectTrusted)` (`internal/codingagent/settings.go:1509,1515`). A single-field options struct maps to a boolean parameter of the second constructor (S4 variant).
-- `MainOptions { extensionFactories? }` (`main.ts:569-571`): Go's entry point takes the factory list through the cmd/pig linking surface, not an options struct. Rule request: place it as a designed-out options parameter once the owner confirms the Go entry.
+- `MainOptions { extensionFactories? }` (`main.ts:569-571`): Go's entry point takes the factory list through the cmd/ompig linking surface, not an options struct. Rule request: place it as a designed-out options parameter once the owner confirms the Go entry.
 
 ## Selector sub-list getters (member-missing, tui and coding-agent components)
 

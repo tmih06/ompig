@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // Pi's provider owns the errored response metadata before lazy/runtime forwarding. A runtime-generated generic error must not replace the provider's active effort.

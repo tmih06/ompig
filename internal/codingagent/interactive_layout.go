@@ -8,8 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // extensionDialogReservedLines is the terminal budget kept for chrome around an
@@ -23,7 +23,7 @@ import (
 //
 // The approximation is the mechanism, not this number: upstream proportions the
 // viewport natively and never computes a line budget, so SetMaxLines is a
-// line-renderer stand-in for a layout pass pig does not have. A proportional
+// line-renderer stand-in for a layout pass ompig does not have. A proportional
 // layout would delete this constant rather than refine it.
 const extensionDialogReservedLines = 3
 
@@ -103,7 +103,7 @@ func (m *InteractiveMode) stopWorkingLoader() { m.clearStatusIndicator("working"
 // stayed idle for idleCollectAfter, the heap is returned to the OS once if it
 // grew since the last collection; a wake restarts the wait, and while the wait
 // runs every input event wakes it (Pi-Bolt idle-gc.ts).
-// pig additive (D172): the ticker parks while idle and returns heap once after a run.
+// ompig additive (D172): the ticker parks while idle and returns heap once after a run.
 func (m *InteractiveMode) tickSpinner(ctx context.Context) {
 	interval := 80 * time.Millisecond // upstream: tui/src/components/loader.ts:DEFAULT_INTERVAL_MS
 	//perf:ok one ticker per spinner goroutine; parking stops it and a wake resets it
@@ -204,7 +204,7 @@ func (m *InteractiveMode) wakeSpinner() {
 	}
 }
 
-// pig additive (D172): idle heap return after a run, mirroring Pi-Bolt 4ee61e8a.
+// ompig additive (D172): idle heap return after a run, mirroring Pi-Bolt 4ee61e8a.
 // idleHeapCollector returns freed heap to the OS once per idle period, only
 // when the live heap grew since its last collection.
 type idleHeapCollector struct {
@@ -218,7 +218,7 @@ func (c *idleHeapCollector) collect() {
 	if sample[0].Value.Kind() != metrics.KindUint64 || sample[0].Value.Uint64() <= c.lastHeap {
 		return
 	}
-	// pig additive (D112, D172): the request caches hold the encodings of the conversation the run sent; an idle session lets them go, and the
+	// ompig additive (D112, D172): the request caches hold the encodings of the conversation the run sent; an idle session lets them go, and the
 	// next prompt encodes its request as its first did.
 	ai.ReleaseRequestCaches()
 	// One forced cycle moves sync.Pool contents to their victim caches and leaves them live; the second, in
@@ -233,7 +233,7 @@ func (c *idleHeapCollector) collect() {
 // releaseStartupHeap returns the heap the start left free to the OS, once: the first frame and the startup loads (settings, the model catalog,
 // the resource listings, the grammars) allocate several times what they keep, and the runtime's background scavenger releases the rest
 // slowly. It runs on a background task after the first frame, never on the owner loop, which keeps handling input while the collection runs.
-// pig additive (D172): the same heap return as the idle collection, once at start.
+// ompig additive (D172): the same heap return as the idle collection, once at start.
 func releaseStartupHeap() {
 	debug.FreeOSMemory()
 }

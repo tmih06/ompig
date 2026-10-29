@@ -100,6 +100,6 @@
    "test:coding/rpcclient/rpc_mode_test.go#TestRpcModeShouldGetSessionTree"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; AbortSignal is the context.Context argument; no detached goroutine.",
-  "rationale": "SessionTreeNode: Go SessionTreeNode has a field for every upstream property; types reviewed against the upstream declaration; tests attributed by go/types. Closed as public-api-tested: the Go type is exported from a public package and no PiG binary uses it; test uses (go/types) are the proof."
+  "rationale": "SessionTreeNode: Go SessionTreeNode has a field for every upstream property; types reviewed against the upstream declaration; tests attributed by go/types. Closed as public-api-tested: the Go type is exported from a public package and no Ompig binary uses it; test uses (go/types) are the proof."
  }
 ]

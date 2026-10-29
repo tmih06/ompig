@@ -18,9 +18,9 @@ wait_event = '{"type":"agent_settled","aborted":false}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["../../testdata/command-send-wait-idle/python"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session", "--no-extensions", "--system-prompt", "P.", "--no-context-files", "--no-skills"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["../../testdata/command-send-wait-idle/python"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session", "--no-extensions", "--system-prompt", "P.", "--no-context-files", "--no-skills"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/command-send-wait-idle.mjs"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session", "--no-extensions", "--system-prompt", "P.", "--no-context-files", "--no-skills"]
 

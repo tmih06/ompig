@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // upstream: packages/durable/src/testing/runner.ts:34 registerEnvConformance builds createEnvConformance({ ...options, assertions, withEnv }):

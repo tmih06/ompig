@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 const defaultBearerTokenMinExpiryMs = float64(30 * 60_000)

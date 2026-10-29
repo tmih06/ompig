@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // BenchmarkNodeEventLoopTurn is the cost a tool call pays for each Node extension with a tool_call handler: one event-loop turn of

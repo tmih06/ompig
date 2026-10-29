@@ -11,7 +11,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // pushRig is a Host with one managed extension on a pipe connection, a UI bridge whose catalogs the test controls, and the state_update frames the extension side received.

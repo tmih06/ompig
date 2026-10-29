@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // TaskRuntime.AbortOwned over the real core: it aborts a task the running task owns and returns once it is terminal, returns for

@@ -3,9 +3,9 @@ package subprocess
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // UIPromptScope records blocking extension UI prompts for the runner that

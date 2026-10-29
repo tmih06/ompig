@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_EventDelivery pins Pi's `pi.on(event, handler)` (Pi 1.1.0 packages/coding-agent/src/core/extensions/types.ts:1569-1650) for the events no other conformance test

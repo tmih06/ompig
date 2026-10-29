@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi linux-platform-x11.c:185 delegates to xcb_connect, whose parser (libxcb 1.15 xcb_util.c:176 and :186) reads the display and screen with C strtoul
@@ -59,7 +59,7 @@ func TestX11DisplayNumbersParseAsXcbDoes(t *testing.T) {
 	for _, input := range []string{":", ":1 ", ":0x1", ":1.", ":1.2 ", ":1.0x", "host:1.0.0", "unix:invalid", ":+", ": -"} {
 		t.Run("reject "+input, func(t *testing.T) {
 			if got, err := parseX11Display(input); err == nil {
-				t.Fatalf("xcb_parse_display rejects %q, PiG accepted %+v", input, got)
+				t.Fatalf("xcb_parse_display rejects %q, Ompig accepted %+v", input, got)
 			}
 		})
 	}
@@ -102,8 +102,8 @@ func TestX11DisplaySpellingsConnectAsPiDoes(t *testing.T) {
 	if output, err := exec.CommandContext(t.Context(), "cc", "-std=c11", "-Wall", "-Wextra", "-Werror", source, "-lxcb", "-o", oracle).CombinedOutput(); err != nil {
 		t.Fatalf("compile the xcb oracle: %v\n%s", err, output)
 	}
-	// Each spelling connects the oracle and then PiG, one client at a time. Without -noreset the server resets whenever its
-	// last client leaves and closes a connection that arrives during the reset, so on a loaded host the next client, PiG's
+	// Each spelling connects the oracle and then Ompig, one client at a time. Without -noreset the server resets whenever its
+	// last client leaves and closes a connection that arrives during the reset, so on a loaded host the next client, Ompig's
 	// or the oracle's, gets EOF or a connection reset.
 	server := startNativeTestProcess(t, "Xvfb", []string{"-displayfd", "1", "-screen", "0", "640x480x24", "-screen", "1", "320x240x24", "-listen", "tcp", "-ac", "-noreset"}, os.Environ())
 	display := nativeReady(t, server)
@@ -120,7 +120,7 @@ func TestX11DisplaySpellingsConnectAsPiDoes(t *testing.T) {
 	}
 	for _, spelling := range spellings {
 		t.Run(spelling, func(t *testing.T) {
-			// Neither xcb_connect nor PiG's connection setup has a deadline of its own (the transfer deadline starts after setup), so the test budget bounds both.
+			// Neither xcb_connect nor Ompig's connection setup has a deadline of its own (the transfer deadline starts after setup), so the test budget bounds both.
 			ctx := testbudget.Context(t)
 			command := exec.CommandContext(ctx, oracle)
 			command.Env = append(os.Environ(), "DISPLAY="+spelling)
@@ -129,16 +129,16 @@ func TestX11DisplaySpellingsConnectAsPiDoes(t *testing.T) {
 				t.Fatalf("xcb oracle: %v", err)
 			}
 			want := strings.TrimSpace(string(output))
-			got, pigErr := pigX11Root(ctx, spelling)
+			got, ompigErr := ompigX11Root(ctx, spelling)
 			if got != want {
-				t.Fatalf("DISPLAY=%q: PiG %s (%v), Pi (xcb_connect) %s", spelling, got, pigErr, want)
+				t.Fatalf("DISPLAY=%q: Ompig %s (%v), Pi (xcb_connect) %s", spelling, got, ompigErr, want)
 			}
 		})
 	}
 }
 
-// pigX11Root is the root window PiG's openX11Clipboard creates its window on for DISPLAY=spelling, or "error" with the reason.
-func pigX11Root(ctx context.Context, spelling string) (string, error) {
+// ompigX11Root is the root window Ompig's openX11Clipboard creates its window on for DISPLAY=spelling, or "error" with the reason.
+func ompigX11Root(ctx context.Context, spelling string) (string, error) {
 	display, err := parseX11Display(spelling)
 	if err != nil {
 		return "error", err

@@ -16,7 +16,7 @@
 #   stdin: {"id":"cmds","type":"get_commands"}
 # describes /module-loading with parser "src/parser.ts", dirname ".",
 # requireConditional "esm-dep require", module "object", and the rest below.
-# PiG loaded extensions with Node's type stripping and its own resolver
+# Ompig loaded extensions with Node's type stripping and its own resolver
 # before: "#src/parser" failed with ERR_MODULE_NOT_FOUND, __dirname was not
 # defined, and a JSON import needed an import attribute.
 
@@ -36,9 +36,9 @@ timeout_seconds = 30
 settle_seconds = 1
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session"]
-pig_extensions = ["testdata/module-loading/index.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session"]
+ompig_extensions = ["testdata/module-loading/index.ts"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/module-loading/index.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session"]

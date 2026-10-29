@@ -13,7 +13,7 @@ import (
 
 // sseIdleTransport ends a text/event-stream response that makes no semantic progress for the configured HTTP idle timeout. The byte-level idle
 // deadline (idleTimeoutConn) never fires while a gateway keeps sending comment lines or pings, so a stalled generation hung forever.
-// pig divergence (D131): Pi measures idleness on bytes only (pi-mono #10761, #10762); reasoning events keep keepalives counting.
+// ompig divergence (D131): Pi measures idleness on bytes only (pi-mono #10761, #10762); reasoning events keep keepalives counting.
 type sseIdleTransport struct{ base http.RoundTripper }
 
 func (t *sseIdleTransport) RoundTrip(request *http.Request) (*http.Response, error) {
@@ -223,12 +223,12 @@ func (b *sseIdleBody) endLine(window []byte) bool {
 
 // sseLineSniffBytes is how much of a line the idle tracker keeps at once. A longer line is sniffed window by window, so a marker after a long value, as
 // Gemini writes "thought": true after the thought's text, is still found.
-// pig divergence (D131): the reasoning sniff window is PiG's; Pi measures idleness on bytes only.
+// ompig divergence (D131): the reasoning sniff window is Ompig's; Pi measures idleness on bytes only.
 const sseLineSniffBytes = 1024
 
 // sseSniffOverlap is how many bytes of a full window the next one keeps: more than the longest marker with its colon, spaces, value prefix and the byte
 // that tells an empty value.
-// pig divergence (D131): the reasoning sniff window is PiG's; Pi measures idleness on bytes only.
+// ompig divergence (D131): the reasoning sniff window is Ompig's; Pi measures idleness on bytes only.
 const sseSniffOverlap = 64
 
 func hasSSEField(line []byte, field string) bool {

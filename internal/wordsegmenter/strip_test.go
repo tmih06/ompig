@@ -1,4 +1,4 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 package wordsegmenter
 
@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A pig_strip_word_dictionaries build compiles cjk.go and sea.go out, so the package embeds no dictionary; stock embeds all five.
+// A ompig_strip_word_dictionaries build compiles cjk.go and sea.go out, so the package embeds no dictionary; stock embeds all five.
 func TestStripWordDictionariesBuildOmitsDictionaryEmbeds(t *testing.T) {
 	if testing.Short() {
 		t.Skip("go list in -short mode")
 	}
 	embeds := func(tags ...string) []string {
 		args := append([]string{"list"}, tags...)
-		args = append(args, "-f", `{{join .EmbedFiles " "}}`, "github.com/MichaelKinsy/PiG/internal/wordsegmenter")
+		args = append(args, "-f", `{{join .EmbedFiles " "}}`, "github.com/tmih06/ompig/internal/wordsegmenter")
 		out, err := exec.Command("go", args...).Output()
 		if err != nil {
 			t.Fatalf("go %s: %v", strings.Join(args, " "), err)
@@ -34,7 +34,7 @@ func TestStripWordDictionariesBuildOmitsDictionaryEmbeds(t *testing.T) {
 	}
 }
 
-// A Piglet that strips word-dictionaries segments each CJK or Southeast Asian run as one word, as a Binary built without the
+// A Ompiglet that strips word-dictionaries segments each CJK or Southeast Asian run as one word, as a Binary built without the
 // dictionaries does; stock splits the run with the dictionary.
 func TestRuntimeStripWordDictionariesKeepsRunsWhole(t *testing.T) {
 	segments := func(text string) []string {

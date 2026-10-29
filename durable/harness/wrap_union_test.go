@@ -3,7 +3,7 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi harness/types.ts:263-265 Wrap = { tool; wrap(tool) } | { section; wrap(section) } and agent.ts:177-190 (`"tool" in wrap` wraps the named tool, otherwise the named

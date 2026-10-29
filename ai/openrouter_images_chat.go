@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonparse"
 )
 
 // The chat completions body of an OpenRouter image generation is read untyped (openrouter-images.ts generateImages): a member of another type is

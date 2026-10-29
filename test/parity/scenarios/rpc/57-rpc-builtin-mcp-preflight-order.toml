@@ -1,5 +1,5 @@
 # Pi 1.1.0 extensions/mcp/index.ts:1175-1181: the built-in MCP extension's before_agent_start handler awaits waitForDirectServers once, so with builtin:mcp loaded agent-session.ts prompt() reaches preflightResult five microtasks after the input line, as late as a steer or follow_up response (rpc-mode.ts:416-424). Probed with a microtask counter on Pi 1.1.0: prompt 5, steer 5, follow_up 5, prompt "/x" 6; with --no-extensions the prompt answers at 3.
-# Steer then prompt therefore answers the steer first; follow_up, prompt "/x", steer answers the prompt last. PiG answered both prompts first.
+# Steer then prompt therefore answers the steer first; follow_up, prompt "/x", steer answers the prompt last. Ompig answered both prompts first.
 name = "57-rpc-builtin-mcp-preflight-order"
 description = "With builtin:mcp loaded, a prompt answers after a steer or follow_up read before it in the same batch"
 covers = ["packages/coding-agent/src/modes/rpc/rpc-mode.ts", "packages/coding-agent/src/extensions/mcp/index.ts"]
@@ -21,8 +21,8 @@ wait_event = '{"type":"agent_settled","aborted":false}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session", "--system-prompt", "RPC runtime values.", "--no-context-files", "--no-skills"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session", "--system-prompt", "RPC runtime values.", "--no-context-files", "--no-skills"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session", "--system-prompt", "RPC runtime values.", "--no-context-files", "--no-skills"]
 # The runner's baseline --no-extensions would drop builtin:mcp, whose handler is the behavior under test.

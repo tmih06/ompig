@@ -5,7 +5,7 @@ import (
 	"math"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Usage appends the text the line encoder writes for its MarshalJSON output, in both member orders, and fails for a non-finite cost with MarshalJSON's error.

@@ -20,14 +20,14 @@ class PathRewriteTest(unittest.TestCase):
     def test_checkout_paths_change_but_runtime_and_upstream_paths_do_not(self):
         source = '''go test ./agent/... ./ai ./coding/... ./tui
 paths="coding/pigversion/pigversion.go $root/coding/upstream.go ${REPO_ROOT}/ai/models.go $(CURDIR)/tui/testdata"
-$PIG_HOME/agent/auth.json $home/agent $source_home/agent/settings.json ~/.pig/agent
+$OMPIG_HOME/agent/auth.json $home/agent $source_home/agent/settings.json ~/.ompig/agent
 $agent/dist $ai/dist $tui/dist packages/agent/src packages/ai/src packages/tui/src
 @earendil-works/pi-ai/compat pi-tui/utils.js internal/ai/x.go ./internal/tui
 keywords = ["ai", "coding", "agent", "tui"]
 '''
         expected = '''go test ./internal/agent/... ./internal/ai ./internal/coding/... ./internal/tui
 paths="internal/coding/pigversion/pigversion.go $root/internal/coding/upstream.go ${REPO_ROOT}/internal/ai/models.go $(CURDIR)/internal/tui/testdata"
-$PIG_HOME/agent/auth.json $home/agent $source_home/agent/settings.json ~/.pig/agent
+$OMPIG_HOME/agent/auth.json $home/agent $source_home/agent/settings.json ~/.ompig/agent
 $agent/dist $ai/dist $tui/dist packages/agent/src packages/ai/src packages/tui/src
 @earendil-works/pi-ai/compat pi-tui/utils.js internal/ai/x.go ./internal/tui
 keywords = ["ai", "coding", "agent", "tui"]
@@ -49,8 +49,8 @@ keywords = ["ai", "coding", "agent", "tui"]
                 self.assertEqual(rewrite(name, expected), expected)
 
     def test_python_path_operands_and_npm_keywords(self):
-        source = 'PIGVERSION_GO = HERE.parents[2] / "coding" / "pigversion" / "pigversion.go"\nkeywords = ["ai", "agent"]\n'
-        expected = 'PIGVERSION_GO = HERE.parents[2] / "internal" / "coding" / "pigversion" / "pigversion.go"\nkeywords = ["ai", "agent"]\n'
+        source = 'OMPIGVERSION_GO = HERE.parents[2] / "coding" / "pigversion" / "pigversion.go"\nkeywords = ["ai", "agent"]\n'
+        expected = 'OMPIGVERSION_GO = HERE.parents[2] / "internal" / "coding" / "pigversion" / "pigversion.go"\nkeywords = ["ai", "agent"]\n'
         self.assertEqual(rewrite("automation/release/npm/pack_npm.py", source), expected)
         self.assertEqual(rewrite("automation/release/npm/pack_npm.py", expected), expected)
 

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // print-mode.ts:76-122: rebindSession awaits session.bindExtensions (every session_start handler) and only then subscribes the JSON writer, so the stream starts
@@ -29,11 +29,11 @@ func TestJSONModeWritesNothingSessionStartEmittedBeforeTheWriterSubscribesInEver
 			defer cancel()
 			cmd := exec.CommandContext(ctx, binary, "--mode", "json", "--model", "test-faux/faux-1", "--no-session", "-e", filepath.Join(fixtures, sdk), "-p", "/writer-after")
 			cmd.Dir = t.TempDir()
-			cmd.Env = append(cmd.Environ(), "PIG_HOME="+home, "PI_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_SDK_GO_ROOT="+filepath.Join(root, "extensions", "sdk"))
+			cmd.Env = append(cmd.Environ(), "OMPIG_HOME="+home, "PI_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_SDK_GO_ROOT="+filepath.Join(root, "extensions", "sdk"))
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			if err := cmd.Run(); err != nil {
-				t.Fatalf("pig: %v\nstderr: %s", err, stderr.String())
+				t.Fatalf("ompig: %v\nstderr: %s", err, stderr.String())
 			}
 			var log []rpcRecord
 			for line := range bytes.SplitSeq(stdout.Bytes(), []byte("\n")) {

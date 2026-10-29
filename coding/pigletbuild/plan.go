@@ -1,5 +1,5 @@
-// Package pigletbuild hosts Piglet Binary planning while orchestration is
-// moved to the final Piglet artifact package. The planner is factual: compatible
+// Package pigletbuild hosts Ompiglet Binary planning while orchestration is
+// moved to the final Ompiglet artifact package. The planner is factual: compatible
 // Go factories fuse; every other extension is an exact subprocess component.
 package pigletbuild
 
@@ -18,7 +18,7 @@ const (
 	Node   Language = "node"
 )
 
-// Decision is how one extension executes in the Piglet Binary.
+// Decision is how one extension executes in the Ompiglet Binary.
 type Decision string
 
 const (
@@ -59,7 +59,7 @@ type Sandbox struct {
 	PyCross   bool
 }
 
-// Options configures one Piglet output build. Component realization is not
+// Options configures one Ompiglet output build. Component realization is not
 // configurable; it is derived from component facts.
 type Options struct {
 	Format        string
@@ -72,7 +72,7 @@ type Options struct {
 	Builder       string
 	Verification  string
 	Workspace     string
-	// SignKeyPath is the ed25519 private key a Piglet Binary is signed with.
+	// SignKeyPath is the ed25519 private key a Ompiglet Binary is signed with.
 	SignKeyPath string
 	// SignKey is SignKeyPath's key, read before any build work starts.
 	SignKey ed25519.PrivateKey
@@ -96,7 +96,7 @@ type ExtPlan struct {
 	Compat    map[string]Compat `json:"compat"`
 }
 
-// Plan is the deterministic Piglet Binary delivery plan.
+// Plan is the deterministic Ompiglet Binary delivery plan.
 type Plan struct {
 	Targets  []string  `json:"targets"`
 	Ext      []ExtPlan `json:"plan"`
@@ -127,7 +127,7 @@ func remedyFor(lang Language) string {
 	case Rust:
 		return "select a builder with the matching Rust target, or build for the builder's native target"
 	case Python:
-		return "use a Piglet Image with the matching Python runtime, or build for the builder's native target"
+		return "use a Ompiglet Image with the matching Python runtime, or build for the builder's native target"
 	default:
 		return "select a builder that supports this target"
 	}
@@ -160,7 +160,7 @@ func BuildPlan(extensions []ExtensionInput, options Options) Plan {
 					Code:      "host-reliant-target",
 					Target:    target.String(),
 					Extension: extension.Name,
-					Message:   fmt.Sprintf("no prebuilt %s cell for %s; a Piglet Image or native-target build is required", extension.Language, target),
+					Message:   fmt.Sprintf("no prebuilt %s cell for %s; a Ompiglet Image or native-target build is required", extension.Language, target),
 					Remedy:    remedyFor(extension.Language),
 				})
 			}
@@ -170,30 +170,30 @@ func BuildPlan(extensions []ExtensionInput, options Options) Plan {
 	return plan
 }
 
-// Verdict reports whether resolution produced a complete buildable Piglet.
+// Verdict reports whether resolution produced a complete buildable Ompiglet.
 type Verdict struct {
 	OK       bool     `json:"ok"`
 	Blockers []string `json:"blockers,omitempty"`
 }
 
-// Validate rejects unresolved Piglet extensions and a Piglet whose listed
+// Validate rejects unresolved Ompiglet extensions and a Ompiglet whose listed
 // extensions resolve to none, and enforces an authored realization
-// requirement. listedExtensions counts the effective Piglet's extension
+// requirement. listedExtensions counts the effective Ompiglet's extension
 // entries (after extends and extends.remove); extensionCount counts the
-// extensions resolution produced. A Piglet that lists no extensions still
+// extensions resolution produced. A Ompiglet that lists no extensions still
 // builds: a base that only strips built-ins or sets defaults, or one with a
-// frontend member, is a Binary of Stock PiG's own parts. Advisory target
+// frontend member, is a Binary of Stock Ompig's own parts. Advisory target
 // compatibility warnings are represented in the plan and do not masquerade
 // as a successful self-contained target.
 //
-// pig additive (D18): a Piglet Binary needs no extension.
+// ompig additive (D18): a Ompiglet Binary needs no extension.
 func Validate(plan Plan, resolutionWarnings []string, listedExtensions, extensionCount int, hasFrontend, requireFused bool) Verdict {
 	blockers := make([]string, 0, len(resolutionWarnings))
 	for _, warning := range resolutionWarnings {
 		blockers = append(blockers, "unresolved extension: "+warning)
 	}
 	if listedExtensions > 0 && extensionCount == 0 && !hasFrontend {
-		blockers = append(blockers, "piglet resolves to no extensions")
+		blockers = append(blockers, "ompiglet resolves to no extensions")
 	}
 	for _, extension := range plan.Ext {
 		if !requireFused || extension.Decision == DecisionFuse {

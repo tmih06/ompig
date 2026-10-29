@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Every test of the package runs with the memo engaged from the first message, so the agent-level tests exercise it on short histories.

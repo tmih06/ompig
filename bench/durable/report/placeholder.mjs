@@ -24,17 +24,17 @@ const meta = {
 		pinning: "one pinned logical core (CPU 23) of a shared 128-thread host",
 		relative: "Absolute times run about 2× Mario's i9-13900 numbers; compare only within this session.",
 	},
-	runner: { repo: "badlogic/durable-bench", commit: "e9abffa", changes: "CPU gate reads the pinned core and its SMT sibling only; PiG targets added." },
+	runner: { repo: "badlogic/durable-bench", commit: "e9abffa", changes: "CPU gate reads the pinned core and its SMT sibling only; Ompig targets added." },
 	protocol: { samples: 12, turns: 10, seed: "scratch", cpu_gate: "<= 8% over 1 s on CPU 23 and 87" },
 	model: { label: "durable-bench's own scripted model in JS (walks the whole transcript on every call), pi-ai's faux provider and the same lookup tool, for every target." },
 	contract: { status: "pending", reference: "da866ada" },
 	cloudflare: { status: "placeholder", label: "PLACEHOLDER: Workers Paid account, SQLite-backed Durable Objects, region and client location to be recorded." },
 	targets: {
-		"pig-tinygo": { label: "PiG Durable", build: "TinyGo", kind: "pig", role: "headline", version: "placeholder", artifact: { bytes: 1_000_000, gzip: 400_000 } },
+		"ompig-tinygo": { label: "Ompig Durable", build: "TinyGo", kind: "ompig", role: "headline", version: "placeholder", artifact: { bytes: 1_000_000, gzip: 400_000 } },
 		"pi-head": { label: "pi-durable main", kind: "pi", role: "reference", version: "da866ada" },
 		tardie: { label: "Tardigrade", kind: "tardigrade", role: "contender", version: "0.44.0" },
-		"pig-go": { label: "PiG Durable", build: "Go", kind: "pig", role: "detail", version: "placeholder", artifact: { bytes: 5_000_000, gzip: 1_300_000 } },
-		"pig-native": { label: "PiG Durable", build: "native", kind: "pig", role: "detail", version: "placeholder", model: "PLACEHOLDER: the Go port of durable-bench's scripted model, in process", artifact: { bytes: 9_000_000, gzip: 3_500_000 } },
+		"ompig-go": { label: "Ompig Durable", build: "Go", kind: "ompig", role: "detail", version: "placeholder", artifact: { bytes: 5_000_000, gzip: 1_300_000 } },
+		"ompig-native": { label: "Ompig Durable", build: "native", kind: "ompig", role: "detail", version: "placeholder", model: "PLACEHOLDER: the Go port of durable-bench's scripted model, in process", artifact: { bytes: 9_000_000, gzip: 3_500_000 } },
 		"ts-control": { label: "Durable core", build: "TS", kind: "control", role: "control", version: "placeholder" },
 		empty: { label: "Empty target", kind: "floor", role: "floor", version: "floor" },
 	},
@@ -70,9 +70,9 @@ const meta = {
 const curves = {
 	"pi-head": { c: [120, 0.07], w: [65, 0.025], mb: [0.2, 0.0027], s: [0.4, 0.011] },
 	tardie: { c: [330, 0.8], w: [130, 0.07], mb: [0.4, 0.0079], s: [0.5, 0.085] },
-	"pig-tinygo": { c: [60, 0.01], w: [30, 0.004], mb: [0.2, 0.0027], s: [0.3, 0.007] },
-	"pig-go": { c: [110, 0.02], w: [35, 0.005], mb: [0.2, 0.0027], s: [0.3, 0.008] },
-	"pig-native": { c: [20, 0.004], w: [12, 0.002], mb: [0.2, 0.0027], s: [0.2, 0.004] },
+	"ompig-tinygo": { c: [60, 0.01], w: [30, 0.004], mb: [0.2, 0.0027], s: [0.3, 0.007] },
+	"ompig-go": { c: [110, 0.02], w: [35, 0.005], mb: [0.2, 0.0027], s: [0.3, 0.008] },
+	"ompig-native": { c: [20, 0.004], w: [12, 0.002], mb: [0.2, 0.0027], s: [0.2, 0.004] },
 	"ts-control": { c: [80, 0.03], w: [40, 0.008], mb: [0.2, 0.0027], s: [0.3, 0.009] },
 	empty: { c: [9, 0], w: [3, 0], mb: [0, 0], s: [0, 0] },
 };
@@ -115,7 +115,7 @@ const seed = (target, n, workload) => {
 };
 
 for (const t of Object.keys(curves).filter((t) => t !== "empty")) for (const n of SIZES) lines.push(seed(t, n, "standard"));
-for (const w of ["compact-big", "big"]) for (const t of ["pig-tinygo", "pi-head"]) for (const n of SIZES) lines.push(seed(t, n, w));
+for (const w of ["compact-big", "big"]) for (const t of ["ompig-tinygo", "pi-head"]) for (const n of SIZES) lines.push(seed(t, n, w));
 // One interleaved session: round-robin over targets within each size and round.
 for (let round = 0; round < meta.protocol.samples; round++)
 	for (const n of SIZES) {
@@ -125,15 +125,15 @@ for (let round = 0; round < meta.protocol.samples; round++)
 			lines.push(sample(t, n, "standard", meta.targets[t].build === "native" ? "native" : "miniflare", round));
 		}
 		for (const w of ["compact-big", "big"])
-			for (const t of ["pig-tinygo", "pi-head"]) lines.push(sample(t, n, w, "miniflare", round, w === "big" ? 1.5 : 0.9));
+			for (const t of ["ompig-tinygo", "pi-head"]) lines.push(sample(t, n, w, "miniflare", round, w === "big" ? 1.5 : 0.9));
 	}
-for (let k = 0; k < 5; k++) for (const n of [50, 3500]) for (const t of ["pig-tinygo", "pi-head", "tardie"]) lines.push(sample(t, n, "standard", "cloudflare", k, 0.6));
+for (let k = 0; k < 5; k++) for (const n of [50, 3500]) for (const t of ["ompig-tinygo", "pi-head", "tardie"]) lines.push(sample(t, n, "standard", "cloudflare", k, 0.6));
 
 // Where-it-runs probe and upload sizes (RUNNER-SPEC 4a), equally invented, for the Durable Object targets.
 const probeCurves = {
 	"pi-head": { rowsRead: [1200, 0.03], heap: [9e6, 3000], wasm: [0, 0], crossings: 0, hops: 0, core: 0, inst: 0 },
-	"pig-tinygo": { rowsRead: [500, 0], heap: [15e6, 1500], wasm: [6e6, 1500], crossings: 1300, hops: 310, core: 0.5, inst: 3 },
-	"pig-go": { rowsRead: [500, 0], heap: [15e6, 1500], wasm: [12e6, 2500], crossings: 1300, hops: 310, core: 0.55, inst: 20 },
+	"ompig-tinygo": { rowsRead: [500, 0], heap: [15e6, 1500], wasm: [6e6, 1500], crossings: 1300, hops: 310, core: 0.5, inst: 3 },
+	"ompig-go": { rowsRead: [500, 0], heap: [15e6, 1500], wasm: [12e6, 2500], crossings: 1300, hops: 310, core: 0.55, inst: 20 },
 };
 const probe = (target, n, mode, k) => {
 	const cv = curves[target];
@@ -166,7 +166,7 @@ const cfProbe = (target, n, k) => {
 	const { retained: _, ...rest } = x;
 	return { ...rest, host: "cloudflare", open: strip(x.open), turn: x.turn.map(strip) };
 };
-for (const [t, bytes, wasm] of [["pi-head", 900_000, 0], ["pig-tinygo", 1_700_000, 750_000], ["pig-go", 6_300_000, 5_300_000]]) lines.push({ t: "size", placeholder: true, target: t, version: meta.targets[t].version, bytes, wasm, gzip: Math.round(bytes * 0.27) });
+for (const [t, bytes, wasm] of [["pi-head", 900_000, 0], ["ompig-tinygo", 1_700_000, 750_000], ["ompig-go", 6_300_000, 5_300_000]]) lines.push({ t: "size", placeholder: true, target: t, version: meta.targets[t].version, bytes, wasm, gzip: Math.round(bytes * 0.27) });
 
-for (let k = 0; k < 3; k++) for (const n of [50, 3500]) for (const t of ["pi-head", "pig-tinygo"]) lines.push(cfProbe(t, n, k));
+for (let k = 0; k < 3; k++) for (const n of [50, 3500]) for (const t of ["pi-head", "ompig-tinygo"]) lines.push(cfProbe(t, n, k));
 process.stdout.write(`${lines.map((l) => JSON.stringify(l)).join("\n")}\n`);

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi main.ts:251-255 resolves a --session argument that contains a path
@@ -24,7 +24,7 @@ import (
 // and the file's directory, and _setSessionFile (session-manager.ts:1050-1054)
 // starts a new session that persists at the explicit path.
 func TestResolveStartupSessionSelectionOpensMissingSessionPath(t *testing.T) {
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
@@ -54,7 +54,7 @@ func TestResolveStartupSessionSelectionOpensMissingSessionPath(t *testing.T) {
 		cases = append(cases,
 			pathCase{arg: `~\tilde-backslash.jsonl`, want: filepath.Join(home, "tilde-backslash.jsonl")},
 			// Node resolves a rooted path without a drive on the process cwd's drive.
-			pathCase{arg: `\pig-rooted-session.jsonl`, want: filepath.VolumeName(processCWD) + `\pig-rooted-session.jsonl`},
+			pathCase{arg: `\ompig-rooted-session.jsonl`, want: filepath.VolumeName(processCWD) + `\ompig-rooted-session.jsonl`},
 			// A drive-relative path on the launch drive resolves against the launch cwd.
 			pathCase{arg: volume + "drive-relative.jsonl", want: filepath.Join(base, "drive-relative.jsonl")},
 			pathCase{arg: "/" + strings.ToLower(msysVolume[:1]) + filepath.ToSlash(msysTarget[len(msysVolume):]), want: msysTarget},
@@ -84,7 +84,7 @@ func TestResolveStartupSessionSelectionOpensMissingSessionPath(t *testing.T) {
 // Node reports the uncaught error headed by its name, code and message, and
 // exits 1. --fork resolves its argument the same way.
 func TestResolveStartupSessionSelectionReportsFileURLError(t *testing.T) {
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	want := "TypeError [ERR_INVALID_FILE_URL_PATH]: File URL path must not include encoded / characters"
 	if runtime.GOOS == "windows" {
 		want = `TypeError [ERR_INVALID_FILE_URL_PATH]: File URL path must not include encoded \ or / characters`
@@ -135,7 +135,7 @@ func TestPrintSessionPathCreatesSessionLikePi(t *testing.T) {
 		argv = append(argv, "--model", "test-faux/faux-1", "--no-context-files", "--no-skills", "--session", sessionPath, "-p", "What is 20+22?")
 		cmd := exec.CommandContext(t.Context(), command, argv...)
 		cmd.Dir = cwd
-		cmd.Env = append(os.Environ(), append([]string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "pig"), "PI_CODING_AGENT_DIR=" + filepath.Join(home, "pi")}, env...)...)
+		cmd.Env = append(os.Environ(), append([]string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "ompig"), "PI_CODING_AGENT_DIR=" + filepath.Join(home, "pi")}, env...)...)
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &stdout, &stderr
 		if err := cmd.Run(); err != nil {
@@ -170,9 +170,9 @@ func TestPrintSessionPathCreatesSessionLikePi(t *testing.T) {
 	if len(pi) == 0 || pi[0] != "session" || !slices.Contains(pi, "message:assistant") {
 		t.Fatalf("Pi session records = %v", pi)
 	}
-	pig := run(binary, nil, []string{"PIG_TEST_FAUX=1"})
-	if !slices.Equal(pig, pi) {
-		t.Fatalf("pig session records = %v, Pi = %v", pig, pi)
+	ompig := run(binary, nil, []string{"OMPIG_TEST_FAUX=1"})
+	if !slices.Equal(ompig, pi) {
+		t.Fatalf("ompig session records = %v, Pi = %v", ompig, pi)
 	}
 }
 
@@ -194,7 +194,7 @@ func TestSessionFileURLErrorComparedWithPi(t *testing.T) {
 		home := t.TempDir()
 		cmd := exec.CommandContext(t.Context(), command, append(argv, "--session", "file:///a%2Fb.jsonl", "-p", "hi")...)
 		cmd.Dir = t.TempDir()
-		cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "pig"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "pi"), "PIG_OFFLINE=1", "PI_OFFLINE=1")
+		cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "ompig"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "pi"), "OMPIG_OFFLINE=1", "PI_OFFLINE=1")
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &stdout, &stderr
 		code := 0
@@ -210,10 +210,10 @@ func TestSessionFileURLErrorComparedWithPi(t *testing.T) {
 	piOut, piErr, piCode := run(node, []string{piCLI})
 	// Node writes its uncaught-error report with CRLF line ends on Windows.
 	piErr = strings.ReplaceAll(piErr, "\r\n", "\n")
-	pigOut, pigErr, pigCode := run(binary, nil)
-	line := strings.TrimSuffix(pigErr, "\n")
-	if pigOut != piOut || pigCode != piCode || piCode != 1 || strings.Contains(line, "\n") || !strings.Contains(piErr, "\n"+line+"\n") {
-		t.Fatalf("pig stdout=%q stderr=%q exit=%d; Pi stdout=%q stderr=%q exit=%d", pigOut, pigErr, pigCode, piOut, piErr, piCode)
+	ompigOut, ompigErr, ompigCode := run(binary, nil)
+	line := strings.TrimSuffix(ompigErr, "\n")
+	if ompigOut != piOut || ompigCode != piCode || piCode != 1 || strings.Contains(line, "\n") || !strings.Contains(piErr, "\n"+line+"\n") {
+		t.Fatalf("ompig stdout=%q stderr=%q exit=%d; Pi stdout=%q stderr=%q exit=%d", ompigOut, ompigErr, ompigCode, piOut, piErr, piCode)
 	}
 }
 
@@ -240,7 +240,7 @@ func TestForkMissingOrInvalidSessionPathComparedWithPi(t *testing.T) {
 		setup(cwd)
 		cmd := exec.CommandContext(t.Context(), command, append(argv, "--fork", arg, "-p", "hi")...)
 		cmd.Dir = cwd
-		cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "pig"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "pi"), "PIG_OFFLINE=1", "PI_OFFLINE=1")
+		cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "ompig"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "pi"), "OMPIG_OFFLINE=1", "PI_OFFLINE=1")
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &stdout, &stderr
 		code := 0
@@ -251,7 +251,7 @@ func TestForkMissingOrInvalidSessionPathComparedWithPi(t *testing.T) {
 			}
 			code = exit.ExitCode()
 		}
-		// pig names the canonical path and Node keeps cwd as given; on Windows they differ when t.TempDir is an 8.3 short path.
+		// ompig names the canonical path and Node keeps cwd as given; on Windows they differ when t.TempDir is an 8.3 short path.
 		return stdout.String(), strings.ReplaceAll(strings.ReplaceAll(stderr.String(), canonicalTestPath(t, cwd), "<cwd>"), cwd, "<cwd>"), code
 	}
 	cases := []struct {
@@ -273,13 +273,13 @@ func TestForkMissingOrInvalidSessionPathComparedWithPi(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			piOut, piErr, piCode := run(node, []string{piCLI}, "source.jsonl", tc.setup)
-			pigOut, pigErr, pigCode := run(binary, nil, "source.jsonl", tc.setup)
+			ompigOut, ompigErr, ompigCode := run(binary, nil, "source.jsonl", tc.setup)
 			want := "Error: Cannot fork: source session file is empty or invalid: <cwd>" + string(filepath.Separator) + "source.jsonl\n"
 			if piErr != want || piCode != 1 {
 				t.Fatalf("Pi stderr=%q exit=%d; want %q exit 1", piErr, piCode, want)
 			}
-			if pigOut != piOut || pigErr != piErr || pigCode != piCode {
-				t.Fatalf("pig stdout=%q stderr=%q exit=%d; Pi stdout=%q stderr=%q exit=%d", pigOut, pigErr, pigCode, piOut, piErr, piCode)
+			if ompigOut != piOut || ompigErr != piErr || ompigCode != piCode {
+				t.Fatalf("ompig stdout=%q stderr=%q exit=%d; Pi stdout=%q stderr=%q exit=%d", ompigOut, ompigErr, ompigCode, piOut, piErr, piCode)
 			}
 		})
 	}

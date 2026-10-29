@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // agent-session-runtime.ts:254-255 `await options.setup(this.session.sessionManager)`: newSession's setup callback receives the new session's own

@@ -3,7 +3,7 @@
 # OpenSSF Scorecard lives in its own workflow because publish_results: true
 # requires a job that uses only allow-listed actions, no top-level env or
 # defaults, and no workflow-level write permissions. Publishing is what makes
-# https://api.scorecard.dev/projects/github.com/MichaelKinsy/PiG/badge work.
+# https://api.scorecard.dev/projects/github.com/tmih06/ompig/badge work.
 name: OpenSSF Scorecard
 
 on:

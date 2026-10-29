@@ -13,8 +13,8 @@ import (
 	xtrace "golang.org/x/exp/trace"
 )
 
-// pigFramePrefix starts the function name of every frame this module owns.
-const pigFramePrefix = "github.com/MichaelKinsy/PiG/"
+// ompigFramePrefix starts the function name of every frame this module owns.
+const ompigFramePrefix = "github.com/tmih06/ompig/"
 
 // traceHops runs fn under runtime/trace and counts what the code under test does while it runs: the scheduler hand-offs
 // it makes and the goroutines it starts. A hand-off is a goroutine blocked in this module's code (a channel, a mutex, a
@@ -71,7 +71,7 @@ func traceHops(t *testing.T, fn func()) (handoffs, started int) {
 		switch {
 		case from == xtrace.GoRunning && to == xtrace.GoWaiting:
 			for frame := range transition.Stack.Frames() {
-				if strings.HasPrefix(frame.Func, pigFramePrefix) {
+				if strings.HasPrefix(frame.Func, ompigFramePrefix) {
 					owned[id] = true
 					break
 				}

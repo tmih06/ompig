@@ -10,8 +10,8 @@ prompt = "What is 20+22?"
 timeout_seconds = 15
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session", "--no-context-files", "--no-skills", "--system-prompt", "Print admission probe."]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session", "--no-context-files", "--no-skills", "--system-prompt", "Print admission probe."]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session", "--no-context-files", "--no-skills", "--system-prompt", "Print admission probe."]
 

@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/payload"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/payload"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 func notice(kind abi.NoticeKind, id uint32, body string) abi.Notice {

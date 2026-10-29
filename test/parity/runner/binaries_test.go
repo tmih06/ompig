@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // splitPath must end at the root of an absolute path. On Windows the root is a
@@ -36,21 +36,21 @@ func TestSplitPathEndsAtTheRoot(t *testing.T) {
 }
 
 func TestResolvePigBinHonorsFreshBuildOverride(t *testing.T) {
-	bin := filepath.Join(t.TempDir(), "pig-under-test")
+	bin := filepath.Join(t.TempDir(), "ompig-under-test")
 	if err := os.WriteFile(bin, []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
-		t.Fatalf("write fake pig: %v", err)
+		t.Fatalf("write fake ompig: %v", err)
 	}
-	t.Setenv("PIG_PARITY_PIG_BIN", bin)
-	t.Setenv("PIG_BIN", filepath.Join(t.TempDir(), "wrong-pig"))
+	t.Setenv("OMPIG_PARITY_OMPIG_BIN", bin)
+	t.Setenv("OMPIG_BIN", filepath.Join(t.TempDir(), "wrong-ompig"))
 
 	got := ResolvePigBin(t)
 	if got.Path != bin {
-		t.Fatalf("ResolvePigBin path = %q, want PIG_PARITY_PIG_BIN %q", got.Path, bin)
+		t.Fatalf("ResolvePigBin path = %q, want OMPIG_PARITY_OMPIG_BIN %q", got.Path, bin)
 	}
-	if got.Label != "pig" {
+	if got.Label != "ompig" {
 		t.Fatalf("ResolvePigBin label = %q", got.Label)
 	}
-	// Pi's checkForNewPiVersion and PiG's D39 startup release check both stop
+	// Pi's checkForNewPiVersion and Ompig's D39 startup release check both stop
 	// on PI_SKIP_VERSION_CHECK; each side of the pair receives the same value.
 	if !slices.Contains(got.Env, "PI_SKIP_VERSION_CHECK=1") {
 		t.Fatalf("ResolvePigBin env = %v, want PI_SKIP_VERSION_CHECK=1", got.Env)
@@ -58,42 +58,42 @@ func TestResolvePigBinHonorsFreshBuildOverride(t *testing.T) {
 }
 
 func TestResolvePigBinFallsBackToPIGBin(t *testing.T) {
-	bin := filepath.Join(t.TempDir(), "pig-from-pig-bin")
+	bin := filepath.Join(t.TempDir(), "ompig-from-ompig-bin")
 	if err := os.WriteFile(bin, []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
-		t.Fatalf("write fake pig: %v", err)
+		t.Fatalf("write fake ompig: %v", err)
 	}
-	t.Setenv("PIG_PARITY_PIG_BIN", "")
-	t.Setenv("PIG_BIN", bin)
+	t.Setenv("OMPIG_PARITY_OMPIG_BIN", "")
+	t.Setenv("OMPIG_BIN", bin)
 
 	got := ResolvePigBin(t)
 	if got.Path != bin {
-		t.Fatalf("ResolvePigBin path = %q, want PIG_BIN %q", got.Path, bin)
+		t.Fatalf("ResolvePigBin path = %q, want OMPIG_BIN %q", got.Path, bin)
 	}
 }
 
 // TestPigBinUnderTestNoInstalledFallback pins that neither env var set resolves
-// to empty: the runner must never borrow an installed ~/.local/bin/pig, so a
+// to empty: the runner must never borrow an installed ~/.local/bin/ompig, so a
 // bare `go test` skips loudly instead of comparing against user state.
 func TestPigBinUnderTestNoInstalledFallback(t *testing.T) {
-	t.Setenv("PIG_PARITY_PIG_BIN", "")
-	t.Setenv("PIG_BIN", "")
-	if got := pigBinUnderTest(); got != "" {
-		t.Fatalf("pigBinUnderTest() = %q, want empty (no installed-pig fallback)", got)
+	t.Setenv("OMPIG_PARITY_OMPIG_BIN", "")
+	t.Setenv("OMPIG_BIN", "")
+	if got := ompigBinUnderTest(); got != "" {
+		t.Fatalf("ompigBinUnderTest() = %q, want empty (no installed-ompig fallback)", got)
 	}
 }
 
 func TestPigBinUnderTestPrefersParityEnv(t *testing.T) {
-	t.Setenv("PIG_PARITY_PIG_BIN", "/test/parity/pig")
-	t.Setenv("PIG_BIN", "/other/pig")
-	if got := pigBinUnderTest(); got != "/test/parity/pig" {
-		t.Fatalf("pigBinUnderTest() = %q, want PIG_PARITY_PIG_BIN precedence", got)
+	t.Setenv("OMPIG_PARITY_OMPIG_BIN", "/test/parity/ompig")
+	t.Setenv("OMPIG_BIN", "/other/ompig")
+	if got := ompigBinUnderTest(); got != "/test/parity/ompig" {
+		t.Fatalf("ompigBinUnderTest() = %q, want OMPIG_PARITY_OMPIG_BIN precedence", got)
 	}
 }
 
 func TestResolveUpstreamPiBinStagesOptedInRealAuth(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	authPath := filepath.Join(home, ".pig", "agent", "auth.json")
+	authPath := filepath.Join(home, ".ompig", "agent", "auth.json")
 	if err := os.MkdirAll(filepath.Dir(authPath), 0o700); err != nil {
 		t.Fatal(err)
 	}
@@ -101,9 +101,9 @@ func TestResolveUpstreamPiBinStagesOptedInRealAuth(t *testing.T) {
 	if err := os.WriteFile(authPath, auth, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_PARITY_REAL_AUTH", authPath)
+	t.Setenv("OMPIG_PARITY_REAL_AUTH", authPath)
 	bin := writeStampedFakePi(t, "pi-under-test")
-	t.Setenv("PIG_PARITY_PI_BIN", bin)
+	t.Setenv("OMPIG_PARITY_PI_BIN", bin)
 	resolved := ResolveUpstreamPiBin(t)
 	var agentDir string
 	for _, value := range resolved.Env {
@@ -118,16 +118,16 @@ func TestResolveUpstreamPiBinStagesOptedInRealAuth(t *testing.T) {
 }
 
 // TestResolveUpstreamPiBinNeverStagesRealAuthWithoutOptIn is the regression
-// guard for the privacy bug: real ~/.pig or ~/.pi credentials must never be
+// guard for the privacy bug: real ~/.ompig or ~/.pi credentials must never be
 // copied into Pi's parity agent directory unless the operator explicitly
-// names the file via PIG_PARITY_REAL_AUTH. Before the fix, ResolveUpstreamPiBin
-// scanned $HOME/.pi and $HOME/.pig unconditionally and staged whatever it
+// names the file via OMPIG_PARITY_REAL_AUTH. Before the fix, ResolveUpstreamPiBin
+// scanned $HOME/.pi and $HOME/.ompig unconditionally and staged whatever it
 // found, so this test failed (staged auth present) on the old code.
 func TestResolveUpstreamPiBinNeverStagesRealAuthWithoutOptIn(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_PARITY_REAL_AUTH", "")
-	authPath := filepath.Join(home, ".pig", "agent", "auth.json")
+	t.Setenv("OMPIG_PARITY_REAL_AUTH", "")
+	authPath := filepath.Join(home, ".ompig", "agent", "auth.json")
 	if err := os.MkdirAll(filepath.Dir(authPath), 0o700); err != nil {
 		t.Fatal(err)
 	}
@@ -136,7 +136,7 @@ func TestResolveUpstreamPiBinNeverStagesRealAuthWithoutOptIn(t *testing.T) {
 		t.Fatal(err)
 	}
 	bin := writeStampedFakePi(t, "pi-under-test")
-	t.Setenv("PIG_PARITY_PI_BIN", bin)
+	t.Setenv("OMPIG_PARITY_PI_BIN", bin)
 	resolved := ResolveUpstreamPiBin(t)
 	var agentDir string
 	for _, value := range resolved.Env {
@@ -158,7 +158,7 @@ func TestResolveUpstreamPiBinNeverStagesRealAuthWithoutOptIn(t *testing.T) {
 // to call t.Fatalf/t.Skipf and merely observe the outcome. Re-executing this
 // same compiled test binary as a child process (the standard os/exec_test.go
 // technique) gives a real, isolated pass/fail/skip outcome to assert on.
-const versionMismatchHelperEnv = "PIG_TEST_VERSION_MISMATCH_HELPER"
+const versionMismatchHelperEnv = "OMPIG_TEST_VERSION_MISMATCH_HELPER"
 
 // TestVersionMismatchHelperProcess is not a real test; it is invoked only as
 // a subprocess by runVersionMismatchHelper.
@@ -218,7 +218,7 @@ func runVersionMismatchHelper(t *testing.T, extraEnv ...string) helperOutcome {
 // old code.
 func TestResolveUpstreamPiBinFailsOnVersionMismatchByDefault(t *testing.T) {
 	bin := writeFakePi(t, "pi-wrong-version", "0.0.0-not-the-pin")
-	outcome := runVersionMismatchHelper(t, "PIG_PARITY_PI_BIN="+bin, "PIG_PARITY_ALLOW_VERSION_SKEW=")
+	outcome := runVersionMismatchHelper(t, "OMPIG_PARITY_PI_BIN="+bin, "OMPIG_PARITY_ALLOW_VERSION_SKEW=")
 	if !outcome.failed || outcome.skipped || outcome.passed {
 		t.Fatalf("version mismatch: %+v, want failed=true (a mismatched reference pi must fail the run, not skip it)\n%s",
 			outcome, outcome.output)
@@ -226,11 +226,11 @@ func TestResolveUpstreamPiBinFailsOnVersionMismatchByDefault(t *testing.T) {
 }
 
 // TestResolveUpstreamPiBinAllowsVersionSkewWithOptOut proves the explicit
-// opt-out still works: PIG_PARITY_ALLOW_VERSION_SKEW=1 turns the failure back
+// opt-out still works: OMPIG_PARITY_ALLOW_VERSION_SKEW=1 turns the failure back
 // into a skip.
 func TestResolveUpstreamPiBinAllowsVersionSkewWithOptOut(t *testing.T) {
 	bin := writeFakePi(t, "pi-wrong-version", "0.0.0-not-the-pin")
-	outcome := runVersionMismatchHelper(t, "PIG_PARITY_PI_BIN="+bin, "PIG_PARITY_ALLOW_VERSION_SKEW=1")
+	outcome := runVersionMismatchHelper(t, "OMPIG_PARITY_PI_BIN="+bin, "OMPIG_PARITY_ALLOW_VERSION_SKEW=1")
 	if outcome.failed || !outcome.skipped {
 		t.Fatalf("version mismatch with opt-out: %+v, want skipped=true\n%s", outcome, outcome.output)
 	}
@@ -245,7 +245,7 @@ func TestResolveUpstreamPiBinFailsWhenVersionCheckErrorsByDefault(t *testing.T) 
 	if err := os.WriteFile(bin, []byte("not an executable\n"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	outcome := runVersionMismatchHelper(t, "PIG_PARITY_PI_BIN="+bin, "PIG_PARITY_ALLOW_VERSION_SKEW=")
+	outcome := runVersionMismatchHelper(t, "OMPIG_PARITY_PI_BIN="+bin, "OMPIG_PARITY_ALLOW_VERSION_SKEW=")
 	if !outcome.failed || outcome.skipped || outcome.passed {
 		t.Fatalf("broken reference pi: %+v, want failed=true\n%s", outcome, outcome.output)
 	}
@@ -253,11 +253,11 @@ func TestResolveUpstreamPiBinFailsWhenVersionCheckErrorsByDefault(t *testing.T) 
 
 func TestResolveUpstreamPiBinHonorsExplicitOverride(t *testing.T) {
 	bin := writeStampedFakePi(t, "pi-under-test")
-	t.Setenv("PIG_PARITY_PI_BIN", bin)
+	t.Setenv("OMPIG_PARITY_PI_BIN", bin)
 
 	got := ResolveUpstreamPiBin(t)
 	if got.Path != bin {
-		t.Fatalf("ResolveUpstreamPiBin path = %q, want PIG_PARITY_PI_BIN %q", got.Path, bin)
+		t.Fatalf("ResolveUpstreamPiBin path = %q, want OMPIG_PARITY_PI_BIN %q", got.Path, bin)
 	}
 	if got.Label != "pi" {
 		t.Fatalf("ResolveUpstreamPiBin label = %q", got.Label)
@@ -270,15 +270,15 @@ func TestResolveUpstreamPiBinHonorsExplicitOverride(t *testing.T) {
 }
 
 // TestResolveUpstreamPiBinMiseInstallSkipsVersionCheck covers the mise install
-// branch, the default local oracle, which the PIG_PARITY_PI_BIN test above does
+// branch, the default local oracle, which the OMPIG_PARITY_PI_BIN test above does
 // not reach.
 func TestResolveUpstreamPiBinMiseInstallSkipsVersionCheck(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_PARITY_PI_BIN", "")
-	t.Setenv("PIG_PARITY_REAL_AUTH", "")
-	t.Setenv("PIG_PARITY_PI_PUBLISHED", "1")
+	t.Setenv("OMPIG_PARITY_PI_BIN", "")
+	t.Setenv("OMPIG_PARITY_REAL_AUTH", "")
+	t.Setenv("OMPIG_PARITY_PI_PUBLISHED", "1")
 	if coding.UpstreamVersion != coding.UpstreamPackageVersion {
 		if publishedOracleAllowed() {
 			t.Fatal("a commit pin has no published Pi: the opt-in must not select a mise install")
@@ -308,7 +308,7 @@ func writeStampedFakePi(t *testing.T, name string) string {
 	t.Helper()
 	bin := writeFakePi(t, name, coding.UpstreamPackageVersion)
 	stamp := `{"commit":"` + coding.UpstreamCommit + `","source":"build"}`
-	if err := os.WriteFile(filepath.Join(filepath.Dir(bin), ".pig-pi-oracle.json"), []byte(stamp), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(filepath.Dir(bin), ".ompig-pi-oracle.json"), []byte(stamp), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	return bin

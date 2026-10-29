@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Generate and pack PiG's npm packages from verified release archives.
+"""Generate and pack Ompig's npm packages from verified release archives.
 
-PiG ships on npm as `@pi-in-go/pig`, a tiny Node launcher, plus seven platform
-packages `@pi-in-go/pig-<os>-<cpu>` that each carry one native binary (the
+Ompig ships on npm as `@ompig/ompig`, a tiny Node launcher, plus seven platform
+packages `@ompig/ompig-<os>-<cpu>` that each carry one native binary (the
 esbuild/biome optionalDependencies pattern; nothing is downloaded at install
 time). Binaries come ONLY from the release archives that release-candidate.yml
 builds: every archive is verified against SHA256SUMS before anything is
@@ -12,7 +12,7 @@ extracted from it.
 Usage:
   pack_npm.py --archives DIR --version 0.2.0 --out DIR [--no-pack]
 
-DIR must hold SHA256SUMS and pig-<version>-<goos>-<goarch>.{tar.gz,zip} for all
+DIR must hold SHA256SUMS and ompig-<version>-<goos>-<goarch>.{tar.gz,zip} for all
 seven targets. The output directory receives one package directory per package
 and, unless --no-pack, the `npm pack` tarballs plus `publish-order.txt`
 ("<package name> <tarball>" per line; platform packages first, launcher last).
@@ -35,16 +35,16 @@ import zipfile
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-import pig_package  # noqa: E402
+import ompig_package  # noqa: E402
 
-LAUNCHER = pig_package.package_name()
+LAUNCHER = ompig_package.package_name()
 SCOPE = LAUNCHER.split("/", 1)[0]
-REPOSITORY = {"type": "git", "url": "git+https://github.com/MichaelKinsy/PiG.git"}
-HOMEPAGE = "https://pi-in-go.dev"
-BUGS = "https://github.com/MichaelKinsy/PiG/issues"
+REPOSITORY = {"type": "git", "url": "git+https://github.com/tmih06/ompig.git"}
+HOMEPAGE = "https://ompig.dev"
+BUGS = "https://github.com/tmih06/ompig/issues"
 LICENSE = "MIT"
 NOTICE_FILES = ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md")
-PIGVERSION_GO = HERE.parents[2] / "internal" / "coding" / "pigversion" / "pigversion.go"
+OMPIGVERSION_GO = HERE.parents[2] / "internal" / "coding" / "pigversion" / "pigversion.go"
 
 # (goos, goarch) in release archive names -> (npm os, npm cpu).
 TARGETS = {
@@ -65,19 +65,19 @@ class PackError(Exception):
 
 
 def package_name(npm_os: str, npm_cpu: str) -> str:
-    return f"{SCOPE}/pig-{npm_os}-{npm_cpu}"
+    return f"{SCOPE}/ompig-{npm_os}-{npm_cpu}"
 
 
 def archive_name(version: str, goos: str, goarch: str) -> str:
     suffix = "zip" if goos == "windows" else "tar.gz"
-    return f"pig-{version}-{goos}-{goarch}.{suffix}"
+    return f"ompig-{version}-{goos}-{goarch}.{suffix}"
 
 
 def binary_name(goos: str) -> str:
-    return "pig.exe" if goos == "windows" else "pig"
+    return "ompig.exe" if goos == "windows" else "ompig"
 
 
-def upstream_version(path: pathlib.Path = PIGVERSION_GO) -> str | None:
+def upstream_version(path: pathlib.Path = OMPIGVERSION_GO) -> str | None:
     try:
         match = re.search(r'^const UpstreamPackageVersion = "([^"]+)"$', path.read_text(), re.M)
     except OSError:
@@ -86,7 +86,7 @@ def upstream_version(path: pathlib.Path = PIGVERSION_GO) -> str | None:
 
 
 def npm_version(release_version: str) -> str:
-    """The npm version: the PiG release version without build metadata."""
+    """The npm version: the Ompig release version without build metadata."""
     version = release_version.removeprefix("v").split("+", 1)[0]
     if not SEMVER.match(version):
         raise PackError(f"not a semantic version: {release_version!r}")
@@ -95,7 +95,7 @@ def npm_version(release_version: str) -> str:
 
 def description(pi_base: str | None) -> str:
     base = f" (based on Pi {pi_base})" if pi_base else ""
-    return f"PiG, the Go port of the Pi coding agent{base}"
+    return f"Ompig, the Go port of the Pi coding agent{base}"
 
 
 def platform_manifest(version: str, npm_os: str, npm_cpu: str, goos: str, pi_base: str | None) -> dict:
@@ -124,9 +124,9 @@ def launcher_manifest(version: str, pi_base: str | None) -> dict:
         "homepage": HOMEPAGE,
         "bugs": BUGS,
         "repository": REPOSITORY,
-        "keywords": ["pig", "pi", "coding-agent", "cli", "ai"],
-        "bin": {"pig": "bin/pig.js"},
-        "files": ["bin/pig.js", "README.md", "LICENSE", "NOTICE"],
+        "keywords": ["ompig", "pi", "coding-agent", "cli", "ai"],
+        "bin": {"ompig": "bin/ompig.js"},
+        "files": ["bin/ompig.js", "README.md", "LICENSE", "NOTICE"],
         "engines": {"node": ">=18"},
         "optionalDependencies": optional,
     }
@@ -197,32 +197,32 @@ def write_json(path: pathlib.Path, data: dict) -> None:
 def platform_readme(name: str, npm_os: str, npm_cpu: str) -> str:
     return (
         f"# {name}\n\n"
-        f"The native `pig` binary for {npm_os}-{npm_cpu}. Do not install this package directly;\n"
+        f"The native `ompig` binary for {npm_os}-{npm_cpu}. Do not install this package directly;\n"
         f"install [`{LAUNCHER}`](https://www.npmjs.com/package/{LAUNCHER}), which selects it.\n"
     )
 
 
 def launcher_readme(version: str, pi_base: str | None) -> str:
-    base = f" PiG {version} is based on Pi {pi_base}." if pi_base else ""
+    base = f" Ompig {version} is based on Pi {pi_base}." if pi_base else ""
     return f"""# {LAUNCHER}
 
-PiG is the Go port of the Pi coding agent.{base}
+Ompig is the Go port of the Pi coding agent.{base}
 
 ```bash
-npm install -g {LAUNCHER}     # install `pig`
+npm install -g {LAUNCHER}     # install `ompig`
 npx {LAUNCHER} --version      # or run it without installing
 npm update -g {LAUNCHER}      # update
 npm uninstall -g {LAUNCHER}   # uninstall
 ```
 
-`pig` is a native binary. npm installs the one matching your platform
-(`@pi-in-go/pig-<os>-<cpu>`, as an optional dependency) and this package's small
+`ompig` is a native binary. npm installs the one matching your platform
+(`@ompig/ompig-<os>-<cpu>`, as an optional dependency) and this package's small
 Node.js (>= 18) launcher runs it. Supported: macOS, Linux and Windows on x64
 and arm64, and Android on arm64 through Termux. Installing with `--no-optional`/`--omit=optional` leaves the binary
 out; reinstall without that flag.
 
 Other install methods, documentation and source: {HOMEPAGE} and
-https://github.com/MichaelKinsy/PiG.
+https://github.com/tmih06/ompig.
 """
 
 
@@ -243,7 +243,7 @@ def generate(archives: pathlib.Path, release_version: str, out: pathlib.Path, pi
             raise PackError(f"missing release archive {archive.name}")
         verify_archive(archive, sums)
         binary = binary_name(goos)
-        members = read_members(archive, f"pig-{archive_version}-{goos}-{goarch}", [binary, *NOTICE_FILES])
+        members = read_members(archive, f"ompig-{archive_version}-{goos}-{goarch}", [binary, *NOTICE_FILES])
         name = package_name(npm_os, npm_cpu)
         pkg_dir = out / name.split("/", 1)[1]
         if pkg_dir.exists():
@@ -259,12 +259,12 @@ def generate(archives: pathlib.Path, release_version: str, out: pathlib.Path, pi
         write_json(pkg_dir / "package.json", platform_manifest(version, npm_os, npm_cpu, goos, pi_base))
         order.append(pkg_dir)
 
-    launcher_dir = out / "pig"
+    launcher_dir = out / "ompig"
     if launcher_dir.exists():
         shutil.rmtree(launcher_dir)
     (launcher_dir / "bin").mkdir(parents=True)
-    script = launcher_dir / "bin" / "pig.js"
-    shutil.copyfile(HERE / "launcher" / "bin" / "pig.js", script)
+    script = launcher_dir / "bin" / "ompig.js"
+    shutil.copyfile(HERE / "launcher" / "bin" / "ompig.js", script)
     script.chmod(script.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     for notice in ("LICENSE", "NOTICE"):
         (launcher_dir / notice).write_bytes(notices[notice])
@@ -312,7 +312,7 @@ def packed_filename(parsed: object, name: str) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--archives", required=True, type=pathlib.Path, help="directory with SHA256SUMS and the seven archives")
-    parser.add_argument("--version", required=True, help="PiG release version, e.g. 0.2.0")
+    parser.add_argument("--version", required=True, help="Ompig release version, e.g. 0.2.0")
     parser.add_argument("--out", required=True, type=pathlib.Path, help="output directory")
     parser.add_argument("--pi-base", default=None, help="Pi base version for descriptions (default: internal/coding/pigversion)")
     parser.add_argument("--no-pack", action="store_true", help="generate directories only")

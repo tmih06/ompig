@@ -3,7 +3,7 @@ package tui
 import (
 	"math"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // overlaySize is an internal absolute-cell or terminal-percentage value.
@@ -199,7 +199,7 @@ func (m *modalOverlay) renderModal(width, height int) []string {
 func (m *modalOverlay) Invalidate() { m.component.Invalidate() }
 
 // HandleMouse hands an event inside the box to the framed component, at
-// its own cells, as the component would take it without PiG's titled box,
+// its own cells, as the component would take it without Ompig's titled box,
 // which Pi's ui.custom does not have.
 func (m *modalOverlay) HandleMouse(event TuiMouseEvent) *TuiMouseDispatchResult {
 	if m.framed == nil {

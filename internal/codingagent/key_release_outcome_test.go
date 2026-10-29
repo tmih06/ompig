@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestKeyReleaseDoesNotDuplicateInput asserts the resulting value after a
@@ -18,7 +18,7 @@ import (
 // consumers that never called it were doubling every keystroke. A predicate
 // test proves the predicate; only an outcome test proves the consumer.
 //
-// pig requests Kitty keyboard flag 2, so a terminal reports press and release
+// ompig requests Kitty keyboard flag 2, so a terminal reports press and release
 // for every key. Any consumer that dispatches raw input must act on the press
 // alone.
 func TestKeyReleaseDoesNotDuplicateInput(t *testing.T) {

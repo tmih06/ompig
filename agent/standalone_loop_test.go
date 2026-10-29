@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Tests for upstream's standalone loop API (packages/agent/src/agent-loop.ts:
@@ -657,7 +657,7 @@ func TestAgentPassesGetAPIKeyToItsRuns(t *testing.T) {
 }
 
 // upstream: agentLoop starts `void runAgentLoop(...).then(...)` with no rejection handler, so a failing run is an
-// unhandled rejection that Node reports on the process. PiG reports it on the process log and ends the stream with the messages produced so far, because a Go consumer of Events would otherwise wait forever.
+// unhandled rejection that Node reports on the process. Ompig reports it on the process log and ends the stream with the messages produced so far, because a Go consumer of Events would otherwise wait forever.
 func TestAgentLoop_ReportsARunFailureOnTheProcessLogAndEndsTheStream(t *testing.T) {
 	var logged bytes.Buffer
 	previous := slog.Default()

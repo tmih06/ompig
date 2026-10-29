@@ -69,7 +69,7 @@ path = "packages/ai/src/api/openai-codex-responses.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/user_agent_test.go#TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent"]
-rationale = "Two changes since 1.0.4. (1) #10429 sets the originator and User-Agent defaults first so model and caller headers override them. ai/openai_codex_responses.go builds the defaults then lets cfg.ExtraHeaders replace them case-insensitively. Mutant: ignoring the model's originator/user-agent headers fails TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent (originator = \"pig\", want the model header). The default originator is PiG under D26. (2) The zstd body is now a copy typed Uint8Array<ArrayBuffer> (TypeScript lib typing for fetch bodies); the bytes sent are the same, and Go sends the []byte directly, so this part is not observable and has no Go counterpart."
+rationale = "Two changes since 1.0.4. (1) #10429 sets the originator and User-Agent defaults first so model and caller headers override them. ai/openai_codex_responses.go builds the defaults then lets cfg.ExtraHeaders replace them case-insensitively. Mutant: ignoring the model's originator/user-agent headers fails TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent (originator = \"ompig\", want the model header). The default originator is Ompig under D26. (2) The zstd body is now a copy typed Uint8Array<ArrayBuffer> (TypeScript lib typing for fetch bodies); the bytes sent are the same, and Go sends the []byte directly, so this part is not observable and has no Go counterpart."
 
 [[files]]
 path = "packages/ai/src/api/openai-decisions.lazy.ts"
@@ -118,7 +118,7 @@ path = "packages/ai/src/auth/oauth/openai-codex.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/login_agent_name_oracle_test.go#TestLoginAgentNameMatchesPi"]
-rationale = "The 1.1.0 change passes options.agentName to createAuthorizationFlow so it becomes the Codex originator. ai/oauth_openai_codex.go does the same with PiG default originator under D26. Ignoring the option fails TestLoginAgentNameMatchesPi."
+rationale = "The 1.1.0 change passes options.agentName to createAuthorizationFlow so it becomes the Codex originator. ai/oauth_openai_codex.go does the same with Ompig default originator under D26. Ignoring the option fails TestLoginAgentNameMatchesPi."
 
 [[files]]
 path = "packages/ai/src/auth/types.ts"
@@ -139,7 +139,7 @@ path = "packages/ai/src/providers/compat-schema.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/codingagent/model_config_oracle_test.go#TestModelsJSONSchemaErrorsMatchPi"]
-rationale = "ProviderCompatSchema is one merged object (completions, responses, anthropic, bedrock, mistral properties in merge order, additional properties allowed). internal/codingagent/configschema.ProviderCompatSchema is that schema and configschema/validate.go checks models.json against it; TestModelsJSONSchemaErrorsMatchPi replays curated and seeded documents against the 42a build (17 differed before). Residual: Pig decodes compat into typed structs, so an unknown compat key is accepted by the schema but not carried through to a provider."
+rationale = "ProviderCompatSchema is one merged object (completions, responses, anthropic, bedrock, mistral properties in merge order, additional properties allowed). internal/codingagent/configschema.ProviderCompatSchema is that schema and configschema/validate.go checks models.json against it; TestModelsJSONSchemaErrorsMatchPi replays curated and seeded documents against the 42a build (17 differed before). Residual: Ompig decodes compat into typed structs, so an unknown compat key is accepted by the schema but not carried through to a provider."
 
 [[files]]
 path = "packages/ai/src/providers/faux.ts"
@@ -314,7 +314,7 @@ path = "packages/codemode/src/runtime/worker.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "worker.ts is the worker thread's entry: it reads workerData, starts startVm with an Atomics interrupt flag, relays host messages to the session and posts a `crash` message when startVm rejects. PiG runs the VM in this process on a goroutine (workerChannel.run in codemode/workerlauncher.go) with an atomic flag, delivers results through a channel, and reports a VM that cannot start as a sandbox error. Only the text of that error differs (`Failed to start the VM: <cause>` against `<Name>: <message>` of QuickJS.create), because the cause is an engine error: wazero and quickjs-wasi word it differently. The 1.1.0 change is the move of the VM driver into vm.ts, which codemode/vmdriver.go carries."
+rationale = "worker.ts is the worker thread's entry: it reads workerData, starts startVm with an Atomics interrupt flag, relays host messages to the session and posts a `crash` message when startVm rejects. Ompig runs the VM in this process on a goroutine (workerChannel.run in codemode/workerlauncher.go) with an atomic flag, delivers results through a channel, and reports a VM that cannot start as a sandbox error. Only the text of that error differs (`Failed to start the VM: <cause>` against `<Name>: <message>` of QuickJS.create), because the cause is an engine error: wazero and quickjs-wasi word it differently. The 1.1.0 change is the move of the VM driver into vm.ts, which codemode/vmdriver.go carries."
 
 [[files]]
 path = "packages/codemode/src/types.ts"
@@ -447,7 +447,7 @@ path = "packages/coding-agent/src/core/settings-schema.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "Pi generates schemas/settings.schema.json from this TypeBox schema. PiG does not ship Pi's generated JSON Schema artifacts or their generator (scripts/generate-schemas.ts); the runtime behavior the schema pins (settings accessors, $schema preservation, legacy migrations) is covered by the settings oracles. Revisit if PiG publishes its own schemas."
+rationale = "Pi generates schemas/settings.schema.json from this TypeBox schema. Ompig does not ship Pi's generated JSON Schema artifacts or their generator (scripts/generate-schemas.ts); the runtime behavior the schema pins (settings accessors, $schema preservation, legacy migrations) is covered by the settings oracles. Revisit if Ompig publishes its own schemas."
 
 [[files]]
 path = "packages/coding-agent/src/core/tools/renderers/bash.ts"
@@ -538,14 +538,14 @@ path = "packages/coding-agent/src/extensions/mcp/cli.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthGivesUpOnPigMcpLoginAfterTimeoutAlsoWhileTheAuthorizationServerHangs"]
-rationale = "`pig mcp login --timeout` limits the whole sign-in, including requests to the authorization server (#10565): coding/mcpext/cli.go runs SignInMcpServer under context.WithTimeout of the command context, and the redirect prompt (waitForRedirectUrl) returns when that context ends instead of running its own timer. The timeout does not cover the reconnect after the sign-in."
+rationale = "`ompig mcp login --timeout` limits the whole sign-in, including requests to the authorization server (#10565): coding/mcpext/cli.go runs SignInMcpServer under context.WithTimeout of the command context, and the redirect prompt (waitForRedirectUrl) returns when that context ends instead of running its own timer. The timeout does not cover the reconnect after the sign-in."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/index.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcpext/responsive_test.go#TestMcpCommandOpensTheManagerBeforeTheStartupConnectionsFinish", "test:coding/mcpext/responsive_test.go#TestMcpManagerEnablesAServerInTheBackground", "test:coding/mcpext/responsive_test.go#TestMcpDirectToolCallWaitsForItsServersReconnect", "test:coding/mcpext/responsive_test.go#TestMcpPreparedToolCallResolvesTheConnectionWhenItExecutes", "test:coding/mcpext/manager_test.go#TestMcpManagerReconnectRunsInTheBackgroundWithoutAStatusScreen", "test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthCancelsASignInWaitingOnTheAuthorizationServerWhenTheSessionShutsDown", "test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthClosesTheSessionWithoutRefreshingAnExpiringToken"]
-rationale = "The manager stays responsive (#10562): `/mcp` opens before the startup connections finish, reconnect/enable/disable run in the background behind an attempt token, reconnects and replacements are serialized, direct tool calls wait for their own server, and a prepared call resolves the current connection when it executes. One session context replaces the generation counter (#10565): sign-ins stop on the cancel key and on session shutdown and are tracked so shutdown waits for them (coding/mcpext/extension.go, background.go, manager.go, command.go). Upstream added no test for #10562; the Go tests are PiG regression tests for its changelog and commit message."
+rationale = "The manager stays responsive (#10562): `/mcp` opens before the startup connections finish, reconnect/enable/disable run in the background behind an attempt token, reconnects and replacements are serialized, direct tool calls wait for their own server, and a prepared call resolves the current connection when it executes. One session context replaces the generation counter (#10565): sign-ins stop on the cancel key and on session shutdown and are tracked so shutdown waits for them (coding/mcpext/extension.go, background.go, manager.go, command.go). Upstream added no test for #10562; the Go tests are Ompig regression tests for its changelog and commit message."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/oauth.ts"
@@ -566,7 +566,7 @@ path = "packages/coding-agent/src/main.ts"
 change = "modified"
 disposition = "unchanged-observable"
 evidence = ["test:tui/theme_json_validate_oracle_test.go#TestThemeJSONValidationMatchesPi", "test:coding/resource_loader_extend_test.go#TestDefaultResourceLoaderAppliesStrictThemeValidationOnReload"]
-rationale = "setThemeJsonValidator moves before runtime creation so commands and startup selectors validate user themes. PiG validates every user-authored theme in LoadThemeFile on every path, so the guard test passes unchanged (not red-proven)."
+rationale = "setThemeJsonValidator moves before runtime creation so commands and startup selectors validate user themes. Ompig validates every user-authored theme in LoadThemeFile on every path, so the guard test passes unchanged (not red-proven)."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/bash-execution.ts"
@@ -678,7 +678,7 @@ path = "packages/coding-agent/src/package-manager-cli.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = ["test:internal/codingagent/selfupdate_test.go#TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable"]
-rationale = "The only 1.1.0 change is pruneManagedReleases (#10392), which deletes old npm managed-release directories after pi update and keeps the new release and the running one. A standalone pig has no release directory (D39): a replacement keeps only the new executable, which the test asserts, so there is nothing to prune."
+rationale = "The only 1.1.0 change is pruneManagedReleases (#10392), which deletes old npm managed-release directories after pi update and keeps the new release and the running one. A standalone ompig has no release directory (D39): a replacement keeps only the new executable, which the test asserts, so there is nothing to prune."
 
 [[files]]
 path = "packages/coding-agent/src/utils/ansi.ts"
@@ -769,7 +769,7 @@ path = "packages/durable/src/harness/agent.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/agent_resolve_pi_oracle_test.go#TestResolveAgentMatchesPi", "test:durable/harness/agent_model_tools_test.go#TestAddToolsExtendsToolsAndModelTools", "test:durable/harness/agent_callers_e2e_test.go#TestModelToolsNarrowWhatTheModelIsOfferedLeavingTheRestCallableByTools", "test:durable/harness/document_retention_test.go#TestResolveSettingsDocumentRetention"]
-rationale = "The 1.1.0 change adds modelTools (a second filter over the enabled tools), the callable list for nested calls, addTools applied to both filters, and the contextRetentionMs and documentRetentionMs defaults. durable/harness/agent.go resolves all of them, and TestResolveAgentMatchesPi drives Pi's resolveAgent and Pig's over seeded agents. Existing tests; no mutant was run in this delta."
+rationale = "The 1.1.0 change adds modelTools (a second filter over the enabled tools), the callable list for nested calls, addTools applied to both filters, and the contextRetentionMs and documentRetentionMs defaults. durable/harness/agent.go resolves all of them, and TestResolveAgentMatchesPi drives Pi's resolveAgent and Ompig's over seeded agents. Existing tests; no mutant was run in this delta."
 
 [[files]]
 path = "packages/durable/src/harness/compaction.ts"
@@ -811,7 +811,7 @@ path = "packages/durable/src/harness/inbox.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/submissions_pi_oracle_test.go#TestAdmitSubmissionMatchesPiOnSeededPrograms", "test:durable/harness/submissions_pi_oracle_test.go#TestAdmitInputEntryMatchesPiOnSeededPrograms", "test:durable/harness/submissions_display_only_test.go#TestDisplayOnlyWritesAreAppendedAtOnce", "test:durable/harness/harness_inbox_test.go#TestInbox"]
-rationale = "The 1.1.0 change adds InboxItem.entry for inputs placed as an application entry, appendInput, pickInputEntry, isDisplayOnly and hasQueuedReset. Fixed in this delta: Pig had no isDisplayOnly or hasQueuedReset, so a data-only write queued behind a busy run and TestAdmitSubmissionMatchesPiOnSeededPrograms differed from Pi in 1454 answers (submission IDs diverged by one per skipped queue step). durable/harness/inbox.go now has both helpers and ApplyBoundary uses hasQueuedReset. harness_inbox_test.go and harness_ownership_test.go take Pi's queuedNote change from harness-inbox.test.ts and harness-ownership.test.ts."
+rationale = "The 1.1.0 change adds InboxItem.entry for inputs placed as an application entry, appendInput, pickInputEntry, isDisplayOnly and hasQueuedReset. Fixed in this delta: Ompig had no isDisplayOnly or hasQueuedReset, so a data-only write queued behind a busy run and TestAdmitSubmissionMatchesPiOnSeededPrograms differed from Pi in 1454 answers (submission IDs diverged by one per skipped queue step). durable/harness/inbox.go now has both helpers and ApplyBoundary uses hasQueuedReset. harness_inbox_test.go and harness_ownership_test.go take Pi's queuedNote change from harness-inbox.test.ts and harness-ownership.test.ts."
 
 [[files]]
 path = "packages/durable/src/harness/live.ts"
@@ -839,7 +839,7 @@ path = "packages/durable/src/harness/task-graph.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/task_graph_pi_oracle_test.go#TestTaskGraphViewMatchesPiOnSeededPrograms", "test:durable/harness/harness_task_graph_test.go#TestTaskGraphView", "test:durable/harness/harness_storage_failure_test.go#TestAFailedStorageCall"]
-rationale = "The 1.1.0 change routes commit publications through observeCommits, contains and reports a throwing observer, ends watches with session_failed, and builds CommittedWatch with a report callback. The seeded oracle compares Pi's graph view and Pig's, and TestAFailedStorageCall asserts the session_failed end of a watch and a stream. Existing tests; no mutant was run in this delta."
+rationale = "The 1.1.0 change routes commit publications through observeCommits, contains and reports a throwing observer, ends watches with session_failed, and builds CommittedWatch with a report callback. The seeded oracle compares Pi's graph view and Ompig's, and TestAFailedStorageCall asserts the session_failed end of a watch and a stream. Existing tests; no mutant was run in this delta."
 
 [[files]]
 path = "packages/durable/src/harness/tool.ts"
@@ -867,7 +867,7 @@ path = "packages/durable/src/harness/view.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/view_pi_oracle_test.go#TestConversationViewsMatchPi", "test:durable/harness/harness_view_test.go#TestConversationView", "test:durable/harness/harness_storage_failure_test.go#TestAFailedStorageCall"]
-rationale = "The 1.1.0 change moves view mounts to observeCommits, contains a throwing observer and reports it through the Harness (the others still get the revision), and ends observers with the Session failure on close. The seeded oracle compares Pi's views and Pig's. Existing tests; no mutant was run in this delta."
+rationale = "The 1.1.0 change moves view mounts to observeCommits, contains a throwing observer and reports it through the Harness (the others still get the revision), and ends observers with the Session failure on close. The seeded oracle compares Pi's views and Ompig's. Existing tests; no mutant was run in this delta."
 
 [[files]]
 path = "packages/durable/src/images/cloudflare.ts"

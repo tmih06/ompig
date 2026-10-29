@@ -150,6 +150,10 @@ for (const [name, path] of Object.entries(files)) {
 			}
 			effective := map[string][]string{}
 			for action, keys := range kb.GetEffectiveConfig() {
+				// ompig divergence (D-SUBAGENT-5): app.agents.hub is ompig-only.
+				if action == "app.agents.hub" {
+					continue
+				}
 				if keys.Keys != nil {
 					effective[action] = keys.Keys
 				} else {

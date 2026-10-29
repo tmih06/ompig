@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // DetectToolConflicts reports each later tool registration with its first owner, in the order DetectExtensionConflicts reports the same conflicts, and no flag conflict.

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 // extensionSource is the rewritten extension file of a plan, without the
@@ -150,10 +150,10 @@ func TestGetterThatCannotMoveTakesAGeneratedHelper(t *testing.T) {
 	requireClean(t, result)
 	got, helper := extensionSource(t, result)
 	for _, want := range []string{
-		"if ready && pigUpgradeIsIdle(ctx) {",
-		"} else if pigUpgradeIsProjectTrusted(ctx) {",
-		"for pigUpgradeHasPendingMessages(ctx) {",
-		`fmt.Println(os.Getenv("A"), pigUpgradeGetSessionID(ctx))`,
+		"if ready && ompigUpgradeIsIdle(ctx) {",
+		"} else if ompigUpgradeIsProjectTrusted(ctx) {",
+		"for ompigUpgradeHasPendingMessages(ctx) {",
+		`fmt.Println(os.Getenv("A"), ompigUpgradeGetSessionID(ctx))`,
 	} {
 		if !strings.Contains(got, want) {
 			t.Errorf("source lacks %q:\n%s", want, got)
@@ -161,9 +161,9 @@ func TestGetterThatCannotMoveTakesAGeneratedHelper(t *testing.T) {
 	}
 	for _, want := range []string{
 		"package ext",
-		`sdk "github.com/MichaelKinsy/PiG/extensions/sdk"`,
-		"func pigUpgradeIsIdle(ctx sdk.Context) bool {\n\tvalue, _ := ctx.IsIdle()\n\treturn value\n}",
-		"func pigUpgradeGetSessionID(ctx sdk.Context) string {",
+		`sdk "github.com/tmih06/ompig/extensions/sdk"`,
+		"func ompigUpgradeIsIdle(ctx sdk.Context) bool {\n\tvalue, _ := ctx.IsIdle()\n\treturn value\n}",
+		"func ompigUpgradeGetSessionID(ctx sdk.Context) string {",
 	} {
 		if !strings.Contains(helper, want) {
 			t.Errorf("helper lacks %q:\n%s", want, helper)
@@ -175,7 +175,7 @@ func TestGetterThatCannotMoveTakesAGeneratedHelper(t *testing.T) {
 			created = append(created, change.Path)
 		}
 	}
-	if len(created) != 1 || !strings.HasSuffix(created[0], "pig_upgrade_getters.go") {
+	if len(created) != 1 || !strings.HasSuffix(created[0], "ompig_upgrade_getters.go") {
 		t.Fatalf("created files = %v", created)
 	}
 }
@@ -191,9 +191,9 @@ func TestGetterHelperKeepsParametersAndPointerResults(t *testing.T) {
 `)
 	_, helper := extensionSource(t, result)
 	for _, want := range []string{
-		"func pigUpgradeGetFlag(ctx sdk.Context, a0 string) any {",
+		"func ompigUpgradeGetFlag(ctx sdk.Context, a0 string) any {",
 		"value, _ := ctx.GetFlag(a0)",
-		"func pigUpgradeGetSessionName(ctx sdk.Context) string {",
+		"func ompigUpgradeGetSessionName(ctx sdk.Context) string {",
 		"if value == nil {\n\t\treturn \"\"\n\t}\n\treturn *value",
 	} {
 		if !strings.Contains(helper, want) {

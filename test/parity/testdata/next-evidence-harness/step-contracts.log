@@ -1,15 +1,15 @@
 go test ./parity/correspondence ./parity/cmd/correspondence
-ok  	github.com/MichaelKinsy/PiG/parity/correspondence	(cached)
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/correspondence	(cached)
-known gap [finding:table-item:missing:cache-warming-mode] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Pig table has no item with the Pi identity
-known gap [finding:table-order:table:settings-selector] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Pi order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "cache-warming-mode" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"] differs from Pig order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"]
+ok  	github.com/tmih06/ompig/parity/correspondence	(cached)
+ok  	github.com/tmih06/ompig/parity/cmd/correspondence	(cached)
+known gap [finding:table-item:missing:cache-warming-mode] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Ompig table has no item with the Pi identity
+known gap [finding:table-order:table:settings-selector] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Pi order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "cache-warming-mode" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"] differs from Ompig order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"]
 correspondence-check: direct facts agree except listed known gaps; packet paths run in go test
 go test ./parity/porter ./parity/cmd/porter
-ok  	github.com/MichaelKinsy/PiG/parity/porter	(cached)
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/porter	(cached)
+ok  	github.com/tmih06/ompig/parity/porter	(cached)
+ok  	github.com/tmih06/ompig/parity/cmd/porter	(cached)
 interface-inventory: clean (13803 semantic interfaces at 0.87.1)
 
-> @michaelkinsy/pig-interface-extractor@0.1.0 test
+> @michaelkinsy/ompig-interface-extractor@0.1.0 test
 > node --test test/*.test.mjs
 
 ✔ extracts stable input-handler branches, effects, and source identity (20.711955ms)
@@ -69,8 +69,8 @@ behavior contracts: OK (22 contracts, 56 input handlers: 0 ported, 0 partial, 0 
 render contracts: 111 surfaces: 0 ported, 0 partial, 0 pending, 109 deferred, 0 divergence, 2 designed-out
 test-inventory-drift: clean
 test inventory: OK (598 files: 2 ported, 1 partial, 0 scenario-covered, 5 designed-out, 0 divergence, 590 pending; upstream 0.87.1)
-format-version inventory: clean (45 fields: 0 Pig-owned format, 21 release/content, 18 upstream, 6 external)
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/customfactoryledger	1.153s
+format-version inventory: clean (45 fields: 0 Ompig-owned format, 21 release/content, 18 upstream, 6 external)
+ok  	github.com/tmih06/ompig/parity/cmd/customfactoryledger	1.153s
 coverage-drift: parity/coverage.md, .github/badges/parity-coverage.svg, and the README.md porting block are current
 port-map-drift: clean (616 upstream source files accounted for)
-ok  	github.com/MichaelKinsy/PiG/tests/docs-drift	1.885s
+ok  	github.com/tmih06/ompig/tests/docs-drift	1.885s

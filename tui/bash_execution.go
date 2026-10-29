@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/text"
-	"github.com/MichaelKinsy/PiG/internal/truncate"
+	"github.com/tmih06/ompig/internal/text"
+	"github.com/tmih06/ompig/internal/truncate"
 )
 
 // previewLines is the collapsed visual-row limit.
@@ -50,7 +50,7 @@ func (b *BashExecutionComponent) IsDirty() bool {
 	return b.stale || b.status == bashStatusRunning || b.Container.IsDirty()
 }
 
-// pig additive (D91): SurfaceLive reports that the spinner, which ticks without invalidating the
+// ompig additive (D91): SurfaceLive reports that the spinner, which ticks without invalidating the
 // block, draws in it.
 func (b *BashExecutionComponent) SurfaceLive() bool { return b.status == bashStatusRunning }
 
@@ -104,7 +104,7 @@ func (b *BashExecutionComponent) Loader() *Loader {
 // AppendOutput streams a chunk into the block. It strips ANSI codes and normalizes line endings first (bash-execution.ts:appendOutput), so output that bypassed the bash executor, such as a user_bash extension result, renders the same. Text the executor already cleaned passes through without a copy.
 func (b *BashExecutionComponent) AppendOutput(chunk string) {
 	clean := strings.ReplaceAll(strings.ReplaceAll(text.StripANSIString(chunk), "\r\n", "\n"), "\r", "\n")
-	// pig additive (D176): Pi's appendOutput keeps every line for getOutput, which nothing reads; the block keeps only the window it shows.
+	// ompig additive (D176): Pi's appendOutput keeps every line for getOutput, which nothing reads; the block keeps only the window it shows.
 	b.tail.Append(clean)
 	b.markStale()
 }

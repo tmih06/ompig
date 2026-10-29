@@ -1,4 +1,4 @@
-use pig_sdk::{
+use ompig_sdk::{
     ConstrainedSampling, Extension, ToolConstrainedSampling, ToolDefinition, ToolResult,
 };
 use serde_json::json;

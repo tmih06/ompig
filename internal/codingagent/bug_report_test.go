@@ -30,9 +30,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Upstream: test/bug-report.test.ts "removes URL credentials and secret query
@@ -80,13 +80,13 @@ func TestRedactBugReportJSONKeepsTokenCounts(t *testing.T) {
 }
 
 func TestBugReportArchiveFileNameUsesPigIdentity(t *testing.T) {
-	if got := BugReportArchiveFileName("0190"); got != "pig-bug-report-0190.zip" {
+	if got := BugReportArchiveFileName("0190"); got != "ompig-bug-report-0190.zip" {
 		t.Fatalf("archive name = %q", got)
 	}
 }
 
-// Upstream collectEnvironment records getPiUserAgent(VERSION). D65 uses PiG's product identity and the node:os platform/release/arch suffix instead of the coding-agent runtime suffix.
-func TestBugReportEnvironmentUsesPiGUserAgent(t *testing.T) {
+// Upstream collectEnvironment records getPiUserAgent(VERSION). D65 uses Ompig's product identity and the node:os platform/release/arch suffix instead of the coding-agent runtime suffix.
+func TestBugReportEnvironmentUsesOmpigUserAgent(t *testing.T) {
 	const version = "test-" + pigversion.Version
 	t.Setenv("NODE_OPTIONS", "")
 	machine, err := exec.CommandContext(t.Context(), "node", "--input-type=module", "-e", `import os from "node:os"; process.stdout.write(" (" + os.platform() + " " + os.release() + "; " + os.arch() + ")");`).Output()
@@ -94,7 +94,7 @@ func TestBugReportEnvironmentUsesPiGUserAgent(t *testing.T) {
 		t.Fatalf("read Node OS identity: %v", err)
 	}
 	environment := collectBugReportEnvironment(version, func(string) string { return "" }, nil)
-	want := "pig/" + version + string(machine)
+	want := "ompig/" + version + string(machine)
 	if environment.UserAgent != want {
 		t.Fatalf("UserAgent = %q, want independent Node OS identity %q", environment.UserAgent, want)
 	}
@@ -216,7 +216,7 @@ func TestBugExportWritesArchiveRecordsSessionAndLinksPigIssue(t *testing.T) {
 		t.Fatal("a transcript report must not request a summary")
 	}
 
-	matches, _ := filepath.Glob(filepath.Join(dir, "pig-bug-report-*.zip"))
+	matches, _ := filepath.Glob(filepath.Join(dir, "ompig-bug-report-*.zip"))
 	if len(matches) != 1 {
 		t.Fatalf("archives = %v", matches)
 	}
@@ -260,7 +260,7 @@ func TestBugExportWritesArchiveRecordsSessionAndLinksPigIssue(t *testing.T) {
 	link := script.appended[len(script.appended)-1]
 	start := strings.Index(link, BugReportIssueURL)
 	if start < 0 {
-		t.Fatalf("no PiG issue link in %q", link)
+		t.Fatalf("no Ompig issue link in %q", link)
 	}
 	assertIssueLink(t, link[start:], report)
 }
@@ -271,7 +271,7 @@ func assertIssueLink(t *testing.T, raw string, report BugReportMetadata) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if parsed.Host != "github.com" || parsed.Path != "/MichaelKinsy/PiG/issues/new" {
+	if parsed.Host != "github.com" || parsed.Path != "/tmih06/ompig/issues/new" {
 		t.Fatalf("link target = %s", raw)
 	}
 	query := parsed.Query()
@@ -279,7 +279,7 @@ func assertIssueLink(t *testing.T, raw string, report BugReportMetadata) {
 	if !slices.Equal(fields, []string{"actual", "platform", "template", "title", "version"}) {
 		t.Fatalf("link fields = %v", fields)
 	}
-	if query.Get("template") != "bug.yml" || query.Get("title") != "bug: Tool hung" || !strings.Contains(query.Get("actual"), report.ID) || query.Get("version") != "pig 0.0.0-test (Pi 0.87.1)" {
+	if query.Get("template") != "bug.yml" || query.Get("title") != "bug: Tool hung" || !strings.Contains(query.Get("actual"), report.ID) || query.Get("version") != "ompig 0.0.0-test (Pi 0.87.1)" {
 		t.Fatalf("link = %v", query)
 	}
 	if strings.Contains(raw, "TRANSCRIPT-MARKER") || strings.Contains(raw, "second") || len(raw) > 1024 {
@@ -315,7 +315,7 @@ func TestBugSummaryReplacesTranscript(t *testing.T) {
 	if err := bugHandler(script.context(bugReportSession(t))); err != nil {
 		t.Fatal(err)
 	}
-	matches, _ := filepath.Glob(filepath.Join(dir, "pig-bug-report-*.zip"))
+	matches, _ := filepath.Glob(filepath.Join(dir, "ompig-bug-report-*.zip"))
 	if len(matches) != 1 || script.summaries != 1 {
 		t.Fatalf("archives = %v summaries = %d", matches, script.summaries)
 	}

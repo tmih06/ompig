@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Each sample owns a fresh Session, an operations-backed bash call, output-event delivery, and joined shutdown. It does not measure shell startup or growing-history append cost.
 func BenchmarkSessionBashLifecycle(b *testing.B) {
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: b.TempDir()})
 	if err != nil {
 		b.Fatal(err)

@@ -1,6 +1,6 @@
 # Upstream evidence: Pi 1.1.0 packages/coding-agent/src/modes/interactive/components/dynamic-border.ts, themed-text.ts and status-indicator.ts (IdleStatus, StatusIndicator.renderInBorder and renderSpinnerInBorder), run on the real components.
 # The corpus holds the rule at widths -3 to 80, ThemedText with five paddings and six texts through changes with and without invalidation, the two idle rows, and a StatusIndicator with six frame sets, five messages and message changes at seven widths.
-# Exact equality of the JSON lines (one per probe); no normalization. The Pig probe is a Go test whose observations the wrapper prints, so a failing test fails the run.
+# Exact equality of the JSON lines (one per probe); no normalization. The Ompig probe is a Go test whose observations the wrapper prints, so a failing test fails the run.
 name = "31-status-components"
 description = "DynamicBorder, ThemedText, IdleStatus and StatusIndicator render the same rows as Pi."
 covers = ["packages/coding-agent/src/modes/interactive/components/dynamic-border.ts", "packages/coding-agent/src/modes/interactive/components/themed-text.ts", "packages/coding-agent/src/modes/interactive/components/status-indicator.ts"]
@@ -9,11 +9,11 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/status-components-pig.mjs"]
+ompig_args = ["node", "./test/parity/testdata/status-components-ompig.mjs"]
 pi_args = ["node", "./test/parity/testdata/status-components-pi.mjs"]
-pig_go_tests = ["./tui"]
+ompig_go_tests = ["./tui"]
 pi_go_tests = ["./tui"]
 
 [cli]

@@ -3140,112 +3140,112 @@
 		"code": "function testBefore(<Test> a, var b = 5, int c = 10)\n{\n    a->method1();\n\n    return b + c;\n}\n\nnamespace Test;\n\nuse RuntimeException as RE;\n\n/**\n * Example comment\n */\nclass Test extends CustomClass implements TestInterface\n{\n    const C1 = null;\n\n    // Magic constant: http://php.net/manual/ru/language.constants.predefined.php\n    const className = __CLASS__;\n\n    public function method1()\n    {\n        int a = 1, b = 2;\n        if likely a > b {\n            a++;\n        } else if unlikely b < a {\n            a--;\n        }\n        return a + b;\n    }\n\n    // See fn is allowed like shortcut\n    public fn method2() -> <Test>\n    {\n        call_user_func(function() { echo \"hello\"; });\n\n\n        [1, 2, 3, 4, 5]->walk(\n            function(int! x) {\n                return x * x;\n            }\n        );\n\n        [1, 2, 3, 4, 5]->walk(\n            function(_, int key) { echo key; }\n        );\n\n        array input = [1, 2, 3, 4, 5];\n\n        input->walk(\n            function(_, int key) { echo key; }\n        );\n\n\n        input->map(x => x * x);\n\n        return this;\n    }\n}\n"
 	},
 	{
-		"id": "pig/628",
+		"id": "ompig/628",
 		"lang": "javascript",
 		"code": "const [a] = await models.get(\"x\", { key: 1, ok: true });\nfunction f(n) { return n * 2; } // twice"
 	},
 	{
-		"id": "pig/629",
+		"id": "ompig/629",
 		"lang": "python",
 		"code": "def f(n: int) -> int:\n    return {\"key\": n * 2, \"ok\": True}  # twice"
 	},
 	{
-		"id": "pig/630",
+		"id": "ompig/630",
 		"lang": "go",
 		"code": "func f(n int) map[string]any {\n\treturn map[string]any{\"key\": n * 2, \"ok\": true} // twice\n}"
 	},
 	{
-		"id": "pig/631",
+		"id": "ompig/631",
 		"lang": "bash",
 		"code": "for f in *.go; do echo \"$f\" | grep -q x && exit 1; done  # twice"
 	},
 	{
-		"id": "pig/632",
+		"id": "ompig/632",
 		"lang": "json",
 		"code": "{\"key\": 1, \"ok\": true, \"list\": [null, \"x\"]}"
 	},
 	{
-		"id": "pig/633",
+		"id": "ompig/633",
 		"lang": "javascript",
 		"code": "const hits = await searchTools(\"read the contents of a file\", { limit: 3 });\ntext(\"E2E:search:\" + JSON.stringify(hits.map((t) => t.name)));\nconst all = ALL_TOOLS.map((t) => t.name).sort();"
 	},
 	{
-		"id": "pig/634",
+		"id": "ompig/634",
 		"lang": "reasonml",
 		"code": "type t = Foo | Bar(int)\nlet x = Foo"
 	},
 	{
-		"id": "pig/635",
+		"id": "ompig/635",
 		"lang": "markdown",
 		"code": "# T\n*em* **strong** [l](u)\n"
 	},
 	{
-		"id": "pig/636",
+		"id": "ompig/636",
 		"lang": "diff",
 		"code": "-old\n+new\n"
 	},
 	{
-		"id": "pig/637",
+		"id": "ompig/637",
 		"lang": "html",
 		"code": "<div></div>"
 	},
 	{
-		"id": "pig/638",
+		"id": "ompig/638",
 		"lang": "",
 		"code": "plain"
 	},
 	{
-		"id": "pig/639",
+		"id": "ompig/639",
 		"lang": "klingon",
 		"code": "x"
 	},
 	{
-		"id": "pig/640",
+		"id": "ompig/640",
 		"lang": "JS",
 		"code": "let x = 1"
 	},
 	{
-		"id": "pig/641",
+		"id": "ompig/641",
 		"lang": "http",
 		"code": "POST / HTTP/1.1\nContent-Type: application/json\n\n{\"a\": 1}"
 	},
 	{
-		"id": "pig/642",
+		"id": "ompig/642",
 		"lang": "http",
 		"code": "HTTP/1.1 200 OK\n\n<html><body>hi</body></html>"
 	},
 	{
-		"id": "pig/643",
+		"id": "ompig/643",
 		"lang": "javascript",
 		"code": "a 😀 é 𝒳 b"
 	},
 	{
-		"id": "pig/644",
+		"id": "ompig/644",
 		"lang": "cpp",
 		"code": "auto s = R\"x(raw ) \" text)x\";"
 	},
 	{
-		"id": "pig/645",
+		"id": "ompig/645",
 		"lang": "ruby",
 		"code": "x = <<~EOS\n  body\nEOS\n"
 	},
 	{
-		"id": "pig/646",
+		"id": "ompig/646",
 		"lang": "typescript",
 		"code": "const a = <T,>(x: T) => <div>{x}</div>;\nconst b: Array<Array<number>> = [];"
 	},
 	{
-		"id": "pig/647",
+		"id": "ompig/647",
 		"lang": "r",
 		"code": "x <- function(a) { a %>% f() }"
 	},
 	{
-		"id": "pig/648",
+		"id": "ompig/648",
 		"lang": "mathematica",
 		"code": "Plot[Sin[x], {x, 0, Pi}] + myFunc[1]"
 	},
 	{
-		"id": "pig/649",
+		"id": "ompig/649",
 		"lang": "sql",
 		"code": "SELECT Key FROM t WHERE ſ = 1"
 	}

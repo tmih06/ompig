@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/piglogin"
 )
 
 func registerBridgeSprite(t *testing.T, bridge *subprocess.UIBridge, ext, id string) *subprocess.CallResultPayload {
@@ -43,19 +43,19 @@ func TestSessionReplacementDropsTheOutgoingBuildsSprites(t *testing.T) {
 	old := subprocess.NewUIBridge(func() {})
 	m.opts.SubprocessUIBridge = old
 	m.attachSubprocess()
-	for _, sprite := range [][2]string{{"old-ext", "old-pig"}, {"kept-ext", "kept-pig"}} {
+	for _, sprite := range [][2]string{{"old-ext", "old-ompig"}, {"kept-ext", "kept-ompig"}} {
 		if result := registerBridgeSprite(t, old, sprite[0], sprite[1]); result.Error != nil {
 			t.Fatalf("register %s = %+v", sprite[1], result.Error)
 		}
 	}
-	if _, ok := piglogin.ByID("old-pig"); !ok {
+	if _, ok := piglogin.ByID("old-ompig"); !ok {
 		t.Fatal("the registered sprite is not in /sprite")
 	}
 
 	// The replacement build loads kept-ext again and a new extension; old-ext is not loaded there.
 	replacement := subprocess.NewUIBridge(func() {})
-	if result := registerBridgeSprite(t, replacement, "kept-ext", "kept-pig"); result.Error != nil {
-		t.Fatalf("register kept-pig in the replacement = %+v", result.Error)
+	if result := registerBridgeSprite(t, replacement, "kept-ext", "kept-ompig"); result.Error != nil {
+		t.Fatalf("register kept-ompig in the replacement = %+v", result.Error)
 	}
 	m.detachSubprocess()
 	m.opts.SubprocessUIBridge = replacement
@@ -63,13 +63,13 @@ func TestSessionReplacementDropsTheOutgoingBuildsSprites(t *testing.T) {
 	old.ClearExtension("old-ext")
 	old.ClearExtension("kept-ext")
 
-	if _, ok := piglogin.ByID("old-pig"); ok {
+	if _, ok := piglogin.ByID("old-ompig"); ok {
 		t.Fatalf("/sprite still offers the outgoing build's sprite: %s", piglogin.IDs())
 	}
-	if _, ok := piglogin.ByID("kept-pig"); !ok {
+	if _, ok := piglogin.ByID("kept-ompig"); !ok {
 		t.Fatalf("/sprite lost the replacement build's sprite: %s", piglogin.IDs())
 	}
-	if result := registerBridgeSprite(t, replacement, "new-ext", "old-pig"); result.Error != nil {
+	if result := registerBridgeSprite(t, replacement, "new-ext", "old-ompig"); result.Error != nil {
 		t.Fatalf("another extension cannot take the gone sprite's ID: %+v", result.Error)
 	}
 
@@ -77,7 +77,7 @@ func TestSessionReplacementDropsTheOutgoingBuildsSprites(t *testing.T) {
 	m.detachSubprocess()
 	m.opts.SubprocessUIBridge = nil
 	m.attachSubprocess()
-	for _, id := range []string{"old-pig", "kept-pig"} {
+	for _, id := range []string{"old-ompig", "kept-ompig"} {
 		if _, ok := piglogin.ByID(id); ok {
 			t.Fatalf("/sprite still offers %s after a build without extensions: %s", id, piglogin.IDs())
 		}

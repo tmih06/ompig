@@ -6,7 +6,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // The JSON text this package writes comes from package jv, the core's one JSON.stringify implementation. The

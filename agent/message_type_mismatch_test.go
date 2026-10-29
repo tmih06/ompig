@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // JSON.parse keeps a member of any type, so Pi keeps a session message whose member has another type than the one Pi writes and writes it unchanged (session-manager.ts parseSessionEntryLine, buildSessionContext). Each line of the fixture holds such members at the top level or in a nested block or record.
@@ -27,7 +27,7 @@ func TestDecodedMessageKeepsMembersOfAnyType(t *testing.T) {
 		}
 		var message AgentMessage
 		if err := message.UnmarshalJSON(line); err != nil {
-			t.Errorf("Pi keeps %s; PiG: %v", line, err)
+			t.Errorf("Pi keeps %s; Ompig: %v", line, err)
 			continue
 		}
 		messages = append(messages, message)

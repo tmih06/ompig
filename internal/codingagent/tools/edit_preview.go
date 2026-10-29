@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // EditReplacement is one exact-text replacement of an edit call.

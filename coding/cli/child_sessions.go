@@ -1,4 +1,4 @@
-// pig-specific: serves createAgentSession (packages/coding-agent/src/core/sdk.ts) to the Go, Python and Rust extension SDKs.
+// ompig-specific: serves createAgentSession (packages/coding-agent/src/core/sdk.ts) to the Go, Python and Rust extension SDKs.
 
 package cli
 
@@ -10,14 +10,14 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // BindChildSessions lets the extensions of bridge's host create child agent sessions. A child shares the model runtime of services (Pi's `modelRuntime: ctx.modelRegistry.runtime`), so every provider the extensions registered is available to it, and its tools, settings and resources are its own.

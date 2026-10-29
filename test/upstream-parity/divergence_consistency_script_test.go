@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func divergenceScript(t *testing.T) string {
@@ -39,13 +39,13 @@ func writeDivergenceFixture(t *testing.T, core, additive, markers string) string
 func runDivergenceScript(t *testing.T, root string) (string, error) {
 	t.Helper()
 	cmd := exec.Command(testenv.Bash(t), divergenceScript(t))
-	cmd.Env = append(os.Environ(), "PIG_DIVERGENCE_ROOT="+root)
+	cmd.Env = append(os.Environ(), "OMPIG_DIVERGENCE_ROOT="+root)
 	output, err := cmd.CombinedOutput()
 	return string(output), err
 }
 
 func TestDivergenceConsistencyRejectsIDsReusedAcrossLedgers(t *testing.T) {
-	root := writeDivergenceFixture(t, "## D1 core\n", "## D1 additive\n", "// pig divergence (D"+"1): fixture\n")
+	root := writeDivergenceFixture(t, "## D1 core\n", "## D1 additive\n", "// ompig divergence (D"+"1): fixture\n")
 	output, err := runDivergenceScript(t, root)
 	if err == nil {
 		t.Fatalf("duplicate global ID passed:\n%s", output)
@@ -56,7 +56,7 @@ func TestDivergenceConsistencyRejectsIDsReusedAcrossLedgers(t *testing.T) {
 }
 
 func TestDivergenceConsistencyRejectsUntypedMarker(t *testing.T) {
-	root := writeDivergenceFixture(t, "", "", "// pig divergence: hidden difference\n")
+	root := writeDivergenceFixture(t, "", "", "// ompig divergence: hidden difference\n")
 	output, err := runDivergenceScript(t, root)
 	if err == nil {
 		t.Fatalf("untyped marker passed:\n%s", output)
@@ -68,7 +68,7 @@ func TestDivergenceConsistencyRejectsUntypedMarker(t *testing.T) {
 
 func TestDivergenceConsistencyRejectsTestOnlyMarker(t *testing.T) {
 	root := writeDivergenceFixture(t, "## D1 core\n", "", "")
-	marker := "package fixture\n// pig divergence (D" + "1): test only\n"
+	marker := "package fixture\n// ompig divergence (D" + "1): test only\n"
 	if err := os.WriteFile(filepath.Join(root, "marker_test.go"), []byte(marker), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -76,7 +76,7 @@ func TestDivergenceConsistencyRejectsTestOnlyMarker(t *testing.T) {
 	if err == nil {
 		t.Fatalf("test-only marker passed:\n%s", output)
 	}
-	if !strings.Contains(output, "core divergences without 'pig divergence' source markers") {
+	if !strings.Contains(output, "core divergences without 'ompig divergence' source markers") {
 		t.Fatalf("unexpected output:\n%s", output)
 	}
 }
@@ -86,17 +86,17 @@ func TestDivergenceConsistencyRejectsWrongMarkerClass(t *testing.T) {
 		t,
 		"## D1 core\n",
 		"## D2 additive\n",
-		"// pig additive (D"+"1): wrong class\n// pig divergence (D"+"2): wrong class\n",
+		"// ompig additive (D"+"1): wrong class\n// ompig divergence (D"+"2): wrong class\n",
 	)
 	output, err := runDivergenceScript(t, root)
 	if err == nil {
 		t.Fatalf("wrong marker classes passed:\n%s", output)
 	}
 	for _, want := range []string{
-		"core divergences without 'pig divergence' source markers",
-		"'pig divergence' markers without core divergence records",
-		"additive features without 'pig additive' source markers",
-		"'pig additive' markers without additive feature records",
+		"core divergences without 'ompig divergence' source markers",
+		"'ompig divergence' markers without core divergence records",
+		"additive features without 'ompig additive' source markers",
+		"'ompig additive' markers without additive feature records",
 	} {
 		if !strings.Contains(output, want) {
 			t.Fatalf("output missing %q:\n%s", want, output)

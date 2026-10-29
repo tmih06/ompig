@@ -42,7 +42,7 @@ func killTestProcess(pid int) error {
 // nothing ever removed a cell key from Host.quarantinedCells, so PlanCells
 // fissioned the same key on every later Reload too, and the crashed Node
 // cell's five extensions stayed as five separate isolated Node processes
-// until the whole pig process restarted. Host.Reload now calls
+// until the whole ompig process restarted. Host.Reload now calls
 // releaseRetryableQuarantines first, which clears a quarantined key's
 // fission unless that key's Supervisor (the same circuit breaker every
 // isolated extension already has) has tripped, so a shared Node cell that
@@ -199,7 +199,7 @@ func TestNodeCellRepeatedCrashesStayIsolated(t *testing.T) {
 // ownership for a process this aborted reload never touched: a real, later
 // crash of that still-current, still-running process would then be
 // silently discarded as stale (quarantinePackedCellGeneration's staleness
-// check) instead of quarantined, and pig would never notice the cell died.
+// check) instead of quarantined, and ompig would never notice the cell died.
 //
 // This test does not need a real Node process: it seeds the bookkeeping a
 // live packed process would have (a claimed generation and a

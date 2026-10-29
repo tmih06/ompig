@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// hotFunc reports whether fn's doc comment marks it hot: `//perf:hot` (an optional reason may follow), or portlint's `//pig:hotpath`.
+// hotFunc reports whether fn's doc comment marks it hot: `//perf:hot` (an optional reason may follow), or portlint's `//ompig:hotpath`.
 // A hot function runs once per streamed event, frame, keystroke or chunk; chan-hop, open-per-call and timer-per-call count only there.
 func hotFunc(fn *ast.FuncDecl) bool {
 	if fn.Doc == nil {
@@ -17,7 +17,7 @@ func hotFunc(fn *ast.FuncDecl) bool {
 	}
 	for _, c := range fn.Doc.List {
 		text := strings.TrimSpace(c.Text)
-		if text == "//pig:hotpath" || text == "//perf:hot" || strings.HasPrefix(text, "//perf:hot ") {
+		if text == "//ompig:hotpath" || text == "//perf:hot" || strings.HasPrefix(text, "//perf:hot ") {
 			return true
 		}
 	}

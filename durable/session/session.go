@@ -35,14 +35,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/entered"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
-	"github.com/MichaelKinsy/PiG/internal/lineadmission"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/chord"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/entered"
+	"github.com/tmih06/ompig/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/lineadmission"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // ErrSessionClosed is upstream's "Session is closed".

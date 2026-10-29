@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/test/parity/closure"
-	"github.com/MichaelKinsy/PiG/test/parity/internal/gitsnapshot"
-	"github.com/MichaelKinsy/PiG/test/parity/knowngaps"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/test/parity/closure"
+	"github.com/tmih06/ompig/test/parity/internal/gitsnapshot"
+	"github.com/tmih06/ompig/test/parity/knowngaps"
 )
 
 func repositorySnapshotCommit(t *testing.T, root string) string {
@@ -99,7 +99,7 @@ func TestClosureReportCommand(t *testing.T) {
 	encoder := json.NewEncoder(file)
 	for _, record := range []closure.Record{
 		&closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:report", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&closure.Pin{Kind: closure.KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 2, QuoteHash: hash},
+		&closure.Pin{Kind: closure.KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 2, QuoteHash: hash},
 		&closure.Fact{Kind: closure.KindFact, ID: "fact:denominator-order:port-map:rows", SnapshotID: "snapshot:report", FactType: "denominator-order:port-map", SubjectID: "rows", Resolution: "resolved", PinIDs: []string{"pin:report"}, Value: orderValue},
 		&closure.Fact{Kind: closure.KindFact, ID: "fact:denominator:port-map:example", SnapshotID: "snapshot:report", FactType: "denominator:port-map", SubjectID: "packages/example.ts", Resolution: "observed", PinIDs: []string{"pin:report"}, Value: value},
 		&closure.ProvisionalClaim{Kind: closure.KindProvisionalClaim, ID: "provisional:denominator:port-map:example", SnapshotID: "snapshot:report", SubjectID: "packages/example.ts", SourcePinID: "pin:report", Status: "✅"},
@@ -211,7 +211,7 @@ func TestCommittedBundlePathsIgnoreUntrackedAndRejectDirty(t *testing.T) {
 	for _, args := range [][]string{
 		{"init", "--quiet"},
 		{"add", "test/parity/closuredata/proposals/test/tracked.json"},
-		{"-c", "user.name=Pig Test", "-c", "user.email=pig@example.invalid", "commit", "--quiet", "-m", "fixture"},
+		{"-c", "user.name=Ompig Test", "-c", "user.email=ompig@example.invalid", "commit", "--quiet", "-m", "fixture"},
 	} {
 		command := exec.CommandContext(t.Context(), "git", args...)
 		command.Dir = root
@@ -243,7 +243,7 @@ func TestCommittedBundlePathsIgnoreUntrackedAndRejectDirty(t *testing.T) {
 	testenv.Symlink(t, "payload.json", filepath.Join(directory, "linked.json"))
 	for _, args := range [][]string{
 		{"add", "test/parity/closuredata/proposals/test/linked.json"},
-		{"-c", "user.name=Pig Test", "-c", "user.email=pig@example.invalid", "commit", "--quiet", "-m", "symlink"},
+		{"-c", "user.name=Ompig Test", "-c", "user.email=ompig@example.invalid", "commit", "--quiet", "-m", "symlink"},
 	} {
 		command := exec.CommandContext(t.Context(), "git", args...)
 		command.Dir = root
@@ -280,7 +280,7 @@ func TestClosureCommandRejectsMissingInputsAndEscapingPaths(t *testing.T) {
 		t.Fatalf("import-denominators error = %v, want required snapshot inputs", err)
 	}
 	if err := run(context.Background(), []string{"coverage-audit"}, &stdout, &stderr); err == nil || !strings.Contains(err.Error(), "requires -profile") {
-		t.Fatalf("coverage-audit error = %v, want required piglet", err)
+		t.Fatalf("coverage-audit error = %v, want required ompiglet", err)
 	}
 	if err := run(context.Background(), []string{"unknown"}, &stdout, &stderr); err == nil || !strings.Contains(err.Error(), "unknown command") {
 		t.Fatalf("unknown command error = %v", err)

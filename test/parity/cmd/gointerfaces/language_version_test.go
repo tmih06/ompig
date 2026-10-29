@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-// The inventory accounts for Pig's exported Go surface, which a compiler patch
+// The inventory accounts for Ompig's exported Go surface, which a compiler patch
 // release does not change. Recording the patch made interface-go-drift depend on
 // which toolchain generated the file: CI builds in a pinned image while
 // developers run whatever their version manager installed, so a committed file

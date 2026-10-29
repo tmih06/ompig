@@ -14,8 +14,8 @@ func TestRPCStartupNamePrecedesTheInitialModelEntries(t *testing.T) {
 	home := t.TempDir()
 	sessions := filepath.Join(home, "sessions")
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"HOME=" + home, "USERPROFILE=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1",
+		"HOME=" + home, "USERPROFILE=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1",
 	}, "--model", "test-faux/faux-1", "--session-dir", sessions, "--name", "Named")
 	p.send(`{"id":"p","type":"prompt","message":"hello"}`)
 	p.await("the prompt's agent_end", func(record rpcRecord) bool { return record["type"] == "agent_end" })

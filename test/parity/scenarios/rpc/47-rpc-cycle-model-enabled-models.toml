@@ -3,7 +3,7 @@
 #
 # Pi 1.1.0 main.ts resolves the scope from --models or settings.enabledModels (main.ts:811) and passes it to the Session; rpc-mode.ts cycle_model
 # calls session.cycleModel(), which cycles the scoped models when there are any (agent-session.ts:2519-2568) and answers isScoped true. The fixture
-# has three models and enables two: one -> three -> one -> three. Pig's rpc handler built its scope from --models only, so it cycled through all three.
+# has three models and enables two: one -> three -> one -> three. Ompig's rpc handler built its scope from --models only, so it cycled through all three.
 
 name = "47-rpc-cycle-model-enabled-models"
 description = "cycle_model cycles the models enabled by settings and reports isScoped."
@@ -24,9 +24,9 @@ timeout_seconds = 15
 settle_seconds = 1
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model-scoped"]
+ompig = ["OMPIG_HOME=testdata/multi-model-scoped"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model-scoped/agent"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 
 [assert]

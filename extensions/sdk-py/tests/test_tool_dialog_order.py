@@ -6,7 +6,7 @@ Pi runs every extension on one thread: two calls of one assistant message that e
 import queue
 import threading
 
-import pig_sdk
+import ompig_sdk
 from test_request_lifetime import connected_extension
 from test_tool_dispatch import request
 
@@ -45,7 +45,7 @@ class Threads:
 def parked_order():
     """An order whose parked hook puts one token on the returned queue each time a caller starts to wait."""
     parked = queue.Queue()
-    order = pig_sdk._ToolStartOrder()
+    order = ompig_sdk._ToolStartOrder()
     order.parked = lambda: parked.put(None)
     return order, lambda: parked.get(timeout=5)
 
@@ -248,7 +248,7 @@ def _frame_text(frame):
 
 def test_dispatch_dialogs_open_in_call_order_and_responses_follow_the_answers():
     # A fake host writes two tool_call requests, answers the second dialog first and the first second, back to back, and reads the dialogs' call order and the responses' order off the socket.
-    ext = pig_sdk.Extension("py-dialog-order")
+    ext = ompig_sdk.Extension("py-dialog-order")
 
     def ask(ctx, args):
         selected, ok = ctx.select(args["name"], ["x"])
@@ -271,7 +271,7 @@ def test_dispatch_dialogs_open_in_call_order_and_responses_follow_the_answers():
 
 
 def test_orders_are_per_batch_and_dropped_when_the_batch_ended():
-    batches = pig_sdk._ToolBatches()
+    batches = ompig_sdk._ToolBatches()
     a1, a2 = batches.reserve("A"), batches.reserve("A")
     b1 = batches.reserve("B")
     assert a1._order is a2._order and a1._order is not b1._order
@@ -292,7 +292,7 @@ def test_orders_are_per_batch_and_dropped_when_the_batch_ended():
 
 def test_dispatch_batches_and_requests_without_a_batch_do_not_gate_each_other():
     # A long request without a dialog in batch A must not hold the first dialog of batch B, or of a request outside any batch.
-    ext = pig_sdk.Extension("py-dialog-batches")
+    ext = ompig_sdk.Extension("py-dialog-batches")
     release_a = threading.Event()
 
     def block(ctx, args):

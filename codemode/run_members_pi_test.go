@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // A run through Sandbox.Start with every member of CodemodeRunOptions, CodemodeDeclaredTool and CodemodeDeclaredGlobal,

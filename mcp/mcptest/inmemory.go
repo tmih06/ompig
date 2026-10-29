@@ -7,7 +7,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/mcp/src/transports/in-memory.ts.

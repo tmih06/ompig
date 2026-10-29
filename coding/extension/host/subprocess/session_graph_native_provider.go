@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // registerGraphNativeProvider is registerNativeProvider for a graph ModelRuntime: the same connection-owned proxy (the calls the runtime makes on the carrier reach the extension that declared the Provider object, as the Session's do), registered in the registry register belongs to. The host keeps no claim on the provider's name beyond the proxy's own lifetime: the Session's registrations, OAuth bridging and ownership transfer are those of the extension's registration with the Session, and this one is the runtime's.

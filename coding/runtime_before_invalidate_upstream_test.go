@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Ports "runs beforeSessionInvalidate after session_shutdown and before rebindSession" of packages/coding-agent/test/agent-session-runtime-events.test.ts: the hook runs while the outgoing session's extension context is still usable, between session_shutdown and the rebind, and that context is stale afterwards.

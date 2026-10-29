@@ -17,8 +17,8 @@ snapshot_cwd = true
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 

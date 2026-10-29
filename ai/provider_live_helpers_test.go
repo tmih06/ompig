@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func liveProviderKey(t *testing.T, provider string) string {
@@ -15,7 +15,7 @@ func liveProviderKey(t *testing.T, provider string) string {
 	t.Logf("live provider: %s", provider)
 	// upstream: packages/ai/test/oauth.ts:56. Codex has no provider API-key environment variable; tests accept an explicitly supplied resolved OAuth access token.
 	if provider == "openai-codex" {
-		return testenv.RequireLiveEnv(t, "PIG_LIVE_CODEX_TOKEN")
+		return testenv.RequireLiveEnv(t, "OMPIG_LIVE_CODEX_TOKEN")
 	}
 	names := getAPIKeyEnvVars(provider)
 	// upstream: packages/ai/src/env-api-keys.ts:getEnvApiKey excludes the header-only token from API-key resolution.

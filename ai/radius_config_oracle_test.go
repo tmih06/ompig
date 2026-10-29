@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type radiusProbe struct {
@@ -31,8 +31,8 @@ type radiusConfigAnswer struct {
 	Bound   [][]string                   `json:"bound"`
 }
 
-// radiusModelMembers are the members of a gateway model Pig carries. Pi's member is read by its exact key; a number keeps its integer part
-// clamped to the int range (the radius oracle writes Infinity as a string), a non-string input entry is skipped, and any other member Pig
+// radiusModelMembers are the members of a gateway model Ompig carries. Pi's member is read by its exact key; a number keeps its integer part
+// clamped to the int range (the radius oracle writes Infinity as a string), a non-string input entry is skipped, and any other member Ompig
 // cannot represent is its zero value.
 type radiusModelMembers struct {
 	Name             string
@@ -45,7 +45,7 @@ type radiusModelMembers struct {
 	ThinkingLevelMap ThinkingLevelMap
 }
 
-func pigRadiusModelMembers(model RadiusGatewayModel) radiusModelMembers {
+func ompigRadiusModelMembers(model RadiusGatewayModel) radiusModelMembers {
 	return radiusModelMembers{model.Name, model.Reasoning, model.Input, model.ContextWindow, model.MaxTokens, model.Cost, model.Headers, model.ThinkingLevelMap}
 }
 
@@ -204,7 +204,7 @@ func TestRadiusConfigMatchesPiOnSeededProbes(t *testing.T) {
 			want = s
 		case "trunc":
 			got = truncateHTTPBody(probe.Value)
-			// A cut through a surrogate pair leaves Pi's text with a lone high surrogate; the WTF-8 decoder keeps it as PiG's strings carry it.
+			// A cut through a surrogate pair leaves Pi's text with a lone high surrogate; the WTF-8 decoder keeps it as Ompig's strings carry it.
 			var s string
 			_ = sdkjson.Unmarshal(expected[i], &s)
 			want = s
@@ -221,7 +221,7 @@ func TestRadiusConfigMatchesPiOnSeededProbes(t *testing.T) {
 				answer = radiusConfigAnswer{OK: true, BaseURL: config.BaseURL, IDs: []string{}, Bound: [][]string{}}
 				for _, model := range config.Models {
 					answer.IDs = append(answer.IDs, model.ID)
-					members = append(members, pigRadiusModelMembers(model))
+					members = append(members, ompigRadiusModelMembers(model))
 				}
 				for _, model := range GetRadiusModels("radius", credential) {
 					answer.Bound = append(answer.Bound, []string{model.ID, model.ProviderID(), model.ProviderMeta.BaseURL, string(model.ProviderMeta.API)})
@@ -245,7 +245,7 @@ func TestRadiusConfigMatchesPiOnSeededProbes(t *testing.T) {
 				if probe.Gateway != nil {
 					gateway = *probe.Gateway
 				}
-				t.Errorf("%s %q %s: Pig %+v, Pi %+v", probe.Op, probe.Value, gateway, got, want)
+				t.Errorf("%s %q %s: Ompig %+v, Pi %+v", probe.Op, probe.Value, gateway, got, want)
 			}
 		}
 	}

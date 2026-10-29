@@ -3,8 +3,8 @@ package coding
 // Ports packages/coding-agent/src/core/agent-session.ts (state accessors).
 
 import (
-	"github.com/MichaelKinsy/PiG/agent"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // SteeringMode reports how the Agent drains queued steering messages (agent-session.ts get steeringMode).

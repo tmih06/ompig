@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // NewTreeSelectorComponent is Pi's TreeSelectorComponent constructor (tree-selector.ts constructor): it takes the session tree as
 // SessionTreeNode data and reads the tool-call arguments and the current leaf from that tree, as Pi's flattenTree does

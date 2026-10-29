@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_EventPayloadsReachEverySDKUnchanged pins the payload of the pi.on(event) overloads (extensions/types.ts: SessionStartEvent

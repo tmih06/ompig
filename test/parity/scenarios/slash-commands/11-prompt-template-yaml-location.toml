@@ -9,8 +9,8 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-session", "--prompt-template", "."]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-session", "--prompt-template", "."]
 pi_args = ["--no-session", "--prompt-template", "."]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
@@ -18,7 +18,7 @@ pi_extensions = ["../../testdata/test-faux-provider.ts"]
 cwd = "testdata/yaml-prompts"
 width = 160
 height = 50
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Nested mappings are not allowed"

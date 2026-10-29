@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // portMapDriftFixture writes a minimal repo: one live upstream file, a pinned
@@ -20,7 +20,7 @@ func portMapDriftFixture(t *testing.T, rows string) (script, root string) {
 		filepath.Join(".upstream", "current", "packages", "ai", "src", "live.ts"): "export const live = 1;\n",
 		"packages.json": `{"packages":[{"key":"ai","name":"@earendil-works/pi-ai","root":"packages/ai"}]}`,
 		filepath.Join("internal", "coding", "pigversion", "pigversion.go"): "package pigversion\nconst UpstreamVersion = \"9.9.9\"\n",
-		"docs/parity/PORT_MAP.md": "# PORT_MAP\n\n## `packages/ai/src/`\n\n| upstream | pig | status |\n|---|---|---|\n" +
+		"docs/parity/PORT_MAP.md": "# PORT_MAP\n\n## `packages/ai/src/`\n\n| upstream | ompig | status |\n|---|---|---|\n" +
 			"| `packages/ai/src/live.ts` | `ai/live.go` | ✅ |\n" + rows,
 	}
 	for rel, body := range files {

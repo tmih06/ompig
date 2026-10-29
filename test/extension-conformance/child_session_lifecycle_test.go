@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/childsession"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/childsession"
 )
 
 // The lifecycle rows run the Go fixture's scenarios against the golden Pi produced (TestNodeCreateAgentSessionLifecycleMatchesPi and TestNodeCreateAgentSessionModelErrorsMatchPi run the same scenarios through Pi's own createAgentSession and assert the same members).
@@ -46,7 +46,7 @@ func loadChildGo(t *testing.T, host *subprocess.Host, isolation string) extensio
 	cfg := subprocess.ExtConfig{
 		Name: childsession.Name, Source: filepath.Join(root, "test/extension-conformance/testdata/child-session-go"), Enabled: true, Isolation: isolation,
 		RuntimeKind: "subprocess", RuntimeLanguage: "go", EntrypointKind: "factory", Factory: "Extension",
-		SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/child-session-go", Package: "example.com/child-session-go",
+		SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/child-session-go", Package: "example.com/child-session-go",
 	}
 	loaded, failures := host.LoadAll(t.Context(), []subprocess.ExtConfig{cfg})
 	if len(failures) != 0 || len(loaded) != 1 {

@@ -12,8 +12,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // stateEmitter is state.test.ts emitter: listeners in a Set, called synchronously by emit.

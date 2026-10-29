@@ -14,14 +14,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 const parityHarnessSamplePngBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aK9sAAAAASUVORK5CYII="
 
 func parityHarnessEnabled() bool {
-	return os.Getenv("PIG_PARITY_HARNESS") == "1"
+	return os.Getenv("OMPIG_PARITY_HARNESS") == "1"
 }
 
 func (m *InteractiveMode) probeClipboardRead() (string, error) {
@@ -213,7 +213,7 @@ func (m *InteractiveMode) probeOAuthCopilot() (string, error) {
 }
 
 func loginGitHubCopilotForParity(ctx context.Context, cb ai.CopilotLoginCallbacks) (ai.Credential, error) {
-	mode := os.Getenv("PIG_PARITY_LOGIN_DIALOG")
+	mode := os.Getenv("OMPIG_PARITY_LOGIN_DIALOG")
 	if mode != "1" && mode != "complete" {
 		return ai.LoginGitHubCopilot(ctx, cb)
 	}

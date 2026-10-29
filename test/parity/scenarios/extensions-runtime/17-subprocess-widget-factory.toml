@@ -4,7 +4,7 @@
 #
 # Upstream evidence (Pi 0.83.0): the command installs an in-process component
 # factory. Pi calls render(width), applies the active theme, and displays the
-# returned line above the editor. Pig runs the same source in the Node
+# returned line above the editor. Ompig runs the same source in the Node
 # subprocess, renders the factory locally, and pushes the byte-identical frame
 # without invoking extension IPC from the host TUI Render path.
 
@@ -19,9 +19,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/widget-factory.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/widget-factory.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/widget-factory.mjs",
@@ -30,7 +30,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 32
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "factory-widget:width=100"

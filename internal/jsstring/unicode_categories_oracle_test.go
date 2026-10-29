@@ -4,10 +4,10 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
-// Go's unicode category predicates against the property escapes of Node's regular expressions (\p{L} and so on), over every code point. PiG's ports of
+// Go's unicode category predicates against the property escapes of Node's regular expressions (\p{L} and so on), over every code point. Ompig's ports of
 // Pi regexes that use \p{..} (marked's punctuation classes, word boundaries) call these predicates, so a Unicode version gap between Go's tables and
 // Node's ICU shows here.
 func TestUnicodeCategoriesMatchNode(t *testing.T) {

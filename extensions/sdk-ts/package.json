@@ -1,8 +1,8 @@
 {
-  "name": "@michaelkinsy/pig-extension-types",
+  "name": "@michaelkinsy/ompig-extension-types",
   "version": "0.5.3",
   "private": true,
-  "description": "TypeScript declarations for Pi-compatible extensions running on PiG",
+  "description": "TypeScript declarations for Pi-compatible extensions running on Ompig",
   "type": "module",
   "types": "./index.d.ts",
   "exports": {

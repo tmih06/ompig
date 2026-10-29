@@ -10,14 +10,14 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/test/version-check.test.ts describe "version checks"
-// Pig's version check reads the signed update manifest of the configured source (D39) where Pi reads pi.dev/api/latest-version, so the release is an UpdateManifest, the automatic check is CheckForBinaryUpdate and the explicit check is FetchUpdateManifest with Retry.
+// Ompig's version check reads the signed update manifest of the configured source (D39) where Pi reads pi.dev/api/latest-version, so the release is an UpdateManifest, the automatic check is CheckForBinaryUpdate and the explicit check is FetchUpdateManifest with Retry.
 
 func versionCheckManifest(version, extra string) string {
-	return `{"version":"` + version + `","packageName":"@pi-in-go/pig",` + extra + `"binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`
+	return `{"version":"` + version + `","packageName":"@ompig/ompig",` + extra + `"binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`
 }
 
 type versionCheckRoundTripper func(*http.Request) (*http.Response, error)
@@ -60,7 +60,7 @@ func TestVersionChecks(t *testing.T) {
 			_, _ = w.Write([]byte(versionCheckManifest("1.2.3", "")))
 		}))
 		defer server.Close()
-		t.Setenv("PIG_UPDATE_URL", server.URL)
+		t.Setenv("OMPIG_UPDATE_URL", server.URL)
 		t.Setenv("PI_SKIP_VERSION_CHECK", "")
 		if update := CheckForBinaryUpdate(t.Context(), server.Client(), "1.2.3"); update != nil {
 			t.Fatalf("an equal version produced %#v", update)
@@ -77,7 +77,7 @@ func TestVersionChecks(t *testing.T) {
 			_, _ = w.Write([]byte(versionCheckManifest("1.2.3", "")))
 		}))
 		defer server.Close()
-		t.Setenv("PIG_UPDATE_URL", server.URL)
+		t.Setenv("OMPIG_UPDATE_URL", server.URL)
 		t.Setenv("PI_SKIP_VERSION_CHECK", "")
 		if update := CheckForBinaryUpdate(t.Context(), server.Client(), "dev"); update == nil || update.Version != "1.2.3" {
 			t.Fatalf("a non-semver current version produced %#v, want 1.2.3", update)
@@ -120,7 +120,7 @@ func TestVersionChecks(t *testing.T) {
 			_, _ = w.Write([]byte(versionCheckManifest("1.2.4", "")))
 		}))
 		defer server.Close()
-		t.Setenv("PIG_UPDATE_URL", server.URL)
+		t.Setenv("OMPIG_UPDATE_URL", server.URL)
 		t.Setenv("PI_SKIP_VERSION_CHECK", "")
 		client, requests := failingClient(server.Client(), 100)
 		if update := CheckForBinaryUpdate(t.Context(), client, "1.2.3"); update != nil || requests.Load() != 1 {
@@ -143,11 +143,11 @@ func TestVersionChecks(t *testing.T) {
 
 	t.Run("returns the active package metadata from the update manifest", func(t *testing.T) { // :92
 		server := newSignedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-			_, _ = w.Write([]byte(`{"version":"1.2.4","packageName":"@new-scope/pig","binaries":{}}`))
+			_, _ = w.Write([]byte(`{"version":"1.2.4","packageName":"@new-scope/ompig","binaries":{}}`))
 		}))
 		defer server.Close()
 		manifest, err := FetchUpdateManifest(t.Context(), server.Client(), server.URL)
-		if err != nil || manifest.PackageName != "@new-scope/pig" || manifest.Version != "1.2.4" {
+		if err != nil || manifest.PackageName != "@new-scope/ompig" || manifest.Version != "1.2.4" {
 			t.Fatalf("manifest = %#v, err = %v", manifest, err)
 		}
 	})
@@ -157,7 +157,7 @@ func TestVersionChecks(t *testing.T) {
 			_, _ = w.Write([]byte(versionCheckManifest("1.2.4", `"notes":" **Read this** ",`)))
 		}))
 		defer server.Close()
-		t.Setenv("PIG_UPDATE_URL", server.URL)
+		t.Setenv("OMPIG_UPDATE_URL", server.URL)
 		t.Setenv("PI_SKIP_VERSION_CHECK", "")
 		update := CheckForBinaryUpdate(t.Context(), server.Client(), "1.2.3")
 		if update == nil || update.Note == nil || *update.Note != "**Read this**" || update.Version != "1.2.4" {
@@ -170,7 +170,7 @@ func TestVersionChecks(t *testing.T) {
 			_, _ = w.Write([]byte(versionCheckManifest("1.2.4", "")))
 		}))
 		defer server.Close()
-		t.Setenv("PIG_UPDATE_URL", server.URL)
+		t.Setenv("OMPIG_UPDATE_URL", server.URL)
 		t.Setenv("PI_SKIP_VERSION_CHECK", "1")
 		client, requests := failingClient(server.Client(), 0)
 		if update := CheckForBinaryUpdate(t.Context(), client, "1.2.3"); update != nil || requests.Load() != 0 {
@@ -195,7 +195,7 @@ func TestVersionChecks(t *testing.T) {
 // version-check.ts getLatestPiRelease returns early on any non-empty PI_OFFLINE (a truthy string), so a whitespace-only value is offline too.
 func TestUpdateChecksOfflineTreatsAnyNonEmptyPiOfflineAsSet(t *testing.T) {
 	for _, value := range []string{"1", "0", "no", " ", "\t", "false"} {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", value)
 		if !updateChecksOffline() {
 			t.Errorf("PI_OFFLINE=%q: updateChecksOffline() = false, want true", value)

@@ -17,11 +17,11 @@
 # describes /process-identity as {"title":"pi","piCodingAgent":"true",
 # "aiAgent":"pi","warned":false,"entryIsScript":true,"harness":{"name":
 # "@earendil-works/pi-coding-agent","binIsEntry":true},"relaunch":{"status":0,
-# "stdout":"0.99.2"}}. PiG's extension process was titled "node", its
+# "stdout":"0.99.2"}}. Ompig's extension process was titled "node", its
 # argv[1] was the runtime's cell.mjs, and the re-launch ran that script.
 #
-# D26: Pi exports AI_AGENT=pi so tools can name the launching agent; PiG
-# exports AI_AGENT=pig. The regex accepts either name and the [diverge]
+# D26: Pi exports AI_AGENT=pi so tools can name the launching agent; Ompig
+# exports AI_AGENT=ompig. The regex accepts either name and the [diverge]
 # block pins each binary to its own; every other field is Pi's.
 
 name = "34-extension-process-identity"
@@ -41,9 +41,9 @@ timeout_seconds = 30
 settle_seconds = 1
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session"]
-pig_extensions = ["testdata/process-identity/identity.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session"]
+ompig_extensions = ["testdata/process-identity/identity.ts"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/process-identity/identity.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session"]
@@ -53,14 +53,14 @@ exit_code = 0
 runs = 3
 both_not_contain = ["Failed to load extension", "panic:"]
 # The re-launched harness prints its own version: Pi's package version
-# ({{UPSTREAM_VERSION}}), or PiG's composite version ({{VERSION}}, D63; for a
+# ({{UPSTREAM_VERSION}}), or Ompig's composite version ({{VERSION}}, D63; for a
 # commit pin its build metadata is 1.1.0.42a3497d). Both come from the pin, so a
 # version leap needs no edit here.
 both_match_regex = [
-  '"name":"process-identity","description":"\{\\"title\\":\\"pi\\",\\"piCodingAgent\\":\\"true\\",\\"aiAgent\\":\\"(pig|pi)\\",\\"warned\\":false,\\"entryIsScript\\":true,\\"harness\\":\{\\"name\\":\\"@earendil-works/pi-coding-agent\\",\\"binIsEntry\\":true\},\\"relaunch\\":\{\\"status\\":0,\\"stdout\\":\\"({{VERSION}}|{{UPSTREAM_VERSION}})\\"\}\}"',
+  '"name":"process-identity","description":"\{\\"title\\":\\"pi\\",\\"piCodingAgent\\":\\"true\\",\\"aiAgent\\":\\"(ompig|pi)\\",\\"warned\\":false,\\"entryIsScript\\":true,\\"harness\\":\{\\"name\\":\\"@earendil-works/pi-coding-agent\\",\\"binIsEntry\\":true\},\\"relaunch\\":\{\\"status\\":0,\\"stdout\\":\\"({{VERSION}}|{{UPSTREAM_VERSION}})\\"\}\}"',
 ]
 
 [diverge]
-pig_contains = ['\"aiAgent\":\"pig\"']
+ompig_contains = ['\"aiAgent\":\"ompig\"']
 pi_contains = ['\"aiAgent\":\"pi\"']
-reason = "D26 SCRUTINIZED:approved. PiG names itself in AI_AGENT, the marker tools read to identify the launching agent; Pi names itself pi."
+reason = "D26 SCRUTINIZED:approved. Ompig names itself in AI_AGENT, the marker tools read to identify the launching agent; Pi names itself pi."

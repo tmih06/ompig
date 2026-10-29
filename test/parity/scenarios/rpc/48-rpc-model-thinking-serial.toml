@@ -148,9 +148,9 @@ wait_contains = ['"id":"c8","type":"response"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/model-thinking"]
+ompig = ["OMPIG_HOME=testdata/model-thinking"]
 pi = ["PI_CODING_AGENT_DIR=testdata/model-thinking/agent"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/plain"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/plain"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/plain"]
 
 [assert]

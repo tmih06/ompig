@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // runner.ts:1144-1170 emitMessageEnd(event): every handler receives `{ ...event, message: currentMessage }`, the caller's event with the latest

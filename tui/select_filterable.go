@@ -24,9 +24,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // SelectListTruncatePrimaryContext describes one primary-column truncation.
@@ -394,7 +394,7 @@ func (f *FilterableList) CapturesSelectPageInput() bool { return true }
 // HandleInput updates the filter or moves the cursor.
 func (f *FilterableList) HandleInput(data string) {
 	// Route through the TUI keybinding registry so user overrides in
-	// ~/.pig/keybindings.json (tui.select.* / tui.input.*) take effect
+	// ~/.ompig/keybindings.json (tui.select.* / tui.input.*) take effect
 	// here. Mirrors upstream filterable-list.ts handleInput dispatch.
 	kb := GetTUIKeybindings()
 	// up and down are checked before confirm and cancel, as in upstream SelectList, so a key bound to two actions keeps the earlier one.

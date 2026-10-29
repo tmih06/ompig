@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi core/model-runtime.ts:573-647 keeps the supplied model after auth resolution.

@@ -9,10 +9,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi 1.2.0 types.ts:2122-2130 picks reachesTools into ToolInfo and agent-session.ts:1507 copies each definition's hook, so an
@@ -132,7 +132,7 @@ func reachToolsFactory(t *testing.T, root, language, name string) subprocess.Ext
 	switch language {
 	case "go":
 		write(filepath.Join(cfg.Source, "extension.go"), fmt.Sprintf(`package flags
-import ("fmt";"sort";"strings";sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("fmt";"sort";"strings";sdk "github.com/tmih06/ompig/extensions/sdk")
 const name=%q
 func Extension()*sdk.Extension{
  e:=sdk.New(name)
@@ -149,7 +149,7 @@ func Extension()*sdk.Extension{
  return e
 }`, name))
 	case "python":
-		write(filepath.Join(cfg.Source, cfg.Package+".py"), fmt.Sprintf(`import pig_sdk
+		write(filepath.Join(cfg.Source, cfg.Package+".py"), fmt.Sprintf(`import ompig_sdk
 NAME = %q
 def reach(input):
     if input.get("all"):
@@ -161,19 +161,19 @@ def probe(ctx, args):
     try:
         tools["host_fail"]["reachesTools"]({})
         failed = "returned"
-    except pig_sdk.HostCallError as error:
+    except ompig_sdk.HostCallError as error:
         failed = "threw" if "reach exploded" in str(error) else str(error)
     return "|".join([show(tools["reach_finder"]["reachesTools"]({"b": 1, "a": 2})), show(tools["reach_finder"]["reachesTools"]({"all": True})), show(tools["peer_finder"]["reachesTools"]({"c": 1})), show(tools["host_reach"]["reachesTools"]({"x": 1})), str("reachesTools" in tools["probe"]).lower(), failed])
 def new_extension():
-    e = pig_sdk.Extension(NAME)
-    e.register_tool(pig_sdk.ToolDefinition(name=NAME + "_finder", label="finder", description="Finds", parameters={"type": "object"}, execute=lambda ctx, args: "ok", reaches_tools=reach))
+    e = ompig_sdk.Extension(NAME)
+    e.register_tool(ompig_sdk.ToolDefinition(name=NAME + "_finder", label="finder", description="Finds", parameters={"type": "object"}, execute=lambda ctx, args: "ok", reaches_tools=reach))
     if NAME == "reach":
         e.tool("probe", "Probe", {"type": "object"}, probe)
     return e
 `, name))
 	case "rust":
 		write(filepath.Join(cfg.Source, "Cargo.toml"), fmt.Sprintf("[package]\nname=%q\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\nserde_json=\"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
-		write(filepath.Join(cfg.Source, "src", "lib.rs"), fmt.Sprintf(`use pig_sdk::{Extension,ToolDefinition,ToolReach,ToolResult,empty_schema};
+		write(filepath.Join(cfg.Source, "src", "lib.rs"), fmt.Sprintf(`use ompig_sdk::{Extension,ToolDefinition,ToolReach,ToolResult,empty_schema};
 use serde_json::json;
 const NAME:&str=%q;
 fn show(reach:ToolReach)->String{match reach{ToolReach::All=>"all".into(),ToolReach::Words(words)=>words.join(",")}}

@@ -1,4 +1,4 @@
-//go:build !pig_strip_export_html
+//go:build !ompig_strip_export_html
 
 package codingagent
 
@@ -59,7 +59,7 @@ func TestExportFileToHTMLMatchesPi(t *testing.T) {
 // file's parent, which exists. An export therefore creates no default session directory under the agent directory.
 func TestExportFileToHTMLCreatesNoSessionDirectoryLikePi(t *testing.T) {
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 	dir := t.TempDir()
 	input := filepath.Join(dir, "valid.jsonl")

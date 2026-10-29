@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // BenchmarkParallelToolBatch runs one assistant message of eight parallel tool calls end to end: the batch creates a gate and a slot per

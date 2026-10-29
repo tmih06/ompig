@@ -8,7 +8,7 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/npm-command/agent", "NPM_TRUST_RECORD={{TEMP}}"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/npm-command/agent", "NPM_TRUST_RECORD={{TEMP}}"]
 pi = ["PI_CODING_AGENT_DIR=testdata/npm-command/agent", "NPM_TRUST_RECORD={{TEMP}}", "PI_SKIP_VERSION_CHECK=1"]
 # The subcommand must precede startup flags.
 override_base_args = true

@@ -60,7 +60,7 @@ Go paths below were checked against `ai/types.go` at 9e25939e3.
 - U5: `ConstrainedSamplingConfig`, `FauxContentBlock`, `PiMessagesEvent` discriminator `Type string` carries the literal union; request a reviewed exception where a test asserts every literal.
 - `SimpleStreamOptions.toolChoice` (U1): Go `ToolChoice` is `interface{}`/`any` because Pi's value is string or object.
 - `PiMessagesResponseError.cause`/`.stack`: Go errors expose `Unwrap`; no stack (designed-out as in section C).
-- `GrammarVariants` (not-exercised): no test and no cmd/pig caller. Not a port gap; it needs a test that drives `GrammarVariants` through the grammar path or removal as caller-free. Left open.
+- `GrammarVariants` (not-exercised): no test and no cmd/ompig caller. Not a port gap; it needs a test that drives `GrammarVariants` through the grammar path or removal as caller-free. Left open.
 
 ## F. Third tranche: `api/*` no-go-symbol rows (checked against the Go source at 9e25939e3)
 ### F1. Rename or placement to an existing Go symbol

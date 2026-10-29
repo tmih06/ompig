@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type tuiKeybindingsConfigCase struct {
@@ -160,7 +160,7 @@ func TestTUIKeybindingsManagerMatchesPi(t *testing.T) {
 		var normalized tuiKeybindingsOracleResult
 		_ = json.Unmarshal(raw, &normalized)
 		normalized.Inputs = expected[i].Inputs
-		// Pi lists conflicts in the order the user config claimed their keys and the claimants in config order; a Go map holds no such order (Pig lists by key and by id), so both sides are sorted.
+		// Pi lists conflicts in the order the user config claimed their keys and the claimants in config order; a Go map holds no such order (Ompig lists by key and by id), so both sides are sorted.
 		for _, snapshot := range []*tuiKeybindingsSnapshot{&normalized.Before, &normalized.After, &expected[i].Before, &expected[i].After} {
 			for j := range snapshot.Conflicts {
 				slices.Sort(snapshot.Conflicts[j].Keybindings)
@@ -190,7 +190,7 @@ func TestTUIKeybindingsManagerMatchesPi(t *testing.T) {
 				if !reflect.DeepEqual(field.got, field.want) {
 					g, _ := json.Marshal(field.got)
 					e, _ := json.Marshal(field.want)
-					report += fmt.Sprintf("\n  %s %s\n  Pig %.600s\n  Pi  %.600s", part.name, field.name, g, e)
+					report += fmt.Sprintf("\n  %s %s\n  Ompig %.600s\n  Pi  %.600s", part.name, field.name, g, e)
 				}
 			}
 		}

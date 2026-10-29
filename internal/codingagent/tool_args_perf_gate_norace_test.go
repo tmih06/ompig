@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // A file written through a tool call streams its arguments into the interactive card 16 bytes at a time. Each delta must cost the same whatever came before it: the card reads the arguments received so far in place instead of a copy of all of them per delta. The gate compares the deltas after 1,600 and after 3,200, through the interactive event handler.

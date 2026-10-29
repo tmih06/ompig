@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi model-runtime.ts:562-577 reads stored credentials from the published snapshot, and provider-composer.ts:597-610 evaluates a configured "$VAR" key against the process environment only. A credential written after the snapshot cannot change the status, and the getter performs no credential I/O.
 func TestProviderAuthStatusConfiguredKeyUsesSnapshotAndProcessEnv(t *testing.T) {
-	const variable = "PIG_CONFIGURED_AUTH_SNAPSHOT_KEY"
+	const variable = "OMPIG_CONFIGURED_AUTH_SNAPSHOT_KEY"
 	t.Setenv(variable, "")
 	if err := os.Unsetenv(variable); err != nil {
 		t.Fatal(err)

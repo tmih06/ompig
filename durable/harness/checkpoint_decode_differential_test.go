@@ -5,9 +5,9 @@ import (
 	"math/rand/v2"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // referenceCheckpoint is what each built-in document's checkpoint predicate was before CheckpointWhenRaw: decode the

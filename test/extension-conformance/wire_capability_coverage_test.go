@@ -228,7 +228,7 @@ func sdkSources(t *testing.T, root string) map[string]string {
 	return map[string]string{
 		"go":   readSDKSourceDir(t, filepath.Join(root, "extensions", "sdk"), ".go"),
 		"rust": readSDKSourceDir(t, filepath.Join(root, "extensions", "sdk-rs", "src"), ".rs"),
-		"py":   readSDKSourceDir(t, filepath.Join(root, "extensions", "sdk-py", "pig_sdk"), ".py"),
+		"py":   readSDKSourceDir(t, filepath.Join(root, "extensions", "sdk-py", "ompig_sdk"), ".py"),
 		"node": readSDKSourceDir(t, filepath.Join(root, "coding", "extension", "host", "subprocess", "runtime-node"), ".mjs"),
 	}
 }

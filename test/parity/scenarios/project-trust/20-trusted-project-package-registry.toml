@@ -10,11 +10,11 @@ driver = "cli-mode"
 [env]
 # Launch the real CLI with isolated per-run loopback registries, then report measured traffic.
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["python3", "./test/parity/testdata/npm-registry-scope.py", "pig", "project"]
+ompig_args = ["python3", "./test/parity/testdata/npm-registry-scope.py", "ompig", "project"]
 pi_args = ["python3", "./test/parity/testdata/npm-registry-scope.py", "pi", "project"]
-pig = ["SCOPE_PROBE_TEMP={{TEMP}}"]
+ompig = ["SCOPE_PROBE_TEMP={{TEMP}}"]
 pi = ["SCOPE_PROBE_TEMP={{TEMP}}"]
 
 [cli]

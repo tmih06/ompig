@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 const (
@@ -88,7 +88,7 @@ func (p xaiOAuthProvider) LoginContext(ctx context.Context, callbacks OAuthLogin
 	status, body, err := p.postForm(ctx, p.deviceURL, formFields{
 		{"client_id", xaiClientID},
 		{"scope", xaiScope},
-		// pig divergence (D26): PiG names itself as the device-code referrer.
+		// ompig divergence (D26): Ompig names itself as the device-code referrer.
 		{"referrer", pigidentity.XAIReferrer},
 	})
 	if err != nil {

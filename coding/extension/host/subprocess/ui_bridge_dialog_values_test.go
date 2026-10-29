@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // valueUI answers every dialog with the JSON in reply, as a UIContext whose dialogs resolve with the client's JSON (Pi's RPC mode) does.

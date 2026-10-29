@@ -1,31 +1,31 @@
 # Automate a weekly report
 
-**Goal:** have PiG write the same report from fresh data every week, without you typing anything. You do the task once by hand, save the instruction as a small script and schedule the script.
+**Goal:** have Ompig write the same report from fresh data every week, without you typing anything. You do the task once by hand, save the instruction as a small script and schedule the script.
 
-**You need:** PiG signed in with `pig login` ([Your first ten minutes](/docs/latest/first-run)), a data file that changes weekly (CSV or text) and a Mac or Linux computer. The script is a shell script. On Windows, run it with WSL or Git Bash.
+**You need:** Ompig signed in with `ompig login` ([Your first ten minutes](/docs/latest/first-run)), a data file that changes weekly (CSV or text) and a Mac or Linux computer. The script is a shell script. On Windows, run it with WSL or Git Bash.
 
 **Time:** fifteen minutes to set up. Each weekly run takes as long as one model reply.
 
 ## How it works
 
-`pig -p "<prompt>"` runs one prompt and exits, with no screen to watch and nothing to type. That is print mode. The pieces of the command are:
+`ompig -p "<prompt>"` runs one prompt and exits, with no screen to watch and nothing to type. That is print mode. The pieces of the command are:
 
 | Piece | Meaning |
 |---|---|
 | `-p` | Run the prompt once and exit (Pi `packages/coding-agent/src/cli/args.ts:177`). |
-| `--no-session` | Do not save the conversation (Pi `packages/coding-agent/src/cli/args.ts:132`). Without it, every run adds a file under `~/.pig/agent/sessions/`. |
+| `--no-session` | Do not save the conversation (Pi `packages/coding-agent/src/cli/args.ts:132`). Without it, every run adds a file under `~/.ompig/agent/sessions/`. |
 | `--tools read,write` | Allow only the tools `read` and `write`. The model cannot run commands or edit other files (Pi `packages/coding-agent/src/cli/args.ts:151`). |
 | `@this-week.csv` | Put this file's contents in the message (Pi `packages/coding-agent/src/cli/file-processor.ts:78`: the text arrives as `<file name="...">`). |
 | the quoted text | The instruction. |
 
 ## Step 1: do it once by hand
 
-Make a folder with the weekly data and start PiG there:
+Make a folder with the weekly data and start Ompig there:
 
 ```bash
 mkdir ~/weekly && cd ~/weekly
 printf 'day,orders,refunds\nMon,41,2\nTue,38,1\nWed,52,4\nThu,47,0\nFri,60,3\n' > this-week.csv
-pig
+ompig
 ```
 
 ```text
@@ -36,13 +36,13 @@ Check `weekly-report.md` against the numbers. Here the orders total 238 and refu
 
 ## Step 2: save it as a script
 
-Save this as `~/weekly/weekly-report.sh`. Replace `/usr/local/bin/pig` with the output of `command -v pig`:
+Save this as `~/weekly/weekly-report.sh`. Replace `/usr/local/bin/ompig` with the output of `command -v ompig`:
 
 ```bash
 #!/bin/sh
-# Writes weekly-report.md from this-week.csv. Appends everything PiG prints to weekly-report.log.
+# Writes weekly-report.md from this-week.csv. Appends everything Ompig prints to weekly-report.log.
 cd "$(dirname "$0")" || exit 1
-/usr/local/bin/pig -p --no-session --no-extensions --tools read,write @this-week.csv \
+/usr/local/bin/ompig -p --no-session --no-extensions --tools read,write @this-week.csv \
   "Write weekly-report.md: total orders, total refunds, refund rate and the best day. Three lines." \
   >> weekly-report.log 2>&1
 ```
@@ -54,7 +54,7 @@ chmod +x ~/weekly/weekly-report.sh
 ~/weekly/weekly-report.sh
 ```
 
-PiG prints the model's final reply into `weekly-report.log` and writes `weekly-report.md`:
+Ompig prints the model's final reply into `weekly-report.log` and writes `weekly-report.md`:
 
 ```text
 Report written to weekly-report.md.
@@ -66,7 +66,7 @@ Report written to weekly-report.md.
 Orders: 238. Refunds: 10 (4.2%). Best day: Friday (60 orders).
 ```
 
-The script's exit code is PiG's exit code. It is 0 when the run worked. A model that cannot be reached writes its error to the log and the script exits 1. Here is the whole log of a run when the provider could not be reached:
+The script's exit code is Ompig's exit code. It is 0 when the run worked. A model that cannot be reached writes its error to the log and the script exits 1. Here is the whole log of a run when the provider could not be reached:
 
 ```text
 Connection error.
@@ -76,14 +76,14 @@ Look in `weekly-report.log` first when a report is missing.
 
 ### Why the full path and a stored login
 
-A scheduler starts the script with an almost empty environment. It has no `PATH` entry for your PiG, and it does not read your shell profile, so a key you `export`ed in `~/.zshrc` is not there. Two rules follow:
+A scheduler starts the script with an almost empty environment. It has no `PATH` entry for your Ompig, and it does not read your shell profile, so a key you `export`ed in `~/.zshrc` is not there. Two rules follow:
 
-1. Write the full path to `pig`, as above.
-2. Sign in with `pig login`. PiG stores that credential in `~/.pig/agent/auth.json` and reads it in every run (`providers.md`: stored credentials take precedence over the environment). If you use an API key from the environment, put the `export` line in the script itself, above the `pig` line, and protect the script (`chmod 700`).
+1. Write the full path to `ompig`, as above.
+2. Sign in with `ompig login`. Ompig stores that credential in `~/.ompig/agent/auth.json` and reads it in every run (`providers.md`: stored credentials take precedence over the environment). If you use an API key from the environment, put the `export` line in the script itself, above the `ompig` line, and protect the script (`chmod 700`).
 
 The script was tested under `env -i PATH=/usr/bin:/bin HOME=...`, an almost empty environment like the scheduler's.
 
-The scheduler's `PATH` also has no Node.js. PiG cannot load an extension written in TypeScript or JavaScript there, and the run would stop with `Error: Failed to load extension ... node was not found on PATH`. The report needs no extensions, so the script starts PiG with `--no-extensions`.
+The scheduler's `PATH` also has no Node.js. Ompig cannot load an extension written in TypeScript or JavaScript there, and the run would stop with `Error: Failed to load extension ... node was not found on PATH`. The report needs no extensions, so the script starts Ompig with `--no-extensions`.
 
 ## Step 3: schedule it
 
@@ -104,9 +104,9 @@ On a Mac, `cron` may need Full Disk Access (System Settings, Privacy & Security)
 ## Step 4: keep it safe
 
 - **Keep the tool list small.** `--tools read,write` is the point of the script. A scheduled run has nobody watching, so give it only the tools it needs. Leave out `bash`.
-- **One output file.** The prompt names `weekly-report.md`. `write` replaces a file of that name each week. Keep last week's with a dated copy: add `cp weekly-report.md "report-$(date +%F).md"` as a line before the `pig` line.
+- **One output file.** The prompt names `weekly-report.md`. `write` replaces a file of that name each week. Keep last week's with a dated copy: add `cp weekly-report.md "report-$(date +%F).md"` as a line before the `ompig` line.
 - **Read the first few reports.** A model can misread a column. Spot-check against the data until you trust the prompt.
-- **No data, no report.** A missing `@` file stops PiG before any model call: it prints `Error: File not found: <path>` and exits 1, and the log shows it (Pi `packages/coding-agent/src/cli/file-processor.ts:36-40`). An **empty** file is skipped without any message (`packages/coding-agent/src/cli/file-processor.ts:46-49`), so the model gets your instruction and no data, and may make numbers up. Add `[ -s this-week.csv ] || exit 1` after the `cd` line to stop on both.
+- **No data, no report.** A missing `@` file stops Ompig before any model call: it prints `Error: File not found: <path>` and exits 1, and the log shows it (Pi `packages/coding-agent/src/cli/file-processor.ts:36-40`). An **empty** file is skipped without any message (`packages/coding-agent/src/cli/file-processor.ts:46-49`), so the model gets your instruction and no data, and may make numbers up. Add `[ -s this-week.csv ] || exit 1` after the `cd` line to stop on both.
 
 ## Undo
 

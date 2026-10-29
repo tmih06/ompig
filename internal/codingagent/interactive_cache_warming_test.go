@@ -7,8 +7,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Changing the row reconciles the running warmer through the Session, as
@@ -102,7 +102,7 @@ func TestRebuildRendersPersistedCacheWarmingUsage(t *testing.T) {
 }
 
 // agent-session.ts _omitRecoveryAttempt appends a context_edit and emits entry_appended; Pi's footer re-asks getContextUsage() on its next render, so
-// the percentage drops the omitted reply's usage. Found by driving a stopReason "length" reply through both TUIs (0.7% in Pi, 0.1% in PiG).
+// the percentage drops the omitted reply's usage. Found by driving a stopReason "length" reply through both TUIs (0.7% in Pi, 0.1% in Ompig).
 func TestContextEditEntryRefreshesTheFooterContextUsage(t *testing.T) {
 	model := &ai.Model{ID: "m", DisplayName: "m", Capabilities: ai.ModelCapabilities{ContextWindow: 8000}}
 	tokens := 120

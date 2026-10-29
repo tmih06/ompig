@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func diagnosticTexts(list []sdk.ResourceDiagnostic) []string {

@@ -17,15 +17,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/managementhttp"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/managementhttp"
 )
 
 // DefaultCatalogBaseURL is the catalog endpoint of the built-in providers.
-// pig divergence (D64): PiG reads the remote catalog overlay from its own pi-in-go.dev instead of Pi's https://pi.dev
+// ompig divergence (D64): Ompig reads the remote catalog overlay from its own ompig.dev instead of Pi's https://pi.dev
 // (remote-catalog-provider.ts:DEFAULT_CATALOG_BASE_URL). An endpoint that does not serve the catalog (404 or 501) leaves the bundled catalog.
-const DefaultCatalogBaseURL = "https://pi-in-go.dev"
+const DefaultCatalogBaseURL = "https://ompig.dev"
 
 const remoteCatalogAttemptTimeout = 4 * time.Second
 
@@ -221,7 +221,7 @@ func newCatalogRequest(ctx context.Context, providerID, catalogBaseURL, validato
 		return nil, err
 	}
 	request.Header.Set("accept", "application/json")
-	// pig divergence (D65): PiG identifies as pig/<version>, where Pi sends pi/<version> (remote-catalog-provider.ts:getPiUserAgent).
+	// ompig divergence (D65): Ompig identifies as ompig/<version>, where Pi sends pi/<version> (remote-catalog-provider.ts:getPiUserAgent).
 	request.Header.Set("User-Agent", ai.FormatUserAgent(nil))
 	if validator != "" {
 		request.Header.Set("if-none-match", validator)

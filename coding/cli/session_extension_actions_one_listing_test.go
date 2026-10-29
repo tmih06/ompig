@@ -5,17 +5,17 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi binds one getCommands (agent-session.ts:3361-3384 _bindExtensionCore), so the list an extension reads through the mode's binding is the
 // list the Session reports. A resource that reached the Session without sourceInfo gets its path provenance in both, not only in Session.SlashCommands.
 func TestModeGetCommandsIsTheSessionsCommandList(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv("PI_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	t.Setenv("PI_CODING_AGENT_DIR", t.TempDir())
 	cwd := t.TempDir()
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: cwd})
@@ -33,7 +33,7 @@ func TestModeGetCommandsIsTheSessionsCommandList(t *testing.T) {
 	})
 	live.SetPromptResources(
 		[]coding.PromptTemplate{{Name: "mine", FilePath: filepath.Join(services.AgentDir(), "prompts", "mine.md")}},
-		[]*coding.Skill{{Name: "lint", FilePath: filepath.Join(cwd, ".pig", "skills", "lint", "SKILL.md")}},
+		[]*coding.Skill{{Name: "lint", FilePath: filepath.Join(cwd, ".ompig", "skills", "lint", "SKILL.md")}},
 	)
 	runtime := extension.CreateExtensionRuntime()
 	runner := inproc.NewRunner(nil, cwd, runtime)

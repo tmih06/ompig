@@ -9,8 +9,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi tui.ts:745-775: unfocus() without options restores focus, and unfocus({target}) focuses exactly target, including null or undefined. The Node handle names the target the host can resolve: null, the extension's editor component, or another of its mounted overlays.

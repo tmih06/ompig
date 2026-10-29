@@ -12,20 +12,20 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extensionset"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extensionset"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/tui"
 )
 
 // cliStartupFailure is a failed build. Startup reports it in the form the failing step used and exits. A replacement receives it as an ordinary error.
@@ -41,7 +41,7 @@ func cliCLIError(format string, args ...any) *cliStartupFailure {
 }
 
 func cliPigError(format string, args ...any) *cliStartupFailure {
-	return &cliStartupFailure{message: fmt.Sprintf(format, args...), report: func(message string) { fmt.Fprintf(os.Stderr, "pig: %s\n", message) }}
+	return &cliStartupFailure{message: fmt.Sprintf(format, args...), report: func(message string) { fmt.Fprintf(os.Stderr, "ompig: %s\n", message) }}
 }
 
 // cliRuntimeBuilder holds the process-fixed inputs of Pi's createRuntime closure and builds the cwd-bound state of one Session runtime: services, resources, extension host, model, tools and system prompt.
@@ -50,7 +50,7 @@ type cliRuntimeBuilder struct {
 	flags               Args
 	agentDir            string
 	launchCWD           string
-	activePiglet        *piglet.Piglet
+	activePiglet        *ompiglet.Ompiglet
 	activePigletBaked   bool
 	shadowedPiglet      string
 	settingsManager     *codingagent.SettingsManager
@@ -189,7 +189,7 @@ func (b *cliRuntimeBuilder) buildResources(ctx context.Context, in cliBuildInput
 	}
 	build.Services = services
 	trace.Mark("services-created")
-	// pig additive (D19): the TypeScript extension runtime this process requests; PIG_TS_RUNTIME overrides it.
+	// ompig additive (D19): the TypeScript extension runtime this process requests; OMPIG_TS_RUNTIME overrides it.
 	subprocess.SetTypeScriptRuntimeSetting(services.SettingsManager().GetExtensionsTypescriptRuntime())
 	// --use-theme and --tui-mode reach only InteractiveMode (InitialThemeSetting
 	// and TuiMode), so the runtime settings keep the saved values as Pi's do.
@@ -216,7 +216,7 @@ func (b *cliRuntimeBuilder) buildResources(ctx context.Context, in cliBuildInput
 				reportExtensionSDKStageFailure(os.Stderr, err)
 				return
 			}
-			sdkDiagnostics = append(sdkDiagnostics, codingagent.AgentSessionRuntimeDiagnostic{Type: "warning", Message: fmt.Sprintf("extension SDK staging failed: %v; extensions that need the SDK may fail to build; run 'pig diagnose' for detail", err)})
+			sdkDiagnostics = append(sdkDiagnostics, codingagent.AgentSessionRuntimeDiagnostic{Type: "warning", Message: fmt.Sprintf("extension SDK staging failed: %v; extensions that need the SDK may fail to build; run 'ompig diagnose' for detail", err)})
 		})
 	}
 
@@ -338,10 +338,10 @@ func (b *cliRuntimeBuilder) buildResources(ctx context.Context, in cliBuildInput
 	}
 	if reinstalled, missingPkgs := packagemanager.EnsureConfiguredPackagesInstalled(cwd, services.SettingsManager().AgentDir(), services.SettingsManager()); len(reinstalled)+len(missingPkgs) > 0 {
 		if len(reinstalled) > 0 {
-			fmt.Fprintf(os.Stderr, "[pig] Reinstalled missing packages: %s\n", strings.Join(reinstalled, ", "))
+			fmt.Fprintf(os.Stderr, "[ompig] Reinstalled missing packages: %s\n", strings.Join(reinstalled, ", "))
 		}
 		if len(missingPkgs) > 0 {
-			fmt.Fprintf(os.Stderr, "[pig] Could not install: %s (run `pig update` when online)\n", strings.Join(missingPkgs, ", "))
+			fmt.Fprintf(os.Stderr, "[ompig] Could not install: %s (run `ompig update` when online)\n", strings.Join(missingPkgs, ", "))
 		}
 	}
 	trace.Mark("packages-reinstall-done")
@@ -393,7 +393,7 @@ func (b *cliRuntimeBuilder) buildResources(ctx context.Context, in cliBuildInput
 	if b.activePiglet != nil {
 		pigletExtConfigs := resolvePigletExtConfigs(b.activePiglet)
 		if b.activePigletBaked && len(b.activePiglet.Extensions) > 0 {
-			// A Binary's own extensions are fused or embedded; an overlay's (D202) have origins and resolve like a stock --piglet's.
+			// A Binary's own extensions are fused or embedded; an overlay's (D202) have origins and resolve like a stock --ompiglet's.
 			flags.NoExtensions = true
 			extraExtConfigs = mergeExtConfigs(append(append(fusedConfigsForPiglet(b.activePiglet), pigletExtConfigs...), extraExtConfigs...))
 		} else if len(pigletExtConfigs) > 0 {
@@ -431,7 +431,7 @@ func (b *cliRuntimeBuilder) buildResources(ctx context.Context, in cliBuildInput
 		finalExtConfigs, reloadFinalExtConfigs = rpcExtensionConfigs(extraExtConfigs, cwd, b.agentDir, build.RPCSourceInfo), nil
 	}
 	var extensionLoadErrs []error
-	// pig divergence (D70): every build, including a session replacement's, starts its own extension host and processes.
+	// ompig divergence (D70): every build, including a session replacement's, starts its own extension host and processes.
 	// Pi queues the provider registrations of the extensions it loads and flushes them only after every factory has finished, immediately before an awaited local refresh (agent-session-services.ts:158-182), so no Provider callback runs while extensions load. The hold keeps a registration from starting that refresh early, including for a replacement Session's build (D70).
 	releaseRegistrationRefresh := registry.HoldRegistrationRefresh()
 	defer releaseRegistrationRefresh()
@@ -509,7 +509,7 @@ func (b *cliRuntimeBuilder) buildResources(ctx context.Context, in cliBuildInput
 			return builtins
 		}
 		owner := pigletToolOwner(func() []extension.Extension { return build.Extensions })
-		return append([]extension.Extension{piglet.BuildExtensionWithPigletTools(activePiglet, owner)}, builtins...)
+		return append([]extension.Extension{ompiglet.BuildExtensionWithPigletTools(activePiglet, owner)}, builtins...)
 	}
 	// The program's own factories load even when every built-in is stripped (D92).
 	if activePiglet != nil || len(builtInExtensions) > 0 || extensionset.HasInline(b.extensionFactories) {
@@ -612,7 +612,7 @@ func (b *cliRuntimeBuilder) loadPromptResources(build *cliBuild, agentToolNames 
 		ToolHints:      toolHints,
 		ToolGuidelines: toolGuidelines,
 		Skills:         promptSkills,
-		PigDocsPath:    codingagent.GetDocsPath(), PigReadmePath: codingagent.GetReadmePath(), PigExamplesPath: codingagent.GetExamplesPath(),
+		OmpigDocsPath:  codingagent.GetDocsPath(), OmpigReadmePath: codingagent.GetReadmePath(), OmpigExamplesPath: codingagent.GetExamplesPath(),
 		AppendMode:   "append",
 		ContextFiles: promptCtxFiles,
 	}

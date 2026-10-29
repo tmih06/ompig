@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // proxy.ts toolcall_delta sets `arguments: args.append(delta)`: tool arguments are an object, so a streamed value of any other kind (null, 0, false, "", [], 5,

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // find.ts trims each fd line with JavaScript's trim(): a name ending in U+FEFF loses it and a name ending in U+0085 (NEL, which Go's
@@ -65,7 +65,7 @@ func TestFindToolTrimsFdLinesLikePi(t *testing.T) {
 		}
 		want := expected[i].Text + expected[i].Thrown
 		if !slices.Equal(sorted(got), sorted(want)) {
-			t.Errorf("find %s:\n  Pig %q\n  Pi  %q", raw, sorted(got), sorted(want))
+			t.Errorf("find %s:\n  Ompig %q\n  Pi  %q", raw, sorted(got), sorted(want))
 		}
 	}
 }

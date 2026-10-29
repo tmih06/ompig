@@ -11,14 +11,14 @@ import (
 
 func TestCheckPigFreshnessDetectsStaleBinary(t *testing.T) {
 	root := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(root, "cmd", "pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, "cmd", "ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	bin := filepath.Join(root, "pig")
-	if err := os.WriteFile(bin, []byte("pig"), 0o755); err != nil {
+	bin := filepath.Join(root, "ompig")
+	if err := os.WriteFile(bin, []byte("ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	src := filepath.Join(root, "cmd", "pig", "main.go")
+	src := filepath.Join(root, "cmd", "ompig", "main.go")
 	if err := os.WriteFile(src, []byte("package main\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -45,11 +45,11 @@ func TestCheckPigFreshnessDetectsStaleBinary(t *testing.T) {
 
 func TestCheckPigFreshnessIgnoresTestsAndTestdata(t *testing.T) {
 	root := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(root, "cmd", "pig", "testdata"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, "cmd", "ompig", "testdata"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	bin := filepath.Join(root, "pig")
-	if err := os.WriteFile(bin, []byte("pig"), 0o755); err != nil {
+	bin := filepath.Join(root, "ompig")
+	if err := os.WriteFile(bin, []byte("ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	old := time.Now().Add(-10 * time.Second)
@@ -58,8 +58,8 @@ func TestCheckPigFreshnessIgnoresTestsAndTestdata(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, p := range []string{
-		filepath.Join(root, "cmd", "pig", "main_test.go"),
-		filepath.Join(root, "cmd", "pig", "testdata", "fixture.go"),
+		filepath.Join(root, "cmd", "ompig", "main_test.go"),
+		filepath.Join(root, "cmd", "ompig", "testdata", "fixture.go"),
 	} {
 		if err := os.WriteFile(p, []byte("package main\n"), 0o644); err != nil {
 			t.Fatal(err)

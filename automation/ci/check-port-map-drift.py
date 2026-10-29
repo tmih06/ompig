@@ -3,7 +3,7 @@
 
 docs/parity/PORT_MAP.md is the denominator for parity coverage. If upstream adds a source
 file and the map omits it, coverage can overstate faithfulness. This check makes
-that impossible: every non-test upstream source file in the packages pig tracks
+that impossible: every non-test upstream source file in the packages ompig tracks
 must be represented, and every row, whatever its status, must point at a file
 that still exists in .upstream/current. A removed file has no behavior to port,
 defer, or rule out, so an n/a or ⏸ row for it only inflates those counts; the
@@ -117,8 +117,8 @@ def status_token(status: str) -> str:
 
 
 def pinned_version(port_map: pathlib.Path) -> str:
-    if os.environ.get("PIG_UPSTREAM_VERSION"):
-        return os.environ["PIG_UPSTREAM_VERSION"]
+    if os.environ.get("OMPIG_UPSTREAM_VERSION"):
+        return os.environ["OMPIG_UPSTREAM_VERSION"]
     source = (port_map.parents[2] / "internal" / "coding" / "pigversion" / "pigversion.go").read_text(encoding="utf-8")
     match = re.search(r'^const UpstreamVersion = "([^"]+)"', source, re.MULTILINE)
     if not match:

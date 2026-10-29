@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -11,7 +11,7 @@ import (
 // Pi's Bedrock client turns a non-2xx response into an exception through @smithy/core and @aws-sdk/core (the body parsed as JSON, the
 // name from x-amzn-errortype, code or __type and otherwise "Unknown", the body's members copied onto the exception), and
 // formatBedrockError (bedrock-converse-stream.ts:393-410) adds the status and the error-body.ts body. Each want is Pi 1.1.0's
-// errorMessage for the same response (probed through AWS_BEDROCK_FORCE_HTTP1 against a local server). PiG gave the Go SDK's text:
+// errorMessage for the same response (probed through AWS_BEDROCK_FORCE_HTTP1 against a local server). Ompig gave the Go SDK's text:
 // "UnknownError: UnknownError" for a gateway's {"error":{...}} body, and "operation error Bedrock Runtime: ConverseStream, https
 // response error StatusCode: 503, …" for an HTML body, which retry.ts then matched on "503".
 func TestBedrockHTTPErrorResponseIsPisSDKErrorText(t *testing.T) {

@@ -65,9 +65,9 @@ func TestExpectedExitCodePrefersPerBinaryAssertion(t *testing.T) {
 	one, two := 1, 2
 	sc := &Scenario{}
 	sc.Assert.ExitCode = &one
-	sc.Assert.PigExitCode = &two
-	if got := expectedExitCode(sc, "pig"); got == nil || *got != 2 {
-		t.Fatalf("pig = %v", got)
+	sc.Assert.OmpigExitCode = &two
+	if got := expectedExitCode(sc, "ompig"); got == nil || *got != 2 {
+		t.Fatalf("ompig = %v", got)
 	}
 	if got := expectedExitCode(sc, "pi"); got == nil || *got != 1 {
 		t.Fatalf("pi = %v", got)

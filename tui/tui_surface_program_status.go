@@ -3,10 +3,10 @@ package tui
 import (
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
-// pig additive (D91): the frontend session is the terminal the TUI is built
+// ompig additive (D91): the frontend session is the terminal the TUI is built
 // on, so Pi's program status (program-status-reporter.ts report, which calls
 // the TUI terminal's setProgramStatus) goes to the session's ProgramStatus
 // hook instead of stdout. As for Pi's terminals that are not a process

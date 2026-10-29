@@ -18,11 +18,11 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // CredentialInfo is non-secret credential metadata for account/status

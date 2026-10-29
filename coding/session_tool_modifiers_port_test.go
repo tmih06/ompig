@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Ports packages/coding-agent/test/default-tools-setting.test.ts (v1.1.0, ddaa0a03): the SDK `tools` option with only `+name` and `-name` entries.

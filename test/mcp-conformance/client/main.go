@@ -2,12 +2,12 @@
 // server and runs this program with the server URL as the last argument, the scenario name in
 // MCP_CONFORMANCE_SCENARIO, and scenario data in MCP_CONFORMANCE_CONTEXT.
 //
-// It drives the code PiG runs for an `mcp.json` HTTP server: mcpext.Connection connects and calls tools, and
+// It drives the code Ompig runs for an `mcp.json` HTTP server: mcpext.Connection connects and calls tools, and
 // mcpext.SignInMcpServer runs the OAuth sign-in that `/mcp` starts. The browser is simulated: the authorization URL is
-// fetched without following its redirect, and the redirect is delivered to PiG's loopback callback server.
+// fetched without following its redirect, and the redirect is delivered to Ompig's loopback callback server.
 // Credentials stay in memory.
 //
-// Run through ../run, which writes the outcome to PIG_MCP_CONFORMANCE_REPORT.
+// Run through ../run, which writes the outcome to OMPIG_MCP_CONFORMANCE_REPORT.
 //
 // Ports packages/coding-agent/test/mcp-conformance/client.ts.
 package main
@@ -24,13 +24,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// maxSignIns: sign-ins PiG asks the user for are not limited, so a user who keeps approving them would loop forever
+// maxSignIns: sign-ins Ompig asks the user for are not limited, so a user who keeps approving them would loop forever
 // against a server that never accepts the granted scope. This simulated user gives up after three, the limit
 // `auth/scope-retry-limit` checks.
 const maxSignIns = 3
@@ -69,7 +69,7 @@ func toolCalls(scenario string, connection *mcpext.Connection) (calls []toolCall
 }
 
 func logf(format string, args ...any) {
-	fmt.Fprintf(os.Stderr, "[pig-conformance] "+format+"\n", args...)
+	fmt.Fprintf(os.Stderr, "[ompig-conformance] "+format+"\n", args...)
 }
 
 func readContext() (map[string]any, error) {
@@ -282,7 +282,7 @@ func main() {
 	if result.Error != "" {
 		logf("error: %s", result.Error)
 	}
-	if path := os.Getenv("PIG_MCP_CONFORMANCE_REPORT"); path != "" {
+	if path := os.Getenv("OMPIG_MCP_CONFORMANCE_REPORT"); path != "" {
 		data, _ := json.MarshalIndent(result, "", "  ")
 		_ = os.WriteFile(path, append(data, '\n'), 0o600)
 	}

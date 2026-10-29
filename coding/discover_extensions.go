@@ -8,21 +8,21 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // DiscoverAndLoadExtensions discovers extensions in the standard locations and loads them: the project's `<cwd>/<config dir>/extensions` (`.pi` in Pi), the global `<agentDir>/extensions`, then each configured path, deduplicated by absolute path in that order. An empty agentDir is the agent directory of the process. Load failures are in the result's Errors, as in Pi.
 //
-// Ports packages/coding-agent/src/core/extensions/loader.ts discoverAndLoadExtensions (:828-875), discoverExtensionsInDir and resolveExtensionEntries. Pi imports each file into its own process; PiG loads it in the Extension Host (D19).
+// Ports packages/coding-agent/src/core/extensions/loader.ts discoverAndLoadExtensions (:828-875), discoverExtensionsInDir and resolveExtensionEntries. Pi imports each file into its own process; Ompig loads it in the Extension Host (D19).
 //
-// pig divergence (D117): Pi's optional event bus parameter does not exist; the Extension Host owns the routing of pi.events and a caller cannot supply a bus.
+// ompig divergence (D117): Pi's optional event bus parameter does not exist; the Extension Host owns the routing of pi.events and a caller cannot supply a bus.
 func DiscoverAndLoadExtensions(ctx context.Context, configuredPaths []string, cwd, agentDir string) (LoadExtensionsResult, error) {
 	allPaths, resolvedCwd, err := discoverExtensionPaths(configuredPaths, cwd, agentDir)
 	if err != nil {

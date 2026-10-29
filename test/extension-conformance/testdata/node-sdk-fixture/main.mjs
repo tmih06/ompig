@@ -175,13 +175,13 @@ export default function (pi) {
     hero: Array.from({ length: 14 }, () => "A".repeat(32)),
     mascot: Array.from({ length: 14 }, () => "A".repeat(16)),
     palette: { A: "#123ABC" },
-    name: "Conformance Pig",
+    name: "Conformance Ompig",
     description: "Cross-language login fixture",
     tagline: "One canonical definition across every SDK",
   });
   const spriteDefinition = () => ({
-    id: "conformance-pig",
-    name: "Conformance Pig",
+    id: "conformance-ompig",
+    name: "Conformance Ompig",
     tagline: "One canonical sprite across every SDK",
     mascot: Array.from({ length: 14 }, () => "A".repeat(16)),
     palette: { A: "#123ABC" },

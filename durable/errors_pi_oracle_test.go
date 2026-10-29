@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Runs Pi's packages/durable/src/errors.ts (Node, types stripped) over the same constructor calls and compares name, message,
-// Error-ness and cause with PiG's StorageRequestError, SessionFailed, ConversationBusy, ReadAfterWrite and ReadOnlySession.
+// Error-ness and cause with Ompig's StorageRequestError, SessionFailed, ConversationBusy, ReadAfterWrite and ReadOnlySession.
 func TestStorageRequestErrorAndSessionFailedMatchPi(t *testing.T) {
 	ops := []map[string]any{
 		{"class": "StorageRequestError", "message": "Invalid storage cursor"},
@@ -71,14 +71,14 @@ func TestStorageRequestErrorAndSessionFailedMatchPi(t *testing.T) {
 	for i, err := range got {
 		want := pi[i]
 		if names[i].Name() != want.Name || err.Error() != want.Message || !want.InstanceofError {
-			t.Errorf("case %d: PiG %q %q, Pi %q %q", i, names[i].Name(), err.Error(), want.Name, want.Message)
+			t.Errorf("case %d: Ompig %q %q, Pi %q %q", i, names[i].Name(), err.Error(), want.Name, want.Message)
 		}
 		cause := errors.Unwrap(err)
 		switch {
 		case want.Cause == nil && cause != nil:
-			t.Errorf("case %d: PiG has cause %v, Pi has none", i, cause)
+			t.Errorf("case %d: Ompig has cause %v, Pi has none", i, cause)
 		case want.Cause != nil && (cause == nil || cause.Error() != want.Cause.Message):
-			t.Errorf("case %d: PiG cause %v, Pi cause %q", i, cause, want.Cause.Message)
+			t.Errorf("case %d: Ompig cause %v, Pi cause %q", i, cause, want.Cause.Message)
 		}
 	}
 }

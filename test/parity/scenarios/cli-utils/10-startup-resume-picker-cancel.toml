@@ -20,16 +20,16 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "Resume Session (Current Folder)"
+ready_pattern_ompig = "Resume Session (Current Folder)"
 ready_pattern_pi = "Resume Session (Current Folder)"
 ready_timeout_seconds = 25
 keys = ["Escape"]
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../session/testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../session/testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=../session/testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--resume"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--resume"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--resume"]
 
 [assert]

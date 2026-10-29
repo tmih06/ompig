@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/test/model-resolver.test.ts (v1.1.0) through the public entry points over a real ModelRuntime: the "resolveModelScopeWithDiagnostics" cases (:224) and the "resolveCliModel" cases (:321).

@@ -74,9 +74,9 @@ class LockTest(unittest.TestCase):
         a = lock.read()["tools"]["hyperfine"]["assets"]["linux-amd64"]
         self.assertEqual((a["sha256"], a["size"]), ("38e59087bd65520930a13cf513d8a493b7043741e8ad62349a8a9929eb61bc5c", 737116))
 
-    def test_pig_release_checksum_is_the_published_one(self):
-        # SHA256SUMS of the PiG v0.4.1 GitHub release (linux-amd64), copied from the release asset, not from this repository's code.
-        self.assertEqual(lock.read()["arms"]["pig-0.4.1"]["assets"]["linux-amd64"]["sha256"], "3b4de3587cbfb617def483ec62dddcf35827acc3436b1454cc5694c22dcdaf3f")
+    def test_ompig_release_checksum_is_the_published_one(self):
+        # SHA256SUMS of the Ompig v0.4.1 GitHub release (linux-amd64), copied from the release asset, not from this repository's code.
+        self.assertEqual(lock.read()["arms"]["ompig-0.4.1"]["assets"]["linux-amd64"]["sha256"], "3b4de3587cbfb617def483ec62dddcf35827acc3436b1454cc5694c22dcdaf3f")
 
     def test_pi_is_locked_to_the_install_pair_its_release_publishes(self):
         # SHA256SUMS of the Pi v1.1.0 GitHub release lists these two files; they are copied from the release, not computed here.

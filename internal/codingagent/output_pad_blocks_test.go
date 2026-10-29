@@ -8,19 +8,19 @@ import (
 
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 
 	"bytes"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // resumedModeWithOutputPad persists a session through build, reloads it (the resume path) and returns a mode whose outputPad is pad.
@@ -91,7 +91,7 @@ func TestResumedBranchSummaryAndSkillBlockUseOutputPadProduction(t *testing.T) {
 }
 
 // Pi interactive-mode.ts:3915-3922 adds new Spacer(1) before every BranchSummaryMessageComponent, and the component is a Box with paddingY 1
-// (branch-summary-message.ts:16): two blank rows sit above the [branch] label. Found by the tree-navigate-branch-summary journey, where PiG
+// (branch-summary-message.ts:16): two blank rows sit above the [branch] label. Found by the tree-navigate-branch-summary journey, where Ompig
 // drew one: it added Text(""), which renders no row, where Pi adds Spacer(1).
 func TestResumedBranchSummaryHasPiSpacingAboveItsLabel(t *testing.T) {
 	m := resumedModeWithOutputPad(t, 1, func(sess *Session) {

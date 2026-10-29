@@ -9,8 +9,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // upstream: packages/ai/test/openai-codex-stream.test.ts:800 (#10429): a models.json header named originator or

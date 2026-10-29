@@ -9,15 +9,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/ai/src/api/openrouter-images.ts generateImages and parseUsage
 
 // Hand-written chat completion bodies for OpenRouter image generation: empty and missing choices, content of every type, images as strings and objects,
 // image URLs that are not data URLs or fail the `^data:([^;]+);base64,(.+)$` pattern, usage with absent, null and cached counts, and bodies that are not
-// JSON objects. The pinned pi-ai and PiG must produce equal output, usage, stop reason and error message.
+// JSON objects. The pinned pi-ai and Ompig must produce equal output, usage, stop reason and error message.
 //
 // Not covered: a response id that is not a non-empty string, and fractional or string token counts (the Go result holds a string id and integer counts).
 func TestOpenRouterImagesEdgeResponsesMatchPi(t *testing.T) {
@@ -188,7 +188,7 @@ func TestOpenRouterImagesEdgeResponsesMatchPi(t *testing.T) {
 		wantJSON, _ := json.Marshal(want[i])
 		if !bytes.Equal(gotJSON, wantJSON) {
 			if failures++; failures <= 100 {
-				t.Errorf("probe %d status %d text=%v body %q:\n PiG %s\n Pi  %s", i, p.Status, p.Text, p.Body, gotJSON, wantJSON)
+				t.Errorf("probe %d status %d text=%v body %q:\n Ompig %s\n Pi  %s", i, p.Status, p.Text, p.Body, gotJSON, wantJSON)
 			}
 		}
 	}

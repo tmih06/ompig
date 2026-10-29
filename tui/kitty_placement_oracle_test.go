@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // registerKittyImageMetadata, getKittyImageMetadata, getKittyImagePlacementRows, getKittyImagePlacement (chunked transmissions, malformed lines, non-ASCII text around
@@ -134,7 +134,7 @@ emit({
 // characters, dots, trailing slashes, backslashes, control characters and non-ASCII text.
 func TestImageFallbackMatchesPi(t *testing.T) {
 	const home = "/home/oracle"
-	// Node's os.homedir() and PiG's os.UserHomeDir() read USERPROFILE on Windows and HOME elsewhere.
+	// Node's os.homedir() and Ompig's os.UserHomeDir() read USERPROFILE on Windows and HOME elsewhere.
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
 	segments := []string{"a", "b c", "d%e", "f?g", "h#i", "j[k]", "l{m}", "n|o", "p^q", "r\"s", "t'u", "v<w>", "x`y", "z;=,@&+$!*()~", "é", "日本", "😀", "..", ".", "", "a\\b", "tab\there", "line\nbreak", "100%", "%41", "colon:x", "back\u007fdel"}
@@ -169,7 +169,7 @@ func TestImageFallbackMatchesPi(t *testing.T) {
 		items = append(items, item{MIME: []string{"image/png", "image/jpeg", ""}[rng.Intn(3)], Width: rng.Intn(5000), Height: rng.Intn(5000), HasDims: rng.Intn(2) == 0, Filename: name, Hyperlink: rng.Intn(2) == 0})
 	}
 	// On Windows Pi's pathToFileURL throws ERR_INVALID_URL for a path that resolves to a UNC path with an invalid host
-	// ("//colon:x/..."), which Pi does not catch; the probe reports those as null and PiG, which does not throw, is not compared.
+	// ("//colon:x/..."), which Pi does not catch; the probe reports those as null and Ompig, which does not throw, is not compared.
 	var want []*string
 	pioracle.Run(t, `
 const m = await load("pi-tui/terminal-image.js");

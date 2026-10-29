@@ -25,7 +25,7 @@ func TestLintChangedPackageSelection(t *testing.T) {
 		{name: "fixtures only", files: []string{
 			"testdata/root/main.go",
 			"test/extension-conformance/testdata/provider-go-sibling/extension.go",
-			"test/parity/testdata/ai-sdk-pig/main.go",
+			"test/parity/testdata/ai-sdk-ompig/main.go",
 		}},
 		{name: "mixed changes", files: []string{
 			"embed.go",
@@ -69,7 +69,7 @@ exit "${LINT_STATUS:-0}"
 			t.Setenv("CHANGED_FILES", strings.Join(tc.files, "\n"))
 			t.Setenv("LINT_LOG", log)
 			t.Setenv("LINT_STATUS", tc.lintStatus)
-			t.Setenv("PIG_DEV_HOME", root)
+			t.Setenv("OMPIG_DEV_HOME", root)
 			cmd := mockedBash(t, filepath.Join(root, "bin"), "-c", "exec make lint-changed LINT_BASE=fixture")
 			cmd.Dir = root
 			output, err := cmd.CombinedOutput()

@@ -59,7 +59,7 @@ func isExtglobType(c uint16) bool {
 	return c != 0 && c < 0x80 && slices.Contains([]byte(globExtglobTypes), byte(c))
 }
 
-// adoptionTypes, adoptionWithSpaceTypes and adoptionAnyTypes are minimatch's adoptionMap, adoptionWithSpaceMap and adoptionAnyMap: the extglob types an extglob of type t adopts, or "" for none. Switches keep them out of package initialization, which every pig start pays.
+// adoptionTypes, adoptionWithSpaceTypes and adoptionAnyTypes are minimatch's adoptionMap, adoptionWithSpaceMap and adoptionAnyMap: the extglob types an extglob of type t adopts, or "" for none. Switches keep them out of package initialization, which every ompig start pays.
 func adoptionTypes(t uint16) string {
 	switch t {
 	case '!', '@':

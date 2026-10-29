@@ -11,8 +11,8 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/tui/termsim"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/tui/termsim"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func mdCaseSetup(t *testing.T) {

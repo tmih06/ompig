@@ -6,9 +6,9 @@ import (
 	"io"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // BuilderReadiness is the side-effect-free probe result used by auto selection
@@ -43,14 +43,14 @@ func (e *NoBuilderReadyError) Error() string {
 	return "no build backend is ready: " + strings.Join(messages, "; ")
 }
 
-// BuilderRequest is one already-validated, locked Piglet build request.
+// BuilderRequest is one already-validated, locked Ompiglet build request.
 type BuilderRequest struct {
-	Piglet  *piglet.Piglet
-	Cells   []subprocess.CellSpec
-	Options Options
-	Output  string
-	Stdout  io.Writer
-	Stderr  io.Writer
+	Ompiglet *ompiglet.Ompiglet
+	Cells    []subprocess.CellSpec
+	Options  Options
+	Output   string
+	Stdout   io.Writer
+	Stderr   io.Writer
 }
 
 // BuilderResult identifies the output produced by exactly one backend.
@@ -62,14 +62,14 @@ type BuilderResult struct {
 
 // BuilderBackend probes and executes one build provenance. Probe must have no
 // authentication, prompt, download, or mutation side effects.
-// pig additive (D18): Piglet Binary builds select generic named builders.
+// ompig additive (D18): Ompiglet Binary builds select generic named builders.
 type BuilderBackend interface {
 	Name() string
 	Probe(context.Context, BuilderRequest) BuilderReadiness
 	Build(context.Context, BuilderRequest) (BuilderResult, error)
 }
 
-// nativeBuilder compiles a Piglet Binary with the host Go toolchain from a local Pig checkout or,
+// nativeBuilder compiles a Ompiglet Binary with the host Go toolchain from a local Ompig checkout or,
 // for a release binary, from the running release's source fetched through the Go module proxy.
 type nativeBuilder struct {
 	// runningRelease reports the fetchable release version of the running binary; nil reads
@@ -90,11 +90,11 @@ func (b nativeBuilder) Probe(_ context.Context, request BuilderRequest) BuilderR
 		return result
 	}
 	fetchVersion := ""
-	if _, err := pigSourceRoot(); err != nil {
+	if _, err := ompigSourceRoot(); err != nil {
 		version, ok := b.releaseFor()
 		if !ok {
 			result.Code = "source-unavailable"
-			result.Message = err.Error() + "; this PiG build is not a tagged release whose source can be fetched"
+			result.Message = err.Error() + "; this Ompig build is not a tagged release whose source can be fetched"
 			result.Remedy = sourceUnavailableRemedy
 			return result
 		}
@@ -103,21 +103,21 @@ func (b nativeBuilder) Probe(_ context.Context, request BuilderRequest) BuilderR
 	if _, err := toolchain.Go(); err != nil {
 		result.Code = "go-unavailable"
 		result.Message = err.Error()
-		result.Remedy = "run `pig setup go` to install a verified Go toolchain, or install Go from https://go.dev/dl/"
+		result.Remedy = "run `ompig setup go` to install a verified Go toolchain, or install Go from https://go.dev/dl/"
 		return result
 	}
 	result.Ready = true
 	if fetchVersion != "" {
-		// pig additive (D18): Probe only reports the fetch; Build downloads the source.
+		// ompig additive (D18): Probe only reports the fetch; Build downloads the source.
 		result.Code = "source-fetchable"
-		result.Message = fmt.Sprintf("PiG %s source will be fetched through the Go module proxy", fetchVersion)
+		result.Message = fmt.Sprintf("Ompig %s source will be fetched through the Go module proxy", fetchVersion)
 	}
 	return result
 }
 
 func (b nativeBuilder) Build(ctx context.Context, request BuilderRequest) (BuilderResult, error) {
-	resolveSource := func(ctx context.Context) (pigSource, error) { return b.resolveSource(ctx, request.Stderr) }
-	artifact, record, err := buildNativeWithRecords(ctx, resolveSource, request.Piglet, request.Cells, request.Options, request.Output, request.Stdout, request.Stderr)
+	resolveSource := func(ctx context.Context) (ompigSource, error) { return b.resolveSource(ctx, request.Stderr) }
+	artifact, record, err := buildNativeWithRecords(ctx, resolveSource, request.Ompiglet, request.Cells, request.Options, request.Output, request.Stdout, request.Stderr)
 	if err != nil {
 		return BuilderResult{}, err
 	}

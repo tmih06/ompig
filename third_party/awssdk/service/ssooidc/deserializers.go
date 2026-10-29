@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/ssooidc/types"
 	"github.com/aws/aws-sdk-go-v2/aws/protocol/restjson"
 	smithy "github.com/aws/smithy-go"
 	smithyio "github.com/aws/smithy-go/io"
@@ -15,6 +14,7 @@ import (
 	"github.com/aws/smithy-go/ptr"
 	"github.com/aws/smithy-go/tracing"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/service/ssooidc/types"
 	"io"
 	"strings"
 )

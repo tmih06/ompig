@@ -1,12 +1,12 @@
-// pig: Go-native port of pi-coding-agent.
+// ompig: Go-native port of pi-coding-agent.
 //
 // Distinct binary name and config root from upstream pi to avoid PATH
 // collisions and shared-config corruption. See codingagent.ConfigRoot()
-// for the on-disk layout (defaults to ~/.pig, override with $PIG_HOME).
+// for the on-disk layout (defaults to ~/.ompig, override with $OMPIG_HOME).
 //
 // Usage:
 //
-//	pig [options] [prompt]
+//	ompig [options] [prompt]
 //
 // Options:
 //
@@ -37,40 +37,40 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/installchange"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/installchange"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodeurl"
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/fusepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/pigletbuild/binarypiglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/timings"
-	"github.com/MichaelKinsy/PiG/internal/frontendpack"
-	"github.com/MichaelKinsy/PiG/internal/gcpolicy"
-	"github.com/MichaelKinsy/PiG/internal/nativeplatform"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
-	"github.com/MichaelKinsy/PiG/internal/termuxenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/fusepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/pigletbuild/binarypiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/timings"
+	"github.com/tmih06/ompig/internal/frontendpack"
+	"github.com/tmih06/ompig/internal/gcpolicy"
+	"github.com/tmih06/ompig/internal/nativeplatform"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/termuxenv"
+	"github.com/tmih06/ompig/tui"
 )
 
-// PigVersion is pig's own release line. UpstreamVersion is the pi build this
+// OmpigVersion is ompig's own release line. UpstreamVersion is the pi build this
 // build targets (a release tag, or a pinned commit as 1.1.0+42a3497d), and
 // UpstreamPackageVersion the version that build's package.json files report.
 // The literals live in internal/coding/pigversion/pigversion.go, generated
@@ -78,7 +78,7 @@ import (
 // coding/upstream.go aliases it, so the parity runner (and this constant)
 // can import it without depending on package main.
 const (
-	PigVersion      = coding.PigVersion
+	OmpigVersion    = coding.OmpigVersion
 	UpstreamVersion = coding.UpstreamVersion
 	// UpstreamPackageVersion is what Pi's own `--version` and user agent report.
 	UpstreamPackageVersion = coding.UpstreamPackageVersion
@@ -111,7 +111,7 @@ func resolveBuildIdentity(linkerBuild, moduleVersion string) string {
 	return moduleVersion
 }
 
-// pig divergence (D39): PigletBinaryVersion is the baked release identity.
+// ompig divergence (D39): PigletBinaryVersion is the baked release identity.
 var PigletBinaryVersion string
 
 // selfUpdateVersion uses the baked release version when present.
@@ -119,28 +119,28 @@ func selfUpdateVersion() string {
 	if codingagent.PigletBinaryRelease != "" {
 		return codingagent.PigletBinaryRelease
 	}
-	return PigVersion
+	return OmpigVersion
 }
 
-// cliVersionString is the `pig --version` output.
+// cliVersionString is the `ompig --version` output.
 func cliVersionString() string {
-	// pig divergence (D63): --version defaults to PiG's composite version; the product-neutral PIG_VERSION_FORMAT=pi opt-in exposes the pinned Pi package version, which is what `pi --version` prints, for Pi-compatible launchers.
-	if os.Getenv("PIG_VERSION_FORMAT") == "pi" { //perf:ok --version runs once at process start
+	// ompig divergence (D63): --version defaults to Ompig's composite version; the product-neutral OMPIG_VERSION_FORMAT=pi opt-in exposes the pinned Pi package version, which is what `pi --version` prints, for Pi-compatible launchers.
+	if os.Getenv("OMPIG_VERSION_FORMAT") == "pi" { //perf:ok --version runs once at process start
 		return UpstreamPackageVersion
 	}
 	return Version
 }
 
-// versionString returns pig's self-identification string for help
+// versionString returns ompig's self-identification string for help
 // and diagnostics banners.
 func versionString() string {
-	return fmt.Sprintf("pig %s [%s %s/%s build=%s]",
+	return fmt.Sprintf("ompig %s [%s %s/%s build=%s]",
 		Version, runtime.Version(), runtime.GOOS, runtime.GOARCH, buildIdentity())
 }
 
 func detailedVersionString() string {
-	return fmt.Sprintf("pig: %s\nupstream pi: %s\ngo: %s\nplatform: %s/%s\nbuild: %s",
-		PigVersion, UpstreamVersion, runtime.Version(), runtime.GOOS, runtime.GOARCH, buildIdentity())
+	return fmt.Sprintf("ompig: %s\nupstream pi: %s\ngo: %s\nplatform: %s/%s\nbuild: %s",
+		OmpigVersion, UpstreamVersion, runtime.Version(), runtime.GOOS, runtime.GOARCH, buildIdentity())
 }
 
 // ─── Extension Loading ────────────────────────────────────────────────────────
@@ -262,14 +262,14 @@ func prepareInitialMessage(cwd string, messages, fileArgs []string, stdinContent
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 func runPigPreSessionCommand(args []string) int {
-	// pig additive (D92): the Piglet builder and `pig docs` are shims a Piglet Binary can compile out.
+	// ompig additive (D92): the Ompiglet builder and `ompig docs` are shims a Ompiglet Binary can compile out.
 	if code := runPigletBuilderCommand(args); code >= 0 {
 		return code
 	}
 	for _, run := range []func([]string, io.Writer, io.Writer) int{
 		runDocsCommand,
 		pigsdk.RunCommand,
-		piglet.RunCommand,
+		ompiglet.RunCommand,
 	} {
 		if code := run(args, os.Stdout, os.Stderr); code >= 0 {
 			return code
@@ -278,35 +278,35 @@ func runPigPreSessionCommand(args []string) int {
 	return -1
 }
 
-// pigletBinary is what the running executable says about its baked Piglet. The production path passes runningPigletBinary();
+// pigletBinary is what the running executable says about its baked Ompiglet. The production path passes runningPigletBinary();
 // tests pass their own value, so the guard and the overlay resolution run unchanged without package state to swap.
 type pigletBinary struct {
-	// Is reports whether the executable is a Piglet Binary.
+	// Is reports whether the executable is a Ompiglet Binary.
 	Is bool
-	// Name is the baked Piglet's name; it is read only to word a refusal.
+	// Name is the baked Ompiglet's name; it is read only to word a refusal.
 	Name func() string
-	// OverlayBase is the baked Piglet as the base of an overlay when the Binary accepts overlays (D202), else nil. It is read
-	// only when a Piglet was selected.
-	OverlayBase func() *piglet.OverlayBase
+	// OverlayBase is the baked Ompiglet as the base of an overlay when the Binary accepts overlays (D202), else nil. It is read
+	// only when a Ompiglet was selected.
+	OverlayBase func() *ompiglet.OverlayBase
 }
 
 func runningPigletBinary() pigletBinary {
 	return pigletBinary{Is: binarypiglet.IsPigletBinary(), Name: binarypiglet.Name, OverlayBase: binarypiglet.OverlayBase}
 }
 
-// pigletBinaryOverlayRefusal returns the refusal for a Piglet requested from a Piglet Binary that does not accept
-// overlays, or "" when the run may go on. A Piglet Binary is bound to one immutable composition unless its Piglet set
-// build.allowOverlays (D202); otherwise running another Piglet is out of scope, so it names the Binary and points at the
-// setting and at raw pig.
+// pigletBinaryOverlayRefusal returns the refusal for a Ompiglet requested from a Ompiglet Binary that does not accept
+// overlays, or "" when the run may go on. A Ompiglet Binary is bound to one immutable composition unless its Ompiglet set
+// build.allowOverlays (D202); otherwise running another Ompiglet is out of scope, so it names the Binary and points at the
+// setting and at raw ompig.
 func pigletBinaryOverlayRefusal(flags map[string]any, binary pigletBinary) string {
 	if !binary.Is || !pigletWasRequested(flags) || binary.OverlayBase() != nil {
 		return ""
 	}
-	return fmt.Sprintf("pig: this Piglet Binary (%s) runs only its built-in Piglet and does not accept --piglet overlays (nor PIG_PIGLET_PATH or PIG_PIGLET_NAME); build its Piglet with build.allowOverlays: true to accept them, or run the Piglet with stock pig (pig --piglet <name|path>)", binary.Name())
+	return fmt.Sprintf("ompig: this Ompiglet Binary (%s) runs only its built-in Ompiglet and does not accept --ompiglet overlays (nor OMPIG_OMPIGLET_PATH or OMPIG_OMPIGLET_NAME); build its Ompiglet with build.allowOverlays: true to accept them, or run the Ompiglet with stock ompig (ompig --ompiglet <name|path>)", binary.Name())
 }
 
-// enforcePigletBinaryScope fails closed when a Piglet Binary is asked to run a
-// different Piglet than the one it was built with and does not accept overlays.
+// enforcePigletBinaryScope fails closed when a Ompiglet Binary is asked to run a
+// different Ompiglet than the one it was built with and does not accept overlays.
 func enforcePigletBinaryScope(flags map[string]any) {
 	if message := pigletBinaryOverlayRefusal(flags, runningPigletBinary()); message != "" {
 		fmt.Fprintln(os.Stderr, message)
@@ -314,51 +314,51 @@ func enforcePigletBinaryScope(flags map[string]any) {
 	}
 }
 
-// resolvePiglet reads the piglet from --piglet flag or
-// PIG_PIGLET_NAME/PIG_PIGLET_PATH env vars. Returns nil if no piglet.
+// resolvePiglet reads the ompiglet from --ompiglet flag or
+// OMPIG_OMPIGLET_NAME/OMPIG_OMPIGLET_PATH env vars. Returns nil if no ompiglet.
 // This is called early in startup: before model resolution, extension
-// loading, and discovery: so that piglet fields can drive those steps.
-// requestedPigletName is the name or path --piglet, PIG_PIGLET_PATH or PIG_PIGLET_NAME selects, in resolvePiglet's order, or "".
+// loading, and discovery: so that ompiglet fields can drive those steps.
+// requestedPigletName is the name or path --ompiglet, OMPIG_OMPIGLET_PATH or OMPIG_OMPIGLET_NAME selects, in resolvePiglet's order, or "".
 func requestedPigletName(unknownFlags map[string]any) string {
-	if v, ok := unknownFlags["piglet"].(string); ok && strings.TrimSpace(v) != "" {
+	if v, ok := unknownFlags["ompiglet"].(string); ok && strings.TrimSpace(v) != "" {
 		return v
 	}
-	if os.Getenv("PIG_PIGLET_PATH") != "" {
+	if os.Getenv("OMPIG_OMPIGLET_PATH") != "" {
 		return ""
 	}
-	return os.Getenv("PIG_PIGLET_NAME")
+	return os.Getenv("OMPIG_OMPIGLET_NAME")
 }
 
-func resolvePiglet(unknownFlags map[string]any, trustOverride *bool) (*piglet.Piglet, bool) {
+func resolvePiglet(unknownFlags map[string]any, trustOverride *bool) (*ompiglet.Ompiglet, bool) {
 	return resolvePigletOn(unknownFlags, trustOverride, runningPigletBinary())
 }
 
-// resolvePigletOn is resolvePiglet for the given Piglet Binary identity.
-func resolvePigletOn(unknownFlags map[string]any, trustOverride *bool, binary pigletBinary) (*piglet.Piglet, bool) {
-	// pig additive (D202): a Piglet Binary that accepts overlays resolves the selected Piglet on top of its baked one. A run that
-	// selects no Piglet does no overlay work.
-	var base *piglet.OverlayBase
+// resolvePigletOn is resolvePiglet for the given Ompiglet Binary identity.
+func resolvePigletOn(unknownFlags map[string]any, trustOverride *bool, binary pigletBinary) (*ompiglet.Ompiglet, bool) {
+	// ompig additive (D202): a Ompiglet Binary that accepts overlays resolves the selected Ompiglet on top of its baked one. A run that
+	// selects no Ompiglet does no overlay work.
+	var base *ompiglet.OverlayBase
 	if binary.Is && pigletWasRequested(unknownFlags) {
 		base = binary.OverlayBase()
 	}
-	// Find the piglet path from flag or env.
+	// Find the ompiglet path from flag or env.
 	var pigletPath string
-	if v, ok := unknownFlags["piglet"]; ok {
+	if v, ok := unknownFlags["ompiglet"]; ok {
 		s, valid := v.(string)
 		if !valid || strings.TrimSpace(s) == "" {
-			fmt.Fprintln(os.Stderr, "warning: --piglet requires a name or path")
+			fmt.Fprintln(os.Stderr, "warning: --ompiglet requires a name or path")
 			return nil, false
 		}
 		pigletPath = s
 	}
 
 	// A path (a separator or a .yaml/.yml name) is used as given; a bare name is searched in the workspace (only when the project is trusted), the
-	// user's Piglets and the system's. A bare name is never a file in the working directory: a checkout could plant one. Resolve's descriptive
+	// user's Ompiglets and the system's. A bare name is never a file in the working directory: a checkout could plant one. Resolve's descriptive
 	// "not found in search paths" error is surfaced instead of parsing the bare name.
 	if pigletPath != "" {
-		resolved, rerr := piglet.ResolveWithTrust(pigletPath, trustOverride)
+		resolved, rerr := ompiglet.ResolveWithTrust(pigletPath, trustOverride)
 		if rerr != nil {
-			fmt.Fprintf(os.Stderr, "warning: piglet %q: %v\n", pigletPath, rerr)
+			fmt.Fprintf(os.Stderr, "warning: ompiglet %q: %v\n", pigletPath, rerr)
 			return nil, false
 		}
 		pigletPath = resolved
@@ -366,29 +366,29 @@ func resolvePigletOn(unknownFlags map[string]any, trustOverride *bool, binary pi
 
 	// Check env vars if no flag.
 	if pigletPath == "" {
-		if p := os.Getenv("PIG_PIGLET_PATH"); p != "" {
+		if p := os.Getenv("OMPIG_OMPIGLET_PATH"); p != "" {
 			pigletPath = p
-		} else if name := os.Getenv("PIG_PIGLET_NAME"); name != "" {
-			resolved, err := piglet.ResolveWithTrust(name, trustOverride)
+		} else if name := os.Getenv("OMPIG_OMPIGLET_NAME"); name != "" {
+			resolved, err := ompiglet.ResolveWithTrust(name, trustOverride)
 			if err == nil {
 				pigletPath = resolved
 			} else if base != nil {
-				// An overlay that does not resolve never falls back to the Binary's own Piglet silently.
-				fmt.Fprintf(os.Stderr, "warning: piglet %q: %v\n", name, err)
+				// An overlay that does not resolve never falls back to the Binary's own Ompiglet silently.
+				fmt.Fprintf(os.Stderr, "warning: ompiglet %q: %v\n", name, err)
 				return nil, false
 			}
 		}
 	}
 
 	if pigletPath == "" {
-		// A Piglet Binary's baked Piglet has precedence over host/platform
-		// defaults and cannot be replaced by an ambient /opt piglet.
+		// A Ompiglet Binary's baked Ompiglet has precedence over host/platform
+		// defaults and cannot be replaced by an ambient /opt ompiglet.
 		if p := binarypiglet.Default(); p != nil {
 			return p, true
 		}
-		// The ambient Piglet is no selection: it is never laid over a Binary's Piglet.
+		// The ambient Ompiglet is no selection: it is never laid over a Binary's Ompiglet.
 		base = nil
-		if pigletPath = piglet.AmbientPigletPath(); pigletPath == "" {
+		if pigletPath = ompiglet.AmbientPigletPath(); pigletPath == "" {
 			return nil, false
 		}
 	}
@@ -402,16 +402,16 @@ func resolvePigletOn(unknownFlags map[string]any, trustOverride *bool, binary pi
 		}
 		workspace = configured
 	}
-	resolution, err := piglet.ResolveEffectiveWithOptions(pigletPath, piglet.ResolveOptions{Workspace: workspace, Base: base})
+	resolution, err := ompiglet.ResolveEffectiveWithOptions(pigletPath, ompiglet.ResolveOptions{Workspace: workspace, Base: base})
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "warning: piglet %s: %v\n", pigletPath, err)
+		fmt.Fprintf(os.Stderr, "warning: ompiglet %s: %v\n", pigletPath, err)
 		return nil, false
 	}
-	// An overlay on a Piglet Binary is still the Binary's Piglet: its closure is verified and its baseline holds.
-	return resolution.Piglet, base != nil
+	// An overlay on a Ompiglet Binary is still the Binary's Ompiglet: its closure is verified and its baseline holds.
+	return resolution.Ompiglet, base != nil
 }
 
-func inlinePigletSystemPrompt(p *piglet.Piglet) {
+func inlinePigletSystemPrompt(p *ompiglet.Ompiglet) {
 	if p == nil || p.SystemPrompt == nil || p.SystemPrompt.File == "" {
 		return
 	}
@@ -420,23 +420,23 @@ func inlinePigletSystemPrompt(p *piglet.Piglet) {
 		promptPath = filepath.Join(filepath.Dir(p.SourcePath()), promptPath)
 	}
 	if data, err := os.ReadFile(promptPath); err == nil {
-		p.SystemPrompt = &piglet.PromptRef{Text: string(data)}
+		p.SystemPrompt = &ompiglet.PromptRef{Text: string(data)}
 	} else {
-		fmt.Fprintf(os.Stderr, "warning: piglet %s: system prompt %s: %v\n", p.Name, p.SystemPrompt.File, err)
+		fmt.Fprintf(os.Stderr, "warning: ompiglet %s: system prompt %s: %v\n", p.Name, p.SystemPrompt.File, err)
 	}
 }
 
-// resolvePigletExtConfigs resolves a piglet's extension origins to
+// resolvePigletExtConfigs resolves a ompiglet's extension origins to
 // subprocess.ExtConfig entries. An extension that does not resolve stays in the
 // result as an unresolved config, so the host reports it as an extension load
 // failure beside the ones that loaded, as Pi's loadExtensions records every
 // failed extension in path order (loader.ts:684-696) and main.ts reports each
-// one (main.ts:799-802). The configs keep the Piglet's declaration order.
+// one (main.ts:799-802). The configs keep the Ompiglet's declaration order.
 // Returns nil if no extensions have origins.
-func resolvePigletExtConfigs(p *piglet.Piglet) []subprocess.ExtConfig {
+func resolvePigletExtConfigs(p *ompiglet.Ompiglet) []subprocess.ExtConfig {
 	// ResolveExtensions yields one resolved extension or one error for each
 	// entry with origins, in declaration order.
-	resolved, errs := piglet.ResolveExtensions(p)
+	resolved, errs := ompiglet.ResolveExtensions(p)
 	var configs []subprocess.ExtConfig
 	for _, ext := range p.Extensions {
 		if len(ext.Origins) == 0 {
@@ -461,25 +461,25 @@ func resolvePigletExtConfigs(p *piglet.Piglet) []subprocess.ExtConfig {
 }
 
 // unresolvedPigletExtConfig reports an extension whose origins did not resolve
-// at the Piglet file. Its name stays unique per entry, so merging the startup
+// at the Ompiglet file. Its name stays unique per entry, so merging the startup
 // configs keeps one failure for each unresolved extension.
-func unresolvedPigletExtConfig(p *piglet.Piglet, name string, err error) subprocess.ExtConfig {
+func unresolvedPigletExtConfig(p *ompiglet.Ompiglet, name string, err error) subprocess.ExtConfig {
 	path := pigletExtensionFailurePath(p)
 	cfg := subprocess.UnresolvedExtConfig(path, err)
 	cfg.Name = path + "#" + name
 	return cfg
 }
 
-// pigletExtensionFailurePath names the Piglet file for an extension that has no
+// pigletExtensionFailurePath names the Ompiglet file for an extension that has no
 // resolved path to report.
-func pigletExtensionFailurePath(p *piglet.Piglet) string {
+func pigletExtensionFailurePath(p *ompiglet.Ompiglet) string {
 	if path := p.SourcePath(); path != "" {
 		return path
 	}
 	return p.Name
 }
 
-func fusedConfigsForPiglet(p *piglet.Piglet) []subprocess.ExtConfig {
+func fusedConfigsForPiglet(p *ompiglet.Ompiglet) []subprocess.ExtConfig {
 	if p == nil || len(p.Extensions) == 0 {
 		return nil
 	}
@@ -508,10 +508,10 @@ func embeddedCellsFromCellpack(cells []cellpack.LoadedCell) []subprocess.Embedde
 	return out
 }
 
-// pigletModelSpec returns a model spec string from the piglet's model
+// pigletModelSpec returns a model spec string from the ompiglet's model
 // config, or "" if not set. The returned spec follows the standard
 // "provider/name" convention and can be passed to resolveModel().
-func pigletModelSpec(p *piglet.Piglet) string {
+func pigletModelSpec(p *ompiglet.Ompiglet) string {
 	if p == nil || p.Model == nil {
 		return ""
 	}
@@ -525,13 +525,13 @@ func pigletModelSpec(p *piglet.Piglet) string {
 	return name
 }
 
-// applyPigletPreStart applies Piglet defaults needed before model/session setup.
-func applyPigletPreStart(p *piglet.Piglet, flags *Args) {
+// applyPigletPreStart applies Ompiglet defaults needed before model/session setup.
+func applyPigletPreStart(p *ompiglet.Ompiglet, flags *Args) {
 	if p == nil {
 		return
 	}
 
-	// Apply the piglet's system prompt as the base prompt (like
+	// Apply the ompiglet's system prompt as the base prompt (like
 	// --system-prompt) unless the user passed one explicitly. resolvePiglet
 	// inlines a file: reference to Text, so this is path-independent.
 	if flags.SystemPrompt == "" && p.SystemPrompt != nil && p.SystemPrompt.Text != "" {
@@ -539,7 +539,7 @@ func applyPigletPreStart(p *piglet.Piglet, flags *Args) {
 	}
 }
 
-func pigletAmbientSources(p *piglet.Piglet, kind string) *[]string {
+func pigletAmbientSources(p *ompiglet.Ompiglet, kind string) *[]string {
 	if p == nil {
 		return nil
 	}
@@ -557,7 +557,7 @@ func runRetiredCommand(args []string) int {
 	if len(args) == 0 || args[0] != "resource" {
 		return -1
 	}
-	fmt.Fprintln(os.Stderr, "pig: unknown command resource; use `pig config` to change Resource filters or `pig status --json` to inspect Resources")
+	fmt.Fprintln(os.Stderr, "ompig: unknown command resource; use `ompig config` to change Resource filters or `ompig status --json` to inspect Resources")
 	return 2
 }
 
@@ -567,22 +567,22 @@ func isReadOnlyConfigRootError(err error) bool {
 	return errors.Is(err, syscall.EROFS) || errors.Is(err, fs.ErrPermission)
 }
 
-// reportVerifyCacheError tells the user that a passing Piglet Binary check could not be remembered, so the next start
+// reportVerifyCacheError tells the user that a passing Ompiglet Binary check could not be remembered, so the next start
 // checks it in full again. A config root this user cannot write is a deployment choice such as a read-only image, so the
-// miss is silent there and `pig diagnose` reports the read-only root; every other write error warns.
+// miss is silent there and `ompig diagnose` reports the read-only root; every other write error warns.
 func reportVerifyCacheError(stderr io.Writer, cacheErr error) {
-	// pig divergence (D157): a read-only config root costs each start a full check without a warning on every start.
+	// ompig divergence (D157): a read-only config root costs each start a full check without a warning on every start.
 	if cacheErr == nil || isReadOnlyConfigRootError(cacheErr) {
 		return
 	}
-	_, _ = fmt.Fprintf(stderr, "pig: warning: %v\n", cacheErr)
-	_, _ = fmt.Fprintln(stderr, "pig: startup will continue; the next start verifies this Piglet Binary in full again")
+	_, _ = fmt.Fprintf(stderr, "ompig: warning: %v\n", cacheErr)
+	_, _ = fmt.Fprintln(stderr, "ompig: startup will continue; the next start verifies this Ompiglet Binary in full again")
 }
 
 // stageExtensionSDKsAtStartup stages the embedded extension SDKs into this build's own directories. A failure warns, because extensions that
 // need the SDK then fail to build, except on a config root this user may not write: that is a deployment choice such as a read-only image. This
 // build reads only its own staged directories, so nothing another build staged can be used in their place; a Go or Rust build reports the
-// missing SDK, and `pig diagnose` reports the SDKs as not staged.
+// missing SDK, and `ompig diagnose` reports the SDKs as not staged.
 func stageExtensionSDKsAtStartup(ctx context.Context, configRoot string, stderr io.Writer, timeout time.Duration) {
 	reportExtensionSDKStageFailure(stderr, stageExtensionSDKsFor(ctx, configRoot, timeout))
 }
@@ -593,8 +593,8 @@ func stageExtensionSDKsFor(ctx context.Context, configRoot string, timeout time.
 	stageCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 	err := pigsdk.EnsureSyncedContext(stageCtx, configRoot)
-	// pig divergence (D157): a config root that cannot be written (EROFS, EACCES, EPERM) is not reported. Pi warns on every start of such a root
-	// through its own settings lock (`Invalid settings file ... EACCES`), and the stage is PiG's own addition.
+	// ompig divergence (D157): a config root that cannot be written (EROFS, EACCES, EPERM) is not reported. Pi warns on every start of such a root
+	// through its own settings lock (`Invalid settings file ... EACCES`), and the stage is Ompig's own addition.
 	if isReadOnlyConfigRootError(err) {
 		return nil
 	}
@@ -606,8 +606,8 @@ func reportExtensionSDKStageFailure(stderr io.Writer, err error) {
 	if err == nil {
 		return
 	}
-	_, _ = fmt.Fprintf(stderr, "pig: warning: extension SDK staging failed: %v\n", err)
-	_, _ = fmt.Fprintln(stderr, "pig: startup will continue; extensions that need the SDK may fail to build; run 'pig diagnose' for detail")
+	_, _ = fmt.Fprintf(stderr, "ompig: warning: extension SDK staging failed: %v\n", err)
+	_, _ = fmt.Fprintln(stderr, "ompig: startup will continue; extensions that need the SDK may fail to build; run 'ompig diagnose' for detail")
 }
 
 // MainOptions are the options of [Main] (main.ts MainOptions).
@@ -616,9 +616,9 @@ type MainOptions struct {
 	ExtensionFactories []extension.InlineExtension
 }
 
-// Main runs the pig command line for args, the arguments after the program name, as Pi's main(args, options) does (main.ts:573). The default and experimental executables call it with args and no options.
+// Main runs the ompig command line for args, the arguments after the program name, as Pi's main(args, options) does (main.ts:573). The default and experimental executables call it with args and no options.
 func Main(args []string, options *MainOptions) {
-	// pig additive (D174): at most procpolicy.Cap Ps unless the environment sets GOMAXPROCS; set before anything reads the width.
+	// ompig additive (D174): at most procpolicy.Cap Ps unless the environment sets GOMAXPROCS; set before anything reads the width.
 	procpolicy.Apply()
 	// upstream: packages/coding-agent/src/main.ts:574 resetTimings(); PI_TIMING=1 prints the report before the mode runs.
 	timings.ResetTimings()
@@ -628,9 +628,9 @@ func Main(args []string, options *MainOptions) {
 		programExtensions = options.ExtensionFactories
 	}
 	commandRuntime := packageCommandRuntimeOptions{extensionFactories: slices.Concat(builtInExtensions, programExtensions)}
-	// PIG_PROFILE (internal/profiling) is read once here. Unset, it costs one lookup.
+	// OMPIG_PROFILE (internal/profiling) is read once here. Unset, it costs one lookup.
 	stopMetrics := profiling.Start()
-	// pig additive (D22): the session's documentation lease lives until exit; give it back before the exit record counts the process's descriptors.
+	// ompig additive (D22): the session's documentation lease lives until exit; give it back before the exit record counts the process's descriptors.
 	stopProfiles = func() {
 		releaseDocsLeases()
 		stopMetrics()
@@ -644,25 +644,25 @@ func Main(args []string, options *MainOptions) {
 	defer exitOnConfigRootFailure()
 
 	termuxenv.Configure()
-	// pig additive (D95): record the executable before anything can replace it, so an error can report that this process runs a replaced install.
+	// ompig additive (D95): record the executable before anything can replace it, so an error can report that this process runs a replaced install.
 	installchange.Record()
 	binaryPath := guardBinaryIdentity()
 	setupCli()
 
-	// pig divergence (D39): publish update ownership before command dispatch.
+	// ompig divergence (D39): publish update ownership before command dispatch.
 	codingagent.PigletBinaryRelease = PigletBinaryVersion
-	codingagent.InstalledPigVersion = PigVersion
+	codingagent.InstalledPigVersion = OmpigVersion
 
-	// pig additive (D18): a Piglet Binary verifies its baked closure and
-	// signature before any command or session behavior. Stock Pig has no baked
+	// ompig additive (D18): a Ompiglet Binary verifies its baked closure and
+	// signature before any command or session behavior. Stock Ompig has no baked
 	// closure, so this is a no-op there.
 	if cacheErr, err := binarypiglet.Verify(); err != nil {
-		fmt.Fprintf(os.Stderr, "pig: Piglet Binary verification failed: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig: Ompiglet Binary verification failed: %v\n", err)
 		exitProcess(1)
 	} else {
 		reportVerifyCacheError(os.Stderr, cacheErr)
 	}
-	// pig additive (D92): a Piglet Binary records its baked strip list in pigstrip before command dispatch, so its subcommands
+	// ompig additive (D92): a Ompiglet Binary records its baked strip list in pigstrip before command dispatch, so its subcommands
 	// see the strip its session sees.
 	if binarypiglet.IsPigletBinary() {
 		if p := binarypiglet.Default(); p != nil {
@@ -671,7 +671,7 @@ func Main(args []string, options *MainOptions) {
 		}
 	}
 
-	// Subcommands run before a Piglet Binary initializes session extensions.
+	// Subcommands run before a Ompiglet Binary initializes session extensions.
 	if len(args) > 0 {
 		if code := runAuthCommand(args); code >= 0 {
 			exitProcess(code)
@@ -747,14 +747,14 @@ func Main(args []string, options *MainOptions) {
 		exitProcess(0)
 	}
 
-	// A Piglet Binary embeds prebuilt cells and may link fused extensions. Register
-	// both only when starting a session (after --version); stock Pig carries empty registries.
+	// A Ompiglet Binary embeds prebuilt cells and may link fused extensions. Register
+	// both only when starting a session (after --version); stock Ompig carries empty registries.
 	if err := cellpack.Register(); err != nil {
-		fmt.Fprintf(os.Stderr, "pig: Piglet Binary cells: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig: Ompiglet Binary cells: %v\n", err)
 	}
 	fusepack.Register()
 
-	// pig additive (D18): verify the baked extension closure before startup.
+	// ompig additive (D18): verify the baked extension closure before startup.
 	fusedNames := make([]string, 0)
 	for _, cfg := range fusepack.FusedConfigs() {
 		fusedNames = append(fusedNames, cfg.Name)
@@ -766,7 +766,7 @@ func Main(args []string, options *MainOptions) {
 		}
 	}
 	if err := binarypiglet.VerifyRegisteredClosure(fusedNames, packedNames); err != nil {
-		fmt.Fprintf(os.Stderr, "pig: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig: %v\n", err)
 		exitProcess(1)
 	}
 
@@ -783,17 +783,17 @@ func Main(args []string, options *MainOptions) {
 		if len(flags.Messages) > 0 {
 			outputPath = flags.Messages[0]
 		}
-		// pig additive (D92): HTML export is a shim a Piglet Binary can compile out.
+		// ompig additive (D92): HTML export is a shim a Ompiglet Binary can compile out.
 		runExportFlag(flags.Export, outputPath)
 	}
 
 	runMode := processAppMode(flags)
 	if runMode == appModePrint || runMode == appModeJSON || runMode == appModeRPC {
-		// pig additive (D175): print, json and rpc runs collect at GOGC 400 unless the environment sets GOGC, and at 100 again past 64 MiB live.
+		// ompig additive (D175): print, json and rpc runs collect at GOGC 400 unless the environment sets GOGC, and at 100 again past 64 MiB live.
 		gcpolicy.Apply()
 	}
 	if runMode == appModeRPC {
-		// pig additive (D174): an rpc run schedules on procpolicy.RPCCap Ps unless the environment sets GOMAXPROCS.
+		// ompig additive (D174): an rpc run schedules on procpolicy.RPCCap Ps unless the environment sets GOMAXPROCS.
 		procpolicy.ApplyRPC()
 	}
 
@@ -869,23 +869,23 @@ func Main(args []string, options *MainOptions) {
 		cancel()
 	}()
 
-	// A required Piglet environment must own the whole coding-agent process,
+	// A required Ompiglet environment must own the whole coding-agent process,
 	// so resolve and enter it before services, model, extensions, or tools start.
-	var activePiglet *piglet.Piglet
+	var activePiglet *ompiglet.Ompiglet
 	var activePigletBaked bool
 	enforcePigletBinaryScope(flags.UnknownFlags)
 	activePiglet, activePigletBaked = resolvePiglet(flags.UnknownFlags, flags.ProjectTrustOverride)
 	if activePigletBaked && flags.SystemPrompt != "" {
-		fmt.Fprintln(os.Stderr, "pig: a Piglet Binary's baseline system prompt cannot be replaced; use --append-system-prompt for an additive prompt")
+		fmt.Fprintln(os.Stderr, "ompig: a Ompiglet Binary's baseline system prompt cannot be replaced; use --append-system-prompt for an additive prompt")
 		exitProcess(1)
 	}
 	if activePiglet == nil && pigletWasRequested(flags.UnknownFlags) {
-		fmt.Fprintln(os.Stderr, "pig: the requested Piglet could not be loaded")
+		fmt.Fprintln(os.Stderr, "ompig: the requested Ompiglet could not be loaded")
 		exitProcess(1)
 	}
 	handled, exitCode, environmentErr := runPigletAgentEnvironment(ctx, activePiglet, flags, initialCWD)
 	if environmentErr != nil {
-		fmt.Fprintf(os.Stderr, "pig: %v\n", environmentErr)
+		fmt.Fprintf(os.Stderr, "ompig: %v\n", environmentErr)
 		exitProcess(1)
 	}
 	if handled {
@@ -893,16 +893,16 @@ func Main(args []string, options *MainOptions) {
 	}
 	inlinePigletSystemPrompt(activePiglet)
 	applyPigletStrip(activePiglet, &flags)
-	if activePiglet != nil && (activePiglet.AgentEnv == nil || piglet.ActiveAgentEnvironmentIdentity() != "") {
-		resolvedSecrets, err := piglet.ResolveRequiredSecrets(ctx, activePiglet)
+	if activePiglet != nil && (activePiglet.AgentEnv == nil || ompiglet.ActiveAgentEnvironmentIdentity() != "") {
+		resolvedSecrets, err := ompiglet.ResolveRequiredSecrets(ctx, activePiglet)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pig: Piglet secrets: %v\n", err)
+			fmt.Fprintf(os.Stderr, "ompig: Ompiglet secrets: %v\n", err)
 			exitProcess(1)
 		}
 		resolvedSecrets.Clear()
 	}
 
-	// pig does not use undici's default 300s body/header timeouts. Our
+	// ompig does not use undici's default 300s body/header timeouts. Our
 	// streaming HTTP clients are built on Go's net/http with no overall client
 	// timeout and ResponseHeaderTimeout explicitly disabled for long-lived SSE
 	// streams; provider-specific deadlines still come from context cancellation.
@@ -913,16 +913,16 @@ func Main(args []string, options *MainOptions) {
 	agentDir := codingagent.AgentDir()
 	agentDirForModelOverride = agentDir
 
-	// pig additive (D102): an interactive session leaves a marker that only a clean end removes, so an exit nothing else
+	// ompig additive (D102): an interactive session leaves a marker that only a clean end removes, so an exit nothing else
 	// recorded is reported at the next start.
 	if processAppMode(flags) == appModeInteractive {
-		//portlint:allow clock the session-marker reconciliation compares file times with the real wall clock at startup; cmd/pig has no clock seam for it and Pi has no counterpart (D102)
+		//portlint:allow clock the session-marker reconciliation compares file times with the real wall clock at startup; cmd/ompig has no clock seam for it and Pi has no counterpart (D102)
 		codingagent.ReconcileSessionMarkers(agentDir, time.Now())
 		codingagent.BeginSessionMarker(agentDir, Version, initialCWD)
 		defer codingagent.EndSessionMarker()
 	}
 
-	// pig divergence (D88): first-time setup runs on an interactive start when settings.json does not exist yet; observed
+	// ompig divergence (D88): first-time setup runs on an interactive start when settings.json does not exist yet; observed
 	// before anything this run writes creates it.
 	firstTimeSetup := shouldRunFirstTimeSetup(processAppMode(flags), codingagent.AgentDirConfigured(), agentDir)
 
@@ -1070,13 +1070,13 @@ func Main(args []string, options *MainOptions) {
 	builder := &cliRuntimeBuilder{
 		mode: processAppMode(flags), flags: flags, agentDir: agentDir, launchCWD: initialCWD,
 		activePiglet: activePiglet, activePigletBaked: activePigletBaked,
-		shadowedPiglet:  piglet.ShadowedWorkspacePiglet(requestedPigletName(flags.UnknownFlags), flags.ProjectTrustOverride),
+		shadowedPiglet:  ompiglet.ShadowedWorkspacePiglet(requestedPigletName(flags.UnknownFlags), flags.ProjectTrustOverride),
 		settingsManager: startupSettingsManager, settingsDiagnostics: startupSettingsDiagnostics,
 		startupUIOptions: startupUIOpts, trustStore: codingagent.NewProjectTrustStore(agentDir),
 		trustByCWD: map[string]bool{}, extensionFactories: programExtensions,
 		stageExtensionSDKs: func() error {
 			// Staged before the first extension load that starts an extension, including the pre-trust load, so out-of-tree `-e` builds and packed
-			// cells resolve the SDKs on a clean host with no PiG checkout. A run that loads no extension reads no SDK, so it neither hashes nor
+			// cells resolve the SDKs on a clean host with no Ompig checkout. A run that loads no extension reads no SDK, so it neither hashes nor
 			// writes one. A failure is not fatal, but it must be visible, because it is otherwise untraceable from the running process.
 			return stageExtensionSDKsFor(ctx, codingagent.ConfigRoot(), startupSDKLockTimeout)
 		},
@@ -1085,7 +1085,7 @@ func Main(args []string, options *MainOptions) {
 	stopStartupExtensions = startupExtensions.close
 	defer startupExtensions.close()
 	defer stopAutomaticExtensionCacheGC()
-	// pig additive (D92): the docs bundle is a shim a Piglet Binary can compile out.
+	// ompig additive (D92): the docs bundle is a shim a Ompiglet Binary can compile out.
 	prepareDocsBundle()
 	if mode := processAppMode(flags); mode == appModeInteractive || mode == appModeRPC {
 		// A user's `!` command and an RPC client's bash command read files with no tool call before them.
@@ -1099,7 +1099,7 @@ func Main(args []string, options *MainOptions) {
 	}
 	extensionDiagnostics := build.ExtensionDiagnostics
 	startupDiagnostics := slices.Concat(build.StartupDiagnostics, extensionDiagnostics)
-	// pig additive (D109): extensions written for an older SDK are upgraded here, before piped input is read. When every one of them builds, this process loads the resources again: the Session selection, its fork and name, and the project trust answer stay as they were made.
+	// ompig additive (D109): extensions written for an older SDK are upgraded here, before piped input is read. When every one of them builds, this process loads the resources again: the Session selection, its fork and name, and the project trust answer stay as they were made.
 	if len(build.SDKDrift) > 0 && !flags.Help && flags.ListModels == "" && !flags.ListModelsAll {
 		interactive := processAppMode(flags) == appModeInteractive && term.IsTerminal(int(os.Stdin.Fd())) && term.IsTerminal(int(os.Stderr.Fd()))
 		if startupUpgrade(ctx, build.SDKDrift, interactive, build.Services.SettingsManager().GetExtensionsAutoUpgrade()) {
@@ -1116,7 +1116,7 @@ func Main(args []string, options *MainOptions) {
 	}
 
 	// Resolve model
-	// Piglet model acts as a fallback: --model flag > piglet.model > settings.defaultModel
+	// Ompiglet model acts as a fallback: --model flag > ompiglet.model > settings.defaultModel
 	if err := startupSession.loadSession(flags); err != nil {
 		printCLIError("open selected session: %v", err)
 		exitProcess(1)
@@ -1165,7 +1165,7 @@ func Main(args []string, options *MainOptions) {
 		exitProcess(0)
 	}
 	// RPC owns stdin as JSONL. Other modes read piped input before runtime diagnostics, and metadata commands above never consume it.
-	// pig divergence (D150): --no-stdin skips the read, which Pi always performs.
+	// ompig divergence (D150): --no-stdin skips the read, which Pi always performs.
 	var stdinContent string
 	if flags.Mode != "rpc" && !flags.NoStdin {
 		trace.Mark("stdin-read-start")
@@ -1225,19 +1225,19 @@ func Main(args []string, options *MainOptions) {
 	projectCtxFiles, resolvedPrompts := build.ContextFiles, build.ResolvedPrompts
 	systemPrompt, systemPromptOptions := build.SystemPrompt, build.SystemPromptOptions
 	// No agent-defined beforeToolCall hooks: agent persona system is
-	// a pig-extension concern, not built into core.
+	// a ompig-extension concern, not built into core.
 	var beforeToolCall []agent.BeforeToolCallHook
 
 	// Quiet startup banner so the user always knows which binary launched.
 	// Suppressed in --print mode and when quietStartup is true; "header" keeps
 	// it (interactive-mode.ts:996, shouldShowStartupHeader at 1409-1412).
 	// --verbose overrides quietStartup (mirrors upstream args.ts:239).
-	// pig divergence (D2): banner says "PiG", not "pi": separate binary
+	// ompig divergence (D2): banner says "Ompig", not "pi": separate binary
 	// and config root avoid collisions with upstream pi.
 	showBanner := !flags.Print && flags.Mode != "rpc" && (settings.QuietStartup != codingagent.QuietStartupTrue || flags.Verbose)
 	var loginOperationalLines []string
 	if showBanner {
-		identityLine := fmt.Sprintf("PiG %s • config=%s • bin=%s",
+		identityLine := fmt.Sprintf("Ompig %s • config=%s • bin=%s",
 			Version, codingagent.ConfigRoot(), binaryPath)
 		startupHints := codingagent.StartupKeybindHints(codingagent.NewKeybindingsManager(agentDir))
 		loginOperationalLines = append(loginOperationalLines, identityLine, "", startupHints)
@@ -1410,7 +1410,7 @@ func Main(args []string, options *MainOptions) {
 		InitialImages:          initialImages,
 		InitialMessages:        extraMessages,
 		AppVersion:             UpstreamPackageVersion,
-		// pig additive (D91): a Piglet Binary's fused frontend member.
+		// ompig additive (D91): a Ompiglet Binary's fused frontend member.
 		Frontend: frontendpack.Selected(),
 		PackageUpdateChecker: func() []string {
 			updates := packagemanager.NewPackageManager(packagemanager.PackageManagerOptions{CWD: cwd, SettingsManager: services.SettingsManager()}).CheckForAvailableUpdates()
@@ -1420,8 +1420,8 @@ func Main(args []string, options *MainOptions) {
 			}
 			return names
 		},
-		// pig divergence (D39): standalone-binary self-update notice at startup.
-		// pig additive (D92): self-update is a shim a Piglet Binary can compile out; nil there.
+		// ompig divergence (D39): standalone-binary self-update notice at startup.
+		// ompig additive (D92): self-update is a shim a Ompiglet Binary can compile out; nil there.
 		BinaryUpdateChecker:        binaryUpdateChecker(),
 		ResourceSourceInfoProvider: resourceSourceInfoProvider(cwd, agentDir, services.SettingsManager(), flags, startupSourceResolver.Resolve),
 		ReloadResourceProvider:     reloadResourceSnapshotProvider(cwd, agentDir, services.SettingsManager(), resourceFlags, skillScopes),
@@ -1468,7 +1468,7 @@ func Main(args []string, options *MainOptions) {
 		},
 		LoginVisible: showBanner,
 	}
-	// pig-specific: wire subprocess extensions after struct init.
+	// ompig-specific: wire subprocess extensions after struct init.
 	// Must check concrete pointer before assigning to interface fields
 	// to avoid typed-nil interface trap: a nil *subprocess.UIBridge
 	// assigned to SubprocessUIBridge interface is non-nil (Go semantics),
@@ -1479,7 +1479,7 @@ func Main(args []string, options *MainOptions) {
 	if subprocHost != nil {
 		iopts.SubprocessHost = subprocHost
 		// /reload recompiles these, and it is the command reached for after
-		// rebuilding pig, so stage the embedded SDKs first for the same reason
+		// rebuilding ompig, so stage the embedded SDKs first for the same reason
 		// startup does.
 		iopts.StageExtensionSDKs = func() error {
 			return pigsdk.EnsureSynced(codingagent.ConfigRoot())
@@ -1639,10 +1639,10 @@ func isValidSessionID(id string) bool {
 // exportOfflineMode mirrors upstream main.ts, which normalizes --offline or a
 // truthy PI_OFFLINE to PI_OFFLINE=1 and PI_SKIP_VERSION_CHECK=1 in the process
 // environment. Pi extensions read PI_OFFLINE (pi-auto-update skips its
-// `pi update` run) and inherit this environment, so PiG's own PIG_OFFLINE
+// `pi update` run) and inherit this environment, so Ompig's own OMPIG_OFFLINE
 // alias sets it too.
 func exportOfflineMode(flagOffline bool) {
-	if flagOffline || truthyEnvFlag(os.Getenv("PI_OFFLINE")) || truthyEnvFlag(strings.TrimSpace(os.Getenv("PIG_OFFLINE"))) {
+	if flagOffline || truthyEnvFlag(os.Getenv("PI_OFFLINE")) || truthyEnvFlag(strings.TrimSpace(os.Getenv("OMPIG_OFFLINE"))) {
 		_ = os.Setenv("PI_OFFLINE", "1")
 		_ = os.Setenv("PI_SKIP_VERSION_CHECK", "1")
 	}

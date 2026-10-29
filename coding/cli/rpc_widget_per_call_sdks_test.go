@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi's RPC mode writes one extension_ui_request per ctx.ui.setWidget call, in call order among the other UI calls of the handler, and
@@ -37,8 +37,8 @@ func TestRPCWidgetsAreWrittenPerCallInEverySDK(t *testing.T) {
 		t.Run(sdk, func(t *testing.T) {
 			home := t.TempDir()
 			p := startRPCProcessAt(t, t.TempDir(), []string{
-				"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1",
-				"PIG_SDK_GO_ROOT=" + filepath.Join(root, "extensions", "sdk"),
+				"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1",
+				"OMPIG_SDK_GO_ROOT=" + filepath.Join(root, "extensions", "sdk"),
 			}, "--model", "test-faux/faux-1", "--no-session", "-e", filepath.Join(fixtures, sdk))
 			// The load builds the Go and Rust fixtures cold, so only the wait for the session_start status allows a build.
 			p.budget = probeWait(t, 10*time.Minute)

@@ -15,9 +15,9 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestCargoBuildTargetDirectoryHonorsAbsoluteAndRelativeOverrides(t *testing.T) {
@@ -111,17 +111,17 @@ func TestBuilderWaitsForSDKStageLock(t *testing.T) {
 	if err := os.MkdirAll(sdkDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(sdkDir, "sdk.go"), []byte("package sdk\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	srcDir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module extension\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module extension\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/tmih06/ompig/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	release, err := pigsdklock.AcquireStage(context.Background(), configRoot)
@@ -146,17 +146,17 @@ func TestBuilderWarmStagedSDKBuildDoesNotWaitForSDKStageLock(t *testing.T) {
 	if err := os.MkdirAll(sdkDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(sdkDir, "sdk.go"), []byte("package sdk\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	srcDir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module extension\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module extension\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/tmih06/ompig/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	cacheDir := t.TempDir()
@@ -244,18 +244,18 @@ func TestAC56BuilderUsesStagedGoSDKWithoutCommittedReplace(t *testing.T) {
 	if err := os.MkdirAll(sdkDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(sdkDir, "sdk.go"), []byte("package sdk\nfunc Name() string { return \"staged\" }\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	srcDir := t.TempDir()
-	goMod := "module relocatable\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	goMod := "module relocatable\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	mainSource := "package main\nimport (\n \"fmt\"\n sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n)\nfunc main(){fmt.Print(sdk.Name())}\n"
+	mainSource := "package main\nimport (\n \"fmt\"\n sdk \"github.com/tmih06/ompig/extensions/sdk\"\n)\nfunc main(){fmt.Print(sdk.Name())}\n"
 	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte(mainSource), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -289,16 +289,16 @@ func TestAC56BuilderUsesStagedGoSDKWithoutCommittedReplace(t *testing.T) {
 
 func TestBuilderMissingStagedGoSDKFailsBeforeCompiler(t *testing.T) {
 	srcDir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module missing-sdk\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module missing-sdk\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/tmih06/ompig/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	builder := NewBuilder(t.TempDir())
 	builder.configRoot = t.TempDir()
 	_, err := builder.Build("missing-sdk", srcDir)
-	if err == nil || !strings.Contains(err.Error(), "staged Go SDK") || !strings.Contains(err.Error(), "pig reload") {
+	if err == nil || !strings.Contains(err.Error(), "staged Go SDK") || !strings.Contains(err.Error(), "ompig reload") {
 		t.Fatalf("missing staged SDK error = %v", err)
 	}
 }
@@ -313,7 +313,7 @@ func TestBuilderUsesStagedRustSDKWithoutCommittedPath(t *testing.T) {
 	}
 	// The staged-SDK contract is independent of a host-wide Cargo source
 	// replacement. CI's tools image points crates.io at an offline vendor that
-	// intentionally does not contain pig-sdk; isolate Cargo configuration so the
+	// intentionally does not contain ompig-sdk; isolate Cargo configuration so the
 	// build-local patch is the only source-resolution input under test. The same
 	// image puts a cargo-auditable launcher first on PATH; its nested
 	// `cargo metadata` does not inherit Cargo's command-line patch and is outside
@@ -350,7 +350,7 @@ func TestBuilderUsesStagedRustSDKWithoutCommittedPath(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(sdkDir, "src"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkDir, "Cargo.toml"), []byte("[package]\nname=\"pig-sdk\"\nversion=\"0.1.0\"\nedition=\"2024\"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkDir, "Cargo.toml"), []byte("[package]\nname=\"ompig-sdk\"\nversion=\"0.1.0\"\nedition=\"2024\"\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(sdkDir, "src", "lib.rs"), []byte("pub fn name() -> &'static str { \"staged\" }\n"), 0o644); err != nil {
@@ -364,7 +364,7 @@ func TestBuilderUsesStagedRustSDKWithoutCommittedPath(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(srcDir, "Cargo.toml"), []byte(cargoToml), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(srcDir, "src", "main.rs"), []byte("fn main(){print!(\"{}\", pig_sdk::name());}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "src", "main.rs"), []byte("fn main(){print!(\"{}\", ompig_sdk::name());}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	builder := NewBuilder(t.TempDir())
@@ -388,7 +388,7 @@ func TestBuilderUsesStagedRustSDKWithoutCommittedPath(t *testing.T) {
 func TestBuilderExplicitSDKOverridesWin(t *testing.T) {
 	t.Run("go replace", func(t *testing.T) {
 		srcDir := t.TempDir()
-		mod := "module explicit-go\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ./author-sdk\n"
+		mod := "module explicit-go\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => ./author-sdk\n"
 		if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte(mod), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -408,7 +408,7 @@ func TestBuilderExplicitSDKOverridesWin(t *testing.T) {
 		if err := os.WriteFile(filepath.Join(srcDir, "Cargo.toml"), []byte(manifest), 0o644); err != nil {
 			t.Fatal(err)
 		}
-		mustWrite(t, filepath.Join(srcDir, "author-sdk", "Cargo.toml"), "[package]\nname=\"pig-sdk\"\n")
+		mustWrite(t, filepath.Join(srcDir, "author-sdk", "Cargo.toml"), "[package]\nname=\"ompig-sdk\"\n")
 		builder := NewBuilder(t.TempDir())
 		builder.configRoot = t.TempDir()
 		if staged, err := builder.resolveStagedSDK(srcDir, "rust"); err != nil || staged != "" {
@@ -421,19 +421,19 @@ func TestBuilderExplicitSDKOverridesWin(t *testing.T) {
 		// (e.g. ../../../unrelated-checkout/extensions/sdk) must fall back to the
 		// staged SDK rather than fail the build on the dead path.
 		srcDir := t.TempDir()
-		mod := "module dead-go\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ../../gone/sdk\n"
+		mod := "module dead-go\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => ../../gone/sdk\n"
 		mustWrite(t, filepath.Join(srcDir, "go.mod"), mod)
 		builder := NewBuilder(t.TempDir())
 		configRoot := t.TempDir()
 		builder.configRoot = configRoot
 		stagedDir := stagedSDKDir(t, configRoot, "go")
-		mustWrite(t, filepath.Join(stagedDir, "go.mod"), "module github.com/MichaelKinsy/PiG/extensions/sdk\n")
+		mustWrite(t, filepath.Join(stagedDir, "go.mod"), "module github.com/tmih06/ompig/extensions/sdk\n")
 		if staged, err := builder.resolveStagedSDK(srcDir, "go"); err != nil || staged != stagedDir {
 			t.Fatalf("dead Go replace resolved staged SDK %q (want %q), %v", staged, stagedDir, err)
 		}
 	})
 
-	// An earlier pig staged its SDK unhashed at <config root>/state/pigsdk/sdk and
+	// An earlier ompig staged its SDK unhashed at <config root>/state/pigsdk/sdk and
 	// never deletes it. A link the author made to it (../.sdk) still resolves
 	// after an update, but it names the retired SDK, so the build must use the
 	// SDK staged now exactly as for a dead replace.
@@ -452,23 +452,23 @@ func TestBuilderExplicitSDKOverridesWin(t *testing.T) {
 	}
 
 	t.Run("go replace linking a retired staged SDK stages the current SDK", func(t *testing.T) {
-		builder, stagedDir, srcDir := retiredFixture(t, "go", "sdk", "go.mod", "module github.com/MichaelKinsy/PiG/extensions/sdk\n")
-		mustWrite(t, filepath.Join(srcDir, "go.mod"), "module retired-go\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ../.sdk\n")
+		builder, stagedDir, srcDir := retiredFixture(t, "go", "sdk", "go.mod", "module github.com/tmih06/ompig/extensions/sdk\n")
+		mustWrite(t, filepath.Join(srcDir, "go.mod"), "module retired-go\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => ../.sdk\n")
 		if staged, err := builder.resolveStagedSDK(srcDir, "go"); err != nil || staged != stagedDir {
 			t.Fatalf("retired Go replace resolved staged SDK %q (want %q), %v", staged, stagedDir, err)
 		}
 	})
 
 	t.Run("go replace naming the current staged SDK wins", func(t *testing.T) {
-		builder, stagedDir, srcDir := retiredFixture(t, "go", "sdk", "go.mod", "module github.com/MichaelKinsy/PiG/extensions/sdk\n")
-		mustWrite(t, filepath.Join(srcDir, "go.mod"), "module current-go\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+modfile.AutoQuote(stagedDir)+"\n")
+		builder, stagedDir, srcDir := retiredFixture(t, "go", "sdk", "go.mod", "module github.com/tmih06/ompig/extensions/sdk\n")
+		mustWrite(t, filepath.Join(srcDir, "go.mod"), "module current-go\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => "+modfile.AutoQuote(stagedDir)+"\n")
 		if staged, err := builder.resolveStagedSDK(srcDir, "go"); err != nil || staged != "" {
 			t.Fatalf("current staged Go replace resolved staged SDK %q, %v", staged, err)
 		}
 	})
 
 	t.Run("rust path linking a retired staged SDK stages the current SDK", func(t *testing.T) {
-		builder, stagedDir, srcDir := retiredFixture(t, "rust", "sdk-rs", "Cargo.toml", "[package]\nname=\"pig-sdk\"\n")
+		builder, stagedDir, srcDir := retiredFixture(t, "rust", "sdk-rs", "Cargo.toml", "[package]\nname=\"ompig-sdk\"\n")
 		mustWrite(t, filepath.Join(srcDir, "Cargo.toml"), "[package]\nname=\"retired-rust\"\nversion=\"0.1.0\"\n[dependencies]\npig-sdk={path=\"../.sdk\"}\n")
 		if staged, err := builder.resolveStagedSDK(srcDir, "rust"); err != nil || staged != stagedDir {
 			t.Fatalf("retired Rust path resolved staged SDK %q (want %q), %v", staged, stagedDir, err)
@@ -799,10 +799,10 @@ func TestHashSourceDirDoesNotTraverseNestedDirectorySymlink(t *testing.T) {
 }
 
 // TestHashSourceDir_LocalReplaceInvalidatesOnSDKChange is the regression for
-// the stale-binary bug: a Go extension resolves the pig SDK through a local
+// the stale-binary bug: a Go extension resolves the ompig SDK through a local
 // `replace`, so editing that SDK changes the compiled binary. The cache key
 // must change too. Before the fix, hashSourceDir hashed only the extension's
-// own files, so this test's two hashes were equal and pig served a binary
+// own files, so this test's two hashes were equal and ompig served a binary
 // built against the old SDK (skewed MaxFrameSize / register fields).
 func TestHashSourceDir_LocalReplaceInvalidatesOnSDKChange(t *testing.T) {
 	sdkDir := t.TempDir()
@@ -933,12 +933,12 @@ func TestGoLocalReplaceDirs(t *testing.T) {
 }
 
 func TestRewritePigSDKPath(t *testing.T) {
-	// An installed Rust extension's Cargo.toml declares pig-sdk as a path
+	// An installed Rust extension's Cargo.toml declares ompig-sdk as a path
 	// dependency pointing at a source-tree checkout. Once installed to
-	// ~/.pig/extensions, that relative path is dead, and [patch.crates-io]
+	// ~/.ompig/extensions, that relative path is dead, and [patch.crates-io]
 	// cannot redirect a path dep, so the build fails. stageRustSDKPath rewrites
 	// the inline path to the staged SDK. This pins that rewrite.
-	const staged = "/Users/x/.pig/state/pigsdk/sdk-rs"
+	const staged = "/Users/x/.ompig/state/pigsdk/sdk-rs"
 	cases := []struct {
 		name    string
 		in      string
@@ -947,24 +947,24 @@ func TestRewritePigSDKPath(t *testing.T) {
 	}{
 		{
 			"inline path dep",
-			`pig-sdk = { path = "../../../../unrelated-checkout/extensions/sdk-rs" }`,
-			`pig-sdk = { path = "/Users/x/.pig/state/pigsdk/sdk-rs" }`,
+			`ompig-sdk = { path = "../../../../unrelated-checkout/extensions/sdk-rs" }`,
+			`ompig-sdk = { path = "/Users/x/.ompig/state/pigsdk/sdk-rs" }`,
 			true,
 		},
 		{
 			"inline path dep with trailing keys",
-			`pig-sdk = { path = "../x", version = "0.1" }`,
-			`pig-sdk = { path = "/Users/x/.pig/state/pigsdk/sdk-rs", version = "0.1" }`,
+			`ompig-sdk = { path = "../x", version = "0.1" }`,
+			`ompig-sdk = { path = "/Users/x/.ompig/state/pigsdk/sdk-rs", version = "0.1" }`,
 			true,
 		},
 		{
 			"registry dep left untouched",
-			`pig-sdk = "0.1"`,
-			`pig-sdk = "0.1"`,
+			`ompig-sdk = "0.1"`,
+			`ompig-sdk = "0.1"`,
 			false,
 		},
 		{
-			"no pig-sdk dep",
+			"no ompig-sdk dep",
 			`serde_json = "1"`,
 			`serde_json = "1"`,
 			false,
@@ -989,7 +989,7 @@ func TestCopyCrateWithStagedSDK(t *testing.T) {
 	mustWrite(t, filepath.Join(src, "target", "release", "junk"), "stale\n")
 
 	dst := filepath.Join(t.TempDir(), "rust-crate")
-	const staged = "/Users/x/.pig/state/pigsdk/sdk-rs"
+	const staged = "/Users/x/.ompig/state/pigsdk/sdk-rs"
 	if err := copyCrateWithStagedSDK(src, dst, staged); err != nil {
 		t.Fatal(err)
 	}
@@ -1000,7 +1000,7 @@ func TestCopyCrateWithStagedSDK(t *testing.T) {
 	}
 	// The copy points at the staged SDK and preserves other deps.
 	gotCopy := readFile(t, filepath.Join(dst, "Cargo.toml"))
-	if !strings.Contains(gotCopy, `pig-sdk = { path = "`+staged+`" }`) {
+	if !strings.Contains(gotCopy, `ompig-sdk = { path = "`+staged+`" }`) {
 		t.Fatalf("copied Cargo.toml not redirected:\n%s", gotCopy)
 	}
 	if !strings.Contains(gotCopy, `serde_json = "1"`) {
@@ -1035,21 +1035,21 @@ func readFile(t *testing.T, path string) string {
 }
 
 func TestRustNeedsStagedSDK(t *testing.T) {
-	// The staging gate must fire for an installed crate whose pig-sdk path
+	// The staging gate must fire for an installed crate whose ompig-sdk path
 	// dependency is dead (the SDK-path bug), stay off when the author's path
 	// resolves (source tree), and fire for a registry-form dep.
 	realSDK := t.TempDir()
-	mustWrite(t, filepath.Join(realSDK, "Cargo.toml"), "[package]\nname = \"pig-sdk\"\n")
+	mustWrite(t, filepath.Join(realSDK, "Cargo.toml"), "[package]\nname = \"ompig-sdk\"\n")
 
 	cases := []struct {
 		name     string
 		manifest string
 		want     bool
 	}{
-		{"dead relative path dep", `[dependencies]` + "\n" + `pig-sdk = { path = "../../nonexistent/sdk-rs" }`, true},
-		{"resolving path dep", `[dependencies]` + "\n" + `pig-sdk = { path = ` + strconv.Quote(realSDK) + ` }`, false},
-		{"registry version dep", `[dependencies]` + "\n" + `pig-sdk = "0.1"`, true},
-		{"no pig-sdk dep", `[dependencies]` + "\n" + `serde_json = "1"`, false},
+		{"dead relative path dep", `[dependencies]` + "\n" + `ompig-sdk = { path = "../../nonexistent/sdk-rs" }`, true},
+		{"resolving path dep", `[dependencies]` + "\n" + `ompig-sdk = { path = ` + strconv.Quote(realSDK) + ` }`, false},
+		{"registry version dep", `[dependencies]` + "\n" + `ompig-sdk = "0.1"`, true},
+		{"no ompig-sdk dep", `[dependencies]` + "\n" + `serde_json = "1"`, false},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

@@ -6,9 +6,9 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // terminalInputListener is one raw terminal-input listener, kept in
@@ -126,7 +126,7 @@ func (t *inputTicket) settle() {
 // terminal-input listeners, then gives handle what they pass on. It returns
 // handle's error when the pass ends without waiting for a remote verdict; a
 // pass that resumes after one reports handle's error to the input loop.
-// pig divergence (D105): the driver owns the terminal reader; extension input listeners run asynchronously around the renderer's listener chain.
+// ompig divergence (D105): the driver owns the terminal reader; extension input listeners run asynchronously around the renderer's listener chain.
 func (m *InteractiveMode) passTerminalInput(ctx context.Context, data string, ticket *inputTicket, handle func(context.Context, string) error) error {
 	// Modal input also passes here without dispatchInputChunk. Terminal replies
 	// precede every listener and focused component, as in tui.ts handleTerminalInput.

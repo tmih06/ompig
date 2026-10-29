@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/MichaelKinsy/PiG/internal/tlsdistrust" // hardens http.DefaultClient (pig additive (D191))
+	_ "github.com/tmih06/ompig/internal/tlsdistrust" // hardens http.DefaultClient (ompig additive (D191))
 )
 
 // requestTimeout mirrors the AbortSignal.timeout(15_000) both upstream clients

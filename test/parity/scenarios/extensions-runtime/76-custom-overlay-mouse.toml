@@ -7,7 +7,7 @@
 # coordinates local to it (tui.ts:862-888 dispatchMouseToOverlay), sends the release and then the click of a
 # press it took to the press target (tui-alt-screen.ts:900-960 handleMouseEvent), counts a second click on the
 # same cell within 500 ms as clickCount 2 (tui-alt-screen.ts:874-888 getComponentClickCount), and gives the
-# first wheel step of a gesture wheelDelta 1 (tui-alt-screen.ts:703-709, wheel-scroll.ts:54-66). PiG hands the
+# first wheel step of a gesture wheelDelta 1 (tui-alt-screen.ts:703-709, wheel-scroll.ts:54-66). Ompig hands the
 # events to the extension over ui.custom.mouse (coding/extension/host/subprocess/runtime-node/mouse.mjs).
 #
 # Upstream evidence (pi 1.1.0, probed through this scenario in tmux at 60x30, default fullscreen tuiMode): the overlay
@@ -17,7 +17,7 @@
 #   wheel none 7,4 7,7 60x12 c- w1 -
 #   press, release, click left 9,6 9,9 60x12 c1 w- SC
 #
-# Before the mouse-110 slice PiG delivered no mouse to a subprocess ui.custom component, so the overlay kept its
+# Before the mouse-110 slice Ompig delivered no mouse to a subprocess ui.custom component, so the overlay kept its
 # eleven "-" rows. The crop is the overlay (rows 3-14); both binaries draw it over the whole 60-column row, so the
 # header behind it does not show. Plain text (output_equal): the rows carry no styling.
 
@@ -32,10 +32,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "COLORTERM="]
+ompig = ["OMPIG_TEST_FAUX=1", "COLORTERM="]
 pi = ["COLORTERM="]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/overlay-mouse.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/overlay-mouse.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/overlay-mouse.mjs",
@@ -44,7 +44,7 @@ pi_extensions = [
 [tmux]
 width = 60
 height = 30
-ready_pattern_pig = "MOUSE-PROBE-READY"
+ready_pattern_ompig = "MOUSE-PROBE-READY"
 ready_pattern_pi = "MOUSE-PROBE-READY"
 ready_timeout_seconds = 30
 capture_start = "MOUSE TOP"

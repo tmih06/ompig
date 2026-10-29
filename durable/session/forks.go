@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Ports packages/durable/src/session/forks.ts

@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // packages/durable/src/harness/tool.ts:194-196 api.output(chunk, skipped): a Uint8Array chunk takes the skipped marker like a string (OutputBuffer.push), and the

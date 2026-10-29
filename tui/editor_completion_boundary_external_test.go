@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The owner services posted applies while workers run: an awaited query may wait for its owner apply before completing. No sleep or guessed event-loop delay substitutes for completion.
@@ -130,7 +130,7 @@ func TestUpstreamEditorCompletionIgnoresInvalidArgumentResult(t *testing.T) {
 	marker := filepath.Join(dir, "received-prefix.txt")
 	// Bound external process/IPC failure, as in the existing host command-completion test.
 	ctx, cancel := context.WithTimeout(t.Context(), time.Minute)
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	host := subprocess.NewHost(t.TempDir())
 	e, flush, join := awaitedCompletionEditor(t, ctx)
 	t.Cleanup(func() {

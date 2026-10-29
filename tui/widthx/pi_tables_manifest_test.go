@@ -6,7 +6,7 @@ package widthx
 //     hashes as the manifest pins;
 //   - the tables header records the digest of this exact manifest;
 //   - unicode_tables.go hashes as gen/output.sha256 recorded at generation;
-//   - with PIG_UCD_DIR set to a UCD 17.0.0 tree and a matching node, the
+//   - with OMPIG_UCD_DIR set to a UCD 17.0.0 tree and a matching node, the
 //     generator (which re-verifies the UCD hashes) reproduces the file byte
 //     for byte.
 
@@ -80,10 +80,10 @@ func TestUnicodeTablesDeriveFromPinnedInputs(t *testing.T) {
 		t.Errorf("unicode_tables.go differs from the generator output recorded in gen/output.sha256 (hand-edited?)")
 	}
 
-	dir := os.Getenv("PIG_UCD_DIR")
+	dir := os.Getenv("OMPIG_UCD_DIR")
 	node, nodeErr := exec.LookPath("node")
 	if dir == "" || nodeErr != nil {
-		t.Log("PIG_UCD_DIR or node unavailable; skipped byte-for-byte regeneration")
+		t.Log("OMPIG_UCD_DIR or node unavailable; skipped byte-for-byte regeneration")
 		return
 	}
 	tmp := t.TempDir()

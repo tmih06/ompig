@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // writeAuthJSON writes a minimal auth.json fixture under dir.
@@ -175,13 +175,13 @@ func TestAuthenticatedProviders_GoogleVertexEnvVar_Includes(t *testing.T) {
 
 func TestAuthenticatedProviders_GoogleVertexADC_Includes(t *testing.T) {
 	// Upstream caches ambient ADC discovery per process. Start with an empty cache.
-	if os.Getenv("PIG_TEST_ADC_CHILD") != "1" {
+	if os.Getenv("OMPIG_TEST_ADC_CHILD") != "1" {
 		executable, err := os.Executable()
 		if err != nil {
 			t.Fatal(err)
 		}
 		cmd := exec.CommandContext(t.Context(), executable, "-test.run=^TestAuthenticatedProviders_GoogleVertexADC_Includes$", "-test.count=1")
-		cmd.Env = append(os.Environ(), "PIG_TEST_ADC_CHILD=1")
+		cmd.Env = append(os.Environ(), "OMPIG_TEST_ADC_CHILD=1")
 		if output, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("ADC subprocess: %v\n%s", err, output)
 		}

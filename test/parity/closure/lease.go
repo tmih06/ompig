@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 // WorkUnit is a graph-derived parallel ownership unit rooted at one open

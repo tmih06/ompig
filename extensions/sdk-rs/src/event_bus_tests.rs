@@ -8,10 +8,10 @@ use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::Duration;
 
-/// Holds the environment lock with no host named: a listener subscribed before `run` connects to the host `PIG_EXT_SOCKET` names, so a test that subscribes without one must not run while another test sets it.
+/// Holds the environment lock with no host named: a listener subscribed before `run` connects to the host `OMPIG_EXT_SOCKET` names, so a test that subscribes without one must not run while another test sets it.
 fn without_host() -> std::sync::MutexGuard<'static, ()> {
     let guard = crate::extension::registration_tests::env_lock().lock().unwrap_or_else(|poisoned| poisoned.into_inner());
-    unsafe { std::env::remove_var("PIG_EXT_SOCKET") };
+    unsafe { std::env::remove_var("OMPIG_EXT_SOCKET") };
     unsafe { std::env::remove_var("GOPI_EXT_SOCKET") };
     guard
 }
@@ -26,7 +26,7 @@ mod tempfile_dir {
     pub struct Dir(pub std::path::PathBuf);
     impl Dir {
         pub fn new(tag: &str) -> Self {
-            let path = std::env::temp_dir().join(format!("pig-sdk-rs-{tag}-{}", std::process::id()));
+            let path = std::env::temp_dir().join(format!("ompig-sdk-rs-{tag}-{}", std::process::id()));
             let _ = std::fs::remove_dir_all(&path);
             std::fs::create_dir_all(&path).unwrap();
             Self(path)
@@ -250,7 +250,7 @@ fn dispatch_during_load_is_served_after_ready() {
 mod factory_emit {
     use super::*;
 
-    /// A host that accepts the one connection the factory dials. PIG_EXT_SOCKET names its socket for the test, under the lock every test that sets the environment shares.
+    /// A host that accepts the one connection the factory dials. OMPIG_EXT_SOCKET names its socket for the test, under the lock every test that sets the environment shares.
     struct FactoryHost {
         _guard: std::sync::MutexGuard<'static, ()>,
         _dir: tempfile_dir::Dir,
@@ -321,7 +321,7 @@ mod factory_emit {
             let path = dir.0.join("ext.sock");
             let listener = UnixListener::bind(&path).unwrap();
             let path = path.to_str().unwrap().to_string();
-            unsafe { std::env::set_var("PIG_EXT_SOCKET", &path) };
+            unsafe { std::env::set_var("OMPIG_EXT_SOCKET", &path) };
             Self { _guard: guard, _dir: dir, path, listener }
         }
 
@@ -340,7 +340,7 @@ mod factory_emit {
 
     impl Drop for FactoryHost {
         fn drop(&mut self) {
-            unsafe { std::env::remove_var("PIG_EXT_SOCKET") };
+            unsafe { std::env::remove_var("OMPIG_EXT_SOCKET") };
             let _ = crate::host_helpers::take_dialled(&self.path);
         }
     }
@@ -435,11 +435,11 @@ mod factory_emit {
     #[test]
     fn without_a_host_a_factory_emit_fails_and_a_listener_waits_for_run() {
         let _guard = crate::extension::registration_tests::env_lock().lock().unwrap_or_else(|poisoned| poisoned.into_inner());
-        unsafe { std::env::remove_var("PIG_EXT_SOCKET") };
+        unsafe { std::env::remove_var("OMPIG_EXT_SOCKET") };
         unsafe { std::env::remove_var("GOPI_EXT_SOCKET") };
         let ext = Extension::new("bus");
         let err = ext.events().emit("ch", Value::Null).unwrap_err();
-        assert!(err.to_string().contains("PIG_EXT_SOCKET"), "{err}");
+        assert!(err.to_string().contains("OMPIG_EXT_SOCKET"), "{err}");
         ext.events().on("ch", |_, _| Ok(())).unwrap();
     }
 

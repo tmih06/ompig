@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // print-mode.ts:97-99 and rpc-mode.ts:341-343 bind the command context's reload to session.reload() (agent-session.ts:3575-3625 in 0.99.2), so
@@ -32,12 +32,12 @@ export default function (pi) {
   pi.registerCommand("reloadme", {
     description: "Rewrite settings and a context file, then reload",
     handler: async (_args, ctx) => {
-      writeFileSync(join(process.env.PIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ quietStartup: false, defaultTools: ["+grep"] }));
+      writeFileSync(join(process.env.OMPIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ quietStartup: false, defaultTools: ["+grep"] }));
       writeFileSync(join(ctx.cwd, "AGENTS.md"), "RELOAD_MARKER_CONTEXT");
-      mkdirSync(join(process.env.PIG_CODING_AGENT_DIR, "prompts"), { recursive: true });
-      writeFileSync(join(process.env.PIG_CODING_AGENT_DIR, "prompts", "reloaded.md"), "---\ndescription: Added by the reload\n---\nreloaded template");
-      mkdirSync(join(process.env.PIG_CODING_AGENT_DIR, "skills", "reloaded-skill"), { recursive: true });
-      writeFileSync(join(process.env.PIG_CODING_AGENT_DIR, "skills", "reloaded-skill", "SKILL.md"), "---\nname: reloaded-skill\ndescription: Added by the reload\n---\nSkill body");
+      mkdirSync(join(process.env.OMPIG_CODING_AGENT_DIR, "prompts"), { recursive: true });
+      writeFileSync(join(process.env.OMPIG_CODING_AGENT_DIR, "prompts", "reloaded.md"), "---\ndescription: Added by the reload\n---\nreloaded template");
+      mkdirSync(join(process.env.OMPIG_CODING_AGENT_DIR, "skills", "reloaded-skill"), { recursive: true });
+      writeFileSync(join(process.env.OMPIG_CODING_AGENT_DIR, "skills", "reloaded-skill", "SKILL.md"), "---\nname: reloaded-skill\ndescription: Added by the reload\n---\nSkill body");
       await ctx.reload();
       log("returned");
     },
@@ -54,7 +54,7 @@ import (
 	"sort"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func logLine(line string) {
@@ -90,13 +90,13 @@ func Extension() *sdk.Extension {
 		return nil, nil
 	})
 	e.Command("reloadme", "Rewrite settings and a context file, then reload", func(ctx sdk.Context, args string) error {
-		if err := os.WriteFile(filepath.Join(os.Getenv("PIG_CODING_AGENT_DIR"), "settings.json"), []byte("{\"quietStartup\":false,\"defaultTools\":[\"+grep\"]}"), 0o600); err != nil {
+		if err := os.WriteFile(filepath.Join(os.Getenv("OMPIG_CODING_AGENT_DIR"), "settings.json"), []byte("{\"quietStartup\":false,\"defaultTools\":[\"+grep\"]}"), 0o600); err != nil {
 			return err
 		}
 		if err := os.WriteFile(filepath.Join(ctx.Cwd(), "AGENTS.md"), []byte("RELOAD_MARKER_CONTEXT"), 0o600); err != nil {
 			return err
 		}
-		agentDir := os.Getenv("PIG_CODING_AGENT_DIR")
+		agentDir := os.Getenv("OMPIG_CODING_AGENT_DIR")
 		for path, content := range map[string]string{
 			filepath.Join(agentDir, "prompts", "reloaded.md"):                      "---\ndescription: Added by the reload\n---\nreloaded template",
 			filepath.Join(agentDir, "skills", "reloaded-skill", "SKILL.md"): "---\nname: reloaded-skill\ndescription: Added by the reload\n---\nSkill body",
@@ -145,7 +145,7 @@ func writeReloadProbe(t *testing.T, language string) string {
 			t.Fatal(err)
 		}
 		for name, content := range map[string]string{
-			"go.mod":       "module example.test/reloadprobe\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n",
+			"go.mod":       "module example.test/reloadprobe\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n",
 			"extension.go": reloadProbeGo,
 		} {
 			if err := os.WriteFile(filepath.Join(root, name), []byte(content), 0o600); err != nil {
@@ -169,7 +169,7 @@ func readReloadLog(t *testing.T, path string) []string {
 
 func TestExtensionReloadIsWiredInEveryHeadlessMode(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and extensions")
+		t.Skip("builds the ompig binary and extensions")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	for _, language := range []string{"node", "go"} {
@@ -177,7 +177,7 @@ func TestExtensionReloadIsWiredInEveryHeadlessMode(t *testing.T) {
 			t.Run(language+"/"+mode, func(t *testing.T) {
 				extension := writeReloadProbe(t, language)
 				home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-				agentDir := filepath.Join(home, "pig")
+				agentDir := filepath.Join(home, "ompig")
 				if err := os.MkdirAll(agentDir, 0o755); err != nil {
 					t.Fatal(err)
 				}
@@ -185,7 +185,7 @@ func TestExtensionReloadIsWiredInEveryHeadlessMode(t *testing.T) {
 					t.Fatal(err)
 				}
 				logPath := filepath.Join(t.TempDir(), "reload.log")
-				env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
+				env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
 				args := []string{"--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir, "-e", extension}
 				switch mode {
 				case "rpc":
@@ -236,7 +236,7 @@ export default function (pi) {
   pi.registerCommand("reloadfail", {
     description: "Reload with a settings file Pi's resource loader rejects",
     handler: async (_args, ctx) => {
-      writeFileSync(join(process.env.PIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ prompts: ["file:///a%2Fb"] }));
+      writeFileSync(join(process.env.OMPIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ prompts: ["file:///a%2Fb"] }));
       try {
         await ctx.reload();
         log("resolved");
@@ -251,7 +251,7 @@ export default function (pi) {
 // agent-session.ts:3598 awaits resourceLoader.reload(), which throws for the file: URL below (resource-loader.ts); the throw rejects session.reload(), and with it the extension's `await ctx.reload()`.
 func TestExtensionReloadFailureRejectsTheExtensionCall(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and extensions")
+		t.Skip("builds the ompig binary and extensions")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	extension := filepath.Join(t.TempDir(), "reload-fail.mjs")
@@ -259,12 +259,12 @@ func TestExtensionReloadFailureRejectsTheExtensionCall(t *testing.T) {
 		t.Fatal(err)
 	}
 	home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	logPath := filepath.Join(t.TempDir(), "reload.log")
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
 	ctx, cancel := context.WithTimeout(t.Context(), testbudget.Wait(t))
 	defer cancel()
 	cmd := exec.CommandContext(ctx, binary, "--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir, "-e", extension, "--print", "/reloadfail")
@@ -301,7 +301,7 @@ export default function (pi) {
 // agent-session.ts:3580 invalidates the old runner, so a pi the old instance captured throws runner.ts invalidate's message after `await ctx.reload()` (probed with Pi 0.99.2: "stale:This extension ctx is stale ..."). The old Node generation keeps running until its command returns; its synchronous host call must get that error, not block the command, and with it the run, forever.
 func TestExtensionCallAfterReloadFailsAsStale(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and extensions")
+		t.Skip("builds the ompig binary and extensions")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	extension := filepath.Join(t.TempDir(), "reload-stale.mjs")
@@ -309,12 +309,12 @@ func TestExtensionCallAfterReloadFailsAsStale(t *testing.T) {
 		t.Fatal(err)
 	}
 	home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	logPath := filepath.Join(t.TempDir(), "reload.log")
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
 	ctx, cancel := context.WithTimeout(t.Context(), testbudget.Wait(t))
 	defer cancel()
 	cmd := exec.CommandContext(ctx, binary, "--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir, "-e", extension, "--print", "/reloadstale")
@@ -337,7 +337,7 @@ export default function (pi) {
   pi.registerCommand("reloadfail", {
     description: "Reload with a settings file Pi's resource loader rejects, then use the captured pi",
     handler: async (_args, ctx) => {
-      writeFileSync(join(process.env.PIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ prompts: ["file:///a%2Fb"] }));
+      writeFileSync(join(process.env.OMPIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ prompts: ["file:///a%2Fb"] }));
       try {
         await ctx.reload();
         log("resolved");
@@ -359,7 +359,7 @@ export default function (pi) {
 // mutation-checked: dropping the extension host invalidation after a failed reload in RPC mode (rpc_mode.go SetReload) logs "live" instead of the stale message.
 func TestFailedExtensionReloadLeavesTheOldInstanceStale(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and extensions")
+		t.Skip("builds the ompig binary and extensions")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	extension := filepath.Join(t.TempDir(), "reload-fail-stale.mjs")
@@ -369,12 +369,12 @@ func TestFailedExtensionReloadLeavesTheOldInstanceStale(t *testing.T) {
 	for _, mode := range []string{"print", "rpc"} {
 		t.Run(mode, func(t *testing.T) {
 			home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-			agentDir := filepath.Join(home, "pig")
+			agentDir := filepath.Join(home, "ompig")
 			if err := os.MkdirAll(agentDir, 0o755); err != nil {
 				t.Fatal(err)
 			}
 			logPath := filepath.Join(t.TempDir(), "reload.log")
-			env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
+			env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
 			args := []string{"--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir, "-e", extension}
 			if mode == "rpc" {
 				p := startRPCProcessAt(t, cwd, env, args...)

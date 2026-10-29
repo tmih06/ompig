@@ -3,7 +3,7 @@
 package journeys
 
 import (
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 const branchSummary = "## Goal\nSummary of the abandoned branch.\n\n## Progress\n- explored the other path"

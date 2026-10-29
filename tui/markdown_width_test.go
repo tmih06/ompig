@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // A component must never emit a line wider than the width it was handed. The
@@ -14,7 +14,7 @@ import (
 // bug. Observed live at terminal width 194: seven prose lines at 195-196 and
 // one code-block line at 486.
 func TestMarkdownRender_NeverExceedsWidth(t *testing.T) {
-	longCode := "const copilotRateLimitRaw = `github-copilot: GetBaseURL: github-copilot: refresh failed: run 'pig login' to re-authenticate: HTTP 403: {\"message\": \"API rate limit exceeded for user ID 186620145. If you reach out to GitHub Support for help, please include the request ID ECCC:3B9203:92655:DFCF0:6A81F1E4 and timestamp 2026-08-16 17:22:44 UTC.\"}`"
+	longCode := "const copilotRateLimitRaw = `github-copilot: GetBaseURL: github-copilot: refresh failed: run 'ompig login' to re-authenticate: HTTP 403: {\"message\": \"API rate limit exceeded for user ID 186620145. If you reach out to GitHub Support for help, please include the request ID ECCC:3B9203:92655:DFCF0:6A81F1E4 and timestamp 2026-08-16 17:22:44 UTC.\"}`"
 
 	cases := []struct {
 		name    string

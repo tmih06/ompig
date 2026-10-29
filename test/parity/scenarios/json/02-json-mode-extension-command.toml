@@ -10,7 +10,7 @@
 #   pi --no-extensions -e test-faux-provider.ts -e extension-api-info.mjs \
 #     --model test-faux/faux-1 --no-session --mode json "/api-info <file>"
 #
-# pig prompted the model with the command text, streaming an agent run that
+# ompig prompted the model with the command text, streaming an agent run that
 # ended in the faux provider's `unhandled request` error.
 #
 # The header carries a session id, timestamp and cwd, and Node and Go order
@@ -34,8 +34,8 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/api-info.json"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["../testdata/extension-api-info.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["../testdata/extension-api-info.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "../testdata/extension-api-info.mjs",

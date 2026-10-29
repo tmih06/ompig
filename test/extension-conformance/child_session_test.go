@@ -12,12 +12,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/cli"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/childsession"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/cli"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/childsession"
 )
 
 // Pi core/sdk.ts createAgentSession as a Go extension calls it: a child session over the host's model runtime, prompted, observed through subscribe, served a custom tool by the extension, aborted and disposed. The sentinel provider answers from the transcript, so only a session that really ran the extension's tool and returned its result reaches the final text.
@@ -135,7 +135,7 @@ func TestChildAgentSessionGoPlacements(t *testing.T) {
 			cfg := subprocess.ExtConfig{
 				Name: childsession.Name, Source: filepath.Join(root, "test/extension-conformance/testdata/child-session-go"), Enabled: true, Isolation: isolation,
 				RuntimeKind: "subprocess", RuntimeLanguage: "go", EntrypointKind: "factory", Factory: "Extension",
-				SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/child-session-go", Package: "example.com/child-session-go",
+				SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/child-session-go", Package: "example.com/child-session-go",
 			}
 			configs := []subprocess.ExtConfig{cfg}
 			if isolation == "shared-ok" {
@@ -220,11 +220,11 @@ const childSessionPython = `import json
 import re
 import threading
 import time
-import pig_sdk
+import ompig_sdk
 
 
 def new_extension():
-    ext = pig_sdk.Extension("child-session")
+    ext = ompig_sdk.Extension("child-session")
 
     def child_run(ctx, args):
         seen = []
@@ -241,14 +241,14 @@ def new_extension():
                 update["streamed"] = text_of(event["message"])
                 update["partial"] = text_of(event["assistantMessageEvent"].get("partial"))
 
-        sentinel = pig_sdk.ToolDefinition(
+        sentinel = ompig_sdk.ToolDefinition(
             name="sentinel_tool", label="sentinel", description="uppercases x",
             parameters={"type": "object", "properties": {"x": {"type": "string"}}, "required": ["x"]},
             execute=lambda c, params: params["x"].upper() + "!",
         )
-        session = ctx.create_agent_session(pig_sdk.CreateAgentSessionOptions(
+        session = ctx.create_agent_session(ompig_sdk.CreateAgentSessionOptions(
             model={"provider": "sentinel", "id": "echo"}, tools=["sentinel_tool"], in_memory=True, settings={"compaction": {"enabled": False}},
-            resources=pig_sdk.ResourceOptions(no_extensions=True, no_skills=True, no_prompt_templates=True, no_themes=True, no_context_files=True, append_system_prompt=["Child appendix"]),
+            resources=ompig_sdk.ResourceOptions(no_extensions=True, no_skills=True, no_prompt_templates=True, no_themes=True, no_context_files=True, append_system_prompt=["Child appendix"]),
             custom_tools=[sentinel],
         ))
         try:
@@ -264,7 +264,7 @@ def new_extension():
         finally:
             session.dispose()
 
-    ext.register_tool(pig_sdk.ToolDefinition(name="child_run", label="child_run", description="child_run", parameters={"type": "object"}, execute=child_run))
+    ext.register_tool(ompig_sdk.ToolDefinition(name="child_run", label="child_run", description="child_run", parameters={"type": "object"}, execute=child_run))
 
     quiet = dict(no_extensions=True, no_skills=True, no_prompt_templates=True, no_themes=True, no_context_files=True)
 
@@ -279,11 +279,11 @@ def new_extension():
             saw["abort"] = True
             raise RuntimeError("aborted")
 
-        tool = pig_sdk.ToolDefinition(name="sentinel_tool", label="sentinel", description="waits for its abort",
+        tool = ompig_sdk.ToolDefinition(name="sentinel_tool", label="sentinel", description="waits for its abort",
                                       parameters={"type": "object", "properties": {"x": {"type": "string"}}, "required": ["x"]}, execute=hang)
-        session = ctx.create_agent_session(pig_sdk.CreateAgentSessionOptions(
+        session = ctx.create_agent_session(ompig_sdk.CreateAgentSessionOptions(
             model={"provider": "sentinel", "id": "echo"}, tools=["sentinel_tool"], in_memory=True, settings={"compaction": {"enabled": False}},
-            resources=pig_sdk.ResourceOptions(**quiet), custom_tools=[tool]))
+            resources=ompig_sdk.ResourceOptions(**quiet), custom_tools=[tool]))
         try:
             events = []
             session.subscribe(lambda e: events.append(e["type"] + (":aborted=" + str(e["aborted"]).lower() if e["type"] == "agent_settled" else "")))
@@ -318,10 +318,10 @@ def new_extension():
                 time.sleep(0.005)
             raise RuntimeError("aborted")
 
-        tool = pig_sdk.ToolDefinition(name="sentinel_tool", label="sentinel", description="waits for its abort",
+        tool = ompig_sdk.ToolDefinition(name="sentinel_tool", label="sentinel", description="waits for its abort",
                                       parameters={"type": "object", "properties": {"x": {"type": "string"}}, "required": ["x"]}, execute=hang)
-        session = ctx.create_agent_session(pig_sdk.CreateAgentSessionOptions(
-            model={"provider": "sentinel", "id": "echo"}, tools=["sentinel_tool"], in_memory=True, resources=pig_sdk.ResourceOptions(**quiet), custom_tools=[tool]))
+        session = ctx.create_agent_session(ompig_sdk.CreateAgentSessionOptions(
+            model={"provider": "sentinel", "id": "echo"}, tools=["sentinel_tool"], in_memory=True, resources=ompig_sdk.ResourceOptions(**quiet), custom_tools=[tool]))
         threading.Thread(target=lambda: session.prompt("tool:hang"), daemon=True).start()
         started.wait(10)
         return json.dumps({"held": True})
@@ -335,7 +335,7 @@ def new_extension():
 
         out = {}
         for name, model in (("no-key", {"provider": "nokey", "id": "locked"}), ("no-model", None)):
-            session = ctx.create_agent_session(pig_sdk.CreateAgentSessionOptions(model=model, in_memory=True, settings={"compaction": {"enabled": False}}, resources=pig_sdk.ResourceOptions(**quiet)))
+            session = ctx.create_agent_session(ompig_sdk.CreateAgentSessionOptions(model=model, in_memory=True, settings={"compaction": {"enabled": False}}, resources=ompig_sdk.ResourceOptions(**quiet)))
             prompt_error = ""
             try:
                 session.prompt("hi")
@@ -351,12 +351,12 @@ def new_extension():
         probe = dict(no_extensions=True, no_skills=True, no_prompt_templates=True, no_themes=True, no_context_files=True)
         options = dict(model={"provider": "sentinel", "id": "echo"}, in_memory=True, settings={"compaction": {"enabled": False}}, scoped_models=scope)
         if args.get("via") == "loader":
-            loader = pig_sdk.DefaultResourceLoader(ctx, cwd=args["cwd"], agent_dir=args["agentDir"], additional_extension_paths=[args["probe"]], **probe)
+            loader = ompig_sdk.DefaultResourceLoader(ctx, cwd=args["cwd"], agent_dir=args["agentDir"], additional_extension_paths=[args["probe"]], **probe)
             loader.reload()
             options["resource_loader"] = loader
         else:
-            options["resources"] = pig_sdk.ResourceOptions(additional_extension_paths=[args["probe"]], **probe)
-        session = ctx.create_agent_session(pig_sdk.CreateAgentSessionOptions(**options))
+            options["resources"] = ompig_sdk.ResourceOptions(additional_extension_paths=[args["probe"]], **probe)
+        session = ctx.create_agent_session(ompig_sdk.CreateAgentSessionOptions(**options))
         try:
             seen = []
 
@@ -376,7 +376,7 @@ def new_extension():
             session.dispose()
 
     for name, fn in (("child_lifecycle", lifecycle), ("child_hold", hold), ("child_errors", errors), ("child_events", events)):
-        ext.register_tool(pig_sdk.ToolDefinition(name=name, label=name, description=name, parameters={"type": "object"}, execute=fn))
+        ext.register_tool(ompig_sdk.ToolDefinition(name=name, label=name, description=name, parameters={"type": "object"}, execute=fn))
     return ext
 `
 
@@ -411,7 +411,7 @@ func quoteJSON(s string) string {
 	return string(b)
 }
 
-const childSessionRust = `use pig_sdk::{CreateAgentSessionOptions, DefaultResourceLoader, DefaultResourceLoaderOptions, Extension, ResourceOptions, ToolDefinition, ToolResult};
+const childSessionRust = `use ompig_sdk::{CreateAgentSessionOptions, DefaultResourceLoader, DefaultResourceLoaderOptions, Extension, ResourceOptions, ToolDefinition, ToolResult};
 use serde_json::{json, Value};
 use std::sync::{Arc, Mutex};
 

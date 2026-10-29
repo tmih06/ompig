@@ -90,15 +90,15 @@ type mappingFile struct {
 }
 
 type mappingRow struct {
-	ID          string            `json:"id"`
-	Disposition string            `json:"disposition"`
-	Rationale   string            `json:"rationale"`
-	PigTargets  []string          `json:"pigTargets"`
-	Layers      map[string]string `json:"layers"`
-	Production  []string          `json:"production"`
-	Evidence    []string          `json:"evidence"`
-	Async       string            `json:"asyncContract"`
-	Contracts   []string          `json:"behaviorContracts"`
+	ID           string            `json:"id"`
+	Disposition  string            `json:"disposition"`
+	Rationale    string            `json:"rationale"`
+	OmpigTargets []string          `json:"ompigTargets"`
+	Layers       map[string]string `json:"layers"`
+	Production   []string          `json:"production"`
+	Evidence     []string          `json:"evidence"`
+	Async        string            `json:"asyncContract"`
+	Contracts    []string          `json:"behaviorContracts"`
 }
 
 type inventoryFile struct {
@@ -300,7 +300,7 @@ func loadPinLedger(root, version string, committed bool, syms *symIndex, fams []
 		} else if r.Status == StatusGap {
 			r.GapReason = "pending"
 		}
-		for _, t := range m.PigTargets {
+		for _, t := range m.OmpigTargets {
 			_, ref := parseRef(t, syms)
 			r.Targets = append(r.Targets, ref)
 		}

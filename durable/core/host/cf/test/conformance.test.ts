@@ -52,10 +52,10 @@ test("two sessions on one instance are independent handles", () => {
   assert.equal(b.step(open.kind, open.payload, 1).reads.length, 1)
 })
 
-test("the module imports exactly the WASI set the ABI lists plus pig.uuidv7", () => {
+test("the module imports exactly the WASI set the ABI lists plus ompig.uuidv7", () => {
   const listed = new Set(abiJson.imports.map(i => i.name))
   const imported = WebAssembly.Module.imports(probeModule()).map(i => `${i.module}.${i.name}`)
-  assert.ok(imported.includes("pig.uuidv7"))
+  assert.ok(imported.includes("ompig.uuidv7"))
   for (const name of imported) assert.ok(listed.has(name), `${name} is not in the ABI import table`)
 })
 

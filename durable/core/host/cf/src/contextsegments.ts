@@ -9,7 +9,7 @@
 // the context is derived from the entries. Bytes rewritten in place into other well-formed messages are not detected, as a
 // rewritten entry record is not. The reader writes checkpoints for contexts without a head marker only (contextstore.ts save).
 //
-// The tables are `pig_`-prefixed, outside Pi's tables and sequence (Pi's code does not read them, and a store Pi wrote has
+// The tables are `ompig_`-prefixed, outside Pi's tables and sequence (Pi's code does not read them, and a store Pi wrote has
 // none), and are written by the host in a transaction of their own.
 import { derivationId, type Baseline, type Message } from "./context.ts"
 import type { Store } from "./store.ts"
@@ -17,13 +17,13 @@ import type { Store } from "./store.ts"
 /** The most bytes of messages one segment row holds (a Durable Object value is 2 MB). */
 export const SEGMENT_BYTES = 512 * 1024
 
-const CREATE_CHECKPOINTS = `CREATE TABLE IF NOT EXISTS pig_context_checkpoints (
+const CREATE_CHECKPOINTS = `CREATE TABLE IF NOT EXISTS ompig_context_checkpoints (
   conversation INTEGER PRIMARY KEY, head INTEGER NOT NULL, tail INTEGER NOT NULL, digest TEXT NOT NULL, schema_version INTEGER NOT NULL,
   derivation TEXT NOT NULL, settled INTEGER NOT NULL, segments INTEGER NOT NULL, open BLOB NOT NULL) STRICT`
-const CREATE_SEGMENTS = `CREATE TABLE IF NOT EXISTS pig_context_segments (
+const CREATE_SEGMENTS = `CREATE TABLE IF NOT EXISTS ompig_context_segments (
   conversation INTEGER NOT NULL, idx INTEGER NOT NULL, count INTEGER NOT NULL, messages BLOB NOT NULL, PRIMARY KEY (conversation, idx)) STRICT, WITHOUT ROWID`
-const SELECT_CHECKPOINT = "SELECT head, tail, digest, schema_version, derivation, settled, segments, CAST(open AS BLOB) FROM pig_context_checkpoints WHERE conversation = ?"
-const SELECT_SEGMENTS = "SELECT idx, count, CAST(messages AS BLOB) FROM pig_context_segments WHERE conversation = ? ORDER BY idx"
+const SELECT_CHECKPOINT = "SELECT head, tail, digest, schema_version, derivation, settled, segments, CAST(open AS BLOB) FROM ompig_context_checkpoints WHERE conversation = ?"
+const SELECT_SEGMENTS = "SELECT idx, count, CAST(messages AS BLOB) FROM ompig_context_segments WHERE conversation = ? ORDER BY idx"
 const SELECT_SCHEMA = "SELECT version FROM durable_schema WHERE singleton = 1"
 const SELECT_ENTRY = "SELECT CAST(record AS BLOB) FROM entries WHERE id = ?"
 
@@ -128,19 +128,19 @@ export class ContextSegments {
     this.store.tx(() => {
       this.store.run(CREATE_CHECKPOINTS, [])
       this.store.run(CREATE_SEGMENTS, [])
-      if (prior === undefined) this.store.run("DELETE FROM pig_context_segments WHERE conversation = ?", [conversation])
-      for (const chunk of chunks) this.store.run("INSERT INTO pig_context_segments (conversation, idx, count, messages) VALUES (?, ?, ?, ?)", [conversation, segments++, chunk.count, chunk.bytes])
+      if (prior === undefined) this.store.run("DELETE FROM ompig_context_segments WHERE conversation = ?", [conversation])
+      for (const chunk of chunks) this.store.run("INSERT INTO ompig_context_segments (conversation, idx, count, messages) VALUES (?, ?, ?, ?)", [conversation, segments++, chunk.count, chunk.bytes])
       const version = this.store.all(SELECT_SCHEMA, [])[0]![0] as number
       const record = this.store.all(SELECT_ENTRY, [tail])
       if (record.length !== 1) throw new Error(`context checkpoint names entry ${tail}, which storage does not have`)
       const values = [head, tail, digestOf(bytesOf(record[0]![0])), version, this.derivation, settled.length, segments, enc.encode(JSON.stringify({ baseline: baselineIndex(settled, open, baseline), open }))]
       if (prior === undefined) {
         this.store.run(
-          "INSERT OR REPLACE INTO pig_context_checkpoints (conversation, head, tail, digest, schema_version, derivation, settled, segments, open) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "INSERT OR REPLACE INTO ompig_context_checkpoints (conversation, head, tail, digest, schema_version, derivation, settled, segments, open) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
           [conversation, ...values],
         )
       } else if (this.store.run(
-        "UPDATE pig_context_checkpoints SET head = ?, tail = ?, digest = ?, schema_version = ?, derivation = ?, settled = ?, segments = ?, open = ? WHERE conversation = ? AND head = ? AND tail = ? AND derivation = ? AND settled = ? AND segments = ?",
+        "UPDATE ompig_context_checkpoints SET head = ?, tail = ?, digest = ?, schema_version = ?, derivation = ?, settled = ?, segments = ?, open = ? WHERE conversation = ? AND head = ? AND tail = ? AND derivation = ? AND settled = ? AND segments = ?",
         [...values, conversation, head, prior.tail, this.derivation, prior.count, prior.segments],
       ) === 0) {
         // Another writer replaced the checkpoint this reader continues: its segments are not the ones counted.

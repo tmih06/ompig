@@ -21,7 +21,7 @@ import (
 type JSONAliasRule struct {
 	Paths   []string `toml:"paths"`
 	Kind    string   `toml:"kind"`    // id, timestamp, duration, path, literal, or session_file
-	Pig     string   `toml:"pig"`     // exact Pig spelling for a literal alias
+	Ompig   string   `toml:"ompig"`   // exact Ompig spelling for a literal alias
 	Pi      string   `toml:"pi"`      // exact Pi spelling for a literal alias
 	Roots   []string `toml:"roots"`   // selected runtime roots; empty retains the standard directory roots
 	Group   string   `toml:"group"`   // shared identity namespace for ids and references
@@ -43,7 +43,7 @@ func compareJSONResults(g, p Result, rules []JSONAliasRule) error {
 	}
 	left, err := parseJSONRecords(g.Output)
 	if err != nil {
-		return fmt.Errorf("pig: %w", err)
+		return fmt.Errorf("ompig: %w", err)
 	}
 	right, err := parseJSONRecords(p.Output)
 	if err != nil {
@@ -60,8 +60,8 @@ func compareJSONResults(g, p Result, rules []JSONAliasRule) error {
 		if rule.Optional && rule.Kind != "duration" && rule.Kind != "duration_ms" {
 			return fmt.Errorf("optional is only allowed on a duration alias")
 		}
-		if rule.Kind == "literal" && (rule.Pig == "" || rule.Pi == "") {
-			return fmt.Errorf("literal alias requires nonempty pig and pi spellings")
+		if rule.Kind == "literal" && (rule.Ompig == "" || rule.Pi == "") {
+			return fmt.Errorf("literal alias requires nonempty ompig and pi spellings")
 		}
 		if (rule.Kind == "id" || rule.Kind == "session_file") && rule.Group == "" {
 			return fmt.Errorf("identity alias requires group")
@@ -102,7 +102,7 @@ func compareJSONResults(g, p Result, rules []JSONAliasRule) error {
 				}
 			case "literal":
 				key := fmt.Sprint(index)
-				gLiterals[key], pLiterals[key] = rule.Pig, rule.Pi
+				gLiterals[key], pLiterals[key] = rule.Ompig, rule.Pi
 			case "session_file":
 				x, xok := a.(string)
 				y, yok := b.(string)
@@ -146,7 +146,7 @@ func compareJSONResults(g, p Result, rules []JSONAliasRule) error {
 					if optionalDurationPresence(rules, next, av, bv, aok) {
 						continue
 					}
-					return fmt.Errorf("%s: field presence differs (pig=%t pi=%t)", next, aok, bok)
+					return fmt.Errorf("%s: field presence differs (ompig=%t pi=%t)", next, aok, bok)
 				}
 				if err := compare(next, av, bv); err != nil {
 					return err
@@ -164,7 +164,7 @@ func compareJSONResults(g, p Result, rules []JSONAliasRule) error {
 				}
 			}
 			if len(x) != len(y) {
-				return fmt.Errorf("%s: array/record count pig=%d pi=%d", path, len(x), len(y))
+				return fmt.Errorf("%s: array/record count ompig=%d pi=%d", path, len(x), len(y))
 			}
 			return nil
 		case json.Number:
@@ -182,7 +182,7 @@ func compareJSONResults(g, p Result, rules []JSONAliasRule) error {
 				return nil
 			}
 		}
-		return fmt.Errorf("%s: pig=%s pi=%s", path, jsonDiagnostic(a), jsonDiagnostic(b))
+		return fmt.Errorf("%s: ompig=%s pi=%s", path, jsonDiagnostic(a), jsonDiagnostic(b))
 	}
 	return compare("", left, right)
 }
@@ -253,19 +253,19 @@ func pointerMatches(pattern, path []string) bool {
 	return len(path) > 0 && (pattern[0] == "*" || pattern[0] == path[0]) && pointerMatches(pattern[1:], path[1:])
 }
 
-func compareIdentity(path, pig, pi, group string, pairs map[string]*identityPair) error {
+func compareIdentity(path, ompig, pi, group string, pairs map[string]*identityPair) error {
 	pair := pairs[group]
 	if pair == nil {
 		pair = &identityPair{map[string]string{}, map[string]string{}}
 		pairs[group] = pair
 	}
-	if old, ok := pair.forward[pig]; ok && old != pi {
-		return fmt.Errorf("%s: identity reference changed: pig=%q pi=%q (previous pi=%q)", path, pig, pi, old)
+	if old, ok := pair.forward[ompig]; ok && old != pi {
+		return fmt.Errorf("%s: identity reference changed: ompig=%q pi=%q (previous pi=%q)", path, ompig, pi, old)
 	}
-	if old, ok := pair.reverse[pi]; ok && old != pig {
-		return fmt.Errorf("%s: identity reuse: pig=%q pi=%q (previous pig=%q)", path, pig, pi, old)
+	if old, ok := pair.reverse[pi]; ok && old != ompig {
+		return fmt.Errorf("%s: identity reuse: ompig=%q pi=%q (previous ompig=%q)", path, ompig, pi, old)
 	}
-	pair.forward[pig], pair.reverse[pi] = pi, pig
+	pair.forward[ompig], pair.reverse[pi] = pi, ompig
 	return nil
 }
 
@@ -293,7 +293,7 @@ func addAliasRoots(target, roots map[string]string, names []string) error {
 var sessionFilenamePattern = regexp.MustCompile(`^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{3}Z)_([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.jsonl$`)
 
 // Pi core/session-manager.ts:newSession spells filenames as an ISO millisecond clock followed by the session ID. Preserve directories and bind the embedded ID to the declared session group.
-func compareSessionFilename(path, pig, pi string, g, p Result, rule JSONAliasRule, pairs map[string]*identityPair) error {
+func compareSessionFilename(path, ompig, pi string, g, p Result, rule JSONAliasRule, pairs map[string]*identityPair) error {
 	split := func(value string) (string, string, error) {
 		start := strings.LastIndexAny(value, "/\\") + 1
 		parts := sessionFilenamePattern.FindStringSubmatch(value[start:])
@@ -307,7 +307,7 @@ func compareSessionFilename(path, pig, pi string, g, p Result, rule JSONAliasRul
 		}
 		return value[:start], parts[2], nil
 	}
-	gd, gi, err := split(pig)
+	gd, gi, err := split(ompig)
 	if err != nil {
 		return err
 	}
@@ -323,7 +323,7 @@ func compareSessionFilename(path, pig, pi string, g, p Result, rule JSONAliasRul
 		return err
 	}
 	if !slices.Equal(aliasText(gd, gr, nil), aliasText(pd, pr, nil)) {
-		return fmt.Errorf("%s: session directories differ: pig=%q pi=%q", path, gd, pd)
+		return fmt.Errorf("%s: session directories differ: ompig=%q pi=%q", path, gd, pd)
 	}
 	return compareIdentity(path, gi, piID, rule.Group, pairs)
 }
@@ -385,21 +385,21 @@ func resultIdentityRoots(cwd, temp string, env []string) map[string]string {
 	for _, kv := range env {
 		key, value, _ := strings.Cut(kv, "=")
 		switch key {
-		case "PIG_HOME":
+		case "OMPIG_HOME":
 			roots["agent"] = value + "/agent"
-			// Each PiG build writes its pages to docs/bundle-<hash>/ (internal/pigdocs); Pi's docs are one directory. The 16-digit pattern leaves out the session's lease file, docs/bundle-<hash>.lease, which is no bundle.
+			// Each Ompig build writes its pages to docs/bundle-<hash>/ (internal/pigdocs); Pi's docs are one directory. The 16-digit pattern leaves out the session's lease file, docs/bundle-<hash>.lease, which is no bundle.
 			docs := value + "/docs"
 			if bundles, _ := filepath.Glob(filepath.Join(value, "docs", "bundle-????????????????")); len(bundles) == 1 {
 				docs = filepath.ToSlash(bundles[0])
 			}
 			roots["docs"] = docs
 			roots["readme"] = docs + "/README.md"
-			roots["examples"] = "https://github.com/MichaelKinsy/PiG/tree/main/examples"
+			roots["examples"] = "https://github.com/tmih06/ompig/tree/main/examples"
 		case "PI_PACKAGE_DIR":
 			roots["docs"] = value + "/docs"
 			roots["readme"] = value + "/README.md"
 			roots["examples"] = value + "/examples"
-		case "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR":
+		case "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR":
 			roots["agent"] = value
 		}
 	}
@@ -539,9 +539,9 @@ func jsonStringIdentity(raw, decoded string) string {
 
 // optionalDurationPresence reports whether the one-sided field at path is a duration that an optional duration alias
 // covers: the present side must hold a valid duration and the path must match one of the rule's patterns.
-func optionalDurationPresence(rules []JSONAliasRule, path string, a, b any, pigHas bool) bool {
+func optionalDurationPresence(rules []JSONAliasRule, path string, a, b any, ompigHas bool) bool {
 	value := b
-	if pigHas {
+	if ompigHas {
 		value = a
 	}
 	for _, rule := range rules {

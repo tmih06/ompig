@@ -30,5 +30,5 @@ Checked against Pi 1.0.4 and left as rule requests (a port would be a duplicate 
 - `AgentLoopConfig.telemetryContext`, `.deferred`: `ai/telemetry_options_upstream_test.go` already ports `telemetry-options.test.ts` (eight provider and Models dispatches, two image dispatches). The P1 rule (b) must count a library-package field exercised by a Pi-oracle test.
 - `createLsTool::call:0` (`AgentTool.constrainedSampling`): Pi's `ls` has no `constrainedSampling`; Go carries the member in `Schema()` (`ai.ToolSchema.ConstrainedSampling`), as for read, edit, write and shell tools.
 - `EntryDraft.head`: `EntryId | "self"` is `Head *EntryId` plus `HeadSelf bool`, with the wire form in `durable/codecs.go`; a union-to-two-fields rule request.
-- `getReadmePath`: Pig's docs bundle is the D22 path `prompts.docsSection` builds from `pigdocs.DocsDir`; a second helper would duplicate it.
+- `getReadmePath`: Ompig's docs bundle is the D22 path `prompts.docsSection` builds from `pigdocs.DocsDir`; a second helper would duplicate it.
 - `SessionEntry` (T10d): Go keeps one raw-JSON `SessionEntry` and typed decoders per consumer (`AsMessage`, projected entries). Typed per-variant structs are a larger session-model change that needs a lead decision, not a rule.

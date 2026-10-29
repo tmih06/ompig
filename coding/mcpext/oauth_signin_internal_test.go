@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // oauth.ts responseFromRedirectURL: a pasted redirect URL carries its `iss` parameter to the code exchange, and

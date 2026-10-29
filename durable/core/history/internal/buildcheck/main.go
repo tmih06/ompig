@@ -7,7 +7,7 @@ package main
 import (
 	"os"
 
-	"github.com/MichaelKinsy/PiG/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/history"
 )
 
 func main() {

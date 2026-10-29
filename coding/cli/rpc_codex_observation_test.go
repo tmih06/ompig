@@ -16,19 +16,19 @@ import (
 	"testing"
 )
 
-// The first assistant message_start of `pig --mode rpc` over Codex SSE must equal Pi 0.87.1's. The oracle
+// The first assistant message_start of `ompig --mode rpc` over Codex SSE must equal Pi 0.87.1's. The oracle
 // (coding/testdata/rpc33-observation/providers/openai-codex-responses/probe.mjs) ran the real Pi CLI against the same
-// wire fixtures; Pi is deterministic there, so every Go run must reproduce it. PIG_D82_ORACLE_RUNS raises the run count.
+// wire fixtures; Pi is deterministic there, so every Go run must reproduce it. OMPIG_D82_ORACLE_RUNS raises the run count.
 
 const codexRPCOraclePath = "../../coding/testdata/rpc33-observation/providers/openai-codex-responses/pi.json"
 
 func codexRPCOracleRuns(t *testing.T) int {
 	t.Helper()
 	runs := 20
-	if value := os.Getenv("PIG_D82_ORACLE_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_D82_ORACLE_RUNS"); value != "" {
 		parsed, err := strconv.Atoi(value)
 		if err != nil || parsed < 1 {
-			t.Fatalf("PIG_D82_ORACLE_RUNS=%q", value)
+			t.Fatalf("OMPIG_D82_ORACLE_RUNS=%q", value)
 		}
 		runs = parsed
 	}
@@ -136,7 +136,7 @@ func TestRPCCodexSSEStartMatchesPi(t *testing.T) {
 					if err := os.WriteFile(filepath.Join(dir, "parity-read-target.txt"), []byte("x\n"), 0o600); err != nil {
 						t.Fatal(err)
 					}
-					p := startRPCProcessAt(t, dir, []string{"HOME=" + dir, "PIG_HOME=" + filepath.Join(dir, "home"), "PIG_CODING_AGENT_DIR=" + agent},
+					p := startRPCProcessAt(t, dir, []string{"HOME=" + dir, "OMPIG_HOME=" + filepath.Join(dir, "home"), "OMPIG_CODING_AGENT_DIR=" + agent},
 						"--offline", "--no-extensions", "--model", "p/strict", "--no-context-files", "--no-skills", "--no-session")
 					p.send(`{"id":"read","type":"prompt","message":"READ"}`)
 					var start map[string]any

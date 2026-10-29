@@ -32,7 +32,7 @@ const kittyModCtrl = 4
 // csiFieldBase parses the numeric value before any ':' sub-parameter in a
 // Kitty CSI field. Kitty encodes the codepoint field as
 // base[:shifted[:base-layout]] (flag 4, alternate keys) and the modifier field
-// as modifier[:event-type] (flag 2, event types); Pig's extendedKeyInit
+// as modifier[:event-type] (flag 2, event types); Ompig's extendedKeyInit
 // negotiates both (\x1b[>7u). We match on the base codepoint and the base
 // modifier and ignore those sub-parameters; the base-layout alternate is
 // honored earlier, by KeybindingsManager.Resolve. Key-release events (event-type 3)

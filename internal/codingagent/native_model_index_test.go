@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // scanNativeModelDefaults is provider-composer.ts findModelDefaults as a scan of the list, the reference the index must agree with.

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 )
 
 // index.ts:31-45: createCodemodeExtension(options) returns an ExtensionFactory that registers the `codemode` tool with `defaultActive: false`;

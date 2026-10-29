@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // StorageBenchmarkScale is the size of a seeded benchmark dataset.

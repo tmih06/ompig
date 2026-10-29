@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // D165: the processor is native Go, so its encoded bytes and resampled pixels are not Photon's. These tests are the differential

@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ToolRendererResolver chooses how calls to a tool are drawn, including tools that are not registered, as upstream
 // ToolRendererResolver does. next returns the renderers the remaining resolvers, then the registered tool, would use,
 // or nil. Return next() to keep them, nil for none, or renderers of this extension.
 //
-// pig divergence (D89): next() returns a marker for renderers the host draws. Returning it keeps them; its Call and
+// ompig divergence (D89): next() returns a marker for renderers the host draws. Returning it keeps them; its Call and
 // Result are nil, so a resolver cannot wrap them. A marker given a Call or Result is the resolver's own renderers.
 type ToolRendererResolver func(toolName string, next func() *ToolRenderers) *ToolRenderers
 

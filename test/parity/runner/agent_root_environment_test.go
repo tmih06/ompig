@@ -14,10 +14,10 @@ import (
 	"time"
 )
 
-var agentRootEnvironmentKeys = []string{"PIG_HOME", "PIG_CODING_AGENT_DIR", "PIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_DIR"}
+var agentRootEnvironmentKeys = []string{"OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "OMPIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_DIR"}
 
 func TestParityEnvironmentChild(t *testing.T) {
-	if os.Getenv("PIG_TEST_ENV_HELPER") != "1" {
+	if os.Getenv("OMPIG_TEST_ENV_HELPER") != "1" {
 		return
 	}
 	values := map[string]string{}
@@ -40,7 +40,7 @@ func TestHermeticCommandsDoNotInheritWorkerAgentRoots(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	output, exit, _, err := runCmd(t.Context(), executable, []string{"-test.run=^TestParityEnvironmentChild$"}, []string{"PIG_TEST_ENV_HELPER=1", "PIG_HOME=fixture-home"}, 5*time.Second, t.TempDir())
+	output, exit, _, err := runCmd(t.Context(), executable, []string{"-test.run=^TestParityEnvironmentChild$"}, []string{"OMPIG_TEST_ENV_HELPER=1", "OMPIG_HOME=fixture-home"}, 5*time.Second, t.TempDir())
 	if err != nil || exit != 0 {
 		t.Fatalf("exit=%d err=%v output=%s", exit, err, output)
 	}
@@ -50,21 +50,21 @@ func TestHermeticCommandsDoNotInheritWorkerAgentRoots(t *testing.T) {
 	}
 	for _, key := range agentRootEnvironmentKeys {
 		want := ""
-		if key == "PIG_HOME" {
+		if key == "OMPIG_HOME" {
 			want = "fixture-home"
 		}
 		if values[key] != want {
 			t.Fatalf("%s=%q, want %q", key, values[key], want)
 		}
 	}
-	output, exit, _, err = runCmd(t.Context(), executable, []string{"-test.run=^TestParityEnvironmentChild$"}, []string{"PIG_TEST_ENV_HELPER=1", "PIG_CODING_AGENT_DIR=explicit-fixture-agent"}, 5*time.Second, t.TempDir())
+	output, exit, _, err = runCmd(t.Context(), executable, []string{"-test.run=^TestParityEnvironmentChild$"}, []string{"OMPIG_TEST_ENV_HELPER=1", "OMPIG_CODING_AGENT_DIR=explicit-fixture-agent"}, 5*time.Second, t.TempDir())
 	if err != nil || exit != 0 {
 		t.Fatalf("exit=%d err=%v", exit, err)
 	}
 	if err := json.Unmarshal([]byte(output), &values); err != nil {
 		t.Fatal(err)
 	}
-	if values["PIG_CODING_AGENT_DIR"] != "explicit-fixture-agent" {
+	if values["OMPIG_CODING_AGENT_DIR"] != "explicit-fixture-agent" {
 		t.Fatal(values)
 	}
 }

@@ -8,8 +8,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // freshProjectionView is the view projection of the current leaf built from the branch, without the Session's kept projection.

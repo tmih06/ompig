@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Each assistant delta updates the chat block from the message's blocks, stop reason and error text. The update reads them in place: its allocations do not grow with the tool call arguments the message carries, which a copy of the whole message per delta would clone (TU-T7).

@@ -4,8 +4,8 @@
 package turn
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // RequestContext is the committed context a model request is prepared from: what generation.ts reads of runtime.context

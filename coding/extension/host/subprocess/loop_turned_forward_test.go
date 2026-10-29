@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A loop turn is the sending process's own: its loop already ran the callbacks its members queued. Packed members have no OS process handle of their own, so the host names their process by processIdentity. A copy on a packed sibling's connection could arrive after the sender's handler answered and end the wait that answer began, letting a queued timer run with a live ctx where Pi's runs after invalidate.

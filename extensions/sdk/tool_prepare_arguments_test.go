@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/internal/jsloop"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Upstream agent-loop.ts:707-716 (prepareToolCall): tool.prepareArguments runs before validateToolArguments, so the host (which validates) must be able to

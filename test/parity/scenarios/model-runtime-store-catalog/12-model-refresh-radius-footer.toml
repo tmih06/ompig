@@ -5,7 +5,7 @@
 # The fixture defines exactly two providers (fixture and radius-dev). Radius
 # imports its fake legacy credential catalog locally; PI_OFFLINE forbids fetches.
 # Open /model, wait for refresh, confirm the current model, then read the footer.
-# PiG readiness uses the active-model footer, not the obsolete startup help banner.
+# Ompig readiness uses the active-model footer, not the obsolete startup help banner.
 # Upstream evidence: exact pinned Pi, probed on 2026-09-25. The final line is
 # "catalog-providers:2", read through the extension host's ReadonlyFooterDataProvider.
 # A compiling mutation excluding radius-dev from the count yields
@@ -24,17 +24,17 @@ driver = "interactive-tmux"
 model = "fixture/current"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent-radius", "PI_OFFLINE=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent-radius", "PI_OFFLINE=1"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-radius", "PI_SKIP_VERSION_CHECK=1", "PI_OFFLINE=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/catalog-footer.mjs"]
+ompig_extensions = ["testdata/catalog-footer.mjs"]
 pi_extensions = ["testdata/catalog-footer.mjs"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(fixture) current"
+ready_pattern_ompig = "(fixture) current"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 capture_start = "catalog-providers:"

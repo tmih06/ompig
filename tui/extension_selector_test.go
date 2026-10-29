@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func TestExtensionSelectorMultilineTitleRendersOneLinePerSegment(t *testing.T) {
@@ -156,7 +156,7 @@ func TestExtensionSelectorComponentChildrenFollowUpstream(t *testing.T) {
 
 // previewMarks are the preview lines the tests below draw: 8 cells a line, so the right column is 8 cells plus the
 // gap that separates it from the option rows.
-var previewMarks = []string{"pigA top", "pigA bot", "pigB top", "pigB bot"}
+var previewMarks = []string{"ompigA top", "ompigA bot", "ompigB top", "ompigB bot"}
 
 func testPreview(selected int) []string {
 	return []string{previewMarks[selected*2], previewMarks[selected*2+1]}
@@ -191,16 +191,16 @@ func TestExtensionSelectorPreviewDrawsAfterTheOptionRows(t *testing.T) {
 		t.Fatalf("option rows at %d, %d, %d: the rows must stay one line each at width %d", first, second, third, width)
 	}
 	// The preview is top-aligned with the first row.
-	if got := lines[first]; !strings.Contains(got, "pigA top") {
+	if got := lines[first]; !strings.Contains(got, "ompigA top") {
 		t.Fatalf("first row = %q, want the preview's first line beside it", got)
 	}
-	if got := lines[second]; !strings.Contains(got, "pigA bot") {
+	if got := lines[second]; !strings.Contains(got, "ompigA bot") {
 		t.Fatalf("second row = %q, want the preview's second line beside it", got)
 	}
-	if got := lines[third]; strings.Contains(got, "pigA") {
+	if got := lines[third]; strings.Contains(got, "ompigA") {
 		t.Fatalf("third row = %q, want the cells right of it blank", got)
 	}
-	prefix, _, ok := strings.Cut(lines[first], "pigA top")
+	prefix, _, ok := strings.Cut(lines[first], "ompigA top")
 	if !ok {
 		t.Fatalf("first row = %q", lines[first])
 	}
@@ -216,7 +216,7 @@ func TestExtensionSelectorPreviewDrawsAfterTheOptionRows(t *testing.T) {
 	// The column follows the highlighted option.
 	selector.HandleInput("j")
 	lines = selector.Render(width)
-	if got := lines[lineIndexOf(t, lines, "first option")]; !strings.Contains(got, "pigB top") {
+	if got := lines[lineIndexOf(t, lines, "first option")]; !strings.Contains(got, "ompigB top") {
 		t.Fatalf("after moving down the first row = %q, want the second option's preview", got)
 	}
 }
@@ -391,7 +391,7 @@ func TestExtensionSelectorComponentOptions(t *testing.T) {
 	}
 }
 
-// Pig's preview column (D2) draws only beside at least one option row, and the selector reports that it handles the page keys itself (D155).
+// Ompig's preview column (D2) draws only beside at least one option row, and the selector reports that it handles the page keys itself (D155).
 func TestExtensionSelectorComponentHasNoPreviewWithoutOptionsAndCapturesThePageKeys(t *testing.T) {
 	preview := func(int) []string { return []string{"preview line"} }
 	build := func(options []string) *ExtensionSelectorComponent {

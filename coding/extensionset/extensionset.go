@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // LoadError is a {path, error} entry of types.ts LoadExtensionsResult.errors.
@@ -178,7 +178,7 @@ func OmitReplaced(extensions []extension.Extension, warnings *[]icodingagent.Ext
 			case "flag":
 				registered = "--" + rawName
 			}
-			// pig divergence (D2): the remedy names PiG's own command; Pi's resource-loader.ts omitReplacedExtensions says `pi config`.
+			// ompig divergence (D2): the remedy names Ompig's own command; Pi's resource-loader.ts omitReplacedExtensions says `pi config`.
 			*warnings = append(*warnings, icodingagent.ExtensionWarning{
 				Path:    ext.Path,
 				Warning: fmt.Sprintf("Extension %s registers %s `%s`, so built-in extension `%s` was not loaded. To use `%s`, run `%s config` and make sure it is enabled under Built-in extensions, then disable or remove the existing extension. We recommend only having one or the other loaded at a time.", replacement.Path, kind, registered, builtin, builtin, icodingagent.AppName),

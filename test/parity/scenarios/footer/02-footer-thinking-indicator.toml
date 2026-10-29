@@ -26,12 +26,12 @@
 #   Upstream renders the thinking level as plain text; no per-level
 #   coloring. The entire line 2 is wrapped in theme.fg("dim").
 #
-# Bug fixed this loop: pig's initThinkingLevel() was not updating the
+# Bug fixed this loop: ompig's initThinkingLevel() was not updating the
 # status line's thinkingLevel field, leaving it at "" which defaulted
 # to "off" in renderFooter. Fixed by adding statusLine.SetThinkingLevel
 # in initThinkingLevel().
 #
-# Bug fixed this loop: pig was coloring the thinking level text with
+# Bug fixed this loop: ompig was coloring the thinking level text with
 # per-level theme colors (ThinkingOff, ThinkingMedium, etc.) but
 # upstream footer.ts does NOT color the thinking level: it's plain
 # text wrapped in the overall dim. Removed per-level coloring from
@@ -56,7 +56,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 20
 capture_start = "parity-snap-cwd-"
@@ -64,9 +64,9 @@ capture_start_last = true
 settle_seconds = 2
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../footer/testdata/thinking-pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../footer/testdata/thinking-ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=../footer/testdata/thinking-pi-agent"]
-pig_args = ["--no-extensions", "--model", "github-copilot/claude-sonnet-4.6"]
+ompig_args = ["--no-extensions", "--model", "github-copilot/claude-sonnet-4.6"]
 pi_args = ["--no-extensions", "--model", "github-copilot/claude-sonnet-4.6"]
 
 [assert]

@@ -24,7 +24,7 @@ func TestOklabToOkhslLightnessMatchesPi(t *testing.T) {
 	}
 }
 
-// components/spacer.ts setLines and select-list.ts setSelectedIndex change what the component renders; Pig's invalidatable marks the component dirty so the
+// components/spacer.ts setLines and select-list.ts setSelectedIndex change what the component renders; Ompig's invalidatable marks the component dirty so the
 // surface that draws it redraws it (D91, tui.go invalidatable). Upstream's own invalidate() is a no-op, so only the Go mark is asserted here.
 func TestSpacerSetLinesAndSelectListSetSelectedIndexMarkTheComponentDirty(t *testing.T) {
 	spacer := NewSpacer(1)
@@ -44,7 +44,7 @@ func TestSpacerSetLinesAndSelectListSetSelectedIndexMarkTheComponentDirty(t *tes
 	}
 }
 
-// components/truncated-text.ts render with a width narrower than twice its padding: Pig clamps the horizontal padding to (width-1)/2 and keeps one content
+// components/truncated-text.ts render with a width narrower than twice its padding: Ompig clamps the horizontal padding to (width-1)/2 and keeps one content
 // cell (D66), so no row is wider than the viewport. The rows are (top padding, content, bottom padding) for text "abcdef", paddingX 5 and paddingY 1.
 func TestTruncatedTextClampsItsPaddingToTheViewport(t *testing.T) {
 	const dot = "\x1b[0m.\x1b[0m"

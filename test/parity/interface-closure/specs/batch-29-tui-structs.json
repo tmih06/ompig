@@ -177,7 +177,7 @@
    "type": "TuiMouseEventResult"
   },
   "production": [
-   "call:internal/codingagent/pig_logo_animation.go#pigLogoAnimation.HandleMouse"
+   "call:internal/codingagent/ompig_logo_animation.go#ompigLogoAnimation.HandleMouse"
   ],
   "evidence": [
    "test:tui/tool_execution_mouse_upstream_test.go#TestToolMouseDelegatesNestedHandlersBeforeExpansion",

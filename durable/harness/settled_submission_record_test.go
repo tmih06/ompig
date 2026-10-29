@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/harness/types.ts:74-76 SettledSubmissionRecord = SubmissionRecord & { status: "done" | "unanswered" }, returned by

@@ -13,7 +13,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // future is a call started without waiting for it, the counterpart of an unawaited Promise.

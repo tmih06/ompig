@@ -1,11 +1,11 @@
 """The Python SDK version of the writer-start fixture (../node/index.mjs)."""
 from __future__ import annotations
 
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("python")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("python")
 
     def session_start(ctx, _data):
         ctx.append_entry("writer-start", {"text": "from-start"})

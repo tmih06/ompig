@@ -42,7 +42,7 @@
    "TestSpacerAndTruncatedTextRender"
   ],
   "upstream_reference": "packages/tui/src/components/truncated-text.ts",
-  "mutation": "tui/truncated_text.go: replace `for range t.PaddingY {\n\t\tresult = append(result, emptyLine)\n\t}\n\n\t// pig` with `// pig`; TestSpacerAndTruncatedTextRender fails."
+  "mutation": "tui/truncated_text.go: replace `for range t.PaddingY {\n\t\tresult = append(result, emptyLine)\n\t}\n\n\t// ompig` with `// ompig`; TestSpacerAndTruncatedTextRender fails."
  },
  {
   "upstream": "packages/tui/src/components/truncated-text.ts",

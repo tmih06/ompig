@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // timerDeferHost returns a host with one Node runtime whose peer end the test drives.
@@ -58,7 +58,7 @@ func ackTimerDefer(t *testing.T, peer *Conn, seq uint64) {
 	}
 }
 
-// pig additive (D189): a stdin command's first event must reach no runtime that still runs its timer callbacks, so the host waits for the runtime's ack of the hold before it lets the command go on (Turns.Arm), and the hold is on the wire ahead of every frame the command sends.
+// ompig additive (D189): a stdin command's first event must reach no runtime that still runs its timer callbacks, so the host waits for the runtime's ack of the hold before it lets the command go on (Turns.Arm), and the hold is on the wire ahead of every frame the command sends.
 func TestArmWaitsForTheRuntimeToAcknowledgeTheHold(t *testing.T) {
 	h, _, peer := timerDeferHost(t)
 	var turns jsloop.Turns

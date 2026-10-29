@@ -7,9 +7,9 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/scoped-model-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/scoped-model-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/scoped-model-agent"]
-pig_extensions = ["testdata/ext/scoped-models.mjs"]
+ompig_extensions = ["testdata/ext/scoped-models.mjs"]
 pi_extensions = ["testdata/ext/scoped-models.mjs"]
 
 [cli]

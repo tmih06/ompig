@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type showImagesProbe struct {
@@ -39,7 +39,7 @@ func TestShowImagesSelectorMatchesPi(t *testing.T) {
 		{"\x1b"},
 		{"\x03"},
 		{"y"},
-		// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+		// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 		{"\x1b[H", "\x1b[F", "\r"},
 		{"\x1b[B", "x", "\r", "\x1b"},
 		{"\x13"},
@@ -109,7 +109,7 @@ func TestShowImagesSelectorMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got.Steps, expected[i].Steps) || !reflect.DeepEqual(got.Frames, expected[i].Frames) {
 			if failures++; failures <= 3 {
-				t.Errorf("probe %d %+v:\n steps Pig %q Pi %q\n frames Pig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
+				t.Errorf("probe %d %+v:\n steps Ompig %q Pi %q\n frames Ompig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
 			}
 		}
 	}

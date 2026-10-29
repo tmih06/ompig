@@ -18,11 +18,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/compactiontypes"
-	"github.com/MichaelKinsy/PiG/internal/usagetotals"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/compactiontypes"
+	"github.com/tmih06/ompig/internal/usagetotals"
 )
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -733,7 +733,7 @@ func GenerateSummaryWithUsageUsing(
 	if len(chunks) <= 1 {
 		return generateSummaryAdaptive(ctx, messages, model, reserveTokens, apiKey, headers, customInstructions, previousSummary, thinkingLevel, completer, streamFn, env, retry, callbacks, sessionID)
 	}
-	// pig divergence (D167): pi sends the whole history in one request, so a history longer than the model's context window fails with the provider's overflow error and the session can never be compacted. PiG summarizes it window-sized chunk by chunk, each chunk updating the summary of the one before (the UPDATE_SUMMARIZATION_PROMPT path pi uses for a previous compaction).
+	// ompig divergence (D167): pi sends the whole history in one request, so a history longer than the model's context window fails with the provider's overflow error and the session can never be compacted. Ompig summarizes it window-sized chunk by chunk, each chunk updating the summary of the one before (the UPDATE_SUMMARIZATION_PROMPT path pi uses for a previous compaction).
 	summary := previousSummary
 	var usage *ai.Usage
 	for _, chunk := range chunks {
@@ -994,7 +994,7 @@ func Compact(
 	if prep.IsSplitTurn && len(prep.TurnPrefixMessages) > 0 {
 		history, prefix := prep.MessagesToSummarize, prep.TurnPrefixMessages
 		if chunks := splitForContextWindow(prefix, model, prep.Settings.ReserveTokens, prep.PreviousSummary, customInstructions); len(chunks) > 1 {
-			// pig divergence (D167): pi sends the whole turn prefix in one request. A prefix longer than the window moves all but its last window-sized part into the chunked history summary.
+			// ompig divergence (D167): pi sends the whole turn prefix in one request. A prefix longer than the window moves all but its last window-sized part into the chunked history summary.
 			last := chunks[len(chunks)-1]
 			history = append(slices.Clip(history), prefix[:len(prefix)-len(last)]...)
 			prefix = last

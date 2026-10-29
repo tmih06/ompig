@@ -16,7 +16,7 @@ const newSessionFileBytesCeiling = 2_048
 
 func TestNewSessionFileWriteSizesItsBuffer(t *testing.T) {
 	dir := t.TempDir()
-	header := []byte(`{"type":"session","version":3,"id":"0199e0a0-0000-7000-8000-000000000000","timestamp":"2026-10-14T00:00:00.000Z","cwd":"/tmp/pig-startup/w"}`)
+	header := []byte(`{"type":"session","version":3,"id":"0199e0a0-0000-7000-8000-000000000000","timestamp":"2026-10-14T00:00:00.000Z","cwd":"/tmp/ompig-startup/w"}`)
 	message := []byte(`{"type":"message","id":"a1b2c3d4","parentId":null,"timestamp":"2026-10-14T00:00:00.001Z","message":{"role":"user","content":[{"type":"text","text":"reply with exactly: ok"}],"timestamp":1791936000001}}`)
 	lines := [][]byte{header, message}
 	paths := make([]string, 21)

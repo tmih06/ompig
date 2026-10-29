@@ -9,10 +9,10 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
-// pig additive (D92): highlightEngine, highlightRegistry and highlightStripped live in highlight_hljs_on.go, or in highlight_hljs_off.go for a Piglet Binary built without syntax-highlight.
+// ompig additive (D92): highlightEngine, highlightRegistry and highlightStripped live in highlight_hljs_on.go, or in highlight_hljs_off.go for a Ompiglet Binary built without syntax-highlight.
 
 // HighlightFormatter styles the text of one highlight.js scope.
 type HighlightFormatter func(text string) string
@@ -32,7 +32,7 @@ var loadAllHighlightLanguagesOnce sync.Once
 
 // LoadAllHighlightLanguages registers every highlight.js language, as loadAllHighlightLanguages does, and returns when they are available. It runs once; later calls wait for that load. Highlighted code cached before the load is discarded, because more languages now highlight.
 func LoadAllHighlightLanguages() {
-	// pig additive (D92): a Piglet that strips syntax-highlight loads no grammar.
+	// ompig additive (D92): a Ompiglet that strips syntax-highlight loads no grammar.
 	if highlightStripped() {
 		return
 	}
@@ -47,7 +47,7 @@ func LoadAllHighlightLanguages() {
 
 // SupportsLanguage reports whether highlight.js has a language or alias of that name.
 func SupportsLanguage(name string) bool {
-	// pig additive (D92): a Piglet that strips syntax-highlight supports no language.
+	// ompig additive (D92): a Ompiglet that strips syntax-highlight supports no language.
 	if highlightStripped() {
 		return false
 	}
@@ -56,7 +56,7 @@ func SupportsLanguage(name string) bool {
 
 // Highlight highlights code with highlight.js and renders its scopes with the theme. An error is an exception highlight.js throws, such as an unknown language.
 func Highlight(code string, options HighlightOptions) (string, error) {
-	// pig additive (D92): a Piglet that strips syntax-highlight highlights as highlight.js does with no language registered.
+	// ompig additive (D92): a Ompiglet that strips syntax-highlight highlights as highlight.js does with no language registered.
 	if highlightStripped() {
 		out, err := highlightPlain(code, options)
 		return terminalText(out), err
@@ -465,7 +465,7 @@ func highlightMarkdownCode(code, lang string) []string {
 // it (write.ts updateWriteHighlightCacheIncremental sets highlightedLines[i]), which must not change a later call's lines.
 func highlightCodeLines(code, lang string, codeBlockOnError bool) []string {
 	t := ActiveTheme()
-	// pig additive (D92): a Piglet that strips syntax-highlight renders every code block as Pi renders a language highlight.js does not support.
+	// ompig additive (D92): a Ompiglet that strips syntax-highlight renders every code block as Pi renders a language highlight.js does not support.
 	if highlightStripped() {
 		return codeBlockLines(code, t)
 	}
@@ -523,13 +523,13 @@ type hlKey struct {
 	codeBlockOnError bool
 }
 
-// pig additive (D112): Pi keeps no highlight memo: its Markdown component reuses its rendered lines only while its text and width are unchanged, and highlights every code block again on any change (markdown.ts render). The memo and its bounds are a Go CPU choice, and a miss, an eviction or a reset returns the same lines as a hit.
+// ompig additive (D112): Pi keeps no highlight memo: its Markdown component reuses its rendered lines only while its text and width are unchanged, and highlights every code block again on any change (markdown.ts render). The memo and its bounds are a Go CPU choice, and a miss, an eviction or a reset returns the same lines as a hit.
 // hlCacheMax bounds the memo so a long session cannot grow it without limit; clearing on overflow keeps memory bounded at the cost of an occasional cold re-highlight.
 const hlCacheMax = 1024
 
 // hlCacheMaxBytes bounds the bytes the memo retains. Streaming a code block re-highlights a longer prefix every frame, and each prefix is a new key that is never asked for again, so the entry count alone lets a large block pin hundreds of megabytes.
 // An entry larger than the budget is not cached.
-// pig additive (D112): see hlCacheMax.
+// ompig additive (D112): see hlCacheMax.
 const hlCacheMaxBytes = 8 << 20
 
 var (

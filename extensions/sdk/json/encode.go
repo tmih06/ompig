@@ -227,7 +227,7 @@ func MarshalJS(v any) ([]byte, error) {
 	return append([]byte(nil), e.Bytes()...), nil
 }
 
-// pig additive (lw-json): the JSON.stringify mode.
+// ompig additive (lw-json): the JSON.stringify mode.
 
 // stringifyOpts is the JSON.stringify mode: numbers as [MarshalJS] writes them, strings with only the escapes JSON.stringify writes (no HTML
 // escaping, U+2028 and U+2029 raw), and [Marshaler] output rewritten to match (see [MarshalStringify]).
@@ -268,7 +268,7 @@ func AppendStringify(dst []byte, v any) ([]byte, error) {
 	return out, nil
 }
 
-// AppendStringifyString appends the JSON.stringify text of the Go string s to dst: what [AppendStringify] writes for s without the reflection walk. pig additive (lw-json).
+// AppendStringifyString appends the JSON.stringify text of the Go string s to dst: what [AppendStringify] writes for s without the reflection walk. ompig additive (lw-json).
 func AppendStringifyString(dst []byte, s string) []byte {
 	return appendString(dst, s, stringifyOpts.stringEscapes())
 }
@@ -362,7 +362,7 @@ func (e *MarshalerError) Unwrap() error { return e.Err }
 const hex = "0123456789abcdef"
 
 // An encodeState encodes JSON into buf.
-// pig: a plain slice rather than an embedded bytes.Buffer, so a [StringifyAppender] and [AppendStringify] append to the output itself.
+// ompig: a plain slice rather than an embedded bytes.Buffer, so a [StringifyAppender] and [AppendStringify] append to the output itself.
 type encodeState struct {
 	buf []byte // accumulated output
 
@@ -485,7 +485,7 @@ type encOpts struct {
 	// jsNumbers makes numbers print as JavaScript's JSON.stringify does: a non-finite number is null and negative zero is 0.
 	jsNumbers bool
 	// jsStrings is the JSON.stringify mode of MarshalStringify: U+2028 and U+2029 stay raw, Marshaler output is rewritten by
-	// appendCompactJS, and a StringifyAppender appends its own text. pig additive (lw-json).
+	// appendCompactJS, and a StringifyAppender appends its own text. ompig additive (lw-json).
 	jsStrings bool
 }
 
@@ -1209,7 +1209,7 @@ func resolveKeyName(k reflect.Value) (string, error) {
 	panic("unexpected map key type")
 }
 
-// stringEscapes selects the escapes appendString writes beyond those every JSON string needs. pig additive (lw-json): the JSON.stringify
+// stringEscapes selects the escapes appendString writes beyond those every JSON string needs. ompig additive (lw-json): the JSON.stringify
 // mode writes neither.
 type stringEscapes uint8
 
@@ -1356,7 +1356,7 @@ func appendString[Bytes []byte | string](dst []byte, src Bytes, escapes stringEs
 		n := min(len(src)-i, utf8.UTFMax)
 		c, size := utf8.DecodeRuneInString(string(src[i : i+n]))
 		if c == utf8.RuneError && size == 1 {
-			// pig (LW-JSON-1): one U+FFFD per maximal subpart, as a JavaScript string decoded from these bytes holds, where encoding/json
+			// ompig (LW-JSON-1): one U+FFFD per maximal subpart, as a JavaScript string decoded from these bytes holds, where encoding/json
 			// writes one per byte. JSON.stringify writes it raw; the other modes keep the escape.
 			dst = append(dst, src[start:i]...)
 			if escapes&escapeReplacement != 0 {

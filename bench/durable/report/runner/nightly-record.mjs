@@ -15,7 +15,7 @@ const night = {
 	core,
 	size: a.turns,
 	warmTurns: { a: a.warmTurns, b: b.nativeWarmTurns },
-	pig: { warm: pick(a, "warm").pig, warmP95: pick(a, "warmP95").pig, cold: pick(a, "cold").pig, nativeWarm: b.nativeWarm, nativeWarmP95: b.nativeWarmP95, nativeCold: b.nativeCold },
+	ompig: { warm: pick(a, "warm").ompig, warmP95: pick(a, "warmP95").ompig, cold: pick(a, "cold").ompig, nativeWarm: b.nativeWarm, nativeWarmP95: b.nativeWarmP95, nativeCold: b.nativeCold },
 	pi: { warm: pick(a, "warm").piRun, warmP95: pick(a, "warmP95").piRun, cold: pick(a, "cold").piRun },
 	run: dir,
 }
@@ -24,7 +24,7 @@ const ttFiles = readdirSync(dir).filter(f => /^timetravel-\d+\.json$/.test(f)).s
 // nightly.sh writes timetravel-<n>.txt for every run it started; a run without its .json gave no result.
 const ttMissing = readdirSync(dir).filter(f => /^timetravel-\d+\.txt$/.test(f) && !ttFiles.includes(f.replace(/\.txt$/, ".json"))).sort()
 const tt = ttFiles.length ? timeTravel(ttFiles.map(f => JSON.parse(readFileSync(join(dir, f), "utf8")))) : undefined
-if (tt) Object.assign(night, { pig: { ...night.pig, ...tt.pig }, pi: { ...night.pi, ...tt.pi }, timeTravel: tt.verdicts })
+if (tt) Object.assign(night, { ompig: { ...night.ompig, ...tt.ompig }, pi: { ...night.pi, ...tt.pi }, timeTravel: tt.verdicts })
 if (ttMissing.length) night.timeTravelMissing = ttMissing
 const history = existsSync(file) ? lines(file) : []
 const verdicts = judge(history, night)

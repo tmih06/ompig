@@ -15,8 +15,8 @@ import (
 	"golang.org/x/image/bmp"
 	"golang.org/x/image/tiff"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type processImageCase struct {
@@ -34,7 +34,7 @@ type processImageOutcome struct {
 	Message  string `json:"message"`
 }
 
-// TestProcessImageMatchesPi runs image-process.ts processImage and PiG's ProcessImage over 400 seeded inputs: PNG, JPEG, GIF, BMP, TIFF and WebP bytes (some larger than the resize
+// TestProcessImageMatchesPi runs image-process.ts processImage and Ompig's ProcessImage over 400 seeded inputs: PNG, JPEG, GIF, BMP, TIFF and WebP bytes (some larger than the resize
 // limits), garbage and empty bytes; declared types with parameters, case and spaces ("IMAGE/JPEG; q=1", " image/jpg "), unsupported types (image/bmp, image/tiff, image/x-icon, application/octet-stream,
 // the empty string) and types that do not match the bytes; automatic resizing on and off with small or default limits. Whether an image is returned, its mime type, the
 // conversion and dimension hints (in order) and the omission message must match. Not compared: the returned bytes (Photon's encoders differ from Go's).

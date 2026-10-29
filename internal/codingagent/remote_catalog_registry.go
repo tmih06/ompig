@@ -7,7 +7,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // SetCatalogBaseURL selects the remote catalog endpoint; empty selects DefaultCatalogBaseURL.

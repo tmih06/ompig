@@ -11,13 +11,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/settings-manager.ts
 
 // The bytes of settings.json after setter calls (persistScopedSettings: the file's own member order kept, a modified field overwritten in place or
-// appended, `JSON.stringify(merged, null, 2)`). The pinned SettingsManager and PiG's write the same scripted setters over the same starting file.
+// appended, `JSON.stringify(merged, null, 2)`). The pinned SettingsManager and Ompig's write the same scripted setters over the same starting file.
 func TestSettingsFileBytesMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(47))
 	quote := func(s string) string { b, _ := json.Marshal(s); return string(b) }
@@ -172,7 +172,7 @@ func TestSettingsFileBytesMatchPi(t *testing.T) {
 		}
 		if got != expected {
 			if failures++; failures <= 4 {
-				t.Errorf("script %d: initial %v ops %v\n PiG %q\n Pi  %q", i, s.Initial, s.Ops, got, expected)
+				t.Errorf("script %d: initial %v ops %v\n Ompig %q\n Pi  %q", i, s.Initial, s.Ops, got, expected)
 			}
 		}
 	}

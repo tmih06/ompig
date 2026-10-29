@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // One of ten identical, trivial extensions for the pigbench overhead bench: a tool, a command and four event handlers.
-// It uses no imports, so Pi, PiG and any Pi-compatible host load it the same way.
+// It uses no imports, so Pi, Ompig and any Pi-compatible host load it the same way.
 export default function (pi: any) {
   let events = 0;
   pi.registerTool({

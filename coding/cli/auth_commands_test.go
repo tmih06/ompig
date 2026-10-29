@@ -15,11 +15,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 type testExternalOAuthStore struct {
@@ -108,8 +108,8 @@ func captureWithStdin(t *testing.T, stdin string, fn func() int) (stdout, stderr
 }
 
 func TestRunAuthCommandListJSONIsStableAndSecretFree(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	stdout, stderr, code := captureWithStdin(t, "", func() int {
 		return runLoginCommand([]string{"login", "--list", "--json", "--no-input"})
 	})
@@ -128,7 +128,7 @@ func TestRunAuthCommandListJSONIsStableAndSecretFree(t *testing.T) {
 		t.Fatal(err)
 	}
 	if _, exists := raw["version"]; exists {
-		t.Fatalf("auth inventory exposed a Pig-owned format version: %s", stdout)
+		t.Fatalf("auth inventory exposed a Ompig-owned format version: %s", stdout)
 	}
 	ids := make([]string, len(output.Targets))
 	for i, target := range output.Targets {
@@ -146,7 +146,7 @@ func TestRunAuthCommandListJSONIsStableAndSecretFree(t *testing.T) {
 
 func TestRunAuthCommandUsesExtensionOwnedCredentialStore(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", dir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", dir)
 	store := &testExternalOAuthStore{}
 	provider := testExternalOAuthProvider{store: store}
 	ai.RegisterOAuthProvider(provider.ID(), provider)
@@ -189,7 +189,7 @@ func TestAuthContributionLoadHonorsCancellation(t *testing.T) {
 		},
 		embedded: map[string]struct{}{}, loaded: map[string]struct{}{},
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	err := registry.loadExtension("cancelled")
 	registry.close()
 	if !errors.Is(err, context.Canceled) {
@@ -227,8 +227,8 @@ func TestRegisteredAuthTargetItemsKeepsCoreProviderOnConflict(t *testing.T) {
 func TestAuthListKeepsHealthyTargetWhenUnrelatedExtensionIsBroken(t *testing.T) {
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Cleanup(ai.ResetOAuthProviders)
 	writeAuthContributionFixture(t, filepath.Join(agentDir, "extensions", "sdk-fixture"))
 	broken := filepath.Join(agentDir, "extensions", "broken-unrelated")
@@ -255,8 +255,8 @@ func TestAuthListKeepsHealthyTargetWhenUnrelatedExtensionIsBroken(t *testing.T) 
 func TestAuthContributionInspectionAndLoginLoadRuntimeRegistration(t *testing.T) {
 	root := t.TempDir()
 	agentDir := filepath.Join(root, "agent")
-	t.Setenv("PIG_HOME", root)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", root)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	fixture := filepath.Join(agentDir, "extensions", "sdk-fixture")
 	writeAuthContributionFixture(t, fixture)
 
@@ -313,7 +313,7 @@ func writeAuthContributionFixture(t *testing.T, root string) {
 	if err := os.WriteFile(filepath.Join(root, "main.go"), mainSource, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	goMod := fmt.Sprintf("module example.com/auth-contribution-fixture\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", sdkRoot)
+	goMod := fmt.Sprintf("module example.com/auth-contribution-fixture\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", sdkRoot)
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -322,7 +322,7 @@ func writeAuthContributionFixture(t *testing.T, root string) {
 
 func TestRunAuthCommandNoInputNeverReadsProviderPrompt(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", dir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", dir)
 	stdout, stderr, code := captureWithStdin(t, "should-not-be-read\n", func() int {
 		return runLoginCommand([]string{"login", "github-copilot", "--no-input"})
 	})
@@ -360,8 +360,8 @@ func TestRunAuthCommand_LoginGitHubCopilotParityHarness(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer func() { _ = os.Chdir(oldWD) }()
-	t.Setenv("PIG_PARITY_HARNESS", "1")
-	t.Setenv("PIG_CODING_AGENT_DIR", ".")
+	t.Setenv("OMPIG_PARITY_HARNESS", "1")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", ".")
 
 	stdout, stderr, code := captureWithStdin(t, "\n", func() int {
 		return runLoginCommand([]string{"login", "github-copilot"})
@@ -386,7 +386,7 @@ func TestRunAuthCommand_LoginGitHubCopilotParityHarness(t *testing.T) {
 	// The harness's fixture model (gpt-4o, policy.state="enabled") already
 	// has an enabled policy, so upstream 0.87.1's loginGitHubCopilot never
 	// prints "Enabling models...": it only does so when a catalog model's
-	// policy is "unconfigured" (github-copilot.ts:471-480). Before pig
+	// policy is "unconfigured" (github-copilot.ts:471-480). Before ompig
 	// matched that selection, it posted a policy update to a fixed model
 	// list unconditionally and always printed this line.
 	if strings.Contains(stdout, "Enabling models...") {
@@ -415,7 +415,7 @@ func TestRunAuthCommand_LogoutDefaultProvider(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer func() { _ = os.Chdir(oldWD) }()
-	t.Setenv("PIG_CODING_AGENT_DIR", ".")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", ".")
 
 	stdout, stderr, code := captureWithStdin(t, "", func() int {
 		return runLoginCommand([]string{"logout"})
@@ -440,12 +440,12 @@ func TestRunAuthCommand_LogoutDefaultProvider(t *testing.T) {
 
 func TestAuthInspectionContainsBrokenPackageExtensions(t *testing.T) {
 	cwd, agentDir, packageRoot := t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	for path, content := range map[string]string{
 		"package.json":                    `{"name":"pkg","pi":{"extensions":["extensions/healthy","extensions/broken","extensions/missing"]}}`,
 		"extensions/healthy/go.mod":       "module example.com/healthy\n\ngo 1.26\n",
-		"extensions/healthy/extension.go": "package healthy\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
+		"extensions/healthy/extension.go": "package healthy\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
 		"extensions/broken/go.mod":        "module example.com/broken\n\ngo 1.26\n",
 		"extensions/broken/extension.go":  "package broken\n",
 	} {
@@ -485,7 +485,7 @@ func TestAuthInspectionContainsBrokenPackageExtensions(t *testing.T) {
 }
 
 func TestAuthInspectionContainsBrokenUnrelatedExtension(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Cleanup(ai.ResetOAuthProviders)
 	healthyRoot := filepath.Join(t.TempDir(), "sdk-fixture")
 	writeAuthContributionFixture(t, healthyRoot)
@@ -513,8 +513,8 @@ func TestAuthInspectionContainsBrokenUnrelatedExtension(t *testing.T) {
 
 func TestAuthRegistrationProjectionReusesExactArtifactAndRejectsStaleDigest(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Cleanup(ai.ResetOAuthProviders)
 	root := filepath.Join(t.TempDir(), "sdk-fixture")
 	writeAuthContributionFixture(t, root)
@@ -573,7 +573,7 @@ func TestAuthRegistrationProjectionReusesExactArtifactAndRejectsStaleDigest(t *t
 }
 
 func TestAuthInspectionRejectsDuplicateRuntimeProviders(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Cleanup(ai.ResetOAuthProviders)
 	sdkRoot, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk"))
 	if err != nil {
@@ -597,7 +597,7 @@ func TestAuthInspectionRejectsDuplicateRuntimeProviders(t *testing.T) {
 		if err := os.WriteFile(filepath.Join(root, "main.go"), []byte(source), 0o644); err != nil {
 			t.Fatal(err)
 		}
-		goMod := fmt.Sprintf("module example.com/%s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", name, sdkRoot)
+		goMod := fmt.Sprintf("module example.com/%s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", name, sdkRoot)
 		if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -623,7 +623,7 @@ func TestAuthInspectionRejectsDuplicateRuntimeProviders(t *testing.T) {
 }
 
 func TestAuthInspectionDispatchesNoLifecycleOrCapabilityHandler(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Cleanup(ai.ResetOAuthProviders)
 	sdkRoot, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk"))
 	if err != nil {
@@ -634,14 +634,14 @@ func TestAuthInspectionDispatchesNoLifecycleOrCapabilityHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	marker := filepath.Join(t.TempDir(), "handler-ran")
-	goMod := fmt.Sprintf("module example.com/inspection-only\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", sdkRoot)
+	goMod := fmt.Sprintf("module example.com/inspection-only\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", sdkRoot)
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	source := fmt.Sprintf(`package inspectiononly
 import (
   "os"
-  sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+  sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 func Extension() *sdk.Extension {
   ext := sdk.New("inspection-only")
@@ -669,7 +669,7 @@ func Extension() *sdk.Extension {
 }
 
 func TestAuthInspectionReadsEmbeddedRuntimeRegistration(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Cleanup(ai.ResetOAuthProviders)
 	source, err := filepath.Abs(filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "testdata", "sdk-fixture"))
 	if err != nil {
@@ -699,7 +699,7 @@ func TestAuthInspectionReadsEmbeddedRuntimeRegistration(t *testing.T) {
 }
 
 func TestAuthLoginStartsOnlyOwningExtension(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Cleanup(ai.ResetOAuthProviders)
 	root := filepath.Join(t.TempDir(), "sdk-fixture")
 	writeAuthContributionFixture(t, root)
@@ -761,11 +761,11 @@ func TestSelectEmbeddedOwnerCellsKeepsContainingBinaryAndOnlyOwner(t *testing.T)
 // Pre-session auth inspection starts each extension it lists, so it lists an auto-discovered project extension only when the project is trusted, as Pi resolves project extensions (package-manager.ts:2417-2424).
 func TestAuthInspectionSkipsUntrustedProjectExtensions(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	for path, content := range map[string]string{
-		".pig/extensions/proj/go.mod":       "module example.com/proj\n\ngo 1.26\n",
-		".pig/extensions/proj/extension.go": "package proj\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
+		".ompig/extensions/proj/go.mod":       "module example.com/proj\n\ngo 1.26\n",
+		".ompig/extensions/proj/extension.go": "package proj\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
 	} {
 		target := filepath.Join(cwd, path)
 		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
@@ -824,7 +824,7 @@ func TestRunAuthCommand_LoginWaitsForAnotherProcessLock(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer func() { _ = os.Chdir(oldWD) }()
-	t.Setenv("PIG_CODING_AGENT_DIR", ".")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", ".")
 	provider := lockHoldingLoginProvider{lockDir: filepath.Join(dir, "auth.json.lock"), hold: 500 * time.Millisecond, released: make(chan error, 1)}
 	ai.RegisterOAuthProvider(provider.ID(), provider)
 	t.Cleanup(func() { ai.UnregisterOAuthProvider(provider.ID()) })

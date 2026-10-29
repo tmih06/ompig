@@ -8,7 +8,7 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/package-node-main/agent", "PIG_HOME=testdata/empty-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/package-node-main/agent", "OMPIG_HOME=testdata/empty-home"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/package-node-main/agent"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 

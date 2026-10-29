@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -14,7 +14,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 func TestReviewProvidersBedrockWhitespace(t *testing.T) {
@@ -189,7 +189,7 @@ func BenchmarkBedrockWhitespaceConversion(b *testing.B) {
 
 func TestBedrockWhitespaceConverseWire(t *testing.T) {
 	// Drive NormalizeContext -> BedrockProvider.Stream -> the real AWS serializer and a hermetic HTTP endpoint. The poisoned signature is a persisted-history shape explicitly handled at bedrock-converse-stream.ts:1029-1036.
-	for _, key := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME"} {
+	for _, key := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME"} {
 		t.Setenv(key, t.TempDir())
 	}
 	for _, key := range []string{"AWS_PROFILE", "AWS_DEFAULT_PROFILE", "AWS_CONFIG_FILE", "AWS_SHARED_CREDENTIALS_FILE", "AWS_BEARER_TOKEN_BEDROCK"} {

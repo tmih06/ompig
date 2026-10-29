@@ -25,7 +25,7 @@ const (
 	ClassPiCited Class = "A-cited"
 	// ClassInvariant checks a rule over generated or looped inputs.
 	ClassInvariant Class = "B-invariant"
-	// ClassSelfRef compares PiG output with a stored copy of PiG output.
+	// ClassSelfRef compares Ompig output with a stored copy of Ompig output.
 	ClassSelfRef Class = "C-selfref"
 	// ClassShape checks only that a type, method or field exists.
 	ClassShape Class = "D-shape"
@@ -58,7 +58,7 @@ var (
 )
 
 // piGoldenBases holds the base names of the golden files the provenance
-// manifest declares as produced by Pi; a test that reads one compares PiG with Pi.
+// manifest declares as produced by Pi; a test that reads one compares Ompig with Pi.
 var piGoldenBases []string
 
 func readsPiGolden(text string) bool {

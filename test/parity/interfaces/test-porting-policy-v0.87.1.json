@@ -3102,7 +3102,7 @@
         "shouldRunFirstTimeSetup › returns false when a custom agent dir is set",
         "shouldRunFirstTimeSetup › returns false when settings.json already exists"
       ],
-      "rationale": "CLI startup, selected execution mode, settings, or command routing. Four official-distribution cases are designed out, SCRUTINIZED:approved by owner Michael Kinsy on 2026-09-29: Pi shows first-time setup only for its official distribution identity (src/cli/startup-ui.ts:122-140; caller src/main.ts:661), which PiG never has. The mapping row test-mapping-v0.87.1.json#packages/coding-agent/test/first-time-setup.test.ts must list exactly these ids."
+      "rationale": "CLI startup, selected execution mode, settings, or command routing. Four official-distribution cases are designed out, SCRUTINIZED:approved by owner Michael Kinsy on 2026-09-29: Pi shows first-time setup only for its official distribution identity (src/cli/startup-ui.ts:122-140; caller src/main.ts:661), which Ompig never has. The mapping row test-mapping-v0.87.1.json#packages/coding-agent/test/first-time-setup.test.ts must list exactly these ids."
     },
     {
       "path": "packages/coding-agent/test/footer-data-provider.test.ts",

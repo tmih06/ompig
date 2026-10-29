@@ -7,8 +7,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // extWithInputHandler wraps a typed input handler.
@@ -178,7 +178,7 @@ func TestEmitInput_TransformWithNilImagesKeepsCurrentImages(t *testing.T) {
 		t.Errorf("Text = %q, want modified", xform.Text)
 	}
 	// Note: upstream's reference-equality check `currentImages !== images`
-	// treats unchanged-but-passed-through images as "not changed". pig's
+	// treats unchanged-but-passed-through images as "not changed". ompig's
 	// imagesChanged flag is set ONLY when a handler explicitly assigns
 	// non-nil Images. Here Images was nil, so flag stays false ⇒ Transform
 	// is returned because Text changed, but Images carries the original.
@@ -210,7 +210,7 @@ func TestEmitInput_TransformImagesUpdates(t *testing.T) {
 }
 
 // TestEmitInput_HandlerErrorRoutesViaEmitErrorAndContinues: upstream
-// EmitInput has explicit try/catch (runner.ts:1218-1225); pig mirrors.
+// EmitInput has explicit try/catch (runner.ts:1218-1225); ompig mirrors.
 func TestEmitInput_HandlerErrorRoutesViaEmitErrorAndContinues(t *testing.T) {
 	var subsequentRan atomic.Int32
 	exts := []extension.Extension{

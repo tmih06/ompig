@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestPublicPackageDocumentation(t *testing.T) {
-	root := pigRepoRoot(t)
+	root := ompigRepoRoot(t)
 	want := map[string]string{
 		"./agent":                             "Package agent ",
 		"./ai":                                "Package ai ",
@@ -21,7 +21,7 @@ func TestPublicPackageDocumentation(t *testing.T) {
 		"./coding/extension":                  "Package extension ",
 		"./coding/extension/host/runtimecell": "Package runtimecell ",
 		"./coding/pigletbuild":                "Package pigletbuild ",
-		"./cmd/pig":                           "Command pig ",
+		"./cmd/ompig":                         "Command ompig ",
 		"./tui":                               "Package tui ",
 	}
 	for packagePath, prefix := range want {
@@ -38,13 +38,13 @@ func TestPublicPackageDocumentation(t *testing.T) {
 }
 
 func TestPublicPackageLayout(t *testing.T) {
-	root := pigRepoRoot(t)
+	root := ompigRepoRoot(t)
 	for _, oldPath := range []string{"agentcore", "internal/tui/tui.go", "pigproc", "resources", "coding/presentation", "schema/gui-extension"} {
 		if _, err := os.Stat(filepath.Join(root, oldPath)); !os.IsNotExist(err) {
 			t.Errorf("retired path %s still exists", oldPath)
 		}
 	}
-	for _, currentPath := range []string{"agent", "ai", "coding", "tui", "piglets/standard", "piglets/porter"} {
+	for _, currentPath := range []string{"agent", "ai", "coding", "tui", "ompiglets/standard", "ompiglets/porter"} {
 		if info, err := os.Stat(filepath.Join(root, currentPath)); err != nil || !info.IsDir() {
 			t.Errorf("public path %s is not a directory", currentPath)
 		}

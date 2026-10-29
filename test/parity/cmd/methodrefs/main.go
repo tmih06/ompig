@@ -30,7 +30,7 @@ type refs struct {
 }
 
 func main() {
-	typeFlag := flag.String("type", "", "import path and type name, for example github.com/MichaelKinsy/PiG/coding.Session")
+	typeFlag := flag.String("type", "", "import path and type name, for example github.com/tmih06/ompig/coding.Session")
 	implFlag := flag.String("impl", "", "comma-separated import path and interface names; a call to one of the interface's methods on any type that implements the whole interface counts, in addition to calls through the interface itself")
 	funcsFlag := flag.String("funcs", "", "comma-separated import path and package-level function names; the output is keyed by function name with member \"_call\"")
 	typesFlag := flag.String("types", "", "comma-separated import path and type names; the output is keyed by type name")

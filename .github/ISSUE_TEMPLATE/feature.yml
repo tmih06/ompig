@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 
 name: Feature request
-description: Propose a PiG capability or compatibility improvement
+description: Propose a Ompig capability or compatibility improvement
 title: "feature: "
 labels:
   - enhancement
@@ -10,7 +10,7 @@ body:
     attributes:
       value: |
         Explain the user problem before proposing implementation details.
-        PiG follows observable upstream Pi behavior unless an approved divergence applies.
+        Ompig follows observable upstream Pi behavior unless an approved divergence applies.
         Do not include credentials, customer data, private configuration, or internal-only endpoints.
   - type: textarea
     id: problem
@@ -33,7 +33,7 @@ body:
       description: Identify the project boundary this proposal changes.
       options:
         - Upstream-parity core behavior
-        - Intentional PiG divergence
+        - Intentional Ompig divergence
         - Additive extension or optional resource
         - Build, release, documentation, or project infrastructure
         - Unsure

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Relative is path.relative(from, to) for the host platform.

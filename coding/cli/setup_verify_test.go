@@ -8,18 +8,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 func TestSetupStatusNamesTheSetupCommandForMissingGo(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	var stdout, stderr bytes.Buffer
 	if code := runSetupCommand([]string{"setup"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("exit %d: %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{"go         missing", "container  missing", "Next steps:", "pig setup go", "pig setup container"} {
+	for _, want := range []string{"go         missing", "container  missing", "Next steps:", "ompig setup go", "ompig setup container"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("status output lacks %q:\n%s", want, out)
 		}
@@ -34,7 +34,7 @@ func TestSetupStatusNamesTheSetupCommandForMissingGo(t *testing.T) {
 
 func TestSetupContainerGuideCoversEachOperatingSystem(t *testing.T) {
 	for goos, want := range map[string]string{"linux": "sudo dnf install podman", "darwin": "podman machine init", "windows": "winget install Docker.DockerDesktop"} {
-		if guide := containerGuide(goos); !strings.Contains(guide, want) || !strings.Contains(guide, "PIG_BUILDERS_FILE") {
+		if guide := containerGuide(goos); !strings.Contains(guide, want) || !strings.Contains(guide, "OMPIG_BUILDERS_FILE") {
 			t.Fatalf("%s guide lacks %q or the builder-image note:\n%s", goos, want, guide)
 		}
 	}
@@ -42,8 +42,8 @@ func TestSetupContainerGuideCoversEachOperatingSystem(t *testing.T) {
 
 func runVerify(t *testing.T, args ...string) (int, string, string) {
 	t.Helper()
-	if os.Getenv("PIG_HOME") == "" {
-		t.Setenv("PIG_HOME", t.TempDir())
+	if os.Getenv("OMPIG_HOME") == "" {
+		t.Setenv("OMPIG_HOME", t.TempDir())
 	}
 	var stdout, stderr bytes.Buffer
 	code := runVerifyCommand(append([]string{"verify"}, args...), &stdout, &stderr)
@@ -59,14 +59,14 @@ func TestVerifyReportsTheBinaryDigestAndIdentity(t *testing.T) {
 	if err := json.Unmarshal([]byte(out), &report); err != nil {
 		t.Fatalf("decode: %v\n%s", err, out)
 	}
-	if !report.Verified || report.Identity.PigVersion == "" || report.Identity.Upstream == "" || len(report.Targets) != 1 || report.Targets[0].Kind != "binary" || len(report.Targets[0].SHA256) != 64 {
+	if !report.Verified || report.Identity.OmpigVersion == "" || report.Identity.Upstream == "" || len(report.Targets) != 1 || report.Targets[0].Kind != "binary" || len(report.Targets[0].SHA256) != 64 {
 		t.Fatalf("report = %+v", report)
 	}
 }
 
 func TestVerifyChecksumsRequireAListedMatchingDigest(t *testing.T) {
 	dir := t.TempDir()
-	artifact := filepath.Join(dir, "pig-1.0.0-linux-amd64.tar.gz")
+	artifact := filepath.Join(dir, "ompig-1.0.0-linux-amd64.tar.gz")
 	if err := os.WriteFile(artifact, []byte("archive bytes"), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -80,11 +80,11 @@ func TestVerifyChecksumsRequireAListedMatchingDigest(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	write(digest + "  pig-1.0.0-linux-amd64.tar.gz\n")
+	write(digest + "  ompig-1.0.0-linux-amd64.tar.gz\n")
 	if code, out, _ := runVerify(t, "--checksums", sums, artifact); code != 0 || !strings.Contains(out, "ok   checksum") {
 		t.Fatalf("matching digest: exit %d\n%s", code, out)
 	}
-	write(strings.Repeat("0", 64) + "  pig-1.0.0-linux-amd64.tar.gz\n")
+	write(strings.Repeat("0", 64) + "  ompig-1.0.0-linux-amd64.tar.gz\n")
 	if code, out, _ := runVerify(t, "--checksums", sums, artifact); code != 1 || !strings.Contains(out, "digest differs") {
 		t.Fatalf("mismatched digest: exit %d\n%s", code, out)
 	}
@@ -99,7 +99,7 @@ func TestVerifyChecksumsRequireAListedMatchingDigest(t *testing.T) {
 }
 
 func TestVerifyReportsPigletSignatureStatusAndRefusesTampering(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	keyPath := filepath.Join(t.TempDir(), "author.key")
 	if _, err := signature.GenerateKey(keyPath); err != nil {
 		t.Fatal(err)
@@ -108,17 +108,17 @@ func TestVerifyReportsPigletSignatureStatusAndRefusesTampering(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	binary := filepath.Join(t.TempDir(), "pig-signed")
+	binary := filepath.Join(t.TempDir(), "ompig-signed")
 	if err := os.WriteFile(binary, []byte("executable bytes"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if code, out, errOut := runVerify(t, binary); code != 0 || errOut != "" || !strings.Contains(out, "n/a  piglet signature: unsigned") {
+	if code, out, errOut := runVerify(t, binary); code != 0 || errOut != "" || !strings.Contains(out, "n/a  ompiglet signature: unsigned") {
 		t.Fatalf("unsigned: exit %d stdout=%q stderr=%q", code, out, errOut)
 	}
-	if _, err := signature.Sign(binary, signature.Manifest{Piglet: "test"}, private); err != nil {
+	if _, err := signature.Sign(binary, signature.Manifest{Ompiglet: "test"}, private); err != nil {
 		t.Fatal(err)
 	}
-	if code, out, errOut := runVerify(t, binary); code != 0 || errOut != "" || !strings.Contains(out, "ok   piglet signature: signed by") {
+	if code, out, errOut := runVerify(t, binary); code != 0 || errOut != "" || !strings.Contains(out, "ok   ompiglet signature: signed by") {
 		t.Fatalf("signed: exit %d stdout=%q stderr=%q", code, out, errOut)
 	}
 	signed, err := os.ReadFile(binary)
@@ -129,21 +129,21 @@ func TestVerifyReportsPigletSignatureStatusAndRefusesTampering(t *testing.T) {
 	if err := os.WriteFile(binary, signed, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if code, out, errOut := runVerify(t, binary); code != 1 || errOut != "" || !strings.Contains(out, "FAIL piglet signature") || !strings.Contains(out, "executable bytes changed") {
+	if code, out, errOut := runVerify(t, binary); code != 1 || errOut != "" || !strings.Contains(out, "FAIL ompiglet signature") || !strings.Contains(out, "executable bytes changed") {
 		t.Fatalf("tampered: exit %d stdout=%q stderr=%q", code, out, errOut)
 	}
 }
 
 func TestVerifyAppliesPigletRequireSignaturePolicyToSignedFiles(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	if err := signature.SetRequireSignature(signature.TrustDir(), true); err != nil {
 		t.Fatal(err)
 	}
-	binary := filepath.Join(t.TempDir(), "pig")
+	binary := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(binary, []byte("unsigned"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if code, out, errOut := runVerify(t, binary); code != 0 || errOut != "" || !strings.Contains(out, "n/a  piglet signature: unsigned") {
+	if code, out, errOut := runVerify(t, binary); code != 0 || errOut != "" || !strings.Contains(out, "n/a  ompiglet signature: unsigned") {
 		t.Fatalf("unsigned generic file: exit %d stdout=%q stderr=%q", code, out, errOut)
 	}
 	keyPath := filepath.Join(t.TempDir(), "author.key")
@@ -154,7 +154,7 @@ func TestVerifyAppliesPigletRequireSignaturePolicyToSignedFiles(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := signature.Sign(binary, signature.Manifest{Piglet: "test"}, private); err != nil {
+	if _, err := signature.Sign(binary, signature.Manifest{Ompiglet: "test"}, private); err != nil {
 		t.Fatal(err)
 	}
 	if code, out, errOut := runVerify(t, binary); code != 1 || errOut != "" || !strings.Contains(out, "policy requires a trusted signature") {
@@ -164,18 +164,18 @@ func TestVerifyAppliesPigletRequireSignaturePolicyToSignedFiles(t *testing.T) {
 
 func TestVerifyProvenanceWithoutGhNamesTheExactCommand(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	artifact := filepath.Join(t.TempDir(), "pig")
+	artifact := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(artifact, []byte("x"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	code, out, _ := runVerify(t, "--provenance", artifact)
-	if code != 0 || !strings.Contains(out, "n/a  provenance") || !strings.Contains(out, "gh attestation verify "+artifact+" --repo MichaelKinsy/PiG --signer-workflow MichaelKinsy/PiG/.github/workflows/release-candidate.yml") {
+	if code != 0 || !strings.Contains(out, "n/a  provenance") || !strings.Contains(out, "gh attestation verify "+artifact+" --repo tmih06/ompig --signer-workflow tmih06/ompig/.github/workflows/release-candidate.yml") {
 		t.Fatalf("exit %d\n%s", code, out)
 	}
 	if code, _, _ := runVerify(t, "--repo"); code != 2 {
 		t.Fatalf("--repo without a value exit = %d, want 2", code)
 	}
-	workflow := "acme/reviewer/.github/workflows/piglet-release.yml"
+	workflow := "acme/reviewer/.github/workflows/ompiglet-release.yml"
 	code, out, _ = runVerify(t, "--provenance", "--repo", "acme/reviewer", "--signer-workflow", workflow, artifact)
 	if code != 0 || !strings.Contains(out, "--signer-workflow "+workflow) {
 		t.Fatalf("custom signer workflow: exit %d\n%s", code, out)
@@ -184,7 +184,7 @@ func TestVerifyProvenanceWithoutGhNamesTheExactCommand(t *testing.T) {
 
 func TestSetupGoOnAndroidPointsToTheTermuxPackage(t *testing.T) {
 	message := goSetupUnsupported("android", "arm64")
-	for _, want := range []string{"android/arm64", "pkg install golang", "pig setup status"} {
+	for _, want := range []string{"android/arm64", "pkg install golang", "ompig setup status"} {
 		if !strings.Contains(message, want) {
 			t.Fatalf("message lacks %q:\n%s", want, message)
 		}
@@ -195,7 +195,7 @@ func TestSetupGoOnAndroidPointsToTheTermuxPackage(t *testing.T) {
 	if got := goRemedy("android"); got != "pkg install golang" {
 		t.Fatalf("android remedy = %q", got)
 	}
-	if got := goRemedy("linux"); got != "pig setup go" {
+	if got := goRemedy("linux"); got != "ompig setup go" {
 		t.Fatalf("linux remedy = %q", got)
 	}
 }

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func TestRegistryAvailabilityBranchesRejectBeforeStalledAuth(t *testing.T) {

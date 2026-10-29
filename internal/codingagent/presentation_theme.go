@@ -11,7 +11,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // terminalColorQueryTimeout is how long the system theme stays grayscale before falling back to palette indices. Terminals answer the trailing DA1 request right after the color replies, so this only matters for terminals that answer neither. Replies arriving later still apply.

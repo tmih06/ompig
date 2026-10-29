@@ -3,7 +3,7 @@ package session
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // applySubmissionChange (transaction.ts:67-82): a settled record (done, unanswered) stays; placing a queued submission turns an input placed and a

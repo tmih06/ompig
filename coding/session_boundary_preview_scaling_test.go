@@ -5,14 +5,14 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // A boundary preview with drafts holds the branch and then the drafts (agent-session.ts _createBoundaryPreviewManager). Its context is the branch's own, so the preview is O(branch) as Pi's is, and each entry costs the projection's copy and the handler-facing lists, not an encode and decode of the entry's record: the preview took each entry through AppendEntry at 63 allocations and 5.4 KB per entry, a build at 16,000 entries took 0.6 s.
 func TestBoundaryPreviewWithDraftsCostsAFewAllocationsPerEntry(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

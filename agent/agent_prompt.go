@@ -3,7 +3,7 @@ package agent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Prompt is Pi's agent.prompt(input, images?) (agent.ts:372): it starts a run from a user message made of the text and the images and returns when the run settles. Pi's method resolves to nothing; the produced messages are the transcript's new tail, which Send returns to a caller that wants them.

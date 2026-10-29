@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
 // The generator writes the owner's shape scaled to the size: the compaction and leaf counts, a tree whose every parent precedes its child, an
@@ -82,7 +82,7 @@ func TestGenerateWritesTheScaledOwnerShape(t *testing.T) {
 	}
 }
 
-// PiG's session loader, an oracle independent of the generator's bookkeeping, resumes the file to the leaf, entry count and active context the generator reports: the context opens with
+// Ompig's session loader, an oracle independent of the generator's bookkeeping, resumes the file to the leaf, entry count and active context the generator reports: the context opens with
 // the last compaction, holds as many entries as Pi's buildContextEntries returns, and Pi's estimateTokens over its messages totals the reported tokens.
 func TestGeneratedSessionResumesToTheReportedContext(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")

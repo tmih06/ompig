@@ -13,8 +13,8 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "../../testdata/list-limit-number-pig.sh"
-pig_go_tests = ["./internal/codingagent"]
+ompig_bin = "../../testdata/list-limit-number-ompig.sh"
+ompig_go_tests = ["./internal/codingagent"]
 pi_bin = "../../testdata/list-limit-number-pi.mjs"
 
 [cli]

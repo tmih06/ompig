@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi package-manager.ts:1511-1519 selects npmCommand and runs view in this.cwd.
@@ -246,11 +246,11 @@ if(args.includes('view')) process.stdout.write(process.env.NPM_METADATA_RESPONSE
 	installRoot := filepath.Join(agentDir, "npm")
 	if local {
 		project["packages"] = []string{"npm:fake-package"}
-		installRoot = filepath.Join(cwd, ".pig", "npm")
+		installRoot = filepath.Join(cwd, ".ompig", "npm")
 	} else {
 		global["packages"] = []string{"npm:fake-package"}
 	}
-	for path, settings := range map[string]map[string]any{filepath.Join(agentDir, "settings.json"): global, filepath.Join(cwd, ".pig", "settings.json"): project} {
+	for path, settings := range map[string]map[string]any{filepath.Join(agentDir, "settings.json"): global, filepath.Join(cwd, ".ompig", "settings.json"): project} {
 		data, err := json.Marshal(settings)
 		if err != nil {
 			t.Fatal(err)

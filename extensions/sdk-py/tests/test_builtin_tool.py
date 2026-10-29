@@ -9,16 +9,16 @@ from __future__ import annotations
 import base64
 import unittest
 
-import pig_sdk
-from pig_sdk import builtin_tool
+import ompig_sdk
+from ompig_sdk import builtin_tool
 
 
 class BuiltinToolOptionsTest(unittest.TestCase):
     def test_serializable_options_cross_and_functions_stay(self) -> None:
         calls: list[str] = []
-        spec = builtin_tool._read_spec("/c", pig_sdk.ReadToolOptions(
-            auto_resize_images=False, resize_options=pig_sdk.ModelImageResizeOptions(max_width=5),
-            operations=pig_sdk.ReadOperations(read_file=lambda path: calls.append(path) or b"\x00\xffbytes", access=lambda path: None),
+        spec = builtin_tool._read_spec("/c", ompig_sdk.ReadToolOptions(
+            auto_resize_images=False, resize_options=ompig_sdk.ModelImageResizeOptions(max_width=5),
+            operations=ompig_sdk.ReadOperations(read_file=lambda path: calls.append(path) or b"\x00\xffbytes", access=lambda path: None),
         ))
         self.assertEqual(spec.options, {"autoResizeImages": False, "resizeOptions": {"maxWidth": 5}, "operations": ["readFile", "access"]})
         handle = builtin_tool._Registry.register(spec.callbacks)
@@ -32,19 +32,19 @@ class BuiltinToolOptionsTest(unittest.TestCase):
             builtin_tool.dispatch_callback({"handle": handle, "member": "operations.readFile", "args": {"path": "/a"}})
 
     def test_optional_members_are_announced_only_when_given(self) -> None:
-        grep = builtin_tool._grep_spec("/c", pig_sdk.GrepToolOptions(operations=pig_sdk.GrepOperations(is_directory=lambda path: True)))
+        grep = builtin_tool._grep_spec("/c", ompig_sdk.GrepToolOptions(operations=ompig_sdk.GrepOperations(is_directory=lambda path: True)))
         self.assertEqual(grep.options["operations"], ["isDirectory"])
-        grep = builtin_tool._grep_spec("/c", pig_sdk.GrepToolOptions(operations=pig_sdk.GrepOperations(is_directory=lambda path: True, read_file=lambda path: "x")))
+        grep = builtin_tool._grep_spec("/c", ompig_sdk.GrepToolOptions(operations=ompig_sdk.GrepOperations(is_directory=lambda path: True, read_file=lambda path: "x")))
         self.assertEqual(grep.options["operations"], ["isDirectory", "readFile"])
 
     def test_an_operations_object_missing_a_member_is_refused(self) -> None:
         with self.assertRaisesRegex(TypeError, "operations.access is required"):
             builtin_tool._read_spec("/c", {"operations": {"read_file": lambda path: b""}})
         with self.assertRaisesRegex(TypeError, "operations.exec is required"):
-            builtin_tool._shell_spec("bash", "/c", pig_sdk.BashToolOptions(operations=pig_sdk.BashOperations(exec=None)))
+            builtin_tool._shell_spec("bash", "/c", ompig_sdk.BashToolOptions(operations=ompig_sdk.BashOperations(exec=None)))
 
     def test_a_spawn_hook_and_the_shell_options_are_announced(self) -> None:
-        spec = builtin_tool._shell_spec("bash", "/c", pig_sdk.BashToolOptions(command_prefix="set -e", expose_session_environment=False, spawn_hook=lambda context: context))
+        spec = builtin_tool._shell_spec("bash", "/c", ompig_sdk.BashToolOptions(command_prefix="set -e", expose_session_environment=False, spawn_hook=lambda context: context))
         self.assertEqual(spec.options, {"exposeSessionEnvironment": False, "commandPrefix": "set -e", "spawnHook": True})
         self.assertIn("spawnHook", spec.callbacks)
 

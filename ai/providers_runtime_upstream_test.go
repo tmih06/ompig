@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // .upstream/v0.99.1/packages/ai/test/providers.test.ts:56: builtinModels() registers builtinProviders(), each with

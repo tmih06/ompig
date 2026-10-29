@@ -29,9 +29,9 @@ func testTemporaryCLIProvenance(t *testing.T, source, relativeCache string) {
 	writePackageResource(t, file, `export default function(pi) { pi.registerCommand("provenance-probe", {description:"CLI provenance", handler: async () => {}}); }`)
 
 	process := startRPCProcessAt(t, cwd, []string{
-		"PIG_HOME=" + home,
-		"PIG_CODING_AGENT_DIR=" + agentDir,
-		"PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "PI_OFFLINE=1",
+		"OMPIG_HOME=" + home,
+		"OMPIG_CODING_AGENT_DIR=" + agentDir,
+		"OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "PI_OFFLINE=1",
 	}, "--model", "test-faux/faux-1", "--no-session", "--no-extensions", "-e", source)
 	process.send(`{"id":"commands","type":"get_commands"}`)
 	process.await("temporary CLI command provenance", func(record rpcRecord) bool {

@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi sdk.ts:232-239 uses the global default for existing history without a thinking entry, then clamps after model selection at :252-256.

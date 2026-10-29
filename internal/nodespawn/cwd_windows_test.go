@@ -15,7 +15,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-const directoryHelper = "PIG_NODESPAWN_DIRECTORY_HELPER"
+const directoryHelper = "OMPIG_NODESPAWN_DIRECTORY_HELPER"
 
 // directoryReport is what a started test binary reports: its working
 // directory and its image.

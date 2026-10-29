@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A beforeToolCall hook that throws ends the call with an error result carrying the thrown message, as agent-loop.ts prepareToolCall's catch does: an empty message stays empty (no "Tool execution was blocked" default) and the batch does not terminate.

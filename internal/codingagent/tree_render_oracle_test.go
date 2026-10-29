@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's TreeList render (modes/interactive/components/tree-selector.js) with a typed search query runs against the vendored Pi module: the visible rows, search matching (JavaScript lowercasing and \s splitting), row text and the status line must agree for every chain in the shared tree corpus.

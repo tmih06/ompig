@@ -6,7 +6,7 @@
 # tool_execution_end events follow that order (a call ends when its own execute settles); the tool-result messages keep source
 # order (Promise.all). The first prompt answers both dialogs in one write in source order, the second in the reverse order.
 #
-# PiG ran each dialog's waiter and each call's tool_call response on goroutines of their own, so the order of the answers was
+# Ompig ran each dialog's waiter and each call's tool_call response on goroutines of their own, so the order of the answers was
 # lost twice and the order of the ends was unspecified: about half of the runs ended "Second?" first although "First?" was
 # answered first.
 
@@ -49,9 +49,9 @@ wait_contains = ['"type":"agent_settled"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["testdata/two-dialog-tools.mjs"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC parallel dialog probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["testdata/two-dialog-tools.mjs"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC parallel dialog probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["testdata/two-dialog-tools.mjs", "../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC parallel dialog probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 

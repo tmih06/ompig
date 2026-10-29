@@ -41,7 +41,7 @@ func TestIsDeadTerminalError(t *testing.T) {
 	}
 }
 
-const deadTerminalChildEnv = "PIG_DEAD_TERMINAL_CHILD"
+const deadTerminalChildEnv = "OMPIG_DEAD_TERMINAL_CHILD"
 
 // TestDeadTerminalChild runs one scenario in a child process, because the emergency exit ends the process.
 func TestDeadTerminalChild(t *testing.T) {
@@ -49,7 +49,7 @@ func TestDeadTerminalChild(t *testing.T) {
 	if scenario == "" {
 		t.Skip("child process only")
 	}
-	agentDir := os.Getenv("PIG_DEAD_TERMINAL_AGENT_DIR")
+	agentDir := os.Getenv("OMPIG_DEAD_TERMINAL_AGENT_DIR")
 	m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: "/work", AgentDir: agentDir, AppVersion: "9.9.9"})
 	var stderr strings.Builder
 	switch scenario {
@@ -83,7 +83,7 @@ func TestDeadTerminalExitsQuietlyWithoutRecordingACrash(t *testing.T) {
 		t.Run(tc.scenario, func(t *testing.T) {
 			agentDir := t.TempDir()
 			cmd := exec.Command(os.Args[0], "-test.run=^TestDeadTerminalChild$")
-			cmd.Env = append(os.Environ(), deadTerminalChildEnv+"="+tc.scenario, "PIG_DEAD_TERMINAL_AGENT_DIR="+agentDir, "PIG_HOME="+t.TempDir())
+			cmd.Env = append(os.Environ(), deadTerminalChildEnv+"="+tc.scenario, "OMPIG_DEAD_TERMINAL_AGENT_DIR="+agentDir, "OMPIG_HOME="+t.TempDir())
 			output, err := cmd.CombinedOutput()
 			code := 0
 			if exit, ok := errors.AsType[*exec.ExitError](err); ok {
@@ -134,7 +134,7 @@ func (a *attachedInput) Close() error {
 
 // Ports packages/coding-agent/test/suite/regressions/5080-signal-shutdown-extension-cleanup.test.ts "dead terminal errors on stdin › handlers are removed on unregister"
 // (Pi 1.0.3). Pi's registerSignalHandlers adds one process.stdin "error" listener that exits quietly on a dead terminal, and unregisterSignalHandlers removes it.
-// PiG registers no stdin listener: its input pump reads the terminal and routes a dead-terminal read error to exitIfDeadTerminal. Unregistering
+// Ompig registers no stdin listener: its input pump reads the terminal and routes a dead-terminal read error to exitIfDeadTerminal. Unregistering
 // is stopTerminalInput, which must leave no reader attached, so a dead-terminal error after unregistration reaches no handler.
 func TestInputHandlersAreRemovedOnUnregister(t *testing.T) {
 	var order []string

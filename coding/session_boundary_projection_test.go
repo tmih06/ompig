@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/boundarywire"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // agent-session.ts _buildBoundaryContext projects SessionManager.inMemory(cwd, undefined, [header, ...getBranch()]) with the drafts applied. Without drafts that preview holds the branch with its ids and parent links, so the session's own projection must be the one the copy produces, for every shape a branch can take.
@@ -148,7 +148,7 @@ func boundaryLeafUnset(t *testing.T) *icodingagent.Session {
 	return inner
 }
 
-// A file's records keep their own member order, spacing, number spelling and members PiG does not model, and entries outside the context may be read back from the file.
+// A file's records keep their own member order, spacing, number spelling and members Ompig does not model, and entries outside the context may be read back from the file.
 func boundaryLoadedFile(t *testing.T) *icodingagent.Session {
 	t.Helper()
 	dir := t.TempDir()

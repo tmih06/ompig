@@ -5,7 +5,7 @@ package coding
 import (
 	"fmt"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // SessionManager is the actual append-only Session log used by the runtime. Sharing this pointer shares entry identity, branching and persistence, not a copied projection.

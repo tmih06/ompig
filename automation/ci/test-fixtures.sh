@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
-OUT_DIR=${PIG_TEST_FIXTURE_DIR:-"$ROOT/tmp/test-fixtures"}
+OUT_DIR=${OMPIG_TEST_FIXTURE_DIR:-"$ROOT/tmp/test-fixtures"}
 FIXTURE_EXT_BIN="$OUT_DIR/fixture-ext"
 SDK_FIXTURE_BIN="$OUT_DIR/sdk-fixture"
 CONFORMANCE_SDK_FIXTURE_BIN="$OUT_DIR/conformance-sdk-fixture"
@@ -67,7 +67,7 @@ if command -v cargo >/dev/null 2>&1; then
   echo "[test-fixtures] building rust-sdk-fixture → $RUST_SDK_FIXTURE_BIN" >&2
   (cd "$RUST_SRC" && CARGO_TARGET_DIR="$RUST_TARGET" cargo build --release --quiet)
   cp "$RUST_RELEASE" "$RUST_SDK_FIXTURE_BIN"
-  RUST_EXPORT="export PIG_TEST_RUST_SDK_FIXTURE_BIN=\"$RUST_SDK_FIXTURE_BIN\""
+  RUST_EXPORT="export OMPIG_TEST_RUST_SDK_FIXTURE_BIN=\"$RUST_SDK_FIXTURE_BIN\""
   RUST_TARGET_EXPORT="export CARGO_TARGET_DIR=\"$RUST_TARGET\""
   RUST_REPORT="rust-sdk-fixture=$RUST_SDK_FIXTURE_BIN"
 else
@@ -77,9 +77,9 @@ fi
 
 if [[ "${1:-}" == "--exports" ]]; then
   cat <<EOF
-export PIG_TEST_FIXTURE_EXT_BIN="$FIXTURE_EXT_BIN"
-export PIG_TEST_SDK_FIXTURE_BIN="$SDK_FIXTURE_BIN"
-export PIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN="$CONFORMANCE_SDK_FIXTURE_BIN"
+export OMPIG_TEST_FIXTURE_EXT_BIN="$FIXTURE_EXT_BIN"
+export OMPIG_TEST_SDK_FIXTURE_BIN="$SDK_FIXTURE_BIN"
+export OMPIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN="$CONFORMANCE_SDK_FIXTURE_BIN"
 $RUST_EXPORT
 $RUST_TARGET_EXPORT
 EOF

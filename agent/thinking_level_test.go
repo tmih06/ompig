@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Regression guards for the assistant message's thinkingLevel. Upstream
@@ -73,7 +73,7 @@ func TestAgentLoop_RecordsThinkingLevelOnErrorAndAbortedResponses(t *testing.T) 
 
 // upstream: a stream function whose request setup fails answers with an error
 // event (ai/src/api/lazy.ts:52-58), and streamAssistantResponse records the
-// requested level on that result too (agent-loop.ts:409, 445). PiG's stream
+// requested level on that result too (agent-loop.ts:409, 445). Ompig's stream
 // function returns the setup error instead, and the loop synthesizes the same
 // final response, so it must record the level as well.
 func TestAgentLoop_RecordsThinkingLevelWhenTheStreamFunctionFailsBeforeStreaming(t *testing.T) {

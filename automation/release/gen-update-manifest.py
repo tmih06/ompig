@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
-r"""Generate a Pig self-update manifest from a release directory.
+r"""Generate a Ompig self-update manifest from a release directory.
 
 Host the output on any static site (GitHub Pages, S3, a marketplace) and point
-Pig at it with PIG_UPDATE_URL.
+Ompig at it with OMPIG_UPDATE_URL.
 
 The exact bytes this emits must be signed before publication. The manifest
-matches what pig's self-update reads (internal/codingagent D39):
+matches what ompig's self-update reads (internal/codingagent D39):
 
-    {"version": "<v>", "packageName": "@pi-in-go/pig", "notes": "...",
+    {"version": "<v>", "packageName": "@ompig/ompig", "notes": "...",
      "binaries": {"<goos>/<goarch>": {"url": "<base>/<file>", "sha256": "<hex>"}}}
 
-With --dir, binaries are matched by the naming pig-<goos>-<goarch> (and
-pig-<goos>-<goarch>.exe on Windows). With --sha256sums, each macOS, Linux and Android
-entry points at the release archive pig-<version>-<goos>-<goarch>.tar.gz and
-takes its digest from the release SHA256SUMS; pig verifies the archive and
-installs the pig executable inside it. Windows is omitted: a standalone
-pig.exe is not replaced in place (D39).
+With --dir, binaries are matched by the naming ompig-<goos>-<goarch> (and
+ompig-<goos>-<goarch>.exe on Windows). With --sha256sums, each macOS, Linux and Android
+entry points at the release archive ompig-<version>-<goos>-<goarch>.tar.gz and
+takes its digest from the release SHA256SUMS; ompig verifies the archive and
+installs the ompig executable inside it. Windows is omitted: a standalone
+ompig.exe is not replaced in place (D39).
 
 Usage:
-    gen-update-manifest.py --version 0.2.0 --base-url https://ORG.github.io/pig \\
+    gen-update-manifest.py --version 0.2.0 --base-url https://ORG.github.io/ompig \\
         --dir ./release-binaries [--notes "See the changelog."] > update.json
     gen-update-manifest.py --version 0.2.1 \\
-        --base-url https://github.com/OWNER/PiG/releases/download/v0.2.1 \\
+        --base-url https://github.com/OWNER/Ompig/releases/download/v0.2.1 \\
         --sha256sums release/SHA256SUMS > update.json
 """
 from __future__ import annotations
@@ -35,9 +35,9 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
-import pig_package
+import ompig_package
 
-# GOOS/GOARCH releases produced for stock Pig.
+# GOOS/GOARCH releases produced for stock Ompig.
 PLATFORMS = [
     ("android", "arm64"),
     ("linux", "amd64"),
@@ -84,7 +84,7 @@ def _valid_base_url(raw: str, *, allow_loopback_http: bool) -> bool:
         return False
 
 
-# Release archives a standalone pig can update itself from.
+# Release archives a standalone ompig can update itself from.
 ARCHIVE_PLATFORMS = [
     ("android", "arm64"),
     ("linux", "amd64"),
@@ -112,7 +112,7 @@ def _read_sha256sums(path: Path) -> dict[str, str] | None:
 
 
 def _binary_name(goos: str, goarch: str) -> str:
-    name = f"pig-{goos}-{goarch}"
+    name = f"ompig-{goos}-{goarch}"
     return f"{name}.exe" if goos == "windows" else name
 
 
@@ -122,11 +122,11 @@ def main() -> int:
     ap.add_argument("--version", required=True, help="release version, e.g. 0.2.0")
     ap.add_argument("--base-url", required=True, help="URL the binaries are served from (no trailing slash)")
     source = ap.add_mutually_exclusive_group(required=True)
-    source.add_argument("--dir", type=Path, help="directory containing the pig-<os>-<arch> binaries")
-    source.add_argument("--sha256sums", type=Path, help="release SHA256SUMS naming the pig-<version>-<os>-<arch>.tar.gz archives")
+    source.add_argument("--dir", type=Path, help="directory containing the ompig-<os>-<arch> binaries")
+    source.add_argument("--sha256sums", type=Path, help="release SHA256SUMS naming the ompig-<version>-<os>-<arch>.tar.gz archives")
     ap.add_argument(
         "--package-name",
-        default=pig_package.package_name(),
+        default=ompig_package.package_name(),
         help="signed package-manager release identity (default: PackageName in internal/codingagent/paths.go)",
     )
     ap.add_argument(
@@ -158,7 +158,7 @@ def main() -> int:
             print(f"{args.sha256sums} is not a SHA256SUMS file with one entry per name", file=sys.stderr)
             return 1
         for goos, goarch in ARCHIVE_PLATFORMS:
-            name = f"pig-{args.version}-{goos}-{goarch}.tar.gz"
+            name = f"ompig-{args.version}-{goos}-{goarch}.tar.gz"
             if name not in sums:
                 print(f"{args.sha256sums} has no entry for {name}", file=sys.stderr)
                 return 1
@@ -172,7 +172,7 @@ def main() -> int:
             binaries[f"{goos}/{goarch}"] = {"url": f"{base}/{path.name}", "sha256": digest}
 
     if not binaries:
-        print(f"no pig-<os>-<arch> binaries found in {args.dir}", file=sys.stderr)
+        print(f"no ompig-<os>-<arch> binaries found in {args.dir}", file=sys.stderr)
         return 1
 
     manifest: dict[str, object] = {

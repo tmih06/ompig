@@ -12,17 +12,17 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
 	"go.yaml.in/yaml/v3"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/hookconfig"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/frontmatter"
-	"github.com/MichaelKinsy/PiG/internal/ignorerules"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/hookconfig"
+	"github.com/tmih06/ompig/internal/codingagent/frontmatter"
+	"github.com/tmih06/ompig/internal/ignorerules"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // Kind identifies a discoverable package resource class.
@@ -64,9 +64,9 @@ type MissingMember struct {
 }
 
 type packageManifest struct {
-	Name string       `json:"name"`
-	PI   *piManifest  `json:"pi"`
-	Pig  *pigManifest `json:"pig"`
+	Name  string         `json:"name"`
+	PI    *piManifest    `json:"pi"`
+	Ompig *ompigManifest `json:"ompig"`
 }
 
 type piManifest struct {
@@ -76,7 +76,7 @@ type piManifest struct {
 	Themes     *[]string `json:"themes"`
 }
 
-type pigManifest struct {
+type ompigManifest struct {
 	Hooks             *[]string `json:"hooks"`
 	MCPServers        *[]string `json:"mcpServers"`
 	AgentEnvironments *[]string `json:"agentEnvironments"`
@@ -152,13 +152,13 @@ func conventionFallback(filters map[Kind][]string) func(Kind, *[]string) bool {
 }
 
 // DescribesResources reports whether root declares Package resources: a "pi"
-// or "pig" package.json block, plugin metadata, or a conventional resource
+// or "ompig" package.json block, plugin metadata, or a conventional resource
 // directory, even an empty one. Upstream collectPackageResources answers the
 // same question for Pi's kinds (package-manager.ts:2235-2262); a local source
 // directory that declares none is itself an extension.
 func DescribesResources(root string) bool {
 	manifest, plugin := readDiscoveryManifests(root)
-	if plugin != nil || manifest != nil && (manifest.PI != nil || manifest.Pig != nil) {
+	if plugin != nil || manifest != nil && (manifest.PI != nil || manifest.Ompig != nil) {
 		return true
 	}
 	for _, kind := range []Kind{Extensions, Skills, Prompts, Themes, Agents, MCP, Hooks, AgentEnvironments} {
@@ -193,12 +193,12 @@ func readDiscoveryManifests(root string) (*packageManifest, *pluginManifest) {
 // discover reads the resources root exposes. collects, when set, says which kinds are collected. conventionFor, when set, says that a Pi kind a "pi" block leaves undeclared is read from its conventional directory.
 func discover(root string, manifest *packageManifest, plugin *pluginManifest, collects func(Kind) bool, conventionFor func(Kind, *[]string) bool) (Resources, error) {
 	// Upstream loads a package that has a "pi" manifest from what the manifest
-	// declares and never from conventional directories. PiG's own kinds follow
-	// that rule: without a "pig" block such a package declares none, so a
+	// declares and never from conventional directories. Ompig's own kinds follow
+	// that rule: without a "ompig" block such a package declares none, so a
 	// hooks/ or mcp/ directory another agent's tooling ships is not read.
-	pigEntries := func(kind Kind) *[]string {
+	ompigEntries := func(kind Kind) *[]string {
 		entries := coalesceEntries(manifestEntries(manifest, kind), pluginEntries(plugin, kind))
-		if entries == nil && manifest != nil && manifest.PI != nil && manifest.Pig == nil {
+		if entries == nil && manifest != nil && manifest.PI != nil && manifest.Ompig == nil {
 			return &[]string{}
 		}
 		return entries
@@ -231,7 +231,7 @@ func discover(root string, manifest *packageManifest, plugin *pluginManifest, co
 	if manifest != nil {
 		resources.PackageName = manifest.Name
 	}
-	// Pi's collectPackageResources collects extensions, skills, prompts and themes in that order and stops at a throw. Pi reads globs only from a "pi" block, so a throw from plugin metadata or from PiG's own kinds, which Pi never reads, leaves that kind empty and stops nothing.
+	// Pi's collectPackageResources collects extensions, skills, prompts and themes in that order and stops at a throw. Pi reads globs only from a "pi" block, so a throw from plugin metadata or from Ompig's own kinds, which Pi never reads, leaves that kind empty and stops nothing.
 	piBlock := manifest != nil && manifest.PI != nil
 	for _, kind := range []struct {
 		kind    Kind
@@ -243,9 +243,9 @@ func discover(root string, manifest *packageManifest, plugin *pluginManifest, co
 		{Prompts, &resources.PromptFiles, func() ([]string, error) { return collectManifestResources(root, Prompts, piEntries(Prompts)) }},
 		{Themes, &resources.ThemeFiles, func() ([]string, error) { return collectManifestResources(root, Themes, piEntries(Themes)) }},
 		{Agents, &resources.AgentFiles, func() ([]string, error) { return collectManifestResources(root, Agents, pluginEntries(plugin, Agents)) }},
-		{MCP, &resources.MCPFiles, func() ([]string, error) { return collectMCPResources(root, pigEntries(MCP)) }},
-		{Hooks, &resources.HookFiles, func() ([]string, error) { return collectManifestResources(root, Hooks, pigEntries(Hooks)) }},
-		{AgentEnvironments, &resources.AgentEnvironments, func() ([]string, error) { return collectAgentEnvironments(root, pigEntries(AgentEnvironments)) }},
+		{MCP, &resources.MCPFiles, func() ([]string, error) { return collectMCPResources(root, ompigEntries(MCP)) }},
+		{Hooks, &resources.HookFiles, func() ([]string, error) { return collectManifestResources(root, Hooks, ompigEntries(Hooks)) }},
+		{AgentEnvironments, &resources.AgentEnvironments, func() ([]string, error) { return collectAgentEnvironments(root, ompigEntries(AgentEnvironments)) }},
 	} {
 		if collects != nil && !collects(kind.kind) {
 			continue
@@ -435,7 +435,7 @@ func ValidateConfiguredForStartupWithResolver(root string, filters map[Kind][]st
 // InspectConfigured returns the discovery inventory, including safe
 // declarations whose files are missing. It uses discovery's tolerant manifest
 // parsing and validates lexical, absolute-path, glob, and symlink boundaries.
-// Missing declarations are data so pig config can disable them;
+// Missing declarations are data so ompig config can disable them;
 // ValidateConfigured remains strict for explicit validation.
 func InspectConfigured(root string, filters map[Kind][]string) (Resources, []MissingMember, error) {
 	return InspectConfiguredWithResolver(root, filters, resolveExtensionSource)
@@ -697,15 +697,15 @@ func parsePackageManifest(manifestPath string, data []byte, requireName bool) (*
 	return &manifest, nil
 }
 
-// vendorPluginManifests are other harnesses' plugin manifests. PiG reads them
+// vendorPluginManifests are other harnesses' plugin manifests. Ompig reads them
 // as additive metadata; upstream Pi reads none of them.
 var vendorPluginManifests = []string{".plugin/plugin.json", ".claude-plugin/plugin.json", ".cursor-plugin/plugin.json"}
 
 func readStrictPluginManifest(root string, manifest *packageManifest) (*pluginManifest, error) {
 	hasPi := manifest != nil && manifest.PI != nil
-	for _, relative := range []string{"plugin.json", ".plugin/plugin.json", ".claude-plugin/plugin.json", ".cursor-plugin/plugin.json", ".pig-plugin/plugin.json"} {
+	for _, relative := range []string{"plugin.json", ".plugin/plugin.json", ".claude-plugin/plugin.json", ".cursor-plugin/plugin.json", ".ompig-plugin/plugin.json"} {
 		// Upstream loads a "pi" package from its manifest alone and never
-		// reads another harness's plugin manifest, so neither does PiG.
+		// reads another harness's plugin manifest, so neither does Ompig.
 		if hasPi && slices.Contains(vendorPluginManifests, relative) {
 			continue
 		}
@@ -721,18 +721,18 @@ func readStrictPluginManifest(root string, manifest *packageManifest) (*pluginMa
 			return nil, err
 		}
 		var packageBoundary struct {
-			Piglets json.RawMessage `json:"piglets"`
+			Ompiglets json.RawMessage `json:"ompiglets"`
 		}
 		if err := json.Unmarshal(data, &packageBoundary); err != nil {
 			// Another harness's manifest that is not JSON declares nothing
-			// PiG reads; readPluginManifest skips it the same way.
+			// Ompig reads; readPluginManifest skips it the same way.
 			if slices.Contains(vendorPluginManifests, relative) {
 				continue
 			}
 			return nil, fmt.Errorf("parse %s: %w", manifestPath, err)
 		}
-		if packageBoundary.Piglets != nil {
-			return nil, fmt.Errorf("plugin manifest %s declares piglets; Piglets are independent and cannot be Package members", manifestPath)
+		if packageBoundary.Ompiglets != nil {
+			return nil, fmt.Errorf("plugin manifest %s declares ompiglets; Ompiglets are independent and cannot be Package members", manifestPath)
 		}
 		plugin, err := parsePluginManifestData(data)
 		if err != nil {
@@ -835,7 +835,7 @@ func validateDeclaredResourcesFiltered(root string, manifest *packageManifest, p
 }
 
 // validateDeclaredEntries checks every declared entry stays inside the
-// Package and that every enabled entry of PiG's own kinds exists. With
+// Package and that every enabled entry of Ompig's own kinds exists. With
 // requireEnabled, an enabled entry of Pi's kinds (extensions, skills, prompts,
 // themes) must exist too; without it one that does not exist is skipped, as
 // upstream's package manager skips it.
@@ -1488,7 +1488,7 @@ func FindSourceMember(root string, kind Kind, name string) (string, error) {
 }
 
 // FindMember selects one discovered resource by public kind/name identity.
-// pig additive (D18): named Piglet Package origins require stable member
+// ompig additive (D18): named Ompiglet Package origins require stable member
 // identity across exact and conventional Package resources.
 // Extension source paths and Skill frontmatter are authoritative.
 func FindMember(resources Resources, kind Kind, name string) (string, error) {
@@ -2246,11 +2246,11 @@ func readPackageManifest(root string) *packageManifest {
 			Themes:     decodePiEntries(pi["themes"]),
 		}
 	}
-	if pig := decodeJSONObject(raw["pig"]); pig != nil {
-		manifest.Pig = &pigManifest{
-			Hooks:             decodeStringSlice(pig["hooks"]),
-			MCPServers:        decodeStringSlice(pig["mcpServers"]),
-			AgentEnvironments: decodeStringSlice(pig["agentEnvironments"]),
+	if ompig := decodeJSONObject(raw["ompig"]); ompig != nil {
+		manifest.Ompig = &ompigManifest{
+			Hooks:             decodeStringSlice(ompig["hooks"]),
+			MCPServers:        decodeStringSlice(ompig["mcpServers"]),
+			AgentEnvironments: decodeStringSlice(ompig["agentEnvironments"]),
 		}
 	}
 	return manifest
@@ -2301,12 +2301,12 @@ func readPluginManifest(root string, hasPi bool) *pluginManifest {
 			}
 		}
 	}
-	if pigOnly := readPluginManifestFile(filepath.Join(root, ".pig-plugin", "plugin.json")); pigOnly != nil {
+	if ompigOnly := readPluginManifestFile(filepath.Join(root, ".ompig-plugin", "plugin.json")); ompigOnly != nil {
 		if merged == nil {
-			copy := *pigOnly
+			copy := *ompigOnly
 			merged = &copy
 		} else {
-			mergePluginManifest(merged, pigOnly)
+			mergePluginManifest(merged, ompigOnly)
 		}
 	}
 	return merged
@@ -2395,16 +2395,16 @@ func manifestEntries(manifest *packageManifest, kind Kind) *[]string {
 			return manifest.PI.Themes
 		}
 	case Hooks:
-		if manifest.Pig != nil {
-			return manifest.Pig.Hooks
+		if manifest.Ompig != nil {
+			return manifest.Ompig.Hooks
 		}
 	case MCP:
-		if manifest.Pig != nil {
-			return manifest.Pig.MCPServers
+		if manifest.Ompig != nil {
+			return manifest.Ompig.MCPServers
 		}
 	case AgentEnvironments:
-		if manifest.Pig != nil {
-			return manifest.Pig.AgentEnvironments
+		if manifest.Ompig != nil {
+			return manifest.Ompig.AgentEnvironments
 		}
 	}
 	return nil
@@ -2676,7 +2676,7 @@ func discoverExtensionEntries(dir string, root extensionRoot) []string {
 
 // resolveExtensionEntries follows Pi's manifest entries, index.ts, then index.js rule. A manifest that declares only missing entries, with no index, contributes nothing.
 //
-// pig additive (D19): a Go, Rust or Python root loads as one extension for source.Resolve to classify. go.mod, Cargo.toml or pyproject.toml marks one; so, when python allows, does the new_extension factory module or executable main.py that source.Resolve accepts, as `pig install DIR --validate-only` does.
+// ompig additive (D19): a Go, Rust or Python root loads as one extension for source.Resolve to classify. go.mod, Cargo.toml or pyproject.toml marks one; so, when python allows, does the new_extension factory module or executable main.py that source.Resolve accepts, as `ompig install DIR --validate-only` does.
 //
 // A directory holding go.work without go.mod is ambiguous: source.Resolve loads it as one extension that selects the modules it uses, but it is also the usual development workspace over sibling extension modules. It is one extension only when none of its children is an extension entry, so a workspace over extensions/a and extensions/b still yields both.
 func resolveExtensionEntries(dir string, python bool) []string {

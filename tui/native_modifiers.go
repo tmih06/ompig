@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/internal/nativeplatform"
+import "github.com/tmih06/ompig/internal/nativeplatform"
 
 // ModifierKey mirrors upstream native-platform.ts ModifierKey.
 type ModifierKey string

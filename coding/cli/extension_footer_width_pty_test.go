@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// Public issue #104: PiG 0.3.0 exited with "Rendered line N exceeds terminal
+// Public issue #104: Ompig 0.3.0 exited with "Rendered line N exceeds terminal
 // width (128 > 114)" when an extension footer laid out for one width was painted
 // after the terminal narrowed. Pi 0.87.1 renders a footer component at the
 // current width every frame (interactive-mode.ts:2418-2445) and lays a string[]
@@ -38,7 +38,7 @@ import (
 	"strings"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func fit(width int) []string {
@@ -82,8 +82,8 @@ func Extension() *sdk.Extension {
 const pyFooterProbeSource = `import os
 import sys
 
-sys.path.insert(0, os.environ["PIG_SDK_PY_ROOT"])
-import pig_sdk
+sys.path.insert(0, os.environ["OMPIG_SDK_PY_ROOT"])
+import ompig_sdk
 
 
 def fit(width):
@@ -92,8 +92,8 @@ def fit(width):
     return [first + "a" * (width - len(first) - 6) + " w=%3d" % width, "PROBE-B ok"]
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("pyprobe")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("pyprobe")
 
     def start(ctx, _event):
         if os.environ.get("F104_WIDGET") == "1":
@@ -109,7 +109,7 @@ def new_extension() -> pig_sdk.Extension:
     return ext
 `
 
-const rsFooterProbeSource = `use pig_sdk::Extension;
+const rsFooterProbeSource = `use ompig_sdk::Extension;
 
 fn fit(width: u32) -> Vec<String> {
     let width = if width == 0 { 128 } else { width as usize };
@@ -153,7 +153,7 @@ func writeFooterProbe(t *testing.T, language string) string {
 	}
 	switch language {
 	case "go":
-		write("go.mod", fmt.Sprintf("module example.com/goprobe\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.3.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", filepath.Join(fixtureSourceRoot, "extensions", "sdk")))
+		write("go.mod", fmt.Sprintf("module example.com/goprobe\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.3.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", filepath.Join(fixtureSourceRoot, "extensions", "sdk")))
 		write("extension.go", goFooterProbeSource)
 	case "py":
 		write("pyprobe.py", pyFooterProbeSource)
@@ -171,23 +171,23 @@ type footerProbeCase struct {
 	// the resize: the host must then paint no footer rather than the
 	// 128-column rows.
 	staleFooterUnpainted bool
-	// probe is the language's shared probe: its extension and PiG home, so the
+	// probe is the language's shared probe: its extension and Ompig home, so the
 	// cases of one language build the extension once.
 	probe footerProbe
 }
 
-// footerProbe is one language's probe extension and the PiG home whose build
+// footerProbe is one language's probe extension and the Ompig home whose build
 // cache its cases share.
-type footerProbe struct{ extension, pigHome string }
+type footerProbe struct{ extension, ompigHome string }
 
-// footerProbes writes each language's probe once per test and builds it into the language's PiG home before any session
+// footerProbes writes each language's probe once per test and builds it into the language's Ompig home before any session
 // starts (prebuildExtension), so no case's first wait covers a build.
 func footerProbes(t *testing.T, binary string) map[string]footerProbe {
 	t.Helper()
 	probes := map[string]footerProbe{}
 	for _, language := range []string{"go", "py", "rs"} {
-		probe := footerProbe{extension: writeFooterProbe(t, language), pigHome: t.TempDir()}
-		prebuildExtension(t, binary, probe.pigHome, seededAgentDir(t), probe.extension, "F104_MODE=none")
+		probe := footerProbe{extension: writeFooterProbe(t, language), ompigHome: t.TempDir()}
+		prebuildExtension(t, binary, probe.ompigHome, seededAgentDir(t), probe.extension, "F104_MODE=none")
 		probes[language] = probe
 	}
 	return probes
@@ -208,7 +208,7 @@ func TestExtensionFooterSurvivesNarrowingResize(t *testing.T) {
 		{language: "rs", mode: "renderer"},
 	} {
 		tc.probe = probes[tc.language]
-		// Each case owns its pseudo-terminal and PiG process; run them together.
+		// Each case owns its pseudo-terminal and Ompig process; run them together.
 		t.Run(tc.language+"/"+tc.mode, func(t *testing.T) { t.Parallel(); runFooterProbe(t, binary, tc) })
 	}
 }
@@ -229,7 +229,7 @@ func TestExtensionStringWidgetIsWrappedByTheHost(t *testing.T) {
 
 func runFooterProbe(t *testing.T, binary string, tc footerProbeCase) {
 	t.Helper()
-	extension, pigHome := tc.probe.extension, tc.probe.pigHome
+	extension, ompigHome := tc.probe.extension, tc.probe.ompigHome
 	master, slave := openPTY(t, 30, 128)
 	defer func() { _ = master.Close() }()
 	widget := "0"
@@ -239,11 +239,11 @@ func runFooterProbe(t *testing.T, binary string, tc footerProbeCase) {
 	// The probe observes the regular renderer's resize redraw ("\x1b[3J"), so it selects the regular mode; fullscreen is the default since Pi 1.0.0 (settings-manager.ts:1348-1350).
 	cmd := exec.Command(binary, "--no-extensions", "-e", extension, "--model", "test-faux/faux-1", "--tui-mode", "regular")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_CODING_AGENT_DIR="+seededAgentDir(t), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "F104_MODE="+tc.mode, "F104_WIDGET="+widget, "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_CODING_AGENT_DIR="+seededAgentDir(t), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "F104_MODE="+tc.mode, "F104_WIDGET="+widget, "TERM=xterm-256color")
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {
-		t.Fatalf("start pig: %v", err)
+		t.Fatalf("start ompig: %v", err)
 	}
 	_ = slave.Close()
 	exited := make(chan struct{})
@@ -267,7 +267,7 @@ func runFooterProbe(t *testing.T, binary string, tc footerProbeCase) {
 		for time.Now().Before(deadline) {
 			select {
 			case <-exited:
-				t.Fatalf("pig exited %s; last output: %q", stage, tail())
+				t.Fatalf("ompig exited %s; last output: %q", stage, tail())
 			default:
 			}
 			if bytes.Contains(output.since(0), []byte("exceeds terminal width")) {

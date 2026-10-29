@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream _emitModelSelect (agent-session.ts:2372-2384) passes the Session's Model objects, so a subprocess extension reads event.model.provider and event.model.id, and previousModel is undefined when the Session had no model.

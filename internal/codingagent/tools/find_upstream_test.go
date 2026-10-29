@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func requireFD(t *testing.T) string {
@@ -121,7 +121,7 @@ func TestFind_NoFdIsError(t *testing.T) {
 	}
 	_ = os.WriteFile(filepath.Join(dir, "sub", "a.ts"), nil, 0o644)
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	args, _ := json.Marshal(map[string]any{"pattern": "sub/*.ts"})
 	for _, tool := range []agent.AgentTool{
 		&FindTool{CWD: dir},
@@ -152,7 +152,7 @@ func TestSearchToolsResolveAgentBinAtCallTime(t *testing.T) {
 		}
 	}
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	if err := os.MkdirAll(binDir, 0o755); err != nil {
 		t.Fatal(err)
 	}

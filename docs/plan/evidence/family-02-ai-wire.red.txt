@@ -43,7 +43,7 @@
     --- FAIL: TestBedrockProviderStreamEventsUpstream/forwards_SDK_stream_items_in_order_before_normalizing_them
     --- FAIL: TestBedrockProviderStreamEventsUpstream/forwards_SDK_error_items_before_reporting_them
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/ai	93.714s
+FAIL	github.com/tmih06/ompig/ai	93.714s
 FAIL
 
 # Cases that pass in red (Go already satisfies the upstream behavior): sampling-options 0.99.1 cases (TestSamplingOptionsUpstream, ...ModelDefaultsOnDirectStreamUpstream, ...PassThroughStreamSimpleUpstream); openai-responses sign-in 'keeps those fields' rows; openai-responses-compat priority/flex rows; cache-retention sk- key rows.

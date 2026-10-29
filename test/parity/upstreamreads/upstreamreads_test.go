@@ -248,7 +248,7 @@ func TestVersionedReadScannerSeparatesCodeFromCitations(t *testing.T) {
 		{"python comment", "a.py", "# " + old + "\n", 0},
 		{"python path", "a.py", "p = root / \"" + old + "\"\n", 1},
 		{"python triple string used as value", "a.py", "src = \"\"\"" + old + "\"\"\"\n", 1},
-		{"toml path", "a.toml", "pig_extensions = [\"../../" + old + "\"]\n", 1},
+		{"toml path", "a.toml", "ompig_extensions = [\"../../" + old + "\"]\n", 1},
 		{"toml comment", "a.toml", "# " + old + "\nx = 1\n", 0},
 		{"toml trailing comment", "a.toml", "x = 1 # " + old + "\n", 0},
 		{"shell hash inside word", "a.sh", "echo a#b " + old + "\n", 1},

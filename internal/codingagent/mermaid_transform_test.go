@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
-// TestMermaidTransformMatchesUpstream diffs pig's Mermaid markdown transformer
+// TestMermaidTransformMatchesUpstream diffs ompig's Mermaid markdown transformer
 // against pi's own createMermaidMarkdownTransformer (compiled mermaid.js, no
 // theme → plain art) over render / gating / warnings / width / identity cases.
 func TestMermaidTransformMatchesUpstream(t *testing.T) {

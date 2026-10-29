@@ -5,7 +5,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // shallowAssistantMessage builds the agent message of a message_update from the provider partial. Its ShallowCopy is

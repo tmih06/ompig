@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The write card names its file from the path arguments alone, so the header reads the same from them as from the whole object: both path keys, a null or missing one, a wrong type, and arguments that are not an object.

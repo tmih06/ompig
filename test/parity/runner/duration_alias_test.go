@@ -19,8 +19,8 @@ func TestJSONDurationAliasRetainsPresenceAndType(t *testing.T) {
 		return Result{Output: `{"type":"tool_execution_end","result":{"structuredContent":{"exit_code":3,"wall_time_seconds":` + value + `}}}`}
 	}
 	for _, tc := range []struct {
-		name, pig, pi string
-		equal         bool
+		name, ompig, pi string
+		equal           bool
 	}{
 		{"rounding step", "0", "0.1", true},
 		{"slow run", "12.3", "0", true},
@@ -35,7 +35,7 @@ func TestJSONDurationAliasRetainsPresenceAndType(t *testing.T) {
 		{"negative zero", "-0", "0.1", false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			err := compareJSONResults(record(tc.pig), record(tc.pi), rules)
+			err := compareJSONResults(record(tc.ompig), record(tc.pi), rules)
 			if (err == nil) != tc.equal {
 				t.Fatalf("equal=%t: %v", tc.equal, err)
 			}
@@ -62,8 +62,8 @@ func TestJSONMillisecondAliasRetainsPresenceAndType(t *testing.T) {
 		return Result{Output: `{"type":"message_end","message":{"role":"assistant","stopReason":"stop","durationMs":` + value + `}}`}
 	}
 	for _, tc := range []struct {
-		name, pig, pi string
-		equal         bool
+		name, ompig, pi string
+		equal           bool
 	}{
 		{"one millisecond apart", "0", "1", true},
 		{"slow run", "1203", "0", true},
@@ -77,7 +77,7 @@ func TestJSONMillisecondAliasRetainsPresenceAndType(t *testing.T) {
 		{"boolean", "false", "0", false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			err := compareJSONResults(record(tc.pig), record(tc.pi), rules)
+			err := compareJSONResults(record(tc.ompig), record(tc.pi), rules)
 			if (err == nil) != tc.equal {
 				t.Fatalf("equal=%t: %v", tc.equal, err)
 			}
@@ -177,9 +177,9 @@ func TestScenarioAssertionsDoNotPinMeasuredDurations(t *testing.T) {
 	for _, sc := range scenarios {
 		var expectations []string
 		expectations = append(expectations, sc.Assert.BothContain...)
-		expectations = append(expectations, sc.Assert.PigContains...)
+		expectations = append(expectations, sc.Assert.OmpigContains...)
 		expectations = append(expectations, sc.Assert.PiContains...)
-		expectations = append(expectations, sc.Diverge.PigContains...)
+		expectations = append(expectations, sc.Diverge.OmpigContains...)
 		expectations = append(expectations, sc.Diverge.PiContains...)
 		for _, expectation := range expectations {
 			if measuredDurationLiteral.MatchString(expectation) {
@@ -202,10 +202,10 @@ func TestJSONOptionalDurationAliasAcceptsOneSidedPresenceOnlyWhereNamed(t *testi
 	with := Result{Output: `{"type":"message_end","message":{"role":"assistant","stopReason":"error","durationMs":3}}`}
 	without := Result{Output: `{"type":"message_end","message":{"role":"assistant","stopReason":"error"}}`}
 	if err := compareJSONResults(with, without, rules); err != nil {
-		t.Fatalf("pig has it, pi does not: %v", err)
+		t.Fatalf("ompig has it, pi does not: %v", err)
 	}
 	if err := compareJSONResults(without, with, rules); err != nil {
-		t.Fatalf("pi has it, pig does not: %v", err)
+		t.Fatalf("pi has it, ompig does not: %v", err)
 	}
 	if err := compareJSONResults(with, with, rules); err != nil {
 		t.Fatalf("both have it: %v", err)

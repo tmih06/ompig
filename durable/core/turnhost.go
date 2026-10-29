@@ -7,13 +7,13 @@ import (
 	"errors"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/docs"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/hopcost"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/docs"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/hopcost"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // newTurnHost is the Harness the built-in tasks run against (turn.Host): settings and models from the open payload,

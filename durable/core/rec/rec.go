@@ -21,7 +21,7 @@ package rec
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // ErrShape reports a stored record that lacks a field the core indexes. Read-only.

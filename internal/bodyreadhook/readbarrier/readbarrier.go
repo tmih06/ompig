@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/bodyreadhook"
+	"github.com/tmih06/ompig/internal/bodyreadhook"
 )
 
 // Barrier lets a fixture server write its next record only after the client has consumed every byte already sent and is reading the socket again: the deterministic form of a Node fixture's timer between writes, which always outlasts the client's microtask drain.

@@ -1,8 +1,8 @@
 package subprocess
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // EncodeKeptProjectionForTest exposes encodeKeptProjection to the external test package, which can import internal/codingagent.

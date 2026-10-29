@@ -6,7 +6,7 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Tool is a host function a script can call.

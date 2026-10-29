@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/mcptest"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/mcptest"
 )
 
-// PiG-only: packages/mcp/test has no test of InMemoryTransport itself; it is only the double under the client tests.
+// Ompig-only: packages/mcp/test has no test of InMemoryTransport itself; it is only the double under the client tests.
 // These tests pin the contract of packages/mcp/src/transports/in-memory.ts.
 func TestInMemoryTransportPairDeliversInOrderAndCloseNotifiesBothEnds(t *testing.T) {
 	client, server := mcptest.NewInMemoryTransportPair()

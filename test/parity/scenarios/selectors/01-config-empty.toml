@@ -1,5 +1,5 @@
 # Behavior family: selectors
-# Surface: `pi config` / `pig config` with no resources
+# Surface: `pi config` / `ompig config` with no resources
 #
 # Upstream evidence (pi 0.99.2, re-probed 2026-10-01 in tmux 100×35):
 #   command: PI_CODING_AGENT_DIR=testdata/pi-agent pi config
@@ -41,7 +41,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "Global Resources"
+ready_pattern_ompig = "Global Resources"
 ready_pattern_pi = "Global Resources"
 ready_timeout_seconds = 15
 capture_start = "Global Resources"
@@ -51,9 +51,9 @@ cwd = "testdata/empty-project"
 
 [env]
 override_base_args = true
-pig = ["PIG_HOME=testdata/pig-home", "HOME=testdata/home-empty"]
+ompig = ["OMPIG_HOME=testdata/ompig-home", "HOME=testdata/home-empty"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "HOME=testdata/home-empty"]
-pig_args = ["config"]
+ompig_args = ["config"]
 pi_args = ["config"]
 
 [assert]
@@ -77,15 +77,15 @@ output_normalized_equal = true
 runtime_ratio_max = 1.40
 runs = 1
 
-# D2: Pig reports its real config root while Pi reports its own. Fold only the
+# D2: Ompig reports its real config root while Pi reports its own. Fold only the
 # product name so the complete selector output remains compared.
 # normalize-rationale: D2 config-root names differ by binary.
 [[assert.normalize_replace]]
-pattern = '~/\.pig/agent/'
+pattern = '~/\.ompig/agent/'
 with    = '~/.pi/agent/'
 reason = "D2: only the configuration-root product name differs in the selector subtitle."
 
 [[assert.normalize_replace]]
-pattern = '\n {6}\[x\] pig-login *'
+pattern = '\n {6}\[x\] ompig-login *'
 with    = ""
-reason = "D2: PiG's built-in pig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
+reason = "D2: Ompig's built-in ompig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."

@@ -14,7 +14,7 @@ func TestCancellableLoaderDisposeParity(t *testing.T) {
 	loader := NewCancellableLoader(nil, nil, nil, "working", nil)
 	aborts := 0
 	loader.OnAbort = func() { aborts++ }
-	// Pi's constructor starts the animation (setIndicator calls start); Pig's frames are driven by the host's Tick, or by Start, so the probe starts it.
+	// Pi's constructor starts the animation (setIndicator calls start); Ompig's frames are driven by the host's Tick, or by Start, so the probe starts it.
 	loader.Start()
 	render := func() string { return strings.Join(loader.Render(40), "\n") }
 	first := render()

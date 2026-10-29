@@ -3,7 +3,7 @@ package packagemanager
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/src/core/resource-loader.ts describePackageInstallFailure and formatPackageInstallWarning (Pi 6dfb54678).

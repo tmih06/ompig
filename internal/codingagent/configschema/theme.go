@@ -1,6 +1,6 @@
 package configschema
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // Mirrors packages/coding-agent/src/modes/interactive/theme/theme-schema.ts.
 

@@ -4,7 +4,7 @@ Status: ABI 1, design, 2026-10-06. Applies to every Wasm bake-off lane ([BAKEOFF
 
 ## 1. Identity, not negotiation
 
-"ABI 1" names this revision of the document. At runtime the core exports `abi_id`, the hex sha256 of the normative tables in sections 4-8 (generated from the Go source of those tables, not hand-written), and the host compares it with the value it was built against. A mismatch is a startup error. There is no negotiation, feature probing or compatibility path: the core and its host shim ship in one bundle and upgrade together (AGENTS.md, Pig-owned format policy). Every change to a normative table changes `abi_id`; the document number changes when a human-visible revision is cut.
+"ABI 1" names this revision of the document. At runtime the core exports `abi_id`, the hex sha256 of the normative tables in sections 4-8 (generated from the Go source of those tables, not hand-written), and the host compares it with the value it was built against. A mismatch is a startup error. There is no negotiation, feature probing or compatibility path: the core and its host shim ship in one bundle and upgrade together (AGENTS.md, Ompig-owned format policy). Every change to a normative table changes `abi_id`; the document number changes when a human-visible revision is cut.
 
 ## 2. Starting point and what changed
 
@@ -71,23 +71,23 @@ Semantic randomness comes from one non-WASI import:
 
 | import | signature | meaning |
 |---|---|---|
-| `pig.uuidv7` | `(dst ptr)` | write the 36 ASCII bytes of one pi-ai `uuidv7()` value; called only for the provider document's `sessionId` (`src/harness/provider.ts:18`) |
+| `ompig.uuidv7` | `(dst ptr)` | write the 36 ASCII bytes of one pi-ai `uuidv7()` value; called only for the provider document's `sessionId` (`src/harness/provider.ts:18`) |
 
 Committed state the core does not hold comes from one more non-WASI import:
 
 | import | signature | meaning |
 |---|---|---|
-| `pig.read` | `(req ptr, reqLen u32, dst ptr, cap u32) -> u32` | run one read statement of `sql_table` synchronously and answer it in the call. `req` is `u16 sqlId, u8 nParams, value*` (a `read` of section 4.4 without its ID). The answer is `u32 nRows, u8 nCols, value{nRows*nCols}` (one answer of the rows event without its ID). The host writes it at `dst` and returns its length; when the length exceeds `cap` it writes nothing and the core calls again with a buffer of that length |
+| `ompig.read` | `(req ptr, reqLen u32, dst ptr, cap u32) -> u32` | run one read statement of `sql_table` synchronously and answer it in the call. `req` is `u16 sqlId, u8 nParams, value*` (a `read` of section 4.4 without its ID). The answer is `u32 nRows, u8 nCols, value{nRows*nCols}` (one answer of the rows event without its ID). The host writes it at `dst` and returns its length; when the length exceeds `cap` it writes nothing and the core calls again with a buffer of that length |
 
-The core holds the live state it opens (section 3) and reads anything else when a step needs it: a terminal task, a settled submission, a submission by request ID. Pi awaits those reads on Storage; the core models their await time with `hops` (section 5.3), so the read itself takes no host time the Session can observe: the host answers inside the call, from the store state every commit it applied so far leaves, and runs no other work in between. A record the core wrote is in its own state, so a read never needs a commit the host has not applied yet. Like `pig.uuidv7`, the call is a pure data source: the host must not call back into the core from it. A read that fails traps the step (section 4.6).
+The core holds the live state it opens (section 3) and reads anything else when a step needs it: a terminal task, a settled submission, a submission by request ID. Pi awaits those reads on Storage; the core models their await time with `hops` (section 5.3), so the read itself takes no host time the Session can observe: the host answers inside the call, from the store state every commit it applied so far leaves, and runs no other work in between. A record the core wrote is in its own state, so a read never needs a commit the host has not applied yet. Like `ompig.uuidv7`, the call is a pure data source: the host must not call back into the core from it. A read that fails traps the step (section 4.6).
 
-**Context reads.** Three statements of `sql_table` are not SQL: the host answers them from the contexts it derives for model requests (section 10.2), through the same `pig.read` call. Their texts name functions SQLite lacks (`pig_context_summary`, `pig_context_messages`, `pig_context_release`), so a host that ran one as SQL fails loudly. The core names a context by its bounds, the newest entry (`tail`) and the newest head marker at or below it, and never reads the transcript through `pig.read`: it asks the host for what request preparation needs.
+**Context reads.** Three statements of `sql_table` are not SQL: the host answers them from the contexts it derives for model requests (section 10.2), through the same `ompig.read` call. Their texts name functions SQLite lacks (`ompig_context_summary`, `ompig_context_messages`, `ompig_context_release`), so a host that ran one as SQL fails loudly. The core names a context by its bounds, the newest entry (`tail`) and the newest head marker at or below it, and never reads the transcript through `ompig.read`: it asks the host for what request preparation needs.
 
 | statement | parameters | answer |
 |---|---|---|
-| `pig_context_summary` | conversation id, `tail`, head marker id (0: none), the marker's `head`, 1 when the estimate is wanted else 0 | one row, one BLOB: JSON `{tail, head, entries?, system, tokens}`. `head` is the marker id or null. `entries` is `[[id, kind]...]` for every active entry and is present only with a marker. `system` is the context's system messages, in order. `tokens` is `estimateContext(view, [])` of `src/harness/compaction.ts` (0 when not wanted) |
-| `pig_context_messages` | conversation id, `tail`, marker id, the marker's `head` | one row, one BLOB: the JSON array of the context's model messages (what the `beforeRequest` hooks receive) |
-| `pig_context_release` | conversation id | no rows: the scheduler dropped the conversation's kept context (idle for `contextRetentionMs`), so the host drops its range |
+| `ompig_context_summary` | conversation id, `tail`, head marker id (0: none), the marker's `head`, 1 when the estimate is wanted else 0 | one row, one BLOB: JSON `{tail, head, entries?, system, tokens}`. `head` is the marker id or null. `entries` is `[[id, kind]...]` for every active entry and is present only with a marker. `system` is the context's system messages, in order. `tokens` is `estimateContext(view, [])` of `src/harness/compaction.ts` (0 when not wanted) |
+| `ompig_context_messages` | conversation id, `tail`, marker id, the marker's `head` | one row, one BLOB: the JSON array of the context's model messages (what the `beforeRequest` hooks receive) |
+| `ompig_context_release` | conversation id | no rows: the scheduler dropped the conversation's kept context (idle for `contextRetentionMs`), so the host drops its range |
 
 The host keeps the newest range each conversation reads (a read through an older entry leaves it, as Pi's scheduler does in `runtime.context`), so the model request that follows a summary read of the same bounds derives nothing again. A host that does not find `tail` in storage fails the read, and so does one whose stored marker has another `head` than the one the core named (the Go host also checks that the marker is the newest at or below `tail`). A core with no reader holds every record and derives the context itself. Compaction range selection and overflow classification still derive the view in the core, and only when the estimate crosses a threshold.
 
@@ -221,7 +221,7 @@ The host keeps a snapshot until the core says it holds no work for it. The core 
 | 9 | `wake` | JSON `{active, at?}`: the `Harness.wake()` value of a `harness`-mode core whose `open` payload sets `onWake`, published after each recomputation (`HarnessOptions.onWake`); the host delivers a changed value to its callback, and again after a throw, so it keeps the last value it delivered. With `onWake` the core arms no timer for sleeping tasks: the host arms its own alarm from `at` |
 | 10 | `origin_free` | `u32 n`, then `n` × `u32 origin` | the origins the core holds no work for any more (section 5.4): the host drops their async contexts. The host consumes it; it reaches no listener |
 
-Sidecar writes, including the `CREATE TABLE IF NOT EXISTS` on first use, are ordinary commits on `pig_*` statements outside Pi's `next_seq` sequence; their `seq` is `-1` (ADR D6).
+Sidecar writes, including the `CREATE TABLE IF NOT EXISTS` on first use, are ordinary commits on `ompig_*` statements outside Pi's `next_seq` sequence; their `seq` is `-1` (ADR D6).
 
 ## 8. Extension transaction channel
 
@@ -297,7 +297,7 @@ Reports must label every number produced with `bench_stub` (BAKEOFF.md section 4
 
 ### 10.1 Records the core does not hold
 
-The core keeps the index of a conversation's entries and holds the record text of its newest entries only. It reads any other record text from storage through `pig.read` (§4.2), and a host reads the records a recipe names, and derives the contexts its ranges name, from the same storage. No import or export exists for this: there is no host-held arena, `hist.copy` or `hist.drop`, and no capability flag; every host expands a `model_context` recipe.
+The core keeps the index of a conversation's entries and holds the record text of its newest entries only. It reads any other record text from storage through `ompig.read` (§4.2), and a host reads the records a recipe names, and derives the contexts its ranges name, from the same storage. No import or export exists for this: there is no host-held arena, `hist.copy` or `hist.drop`, and no capability flag; every host expands a `model_context` recipe.
 
 ### 10.2 Body recipe (the `model_context` effect payload)
 

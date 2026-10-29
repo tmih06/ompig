@@ -9,13 +9,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/installchange"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/installchange"
 )
 
-// PiG's version of Pi 1.0.3's install change warning (#10439), D95. The tests change a real executable on disk: they
+// Ompig's version of Pi 1.0.3's install change warning (#10439), D95. The tests change a real executable on disk: they
 // build a small program, record it as the process's install, then replace or remove it.
 
 var (
@@ -27,7 +27,7 @@ var (
 func buildInstallProgram(t *testing.T) string {
 	t.Helper()
 	installProgramOnce.Do(func() {
-		dir, err := os.MkdirTemp("", "pig-install-change-")
+		dir, err := os.MkdirTemp("", "ompig-install-change-")
 		if err != nil {
 			installProgramErr = err.Error()
 			return
@@ -64,7 +64,7 @@ func installedProgram(t *testing.T) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	path := filepath.Join(t.TempDir(), "pig"+installExeSuffix())
+	path := filepath.Join(t.TempDir(), "ompig"+installExeSuffix())
 	if err := os.WriteFile(path, data, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -114,14 +114,14 @@ func chatText(m *InteractiveMode) string {
 	return strings.Join(strings.Fields(stripANSITest(strings.Join(m.chatContainer.Render(200), "\n"))), " ")
 }
 
-// installRemovedWarning is Pi's warning for a removed install (interactive-mode.ts maybeShowInstallChangeWarning, kind "removed") with pig's
+// installRemovedWarning is Pi's warning for a removed install (interactive-mode.ts maybeShowInstallChangeWarning, kind "removed") with ompig's
 // app name, and the restart sentence for output that is not a terminal. A replaced or removed executable shows it.
-const installRemovedWarning = "Warning: The pig installation this session runs from was removed or replaced. Features that load code on demand can fail until restart. Restart pig."
+const installRemovedWarning = "Warning: The ompig installation this session runs from was removed or replaced. Features that load code on demand can fail until restart. Restart ompig."
 
 // cellsPrunedWarning is the same warning for a pruned extension cell or runtime file (D95).
-const cellsPrunedWarning = "Warning: The pig extension files this session runs from were removed or replaced. Features that load code on demand can fail until restart. Restart pig."
+const cellsPrunedWarning = "Warning: The ompig extension files this session runs from were removed or replaced. Features that load code on demand can fail until restart. Restart ompig."
 
-// outputNotATerminal makes the restart sentence `Restart pig.`, whatever the test's own stdout is.
+// outputNotATerminal makes the restart sentence `Restart ompig.`, whatever the test's own stdout is.
 func outputNotATerminal(t *testing.T) {
 	t.Helper()
 	previous := stdoutIsTTY
@@ -223,7 +223,7 @@ func TestInstallChangeWarningRestartCommand(t *testing.T) {
 		removeInstall(t, path)
 		m.showError("failed")
 		id := m.currentSession().ID()
-		want := "Features that load code on demand can fail until restart. Restart with `pig --session " + id + "` to continue this session."
+		want := "Features that load code on demand can fail until restart. Restart with `ompig --session " + id + "` to continue this session."
 		if !strings.Contains(chatText(m), want) {
 			t.Fatalf("restart sentence missing %q:\n%s", want, chatText(m))
 		}
@@ -234,14 +234,14 @@ func TestInstallChangeWarningRestartCommand(t *testing.T) {
 		m := installChangeMode(t, installchange.NewTracker(path))
 		removeInstall(t, path)
 		m.showError("failed")
-		want := "Features that load code on demand can fail until restart. Restart pig."
+		want := "Features that load code on demand can fail until restart. Restart ompig."
 		if !strings.Contains(chatText(m), want) {
 			t.Fatalf("restart sentence missing %q:\n%s", want, chatText(m))
 		}
 	})
 }
 
-// An extension cell or runtime file that another pig's cache prune removed shows the warning when the failure is shown.
+// An extension cell or runtime file that another ompig's cache prune removed shows the warning when the failure is shown.
 func TestInstallChangeWarningWhenACellFileIsMissing(t *testing.T) {
 	for _, show := range []struct {
 		name string

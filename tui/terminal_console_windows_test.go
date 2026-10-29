@@ -19,15 +19,15 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
-const consoleReadResultEnv = "PIG_TUI_CONSOLE_READ_RESULT"
+const consoleReadResultEnv = "OMPIG_TUI_CONSOLE_READ_RESULT"
 
 // Pi 0.87.1 binds undo to Ctrl+Z on win32, and Node's TTY delivers Ctrl+Z
 // (0x1A) from the console as a key. ReadInput must deliver it too. Reading the
 // console through os.File.Read reported a Ctrl+Z at the start of a read as end
-// of file, which ended pig's interactive input loop with "error: EOF".
+// of file, which ended ompig's interactive input loop with "error: EOF".
 func TestReadInputDeliversCtrlZFromTheConsole(t *testing.T) {
 	if result := os.Getenv(consoleReadResultEnv); result != "" {
 		readConsoleUntil(t, result, 'b')
@@ -79,7 +79,7 @@ func TestConsoleInputJoinsSurrogatesAcrossReads(t *testing.T) {
 	}
 }
 
-const consoleNegotiationResultEnv = "PIG_TUI_CONSOLE_NEGOTIATION_RESULT"
+const consoleNegotiationResultEnv = "OMPIG_TUI_CONSOLE_NEGOTIATION_RESULT"
 
 // Pi consumes a DA reply and returns to its event loop. No key or EOF is
 // necessary to stop the terminal after negotiation, including on ReadConsoleW.
@@ -147,7 +147,7 @@ func TestStartedTerminalStopsAfterConsoleNegotiation(t *testing.T) {
 	}
 }
 
-const consoleHandoffResultEnv = "PIG_TUI_CONSOLE_HANDOFF_RESULT"
+const consoleHandoffResultEnv = "OMPIG_TUI_CONSOLE_HANDOFF_RESULT"
 
 // One console read can return more input than one delivery holds, and input
 // the reader has already taken from the console does not signal the handle

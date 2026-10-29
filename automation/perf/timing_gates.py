@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Run every timing-gate test (automation/perf/timing-gates.json) as a blocking gate, one package at a time.
 
-Pull-request CI sets PIG_PERF_TIMING_REPORT_ONLY=1 so a timing gate warns instead of failing (internal/testenv.TimingGate). This is the release perf run for quiet pinned hardware: the variable is removed, so a missed bar fails, and a gate that did not run or skipped fails too.
+Pull-request CI sets OMPIG_PERF_TIMING_REPORT_ONLY=1 so a timing gate warns instead of failing (internal/testenv.TimingGate). This is the release perf run for quiet pinned hardware: the variable is removed, so a missed bar fails, and a gate that did not run or skipped fails too.
 """
 import json
 import os
@@ -16,9 +16,9 @@ GOOS = {"darwin": "darwin", "linux": "linux", "win32": "windows"}.get(sys.platfo
 
 
 def main():
-    env = {k: v for k, v in os.environ.items() if k != "PIG_PERF_TIMING_REPORT_ONLY"}
-    # PIG_SERIAL_TIMING enables the ratio gates that skip beside parallel tests; SESSIONSCALE_GATE the 300 MB session-scale gates.
-    env.update(PIG_SERIAL_TIMING="1", SESSIONSCALE_GATE="1")
+    env = {k: v for k, v in os.environ.items() if k != "OMPIG_PERF_TIMING_REPORT_ONLY"}
+    # OMPIG_SERIAL_TIMING enables the ratio gates that skip beside parallel tests; SESSIONSCALE_GATE the 300 MB session-scale gates.
+    env.update(OMPIG_SERIAL_TIMING="1", SESSIONSCALE_GATE="1")
     failed = False
     for entry in json.loads((ROOT / "automation/perf/timing-gates.json").read_text()):
         if entry.get("goos", GOOS) != GOOS:

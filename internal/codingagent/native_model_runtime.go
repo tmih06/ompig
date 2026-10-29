@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 type registryModelsStore struct{ registry *ModelRegistry }
@@ -149,7 +149,7 @@ func mergeProviderConfigInput(previous *ProviderConfigInput, input ProviderConfi
 	if input.BaseURL != "" {
 		merged.BaseURL = input.BaseURL
 	}
-	// pig divergence (D203): a re-registration's empty apiKey keeps the earlier key; Pi's merge replaces it with "" (it keeps the earlier value only for undefined, model-runtime.ts registerProvider).
+	// ompig divergence (D203): a re-registration's empty apiKey keeps the earlier key; Pi's merge replaces it with "" (it keeps the earlier value only for undefined, model-runtime.ts registerProvider).
 	if input.APIKey != "" {
 		merged.APIKey = input.APIKey
 	}
@@ -180,7 +180,7 @@ func mergeProviderConfigInput(previous *ProviderConfigInput, input ProviderConfi
 	if input.RefreshModels != nil {
 		merged.RefreshModels = input.RefreshModels
 	}
-	// pig additive (D36): Pi merges a re-registration's defined values and keeps the undefined ones (model-runtime.ts:921-933); an omitted (false) opt-in keeps the earlier one, as the fields above keep theirs.
+	// ompig additive (D36): Pi merges a re-registration's defined values and keeps the undefined ones (model-runtime.ts:921-933); an omitted (false) opt-in keeps the earlier one, as the fields above keep theirs.
 	merged.Insecure = merged.Insecure || input.Insecure
 	return merged
 }

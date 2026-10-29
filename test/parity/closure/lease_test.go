@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 // behaviorBundle builds one open behavior root with an origin pin (carrying a
@@ -14,7 +14,7 @@ import (
 func behaviorBundle(snapshot *Snapshot, name, boundary, writePath string) []Record {
 	h := func(value string) string { return HashBytes([]byte(name + value)) }
 	originPin := &Pin{Kind: KindPin, ID: "pin:" + name + ":origin", SnapshotID: snapshot.ID, Repository: "upstream", Commit: snapshot.UpstreamCommit, Path: "packages/x/" + name + ".ts", SemanticID: boundary, StartLine: 1, EndLine: 1, QuoteHash: h("q")}
-	prodPin := &Pin{Kind: KindPin, ID: "pin:" + name + ":prod", SnapshotID: snapshot.ID, Repository: "pig", Commit: snapshot.TargetCommit, Path: writePath, SemanticID: "sym." + name, StartLine: 1, EndLine: 1, QuoteHash: h("p"), APIHash: h("a"), BodyHash: h("b")}
+	prodPin := &Pin{Kind: KindPin, ID: "pin:" + name + ":prod", SnapshotID: snapshot.ID, Repository: "ompig", Commit: snapshot.TargetCommit, Path: writePath, SemanticID: "sym." + name, StartLine: 1, EndLine: 1, QuoteHash: h("p"), APIHash: h("a"), BodyHash: h("b")}
 	target := &Target{Kind: KindTarget, ID: "target:" + name, SnapshotID: snapshot.ID, PinIDs: []string{prodPin.ID}, Language: "go", Symbol: "sym." + name}
 	behavior := &Behavior{Kind: KindBehavior, ID: "behavior:" + name, Name: name, OriginPinIDs: []string{originPin.ID}, Profile: "application"}
 	facet := &Facet{Kind: KindFacet, ID: "facet:" + name, Name: "wire"}

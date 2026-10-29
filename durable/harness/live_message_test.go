@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // live.ts:51 types the in-flight partial as JsonRepresentation<AssistantMessage>: LiveGeneration.Message is the AssistantMessage itself, so the

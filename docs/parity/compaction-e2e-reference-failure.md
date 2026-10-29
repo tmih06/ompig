@@ -2,7 +2,7 @@
 
 The case at Pi 0.87.1 `packages/coding-agent/test/agent-session-compaction.test.ts:84-107` expects `session.messages[0].role` to be `compactionSummary` at line 107. The pinned implementation instead saves a system checkpoint in `packages/coding-agent/src/core/session-manager.ts:1268-1281` and projects it before the summary at lines 461-463. The newer Session suite explicitly expects `system` followed by `compactionSummary` at `packages/coding-agent/test/suite/agent-session-compaction.test.ts:185-186`.
 
-The lane lead approves the pinned implementation as the oracle: **upstream test expectation disagrees with the pinned implementation; PiG matches the implementation**. The Go port asserts the system checkpoint followed by the compaction summary and retains the original nonempty-summary, positive-token, and nonempty-message assertions. It does not filter system messages. This is not a divergence or a designed-out case. All five cases in the E2E file are ported.
+The lane lead approves the pinned implementation as the oracle: **upstream test expectation disagrees with the pinned implementation; Ompig matches the implementation**. The Go port asserts the system checkpoint followed by the compaction summary and retains the original nonempty-summary, positive-token, and nonempty-message assertions. It does not filter system messages. This is not a divergence or a designed-out case. All five cases in the E2E file are ported.
 
 ## Reference probe
 

@@ -1801,7 +1801,7 @@
   "evidence": [
    "test:ai/models_collection_upstream_test.go#TestModelsResolvedEnvironmentAndRequestKeyUpstream"
   ],
-  "rationale": "ApiStreamOptions & ModelsRequestTransforms is the Go StreamOptions (one struct for every API; TransformHeaders is a field). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsApiStreamOptions (identical shape and members)."
+  "rationale": "ApiStreamOptions & ModelsRequestTransforms is the Go StreamOptions (one struct for every API; TransformHeaders is a field). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsApiStreamOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1816,7 +1816,7 @@
   "evidence": [
    "test:ai/models_collection_upstream_test.go#TestModelsResolvedEnvironmentAndRequestKeyUpstream"
   ],
-  "rationale": "ApiStreamOptions & ModelsRequestTransforms is the Go StreamOptions (one struct for every API; TransformHeaders is a field). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsApiStreamOptions (identical shape and members)."
+  "rationale": "ApiStreamOptions & ModelsRequestTransforms is the Go StreamOptions (one struct for every API; TransformHeaders is a field). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsApiStreamOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1831,7 +1831,7 @@
   "evidence": [
    "test:ai/classifier_models_upstream_test.go#TestClassifierModelsUpstream"
   ],
-  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsClassifierOptions (identical shape and members)."
+  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsClassifierOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1846,7 +1846,7 @@
   "evidence": [
    "test:ai/classifier_models_upstream_test.go#TestClassifierModelsUpstream"
   ],
-  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsClassifierOptions (identical shape and members)."
+  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsClassifierOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1861,7 +1861,7 @@
   "evidence": [
    "test:ai/faux_deferred_models_upstream_test.go#TestFauxModelsDeferredFailureAndCancellationUpstream"
   ],
-  "rationale": "DeferredCancelOptions is an alias of StreamOptions, which carries TransformHeaders. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredCancelOptions (identical shape and members)."
+  "rationale": "DeferredCancelOptions is an alias of StreamOptions, which carries TransformHeaders. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredCancelOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1876,7 +1876,7 @@
   "evidence": [
    "test:ai/faux_deferred_models_upstream_test.go#TestFauxModelsDeferredFailureAndCancellationUpstream"
   ],
-  "rationale": "DeferredCancelOptions is an alias of StreamOptions, which carries TransformHeaders. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredCancelOptions (identical shape and members)."
+  "rationale": "DeferredCancelOptions is an alias of StreamOptions, which carries TransformHeaders. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredCancelOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1891,7 +1891,7 @@
   "evidence": [
    "test:ai/models_collection_upstream_test.go#TestModelsDeferredResolvedRequestOptionsUpstream"
   ],
-  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredFetchOptions (identical shape and members)."
+  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredFetchOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1906,7 +1906,7 @@
   "evidence": [
    "test:ai/models_collection_upstream_test.go#TestModelsDeferredResolvedRequestOptionsUpstream"
   ],
-  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredFetchOptions (identical shape and members)."
+  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsDeferredFetchOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -1922,7 +1922,7 @@
    "test:ai/models_runtime_basic_upstream_test.go#TestModelsRuntimeBasicUpstream",
    "test:ai/models_runtime_auth_upstream_test.go#TestModelsRuntimeAuthUpstream"
   ],
-  "rationale": "The six upstream string literals are the six ModelsError* constants. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsErrorCode (identical shape and members)."
+  "rationale": "The six upstream string literals are the six ModelsError* constants. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsErrorCode (identical shape and members)."
  },
  {
   "ids": [
@@ -1938,7 +1938,7 @@
    "test:ai/models_runtime_basic_upstream_test.go#TestModelsRuntimeBasicUpstream",
    "test:ai/models_runtime_auth_upstream_test.go#TestModelsRuntimeAuthUpstream"
   ],
-  "rationale": "The six upstream string literals are the six ModelsError* constants. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsErrorCode (identical shape and members)."
+  "rationale": "The six upstream string literals are the six ModelsError* constants. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsErrorCode (identical shape and members)."
  },
  {
   "ids": [
@@ -1994,7 +1994,7 @@
   "evidence": [
    "test:ai/models_runtime_refresh_upstream_test.go#TestModelsRuntimeRefreshUpstream"
   ],
-  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRefreshOptions (identical shape and members).",
+  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRefreshOptions (identical shape and members).",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; there is no detached goroutine.",
   "properties": {
    "allowNetwork": {
@@ -2007,7 +2007,7 @@
     "production": [
      "call:internal/codingagent/native_model_runtime.go#ModelRegistry.refreshNativeModels"
     ],
-    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    },
    "force": {
     "targets": [
@@ -2019,7 +2019,7 @@
     "production": [
      "call:coding/cli/package_model_catalogs.go#refreshModelCatalogs"
     ],
-    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    },
    "providers": {
     "targets": [
@@ -2031,7 +2031,7 @@
     "production": [
      "call:internal/codingagent/native_credential_operations.go#ModelRegistry.synchronizeCredentialState"
     ],
-    "rationale": "Pi refreshes the one provider whose credential changed with providers: [providerId] (model-runtime.ts:602); synchronizeCredentialState does the same. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Pi refreshes the one provider whose credential changed with providers: [providerId] (model-runtime.ts:602); synchronizeCredentialState does the same. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    },
    "signal": {
     "targets": [
@@ -2044,7 +2044,7 @@
     "production": [
      "call:internal/codingagent/native_model_runtime.go#ModelRegistry.refreshNativeModels"
     ],
-    "rationale": "AbortSignal is the context.Context first argument of Models.Refresh; it is not a field of ModelsRefreshOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "AbortSignal is the context.Context first argument of Models.Refresh; it is not a field of ModelsRefreshOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    }
   }
  },
@@ -2061,7 +2061,7 @@
   "evidence": [
    "test:ai/models_runtime_refresh_upstream_test.go#TestModelsRuntimeRefreshUpstream"
   ],
-  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRefreshOptions (identical shape and members).",
+  "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRefreshOptions (identical shape and members).",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; there is no detached goroutine.",
   "properties": {
    "allowNetwork": {
@@ -2074,7 +2074,7 @@
     "production": [
      "call:internal/codingagent/native_model_runtime.go#ModelRegistry.refreshNativeModels"
     ],
-    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    },
    "force": {
     "targets": [
@@ -2086,7 +2086,7 @@
     "production": [
      "call:coding/cli/package_model_catalogs.go#refreshModelCatalogs"
     ],
-    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    },
    "providers": {
     "targets": [
@@ -2098,7 +2098,7 @@
     "production": [
      "call:internal/codingagent/native_credential_operations.go#ModelRegistry.synchronizeCredentialState"
     ],
-    "rationale": "Pi refreshes the one provider whose credential changed with providers: [providerId] (model-runtime.ts:602); synchronizeCredentialState does the same. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Pi refreshes the one provider whose credential changed with providers: [providerId] (model-runtime.ts:602); synchronizeCredentialState does the same. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    },
    "signal": {
     "targets": [
@@ -2111,7 +2111,7 @@
     "production": [
      "call:internal/codingagent/native_model_runtime.go#ModelRegistry.refreshNativeModels"
     ],
-    "rationale": "AbortSignal is the context.Context first argument of Models.Refresh; it is not a field of ModelsRefreshOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "AbortSignal is the context.Context first argument of Models.Refresh; it is not a field of ModelsRefreshOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    }
   }
  },
@@ -2172,7 +2172,7 @@
    "test:ai/models_collection_upstream_test.go#TestModelsResolvedEnvironmentAndRequestKeyUpstream",
    "test:ai/models_typed_upstream_test.go#TestModelTypesUpstream"
   ],
-  "rationale": "The upstream mixin is flattened into the Go option structs that carry TransformHeaders, because Go has no intersection types. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRequestTransforms (identical shape and members).",
+  "rationale": "The upstream mixin is flattened into the Go option structs that carry TransformHeaders, because Go has no intersection types. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRequestTransforms (identical shape and members).",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; there is no detached goroutine.",
   "properties": {
    "transformHeaders": {
@@ -2186,7 +2186,7 @@
     "production": [
      "call:coding/services.go#ModelRuntime.prepareRequest"
     ],
-    "rationale": "Go carries the field on StreamOptions, ModelsImagesOptions and ModelsClassifierOptions; Models.applyAuth runs it once after the configured, auth and request headers are merged and clears it before dispatch (models.ts:848-870). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Go carries the field on StreamOptions, ModelsImagesOptions and ModelsClassifierOptions; Models.applyAuth runs it once after the configured, auth and request headers are merged and clears it before dispatch (models.ts:848-870). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    }
   }
  },
@@ -2206,7 +2206,7 @@
    "test:ai/models_collection_upstream_test.go#TestModelsResolvedEnvironmentAndRequestKeyUpstream",
    "test:ai/models_typed_upstream_test.go#TestModelTypesUpstream"
   ],
-  "rationale": "The upstream mixin is flattened into the Go option structs that carry TransformHeaders, because Go has no intersection types. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRequestTransforms (identical shape and members).",
+  "rationale": "The upstream mixin is flattened into the Go option structs that carry TransformHeaders, because Go has no intersection types. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsRequestTransforms (identical shape and members).",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; there is no detached goroutine.",
   "properties": {
    "transformHeaders": {
@@ -2220,7 +2220,7 @@
     "production": [
      "call:coding/services.go#ModelRuntime.prepareRequest"
     ],
-    "rationale": "Go carries the field on StreamOptions, ModelsImagesOptions and ModelsClassifierOptions; Models.applyAuth runs it once after the configured, auth and request headers are merged and clears it before dispatch (models.ts:848-870). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
+    "rationale": "Go carries the field on StreamOptions, ModelsImagesOptions and ModelsClassifierOptions; Models.applyAuth runs it once after the configured, auth and request headers are merged and clears it before dispatch (models.ts:848-870). Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface."
    }
   }
  },
@@ -2237,7 +2237,7 @@
   "evidence": [
    "test:ai/models_runtime_basic_upstream_test.go#TestModelsRuntimeBasicUpstream"
   ],
-  "rationale": "SimpleStreamOptions & ModelsRequestTransforms is the Go StreamOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsSimpleStreamOptions (identical shape and members)."
+  "rationale": "SimpleStreamOptions & ModelsRequestTransforms is the Go StreamOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsSimpleStreamOptions (identical shape and members)."
  },
  {
   "ids": [
@@ -2252,7 +2252,7 @@
   "evidence": [
    "test:ai/models_runtime_basic_upstream_test.go#TestModelsRuntimeBasicUpstream"
   ],
-  "rationale": "SimpleStreamOptions & ModelsRequestTransforms is the Go StreamOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Pig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsSimpleStreamOptions (identical shape and members)."
+  "rationale": "SimpleStreamOptions & ModelsRequestTransforms is the Go StreamOptions. Re-reviewed against Pi 1.0.4: the owning source is unchanged since the 0.99.2 review except models.ts resolveRefreshCredential, which Ompig ports (ai/models_runtime_refresh.go resolveRefreshCredential); the diff touches no other interface. Re-export of ai/models#ModelsSimpleStreamOptions (identical shape and members)."
  },
  {
   "ids": [

@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // packages/coding-agent/src/modes/interactive/components/settings-selector.ts (SettingsConfig, SettingsCallbacks): the

@@ -104,9 +104,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/sts"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/sts/types"
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/tmih06/ompig/third_party/awssdk/service/sts"
+	"github.com/tmih06/ompig/third_party/awssdk/service/sts/types"
 )
 
 // StdinTokenProvider will prompt on stdout and read from stdin for a string value.

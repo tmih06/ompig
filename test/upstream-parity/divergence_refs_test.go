@@ -1,7 +1,7 @@
 // Cross-validates that every divergence number referenced in parity-gate
 // allowlists actually exists as a `## DN` heading in docs/parity/DIVERGENCES.md.
 //
-// Catches: typos like `"D9"` instead of `"D5"` in pigOnlyRunnerMethods
+// Catches: typos like `"D9"` instead of `"D5"` in ompigOnlyRunnerMethods
 // (or any future allowlist) silently passing the gate.
 //
 // Identified during the meta-F/B-pass (post-F/B-pass-2) review as Q1.
@@ -15,14 +15,14 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // divergenceHeaderRE matches `## D1 -` / `## D42 -` style headers.
 var divergenceHeaderRE = regexp.MustCompile(`^## (D\d+) `)
 
 // divergenceRefRE matches a bare divergence reference (`D42`). Values in
-// pigOnlyRunnerMethods that are not divergence references (e.g. SDK-surface
+// ompigOnlyRunnerMethods that are not divergence references (e.g. SDK-surface
 // rationales for language-surface accessor additions) do not resolve to a
 // docs/parity/DIVERGENCES.md section and are skipped by the ref-resolution gate.
 var divergenceRefRE = regexp.MustCompile(`^D\d+$`)
@@ -86,23 +86,23 @@ func loadAllLedgerNumbers(t *testing.T) map[string]bool {
 }
 
 // TestRunnerParityGate_DivergenceRefsResolve enforces that every
-// divergence number cited in `pigOnlyRunnerMethods` (in
+// divergence number cited in `ompigOnlyRunnerMethods` (in
 // runner_method_parity_test.go) actually exists in docs/parity/DIVERGENCES.md.
 // Values that are SDK-surface rationales rather than `D<N>` references
 // (language-surface accessor additions, which the docs/parity/DIVERGENCES.md header
 // excludes) are not divergence citations and are skipped.
 //
-// Without this gate, a typo like `"D9"` in pigOnlyRunnerMethods would
+// Without this gate, a typo like `"D9"` in ompigOnlyRunnerMethods would
 // silently pass: the parity gate only checks "is this method allowed?",
 // not "does the cited divergence exist?". This closes that loop.
 func TestRunnerParityGate_DivergenceRefsResolve(t *testing.T) {
 	known := loadDivergenceNumbers(t)
-	for method, ref := range pigOnlyRunnerMethods {
+	for method, ref := range ompigOnlyRunnerMethods {
 		if !divergenceRefRE.MatchString(ref) {
 			continue // SDK-surface rationale, not a divergence reference
 		}
 		if !known[ref] {
-			t.Errorf("pigOnlyRunnerMethods[%q] = %q, but no `## %s` section exists in docs/parity/DIVERGENCES.md. "+
+			t.Errorf("ompigOnlyRunnerMethods[%q] = %q, but no `## %s` section exists in docs/parity/DIVERGENCES.md. "+
 				"Either fix the typo or add the divergence section.",
 				method, ref, ref)
 		}

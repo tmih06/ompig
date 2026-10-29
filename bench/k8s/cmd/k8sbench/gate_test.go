@@ -27,7 +27,7 @@ type synth struct {
 	fingerprint string
 	// usage replaces every cpu line's usageUsec, as a pod that could not read the cgroup's usage wrote it.
 	usage *float64
-	// secondPig adds a second pig target, pig-tinygo, 10% slower than pig, with this rule ("" for the default).
+	// secondPig adds a second ompig target, ompig-tinygo, 10% slower than ompig, with this rule ("" for the default).
 	secondPig  bool
 	secondRule string
 	// retained is each target's retained memory (MiB) per sample; a target without an entry reports none.
@@ -43,13 +43,13 @@ type synth struct {
 }
 
 var synthTurns = map[string][]float64{
-	"pig":        {90, 80, 81, 79, 82, 80, 85, 83, 78, 84},
-	"pig-tinygo": {99, 88, 89.1, 86.9, 90.2, 88, 93.5, 91.3, 85.8, 92.4},
-	"pi":         {140, 75, 72, 71, 86, 91, 75, 77, 96, 140},
+	"ompig":        {90, 80, 81, 79, 82, 80, 85, 83, 78, 84},
+	"ompig-tinygo": {99, 88, 89.1, 86.9, 90.2, 88, 93.5, 91.3, 85.8, 92.4},
+	"pi":           {140, 75, 72, 71, 86, 91, 75, 77, 96, 140},
 }
 
 // synthCPU is each target's process CPU per turn (ms) at scale 1; open CPU is 10 ms.
-var synthCPU = map[string]float64{"pig": 40, "pig-tinygo": 44, "pi": 60}
+var synthCPU = map[string]float64{"ompig": 40, "ompig-tinygo": 44, "pi": 60}
 
 func (o synth) text(t *testing.T) string {
 	t.Helper()
@@ -63,15 +63,15 @@ func (o synth) text(t *testing.T) string {
 	facts.set("node", o.node)
 	facts.set("cpuSet", o.cpuSet)
 	facts.set("rounds", o.runs)
-	targets := []string{"pig", "pi"}
+	targets := []string{"ompig", "pi"}
 	if o.secondPig {
 		var spec profile
 		facts.get("profileSpec", &spec)
-		tg, _ := spec.byName("pig")
-		tg.Name, tg.Rule = "pig-tinygo", o.secondRule
+		tg, _ := spec.byName("ompig")
+		tg.Name, tg.Rule = "ompig-tinygo", o.secondRule
 		spec.Targets = append(spec.Targets[:1], append([]target{tg}, spec.Targets[1:]...)...)
 		facts.set("profileSpec", spec)
-		targets = []string{"pig", "pig-tinygo", "pi"}
+		targets = []string{"ompig", "ompig-tinygo", "pi"}
 	}
 	if o.metrics != nil {
 		var spec profile
@@ -392,7 +392,7 @@ func TestSpreadTakesTheMedianOverNodes(t *testing.T) {
 	line := objectFrom(t, strings.TrimSpace(stdout.String()))
 	values := map[string]float64{}
 	line.get("values", &values)
-	// node-a's pig warm p50 is 81, node-c's 97.2, node-b's 121.5: the median is node-c's.
+	// node-a's ompig warm p50 is 81, node-c's 97.2, node-b's 121.5: the median is node-c's.
 	var warmTurns int
 	line.get("warmTurns", &warmTurns)
 	if values["warm"] != 97.2 || values["cpuWarm"] != 48 || values["piCpuWarm"] != 72 || warmTurns != 3*6*9 {
@@ -525,11 +525,11 @@ func TestNodeTypesMustAgree(t *testing.T) {
 	// The analysis refuses both on its own path: one pod whose targets ran under two GOMAXPROCS values, and a spread
 	// whose nodes differ.
 	gmp := func(n float64) map[string]map[string]float64 {
-		return map[string]map[string]float64{"pig": {"gomaxprocs": n}, "pi": {"gomaxprocs": n}}
+		return map[string]map[string]float64{"ompig": {"gomaxprocs": n}, "pi": {"gomaxprocs": n}}
 	}
 	out := t.TempDir()
 	pod := filepath.Join(out, "pod")
-	synth{mode: modeCompare, node: "node-a", cpuSet: "shared", runs: 6, extra: map[string]map[string]float64{"pig": {"gomaxprocs": 2}, "pi": {"gomaxprocs": 4}}}.write(t, pod)
+	synth{mode: modeCompare, node: "node-a", cpuSet: "shared", runs: 6, extra: map[string]map[string]float64{"ompig": {"gomaxprocs": 2}, "pi": {"gomaxprocs": 4}}}.write(t, pod)
 	if err := analyze(pod, out, flagsGate(gateAuto, 0.05, ""), &bytes.Buffer{}, time.Unix(0, 0)); err == nil || !strings.Contains(err.Error(), "different node types or GOMAXPROCS") {
 		t.Errorf("one pod, two GOMAXPROCS values: %v", err)
 	}
@@ -639,7 +639,7 @@ func TestCompareJudgesTheCalibrationOfItsOwnNodes(t *testing.T) {
 	}
 }
 
-// A profile with several pig targets measures them in one session and writes one tracker line per pig target and
+// A profile with several ompig targets measures them in one session and writes one tracker line per ompig target and
 // size, each with its own rule, rolling history and baseline.
 func TestSeveralPigTargets(t *testing.T) {
 	out := t.TempDir()
@@ -651,9 +651,9 @@ func TestSeveralPigTargets(t *testing.T) {
 	}
 	lines := strings.Split(strings.TrimSpace(stdout.String()), "\n")
 	if len(lines) != 2 {
-		t.Fatalf("want one line per pig target:\n%s", stdout.String())
+		t.Fatalf("want one line per ompig target:\n%s", stdout.String())
 	}
-	want := map[string][2]float64{"native-pig": {81, 40}, "native-pig-tinygo": {89.1, 44}}
+	want := map[string][2]float64{"native-ompig": {81, 40}, "native-ompig-tinygo": {89.1, 44}}
 	for _, text := range lines {
 		line := objectFrom(t, text)
 		values := map[string]float64{}
@@ -663,7 +663,7 @@ func TestSeveralPigTargets(t *testing.T) {
 			t.Errorf("line %s: %v", line.str("rule"), values)
 		}
 		target := strings.TrimPrefix(line.str("rule"), "native-")
-		if !strings.Contains(line.str("summary"), "Rule "+line.str("rule")+",") || !strings.Contains(line.str("summary"), "PiG "+target+" vs pi same run") {
+		if !strings.Contains(line.str("summary"), "Rule "+line.str("rule")+",") || !strings.Contains(line.str("summary"), "Ompig "+target+" vs pi same run") {
 			t.Errorf("summary: %s", line.str("summary"))
 		}
 		delete(want, line.str("rule"))
@@ -674,7 +674,7 @@ func TestSeveralPigTargets(t *testing.T) {
 	dir2 := filepath.Join(out, "run2")
 	synth{mode: modeCompare, node: "node-a", cpuSet: "shared", runs: 6, turnCPU: true, secondPig: true}.write(t, dir2)
 	baseline := filepath.Join(out, "baseline.json")
-	if err := os.WriteFile(baseline, []byte(`{"rule":"native-pig-tinygo","core":"base","warm":99}`), 0o644); err != nil {
+	if err := os.WriteFile(baseline, []byte(`{"rule":"native-ompig-tinygo","core":"base","warm":99}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	empty, gate, maxCV := "", gateAuto, 0.05
@@ -684,7 +684,7 @@ func TestSeveralPigTargets(t *testing.T) {
 		t.Fatal(err)
 	}
 	if n := strings.Count(strings.TrimSpace(stdout.String()), "\n") + 1; n != 2 {
-		t.Fatalf("second run: %d lines, want one per pig target:\n%s", n, stdout.String())
+		t.Fatalf("second run: %d lines, want one per ompig target:\n%s", n, stdout.String())
 	}
 	for text := range strings.SplitSeq(strings.TrimSpace(stdout.String()), "\n") {
 		line := objectFrom(t, text)
@@ -692,7 +692,7 @@ func TestSeveralPigTargets(t *testing.T) {
 		line.get("compare", &cmp)
 		delta := map[string]string{}
 		line.get("delta", &delta)
-		tinygo := line.str("rule") == "native-pig-tinygo"
+		tinygo := line.str("rule") == "native-ompig-tinygo"
 		if cmp["warm"].NRolling != 2 || (delta["warm"] == "-10%") != tinygo || (line.str("baseline") == "base") != tinygo {
 			t.Errorf("%s: rolling %d, delta %s, baseline %s", line.str("rule"), cmp["warm"].NRolling, delta["warm"], line.str("baseline"))
 		}
@@ -703,12 +703,12 @@ func TestSeveralPigTargets(t *testing.T) {
 		t.Fatal(err)
 	}
 	a.baseline = &ruleless
-	if err := analyze(dir, out, a, &bytes.Buffer{}, time.Unix(2, 0)); err == nil || !strings.Contains(err.Error(), "has no rule; with 2 pig targets") {
-		t.Errorf("a rule-less baseline is ambiguous with two pig targets: %v", err)
+	if err := analyze(dir, out, a, &bytes.Buffer{}, time.Unix(2, 0)); err == nil || !strings.Contains(err.Error(), "has no rule; with 2 ompig targets") {
+		t.Errorf("a rule-less baseline is ambiguous with two ompig targets: %v", err)
 	}
 }
 
-// An explicit rule names a pig target's tracker line.
+// An explicit rule names a ompig target's tracker line.
 func TestPigTargetRule(t *testing.T) {
 	out := t.TempDir()
 	dir := filepath.Join(out, "run1")
@@ -717,7 +717,7 @@ func TestPigTargetRule(t *testing.T) {
 	if err := analyze(dir, out, flagsGate(gateAuto, 0.05, ""), &stdout, time.Unix(0, 0)); err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(stdout.String(), `"rule":"native-pig"`) || !strings.Contains(stdout.String(), `"rule":"core-tinygo"`) {
+	if !strings.Contains(stdout.String(), `"rule":"native-ompig"`) || !strings.Contains(stdout.String(), `"rule":"core-tinygo"`) {
 		t.Errorf("rules:\n%s", stdout.String())
 	}
 }
@@ -727,33 +727,33 @@ func TestProfileRoles(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	pig, _ := base.byName("pig")
+	ompig, _ := base.byName("ompig")
 	ref, _ := base.byName("pi")
 	with := func(ts ...target) *profile {
 		p := *base
 		p.Targets = ts
 		return &p
 	}
-	tinygo := pig
-	tinygo.Name = "pig-tinygo"
-	if p := with(pig, ref); p.validate() != nil || p.ruleOf(pig) != "native" {
-		t.Errorf("one pig target keeps the profile's rule: %v %s", p.validate(), p.ruleOf(pig))
+	tinygo := ompig
+	tinygo.Name = "ompig-tinygo"
+	if p := with(ompig, ref); p.validate() != nil || p.ruleOf(ompig) != "native" {
+		t.Errorf("one ompig target keeps the profile's rule: %v %s", p.validate(), p.ruleOf(ompig))
 	}
-	p := with(pig, tinygo, ref)
-	if err := p.validate(); err != nil || p.ruleOf(pig) != "native-pig" || p.ruleOf(tinygo) != "native-pig-tinygo" || !slices.Equal(sessionTargets(p, modeCompare), []string{"pig", "pig-tinygo", "pi"}) {
-		t.Errorf("two pig targets: %v %s %s %v", err, p.ruleOf(pig), p.ruleOf(tinygo), sessionTargets(p, modeCompare))
+	p := with(ompig, tinygo, ref)
+	if err := p.validate(); err != nil || p.ruleOf(ompig) != "native-ompig" || p.ruleOf(tinygo) != "native-ompig-tinygo" || !slices.Equal(sessionTargets(p, modeCompare), []string{"ompig", "ompig-tinygo", "pi"}) {
+		t.Errorf("two ompig targets: %v %s %s %v", err, p.ruleOf(ompig), p.ruleOf(tinygo), sessionTargets(p, modeCompare))
 	}
 	clash := tinygo
-	clash.Rule = "native-pig"
+	clash.Rule = "native-ompig"
 	refRule := ref
 	refRule.Rule = "x"
 	for name, c := range map[string]struct {
 		p    *profile
 		want string
 	}{
-		"no pig":      {with(ref), "at least one pig target"},
-		"shared rule": {with(pig, clash, ref), "share the rule native-pig"},
-		"ref rule":    {with(pig, refRule), "only a pig target has its own rule"},
+		"no ompig":    {with(ref), "at least one ompig target"},
+		"shared rule": {with(ompig, clash, ref), "share the rule native-ompig"},
+		"ref rule":    {with(ompig, refRule), "only a ompig target has its own rule"},
 	} {
 		if err := c.p.validate(); err == nil || !strings.Contains(err.Error(), c.want) {
 			t.Errorf("%s: %v", name, err)
@@ -761,21 +761,21 @@ func TestProfileRoles(t *testing.T) {
 	}
 }
 
-// Each -baseline file applies to exactly one tracker line: a file whose rule no pig target has, or a second file for
+// Each -baseline file applies to exactly one tracker line: a file whose rule no ompig target has, or a second file for
 // one rule, is refused instead of being dropped or overwriting the first, so a line never silently loses its deltas.
 func TestReadBaselines(t *testing.T) {
 	base, err := loadProfile("durable-native")
 	if err != nil {
 		t.Fatal(err)
 	}
-	pig, _ := base.byName("pig")
+	ompig, _ := base.byName("ompig")
 	ref, _ := base.byName("pi")
-	tinygo := pig
-	tinygo.Name = "pig-tinygo"
+	tinygo := ompig
+	tinygo.Name = "ompig-tinygo"
 	one := *base
-	one.Targets = []target{pig, ref}
+	one.Targets = []target{ompig, ref}
 	two := *base
-	two.Targets = []target{pig, tinygo, ref}
+	two.Targets = []target{ompig, tinygo, ref}
 	dir := t.TempDir()
 	file := func(name, text string) string {
 		path := filepath.Join(dir, name)
@@ -786,28 +786,28 @@ func TestReadBaselines(t *testing.T) {
 	}
 	ruleless := file("ruleless.json", `{"core":"a","warm":1}`)
 	native := file("native.json", `{"rule":"native","core":"b","warm":2}`)
-	pigLine := file("pig.json", `{"rule":"native-pig","core":"c","warm":3}`)
-	tinygoLine := file("tinygo.json", `{"rule":"native-pig-tinygo","core":"d","warm":4}`)
-	typo := file("typo.json", `{"rule":"native-pig-tinyg0","core":"e","warm":5}`)
+	ompigLine := file("ompig.json", `{"rule":"native-ompig","core":"c","warm":3}`)
+	tinygoLine := file("tinygo.json", `{"rule":"native-ompig-tinygo","core":"d","warm":4}`)
+	typo := file("typo.json", `{"rule":"native-ompig-tinyg0","core":"e","warm":5}`)
 
 	if got, err := readBaselines(ruleless, &one); err != nil || got["native"].str("core") != "a" || len(got) != 1 {
-		t.Errorf("a rule-less file belongs to the only pig target: %v %v", got, err)
+		t.Errorf("a rule-less file belongs to the only ompig target: %v %v", got, err)
 	}
 	if got, err := readBaselines(native, &one); err != nil || got["native"].str("core") != "b" {
-		t.Errorf("a file of the only pig target's rule: %v %v", got, err)
+		t.Errorf("a file of the only ompig target's rule: %v %v", got, err)
 	}
-	if got, err := readBaselines(pigLine+","+tinygoLine, &two); err != nil || got["native-pig"].str("core") != "c" || got["native-pig-tinygo"].str("core") != "d" || len(got) != 2 {
-		t.Errorf("one file per pig target: %v %v", got, err)
+	if got, err := readBaselines(ompigLine+","+tinygoLine, &two); err != nil || got["native-ompig"].str("core") != "c" || got["native-ompig-tinygo"].str("core") != "d" || len(got) != 2 {
+		t.Errorf("one file per ompig target: %v %v", got, err)
 	}
 	for name, c := range map[string]struct {
 		paths string
 		prof  *profile
 		want  string
 	}{
-		"unknown rule":       {pigLine + "," + typo, &two, "is for rule native-pig-tinyg0, which no pig target of profile durable-native has"},
-		"other profile rule": {pigLine, &one, "is for rule native-pig, which no pig target"},
-		"two for one rule":   {tinygoLine + "," + tinygoLine, &two, "names two files for rule native-pig-tinygo"},
-		"rule-less with two": {ruleless, &two, "has no rule; with 2 pig targets"},
+		"unknown rule":       {ompigLine + "," + typo, &two, "is for rule native-ompig-tinyg0, which no ompig target of profile durable-native has"},
+		"other profile rule": {ompigLine, &one, "is for rule native-ompig, which no ompig target"},
+		"two for one rule":   {tinygoLine + "," + tinygoLine, &two, "names two files for rule native-ompig-tinygo"},
+		"rule-less with two": {ruleless, &two, "has no rule; with 2 ompig targets"},
 		"two rule-less":      {ruleless + "," + ruleless, &one, "names two files for rule native"},
 	} {
 		if _, err := readBaselines(c.paths, c.prof); err == nil || !strings.Contains(err.Error(), c.want) {
@@ -823,13 +823,13 @@ func rssOf(rss map[string]float64, target string) float64 {
 	return 95
 }
 
-// The tracker compares PiG's peak resident memory with the reference's, as the median over the samples, converted from
+// The tracker compares Ompig's peak resident memory with the reference's, as the median over the samples, converted from
 // the workloads' MiB to track-row's MB (40 MiB is 41.9 MB); without it
 // on every sample of both targets there is no memory value.
 func TestTrackerComparesMemory(t *testing.T) {
 	out := t.TempDir()
 	dir := filepath.Join(out, "run1")
-	synth{mode: modeCompare, node: "node-a", cpuSet: "shared", runs: 6, rss: map[string]float64{"pig": 40, "pi": 90}}.write(t, dir)
+	synth{mode: modeCompare, node: "node-a", cpuSet: "shared", runs: 6, rss: map[string]float64{"ompig": 40, "pi": 90}}.write(t, dir)
 	var stdout bytes.Buffer
 	if err := analyze(dir, out, flagsGate(gateAuto, 0.05, ""), &stdout, time.Unix(0, 0)); err != nil {
 		t.Fatal(err)
@@ -858,7 +858,7 @@ func TestTrackerComparesMemory(t *testing.T) {
 // Either exists only when every sample of both targets reports it.
 func TestTrackerReportsRetainedMemoryAndGrowth(t *testing.T) {
 	out := t.TempDir()
-	extra := map[string]map[string]float64{"pig": {"retained": 20, "growthPerTurn": 0}, "pi": {"retained": 80, "growthPerTurn": 4096}}
+	extra := map[string]map[string]float64{"ompig": {"retained": 20, "growthPerTurn": 0}, "pi": {"retained": 80, "growthPerTurn": 4096}}
 	dir := filepath.Join(out, "run1")
 	synth{mode: modeCompare, node: "node-a", cpuSet: "shared", runs: 6, extra: extra}.write(t, dir)
 	var stdout bytes.Buffer
@@ -961,7 +961,7 @@ var longMetrics = []metric{{Name: "resumeMs", Label: "resume ms"}, {Name: "redra
 func TestTrackerReportsProfileMetrics(t *testing.T) {
 	out := t.TempDir()
 	at := func(tg string, i int) map[string]float64 {
-		if tg == "pig" {
+		if tg == "ompig" {
 			return map[string]float64{"resumeMs": 900 + float64(i%3), "redrawCpuMs": 50}
 		}
 		return map[string]float64{"resumeMs": 500 + float64(i%3), "redrawCpuMs": 80}
@@ -1062,12 +1062,12 @@ func TestGatedProfileMetricIsJudged(t *testing.T) {
 // A profile metric is the workload's own measure of the whole process, so the floor target's value is not subtracted.
 func TestProfileMetricIsNotNetOfTheFloor(t *testing.T) {
 	prof := &profile{Name: "p", Rule: "A", Metrics: []metric{{Name: "resumeMs", Label: "resume ms"}}, Targets: []target{
-		{Name: "pig", Role: rolePig, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"x"}},
+		{Name: "ompig", Role: rolePig, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"x"}},
 		{Name: "pi", Role: roleReference, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"x"}},
 		{Name: "empty", Role: roleFloor, Sample: []string{"x"}},
 	}}
 	log, err := parsePodLog(strings.NewReader(strings.Join([]string{
-		`{"t":"sample","target":"pig","turns":10,"open":10,"turn":[20,30,40],"resumeMs":900}`,
+		`{"t":"sample","target":"ompig","turns":10,"open":10,"turn":[20,30,40],"resumeMs":900}`,
 		`{"t":"sample","target":"pi","turns":10,"open":10,"turn":[30,50,60],"resumeMs":500}`,
 		`{"t":"sample","target":"empty","turns":10,"open":2,"turn":[3,5,7],"resumeMs":100}`,
 	}, "\n")))

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The grouped verifier must prebuild the same source each consumer builds
@@ -16,7 +16,7 @@ func TestFixtureBuildsExportDistinctGoSDKConsumers(t *testing.T) {
 	root := repoRoot(t)
 	bin := t.TempDir()
 	out := filepath.Join(t.TempDir(), "fixture output")
-	t.Setenv("PIG_TEST_FIXTURE_DIR", out)
+	t.Setenv("OMPIG_TEST_FIXTURE_DIR", out)
 	cargoTarget := filepath.Join(t.TempDir(), "cargo target")
 	t.Setenv("CARGO_TARGET_DIR", cargoTarget)
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
@@ -41,7 +41,7 @@ printf 'rust fixture\n' > "$CARGO_TARGET_DIR/release/rust-sdk-fixture"
 set -euo pipefail
 exports=$(./automation/ci/test-fixtures.sh --exports)
 eval "$exports"
-printf '%s\n' "$PIG_TEST_SDK_FIXTURE_BIN" "${PIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN:-}"
+printf '%s\n' "$OMPIG_TEST_SDK_FIXTURE_BIN" "${OMPIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN:-}"
 `)
 	cmd.Dir = root
 	output, err := cmd.Output()

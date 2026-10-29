@@ -17,9 +17,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 type runtimeTestProvider struct {
@@ -863,7 +863,7 @@ func TestProjectionPreservesCompleteUpstreamCompat(t *testing.T) {
 }
 
 func TestRegistryFindDoesNotPublishResolvedRequestHeaders(t *testing.T) {
-	t.Setenv("PIG_INDEPENDENT_SECRET", "do-not-publish")
+	t.Setenv("OMPIG_INDEPENDENT_SECRET", "do-not-publish")
 	t.Setenv("OPENAI_API_KEY", "test-key")
 	var authorization string
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
@@ -873,7 +873,7 @@ func TestRegistryFindDoesNotPublishResolvedRequestHeaders(t *testing.T) {
 	}))
 	defer server.Close()
 	agentDir := t.TempDir()
-	config := fmt.Sprintf(`{"providers":{"openai":{"baseUrl":%q,"headers":{"Authorization":"Bearer $PIG_INDEPENDENT_SECRET"}}}}`, server.URL)
+	config := fmt.Sprintf(`{"providers":{"openai":{"baseUrl":%q,"headers":{"Authorization":"Bearer $OMPIG_INDEPENDENT_SECRET"}}}}`, server.URL)
 	if err := os.WriteFile(filepath.Join(agentDir, "models.json"), []byte(config), 0o644); err != nil {
 		t.Fatal(err)
 	}

@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
 )
 
 // TestJsonlPublicationFailuresNameTheFailedStep ports storage.ts:292, :297 and :301: a failure while publishing a commit poisons the storage with

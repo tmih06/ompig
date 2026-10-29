@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream createAgentSessionRuntime keeps the factory's { session, services } as the runtime's current pair, and a replacement installs the pair the factory returns for the new Session.

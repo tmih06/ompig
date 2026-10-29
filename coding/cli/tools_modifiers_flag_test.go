@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // A --tools list of only +name/-name entries changes the default selection instead of replacing it (ddaa0a03, sdk.ts:280-294, cli.md "Tools").
@@ -57,10 +57,10 @@ func TestToolsFlagModifiersChangeTheDefaultSelection(t *testing.T) {
 					t.Fatal(err)
 				}
 			}
-			t.Setenv("PIG_HOME", home)
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_HOME", home)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			t.Setenv("PI_CODING_AGENT_DIR", agentDir)
-			t.Setenv("PIG_TEST_FAUX", "1")
+			t.Setenv("OMPIG_TEST_FAUX", "1")
 			flags := parseArgs(append([]string{"--model", "test-faux/faux-1", "--print"}, tc.args...))
 			if len(flags.Diagnostics) != 0 {
 				t.Fatalf("diagnostics = %+v", flags.Diagnostics)

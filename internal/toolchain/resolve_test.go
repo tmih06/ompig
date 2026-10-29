@@ -56,7 +56,7 @@ func selectGo(t *testing.T, pathDir, goroot string) {
 	t.Setenv("PATH", pathDir)
 	t.Setenv("GOROOT", goroot)
 	t.Setenv("GOTOOLCHAIN", "")
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 }
 
 func envValue(env []string, key string) (string, int) {
@@ -171,8 +171,8 @@ func TestResolveGoKeepsAMatchingGOROOT(t *testing.T) {
 
 func TestResolveGoWithoutGoIsTheSetupError(t *testing.T) {
 	selectGo(t, t.TempDir(), "")
-	if _, err := ResolveGo(); err == nil || !strings.Contains(err.Error(), "pig setup go") {
-		t.Fatalf("err = %v, want the pig setup go remedy", err)
+	if _, err := ResolveGo(); err == nil || !strings.Contains(err.Error(), "ompig setup go") {
+		t.Fatalf("err = %v, want the ompig setup go remedy", err)
 	}
 }
 
@@ -247,11 +247,11 @@ func TestResolveGoKeepsACommandThatCannotReportItsRoot(t *testing.T) {
 	}
 }
 
-// installManagedGo lays out a PiG-managed toolchain, as `pig setup go` leaves
-// it, under the PIG_HOME that selectGo set.
+// installManagedGo lays out a Ompig-managed toolchain, as `ompig setup go` leaves
+// it, under the OMPIG_HOME that selectGo set.
 func installManagedGo(t *testing.T, version string) string {
 	t.Helper()
-	root := ManagedGoRoot(os.Getenv("PIG_HOME"))
+	root := ManagedGoRoot(os.Getenv("OMPIG_HOME"))
 	src := fakeGoRoot(t, version)
 	if err := os.MkdirAll(filepath.Dir(root), 0o755); err != nil {
 		t.Fatal(err)
@@ -263,7 +263,7 @@ func installManagedGo(t *testing.T, version string) string {
 }
 
 // A go on PATH older than the extension SDK's go directive cannot build
-// extensions under GOTOOLCHAIN=local; the toolchain `pig setup go` installed
+// extensions under GOTOOLCHAIN=local; the toolchain `ompig setup go` installed
 // is used instead.
 func TestResolveGoPrefersManagedGoOverAPathGoBelowTheFloor(t *testing.T) {
 	old := fakeGoRoot(t, "go1.22.2")

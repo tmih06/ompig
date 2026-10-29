@@ -6,7 +6,7 @@ import (
 	"context"
 	"maps"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Classify classifies structured state through the owning provider with auth resolved like a chat request. It never returns an error: a model that is not a classifier, an unknown provider, unconfigured auth, cancellation and a provider without classification become an error or aborted result.

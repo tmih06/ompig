@@ -21,8 +21,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // PiMessagesConfig configures a pi-messages provider. The per-request options (debug, toolChoice, onResponse) are StreamOptions fields.
@@ -108,7 +108,7 @@ func (p *piMessagesProvider) run(ctx context.Context, transcript TranscriptConte
 	defer func() { _ = response.Body.Close() }()
 	body, ok := response.Body.(*observedResponseBody)
 	if !ok {
-		// A body from a client that is not PiG's transport cannot report whether bytes are buffered: every read awaits input (D82).
+		// A body from a client that is not Ompig's transport cannot report whether bytes are buffered: every read awaits input (D82).
 		body = &observedResponseBody{ReadCloser: response.Body, owner: &bodyReadOwner{}, alwaysPending: true}
 	}
 	// The IIFE resumes from `await fetch` as an executor turn. Everything up to the next external completion runs in it.

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tui/termsim"
+	"github.com/tmih06/ompig/internal/tui/termsim"
 )
 
 type upstreamRenderHarness struct {
@@ -78,7 +78,7 @@ func TestUpstreamTUIRenderDiagnostics(t *testing.T) {
 	t.Run("writes redraw logs to the provided directory", func(t *testing.T) {
 		dir := t.TempDir()
 		t.Setenv("PI_TUI_DEBUG_REDRAW", "1")
-		t.Setenv("PIG_HOME", t.TempDir())
+		t.Setenv("OMPIG_HOME", t.TempDir())
 		h := newUpstreamRenderHarness(t, 40, 10)
 		h.ui.SetLogDirectory(dir)
 		h.render([]string{"test"})

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // RPC sends the Session message without rewriting user content. Expectations come from raw source fixtures, not from an already decoded/marshaled Session message.

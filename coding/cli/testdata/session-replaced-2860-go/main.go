@@ -1,4 +1,4 @@
-// Command session-replaced-2860-go runs the bodies of Pi's 2860-replaced-session-context.test.ts cases as Go SDK commands. Each line goes to the file named by PIG_TEST_2860_LOG; process ids name the extension instances, because each Session's extensions run in their own process here.
+// Command session-replaced-2860-go runs the bodies of Pi's 2860-replaced-session-context.test.ts cases as Go SDK commands. Each line goes to the file named by OMPIG_TEST_2860_LOG; process ids name the extension instances, because each Session's extensions run in their own process here.
 package main
 
 import (
@@ -8,11 +8,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func record(line string) {
-	f, err := os.OpenFile(os.Getenv("PIG_TEST_2860_LOG"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644)
+	f, err := os.OpenFile(os.Getenv("OMPIG_TEST_2860_LOG"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0o644)
 	if err != nil {
 		return
 	}
@@ -53,7 +53,7 @@ func conversation(manager sdk.ReadonlySessionManager) string {
 
 func marks() map[string]string {
 	values := map[string]string{}
-	if data, err := os.ReadFile(os.Getenv("PIG_TEST_2860_MARKS")); err == nil {
+	if data, err := os.ReadFile(os.Getenv("OMPIG_TEST_2860_MARKS")); err == nil {
 		_ = json.Unmarshal(data, &values)
 	}
 	return values
@@ -197,7 +197,7 @@ func main() {
 		if err != nil {
 			return err
 		}
-		return os.WriteFile(os.Getenv("PIG_TEST_2860_MARKS"), data, 0o644)
+		return os.WriteFile(os.Getenv("OMPIG_TEST_2860_MARKS"), data, 0o644)
 	})
 	ext.Command("new", "new", func(ctx sdk.Context, _ string) error {
 		_, err := ctx.NewSession(nil)

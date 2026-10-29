@@ -15,12 +15,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// pig divergence (D64): PiG reports installs/updates to its own pi-in-go.dev
+// ompig divergence (D64): Ompig reports installs/updates to its own ompig.dev
 // endpoint instead of Pi's pi.dev.
-const defaultInstallTelemetryURL = "https://pi-in-go.dev/api/report-install"
+const defaultInstallTelemetryURL = "https://ompig.dev/api/report-install"
 
 // installTelemetryTimeout bounds the outbound request at upstream's own
 // value.
@@ -28,12 +28,12 @@ const defaultInstallTelemetryURL = "https://pi-in-go.dev/api/report-install"
 const installTelemetryTimeout = 5 * time.Second
 
 // installTelemetryURL returns the configured report-install endpoint.
-// PIG_INSTALL_TELEMETRY_URL overrides it; tests use this to point at a local
+// OMPIG_INSTALL_TELEMETRY_URL overrides it; tests use this to point at a local
 // httptest server instead of the network, and it doubles as the general
 // injectable-endpoint mechanism (there is no upstream equivalent: Pi hardcodes
 // pi.dev).
 func installTelemetryURL() string {
-	if configured := strings.TrimSpace(os.Getenv("PIG_INSTALL_TELEMETRY_URL")); configured != "" {
+	if configured := strings.TrimSpace(os.Getenv("OMPIG_INSTALL_TELEMETRY_URL")); configured != "" {
 		return configured
 	}
 	return defaultInstallTelemetryURL
@@ -56,8 +56,8 @@ func installTelemetryAllowed(sm *SettingsManager) bool {
 	return sm != nil && sm.IsInstallTelemetryEnabled()
 }
 
-// reportInstallTelemetry sends PiG's anonymous install/update ping: the
-// version alone, as a `version` query parameter, to PiG's report-install
+// reportInstallTelemetry sends Ompig's anonymous install/update ping: the
+// version alone, as a `version` query parameter, to Ompig's report-install
 // endpoint. It mirrors upstream reportInstallTelemetry (interactive-mode.ts:
 // 1292-1307): skip entirely when installTelemetryAllowed says no, and
 // otherwise fire an unawaited, best-effort HTTPS GET with a 5s timeout whose
@@ -83,7 +83,7 @@ func reportInstallTelemetry(sm *SettingsManager, version string) {
 // exactly one `version` parameter. Upstream sends only
 // `?version=<version>` (interactive-mode.ts:1300); any other query
 // parameters already present on the configured endpoint (for example ones
-// baked into a PIG_INSTALL_TELEMETRY_URL override) must not leak onto the
+// baked into a OMPIG_INSTALL_TELEMETRY_URL override) must not leak onto the
 // wire, so the query is rebuilt from scratch rather than mutated in place.
 func buildInstallTelemetryRequestURL(endpoint, version string) (string, error) {
 	target, err := url.Parse(endpoint)
@@ -97,7 +97,7 @@ func buildInstallTelemetryRequestURL(endpoint, version string) (string, error) {
 // sendInstallTelemetry performs the actual request. It runs in its own
 // goroutine (upstream's unawaited fetch) and swallows every error: a network
 // failure, timeout, or non-2xx response must never affect the interactive
-// session. No data beyond the version and the standard PiG User-Agent is
+// session. No data beyond the version and the standard Ompig User-Agent is
 // sent, matching upstream, which sends only `?version=<version>` and the
 // User-Agent header.
 func sendInstallTelemetry(endpoint, version string) {

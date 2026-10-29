@@ -1,7 +1,7 @@
 package codingagent
 
 import (
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ExtensionEditorOptions is extension-editor.ts ExtensionEditorOptions: the Editor's options and an optional description shown between the title and the editor.

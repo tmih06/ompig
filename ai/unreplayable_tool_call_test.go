@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// pi-mono #10299. pig divergence (D120): ids generated for calls streamed without one are unique, so two such calls in different turns
+// pi-mono #10299. ompig divergence (D120): ids generated for calls streamed without one are unique, so two such calls in different turns
 // (an OpenAI-compatible server that never sends ids, the same tool and arguments) cannot share an id and pair the wrong tool result.
 func TestStreamedToolCallsWithoutIDGetDistinctIDsAcrossTurns(t *testing.T) {
 	seen := map[string]bool{}
@@ -27,7 +27,7 @@ func TestStreamedToolCallsWithoutIDGetDistinctIDsAcrossTurns(t *testing.T) {
 	}
 }
 
-// pi-mono #10299 (and the transformMessages fix proposed in its thread). pig divergence (D120): every provider's replay omits a tool call
+// pi-mono #10299 (and the transformMessages fix proposed in its thread). ompig divergence (D120): every provider's replay omits a tool call
 // with a blank name or an empty id, and its results, so a stored session holding one (including a session stored before ids were generated)
 // replays again. Completions, Responses, Anthropic and Mistral reach this through TransformMessages; Google and Bedrock through
 // prepareProviderToolFlow directly.

@@ -14,12 +14,12 @@ driver = "interactive-tmux"
 width = 100
 height = 35
 # The footer is drawn when the TUI mounts, before session_start installs the
-# wrapper provider (interactive-mode.ts:951-1036, 1911-1980); PiG keeps that
+# wrapper provider (interactive-mode.ts:951-1036, 1911-1980); Ompig keeps that
 # order, and the Node extension host makes its session_start the slower of the two.
 # Typing "/boom" before the provider exists reaches only the built-in provider, so
 # no error is raised. The no-model warning follows init in both binaries
 # (interactive-mode.ts:1149-1150), so typing starts only once the provider is in place.
-ready_pattern_pig = "No models available"
+ready_pattern_ompig = "No models available"
 ready_pattern_pi = "No models available"
 ready_timeout_seconds = 30
 capture_start = "Error: BR25_AUTOCOMPLETE_ERROR"
@@ -31,11 +31,11 @@ wait_contains = ["BR25_AUTOCOMPLETE_ERROR"]
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../selectors/testdata/dialogs-default"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../selectors/testdata/dialogs-default"]
 pi = ["PI_CODING_AGENT_DIR=../selectors/testdata/dialogs-default"]
-pig_extensions = ["testdata/wrapper-error.ts"]
+ompig_extensions = ["testdata/wrapper-error.ts"]
 pi_extensions = ["testdata/wrapper-error.ts"]
-pig_args = ["--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -16,8 +16,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/childwait"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/childwait"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // execDrainHooksKey carries the childwait hooks that a test installs on the

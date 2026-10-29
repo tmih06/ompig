@@ -1,5 +1,5 @@
 // parity-echo: registers a custom tool "echo_bridge" for tool-bridge parity.
-// Both pig (convention discovery) and pi (-e flag) load this extension.
+// Both ompig (convention discovery) and pi (-e flag) load this extension.
 export default function (pi) {
   pi.registerTool({
     name: "echo_bridge",

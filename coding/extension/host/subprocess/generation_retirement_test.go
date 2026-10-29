@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi's old extension instance keeps running while its command awaits `ctx.reload()`, because everything is one process (agent-session.ts:3575-3625). A generation with a command running is therefore stopped when that command returns, not when the reload commits.

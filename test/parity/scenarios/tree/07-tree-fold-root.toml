@@ -13,7 +13,7 @@
 #   › ⊞ • user: reply with exactly: done
 #     (1/1)
 #
-# This scenario uses the deterministic faux provider. Both pig and pi register
+# This scenario uses the deterministic faux provider. Both ompig and pi register
 # test-faux. Folding with Ctrl+Left collapses children under the user node.
 
 name = "07-tree-fold-root"
@@ -30,13 +30,13 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
+ompig = ["OMPIG_TEST_FAUX=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Type to search:"

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // scheduler.ts:1188-1195 builds the runtime's snapshotAsOf (the DocumentReader of types.ts:886) through #read, which throws endedError once the invocation has

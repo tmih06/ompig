@@ -10,8 +10,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/ai/src/env-api-keys.ts getEnvApiKey, findEnvKeys
@@ -78,7 +78,7 @@ func TestEnvAPIKeysMatchPi(t *testing.T) {
 		}
 		if key != wantKey || !slices.Equal(found, want[i].Found) {
 			if failures++; failures <= 6 {
-				t.Errorf("%s %v:\n PiG %q %v\n Pi  %q %v", p.Provider, p.Env, key, found, wantKey, want[i].Found)
+				t.Errorf("%s %v:\n Ompig %q %v\n Pi  %q %v", p.Provider, p.Env, key, found, wantKey, want[i].Found)
 			}
 		}
 	}

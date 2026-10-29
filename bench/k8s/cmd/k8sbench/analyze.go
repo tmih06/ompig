@@ -219,14 +219,14 @@ func pct(a float64, b float64, haveB bool) string {
 	return "-" + strconv.FormatFloat(math.Round(-v), 'f', 0, 64) + "%"
 }
 
-// verdict is the deck's rule: a loss when PiG is more than 3% worse, a win only from 1.3x.
-func verdict(pig, pi float64) string {
+// verdict is the deck's rule: a loss when Ompig is more than 3% worse, a win only from 1.3x.
+func verdict(ompig, pi float64) string {
 	switch {
-	case pig > pi*1.03:
+	case ompig > pi*1.03:
 		return "lose"
-	case pi/pig >= 1.3:
+	case pi/ompig >= 1.3:
 		return "win"
-	case pig < pi*0.97:
+	case ompig < pi*0.97:
 		return "slightly better"
 	}
 	return "tie"
@@ -600,15 +600,15 @@ func likeForLike(prof *profile, log *podLog, targets []string, turns int) error 
 }
 
 // trackInput is everything one tracker line is built from besides its measured values: computeTrack computes those
-// from the pig, reference and optional floor samples of one size (warm, every turn after the first, pooled; cold, open
+// from the ompig, reference and optional floor samples of one size (warm, every turn after the first, pooled; cold, open
 // plus first turn; p50, p95 and max net of the floor's p50; CPU per warm turn and cold CPU when the workload reports
-// them; seed time), and buildTrackLine adds the deltas against the baseline and judges each PiG metric against the
+// them; seed time), and buildTrackLine adds the deltas against the baseline and judges each Ompig metric against the
 // reference of this run and the rolling median of the reference over the last five runs, as durable-report's
 // track-row.sh does.
 type trackInput struct {
 	prof *profile
-	// pig is the pig target the line compares with the reference.
-	pig      target
+	// ompig is the ompig target the line compares with the reference.
+	ompig    target
 	turns    int
 	run      string
 	commit   string
@@ -650,7 +650,7 @@ func (t trackValues) value(k string) (float64, bool) {
 	return 0, false
 }
 
-func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValues, error) {
+func computeTrack(prof *profile, ompig target, log *podLog, turns int) (trackValues, error) {
 	var tv trackValues
 	ref, _ := prof.byRole(roleReference)
 	floorT, hasFloor := prof.byRole(roleFloor)
@@ -670,7 +670,7 @@ func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValue
 		}
 		return out
 	}
-	for _, name := range []string{pig.Name, ref.Name} {
+	for _, name := range []string{ompig.Name, ref.Name} {
 		if len(log.of(name, turns)) == 0 {
 			return tv, fmt.Errorf("no %s samples at %d turns", name, turns)
 		}
@@ -707,7 +707,7 @@ func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValue
 		}
 		return true
 	}
-	cpu := hasCPU(pig.Name) && hasCPU(ref.Name)
+	cpu := hasCPU(ompig.Name) && hasCPU(ref.Name)
 	// A memory measure exists only when every sample of both targets reports it; its value is the median over the
 	// samples, each a fresh process. The workloads report peakRss and retained (the memory the open store keeps after
 	// a forced collection after the last measured turn) in MiB, as their rss; the tracker carries them in track-row's
@@ -723,39 +723,39 @@ func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValue
 		}
 		return out, len(out) > 0
 	}
-	both := func(key string) (pigV, refV float64, ok bool) {
-		p, ok1 := every(pig.Name, key)
+	both := func(key string) (ompigV, refV float64, ok bool) {
+		p, ok1 := every(ompig.Name, key)
 		r, ok2 := every(ref.Name, key)
 		if !ok1 || !ok2 {
 			return 0, 0, false
 		}
 		return median(p), median(r), true
 	}
-	pigRSS, refRSS, memory := both("peakRss")
-	pigRetained, refRetained, retained := both("retained")
-	pigGrowth, refGrowth, growth := both("growthPerTurn")
+	ompigRSS, refRSS, memory := both("peakRss")
+	ompigRetained, refRetained, retained := both("retained")
+	ompigGrowth, refGrowth, growth := both("growthPerTurn")
 	add := func(k string, v float64) { tv.r = append(tv.r, kv{k, v}) }
-	add("warm", median(net("warm", pig.Name)))
-	add("warmP95", quantile(net("warm", pig.Name), 0.95))
-	add("warmMax", slices.Max(net("warm", pig.Name)))
-	add("cold", median(net("cold", pig.Name)))
-	add("coldP95", quantile(net("cold", pig.Name), 0.95))
-	add("coldMax", slices.Max(net("cold", pig.Name)))
-	if v, ok := seedS(pig.Name); ok {
+	add("warm", median(net("warm", ompig.Name)))
+	add("warmP95", quantile(net("warm", ompig.Name), 0.95))
+	add("warmMax", slices.Max(net("warm", ompig.Name)))
+	add("cold", median(net("cold", ompig.Name)))
+	add("coldP95", quantile(net("cold", ompig.Name), 0.95))
+	add("coldMax", slices.Max(net("cold", ompig.Name)))
+	if v, ok := seedS(ompig.Name); ok {
 		add("seedS", v)
 	}
 	if cpu {
-		add("cpuWarm", median(pool(pig.Name, "cpuWarm")))
-		add("cpuCold", median(pool(pig.Name, "cpuCold")))
+		add("cpuWarm", median(pool(ompig.Name, "cpuWarm")))
+		add("cpuCold", median(pool(ompig.Name, "cpuCold")))
 	}
 	if retained {
-		add("retainedMB", pigRetained*mib)
+		add("retainedMB", ompigRetained*mib)
 	}
 	if growth {
-		add("growthPerTurn", pigGrowth)
+		add("growthPerTurn", ompigGrowth)
 	}
 	if memory {
-		add("peakRssMB", pigRSS*mib)
+		add("peakRssMB", ompigRSS*mib)
 	}
 	add("piWarm", median(net("warm", ref.Name)))
 	add("piWarmP95", quantile(net("warm", ref.Name), 0.95))
@@ -780,8 +780,8 @@ func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValue
 	}
 	// A profile metric is reported only when every sample of both targets has it; the floor does not apply.
 	for _, m := range prof.Metrics {
-		if pigV, refV, ok := both(m.Name); ok {
-			add(m.Name, pigV)
+		if ompigV, refV, ok := both(m.Name); ok {
+			add(m.Name, ompigV)
 			add(m.refName(), refV)
 		}
 	}
@@ -790,10 +790,10 @@ func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValue
 		add("floorCold", floor["cold"])
 	}
 	tv.hasFloor, tv.floorWarm = hasFloor, floor["warm"]
-	if seeds := log.seedOf(pig.Name, turns); len(seeds) == 1 {
+	if seeds := log.seedOf(ompig.Name, turns); len(seeds) == 1 {
 		tv.fingerprint = seeds[0].str("fingerprint")
 	}
-	tv.warmN = len(pool(pig.Name, "warm"))
+	tv.warmN = len(pool(ompig.Name, "warm"))
 	if log.facts != nil {
 		tv.nodes, tv.cpuSets = []string{log.facts.str("node")}, []string{log.facts.str("cpuSet")}
 	}
@@ -805,7 +805,7 @@ func computeTrack(prof *profile, pig target, log *podLog, turns int) (trackValue
 		return tv, err
 	}
 	tv.machine = machine
-	throttle, refThrottle := throttleOf(log, pig.Name, turns), throttleOf(log, ref.Name, turns)
+	throttle, refThrottle := throttleOf(log, ompig.Name, turns), throttleOf(log, ref.Name, turns)
 	if throttle.get("throttledSamples", &tv.throttled[0]) && refThrottle.get("throttledSamples", &tv.refThr[0]) {
 		tv.throttleReadable = true
 		throttle.get("throttledMs", &tv.throttled[1])
@@ -861,8 +861,8 @@ func mergeTrack(parts []trackValues) (trackValues, error) {
 }
 
 func buildTrackLine(in trackInput, tv trackValues) *object {
-	pig := in.pig
-	rule := in.prof.ruleOf(pig)
+	ompig := in.ompig
+	rule := in.prof.ruleOf(ompig)
 	ref, _ := in.prof.byRole(roleReference)
 	baselineCore := "none"
 	if in.baseline != nil {
@@ -878,7 +878,7 @@ func buildTrackLine(in trackInput, tv trackValues) *object {
 		delta.set(e.k, pct(e.v, b, have))
 	}
 
-	// PiG metric -> its reference control, in track-row's order.
+	// Ompig metric -> its reference control, in track-row's order.
 	pairs := [][2]string{{"warm", "piWarm"}, {"warmP95", "piWarmP95"}, {"cold", "piCold"}, {"coldP95", "piColdP95"}, {"cpuWarm", "piCpuWarm"}, {"cpuCold", "piCpuCold"}, {"retainedMB", "piRetainedMB"}, {"peakRssMB", "piPeakRssMB"}, {"seedS", "piSeedS"}}
 	names := map[string]string{"warm": "warm p50", "warmP95": "warm p95", "cold": "cold p50", "coldP95": "cold p95", "cpuWarm": "CPU/warm turn", "cpuCold": "CPU cold", "retainedMB": "retained MB", "peakRssMB": "peak RSS MB", "seedS": "seed s"}
 	for _, m := range in.prof.Metrics {
@@ -892,7 +892,7 @@ func buildTrackLine(in trackInput, tv trackValues) *object {
 	var parts []string
 	nRolling := 0
 	for _, p := range pairs {
-		pigV, ok1 := tv.value(p[0])
+		ompigV, ok1 := tv.value(p[0])
 		piV, ok2 := tv.value(p[1])
 		if !ok1 || !ok2 {
 			continue
@@ -911,10 +911,10 @@ func buildTrackLine(in trackInput, tv trackValues) *object {
 			past = past[len(past)-4:]
 		}
 		rolling := median(append(past, piV))
-		a, b := verdict(pigV, piV), verdict(pigV, rolling)
+		a, b := verdict(ompigV, piV), verdict(ompigV, rolling)
 		dis := (a == "win") != (b == "win") || (a == "lose") != (b == "lose")
 		c := newObject()
-		c.set("pig", round1(pigV))
+		c.set("ompig", round1(ompigV))
 		c.set("piRun", round1(piV))
 		c.set("piRolling", round1(rolling))
 		c.set("nRolling", len(past)+1)
@@ -932,12 +932,12 @@ func buildTrackLine(in trackInput, tv trackValues) *object {
 		if dis {
 			side += " / rolling " + b
 		}
-		parts = append(parts, fmt.Sprintf("%s %s vs %s (%s) %s", names[p[0]], formatNumber(pigV), formatNumber(piV), formatNumber(rolling), side))
+		parts = append(parts, fmt.Sprintf("%s %s vs %s (%s) %s", names[p[0]], formatNumber(ompigV), formatNumber(piV), formatNumber(rolling), side))
 	}
 	// Growth per turn is judged against zero, not against the reference, so it is reported without a verdict.
-	var pigGrowth, piGrowth float64
-	if values.get("growthPerTurn", &pigGrowth) && values.get("piGrowthPerTurn", &piGrowth) {
-		parts = append(parts, fmt.Sprintf("heap growth/turn %s B vs %s B", formatNumber(pigGrowth), formatNumber(piGrowth)))
+	var ompigGrowth, piGrowth float64
+	if values.get("growthPerTurn", &ompigGrowth) && values.get("piGrowthPerTurn", &piGrowth) {
+		parts = append(parts, fmt.Sprintf("heap growth/turn %s B vs %s B", formatNumber(ompigGrowth), formatNumber(piGrowth)))
 	}
 	if disagree == nil {
 		disagree = []string{}
@@ -949,7 +949,7 @@ func buildTrackLine(in trackInput, tv trackValues) *object {
 	}
 	throttleText := "throttling not readable"
 	if tv.throttleReadable {
-		throttleText = fmt.Sprintf("CFS-throttled samples: %s %d (%s ms), %s %d (%s ms)", pig.Name, int(tv.throttled[0]), formatNumber(tv.throttled[1]), ref.Name, int(tv.refThr[0]), formatNumber(tv.refThr[1]))
+		throttleText = fmt.Sprintf("CFS-throttled samples: %s %d (%s ms), %s %d (%s ms)", ompig.Name, int(tv.throttled[0]), formatNumber(tv.throttled[1]), ref.Name, int(tv.refThr[0]), formatNumber(tv.refThr[1]))
 	}
 	var deltaParts []string
 	for _, k := range []string{"warm", "cold"} {
@@ -978,9 +978,9 @@ func buildTrackLine(in trackInput, tv trackValues) *object {
 			gateText += ", wall times informational"
 		}
 	}
-	versus := "PiG vs pi"
+	versus := "Ompig vs pi"
 	if len(in.prof.pigs()) > 1 {
-		versus = fmt.Sprintf("PiG %s vs %s", pig.Name, ref.Name)
+		versus = fmt.Sprintf("Ompig %s vs %s", ompig.Name, ref.Name)
 	}
 	summary := fmt.Sprintf("Rule %s, %s %s turns at %s %s; %s; warm n=%d%s). %s same run (rolling median of last %d pi): %s. vs %s: %s. %s. %s fingerprint %s. Private tracker, not deck numbers.",
 		rule, in.prof.Name, formatTurns(in.turns), in.commit, where, floorText, tv.warmN, gateText, versus, nRolling, strings.Join(parts, "; "), baselineCore, strings.Join(deltaParts, ", "), throttleText, agree, tv.fingerprint)

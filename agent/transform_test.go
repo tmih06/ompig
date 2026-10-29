@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // TestNormalizeMessages_OpenAI_Passthrough verifies that a clean conversation
@@ -245,7 +245,7 @@ func TestNormalizeMessages_NilModelKeepsThinking(t *testing.T) {
 // that upstream does NOT handle: an errored/aborted assistant that held the
 // only tool_use for a persisted tool result (an abort race where the tool ran
 // and recorded its result before the turn was marked aborted). The errored
-// assistant is dropped, orphaning the result; pig strips it so the request
+// assistant is dropped, orphaning the result; ompig strips it so the request
 // stays valid, where upstream would send it and the provider would reject the
 // whole request ("No tool call found for function call output").
 func TestNormalizeMessages_ErroredAssistantOrphansToolResult(t *testing.T) {

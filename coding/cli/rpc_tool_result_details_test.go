@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi's RPC mode writes the AgentMessage object with JSON.stringify (rpc-mode.ts output), so a persisted toolResult

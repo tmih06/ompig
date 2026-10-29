@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-func TestTypeScriptDeclarationsPinUpstreamAndExposePiGLogin(t *testing.T) {
+func TestTypeScriptDeclarationsPinUpstreamAndExposeOmpigLogin(t *testing.T) {
 	root := findModuleRoot(t)
 	packageData, err := os.ReadFile(filepath.Join(root, "extensions", "sdk-ts", "package.json"))
 	if err != nil {
@@ -56,10 +56,10 @@ func TestTypeScriptDeclarationsPinUpstreamAndExposePiGLogin(t *testing.T) {
 	}
 	for _, required := range []string{
 		`export type * from "@earendil-works/pi-coding-agent"`,
-		`interface PiGLoginDefinition`,
-		`setLogin(definition: PiGLoginDefinition): Promise<void>`,
-		`interface PiGSpriteDefinition`,
-		`registerSprite(definition: PiGSpriteDefinition): Promise<void>`,
+		`interface OmpigLoginDefinition`,
+		`setLogin(definition: OmpigLoginDefinition): Promise<void>`,
+		`interface OmpigSpriteDefinition`,
+		`registerSprite(definition: OmpigSpriteDefinition): Promise<void>`,
 	} {
 		if !strings.Contains(string(declarations), required) {
 			t.Errorf("TypeScript declarations do not contain %q", required)

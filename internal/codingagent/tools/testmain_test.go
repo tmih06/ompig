@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestMain lets the test binary stand in for the shell and report how it was
@@ -14,5 +14,5 @@ func TestMain(m *testing.M) {
 	reportShellEnvIfRequested()
 	testenv.ReportStartupIfRequested()
 	testenv.ReportEnvironIfRequested()
-	os.Exit(testenv.RunScoped(m, "pig-tools-"))
+	os.Exit(testenv.RunScoped(m, "ompig-tools-"))
 }

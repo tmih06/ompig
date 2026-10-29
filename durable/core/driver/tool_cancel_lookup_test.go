@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // The core cancels a tool effect when its task is aborted, and it settles the call on the effect's completion, so a

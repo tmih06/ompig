@@ -11,11 +11,11 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
-// Pi model-runtime.ts:744-797: registerNativeProvider, registerProvider and unregisterProvider finish synchronously (updateModelSnapshot, 277-284; provisional auth, 768-787) and then start an unawaited `void this.refresh({ allowNetwork: false })` (750, 788, 796). That refresh is a continuation on the single JavaScript thread: it cannot pass its first await (ModelConfig.load, 702) before the registering caller yields, and it never runs concurrently with provider callbacks. PiG runs it inside the first awaited model-runtime call (Refresh, GetAvailable, CheckAuth, Login, Logout), or when an extension host registration returns (cmd/pig), and never on a free goroutine started by the registration itself or in a provider request.
+// Pi model-runtime.ts:744-797: registerNativeProvider, registerProvider and unregisterProvider finish synchronously (updateModelSnapshot, 277-284; provisional auth, 768-787) and then start an unawaited `void this.refresh({ allowNetwork: false })` (750, 788, 796). That refresh is a continuation on the single JavaScript thread: it cannot pass its first await (ModelConfig.load, 702) before the registering caller yields, and it never runs concurrently with provider callbacks. Ompig runs it inside the first awaited model-runtime call (Refresh, GetAvailable, CheckAuth, Login, Logout), or when an extension host registration returns (cmd/ompig), and never on a free goroutine started by the registration itself or in a provider request.
 
 func newRegistrationServices(t *testing.T) *AgentSessionServices {
 	t.Helper()
@@ -657,7 +657,7 @@ func TestAbortedScopedRefreshKeepsTheCoveredRegistrationRefresh(t *testing.T) {
 	}
 }
 
-// A login or logout recomposes and refreshes its own provider during local synchronization (model-runtime.ts:515-535), and Pi's earlier-queued registration refresh begins before it, so the operation's own refresh is never superseded by the registration pass (models.ts beginProviderRefresh). PiG covers the provider's queued pass instead of starting it beside the operation: a pass started beside the login began the same provider's refresh after the login's and dropped the login's CredentialSynchronizationError (TestModelRuntimeCredentialSynchronizationErrorRetainsCommit failed 15 of 40 runs). A login that never reaches synchronization returns the provider to the queue, because Pi's registration refresh still runs. A registration pass checks every provider, so an already refreshed witness provider shows whether one ran.
+// A login or logout recomposes and refreshes its own provider during local synchronization (model-runtime.ts:515-535), and Pi's earlier-queued registration refresh begins before it, so the operation's own refresh is never superseded by the registration pass (models.ts beginProviderRefresh). Ompig covers the provider's queued pass instead of starting it beside the operation: a pass started beside the login began the same provider's refresh after the login's and dropped the login's CredentialSynchronizationError (TestModelRuntimeCredentialSynchronizationErrorRetainsCommit failed 15 of 40 runs). A login that never reaches synchronization returns the provider to the queue, because Pi's registration refresh still runs. A registration pass checks every provider, so an already refreshed witness provider shows whether one ran.
 func TestCredentialOperationCoversItsProvidersRegistrationRefresh(t *testing.T) {
 	for _, loginFails := range []bool{false, true} {
 		t.Run(map[bool]string{false: "synchronized", true: "login failed"}[loginFails], func(t *testing.T) {

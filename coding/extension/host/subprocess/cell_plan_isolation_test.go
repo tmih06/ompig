@@ -9,7 +9,7 @@ import (
 // Bug 1 (D20 conformance): packability is gated positively on shared-ok, so an
 // unrecognized isolation token must fail safe to an isolated cell instead of
 // being silently packed. "dedicated" is the token that triggered the original
-// pig-mcp-adapter build failure.
+// ompig-mcp-adapter build failure.
 func TestPlanCellsRoutesUnknownIsolationToIsolated(t *testing.T) {
 	cfg := packableConfig("unknown-iso", "hu")
 	cfg.Isolation = "dedicated"

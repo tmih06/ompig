@@ -13,7 +13,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type wheelOp struct {
@@ -125,7 +125,7 @@ func TestWheelScrollAcceleratorMatchesPiOnSeededScripts(t *testing.T) {
 		if !reflect.DeepEqual(got, want) {
 			if differing++; differing <= 5 {
 				raw, _ := json.Marshal(script)
-				t.Errorf("script %d %s\n  Pig %v\n  Pi  %v", i, raw, got, want)
+				t.Errorf("script %d %s\n  Ompig %v\n  Pi  %v", i, raw, got, want)
 			}
 		}
 	}

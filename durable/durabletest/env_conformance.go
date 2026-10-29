@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // EnvConformanceAssertions are the checks an environment conformance case makes.

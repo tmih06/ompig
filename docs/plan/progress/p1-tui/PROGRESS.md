@@ -36,9 +36,9 @@ Upstream changed these sources without a test. Where a Go test can assert the so
 | `piWordmark()`: "Pi" in coral and yellow, in the terminal color mode | `pi-logo.ts:36-40` | `internal/codingagent/pi_logo_upstream_test.go#TestPiWordmarkUpstream` | added, red |
 | Apple Terminal header: `Pi vX` line, key hints on the next line, no half-block logo | `interactive-mode.ts:1000-1006`, `pi-logo.ts:32-34` | `internal/codingagent/pi_logo_apple_terminal_darwin_test.go#TestBuiltInHeaderShowsTheWordmarkInAppleTerminalUpstream` (darwin only, because `isAppleTerminalSession` requires `process.platform === "darwin"`) | added; compiles (`GOOS=darwin go vet`), not run on this Linux host; expected red |
 | Compact onboarding drops " and loaded resources" with `quietStartup: "header"` | `interactive-mode.ts:1045-1048` | `internal/codingagent/pi_logo_upstream_test.go#TestBuiltInHeaderOnboardingWithHeaderOnlyQuietStartupUpstream` | added, red |
-| `--tui-mode` help text says fullscreen is the default | `cli/args.ts:326` | none: `cmd/pig/help_upstream.txt` is generated from the pinned Pi by `automation/gen/gen-help.sh` | regenerates with the pin move |
+| `--tui-mode` help text says fullscreen is the default | `cli/args.ts:326` | none: `cmd/ompig/help_upstream.txt` is generated from the pinned Pi by `automation/gen/gen-help.sh` | regenerates with the pin move |
 | `/settings` quiet startup values `true`/`header`/`false` and new descriptions | `settings-selector.ts:556-560, 708, 924` | none | follow-up for the fix lane (`internal/codingagent/slash_session_handlers.go:859`) |
-| cmd/pig startup banner gate honors `"header"` | `interactive-mode.ts:996` | none: `showBanner` is computed inline in `cmd/pig/main.go:982` | follow-up for the fix lane |
+| cmd/ompig startup banner gate honors `"header"` | `interactive-mode.ts:996` | none: `showBanner` is computed inline in `cmd/ompig/main.go:982` | follow-up for the fix lane |
 | Model scope line hidden by `"header"` | `interactive-mode.ts:940` | none | follow-up for the fix lane |
 | Logo-click easter egg | `interactive-mode.ts:254-263, 1058`, `pi-logo-animation*.ts` | none | skipped by task scope |
 | `TuiAltScreen.getScreenLines()` | `tui-alt-screen.ts:315-318` | none upstream | interface-inventory follow-up |

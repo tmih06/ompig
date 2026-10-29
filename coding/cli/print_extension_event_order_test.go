@@ -13,7 +13,7 @@ import (
 
 // Upstream print mode awaits session.prompt, which resolves only after every
 // agent event's extension handlers ran, and only then disposes the runtime
-// (session_shutdown). Pig's print mode returned as soon as Send did, while the
+// (session_shutdown). Ompig's print mode returned as soon as Send did, while the
 // session was still dispatching the turn's tail to extensions, so message_end,
 // turn_end, and agent_end reached a closed extension connection after
 // session_shutdown ("connection closed").
@@ -27,10 +27,10 @@ func TestPrintModeDeliversTurnEventsBeforeSessionShutdown(t *testing.T) {
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-session", "-e", fixture, "--print", "What is 20+22?")
 	cmd.Dir = t.TempDir()
 	cmd.Stdin = nil
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_TEST_EVENT_LOG="+eventLog)
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_TEST_EVENT_LOG="+eventLog)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("pig --print: %v\n%s", err, out)
+		t.Fatalf("ompig --print: %v\n%s", err, out)
 	}
 	if strings.Contains(string(out), "Extension error") {
 		t.Fatalf("extension handlers failed:\n%s", out)

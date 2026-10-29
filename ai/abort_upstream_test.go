@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // The helpers in .upstream/v0.99.1/packages/ai/test/abort.test.ts:14-99 assert cancellation and follow-up behavior independently of generated wording. The paced faux provider supplies the deterministic generation side; remote transport cancellation is live-only.

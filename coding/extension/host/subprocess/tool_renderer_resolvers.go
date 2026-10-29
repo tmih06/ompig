@@ -9,7 +9,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // toolRendererResolution is one tool's answer from an extension's resolvers.
@@ -58,7 +58,7 @@ func toolRenderersDecl(renderers *extension.ToolRenderers) *ToolRenderersDecl {
 // process: the first resolution of a tool asks the process on a host goroutine and returns next() meanwhile, and later
 // resolutions use its answer.
 //
-// pig divergence (D89): next() is evaluated before the extension is asked and reaches its resolvers as a marker, so
+// ompig divergence (D89): next() is evaluated before the extension is asked and reaches its resolvers as a marker, so
 // they can return it but not call its renderers; until the extension answers, a tool draws with next()'s renderers.
 func (h *Host) makeToolRendererResolver(me *managedExt) extension.ToolRendererResolver {
 	return func(toolName string, next func() *extension.ToolRenderers) *extension.ToolRenderers {

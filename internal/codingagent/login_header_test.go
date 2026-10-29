@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func loginHeaderDefinition(name string) extension.LoginDefinition {
@@ -32,7 +32,7 @@ func loginHeaderDefinition(name string) extension.LoginDefinition {
 
 func loginHeaderFixture(t *testing.T) extension.ValidatedLoginDefinition {
 	t.Helper()
-	definition, err := extension.ValidateLoginDefinition(loginHeaderDefinition("Test Pig"))
+	definition, err := extension.ValidateLoginDefinition(loginHeaderDefinition("Test Ompig"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,7 +83,7 @@ func TestLoginHeaderFixedNativeTemplate(t *testing.T) {
 }
 
 func TestLoginHeaderOmitsTransparentBrandBand(t *testing.T) {
-	input := loginHeaderDefinition("Test Pig")
+	input := loginHeaderDefinition("Test Ompig")
 	input.Brand = filledLoginRows(extension.LoginBrandWidth, extension.LoginBrandHeight, '.')
 	delete(input.Palette, "B")
 	definition, err := extension.ValidateLoginDefinition(input)
@@ -131,7 +131,7 @@ func TestLoginHeaderAppliesHostThemeColorsWithoutChangingExtensionPalette(t *tes
 		},
 		extHeader: newSpecialLinesComponent(func() {}),
 	}
-	if err := (&ExtUIContext{m: m}).SetLogin(loginHeaderDefinition("Extension Pig")); err != nil {
+	if err := (&ExtUIContext{m: m}).SetLogin(loginHeaderDefinition("Extension Ompig")); err != nil {
 		t.Fatal(err)
 	}
 	extensionLines := m.extHeader.Render(66)
@@ -188,11 +188,11 @@ func TestLoginHeaderCompactFallbackStacksWrapsAndOmitsArt(t *testing.T) {
 func TestLoginHeaderOperationalLinesAreHostOwnedInput(t *testing.T) {
 	definition := loginHeaderFixture(t)
 	without := RenderLoginHeader(definition, 80, LoginHeaderOptions{TrueColor: true})
-	with := RenderLoginHeader(definition, 80, LoginHeaderOptions{TrueColor: true, OperationalLines: []string{"Pig v1.2.3", "Config ~/.pig"}})
+	with := RenderLoginHeader(definition, 80, LoginHeaderOptions{TrueColor: true, OperationalLines: []string{"Ompig v1.2.3", "Config ~/.ompig"}})
 	if len(with) != len(without)+2 {
 		t.Fatalf("operational rows added %d lines, want 2", len(with)-len(without))
 	}
-	if !strings.Contains(with[len(with)-2], "Pig v1.2.3") || !strings.Contains(with[len(with)-1], "Config ~/.pig") {
+	if !strings.Contains(with[len(with)-2], "Ompig v1.2.3") || !strings.Contains(with[len(with)-1], "Config ~/.ompig") {
 		t.Fatalf("operational rows missing: %q", with[len(with)-2:])
 	}
 }
@@ -335,7 +335,7 @@ func TestLoginHeaderCompactFallbackFitsEveryPositiveBoundaryWidth(t *testing.T) 
 
 func TestLoginHeaderRendererCachesDefensivelyAndTracksTheme(t *testing.T) {
 	definition := loginHeaderFixture(t)
-	options := LoginHeaderOptions{TrueColor: true, OperationalLines: []string{"Pig v1"}}
+	options := LoginHeaderOptions{TrueColor: true, OperationalLines: []string{"Ompig v1"}}
 	renderer := newLoginHeaderRenderer(definition, options)
 	options.OperationalLines[0] = "changed outside renderer"
 	tui.SetTheme("dark")
@@ -415,7 +415,7 @@ func TestExtUIContextSetLoginHonorsStartupSilenceGate(t *testing.T) {
 		Hero:    filledLoginRows(extension.LoginHeroWidth, extension.LoginHeroHeight, 'H'),
 		Mascot:  filledLoginRows(extension.LoginMascotWidth, extension.LoginMascotHeight, 'M'),
 		Palette: map[string]string{"B": "#102030", "H": "#405060", "M": "#708090"},
-		Name:    "Quiet Pig", Description: "Must stay hidden", Tagline: "No startup output",
+		Name:    "Quiet Ompig", Description: "Must stay hidden", Tagline: "No startup output",
 	}
 	if err := ui.SetLogin(definition); err != nil {
 		t.Fatal(err)
@@ -429,7 +429,7 @@ func TestExtUIContextSetLoginKeepsOperationalRowsWithoutBuiltInArt(t *testing.T)
 	m := &InteractiveMode{
 		opts: InteractiveModeOptions{
 			LoginVisible:       true,
-			LoginHeaderOptions: LoginHeaderOptions{OperationalLines: []string{"PiG v1", "startup hints"}},
+			LoginHeaderOptions: LoginHeaderOptions{OperationalLines: []string{"Ompig v1", "startup hints"}},
 			BuiltInHeaderLines: []string{"minimal identity"},
 		},
 		extHeader: newSpecialLinesComponent(func() {}),
@@ -441,13 +441,13 @@ func TestExtUIContextSetLoginKeepsOperationalRowsWithoutBuiltInArt(t *testing.T)
 		Hero:    filledLoginRows(extension.LoginHeroWidth, extension.LoginHeroHeight, 'H'),
 		Mascot:  filledLoginRows(extension.LoginMascotWidth, extension.LoginMascotHeight, 'M'),
 		Palette: map[string]string{"B": "#102030", "H": "#405060", "M": "#708090"},
-		Name:    "Extension Pig", Description: "Works without built-in art", Tagline: "Core API",
+		Name:    "Extension Ompig", Description: "Works without built-in art", Tagline: "Core API",
 	}
 	if err := ui.SetLogin(definition); err != nil {
 		t.Fatal(err)
 	}
 	got := strings.Join(m.extHeader.Render(65), "\n")
-	for _, want := range []string{"Extension Pig", "PiG v1", "startup hints"} {
+	for _, want := range []string{"Extension Ompig", "Ompig v1", "startup hints"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("extension login output lacks %q: %q", want, got)
 		}
@@ -507,7 +507,7 @@ func TestQuietLoginReplacesEarlierExtensionHeaderWithHiddenSlot(t *testing.T) {
 	if got := m.extHeader.Render(80); len(got) == 0 {
 		t.Fatal("setup: extension header not shown")
 	}
-	if err := ui.SetLogin(loginHeaderDefinition("Quiet Pig")); err != nil {
+	if err := ui.SetLogin(loginHeaderDefinition("Quiet Ompig")); err != nil {
 		t.Fatal(err)
 	}
 	if got := m.extHeader.Render(80); len(got) != 0 || m.extHeader.HasContent() {

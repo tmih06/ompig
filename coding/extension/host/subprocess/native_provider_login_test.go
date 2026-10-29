@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // auth/types.ts: AuthPrompt and AuthEvent are closed unions discriminated by type. Each variant decodes to its Go

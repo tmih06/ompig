@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // liveModelSessionHandle applies a model change as the Session does: it sets the agent's model and thinking level, then awaits the model_select notification before returning (agent-session.ts setModel/cycleModel, _emitModelSelect).
@@ -90,7 +90,7 @@ func TestInteractiveModelSelectHandlersObserveTheSelectedModel(t *testing.T) {
 	}
 }
 
-// Pi's ModelRuntime.streamSimple passes an extension's options through unchanged (model-runtime.ts streamSimple): a request without `reasoning` streams without thinking, whatever the Session's level, as headless PiG does. Interactive mode defaulted such a request to the thinking level it held when it wired the bridge, so an extension stream thought at the startup level even after the user turned thinking off.
+// Pi's ModelRuntime.streamSimple passes an extension's options through unchanged (model-runtime.ts streamSimple): a request without `reasoning` streams without thinking, whatever the Session's level, as headless Ompig does. Interactive mode defaulted such a request to the thinking level it held when it wired the bridge, so an extension stream thought at the startup level even after the user turned thinking off.
 func TestInteractiveExtensionStreamWithoutReasoningDoesNotThink(t *testing.T) {
 	m := modelPickerTestMode(t)
 	m.thinkingLevel = string(ai.ThinkingHigh)

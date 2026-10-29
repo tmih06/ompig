@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 func TestDecoderKeepsAFeffThatDoesNotStartTheStream(t *testing.T) {

@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -10,8 +10,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // This test value represents upstream's untyped {type:unknown,data:foo}; it is not a production union member.
@@ -235,7 +235,7 @@ func TestBedrockUpstreamConvertMessages(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		// pig divergence (D116): Pi sends [assistant, tool result, "Continue"] as three messages; PiG merges the two user messages.
+		// ompig divergence (D116): Pi sends [assistant, tool result, "Continue"] as three messages; Ompig merges the two user messages.
 		if len(messages) != 2 || len(messages[0].Content) != 1 || len(messages[1].Content) != 2 {
 			t.Fatalf("messages=%#v", messages)
 		}

@@ -1,8 +1,8 @@
 package coding
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // An extension host with no UI bridge (an SDK session, the extension validate and login loaders) runs the pi-ai calls a module makes while it loads through the

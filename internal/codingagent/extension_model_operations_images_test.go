@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/ai/src/types.ts ProviderRequestOptions: an extension's ModelRegistry.generateImages options carry maxRetries and maxRetryDelayMs to the provider request (api/openrouter-images.ts passes both to retryProviderRequest). Every SDK serializes maxRetryDelayMs, so the host must not drop it.

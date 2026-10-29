@@ -13,8 +13,8 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/jobgroup"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/jobgroup"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // setProcessGroup starts the shell suspended, so attachProcessGroup can put it

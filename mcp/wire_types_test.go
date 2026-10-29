@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // The MCP schema (packages/mcp/src/protocol/types.ts) lists every optional member below. A server may send each of them and the

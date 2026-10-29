@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-pig-sdk = { path = "../../../../extensions/sdk-rs" }
+ompig-sdk = { path = "../../../../extensions/sdk-rs" }

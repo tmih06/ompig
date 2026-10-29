@@ -10,12 +10,12 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func contextBoundaryTranscript() []agent.AgentMessage {
@@ -214,7 +214,7 @@ func TestContextPhaseIdentityThroughSDKTransports(t *testing.T) {
 	rustHandlers := map[string]string{
 		"reorder": `data["messages"].as_array_mut().unwrap().reverse(); None`,
 		"equal":   `let first = data["messages"][0].clone(); let second = data["messages"][1].clone(); Some(json!({"messages": [first, second]}))`,
-		"edit":    `data["messages"][0]["content"] = json!("edited"); pig_sdk::context_unchanged()`,
+		"edit":    `data["messages"][0]["content"] = json!("edited"); ompig_sdk::context_unchanged()`,
 		"same":    `None`,
 	}
 	root, err := filepath.Abs("..")
@@ -259,7 +259,7 @@ func TestContextPhaseIdentityThroughSDKTransports(t *testing.T) {
 	for name, body := range pythonHandlers {
 		t.Run("python/"+name, func(t *testing.T) {
 			source := filepath.Join(t.TempDir(), "main.py")
-			program := fmt.Sprintf("import sys\nsys.path.insert(0, %q)\nimport pig_sdk\n\n\ndef handle(ctx, data):\n    %s\n\n\next = pig_sdk.Extension(%q)\next.on_event(\"context\", handle)\n\nif __name__ == \"__main__\":\n    ext.run()\n", filepath.ToSlash(filepath.Join(root, "extensions", "sdk-py")), body, "context-"+name)
+			program := fmt.Sprintf("import sys\nsys.path.insert(0, %q)\nimport ompig_sdk\n\n\ndef handle(ctx, data):\n    %s\n\n\next = ompig_sdk.Extension(%q)\next.on_event(\"context\", handle)\n\nif __name__ == \"__main__\":\n    ext.run()\n", filepath.ToSlash(filepath.Join(root, "extensions", "sdk-py")), body, "context-"+name)
 			if err := os.WriteFile(source, []byte(program), 0o644); err != nil {
 				t.Fatal(err)
 			}
@@ -270,7 +270,7 @@ func TestContextPhaseIdentityThroughSDKTransports(t *testing.T) {
 		t.Run("rust/"+name, func(t *testing.T) {
 			dir := t.TempDir()
 			cargo := fmt.Sprintf("[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", "context-"+name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs")))
-			program := fmt.Sprintf("use pig_sdk::Extension;\nuse serde_json::json;\n\nfn main() {\n    let mut ext = Extension::new(%q);\n    ext.on_event(\"context\", |_ctx, data| { %s });\n    ext.run().unwrap();\n}\n", "context-"+name, body)
+			program := fmt.Sprintf("use ompig_sdk::Extension;\nuse serde_json::json;\n\nfn main() {\n    let mut ext = Extension::new(%q);\n    ext.on_event(\"context\", |_ctx, data| { %s });\n    ext.run().unwrap();\n}\n", "context-"+name, body)
 			if err := os.WriteFile(filepath.Join(dir, "Cargo.toml"), []byte(cargo), 0o644); err != nil {
 				t.Fatal(err)
 			}

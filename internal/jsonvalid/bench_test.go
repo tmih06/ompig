@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // sessionLines builds lines of the shape a long coding session holds: a tool result whose text is source code with escaped newlines and quotes, an assistant turn with thinking, text and a tool call, and a small custom entry.

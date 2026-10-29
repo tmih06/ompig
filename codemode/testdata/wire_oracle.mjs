@@ -1,7 +1,7 @@
 // Drives the pinned Pi codemode runtime (serveCodemodeRemote, RemoteCodemodeSandbox, InlineCodemodeSandbox, CodemodeSandboxBase.start)
 // through the cases of codemode/wire_oracle_test.go and records what Pi does at its seams: the frames of the remote exchange
 // (the VM's messages and the client's replies, as protocol.ts and remote.ts define them), the requests a remote sandbox sends,
-// the events of a deterministic run, and the outcomes. The Go test runs the same cases against PiG and compares the records.
+// the events of a deterministic run, and the outcomes. The Go test runs the same cases against Ompig and compares the records.
 import { pathToFileURL } from "node:url";
 
 const TIMEOUT = Symbol("timeout");

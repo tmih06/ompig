@@ -52,7 +52,7 @@ func TestPlatformNamesPigTargets(t *testing.T) {
 	}
 }
 
-// Every lock entry names one of PiG's eight release targets with a digest; each target has at least one Bun executable.
+// Every lock entry names one of Ompig's eight release targets with a digest; each target has at least one Bun executable.
 func TestLockCoversEveryReleaseTarget(t *testing.T) {
 	targets := map[string]bool{"linux-x64": false, "linux-arm64": false, "darwin-x64": false, "darwin-arm64": false, "android-x64": false, "android-arm64": false, "windows-x64": false, "windows-arm64": false}
 	for _, entry := range Lock {
@@ -73,7 +73,7 @@ func TestLockCoversEveryReleaseTarget(t *testing.T) {
 
 func TestParseManifestIsStrict(t *testing.T) {
 	digest := strings.Repeat("a", 64)
-	valid := `{"id":"bun","kind":"bun","version":"1.4.2","platform":"linux-x64","provider":"pig-bun","image":{"executable":"bun","sha256":"` + digest + `"}}`
+	valid := `{"id":"bun","kind":"bun","version":"1.4.2","platform":"linux-x64","provider":"ompig-bun","image":{"executable":"bun","sha256":"` + digest + `"}}`
 	if _, err := ParseManifest("bun", []byte(valid)); err != nil {
 		t.Fatalf("valid manifest: %v", err)
 	}
@@ -331,7 +331,7 @@ func TestListReportsEveryRuntimeDirectory(t *testing.T) {
 	}
 }
 
-// An executable runtime names a fallback slot runtime: PiG tries it before Node and records every skipped tier. A fallback's own
+// An executable runtime names a fallback slot runtime: Ompig tries it before Node and records every skipped tier. A fallback's own
 // fallback is not followed.
 func TestResolveTriesTheManifestFallbackBeforeNode(t *testing.T) {
 	s := newSlot(t)

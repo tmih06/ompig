@@ -3,9 +3,9 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // startSessionWithLoader starts a Session in cwd with loader as its resource loader and extensions loaded, and emits session_start for startup the way print, JSON and RPC mode bind it: the Session runs resources_discover and extends loader with the result (agent-session.ts bindExtensions). It returns the error session_start's discovery returned.

@@ -108,11 +108,11 @@
 			"signature": "() -> errno"
 		},
 		{
-			"name": "pig.uuidv7",
+			"name": "ompig.uuidv7",
 			"signature": "(dst ptr)"
 		},
 		{
-			"name": "pig.read",
+			"name": "ompig.read",
 			"signature": "(req ptr, reqLen u32, dst ptr, cap u32) -> u32"
 		}
 	],

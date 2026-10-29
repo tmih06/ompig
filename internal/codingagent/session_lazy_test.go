@@ -11,8 +11,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // checkHandleReads compares the lazy whole-history reads of s with its decoded ones: the same entries in the same order, the same base

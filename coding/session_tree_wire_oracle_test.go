@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // anthropicWireServer answers every request with a short Anthropic text reply and
@@ -188,7 +188,7 @@ func buildWireOracleTree(t *testing.T, sess *Session) []string {
 // Pi builds the context from the session path, converts it, and
 // transformMessages closes every pending tool call at the next user turn, so a
 // navigation point between a tool call and one of its results never leaves a
-// tool_result without its tool_use. Pig normalizes before converting; this
+// tool_result without its tool_use. Ompig normalizes before converting; this
 // drives /tree navigation to every entry of a forked tree, with and without a
 // branch summary, sends a new prompt through the Anthropic provider and checks
 // the request it serializes.

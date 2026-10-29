@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type servicesProbe struct {
@@ -45,7 +45,7 @@ func TestAgentSessionServicesResolvePathsMatchPi(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	piSandbox, pigSandbox := t.TempDir(), t.TempDir()
+	piSandbox, ompigSandbox := t.TempDir(), t.TempDir()
 	cmd := exec.CommandContext(t.Context(), "node", "testdata/agent_session_services.mjs", pigversion.UpstreamPackageVersion, piSandbox)
 	cmd.Stdin = bytes.NewReader(input)
 	var stderr bytes.Buffer
@@ -62,22 +62,22 @@ func TestAgentSessionServicesResolvePathsMatchPi(t *testing.T) {
 		t.Fatalf("Pi returned %d results for %d probes", len(want), len(probes))
 	}
 
-	t.Setenv("HOME", filepath.Join(pigSandbox, "home"))
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(pigSandbox, "default-agent"))
-	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(pigSandbox, "default-agent"))
-	t.Setenv("PIG_HOME", "")
+	t.Setenv("HOME", filepath.Join(ompigSandbox, "home"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(ompigSandbox, "default-agent"))
+	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(ompigSandbox, "default-agent"))
+	t.Setenv("OMPIG_HOME", "")
 	t.Setenv("PI_HOME", "")
-	if err := os.MkdirAll(filepath.Join(pigSandbox, "home"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(ompigSandbox, "home"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Chdir(pigSandbox)
+	t.Chdir(ompigSandbox)
 	fill := func(s *string) string {
 		if s == nil {
 			return ""
 		}
-		return strings.ReplaceAll(*s, "{S}", pigSandbox)
+		return strings.ReplaceAll(*s, "{S}", ompigSandbox)
 	}
-	strip := func(s string) *string { v := strings.ReplaceAll(s, pigSandbox, "{S}"); return &v }
+	strip := func(s string) *string { v := strings.ReplaceAll(s, ompigSandbox, "{S}"); return &v }
 	for i, probe := range probes {
 		var got servicesOut
 		services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: fill(probe.CWD), AgentDir: fill(probe.AgentDir)})

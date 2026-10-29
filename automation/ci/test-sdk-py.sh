@@ -2,17 +2,17 @@
 # SPDX-License-Identifier: MIT
 set -euo pipefail
 
-# Runs the Python extension SDK's pytest suite in a venv under PIG_CACHE_HOME that holds only the hash-locked dev
+# Runs the Python extension SDK's pytest suite in a venv under OMPIG_CACHE_HOME that holds only the hash-locked dev
 # dependencies of extensions/sdk-py/requirements-dev.txt. The venv's name hashes the lock and the interpreter, so a lock
 # or interpreter change builds a new venv instead of reusing a stale one. The venv is built in a temporary directory
 # and renamed into place, so an interrupted install or a concurrent run in another worktree never leaves a half-built
-# venv behind. pytest runs as `python -m pytest` from the SDK root, which puts pig_sdk on sys.path without installing it.
+# venv behind. pytest runs as `python -m pytest` from the SDK root, which puts ompig_sdk on sys.path without installing it.
 # uv builds the venv when it is on PATH, because a system Python (Debian's, for one) can lack ensurepip and pip;
 # otherwise the interpreter's own venv and pip do. Both install with --require-hashes and wheels only.
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 sdk="$root/extensions/sdk-py"
 lock="$sdk/requirements-dev.txt"
-cache="${PIG_CACHE_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}}/pig-sdk-py"
+cache="${OMPIG_CACHE_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}}/ompig-sdk-py"
 
 python=$(python3 -c 'import sys; print(sys.executable)')
 key=$("$python" -c '

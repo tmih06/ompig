@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/sessiongraph"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/sessiongraph"
 )
 
 // sessionGraphPackedSDKs are the session-graph fixtures of the Go, Rust and Python SDKs loaded into a shared cell next to a second extension of their language, so that the extension under test shares its runtime process with another. A cell is shared only by extensions of one dependency set, so the fixture and its companion are built from the same manifest.
@@ -56,13 +56,13 @@ func sessionGraphPackedSDKs() map[string]sessionGraphLoader {
 				source := filepath.Join(dir, name)
 				write(t, map[string]string{
 					filepath.Join(source, "extension.go"): body,
-					filepath.Join(source, "go.mod"): fmt.Sprintf("module example.com/%s\n\ngo 1.26.0\nrequire (\n github.com/MichaelKinsy/PiG v%s\n github.com/MichaelKinsy/PiG/extensions/sdk v%s\n)\nreplace github.com/MichaelKinsy/PiG => %s\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n",
-						name, pigversion.PigVersion, pigversion.PigVersion, filepath.ToSlash(root), filepath.ToSlash(filepath.Join(root, "extensions", "sdk"))),
+					filepath.Join(source, "go.mod"): fmt.Sprintf("module example.com/%s\n\ngo 1.26.0\nrequire (\n github.com/tmih06/ompig v%s\n github.com/tmih06/ompig/extensions/sdk v%s\n)\nreplace github.com/tmih06/ompig => %s\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n",
+						name, pigversion.OmpigVersion, pigversion.OmpigVersion, filepath.ToSlash(root), filepath.ToSlash(filepath.Join(root, "extensions", "sdk"))),
 				})
-				return subprocess.ExtConfig{Name: name, Source: source, SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/" + name, Package: "example.com/" + name, Factory: "Extension"}
+				return subprocess.ExtConfig{Name: name, Source: source, SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/" + name, Package: "example.com/" + name, Factory: "Extension"}
 			}
-			return cfg(sessiongraph.Name, "package fixture\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nimport \"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/sessiongraph\"\nfunc Extension() *sdk.Extension { return sessiongraph.Extension() }\n"),
-				cfg("packed-companion", "package fixture\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"packed-companion\") }\n")
+			return cfg(sessiongraph.Name, "package fixture\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nimport \"github.com/tmih06/ompig/test/extension-conformance/testfixture/sessiongraph\"\nfunc Extension() *sdk.Extension { return sessiongraph.Extension() }\n"),
+				cfg("packed-companion", "package fixture\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"packed-companion\") }\n")
 		}),
 		"rust-packed": pack("rust", func(t testing.TB, root string) (subprocess.ExtConfig, subprocess.ExtConfig) {
 			dir := t.TempDir()
@@ -84,10 +84,10 @@ func sessionGraphPackedSDKs() map[string]sessionGraphLoader {
 			}
 			companionSource := filepath.Join(dir, "packed-companion")
 			files[filepath.Join(companionSource, "Cargo.toml")] = manifest("packed-companion")
-			files[filepath.Join(companionSource, "src", "lib.rs")] = "pub fn new_extension() -> pig_sdk::Extension { pig_sdk::Extension::new(\"packed-companion\") }\n"
+			files[filepath.Join(companionSource, "src", "lib.rs")] = "pub fn new_extension() -> ompig_sdk::Extension { ompig_sdk::Extension::new(\"packed-companion\") }\n"
 			write(t, files)
-			return subprocess.ExtConfig{Name: sessiongraph.Name, Source: fixtureSource, SDKName: "pig-sdk", Package: "session-graph-fixture", Factory: "new_extension"},
-				subprocess.ExtConfig{Name: "packed-companion", Source: companionSource, SDKName: "pig-sdk", Package: "packed-companion", Factory: "new_extension"}
+			return subprocess.ExtConfig{Name: sessiongraph.Name, Source: fixtureSource, SDKName: "ompig-sdk", Package: "session-graph-fixture", Factory: "new_extension"},
+				subprocess.ExtConfig{Name: "packed-companion", Source: companionSource, SDKName: "ompig-sdk", Package: "packed-companion", Factory: "new_extension"}
 		}),
 		"python-packed": pack("python", func(t testing.TB, root string) (subprocess.ExtConfig, subprocess.ExtConfig) {
 			fixture := packedFlagFactory(t, root, "python", sessiongraph.Name, false)

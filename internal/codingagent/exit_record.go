@@ -5,7 +5,7 @@ package codingagent
 // Go adds two more silent endings: a panic or fatal error in a goroutine nobody recovers (it prints to stderr, which a
 // closed terminal discards) and a kill by the OS (SIGKILL, memory pressure), which no code in the process can observe.
 //
-// pig additive (D102): exit.log and crash-output/ in the agent directory.
+// ompig additive (D102): exit.log and crash-output/ in the agent directory.
 
 import (
 	"bytes"
@@ -20,15 +20,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/profiling"
+	"github.com/tmih06/ompig/internal/profiling"
 )
 
 const (
 	exitLogName    = "exit.log"
 	crashOutputDir = "crash-output"
-	// pig additive (D102): exit.log bounds are PiG's own; Pi keeps no such log.
+	// ompig additive (D102): exit.log bounds are Ompig's own; Pi keeps no such log.
 	maxExitLogBytes = 64 << 10
-	// pig additive (D102): see maxExitLogBytes.
+	// ompig additive (D102): see maxExitLogBytes.
 	keptExitLogLines  = 100
 	crashOutputSuffix = ".log"
 )
@@ -54,7 +54,7 @@ func RecordExit(agentDir, reason string) {
 const flightRecordSuffix = ".flight.trace"
 
 // dumpFlightRecord writes the last seconds of the execution trace next to this process's crash output file when
-// PIG_PROFILE=flight started the recorder, so an exit nobody asked for leaves what the process was doing. It is best
+// OMPIG_PROFILE=flight started the recorder, so an exit nobody asked for leaves what the process was doing. It is best
 // effort and does nothing when the recorder is off.
 func dumpFlightRecord(agentDir string) {
 	if agentDir == "" || !profiling.FlightActive() {
@@ -112,7 +112,7 @@ func trimExitLog(path string) {
 	if len(lines) > keptExitLogLines {
 		lines = lines[len(lines)-keptExitLogLines:]
 	}
-	// pig additive (D102): a failed trim leaves a longer log, and the caller still appends its line.
+	// ompig additive (D102): a failed trim leaves a longer log, and the caller still appends its line.
 	_ = os.WriteFile(path, bytes.Join(lines, nil), 0o644)
 }
 

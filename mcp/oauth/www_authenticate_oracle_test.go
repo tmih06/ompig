@@ -3,7 +3,7 @@ package oauth
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's parseWwwAuthenticate (oauth/discovery.js), run against the vendored Pi module: scheme detection, the case-folded `name=value` fields with quoted or bare values, and the resource_metadata URL.

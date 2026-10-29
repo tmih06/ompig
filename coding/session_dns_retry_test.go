@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/test/suite/regressions/6904-dns-transport-retry.test.ts.

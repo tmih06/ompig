@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's bindCore takes providerActions.registerNativeProvider(provider: Provider) (runner.ts:410-418) and hands it each queued registration's Provider

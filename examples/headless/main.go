@@ -1,9 +1,9 @@
-// Command headless embeds PiG as a library: a coding session with MCP servers and one provider (Anthropic), and no
+// Command headless embeds Ompig as a library: a coding session with MCP servers and one provider (Anthropic), and no
 // terminal. It reads a prompt from its arguments, runs it, and prints the last assistant message.
 //
 //	ANTHROPIC_API_KEY=... go run ./examples/headless "list the files in the current directory"
 //
-// MCP servers come from mcp.json in the agent directory and in the project's .pig directory, as for the pig command.
+// MCP servers come from mcp.json in the agent directory and in the project's .ompig directory, as for the ompig command.
 //
 // The size of this program is what an embedder pays for MCP, the session API and the provider code. Build it with the
 // strip tags that drop the features it never uses (see docs/site/docs/embedding.md and TestHeadlessEmbedBinarySizeGate).
@@ -18,16 +18,16 @@ import (
 	"os/signal"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
 // model is the one provider and model this program uses: provider id, then model id.
 const model = "anthropic/claude-sonnet-4-5"
 
-// configDirName is the name of the per-project configuration directory (.pig/mcp.json, .pig/settings.json).
-const configDirName = ".pig"
+// configDirName is the name of the per-project configuration directory (.ompig/mcp.json, .ompig/settings.json).
+const configDirName = ".ompig"
 
 func main() {
 	if err := runUntilInterrupted(strings.Join(os.Args[1:], " ")); err != nil {

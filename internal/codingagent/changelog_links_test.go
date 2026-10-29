@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // packages/coding-agent/test/changelog.test.ts, ported with the same inputs and expected results.
@@ -95,7 +95,7 @@ func TestNormalizeChangelogLinksMatchesPi(t *testing.T) {
 	for i, probe := range probes {
 		if got := NormalizeChangelogLinks(probe["markdown"], probe["version"]); got != expected[i] {
 			if failures++; failures <= 8 {
-				t.Errorf("%q @%s:\n  Pig %q\n  Pi  %q", probe["markdown"], probe["version"], got, expected[i])
+				t.Errorf("%q @%s:\n  Ompig %q\n  Pi  %q", probe["markdown"], probe["version"], got, expected[i])
 			}
 		}
 	}

@@ -17,7 +17,7 @@ func TestResolveAliasesGivesAnAliasItsTargetsWireFields(t *testing.T) {
 	if got := ext.jsonFields("MarkdownTransformContext"); len(got) != 0 {
 		t.Fatalf("before resolution the alias has no fields of its own, got %v", got)
 	}
-	if err := ext.resolveAliases(repoRoot, "github.com/MichaelKinsy/PiG"); err != nil {
+	if err := ext.resolveAliases(repoRoot, "github.com/tmih06/ompig"); err != nil {
 		t.Fatal(err)
 	}
 	got := ext.jsonFields("MarkdownTransformContext")

@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // SessionGraphBackend constructs and serves the objects of the session graph (protocol_session_graph.go). The process that owns the coding package implements it; the host only keeps the objects for the connection that built them.

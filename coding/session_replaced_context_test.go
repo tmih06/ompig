@@ -5,8 +5,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's createReplacedSessionContext (agent-session.ts:4375-4383) copies the runner's command context and rebinds sendMessage and sendUserMessage

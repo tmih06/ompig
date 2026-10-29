@@ -132,7 +132,7 @@ func generatePendingInputMapping(inventory inputInventory, previous inputMapping
 		}
 		return inputMappingEntry{
 			ID: id, OwnerFamily: owner, Disposition: "pending",
-			PigTargets: []string{}, Evidence: []string{}, Contracts: []string{},
+			OmpigTargets: []string{}, Evidence: []string{}, Contracts: []string{},
 		}, nil
 	}
 	output := inputMapping{UpstreamVersion: inventory.UpstreamVersion}

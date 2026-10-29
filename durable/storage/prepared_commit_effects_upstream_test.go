@@ -3,8 +3,8 @@ package storage_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // prepareCommit (packages/durable/src/storage/memory.ts:266-288) validates and detaches one commit "without changing observable state": nothing is

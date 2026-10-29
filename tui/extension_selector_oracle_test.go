@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type extensionSelectorProbe struct {
@@ -125,7 +125,7 @@ func TestExtensionSelectorMatchesPi(t *testing.T) {
 			func() { events = append(events, "cancel") },
 			ExtensionSelectorOptions{Description: probe.Description})
 		got := showImagesResult{Steps: [][]string{}, Frames: [][]string{selector.Render(probe.Width)}}
-		// The host removes the component as soon as a callback runs, so Pi's never sees a key after one; Pig's host polls Done and ignores later keys.
+		// The host removes the component as soon as a callback runs, so Pi's never sees a key after one; Ompig's host polls Done and ignores later keys.
 		keys := probe.Keys
 		if completed := firstCompletedStep(expected[i].Steps); completed >= 0 {
 			keys = keys[:completed+1]
@@ -138,7 +138,7 @@ func TestExtensionSelectorMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got.Steps, expected[i].Steps) || !reflect.DeepEqual(got.Frames, expected[i].Frames) {
 			if failures++; failures <= 3 {
-				t.Errorf("probe %d %+v:\n steps Pig %q Pi %q\n frames Pig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
+				t.Errorf("probe %d %+v:\n steps Ompig %q Pi %q\n frames Ompig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
 			}
 		}
 	}

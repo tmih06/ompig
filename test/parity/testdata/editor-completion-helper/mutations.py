@@ -62,9 +62,9 @@ for name, source, old, new, tests in mutations:
     if statuses != [0, 1]:
         raise RuntimeError(f"{name}: mutation was not compiled and killed")
     if name in pair_mutations:
-        pair = subprocess.run(["go", "run", "-overlay", str(overlay), "./test/parity/testdata/editor-completion-helper/pig"], cwd=root, capture_output=True, check=False)
-        (directory / "pig-output.txt").write_bytes(pair.stdout)
-        (directory / "pig-stderr.txt").write_bytes(pair.stderr)
+        pair = subprocess.run(["go", "run", "-overlay", str(overlay), "./test/parity/testdata/editor-completion-helper/ompig"], cwd=root, capture_output=True, check=False)
+        (directory / "ompig-output.txt").write_bytes(pair.stdout)
+        (directory / "ompig-stderr.txt").write_bytes(pair.stderr)
         equal = pair.returncode == 0 and pair.stdout == pi.stdout
         print(f"{name}: fixture exit={pair.returncode} output_equal={equal}", flush=True)
         if equal:

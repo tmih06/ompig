@@ -7,19 +7,19 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Pi 0.87.1 interactive-mode.ts:2321-2336 wraps a widget set as string[] in a
 // Container of Text(line, 1, 0) for the first MAX_WIDGET_LINES (10) entries
 // (interactive-mode.ts:2377) plus a muted "... (widget truncated)" Text, and
 // the TUI renders it at the current width on every frame. Public issue #104:
-// PiG painted the rows as pushed, so a row wider than the pane reached the
+// Ompig painted the rows as pushed, so a row wider than the pane reached the
 // differential renderer and panicked.
 //
 // The expected rows are the output of Pi's pi-tui Text.render for the same
-// input (probed against the pinned package), not PiG's Text.
+// input (probed against the pinned package), not Ompig's Text.
 func TestSetWidgetStringContentUsesPiTextLayout(t *testing.T) {
 	muted := tui.ActiveTheme().Fg("muted", "... (widget truncated)")
 	cases := []struct {

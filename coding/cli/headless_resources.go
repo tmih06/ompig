@@ -1,9 +1,9 @@
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // extensionPromptSkills is the Skill shape Pi hands extensions in systemPromptOptions.skills (skills.ts Skill).

@@ -3,7 +3,7 @@ package parity
 import (
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // eventTypeRegistry maps upstream event type names (as they appear in

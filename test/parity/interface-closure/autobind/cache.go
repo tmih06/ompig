@@ -20,17 +20,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/test/parity/internal/ledgertarget"
+	"github.com/tmih06/ompig/test/parity/internal/ledgertarget"
 )
 
 // The shared derivation cache. Every ledger lane derives the same 12k rows from nearly the same tree, and the two expensive stages are
-// pure functions of files: the reach graph (cmd/prodreach) of the source that cmd/pig links, and the decisions of the rules over the Go
+// pure functions of files: the reach graph (cmd/prodreach) of the source that cmd/ompig links, and the decisions of the rules over the Go
 // tree, the upstream inventory and the reviewed inputs. Each result is stored once under a content key, so a lane (or the integrator)
 // whose inputs are byte-identical to an earlier derivation reads it instead of recomputing it.
 //
 // The key is exact, not a heuristic: it hashes every file the derivation reads (inputFiles), the engine included, so a hit returns
 // what a full derivation would have written. A per-package incremental derivation is deliberately absent: a row's decision depends on
-// the declarations of every package its Go types reach and on every caller and test of the symbol it picks, and cmd/pig links all of
+// the declarations of every package its Go types reach and on every caller and test of the symbol it picks, and cmd/ompig links all of
 // them, so no sound smaller footprint exists (docs/parity/gap-closure/ledger-autobind.md, "The derivation cache").
 
 // cacheSchema versions the stored layout; a change to what is stored bumps it, which changes every key.
@@ -42,10 +42,10 @@ type ledgerCache struct {
 	log io.Writer
 }
 
-// defaultCacheDir returns PIG_LEDGER_CACHE when it is set (lane hosts point it at one directory shared by every lane), else a
+// defaultCacheDir returns OMPIG_LEDGER_CACHE when it is set (lane hosts point it at one directory shared by every lane), else a
 // per-checkout directory.
 func defaultCacheDir(root string) string {
-	if env := os.Getenv("PIG_LEDGER_CACHE"); env != "" {
+	if env := os.Getenv("OMPIG_LEDGER_CACHE"); env != "" {
 		return env
 	}
 	return filepath.Join(root, "build", "ledger-cache")
@@ -308,7 +308,7 @@ func derivationKey(root string, o options) (string, error) {
 	return keyOf(key, "reach-file", hex.EncodeToString(sum[:])), nil
 }
 
-// reachKey is the content key of the reach graph: the toolchain and the source of every package that cmd/pig and the seeded library
+// reachKey is the content key of the reach graph: the toolchain and the source of every package that cmd/ompig and the seeded library
 // packages link in each build. Tests, tools and packages they do not link do not change what they can reach, so a lane that only
 // adds tests or ledger rows hits the entry another lane stored.
 func reachKey(root string, tags, patterns, libraries []string) (string, error) {

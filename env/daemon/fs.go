@@ -13,12 +13,12 @@ import (
 	"strings"
 	"syscall"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
-// pig divergence (D96): the Go daemon takes its target system from the build instead of Rust's cfg!.
+// ompig divergence (D96): the Go daemon takes its target system from the build instead of Rust's cfg!.
 // targetOS is the system the daemon is built for: GOOS, or `android` for the static linux/amd64 build that
 // make build-env-daemons packages for Android on x86-64, where Go links GOOS=android only with cgo. It sets this
 // variable with -ldflags -X, so that build reports and follows Android as Pi's daemon built for Android does.

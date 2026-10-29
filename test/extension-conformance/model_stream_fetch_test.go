@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's ProviderRequestOptions.fetch (packages/ai/src/types.ts) is the transport a model request goes through. Every SDK keeps the function

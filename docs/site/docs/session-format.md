@@ -1,20 +1,20 @@
 # Session file format
 
-PiG stores each Session as JSON Lines. Line 1 is a Session header. Each later line is one entry in a tree.
+Ompig stores each Session as JSON Lines. Line 1 is a Session header. Each later line is one entry in a tree.
 
-The format is the Session format of Pi 1.4.0 ([Pi's session file format](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/session-format.md)). PiG keeps each entry's JSON as it was read, so unknown fields, unknown entry types and the member order survive when PiG loads and rewrites a Session file, as in Pi.
+The format is the Session format of Pi 1.4.0 ([Pi's session file format](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/session-format.md)). Ompig keeps each entry's JSON as it was read, so unknown fields, unknown entry types and the member order survive when Ompig loads and rewrites a Session file, as in Pi.
 
 ## File location
 
 The default location is:
 
 ```text
-~/.pig/agent/sessions/--<project-path>--/<timestamp>_<uuid>.jsonl
+~/.ompig/agent/sessions/--<project-path>--/<timestamp>_<uuid>.jsonl
 ```
 
-PiG uses `PIG_CODING_AGENT_DIR` when you configure a different agent directory.
+Ompig uses `OMPIG_CODING_AGENT_DIR` when you configure a different agent directory.
 
-Use `/resume` to open or delete a Session. PiG uses the `trash` command for deletion when it is available.
+Use `/resume` to open or delete a Session. Ompig uses the `trash` command for deletion when it is available.
 
 ## Header
 
@@ -26,7 +26,7 @@ The first line has no `id` or `parentId`:
 
 A Session created with `/fork` or `/clone` also contains `parentSession`, the path of the original Session file.
 
-The current upstream Session schema version is 3. PiG migrates supported older upstream Session shapes when it loads them. Do not change the version field by hand.
+The current upstream Session schema version is 3. Ompig migrates supported older upstream Session shapes when it loads them. Do not change the version field by hand.
 
 ## Entry tree
 
@@ -81,7 +81,7 @@ For example, an assistant turn that calls the `read` tool stores:
 {"type":"toolCall","id":"call_1","name":"read","arguments":{"path":"a.txt"}}
 ```
 
-Treat signatures as opaque provider data. Sessions written by older PiG versions can contain a `tool_use` block with `input` in place of `arguments`. PiG still reads that form and writes `toolCall`.
+Treat signatures as opaque provider data. Sessions written by older Ompig versions can contain a `tool_use` block with `input` in place of `arguments`. Ompig still reads that form and writes `toolCall`.
 
 A completed assistant message can contain provider, model, API, usage, diagnostics, response identity, `stopReason`, `errorMessage` and `durationMs` fields. `durationMs` is the time in milliseconds from the start of the request to the final message. A tool result message can contain `durationMs`, the time the tool's `execute` took, without hooks; a tool call that did not run has none. Treat fields that you do not use as opaque data.
 
@@ -123,7 +123,7 @@ Treat an unknown `kind` as ordinary usage.
 
 Optional fields include `details`, `fromHook`, summary-generation `usage`, and `systemMessage`. `systemMessage` records the system prompt and tool declarations at the compaction boundary. It becomes the leading system message of the compacted context. Built-in `toolsAdded` parameter schemas retain Pi's declaration order, including nested properties, when saved and compacted again after loading.
 
-PiG builds post-compaction context from the summary, `firstKeptEntryId`, and later entries. The current format does not define a `retainedTail` field.
+Ompig builds post-compaction context from the summary, `firstKeptEntryId`, and later entries. The current format does not define a `retainedTail` field.
 
 ### Branch summary
 
@@ -177,11 +177,11 @@ The target can be a user, assistant, tool-result or custom-message entry. A `nul
 {"type":"session_info","id":"d0e1f2a3","parentId":"c9d0e1f2","timestamp":"2026-01-15T14:35:00Z","name":"Refactor authentication"}
 ```
 
-PiG shows the latest Session name in `/resume`.
+Ompig shows the latest Session name in `/resume`.
 
 ## Context construction
 
-PiG builds model context from the active root-to-leaf branch:
+Ompig builds model context from the active root-to-leaf branch:
 
 1. It finds the active branch.
 2. It applies the latest model and thinking-level entries.
@@ -205,7 +205,7 @@ file, err := ctx.GetSessionFile()   // *string, nil for an in-memory session
 
 `GetBranch` provides a flattened reading view for common message fields. Use `GetEntries` when you need the exact entry JSON.
 
-PiG subscribes an extension to Session-log replication only when the extension first asks for entries. Later appends update a local SDK mirror. This avoids repeated full-history IPC and avoids copying long Sessions into extensions that never inspect them.
+Ompig subscribes an extension to Session-log replication only when the extension first asks for entries. Later appends update a local SDK mirror. This avoids repeated full-history IPC and avoids copying long Sessions into extensions that never inspect them.
 
 ## Parse a file in Go
 
@@ -244,12 +244,12 @@ Set an explicit scanner limit. A Session line can contain a large tool result or
 - Preserve `null` versus a missing `parentId`.
 - Do not reorder entries.
 - Do not rewrite timestamps or IDs.
-- Do not edit a Session while PiG is writing it.
+- Do not edit a Session while Ompig is writing it.
 - Use the extension APIs to append extension state or messages during a running Session.
 
 ## Source references
 
-PiG implementation:
+Ompig implementation:
 
 - `internal/sessionentry/union.go` defines the entry types of Pi's `SessionEntry` union.
 - `internal/codingagent/session.go` defines the durable entry shapes.

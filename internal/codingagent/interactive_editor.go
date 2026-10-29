@@ -3,7 +3,7 @@ package codingagent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func (m *InteractiveMode) openExternalEditor(ctx context.Context) {
@@ -17,7 +17,7 @@ func (m *InteractiveMode) openExternalEditorBuffer(ctx context.Context, command,
 	}
 	m.externalEditorActive = true
 	if m.surface != nil {
-		// pig additive (D91): the frontend session keeps its frames while
+		// ompig additive (D91): the frontend session keeps its frames while
 		// the editor owns the terminal and learns of the handoff.
 		m.surface.Suspend()
 	} else {
@@ -54,7 +54,7 @@ func (m *InteractiveMode) openExternalEditorBuffer(ctx context.Context, command,
 				apply(result)
 			}
 			if m.surface != nil {
-				// pig additive (D91): the frame after the handoff carries
+				// ompig additive (D91): the frame after the handoff carries
 				// only what changed, such as the edited text.
 				m.surface.Resume()
 			} else {

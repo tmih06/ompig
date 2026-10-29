@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // A streamed message grows at its end, so a render of the longer text resumes from the last top-level block start that

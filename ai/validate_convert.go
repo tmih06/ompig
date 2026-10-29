@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // convert follows TypeBox 1.3.27 value/convert. Only TypeBox's non-enumerable

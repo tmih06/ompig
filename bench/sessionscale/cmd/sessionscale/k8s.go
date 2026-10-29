@@ -17,7 +17,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/bench/sessionscale"
+	"github.com/tmih06/ompig/bench/sessionscale"
 )
 
 // The k8s subcommands are bench/k8s's adapter: k8sbench runs `k8s seed` once per target and size and `k8s sample` once

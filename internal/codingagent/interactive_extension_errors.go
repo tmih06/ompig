@@ -3,9 +3,9 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
 )
 
 // queueExtensionError is the runner's error listener. Listeners run on the
@@ -41,7 +41,7 @@ func (m *InteractiveMode) showPendingExtensionErrors() {
 		m.showExtensionError(err.ExtensionPath, err.Error, err.Stack)
 	}
 	if len(pending) > 0 {
-		// pig additive (D95): a failed extension may be a cell file another pig pruned.
+		// ompig additive (D95): a failed extension may be a cell file another ompig pruned.
 		m.maybeShowInstallChangeWarning()
 		m.requestRender()
 	}

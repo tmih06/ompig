@@ -2,11 +2,11 @@
 import json
 import os
 
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("host-wiring-run-mode")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("host-wiring-run-mode")
 
     def on_start(ctx, data):
         # newline="" keeps the "\n" record separator on Windows, where text mode writes "\r\n".

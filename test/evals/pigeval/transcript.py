@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Per-run metrics from a harness's machine-readable output.
 
-Formats: Pi-family `--mode json` (pig, pi, omp), Claude Code `stream-json`,
+Formats: Pi-family `--mode json` (ompig, pi, omp), Claude Code `stream-json`,
 and Codex `exec --json`. Other harnesses report pass or fail and wall time only.
 Metrics follow the no-poll comparison in oh-my-pi: turns, tool calls, polling
 calls, context tokens, and cost.

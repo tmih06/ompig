@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // knownTerminalRenderer is a renderer whose Terminal is a known value.

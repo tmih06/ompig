@@ -73,7 +73,7 @@ func TestMutationKeyOfAMissingFileUnderARootParentAddsNoSeparator(t *testing.T) 
 		t.Skip("a root parent is a drive on Windows")
 	}
 	executionEnv := createEnv(t)
-	const name = "pig-no-such-entry-9f3a1c"
+	const name = "ompig-no-such-entry-9f3a1c"
 	key, err := mutationKey(background, executionEnv, "/"+name)
 	mustDo(t, err)
 	if want := executionEnv.Id() + "\x00/" + name; key != want {

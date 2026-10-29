@@ -5,17 +5,17 @@
 const test = require("node:test");
 const assert = require("node:assert");
 const path = require("path");
-const launcher = require("./launcher/bin/pig.js");
+const launcher = require("./launcher/bin/ompig.js");
 
 const TARGETS = [
   // Node on Termux reports "android" and needs the android binary, not linux-arm64.
-  ["android", "arm64", "@pi-in-go/pig-android-arm64", "pig"],
-  ["darwin", "arm64", "@pi-in-go/pig-darwin-arm64", "pig"],
-  ["darwin", "x64", "@pi-in-go/pig-darwin-x64", "pig"],
-  ["linux", "arm64", "@pi-in-go/pig-linux-arm64", "pig"],
-  ["linux", "x64", "@pi-in-go/pig-linux-x64", "pig"],
-  ["win32", "arm64", "@pi-in-go/pig-win32-arm64", "pig.exe"],
-  ["win32", "x64", "@pi-in-go/pig-win32-x64", "pig.exe"],
+  ["android", "arm64", "@ompig/ompig-android-arm64", "ompig"],
+  ["darwin", "arm64", "@ompig/ompig-darwin-arm64", "ompig"],
+  ["darwin", "x64", "@ompig/ompig-darwin-x64", "ompig"],
+  ["linux", "arm64", "@ompig/ompig-linux-arm64", "ompig"],
+  ["linux", "x64", "@ompig/ompig-linux-x64", "ompig"],
+  ["win32", "arm64", "@ompig/ompig-win32-arm64", "ompig.exe"],
+  ["win32", "x64", "@ompig/ompig-win32-x64", "ompig.exe"],
 ];
 
 for (const [platform, arch, pkg, bin] of TARGETS) {
@@ -52,6 +52,6 @@ test("missing optional platform package explains --no-optional", () => {
         err.code = "MODULE_NOT_FOUND";
         throw err;
       }),
-    (err) => /@pi-in-go\/pig-linux-x64 is not installed/.test(err.message) && /--no-optional/.test(err.message),
+    (err) => /@ompig\/ompig-linux-x64 is not installed/.test(err.message) && /--no-optional/.test(err.message),
   );
 });

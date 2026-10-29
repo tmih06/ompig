@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,8 +13,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepack"
-	"github.com/MichaelKinsy/PiG/internal/fspublish"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepack"
+	"github.com/tmih06/ompig/internal/fspublish"
 )
 
 func TestNodeRuntimeMaterializesOncePerContentHash(t *testing.T) {

@@ -10,7 +10,7 @@
 #   IMAGE=... PI_REFERENCE=0 bench/k8s/image/build.sh                   leave out the Pi reference checkout
 #   BUNDLE=<dir> bench/k8s/image/build.sh                               export the bundle to <dir> instead (Docker only)
 #   ARMS=codex                                                          also install these bench/evals/arms.lock arms under arms/<id>
-#   PIG_PI_BUILD_STORE, PIG_DEV_HOME                                    where pin.py install-oracle left the pinned Pi's packs (commit pin)
+#   OMPIG_PI_BUILD_STORE, OMPIG_DEV_HOME                                    where pin.py install-oracle left the pinned Pi's packs (commit pin)
 #   K8SBENCH_ALLOW_DIRTY=1                                              build a tree with uncommitted or untracked files (commit gets -dirty)
 set -eu
 PLATFORM=${PLATFORM:-linux/amd64}
@@ -36,7 +36,7 @@ if [ -n "${BUNDLE:-}" ]; then
 		exit 1
 	fi
 	docker buildx build --platform "$PLATFORM" -f bench/k8s/image/Dockerfile --target bundle --build-context pi="$pi" \
-		--build-arg PIG_COMMIT="$commit" --build-arg PI_REFERENCE=0 --build-arg ARMS="${ARMS:-}" \
+		--build-arg OMPIG_COMMIT="$commit" --build-arg PI_REFERENCE=0 --build-arg ARMS="${ARMS:-}" \
 		--output "type=local,dest=$BUNDLE" .
 	echo "$BUNDLE"
 	exit 0
@@ -48,7 +48,7 @@ trap 'rm -f "$meta"; rm -rf "$pi"' EXIT
 output="--load"
 [ "$PUSH" = 1 ] && output="--push"
 docker buildx build --platform "$PLATFORM" -f bench/k8s/image/Dockerfile --build-context pi="$pi" \
-	--build-arg PIG_COMMIT="$commit" --build-arg PI_REFERENCE="${PI_REFERENCE:-1}" --build-arg ARMS="${ARMS:-}" \
+	--build-arg OMPIG_COMMIT="$commit" --build-arg PI_REFERENCE="${PI_REFERENCE:-1}" --build-arg ARMS="${ARMS:-}" \
 	--metadata-file "$meta" -t "$tag" $output .
 digest=$(sed -n 's/.*"containerimage.digest": *"\(sha256:[0-9a-f]*\)".*/\1/p' "$meta" | head -1)
 [ -n "$digest" ] || { echo "build.sh: buildx reported no digest" >&2; exit 1; }

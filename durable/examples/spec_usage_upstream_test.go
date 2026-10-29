@@ -19,13 +19,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 type (

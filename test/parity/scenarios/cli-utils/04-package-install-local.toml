@@ -7,8 +7,8 @@
 #     Installing ./testdata/local-package...
 #     Installed ./testdata/local-package
 # No ANSI, version, or temporary paths occur here; compare complete output without normalization.
-# This is the shared Package materializer boundary used by Piglet source add,
-# not a claim that Pi implements the additive Piglet commands (D18).
+# This is the shared Package materializer boundary used by Ompiglet source add,
+# not a claim that Pi implements the additive Ompiglet commands (D18).
 #
 # Local package installs are the honest CLI path that exercise package-command
 # parsing plus local-path classification without network access.
@@ -23,7 +23,7 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_HOME=testdata/package-home"]
+ompig = ["OMPIG_HOME=testdata/package-home"]
 pi = ["PI_HOME=testdata/package-home", "PI_CODING_AGENT_DIR=testdata/package-home/agent", "PI_SKIP_VERSION_CHECK=1"]
 override_base_args = true
 

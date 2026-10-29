@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // scheduler.ts TaskRuntime.getTask: a task reads another task's record through its runtime, by id, within the same conversation;

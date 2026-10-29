@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/bench/sessionscale"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/bench/sessionscale"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The /tree selector over the 300 MB owner-shape session opens and renders its first screen within Pi 1.1.0's time for the same file (0.58 s

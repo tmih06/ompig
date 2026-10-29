@@ -7,7 +7,7 @@ import { extractBehaviorInputInventory } from "../src/behavior-input-inventory.m
 import { scratchDir } from "./scratch.mjs";
 
 function fixture() {
-  const root = scratchDir("pig-behavior-inputs-");
+  const root = scratchDir("ompig-behavior-inputs-");
   const file = path.join(root, "packages/coding-agent/src/components/picker.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -69,7 +69,7 @@ test("extracts stable input-handler branches, effects, and source identity", () 
 });
 
 test("extracts WSL keybinding defaults separately from ordinary Linux", () => {
-  const root = scratchDir("pig-wsl-keybindings-");
+  const root = scratchDir("ompig-wsl-keybindings-");
   const file = path.join(root, "packages/coding-agent/src/core/keybindings.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -90,7 +90,7 @@ class Handler { handleInput(data: string) { if (kb.matches(data, "app.model.prev
 });
 
 test("inherits keybinding descriptions through TUI definition spreads", () => {
-  const root = scratchDir("pig-spread-keybindings-");
+  const root = scratchDir("ompig-spread-keybindings-");
   const file = path.join(root, "packages/coding-agent/src/core/keybindings.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -113,7 +113,7 @@ class Handler { handleInput(data: string) { if (kb.matches(data, "tui.altScreen.
 });
 
 test("reads app keybindings declared in APP_KEYBINDINGS and spread into KEYBINDINGS (Pi 42a3497d layout)", () => {
-  const root = scratchDir("pig-app-keybindings-");
+  const root = scratchDir("ompig-app-keybindings-");
   const file = path.join(root, "packages/coding-agent/src/core/keybindings.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -136,7 +136,7 @@ class Handler { handleInput(data: string) { if (kb.matches(data, "app.clear")) t
 });
 
 test("fills spread descriptions when the TUI base file is visited after the coding override", () => {
-  const root = scratchDir("pig-cross-package-keybindings-");
+  const root = scratchDir("ompig-cross-package-keybindings-");
   const codingFile = path.join(root, "packages/coding-agent/src/core/keybindings.ts");
   const tuiFile = path.join(root, "packages/tui/src/keybindings.ts");
   fs.mkdirSync(path.dirname(codingFile), { recursive: true });
@@ -172,7 +172,7 @@ test("source and event changes alter the generated contract denominator", () => 
 });
 
 test("distinguishes object render delegates from their enclosing class renderer", () => {
-  const root = scratchDir("pig-nested-renderers-");
+  const root = scratchDir("ompig-nested-renderers-");
   const file = path.join(root, "packages/tui/src/tui-alt-screen.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -192,7 +192,7 @@ class TuiAltScreen {
 });
 
 test("distinguishes module object renderers passed through factories", () => {
-  const root = scratchDir("pig-factory-renderers-");
+  const root = scratchDir("ompig-factory-renderers-");
   const file = path.join(root, "packages/agent/src/system.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -209,7 +209,7 @@ const sections = {
 });
 
 test("ac47_production_reachable_private_dialog_logic", () => {
-  const root = scratchDir("pig-private-dialog-inputs-");
+  const root = scratchDir("ompig-private-dialog-inputs-");
   const file = path.join(root, "packages/coding-agent/src/modes/interactive/interactive-mode.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -233,7 +233,7 @@ class InteractiveMode {
 });
 
 test("tracks production-reachable private queue control flow", () => {
-  const root = scratchDir("pig-private-queue-inputs-");
+  const root = scratchDir("ompig-private-queue-inputs-");
   const file = path.join(root, "packages/coding-agent/src/modes/interactive/interactive-mode.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `
@@ -268,7 +268,7 @@ test("renderer dependencies catch positioning changes outside the render method"
 });
 
 test("a local render function that shares a class method's name is qualified by its enclosing method", () => {
-  const root = scratchDir("pig-behavior-inputs-");
+  const root = scratchDir("ompig-behavior-inputs-");
   const file = path.join(root, "packages/coding-agent/src/extensions/mcp/ui.ts");
   fs.mkdirSync(path.dirname(file), { recursive: true });
   // Mirrors upstream 0.99.1 McpManagerView.menu: a `const render` inside a Promise executor beside the class's render method.

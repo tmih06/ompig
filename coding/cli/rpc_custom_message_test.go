@@ -20,11 +20,11 @@ func startCustomMessageRPC(t *testing.T) *rpcProcess {
 		t.Fatal(err)
 	}
 	p := startRPCProcessAt(t, root, []string{
-		"PIG_HOME=" + filepath.Join(root, "pig"),
-		"PIG_CODING_AGENT_DIR=" + filepath.Join(root, "pig", "agent"),
+		"OMPIG_HOME=" + filepath.Join(root, "ompig"),
+		"OMPIG_CODING_AGENT_DIR=" + filepath.Join(root, "ompig", "agent"),
 		"PI_CODING_AGENT_DIR=" + filepath.Join(root, "pi"),
-		"PIG_TEST_FAUX=1",
-		"PIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_TEST_FAUX=1",
+		"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 	}, "--model", "test-faux/faux-1", "--no-session", "--no-extensions", "-e", fixture)
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	p.await("custom command registration", func(record rpcRecord) bool {

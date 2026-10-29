@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/harness/tool.ts:33 ToolTaskInput = { assistant: EntryId; callId: string }: the task input is exactly those two members on the wire.

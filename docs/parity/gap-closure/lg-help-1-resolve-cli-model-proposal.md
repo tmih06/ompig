@@ -4,7 +4,7 @@ Row: `pkg:coding-agent/.#ResolveCliModelResult::property:model` (T9t: Go `coding
 
 Pi: `ResolveCliModelResult.model` is the registry's `Model<Api>` (`model-resolver.ts:385`), so `main.ts` passes it straight on.
 
-Go: `ResolveCliModelResult.Model` is `*RuntimeModel`, the composed-catalog selection entry (provider, id, name, reasoning, headers). `cmd/pig/startup_model.go` then builds the request model with `buildModelFromRef` (virtual models, the authenticated native binding, models.json entries).
+Go: `ResolveCliModelResult.Model` is `*RuntimeModel`, the composed-catalog selection entry (provider, id, name, reasoning, headers). `cmd/ompig/startup_model.go` then builds the request model with `buildModelFromRef` (virtual models, the authenticated native binding, models.json entries).
 
 Why Go does not carry `*ai.Model` through resolution:
 

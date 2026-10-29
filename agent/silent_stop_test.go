@@ -6,11 +6,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream agent-loop.ts has no turn cap: after tool results it always makes
-// the next request until the model stops calling tools. Pig defaulted
+// the next request until the model stops calling tools. Ompig defaulted
 // MaxTurns to 100, and at that count the loop broke out, emitted agent_end and
 // returned nil with the last message a tool result: the run ended silently
 // mid-task, with no response and no error. Worker sessions show it twice at

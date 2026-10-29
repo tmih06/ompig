@@ -10,8 +10,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type scopedOracleModel struct {
@@ -154,41 +154,41 @@ func TestScopedModelsSelectorMatchesPi(t *testing.T) {
 			return step
 		}
 		got := scopedOracleResult{Steps: []scopedOracleStep{snapshot()}, Frames: [][]string{list.Render(probe.Width)}}
-		pigPanicked := false
+		ompigPanicked := false
 		for _, key := range probe.Keys {
 			func() {
 				defer func() {
 					if recover() != nil {
-						pigPanicked = true
+						ompigPanicked = true
 					}
 				}()
 				list.HandleInput(key)
 				got.Steps = append(got.Steps, snapshot())
 				got.Frames = append(got.Frames, list.Render(probe.Width))
 			}()
-			if pigPanicked || list.Done() {
+			if ompigPanicked || list.Done() {
 				break
 			}
 		}
 		want := expected[i]
-		// Pi keeps feeding keys after a cancel; Pig's host stops at Done. A crash only counts when it happens before Pig is done.
+		// Pi keeps feeding keys after a cancel; Ompig's host stops at Done. A crash only counts when it happens before Ompig is done.
 		piKeys := len(want.Steps) - 1
-		pigKeys := len(got.Steps) - 1
+		ompigKeys := len(got.Steps) - 1
 		switch {
-		case want.Crash != nil && piKeys < pigKeys:
+		case want.Crash != nil && piKeys < ompigKeys:
 			failures++
-			t.Errorf("probe %d: Pi crashed at key %d, Pig ran on to key %d (keys %q)", i, piKeys+1, pigKeys, probe.Keys)
+			t.Errorf("probe %d: Pi crashed at key %d, Ompig ran on to key %d (keys %q)", i, piKeys+1, ompigKeys, probe.Keys)
 			continue
-		case want.Crash != nil && piKeys == pigKeys && !pigPanicked && !list.Done():
+		case want.Crash != nil && piKeys == ompigKeys && !ompigPanicked && !list.Done():
 			failures++
-			t.Errorf("probe %d: Pi crashed at key %d, Pig did not panic there (keys %q)", i, piKeys+1, probe.Keys)
+			t.Errorf("probe %d: Pi crashed at key %d, Ompig did not panic there (keys %q)", i, piKeys+1, probe.Keys)
 			continue
-		case pigPanicked && (want.Crash == nil || piKeys != pigKeys):
+		case ompigPanicked && (want.Crash == nil || piKeys != ompigKeys):
 			failures++
-			t.Errorf("probe %d: Pig panicked at key %d, Pi did not (keys %q)", i, pigKeys+1, probe.Keys)
+			t.Errorf("probe %d: Ompig panicked at key %d, Pi did not (keys %q)", i, ompigKeys+1, probe.Keys)
 			continue
 		}
-		if pigPanicked {
+		if ompigPanicked {
 			crashes++ // both threw on the same key (a reorder moved the selection above the first filtered row)
 		}
 		want.Steps, want.Frames = want.Steps[:len(got.Steps)], want.Frames[:len(got.Frames)]
@@ -223,7 +223,7 @@ func TestScopedModelsSelectorMatchesPi(t *testing.T) {
 						break
 					}
 				}
-				t.Errorf("probe %d bindings=%v enabled=%v keys=%q\nfirst step difference %d: Pig %+v, Pi %+v\n%s", i, probe.Bindings, probe.Enabled, probe.Keys, stepAt, safeStep(got.Steps, stepAt), safeStep(want.Steps, stepAt), firstFrameDifference(got.Frames, want.Frames))
+				t.Errorf("probe %d bindings=%v enabled=%v keys=%q\nfirst step difference %d: Ompig %+v, Pi %+v\n%s", i, probe.Bindings, probe.Enabled, probe.Keys, stepAt, safeStep(got.Steps, stepAt), safeStep(want.Steps, stepAt), firstFrameDifference(got.Frames, want.Frames))
 			}
 		}
 	}

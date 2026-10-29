@@ -6,9 +6,9 @@ package store
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/rec"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/rec"
 )
 
 // Revision is one document_revisions row.
@@ -72,7 +72,7 @@ type dumpState struct {
 
 // LoadAll reads every Pi table after Open and seeds the store's commit validation with it (record_ids claims of live
 // tasks and submissions, every conversation, every document incarnation with its current value). With live set it reads
-// no entries and only the live tasks and submissions: a core that reads the rest on demand (ABI section 4.2, pig.read). It
+// no entries and only the live tasks and submissions: a core that reads the rest on demand (ABI section 4.2, ompig.read). It
 // returns ErrPending after emitting reads, and the dump once every table has arrived. A store Open initialised needs no
 // reads.
 func (s *Store) LoadAll(b *abi.Builder, live bool) (*Dump, error) {

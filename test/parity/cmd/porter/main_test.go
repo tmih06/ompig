@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/closure"
-	"github.com/MichaelKinsy/PiG/test/parity/porter"
+	"github.com/tmih06/ompig/test/parity/closure"
+	"github.com/tmih06/ompig/test/parity/porter"
 )
 
 func TestRunRejectsMalformedRequest(t *testing.T) {
@@ -32,7 +32,7 @@ func TestRunRequiresExistingStore(t *testing.T) {
 func TestRunUsesTheSharedPorterResponseContract(t *testing.T) {
 	root := t.TempDir()
 	hash := closure.HashBytes([]byte("fixture"))
-	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:run", SnapshotID: "snapshot:run", Repository: "pig", Commit: strings.Repeat("a", 40), Path: "run.go", SemanticID: "run", StartLine: 1, EndLine: 1, QuoteHash: hash}
+	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:run", SnapshotID: "snapshot:run", Repository: "ompig", Commit: strings.Repeat("a", 40), Path: "run.go", SemanticID: "run", StartLine: 1, EndLine: 1, QuoteHash: hash}
 	snapshot := &closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:run", UpstreamCommit: strings.Repeat("b", 40), TargetCommit: strings.Repeat("a", 40), ToolchainHash: hash, EnvironmentHash: hash}
 	behavior := &closure.Behavior{Kind: closure.KindBehavior, ID: "behavior:run", Name: "run", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	graph, err := closure.Build([]closure.Record{snapshot, pin, behavior})

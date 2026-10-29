@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/ai/src/models.ts:732-735 (getAllAvailable): without filterAllModels, filterModels receives the provider's chat models and

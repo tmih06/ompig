@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestUserMessageSelectorItemsExtractsUserMessagesOldestFirst(t *testing.T) {
@@ -240,7 +240,7 @@ func TestSlashHandlerTreeEmptySessionFlashesStatus(t *testing.T) {
 
 // c: picker cancel is silent (mirrors upstream onCancel at
 // interactive-mode.ts:4181-4184: just `done()` + `requestRender()`,
-// no message). The previous "Tree closed." chat append was a pig
+// no message). The previous "Tree closed." chat append was a ompig
 // addition, dropped here.
 func TestSlashHandlerTreeCancelIsSilent(t *testing.T) {
 	sc, out := newFakeSlashCtx()

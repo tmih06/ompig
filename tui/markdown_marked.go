@@ -11,11 +11,11 @@ import (
 	"unicode/utf8"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
 	"github.com/dlclark/regexp2"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // markedRegexp is one marked rule compiled on first use from the JavaScript source marked 18.0.11 builds (Lexer.rules.inline.gfm / Lexer.rules.block.gfm). The source is kept verbatim so it can be compared with marked's; translateMarkedPattern supplies JavaScript's meaning for the constructs regexp2 reads differently.
@@ -231,7 +231,7 @@ type markedLexFrame struct {
 var markedInlineStates = sync.Pool{New: func() any { return &markedInlineState{} }}
 
 // maxPooledMarkedBytes bounds the buffers a pooled markedInlineState keeps (golang/go#23199): one long paragraph must not pin them.
-// pig additive (D112): Pi's marked lexer keeps no state between renders; a state that is not pooled is made again and lexes the same.
+// ompig additive (D112): Pi's marked lexer keeps no state between renders; a state that is not pooled is made again and lexes the same.
 const maxPooledMarkedBytes = 64 << 10
 
 // release returns l to markedInlineStates without the strings its tokens and link definitions hold, so an idle pool does not keep the

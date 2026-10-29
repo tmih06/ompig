@@ -6,15 +6,15 @@ package core
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 // lazyState is how the mirror reads the records it did not load at open. With the host's synchronous read (ABI section
-// 4.2, pig.read) open loads the live tasks and submissions only, as Pi opens with the live state: a terminal task or a
+// 4.2, ompig.read) open loads the live tasks and submissions only, as Pi opens with the live state: a terminal task or a
 // settled submission is read when a step needs it, as Pi's Storage reads it then. The read takes no time the Session can
 // observe (the hop model charges each Storage read whether the mirror held the record or not), and the mirror holds every
 // record a commit of this handle wrote until the host has applied it, so a read never needs a commit the host has not

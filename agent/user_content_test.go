@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi session-manager.ts:439-451 only replaces null/missing user content; core/messages.ts:185 passes valid user messages through.

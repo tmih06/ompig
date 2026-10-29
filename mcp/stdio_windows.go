@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 //portlint:allow ctxbackground the server runs until the transport's Close ends it (stdio.go Start sets cmd.Cancel = nil), so no caller context bounds it

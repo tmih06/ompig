@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // TestLoadEntriesFromFileMatchesPi runs loadEntriesFromFile of Pi 1.0.4 and LoadEntriesFromFile over session file texts: headers, malformed and JSON-falsy lines, blank lines, CRLF, a missing final newline (which both repair), invalid UTF-8 and a missing or ill-typed header.
@@ -27,7 +27,7 @@ func TestLoadEntriesFromFileMatchesPi(t *testing.T) {
 	paths := make([]string, len(texts))
 	oraclePaths := make([]string, len(texts))
 	for i, text := range texts {
-		paths[i] = filepath.Join(dir, "pig-"+strconv.Itoa(i)+".jsonl")
+		paths[i] = filepath.Join(dir, "ompig-"+strconv.Itoa(i)+".jsonl")
 		oraclePaths[i] = filepath.Join(dir, "pi-"+strconv.Itoa(i)+".jsonl")
 		for _, p := range []string{paths[i], oraclePaths[i]} {
 			if err := os.WriteFile(p, []byte(text), 0o644); err != nil {
@@ -52,14 +52,14 @@ emit(input.map((p) => { const entries = mod.loadEntriesFromFile(p); return { ent
 		got := make([]any, len(records))
 		for j, raw := range records {
 			if err := json.Unmarshal(raw.Raw(), &got[j]); err != nil {
-				t.Fatalf("text %d: Pig returned invalid JSON %q: %v", i, raw, err)
+				t.Fatalf("text %d: Ompig returned invalid JSON %q: %v", i, raw, err)
 			}
 		}
 		if len(got) == 0 && len(want[i].Entries) == 0 {
 			got = want[i].Entries
 		}
 		if !reflect.DeepEqual(got, want[i].Entries) {
-			t.Errorf("text %d %q: entries\n  Pig %v\n  Pi  %v", i, text, got, want[i].Entries)
+			t.Errorf("text %d %q: entries\n  Ompig %v\n  Pi  %v", i, text, got, want[i].Entries)
 		}
 		file, _ := os.ReadFile(paths[i])
 		var latin []rune

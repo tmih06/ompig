@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/sqlite/node"
-	"github.com/MichaelKinsy/PiG/chord/telemetrysqlite"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/sqlite/node"
+	"github.com/tmih06/ompig/chord/telemetrysqlite"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // benchGeneration drives the Durable harness generation loop: one input submission, one faux model request that streams answer, one

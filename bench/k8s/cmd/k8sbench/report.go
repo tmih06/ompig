@@ -268,15 +268,15 @@ func analyze(runDir, outDir string, a analysisFlags, stdout io.Writer, now time.
 	}
 	var lines []*object
 	for _, n := range turns {
-		for _, pig := range prof.pigs() {
-			rule := prof.ruleOf(pig)
+		for _, ompig := range prof.pigs() {
+			rule := prof.ruleOf(ompig)
 			history, err := readHistory(historyPaths, rule, n, runDir)
 			if err != nil {
 				return err
 			}
 			var parts []trackValues
 			for _, r := range runs {
-				tv, err := computeTrack(prof, pig, r.log, n)
+				tv, err := computeTrack(prof, ompig, r.log, n)
 				if err != nil {
 					return fmt.Errorf("%s: %w", r.node, err)
 				}
@@ -286,7 +286,7 @@ func analyze(runDir, outDir string, a analysisFlags, stdout io.Writer, now time.
 			if err != nil {
 				return err
 			}
-			lines = append(lines, buildTrackLine(trackInput{prof: prof, pig: pig, turns: n, run: runDir, commit: first.commit, at: now, baseline: baselines[rule], history: history, gates: gates}, tv))
+			lines = append(lines, buildTrackLine(trackInput{prof: prof, ompig: ompig, turns: n, run: runDir, commit: first.commit, at: now, baseline: baselines[rule], history: history, gates: gates}, tv))
 		}
 	}
 	if err := os.MkdirAll(filepath.Dir(trackPath), 0o755); err != nil {
@@ -575,9 +575,9 @@ func envText(log *podLog, cluster *object) string {
 	return b.String()
 }
 
-// readBaselines reads the comma-separated -baseline files and assigns each to the tracker rule of a pig target: a
-// file with a "rule" field to that rule, a file without one to the only pig target. Two files for one rule, a rule no
-// pig target has, and a rule-less file in a profile with several pig targets are refused.
+// readBaselines reads the comma-separated -baseline files and assigns each to the tracker rule of a ompig target: a
+// file with a "rule" field to that rule, a file without one to the only ompig target. Two files for one rule, a rule no
+// ompig target has, and a rule-less file in a profile with several ompig targets are refused.
 func readBaselines(paths string, prof *profile) (map[string]*object, error) {
 	out := map[string]*object{}
 	if paths == "" {
@@ -598,9 +598,9 @@ func readBaselines(paths string, prof *profile) (map[string]*object, error) {
 		case rule == "" && len(pigs) == 1:
 			rule = prof.ruleOf(pigs[0])
 		case rule == "":
-			return nil, fmt.Errorf("-baseline %s has no rule; with %d pig targets each baseline names the rule of its line", path, len(pigs))
+			return nil, fmt.Errorf("-baseline %s has no rule; with %d ompig targets each baseline names the rule of its line", path, len(pigs))
 		case !slices.ContainsFunc(pigs, func(t target) bool { return prof.ruleOf(t) == rule }):
-			return nil, fmt.Errorf("-baseline %s is for rule %s, which no pig target of profile %s has", path, rule, prof.Name)
+			return nil, fmt.Errorf("-baseline %s is for rule %s, which no ompig target of profile %s has", path, rule, prof.Name)
 		}
 		if _, dup := out[rule]; dup {
 			return nil, fmt.Errorf("-baseline names two files for rule %s", rule)

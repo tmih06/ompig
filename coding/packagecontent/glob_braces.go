@@ -7,14 +7,14 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // braceExpansionMax is brace-expansion's EXPANSION_MAX, the most expansions one brace set gives.
 const braceExpansionMax = 100_000
 
-// braceEscapes are the markers brace-expansion puts in place of an escaped brace, comma, period or backslash while it expands, and the replacers that put them in and take them out. As in brace-expansion, each marker holds a random number, so a pattern cannot spell one. They are built on first use, outside the package initialization every pig start pays.
+// braceEscapes are the markers brace-expansion puts in place of an escaped brace, comma, period or backslash while it expands, and the replacers that put them in and take them out. As in brace-expansion, each marker holds a random number, so a pattern cannot spell one. They are built on first use, outside the package initialization every ompig start pays.
 type braceEscapes struct {
 	slash, open, close, comma, period string
 	escape, unescape                  *strings.Replacer

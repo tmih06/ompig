@@ -5,7 +5,7 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // ExtensionConflict is a tool or flag that an extension registers after
@@ -16,7 +16,7 @@ type ExtensionConflict struct {
 }
 
 // ToolConflict is a tool that the extension at Path registered after the extension at Owner, at a different path, already registered it.
-// pig additive (D109): PiG's stale-copy diagnostic needs the owner as data; Pi's conflict carries only the message.
+// ompig additive (D109): Ompig's stale-copy diagnostic needs the owner as data; Pi's conflict carries only the message.
 type ToolConflict struct {
 	Path  string
 	Owner string

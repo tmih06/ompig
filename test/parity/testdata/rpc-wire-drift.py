@@ -54,7 +54,7 @@ class Provider(http.server.BaseHTTPRequestHandler):
 def run(host, root, initial_only=False):
     agent = root / 'agent'
     agent.mkdir()
-    # Pi and PiG append the working directory to the system prompt and estimate tokens from its characters, so the two sides' cwds must have the same length. root differs in length between the sides ({{TEMP}} names the binary: ...-pig-N versus ...-pi-N), so the cwd is a mkdtemp directory: a fixed-length name under the one temp directory both sides share.
+    # Pi and Ompig append the working directory to the system prompt and estimate tokens from its characters, so the two sides' cwds must have the same length. root differs in length between the sides ({{TEMP}} names the binary: ...-ompig-N versus ...-pi-N), so the cwd is a mkdtemp directory: a fixed-length name under the one temp directory both sides share.
     cwd = Path(tempfile.mkdtemp(prefix='rpc-wire-')).resolve()
     server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Provider)
     server.retried = False
@@ -63,8 +63,8 @@ def run(host, root, initial_only=False):
     url = f'http://127.0.0.1:{server.server_port}'
     (agent / 'models.json').write_text(json.dumps({'providers': {'anthropic': {'baseUrl': url, 'api': 'anthropic-messages', 'apiKey': 'fixture-key', 'models': [{'id': 'wire-model', 'name': 'Wire model', 'reasoning': True, 'contextWindow': 200000, 'maxTokens': 8192}]}}}))
     (agent / 'settings.json').write_text(json.dumps({'defaultThinkingLevel': 'medium' if initial_only else 'off', 'compaction': {'enabled': False, 'keepRecentTokens': 1}, 'retry': {'enabled': True, 'maxRetries': 1, 'baseDelayMs': 1}}))
-    binary = os.environ.get('PIG_PARITY_PIG_BIN', str(REPO / 'bin/pig')) if host == 'pig' else str(REPO / 'extensions/sdk-ts/node_modules/.bin/pi')
-    env = {'PATH': os.environ['PATH'], 'HOME': str(root), 'PIG_HOME': str(root), 'PIG_CODING_AGENT_DIR': str(agent), 'PI_CODING_AGENT_DIR': str(agent), 'NO_COLOR': '1'}
+    binary = os.environ.get('OMPIG_PARITY_OMPIG_BIN', str(REPO / 'bin/ompig')) if host == 'ompig' else str(REPO / 'extensions/sdk-ts/node_modules/.bin/pi')
+    env = {'PATH': os.environ['PATH'], 'HOME': str(root), 'OMPIG_HOME': str(root), 'OMPIG_CODING_AGENT_DIR': str(agent), 'PI_CODING_AGENT_DIR': str(agent), 'NO_COLOR': '1'}
     args = [binary, '--mode', 'rpc', '--session-dir', str(root / 'sessions'), '--offline', '--no-extensions', '--no-skills', '--no-context-files', '--system-prompt', 'Wire test.', '--provider', 'anthropic', '--model', 'wire-model', '--thinking', 'off', '-e', str(REPO / 'test/parity/scenarios/rpc/testdata/wire-drift-ui.mjs')]
     stderr_file = (root / 'stderr').open('w+')
     process = subprocess.Popen(args, cwd=cwd, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr_file, text=True)

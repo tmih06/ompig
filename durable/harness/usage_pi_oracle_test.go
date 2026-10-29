@@ -13,11 +13,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type usageStep struct {
@@ -191,7 +191,7 @@ func TestUsageLedgerMatchesPiOnSeededPrograms(t *testing.T) {
 			if got[k].Err != want.Err || !reflect.DeepEqual(canonical(got[k].OK), canonical(want.OK)) {
 				differing++
 				if differing <= 3 {
-					t.Errorf("program %d step %d (%s %s %s)\n  Pi  err=%q ok=%.400s\n  Pig err=%q ok=%.400s\n  usage=%.300s", i, k, program[k].Op, program[k].Bucket, program[k].Key, want.Err, want.OK, got[k].Err, got[k].OK, program[k].Usage)
+					t.Errorf("program %d step %d (%s %s %s)\n  Pi  err=%q ok=%.400s\n  Ompig err=%q ok=%.400s\n  usage=%.300s", i, k, program[k].Op, program[k].Bucket, program[k].Key, want.Err, want.OK, got[k].Err, got[k].OK, program[k].Usage)
 				}
 			}
 			if want.Err != "" {

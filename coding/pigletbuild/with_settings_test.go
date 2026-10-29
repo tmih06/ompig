@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
 )
 
 func TestBakePigletInlinesAgentShapeAndStripsBuildOrigins(t *testing.T) {
@@ -28,30 +28,30 @@ func TestBakePigletInlinesAgentShapeAndStripsBuildOrigins(t *testing.T) {
 
 	builtins := []string{"read", "grep"}
 	extensionTools := []string{"ask"}
-	source := &piglet.Piglet{
+	source := &ompiglet.Ompiglet{
 		Name:         "research",
 		BuiltinTools: &builtins,
-		Model:        &piglet.ModelConfig{Provider: "github-copilot", Name: "gpt-5-mini", Thinking: "high"},
-		SystemPrompt: &piglet.PromptRef{File: "p.md"},
-		Extensions: []piglet.ExtensionEntry{{
+		Model:        &ompiglet.ModelConfig{Provider: "github-copilot", Name: "gpt-5-mini", Thinking: "high"},
+		SystemPrompt: &ompiglet.PromptRef{File: "p.md"},
+		Extensions: []ompiglet.ExtensionEntry{{
 			Name:    "subagent",
 			Origins: []string{"local:" + filepath.Join(dir, "extensions", "subagent")},
 			Tools:   &extensionTools,
 		}},
-		Skills:    []piglet.SkillEntry{{Name: "commit", Origins: []string{"local:" + skillDir}}},
+		Skills:    []ompiglet.SkillEntry{{Name: "commit", Origins: []string{"local:" + skillDir}}},
 		Packages:  map[string]string{"base": "npm:@acme/base@1.0.0"},
-		Build:     &piglet.BuildSpec{OutputName: "pig-research"},
-		Slots:     &piglet.Slots{Frontend: &piglet.SlotMember{Member: "./tern"}},
-		Discovery: &piglet.Discovery{Skills: []string{"workspace"}},
+		Build:     &ompiglet.BuildSpec{OutputName: "ompig-research"},
+		Slots:     &ompiglet.Slots{Frontend: &ompiglet.SlotMember{Member: "./tern"}},
+		Discovery: &ompiglet.Discovery{Skills: []string{"workspace"}},
 	}
 
-	encoded, err := piglet.Bake(source, dir)
+	encoded, err := ompiglet.Bake(source, dir)
 	if err != nil {
 		t.Fatal(err)
 	}
-	got, err := piglet.ParseBytes(encoded)
+	got, err := ompiglet.ParseBytes(encoded)
 	if err != nil {
-		t.Fatalf("embedded Piglet did not parse: %v\n%s", err, encoded)
+		t.Fatalf("embedded Ompiglet did not parse: %v\n%s", err, encoded)
 	}
 	if got.Model == nil || got.Model.Name != "gpt-5-mini" || got.Model.Thinking != "high" {
 		t.Errorf("model = %+v", got.Model)
@@ -77,9 +77,9 @@ func TestBakePigletInlinesAgentShapeAndStripsBuildOrigins(t *testing.T) {
 }
 
 func TestBakePigletRejectsBareSkillName(t *testing.T) {
-	_, err := piglet.Bake(&piglet.Piglet{Name: "bad", Skills: []piglet.SkillEntry{{Name: "local-only"}}}, "")
+	_, err := ompiglet.Bake(&ompiglet.Ompiglet{Name: "bad", Skills: []ompiglet.SkillEntry{{Name: "local-only"}}}, "")
 	if err == nil {
-		t.Fatal("piglet.Bake succeeded with bare skill name")
+		t.Fatal("ompiglet.Bake succeeded with bare skill name")
 	}
 }
 
@@ -102,12 +102,12 @@ func TestAC55BinaryBakePreservesPackageAliasesThroughResolution(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(extensionDir, "index.js"), []byte("export default function extension(pi) {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	pigletYAML := "name: meta\npackages:\n  devkit: local:./package\nextensions:\n  - name: ask\n    origins: [package:devkit]\nskills:\n  - name: commit\n    origins: [package:devkit]\n"
 	if err := os.WriteFile(pigletPath, []byte(pigletYAML), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -148,11 +148,11 @@ func TestAC55BinaryBakePreservesPackageAliasesThroughResolution(t *testing.T) {
 		t.Fatalf("Package-backed resolution inputs = package:%+v extension:%+v skill:%+v", packageInput, extensionInput, skillInput)
 	}
 
-	encoded, err := piglet.Bake(parsed, root)
+	encoded, err := ompiglet.Bake(parsed, root)
 	if err != nil {
 		t.Fatal(err)
 	}
-	baked, err := piglet.ParseBytes(encoded)
+	baked, err := ompiglet.ParseBytes(encoded)
 	if err != nil {
 		t.Fatal(err)
 	}

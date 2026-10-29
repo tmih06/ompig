@@ -1,4 +1,4 @@
-use pig_sdk::{Extension, ToolDefinition, ToolResult};
+use ompig_sdk::{Extension, ToolDefinition, ToolResult};
 use serde_json::json;
 
 pub fn new_extension() -> Extension {

@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Node's IPC channel from the child's side. manager.test.ts forks a Node child, whose `process` is the channel; a Go

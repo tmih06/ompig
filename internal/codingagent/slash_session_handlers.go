@@ -22,13 +22,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 // jsonStringifyString quotes text as JSON.stringify does: control characters escape, and U+2028, U+2029 and HTML characters stay literal.
@@ -542,7 +542,7 @@ func compactHandler(sc *SlashContext) error {
 // this process strips: skills, Mermaid, the changelog (whose detected updates
 // also send the install telemetry ping) and /tree; the double-escape row goes
 // when only "none" is left.
-// pig additive (D92): the row of a stripped built-in is not offered.
+// ompig additive (D92): the row of a stripped built-in is not offered.
 func settingStripped(id string) bool {
 	switch id {
 	case "skill-commands":
@@ -561,7 +561,7 @@ func settingStripped(id string) bool {
 
 // doubleEscapeActions are the double-escape actions whose command the process
 // has, then "none".
-// pig additive (D92): a stripped /tree or /fork is not offered.
+// ompig additive (D92): a stripped /tree or /fork is not offered.
 func doubleEscapeActions() []string {
 	return slices.DeleteFunc([]string{"tree", "fork", "none"}, func(action string) bool {
 		return action != "none" && pigstrip.Has(pigstrip.ListCommands, "/"+action)
@@ -1111,7 +1111,7 @@ func confirmSlash(sc *SlashContext, title, message string) bool {
 }
 
 // shareHandler implements /share: export the active branch with the pi.share
-// presentation entry and upload it to PiG's share gateway. The command itself
+// presentation entry and upload it to Ompig's share gateway. The command itself
 // is the explicit opt-in; shareSession displays the privacy notice before it
 // starts the upload.
 func shareHandler(sc *SlashContext) error {
@@ -1164,4 +1164,14 @@ var thinkingDescriptions = map[string]string{
 	"high":    "Deep reasoning (~16k tokens)",
 	"xhigh":   "Extra-high reasoning (~32k tokens)",
 	"max":     "Maximum reasoning",
+}
+
+// agentsHandler opens the Agent Hub roster (ompig divergence D206).
+func agentsHandler(sc *SlashContext) error {
+	if sc.OpenAgentHub == nil {
+		sc.Append("Subagents are unavailable in this session.")
+		return nil
+	}
+	sc.OpenAgentHub()
+	return nil
 }

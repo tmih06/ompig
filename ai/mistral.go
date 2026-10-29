@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -18,12 +18,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsjson"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 const (
@@ -50,7 +50,7 @@ func NewMistralProvider(cfg MistralConfig) Provider {
 
 // NewMistralAPIProvider builds the mistral-conversations provider for cfg, the provider every model-to-provider factory uses.
 func NewMistralAPIProvider(cfg MistralConfig) (Provider, error) {
-	// pig additive (D92): a Piglet's strip.apis disables Mistral at runtime the way a pig_strip_mistral_conversations build compiles it out.
+	// ompig additive (D92): a Ompiglet's strip.apis disables Mistral at runtime the way a ompig_strip_mistral_conversations build compiles it out.
 	if pigstrip.Has(pigstrip.ListAPIs, string(APIMistralConversations)) {
 		return nil, strippedMistralError(&cfg)
 	}
@@ -322,7 +322,7 @@ func (p *mistralProvider) resolveModel() *Model {
 }
 
 func (p *mistralProvider) Stream(ctx context.Context, transcript TranscriptContext, opts StreamOptions) (*AssistantMessageEventStream, error) {
-	// pig divergence (D48): the agent loop asks for the tool-flow repair.
+	// ompig divergence (D48): the agent loop asks for the tool-flow repair.
 	if opts.RepairToolFlow {
 		transcript = transcript.withRepairedToolFlow()
 	}

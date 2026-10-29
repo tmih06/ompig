@@ -7,12 +7,12 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // cliSessionInputs is what one Session of a mode needs from its cwd-bound build: the Services and extension set the Session runs on, the options it starts with, and how to retire the build's resources after the Session is replaced.
@@ -85,7 +85,7 @@ func (f *cliSessionFactory[S]) create(ctx context.Context, options coding.Create
 			return coding.CreateAgentSessionRuntimeResult{}, errors.New("cli: this mode cannot rebuild a runtime for a replacement Session")
 		}
 		// The replacement's extension processes and background work live as long as the process, not as long as the call that requested the replacement.
-		// pig divergence (D70): the replacement Session's extensions run in processes started for it; Pi runs the factories again in the same Node process.
+		// ompig divergence (D70): the replacement Session's extensions run in processes started for it; Pi runs the factories again in the same Node process.
 		rebuilt, rebuiltState, err := f.rebuild(f.ctx, options)
 		if err != nil {
 			return coding.CreateAgentSessionRuntimeResult{}, err
@@ -111,7 +111,7 @@ func (f *cliSessionFactory[S]) create(ctx context.Context, options coding.Create
 		holding := f.holding
 		f.mu.Unlock()
 		if holding {
-			// pig divergence (D70): the process is exiting and a quit session_shutdown may still be pending on this host; Pi's handler stays pending until exit, so the host keeps running and TerminateProcesses stops it.
+			// ompig divergence (D70): the process is exiting and a quit session_shutdown may still be pending on this host; Pi's handler stays pending until exit, so the host keeps running and TerminateProcesses stops it.
 			return
 		}
 		if inputs.Release != nil {
@@ -158,7 +158,7 @@ func (f *cliSessionFactory[S]) create(ctx context.Context, options coding.Create
 			f.mu.Lock()
 			delete(f.states, session)
 			f.mu.Unlock()
-			// pig divergence (D30): the host rejects the replaced Session's later calls with Pi's stale message and notifies the extension processes, but a Go, Rust or Python SDK-local getter or fire-and-forget call does not throw.
+			// ompig divergence (D30): the host rejects the replaced Session's later calls with Pi's stale message and notifies the extension processes, but a Go, Rust or Python SDK-local getter or fire-and-forget call does not throw.
 			if message := session.ExtensionRunner().StaleMessage(); message != "" && inputs.Invalidate != nil {
 				inputs.Invalidate(message)
 			}
@@ -286,7 +286,7 @@ func newCLIRetirement(parent context.Context) cliRetirement {
 	return cliRetirement{ctx: ctx, stop: stop, wg: new(sync.WaitGroup)}
 }
 
-// pig divergence (D70): the replaced Session's extension processes stop here, once their running command handlers return, instead of surviving into the replacement as they do in Pi's single Node process.
+// ompig divergence (D70): the replaced Session's extension processes stop here, once their running command handlers return, instead of surviving into the replacement as they do in Pi's single Node process.
 func (r cliRetirement) retire(runner *inproc.Runner, release func()) {
 	if runner == nil || runner.ActiveCommands() == 0 {
 		release()

@@ -13,8 +13,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/entered"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/entered"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // OutputLimits are the retention limits of one output stream. Retain is "head" or "tail".

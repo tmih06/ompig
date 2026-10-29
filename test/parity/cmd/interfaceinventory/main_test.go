@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/test/parity/upstreampackages"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/test/parity/upstreampackages"
 )
 
 const testShapeHash = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -110,7 +110,7 @@ func TestAC36RejectsMissingUnclassifiedAndUnreachableInterfaces(t *testing.T) {
 		{
 			name: "declaration only is not ported",
 			ledger: mappingLedger{UpstreamVersion: "0.83.0", Mappings: []mappingEntry{
-				{ID: "pkg:coding-agent/.#ExtensionAPI", Disposition: "ported", UpstreamShapeHash: testShapeHash, PigTargets: []string{"coding/extension/api.go"}, Layers: map[string]string{"api": "complete"}, Evidence: []string{"test:x"}},
+				{ID: "pkg:coding-agent/.#ExtensionAPI", Disposition: "ported", UpstreamShapeHash: testShapeHash, OmpigTargets: []string{"coding/extension/api.go"}, Layers: map[string]string{"api": "complete"}, Evidence: []string{"test:x"}},
 				{ID: "pkg:coding-agent/.#main", Disposition: "designed-out", UpstreamShapeHash: testShapeHash, Rationale: "library-only fixture"},
 			}},
 			contain: []string{"ported without production reachability"},
@@ -181,7 +181,7 @@ func TestPortedParentClosesOverADesignedOutMember(t *testing.T) {
 
 func TestPortedMappingsRequireKnownKindSpecificLayersAndAsyncContract(t *testing.T) {
 	entry := mappingEntry{
-		ID: "cli:pi/--approve", Disposition: "ported", PigTargets: []string{"coding/cli/args.go"},
+		ID: "cli:pi/--approve", Disposition: "ported", OmpigTargets: []string{"coding/cli/args.go"},
 		Layers:     map[string]string{"anything": "complete", "parser": "complete"},
 		Production: []string{"call:coding/cli/main.go"}, Evidence: []string{"scenario:test/parity/scenarios/project-trust/03-approve-loads-project-extension.toml"},
 	}
@@ -197,7 +197,7 @@ func TestPortedMappingsRequireKnownKindSpecificLayersAndAsyncContract(t *testing
 func TestExtensionEventMappingsRequireFullSDKAndHostClosure(t *testing.T) {
 	entry := mappingEntry{
 		ID: "pkg:coding-agent/.#ExtensionAPI::property:on::call:project_trust", Disposition: "ported",
-		PigTargets: []string{"coding/extension/api.go"}, Layers: map[string]string{
+		OmpigTargets: []string{"coding/extension/api.go"}, Layers: map[string]string{
 			"shape": "complete", "api": "complete", "production": "complete", "behavior": "complete",
 		},
 		Production: []string{"registry:coding/extension/api.go"}, Evidence: []string{"conformance:test/extension-conformance/conformance_test.go"},
@@ -230,10 +230,10 @@ func TestValidateMappingsAcceptsClosedAndExplainedRecords(t *testing.T) {
 		{
 			ID:          "pkg:coding-agent/.#ExtensionAPI",
 			Disposition: "ported", UpstreamShapeHash: testShapeHash,
-			PigTargets: []string{"coding/extension/api.go#API"},
-			Layers:     map[string]string{"shape": "complete", "production": "complete", "behavior": "complete", "api": "complete", "wire": "n/a"},
-			Production: []string{"call:coding/runtime.go#NewRuntime"},
-			Evidence:   []string{"test:test/upstream-parity/api_parity_test.go#TestAPIParity"},
+			OmpigTargets: []string{"coding/extension/api.go#API"},
+			Layers:       map[string]string{"shape": "complete", "production": "complete", "behavior": "complete", "api": "complete", "wire": "n/a"},
+			Production:   []string{"call:coding/runtime.go#NewRuntime"},
+			Evidence:     []string{"test:test/upstream-parity/api_parity_test.go#TestAPIParity"},
 		},
 		{ID: "pkg:coding-agent/.#main", Disposition: "designed-out", UpstreamShapeHash: testShapeHash, Rationale: "Go binary entrypoint is mapped through CLI inventory"},
 	}}
@@ -246,7 +246,7 @@ func TestValidateMappingsAcceptsClosedAndExplainedRecords(t *testing.T) {
 		t.Fatalf("unknown-layer problems = %v", problems)
 	}
 	delete(ledger.Mappings[0].Layers, "invented")
-	ledger.Mappings[0].PigTargets[0] = "coding/extension/api.go#MissingAPI"
+	ledger.Mappings[0].OmpigTargets[0] = "coding/extension/api.go#MissingAPI"
 	problems = validateMappings(testInventory(), ledger, behaviorLedger{}, true, repoRoot)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "does not name a Go declaration") }) {
 		t.Fatalf("missing-fragment problems = %v", problems)
@@ -262,13 +262,13 @@ func TestMappingReferencesRejectEscapesAndMissingFragments(t *testing.T) {
 	if err := os.WriteFile(outside, []byte("package outside\nfunc Proof() {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	problems := validatePathReference("pkg:test/.#X", "Pig target", "../../outside.go#Proof", root, nil)
+	problems := validatePathReference("pkg:test/.#X", "Ompig target", "../../outside.go#Proof", root, nil)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "escapes repository root") }) {
 		t.Fatalf("lexical-escape problems = %v", problems)
 	}
 	link := filepath.Join(root, "link.go")
 	testenv.Symlink(t, outside, link)
-	problems = validatePathReference("pkg:test/.#X", "Pig target", "link.go#Proof", root, nil)
+	problems = validatePathReference("pkg:test/.#X", "Ompig target", "link.go#Proof", root, nil)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "symlink escapes repository root") }) {
 		t.Fatalf("symlink-escape problems = %v", problems)
 	}
@@ -276,12 +276,12 @@ func TestMappingReferencesRejectEscapesAndMissingFragments(t *testing.T) {
 	if err := os.WriteFile(inside, []byte("package inside\ntype ProofType struct { Value string }\nfunc (ProofType) Run() {}\nfunc Proof() {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	problems = validatePathReference("pkg:test/.#X", "Pig target", "inside.go", root, nil)
+	problems = validatePathReference("pkg:test/.#X", "Ompig target", "inside.go", root, nil)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "no concrete fragment") }) {
 		t.Fatalf("missing-fragment problems = %v", problems)
 	}
 	for _, reference := range []string{"inside.go#ProofType.Value", "inside.go#ProofType.Run"} {
-		if problems := validatePathReference("pkg:test/.#X", "Pig target", reference, root, nil); len(problems) != 0 {
+		if problems := validatePathReference("pkg:test/.#X", "Ompig target", reference, root, nil); len(problems) != 0 {
 			t.Fatalf("reference %s problems = %v", reference, problems)
 		}
 	}
@@ -296,10 +296,10 @@ func TestMappingReferencesRejectEscapesAndMissingFragments(t *testing.T) {
 func publicAPIEntry() mappingEntry {
 	return mappingEntry{
 		ID: "pkg:coding-agent/.#RpcClient::property:abort", Disposition: "ported", UpstreamShapeHash: testShapeHash,
-		PigTargets: []string{"client/client.go#Client.Abort"},
-		Layers:     map[string]string{"shape": "complete", "production": "public-api-tested", "behavior": "complete"},
-		Production: []string{"public-api:client/client.go#Client.Abort"},
-		Evidence:   []string{"test:client/client_test.go#TestAbort"},
+		OmpigTargets: []string{"client/client.go#Client.Abort"},
+		Layers:       map[string]string{"shape": "complete", "production": "public-api-tested", "behavior": "complete"},
+		Production:   []string{"public-api:client/client.go#Client.Abort"},
+		Evidence:     []string{"test:client/client_test.go#TestAbort"},
 	}
 }
 
@@ -363,7 +363,7 @@ func TestPublicAPITestedClosureIsDistinctFromProduction(t *testing.T) {
 	if problems := validateMappingReferences(method, root); !hasProblem(problems, "is not an exported") {
 		t.Fatalf("an unexported method: %v", problems)
 	}
-	for _, path := range []string{"internal/codingagent/session.go", "coding/internal/x.go", "cmd/pig/main_default.go", "tui/testdata/x.go"} {
+	for _, path := range []string{"internal/codingagent/session.go", "coding/internal/x.go", "cmd/ompig/main_default.go", "tui/testdata/x.go"} {
 		if err := validatePublicAPIFragment(path, "Exported"); err == nil || !strings.Contains(err.Error(), "not in an importable public package") {
 			t.Fatalf("a symbol in %s: %v", path, err)
 		}
@@ -375,7 +375,7 @@ func TestPublicAPITestedClosureIsDistinctFromProduction(t *testing.T) {
 	}
 }
 
-// A parity-harness probe runs only under PIG_PARITY_HARNESS=1, so a production reference to it does not prove that the binary reaches the symbol.
+// A parity-harness probe runs only under OMPIG_PARITY_HARNESS=1, so a production reference to it does not prove that the binary reaches the symbol.
 func TestProductionReferenceRejectsParityHarnessProbe(t *testing.T) {
 	root := publicAPIRoot(t)
 	harness := filepath.Join(root, "internal", "codingagent", "parity_harness.go")
@@ -387,10 +387,10 @@ func TestProductionReferenceRejectsParityHarnessProbe(t *testing.T) {
 	}
 	entry := mappingEntry{
 		ID: "pkg:tui/.#Loader::property:render", Disposition: "ported", UpstreamShapeHash: testShapeHash,
-		PigTargets: []string{"client/client.go#Client.Abort"},
-		Layers:     map[string]string{"shape": "complete", "production": "complete", "behavior": "complete"},
-		Production: []string{"call:internal/codingagent/parity_harness.go#InteractiveMode.probeLoader"},
-		Evidence:   []string{"test:client/client_test.go#TestAbort"},
+		OmpigTargets: []string{"client/client.go#Client.Abort"},
+		Layers:       map[string]string{"shape": "complete", "production": "complete", "behavior": "complete"},
+		Production:   []string{"call:internal/codingagent/parity_harness.go#InteractiveMode.probeLoader"},
+		Evidence:     []string{"test:client/client_test.go#TestAbort"},
 	}
 	if problems := validateMappingReferences(entry, root); !hasProblem(problems, "is a parity-harness probe") {
 		t.Fatalf("a parity-harness production reference: %v", problems)
@@ -413,7 +413,7 @@ func TestDivergenceMappingsRequireApprovedLedgerAndCallSiteMarker(t *testing.T) 
 	if err := os.WriteFile(target, []byte("package coding\nfunc Run() {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	entry := mappingEntry{ID: "pkg:coding-agent/.#main", Divergence: "D25", PigTargets: []string{"coding/runtime.go#Run"}}
+	entry := mappingEntry{ID: "pkg:coding-agent/.#main", Divergence: "D25", OmpigTargets: []string{"coding/runtime.go#Run"}}
 	divergences := filepath.Join(root, "docs/parity/DIVERGENCES.md")
 	if err := os.WriteFile(divergences, []byte("## D25 retry behavior\nSCRUTINIZED:pending\n"), 0o644); err != nil {
 		t.Fatal(err)
@@ -430,9 +430,9 @@ func TestDivergenceMappingsRequireApprovedLedgerAndCallSiteMarker(t *testing.T) 
 		t.Fatalf("missing-marker problems = %v", problems)
 	}
 	// The marker is assembled so the source text does not contain a literal
-	// "pig divergence (Dnn)" that the divergence-consistency scanner would treat
+	// "ompig divergence (Dnn)" that the divergence-consistency scanner would treat
 	// as a real, ledger-coupled call site.
-	marker := "// pig divergence (" + entry.Divergence + "): retry behavior"
+	marker := "// ompig divergence (" + entry.Divergence + "): retry behavior"
 	if err := os.WriteFile(target, []byte("package coding\n"+marker+"\nfunc Run() {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -481,24 +481,24 @@ func TestValidateObservableCLIInventory(t *testing.T) {
 
 func TestAC37RecommendationsRemainNonAuthoritative(t *testing.T) {
 	upstream := testInventory()
-	pig := testGoInventory(t)
+	ompig := testGoInventory(t)
 	recommendations := recommendationLedger{
 		UpstreamVersion: "0.83.0", GeneratedBy: "agent:test",
 		Recommendations: []interfaceRecommendation{{
 			ID: "pkg:coding-agent/.#ExtensionAPI", UpstreamShapeHash: testShapeHash,
 			RecommendedDisposition: "ported", Confidence: "high",
 			Basis: []string{"candidate matched"}, Alternatives: []string{"partial"},
-			PigCandidates: []string{"go:example#ExtensionAPI"}, MissingClosure: []string{"behavioral-evidence"},
+			OmpigCandidates: []string{"go:example#ExtensionAPI"}, MissingClosure: []string{"behavioral-evidence"},
 			Provenance: []string{"agent:test"},
 		}},
 	}
-	problems := validateRecommendations(upstream, recommendations, pig)
+	problems := validateRecommendations(upstream, recommendations, ompig)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "cannot recommend authoritative ported") }) {
 		t.Fatalf("ported recommendation problems = %v", problems)
 	}
 	recommendations.Recommendations[0].RecommendedDisposition = "partial"
 	recommendations.Recommendations[0].Alternatives = []string{"ported", "pending"}
-	if problems := validateRecommendations(upstream, recommendations, pig); len(problems) != 0 {
+	if problems := validateRecommendations(upstream, recommendations, ompig); len(problems) != 0 {
 		t.Fatalf("validateRecommendations() = %v", problems)
 	}
 	mapping := mappingLedger{UpstreamVersion: "0.83.0", Mappings: []mappingEntry{
@@ -511,40 +511,40 @@ func TestAC37RecommendationsRemainNonAuthoritative(t *testing.T) {
 	}
 
 	recommendations.Recommendations[0].UpstreamShapeHash = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-	problems = validateRecommendations(upstream, recommendations, pig)
+	problems = validateRecommendations(upstream, recommendations, ompig)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "stale for current upstream shape") }) {
 		t.Fatalf("stale recommendation problems = %v", problems)
 	}
 }
 
 func TestRecommendationsRejectTamperedGoCandidateShape(t *testing.T) {
-	pig := testGoInventory(t)
-	pig.Interfaces[0].ShapeHash = testShapeHash
+	ompig := testGoInventory(t)
+	ompig.Interfaces[0].ShapeHash = testShapeHash
 	ledger := recommendationLedger{UpstreamVersion: "0.83.0", GeneratedBy: "agent:test"}
-	problems := validateRecommendations(testInventory(), ledger, pig)
+	problems := validateRecommendations(testInventory(), ledger, ompig)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "shape hash does not match shape") }) {
 		t.Fatalf("candidate-shape problems = %v", problems)
 	}
-	pig = testGoInventory(t)
-	pig.Interfaces[0].ID = "go:other#ExtensionAPI"
-	problems = validateRecommendations(testInventory(), ledger, pig)
+	ompig = testGoInventory(t)
+	ompig.Interfaces[0].ID = "go:other#ExtensionAPI"
+	problems = validateRecommendations(testInventory(), ledger, ompig)
 	if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, "ID does not match package/name") }) {
 		t.Fatalf("candidate-ID problems = %v", problems)
 	}
 }
 
 func TestGeneratedRecommendationsMustCoverEveryInterface(t *testing.T) {
-	pig := testGoInventory(t)
+	ompig := testGoInventory(t)
 	ledger := recommendationLedger{
-		UpstreamVersion: "0.83.0", GeneratedBy: "pig-interface-recommend-v2",
+		UpstreamVersion: "0.83.0", GeneratedBy: "ompig-interface-recommend-v2",
 		Recommendations: []interfaceRecommendation{{
 			ID: "pkg:coding-agent/.#ExtensionAPI", UpstreamShapeHash: testShapeHash,
 			RecommendedDisposition: "partial", Confidence: "medium", Basis: []string{"candidate"},
-			Alternatives: []string{"ported", "pending"}, PigCandidates: []string{"go:example#ExtensionAPI"},
+			Alternatives: []string{"ported", "pending"}, OmpigCandidates: []string{"go:example#ExtensionAPI"},
 			MissingClosure: []string{"behavioral-evidence"}, Provenance: []string{"generator:test"},
 		}},
 	}
-	problems := validateRecommendations(testInventory(), ledger, pig)
+	problems := validateRecommendations(testInventory(), ledger, ompig)
 	if !slices.ContainsFunc(problems, func(problem string) bool {
 		return strings.Contains(problem, "generated recommendations missing pkg:coding-agent/.#main")
 	}) {
@@ -559,12 +559,12 @@ func TestRecommendationsRejectUnknownCandidatesAndClosure(t *testing.T) {
 			ID: "pkg:coding-agent/.#ExtensionAPI", UpstreamShapeHash: testShapeHash,
 			RecommendedDisposition: "partial", Confidence: "medium",
 			Basis: []string{"name match"}, Alternatives: []string{"ported", "ported"},
-			PigCandidates: []string{"go:missing#ExtensionAPI"}, MissingClosure: []string{"unknown-gap"},
+			OmpigCandidates: []string{"go:missing#ExtensionAPI"}, MissingClosure: []string{"unknown-gap"},
 			Provenance: []string{"agent:test"},
 		}},
 	}
 	problems := validateRecommendations(testInventory(), recommendations, goInventory{})
-	for _, want := range []string{"unknown Pig candidate", `alternatives repeats "ported"`, "missingClosure contains unknown value"} {
+	for _, want := range []string{"unknown Ompig candidate", `alternatives repeats "ported"`, "missingClosure contains unknown value"} {
 		if !slices.ContainsFunc(problems, func(problem string) bool { return strings.Contains(problem, want) }) {
 			t.Fatalf("problems = %v, want containing %q", problems, want)
 		}
@@ -634,8 +634,8 @@ func TestPendingMappingLedgerCarriesEveryRowWithAnUnchangedShape(t *testing.T) {
 	const oldHash = "sha256:1111111111111111111111111111111111111111111111111111111111111111"
 	previous := filepath.Join(t.TempDir(), "mapping-old.json")
 	// A version leap never resets status: every row with an unchanged shape is carried, and the gap detector re-derives it.
-	ported := `{"id":"pkg:ai/.#ported","disposition":"ported","upstreamShapeHash":"` + testShapeHash + `","pigTargets":["ai/kept.go#Kept"],"layers":{"shape":"complete"}}`
-	partial := `{"id":"pkg:ai/.#partial","disposition":"partial","upstreamShapeHash":"` + testShapeHash + `","pigTargets":["ai/partial.go#Partial"]}`
+	ported := `{"id":"pkg:ai/.#ported","disposition":"ported","upstreamShapeHash":"` + testShapeHash + `","ompigTargets":["ai/kept.go#Kept"],"layers":{"shape":"complete"}}`
+	partial := `{"id":"pkg:ai/.#partial","disposition":"partial","upstreamShapeHash":"` + testShapeHash + `","ompigTargets":["ai/partial.go#Partial"]}`
 	divergence := `{"id":"pkg:ai/.#divergence","disposition":"divergence","upstreamShapeHash":"` + testShapeHash + `","divergence":"D1","rationale":"r"}`
 	deferred := `{"id":"pkg:ai/.#deferred","disposition":"deferred","upstreamShapeHash":"` + testShapeHash + `","rationale":"outside 0.3.x"}`
 	designed := `{"id":"pkg:ai/.#designed","disposition":"designed-out","upstreamShapeHash":"` + testShapeHash + `","rationale":"Go typing"}`

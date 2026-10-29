@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-// mockHost simulates the pig host side of the socket for testing.
+// mockHost simulates the ompig host side of the socket for testing.
 type mockHost struct {
 	nc       net.Conn
 	listener net.Listener
@@ -27,7 +27,7 @@ type mockHost struct {
 // t.TempDir can exceed the Unix socket path limit on macOS.
 func newMockHost(t *testing.T) *mockHost {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "pig-sdk-")
+	dir, err := os.MkdirTemp("", "ompig-sdk-")
 	if err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
@@ -224,7 +224,7 @@ func TestExtension_RegisterAndReady(t *testing.T) {
 	})
 
 	// Set socket env and run in background.
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() {
@@ -302,7 +302,7 @@ func TestContext_GetFlag_DefaultFallback(t *testing.T) {
 		return err
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -340,7 +340,7 @@ func TestExtension_CommandResponseWaitsForHandlerCompletion(t *testing.T) {
 		return errors.New("after-release")
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)
@@ -390,7 +390,7 @@ func TestExtension_ShutdownWaitsForCooperativeHandler(t *testing.T) {
 		close(handlerDone)
 		return ctx.Err()
 	})
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	runDone := make(chan error, 1)
 	go func() { runDone <- ext.Run() }()
 	host.accept(t)
@@ -431,7 +431,7 @@ func TestExtension_CancelRequestCancelsContext(t *testing.T) {
 		return ctx.Err()
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)
@@ -470,7 +470,7 @@ func TestExtension_RenderMessageRequest(t *testing.T) {
 		return []string{message["content"].(string)}, nil
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -514,7 +514,7 @@ func TestExtension_ToolExecution(t *testing.T) {
 		return map[string]any{"greeting": "Hello, " + name + "!"}, nil
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -578,7 +578,7 @@ func TestExtension_HandlerPanicIsolated(t *testing.T) {
 		return map[string]any{"greeting": "hi"}, nil
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -633,7 +633,7 @@ func TestExtension_CommandExecution(t *testing.T) {
 		return nil
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -683,7 +683,7 @@ func TestExtension_NotifyCallback(t *testing.T) {
 		return "ok", nil
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -740,7 +740,7 @@ func TestContextSelectSurfacesHostUIFailure(t *testing.T) {
 		return err
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 
@@ -788,7 +788,7 @@ func TestExtension_WidgetPush(t *testing.T) {
 		return "ok", nil
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -976,7 +976,7 @@ func TestExtensionHeartbeatAndRequestStateBypassHandlers(t *testing.T) {
 
 	ext := New("liveness-test")
 	ext.Command("done", "complete immediately", func(Context, string) error { return nil })
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)
@@ -1017,7 +1017,7 @@ func TestContextUserWaitReportsBlockedAndParentsHostCall(t *testing.T) {
 		_, _, err := ctx.Input("Question", "Answer")
 		return err
 	})
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)

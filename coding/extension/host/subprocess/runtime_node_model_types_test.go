@@ -174,8 +174,8 @@ assert.deepEqual(responses.map(([id, result, error]) => [id, result?.model?.id, 
 func TestNodeProviderConfigImagesAndClassifiers(t *testing.T) {
 	nodeModelTypesScript(t, `
 const sock = process.platform === "win32"
-  ? "\\\\.\\pipe\\pig-provider-ops-" + process.pid
-  : join(tmpdir(), "pig-provider-ops-" + process.pid + ".sock");
+  ? "\\\\.\\pipe\\ompig-provider-ops-" + process.pid
+  : join(tmpdir(), "ompig-provider-ops-" + process.pid + ".sock");
 const frame = new Promise((resolve, reject) => {
   const server = net.createServer((socket) => {
     let buffer = Buffer.alloc(0);
@@ -192,7 +192,7 @@ const frame = new Promise((resolve, reject) => {
   server.on("error", reject);
   server.listen(sock);
 });
-process.env.PIG_EXT_SOCKET = sock;
+process.env.OMPIG_EXT_SOCKET = sock;
 
 const seen = [];
 const ZERO = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 };

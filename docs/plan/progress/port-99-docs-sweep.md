@@ -4,10 +4,10 @@ Branch `port-99-docs-sweep`, from `porter/pin-move` (6e8986038). `python3 automa
 
 ## Method
 
-- Real upstream 0.99.1 and 0.87.1 were installed from the sdk-ts lockfile (integrity `sha512-cWUrTOqA…` matches `extensions/sdk-ts/package-lock.json`) under `/tmp/sw` with `HOME`, `PI_CODING_AGENT_DIR`, `PI_SKIP_VERSION_CHECK=1` and `PI_OFFLINE=1` isolated (rule 17). No `pig` binary was run.
+- Real upstream 0.99.1 and 0.87.1 were installed from the sdk-ts lockfile (integrity `sha512-cWUrTOqA…` matches `extensions/sdk-ts/package-lock.json`) under `/tmp/sw` with `HOME`, `PI_CODING_AGENT_DIR`, `PI_SKIP_VERSION_CHECK=1` and `PI_OFFLINE=1` isolated (rule 17). No `ompig` binary was run.
 - Every `path:lines` citation in an edited statement was mapped from `.upstream/v0.87.1` to `.upstream/v0.99.1` with a line-diff mapper. A citation was renumbered only when the mapped range was identical; a range with changed or inserted lines was re-read by hand.
 - Behavior probes ran against real 0.99.1 (and 0.87.1 for comparison) where the statement is a runtime fact.
-- The two statements about PiG that were wrong were checked against the Go source.
+- The two statements about Ompig that were wrong were checked against the Go source.
 
 ## The checker (`automation/ci/check-public-claims.py`, `automation/ci/version-records.toml`)
 
@@ -24,13 +24,13 @@ Audit of the listed records (which cited upstream ranges changed under them, so 
 
 | File:line | Old statement | 0.99.1 evidence |
 |---|---|---|
-| `docs/site/docs/compaction.md:109,114` | "PiG does not emit `session_compact_failed`" | `coding/session.go:2330,2779,2922,2957` and `coding/session_compaction_extensions.go:122` emit it; upstream `agent-session.ts:1012-1015`, `extensions/types.ts:770-782`. Added a table row with the event's fields; removed the false sentence. |
+| `docs/site/docs/compaction.md:109,114` | "Ompig does not emit `session_compact_failed`" | `coding/session.go:2330,2779,2922,2957` and `coding/session_compaction_extensions.go:122` emit it; upstream `agent-session.ts:1012-1015`, `extensions/types.ts:770-782`. Added a table row with the event's fields; removed the false sentence. |
 | `docs/site/docs/extensions.md:197` | (absent) | New paragraph for the same event; `internal/pigdocs/content/events.md:47` gains the `OnEvent("session_compact_failed", …)` row (`extensions/sdk/events.go:21`). |
-| `docs/site/docs/session-format.md:7` | "PiG does not apply `context_edit` entries yet" | `internal/codingagent/session_manager_projection.go:113,198-215` builds `projectContextEntry` like upstream `session-manager.ts:519-540,543-575`; `coding/session.go:2794,2852` and `session_boundaries.go:231` use it. |
+| `docs/site/docs/session-format.md:7` | "Ompig does not apply `context_edit` entries yet" | `internal/codingagent/session_manager_projection.go:113,198-215` builds `projectContextEntry` like upstream `session-manager.ts:519-540,543-575`; `coding/session.go:2794,2852` and `session_boundaries.go:231` use it. |
 | `docs/parity/DIVERGENCES.md:988,990` (D70) | "`.ts` is re-evaluated on a session replacement, so a `.ts` module-scope counter behaves the same" | Probe: two `ctx.reload()` calls log `.ts` evaluated 3x, `.mjs` 1x; two RPC `new_session` calls log `.ts` 1x, `.mjs` 1x (factories 3x each). Same counts on 0.87.1 and 0.99.1 (`loader.ts:128-148` module-level factory cache; `resource-loader.ts:509` clears it only on a reload of a loaded loader). The old text was wrong for both releases. The observable effect now says module state resets on replacement for `.ts` too. **Owner note: D70 is `SCRUTINIZED:approved`; the scope is unchanged but the described gap is larger for `.ts`.** |
-| `docs/extension-api-parity.md:277` | new tool "activated" on registration | 0.99.1 activates only when exposure is `direct`/`model-only` and `defaultActive !== false` (`agent-session.ts:3410-3519`, `_isActivatedOnRegistration` 3516-3519). PiG's `extension/tool.go:148-153` has the field; the session path is family 6E's to confirm. |
+| `docs/extension-api-parity.md:277` | new tool "activated" on registration | 0.99.1 activates only when exposure is `direct`/`model-only` and `defaultActive !== false` (`agent-session.ts:3410-3519`, `_isActivatedOnRegistration` 3516-3519). Ompig's `extension/tool.go:148-153` has the field; the session path is family 6E's to confirm. |
 | `docs/extension-api-parity.md:471` | theme selection "disables automatic updates … dark fallback" | 0.99.1 `theme-controller.ts:124-131` enables auto-sync for the `system` theme; `theme.ts:772-793` falls back to `SYSTEM_THEME_NAME`, not `dark`. |
-| `docs/site/docs/message-types.md:3,116,144` | field names match Pi | 0.99.1 adds assistant `thinkingLevel` (`ai/types.ts:556-557`; PiG has it, `ai/messages.go:135`) and tool-result `nestedCalls` (`ai/types.ts:603-604`; PiG has no message field). Added the `thinkingLevel` row and named the `nestedCalls` exception. |
+| `docs/site/docs/message-types.md:3,116,144` | field names match Pi | 0.99.1 adds assistant `thinkingLevel` (`ai/types.ts:556-557`; Ompig has it, `ai/messages.go:135`) and tool-result `nestedCalls` (`ai/types.ts:603-604`; Ompig has no message field). Added the `thinkingLevel` row and named the `nestedCalls` exception. |
 | `docs/site/docs/providers.md:11`, `internal/pigdocs/content/providers.md:9` | "same built-in provider set" | Provider ids equal upstream's minus `typesafe` (`providers/typesafe.ts`, classifier only). Chat wire columns equal the per-provider `api` sets in `providers/data/*.json`. Classifier APIs added to `cloudflare-workers-ai`, `opencode`, `openrouter`, `vercel-ai-gateway`. Reworded to "same chat providers" and named the classifier gap. |
 | `docs/extension-api-parity.md:9` | "Pi 0.87.1 added extension events and registration methods" | Reworded to the unported declarations of the pinned API. |
 | `docs/parity/DIVERGENCES.md:1008` (D73) | "their Pi 0.87.1 packages export" | The shipped shim is the vendored 0.87.1 dist (`shims/pi-dist`, blocked at 0.99.1, see f6f-ts report), so "0.99.1" would be false. Now says "the Pi release vendored in `shims/pi-dist`". |
@@ -42,8 +42,8 @@ Audit of the listed records (which cited upstream ranges changed under them, so 
 |---|---|
 | `README.md:21` badge, `:28`, `docs/site/docs/index.md:79` | The pin (`internal/coding/pigversion/pigversion.go`); tag `v0.99.1` exists in the mirror. |
 | `README.md:121`, `docs/project/RELEASING.md:157`, DIVERGENCES D63 (`:876,880`) and the user-agent example (`:925`) | Format examples (not flagged): `0.3.0+0.99.1` is `coding.Version` at this pin (`pigversion.go:7,10,17`). |
-| `docs/site/docs/how-pig-works.md:3` | `how-pi-works.md` identical in both releases; `agent-loop.ts` has no steering/follow-up change; `keybindings.md` differs only in the paste-image label. |
-| `docs/site/docs/configuration.md:68`, `internal/pigdocs/content/config.md:72` | `auth-storage.ts` byte-identical; session `CURRENT_SESSION_VERSION = 3` (`session-manager.ts:41`); settings changes are additive keys (`deviceId`, `codemode`, `fullscreenWheelScrollLines`), and PiG keeps unknown keys; Pi still does not write `models.json` (`model-runtime.ts:218`, `model-config.ts`). |
+| `docs/site/docs/how-ompig-works.md:3` | `how-pi-works.md` identical in both releases; `agent-loop.ts` has no steering/follow-up change; `keybindings.md` differs only in the paste-image label. |
+| `docs/site/docs/configuration.md:68`, `internal/pigdocs/content/config.md:72` | `auth-storage.ts` byte-identical; session `CURRENT_SESSION_VERSION = 3` (`session-manager.ts:41`); settings changes are additive keys (`deviceId`, `codemode`, `fullscreenWheelScrollLines`), and Ompig keeps unknown keys; Pi still does not write `models.json` (`model-runtime.ts:218`, `model-config.ts`). |
 | `docs/site/docs/extensions.md:362` | `ContextUsage.tokens: number \| null` and `getContextUsage(): ContextUsage \| undefined` (`extensions/types.ts:306-312,360`; `agent-session.ts:4139-4160`). |
 | `docs/site/docs/message-types.md:116` | No `replace` field on `SystemMessage` (`ai/types.ts:496-539`); upstream `docs/message-types.md:103,108` still lists one and is unchanged. |
 | `docs/site/docs/providers.md:92`, `internal/pigdocs/content/providers.md:92`, DIVERGENCES D80 (`:1118`) | `login-dialog.ts` byte-identical; `showAuthPrompt` (`interactive-mode.ts:6124`) still passes `prompt.placeholder` to a plain `Input`. |
@@ -71,17 +71,17 @@ Audit of the listed records (which cited upstream ranges changed under them, so 
 1. `docs/extension-sdk-surface.md` and `docs/parity/KNOWN-GAPS-0.3.x.md` (generated block) are generated. `go run ./test/parity/cmd/sdksurface` needs `test/parity/interfaces/upstream-v0.99.1.json`, so it waits for your step 5. After regeneration the sdk-surface entry in `version-records.toml` fails as stale: delete it. `test/parity/known-gaps.toml` still has `pi_version = "0.87.1"`.
 2. Pin statements the check does not scan and this item did not touch: `NOTICE`, `THIRD_PARTY_NOTICES.md` and `REUSE.toml` (vendored 0.87.1 dependency notices; correct until `vendor-pi-dist.sh` runs at 0.99.1), `.github/badges/parity-coverage.svg` (generated), `.github/ISSUE_TEMPLATE/parity.yml`, `automation/gen/pending-test-batches.py`, `automation/gen/test-ported-baseline.py`, `automation/make/parity.mk`, `docs/project/QUICKSTART.md` and `docs/media/quickstart/quickstart.ascii` (recorded 0.2.0 captures), `docs/site/docs/evals.md` (measured run), `plans/0.3.x/*`.
 3. When family 3 (ChatGPT OAuth on `openai`, `openai-codex` renamed "OpenAI Codex (legacy)"), 6B (typesafe provider and classifier models) and the tool-nesting work land, revisit: the `typesafe`/classifier sentence in both `providers.md` files, the `nestedCalls` exception in `message-types.md`, and the tool-activation sentence at `extension-api-parity.md:277`.
-4. New 0.99.1 hosted endpoint: `remote-catalog-provider.ts:13` (`https://pi.dev` catalog overlay). D64 lists the other `pi.dev` endpoints; PiG has no catalog fetch yet, so 6B needs a D64 decision.
-5. `docs/additive-features.md:217` says stock `pig` keeps one Host across a replacement (D30, D61), while D70 says it starts a new host. This item only corrected D70's `.ts` claim; the two entries still need reconciling.
-6. The pin-move note about "docs mirrors for the new upstream docs" (`docs/mcp.md`, `docs/virtual-models.md`, 19 changed docs) has no mirror to update: `internal/pigdocs` and `docs/site/docs` are PiG-written, and no gate compares them with upstream docs. The MCP and virtual-model pages belong to the lanes that port those features.
+4. New 0.99.1 hosted endpoint: `remote-catalog-provider.ts:13` (`https://pi.dev` catalog overlay). D64 lists the other `pi.dev` endpoints; Ompig has no catalog fetch yet, so 6B needs a D64 decision.
+5. `docs/additive-features.md:217` says stock `ompig` keeps one Host across a replacement (D30, D61), while D70 says it starts a new host. This item only corrected D70's `.ts` claim; the two entries still need reconciling.
+6. The pin-move note about "docs mirrors for the new upstream docs" (`docs/mcp.md`, `docs/virtual-models.md`, 19 changed docs) has no mirror to update: `internal/pigdocs` and `docs/site/docs` are Ompig-written, and no gate compares them with upstream docs. The MCP and virtual-model pages belong to the lanes that port those features.
 
 ### Loop self-report
 
 Family: docs (pin-move item 4)
 
 Bugs found and fixed at the source (count: 3):
-  - compaction page said PiG lacks `session_compact_failed` → documented the event PiG emits @ docs/site/docs/compaction.md:109
-  - session-format page said PiG ignores `context_edit` → documented that PiG applies it @ docs/site/docs/session-format.md:7
+  - compaction page said Ompig lacks `session_compact_failed` → documented the event Ompig emits @ docs/site/docs/compaction.md:109
+  - session-format page said Ompig ignores `context_edit` → documented that Ompig applies it @ docs/site/docs/session-format.md:7
   - D70 claimed `.ts` modules are re-evaluated on replacement → measured on both releases and corrected @ docs/parity/DIVERGENCES.md:988
 
 Comparators tightened (count: 0)

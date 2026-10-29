@@ -8,9 +8,9 @@ import (
 	"slices"
 	"strings"
 
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Namespace is a group of tools named by a common prefix, such as an MCP server's `mcp__github__`.

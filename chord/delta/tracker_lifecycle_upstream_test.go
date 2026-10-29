@@ -3,7 +3,7 @@ package delta
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Ports the "delta tracker transactional overlay lifecycle" cases of packages/chord/test/delta-tracker/tracker.test.ts onto the overlay Tracker. Go mapping: Change.State is the Object handle for upstream's Proxy draft, a string `+=` is Get then Set, and a revoked draft panics with ErrRevoked where upstream throws TypeError("Cannot use a settled overlay").

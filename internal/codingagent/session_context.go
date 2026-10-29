@@ -6,9 +6,9 @@ package codingagent
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // Ports packages/coding-agent/src/core/session-manager.ts (buildSessionContext).

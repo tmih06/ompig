@@ -13,8 +13,8 @@ import (
 // Deeply nested / huge inputs are bounded in OUTPUT (Render returns null once a
 // cap is hit: MAX_GROUP_DEPTH, MAX_NODES, MAX_EDGES) but their parse/layout
 // COST is superlinear on pathological input, exactly as upstream grok-mermaid
-// (grok itself takes ~6s at 2000-deep, ~92s at 5000-deep; pig is faster). pi's
-// transformer applies no input-size guard, so pig matches it; realistic diagrams
+// (grok itself takes ~6s at 2000-deep, ~92s at 5000-deep; ompig is faster). pi's
+// transformer applies no input-size guard, so ompig matches it; realistic diagrams
 // (bounded by the caps) render in microseconds: see BenchmarkRender. The cases
 // below stay within the realistic-pathological range that terminates quickly.
 func TestRenderRobustness(t *testing.T) {

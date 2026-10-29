@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // theme.ts Theme.fg/bg/getFgAnsi/getBgAnsi, the text attributes and the thinking and bash border colours for every
@@ -58,14 +58,14 @@ func TestBuiltinThemeTokensMatchPi(t *testing.T) {
 					func() {
 						defer func() {
 							if r := recover(); r != nil {
-								t.Errorf("%s %q: Pig panics (%v), Pi defines it", kind, token, r)
+								t.Errorf("%s %q: Ompig panics (%v), Pi defines it", kind, token, r)
 							}
 						}()
 						if got := text(token); got != wantText {
-							t.Errorf("%s %q: Pig %q, Pi %q", kind, token, got, wantText)
+							t.Errorf("%s %q: Ompig %q, Pi %q", kind, token, got, wantText)
 						}
 						if got := ansi(token); got != wantAnsi[token] {
-							t.Errorf("%s %q opening: Pig %q, Pi %q", kind, token, got, wantAnsi[token])
+							t.Errorf("%s %q opening: Ompig %q, Pi %q", kind, token, got, wantAnsi[token])
 						}
 					}()
 				}
@@ -74,19 +74,19 @@ func TestBuiltinThemeTokensMatchPi(t *testing.T) {
 			palette("bg", want.Bg, func(token string) string { return theme.Bg(token, "x") }, theme.GetBgAnsi, want.BgAnsi)
 			fgPalette, bgPalette := theme.ANSIPalette()
 			if len(fgPalette) != len(want.Fg) || len(bgPalette) != len(want.Bg) {
-				t.Errorf("Pig defines %d fg and %d bg tokens, Pi %d and %d", len(fgPalette), len(bgPalette), len(want.Fg), len(want.Bg))
+				t.Errorf("Ompig defines %d fg and %d bg tokens, Pi %d and %d", len(fgPalette), len(bgPalette), len(want.Fg), len(want.Bg))
 			}
 			styles := []string{theme.Bold("x"), theme.Italic("x"), theme.Underline("x"), theme.Inverse("x"), theme.Strikethrough("x")}
 			if !slices.Equal(styles, want.Styles) {
-				t.Errorf("attributes: Pig %q, Pi %q", styles, want.Styles)
+				t.Errorf("attributes: Ompig %q, Pi %q", styles, want.Styles)
 			}
 			for level, wantText := range want.Thinking {
 				if got := theme.GetThinkingBorderColor(level)("x"); got != wantText {
-					t.Errorf("thinking border %q: Pig %q, Pi %q", level, got, wantText)
+					t.Errorf("thinking border %q: Ompig %q, Pi %q", level, got, wantText)
 				}
 			}
 			if got := theme.GetBashModeBorderColor()("x"); got != want.Bash {
-				t.Errorf("bash border: Pig %q, Pi %q", got, want.Bash)
+				t.Errorf("bash border: Ompig %q, Pi %q", got, want.Bash)
 			}
 		})
 	}
@@ -129,7 +129,7 @@ func TestBuiltinThemeFilesMatchPiBytes(t *testing.T) {
 				w = wantLines[i]
 			}
 			if !bytes.Equal(g, w) {
-				t.Errorf("theme_%s.json line %d: Pig %q, Pi %q", name, i+1, g, w)
+				t.Errorf("theme_%s.json line %d: Ompig %q, Pi %q", name, i+1, g, w)
 				break
 			}
 		}

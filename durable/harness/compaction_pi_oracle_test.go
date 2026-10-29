@@ -13,10 +13,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type compactionOp struct {
@@ -98,7 +98,7 @@ func (g *compactionGen) assistant() map[string]any {
 	}
 	message := map[string]any{"role": "assistant", "content": content, "api": "openai-responses", "provider": "p", "model": "m", "usage": g.usage(g.random.Intn(3) == 0), "stopReason": g.pick("stop", "stop", "toolUse", "length", "error", "aborted"), "timestamp": g.random.Intn(1000)}
 	if g.random.Intn(3) == 0 {
-		// Not generated: errorMessage "" (an Error with no message). ai.AssistantMessage.ErrorMessage is a string where Pi keeps the empty string, so Pig reads it as absent.
+		// Not generated: errorMessage "" (an Error with no message). ai.AssistantMessage.ErrorMessage is a string where Pi keeps the empty string, so Ompig reads it as absent.
 		message["errorMessage"] = g.pick("boom", "é😀")
 	}
 	return message
@@ -250,7 +250,7 @@ func TestCompactionHelpersMatchPi(t *testing.T) {
 		case "order":
 			got = canonical(OrderToolResults(decode(op.Messages)))
 		case "serialize":
-			// A cut inside a surrogate pair leaves a lone surrogate, which Pi's JSON output spells \ud83d; spell Pig's the same way.
+			// A cut inside a surrogate pair leaves a lone surrogate, which Pi's JSON output spells \ud83d; spell Ompig's the same way.
 			serialized, err := jsstring.MarshalJSON(SerializeConversation(decode(op.Messages)))
 			if err != nil {
 				t.Fatal(err)
@@ -283,7 +283,7 @@ func TestCompactionHelpersMatchPi(t *testing.T) {
 		if !reflect.DeepEqual(canonical(got), canonical(wantValue)) {
 			differing[op.Op]++
 			if differing[op.Op] <= 2 {
-				t.Errorf("%s op %d\n  Pi  %s\n  Pig %s", op.Op, i, tail(wantValue), tail(got))
+				t.Errorf("%s op %d\n  Pi  %s\n  Ompig %s", op.Op, i, tail(wantValue), tail(got))
 			}
 		}
 	}

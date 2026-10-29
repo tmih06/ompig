@@ -13,6 +13,6 @@ Do not log:
 Every active divergence must have:
 
 - id `D<N>`
-- `// pig divergence (D<N>): ...` at each call site
+- `// ompig divergence (D<N>): ...` at each call site
 - parity coverage or an explicit parity allowance
 - `SCRUTINIZED:approved`

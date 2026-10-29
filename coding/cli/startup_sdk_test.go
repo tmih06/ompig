@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 func TestStartupSDKStageLockWaitIsBoundedAndVisible(t *testing.T) {
@@ -57,7 +57,7 @@ func TestStartupSDKStageIsQuietOnAReadOnlyConfigRoot(t *testing.T) {
 		}},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			root := filepath.Join(t.TempDir(), "pig")
+			root := filepath.Join(t.TempDir(), "ompig")
 			if err := os.MkdirAll(root, 0o700); err != nil {
 				t.Fatal(err)
 			}

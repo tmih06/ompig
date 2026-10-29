@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func failingHandlerFixture(t *testing.T) string {
@@ -25,11 +25,11 @@ func failingHandlerFixture(t *testing.T) string {
 
 // Upstream rpc-mode.ts binds onError to output({type: "extension_error",
 // extensionPath, event, error}); the 9068 regression asserts that shape
-// (type, event, error containing the handler's message). Pig registered no
+// (type, event, error containing the handler's message). Ompig registered no
 // listener in RPC mode, so handler failures never reached the client.
 func TestRPCModeOutputsExtensionErrors(t *testing.T) {
 	fixture := failingHandlerFixture(t)
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
 	p.send(`{"id":"run","type":"prompt","message":"What is 20+22?"}`)
 	p.await("extension_error for the failing agent_start handler", func(record rpcRecord) bool {
 		if record["type"] != "extension_error" {
@@ -50,7 +50,7 @@ func TestRPCModeOutputsExtensionErrors(t *testing.T) {
 }
 
 // Upstream print-mode.ts binds onError to console.error(`Extension error
-// (${err.extensionPath}): ${err.error}`) in text and json modes alike. Pig
+// (${err.extensionPath}): ${err.error}`) in text and json modes alike. Ompig
 // registered no listener in either, so handler failures were silent.
 func TestPrintModeWritesExtensionErrorsToStderr(t *testing.T) {
 	t.Parallel()
@@ -60,14 +60,14 @@ func TestPrintModeWritesExtensionErrorsToStderr(t *testing.T) {
 		t.Run(mode, func(t *testing.T) {
 			cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-session", "-e", fixture, "--mode", mode, "--print", "What is 20+22?")
 			cmd.Dir = t.TempDir()
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			if err := cmd.Run(); err != nil {
 				if _, ok := errors.AsType[*exec.ExitError](err); !ok {
 					t.Fatal(err)
 				}
-				t.Fatalf("pig --print failed: %v\nstderr:\n%s", err, stderr.String())
+				t.Fatalf("ompig --print failed: %v\nstderr:\n%s", err, stderr.String())
 			}
 			if !strings.Contains(stdout.String(), "42") {
 				t.Fatalf("the run did not complete; stdout:\n%s\nstderr:\n%s", stdout.String(), stderr.String())

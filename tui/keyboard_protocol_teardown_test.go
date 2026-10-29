@@ -9,7 +9,7 @@ import (
 )
 
 // resetKeyboardProtocolState puts the package globals back to a known state so
-// each case starts from "pig has pushed the flags".
+// each case starts from "ompig has pushed the flags".
 func resetKeyboardProtocolState(pushed, modify, kitty bool) {
 	keyboardProtocolPushed.Store(pushed)
 	modifyOtherKeysActive.Store(modify)
@@ -20,7 +20,7 @@ func resetKeyboardProtocolState(pushed, modify, kitty bool) {
 // that let one owner handle teardown from several call paths.
 //
 // The pop must happen exactly once however many callers ask, because a second
-// \x1b[<u pops an entry pig never pushed and disturbs whatever the terminal had
+// \x1b[<u pops an entry ompig never pushed and disturbs whatever the terminal had
 // underneath. It must also leave the terminal in one write, so a concurrent
 // render cannot land between the Kitty pop and the modifyOtherKeys disable.
 func TestDisableKeyboardProtocolIsIdempotentAndSingleWrite(t *testing.T) {

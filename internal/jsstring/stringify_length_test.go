@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // referenceStringifyLength is the length computed from a separately allocated MarshalJSON string, the way ai.JSONStringifyLength once did it.

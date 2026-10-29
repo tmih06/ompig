@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports execute.ts saveImages (Pi 1.0.3, #10310): each image gets a text item with its saved path before it, a repeated

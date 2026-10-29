@@ -3,8 +3,8 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 type foreignHarness struct{ Harness }

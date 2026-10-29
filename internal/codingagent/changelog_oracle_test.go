@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's parseChangelog and getNewEntries (utils/changelog.ts) run against the vendored Pi module for the same changelog text and last-seen versions.

@@ -10,14 +10,14 @@ import (
 
 	"github.com/dlclark/regexp2"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type sessionScope string
@@ -513,7 +513,7 @@ func (s *SessionSelectorComponent) move(delta int) {
 	case delta < 0:
 		s.selected = max(0, s.selected+delta)
 	case paging:
-		// pig divergence (D155): a page key keeps the index valid over an empty list, where Pi 1.1.0 leaves -1 (Pi PR #7680, "keeps the session selection valid when paging before sessions load").
+		// ompig divergence (D155): a page key keeps the index valid over an empty list, where Pi 1.1.0 leaves -1 (Pi PR #7680, "keeps the session selection valid when paging before sessions load").
 		s.selected = min(max(0, len(s.filtered)-1), s.selected+delta)
 	default:
 		s.selected = min(len(s.filtered)-1, s.selected+delta)

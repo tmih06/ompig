@@ -42,7 +42,7 @@
 //     or assertions must match an entry in docs/parity/DIVERGENCES.md. Prevents
 //     fake-citing a divergence number to justify silent skipping.
 //
-//  8. literal-tmp-path: scenario fields (pig_args, pi_args, env values,
+//  8. literal-tmp-path: scenario fields (ompig_args, pi_args, env values,
 //     tmux.cwd, pre_clear_paths) must not contain literal /tmp/... paths.
 //     Use the {{TEMP}} substitution token instead. The runner expands
 //     {{TEMP}} to a fresh per-binary, per-run tempdir, eliminating the
@@ -120,12 +120,12 @@ type assertBlock struct {
 	JSONAliases           []jsonAliasRule         `toml:"json_aliases"`
 	ArtifactEqual         bool                    `toml:"artifact_equal"`
 	ExitCode              *int                    `toml:"exit_code"`
-	PigExitCode           *int                    `toml:"pig_exit_code"`
+	OmpigExitCode         *int                    `toml:"ompig_exit_code"`
 	PiExitCode            *int                    `toml:"pi_exit_code"`
 	BothContain           []string                `toml:"both_contain"`
 	BothNotContain        []string                `toml:"both_not_contain"`
-	PigContains           []string                `toml:"pig_contains"`
-	PigNotContain         []string                `toml:"pig_not_contain"`
+	OmpigContains         []string                `toml:"ompig_contains"`
+	OmpigNotContain       []string                `toml:"ompig_not_contain"`
 	PiContains            []string                `toml:"pi_contains"`
 	PiNotContain          []string                `toml:"pi_not_contain"`
 	BothMatchRegex        []string                `toml:"both_match_regex"`
@@ -147,7 +147,7 @@ type assertBlock struct {
 }
 
 type jsonAliasRule struct {
-	Pig      string   `toml:"pig"`
+	Ompig    string   `toml:"ompig"`
 	Pi       string   `toml:"pi"`
 	Roots    []string `toml:"roots"`
 	Paths    []string `toml:"paths"`
@@ -174,16 +174,16 @@ type extensionAssertBlock struct {
 }
 
 type envBlock struct {
-	Pig              []string `toml:"pig"`
+	Ompig            []string `toml:"ompig"`
 	Pi               []string `toml:"pi"`
-	PigArgs          []string `toml:"pig_args"`
+	OmpigArgs        []string `toml:"ompig_args"`
 	PiArgs           []string `toml:"pi_args"`
-	PigExtensions    []string `toml:"pig_extensions"`
+	OmpigExtensions  []string `toml:"ompig_extensions"`
 	PiExtensions     []string `toml:"pi_extensions"`
-	PigBin           string   `toml:"pig_bin"`
-	PigGoTests       []string `toml:"pig_go_tests"`
+	OmpigBin         string   `toml:"ompig_bin"`
+	OmpigGoTests     []string `toml:"ompig_go_tests"`
 	PiGoTests        []string `toml:"pi_go_tests"`
-	PigGoPrograms    []string `toml:"pig_go_programs"`
+	OmpigGoPrograms  []string `toml:"ompig_go_programs"`
 	PiGoPrograms     []string `toml:"pi_go_programs"`
 	PiBin            string   `toml:"pi_bin"`
 	OverrideBaseArgs bool     `toml:"override_base_args"`
@@ -195,7 +195,7 @@ type tmuxBlock struct {
 	ReadyTimeoutSeconds int             `toml:"ready_timeout_seconds"`
 	Keys                []string        `toml:"keys"`
 	SettleSeconds       int             `toml:"settle_seconds"`
-	ReadyPatternPig     string          `toml:"ready_pattern_pig"`
+	ReadyPatternPig     string          `toml:"ready_pattern_ompig"`
 	ReadyPatternPi      string          `toml:"ready_pattern_pi"`
 	CaptureStart        string          `toml:"capture_start"`
 	CaptureEnd          string          `toml:"capture_end"`
@@ -215,7 +215,7 @@ type tmuxStepBlock struct {
 	SettleSeconds          int      `toml:"settle_seconds"`
 	WaitContains           []string `toml:"wait_contains"`
 	WaitVisibleContains    []string `toml:"wait_visible_contains"`
-	WaitVisibleContainsPig []string `toml:"wait_visible_contains_pig"`
+	WaitVisibleContainsPig []string `toml:"wait_visible_contains_ompig"`
 	WaitVisibleContainsPi  []string `toml:"wait_visible_contains_pi"`
 	WaitNotContains        []string `toml:"wait_not_contains"`
 	WaitTimeoutSeconds     int      `toml:"wait_timeout_seconds"`
@@ -225,7 +225,7 @@ type tmuxStepBlock struct {
 
 type cliBlock struct {
 	Args           []string `toml:"args"`
-	PigArgs        []string `toml:"pig_args"`
+	OmpigArgs      []string `toml:"ompig_args"`
 	PiArgs         []string `toml:"pi_args"`
 	InputLines     []string `toml:"input_lines"`
 	SettleSeconds  int      `toml:"settle_seconds"`
@@ -267,9 +267,9 @@ type extensionHostBlock struct {
 }
 
 type divergeBlock struct {
-	PigContains []string `toml:"pig_contains"`
-	PiContains  []string `toml:"pi_contains"`
-	Reason      string   `toml:"reason"`
+	OmpigContains []string `toml:"ompig_contains"`
+	PiContains    []string `toml:"pi_contains"`
+	Reason        string   `toml:"reason"`
 }
 
 type violation struct {
@@ -295,7 +295,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "lint: %v\n", err)
 		os.Exit(2)
 	}
-	// Additive Pig-only features (no upstream Pi equivalent) live in a
+	// Additive Ompig-only features (no upstream Pi equivalent) live in a
 	// separate registry. Scenarios may still reference them by ID for
 	// downstream-evidence comments: treat them as known.
 	additivePath := filepath.Join(filepath.Dir(*divergencesMd), "..", "additive-features.md")
@@ -611,8 +611,8 @@ func lintScenario(path, source string, sc *scenario, known map[string]bool, know
 		out = append(out, violation{path, "json-text-normalization", "full JSON comparison cannot use text normalization"})
 	}
 	for _, rule := range sc.Assert.JSONAliases {
-		if rule.Kind == "literal" && (rule.Pig == "" || rule.Pi == "") {
-			out = append(out, violation{path, "json-alias-literal-missing", "literal alias requires exact nonempty pig and pi spellings"})
+		if rule.Kind == "literal" && (rule.Ompig == "" || rule.Pi == "") {
+			out = append(out, violation{path, "json-alias-literal-missing", "literal alias requires exact nonempty ompig and pi spellings"})
 		}
 		if (rule.Kind == "id" || rule.Kind == "session_file") && rule.Group == "" {
 			out = append(out, violation{path, "json-alias-group-missing", "identity alias requires a shared group"})
@@ -626,14 +626,14 @@ func lintScenario(path, source string, sc *scenario, known map[string]bool, know
 
 func hasBehaviorAssertion(sc *scenario) bool {
 	a := sc.Assert
-	return a.ExitCode != nil || a.PigExitCode != nil || a.PiExitCode != nil ||
-		len(a.BothContain) > 0 || len(a.PigContains) > 0 || len(a.PiContains) > 0 ||
+	return a.ExitCode != nil || a.OmpigExitCode != nil || a.PiExitCode != nil ||
+		len(a.BothContain) > 0 || len(a.OmpigContains) > 0 || len(a.PiContains) > 0 ||
 		a.ChangelogHeadersComplete || len(a.BothMatchRegex) > 0 || a.OutputEqual || a.OutputNormalizedEqual ||
 		a.OutputLayoutEqual || a.EscapedOutputEqual || a.JSONOutputEqual || a.StderrEqual || a.ArtifactEqual || a.BothReachReady ||
 		len(a.Extensions.RegisteredTools) > 0 || len(a.Extensions.RegisteredCommands) > 0 ||
 		len(a.Extensions.RegisteredProviders) > 0 || len(a.Extensions.RegisteredShortcuts) > 0 ||
 		a.Extensions.NoDiagnostics || len(a.Extensions.PlacementStrategy) > 0 ||
-		len(sc.Diverge.PigContains) > 0 || len(sc.Diverge.PiContains) > 0
+		len(sc.Diverge.OmpigContains) > 0 || len(sc.Diverge.PiContains) > 0
 }
 
 func lintOAuthProviderCoverage(scenariosDir string) []violation {
@@ -700,7 +700,7 @@ var parityFixtureExtensions = map[string]bool{
 // that starts a subprocess extension host, i.e. the extensions the -ext groups
 // throttle. In-process parity fixtures do not count.
 func schedulingExtensionsPresent(sc *scenario) bool {
-	for _, ext := range sc.Env.PigExtensions {
+	for _, ext := range sc.Env.OmpigExtensions {
 		if !parityFixtureExtensions[filepath.Base(ext)] {
 			return true
 		}
@@ -754,9 +754,9 @@ func lintNoLiteralTmpPaths(path string, sc *scenario) []violation {
 			}
 		}
 	}
-	check("env.pig_args", sc.Env.PigArgs)
+	check("env.ompig_args", sc.Env.OmpigArgs)
 	check("env.pi_args", sc.Env.PiArgs)
-	check("env.pig", sc.Env.Pig)
+	check("env.ompig", sc.Env.Ompig)
 	check("env.pi", sc.Env.Pi)
 	check("tmux.pre_clear_paths", sc.Tmux.PreClearPaths)
 	if sc.Tmux.CWD != "" {
@@ -769,10 +769,10 @@ func lintNoLiteralTmpPaths(path string, sc *scenario) []violation {
 // the snapshot mechanism copies. Must stay in sync with
 // test/parity/runner/snapshot.go:snapshotEnvKeys.
 var lintSnapshotKeys = map[string]bool{
-	"PIG_CODING_AGENT_DIR": true,
-	"PI_CODING_AGENT_DIR":  true,
-	"PIG_HOME":             true,
-	"PI_HOME":              true,
+	"OMPIG_CODING_AGENT_DIR": true,
+	"PI_CODING_AGENT_DIR":    true,
+	"OMPIG_HOME":             true,
+	"PI_HOME":                true,
 }
 
 // lintEnvDirPaths validates that every snapshotable env key in the
@@ -807,7 +807,7 @@ func lintEnvDirPaths(scenarioPath string, sc *scenario) []violation {
 		}
 	}
 
-	check(sc.Env.Pig, "pig")
+	check(sc.Env.Ompig, "ompig")
 	check(sc.Env.Pi, "pi")
 	return out
 }
@@ -824,7 +824,7 @@ func hasTag(tags []string, tag string) bool {
 	return slices.Contains(tags, tag)
 }
 
-// A PORT_MAP row is | `upstream path` | Pig cell | status |. The Pig cell is whatever sits between the upstream span and the status: empty, code spans, or code spans followed by prose.
+// A PORT_MAP row is | `upstream path` | Ompig cell | status |. The Ompig cell is whatever sits between the upstream span and the status: empty, code spans, or code spans followed by prose.
 var (
 	portMapRowRE        = regexp.MustCompile("^\\|\\s+`([^`]+)`\\s+\\|.*\\|\\s+(?:✅|🟡|⬜|⏸|🔴|n/a)\\s+\\|\\s*$")
 	portMapSeparatorRE  = regexp.MustCompile(`^\|[\s:|-]+\|\s*$`)
@@ -886,7 +886,7 @@ func parsePortMapPaths(path string) (map[string]bool, error) {
 		}
 		m := portMapRowRE.FindStringSubmatch(line)
 		if m == nil {
-			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | pig cell | status |): %s", path, i+1, line)
+			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | ompig cell | status |): %s", path, i+1, line)
 		}
 		out[m[1]] = true
 	}

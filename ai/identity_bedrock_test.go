@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // Pi adc5fa9f: bedrock-converse-stream.ts bedrockUserAgent sends the client identity as AWS SDK user agent pairs: name and

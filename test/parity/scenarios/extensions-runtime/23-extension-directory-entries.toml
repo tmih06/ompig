@@ -15,7 +15,7 @@
 #     -e dir-entries/empty --model test-faux/faux-1 --mode rpc
 #   stdin: {"id":"cmds","type":"get_commands"}
 #
-# PiG used to resolve each directory as one extension and failed with "resolves
+# Ompig used to resolve each directory as one extension and failed with "resolves
 # to 3 entrypoints" and "declares pi.extensions directories with no extension
 # entry file".
 
@@ -36,9 +36,9 @@ timeout_seconds = 20
 settle_seconds = 1
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session"]
-pig_extensions = ["testdata/dir-entries/pkg", "testdata/dir-entries/empty"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session"]
+ompig_extensions = ["testdata/dir-entries/pkg", "testdata/dir-entries/empty"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/dir-entries/pkg",

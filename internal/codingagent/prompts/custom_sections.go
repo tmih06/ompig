@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ApplyCustomSystemPromptSections overlays extension-authored sections on the base prompt in insertion order. Empty values leave the base unchanged; preamble and invalid tag names are rejected.

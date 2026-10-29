@@ -1,4 +1,4 @@
-// Package extension defines the contract every pig extension speaks. It
+// Package extension defines the contract every ompig extension speaks. It
 // mirrors upstream pi's ExtensionAPI surface 1:1 so a TS extension can
 // be ported to Go almost line-for-line, and so each upstream version bump is
 // an additive diff rather than a structural one.
@@ -31,7 +31,7 @@
 //
 // Upstream references many domain types (AgentMessage, Model, CompactionEntry,
 // AbortSignal, Component, etc.) that don't yet have concrete Go equivalents
-// in PiG. Types that cross the current dynamic JSON or renderer boundaries are
+// in Ompig. Types that cross the current dynamic JSON or renderer boundaries are
 // explicit opaque aliases in opaque_types.go. Concrete events and SDK methods
 // use typed Go values where the contract is stable.
 package extension

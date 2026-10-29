@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/frontmatter"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/ignorerules"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/frontmatter"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/ignorerules"
+	"github.com/tmih06/ompig/internal/nodefs"
 )
 
 // LoadSkillsFromDirOptions selects one skill directory and its provenance source.

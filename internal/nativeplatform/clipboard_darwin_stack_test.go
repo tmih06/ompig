@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-const stackMoveChildEnv = "PIG_NATIVEPLATFORM_STACK_MOVE_CHILD"
+const stackMoveChildEnv = "OMPIG_NATIVEPLATFORM_STACK_MOVE_CHILD"
 
 // stackMoveDepths covers three doublings of a goroutine stack on darwin/arm64, where an efence stack starts at one 16 KiB page, and five on darwin/amd64 with 4 KiB pages, so at some depths the stack grows between an operation's conversion of its Go array and its system call.
 const stackMoveDepths = 2600
@@ -45,7 +45,7 @@ func TestDarwinPasteboardBuffersSurviveAStackMove(t *testing.T) {
 	}
 	defer s.send(board, "releaseGlobally", 0, 0, 0)
 
-	if err := s.setPasteboardText(board, "pig"); err != nil {
+	if err := s.setPasteboardText(board, "ompig"); err != nil {
 		t.Fatalf("setPasteboardText = %v", err)
 	}
 	operations := []struct {
@@ -65,11 +65,11 @@ func TestDarwinPasteboardBuffersSurviveAStackMove(t *testing.T) {
 			return nil
 		}},
 		{"setPasteboardText", func() error {
-			if err := s.setPasteboardText(board, "pig"); err != nil {
+			if err := s.setPasteboardText(board, "ompig"); err != nil {
 				return err
 			}
-			if text, err := s.pasteboardText(board); err != nil || text == nil || *text != "pig" {
-				return fmt.Errorf("pasteboard text = %s, %w; want %q", quoted(text), err, "pig")
+			if text, err := s.pasteboardText(board); err != nil || text == nil || *text != "ompig" {
+				return fmt.Errorf("pasteboard text = %s, %w; want %q", quoted(text), err, "ompig")
 			}
 			return nil
 		}},
@@ -122,7 +122,7 @@ func TestDarwinPasteboardTextRoundTrip(t *testing.T) {
 	if text, err := s.pasteboardText(board); err != nil || text != nil {
 		t.Fatalf("empty pasteboard text = %s, %v; want none", quoted(text), err)
 	}
-	for _, want := range []string{"pig", "größer 🐷 als ein Ferkel"} {
+	for _, want := range []string{"ompig", "größer 🐷 als ein Ferkel"} {
 		if err := s.setPasteboardText(board, want); err != nil {
 			t.Fatalf("setPasteboardText(%q) = %v", want, err)
 		}

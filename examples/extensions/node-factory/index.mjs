@@ -1,4 +1,4 @@
-// Minimal Node Pig extension: Pi's default-export factory, registering one tool.
+// Minimal Node Ompig extension: Pi's default-export factory, registering one tool.
 // The Node runtime supplies "@earendil-works/pi-coding-agent" itself, so the file needs no install step.
 export default function (pi) {
   pi.registerTool({

@@ -3,7 +3,7 @@ package inproc
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Ports packages/coding-agent/src/core/extensions/runner.ts

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi 1.2.0 runner.ts:1426-1450 renderCurrentSystemPrompt: in a before_agent_start handler, event.systemPrompt and

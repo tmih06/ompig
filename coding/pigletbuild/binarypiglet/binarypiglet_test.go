@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet/artifact"
+	"github.com/tmih06/ompig/coding/ompiglet/artifact"
 )
 
-// TestParse pins the fallback contract: only a baked piglet with a model or a
+// TestParse pins the fallback contract: only a baked ompiglet with a model or a
 // prompt yields a non-nil default; everything else (empty, comment-only, or a
-// name-only piglet) resolves to nil so normal startup runs.
+// name-only ompiglet) resolves to nil so normal startup runs.
 func TestParse(t *testing.T) {
 	cases := map[string]struct {
 		yaml   string
@@ -29,7 +29,7 @@ func TestParse(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			got := parse([]byte(tc.yaml))
 			if tc.wantOK && got == nil {
-				t.Fatalf("parse(%q) = nil, want a piglet", tc.yaml)
+				t.Fatalf("parse(%q) = nil, want a ompiglet", tc.yaml)
 			}
 			if !tc.wantOK && got != nil {
 				t.Fatalf("parse(%q) = %+v, want nil", tc.yaml, got)
@@ -38,26 +38,26 @@ func TestParse(t *testing.T) {
 	}
 }
 
-// TestDefault_StockIsNil: the committed piglet.yaml bakes nothing, so a stock
-// Stock Pig and a Binary built without an embedded Piglet get no default.
+// TestDefault_StockIsNil: the committed ompiglet.yaml bakes nothing, so a stock
+// Stock Ompig and a Binary built without an embedded Ompiglet get no default.
 func TestDefault_StockIsNil(t *testing.T) {
 	if got := Default(); got != nil {
-		t.Fatalf("Default() = %+v on committed piglet.yaml, want nil", got)
+		t.Fatalf("Default() = %+v on committed ompiglet.yaml, want nil", got)
 	}
 }
 
-// swapBaked temporarily replaces the embedded piglet and closure so Verify can
-// be exercised without compiling a real Piglet Binary.
+// swapBaked temporarily replaces the embedded ompiglet and closure so Verify can
+// be exercised without compiling a real Ompiglet Binary.
 func swapBaked(t *testing.T, yaml, closure []byte) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	oy, oc := pigletYAML, resolutionRecordJSON
 	pigletYAML, resolutionRecordJSON = yaml, closure
 	t.Cleanup(func() { pigletYAML, resolutionRecordJSON = oy, oc })
 }
 
 // resolutionFor builds a valid resolution record whose effective digest matches
-// the given baked piglet bytes, exactly as a real build would.
+// the given baked ompiglet bytes, exactly as a real build would.
 func resolutionFor(t *testing.T, yaml []byte) artifact.Record {
 	t.Helper()
 	plan, err := artifact.BuildPlan(nil)
@@ -84,8 +84,8 @@ func marshal(t *testing.T, v any) []byte {
 	return data
 }
 
-// TestVerify_StockIsNoop: with no baked closure, Verify passes so stock pig and
-// Stock Pig builds without a resolution record run unchanged.
+// TestVerify_StockIsNoop: with no baked closure, Verify passes so stock ompig and
+// Stock Ompig builds without a resolution record run unchanged.
 func TestVerify_StockIsNoop(t *testing.T) {
 	swapBaked(t, nil, nil)
 	if _, err := Verify(); err != nil {
@@ -93,21 +93,21 @@ func TestVerify_StockIsNoop(t *testing.T) {
 	}
 }
 
-// TestIsPigletBinary: a baked closure marks the executable as a Piglet Binary;
-// stock pig (no closure) is not.
+// TestIsPigletBinary: a baked closure marks the executable as a Ompiglet Binary;
+// stock ompig (no closure) is not.
 func TestIsPigletBinary(t *testing.T) {
 	swapBaked(t, nil, nil)
 	if IsPigletBinary() {
 		t.Fatal("IsPigletBinary() = true with no baked closure, want false")
 	}
-	swapBaked(t, []byte("name: t\n"), []byte(`{"kind":"piglet-resolution"}`))
+	swapBaked(t, []byte("name: t\n"), []byte(`{"kind":"ompiglet-resolution"}`))
 	if !IsPigletBinary() {
 		t.Fatal("IsPigletBinary() = false with a baked closure, want true")
 	}
 }
 
 // TestVerify_ValidClosurePasses: a well-formed resolution record whose effective
-// digest matches the baked piglet verifies.
+// digest matches the baked ompiglet verifies.
 func TestVerify_ValidClosurePasses(t *testing.T) {
 	yaml := []byte("name: t\n")
 	swapBaked(t, yaml, marshal(t, resolutionFor(t, yaml)))
@@ -117,13 +117,13 @@ func TestVerify_ValidClosurePasses(t *testing.T) {
 }
 
 // TestVerify_PigletDigestMismatchFails: a closure whose effective digest does
-// not match the baked piglet is rejected (piglet swapped after the build).
+// not match the baked ompiglet is rejected (ompiglet swapped after the build).
 func TestVerify_PigletDigestMismatchFails(t *testing.T) {
 	closure := marshal(t, resolutionFor(t, []byte("name: built\n")))
 	swapBaked(t, []byte("name: swapped\n"), closure)
 	_, err := Verify()
 	if err == nil || !strings.Contains(err.Error(), "does not match its closure") {
-		t.Fatalf("Verify() = %v, want a piglet/closure mismatch error", err)
+		t.Fatalf("Verify() = %v, want a ompiglet/closure mismatch error", err)
 	}
 }
 
@@ -149,7 +149,7 @@ func TestVerify_TamperedRecordFails(t *testing.T) {
 func TestVerify_MalformedClosureFails(t *testing.T) {
 	swapBaked(t, []byte("name: t\n"), []byte("{ not json"))
 	_, err := Verify()
-	if err == nil || !strings.Contains(err.Error(), "decode baked Piglet closure") {
+	if err == nil || !strings.Contains(err.Error(), "decode baked Ompiglet closure") {
 		t.Fatalf("Verify() = %v, want a decode error", err)
 	}
 }
@@ -229,13 +229,13 @@ func TestVerifyRegisteredClosure_UnexpectedPackedFails(t *testing.T) {
 	}
 }
 
-// TestOverlayBase: only a Piglet Binary whose baked Piglet sets build.allowOverlays offers a base for an overlay, with the
-// digest of the baked bytes; stock pig, an unmarked Binary and a Binary that sets the flag false offer none. Name is the
-// baked Piglet's name from the closure.
+// TestOverlayBase: only a Ompiglet Binary whose baked Ompiglet sets build.allowOverlays offers a base for an overlay, with the
+// digest of the baked bytes; stock ompig, an unmarked Binary and a Binary that sets the flag false offer none. Name is the
+// baked Ompiglet's name from the closure.
 func TestOverlayBase(t *testing.T) {
 	swapBaked(t, nil, nil)
 	if OverlayBase() != nil || Name() != "" {
-		t.Fatalf("stock pig offered an overlay base %+v or a name %q", OverlayBase(), Name())
+		t.Fatalf("stock ompig offered an overlay base %+v or a name %q", OverlayBase(), Name())
 	}
 	for _, tc := range []struct {
 		name string
@@ -255,8 +255,8 @@ func TestOverlayBase(t *testing.T) {
 			if (base != nil) != tc.want {
 				t.Fatalf("OverlayBase() = %+v, want present = %t", base, tc.want)
 			}
-			if tc.want && (base.Piglet.Name != "t" || base.Digest != "sha256:"+hex.EncodeToString(sha256Sum(yaml)) || base.Digest != record.Resolution.EffectiveDigest) {
-				t.Fatalf("base = %+v, want the baked Piglet and its digest", base)
+			if tc.want && (base.Ompiglet.Name != "t" || base.Digest != "sha256:"+hex.EncodeToString(sha256Sum(yaml)) || base.Digest != record.Resolution.EffectiveDigest) {
+				t.Fatalf("base = %+v, want the baked Ompiglet and its digest", base)
 			}
 			if Name() != "t" {
 				t.Fatalf("Name() = %q, want t", Name())

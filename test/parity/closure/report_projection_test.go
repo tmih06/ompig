@@ -12,14 +12,14 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 func TestRenderPortMapProjectsProvisionalRows(t *testing.T) {
 	hash := HashBytes([]byte("report"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:report", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		rowOrderFact(t, "snapshot:report", "pin:report", PortMapDataset, "rows", []string{"packages/a.ts", "packages/b.ts"}),
 		portMapFact(t, "packages/a.ts", "a.go", "✅", "pin:report", hash),
 		portMapFact(t, "packages/b.ts", "b.go", "⬜", "pin:report", hash),
@@ -32,7 +32,7 @@ func TestRenderPortMapProjectsProvisionalRows(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RenderReport(): %v", err)
 	}
-	want := "| upstream | pig | status | proven | waived | provisional | open | contradicted | reason |\n" +
+	want := "| upstream | ompig | status | proven | waived | provisional | open | contradicted | reason |\n" +
 		"|---|---|---|---:|---:|---:|---:|---:|---|\n" +
 		"| `packages/a.ts` | `a.go` | ✅ | 0 | 0 | 1 | 0 | 0 | imported status ✅ |\n" +
 		"| `packages/b.ts` | `b.go` | ⬜ | 0 | 0 | 0 | 1 | 0 | source row has no imported status claim |\n"
@@ -45,7 +45,7 @@ func TestReadReportRebuildIsDeterministic(t *testing.T) {
 	hash := HashBytes([]byte("denominator-store"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:report", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 2, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 2, QuoteHash: hash},
 		rowOrderFact(t, "snapshot:report", "pin:report", PortMapDataset, "rows", []string{"packages/example.ts"}),
 		portMapFact(t, "packages/example.ts", "example.go", "✅", "pin:report", hash),
 		&ProvisionalClaim{Kind: KindProvisionalClaim, ID: "provisional:denominator:port-map:example", SnapshotID: "snapshot:report", SubjectID: "packages/example.ts", SourcePinID: "pin:report", Status: "✅"},
@@ -77,7 +77,7 @@ func TestReadJSONReportRebuildIsDeterministic(t *testing.T) {
 	hash := HashBytes([]byte("denominator-json-store"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:denominator-json-store", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:denominator-json-store", SnapshotID: "snapshot:denominator-json-store", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "mapping.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 2, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:denominator-json-store", SnapshotID: "snapshot:denominator-json-store", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "mapping.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 2, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator-json-store:metadata", SnapshotID: "snapshot:denominator-json-store", FactType: "denominator:semantic-mapping", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:denominator-json-store"}, Value: json.RawMessage(`{"upstreamVersion":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:denominator-json-store", "pin:denominator-json-store", SemanticMappingDataset, "mappings", []string{"pkg:ai/.#Example"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator-json-store:row", SnapshotID: "snapshot:denominator-json-store", FactType: "denominator:semantic-mapping", SubjectID: "pkg:ai/.#Example", Resolution: "observed", PinIDs: []string{"pin:denominator-json-store"}, Value: json.RawMessage(`{"id":"pkg:ai/.#Example","disposition":"pending"}`)},
@@ -109,7 +109,7 @@ func TestRenderCoverageProjectsPortMapClaim(t *testing.T) {
 	hash := HashBytes([]byte("denominator-coverage"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:denominator-coverage", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:denominator-coverage", SnapshotID: "snapshot:denominator-coverage", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/coverage.md", SemanticID: "denominator:coverage-row", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:denominator-coverage", SnapshotID: "snapshot:denominator-coverage", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/coverage.md", SemanticID: "denominator:coverage-row", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		rowOrderFact(t, "snapshot:denominator-coverage", "pin:denominator-coverage", CoverageDataset, "rows", []string{"packages/example.ts"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:coverage-row:example", SnapshotID: "snapshot:denominator-coverage", FactType: "denominator:coverage-row", SubjectID: "packages/example.ts", Resolution: "observed", PinIDs: []string{"pin:denominator-coverage"}, Value: json.RawMessage(`{"fields":["` + "`packages/example.ts`" + `","✅","1 (scenario)","1 (scenario)","1 pass"]}`)},
 		&ProvisionalClaim{Kind: KindProvisionalClaim, ID: "provisional:denominator:port-map:example", SnapshotID: "snapshot:denominator-coverage", SubjectID: "packages/example.ts", SourcePinID: "pin:denominator-coverage", Status: "✅"},
@@ -133,7 +133,7 @@ func TestRenderSemanticMappingPreservesRowsAndProjectsState(t *testing.T) {
 	hash := HashBytes([]byte("denominator-semantic-mapping"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:semantic-mapping", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:semantic-mapping", SnapshotID: "snapshot:semantic-mapping", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/interfaces/mapping-v0.84.0.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:semantic-mapping", SnapshotID: "snapshot:semantic-mapping", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/interfaces/mapping-v0.84.0.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:semantic-mapping:metadata", SnapshotID: "snapshot:semantic-mapping", FactType: "denominator:semantic-mapping", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:semantic-mapping"}, Value: json.RawMessage(`{"upstreamVersion":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:semantic-mapping", "pin:semantic-mapping", SemanticMappingDataset, "mappings", []string{"pkg:ai/.#Foo"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:semantic-mapping:foo", SnapshotID: "snapshot:semantic-mapping", FactType: "denominator:semantic-mapping", SubjectID: "pkg:ai/.#Foo", Resolution: "observed", PinIDs: []string{"pin:semantic-mapping"}, Value: json.RawMessage(`{"id":"pkg:ai/.#Foo","disposition":"ported","upstreamShapeHash":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","evidence":[]}`)},
@@ -172,7 +172,7 @@ func TestRenderSemanticMappingPreservesSourceOrder(t *testing.T) {
 	hash := HashBytes([]byte("denominator-semantic-mapping-order"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:semantic-mapping-order", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:semantic-mapping-order", SnapshotID: "snapshot:semantic-mapping-order", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "mapping.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 3, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:semantic-mapping-order", SnapshotID: "snapshot:semantic-mapping-order", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "mapping.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 3, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:semantic-mapping-order:metadata", SnapshotID: "snapshot:semantic-mapping-order", FactType: "denominator:semantic-mapping", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:semantic-mapping-order"}, Value: json.RawMessage(`{"upstreamVersion":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:semantic-mapping-order", "pin:semantic-mapping-order", SemanticMappingDataset, "mappings", []string{"pkg:ai/.#Zulu", "pkg:ai/.#Alpha"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:semantic-mapping-order:zulu", SnapshotID: "snapshot:semantic-mapping-order", FactType: "denominator:semantic-mapping", SubjectID: "pkg:ai/.#Zulu", Resolution: "observed", PinIDs: []string{"pin:semantic-mapping-order"}, Value: json.RawMessage(`{"id":"pkg:ai/.#Zulu","disposition":"pending"}`)},
@@ -196,7 +196,7 @@ func TestRenderSemanticDeltaPreservesRowsAndProjectsState(t *testing.T) {
 	hash := HashBytes([]byte("denominator-semantic-delta"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:semantic-delta", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:semantic-delta", SnapshotID: "snapshot:semantic-delta", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/interfaces/delta-v0.83.0-v0.84.0.json", SemanticID: "denominator:semantic-delta", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:semantic-delta", SnapshotID: "snapshot:semantic-delta", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/interfaces/delta-v0.83.0-v0.84.0.json", SemanticID: "denominator:semantic-delta", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:semantic-delta:metadata", SnapshotID: "snapshot:semantic-delta", FactType: "denominator:semantic-delta", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:semantic-delta"}, Value: json.RawMessage(`{"from":"0.83.0","to":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:semantic-delta", "pin:semantic-delta", SemanticDeltaDataset, "changes", []string{"pkg:ai/.#Foo"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:semantic-delta:foo", SnapshotID: "snapshot:semantic-delta", FactType: "denominator:semantic-delta", SubjectID: "pkg:ai/.#Foo", Resolution: "resolved", PinIDs: []string{"pin:semantic-delta"}, Value: json.RawMessage(`{"id":"pkg:ai/.#Foo","change":"added","after_shape_hash":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","disposition":"pending","evidence":[],"rationale":""}`)},
@@ -237,12 +237,12 @@ func TestRenderInputRenderMappingPreservesBothSections(t *testing.T) {
 	hash := HashBytes([]byte("denominator-input-render-mapping"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:input-render", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:input-render", SnapshotID: "snapshot:input-render", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/interfaces/behavior-input-mapping-v0.84.0.json", SemanticID: "denominator:behavior-input-mapping", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:input-render", SnapshotID: "snapshot:input-render", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/interfaces/behavior-input-mapping-v0.84.0.json", SemanticID: "denominator:behavior-input-mapping", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:input-render:metadata", SnapshotID: "snapshot:input-render", FactType: "denominator:behavior-input-mapping", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:input-render"}, Value: json.RawMessage(`{"upstreamVersion":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:input-render", "pin:input-render", InputRenderMappingDataset, "mappings", []string{"input:example"}),
 		rowOrderFact(t, "snapshot:input-render", "pin:input-render", InputRenderMappingDataset, "renderMappings", []string{"render:example"}),
-		&Fact{Kind: KindFact, ID: "fact:denominator:input-render:input", SnapshotID: "snapshot:input-render", FactType: "denominator:behavior-input-mapping", SubjectID: "input:example", Resolution: "observed", PinIDs: []string{"pin:input-render"}, Value: json.RawMessage(`{"id":"input:example","ownerFamily":"selectors","disposition":"partial","pigTargets":["tui/example.go"],"evidence":[],"contracts":[]}`)},
-		&Fact{Kind: KindFact, ID: "fact:denominator:input-render:render", SnapshotID: "snapshot:input-render", FactType: "denominator:behavior-input-mapping", SubjectID: "render:example", Resolution: "observed", PinIDs: []string{"pin:input-render"}, Value: json.RawMessage(`{"id":"render:example","ownerFamily":"selectors","disposition":"pending","pigTargets":[],"evidence":[],"contracts":[]}`)},
+		&Fact{Kind: KindFact, ID: "fact:denominator:input-render:input", SnapshotID: "snapshot:input-render", FactType: "denominator:behavior-input-mapping", SubjectID: "input:example", Resolution: "observed", PinIDs: []string{"pin:input-render"}, Value: json.RawMessage(`{"id":"input:example","ownerFamily":"selectors","disposition":"partial","ompigTargets":["tui/example.go"],"evidence":[],"contracts":[]}`)},
+		&Fact{Kind: KindFact, ID: "fact:denominator:input-render:render", SnapshotID: "snapshot:input-render", FactType: "denominator:behavior-input-mapping", SubjectID: "render:example", Resolution: "observed", PinIDs: []string{"pin:input-render"}, Value: json.RawMessage(`{"id":"render:example","ownerFamily":"selectors","disposition":"pending","ompigTargets":[],"evidence":[],"contracts":[]}`)},
 		&ProvisionalClaim{Kind: KindProvisionalClaim, ID: "provisional:denominator:behavior-input-mapping:input", SnapshotID: "snapshot:input-render", SubjectID: "input:example", SourcePinID: "pin:input-render", Status: "partial"},
 	})
 	if err != nil {
@@ -259,7 +259,7 @@ func TestRenderInputRenderMappingPreservesBothSections(t *testing.T) {
 		"      \"id\": \"input:example\",\n" +
 		"      \"ownerFamily\": \"selectors\",\n" +
 		"      \"disposition\": \"partial\",\n" +
-		"      \"pigTargets\": [\n" +
+		"      \"ompigTargets\": [\n" +
 		"        \"tui/example.go\"\n" +
 		"      ],\n" +
 		"      \"evidence\": [],\n" +
@@ -277,7 +277,7 @@ func TestRenderInputRenderMappingPreservesBothSections(t *testing.T) {
 		"      \"id\": \"render:example\",\n" +
 		"      \"ownerFamily\": \"selectors\",\n" +
 		"      \"disposition\": \"pending\",\n" +
-		"      \"pigTargets\": [],\n" +
+		"      \"ompigTargets\": [],\n" +
 		"      \"evidence\": [],\n" +
 		"      \"contracts\": [],\n" +
 		"      \"proven\": 0,\n" +
@@ -298,7 +298,7 @@ func TestRenderAsyncContractsPreservesRowsAndProjectsState(t *testing.T) {
 	hash := HashBytes([]byte("denominator-async-contract"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:async-contract", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:async-contract", SnapshotID: "snapshot:async-contract", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/async-contracts.toml", SemanticID: "denominator:async-contract", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:async-contract", SnapshotID: "snapshot:async-contract", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/async-contracts.toml", SemanticID: "denominator:async-contract", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:async-contract:metadata", SnapshotID: "snapshot:async-contract", FactType: "denominator:async-contract", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:async-contract"}, Value: json.RawMessage(`{"version":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:async-contract", "pin:async-contract", AsyncContractDataset, "files", []string{"packages/example.ts"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:async-contract:row", SnapshotID: "snapshot:async-contract", FactType: "denominator:async-contract", SubjectID: "packages/example.ts", Resolution: "observed", PinIDs: []string{"pin:async-contract"}, Value: json.RawMessage(`{"contracts":["awaited"],"disposition":"ported","evidence":["example_test.go"],"path":"packages/example.ts","rationale":"reviewed"}`)},
@@ -329,7 +329,7 @@ func TestRenderChangedSourcePreservesRowsAndProjectsState(t *testing.T) {
 	hash := HashBytes([]byte("denominator-upstream-sync"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:upstream-sync", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:upstream-sync", SnapshotID: "snapshot:upstream-sync", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/upstream-sync/v0.84.0.toml", SemanticID: "denominator:upstream-sync", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:upstream-sync", SnapshotID: "snapshot:upstream-sync", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/upstream-sync/v0.84.0.toml", SemanticID: "denominator:upstream-sync", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:upstream-sync:metadata", SnapshotID: "snapshot:upstream-sync", FactType: "denominator:upstream-sync", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:upstream-sync"}, Value: json.RawMessage(`{"from":"0.83.0","to":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:upstream-sync", "pin:upstream-sync", ChangedSourceDataset, "files", []string{"packages/example.ts"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:upstream-sync:row", SnapshotID: "snapshot:upstream-sync", FactType: "denominator:upstream-sync", SubjectID: "packages/example.ts", Resolution: "observed", PinIDs: []string{"pin:upstream-sync"}, Value: json.RawMessage(`{"change":"modified","disposition":"pending","evidence":[],"path":"packages/example.ts","rationale":""}`)},
@@ -359,10 +359,10 @@ func TestRenderBehaviorContractsPreservesNestedSource(t *testing.T) {
 	hash := HashBytes([]byte("denominator-behavior-contract"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:behavior-contract", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:behavior-contract", SnapshotID: "snapshot:behavior-contract", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/behavior-contracts.toml", SemanticID: "denominator:behavior-contract", StartLine: 1, EndLine: 20, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:behavior-contract", SnapshotID: "snapshot:behavior-contract", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/behavior-contracts.toml", SemanticID: "denominator:behavior-contract", StartLine: 1, EndLine: 20, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:behavior-contract:metadata", SnapshotID: "snapshot:behavior-contract", FactType: "denominator:behavior-contract", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{"pin:behavior-contract"}, Value: json.RawMessage(`{"upstream_version":"0.84.0"}`)},
 		rowOrderFact(t, "snapshot:behavior-contract", "pin:behavior-contract", BehaviorContractDataset, "contract", []string{"example/wrap"}),
-		&Fact{Kind: KindFact, ID: "fact:denominator:behavior-contract:row", SnapshotID: "snapshot:behavior-contract", FactType: "denominator:behavior-contract", SubjectID: "example/wrap", Resolution: "observed", PinIDs: []string{"pin:behavior-contract"}, Value: json.RawMessage(`{"claim":"wraps at both boundaries","evidence":["example_test.go"],"family":"selectors","id":"example/wrap","kind":"boundary-transition","pig_targets":["tui/example.go"],"status":"ported","upstream":{"end":"end marker","keybindings":["tui.select.up"],"path":"packages/example.ts","sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","start":"\tstart marker"},"upstream_id":"input:example"}`)},
+		&Fact{Kind: KindFact, ID: "fact:denominator:behavior-contract:row", SnapshotID: "snapshot:behavior-contract", FactType: "denominator:behavior-contract", SubjectID: "example/wrap", Resolution: "observed", PinIDs: []string{"pin:behavior-contract"}, Value: json.RawMessage(`{"claim":"wraps at both boundaries","evidence":["example_test.go"],"family":"selectors","id":"example/wrap","kind":"boundary-transition","ompig_targets":["tui/example.go"],"status":"ported","upstream":{"end":"end marker","keybindings":["tui.select.up"],"path":"packages/example.ts","sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","start":"\tstart marker"},"upstream_id":"input:example"}`)},
 		&ProvisionalClaim{Kind: KindProvisionalClaim, ID: "provisional:denominator:behavior-contract:row", SnapshotID: "snapshot:behavior-contract", SubjectID: "example/wrap", SourcePinID: "pin:behavior-contract", Status: "ported"},
 	})
 	if err != nil {
@@ -380,7 +380,7 @@ func TestRenderBehaviorContractsPreservesNestedSource(t *testing.T) {
 		"kind = \"boundary-transition\"\n" +
 		"claim = \"wraps at both boundaries\"\n" +
 		"status = \"ported\"\n" +
-		"pig_targets = [\"tui/example.go\"]\n" +
+		"ompig_targets = [\"tui/example.go\"]\n" +
 		"evidence = [\"example_test.go\"]\n" +
 		"proven = 0\nwaived = 0\nprovisional = 1\nopen = 0\ncontradicted = 0\n" +
 		"reason = \"imported status ported\"\n\n" +
@@ -399,7 +399,7 @@ func TestRenderFormatVersionsPreservesRows(t *testing.T) {
 	hash := HashBytes([]byte("denominator-format-version"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:format-version", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:format-version", SnapshotID: "snapshot:format-version", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/format-versions.toml", SemanticID: "denominator:format-version", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:format-version", SnapshotID: "snapshot:format-version", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/format-versions.toml", SemanticID: "denominator:format-version", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		rowOrderFact(t, "snapshot:format-version", "pin:format-version", FormatOwnershipDataset, "fields", []string{"example.go#Config.Version:json:version"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:format-version:row", SnapshotID: "snapshot:format-version", FactType: "denominator:format-version", SubjectID: "example.go#Config.Version:json:version", Resolution: "resolved", PinIDs: []string{"pin:format-version"}, Value: json.RawMessage(`{"classification":"external","field":"Version","id":"example.go#Config.Version:json:version","owner":"Config","path":"example.go","rationale":"external protocol","wire_name":"version"}`)},
 	})
@@ -429,7 +429,7 @@ func TestRenderFamilyCoverageDerivesScenarioQuality(t *testing.T) {
 	hash := HashBytes([]byte("family-coverage"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:family-coverage", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:family-coverage", SnapshotID: "snapshot:family-coverage", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/scenarios/selectors", SemanticID: "denominator:scenario", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:family-coverage", SnapshotID: "snapshot:family-coverage", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/scenarios/selectors", SemanticID: "denominator:scenario", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		scenarioFact("snapshot:family-coverage", "pin:family-coverage", "test/parity/scenarios/selectors/01-behavior.toml", `{"description":"behavior","covers":["packages/a.ts"],"tags":["hermetic"]}`),
 		scenarioFact("snapshot:family-coverage", "pin:family-coverage", "test/parity/scenarios/selectors/02-boot.toml", `{"description":"boot-only: starts","covers":["packages/b.ts"],"tags":[]}`),
 		scenarioFact("snapshot:family-coverage", "pin:family-coverage", "test/parity/scenarios/selectors/03-registration.toml", `{"description":"registration","covers":["packages/ai/src/api-registry.ts"],"tags":["registration-only"]}`),
@@ -459,7 +459,7 @@ func TestRenderScenarioQualityProjectsEachScenario(t *testing.T) {
 	hash := HashBytes([]byte("scenario-quality"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:scenario-quality", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:scenario-quality", SnapshotID: "snapshot:scenario-quality", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "test/parity/scenarios", SemanticID: "denominator:scenario", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:scenario-quality", SnapshotID: "snapshot:scenario-quality", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "test/parity/scenarios", SemanticID: "denominator:scenario", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		scenarioFact("snapshot:scenario-quality", "pin:scenario-quality", "test/parity/scenarios/02-top.toml", `{"description":"boot-only: starts","covers":["packages/top.ts"],"tags":[]}`),
 		scenarioFact("snapshot:scenario-quality", "pin:scenario-quality", "test/parity/scenarios/selectors/01-behavior.toml", `{"description":"behavior","covers":["packages/a.ts","packages/b.ts"],"tags":[]}`),
 		scenarioFact("snapshot:scenario-quality", "pin:scenario-quality", "test/parity/scenarios/selectors/03-deferred.toml", `{"description":"later","covers":[],"tags":["deferred"]}`),
@@ -485,7 +485,7 @@ func TestRenderDivergenceDashboardKeepsApprovalProvisional(t *testing.T) {
 	hash := HashBytes([]byte("divergence-dashboard"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:divergence-dashboard", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:divergence-dashboard", SnapshotID: "snapshot:divergence-dashboard", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/DIVERGENCES.md", SemanticID: "denominator:divergence", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:divergence-dashboard", SnapshotID: "snapshot:divergence-dashboard", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/DIVERGENCES.md", SemanticID: "denominator:divergence", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		&Fact{Kind: KindFact, ID: "fact:denominator:divergence:D10", SnapshotID: "snapshot:divergence-dashboard", FactType: "denominator:divergence", SubjectID: "D10", Resolution: "observed", PinIDs: []string{"pin:divergence-dashboard"}, Value: json.RawMessage(`{"section":"## D10 open difference\n\nWhat: unresolved."}`)},
 		&Fact{Kind: KindFact, ID: "fact:denominator:divergence:D2", SnapshotID: "snapshot:divergence-dashboard", FactType: "denominator:divergence", SubjectID: "D2", Resolution: "observed", PinIDs: []string{"pin:divergence-dashboard"}, Value: json.RawMessage(`{"section":"## D2 approved difference\n\nSCRUTINIZED:approved"}`)},
 		&ProvisionalClaim{Kind: KindProvisionalClaim, ID: "provisional:denominator:divergence:D2", SnapshotID: "snapshot:divergence-dashboard", SubjectID: "D2", SourcePinID: "pin:divergence-dashboard", Status: "approved"},
@@ -558,7 +558,7 @@ func TestRenderReportRejectsUnsupportedAndMalformedRows(t *testing.T) {
 	hash := HashBytes([]byte("hash"))
 	graph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:report", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 10, QuoteHash: hash},
 	})
 	if err != nil {
 		t.Fatalf("Build(): %v", err)
@@ -575,7 +575,7 @@ func TestRenderReportRejectsUnsupportedAndMalformedRows(t *testing.T) {
 	}
 	badGraph, err := Build([]Record{
 		&Snapshot{Kind: KindSnapshot, ID: "snapshot:report", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash},
-		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 10, QuoteHash: hash},
+		&Pin{Kind: KindPin, ID: "pin:report", SnapshotID: "snapshot:report", Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 10, QuoteHash: hash},
 		rowOrderFact(t, "snapshot:report", "pin:report", PortMapDataset, "rows", []string{"packages/b.ts"}),
 		&Fact{Kind: KindFact, ID: "fact:denominator:port-map:bad", SnapshotID: "snapshot:report", FactType: "denominator:port-map", SubjectID: "packages/b.ts", Resolution: "observed", PinIDs: []string{"pin:report"}, Value: badValue},
 	})
@@ -590,7 +590,7 @@ func TestRenderReportRejectsUnsupportedAndMalformedRows(t *testing.T) {
 func TestRenderJSONReportRejectsReservedFieldsAndOrphanClaims(t *testing.T) {
 	hash := HashBytes([]byte("bad-denominator-json"))
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:bad-denominator-json", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash}
-	pin := &Pin{Kind: KindPin, ID: "pin:bad-denominator-json", SnapshotID: snapshot.ID, Repository: "pig", Commit: strings.Repeat("b", 40), Path: "mapping.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 2, QuoteHash: hash}
+	pin := &Pin{Kind: KindPin, ID: "pin:bad-denominator-json", SnapshotID: snapshot.ID, Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "mapping.json", SemanticID: "denominator:semantic-mapping", StartLine: 1, EndLine: 2, QuoteHash: hash}
 	metadata := &Fact{Kind: KindFact, ID: "fact:bad-denominator-json:metadata", SnapshotID: snapshot.ID, FactType: "denominator:semantic-mapping", SubjectID: "<metadata>", Resolution: "resolved", PinIDs: []string{pin.ID}, Value: json.RawMessage(`{"upstreamVersion":"0.84.0"}`)}
 	reserved := &Fact{Kind: KindFact, ID: "fact:bad-denominator-json:reserved", SnapshotID: snapshot.ID, FactType: "denominator:semantic-mapping", SubjectID: "pkg:ai/.#Bad", Resolution: "observed", PinIDs: []string{pin.ID}, Value: json.RawMessage(`{"id":"pkg:ai/.#Bad","disposition":"pending","proven":1}`)}
 	reservedOrder := rowOrderFact(t, snapshot.ID, pin.ID, SemanticMappingDataset, "mappings", []string{"pkg:ai/.#Bad"})

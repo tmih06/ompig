@@ -34,13 +34,13 @@ Recovery reruns factories, not interrupted tools or callbacks. Current invocatio
 
 ## Diagnostic logs
 
-PiG captures one temporary `pig-packed-*.log` stderr file per packed process (D20) or `pig-ext-*.log` per isolated process (D56). Each file keeps the first 1 MiB and the last 64 KiB of the output and states how many bytes it dropped, so a startup failure and a crash line both survive a flood. Shutdown and reload close the process handles and remove that file. A load or crash diagnostic that names the file retains it for troubleshooting, including after reload. A cancelled load does not retain a log. Remove a retained file manually when you no longer need it.
+Ompig captures one temporary `ompig-packed-*.log` stderr file per packed process (D20) or `ompig-ext-*.log` per isolated process (D56). Each file keeps the first 1 MiB and the last 64 KiB of the output and states how many bytes it dropped, so a startup failure and a crash line both survive a flood. Shutdown and reload close the process handles and remove that file. A load or crash diagnostic that names the file retains it for troubleshooting, including after reload. A cancelled load does not retain a log. Remove a retained file manually when you no longer need it.
 
 When a shared Go, Rust, or Python process crashes, the error for each stopped extension says that `/reload` restarts it. A Go, Rust, or Python extension that fails while it registers shows its own error in the load message, and a Rust panic shows its panic message.
 
 A socket close and process exit claim the same failed member only once. Interrupted commands, shortcuts and events keep their error result, but the lifecycle handler owns the connection failure diagnostic when a crash handler is installed. Ordinary handler errors still reach the runner's error listener. Interactive commands use that same runner path.
 
-PiG does not sweep logs from earlier sessions. Their names do not identify an owner or prove that its process has exited. Automatic deletion could remove a live session's log or a retained failure diagnostic.
+Ompig does not sweep logs from earlier sessions. Their names do not identify an owner or prove that its process has exited. Automatic deletion could remove a live session's log or a retained failure diagnostic.
 
 ## Reload report
 
@@ -73,21 +73,21 @@ Packed mode must be observationally identical to isolated mode. Fix the host or 
 
 The host catches extension-call panics at the extension boundary and returns a structured internal error when a response is possible. Results above the protocol frame limit are replaced with a small `result_too_large` error so the host does not write a frame no compliant extension can read.
 
-## Piglet component runtime
+## Ompiglet component runtime
 
-A Piglet build/release may populate neutral runtime inputs:
+A Ompiglet build/release may populate neutral runtime inputs:
 
 | Input | Runtime job |
 |---|---|
-| effective Piglet | provide immutable agent composition |
+| effective Ompiglet | provide immutable agent composition |
 | component closure | expose exact prebuilt subprocess runners/assets to ordinary resolution |
 | fused registrations | register build-time-linked compatible Go factories |
 
-Stock Pig has no Piglet-specific registrations or closure. Runtime registration remains generic and does not own Piglet schema or product transport.
+Stock Ompig has no Ompiglet-specific registrations or closure. Runtime registration remains generic and does not own Ompiglet schema or product transport.
 
 ## Operational boundaries
 
-| Pig owns | Product/platform owns |
+| Ompig owns | Product/platform owns |
 |---|---|
 | placement/reload facts | org policy and quotas |
 | cell build/cache/start | build-environment scheduling |

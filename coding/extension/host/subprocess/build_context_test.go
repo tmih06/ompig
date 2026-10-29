@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // buildContext bounds a call that compiles an extension or a cell (a Load, LoadAll or Reload of a Go or Rust source, or

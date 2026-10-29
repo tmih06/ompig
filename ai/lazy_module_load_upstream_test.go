@@ -16,7 +16,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Equivalence port of packages/ai/test/lazy-module-load.test.ts (Pi 1.0.0). Pi counts the provider SDK
@@ -26,17 +26,17 @@ import (
 // reading the catalog and building every built-in provider has none of those effects; streaming one model has them
 // only for that model's provider.
 
-const lazyProbeEnv = "PIG_LAZY_MODULE_LOAD_PROBE"
+const lazyProbeEnv = "OMPIG_LAZY_MODULE_LOAD_PROBE"
 
 // lazyProbeReport is what a fresh process reports after one action.
 type lazyProbeReport struct {
-	PiGGoroutines []string `json:"pigGoroutines"`
-	InitSockets   int      `json:"initSockets"`
-	Sockets       int      `json:"sockets"`
-	ProxyDials    int64    `json:"proxyDials"`
-	Credentials   []string `json:"credentials"`
-	ModelsStore   []string `json:"modelsStore"`
-	Models        int      `json:"models"`
+	OmpigGoroutines []string `json:"ompigGoroutines"`
+	InitSockets     int      `json:"initSockets"`
+	Sockets         int      `json:"sockets"`
+	ProxyDials      int64    `json:"proxyDials"`
+	Credentials     []string `json:"credentials"`
+	ModelsStore     []string `json:"modelsStore"`
+	Models          int      `json:"models"`
 }
 
 // countingCredentialStore records each provider whose credentials are read.
@@ -79,8 +79,8 @@ func (s *countingModelsStore) Read(ctx context.Context, providerID string) (*ai.
 	return s.InMemoryModelsStore.Read(ctx, providerID)
 }
 
-// pigGoroutines lists the goroutines that have a frame in a PiG package, other than the probe's own.
-func pigGoroutines() []string {
+// ompigGoroutines lists the goroutines that have a frame in a Ompig package, other than the probe's own.
+func ompigGoroutines() []string {
 	buffer := make([]byte, 1<<20)
 	buffer = buffer[:runtime.Stack(buffer, true)]
 	var found []string
@@ -88,7 +88,7 @@ func pigGoroutines() []string {
 		if strings.Contains(stack, "TestLazyModuleLoad") || strings.Contains(stack, "testing.tRunner") || strings.Contains(stack, "testing.(*M)") {
 			continue
 		}
-		if strings.Contains(stack, "github.com/MichaelKinsy/PiG/") {
+		if strings.Contains(stack, "github.com/tmih06/ompig/") {
 			found = append(found, stack)
 		}
 	}
@@ -164,7 +164,7 @@ func TestLazyModuleLoadProbe(t *testing.T) {
 	default:
 		t.Fatalf("unknown action %q", action)
 	}
-	report.PiGGoroutines = pigGoroutines()
+	report.OmpigGoroutines = ompigGoroutines()
 	report.Sockets = openSockets()
 	if report.Sockets >= 0 {
 		report.Sockets -= baselineSockets
@@ -204,8 +204,8 @@ func runLazyProbe(t *testing.T, action string) lazyProbeReport {
 
 func wantNoProviderEffects(t *testing.T, report lazyProbeReport) {
 	t.Helper()
-	if len(report.PiGGoroutines) != 0 {
-		t.Errorf("PiG goroutines started:\n%s", strings.Join(report.PiGGoroutines, "\n\n"))
+	if len(report.OmpigGoroutines) != 0 {
+		t.Errorf("Ompig goroutines started:\n%s", strings.Join(report.OmpigGoroutines, "\n\n"))
 	}
 	if report.InitSockets > 0 {
 		t.Errorf("%d sockets open after package initialization", report.InitSockets)

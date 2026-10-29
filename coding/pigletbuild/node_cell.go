@@ -13,17 +13,17 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // buildNodeCell packs the sources of a Node cell's members into one tar
-// archive that the Piglet Binary embeds. Nothing is compiled: at startup the
+// archive that the Ompiglet Binary embeds. Nothing is compiled: at startup the
 // Binary extracts the sources and runs them with the user's installed Node
-// through the same Node cell path Stock PiG uses, so the extension behaves as
-// it does under Stock PiG. A directory member is archived whole except its
+// through the same Node cell path Stock Ompig uses, so the extension behaves as
+// it does under Stock Ompig. A directory member is archived whole except its
 // .git metadata; a single-file member is archived as that file.
-// pig additive (D18): a Piglet Binary carries its TypeScript and JavaScript extensions.
+// ompig additive (D18): a Ompiglet Binary carries its TypeScript and JavaScript extensions.
 func buildNodeCell(cell subprocess.CellSpec, cacheRoot string, host Target) (stagedCell, error) {
 	dir := filepath.Join(cacheRoot, "node")
 	if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -153,7 +153,7 @@ func writeArchiveLink(writer *tar.Writer, name, root, current string) error {
 	//portlint:allow pathseparators tar member and link names are slash paths by the tar format, not host paths
 	resolved := path.Join(path.Dir(name), slashTarget)
 	if filepath.IsAbs(target) || (resolved != member && !strings.HasPrefix(resolved, member+"/")) {
-		return fmt.Errorf("symbolic link %s points outside the extension directory %s; the Piglet Binary embeds only that directory", current, root)
+		return fmt.Errorf("symbolic link %s points outside the extension directory %s; the Ompiglet Binary embeds only that directory", current, root)
 	}
 	return writer.WriteHeader(&tar.Header{Typeflag: tar.TypeSymlink, Name: name, Linkname: slashTarget, Mode: 0o777, Format: tar.FormatPAX})
 }

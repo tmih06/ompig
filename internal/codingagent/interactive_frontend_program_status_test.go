@@ -15,17 +15,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 const (
-	frontendStatusChildEnv = "PIG_TEST_FRONTEND_STATUS_CHILD"
-	frontendStatusHookEnv  = "PIG_TEST_FRONTEND_STATUS_HOOK"
+	frontendStatusChildEnv = "OMPIG_TEST_FRONTEND_STATUS_CHILD"
+	frontendStatusHookEnv  = "OMPIG_TEST_FRONTEND_STATUS_HOOK"
 )
 
 // statusFrontendSession is a fake session with the program status hook. It
@@ -211,7 +211,7 @@ func TestFrontendProgramStatusChild(t *testing.T) {
 	}
 }
 
-// pig additive (D91): once a session stops drawing mid-run, the status is
+// ompig additive (D91): once a session stops drawing mid-run, the status is
 // cleared for it before Close and reported again to the terminal that
 // replaces it.
 func TestFrontendFallbackHandsTheProgramStatusBack(t *testing.T) {
@@ -242,7 +242,7 @@ func TestFrontendFallbackHandsTheProgramStatusBack(t *testing.T) {
 	}
 }
 
-const frontendStatusReleaseEnv = "PIG_TEST_FRONTEND_STATUS_RELEASE"
+const frontendStatusReleaseEnv = "OMPIG_TEST_FRONTEND_STATUS_RELEASE"
 
 // frontendStatusReleaseMark is what the child writes to the pty after raw
 // mode starts and before the release under test.

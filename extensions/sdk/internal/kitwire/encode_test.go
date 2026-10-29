@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // representativeView uses every node kind and field the host's ViewPayload

@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports of the packages/coding-agent/test/suite/agent-session-boundaries.test.ts
@@ -143,9 +143,9 @@ type recoveryHarness struct {
 
 func newRecoveryHarness(t *testing.T, opts harnessOptions, responses ...scriptedResponse) *recoveryHarness {
 	t.Helper()
-	// Home and cwd are short temp directories, as upstream test/suite/harness.ts createTempDir makes (tmpdir()/pi-suite-<time>-<random>). The system prompt names the cwd and the docs bundle under PIG_HOME, and the faux provider counts their tokens, so t.TempDir's test-name paths pushed the tight compaction suites over their context window when TMPDIR was long.
-	home := suiteTempDir(t, "pig-home-")
-	t.Setenv("PIG_HOME", home)
+	// Home and cwd are short temp directories, as upstream test/suite/harness.ts createTempDir makes (tmpdir()/pi-suite-<time>-<random>). The system prompt names the cwd and the docs bundle under OMPIG_HOME, and the faux provider counts their tokens, so t.TempDir's test-name paths pushed the tight compaction suites over their context window when TMPDIR was long.
+	home := suiteTempDir(t, "ompig-home-")
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

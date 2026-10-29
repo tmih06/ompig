@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
 // CellStrategy describes how a group of extension configs should be started.
@@ -44,7 +44,7 @@ type CellSpec struct {
 }
 
 // PlanCells groups compatible factories. Native packed factories form contiguous runs because their runners execute all factories together. Node members share one process across intervening native cells; host admission runs each Node factory in configured order.
-// pig additive (D20): process sharing preserves one registration per extension.
+// ompig additive (D20): process sharing preserves one registration per extension.
 func PlanCells(configs []ExtConfig, quarantined map[string]string) []CellSpec {
 	type indexedConfig struct {
 		config ExtConfig
@@ -99,7 +99,7 @@ func PlanCells(configs []ExtConfig, quarantined map[string]string) []CellSpec {
 			compatible := current != nil && current.key == key
 			if compatible && cfg.RuntimeLanguage == "go" {
 				for _, previous := range current.configs {
-					// pig additive (D20): a Go build resolves one source root per module path. Distinct copies cannot share that build.
+					// ompig additive (D20): a Go build resolves one source root per module path. Distinct copies cannot share that build.
 					if cfg.ModulePath != "" && cfg.ModulePath == previous.config.ModulePath && cfg.Source != previous.config.Source {
 						compatible = false
 						break
@@ -110,7 +110,7 @@ func PlanCells(configs []ExtConfig, quarantined map[string]string) []CellSpec {
 				module, _, _ := strings.Cut(cfg.Package, ".")
 				for _, previous := range current.configs {
 					other, _, _ := strings.Cut(previous.config.Package, ".")
-					// pig additive (D20): Python caches imports by module name, so independent roots for one module need separate interpreters.
+					// ompig additive (D20): Python caches imports by module name, so independent roots for one module need separate interpreters.
 					if module == other && cfg.Source != previous.config.Source {
 						compatible = false
 						break

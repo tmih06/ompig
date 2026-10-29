@@ -1,5 +1,5 @@
 # Pi 0.87.1 openai-codex-responses.ts:304-377 retries missing continuations after a rate-limit prelude.
-# Pi uses the upstream test's WebSocket event mock; Pig uses a real hermetic WebSocket server.
+# Pi uses the upstream test's WebSocket event mock; Ompig uses a real hermetic WebSocket server.
 # Both print complete asserted continuation request counts, input lengths, identities, event counts and results.
 name = "25-codex-continuation-recovery"
 description = "Missing Codex continuations reconnect once with full history and can fall back to SSE without an error event."
@@ -8,9 +8,9 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/codex-continuation-pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/codex-continuation-ompig"]
 pi_args = ["node", "./test/parity/testdata/codex-continuation-pi.mjs"]
 [cli]
 cwd = "../../../.."

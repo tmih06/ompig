@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package coding
 
@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // The wire of updateConfig and openUrl is the documented one: Pi's entry and patch objects as JSON, and the function's error is the error of the call.

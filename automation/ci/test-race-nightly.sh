@@ -6,13 +6,13 @@
 # (coding), the RPC/print/JSON modes (coding/cli) and the libraries that run goroutines of their own. automation/ci/race-packages.txt names every package and
 # its group; race-coverage.sh fails when a concurrency owner is missing from it. A package whose TestMain calls testenv.RunWithoutGoroutineLeaks also fails here
 # when its tests leak a blocked goroutine.
-# PIG_RACE_GROUP picks a share for one nightly job (ai, rest, host, coding, cli, libs; each is a job of the nightly matrix), or every package when unset.
+# OMPIG_RACE_GROUP picks a share for one nightly job (ai, rest, host, coding, cli, libs; each is a job of the nightly matrix), or every package when unset.
 # A path with its own go.mod runs as that module (GOWORK=off), as `make test-sdk-go` does.
-# PIG_RACE_SHARD=<k>/<n> runs shard k of n of the tests of a group that is one package (automation/ci/test-shard-pattern.sh), for the cli group.
+# OMPIG_RACE_SHARD=<k>/<n> runs shard k of n of the tests of a group that is one package (automation/ci/test-shard-pattern.sh), for the cli group.
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-group="${PIG_RACE_GROUP:-all}"
+group="${OMPIG_RACE_GROUP:-all}"
 list="$root/automation/ci/race-packages.txt"
 
 packages=()
@@ -25,15 +25,15 @@ while read -r entry_group path _; do
   matched=1
   if [[ -f "$root/$path/go.mod" ]]; then modules+=("$path"); else packages+=("$path"); fi
 done <"$list"
-if [[ $matched -eq 0 ]]; then echo "test-race-nightly: unknown PIG_RACE_GROUP ${group}" >&2; exit 2; fi
+if [[ $matched -eq 0 ]]; then echo "test-race-nightly: unknown OMPIG_RACE_GROUP ${group}" >&2; exit 2; fi
 
 cd "$root"
-timeout="${PIG_RACE_TIMEOUT:-60m}"
+timeout="${OMPIG_RACE_TIMEOUT:-60m}"
 run=()
-shard="${PIG_RACE_SHARD:-}"
+shard="${OMPIG_RACE_SHARD:-}"
 if [[ -n "$shard" ]]; then
   if [[ ! "$shard" =~ ^[1-9][0-9]*/[1-9][0-9]*$ || ${#packages[@]} -ne 1 || ${#modules[@]} -ne 0 ]]; then
-    echo "test-race-nightly: PIG_RACE_SHARD=<k>/<n> needs a group of exactly one package (group ${group}, shard ${shard})" >&2
+    echo "test-race-nightly: OMPIG_RACE_SHARD=<k>/<n> needs a group of exactly one package (group ${group}, shard ${shard})" >&2
     exit 2
   fi
   run=(-run "$(automation/ci/test-shard-pattern.sh "${shard%/*}" "${shard#*/}" "${packages[0]}")")

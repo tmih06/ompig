@@ -10,14 +10,14 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // UserAgentMode is the `User-Agent` sent to providers: UserAgentDetailed, UserAgentShort, or UserAgentCustom(value) (upstream's `"short" | "detailed" | { custom: string }`). The zero value is not a mode; ClientIdentity.UserAgent is nil when the mode is omitted.
 //
-// pig divergence (D65): detailed is `pig/<version> (<platform> <release>; <arch>)` and short is `pig`, where upstream sends `pi/<version> (<platform>; <runtime>; <arch>)` and `pi`.
+// ompig divergence (D65): detailed is `ompig/<version> (<platform> <release>; <arch>)` and short is `ompig`, where upstream sends `pi/<version> (<platform>; <runtime>; <arch>)` and `pi`.
 type UserAgentMode struct {
 	kind   userAgentKind
 	custom string
@@ -97,7 +97,7 @@ type ClientAttribution struct {
 
 // PiAttribution is the attribution used by the agent loop, durable Harness and coding agent (upstream PI_ATTRIBUTION).
 //
-// pig divergence (D26): the values are PiG's brand (internal/coding/pigidentity), not pi's `{ name: "pi", url: "https://pi.dev", categories: ["cli-agent"] }`.
+// ompig divergence (D26): the values are Ompig's brand (internal/coding/pigidentity), not pi's `{ name: "pi", url: "https://pi.dev", categories: ["cli-agent"] }`.
 var PiAttribution = ClientAttribution{Name: pigidentity.AttributionName, URL: pigidentity.AttributionURL, Categories: []string{pigidentity.AttributionCategory}}
 
 // ClientIdentity is how requests identify the calling app to providers. Every field is optional; absent fields use the defaults: a detailed `User-Agent` with this package's version and no attribution headers. It encodes as plain JSON.
@@ -192,7 +192,7 @@ func GetClientVersion(identity *ClientIdentity) string {
 
 // FormatUserAgent is the `User-Agent` value of an identity.
 //
-// pig divergence (D65): see UserAgentMode.
+// ompig divergence (D65): see UserAgentMode.
 func FormatUserAgent(identity *ClientIdentity) string {
 	mode := UserAgentDetailed
 	if identity != nil && identity.UserAgent != nil {

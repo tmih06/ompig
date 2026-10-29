@@ -7,8 +7,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // SendCustomMessage awaits custom-message delivery and any triggered turn. An explicit false TriggerTurn defers an active turn's append until its tool results are complete.

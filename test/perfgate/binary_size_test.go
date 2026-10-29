@@ -14,9 +14,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // releasePlatforms are the stripped release builds whose size is gated; release-candidate.yml builds them with CGO_ENABLED=0, -trimpath and -ldflags "-s -w".
@@ -24,13 +24,13 @@ var releasePlatforms = []struct{ goos, goarch string }{
 	{"linux", "amd64"}, {"linux", "arm64"}, {"darwin", "arm64"}, {"windows", "amd64"},
 }
 
-// The stock pig binary of each release platform, stripped as released, may only shrink.
+// The stock ompig binary of each release platform, stripped as released, may only shrink.
 func TestReleaseBinarySizeGate(t *testing.T) {
 	root := testenv.ModuleRoot(t)
 	for _, platform := range releasePlatforms {
 		t.Run(platform.goos+"_"+platform.goarch, func(t *testing.T) {
-			out := filepath.Join(t.TempDir(), "pig")
-			build := exec.CommandContext(t.Context(), "go", "build", "-trimpath", "-buildvcs=false", "-ldflags", "-s -w", "-o", out, "./cmd/pig")
+			out := filepath.Join(t.TempDir(), "ompig")
+			build := exec.CommandContext(t.Context(), "go", "build", "-trimpath", "-buildvcs=false", "-ldflags", "-s -w", "-o", out, "./cmd/ompig")
 			build.Dir = root
 			build.Env = append(os.Environ(), "CGO_ENABLED=0", "GOOS="+platform.goos, "GOARCH="+platform.goarch)
 			if data, err := build.CombinedOutput(); err != nil {
@@ -40,7 +40,7 @@ func TestReleaseBinarySizeGate(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			perfgate.Check(t, "binary.pig."+platform.goos+"_"+platform.goarch+".bytes", float64(info.Size()))
+			perfgate.Check(t, "binary.ompig."+platform.goos+"_"+platform.goarch+".bytes", float64(info.Size()))
 		})
 	}
 }
@@ -51,7 +51,7 @@ func TestReleaseBinarySizeGate(t *testing.T) {
 // embedder that has no use for the features they name.
 func TestHeadlessEmbedBinarySizeGate(t *testing.T) {
 	root := testenv.ModuleRoot(t)
-	stripped := slices.DeleteFunc(piglet.StripBuildTags(), func(tag string) bool { return tag == "pig_strip_mcp" })
+	stripped := slices.DeleteFunc(ompiglet.StripBuildTags(), func(tag string) bool { return tag == "ompig_strip_mcp" })
 	variants := []struct{ name, tags string }{{"default", ""}, {"stripped", strings.Join(stripped, ",")}}
 	for _, variant := range variants {
 		for _, platform := range releasePlatforms {

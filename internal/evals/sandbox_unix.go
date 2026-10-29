@@ -22,7 +22,7 @@ func chownTree(path string, identity sandboxIdentity) error {
 }
 
 // enterToolSandbox makes the agent process an unprivileged user (harness.ts enterToolSandbox). Pi drops its own
-// process after the model runtime holds the credentials; PiG's Session is a child process, so the child starts with
+// process after the model runtime holds the credentials; Ompig's Session is a child process, so the child starts with
 // the sandbox identity and no supplementary groups, after the harness hands it the run's root.
 func enterToolSandbox(command *exec.Cmd, root string, identity *sandboxIdentity) error {
 	if identity == nil {

@@ -22,7 +22,7 @@ func (o *terminalProtocolParityOutput) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-// TestTerminalProtocolParityObservations is the PiG side of parity scenario tui-components/14-terminal-negotiation-framing. Like test/parity/testdata/terminal-protocol-pi.mjs, each case first runs the private keyboard protocol query, so the DA1 reply the terminal owes it is negotiation (upstream 0.99.1 terminal.ts:262,272), and records from after the query until before teardown. queryAndEnableKittyProtocol is private, so the observations come from this in-package test instead of a public test-only API; test/parity/testdata/terminal-protocol-pig.mjs prints them.
+// TestTerminalProtocolParityObservations is the Ompig side of parity scenario tui-components/14-terminal-negotiation-framing. Like test/parity/testdata/terminal-protocol-pi.mjs, each case first runs the private keyboard protocol query, so the DA1 reply the terminal owes it is negotiation (upstream 0.99.1 terminal.ts:262,272), and records from after the query until before teardown. queryAndEnableKittyProtocol is private, so the observations come from this in-package test instead of a public test-only API; test/parity/testdata/terminal-protocol-ompig.mjs prints them.
 func TestTerminalProtocolParityObservations(t *testing.T) {
 	preserveKeyboardProtocolState(t)
 	lines := []string{}

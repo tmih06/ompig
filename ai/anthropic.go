@@ -18,10 +18,10 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsjson"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // AnthropicConfig configures the Anthropic Messages API provider.
@@ -1098,7 +1098,7 @@ func (params anthropicParams) convertMessages(messages []Message, isOAuthToken b
 // Stream retains the assistant identity and active effort when request preparation fails, and terminates with an error event before generation starts. The request, its response and the body read run behind the returned stream, as upstream's async IIFE does; only the synchronous prefix of that IIFE runs before Stream returns.
 func (p *anthropicProvider) Stream(ctx context.Context, transcript TranscriptContext, opts StreamOptions) (*AssistantMessageEventStream, error) {
 	ctx = withProviderRequestOptions(ctx, opts)
-	// pig divergence (D48): the agent loop asks for the tool-flow repair.
+	// ompig divergence (D48): the agent loop asks for the tool-flow repair.
 	if opts.RepairToolFlow {
 		transcript = transcript.withRepairedToolFlow()
 	}
@@ -1244,7 +1244,7 @@ func (p *anthropicProvider) streamResponse(ctx, requestContext context.Context, 
 	if resp.StatusCode != http.StatusOK {
 		b, _ := readWebText(resp.Body)
 		_ = resp.Body.Close()
-		// pig divergence (D37): retry once without rejected thinking signatures.
+		// ompig divergence (D37): retry once without rejected thinking signatures.
 		var retry *anthropicOutgoing
 		strictLimitMessage, strictLimitsExceeded := anthropicStrictToolLimitsExceeded(resp.StatusCode, b)
 		switch {
@@ -1492,7 +1492,7 @@ func anthropicRequestTools(params anthropicParams, initialTools []ToolSchema, is
 	return append(tools, deferredToolPlaceholder()), nil
 }
 
-// buildParams mirrors upstream buildParams for the request fields PiG sends. disablePreferredStrictTools is upstream's parameter of that name.
+// buildParams mirrors upstream buildParams for the request fields Ompig sends. disablePreferredStrictTools is upstream's parameter of that name.
 func (p *anthropicProvider) buildParams(model *Model, transcript TranscriptContext, isOAuthToken bool, modelHeaders, optionsHeaders anthropicHeaders, opts StreamOptions, env ProviderEnv, disablePreferredStrictTools bool) (anthropicParams, error) {
 	supportsMidConversation := anthropicCompatFlag(model, func(c *ModelCompat) *bool { return c.SupportsMidConvoSystemMessages })
 	// upstream: packages/ai/src/api/anthropic-messages.ts:buildParams
@@ -1568,7 +1568,7 @@ func (p *anthropicProvider) buildParams(model *Model, transcript TranscriptConte
 		supportsMidConvoEffort:          params.activeEffort != "",
 		nativeToolChanges:               params.nativeToolChanges,
 	})
-	// pig divergence (D130): Pi #10759. An explicit anthropic-beta header can drop the managed-effort betas, so each managed body field is sent only with its beta: the mid-conversation output_config markers with mid-conversation-output-config-2026-07-01 and block_binding with thinking-binding-controls-2026-08-01 (applySampling). Pi sends both regardless and the API rejects the request with 400.
+	// ompig divergence (D130): Pi #10759. An explicit anthropic-beta header can drop the managed-effort betas, so each managed body field is sent only with its beta: the mid-conversation output_config markers with mid-conversation-output-config-2026-07-01 and block_binding with thinking-binding-controls-2026-08-01 (applySampling). Pi sends both regardless and the API rejects the request with 400.
 	params.effortMarkers = effortMessages && slices.Contains(betas, midConversationEffortBeta)
 	conversation, err := params.convertMessages(params.conversation, isOAuthToken)
 	if err != nil {
@@ -1640,7 +1640,7 @@ func (p *anthropicProvider) applySampling(req *anthRequest, model *Model, transc
 			req.Thinking = &anthThinking{Type: "disabled"}
 		} else {
 			req.Thinking = &anthThinking{Type: "adaptive", Display: string(display)}
-			// pig divergence (D130): block_binding goes only with its beta, and without the mid-conversation markers the active effort is the top-level effort.
+			// ompig divergence (D130): block_binding goes only with its beta, and without the mid-conversation markers the active effort is the top-level effort.
 			if slices.Contains(req.Betas, thinkingBindingControlsBeta) {
 				req.Thinking.BlockBinding = &anthBlockBinding{PrefixMismatchBehavior: "drop_block"}
 			}

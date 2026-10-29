@@ -26,7 +26,7 @@ register("./resolve.mjs", import.meta.url, {
 
 // The candidate's storage modules reach capsql through this global: `openStore(path)` returns a host-loop store (capturingStore)
 // whose transactions are traced like the reference's, so the candidate cannot write a store the contract does not see.
-globalThis[Symbol.for("pig.contract")] = {
+globalThis[Symbol.for("ompig.contract")] = {
 	/** The Wasm cores the candidate facade instantiated (it adds each one): bench.mjs reads their linear memory per turn. */
 	cores: new Set(),
 	/** The SqliteDatabase facade of pi-durable's storage/sqlite over capsql, for a candidate that keeps Pi's SqliteStorage design. */

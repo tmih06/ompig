@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 type T struct{ A int }

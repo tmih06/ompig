@@ -64,7 +64,7 @@ func StartTerminal(o TermOpts) (*Terminal, error) {
 		o.Height = 40
 	}
 	id := fmt.Sprintf("%d-%d", os.Getpid(), uniqueN())
-	t := &Terminal{opts: o, sock: "pig-jny-" + id, session: "pig-jny", root: o.Root,
+	t := &Terminal{opts: o, sock: "ompig-jny-" + id, session: "ompig-jny", root: o.Root,
 		changed: make(chan struct{}), exited: make(chan struct{}), waitDone: make(chan struct{}), replies: make(chan reply, 64)}
 	if err := os.MkdirAll(t.root, 0o700); err != nil {
 		return nil, err

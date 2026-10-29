@@ -6,7 +6,7 @@ func abortRule() []Scenario {
 	return []Scenario{
 		{
 			ID: "noncooperative-tool-gets-a-grace-period-then-aborted", Group: group,
-			Pi:     "agent-loop.ts awaits tool.execute after the signal aborts; pig divergence D111 (docs/parity/DIVERGENCES.md) for an extension tool that ignores its signal: signal it, wait ToolAbortGrace (3 s), then answer \"Operation aborted\" (agent-loop.ts:623), identically in every SDK",
+			Pi:     "agent-loop.ts awaits tool.execute after the signal aborts; ompig divergence D111 (docs/parity/DIVERGENCES.md) for an extension tool that ignores its signal: signal it, wait ToolAbortGrace (3 s), then answer \"Operation aborted\" (agent-loop.ts:623), identically in every SDK",
 			Covers: []string{"request tool_call"},
 			Spec:   Spec{Tools: []Tool{{Name: "stuck", Description: "Ignores its abort signal", Behavior: ToolHang}}},
 			Steps:  []Step{{Op: "abort-tool", Name: "stuck"}},

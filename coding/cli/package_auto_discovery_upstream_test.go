@@ -5,16 +5,16 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/test/package-manager.test.ts:643: auto-discovery returns extensions/main.ts and themes/dark.json, not the enclosing directories.
 func TestPackageAutoDiscoveryLayoutUpstream(t *testing.T) {
 	cwd, agent := t.TempDir(), t.TempDir()
 	t.Setenv("HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	pkg := filepath.Join(cwd, "auto-pkg")
 	extension, theme := filepath.Join(pkg, "extensions", "main.ts"), filepath.Join(pkg, "themes", "dark.json")
 	for _, file := range []struct{ path, contents string }{{extension, "export default function() {}"}, {theme, "{}"}} {

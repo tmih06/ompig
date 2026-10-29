@@ -5,7 +5,7 @@
 interleaved, --runs each. The difference is what an adapter adds to every wall and CPU figure the suite reports for that arm (the launcher execs, so memory
 is the arm's own). Prints median wall and CPU in ms for both and the difference.
 
-  overhead.py --root ROOT --arms pig-0.4.1,pig-tip,gi,omp [--runs 200] [--cpus 150-153]
+  overhead.py --root ROOT --arms ompig-0.4.1,ompig-tip,gi,omp [--runs 200] [--cpus 150-153]
 """
 import argparse
 import os
@@ -45,12 +45,12 @@ def main():
         exe = re.search(r'exec "([^"]+)"', text).group(1)
         home = tempfile.mkdtemp(prefix="overhead-")
         (Path(home) / "models.json").write_text("{}")
-        base = {k: v for k, v in os.environ.items() if not k.startswith(("PIG_", "PI_"))}
+        base = {k: v for k, v in os.environ.items() if not k.startswith(("OMPIG_", "PI_"))}
         env = {**base, "PI_CODING_AGENT_DIR": home}
         # what the launcher sets, applied by hand for the direct run
         direct_env = dict(env)
-        if "PIG_CODING_AGENT_DIR" in text:
-            direct_env.update(PIG_CODING_AGENT_DIR=home, PIG_OFFLINE="1", PIG_TELEMETRY="0", PIG_SKIP_VERSION_CHECK="1")
+        if "OMPIG_CODING_AGENT_DIR" in text:
+            direct_env.update(OMPIG_CODING_AGENT_DIR=home, OMPIG_OFFLINE="1", OMPIG_TELEMETRY="0", OMPIG_SKIP_VERSION_CHECK="1")
         direct_env["HOME"] = f"{home}/home"
         os.makedirs(direct_env["HOME"], exist_ok=True)
         for _ in range(5):

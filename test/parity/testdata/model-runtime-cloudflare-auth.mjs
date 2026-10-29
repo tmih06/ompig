@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-if (process.argv[2] === "pig") {
+if (process.argv[2] === "ompig") {
   const output = execFileSync("./test/parity/testdata/prebuilt-go-test.sh", ["./coding", "-run", "^TestModelRuntimeCloudflareCompatUpstream$", "-count=1", "-v"], { encoding: "utf8" });
   const records = output.split("\n").filter(line => line.startsWith("CLOUDFLARE_REQUEST "));
   assert.equal(records.length, [false, true].length, "direct and extension-style requests");

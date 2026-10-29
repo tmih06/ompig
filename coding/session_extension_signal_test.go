@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi binds an extension's ctx.signal to the session's `this.agent.signal` (agent-session.ts:3368): the signal of the run in progress, undefined when none is active (agent.ts:336-338).

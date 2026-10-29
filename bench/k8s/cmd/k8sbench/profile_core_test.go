@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// durable-core measures two builds of the core against the conformance gate's reference in one session: each pig target
+// durable-core measures two builds of the core against the conformance gate's reference in one session: each ompig target
 // keeps its own tracker rule, the fingerprints are durable-bench's published ones (as durable-native's), and every
 // command names a program the bundle carries (core/ from durable/core/host/cf/bench/build.mjs, bin/ on PATH); Node runs
 // with --expose-gc so every target reports retained memory.
@@ -27,13 +27,13 @@ func TestDurableCoreProfile(t *testing.T) {
 	for _, tg := range p.pigs() {
 		rules[tg.Name] = p.ruleOf(tg)
 	}
-	if !maps.Equal(rules, map[string]string{"pig-tinygo": "core-tinygo", "pig-native": "core-native"}) {
-		t.Errorf("pig targets and rules %v", rules)
+	if !maps.Equal(rules, map[string]string{"ompig-tinygo": "core-tinygo", "ompig-native": "core-native"}) {
+		t.Errorf("ompig targets and rules %v", rules)
 	}
 	if ref, ok := p.byRole(roleReference); !ok || ref.Name != "pi" {
 		t.Errorf("reference %+v", ref)
 	}
-	carried := map[string]bool{"{root}/core/bench-pi.mjs": true, "{root}/core/bench-pig.mjs": true, "sqlhost-bench": true, "node": true}
+	carried := map[string]bool{"{root}/core/bench-pi.mjs": true, "{root}/core/bench-ompig.mjs": true, "sqlhost-bench": true, "node": true}
 	for _, tg := range p.Targets {
 		for _, argv := range [][]string{tg.Seed, tg.Sample} {
 			program := argv[0]

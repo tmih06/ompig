@@ -6,9 +6,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // oauth.ts parses response.headers.get("www-authenticate"), which Node's fetch decodes as Latin-1: a lone 0xA0 byte is U+00A0, JavaScript

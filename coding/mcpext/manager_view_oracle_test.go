@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/coding/mcpext/mcptui"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/coding/mcpext/mcptui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/tui"
 )
 
 type managerViewProbe struct {

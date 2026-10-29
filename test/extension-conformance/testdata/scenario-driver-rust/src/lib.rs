@@ -3,7 +3,7 @@
 //! Python drivers read the same file and do the same, so one scenario table
 //! exercises every SDK. Keep each driver a straight reading of the Spec: behavior
 //! belongs in the scenario, not here.
-use pig_sdk::*;
+use ompig_sdk::*;
 use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::sync::Arc;

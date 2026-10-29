@@ -14,7 +14,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 var portsRe = regexp.MustCompile(`packages/[A-Za-z0-9_./-]+\.ts`)
@@ -170,11 +170,11 @@ var ProviderLiteral = newCheck("providerliteral",
 
 var providerNameRe = regexp.MustCompile(`(?i)provider`)
 
-var agentEnv = map[string]bool{"HOME": true, "PIG_HOME": true, "PI_HOME": true, "PIG_CODING_AGENT_DIR": true, "PI_CODING_AGENT_DIR": true}
+var agentEnv = map[string]bool{"HOME": true, "OMPIG_HOME": true, "PI_HOME": true, "OMPIG_CODING_AGENT_DIR": true, "PI_CODING_AGENT_DIR": true}
 
 // TestIsolation flags tests that touch the user's real agent state: a package without a scoped TestMain whose tests read or set the home and agent-directory variables unsafely.
 var TestIsolation = newToolingCheck("testisolation",
-	"test reads or sets HOME/PIG_HOME/PI_HOME/*_CODING_AGENT_DIR with os.Setenv or os.UserHomeDir, or sets only some of them before starting a child process, in a package whose TestMain does not call testenv.ScopeTempDir",
+	"test reads or sets HOME/OMPIG_HOME/PI_HOME/*_CODING_AGENT_DIR with os.Setenv or os.UserHomeDir, or sets only some of them before starting a child process, in a package whose TestMain does not call testenv.ScopeTempDir",
 	High, "2026-10-06 lane auth.json wipe; #163 agent-dir guard",
 	func(p *Pass) {
 		scoped := false

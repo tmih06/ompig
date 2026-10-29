@@ -1,8 +1,8 @@
 package codingagent
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/codingagent/configschema"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/configschema"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Mirrors packages/coding-agent/src/core/key-id-schema.ts and keybindings-schema.ts. The artifact lives here because it enumerates the keybinding

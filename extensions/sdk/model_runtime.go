@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ModelRuntime is Pi's `ModelRuntime` class (core/model-runtime.ts): the configured model collection an extension builds over its own credential and model files, for models, provider auth, completions and the registrations a Session shares. The host owns the object for the extension's connection; this value names it. Models are Pi's Model objects as JSON maps.

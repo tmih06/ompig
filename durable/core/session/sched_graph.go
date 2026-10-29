@@ -3,7 +3,7 @@ package session
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // overlayOf is scheduler.ts overlayOf: the tasks and conversation edges a

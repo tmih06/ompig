@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
 
 	"golang.org/x/term"
 )
 
-func runPigletAgentEnvironment(ctx context.Context, p *piglet.Piglet, flags Args, cwd string) (bool, int, error) {
+func runPigletAgentEnvironment(ctx context.Context, p *ompiglet.Ompiglet, flags Args, cwd string) (bool, int, error) {
 	unsafeHost, err := unknownBoolFlag(flags.UnknownFlags, "unsafe-host")
 	if err != nil {
 		return false, 0, err
@@ -26,18 +26,18 @@ func runPigletAgentEnvironment(ctx context.Context, p *piglet.Piglet, flags Args
 	if p == nil || p.AgentEnv == nil {
 		for _, flag := range []string{"container-engine", "workspace"} {
 			if _, set := flags.UnknownFlags[flag]; set {
-				return false, 0, fmt.Errorf("--%s requires a Piglet with agentEnv", flag)
+				return false, 0, fmt.Errorf("--%s requires a Ompiglet with agentEnv", flag)
 			}
 		}
 		if unsafeHost {
-			return false, 0, fmt.Errorf("--unsafe-host requires a Piglet with agentEnv")
+			return false, 0, fmt.Errorf("--unsafe-host requires a Ompiglet with agentEnv")
 		}
 		return false, 0, nil
 	}
-	result, err := piglet.RunAgentEnvironment(ctx, p, piglet.AgentEnvironmentRuntimeOptions{
-		Engine: engine, Workspace: workspace, Args: os.Args[1:], PigVersion: PigVersion,
+	result, err := ompiglet.RunAgentEnvironment(ctx, p, ompiglet.AgentEnvironmentRuntimeOptions{
+		Engine: engine, Workspace: workspace, Args: os.Args[1:], OmpigVersion: OmpigVersion,
 		UnsafeHost: unsafeHost,
-		IO: piglet.RuntimeIO{
+		IO: ompiglet.RuntimeIO{
 			Stdin: os.Stdin, Stdout: os.Stdout, Stderr: os.Stderr,
 			TTY: term.IsTerminal(int(os.Stdin.Fd())) && term.IsTerminal(int(os.Stdout.Fd())),
 		},
@@ -73,8 +73,8 @@ func unknownStringFlag(flags map[string]any, name, fallback string) (string, err
 }
 
 func pigletWasRequested(flags map[string]any) bool {
-	if _, ok := flags["piglet"]; ok {
+	if _, ok := flags["ompiglet"]; ok {
 		return true
 	}
-	return os.Getenv("PIG_PIGLET_PATH") != "" || os.Getenv("PIG_PIGLET_NAME") != ""
+	return os.Getenv("OMPIG_OMPIGLET_PATH") != "" || os.Getenv("OMPIG_OMPIGLET_NAME") != ""
 }

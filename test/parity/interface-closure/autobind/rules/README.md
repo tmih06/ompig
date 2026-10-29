@@ -21,7 +21,7 @@ Each rule needs table tests in `<family>_test.go` with at least one case the rul
 
 ## Trust checks to run before you push (from the repo root)
 ```
-go run ./test/parity/interface-closure/autobind -write-reach /tmp/reach-ab.json                 # once: cmd/pig and the library entry points
+go run ./test/parity/interface-closure/autobind -write-reach /tmp/reach-ab.json                 # once: cmd/ompig and the library entry points
 git show 549079d4d:test/parity/interfaces/mapping-v1.0.4.json > /tmp/hand-mapping.json          # once
 go run ./test/parity/interface-closure/autobind -reach /tmp/reach-ab.json -hand-ledger /tmp/hand-mapping.json -closed-check -out /tmp/ab-closed   # trust check 1: hand-closed rows
 go test ./test/parity/interface-closure/autobind/...                                            # trust check 2: seeded gaps + your rule tests

@@ -13,15 +13,15 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/bytesize"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/bytesize"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestExtensionsCacheStatsAndPruneUseManagedRootsOnly(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	entry := filepath.Join(home, "cache", "ext", "fixture-hash")
 	published, err := runtimecell.PublishArtifact(context.Background(), entry, "bin", "hash", "go", func(scratch string) (string, error) {
 		artifact := filepath.Join(scratch, "bin")
@@ -134,7 +134,7 @@ func TestCachePruneFailsClosedWhenCurrentRootsDoNotResolve(t *testing.T) {
 // startup extension passes.
 func TestAutomaticExtensionCacheGCNeverWaitsForAnotherCollector(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	cacheRoot := filepath.Join(home, "cache")
 	if err := os.MkdirAll(cacheRoot, 0o755); err != nil {
 		t.Fatal(err)
@@ -179,8 +179,8 @@ func TestAutomaticExtensionCacheGCNeverWaitsForAnotherCollector(t *testing.T) {
 // evicting the entries used longest ago; nothing else is touched.
 func TestAutomaticExtensionCacheGCEnforcesTheSizeLimitOldestFirst(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	cacheRoot := filepath.Join(home, "cache")
 	const entrySize = 1 << 20
 	now := time.Now()

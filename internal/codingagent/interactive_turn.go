@@ -8,15 +8,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func (m *InteractiveMode) handleSubmit(ctx context.Context, prompt string) {
@@ -24,7 +24,7 @@ func (m *InteractiveMode) handleSubmit(ctx context.Context, prompt string) {
 }
 
 // isUserBashCommand requires a nonempty command after Pi's ! or !! prefix. Bare prefixes remain ordinary prompts.
-// pig additive (D92): user bash belongs to the bash tool, so with bash stripped a `!` line is an ordinary prompt.
+// ompig additive (D92): user bash belongs to the bash tool, so with bash stripped a `!` line is an ordinary prompt.
 func isUserBashCommand(text string) bool {
 	return strings.HasPrefix(text, "!") && widthx.JSTrim(strings.TrimPrefix(text[1:], "!")) != "" && !pigstrip.Has(pigstrip.ListTools, "bash")
 }
@@ -43,10 +43,10 @@ func (m *InteractiveMode) handleSubmitWithImages(ctx context.Context, prompt str
 	// the !bash branch BEFORE the isCompacting gate, and inside the gate lets
 	// extension commands through via isExtensionCommand; only plain prompts,
 	// prompt templates, and skill commands (which expand into model input) are
-	// queued (interactive-mode.ts:2530-2686). pig's registry holds those same
+	// queued (interactive-mode.ts:2530-2686). ompig's registry holds those same
 	// builtins plus extension-registered commands, so a prompt that resolves in
 	// the registry is a local/UI dispatch that must run now, even mid-compaction.
-	// Queueing it (as prior pig did) showed "/session" as a steering message
+	// Queueing it (as prior ompig did) showed "/session" as a steering message
 	// and stalled it until compaction finished.
 	if m.isCompacting && !isUserBashCommand(prompt) && !m.resolvableSlashCommand(prompt) {
 		m.compactionQueue = append(m.compactionQueue, compactionQueuedMessage{text: prompt, images: images, mode: compactionQueueSteer})
@@ -210,7 +210,7 @@ func (m *InteractiveMode) runCustomMessageTurn(ctx context.Context, msg agent.Ag
 // queued follow-ups have drained, which is the same window upstream measures.
 //
 // It also fixes the observed value at agent_settled. Upstream clears the flag
-// before emitting that event; pig emits it after runOnMain has merely accepted
+// before emitting that event; ompig emits it after runOnMain has merely accepted
 // the reset, so a cached read reported busy at the moment the run finished.
 //
 // The UI keeps m.isIdle: resolveOutcome reads it on every keystroke, and its
@@ -313,7 +313,7 @@ func (m *InteractiveMode) startTurn(ctx context.Context, prompt string, images [
 			m.runOnMain(m.runCtx, func() {
 				if m.runGen == gen {
 					m.isIdle = true
-					m.idleCollectArmed.Store(true) // pig additive (D172): arm the idle collection at run end
+					m.idleCollectArmed.Store(true) // ompig additive (D172): arm the idle collection at run end
 					m.workStart = time.Time{}
 					m.statusLine.SetWorking(false)
 					m.stopWorkingLoader() // belt-and-suspenders: ensure loader is removed on abort
@@ -373,7 +373,7 @@ func (m *InteractiveMode) startTurn(ctx context.Context, prompt string, images [
 		}
 		// Fire before_agent_start after the pre-prompt compaction check and off the
 		// input loop. Upstream runs the async extension event after compaction and
-		// before the provider request; Pig used to run it synchronously before
+		// before the provider request; Ompig used to run it synchronously before
 		// rendering the user's message, so a slow hook made Enter appear frozen.
 		// The run's prompt and tool loadout come from the handlers' result.
 		var err error

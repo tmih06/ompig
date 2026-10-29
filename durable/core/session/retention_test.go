@@ -8,9 +8,9 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/sessiontest"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/sessiontest"
 )
 
 // Pi f44707e7 (session.ts document retention) on the core Session: a cached document leaves the cache once it was not used for the

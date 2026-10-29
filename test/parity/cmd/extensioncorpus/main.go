@@ -20,23 +20,23 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-const evidenceKind = "pig-typescript-extension-corpus"
+const evidenceKind = "ompig-typescript-extension-corpus"
 
 type identity struct {
-	UpstreamVersion  string `json:"upstreamVersion"`
-	UpstreamCommit   string `json:"upstreamCommit"`
-	CorpusSHA256     string `json:"corpusSha256"`
-	RuntimeSHA256    string `json:"runtimeSha256"`
-	PigSHA256        string `json:"pigSha256"`
-	PigModule        string `json:"pigModule,omitempty"`
-	PigModuleVersion string `json:"pigModuleVersion,omitempty"`
-	GoVersion        string `json:"goVersion,omitempty"`
-	NodeVersion      string `json:"nodeVersion"`
-	OS               string `json:"os"`
-	Architecture     string `json:"architecture"`
+	UpstreamVersion    string `json:"upstreamVersion"`
+	UpstreamCommit     string `json:"upstreamCommit"`
+	CorpusSHA256       string `json:"corpusSha256"`
+	RuntimeSHA256      string `json:"runtimeSha256"`
+	OmpigSHA256        string `json:"ompigSha256"`
+	OmpigModule        string `json:"ompigModule,omitempty"`
+	OmpigModuleVersion string `json:"ompigModuleVersion,omitempty"`
+	GoVersion          string `json:"goVersion,omitempty"`
+	NodeVersion        string `json:"nodeVersion"`
+	OS                 string `json:"os"`
+	Architecture       string `json:"architecture"`
 }
 
 type validationPayload struct {
@@ -80,8 +80,8 @@ type report struct {
 }
 
 func main() {
-	root := flag.String("root", ".", "PiG repository root")
-	pigBin := flag.String("pig-bin", "bin/pig-parity", "PiG binary to validate with")
+	root := flag.String("root", ".", "Ompig repository root")
+	ompigBin := flag.String("ompig-bin", "bin/ompig-parity", "Ompig binary to validate with")
 	output := flag.String("out", "-", "report path or - for stdout")
 	timeout := flag.Duration("timeout", 120*time.Second, "test-only timeout for each example validation")
 	flag.Parse()
@@ -90,7 +90,7 @@ func main() {
 	if err != nil {
 		fatal(err)
 	}
-	binary := *pigBin
+	binary := *ompigBin
 	if !filepath.IsAbs(binary) {
 		binary = filepath.Join(absoluteRoot, binary)
 	}
@@ -147,21 +147,21 @@ func run(ctx context.Context, root, binary string, timeout time.Duration) (repor
 	}
 	binaryHash, err := hashFile(binary)
 	if err != nil {
-		return report{}, fmt.Errorf("hash PiG binary: %w", err)
+		return report{}, fmt.Errorf("hash Ompig binary: %w", err)
 	}
 	id := identity{
 		UpstreamVersion: version,
 		UpstreamCommit:  commit,
 		CorpusSHA256:    corpusHash,
 		RuntimeSHA256:   runtimeHash,
-		PigSHA256:       binaryHash,
+		OmpigSHA256:     binaryHash,
 		NodeVersion:     commandVersion("node", "--version"),
 		OS:              runtime.GOOS,
 		Architecture:    runtime.GOARCH,
 	}
 	if info, err := buildinfo.ReadFile(binary); err == nil {
-		id.PigModule = info.Main.Path
-		id.PigModuleVersion = info.Main.Version
+		id.OmpigModule = info.Main.Path
+		id.OmpigModuleVersion = info.Main.Version
 		id.GoVersion = info.GoVersion
 	}
 
@@ -197,7 +197,7 @@ func validateExample(parent context.Context, root, binary, corpusRoot, path stri
 	if err != nil {
 		return result{}, err
 	}
-	home, err := os.MkdirTemp("", "pig-extension-corpus-")
+	home, err := os.MkdirTemp("", "ompig-extension-corpus-")
 	if err != nil {
 		return result{}, err
 	}
@@ -245,11 +245,11 @@ func validateExample(parent context.Context, root, binary, corpusRoot, path stri
 }
 
 func corpusEnvironment(home string) []string {
-	blocked := []string{"ALL_PROXY=", "HTTPS_PROXY=", "HTTP_PROXY=", "all_proxy=", "https_proxy=", "http_proxy=", "HOME=", "PIG_HOME="}
+	blocked := []string{"ALL_PROXY=", "HTTPS_PROXY=", "HTTP_PROXY=", "all_proxy=", "https_proxy=", "http_proxy=", "HOME=", "OMPIG_HOME="}
 	environment := slices.DeleteFunc(append([]string(nil), os.Environ()...), func(value string) bool {
 		return slices.ContainsFunc(blocked, func(prefix string) bool { return strings.HasPrefix(value, prefix) })
 	})
-	return append(environment, "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"))
+	return append(environment, "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"))
 }
 
 func sourceFiles(root string) ([]string, error) {

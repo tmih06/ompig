@@ -1,4 +1,4 @@
-// Command child-session-modes-go registers a provider and a command that creates a child agent session over it, prompts the child and writes what the child answered to the file named by PIG_TEST_CHILD_LOG. It runs in print, JSON and RPC mode.
+// Command child-session-modes-go registers a provider and a command that creates a child agent session over it, prompts the child and writes what the child answered to the file named by OMPIG_TEST_CHILD_LOG. It runs in print, JSON and RPC mode.
 package main
 
 import (
@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func record(line string) {
-	if err := os.WriteFile(os.Getenv("PIG_TEST_CHILD_LOG"), []byte(line+"\n"), 0o644); err != nil {
+	if err := os.WriteFile(os.Getenv("OMPIG_TEST_CHILD_LOG"), []byte(line+"\n"), 0o644); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 }

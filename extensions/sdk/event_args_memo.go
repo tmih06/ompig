@@ -5,10 +5,10 @@ import (
 	"sync"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
-// eventArgsMemo decodes an event payload once for the fused extensions of one process and hands every handler its own copy. Fused extensions (D31) run in the pig process and receive the same payload bytes, so without it K handlers of one turn_end each decoded the same args. The decoded master is never handed out: each caller gets cloneStreamValue(master), so a handler may change or keep its value and no other handler, extension or later event sees it (D20, D31).
+// eventArgsMemo decodes an event payload once for the fused extensions of one process and hands every handler its own copy. Fused extensions (D31) run in the ompig process and receive the same payload bytes, so without it K handlers of one turn_end each decoded the same args. The decoded master is never handed out: each caller gets cloneStreamValue(master), so a handler may change or keep its value and no other handler, extension or later event sees it (D20, D31).
 //
 // Lifetime: an entry is held strongly only while a handler that decoded it is running (pin until release). Otherwise the memo keeps weak pointers, so the collector frees an idle entry at its next cycle and the memo retains nothing between dispatches. An entry the collector freed between two handlers of one dispatch is decoded again. The memo holds its own copy of the bytes it compares, so a caller reusing its buffer cannot change an entry.
 type eventArgsMemo struct {

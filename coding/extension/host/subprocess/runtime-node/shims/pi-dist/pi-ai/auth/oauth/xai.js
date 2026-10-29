@@ -115,7 +115,7 @@ async function requestDeviceCode(signal) {
     const response = await postForm(XAI_DEVICE_CODE_URL, {
         client_id: XAI_CLIENT_ID,
         scope: XAI_SCOPE,
-        referrer: "pig",
+        referrer: "ompig",
     }, signal);
     if (!response.ok) {
         throw requestFailure("device authorization", response);

@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 // ABI section 3, invariant 3: the host applies a read step's commits before it runs the reads. Cold open's step commits

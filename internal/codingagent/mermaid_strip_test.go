@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -8,34 +8,34 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A pig_strip_mermaid build of cmd/pig compiles mermaid_transform.go and the Marked block parsers out, so it does not link
+// A ompig_strip_mermaid build of cmd/ompig compiles mermaid_transform.go and the Marked block parsers out, so it does not link
 // the diagram renderer; stock does.
 func TestStripMermaidBuildOmitsMermaidRenderer(t *testing.T) {
 	if testing.Short() {
-		t.Skip("go list of cmd/pig in -short mode")
+		t.Skip("go list of cmd/ompig in -short mode")
 	}
 	deps := func(tags ...string) []string {
-		args := append(append([]string{"list"}, tags...), "-deps", "github.com/MichaelKinsy/PiG/cmd/pig")
+		args := append(append([]string{"list"}, tags...), "-deps", "github.com/tmih06/ompig/cmd/ompig")
 		out, err := exec.Command("go", args...).Output()
 		if err != nil {
 			t.Fatalf("go %s: %v", strings.Join(args, " "), err)
 		}
 		return strings.Fields(string(out))
 	}
-	const pkg = "github.com/MichaelKinsy/PiG/internal/mermaid"
+	const pkg = "github.com/tmih06/ompig/internal/mermaid"
 	if !slices.Contains(deps(), pkg) {
-		t.Errorf("the stock cmd/pig does not link %s", pkg)
+		t.Errorf("the stock cmd/ompig does not link %s", pkg)
 	}
 	if slices.Contains(deps("-tags", pigstrip.Tag(pigstrip.Mermaid)), pkg) {
-		t.Errorf("a %s build of cmd/pig links %s", pigstrip.Tag(pigstrip.Mermaid), pkg)
+		t.Errorf("a %s build of cmd/ompig links %s", pigstrip.Tag(pigstrip.Mermaid), pkg)
 	}
 }
 
-// A Piglet that strips mermaid leaves a mermaid fence raw, as mermaid mode "off" does; stock draws it.
+// A Ompiglet that strips mermaid leaves a mermaid fence raw, as mermaid mode "off" does; stock draws it.
 func TestRuntimeStripMermaidLeavesFenceRaw(t *testing.T) {
 	const markdown = "```mermaid\nflowchart LR\nA --> B\n```\n"
 	ctx := extension.MarkdownTransformContext{MessageType: extension.MarkdownMessageAssistant, AvailableWidth: 200}

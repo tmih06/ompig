@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-if (process.argv[2] === 'pig') {
+if (process.argv[2] === 'ompig') {
   const run=spawnSync('./test/parity/testdata/prebuilt-go-test.sh',['./ai','-run','^TestFileModelsStoreUpstream$/cancels_a_catalog_write','-count=1','-v'],{encoding:'utf8'});
   if(run.status!==0)throw new Error(run.stdout);
   const rows=run.stdout.split('\n').filter(line=>line.startsWith('MODELS-STORE:'));

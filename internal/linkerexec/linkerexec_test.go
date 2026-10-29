@@ -97,7 +97,7 @@ func TestResolveStartsAScriptThroughItsMappedInterpreter(t *testing.T) {
 	}
 }
 
-// env would exec its command with a libc execve that only termux-exec's preload redirects, so PiG finds the command itself.
+// env would exec its command with a libc execve that only termux-exec's preload redirects, so Ompig finds the command itself.
 func TestResolveRunsEnvCommandsDirectly(t *testing.T) {
 	f := files{
 		prefix + "/bin/script":  "#!/usr/bin/env python3\n",
@@ -225,7 +225,7 @@ func TestStarterForActsOnlyWhenTheLinkerStartedThisProcess(t *testing.T) {
 	if got := starterFor(env(termux), selfExe("/apex/com.android.runtime/bin/linker64", nil)); got.Linker != "/apex/com.android.runtime/bin/linker64" {
 		t.Fatalf("apex linker: %+v", got)
 	}
-	if got := starterFor(env(termux), selfExe(prefix+"/bin/pig", nil)); got.Active() {
+	if got := starterFor(env(termux), selfExe(prefix+"/bin/ompig", nil)); got.Active() {
 		t.Fatalf("directly started process rewrites starts: %+v", got)
 	}
 	if got := starterFor(env(termux), selfExe("", errors.New("no /proc"))); got.Active() {
@@ -249,10 +249,10 @@ func TestProgramOfLinkedProcess(t *testing.T) {
 		want string
 		fail bool
 	}{
-		"recorded":                     {map[string]string{"TERMUX_EXEC__PROC_SELF_EXE": prefix + "/bin/pig"}, []string{"pig"}, prefix + "/bin/pig", false},
-		"absolute argv0":               {nil, []string{prefix + "/bin/pig", "x"}, prefix + "/bin/pig", false},
-		"relative recorded is ignored": {map[string]string{"TERMUX_EXEC__PROC_SELF_EXE": "pig"}, []string{prefix + "/bin/pig"}, prefix + "/bin/pig", false},
-		"unknown":                      {nil, []string{"pig"}, "", true},
+		"recorded":                     {map[string]string{"TERMUX_EXEC__PROC_SELF_EXE": prefix + "/bin/ompig"}, []string{"ompig"}, prefix + "/bin/ompig", false},
+		"absolute argv0":               {nil, []string{prefix + "/bin/ompig", "x"}, prefix + "/bin/ompig", false},
+		"relative recorded is ignored": {map[string]string{"TERMUX_EXEC__PROC_SELF_EXE": "ompig"}, []string{prefix + "/bin/ompig"}, prefix + "/bin/ompig", false},
+		"unknown":                      {nil, []string{"ompig"}, "", true},
 		"no args":                      {nil, nil, "", true},
 	} {
 		got, err := programOfLinkedProcess(env(tc.env), tc.args)
@@ -266,19 +266,19 @@ func TestProgramOfLinkedProcess(t *testing.T) {
 func TestExecutableFollowsTheLinkerOnlyOnAndroid(t *testing.T) {
 	env := func(k string) string {
 		if k == "TERMUX_EXEC__PROC_SELF_EXE" {
-			return prefix + "/bin/pig"
+			return prefix + "/bin/ompig"
 		}
 		return ""
 	}
 	for name, tc := range map[string]struct {
 		goos, exe, want string
 	}{
-		"android linker64": {"android", "/system/bin/linker64", prefix + "/bin/pig"},
-		"android program":  {"android", prefix + "/bin/pig", prefix + "/bin/pig"},
+		"android linker64": {"android", "/system/bin/linker64", prefix + "/bin/ompig"},
+		"android program":  {"android", prefix + "/bin/ompig", prefix + "/bin/ompig"},
 		"linux linker":     {"linux", "/opt/tools/linker", "/opt/tools/linker"},
 		"darwin linker64":  {"darwin", "/usr/local/bin/linker64", "/usr/local/bin/linker64"},
 	} {
-		got, err := executable(tc.goos, func() (string, error) { return tc.exe, nil }, env, []string{"pig"})
+		got, err := executable(tc.goos, func() (string, error) { return tc.exe, nil }, env, []string{"ompig"})
 		if err != nil || got != tc.want {
 			t.Errorf("%s: = %q, %v; want %q", name, got, err, tc.want)
 		}
@@ -332,7 +332,7 @@ func TestPrepareStartsRealProgramsThroughAFakeLinker(t *testing.T) {
 }
 
 // Termux 0.118.3 sets TERMUX_APP__DATA_DIR to /data/user/0/com.termux while $PREFIX and every program path use
-// /data/data/com.termux. termux-exec treats a path under either directory as an app data file; so does PiG.
+// /data/data/com.termux. termux-exec treats a path under either directory as an app data file; so does Ompig.
 func TestStarterForTreatsTheLegacyDataDirAsTheDataDir(t *testing.T) {
 	env := map[string]string{"PREFIX": prefix, "TERMUX_APP__DATA_DIR": "/data/user/0/com.termux"}
 	s := starterFor(func(k string) string { return env[k] }, func() (string, error) { return "/system/bin/linker64", nil })

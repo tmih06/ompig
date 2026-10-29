@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Turn is one entry of a request's message list, reduced to what a provider's tool contract constrains.
@@ -22,9 +22,9 @@ type Turn struct {
 	ContentBeforeResult bool
 }
 
-// Contract is the part of a provider's message contract that PiG checks.
+// Contract is the part of a provider's message contract that Ompig checks.
 type Contract struct {
-	// API is the PiG API name.
+	// API is the Ompig API name.
 	API string
 	// Cite names the documentation the rules come from.
 	Cite string

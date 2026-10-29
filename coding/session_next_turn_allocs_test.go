@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // nextTurnAllocs returns what one prepareNextTurn allocates over a session of the given number of question/answer pairs, and the projected context it returns.

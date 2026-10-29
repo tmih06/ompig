@@ -4,12 +4,12 @@
 package core
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/docs"
-	"github.com/MichaelKinsy/PiG/durable/core/inbox"
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/docs"
+	"github.com/tmih06/ompig/durable/core/inbox"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // usageDef is UsageDoc (src/harness/usage.ts): the conversation's usage ledger.

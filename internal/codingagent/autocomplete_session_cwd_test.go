@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi builds the autocomplete provider on this.sessionManager.getCwd() (interactive-mode.ts:820), so after resuming a

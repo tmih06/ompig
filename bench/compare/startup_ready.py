@@ -3,9 +3,9 @@
 """The end of a Pi-family TUI's startup, as a harness sees it.
 
 Pi (interactive-mode.ts init()) paints the editor and footer, model name included, before startup completes: until managed-tool setup ends
-it keeps an Enter in the editor and shows "Startup is still in progress" (handleStartupSubmit), and PiG ports that window. A harness that
+it keeps an Enter in the editor and shows "Startup is still in progress" (handleStartupSubmit), and Ompig ports that window. A harness that
 types the moment the model name shows can land in it. Startup then binds the session (rebindCurrentSession), whose last step sets the
-terminal title (updateTerminalTitle: OSC 0, "π - <cwd>" or "PiG - <cwd>"), after the submit handler is installed. That title is the
+terminal title (updateTerminalTitle: OSC 0, "π - <cwd>" or "Ompig - <cwd>"), after the submit handler is installed. That title is the
 marker: once it is written, input is handled as at any later prompt. Arms that never set a title fall back to a quiet settle."""
 import re
 import time

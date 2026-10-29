@@ -3,7 +3,7 @@
 package ai
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // marshalRequestBody is JSON.stringify(body), which Pi's provider SDKs send (openai 7.19.0 internal/request-options.js:29): '<', '>', '&',

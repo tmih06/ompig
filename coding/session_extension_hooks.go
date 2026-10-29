@@ -8,12 +8,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // installExtensionHooks installs the Session's extension hooks on its agent,
@@ -106,7 +106,7 @@ func (s *Session) toolResultHook(ctx context.Context, toolCallID, parentToolCall
 		return agent.AfterToolCallResult{}
 	}
 	if runner.HasHandlers(icodingagent.EventToolCall) {
-		// pig additive (D19): Pi runs the tool on the extensions' event loop, so what a tool_call handler queued, such as a sendUserMessage and the input it starts, runs before tool_result (agent-session.ts:1968-2000). The tool ran in Go, so each extension that saw tool_call on a loop of its own takes one turn first.
+		// ompig additive (D19): Pi runs the tool on the extensions' event loop, so what a tool_call handler queued, such as a sendUserMessage and the input it starts, runs before tool_result (agent-session.ts:1968-2000). The tool ran in Go, so each extension that saw tool_call on a loop of its own takes one turn first.
 		runner.AwaitEventLoopTurns(ctx, icodingagent.EventToolCall)
 	}
 	if !runner.HasHandlers(icodingagent.EventToolResult) {

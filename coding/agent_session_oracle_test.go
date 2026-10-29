@@ -14,10 +14,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type agentSessionOp struct {
@@ -514,7 +514,7 @@ func TestAgentSessionMatchesPi(t *testing.T) {
 		if !reflect.DeepEqual(normalized.Initial, expected[i].Initial) {
 			g, _ := json.Marshal(normalized.Initial)
 			e, _ := json.Marshal(expected[i].Initial)
-			report += fmt.Sprintf("\n  initial\n  Pig %s\n  Pi  %s", g, e)
+			report += fmt.Sprintf("\n  initial\n  Ompig %s\n  Pi  %s", g, e)
 		} else {
 			for k, op := range scenario.Ops {
 				if k >= len(normalized.Outs) || reflect.DeepEqual(normalized.Outs[k], expected[i].Outs[k]) {
@@ -526,14 +526,14 @@ func TestAgentSessionMatchesPi(t *testing.T) {
 					if !reflect.DeepEqual(value, expected[i].Outs[k][key]) {
 						g, _ := json.Marshal(value)
 						e, _ := json.Marshal(expected[i].Outs[k][key])
-						report += fmt.Sprintf("\n  ops %.600s\n  op %d %s differs\n  Pig %.900s\n  Pi  %.900s", opJSON, k, key, g, e)
+						report += fmt.Sprintf("\n  ops %.600s\n  op %d %s differs\n  Ompig %.900s\n  Pi  %.900s", opJSON, k, key, g, e)
 						if key == "state" {
 							gm, em := value.(map[string]any), expected[i].Outs[k][key].(map[string]any)
 							for field := range gm {
 								if !reflect.DeepEqual(gm[field], em[field]) {
 									gf, _ := json.Marshal(gm[field])
 									ef, _ := json.Marshal(em[field])
-									report = strings.Split(report, "\n  Pig")[0] + fmt.Sprintf("\n  field %s\n  Pig %.500s\n  Pi  %.500s", field, gf, ef)
+									report = strings.Split(report, "\n  Ompig")[0] + fmt.Sprintf("\n  field %s\n  Ompig %.500s\n  Pi  %.500s", field, gf, ef)
 									break
 								}
 							}

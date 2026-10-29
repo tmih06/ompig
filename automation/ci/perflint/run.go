@@ -34,7 +34,7 @@ type baselineFile struct {
 	Hit []finding `toml:"hit"`
 }
 
-const sdkJSONPath = "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+const sdkJSONPath = "github.com/tmih06/ompig/extensions/sdk/json"
 
 func isJSONPkg(p string) bool {
 	return p == "encoding/json" || p == "encoding/json/v2" || p == sdkJSONPath
@@ -51,7 +51,7 @@ func hotPackage(rel string) bool {
 }
 
 func isToolingPath(rel string) bool {
-	for _, prefix := range []string{"test/", "tests/", "automation/", "tmp/", "examples/", "docs/", "third_party/", "wt/", "evals/", "internal/evals/", "parity/", "piglets/", "cmd/"} {
+	for _, prefix := range []string{"test/", "tests/", "automation/", "tmp/", "examples/", "docs/", "third_party/", "wt/", "evals/", "internal/evals/", "parity/", "ompiglets/", "cmd/"} {
 		if strings.HasPrefix(rel, prefix) {
 			return true
 		}

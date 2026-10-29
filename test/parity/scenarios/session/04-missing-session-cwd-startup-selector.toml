@@ -24,7 +24,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "cwd from session file does not exist"
+ready_pattern_ompig = "cwd from session file does not exist"
 ready_pattern_pi = "cwd from session file does not exist"
 ready_timeout_seconds = 25
 capture_start = "cwd from session file does not exist"
@@ -33,9 +33,9 @@ settle_seconds = 1
 cwd = "testdata/missing-session-cwd"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--session", "sessions/missing.jsonl"]
+ompig_args = ["--no-extensions", "--offline", "--session", "sessions/missing.jsonl"]
 pi_args = ["--no-extensions", "--offline", "--session", "sessions/missing.jsonl"]
 
 # normalize-rationale: independent cwd snapshots differ only in their random numeric suffix.

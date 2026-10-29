@@ -11,14 +11,14 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 func newTestFauxRuntime(t testing.TB) (*coding.AgentSessionServices, *ai.Model) {
 	t.Helper()
-	t.Setenv("PIG_TEST_FAUX", "1")
-	t.Setenv("PIG_TEST_FAUX_SCENARIO", "parity-basic")
+	t.Setenv("OMPIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_TEST_FAUX_SCENARIO", "parity-basic")
 	agentDir := t.TempDir()
 	config := `{"providers":{"test-faux":{"baseUrl":"http://localhost:0","api":"test-faux","authHeader":false,"models":[{"id":"faux-1","name":"Test Faux"}]}}}`
 	if err := os.WriteFile(filepath.Join(agentDir, "models.json"), []byte(config), 0o600); err != nil {

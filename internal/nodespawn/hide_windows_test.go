@@ -13,7 +13,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // libuv's uv_spawn (src/win/process.c) sets STARTF_USESHOWWINDOW and SW_HIDE

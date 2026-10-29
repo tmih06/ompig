@@ -12,7 +12,7 @@ import (
 	// Registers the pure-Go "sqlite" database/sql driver.
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // DB is one dedicated SQLite connection. Only the owner goroutine of a Host uses it, so it takes no lock. Statements

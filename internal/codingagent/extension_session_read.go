@@ -17,14 +17,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // ExtensionSessionView names the session an extension reads and the facts
@@ -95,7 +95,7 @@ func (m *ExtensionSessionInfoMemo) Encoded(view ExtensionSessionView) (json.RawM
 	if m.valid && m.cwd == view.CWD && m.dir == dir && m.persisted == persisted && m.hasSession == (view.Session != nil) && m.header.SameRecord(header) {
 		return m.encoded, nil
 	}
-	//portlint:allow mapkeyorder PiG-only wire snapshot of SessionManager getters (session-manager.ts:1148 usesDefaultSessionDir and siblings); every SDK reads it member by member (runtime.mjs:319-332, extensions/sdk/session_manager.go)
+	//portlint:allow mapkeyorder Ompig-only wire snapshot of SessionManager getters (session-manager.ts:1148 usesDefaultSessionDir and siblings); every SDK reads it member by member (runtime.mjs:319-332, extensions/sdk/session_manager.go)
 	encoded, err := json.Marshal(ExtensionSessionInfo(view))
 	if err != nil {
 		return nil, err

@@ -3,7 +3,7 @@ package jsdiff
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // The helpers below are jsdiff's util/string.js for whitespace-only prefixes and suffixes, which are BMP characters, so rune

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -12,7 +12,7 @@ import (
 )
 
 // An extension that starts a detached helper process (nicobailon/pi-subagents' background runner) locates Pi's host packages from the package process.argv[1] belongs to, reads each
-// peer's package.json for its name and exports, and imports the file an export names. PiG's harness entry is that package, so every package Pi's pi-coding-agent lists as a
+// peer's package.json for its name and exports, and imports the file an export names. Ompig's harness entry is that package, so every package Pi's pi-coding-agent lists as a
 // dependency must be a peer next to it, with each export importable by a plain Node process. The peers are generated into the runtime archive (internal/noderuntimegen).
 // upstream: packages/coding-agent/package.json dependencies; pi-subagents runs/background/runner-aliases.js:resolveHostPeerAliases.
 func TestHarnessProvidesEveryPeerPackagePiListsAsADependency(t *testing.T) {

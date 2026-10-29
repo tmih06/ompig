@@ -5,10 +5,10 @@ package harness
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // HookApi is what a hook may use: committed reads and the asking task's memos, which hooks and the task share.
@@ -143,7 +143,7 @@ type HarnessOptions struct {
 	// replace its model configuration without reopening the Harness (HarnessOptions.models as a function, Pi 7ec1f648).
 	Models     durable.Models
 	ModelsFunc func() durable.Models
-	// Identity is how model requests identify the app to providers, merged field by field over DefaultHarnessIdentity (attribution to PiG). It applies to every request through the Harness's models, including hooks and tools, and overrides the identity the models were created with; a request's own Identity overrides it. Pass an identity with AttributionNull to send no attribution headers (HarnessOptions.identity).
+	// Identity is how model requests identify the app to providers, merged field by field over DefaultHarnessIdentity (attribution to Ompig). It applies to every request through the Harness's models, including hooks and tools, and overrides the identity the models were created with; a request's own Identity overrides it. Pass an identity with AttributionNull to send no attribution headers (HarnessOptions.identity).
 	Identity *ai.ClientIdentity
 	// plainModels is Models with Identity applied, wrapped once by WithModelsView; Pi wraps a plain Models once and a function's result at each call.
 	plainModels durable.Models
@@ -316,7 +316,7 @@ type Harness interface {
 	ObserveTaskGraph(ctx context.Context, observer durable.Observer[TaskGraph]) (durable.Observation[TaskGraph], error)
 }
 
-// DefaultHarnessIdentity is the request identity of a Harness's model requests: the ai package's defaults with provider attribution to PiG.
+// DefaultHarnessIdentity is the request identity of a Harness's model requests: the ai package's defaults with provider attribution to Ompig.
 var DefaultHarnessIdentity = ai.ClientIdentity{Attribution: new(ai.PiAttribution)}
 
 // WithModelsView returns the options with a plain Models wrapped once with Identity applied over DefaultHarnessIdentity, so every CurrentModels returns the same view (harness.ts currentModels: "A plain Models is wrapped once; a function's result is wrapped at each call").

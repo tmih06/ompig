@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // upstream print-mode.ts and rpc-mode.ts bind ctx.navigateTree to session.navigateTree(targetId, {summarize, customInstructions, replaceInstructions, label}) and return {cancelled}; newSession, fork

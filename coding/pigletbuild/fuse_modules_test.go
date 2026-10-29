@@ -25,7 +25,7 @@ import (
 const fusedDepModule = "example.com/dep"
 
 type fusedModuleFixture struct {
-	root    string // fake Pig source
+	root    string // fake Ompig source
 	member  string // fused member module root
 	goEnv   []string
 	sums    map[string]string // version -> go.sum lines
@@ -82,7 +82,7 @@ func publishProxyModule(t *testing.T, proxy, version string) string {
 	return fusedDepModule + " " + version + " " + zipHash + "\n" + fusedDepModule + " " + version + "/go.mod " + modHash + "\n"
 }
 
-// newFusedModuleFixture builds a fake Pig source pinning example.com/dep v1.0.0
+// newFusedModuleFixture builds a fake Ompig source pinning example.com/dep v1.0.0
 // and a fused member requiring v1.1.0, with both versions in a warm private
 // module cache.
 func newFusedModuleFixture(t *testing.T, workspace bool) fusedModuleFixture {
@@ -112,12 +112,12 @@ func newFusedModuleFixture(t *testing.T, workspace bool) fusedModuleFixture {
 	// The Go command resolves a workspace's `use .` against the physical
 	// working directory, so the fixture uses physical paths.
 	root := physicalTempDir(t)
-	writeFixtureFile(t, filepath.Join(root, "go.mod"), "module example.com/pig\n\ngo 1.26\n\nrequire (\n\tgithub.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\t"+fusedDepModule+" v1.0.0\n)\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+modfile.AutoQuote(filepath.ToSlash(sdkRoot))+"\n")
+	writeFixtureFile(t, filepath.Join(root, "go.mod"), "module example.com/ompig\n\ngo 1.26\n\nrequire (\n\tgithub.com/tmih06/ompig/extensions/sdk v0.0.0\n\t"+fusedDepModule+" v1.0.0\n)\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+modfile.AutoQuote(filepath.ToSlash(sdkRoot))+"\n")
 	writeFixtureFile(t, filepath.Join(root, "go.sum"), sums["v1.0.0"])
 	writeFixtureFile(t, filepath.Join(root, "pigdep", "pigdep.go"), "package pigdep\n\nimport \"example.com/dep\"\n\nconst Version = dep.Version\n")
 	fuseDir := filepath.Join(root, "coding", "extension", "host", "fusepack")
 	writeFixtureFile(t, filepath.Join(fuseDir, "base.go"), `package fusepack
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 var factories = map[string]func() *sdk.Extension{}
 func registerFactory(name string, factory func() *sdk.Extension) { factories[name] = factory }
 `)
@@ -128,11 +128,11 @@ func registerFactory(name string, factory func() *sdk.Extension) { factories[nam
 	}
 
 	member := physicalTempDir(t)
-	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/extensions\n\ngo 1.26\n\nrequire (\n\tgithub.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\t"+fusedDepModule+" v1.1.0\n)\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+modfile.AutoQuote(filepath.ToSlash(sdkRoot))+"\n")
+	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/extensions\n\ngo 1.26\n\nrequire (\n\tgithub.com/tmih06/ompig/extensions/sdk v0.0.0\n\t"+fusedDepModule+" v1.1.0\n)\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+modfile.AutoQuote(filepath.ToSlash(sdkRoot))+"\n")
 	writeFixtureFile(t, filepath.Join(member, "go.sum"), sums["v1.1.0"])
 	writeFixtureFile(t, filepath.Join(member, "review", "extension.go"), `package review
 import (
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 	"example.com/dep"
 )
 func Extension() *sdk.Extension { return sdk.New("review-" + dep.Version) }
@@ -177,7 +177,7 @@ func snapshotTree(t *testing.T, root string) map[string]string {
 }
 
 // makeReadOnly removes write permission from the whole tree, as for an
-// installed or shared Pig checkout, and restores it for TempDir cleanup.
+// installed or shared Ompig checkout, and restores it for TempDir cleanup.
 func makeReadOnly(t *testing.T, root string) {
 	t.Helper()
 	var dirs []string
@@ -245,7 +245,7 @@ func buildFusedFixture(t *testing.T, f fusedModuleFixture, env []string) {
 			t.Errorf("build removed source path %s", path)
 		}
 	}
-	if want := `fused member "review" raises Pig's example.com/dep v1.0.0 to v1.1.0 (minimum version selection)`; !slices.Equal(graph.raised, []string{want}) {
+	if want := `fused member "review" raises Ompig's example.com/dep v1.0.0 to v1.1.0 (minimum version selection)`; !slices.Equal(graph.raised, []string{want}) {
 		t.Fatalf("raised = %q, want %q", graph.raised, want)
 	}
 	// The module the build compiled is the one the vet scope note names.
@@ -273,10 +273,10 @@ func TestOverlayFuseBuildsExternalModuleWithoutWorkspaceReadonlyOffline(t *testi
 	buildFusedFixture(t, f, moduleSourceBuildEnv(f.goEnv))
 }
 
-func fuseModuleConflict(t *testing.T, pigMod string, members map[string]string) error {
+func fuseModuleConflict(t *testing.T, ompigMod string, members map[string]string) error {
 	t.Helper()
 	root := t.TempDir()
-	writeFixtureFile(t, filepath.Join(root, "go.mod"), pigMod)
+	writeFixtureFile(t, filepath.Join(root, "go.mod"), ompigMod)
 	overlay, err := newBuildOverlay(t.TempDir())
 	if err != nil {
 		t.Fatal(err)
@@ -292,18 +292,18 @@ func fuseModuleConflict(t *testing.T, pigMod string, members map[string]string) 
 	return err
 }
 
-// A fused member links the SDK of the Pig source it is fused into, so a
+// A fused member links the SDK of the Ompig source it is fused into, so a
 // member that requires a newer SDK than that source pins is a clear error, not
 // a silent upgrade of the host contract.
 func TestOverlayFuseRejectsMemberRequiringNewerSDK(t *testing.T) {
-	pigMod := "module example.com/pig\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.4.0\n"
-	err := fuseModuleConflict(t, pigMod, map[string]string{
-		"review": "module example.com/review\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.5.0\n",
+	ompigMod := "module example.com/ompig\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.4.0\n"
+	err := fuseModuleConflict(t, ompigMod, map[string]string{
+		"review": "module example.com/review\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.5.0\n",
 	})
 	if err == nil {
-		t.Fatal("a member requiring a newer SDK than Pig pins was fused")
+		t.Fatal("a member requiring a newer SDK than Ompig pins was fused")
 	}
-	for _, want := range []string{`fuse "review"`, "github.com/MichaelKinsy/PiG/extensions/sdk v0.5.0", "newer than the v0.4.0 this Pig source pins"} {
+	for _, want := range []string{`fuse "review"`, "github.com/tmih06/ompig/extensions/sdk v0.5.0", "newer than the v0.4.0 this Ompig source pins"} {
 		if !strings.Contains(err.Error(), want) {
 			t.Fatalf("error %q does not contain %q", err, want)
 		}
@@ -313,8 +313,8 @@ func TestOverlayFuseRejectsMemberRequiringNewerSDK(t *testing.T) {
 // Go applies only the main module's replacements, so members' replacements are
 // promoted; two members replacing one module differently cannot both hold.
 func TestOverlayFuseRejectsConflictingMemberReplacements(t *testing.T) {
-	pigMod := "module example.com/pig\n\ngo 1.26\n"
-	err := fuseModuleConflict(t, pigMod, map[string]string{
+	ompigMod := "module example.com/ompig\n\ngo 1.26\n"
+	err := fuseModuleConflict(t, ompigMod, map[string]string{
 		"alpha": "module example.com/alpha\n\ngo 1.26\n\nrequire example.com/shared v1.0.0\n\nreplace example.com/shared => example.com/shared-fork v1.0.1\n",
 		"beta":  "module example.com/beta\n\ngo 1.26\n\nrequire example.com/shared v1.0.0\n\nreplace example.com/shared => example.com/shared-fork v1.0.2\n",
 	})
@@ -323,23 +323,23 @@ func TestOverlayFuseRejectsConflictingMemberReplacements(t *testing.T) {
 	}
 }
 
-// Minimum version selection never lowers a Pig requirement and adds a member's
+// Minimum version selection never lowers a Ompig requirement and adds a member's
 // new modules as indirect requirements.
 func TestMergeFusedModulesKeepsHigherPigVersion(t *testing.T) {
-	pig, err := modfile.Parse("go.mod", []byte("module example.com/pig\n\ngo 1.26\n\nrequire example.com/dep v1.2.0\n"), nil)
+	ompig, err := modfile.Parse("go.mod", []byte("module example.com/ompig\n\ngo 1.26\n\nrequire example.com/dep v1.2.0\n"), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	member := t.TempDir()
-	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/review\n\ngo 1.26\n\nrequire (\n\texample.com/dep v1.1.0\n\texample.com/other v0.3.0\n\texample.com/pig v0.9.0\n)\n")
-	graph, err := mergeFusedModules(pig, []fusedEntry{{Name: "review", Root: member, ModulePath: "example.com/review", Package: "example.com/review"}})
+	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/review\n\ngo 1.26\n\nrequire (\n\texample.com/dep v1.1.0\n\texample.com/other v0.3.0\n\texample.com/ompig v0.9.0\n)\n")
+	graph, err := mergeFusedModules(ompig, []fusedEntry{{Name: "review", Root: member, ModulePath: "example.com/review", Package: "example.com/review"}})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(graph.raised) != 0 {
 		t.Fatalf("raised = %q", graph.raised)
 	}
-	formatted, err := pig.Format()
+	formatted, err := ompig.Format()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -348,16 +348,16 @@ func TestMergeFusedModulesKeepsHigherPigVersion(t *testing.T) {
 			t.Fatalf("merged go.mod missing %q:\n%s", want, formatted)
 		}
 	}
-	if bytes.Contains(formatted, []byte("example.com/pig v")) {
+	if bytes.Contains(formatted, []byte("example.com/ompig v")) {
 		t.Fatalf("merged go.mod requires the main module:\n%s", formatted)
 	}
 }
 
 // Across members, each module gets the highest version any of them requires,
 // whichever member is read first, and a member's relative replacement names its
-// directory from the member's root, since Pig's go.mod sits elsewhere.
+// directory from the member's root, since Ompig's go.mod sits elsewhere.
 func TestMergeFusedModulesTakesTheHighestMemberVersionAndAnchorsLocalReplacements(t *testing.T) {
-	pig, err := modfile.Parse("go.mod", []byte("module example.com/pig\n\ngo 1.26\n\nrequire example.com/dep v1.0.0\n"), nil)
+	ompig, err := modfile.Parse("go.mod", []byte("module example.com/ompig\n\ngo 1.26\n\nrequire example.com/dep v1.0.0\n"), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -366,24 +366,24 @@ func TestMergeFusedModulesTakesTheHighestMemberVersionAndAnchorsLocalReplacement
 	// alpha sorts first and requires the lower version, beta the higher one.
 	writeFixtureFile(t, filepath.Join(alpha, "go.mod"), "module example.com/alpha\n\ngo 1.26\n\nrequire example.com/dep v1.2.0\n")
 	writeFixtureFile(t, filepath.Join(beta, "go.mod"), "module example.com/beta\n\ngo 1.26\n\nrequire (\n\texample.com/dep v1.3.0\n\texample.com/vendored v0.1.0\n)\n\nreplace example.com/vendored => ./third_party/vendored\n")
-	graph, err := mergeFusedModules(pig, []fusedEntry{
+	graph, err := mergeFusedModules(ompig, []fusedEntry{
 		{Name: "alpha", Root: alpha, ModulePath: "example.com/alpha", Package: "example.com/alpha"},
 		{Name: "beta", Root: beta, ModulePath: "example.com/beta", Package: "example.com/beta"},
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := `fused member "beta" raises Pig's example.com/dep v1.0.0 to v1.3.0 (minimum version selection)`; !slices.Equal(graph.raised, []string{want}) {
+	if want := `fused member "beta" raises Ompig's example.com/dep v1.0.0 to v1.3.0 (minimum version selection)`; !slices.Equal(graph.raised, []string{want}) {
 		t.Fatalf("raised = %q, want %q", graph.raised, want)
 	}
 	versions := map[string]string{}
-	for _, r := range pig.Require {
+	for _, r := range ompig.Require {
 		versions[r.Mod.Path] = r.Mod.Version
 	}
 	if versions["example.com/dep"] != "v1.3.0" {
 		t.Fatalf("example.com/dep = %q, want v1.3.0", versions["example.com/dep"])
 	}
-	replacement := pigReplacement(pig, module.Version{Path: "example.com/vendored"})
+	replacement := ompigReplacement(ompig, module.Version{Path: "example.com/vendored"})
 	if want := filepath.Join(beta, "third_party", "vendored"); replacement == nil || replacement.New.Path != want || replacement.New.Version != "" {
 		t.Fatalf("example.com/vendored replacement = %+v, want %s", replacement, want)
 	}

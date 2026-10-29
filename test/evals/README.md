@@ -6,17 +6,17 @@ and runs through `make`:
 | Target | What it does |
 |---|---|
 | `make evals` | Overhead: startup, one prompt round trip, and a resumed 2,000-exchange Session, against a mock model. `HARNESSES=all RUNS=10`. |
-| `make evals-requests` | Saves every request body to `tmp/evals/requests/` and diffs the first two harnesses (default pig against pi). |
+| `make evals-requests` | Saves every request body to `tmp/evals/requests/` and diffs the first two harnesses (default ompig against pi). |
 | `make evals-live MODEL=provider/model` | Runs `test/evals/tasks` with a real model and checks each result. |
 | `make perf-check` | Applies `budgets.toml` to the last overhead run (`EVAL_RESULTS`). |
 | `make evals-publish` | Copies a reviewed run to `results/latest.json` and regenerates `docs/site/docs/evals.md`. |
-| `make profile`, `make pgo` | Profiles pig round trips with `PIG_PROFILE`; `pgo` merges CPU profiles for a profile-guided build. |
+| `make profile`, `make pgo` | Profiles ompig round trips with `OMPIG_PROFILE`; `pgo` merges CPU profiles for a profile-guided build. |
 | `make bench`, `make bench-compare` | Go benchmarks and a median comparison against a saved base. |
 | `make evals-test` | Unit tests for pigeval. |
-| `make bench-overhead`, `bench-reliability`, `bench-longhistory`, `bench-durable`, `bench-harbor` | The pinned-arm benchmark suite in `bench/evals` (PiG 0.5, PiG 0.4.1, Pi 1.1.0, Claude Code, Codex, Copilot): see `bench/evals/README.md`. |
+| `make bench-overhead`, `bench-reliability`, `bench-longhistory`, `bench-durable`, `bench-harbor` | The pinned-arm benchmark suite in `bench/evals` (Ompig 0.5, Ompig 0.4.1, Pi 1.1.0, Claude Code, Codex, Copilot): see `bench/evals/README.md`. |
 
 `make setup SETUP_ARGS=--harnesses=all` installs the pinned third-party
-harnesses under `~/.cache/pig-dev/harnesses`, never globally.
+harnesses under `~/.cache/ompig-dev/harnesses`, never globally.
 
 ## Method
 
@@ -30,14 +30,14 @@ harness's process tree.
 
 **Requests.** The mock records every request body. `--diff` compares system
 prompt, tool definitions, tool order, and top-level fields. We use this to keep
-PiG's requests byte-for-byte faithful to Pi's, apart from recorded divergences.
+Ompig's requests byte-for-byte faithful to Pi's, apart from recorded divergences.
 
 **Live tasks.** Each task in `tasks/` is a small repository, a prompt, a check
 command, and a list of protected files. A run passes when the check exits 0,
 no protected file changed, and the harness did not time out. Every task's check
 fails before the fix; the unit tests assert that.
 
-**Mutation tasks.** `make evals-mutate` generates seeded bug-fix tasks from PiG's
+**Mutation tasks.** `make evals-mutate` generates seeded bug-fix tasks from Ompig's
 own Go source, following the method in Can Bölük's "The Harness Problem" and
 oh-my-pi's edit benchmark: take a real file, apply one mechanical bug with a
 known inverse (inverted comparison, flipped boolean, off-by-one bound, swapped
@@ -58,7 +58,7 @@ Add a table to `harnesses.toml`. Pin the npm version, give the print-mode argv
 with `{prompt}`, and say which protocol it speaks (`api`) and how it learns the
 mock's base URL (`config`, `env`, or argv placeholders such as `{base_url}`).
 Unknown keys are rejected. Harnesses without a custom-endpoint mechanism set
-`mock = false` and run only in live evals. Set `own_version` when the harness's release version differs from its `--version` output. The argv's first output line must end with the release version. The report shows both. PiG uses `pig version` to record its release separately from the composite `<PiG release>+<Pi release>` printed by `pig --version` (D63).
+`mock = false` and run only in live evals. Set `own_version` when the harness's release version differs from its `--version` output. The argv's first output line must end with the release version. The report shows both. Ompig uses `ompig version` to record its release separately from the composite `<Ompig release>+<Pi release>` printed by `ompig --version` (D63).
 
 ## Adding a task
 

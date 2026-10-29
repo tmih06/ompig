@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsjson"
 )
 
 // responsesDeltaSeeds are delta events as OpenAI, Azure and Codex send them, and near misses the fast decoder must leave to json.Unmarshal.

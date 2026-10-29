@@ -15,7 +15,7 @@ func parseShard(value string) (shard, shards int, err error) {
 	shard, errN := strconv.Atoi(n)
 	shards, errM := strconv.Atoi(m)
 	if !ok || errN != nil || errM != nil || shards < 1 || shard < 1 || shard > shards {
-		return 0, 0, fmt.Errorf("-pig-parity.shard %q: want N/M with 1 <= N <= M", value)
+		return 0, 0, fmt.Errorf("-ompig-parity.shard %q: want N/M with 1 <= N <= M", value)
 	}
 	return shard, shards, nil
 }

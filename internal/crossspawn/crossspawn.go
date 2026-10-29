@@ -8,8 +8,8 @@ import (
 	"context"
 	"os/exec"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // Command returns the command that runs name with args in dir. It resolves

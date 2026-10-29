@@ -16,7 +16,7 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-const fusedProcessHazardDiagnostic = "PIGLET_FUSED_PROCESS_HAZARD"
+const fusedProcessHazardDiagnostic = "OMPIGLET_FUSED_PROCESS_HAZARD"
 
 type fusedModule struct {
 	path string
@@ -30,7 +30,7 @@ type fusedHazard struct {
 }
 
 func (h fusedHazard) message() string {
-	return fmt.Sprintf("%s: fused extension %q: %s uses %s; fused extensions share the Pig process; return errors and use extension host/UI APIs instead", fusedProcessHazardDiagnostic, h.extension, h.position, h.symbol)
+	return fmt.Sprintf("%s: fused extension %q: %s uses %s; fused extensions share the Ompig process; return errors and use extension host/UI APIs instead", fusedProcessHazardDiagnostic, h.extension, h.position, h.symbol)
 }
 
 func vetFusedPackages(ctx context.Context, fused []fusedEntry) error {
@@ -192,11 +192,11 @@ func fusedHazardSymbol(expression ast.Expr, aliases map[string]string, dotImport
 		{path: "os", names: []string{"Exit", "Chdir", "Stdout"}},
 		{path: "log", names: []string{"Fatal", "Fatalf", "Fatalln"}},
 		{path: "fmt", names: []string{"Print", "Printf", "Println"}},
-		// A fused member keeps the wire contract: the compiled-in factory form belongs to the binary's own main package, never to a Piglet
+		// A fused member keeps the wire contract: the compiled-in factory form belongs to the binary's own main package, never to a Ompiglet
 		// (docs/specs/extension-factory-trust.md, property 4).
-		{path: "github.com/MichaelKinsy/PiG/coding/extension", names: []string{"ExtensionFactory", "InlineExtension"}},
-		{path: "github.com/MichaelKinsy/PiG/coding/extension/factoryload", names: []string{"LoadExtensionFromFactory", "WithSourceInfo"}},
-		{path: "github.com/MichaelKinsy/PiG/coding/extension/builtin", names: []string{"All", "Resolve"}},
+		{path: "github.com/tmih06/ompig/coding/extension", names: []string{"ExtensionFactory", "InlineExtension"}},
+		{path: "github.com/tmih06/ompig/coding/extension/factoryload", names: []string{"LoadExtensionFromFactory", "WithSourceInfo"}},
+		{path: "github.com/tmih06/ompig/coding/extension/builtin", names: []string{"All", "Resolve"}},
 	} {
 		for _, name := range symbol.names {
 			selector, ok := expression.(*ast.SelectorExpr)

@@ -53,7 +53,7 @@ func TestTerminalDriversRejectUnrenderableCWDCropBeforeLaunch(t *testing.T) {
 		t.Run(filepath.Base(temp), func(t *testing.T) {
 			t.Setenv(tempDirVar, temp)
 			for _, name := range []string{"interactive-tmux", "headless-terminal"} {
-				for _, label := range []string{"pig", "pi"} {
+				for _, label := range []string{"ompig", "pi"} {
 					t.Run(name+"/"+label, func(t *testing.T) {
 						sc := &Scenario{Name: "reject-crop", SourcePath: filepath.Join(defaultCWDFixture(), "scenario.toml")}
 						sc.Tmux = TmuxDriverConfig{Width: 100, Height: 35, CaptureStart: "parity-snap-cwd-", CaptureStartLast: true}

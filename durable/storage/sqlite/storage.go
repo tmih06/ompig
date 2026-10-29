@@ -13,15 +13,15 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/internal/ordered"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/ops"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/scan"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/writes"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/internal/ordered"
+	"github.com/tmih06/ompig/durable/storage/internal/ops"
+	"github.com/tmih06/ompig/durable/storage/internal/scan"
+	"github.com/tmih06/ompig/durable/storage/internal/writes"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 type storedTask = durable.TaskRecord[durable.JsonValue, durable.JsonValue, durable.JsonValue]

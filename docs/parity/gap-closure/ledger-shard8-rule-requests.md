@@ -25,7 +25,7 @@ State: branch lg-help-8 on integrate-042 (9babe4b66) plus this lane's commits. l
 - `pkg:ai/api/google-shared#getDisabledGoogleThinkingConfig`: `buildGeminiThinkingConfig` (ai/google.go:640) with `isReasoning` false; `GoogleApiThinkingLevel`: `GoogleThinkingLevel`.
 - `pkg:ai/utils/provider-retry#retryProviderRequest`: `retryClassifierRequest` (ai/classifier_http.go:67), generic in the result type.
 - `pkg:coding-agent/.#generateSummaryWithUsage` (and shard 7's `generateSummary`): ported as exported `compaction.GenerateSummaryWithUsage` (the former unexported `generateSummary`, same parameters), which `Compact` calls. The text-only `generateSummary` stays open: Pi exports it without an internal caller, and a Go wrapper in the internal compaction package would have no production caller. Remaining mismatch is the parameter list (upstream 13/14 positional: apiKey, headers, signal, env, callbacks fold into the completer and context): options-folding rule.
-- `pkg:coding-agent/.#parseArgs` is `parseFlags` in `cmd/pig/args.go` (package main); `pkg:coding-agent/.#ExtensionHandler` is `extension.HandlerFn`; `LoadExtensionsResult` is the subprocess `Host.LoadAll` plus `Host.LoadErrors()` (no in-process extension runtime by design); `MainOptions` is the `cmd/pig` flag set.
+- `pkg:coding-agent/.#parseArgs` is `parseFlags` in `cmd/ompig/args.go` (package main); `pkg:coding-agent/.#ExtensionHandler` is `extension.HandlerFn`; `LoadExtensionsResult` is the subprocess `Host.LoadAll` plus `Host.LoadErrors()` (no in-process extension runtime by design); `MainOptions` is the `cmd/ompig` flag set.
 - `pkg:coding-agent/.#createEditToolDefinition` -> `tools.CreateEditTool`, like lg-help-10's R6 for `createReadToolDefinition` and `createFindToolDefinition` (questions/lg-help-10.md:20): a Go built-in tool is its own definition (D73), so the family needs a rename rule, not a new adapter. Same for bash, write, grep, ls and powershell.
 - `pkg:ai/providers/{ant-ling,meta,openrouter,xiaomi-token-plan-cn}#...Provider`: lg-ai-nogo-b ports these as `AntLingProvider`, `MetaProvider` ... (`ai/provider_constructors.go`); they need the `<id>Provider` -> `<Id>Provider` name rule only.
 ### Object-literal constants
@@ -60,7 +60,7 @@ State: branch lg-help-8 on integrate-042 (9babe4b66) plus this lane's commits. l
 - `StorageConformanceAssertions.ok(value: unknown)`: Go `Ok(bool)`: the assertion is on truthiness already evaluated by the caller (TypeScript `unknown` truthiness has no Go form).
 - `NodeExecutionEnv` constructor option `env: ProcessEnv` (`Record<string, string | undefined>`): Go `map[string]string`; an unset variable is an absent key.
 - `AgentDoc`, `UsageDoc`: `RewindableConversationDocToken`/`ConversationDocToken` -> `durable.DocToken[T]` (generic instantiation rule P4).
-- `parseArgs`: `cmd/pig/args.go` `parseFlags` (package main), result `Args` -> `cmd/pig.Args`.
+- `parseArgs`: `cmd/ompig/args.go` `parseFlags` (package main), result `Args` -> `cmd/ompig.Args`.
 
 ## Shard 8 top-down (lg-imla-8): ported rows and rule requests
 State: branch lg-imla-8 on lg-help-8 and lg-ca-member-b (merged), after `make interface-gaps-update`. Every remaining shard-8 gap was probed against the Go source; the groups below are the ones the earlier lanes did not record.

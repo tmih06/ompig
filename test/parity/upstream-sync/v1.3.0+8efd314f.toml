@@ -83,7 +83,7 @@ path = "packages/ai/src/api/openai-codex-responses.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/user_agent_test.go#TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent"]
-rationale = "Two changes since 1.0.4. (1) #10429 sets the originator and User-Agent defaults first so model and caller headers override them. ai/openai_codex_responses.go builds the defaults then lets cfg.ExtraHeaders replace them case-insensitively. Mutant: ignoring the model's originator/user-agent headers fails TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent (originator = \"pig\", want the model header). The default originator is PiG under D26. (2) The zstd body is now a copy typed Uint8Array<ArrayBuffer> (TypeScript lib typing for fetch bodies); the bytes sent are the same, and Go sends the []byte directly, so this part is not observable and has no Go counterpart."
+rationale = "Two changes since 1.0.4. (1) #10429 sets the originator and User-Agent defaults first so model and caller headers override them. ai/openai_codex_responses.go builds the defaults then lets cfg.ExtraHeaders replace them case-insensitively. Mutant: ignoring the model's originator/user-agent headers fails TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent (originator = \"ompig\", want the model header). The default originator is Ompig under D26. (2) The zstd body is now a copy typed Uint8Array<ArrayBuffer> (TypeScript lib typing for fetch bodies); the bytes sent are the same, and Go sends the []byte directly, so this part is not observable and has no Go counterpart."
 
 [[files]]
 path = "packages/ai/src/api/openai-completions.ts"
@@ -160,7 +160,7 @@ path = "packages/ai/src/auth/oauth/openai-codex.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/login_agent_name_oracle_test.go#TestLoginAgentNameMatchesPi"]
-rationale = "The 1.1.0 change passes options.agentName to createAuthorizationFlow so it becomes the Codex originator. ai/oauth_openai_codex.go does the same with PiG default originator under D26. Ignoring the option fails TestLoginAgentNameMatchesPi."
+rationale = "The 1.1.0 change passes options.agentName to createAuthorizationFlow so it becomes the Codex originator. ai/oauth_openai_codex.go does the same with Ompig default originator under D26. Ignoring the option fails TestLoginAgentNameMatchesPi."
 
 [[files]]
 path = "packages/ai/src/auth/types.ts"
@@ -174,7 +174,7 @@ path = "packages/ai/src/index.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "3daa2028→b06c1f2c: Pi b3997979 drops the assistant-message-frame export; PiG removes ai/assistant_message_frame*.go to match."
+rationale = "3daa2028→b06c1f2c: Pi b3997979 drops the assistant-message-frame export; Ompig removes ai/assistant_message_frame*.go to match."
 
 [[files]]
 path = "packages/ai/src/models.ts"
@@ -188,7 +188,7 @@ path = "packages/ai/src/providers/compat-schema.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/codingagent/configschema/compat_schema_upstream_test.go"]
-rationale = "71023aec→8efd314f: Pi 4954d760 exports CompatSchemasByApi and maps azure-openai-responses and openai-codex-responses to the OpenAI Responses compat schema, de-duplicating the merged groups with a Set. The merged ProviderCompatSchema (internal/codingagent/configschema/compat_b.go) is unchanged by it, since both new keys reuse the Responses schema already in the list; the export serves only Pi's catalog-compat publish script, which has no PiG counterpart. schemas/models.schema.json is byte-identical to Pi's."
+rationale = "71023aec→8efd314f: Pi 4954d760 exports CompatSchemasByApi and maps azure-openai-responses and openai-codex-responses to the OpenAI Responses compat schema, de-duplicating the merged groups with a Set. The merged ProviderCompatSchema (internal/codingagent/configschema/compat_b.go) is unchanged by it, since both new keys reuse the Responses schema already in the list; the export serves only Pi's catalog-compat publish script, which has no Ompig counterpart. schemas/models.schema.json is byte-identical to Pi's."
 
 [[files]]
 path = "packages/ai/src/providers/faux.ts"
@@ -258,7 +258,7 @@ path = "packages/ai/src/utils/assistant-message-frame.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi b3997979 (only the removed experimental harness used it). PiG removes its port, ai/assistant_message_frame.go and its tests; AssistantMessage JSON decoding moves to ai/assistant_message_json.go."
+rationale = "Removed in Pi b3997979 (only the removed experimental harness used it). Ompig removes its port, ai/assistant_message_frame.go and its tests; AssistantMessage JSON decoding moves to ai/assistant_message_json.go."
 
 [[files]]
 path = "packages/ai/src/utils/estimate.ts"
@@ -314,14 +314,14 @@ path = "packages/chord/src/api.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0: chord CHANGELOG 1.2.0 Breaking Changes replaces the facet and service runtime with the host runtime and removes defineService, createFacetHost, createRemoteServiceBinding, createStaticFacetLoader and combineFacetLoaders. The 1.2.0 runtime is ported in chord/host. PiG removes its 1.1.0 port, internal/chord/facets.go CreateFacetHost, CreateStaticFacetLoader and CombineFacetLoaders, service.go DefineService, binding.go CreateRemoteServiceBinding and state.go NewReplicatedState/AttachReplicatedState (chord/state.go keeps the 1.2.0 public form), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0: chord CHANGELOG 1.2.0 Breaking Changes replaces the facet and service runtime with the host runtime and removes defineService, createFacetHost, createRemoteServiceBinding, createStaticFacetLoader and combineFacetLoaders. The 1.2.0 runtime is ported in chord/host. Ompig removes its 1.1.0 port, internal/chord/facets.go CreateFacetHost, CreateStaticFacetLoader and CombineFacetLoaders, service.go DefineService, binding.go CreateRemoteServiceBinding and state.go NewReplicatedState/AttachReplicatedState (chord/state.go keeps the 1.2.0 public form), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/bundler.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (chord CHANGELOG 1.2.0 Breaking Changes: the ./bundler export is removed). PiG removes its 1.1.0 port, internal/experimental/plugin_package_build.go BundleFacets and facet_bundle_build.go BundleFacetPackage, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (chord CHANGELOG 1.2.0 Breaking Changes: the ./bundler export is removed). Ompig removes its 1.1.0 port, internal/experimental/plugin_package_build.go BundleFacets and facet_bundle_build.go BundleFacetPackage, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/cell.ts"
@@ -335,7 +335,7 @@ path = "packages/chord/src/cluster.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/cluster_upstream_test.go#TestCrossHostReloadPreparesEveryHostCommitsTheServerFirstThenTheWorkersCodeVersionsStayInStep", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAFailingVoteAbortsEveryHostTheErrorKeepsItsCodeAndNamesTheHost", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAWorkerGateBlockedPastItsDeadlineAbortsTheWholeReload", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadRemovesFacetsFromServerAndWorkersReconcilesRemovalTombstonesAndClearsThemOnReAdd", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadOnlyTheServerCoordinatesReloads", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadBrowsersAreNotParticipantsTheySeeShapeAndResetPushesOrUpgradeRequired", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAnAbortWhileAWorkerIsStillPreparingALateOpenClosesItselfAndTheWorkerCanReloadAgain", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildThatSaysHelloWhileAReloadRunsIsReconciledAfterItNeverLeftInStepWithTheOldCode", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildKeepsThePreviousCodeVersionUntilItsParentRetiredItSpec12", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildReconciledAfterItsParentRetiredOldCodeVersionsMayRetireItsOwnPreviousOneAtOnce", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAReconciliationRunningWhenAReloadStartsSyncsTheChildOnlyAfterItToTheCommittedCodeVersion", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildBehindWhoseHelloWaitsForARunningReloadIsFencedAtOnceItsCallsUpAreAdmittedSpec9", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAReconnectingChildBehindItsParentStillRetainingItsPreviousCodeVersionReconcilesWithoutWaitingOutTheRetireDeadline", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadForcedRetirementCancelsABrowserCallRelayedToAWorkerBeforeTheServerClosesTheOldCodesResources"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 00d8d049: chord/host/cluster.go runClusterReload retires before it sends prepare and builds participants after; reconcileChild waits out a running reload and announces the retired code versions before prepare and when marking a child synced; a child hello during a cluster reload is synced or reconciled when the reload ends (host.go peerHello, reloadEnded). 2688aba7/d20c6e96: epoch is codeVersion in RetireFrame and peer bookkeeping. cluster.test.ts cases at b06c1f2c are ported in cluster_upstream_test.go, including the seven new 00d8d049 cases."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 00d8d049: chord/host/cluster.go runClusterReload retires before it sends prepare and builds participants after; reconcileChild waits out a running reload and announces the retired code versions before prepare and when marking a child synced; a child hello during a cluster reload is synced or reconciled when the reload ends (host.go peerHello, reloadEnded). 2688aba7/d20c6e96: epoch is codeVersion in RetireFrame and peer bookkeeping. cluster.test.ts cases at b06c1f2c are ported in cluster_upstream_test.go, including the seven new 00d8d049 cases."
 
 [[files]]
 path = "packages/chord/src/connection.ts"
@@ -405,21 +405,21 @@ path = "packages/chord/src/errors.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/errors_test.go#TestForbiddenDefaultsOnlyAnOmittedMessage", "test:chord/host/errors_test.go#TestChordErrorCarriesPiFields", "test:chord/host/errors_test.go#TestIsChordErrorIsInstanceofWithAnOptionalCode", "test:chord/host/errors_test.go#TestAsChordErrorKeepsChordErrorsAndWrapsOthers", "test:chord/host/errors_test.go#TestRunAllRunsEveryStepAndAggregates", "test:chord/host/wire_test.go#TestFrameSchemaIsPiFrameSchema", "test:chord/host/wire_test.go#TestIsFrameChecksErrorCodesAndContractTokens", "test:chord/host/host_upstream_test.go#TestHostRejectsDuplicateDeclarationNames", "test:chord/host/host_upstream_test.go#TestHostServeRefusesALifetimeHostTheTypeCannotHaveAtCompileTimeAndAtRuntime", "test:chord/host/host_upstream_test.go#TestHostOnlyObjectsOfLifetimeHostRegisterTablesFollowRegistrationOrder"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/d20c6e96/301617df change reason strings and messages (object for record, reference for handle, invalid/not_host_lifetime for not_eager, invalid/duplicate); chord/host/errors.go and its callers use Pi's b06c1f2c text, held by errors_test.go, the frame schema hash test and the host lifetime and duplicate-name tests."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/d20c6e96/301617df change reason strings and messages (object for record, reference for handle, invalid/not_host_lifetime for not_eager, invalid/duplicate); chord/host/errors.go and its callers use Pi's b06c1f2c text, held by errors_test.go, the frame schema hash test and the host lifetime and duplicate-name tests."
 
 [[files]]
 path = "packages/chord/src/facets/host.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (the facet runtime is replaced by chord/src/host.ts, ported in chord/host/host.go). PiG removes its 1.1.0 port, internal/chord/facets.go facetKernel, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (the facet runtime is replaced by chord/src/host.ts, ported in chord/host/host.go). Ompig removes its 1.1.0 port, internal/chord/facets.go facetKernel, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/facets/loader.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (facet loaders are replaced by host.ts FacetLoader and loader.ts nodeLoader). PiG removes its 1.1.0 port, internal/chord/facets.go CombineFacetLoaders and its AggregateError disposal join, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (facet loaders are replaced by host.ts FacetLoader and loader.ts nodeLoader). Ompig removes its 1.1.0 port, internal/chord/facets.go CombineFacetLoaders and its AggregateError disposal join, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/host.ts"
@@ -461,7 +461,7 @@ path = "packages/chord/src/manager.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/manager_upstream_test.go#TestHostManagerAChildWithoutALockDoesNotInheritTheParentsLock", "test:chord/host/manager_upstream_test.go#TestHostManagerStartsAChildHostLinksItStopsItGracefully", "test:chord/host/manager_upstream_test.go#TestHostManagerAChildOwnedKernelLockAdmitsOneLiveProcessReplaceWaitsForTheExitBeforeTheNextStart", "test:chord/host/manager_upstream_test.go#TestHostManagerAGracefulExitStillTakesTheChildsDescendantsWithIt", "test:chord/host/manager_upstream_test.go#TestHostManagerKillsTheProcessTreeWhenAChildIgnoresShutdownPastTheGracePeriod", "test:chord/host/manager_upstream_test.go#TestHostManagerReportsAFatalChildAsAFailedStart", "test:chord/host/manager_upstream_test.go#TestHostManagerStopsAnIdleChildWhenKeepAliveSaysSo", "test:chord/host/manager_upstream_test.go#TestHostManagerIdleForCountsFromTheBusyToIdleTransition", "test:chord/host/manager_upstream_test.go#TestHostManagerKeepsFractionalActivityCounts", "test:chord/host/manager_upstream_test.go#TestHostManagerStartIsIdempotentAndStopIsGraceful", "test:chord/host/manager_upstream_test.go#TestHostManagerKillsTreeAfterGrace", "test:chord/host/manager_upstream_test.go#TestHostManagerFatalChildFailsStart", "test:chord/host/manager_upstream_test.go#TestHostManagerExitBeforeReadyAndReadyTimeout", "test:chord/host/manager_upstream_test.go#TestHostManagerKeepAliveStopsIdleChild", "test:chord/host/manager_upstream_test.go#TestHostManagerStopWaitsForPendingStart", "test:chord/host/manager_upstream_test.go#TestHostManagerReplaceWaitsForExit", "test:chord/host/manager_upstream_test.go#TestControlMessageJSON", "test:chord/host/manager_upstream_test.go#TestChildControlOverNodeChannel", "test:chord/host/manager_upstream_test.go#TestProcessLockAdmitsOneHolderWhenTheTemporaryDirectoryIsTooDeepForASocketPath", "test:chord/host/manager_upstream_test.go#TestProcessLock", "test:chord/host/link_upstream_test.go#TestLinksIPCAWriteThatFailsAfterThePeerProcessExitedEPIPEEndsTheLinkInsteadOfRaisingAnUnhandledError", "test:chord/host/manager_process_channel_test.go#TestProcessChannelIsNodesIPCChannel"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 39294a5e: host-manager control messages to a gone peer are dropped (chord/host/manager.go and manager_fork.go send with ignoreSendError; IpcChannel.Send takes a callback that reports a failed write off the sender's stack). 2688aba7 renames only. manager.test.ts at b06c1f2c is ported in manager_upstream_test.go."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 39294a5e: host-manager control messages to a gone peer are dropped (chord/host/manager.go and manager_fork.go send with ignoreSendError; IpcChannel.Send takes a callback that reports a failed write off the sender's stack). 2688aba7 renames only. manager.test.ts at b06c1f2c is ported in manager_upstream_test.go."
 
 [[files]]
 path = "packages/chord/src/node.ts"
@@ -475,28 +475,28 @@ path = "packages/chord/src/node/bundle-loader.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (chord CHANGELOG 1.2.0 Breaking Changes: the facet bundle loaders of ./node are removed; ./node now exports the child host manager). PiG removes its 1.1.0 port, the isolated-Node runner of the vendored 1.1.0 bundle-loader.js (internal/experimental/node_facets.go and node_facets_protocol.go, with make node-facets-chord and automation/ci/vendor-node-facets-chord.py), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (chord CHANGELOG 1.2.0 Breaking Changes: the facet bundle loaders of ./node are removed; ./node now exports the child host manager). Ompig removes its 1.1.0 port, the isolated-Node runner of the vendored 1.1.0 bundle-loader.js (internal/experimental/node_facets.go and node_facets_protocol.go, with make node-facets-chord and automation/ci/vendor-node-facets-chord.py), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/node/bundle.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 together with the ./bundler export and the facet bundle loaders. PiG removes its 1.1.0 port, internal/experimental/plugin_package_build.go (the pinned esbuild Go compiler, whose module goes too) and facet_bundle_build.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 together with the ./bundler export and the facet bundle loaders. Ompig removes its 1.1.0 port, internal/experimental/plugin_package_build.go (the pinned esbuild Go compiler, whose module goes too) and facet_bundle_build.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/node/manifest.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 together with the facet bundle loaders. PiG removes its 1.1.0 port, internal/experimental/facet_bundle.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 together with the facet bundle loaders. Ompig removes its 1.1.0 port, internal/experimental/facet_bundle.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/node/package.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 together with the facet bundle loaders. PiG removes its 1.1.0 port, internal/experimental/plugin_package_metadata.go and facet_bundle_build.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 together with the facet bundle loaders. Ompig removes its 1.1.0 port, internal/experimental/plugin_package_metadata.go and facet_bundle_build.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/object.ts"
@@ -524,7 +524,7 @@ path = "packages/chord/src/registry.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/registry_test.go#TestDefineRegistryIsPlainDataWithErrorConflictByDefault", "test:chord/host/registry_test.go#TestRegistryTableIsAnOrderedReadonlyMap", "test:chord/host/host_upstream_test.go#TestHostOnlyObjectsOfLifetimeHostRegisterTablesFollowRegistrationOrder", "test:chord/host/host_upstream_test.go#TestHostRejectsConflictingRegistrations", "test:chord/host/reload_upstream_test.go#TestReloadKeepsRegistryTablesPerCodeVersion", "test:chord/host/host_test.go#TestRegistryViewAndSubscribers"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/301617df: only objects of lifetime \"host\" may register (invalid/not_host_lifetime, was not_eager) and tables are kept per code version; chord/host/registry.go and object.go follow, held by the registry and lifetime tests."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/301617df: only objects of lifetime \"host\" may register (invalid/not_host_lifetime, was not_eager) and tables are kept per code version; chord/host/registry.go and object.go follow, held by the registry and lifetime tests."
 
 [[files]]
 path = "packages/chord/src/reload.ts"
@@ -552,70 +552,70 @@ path = "packages/chord/src/services/consumer.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (the service runtime is replaced by handles: record.ts HandleImpl and remote.ts RemoteHandle, ported in chord/host/record.go and remote.go). PiG removes its 1.1.0 port, internal/chord/binding.go and binding_async.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (the service runtime is replaced by handles: record.ts HandleImpl and remote.ts RemoteHandle, ported in chord/host/record.go and remote.go). Ompig removes its 1.1.0 port, internal/chord/binding.go and binding_async.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/errors.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (service errors are replaced by errors.ts ChordError and codes, ported in chord/host/errors.go). PiG removes its 1.1.0 port, internal/chord/types.go error codes, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (service errors are replaced by errors.ts ChordError and codes, ported in chord/host/errors.go). Ompig removes its 1.1.0 port, internal/chord/types.go error codes, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/handle.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (service handles are replaced by record.ts HandleImpl, ported in chord/host/record.go). PiG removes its 1.1.0 port, internal/chord/views.go and facets.go serviceSlot, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (service handles are replaced by record.ts HandleImpl, ported in chord/host/record.go). Ompig removes its 1.1.0 port, internal/chord/views.go and facets.go serviceSlot, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/instances.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (keyed service instances are replaced by host records keyed by address). PiG removes its 1.1.0 port, internal/chord/keyed.go instanceDirectory, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (keyed service instances are replaced by host records keyed by address). Ompig removes its 1.1.0 port, internal/chord/keyed.go instanceDirectory, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/loopback.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (the loopback service transport is replaced by link.ts memoryLinkPair, ported in chord/host/link.go). PiG removes its 1.1.0 port, internal/chord/endpoint.go NewLoopbackTransport, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (the loopback service transport is replaced by link.ts memoryLinkPair, ported in chord/host/link.go). Ompig removes its 1.1.0 port, internal/chord/endpoint.go NewLoopbackTransport, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/provider.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (service providers are replaced by host.serve and records). PiG removes its 1.1.0 port, internal/chord/provider.go and endpoint.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (service providers are replaced by host.serve and records). Ompig removes its 1.1.0 port, internal/chord/provider.go and endpoint.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/state-codec.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (state is encoded by the connection's delta encoder: connection.ts onSub and wire.ts state frames, ported in chord/host/connection.go). PiG removes its 1.1.0 port, internal/chord/state_codec.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (state is encoded by the connection's delta encoder: connection.ts onSub and wire.ts state frames, ported in chord/host/connection.go). Ompig removes its 1.1.0 port, internal/chord/state_codec.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/state-internals.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0; its replicated-state internals moved to src/state.ts. chord/state.go ReplicatedStateInternals serves the 1.2.0 file, and internal/chord/state.go replicaCore still ports the 1.1.0 internals for internal/experimental. Missing: deleting the internal/chord copy with the experimental runtime cutover, or a numbered decision to keep it. PiG removes its 1.1.0 port, internal/chord/state.go replicaCore (chord/state.go ReplicatedStateInternals stays as the port of src/state.ts), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0; its replicated-state internals moved to src/state.ts. chord/state.go ReplicatedStateInternals serves the 1.2.0 file, and internal/chord/state.go replicaCore still ports the 1.1.0 internals for internal/experimental. Missing: deleting the internal/chord copy with the experimental runtime cutover, or a numbered decision to keep it. Ompig removes its 1.1.0 port, internal/chord/state.go replicaCore (chord/state.go ReplicatedStateInternals stays as the port of src/state.ts), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/state.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0; replicatedState now lives in src/state.ts (its own row). PiG removes its 1.1.0 port, internal/chord/state.go mutable, attached and replica states (chord/state.go stays as the port of src/state.ts), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0; replicatedState now lives in src/state.ts (its own row). Ompig removes its 1.1.0 port, internal/chord/state.go mutable, attached and replica states (chord/state.go stays as the port of src/state.ts), together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/services/wire.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 (service wire messages are replaced by the wire.ts Frame union, ported in chord/host/wire.go). PiG removes its 1.1.0 port, internal/chord/state_wire.go, state_wire_parse.go and wire.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
+rationale = "Removed in Pi 1.2.0 (service wire messages are replaced by the wire.ts Frame union, ported in chord/host/wire.go). Ompig removes its 1.1.0 port, internal/chord/state_wire.go, state_wire_parse.go and wire.go, together with internal/experimental, its only importer. The Chord 1.2.0 port stays: chord, chord/host, chord/context, chord/delta and internal/chord/chordjson."
 
 [[files]]
 path = "packages/chord/src/state.ts"
@@ -734,7 +734,7 @@ path = "packages/codemode/src/runtime/worker.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "worker.ts is the entry module of a Node worker_threads Worker: imported in the worker, it reads workerData, starts startVm with an Atomics interrupt flag on a SharedArrayBuffer, relays parentPort messages to the session, and posts a `crash` message when startVm rejects. PiG has no worker_threads Worker and no worker entry file: Go's CodemodeSandbox (codemode/sandbox.go with codemode/workerlauncher.go) runs each VM on a goroutine in the process, with an atomic interrupt flag and results delivered through a channel, and the Cloudflare Worker host runs the codemode TinyGo module (codemode/serve_tinygo.go, durable/core/host/cf/src/codemode/) in workerd, which is the counterpart of serveCodemodeRemote, not of worker.ts. The behavior worker.ts contributes is ported in workerlauncher.go and tested under host.ts's row; only the text of a VM that cannot start differs (`Failed to start the VM: <cause>` against `<Name>: <message>` of QuickJS.create), because the cause is an engine error that wazero and quickjs-wasi word differently. The 1.2.0 change (since 1.1.0) moves the VM driver into vm.ts, which codemode/vmdriver.go carries."
+rationale = "worker.ts is the entry module of a Node worker_threads Worker: imported in the worker, it reads workerData, starts startVm with an Atomics interrupt flag on a SharedArrayBuffer, relays parentPort messages to the session, and posts a `crash` message when startVm rejects. Ompig has no worker_threads Worker and no worker entry file: Go's CodemodeSandbox (codemode/sandbox.go with codemode/workerlauncher.go) runs each VM on a goroutine in the process, with an atomic interrupt flag and results delivered through a channel, and the Cloudflare Worker host runs the codemode TinyGo module (codemode/serve_tinygo.go, durable/core/host/cf/src/codemode/) in workerd, which is the counterpart of serveCodemodeRemote, not of worker.ts. The behavior worker.ts contributes is ported in workerlauncher.go and tested under host.ts's row; only the text of a VM that cannot start differs (`Failed to start the VM: <cause>` against `<Name>: <message>` of QuickJS.create), because the cause is an engine error that wazero and quickjs-wasi word differently. The 1.2.0 change (since 1.1.0) moves the VM driver into vm.ts, which codemode/vmdriver.go carries."
 
 [[files]]
 path = "packages/codemode/src/source.ts"
@@ -769,42 +769,42 @@ path = "packages/coding-agent/src/cli/experimental/cli.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/commands.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/commands.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/cli/experimental/command-options.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/commands_types.go and command_parse.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/commands_types.go and command_parse.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/cli/experimental/command.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/commands_types.go and command_parse.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/commands_types.go and command_parse.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/cli/experimental/commands/client.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/commands_types.go and commands.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/commands_types.go and commands.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/cli/experimental/commands/server.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/commands_types.go and commands.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/commands_types.go and commands.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/client/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Pi 1.2.0 deletes src/client/index.ts, the barrel `export * from \"@earendil-works/pi-client\"` behind the source-only `./client` subpath export; 1.0.4→1.1.0 left it unchanged. PiG never had a Go counterpart for the barrel: the 1.0.x PORT_MAP row said `(not ported: remote-session capability via A2A, spec 482; pi-client cloud SDK not portable)` with status n/a, and c3147b4e35 dropped that row. A TypeScript re-export module has no Go form (language mechanic: Go packages are imported directly), so its deletion changes no PiG behavior. PiG removes the Go port of packages/client (internal/experimental/client) with the rest of the experimental stack, which Pi 1.2.0 also removed."
+rationale = "Pi 1.2.0 deletes src/client/index.ts, the barrel `export * from \"@earendil-works/pi-client\"` behind the source-only `./client` subpath export; 1.0.4→1.1.0 left it unchanged. Ompig never had a Go counterpart for the barrel: the 1.0.x PORT_MAP row said `(not ported: remote-session capability via A2A, spec 482; pi-client cloud SDK not portable)` with status n/a, and c3147b4e35 dropped that row. A TypeScript re-export module has no Go form (language mechanic: Go packages are imported directly), so its deletion changes no Ompig behavior. Ompig removes the Go port of packages/client (internal/experimental/client) with the rest of the experimental stack, which Pi 1.2.0 also removed."
 
 [[files]]
 path = "packages/coding-agent/src/core/agent-session.ts"
@@ -902,7 +902,7 @@ path = "packages/coding-agent/src/core/model-config.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:internal/codingagent/configschema/compat_schema_upstream_test.go"]
-rationale = "71023aec→8efd314f: Pi 8efd314f adds descriptions and defaults to the models.json schema (ModelsJsonSchemas for its docs generator) without changing validation. internal/codingagent/configschema/models.go carries them; schemas/models.schema.json is byte-identical to Pi's 1.3.0+8efd314f schema. The docs generator (scripts/generate-references.ts) has no PiG counterpart."
+rationale = "71023aec→8efd314f: Pi 8efd314f adds descriptions and defaults to the models.json schema (ModelsJsonSchemas for its docs generator) without changing validation. internal/codingagent/configschema/models.go carries them; schemas/models.schema.json is byte-identical to Pi's 1.3.0+8efd314f schema. The docs generator (scripts/generate-references.ts) has no Ompig counterpart."
 
 [[files]]
 path = "packages/coding-agent/src/core/model-resolver.ts"
@@ -992,8 +992,8 @@ rationale = "Pi cea25743 adds sessionShareDestination; schemas/settings.schema.j
 path = "packages/coding-agent/src/core/slash-commands.ts"
 change = "modified"
 disposition = "designed-out"
-evidence = ["test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToPiGForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination"]
-rationale = "Pi cea25743 rewords the /share description for its configurable destination; PiG's /share always uploads to the PiG gateway and keeps the D64 description."
+evidence = ["test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToOmpigForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination"]
+rationale = "Pi cea25743 rewords the /share description for its configurable destination; Ompig's /share always uploads to the Ompig gateway and keeps the D64 description."
 
 [[files]]
 path = "packages/coding-agent/src/core/tools/render-utils.ts"
@@ -1028,315 +1028,315 @@ path = "packages/coding-agent/src/experimental/cli.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, coding/cli/experimental_entry.go and cmd/pig/main_experimental.go (cmd/pig/main_default.go becomes the untagged main.go), together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, coding/cli/experimental_entry.go and cmd/ompig/main_experimental.go (cmd/ompig/main_default.go becomes the untagged main.go), together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/client-runtime.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/client_runtime.go, client_runtime_types.go, client_runtime_sources.go and client_runtime_activate.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/client_runtime.go, client_runtime_types.go, client_runtime_sources.go and client_runtime_activate.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/client-tui-chat.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/client_tui_chat.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/client_tui_chat.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/client-tui.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/client_tui.go and client_tui_sources.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/client_tui.go and client_tui_sources.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/client.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/client_run.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/client_run.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/commands.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = ["test:coding/cli/experimental_entry_test.go#TestStableEntryDoesNotDispatchExperimentalCommands"]
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, coding/cli/experimental_entry.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable pig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `pig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, coding/cli/experimental_entry.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it. The stable ompig entry never dispatched the experimental commands: TestStableEntryDoesNotDispatchExperimentalCommands runs `ompig server|client --server-id invalid --version` with PI_EXPERIMENTAL=1 and gets the stable CLI's version."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/coordinator-entry.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/coordinator_entry.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/coordinator_entry.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/coordinator.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/coordinator.go, coordinator_connection.go and coordinator_transport.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/coordinator.go, coordinator_connection.go and coordinator_transport.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/harness-setup.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/harness_setup.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/harness_setup.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/main.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/main and durableagent/args.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/main and durableagent/args.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/prompt.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/prompt.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/prompt.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/runtime.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/runtime.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/runtime.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/sessions.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/sessions.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/sessions.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/subagent.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/subagent.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/subagent.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/tui.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durable_tui.go and durable_tui_run.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durable_tui.go and durable_tui_run.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/plugin.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack. PiG never ported it: it is the source-only \"@earendil-works/pi-coding-agent/experimental/plugin\" import specifier that plugins/bundled.ts handed to in-process TypeScript facet bundles, and PiG has no in-process JavaScript module loader. Its deletion changes no PiG behavior; PiG removes the facet bundle runtime that consumed it (internal/experimental) with the rest of the stack."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack. Ompig never ported it: it is the source-only \"@earendil-works/pi-coding-agent/experimental/plugin\" import specifier that plugins/bundled.ts handed to in-process TypeScript facet bundles, and Ompig has no in-process JavaScript module loader. Its deletion changes no Ompig behavior; Ompig removes the facet bundle runtime that consumed it (internal/experimental) with the rest of the stack."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/plugins/bundled.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/facet_bundle.go, node_facets.go, node_facets_host.go and node_facets_protocol.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/facet_bundle.go, node_facets.go, node_facets_host.go and node_facets_protocol.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/plugins/package.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/plugin_package_profile.go, plugin_package_build.go and plugin_package_metadata.go (and with them the github.com/evanw/esbuild module), together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/plugin_package_profile.go, plugin_package_build.go and plugin_package_metadata.go (and with them the github.com/evanw/esbuild module), together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/process.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/process.go, process_unix.go and process_windows.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/process.go, process_unix.go and process_windows.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/radius-auth.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/radius_auth.go (a library no application path selected; D64 loses its experimental Radius paragraph), together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/radius_auth.go (a library no application path selected; D64 loses its experimental Radius paragraph), together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/radius-relay.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/radius_relay.go, radius_client.go, radius_host.go and radius_socket.go (a library no application path composed; D64 loses its experimental Radius paragraph), together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/radius_relay.go, radius_client.go, radius_host.go and radius_socket.go (a library no application path composed; D64 loses its experimental Radius paragraph), together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/server.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/server_runtime.go, server_lifetime.go, server_profile.go, session_directory.go, server_directory.go, server_activation.go, server_options.go and server_process.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/server_runtime.go, server_lifetime.go, server_profile.go, session_directory.go, server_directory.go, server_activation.go, server_options.go and server_process.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/agent-controller-provider.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/agent_controller_provider.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/agent_controller_provider.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/agent-controller.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/agent_controller.go, agent_controller_adapters.go and agent_controller_invocation.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/agent_controller.go, agent_controller_adapters.go and agent_controller_invocation.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/connection.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/connection.go and connection_types.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/connection.go and connection_types.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/models-provider.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/models_provider.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/models_provider.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/models.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/models.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/models.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/plugins.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/plugins.go and plugins_adapters.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/plugins.go and plugins_adapters.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/presentation-ui.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/presentation_ui.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/presentation_ui.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/server.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/server.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/server.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/sessions.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/sessions.go and sessions_adapters.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/sessions.go and sessions_adapters.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/slash-commands-provider.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/slash_commands_provider.go and slash_commands_builtin.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/slash_commands_provider.go and slash_commands_builtin.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/slash-commands.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/slash_commands.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/slash_commands.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/transcript-provider.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/transcript_provider.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/transcript_provider.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/transcript.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/transcript.go and conversation_view.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/transcript.go and conversation_view.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/services/worker.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/services/worker.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/services/worker.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/session-catalog.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/session_catalog.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/session_catalog.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/session-worker-manager.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/session_worker_manager.go and session_worker_events.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/session_worker_manager.go and session_worker_events.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/session-worker.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/worker_lifecycle.go, session_worker_process.go, session_worker_control.go and session_worker_factory.go, together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/worker_lifecycle.go, session_worker_process.go, session_worker_control.go and session_worker_factory.go, together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/vacation/harness-setup.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream with the vacation planner; PiG removes its port, internal/experimental/vacation (harness_setup.go), which had no caller outside its own program and tests."
+rationale = "Removed upstream with the vacation planner; Ompig removes its port, internal/experimental/vacation (harness_setup.go), which had no caller outside its own program and tests."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/vacation/main.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream with the vacation planner; PiG removes its port, the program internal/experimental/vacation/main, and with the rest of the experimental stack internal/experimental/durableagent (durable/main.ts row)."
+rationale = "Removed upstream with the vacation planner; Ompig removes its port, the program internal/experimental/vacation/main, and with the rest of the experimental stack internal/experimental/durableagent (durable/main.ts row)."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/vacation/runtime.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream with the vacation planner; PiG removes the vacation part of its port (internal/experimental/vacation/harness_setup.go) and, with the rest of the experimental stack, the shared internal/experimental/durableagent/runtime.go (durable/runtime.ts row)."
+rationale = "Removed upstream with the vacation planner; Ompig removes the vacation part of its port (internal/experimental/vacation/harness_setup.go) and, with the rest of the experimental stack, the shared internal/experimental/durableagent/runtime.go (durable/runtime.ts row)."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/vacation/sessions.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durableagent/sessions.go (shared with durable/sessions.ts), together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durableagent/sessions.go (shared with durable/sessions.ts), together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/vacation/tui.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). PiG removes its port, internal/experimental/durable_tui.go and durable_tui_run.go (shared with durable/tui.ts), together with the rest of internal/experimental, cmd/pig-experimental and the pig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
+rationale = "Removed in Pi 1.2.0 with the experimental server, client and plugin stack (coding-agent src/experimental except source-resolver.ts, src/cli/experimental, and the client, protocol and server packages). Ompig removes its port, internal/experimental/durable_tui.go and durable_tui_run.go (shared with durable/tui.ts), together with the rest of internal/experimental, cmd/ompig-experimental and the ompig_experimental entry (coding/cli/experimental_entry.go); nothing outside that stack used it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/vacation/vacation.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream with the vacation planner; PiG removes its port, internal/experimental/vacation (vacation.go and its tests), which had no caller outside its own program and tests."
+rationale = "Removed upstream with the vacation planner; Ompig removes its port, internal/experimental/vacation (vacation.go and its tests), which had no caller outside its own program and tests."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/codemode/execute.ts"
@@ -1378,7 +1378,7 @@ path = "packages/coding-agent/src/extensions/mcp/cli.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthGivesUpOnPigMcpLoginAfterTimeoutAlsoWhileTheAuthorizationServerHangs", "test:coding/cli/mcp_command_test.go#TestPigMcpHelpIsPisHelpWithPiGsIdentity", "test:coding/mcpext/cli_upstream_test.go#TestMcpCommandListReportsThatAServerOffersResourcesWithoutCountingThem"]
-rationale = "1.0.4 to 1.1.0 (reviewed row carried): `pig mcp login --timeout` limits the whole sign-in (#10565); coding/mcpext/cli.go runs SignInMcpServer under context.WithTimeout. 1.1.0 to 1.2.0: the --timeout help line reads 'Time limit for the whole sign-in (default: 300)' (coding/mcpext/cli.go usage, asserted by TestPigMcpHelpIsPisHelpWithPiGsIdentity), and `mcp list` reports `resources: true` in JSON and `  offers resources` in text instead of resource and template counts, because resources are no longer listed at connect (cli.go list report; TestMcpCommandListReportsThatAServerOffersResourcesWithoutCountingThem)."
+rationale = "1.0.4 to 1.1.0 (reviewed row carried): `ompig mcp login --timeout` limits the whole sign-in (#10565); coding/mcpext/cli.go runs SignInMcpServer under context.WithTimeout. 1.1.0 to 1.2.0: the --timeout help line reads 'Time limit for the whole sign-in (default: 300)' (coding/mcpext/cli.go usage, asserted by TestPigMcpHelpIsPisHelpWithPiGsIdentity), and `mcp list` reports `resources: true` in JSON and `  offers resources` in text instead of resource and template counts, because resources are no longer listed at connect (cli.go list report; TestMcpCommandListReportsThatAServerOffersResourcesWithoutCountingThem)."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/index.ts"
@@ -1434,7 +1434,7 @@ path = "packages/coding-agent/src/index.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:tui/read_header_string_range_test.go#TestFormatReadLineRangeMatchesPi"]
-rationale = "3daa2028→b06c1f2c: Pi 91014991 exports formatReadLineRange from render-utils; PiG exports it as tui.FormatReadLineRange."
+rationale = "3daa2028→b06c1f2c: Pi 91014991 exports formatReadLineRange from render-utils; Ompig exports it as tui.FormatReadLineRange."
 
 [[files]]
 path = "packages/coding-agent/src/main.ts"
@@ -1482,8 +1482,8 @@ rationale = "rebuild() sets the box padding from outputPad on every rebuild, so 
 path = "packages/coding-agent/src/modes/interactive/components/settings-selector.ts"
 change = "modified"
 disposition = "ported"
-evidence = ["test:internal/codingagent/settings_selector_oracle_test.go#TestSettingsSelectorMatchesPi", "test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToPiGForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination"]
-rationale = "The show-hardware-cursor description is 'Use the terminal cursor instead of Pi's drawn cursor' and anthropicExtraUsage reads SETTINGS_DEFAULTS (true). Red before: 314 of 576 probes. Pi cea25743 adds a Session share destination item; PiG omits it because /share has one destination (D64)."
+evidence = ["test:internal/codingagent/settings_selector_oracle_test.go#TestSettingsSelectorMatchesPi", "test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToOmpigForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination"]
+rationale = "The show-hardware-cursor description is 'Use the terminal cursor instead of Pi's drawn cursor' and anthropicExtraUsage reads SETTINGS_DEFAULTS (true). Red before: 314 of 576 probes. Pi cea25743 adds a Session share destination item; Ompig omits it because /share has one destination (D64)."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/skill-invocation-message.ts"
@@ -1517,7 +1517,7 @@ rationale = "3daa2028→b06c1f2c: Pi 91014991: the /tree read row uses formatRea
 path = "packages/coding-agent/src/modes/interactive/interactive-mode.ts"
 change = "modified"
 disposition = "ported"
-evidence = ["test:internal/codingagent/program_status_reporter_test.go#TestInteractiveModeForwardsAgentEventsToTheProgramStatusReporter", "test:internal/codingagent/program_status_reporter_test.go#TestExtensionDialogsReportBlockedWhileTheyAreOpen", "test:internal/codingagent/rebind_ui_upstream_test.go#TestRebindResetsProgramStatus", "test:internal/codingagent/output_pad_test.go#TestApplyOutputPadUpdatesBlocksInPlace", "test:internal/codingagent/interactive_selection_reset_test.go#TestRenderSessionEntriesDropsFullscreenTextSelection", "test:tui/editor_status_test.go#TestEmbeddedCompactionStatusTakesTheEditorBorderColorLikeWorking", "test:coding/extension/host/subprocess/runtime_node_editor_component_test.go#TestNodeEditorComponentIsPisCustomEditor", "test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToPiGForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination", "test:internal/codingagent/ext_ui_custom_stack_test.go#TestHostCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay", "test:internal/codingagent/ext_ui_custom_stack_test.go#TestRemoteCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay"]
+evidence = ["test:internal/codingagent/program_status_reporter_test.go#TestInteractiveModeForwardsAgentEventsToTheProgramStatusReporter", "test:internal/codingagent/program_status_reporter_test.go#TestExtensionDialogsReportBlockedWhileTheyAreOpen", "test:internal/codingagent/rebind_ui_upstream_test.go#TestRebindResetsProgramStatus", "test:internal/codingagent/output_pad_test.go#TestApplyOutputPadUpdatesBlocksInPlace", "test:internal/codingagent/interactive_selection_reset_test.go#TestRenderSessionEntriesDropsFullscreenTextSelection", "test:tui/editor_status_test.go#TestEmbeddedCompactionStatusTakesTheEditorBorderColorLikeWorking", "test:coding/extension/host/subprocess/runtime_node_editor_component_test.go#TestNodeEditorComponentIsPisCustomEditor", "test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToOmpigForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination", "test:internal/codingagent/ext_ui_custom_stack_test.go#TestHostCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay", "test:internal/codingagent/ext_ui_custom_stack_test.go#TestRemoteCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay"]
 rationale = "1.0.4 to 1.1.0 (reviewed row carried, ported): ProgramStatusReporter calls, outputPad on every transcript component and tool card, the tool durationMs, the fullscreen selection reset and in-place outputPad updates, with the cited internal/codingagent tests (the full 1.1.0 evidence list is in v1.1.0.toml). 1.1.0 to 1.2.0 (#10810): isWorkingStatusEditor is renamed isEmbeddedStatus (not observable), and the compaction_start and auto-compaction status indicators pass the editor's border color (or the thinking-level border color) to CompactionStatusIndicator when the editor embeds the working status. Go applies the color where the editor draws an embedded status: tui/editor_status.go renderStatusBorder (9721c489d0) for the built-in and Go custom editors, and runtime-node/editor-component.mjs for a delegated extension editor, each with the editor's border color or, when the editor has none, the thinking level's border color; the two cited editor tests prove both paths against Pi's rows. Pi cea25743 wires the share destination selector item; omitted under D64. Pi a4f67eb6 (#10999): showExtensionCustom's close() hides the overlay through its own handle (overlayHandle?.hide(), :2999) instead of ui.hideOverlay(), which removes the topmost overlay. customCall.teardown (ext_ui_custom.go) and RunRemoteOverlay (ext_ui_context.go) hide the handle they showed; Pi's test \"closing a lower $lowerKind overlay custom UI removes its own overlay, not the topmost one\" is TestHostCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay (capturing and non-capturing lower overlay) and the subprocess twin TestRemoteCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay; reverting either site fails them."
 
 [[files]]
@@ -1531,8 +1531,8 @@ rationale = "internal/codingagent/program_status_reporter.go ports the reporter;
 path = "packages/coding-agent/src/modes/interactive/session-share.ts"
 change = "modified"
 disposition = "designed-out"
-evidence = ["test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToPiGForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination"]
-rationale = "Pi cea25743 picks gist or Radius by sessionShareDestination; PiG /share uploads only to pi-in-go.dev (D64)."
+evidence = ["test:internal/codingagent/session_share_destination_test.go#TestShareHandlerUploadsToOmpigForEveryShareDestination", "test:internal/codingagent/session_share_destination_test.go#TestSettingsSelectorOmitsShareDestination"]
+rationale = "Pi cea25743 picks gist or Radius by sessionShareDestination; Ompig /share uploads only to ompig.dev (D64)."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/theme/theme-json.ts"
@@ -1574,7 +1574,7 @@ path = "packages/coding-agent/src/package-manager-cli.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = ["test:internal/codingagent/selfupdate_test.go#TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable"]
-rationale = "The only 1.1.0 change is pruneManagedReleases (#10392), which deletes old npm managed-release directories after pi update and keeps the new release and the running one. A standalone pig has no release directory (D39): a replacement keeps only the new executable, which the test asserts, so there is nothing to prune."
+rationale = "The only 1.1.0 change is pruneManagedReleases (#10392), which deletes old npm managed-release directories after pi update and keeps the new release and the running one. A standalone ompig has no release directory (D39): a replacement keeps only the new executable, which the test asserts, so there is nothing to prune."
 
 [[files]]
 path = "packages/coding-agent/src/utils/ansi.ts"
@@ -1707,7 +1707,7 @@ path = "packages/durable/src/harness/inbox.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/submissions_pi_oracle_test.go#TestAdmitSubmissionMatchesPiOnSeededPrograms", "test:durable/harness/submissions_pi_oracle_test.go#TestAdmitInputEntryMatchesPiOnSeededPrograms", "test:durable/harness/submissions_display_only_test.go#TestDisplayOnlyWritesAreAppendedAtOnce", "test:durable/harness/harness_inbox_test.go#TestInbox"]
-rationale = "The 1.1.0 change adds InboxItem.entry for inputs placed as an application entry, appendInput, pickInputEntry, isDisplayOnly and hasQueuedReset. Fixed in this delta: Pig had no isDisplayOnly or hasQueuedReset, so a data-only write queued behind a busy run and TestAdmitSubmissionMatchesPiOnSeededPrograms differed from Pi in 1454 answers (submission IDs diverged by one per skipped queue step). durable/harness/inbox.go now has both helpers and ApplyBoundary uses hasQueuedReset. harness_inbox_test.go and harness_ownership_test.go take Pi's queuedNote change from harness-inbox.test.ts and harness-ownership.test.ts."
+rationale = "The 1.1.0 change adds InboxItem.entry for inputs placed as an application entry, appendInput, pickInputEntry, isDisplayOnly and hasQueuedReset. Fixed in this delta: Ompig had no isDisplayOnly or hasQueuedReset, so a data-only write queued behind a busy run and TestAdmitSubmissionMatchesPiOnSeededPrograms differed from Pi in 1454 answers (submission IDs diverged by one per skipped queue step). durable/harness/inbox.go now has both helpers and ApplyBoundary uses hasQueuedReset. harness_inbox_test.go and harness_ownership_test.go take Pi's queuedNote change from harness-inbox.test.ts and harness-ownership.test.ts."
 
 [[files]]
 path = "packages/durable/src/harness/live.ts"
@@ -1742,7 +1742,7 @@ path = "packages/durable/src/harness/task-graph.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/task_graph_pi_oracle_test.go#TestTaskGraphViewMatchesPiOnSeededPrograms", "test:durable/harness/harness_task_graph_test.go#TestTaskGraphView", "test:durable/harness/harness_storage_failure_test.go#TestAFailedStorageCall"]
-rationale = "The 1.1.0 change routes commit publications through observeCommits, contains and reports a throwing observer, ends watches with session_failed, and builds CommittedWatch with a report callback. The seeded oracle compares Pi's graph view and Pig's, and TestAFailedStorageCall asserts the session_failed end of a watch and a stream. Existing tests; no mutant was run in this delta."
+rationale = "The 1.1.0 change routes commit publications through observeCommits, contains and reports a throwing observer, ends watches with session_failed, and builds CommittedWatch with a report callback. The seeded oracle compares Pi's graph view and Ompig's, and TestAFailedStorageCall asserts the session_failed end of a watch and a stream. Existing tests; no mutant was run in this delta."
 
 [[files]]
 path = "packages/durable/src/harness/tool.ts"
@@ -1770,7 +1770,7 @@ path = "packages/durable/src/harness/view.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:durable/harness/view_pi_oracle_test.go#TestConversationViewsMatchPi", "test:durable/harness/harness_view_test.go#TestConversationView", "test:durable/harness/harness_storage_failure_test.go#TestAFailedStorageCall"]
-rationale = "The 1.1.0 change moves view mounts to observeCommits, contains a throwing observer and reports it through the Harness (the others still get the revision), and ends observers with the Session failure on close. The seeded oracle compares Pi's views and Pig's. Existing tests; no mutant was run in this delta."
+rationale = "The 1.1.0 change moves view mounts to observeCommits, contains a throwing observer and reports it through the Harness (the others still get the revision), and ends observers with the Session failure on close. The seeded oracle compares Pi's views and Ompig's. Existing tests; no mutant was run in this delta."
 
 [[files]]
 path = "packages/durable/src/images/cloudflare.ts"

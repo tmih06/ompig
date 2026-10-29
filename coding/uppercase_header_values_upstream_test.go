@@ -7,14 +7,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/5661-uppercase-header-values.test.ts:33
 func TestStartupMigrationsKeepUppercaseHeaderStringsAsLiterals(t *testing.T) {
 	agentDir, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv("CUSTOM_API_KEY", "env-CUSTOM_API_KEY")
 	t.Setenv("BEARER", "env-BEARER")
 	path := filepath.Join(agentDir, "models.json")

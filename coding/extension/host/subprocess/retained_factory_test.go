@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Pi 0.87.1 reload() clears the extension factory cache and invokes every factory again inside one Node process (resource-loader.ts, extensions/loader.ts). jiti (moduleCache: false) re-evaluates a .ts module; a .mjs module stays in Node's ESM cache, so its module-level state survives. PiG re-invokes the factory in the retained runtime process and applies the same loader rules.
+// Pi 0.87.1 reload() clears the extension factory cache and invokes every factory again inside one Node process (resource-loader.ts, extensions/loader.ts). jiti (moduleCache: false) re-evaluates a .ts module; a .mjs module stays in Node's ESM cache, so its module-level state survives. Ompig re-invokes the factory in the retained runtime process and applies the same loader rules.
 const retainedStateSource = `import {appendFileSync} from "node:fs";
 let moduleFactoryCalls%[1]s = 0;
 appendFileSync(%[2]q, "module\n");
@@ -703,7 +703,7 @@ export default function (pi) {
 	}
 }
 
-// Pi /reload keeps a native ESM .js entry (a "type": "module" package) in Node's module cache: jiti imports it natively, so an edit, even a syntax error, is not seen, and the factory runs again with the module's state. Probed with Pi 0.87.1's own loadExtensionsCached after clearExtensionCache per reload: old-1, old-2, old-3 and no load error. PiG evaluates an edited ES module entry again (D93), so an edit runs, an edit that breaks the module fails its load as an edited TypeScript extension's does in Pi, and the next valid edit loads; an unedited reload keeps the module and its state.
+// Pi /reload keeps a native ESM .js entry (a "type": "module" package) in Node's module cache: jiti imports it natively, so an edit, even a syntax error, is not seen, and the factory runs again with the module's state. Probed with Pi 0.87.1's own loadExtensionsCached after clearExtensionCache per reload: old-1, old-2, old-3 and no load error. Ompig evaluates an edited ES module entry again (D93), so an edit runs, an edit that breaks the module fails its load as an edited TypeScript extension's does in Pi, and the next valid edit loads; an unedited reload keeps the module and its state.
 func TestNodeReloadEvaluatesAnEditedTypeModuleJsEntryAgain(t *testing.T) {
 	skipWithoutNodeExtensions(t)
 	nodeCellRequireNode(t)

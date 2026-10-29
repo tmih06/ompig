@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestConformance_OversizedToolResultIsAnsweredAcrossSDKs: the wire refuses a frame past 128 MiB in every SDK. The host waits for each request's response, so a result that cannot be framed must be answered

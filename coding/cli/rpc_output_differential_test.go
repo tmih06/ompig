@@ -11,9 +11,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/rpcclient"
 )
 
 // The RPC event encoder writes each event member into the output line. These tests hold its text to the text of the encoder it replaced: rpcObject.MarshalJSON, which encodes every member apart and has the line encoder compact the result.

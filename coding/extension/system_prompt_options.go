@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"maps"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // BuildSystemPromptOptions mirrors upstream

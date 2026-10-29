@@ -12,7 +12,7 @@ import (
 // anonymousFile creates a file in dir that Windows deletes when its handle closes, also when the process ends.
 func anonymousFile(dir string) (*os.File, error) {
 	//portlint:allow clock the time only makes the snapshot file name unique (CREATE_NEW fails on a clash); no time value reaches Pi-facing output
-	name := filepath.Join(dir, ".pig-snapshot-"+strconv.FormatInt(time.Now().UnixNano(), 36)+"-"+strconv.Itoa(os.Getpid()))
+	name := filepath.Join(dir, ".ompig-snapshot-"+strconv.FormatInt(time.Now().UnixNano(), 36)+"-"+strconv.Itoa(os.Getpid()))
 	path, err := windows.UTF16PtrFromString(name)
 	if err != nil {
 		return nil, err

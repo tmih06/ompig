@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	startupQueryOrderChildEnv = "PIG_TEST_STARTUP_QUERY_ORDER_CHILD"
-	startupQueryOrderModeEnv  = "PIG_TEST_STARTUP_QUERY_ORDER_MODE"
+	startupQueryOrderChildEnv = "OMPIG_TEST_STARTUP_QUERY_ORDER_CHILD"
+	startupQueryOrderModeEnv  = "OMPIG_TEST_STARTUP_QUERY_ORDER_MODE"
 )
 
 // Pi 1.2.0 writes the terminal color query before its first frame. TUI.start() only requests the first frame: requestRender()

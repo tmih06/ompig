@@ -10,7 +10,7 @@
 # absent from the next `--list-models`.
 #
 # The fixture agent dir holds a saved list (the key comes from OPENROUTER_API_KEY) of two models
-# that are not in the bundled catalog. Pig used to append every bundled model of an
+# that are not in the bundled catalog. Ompig used to append every bundled model of an
 # authenticated provider after the registry's list, so it printed the whole bundled OpenRouter
 # catalog besides the two saved models. Table equality proves the two saved rows and nothing
 # else are listed, with identical context, max-out, thinking and images columns.
@@ -29,9 +29,9 @@ args = ["--list-models"]
 timeout_seconds = 20
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/pig-agent-personalized", "OPENROUTER_API_KEY=fixture-openrouter-key"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/ompig-agent-personalized", "OPENROUTER_API_KEY=fixture-openrouter-key"]
 pi = ["PI_CODING_AGENT_DIR=../model-resolver-selector/testdata/pi-agent-personalized", "OPENROUTER_API_KEY=fixture-openrouter-key"]
-pig_args = ["--no-extensions", "--offline"]
+ompig_args = ["--no-extensions", "--offline"]
 pi_args = ["--no-extensions", "--offline"]
 
 [assert]

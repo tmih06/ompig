@@ -20,7 +20,7 @@ const (
 // widgetRendererID is the key of the renderer installed for the widget key in Extension.surfaces.
 func widgetRendererID(key string) string { return widgetMethod + ":" + key }
 
-// pig additive (D19): Pi installs a footer or header as an in-process component
+// ompig additive (D19): Pi installs a footer or header as an in-process component
 // factory that the TUI renders every frame; a subprocess SDK renders at the host
 // width itself and sends the width with the rows.
 type surfaceRenderer struct {

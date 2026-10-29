@@ -16,7 +16,7 @@ func TestBuildACPBuildsLocalSourceOffline(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(src, "main.go"), []byte("package main\n\nfunc main() {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	target := filepath.Join(t.TempDir(), "bin", "pig-acp")
+	target := filepath.Join(t.TempDir(), "bin", "ompig-acp")
 	var stderr bytes.Buffer
 	if err := buildACP(t.Context(), src, target, &stderr); err != nil {
 		t.Fatalf("buildACP: %v\n%s", err, stderr.String())
@@ -27,9 +27,9 @@ func TestBuildACPBuildsLocalSourceOffline(t *testing.T) {
 }
 
 func TestACPInstallTargetBesidePigBin(t *testing.T) {
-	t.Setenv("PIG_BIN", filepath.Join(t.TempDir(), "bin", "pig"))
+	t.Setenv("OMPIG_BIN", filepath.Join(t.TempDir(), "bin", "ompig"))
 	got, err := acpBuildTarget()
-	if err != nil || filepath.Dir(got) != filepath.Dir(os.Getenv("PIG_BIN")) || !strings.HasPrefix(filepath.Base(got), "pig-acp") {
+	if err != nil || filepath.Dir(got) != filepath.Dir(os.Getenv("OMPIG_BIN")) || !strings.HasPrefix(filepath.Base(got), "ompig-acp") {
 		t.Fatalf("target = %q, %v", got, err)
 	}
 }
@@ -39,7 +39,7 @@ func TestACPCommandRoutingAndUsage(t *testing.T) {
 	if runACPCommand([]string{"models"}, &out, &errb) != -1 {
 		t.Fatal("must ignore other commands")
 	}
-	if code := runACPCommand([]string{"acp", "bogus"}, &out, &errb); code != 2 || !strings.Contains(errb.String(), "pig acp install") {
+	if code := runACPCommand([]string{"acp", "bogus"}, &out, &errb); code != 2 || !strings.Contains(errb.String(), "ompig acp install") {
 		t.Fatalf("code=%d %q", code, errb.String())
 	}
 }

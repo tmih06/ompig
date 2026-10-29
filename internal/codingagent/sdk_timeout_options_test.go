@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi: packages/coding-agent/src/core/settings-manager.ts:1042 (SettingsManager.getWebSocketConnectTimeoutMs).

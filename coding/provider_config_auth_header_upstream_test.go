@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/src/core/extensions/types.ts:1884-1888 (ProviderConfig.authHeader: "adds Authorization: Bearer <resolved apiKey>") through registerProvider (model-registry.ts), with the request resolution of model-registry.test.ts:2037 ("getApiKeyAndHeaders resolves authHeader on every request"): the key command runs on each request, and only a provider registered with authHeader sends the Authorization header.

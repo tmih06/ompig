@@ -9,7 +9,7 @@ function removeAll() {
   live.clear();
 }
 
-// Each test file runs in its own Node process. Remove every scratch directory when that process exits, including a failing assertion, an uncaught error, and SIGINT or SIGTERM. A SIGKILL can still leave the directory, which carries the caller's pig- prefix.
+// Each test file runs in its own Node process. Remove every scratch directory when that process exits, including a failing assertion, an uncaught error, and SIGINT or SIGTERM. A SIGKILL can still leave the directory, which carries the caller's ompig- prefix.
 process.on("exit", removeAll);
 for (const [signal, code] of [["SIGINT", 130], ["SIGTERM", 143]]) {
   process.on(signal, () => process.exit(code));

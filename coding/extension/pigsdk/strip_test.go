@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_go && !pig_strip_extension_sdk_rust && !pig_strip_extension_sdk_python
+//go:build !ompig_strip_extension_sdk_go && !ompig_strip_extension_sdk_rust && !ompig_strip_extension_sdk_python
 
 package pigsdk
 
@@ -9,12 +9,12 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/contentdirs"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // D92: a stripped extension SDK is neither staged nor reported as an unknown
-// language: `pig reload --sdk-path <lang>`, `pig extension init --lang <lang>`
+// language: `ompig reload --sdk-path <lang>`, `ompig extension init --lang <lang>`
 // (EnsureSyncedLang, SDKDirFor) and `--sdk-version` name the strip. The other
 // languages stage as before.
 func TestStripExtensionSDKRuntimeReportsStrip(t *testing.T) {
@@ -25,7 +25,7 @@ func TestStripExtensionSDKRuntimeReportsStrip(t *testing.T) {
 	} {
 		t.Run(tc.lang, func(t *testing.T) {
 			root := t.TempDir()
-			t.Setenv("PIG_HOME", root)
+			t.Setenv("OMPIG_HOME", root)
 			if _, err := SDKDirFor(root, tc.lang); err != nil {
 				t.Fatalf("stock SDKDirFor(%s): %v", tc.lang, err)
 			}
@@ -41,8 +41,8 @@ func TestStripExtensionSDKRuntimeReportsStrip(t *testing.T) {
 			}
 			for _, flag := range []string{"--sdk-path", "--sdk-version"} {
 				var stdout, stderr bytes.Buffer
-				if code := RunCommand([]string{"reload", flag, tc.lang}, &stdout, &stderr); code != 1 || stderr.String() != "pig reload: "+want+"\n" {
-					t.Fatalf("pig reload %s %s = %d, stderr %q, want %q", flag, tc.lang, code, stderr.String(), "pig reload: "+want)
+				if code := RunCommand([]string{"reload", flag, tc.lang}, &stdout, &stderr); code != 1 || stderr.String() != "ompig reload: "+want+"\n" {
+					t.Fatalf("ompig reload %s %s = %d, stderr %q, want %q", flag, tc.lang, code, stderr.String(), "ompig reload: "+want)
 				}
 			}
 			if err := EnsureSynced(root); err != nil {

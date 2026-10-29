@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -16,7 +16,7 @@ import (
 // comb-audit row 100 follow-up: a Mistral stream chunk that is valid JSON but holds a member of an unexpected type. Pi reads each member with its own
 // expression (mistral-conversations.ts:541-731): `|| 0` on the usage counts, the cached-token `??` chain, `if (choice.finish_reason)` then mapChatStopReason's
 // === switch, sanitizeSurrogates on a content item's text, and `delta.tool_calls || []` in a for-of. The rows run Pi's own stream (through @mistralai) over
-// each body and compare the final message with PiG's.
+// each body and compare the final message with Ompig's.
 func TestMistralChunkMistypedMembersMatchPi(t *testing.T) {
 	chunk := func(data string) string { return "data: " + data + "\n\n" }
 	hel := chunk(`{"id":"c","object":"chat.completion.chunk","created":1,"model":"m","choices":[{"index":0,"delta":{"role":"assistant","content":"Hel"},"finish_reason":null}]}`)
@@ -143,7 +143,7 @@ process.exit(0);
 				want[i].Tools = "null"
 			}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}

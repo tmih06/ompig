@@ -3,7 +3,7 @@ package sdk
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui"
+	"github.com/tmih06/ompig/extensions/sdk/tui"
 )
 
 // VisualTruncateResult is pi-coding-agent's VisualTruncateResult: the visual lines kept and how many were dropped.

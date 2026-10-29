@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-// armsLock is bench/evals/arms.lock, the one place the benchmarks pin the agents they compare with PiG. The bundle and
+// armsLock is bench/evals/arms.lock, the one place the benchmarks pin the agents they compare with Ompig. The bundle and
 // the image install an arm from it exactly as bench/evals' pigbench does (pigbench/arms.py), so a cluster run measures
 // the bytes the local bench measures.
 const armsLock = "bench/evals/arms.lock"
@@ -94,8 +94,8 @@ func parseArmIDs(text string) ([]string, error) {
 		if !armIDPattern.MatchString(id) || id == "." || strings.Contains(id, "..") {
 			return nil, fmt.Errorf("arm id %q: use the ids of %s", id, armsLock)
 		}
-		if strings.HasPrefix(id, "pi-") || strings.HasPrefix(id, "pig") {
-			return nil, fmt.Errorf("arm %s: an agent bundle already carries PiG (bin/pig, built from the commit) and Pi's coding agent (pi-agent/)", id)
+		if strings.HasPrefix(id, "pi-") || strings.HasPrefix(id, "ompig") {
+			return nil, fmt.Errorf("arm %s: an agent bundle already carries Ompig (bin/ompig, built from the commit) and Pi's coding agent (pi-agent/)", id)
 		}
 		if slices.Contains(ids, id) {
 			return nil, fmt.Errorf("arm %s appears twice", id)
@@ -392,7 +392,7 @@ func cmdArms(ctx context.Context, args []string, stdout, stderr io.Writer) error
 	fs := flag.NewFlagSet("arms", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	root := fs.String("root", ".", "repository root (its "+armsLock+" pins the arms)")
-	out := fs.String("out", "", "directory that receives arms/<id>/ (an agent bundle or the image's /opt/pig)")
+	out := fs.String("out", "", "directory that receives arms/<id>/ (an agent bundle or the image's /opt/ompig)")
 	arch := fs.String("arch", "amd64", "node architecture: amd64 or arm64")
 	if err := fs.Parse(args); err != nil {
 		return err

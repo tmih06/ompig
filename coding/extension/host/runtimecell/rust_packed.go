@@ -14,16 +14,16 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 // RustExtension describes one factory-style Rust SDK extension that can be
 // packed into a generated subprocess runner. The crate must expose a factory
-// function returning pig_sdk::Extension, typically:
+// function returning ompig_sdk::Extension, typically:
 //
-//	pub fn new_extension() -> pig_sdk::Extension
+//	pub fn new_extension() -> ompig_sdk::Extension
 //
 // The generated runner still runs as a subprocess and uses one socket per
 // contained extension.
@@ -73,7 +73,7 @@ func BuildRustPackedCell(ctx context.Context, cacheRoot, key string, extensions 
 	if cell, ok := reuseRustPackedCell(cacheRoot, key, normalized); ok {
 		return cell, nil
 	}
-	lockCandidates := []string{os.Getenv("PIG_SDK_RS_ROOT")}
+	lockCandidates := []string{os.Getenv("OMPIG_SDK_RS_ROOT")}
 	for _, extension := range normalized {
 		lockCandidates = append(lockCandidates, RustSDKPathOverride(extension.Root))
 	}
@@ -90,7 +90,7 @@ func BuildRustPackedCell(ctx context.Context, cacheRoot, key string, extensions 
 			}
 			cellDir := filepath.Join(cacheRoot, "cells", "rust", hash)
 			start := time.Now()
-			packageName := "pig-generated-packed-cell-" + hash[:16]
+			packageName := "ompig-generated-packed-cell-" + hash[:16]
 			artifactName := packedRunnerName(runtime.GOOS, "rust")
 			entry, err := publishArtifactWithFailureCache(ctx, cellDir, artifactName, hash, "rust", func(scratch string) (string, error) {
 				if err := os.MkdirAll(filepath.Join(scratch, "src"), 0o755); err != nil {
@@ -105,7 +105,7 @@ func BuildRustPackedCell(ctx context.Context, cacheRoot, key string, extensions 
 				if err := os.WriteFile(filepath.Join(scratch, "src", "main.rs"), []byte(renderRustRunner(normalized)), 0o644); err != nil {
 					return "", fmt.Errorf("write generated Rust runner: %w", err)
 				}
-				// pig additive (D18): compiler diagnostics are selected only by explicit build callers.
+				// ompig additive (D18): compiler diagnostics are selected only by explicit build callers.
 				names := make([]string, len(normalized))
 				for i, ext := range normalized {
 					names[i] = ext.Name
@@ -221,7 +221,7 @@ func rustPackedCellHash(cacheRoot, key string, extensions []RustExtension, sdkRo
 		return sdkHash
 	}
 	h := sha256.New()
-	_, _ = h.Write([]byte("pig-rust-packed-cell\x00"))
+	_, _ = h.Write([]byte("ompig-rust-packed-cell\x00"))
 	_, _ = h.Write([]byte(key))
 	_, _ = h.Write([]byte("\x00"))
 	hashBuildInput(h, "sdk", sdkHash)
@@ -243,12 +243,12 @@ func findRustSDKRoot(extensions []RustExtension) (string, error) {
 			return root, nil
 		}
 	}
-	if root := strings.TrimSpace(os.Getenv("PIG_SDK_RS_ROOT")); root != "" {
+	if root := strings.TrimSpace(os.Getenv("OMPIG_SDK_RS_ROOT")); root != "" {
 		if abs, err := filepath.Abs(root); err == nil && statHasFile(abs, "Cargo.toml") {
 			return abs, nil
 		}
 	}
-	// pig additive (D92): only an author override serves a Rust SDK the active Piglet strips; this binary staged none.
+	// ompig additive (D92): only an author override serves a Rust SDK the active Ompiglet strips; this binary staged none.
 	if err := StrippedSDKError("rust"); err != nil {
 		return "", err
 	}
@@ -263,7 +263,7 @@ func findRustSDKRoot(extensions []RustExtension) (string, error) {
 	}
 	for dir := wd; ; dir = filepath.Dir(dir) {
 		data, err := os.ReadFile(filepath.Join(dir, "go.mod"))
-		if err == nil && strings.Contains(string(data), "module github.com/MichaelKinsy/PiG") {
+		if err == nil && strings.Contains(string(data), "module github.com/tmih06/ompig") {
 			if cand := filepath.Join(dir, "extensions", "sdk-rs"); statHasFile(cand, "Cargo.toml") {
 				return cand, nil
 			}
@@ -273,9 +273,9 @@ func findRustSDKRoot(extensions []RustExtension) (string, error) {
 			break
 		}
 	}
-	// Staged copy under the config-root data dir (~/.pig/source) or
-	// PIG_SOURCE_ROOT, written by Stock Pig's SDK staging step. This is what
-	// lets an installed pig resolve the Rust SDK on a clean host with no checkout
+	// Staged copy under the config-root data dir (~/.ompig/source) or
+	// OMPIG_SOURCE_ROOT, written by Stock Ompig's SDK staging step. This is what
+	// lets an installed ompig resolve the Rust SDK on a clean host with no checkout
 	// and no env config.
 	for _, root := range installedPigSourceRoots() {
 		cand := filepath.Join(root, "extensions", "sdk-rs")
@@ -283,7 +283,7 @@ func findRustSDKRoot(extensions []RustExtension) (string, error) {
 			return cand, nil
 		}
 	}
-	return "", fmt.Errorf("cannot locate github.com/MichaelKinsy/PiG checkout for Rust SDK; set PIG_SDK_RS_ROOT")
+	return "", fmt.Errorf("cannot locate github.com/tmih06/ompig checkout for Rust SDK; set OMPIG_SDK_RS_ROOT")
 }
 
 // RustSDKPathOverride returns an extension crate's explicit local SDK path,
@@ -295,7 +295,7 @@ func RustSDKPathOverride(root string) string {
 	if _, err := toml.DecodeFile(filepath.Join(root, "Cargo.toml"), &manifest); err != nil {
 		return ""
 	}
-	dependency, ok := manifest.Dependencies["pig-sdk"].(map[string]any)
+	dependency, ok := manifest.Dependencies["ompig-sdk"].(map[string]any)
 	if !ok {
 		return ""
 	}
@@ -336,12 +336,12 @@ func copyRustSDKLockfile(sdkRoot, cellDir string) error {
 func renderRustCargoToml(extensions []RustExtension, sdkRoot, packageName string) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "[package]\nname = %q\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\n", packageName)
-	fmt.Fprintf(&b, "pig-sdk = { path = %q }\n", filepath.ToSlash(sdkRoot))
+	fmt.Fprintf(&b, "ompig-sdk = { path = %q }\n", filepath.ToSlash(sdkRoot))
 	for _, ext := range extensions {
 		fmt.Fprintf(&b, "%s = { package = %q, path = %q }\n", ext.Crate, ext.Package, filepath.ToSlash(ext.Root))
 	}
 	b.WriteString("\n[patch.crates-io]\n")
-	fmt.Fprintf(&b, "pig-sdk = { path = %q }\n", filepath.ToSlash(sdkRoot))
+	fmt.Fprintf(&b, "ompig-sdk = { path = %q }\n", filepath.ToSlash(sdkRoot))
 	return b.String()
 }
 
@@ -366,19 +366,19 @@ const rustRunnerState = `#[derive(Default)]
 struct State { live: usize, parked: bool, input_closed: bool, failed: bool }
 type Shared = Arc<(Mutex<State>, Condvar)>;
 
-// Builds one member at a time with PIG_EXT_SOCKET set to that member's socket, which is what an isolated extension's factory sees: a helper the factory
-// calls before run (pig_sdk::parse_frontmatter, parse_date) dials that socket. The members' factories run one at a time, as Pi loads extensions one at a time.
+// Builds one member at a time with OMPIG_EXT_SOCKET set to that member's socket, which is what an isolated extension's factory sees: a helper the factory
+// calls before run (ompig_sdk::parse_frontmatter, parse_date) dials that socket. The members' factories run one at a time, as Pi loads extensions one at a time.
 static FACTORY_TURN: Mutex<()> = Mutex::new(());
 
 #[allow(unused_unsafe)]
 fn build<T>(sock: &str, factory: impl FnOnce() -> T) -> T {
     let _turn = FACTORY_TURN.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
-    let previous = env::var("PIG_EXT_SOCKET").ok();
-    unsafe { env::set_var("PIG_EXT_SOCKET", sock) };
+    let previous = env::var("OMPIG_EXT_SOCKET").ok();
+    unsafe { env::set_var("OMPIG_EXT_SOCKET", sock) };
     let built = std::panic::catch_unwind(std::panic::AssertUnwindSafe(factory));
     match previous {
-        Some(previous) => unsafe { env::set_var("PIG_EXT_SOCKET", previous) },
-        None => unsafe { env::remove_var("PIG_EXT_SOCKET") },
+        Some(previous) => unsafe { env::set_var("OMPIG_EXT_SOCKET", previous) },
+        None => unsafe { env::remove_var("OMPIG_EXT_SOCKET") },
     }
     match built { Ok(built) => built, Err(payload) => std::panic::resume_unwind(payload) }
 }
@@ -396,7 +396,7 @@ fn start(item: Item, sock: String, shared: Shared) -> std::sync::mpsc::Receiver<
         let built: Box<dyn FnOnce() + Send> = Box::new(move || { let _ = built_sender.send(()); });
         let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| (item.run)(sock.clone(), built)));
         let result = match result { Ok(result) => result, Err(_) => Err(std::io::Error::other("extension panicked")) };
-        if let Err(err) = &result { eprintln!("{}: {}", item.name, err); let _ = pig_sdk::report_load_failure(&sock); }
+        if let Err(err) = &result { eprintln!("{}: {}", item.name, err); let _ = ompig_sdk::report_load_failure(&sock); }
         let (state, cond) = &*shared;
         let mut state = state.lock().unwrap();
         state.live -= 1;
@@ -410,11 +410,11 @@ fn start(item: Item, sock: String, shared: Shared) -> std::sync::mpsc::Receiver<
 
 // rustRunnerMain starts each member's factory, then admits a further generation of a member's factory for every "admit" line on stdin: Pi re-invokes an extension's factory in the process that already holds its static state. The runner exits once every generation has ended, unless the host parked it for a replacement Session. A "park" line names a socket the runner connects to once it holds the process open, so the host retires its last generation only after the notice took effect.
 const rustRunnerMain = `    let shared: Shared = Arc::new((Mutex::new(State::default()), Condvar::new()));
-    let active = env::var("PIG_EXT_ACTIVE_MEMBERS").ok();
+    let active = env::var("OMPIG_EXT_ACTIVE_MEMBERS").ok();
     let mut started = 0;
     for item in items.iter().copied() {
         if active.as_ref().is_some_and(|value| !value.split(',').any(|name| name == item.name)) { continue; }
-        let sock = match env::var(item.env).or_else(|_| if started == 0 { env::var("PIG_EXT_SOCKET") } else { Err(env::VarError::NotPresent) }) {
+        let sock = match env::var(item.env).or_else(|_| if started == 0 { env::var("OMPIG_EXT_SOCKET") } else { Err(env::VarError::NotPresent) }) {
             Ok(sock) => sock,
             Err(_) => { eprintln!("{} not set for {}", item.env, item.name); process::exit(1); }
         };
@@ -435,7 +435,7 @@ const rustRunnerMain = `    let shared: Shared = Arc::new((Mutex::new(State::def
                         let (state, cond) = &*shared;
                         state.lock().unwrap().parked = true;
                         cond.notify_all();
-                        if fields.len() > 2 && !fields[2].is_empty() { let _ = pig_sdk::report_load_failure(&fields[2]); }
+                        if fields.len() > 2 && !fields[2].is_empty() { let _ = ompig_sdk::report_load_failure(&fields[2]); }
                     }
                     "admit" if fields.len() >= 3 => {
                         for item in items.iter().copied().filter(|item| item.name == fields[1].as_str()) {
@@ -482,7 +482,7 @@ func CurrentRustPackedCellEntry(cacheRoot, key string, extensions []RustExtensio
 	if err != nil {
 		return "", false, err
 	}
-	lockCandidates := []string{os.Getenv("PIG_SDK_RS_ROOT")}
+	lockCandidates := []string{os.Getenv("OMPIG_SDK_RS_ROOT")}
 	for _, extension := range normalized {
 		lockCandidates = append(lockCandidates, RustSDKPathOverride(extension.Root))
 	}

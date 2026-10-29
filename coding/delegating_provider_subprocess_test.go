@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
-// An extension provider whose streamSimple calls pi-ai's compat streamSimple for a stock API completes through the real Session, Model Runtime, Extension Host and Node runtime. Pi dispatches that call on model.api through the pi-ai api registry (packages/ai/src/compat.ts:278-293) and never re-enters the registered provider. PiG re-entered the provider's own streamSimple without bound (issue #164, pi-commandcode-provider): the extension process stopped answering heartbeats and the cell was killed.
+// An extension provider whose streamSimple calls pi-ai's compat streamSimple for a stock API completes through the real Session, Model Runtime, Extension Host and Node runtime. Pi dispatches that call on model.api through the pi-ai api registry (packages/ai/src/compat.ts:278-293) and never re-enters the registered provider. Ompig re-entered the provider's own streamSimple without bound (issue #164, pi-commandcode-provider): the extension process stopped answering heartbeats and the cell was killed.
 func TestRegisteredProviderDelegatingToCompatStreamSimpleReachesTheAPI(t *testing.T) {
 	services := newTestServices(t)
 	session, err := NewSession(services, SessionOptions{Model: &ai.Model{ID: "primary", Provider: &scriptedProvider{}}, NoSession: true, SkipBuiltinTools: true})

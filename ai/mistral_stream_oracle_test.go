@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -68,7 +68,7 @@ func mistralStreamBodies() [][][]byte {
 	return bodies
 }
 
-// TestMistralProviderStreamMatchesPi compares Pi's mistral-conversations provider with Pig's over seeded Mistral chunk streams.
+// TestMistralProviderStreamMatchesPi compares Pi's mistral-conversations provider with Ompig's over seeded Mistral chunk streams.
 func TestMistralProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"mistral-conversations", "mistralConversationsApi", "mistral-conversations", "mistral"}, true, mistralStreamBodies(), func(baseURL string) Provider {
 		return NewMistralProvider(MistralConfig{APIKey: "k", Model: "m", BaseURL: baseURL})

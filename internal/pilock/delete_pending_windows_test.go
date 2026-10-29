@@ -13,7 +13,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // markBeingRemoved puts dir in the state another process's RemoveDirectoryW holds it in between marking it for deletion and closing its handle: the name is delete-pending, and opening or creating it fails with ERROR_ACCESS_DENIED (STATUS_DELETE_PENDING). The returned func closes the handle, which completes the removal.
@@ -56,7 +56,7 @@ func markBeingRemoved(t *testing.T, dir string) func() {
 	return finish
 }
 
-// proper-lockfile 4.1.2 lib/lockfile.js:56-69 stats the held directory after mkdir reports EEXIST. When the holder's removal is in flight, Node's fs.stat still reads the directory (libuv src/win/fs.c fs__stat_impl_from_path falls back to the parent directory entry on ERROR_ACCESS_DENIED), so proper-lockfile reports ELOCKED and Pi's auth-storage.ts retry loops wait for the removal to finish. PiG reports the same contention and acquires on the next attempt.
+// proper-lockfile 4.1.2 lib/lockfile.js:56-69 stats the held directory after mkdir reports EEXIST. When the holder's removal is in flight, Node's fs.stat still reads the directory (libuv src/win/fs.c fs__stat_impl_from_path falls back to the parent directory entry on ERROR_ACCESS_DENIED), so proper-lockfile reports ELOCKED and Pi's auth-storage.ts retry loops wait for the removal to finish. Ompig reports the same contention and acquires on the next attempt.
 func TestAcquireTreatsLockBeingRemovedAtStatAsHeld(t *testing.T) {
 	for _, a := range acquirers {
 		t.Run(a.name, func(t *testing.T) {
@@ -224,7 +224,7 @@ var lockfileAttempts = []acquirer{
 }
 
 // Two entries read from the parent directory still fail the attempt, as in Pi (see TestProperLockfileOnLockBeingRemovedUpstream):
-//   - A stale directory: proper-lockfile removes it (lib/lockfile.js:71-79) and its rmdir fails with EPERM because the name is delete-pending. PiG's syscall.Rmdir fails with ERROR_ACCESS_DENIED.
+//   - A stale directory: proper-lockfile removes it (lib/lockfile.js:71-79) and its rmdir fails with EPERM because the name is delete-pending. Ompig's syscall.Rmdir fails with ERROR_ACCESS_DENIED.
 //   - A directory link: fs.stat follows links, and libuv's fs__stat_directory keeps the original ERROR_ACCESS_DENIED (EPERM) for a reparse point when it does not lstat (src/win/fs.c).
 //
 // Neither is contention: one proper-lockfile call rejects with that EPERM after one mkdir.
@@ -389,7 +389,7 @@ if (api === 'sync') {
 	}
 }
 
-// A link whose target directory is being removed: fs.stat follows the link, the target is delete-pending, and libuv's fs__stat_directory reads the link's own entry, a reparse point, so it keeps ERROR_ACCESS_DENIED (src/win/fs.c fs__stat_impl_from_path; the do_lstat=0 branch of fs__stat_directory). proper-lockfile passes the stat error through (lib/lockfile.js:56-65) as EPERM, and PiG surfaces ERROR_ACCESS_DENIED.
+// A link whose target directory is being removed: fs.stat follows the link, the target is delete-pending, and libuv's fs__stat_directory reads the link's own entry, a reparse point, so it keeps ERROR_ACCESS_DENIED (src/win/fs.c fs__stat_impl_from_path; the do_lstat=0 branch of fs__stat_directory). proper-lockfile passes the stat error through (lib/lockfile.js:56-65) as EPERM, and Ompig surfaces ERROR_ACCESS_DENIED.
 func TestAcquireSurfacesLinkToDirectoryBeingRemovedUpstream(t *testing.T) {
 	for _, api := range []string{"sync", "async"} {
 		t.Run(api, func(t *testing.T) {
@@ -478,7 +478,7 @@ if (api === 'sync') {
 	return strings.TrimSpace(out.String())
 }
 
-// When the mtime probe fails right after mkdir, proper-lockfile removes the new directory with rmdir, ignores that rmdir's result, and rejects with the probe's error (lib/lockfile.js:29-43, lib/mtime-precision.js). A directory that another process starts removing then makes both the utime and the rmdir fail with EPERM. Pi reports only the utime error; so does PiG. Each row runs Pi's pinned proper-lockfile on the same state first.
+// When the mtime probe fails right after mkdir, proper-lockfile removes the new directory with rmdir, ignores that rmdir's result, and rejects with the probe's error (lib/lockfile.js:29-43, lib/mtime-precision.js). A directory that another process starts removing then makes both the utime and the rmdir fail with EPERM. Pi reports only the utime error; so does Ompig. Each row runs Pi's pinned proper-lockfile on the same state first.
 func TestAcquireIgnoresRmdirAfterFailedProbeUpstream(t *testing.T) {
 	for i, api := range []string{"sync", "async"} {
 		t.Run(api, func(t *testing.T) {
@@ -518,7 +518,7 @@ func TestAcquireIgnoresRmdirAfterFailedProbeUpstream(t *testing.T) {
 	}
 }
 
-// When the release of a lock taken after the abort fails, Pi's acquireLockAsync throws the release's error in place of the abort (auth-storage.ts:149-152: await release() rejects before signal.throwIfAborted()). A lock directory that another process starts removing makes that rmdir fail with EPERM. PiG's Acquire and AcquireWithOptions return the release error alone, not joined with the cancellation.
+// When the release of a lock taken after the abort fails, Pi's acquireLockAsync throws the release's error in place of the abort (auth-storage.ts:149-152: await release() rejects before signal.throwIfAborted()). A lock directory that another process starts removing makes that rmdir fail with EPERM. Ompig's Acquire and AcquireWithOptions return the release error alone, not joined with the cancellation.
 func TestAcquireAbortedAfterAcquisitionReturnsAFailedReleaseUpstream(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "auth.json")
 	if err := os.WriteFile(path, []byte("{}"), 0o600); err != nil {
@@ -622,7 +622,7 @@ const attempt = () => lockfile.lock(file, { realpath: false, fs: custom }).then(
 	return strings.TrimSpace(out.String())
 }
 
-// proper-lockfile caches the mtime precision on the fs object after its first successful probe (lib/mtime-precision.js:6-17), and every lock call shares graceful-fs, so later acquisitions in the process only stat their new directory. A directory that another process starts removing right after mkdir then still stats (libuv reads its parent entry), so the lock is taken, and its release fails with EPERM. PiG's cancellable acquisitions share one probe the same way. lockSync builds a new fs for each call (lib/adapter.js:5-25,63-68), so AcquireSync always probes (TestAcquireIgnoresRmdirAfterFailedProbeUpstream/sync).
+// proper-lockfile caches the mtime precision on the fs object after its first successful probe (lib/mtime-precision.js:6-17), and every lock call shares graceful-fs, so later acquisitions in the process only stat their new directory. A directory that another process starts removing right after mkdir then still stats (libuv reads its parent entry), so the lock is taken, and its release fails with EPERM. Ompig's cancellable acquisitions share one probe the same way. lockSync builds a new fs for each call (lib/adapter.js:5-25,63-68), so AcquireSync always probes (TestAcquireIgnoresRmdirAfterFailedProbeUpstream/sync).
 func TestAcquireAfterTheFirstProbeOnlyStatsUpstream(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "auth.json")
 	var finish func()

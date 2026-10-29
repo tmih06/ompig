@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
-// A fresh process must retain its configured credentials and settings when an earlier PiG left a stale regular sidecar.
+// A fresh process must retain its configured credentials and settings when an earlier Ompig left a stale regular sidecar.
 func TestStoresReadThroughStaleRegularLocks(t *testing.T) {
 	for _, name := range []string{"auth.json", "settings.json"} {
 		t.Run(name, func(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 func TestBehaviorContractsCurrentLedgerPasses(t *testing.T) {
@@ -34,7 +34,7 @@ func TestBehaviorContractsRejectSourceAndKeybindingDrift(t *testing.T) {
 	if err := os.WriteFile(inventoryPath, fmt.Appendf(nil, `{"upstreamVersion":%q,"keybindings":[{"id":"tui.select.up","defaults":{"darwin":["up"],"linux":["up"],"linuxWsl":["up"],"win32":["up"]},"description":"Move selection up","path":"component.ts","line":1,"consumers":["fixture-handler"]}],"handlers":[{"id":"fixture-handler","path":"component.ts","owner":"Fixture","method":"handleInput","startLine":1,"endLine":1,"sourceHash":"sha256:0000000000000000000000000000000000000000000000000000000000000000","async":false,"branchCount":1,"bindings":["tui.select.up"],"rawInputs":[],"callbacks":[],"delegates":[],"mutations":[],"boundaryOperators":[]}]}`, coding.UpstreamVersion), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(mappingPath, fmt.Appendf(nil, `{"upstreamVersion":%q,"mappings":[{"id":"fixture-handler","ownerFamily":"selectors","disposition":"pending","pigTargets":[],"evidence":[],"contracts":["fixture"]}]}`, coding.UpstreamVersion), 0o644); err != nil {
+	if err := os.WriteFile(mappingPath, fmt.Appendf(nil, `{"upstreamVersion":%q,"mappings":[{"id":"fixture-handler","ownerFamily":"selectors","disposition":"pending","ompigTargets":[],"evidence":[],"contracts":["fixture"]}]}`, coding.UpstreamVersion), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(familiesPath, []byte("[families.selectors]\nincludes = [\"component.ts\"]\n"), 0o644); err != nil {
@@ -120,7 +120,7 @@ func TestGeneratePendingInputMappingCarriesStableOwnersAndResolvesNewScope(t *te
 	}
 	wantOwners := []string{"stable", "new", "new"}
 	for index, entry := range got.Mappings {
-		if entry.OwnerFamily != wantOwners[index] || entry.Disposition != "pending" || len(entry.PigTargets) != 0 || len(entry.Evidence) != 0 || len(entry.Contracts) != 0 || entry.Divergence != "" || entry.Rationale != "" {
+		if entry.OwnerFamily != wantOwners[index] || entry.Disposition != "pending" || len(entry.OmpigTargets) != 0 || len(entry.Evidence) != 0 || len(entry.Contracts) != 0 || entry.Divergence != "" || entry.Rationale != "" {
 			t.Fatalf("mapping[%d] = %#v, want pending owner %q", index, entry, wantOwners[index])
 		}
 	}
@@ -163,7 +163,7 @@ func TestRenderMappingsRejectMissingAndIncompleteClosure(t *testing.T) {
 		t.Fatalf("missing render mapping error = %v", err)
 	}
 	mappings := []inputMappingEntry{{ID: "render:fixture#Picker.render", OwnerFamily: "selectors", Disposition: "partial"}}
-	if _, err := checkRenderMappings(mappings, renderers, nil, families, t.TempDir(), false); err == nil || !strings.Contains(err.Error(), "needs Pig targets, evidence, and contracts") {
+	if _, err := checkRenderMappings(mappings, renderers, nil, families, t.TempDir(), false); err == nil || !strings.Contains(err.Error(), "needs Ompig targets, evidence, and contracts") {
 		t.Fatalf("partial render mapping error = %v", err)
 	}
 }

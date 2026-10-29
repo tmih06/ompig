@@ -8,7 +8,7 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // DiffComponent renders a diff string as colored output.

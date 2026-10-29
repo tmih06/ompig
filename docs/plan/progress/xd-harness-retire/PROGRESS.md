@@ -4,7 +4,7 @@ Branch `team/the bench host/xd-harness-retire`. Task: delete the code Pi 1.0.0 r
 
 ## Status: READY
 
-`agent/harness/**`, `agent/search` and `internal/codingagent/tools/harness_*.go` are deleted. Their tests, the parity scripts for them and the Windows-relevant `agent/harness/env` and `pico3` tests go with them. `pico3` aliases are `internal/chord`; UUIDv7 is `ai.UUIDv7`; `combineUsage` is `internal/usagetotals`. Ledgers are updated. `go vet ./...` passes for Linux and Windows, `make lint-changed` and `make divergence-guard` are green, and `cmd/pig` passes.
+`agent/harness/**`, `agent/search` and `internal/codingagent/tools/harness_*.go` are deleted. Their tests, the parity scripts for them and the Windows-relevant `agent/harness/env` and `pico3` tests go with them. `pico3` aliases are `internal/chord`; UUIDv7 is `ai.UUIDv7`; `combineUsage` is `internal/usagetotals`. Ledgers are updated. `go vet ./...` passes for Linux and Windows, `make lint-changed` and `make divergence-guard` are green, and `cmd/ompig` passes.
 
 ## Not green, not from this change
 

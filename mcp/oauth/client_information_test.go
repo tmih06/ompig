@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Pi's parseClientInformation (packages/mcp/src/oauth/types.ts:198-209) spreads the whole response, so a member of an

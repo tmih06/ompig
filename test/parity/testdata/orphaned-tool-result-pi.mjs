@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // orphaned-tool-result-pi.mjs drives the pinned upstream openai-completions
 // provider for the D48 parity scenario. It builds the same poisoned conversation
-// as the pig harness (an aborted assistant turn holding the only tool_use for a
+// as the ompig harness (an aborted assistant turn holding the only tool_use for a
 // persisted tool-result), streams it through the real provider against a
 // hermetic endpoint, and prints the tool_call_ids the serialized request carries.
 // Upstream transformMessages drops the aborted assistant but never strips the

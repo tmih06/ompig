@@ -13,8 +13,8 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
-pig_args = ["--export", "testdata/sessions/plain.jsonl", "{{TEMP}}/out.html"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--export", "testdata/sessions/plain.jsonl", "{{TEMP}}/out.html"]
 pi_args = ["--export", "testdata/sessions/plain.jsonl", "{{TEMP}}/out.html"]
 
 [cli]
@@ -30,8 +30,8 @@ artifact_equal = true
 runs = 3
 
 # Normalize the temp dir paths so the "Exported to: /path" messages compare equal.
-# normalize-rationale: Pig and Pi receive independent temporary export paths.
+# normalize-rationale: Ompig and Pi receive independent temporary export paths.
 [[assert.normalize_replace]]
-pattern = '(?m)^(Exported to: )/[^\r\n]*/parity-cli-01-export-cli-plain-(pig|pi)-[0-9]+'
+pattern = '(?m)^(Exported to: )/[^\r\n]*/parity-cli-01-export-cli-plain-(ompig|pi)-[0-9]+'
 with = '${1}<TEMP>'
 reason = "D2: replace only this scenario's allocated temporary root, preserving the entire destination suffix and status line."

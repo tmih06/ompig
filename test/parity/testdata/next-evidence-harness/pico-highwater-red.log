@@ -9,7 +9,7 @@ Go test Output events follow verbatim; top-level completion events retain elapse
         want: 4
 --- FAIL: TestHarnessPicoJSONLRetirementAndHighWater (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/agent/harness/pico3	0.034s
+FAIL	github.com/tmih06/ompig/agent/harness/pico3	0.034s
 
 Top-level completion events:
-{"Time": "2026-09-24T22:01:44.664862438-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/agent/harness/pico3", "Test": "TestHarnessPicoJSONLRetirementAndHighWater", "Elapsed": 0}
+{"Time": "2026-09-24T22:01:44.664862438-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/agent/harness/pico3", "Test": "TestHarnessPicoJSONLRetirementAndHighWater", "Elapsed": 0}

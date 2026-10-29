@@ -7,12 +7,12 @@
 # `make porter PORTER_ARGS=--continue` must find the earlier session after the private directory is removed.
 
 porter_operator_agent_dir() {
-  if [ -n "${PIG_CODING_AGENT_DIR:-}" ]; then
-    printf '%s\n' "$PIG_CODING_AGENT_DIR"
+  if [ -n "${OMPIG_CODING_AGENT_DIR:-}" ]; then
+    printf '%s\n' "$OMPIG_CODING_AGENT_DIR"
   elif [ -n "${PI_CODING_AGENT_DIR:-}" ]; then
     printf '%s\n' "$PI_CODING_AGENT_DIR"
   else
-    printf '%s\n' "${PIG_HOME:-$HOME/.pig}/agent"
+    printf '%s\n' "${OMPIG_HOME:-$HOME/.ompig}/agent"
   fi
 }
 
@@ -49,6 +49,6 @@ porter_export_hermetic_agent() {
   fi
   mkdir -p "$source/sessions"
   ln -s "$source/sessions" "$dest/sessions"
-  PIG_HOME=$(dirname "$dest")
-  export PIG_CODING_AGENT_DIR="$dest" PI_CODING_AGENT_DIR="$dest" PIG_HOME
+  OMPIG_HOME=$(dirname "$dest")
+  export OMPIG_CODING_AGENT_DIR="$dest" PI_CODING_AGENT_DIR="$dest" OMPIG_HOME
 }

@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: MIT
-"""Build variants as arms: measure arbitrary PiG executables (a PGO build, a GOAMD64 build, a stripped Piglet Binary, the same binary under another GOGC) with the overhead bench's scenarios.
+"""Build variants as arms: measure arbitrary Ompig executables (a PGO build, a GOAMD64 build, a stripped Ompiglet Binary, the same binary under another GOGC) with the overhead bench's scenarios.
 
 Every variant runs beside an A/A copy of itself (the same binary and settings in its own home), so each number carries its own noise floor. `--arm id=path[,flag...]`
 takes `noext` (the build cannot load extensions), `own` (the build carries its own extensions, so the extension scenarios install no TypeScript fixtures) and `K=V`
-(an environment variable for this arm; the harness drops inherited `PIG_` variables, so a `PIG_` setting belongs here). Arms are unpinned: the report says so.
+(an environment variable for this arm; the harness drops inherited `OMPIG_` variables, so a `OMPIG_` setting belongs here). Arms are unpinned: the report says so.
 """
 import json
 import os
@@ -14,12 +14,12 @@ from . import overhead
 
 
 def parse_arm(text, shared_env=None):
-    """`id=path[,noext][,own][,K=V...]` -> an unpinned pig-family Arm that runs the executable at `path`."""
+    """`id=path[,noext][,own][,K=V...]` -> an unpinned ompig-family Arm that runs the executable at `path`."""
     ident, sep, rest = text.partition("=")
     if not sep or not ident or not rest:
         raise SystemExit(f"--arm wants id=path[,flag...], got {text!r}")
     path, *flags = rest.split(",")
-    env, spec = dict(shared_env or {}), {"name": ident, "family": "pig", "binary": os.path.abspath(path)}
+    env, spec = dict(shared_env or {}), {"name": ident, "family": "ompig", "binary": os.path.abspath(path)}
     for flag in flags:
         if flag == "noext":
             spec["no_extensions"] = True

@@ -67,7 +67,7 @@ def run(binary, directory):
     (agent / "models.json").write_text(json.dumps({"providers": {"wire": {"baseUrl": f"http://127.0.0.1:{server.server_port}/v1", "api": "openai-completions", "apiKey": "not-a-secret", "models": [model]}}}))
     (agent / "settings.json").write_text(json.dumps({"quietStartup": True, "enableInstallTelemetry": False, "compaction": {"enabled": False}, "retry": {"enabled": False}}))
     (agent / "auth.json").write_text("{}")
-    env = {"PATH": os.environ["PATH"], "HOME": str(home), "LANG": "C.UTF-8", "TERM": "dumb", "PI_CODING_AGENT_DIR": str(agent), "PIG_CODING_AGENT_DIR": str(agent), "PIG_HOME": str(home / ".pig"), "PI_OFFLINE": "1", "PIG_OFFLINE": "1", "PI_TELEMETRY": "0"}
+    env = {"PATH": os.environ["PATH"], "HOME": str(home), "LANG": "C.UTF-8", "TERM": "dumb", "PI_CODING_AGENT_DIR": str(agent), "OMPIG_CODING_AGENT_DIR": str(agent), "OMPIG_HOME": str(home / ".ompig"), "PI_OFFLINE": "1", "OMPIG_OFFLINE": "1", "PI_TELEMETRY": "0"}
     args = [*binary, "--mode", "rpc", "--provider", "wire", "--model", "wire-model", "--thinking", "off", "--system-prompt", "Wire.", "--no-context-files", "--no-skills", "--no-extensions", "--no-prompt-templates", "--no-themes", "--tools", "read,write,edit,bash,grep,find,ls"]
     started = time.time() * 1000
     records, raw_lines, inbox = [], [], queue.Queue()
@@ -172,7 +172,7 @@ def run(binary, directory):
 
 
 def upstream_version(repo):
-    """The Pi release PiG pins, read from the one place that pins it."""
+    """The Pi release Ompig pins, read from the one place that pins it."""
     source = (repo / "internal/coding/pigversion/pigversion.go").read_text()
     match = re.search(r'^const UpstreamPackageVersion = "([^"]+)"$', source, re.MULTILINE)
     assert match, "cannot read UpstreamPackageVersion"
@@ -181,11 +181,11 @@ def upstream_version(repo):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("host", choices=("pig", "pi"))
+    parser.add_argument("host", choices=("ompig", "pi"))
     parser.add_argument("--evidence", type=Path)
     options = parser.parse_args()
     repo = Path(__file__).resolve().parents[3]
-    binary = Path(os.environ.get("PIG_PARITY_PIG_BIN", repo / "bin/pig-parity")) if options.host == "pig" else repo / "extensions/sdk-ts/node_modules/.bin/pi"
+    binary = Path(os.environ.get("OMPIG_PARITY_OMPIG_BIN", repo / "bin/ompig-parity")) if options.host == "ompig" else repo / "extensions/sdk-ts/node_modules/.bin/pi"
     command = [str(binary.resolve())]
     if options.host == "pi":
         # Resolve Node before the private HOME so a manager shim cannot select or install another runtime.

@@ -14,15 +14,15 @@ func extensionArtifactName(goos, buildType string) string {
 
 func resolveSocketDirForGOOS(goos, xdgRuntimeDir, tmpDir, systemTempDir string, uid int) string {
 	if goos == "windows" {
-		return filepath.Join(systemTempDir, "pig")
+		return filepath.Join(systemTempDir, "ompig")
 	}
 	if xdgRuntimeDir != "" {
-		return filepath.Join(xdgRuntimeDir, "pig")
+		return filepath.Join(xdgRuntimeDir, "ompig")
 	}
 	if tmpDir == "" {
 		tmpDir = systemTempDir
 	}
-	return filepath.Join(tmpDir, fmt.Sprintf("pig-%d", uid))
+	return filepath.Join(tmpDir, fmt.Sprintf("ompig-%d", uid))
 }
 
 // socketRuntimeDirPrefix is the os.MkdirTemp prefix of a Host's private runtime directory.
@@ -34,8 +34,8 @@ const worstRuntimeSocketSuffix = len("/" + socketRuntimeDirPrefix + "4294967295"
 
 // socketRuntimeBase returns the directory below which a Host creates its private runtime directory. It is socketDir
 // unless a socket below it could exceed the platform's Unix socket path limit, as with a deep $TMPDIR or %TEMP%, and
-// then a short per-user directory: /tmp/pig-<uid>, or on Windows <localAppData>\pig\s. Pi's in-process extensions have
-// no such limit, so a deep temp directory must not stop PiG from starting an extension. When Windows has no local
+// then a short per-user directory: /tmp/ompig-<uid>, or on Windows <localAppData>\ompig\s. Pi's in-process extensions have
+// no such limit, so a deep temp directory must not stop Ompig from starting an extension. When Windows has no local
 // application data directory, socketDir stays and sockPathFor reports the over-long path.
 func socketRuntimeBase(goos, socketDir string, uid int, localAppData string) string {
 	if len(socketDir)+worstRuntimeSocketSuffix <= unixSocketPathLimit(goos) {
@@ -45,9 +45,9 @@ func socketRuntimeBase(goos, socketDir string, uid int, localAppData string) str
 		if localAppData == "" {
 			return socketDir
 		}
-		return filepath.Join(localAppData, "pig", "s")
+		return filepath.Join(localAppData, "ompig", "s")
 	}
-	return fmt.Sprintf("/tmp/pig-%d", uid)
+	return fmt.Sprintf("/tmp/ompig-%d", uid)
 }
 
 func unixSocketPathLimit(goos string) int {

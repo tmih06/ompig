@@ -18,17 +18,17 @@ type ArtifactContext struct {
 	ScenarioPath    string          `json:"scenarioPath"`
 	Driver          string          `json:"driver"`
 	Timestamp       string          `json:"timestamp"`
-	PigPath         string          `json:"pigPath"`
+	OmpigPath       string          `json:"ompigPath"`
 	PiPath          string          `json:"piPath"`
-	PigFreshness    FreshnessReport `json:"pigFreshness"`
+	OmpigFreshness  FreshnessReport `json:"ompigFreshness"`
 	Failures        []string        `json:"failures"`
-	PigMedianMs     int64           `json:"pigMedianMs"`
+	OmpigMedianMs   int64           `json:"ompigMedianMs"`
 	PiMedianMs      int64           `json:"piMedianMs"`
 	SkipPerformance bool            `json:"skipPerformance"`
 }
 
 // WriteFailureArtifacts writes escape-preserving outputs, context, diffs, and a rerun script for one failed scenario. Captures use the last completed pair: RunScenario stops at the first behavioral failure, so an earlier pair can be green. The artifact directory is returned so the test log can point at it.
-func WriteFailureArtifacts(t *testing.T, root string, o *ScenarioOutcome, pig, pi BinaryRef, freshness FreshnessReport) (string, error) {
+func WriteFailureArtifacts(t *testing.T, root string, o *ScenarioOutcome, ompig, pi BinaryRef, freshness FreshnessReport) (string, error) {
 	t.Helper()
 	if root == "" {
 		return "", nil
@@ -51,11 +51,11 @@ func WriteFailureArtifacts(t *testing.T, root string, o *ScenarioOutcome, pig, p
 		ScenarioPath:    o.Scenario.SourcePath,
 		Driver:          o.Scenario.Driver,
 		Timestamp:       now,
-		PigPath:         pig.Path,
+		OmpigPath:       ompig.Path,
 		PiPath:          pi.Path,
-		PigFreshness:    freshness,
+		OmpigFreshness:  freshness,
 		Failures:        append([]string(nil), o.Failures...),
-		PigMedianMs:     o.Pig.MedianMs,
+		OmpigMedianMs:   o.Ompig.MedianMs,
 		PiMedianMs:      o.Pi.MedianMs,
 		SkipPerformance: o.SkipPerfGate,
 	}
@@ -66,18 +66,18 @@ func WriteFailureArtifacts(t *testing.T, root string, o *ScenarioOutcome, pig, p
 	if err := os.WriteFile(filepath.Join(dir, "context.json"), ctxJSON, 0o644); err != nil {
 		return "", err
 	}
-	pigRun, piRun := len(o.Pig.Runs)-1, len(o.Pi.Runs)-1
-	if pigRun >= 0 {
-		if source := o.Pig.Runs[pigRun].ChangelogSource; source != "" {
-			if err := write("pig.changelog-source.md", source); err != nil {
+	ompigRun, piRun := len(o.Ompig.Runs)-1, len(o.Pi.Runs)-1
+	if ompigRun >= 0 {
+		if source := o.Ompig.Runs[ompigRun].ChangelogSource; source != "" {
+			if err := write("ompig.changelog-source.md", source); err != nil {
 				return "", err
 			}
 		}
-		_ = write("pig.raw.stdout", o.Pig.Runs[pigRun].RawOutput)
-		_ = write("pig.stderr", o.Pig.Runs[pigRun].Stderr)
-		_ = write("pig.artifact", o.Pig.Runs[pigRun].Artifact)
-		_ = write("pig.stdout", o.Pig.Runs[pigRun].Output)
-		_ = write("pig.escaped", o.Pig.Runs[pigRun].Escaped)
+		_ = write("ompig.raw.stdout", o.Ompig.Runs[ompigRun].RawOutput)
+		_ = write("ompig.stderr", o.Ompig.Runs[ompigRun].Stderr)
+		_ = write("ompig.artifact", o.Ompig.Runs[ompigRun].Artifact)
+		_ = write("ompig.stdout", o.Ompig.Runs[ompigRun].Output)
+		_ = write("ompig.escaped", o.Ompig.Runs[ompigRun].Escaped)
 	}
 	if piRun >= 0 {
 		if source := o.Pi.Runs[piRun].ChangelogSource; source != "" {
@@ -91,11 +91,11 @@ func WriteFailureArtifacts(t *testing.T, root string, o *ScenarioOutcome, pig, p
 		_ = write("pi.stdout", o.Pi.Runs[piRun].Output)
 		_ = write("pi.escaped", o.Pi.Runs[piRun].Escaped)
 	}
-	if pigRun >= 0 && piRun >= 0 {
-		_ = write("diff.txt", LineDiff(o.Pig.Runs[pigRun].Output, o.Pi.Runs[piRun].Output))
+	if ompigRun >= 0 && piRun >= 0 {
+		_ = write("diff.txt", LineDiff(o.Ompig.Runs[ompigRun].Output, o.Pi.Runs[piRun].Output))
 	}
-	rerun := fmt.Sprintf("#!/usr/bin/env bash\nset -euo pipefail\ncd %q\nPIG_PARITY_PIG_BIN=%q go test -tags=parity ./test/parity/runner -run 'TestParity/%s$' -count=1 -v -timeout 3m\n",
-		mustRepoRootForArtifact(o.Scenario.SourcePath), pig.Path, shellSingleQuoteSafeRegex(o.Scenario.Name))
+	rerun := fmt.Sprintf("#!/usr/bin/env bash\nset -euo pipefail\ncd %q\nPIG_PARITY_OMPIG_BIN=%q go test -tags=parity ./test/parity/runner -run 'TestParity/%s$' -count=1 -v -timeout 3m\n",
+		mustRepoRootForArtifact(o.Scenario.SourcePath), ompig.Path, shellSingleQuoteSafeRegex(o.Scenario.Name))
 	if err := os.WriteFile(filepath.Join(dir, "rerun.sh"), []byte(rerun), 0o755); err != nil {
 		return "", err
 	}
@@ -124,7 +124,7 @@ func shellSingleQuoteSafeRegex(s string) string {
 func mustRepoRootForArtifact(scenarioPath string) string {
 	dir := filepath.Dir(scenarioPath)
 	for {
-		if data, err := os.ReadFile(filepath.Join(dir, "go.mod")); err == nil && strings.Contains(string(data), "module github.com/MichaelKinsy/PiG") {
+		if data, err := os.ReadFile(filepath.Join(dir, "go.mod")); err == nil && strings.Contains(string(data), "module github.com/tmih06/ompig") {
 			return dir
 		}
 		parent := filepath.Dir(dir)

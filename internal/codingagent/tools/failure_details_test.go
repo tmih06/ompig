@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi 0.99.1 agent-loop.ts:906-910 turns built-in throws into content plus details:{}, and that result has no isError.

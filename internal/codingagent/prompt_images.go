@@ -4,10 +4,10 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodebase64"
+	"github.com/tmih06/ompig/internal/nodebase64"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/imageprocessing"
 )
 
 // NormalizePromptContent applies the given model's profile once, before new

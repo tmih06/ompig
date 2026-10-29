@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nativeplatform"
+	"github.com/tmih06/ompig/internal/nativeplatform"
 )
 
 // cancellable-loader.ts: the tui.select.cancel key aborts the loader's signal and then calls onAbort; any other key does neither.

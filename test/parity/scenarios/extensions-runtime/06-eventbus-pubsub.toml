@@ -10,7 +10,7 @@
 # launcher for this startup-only pub/sub probe flakes before ready; run it in
 # isolation so `make parity` encodes the scheduler knowledge instead of relying
 # on ad hoc low-concurrency invocations. Four runs give the performance median
-# two Pig-first and two Pi-first pairs, cancelling launch-order cache warming.
+# two Ompig-first and two Pi-first pairs, cancelling launch-order cache warming.
 # The process cwd is an ephemeral copy of this scenario's testdata so the
 # runtime ratio measures extension startup rather than checkout trust, context,
 # and Git discovery that the EventBus assertion does not exercise.
@@ -41,10 +41,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/parity-eventbus.mjs"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/ext/parity-eventbus.mjs"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
@@ -55,7 +55,7 @@ pi_extensions = [
 cwd = "testdata"
 width = 100
 height = 35
-ready_pattern_pig = "eventbus:round-trip:ok"
+ready_pattern_ompig = "eventbus:round-trip:ok"
 ready_pattern_pi = "eventbus:round-trip:ok"
 ready_timeout_seconds = 25
 capture_start = "eventbus:round-trip:ok"

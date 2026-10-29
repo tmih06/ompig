@@ -12,9 +12,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	envnode "github.com/tmih06/ompig/durable/env/node"
 )
 
 // Ports the "powershell" describe of packages/durable/test/tools.test.ts (Pi 1.2.0) and its read case "reads a log that

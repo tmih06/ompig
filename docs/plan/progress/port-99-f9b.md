@@ -4,7 +4,7 @@ Branch `port-99-f9b` from `porter/pi-0.99.1`. Scope: generic tool-call rendering
 
 ## Environment
 
-- Every command ran with `HOME`, `PIG_HOME`, `PIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR` and `TMPDIR` set to scratch directories under `/tmp/f9b` (`/tmp/f9b/env.sh`), and Go's cache paths pointed at the real caches. Nothing was written under `~/.pig`.
+- Every command ran with `HOME`, `OMPIG_HOME`, `OMPIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR` and `TMPDIR` set to scratch directories under `/tmp/f9b` (`/tmp/f9b/env.sh`), and Go's cache paths pointed at the real caches. Nothing was written under `~/.ompig`.
 - The exact 0.99.1 package is installed in `/tmp/pi99` by an earlier lane (`/tmp/pi99/node_modules/.bin/pi --version` prints 0.99.1). It is the comparator for probes; this branch does not move the pin.
 
 ## Upstream changes in scope (0.87.1 to 0.99.1)

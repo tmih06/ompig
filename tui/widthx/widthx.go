@@ -6,15 +6,15 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ExtractAnsi returns the byte length of the ANSI escape starting at byte
 // offset i in s, or 0 if none begins there. It is upstream extractAnsiCode
 // exactly (via ExtractAnsiCode): a CSI runs to the first m|G|K|H|J, whatever
 // comes between, and OSC/APC run to BEL or ST. Width must match Pi byte for
-// byte because PiG adopts Pi's crash-on-overflow render check; the former
-// D47 h/l extension and bail-on-unknown-final-byte rule made PiG measure some
+// byte because Ompig adopts Pi's crash-on-overflow render check; the former
+// D47 h/l extension and bail-on-unknown-final-byte rule made Ompig measure some
 // strings wider than Pi does.
 func ExtractAnsi(s string, i int) int {
 	_, n := ExtractAnsiCode(s, i)

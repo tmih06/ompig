@@ -151,7 +151,7 @@
    "TestGetReadmePathAndGetExamplesPath"
   ],
   "upstream_reference": "packages/coding-agent/src/config.ts",
-  "mutation": "internal/codingagent/paths.go: replace `func GetExamplesPath() string { return prompts.PigExamplesLocation }` with `func GetExamplesPath() string { return prompts.PigExamplesLocation + \"x\" }`; TestGetReadmePathAndGetExamplesPath fails."
+  "mutation": "internal/codingagent/paths.go: replace `func GetExamplesPath() string { return prompts.OmpigExamplesLocation }` with `func GetExamplesPath() string { return prompts.OmpigExamplesLocation + \"x\" }`; TestGetReadmePathAndGetExamplesPath fails."
  },
  {
   "upstream": "packages/coding-agent/src/core/trust-manager.ts",

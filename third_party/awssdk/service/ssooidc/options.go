@@ -4,7 +4,6 @@ package ssooidc
 
 import (
 	"context"
-	internalauthsmithy "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/auth/smithy"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	smithyauth "github.com/aws/smithy-go/auth"
@@ -13,6 +12,7 @@ import (
 	"github.com/aws/smithy-go/middleware"
 	"github.com/aws/smithy-go/tracing"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	internalauthsmithy "github.com/tmih06/ompig/third_party/awssdk/internal/auth/smithy"
 	"net/http"
 )
 

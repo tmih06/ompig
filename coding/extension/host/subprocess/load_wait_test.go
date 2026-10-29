@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,7 +13,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // upstream: packages/coding-agent/src/core/extensions/loader.ts:546-553 awaits the factory without a deadline before committing registration. The real 12-second Node factory must outlast a fixed 10-second connect deadline.

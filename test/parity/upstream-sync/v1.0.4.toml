@@ -118,7 +118,7 @@ path = "packages/coding-agent/src/extensions/mcp/runtime.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcpext/connection_test.go#TestMCPConnectionsClosesAConnectionThatIsStillInitializingBeforeCloseReturns", "test:coding/mcpext/connection_test.go#TestMCPConnectionsStopsWaitingToRetryAConnectionWhenClosed"]
-rationale = "Connections still connecting are closed on shutdown. PiG's Connection.Close already conformed; the two upstream cases pin it (mutation-checked)."
+rationale = "Connections still connecting are closed on shutdown. Ompig's Connection.Close already conformed; the two upstream cases pin it (mutation-checked)."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/tools.ts"

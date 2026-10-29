@@ -45,13 +45,13 @@ func uniqueID() string {
 	return fmt.Sprintf("%d-%d", time.Now().UnixNano()%1_000_000, counter.Add(1))
 }
 
-const agentHomeEnvKeys = "PIG_CODING_AGENT_DIR PI_CODING_AGENT_DIR PIG_CODING_AGENT_SESSION_DIR PIG_HOME PI_HOME"
+const agentHomeEnvKeys = "OMPIG_CODING_AGENT_DIR PI_CODING_AGENT_DIR OMPIG_CODING_AGENT_SESSION_DIR OMPIG_HOME PI_HOME"
 
-// hostTerminalEnvKeys are host-terminal and host-OS signals that both Pi and PiG read to
+// hostTerminalEnvKeys are host-terminal and host-OS signals that both Pi and Ompig read to
 // choose keybinding columns, image protocols, clipboard paths, theme background and Windows
 // Terminal heuristics (Pi keybindings.ts useWindowsKeybindings, keys.ts isWindowsTerminalSession,
-// terminal-image.ts detectCapabilities, clipboard.ts, wsl.ts, theme.ts). Only PiG reads the
-// HERDR_* keys (D44, tui/terminal_image.go); Pi has no Herdr branch. Pi and PiG treat an empty
+// terminal-image.ts detectCapabilities, clipboard.ts, wsl.ts, theme.ts). Only Ompig reads the
+// HERDR_* keys (D44, tui/terminal_image.go); Pi has no Herdr branch. Pi and Ompig treat an empty
 // value as unset for every key here, so headless terminals can clear them with an empty
 // assignment. A scenario that needs one sets it in its own [env], which is applied after this scrub.
 const hostTerminalEnvKeys = "WT_SESSION WSL_DISTRO_NAME WSL_INTEROP WSLENV SSH_CONNECTION SSH_CLIENT SSH_TTY " +
@@ -90,7 +90,7 @@ func hermeticEnviron() []string {
 
 // hermeticEnvironFrom filters environ as hermeticEnviron does. Windows environment names are
 // case-insensitive (Node process.env and Go os/exec both fold them), so a host variable such as
-// Ci or Wt_Session reaches Pi and PiG as CI or WT_SESSION and is matched case-insensitively there.
+// Ci or Wt_Session reaches Pi and Ompig as CI or WT_SESSION and is matched case-insensitively there.
 func hermeticEnvironFrom(environ []string, caseInsensitive bool) []string {
 	fold := func(k string) string {
 		if caseInsensitive {

@@ -48,7 +48,7 @@ func TestBuildGoPackedCell_PrebuiltShortCircuits(t *testing.T) {
 	}
 }
 
-// With no resolver (stock pig) the host must attempt a from-source build, not
+// With no resolver (stock ompig) the host must attempt a from-source build, not
 // short-circuit. Bogus roots make that attempt fail, proving it was tried.
 func TestBuildGoPackedCell_NoResolverBuildsFromSource(t *testing.T) {
 	SetPrebuiltResolver(nil)
@@ -72,7 +72,7 @@ func TestBuildGoPackedCell_ResolverMissBuildsFromSource(t *testing.T) {
 // Rust cell without cargo.
 func TestBuildRustPackedCell_PrebuiltShortCircuits(t *testing.T) {
 	dir := t.TempDir()
-	bin := filepath.Join(dir, "pig-generated-packed-cell")
+	bin := filepath.Join(dir, "ompig-generated-packed-cell")
 	if err := os.WriteFile(bin, []byte("prebuilt"), 0o755); err != nil {
 		t.Fatal(err)
 	}

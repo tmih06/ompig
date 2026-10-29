@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // Pi's package manager retains its caller's SettingsManager (package-manager.ts:817,1747-1782).
@@ -166,7 +166,7 @@ func TestPackageRegistrySourcesRequireProjectTrust(t *testing.T) {
 	for _, trusted := range []bool{false, true} {
 		t.Run(fmt.Sprintf("trusted=%t", trusted), func(t *testing.T) {
 			cwd, agentDir, record := npmTrustFixture(t)
-			projectPath := filepath.Join(cwd, ".pig", "settings.json")
+			projectPath := filepath.Join(cwd, ".ompig", "settings.json")
 			data, err := os.ReadFile(projectPath)
 			if err != nil {
 				t.Fatal(err)
@@ -285,10 +285,10 @@ func TestPackageNpmCommandDefaultsRespectTrust(t *testing.T) {
 
 func BenchmarkPackageCommandTrustResolution(b *testing.B) {
 	cwd, agentDir := b.TempDir(), b.TempDir()
-	if err := os.MkdirAll(filepath.Join(cwd, ".pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(cwd, ".ompig"), 0o755); err != nil {
 		b.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(cwd, ".pig", "settings.json"), []byte(`{"npmCommand":["untrusted"]}`), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(cwd, ".ompig", "settings.json"), []byte(`{"npmCommand":["untrusted"]}`), 0o600); err != nil {
 		b.Fatal(err)
 	}
 	opts := &packageCLIOptions{command: packageUpdate}
@@ -308,10 +308,10 @@ func npmTrustFixture(t *testing.T) (cwd, agentDir, record string) {
 	t.Helper()
 	root := shortTempDir(t)
 	cwd, agentDir, record = filepath.Join(root, "project"), filepath.Join(root, "agent"), filepath.Join(root, "calls.jsonl")
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("NPM_TRUST_FAIL", "")
 	node, err := exec.LookPath("node")
 	if err != nil {
@@ -328,7 +328,7 @@ if (args.includes('list')) process.stdout.write('[]');
 `))
 	for _, scope := range []string{"global", "project"} {
 		settings := map[string]any{"npmCommand": []string{node, script, record, scope, "--", "pnpm"}}
-		path := filepath.Join(cwd, ".pig", "settings.json")
+		path := filepath.Join(cwd, ".ompig", "settings.json")
 		if scope == "global" {
 			settings["packages"] = []string{"npm:fake-package"}
 			settings["defaultProjectTrust"] = "always"

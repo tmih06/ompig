@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi 014873d7 execute.ts executeCodemode: "Show the script as running before its first nested call, so the row's timer starts." A

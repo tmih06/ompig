@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -39,7 +39,7 @@ func loadNodeCommandDescription(t *testing.T, h *Host, entry, isolation, command
 // moduleCache false, tryNative false and its virtual modules. The fixture
 // probes package.json "imports" and "exports" maps, extensionless and
 // emitted-extension specifiers, index files, JSON, CommonJS interop,
-// import.meta and the CommonJS globals; PiG must load it the same way
+// import.meta and the CommonJS globals; Ompig must load it the same way
 // (@gotgenes/pi-permission-system imports "#src/..." without an extension,
 // confluence-cli reads __dirname).
 func TestNodeExtensionModulesLoadLikePinnedPi(t *testing.T) {
@@ -87,7 +87,7 @@ jiti.import(process.argv[2], { default: true }).then(
 // the CLI entry of the @earendil-works/pi-coding-agent package, and the
 // arguments after it are the ones Pi was started with. @henryqw/pi-subagent
 // requires the title and re-launches the harness with
-// `process.execPath process.argv[1] ...`; in PiG that entry must run PiG.
+// `process.execPath process.argv[1] ...`; in Ompig that entry must run Ompig.
 // getPackageDir identifies the shipped SDK and assets (Pi config.ts:376-403),
 // not the Node interpreter directory. Absolute host-SDK imports use that root.
 func TestNodeExtensionSeesPiProcessIdentity(t *testing.T) {

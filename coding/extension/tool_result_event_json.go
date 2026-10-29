@@ -3,8 +3,8 @@ package extension
 import (
 	"reflect"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // contentBlockMemberOrder is the order Pi's tools and extensions write a TextContent or ImageContent in (packages/ai/src/types.ts).

@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/durabletest"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // env-conformance.ts EnvConformanceOptions: assertions, withEnv, shell (default ["sh","-c"]) and symlinks (default true). The symlink

@@ -7,8 +7,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestConcurrent_SIGWINCHVsTyping probes the reliability question directly:
@@ -99,8 +99,8 @@ func TestConcurrent_SIGWINCHViaPostUITask_NoRace(t *testing.T) {
 }
 
 func TestConcurrent_SIGWINCHVsTyping(t *testing.T) {
-	if os.Getenv("PIG_PROBE_RENDER_RACE") == "" {
-		t.Skip("reproduction for the off-main render data race (SIGWINCH / background Render vs main-loop editing); set PIG_PROBE_RENDER_RACE=1 with -race to reproduce")
+	if os.Getenv("OMPIG_PROBE_RENDER_RACE") == "" {
+		t.Skip("reproduction for the off-main render data race (SIGWINCH / background Render vs main-loop editing); set OMPIG_PROBE_RENDER_RACE=1 with -race to reproduce")
 	}
 	model := &ai.Model{ID: "m", DisplayName: "m", Capabilities: ai.ModelCapabilities{ContextWindow: 8000}}
 	m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: t.TempDir(), Model: model})

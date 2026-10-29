@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func TestPackedUserBashUndefinedAcrossSDKs(t *testing.T) {
@@ -74,34 +74,34 @@ func packedUserBashFactory(t *testing.T, root, language, name string) subprocess
 	cfg := subprocess.ExtConfig{Name: name, Source: dir, Enabled: true, RuntimeKind: "subprocess", RuntimeLanguage: language, Isolation: "shared-ok", EntrypointKind: "factory", ContentHash: "user-bash-" + name}
 	switch language {
 	case "go":
-		cfg.SDKName = "github.com/MichaelKinsy/PiG/extensions/sdk"
+		cfg.SDKName = "github.com/tmih06/ompig/extensions/sdk"
 		cfg.ModulePath = "example.test/" + name
 		cfg.Package = cfg.ModulePath
 		cfg.Factory = "Extension"
-		write(filepath.Join(dir, "go.mod"), fmt.Sprintf("module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", cfg.ModulePath))
+		write(filepath.Join(dir, "go.mod"), fmt.Sprintf("module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", cfg.ModulePath))
 		write(filepath.Join(dir, "extension.go"), fmt.Sprintf(`package bash
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension()*sdk.Extension{
  e:=sdk.New(%q)
  e.OnEvent("user_bash",func(sdk.Context,map[string]any)(any,error){return map[string]any{"result":map[string]any{"output":%q,"exitCode":nil,"cancelled":false,"truncated":false}},nil})
  return e
 }`, name, name))
 	case "python":
-		cfg.SDKName = "pig-sdk-py"
+		cfg.SDKName = "ompig-sdk-py"
 		cfg.Package = strings.ReplaceAll(name, "-", "_")
 		cfg.Factory = "new_extension"
-		write(filepath.Join(dir, cfg.Package+".py"), fmt.Sprintf(`import pig_sdk
+		write(filepath.Join(dir, cfg.Package+".py"), fmt.Sprintf(`import ompig_sdk
 def new_extension():
-    e=pig_sdk.Extension(%q)
+    e=ompig_sdk.Extension(%q)
     e.on_event("user_bash",lambda ctx,data: {"result":{"output":%q,"exitCode":None,"cancelled":False,"truncated":False}})
     return e
 `, name, name))
 	case "rust":
-		cfg.SDKName = "pig-sdk"
+		cfg.SDKName = "ompig-sdk"
 		cfg.Package = name
 		cfg.Factory = "new_extension"
 		write(filepath.Join(dir, "Cargo.toml"), fmt.Sprintf("[package]\nname=%q\nversion=\"0.0.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\nserde_json=\"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
-		write(filepath.Join(dir, "src", "lib.rs"), fmt.Sprintf(`use pig_sdk::Extension;
+		write(filepath.Join(dir, "src", "lib.rs"), fmt.Sprintf(`use ompig_sdk::Extension;
 pub fn new_extension()->Extension{
  let mut e=Extension::new(%q);
  e.on_event("user_bash",|_,_|Some(serde_json::json!({"result":{"output":%q,"exitCode":null,"cancelled":false,"truncated":false}})));

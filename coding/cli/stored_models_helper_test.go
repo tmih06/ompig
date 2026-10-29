@@ -3,7 +3,7 @@ package cli
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // mustStoredModels decodes persisted catalog records for a test fixture.

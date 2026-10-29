@@ -13,7 +13,7 @@ import (
 //
 //	[{"name":"auditsrv","config":{"command":"true","exposure":"codemode","toolExposure":{"a":"codemode"},"enabled":false},"extensionPath":...}]
 //
-// PiG 0.4.0 candidate printed `"exposure":"codemode-deferred","toolExposure":{"a":"codemode-deferred"}`.
+// Ompig 0.4.0 candidate printed `"exposure":"codemode-deferred","toolExposure":{"a":"codemode-deferred"}`.
 func TestAuditRegisteredMcpServerReportsResolvedExposureAliases(t *testing.T) {
 	runtime := CreateExtensionRuntime()
 	config := `{"command":"true","exposure":"codemode-deferred","toolExposure":{"a":"codemode-deferred"},"enabled":false}`

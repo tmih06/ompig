@@ -1,4 +1,4 @@
-//go:build !pig_strip_self_update
+//go:build !ompig_strip_self_update
 
 package cli
 
@@ -12,13 +12,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// This file is the boundary a Piglet Binary compiles out with the
-// pig_strip_self_update tag: self_update_stripped.go replaces it.
+// This file is the boundary a Ompiglet Binary compiles out with the
+// ompig_strip_self_update tag: self_update_stripped.go replaces it.
 
 // selfUpdateTimeout bounds the whole self-update (manifest fetch + binary
 // download). Generous because a release binary can be tens of megabytes.
@@ -29,9 +29,9 @@ const selfUpdateTimeout = 5 * time.Minute
 var errUpdateNotNeeded = errors.New("up to date")
 
 // runSelfUpdate applies one proven installation tier.
-// pig divergence (D39): a started tier never falls through to another.
+// ompig divergence (D39): a started tier never falls through to another.
 func runSelfUpdate(force bool) int {
-	// pig additive (D92): a Piglet that strips self-update refuses, as its Binary does.
+	// ompig additive (D92): a Ompiglet that strips self-update refuses, as its Binary does.
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.SelfUpdate) {
 		return reportStrippedFeature("self-update", pigstrip.SelfUpdate, selfUpdateStrippedHint)
 	}
@@ -49,7 +49,7 @@ func runSelfUpdate(force bool) int {
 	)
 	switch result.Action {
 	case "standalone-updated", "package-manager-updated":
-		// pig additive (D109): with extensionsAutoUpgrade on, the installed pig upgrades extensions written for an older SDK.
+		// ompig additive (D109): with extensionsAutoUpgrade on, the installed ompig upgrades extensions written for an older SDK.
 		upgradeExtensionsAfterUpdate(settings.GetExtensionsAutoUpgrade(), runUpdatedExtensionUpgrade)
 		return 0
 	case "refused":
@@ -70,10 +70,10 @@ func runSelfUpdate(force bool) int {
 }
 
 // binaryUpdateChecker is the interactive startup check for a newer standalone
-// release, or nil when a Piglet strips self-update (no new-version notice).
-// pig divergence (D39): standalone-binary self-update notice at startup.
+// release, or nil when a Ompiglet strips self-update (no new-version notice).
+// ompig divergence (D39): standalone-binary self-update notice at startup.
 func binaryUpdateChecker() func() *codingagent.BinaryUpdate {
-	// pig additive (D92): a Piglet that strips self-update shows no notice, as its Binary does.
+	// ompig additive (D92): a Ompiglet that strips self-update shows no notice, as its Binary does.
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.SelfUpdate) {
 		return nil
 	}
@@ -89,7 +89,7 @@ func binaryUpdateChecker() func() *codingagent.BinaryUpdate {
 
 // checkSelfUpdateVersion checks the release before the installation tier, as
 // upstream getSelfUpdatePlan runs before any install-method refusal: an
-// installation that is already current exits 0 even when pig cannot update
+// installation that is already current exits 0 even when ompig cannot update
 // it, and an unreachable source fails the update. It reports done when the
 // update ends here. Without a configured source there is nothing to check and
 // the tier explains that.

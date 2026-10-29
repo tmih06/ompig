@@ -12,7 +12,7 @@ import (
 
 // The settings page is a table of keys the wire struct already declares. A key
 // added without a row is a key no reader can discover, and a row for a key that
-// was removed sends a reader to edit a file Pig ignores.
+// was removed sends a reader to edit a file Ompig ignores.
 //
 // This lives in this package because settingsWire is unexported.
 
@@ -63,7 +63,7 @@ func TestNoDocumentedSettingKeyHasBeenRemoved(t *testing.T) {
 	declared := declaredSettingKeys()
 	for _, key := range documentedSettingKeys(t) {
 		if !slices.Contains(declared, key) {
-			t.Errorf("the settings page documents %q, which Pig no longer reads", key)
+			t.Errorf("the settings page documents %q, which Ompig no longer reads", key)
 		}
 	}
 }
@@ -83,7 +83,7 @@ func TestAnUntrustedProjectContributesNoSettings(t *testing.T) {
 
 	sm := NewSettingsManagerWithProjectTrust(project, filepath.Join(dir, "agent"), false)
 	if got := sm.Get().CommandPrefix; got != "" {
-		t.Fatalf("an untrusted project set the shell command prefix to %q; opening a repository must not change what Pig runs", got)
+		t.Fatalf("an untrusted project set the shell command prefix to %q; opening a repository must not change what Ompig runs", got)
 	}
 
 	sm.SetProjectTrusted(true)

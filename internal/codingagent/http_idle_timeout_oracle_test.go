@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/http-dispatcher.ts
@@ -55,9 +55,9 @@ emit({ parsed: input.values.map((value) => parseHttpIdleTimeoutMs(value) ?? null
 		}
 		got, ok := parseHTTPIdleTimeoutMs(value)
 		if want.Parsed[i] != nil && *want.Parsed[i] >= 1<<63 {
-			// Go's int cannot hold a double that large; PiG saturates where Pi keeps the number.
+			// Go's int cannot hold a double that large; Ompig saturates where Pi keeps the number.
 			if !ok || got != math.MaxInt {
-				t.Errorf("%s: PiG (%d, %v), Pi %g: want the saturated value", raw, got, ok, *want.Parsed[i])
+				t.Errorf("%s: Ompig (%d, %v), Pi %g: want the saturated value", raw, got, ok, *want.Parsed[i])
 			}
 			continue
 		}
@@ -68,13 +68,13 @@ emit({ parsed: input.values.map((value) => parseHttpIdleTimeoutMs(value) ?? null
 				if want.Parsed[i] != nil {
 					expected = strconv.FormatFloat(*want.Parsed[i], 'g', -1, 64)
 				}
-				t.Errorf("%s: PiG (%d, %v), Pi %s", raw, got, ok, expected)
+				t.Errorf("%s: Ompig (%d, %v), Pi %s", raw, got, ok, expected)
 			}
 		}
 	}
 	for i, ms := range timeouts {
 		if got := formatHTTPIdleTimeoutMs(ms); got != want.Format[i] {
-			t.Errorf("format %d: PiG %q, Pi %q", ms, got, want.Format[i])
+			t.Errorf("format %d: Ompig %q, Pi %q", ms, got, want.Format[i])
 		}
 	}
 	if failures > 0 {

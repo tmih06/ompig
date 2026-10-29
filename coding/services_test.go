@@ -7,15 +7,15 @@ import (
 	"strings"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
-// withTempHome isolates PIG_HOME for a test so settings + auth lookups
+// withTempHome isolates OMPIG_HOME for a test so settings + auth lookups
 // don't touch the developer's real config.
 func withTempHome(t *testing.T) string {
 	t.Helper()
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	return tmp
 }
 
@@ -127,7 +127,7 @@ func TestServicesSettingsReflectsProjectOverlay(t *testing.T) {
 	// internal/codingagent.mergeSettings only overrides string/slice
 	// fields today: bools always come from the global layer. (Tracked
 	// as a separate parity follow-up; not in F2 scope.)
-	projSettingsDir := filepath.Join(cwd, ".pig")
+	projSettingsDir := filepath.Join(cwd, ".ompig")
 	if err := os.MkdirAll(projSettingsDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -149,7 +149,7 @@ func TestServicesSettingsReflectsProjectOverlay(t *testing.T) {
 
 func TestDefaultAgentDirHonorsPIG_HOME(t *testing.T) {
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	got := DefaultAgentDir()
 	want := filepath.Join(tmp, "agent")
 	if got != want {
@@ -157,8 +157,8 @@ func TestDefaultAgentDirHonorsPIG_HOME(t *testing.T) {
 	}
 }
 
-// Pi's getAgentDir (config.ts) returns the directory named by the agent directory variable, tilde expanded, before any default; PiG's embedder entry point
-// and the pig binary's resolver must name the same directory.
+// Pi's getAgentDir (config.ts) returns the directory named by the agent directory variable, tilde expanded, before any default; Ompig's embedder entry point
+// and the ompig binary's resolver must name the same directory.
 func TestDefaultAgentDirHonorsTheAgentDirVariable(t *testing.T) {
 	home := t.TempDir()
 	for _, test := range []struct {
@@ -166,16 +166,16 @@ func TestDefaultAgentDirHonorsTheAgentDirVariable(t *testing.T) {
 		env  map[string]string
 		want string
 	}{
-		{"PIG_CODING_AGENT_DIR", map[string]string{"PIG_CODING_AGENT_DIR": filepath.Join(home, "custom")}, filepath.Join(home, "custom")},
-		{"tilde is expanded", map[string]string{"PIG_CODING_AGENT_DIR": "~/custom"}, filepath.Join(home, "custom")},
-		{"it wins over PIG_HOME", map[string]string{"PIG_CODING_AGENT_DIR": filepath.Join(home, "custom"), "PIG_HOME": filepath.Join(home, "pighome")}, filepath.Join(home, "custom")},
-		{"shared mode reads PI_CODING_AGENT_DIR", map[string]string{"PIG_USE_PI_DIRS": "1", "PI_CODING_AGENT_DIR": filepath.Join(home, "pi"), "PIG_CODING_AGENT_DIR": filepath.Join(home, "ignored")}, filepath.Join(home, "pi")},
-		{"PI_CODING_AGENT_DIR is ignored outside shared mode", map[string]string{"PI_CODING_AGENT_DIR": filepath.Join(home, "pi"), "PIG_HOME": filepath.Join(home, "pighome")}, filepath.Join(home, "pighome", "agent")},
+		{"OMPIG_CODING_AGENT_DIR", map[string]string{"OMPIG_CODING_AGENT_DIR": filepath.Join(home, "custom")}, filepath.Join(home, "custom")},
+		{"tilde is expanded", map[string]string{"OMPIG_CODING_AGENT_DIR": "~/custom"}, filepath.Join(home, "custom")},
+		{"it wins over OMPIG_HOME", map[string]string{"OMPIG_CODING_AGENT_DIR": filepath.Join(home, "custom"), "OMPIG_HOME": filepath.Join(home, "pighome")}, filepath.Join(home, "custom")},
+		{"shared mode reads PI_CODING_AGENT_DIR", map[string]string{"OMPIG_USE_PI_DIRS": "1", "PI_CODING_AGENT_DIR": filepath.Join(home, "pi"), "OMPIG_CODING_AGENT_DIR": filepath.Join(home, "ignored")}, filepath.Join(home, "pi")},
+		{"PI_CODING_AGENT_DIR is ignored outside shared mode", map[string]string{"PI_CODING_AGENT_DIR": filepath.Join(home, "pi"), "OMPIG_HOME": filepath.Join(home, "pighome")}, filepath.Join(home, "pighome", "agent")},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Setenv("HOME", home)
 			t.Setenv("USERPROFILE", home)
-			for _, name := range []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PIG_USE_PI_DIRS"} {
+			for _, name := range []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "OMPIG_USE_PI_DIRS"} {
 				t.Setenv(name, "")
 			}
 			for name, value := range test.env {

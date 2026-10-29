@@ -12,8 +12,8 @@ import (
 	"image/png"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // bitfieldBMP builds a BMP file around a DIB with the given header size. A BITMAPINFOHEADER with BI_BITFIELDS carries its three masks after the header; larger headers carry them inside.

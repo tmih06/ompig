@@ -13,8 +13,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // The most objects a streamed argument delta may allocate in `-p` text mode, where nothing observes message_update, and
@@ -125,7 +125,7 @@ func runPrintText(tb testing.TB, host printModeRuntime) {
 }
 
 func quietPipelineServices(tb testing.TB) *coding.AgentSessionServices {
-	tb.Setenv("PIG_HOME", tb.TempDir())
+	tb.Setenv("OMPIG_HOME", tb.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: tb.TempDir(), AgentDir: tb.TempDir()})
 	if err != nil {
 		tb.Fatal(err)

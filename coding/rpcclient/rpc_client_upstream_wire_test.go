@@ -18,17 +18,17 @@ import (
 )
 
 // scriptEnv carries the scripted child's answers: a JSON object mapping a command type to the record its response adds ("data" or "success":false and "error"), and an "events" list of records the child writes after answering "prompt".
-const scriptEnv = "PIG_RPCCLIENT_TEST_SCRIPT"
+const scriptEnv = "OMPIG_RPCCLIENT_TEST_SCRIPT"
 
 // runScriptedChild logs argv, the working directory and every command line, then answers each command with the scripted response, as rpc-mode.ts does on the wire.
 func runScriptedChild() int {
-	logFile, err := os.OpenFile(os.Getenv("PIG_RPCCLIENT_TEST_LOG"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
+	logFile, err := os.OpenFile(os.Getenv("OMPIG_RPCCLIENT_TEST_LOG"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
 		return 3
 	}
 	defer func() { _ = logFile.Close() }()
 	cwd, _ := os.Getwd()
-	header, _ := json.Marshal(map[string]any{"argv": os.Args[1:], "cwd": cwd, "marker": os.Getenv("PIG_RPCCLIENT_TEST_MARKER")})
+	header, _ := json.Marshal(map[string]any{"argv": os.Args[1:], "cwd": cwd, "marker": os.Getenv("OMPIG_RPCCLIENT_TEST_MARKER")})
 	_, _ = fmt.Fprintln(logFile, string(header))
 	var script struct {
 		Responses map[string]json.RawMessage `json:"responses"`
@@ -78,7 +78,7 @@ func scriptedClient(t *testing.T, options RpcClientOptions, script map[string]an
 	}
 	logPath := filepath.Join(t.TempDir(), "commands.log")
 	options.CliPath = os.Args[0]
-	env := map[string]string{childModeEnv: "scripted", "PIG_RPCCLIENT_TEST_LOG": logPath, scriptEnv: string(encoded)}
+	env := map[string]string{childModeEnv: "scripted", "OMPIG_RPCCLIENT_TEST_LOG": logPath, scriptEnv: string(encoded)}
 	maps.Copy(env, options.Env)
 	options.Env = env
 	client := NewRpcClient(options)
@@ -232,7 +232,7 @@ func TestRpcClientNullResultsAndErrorResponses(t *testing.T) {
 // packages/coding-agent/src/modes/rpc/rpc-client.ts:74 (RpcClient.start); packages/coding-agent/src/modes/rpc/rpc-client.ts:226 (RpcClient.abort).
 func TestRpcClientOptionsReachTheSpawnedProcess(t *testing.T) {
 	cwd := t.TempDir()
-	client, logPath := scriptedClient(t, RpcClientOptions{Cwd: cwd, Provider: "prov", Model: "mod", Args: []string{"--no-session", "--x", "y"}, Env: map[string]string{"PIG_RPCCLIENT_TEST_MARKER": "from-options"}}, map[string]any{})
+	client, logPath := scriptedClient(t, RpcClientOptions{Cwd: cwd, Provider: "prov", Model: "mod", Args: []string{"--no-session", "--x", "y"}, Env: map[string]string{"OMPIG_RPCCLIENT_TEST_MARKER": "from-options"}}, map[string]any{})
 	if err := client.Start(); err != nil {
 		t.Fatal(err)
 	}

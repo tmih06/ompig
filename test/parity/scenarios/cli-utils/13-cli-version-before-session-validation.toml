@@ -22,6 +22,6 @@ with = '<version>'
 reason = "D63 changes release identity. Match only the complete version line including its LF; preserve all other bytes."
 
 [diverge]
-pig_contains = ["{{VERSION}}"]
+ompig_contains = ["{{VERSION}}"]
 pi_contains = ["{{UPSTREAM_VERSION}}"]
-reason = "D63 SCRUTINIZED:approved. PiG prints its composite PiG+Pi version; Pi prints its upstream version. Session validation must not run first."
+reason = "D63 SCRUTINIZED:approved. Ompig prints its composite Ompig+Pi version; Pi prints its upstream version. Session validation must not run first."

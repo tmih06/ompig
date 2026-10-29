@@ -3,8 +3,8 @@ package modeltypes
 import (
 	"slices"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/tui"
 )
 
 // tuiCaps is a capability set as the tui_probe reports it.

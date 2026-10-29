@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func checkFuzzWidth(t *testing.T, what string, lines []string, width int, input string) {

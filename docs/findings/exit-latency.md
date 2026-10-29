@@ -4,7 +4,7 @@
 
 Pi 0.87.1 stops terminal rendering, awaits every `session_shutdown` handler, disposes the Session, and exits. It does not impose a 200 ms shutdown deadline. See `packages/coding-agent/src/modes/interactive/interactive-mode.ts:4138–4177`, `core/agent-session-runtime.ts:406–412`, `core/extensions/runner.ts:988–1018`, and `core/agent-session.ts:1170–1193` in the pinned upstream tree.
 
-PiG's `Host.Shutdown` removed extensions individually. Each provider removal published a newly projected and encoded catalog to sibling connections, even though those siblings were also shutting down. A 20-Package CPU profile attributed 1.65 seconds to `ForgetProviderRegistration → PublishModelCatalog` during teardown. The measured Host shutdown took 1.962 seconds.
+Ompig's `Host.Shutdown` removed extensions individually. Each provider removal published a newly projected and encoded catalog to sibling connections, even though those siblings were also shutting down. A 20-Package CPU profile attributed 1.65 seconds to `ForgetProviderRegistration → PublishModelCatalog` during teardown. The measured Host shutdown took 1.962 seconds.
 
 `coding/extension/host/subprocess/host.go` now detaches every ending connection from the UI bridge before removing any provider. It uses the existing owner-scoped cleanup operation. It still sends transport shutdown barriers, cancels the owned processes, joins connection and process work, releases cache leases, and removes sockets. Individual removal, crash recovery, and reload retain live-sibling catalog publication. The change does not shorten any timeout, skip an awaited handler, change an SDK API, or add a background task.
 
@@ -16,7 +16,7 @@ Environment: Linux amd64, Intel Xeon 6746E, Go 1.27.1, Node 24.19.0, Pi 0.87.1. 
 
 The driver opens a 120×40 PTY and starts an interactive Session with an initial `/latency-ready` extension command. The command writes a monotonic timestamp. The driver then sends Ctrl+D to the empty editor and drains terminal output until process exit. Readiness includes command dispatch, not merely a banner or the first editor frame. One separately recorded warmup precedes five rotated before/after/Pi trials. All 15 accepted trials exit with code zero. No failed sample is silently replaced.
 
-A warm startup deadlock initially prevented the comparison. The captured goroutine dump exposed a registry/credential-store lock cycle before `session_start` completed. `perf-startup-corners` owns its fix: the credential transaction reads the operation's captured `credentials.RuntimeAPIKey`, rather than reacquiring the ModelRegistry lock through `r.RuntimeAPIKey`. Both PiG columns below include that identical one-line prerequisite through a diagnostic Go build overlay. Only the after column includes this slice's shutdown change. The failed attempts remain in the evidence bundle; they are not included as successful trials.
+A warm startup deadlock initially prevented the comparison. The captured goroutine dump exposed a registry/credential-store lock cycle before `session_start` completed. `perf-startup-corners` owns its fix: the credential transaction reads the operation's captured `credentials.RuntimeAPIKey`, rather than reacquiring the ModelRegistry lock through `r.RuntimeAPIKey`. Both Ompig columns below include that identical one-line prerequisite through a diagnostic Go build overlay. Only the after column includes this slice's shutdown change. The failed attempts remain in the evidence bundle; they are not included as successful trials.
 
 | Median of five runs | Before shutdown fix, with common lock prerequisite | After shutdown fix, with common lock prerequisite | Pi |
 |---|---:|---:|---:|
@@ -36,7 +36,7 @@ The same five runs retain the built-in startup checkpoints. Each cell below is t
 | session_start and resource discovery | 5,507 ms | 5,485 ms |
 | Final rendering and editor readiness | 0 ms | 1 ms |
 
-The reported WSL 3.2-second/0.2-second pair was a single observation with a different package snapshot. This replay resolves the same package names, not WSL's unavailable lock. In this snapshot, `@tian.zuo/pi-antigravity` itself takes approximately two seconds during shutdown in both Pi and PiG. The result therefore does not reproduce WSL's absolute Pi exit time.
+The reported WSL 3.2-second/0.2-second pair was a single observation with a different package snapshot. This replay resolves the same package names, not WSL's unavailable lock. In this snapshot, `@tian.zuo/pi-antigravity` itself takes approximately two seconds during shutdown in both Pi and Ompig. The result therefore does not reproduce WSL's absolute Pi exit time.
 
 The assigned base, `1beced15480cb8d46db113af9874d7316baf0b4f`, does not contain the prior Go `7c551a5fc` or Node `abb743382` startup changes. The startup lanes own their integration and new startup hotspots. Reimplementing their catalog, encoding, or runtime-cache optimizations here would duplicate their work.
 
@@ -113,8 +113,8 @@ go test ./coding/extension/host/subprocess -run '^$' -bench '^BenchmarkHostShutd
 
 | Artifact | SHA-256 |
 |---|---|
-| pig-before-lock | `9ee8deedeff184c590c8c9bc311245de5f1ae4e7518cdcba88b24d08a4648f3e` |
-| pig-after-lock | `066e1380bc9fd0357f9434269bc2d2b7456d32a67addfebd9babdfe387310605` |
+| ompig-before-lock | `9ee8deedeff184c590c8c9bc311245de5f1ae4e7518cdcba88b24d08a4648f3e` |
+| ompig-after-lock | `066e1380bc9fd0357f9434269bc2d2b7456d32a67addfebd9babdfe387310605` |
 | lock-native_provider.go | `8d4c51c5102776cd6961c6f30d0fd51586f61fcfe1fd839691b752eee68c8bea` |
 | baseline-host.go | `0f94b5e0d87fc443615fcf076bbc6c3bc2893edef596ed81ea0cb8ec17b1fe58` |
 | packages/package-lock.json | `db1c789c13e6ff53f5d0f6419c0a7440a067b830243bed6763c3872527febe37` |

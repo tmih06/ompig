@@ -14,20 +14,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Equivalence port of packages/coding-agent/test/codemode-worker-config.test.ts (Pi 1.0.0, #10204).
 // resolveCodemodeWorkerSpecifier picks the codemode worker for each Pi distribution: a Bun compiled executable, the
-// bundled Node module, or an unbundled package. A wrong choice breaks codemode in that distribution only. PiG runs
-// QuickJS on wazero in process, so its concern is the module instead of a worker: every PiG distribution (go
-// install or go test from source, the release archive binary, and the binary the @pi-in-go/pig npm launcher starts)
+// bundled Node module, or an unbundled package. A wrong choice breaks codemode in that distribution only. Ompig runs
+// QuickJS on wazero in process, so its concern is the module instead of a worker: every Ompig distribution (go
+// install or go test from source, the release archive binary, and the binary the @ompig/ompig npm launcher starts)
 // loads the same checksum-pinned module embedded in the executable, independent of the working directory and of any
 // file on disk.
 
 const (
-	codemodeProbeEnv     = "PIG_CODEMODE_DISTRIBUTION_PROBE"
+	codemodeProbeEnv     = "OMPIG_CODEMODE_DISTRIBUTION_PROBE"
 	quickJSWasmSHA256    = "d4c9375f2b1ca4dc95f72c8aa2982a7a9951ac8011490d79c6582df732b4bbd9"
 	codemodeProbePrefix  = "CODEMODE-PROBE "
 	codemodeWorkerConfig = "packages/coding-agent/test/codemode-worker-config.test.ts"
@@ -196,15 +196,15 @@ func TestCodemodeWorkerConfigUpstream(t *testing.T) {
 		exe = ".exe"
 	}
 	byLine := map[int]func(t *testing.T){
-		// uses a relative source entrypoint in Bun binaries: Pi's standalone executable. PiG's counterpart is the
+		// uses a relative source entrypoint in Bun binaries: Pi's standalone executable. Ompig's counterpart is the
 		// release archive binary, started from an unrelated working directory with no source tree reachable.
 		6: func(t *testing.T) {
 			root := t.TempDir()
 			cwd := t.TempDir()
-			wantEmbeddedModule(t, runCodemodeDistribution(t, filepath.Join(root, "pig-release", "pig"+exe), cwd), cwd)
+			wantEmbeddedModule(t, runCodemodeDistribution(t, filepath.Join(root, "ompig-release", "ompig"+exe), cwd), cwd)
 		},
-		// uses the emitted worker beside the bundled Node module: Pi's npm bundle. PiG's counterpart is the
-		// platform binary inside the @pi-in-go/pig-<os>-<cpu> package that the npm launcher starts.
+		// uses the emitted worker beside the bundled Node module: Pi's npm bundle. Ompig's counterpart is the
+		// platform binary inside the @ompig/ompig-<os>-<cpu> package that the npm launcher starts.
 		12: func(t *testing.T) {
 			root := t.TempDir()
 			cwd := t.TempDir()
@@ -217,10 +217,10 @@ func TestCodemodeWorkerConfigUpstream(t *testing.T) {
 			if cpu == "" {
 				cpu = runtime.GOARCH
 			}
-			pkg := filepath.Join(root, "node_modules", "@pi-in-go", "pig-"+platform+"-"+cpu)
-			wantEmbeddedModule(t, runCodemodeDistribution(t, filepath.Join(pkg, "pig"+exe), cwd), cwd)
+			pkg := filepath.Join(root, "node_modules", "@ompig", "ompig-"+platform+"-"+cpu)
+			wantEmbeddedModule(t, runCodemodeDistribution(t, filepath.Join(pkg, "ompig"+exe), cwd), cwd)
 		},
-		// uses the pi-codemode worker when unbundled: Pi run from source. PiG's counterpart is go install or go test
+		// uses the pi-codemode worker when unbundled: Pi run from source. Ompig's counterpart is go install or go test
 		// from the module, here this process after it leaves the source directory.
 		18: func(t *testing.T) {
 			cwd := t.TempDir()

@@ -12,8 +12,8 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // codexWebSocketFailureRun serves one Codex request: the WebSocket upgrade runs ws (nil answers 404), and a POST answers the SSE fallback. It returns the final message and the length of the request body the provider sent.

@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
 )
 
 // engineMessage is the message of an error observation, "name!TypeError:message", up to the end of its JSON string.
@@ -155,7 +155,7 @@ var xrefBusScenario = []string{
     const log = [];
     const data = { n: 0, list: [1, 2], map: new Map([["k", 1]]), when: new Date(0), point: new Point(3), log, fn(a) { return a + this.n; } };
     data.self = data;
-    data[Symbol.for("pig.shared")] = "g";
+    data[Symbol.for("ompig.shared")] = "g";
     Object.defineProperty(data, "fixed", { value: 42, enumerable: false, configurable: false, writable: false });
     pi.events.emit("probe", data);
     const afterEmit = { n: data.n, seen: data.seen === true, post: data.post ?? null };
@@ -174,7 +174,7 @@ var xrefBusScenario = []string{
   pi.events.on("probe", async data => {
     saved = data;
     data.n++;
-    data.log.push(["L1", data.self === data, Array.isArray(data.list), data.list.length, JSON.stringify(data.list), data.map.get("k"), data.map instanceof Map, data.when.getTime(), data.when instanceof Date, data.point.norm(), data.point.doubled, data.fn(10), typeof data.fn, data[Symbol.for("pig.shared")], data.fixed, Object.getOwnPropertyDescriptor(data, "fixed").writable, "fixed" in data, Object.keys(data).length].join("|"));
+    data.log.push(["L1", data.self === data, Array.isArray(data.list), data.list.length, JSON.stringify(data.list), data.map.get("k"), data.map instanceof Map, data.when.getTime(), data.when instanceof Date, data.point.norm(), data.point.doubled, data.fn(10), typeof data.fn, data[Symbol.for("ompig.shared")], data.fixed, Object.getOwnPropertyDescriptor(data, "fixed").writable, "fixed" in data, Object.keys(data).length].join("|"));
     data.seen = true;
     data.cb = function (v) { this.cbSeen = v + ":" + (this === data); };
     await Promise.resolve();
@@ -202,7 +202,7 @@ func TestXrefEventBusMatchesPiAcrossRealms(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "probe"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -249,7 +249,7 @@ func TestXrefEventBusListenerOrderMatchesPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusOrderScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "order"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -297,7 +297,7 @@ func TestXrefEventBusPayloadLifetimeMatchesPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			h, exts := xrefFixture(t, isolation, xrefBusLifetimeScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "lifetime"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 			if stats := h.xref.stats(); stats.Leases != 0 || stats.Holds != 0 || stats.Expected != 0 {
 				t.Fatalf("Host xref ledger retained %+v", stats)
@@ -349,7 +349,7 @@ func TestXrefEventBusSymbolLifetimeMatchesPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			h, exts := xrefFixture(t, isolation, xrefBusSymbolLifetimeScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "symlife"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 			if stats := h.xref.stats(); stats.Leases != 0 || stats.Holds != 0 || stats.Expected != 0 {
 				t.Fatalf("Host xref ledger retained %+v", stats)
@@ -387,7 +387,7 @@ func TestXrefEventBusReentrantDispatchMatchesPi(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusReentrantScenario...)
 			for range 3 {
 				if got := xrefRunTool(t, exts["xref-0"], "reentrant"); got != want {
-					t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+					t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 				}
 			}
 		})
@@ -574,7 +574,7 @@ func TestXrefEventBusIntegrityLevelsMatchPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusIntegrityScenario...)
 			if got := withoutEngineMessages(xrefRunTool(t, exts["xref-0"], "integrity")); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -643,7 +643,7 @@ func TestXrefEventBusRejectedWritesMatchPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusRejectedWriteScenario...)
 			if got := withoutEngineMessages(xrefRunTool(t, exts["xref-0"], "rejected")); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -802,7 +802,7 @@ func xrefInspectMatchesPi(t *testing.T) {
 						t.Errorf("line %d differs from Pi\n got: %q\nwant: %q", i, g, w)
 					}
 				}
-				t.Fatalf("PiG inspect output differs from Pi (%d vs %d lines)", len(gotLines), len(wantLines))
+				t.Fatalf("Ompig inspect output differs from Pi (%d vs %d lines)", len(gotLines), len(wantLines))
 			}
 		})
 	}
@@ -910,7 +910,7 @@ func TestXrefEventBusCloneMatchesPi(t *testing.T) {
 						t.Errorf("line %d differs from Pi\n got: %q\nwant: %q", i, g, w)
 					}
 				}
-				t.Fatalf("PiG observation differs from Pi (%d vs %d lines)", len(gotLines), len(wantLines))
+				t.Fatalf("Ompig observation differs from Pi (%d vs %d lines)", len(gotLines), len(wantLines))
 			}
 		})
 	}
@@ -960,7 +960,7 @@ func TestXrefEventBusMaxListenersWarningIsSilentLikePi(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusMaxListenersScenario...)
 			got := xrefRunTool(t, exts["xref-0"], "warnings")
 			if got != want {
-				t.Fatalf("PiG warnings differ from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig warnings differ from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -1039,7 +1039,7 @@ func TestXrefEventBusCloneLocalGraphsMatchPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusCloneLocalScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "clonedLocal"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -1065,7 +1065,7 @@ export default pi => {
 };`,
 }
 
-// A foreign object printed inside a local value is laid out at the caller's indentation, and a cycle through a foreign object prints as [Circular], as in Pi's one heap. The owner formats its object into a string, and Node's custom inspection receives neither the caller's indentation nor its seen list, so PiG breaks lines as if the object started at column 0 and expands a cross-realm cycle to the depth limit. This test states Pi's output and stays skipped until the owner approves D83 boundary 4 wording or a design that hands Node a local view.
+// A foreign object printed inside a local value is laid out at the caller's indentation, and a cycle through a foreign object prints as [Circular], as in Pi's one heap. The owner formats its object into a string, and Node's custom inspection receives neither the caller's indentation nor its seen list, so Ompig breaks lines as if the object started at column 0 and expands a cross-realm cycle to the depth limit. This test states Pi's output and stays skipped until the owner approves D83 boundary 4 wording or a design that hands Node a local view.
 func TestXrefEventBusInspectNestedLayoutMatchesPi(t *testing.T) {
 	skipWithoutNodeExtensions(t)
 
@@ -1074,7 +1074,7 @@ func TestXrefEventBusInspectNestedLayoutMatchesPi(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusInspectNestedScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "inspectedNested"); got != want {
-				t.Fatalf("PiG inspect output differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig inspect output differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}
@@ -1145,7 +1145,7 @@ func TestXrefEventBusInspectProxyBoundaryIsStated(t *testing.T) {
 	}
 }
 
-// nodeMajorVersion reports the major version of the node on PATH, which runs both Pi's oracle and PiG's Node realms.
+// nodeMajorVersion reports the major version of the node on PATH, which runs both Pi's oracle and Ompig's Node realms.
 func nodeMajorVersion(t *testing.T) int {
 	t.Helper()
 	nodeCellRequireNode(t)
@@ -1191,7 +1191,7 @@ func TestXrefEventBusInspectReadsOnlyWhatNodePrints(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			h, exts := xrefFixture(t, isolation, xrefBusInspectBoundedScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "inspectedBounded"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 			// Each of the 4000 elements is a separate owner object; 400 leases cover the payload, the four containers and the printed entries only.
 			if stats := h.xref.stats(); stats.Leases > 400 {
@@ -1234,7 +1234,7 @@ func TestXrefEventBusFormatFollowsToStringChanges(t *testing.T) {
 		t.Run(fmt.Sprintf("%q", isolation), func(t *testing.T) {
 			_, exts := xrefFixture(t, isolation, xrefBusFormatToStringScenario...)
 			if got := xrefRunTool(t, exts["xref-0"], "formatted"); got != want {
-				t.Fatalf("PiG observation differs from Pi\n got: %s\nwant: %s", got, want)
+				t.Fatalf("Ompig observation differs from Pi\n got: %s\nwant: %s", got, want)
 			}
 		})
 	}

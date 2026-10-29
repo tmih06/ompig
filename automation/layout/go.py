@@ -12,7 +12,7 @@ import sys
 import plan
 
 HERE = Path(__file__).resolve().parent
-MODULE = "github.com/MichaelKinsy/PiG"
+MODULE = "github.com/tmih06/ompig"
 MOVES = plan.package_moves()
 # Keep fixture paths equal to the governance moves in docs.py and build.py.
 DOC_MOVES = {
@@ -40,14 +40,14 @@ SOURCE_REPLACEMENTS = {
          '// This is the only Go file at the module root. Runtime code lives in cmd/ and\n// internal/. This package hosts `//go:embed` directives that need'),
     ],
     "coding/doc.go": [
-        ('// Package coding is the public SDK for embedding the pig coding\n// agent as a Go library.',
+        ('// Package coding is the public SDK for embedding the ompig coding\n// agent as a Go library.',
          '// Package coding provides the in-tree coding-agent Session and Runtime APIs.\n// External Go extension authors use the separate extensions/sdk module.'),
         ('// # Quick start', '// # In-tree quick start'),
         ('// The package exposes three public types that compose into a working', '// The package exposes three types that compose into a working'),
         ('//   - examples/sdk/main.go: minimal embedding example', '//   - examples/sdk/main.go: minimal in-tree session example'),
     ],
     "coding/cli/main.go": [
-        ('// Construct the SDK Services container. Mirrors what library\n\t// consumers of github.com/MichaelKinsy/PiG/internal/coding will do;\n\t// the binary uses the same path so SDK + CLI share the same\n\t// startup semantics.', '// Construct the shared Services container for all execution modes.'),
+        ('// Construct the SDK Services container. Mirrors what library\n\t// consumers of github.com/tmih06/ompig/internal/coding will do;\n\t// the binary uses the same path so SDK + CLI share the same\n\t// startup semantics.', '// Construct the shared Services container for all execution modes.'),
     ],
     "coding/extension/doc.go": [
         ('// coding/extension/host/ and depend on this package, never the reverse.', '// internal/coding/extension/host/ and depend on this package, never the reverse.'),
@@ -60,8 +60,8 @@ SOURCE_REPLACEMENTS = {
         ('func TestPublicPackageLayout(', 'func TestImplementationPackageLayout('),
         ('[]string{"agentcore", "internal/tui", "pigproc", "resources", "coding/presentation", "schema/gui-extension"}',
          '[]string{"agent", "ai", "coding", "tui", "agentcore", "pigproc", "resources", "internal/coding/presentation", "schema/gui-extension"}'),
-        ('[]string{"agent", "ai", "coding", "tui", "piglets/standard", "piglets/porter"}',
-         '[]string{"internal/agent", "internal/ai", "internal/coding", "internal/tui", "extensions/sdk", "piglets/standard", "piglets/porter"}'),
+        ('[]string{"agent", "ai", "coding", "tui", "ompiglets/standard", "ompiglets/porter"}',
+         '[]string{"internal/agent", "internal/ai", "internal/coding", "internal/tui", "extensions/sdk", "ompiglets/standard", "ompiglets/porter"}'),
         ('"public path %s is not a directory"', '"current path %s is not a directory"'),
     ],
 }
@@ -131,7 +131,7 @@ def rewrite_go(path, data, literals, relocating, comments=None, tracked=None, mo
         data = data[:start] + replacement + data[end:]
     text = data.decode()
     # Explicit structural path forms: only package directories followed by a
-    # repository child. Never rewrite ~/.pig/agent, upstream packages/ai, or IDs.
+    # repository child. Never rewrite ~/.ompig/agent, upstream packages/ai, or IDs.
     def joined(match):
         parts = re.findall(r'"([^"\n]+)"', match[0])
         path = "/".join(parts)

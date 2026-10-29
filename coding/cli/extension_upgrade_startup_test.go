@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // startupDriftFixture is an agent directory whose extension was written for an older SDK.
@@ -30,7 +30,7 @@ func runDriftStartup(t *testing.T, binary, home, agentDir string, extraEnv []str
 	t.Helper()
 	cmd := exec.Command(binary, append([]string{"--model", "test-faux/faux-1", "--offline"}, args...)...)
 	cmd.Dir = home
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PI_HOME="+filepath.Join(home, "pi"), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "PI_HOME="+filepath.Join(home, "pi"), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	cmd.Env = append(cmd.Env, extraEnv...)
 	var out, errOut bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &out, &errOut
@@ -57,7 +57,7 @@ func TestStartupNamesSDKDriftAndExitsInPrintMode(t *testing.T) {
 		`Extension "ask" was written for an older SDK:`,
 		"Context.GetSessionID: func() string -> func() (string, error) (SDK 0.3.0)",
 		"SendMessageOptions.TriggerTurn: bool -> *bool (SDK 0.2.0)",
-		"Run: pig extension upgrade " + commandWord(extension) + "\n",
+		"Run: ompig extension upgrade " + commandWord(extension) + "\n",
 		"written for an older SDK (",
 	} {
 		if !strings.Contains(stderr, want) {
@@ -67,7 +67,7 @@ func TestStartupNamesSDKDriftAndExitsInPrintMode(t *testing.T) {
 	if readFile(t, filepath.Join(extension, "extension.go")) != oldExtensionSource {
 		t.Fatal("print mode edited the extension")
 	}
-	if _, err := os.Stat(filepath.Join(home, "pig", "state", "extension-upgrade")); err == nil {
+	if _, err := os.Stat(filepath.Join(home, "ompig", "state", "extension-upgrade")); err == nil {
 		t.Fatal("print mode wrote an upgrade backup")
 	}
 }
@@ -126,10 +126,10 @@ func TestStartupAutoUpgradeKeepsTheForkedSession(t *testing.T) {
 func TestStartupIgnoresAutoUpgradeInAProjectFile(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
 	home, agentDir, extension := startupDriftFixture(t)
-	if err := os.MkdirAll(filepath.Join(home, ".pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(home, ".ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(home, ".pig", "settings.json"), []byte(`{"extensionsAutoUpgrade":true}`), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(home, ".ompig", "settings.json"), []byte(`{"extensionsAutoUpgrade":true}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	_, stderr, code := runDriftStartup(t, binary, home, agentDir, nil, "-p", "hello")
@@ -162,8 +162,8 @@ func TestInteractiveStartupAsksToUpgrade(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
 	t.Run("yes", func(t *testing.T) {
 		home, agentDir, extension := startupDriftFixture(t)
-		session := startSpriteSession(t, binary, filepath.Join(home, "pig"), agentDir)
-		session.await("asking", 0, "Run pig extension upgrade ")
+		session := startSpriteSession(t, binary, filepath.Join(home, "ompig"), agentDir)
+		session.await("asking", 0, "Run ompig extension upgrade ")
 		session.await("the question", 0, "now? [y/N] ")
 		mark := session.send("y\r")
 		session.await("upgrading", mark, "rebuilt: ok")
@@ -174,13 +174,13 @@ func TestInteractiveStartupAsksToUpgrade(t *testing.T) {
 	})
 	t.Run("no", func(t *testing.T) {
 		home, agentDir, extension := startupDriftFixture(t)
-		session := startSpriteSession(t, binary, filepath.Join(home, "pig"), agentDir)
+		session := startSpriteSession(t, binary, filepath.Join(home, "ompig"), agentDir)
 		session.await("the question", 0, "now? [y/N] ")
 		session.send("\r")
 		select {
 		case <-session.exited:
 		case <-time.After(testbudget.Wait(t)):
-			t.Fatalf("pig did not exit after no; last output: %q", session.tail())
+			t.Fatalf("ompig did not exit after no; last output: %q", session.tail())
 		}
 		if !strings.Contains(session.tail(), "Failed to load extension") || readFile(t, filepath.Join(extension, "extension.go")) != oldExtensionSource {
 			t.Fatalf("output: %q", session.tail())

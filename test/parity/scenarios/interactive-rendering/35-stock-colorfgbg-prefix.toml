@@ -14,16 +14,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/stock-color-agent", "TERM=screen-256color", "COLORTERM=", "COLORFGBG=0;15suffix"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/stock-color-agent", "TERM=screen-256color", "COLORTERM=", "COLORFGBG=0;15suffix"]
 pi = ["PI_CODING_AGENT_DIR=testdata/stock-color-agent", "PI_SKIP_VERSION_CHECK=1", "TERM=screen-256color", "COLORTERM=", "COLORFGBG=0;15suffix"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "sessions", "-c"]
+ompig_args = ["--no-extensions", "--session-dir", "sessions", "-c"]
 pi_args = ["--session-dir", "sessions", "-c"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "Resume marker end"
+ready_pattern_ompig = "Resume marker end"
 ready_pattern_pi = "Resume marker end"
 ready_timeout_seconds = 30
 cwd = "testdata/thinking-cwd"

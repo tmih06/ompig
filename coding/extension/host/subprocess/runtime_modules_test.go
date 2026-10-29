@@ -38,7 +38,7 @@ func TestRuntimeModulesListsEveryLazyLoad(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		// Vendored packages under shims/ load their own files; PiG's sources are the tree's top level, harness/ and the shims/ modules.
+		// Vendored packages under shims/ load their own files; Ompig's sources are the tree's top level, harness/ and the shims/ modules.
 		if entry.IsDir() && filepath.Dir(path) == filepath.Join(root, "shims") {
 			return filepath.SkipDir
 		}

@@ -16,7 +16,7 @@ driver = "interactive-tmux"
 width = 100
 height = 40
 # Quiet startup has no banner; use the same footer/prompt readiness contract as Pi.
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 20
 capture_start = "Only showing models"
@@ -41,9 +41,9 @@ wait_not_contains = ["Refreshing model catalogs…"]
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/model-picker-defaults", "GEMINI_API_KEY=fake-gemini", "GOOGLE_API_KEY=ignored-google"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/model-picker-defaults", "GEMINI_API_KEY=fake-gemini", "GOOGLE_API_KEY=ignored-google"]
 pi = ["PI_CODING_AGENT_DIR=testdata/model-picker-defaults", "GEMINI_API_KEY=fake-gemini", "GOOGLE_API_KEY=ignored-google", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

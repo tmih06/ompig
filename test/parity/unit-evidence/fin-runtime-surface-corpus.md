@@ -13,7 +13,7 @@ Pi: `0.87.1`. Baseline: `da3b0ff`.
 - Baseline-report SHA256: `e9b720ffee9259b0e3b9a69a69eb2dbdf63d14305acbe7df6bb27a5b92be6eca`
 - Candidate binary SHA256: `dcc165cd79f3f60fdc4c12c504004b8eff5234f098f756c545f84b7a61119d6a`
 
-| Package | Version | Pi print exit | PiG print exit | Package manifest SHA256 |
+| Package | Version | Pi print exit | Ompig print exit | Package manifest SHA256 |
 |---|---|---|---|---|
 | `pi-mcp-adapter` | 2.38.0 | 0 | 0 | `ef9b7355d2c8bf360ed8cd43b31170d5c75e9a9e6fec3b16b643fa08fd2606c2` |
 | `pi-subagents` | 0.71.0 | 0 | 0 | `7c978160eacba4b8b58c838401dd8d2919bbc3a2fd8e8f1673e580ee5659e7f9` |

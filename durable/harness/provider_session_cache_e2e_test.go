@@ -17,9 +17,9 @@ import (
 
 	"github.com/klauspost/compress/zstd"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // providerSessionCacheModels is the test's Proxy over builtinModels(): StreamSimple records the forwarded provider session ID and streams the model through openai-codex-responses with the token over SSE. baseURL replaces the model's endpoint for the hermetic run.

@@ -15,10 +15,10 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // This adapter deliberately exposes only the original binding contract.
@@ -217,7 +217,7 @@ func registryUpdates(t *testing.T, conn *subprocess.Conn, peer net.Conn) int {
 	}
 }
 
-// pig additive (D19): only a runtime that declared
+// ompig additive (D19): only a runtime that declared
 // RegisterPayload.WantsModelRegistry replicates the registry. Wiring the
 // Session's model operations publishes the catalog once; a connection
 // that reads getModelRegistryState on use receives none of it, and while only
@@ -256,16 +256,16 @@ func TestModelCatalogReachesOnlyRegistryReplicas(t *testing.T) {
 	}
 }
 
-// pig additive (D19): the Go, Rust and Python SDKs answer ctx.modelRegistry by
+// ompig additive (D19): the Go, Rust and Python SDKs answer ctx.modelRegistry by
 // calling getModelRegistryState when an extension reads it, so they never
-// declare RegisterPayload.WantsModelRegistry. A Piglet Binary paid for the
+// declare RegisterPayload.WantsModelRegistry. A Ompiglet Binary paid for the
 // whole catalog (more than 1 MB of JSON) in the ready payload and three
 // publications on its startup path for a fused Go extension that discarded
 // every copy. Loading such an extension with the Session's model operations
 // wired builds no catalog, while the extension's own read still returns the
 // host's registry.
 func TestGoSDKExtensionStartsWithoutModelRegistrySnapshot(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	_, bindings, builds := replicaRegistry(t)
 	bridge := subprocess.NewUIBridge(func() {})
 	detach := WireModelOperations(bridge, bindings)
@@ -306,7 +306,7 @@ func TestGoSDKExtensionStartsWithoutModelRegistrySnapshot(t *testing.T) {
 	}
 }
 
-// pig additive (D19): a Node member answers ctx.modelRegistry from the snapshot
+// ompig additive (D19): a Node member answers ctx.modelRegistry from the snapshot
 // the host replicates into it. A Node cell defers each member's ready until
 // every factory has finished, so the member receives RegisterExtConn's
 // model_registry_update first; the deferred ready payload then replaces the
@@ -319,7 +319,7 @@ func TestNodeModelRegistryReplicaSurvivesDeferredReady(t *testing.T) {
 	}
 	for _, count := range []int{1, 2} {
 		t.Run(map[int]string{1: "one-member", 2: "two-members"}[count], func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
 			_, bindings, _ := replicaRegistry(t)
 			bridge := subprocess.NewUIBridge(func() {})
 			detach := WireModelOperations(bridge, bindings)

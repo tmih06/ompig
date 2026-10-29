@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // pi-coding-agent's theme helpers (getMarkdownTheme, getSelectListTheme, getSettingsListTheme, highlightCode, initTheme) and keyHint family for every SDK against the

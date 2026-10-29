@@ -5,7 +5,7 @@
       "id": "input:packages/coding-agent/src/core/agent-session.ts#AgentSession._emitExtensionEvent",
       "ownerFamily": "extensions-runtime",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -15,7 +15,7 @@
       "id": "input:packages/coding-agent/src/extensions/llama/ui.ts#HuggingFaceSearch.handleInput",
       "ownerFamily": "llama-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/llama/ui.go#HandleInput",
         "internal/codingagent/llama/ui.go#scheduleSearch",
         "internal/codingagent/llama/ui.go#runSearch"
@@ -35,7 +35,7 @@
       "id": "input:packages/coding-agent/src/extensions/llama/ui.ts#LlamaView.handleInput",
       "ownerFamily": "llama-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/llama/ui.go#HandleInput"
       ],
       "evidence": [
@@ -52,7 +52,7 @@
       "id": "input:packages/coding-agent/src/extensions/mcp/ui.ts#McpManagerView.<anonymous@130>",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/manager.go#Menu"
       ],
       "evidence": [
@@ -69,7 +69,7 @@
       "id": "input:packages/coding-agent/src/extensions/mcp/ui.ts#McpManagerView.<anonymous@165>",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/manager.go#Status"
       ],
       "evidence": [
@@ -88,7 +88,7 @@
       "id": "input:packages/coding-agent/src/extensions/mcp/ui.ts#McpManagerView.<anonymous@206>",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/manager.go#RedirectURL"
       ],
       "evidence": [
@@ -108,7 +108,7 @@
       "id": "input:packages/coding-agent/src/extensions/mcp/ui.ts#McpManagerView.handleInput",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/manager.go#HandleInput"
       ],
       "evidence": [
@@ -125,7 +125,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/bordered-loader.ts#BorderedLoader.handleInput",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/bordered_loader.go#HandleInput",
         "tui/bordered_loader.go#NewBorderedLoader"
       ],
@@ -146,7 +146,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/config-selector.ts#ResourceList.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/config_selector.go#HandleInput"
       ],
       "evidence": [
@@ -163,7 +163,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/custom-editor.ts#CustomEditor.handleInput",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/custom_editor.go#HandleInput",
         "internal/codingagent/custom_editor.go#OnAction",
         "internal/codingagent/interactive_input.go#handleCustomEditorKey",
@@ -192,14 +192,14 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts#EasterEgg3dAnimation.handleInput",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
-        "internal/codingagent/pig_egg3d.go#blockOffsets",
-        "internal/codingagent/pig_logo_animation.go#HandleInput",
-        "internal/codingagent/pig_logo_animation.go#close"
+      "ompigTargets": [
+        "internal/codingagent/ompig_egg3d.go#blockOffsets",
+        "internal/codingagent/ompig_logo_animation.go#HandleInput",
+        "internal/codingagent/ompig_logo_animation.go#close"
       ],
       "evidence": [
-        "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
-        "internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
+        "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+        "internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
         "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml"
       ],
       "contracts": [
@@ -212,7 +212,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/extension-editor.ts#ExtensionEditorComponent.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#Editor",
         "internal/codingagent/extension_editor.go#HandleInput"
       ],
@@ -233,7 +233,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/extension-input.ts#ExtensionInputComponent.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#Input",
         "tui/extension_input.go#HandleInput"
       ],
@@ -252,7 +252,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/extension-selector.ts#ExtensionSelectorComponent.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#Select",
         "tui/extension_selector.go#HandleInput"
       ],
@@ -271,7 +271,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/first-time-setup.ts#FirstTimeSetupComponent.handleInput",
       "ownerFamily": "startup",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/first_time_setup.go#HandleInput"
       ],
       "evidence": [
@@ -288,7 +288,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/login-dialog.ts#LoginDialogComponent.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/login_dialog.go#HandleInput",
         "tui/login_dialog.go#showInput"
       ],
@@ -307,7 +307,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/model-selector.ts#ModelSelectorComponent.handleInput",
       "ownerFamily": "model-resolver-selector",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/model_select.go#moveCursor",
         "tui/model_select.go#HandleInput",
         "internal/codingagent/interactive_commands.go#buildSlashContext",
@@ -346,7 +346,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/model-selector.ts#ModelSelectorComponent.refreshModels",
       "ownerFamily": "model-resolver-selector",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/model_selector_runtime.go#NewModelSelectorComponent",
         "tui/model_selector_runtime.go#applyCatalogRefresh",
         "tui/model_selector_runtime.go#rejectCatalogRefresh",
@@ -368,7 +368,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/oauth-selector.ts#OAuthSelectorComponent.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/oauth_selector.go#HandleInput",
         "tui/oauth_selector.go#confirm"
       ],
@@ -391,7 +391,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/scoped-models-selector.ts#ScopedModelsSelectorComponent.handleInput",
       "ownerFamily": "model-resolver-selector",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/scoped_models_list.go#HandleInput",
         "tui/scoped_models_list.go#refresh",
         "internal/codingagent/keybindings.go#syncToTUI"
@@ -416,7 +416,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/session-selector.ts#SessionList.handleInput",
       "ownerFamily": "session",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/session_selector.go#HandleInput"
       ],
       "evidence": [
@@ -433,7 +433,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/session-selector.ts#SessionSelectorComponent.handleInput",
       "ownerFamily": "session",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/session_selector.go#HandleInput"
       ],
       "evidence": [
@@ -450,7 +450,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/settings-selector.ts#ThemeSubmenu.handleInput",
       "ownerFamily": "settings",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -460,7 +460,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/settings-selector.ts#WarningSettingsSubmenu.handleInput",
       "ownerFamily": "settings",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -470,7 +470,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/settings-submenu.ts#SelectSubmenu.handleInput",
       "ownerFamily": "settings",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/select_submenu.go#HandleInput"
       ],
       "evidence": [
@@ -487,7 +487,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/settings-submenu.ts#SteppedSubmenu.handleInput",
       "ownerFamily": "settings",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/settings_submenu.go#HandleInput"
       ],
       "evidence": [
@@ -504,7 +504,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/thinking-selector.ts#ThinkingSelectorComponent.handleInput",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/thinking_selector.go#HandleInput"
       ],
       "evidence": [
@@ -525,7 +525,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#LabelInput.handleInput",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -535,7 +535,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#SearchLine.handleInput",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -545,7 +545,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#TreeList.handleInput",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -555,7 +555,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#TreeSelectorComponent.handleInput",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -565,7 +565,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/trust-selector.ts#TrustSelectorComponent.handleInput",
       "ownerFamily": "project-trust",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/trust_selector.go#HandleInput"
       ],
       "evidence": [
@@ -582,7 +582,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/components/user-message-selector.ts#UserMessageList.handleInput",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/user_message_selector.go#HandleInput"
       ],
       "evidence": [
@@ -599,7 +599,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.flushCompactionQueue",
       "ownerFamily": "compaction",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -609,7 +609,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.handleEvent",
       "ownerFamily": "compaction",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -619,7 +619,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.init",
       "ownerFamily": "startup",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/interactive.go#Run",
         "internal/codingagent/interactive_editor.go#setAllToolsExpanded",
         "internal/codingagent/startup_header.go#renderBuiltInHeader"
@@ -639,7 +639,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.onExtensionShortcut",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/interactive_helpers.go#setupExtensionShortcutListener",
         "internal/codingagent/reload_resources.go#replaceExtensionRunner"
       ],
@@ -659,7 +659,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.setExtensionFooter",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#SetFooter",
         "internal/codingagent/status_line.go#Render(width int)"
       ],
@@ -679,7 +679,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.setupKeyHandlers",
       "ownerFamily": "interactive-input",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -689,7 +689,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.showExtensionEditor",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#runDialog",
         "internal/codingagent/ext_ui_context.go#hideExtensionDialog",
         "coding/extension/host/subprocess/ui_bridge.go#handleCall",
@@ -719,7 +719,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.showExtensionInput",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#runDialog",
         "internal/codingagent/ext_ui_context.go#hideExtensionDialog",
         "coding/extension/host/subprocess/ui_bridge.go#handleCall",
@@ -750,7 +750,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.showExtensionSelector",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/ext_ui_context.go#runDialog",
         "internal/codingagent/ext_ui_context.go#hideExtensionDialog",
         "coding/extension/host/subprocess/ui_bridge.go#handleCall",
@@ -781,7 +781,7 @@
       "id": "input:packages/coding-agent/src/modes/interactive/program-status-reporter.ts#ProgramStatusReporter.handleEvent",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/program_status_reporter.go#HandleEvent",
         "internal/codingagent/program_status_reporter.go#SetBlocked",
         "internal/codingagent/program_status_reporter.go#Reset",
@@ -802,7 +802,7 @@
       "id": "input:packages/tui/src/alt-screen-search.ts#AltScreenSearchComponent.handleInput",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/alt_screen_search.go#HandleInput"
       ],
       "evidence": [
@@ -819,7 +819,7 @@
       "id": "input:packages/tui/src/components/cancellable-loader.ts#CancellableLoader.dispose",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/cancellable_loader.go#Dispose"
       ],
       "evidence": [
@@ -837,7 +837,7 @@
       "id": "input:packages/tui/src/components/cancellable-loader.ts#CancellableLoader.handleInput",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/cancellable_loader.go#HandleInput"
       ],
       "evidence": [
@@ -855,7 +855,7 @@
       "id": "input:packages/tui/src/components/editor.ts#Editor.handleInput",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/editor.go#submitValue",
         "internal/codingagent/extension_editor.go#HandleInput",
         "tui/editor.go#AddToHistory",
@@ -898,7 +898,7 @@
       "id": "input:packages/tui/src/components/editor.ts#Editor.shouldSubmitOnBackslashEnter",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/editor.go#shouldSubmitOnBackslashEnter"
       ],
       "evidence": [
@@ -915,7 +915,7 @@
       "id": "input:packages/tui/src/components/input.ts#Input.handleInput",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/text_input.go#HandleInput"
       ],
       "evidence": [
@@ -938,7 +938,7 @@
       "id": "input:packages/tui/src/components/select-list.ts#SelectList.handleInput",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/select_list.go#HandleInput",
         "tui/select_filterable.go#HandleInput",
         "tui/select_submenu.go#HandleInput"
@@ -961,7 +961,7 @@
       "id": "input:packages/tui/src/components/settings-list.ts#SettingsList.handleInput",
       "ownerFamily": "settings",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/settings_list.go#HandleInput",
         "tui/settings_list.go#applyFilter"
       ],
@@ -979,7 +979,7 @@
       "id": "input:packages/tui/src/keybindings.ts#KeybindingsManager.matches",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/keybindings.go#Matches"
       ],
       "evidence": [
@@ -996,7 +996,7 @@
       "id": "input:packages/tui/src/terminal-image.ts#<module>.detectCapabilities",
       "ownerFamily": "tui-components",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -1006,7 +1006,7 @@
       "id": "input:packages/tui/src/terminal.ts#ProcessTerminal.handleKeyboardProtocolNegotiationSequence",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/terminal.go#handleKeyboardProtocolNegotiationSequence"
       ],
       "evidence": [
@@ -1023,7 +1023,7 @@
       "id": "input:packages/tui/src/tui-alt-screen.ts#TuiAltScreen.handleViewportInput",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui_alt_screen_input.go#HandleViewportInput",
         "tui/tui_alt_screen_mouse.go#handleWheel"
       ],
@@ -1043,7 +1043,7 @@
       "id": "input:packages/tui/src/tui.ts#TuiBase.handleTerminalInput",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui_input.go#HandleTerminalInput",
         "coding/cli/config_command.go#driveConfigSelector"
       ],
@@ -1065,7 +1065,7 @@
       "id": "render:packages/ai/src/api/llama-cpp-classify.ts#<module>.renderOverview",
       "ownerFamily": "providers-registry",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/llama_cpp_classify.go#renderLlamaOverview"
       ],
       "evidence": [
@@ -1083,7 +1083,7 @@
       "id": "render:packages/ai/src/api/llama-cpp-classify.ts#<module>.renderPrompt",
       "ownerFamily": "providers-registry",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/llama_cpp_classify.go#renderPrompt"
       ],
       "evidence": [
@@ -1101,7 +1101,7 @@
       "id": "render:packages/ai/src/api/llama-cpp-classify.ts#<module>.renderQuestion",
       "ownerFamily": "providers-registry",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/llama_cpp_classify.go#LlamaCppRenderQuestion"
       ],
       "evidence": [
@@ -1119,7 +1119,7 @@
       "id": "render:packages/ai/src/api/llama-cpp-classify.ts#<module>.renderState",
       "ownerFamily": "providers-registry",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/llama_cpp_classify.go#renderLlamaState"
       ],
       "evidence": [
@@ -1137,7 +1137,7 @@
       "id": "render:packages/ai/src/api/llama-cpp-classify.ts#<module>.renderTask",
       "ownerFamily": "providers-registry",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/llama_cpp_classify.go#renderLlamaTask",
         "ai/llama_cpp_classify.go#llamaQuestionLabels"
       ],
@@ -1156,7 +1156,7 @@
       "id": "render:packages/ai/src/api/openai-responses-shared.ts#<module>.renderIncrementalToolsNotice",
       "ownerFamily": "providers-faux-streaming",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -1166,7 +1166,7 @@
       "id": "render:packages/ai/src/api/openai-responses-shared.ts#<module>.renderToolRemovalNotice",
       "ownerFamily": "providers-faux-streaming",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -1176,7 +1176,7 @@
       "id": "render:packages/ai/src/utils/oauth-page.ts#<module>.renderPage",
       "ownerFamily": "oauth",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/oauth_page.go#renderOAuthPage",
         "ai/oauth_page.go#escapeOAuthPageHTML",
         "ai/oauth_page.go#OAuthSuccessHTML",
@@ -1197,7 +1197,7 @@
       "id": "render:packages/ai/src/utils/text.ts#<module>.renderSystemMessageUpdate",
       "ownerFamily": "providers-faux-streaming",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "ai/transcript.go#RenderSystemMessageUpdate"
       ],
       "evidence": [
@@ -1214,7 +1214,7 @@
       "id": "render:packages/codemode/src/declarations.ts#<module>.render",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "codemode/declarations.go#schemaToType"
       ],
       "evidence": [
@@ -1233,7 +1233,7 @@
       "id": "render:packages/codemode/src/declarations.ts#<module>.renderDeclarations",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "codemode/declarations.go#RenderDeclarations"
       ],
       "evidence": [
@@ -1250,7 +1250,7 @@
       "id": "render:packages/codemode/src/declarations.ts#<module>.renderGlobal",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "codemode/declarations.go#renderGlobal"
       ],
       "evidence": [
@@ -1267,7 +1267,7 @@
       "id": "render:packages/codemode/src/declarations.ts#<module>.renderToolOutputType",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "codemode/declarations.go#RenderToolOutputType"
       ],
       "evidence": [
@@ -1284,7 +1284,7 @@
       "id": "render:packages/codemode/src/declarations.ts#<module>.renderToolSample",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "codemode/declarations.go#RenderToolSample"
       ],
       "evidence": [
@@ -1301,7 +1301,7 @@
       "id": "render:packages/codemode/src/declarations.ts#<module>.renderToolSignature",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "codemode/declarations.go#RenderToolSignature"
       ],
       "evidence": [
@@ -1318,7 +1318,7 @@
       "id": "render:packages/coding-agent/src/core/export-html/tool-renderer.ts#<module>.renderCall",
       "ownerFamily": "export-html",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/export/tool_renderer.go#renderCall",
         "internal/codingagent/export/tool_renderer.go#renderContext"
       ],
@@ -1336,7 +1336,7 @@
       "id": "render:packages/coding-agent/src/core/export-html/tool-renderer.ts#<module>.renderResult",
       "ownerFamily": "export-html",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/export/tool_renderer.go#renderResult",
         "internal/codingagent/export/tool_renderer.go#trimRenderedResultLines",
         "internal/codingagent/export/tool_renderer.go#isBlankRenderedLine"
@@ -1355,7 +1355,7 @@
       "id": "render:packages/coding-agent/src/core/extensions/runner.ts#ExtensionRunner.renderCurrentSystemPrompt",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/extension/host/inproc/runner.go#EmitBeforeAgentStart",
         "coding/extension/host/inproc/runner.go#RenderSystemPrompt",
         "coding/extension/host/subprocess/prompt_options.go#renderSystemPromptCall",
@@ -1377,7 +1377,7 @@
       "id": "render:packages/coding-agent/src/core/system-prompt.ts#<module>.renderProjectContext",
       "ownerFamily": "project-trust",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/prompts/coding.go#BuildSystemPromptSections"
       ],
       "evidence": [
@@ -1395,7 +1395,7 @@
       "id": "render:packages/coding-agent/src/core/tools/render-utils.ts#<module>.renderToolPath",
       "ownerFamily": "tools",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -1405,7 +1405,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/bash.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#shellRenderCall"
       ],
       "evidence": [
@@ -1422,7 +1422,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/bash.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#shellRenderResult"
       ],
       "evidence": [
@@ -1439,7 +1439,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/edit.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#editRenderCall"
       ],
       "evidence": [
@@ -1457,7 +1457,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/edit.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#editRenderResult"
       ],
       "evidence": [
@@ -1474,7 +1474,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/find.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#builtInToolRenderers"
       ],
       "evidence": [
@@ -1491,7 +1491,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/find.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#listRenderResult"
       ],
       "evidence": [
@@ -1508,7 +1508,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/grep.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#builtInToolRenderers"
       ],
       "evidence": [
@@ -1525,7 +1525,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/grep.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#listRenderResult"
       ],
       "evidence": [
@@ -1542,7 +1542,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/ls.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#builtInToolRenderers"
       ],
       "evidence": [
@@ -1559,7 +1559,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/ls.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#listRenderResult"
       ],
       "evidence": [
@@ -1576,7 +1576,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/read.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -1586,7 +1586,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/read.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -1596,7 +1596,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/write.ts#<module>.renderCall",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#writeRenderCall"
       ],
       "evidence": [
@@ -1613,7 +1613,7 @@
       "id": "render:packages/coding-agent/src/core/tools/renderers/write.ts#<module>.renderResult",
       "ownerFamily": "tools",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_builtin_renderers.go#writeRenderResult"
       ],
       "evidence": [
@@ -1630,7 +1630,7 @@
       "id": "render:packages/coding-agent/src/extensions/codemode/renderer.ts#<module>.renderCall",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_codemode_renderer.go#codemodeRenderCall"
       ],
       "evidence": [
@@ -1648,7 +1648,7 @@
       "id": "render:packages/coding-agent/src/extensions/codemode/renderer.ts#<module>.renderResult",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/tool_codemode_renderer.go#codemodeRenderResult"
       ],
       "evidence": [
@@ -1666,7 +1666,7 @@
       "id": "render:packages/coding-agent/src/extensions/codemode/tool.ts#<module>.renderToolSection",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/extension/builtin/codemode/description.go#renderToolSection",
         "coding/extension/builtin/codemode/description.go#CreateDescription"
       ],
@@ -1685,7 +1685,7 @@
       "id": "render:packages/coding-agent/src/extensions/llama/ui.ts#LlamaView.render",
       "ownerFamily": "llama-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/llama/ui.go#Render",
         "internal/codingagent/llama/ui.go#frame",
         "internal/codingagent/llama/ui.go#ShowModels",
@@ -1705,7 +1705,7 @@
       "id": "render:packages/coding-agent/src/extensions/mcp/index.ts#<module>.renderServersSection",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/extension.go#RenderServersSection"
       ],
       "evidence": [
@@ -1724,7 +1724,7 @@
       "id": "render:packages/coding-agent/src/extensions/mcp/oauth.ts#<module>.options.renderPage",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/oauth.go#listenForCallback"
       ],
       "evidence": [
@@ -1741,7 +1741,7 @@
       "id": "render:packages/coding-agent/src/extensions/mcp/tools.ts#<module>.renderCall",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/render.go#renderCall"
       ],
       "evidence": [
@@ -1758,7 +1758,7 @@
       "id": "render:packages/coding-agent/src/extensions/mcp/tools.ts#<module>.renderResult",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/render.go#renderResult"
       ],
       "evidence": [
@@ -1775,7 +1775,7 @@
       "id": "render:packages/coding-agent/src/extensions/mcp/ui.ts#McpManagerView.menu.render",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/manager.go#Menu"
       ],
       "evidence": [
@@ -1795,7 +1795,7 @@
       "id": "render:packages/coding-agent/src/extensions/mcp/ui.ts#McpManagerView.render",
       "ownerFamily": "extensions-runtime",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "coding/mcpext/mcptui/manager.go#Render"
       ],
       "evidence": [
@@ -1813,7 +1813,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/armin.ts#ArminComponent.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/armin.go#Render"
       ],
       "evidence": [
@@ -1830,7 +1830,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/assistant-message.ts#AssistantMessageComponent.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/assistant_message_block.go#Render"
       ],
       "evidence": [
@@ -1847,7 +1847,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/bash-execution.ts#BashExecutionComponent.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/bash_execution.go#Render"
       ],
       "evidence": [
@@ -1864,7 +1864,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/config-selector.ts#ConfigSelectorHeader.render",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/config_selector.go#Render"
       ],
       "evidence": [
@@ -1881,7 +1881,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/config-selector.ts#ResourceList.render",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/config_selector.go#Render"
       ],
       "evidence": [
@@ -1898,7 +1898,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/config-selector.ts#ResourceList.renderCheckbox",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/config_selector.go#Render"
       ],
       "evidence": [
@@ -1915,7 +1915,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/custom-editor.ts#CustomEditor.renderTopBorder",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/editor_status.go#renderStatusBorder"
       ],
       "evidence": [
@@ -1932,7 +1932,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/diff.ts#<module>.renderDiff",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/diff_render.go#RenderDiff"
       ],
       "evidence": [
@@ -1950,7 +1950,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/diff.ts#<module>.renderIntraLineDiff",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/diff_render.go#RenderIntraLineDiff"
       ],
       "evidence": [
@@ -1968,7 +1968,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/dynamic-border.ts#DynamicBorder.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/dynamic_border.go#Render"
       ],
       "evidence": [
@@ -1985,12 +1985,12 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts#BlockRaster.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
-        "internal/codingagent/pig_logo_animation.go#renderLayer"
+      "ompigTargets": [
+        "internal/codingagent/ompig_logo_animation.go#renderLayer"
       ],
       "evidence": [
-        "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
-        "internal/codingagent/pig_logo_animation_test.go#TestPigLogoRasterHoldsMoreThan255Faces",
+        "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+        "internal/codingagent/ompig_logo_animation_test.go#TestPigLogoRasterHoldsMoreThan255Faces",
         "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml"
       ],
       "contracts": [
@@ -2003,11 +2003,11 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts#BlockRaster.renderHalo",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
-        "internal/codingagent/pig_logo_animation.go#renderHalo"
+      "ompigTargets": [
+        "internal/codingagent/ompig_logo_animation.go#renderHalo"
       ],
       "evidence": [
-        "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+        "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
         "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml"
       ],
       "contracts": [
@@ -2020,13 +2020,13 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts#EasterEgg3dAnimation.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
-        "internal/codingagent/pig_egg3d.go#blockOffsets",
-        "internal/codingagent/pig_logo_animation.go#renderFrame"
+      "ompigTargets": [
+        "internal/codingagent/ompig_egg3d.go#blockOffsets",
+        "internal/codingagent/ompig_logo_animation.go#renderFrame"
       ],
       "evidence": [
-        "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
-        "internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
+        "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+        "internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
         "test/parity/scenarios/fullscreen/11-logo-click-animation.toml",
         "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml"
       ],
@@ -2040,7 +2040,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/footer.ts#FooterComponent.render",
       "ownerFamily": "footer",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/status_line.go#renderFooter"
       ],
       "evidence": [
@@ -2057,7 +2057,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/radius-login-selector.ts#RadiusLoginMenuComponent.render",
       "ownerFamily": "selectors",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/radius_login_selector.go#Render"
       ],
       "evidence": [
@@ -2074,7 +2074,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/session-selector.ts#SessionList.render",
       "ownerFamily": "session",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/session_selector.go#renderList"
       ],
       "evidence": [
@@ -2091,7 +2091,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/session-selector.ts#SessionSelectorHeader.render",
       "ownerFamily": "session",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/session_selector.go#sessionSelectorHeader"
       ],
       "evidence": [
@@ -2108,7 +2108,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/settings-submenu.ts#SteppedSubmenu.render",
       "ownerFamily": "settings",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/select_submenu.go#Render"
       ],
       "evidence": [
@@ -2125,7 +2125,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/status-indicator.ts#IdleStatus.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/status_indicator.go#Render"
       ],
       "evidence": [
@@ -2142,7 +2142,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/status-indicator.ts#StatusIndicator.renderInBorder",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/status_indicator.go#RenderInBorder"
       ],
       "evidence": [
@@ -2159,7 +2159,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/status-indicator.ts#StatusIndicator.renderSpinnerInBorder",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/status_indicator.go#RenderSpinnerInBorder"
       ],
       "evidence": [
@@ -2176,7 +2176,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/themed-text.ts#ThemedText.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/themed_text.go#Render"
       ],
       "evidence": [
@@ -2193,7 +2193,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/tool-execution.ts#ToolExecutionComponent.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tool_execution.go#Render",
         "tui/tool_execution_definition.go#renderSelfShell"
       ],
@@ -2213,7 +2213,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#<module>.renderHorizontalViewport",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2223,7 +2223,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#LabelInput.render",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2233,7 +2233,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#SearchLine.render",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2243,7 +2243,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#TreeHelp.render",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2253,7 +2253,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/tree-selector.ts#TreeList.render",
       "ownerFamily": "tree",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2263,7 +2263,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/user-message-selector.ts#UserMessageList.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/user_message_selector.go#Render"
       ],
       "evidence": [
@@ -2280,7 +2280,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/user-message.ts#UserMessageComponent.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/user_message_block.go#Render"
       ],
       "evidence": [
@@ -2297,7 +2297,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/components/visual-truncate.ts#VisualLinePreview.render",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/visual_truncate.go#Render"
       ],
       "evidence": [
@@ -2314,7 +2314,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderCurrentSessionState",
       "ownerFamily": "interactive-input",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/interactive_rebind.go#renderCurrentSessionState",
         "internal/codingagent/interactive_transcript.go#repaintInitialMessages"
       ],
@@ -2334,7 +2334,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderInfo",
       "ownerFamily": "interactive-input",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2344,7 +2344,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderInitialMessages",
       "ownerFamily": "extensions-runtime",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2354,7 +2354,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderProjectTrustWarningIfNeeded",
       "ownerFamily": "interactive-input",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2364,7 +2364,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderSessionEntries",
       "ownerFamily": "interactive-input",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2374,7 +2374,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderSessionItems",
       "ownerFamily": "interactive-input",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2384,7 +2384,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderStack",
       "ownerFamily": "extensions-runtime",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2394,7 +2394,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderWidgetContainer",
       "ownerFamily": "interactive-input",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/interactive_extensions.go#renderWidgetsLocked"
       ],
       "evidence": [
@@ -2413,7 +2413,7 @@
       "id": "render:packages/coding-agent/src/modes/interactive/interactive-mode.ts#InteractiveMode.renderWidgets",
       "ownerFamily": "interactive-input",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/codingagent/interactive_extensions.go#renderWidgetsLocked",
         "internal/codingagent/ext_widgets.go#setExtensionWidget"
       ],
@@ -2432,7 +2432,7 @@
       "id": "render:packages/coding-agent/src/utils/syntax-highlight.ts#<module>.renderHighlightedHtml",
       "ownerFamily": "interactive-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/highlight.go#RenderHighlightedHtml",
         "tui/highlight.go#renderHighlightedHTML",
         "tui/highlight.go#spanClassValue",
@@ -2452,7 +2452,7 @@
       "id": "render:packages/tui/src/alt-screen-search.ts#AltScreenSearchComponent.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/alt_screen_search.go#Render"
       ],
       "evidence": [
@@ -2469,7 +2469,7 @@
       "id": "render:packages/tui/src/components/alt-screen-flash.ts#AltScreenFlashContainer.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/alt_screen_flash.go#Render"
       ],
       "evidence": [
@@ -2486,7 +2486,7 @@
       "id": "render:packages/tui/src/components/box.ts#Box.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/box.go#Render"
       ],
       "evidence": [
@@ -2503,7 +2503,7 @@
       "id": "render:packages/tui/src/components/editor.ts#Editor.render",
       "ownerFamily": "tui-components",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/editor.go#Render"
       ],
       "evidence": [
@@ -2520,7 +2520,7 @@
       "id": "render:packages/tui/src/components/editor.ts#Editor.renderBottomBorder",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/editor.go#renderBottomBorder"
       ],
       "evidence": [
@@ -2538,7 +2538,7 @@
       "id": "render:packages/tui/src/components/editor.ts#Editor.renderTopBorder",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/editor.go#renderTopBorder"
       ],
       "evidence": [
@@ -2556,7 +2556,7 @@
       "id": "render:packages/tui/src/components/h-stack.ts#HStack.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/stack.go#Render"
       ],
       "evidence": [
@@ -2573,7 +2573,7 @@
       "id": "render:packages/tui/src/components/image.ts#Image.render",
       "ownerFamily": "clipboard-images",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/image.go#Render"
       ],
       "evidence": [
@@ -2590,7 +2590,7 @@
       "id": "render:packages/tui/src/components/input.ts#Input.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/text_input.go#Render"
       ],
       "evidence": [
@@ -2607,7 +2607,7 @@
       "id": "render:packages/tui/src/components/loader.ts#Loader.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/loader.go#Render"
       ],
       "evidence": [
@@ -2624,7 +2624,7 @@
       "id": "render:packages/tui/src/components/markdown.ts#Markdown.render",
       "ownerFamily": "tui-components",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2634,7 +2634,7 @@
       "id": "render:packages/tui/src/components/markdown.ts#Markdown.renderInlineTokens",
       "ownerFamily": "tui-components",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2644,7 +2644,7 @@
       "id": "render:packages/tui/src/components/markdown.ts#Markdown.renderList",
       "ownerFamily": "tui-components",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2654,7 +2654,7 @@
       "id": "render:packages/tui/src/components/markdown.ts#Markdown.renderTable",
       "ownerFamily": "tui-components",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2664,7 +2664,7 @@
       "id": "render:packages/tui/src/components/markdown.ts#Markdown.renderToken",
       "ownerFamily": "tui-components",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2674,7 +2674,7 @@
       "id": "render:packages/tui/src/components/mouse-region.ts#MouseRegion.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/mouse_region.go#Render"
       ],
       "evidence": [
@@ -2692,7 +2692,7 @@
       "id": "render:packages/tui/src/components/scroll-view.ts#ScrollView.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/scroll_view.go#Render"
       ],
       "evidence": [
@@ -2709,7 +2709,7 @@
       "id": "render:packages/tui/src/components/select-list.ts#SelectList.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/select_list.go#Render"
       ],
       "evidence": [
@@ -2726,7 +2726,7 @@
       "id": "render:packages/tui/src/components/select-list.ts#SelectList.renderItem",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/select_list.go#renderItem",
         "tui/select_list.go#primaryColumnWidth"
       ],
@@ -2744,7 +2744,7 @@
       "id": "render:packages/tui/src/components/settings-list.ts#SettingsList.render",
       "ownerFamily": "settings",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/settings_list.go#Render"
       ],
       "evidence": [
@@ -2761,7 +2761,7 @@
       "id": "render:packages/tui/src/components/settings-list.ts#SettingsList.renderMainList",
       "ownerFamily": "settings",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/settings_list.go#renderMainList"
       ],
       "evidence": [
@@ -2778,7 +2778,7 @@
       "id": "render:packages/tui/src/components/spacer.ts#Spacer.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/spacer.go#Render"
       ],
       "evidence": [
@@ -2795,7 +2795,7 @@
       "id": "render:packages/tui/src/components/text.ts#Text.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/text.go#Render"
       ],
       "evidence": [
@@ -2812,7 +2812,7 @@
       "id": "render:packages/tui/src/components/truncated-text.ts#TruncatedText.render",
       "ownerFamily": "tui-components",
       "disposition": "divergence",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/truncated_text.go#Render"
       ],
       "evidence": [
@@ -2828,7 +2828,7 @@
       "id": "render:packages/tui/src/components/v-stack.ts#VStack.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/stack.go#Render"
       ],
       "evidence": [
@@ -2845,7 +2845,7 @@
       "id": "render:packages/tui/src/latex.ts#<module>.renderLatex",
       "ownerFamily": "markdown-rich-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/latex/latex.go#RenderLatex"
       ],
       "evidence": [
@@ -2862,7 +2862,7 @@
       "id": "render:packages/tui/src/latex.ts#<module>.renderLayout",
       "ownerFamily": "markdown-rich-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/latex/latex.go#renderLayout"
       ],
       "evidence": [
@@ -2879,7 +2879,7 @@
       "id": "render:packages/tui/src/latex.ts#LatexParser.render",
       "ownerFamily": "markdown-rich-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/latex/latex.go#render"
       ],
       "evidence": [
@@ -2896,7 +2896,7 @@
       "id": "render:packages/tui/src/latex.ts#LatexParser.renderCases",
       "ownerFamily": "markdown-rich-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/latex/latex.go#parseEnvironment"
       ],
       "evidence": [
@@ -2913,7 +2913,7 @@
       "id": "render:packages/tui/src/latex.ts#LatexParser.renderMatrix",
       "ownerFamily": "markdown-rich-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/latex/latex.go#renderMatrix"
       ],
       "evidence": [
@@ -2930,7 +2930,7 @@
       "id": "render:packages/tui/src/latex.ts#LatexParser.renderNested",
       "ownerFamily": "markdown-rich-rendering",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "internal/latex/latex.go#renderNested"
       ],
       "evidence": [
@@ -2947,7 +2947,7 @@
       "id": "render:packages/tui/src/layout.ts#<module>.renderCached",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/layout.go#renderCached"
       ],
       "evidence": [
@@ -2965,7 +2965,7 @@
       "id": "render:packages/tui/src/layout.ts#<module>.renderLayoutFrame",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/layout.go#RenderLayoutFrame"
       ],
       "evidence": [
@@ -2983,7 +2983,7 @@
       "id": "render:packages/tui/src/terminal-image.ts#<module>.renderImage",
       "ownerFamily": "clipboard-images",
       "disposition": "pending",
-      "pigTargets": [],
+      "ompigTargets": [],
       "evidence": [],
       "contracts": [],
       "divergence": "",
@@ -2993,7 +2993,7 @@
       "id": "render:packages/tui/src/tui-alt-screen.ts#TuiAltScreen.doRender",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui_alt_screen.go#doRender",
         "tui/tui.go#resolveFakeCursors"
       ],
@@ -3012,7 +3012,7 @@
       "id": "render:packages/tui/src/tui-alt-screen.ts#TuiAltScreen.implicitDocument.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui_alt_screen.go#renderBorrowed",
         "tui/tui_alt_screen.go#NewTuiAltScreenWithOutput"
       ],
@@ -3030,7 +3030,7 @@
       "id": "render:packages/tui/src/tui-alt-screen.ts#TuiAltScreen.render",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui_alt_screen.go#renderDocument",
         "tui/tui_alt_screen.go#StopWithOptions"
       ],
@@ -3048,7 +3048,7 @@
       "id": "render:packages/tui/src/tui-main-screen.ts#TuiMainScreen.doRender",
       "ownerFamily": "fullscreen",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui.go#doRender",
         "tui/tui.go#resolveFakeCursors"
       ],
@@ -3067,7 +3067,7 @@
       "id": "render:packages/tui/src/tui.ts#<module>.renderFakeCursor",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/cursor_marker.go#RenderFakeCursor",
         "tui/tui.go#resolveFakeCursors"
       ],
@@ -3085,7 +3085,7 @@
       "id": "render:packages/tui/src/tui.ts#Container.render",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui.go#Render",
         "tui/tui.go#renderBorrowedLocked"
       ],
@@ -3104,7 +3104,7 @@
       "id": "render:packages/tui/src/tui.ts#TuiBase.renderNow",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/tui.go#RenderNow"
       ],
       "evidence": [
@@ -3122,7 +3122,7 @@
       "id": "render:packages/tui/src/utils.ts#<module>.breakLongWord",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/wrap.go#breakLongWord"
       ],
       "evidence": [
@@ -3139,7 +3139,7 @@
       "id": "render:packages/tui/src/utils.ts#<module>.splitIntoTokensWithAnsi",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/wrap.go#splitIntoTokensWithAnsi"
       ],
       "evidence": [
@@ -3157,7 +3157,7 @@
       "id": "render:packages/tui/src/utils.ts#<module>.truncateToWidth",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/truncate.go#TruncateToWidth"
       ],
       "evidence": [
@@ -3174,7 +3174,7 @@
       "id": "render:packages/tui/src/utils.ts#<module>.visibleWidth",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/widthx.go#VisibleWidth"
       ],
       "evidence": [
@@ -3191,7 +3191,7 @@
       "id": "render:packages/tui/src/utils.ts#<module>.wrapSingleLine",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/wrap.go#wrapSingleLine"
       ],
       "evidence": [
@@ -3208,7 +3208,7 @@
       "id": "render:packages/tui/src/utils.ts#<module>.wrapTextWithAnsi",
       "ownerFamily": "tui-components",
       "disposition": "ported",
-      "pigTargets": [
+      "ompigTargets": [
         "tui/widthx/wrap.go#WrapTextWithAnsi"
       ],
       "evidence": [

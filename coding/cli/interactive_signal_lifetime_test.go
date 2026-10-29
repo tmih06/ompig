@@ -18,12 +18,12 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestInteractiveSignalsRetainHandlersThroughDisposalAndDrain(t *testing.T) {
 	t.Parallel()
-	binary := os.Getenv("PIG_SIGNAL_REFERENCE_BIN")
+	binary := os.Getenv("OMPIG_SIGNAL_REFERENCE_BIN")
 	if binary == "" {
 		binary = buildPigBinaryForSignalTest(t)
 	} else {
@@ -63,7 +63,7 @@ func TestInteractiveSignalsRetainHandlersThroughDisposalAndDrain(t *testing.T) {
 			defer cancel()
 			cmd := exec.CommandContext(ctx, binary, "--no-session", "--no-extensions", "-e", extension, "--approve", "--model", "signal-faux/signal-test-model")
 			cmd.Dir = project
-			cmd.Env = append(os.Environ(), "PIG_HOME="+root, "PIG_CODING_AGENT_DIR="+agent, "PI_CODING_AGENT_DIR="+agent, "PIG_OFFLINE=1", "PI_OFFLINE=1", "TERM=xterm-256color")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+root, "OMPIG_CODING_AGENT_DIR="+agent, "PI_CODING_AGENT_DIR="+agent, "OMPIG_OFFLINE=1", "PI_OFFLINE=1", "TERM=xterm-256color")
 			cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true, Ctty: 0}
 			output := &ptyOutput{}

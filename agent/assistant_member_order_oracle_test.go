@@ -11,14 +11,14 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's providers create the members of the finished assistant message in stream order (JSON.stringify writes creation order):
 // openai-completions.ts:564 `output.responseId ||= chunk.id` on the first chunk, :566 responseModel when the served model differs, :582
 // rawStopReason and :586 errorMessage at the finish reason, then event-stream.ts:127-128 durationMs on the final message. The same stream
-// drives Pi's openai-completions stream and PiG's provider; the session-line encoding of PiG's message must equal JSON.stringify of Pi's.
+// drives Pi's openai-completions stream and Ompig's provider; the session-line encoding of Ompig's message must equal JSON.stringify of Pi's.
 func TestAssistantLateMembersFollowPiCreationOrder(t *testing.T) {
 	type oracleStream struct {
 		api    string

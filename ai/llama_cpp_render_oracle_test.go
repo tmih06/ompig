@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type llamaRenderDoc struct {
@@ -67,7 +67,7 @@ emit(input.map((doc) => {
 				for at < min(len(got.Content), len(want[i].Content)) && got.Content[at] == want[i].Content[at] {
 					at++
 				}
-				t.Errorf("request %d differs from Pi\n doc %s\n Pig %q %v %v %q\n Pi  %q %v %v %q\n first content difference at byte %d", i, input, got.Content[at:min(len(got.Content), at+80)], got.Labels, got.Keys, got.Error, want[i].Content[at:min(len(want[i].Content), at+80)], want[i].Labels, want[i].Keys, want[i].Error, at)
+				t.Errorf("request %d differs from Pi\n doc %s\n Ompig %q %v %v %q\n Pi  %q %v %v %q\n first content difference at byte %d", i, input, got.Content[at:min(len(got.Content), at+80)], got.Labels, got.Keys, got.Error, want[i].Content[at:min(len(want[i].Content), at+80)], want[i].Labels, want[i].Keys, want[i].Error, at)
 			}
 		}
 	}
@@ -85,7 +85,7 @@ func TestLlamaCppRenderDocsDump(t *testing.T) {
 	fmt.Printf("llama-render-probes:%s\n", line)
 }
 
-// TestLlamaCppRenderDocsParity prints PiG's result of each request, one JSON line [content, labels, keys, error] per request, for the providers-registry/07 parity scenario.
+// TestLlamaCppRenderDocsParity prints Ompig's result of each request, one JSON line [content, labels, keys, error] per request, for the providers-registry/07 parity scenario.
 func TestLlamaCppRenderDocsParity(t *testing.T) {
 	for _, doc := range llamaRenderDocs() {
 		got := goLlamaRender(doc)

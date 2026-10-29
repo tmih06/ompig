@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi calls an extension's UI closures only in the TUI. print and JSON mode bind no UI (runner.ts noOpUIContext: setFooter, setHeader, custom,

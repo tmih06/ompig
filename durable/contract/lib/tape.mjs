@@ -8,8 +8,8 @@ import { AsyncLocalStorage, executionAsyncId, triggerAsyncId } from "node:async_
 import { ctxFingerprint } from "./canon.mjs"
 import { emit } from "./trace.mjs"
 
-const KEY = Symbol.for("pig.contract.tape")
-const clock = () => globalThis[Symbol.for("pig.contract.clock")]
+const KEY = Symbol.for("ompig.contract.tape")
+const clock = () => globalThis[Symbol.for("ompig.contract.clock")]
 const now = () => clock()?.now() ?? Date.now()
 
 export class TapeMismatch extends Error {
@@ -76,7 +76,7 @@ export function wrapModels(models, { createStream }) {
 		const request = fingerprint(model, context, options)
 		const n = ++call
 		// A scenario program may add durable-bench's own fingerprint of the call (CONTRACT section 5.4).
-		const benchfp = globalThis[Symbol.for("pig.contract.benchfp")]
+		const benchfp = globalThis[Symbol.for("ompig.contract.benchfp")]
 		emit({ t: "model", call: n, ...request, ...(typeof benchfp === "function" ? { bench: benchfp(context.messages) } : {}), ...(typeof context.messages?.length === "number" ? { messages: context.messages.length } : {}) })
 		if (t.mode === "replay") {
 			const recorded = nextRecorded(t, "model", request)
@@ -117,7 +117,7 @@ export function wrapModels(models, { createStream }) {
 	return models
 }
 
-/** Wrap uuidv7(): record each value, or return the recorded one (ABI section 4.2: `pig.uuidv7`). */
+/** Wrap uuidv7(): record each value, or return the recorded one (ABI section 4.2: `ompig.uuidv7`). */
 export function wrapUuid(real) {
 	const t = tape()
 	return (...args) => {

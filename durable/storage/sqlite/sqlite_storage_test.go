@@ -16,12 +16,12 @@ import (
 	"sync"
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/durabletest"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
+	"github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 var testContext = context.Background()

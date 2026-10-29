@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Upstream's pi.events is one EventEmitter per session (packages/coding-agent/src/core/event-bus.ts:12-33): listeners run in registration order, each one's synchronous prefix finishes before emit returns, a listener's error is caught and printed as `Event handler error (<channel>):` (event-bus.ts:19-25), and the unsubscribe function removes only that listener (event-bus.ts:27). The native SDKs bridge that bus by value. The node realm is the control: it runs upstream's own semantics, and a native realm must produce the same observations wherever a payload by value can.
@@ -417,7 +417,7 @@ func TestNativeEventBusEmitterReentersThroughItsOwnListener(t *testing.T) {
 	})
 }
 
-// A Go extension fused into the Host's own process (a Piglet Binary runs it over an in-memory pipe) joins the same bus: it receives a node emitter's payload and its echo reaches a node observer.
+// A Go extension fused into the Host's own process (a Ompiglet Binary runs it over an in-memory pipe) joins the same bus: it receives a node emitter's payload and its echo reaches a node observer.
 func TestNativeEventBusFusedGoExtensionJoinsTheBus(t *testing.T) {
 	t.Parallel()
 	rig := newBusRig(t,

@@ -1,4 +1,4 @@
-// pig-specific: serves Pi's DefaultPackageManager (packages/coding-agent/src/core/package-manager.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is the runtime's own package manager over the settings object it was given. The Node runtime serves Pi's own class in the extension process.
+// ompig-specific: serves Pi's DefaultPackageManager (packages/coding-agent/src/core/package-manager.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is the runtime's own package manager over the settings object it was given. The Node runtime serves Pi's own class in the extension process.
 
 package coding
 
@@ -7,11 +7,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // GraphPackageManager is a DefaultPackageManager an extension constructed.

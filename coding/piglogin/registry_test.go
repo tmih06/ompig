@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
 )
 
 func blueSprite(t *testing.T, id, name string) extension.ValidatedSpriteDefinition {
@@ -43,19 +43,19 @@ func registerFor(t *testing.T, owner string, definition extension.ValidatedSprit
 // A registered sprite follows the built-in sprites in /sprite list, the picker and the IDs, and draws its own head.
 func TestRegisteredSpriteJoinsTheCatalogue(t *testing.T) {
 	h := newSpriteHarness(t)
-	registerFor(t, "piglet-a", blueSprite(t, "blue-pig", "Blue PiG"))
+	registerFor(t, "ompiglet-a", blueSprite(t, "blue-ompig", "Blue Ompig"))
 	all := piglogin.All()
-	if len(all) != len(wantIDs)+1 || all[len(all)-1].ID != "blue-pig" {
+	if len(all) != len(wantIDs)+1 || all[len(all)-1].ID != "blue-ompig" {
 		t.Fatalf("catalogue = %d sprites ending in %q", len(all), all[len(all)-1].ID)
 	}
 	if err := h.run("list"); err != nil {
 		t.Fatal(err)
 	}
 	lines := strings.Split(h.ui.notes[0].message, "\n")
-	if got := lines[len(lines)-1]; got != "blue-pig: Blue PiG: Registered by an extension." {
+	if got := lines[len(lines)-1]; got != "blue-ompig: Blue Ompig: Registered by an extension." {
 		t.Fatalf("last /sprite list line = %q", got)
 	}
-	h.ui.answer = "Blue PiG: Registered by an extension."
+	h.ui.answer = "Blue Ompig: Registered by an extension."
 	if err := h.run(""); err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func TestRegisteredSpriteJoinsTheCatalogue(t *testing.T) {
 	if got := h.ui.asked[0][len(h.ui.asked[0])-2]; got != h.ui.answer {
 		t.Fatalf("picker's last sprite = %q", got)
 	}
-	if got := piglogin.Active(); got.ID != "blue-pig" || got.Sprite[2] != "...OeeO..OeeO..." {
+	if got := piglogin.Active(); got.ID != "blue-ompig" || got.Sprite[2] != "...OeeO..OeeO..." {
 		t.Fatalf("active = %q", got.ID)
 	}
 	if pixels := piglogin.HeadPixels(piglogin.Active()); pixels[0].Color.B != 0x1E || !slices.ContainsFunc(pixels, func(p piglogin.HeadPixel) bool { return p.Color.R == 0x5B && p.Color.B == 0xEF }) {
@@ -73,19 +73,19 @@ func TestRegisteredSpriteJoinsTheCatalogue(t *testing.T) {
 
 func TestRegisterRejectsTakenIDsAndReplacesItsOwn(t *testing.T) {
 	isolate(t)
-	if err := piglogin.Register("piglet-a", blueSprite(t, "sheriff", "Fake Sheriff")); err == nil || !strings.Contains(err.Error(), "built-in") {
+	if err := piglogin.Register("ompiglet-a", blueSprite(t, "sheriff", "Fake Sheriff")); err == nil || !strings.Contains(err.Error(), "built-in") {
 		t.Fatalf("registering a built-in ID = %v", err)
 	}
-	registerFor(t, "piglet-a", blueSprite(t, "blue-pig", "Blue PiG"))
-	if err := piglogin.Register("piglet-b", blueSprite(t, "blue-pig", "Other Blue")); err == nil || !strings.Contains(err.Error(), "another extension") {
+	registerFor(t, "ompiglet-a", blueSprite(t, "blue-ompig", "Blue Ompig"))
+	if err := piglogin.Register("ompiglet-b", blueSprite(t, "blue-ompig", "Other Blue")); err == nil || !strings.Contains(err.Error(), "another extension") {
 		t.Fatalf("registering another extension's ID = %v", err)
 	}
-	registerFor(t, "piglet-a", blueSprite(t, "blue-pig", "Bluer PiG"))
-	if got, _ := piglogin.ByID("blue-pig"); got.Name != "Bluer PiG" || len(piglogin.All()) != len(wantIDs)+1 {
+	registerFor(t, "ompiglet-a", blueSprite(t, "blue-ompig", "Bluer Ompig"))
+	if got, _ := piglogin.ByID("blue-ompig"); got.Name != "Bluer Ompig" || len(piglogin.All()) != len(wantIDs)+1 {
 		t.Fatalf("re-registering = %q with %d sprites", got.Name, len(piglogin.All()))
 	}
-	piglogin.Unregister("piglet-a")
-	if _, ok := piglogin.ByID("blue-pig"); ok || len(piglogin.All()) != len(wantIDs) {
+	piglogin.Unregister("ompiglet-a")
+	if _, ok := piglogin.ByID("blue-ompig"); ok || len(piglogin.All()) != len(wantIDs) {
 		t.Fatal("Unregister left the sprite")
 	}
 }
@@ -94,35 +94,35 @@ func TestRegisterRejectsTakenIDsAndReplacesItsOwn(t *testing.T) {
 // and the saved choice stays, so it returns when the extension registers the sprite again (a restart with the extension).
 func TestSavedRegisteredSpriteFallsBackAndReturnsWithItsExtension(t *testing.T) {
 	h := newSpriteHarness(t)
-	registerFor(t, "piglet-a", blueSprite(t, "blue-pig", "Blue PiG"))
-	if err := h.run("set blue-pig"); err != nil {
+	registerFor(t, "ompiglet-a", blueSprite(t, "blue-ompig", "Blue Ompig"))
+	if err := h.run("set blue-ompig"); err != nil {
 		t.Fatal(err)
 	}
-	piglogin.Unregister("piglet-a")
+	piglogin.Unregister("ompiglet-a")
 	piglogin.Refresh()
 	if got := piglogin.Active(); got.ID != piglogin.DefaultID {
 		t.Fatalf("without its extension the header draws %q, want the default", got.ID)
 	}
 	data, err := os.ReadFile(piglogin.StatePath(h.root))
-	if err != nil || !strings.Contains(string(data), `"blue-pig"`) {
+	if err != nil || !strings.Contains(string(data), `"blue-ompig"`) {
 		t.Fatalf("the saved choice was lost: %q %v", data, err)
 	}
-	if err := h.run("set blue-pig"); err == nil {
+	if err := h.run("set blue-ompig"); err == nil {
 		t.Fatal("/sprite set accepted a sprite no extension registered")
 	}
-	registerFor(t, "piglet-a", blueSprite(t, "blue-pig", "Blue PiG"))
-	if got := piglogin.Active(); got.ID != "blue-pig" {
+	registerFor(t, "ompiglet-a", blueSprite(t, "blue-ompig", "Blue Ompig"))
+	if got := piglogin.Active(); got.ID != "blue-ompig" {
 		t.Fatalf("after the extension registers again the header draws %q", got.ID)
 	}
 }
 
 func isolate(t *testing.T) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 }
 
-// An extension's mascot may use the symbols the "PiG." wordmark uses (digits and punctuation). The login definition moves
+// An extension's mascot may use the symbols the "Ompig." wordmark uses (digits and punctuation). The login definition moves
 // them to free symbols, so the mascot keeps its colors and the wordmark keeps the logo's.
 func TestRegisteredMascotSymbolsDoNotRecolorTheWordmark(t *testing.T) {
 	isolate(t)

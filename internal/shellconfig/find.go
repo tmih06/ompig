@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // findTimeout is the time `which` or `where` gets, upstream's spawnSync timeout.

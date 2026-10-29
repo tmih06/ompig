@@ -1573,7 +1573,7 @@ func TestStreamDeepseekThinkingOffSuppressed(t *testing.T) {
 
 // TestConvertMessages_AssistantTextIsStringNotArray pins the OpenAI Chat
 // Completions request shape for an assistant turn carrying text plus a tool call,
-// followed by a tool result. Two upstream-faithful invariants that pig previously
+// followed by a tool result. Two upstream-faithful invariants that ompig previously
 // violated (verified by differential against pi 0.84.0 openai-completions.js):
 //
 //   - assistant content is a plain string, not a [{type:"text",text}] array

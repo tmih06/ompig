@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
+	"github.com/tmih06/ompig/internal/configvalue"
 )
 
 func TestReadOnlyAuthStorageDoesNotCreateFilesOrRunCommands(t *testing.T) {
@@ -21,7 +21,7 @@ func TestReadOnlyAuthStorageDoesNotCreateFilesOrRunCommands(t *testing.T) {
 	})
 	t.Cleanup(restore)
 	configvalue.ClearCache()
-	t.Setenv("PIG_TEST_READONLY_KEY", "env-key")
+	t.Setenv("OMPIG_TEST_READONLY_KEY", "env-key")
 
 	dir := t.TempDir()
 	missing := filepath.Join(dir, "agent", "auth.json")
@@ -38,7 +38,7 @@ func TestReadOnlyAuthStorageDoesNotCreateFilesOrRunCommands(t *testing.T) {
 	}
 
 	path := filepath.Join(dir, "auth.json")
-	writeAuthFixture(t, path, `{"cmd":{"type":"api_key","key":"!op read secret"},"env":{"type":"api_key","key":"$PIG_TEST_READONLY_KEY"},"codex":{"type":"oauth","access":"a","refresh":"r","expires":1}}`)
+	writeAuthFixture(t, path, `{"cmd":{"type":"api_key","key":"!op read secret"},"env":{"type":"api_key","key":"$OMPIG_TEST_READONLY_KEY"},"codex":{"type":"oauth","access":"a","refresh":"r","expires":1}}`)
 	store = NewReadOnlyAuthStorage(path)
 	command, err := store.Read(context.Background(), "cmd")
 	if err != nil || command.Key != "!op read secret" {
@@ -93,13 +93,13 @@ func TestReadOnlyAuthStorageRejectsInvalidState(t *testing.T) {
 }
 
 func TestAuthStorageModifyIsTheCredentialWritePath(t *testing.T) {
-	t.Setenv("PIG_TEST_STORE_KEY", "resolved-key")
+	t.Setenv("OMPIG_TEST_STORE_KEY", "resolved-key")
 	path := filepath.Join(t.TempDir(), "auth.json")
 	store, err := NewAuthStorage(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := store.Set("openai", Credential{Type: CredentialAPIKey, Key: "$PIG_TEST_STORE_KEY"}); err != nil {
+	if err := store.Set("openai", Credential{Type: CredentialAPIKey, Key: "$OMPIG_TEST_STORE_KEY"}); err != nil {
 		t.Fatal(err)
 	}
 	ctx := context.Background()
@@ -108,12 +108,12 @@ func TestAuthStorageModifyIsTheCredentialWritePath(t *testing.T) {
 		t.Fatalf("Read = %+v, %v; want resolved key", read, err)
 	}
 	unchanged, err := store.Modify(ctx, "openai", func(current *Credential) (*Credential, error) {
-		if current == nil || current.Key != "$PIG_TEST_STORE_KEY" {
+		if current == nil || current.Key != "$OMPIG_TEST_STORE_KEY" {
 			t.Fatalf("Modify saw %+v; want the raw stored credential", current)
 		}
 		return nil, nil
 	})
-	if err != nil || unchanged.Key != "$PIG_TEST_STORE_KEY" {
+	if err != nil || unchanged.Key != "$OMPIG_TEST_STORE_KEY" {
 		t.Fatalf("Modify(nil) = %+v, %v; want the current credential", unchanged, err)
 	}
 	written, err := store.Modify(ctx, "codex", func(current *Credential) (*Credential, error) {
@@ -145,15 +145,15 @@ func TestAuthStorageModifyIsTheCredentialWritePath(t *testing.T) {
 }
 
 func TestInMemoryAuthStorageModifyAndRead(t *testing.T) {
-	t.Setenv("PIG_TEST_MEMORY_KEY", "memory-key")
-	store := NewInMemoryAuthStorage(map[string]Credential{"openai": {Type: CredentialAPIKey, Key: "$PIG_TEST_MEMORY_KEY"}})
+	t.Setenv("OMPIG_TEST_MEMORY_KEY", "memory-key")
+	store := NewInMemoryAuthStorage(map[string]Credential{"openai": {Type: CredentialAPIKey, Key: "$OMPIG_TEST_MEMORY_KEY"}})
 	ctx := context.Background()
 	read, err := store.Read(ctx, "openai")
 	if err != nil || read.Key != "memory-key" {
 		t.Fatalf("Read = %+v, %v", read, err)
 	}
 	if _, err := store.Modify(ctx, "openai", func(current *Credential) (*Credential, error) {
-		if current.Key != "$PIG_TEST_MEMORY_KEY" {
+		if current.Key != "$OMPIG_TEST_MEMORY_KEY" {
 			t.Fatalf("Modify saw %+v; want raw", current)
 		}
 		return &Credential{Type: CredentialAPIKey, Key: "literal"}, nil

@@ -13,7 +13,7 @@ import (
 func TestDebugCommandShowsThePathVerbatim(t *testing.T) {
 	m := sessionChromeMode(t)
 	m.chatContainer.Clear()
-	const path = `C:\Users\someone\.pig\agent\pig-debug.log`
+	const path = `C:\Users\someone\.ompig\agent\ompig-debug.log`
 	sc := m.buildSlashContext(context.Background())
 	sc.WriteDebugLog = func() (string, error) { return path, nil }
 	if err := debugHandler(sc); err != nil {

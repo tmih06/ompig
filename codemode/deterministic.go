@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // Deterministic mode (VmStartData.Deterministic, used by Sandbox.Start): a script must make the same calls with the same

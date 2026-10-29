@@ -12,7 +12,7 @@ import (
 // comb-audit row 100 follow-up: a Gemini stream chunk that is valid JSON but holds a member of an unexpected type. Pi reads each member with its own
 // expression (google-generative-ai.ts:106-235): `chunk.candidates?.[0]`, `for (const part of candidate.content.parts)`, `part.text !== undefined` then `+=`,
 // `part.thought === true`, mapStopReason's === switch, and `|| 0` on the usage counts. The rows run Pi's own stream (through @google/genai) over each body
-// and compare the final message with PiG's. Generated tool call ids carry the clock, so tool calls compare by name and arguments.
+// and compare the final message with Ompig's. Generated tool call ids carry the clock, so tool calls compare by name and arguments.
 func TestGoogleChunkMistypedMembersMatchPi(t *testing.T) {
 	chunk := func(data string) string { return "data: " + data + "\r\n\r\n" }
 	text := func(value string) string {
@@ -147,7 +147,7 @@ process.exit(0);
 				want[i].Tools = "null"
 			}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}

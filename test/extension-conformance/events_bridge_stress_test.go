@@ -84,7 +84,7 @@ func TestNativeEventBusStressKeepsEveryDeliveryAndBoundedState(t *testing.T) {
 				}
 			}
 
-			// A Node realm releases the payload references it imported when V8 collects their proxies, which a loaded or idle process may not do before any deadline, as Pi's collector frees an unreachable payload whenever it runs. Each Node realm collects now (the PIG_TEST_XREF_COLLECT switch), so the ledger check below waits for no collector: a proxy still reachable after a full collection is a leak.
+			// A Node realm releases the payload references it imported when V8 collects their proxies, which a loaded or idle process may not do before any deadline, as Pi's collector frees an unreachable payload whenever it runs. Each Node realm collects now (the OMPIG_TEST_XREF_COLLECT switch), so the ledger check below waits for no collector: a proxy still reachable after a full collection is a leak.
 			for _, realm := range realms {
 				if realm.language == "node" {
 					rig.must(realm.Name, "collect", "")

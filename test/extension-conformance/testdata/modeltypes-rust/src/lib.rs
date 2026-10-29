@@ -2,8 +2,8 @@
 //! testfixture/modeltypes (Go) and of the inline Python fixture, so one table of rows proves every SDK. Every value a row asserts is one the
 //! host or this code produces and no SDK fallback can.
 
-use pig_sdk::tui;
-use pig_sdk::{
+use ompig_sdk::tui;
+use ompig_sdk::{
     APIKeyAuth, AuthResult, Color, Extension, ModelRoute, Provider, ProviderAuth, ProviderOperationFn, ProviderOperations,
     TextAttributes, ThemeAppearance, Theme, ThemeSlot, ThemeStyle, ToolResult, VirtualModel, empty_schema,
 };
@@ -17,11 +17,11 @@ fn strings_of(value: &Value) -> Vec<String> {
     value.as_array().map(|items| items.iter().map(|item| item.as_str().unwrap_or_default().to_string()).collect()).unwrap_or_default()
 }
 
-fn apply_all(style: &pig_sdk::StyleFn, samples: &[String]) -> Value {
+fn apply_all(style: &ompig_sdk::StyleFn, samples: &[String]) -> Value {
     json!(samples.iter().map(|sample| style(sample)).collect::<Vec<_>>())
 }
 
-fn apply_pairs(style: &pig_sdk::SelectedStyleFn, samples: &[String]) -> Value {
+fn apply_pairs(style: &ompig_sdk::SelectedStyleFn, samples: &[String]) -> Value {
     json!(samples.iter().map(|sample| [style(sample, false), style(sample, true)]).collect::<Vec<_>>())
 }
 
@@ -31,7 +31,7 @@ fn tui_theme_probe(args: &Value) -> ToolResult {
     let samples = strings_of(&args["samples"]);
     let result = match args["op"].as_str().unwrap_or_default() {
         "markdown" => {
-            let theme = pig_sdk::get_markdown_theme();
+            let theme = ompig_sdk::get_markdown_theme();
             let styles = json!({
                 "heading": apply_all(&theme.heading, &samples), "link": apply_all(&theme.link, &samples), "linkUrl": apply_all(&theme.link_url, &samples),
                 "code": apply_all(&theme.code, &samples), "codeBlock": apply_all(&theme.code_block, &samples), "codeBlockBorder": apply_all(&theme.code_block_border, &samples),
@@ -46,14 +46,14 @@ fn tui_theme_probe(args: &Value) -> ToolResult {
             json!({"styles": styles, "highlight": highlight})
         }
         "select" => {
-            let theme = pig_sdk::get_select_list_theme();
+            let theme = ompig_sdk::get_select_list_theme();
             json!({"styles": {
                 "selectedPrefix": apply_all(&theme.selected_prefix, &samples), "selectedText": apply_all(&theme.selected_text, &samples),
                 "description": apply_all(&theme.description, &samples), "scrollInfo": apply_all(&theme.scroll_info, &samples), "noMatch": apply_all(&theme.no_match, &samples),
             }})
         }
         "settings" => {
-            let theme = pig_sdk::get_settings_list_theme();
+            let theme = ompig_sdk::get_settings_list_theme();
             json!({"styles": {
                 "label": apply_pairs(&theme.label, &samples), "value": apply_pairs(&theme.value, &samples), "description": apply_all(&theme.description, &samples),
                 "cursor": theme.cursor, "hint": apply_all(&theme.hint, &samples),
@@ -61,30 +61,30 @@ fn tui_theme_probe(args: &Value) -> ToolResult {
         }
         "highlight" => {
             if let Some(name) = args["theme"].as_str().filter(|name| !name.is_empty()) {
-                if let Err(error) = pig_sdk::init_theme(Some(name)) {
+                if let Err(error) = ompig_sdk::init_theme(Some(name)) {
                     return ToolResult::Error(error.to_string());
                 }
             }
-            json!({"lines": pig_sdk::highlight_code(args["code"].as_str().unwrap_or_default(), args["lang"].as_str())})
+            json!({"lines": ompig_sdk::highlight_code(args["code"].as_str().unwrap_or_default(), args["lang"].as_str())})
         }
         "init_theme" => {
-            if let Err(error) = pig_sdk::init_theme(args["theme"].as_str()) {
+            if let Err(error) = ompig_sdk::init_theme(args["theme"].as_str()) {
                 return ToolResult::Error(error.to_string());
             }
-            let theme = pig_sdk::get_markdown_theme();
+            let theme = ompig_sdk::get_markdown_theme();
             json!({"bold": apply_all(&theme.bold, &samples), "heading": apply_all(&theme.heading, &samples)})
         }
         "key_hint" => {
             let id = args["id"].as_str().unwrap_or_default();
-            json!({"keyHint": pig_sdk::key_hint(id, args["description"].as_str().unwrap_or_default()), "keyText": pig_sdk::key_text(id)})
+            json!({"keyHint": ompig_sdk::key_hint(id, args["description"].as_str().unwrap_or_default()), "keyText": ompig_sdk::key_text(id)})
         }
-        "raw_key_hint" => json!({"rawKeyHint": pig_sdk::raw_key_hint(args["key"].as_str().unwrap_or_default(), args["description"].as_str().unwrap_or_default())}),
+        "raw_key_hint" => json!({"rawKeyHint": ompig_sdk::raw_key_hint(args["key"].as_str().unwrap_or_default(), args["description"].as_str().unwrap_or_default())}),
         other => return ToolResult::Error(format!("unknown op {other}")),
     };
     ToolResult::text(result.to_string())
 }
 
-fn image_impl(model: Arc<Value>, request: Value, options: pig_sdk::ProviderOperationOptions) -> Result<Value, String> {
+fn image_impl(model: Arc<Value>, request: Value, options: ompig_sdk::ProviderOperationOptions) -> Result<Value, String> {
     let prompt = request["input"][0]["text"].as_str().unwrap_or_default();
     if prompt == "fail" {
         return Err("image failed".into());
@@ -96,7 +96,7 @@ fn image_impl(model: Arc<Value>, request: Value, options: pig_sdk::ProviderOpera
     }))
 }
 
-fn classify_impl(model: Arc<Value>, request: Value, options: pig_sdk::ProviderOperationOptions) -> Result<Value, String> {
+fn classify_impl(model: Arc<Value>, request: Value, options: ompig_sdk::ProviderOperationOptions) -> Result<Value, String> {
     let state = request["state"]["text"].as_str().unwrap_or_default();
     match state {
         "fail" => return Err("classifier failed".into()),
@@ -135,7 +135,7 @@ fn pixels() -> Provider {
         Arc::new(json!({"id": "flux", "name": "Flux", "type": "image", "api": "test-images", "input": ["text"], "output": ["image"], "cost": cost, "baseUrl": "https://pixels.test/v1"})),
         Arc::new(json!({"id": "cls", "name": "Cls", "type": "classifier", "api": "test-classifier", "input": ["text"], "contextWindow": 1000, "cost": cost, "baseUrl": "https://pixels.test/v1"})),
     ];
-    let unused: pig_sdk::ProviderStreamFn = Arc::new(|_, _, _| Err("unused".into()));
+    let unused: ompig_sdk::ProviderStreamFn = Arc::new(|_, _, _| Err("unused".into()));
     let generate: ProviderOperationFn = Arc::new(image_impl);
     let classify: ProviderOperationFn = Arc::new(classify_impl);
     Provider {
@@ -270,7 +270,7 @@ pub fn new_extension() -> Extension {
     });
     ext.tool("virtual_probe", "Registers virtual models through the registry.", empty_schema(), |ctx, _| {
         let registry = ctx.model_registry();
-        let route = |_: &pig_sdk::Context, _: pig_sdk::ModelRouteRequest| Ok(ModelRoute { model: json!({"provider": "p", "id": "m"}), thinking_level: "off".into(), state: None });
+        let route = |_: &ompig_sdk::Context, _: ompig_sdk::ModelRouteRequest| Ok(ModelRoute { model: json!({"provider": "p", "id": "m"}), thinking_level: "off".into(), state: None });
         let mut late = VirtualModel::new("router", "late", "Late", route);
         late.context_window = Some(1000);
         let first = registry.register_virtual_model(late);
@@ -280,7 +280,7 @@ pub fn new_extension() -> Extension {
     });
     ext.tool("virtual_visible", "Registers a virtual model and reads the registry on the next line.", empty_schema(), |ctx, _| {
         let registry = ctx.model_registry();
-        let route = |_: &pig_sdk::Context, _: pig_sdk::ModelRouteRequest| Ok(ModelRoute { model: json!({"provider": "p", "id": "m"}), thinking_level: "off".into(), state: None });
+        let route = |_: &ompig_sdk::Context, _: ompig_sdk::ModelRouteRequest| Ok(ModelRoute { model: json!({"provider": "p", "id": "m"}), thinking_level: "off".into(), state: None });
         let mut seen = VirtualModel::new("router", "seen", "Seen", route);
         seen.context_window = Some(1000);
         if let Err(error) = registry.register_virtual_model(seen) {
@@ -312,7 +312,7 @@ pub fn new_extension() -> Extension {
             .images("late-images", image_impl)
             .classifier("late-classifier", classify_impl)
             .stream_simple(|_, model, _, options| {
-                let stream = Arc::new(pig_sdk::ModelEventStream::new());
+                let stream = Arc::new(ompig_sdk::ModelEventStream::new());
                 let text = format!("late:{}:{}", model["id"].as_str().unwrap_or_default(), options["apiKey"].as_str().unwrap_or_default());
                 let message = json!({"role": "assistant", "api": model["api"], "provider": model["provider"], "model": model["id"], "content": [{"type": "text", "text": text}], "stopReason": "stop", "timestamp": 1});
                 stream.push(json!({"type": "done", "reason": "stop", "message": message}));
@@ -478,7 +478,7 @@ fn tui_probe(args: &Value) -> Value {
 
 /// The tools of the host-surface rows (host_surface_test.go): on_theme_change, on_tools_expanded_change, set_widget_renderer, bell, tool_call_index, tool_input and tool_params, extension_source_info, on_loaded and a factory-time events.emit. testfixture/modeltypes (Go), the inline Python fixture and testdata/model-types.mjs carry the same tools.
 fn register_host_surface(ext: &mut Extension) {
-    use pig_sdk::HostSubscription;
+    use ompig_sdk::HostSubscription;
     use std::sync::Mutex;
     use std::time::Duration;
 

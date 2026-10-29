@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // controllableOverlay is the host's mounted overlay as ui.custom.control sees it: a state machine that applies each control and answers

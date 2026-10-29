@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/imageprocessing"
 )
 
 // Pi packages/coding-agent/src/utils/tool-result-images.ts:57-60 inserts each hint immediately after its image, never before it.

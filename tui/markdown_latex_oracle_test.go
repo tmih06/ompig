@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Markdown's `$`-math disambiguation (components/markdown.ts:56-120) against the vendored pi-tui: whitespace after an opening `$` or before the closing one is JavaScript `\s` (NBSP, U+2003, U+3000, U+FEFF and the line separators count), a closing `$` before a digit ends the span, a shell-variable-looking body is left alone, and unclosed `$$`/`\[` blocks stream as pending. Known gap left out of the corpus: a paragraph whose only inline renders to the empty string (`$\\$`): Pi keeps one blank padded line, the line-based Go renderer returns the unpadded [""] fallback.

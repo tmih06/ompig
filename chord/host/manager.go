@@ -17,8 +17,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // ControlMessageType is the discriminator of a ControlMessage: manager.ts ControlMessage's type literals.

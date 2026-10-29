@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func proxyTestModel() *ai.Model {
@@ -180,7 +180,7 @@ func TestStreamProxyReconstructsPartialsAndPreservesRequestAndTerminalMetadata(t
 		t.Errorf("tool call = %#v", result.Content[2])
 	}
 	firstToolDelta := events[9].(ai.ToolCallDeltaEvent)
-	// pig divergence (D82): the proxy reader runs outside the JavaScript-order executor, so a queued partial is its emission-time snapshot.
+	// ompig divergence (D82): the proxy reader runs outside the JavaScript-order executor, so a queued partial is its emission-time snapshot.
 	if got := firstToolDelta.Partial.Observe().Content[2].(ai.ToolCall).Arguments["value"]; got != "hel" {
 		t.Errorf("first partial tool argument = %#v, want hel", got)
 	}

@@ -3,7 +3,7 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // pi: packages/durable/src/harness/registry.ts:62-70,89-92 (RegistryReader.subscribe, types.ts:292-297): listeners are a Set, so publication calls them in

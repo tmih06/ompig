@@ -3,8 +3,8 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // A system message is held as JSON.parse returned it, like every other role, and one without content projects { ...message, content: "" } (session-manager.ts sessionEntryToContextMessages). Expectations: node JSON.stringify of the parsed object and of the spread.

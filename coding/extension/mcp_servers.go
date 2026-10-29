@@ -8,13 +8,13 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/changeobservers"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/changeobservers"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports packages/coding-agent/src/core/mcp-servers.ts.
@@ -542,7 +542,7 @@ func ValidateMcpServerConfig(name string, value json.RawMessage) (McpServerConfi
 	rawURL, hasURL := stringField(fields, "url")
 	if hasURL && typeIs("http", "streamable-http") {
 		// upstream: mcp-servers.ts validateMcpServerConfig (`URL.canParse(value.url) && /^https?:$/.test(new URL(value.url).protocol)`).
-		// pig divergence (D156): the URL is checked after environment expansion, as headers and env values are resolved (Pi #10654).
+		// ompig divergence (D156): the URL is checked after environment expansion, as headers and env values are resolved (Pi #10654).
 		parsedURL, err := nodeurl.ParseHTTPURL(ExpandMcpURL(rawURL))
 		if err != nil {
 			return McpServerConfig{}, fmt.Sprintf(`server "%s": url must be an http or https URL`, name)
@@ -592,7 +592,7 @@ func ValidateMcpServerConfig(name string, value json.RawMessage) (McpServerConfi
 // written, so a literal URL that contains a `$` keeps working. Validation, the transport and the OAuth URL use the
 // expansion; the stored config keeps the reference.
 //
-// pig divergence (D156): Pi uses the URL as written (Pi #10654).
+// ompig divergence (D156): Pi uses the URL as written (Pi #10654).
 func ExpandMcpURL(raw string) string {
 	if configvalue.IsCommandConfigValue(raw) || !configvalue.IsConfigValueConfigured(raw, nil) {
 		return raw

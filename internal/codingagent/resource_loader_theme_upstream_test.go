@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
-// Ports packages/coding-agent/test/resource-loader-theme.test.ts (upstream 0.99.1). PiG's theme resources load in InteractiveMode.loadThemes, the counterpart of DefaultResourceLoader.loadThemes (resource-loader.ts:881-890).
+// Ports packages/coding-agent/test/resource-loader-theme.test.ts (upstream 0.99.1). Ompig's theme resources load in InteractiveMode.loadThemes, the counterpart of DefaultResourceLoader.loadThemes (resource-loader.ts:881-890).
 
 func resourceLoaderThemeFixture(t *testing.T) (agentDir, cwd, themePath string) {
 	t.Helper()
@@ -78,7 +78,7 @@ func TestDefaultResourceLoaderThemeColorModeUpstream(t *testing.T) {
 		})
 	}
 
-	// resource-loader-theme.test.ts:76. DefaultResourceLoader.reload() reloads the settings first (resource-loader.ts reload); PiG's reload path does the same before loadThemes, so the case reloads the manager explicitly.
+	// resource-loader-theme.test.ts:76. DefaultResourceLoader.reload() reloads the settings first (resource-loader.ts reload); Ompig's reload path does the same before loadThemes, so the case reloads the manager explicitly.
 	t.Run("returns to automatic detection after an explicit setting is removed", func(t *testing.T) {
 		agentDir, cwd, themePath := resourceLoaderThemeFixture(t)
 		t.Setenv("PI_TRUE_COLOR", "1")

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func askProjectTrusted(t *testing.T, bridge *subprocess.UIBridge) bool {
@@ -24,7 +24,7 @@ func askProjectTrusted(t *testing.T, bridge *subprocess.UIBridge) bool {
 	return answer.Trusted
 }
 
-// Pi answers ctx.isProjectTrusted() from the Session's settings manager (agent-session.ts:3355), so a project is trusted only when that manager says so. Before a Session exists Pig's binding has no settings manager to ask; it answers false, because a project nothing has established as trusted must not read as trusted. It answered true.
+// Pi answers ctx.isProjectTrusted() from the Session's settings manager (agent-session.ts:3355), so a project is trusted only when that manager says so. Before a Session exists Ompig's binding has no settings manager to ask; it answers false, because a project nothing has established as trusted must not read as trusted. It answered true.
 func TestHeadlessIsProjectTrustedFailsClosedWithoutASession(t *testing.T) {
 	bridge := subprocess.NewUIBridge(func() {})
 	coding.BindSessionExtensionActions(nil, bridge, func() *coding.Session { return nil }, extension.ContextActions{}, nil)

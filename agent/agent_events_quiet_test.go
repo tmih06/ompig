@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // quietFauxModel streams thinking, text and a tool call in small paced chunks, so each chunk is pushed from its own

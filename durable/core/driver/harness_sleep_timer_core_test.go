@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 type timerRuntime = durable.TaskRuntime[durable.JsonValue, napState, durable.JsonValue, any]

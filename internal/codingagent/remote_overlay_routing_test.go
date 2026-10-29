@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestRunRemoteOverlayHonorsOverlayFlag pins the routing contract that mirrors
 // upstream ui.custom(): opts.Overlay=true opens a floating viewport overlay and
 // leaves the editor slot intact, while opts.Overlay=false replaces the editor
-// slot inline. Before this fix pig ignored the flag and always used the editor
+// slot inline. Before this fix ompig ignored the flag and always used the editor
 // slot in the interactive layout, silently downgrading overlay: true.
 func TestRunRemoteOverlayHonorsOverlayFlag(t *testing.T) {
 	const marker = "OVERLAY_MARKER_LINE"

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // TestFileWatcherCloseIsIdempotentAndEndsReporting ports the FileWatcher contract of packages/durable/src/env/index.ts:136 ("Stop watching; no

@@ -7,8 +7,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/providerobject"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/providerobject"
 )
 
 // Pi's loader queues a Provider object an extension registers while it loads, as it queues a configuration, whatever registry the host is bound to: the registry is asked when the

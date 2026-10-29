@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/test/agent-loop.test.ts:1503 "should use prepareNextTurn snapshot before continuing", and agent.ts:211

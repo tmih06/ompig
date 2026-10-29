@@ -6,11 +6,11 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's ctx.model, pi.getSettings(), pi.getSessionName() and ctx.ui.theme read the live Session, settings and global theme (runner.ts:906, loader.ts:411-414, interactive-mode.ts:2665), so the modes that run extensions report each change of the replicated host state to the extension host: a runtime that reads between two requests then holds the new value.

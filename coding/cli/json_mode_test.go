@@ -18,10 +18,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // eventTypes renders the wire sequence the way the probes above read it, so a
@@ -96,7 +96,7 @@ func assistantEnd(text string) agent.AgentEvent {
 }
 
 // A streamed text run must be delimited: text_start before the first delta and
-// text_end before the message closes. Upstream emits all three; pig previously
+// text_end before the message closes. Upstream emits all three; ompig previously
 // emitted only the delta, so a consumer could not tell where a run began.
 func TestJSONModeTextRunIsDelimited(t *testing.T) {
 	partial4 := jsonTestPartial(ai.TextContent{Text: "4"})

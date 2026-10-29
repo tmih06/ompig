@@ -11,13 +11,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/pi-manifest.ts
 
 // readPiManifest over package.json files with byte-order marks (one, two, after whitespace), malformed JSON, non-object roots and "pi" values, resource fields that
-// are not arrays of strings, duplicate members, odd whitespace and escapes. Pi reads the file with Node and PiG with encoding/json: the manifest each returns
+// are not arrays of strings, duplicate members, odd whitespace and escapes. Pi reads the file with Node and Ompig with encoding/json: the manifest each returns
 // (null, or the resource fields it kept) must be equal.
 func TestReadPiManifestMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(229))
@@ -138,7 +138,7 @@ emit(input.map(({ path }) => readPiManifest(path)));`, probes, &want)
 		if !reflect.DeepEqual(gotRound, wantJSON) {
 			if failures++; failures <= 8 {
 				body, _ := os.ReadFile(p.Path)
-				t.Errorf("%q: PiG %s, Pi %s", body, encoded, want[i])
+				t.Errorf("%q: Ompig %s, Pi %s", body, encoded, want[i])
 			}
 		}
 	}

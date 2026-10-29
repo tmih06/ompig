@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/filelock"
+	"github.com/tmih06/ompig/internal/filelock"
 )
 
 const (
@@ -107,7 +107,7 @@ func MarkArtifactUsed(artifactPath string, now time.Time) error {
 
 // AcquireArtifactUsageLease takes the shared usage lease on the cache entry that holds artifactPath, so a collection leaves the
 // entry alone until the lease is released. A path outside the governed cache (a prebuilt binary, a source script) has no entry, and
-// the lease is nil. An artifact that a cache entry held and that is gone is an error, not a nil lease: another pig's collection
+// the lease is nil. An artifact that a cache entry held and that is gone is an error, not a nil lease: another ompig's collection
 // removed the entry after this process resolved it, and a nil lease would let the caller's spawn fail with a bare missing file while
 // the use of the entry went untracked.
 func AcquireArtifactUsageLease(artifactPath string) (*UsageLease, error) {
@@ -139,7 +139,7 @@ func AcquireArtifactUsageLease(artifactPath string) (*UsageLease, error) {
 }
 
 func errCacheEntryRemoved(artifactPath string) error {
-	return fmt.Errorf("cache artifact %s no longer exists: another pig's cache collection removed its entry after this process resolved it; start the extension again to rebuild it", artifactPath)
+	return fmt.Errorf("cache artifact %s no longer exists: another ompig's cache collection removed its entry after this process resolved it; start the extension again to rebuild it", artifactPath)
 }
 
 // cacheEntryRemoved reports whether artifactPath was a file of a governed cache entry that is gone: it does not exist and its entry
@@ -424,7 +424,7 @@ func inspectOrPruneCache(options CacheLifecycleOptions, prune bool) (CacheReport
 var tombstoneSequence atomic.Uint64
 
 // gcLockRetry is how often a collection waiting for another collector's lock retries it while its context is live.
-// pig additive (D20): packed-runtime cache collections poll the shared collector lock like the cell build lock.
+// ompig additive (D20): packed-runtime cache collections poll the shared collector lock like the cell build lock.
 const gcLockRetry = 50 * time.Millisecond
 
 // recordFailure counts a removal that failed only because the file system reported busy files as a skipped

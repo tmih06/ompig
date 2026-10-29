@@ -3,7 +3,7 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ThinkingBlock renders one reasoning trace.

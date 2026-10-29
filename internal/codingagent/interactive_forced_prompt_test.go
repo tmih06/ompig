@@ -10,13 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 // requestShapeProvider records the structure of every request: the role of each message, what each system message carries, the rendered current system prompt and the declared tools.
@@ -100,7 +100,7 @@ type forcedPromptBuild struct {
 func newForcedPromptBuild(t *testing.T, register func(extension.API)) *forcedPromptBuild {
 	t.Helper()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	cwd := t.TempDir()
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: cwd, AgentDir: t.TempDir()})
 	if err != nil {

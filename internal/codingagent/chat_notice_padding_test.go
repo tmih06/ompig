@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // directRenderTUI counts the renders the mode asks for, synchronous or requested.
@@ -19,7 +19,7 @@ func (r *directRenderTUI) Render()               { r.renders++ }
 func (r *directRenderTUI) RequestRender(...bool) { r.renders++ }
 
 // interactive-mode.ts:4618-4633 showError / showWarning: an error is `Error: <msg>` in the error color padded by the output pad (Pi 1.1.0 outputPad), a warning is `Warning: <msg>` padded by
-// one column, and each asks for a render (ui.requestRender()); the existing color test never looks at the padding. clearEditor empties the editor and asks for a render. PiG draws
+// one column, and each asks for a render (ui.requestRender()); the existing color test never looks at the padding. clearEditor empties the editor and asks for a render. Ompig draws
 // showWarning and clearEditor with a direct Render and showError with RequestRender; the test counts either, so it pins that a render follows, not which kind.
 func TestChatNoticesCarryTheirPaddingAndTheEditorClearRerenders(t *testing.T) {
 	restoreStartupTheme(t)

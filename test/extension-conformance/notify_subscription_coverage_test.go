@@ -16,7 +16,7 @@ import (
 var notifySubscriptions = map[string]map[string]string{
 	// Upstream Pi installs headers and footers as component factories whose
 	// render(width) runs every frame, so they follow a resize with no work from
-	// the extension. A pig extension is a subprocess and sends static lines, so
+	// the extension. A ompig extension is a subprocess and sends static lines, so
 	// a footer keeps the width it was built for until something re-pushes it.
 	// Every SDK must therefore offer the resize trigger.
 	"width_change": {

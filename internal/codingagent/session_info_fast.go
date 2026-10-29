@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonvalid"
+	"github.com/tmih06/ompig/internal/jsonvalid"
 )
 
 // The listing needs only a count for a tool-result message line, so such a line is recognised without decoding it. The line must still be valid JSON (a malformed line is skipped exactly as the full decode skips it); anything unusual falls back to the full decode.

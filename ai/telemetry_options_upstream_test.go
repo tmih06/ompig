@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Ports packages/ai/test/telemetry-options.test.ts. Telemetry is upstream ProviderRequestOptions.telemetry

@@ -10,19 +10,19 @@ import (
 	"time"
 )
 
-// PR #161 CI: `pig update` in an npm install failed with "rename ...\pig.exe"
+// PR #161 CI: `ompig update` in an npm install failed with "rename ...\ompig.exe"
 // right after the installation was written and started, while anti-virus held
 // the new image open. A handle opened without delete sharing, as Go's os.Open
 // and scanners open files, makes Windows refuse the rename until it closes.
 // The quarantine waits the hold out, then moves and copies back the image.
 func TestQuarantineWaitsOutAHandleHeldOnTheRunningImage(t *testing.T) {
 	root := filepath.Join(t.TempDir(), "node_modules")
-	packageDir := filepath.Join(root, "pig")
-	image := filepath.Join(packageDir, "pig.exe")
+	packageDir := filepath.Join(root, "ompig")
+	image := filepath.Join(packageDir, "ompig.exe")
 	if err := os.MkdirAll(packageDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(image, []byte("running pig"), 0o755); err != nil {
+	if err := os.WriteFile(image, []byte("running ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	held, err := os.Open(image)
@@ -45,12 +45,12 @@ func TestQuarantineWaitsOutAHandleHeldOnTheRunningImage(t *testing.T) {
 	if waits != 1 {
 		t.Fatalf("waits = %d, want one: the held image must block the first rename", waits)
 	}
-	quarantined, err := filepath.Glob(filepath.Join(root, quarantineDirName, "*", "pig.exe"))
+	quarantined, err := filepath.Glob(filepath.Join(root, quarantineDirName, "*", "ompig.exe"))
 	if err != nil || len(quarantined) != 1 {
-		t.Fatalf("quarantined = %v (err=%v), want pig.exe", quarantined, err)
+		t.Fatalf("quarantined = %v (err=%v), want ompig.exe", quarantined, err)
 	}
 	for _, path := range []string{image, quarantined[0]} {
-		if got, err := os.ReadFile(path); err != nil || string(got) != "running pig" {
+		if got, err := os.ReadFile(path); err != nil || string(got) != "running ompig" {
 			t.Fatalf("%s = %q (err=%v), want the loaded image", path, got, err)
 		}
 	}

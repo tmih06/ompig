@@ -8,9 +8,9 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/env/node"
+	"github.com/tmih06/ompig/durable/durabletest"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/env/node"
 )
 
 // conformanceShell is the shell the conformance cases use on Windows, where `sh` is not a program. Git Bash's `ln -s`

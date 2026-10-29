@@ -9,16 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi's loader.ts records each failed extension and continues loading healthy
-// siblings. Its in-process runtime has no socket launcher; both PiG launchers
+// siblings. Its in-process runtime has no socket launcher; both Ompig launchers
 // must surface a runtime failure rather than turn it into a successful exit.
 func TestNodeCellRuntimeFailureExitsNonzero(t *testing.T) {
 	nodeCellRequireNode(t)
-	t.Setenv("PIG_EXT_SOCKET", "")
-	t.Setenv("PIG_TEST_CELL_MISSING_SOCKET", "")
+	t.Setenv("OMPIG_EXT_SOCKET", "")
+	t.Setenv("OMPIG_TEST_CELL_MISSING_SOCKET", "")
 	entry, manifest := nodeCellFailureManifest(t, []string{"broken"})
 	for _, launcher := range []struct{ file, arg string }{
 		{"cli.mjs", entry},
@@ -34,7 +34,7 @@ func TestNodeCellRuntimeFailureExitsNonzero(t *testing.T) {
 			if !errors.As(err, &exitErr) || exitErr.ExitCode() != 1 {
 				t.Errorf("launcher error = %v, want exit 1; output: %s", err, out)
 			}
-			if !strings.Contains(string(out), "Error: PIG_EXT_SOCKET not set") || !strings.Contains(string(out), "at Runtime.connect") {
+			if !strings.Contains(string(out), "Error: OMPIG_EXT_SOCKET not set") || !strings.Contains(string(out), "at Runtime.connect") {
 				t.Errorf("launcher lost runtime error/stack: %s", out)
 			}
 			if launcher.file == "cell.mjs" && !strings.Contains(string(out), `extension "broken"`) {
@@ -114,7 +114,7 @@ func nodeCellFailureManifest(t *testing.T, names []string) (string, string) {
 	}
 	var members []string
 	for _, name := range names {
-		members = append(members, fmt.Sprintf(`{"name":%q,"entry":%q,"sockEnv":"PIG_TEST_CELL_MISSING_SOCKET"}`, name, entry))
+		members = append(members, fmt.Sprintf(`{"name":%q,"entry":%q,"sockEnv":"OMPIG_TEST_CELL_MISSING_SOCKET"}`, name, entry))
 	}
 	manifest := filepath.Join(dir, "manifest.json")
 	if err := os.WriteFile(manifest, []byte("["+strings.Join(members, ",")+"]"), 0o600); err != nil {

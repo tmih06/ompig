@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // keyAction is the abstract action a keystroke triggers. Lifted out
@@ -39,6 +39,7 @@ const (
 	actionSessionTree                         // app.session.tree: open tree selector
 	actionSessionFork                         // app.session.fork: open user-message fork selector
 	actionSessionResume                       // app.session.resume: open session resume selector
+	actionAgentsHub                           // app.agents.hub: open the subagent roster
 	actionMessageCopy                         // app.message.copy: copy last agent message (Ctrl+X)
 	actionBracketedPaste                      // ESC[200~…ESC[201~ bracketed-paste payload
 )
@@ -98,6 +99,8 @@ func classifyKeyWithBindings(data string, kb *KeybindingsManager) keyAction {
 			return actionSessionFork
 		case "app.session.resume":
 			return actionSessionResume
+		case "app.agents.hub":
+			return actionAgentsHub
 		case "app.message.copy":
 			return actionMessageCopy
 		}
@@ -155,6 +158,7 @@ const (
 	outcomeSessionTree        // app.session.tree: open tree selector
 	outcomeSessionFork        // app.session.fork: open fork selector
 	outcomeSessionResume      // app.session.resume: open resume selector
+	outcomeAgentsHub          // app.agents.hub: open the subagent roster
 	outcomeCopyMessage        // app.message.copy: copy last agent message to clipboard
 	outcomeBracketedPaste     // ESC[200~…ESC[201~ inserts the paste body without submitting
 )
@@ -234,6 +238,9 @@ func resolveOutcome(action keyAction, idle, editorEmpty bool) dispatchOutcome {
 		return outcomeSessionFork
 	case actionSessionResume:
 		return outcomeSessionResume
+	case actionAgentsHub:
+		// app.agents.hub opens the subagent roster in any state, as omp does.
+		return outcomeAgentsHub
 	case actionMessageCopy:
 		// app.message.copy: copy the last agent message to the clipboard.
 		// State-invariant, matching upstream's editor onAction binding.

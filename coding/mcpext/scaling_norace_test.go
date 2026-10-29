@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/testscaling"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Scaling gates for the MCP extension over N, 10N and 100N configured servers of three tools each (agent-session-mcp.test.ts's server, one `docs` per name).

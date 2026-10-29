@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Fixtures are the unchanged base64-decoded constants from packages/coding-agent/test/image-processing.test.ts:10-24.

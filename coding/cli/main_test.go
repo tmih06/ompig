@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func assertNoTopLevelVersionJSON(t *testing.T, output string) {
@@ -24,11 +24,11 @@ func assertNoTopLevelVersionJSON(t *testing.T, output string) {
 		t.Fatal(err)
 	}
 	if _, exists := document["version"]; exists {
-		t.Fatalf("JSON output exposed a Pig-owned format version: %s", output)
+		t.Fatalf("JSON output exposed a Ompig-owned format version: %s", output)
 	}
 }
 
-// versionFormatCase is one PIG_VERSION_FORMAT state: unset, set to a value, or set to the empty string.
+// versionFormatCase is one OMPIG_VERSION_FORMAT state: unset, set to a value, or set to the empty string.
 type versionFormatCase struct {
 	name, format, want string
 	set                bool
@@ -49,25 +49,25 @@ func versionFormatCases() []versionFormatCase {
 // setVersionFormat applies one case to this process and restores the caller's value when the test ends.
 func (c versionFormatCase) setVersionFormat(t *testing.T) {
 	t.Helper()
-	t.Setenv("PIG_VERSION_FORMAT", c.format)
+	t.Setenv("OMPIG_VERSION_FORMAT", c.format)
 	if !c.set {
-		if err := os.Unsetenv("PIG_VERSION_FORMAT"); err != nil {
+		if err := os.Unsetenv("OMPIG_VERSION_FORMAT"); err != nil {
 			t.Fatal(err)
 		}
 	}
 }
 
-// childEnv is the environment for a pig subprocess: the caller's environment without PIG_VERSION_FORMAT, the case applied,
+// childEnv is the environment for a ompig subprocess: the caller's environment without OMPIG_VERSION_FORMAT, the case applied,
 // and every variable that selects the agent directory pointed at a fresh temporary directory.
 func (c versionFormatCase) childEnv(t *testing.T) []string {
 	t.Helper()
-	managed := []string{"PIG_VERSION_FORMAT", "HOME", "PIG_HOME", "PI_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"}
+	managed := []string{"OMPIG_VERSION_FORMAT", "HOME", "OMPIG_HOME", "PI_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"}
 	env := slices.DeleteFunc(os.Environ(), func(entry string) bool {
 		name, _, _ := strings.Cut(entry, "=")
 		return slices.Contains(managed, name)
 	})
 	if c.set {
-		env = append(env, "PIG_VERSION_FORMAT="+c.format)
+		env = append(env, "OMPIG_VERSION_FORMAT="+c.format)
 	}
 	for _, name := range managed[1:] {
 		env = append(env, name+"="+t.TempDir())
@@ -75,7 +75,7 @@ func (c versionFormatCase) childEnv(t *testing.T) []string {
 	return env
 }
 
-// D63: --version prints the composite PigVersion+UpstreamVersion unless the caller explicitly requests Pi's version format.
+// D63: --version prints the composite OmpigVersion+UpstreamVersion unless the caller explicitly requests Pi's version format.
 func TestCLIVersionStringFormat(t *testing.T) {
 	for _, test := range versionFormatCases() {
 		t.Run(test.name, func(t *testing.T) {
@@ -85,7 +85,7 @@ func TestCLIVersionStringFormat(t *testing.T) {
 			}
 		})
 	}
-	if want := PigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", "."); Version != want {
+	if want := OmpigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", "."); Version != want {
 		t.Fatalf("Version = %q, want %q", Version, want)
 	}
 }
@@ -113,9 +113,9 @@ func TestVersionFlagsHonorPiFormatWithoutChangingDetailedVersion(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"pig: " + PigVersion + "\n", "upstream pi: " + UpstreamVersion + "\n", "go: ", "platform: "} {
+	for _, want := range []string{"ompig: " + OmpigVersion + "\n", "upstream pi: " + UpstreamVersion + "\n", "go: ", "platform: "} {
 		if !strings.Contains(string(output), want) {
-			t.Fatalf("pig version = %q, missing %q", output, want)
+			t.Fatalf("ompig version = %q, missing %q", output, want)
 		}
 	}
 }
@@ -124,9 +124,9 @@ func TestAgentDirForModelUsesEnvWithoutOverride(t *testing.T) {
 	orig := agentDirForModelOverride
 	t.Cleanup(func() { agentDirForModelOverride = orig })
 	agentDirForModelOverride = ""
-	t.Setenv("PIG_CODING_AGENT_DIR", "/tmp/pig-agent-under-test")
-	if got := agentDirForModel(); got != "/tmp/pig-agent-under-test" {
-		t.Fatalf("agentDirForModel() = %q, want PIG_CODING_AGENT_DIR", got)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", "/tmp/ompig-agent-under-test")
+	if got := agentDirForModel(); got != "/tmp/ompig-agent-under-test" {
+		t.Fatalf("agentDirForModel() = %q, want OMPIG_CODING_AGENT_DIR", got)
 	}
 }
 
@@ -212,7 +212,7 @@ func TestReadPipedStdinTrimsContent(t *testing.T) {
 
 func TestVersionStringIncludesPigAndUpstreamVersions(t *testing.T) {
 	got := versionString()
-	if !strings.HasPrefix(got, "pig "+PigVersion+"+"+strings.ReplaceAll(UpstreamVersion, "+", ".")+" [") {
+	if !strings.HasPrefix(got, "ompig "+OmpigVersion+"+"+strings.ReplaceAll(UpstreamVersion, "+", ".")+" [") {
 		t.Fatalf("versionString() does not lead with the composite version: %q", got)
 	}
 	if !strings.Contains(got, runtime.Version()) {
@@ -242,12 +242,12 @@ func TestResolveBuildIdentity(t *testing.T) {
 
 func TestDetailedVersionStringIncludesPigAndUpstreamVersions(t *testing.T) {
 	got := detailedVersionString()
-	// test/evals/harnesses.toml reads PiG's own version from the last word of
-	// the first line of `pig version`.
-	if first, _, _ := strings.Cut(got, "\n"); first != "pig: "+PigVersion {
-		t.Fatalf("detailedVersionString() first line = %q, want %q", first, "pig: "+PigVersion)
+	// test/evals/harnesses.toml reads Ompig's own version from the last word of
+	// the first line of `ompig version`.
+	if first, _, _ := strings.Cut(got, "\n"); first != "ompig: "+OmpigVersion {
+		t.Fatalf("detailedVersionString() first line = %q, want %q", first, "ompig: "+OmpigVersion)
 	}
-	for _, want := range []string{"pig: " + PigVersion, "upstream pi: " + UpstreamVersion, "go: " + runtime.Version()} {
+	for _, want := range []string{"ompig: " + OmpigVersion, "upstream pi: " + UpstreamVersion, "go: " + runtime.Version()} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("detailedVersionString() missing %q: %q", want, got)
 		}
@@ -317,22 +317,22 @@ func TestConfigureHTTPDispatcherFromSettings_WiresProviderRetry(t *testing.T) {
 	}
 }
 
-// --- Pre-start piglet resolver tests ---
+// --- Pre-start ompiglet resolver tests ---
 
 func TestPigletModelSpec(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name string
-		p    *piglet.Piglet
+		p    *ompiglet.Ompiglet
 		want string
 	}{
-		{"nil piglet", nil, ""},
-		{"no model config", &piglet.Piglet{}, ""},
-		{"model name only", &piglet.Piglet{Model: &piglet.ModelConfig{Name: "gpt-4o"}}, "gpt-4o"},
-		{"provider and name", &piglet.Piglet{Model: &piglet.ModelConfig{Provider: "openai", Name: "gpt-4o"}}, "openai/gpt-4o"},
-		{"name already has provider", &piglet.Piglet{Model: &piglet.ModelConfig{Provider: "openai", Name: "openai/gpt-4o"}}, "openai/gpt-4o"},
-		{"provider only (no name)", &piglet.Piglet{Model: &piglet.ModelConfig{Provider: "openai"}}, ""},
-		{"empty model config", &piglet.Piglet{Model: &piglet.ModelConfig{}}, ""},
+		{"nil ompiglet", nil, ""},
+		{"no model config", &ompiglet.Ompiglet{}, ""},
+		{"model name only", &ompiglet.Ompiglet{Model: &ompiglet.ModelConfig{Name: "gpt-4o"}}, "gpt-4o"},
+		{"provider and name", &ompiglet.Ompiglet{Model: &ompiglet.ModelConfig{Provider: "openai", Name: "gpt-4o"}}, "openai/gpt-4o"},
+		{"name already has provider", &ompiglet.Ompiglet{Model: &ompiglet.ModelConfig{Provider: "openai", Name: "openai/gpt-4o"}}, "openai/gpt-4o"},
+		{"provider only (no name)", &ompiglet.Ompiglet{Model: &ompiglet.ModelConfig{Provider: "openai"}}, ""},
+		{"empty model config", &ompiglet.Ompiglet{Model: &ompiglet.ModelConfig{}}, ""},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -351,7 +351,7 @@ func TestApplyPigletPreStart_NilPiglet(t *testing.T) {
 
 func TestResolvePiglet_NoFlagNoEnv(t *testing.T) {
 	// Clean env for this test.
-	for _, env := range []string{"PIG_PIGLET_PATH", "PIG_PIGLET_NAME"} {
+	for _, env := range []string{"OMPIG_OMPIGLET_PATH", "OMPIG_OMPIGLET_NAME"} {
 		original := os.Getenv(env)
 		t.Cleanup(func() {
 			if original == "" {
@@ -365,76 +365,76 @@ func TestResolvePiglet_NoFlagNoEnv(t *testing.T) {
 
 	p, baked := resolvePiglet(map[string]any{}, nil)
 	if baked {
-		t.Fatal("expected baked=false for stock pig")
+		t.Fatal("expected baked=false for stock ompig")
 	}
 	if p != nil {
-		t.Errorf("expected nil piglet with no flags/env, got %+v", p)
+		t.Errorf("expected nil ompiglet with no flags/env, got %+v", p)
 	}
 }
 
 func TestResolvePiglet_FromEnvPath(t *testing.T) {
-	// Write a minimal piglet YAML.
+	// Write a minimal ompiglet YAML.
 	dir := t.TempDir()
 	path := filepath.Join(dir, "test.yaml")
-	_ = os.WriteFile(path, []byte("name: test-piglet\n"), 0644)
+	_ = os.WriteFile(path, []byte("name: test-ompiglet\n"), 0644)
 
-	original := os.Getenv("PIG_PIGLET_PATH")
+	original := os.Getenv("OMPIG_OMPIGLET_PATH")
 	t.Cleanup(func() {
 		if original == "" {
-			_ = os.Unsetenv("PIG_PIGLET_PATH")
+			_ = os.Unsetenv("OMPIG_OMPIGLET_PATH")
 		} else {
-			_ = os.Setenv("PIG_PIGLET_PATH", original)
+			_ = os.Setenv("OMPIG_OMPIGLET_PATH", original)
 		}
 	})
-	_ = os.Setenv("PIG_PIGLET_PATH", path)
+	_ = os.Setenv("OMPIG_OMPIGLET_PATH", path)
 
 	p, baked := resolvePiglet(map[string]any{}, nil)
 	if baked {
-		t.Fatal("expected baked=false for env piglet")
+		t.Fatal("expected baked=false for env ompiglet")
 	}
 	if p == nil {
-		t.Fatal("expected non-nil piglet from PIG_PIGLET_PATH")
+		t.Fatal("expected non-nil ompiglet from OMPIG_OMPIGLET_PATH")
 	}
-	if p.Name != "test-piglet" {
-		t.Errorf("piglet name = %q, want %q", p.Name, "test-piglet")
+	if p.Name != "test-ompiglet" {
+		t.Errorf("ompiglet name = %q, want %q", p.Name, "test-ompiglet")
 	}
 }
 
 func TestResolvePiglet_FlagOverridesEnv(t *testing.T) {
-	// Write two piglets.
+	// Write two ompiglets.
 	dir := t.TempDir()
 	envPath := filepath.Join(dir, "env.yaml")
 	_ = os.WriteFile(envPath, []byte("name: from-env\n"), 0644)
 	flagPath := filepath.Join(dir, "flag.yaml")
 	_ = os.WriteFile(flagPath, []byte("name: from-flag\n"), 0644)
 
-	original := os.Getenv("PIG_PIGLET_PATH")
+	original := os.Getenv("OMPIG_OMPIGLET_PATH")
 	t.Cleanup(func() {
 		if original == "" {
-			_ = os.Unsetenv("PIG_PIGLET_PATH")
+			_ = os.Unsetenv("OMPIG_OMPIGLET_PATH")
 		} else {
-			_ = os.Setenv("PIG_PIGLET_PATH", original)
+			_ = os.Setenv("OMPIG_OMPIGLET_PATH", original)
 		}
 	})
-	_ = os.Setenv("PIG_PIGLET_PATH", envPath)
+	_ = os.Setenv("OMPIG_OMPIGLET_PATH", envPath)
 
-	p, baked := resolvePiglet(map[string]any{"piglet": flagPath}, nil)
+	p, baked := resolvePiglet(map[string]any{"ompiglet": flagPath}, nil)
 	if baked {
-		t.Fatal("expected baked=false for flag piglet")
+		t.Fatal("expected baked=false for flag ompiglet")
 	}
 	if p == nil {
-		t.Fatal("expected non-nil piglet from --piglet flag")
+		t.Fatal("expected non-nil ompiglet from --ompiglet flag")
 	}
 	if p.Name != "from-flag" {
-		t.Errorf("piglet name = %q, want %q (flag should override env)", p.Name, "from-flag")
+		t.Errorf("ompiglet name = %q, want %q (flag should override env)", p.Name, "from-flag")
 	}
 }
 
-// TestEnforcePigletBinaryScope_StockAllowsPigletFlag proves the Piglet Binary
-// scope guard does not over-trigger: stock pig (no baked closure) accepts
-// --piglet normally. Reaching the assertion means the guard did not os.Exit.
+// TestEnforcePigletBinaryScope_StockAllowsPigletFlag proves the Ompiglet Binary
+// scope guard does not over-trigger: stock ompig (no baked closure) accepts
+// --ompiglet normally. Reaching the assertion means the guard did not os.Exit.
 func TestEnforcePigletBinaryScope_StockAllowsPigletFlag(t *testing.T) {
-	enforcePigletBinaryScope(map[string]any{"piglet": "some-other"})
+	enforcePigletBinaryScope(map[string]any{"ompiglet": "some-other"})
 }
 
 // TestResolvePigletResolvesExtends proves the runtime startup path receives the
@@ -449,18 +449,18 @@ func TestResolvePigletResolvesExtends(t *testing.T) {
 	if err := os.WriteFile(child, []byte("name: child\nextends:\n  source: local:./base.yaml\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	p, baked := resolvePiglet(map[string]any{"piglet": child}, nil)
+	p, baked := resolvePiglet(map[string]any{"ompiglet": child}, nil)
 	if p == nil || baked || p.Name != "child" || p.Description != "inherited" || p.Extends != nil {
-		t.Fatalf("runtime Piglet = %#v baked=%t", p, baked)
+		t.Fatalf("runtime Ompiglet = %#v baked=%t", p, baked)
 	}
 }
 
-// --piglet <name> resolves the name through the Piglet search paths with the run's trust override: a bare name is never read as a file in the
-// working directory, an untrusted project's .pig/piglets Piglet does not shadow the user's, and --approve (override true) selects it.
+// --ompiglet <name> resolves the name through the Ompiglet search paths with the run's trust override: a bare name is never read as a file in the
+// working directory, an untrusted project's .ompig/ompiglets Ompiglet does not shadow the user's, and --approve (override true) selects it.
 func TestResolvePigletAppliesTheTrustOverrideAndNeverReadsABareNameFromTheWorkingDirectory(t *testing.T) {
-	t.Setenv("PIG_PIGLET_PATH", "")
-	t.Setenv("PIG_PIGLET_NAME", "")
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_OMPIGLET_PATH", "")
+	t.Setenv("OMPIG_OMPIGLET_NAME", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv(codingagent.ENV_AGENT_DIR, t.TempDir())
 	project := t.TempDir()
 	t.Chdir(project)
@@ -474,12 +474,12 @@ func TestResolvePigletAppliesTheTrustOverrideAndNeverReadsABareNameFromTheWorkin
 		}
 	}
 	write(filepath.Join(project, "planted"), "from-working-directory")
-	if p, _ := resolvePiglet(map[string]any{"piglet": "planted"}, nil); p != nil {
-		t.Fatalf("--piglet planted read the working directory's file %s", p.Name)
+	if p, _ := resolvePiglet(map[string]any{"ompiglet": "planted"}, nil); p != nil {
+		t.Fatalf("--ompiglet planted read the working directory's file %s", p.Name)
 	}
 
 	write(filepath.Join(codingagent.PigletsDir(), "demo.yaml"), "from-user")
-	write(filepath.Join(codingagent.ProjectConfigDir(project), "piglets", "demo.yaml"), "from-workspace")
+	write(filepath.Join(codingagent.ProjectConfigDir(project), "ompiglets", "demo.yaml"), "from-workspace")
 	for _, tc := range []struct {
 		name     string
 		override *bool
@@ -490,18 +490,18 @@ func TestResolvePigletAppliesTheTrustOverrideAndNeverReadsABareNameFromTheWorkin
 		{name: "--no-approve", override: new(false), want: "from-user"},
 	} {
 		got := "<nil>"
-		if p, _ := resolvePiglet(map[string]any{"piglet": "demo"}, tc.override); p != nil {
+		if p, _ := resolvePiglet(map[string]any{"ompiglet": "demo"}, tc.override); p != nil {
 			got = p.Name
 		}
 		if got != tc.want {
-			t.Fatalf("%s: --piglet demo = %s, want %s", tc.name, got, tc.want)
+			t.Fatalf("%s: --ompiglet demo = %s, want %s", tc.name, got, tc.want)
 		}
 	}
 }
 
 // Pi's main.ts configures the dispatcher with settingsManager.getHttpIdleTimeoutMs() only; retry.provider.timeoutMs becomes the request's
 // timeoutMs (sdk.ts buildRequestOptions), not the dispatcher's idle timeout. Probed: with retry.provider.timeoutMs 1500 and a google
-// endpoint that never answers (google passes no request timeout), Pi 1.1.0 waits on the 5-minute dispatcher; PiG failed after 1.5 s.
+// endpoint that never answers (google passes no request timeout), Pi 1.1.0 waits on the 5-minute dispatcher; Ompig failed after 1.5 s.
 func TestConfigureHTTPDispatcherFromSettings_ProviderTimeoutIsNotTheIdleTimeout(t *testing.T) {
 	before := ai.ConfiguredHTTPIdleTimeoutMs()
 	t.Cleanup(func() {

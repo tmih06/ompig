@@ -88,7 +88,7 @@ func TestStartRejectsACancelOrAWaitDelay(t *testing.T) {
 }
 
 // Start closes the parent's copy of each file it gives the child, other than
-// PiG's own standard files, whether the start succeeds, fails, or is refused.
+// Ompig's own standard files, whether the start succeeds, fails, or is refused.
 // A pipe's reader then sees the end of the child's output when the child
 // exits.
 func TestStartClosesTheChildsFiles(t *testing.T) {
@@ -117,7 +117,7 @@ func TestStartClosesTheChildsFiles(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
-	t.Run("PiG's own standard files stay open", func(t *testing.T) {
+	t.Run("Ompig's own standard files stay open", func(t *testing.T) {
 		cmd := quietCommand(t)
 		cmd.Stdin, cmd.Stdout, cmd.Stderr = os.Stdin, os.Stdout, os.Stderr
 		if err := Start(cmd); err != nil {

@@ -19,10 +19,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Generated tool-call IDs use one module-level counter per API, as google-generative-ai.ts:57 and google-vertex.ts:66 do.
@@ -532,7 +532,7 @@ func ConvertGoogleMessages(model *Model, transcript TranscriptContext) []GeminiC
 func geminiConvertMessages(messages []Message, providerID, modelID string, supportsImages bool) []geminiContent {
 	// An empty conversation is `contents: []` in the request, not null.
 	contents := []geminiContent{}
-	// pig divergence (D115): Pi pushes a Gemini 2.x result's image turn before the next result, which splits the function-response turn of parallel calls; the image turns wait until the next turn that is not a function response and keep result order.
+	// ompig divergence (D115): Pi pushes a Gemini 2.x result's image turn before the next result, which splits the function-response turn of parallel calls; the image turns wait until the next turn that is not a function response and keep result order.
 	var imageTurns []geminiContent
 	flushImageTurns := func() {
 		contents = append(contents, imageTurns...)
@@ -949,7 +949,7 @@ func (p *googleProvider) Stream(ctx context.Context, transcript TranscriptContex
 		}
 		return nil, fmt.Errorf("Custom fetch is not supported by the %s adapter", adapter)
 	}
-	// pig divergence (D48): the agent loop asks for the tool-flow repair.
+	// ompig divergence (D48): the agent loop asks for the tool-flow repair.
 	if opts.RepairToolFlow {
 		transcript = transcript.withRepairedToolFlow()
 	}

@@ -18,15 +18,15 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// Pi startup-ui.ts:32-47,122-140 excludes non-official distributions before the other gates. These keep the original inputs; PiG's own gate (D88) shows setup on an interactive start in the default agent directory exactly when settings.json does not exist, regardless of PI_EXPERIMENTAL; a custom agent directory skips it as in Pi (startup-ui.ts:144-146).
+// Pi startup-ui.ts:32-47,122-140 excludes non-official distributions before the other gates. These keep the original inputs; Ompig's own gate (D88) shows setup on an interactive start in the default agent directory exactly when settings.json does not exist, regardless of PI_EXPERIMENTAL; a custom agent directory skips it as in Pi (startup-ui.ts:144-146).
 func TestFirstTimeSetupOriginalCasesAsFork(t *testing.T) {
 	if codingagent.PackageName == "@earendil-works/pi-coding-agent" && codingagent.AppName == "pi" && codingagent.CONFIG_DIR_NAME == ".pi" {
-		t.Fatal("this test requires the actual non-official PiG distribution")
+		t.Fatal("this test requires the actual non-official Ompig distribution")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	var observed struct {
@@ -50,7 +50,7 @@ func TestFirstTimeSetupOriginalCasesAsFork(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			shown := firstTimeStartupShowsSetup(t, binary, tc.experimental, tc.custom, tc.existing)
 			if want := !tc.existing && !tc.custom; shown != want {
-				t.Fatalf("PiG startup displayed setup = %v with settings.json present = %v and a custom agent dir = %v; PiG's gate (D88) shows it exactly when settings.json is missing in the default agent dir", shown, tc.existing, tc.custom)
+				t.Fatalf("Ompig startup displayed setup = %v with settings.json present = %v and a custom agent dir = %v; Ompig's gate (D88) shows it exactly when settings.json is missing in the default agent dir", shown, tc.existing, tc.custom)
 			}
 			observed.Cases = append(observed.Cases, tc.line)
 			observed.Results = append(observed.Results, shown)
@@ -63,13 +63,13 @@ func TestFirstTimeSetupOriginalCasesAsFork(t *testing.T) {
 	fmt.Printf("FIRST_TIME_FORK %s\n", data)
 }
 
-// ConfigRoot prefers PIG_HOME, then XDG_CONFIG_HOME, over HOME (paths.go ConfigRoot). An ambient XDG_CONFIG_HOME must neither receive the binary's config writes nor make the settings.json the case prepares differ from the one startup reads.
+// ConfigRoot prefers OMPIG_HOME, then XDG_CONFIG_HOME, over HOME (paths.go ConfigRoot). An ambient XDG_CONFIG_HOME must neither receive the binary's config writes nor make the settings.json the case prepares differ from the one startup reads.
 func TestFirstTimeSetupStartupIgnoresAmbientConfigRoot(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t) // Built before the override so the Go toolchain's own XDG use stays out of the assertion.
 	ambient := t.TempDir()
 	t.Setenv("XDG_CONFIG_HOME", ambient)
 	if firstTimeStartupShowsSetup(t, binary, true, false, true) {
-		t.Fatal("PiG startup displayed setup; real Pi with fork metadata returns false")
+		t.Fatal("Ompig startup displayed setup; real Pi with fork metadata returns false")
 	}
 	entries, err := os.ReadDir(ambient)
 	if err != nil {
@@ -104,9 +104,9 @@ func firstTimeStartupShowsSetup(t *testing.T, binary string, experimental, custo
 	}
 	env := slices.DeleteFunc(os.Environ(), func(value string) bool {
 		name, _, _ := strings.Cut(value, "=")
-		return slices.Contains([]string{"HOME", "PIG_HOME", "XDG_CONFIG_HOME", "PI_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PI_PACKAGE_DIR", "PIG_USE_PI_DIRS", "PI_EXPERIMENTAL", "PIG_TEST_FAUX", "PIG_TEST_FAUX_SCENARIO", "PIG_STARTUP_TRACE", "PIG_OFFLINE", "PI_OFFLINE"}, name)
+		return slices.Contains([]string{"HOME", "OMPIG_HOME", "XDG_CONFIG_HOME", "PI_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PI_PACKAGE_DIR", "OMPIG_USE_PI_DIRS", "PI_EXPERIMENTAL", "OMPIG_TEST_FAUX", "OMPIG_TEST_FAUX_SCENARIO", "OMPIG_STARTUP_TRACE", "OMPIG_OFFLINE", "PI_OFFLINE"}, name)
 	})
-	env = append(env, "HOME="+home, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_STARTUP_TRACE=1", "TERM=xterm-256color")
+	env = append(env, "HOME="+home, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_STARTUP_TRACE=1", "TERM=xterm-256color")
 	if experimental {
 		env = append(env, "PI_EXPERIMENTAL=1")
 	}

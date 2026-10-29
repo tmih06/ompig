@@ -5,14 +5,14 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // TestContextActions_ToolScoping verifies that in-process extensions can
 // query and modify the active tool set via extension.Context methods.
 // This is the integration test for the ContextActions wiring that the
-// piglet extension depends on.
+// ompiglet extension depends on.
 func TestContextActions_ToolScoping(t *testing.T) {
 	// Track what SetActiveTools receives.
 	var setToolsCalled bool
@@ -59,7 +59,7 @@ func TestContextActions_ToolScoping(t *testing.T) {
 					gotActiveTools = extCtx.GetActiveTools()
 
 					// Exercise GetFlagValue
-					gotFlagValue = extCtx.GetFlagValue("piglet")
+					gotFlagValue = extCtx.GetFlagValue("ompiglet")
 
 					// Exercise SetActiveTools: filter to just builtins
 					extCtx.SetActiveTools([]string{"read", "write", "bash"})
@@ -92,7 +92,7 @@ func TestContextActions_ToolScoping(t *testing.T) {
 				setToolsNames = names
 			},
 			GetFlagValue: func(name string) any {
-				if name == "piglet" {
+				if name == "ompiglet" {
 					return "meta"
 				}
 				return nil
@@ -124,7 +124,7 @@ func TestContextActions_ToolScoping(t *testing.T) {
 
 	// Verify GetFlagValue returned the flag.
 	if gotFlagValue != "meta" {
-		t.Errorf("GetFlagValue(piglet) = %v, want 'meta'", gotFlagValue)
+		t.Errorf("GetFlagValue(ompiglet) = %v, want 'meta'", gotFlagValue)
 	}
 
 	// Verify SetActiveTools was called with the filtered set.
@@ -193,10 +193,10 @@ func TestContextActions_NilSafe(t *testing.T) {
 	}
 }
 
-// TestContextActions_PigletScopeIntegration simulates the piglet extension's
+// TestContextActions_PigletScopeIntegration simulates the ompiglet extension's
 // actual scoping flow: GetAllTools → ScopeTools → SetActiveTools.
 // This is the end-to-end test that catches the bug where ContextActions
-// were never wired, making piglet scoping silently no-op.
+// were never wired, making ompiglet scoping silently no-op.
 func TestContextActions_PigletScopeIntegration(t *testing.T) {
 	allTools := []extension.ToolInfo{
 		{Name: "read", Source: "builtin"},
@@ -208,12 +208,12 @@ func TestContextActions_PigletScopeIntegration(t *testing.T) {
 
 	var finalActiveTools []string
 
-	// Simulate what the piglet extension does: get all tools, filter by
+	// Simulate what the ompiglet extension does: get all tools, filter by
 	// allowed extensions (only builtin + subagent), set active.
 	pigletExt := extension.Extension{
-		Name:         "piglet-sim",
-		Path:         "test:piglet",
-		ResolvedPath: "test:piglet",
+		Name:         "ompiglet-sim",
+		Path:         "test:ompiglet",
+		ResolvedPath: "test:ompiglet",
 		Handlers: map[string][]extension.HandlerFn{
 			"session_start": {
 				func(args ...any) (any, error) {
@@ -284,7 +284,7 @@ func TestContextActions_PigletScopeIntegration(t *testing.T) {
 
 	// Verify evil-ext's tool was excluded.
 	if slices.Contains(finalActiveTools, "secret_tool") {
-		t.Error("secret_tool should have been excluded by piglet scoping")
+		t.Error("secret_tool should have been excluded by ompiglet scoping")
 	}
 	if slices.Contains(finalActiveTools, "web_search") {
 		t.Error("web_search (from unlisted extension) should have been excluded")

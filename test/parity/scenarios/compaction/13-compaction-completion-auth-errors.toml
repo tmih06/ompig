@@ -8,15 +8,15 @@
 # resolves its auth in _getSummarizationRequestAuth (agent-session.ts:591-597, lenient
 # branch) and again in the model runtime (model-runtime.ts:671 prepareRequest, :723-747
 # streamSimple; resolve.ts:56-67 and :193-204 call the provider's resolve even when the
-# request carries an apiKey). Pi prints resolved=2 there and PiG must too. Measured on the
+# request carries an apiKey). Pi prints resolved=2 there and Ompig must too. Measured on the
 # pinned Pi package: resolved=2 with createAgentSession, resolved=1 with upstream's harness.
 # That harness builds `new Agent({ streamFn: streamSimple })` (test/suite/harness.ts:193-195),
 # which agent-session.ts:591 treats as the stock stream, so the request never reaches the
 # model runtime; no Pi session is built that way. The other boundaries use the harness: they
 # do not depend on the stream function.
 # Node's resolution flag binds upstream test helpers to unchanged installed Pi.
-# Error fixtures point Pi's package dir and Pig's materialized-docs root at the
-# same read-only repository root after constructing isolated Services. PiG names
+# Error fixtures point Pi's package dir and Ompig's materialized-docs root at the
+# same read-only repository root after constructing isolated Services. Ompig names
 # its docs under <root>/docs/bundle-<hash> (D22: one bundle directory per build)
 # where Pi names <root>/docs, so the bundle segment is the one normalized token.
 name = "13-compaction-completion-auth-errors"
@@ -27,10 +27,10 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["bash", "./test/parity/testdata/compaction-boundaries-pig.sh"]
-pig_go_tests = ["./coding"]
+ompig_args = ["bash", "./test/parity/testdata/compaction-boundaries-ompig.sh"]
+ompig_go_tests = ["./coding"]
 pi_args = ["node", "--experimental-import-meta-resolve", "./test/parity/testdata/compaction-boundaries-pi.mjs"]
 
 [cli]
@@ -43,8 +43,8 @@ output_equal = true
 both_contain = ["beforeReturn=true idle=true", "bearer requests=1 resolved=2", "Auto-compaction failed: summary generator blew up", "custom requests=1"]
 runs = 3
 
-# normalize-rationale: D22 puts each PiG build's documentation in docs/bundle-<16 hex>; Pi's package docs directory has no such segment. Only that segment is removed; the root, file names and every other byte stay compared.
+# normalize-rationale: D22 puts each Ompig build's documentation in docs/bundle-<16 hex>; Pi's package docs directory has no such segment. Only that segment is removed; the root, file names and every other byte stay compared.
 [[assert.normalize_replace]]
 pattern = '/docs/bundle-[0-9a-f]{16}/'
 with = '/docs/'
-reason = "D22: PiG's per-build docs bundle directory sits where Pi's package docs directory does; retain the root and the page names."
+reason = "D22: Ompig's per-build docs bundle directory sits where Pi's package docs directory does; retain the root and the page names."

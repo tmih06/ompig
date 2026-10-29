@@ -7,19 +7,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Extensions read and write settings through Pi's SettingsManager
 // (pi-vim reads its piVim settings with SettingsManager.create(cwd) and
 // getGlobalSettings/getProjectSettings). The runtime's SettingsManager is
-// Pi's own over PiG's configuration tree, so against the same files it
+// Pi's own over Ompig's configuration tree, so against the same files it
 // answers every getter, migrates, merges, persists setters and reports lock
 // and parse errors exactly as the pinned package does over Pi's tree.
 // Pi config.ts and SettingsManager select the same project tree. The independent SDK bundle must preserve the host's explicit D2 directory choice, not its pre-bundle hard-coded default.
 func TestNodeIndependentSDKHonorsPiDirectoryOptIn(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	for name, theme := range map[string]string{".pi": "light", ".pig": "dark"} {
+	for name, theme := range map[string]string{".pi": "light", ".ompig": "dark"} {
 		dir := filepath.Join(cwd, name)
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
@@ -28,19 +28,19 @@ func TestNodeIndependentSDKHonorsPiDirectoryOptIn(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	t.Setenv("PIG_USE_PI_DIRS", "1")
+	t.Setenv("OMPIG_USE_PI_DIRS", "1")
 	t.Setenv("PI_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
-	t.Setenv("PIG_TEST_SHARED_CWD", cwd)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_TEST_SHARED_CWD", cwd)
 	runPinnedComparison(t, []string{"dist", "index.js"}, "pi-coding-agent.mjs", `
 import assert from "node:assert/strict";
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
-assert.equal(pig.CONFIG_DIR_NAME, pi.CONFIG_DIR_NAME);
-assert.equal(pig.ENV_AGENT_DIR, pi.ENV_AGENT_DIR);
-assert.equal(pig.getAgentDir(), pi.getAgentDir());
-const cwd = process.env.PIG_TEST_SHARED_CWD;
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+assert.equal(ompig.CONFIG_DIR_NAME, pi.CONFIG_DIR_NAME);
+assert.equal(ompig.ENV_AGENT_DIR, pi.ENV_AGENT_DIR);
+assert.equal(ompig.getAgentDir(), pi.getAgentDir());
+const cwd = process.env.OMPIG_TEST_SHARED_CWD;
 assert.equal(pi.SettingsManager.create(cwd).getTheme(), "light");
-assert.equal(pig.SettingsManager.create(cwd).getTheme(), "light");
+assert.equal(ompig.SettingsManager.create(cwd).getTheme(), "light");
 `)
 }
 
@@ -67,8 +67,8 @@ func TestPiSettingsManagerMatchesThePinnedPackage(t *testing.T) {
   "editorPaddingX": 2
 }`
 	trees := map[string]string{}
-	for _, side := range []string{"pi", "pig"} {
-		configDir := map[string]string{"pi": ".pi", "pig": ".pig"}[side]
+	for _, side := range []string{"pi", "ompig"} {
+		configDir := map[string]string{"pi": ".pi", "ompig": ".ompig"}[side]
 		agent := filepath.Join(root, side, "agent")
 		cwd := filepath.Join(root, side, "project")
 		for dir, content := range map[string]string{agent: global, filepath.Join(cwd, configDir): project} {
@@ -89,17 +89,17 @@ func TestPiSettingsManagerMatchesThePinnedPackage(t *testing.T) {
 		trees[side] = filepath.Join(root, side)
 	}
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(trees["pi"], "agent"))
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(trees["pig"], "agent"))
-	t.Setenv("PIG_TEST_SETTINGS_TREES", trees["pi"]+string(os.PathListSeparator)+trees["pig"])
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(trees["ompig"], "agent"))
+	t.Setenv("OMPIG_TEST_SETTINGS_TREES", trees["pi"]+string(os.PathListSeparator)+trees["ompig"])
 	runPinnedComparison(t, []string{"dist", "index.js"}, "pi-coding-agent.mjs", `
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, readFileSync, rmdirSync } from "node:fs";
 import { delimiter, join } from "node:path";
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
-const [piTree, pigTree] = process.env.PIG_TEST_SETTINGS_TREES.split(delimiter);
-const agentDirs = { pi: join(piTree, "agent"), pig: join(pigTree, "agent") };
-assert.equal(pig.getAgentDir(), agentDirs.pig);
-assert.equal(pig.CONFIG_DIR_NAME, ".pig");
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [piTree, ompigTree] = process.env.OMPIG_TEST_SETTINGS_TREES.split(delimiter);
+const agentDirs = { pi: join(piTree, "agent"), ompig: join(ompigTree, "agent") };
+assert.equal(ompig.getAgentDir(), agentDirs.ompig);
+assert.equal(ompig.CONFIG_DIR_NAME, ".ompig");
 
 function getters(manager) {
   const out = {};
@@ -183,7 +183,7 @@ function anonymizeDeviceIds(value, ids = new Map()) {
 }
 
 const want = await scene(pi, piTree, ".pi");
-const got = await scene(pig, pigTree, ".pig");
+const got = await scene(ompig, ompigTree, ".ompig");
 anonymizeDeviceIds(want);
 anonymizeDeviceIds(got);
 assert.equal(got.global.theme, "light");
@@ -193,10 +193,10 @@ assert.deepEqual(got, want);
 `)
 }
 
-// PiG's host and an extension's SettingsManager share settings files: the
-// runtime resolves PiG's agent directory from the environment exactly as the
-// host does, a setting PiG writes is what the extension reads, and a setting
-// the extension writes is what PiG reads back.
+// Ompig's host and an extension's SettingsManager share settings files: the
+// runtime resolves Ompig's agent directory from the environment exactly as the
+// host does, a setting Ompig writes is what the extension reads, and a setting
+// the extension writes is what Ompig reads back.
 func TestNodeSettingsManagerSharesPigSettings(t *testing.T) {
 	node, err := exec.LookPath("node")
 	if err != nil {
@@ -212,7 +212,7 @@ func TestNodeSettingsManagerSharesPigSettings(t *testing.T) {
 	runNode := func(script string, env ...string) string {
 		t.Helper()
 		cmd := exec.CommandContext(t.Context(), node, "--input-type=module", "--eval",
-			`const pig = await import(process.argv[1]);`+script, "file://"+filepath.ToSlash(shim))
+			`const ompig = await import(process.argv[1]);`+script, "file://"+filepath.ToSlash(shim))
 		cmd.Env = append(os.Environ(), env...)
 		output, err := cmd.CombinedOutput()
 		if err != nil {
@@ -221,12 +221,12 @@ func TestNodeSettingsManagerSharesPigSettings(t *testing.T) {
 		return strings.TrimSpace(string(output))
 	}
 	for _, env := range [][2]string{
-		{"PIG_HOME", filepath.Join(home, "pighome")},
+		{"OMPIG_HOME", filepath.Join(home, "pighome")},
 		{"XDG_CONFIG_HOME", filepath.Join(home, "xdg")},
-		{"PIG_CODING_AGENT_DIR", "~/custom-agent"},
+		{"OMPIG_CODING_AGENT_DIR", "~/custom-agent"},
 		{"", ""},
 	} {
-		for _, key := range []string{"PIG_HOME", "XDG_CONFIG_HOME", "PIG_CODING_AGENT_DIR"} {
+		for _, key := range []string{"OMPIG_HOME", "XDG_CONFIG_HOME", "OMPIG_CODING_AGENT_DIR"} {
 			t.Setenv(key, "")
 			if err := os.Unsetenv(key); err != nil {
 				t.Fatal(err)
@@ -239,8 +239,8 @@ func TestNodeSettingsManagerSharesPigSettings(t *testing.T) {
 		if configured := os.Getenv(codingagent.ENV_AGENT_DIR); configured != "" {
 			want = codingagent.ExpandTildePath(configured)
 		}
-		if got := runNode(`console.log(pig.getAgentDir());`); got != want {
-			t.Errorf("with %s=%q the runtime's agent directory is %q, PiG's %q", env[0], env[1], got, want)
+		if got := runNode(`console.log(ompig.getAgentDir());`); got != want {
+			t.Errorf("with %s=%q the runtime's agent directory is %q, Ompig's %q", env[0], env[1], got, want)
 		}
 	}
 
@@ -256,10 +256,10 @@ func TestNodeSettingsManagerSharesPigSettings(t *testing.T) {
 	if err := host.SetTheme("light"); err != nil {
 		t.Fatal(err)
 	}
-	env := []string{"PIG_CODING_AGENT_DIR=" + agentDir}
+	env := []string{"OMPIG_CODING_AGENT_DIR=" + agentDir}
 	cmd := exec.CommandContext(t.Context(), node, "--input-type=module", "--eval", `
-const pig = await import(process.argv[1]);
-const s = pig.SettingsManager.create(process.argv[2]);
+const ompig = await import(process.argv[1]);
+const s = ompig.SettingsManager.create(process.argv[2]);
 console.log(JSON.stringify([s.getTheme(), s.getProjectSettings().piVim]));
 s.setTheme("dark");
 await s.flush();
@@ -276,7 +276,7 @@ if (errors.length) throw errors[0].error;
 	}
 	host.Reload()
 	if got := host.GetTheme(); got != "dark" {
-		t.Fatalf("PiG reads theme %q after the extension set dark", got)
+		t.Fatalf("Ompig reads theme %q after the extension set dark", got)
 	}
 	if _, err := os.Stat(filepath.Join(agentDir, "settings.json.lock")); !os.IsNotExist(err) {
 		t.Fatalf("settings lock left behind: %v", err)

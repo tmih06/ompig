@@ -24,19 +24,19 @@ func TestAssertCleanTmpFlagsLeaksAndAllowsSharedCaches(t *testing.T) {
 	if out, err := exec.Command(script, scratch).CombinedOutput(); err != nil {
 		t.Fatalf("shared caches reported as leaks: %v\n%s", err, out)
 	}
-	for _, leak := range []string{"pig-ext-sdk-fixture-1.log", "pig-packed-packed-node-abc-2.log", "go-build123456"} {
+	for _, leak := range []string{"ompig-ext-sdk-fixture-1.log", "ompig-packed-packed-node-abc-2.log", "go-build123456"} {
 		if err := os.WriteFile(filepath.Join(scratch, leak), nil, 0o600); err != nil {
 			t.Fatal(err)
 		}
 	}
-	if err := os.Mkdir(filepath.Join(scratch, "pig-cli-inventory-x"), 0o700); err != nil {
+	if err := os.Mkdir(filepath.Join(scratch, "ompig-cli-inventory-x"), 0o700); err != nil {
 		t.Fatal(err)
 	}
 	out, err := exec.Command(script, scratch).CombinedOutput()
 	if err == nil {
-		t.Fatal("leaked pig-* entries were accepted")
+		t.Fatal("leaked ompig-* entries were accepted")
 	}
-	for _, name := range []string{"pig-ext-sdk-fixture-1.log", "pig-packed-packed-node-abc-2.log", "go-build123456", "pig-cli-inventory-x"} {
+	for _, name := range []string{"ompig-ext-sdk-fixture-1.log", "ompig-packed-packed-node-abc-2.log", "go-build123456", "ompig-cli-inventory-x"} {
 		if !strings.Contains(string(out), name) {
 			t.Errorf("leak %s missing from report:\n%s", name, out)
 		}

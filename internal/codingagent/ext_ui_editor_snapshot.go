@@ -1,6 +1,6 @@
 package codingagent
 
-// pig additive (D19): synchronous SDK getters read immutable editor text published by the owner, not the editor's mutable lines from an IPC worker.
+// ompig additive (D19): synchronous SDK getters read immutable editor text published by the owner, not the editor's mutable lines from an IPC worker.
 func (m *InteractiveMode) bindEditorSnapshot() {
 	if m.editor == nil || m.editorSnapshotOwner == m.editor {
 		return

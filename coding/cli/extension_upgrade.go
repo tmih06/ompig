@@ -15,15 +15,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
-// pig additive (D109): pig compiles Go extensions against its own SDK, so an SDK release can break an extension written for an older one. Pi loads extension source in process and has no counterpart.
+// ompig additive (D109): ompig compiles Go extensions against its own SDK, so an SDK release can break an extension written for an older one. Pi loads extension source in process and has no counterpart.
 
 // extensionDrift is one extension that failed to build and is written for an older SDK.
 type extensionDrift struct {
@@ -419,8 +419,8 @@ type backupManifest struct {
 type backupFile struct {
 	Path string `json:"path"`
 	// Backup is the copy of the file as it was. A file the upgrade added has none: Added is set, and the original state is that the file did not exist.
-	Backup string `json:"backup,omitempty"` //portlint:allow emptydrop PiG-only backup manifest read back by Go; an added file has no copy
-	Added  bool   `json:"added,omitempty"`  //portlint:allow emptydrop PiG-only backup manifest read back by Go
+	Backup string `json:"backup,omitempty"` //portlint:allow emptydrop Ompig-only backup manifest read back by Go; an added file has no copy
+	Added  bool   `json:"added,omitempty"`  //portlint:allow emptydrop Ompig-only backup manifest read back by Go
 }
 
 // backup copies each file the plan rewrites into a directory under the configuration root, with a manifest that maps the copies back.
@@ -451,7 +451,7 @@ func (u *extensionUpgrader) backup(config subprocess.ExtConfig, result *upgrade.
 		}
 		manifest.Files = append(manifest.Files, backupFile{Path: change.Path, Backup: target})
 	}
-	data, err := json.MarshalIndent(manifest, "", "  ") //portlint:allow jsonescape the manifest is PiG-only backup metadata read back by Go, not a Pi-compatible file
+	data, err := json.MarshalIndent(manifest, "", "  ") //portlint:allow jsonescape the manifest is Ompig-only backup metadata read back by Go, not a Pi-compatible file
 	if err != nil {
 		return "", err
 	}
@@ -487,7 +487,7 @@ func writeFileKeepingMode(path string, data []byte) error {
 	if info, err := os.Stat(path); err == nil {
 		mode = info.Mode().Perm()
 	}
-	temporary, err := os.CreateTemp(filepath.Dir(path), ".pig-upgrade-*")
+	temporary, err := os.CreateTemp(filepath.Dir(path), ".ompig-upgrade-*")
 	if err != nil {
 		return err
 	}

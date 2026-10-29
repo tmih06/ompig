@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type borderedLoaderProbe struct {
@@ -104,9 +104,9 @@ func oracleFrameDifference(got, want [][]string) string {
 				w = want[f][r]
 			}
 			if g != w {
-				return fmt.Sprintf("frame %d row %d:\n  Pig %q\n  Pi  %q", f, r, g, w)
+				return fmt.Sprintf("frame %d row %d:\n  Ompig %q\n  Pi  %q", f, r, g, w)
 			}
 		}
 	}
-	return fmt.Sprintf("frame counts differ: Pig %d, Pi %d", len(got), len(want))
+	return fmt.Sprintf("frame counts differ: Ompig %d, Pi %d", len(got), len(want))
 }

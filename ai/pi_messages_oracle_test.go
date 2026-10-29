@@ -220,7 +220,7 @@ func observedPiMessagesDirectWith(t *testing.T, baseURL, abort string, options S
 }
 
 func piMessagesOracleRuns() int {
-	if value := os.Getenv("PIG_D82_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_D82_RUNS"); value != "" {
 		if runs, err := strconv.Atoi(value); err == nil && runs > 0 {
 			return runs
 		}

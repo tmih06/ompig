@@ -4,7 +4,7 @@
 # Upstream evidence (Pi 0.99.1, dist/cli.js, probed 2026-09-30; test-faux twin, prompt "Run: expr 20 + 22"; agent-loop.ts:778-786 emits `partialResult` as given):
 #   {"type":"tool_execution_update",...,"partialResult":{"content":[]}}
 #   {"type":"tool_execution_update",...,"partialResult":{"content":[{"type":"text","text":"42\n"}],"details":{}}}
-# bash.ts:321-323 passes {content: [], details: undefined} first and bash.ts:290-296 the output snapshot. PiG flattened `content` to a string for extension handlers ({"content":""}, {"content":"42\n","details":{}}).
+# bash.ts:321-323 passes {content: [], details: undefined} first and bash.ts:290-296 the output snapshot. Ompig flattened `content` to a string for extension handlers ({"content":""}, {"content":"42\n","details":{}}).
 # parity-partial-observer.mjs stringifies what its tool_execution_update handler received into the bash result (tool_result handler), so tool_execution_end carries the shape the Node handler observed.
 
 name = "08-json-tool-execution-update-partial-result"
@@ -24,9 +24,9 @@ args = ["--mode", "json", "--model", "test-faux/faux-1", "--system-prompt", "JSO
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../../scenarios/json/testdata/ext/parity-partial-observer.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["../../scenarios/json/testdata/ext/parity-partial-observer.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../../scenarios/json/testdata/ext/parity-partial-observer.mjs"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 

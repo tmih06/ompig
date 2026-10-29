@@ -27,20 +27,20 @@ model = "test-faux/faux-1"
 # core/keybindings.ts binds tui.editor.undo to alt+z when
 # useWindowsKeybindings() sees WSL_DISTRO_NAME or WSL_INTEROP, and to ctrl+z
 # on win32. Both tools read those variables, so a WSL host moved both to
-# alt+z and this ctrl+- scenario failed for Pi and PiG alike. Clearing them
+# alt+z and this ctrl+- scenario failed for Pi and Ompig alike. Clearing them
 # keeps both on the column this scenario asserts; the expected Pi behavior is
 # unchanged. Native Windows still needs a platform-aware keystroke.
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent", "WSL_DISTRO_NAME=", "WSL_INTEROP="]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent", "WSL_DISTRO_NAME=", "WSL_INTEROP="]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "WSL_DISTRO_NAME=", "WSL_INTEROP="]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "undo test"

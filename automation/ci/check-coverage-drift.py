@@ -40,7 +40,7 @@ def strip_run_column(text: str) -> list[str]:
     return stripped
 
 
-def generate(pig_root: pathlib.Path) -> tuple[str, str]:
+def generate(ompig_root: pathlib.Path) -> tuple[str, str]:
     with tempfile.TemporaryDirectory() as directory:
         badge = pathlib.Path(directory) / "parity-coverage.svg"
         proc = subprocess.run(
@@ -50,7 +50,7 @@ def generate(pig_root: pathlib.Path) -> tuple[str, str]:
                 "-scenarios", "test/parity/scenarios",
                 "-badge", str(badge),
             ],
-            cwd=pig_root,
+            cwd=ompig_root,
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -66,14 +66,14 @@ def main() -> int:
     parser.add_argument("--badge", default=".github/badges/parity-coverage.svg")
     args = parser.parse_args()
 
-    pig_root = pathlib.Path(__file__).resolve().parents[2]
-    committed_path = pig_root / args.coverage
-    badge_path = pig_root / args.badge
+    ompig_root = pathlib.Path(__file__).resolve().parents[2]
+    committed_path = ompig_root / args.coverage
+    badge_path = ompig_root / args.badge
     if not committed_path.is_file():
         sys.exit(f"coverage-drift: {args.coverage} not found; {REPAIR}")
     if not badge_path.is_file():
         sys.exit(f"coverage-drift: {args.badge} not found; {REPAIR}")
-    generated_report, generated_badge = generate(pig_root)
+    generated_report, generated_badge = generate(ompig_root)
     committed = strip_run_column(committed_path.read_text(encoding="utf-8"))
     current = strip_run_column(generated_report)
 

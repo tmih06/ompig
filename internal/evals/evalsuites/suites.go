@@ -1,6 +1,6 @@
-// Package evalsuites holds the eval suites of Pi's packages/evals/evals directory, written against the PiG Session
-// harness. Each suite names the upstream file it ports; prompts say PiG where Pi's say Pi, and the documentation the
-// agent reads is PiG's.
+// Package evalsuites holds the eval suites of Pi's packages/evals/evals directory, written against the Ompig Session
+// harness. Each suite names the upstream file it ports; prompts say Ompig where Pi's say Pi, and the documentation the
+// agent reads is Ompig's.
 package evalsuites
 
 import (
@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/internal/evals"
+	"github.com/tmih06/ompig/internal/evals"
 )
 
 // All returns every suite in file order.

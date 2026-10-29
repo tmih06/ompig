@@ -11,15 +11,15 @@ import (
 )
 
 func TestPigVersionIdentityNamesPigAndPi(t *testing.T) {
-	want := "pig " + PigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", ".")
-	if got, ok := pigVersionIdentity(detailedVersionString()); !ok || got != want {
-		t.Fatalf("pigVersionIdentity(detailedVersionString()) = %q, %v; want %q", got, ok, want)
+	want := "ompig " + OmpigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", ".")
+	if got, ok := ompigVersionIdentity(detailedVersionString()); !ok || got != want {
+		t.Fatalf("ompigVersionIdentity(detailedVersionString()) = %q, %v; want %q", got, ok, want)
 	}
-	if got, ok := pigVersionIdentity("pig: 1.2.3\n"); !ok || got != "pig 1.2.3" {
-		t.Fatalf("pigVersionIdentity without upstream = %q, %v", got, ok)
+	if got, ok := ompigVersionIdentity("ompig: 1.2.3\n"); !ok || got != "ompig 1.2.3" {
+		t.Fatalf("ompigVersionIdentity without upstream = %q, %v", got, ok)
 	}
-	if _, ok := pigVersionIdentity(UpstreamVersion + "\n"); ok {
-		t.Fatal("pigVersionIdentity accepted --version output")
+	if _, ok := ompigVersionIdentity(UpstreamVersion + "\n"); ok {
+		t.Fatal("ompigVersionIdentity accepted --version output")
 	}
 }
 
@@ -29,7 +29,7 @@ func TestRunBuildCommandHelp(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("runBuildCommand help = %d, stderr=%s", code, stderr.String())
 	}
-	if !strings.Contains(stdout.String(), "Usage: pig build") {
+	if !strings.Contains(stdout.String(), "Usage: ompig build") {
 		t.Fatalf("help missing usage: %s", stdout.String())
 	}
 }
@@ -51,12 +51,12 @@ func TestRunBuildCommandBuildsFromLinkedWorktreeBelowInvalidGitDir(t *testing.T)
 	repository := filepath.Join(base, "repository")
 	container := filepath.Join(base, "container")
 	worktree := filepath.Join(container, "worktree")
-	for _, dir := range []string{filepath.Join(repository, "cmd", "pig"), filepath.Join(repository, "coding", "cli"), filepath.Join(container, ".git")} {
+	for _, dir := range []string{filepath.Join(repository, "cmd", "ompig"), filepath.Join(repository, "coding", "cli"), filepath.Join(container, ".git")} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
 		}
 	}
-	// The repository has pig's layout: cmd/pig is the program and coding/cli owns the build identity that pig build stamps.
+	// The repository has ompig's layout: cmd/ompig is the program and coding/cli owns the build identity that ompig build stamps.
 	cliSource := `package cli
 
 import (
@@ -68,7 +68,7 @@ var Build = "dev"
 
 func Main(args []string) {
 	if len(args) > 0 && args[0] == "version" {
-		fmt.Fprint(os.Stdout, "pig: ` + PigVersion + `\nupstream pi: ` + UpstreamVersion + `\nbuild: ", Build, "\n")
+		fmt.Fprint(os.Stdout, "ompig: ` + OmpigVersion + `\nupstream pi: ` + UpstreamVersion + `\nbuild: ", Build, "\n")
 	}
 }
 `
@@ -77,15 +77,15 @@ func Main(args []string) {
 import (
 	"os"
 
-	"` + pigModulePath + `/coding/cli"
+	"` + ompigModulePath + `/coding/cli"
 )
 
 func main() { cli.Main(os.Args[1:]) }
 `
 	for path, source := range map[string]string{
-		"go.mod":                                 "module " + pigModulePath + "\n\ngo 1.26\n",
+		"go.mod":                                 "module " + ompigModulePath + "\n\ngo 1.26\n",
 		filepath.Join("coding", "cli", "cli.go"): cliSource,
-		filepath.Join("cmd", "pig", "main.go"):   mainSource,
+		filepath.Join("cmd", "ompig", "main.go"): mainSource,
 	} {
 		if err := os.WriteFile(filepath.Join(repository, path), []byte(source), 0o644); err != nil {
 			t.Fatal(err)
@@ -115,8 +115,8 @@ func main() { cli.Main(os.Args[1:]) }
 		t.Fatal(err)
 	}
 	t.Setenv("GOFLAGS", "")
-	target := testExecutable(filepath.Join(base, "pig"))
-	t.Setenv("PIG_BIN", target)
+	target := testExecutable(filepath.Join(base, "ompig"))
+	t.Setenv("OMPIG_BIN", target)
 
 	var stdout, stderr bytes.Buffer
 	if code := runBuildCommand([]string{"build"}, &stdout, &stderr); code != 0 {
@@ -125,21 +125,21 @@ func main() { cli.Main(os.Args[1:]) }
 	wantBuild := gitShortCommit(worktree)
 	version, err := exec.Command(target, "version").Output()
 	if err != nil {
-		t.Fatalf("built Pig version: %v", err)
+		t.Fatalf("built Ompig version: %v", err)
 	}
-	wantVersion := "pig: " + PigVersion + "\nupstream pi: " + UpstreamVersion + "\nbuild: " + wantBuild + "\n"
+	wantVersion := "ompig: " + OmpigVersion + "\nupstream pi: " + UpstreamVersion + "\nbuild: " + wantBuild + "\n"
 	if got := string(version); got != wantVersion {
-		t.Fatalf("built Pig version = %q, want explicit build identity %q", got, wantVersion)
+		t.Fatalf("built Ompig version = %q, want explicit build identity %q", got, wantVersion)
 	}
-	if want := "installed: pig " + PigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", ".") + " → " + target + "\n"; !strings.Contains(stdout.String(), want) {
+	if want := "installed: ompig " + OmpigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", ".") + " → " + target + "\n"; !strings.Contains(stdout.String(), want) {
 		t.Fatalf("build output missing %q: %s", want, stdout.String())
 	}
 }
 
 func TestPigBuildTargetUsesEnv(t *testing.T) {
-	want := filepath.Join(t.TempDir(), "pig-test-bin")
-	t.Setenv("PIG_BIN", want)
-	target, err := pigBuildTarget()
+	want := filepath.Join(t.TempDir(), "ompig-test-bin")
+	t.Setenv("OMPIG_BIN", want)
+	target, err := ompigBuildTarget()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,17 +149,17 @@ func TestPigBuildTargetUsesEnv(t *testing.T) {
 }
 
 // The default install target must be runnable by name: Windows starts only
-// files with an executable extension, so there it is pig.exe.
+// files with an executable extension, so there it is ompig.exe.
 func TestPigBuildTargetDefaultIsRunnableByName(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_BIN", "")
+	t.Setenv("OMPIG_BIN", "")
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	target, err := pigBuildTarget()
+	target, err := ompigBuildTarget()
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := filepath.Join(home, ".local", "bin", "pig")
+	want := filepath.Join(home, ".local", "bin", "ompig")
 	if runtime.GOOS == "windows" {
 		want += ".exe"
 	}
@@ -170,7 +170,7 @@ func TestPigBuildTargetDefaultIsRunnableByName(t *testing.T) {
 
 func TestFindPigSourceRootUsesEnvFallback(t *testing.T) {
 	root := t.TempDir()
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+pigModulePath+"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module "+ompigModulePath+"\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	outside := t.TempDir()
@@ -182,7 +182,7 @@ func TestFindPigSourceRootUsesEnvFallback(t *testing.T) {
 	if err := os.Chdir(outside); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SOURCE_ROOT", root)
+	t.Setenv("OMPIG_SOURCE_ROOT", root)
 
 	got, err := findPigSourceRoot()
 	if err != nil {
@@ -199,11 +199,11 @@ func TestFindPigSourceRootUsesEnvFallback(t *testing.T) {
 
 func TestFindPigSourceRootFindsNestedCheckoutBeforeFallback(t *testing.T) {
 	repo := t.TempDir()
-	pigRoot := filepath.Join(repo, "pig")
-	if err := os.MkdirAll(pigRoot, 0o755); err != nil {
+	ompigRoot := filepath.Join(repo, "ompig")
+	if err := os.MkdirAll(ompigRoot, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(pigRoot, "go.mod"), []byte("module "+pigModulePath+"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(ompigRoot, "go.mod"), []byte("module "+ompigModulePath+"\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -211,7 +211,7 @@ func TestFindPigSourceRootFindsNestedCheckoutBeforeFallback(t *testing.T) {
 	if err := os.MkdirAll(staleFallback, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(staleFallback, "go.mod"), []byte("module "+pigModulePath+"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(staleFallback, "go.mod"), []byte("module "+ompigModulePath+"\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -223,13 +223,13 @@ func TestFindPigSourceRootFindsNestedCheckoutBeforeFallback(t *testing.T) {
 	if err := os.Chdir(repo); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SOURCE_ROOT", staleFallback)
+	t.Setenv("OMPIG_SOURCE_ROOT", staleFallback)
 
 	got, err := findPigSourceRoot()
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := pigRoot
+	want := ompigRoot
 	if real, err := filepath.EvalSymlinks(want); err == nil {
 		want = real
 	}
@@ -241,8 +241,8 @@ func TestFindPigSourceRootFindsNestedCheckoutBeforeFallback(t *testing.T) {
 func TestReportActivePigBinaryWarnsWhenPigNotOnPath(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
 	var stdout bytes.Buffer
-	reportActivePigBinary("/tmp/pig-test-bin", &stdout)
-	if !strings.Contains(stdout.String(), "warning: no pig found on PATH") {
+	reportActivePigBinary("/tmp/ompig-test-bin", &stdout)
+	if !strings.Contains(stdout.String(), "warning: no ompig found on PATH") {
 		t.Fatalf("missing PATH warning: %s", stdout.String())
 	}
 }
@@ -250,12 +250,12 @@ func TestReportActivePigBinaryWarnsWhenPigNotOnPath(t *testing.T) {
 func TestBuiltPigVersionUsesDetailedIdentity(t *testing.T) {
 	dir := t.TempDir()
 	source := filepath.Join(dir, "main.go")
-	path := filepath.Join(dir, "pig.exe")
+	path := filepath.Join(dir, "ompig.exe")
 	body := `package main
 import ("fmt"; "os")
 func main() {
  if len(os.Args) != 2 || os.Args[1] != "version" { os.Exit(1) }
- fmt.Print(os.Getenv("PIG_TEST_BUILT_IDENTITY"))
+ fmt.Print(os.Getenv("OMPIG_TEST_BUILT_IDENTITY"))
 }
 `
 	if err := os.WriteFile(source, []byte(body), 0o600); err != nil {
@@ -265,11 +265,11 @@ func main() {
 		t.Fatalf("build fixture: %v\n%s", err, output)
 	}
 	for _, tc := range []struct{ name, output, want string }{
-		{"detailed", "pig: own\nupstream pi: target\n", "pig own+target"},
-		{"pin only", "target\n", "pig"},
+		{"detailed", "ompig: own\nupstream pi: target\n", "ompig own+target"},
+		{"pin only", "target\n", "ompig"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Setenv("PIG_TEST_BUILT_IDENTITY", tc.output)
+			t.Setenv("OMPIG_TEST_BUILT_IDENTITY", tc.output)
 			if got := builtPigVersion(path); got != tc.want {
 				t.Errorf("builtPigVersion = %q, want %q", got, tc.want)
 			}

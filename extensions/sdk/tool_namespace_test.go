@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // toolNamespaceSliceShape is ToolNamespace as the aliases port first wrote it, with the aliases in a []string. Its encoding is the wire shape

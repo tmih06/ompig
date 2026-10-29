@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // A provider_superseded notification ends an owner's claim to the provider's root, not the life of a Provider object another extension captured. Pi
@@ -37,11 +37,11 @@ func TestSupersededOwnerKeepsACapturedProviderCallableAcrossSDKs(t *testing.T) {
 			owner := subprocess.ExtConfig{Name: "extension-provider-carrier-owner", Source: filepath.Join(root, "test/parity/scenarios/testdata/extension-provider-carrier-owner.mjs"), Enabled: true, Isolation: "strict"}
 			switch language {
 			case "go":
-				owner = subprocess.ExtConfig{Name: "provider-object-go", Source: filepath.Join(root, "test/extension-conformance/testdata/provider-object-go"), Enabled: true, Isolation: "strict", RuntimeKind: "subprocess", RuntimeLanguage: language, EntrypointKind: "factory", Factory: "Extension", SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/provider-object-go", Package: "example.com/provider-object-go"}
+				owner = subprocess.ExtConfig{Name: "provider-object-go", Source: filepath.Join(root, "test/extension-conformance/testdata/provider-object-go"), Enabled: true, Isolation: "strict", RuntimeKind: "subprocess", RuntimeLanguage: language, EntrypointKind: "factory", Factory: "Extension", SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/provider-object-go", Package: "example.com/provider-object-go"}
 			case "python":
-				owner = subprocess.ExtConfig{Name: "provider-object-python", Source: filepath.Join(root, "test/extension-conformance/testdata/provider-object-python"), Enabled: true, Isolation: "strict", RuntimeKind: "subprocess", RuntimeLanguage: language, EntrypointKind: "factory", Factory: "new_extension", SDKName: "pig-sdk-py", Package: "provider_object"}
+				owner = subprocess.ExtConfig{Name: "provider-object-python", Source: filepath.Join(root, "test/extension-conformance/testdata/provider-object-python"), Enabled: true, Isolation: "strict", RuntimeKind: "subprocess", RuntimeLanguage: language, EntrypointKind: "factory", Factory: "new_extension", SDKName: "ompig-sdk-py", Package: "provider_object"}
 			case "rust":
-				owner = subprocess.ExtConfig{Name: "provider-object-rust", Source: filepath.Join(root, "test/extension-conformance/testdata/provider-object-rust"), Enabled: true, Isolation: "strict", RuntimeKind: "subprocess", RuntimeLanguage: language, EntrypointKind: "factory", Factory: "new_extension", SDKName: "pig-sdk", Package: "provider-object-rust"}
+				owner = subprocess.ExtConfig{Name: "provider-object-rust", Source: filepath.Join(root, "test/extension-conformance/testdata/provider-object-rust"), Enabled: true, Isolation: "strict", RuntimeKind: "subprocess", RuntimeLanguage: language, EntrypointKind: "factory", Factory: "new_extension", SDKName: "ompig-sdk", Package: "provider-object-rust"}
 			}
 			reader := subprocess.ExtConfig{Name: "extension-provider-carrier-remote", Source: filepath.Join(root, "test/parity/scenarios/testdata/extension-provider-carrier-remote.mjs"), Enabled: true, Isolation: "strict"}
 			loaded, errs := host.LoadAll(t.Context(), []subprocess.ExtConfig{owner, reader})

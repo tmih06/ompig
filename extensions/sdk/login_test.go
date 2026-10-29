@@ -93,8 +93,8 @@ func TestContextRegisterSpriteSendsTheDefinitionAsCallArguments(t *testing.T) {
 	t.Cleanup(func() { _ = client.Close() })
 
 	definition := SpriteDefinition{
-		ID:      "blue-pig",
-		Name:    "Blue PiG",
+		ID:      "blue-ompig",
+		Name:    "Blue Ompig",
 		Tagline: "From an extension.",
 		Mascot:  []string{"mascot"},
 		Palette: map[string]string{"P": "#5B8DEF"},
@@ -114,8 +114,8 @@ func TestContextRegisterSpriteSendsTheDefinitionAsCallArguments(t *testing.T) {
 		t.Fatalf("decode call args: %v", err)
 	}
 	want := map[string]any{
-		"id":      "blue-pig",
-		"name":    "Blue PiG",
+		"id":      "blue-ompig",
+		"name":    "Blue Ompig",
 		"tagline": "From an extension.",
 		"mascot":  []any{"mascot"},
 		"palette": map[string]any{"P": "#5B8DEF"},

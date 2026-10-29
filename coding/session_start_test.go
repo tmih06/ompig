@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Upstream sdk.ts constructs Agent with empty prompt/tools and existing messages;
@@ -183,7 +183,7 @@ func TestSessionFirstPromptWithoutToolsPublishesSystemLifecycleOnce(t *testing.T
 }
 
 func BenchmarkSessionStartupWithoutTranscript(b *testing.B) {
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: b.TempDir()})
 	if err != nil {
 		b.Fatal(err)

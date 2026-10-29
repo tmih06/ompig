@@ -8,9 +8,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func run() (err error) {
 	if err != nil {
 		return err
 	}
-	root, err := os.MkdirTemp("", "pig-user-bash-")
+	root, err := os.MkdirTemp("", "ompig-user-bash-")
 	if err != nil {
 		return err
 	}

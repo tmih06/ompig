@@ -24,7 +24,7 @@ func TestOther(t *testing.T) { t.Fatal("outside") }
 		t.Fatal(err)
 	}
 	test := &Test{ID: "test:value"}
-	pin := &Pin{Repository: "pig", Path: "sample_test.go", StartLine: 4, EndLine: 7}
+	pin := &Pin{Repository: "ompig", Path: "sample_test.go", StartLine: 4, EndLine: 7}
 	candidates, err := ExtractAssertionCandidates(root, test, pin)
 	if err != nil {
 		t.Fatal(err)
@@ -59,7 +59,7 @@ both_not_contain = ["panic"]
 		t.Fatal(err)
 	}
 	candidates, err := ExtractAssertionCandidates(root, &Test{ID: "test:scenario"}, &Pin{
-		Repository: "pig", Path: "scenario.toml", StartLine: 1, EndLine: 6,
+		Repository: "ompig", Path: "scenario.toml", StartLine: 1, EndLine: 6,
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -76,7 +76,7 @@ func TestAssertionAuditReportsAssertionlessBoundTests(t *testing.T) {
 		t.Fatal(err)
 	}
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:test", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: HashBytes([]byte("tools")), EnvironmentHash: HashBytes([]byte("environment"))}
-	pin := &Pin{Kind: KindPin, ID: "pin:empty-test", SnapshotID: snapshot.ID, Repository: "pig", Commit: snapshot.TargetCommit,
+	pin := &Pin{Kind: KindPin, ID: "pin:empty-test", SnapshotID: snapshot.ID, Repository: "ompig", Commit: snapshot.TargetCommit,
 		Path: "sample_test.go", SemanticID: "sample.TestEmpty", StartLine: 2, EndLine: 2,
 		QuoteHash: HashBytes([]byte("func TestEmpty() {}")), APIHash: HashBytes([]byte("TestEmpty")), BodyHash: HashBytes([]byte("{}"))}
 	testRecord := &Test{Kind: KindTest, ID: "test:empty", SnapshotID: snapshot.ID, PinID: pin.ID, FixturePinIDs: []string{}, DefinitionHash: pin.BodyHash}

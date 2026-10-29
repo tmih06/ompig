@@ -11,10 +11,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // ImportFromJsonl copies the session file at inputPath into the session
@@ -37,7 +37,7 @@ func (s *Session) ImportFromJsonl(ctx context.Context, inputPath, cwdOverride st
 	}
 	manager := newSessionManagerForDir(s.services, s.sessionDir)
 	sessionDir := manager.SessionDir()
-	// pig divergence (D132): session directories are 0700.
+	// ompig divergence (D132): session directories are 0700.
 	if err := icodingagent.MkdirSessionDir(sessionDir); err != nil {
 		return extension.CancelledResult{}, err
 	}

@@ -8,7 +8,7 @@
 //   - for every runtime export Pi's packages declare, and every member of each
 //     exported class, whether the runtime module serves it, and where the
 //     value's code comes from: Pi's own code copied into shims/pi-dist (or the
-//     third-party packages Pi depends on), PiG's own implementation in the
+//     third-party packages Pi depends on), Ompig's own implementation in the
 //     runtime modules, or a stand-in that throws when called or constructed.
 //
 // Function origins come from the V8 inspector ([[FunctionLocation]] mapped to

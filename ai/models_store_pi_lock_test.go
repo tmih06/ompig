@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // Pi models-store.ts:55 uses FileAuthStorageBackend, so dynamic catalogs

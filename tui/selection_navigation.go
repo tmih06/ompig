@@ -6,7 +6,7 @@ import "slices"
 // tui.select.pageUp or tui.select.pageDown key moves a selection to, clamped to the list without wrapping, and false
 // when data is neither key.
 //
-// pig divergence (D155): Pi 1.1.0 handles these keys in only some selection lists (Pi #7629).
+// ompig divergence (D155): Pi 1.1.0 handles these keys in only some selection lists (Pi #7629).
 func PageSelectionIndex(kb *TUIKeybindingsManager, data string, selectedIndex, itemCount, pageSize int) (int, bool) {
 	direction := 0
 	switch {

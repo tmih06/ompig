@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // trampolineEnv names the only variable of the environment of a trampoline.
@@ -18,7 +18,7 @@ import (
 // trampoline's arguments after its own name are the program's path, its
 // arguments, and its environment block, each as the raw string that execve
 // takes, so a name, an argument, or a value need not be UTF-8.
-const trampolineEnv = "PIG_NODESPAWN_EXEC"
+const trampolineEnv = "OMPIG_NODESPAWN_EXEC"
 
 // runTrampoline runs before main in every program that links this package. A
 // process that was started by useTrampoline replaces itself with the program
@@ -31,12 +31,12 @@ func runTrampoline() {
 	}
 	n, err := strconv.Atoi(value)
 	if err != nil || n < 1 || n > len(os.Args)-2 {
-		fmt.Fprintf(os.Stderr, "pig: invalid %s=%s for %d arguments\n", trampolineEnv, value, len(os.Args))
+		fmt.Fprintf(os.Stderr, "ompig: invalid %s=%s for %d arguments\n", trampolineEnv, value, len(os.Args))
 		os.Exit(127)
 	}
 	path, args, env := os.Args[1], os.Args[2:2+n], os.Args[2+n:]
 	err = syscall.Exec(path, args, env)
-	fmt.Fprintf(os.Stderr, "pig: exec %s: %v\n", path, err)
+	fmt.Fprintf(os.Stderr, "ompig: exec %s: %v\n", path, err)
 	os.Exit(127)
 }
 
@@ -51,7 +51,7 @@ func init() { runTrampoline() }
 // so the kernel limits (E2BIG) apply to them as they apply to the program's own
 // execve, except for the few bytes of the trampoline's name, the path, and
 // its variable. On Linux the copy is /proc/self/exe, the running image, which
-// stays valid when an update replaces or removes the file PiG started from.
+// stays valid when an update replaces or removes the file Ompig started from.
 func useTrampoline(cmd *exec.Cmd) {
 	if cmd.Err != nil || len(cmd.Args) == 0 || !sharesEnvKey(cmd.Env) {
 		return

@@ -9,7 +9,7 @@ import (
 
 // comb-audit row 100: an Anthropic content_block_delta that is valid JSON but holds a member of an unexpected type. Pi's `blocks.findIndex((b) => b.index === event.index)`
 // finds no block for an index that is not a number, no `event.delta.type` case matches a type that is not a string, and the delta members are appended with `+=`
-// (anthropic-messages.ts:737-790). The rows run Pi's own stream over each body and compare the final message with PiG's.
+// (anthropic-messages.ts:737-790). The rows run Pi's own stream over each body and compare the final message with Ompig's.
 func TestAnthropicDeltaMistypedMembersMatchPi(t *testing.T) {
 	event := func(kind, data string) string { return "event: " + kind + "\ndata: " + data + "\n\n" }
 	start := event("message_start", `{"type":"message_start","message":{"id":"m","type":"message","role":"assistant","content":[],"model":"claude-sonnet-4-5","stop_reason":null,"usage":{"input_tokens":5,"output_tokens":1}}}`)
@@ -118,7 +118,7 @@ process.exit(0);
 				want[i].Tools = "null"
 			}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}

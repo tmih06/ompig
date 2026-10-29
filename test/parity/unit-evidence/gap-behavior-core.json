@@ -469,7 +469,7 @@
       "TestCollectCatalogSplitsTypesInBarrelOrder",
       "TestCollectCatalogOrdersNumericIDsLikeObjectFromEntries"
     ],
-    "upstream_reference": "packages/ai/src/model-catalog.ts flattenModelCatalog (57-63): every API group's models of one type, in insertion order with canonical array-index ids first in ascending order; PiG runs it at generation time (cmd/gen-models flattenModelCatalog) and ai/builtin_catalog_upstream_test.go compares the generated records with the pinned provider data",
+    "upstream_reference": "packages/ai/src/model-catalog.ts flattenModelCatalog (57-63): every API group's models of one type, in insertion order with canonical array-index ids first in ascending order; Ompig runs it at generation time (cmd/gen-models flattenModelCatalog) and ai/builtin_catalog_upstream_test.go compares the generated records with the pinned provider data",
     "mutation": "cmd/gen-models/main.go: if row.Type == modelType { -> if true { (TestCollectCatalogSplitsTypesInBarrelOrder FAIL); case xok: return -1 -> return 1 (TestCollectCatalogOrdersNumericIDsLikeObjectFromEntries FAIL); compiled tests, baseline PASS"
   },
   {

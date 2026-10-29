@@ -6,11 +6,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ActiveToolNames returns the names of the tools active for the next agent turn. Mirrors upstream AgentSession.getActiveToolNames.

@@ -56,17 +56,17 @@ func NewGitGate(t testing.TB, hold func(GitOp) <-chan struct{}, exited func(GitO
 	if err := os.WriteFile(script, []byte(gitGateScript), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	stub, content := "git", "#!/bin/sh\nexec \"$PIG_TEST_GIT_GATE_NODE\" \"$PIG_TEST_GIT_GATE_SCRIPT\" \"$@\"\n"
+	stub, content := "git", "#!/bin/sh\nexec \"$OMPIG_TEST_GIT_GATE_NODE\" \"$OMPIG_TEST_GIT_GATE_SCRIPT\" \"$@\"\n"
 	if runtime.GOOS == "windows" {
-		stub, content = "git.cmd", "@echo off\r\n\"%PIG_TEST_GIT_GATE_NODE%\" \"%PIG_TEST_GIT_GATE_SCRIPT%\" %*\r\n"
+		stub, content = "git.cmd", "@echo off\r\n\"%OMPIG_TEST_GIT_GATE_NODE%\" \"%OMPIG_TEST_GIT_GATE_SCRIPT%\" %*\r\n"
 	}
 	if err := os.WriteFile(filepath.Join(bin, stub), []byte(content), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_TEST_GIT_GATE_NODE", nodePath)
-	t.Setenv("PIG_TEST_GIT_GATE_SCRIPT", script)
-	t.Setenv("PIG_TEST_GIT_GATE_REAL", realGit)
-	t.Setenv("PIG_TEST_GIT_GATE_URL", server.URL)
+	t.Setenv("OMPIG_TEST_GIT_GATE_NODE", nodePath)
+	t.Setenv("OMPIG_TEST_GIT_GATE_SCRIPT", script)
+	t.Setenv("OMPIG_TEST_GIT_GATE_REAL", realGit)
+	t.Setenv("OMPIG_TEST_GIT_GATE_URL", server.URL)
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
 	return gate
 }
@@ -138,7 +138,7 @@ func PhysicalPath(path string) string {
 // gitGateScript reports a git process to the gate, runs the real git with the caller's streams, then reports that it finished.
 const gitGateScript = `const { spawnSync } = require('node:child_process');
 const args = process.argv.slice(2);
-const url = process.env.PIG_TEST_GIT_GATE_URL;
+const url = process.env.OMPIG_TEST_GIT_GATE_URL;
 const query = new URLSearchParams({ cwd: process.cwd(), args: JSON.stringify(args) }).toString();
 async function report(event) {
   const response = await fetch(url + '/' + event + '?' + query, { method: 'POST' });
@@ -146,7 +146,7 @@ async function report(event) {
 }
 (async () => {
   await report('enter');
-  const result = spawnSync(process.env.PIG_TEST_GIT_GATE_REAL, args, { stdio: 'inherit', env: { ...process.env, PIG_TEST_GIT_GATE_URL: '' } });
+  const result = spawnSync(process.env.OMPIG_TEST_GIT_GATE_REAL, args, { stdio: 'inherit', env: { ...process.env, OMPIG_TEST_GIT_GATE_URL: '' } });
   await report('exit');
   process.exit(result.status === null ? 1 : result.status);
 })().catch((error) => { console.error(error); process.exit(99); });
@@ -163,8 +163,8 @@ func IsolateGit(t testing.TB) {
 		"GIT_CONFIG_GLOBAL":   config,
 		"GIT_CONFIG_NOSYSTEM": "1",
 		"GIT_TERMINAL_PROMPT": "0",
-		"GIT_AUTHOR_NAME":     "pig test", "GIT_AUTHOR_EMAIL": "pig-test@example.invalid",
-		"GIT_COMMITTER_NAME": "pig test", "GIT_COMMITTER_EMAIL": "pig-test@example.invalid",
+		"GIT_AUTHOR_NAME":     "ompig test", "GIT_AUTHOR_EMAIL": "ompig-test@example.invalid",
+		"GIT_COMMITTER_NAME": "ompig test", "GIT_COMMITTER_EMAIL": "ompig-test@example.invalid",
 	} {
 		t.Setenv(key, value)
 	}

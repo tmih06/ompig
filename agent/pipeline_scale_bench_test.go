@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // toolHistory builds turns of one user prompt, an assistant message with three tool calls, and their three results.

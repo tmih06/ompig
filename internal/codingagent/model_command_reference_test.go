@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // /model <term> resolves the term with findExactModelReferenceMatch (interactive-mode.ts findExactModelMatch, core/model-resolver.ts:88). The rows are

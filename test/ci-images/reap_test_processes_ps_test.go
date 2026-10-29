@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // QUALITY-AUDIT-050 item 16: reap-test-processes.sh read /proc and reported nothing on macOS, so a test's leaked tmux server, Node

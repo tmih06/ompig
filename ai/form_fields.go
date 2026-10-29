@@ -3,7 +3,7 @@ package ai
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // formFields is the Record<string, string> that Pi passes to `new URLSearchParams(fields)`: name/value pairs in insertion order,

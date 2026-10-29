@@ -5,7 +5,7 @@ Branch `pin-move`, worktree outside the integration checkout, based on the integ
 ## Done
 
 - 6F-ts merged with the 6D contract commit. The auto-merge conflict in `coding/extension/mcp_servers.go` kept the family 8a copy. `coding/mcpext` now uses the API's `mcp_servers_change` event (`extension.McpServersChangeEvent`) instead of its own copy. Build and `go vet ./...` are clean.
-- `UpstreamVersion` 0.99.1, `UpstreamCommit` d86654abb8862e201933517d6f1fce9f88dd117f (`internal/coding/pigversion/pigversion.go`). PiG stays 0.3.0 until the release step (`make set-version`).
+- `UpstreamVersion` 0.99.1, `UpstreamCommit` d86654abb8862e201933517d6f1fce9f88dd117f (`internal/coding/pigversion/pigversion.go`). Ompig stays 0.3.0 until the release step (`make set-version`).
 - `automation/gen/mirror-upstream.sh` no longer requires `image-models.generated.js` (upstream deleted it). The mirror `.upstream/v0.99.1` is materialized with provenance and `.upstream/current` points at it.
 - `extensions/sdk-ts` is locked to 0.99.1 (`npm ci --min-release-age=0` installs it).
 
@@ -23,7 +23,7 @@ Branch `pin-move`, worktree outside the integration checkout, based on the integ
 
 ## Docs sweep (needs an owner)
 
-`python3 automation/ci/check-public-claims.py` reports 147 lines that still say "Pi 0.87.1" while the pin is 0.99.1: README (badge and status line), `docs/site/docs/*`, `internal/pigdocs/content/*`, `CHANGELOG.md`, `docs/parity/*`, `docs/findings/*`, `docs/performance/*`, `docs/extension-api-parity.md`, `docs/additive-features.md` and `docs/extension-sdk-surface.md`. The pin statements (README badge, `docs/site/docs/index.md` table) become 0.99.1. Each behavior statement ("PiG ships the same provider set as ...", "Pi ... also emits ...") has to be checked against upstream 0.99.1 and then reworded: a blind rename would claim a version the statement was never checked against. The docs mirrors for the new upstream docs (`docs/mcp.md`, `docs/virtual-models.md`, 19 changed docs) belong to the same sweep (`internal/pigdocs`, docs-drift gate).
+`python3 automation/ci/check-public-claims.py` reports 147 lines that still say "Pi 0.87.1" while the pin is 0.99.1: README (badge and status line), `docs/site/docs/*`, `internal/pigdocs/content/*`, `CHANGELOG.md`, `docs/parity/*`, `docs/findings/*`, `docs/performance/*`, `docs/extension-api-parity.md`, `docs/additive-features.md` and `docs/extension-sdk-surface.md`. The pin statements (README badge, `docs/site/docs/index.md` table) become 0.99.1. Each behavior statement ("Ompig ships the same provider set as ...", "Pi ... also emits ...") has to be checked against upstream 0.99.1 and then reworded: a blind rename would claim a version the statement was never checked against. The docs mirrors for the new upstream docs (`docs/mcp.md`, `docs/virtual-models.md`, 19 changed docs) belong to the same sweep (`internal/pigdocs`, docs-drift gate).
 
 ## Status log
 

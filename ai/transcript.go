@@ -13,7 +13,7 @@ import (
 	"unicode/utf8"
 	"unsafe"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Context is the public request shape accepted before provider normalization.
@@ -24,12 +24,12 @@ type Context struct {
 	// Frozen declares that nothing modifies Messages, or anything they reference, while a request or stream made
 	// from this context is live. Normalization then shares the messages instead of deep-copying them, as pi-ai's
 	// normalizeContext does. TranscriptContext.Messages still returns copies.
-	// pig additive (D104): pi-ai copies nothing; PiG copies unless the caller declares the messages immutable.
+	// ompig additive (D104): pi-ai copies nothing; Ompig copies unless the caller declares the messages immutable.
 	Frozen bool
 	// Validated lets a Frozen context skip validating a value an earlier request of the same transcript already
 	// validated: it answers by the value's identity, so the caller promises that no value the memo has seen changes
 	// while the memo is in use. It is ignored unless Frozen is set.
-	// pig additive (D104): pi-ai validates nothing; PiG checks every tool result's details and call arguments for JSON, and a transcript that grows by one message per turn would otherwise check them all again every turn.
+	// ompig additive (D104): pi-ai validates nothing; Ompig checks every tool result's details and call arguments for JSON, and a transcript that grows by one message per turn would otherwise check them all again every turn.
 	Validated *ValidationMemo
 	// validated is set only by TranscriptContext.FrozenContext: the messages are a normalized transcript's.
 	validated bool
@@ -55,7 +55,7 @@ func newTranscriptContext(messages []Message) TranscriptContext {
 }
 
 // Len is the number of messages in the normalized transcript.
-// pig additive (D104): reads transcript.messages without the copy Messages makes.
+// ompig additive (D104): reads transcript.messages without the copy Messages makes.
 func (context TranscriptContext) Len() int {
 	if context.err != nil {
 		return 0
@@ -83,7 +83,7 @@ func (context TranscriptContext) Messages() []Message {
 
 // FrozenContext is a Context for a stream made from this transcript: its messages are shared, not copied, and
 // normalizing it does not validate them again. The caller must not modify Messages or anything a message references.
-// pig additive (D104): pi-ai's normalizeContext neither copies nor revalidates a transcript's messages.
+// ompig additive (D104): pi-ai's normalizeContext neither copies nor revalidates a transcript's messages.
 func (context TranscriptContext) FrozenContext() Context {
 	return Context{Messages: context.borrowed(), Frozen: true, validated: context.validated}
 }

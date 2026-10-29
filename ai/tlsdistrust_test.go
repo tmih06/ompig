@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust"
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust/tlsdistrusttest"
+	"github.com/tmih06/ompig/internal/tlsdistrust"
+	"github.com/tmih06/ompig/internal/tlsdistrust/tlsdistrusttest"
 )
 
 func compromisedTLSIntermediate(t *testing.T) *x509.Certificate {

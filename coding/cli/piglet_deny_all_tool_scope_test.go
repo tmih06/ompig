@@ -50,14 +50,14 @@ func newAnthropicScopeProvider(t *testing.T) *scopeProvider {
 	return provider
 }
 
-// An extension that denies every tool with setActiveTools([]) keeps the model request free of tools when a Piglet is
+// An extension that denies every tool with setActiveTools([]) keeps the model request free of tools when a Ompiglet is
 // active, in every mode and for each provider API. Pi applies exactly the requested names (agent-session.ts
-// setActiveToolsByName) and nothing re-widens them. The Piglet reapplies its scope on before_agent_start; it read the
+// setActiveToolsByName) and nothing re-widens them. The Ompiglet reapplies its scope on before_agent_start; it read the
 // empty selection as "no earlier narrowing" and offered its full scope again. Each mode binds its own getActiveTools, so
 // each must report the empty selection as a non-nil list, and each provider API must then declare no tools.
 func TestPigletKeepsAnExtensionsDenyAllSelectionInEveryMode(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and starts Node extensions")
+		t.Skip("builds the ompig binary and starts Node extensions")
 	}
 	t.Parallel()
 	for _, api := range []struct {
@@ -71,14 +71,14 @@ func TestPigletKeepsAnExtensionsDenyAllSelectionInEveryMode(t *testing.T) {
 			for _, mode := range []string{"print", "json", "rpc", "interactive"} {
 				t.Run(mode, func(t *testing.T) {
 					provider := api.provider(t)
-					home, piglet := scopeFixture(t, provider, "")
+					home, ompiglet := scopeFixture(t, provider, "")
 					writeStartupFixtureFile(t, filepath.Join(home, "agent", "models.json"), fmt.Sprintf(`{"providers":{"fake":{"baseUrl":%q,"api":%q,"apiKey":"synthetic-test-key","models":[{"id":"fake","name":"Fake","reasoning":false,"input":["text"],"contextWindow":128000,"maxTokens":1024,"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0}}]}}}`, provider.url, api.name))
-					writeStartupFixtureFile(t, filepath.Join(piglet, "scoped.mjs"), `export default function (pi) {
+					writeStartupFixtureFile(t, filepath.Join(ompiglet, "scoped.mjs"), `export default function (pi) {
   pi.registerTool({ name: "scoped_tool", label: "Scoped", description: "scoped", parameters: { type: "object", properties: {} }, execute: async () => ({ content: [{ type: "text", text: "ok" }] }) });
   pi.on("session_start", () => { pi.setActiveTools([]); });
 }
 `)
-					if names := firstRequestTools(t, provider, home, piglet, mode); len(names) != 0 {
+					if names := firstRequestTools(t, provider, home, ompiglet, mode); len(names) != 0 {
 						t.Errorf("a deny-all selection offered %v, want no tools", names)
 					}
 				})

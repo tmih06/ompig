@@ -22,7 +22,7 @@ func decisionDoc(t *testing.T, rows ...string) *mappingDoc {
 	return doc
 }
 
-const reviewedRow = `{"disposition":"designed-out","upstreamShapeHash":"sha256:aa","rationale":"Go replaces it","pigTargets":["x/y.go#Z"]}`
+const reviewedRow = `{"disposition":"designed-out","upstreamShapeHash":"sha256:aa","rationale":"Go replaces it","ompigTargets":["x/y.go#Z"]}`
 
 func neverDerived(string) (bool, bool) { return false, false }
 
@@ -40,7 +40,7 @@ func TestReviewedDecisionSurvivesAMappingRegeneration(t *testing.T) {
 			t.Fatal(err)
 		}
 		row := doc.Mappings[0]
-		if row.get("disposition") != "designed-out" || row.get("rationale") != "Go replaces it" || len(row.list("pigTargets")) != 1 || st.Restored != 1 || st.Applied != 1 {
+		if row.get("disposition") != "designed-out" || row.get("rationale") != "Go replaces it" || len(row.list("ompigTargets")) != 1 || st.Restored != 1 || st.Applied != 1 {
 			t.Errorf("a %s row did not get its reviewed decision back: %v %+v", reset, row.get("disposition"), st)
 		}
 		out, err := encodeMapping(doc)
@@ -173,7 +173,7 @@ func TestRowTheRulesDesignOutCarriesTheRulesCurrentRationale(t *testing.T) {
 	dir := t.TempDir()
 	mapping := filepath.Join(dir, "mapping.json")
 	decisions := filepath.Join(dir, "reviewed-decisions.json")
-	row := `{"id":"pkg:x/.#K","disposition":"designed-out","upstreamShapeHash":"sha256:cc","rationale":"read by nothing in Pi 1.0.4","pigTargets":["x/k.go#K"]}`
+	row := `{"id":"pkg:x/.#K","disposition":"designed-out","upstreamShapeHash":"sha256:cc","rationale":"read by nothing in Pi 1.0.4","ompigTargets":["x/k.go#K"]}`
 	if err := os.WriteFile(mapping, []byte(`{"upstreamVersion":"1.2.0","mappings":[`+row+`]}`), 0o644); err != nil {
 		t.Fatal(err)
 	}

@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// Session content blocks from older PiG persistence can use provider spellings.
+// Session content blocks from older Ompig persistence can use provider spellings.
 // The persistence reader reduces them into the closed transcript union.
 func TestProviderSpelledContentBlocksDecode(t *testing.T) {
 	for _, tc := range []struct {

@@ -14,11 +14,11 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // nestedCalls tracks the executeTool calls of each connection from the moment the read loop queues them until they finish, so the extension's own signal can cancel one. An SDK sends executeTool under the calling tool's request and executeTool.cancel outside it, in another call lane, so the cancel can run before the call reaches its handler. The call is reserved when the read loop queues its frame, which precedes the cancel's frame, and the reservation carries the cancellation until the handler starts. A call is named by the connection that made it and its ExecuteID.

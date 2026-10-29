@@ -8,18 +8,18 @@ import (
 	"testing"
 )
 
-// Every environment variable the docs name must be one Pig actually reads.
+// Every environment variable the docs name must be one Ompig actually reads.
 //
 // A variable that does not exist is worse than an undocumented one: the reader
 // sets it, sees no change, and has no way to tell a typo from a broken feature.
 // This scans the source for the name rather than keeping a second list, so the
-// check cannot drift from the code it is checking. It accepts a variable Pig
+// check cannot drift from the code it is checking. It accepts a variable Ompig
 // sets for a child process as well as one it reads, because both are real to a
 // reader.
 
 var (
-	docEnvRE    = regexp.MustCompile("`((?:PIG|PI)_[A-Z0-9_]+)(?:=[^`]*)?`")
-	sourceEnvRE = regexp.MustCompile(`((?:PIG|PI)_[A-Z0-9_]+)`)
+	docEnvRE    = regexp.MustCompile("`((?:OMPIG|PI)_[A-Z0-9_]+)(?:=[^`]*)?`")
+	sourceEnvRE = regexp.MustCompile(`((?:OMPIG|PI)_[A-Z0-9_]+)`)
 )
 
 func readEnvNames(t *testing.T) map[string]bool {
@@ -66,7 +66,7 @@ func TestEveryDocumentedEnvironmentVariableExists(t *testing.T) {
 	read := readEnvNames(t)
 	for _, src := range corpus(t) {
 		for _, m := range docEnvRE.FindAllStringSubmatch(src.Body, -1) {
-			if !read[m[1]] && m[1] != "PIG_ACP_PIG_COMMAND" { // read by the pig-acp companion of the Pigpen acp Package (packages.md), not by PiG
+			if !read[m[1]] && m[1] != "OMPIG_ACP_OMPIG_COMMAND" { // read by the ompig-acp companion of the Pigpen acp Package (packages.md), not by Ompig
 				t.Errorf("%s documents %s, which appears nowhere in the source", src.Rel, m[1])
 			}
 		}

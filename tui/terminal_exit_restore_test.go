@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	exitRestoreModeEnv = "PIG_TUI_EXIT_RESTORE_MODE"
+	exitRestoreModeEnv = "OMPIG_TUI_EXIT_RESTORE_MODE"
 	// exitRestoreReady ends the startup output: the fixture starts the terminal and the alternate screen, writes it, then exits.
 	exitRestoreReady = "\x1b]0;exit-restore-ready\x07"
 )

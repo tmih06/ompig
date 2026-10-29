@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type trustMultiUpdate struct {
@@ -30,7 +30,7 @@ type trustMultiCase struct {
 	Ops     []trustMultiOp `json:"ops"`
 }
 
-// TestProjectTrustStoreMultiEntryFilesMatchPi extends TestProjectTrustStoreMatchesPi to files with several invalid values (the error names the first in Object.entries order), a symlinked cwd, astral and BMP-high keys (JSON.stringify of sorted keys orders by UTF-16 code unit) and root-relative ancestors. It runs core/trust-manager.ts ProjectTrustStore and PiG's NewProjectTrustStore over the same trust.json files and operation
+// TestProjectTrustStoreMultiEntryFilesMatchPi extends TestProjectTrustStoreMatchesPi to files with several invalid values (the error names the first in Object.entries order), a symlinked cwd, astral and BMP-high keys (JSON.stringify of sorted keys orders by UTF-16 code unit) and root-relative ancestors. It runs core/trust-manager.ts ProjectTrustStore and Ompig's NewProjectTrustStore over the same trust.json files and operation
 // sequences (get, getEntry, set, setMany). Files are absent, empty, corrupt, byte-order-marked, non-object roots, objects whose values are true, false, null or
 // not booleans, with keys that are the case's directories, a symlink to one, missing paths, integer-like and non-ASCII keys. Results, whether an operation
 // threw, the text of an "Invalid trust store" error and the file bytes after each operation match. Not compared: the V8 text after "Failed to read trust store

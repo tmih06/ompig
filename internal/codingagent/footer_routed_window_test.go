@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream 0.99.1 footer.ts:162 takes the context window from session.getContextUsage(), which measures against _limitsModel (agent-session.ts:4139-4144): under a virtual selection, the physical model that answered last.

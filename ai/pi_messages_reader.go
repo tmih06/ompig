@@ -17,7 +17,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonparse"
 )
 
 // piMessagesEventLoop is `for await (const piEvent of readPiMessagesEvents(response.body))` (pi-messages.ts:432-441) on the executor

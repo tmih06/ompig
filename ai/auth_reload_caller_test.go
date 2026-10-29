@@ -7,7 +7,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 func TestResolveProviderAuthSharesFileReloadIsolation(t *testing.T) {

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/typebox/engine"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/typebox/engine"
 )
 
 // The Go SDK's Type members that the host's type engine serves, run through the SDK exactly as an extension calls them, against the vectors Pi's own Type (TypeBox 1.3.27) produced

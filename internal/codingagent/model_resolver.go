@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ModelResolverRuntime supplies the catalog and configured-auth observations used by CLI resolution. Selection does not resolve credentials or refresh the catalog.
@@ -127,7 +127,7 @@ func ResolveCliModel(cliProvider, cliModel, cliThinking string, inlineApiKey boo
 }
 
 // strippedCliModelError is the strip that keeps an unresolved --provider/--model selection out of the offered catalog, or nil. Using a model of a stripped API reports the strip, so naming one does too instead of reporting an unknown provider or model.
-// pig additive (D92): Stock PiG strips no API, so this is always nil there.
+// ompig additive (D92): Stock Ompig strips no API, so this is always nil there.
 func strippedCliModelError(cliProvider, cliModel string) error {
 	if cliProvider != "" {
 		modelID := cliModel

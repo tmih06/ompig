@@ -16,7 +16,7 @@ func rules(violations []Violation) string {
 	return strings.Join(names, ",")
 }
 
-// Each case is a request body written from the provider's documented contract, not captured from PiG output.
+// Each case is a request body written from the provider's documented contract, not captured from Ompig output.
 func TestCheckBodyContracts(t *testing.T) {
 	cases := []struct {
 		name string
@@ -97,7 +97,7 @@ func TestFailEndsTheProcessEvenInsideARecover(t *testing.T) {
 		os.Exit(0)
 	}
 	cmd := exec.CommandContext(t.Context(), os.Args[0], "-test.run=^TestFailEndsTheProcessEvenInsideARecover$")
-	cmd.Env = append(os.Environ(), "REQUESTVALIDITY_CHILD=1", "PIG_REQUEST_VALIDITY_REPORT=")
+	cmd.Env = append(os.Environ(), "REQUESTVALIDITY_CHILD=1", "OMPIG_REQUEST_VALIDITY_REPORT=")
 	out, err := cmd.CombinedOutput()
 	if err == nil || !strings.Contains(string(out), "requestvalidity: invalid anthropic-messages request") || !strings.Contains(string(out), "result-has-call: orphan") {
 		t.Fatalf("the child survived or did not name the violation: err=%v\n%s", err, out)
@@ -106,7 +106,7 @@ func TestFailEndsTheProcessEvenInsideARecover(t *testing.T) {
 
 func TestEnforceReport(t *testing.T) {
 	path := t.TempDir() + "/report.tsv"
-	t.Setenv("PIG_REQUEST_VALIDITY_REPORT", path)
+	t.Setenv("OMPIG_REQUEST_VALIDITY_REPORT", path)
 	Enforce(context.Background(), "openai-completions", []Violation{{Rule: "call-has-result", Detail: "line1\nline2"}})
 	data, err := os.ReadFile(path)
 	if err != nil || !strings.HasPrefix(string(data), "openai-completions\tcall-has-result\tline1 line2\t") {

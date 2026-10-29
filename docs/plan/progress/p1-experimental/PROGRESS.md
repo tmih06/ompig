@@ -14,7 +14,7 @@ This lane owns the seven files above. `c1-login-fixes` and `p1-login-fixes` neve
 
 Pi 1.0.0 removed `pi-agent-core`'s harness (`packages/agent/src/harness`, including `AgentLane`, `JsonlSessionRepo` and Pico3) and rebuilt the experimental server on `pi-durable`. The session worker opens a pi-durable `Harness` on `<session>/session.sqlite` (`session-worker.ts:527`, `durable/harness-setup.ts`). The server lists a `meta.json` catalog (`session-catalog.ts`, `server.ts:383-397`). The `AgentController` contract and provider, the `Transcript` state (`ConversationView`) and the client TUI's transcript render the durable conversation. The tests use `experimental-durable-support.ts` `openFauxConversation`, a faux pi-durable Harness.
 
-pi-durable is outside PiG's package denominator (owner decision D-H, `docs/plan/upgrade-0.99.1.md:58` and `:74`; `docs/parity/PORT_MAP.md` package scope). The 38 pi-durable test files are designed-out (`docs/plan/progress/port-992-durable.md`). PiG's experimental server still runs the Go Harness (`agent/harness`), the port of the removed 0.99.2 harness.
+pi-durable is outside Ompig's package denominator (owner decision D-H, `docs/plan/upgrade-0.99.1.md:58` and `:74`; `docs/parity/PORT_MAP.md` package scope). The 38 pi-durable test files are designed-out (`docs/plan/progress/port-992-durable.md`). Ompig's experimental server still runs the Go Harness (`agent/harness`), the port of the removed 0.99.2 harness.
 
 ## Per-file decision
 
@@ -39,7 +39,7 @@ None is designed out. The pending rows need an owner decision, not more lane wor
 - `internal/experimental/server_runtime.go`: the JSONL listing is projected onto the catalog metadata at the manager calls.
 - Ledgers: `test-mapping-v1.0.0.json` (7 rows), `upstream-sync/v1.0.0.toml` (`session-worker-manager.ts` ported; `session-worker.ts` and `session-catalog.ts` pending with a rationale), `PORT_MAP.md` (`session-catalog.ts` 🟡, two row descriptions).
 
-No user-visible change: the experimental server ships only in the `pig_experimental` build. No changelog entry or user doc is needed.
+No user-visible change: the experimental server ships only in the `ompig_experimental` build. No changelog entry or user doc is needed.
 
 ## Red -> green
 
@@ -48,13 +48,13 @@ No user-visible change: the experimental server ships only in the `pig_experimen
 - `TestPortWave08WorkerManager` (9 cases, 1.0.0 metadata): with the 0.99.2 decoder that required `storageVersion`, the adoption case `:99` fails and the run then hangs in `OpenSession`. Green after the port.
 - `TestSessionWorkerMetadataWireSchema` (replaces the 0.99.2 number tests): rows confirmed with a TypeBox 1.3.27 `Check` under Node 24. A mutation accepting additional members fails the `storageVersion`, 0.99.2 metadata and `parentSessionId` rows.
 - `TestPortWave08WorkerLaunchMetadataProjection`, `TestSessionWorkerAdoptsWorkerWithFractionalCreatedAt`: rewritten for the four-member contract.
-- The 0.99.2-ported remote-runtime, client-TUI, transcript and controller tests still pass and keep covering PiG's current JSONL server.
+- The 0.99.2-ported remote-runtime, client-TUI, transcript and controller tests still pass and keep covering Ompig's current JSONL server.
 
 ## Gates
 
-- `go vet ./internal/experimental/... ./cmd/...` (plain, `GOOS=windows` and `-tags pig_experimental`): clean.
+- `go vet ./internal/experimental/... ./cmd/...` (plain, `GOOS=windows` and `-tags ompig_experimental`): clean.
 - `go tool golangci-lint run ./internal/experimental/...`: 0 issues.
-- `go test ./internal/experimental/ ./cmd/pig-experimental/`, and `-race` on the lifecycle, manager, worker and remote-runtime tests: pass.
+- `go test ./internal/experimental/ ./cmd/ompig-experimental/`, and `-race` on the lifecycle, manager, worker and remote-runtime tests: pass.
 - `make ci-contracts`: `test-inventory` OK (490 ported, 2 partial, 51 pending). Failures that exist on the base and name no file of this lane: `correspondence-check` (quiet-startup and tui-mode settings), `test-porting-release` and `known-gaps-drift` (other lanes' hot-path pending rows), `sdk-surface-drift` (`generateImages`).
 - `make ci-drift`: `port-map-drift`, `source-hygiene` and `docs-drift` clean. `coverage-drift` clean after a local `make coverage` (generated files restored). `divergence-guard` fails on the base only, on `agent/harness` and `internal/codingagent/tools` literals whose upstream harness files 1.0.0 removed.
 - Base failures in the area, outside this diff: `internal/experimental/services` `TestControllerMatchesPinnedProvider` and `TestModelsProviderMatchesPinnedUpstream` run the 1.0.0 providers, which import `@earendil-works/pi-durable`. `internal/experimental/mini/shared` oracles import `experimental/mini`, which 1.0.0 removed.
@@ -64,7 +64,7 @@ No user-visible change: the experimental server ships only in the `pig_experimen
 Pi 1.0.0's experimental server is a pi-durable application. D-H keeps pi-durable out of scope. That leaves four test files pending and one partial, and the experimental server rows (`server.ts`, `session-worker.ts`, `session-catalog.ts`, `services/*`) cannot follow 1.0.0. Choose one:
 
 - A: port pi-durable (about 17,700 source lines at 1.0.0) and move the experimental stack onto it.
-- B: design out the experimental server's pi-durable parts with a numbered divergence that keeps PiG's Go-Harness JSONL stack, and mark these test files designed-out.
+- B: design out the experimental server's pi-durable parts with a numbered divergence that keeps Ompig's Go-Harness JSONL stack, and mark these test files designed-out.
 - C: leave them pending until the experimental server is scheduled.
 
 This lane continues on nothing else in the area until you answer.

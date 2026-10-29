@@ -1,35 +1,35 @@
 # MCP Servers
 
-PiG connects to [Model Context Protocol](https://modelcontextprotocol.io) servers over stdio or streamable HTTP and makes their tools and resources available to the model.
+Ompig connects to [Model Context Protocol](https://modelcontextprotocol.io) servers over stdio or streamable HTTP and makes their tools and resources available to the model.
 
 ## Quick setup
 
-Add a local stdio server, check the connection, then start PiG:
+Add a local stdio server, check the connection, then start Ompig:
 
 ```bash
-pig mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem .
-pig mcp list
-pig
+ompig mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem .
+ompig mcp list
+ompig
 ```
 
 For a remote server:
 
 ```bash
-pig mcp add docs --url https://example.com/mcp --bearer-token-env-var DOCS_TOKEN
-pig mcp list
+ompig mcp add docs --url https://example.com/mcp --bearer-token-env-var DOCS_TOKEN
+ompig mcp list
 ```
 
 These commands add user-level servers by default. Add `--local` or `-l` to write the project configuration instead:
 
 ```bash
-pig mcp add -l tools --env API_KEY='${TOOLS_KEY}' -- uvx tools-mcp
+ompig mcp add -l tools --env API_KEY='${TOOLS_KEY}' -- uvx tools-mcp
 ```
 
 Use `/mcp` inside an interactive session to inspect connections, sign in, reconnect, change exposure, or enable and disable servers. Run `/reload` after adding, removing, or changing a server outside the session.
 
 ## Configure servers
 
-PiG reads user-level servers from `~/.pig/agent/mcp.json` and project servers from `.pig/mcp.json`. Project configuration is read only after [project trust](security.md#project-trust) is granted. A project entry replaces a user-level entry with the same name.
+Ompig reads user-level servers from `~/.ompig/agent/mcp.json` and project servers from `.ompig/mcp.json`. Project configuration is read only after [project trust](security.md#project-trust) is granted. A project entry replaces a user-level entry with the same name.
 
 A project entry without `command`, `url`, or `type` overrides only `enabled`, `exposure`, and `toolExposure` of the user-level server with the same name and keeps the rest, including `env`, `headers`, and `auth`. For example, this turns off a user-level server in one project:
 
@@ -79,25 +79,25 @@ Keep personal servers and servers with credentials in the user-level file. Use t
 - `sse` is rejected. Servers that document an SSE endpoint often also provide streamable HTTP, commonly at a URL path ending in `mcp` instead of `sse`.
 - `command` is one executable and `args` contains its arguments. It is not a shell command string.
 - `env` and `headers` values can use environment variables such as `${GITHUB_TOKEN}`. They can also run a command with `!command`, but the command must make up the whole value, for example `"Authorization": "!echo Bearer $(gh auth token)"`.
-- A `url` can use environment variables, such as `"url": "${TOOLS_URL}"` or `"url": "https://${TOOLS_HOST}/mcp"`. PiG uses the expanded URL to check the entry and to connect. A `url` that cannot be expanded (it runs a `!command`, or a variable is unset) is used as written. Write `$$` for a literal `$` in a URL. Pi uses the `url` as written (D156, Pi #10654).
+- A `url` can use environment variables, such as `"url": "${TOOLS_URL}"` or `"url": "https://${TOOLS_HOST}/mcp"`. Ompig uses the expanded URL to check the entry and to connect. A `url` that cannot be expanded (it runs a `!command`, or a variable is unset) is used as written. Write `$$` for a literal `$` in a URL. Pi uses the `url` as written (D156, Pi #10654).
 - Invalid entries are reported and skipped without preventing other servers from connecting.
 
-`pig mcp add` and `pig mcp remove` cover common changes from a shell. See [MCP commands](#mcp-commands) for their options.
+`ompig mcp add` and `ompig mcp remove` cover common changes from a shell. See [MCP commands](#mcp-commands) for their options.
 
 ### MCP commands
 
-`pig mcp` configures and checks servers without starting a session. It does not load extensions.
+`ompig mcp` configures and checks servers without starting a session. It does not load extensions.
 
 | Command | Meaning |
 |---|---|
-| `pig mcp add <server> [options] -- <command> [args...]` | Add or replace a stdio server |
-| `pig mcp add <server> [options] --url <url>` | Add or replace a streamable HTTP server |
-| `pig mcp remove <server> [-l]` | Remove a server; stored OAuth credentials are kept |
-| `pig mcp list [--json]` | Connect to every enabled server and print its state, tools and errors; exits 1 on failure |
-| `pig mcp login <server> [--timeout <seconds>]` | Sign in through the browser; `--timeout` limits the whole sign-in, including requests to the authorization server (default: 300 seconds) |
-| `pig mcp logout <server>` | Delete the stored OAuth credentials |
+| `ompig mcp add <server> [options] -- <command> [args...]` | Add or replace a stdio server |
+| `ompig mcp add <server> [options] --url <url>` | Add or replace a streamable HTTP server |
+| `ompig mcp remove <server> [-l]` | Remove a server; stored OAuth credentials are kept |
+| `ompig mcp list [--json]` | Connect to every enabled server and print its state, tools and errors; exits 1 on failure |
+| `ompig mcp login <server> [--timeout <seconds>]` | Sign in through the browser; `--timeout` limits the whole sign-in, including requests to the authorization server (default: 300 seconds) |
+| `ompig mcp logout <server>` | Delete the stored OAuth credentials |
 
-Options for `add` and `remove`: `-l`, `--local` writes `.pig/mcp.json` in the current project instead of the user-level file.
+Options for `add` and `remove`: `-l`, `--local` writes `.ompig/mcp.json` in the current project instead of the user-level file.
 
 Options for `add`:
 
@@ -120,17 +120,17 @@ Options for `add`:
 
 Exposure and enabled-state changes are saved to the file that defines the server without replacing unrelated content. In a trusted project, "Enable in this project" and "Disable in this project" add a project override for a user-level server; later changes to that server are saved to the override. Disabled servers remain listed. `/mcp` opens at once, also while servers are still connecting, and shows them as they connect; reconnecting, enabling, and disabling a server run in the background. Outside the interactive TUI, `/mcp` prints server status; `/mcp login <server>`, `/mcp logout <server>`, and `/mcp reconnect <server>` perform those actions directly.
 
-Shell commands work without a session: `pig mcp add`, `pig mcp remove`, `pig mcp list`, `pig mcp login`, and `pig mcp logout`. Shell commands do not load extensions.
+Shell commands work without a session: `ompig mcp add`, `ompig mcp remove`, `ompig mcp list`, `ompig mcp login`, and `ompig mcp logout`. Shell commands do not load extensions.
 
 ### Diagnose connection problems
 
-Run `pig mcp list` to connect to every enabled server and print its state, tools, and errors. It exits with status 1 when an entry is invalid or an enabled server is not connected. `/mcp` shows the full connection error and the tail of stderr from a failed stdio server.
+Run `ompig mcp list` to connect to every enabled server and print its state, tools, and errors. It exits with status 1 when an entry is invalid or an enabled server is not connected. `/mcp` shows the full connection error and the tail of stderr from a failed stdio server.
 
-PiG reports configuration errors, failed connections, and required sign-ins once after startup. Server logging notifications are appended to `~/.pig/agent/mcp.log` as `<time> [<server>] <level> <logger>: <message>`. The file moves to `mcp.log.1` after it grows past 5 MB.
+Ompig reports configuration errors, failed connections, and required sign-ins once after startup. Server logging notifications are appended to `~/.ompig/agent/mcp.log` as `<time> [<server>] <level> <logger>: <message>`. The file moves to `mcp.log.1` after it grows past 5 MB.
 
-PiG connects every enabled server in the background when a session starts. A server's tools appear once it connects; the `codemode` description does not list them, so it does not change when servers connect. The first prompt waits up to 10 seconds only for servers with `direct` tools, which must be declared in its request. Other servers are waited for when they are needed: a codemode script waits for the servers it names (`mcp__<server>`) and, when it calls `searchTools()` or reads `ALL_TOOLS`, for all of them; `tool_search` and the resource tools also wait for all of them. HTTP network errors and transient statuses (408, 429, and 5xx) are retried twice. A dropped connection is shown as disconnected and reconnects on the next call. When a server announces a changed tool list, new tools are added and withdrawn tools become unreachable.
+Ompig connects every enabled server in the background when a session starts. A server's tools appear once it connects; the `codemode` description does not list them, so it does not change when servers connect. The first prompt waits up to 10 seconds only for servers with `direct` tools, which must be declared in its request. Other servers are waited for when they are needed: a codemode script waits for the servers it names (`mcp__<server>`) and, when it calls `searchTools()` or reads `ALL_TOOLS`, for all of them; `tool_search` and the resource tools also wait for all of them. HTTP network errors and transient statuses (408, 429, and 5xx) are retried twice. A dropped connection is shown as disconnected and reconnects on the next call. When a server announces a changed tool list, new tools are added and withdrawn tools become unreachable.
 
-On Linux and macOS, stopping a stdio server closes its stdin, sends SIGTERM, then sends SIGKILL to its process group. This also stops servers launched through wrappers such as `npx` or `uvx`. PiG also stops its stdio servers when it exits because its terminal closed, it crashed, or it received a termination signal, as Pi does from its exit hook.
+On Linux and macOS, stopping a stdio server closes its stdin, sends SIGTERM, then sends SIGKILL to its process group. This also stops servers launched through wrappers such as `npx` or `uvx`. Ompig also stops its stdio servers when it exits because its terminal closed, it crashed, or it received a termination signal, as Pi does from its exit hook.
 
 ## Worked example: a server in twenty lines
 
@@ -168,16 +168,16 @@ for line in sys.stdin:
         sys.stdout.flush()
 ```
 
-Add it and check the connection. PiG starts the program, asks for its tools and reports. Checked on PiG:
+Add it and check the connection. Ompig starts the program, asks for its tools and reports. Checked on Ompig:
 
 ```bash
-pig mcp add wordcount -- python3 /home/you/mcp/wordcount.py
-pig mcp list
+ompig mcp add wordcount -- python3 /home/you/mcp/wordcount.py
+ompig mcp list
 ```
 
 ```text
-Added global MCP server "wordcount" in /home/you/.pig/agent/mcp.json.
-Check it with: pig mcp list
+Added global MCP server "wordcount" in /home/you/.ompig/agent/mcp.json.
+Check it with: ompig mcp list
 ```
 
 ```text
@@ -209,7 +209,7 @@ In a session, `/mcp` shows the connection:
  enter manage • escape/ctrl+c close
 ```
 
-The word `codemode` in both outputs is how the server's tools reach the model. By default PiG does not give the model each MCP tool as a separate tool. It lists the server in the system prompt (`- mcp__wordcount (codemode)`) and gives the model one `codemode` tool, which runs a short JavaScript script that calls `tools.mcp__wordcount__word_count(...)`. Ask `How many words are in: the quick brown fox` and the model writes the script. PiG shows it, the call with its time, and the server's reply (the test model here wrote the script):
+The word `codemode` in both outputs is how the server's tools reach the model. By default Ompig does not give the model each MCP tool as a separate tool. It lists the server in the system prompt (`- mcp__wordcount (codemode)`) and gives the model one `codemode` tool, which runs a short JavaScript script that calls `tools.mcp__wordcount__word_count(...)`. Ask `How many words are in: the quick brown fox` and the model writes the script. Ompig shows it, the call with its time, and the server's reply (the test model here wrote the script):
 
 ```text
  codemode
@@ -219,14 +219,14 @@ The word `codemode` in both outputs is how the server's tools reach the model. B
  The text has 4 words.
 ```
 
-To change how the tools are shown to the model, see [Control tool exposure](#control-tool-exposure). `pig mcp remove wordcount` removes the entry.
+To change how the tools are shown to the model, see [Control tool exposure](#control-tool-exposure). `ompig mcp remove wordcount` removes the entry.
 
 An MCP server runs with your permissions, like any program you start. Add only servers you trust ([Security](/docs/latest/security)).
 
 
 ## Migrate configuration from another client
 
-Move the converted entry under `mcpServers` in `mcp.json`, then run `pig mcp list` to validate it.
+Move the converted entry under `mcpServers` in `mcp.json`, then run `ompig mcp list` to validate it.
 
 | Client | Conversion |
 |---|---|
@@ -247,9 +247,9 @@ Remote servers that use OAuth, such as Sentry, need no credentials in `mcp.json`
 }
 ```
 
-When the server rejects an unauthenticated connection, `/mcp` shows that it needs sign-in. Select "Sign in", run `/mcp login sentry`, or run `pig mcp login sentry`. PiG opens the authorization page and waits for approval. If the browser runs on another machine, such as over SSH, paste its redirected URL into the sign-in screen. The sign-in screens cancel with Esc at every step, a session that ends stops a running sign-in, and each request to the authorization server times out after 15 seconds. A running session uses the new credentials on its next turn.
+When the server rejects an unauthenticated connection, `/mcp` shows that it needs sign-in. Select "Sign in", run `/mcp login sentry`, or run `ompig mcp login sentry`. Ompig opens the authorization page and waits for approval. If the browser runs on another machine, such as over SSH, paste its redirected URL into the sign-in screen. The sign-in screens cancel with Esc at every step, a session that ends stops a running sign-in, and each request to the authorization server times out after 15 seconds. A running session uses the new credentials on its next turn.
 
-PiG registers itself with the authorization server, stores tokens in `~/.pig/agent/mcp-auth.json`, and refreshes access tokens when they expire or the server rejects them. If a server later requests additional scope, PiG asks for sign-in again and keeps the scope granted so far. Signing out deletes the stored credentials.
+Ompig registers itself with the authorization server, stores tokens in `~/.ompig/agent/mcp-auth.json`, and refreshes access tokens when they expire or the server rejects them. If a server later requests additional scope, Ompig asks for sign-in again and keeps the scope granted so far. Signing out deletes the stored credentials.
 
 Credentials belong to a server name and URL. Servers with the same URL under different names, such as one per account, sign in separately; servers with the same name and URL in different `mcp.json` files share one sign-in. Credentials that an earlier version stored by URL alone move to the first server that uses them.
 
@@ -266,11 +266,11 @@ OAuth applies to HTTP servers without an `Authorization` header. For a server th
 }
 ```
 
-The redirect URI must match the registered URI. `callbackPort` uses `http://127.0.0.1:<port>/callback`. To use another URI, set `callbackUrl`; it must use HTTP on `localhost`, `127.0.0.1`, or `[::1]`. PiG sends it exactly as written. When `callbackUrl` omits a port, PiG uses `callbackPort` or a free port and adds it to the URI, as allowed for loopback redirects by RFC 8252. `clientSecret` is optional and can use an environment variable or command.
+The redirect URI must match the registered URI. `callbackPort` uses `http://127.0.0.1:<port>/callback`. To use another URI, set `callbackUrl`; it must use HTTP on `localhost`, `127.0.0.1`, or `[::1]`. Ompig sends it exactly as written. When `callbackUrl` omits a port, Ompig uses `callbackPort` or a free port and adds it to the URI, as allowed for loopback redirects by RFC 8252. `clientSecret` is optional and can use an environment variable or command.
 
-Set `scope` to a space-separated list for servers that do not advertise their required scopes. Otherwise, PiG requests the advertised scopes. Later scope requests are added to the configured value.
+Set `scope` to a space-separated list for servers that do not advertise their required scopes. Otherwise, Ompig requests the advertised scopes. Later scope requests are added to the configured value.
 
-PiG registers under its application name, `pig`. Some servers only accept registrations from known clients. Set `clientName` to send another name:
+Ompig registers under its application name, `ompig`. Some servers only accept registrations from known clients. Set `clientName` to send another name:
 
 ```json
 {
@@ -280,7 +280,7 @@ PiG registers under its application name, `pig`. Some servers only accept regist
 }
 ```
 
-The name is only sent when PiG registers a client. To register again under a new name, sign out first.
+The name is only sent when Ompig registers a client. To register again under a new name, sign out first.
 
 Some authorization servers allow clients by their Client ID Metadata Document URL instead of registering them. Set `clientRegistration` to `cimd` to identify as Pi's document on pi.dev instead of registering:
 
@@ -292,11 +292,11 @@ Some authorization servers allow clients by their Client ID Metadata Document UR
 }
 ```
 
-The client ID is `https://pi.dev/oauth/client.json` with the redirect URI `http://127.0.0.1:<port>/callback`. If the authorization server does not send the `iss` parameter in authorization responses (RFC 9207), PiG uses a document and redirect path specific to the MCP server instead: `https://pi.dev/oauth/<id>/client.json` with `http://127.0.0.1:<port>/callback/<id>`. The authorization server must advertise Client ID Metadata Document support and public clients, or sign-in fails. `cimd` cannot be combined with `clientId` or `clientName`, and a `callbackUrl` must use `localhost` or `127.0.0.1` with the path `/callback`.
+The client ID is `https://pi.dev/oauth/client.json` with the redirect URI `http://127.0.0.1:<port>/callback`. If the authorization server does not send the `iss` parameter in authorization responses (RFC 9207), Ompig uses a document and redirect path specific to the MCP server instead: `https://pi.dev/oauth/<id>/client.json` with `http://127.0.0.1:<port>/callback/<id>`. The authorization server must advertise Client ID Metadata Document support and public clients, or sign-in fails. `cimd` cannot be combined with `clientId` or `clientName`, and a `callbackUrl` must use `localhost` or `127.0.0.1` with the path `/callback`.
 
-When an authorization response carries an `iss` parameter but PiG discovered no authorization server metadata, sign-in fails with an issuer mismatch error before the token request, as in Pi 1.4.0. Pi 1.1.0 skipped this check when metadata was absent.
+When an authorization response carries an `iss` parameter but Ompig discovered no authorization server metadata, sign-in fails with an issuer mismatch error before the token request, as in Pi 1.4.0. Pi 1.1.0 skipped this check when metadata was absent.
 
-PiG finds the authorization server through the server's protected resource metadata (RFC 9728) and checks that the authorization server's metadata names the expected issuer (RFC 8414). Some servers advertise the wrong authorization server or none, so sign-in opens a page that does not exist. Set `authServerMetadataUrl` to the metadata document of the right authorization server:
+Ompig finds the authorization server through the server's protected resource metadata (RFC 9728) and checks that the authorization server's metadata names the expected issuer (RFC 8414). Some servers advertise the wrong authorization server or none, so sign-in opens a page that does not exist. Set `authServerMetadataUrl` to the metadata document of the right authorization server:
 
 ```json
 {
@@ -309,7 +309,7 @@ PiG finds the authorization server through the server's protected resource metad
 }
 ```
 
-PiG uses that document instead of discovery and trusts it as configured, so only point it at a document you trust. The URL must use HTTPS, except on `localhost`, `127.0.0.1`, or `[::1]`.
+Ompig uses that document instead of discovery and trusts it as configured, so only point it at a document you trust. The URL must use HTTPS, except on `localhost`, `127.0.0.1`, or `[::1]`.
 
 ## Authenticate with a provider token
 
@@ -323,7 +323,7 @@ An HTTP server can use the token of a provider you signed in to with `/login` in
 }
 ```
 
-PiG reads the provider's current token on every request, so refreshes apply, and sends it as the bearer token. `auth` is allowed only in the user-level `mcp.json` and in servers registered by extensions, so a repository cannot choose where a credential goes. The URL must use https, except on loopback hosts.
+Ompig reads the provider's current token on every request, so refreshes apply, and sends it as the bearer token. `auth` is allowed only in the user-level `mcp.json` and in servers registered by extensions, so a repository cannot choose where a credential goes. The URL must use https, except on loopback hosts.
 
 ## Control tool exposure
 
@@ -338,11 +338,11 @@ Each server tool is registered as `mcp__<server>__<tool>`. The server's `exposur
 
 `codemode-deferred` is accepted as an alias for `codemode`.
 
-Servers with `codemode` or `deferred` tools are listed in the `mcp_servers` section of the system prompt, with how their tools are reached and one line from the configured `description` or, once connected, from the server instructions. PiG updates the section when a prompt starts, after waiting for servers with `direct` tools. When it changed, for example because a server connected and its summary became available, PiG appends the new section to the conversation instead of changing tool declarations, so earlier messages stay cached. `describeNamespace()` and the `namespace` option of `searchTools()` accept `mcp__dev-radius`, `mcp__dev_radius`, `dev-radius`, or `dev_radius`.
+Servers with `codemode` or `deferred` tools are listed in the `mcp_servers` section of the system prompt, with how their tools are reached and one line from the configured `description` or, once connected, from the server instructions. Ompig updates the section when a prompt starts, after waiting for servers with `direct` tools. When it changed, for example because a server connected and its summary became available, Ompig appends the new section to the conversation instead of changing tool declarations, so earlier messages stay cached. `describeNamespace()` and the `namespace` option of `searchTools()` accept `mcp__dev-radius`, `mcp__dev_radius`, `dev-radius`, or `dev_radius`.
 
-PiG activates `codemode` when a server with `codemode` exposure connects. It activates `tool_search` for a server with `deferred` exposure. To make the model see a tool without searching, give it `direct` exposure with `toolExposure`.
+Ompig activates `codemode` when a server with `codemode` exposure connects. It activates `tool_search` for a server with `deferred` exposure. To make the model see a tool without searching, give it `direct` exposure with `toolExposure`.
 
-`--tools` does not remove MCP tools unless one of its entries starts with `mcp__`; `pig --tools read,codemode,'mcp__radius__*'` keeps only the tools of `radius`. `--exclude-tools` accepts the same patterns, and `--no-mcp` disables MCP for one run (see [Tools](cli.md#mcp-tools)).
+`--tools` does not remove MCP tools unless one of its entries starts with `mcp__`; `ompig --tools read,codemode,'mcp__radius__*'` keeps only the tools of `radius`. `--exclude-tools` accepts the same patterns, and `--no-mcp` disables MCP for one run (see [Tools](cli.md#mcp-tools)).
 
 `toolExposure` overrides the server exposure for individual tools. Keys are exact server tool names or patterns where `*` matches any characters. Exact names win over patterns; among patterns, the first match wins. A server with `hidden` exposure can expose only selected tools:
 
@@ -362,11 +362,11 @@ PiG activates `codemode` when a server with `codemode` exposure connects. It act
 }
 ```
 
-`pig mcp list` marks tools whose exposure differs from their server. The Tools view in `/mcp` also shows the effective exposure.
+`ompig mcp list` marks tools whose exposure differs from their server. The Tools view in `/mcp` also shows the effective exposure.
 
 Tools with `codemode` or `deferred` exposure can be reached through either indirect mechanism: codemode scripts can call them, and `tool_search` can load them. Codemode calls do not depend on the active tool set, so they remain available after `/tree`, resume, and fork. Tools loaded by `tool_search` are recorded in the transcript and remain declared on that branch.
 
-To keep `codemode` active without MCP servers, add `"defaultTools": ["+codemode"]` to [settings](settings.md#tools). To prevent automatic codemode activation, set `"autoEnableCodemode": false` beside `mcpServers`. A project value overrides the user-level value. PiG warns once when neither `codemode` nor `tool_search` is active and non-direct tools cannot be called.
+To keep `codemode` active without MCP servers, add `"defaultTools": ["+codemode"]` to [settings](settings.md#tools). To prevent automatic codemode activation, set `"autoEnableCodemode": false` beside `mcpServers`. A project value overrides the user-level value. Ompig warns once when neither `codemode` nor `tool_search` is active and non-direct tools cannot be called.
 
 Text results over 20 KB reach the model with their middle removed around a `…N chars truncated…` marker. The full text is saved to a temporary file named in the result. Codemode scripts receive the complete result and can reduce it before returning output to the model.
 
@@ -374,21 +374,21 @@ Codemode scripts receive the complete MCP `CallToolResult`, including `content`,
 
 ## Use resources
 
-When a connected server offers [resources](https://modelcontextprotocol.io/specification/2025-11-25/server/resources), PiG adds the resource tools used by Codex and OpenCode:
+When a connected server offers [resources](https://modelcontextprotocol.io/specification/2025-11-25/server/resources), Ompig adds the resource tools used by Codex and OpenCode:
 
 - `list_mcp_resources` lists resources as JSON: `{ server?, resources: [{ server, uri, name, ... }], nextCursor? }`. With `server`, it lists one page; `cursor` continues with the next page. Without `server`, it lists every resource from every server.
 - `list_mcp_resource_templates` lists URI templates for resources the servers do not list directly.
 - `read_mcp_resource` reads a resource by `server` and `uri`. Text reaches the model as text and images as images. Other binary resources are saved to temporary files, and the model receives the path. Scripts receive `{ server, uri, contents }`.
 
-These tools reach every enabled, non-hidden server with resources. Their exposure is the widest exposure among those servers: `direct`, then `codemode` or `deferred`. Resource links in tool results identify `read_mcp_resource` and the server. PiG does not list resources when it connects, so a server's tools do not wait for a slow listing. `/mcp` and `pig mcp list` show only that a server offers resources; the resource tools list and read them when asked.
+These tools reach every enabled, non-hidden server with resources. Their exposure is the widest exposure among those servers: `direct`, then `codemode` or `deferred`. Resource links in tool results identify `read_mcp_resource` and the server. Ompig does not list resources when it connects, so a server's tools do not wait for a slow listing. `/mcp` and `ompig mcp list` show only that a server offers resources; the resource tools list and read them when asked.
 
-Resources for MCP Apps, identified by `ui://` URIs or `text/html;profile=mcp-app`, are omitted because PiG does not render them. Resource icons are also omitted.
+Resources for MCP Apps, identified by `ui://` URIs or `text/html;profile=mcp-app`, are omitted because Ompig does not render them. Resource icons are also omitted.
 
 Reading and listing resources is retried once after a transient HTTP error (408, 429, or 5xx). Tool calls are not retried because the server may already have performed them.
 
 ## Permissions
 
-Every MCP call passes through PiG's tool pipeline. Extension `tool_call` and `tool_result` handlers, including permission gates, therefore apply to MCP tools. Calls made from codemode scripts carry the codemode call ID as `parentToolCallId`.
+Every MCP call passes through Ompig's tool pipeline. Extension `tool_call` and `tool_result` handlers, including permission gates, therefore apply to MCP tools. Calls made from codemode scripts carry the codemode call ID as `parentToolCallId`.
 
 `getAllTools()` reports the annotations declared by each server: `readOnlyHint`, `destructiveHint`, `idempotentHint`, and `openWorldHint`. Permission extensions can use these hints to decide which calls require confirmation (see [Tool exposure](extensions.md)). Resource tools are marked read-only.
 
@@ -398,12 +398,12 @@ Every MCP call passes through PiG's tool pipeline. Extension `tool_call` and `to
 
 Extensions can add servers for the current session with `registerMcpServer(name, config)` (Node: `pi.registerMcpServer`; Go, Python and Rust SDKs: `RegisterMcpServer`, `register_mcp_server`, `register_mcp_server`), using the same shape as an `mcpServers` entry (see [MCP servers in extensions](extensions.md)). Registered servers connect like configured servers and appear in `/mcp` with the extension as their source.
 
-Changes to enabled state or exposure apply only to the current session. A file-configured server with the same name takes precedence, and `/mcp` lists the overridden registration. `pig mcp` shell commands do not load extensions and only see file-configured servers.
+Changes to enabled state or exposure apply only to the current session. A file-configured server with the same name takes precedence, and `/mcp` lists the overridden registration. `ompig mcp` shell commands do not load extensions and only see file-configured servers.
 
 ### Replace the built-in MCP support
 
-An installed extension that registers `/mcp`, such as `pi-mcp-adapter`, replaces the built-in MCP support for sessions. PiG then does not read `mcp.json` or connect its servers in a session, and `/mcp` belongs to the extension. Remove the extension to restore the built-in behavior. To disable built-in MCP support without a replacement, disable `mcp` under Built-in in `pig config`, or set `"extensions": ["-builtin:mcp"]` in [settings](settings.md). `--no-mcp` disables it for one run.
+An installed extension that registers `/mcp`, such as `pi-mcp-adapter`, replaces the built-in MCP support for sessions. Ompig then does not read `mcp.json` or connect its servers in a session, and `/mcp` belongs to the extension. Remove the extension to restore the built-in behavior. To disable built-in MCP support without a replacement, disable `mcp` under Built-in in `ompig config`, or set `"extensions": ["-builtin:mcp"]` in [settings](settings.md). `--no-mcp` disables it for one run.
 
-An extension that registers `codemode` or `tool_search` similarly replaces the built-in tool with that name. Shell-level `pig mcp` commands always use the built-in implementation.
+An extension that registers `codemode` or `tool_search` similarly replaces the built-in tool with that name. Shell-level `ompig mcp` commands always use the built-in implementation.
 
 See [upstream Pi's MCP documentation](https://pi.dev/docs/latest/mcp) for the reference implementation.

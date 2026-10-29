@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // baseEditorHost stands in for the host's stock editor behind a delegated editor component: it holds text, answers the base operations a component's `super` calls, and records the component's output. The stock editor itself is covered by internal/codingagent TestDelegatedEditorBaseIsTheHostsStockEditor.

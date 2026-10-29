@@ -11,7 +11,7 @@
 //
 // Mirrors upstream pi-coding-agent's model-runtime.ts availability filter:
 // upstream derives `available` from checkAuth() over the whole provider
-// catalog, so pig derives both sets from the catalog rather than a
+// catalog, so ompig derives both sets from the catalog rather than a
 // hand-maintained provider list.
 package codingagent
 
@@ -19,7 +19,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ReachableProviders returns the set of provider IDs that ModelRuntime can
@@ -51,7 +51,7 @@ func ReachableProviders() map[string]bool {
 //     user error caught at switch time)
 //   - amazon-bedrock, google-vertex, cloudflare-*: their resolvers' env signals (Pi reads no shared AWS config file)
 //
-// agentDir is the pig config dir (typically ~/.pig/agent). auth.json
+// agentDir is the ompig config dir (typically ~/.ompig/agent). auth.json
 // and models.json are read from there.
 func AuthenticatedProviders(agentDir string) map[string]bool {
 	if agentDir == "" {

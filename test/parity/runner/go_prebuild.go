@@ -17,20 +17,20 @@ import (
 	"time"
 )
 
-// A cli-mode scenario's pig side can be a Go probe: `go run ./PACKAGE ARGS` in its pig args, or a script that runs the
-// test binaries of the packages in [env] pig_go_tests through test/parity/testdata/prebuilt-go-test.sh (a Pi script lists
-// pi_go_tests; a script that runs a Go program lists pig_go_programs or pi_go_programs and uses prebuilt-go-run.sh). Building a
+// A cli-mode scenario's ompig side can be a Go probe: `go run ./PACKAGE ARGS` in its ompig args, or a script that runs the
+// test binaries of the packages in [env] ompig_go_tests through test/parity/testdata/prebuilt-go-test.sh (a Pi script lists
+// pi_go_tests; a script that runs a Go program lists ompig_go_programs or pi_go_programs and uses prebuilt-go-run.sh). Building a
 // probe inside a timed run made the run's runtime and timeout cover the Go toolchain, and on a loaded host a cold
 // build cache alone outlasted a 60 s timeout. RunScenario therefore builds them first (goPrebuildCache.prepare) and
 // the timed runs start the binaries. One TestParity run builds each package once and removes the binaries at its end.
 
-// goTestsEnv names the directory holding a scenario's pig_go_tests binaries, laid out as prebuilt-go-test.sh reads
+// goTestsEnv names the directory holding a scenario's ompig_go_tests binaries, laid out as prebuilt-go-test.sh reads
 // them: <dir>/<package directory>/<its last element>.test.
-const goTestsEnv = "PIG_PARITY_GO_TESTS"
+const goTestsEnv = "OMPIG_PARITY_GO_TESTS"
 
-// goProgramsEnv names the directory holding a scenario's pig_go_programs and pi_go_programs binaries, laid out as
+// goProgramsEnv names the directory holding a scenario's ompig_go_programs and pi_go_programs binaries, laid out as
 // prebuilt-go-run.sh reads them: <dir>/<package directory>/<its last element>.
-const goProgramsEnv = "PIG_PARITY_GO_PROGRAMS"
+const goProgramsEnv = "OMPIG_PARITY_GO_PROGRAMS"
 
 // goPrebuilds holds the binaries built for TestParity's scenarios.
 var goPrebuilds goPrebuildCache
@@ -47,13 +47,13 @@ type goPrebuild struct {
 	err  error
 }
 
-// prepare returns sc with its pig side starting binaries built before the call returns: its `go run ./PACKAGE`
-// becomes the binary built from PACKAGE, and pig_go_tests adds goTestsEnv to the pig environment. A scenario with
+// prepare returns sc with its ompig side starting binaries built before the call returns: its `go run ./PACKAGE`
+// becomes the binary built from PACKAGE, and ompig_go_tests adds goTestsEnv to the ompig environment. A scenario with
 // neither is returned as is.
 func (c *goPrebuildCache) prepare(sc *Scenario, logf func(format string, args ...any)) (*Scenario, error) {
 	prepared := *sc
 	runArgs, run := goRunArgs(&prepared)
-	if run < 0 && len(sc.Env.PigGoTests)+len(sc.Env.PiGoTests)+len(sc.Env.PigGoPrograms)+len(sc.Env.PiGoPrograms) == 0 {
+	if run < 0 && len(sc.Env.OmpigGoTests)+len(sc.Env.PiGoTests)+len(sc.Env.OmpigGoPrograms)+len(sc.Env.PiGoPrograms) == 0 {
 		return sc, nil
 	}
 	if sc.CLI.CWD == "" || strings.Contains(sc.CLI.CWD, "{{") {
@@ -67,7 +67,7 @@ func (c *goPrebuildCache) prepare(sc *Scenario, logf func(format string, args ..
 	if run >= 0 {
 		args := *runArgs
 		if run+2 >= len(args) || !isLocalGoPackage(args[run+2]) {
-			return nil, fmt.Errorf("pig args %q: the runner builds `go run ./PACKAGE ARGS` before the timed runs and takes no go run flags", args[run:])
+			return nil, fmt.Errorf("ompig args %q: the runner builds `go run ./PACKAGE ARGS` before the timed runs and takes no go run flags", args[run:])
 		}
 		pkg := args[run+2]
 		binary := filepath.Join(root, "run", goPrebuildKey(filepath.Join(cwd, pkg)), path.Base(pkg)+exeSuffix())
@@ -98,20 +98,20 @@ func (c *goPrebuildCache) prepare(sc *Scenario, logf func(format string, args ..
 		}
 		return nil
 	}
-	if err := buildTests(slices.Concat(sc.Env.PigGoTests, sc.Env.PiGoTests)); err != nil {
+	if err := buildTests(slices.Concat(sc.Env.OmpigGoTests, sc.Env.PiGoTests)); err != nil {
 		return nil, err
 	}
-	if err := buildPrograms(slices.Concat(sc.Env.PigGoPrograms, sc.Env.PiGoPrograms)); err != nil {
+	if err := buildPrograms(slices.Concat(sc.Env.OmpigGoPrograms, sc.Env.PiGoPrograms)); err != nil {
 		return nil, err
 	}
-	if len(sc.Env.PigGoTests) > 0 {
-		prepared.Env.Pig = append(slices.Clip(prepared.Env.Pig), goTestsEnv+"="+testsDir)
+	if len(sc.Env.OmpigGoTests) > 0 {
+		prepared.Env.Ompig = append(slices.Clip(prepared.Env.Ompig), goTestsEnv+"="+testsDir)
 	}
 	if len(sc.Env.PiGoTests) > 0 {
 		prepared.Env.Pi = append(slices.Clip(prepared.Env.Pi), goTestsEnv+"="+testsDir)
 	}
-	if len(sc.Env.PigGoPrograms) > 0 {
-		prepared.Env.Pig = append(slices.Clip(prepared.Env.Pig), goProgramsEnv+"="+programsDir)
+	if len(sc.Env.OmpigGoPrograms) > 0 {
+		prepared.Env.Ompig = append(slices.Clip(prepared.Env.Ompig), goProgramsEnv+"="+programsDir)
 	}
 	if len(sc.Env.PiGoPrograms) > 0 {
 		prepared.Env.Pi = append(slices.Clip(prepared.Env.Pi), goProgramsEnv+"="+programsDir)
@@ -124,7 +124,7 @@ func (c *goPrebuildCache) dir() (string, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if c.root == "" {
-		root, err := os.MkdirTemp("", "pig-parity-go-")
+		root, err := os.MkdirTemp("", "ompig-parity-go-")
 		if err != nil {
 			return "", fmt.Errorf("create the Go probe build directory: %w", err)
 		}
@@ -185,20 +185,20 @@ func (c *goPrebuildCache) removeAll() error {
 	return os.RemoveAll(root)
 }
 
-// goRunArgs finds the `go run` that a cli-mode scenario's /usr/bin/env pig_bin, with the base args overridden,
-// starts after env's -u NAME and NAME=VALUE operands. It returns the argument list holding it, [env] pig_args or the
-// [cli] pig_args that follow them, and the index of its `go`; or nil and -1 when the pig side is not `go run`.
+// goRunArgs finds the `go run` that a cli-mode scenario's /usr/bin/env ompig_bin, with the base args overridden,
+// starts after env's -u NAME and NAME=VALUE operands. It returns the argument list holding it, [env] ompig_args or the
+// [cli] ompig_args that follow them, and the index of its `go`; or nil and -1 when the ompig side is not `go run`.
 func goRunArgs(sc *Scenario) (*[]string, int) {
-	if sc.Driver != "cli-mode" || sc.Env.PigBin != posixEnvLauncher || !sc.Env.OverrideBaseArgs {
+	if sc.Driver != "cli-mode" || sc.Env.OmpigBin != posixEnvLauncher || !sc.Env.OverrideBaseArgs {
 		return nil, -1
 	}
-	run, operandsOnly := goRunAfterEnvOperands(sc.Env.PigArgs)
+	run, operandsOnly := goRunAfterEnvOperands(sc.Env.OmpigArgs)
 	if run >= 0 {
-		return &sc.Env.PigArgs, run
+		return &sc.Env.OmpigArgs, run
 	}
-	if operandsOnly && len(sc.Env.PigExtensions) == 0 {
-		if run, _ := goRunAfterEnvOperands(sc.CLI.PigArgs); run >= 0 {
-			return &sc.CLI.PigArgs, run
+	if operandsOnly && len(sc.Env.OmpigExtensions) == 0 {
+		if run, _ := goRunAfterEnvOperands(sc.CLI.OmpigArgs); run >= 0 {
+			return &sc.CLI.OmpigArgs, run
 		}
 	}
 	return nil, -1

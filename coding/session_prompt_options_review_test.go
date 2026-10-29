@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi agent-session.ts:1379-1394 retains the loader's custom prompt before exposing base options.

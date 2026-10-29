@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/execfile"
+	"github.com/tmih06/ompig/internal/execfile"
 )
 
 // newlines is n bytes of newline: padding that lengthens a copy without a buffer of n bytes.

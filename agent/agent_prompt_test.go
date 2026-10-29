@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func promptAgent(t *testing.T) (*Agent, *scriptedProvider) {

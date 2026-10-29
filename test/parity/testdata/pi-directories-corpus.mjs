@@ -1,5 +1,5 @@
 // Replay the real Powerline and pi-acp directory contracts in isolated homes.
-// Usage: node test/parity/testdata/pi-directories-corpus.mjs <pig> <pi> <powerline-npm-root> <pi-acp-index.js> <output-dir>
+// Usage: node test/parity/testdata/pi-directories-corpus.mjs <ompig> <pi> <powerline-npm-root> <pi-acp-index.js> <output-dir>
 import assert from 'node:assert/strict';
 import {spawn, spawnSync, execFileSync} from 'node:child_process';
 import {createInterface} from 'node:readline';
@@ -7,7 +7,7 @@ import {mkdirSync, writeFileSync, readFileSync, appendFileSync, cpSync, renameSy
 import {join, resolve, dirname} from 'node:path';
 import {tmpdir} from 'node:os';
 
-const [pig, pi, powerlineNpm, adapter, output] = process.argv.slice(2).map(p => resolve(p));
+const [ompig, pi, powerlineNpm, adapter, output] = process.argv.slice(2).map(p => resolve(p));
 const root = resolve(import.meta.dirname, '../../..');
 const scratch = mkdtempSync(join(tmpdir(), 'parity-pi-dirs-'));
 mkdirSync(output, {recursive:true});
@@ -24,7 +24,7 @@ function setup(label, binary, isPi, quietStartup) {
     mkdirSync(join(agent,'extensions'),{recursive:true});
     cpSync(join(root,'test/parity/testdata/test-faux-provider.ts'),join(agent,'extensions/faux.ts'));
   }
-  const env = {HOME:home,USERPROFILE:home,PATH:dirname(process.execPath)+':'+process.env.PATH,LANG:'C.UTF-8',TERM:'xterm-256color',COLORTERM:'truecolor',PI_OFFLINE:'1',PIG_OFFLINE:'1',PI_TELEMETRY:'0',PIG_USE_PI_DIRS:'1',PIG_TEST_FAUX:'1',PIG_TEST_FAUX_SCENARIO:'parity-basic',PI_ACP_PI_COMMAND:binary};
+  const env = {HOME:home,USERPROFILE:home,PATH:dirname(process.execPath)+':'+process.env.PATH,LANG:'C.UTF-8',TERM:'xterm-256color',COLORTERM:'truecolor',PI_OFFLINE:'1',OMPIG_OFFLINE:'1',PI_TELEMETRY:'0',OMPIG_USE_PI_DIRS:'1',OMPIG_TEST_FAUX:'1',OMPIG_TEST_FAUX_SCENARIO:'parity-basic',PI_ACP_PI_COMMAND:binary};
   return {home,cwd,agent,env,binary,label};
 }
 function print(s, args) {
@@ -63,12 +63,12 @@ async function welcome(s) {
 }
 async function acp(s) {
   mkdirSync(join(s.cwd,'.pi/prompts'),{recursive:true});
-  mkdirSync(join(s.cwd,'.pig/prompts'),{recursive:true});
-  mkdirSync(join(s.home,'.pig/agent/prompts'),{recursive:true});
-  writeFileSync(join(s.home,'.pig/agent/prompts/shared-global.md'),'---\ndescription: Wrong Pig global template\n---\nreply with exactly: WRONGGLOBAL-$1\n');
+  mkdirSync(join(s.cwd,'.ompig/prompts'),{recursive:true});
+  mkdirSync(join(s.home,'.ompig/agent/prompts'),{recursive:true});
+  writeFileSync(join(s.home,'.ompig/agent/prompts/shared-global.md'),'---\ndescription: Wrong Ompig global template\n---\nreply with exactly: WRONGGLOBAL-$1\n');
   writeFileSync(join(s.agent,'prompts/shared-global.md'),'---\ndescription: Global Pi template\n---\nreply with exactly: GLOBAL-$1\n');
   writeFileSync(join(s.cwd,'.pi/prompts/shared-project.md'),'---\ndescription: Project Pi template\n---\nreply with exactly: PROJECT-$1\n');
-  writeFileSync(join(s.cwd,'.pig/prompts/shared-project.md'),'---\ndescription: Wrong Pig template\n---\nreply with exactly: WRONG-$1\n');
+  writeFileSync(join(s.cwd,'.ompig/prompts/shared-project.md'),'---\ndescription: Wrong Ompig template\n---\nreply with exactly: WRONG-$1\n');
   const log=join(output,s.label+'-acp.jsonl');
   let proc, seq=0, sid; const pending=new Map(); let updates=[], inventories=[];
   const record=(direction,message)=>appendFileSync(log,JSON.stringify({direction,message})+'\n');
@@ -111,10 +111,10 @@ async function acp(s) {
     console.log(s.label+': global/project templates, native list, mapped restart, unmapped restart PASS');
   } finally {clearTimeout(deadline);await stop();}
 }
-for(const [label,binary,isPi] of [['pi',pi,true],['pig',pig,false]]) {
+for(const [label,binary,isPi] of [['pi',pi,true],['ompig',ompig,false]]) {
   await welcome(setup(label+'-powerline',binary,isPi,false));
   console.log(label+': Powerline welcome recent-session / just now PASS');
   await acp(setup(label+'-adapter',binary,isPi,true));
 }
-assert.equal(recentRows.get('pig-powerline'),recentRows.get('pi-powerline'),'Powerline recent-session ANSI row differs');
+assert.equal(recentRows.get('ompig-powerline'),recentRows.get('pi-powerline'),'Powerline recent-session ANSI row differs');
 console.log('Evidence: '+output+'; isolated homes: '+scratch);

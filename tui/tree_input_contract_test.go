@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Pi tree-selector.ts:1006-1115 orders matching actions explicitly, even when a user binds more than one action to the same key.

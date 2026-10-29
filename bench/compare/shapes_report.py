@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 """Aggregates stream_shapes.py rows.
 
-  shapes_report.py shapes.jsonl --base pig-tip [--pair ARM=COPY ...]
+  shapes_report.py shapes.jsonl --base ompig-tip [--pair ARM=COPY ...]
 
 Prints, in this order: every sample that did not run (by build and reason); per cell (shape, wire API, size) each arm's CPU s median
 (min-max) n and its A/A delta (|arm - copy| as % of the lower median); per other arm and size the range of other/base median ratios

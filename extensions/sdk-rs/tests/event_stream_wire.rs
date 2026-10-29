@@ -1,7 +1,7 @@
 //! Event stream deltas through the Rust SDK's read loop and event dispatch against a fake host: the handler owns its payload (`&mut Value`), so each frame copies the payload once, and only once.
 #![cfg(unix)]
 
-use pig_sdk::Extension;
+use ompig_sdk::Extension;
 use serde_json::{Value, json};
 use std::alloc::{GlobalAlloc, Layout, System};
 use std::io::{Read, Write};
@@ -78,7 +78,7 @@ fn a_delta_frame_copies_the_payload_once() {
         LAST.store(length, Ordering::Relaxed);
         None
     });
-    let root = std::env::temp_dir().join(format!("pig-event-stream-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("ompig-event-stream-{}", std::process::id()));
     std::fs::create_dir_all(&root).unwrap();
     let socket = root.join("sock");
     let _ = std::fs::remove_file(&socket);

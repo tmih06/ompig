@@ -35,7 +35,7 @@ func TestReleaseCandidateVerifiesPortableChecksumsAndNativeArchives(t *testing.T
 	for _, want := range []string{
 		"native-smoke:",
 		"needs: source",
-		"name: pig-${{ inputs.version }}-source",
+		"name: ompig-${{ inputs.version }}-source",
 		"SOURCE_ROOT: ${{ steps.source.outputs.root }}",
 		`source_root="$SOURCE_ROOT"`,
 		`cp -R "$source_root/LICENSES" "$stage/"`,

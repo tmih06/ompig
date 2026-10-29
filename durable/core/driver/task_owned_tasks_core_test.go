@@ -11,10 +11,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Pi 4ac0bd8c/e37cdc42 test/harness-scheduler-indexes.test.ts "TaskRuntime.ownedTasks" over the real core: the driver's

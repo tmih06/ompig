@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi interactive-mode.ts delegates getContextUsage to AgentSession, whose projection includes estimates without assistant usage (agent-session.ts:3858-3900).

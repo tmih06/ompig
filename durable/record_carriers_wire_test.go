@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // The carriers are optional plain JSON members of the stored records: absent without propagation, kept as given with it,

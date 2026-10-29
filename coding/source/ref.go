@@ -1,9 +1,9 @@
 // Package source parses the source-reference vocabulary shared by package
-// installation and Pig piglet resource origins. It preserves upstream Pi's
-// npm/git/local grammar while allowing Pig products to contribute explicit
+// installation and Ompig ompiglet resource origins. It preserves upstream Pi's
+// npm/git/local grammar while allowing Ompig products to contribute explicit
 // lowercase schemes without teaching generic code their transport semantics.
 //
-// pig additive (D18): product-neutral typed source and contributed schemes.
+// ompig additive (D18): product-neutral typed source and contributed schemes.
 package source
 
 import (
@@ -14,10 +14,10 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // Kind is the transport-independent source category.
@@ -46,7 +46,7 @@ type Options struct {
 	AllowContributed bool
 }
 
-// Ref is a parsed source. Raw is retained for settings/piglet serialization;
+// Ref is a parsed source. Raw is retained for settings/ompiglet serialization;
 // identity fields exclude mutable version/ref selectors where upstream package
 // de-duplication does.
 type Ref struct {
@@ -248,7 +248,7 @@ func parseGit(raw string) (Ref, error) {
 	if locator == "" {
 		return Ref{}, fmt.Errorf("git source locator is required")
 	}
-	// pig divergence (D110): a fragment that starts with "subdirectory=" selects a subdirectory of the repository; any other fragment is a ref, as in Pi.
+	// ompig divergence (D110): a fragment that starts with "subdirectory=" selects a subdirectory of the repository; any other fragment is a ref, as in Pi.
 	source, subdir, err := splitGitSubdirectory(raw)
 	if err != nil {
 		return Ref{}, fmt.Errorf("invalid Git source %q: %w", raw, err)

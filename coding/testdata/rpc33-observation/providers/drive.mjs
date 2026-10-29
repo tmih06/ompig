@@ -1,5 +1,5 @@
-// Runs Pi (cli.js) or PiG (native binary) in RPC mode against server.mjs and prints, per run, the first assistant message_start message as one JSON line.
-// usage: node drive.mjs <api> <node-bin> <pi-cli.js|pig-binary> [runs]
+// Runs Pi (cli.js) or Ompig (native binary) in RPC mode against server.mjs and prints, per run, the first assistant message_start message as one JSON line.
+// usage: node drive.mjs <api> <node-bin> <pi-cli.js|ompig-binary> [runs]
 // Object keys are sorted (RPC33 compares parsed records, not insertion order). Clocks and Google's generated `${name}_${Date.now()}_${counter}` IDs are canonicalized; every other field is kept.
 import { spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { createInterface } from 'node:readline';
 const [api, nodeBin, bin, runsArg] = process.argv.slice(2);
 const runs = Number(runsArg ?? 1);
-// `test-faux` needs no server: Pi loads the paired fixture extension and PiG builds test-faux in under PIG_TEST_FAUX.
+// `test-faux` needs no server: Pi loads the paired fixture extension and Ompig builds test-faux in under OMPIG_TEST_FAUX.
 const fixture = api === 'test-faux';
 const testFauxExtension = new URL('../../../../test/parity/testdata/test-faux-provider.ts', import.meta.url).pathname;
 const srv = fixture ? null : spawn(nodeBin, [new URL('./server.mjs', import.meta.url).pathname, api], {stdio:['ignore','pipe','inherit']});
@@ -25,7 +25,7 @@ for (let run = 0; run < runs; run++) {
   if (api === 'openai-codex-responses') writeFileSync(join(agent, 'settings.json'), JSON.stringify({transport: 'sse'}));
   writeFileSync(join(agent, 'models.json'), JSON.stringify({providers:{p:{api, baseUrl, apiKey, models:[{id:'strict',name:'strict',reasoning:false,input:['text'],cost:{input:0,output:0,cacheRead:0,cacheWrite:0},contextWindow:128000,maxTokens:1000}]}}}));
   writeFileSync(join(dir, 'parity-read-target.txt'), 'x\n');
-  const child = spawn(isPig ? bin : nodeBin, [...(isPig ? [] : [bin]), '--mode', 'rpc', '--offline', '--no-extensions', ...(fixture && !isPig ? ['-e', testFauxExtension] : []), '--model', fixture ? 'test-faux/faux-1' : 'p/strict', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], {cwd: dir, env: {...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, PIG_CODING_AGENT_DIR: agent, PIG_HOME: join(dir, 'pighome'), ...(fixture ? {PIG_TEST_FAUX: '1'} : {}), ...(api === 'bedrock-converse-stream' ? {AWS_BEDROCK_SKIP_AUTH: '1', AWS_BEDROCK_FORCE_HTTP1: '1'} : {})}, stdio:['pipe','pipe','inherit']});
+  const child = spawn(isPig ? bin : nodeBin, [...(isPig ? [] : [bin]), '--mode', 'rpc', '--offline', '--no-extensions', ...(fixture && !isPig ? ['-e', testFauxExtension] : []), '--model', fixture ? 'test-faux/faux-1' : 'p/strict', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], {cwd: dir, env: {...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, OMPIG_CODING_AGENT_DIR: agent, OMPIG_HOME: join(dir, 'pighome'), ...(fixture ? {OMPIG_TEST_FAUX: '1'} : {}), ...(api === 'bedrock-converse-stream' ? {AWS_BEDROCK_SKIP_AUTH: '1', AWS_BEDROCK_FORCE_HTTP1: '1'} : {})}, stdio:['pipe','pipe','inherit']});
   let start = null;
   const settled = await new Promise(resolve => {
     const timer = setTimeout(() => resolve(false), 20000);

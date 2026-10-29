@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi #10415: `pi -p hi < <(sleep 15)` never starts because readPipedStdin
-// (main.ts:80-97) waits for EOF on a pipe whose writer stays open. PiG's
+// (main.ts:80-97) waits for EOF on a pipe whose writer stays open. Ompig's
 // --no-stdin skips the read; the default read-until-EOF is unchanged
 // (TestReadPipedStdinMatchesUpstreamTrim).
 func TestNoStdinStartsWithAnOpenInputPipe(t *testing.T) {
@@ -32,14 +32,14 @@ func TestNoStdinStartsWithAnOpenInputPipe(t *testing.T) {
 	cmd.Stdin = reader
 	out, err := cmd.Output()
 	if ctx.Err() != nil {
-		t.Fatalf("pig --no-stdin did not exit with its stdin pipe open")
+		t.Fatalf("ompig --no-stdin did not exit with its stdin pipe open")
 	}
 	if err != nil {
 		var stderr string
 		if exitErr, ok := err.(*exec.ExitError); ok { //nolint:errorlint // exec.Command returns *ExitError unwrapped
 			stderr = string(exitErr.Stderr)
 		}
-		t.Fatalf("pig --no-stdin: %v: %s", err, stderr)
+		t.Fatalf("ompig --no-stdin: %v: %s", err, stderr)
 	}
 	if !strings.Contains(string(out), "42") {
 		t.Fatalf("stdout = %q, want the faux answer to the prompt", out)

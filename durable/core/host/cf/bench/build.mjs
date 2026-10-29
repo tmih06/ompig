@@ -4,11 +4,11 @@
 //
 //   <dir>/bench-pi.mjs   durable/interop/bench.mjs on pi-durable, pi-ai and chord from the Pi checkout's sources: the
 //                        reference the core's conformance gate captures its corpus from (main, not an npm release).
-//   <dir>/bench-pig.mjs  the same program on the PiG Durable core through this host's pi-durable-compatible facade
+//   <dir>/bench-ompig.mjs  the same program on the Ompig Durable core through this host's pi-durable-compatible facade
 //                        (src/facade, node:sqlite), with pi-ai and chord from the same Pi sources.
 //
 // Both resolve @earendil-works packages to the checkout's TypeScript sources through their export maps (as durable-bench
-// builds its pi-head target), bundle every other dependency, and leave node: built-ins external. bench-pig.mjs runs the core
+// builds its pi-head target), bundle every other dependency, and leave node: built-ins external. bench-ompig.mjs runs the core
 // module DCORE_WASM when set, else core-tinygo.wasm from the dist/ directory beside <dir> (the benchmark bundle's layout). Each file names
 // its target and implementation in bench.mjs's lines (BENCH_TARGET, BENCH_DURABLE_VERSION).
 import { build } from "esbuild"
@@ -53,7 +53,7 @@ const resolver = facadeFor => ({
 	name: "pi-source",
 	setup(b) {
 		b.onResolve({ filter: /^@earendil-works\// }, args => {
-			// bench.mjs's pi-durable entry points are the facade in the PiG program; the facade's own imports stay Pi's.
+			// bench.mjs's pi-durable entry points are the facade in the Ompig program; the facade's own imports stay Pi's.
 			const fromBench = args.importer === benchMjs
 			if (facadeFor && fromBench && /^@earendil-works\/pi-durable(\/storage\/sqlite\/node)?$/.test(args.path)) return { path: facade }
 			return { path: piSource(args.path) }
@@ -77,7 +77,7 @@ async function bundle(name, env, facadeFor) {
 	await build({
 		entryPoints: [entry], outfile: join(out, `${name}.mjs`), bundle: true, platform: "node", format: "esm", target: "node24",
 		packages: "bundle", external: ["node:*"], plugins: [resolver(facadeFor)], logLevel: "warning", legalComments: "eof",
-		banner: { js: "import { createRequire as __pigCreateRequire } from 'node:module'; const require = __pigCreateRequire(import.meta.url);" },
+		banner: { js: "import { createRequire as __ompigCreateRequire } from 'node:module'; const require = __ompigCreateRequire(import.meta.url);" },
 	})
 }
 
@@ -87,17 +87,17 @@ const head = (() => { try { return execFileSync("git", ["-C", pi, "rev-parse", "
 const piVersion = JSON.parse(readFileSync(join(pi, "packages/durable/package.json"), "utf8")).version
 const piLabel = head === pin ? `main-${pin.slice(0, 10)}` : head ? `${piVersion}-${head.slice(0, 10)}` : piVersion
 await bundle("bench-pi", `process.env.BENCH_TARGET ??= "pi"\nprocess.env.BENCH_DURABLE_VERSION ??= ${JSON.stringify(piLabel)}\n`, false)
-await bundle("bench-pig", `import { existsSync, readFileSync } from "node:fs"
+await bundle("bench-ompig", `import { existsSync, readFileSync } from "node:fs"
 import { createHash } from "node:crypto"
 import { fileURLToPath } from "node:url"
 if (!process.env.DCORE_WASM) {
 	const found = [new URL("../dist/core-tinygo.wasm", import.meta.url)].map(u => fileURLToPath(u)).find(p => existsSync(p))
-	if (!found) throw new Error("bench-pig: no core module: set DCORE_WASM, or put core-tinygo.wasm in ../dist")
+	if (!found) throw new Error("bench-ompig: no core module: set DCORE_WASM, or put core-tinygo.wasm in ../dist")
 	process.env.DCORE_WASM = found
 }
-process.env.BENCH_TARGET ??= "pig-tinygo"
+process.env.BENCH_TARGET ??= "ompig-tinygo"
 process.env.BENCH_DURABLE_VERSION ??= "core-" + createHash("sha256").update(readFileSync(process.env.DCORE_WASM)).digest("hex").slice(0, 16)
 `, true)
 rmSync(scratch, { recursive: true, force: true })
-const sums = ["bench-pi.mjs", "bench-pig.mjs"].map(f => `${createHash("sha256").update(readFileSync(join(out, f))).digest("hex")}  ${f}`)
+const sums = ["bench-pi.mjs", "bench-ompig.mjs"].map(f => `${createHash("sha256").update(readFileSync(join(out, f))).digest("hex")}  ${f}`)
 console.log(sums.join("\n"))

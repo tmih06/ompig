@@ -1,4 +1,4 @@
-//go:build !pig_strip_syntax_highlight
+//go:build !ompig_strip_syntax_highlight
 
 package tui
 
@@ -8,18 +8,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A pig_strip_syntax_highlight build of cmd/pig compiles highlight_hljs_on.go out, so it links neither highlight.js nor
+// A ompig_strip_syntax_highlight build of cmd/ompig compiles highlight_hljs_on.go out, so it links neither highlight.js nor
 // the JavaScript sort only highlight.js uses; stock links both. Both builds link regexp2: the Markdown component
 // evaluates marked's rules, which need lookaround and backreferences, with it.
 func TestStripSyntaxHighlightBuildOmitsHljs(t *testing.T) {
 	if testing.Short() {
-		t.Skip("go list of cmd/pig in -short mode")
+		t.Skip("go list of cmd/ompig in -short mode")
 	}
 	deps := func(tags ...string) []string {
-		args := append(append([]string{"list"}, tags...), "-deps", "github.com/MichaelKinsy/PiG/cmd/pig")
+		args := append(append([]string{"list"}, tags...), "-deps", "github.com/tmih06/ompig/cmd/ompig")
 		out, err := exec.Command("go", args...).Output()
 		if err != nil {
 			t.Fatalf("go %s: %v", strings.Join(args, " "), err)
@@ -28,17 +28,17 @@ func TestStripSyntaxHighlightBuildOmitsHljs(t *testing.T) {
 	}
 	stock := deps()
 	stripped := deps("-tags", pigstrip.Tag(pigstrip.SyntaxHighlight))
-	for _, pkg := range []string{"github.com/MichaelKinsy/PiG/tui/internal/hljs", "github.com/MichaelKinsy/PiG/internal/jsarray"} {
+	for _, pkg := range []string{"github.com/tmih06/ompig/tui/internal/hljs", "github.com/tmih06/ompig/internal/jsarray"} {
 		if !slices.Contains(stock, pkg) {
-			t.Errorf("the stock cmd/pig does not link %s", pkg)
+			t.Errorf("the stock cmd/ompig does not link %s", pkg)
 		}
 		if slices.Contains(stripped, pkg) {
-			t.Errorf("a %s build of cmd/pig links %s", pigstrip.Tag(pigstrip.SyntaxHighlight), pkg)
+			t.Errorf("a %s build of cmd/ompig links %s", pigstrip.Tag(pigstrip.SyntaxHighlight), pkg)
 		}
 	}
 }
 
-// A Piglet that strips syntax-highlight renders a go code block exactly as Pi renders a language highlight.js does not
+// A Ompiglet that strips syntax-highlight renders a go code block exactly as Pi renders a language highlight.js does not
 // support; stock highlights it.
 func TestRuntimeStripSyntaxHighlightRendersUnknownLanguagePath(t *testing.T) {
 	const code = "func main() {\n\treturn \"x\" // done\n}"

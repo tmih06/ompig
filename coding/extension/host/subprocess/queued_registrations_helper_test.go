@@ -1,6 +1,6 @@
 package subprocess
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // applyQueuedRegistrations is the bind that follows a load: the services of createAgentSessionServices, or the Runner that bindCore binds, apply the provider registrations the extensions queued while they loaded to the registry bound on the Host, and report each rejected one (agent-session-services.ts:157-169, runner.ts:471-487). The Host asks the registry for nothing while an extension loads.
 func applyQueuedRegistrations(h *Host) []*extension.ExtensionError {

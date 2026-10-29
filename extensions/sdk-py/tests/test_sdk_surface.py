@@ -1,4 +1,4 @@
-"""Wire-shape smoke tests for the Pi extension API surfaces of pig-sdk.
+"""Wire-shape smoke tests for the Pi extension API surfaces of ompig-sdk.
 
 Each test runs an extension against a fake host socket and asserts the exact
 frames it sends and how it decodes the host's answers.
@@ -16,13 +16,13 @@ from test_sdk import _read_frame, _start_fake_host, _write_frame
 
 import pytest
 
-import pig_sdk
+import ompig_sdk
 
 
 class _Host:
     """A connected fake host: register read, ready sent."""
 
-    def __init__(self, ext: pig_sdk.Extension, ready: dict[str, Any] | None = None) -> None:
+    def __init__(self, ext: ompig_sdk.Extension, ready: dict[str, Any] | None = None) -> None:
         tmp = tempfile.mkdtemp()
         sock_path = os.path.join(tmp, "ext.sock")
         self.listener = _start_fake_host(sock_path)
@@ -53,12 +53,12 @@ class _Host:
         self.thread.join(timeout=2)
 
 
-def _run_command(handler: Callable[[pig_sdk.Context], Any], answers: dict[str, Any], ready: dict[str, Any] | None = None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def _run_command(handler: Callable[[ompig_sdk.Context], Any], answers: dict[str, Any], ready: dict[str, Any] | None = None) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Run handler as a command, answering each host call from answers.
 
     Returns the call frames the extension sent and its response frame.
     """
-    ext = pig_sdk.Extension("py-surface")
+    ext = ompig_sdk.Extension("py-surface")
     ext.command("go", "run", lambda ctx, _args: handler(ctx))
     host = _Host(ext, ready)
     calls: list[dict[str, Any]] = []
@@ -88,13 +88,13 @@ def test_event_constants_match_upstream_names() -> None:
         "thinking_level_select", "tool_call", "tool_result", "user_bash", "input",
     ]
     for name in names:
-        assert getattr(pig_sdk, "EVENT_" + name.upper()) == name
+        assert getattr(ompig_sdk, "EVENT_" + name.upper()) == name
 
 
 def test_register_tool_declares_definition_and_runs_execute() -> None:
-    ext = pig_sdk.Extension("py-register-tool")
+    ext = ompig_sdk.Extension("py-register-tool")
     ext.tool("other", "other tool", {"type": "object"}, lambda ctx, args: {"content": "other"})
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="greet",
         label="Greet",
         description="first",
@@ -102,7 +102,7 @@ def test_register_tool_declares_definition_and_runs_execute() -> None:
         execute=lambda ctx, args: {"content": "stale"},
     ))
     # A second registration of the name replaces the first in place.
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="greet",
         label="Greet",
         description="Say hello",
@@ -153,19 +153,19 @@ def test_send_message_sends_details() -> None:
 
 
 def test_exec_sends_options_and_decodes_result() -> None:
-    results: list[pig_sdk.ExecResult] = []
+    results: list[ompig_sdk.ExecResult] = []
     calls, _ = _run_command(
         lambda ctx: results.append(ctx.exec("sleep", ["5"], timeout=250, cwd="/tmp")),
         {"exec": {"stdout": "out", "stderr": "err", "code": 137, "killed": True}},
     )
     assert calls[0]["call"]["args"] == {"command": "sleep", "args": ["5"], "options": {"timeout": 250, "cwd": "/tmp"}}
-    assert results == [pig_sdk.ExecResult(stdout="out", stderr="err", exit_code=137, killed=True)]
+    assert results == [ompig_sdk.ExecResult(stdout="out", stderr="err", exit_code=137, killed=True)]
 
 
 def test_dialog_timeout_sends_opts() -> None:
     seen: list[Any] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         seen.append(ctx.select("Pick", ["a", "b"], timeout=1000))
         seen.append(ctx.confirm("Sure?", "really", timeout=2000))
         seen.append(ctx.input("Name", "who", timeout=3000))
@@ -195,7 +195,7 @@ def test_dialog_timeout_sends_opts() -> None:
     ("ui.input", lambda ctx: ctx.input("a", "p"), {"text": {"a": [1, "x"]}, "ok": True}, ({"a": [1, "x"]}, True)),
     ("ui.editor", lambda ctx: ctx.editor("a", "p"), {"text": [1, 2], "ok": True}, ([1, 2], True)),
 ])
-def test_dialog_results_carry_the_clients_json_types(method: str, call: Callable[[pig_sdk.Context], Any], reply: dict[str, Any], want: Any) -> None:
+def test_dialog_results_carry_the_clients_json_types(method: str, call: Callable[[ompig_sdk.Context], Any], reply: dict[str, Any], want: Any) -> None:
     """Pi's RPC mode resolves a dialog with whatever JSON the client sent: the SDK returns it unchanged, with undefined (ok False) apart from null."""
     seen: list[Any] = []
     _run_command(lambda ctx: seen.append(call(ctx)), {method: reply})
@@ -206,7 +206,7 @@ def test_dialog_results_carry_the_clients_json_types(method: str, call: Callable
 def test_empty_and_unset_ui_members_stay_distinct_on_the_wire() -> None:
     """Pi's rpc-mode writes "" and [] where an extension passes them and omits `undefined`: set_status("") and clear_status differ, and so do an omitted placeholder/prefill and an empty one."""
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         ctx.set_status("k", "")
         ctx.clear_status("k")
         ctx.notify("")
@@ -236,7 +236,7 @@ def test_empty_and_unset_ui_members_stay_distinct_on_the_wire() -> None:
 
 
 def test_set_footer_and_header_send_lines() -> None:
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         ctx.set_footer(["f1", "f2"])
         ctx.set_header(["h1"])
         ctx.set_footer(None)
@@ -264,10 +264,10 @@ _PALETTE = {
 
 
 def test_has_ui_and_theme_follow_host_state() -> None:
-    ext = pig_sdk.Extension("py-theme")
+    ext = ompig_sdk.Extension("py-theme")
     observed: list[dict[str, Any]] = []
 
-    def probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def probe(ctx: ompig_sdk.Context, _args: str) -> None:
         theme = ctx.theme
 
         def ansi(lookup: Callable[[str], str], token: str) -> str:
@@ -341,11 +341,11 @@ def test_has_ui_and_theme_follow_host_state() -> None:
 def _run_compact(answer: dict[str, Any]) -> tuple[dict[str, Any], list[Any]]:
     """Start a callback compaction from a command, then answer it after the
     command has returned. Returns the compact call frame and callback values."""
-    ext = pig_sdk.Extension("py-compact")
+    ext = ompig_sdk.Extension("py-compact")
     outcome: list[Any] = []
     done = threading.Event()
 
-    def start(ctx: pig_sdk.Context, _args: str) -> None:
+    def start(ctx: ompig_sdk.Context, _args: str) -> None:
         ctx.compact(
             custom_instructions="keep the plan",
             on_complete=lambda result: (outcome.append(("complete", result)), done.set()),
@@ -388,17 +388,17 @@ def test_compact_callbacks_on_error() -> None:
     assert outcome == [("error", "Nothing to compact")]
 
 
-def _probe_getter(call: Callable[[pig_sdk.Context], Any], answer: dict[str, Any] | None, error: dict[str, Any] | None = None) -> Any:
+def _probe_getter(call: Callable[[ompig_sdk.Context], Any], answer: dict[str, Any] | None, error: dict[str, Any] | None = None) -> Any:
     """Run one getter against a fake host answering its call, returning the value or the raised exception."""
     outcome: list[Any] = []
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         try:
             outcome.append(call(ctx))
         except Exception as exc:  # noqa: BLE001 - the exception is the observation
             outcome.append(exc)
 
-    ext = pig_sdk.Extension("py-getters")
+    ext = ompig_sdk.Extension("py-getters")
     ext.command("go", "run", lambda ctx, _args: handler(ctx))
     host = _Host(ext)
     try:
@@ -427,15 +427,15 @@ def test_getters_distinguish_absent_empty_and_failure() -> None:
     # SetActiveTools([]) narrows the session to no tools: an empty list is a value, a null one a protocol error.
     assert _probe_getter(lambda c: c.get_active_tools(), {"tools": []}) == []
     assert _probe_getter(lambda c: c.get_active_tools(), {"tools": ["read"]}) == ["read"]
-    assert isinstance(_probe_getter(lambda c: c.get_active_tools(), {"tools": None}), pig_sdk.HostCallError)
+    assert isinstance(_probe_getter(lambda c: c.get_active_tools(), {"tools": None}), ompig_sdk.HostCallError)
     failure = {"code": "host_failed", "message": "boom"}
     for name in ("get_session_name", "get_editor_text", "get_active_tools", "get_context_usage", "is_idle", "is_project_trusted", "get_leaf_id"):
         raised = _probe_getter(lambda c, name=name: getattr(c, name)(), None, failure)
-        assert isinstance(raised, pig_sdk.HostCallError) and "boom" in str(raised), name
+        assert isinstance(raised, ompig_sdk.HostCallError) and "boom" in str(raised), name
     raised = _probe_getter(lambda c: c.get_flag("f"), None, failure)
-    assert isinstance(raised, pig_sdk.HostCallError)
+    assert isinstance(raised, ompig_sdk.HostCallError)
     missing = _probe_getter(lambda c: c.get_thinking_level(), {"unrelated": 1})
-    assert isinstance(missing, pig_sdk.HostCallError)
+    assert isinstance(missing, ompig_sdk.HostCallError)
 
 
 def test_session_log_getters_report_subscription_failure() -> None:
@@ -443,4 +443,4 @@ def test_session_log_getters_report_subscription_failure() -> None:
     failure = {"code": "host_failed", "message": "log unavailable"}
     for name in ("get_branch", "get_entries"):
         raised = _probe_getter(lambda c, name=name: getattr(c, name)(), None, failure)
-        assert isinstance(raised, pig_sdk.HostCallError) and "log unavailable" in str(raised), name
+        assert isinstance(raised, ompig_sdk.HostCallError) and "log unavailable" in str(raised), name

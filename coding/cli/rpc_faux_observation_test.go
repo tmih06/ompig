@@ -12,8 +12,8 @@ import (
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 const fauxRPCOraclePath = "../../coding/testdata/rpc33-observation/providers/faux/pi.json"
@@ -198,8 +198,8 @@ func TestFauxRPCObservation(t *testing.T) {
 		t.Fatalf("faux oracle pins Pi %s; current Pi %s requires a fresh oracle", oracle.Pi, coding.UpstreamVersion)
 	}
 	runs := 1
-	if os.Getenv("PIG_FAUX_RPC_RUNS") != "" {
-		if _, err := fmt.Sscan(os.Getenv("PIG_FAUX_RPC_RUNS"), &runs); err != nil {
+	if os.Getenv("OMPIG_FAUX_RPC_RUNS") != "" {
+		if _, err := fmt.Sscan(os.Getenv("OMPIG_FAUX_RPC_RUNS"), &runs); err != nil {
 			t.Fatal(err)
 		}
 	}

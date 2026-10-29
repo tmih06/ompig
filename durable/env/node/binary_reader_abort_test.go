@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // lateAbort is a context that reports cancellation only from its n-th Err() call on, so the abort arrives while the operation runs.

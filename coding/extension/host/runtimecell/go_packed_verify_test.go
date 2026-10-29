@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
 // A cell's extension sources enter its digest only as the Hash their caller derived from them, so the cell cannot read them again

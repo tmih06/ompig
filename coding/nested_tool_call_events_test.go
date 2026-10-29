@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.99.1 nested-tool-calls.ts:240-247 emits tool_execution_end with `result: outcome.result, isError: outcome.isError`. A call that never

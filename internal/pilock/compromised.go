@@ -6,7 +6,7 @@ import (
 	"io/fs"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // CompromisedError is the ECOMPROMISED error that proper-lockfile 4.1.2 passes to onCompromised (lib/lockfile.js:119-138,153-156,185-201). Cause is the failed stat or utime, or nil when the lock directory's mtime is no longer ours.

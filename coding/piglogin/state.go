@@ -7,20 +7,20 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
+	"github.com/tmih06/ompig/internal/configroot"
 )
 
 // DefaultID is the sprite used until one is selected.
-const DefaultID = "pig-default"
+const DefaultID = "ompig-default"
 
 type state struct {
 	Variant string `json:"variant"`
 }
 
-// StatePath is where the selection lives under configHome. The directory name is PiG Standard's, so a selection made there
+// StatePath is where the selection lives under configHome. The directory name is Ompig Standard's, so a selection made there
 // carries over and the games find it.
 func StatePath(configHome string) string {
-	return filepath.Join(configHome, "state", "pig-standard", "login.json")
+	return filepath.Join(configHome, "state", "ompig-standard", "login.json")
 }
 
 // LoadVariant reads the selection saved under configHome. A missing, unreadable or unknown selection is the default.
@@ -103,7 +103,7 @@ func Activate(id string) error {
 	return nil
 }
 
-// Refresh makes the next Active read the saved selection again: a game or another PiG may have written it.
+// Refresh makes the next Active read the saved selection again: a game or another Ompig may have written it.
 func Refresh() {
 	active.mu.Lock()
 	active.loaded = false

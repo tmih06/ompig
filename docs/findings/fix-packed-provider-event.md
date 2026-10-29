@@ -15,7 +15,7 @@ The fixed worker waits for the notification prefix before inferring missing crea
 - `packages/ai/src/api/lazy.ts:31-38` forwards source events before ending the target stream.
 - `packages/coding-agent/src/core/model-runtime.ts:638-660` uses that stream contract for simple and deferred calls.
 
-A direct probe of the pinned upstream implementation checks success, error, and aborted terminals. It requests the result before iterating, attempts a late fallback error, and compares the complete result and event sequence. All three cases retain the original terminal. The existing `extensions-runtime/53-node-provider-object-carrier` scenario also passes all three declared Pi/PiG pairs. That scenario proves Node Provider identity/callback behavior, not the native Go dispatcher race.
+A direct probe of the pinned upstream implementation checks success, error, and aborted terminals. It requests the result before iterating, attempts a late fallback error, and compares the complete result and event sequence. All three cases retain the original terminal. The existing `extensions-runtime/53-node-provider-object-carrier` scenario also passes all three declared Pi/Ompig pairs. That scenario proves Node Provider identity/callback behavior, not the native Go dispatcher race.
 
 ## Regression and mutation evidence
 

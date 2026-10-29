@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-const imageHelper = "PIG_NODESPAWN_IMAGE_HELPER"
+const imageHelper = "OMPIG_NODESPAWN_IMAGE_HELPER"
 
 // spawnOutcome is what Node's spawn(file, [], { shell: false }) does: throw,
 // emit an error, or start a program that reports its image path.

@@ -13,13 +13,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture"
 )
 
 var piIdentity = regexp.MustCompile(`(?i)(^pi$|^pi[ /(]|pi\.dev|^pi-coding-agent$)`)
@@ -30,8 +30,8 @@ var piIdentity = regexp.MustCompile(`(?i)(^pi$|^pi[ /(]|pi\.dev|^pi-coding-agent
 // OpenRouter-, NVIDIA- or OpenCode-shaped endpoint carrying no attribution,
 // which only a Session's identity adds (as under Pi, where the extension runner's
 // model calls pass no identity), and never Pi's identity (D26). The Node SDK's own paths run in the real binary in
-// cmd/pig's TestNodeExtensionModelCallsCarryPiGIdentityNeverPis.
-func TestSDKModelCallsCarryPiGIdentityNeverPis(t *testing.T) {
+// cmd/ompig's TestNodeExtensionModelCallsCarryOmpigIdentityNeverPis.
+func TestSDKModelCallsCarryOmpigIdentityNeverPis(t *testing.T) {
 	type sdkCase struct {
 		name, source string
 		fused        bool

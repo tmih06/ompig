@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // servicesScript is createAgentSessionServices and createAgentSessionFromServices over the same options as testdata/session-graph.mjs servicesScript; the report is Pi's own run's.

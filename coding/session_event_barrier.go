@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // sessionEventBarrier is an internal FIFO marker, not an agent or wire event.

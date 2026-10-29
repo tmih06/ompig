@@ -22,9 +22,9 @@ timeout_seconds = 15
 settle_seconds = 1
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model"]
+ompig = ["OMPIG_HOME=testdata/multi-model"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model/agent"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 
 [assert]

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 1.2.0 types.ts:2122-2130 picks reachesTools into ToolInfo, and agent-session.ts:1507 copies the definition's hook onto the

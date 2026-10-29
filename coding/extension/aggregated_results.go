@@ -12,7 +12,7 @@ package extension
 //	}
 //
 // Upstream declares this type as `interface` private to runner.ts;
-// pig exports it because Go callers need to type-assert on it after
+// ompig exports it because Go callers need to type-assert on it after
 // EmitBeforeAgentStart returns. Field semantics match upstream
 // verbatim.
 type BeforeAgentStartCombinedResult struct {
@@ -40,7 +40,7 @@ type BeforeAgentStartCombinedResult struct {
 //
 //	skillPaths: Array<{ path: string; extensionPath: string }>;
 //
-// pig names this type because Go's anonymous-type composition is
+// ompig names this type because Go's anonymous-type composition is
 // less ergonomic than TS's; same wire shape.
 type AttributedResourcePath struct {
 	Path          string `json:"path"`

@@ -29,13 +29,13 @@ func TestStableEntryDoesNotDispatchExperimentalCommands(t *testing.T) {
 			directory := t.TempDir()
 			cmd := exec.Command(bin, command, "--server-id", "invalid", "--version")
 			cmd.Dir = directory
-			// Upstream isolates Pi's agent directory; PiG reads PIG_CODING_AGENT_DIR and PIG_HOME unless Pi directories are shared, so both roots are isolated.
+			// Upstream isolates Pi's agent directory; Ompig reads OMPIG_CODING_AGENT_DIR and OMPIG_HOME unless Pi directories are shared, so both roots are isolated.
 			cmd.Env = append(os.Environ(),
 				"HOME="+directory,
 				"USERPROFILE="+directory,
 				"PI_CODING_AGENT_DIR="+filepath.Join(directory, "agent"),
-				"PIG_CODING_AGENT_DIR="+filepath.Join(directory, "pig-agent"),
-				"PIG_HOME="+filepath.Join(directory, "pig"),
+				"OMPIG_CODING_AGENT_DIR="+filepath.Join(directory, "ompig-agent"),
+				"OMPIG_HOME="+filepath.Join(directory, "ompig"),
 				"PI_OFFLINE=1",
 				"PI_EXPERIMENTAL=1",
 			)
@@ -43,7 +43,7 @@ func TestStableEntryDoesNotDispatchExperimentalCommands(t *testing.T) {
 			cmd.Stderr = &stderr
 			stdout, err := cmd.Output()
 			if err != nil {
-				t.Fatalf("pig %s --server-id invalid --version: %v\nstderr: %s", command, err, stderr.String())
+				t.Fatalf("ompig %s --server-id invalid --version: %v\nstderr: %s", command, err, stderr.String())
 			}
 			if got := strings.TrimSpace(string(stdout)); got != cliVersionString() {
 				t.Fatalf("stdout = %q, want the stable CLI version %q", got, cliVersionString())

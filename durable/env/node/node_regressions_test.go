@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // writeFile and appendFile run mkdir(resolve(resolved, ".."), {recursive:

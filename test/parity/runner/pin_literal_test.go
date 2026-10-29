@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // A probe that names the pinned Pi release as a literal passes on one pin and fails on the next:
@@ -27,10 +27,10 @@ func TestScenarioAssertionsNameThePinThroughTokens(t *testing.T) {
 	for _, sc := range scenarios {
 		var expectations []string
 		expectations = append(expectations, sc.Assert.BothContain...)
-		expectations = append(expectations, sc.Assert.PigContains...)
+		expectations = append(expectations, sc.Assert.OmpigContains...)
 		expectations = append(expectations, sc.Assert.PiContains...)
 		expectations = append(expectations, sc.Assert.BothMatchRegex...)
-		expectations = append(expectations, sc.Diverge.PigContains...)
+		expectations = append(expectations, sc.Diverge.OmpigContains...)
 		expectations = append(expectations, sc.Diverge.PiContains...)
 		for _, expectation := range expectations {
 			for _, literal := range literals {

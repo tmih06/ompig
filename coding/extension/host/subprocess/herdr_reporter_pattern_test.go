@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -16,7 +16,7 @@ import (
 
 // TestNodeSocketReporterPatternDeliversLifecycleReports pins that a Pi
 // extension shaped like herdr's agent-state reporter (issue 136) reaches its
-// socket from every lifecycle event PiG dispatches.
+// socket from every lifecycle event Ompig dispatches.
 //
 // The reporter reads HERDR_* from the extension process environment, gates on
 // ctx.mode === "tui", awaits a socket write from an async session_start, and

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // BeforeToolCallContext is the context of a beforeToolCall hook (upstream types.ts BeforeToolCallContext).

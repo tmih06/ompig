@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/tui/src/utils.ts
@@ -116,7 +116,7 @@ emit(input.map((line) => {
 		got := result{Strip: StripTerminalSequences(line), Norm: NormalizeTerminalOutput(line), Bg: GetActiveBackgroundAnsi(line), Esc: esc, Cells: cells, Links: links, Width: VisibleWidth(line)}
 		if !reflect.DeepEqual(got, w) {
 			if failures++; failures <= 8 {
-				t.Errorf("%q:\n  PiG %s\n  Pi  %s", line, dump(got.Strip, got.Norm, got.Bg, got.Esc, got.Cells, got.Links, got.Width), dump(w.Strip, w.Norm, w.Bg, w.Esc, w.Cells, w.Links, w.Width))
+				t.Errorf("%q:\n  Ompig %s\n  Pi  %s", line, dump(got.Strip, got.Norm, got.Bg, got.Esc, got.Cells, got.Links, got.Width), dump(w.Strip, w.Norm, w.Bg, w.Esc, w.Cells, w.Links, w.Width))
 			}
 		}
 	}

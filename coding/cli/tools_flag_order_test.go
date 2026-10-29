@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // --tools selects the tools in its own order, as Pi does: main.ts:545-546 copies the --tools list into options.tools,
@@ -36,9 +36,9 @@ func buildToolOrderRuntime(t *testing.T, args ...string) *cliBuild {
 	home := t.TempDir()
 	agentDir := home + "/agent"
 	cwd := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	flags := parseArgs(append([]string{"--model", "test-faux/faux-1", "--print"}, args...))
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
 	builder := &cliRuntimeBuilder{
@@ -77,7 +77,7 @@ var toolOrderAPIs = []struct {
 	{"anthropic-messages", newAnthropicScopeProvider},
 }
 
-// toolOrderFixture writes a Stock PiG home whose models.json points the fake model at provider with api, and an
+// toolOrderFixture writes a Stock Ompig home whose models.json points the fake model at provider with api, and an
 // extension, scoped.mjs, that registers scoped_tool. It returns the home and the extension's directory.
 func toolOrderFixture(t *testing.T, provider *scopeProvider, api string) (home, dir string) {
 	t.Helper()
@@ -94,12 +94,12 @@ func toolOrderFixture(t *testing.T, provider *scopeProvider, api string) (home, 
 	return home, dir
 }
 
-// Stock PiG sends the --tools list to the provider in its order in every mode, extension tools included: Pi's
+// Stock Ompig sends the --tools list to the provider in its order in every mode, extension tools included: Pi's
 // initialActiveToolNames is options.tools as given (sdk.ts:271-276), and the request declares agent.state.tools in
 // that order (agent-session.ts:1561-1565, _applyToolLoadout).
 func TestToolsFlagOrderReachesTheProviderInEveryMode(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and starts a Node extension")
+		t.Skip("builds the ompig binary and starts a Node extension")
 	}
 	t.Parallel()
 	want := []string{"grep", "scoped_tool", "read"}
@@ -122,7 +122,7 @@ func TestToolsFlagOrderReachesTheProviderInEveryMode(t *testing.T) {
 // their order (agent-session.ts _refreshToolRegistry: previousActiveToolNames, then a Set).
 func TestReloadKeepsTheToolsFlagOrder(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and starts a Node extension")
+		t.Skip("builds the ompig binary and starts a Node extension")
 	}
 	t.Parallel()
 	want := []string{"grep", "scoped_tool", "read"}
@@ -140,7 +140,7 @@ func TestReloadKeepsTheToolsFlagOrder(t *testing.T) {
 	}
 }
 
-// interactiveRequestsAcrossReload starts interactive pig in dir, prompts once, runs /reload once the first run settled,
+// interactiveRequestsAcrossReload starts interactive ompig in dir, prompts once, runs /reload once the first run settled,
 // prompts again, and returns the tool names of both model requests.
 func interactiveRequestsAcrossReload(t *testing.T, provider *scopeProvider, home, dir string, launch ...string) [][]string {
 	t.Helper()
@@ -162,7 +162,7 @@ func interactiveRequestsAcrossReload(t *testing.T, provider *scopeProvider, home
 `)
 	cmd := exec.Command(buildPigBinaryForSignalTest(t), append(slices.Clone(launch), "-e", idle, "--no-session", "--offline", "--no-context-files", "--model", "fake/fake")...)
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
 		"PATH="+filepath.Dir(node)+string(os.PathListSeparator)+os.Getenv("PATH"), "PI_OFFLINE=1", "PI_TELEMETRY=0", "PI_SKIP_VERSION_CHECK=1", "TERM=xterm-256color")
 	var stderr strings.Builder
 	cmd.Stderr = &stderr
@@ -173,7 +173,7 @@ func interactiveRequestsAcrossReload(t *testing.T, provider *scopeProvider, home
 		t.Helper()
 		switch err := waitUntil(ctx, provider, terminal, done); {
 		case errors.Is(err, errTerminalClosed):
-			t.Fatalf("pig exited while waiting for %s\nstderr:\n%s", what, stderr.String())
+			t.Fatalf("ompig exited while waiting for %s\nstderr:\n%s", what, stderr.String())
 		case err != nil:
 			t.Fatalf("timed out waiting for %s\nscreen:\n%s\nstderr:\n%s", what, terminal, stderr.String())
 		}

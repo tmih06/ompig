@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type simpleOptionsProbe struct {
@@ -126,7 +126,7 @@ func TestSimpleOptionsMatchPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got, want) {
 			if differing++; differing <= 10 {
-				t.Errorf("%s level=%s custom=%v base=%v modelMax=%d: Pig %v, Pi %v", probe.Op, probe.Level, probe.Custom, probe.Base, probe.ModelMax, got, want)
+				t.Errorf("%s level=%s custom=%v base=%v modelMax=%d: Ompig %v, Pi %v", probe.Op, probe.Level, probe.Custom, probe.Base, probe.ModelMax, got, want)
 			}
 		}
 	}

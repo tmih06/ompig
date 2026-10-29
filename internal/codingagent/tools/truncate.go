@@ -25,8 +25,8 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/truncate"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/truncate"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Mirrors upstream defaults exactly.
@@ -119,7 +119,7 @@ func truncationResult(r truncate.Result, maxBytes, maxLines int) TruncationResul
 // ...]` warning string for a TruncationResult, or "" if not
 // truncated. Mirrors upstream's render-layer formatting in
 // `read.ts:108-116` and `bash.ts:247-263`. Producers that don't
-// have a separate render layer (pig grep / find / etc.) append
+// have a separate render layer (ompig grep / find / etc.) append
 // the warning directly to the LLM-visible content.
 func FormatTruncationWarning(tr TruncationResult) string {
 	if !tr.Truncated {

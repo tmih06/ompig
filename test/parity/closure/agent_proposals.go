@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 const adversaryProposalType = "agent:adversary-proposal"
@@ -130,7 +130,7 @@ func proposalCitationPins(records map[string]Record, snapshotID string, citation
 	for _, citation := range citations {
 		repository := "upstream"
 		if citation.Side == "target" {
-			repository = "pig"
+			repository = "ompig"
 		} else if citation.Side != "source" {
 			return nil, fmt.Errorf("citation has unknown side %s", citation.Side)
 		}

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // quietPrintFaux streams one write call in 16-byte deltas and then a closing text, with a fixed timestamp so two runs
@@ -55,7 +55,7 @@ func runQuietPrint(t *testing.T, mode string) (updates []string, stdout string) 
 
 func quietPrintServices(t *testing.T) *coding.AgentSessionServices {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir(), AgentDir: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

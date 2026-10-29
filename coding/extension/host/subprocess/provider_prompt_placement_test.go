@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 func TestPackedProviderResponseAndToolPrompts(t *testing.T) {
@@ -73,9 +73,9 @@ func writePromptFactory(t *testing.T, root, language, name string) ExtConfig {
 	switch language {
 	case "go":
 		module := "example.com/" + name
-		write("go.mod", fmt.Sprintf("module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", module))
+		write("go.mod", fmt.Sprintf("module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", module))
 		write("extension.go", fmt.Sprintf(`package fixture
-import ("fmt"; "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("fmt"; "github.com/tmih06/ompig/extensions/sdk")
 func Extension() *sdk.Extension {
  ext := sdk.New(%q)
  observed := "missing"
@@ -87,9 +87,9 @@ func Extension() *sdk.Extension {
 `, name, name, name+" rule", name))
 		return packedFactoryConfig(name, dir, module, name)
 	case "python":
-		write(name+".py", fmt.Sprintf(`import pig_sdk
+		write(name+".py", fmt.Sprintf(`import ompig_sdk
 def new_extension():
-    ext = pig_sdk.Extension(%q)
+    ext = ompig_sdk.Extension(%q)
     observed = "missing"
     ext.tool(%q, "not a snippet", {"type":"object"}, lambda ctx, args: {"content": observed}, prompt_snippet=" Tool\r\n summary ", prompt_guidelines=[%q," shared ","shared"])
     def response(ctx, event):
@@ -102,7 +102,7 @@ def new_extension():
 		return packedPythonFactoryConfig(name, dir, name, name)
 	case "rust":
 		write("Cargo.toml", fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2024\"\n[dependencies]\npig-sdk = { path = %q }\nserde_json = \"1\"\n", name, filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
-		write("src/lib.rs", fmt.Sprintf(`use pig_sdk::{Extension,ToolResult};
+		write("src/lib.rs", fmt.Sprintf(`use ompig_sdk::{Extension,ToolResult};
 use serde_json::json;
 use std::sync::{Arc,Mutex};
 pub fn new_extension() -> Extension {

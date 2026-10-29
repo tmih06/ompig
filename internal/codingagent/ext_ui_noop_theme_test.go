@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's no-op UI context answers `ctx.ui.theme` with the global theme (runner.ts noOpUIContext), so an in-process extension running with no UI (print, JSON) reads

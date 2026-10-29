@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi's _restoreToolsFromTranscript reads the toolsAdded and toolsRemoved of every system message of the branch and throws a TypeError for a member it cannot read, and a content it cannot read never fails it. Each case is a branch's system messages; the installed Pi replays the same messages, and ToolReplayError must report the message Pi throws, or nil where Pi replays without one.

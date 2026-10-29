@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/interactive-tui.test.ts:380
@@ -49,7 +49,7 @@ func TestInteractiveTuiEmbeddedStatusClearingUpstream(t *testing.T) {
 			mode.editor.SetWorkingStatusIndicator(indicator)
 			mode.activeStatusIndicator = indicator
 			mode.activeWorkingIndicatorEmbedded = true
-			// Pi's indicators own timers. PiG's owner advances the active indicator and owns the retry countdown; other kinds hold no independent resource to dispose.
+			// Pi's indicators own timers. Ompig's owner advances the active indicator and owns the retry countdown; other kinds hold no independent resource to dispose.
 			if kind == "retry" {
 				mode.retryCountdownStop = func() { disposed++ }
 			}

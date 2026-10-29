@@ -3,7 +3,7 @@ package coding
 import (
 	"context"
 	"errors"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 	"testing"
 	"time"
 )

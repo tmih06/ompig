@@ -6,8 +6,8 @@ import (
 )
 
 // Pi cea25743 session-share.test.ts "forces gist sharing without checking Radius authentication" and "reports missing Radius authentication when Radius is forced": Pi's /share reads sessionShareDestination and sends "gist" straight to a GitHub gist and "radius" only to Radius.
-// pig divergence (D64): PiG's /share has one destination, the PiG gateway, so every value, including Pi's forced "radius" without Radius auth, still runs the PiG upload and reports no Radius error.
-func TestShareHandlerUploadsToPiGForEveryShareDestination(t *testing.T) {
+// ompig divergence (D64): Ompig's /share has one destination, the Ompig gateway, so every value, including Pi's forced "radius" without Radius auth, still runs the Ompig upload and reports no Radius error.
+func TestShareHandlerUploadsToOmpigForEveryShareDestination(t *testing.T) {
 	for _, destination := range []SessionShareDestination{SessionShareDestinationAuto, SessionShareDestinationGist, SessionShareDestinationRadius} {
 		t.Run(string(destination), func(t *testing.T) {
 			sm := NewSettingsManager(t.TempDir(), t.TempDir())
@@ -27,12 +27,12 @@ func TestShareHandlerUploadsToPiGForEveryShareDestination(t *testing.T) {
 					t.Fatalf("shared session = %p, want %p", got, session)
 				}
 				uploads++
-				return "Share URL: https://pi-in-go.dev/session/p_destination", nil
+				return "Share URL: https://ompig.dev/session/p_destination", nil
 			}
 			if err := shareHandler(sc); err != nil {
 				t.Fatal(err)
 			}
-			if uploads != 1 || out.String() != "Share URL: https://pi-in-go.dev/session/p_destination\n" {
+			if uploads != 1 || out.String() != "Share URL: https://ompig.dev/session/p_destination\n" {
 				t.Fatalf("uploads = %d, output = %q", uploads, out.String())
 			}
 		})
@@ -40,7 +40,7 @@ func TestShareHandlerUploadsToPiGForEveryShareDestination(t *testing.T) {
 }
 
 // Pi cea25743 settings-selector.test.ts "cycles through share destinations": Pi's /settings has a "share-destination" item cycling auto, gist, radius.
-// pig divergence (D64): PiG's /share ignores the setting, so /settings offers no item that would change nothing.
+// ompig divergence (D64): Ompig's /share ignores the setting, so /settings offers no item that would change nothing.
 func TestSettingsSelectorOmitsShareDestination(t *testing.T) {
 	initSettingsSelectorTheme(t)
 	list := NewSettingsSelectorComponent(SettingsConfig{DefaultModel: "not set"}, SettingsCallbacks{}).GetSettingsList()

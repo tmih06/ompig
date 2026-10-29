@@ -10,9 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsclock"
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/internal/jsclock"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 func TestInMemoryTelemetryStoreConformance(t *testing.T) {

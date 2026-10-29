@@ -33,7 +33,7 @@ func checkCodingAgentVendor(t *testing.T, root, file string, got []byte) {
 	case "core/extensions/virtual-modules.js":
 		replacements = append(replacements, [2]string{`from "../../index.js";`, `from "../../../../pi-coding-agent.mjs";`})
 	case "core/tools/edit.js", "core/tools/write.js":
-		// pig additive (D19): the file mutation queue is the host's (shims/file-mutation-queue-bridge.mjs).
+		// ompig additive (D19): the file mutation queue is the host's (shims/file-mutation-queue-bridge.mjs).
 		replacements = append(replacements, [2]string{`import { withFileMutationQueue } from "./file-mutation-queue.js";`, `import { withFileMutationQueue } from "../../../../file-mutation-queue-bridge.mjs";`})
 	case "core/tools/index.js":
 		replacements = append(replacements, [2]string{`export { withFileMutationQueue } from "./file-mutation-queue.js";`, `export { withFileMutationQueue } from "../../../../file-mutation-queue-bridge.mjs";`})
@@ -53,11 +53,11 @@ import { oklabToOkhslLightness, } from "../../../../pi-tui/oklab.js";`},
 	case "config.js":
 		replacements = append(replacements,
 			[2]string{`export const isBundledNode = typeof PI_BUNDLED_NODE !== "undefined" && PI_BUNDLED_NODE;`, `export const isBundledNode = true;`},
-			[2]string{`export const APP_NAME = piConfigName || "pi";`, `export const APP_NAME = "pig"; // pig divergence (D2): host configuration identity.`},
-			[2]string{`export const CONFIG_DIR_NAME = pkg.piConfig?.configDir || ".pi";`, `export { CONFIG_DIR_NAME } from "../../pig-config.mjs"; // pig divergence (D2): selected host configuration tree.`},
-			[2]string{"export const ENV_AGENT_DIR = `${APP_NAME.toUpperCase()}_CODING_AGENT_DIR`;", `export { ENV_AGENT_DIR } from "../../pig-config.mjs";`},
+			[2]string{`export const APP_NAME = piConfigName || "pi";`, `export const APP_NAME = "ompig"; // ompig divergence (D2): host configuration identity.`},
+			[2]string{`export const CONFIG_DIR_NAME = pkg.piConfig?.configDir || ".pi";`, `export { CONFIG_DIR_NAME } from "../../ompig-config.mjs"; // ompig divergence (D2): selected host configuration tree.`},
+			[2]string{"export const ENV_AGENT_DIR = `${APP_NAME.toUpperCase()}_CODING_AGENT_DIR`;", `export { ENV_AGENT_DIR } from "../../ompig-config.mjs";`},
 			[2]string{`const srcOrDist = existsSync(join(packageDir, "src")) ? "src" : "dist";`, `const srcOrDist = ".";`},
-			// .upstream/v1.0.3/packages/coding-agent/src/config.ts:490-496,507-549 (getQuickJSWasmPath, resolveCodemodeWorkerSpecifier, getCodemodeWorkerSpecifier): the private quickjs-wasi copy is not under node_modules, and the bundled worker entry is the copied dist/extensions/codemode/worker.js. Pi 1.0.3 spawns that worker from a data: URL so an update cannot remove it; the private copy lives in PiG's content-addressed runtime directory, and the vendored worker keeps its relative imports, which need a file location.
+			// .upstream/v1.0.3/packages/coding-agent/src/config.ts:490-496,507-549 (getQuickJSWasmPath, resolveCodemodeWorkerSpecifier, getCodemodeWorkerSpecifier): the private quickjs-wasi copy is not under node_modules, and the bundled worker entry is the copied dist/extensions/codemode/worker.js. Pi 1.0.3 spawns that worker from a data: URL so an update cannot remove it; the private copy lives in Ompig's content-addressed runtime directory, and the vendored worker keeps its relative imports, which need a file location.
 			[2]string{`quickJSWasmPath ??= createRequire(import.meta.url).resolve("quickjs-wasi/quickjs.wasm");`, `quickJSWasmPath ??= fileURLToPath(new URL("../../quickjs-wasi/quickjs.wasm", import.meta.url));`},
 			[2]string{`return new URL("./codemode-worker.js", moduleUrl);`, `return new URL("./extensions/codemode/worker.js", moduleUrl);`},
 			[2]string{"    // Spawn workers from an in-memory copy. An update replaces or deletes the file while this\n    // process keeps running (#10439). The bundle build keeps the worker free of relative imports\n    // and import.meta, so it runs from a data: URL.\n    codemodeWorkerDataUrl ??= new URL(`data:text/javascript;base64,${readFileSync(specifier).toString(\"base64\")}`);\n    return codemodeWorkerDataUrl;", "    return specifier;"},
@@ -67,8 +67,8 @@ import { oklabToOkhslLightness, } from "../../../../pi-tui/oklab.js";`},
         return expandTildePath(envDir);
     }
     return join(homedir(), CONFIG_DIR_NAME, "agent");
-}`, `// pig divergence (D2): independent SDK instances share the host's default config root.
-import { CONFIG_DIR_NAME, getAgentDir } from "../../pig-config.mjs";
+}`, `// ompig divergence (D2): independent SDK instances share the host's default config root.
+import { CONFIG_DIR_NAME, getAgentDir } from "../../ompig-config.mjs";
 export { getAgentDir };`},
 		)
 	}

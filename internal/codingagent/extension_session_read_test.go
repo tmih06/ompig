@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // Pi's sessionEntryToContextMessages uses Date.getTime(): integer milliseconds,

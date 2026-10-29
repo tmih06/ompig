@@ -1,7 +1,7 @@
 // host-wiring-session-actions.mjs calls the Session actions Pi binds in every
 // mode (agent-session.ts _bindExtensionCore) from session_start and records
 // each answer, then records the model and thinking-level entries the Session
-// wrote. It registers the only provider with credentials, so Pi and Pig both
+// wrote. It registers the only provider with credentials, so Pi and Ompig both
 // start on probe/probe-model, and switches to probe/probe-model-2. A second
 // provider has no credentials, so setModel to its model answers false and
 // changes nothing (agent-session.ts _bindExtensionCore setModel).

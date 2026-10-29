@@ -8,7 +8,7 @@ import (
 
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's replacement event files cross the same wire in every SDK realization.

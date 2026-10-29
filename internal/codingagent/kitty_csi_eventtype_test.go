@@ -3,7 +3,7 @@ package codingagent
 import "testing"
 
 // TestClassifyCSIuEventTypes pins the fix for Ctrl+C / Ctrl+D going dead under
-// the Kitty keyboard protocol. Pig negotiates \x1b[>7u (flags 1+2+4), so keys
+// the Kitty keyboard protocol. Ompig negotiates \x1b[>7u (flags 1+2+4), so keys
 // arrive with an event-type sub-parameter (\x1b[99;5:1u) and, with alternate
 // keys, a codepoint sub-parameter (\x1b[99:67;5:1u). The decoder must match on
 // the base codepoint + base modifier and ignore those sub-parameters.

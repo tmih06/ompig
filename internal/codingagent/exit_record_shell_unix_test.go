@@ -15,7 +15,7 @@ import (
 )
 
 // A shell command (a `!` command or the bash tool) runs in its own process group, so neither a terminal hangup nor
-// pig's exit reaches it. Pi kills its tracked detached children on both exits that skip orderly shutdown
+// ompig's exit reaches it. Pi kills its tracked detached children on both exits that skip orderly shutdown
 // (interactive-mode.ts emergencyTerminalExit and uncaughtCrash). Without that, a `!sleep 30` kept running after a
 // closed terminal ended the session.
 func TestExitWithoutShutdownKillsTheRunningShellCommand(t *testing.T) {

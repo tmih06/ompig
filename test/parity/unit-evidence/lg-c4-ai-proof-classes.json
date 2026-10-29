@@ -706,7 +706,7 @@
   "upstream": "packages/ai/src/auth/oauth/openai-codex.ts",
   "package": "./ai",
   "tests": [
-   "TestLoginOpenAICodexAuthorizeURLNamesPiGAsOriginator",
+   "TestLoginOpenAICodexAuthorizeURLNamesOmpigAsOriginator",
    "TestOpenAICodexOAuthUpstream"
   ],
   "upstream_reference": "packages/ai/src/auth/oauth/openai-codex.ts",

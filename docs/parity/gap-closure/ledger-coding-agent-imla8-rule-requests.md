@@ -17,7 +17,7 @@ Adding only `AgentSession` -> `coding/session.go#Session`, `ExtensionUIContext` 
 - `parseSessionEntries` -> `codingagent.ParseSessionEntries` (session-manager.ts:355); `TestParseSessionEntriesMatchesPi` carries expected values measured on Node.
 - `buildSessionProjection(entries, leafId)` -> `codingagent.BuildSessionProjection(entries, leafID...)`; the former path-only function is `ProjectSessionPath`, which compaction preparation calls (its fixtures are unchained paths). `TestBuildSessionProjectionFollowsTheLeafBranch`. The optional `byId` Map parameter of `buildSessionContext`, `buildContextEntries` and `buildSessionProjection` is a lookup cache; Go builds the index inside `buildSessionPath` (rule: an optional index parameter that only caches a derived lookup is not a member).
 - `AgentSession.hasExtensionHandlers` and `promptTemplates` -> `Session.HasExtensionHandlers` and `Session.PromptTemplates` (agent-session.ts:4373, 1658); `TestSessionHasExtensionHandlersReportsRegisteredEvents` and `TestSessionPromptTemplatesReadTheResourceLoader`, each mutation-checked.
-- `Args.print` and `Args.resume` -> `cmd/pig.Args.Print bool` and `Args.Resume` (args.ts:21,39); the string sentinel `Print = " "` is gone.
+- `Args.print` and `Args.resume` -> `cmd/ompig.Args.Print bool` and `Args.Resume` (args.ts:21,39); the string sentinel `Print = " "` is gone.
 - `ProviderConfig.authHeader` through `registerProvider`: `TestRegisterProviderAuthHeaderAddsBearerAuthorization` (model-registry.test.ts:2037).
 - `BashToolCallEvent`... `LsToolCallEvent` `toolName` and `input`: `TestToolCallEventVariantsCarryPiToolNameAndInput` for all eight variants.
 

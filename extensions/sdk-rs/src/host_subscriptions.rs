@@ -65,7 +65,7 @@ impl<T: Clone + Send + 'static> Feed<T> {
         }
         threads.start();
         let (feed, finished) = (self.clone(), threads.clone());
-        let spawned = thread::Builder::new().name(format!("pig-{}-change", self.what)).spawn(move || {
+        let spawned = thread::Builder::new().name(format!("ompig-{}-change", self.what)).spawn(move || {
             feed.run();
             finished.finish();
         });

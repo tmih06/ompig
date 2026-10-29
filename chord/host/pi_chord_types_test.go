@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // contract.test.ts:100-107: method() is described as {kind: "method"}; method(args) and method(undefined, result) differ

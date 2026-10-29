@@ -1,4 +1,4 @@
-//go:build !pig_strip_google_vertex
+//go:build !ompig_strip_google_vertex
 
 package ai
 
@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type codexVertexProbe struct {
@@ -46,7 +46,7 @@ func codexVertexProbes() []codexVertexProbe {
 }
 
 // resolveCodexWebSocketUrl (with resolveCodexUrl) and baseUrlIncludesApiVersion, cut from Pi's sources, run in Node on the same base URLs: the Codex endpoint suffix rules on JS-trimmed text, the WHATWG parse,
-// the https: to wss: and http: to ws: protocol setter, and the Vertex segment test on the parsed pathname must match Pig's resolveCodexURL with codexWebSocketHref and vertexBaseURLIncludesAPIVersion.
+// the https: to wss: and http: to ws: protocol setter, and the Vertex segment test on the parsed pathname must match Ompig's resolveCodexURL with codexWebSocketHref and vertexBaseURLIncludesAPIVersion.
 func TestCodexWebSocketAndVertexVersionURLsMatchPi(t *testing.T) {
 	probes := codexVertexProbes()
 	payload, err := json.Marshal(probes)
@@ -88,7 +88,7 @@ func TestCodexWebSocketAndVertexVersionURLsMatchPi(t *testing.T) {
 		}
 		if string(got) != string(expected[i]) {
 			if differing++; differing <= 12 {
-				t.Errorf("%+v\n  Pig %s\n  Pi  %s", probe, got, expected[i])
+				t.Errorf("%+v\n  Ompig %s\n  Pi  %s", probe, got, expected[i])
 			}
 		}
 	}

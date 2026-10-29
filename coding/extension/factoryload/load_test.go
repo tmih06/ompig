@@ -9,9 +9,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 var providerConfig = extension.ProviderConfig{BaseURL: "https://provider.test/v1", APIKey: "provider-test-key"}

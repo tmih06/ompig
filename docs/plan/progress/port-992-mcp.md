@@ -41,7 +41,7 @@ Not runnable here: the Pi-oracle tests (`TestColorDetectionMatchesPi` and simila
 
 ## Phase 1 ledger (per upstream test file, upstream 0.99.2)
 
-Status: credited / ported-passing / ported-FAILING. No ported test in scope fails. Production fixes were made before the method change, in their own commits: `a0c498d86` (MCP extension, config, CLI, OAuth, tools, renderers, `VisualLinePreview`), `c8eac53bb` (codemode, tool_search, prelude, hidden tool list), `d16ac1e56` (unused helper removed); `c3fd07386` regenerates `pig-go.json` and the recommendations.
+Status: credited / ported-passing / ported-FAILING. No ported test in scope fails. Production fixes were made before the method change, in their own commits: `a0c498d86` (MCP extension, config, CLI, OAuth, tools, renderers, `VisualLinePreview`), `c8eac53bb` (codemode, tool_search, prelude, hidden tool list), `d16ac1e56` (unused helper removed); `c3fd07386` regenerates `ompig-go.json` and the recommendations.
 
 | upstream file | status | Go tests |
 |---|---|---|
@@ -51,7 +51,7 @@ Status: credited / ported-passing / ported-FAILING. No ported test in scope fail
 | `coding-agent/test/tool-search.test.ts` | ported-passing | `coding/extension/builtin/toolsearch/toolsearch_upstream_test.go`, `codemode/run_test.go` |
 | `coding-agent/test/suite/agent-session-codemode.test.ts` | ported-passing | `coding/codemode_session_upstream_test.go` (`presents callable tools per codemode.mode`, #10192) |
 | `coding-agent/test/suite/agent-session-mcp.test.ts` | ported-passing at the extension boundary, except one case credited | `coding/mcpext/extension_test.go`. "keeps the codemode description unchanged when the server connects" is credited to `TestCodemodeDescriptionLeavesDeferredToolsAndTheirNamespacesOutEntirely`: the codemode description no longer depends on deferred tools. The session-level form needs `builtin:mcp` registered in a Session, which this base lacks. |
-| `coding-agent/test/suite/agent-session-mcp-oauth.test.ts` | ported-passing at the CLI boundary | `TestMcpLoginRegistersWithTheConfiguredClientName` (fallback client name is the app name, `pig`) |
+| `coding-agent/test/suite/agent-session-mcp-oauth.test.ts` | ported-passing at the CLI boundary | `TestMcpLoginRegistersWithTheConfiguredClientName` (fallback client name is the app name, `ompig`) |
 | `coding-agent/test/suite/mcp-oauth-server.ts` (helper) | ported | `coding/mcpext/oauthserver_test.go` (`registrationClientNames`) |
 | `codemode/test/sandbox.test.ts` | ported-passing | `codemode/sandbox_test.go`; "accepts a worker path string" designed out (no worker in the Go engine) |
 | `coding-agent/test/codemode-worker-config.test.ts` | designed-out (#10204) | no worker file in the QuickJS/wazero engine |

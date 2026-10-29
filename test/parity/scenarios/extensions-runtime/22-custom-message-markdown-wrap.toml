@@ -11,8 +11,8 @@
 #     --model test-faux/faux-1 --no-session
 #   send: "/long-message" Enter
 #
-# pig printed each content line unwrapped. pi-web-access's /websearch result
-# message has such a line, and the over-wide row ended pig through the TUI
+# ompig printed each content line unwrapped. pi-web-access's /websearch result
+# message has such a line, and the over-wide row ended ompig through the TUI
 # overflow check.
 
 name = "22-custom-message-markdown-wrap"
@@ -25,10 +25,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--no-session"]
-pig_extensions = ["testdata/ext/custom-message-long.mjs"]
+ompig_args = ["--no-extensions", "--no-session"]
+ompig_extensions = ["testdata/ext/custom-message-long.mjs"]
 pi_args = ["--no-session"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
@@ -38,7 +38,7 @@ pi_extensions = [
 [tmux]
 width = 80
 height = 45
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 capture_start = "[long-probe]"

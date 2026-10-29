@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // TestRemoteWatcherDoublesItsReconnectDelayAfterEachLostAttempt starts a scripted daemon that serves the first watch and exits once the test sends it

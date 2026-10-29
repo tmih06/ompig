@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // packages/env/src/remote-env.ts:774 createTempDir makes a fresh directory under the daemon's tmpdir named by the prefix
@@ -15,7 +15,7 @@ import (
 func TestRemoteExecutionEnvCreateTempDirAndRemove(t *testing.T) {
 	t.Parallel()
 	env, _ := remoteEnvironment(t)
-	prefix := "pig-probe-"
+	prefix := "ompig-probe-"
 	dir := must(env.CreateTempDir(background, &prefix))
 	t.Cleanup(func() { _ = os.RemoveAll(dir) })
 	other := must(env.CreateTempDir(background, nil))

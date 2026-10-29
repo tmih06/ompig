@@ -1,7 +1,7 @@
-// session-replaced-2860.mjs runs the bodies of Pi's 2860-replaced-session-context.test.ts cases as extension commands. Each line goes to the file named by PIG_TEST_2860_LOG; process ids name the extension instances, because each Session's extensions run in their own process here.
+// session-replaced-2860.mjs runs the bodies of Pi's 2860-replaced-session-context.test.ts cases as extension commands. Each line goes to the file named by OMPIG_TEST_2860_LOG; process ids name the extension instances, because each Session's extensions run in their own process here.
 import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 
-const log = (line) => appendFileSync(process.env.PIG_TEST_2860_LOG, `${line}\n`);
+const log = (line) => appendFileSync(process.env.OMPIG_TEST_2860_LOG, `${line}\n`);
 const text = (message) => typeof message.content === "string"
   ? message.content
   : message.content.filter((part) => part.type === "text").map((part) => part.text).join("");
@@ -10,7 +10,7 @@ const conversation = (sessionManager) => sessionManager.getBranch()
   .map((entry) => `${entry.message.role}:${text(entry.message)}`)
   .join("|");
 const marks = () => {
-  try { return JSON.parse(readFileSync(process.env.PIG_TEST_2860_MARKS, "utf8")); } catch { return {}; }
+  try { return JSON.parse(readFileSync(process.env.OMPIG_TEST_2860_MARKS, "utf8")); } catch { return {}; }
 };
 
 export default function replacedSession2860(pi) {
@@ -112,7 +112,7 @@ export default function replacedSession2860(pi) {
   pi.registerCommand("mark", {
     description: "mark",
     handler: async (name, ctx) => {
-      writeFileSync(process.env.PIG_TEST_2860_MARKS, JSON.stringify({ ...marks(), [name]: ctx.sessionManager.getSessionFile() }));
+      writeFileSync(process.env.OMPIG_TEST_2860_MARKS, JSON.stringify({ ...marks(), [name]: ctx.sessionManager.getSessionFile() }));
     },
   });
 

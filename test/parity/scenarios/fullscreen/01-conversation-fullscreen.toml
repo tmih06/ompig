@@ -13,22 +13,22 @@
 # This is the end-to-end proof for Phase A: mode selection constructs the
 # alt-screen renderer, the fullscreen layout root (transcript ScrollView over
 # the dock VStack) renders, Start() enters the alt buffer, and the editor-slot /
-# input path work in fullscreen. Both pig and pi run the same fullscreen setting,
+# input path work in fullscreen. Both ompig and pi run the same fullscreen setting,
 # so the comparison is alt-screen vs alt-screen.
 #
 # height = 24 is deliberate: it makes the transcript content overflow the
 # viewport so both renderers follow=end and bottom-align the conversation against
 # the dock. The crop from a conversation line to the dock is then identical
-# regardless of startup-content height (banner/notices differ between pig and pi
+# regardless of startup-content height (banner/notices differ between ompig and pi
 # above the crop, but the bottom-aligned conversation does not). At height=40 the
 # short conversation top-aligns and the crop rides the follow-end scroll boundary,
 # which is startup-content-height sensitive and not a rendering-parity signal.
 #
-# Verified separately at height = 40 (real full-screen): pig and pi render the
+# Verified separately at height = 40 (real full-screen): ompig and pi render the
 # byte-identical conversation structure and inter-line spacing
 # (Run -> $expr +4, -> 42 +2, -> Took +2, -> 42 +3, dock separator same row).
 # The only full-height difference is the transcript scroll offset, driven by
-# pig's banner vs pi's startup content height (a product difference above the
+# ompig's banner vs pi's startup content height (a product difference above the
 # crop), so height = 40 is not a skipped case: the same doRender/layout/scroll
 # path runs at every height. runs = 3 because tmux capture timing on a live
 # render is non-trivial (stress-verified 5/5 stable).
@@ -48,16 +48,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 24
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Run: expr 20 + 22"
@@ -73,10 +73,10 @@ wait_timeout_seconds = 15
 both_reach_ready = true
 both_not_contain = ["unknown command", "panic:", "goroutine "]
 # The cropped region underneath the divergent headers (banner vs changelog) is
-# byte-identical between pig and pi after the one nondeterministic-duration
+# byte-identical between ompig and pi after the one nondeterministic-duration
 # normalization below. This asserts PLAIN-CELL parity, not full byte/render
 # parity: escaped_output_equal compares the full SGR-preserving capture
-# (capture-pane -e). pig's alt-screen frame is byte-identical to pi 0.84 after
+# (capture-pane -e). ompig's alt-screen frame is byte-identical to pi 0.84 after
 # the theme text tokens (userMessageText/toolTitle/text/customMessageText) were
 # populated in the built-in dark theme and Markdown gained the default-color
 # option (upstream DefaultTextStyle.color); the shared AnsiCodeTracker emits the

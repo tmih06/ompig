@@ -14,9 +14,9 @@ import (
 	"sync"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // pi: packages/ai/src/api/openai-decisions.ts
@@ -41,7 +41,7 @@ type decisionsOracleResult struct {
 	Usage        map[string]any        `json:"usage"`
 }
 
-// TestOpenAIDecisionsMatchesPi runs the pinned pi-ai openai-decisions classifier and PiG's ClassifyOpenAIDecisions against the same scripted server for random
+// TestOpenAIDecisionsMatchesPi runs the pinned pi-ai openai-decisions classifier and Ompig's ClassifyOpenAIDecisions against the same scripted server for random
 // states, questions, image counts, model prices (with prompt-length tiers), base URLs and responses (well-formed, malformed, refused, missing and extra
 // answers, odd usage objects, HTTP errors). Fractional and over-int32 token counts are left out: Usage holds integers, where Pi keeps the JavaScript number (the
 // same representation gap as the other providers' token counts). The request the server saw, the stop reason, the error message, the answers and the priced usage must agree.
@@ -182,17 +182,17 @@ func TestOpenAIDecisionsMatchesPi(t *testing.T) {
 		}
 		var problems []string
 		if string(result.StopReason) != want[i].StopReason {
-			problems = append(problems, fmt.Sprintf("stopReason PiG %q Pi %q", result.StopReason, want[i].StopReason))
+			problems = append(problems, fmt.Sprintf("stopReason Ompig %q Pi %q", result.StopReason, want[i].StopReason))
 		}
 		wantMessage := ""
 		if want[i].ErrorMessage != nil {
 			wantMessage = *want[i].ErrorMessage
 		}
 		if result.ErrorMessage != wantMessage {
-			problems = append(problems, fmt.Sprintf("errorMessage\n   PiG %q\n   Pi  %q", result.ErrorMessage, wantMessage))
+			problems = append(problems, fmt.Sprintf("errorMessage\n   Ompig %q\n   Pi  %q", result.ErrorMessage, wantMessage))
 		}
 		if string(answers) != want[i].AnswersJSON {
-			problems = append(problems, fmt.Sprintf("answers\n   PiG %s\n   Pi  %s", answers, want[i].AnswersJSON))
+			problems = append(problems, fmt.Sprintf("answers\n   Ompig %s\n   Pi  %s", answers, want[i].AnswersJSON))
 		}
 		var gotUsage map[string]any
 		if result.Usage != nil {
@@ -200,11 +200,11 @@ func TestOpenAIDecisionsMatchesPi(t *testing.T) {
 			_ = json.Unmarshal(encoded, &gotUsage)
 		}
 		if !reflect.DeepEqual(gotUsage, want[i].Usage) {
-			problems = append(problems, fmt.Sprintf("usage\n   PiG %v\n   Pi  %v", gotUsage, want[i].Usage))
+			problems = append(problems, fmt.Sprintf("usage\n   Ompig %v\n   Pi  %v", gotUsage, want[i].Usage))
 		}
 		if len(seen) != 0 || len(want[i].Requests) != 0 {
 			if !reflect.DeepEqual(seen, want[i].Requests) {
-				problems = append(problems, fmt.Sprintf("requests\n   PiG %.500s\n   Pi  %.500s", decisionsOracleJSON(seen), decisionsOracleJSON(want[i].Requests)))
+				problems = append(problems, fmt.Sprintf("requests\n   Ompig %.500s\n   Pi  %.500s", decisionsOracleJSON(seen), decisionsOracleJSON(want[i].Requests)))
 			}
 		}
 		if len(problems) > 0 {

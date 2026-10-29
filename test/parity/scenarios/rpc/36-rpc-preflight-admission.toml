@@ -46,11 +46,11 @@ wait_event = '{"type":"agent_settled","aborted":false}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["../../../../coding/cli/testdata/rpc-preflight.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["../../../../coding/cli/testdata/rpc-preflight.mjs"]
 pi_extensions = ["../../../../coding/cli/testdata/rpc-preflight.mjs", "../../testdata/test-faux-provider.ts"]
 # Same explicit prompt controls D2/D22 inputs without deleting captured sections. In-memory sessions leave no generated session filename to alias.
-pig_args = ["--model", "test-faux/faux-1", "--no-session", "--system-prompt", "RPC admission.", "--no-context-files", "--no-skills"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session", "--system-prompt", "RPC admission.", "--no-context-files", "--no-skills"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session", "--system-prompt", "RPC admission.", "--no-context-files", "--no-skills"]
 
 [assert]

@@ -1,12 +1,12 @@
 # Settings by example
 
-[Settings](/docs/latest/settings) is the reference: every key, its type and its default. This page shows the keys at work. Each recipe gives the JSON to put in `~/.pig/agent/settings.json`, how to check the effect and what you should see. Edit the file with any editor, or use `/settings` for the keys it lists. PiG reads `settings.json` at startup. `/reload` re-reads it in a running session (Pi `core/agent-session.ts:3698`).
+[Settings](/docs/latest/settings) is the reference: every key, its type and its default. This page shows the keys at work. Each recipe gives the JSON to put in `~/.ompig/agent/settings.json`, how to check the effect and what you should see. Edit the file with any editor, or use `/settings` for the keys it lists. Ompig reads `settings.json` at startup. `/reload` re-reads it in a running session (Pi `core/agent-session.ts:3698`).
 
-The outputs below come from PiG run against a scripted test model, with each key set in turn. A recipe says "checked" when the output was observed. Keys without a recipe are in [the table at the end](#every-other-key). That table gives an example value and the Pi source line, and it was not run on this page.
+The outputs below come from Ompig run against a scripted test model, with each key set in turn. A recipe says "checked" when the output was observed. Keys without a recipe are in [the table at the end](#every-other-key). That table gives an example value and the Pi source line, and it was not run on this page.
 
-Settings are merged from two files, and a key in the project file wins: `~/.pig/agent/settings.json` (yours) and `<project>/.pig/settings.json` (the project's, read only after you trust the project). Some keys are read from the global file only and are ignored in a project file: `defaultProjectTrust`, `httpProxy`, `cacheWarming`, `extensionsAutoUpgrade`, `extensionsTypescriptRuntime` and `deviceId`.
+Settings are merged from two files, and a key in the project file wins: `~/.ompig/agent/settings.json` (yours) and `<project>/.ompig/settings.json` (the project's, read only after you trust the project). Some keys are read from the global file only and are ignored in a project file: `defaultProjectTrust`, `httpProxy`, `cacheWarming`, `extensionsAutoUpgrade`, `extensionsTypescriptRuntime` and `deviceId`.
 
-If the file is not valid JSON, PiG warns at startup (`Invalid settings file …`) and uses defaults for what it cannot read. A value of the wrong JSON type, such as `"skills": 5`, is ignored with one warning that names it, and the other keys apply. Pi 1.4.0 exits with a `TypeError` instead (D158). After an edit, start PiG again (or `/reload`) and look at the first lines of the screen.
+If the file is not valid JSON, Ompig warns at startup (`Invalid settings file …`) and uses defaults for what it cannot read. A value of the wrong JSON type, such as `"skills": 5`, is ignored with one warning that names it, and the other keys apply. Pi 1.4.0 exits with a `TypeError` instead (D158). After an edit, start Ompig again (or `/reload`) and look at the first lines of the screen.
 
 ## Choose the model, and how hard it thinks
 
@@ -21,7 +21,7 @@ If the file is not valid JSON, PiG warns at startup (`Invalid settings file …`
 
 `defaultProvider` and `defaultModel` choose the model for a new session. `defaultModel` is the model ID **without** the provider prefix. A value such as `mock/mock-think` is not accepted here. `defaultThinkingLevel` applies to a new session, and `modelThinkingLevels` overrides it for one model, keyed by `provider/modelId`.
 
-**Check:** start PiG with no `--model`. The footer names the model. For a model that can think, it shows the level: `mock-think • low` (Pi: `components/footer.ts:236-238`). Checked: the provider request for `pig -p hi` named the model `mock-think` and carried `reasoning_effort: "low"`. Without `modelThinkingLevels` it carried `"high"`. A model that cannot think carries no effort at all, and `/thinking high` on it says `Error: Unknown thinking level "high". Available levels: off.`
+**Check:** start Ompig with no `--model`. The footer names the model. For a model that can think, it shows the level: `mock-think • low` (Pi: `components/footer.ts:236-238`). Checked: the provider request for `ompig -p hi` named the model `mock-think` and carried `reasoning_effort: "low"`. Without `modelThinkingLevels` it carried `"high"`. A model that cannot think carries no effort at all, and `/thinking high` on it says `Error: Unknown thinking level "high". Available levels: off.`
 
 `--model` and `--thinking` on the command line win over these keys.
 
@@ -41,7 +41,7 @@ If the file is not valid JSON, PiG warns at startup (`Invalid settings file …`
 
 Plain names replace the default set (`read`, `bash`, `edit`, `write`).
 
-**Check:** ask `List the names of your tools and nothing else.` PiG's answer follows what the model was given. Checked in the provider request: the tool list was `read`, `grep`. These variants were also checked:
+**Check:** ask `List the names of your tools and nothing else.` Ompig's answer follows what the model was given. Checked in the provider request: the tool list was `read`, `grep`. These variants were also checked:
 
 | `defaultTools` | Tools the model received |
 |---|---|
@@ -52,7 +52,7 @@ Plain names replace the default set (`read`, `bash`, `edit`, `write`).
 
 `+name` adds a tool, `-name` removes one, and a list of only `+` and `-` entries adjusts the inherited set. `--tools`, `--no-tools` and `--no-builtin-tools` on the command line override the setting for one run (Pi `cli/args.ts:151`).
 
-A project file that sets `defaultTools` can give a repository's own agent fewer tools than yours, or more. Read a project's `.pig/settings.json` before you trust the project.
+A project file that sets `defaultTools` can give a repository's own agent fewer tools than yours, or more. Read a project's `.ompig/settings.json` before you trust the project.
 
 ## Retry a failing provider
 
@@ -60,19 +60,19 @@ A project file that sets `defaultTools` can give a repository's own agent fewer 
 { "retry": { "enabled": true, "maxRetries": 3, "baseDelayMs": 200 } }
 ```
 
-PiG retries a request that fails with a transient provider or transport error, such as an overloaded service (a 503) or a dropped connection. It waits `baseDelayMs`, then twice that, and so on, up to `maxAgentDelayMs`. Context-length errors are not retried (they go to compaction) (Pi `ai/src/utils/retry.ts:253`, `core/agent-session.ts:3734-3737`).
+Ompig retries a request that fails with a transient provider or transport error, such as an overloaded service (a 503) or a dropped connection. It waits `baseDelayMs`, then twice that, and so on, up to `maxAgentDelayMs`. Context-length errors are not retried (they go to compaction) (Pi `ai/src/utils/retry.ts:253`, `core/agent-session.ts:3734-3737`).
 
 **Check (print mode, a provider that answers `503` twice and then succeeds):**
 
 ```bash
-pig --no-session --model mock/mock-1 -p "hi"
+ompig --no-session --model mock/mock-1 -p "hi"
 ```
 
 ```text
 ok after retries
 ```
 
-The provider saw three requests and the command took about 0.65 seconds: 200 ms and 400 ms of waiting. In the interactive screen, PiG shows a line above the editor while it waits, for example `── ⠋ Retrying (3/3) in 8s... (escape to cancel) ──`. `Esc` cancels the wait.
+The provider saw three requests and the command took about 0.65 seconds: 200 ms and 400 ms of waiting. In the interactive screen, Ompig shows a line above the editor while it waits, for example `── ⠋ Retrying (3/3) in 8s... (escape to cancel) ──`. `Esc` cancels the wait.
 
 With `"retry": { "enabled": false }` the same run makes one request, prints the error, and exits 1:
 
@@ -89,9 +89,9 @@ With `"retry": { "enabled": false }` the same run makes one request, prints the 
 }
 ```
 
-`shellCommandPrefix` runs before every command of the `bash` tool and every `!` and `!!` command. `httpProxy` sets `HTTP_PROXY` and `HTTPS_PROXY` for PiG and everything it starts, when those variables are not already set. PiG reads `httpProxy` from the global file only.
+`shellCommandPrefix` runs before every command of the `bash` tool and every `!` and `!!` command. `httpProxy` sets `HTTP_PROXY` and `HTTPS_PROXY` for Ompig and everything it starts, when those variables are not already set. Ompig reads `httpProxy` from the global file only.
 
-**Check:** in PiG, type `!echo "$GREETING $HTTPS_PROXY"` and press `Enter`. Checked:
+**Check:** in Ompig, type `!echo "$GREETING $HTTPS_PROXY"` and press `Enter`. Checked:
 
 ```text
  $ echo "$GREETING $HTTPS_PROXY $HTTP_PROXY"
@@ -103,10 +103,10 @@ A `!!` command runs the same way, but its output is not sent to the model. See [
 ## Keep sessions somewhere else
 
 ```json
-{ "sessionDir": "/home/you/pig-sessions" }
+{ "sessionDir": "/home/you/ompig-sessions" }
 ```
 
-**Check:** run PiG, send one message and list the folder. Checked: the folder held `2026-10-11T16-29-41-621Z_01a12bcc-7375-7762-9768-9114771457de.jsonl`, one file for the session, and `/session` printed that path. The default is `~/.pig/agent/sessions/--<project path>--/`.
+**Check:** run Ompig, send one message and list the folder. Checked: the folder held `2026-10-11T16-29-41-621Z_01a12bcc-7375-7762-9768-9114771457de.jsonl`, one file for the session, and `/session` printed that path. The default is `~/.ompig/agent/sessions/--<project path>--/`.
 
 ## Stop the prompt-cache refresher
 
@@ -128,7 +128,7 @@ The default shows `Mode: streaming`. The key is global-only.
 
 ## Trust a project
 
-A repository can carry its own `.pig/settings.json`. PiG ignores it until you trust the project. Take this project file as the example:
+A repository can carry its own `.ompig/settings.json`. Ompig ignores it until you trust the project. Take this project file as the example:
 
 ```json
 { "quietStartup": true, "shellCommandPrefix": "echo PROJECT-PREFIX-RAN" }
@@ -139,7 +139,7 @@ With `defaultProjectTrust` unset (it is `ask`), the first start in that folder a
 ```text
  Trust project folder?
  /home/you/project
- This allows pig to load .pig settings and resources, install missing project packages, and execute
+ This allows ompig to load .ompig settings and resources, install missing project packages, and execute
  project extensions.
  → Trust
    Trust parent folder (/home/you)
@@ -149,11 +149,11 @@ With `defaultProjectTrust` unset (it is `ask`), the first start in that folder a
  ↑↓ navigate  enter select  escape/ctrl+c cancel
 ```
 
-Checked: after `Trust (this session only)`, `!echo hi` printed `PROJECT-PREFIX-RAN` first and the startup header was hidden. After `Do not trust (this session only)`, `!echo hi` printed only `hi`, and PiG said:
+Checked: after `Trust (this session only)`, `!echo hi` printed `PROJECT-PREFIX-RAN` first and the startup header was hidden. After `Do not trust (this session only)`, `!echo hi` printed only `hi`, and Ompig said:
 
 ```text
- This project is not trusted. Project .pig resources and packages are ignored. Use /trust to save a
- trust decision, then restart pig.
+ This project is not trusted. Project .ompig resources and packages are ignored. Use /trust to save a
+ trust decision, then restart ompig.
 ```
 
 The three values of `defaultProjectTrust` (global file only):
@@ -172,7 +172,7 @@ The three values of `defaultProjectTrust` (global file only):
 { "quietStartup": "header", "editorPaddingX": 2, "outputPad": 0 }
 ```
 
-- `quietStartup: true` hides the header and the list of loaded resources. Checked: the first screen shows only the editor and footer. `"header"` keeps the header and hides the resource list. Checked: the `PiG. v…` line and key hints stay, and the hint reads `Press ctrl+o to show full startup help.` (without "and loaded resources"). `--verbose` overrides both.
+- `quietStartup: true` hides the header and the list of loaded resources. Checked: the first screen shows only the editor and footer. `"header"` keeps the header and hides the resource list. Checked: the `Ompig. v…` line and key hints stay, and the hint reads `Press ctrl+o to show full startup help.` (without "and loaded resources"). `--verbose` overrides both.
 - `editorPaddingX` indents the text you type. Checked: with `2`, typed text starts two cells in from the left. `0` is the default.
 - `outputPad: 0` removes the one-cell left margin around messages, tool output, `!` command output, summary blocks, and extension messages (`1` is the default). Changing it in `/settings` redraws the transcript in place.
 
@@ -195,7 +195,7 @@ Pressing `Esc` twice on an empty editor opens `/tree` (the default `doubleEscape
   (3/3)
 ```
 
-Pick an earlier entry and press `Enter`. By default PiG asks `Summarize branch?`. With `skipPrompt: true` it does not ask. It writes no summary and says `Navigated to selected point`. Checked, and the chosen message came back in the editor. Other values of `doubleEscapeAction` are `fork` and `none` (Pi `settings-schema.ts:332`).
+Pick an earlier entry and press `Enter`. By default Ompig asks `Summarize branch?`. With `skipPrompt: true` it does not ask. It writes no summary and says `Navigated to selected point`. Checked, and the chosen message came back in the editor. Other values of `doubleEscapeAction` are `fork` and `none` (Pi `settings-schema.ts:332`).
 
 ## Compact sooner
 
@@ -203,7 +203,7 @@ Pick an earlier entry and press `Enter`. By default PiG asks `Summarize branch?`
 { "compaction": { "enabled": true, "keepRecentTokens": 200 } }
 ```
 
-PiG keeps the most recent `keepRecentTokens` tokens in full and summarises the rest. The default keeps 20,000 tokens, so a short conversation has nothing to summarise and `/compact` says `Error: Compaction failed: Nothing to compact (session too small)`. With `200`, a short conversation compacts. Checked, after three long prompts and `/compact`:
+Ompig keeps the most recent `keepRecentTokens` tokens in full and summarises the rest. The default keeps 20,000 tokens, so a short conversation has nothing to summarise and `/compact` says `Error: Compaction failed: Nothing to compact (session too small)`. With `200`, a short conversation compacts. Checked, after three long prompts and `/compact`:
 
 ```text
  [compaction]
@@ -218,7 +218,7 @@ PiG keeps the most recent `keepRecentTokens` tokens in full and summarises the r
 { "maskSecretInput": true }
 ```
 
-PiG-only (D80). When you enter an API key in `/login`, PiG shows dots, a character count and the last four characters. Checked: the prompt says `Input hidden (PiG default). Show like Pi: /settings → Mask secret input` and `(0 characters)`. With `false`, PiG types plain text, as Pi does.
+Ompig-only (D80). When you enter an API key in `/login`, Ompig shows dots, a character count and the last four characters. Checked: the prompt says `Input hidden (Ompig default). Show like Pi: /settings → Mask secret input` and `(0 characters)`. With `false`, Ompig types plain text, as Pi does.
 
 ## Every other key
 
@@ -250,7 +250,7 @@ Each row gives a value to try, what it does and the line in Pi 1.4.0's `packages
 | `terminal.showTerminalProgress` | `true` | A progress bar appears in the terminal tab while the agent works. | `:93` |
 | `terminal.hyperlinks`, `terminal.images`, `terminal.trueColor` | `false`, `"kitty"`, `true` | Overrides detection of links, inline images and 24-bit colour. A setting beats `PI_HYPERLINKS`, `PI_IMAGE_PROTOCOL`, `PI_TRUE_COLOR`. | `:99-103` |
 | `images.autoResize` | `false` | Large images go to the model at full size. | `:107` |
-| `images.blockImages` | `true` | The model receives `Image reading is disabled.` in place of each image (Pi `sdk.ts:312`). Checked for this page: `pig -p "what is this" @a.png` sent the text and no image. | `:113` |
+| `images.blockImages` | `true` | The model receives `Image reading is disabled.` in place of each image (Pi `sdk.ts:312`). Checked for this page: `ompig -p "what is this" @a.png` sent the text and no image. | `:113` |
 | `enableSkillCommands` | `false` | Skills no longer appear as `/skill:<name>`. | `:313` |
 | `packages`, `extensions`, `skills`, `prompts`, `themes` | `["./my-skills"]` | Adds those paths to discovery. See [Packages](/docs/latest/packages), [Skills](/docs/latest/skills). | `:295-312` |
 | `shellPath` | `"/bin/zsh"` | The `bash` tool starts that shell. | `:248` |
@@ -262,6 +262,6 @@ Each row gives a value to try, what it does and the line in Pi 1.4.0's `packages
 | `showCacheMissNotices` | `true` | A notice appears for each prompt-cache miss and refresh. | `:239` |
 | `enableInstallTelemetry` | `false` | No install or update ping is sent (D64). `PI_TELEMETRY=0` does the same. | `:280` |
 | `enableAnalytics`, `trackingId` | written by the first-time setup | `false` after you choose `Don't share` (see [Your first ten minutes](/docs/latest/first-run)). | `:286,292` |
-| `extensionsAutoUpgrade`, `extensionsTypescriptRuntime` | `true`, `"bun"` | PiG-only (D109, D19). See [TypeScript extension runtimes](/docs/latest/typescript-runtimes). | none |
+| `extensionsAutoUpgrade`, `extensionsTypescriptRuntime` | `true`, `"bun"` | Ompig-only (D109, D19). See [TypeScript extension runtimes](/docs/latest/typescript-runtimes). | none |
 
-For `lastChangelogVersion` and `deviceId`, PiG writes the value; do not edit them.
+For `lastChangelogVersion` and `deviceId`, Ompig writes the value; do not edit them.

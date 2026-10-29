@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 // The picker's member walk folds every line into the summary exactly as decoding the whole line does: the same error, count, name, last

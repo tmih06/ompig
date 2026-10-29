@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// Pi awaits command.getArgumentCompletions on the trimStart()ed command text (autocomplete.ts:338-392, #10218), so a Promise-returning argument completer also answers after leading whitespace. PiG runs that awaited form through SuggestionTask; the task must split the trimmed text the same way the synchronous path does.
+// Pi awaits command.getArgumentCompletions on the trimStart()ed command text (autocomplete.ts:338-392, #10218), so a Promise-returning argument completer also answers after leading whitespace. Ompig runs that awaited form through SuggestionTask; the task must split the trimmed text the same way the synchronous path does.
 func TestCombinedProviderSuggestionTaskAwaitsArgumentsAfterLeadingWhitespace(t *testing.T) {
 	var prefixes []string
 	provider := NewCombinedProvider([]SlashCommand{{

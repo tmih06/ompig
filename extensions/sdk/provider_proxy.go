@@ -54,7 +54,7 @@ func providerFromDeclaration(c Context, decl providerObjectDeclaration) (*Provid
 	return provider, nil
 }
 
-// pig divergence (D78): builtin/composed Provider object methods still need a native SDK carrier.
+// ompig divergence (D78): builtin/composed Provider object methods still need a native SDK carrier.
 func (r ModelRegistry) GetProvider(id string) (*Provider, error) {
 	if r.runtime != nil {
 		return r.runtime.GetProvider(id)

@@ -3,7 +3,7 @@ package session_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // transaction.ts:264-265 scanTasks reads through to storage.scanTasks(query, limit, cursor): the query filters, the limit and cursor page the

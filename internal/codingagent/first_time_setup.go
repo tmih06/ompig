@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/components/first-time-setup.ts
@@ -51,7 +51,7 @@ var firstTimeSetupAnalyticsOptions = []struct {
 }
 
 // FirstTimeSetupComponent is the first-time setup dialog: theme, sprite and analytics opt-in.
-// pig divergence (D88): the dialog's logo is the pig head of the sprite in view, not Pi's SETUP_LOGO_LINES, and a sprite step
+// ompig divergence (D88): the dialog's logo is the ompig head of the sprite in view, not Pi's SETUP_LOGO_LINES, and a sprite step
 // follows the theme step; its options are the built-in sprites, then the extension-registered ones (piglogin.All).
 type FirstTimeSetupComponent struct {
 	*tui.Container
@@ -68,7 +68,7 @@ type FirstTimeSetupComponent struct {
 const firstTimeSetupSpriteRows = 8
 
 // NewFirstTimeSetupComponent builds the dialog over the sprites offered at construction, starting on the active sprite.
-// pig additive (D92): pig-login owns /sprite, so with it stripped there are no sprites to offer and no sprite step.
+// ompig additive (D92): ompig-login owns /sprite, so with it stripped there are no sprites to offer and no sprite step.
 func NewFirstTimeSetupComponent(options FirstTimeSetupOptions) *FirstTimeSetupComponent {
 	c := &FirstTimeSetupComponent{Container: tui.NewContainer(), step: firstTimeSetupStepTheme, options: options}
 	if !pigstrip.Has(pigstrip.ListExtensions, piglogin.Name) {
@@ -93,7 +93,7 @@ func (c *FirstTimeSetupComponent) Invalidate() {
 // Done reports whether the dialog was submitted or skipped.
 func (c *FirstTimeSetupComponent) Done() bool { return c.done }
 
-// logoSprite is the highlighted sprite, which stays the dialog's pig after the sprite step. "Create your own..." shows the
+// logoSprite is the highlighted sprite, which stays the dialog's ompig after the sprite step. "Create your own..." shows the
 // active sprite, which it keeps.
 func (c *FirstTimeSetupComponent) logoSprite() piglogin.Variant {
 	if c.spriteIndex < len(c.sprites) {
@@ -110,8 +110,8 @@ func (c *FirstTimeSetupComponent) update() {
 	c.Add(tui.NewSpacer(1))
 	c.Add(tui.NewPaddedText(strings.Join(piglogin.HeadLines(c.logoSprite(), t.GetColorMode()), "\n"), 1, 0, nil))
 	c.Add(tui.NewSpacer(1))
-	// pig divergence (D88): the welcome names PiG where Pi's names APP_NAME.
-	c.Add(tui.NewPaddedText(t.Fg("accent", "\x1b[1mWelcome to PiG, the minimal coding agent.\x1b[22m"), 1, 0, nil))
+	// ompig divergence (D88): the welcome names Ompig where Pi's names APP_NAME.
+	c.Add(tui.NewPaddedText(t.Fg("accent", "\x1b[1mWelcome to Ompig, the minimal coding agent.\x1b[22m"), 1, 0, nil))
 	c.Add(tui.NewSpacer(1))
 
 	switch c.step {
@@ -125,7 +125,7 @@ func (c *FirstTimeSetupComponent) update() {
 		c.addOptionList(labels, c.themeIndex)
 	case firstTimeSetupStepSprite:
 		c.Add(tui.NewPaddedText(t.Fg("text", "Pick a sprite."), 1, 0, nil))
-		c.Add(tui.NewPaddedText(t.Fg("muted", "The pig your header shows. Change it anytime with /sprite."), 1, 0, nil))
+		c.Add(tui.NewPaddedText(t.Fg("muted", "The ompig your header shows. Change it anytime with /sprite."), 1, 0, nil))
 		c.Add(tui.NewSpacer(1))
 		labels := make([]string, len(c.sprites)+1)
 		for i, sprite := range c.sprites {
@@ -140,7 +140,7 @@ func (c *FirstTimeSetupComponent) update() {
 		}
 	default:
 		c.Add(tui.NewPaddedText(t.Fg("text", "Opt-in to anonymous usage data sharing?"), 1, 0, nil))
-		c.Add(tui.NewPaddedText(t.Fg("muted", "Opting in stores a tracking identifier in settings.json and enables anonymous\nusage analytics. This helps us to better debug, reproduce, and resolve issues\nand bugs within PiG. You can observe what is shared using /privacy and make\nchanges anytime in settings.json."), 1, 0, nil))
+		c.Add(tui.NewPaddedText(t.Fg("muted", "Opting in stores a tracking identifier in settings.json and enables anonymous\nusage analytics. This helps us to better debug, reproduce, and resolve issues\nand bugs within Ompig. You can observe what is shared using /privacy and make\nchanges anytime in settings.json."), 1, 0, nil))
 		c.Add(tui.NewSpacer(1))
 		labels := make([]string, len(firstTimeSetupAnalyticsOptions))
 		for i, option := range firstTimeSetupAnalyticsOptions {
@@ -267,7 +267,7 @@ type FirstTimeSetupSettings interface {
 // showFirstTimeSetup does (cli/startup-ui.ts:182-218, main.ts:672-676), and persists a submitted result: the theme and
 // analytics opt-in in settings, and the sprite exactly as /sprite set saves it. It returns the submitted result, or nil
 // when setup was skipped. A settings write failure is recorded by the settings manager, not returned, as Pi's queued writes are.
-// pig divergence (D88): the sprite step offers the built-in sprites; extensions are not loaded yet, so their sprites are
+// ompig divergence (D88): the sprite step offers the built-in sprites; extensions are not loaded yet, so their sprites are
 // chosen later with /sprite.
 func ShowFirstTimeSetup(settings FirstTimeSetupSettings, opts StartupUIOptions) (*FirstTimeSetupResult, error) {
 	ui := tui.New()

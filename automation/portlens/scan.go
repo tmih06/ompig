@@ -20,7 +20,7 @@ type Site struct {
 
 // treeScan is the result of one walk over the repository's source files.
 type treeScan struct {
-	// Markers maps "D12" to the lines that carry a `pig divergence (D<N>)` or `pig additive (D<N>)` marker.
+	// Markers maps "D12" to the lines that carry a `ompig divergence (D<N>)` or `ompig additive (D<N>)` marker.
 	Markers map[string][]Site
 	// Tests maps a Go test, fuzz or benchmark function name to its declarations.
 	Tests map[string][]Site
@@ -29,7 +29,7 @@ type treeScan struct {
 }
 
 var (
-	markerRe   = regexp.MustCompile(`pig (?:divergence|additive)\s*\(([^)]*)\)`)
+	markerRe   = regexp.MustCompile(`ompig (?:divergence|additive)\s*\(([^)]*)\)`)
 	testDeclRe = regexp.MustCompile(`^func ((?:Test|Fuzz|Benchmark|Example)\w*)\(`)
 	skipDirs   = map[string]bool{".git": true, "node_modules": true, ".upstream": true, "third_party": true, "vendor": true, "build": true, "tmp": true, "bin": true, "dist": true, "target": true, "__pycache__": true}
 )
@@ -64,7 +64,7 @@ func scanTree(root string) (*treeScan, error) {
 		if err != nil {
 			return nil
 		}
-		hasMarker := bytes.Contains(b, []byte("pig divergence")) || bytes.Contains(b, []byte("pig additive"))
+		hasMarker := bytes.Contains(b, []byte("ompig divergence")) || bytes.Contains(b, []byte("ompig additive"))
 		isTest := strings.HasSuffix(p, "_test.go")
 		if !hasMarker && !isTest {
 			return nil

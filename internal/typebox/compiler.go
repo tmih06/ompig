@@ -1,4 +1,4 @@
-// Package typebox ports the parts of TypeBox 1.3.27 Value that PiG needs over JSON Schema data: Check, Errors, Clean,
+// Package typebox ports the parts of TypeBox 1.3.27 Value that Ompig needs over JSON Schema data: Check, Errors, Clean,
 // Default and Clone, with the format registry and the keyword spellings TypeBox accepts.
 package typebox
 

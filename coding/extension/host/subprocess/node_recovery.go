@@ -110,7 +110,7 @@ func (p *packedProcessState) culprit() string {
 }
 
 // recoverNodeProcess restarts factories, never interrupted invocations. Unknown failure gets one whole-group retry, then progressively smaller diagnostic groups. Identifying the culprit rejoins all healthy members on one bus.
-// pig additive (D20): process recovery preserves cooperating Node extensions instead of isolating every member.
+// ompig additive (D20): process recovery preserves cooperating Node extensions instead of isolating every member.
 func (h *Host) recoverNodeProcess(failed *packedProcessState, reason string) {
 	h.transitionMu.Lock()
 	defer h.transitionMu.Unlock()

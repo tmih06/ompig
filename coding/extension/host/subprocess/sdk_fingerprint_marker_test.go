@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The collector reads the SDK fingerprint marker of a published entry and expires the entry when the marker names an SDK no staged
@@ -21,17 +21,17 @@ func TestBuilderRecordsTheSDKFingerprintByReplacingTheMarker(t *testing.T) {
 	if err := os.MkdirAll(sdkDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkDir, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(sdkDir, "sdk.go"), []byte("package sdk\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	srcDir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module extension\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module extension\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/tmih06/ompig/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	cacheDir := t.TempDir()

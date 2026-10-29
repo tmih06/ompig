@@ -9,7 +9,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // orderRecorder is an ImageProcessor that logs when each image, named by its first byte, starts and ends, and holds each one

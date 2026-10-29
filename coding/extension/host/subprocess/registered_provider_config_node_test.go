@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestNodeRegisteredProviderConfigMatchesPi runs one scenario against Pi 0.87.1's ModelRegistry and the Node runtime's same-process ModelRegistry and compares every observation: root identity, author aliases, getter evaluation, reader writes, validation before merge, rejected re-registration and unregister.
@@ -32,8 +32,8 @@ func TestNodeRegisteredProviderConfigMatchesPi(t *testing.T) {
 		return strings.TrimSpace(string(out))
 	}
 	pi := run(filepath.Join(dir, "pi.mjs"), filepath.Join(root, "extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent"), scenario)
-	pig := run(filepath.Join(dir, "pig.mjs"), runtimePath, scenario)
-	if pig != pi {
-		t.Fatalf("PiG observations differ from Pi\nPi:  %s\nPiG: %s", pi, pig)
+	ompig := run(filepath.Join(dir, "ompig.mjs"), runtimePath, scenario)
+	if ompig != pi {
+		t.Fatalf("Ompig observations differ from Pi\nPi:  %s\nOmpig: %s", pi, ompig)
 	}
 }

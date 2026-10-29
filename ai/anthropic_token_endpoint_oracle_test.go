@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // anthropicTokenEndpointProbes cover the loopback exemption and the https rule: schemes in any case, loopback spellings (localhost in mixed case or with a trailing dot, 127.0.0.1 and its numeric and short forms, [::1] and its
@@ -71,7 +71,7 @@ func TestAnthropicTokenEndpointRuleMatchesSDK(t *testing.T) {
 				if err != nil {
 					have = err.Error()
 				}
-				t.Errorf("%q\n  Pig %s\n  SDK %s", probe, have, want)
+				t.Errorf("%q\n  Ompig %s\n  SDK %s", probe, have, want)
 			}
 		}
 	}

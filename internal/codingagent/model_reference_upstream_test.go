@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/test/model-resolver.test.ts (d7f7e0dfe) referenceModel, referenceCatalog, referenceCases.

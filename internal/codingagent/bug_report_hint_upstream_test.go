@@ -4,15 +4,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 func TestBugReportHintsUpstream(t *testing.T) {
 	// .upstream/v0.87.1/packages/coding-agent/test/interactive-mode-bug-report-hint.test.ts:19
 	t.Run("identifies extensions with frames in a crash stack", func(t *testing.T) {
-		// D2: command examples use the PiG binary name.
-		want := "A stack frame came from loaded extension `npm:pi-observational-memory`, which may be involved. Try disabling it with `pig config`, or run `pig -ne` to confirm."
+		// D2: command examples use the Ompig binary name.
+		want := "A stack frame came from loaded extension `npm:pi-observational-memory`, which may be involved. Try disabling it with `ompig config`, or run `ompig -ne` to confirm."
 		if got := FormatCrashExtensionHint([]string{"npm:pi-observational-memory"}); got != want {
 			t.Fatalf("hint = %q, want %q", got, want)
 		}

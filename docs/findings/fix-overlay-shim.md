@@ -10,9 +10,9 @@ Reference: Pi 1.3.0, `.upstream/v1.2.0/`.
 - `packages/tui/src/tui.ts:729-742` (`showOverlay`) pushes an entry whose `preFocus` is the current focus and focuses the overlay unless it is non-capturing. `hideOverlay` (`tui.ts:829-841`) pops the entry and focuses the topmost visible overlay or the popped entry's `preFocus`. `setFocusInternal` (`tui.ts:602-665`) resumes a focused overlay whose restore an editor-slot component or dialog blocked once that component is unmounted.
 - The TUI hands each key to its focused component only (`handleInput`), so of overlapping components only the one on top reads keys, and the one below gets the next key after the top one closes.
 
-PiG before the fix: the subprocess UI bridge queued a second `ui.custom` call behind the first (`interactiveFocus`), and every mounted `RunRemoteOverlay` component held a lease on the one shared modal input channel, so two shown together competed for the same keys.
+Ompig before the fix: the subprocess UI bridge queued a second `ui.custom` call behind the first (`interactiveFocus`), and every mounted `RunRemoteOverlay` component held a lease on the one shared modal input channel, so two shown together competed for the same keys.
 
-PiG now:
+Ompig now:
 
 - `coding/extension/host/subprocess/ui_bridge.go` `handleCustom` opens every `ui.custom` call at once; only an already-cancelled call returns `cancelled` without mounting.
 - `internal/codingagent/custom_overlay_control.go`: `customOverlay` is a `tui.Focusable`. The TUI calls `SetFocused` on the owner loop whenever focus moves to or from the component, and the component holds its modal input lease exactly while it has focus. A host-process component, dialog, or overlay shown over it takes the keys through TUI focus, and the lease returns when focus does. `retireInput` refuses a lease after the `RunRemoteOverlay` call returned. This replaces the `remoteCustoms` list and `syncRemoteCustomInput`.
@@ -25,7 +25,7 @@ Regression tests (red before, green after):
 - `internal/codingagent/ext_ui_custom_stack_test.go`: `TestRemoteCustomOverlaysStackAndHandFocusBack` (replaces the probe `overlay-stack-input.go.txt`), `TestRemoteCustomOverlayStacksOverRemoteEditorSlotComponent`, `TestHostCustomOverlayStacksOverRemoteOverlay`; `TestRemoteCustomOverlayStacksOverHostOverlay` and `TestHostCustomOverlaysStackAndHandFocusBack` pin the paths that were already right.
 - Focus publication: the same three host tests assert the `OnFocus(false)` and `OnFocus(true)` the component below receives; `test/extension-conformance/overlay_handle_test.go#TestCustomOverlayFocusChangesReachSDKs` (Node, Node packed, Go, Rust, Python, fused Go) asserts that each SDK renders `focused=false` and then `focused=true` from the handle.
 
-Out-of-order close follows Pi 1.3.0: `close()` for an overlay hides it through its own handle (`overlayHandle?.hide()`, interactive-mode.ts:2999, Pi #10999), so closing the lower of two overlays removes the lower one and leaves the upper one with the focus and the keys. Until Pi 1.3.0 it called `this.ui.hideOverlay()`, which popped the topmost overlay whichever component closed. PiG's host-process and subprocess custom overlays hide their own handle (`TestHostCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay`, `TestRemoteCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay`); a factory's `tui.hideOverlay()` still pops the topmost overlay (`HideTopOverlay`).
+Out-of-order close follows Pi 1.3.0: `close()` for an overlay hides it through its own handle (`overlayHandle?.hide()`, interactive-mode.ts:2999, Pi #10999), so closing the lower of two overlays removes the lower one and leaves the upper one with the focus and the keys. Until Pi 1.3.0 it called `this.ui.hideOverlay()`, which popped the topmost overlay whichever component closed. Ompig's host-process and subprocess custom overlays hide their own handle (`TestHostCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay`, `TestRemoteCustomOverlayCloseOutOfOrderRemovesItsOwnOverlay`); a factory's `tui.hideOverlay()` still pops the topmost overlay (`HideTopOverlay`).
 
 ## Factory TUI `showOverlay`
 
@@ -33,7 +33,7 @@ Reference: Pi 1.3.0 `interactive-mode.ts:3008` hands `showExtensionCustom`'s fac
 
 Before: the Node factory TUI had no `showOverlay`, so the three commands threw `this.tui.showOverlay is not a function` during construction.
 
-PiG now:
+Ompig now:
 
 - Node runtime (`runtime.mjs` `showChildOverlay`, `hideTopOverlay`, `setTuiFocus`; `overlay-handle.mjs`): the factory's `tui` has `showOverlay`, `hideOverlay` and `setFocus`. `showOverlay` asks the host synchronously (`ui.custom.showOverlay {key, overlayOptions}`), so the handle works at once, inside the factory, before the `ui.custom` call is sent. The panel's frames, input, focus notifications and handle controls reuse `ui.custom.render`, `ui.custom.input`, `ui.custom.focus` and `ui.custom.control` under its own key. Every answer that can move focus carries `focusedKey`, and the runtime clears the focused flag of the extension's other components, as Pi's `setFocus` does; a capturing `ui.custom` component does the same locally when it is shown. `tui.requestRender()` renders every component the extension shows, and a `ui.custom.focus` notification redraws them all.
 - Host (`overlay_control.go`, `extension.RemoteTUI`, `ExtUIContext.ShowRemoteOverlay`/`HideTopOverlay`/`SetRemoteFocus`): a raw overlay goes on the TUI stack with no pending `ui.custom` call, gets its own input loop, and holds the modal input lease while it has focus (`SetFocused`). Its handle's `hide` removes exactly its entry (Pi's `OverlayHandle.hide`) and ends it; nothing waits on it. `tui.hideOverlay` pops the topmost overlay, and a `ui.custom` close still pops the topmost overlay. When the extension's connection ends (reload, shutdown, exit), the bridge closes each raw overlay, which removes its own entry.
@@ -47,7 +47,7 @@ Probe, from the repository root with the Pi 1.3.0 Node dependencies present:
 node test/parity/probes/overlay-shim.mjs
 ```
 
-It runs the unmodified example's `/overlay-focus`, `/overlay-passive`, `/overlay-streaming` and `/overlay-stack` with the same keys on Pi (`showExtensionCustom` on Pi's `TuiMainScreen`) and on the production Node runtime, whose host calls a second Pi `TuiMainScreen` answers. After every step both must show the same overlays in order, rendering the same text and cursor markers, with the same one focused, and each PiG frame must match its component. Output, exit status 0:
+It runs the unmodified example's `/overlay-focus`, `/overlay-passive`, `/overlay-streaming` and `/overlay-stack` with the same keys on Pi (`showExtensionCustom` on Pi's `TuiMainScreen`) and on the production Node runtime, whose host calls a second Pi `TuiMainScreen` answers. After every step both must show the same overlays in order, rendering the same text and cursor markers, with the same one focused, and each Ompig frame must match its component. Output, exit status 0:
 
 ```text
 overlay-focus: 12 states equal, up to 4 overlays shown

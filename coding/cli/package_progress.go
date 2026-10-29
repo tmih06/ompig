@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // Ports packages/coding-agent/src/core/package-manager.ts (ProgressEvent, ProgressCallback, withProgress).

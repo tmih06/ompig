@@ -9,10 +9,10 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["bash", "./test/parity/testdata/skill-metadata-pig.sh"]
-pig_go_tests = ["./coding/cli"]
+ompig_args = ["bash", "./test/parity/testdata/skill-metadata-ompig.sh"]
+ompig_go_tests = ["./coding/cli"]
 pi_args = ["node", "./test/parity/testdata/skill-metadata-pi.mjs"]
 
 [cli]

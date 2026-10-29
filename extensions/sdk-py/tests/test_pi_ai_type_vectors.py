@@ -10,7 +10,7 @@ import re
 
 import pytest
 
-from pig_sdk import BigInt, Type
+from ompig_sdk import BigInt, Type
 from type_vectors_support import all_cases, check_case, needs_host, non_engine_cases
 
 
@@ -50,7 +50,7 @@ def test_engine_wire_round_trip(case):
     """The wire text TypeBox's own value has (the "wire" of the case) read through the SDK's decoder makes Pi's schema (the JSON text and the hidden members), and the SDK's encoder
     writes something that reads back as the same schema. The decoder and encoder are what every engine member goes through; the host's side is checked against the same vectors
     in internal/typebox/engine."""
-    from pig_sdk.type_engine import _decode, _encode, _schema
+    from ompig_sdk.type_engine import _decode, _encode, _schema
 
     want = case["result"]
     value = _schema(_decode(json.loads(case["result"]["wire"]), []))
@@ -70,7 +70,7 @@ def test_engine_wire_round_trip(case):
 
 def test_a_schema_holds_a_bigint_and_only_writing_it_as_json_fails():
     """Pi's value holds a bigint (`Type.Literal(1n)`, a `Type.Script("1n")` result); `JSON.stringify` of it throws "Do not know how to serialize a BigInt"."""
-    import pig_sdk
+    import ompig_sdk
 
     literal = Type.literal(BigInt(10**30))
     assert Type.is_literal(literal) and literal["type"] == "bigint" and literal["const"] == BigInt(10**30)
@@ -81,10 +81,10 @@ def test_a_schema_holds_a_bigint_and_only_writing_it_as_json_fails():
     with pytest.raises(TypeError, match="^Do not know how to serialize a BigInt$"):
         nested.to_json()
     with pytest.raises(TypeError, match="^Do not know how to serialize a BigInt$"):
-        pig_sdk.type_to_json(nested)
+        ompig_sdk.type_to_json(nested)
     with pytest.raises(TypeError):
         json.dumps(nested)
-    ext = pig_sdk.Extension("bigint-probe")
+    ext = ompig_sdk.Extension("bigint-probe")
     with pytest.raises(TypeError, match="^Do not know how to serialize a BigInt$"):
         ext.tool("t", "d", nested, lambda ctx, args: "ok")
     with pytest.raises(TypeError):
@@ -96,7 +96,7 @@ def test_a_schema_holds_a_bigint_and_only_writing_it_as_json_fails():
 
 
 def test_a_bigint_crosses_the_wire_as_pi_writes_it():
-    from pig_sdk.type_engine import _decode, _encode
+    from ompig_sdk.type_engine import _decode, _encode
 
     wire = {"\x00": "n", "v": "-12345678901234567890"}
     assert _decode(wire, []) == BigInt(-12345678901234567890)

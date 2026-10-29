@@ -15,11 +15,11 @@ import (
 //go:embed profiles/*.json
 var builtinProfiles embed.FS
 
-// Target roles. Each tracker line compares one pig target with the reference target and nets both of the floor
-// target's p50 when the profile has one; a profile with several pig targets writes one line per pig target and
+// Target roles. Each tracker line compares one ompig target with the reference target and nets both of the floor
+// target's p50 when the profile has one; a profile with several ompig targets writes one line per ompig target and
 // size. Calibration runs the reference target alone.
 const (
-	rolePig       = "pig"
+	rolePig       = "ompig"
 	roleReference = "reference"
 	roleFloor     = "floor"
 )
@@ -44,7 +44,7 @@ type profile struct {
 }
 
 // metric is a workload-specific sample field. The analysis reports its CV over the reference's samples, and the
-// tracker carries the median of the pig and reference samples as <name> and pi<Name> with a verdict, when every
+// tracker carries the median of the ompig and reference samples as <name> and pi<Name> with a verdict, when every
 // sample of both has it. A gated metric is part of the noise gate and must be in every reference sample.
 type metric struct {
 	Name  string `json:"name"`
@@ -58,7 +58,7 @@ var (
 )
 
 // reservedMetrics are the sample fields the pod or the analysis already gives a meaning and the tracker values. The pod
-// writes the image commit as a pig target's version.
+// writes the image commit as a ompig target's version.
 var reservedMetrics = []string{"t", "target", "version", "turns", "sample", "open", "turn", "fingerprint", "openCpu", "turnCpu",
 	"warm", "warmP95", "warmMax", "cold", "coldP95", "coldMax", "cpu", "cpuWarm", "cpuCold", "cpuSeconds", "peakRss",
 	"peakRssMB", "retained", "retainedMB", "growthPerTurn", "bytes", "seedS", "floorWarm", "floorCold", "gomaxprocs", "cpuModel", "cpuFeatures"}
@@ -86,7 +86,7 @@ type target struct {
 	SeedMeta string   `json:"seedMeta"`
 	// Sample runs one fresh process that prints one durable-bench result line (open, turn[]) on stdout.
 	Sample []string `json:"sample"`
-	// Rule is a pig target's tracker rule. It defaults to the profile's rule when the profile has one pig target and
+	// Rule is a ompig target's tracker rule. It defaults to the profile's rule when the profile has one ompig target and
 	// to "<profile rule>-<target name>" when it has several, so their rolling histories never mix.
 	Rule string `json:"rule,omitempty"`
 }
@@ -113,7 +113,7 @@ func (p *profile) validate() error {
 		switch t.Role {
 		case rolePig, roleReference, roleFloor:
 		default:
-			return fmt.Errorf("profile %s: target %s: role %q is not pig, reference or floor", p.Name, t.Name, t.Role)
+			return fmt.Errorf("profile %s: target %s: role %q is not ompig, reference or floor", p.Name, t.Name, t.Role)
 		}
 		roles[t.Role]++
 		if len(t.Sample) == 0 {
@@ -127,19 +127,19 @@ func (p *profile) validate() error {
 		}
 	}
 	if roles[rolePig] < 1 || roles[roleReference] != 1 || roles[roleFloor] > 1 {
-		return fmt.Errorf("profile %s: needs at least one pig target, exactly one reference target and at most one floor", p.Name)
+		return fmt.Errorf("profile %s: needs at least one ompig target, exactly one reference target and at most one floor", p.Name)
 	}
 	rules := map[string]string{}
 	for _, t := range p.Targets {
 		if t.Rule != "" && t.Role != rolePig {
-			return fmt.Errorf("profile %s: target %s: only a pig target has its own rule", p.Name, t.Name)
+			return fmt.Errorf("profile %s: target %s: only a ompig target has its own rule", p.Name, t.Name)
 		}
 		if t.Role != rolePig {
 			continue
 		}
 		r := p.ruleOf(t)
 		if other, ok := rules[r]; ok {
-			return fmt.Errorf("profile %s: pig targets %s and %s share the rule %s; their tracker histories would mix", p.Name, other, t.Name, r)
+			return fmt.Errorf("profile %s: ompig targets %s and %s share the rule %s; their tracker histories would mix", p.Name, other, t.Name, r)
 		}
 		rules[r] = t.Name
 	}
@@ -168,7 +168,7 @@ func (p *profile) validate() error {
 	return nil
 }
 
-// pigs are the profile's pig targets in profile order.
+// pigs are the profile's ompig targets in profile order.
 func (p *profile) pigs() []target {
 	var out []target
 	for _, t := range p.Targets {
@@ -179,7 +179,7 @@ func (p *profile) pigs() []target {
 	return out
 }
 
-// ruleOf is the tracker rule of a pig target's lines.
+// ruleOf is the tracker rule of a ompig target's lines.
 func (p *profile) ruleOf(t target) string {
 	switch {
 	case t.Rule != "":

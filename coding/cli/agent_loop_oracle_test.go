@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // pi: packages/agent/src/agent-loop.ts agentLoop
@@ -298,7 +298,7 @@ func TestAgentLoopMatchesPi(t *testing.T) {
 					first++
 				}
 				from := max(first-150, 0)
-				t.Errorf("probe %d: %s\n PiG …%s\n Pi  …%s", i, loopOracleJSON(p), got[from:min(first+350, len(got))], expected[from:min(first+350, len(expected))])
+				t.Errorf("probe %d: %s\n Ompig …%s\n Pi  …%s", i, loopOracleJSON(p), got[from:min(first+350, len(got))], expected[from:min(first+350, len(expected))])
 			}
 		}
 	}
@@ -319,7 +319,7 @@ func loopStrip(value any) any {
 			case "timestamp", "usage", "api", "provider", "model", "durationMs", "thinkingLevel", "responseId", "partial", "willRetry":
 				continue
 			}
-			// A hook that answers terminate: false makes Pi keep the member in the result; PiG's bool cannot tell false from unset.
+			// A hook that answers terminate: false makes Pi keep the member in the result; Ompig's bool cannot tell false from unset.
 			if child == nil || key == "terminate" && child == false {
 				continue
 			}
@@ -413,7 +413,7 @@ func loopAssistantText(text string) agent.AgentMessage {
 
 // loopGroupToolEvents keeps each run of tool_execution_* events' starts in their order and sorts the other events by tool call id, keeping each call's
 // own events in order. A parallel batch emits every start in source order (agent-loop.ts executeToolCallsParallel) and then reports its calls as they
-// progress: Pi's calls interleave on one thread (a microtask per await), PiG's on goroutines, so after the starts only the order within one call is
+// progress: Pi's calls interleave on one thread (a microtask per await), Ompig's on goroutines, so after the starts only the order within one call is
 // comparable. The caller compares a sequential batch as it is.
 func loopGroupToolEvents(value any) any {
 	events, ok := value.([]any)

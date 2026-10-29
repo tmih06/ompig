@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // read.ts:160-199 keeps offset and limit as JavaScript numbers: slice truncates them when selecting lines, but the

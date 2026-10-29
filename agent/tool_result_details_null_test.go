@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's toolResult message is `details: finalized.result.details` (agent-loop.ts:922-934), so a tool that returns

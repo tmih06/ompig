@@ -7,7 +7,7 @@
 #   pi --offline --no-extensions --no-session --model openai/gpt-4o --mode json -p hello   (no OpenAI credentials)
 #
 # writes only the session header to stdout, writes "No API key found for openai." with the login guidance to stderr,
-# and exits 1. PiG sent the prompt straight to Session.SendContent, so JSON mode ran the whole turn (agent_start,
+# and exits 1. Ompig sent the prompt straight to Session.SendContent, so JSON mode ran the whole turn (agent_start,
 # the user message, an assistant error "provider is not configured: openai") and exited 0, and text mode printed
 # "provider is not configured: openai".
 #
@@ -28,7 +28,7 @@ args = ["--offline", "--no-extensions", "--no-context-files", "--no-skills", "--
 timeout_seconds = 20
 
 [env]
-pig = ["PIG_HOME=../rpc/testdata/pig-home"]
+ompig = ["OMPIG_HOME=../rpc/testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=../rpc/testdata/pi-home/agent", "PI_SKIP_VERSION_CHECK=1"]
 
 [assert]

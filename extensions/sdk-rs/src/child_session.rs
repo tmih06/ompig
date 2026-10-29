@@ -229,7 +229,7 @@ impl SessionShared {
                 root
             }
             Err(message) => {
-                eprintln!("pig: child session {}: {message}", self.id);
+                eprintln!("ompig: child session {}: {message}", self.id);
                 Value::Null
             }
         }
@@ -504,7 +504,7 @@ impl AgentSession {
         }
         self.shared.stop();
         if let Err(error) = self.call("childSession.dispose", json!({})) {
-            eprintln!("pig: dispose of child session {} failed: {error}", self.shared.id);
+            eprintln!("ompig: dispose of child session {} failed: {error}", self.shared.id);
         }
     }
 }

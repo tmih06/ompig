@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 type treeTestNode struct {
@@ -24,7 +24,7 @@ func newTestTree() *tui.TreeSelectorComponent {
 
 // TestModalSelectorDropsKittyKeyRelease pins the contract that chunks produced
 // by StdinBuffer for a focused modal component carry key presses only. The
-// Kitty keyboard protocol (pig pushes \x1b[>7u, whose flag 2 reports
+// Kitty keyboard protocol (ompig pushes \x1b[>7u, whose flag 2 reports
 // press/repeat/release) sends a release for every press, so a modal that
 // dispatches raw chunks moves its cursor twice per keystroke.
 //

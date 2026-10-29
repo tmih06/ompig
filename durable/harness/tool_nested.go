@@ -8,12 +8,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Ports the nested-call half of packages/durable/src/harness/tool.ts (executeTool, startNestedCall, settle's nested

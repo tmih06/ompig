@@ -5,7 +5,7 @@
 # The runner still owns correctness and per-driver grouping; this script chooses
 # a safe default for the current machine instead of hard-coding one contention
 # profile in the Makefile. Environment overrides:
-#   PIG_PARITY_PROFILE=low|medium|high|auto
+#   OMPIG_PARITY_PROFILE=low|medium|high|auto
 #   PARITY_PARALLEL / PARITY_GROUP_LIMITS still override Makefile defaults.
 set -euo pipefail
 
@@ -52,7 +52,7 @@ except Exception:
 PY
 }
 
-profile=${PIG_PARITY_PROFILE:-auto}
+profile=${OMPIG_PARITY_PROFILE:-auto}
 cpus=$(cpu_count | head -1)
 mem_mb=$(free_mem_mb | head -1)
 load=$(load_ceil | head -1)
@@ -77,9 +77,9 @@ fi
 
 case "$profile" in
   high)
-    # One scenario lane normally starts Pig and Pi concurrently; extension
+    # One scenario lane normally starts Ompig and Pi concurrently; extension
     # lanes can add another host process. Size lanes by pairs, not scenarios,
-    # so Node/Pig startup bursts cannot starve a 10s extension handshake.
+    # so Node/Ompig startup bursts cannot starve a 10s extension handshake.
     echo "4 process=4,process-ext=1,tmux=4,tmux-ext=1,ht=2,rpc=3"
     ;;
   medium)
@@ -89,7 +89,7 @@ case "$profile" in
     echo "2 process=2,process-ext=1,tmux=2,tmux-ext=1,ht=1,rpc=1"
     ;;
   *)
-    echo "unknown PIG_PARITY_PROFILE=$profile (want auto|low|medium|high)" >&2
+    echo "unknown OMPIG_PARITY_PROFILE=$profile (want auto|low|medium|high)" >&2
     exit 2
     ;;
 esac

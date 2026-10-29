@@ -9,7 +9,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsjson"
 )
 
 // modelsCatalogRecord is the data-only Model<Api> stored by provider publication; bound backend objects never enter the catalog file.

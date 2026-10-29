@@ -20,7 +20,7 @@ import (
 )
 
 // resizePollInterval is how often the Windows resize watcher samples the
-// console size. Windows has no SIGWINCH, so pig polls (the spike on the
+// console size. Windows has no SIGWINCH, so ompig polls (the spike on the
 // joe-jump host confirmed GetConsoleScreenBufferInfo tracks live resizes over
 // ConPTY). ~120ms is imperceptible for re-render yet cheap.
 const resizePollInterval = 120 * time.Millisecond
@@ -369,7 +369,7 @@ func (t *ProcessTerminal) CacheSizeUntilResize() (invalidate, stop func()) {
 
 // startResizeWatcher polls the console size and invokes onResize on change,
 // kicking once on startup. Returns a stop func; the goroutine also exits when
-// ctx is cancelled. This is pig's platform mechanism for the same observable
+// ctx is cancelled. This is ompig's platform mechanism for the same observable
 // "resize -> re-render" behavior upstream gets from Node's stdout "resize"
 // event (no user-visible divergence).
 func (t *ProcessTerminal) startResizeWatcher(ctx context.Context, onResize func()) func() {
@@ -395,15 +395,15 @@ func (t *ProcessTerminal) startResizeWatcher(ctx context.Context, onResize func(
 	return func() {} // goroutine stops on ctx cancellation
 }
 
-// enableVTProcessing configures the output console for pig's ANSI renderer and
+// enableVTProcessing configures the output console for ompig's ANSI renderer and
 // returns a restore func. No-op when stdout is not a console.
 //
-// Two flags matter, together giving the same exact cursor control pig assumes
+// Two flags matter, together giving the same exact cursor control ompig assumes
 // on unix:
-//   - ENABLE_VIRTUAL_TERMINAL_PROCESSING: interpret pig's ANSI escapes.
+//   - ENABLE_VIRTUAL_TERMINAL_PROCESSING: interpret ompig's ANSI escapes.
 //   - DISABLE_NEWLINE_AUTO_RETURN: stop conhost from auto-scrolling / returning
 //     the cursor on a write to the last column/row. Without it, bottom-row
-//     writes desync pig's cursor-precise incremental renderer (symptom: typed
+//     writes desync ompig's cursor-precise incremental renderer (symptom: typed
 //     input not painting until a full-clear repaint forced by a resize).
 func (t *ProcessTerminal) enableVTProcessing() func() {
 	if t.stdout == nil {

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // notifyRecorder records the notifications the host receives, in order.
@@ -33,7 +33,7 @@ func (r *notifyRecorder) notices() []string {
 	return slices.Clone(r.got)
 }
 
-// pig additive (D189): Pi runs a setImmediate or setTimeout callback an extension queued only when the agent's run awaits real work or is over, so its ui.notify reaches the UI behind everything the run's microtasks write. A Node runtime marks the host calls of such a callback that fires after its request's handler returned, and the host holds them while a chain runs (jsloop.Turns).
+// ompig additive (D189): Pi runs a setImmediate or setTimeout callback an extension queued only when the agent's run awaits real work or is over, so its ui.notify reaches the UI behind everything the run's microtasks write. A Node runtime marks the host calls of such a callback that fires after its request's handler returned, and the host holds them while a chain runs (jsloop.Turns).
 // Probed against Pi 1.3.0: a tool's synchronous, queueMicrotask and promise notifications precede tool_execution_end; setImmediate and setTimeout(0) notifications follow agent_settled (test/parity scenario 63).
 func TestNodeTimerCallbackCallsWaitForTheLoopTurn(t *testing.T) {
 	nodeCellRequireNode(t)
@@ -93,7 +93,7 @@ func TestNodeTimerCallbackCallsWaitForTheLoopTurn(t *testing.T) {
 	}
 }
 
-// pig additive (D189): Pi runs the callbacks a tool queued right after that tool's tool_execution_end, while a sibling tool awaits real work and the loop turns. The Node runtime is another process, so a callback's call can reach the host before or after the event; the call names the tool call whose handler queued the callback (CallPayload.OriginToolCallID), and the host runs it behind that call's end whichever came first. A timer queued 100 ms ahead reaches the host long after the end; held for the next end of any tool, it would reach the UI behind the sibling's result.
+// ompig additive (D189): Pi runs the callbacks a tool queued right after that tool's tool_execution_end, while a sibling tool awaits real work and the loop turns. The Node runtime is another process, so a callback's call can reach the host before or after the event; the call names the tool call whose handler queued the callback (CallPayload.OriginToolCallID), and the host runs it behind that call's end whichever came first. A timer queued 100 ms ahead reaches the host long after the end; held for the next end of any tool, it would reach the UI behind the sibling's result.
 func TestNodeTickCallsOfAToolRunAfterItsEndWhenTheyArriveLate(t *testing.T) {
 	nodeCellRequireNode(t)
 	shortSockDir(t)

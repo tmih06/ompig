@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // interactiveInprocBuild is an interactive mode over a real Session whose runner carries one compiled-in Go extension, the way a fused or built-in factory reaches the mode. pi is the extension's registering API.
@@ -26,7 +26,7 @@ type interactiveInprocBuild struct {
 
 func newInteractiveInprocBuild(t *testing.T) *interactiveInprocBuild {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: cwd, AgentDir: t.TempDir()})
 	if err != nil {

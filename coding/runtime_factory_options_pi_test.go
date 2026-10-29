@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestRuntimeReplacementFactoryReceivesPisOptions ports the object Pi passes to createRuntime on every replacement

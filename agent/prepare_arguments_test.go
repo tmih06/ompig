@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // preparerTool is an AgentTool with Pi's prepareArguments hook (packages/agent/src/types.ts:473).

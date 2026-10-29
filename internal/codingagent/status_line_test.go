@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Footer must render the bare model id stored in ai.Model.ID (e.g.
@@ -41,14 +41,14 @@ func TestRenderFooterBareModelID(t *testing.T) {
 
 func TestExperimentalFeaturesEnabled(t *testing.T) {
 	cases := []struct {
-		pi, pig string
-		want    bool
+		pi, ompig string
+		want      bool
 	}{
 		{"1", "", true},     // PI_EXPERIMENTAL strict "1", mirrors upstream
 		{"true", "", false}, // PI_ is strict === "1"; "true" does not enable
 		{"0", "", false},
-		{"", "1", true},    // PIG_ alias
-		{"", "true", true}, // PIG_ alias accepts truthy spellings
+		{"", "1", true},    // OMPIG_ alias
+		{"", "true", true}, // OMPIG_ alias accepts truthy spellings
 		{"", "yes", true},
 		{"", " TRUE ", true}, // trimmed + case-insensitive
 		{"", "0", false},
@@ -56,9 +56,9 @@ func TestExperimentalFeaturesEnabled(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Setenv("PI_EXPERIMENTAL", c.pi)
-		t.Setenv("PIG_EXPERIMENTAL", c.pig)
+		t.Setenv("OMPIG_EXPERIMENTAL", c.ompig)
 		if got := experimentalFeaturesEnabled(); got != c.want {
-			t.Errorf("PI_EXPERIMENTAL=%q PIG_EXPERIMENTAL=%q → %v, want %v", c.pi, c.pig, got, c.want)
+			t.Errorf("PI_EXPERIMENTAL=%q OMPIG_EXPERIMENTAL=%q → %v, want %v", c.pi, c.ompig, got, c.want)
 		}
 	}
 }
@@ -248,7 +248,7 @@ func TestRenderFooterTwoLines(t *testing.T) {
 
 // Upstream footer.ts:141-145 gates the cost segment on `totalCost || usingSubscription`.
 // A priced model with no accrued cost and no subscription shows NO cost segment, not
-// "$0.000". pig previously gated on "model has a price" and always printed the computed
+// "$0.000". ompig previously gated on "model has a price" and always printed the computed
 // cost, so an idle priced model (e.g. github-copilot gpt-4.1 at session start) rendered
 // "$0.000" while real pi renders nothing. Pre-existing divergence surfaced by parity
 // footer/03 during the 0.79.10 sync (guard identical in v0.79.4/v0.79.10/v0.80.2).
@@ -555,7 +555,7 @@ func TestStatusLineModelSwitchUsesCurrentContextWindow(t *testing.T) {
 }
 
 // Resolving the footer branch leaves no handle open on the repository or its
-// .git directory, so the directory can still be renamed and removed while pig
+// .git directory, so the directory can still be renamed and removed while ompig
 // runs. Windows refuses both while any handle inside is open.
 func TestStatusLineHoldsNoHandleOnTheRepository(t *testing.T) {
 	repo := filepath.Join(t.TempDir(), "repo")

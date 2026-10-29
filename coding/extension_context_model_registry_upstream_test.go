@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // .upstream/v1.1.0/packages/coding-agent/test/suite/regressions/8964-extension-provider-streaming.test.ts:7 (both rows): an extension command streams a response from a provider that pi.registerProvider registered, through ctx.modelRegistry.find and ctx.modelRegistry.stream or streamSimple. The provider receives the registered API key, and the command reads the deltas and the final message. The registry the command reaches is the Session's registry, typed as Pi's ModelRegistry.

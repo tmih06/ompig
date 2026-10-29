@@ -13,7 +13,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 type modelFetchRequest struct {
@@ -97,7 +97,7 @@ func (body *modelFetchBody) Read(buffer []byte) (int, error) {
 	if body.done {
 		return 0, io.EOF
 	}
-	// pig additive (D19): bounded pull frames carry the unchanged response byte stream over the extension socket.
+	// ompig additive (D19): bounded pull frames carry the unchanged response byte stream over the extension socket.
 	size := min(len(buffer), 64*1024)
 	encoded, err := body.invoke(body.ctx, "fetchRead", modelFetchRead{ID: body.id, Size: size})
 	if err != nil {

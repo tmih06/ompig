@@ -13,7 +13,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
 func writeConcurrentBuildSource(t *testing.T, name string) string {

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 const (
@@ -62,7 +62,7 @@ func (r *loginHeaderRenderer) Render(width int) []string {
 	return append([]string(nil), r.cachedLines...)
 }
 
-// RenderLoginHeader renders a validated definition with Pig's fixed native
+// RenderLoginHeader renders a validated definition with Ompig's fixed native
 // login template. It is local and deterministic; callers choose terminal color
 // and glyph capabilities before rendering.
 func RenderLoginHeader(definition extension.ValidatedLoginDefinition, width int, options LoginHeaderOptions) []string {

@@ -3,7 +3,7 @@ package ai
 import (
 	"context"
 	"encoding/json"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 	"net/http"
 	"os"
 	"reflect"

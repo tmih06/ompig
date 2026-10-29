@@ -17,10 +17,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/tui/widthx"
 
 	"golang.org/x/term"
 )
@@ -249,7 +249,7 @@ func (t *ProcessTerminal) startProgramStatusLocked() string {
 	return ""
 }
 
-// pig additive (D91): while a frontend session may draw the run, the session
+// ompig additive (D91): while a frontend session may draw the run, the session
 // is the terminal that shows the program status, through the Terminal of the
 // renderer that draws on it (TuiSurface). The process terminal then sends no
 // OSC 7501 query and no report to stdout.
@@ -340,7 +340,7 @@ func (t *ProcessTerminal) stopProgramStatus() {
 
 // EnterRawMode puts stdin into raw mode and returns a restore function.
 //
-// This preserves pig's main-buffer rendering model from `tui.go`: no alternate
+// This preserves ompig's main-buffer rendering model from `tui.go`: no alternate
 // screen, no hidden terminal reader, and callers continue to own the input loop.
 func EnterRawMode() (restore func(), err error) {
 	return processTerminal.EnterRawMode()
@@ -377,7 +377,7 @@ func (t *ProcessTerminal) enterRawMode(drainOnRestore bool) (restore func(), err
 	}
 	rememberSignalRestore(fd, state)
 	t.exitRestored.Store(false)
-	// On Windows, enable VT output processing so pig's ANSI renderer displays;
+	// On Windows, enable VT output processing so ompig's ANSI renderer displays;
 	// term.MakeRaw only configures raw input. No-op on unix.
 	vtRestore := t.enableVTProcessing()
 	t.writeUnlogged("\x1b[?2004h")
@@ -481,7 +481,7 @@ func (t *ProcessTerminal) disableModifyOtherKeys() {
 }
 
 // disableKeyboardProtocol returns the keyboard to the mode the terminal had
-// before pig requested extended keys, and does it exactly once however many
+// before ompig requested extended keys, and does it exactly once however many
 // callers ask.
 //
 // Ownership sits here rather than at the call sites because the order matters
@@ -712,7 +712,7 @@ func minDuration(a, b time.Duration) time.Duration {
 
 // Write emits data to the terminal output.
 func (t *ProcessTerminal) Write(data string) {
-	// process.stdout.write and appendFileSync(..., "utf8") send a lone surrogate, which PiG strings carry as WTF-8, as U+FFFD.
+	// process.stdout.write and appendFileSync(..., "utf8") send a lone surrogate, which Ompig strings carry as WTF-8, as U+FFFD.
 	data = jsstring.StreamText(data)
 	t.outMu.Lock()
 	defer t.outMu.Unlock()
@@ -913,7 +913,7 @@ func SetTerminalProgress(active bool) {
 	processTerminal.SetProgress(active)
 }
 
-// BuildTerminalTitle formats the pig terminal title from a session name
+// BuildTerminalTitle formats the ompig terminal title from a session name
 // (may be empty) and a cwd path. Matches upstream
 // interactive-mode.ts pattern using APP_TITLE semantics.
 func BuildTerminalTitle(sessionName, cwd string) string {
@@ -929,7 +929,7 @@ func BuildTerminalTitle(sessionName, cwd string) string {
 
 func codingAgentAppTitle() string {
 	// Keep terminal package decoupled from internal/codingagent to avoid an import cycle.
-	return "pig"
+	return "ompig"
 }
 
 // OutputTerminalHungUp reports whether the terminal the process writes to has been hung up, as when the master side of

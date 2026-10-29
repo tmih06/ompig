@@ -16,8 +16,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type recordingSession struct {
@@ -288,7 +288,7 @@ func TestTuiSurfaceParallelToolsUpdateTheirOwnNodes(t *testing.T) {
 	chat.Add(bashCard)
 	surface, session := startedSurface(t, NewContainer(chat), nil)
 
-	// The header is PiG's styled card header without its terminal styling.
+	// The header is Ompig's styled card header without its terminal styling.
 	want := []frontend.Node{
 		frontend.ToolCard{Name: "read", Arguments: map[string]any{"path": "notes.txt"}, Header: "read notes.txt", Status: frontend.ToolPending},
 		frontend.ToolCard{Name: "bash", Arguments: map[string]any{"command": "echo ok"}, Header: "$ echo ok", Status: frontend.ToolPending},
@@ -461,7 +461,7 @@ func TestTuiSurfaceUpdatesLinesRewrittenInPlace(t *testing.T) {
 }
 
 // The frontend lays main out narrower than the terminal (Tern's chat column),
-// so PiG renders main's lines at the session's width and repaints when an
+// so Ompig renders main's lines at the session's width and repaints when an
 // input sequence changes it. Wider than the terminal is capped.
 func TestTuiSurfaceRendersRegionsAtSessionWidths(t *testing.T) {
 	text := strings.Repeat("word ", 20)
@@ -1090,7 +1090,7 @@ func TestTuiSurfaceReportsTheFooterAsTheLastDockNode(t *testing.T) {
 	extFooter := NewText("")
 	footerLines := NewText("footer lines")
 	surface, session := startedSurface(t, nil, NewContainer(NewContainer(editor), extFooter, footerLines))
-	footer := &frontend.Footer{Cwd: "~/pig", Model: "faux-1", ThinkingLevel: "off", AutoCompact: true, ContextUsage: frontend.ContextUsage{ContextWindow: 128000}}
+	footer := &frontend.Footer{Cwd: "~/ompig", Model: "faux-1", ThinkingLevel: "off", AutoCompact: true, ContextUsage: frontend.ContextUsage{ContextWindow: 128000}}
 	surface.SetHooks(SurfaceHooks{
 		Editor: func() *Editor { return editor },
 		Footer: func(c Component) (frontend.Footer, bool) {

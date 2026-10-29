@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi packages/coding-agent/src/core/agent-session.ts:1673-1691 validates the

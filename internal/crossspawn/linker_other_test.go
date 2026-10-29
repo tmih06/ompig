@@ -8,7 +8,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // On Android an app cannot execve a file in its data directory, so Command must

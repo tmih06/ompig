@@ -37,7 +37,7 @@ impl Latch {
 }
 
 /// The names of the threads that parked behind an earlier request's place, so a wire test can wait for a request's thread to take its place instead of
-/// sleeping. Request threads are named `pig-request-<id>`, and a test uses ids no other test uses.
+/// sleeping. Request threads are named `ompig-request-<id>`, and a test uses ids no other test uses.
 #[cfg(test)]
 pub(crate) mod parked {
     use std::collections::HashSet;

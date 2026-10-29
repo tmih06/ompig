@@ -19,7 +19,7 @@ import (
 // the session running (#165, TestInteractiveKeepsRunningWhenInputEndsOnALiveTerminal).
 func TestHungUpTerminalEOFExits129(t *testing.T) {
 	if os.Getenv(deadTerminalChildEnv) == "hung-up-eof" {
-		m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: "/work", AgentDir: os.Getenv("PIG_DEAD_TERMINAL_AGENT_DIR"), AppVersion: "9.9.9"})
+		m := NewInteractiveMode(nil, InteractiveModeOptions{CWD: "/work", AgentDir: os.Getenv("OMPIG_DEAD_TERMINAL_AGENT_DIR"), AppVersion: "9.9.9"})
 		m.exitIfDeadTerminal(io.EOF)
 		fmt.Fprintln(os.Stderr, "survived")
 		os.Exit(0)
@@ -27,7 +27,7 @@ func TestHungUpTerminalEOFExits129(t *testing.T) {
 	run := func(t *testing.T, stdin, stdout *os.File) (int, string) {
 		t.Helper()
 		cmd := exec.Command(os.Args[0], "-test.run=^TestHungUpTerminalEOFExits129$")
-		cmd.Env = append(os.Environ(), deadTerminalChildEnv+"=hung-up-eof", "PIG_DEAD_TERMINAL_AGENT_DIR="+t.TempDir(), "PIG_HOME="+t.TempDir())
+		cmd.Env = append(os.Environ(), deadTerminalChildEnv+"=hung-up-eof", "OMPIG_DEAD_TERMINAL_AGENT_DIR="+t.TempDir(), "OMPIG_HOME="+t.TempDir())
 		cmd.Stdin, cmd.Stdout = stdin, stdout
 		var stderr strings.Builder
 		cmd.Stderr = &stderr

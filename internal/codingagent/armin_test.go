@@ -16,9 +16,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func arminTestRandom(effect int) func() float64 {
@@ -41,7 +41,7 @@ func plainArminLines(lines []string) []string {
 	return result
 }
 
-// arminXBM encodes the pig head as armin.ts stores its image: XBM rows of ceil(width/8) bytes, least significant bit
+// arminXBM encodes the ompig head as armin.ts stores its image: XBM rows of ceil(width/8) bytes, least significant bit
 // first, 1 for background and 0 for foreground. The pinned source reads these bits in place of Armin's.
 func arminXBM() []int {
 	bytesPerRow := (arminWidth + 7) / 8
@@ -210,7 +210,7 @@ func BenchmarkArminFrameRender(b *testing.B) {
 	}
 }
 
-// TestArminSaysHiDrawsThePigHead pins PiG's art (D87): once settled, /arminsayshi shows the pig head and "pigsayhi", never
+// TestArminSaysHiDrawsThePigHead pins Ompig's art (D87): once settled, /arminsayshi shows the ompig head and "pigsayhi", never
 // Armin's image or label.
 func TestArminSaysHiDrawsThePigHead(t *testing.T) {
 	want := []string{

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // emptyContext is Pi's EmptyContext: a root with no values and no cancellation, printed as its name.

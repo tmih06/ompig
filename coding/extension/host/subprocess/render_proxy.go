@@ -8,15 +8,15 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // renderProxyComponent keeps subprocess-rendered lines in a host-side cache.
-// pig divergence (D56): renderer inactivity cancels one generation off-loop,
+// ompig divergence (D56): renderer inactivity cancels one generation off-loop,
 // and renderRetry asks the extension again once it can answer.
 // Render never performs IPC or JSON work; it returns the current generation and
 // starts at most one owned background request loop when width/options change.
@@ -108,7 +108,7 @@ func (c *renderProxyComponent) Render(width int) []string {
 			start = true
 		}
 	}
-	// pig divergence (D56): the first frame after an abandoned render's retry came due asks the extension again.
+	// ompig divergence (D56): the first frame after an abandoned render's retry came due asks the extension again.
 	if c.retry.takeDue() && !start && !c.requesting && c.width > 0 && c.conn != nil {
 		c.requesting = true
 		start = true
@@ -303,7 +303,7 @@ func (c *renderProxyComponent) FrontendView(width int) *frontend.View {
 
 // renderRetryMaxBackoff caps the wait between the requests a render proxy
 // sends an extension whose renders the inactivity boundary keeps abandoning.
-// pig divergence (D56): Pi renders synchronously and never retries; the cap bounds how seldom an abandoned render asks again.
+// ompig divergence (D56): Pi renders synchronously and never retries; the cap bounds how seldom an abandoned render asks again.
 const renderRetryMaxBackoff = time.Minute
 
 // renderRetry is a render proxy's plan after the renderer inactivity boundary
@@ -340,7 +340,7 @@ func (r *renderRetry) abandoned(inactivity time.Duration, settled <-chan struct{
 	r.epoch++
 	backoff := inactivity
 	for i := 1; i < r.streak && backoff < renderRetryMaxBackoff; i++ {
-		// pig divergence (D56): the backoff doubles with each consecutive abandonment.
+		// ompig divergence (D56): the backoff doubles with each consecutive abandonment.
 		backoff *= 2
 	}
 	if r.streak > 1 {

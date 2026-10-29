@@ -11,7 +11,7 @@ integrity="sha512-zu+jc1pcy4UiNThxikUr36f0Rybk9PEeCg/NE6adeWr/SKsdNO4EzZHYRDlv2Y
 esbuild="0.25.10"
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
 shims="$root/coding/extension/host/subprocess/runtime-node/shims"
-work=$(mktemp -d "${TMPDIR:-/tmp}/pig.XXXXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/ompig.XXXXXXXX")
 trap 'rm -rf "$work"' EXIT
 
 cd "$work"

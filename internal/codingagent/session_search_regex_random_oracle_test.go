@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // TestSessionSearchRegexMatchesPi: the `re:` mode of parseSearchQuery and filterAndSortSessions (session-selector-search.ts, new RegExp(pattern, "i")) over random JavaScript patterns built from literals, classes, escapes, groups, lookaround, backreferences, quantifiers, anchors and deliberate syntax errors: whether the pattern compiles, the error message, and which sessions match, against the pinned Pi.
@@ -138,7 +138,7 @@ emit(input.queries.map((q) => ({ error: mod.parseSearchQuery(q).error ?? "", pat
 		}
 		if parsed.error != want[i].Error || !slices.Equal(got, want[i].Paths) {
 			if failures++; failures <= 25 {
-				t.Errorf("%q:\n Pig error %q paths %q\n Pi  error %q paths %q", query, parsed.error, got, want[i].Error, want[i].Paths)
+				t.Errorf("%q:\n Ompig error %q paths %q\n Pi  error %q paths %q", query, parsed.error, got, want[i].Error, want[i].Paths)
 			}
 		}
 	}

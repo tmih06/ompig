@@ -112,7 +112,7 @@ func isMeta(url string) bool {
 	return false
 }
 
-// loadMeta is a variable so that lazy_meta_test.go can count the metaschema documents a process loads. PiG fork.
+// loadMeta is a variable so that lazy_meta_test.go can count the metaschema documents a process loads. Ompig fork.
 var loadMeta = func(url string) (any, error) {
 	f, err := openMeta(url)
 	if err != nil {

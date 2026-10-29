@@ -5,14 +5,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Issue #260. Pi's listModels (cli/list-models.ts) prints exactly modelRuntime.getAvailable(). An OpenRouter key's saved personalized
 // catalog (model-runtime.ts:create, withPersonalizedCatalog) replaces the bundled OpenRouter list, so a bundled model the saved list
-// does not carry is not listed. pig used to add every bundled model of an authenticated provider back after the registry's own list,
-// so `pig update --models` followed by `pig --list-models` still showed models Pi had dropped.
+// does not carry is not listed. ompig used to add every bundled model of an authenticated provider back after the registry's own list,
+// so `ompig update --models` followed by `ompig --list-models` still showed models Pi had dropped.
 func TestPrintModelList_PersonalizedOpenRouterCatalogReplacesBundledModels(t *testing.T) {
 	filterAllProviderEnv(t)
 	t.Setenv("HOME", t.TempDir())

@@ -5,9 +5,9 @@ package boundarywire
 import (
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Encodings keeps, from one boundary dispatch of a session to the next, the encodings of the messages and entry records of the session's latest preview, so a dispatch encodes only what is new to its preview. A preview's messages are the session's own objects (Cache.Shared), which nothing changes, so an object's encoding stays its encoding. Each pass keeps only what it used. A key holds the objects it names, so it names no other while kept.

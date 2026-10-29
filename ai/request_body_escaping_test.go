@@ -10,7 +10,7 @@ import (
 
 	"github.com/klauspost/compress/zstd"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's provider SDKs send JSON.stringify(body) (openai 7.19.0 internal/request-options.js:29; the Anthropic, Google GenAI and Mistral SDKs

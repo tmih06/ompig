@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // modalContextDone is nil for component-only tests that do not run an interactive session.
 func (m *InteractiveMode) modalContextDone() <-chan struct{} {
@@ -27,14 +27,14 @@ func (m *InteractiveMode) readModalInputFor(focus tui.Component, input <-chan []
 	return waitModalValue(m, input, func(buf []byte) bool { return m.consumeModalHostInputFor(focus, string(buf)) })
 }
 
-// consumeModalHostInput runs the input stages that precede a selector's own handler: a frontend session's replies and events (pig additive, D91), terminal theme replies, then, in fullscreen, the alternate screen's viewport listener and the focused transcript search. Upstream TUI runs input listeners, including the alternate screen's handleViewportInput, before the focused component (tui-alt-screen.ts handleViewportInput; tui.ts handleInput), so PageUp, PageDown, ctrl+home, ctrl+end, the wheel and ctrl+shift+f move the viewport while an editor-slot selector has focus.
+// consumeModalHostInput runs the input stages that precede a selector's own handler: a frontend session's replies and events (ompig additive, D91), terminal theme replies, then, in fullscreen, the alternate screen's viewport listener and the focused transcript search. Upstream TUI runs input listeners, including the alternate screen's handleViewportInput, before the focused component (tui-alt-screen.ts handleViewportInput; tui.ts handleInput), so PageUp, PageDown, ctrl+home, ctrl+end, the wheel and ctrl+shift+f move the viewport while an editor-slot selector has focus.
 func (m *InteractiveMode) consumeModalHostInput(data string) bool {
 	return m.consumeModalHostInputFor(nil, data)
 }
 
 // consumeModalHostInputFor is consumeModalHostInput for a selector that owns focus.
 //
-// pig divergence (D155): a focused component that captures tui.select.pageUp and tui.select.pageDown keeps those keys, so they move its
+// ompig divergence (D155): a focused component that captures tui.select.pageUp and tui.select.pageDown keeps those keys, so they move its
 // selection and do not scroll the transcript (Pi #7629; tui-alt-screen.ts handleViewportInput in Pi PR #7680).
 func (m *InteractiveMode) consumeModalHostInputFor(focus tui.Component, data string) bool {
 	if m.frontendInput(data) || m.consumeTerminalThemeInput(data) {

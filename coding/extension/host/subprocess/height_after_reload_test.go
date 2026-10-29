@@ -18,16 +18,16 @@ import (
 // for "what height did this extension receive".
 func writeHeightReportingModule(t *testing.T, modulePath, extName string) string {
 	t.Helper()
-	t.Setenv("PIG_SDK_GO_ROOT", filepath.Join(findModuleRoot(t), "extensions", "sdk"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", filepath.Join(findModuleRoot(t), "extensions", "sdk"))
 	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	src := fmt.Sprintf(`package ext
 
 import (
 	"fmt"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func Extension() *sdk.Extension {

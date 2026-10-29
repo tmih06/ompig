@@ -91,7 +91,7 @@ Status per file (all 28 rows are now `ported` in the mapping; `make test-porting
 | upstream file (packages/coding-agent/test/) | status |
 |---|---|
 | `resource-loader-theme.test.ts` | credited (2 cases; ported in 0.99.1 by the f9a lane) |
-| `resource-loader.test.ts` | credited (50 sites: 42 from the 0.87.1 review, 8 new ones in cmd/pig/extension_set_upstream_test.go) |
+| `resource-loader.test.ts` | credited (50 sites: 42 from the 0.87.1 review, 8 new ones in cmd/ompig/extension_set_upstream_test.go) |
 | `rpc-prompt-response-semantics.test.ts` | credited (7 cases) |
 | `sdk-stream-options.test.ts` | credited (10 cases) |
 | `session-file-invalid.test.ts` | credited (1 case, harness-only change) |
@@ -127,13 +127,13 @@ Not failing but not mine: `internal/codingagent/tools` `TestBashStructuredResult
 
 ## Stubs and notes for other lanes
 
-- `internal/codingagent/session_projection_calls.go`: `Session.BuildSessionProjectionCalls` stub (returns 0). The `make interface-go` output for it (`test/parity/interfaces/pig-go.json`) is in the last commit; `make known-gaps` cannot regenerate while the gate is red, so `docs/parity/KNOWN-GAPS-0.3.x.md` is left to the central run.
+- `internal/codingagent/session_projection_calls.go`: `Session.BuildSessionProjectionCalls` stub (returns 0). The `make interface-go` output for it (`test/parity/interfaces/ompig-go.json`) is in the last commit; `make known-gaps` cannot regenerate while the gate is red, so `docs/parity/KNOWN-GAPS-0.3.x.md` is left to the central run.
 - Line citations inside `coding/sdk_stream_options_upstream_test.go` for the unchanged cases use 0.87.1 numbering; the assertions match.
-- Environment: the tests ran with a temporary HOME, `PIG_HOME` and agent dir; `extensions/sdk-ts/node_modules` was installed with `npm ci --min-release-age=0` in this worktree.
+- Environment: the tests ran with a temporary HOME, `OMPIG_HOME` and agent dir; `extensions/sdk-ts/node_modules` was installed with `npm ci --min-release-age=0` in this worktree.
 
 ## Test runs
 
-All named evidence tests (64 in internal/codingagent, 52 in cmd/pig, 53 in coding, 26 in internal/codingagent/tools, 19 in tui and the rest, 229 functions over 11 packages) pass with `go test -count=1` except the one above.
+All named evidence tests (64 in internal/codingagent, 52 in cmd/ompig, 53 in coding, 26 in internal/codingagent/tools, 19 in tui and the rest, 229 functions over 11 packages) pass with `go test -count=1` except the one above.
 
 ## Phase 2 (green)
 

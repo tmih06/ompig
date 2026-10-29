@@ -3,7 +3,7 @@ import type { Storage } from "@earendil-works/pi-durable"
 import type { Store } from "@@HOST@@/store.ts"
 
 type Contract = { openStore(path: string): Promise<Store & { close(): void }> }
-const contract = () => (globalThis as { [k: symbol]: unknown })[Symbol.for("pig.contract")] as Contract
+const contract = () => (globalThis as { [k: symbol]: unknown })[Symbol.for("ompig.contract")] as Contract
 
 export async function openNodeSqliteStorage(path: string): Promise<Storage> {
   let store: Promise<Store & { close(): void }> | undefined

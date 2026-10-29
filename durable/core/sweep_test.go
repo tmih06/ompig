@@ -6,9 +6,9 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/sessiontest"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/sessiontest"
 )
 
 // A Session-mode core has no Loop: its document sweeps wait for the end of the step and for the open host transaction, and a host

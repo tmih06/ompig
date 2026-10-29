@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// hashFile digests every Piglet Binary and release asset (70 MB and more each),
+// hashFile digests every Ompiglet Binary and release asset (70 MB and more each),
 // several times per build and verify. It streams the file: the heap it allocates
 // stays bounded by a copy buffer, not by the artifact size.
 func TestHashFileStreamsTheFile(t *testing.T) {

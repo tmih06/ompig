@@ -1,4 +1,4 @@
-module github.com/MichaelKinsy/PiG
+module github.com/tmih06/ompig
 
 go 1.26.0
 
@@ -13,7 +13,7 @@ godebug winsymlink=0
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/MichaelKinsy/PiG/extensions/sdk v0.3.1-0.20261026060701-a6e86b8979d5
+	github.com/tmih06/ompig/extensions/sdk v0.3.1-0.20261026060701-a6e86b8979d5
 	github.com/Microsoft/go-winio v0.6.2
 	github.com/alecthomas/chroma/v2 v2.24.1
 	github.com/aws/aws-sdk-go-v2 v1.47.1
@@ -257,6 +257,10 @@ require (
 	mvdan.cc/gofumpt v0.9.2 // indirect
 	mvdan.cc/unparam v0.0.0-20251027182757-5beb8c8f8f15 // indirect
 )
+
+// This fork publishes no module tags, so the SDK it ships is resolved from the
+// checkout. A published release replaces these directives with real versions.
+replace github.com/tmih06/ompig/extensions/sdk => ./extensions/sdk
 
 tool (
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint

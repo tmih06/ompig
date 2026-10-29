@@ -5,7 +5,7 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // norm folds a name for comparison: lower case without separators, so ResolveHttpProxyUrl equals

@@ -1,4 +1,4 @@
-//go:build !pig_strip_codemode && !pig_strip_tool_search
+//go:build !ompig_strip_codemode && !ompig_strip_tool_search
 
 package cli
 
@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Trust-split spec test 3 (docs/specs/extension-factory-trust.md): the production built-in table, loaded through the production extension set,
@@ -47,10 +47,10 @@ func TestProductionBuiltInToolsLoadInactiveAndCanBeRemoved(t *testing.T) {
 		}
 	}
 
-	writeResourceTestFiles(t, root, map[string]string{"project/.pig/settings.json": `{"extensions":["-builtin:codemode"]}`})
+	writeResourceTestFiles(t, root, map[string]string{"project/.ompig/settings.json": `{"extensions":["-builtin:codemode"]}`})
 	removed := load()
 	requirePaths(t, removed.paths(), builtinPaths("codemode"))
-	writeResourceTestFiles(t, root, map[string]string{"project/.pig/settings.json": `{}`})
+	writeResourceTestFiles(t, root, map[string]string{"project/.ompig/settings.json": `{}`})
 
 	none := load("--no-extensions")
 	requirePaths(t, none.paths(), nil)

@@ -21,11 +21,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 const (
@@ -317,7 +317,7 @@ func LoginOpenAIChatGPT(ctx context.Context, callbacks OAuthLoginCallbacks) (OAu
 	defer callback.close()
 
 	// agent_name_hint is options?.agentName ?? AGENT_NAME_HINT (openai-chatgpt.ts:253): an empty name is kept.
-	// pig divergence (D26): PiG names itself in the default agent name hint, as it does for the Codex originator.
+	// ompig divergence (D26): Ompig names itself in the default agent name hint, as it does for the Codex originator.
 	agentNameHint := pigidentity.ChatGPTAgentName
 	if callbacks.AgentName != nil {
 		agentNameHint = *callbacks.AgentName

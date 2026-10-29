@@ -258,7 +258,7 @@ PASS
 === RUN   TestHarnessJSONLInvalidHeaderRepositoryOpen/zero-storage
 --- PASS: TestHarnessJSONLInvalidHeaderRepositoryOpen/zero-storage (0.00s)
 === RUN   TestHarnessJSONLInvalidHeaderRepositoryOpen/fractional-storage
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.030s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	0.030s
 --- PASS: TestHarnessJSONLInvalidHeaderRepositoryOpen/fractional-storage (0.00s)
 === RUN   TestHarnessJSONLInvalidHeaderRepositoryOpen/negative-created
 --- PASS: TestHarnessJSONLInvalidHeaderRepositoryOpen/negative-created (0.00s)
@@ -270,7 +270,7 @@ ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.030s
 --- PASS: TestHarnessJSONLInvalidHeaderRepositoryOpen/nonstring-legacy-parent (0.00s)
 --- PASS: TestHarnessJSONLInvalidHeaderRepositoryOpen (0.01s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/agent/harness/session	0.035s
+ok  	github.com/tmih06/ompig/agent/harness/session	0.035s
 === RUN   TestHarnessPicoJSONLPublicationRecovery
 === PAUSE TestHarnessPicoJSONLPublicationRecovery
 === RUN   TestHarnessPicoJSONLRetirementAndHighWater
@@ -294,12 +294,12 @@ ok  	github.com/MichaelKinsy/PiG/agent/harness/session	0.035s
 --- PASS: TestHarnessPicoJSONLPublicationRecovery/torn-sticky-tail (0.00s)
 --- PASS: TestHarnessPicoJSONLPublicationRecovery (0.01s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/agent/harness/pico3	0.035s
+ok  	github.com/tmih06/ompig/agent/harness/pico3	0.035s
 
 Top-level completion events:
-{"Time": "2026-09-24T22:02:12.20660295-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/internal/codingagent/tools", "Test": "TestHarnessImageMagicBoundaries", "Elapsed": 0}
-{"Time": "2026-09-24T22:02:12.207664494-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/internal/codingagent/tools", "Test": "TestHarnessImageBMPPlanesAndBitDepth", "Elapsed": 0}
-{"Time": "2026-09-24T22:02:12.207740599-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/session", "Test": "TestHarnessJSONLHeaderRepositoryRoundTrip", "Elapsed": 0}
-{"Time": "2026-09-24T22:02:12.212460877-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/session", "Test": "TestHarnessJSONLInvalidHeaderRepositoryOpen", "Elapsed": 0.01}
-{"Time": "2026-09-24T22:02:12.308490311-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/pico3", "Test": "TestHarnessPicoJSONLRetirementAndHighWater", "Elapsed": 0}
-{"Time": "2026-09-24T22:02:12.315289761-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/pico3", "Test": "TestHarnessPicoJSONLPublicationRecovery", "Elapsed": 0.01}
+{"Time": "2026-09-24T22:02:12.20660295-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/internal/codingagent/tools", "Test": "TestHarnessImageMagicBoundaries", "Elapsed": 0}
+{"Time": "2026-09-24T22:02:12.207664494-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/internal/codingagent/tools", "Test": "TestHarnessImageBMPPlanesAndBitDepth", "Elapsed": 0}
+{"Time": "2026-09-24T22:02:12.207740599-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/session", "Test": "TestHarnessJSONLHeaderRepositoryRoundTrip", "Elapsed": 0}
+{"Time": "2026-09-24T22:02:12.212460877-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/session", "Test": "TestHarnessJSONLInvalidHeaderRepositoryOpen", "Elapsed": 0.01}
+{"Time": "2026-09-24T22:02:12.308490311-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/pico3", "Test": "TestHarnessPicoJSONLRetirementAndHighWater", "Elapsed": 0}
+{"Time": "2026-09-24T22:02:12.315289761-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/pico3", "Test": "TestHarnessPicoJSONLPublicationRecovery", "Elapsed": 0.01}

@@ -4,7 +4,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === "object" ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
-if (process.argv[2] === "pig") {
+if (process.argv[2] === "ompig") {
   console.log(JSON.stringify(canonical(JSON.parse(execFileSync("./test/parity/testdata/prebuilt-go-run.sh", ["./test/parity/testdata/session-model-go"], { encoding: "utf8" })))));
 } else {
   const root = process.env.PI_PACKAGE_ROOT;

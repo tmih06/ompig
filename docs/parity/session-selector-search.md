@@ -8,7 +8,7 @@ Empty queries and Recent mode retain incoming order. Threaded and Fuzzy modes ra
 
 ## Findings
 
-PiG substituted substring positions and a fixed token-length score for fuzzy matching. It also sorted Recent results again and normalized only the text side of phrases. Query tokenization omitted several JavaScript whitespace characters. The shared fuzzy matcher counted UTF-8 bytes, treated NEXT LINE as whitespace, missed BOM word boundaries, and used simple lowercase conversion instead of context-sensitive Unicode lowercase conversion.
+Ompig substituted substring positions and a fixed token-length score for fuzzy matching. It also sorted Recent results again and normalized only the text side of phrases. Query tokenization omitted several JavaScript whitespace characters. The shared fuzzy matcher counted UTF-8 bytes, treated NEXT LINE as whitespace, missed BOM word boundaries, and used simple lowercase conversion instead of context-sensitive Unicode lowercase conversion.
 
 The selector now calls the shared fuzzy matcher, normalizes only phrase text, preserves incoming order where Pi does, and uses stable millisecond tie-breaking. The shared matcher scores UTF-16 units and uses Unicode lowercase conversion. The fix adds no background task, IPC, filesystem access, cache, or retained history copy. The existing selector index policy remains unchanged.
 

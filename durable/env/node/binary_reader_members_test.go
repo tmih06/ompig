@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // upstream: packages/durable/src/testing/env-conformance.ts "binary reader reads byte ranges of the opened file": Info is the opened file's metadata, Read returns up to length bytes at offset and fewer only at the end, a bad range is invalid, Close is idempotent and every later call is invalid.

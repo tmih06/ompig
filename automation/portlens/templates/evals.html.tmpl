@@ -7,7 +7,7 @@
 <p class="crit">{{.Criterion}}</p>
 <p class="verdict">{{.Verdict}}</p>
 {{if .Rows}}<div class="table-wrap"><table class="matrix">
-<caption class="sr">{{.Title}}: PiG against the reference, per measure and size</caption>
+<caption class="sr">{{.Title}}: Ompig against the reference, per measure and size</caption>
 <thead><tr><th scope="col">Measure</th>{{range .Sizes}}<th scope="col">{{fmtn .}} turns</th>{{end}}</tr></thead>
 <tbody>{{range .Rows}}<tr><th scope="row">{{.Measure}}</th>{{range .Cells}}<td>{{if .Present}}<span class="{{if .Met}}cell-ok{{else}}cell-bad{{end}}">{{if .Met}}met{{else}}not met{{end}}</span><div class="small muted">{{.Text}}</div>{{else}}<span class="muted">no data</span>{{end}}</td>{{end}}</tr>{{end}}</tbody></table></div>{{end}}
 </div>

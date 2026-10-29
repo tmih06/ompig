@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 const benchSchemaText = `{"type":"object","properties":{"name":{"type":"string","default":"x"},"limit":{"type":"integer","default":10},"tags":{"type":"array","items":{"type":"string"}},"nested":{"type":"object","properties":{"on":{"type":"boolean","default":false}}}},"required":["name"],"additionalProperties":false}`

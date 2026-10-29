@@ -9,36 +9,36 @@ import (
 	"strings"
 	"testing"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-var updatePigletInventory = flag.Bool("update-piglet-inventory", false, "rewrite testdata/piglet-inventory from the shipped Piglets")
+var updatePigletInventory = flag.Bool("update-ompiglet-inventory", false, "rewrite testdata/ompiglet-inventory from the shipped Ompiglets")
 
-const pigletInventoryDir = "testdata/piglet-inventory"
+const pigletInventoryDir = "testdata/ompiglet-inventory"
 
-// TestShippedPigletInventory pins, for every shipped Piglet (a manifest under piglets/ with a release block), exactly
+// TestShippedPigletInventory pins, for every shipped Ompiglet (a manifest under ompiglets/ with a release block), exactly
 // which built-in tools, slash commands, built-in extensions, model APIs and features it exposes, and the extensions,
-// tools allow-list and discovery it selects. A strip is opt-in (D92): an ID is stripped only when the Piglet's strip
+// tools allow-list and discovery it selects. A strip is opt-in (D92): an ID is stripped only when the Ompiglet's strip
 // list names it, never because discovery is empty. The built-in states come from the production startup build of the
-// resolved Piglet (applyPigletStrip, then buildResources and buildSession), so a strip list, a resolver or a startup
+// resolved Ompiglet (applyPigletStrip, then buildResources and buildSession), so a strip list, a resolver or a startup
 // change that removes or adds anything shows as a diff against the reviewed inventory. TestStripLeakGate proves that a
-// stripped ID leaves every surface; this test pins which IDs each shipped Piglet strips.
+// stripped ID leaves every surface; this test pins which IDs each shipped Ompiglet strips.
 //
-// Regenerate after a reviewed change: go test ./coding/cli -run '^TestShippedPigletInventory$' -update-piglet-inventory
+// Regenerate after a reviewed change: go test ./coding/cli -run '^TestShippedPigletInventory$' -update-ompiglet-inventory
 func TestShippedPigletInventory(t *testing.T) {
 	if pigstrip.Active() {
-		t.Skip("this build compiles built-ins out; the inventory is of Stock PiG running each Piglet")
+		t.Skip("this build compiles built-ins out; the inventory is of Stock Ompig running each Ompiglet")
 	}
 	root := testenv.ModuleRoot(t)
-	manifests, err := filepath.Glob(filepath.Join(root, "piglets", "*", "*.yaml"))
+	manifests, err := filepath.Glob(filepath.Join(root, "ompiglets", "*", "*.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	shipped := map[string]bool{}
 	for _, path := range manifests {
-		parsed, err := piglet.Parse(path)
+		parsed, err := ompiglet.Parse(path)
 		if err != nil {
 			t.Fatalf("parse %s: %v", path, err)
 		}
@@ -64,15 +64,15 @@ func TestShippedPigletInventory(t *testing.T) {
 			}
 			want, err := os.ReadFile(golden)
 			if err != nil {
-				t.Fatalf("shipped Piglet %s has no reviewed inventory (%v); review this one and regenerate with -update-piglet-inventory:\n%s", parsed.Name, err, got)
+				t.Fatalf("shipped Ompiglet %s has no reviewed inventory (%v); review this one and regenerate with -update-ompiglet-inventory:\n%s", parsed.Name, err, got)
 			}
 			if string(want) != got {
-				t.Fatalf("shipped Piglet %s exposes a different inventory than %s; review the change and regenerate with -update-piglet-inventory\n%s", parsed.Name, golden, lineDiff(string(want), got))
+				t.Fatalf("shipped Ompiglet %s exposes a different inventory than %s; review the change and regenerate with -update-ompiglet-inventory\n%s", parsed.Name, golden, lineDiff(string(want), got))
 			}
 		})
 	}
 	if len(shipped) == 0 {
-		t.Fatal("no shipped Piglet under piglets/; the inventory would pass vacuously")
+		t.Fatal("no shipped Ompiglet under ompiglets/; the inventory would pass vacuously")
 	}
 	if *updatePigletInventory {
 		return
@@ -83,22 +83,22 @@ func TestShippedPigletInventory(t *testing.T) {
 	}
 	for _, entry := range entries {
 		if name, ok := strings.CutSuffix(entry.Name(), ".txt"); !ok || !shipped[name] {
-			t.Errorf("%s/%s pins no shipped Piglet; remove it", pigletInventoryDir, entry.Name())
+			t.Errorf("%s/%s pins no shipped Ompiglet; remove it", pigletInventoryDir, entry.Name())
 		}
 	}
 }
 
-// shippedPigletInventory renders the inventory of the Piglet at path as the reviewed text form.
+// shippedPigletInventory renders the inventory of the Ompiglet at path as the reviewed text form.
 func shippedPigletInventory(t *testing.T, path, rel string) string {
 	t.Helper()
-	resolved, err := piglet.ResolveEffective(path)
+	resolved, err := ompiglet.ResolveEffective(path)
 	if err != nil {
 		t.Fatalf("resolve %s: %v", rel, err)
 	}
-	p := resolved.Piglet
+	p := resolved.Ompiglet
 	var b strings.Builder
 	fmt.Fprintf(&b, "# %s (%s)\n", p.Name, rel)
-	b.WriteString("# regenerate: go test ./coding/cli -run '^TestShippedPigletInventory$' -update-piglet-inventory\n")
+	b.WriteString("# regenerate: go test ./coding/cli -run '^TestShippedPigletInventory$' -update-ompiglet-inventory\n")
 	strip := "none"
 	if !p.Strip.IsEmpty() {
 		var ids []string
@@ -113,13 +113,13 @@ func shippedPigletInventory(t *testing.T, path, rel string) string {
 		toolsAllow = "[" + strings.Join(*p.BuiltinTools, ", ") + "]"
 	}
 	fmt.Fprintf(&b, "tools allow-list: %s\n", toolsAllow)
-	discovery := piglet.Discovery{}
+	discovery := ompiglet.Discovery{}
 	if p.Discovery != nil {
 		discovery = *p.Discovery
 	}
 	fmt.Fprintf(&b, "discovery.extensions: [%s]\n", strings.Join(discovery.Extensions, ", "))
 	fmt.Fprintf(&b, "discovery.skills: [%s]\n", strings.Join(discovery.Skills, ", "))
-	frontend := "pig"
+	frontend := "ompig"
 	if p.HasFrontend() {
 		frontend = "replaced"
 	}
@@ -146,14 +146,14 @@ func shippedPigletInventory(t *testing.T, path, rel string) string {
 		fmt.Fprintf(&b, "skill %s\n", skill.Name)
 	}
 
-	// The built-in surface: the same resolved Piglet without its own extensions, which the build would compile and
+	// The built-in surface: the same resolved Ompiglet without its own extensions, which the build would compile and
 	// start, through the production strip and startup build.
-	startup, err := piglet.ResolveEffective(path)
+	startup, err := ompiglet.ResolveEffective(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	startup.Piglet.Extensions = nil
-	build := buildStripRuntime(t, startup.Piglet)
+	startup.Ompiglet.Extensions = nil
+	build := buildStripRuntime(t, startup.Ompiglet)
 	for _, id := range pigstrip.Known(pigstrip.ListTools) {
 		state := "inactive"
 		switch {

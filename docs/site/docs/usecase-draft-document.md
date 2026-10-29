@@ -2,13 +2,13 @@
 
 **Goal:** write a first draft from your own notes, then change one part of it without touching the rest, with the earlier version kept so you can go back.
 
-**You need:** PiG signed in to a model ([Your first ten minutes](/docs/latest/first-run)) and your notes in a plain text or Markdown file. PiG cannot read Word or Pages files. Save them as plain text first, or paste the text into a `.txt` file.
+**You need:** Ompig signed in to a model ([Your first ten minutes](/docs/latest/first-run)) and your notes in a plain text or Markdown file. Ompig cannot read Word or Pages files. Save them as plain text first, or paste the text into a `.txt` file.
 
 **Time:** ten minutes.
 
 ## Before you start
 
-Put your notes in a new folder and start PiG there:
+Put your notes in a new folder and start Ompig there:
 
 ```bash
 mkdir ~/status-update && cd ~/status-update
@@ -19,7 +19,7 @@ Week 12 notes
 - Budget: 8% under plan
 - Risk: vendor contract renewal due 30 Oct
 EOF
-pig
+ompig
 ```
 
 ## Step 1: draft from the notes
@@ -28,7 +28,7 @@ pig
 Read notes.txt and write a one-page status update for my manager into update.md. Plain language, three short paragraphs.
 ```
 
-Name the file, the reader, the length and the tone. PiG shows the file it writes, then the model's message:
+Name the file, the reader, the length and the tone. Ompig shows the file it writes, then the model's message:
 
 ```text
  write update.md
@@ -49,7 +49,7 @@ Your model's draft will read differently. `write` creates the file, or overwrite
 
 ### Naming a file in the editor
 
-Typing `@` in the editor shows file suggestions. `Tab` completes the name. PiG sends your text as you typed it, including the `@name`. It does not paste the file's contents into your message. The model opens the file itself with its `read` tool. If you want the contents sent with your first message, start PiG with the file on the command line: `pig @notes.txt "Write a status update from this"`.
+Typing `@` in the editor shows file suggestions. `Tab` completes the name. Ompig sends your text as you typed it, including the `@name`. It does not paste the file's contents into your message. The model opens the file itself with its `read` tool. If you want the contents sent with your first message, start Ompig with the file on the command line: `ompig @notes.txt "Write a status update from this"`.
 
 ## Step 2: keep a copy, then change one thing
 
@@ -59,7 +59,7 @@ Before the second change, keep the first draft. A copy is the most reliable way 
 Before you change update.md again, copy it to update.v1.md. Then make the first paragraph friendlier. Change nothing else.
 ```
 
-PiG copies the file, then edits it. An edit is a replacement of one passage by another, and PiG shows it as a diff. Lines that start with `-` were removed, lines that start with `+` were added, and the numbers are line numbers in the file:
+Ompig copies the file, then edits it. An edit is a replacement of one passage by another, and Ompig shows it as a diff. Lines that start with `-` were removed, lines that start with `+` were added, and the numbers are line numbers in the file:
 
 ```text
  $ cp update.md update.v1.md && ls
@@ -86,7 +86,7 @@ PiG copies the file, then edits it. An edit is a replacement of one passage by a
  I changed only the first paragraph. The other two are as they were.
 ```
 
-The diff is the check. Only line 3 changed, and lines 1, 2 and 4 to 7 are context. In colour, PiG highlights the changed words inside the line (Pi `packages/coding-agent/src/modes/interactive/components/diff.ts:22-45`). Without colour the only sign is a stray space before the full stop, as in the diff above. Pi shows the same.
+The diff is the check. Only line 3 changed, and lines 1, 2 and 4 to 7 are context. In colour, Ompig highlights the changed words inside the line (Pi `packages/coding-agent/src/modes/interactive/components/diff.ts:22-45`). Without colour the only sign is a stray space before the full stop, as in the diff above. Pi shows the same.
 
 Repeat step 2 as often as you like, with `update.v2.md`, `update.v3.md` and so on.
 
@@ -111,13 +111,13 @@ Repeat step 2 as often as you like, with `update.v2.md`, `update.v3.md` and so o
 
 ## Step 4: copy the text out
 
-Type `/copy` in PiG to copy the last message to your clipboard. Or open `update.md` and copy from there.
+Type `/copy` in Ompig to copy the last message to your clipboard. Or open `update.md` and copy from there.
 
 ## Undo
 
 - **The last edit:** `cp update.v1.md update.md` puts the first draft back.
 - **The whole thing:** delete `update.md` and `update.v1.md`. `notes.txt` was only read.
-- **With PiG:** type `Put update.md back to how it was in update.v1.md.` If you made no copy, type `Undo your last edit to update.md.` The model can see the diff it made in the conversation and reverse it. That works only while the edit is still in the conversation.
+- **With Ompig:** type `Put update.md back to how it was in update.v1.md.` If you made no copy, type `Undo your last edit to update.md.` The model can see the diff it made in the conversation and reverse it. That works only while the edit is still in the conversation.
 
 ## Variations
 

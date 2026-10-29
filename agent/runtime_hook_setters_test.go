@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent.ts:238 and :473 hand the Agent's public onPayload field to every request's stream options, read at run time, so assigning it after

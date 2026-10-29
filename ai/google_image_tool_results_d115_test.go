@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// D115: Gemini answers the function calls of one model turn only when one user turn directly after it holds every function response ("the number of function response parts must equal the number of function call parts"). Pi 1.1.0 (google-shared.ts convertMessages, asserted by google-shared-image-tool-result-routing.test.ts:80-88) pushes the image turn of a Gemini 2.x tool result before the next result, which splits the response turn. PiG sends the image turns after the last result of the run, in result order.
+// D115: Gemini answers the function calls of one model turn only when one user turn directly after it holds every function response ("the number of function response parts must equal the number of function call parts"). Pi 1.1.0 (google-shared.ts convertMessages, asserted by google-shared-image-tool-result-routing.test.ts:80-88) pushes the image turn of a Gemini 2.x tool result before the next result, which splits the response turn. Ompig sends the image turns after the last result of the run, in result order.
 func TestGoogleImageToolResultsKeepFunctionResponsesInOneTurnD115(t *testing.T) {
 	image := func(data string) ImageContent { return ImageContent{MimeType: "image/png", Data: data} }
 	result := func(id string, content ...ToolResultMessageContent) ToolResultMessage {

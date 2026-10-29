@@ -5,8 +5,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // frameSchema is the JSON Schema TypeBox builds for wire.ts FrameSchema: Pi b45e0ebc gives

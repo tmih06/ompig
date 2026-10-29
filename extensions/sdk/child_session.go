@@ -9,7 +9,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Ports packages/coding-agent/src/core/sdk.ts createAgentSession for an extension: a child agent session the host owns for this extension's connection. The extension prompts it, listens to its events, aborts it and disposes it; the host runs the agent loop and calls back into the extension for the tools it serves (customTools). The Node runtime serves Pi's own createAgentSession in the extension process; this is the same call for the native SDKs, with the same observable behavior (`TestChildAgentSessionsAcrossSDKs`).
@@ -307,7 +307,7 @@ func (t *childSessions) deliver(args json.RawMessage) {
 	full, err := session.applyUpdate(event.Stream, event.Event)
 	if err != nil {
 		// The event is not delivered; its number still counts, so a prompt does not wait for it.
-		fmt.Fprintf(os.Stderr, "pig: child session %s: %v\n", session.id, err)
+		fmt.Fprintf(os.Stderr, "ompig: child session %s: %v\n", session.id, err)
 		session.enqueue(queuedEvent{seq: event.Seq})
 		return
 	}
@@ -498,7 +498,7 @@ func (s *AgentSession) Prompt(ctx context.Context, text string, options ...Promp
 	if ctx.Done() != nil {
 		stop := context.AfterFunc(ctx, func() {
 			if err := s.Abort(); err != nil && !s.disposed.Load() {
-				fmt.Fprintf(os.Stderr, "pig: abort of child session %s failed: %v\n", s.id, err)
+				fmt.Fprintf(os.Stderr, "ompig: abort of child session %s failed: %v\n", s.id, err)
 			}
 		})
 		defer stop()
@@ -594,7 +594,7 @@ func (s *AgentSession) Dispose() {
 	}
 	s.stop()
 	if _, err := s.call(callChildSessionDispose, sessionRef{s.id}); err != nil {
-		fmt.Fprintf(os.Stderr, "pig: dispose of child session %s failed: %v\n", s.id, err)
+		fmt.Fprintf(os.Stderr, "ompig: dispose of child session %s failed: %v\n", s.id, err)
 	}
 }
 
@@ -663,7 +663,7 @@ func (s *AgentSession) deliverLoop() {
 func (s *AgentSession) call1(listener *childListener, event map[string]any) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Fprintf(os.Stderr, "pig: child session %s listener panicked: %v\n", s.id, r)
+			fmt.Fprintf(os.Stderr, "ompig: child session %s listener panicked: %v\n", s.id, r)
 		}
 	}()
 	listener.fn(event)

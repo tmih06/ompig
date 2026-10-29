@@ -1,6 +1,6 @@
 package session
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // Wake is when the Session next needs a running process (scheduler.ts wake, Harness.wake): Active while some task can run
 // now or is running, At for the earliest sleep not yet due.

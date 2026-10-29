@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -12,7 +12,7 @@ import (
 )
 
 // The Mistral request URL expression runs in Node on the service-URL base URLs (schemes, hosts, userinfo, ports, trailing slashes, queries, fragments, dot segments and percent-encoded text) plus
-// opaque and path-less bases: Pig's mistralChatCompletionsURL must give Pi's string and fail exactly when a URL constructor throws.
+// opaque and path-less bases: Ompig's mistralChatCompletionsURL must give Pi's string and fail exactly when a URL constructor throws.
 func TestMistralChatCompletionsURLMatchesPiOnSeededProbes(t *testing.T) {
 	var bases []string
 	for _, probe := range serviceURLProbes() {
@@ -53,7 +53,7 @@ func TestMistralChatCompletionsURLMatchesPiOnSeededProbes(t *testing.T) {
 				if err == nil {
 					have = text
 				}
-				t.Errorf("%q\n  Pig %q\n  Pi  %q", base, have, want)
+				t.Errorf("%q\n  Ompig %q\n  Pi  %q", base, have, want)
 			}
 		}
 	}

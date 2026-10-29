@@ -10,7 +10,7 @@ import (
 	"syscall"
 )
 
-// binfmtMiscDir is where the kernel's binfmt_misc file system is mounted. PiG reads the instance mounted there; since Linux 6.7 the kernel uses the instance of the nearest user namespace that has one, which differs only where a container or a private mount replaces it.
+// binfmtMiscDir is where the kernel's binfmt_misc file system is mounted. Ompig reads the instance mounted there; since Linux 6.7 the kernel uses the instance of the nearest user namespace that has one, which differs only where a container or a private mount replaces it.
 var binfmtMiscDir = "/proc/sys/fs/binfmt_misc"
 
 // binfmtMiscHandler is an enabled binfmt_misc entry as /proc/sys/fs/binfmt_misc/<name> prints it (entry_status, fs/binfmt_misc.c): an extension handler, or a handler that matches magic, under mask, at offset in the head of the file.
@@ -126,7 +126,7 @@ func (h binfmtMiscHandler) matches(path string, head []byte) bool {
 	return true
 }
 
-// miscErrno is the errno of the kernel's binfmt_misc handler (load_misc_binary) for path at depth, whose head is head, which execve tries before the "#!" and ELF handlers: the errno of the interpreter of the first enabled handler that recognizes the file, as interpreterErrno describes, where execfd reports an earlier handler with flag O. Without flag F the kernel opens the interpreter in the child's working directory cwd, as a "#!" interpreter. With flag F it runs the file it opened at registration, so an interpreter that is not an executable file at its path when PiG looks is assumed to start. It reports false when no handler recognizes the file, and the "#!" and ELF handlers decide.
+// miscErrno is the errno of the kernel's binfmt_misc handler (load_misc_binary) for path at depth, whose head is head, which execve tries before the "#!" and ELF handlers: the errno of the interpreter of the first enabled handler that recognizes the file, as interpreterErrno describes, where execfd reports an earlier handler with flag O. Without flag F the kernel opens the interpreter in the child's working directory cwd, as a "#!" interpreter. With flag F it runs the file it opened at registration, so an interpreter that is not an executable file at its path when Ompig looks is assumed to start. It reports false when no handler recognizes the file, and the "#!" and ELF handlers decide.
 func miscErrno(path, cwd string, head []byte, depth int, execfd bool) (syscall.Errno, bool) {
 	for _, handler := range binfmtMiscHandlers() {
 		if !handler.matches(path, head) {

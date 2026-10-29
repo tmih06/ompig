@@ -138,7 +138,7 @@ class MockTest(unittest.TestCase):
 
 
 class KeepAliveLatencyTest(unittest.TestCase):
-    """A harness that reuses its connection (PiG's shared transport, Pi's undici dispatcher) must not wait on the mock.
+    """A harness that reuses its connection (Ompig's shared transport, Pi's undici dispatcher) must not wait on the mock.
 
     The mock writes a streamed response in several small sends. With Nagle's algorithm on, every send after the first
     waits for the client's ACK, and a client past the start of a connection delays its ACK by up to 40 ms on Linux, so

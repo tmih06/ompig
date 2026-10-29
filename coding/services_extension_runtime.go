@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"maps"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // applyLoadedExtensions finishes the extension load of a Services container the way createAgentSessionServices does after resourceLoader.reload

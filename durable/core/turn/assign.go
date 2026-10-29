@@ -4,8 +4,8 @@
 package turn
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // assignObj is assignJson (src/harness/json.ts) on an object draft: it assigns value at target[key] leaf by leaf. A

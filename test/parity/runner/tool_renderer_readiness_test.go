@@ -15,7 +15,7 @@ func TestExpandedToolRendererReadinessUsesIdleUI(t *testing.T) {
 	}
 	const idle = "[Extensions]\n  tool-renderers.mjs\n\n────────────────────────────────────────────────────────────────────────────────────────────────────\n\n────────────────────────────────────────────────────────────────────────────────────────────────────\n/isolated/project\n0.0%/128k (auto)                                                                              faux-1\n"
 	const warning = "tmux extended-keys is off. Modified Enter keys may not work."
-	for _, host := range []struct{ name, pattern string }{{"pig", sc.Tmux.ReadyPatternPig}, {"pi", sc.Tmux.ReadyPatternPi}} {
+	for _, host := range []struct{ name, pattern string }{{"ompig", sc.Tmux.ReadyPatternPig}, {"pi", sc.Tmux.ReadyPatternPi}} {
 		t.Run(host.name, func(t *testing.T) {
 			if !paneMatchesReadyPattern(idle, host.pattern) {
 				t.Errorf("idle editor/footer without an optional warning did not satisfy %q", host.pattern)

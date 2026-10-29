@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // appendTurnMessages are the messages one tool-calling turn persists: the user's prompt, an assistant message with a tool call and usage, and a large tool result.

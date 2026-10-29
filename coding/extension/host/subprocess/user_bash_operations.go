@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // remoteBashOperations is the extension.BashOperations a subprocess extension's user_bash handler returned: Pi's runner holds the extension's own object (runner.ts isUserBashEventResult), which here lives in the extension process and runs through RequestUserBashExec.

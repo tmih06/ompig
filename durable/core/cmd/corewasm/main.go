@@ -16,8 +16,8 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 var (
@@ -31,7 +31,7 @@ var (
 	// them out of the collector's root scan (budget/tinygo/patchdata).
 	stats  [64]byte
 	allocs [24]byte
-	// readReq and readAns are the request and answer buffers of the pig.read import.
+	// readReq and readAns are the request and answer buffers of the ompig.read import.
 	readReq, readAns []byte
 	// parts are the pieces of the last step and partList their addresses, the step export's answer; parts keep the
 	// payloads they alias alive until the host has read them.
@@ -189,7 +189,7 @@ func allocStats() unsafe.Pointer {
 	return unsafe.Pointer(&allocs[0])
 }
 
-//go:wasmimport pig uuidv7
+//go:wasmimport ompig uuidv7
 func hostUUIDv7(dst unsafe.Pointer)
 
 // hostUUID asks the host for one pi-ai uuidv7() value (36 ASCII bytes).
@@ -204,10 +204,10 @@ func hostUUID() string {
 // collection that TinyGo's conservative roots may never make good on.
 const readKeep = 1 << 20
 
-//go:wasmimport pig read
+//go:wasmimport ompig read
 func hostReadImport(req unsafe.Pointer, reqLen uint32, dst unsafe.Pointer, capacity uint32) uint32
 
-// hostRead runs one read statement through the host at once (ABI section 4.2, pig.read). An answer longer than the buffer
+// hostRead runs one read statement through the host at once (ABI section 4.2, ompig.read). An answer longer than the buffer
 // comes back as its length only, and the call repeats with a buffer of that length.
 func hostRead(sql uint16, params []abi.Value) ([][]abi.Value, error) {
 	readReq = abi.AppendReadRequest(readReq[:0], sql, params)

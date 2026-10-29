@@ -10,7 +10,7 @@ import (
 
 func goCellFixture(t *testing.T, content string) (fstest.MapFS, Manifest) {
 	t.Helper()
-	m := Manifest{PigCoreVersion: "test", Cells: []CellEntry{{
+	m := Manifest{OmpigCoreVersion: "test", Cells: []CellEntry{{
 		Language: "go", Key: "go-core", OS: runtime.GOOS, Arch: runtime.GOARCH,
 		Binary:     "go/aaaa/runner",
 		Extensions: []ExtEntry{{Name: "context-info", Hash: "h1"}},
@@ -21,7 +21,7 @@ func goCellFixture(t *testing.T, content string) (fstest.MapFS, Manifest) {
 	}, m
 }
 
-// A second Piglet Binary instance starts while the first executes the extracted cell. Windows refuses to replace the file of a running image, so extraction leaves a cell binary that already holds the embedded bytes untouched.
+// A second Ompiglet Binary instance starts while the first executes the extracted cell. Windows refuses to replace the file of a running image, so extraction leaves a cell binary that already holds the embedded bytes untouched.
 func TestExtractLeavesAnIdenticalCellBinaryInPlace(t *testing.T) {
 	fsys, m := goCellFixture(t, "BINARY")
 	dest := t.TempDir()

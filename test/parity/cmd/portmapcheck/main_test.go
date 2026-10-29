@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // fixture writes a small repository: one Pi file (packages/fx/src/widget.ts) with two exported members, and the PORT_MAP row for it.
@@ -37,13 +37,13 @@ func fixture(t *testing.T, cell, status string, extra map[string]string, targets
 		if d, ok := dispositions[id]; ok {
 			disp = d
 		}
-		maps = append(maps, m{"id": id, "disposition": disp, "pigTargets": targets[id]})
+		maps = append(maps, m{"id": id, "disposition": disp, "ompigTargets": targets[id]})
 	}
 	write("test/parity/interfaces/upstream-v1.0.0.json", js(m{"packages": []m{{"key": "fx", "name": "@scope/fx"}}, "interfaces": entries}))
 	write("test/parity/interfaces/mapping-v1.0.0.json", js(m{"mappings": maps}))
 	write("lib/widget.go", "package lib\n\ntype Widget struct{ Name string }\n")
 	write("lib/other.go", "package lib\n\nfunc Unrelated() {}\n")
-	write("docs/parity/PORT_MAP.md", "| upstream | pig | status |\n|---|---|---|\n| `packages/fx/src/widget.ts` | `"+cell+"` | "+status+" |\n")
+	write("docs/parity/PORT_MAP.md", "| upstream | ompig | status |\n|---|---|---|\n| `packages/fx/src/widget.ts` | `"+cell+"` | "+status+" |\n")
 	for k, v := range extra {
 		write(k, v)
 	}
@@ -186,8 +186,8 @@ func coverageFixture(t *testing.T, testBody string) string {
 		"lib/widget_test.go": testBody,
 	}, goodTargets, nil)
 	mapping := map[string]any{"mappings": []map[string]any{
-		{"id": "pkg:fx/.#Widget", "disposition": "ported", "pigTargets": []string{"lib/widget.go#Widget"}, "evidence": []string{"test:lib/widget_test.go#TestWidget"}},
-		{"id": "pkg:fx/.#Widget::property:name", "disposition": "ported", "pigTargets": []string{"lib/widget.go#Widget.Name"}, "evidence": []string{"test:lib/widget_test.go#TestWidget"}},
+		{"id": "pkg:fx/.#Widget", "disposition": "ported", "ompigTargets": []string{"lib/widget.go#Widget"}, "evidence": []string{"test:lib/widget_test.go#TestWidget"}},
+		{"id": "pkg:fx/.#Widget::property:name", "disposition": "ported", "ompigTargets": []string{"lib/widget.go#Widget.Name"}, "evidence": []string{"test:lib/widget_test.go#TestWidget"}},
 	}}
 	b, _ := json.Marshal(mapping)
 	if err := os.WriteFile(filepath.Join(root, "test/parity/interfaces/mapping-v1.0.0.json"), b, 0o644); err != nil {
@@ -285,8 +285,8 @@ func TestARedEvidenceRunIsNotCached(t *testing.T) {
 func TestATickWithNoEvidenceTestFails(t *testing.T) {
 	root := coverageFixture(t, "package lib\n")
 	b, _ := json.Marshal(map[string]any{"mappings": []map[string]any{
-		{"id": "pkg:fx/.#Widget", "disposition": "ported", "pigTargets": []string{"lib/widget.go#Widget"}},
-		{"id": "pkg:fx/.#Widget::property:name", "disposition": "ported", "pigTargets": []string{"lib/widget.go#Widget.Name"}},
+		{"id": "pkg:fx/.#Widget", "disposition": "ported", "ompigTargets": []string{"lib/widget.go#Widget"}},
+		{"id": "pkg:fx/.#Widget::property:name", "disposition": "ported", "ompigTargets": []string{"lib/widget.go#Widget.Name"}},
 	}})
 	if err := os.WriteFile(filepath.Join(root, "test/parity/interfaces/mapping-v1.0.0.json"), b, 0o644); err != nil {
 		t.Fatal(err)
@@ -342,7 +342,7 @@ func TestEvidenceTestsRunWithScratchAgentDirectories(t *testing.T) {
 		t.Setenv(name, caller)
 	}
 	body := "package lib\n\nimport (\n\t\"os\"\n\t\"strings\"\n\t\"testing\"\n)\n\nfunc TestWidget(t *testing.T) {\n" +
-		"\tfor _, name := range []string{\"PIG_CODING_AGENT_DIR\", \"PI_CODING_AGENT_DIR\", \"PIG_HOME\", \"PI_HOME\", \"HOME\"} {\n" +
+		"\tfor _, name := range []string{\"OMPIG_CODING_AGENT_DIR\", \"PI_CODING_AGENT_DIR\", \"OMPIG_HOME\", \"PI_HOME\", \"HOME\"} {\n" +
 		"\t\tif v := os.Getenv(name); v == \"\" || strings.HasPrefix(v, " + strconv.Quote(caller) + ") {\n\t\t\tt.Fatalf(\"%s = %q\", name, v)\n\t\t}\n\t}\n" +
 		"\tif (Widget{Name: \"a\"}).Hello() != \"hello a\" {\n\t\tt.Fatal(\"hello\")\n\t}\n}\n"
 	res, err := checkWith(coverageFixture(t, body), true)
@@ -579,7 +579,7 @@ func sharedFixture(t *testing.T) string {
 		"test/parity/interfaces/upstream-v1.0.0.json": `{"packages":[],"interfaces":[]}`,
 		"test/parity/interfaces/mapping-v1.0.0.json":  `{"mappings":[]}`,
 		mutantsFile: `{"packages/fx/src/a.ts":[` + mutant("A") + `],"packages/fx/src/b.ts":[` + mutant("B") + `],"packages/fx/src/c.ts":[` + mutant("C") + `]}`,
-		"docs/parity/PORT_MAP.md": "| upstream | pig | status |\n|---|---|---|\n" +
+		"docs/parity/PORT_MAP.md": "| upstream | ompig | status |\n|---|---|---|\n" +
 			"| `packages/fx/src/a.ts` | `lib/a.go, lib/a_test.go` | ✅ |\n" +
 			"| `packages/fx/src/b.ts` | `lib/b.go, lib/b_test.go` | ✅ |\n" +
 			"| `packages/fx/src/c.ts` | `lib/c.go, lib/c_test.go` | ✅ |\n",

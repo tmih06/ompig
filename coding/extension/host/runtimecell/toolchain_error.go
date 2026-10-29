@@ -12,7 +12,7 @@ import (
 // absent. exec reports that as `exec: "go": executable file not found in $PATH`,
 // which names neither the requirement nor the remedy.
 var toolchains = map[string]struct{ binary, install string }{
-	"go":   {"go", "run `pig setup go` to install a verified Go toolchain, or install Go 1.26 or newer from https://go.dev/dl/"},
+	"go":   {"go", "run `ompig setup go` to install a verified Go toolchain, or install Go 1.26 or newer from https://go.dev/dl/"},
 	"rust": {"cargo", "install Rust from https://rustup.rs (or via mise/asdf/brew)"},
 }
 

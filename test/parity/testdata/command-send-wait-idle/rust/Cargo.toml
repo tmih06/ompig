@@ -5,4 +5,4 @@ edition = "2024"
 publish = false
 
 [dependencies]
-pig-sdk = "0.1.0"
+ompig-sdk = "0.1.0"

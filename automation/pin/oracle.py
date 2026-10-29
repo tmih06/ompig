@@ -49,17 +49,17 @@ import pinlib
 from pinlib import ROOT, Pin, PinError
 
 SDK_TS = ROOT / "extensions" / "sdk-ts"
-STAMP = ".pig-pi-oracle.json"
+STAMP = ".ompig-pi-oracle.json"
 NPM_FLAGS = ["--ignore-scripts", "--no-audit", "--no-fund"]
 
 
 def store() -> Path:
-    if os.environ.get("PIG_PI_BUILD_STORE"):
-        return Path(os.environ["PIG_PI_BUILD_STORE"])
-    base = os.environ.get("PIG_DEV_HOME")
+    if os.environ.get("OMPIG_PI_BUILD_STORE"):
+        return Path(os.environ["OMPIG_PI_BUILD_STORE"])
+    base = os.environ.get("OMPIG_DEV_HOME")
     if not base:
         cache = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
-        base = str(Path(cache) / "pig-dev")
+        base = str(Path(cache) / "ompig-dev")
     return Path(base) / "pi-builds"
 
 
@@ -213,7 +213,7 @@ def build_source(pin: Pin, source: Path) -> str:
         elif pin.kind == "tag":
             raise PinError(
                 f"no frozen model data for release {pin.tag} ({frozen_path(pin).name}): a source build would hydrate live models.dev data and differ from the release. "
-                "Freeze the data its published package shipped: `PIG_PARITY_PI_PUBLISHED=1 make parity-deps`, then "
+                "Freeze the data its published package shipped: `OMPIG_PARITY_PI_PUBLISHED=1 make parity-deps`, then "
                 "`python3 automation/pin/pin.py freeze-oracle --from extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai/dist/providers/data`"
             )
         else:
@@ -297,7 +297,7 @@ DURABLE = "@earendil-works/pi-durable"
 # The packages durable/interop imports directly (its package.json dependencies): they sit at the top of the durable oracle tree.
 INTEROP = ["@earendil-works/chord", "@earendil-works/pi-ai", DURABLE, "@earendil-works/pi-telemetry"]
 LOCK_KEY = "node_modules/" + AGENT
-PACK_PREFIX = "pig-pack:"
+PACK_PREFIX = "ompig-pack:"
 
 
 def frozen_lock_path(pin: Pin, root: str | None = None) -> Path:
@@ -867,11 +867,11 @@ def report_resolution(mirror: Path, source: Path) -> None:
         return
     importable = sorted(name for name, directory in workspace_names(source).items() if {"exports", "main"} & json.loads((directory / "package.json").read_text()).keys())
     script = (
-        "for (const name of JSON.parse(process.env.PIG_WORKSPACES)) {"
+        "for (const name of JSON.parse(process.env.OMPIG_WORKSPACES)) {"
         " try { console.error(`link-mirror: node resolves ${name} -> ${import.meta.resolve(name)}`); }"
         " catch (error) { console.error(`link-mirror: node cannot resolve ${name}: ${error.message}`); } }"
     )
-    subprocess.run([node, "--input-type=module", "-e", script], cwd=where, env={**os.environ, "PIG_WORKSPACES": json.dumps(importable)}, check=False, timeout=120)
+    subprocess.run([node, "--input-type=module", "-e", script], cwd=where, env={**os.environ, "OMPIG_WORKSPACES": json.dumps(importable)}, check=False, timeout=120)
 
 
 def link_mirror(pin: Pin) -> Path | None:
@@ -883,7 +883,7 @@ def link_mirror(pin: Pin) -> Path | None:
         return None
     modules = source_modules(pin)
     if modules is None:
-        print(f"link-mirror: no source build of {pin.ref} is installed; imports of third-party packages from {mirror} stay unresolved (run `make parity-deps` without PIG_PARITY_PI_PUBLISHED=1)", file=sys.stderr)
+        print(f"link-mirror: no source build of {pin.ref} is installed; imports of third-party packages from {mirror} stay unresolved (run `make parity-deps` without OMPIG_PARITY_PI_PUBLISHED=1)", file=sys.stderr)
         return None
     restore_workspace_links(modules.parent)
     link = mirror / "node_modules"

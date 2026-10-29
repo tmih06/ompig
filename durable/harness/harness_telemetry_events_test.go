@@ -10,11 +10,11 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 func spanAttr(spans []telemetry.RecordedTelemetrySpan, name string, key string, value any) *telemetry.RecordedTelemetrySpan {

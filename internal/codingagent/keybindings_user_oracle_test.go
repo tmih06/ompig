@@ -9,13 +9,13 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi's KeybindingsManager keeps each user key id as written: tui keybindings.ts normalizeKeys only drops duplicates, so "CTRL+L" is shown
 // as written by keyText, " ctrl+x" (a space) matches nothing, and "Ctrl+L" and "ctrl+l" are two different claims. matchesKey still reads
-// letter case loosely. PiG lowercased, trimmed and dropped empty ids. rebuild counts a claim toward a conflict only for an id KEYBINDINGS
-// defines, which includes the tui.* ids; PiG reported a conflict for an unknown id.
+// letter case loosely. Ompig lowercased, trimmed and dropped empty ids. rebuild counts a claim toward a conflict only for an id KEYBINDINGS
+// defines, which includes the tui.* ids; Ompig reported a conflict for an unknown id.
 func TestUserKeybindingsMatchPi(t *testing.T) {
 	configs := []map[string]any{
 		{"app.model.select": "CTRL+L"},
@@ -125,8 +125,19 @@ func TestUserKeybindingsMatchPi(t *testing.T) {
 		}
 		// getResolvedBindings lists every keybinding the merged table defines (tui.* and app.*), a single key as a string and several as an array; getDefinition returns each one's description and default keys.
 		resolved := km.GetResolvedBindings()
-		if len(resolved) != len(want[i].Resolved) {
-			t.Errorf("config %v: getResolvedBindings lists %d keybindings, Pi %d", config, len(resolved), len(want[i].Resolved))
+		// ompig divergence (D-SUBAGENT-5): the merged table also defines
+		// app.agents.hub, which Pi has no equivalent of.
+		piResolved := len(want[i].Resolved)
+		if _, ompigOnly := resolved["app.agents.hub"]; ompigOnly {
+			piResolved++
+		}
+		if len(resolved) != piResolved {
+			t.Errorf("config %v: getResolvedBindings lists %d keybindings, Pi %d (%d plus ompig-only)", config, len(resolved), len(want[i].Resolved), piResolved)
+		}
+		for id := range resolved {
+			if id == "app.agents.hub" {
+				delete(resolved, id)
+			}
 		}
 		for id, piValue := range want[i].Resolved {
 			keys, ok := resolved[id]

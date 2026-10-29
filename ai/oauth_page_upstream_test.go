@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// Pi's oauth-page.ts serves one fixed HTML template and escapes the title, heading, message and details with its escapeHtml (& < > " ' as &amp; &lt; &gt; &quot; &#39;); a falsy details value omits the details block. The callback servers send these bytes to the browser, so PiG's pages equal the pinned package's pages byte for byte.
+// Pi's oauth-page.ts serves one fixed HTML template and escapes the title, heading, message and details with its escapeHtml (& < > " ' as &amp; &lt; &gt; &quot; &#39;); a falsy details value omits the details block. The callback servers send these bytes to the browser, so Ompig's pages equal the pinned package's pages byte for byte.
 func TestOAuthPageMatchesThePinnedPackage(t *testing.T) {
 	type pageCase struct {
 		Message string `json:"message"`

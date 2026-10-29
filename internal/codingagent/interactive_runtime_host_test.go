@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // recordingRuntimeHost is the runtime host a test hands to NewInteractiveMode. It records the calls the mode routes to

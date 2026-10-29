@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // mutation-checked: zeroing the results of RemoteExecutionEnv.CanonicalPath, RemoteExecutionEnv.CreateTempFile, RemoteExecutionEnv.Exists, RemoteExecutionEnv.FileInfo, RemoteExecutionEnv.Id, RemoteExecutionEnv.JoinPath, RemoteExecutionEnv.ListDir, RemoteExecutionEnv.OpenDirReader, RemoteExecutionEnv.OpenTextLineReader, RemoteExecutionEnv.ReadTextFile, RemoteExecutionEnv.ReadTextLines fails it

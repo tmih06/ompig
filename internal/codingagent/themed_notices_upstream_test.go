@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Upstream 0.99.1 builds the chat notices with ThemedText (interactive-mode.ts:4492-4502 showError and showWarning, :3705-3736 status lines, :2942-2955 extension errors, :6231-6236 the reload notice) so a theme change, or the system theme receiving the terminal's colors, rebuilds them: the UI invalidates every component on a theme change and ThemedText rebuilds its string after an invalidation (themed-text.test.ts). The upstream tests cover the component; these cases cover the notices that use it.

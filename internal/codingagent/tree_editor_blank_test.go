@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // interactive-mode.ts fills the editor with the navigated entry's text only when `!this.editor.getText().trim()`: String.prototype.trim removes U+FEFF and U+00A0 but not U+0085.

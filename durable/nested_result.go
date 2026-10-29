@@ -3,8 +3,8 @@ package durable
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // nestedResultWire is NestedToolExecutionResult's JSON: taskId, structuredOutput, isError, details, diagnostics, usage,

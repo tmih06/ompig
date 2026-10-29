@@ -5,7 +5,7 @@
 # Capture the whole block between independent begin/end markers so a duplicated
 # diagnostic also fails equality. Process death itself has no in-process Pi
 # equivalent (D56); TestCrashingCommandHasOneDiagnostic tests that host boundary.
-# Initial PiG output used a separate generic Error line with an extra spacer.
+# Initial Ompig output used a separate generic Error line with an extra spacer.
 # Routing interactive commands through the runner, omitting command stacks as Pi
 # does, and using showExtensionError's unspaced blocks reproduces Pi's complete crop.
 name = "22-command-error-once"
@@ -16,15 +16,15 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/error-once.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/error-once.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/error-once.mjs"]
 
 [tmux]
 width = 100
 height = 32
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "error-probe-begin"

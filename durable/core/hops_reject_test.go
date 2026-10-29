@@ -6,7 +6,7 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // A rejected step drops its effects (abi.Builder.Reject), so the hops chain it opened is never run and no hopped event answers it. The

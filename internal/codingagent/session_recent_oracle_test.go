@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type recentFile struct {
@@ -27,7 +27,7 @@ func recentHeader(id, cwd string) string {
 	return `{"type":"session","version":3,"id":"` + id + `","timestamp":"2026-01-0` + id[len(id)-1:] + `T00:00:00.000Z","cwd":` + strconv.Quote(cwd) + `}` + "\n"
 }
 
-// TestFindMostRecentSessionMatchesPi compares findMostRecentSession of Pi 1.0.4 with the Pig discovery over session directories: ordering by mtime, ties, the header scan (blank and garbage leading lines, a header with no id, an ill-typed cwd), cwd filters, non-sessions and a directory that ends in .jsonl.
+// TestFindMostRecentSessionMatchesPi compares findMostRecentSession of Pi 1.0.4 with the Ompig discovery over session directories: ordering by mtime, ties, the header scan (blank and garbage leading lines, a header with no id, an ill-typed cwd), cwd filters, non-sessions and a directory that ends in .jsonl.
 func TestFindMostRecentSessionMatchesPi(t *testing.T) {
 	work := t.TempDir()
 	cwd := filepath.Join(work, "proj")
@@ -78,7 +78,7 @@ func TestFindMostRecentSessionMatchesPi(t *testing.T) {
 	oracleDirs := make([]string, len(cases))
 	for i, c := range cases {
 		for k, base := range []*[]string{(&dirs), (&oracleDirs)} {
-			dir := filepath.Join(work, []string{"pig", "pi"}[k], strconv.Itoa(i))
+			dir := filepath.Join(work, []string{"ompig", "pi"}[k], strconv.Itoa(i))
 			if err := os.MkdirAll(dir, 0o755); err != nil {
 				t.Fatal(err)
 			}
@@ -118,7 +118,7 @@ emit(input.map((q) => mod.findMostRecentSession(q.dir, q.cwd || undefined)));`, 
 			wantPath = filepath.Join(dirs[i], filepath.Base(*want[i]))
 		}
 		if got != wantPath {
-			t.Errorf("case %d (%+v): Pig %q, Pi %q", i, cases[i], filepath.Base(got), filepath.Base(wantPath))
+			t.Errorf("case %d (%+v): Ompig %q, Pi %q", i, cases[i], filepath.Base(got), filepath.Base(wantPath))
 		}
 	}
 	for i, c := range cases {
@@ -126,6 +126,6 @@ emit(input.map((q) => mod.findMostRecentSession(q.dir, q.cwd || undefined)));`, 
 		check(i, sm.findMostRecent(c.Cwd != ""), dirs[i])
 	}
 	if got := NewSessionManagerWithDir(cwd, filepath.Join(work, "missing")).findMostRecent(false); got != "" || want[len(cases)] != nil {
-		t.Errorf("missing dir: Pig %q, Pi %v", got, want[len(cases)])
+		t.Errorf("missing dir: Ompig %q, Pi %v", got, want[len(cases)])
 	}
 }

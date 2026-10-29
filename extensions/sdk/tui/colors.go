@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/engine"
+import "github.com/tmih06/ompig/extensions/sdk/tui/internal/engine"
 
 // Color is pi-tui's Color: an [IndexedColor], an [RgbColorValue] or an [OklchColorValue].
 type Color = engine.Color

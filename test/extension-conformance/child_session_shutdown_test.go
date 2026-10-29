@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/childsession"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/childsession"
 )
 
 // A host that shuts down while child sessions are live leaves no process behind. The fixture's child_events tool builds sessions whose resource loaders start an extension host, once over the options and once over a DefaultResourceLoader the extension built, and disposes them without closing them: the extension's dispose does not end the session's host, and neither does the release of the loader's handle while a session holds it. Only Shutdown can.
@@ -20,7 +20,7 @@ func TestShutdownWithLiveChildSessionsLeavesNoDescendants(t *testing.T) {
 	loaded, failures := host.LoadAll(t.Context(), []subprocess.ExtConfig{{
 		Name: childsession.Name, Source: filepath.Join(root, "test/extension-conformance/testdata/child-session-go"), Enabled: true, Isolation: "strict",
 		RuntimeKind: "subprocess", RuntimeLanguage: "go", EntrypointKind: "factory", Factory: "Extension",
-		SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/child-session-go", Package: "example.com/child-session-go",
+		SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/child-session-go", Package: "example.com/child-session-go",
 	}})
 	if len(failures) != 0 || len(loaded) != 1 {
 		t.Fatalf("load: %v", failures)

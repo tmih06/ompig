@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
-// The boundary scaling audit: what the host encodes for an extension on each event whose payload grows with the length of a stream (M) or of the session history (H). encodeEventForWire is the encoding makeEventHandler runs for every handler of an extension on every event (host.go: marshalEventWire of boundaryEventWire(wireEventPayload(event))). The wire bytes are the same for every SDK and for isolated and packed cells: each extension has its own socket and its own frames either way. The slopes are measured at n and 10n by testscaling (allocations and bytes gated, wall time reported). Pi hands an in-process handler the same objects by reference, so a row that grows with M or H per call is a cost PiG pays on the wire and Pi does not.
+// The boundary scaling audit: what the host encodes for an extension on each event whose payload grows with the length of a stream (M) or of the session history (H). encodeEventForWire is the encoding makeEventHandler runs for every handler of an extension on every event (host.go: marshalEventWire of boundaryEventWire(wireEventPayload(event))). The wire bytes are the same for every SDK and for isolated and packed cells: each extension has its own socket and its own frames either way. The slopes are measured at n and 10n by testscaling (allocations and bytes gated, wall time reported). Pi hands an in-process handler the same objects by reference, so a row that grows with M or H per call is a cost Ompig pays on the wire and Pi does not.
 func encodeEventForWire(event any) int {
 	encoded, err := marshalEventWire(boundaryEventWire(wireEventPayload(event), nil))
 	if err != nil {

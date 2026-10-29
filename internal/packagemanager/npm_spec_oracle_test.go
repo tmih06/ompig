@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/package-manager.ts
@@ -55,7 +55,7 @@ emit(input.map((spec) => {
 		got := result{Name: name, Version: version, Range: GetNpmVersionRange(version), Pinned: isExactNpmVersion(version)}
 		if got != want[i] {
 			if failures++; failures <= 12 {
-				t.Errorf("npm:%q: PiG %+v, Pi %+v", spec, got, want[i])
+				t.Errorf("npm:%q: Ompig %+v, Pi %+v", spec, got, want[i])
 			}
 		}
 	}

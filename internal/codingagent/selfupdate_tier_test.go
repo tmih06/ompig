@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // fakeCmdRunner is a deterministic cmdRunner for package-manager root probes.
@@ -43,7 +43,7 @@ func ownExe(t *testing.T) string {
 // writeFakeExe creates a writable executable in a temp dir and returns its path.
 func writeFakeExe(t *testing.T, dir string) string {
 	t.Helper()
-	exe := filepath.Join(dir, "pig")
+	exe := filepath.Join(dir, "ompig")
 	if runtime.GOOS == "windows" {
 		exe += ".exe"
 	}
@@ -55,8 +55,8 @@ func writeFakeExe(t *testing.T, dir string) string {
 
 func writeStandaloneTestReceipt(t *testing.T, exe string) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", "https://updates.example/manifest")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", "https://updates.example/manifest")
 	originalVersion := InstalledPigVersion
 	t.Cleanup(func() { InstalledPigVersion = originalVersion })
 	InstalledPigVersion = "test-version"
@@ -108,8 +108,8 @@ func TestAC9StandaloneReceiptControlsOwnership(t *testing.T) {
 	t.Run("transport_ca_digest_mismatch", func(t *testing.T) {
 		dir := t.TempDir()
 		exe := writeFakeExe(t, dir)
-		t.Setenv("PIG_HOME", t.TempDir())
-		t.Setenv("PIG_UPDATE_URL", "https://updates.example/manifest")
+		t.Setenv("OMPIG_HOME", t.TempDir())
+		t.Setenv("OMPIG_UPDATE_URL", "https://updates.example/manifest")
 		originalVersion := InstalledPigVersion
 		t.Cleanup(func() { InstalledPigVersion = originalVersion })
 		InstalledPigVersion = "test-version"
@@ -170,7 +170,7 @@ func TestAC9StandaloneReceiptControlsOwnership(t *testing.T) {
 		dir := t.TempDir()
 		exe := writeFakeExe(t, dir)
 		writeStandaloneTestReceipt(t, exe)
-		moved := filepath.Join(dir, "moved-pig")
+		moved := filepath.Join(dir, "moved-ompig")
 		if err := os.Rename(exe, moved); err != nil {
 			t.Fatal(err)
 		}
@@ -185,7 +185,7 @@ func TestAC9StandaloneReceiptControlsOwnership(t *testing.T) {
 	t.Run("update_source_mismatch", func(t *testing.T) {
 		exe := writeFakeExe(t, t.TempDir())
 		writeStandaloneTestReceipt(t, exe)
-		t.Setenv("PIG_UPDATE_URL", "https://other.example/manifest")
+		t.Setenv("OMPIG_UPDATE_URL", "https://other.example/manifest")
 		prov, err := resolveTierForExe(t, exe, fakeCmdRunner{outputs: map[string]string{}})
 		if err != nil {
 			t.Fatal(err)
@@ -221,7 +221,7 @@ func TestResolveSelfUpdateTier_SymlinkedBinaryResolvesToTarget(t *testing.T) {
 	dir := t.TempDir()
 	target := writeFakeExe(t, dir)
 	writeStandaloneTestReceipt(t, target)
-	link := filepath.Join(dir, "pig-link")
+	link := filepath.Join(dir, "ompig-link")
 	testenv.Symlink(t, target, link)
 	prov, err := resolveTierForExe(t, link, fakeCmdRunner{outputs: map[string]string{}})
 	if err != nil {
@@ -255,7 +255,7 @@ func TestAC2ResolveSelfUpdateTier(t *testing.T) {
 		}
 	})
 	t.Run("writable_unreceipted_is_unsupported", func(t *testing.T) {
-		t.Setenv("PIG_HOME", t.TempDir())
+		t.Setenv("OMPIG_HOME", t.TempDir())
 		dir := t.TempDir()
 		prov, err := resolveTierForExe(t, writeFakeExe(t, dir), fakeCmdRunner{outputs: map[string]string{}})
 		if err != nil {
@@ -286,7 +286,7 @@ func TestAC2ResolveSelfUpdateTier(t *testing.T) {
 		dir := t.TempDir()
 		target := writeFakeExe(t, dir)
 		writeStandaloneTestReceipt(t, target)
-		link := filepath.Join(dir, "pig-link")
+		link := filepath.Join(dir, "ompig-link")
 		testenv.Symlink(t, target, link)
 		prov, err := resolveTierForExe(t, link, fakeCmdRunner{outputs: map[string]string{}})
 		if err != nil {
@@ -299,7 +299,7 @@ func TestAC2ResolveSelfUpdateTier(t *testing.T) {
 	t.Run("package_managed", func(t *testing.T) {
 		root := t.TempDir()
 		npmRoot := filepath.Join(root, "node_modules")
-		binDir := filepath.Join(npmRoot, "pig", "bin")
+		binDir := filepath.Join(npmRoot, "ompig", "bin")
 		_ = os.MkdirAll(binDir, 0o755)
 		prov, err := resolveTierForExe(t, writeFakeExe(t, binDir), fakeCmdRunner{outputs: map[string]string{
 			"npm root -g": npmRoot,
@@ -317,7 +317,7 @@ func TestAC2ResolveSelfUpdateTier(t *testing.T) {
 		}
 		root := t.TempDir()
 		npmRoot := filepath.Join(root, "node_modules")
-		binDir := filepath.Join(npmRoot, "pig", "bin")
+		binDir := filepath.Join(npmRoot, "ompig", "bin")
 		_ = os.MkdirAll(binDir, 0o755)
 		exe := writeFakeExe(t, binDir)
 		testenv.ReadOnlyDir(t, binDir)
@@ -344,7 +344,7 @@ func TestAC2ResolveSelfUpdateTier(t *testing.T) {
 		}
 	})
 	t.Run("oci_container", func(t *testing.T) {
-		t.Setenv("PIG_INSTALL_TIER", "container")
+		t.Setenv("OMPIG_INSTALL_TIER", "container")
 		prov, err := resolveTierForExe(t, ownExe(t), fakeCmdRunner{outputs: map[string]string{}})
 		if err != nil {
 			t.Fatal(err)
@@ -356,7 +356,7 @@ func TestAC2ResolveSelfUpdateTier(t *testing.T) {
 	t.Run("ambiguous_rejected", func(t *testing.T) {
 		root := t.TempDir()
 		shared := filepath.Join(root, "node_modules")
-		binDir := filepath.Join(shared, "pig", "bin")
+		binDir := filepath.Join(shared, "ompig", "bin")
 		_ = os.MkdirAll(binDir, 0o755)
 		_, err := resolveTierForExe(t, writeFakeExe(t, binDir), fakeCmdRunner{outputs: map[string]string{
 			"npm root -g":  shared,
@@ -372,7 +372,7 @@ func TestResolveSelfUpdateTier_PackageManagerOwnershipDetected(t *testing.T) {
 	// Place the fake exe inside a simulated npm global root.
 	root := t.TempDir()
 	npmRoot := filepath.Join(root, "node_modules")
-	binDir := filepath.Join(npmRoot, "pig", "bin")
+	binDir := filepath.Join(npmRoot, "ompig", "bin")
 	if err := os.MkdirAll(binDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -390,8 +390,8 @@ func TestResolveSelfUpdateTier_PackageManagerOwnershipDetected(t *testing.T) {
 	if prov.PackageOwner != ownerNPM {
 		t.Fatalf("owner = %s, want npm", prov.PackageOwner)
 	}
-	if prov.PackageName != "pig" {
-		t.Fatalf("package = %q, want pig", prov.PackageName)
+	if prov.PackageName != "ompig" {
+		t.Fatalf("package = %q, want ompig", prov.PackageName)
 	}
 }
 
@@ -401,10 +401,10 @@ func TestResolveSelfUpdateTier_PNPMPackageIdentityUsesLinkedPackage(t *testing.T
 	binDir := filepath.Join(
 		pnpmRoot,
 		".pnpm",
-		"@example+pig@1.2.3",
+		"@example+ompig@1.2.3",
 		"node_modules",
 		"@example",
-		"pig",
+		"ompig",
 		"bin",
 	)
 	if err := os.MkdirAll(binDir, 0o755); err != nil {
@@ -419,8 +419,8 @@ func TestResolveSelfUpdateTier_PNPMPackageIdentityUsesLinkedPackage(t *testing.T
 	if prov.Tier != tierPackageManager || prov.PackageOwner != ownerPNPM {
 		t.Fatalf("provenance = %#v, want pnpm package-manager", prov)
 	}
-	if prov.PackageName != "@example/pig" {
-		t.Fatalf("package = %q, want @example/pig", prov.PackageName)
+	if prov.PackageName != "@example/ompig" {
+		t.Fatalf("package = %q, want @example/ompig", prov.PackageName)
 	}
 }
 
@@ -428,7 +428,7 @@ func TestResolveSelfUpdateTier_AmbiguousOwnershipIsRejected(t *testing.T) {
 	// The same exe path is claimed by both npm and pnpm global roots.
 	root := t.TempDir()
 	sharedRoot := filepath.Join(root, "node_modules")
-	binDir := filepath.Join(sharedRoot, "pig", "bin")
+	binDir := filepath.Join(sharedRoot, "ompig", "bin")
 	if err := os.MkdirAll(binDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -470,35 +470,35 @@ func TestResolveSelfUpdateTier_ImmutableBinaryWhenReleaseBaked(t *testing.T) {
 func TestResolveSelfUpdateTier_ContainerViaEnvOverride(t *testing.T) {
 	for _, val := range []string{"container", "image"} {
 		t.Run(val, func(t *testing.T) {
-			t.Setenv("PIG_INSTALL_TIER", val)
+			t.Setenv("OMPIG_INSTALL_TIER", val)
 			prov, err := resolveTierForExe(t, ownExe(t), fakeCmdRunner{outputs: map[string]string{}})
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
 			if prov.Tier != tierContainer {
-				t.Fatalf("tier = %s, want container for PIG_INSTALL_TIER=%s", prov.Tier, val)
+				t.Fatalf("tier = %s, want container for OMPIG_INSTALL_TIER=%s", prov.Tier, val)
 			}
 		})
 	}
 }
 
 func TestResolveSelfUpdateTier_UnknownEnvOverrideIsRejected(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TIER", "bogus")
+	t.Setenv("OMPIG_INSTALL_TIER", "bogus")
 	_, err := resolveTierForExe(t, ownExe(t), fakeCmdRunner{outputs: map[string]string{}})
 	if err == nil {
-		t.Fatal("unknown PIG_INSTALL_TIER resolved without error")
+		t.Fatal("unknown OMPIG_INSTALL_TIER resolved without error")
 	}
 	var te *TierError
 	if !errors.As(err, &te) {
 		t.Fatalf("error is not a *TierError: %v", err)
 	}
-	if !strings.Contains(te.Remediation, "unknown PIG_INSTALL_TIER value") {
+	if !strings.Contains(te.Remediation, "unknown OMPIG_INSTALL_TIER value") {
 		t.Fatalf("remediation missing unknown-tier message: %s", te.Remediation)
 	}
 }
 
-// pig123 is the release plan that updates pig to 1.2.3 without a rename.
-var pig123 = SelfUpdatePackageTarget{PackageName: "pig", InstallSpec: "pig@1.2.3"}
+// ompig123 is the release plan that updates ompig to 1.2.3 without a rename.
+var ompig123 = SelfUpdatePackageTarget{PackageName: "ompig", InstallSpec: "ompig@1.2.3"}
 
 func TestPackageManagerUpdateCommand_MirrorsUpstreamShape(t *testing.T) {
 	cases := []struct {
@@ -506,14 +506,14 @@ func TestPackageManagerUpdateCommand_MirrorsUpstreamShape(t *testing.T) {
 		wantCmd  string
 		wantArgs []string
 	}{
-		{ownerNPM, "npm", []string{"install", "-g", "--ignore-scripts", "--min-release-age=0", "pig@1.2.3"}},
-		{ownerPNPM, "pnpm", []string{"install", "-g", "--ignore-scripts", "--config.minimumReleaseAge=0", "pig@1.2.3"}},
-		{ownerYarn, "yarn", []string{"global", "add", "--ignore-scripts", "pig@1.2.3"}},
-		{ownerBun, "bun", []string{"install", "-g", "--ignore-scripts", "--minimum-release-age=0", "pig@1.2.3"}},
+		{ownerNPM, "npm", []string{"install", "-g", "--ignore-scripts", "--min-release-age=0", "ompig@1.2.3"}},
+		{ownerPNPM, "pnpm", []string{"install", "-g", "--ignore-scripts", "--config.minimumReleaseAge=0", "ompig@1.2.3"}},
+		{ownerYarn, "yarn", []string{"global", "add", "--ignore-scripts", "ompig@1.2.3"}},
+		{ownerBun, "bun", []string{"install", "-g", "--ignore-scripts", "--minimum-release-age=0", "ompig@1.2.3"}},
 	}
 	for _, tc := range cases {
 		t.Run(string(tc.owner), func(t *testing.T) {
-			cmd := PackageManagerUpdateCommand(tc.owner, "pig", nil, pig123)
+			cmd := PackageManagerUpdateCommand(tc.owner, "ompig", nil, ompig123)
 			if cmd == nil {
 				t.Fatal("nil command")
 			}
@@ -534,43 +534,43 @@ func TestPackageManagerUpdateCommand_MirrorsUpstreamShape(t *testing.T) {
 			}
 		})
 	}
-	if PackageManagerUpdateCommand(PackageManagerOwner("unknown"), "pig", nil, pig123) != nil {
+	if PackageManagerUpdateCommand(PackageManagerOwner("unknown"), "ompig", nil, ompig123) != nil {
 		t.Fatal("unknown owner returned a command")
 	}
 }
 
 func TestRemediationMessagesAreNonLoopingAndMentionExe(t *testing.T) {
-	exe := "/usr/local/bin/pig"
-	if msg := ImmutableBinaryRemediation(exe); !strings.Contains(msg, exe) || strings.Contains(msg, "pig update") {
+	exe := "/usr/local/bin/ompig"
+	if msg := ImmutableBinaryRemediation(exe); !strings.Contains(msg, exe) || strings.Contains(msg, "ompig update") {
 		t.Fatalf("immutable remediation loops or omits exe: %s", msg)
 	}
-	if msg := ContainerRemediation(exe); !strings.Contains(msg, exe) || strings.Contains(msg, "pig update") {
+	if msg := ContainerRemediation(exe); !strings.Contains(msg, exe) || strings.Contains(msg, "ompig update") {
 		t.Fatalf("container remediation loops or omits exe: %s", msg)
 	}
-	if msg := UnsupportedRemediation(exe); !strings.Contains(msg, exe) || strings.Contains(msg, "pig update") {
+	if msg := UnsupportedRemediation(exe); !strings.Contains(msg, exe) || strings.Contains(msg, "ompig update") {
 		t.Fatalf("unsupported remediation loops or omits exe: %s", msg)
 	}
 }
 
 func TestContainerRemediationUsesImageRefWhenSet(t *testing.T) {
-	t.Setenv("PIG_IMAGE_REF", "registry.example/pig:1.2.3")
-	msg := ContainerRemediation("/x/pig")
-	if !strings.Contains(msg, "registry.example/pig:1.2.3") {
-		t.Fatalf("container remediation omits PIG_IMAGE_REF: %s", msg)
+	t.Setenv("OMPIG_IMAGE_REF", "registry.example/ompig:1.2.3")
+	msg := ContainerRemediation("/x/ompig")
+	if !strings.Contains(msg, "registry.example/ompig:1.2.3") {
+		t.Fatalf("container remediation omits OMPIG_IMAGE_REF: %s", msg)
 	}
-	if !strings.Contains(msg, "pull registry.example/pig:1.2.3") {
+	if !strings.Contains(msg, "pull registry.example/ompig:1.2.3") {
 		t.Fatalf("container remediation omits pull command: %s", msg)
 	}
 }
 
 // TestContainerRemediationRendersProductRedeployInstruction proves that a
 // managed deployment supplies the exact redeploy operation through the generic
-// seam. Pig renders it instead of asserting a generic `docker pull` that an
+// seam. Ompig renders it instead of asserting a generic `docker pull` that an
 // operator cannot run against the managed environment.
 func TestContainerRemediationRendersProductRedeployInstruction(t *testing.T) {
-	t.Setenv("PIG_IMAGE_REF", "registry.example/pig-agent:1.2.3")
-	t.Setenv("PIG_REDEPLOY_INSTRUCTION", "Roll the managed agent deployment.")
-	msg := ContainerRemediation("/usr/local/bin/pig")
+	t.Setenv("OMPIG_IMAGE_REF", "registry.example/ompig-agent:1.2.3")
+	t.Setenv("OMPIG_REDEPLOY_INSTRUCTION", "Roll the managed agent deployment.")
+	msg := ContainerRemediation("/usr/local/bin/ompig")
 
 	if !strings.Contains(msg, "Roll the managed agent deployment") {
 		t.Fatalf("remediation dropped the product redeploy instruction: %s", msg)
@@ -578,18 +578,18 @@ func TestContainerRemediationRendersProductRedeployInstruction(t *testing.T) {
 	if strings.Contains(msg, "docker pull") {
 		t.Fatalf("remediation asserted a generic docker pull over the product instruction: %s", msg)
 	}
-	// Pig's own invariants must survive: the artifact identity, the executable,
+	// Ompig's own invariants must survive: the artifact identity, the executable,
 	// and the no-in-place-rewrite guarantee.
 	for _, want := range []string{
-		"registry.example/pig-agent:1.2.3",
-		"/usr/local/bin/pig",
+		"registry.example/ompig-agent:1.2.3",
+		"/usr/local/bin/ompig",
 		"not rewritten",
 	} {
 		if !strings.Contains(msg, want) {
 			t.Fatalf("remediation dropped %q: %s", want, msg)
 		}
 	}
-	if strings.Contains(msg, "pig update") {
+	if strings.Contains(msg, "ompig update") {
 		t.Fatalf("remediation loops back to the failed command: %s", msg)
 	}
 }
@@ -678,15 +678,15 @@ func TestAC4PackageManagerUpdateOwnsMutation(t *testing.T) {
 	standaloneCalled := false
 	prov := &SelfUpdateProvenance{
 		Tier:         tierPackageManager,
-		ExePath:      "/managed/pig",
+		ExePath:      "/managed/ompig",
 		PackageOwner: ownerPNPM,
-		PackageName:  "pig",
+		PackageName:  "ompig",
 	}
 	result := applyProvenance(prov, func(string) error {
 		standaloneCalled = true
 		return nil
 	}, func(prov *SelfUpdateProvenance) error {
-		return RunPackageManagerUpdate(PackageManagerUpdateCommand(prov.PackageOwner, prov.PackageName, nil, pig123))
+		return RunPackageManagerUpdate(PackageManagerUpdateCommand(prov.PackageOwner, prov.PackageName, nil, ompig123))
 	})
 	if standaloneCalled {
 		t.Fatal("standalone apply was invoked; package-manager tier fell back to standalone")
@@ -714,15 +714,15 @@ func TestAC4PackageManagerFailureSurfacesNoFallback(t *testing.T) {
 	standaloneCalled := false
 	prov := &SelfUpdateProvenance{
 		Tier:         tierPackageManager,
-		ExePath:      "/managed/pig",
+		ExePath:      "/managed/ompig",
 		PackageOwner: ownerPNPM,
-		PackageName:  "pig",
+		PackageName:  "ompig",
 	}
 	result := applyProvenance(prov, func(string) error {
 		standaloneCalled = true
 		return nil
 	}, func(prov *SelfUpdateProvenance) error {
-		return RunPackageManagerUpdate(PackageManagerUpdateCommand(prov.PackageOwner, prov.PackageName, nil, pig123))
+		return RunPackageManagerUpdate(PackageManagerUpdateCommand(prov.PackageOwner, prov.PackageName, nil, ompig123))
 	})
 	if standaloneCalled {
 		t.Fatal("standalone apply invoked after package-manager failure")
@@ -737,10 +737,10 @@ func TestAC4PackageManagerFailureSurfacesNoFallback(t *testing.T) {
 
 // Upstream self-updates npm and pnpm installs on Windows and refuses every
 // other install method there with "self-update on Windows is only supported
-// for npm and pnpm installs" (package-manager-cli.ts). A standalone pig.exe
+// for npm and pnpm installs" (package-manager-cli.ts). A standalone ompig.exe
 // stays unsupported (D39).
 func TestResolveSelfUpdateTierOnWindowsFollowsInstallMethod(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	type install struct {
 		outputs map[string]string
 		binDir  string
@@ -748,20 +748,20 @@ func TestResolveSelfUpdateTierOnWindowsFollowsInstallMethod(t *testing.T) {
 	layouts := map[PackageManagerOwner]func(root string) install{
 		ownerNPM: func(root string) install {
 			global := filepath.Join(root, "node_modules")
-			return install{map[string]string{"npm root -g": global}, filepath.Join(global, "pig", "bin")}
+			return install{map[string]string{"npm root -g": global}, filepath.Join(global, "ompig", "bin")}
 		},
 		ownerPNPM: func(root string) install {
 			global := filepath.Join(root, "pnpm", "node_modules")
-			return install{map[string]string{"pnpm root -g": global}, filepath.Join(global, "pig", "bin")}
+			return install{map[string]string{"pnpm root -g": global}, filepath.Join(global, "ompig", "bin")}
 		},
 		ownerYarn: func(root string) install {
 			global := filepath.Join(root, "yarn", "global")
-			return install{map[string]string{"yarn global dir": global}, filepath.Join(global, "node_modules", "pig", "bin")}
+			return install{map[string]string{"yarn global dir": global}, filepath.Join(global, "node_modules", "ompig", "bin")}
 		},
 		ownerBun: func(root string) install {
 			return install{
 				map[string]string{"bun pm bin -g": filepath.Join(root, "bun", "bin")},
-				filepath.Join(root, "bun", "install", "global", "node_modules", "pig", "bin"),
+				filepath.Join(root, "bun", "install", "global", "node_modules", "ompig", "bin"),
 			}
 		},
 	}
@@ -785,7 +785,7 @@ func TestResolveSelfUpdateTierOnWindowsFollowsInstallMethod(t *testing.T) {
 			exe := writeFakeExe(t, layout.binDir)
 			prov, err := resolveSelfUpdateTierOn(tc.goos, exe, fakeCmdRunner{outputs: layout.outputs})
 			if tc.refused {
-				want := "pig self-update on Windows is only supported for npm and pnpm installs.\nDetected install method: " + string(tc.owner) + ". Update pig manually."
+				want := "ompig self-update on Windows is only supported for npm and pnpm installs.\nDetected install method: " + string(tc.owner) + ". Update ompig manually."
 				te, ok := errors.AsType[*TierError](err)
 				if !ok || te.Error() != want {
 					t.Fatalf("resolve = %#v, %v; want the refusal %q", prov, err, want)
@@ -795,8 +795,8 @@ func TestResolveSelfUpdateTierOnWindowsFollowsInstallMethod(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if prov.Tier != tierPackageManager || prov.PackageOwner != tc.owner || prov.PackageName != "pig" {
-				t.Fatalf("provenance = %#v, want the %s package-manager tier for pig", prov, tc.owner)
+			if prov.Tier != tierPackageManager || prov.PackageOwner != tc.owner || prov.PackageName != "ompig" {
+				t.Fatalf("provenance = %#v, want the %s package-manager tier for ompig", prov, tc.owner)
 			}
 		})
 	}

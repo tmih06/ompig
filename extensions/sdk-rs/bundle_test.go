@@ -24,7 +24,7 @@ func TestSourceReadable(t *testing.T) {
 		}
 	}
 	data, err := Source.ReadFile("Cargo.toml")
-	if err != nil || !strings.Contains(string(data), "pig-sdk") {
+	if err != nil || !strings.Contains(string(data), "ompig-sdk") {
 		t.Fatalf("embedded Cargo.toml is not the SDK crate: err=%v", err)
 	}
 }

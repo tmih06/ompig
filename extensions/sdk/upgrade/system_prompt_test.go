@@ -5,7 +5,7 @@ package upgrade_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 // systemPromptSource reads before_agent_start's data["systemPrompt"] as a string in each form: a handler the package

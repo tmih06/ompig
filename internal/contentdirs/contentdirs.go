@@ -1,5 +1,5 @@
 // Package contentdirs keeps content-addressed directories under a shared config root: one directory per build of an embedded bundle, named
-// <base>-<hash>. PiG builds that share a config root (two installed versions, or stock PiG beside a Piglet Binary) each read and write only their
+// <base>-<hash>. Ompig builds that share a config root (two installed versions, or stock Ompig beside a Ompiglet Binary) each read and write only their
 // own directory, so no build rewrites another's files or strands its extension builds.
 //
 // A directory records its last use in its modification time. Eviction keeps the most recently used directories and never removes the caller's
@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	// Keep is how many directories of one base survive eviction, the caller's own included. It covers a stock install, a Piglet Binary and an
+	// Keep is how many directories of one base survive eviction, the caller's own included. It covers a stock install, a Ompiglet Binary and an
 	// upgrade in progress sharing one config root; each directory holds a few MiB.
 	Keep = 4
 	// touchInterval bounds how often a warm start writes a use time, so most starts write nothing.
@@ -58,7 +58,7 @@ var leases sync.Map
 // Hold records that this process reads dir until the returned release runs, which a process that holds a directory for as long as it lives never calls: [Evict]
 // leaves a held directory, in this process and in every other, whatever its use time. The operating system releases the lease with the process, so a holder
 // that dies leaves nothing behind but a lease file the next eviction removes with the directory. A directory with no lease file has no holder, so a build that
-// never holds one (an older PiG) is evicted as before. Hold is best-effort, like [Touch]: a parent this user cannot write leaves the directory evictable, and
+// never holds one (an older Ompig) is evicted as before. Hold is best-effort, like [Touch]: a parent this user cannot write leaves the directory evictable, and
 // release is then a no-op. Holding a directory twice holds it once.
 func Hold(dir string) (release func()) {
 	path := dir + leaseSuffix

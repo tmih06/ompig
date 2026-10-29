@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // previewGapCells separates the longest option row from the preview column that follows it.
@@ -160,8 +160,8 @@ func (e *ExtensionSelectorComponent) rowText(i int) string {
 
 // SetPreview supplies the dialog's right column: the lines drawn beside the option rows for the highlighted option,
 // which the selector asks for on every render so the column follows the cursor. Nil, the default, draws upstream's
-// selector with no preview column. Pig's sprite picker uses it to show the pig of the sprite under the cursor.
-// pig divergence (D2): the preview column is Pig's sprite picker's; upstream's selector renders without one.
+// selector with no preview column. Ompig's sprite picker uses it to show the ompig of the sprite under the cursor.
+// ompig divergence (D2): the preview column is Ompig's sprite picker's; upstream's selector renders without one.
 func (e *ExtensionSelectorComponent) SetPreview(preview func(selectedIndex int) []string) {
 	e.preview = preview
 	e.Invalidate()
@@ -315,7 +315,7 @@ func (e *ExtensionSelectorComponent) SelectedValue() string {
 	return e.options[e.cursor]
 }
 
-// pig divergence (D155): extensionSelectorPageSize is the rows a selection page key moves (PAGE_SIZE of Pi PR #7680's extension-selector.ts).
+// ompig divergence (D155): extensionSelectorPageSize is the rows a selection page key moves (PAGE_SIZE of Pi PR #7680's extension-selector.ts).
 const extensionSelectorPageSize = 8
 
 // CapturesSelectPageInput reports that the selector handles tui.select.pageUp and tui.select.pageDown.

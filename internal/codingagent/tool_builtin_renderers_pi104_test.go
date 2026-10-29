@@ -14,11 +14,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 type piRenderStep struct {
@@ -55,7 +55,7 @@ type piRenderCase struct {
 
 // TestBuiltInRenderersMatchPi104 renders every case of the committed Pi 1.0.4 probe
 // (testdata/pi104-render-probe/render-probe.mjs, run against Pi's built renderers)
-// through PiG's built-in read, write and edit renderers and compares the rows.
+// through Ompig's built-in read, write and edit renderers and compares the rows.
 // Pi: packages/coding-agent/src/core/extensions/types.ts:463 (ToolRenderResultOptions.isPartial).
 func TestBuiltInRenderersMatchPi104(t *testing.T) {
 	data, err := os.ReadFile(filepath.Join("testdata", "pi104-render-probe", "builtin-renderers.golden.json"))
@@ -89,7 +89,7 @@ func TestBuiltInRenderersMatchPi104(t *testing.T) {
 	t.Cleanup(tui.ResetCapabilitiesCache)
 	tui.SetTheme("dark")
 	// Pi's edit preview settles in a promise continuation, after the render that follows renderCall and before the probe's
-	// "wait" step ends. Each case holds PiG's preview until its "wait" step, so the first frame never races the preview.
+	// "wait" step ends. Each case holds Ompig's preview until its "wait" step, so the first frame never races the preview.
 	var previewGate atomic.Pointer[chan struct{}]
 	compute := computeEditsDiff
 	computeEditsDiff = func(path string, edits []tools.EditReplacement, cwd string) tools.EditDiffOutcome {
@@ -137,7 +137,7 @@ func TestBuiltInRenderersMatchPi104(t *testing.T) {
 				switch step.Op {
 				case "wait":
 					release()
-					// The probe sleeps; PiG's preview invalidates the card, so wait for that when the previous call computed one.
+					// The probe sleeps; Ompig's preview invalidates the card, so wait for that when the previous call computed one.
 					if previous := stepPrev; previous.Op == "call" && previous.Tool == "edit" && previewExpected(previous) {
 						select {
 						case <-invalidated:

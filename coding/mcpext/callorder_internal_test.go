@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsloop"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // orderCaller records the order in which tool calls reach the client and gives each its id, as mcp.Client does.

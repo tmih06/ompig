@@ -13,17 +13,17 @@ Measured on the shared (load 40-100) 196-core host, same script, one execution a
 | | time |
 |---|---|
 | upstream 0.99.2 (`quickjs-wasi@3.6.2` in node, with and without an interrupt handler; `/tmp/qjsmem.mjs`) | 1.95-2.05 s |
-| Pig before (`BenchmarkMemoryLimitTrip`, `-benchtime 3x`) | 13.3 s |
-| Pig with `WithCloseOnContextDone(false)` (experiment, no hard stop) | 3.4 s |
-| Pig after | 3.0 s |
+| Ompig before (`BenchmarkMemoryLimitTrip`, `-benchtime 3x`) | 13.3 s |
+| Ompig with `WithCloseOnContextDone(false)` (experiment, no hard stop) | 3.4 s |
+| Ompig after | 3.0 s |
 
 Other scripts: 100 x `"x".repeat(1<<20)`: 5.1 s -> 1.2 s; a 10M-iteration integer loop: 8.5 s -> 2.3 s (node 0.77 s). Every code mode script ran 4-6x slower than it needed to.
 
 ## Fix
 
-The hard stop (a script that never reaches QuickJS's interrupt poll, `execution.go` `terminationGrace`) is a real requirement: the sandbox shares PiG's process and Go cannot preempt compiled guest code, where Pi calls `worker.terminate()`. So the stop is kept and made cheap:
+The hard stop (a script that never reaches QuickJS's interrupt poll, `execution.go` `terminationGrace`) is a real requirement: the sandbox shares Ompig's process and Go cannot preempt compiled guest code, where Pi calls `worker.terminate()`. So the stop is kept and made cheap:
 
-- `codemode/haltcheck.go` `instrumentHalt` rewrites the module once at engine creation: it appends a mutable i32 global exported as `pig_halt` and inserts `global.get $pig_halt; if; unreachable; end` after every `loop` header (a load and a branch in compiled code). The rewriter decodes the instruction stream (MVP, reference types, bulk memory, tail calls) and fails on anything else (SIMD, atomics, exceptions); the embedded module needs none of those. A custom `SandboxOptions.Wasm` module it cannot rewrite keeps the previous `WithCloseOnContextDone` hard stop (review fix, `TestHaltFallsBackToClosingAModuleItCannotInstrument`). The embedded `assets/quickjs.wasm` is not modified.
+- `codemode/haltcheck.go` `instrumentHalt` rewrites the module once at engine creation: it appends a mutable i32 global exported as `ompig_halt` and inserts `global.get $ompig_halt; if; unreachable; end` after every `loop` header (a load and a branch in compiled code). The rewriter decodes the instruction stream (MVP, reference types, bulk memory, tail calls) and fails on anything else (SIMD, atomics, exceptions); the embedded module needs none of those. A custom `SandboxOptions.Wasm` module it cannot rewrite keeps the previous `WithCloseOnContextDone` hard stop (review fix, `TestHaltFallsBackToClosingAModuleItCannotInstrument`). The embedded `assets/quickjs.wasm` is not modified.
 - `newEngine` no longer sets `WithCloseOnContextDone`; `vm.halt` sets the global; the grace timer in `execution.finish` calls it (the VM-start / grace-timer ordering is closed by `execution.machine` and `execution.halting`, whichever is set second halts). The halted guest traps with `unreachable`, which surfaces as the existing `vmTrap`; the verdict was already recorded, `hardStops` and the lifetime guarantees are unchanged.
 - No observable change: error text, RangeError/`InternalError: out of memory` and the timeout/abort messages are the engine's and the existing tests'.
 

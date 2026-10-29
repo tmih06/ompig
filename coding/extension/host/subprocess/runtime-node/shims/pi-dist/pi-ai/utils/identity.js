@@ -1,7 +1,7 @@
 import { PI_AI_VERSION } from "./version.js";
-import { pigUserAgent } from "../../../pig-identity.mjs";
+import { ompigUserAgent } from "../../../ompig-identity.mjs";
 /** pi's attribution, used by pi-agent-core, pi-durable, and the coding agent. */
-export const PI_ATTRIBUTION = { name: "PiG", url: "https://github.com/MichaelKinsy/PiG", categories: ["cli-agent"] };
+export const PI_ATTRIBUTION = { name: "Ompig", url: "https://github.com/tmih06/ompig", categories: ["cli-agent"] };
 const NVIDIA_NIM_HOST = "integrate.api.nvidia.com";
 const OPENCODE_HOST = "opencode.ai";
 /** Merge identities field by field; later sources win and undefined fields are skipped. */
@@ -39,10 +39,10 @@ export function formatUserAgent(identity) {
     const mode = identity?.userAgent ?? "detailed";
     if (typeof mode === "object")
         return mode.custom;
-// pig divergence (D26, D65): PiG's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.
+// ompig divergence (D26, D65): Ompig's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.
     if (mode === "short")
-        return "pig";
-    return pigUserAgent("pig", identity?.version);
+        return "ompig";
+    return ompigUserAgent("ompig", identity?.version);
 }
 function matchesHost(baseUrl, expectedHost) {
     try {

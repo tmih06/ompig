@@ -10,14 +10,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // settings-manager.ts getPackages, getExtensionPaths, getSkillPaths, getPromptTemplatePaths, getThemePaths, getAllModelThinkingLevels, getThinkingBudgets,
 // getTerminalCapabilityOverrides, getWarnings (compared as the consumer reads it: anthropicExtraUsage !== false), getHttpIdleTimeoutMs,
 // getWebSocketConnectTimeoutMs (a throw is compared by message) and getExternalEditorCommand (VISUAL and EDITOR cleared) against pinned Pi, over layered
 // global and project files: project arrays replace global ones, nested objects merge a key at a time. Not compared: wrong-typed array members, fractional
-// numbers (PiG's Settings is typed) and a thrown value that is not a number or string.
+// numbers (Ompig's Settings is typed) and a thrown value that is not a number or string.
 func TestSettingsManagerCollectionGettersMatchPi(t *testing.T) {
 	t.Setenv("VISUAL", "")
 	t.Setenv("EDITOR", "")

@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -14,7 +14,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream"
 
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // .upstream/v0.99.1/packages/ai/test/bedrock-raw-stop-reason.test.ts:73,91

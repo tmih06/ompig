@@ -12,7 +12,7 @@ func TestQuoteIfNeeded(t *testing.T) {
 		want string
 	}{
 		{"plain", "plain"},
-		{"/home/user/.pig/sessions", "/home/user/.pig/sessions"},
+		{"/home/user/.ompig/sessions", "/home/user/.ompig/sessions"},
 		{"a-b_c.d~e:f@g", "a-b_c.d~e:f@g"},
 		{"", "''"},
 		{"has space", "'has space'"},
@@ -46,13 +46,13 @@ func TestResumeCommand(t *testing.T) {
 	})
 	t.Run("default dir omits --session-dir", func(t *testing.T) {
 		got := resumeCommand(existing, "abc123", "", false)
-		if want := "pig --session abc123"; got != want {
+		if want := "ompig --session abc123"; got != want {
 			t.Errorf("got %q, want %q", got, want)
 		}
 	})
 	t.Run("custom dir includes quoted --session-dir", func(t *testing.T) {
 		got := resumeCommand(existing, "abc123", "/my sessions/dir", true)
-		if want := "pig --session-dir '/my sessions/dir' --session abc123"; got != want {
+		if want := "ompig --session-dir '/my sessions/dir' --session abc123"; got != want {
 			t.Errorf("got %q, want %q", got, want)
 		}
 	})

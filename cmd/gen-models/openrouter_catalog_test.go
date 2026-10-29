@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The fixtures and cases mirror packages/ai/test/image-model-data.test.ts at 0.99.1.
@@ -197,7 +197,7 @@ func TestOpenRouterCatalogParity(t *testing.T) {
 		if encoded, err = json.Marshal(generic); err != nil {
 			t.Fatal(err)
 		}
-		if os.Getenv("PIG_PARITY_PROBE") == "1" {
+		if os.Getenv("OMPIG_PARITY_PROBE") == "1" {
 			fmt.Printf("OPENROUTER_CATALOG %s\n", encoded)
 		}
 	}

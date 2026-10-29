@@ -7,8 +7,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 func TestPackageResourceDeltaPreservesPatternInsertionOrder(t *testing.T) {
@@ -44,7 +44,7 @@ func TestPackageResourceDeltaPreservesPatternInsertionOrder(t *testing.T) {
 func BenchmarkConfiguredPackageResources(b *testing.B) {
 	cwd, agent, root := b.TempDir(), b.TempDir(), b.TempDir()
 	b.Setenv("HOME", b.TempDir())
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	const members = 32
 	for i := range members {
 		for _, kind := range []string{"extensions", "prompts", "skills"} {

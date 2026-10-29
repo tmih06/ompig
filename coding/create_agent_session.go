@@ -8,9 +8,9 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // CreateAgentSessionFromServicesOptions mirrors agent-session-services.ts CreateAgentSessionFromServicesOptions: the services plus the session inputs

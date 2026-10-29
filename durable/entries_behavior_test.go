@@ -8,7 +8,7 @@ package durable_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // mutation-checked: zeroing the results of Entry.Is fails it

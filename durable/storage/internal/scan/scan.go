@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // maxSafeInteger is JavaScript's Number.MAX_SAFE_INTEGER, the end of the durable ID space.

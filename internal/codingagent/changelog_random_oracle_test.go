@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/utils/changelog.ts parseChangelog and getNewEntries against pinned Pi over random changelogs assembled from release headers (bracketed or bare, with odd versions, huge and zero-padded numbers, stray text and whitespace forms), bodies and every newline form. Versions beyond int64 are left out: ChangelogEntry holds ints, Pi doubles.

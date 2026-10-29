@@ -3,10 +3,10 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 type appendEntryCapture struct {
@@ -21,7 +21,7 @@ func (c *appendEntryCapture) SetHostAction(key string, fn any) {
 
 // BenchmarkExtensionAppendEntry is the host cost of one pi.appendEntry call of an extension a Session's resource loader loaded, composed as bindLoaderExtensionHost composes it: "log-only" is the call that only writes the log (what the Session did before it reported the entry, and what ctx.sessionManager.appendCustomEntry still does), "event" is the call that also delivers entry_appended to a listener, which each op waits for.
 func BenchmarkExtensionAppendEntry(b *testing.B) {
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: b.TempDir()})
 	if err != nil {
 		b.Fatal(err)

@@ -6,7 +6,7 @@ import (
 	"math"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Deferred commits (durable.CommitPersistence, spec section 4.1): a commit whose writes are cheap to lose is adopted in

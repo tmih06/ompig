@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func resolvePrint(t *testing.T, runtime *codingagent.RequestAuthRuntime, kind AuthCommandKind, args ...string) (string, error) {
@@ -101,7 +101,7 @@ func TestCredentialPrintReportsUnknownAuthOptionsLikePackageCommands(t *testing.
 	if !strings.Contains(stderr.String(), `Unknown option --`+misspelledCredentialsFlag+` for "auth check".`) {
 		t.Fatalf("stderr = %q", stderr.String())
 	}
-	if !strings.Contains(stderr.String(), `Use "pig --help" or "pig auth check --provider <provider> [--json] [--credentials] [--no-refresh]".`) {
+	if !strings.Contains(stderr.String(), `Use "ompig --help" or "ompig auth check --provider <provider> [--json] [--credentials] [--no-refresh]".`) {
 		t.Fatalf("stderr = %q", stderr.String())
 	}
 	if code != 1 || stdout.Len() != 0 {
@@ -172,7 +172,7 @@ func TestParseAuthCommandMinExpiryUnits(t *testing.T) {
 		t.Fatalf("--json on print-api-key = %v", err)
 	}
 	if _, err := ParseAuthCommand([]string{"auth"}); err == nil ||
-		err.Error() != `Unknown auth command "". Use "pig auth print-api-key", "pig auth print-bearer-token", or "pig auth check".` {
+		err.Error() != `Unknown auth command "". Use "ompig auth print-api-key", "ompig auth print-bearer-token", or "ompig auth check".` {
 		t.Fatalf("bare auth parse = %v", err)
 	}
 }
@@ -291,7 +291,7 @@ func TestAuthCommandExitCodesAndErrors(t *testing.T) {
 		stdout, stderr string
 	}{
 		{"help", []string{}, 0, authCommandHelp + "\n", ""},
-		{"unknown subcommand", []string{"nope"}, 1, "", `Error: Unknown auth command "nope". Use "pig auth print-api-key", "pig auth print-bearer-token", or "pig auth check".` + "\n"},
+		{"unknown subcommand", []string{"nope"}, 1, "", `Error: Unknown auth command "nope". Use "ompig auth print-api-key", "ompig auth print-bearer-token", or "ompig auth check".` + "\n"},
 		{"check without target", []string{"check"}, 2, "", "Error: Auth checks require --provider <provider> or --model <model>\n"},
 		{"print without target", []string{"print-api-key"}, 1, "", "Error: Credential printing requires --provider <provider> or --model <model>\n"},
 		{"check with message", []string{"check", "--provider", "openai", "hello"}, 2, "", "Error: Auth commands only accept --provider and --model\n"},
@@ -341,9 +341,9 @@ func TestAuthCheckNoRefreshCreatesNothingAndDoesNotRefresh(t *testing.T) {
 
 func TestAuthCheckWithModelsJSONProvider(t *testing.T) {
 	isolateAuthEnv(t)
-	t.Setenv("PIG_TEST_CUSTOM_KEY", "custom-secret")
+	t.Setenv("OMPIG_TEST_CUSTOM_KEY", "custom-secret")
 	agentDir := t.TempDir()
-	models := `{"providers":{"custom":{"baseUrl":"https://example.test/v1","apiKey":"$PIG_TEST_CUSTOM_KEY","api":"openai-completions","models":[{"id":"custom-model"}]}}}`
+	models := `{"providers":{"custom":{"baseUrl":"https://example.test/v1","apiKey":"$OMPIG_TEST_CUSTOM_KEY","api":"openai-completions","models":[{"id":"custom-model"}]}}}`
 	if err := os.WriteFile(filepath.Join(agentDir, "models.json"), []byte(models), 0o600); err != nil {
 		t.Fatal(err)
 	}

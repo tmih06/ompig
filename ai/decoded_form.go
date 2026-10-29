@@ -8,7 +8,7 @@ import (
 	"unsafe"
 )
 
-// pig additive (D112): DecodedFormBlock and DecodedFormUsage let the session store a message it just encoded without decoding the record again.
+// ompig additive (D112): DecodedFormBlock and DecodedFormUsage let the session store a message it just encoded without decoding the record again.
 
 // DecodedFormBlock is the block decoding the JSON encoding of block yields, when that can be proven without encoding or decoding: a text, thinking, image or tool call block that holds only valid UTF-8 text and, for a tool call, arguments that are an object of plain JSON values (nil, bool, finite float64 other than negative zero, string, []any, map[string]any). It reports false for anything else, and the caller decodes the record.
 func DecodedFormBlock(block ContentBlock) (ContentBlock, bool) {

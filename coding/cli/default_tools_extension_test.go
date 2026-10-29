@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -35,7 +35,7 @@ func TestDefaultToolsActivatesExtensionToolsAtStartup(t *testing.T) {
 		for _, mode := range []string{"print", "json", "rpc", "interactive"} {
 			t.Run(tc.name+"/"+mode, func(t *testing.T) {
 				home, cwd := t.TempDir(), t.TempDir()
-				agentDir := filepath.Join(home, "pig")
+				agentDir := filepath.Join(home, "ompig")
 				if err := os.MkdirAll(agentDir, 0o700); err != nil {
 					t.Fatal(err)
 				}
@@ -61,7 +61,7 @@ func TestDefaultToolsActivatesExtensionToolsAtStartup(t *testing.T) {
 				}
 				cmd := exec.CommandContext(t.Context(), binary, args...)
 				cmd.Dir = cwd
-				cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
+				cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
 				var output strings.Builder
 				switch mode {
 				case "interactive":
@@ -113,7 +113,7 @@ export default function (pi) {
   });
   pi.registerCommand("addcodemode", { description: "x", handler: async (_args, ctx) => {
     appendFileSync(process.env.AUDIT_OUT, "before=" + pi.getActiveTools().join(",") + "\n");
-    writeFileSync(join(process.env.PIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ defaultTools: ["+codemode"] }));
+    writeFileSync(join(process.env.OMPIG_CODING_AGENT_DIR, "settings.json"), JSON.stringify({ defaultTools: ["+codemode"] }));
     await ctx.reload();
   } });
 }
@@ -125,7 +125,7 @@ export default function (pi) {
 	for _, mode := range []string{"print", "json", "rpc"} {
 		t.Run(mode, func(t *testing.T) {
 			home, cwd := t.TempDir(), t.TempDir()
-			agentDir := filepath.Join(home, "pig")
+			agentDir := filepath.Join(home, "ompig")
 			if err := os.MkdirAll(agentDir, 0o700); err != nil {
 				t.Fatal(err)
 			}
@@ -137,7 +137,7 @@ export default function (pi) {
 				t.Fatal(err)
 			}
 			out := filepath.Join(t.TempDir(), "out.log")
-			env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "AUDIT_OUT=" + out}
+			env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "AUDIT_OUT=" + out}
 			args := []string{"-e", extension, "--model", "fixture/test", "--no-skills", "--no-prompt-templates", "--no-context-files", "--session-dir", t.TempDir()}
 			if mode == "rpc" {
 				process := startRPCProcessAt(t, cwd, env, args...)

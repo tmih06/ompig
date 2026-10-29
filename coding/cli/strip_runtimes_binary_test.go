@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // D92: a Binary without the Node runtime reports a TypeScript extension as
@@ -16,7 +16,7 @@ import (
 // completes with the faux model.
 func TestStrippedBinaryReportsTypeScriptExtensionStripped(t *testing.T) {
 	project := t.TempDir()
-	extensions := filepath.Join(project, ".pig", "extensions")
+	extensions := filepath.Join(project, ".ompig", "extensions")
 	if err := os.MkdirAll(extensions, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -24,21 +24,21 @@ func TestStrippedBinaryReportsTypeScriptExtensionStripped(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := pigstrip.Error("The TypeScript and JavaScript extension runtime", pigstrip.ListFeatures, pigstrip.NodeExtensions).Error()
-	for _, args := range [][]string{{"--approve"}, {"-ne", "-e", "./.pig/extensions/hello.ts"}} {
+	for _, args := range [][]string{{"--approve"}, {"-ne", "-e", "./.ompig/extensions/hello.ts"}} {
 		args = append(append([]string{"-p", "--model", "test-faux/faux-1"}, args...), "reply with exactly: done")
 		stdout, stderr, code := runStrippedPig(t, project, args...)
 		if code != 1 || !strings.Contains(stderr, `Failed to load extension "`) || !strings.Contains(stderr, want) || !strings.Contains(stderr, "-ne") {
-			t.Fatalf("pig %v: exit %d\nstdout: %q\nstderr: %q\nwant a load failure naming %q", args, code, stdout, stderr, want)
+			t.Fatalf("ompig %v: exit %d\nstdout: %q\nstderr: %q\nwant a load failure naming %q", args, code, stdout, stderr, want)
 		}
 	}
 	stdout, stderr, code := runStrippedPig(t, project, "-p", "--approve", "-ne", "--model", "test-faux/faux-1", "reply with exactly: done")
 	if code != 0 || strings.TrimSpace(stdout) != "done" {
-		t.Fatalf("pig -ne: exit %d\nstdout: %q\nstderr: %q", code, stdout, stderr)
+		t.Fatalf("ompig -ne: exit %d\nstdout: %q\nstderr: %q", code, stdout, stderr)
 	}
 }
 
-// D92: a Binary without the extension SDKs answers `pig reload --sdk-path
-// <lang>` and `pig extension init --lang <lang>` with the strip, not an
+// D92: a Binary without the extension SDKs answers `ompig reload --sdk-path
+// <lang>` and `ompig extension init --lang <lang>` with the strip, not an
 // unknown language or a missing stage.
 func TestStrippedBinaryReportsExtensionSDKsStripped(t *testing.T) {
 	for _, tc := range []struct{ lang, what, id string }{
@@ -48,13 +48,13 @@ func TestStrippedBinaryReportsExtensionSDKsStripped(t *testing.T) {
 	} {
 		want := pigstrip.Error(tc.what, pigstrip.ListFeatures, tc.id).Error()
 		stdout, stderr, code := runStrippedPig(t, "", "reload", "--sdk-path", tc.lang)
-		if code != 1 || strings.TrimSpace(stderr) != "pig reload: "+want || stdout != "" {
-			t.Fatalf("pig reload --sdk-path %s: exit %d\nstdout: %q\nstderr: %q", tc.lang, code, stdout, stderr)
+		if code != 1 || strings.TrimSpace(stderr) != "ompig reload: "+want || stdout != "" {
+			t.Fatalf("ompig reload --sdk-path %s: exit %d\nstdout: %q\nstderr: %q", tc.lang, code, stdout, stderr)
 		}
 		project := filepath.Join(t.TempDir(), "hello")
 		stdout, stderr, code = runStrippedPig(t, "", "extension", "init", "--lang", tc.lang, project)
 		if code != 1 || !strings.Contains(stdout+stderr, "stage "+tc.lang+" SDK: "+want) {
-			t.Fatalf("pig extension init --lang %s: exit %d\nstdout: %q\nstderr: %q", tc.lang, code, stdout, stderr)
+			t.Fatalf("ompig extension init --lang %s: exit %d\nstdout: %q\nstderr: %q", tc.lang, code, stdout, stderr)
 		}
 	}
 }
@@ -63,7 +63,7 @@ func TestStrippedBinaryReportsExtensionSDKsStripped(t *testing.T) {
 // package stays (fused extensions build on it), so the check is by symbol.
 func TestStrippedBinaryOmitsExtensionSDKSources(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds a stripped cmd/pig")
+		t.Skip("builds a stripped cmd/ompig")
 	}
 	binary, err := strippedTestBinary()
 	if err != nil {
@@ -76,7 +76,7 @@ func TestStrippedBinaryOmitsExtensionSDKSources(t *testing.T) {
 	for line := range strings.SplitSeq(string(out), "\n") {
 		for _, symbol := range []string{"/extensions/sdk.Source", "/extensions/sdk-py.Source", "/extensions/sdk-rs.Source", "klauspost/compress/zstd."} {
 			if strings.Contains(line, symbol) {
-				t.Errorf("stripped pig links %s", strings.TrimSpace(line))
+				t.Errorf("stripped ompig links %s", strings.TrimSpace(line))
 			}
 		}
 	}

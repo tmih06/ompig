@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func configMigrationAgentDir(t *testing.T) string {
@@ -15,8 +15,8 @@ func configMigrationAgentDir(t *testing.T) string {
 	agentDir := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 	return agentDir
 }

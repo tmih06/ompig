@@ -7,18 +7,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's ctx.model is live (runner.ts:906), so a model change that no extension call announced, here one a native in-process extension makes between two handlers of the same emission, is what the next handler reads. The host's replicated state must not hold the model a handler earlier. The recorded ids are catalog models, not any SDK's fallback.
 func TestModelChangedWithoutACallReachesTheNextHandlerAcrossSDKs(t *testing.T) {
 	root := findModuleRoot(t)
-	t.Setenv("PIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
-	t.Setenv("PIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
-	t.Setenv("PIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
+	t.Setenv("OMPIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
+	t.Setenv("OMPIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
 	small := ai.GetBuiltinModel("anthropic", "claude-haiku-4-5")
 	large := ai.GetBuiltinModel("anthropic", "claude-sonnet-4-5")
 	if small == nil || large == nil || small.ID == large.ID {
@@ -98,7 +98,7 @@ func modelRecorderFactory(t *testing.T, root, language, name string) subprocess.
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package recorder
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.OnEvent("before_agent_start",func(ctx sdk.Context,data map[string]any)(any,error){
@@ -114,9 +114,9 @@ func Extension()*sdk.Extension {
 }`, name, name)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  def handler(ctx,data):
   info=ctx.get_model_info()
   data["systemPromptOptions"]["appendSystemPrompt"]+="|%s="+(info["id"] if info else "none")+"/"+ctx.model
@@ -125,7 +125,7 @@ def new_extension():
 `, name, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.on_before_agent_start(|ctx,event| {

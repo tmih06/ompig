@@ -10,7 +10,7 @@ import (
 
 // Ports packages/coding-agent/test/theme-export.test.ts:73 "converts OKHSL export colors to hex because CSS does not support them" (upstream 0.99.1).
 //
-// Per-case substitution: upstream sets `vars: { card: ... }` and reads only the export section through loadThemeJson. PiG reads the export colors from a loaded Theme, which must resolve every color, so the built-in dark vars are kept next to `card`, as TestThemeExportColorsUpstream does.
+// Per-case substitution: upstream sets `vars: { card: ... }` and reads only the export section through loadThemeJson. Ompig reads the export colors from a loaded Theme, which must resolve every color, so the built-in dark vars are kept next to `card`, as TestThemeExportColorsUpstream does.
 func TestThemeExportOkhslColorsUpstream(t *testing.T) {
 	dark, err := builtinThemes.ReadFile("theme_dark.json")
 	if err != nil {

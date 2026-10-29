@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Pi keys.ts uses String.fromCodePoint, which preserves surrogate code points rather than replacing them as Go string(rune) does.

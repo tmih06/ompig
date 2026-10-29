@@ -9,7 +9,7 @@ import (
 	"time"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // newDisposableSession builds a Session whose test keeps no reference to it, so the test can observe what still holds it
@@ -17,7 +17,7 @@ import (
 func newDisposableSession(t *testing.T) (weak.Pointer[Session], <-chan agent.AgentEvent, func(), *AgentSessionServices) {
 	t.Helper()
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	agentDir := filepath.Join(tmp, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

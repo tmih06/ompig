@@ -37,7 +37,7 @@ process.env.AWS_BEDROCK_FORCE_HTTP1 = '1';
 // FAUX_USAGE_SSE reproduces a provider that attaches a usage object to
 // content-bearing chunks (e.g. gemini-3.5-flash via github-copilot). The parser
 // must record usage and keep processing; aborting on the first usage chunk
-// drops the whole stream. Kept byte-identical with the pig harness fauxUsageSSE.
+// drops the whole stream. Kept byte-identical with the ompig harness fauxUsageSSE.
 const FAUX_USAGE_SSE = [
   'data: {"choices":[{"delta":{"content":"VER"},"finish_reason":null}],"usage":{"prompt_tokens":5,"completion_tokens":1}}',
   '',
@@ -142,7 +142,7 @@ async function sseResponseServer(body) {
 }
 
 // collectResponse drives the upstream stream function against the faux SSE and
-// aggregates it into the same normalized shape the pig harness produces.
+// aggregates it into the same normalized shape the ompig harness produces.
 async function probeOpenAICompletionsResponse() {
   const { server, url } = await sseResponseServer(FAUX_USAGE_SSE);
   try {

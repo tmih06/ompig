@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ToolRenderResultOptions mirrors upstream ToolRenderResultOptions.
@@ -160,7 +160,7 @@ type ToolNamespace struct {
 
 // ToolDefinition mirrors upstream ToolDefinition<TParams, TDetails, TState>.
 //
-// pig Go mechanic (not a divergence): upstream is generic over TParams (TypeBox
+// ompig Go mechanic (not a divergence): upstream is generic over TParams (TypeBox
 // TSchema), TDetails, and TState. Go uses json.RawMessage for parameters and any
 // for details/state because Go interface methods cannot have type parameters and
 // the host registry is heterogeneous. The SDK ergonomics layer in
@@ -230,7 +230,7 @@ type ToolDefinition struct {
 // words of the input that may name them, where a word refers to a tool or namespace whose name contains it, so words
 // may over-match.
 //
-// pig Go mechanic (not a divergence): a Go struct stands for the string-or-array union.
+// ompig Go mechanic (not a divergence): a Go struct stands for the string-or-array union.
 type ToolReach struct {
 	All   bool
 	Words []string
@@ -248,7 +248,7 @@ type ToolInfo struct {
 	Parameters       json.RawMessage `json:"parameters"`
 	PromptGuidelines []string        `json:"promptGuidelines,omitempty"`
 	SourceInfo       SourceInfo      `json:"sourceInfo"`
-	// Source is PiG's per-tool source attribution (D23): "builtin", the registering extension's name, or the tool's declared source. It is not part of upstream's ToolInfo.
+	// Source is Ompig's per-tool source attribution (D23): "builtin", the registering extension's name, or the tool's declared source. It is not part of upstream's ToolInfo.
 	Source string `json:"-"`
 	// Exposure, Namespace, and Annotations mirror upstream ToolInfo. upstream: types.ts:2063
 	Exposure    ToolExposure     `json:"exposure,omitempty"`
@@ -263,7 +263,7 @@ type ToolInfo struct {
 type RegisteredTool struct {
 	Definition ToolDefinition `json:"definition"`
 	SourceInfo SourceInfo     `json:"sourceInfo"`
-	// Source is PiG's per-tool source attribution (D23): the tool's declared source, or the registering extension's name. It is not part of upstream's RegisteredTool and is empty for tools no extension registered.
+	// Source is Ompig's per-tool source attribution (D23): the tool's declared source, or the registering extension's name. It is not part of upstream's RegisteredTool and is empty for tools no extension registered.
 	Source string `json:"-"`
 	// Revision identifies this registration: a live registry stamps every registration, including one that replaces a name, with a value no other registration of the process has, so a consumer that derived something from a definition can tell that the definition is the one it saw. Zero is a registration no live registry stamped, which identifies nothing.
 	Revision uint64 `json:"-"`

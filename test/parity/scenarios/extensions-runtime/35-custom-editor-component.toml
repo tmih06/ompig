@@ -9,7 +9,7 @@
 # screen. Keys it passes to CustomEditor.handleInput run Pi's editing, and
 # Enter submits through the default editor's onSubmit. The extension reads its
 # label through SettingsManager.create(cwd).getGlobalSettings().
-# PiG failed pi-vim with "SettingsManager.create is not a function", and its
+# Ompig failed pi-vim with "SettingsManager.create is not a function", and its
 # CustomEditor was a decoration stand-in that never received a key.
 
 name = "35-custom-editor-component"
@@ -25,14 +25,14 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-# 256 colors in both binaries: PiG's header then takes Pi's two logo lines with
-# the PiG. text mark (D2), so the rows between the capture's first line and the
-# editor match. In truecolor PiG draws its 7-line pig head in Pi's 2-line logo
+# 256 colors in both binaries: Ompig's header then takes Pi's two logo lines with
+# the Ompig. text mark (D2), so the rows between the capture's first line and the
+# editor match. In truecolor Ompig draws its 7-line ompig head in Pi's 2-line logo
 # slot, which makes the header 2 rows taller and leaves 2 fewer blank rows.
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/editor-pig-home/agent", "COLORTERM="]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/editor-ompig-home/agent", "COLORTERM="]
 pi = ["PI_CODING_AGENT_DIR=testdata/editor-pi-agent", "COLORTERM="]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/modal-editor.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/modal-editor.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/modal-editor.mjs",
@@ -41,7 +41,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 40
-ready_pattern_pig = "PROBE:INSERT"
+ready_pattern_ompig = "PROBE:INSERT"
 ready_pattern_pi = "PROBE:INSERT"
 ready_timeout_seconds = 30
 capture_start = "reply with exactly"

@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 // pi: packages/durable/src/storage/sqlite/storage.ts:72,312,341,378 and storage/memory.ts:126,498,684 and storage/scan.ts:21-32 (42a3497d):

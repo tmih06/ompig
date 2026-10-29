@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's DefaultResourceLoader requires agentDir (resource-loader.ts:274, 373) and its package manager resolves it to an absolute path
@@ -14,7 +14,7 @@ import (
 // reported as a warning instead of rejecting the reload, so the not-absolute error is that warning.
 func TestResourceLoaderWithoutAnAgentDirWritesNothingIntoTheProcessDirectory(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	dir := t.TempDir()
 	t.Chdir(dir)
 	settings := NewInMemorySettingsManager(Settings{})

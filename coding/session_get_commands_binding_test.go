@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi: packages/coding-agent/src/core/agent-session.ts:3361-3383 (_bindExtensionCore getCommands), bound as runner.ts:433 runtime.getCommands:
@@ -42,7 +42,7 @@ func TestSessionBindsGetCommandsForExtensions(t *testing.T) {
 	if got := runtime.GetCommands(); !reflect.DeepEqual(got, want) {
 		t.Fatalf("getCommands = %+v, want %+v", got, want)
 	}
-	// A mode binds its own actions after the Session (cmd/pig sessionExtensionActions); omitting getCommands keeps the Session's.
+	// A mode binds its own actions after the Session (cmd/ompig sessionExtensionActions); omitting getCommands keeps the Session's.
 	runner.BindCore(extension.ExtensionActions{SetSessionName: func(string) error { return nil }}, extension.ContextActions{}, nil)
 	if got := runtime.GetCommands(); !reflect.DeepEqual(got, want) {
 		t.Fatalf("getCommands after a mode rebinds the core actions = %+v, want %+v", got, want)

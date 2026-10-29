@@ -4,10 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/internal/detach"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/internal/detach"
 )
 
 // A storage that retains decoded entries shares them with its readers internally; the Context a caller receives must

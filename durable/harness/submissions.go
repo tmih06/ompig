@@ -8,10 +8,10 @@ import (
 	"strings"
 	"sync"
 
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // commitOnLine runs change on the Session line and returns its typed result.

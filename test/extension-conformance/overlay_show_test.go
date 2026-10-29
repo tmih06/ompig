@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // rawProbeOverlay is a raw overlay as the host's ShowRemoteOverlay mounts it: it records the controls the extension applies and the

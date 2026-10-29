@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // The /tree listing cuts a message at 60 characters. A byte cut inside a multi-byte character left invalid UTF-8 on screen.
@@ -38,7 +38,7 @@ func TestRenderTreeASCIICutInsideASurrogatePairWritesTheReplacementCharacter(t *
 	}
 }
 
-// A legacy PiG bash_execution entry labels its command cut at 50 UTF-16 units.
+// A legacy Ompig bash_execution entry labels its command cut at 50 UTF-16 units.
 func TestTreeRowCutsALegacyBashCommandAtCharacters(t *testing.T) {
 	for _, tc := range []struct{ command, want string }{
 		{strings.Repeat("界", 60), "[bash: !" + strings.Repeat("界", 50) + "…]"},

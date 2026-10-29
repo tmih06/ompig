@@ -8,11 +8,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/internal/entryscan"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/internal/entryscan"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
+	"github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 // The working set must answer exactly what ScanEntries answers, whatever it retains, through writes, forks, eviction,

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/tui"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestUpstreamKeybindingsMigration(t *testing.T) {

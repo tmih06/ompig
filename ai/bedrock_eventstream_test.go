@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -15,7 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/smithy-go"
 
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // golden.json is the output of testdata/bedrock-eventstream/probe.mjs: what Pi's real AWS SDK and @smithy/core event-stream stack yields or throws for each byte sequence, recorded on Node 24.19.0. Node 26.7.0 prints the same file.
@@ -41,7 +41,7 @@ type bedrockReplayResult struct {
 	hasError bool
 }
 
-// replayBedrockEventStream runs bytes through PiG's framing, decoding and unmarshalling until the first thrown error, as the async generator chain stops at its first rejection.
+// replayBedrockEventStream runs bytes through Ompig's framing, decoding and unmarshalling until the first thrown error, as the async generator chain stops at its first rejection.
 func replayBedrockEventStream(chunks [][]byte) []bedrockReplayResult {
 	var results []bedrockReplayResult
 	fail := func(err error) []bedrockReplayResult {

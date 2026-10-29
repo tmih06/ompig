@@ -12,7 +12,7 @@ type idIndex struct {
 }
 
 // idIndexMinTable is the size of an index's first table.
-// pig additive (D112): Pi's byId is a Map with no table to size; the first table's size changes how often the index grows, never what a lookup returns.
+// ompig additive (D112): Pi's byId is a Map with no table to size; the first table's size changes how often the index grows, never what a lookup returns.
 const idIndexMinTable = 16
 
 // find returns the slot of id in slots, and false when no slot has it.

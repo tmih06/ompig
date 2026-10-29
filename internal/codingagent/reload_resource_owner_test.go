@@ -8,7 +8,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.87.1 agent-session.ts:3294-3313 awaits resource-loader.ts:405 before rebuilding and session_start.

@@ -5,8 +5,8 @@
 //
 // Upstream builds a single SessionManager from the resolved session dir
 // (main.ts createSessionManager) and hands it to every mode, so the flag is
-// uniform there. pig resolves the same value but dispatched print/json/rpc
-// before applying it, silently writing to PIG_HOME instead.
+// uniform there. ompig resolves the same value but dispatched print/json/rpc
+// before applying it, silently writing to OMPIG_HOME instead.
 
 package integration
 
@@ -38,19 +38,19 @@ func sessionFiles(t *testing.T, root string) []string {
 }
 
 // runWithSessionDir runs one non-interactive turn with --session-dir and
-// returns the chosen dir and the isolated PIG_HOME it must not write into.
-func runWithSessionDir(t *testing.T, modeArgs []string, prompt string) (sessionDir, pigHome string) {
+// returns the chosen dir and the isolated OMPIG_HOME it must not write into.
+func runWithSessionDir(t *testing.T, modeArgs []string, prompt string) (sessionDir, ompigHome string) {
 	t.Helper()
 	sessionDir = filepath.Join(t.TempDir(), "chosen-sessions")
-	pigHome = extIsolatedHome(t)
+	ompigHome = extIsolatedHome(t)
 
 	args := append([]string{"--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir}, modeArgs...)
 	cmd := exec.Command(buildBinary(t), append(args, prompt)...)
-	cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_QUIET_STARTUP=1", "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_QUIET_STARTUP=1", "OMPIG_TEST_FAUX=1")
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("run failed: %v\n%s", err, out)
 	}
-	return sessionDir, pigHome
+	return sessionDir, ompigHome
 }
 
 func TestSessionDirHonoredInPrintMode(t *testing.T) {
@@ -60,7 +60,7 @@ func TestSessionDirHonoredInPrintMode(t *testing.T) {
 		t.Errorf("no session written under --session-dir %s", dir)
 	}
 	if stray := sessionFiles(t, filepath.Join(home, "agent", "sessions")); len(stray) > 0 {
-		t.Errorf("--session-dir was ignored; session written to PIG_HOME instead: %v", stray)
+		t.Errorf("--session-dir was ignored; session written to OMPIG_HOME instead: %v", stray)
 	}
 }
 
@@ -71,7 +71,7 @@ func TestSessionDirHonoredInJSONMode(t *testing.T) {
 		t.Errorf("no session written under --session-dir %s", dir)
 	}
 	if stray := sessionFiles(t, filepath.Join(home, "agent", "sessions")); len(stray) > 0 {
-		t.Errorf("--session-dir was ignored; session written to PIG_HOME instead: %v", stray)
+		t.Errorf("--session-dir was ignored; session written to OMPIG_HOME instead: %v", stray)
 	}
 }
 
@@ -79,7 +79,7 @@ func TestSessionDirHonoredInJSONMode(t *testing.T) {
 // too, otherwise a caller can persist a session it can never reload.
 func TestSessionDirUsedForResumeLookup(t *testing.T) {
 	sessionDir := filepath.Join(t.TempDir(), "chosen-sessions")
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	const id = "session-dir-resume"
 
 	run := func(prompt string) string {
@@ -87,7 +87,7 @@ func TestSessionDirUsedForResumeLookup(t *testing.T) {
 		cmd := exec.Command(buildBinary(t),
 			"--no-extensions", "--mode", "json", "--model", "test-faux/faux-1",
 			"--session-dir", sessionDir, "--session-id", id, prompt)
-		cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_QUIET_STARTUP=1", "PIG_TEST_FAUX=1")
+		cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_QUIET_STARTUP=1", "OMPIG_TEST_FAUX=1")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatalf("run failed: %v\n%s", err, out)
@@ -102,20 +102,20 @@ func TestSessionDirUsedForResumeLookup(t *testing.T) {
 }
 
 // runRPCTurn drives one prompt through --mode rpc and returns the session dir
-// and PIG_HOME it was given. RPC exits on stdin EOF, so stdin is held open
+// and OMPIG_HOME it was given. RPC exits on stdin EOF, so stdin is held open
 // until agent_settled shows the turn finished and the session is flushed;
 // closing it earlier truncates the run before anything reaches disk.
-func runRPCTurn(t *testing.T, extra ...string) (sessionDir, pigHome string) {
+func runRPCTurn(t *testing.T, extra ...string) (sessionDir, ompigHome string) {
 	t.Helper()
 	sessionDir = filepath.Join(t.TempDir(), "chosen-sessions")
-	pigHome = extIsolatedHome(t)
+	ompigHome = extIsolatedHome(t)
 
 	args := append([]string{
 		"--no-extensions", "--mode", "rpc",
 		"--model", "test-faux/faux-1", "--session-dir", sessionDir,
 	}, extra...)
 	cmd := exec.Command(buildBinary(t), args...)
-	cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_QUIET_STARTUP=1", "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_QUIET_STARTUP=1", "OMPIG_TEST_FAUX=1")
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
@@ -154,7 +154,7 @@ func runRPCTurn(t *testing.T, extra ...string) (sessionDir, pigHome string) {
 	if err := cmd.Wait(); err != nil {
 		t.Fatalf("rpc run failed: %v", err)
 	}
-	return sessionDir, pigHome
+	return sessionDir, ompigHome
 }
 
 func TestRPCModeHonorsSessionFlags(t *testing.T) {
@@ -164,7 +164,7 @@ func TestRPCModeHonorsSessionFlags(t *testing.T) {
 			t.Errorf("no session written under --session-dir %s", dir)
 		}
 		if stray := sessionFiles(t, filepath.Join(home, "agent", "sessions")); len(stray) > 0 {
-			t.Errorf("--session-dir ignored; wrote to PIG_HOME: %v", stray)
+			t.Errorf("--session-dir ignored; wrote to OMPIG_HOME: %v", stray)
 		}
 	})
 

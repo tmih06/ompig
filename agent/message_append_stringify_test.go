@@ -4,8 +4,8 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // assertMessageAppendStringifyMatches checks that value's AppendStringify appends what the JSON.stringify mode writes for its MarshalJSON

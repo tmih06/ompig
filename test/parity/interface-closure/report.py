@@ -17,5 +17,5 @@ for key, name in [("pkg:ai", "ai"), ("pkg:coding-agent", "coding-agent"), ("pkg:
 t = collections.Counter(x["disposition"] for x in m)
 print(f"| total | 0 | {t['ported']} | {t['deferred']} | {t['pending']} (+2 designed-out) |")
 tested = collections.Counter((x["id"].split("/")[0] if x["id"].startswith("pkg") else "cli") for x in m if x["disposition"] == "ported" and x.get("layers", {}).get("production") == "public-api-tested")
-print("public-api-tested (a public library API proven by test callers, no PiG call site): " + (", ".join(f"{k[4:] if k.startswith('pkg:') else k} {v}" for k, v in sorted(tested.items())) or "0"))
+print("public-api-tested (a public library API proven by test callers, no Ompig call site): " + (", ".join(f"{k[4:] if k.startswith('pkg:') else k} {v}" for k, v in sorted(tested.items())) or "0"))
 print(f"moved to ported: {3543 - t['pending']} pending and {6405 - t['deferred']} deferred")

@@ -6,7 +6,7 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // JsonObject is a JSON object that keeps JavaScript's property order: array-index keys first in ascending numeric order, then the other keys in insertion order. It is the object representation of every value this package stores and returns.

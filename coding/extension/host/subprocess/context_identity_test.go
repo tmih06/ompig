@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -14,10 +14,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const nodeContextIdentityExtension = `export default function (pi) {
@@ -127,7 +127,7 @@ const nodeContextResultShapeExtension = `export default function (pi) {
 
 const pythonContextResultShapeExtension = `import sys
 sys.path.insert(0, %q)
-import pig_sdk
+import ompig_sdk
 
 
 def handle(ctx, data):
@@ -146,14 +146,14 @@ def handle(ctx, data):
     return None
 
 
-ext = pig_sdk.Extension("context-result-shape")
+ext = ompig_sdk.Extension("context-result-shape")
 ext.on_event("context", handle)
 
 if __name__ == "__main__":
     ext.run()
 `
 
-const rustContextResultShapeExtension = `use pig_sdk::Extension;
+const rustContextResultShapeExtension = `use ompig_sdk::Extension;
 use serde_json::{json, Value};
 
 fn main() {
@@ -163,11 +163,11 @@ fn main() {
         let second = data["messages"][1].clone();
         match first["content"].as_str().unwrap_or_default() {
             "typed" => Some(json!({"messages": [second]})),
-            "same" => pig_sdk::context_unchanged(),
+            "same" => ompig_sdk::context_unchanged(),
             "malformed" => Some(json!({"messages": "not-a-list"})),
             "inplace" | "null" => {
                 data["messages"][0]["content"] = json!("edited");
-                if second["content"] == "two-null" { Some(json!({"messages": Value::Null, "_pigContextUnchanged": true})) } else { pig_sdk::context_unchanged() }
+                if second["content"] == "two-null" { Some(json!({"messages": Value::Null, "_ompigContextUnchanged": true})) } else { ompig_sdk::context_unchanged() }
             }
             _ => None,
         }
@@ -184,7 +184,7 @@ fn main() {
 // that handler's error, never a silently unchanged context. A handler that
 // edits event.messages in place and returns nothing or a null messages value
 // keeps its edit. The Rust SDK holds values, not Pi's objects, so its handler
-// states identity with pig_sdk::context_unchanged(), and every SDK reports the same.
+// states identity with ompig_sdk::context_unchanged(), and every SDK reports the same.
 func TestContextResultShapesCrossSDKTransports(t *testing.T) {
 	t.Parallel()
 	type loader struct {
@@ -279,8 +279,8 @@ func TestContextResultShapesCrossSDKTransports(t *testing.T) {
 				wantList        bool
 				wantReport      string
 			}{
-				{content: "same", second: "two", wantReport: `{"_pigContextUnchanged":true}`},
-				{content: "plain", second: "two", wantReport: `{"_pigContextUnchanged":true}`},
+				{content: "same", second: "two", wantReport: `{"_ompigContextUnchanged":true}`},
+				{content: "plain", second: "two", wantReport: `{"_ompigContextUnchanged":true}`},
 				{content: "inplace", second: "two", wantList: true, wantReport: "true"},
 				{content: "typed", second: "two", wantList: true, wantReport: "false"},
 			} {
@@ -298,7 +298,7 @@ func TestContextResultShapesCrossSDKTransports(t *testing.T) {
 				}
 				var report struct {
 					Messages  json.RawMessage `json:"messages"`
-					Unchanged *bool           `json:"_pigContextUnchanged"`
+					Unchanged *bool           `json:"_ompigContextUnchanged"`
 				}
 				if err := json.Unmarshal(raw, &report); err != nil {
 					t.Fatalf("%s reply %s: %v", tc.content, raw, err)
@@ -313,7 +313,7 @@ func TestContextResultShapesCrossSDKTransports(t *testing.T) {
 					t.Fatalf("%s reply = %s, want the list", tc.content, raw)
 				}
 				if report.Unchanged == nil || strconv.FormatBool(*report.Unchanged) != tc.wantReport {
-					t.Fatalf("%s reply = %s, want _pigContextUnchanged %s", tc.content, raw, tc.wantReport)
+					t.Fatalf("%s reply = %s, want _ompigContextUnchanged %s", tc.content, raw, tc.wantReport)
 				}
 			}
 			var mu sync.Mutex

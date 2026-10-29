@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's first confirmRename finally runs when its cancelled refresh settles, even while a second rename refresh remains pending.

@@ -13,15 +13,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	coresession "github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/driver"
+	coresession "github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Ports of packages/durable/test/session-checkpoints-migrations.test.ts and session-documents.test.ts transaction cases through

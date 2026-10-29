@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // GoBuildModule is the generated module a build of one Go extension compiles,
@@ -28,13 +28,13 @@ type GoBuildModule struct {
 // SDK against a restage while use runs, and removes the module after. It
 // compiles nothing.
 //
-// pig additive (D109): pig extension upgrade reads the types of an extension the way its build does.
+// ompig additive (D109): ompig extension upgrade reads the types of an extension the way its build does.
 func WithGoBuildModule(ctx context.Context, extension GoExtension, preferredSDKRoot string, use func(GoBuildModule) error) error {
 	normalized, err := normalizeGoExtensions([]GoExtension{extension}, true)
 	if err != nil {
 		return err
 	}
-	candidates := []string{preferredSDKRoot, os.Getenv("PIG_SDK_GO_ROOT"), goSDKPathOverride(normalized[0].Root, currentGoStagedSDK(preferredSDKRoot))}
+	candidates := []string{preferredSDKRoot, os.Getenv("OMPIG_SDK_GO_ROOT"), goSDKPathOverride(normalized[0].Root, currentGoStagedSDK(preferredSDKRoot))}
 	candidates = append(candidates, stagedGoSDKRoots()...)
 	_, err = pigsdklock.WithBuildCandidates(ctx, candidates, func() (struct{}, error) {
 		sdkRoot, err := findSDKRootWithPreferred(normalized, preferredSDKRoot)
@@ -42,7 +42,7 @@ func WithGoBuildModule(ctx context.Context, extension GoExtension, preferredSDKR
 			return struct{}{}, err
 		}
 		return pigsdklock.WithBuildForRoot(ctx, sdkRoot, func() (struct{}, error) {
-			buildDir, err := os.MkdirTemp("", "pig-go-upgrade-*")
+			buildDir, err := os.MkdirTemp("", "ompig-go-upgrade-*")
 			if err != nil {
 				return struct{}{}, fmt.Errorf("create generated Go module directory: %w", err)
 			}

@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // The original suite harness uses an empty in-memory manager and configured faux auth. Unlike the older recovery helpers, fauxAssistantMessage preserves empty text blocks and present zero usage.
@@ -61,7 +61,7 @@ func boundaryJSON(t *testing.T, value any) string {
 func boundaryRecord(t *testing.T, h *recoveryHarness, site int, name string) {
 	t.Helper()
 	t.Cleanup(func() {
-		if !t.Failed() && os.Getenv("PIG_BOUNDARY_PROBE") == "1" {
+		if !t.Failed() && os.Getenv("OMPIG_BOUNDARY_PROBE") == "1" {
 			fmt.Println("SESSION_BOUNDARY_CASE " + boundaryJSON(t, []any{site, name, h.provider.callCount()}))
 		}
 	})

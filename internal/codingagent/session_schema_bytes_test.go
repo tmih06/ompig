@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // Pi session-manager.ts:1259-1283 persists the projected tools without rebuilding their schemas. Compare the actual on-disk compaction declarations after append, load and a second compaction.

@@ -3,7 +3,7 @@ package durable
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // types.ts:84-88: a family definition written in Pi's shape carries `family: true` (documents.ts:31-34 requires it at compile time, so DefineDocFamily panics

@@ -7,7 +7,7 @@ import { join, resolve } from "node:path";
 import { setImmediate } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 
-if (process.argv[2] === "pig") {
+if (process.argv[2] === "ompig") {
   const output = execFileSync("./test/parity/testdata/prebuilt-go-test.sh", ["./internal/codingagent", "-run", "^TestUpstreamSessionSelectorPathDelete$", "-count=1", "-v"], { encoding: "utf8" });
   const records = output.split("\n").filter(line => line.startsWith("SESSION_PATH_DELETE_BASIC "));
   assert.equal(records.length, 1, "one projection from the selected Go test");

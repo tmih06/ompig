@@ -9,7 +9,7 @@ Use a skill when the thing you want to reuse is a procedure or a convention, not
 A skill is a directory named for the skill, containing a `SKILL.md` file:
 
 ```text
-~/.pig/skills/commit/SKILL.md
+~/.ompig/skills/commit/SKILL.md
 ```
 
 `SKILL.md` is markdown with a YAML frontmatter header:
@@ -33,11 +33,11 @@ Explain *why* in the body, not what. Never mention tooling.
 Explicitly, for one run:
 
 ```bash
-pig --skill commit
-pig --skill ./path/to/skill-dir      # a direct path also works
+ompig --skill commit
+ompig --skill ./path/to/skill-dir      # a direct path also works
 ```
 
-From a piglet, so it loads every time that agent runs (see [piglets](piglets.md)):
+From a ompiglet, so it loads every time that agent runs (see [ompiglets](ompiglets.md)):
 
 ```yaml
 skills:
@@ -46,22 +46,22 @@ skills:
   - learn-codebase        # a bare name resolves through the skills dir
 ```
 
-For a portable Piglet, use ordered typed `origins`, usually a declared
+For a portable Ompiglet, use ordered typed `origins`, usually a declared
 `package:<alias>` member or `local:<relative-path>`. A bare name is convenient
 on your machine but depends on a local skill already being installed under the
-config tree (`~/.pig/skills/<name>/SKILL.md`).
+config tree (`~/.ompig/skills/<name>/SKILL.md`).
 
 ## Discovery
 
-Beyond explicit `--skill` and piglet entries, pig can discover skills already sitting in a project or your home dir. Treat discovery as a local convenience, not as the dependency contract for an agent you hand to someone else: portable piglets should declare skill origins.
+Beyond explicit `--skill` and ompiglet entries, ompig can discover skills already sitting in a project or your home dir. Treat discovery as a local convenience, not as the dependency contract for an agent you hand to someone else: portable ompiglets should declare skill origins.
 
-PiG scans:
+Ompig scans:
 
 - `.agents/skills/` at each directory from the workspace up to its root,
 - `~/.agents/skills/` for user-level skills,
-- `.pig/skills/` in the workspace.
+- `.ompig/skills/` in the workspace.
 
-A piglet controls whether this scan runs, so a locked-down agent picks up nothing it did not declare:
+A ompiglet controls whether this scan runs, so a locked-down agent picks up nothing it did not declare:
 
 ```yaml
 discovery:
@@ -70,10 +70,10 @@ discovery:
 
 ## Share a skill
 
-Skills travel the same way as every other resource: bundle them in a [package](packages.md) and `pig install` it, or publish them to a marketplace. A package can carry skills alongside extensions, prompts, and themes.
+Skills travel the same way as every other resource: bundle them in a [package](packages.md) and `ompig install` it, or publish them to a marketplace. A package can carry skills alongside extensions, prompts, and themes.
 
 ## See also
 
-- [concepts](concepts.md) - where skills sit among resources, packages, and piglets.
-- [piglets](piglets.md) - declaring a skill set as part of an agent, with discovery toggles.
+- [concepts](concepts.md) - where skills sit among resources, packages, and ompiglets.
+- [ompiglets](ompiglets.md) - declaring a skill set as part of an agent, with discovery toggles.
 - [packages](packages.md) - sharing and installing skills.

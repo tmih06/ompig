@@ -1,4 +1,4 @@
-// Ports the extension pieces of packages/coding-agent/src/core/resource-loader.ts that cmd/pig's build sequences (loadExtensionPaths'
+// Ports the extension pieces of packages/coding-agent/src/core/resource-loader.ts that cmd/ompig's build sequences (loadExtensionPaths'
 // built-in paths, loadExtensionFactories, omitReplacedExtensions and collectExtensionPackageWarnings) over coding/extensionset. The
 // subprocess Extension Host loads file extensions; inline and built-in extensions are the in-process factories of builtInExtensions and
 // the loader's inline list. The reload sequencing (the pre-trust pass, the trust callback and the final pass) runs in cli_runtime_build.go
@@ -11,12 +11,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extensionset"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extensionset"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // extensionSetError and extensionSetWarning are the {path, error} and {path, warning} entries of types.ts LoadExtensionsResult.
@@ -108,8 +108,8 @@ func mergeExtensionWarnings(existing, added []extensionSetWarning) []extensionSe
 // Ports .upstream/v0.99.2/packages/coding-agent/src/extensions/index.ts:7-14.
 var builtInExtensions = nativeBuiltInExtensions(nil)
 
-// cliBuiltinExtensionNames are the names of the CLI's built-in extensions in extensions/index.ts order. `pig config` lists each as
-// a `builtin:<name>` resource. pig additive (D92): a stripped built-in is left out.
+// cliBuiltinExtensionNames are the names of the CLI's built-in extensions in extensions/index.ts order. `ompig config` lists each as
+// a `builtin:<name>` resource. ompig additive (D92): a stripped built-in is left out.
 // Ports .upstream/v0.99.2/packages/coding-agent/src/extensions/index.ts:7-14 with package-manager-cli.ts:842-844.
 func cliBuiltinExtensionNames() []string {
 	return configBuiltinExtensionNames(builtInExtensions)
@@ -154,12 +154,12 @@ func enabledBuiltinExtensionPaths(sm *codingagent.SettingsManager, flags Args, n
 	return paths
 }
 
-// builtinExtensionStripped reports whether the built-in extension at path is stripped: a Piglet Binary compiled it out (its OFF
-// shim records it in pigstrip) or the active Piglet's strip list names it (applyPigletStrip records it in pigstrip). Like
+// builtinExtensionStripped reports whether the built-in extension at path is stripped: a Ompiglet Binary compiled it out (its OFF
+// shim records it in pigstrip) or the active Ompiglet's strip list names it (applyPigletStrip records it in pigstrip). Like
 // upstream's disabledBuiltinExtensions filter in resource-loader.ts (`--no-mcp`), a stripped built-in path is dropped before
 // loading, so it neither loads nor reports `Unknown built-in extension`; a name that was never a built-in still reaches the
 // loader and fails with that message.
-// pig additive (D92): stripped built-in extensions are filtered out of the built-in extension paths silently.
+// ompig additive (D92): stripped built-in extensions are filtered out of the built-in extension paths silently.
 func builtinExtensionStripped(path string) bool {
 	name, ok := strings.CutPrefix(path, codingagent.BuiltinPathPrefix)
 	return ok && pigstrip.Has(pigstrip.ListExtensions, name)

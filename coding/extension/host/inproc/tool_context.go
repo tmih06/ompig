@@ -7,9 +7,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // CreateToolContext returns the [extension.ToolContext] of the tool call toolCallID: the extension context plus the callable tools and executeTool. ctx is the default cancellation of nested calls (upstream's `signal`).

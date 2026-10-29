@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 
-	"github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // package-manager.ts:1446-1470 treats every unprefixed, non-Git spelling as a local source, even when it does not exist.
@@ -19,8 +19,8 @@ func TestPackageBareSourcesNeverInvokeNpm(t *testing.T) {
 		t.Run(input, func(t *testing.T) {
 			cwd, dir := physicalTempDir(t), t.TempDir()
 			t.Chdir(cwd)
-			t.Setenv("PIG_HOME", t.TempDir())
-			t.Setenv("PIG_CODING_AGENT_DIR", dir)
+			t.Setenv("OMPIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_CODING_AGENT_DIR", dir)
 			node, err := exec.LookPath("node")
 			if err != nil {
 				t.Fatal(err)

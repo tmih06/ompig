@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // passthroughText writes a JSON object as a model might: mostly compact, sometimes with whitespace, escapes JSON.stringify

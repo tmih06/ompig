@@ -16,28 +16,28 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/linkerexec"
 
 	"golang.org/x/mod/semver"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletrelease "github.com/MichaelKinsy/PiG/coding/piglet/release"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletrelease "github.com/tmih06/ompig/coding/ompiglet/release"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
-const publishUsageLine = "Usage: pig piglet publish <name|path> --to github --repo <owner/repo> --sign-key <key> [--targets os/arch,...] [--artifacts <dir>] [--tag-prefix <name>/] [--dry-run|--yes]"
+const publishUsageLine = "Usage: ompig ompiglet publish <name|path> --to github --repo <owner/repo> --sign-key <key> [--targets os/arch,...] [--artifacts <dir>] [--tag-prefix <name>/] [--dry-run|--yes]"
 
 const publishUsage = publishUsageLine + `
 
-Publish one GitHub Release named v<release.version> with a signed Piglet Binary
-for each target, SHA256SUMS, and a signed piglet-release.json index. Without
+Publish one GitHub Release named v<release.version> with a signed Ompiglet Binary
+for each target, SHA256SUMS, and a signed ompiglet-release.json index. Without
 --yes, publish is a dry run: it validates the release and prints the planned
-assets without building or uploading anything. PiG runs the GitHub CLI (gh)
+assets without building or uploading anything. Ompig runs the GitHub CLI (gh)
 for GitHub access and never handles a GitHub token.
 
-Use --to npm to publish the Piglet's source to npm instead; see
-pig piglet publish --to npm --help.
+Use --to npm to publish the Ompiglet's source to npm instead; see
+ompig ompiglet publish --to npm --help.
 
 Options:
   --to github                   Publish to GitHub Releases
@@ -47,11 +47,11 @@ Options:
                                 host target, or every Binary in --artifacts)
   --artifacts <dir>             Publish prebuilt signed Binaries from dir; nothing is built
   --builder <auto|native|name>  Builder for each target when building (default auto)
-  --tag-prefix <name>/          Namespace tags by this Piglet's name (default: no prefix)
+  --tag-prefix <name>/          Namespace tags by this Ompiglet's name (default: no prefix)
   --commit <sha>                Commit for a new release tag (default: the default branch)
   --source-ref <ref>            npm or Git source recorded in the index (default:
                                 git:github.com/<owner/repo>@<commit or tag>)
-  --workspace <path>            Resolve workspace-bound Piglet inputs from this path
+  --workspace <path>            Resolve workspace-bound Ompiglet inputs from this path
   --dry-run                     Validate and print the plan only (default)
   --yes                         Build, sign, and upload the release
   --no-input                    Do not prompt
@@ -63,7 +63,7 @@ var (
 	publishCommitPattern     = lazyregexp.New(`^(?:[0-9a-f]{40}|[0-9a-f]{64})$`)
 )
 
-// RunPigletPublishCommand handles `pig piglet publish`.
+// RunPigletPublishCommand handles `ompig ompiglet publish`.
 func RunPigletPublishCommand(args []string, stdout, stderr io.Writer) int {
 	return runPublish(context.Background(), args, stdout, stderr, configuredBuilders)
 }
@@ -84,8 +84,8 @@ type publishRequest struct {
 	dryRun      bool
 }
 
-// pig additive (D18): Stock Pig publishes signed Piglet Binary releases to
-// GitHub through the user's GitHub CLI and never contacts a PiG or Pi service.
+// ompig additive (D18): Stock Ompig publishes signed Ompiglet Binary releases to
+// GitHub through the user's GitHub CLI and never contacts a Ompig or Pi service.
 func runPublish(ctx context.Context, args []string, stdout, stderr io.Writer, builders func() ([]BuilderBackend, error)) int {
 	if publishDestination(args) == "npm" {
 		return runPublishNPM(ctx, args, stdout, stderr, npmPublishDeps{})
@@ -155,11 +155,11 @@ func parsePublishArgs(args []string) (publishRequest, bool, error) {
 func (r publishRequest) validate() error {
 	switch {
 	case r.pigletRef == "":
-		return fmt.Errorf("Piglet name or path is required")
+		return fmt.Errorf("Ompiglet name or path is required")
 	case r.destination == "":
 		return fmt.Errorf("--to is required")
 	case r.destination != "github":
-		return fmt.Errorf("unsupported Piglet publish destination %q; use --to github or --to npm", r.destination)
+		return fmt.Errorf("unsupported Ompiglet publish destination %q; use --to github or --to npm", r.destination)
 	case r.yes && r.dryRun:
 		return fmt.Errorf("--yes and --dry-run cannot be combined")
 	case r.repo == "":
@@ -176,10 +176,10 @@ func (r publishRequest) validate() error {
 	return nil
 }
 
-// publishRelease is one validated Piglet release and its signing identity.
+// publishRelease is one validated Ompiglet release and its signing identity.
 type publishRelease struct {
 	pigletRef    string
-	piglet       *piglet.Piglet
+	ompiglet     *ompiglet.Ompiglet
 	version      string
 	repo         string
 	tagPrefix    string
@@ -224,21 +224,21 @@ func publishGitHub(ctx context.Context, request publishRequest, stdout, stderr i
 	if err != nil {
 		return err
 	}
-	if piglet.DistributionOffline() {
-		return fmt.Errorf("cannot publish Piglet %q to GitHub while offline; unset PIG_OFFLINE and PI_OFFLINE to run gh", release.piglet.Name)
+	if ompiglet.DistributionOffline() {
+		return fmt.Errorf("cannot publish Ompiglet %q to GitHub while offline; unset OMPIG_OFFLINE and PI_OFFLINE to run gh", release.ompiglet.Name)
 	}
 	exists, err := githubReleaseExists(ctx, release.repo, release.tag())
 	if err != nil {
 		return err
 	}
 	if exists {
-		return fmt.Errorf("GitHub release %s already exists in %s; published Piglet releases are immutable", release.tag(), release.repo)
+		return fmt.Errorf("GitHub release %s already exists in %s; published Ompiglet releases are immutable", release.tag(), release.repo)
 	}
 	renderPublishPlan(stdout, release, assets, !request.yes)
 	if !request.yes {
 		return nil
 	}
-	stage, err := os.MkdirTemp("", "pig-piglet-release-*")
+	stage, err := os.MkdirTemp("", "ompig-ompiglet-release-*")
 	if err != nil {
 		return fmt.Errorf("create release staging directory: %w", err)
 	}
@@ -265,22 +265,22 @@ func preparePublishRelease(request publishRequest) (publishRelease, error) {
 	if err != nil {
 		return publishRelease{}, err
 	}
-	// pig additive (D18): a named namespace is explicit and must match the selected Piglet.
+	// ompig additive (D18): a named namespace is explicit and must match the selected Ompiglet.
 	if request.tagPrefix != "" && request.tagPrefix != p.Name+"/" {
-		return publishRelease{}, fmt.Errorf("--tag-prefix must be %q for Piglet %s", p.Name+"/", p.Name)
+		return publishRelease{}, fmt.Errorf("--tag-prefix must be %q for Ompiglet %s", p.Name+"/", p.Name)
 	}
 	if p.Release == nil || p.Release.Version == "" {
-		return publishRelease{}, fmt.Errorf("Piglet %q release.version is required for publication", p.Name)
+		return publishRelease{}, fmt.Errorf("Ompiglet %q release.version is required for publication", p.Name)
 	}
 	if err := p.ValidateAgentEnvironmentRuntime(); err != nil {
 		return publishRelease{}, err
 	}
 	sourceDigest, _, err := hashFile(p.SourcePath())
 	if err != nil {
-		return publishRelease{}, fmt.Errorf("hash Piglet source: %w", err)
+		return publishRelease{}, fmt.Errorf("hash Ompiglet source: %w", err)
 	}
 	release := publishRelease{
-		pigletRef: request.pigletRef, piglet: p, version: p.Release.Version, repo: request.repo,
+		pigletRef: request.pigletRef, ompiglet: p, version: p.Release.Version, repo: request.repo,
 		tagPrefix: request.tagPrefix,
 		commit:    request.commit, workspace: workspace, signKeyPath: request.signKeyPath, key: key,
 		keyID: signature.KeyID(key.Public().(ed25519.PublicKey)), sourceDigest: sourceDigest,
@@ -294,7 +294,7 @@ func preparePublishRelease(request publishRequest) (publishRelease, error) {
 	return release, nil
 }
 
-// publishSourceRef is the Piglet source named by the signed index. By default
+// publishSourceRef is the Ompiglet source named by the signed index. By default
 // it is the Git commit or release tag the GitHub Release is created at.
 func publishSourceRef(request publishRequest, version string) (string, error) {
 	if request.sourceRef == "" {
@@ -304,13 +304,13 @@ func publishSourceRef(request publishRequest, version string) (string, error) {
 		}
 		return "git:github.com/" + request.repo + "@" + selector, nil
 	}
-	if err := piglet.ValidateRemoteSource(request.sourceRef); err != nil {
+	if err := ompiglet.ValidateRemoteSource(request.sourceRef); err != nil {
 		return "", fmt.Errorf("--source-ref: %w", err)
 	}
 	return request.sourceRef, nil
 }
 
-func publishTargets(spec string, p *piglet.Piglet) ([]Target, error) {
+func publishTargets(spec string, p *ompiglet.Ompiglet) ([]Target, error) {
 	var values []string
 	switch {
 	case spec != "":
@@ -365,13 +365,13 @@ func planPublishBuilds(ctx context.Context, release publishRelease, selector str
 	missing := map[Target]string{}
 	assets := make([]publishAsset, 0, len(targets))
 	for _, target := range targets {
-		request := BuilderRequest{Piglet: release.piglet, Options: release.buildOptions(target, selector)}
+		request := BuilderRequest{Ompiglet: release.ompiglet, Options: release.buildOptions(target, selector)}
 		builder, _, err := selectBuilder(ctx, backends, selector, request)
 		if err != nil {
 			missing[target] = err.Error()
 			continue
 		}
-		assets = append(assets, publishAsset{target: target, name: pigletrelease.AssetName(release.piglet.Name, target.String()), builder: builder.Name()})
+		assets = append(assets, publishAsset{target: target, name: pigletrelease.AssetName(release.ompiglet.Name, target.String()), builder: builder.Name()})
 	}
 	if len(missing) > 0 {
 		return nil, missingPublishTargets(release, missing)
@@ -390,7 +390,7 @@ func collectPublishArtifacts(release publishRelease, dir string) ([]publishAsset
 	for _, entry := range entries {
 		path := filepath.Join(dir, entry.Name())
 		if !entry.Type().IsRegular() {
-			return nil, fmt.Errorf("--artifacts %s contains %s, which is not a regular file; the directory must hold only signed Piglet Binaries", dir, entry.Name())
+			return nil, fmt.Errorf("--artifacts %s contains %s, which is not a regular file; the directory must hold only signed Ompiglet Binaries", dir, entry.Name())
 		}
 		manifest, err := release.verifyBinary(path, nil)
 		if err != nil {
@@ -398,16 +398,16 @@ func collectPublishArtifacts(release publishRelease, dir string) ([]publishAsset
 		}
 		target, _ := parsePublishTarget(manifest.Target)
 		if prior, duplicate := found[target]; duplicate {
-			return nil, fmt.Errorf("--artifacts holds two Piglet Binaries for %s: %s and %s", target, prior.source, path)
+			return nil, fmt.Errorf("--artifacts holds two Ompiglet Binaries for %s: %s and %s", target, prior.source, path)
 		}
-		found[target] = publishAsset{target: target, name: pigletrelease.AssetName(release.piglet.Name, target.String()), source: path, manifest: manifest}
+		found[target] = publishAsset{target: target, name: pigletrelease.AssetName(release.ompiglet.Name, target.String()), source: path, manifest: manifest}
 	}
 	targets := release.targets
 	if targets == nil {
 		targets = slices.SortedFunc(maps.Keys(found), compareTargets)
 	}
 	if len(targets) == 0 {
-		return nil, fmt.Errorf("--artifacts %s holds no Piglet Binaries", dir)
+		return nil, fmt.Errorf("--artifacts %s holds no Ompiglet Binaries", dir)
 	}
 	for target, asset := range found {
 		if !slices.Contains(targets, target) {
@@ -419,7 +419,7 @@ func collectPublishArtifacts(release publishRelease, dir string) ([]publishAsset
 	for _, target := range targets {
 		asset, ok := found[target]
 		if !ok {
-			missing[target] = "no signed Piglet Binary for this target in " + dir
+			missing[target] = "no signed Ompiglet Binary for this target in " + dir
 			continue
 		}
 		assets = append(assets, asset)
@@ -432,11 +432,11 @@ func collectPublishArtifacts(release publishRelease, dir string) ([]publishAsset
 
 func missingPublishTargets(release publishRelease, missing map[Target]string) error {
 	var message strings.Builder
-	_, _ = fmt.Fprintf(&message, "Piglet %s %s has no signed Piglet Binary for %d target(s); nothing was built or uploaded:", release.piglet.Name, release.version, len(missing))
+	_, _ = fmt.Fprintf(&message, "Ompiglet %s %s has no signed Ompiglet Binary for %d target(s); nothing was built or uploaded:", release.ompiglet.Name, release.version, len(missing))
 	for _, target := range slices.SortedFunc(maps.Keys(missing), compareTargets) {
 		_, _ = fmt.Fprintf(&message, "\n  %s: %s", target, missing[target])
 	}
-	_, _ = fmt.Fprintf(&message, "\nBuild each missing target on a matching host with `pig piglet build %s --format binary --sign-key <key>`, collect the Binaries in one directory, and publish them with --artifacts <dir>.", release.pigletRef)
+	_, _ = fmt.Fprintf(&message, "\nBuild each missing target on a matching host with `ompig ompiglet build %s --format binary --sign-key <key>`, collect the Binaries in one directory, and publish them with --artifacts <dir>.", release.pigletRef)
 	return errors.New(message.String())
 }
 
@@ -450,46 +450,46 @@ func sortedAssets(assets []publishAsset) []publishAsset {
 }
 
 // verifyBinary checks that path is a Binary of this release: validly signed by
-// the release key and built from this Piglet source and release.version.
+// the release key and built from this Ompiglet source and release.version.
 func (r publishRelease) verifyBinary(path string, want *Target) (signature.Manifest, error) {
 	status, err := signature.Check(path, signature.Policy{})
 	if err != nil {
-		return signature.Manifest{}, fmt.Errorf("Piglet Binary %s: %w", path, err)
+		return signature.Manifest{}, fmt.Errorf("Ompiglet Binary %s: %w", path, err)
 	}
 	if !status.Signed {
-		return signature.Manifest{}, fmt.Errorf("%s is not a signed Piglet Binary; build it with --sign-key", path)
+		return signature.Manifest{}, fmt.Errorf("%s is not a signed Ompiglet Binary; build it with --sign-key", path)
 	}
 	if status.KeyID != r.keyID {
-		return signature.Manifest{}, fmt.Errorf("Piglet Binary %s is signed by %s; --sign-key is %s", path, status.KeyID, r.keyID)
+		return signature.Manifest{}, fmt.Errorf("Ompiglet Binary %s is signed by %s; --sign-key is %s", path, status.KeyID, r.keyID)
 	}
 	manifest := status.Manifest
 	for _, check := range []struct{ name, signed, want string }{
-		{"Piglet", manifest.Piglet, r.piglet.Name},
+		{"Ompiglet", manifest.Ompiglet, r.ompiglet.Name},
 		{"release version", manifest.ReleaseVersion, r.version},
-		{"Piglet source digest", manifest.SourceDigest, r.sourceDigest},
+		{"Ompiglet source digest", manifest.SourceDigest, r.sourceDigest},
 	} {
 		if check.signed != check.want {
-			return signature.Manifest{}, fmt.Errorf("Piglet Binary %s names %s %q; this release has %q", path, check.name, check.signed, check.want)
+			return signature.Manifest{}, fmt.Errorf("Ompiglet Binary %s names %s %q; this release has %q", path, check.name, check.signed, check.want)
 		}
 	}
 	target, err := parsePublishTarget(manifest.Target)
 	if err != nil {
-		return signature.Manifest{}, fmt.Errorf("Piglet Binary %s: %w", path, err)
+		return signature.Manifest{}, fmt.Errorf("Ompiglet Binary %s: %w", path, err)
 	}
 	if want != nil && target != *want {
-		return signature.Manifest{}, fmt.Errorf("Piglet Binary %s is built for %s, want %s", path, target, *want)
+		return signature.Manifest{}, fmt.Errorf("Ompiglet Binary %s is built for %s, want %s", path, target, *want)
 	}
 	return manifest, nil
 }
 
 func renderPublishPlan(w io.Writer, release publishRelease, assets []publishAsset, dryRun bool) {
-	title := "Piglet GitHub release"
+	title := "Ompiglet GitHub release"
 	if dryRun {
 		title += " dry run"
 	}
 	_, _ = fmt.Fprintf(w, "%s\nRelease: %s %s\nDestination: github.com/%s (tag %s)\nSigner: %s\nSource: %s\nAssets:\n",
-		title, release.piglet.Name, release.version, release.repo, release.tag(), release.keyID, release.sourceRef)
-	nameWidth, targetWidth := len("piglet-release.json"), 0
+		title, release.ompiglet.Name, release.version, release.repo, release.tag(), release.keyID, release.sourceRef)
+	nameWidth, targetWidth := len("ompiglet-release.json"), 0
 	for _, asset := range assets {
 		nameWidth = max(nameWidth, len(asset.name))
 		targetWidth = max(targetWidth, len(asset.target.String()))
@@ -501,7 +501,7 @@ func renderPublishPlan(w io.Writer, release publishRelease, assets []publishAsse
 		}
 		_, _ = fmt.Fprintf(w, "  %-*s  %-*s  %s\n", nameWidth, asset.name, targetWidth, asset.target, origin)
 	}
-	_, _ = fmt.Fprintf(w, "  SHA256SUMS\n  piglet-release.json\nPull with: pig piglet pull %s\n", release.github().Reference(release.version))
+	_, _ = fmt.Fprintf(w, "  SHA256SUMS\n  ompiglet-release.json\nPull with: ompig ompiglet pull %s\n", release.github().Reference(release.version))
 	if dryRun {
 		_, _ = fmt.Fprintln(w, "Dry run only; rerun with --yes to build, sign, and upload.")
 	}
@@ -517,7 +517,7 @@ func stagePublishAssets(ctx context.Context, release publishRelease, assets []pu
 			return err
 		}
 	}
-	pigVersions := map[string][]Target{}
+	ompigVersions := map[string][]Target{}
 	for i := range assets {
 		asset := &assets[i]
 		path := filepath.Join(stage, asset.name)
@@ -533,40 +533,40 @@ func stagePublishAssets(ctx context.Context, release publishRelease, assets []pu
 		if asset.manifest, err = release.verifyBinary(path, &asset.target); err != nil {
 			return err
 		}
-		pigVersions[asset.manifest.PigVersion] = append(pigVersions[asset.manifest.PigVersion], asset.target)
+		ompigVersions[asset.manifest.OmpigVersion] = append(ompigVersions[asset.manifest.OmpigVersion], asset.target)
 	}
-	if len(pigVersions) > 1 {
-		return fmt.Errorf("the Piglet Binaries were built by different PiG versions %v; build every target with one PiG version", pigVersions)
+	if len(ompigVersions) > 1 {
+		return fmt.Errorf("the Ompiglet Binaries were built by different Ompig versions %v; build every target with one Ompig version", ompigVersions)
 	}
 	return nil
 }
 
-// prepareBuilds resolves the Piglet's build closure once and returns a
+// prepareBuilds resolves the Ompiglet's build closure once and returns a
 // function that builds one target with its planned builder.
 func (r publishRelease) prepareBuilds(ctx context.Context, stdout, stderr io.Writer, builders func() ([]BuilderBackend, error)) (func(publishAsset, string) error, error) {
 	backends, err := builders()
 	if err != nil {
 		return nil, err
 	}
-	cells, warnings := resolvePigletCells(r.piglet)
+	cells, warnings := resolvePigletCells(r.ompiglet)
 	exts := extensionInputsFromCells(cells)
-	requireFused := r.piglet.Build != nil && r.piglet.Build.ExtensionRealization == "fused"
-	hasFrontend := r.piglet.HasFrontend()
-	if verdict := Validate(BuildPlan(exts, Options{}), warnings, len(r.piglet.Extensions), len(exts), hasFrontend, requireFused); !verdict.OK {
-		return nil, fmt.Errorf("Piglet will not build: %s", strings.Join(verdict.Blockers, "; "))
+	requireFused := r.ompiglet.Build != nil && r.ompiglet.Build.ExtensionRealization == "fused"
+	hasFrontend := r.ompiglet.HasFrontend()
+	if verdict := Validate(BuildPlan(exts, Options{}), warnings, len(r.ompiglet.Extensions), len(exts), hasFrontend, requireFused); !verdict.OK {
+		return nil, fmt.Errorf("Ompiglet will not build: %s", strings.Join(verdict.Blockers, "; "))
 	}
 	var baked Options
-	if err := applyBakedPiglet(r.pigletRef, r.piglet, &baked); err != nil {
+	if err := applyBakedPiglet(r.pigletRef, r.ompiglet, &baked); err != nil {
 		return nil, err
 	}
 	return func(asset publishAsset, output string) error {
 		options := r.buildOptions(asset.target, asset.builder)
 		options.BakedSettings = baked.BakedSettings
 		_, err := executeBuild(ctx, backends, asset.builder, BuilderRequest{
-			Piglet: r.piglet, Cells: cells, Options: options, Output: output, Stdout: stdout, Stderr: stderr,
+			Ompiglet: r.ompiglet, Cells: cells, Options: options, Output: output, Stdout: stdout, Stderr: stderr,
 		})
 		if err != nil {
-			return fmt.Errorf("build %s for %s: %w", r.piglet.Name, asset.target, err)
+			return fmt.Errorf("build %s for %s: %w", r.ompiglet.Name, asset.target, err)
 		}
 		return nil
 	}, nil
@@ -589,13 +589,13 @@ func copyReleaseAsset(source, target string) error {
 	return output.Close()
 }
 
-// writeReleaseIndex writes SHA256SUMS and the signed piglet-release.json, then
+// writeReleaseIndex writes SHA256SUMS and the signed ompiglet-release.json, then
 // checks every staged asset against the signed index exactly as pull will.
 func writeReleaseIndex(release publishRelease, assets []publishAsset, stage string) error {
 	github := release.github()
 	index := pigletrelease.Index{
-		GitHub: &github,
-		Piglet: release.piglet.Name, Version: release.version, PigVersion: assets[0].manifest.PigVersion,
+		GitHub:   &github,
+		Ompiglet: release.ompiglet.Name, Version: release.version, OmpigVersion: assets[0].manifest.OmpigVersion,
 		SourceRef: release.sourceRef, Binaries: make(map[string]pigletrelease.Binary, len(assets)),
 	}
 	var sums strings.Builder
@@ -610,7 +610,7 @@ func writeReleaseIndex(release publishRelease, assets []publishAsset, stage stri
 	}
 	indexData, err := pigletrelease.Sign(index, release.key)
 	if err != nil {
-		return fmt.Errorf("sign Piglet release index: %w", err)
+		return fmt.Errorf("sign Ompiglet release index: %w", err)
 	}
 	verified, err := pigletrelease.Verify(indexData)
 	if err != nil {
@@ -624,7 +624,7 @@ func writeReleaseIndex(release publishRelease, assets []publishAsset, stage stri
 	if err := os.WriteFile(filepath.Join(stage, "SHA256SUMS"), []byte(sums.String()), 0o644); err != nil {
 		return err
 	}
-	return os.WriteFile(filepath.Join(stage, "piglet-release.json"), indexData, 0o644)
+	return os.WriteFile(filepath.Join(stage, "ompiglet-release.json"), indexData, 0o644)
 }
 
 func githubReleaseExists(ctx context.Context, repo, tag string) (bool, error) {
@@ -649,9 +649,9 @@ func uploadGitHubRelease(ctx context.Context, release publishRelease, assets []p
 		args = append(args, asset.name)
 		targets = append(targets, asset.target.String())
 	}
-	notes := fmt.Sprintf("Signed Piglet Binary release for %s %s.\n\nInstall it with PiG:\n\n    pig piglet pull %s\n\nSigner: %s\nTargets: %s\nSource: %s\n\nEach Binary carries an Ed25519 signature trailer. piglet-release.json is the DSSE-signed release index, and SHA256SUMS lists the SHA-256 of each Binary.\n",
-		release.piglet.Name, release.version, release.github().Reference(release.version), release.keyID, strings.Join(targets, ", "), release.sourceRef)
-	args = append(args, "SHA256SUMS", "piglet-release.json", "--repo", release.repo, "--title", release.piglet.Name+" "+release.tag(), "--notes", notes)
+	notes := fmt.Sprintf("Signed Ompiglet Binary release for %s %s.\n\nInstall it with Ompig:\n\n    ompig ompiglet pull %s\n\nSigner: %s\nTargets: %s\nSource: %s\n\nEach Binary carries an Ed25519 signature trailer. ompiglet-release.json is the DSSE-signed release index, and SHA256SUMS lists the SHA-256 of each Binary.\n",
+		release.ompiglet.Name, release.version, release.github().Reference(release.version), release.keyID, strings.Join(targets, ", "), release.sourceRef)
+	args = append(args, "SHA256SUMS", "ompiglet-release.json", "--repo", release.repo, "--title", release.ompiglet.Name+" "+release.tag(), "--notes", notes)
 	if release.commit != "" {
 		args = append(args, "--target", release.commit)
 	}
@@ -668,10 +668,10 @@ func uploadGitHubRelease(ctx context.Context, release publishRelease, assets []p
 		return ghError("create GitHub release "+release.tag()+" in "+release.repo, err, ghStderr.String())
 	}
 	_, _ = stderr.Write(ghStderr.Bytes())
-	_, _ = fmt.Fprintf(stdout, "Published %s %s to https://github.com/%s/releases/tag/%s\n", release.piglet.Name, release.version, release.repo, url.PathEscape(release.tag()))
-	// pig additive (D18): a later `--to npm` publication names these signed Binaries in its package.json.
+	_, _ = fmt.Fprintf(stdout, "Published %s %s to https://github.com/%s/releases/tag/%s\n", release.ompiglet.Name, release.version, release.repo, url.PathEscape(release.tag()))
+	// ompig additive (D18): a later `--to npm` publication names these signed Binaries in its package.json.
 	if err := recordGitHubPublication(release); err != nil {
-		_, _ = fmt.Fprintf(stderr, "warning: the release exists, but PiG could not record it for npm publication: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "warning: the release exists, but Ompig could not record it for npm publication: %v\n", err)
 	}
 	return nil
 }

@@ -8,11 +8,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi runner.ts:1312-1362 awaits before_agent_start and retains section mutations even without a result or after a handler error. This row binds a value that no SDK can satisfy by returning its empty fallback.
@@ -142,7 +142,7 @@ func promptSectionsFactory(t *testing.T, root, language, name string) subprocess
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package sections
-import ("errors"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("errors"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.OnEvent("before_agent_start",func(_ sdk.Context,data map[string]any)(any,error){
@@ -154,9 +154,9 @@ func Extension()*sdk.Extension {
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, name+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  def handler(ctx,data):
   data["systemPromptOptions"]["sections"]["plan_mode"]="Plan only."
   if data["prompt"]=="error": raise RuntimeError("section failure")
@@ -166,7 +166,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.on_before_agent_start(|_,event| {

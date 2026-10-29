@@ -9,9 +9,9 @@ import (
 	"runtime"
 	"strings"
 
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // ResolveManagedPackagePath is package-manager.ts resolveManagedPath: path.resolve(resolve(root), ...parts), so an absolute component replaces the preceding root, then a check that the result is the root or starts with the root and a separator.

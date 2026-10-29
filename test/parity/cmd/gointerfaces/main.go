@@ -44,13 +44,13 @@ func main() {
 }
 
 func run() error {
-	out := flag.String("out", "test/parity/interfaces/pig-go.json", "output JSON path or - for stdout")
+	out := flag.String("out", "test/parity/interfaces/ompig-go.json", "output JSON path or - for stdout")
 	flag.Parse()
 	patterns := flag.Args()
 	if len(patterns) == 0 {
 		patterns = []string{
 			"./agent/...", "./ai/...", "./coding/...", "./extensions/sdk/...",
-			"./internal/codingagent/...", "./tui/...", "./cmd/pig",
+			"./internal/codingagent/...", "./tui/...", "./cmd/ompig",
 		}
 	}
 	result, err := extract(patterns)
@@ -121,7 +121,7 @@ var runtimeVersion = runtime.Version
 // languageVersion reduces a toolchain version to its language version, so the
 // inventory records "1.26" rather than "1.26.1".
 //
-// The inventory is an account of Pig's exported Go surface, which a compiler
+// The inventory is an account of Ompig's exported Go surface, which a compiler
 // patch release does not change. Recording the patch made the drift gate depend
 // on which toolchain happened to generate the file: CI builds in a pinned image
 // (1.26.6) while developers run whatever their version manager installed, so

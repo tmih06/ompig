@@ -20,8 +20,8 @@ wait_contains = ['"id":"switch","type":"response","command":"switch_session"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 

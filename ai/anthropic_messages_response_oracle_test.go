@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/anthropic-messages.ts
 
 // Scripted Messages-API SSE responses (text, thinking with signatures, redacted thinking, fragmented tool input, stop reasons, usage in the start and
-// delta events, ping and error events, truncated streams) read by the pinned pi-ai and by PiG; the stream events and the final message must be equal.
+// delta events, ping and error events, truncated streams) read by the pinned pi-ai and by Ompig; the stream events and the final message must be equal.
 func TestAnthropicMessagesResponseMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(127))
 	quote := func(s string) string { b, _ := json.Marshal(s); return string(b) }

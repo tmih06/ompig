@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -84,7 +84,7 @@ func TestProviderErrorResponsesMatchPi(t *testing.T) {
 	}
 }
 
-// TestOpenAICodexErrorResponsesMatchPi sends the same failed responses to Pi's openai-codex-responses provider (SSE transport) and Pig's: Codex reads the
+// TestOpenAICodexErrorResponsesMatchPi sends the same failed responses to Pi's openai-codex-responses provider (SSE transport) and Ompig's: Codex reads the
 // body with `await response.text()` (openai-codex-responses.ts:423) and builds its own error message from it.
 func TestOpenAICodexErrorResponsesMatchPi(t *testing.T) {
 	bodies, statuses := providerErrorResponses()
@@ -98,7 +98,7 @@ func TestOpenAICodexErrorResponsesMatchPi(t *testing.T) {
 	})
 }
 
-// A response whose connection breaks after some of the body: the stream ends with the failure and keeps what was received. Pi's "terminated" is Pig's "terminated (cause: ...)" (D144); the events, the partial content and every other error text must match.
+// A response whose connection breaks after some of the body: the stream ends with the failure and keeps what was received. Pi's "terminated" is Ompig's "terminated (cause: ...)" (D144); the events, the partial content and every other error text must match.
 func TestProviderDroppedConnectionMatchesPi(t *testing.T) {
 	for _, test := range []struct {
 		name   string

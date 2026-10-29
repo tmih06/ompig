@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // ssh.ts changeKnownHosts: an existing known-hosts file that cannot be read fails the change (readFile rejects); it is

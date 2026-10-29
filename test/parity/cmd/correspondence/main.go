@@ -14,9 +14,9 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
-	"github.com/MichaelKinsy/PiG/test/parity/internal/gitsnapshot"
-	"github.com/MichaelKinsy/PiG/test/parity/knowngaps"
+	"github.com/tmih06/ompig/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/internal/gitsnapshot"
+	"github.com/tmih06/ompig/test/parity/knowngaps"
 )
 
 func submitBundle(root, packetInput, bundleInput, outputDirectory string, stdout io.Writer) error {
@@ -46,10 +46,10 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) error {
 	command := args[0]
 	flags := flag.NewFlagSet("correspondence "+command, flag.ContinueOnError)
 	flags.SetOutput(stderr)
-	root := flags.String("root", ".", "Pig repository root")
+	root := flags.String("root", ".", "Ompig repository root")
 	upstreamVersion := flags.String("upstream-version", "", "exact upstream version")
-	targetCommit := flags.String("target-commit", "", "exact Pig commit")
-	targetWorktree := flags.Bool("target-worktree", false, "snapshot the current Pig working tree without changing HEAD or the repository index")
+	targetCommit := flags.String("target-commit", "", "exact Ompig commit")
+	targetWorktree := flags.Bool("target-worktree", false, "snapshot the current Ompig working tree without changing HEAD or the repository index")
 	node := flags.String("node", "", "Node executable")
 	role := flags.String("role", "", "agent role for work-packet")
 	snapshotID := flags.String("snapshot-id", "", "closure snapshot identity for work-packet")
@@ -82,7 +82,7 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) error {
 		return submitBundle(absoluteRoot, *packetPath, *bundlePath, *outputDirectory, stdout)
 	}
 	if *targetWorktree {
-		snapshotDirectory, err := os.MkdirTemp("", "pig-correspondence-snapshot-*")
+		snapshotDirectory, err := os.MkdirTemp("", "ompig-correspondence-snapshot-*")
 		if err != nil {
 			return fmt.Errorf("create correspondence snapshot directory: %w", err)
 		}

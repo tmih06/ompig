@@ -14,7 +14,7 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodefs"
 )
 
 const (

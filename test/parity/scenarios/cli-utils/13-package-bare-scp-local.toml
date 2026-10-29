@@ -8,7 +8,7 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig = ["PIG_CODING_AGENT_DIR=testdata/empty-home/agent", "PIG_HOME=testdata/empty-home"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/empty-home/agent", "OMPIG_HOME=testdata/empty-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/empty-home/agent"]
 
 [cli]

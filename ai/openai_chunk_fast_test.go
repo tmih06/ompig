@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsjson"
 )
 
 func chunkSeeds() []string {

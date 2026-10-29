@@ -3,7 +3,7 @@ package sdk
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ResourceCollision is Pi's ResourceCollision: two resources with one name.
@@ -143,7 +143,7 @@ type DefaultResourceLoaderOptions struct {
 	Cwd             string
 	AgentDir        string
 	SettingsManager *SettingsManager
-	// Runtime is the runtime the loader loads its extensions against, which [CreateExtensionRuntime] made. pig additive (D201): Pi's loader takes none (its loadExtensions does); this is how a runtime made first reaches the extensions. Nil: each reload makes its own, as Pi's does.
+	// Runtime is the runtime the loader loads its extensions against, which [CreateExtensionRuntime] made. ompig additive (D201): Pi's loader takes none (its loadExtensions does); this is how a runtime made first reaches the extensions. Nil: each reload makes its own, as Pi's does.
 	Runtime                       *ExtensionRuntime
 	AdditionalExtensionPaths      []string
 	AdditionalSkillPaths          []string

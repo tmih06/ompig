@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 func suggestionValues(mode *InteractiveMode, prefix string) []string {

@@ -1,14 +1,14 @@
 package coding
 
 // Ports .upstream/current/packages/ai/test/opencode-provider-headers.test.ts.
-// Pi adds x-opencode-session in ai/providers/opencode-headers.ts; PiG adds it
+// Pi adds x-opencode-session in ai/providers/opencode-headers.ts; Ompig adds it
 // in the request options wrapper every built-in OpenCode provider stream passes through; the Model Runtime adds it for every OpenCode target (client_identity_test.go).
 
 import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func streamOpenCodeAttribution(t *testing.T, providerID string, options ai.StreamOptions) ai.ProviderHeaders {

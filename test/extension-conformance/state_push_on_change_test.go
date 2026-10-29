@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's extension context reads the live Session at every call: `ctx.model` is `getModel()` (runner.ts:906), `pi.getSettings()` reads the settings manager (loader.ts:411-414), and `pi.getSessionName()` and `pi.getThinkingLevel()` read the Session (agent-session.ts). `pi.getMcpServers()` reads the runtime's registry (loader.ts:495-497) and `ctx.ui.theme` is the global theme (interactive-mode.ts:2665). The SDKs and the Node runtime replicate that state, so a change the host makes with no extension call and no event to the extension, a user's model switch, a settings edit, the /name command, a theme selection, an MCP server another extension registers, reaches an extension that reads from a timer, a thread or a goroutine between requests only if the host pushes it when it changes.
@@ -77,7 +77,7 @@ type statePushRig struct {
 func newStatePushRig(t *testing.T, h *harness) *statePushRig {
 	t.Helper()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

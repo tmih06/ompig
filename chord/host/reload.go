@@ -17,7 +17,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // defaultDeadline is Pi's 5000 ms default of every reload deadline.

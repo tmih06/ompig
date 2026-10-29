@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Upstream has one EventEmitter per loader (event-bus.ts:12-33), so a listener hears every emit, whenever its extension loaded. A native realm's first bus call switches the Host registry on; a Node realm that is spawning at that moment has started with its in-heap EventEmitter and has no connection yet to migrate over. It must join the registry once it registers, or a native emit never reaches its listeners. The first native call is swept across the Node realm's load, so one of the delays lands between its spawn and its connection.

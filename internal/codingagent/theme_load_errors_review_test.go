@@ -6,8 +6,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi resource-loader.ts:886-890 tests existsSync, which is false for every stat failure, so a path below a regular file is reported as missing.

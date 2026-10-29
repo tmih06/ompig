@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // widthTableText is long, space-separated prose that forces wrapping or

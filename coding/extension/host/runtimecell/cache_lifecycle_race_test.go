@@ -52,7 +52,7 @@ func publishAgedCell(t *testing.T, cacheRoot string) (EntryIdentity, string) {
 	return identity, finalDir
 }
 
-// Another pig reuses an old cell between the moment a collection classifies it and the moment the collection renames it away. The
+// Another ompig reuses an old cell between the moment a collection classifies it and the moment the collection renames it away. The
 // reuse refreshes the usage record but holds no lease until the extension process starts, so the collector must read the entry
 // again under its exclusive lock. The collector's removal loop makes one cancellation check per removal candidate, immediately
 // before it locks the entry, and the check numbered by an identical collection's Rename is that one.
@@ -115,7 +115,7 @@ func TestReusePublishedArtifactDoesNotReuseAnEntryACollectorHasLocked(t *testing
 	}
 }
 
-// A cell that another pig's collection removed after this process resolved it must not look like a binary outside the cache: a nil
+// A cell that another ompig's collection removed after this process resolved it must not look like a binary outside the cache: a nil
 // lease would let the spawn fail with a bare missing-file error and skip the install-change tracking of the pruned file.
 func TestAcquireArtifactUsageLeaseReportsARemovedCacheEntry(t *testing.T) {
 	_, finalDir := publishAgedCell(t, t.TempDir())

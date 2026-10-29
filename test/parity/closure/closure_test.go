@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestDecodeRejectsUnknownFieldsAndVerdictInputs(t *testing.T) {
@@ -725,12 +725,12 @@ func provedFixture(t *testing.T) []Record {
 			StartLine: 1, EndLine: 3, QuoteHash: h("quote"), APIHash: h("api"), BodyHash: h("body"),
 		},
 		&Pin{
-			Kind: KindPin, ID: "pin:target", SnapshotID: "snapshot:test", Repository: "pig",
+			Kind: KindPin, ID: "pin:target", SnapshotID: "snapshot:test", Repository: "ompig",
 			Commit: strings.Repeat("b", 40), Path: "example.go", SemanticID: "example.Run",
 			StartLine: 10, EndLine: 12, QuoteHash: h("target-quote"), APIHash: h("target-api"), BodyHash: h("target-body"),
 		},
 		&Pin{
-			Kind: KindPin, ID: "pin:fixture", SnapshotID: "snapshot:test", Repository: "pig",
+			Kind: KindPin, ID: "pin:fixture", SnapshotID: "snapshot:test", Repository: "ompig",
 			Commit: strings.Repeat("b", 40), Path: "fixture.json", SemanticID: "fixture.run",
 			StartLine: 1, EndLine: 1, QuoteHash: h("fixture-quote"), BodyHash: h("fixture-body"),
 		},

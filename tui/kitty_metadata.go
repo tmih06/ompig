@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Ports pi-tui's terminal-image.ts Kitty metadata registry and the two layout

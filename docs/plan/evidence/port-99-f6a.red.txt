@@ -127,7 +127,7 @@ $ go test ./internal/codingagent/ -run <ported and new cases>
         --- PASS: TestUpstreamSettingsManager/getShellPath/should_expand_a_bare_~_in_shellPath (0.00s)
 --- FAIL: TestForkUnsavedRefusalPreservesSource (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent	0.203s
+FAIL	github.com/tmih06/ompig/internal/codingagent	0.203s
 FAIL
 
 $ go test ./coding/ -run TestRuntimeOriginalUnflushedForkDiagnostic|TestSessionCloneBootstrapSessionRefuses|TestDefaultToolsInitialSelectionPort
@@ -139,13 +139,13 @@ $ go test ./coding/ -run TestRuntimeOriginalUnflushedForkDiagnostic|TestSessionC
 --- FAIL: TestDefaultToolsInitialSelectionPort (0.03s)
     --- FAIL: TestDefaultToolsInitialSelectionPort/activates_an_inactive_extension_tool_with_+name (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.102s
+FAIL	github.com/tmih06/ompig/coding	0.102s
 FAIL
 22:func TestRPCSessionReplacementUsesDefaultSessionDir(t *testing.T) {
 
-$ go test ./cmd/pig/ -run TestRPCSessionReplacementUsesDefaultSessionDir
+$ go test ./cmd/ompig/ -run TestRPCSessionReplacementUsesDefaultSessionDir
 --- FAIL: TestRPCSessionReplacementUsesDefaultSessionDir (2.21s)
     rpc_default_session_dir_test.go:79: clone of an unsaved Session = map[command:clone error:This session has not been saved yet. Wait for the first assistant response before cloning or forking it. id:clone success:false type:response], want the Pi error "This session has not been saved yet. Send a message before cloning or forking it."
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/cmd/pig	2.256s
+FAIL	github.com/tmih06/ompig/cmd/ompig	2.256s
 FAIL

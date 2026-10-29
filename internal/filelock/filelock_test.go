@@ -31,11 +31,11 @@ func TestUnsupportedRecognisesAFileSystemThatRefusesFileLocks(t *testing.T) {
 
 func TestExplainNamesTheDirectoryAndTheRemedyOnlyForUnsupportedLocks(t *testing.T) {
 	unsupported := &os.PathError{Op: "flock", Path: "x", Err: syscall.ENOLCK}
-	explained := Explain("/mnt/home/.pig/cache/cells/go", unsupported)
+	explained := Explain("/mnt/home/.ompig/cache/cells/go", unsupported)
 	if !errors.Is(explained, syscall.ENOLCK) {
 		t.Fatalf("explained error %q does not wrap the lock failure", explained)
 	}
-	for _, want := range []string{"/mnt/home/.pig/cache/cells/go", "does not support file locks", "PIG_HOME"} {
+	for _, want := range []string{"/mnt/home/.ompig/cache/cells/go", "does not support file locks", "OMPIG_HOME"} {
 		if !strings.Contains(explained.Error(), want) {
 			t.Errorf("explained error %q does not contain %q", explained, want)
 		}

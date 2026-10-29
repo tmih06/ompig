@@ -13,10 +13,10 @@ func TestExtensionsTypescriptRuntimeSetting(t *testing.T) {
 	if got := NewSettingsManager(cwd, agentDir).GetExtensionsTypescriptRuntime(); got != "" {
 		t.Fatalf("default = %q", got)
 	}
-	if err := os.MkdirAll(filepath.Join(cwd, ".pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(cwd, ".ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(cwd, ".pig", "settings.json"), []byte(`{"extensionsTypescriptRuntime":"aot"}`), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(cwd, ".ompig", "settings.json"), []byte(`{"extensionsTypescriptRuntime":"aot"}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	if got := NewSettingsManager(cwd, agentDir).GetExtensionsTypescriptRuntime(); got != "" {

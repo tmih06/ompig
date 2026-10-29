@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // nodeFileURL returns the href Node's url.pathToFileURL returns for path on

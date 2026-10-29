@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A tool's result object reaches the host as the members the SDK wrote, and Pi hands the tool's own object on (agent-loop.ts:778-786, 912-919), so the host keeps the order: every SDK writes the object with its members in the author's order (a Node object, a Python dict, a Rust JSON object), and the host names them as Pi does (is_error is isError). A member that is not an AgentToolResult member (preview, an unknown key) has no place in the object Pi writes.

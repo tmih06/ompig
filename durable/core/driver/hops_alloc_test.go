@@ -9,12 +9,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // A hopped event whose chain parked nothing is the empty hop the host's `hop` export answers with 0 (ABI section 4.1): the core

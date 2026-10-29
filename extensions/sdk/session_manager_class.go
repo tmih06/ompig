@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // SessionManager is Pi's `SessionManager` class (core/session-manager.ts): an append-only session log an extension constructs, reads and appends to. The host owns the log; a SessionManager built here and passed to CreateAgentSession is the very log the child session appends to. ctx.SessionManager() is Pi's ReadonlySessionManager, the [ReadonlySessionManager] of the running session.

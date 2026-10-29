@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // The tool input types are `Static<typeof schema>` upstream (bash.ts:10-21, edit.ts:27-35, write.ts:9-14): the schema's properties are the input's

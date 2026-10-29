@@ -5,10 +5,10 @@ package coding
 import (
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // reportExtensionEntry is the part of upstream's appendEntry action (agent-session.ts:3321-3327) that follows the append: the entry reaches the Session's listeners as an entry_appended event. Only pi.appendEntry emits it; ctx.sessionManager.appendCustomEntry writes the log alone.

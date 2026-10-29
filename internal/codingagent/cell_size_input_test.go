@@ -5,11 +5,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ported from tui-cell-size-input.test.ts "consumes cell size responses and
-// still forwards later user input" through Pig's driver-owned input path.
+// still forwards later user input" through Ompig's driver-owned input path.
 func TestDispatchKeyConsumesCellSizeResponseBeforeEditor(t *testing.T) {
 	previousDimensions := tui.GetCellDimensions()
 	t.Cleanup(func() { tui.SetCellDimensions(previousDimensions) })

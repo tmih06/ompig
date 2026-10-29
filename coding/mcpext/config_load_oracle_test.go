@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/extensions/mcp/config.ts loadMcpConfig and core/mcp-servers.ts validateMcpServerConfig. Random global and project mcp.json files (valid servers, overrides, every validation failure, bad JSON) load the same servers, scopes, sources, errors and autoEnableCodemode.
@@ -176,12 +176,12 @@ func TestLoadMcpConfigMatchesPiOnRandomFiles(t *testing.T) {
 		if err := json.Unmarshal([]byte(want[i]), &expected); err != nil {
 			t.Fatal(err)
 		}
-		// Members PiG's typed server config does not model are not compared.
+		// Members Ompig's typed server config does not model are not compared.
 		for si := range expected.Servers {
 			if si < len(got.Servers) {
 				projected := map[string]any{}
 				for key, v := range expected.Servers[si].Config {
-					// PiG's typed config omits an empty string or list (omitempty); Pi keeps it.
+					// Ompig's typed config omits an empty string or list (omitempty); Pi keeps it.
 					if text, isString := v.(string); isString && text == "" {
 						continue
 					}
@@ -220,7 +220,7 @@ func TestLoadMcpConfigMatchesPiOnRandomFiles(t *testing.T) {
 	}
 }
 
-// mcpConfigComparedKeys are the members of a server config that PiG models: if Pi holds one, PiG must hold it too.
+// mcpConfigComparedKeys are the members of a server config that Ompig models: if Pi holds one, Ompig must hold it too.
 var mcpConfigComparedKeys = map[string]bool{
 	"type": true, "exposure": true, "description": true, "toolExposure": true, "enabled": true, "timeout": true, "command": true, "args": true, "env": true, "cwd": true,
 	"url": true, "headers": true, "auth": true, "oauth": true,

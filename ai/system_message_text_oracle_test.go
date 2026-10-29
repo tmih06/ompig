@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/ai/src/utils/text.ts getSystemMessageText and renderSystemMessageUpdate against pinned Pi over random system messages decoded from JSON: text or block content, sections named with integer-like, duplicate, empty and unicode keys, null and empty values.
@@ -49,7 +49,7 @@ func TestSystemMessageDocsDump(t *testing.T) {
 	fmt.Printf("system-message-probes:%s\n", line)
 }
 
-// TestSystemMessageDocsParity prints PiG's getSystemMessageText and renderSystemMessageUpdate of each message, one JSON line per message, for the providers-faux-streaming/32 parity scenario.
+// TestSystemMessageDocsParity prints Ompig's getSystemMessageText and renderSystemMessageUpdate of each message, one JSON line per message, for the providers-faux-streaming/32 parity scenario.
 func TestSystemMessageDocsParity(t *testing.T) {
 	for _, doc := range systemMessageDocs() {
 		message := systemMessageFromDoc(t, doc)
@@ -94,7 +94,7 @@ func systemMessageDocs() []string {
 	return docs
 }
 
-// systemMessageFromDoc decodes one corpus document into PiG's SystemMessage.
+// systemMessageFromDoc decodes one corpus document into Ompig's SystemMessage.
 func systemMessageFromDoc(t *testing.T, doc string) SystemMessage {
 	t.Helper()
 	var wire struct {

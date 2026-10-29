@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -7,7 +7,7 @@ import (
 	"net"
 	"testing"
 
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // TestBedrockStreamEventReadsIntegerValuedFloats pins JSON.parse number semantics for the Bedrock event-stream body: Pi's AWS SDK parses the payload with

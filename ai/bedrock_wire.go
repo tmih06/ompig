@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -15,18 +15,18 @@ import (
 	smithymiddleware "github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
-	bdoc "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
+	bdoc "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Pi's @aws-sdk/client-bedrock-runtime serializes a ConverseStream command from its schema (dist-cjs ConverseStreamRequest$ and the
 // shapes below it): every structure writes its members in schema order, a union writes its one member, a blob is base64, and a document
 // is JSON.stringify of the value Pi built, so its members keep their order and an empty member name stays. The Go SDK writes structure
-// members sorted, and its document encoder sorts map keys and rejects an empty one, so PiG writes the body itself.
+// members sorted, and its document encoder sorts map keys and rejects an empty one, so Ompig writes the body itself.
 
 // bedrockDocument is a document whose JSON is fixed when it is made, in the member order of the value it stands for. It keeps the SDK's
 // lazy document for the value, so a caller can still decode it.
@@ -52,7 +52,7 @@ func withBedrockConverseBody(metadataOrder []string) func(*smithymiddleware.Stac
 }
 
 func insertBedrockConverseBody(stack *smithymiddleware.Stack, metadataOrder []string) error {
-	return stack.Serialize.Insert(smithymiddleware.SerializeMiddlewareFunc("PiGConverseStreamBody", func(ctx context.Context, in smithymiddleware.SerializeInput, next smithymiddleware.SerializeHandler) (smithymiddleware.SerializeOutput, smithymiddleware.Metadata, error) {
+	return stack.Serialize.Insert(smithymiddleware.SerializeMiddlewareFunc("OmpigConverseStreamBody", func(ctx context.Context, in smithymiddleware.SerializeInput, next smithymiddleware.SerializeHandler) (smithymiddleware.SerializeOutput, smithymiddleware.Metadata, error) {
 		request, ok := in.Request.(*smithyhttp.Request)
 		input, isInput := in.Parameters.(*bedrockruntime.ConverseStreamInput)
 		if !ok || !isInput {

@@ -73,12 +73,12 @@ type BarItem struct {
 
 // BarCell is a per-measure, per-size verdict.
 type BarCell struct {
-	Measure string
-	Size    int
-	Met     bool
-	PiVal   float64
-	PigVal  float64
-	Unit    string
+	Measure  string
+	Size     int
+	Met      bool
+	PiVal    float64
+	OmpigVal float64
+	Unit     string
 }
 
 type durableSample struct {
@@ -106,7 +106,7 @@ func median(v []float64) float64 {
 }
 
 const (
-	headlineArm = "pig-walk-faux-default-procs"
+	headlineArm = "ompig-walk-faux-default-procs"
 	piArm       = "pi-durable-1.0.4-node"
 	// A flat memory curve grows less than this many KiB per turn between 1,000 and 3,500 turns.
 	flatKiBPerTurn = 1.0
@@ -224,15 +224,15 @@ func evaluateBar(b *DurableBar) []BarItem {
 	}
 	items = append(items, it1)
 
-	pi, pig := b.arm(piArm), b.arm(headlineArm)
+	pi, ompig := b.arm(piArm), b.arm(headlineArm)
 	// 2. beat Pi on every measure
-	it2 := BarItem{N: 2, Title: "Beat Pi on every measure", Criterion: "At every size the headline arm (PiG, the benchmark's own walk model, default GOMAXPROCS) is below pi-durable on warm wall, cold wall, CPU seconds and peak RSS."}
-	if pi == nil || pig == nil {
+	it2 := BarItem{N: 2, Title: "Beat Pi on every measure", Criterion: "At every size the headline arm (Ompig, the benchmark's own walk model, default GOMAXPROCS) is below pi-durable on warm wall, cold wall, CPU seconds and peak RSS."}
+	if pi == nil || ompig == nil {
 		it2.Verdict = "no committed results for both arms"
 	} else {
 		wins, total := 0, 0
 		for _, n := range b.Sizes {
-			p, g := pi.Cells[n], pig.Cells[n]
+			p, g := pi.Cells[n], ompig.Cells[n]
 			if p.Samples == 0 || g.Samples == 0 {
 				continue
 			}
@@ -250,7 +250,7 @@ func evaluateBar(b *DurableBar) []BarItem {
 				if met {
 					wins++
 				}
-				it2.Cells = append(it2.Cells, BarCell{Measure: m.name, Size: n, Met: met, PiVal: m.pv, PigVal: m.gv, Unit: m.unit})
+				it2.Cells = append(it2.Cells, BarCell{Measure: m.name, Size: n, Met: met, PiVal: m.pv, OmpigVal: m.gv, Unit: m.unit})
 			}
 		}
 		it2.Met = total > 0 && wins == total
@@ -260,14 +260,14 @@ func evaluateBar(b *DurableBar) []BarItem {
 
 	// 3. memory bounded by the context window, not by conversation length
 	it3 := BarItem{N: 3, Title: "Memory bounded by the context window", Criterion: fmt.Sprintf("Peak RSS grows less than %.0f KiB per turn between 1,000 and 3,500 turns (flat in the conversation length).", flatKiBPerTurn)}
-	if pig == nil || pig.Cells[1000].Samples == 0 || pig.Cells[3500].Samples == 0 {
+	if ompig == nil || ompig.Cells[1000].Samples == 0 || ompig.Cells[3500].Samples == 0 {
 		it3.Verdict = "no committed results at 1,000 and 3,500 turns"
 	} else {
-		slope := (pig.Cells[3500].RSSMB - pig.Cells[1000].RSSMB) * 1024 / 2500
+		slope := (ompig.Cells[3500].RSSMB - ompig.Cells[1000].RSSMB) * 1024 / 2500
 		it3.Met = slope < flatKiBPerTurn
-		it3.Verdict = fmt.Sprintf("headline arm: %.1f MB at 1,000 turns, %.1f MB at 3,500 turns, %.1f KiB per turn", pig.Cells[1000].RSSMB, pig.Cells[3500].RSSMB, slope)
+		it3.Verdict = fmt.Sprintf("headline arm: %.1f MB at 1,000 turns, %.1f MB at 3,500 turns, %.1f KiB per turn", ompig.Cells[1000].RSSMB, ompig.Cells[3500].RSSMB, slope)
 		for _, n := range []int{1000, 3500} {
-			it3.Cells = append(it3.Cells, BarCell{Measure: "peak RSS", Size: n, Met: it3.Met, PigVal: pig.Cells[n].RSSMB, Unit: "MB"})
+			it3.Cells = append(it3.Cells, BarCell{Measure: "peak RSS", Size: n, Met: it3.Met, OmpigVal: ompig.Cells[n].RSSMB, Unit: "MB"})
 		}
 	}
 	items = append(items, it3)

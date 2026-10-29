@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A tool_result handler's `details` replaces the tool's (runner.ts:707-755). An extension process returns it as JSON the host decodes; the chained and returned value keeps the member order the handler wrote, as the JavaScript object it is does.

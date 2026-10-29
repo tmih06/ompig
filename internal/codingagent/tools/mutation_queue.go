@@ -8,8 +8,8 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // FileMutationQueue serialises concurrent mutations of one file, in the order
@@ -24,7 +24,7 @@ import (
 // order withFileMutationQueue was called, and drops the map entry once the
 // chain drains. Upstream additionally serialises the async key-resolution
 // step itself through a package-level registrationQueue so that admission
-// order matches call order even though realpath is async; pig's key
+// order matches call order even though realpath is async; ompig's key
 // resolution (canonicalKey) is synchronous, so admission and key resolution
 // happen inside the same lock/unlock section below, giving the same
 // call-order guarantee without a separate queue.
@@ -120,7 +120,7 @@ func (q *FileMutationQueue) Reserve(filePath string) (*MutationTicket, error) {
 			//perf:ok only for a queued call whose file was missing when it queued, and only while a call for an existing file is queued behind it
 			observed, _ = os.Stat(path)
 		}
-		// pig divergence (D190): a mutation also waits for earlier mutations of the same existing file reached by another canonical path (a hard link, or a case alias on a case-insensitive filesystem); Pi keys only by realpath, so it runs them at once and one overwrites the other.
+		// ompig divergence (D190): a mutation also waits for earlier mutations of the same existing file reached by another canonical path (a hard link, or a case alias on a case-insensitive filesystem); Pi keys only by realpath, so it runs them at once and one overwrites the other.
 		if path == key || (info != nil && observed != nil && os.SameFile(info, observed)) {
 			prev = append(prev, pending)
 		}

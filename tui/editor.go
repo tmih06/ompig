@@ -12,10 +12,10 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 var pasteMarkerRegex = lazyregexp.New(`\[paste #(\d+)( (\+\d+ lines|\d+ chars))?\]`)
@@ -578,7 +578,7 @@ func wordWrapLine(line string, maxWidth int, preSegmented []editorSegment) []tex
 			wrapOppIndex = -1
 		}
 		if gWidth > maxWidth {
-			// pig divergence (D159): a single grapheme wider than maxWidth (a tab at width 2, a wide character at width 1) stays one chunk. Pi re-wraps it with the same input and exhausts the stack.
+			// ompig divergence (D159): a single grapheme wider than maxWidth (a tab at width 2, a wide character at width 1) stays one chunk. Pi re-wraps it with the same input and exhausts the stack.
 			subSegments := editorSegments(graphemeSegmentData(seg.Text), seg.Text)
 			var subChunks []textChunk
 			if len(subSegments) <= 1 {
@@ -756,9 +756,9 @@ func (e *Editor) buildVisualLines(width, rowWidth int) []string {
 			out = append(out, line.text)
 			continue
 		}
-		// pig divergence (D66): Upstream appends the end-of-line cursor as a
+		// ompig divergence (D66): Upstream appends the end-of-line cursor as a
 		// highlighted space even when the row has no cell left for it, which
-		// happens only at width 1 without padding. PiG highlights the final
+		// happens only at width 1 without padding. Ompig highlights the final
 		// grapheme there instead of emitting a row wider than the terminal.
 		if line.cursorPos == jsstring.Length(line.text) && widthx.VisibleWidth(line.text) >= rowWidth && len(line.text) > 0 {
 			segments := graphemeSegments(line.text)
@@ -1036,7 +1036,7 @@ func (e *Editor) Render(width int) []string {
 		e.renderedAutocompleteHeight = len(autocomplete)
 		padding := blanks(paddingX)
 		for i, line := range autocomplete {
-			// pig divergence (D66): a select-list row wider than a very narrow content width is clipped; Pi emits it over-wide.
+			// ompig divergence (D66): a select-list row wider than a very narrow content width is clipped; Pi emits it over-wide.
 			if widthx.VisibleWidth(line) > contentWidth {
 				line = widthx.TruncateToWidth(line, contentWidth, "", false)
 			}
@@ -1765,7 +1765,7 @@ func (e *Editor) HandleInput(data string) {
 			e.AutocompleteMove(1)
 			return
 		case pageSelectionKey(kb, data):
-			// pig divergence (D155): Pi 1.1.0 ignores the selection page keys in the autocomplete list (Pi #7629).
+			// ompig divergence (D155): Pi 1.1.0 ignores the selection page keys in the autocomplete list (Pi #7629).
 			if index, ok := PageSelectionIndex(kb, data, e.autocompleteCursor, len(e.autocompleteItems), e.AutocompleteMaxVisible()); ok && index != e.autocompleteCursor {
 				e.autocompleteCursor = index
 				e.Invalidate()
@@ -1937,7 +1937,7 @@ func (e *Editor) HandleInput(data string) {
 	case kb.Matches(data, KBEditorUndo):
 		// Ctrl+- (default): undo. Upstream binds undo to `ctrl+-` (which
 		// emits \x1f on most terminals); user can rebind via
-		// ~/.pig/keybindings.json.
+		// ~/.ompig/keybindings.json.
 		e.lastAction = ""
 		e.undo()
 	case kb.Matches(data, KBEditorPageUp):

@@ -2,7 +2,7 @@
 # Surface: a message a session_start listener sends while an extension command starts a new Session (a prompt of "/fresh"), against the prompt's response.
 #
 # Pi's rpc-mode.ts rebindSession subscribes its writer to the new Session after `await session.bindExtensions()`, which emits session_start, so a message the listener sends at once is not written. A toast it defers with a zero-delay timer runs after the command (agent-session.ts prompt writes the response once `await command.handler()` returned) and is written after the response.
-# PiG subscribed its writer before session_start and wrote the message the listener sent at once, ahead of the response (found with a Pigpen warden's /eq-new on Pi 1402973a).
+# Ompig subscribed its writer before session_start and wrote the message the listener sent at once, ahead of the response (found with a Pigpen warden's /eq-new on Pi 1402973a).
 
 name = "73-rpc-session-start-message-after-response"
 description = "A message a session_start listener sends at once during a command's new Session is not written, and a toast it defers follows the command's response"
@@ -25,11 +25,11 @@ wait_contains = ['"id":"fresh","type":"response","command":"prompt"', '"message"
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model"]
+ompig = ["OMPIG_HOME=testdata/multi-model"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model/agent"]
-pig_extensions = ["testdata/session-start-message.ts"]
+ompig_extensions = ["testdata/session-start-message.ts"]
 pi_extensions = ["testdata/session-start-message.ts"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 
 [assert]

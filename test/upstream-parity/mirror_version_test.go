@@ -3,16 +3,16 @@ package parity
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/internal/upstreammirror"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/internal/upstreammirror"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // TestUpstreamMirror_MatchesPin fails loudly when the local `.upstream/current`
 // mirror does not match the pinned coding.UpstreamVersion and coding.UpstreamCommit.
 // Every other parity test reads types.ts from that mirror and trusts it; a
-// stale mirror silently validates pig against the wrong upstream version and
+// stale mirror silently validates ompig against the wrong upstream version and
 // (observed: a 0.79.4 mirror hid that session_info_changed graduated to
 // upstream in 0.80.3).
 // This guard turns that silent drift into an explicit failure with the fix.

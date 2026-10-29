@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // RegistryReader (packages/durable/src/harness/types.ts:291-298) is what a Harness reads: `snapshot()` is an "immutable view of the whole current registry" and `subscribe(listener)`

@@ -9,17 +9,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestWindowsUnixSocketPathsAreShortIsolatedAndCleaned(t *testing.T) {
-	// A short directory whose name has spaces is the temporary directory, so <TEMP>\pig keeps every socket path the Host
-	// can produce (<TEMP>\pig\h<uint32>\e-9999.sock) within the AF_UNIX limit whatever length TEMP has on this machine.
-	base := testenv.ShortTempDir(t, "pig ext ")
+	// A short directory whose name has spaces is the temporary directory, so <TEMP>\ompig keeps every socket path the Host
+	// can produce (<TEMP>\ompig\h<uint32>\e-9999.sock) within the AF_UNIX limit whatever length TEMP has on this machine.
+	base := testenv.ShortTempDir(t, "ompig ext ")
 	t.Setenv("TEMP", base)
 	t.Setenv("TMP", base)
 	t.Setenv("TMPDIR", base)
-	if socketDir := filepath.Join(base, "pig"); len(socketDir)+worstRuntimeSocketSuffix > unixSocketPathLimit("windows") {
+	if socketDir := filepath.Join(base, "ompig"); len(socketDir)+worstRuntimeSocketSuffix > unixSocketPathLimit("windows") {
 		t.Fatalf("test temp directory %q is too deep to keep its socket directory", socketDir)
 	}
 
@@ -41,7 +41,7 @@ func TestWindowsUnixSocketPathsAreShortIsolatedAndCleaned(t *testing.T) {
 		if len([]byte(path)) > unixSocketPathLimit("windows") {
 			t.Fatalf("Windows AF_UNIX path has %d bytes: %q", len([]byte(path)), path)
 		}
-		if !strings.Contains(path, "pig ext ") {
+		if !strings.Contains(path, "ompig ext ") {
 			t.Fatalf("socket path did not preserve spaces: %q", path)
 		}
 		listener, listenErr := net.Listen("unix", path)
@@ -64,13 +64,13 @@ func TestWindowsUnixSocketPathsAreShortIsolatedAndCleaned(t *testing.T) {
 	}
 }
 
-// A TEMP too deep for the socket paths below it makes the Host use %LOCALAPPDATA%\pig\s, so the extension still starts.
+// A TEMP too deep for the socket paths below it makes the Host use %LOCALAPPDATA%\ompig\s, so the extension still starts.
 func TestWindowsUnixSocketPathsFallBackWhenTempIsTooLong(t *testing.T) {
 	cwd, configRoot := t.TempDir(), t.TempDir()
 	// Both ShortTempDir calls precede the LOCALAPPDATA override: under a long TEMP ShortTempDir falls back to
-	// %LOCALAPPDATA%\pig\s, and below the overridden directory the fallback exceeds its own length bound.
-	deep := filepath.Join(testenv.ShortTempDir(t, "pig deep "), strings.Repeat("d", unixSocketPathLimit("windows")))
-	localAppData := testenv.ShortTempDir(t, "pig local ")
+	// %LOCALAPPDATA%\ompig\s, and below the overridden directory the fallback exceeds its own length bound.
+	deep := filepath.Join(testenv.ShortTempDir(t, "ompig deep "), strings.Repeat("d", unixSocketPathLimit("windows")))
+	localAppData := testenv.ShortTempDir(t, "ompig local ")
 	t.Setenv("LOCALAPPDATA", localAppData)
 	if err := os.MkdirAll(deep, 0o700); err != nil {
 		t.Fatal(err)
@@ -85,7 +85,7 @@ func TestWindowsUnixSocketPathsFallBackWhenTempIsTooLong(t *testing.T) {
 		t.Fatal(err)
 	}
 	runtimeDir := host.sockRuntimeDir
-	if want := filepath.Join(localAppData, "pig", "s"); filepath.Dir(runtimeDir) != want {
+	if want := filepath.Join(localAppData, "ompig", "s"); filepath.Dir(runtimeDir) != want {
 		t.Fatalf("runtime directory %q is not below the fallback %q", runtimeDir, want)
 	}
 	if len([]byte(path)) > unixSocketPathLimit("windows") {

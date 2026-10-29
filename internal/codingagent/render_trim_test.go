@@ -4,7 +4,7 @@ import "testing"
 
 // TestCompactionTrimIndex verifies that resume rendering begins at the
 // latest compaction's kept tail (FirstKeptEntryID), matching the aligned
-// context produced by BuildContext. Without the trim, pig re-renders the
+// context produced by BuildContext. Without the trim, ompig re-renders the
 // pre-compaction history that compaction summarized away: wrong visually
 // and the source of the long resume render on compacted sessions.
 func TestCompactionTrimIndex(t *testing.T) {
@@ -51,7 +51,7 @@ func TestCompactionTrimIndex(t *testing.T) {
 
 	// Rendered message entries (from the trim point) should equal the
 	// aligned context minus the one synthetic compaction-summary message
-	// (which pig renders as a chip, not a message).
+	// (which ompig renders as a chip, not a message).
 	trimMsgs := 0
 	for i := got; i < len(branch); i++ {
 		if branch[i].entry.Base().Type == "message" {

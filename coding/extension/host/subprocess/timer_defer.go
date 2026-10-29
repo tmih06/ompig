@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // timerDeferState numbers the NotifyTimerDefer frames of one connection and records which of them the runtime acknowledged (NotifyTimerDeferAck).

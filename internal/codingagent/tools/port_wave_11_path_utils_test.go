@@ -20,8 +20,8 @@ func TestPortWave11PathUtils(t *testing.T) {
 	}
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	t.Setenv("PI_CODING_AGENT_DIR", t.TempDir())
 
 	t.Run("expandPath", func(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // defaultShell is the shell Node's execSync runs: /bin/sh, or /system/bin/sh

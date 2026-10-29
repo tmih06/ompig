@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // isolateTerminalCapabilities pins a Kitty environment, which auto-detects
@@ -121,7 +121,7 @@ func recordInputNormalization(t *testing.T) func() []string {
 }
 
 // Upstream ProcessTerminal.forwardInputSequence normalizes each StdinBuffer
-// sequence before the input handler sees it; Pig's interactive pump owns the
+// sequence before the input handler sees it; Ompig's interactive pump owns the
 // StdinBuffer, so it must apply the same normalization.
 func TestInteractiveInputPumpNormalizesNativeShiftEnter(t *testing.T) {
 	seen := recordInputNormalization(t)

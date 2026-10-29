@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ReadStoredCredential is Pi's readStoredCredential (core/auth-storage.ts, exported from index.ts): a one-off synchronous read of the credential stored for providerID in an

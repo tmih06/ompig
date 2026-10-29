@@ -5,7 +5,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 var (
@@ -63,7 +63,7 @@ func noteTerminationSignal(sig os.Signal) (syscall.Signal, bool) {
 		if prelude != nil {
 			prelude()
 		}
-		// pig additive (D102): Pi exits on SIGTERM and SIGHUP without a trace.
+		// ompig additive (D102): Pi exits on SIGTERM and SIGHUP without a trace.
 		codingagent.RecordExit(codingagent.AgentDir(), "received "+codingagent.SignalName(sig))
 	})
 	sysSig, ok := sig.(syscall.Signal)

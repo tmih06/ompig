@@ -3,7 +3,7 @@ package sdk
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi's assistant message carries its tool calls as ToolCall blocks whose arguments are an object (packages/ai/src/types.ts:423-431). Decoding that into a
@@ -89,8 +89,8 @@ func TestBranchEntryCustomMessageWithBlockContentTakesItsText(t *testing.T) {
 	for raw, want := range map[string]string{
 		`{"id":"c1","type":"custom_message","customType":"x","content":[{"type":"text","text":"a"},{"type":"image","data":"AA==","mimeType":"image/png"},{"type":"text","text":"b"}],"display":true}`: "ab",
 		`{"type":"custom_message","content":[{"type":"image","data":"AA==","mimeType":"image/png"}],"summary":"s"}`:                                                                                   "s",
-		`{"type":"custom_message","content":null,"summary":"s"}`:                                                                                                                                      "s",
-		`{"type":"message","message":{"role":"user","content":[null,{"type":"text","text":"kept"}]}}`:                                                                                                 "kept",
+		`{"type":"custom_message","content":null,"summary":"s"}`:                                      "s",
+		`{"type":"message","message":{"role":"user","content":[null,{"type":"text","text":"kept"}]}}`: "kept",
 	} {
 		var b BranchEntry
 		if err := json.Unmarshal([]byte(raw), &b); err != nil || b.Content != want {

@@ -15,7 +15,7 @@ type markdownLatexGolden struct {
 	Lines []string `json:"lines"`
 }
 
-// TestMarkdownLatexMatchesUpstream diffs pig's Markdown render (ANSI-stripped,
+// TestMarkdownLatexMatchesUpstream diffs ompig's Markdown render (ANSI-stripped,
 // like markdownPlainLines) against pi's over a markdown+math corpus at width 80,
 // proving the inline/block latex tokenizer integration is faithful.
 func TestMarkdownLatexMatchesUpstream(t *testing.T) {

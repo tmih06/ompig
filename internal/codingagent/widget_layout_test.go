@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Pi 0.87.1 interactive-mode.ts:2401-2422 puts Spacer(1) before the
@@ -37,7 +37,7 @@ func TestAboveEditorWidgetSpacerPrecedesWidgets(t *testing.T) {
 }
 
 // interactive-mode.ts renderWidgets lays out extensionWidgetsAbove and extensionWidgetsBelow, one Map per side in the order the widgets were set
-// (setExtensionWidget deletes a key before setting it, so a replaced widget moves to the end). Pig keeps the extension processes' widgets and the
+// (setExtensionWidget deletes a key before setting it, so a replaced widget moves to the end). Ompig keeps the extension processes' widgets and the
 // host-process ones apart, so the layout must interleave the two by the order they were set.
 func TestWidgetsFollowTheOrderTheyWereSetAcrossExtensionHosts(t *testing.T) {
 	m := &InteractiveMode{widgetContainer: tui.NewContainer(), widgetContainerBelow: tui.NewContainer()}

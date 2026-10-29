@@ -33,7 +33,7 @@ func clipboardPipe(parentReads bool) (parentEnd, childEnd *os.File, err error) {
 	}
 	attrs := &windows.SecurityAttributes{SecurityDescriptor: sd}
 	attrs.Length = uint32(unsafe.Sizeof(*attrs))
-	path := `\\.\pipe\pig-clipboard-` + rand.Text()
+	path := `\\.\pipe\ompig-clipboard-` + rand.Text()
 	name, err := windows.UTF16PtrFromString(path)
 	if err != nil {
 		return nil, nil, err

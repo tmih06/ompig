@@ -1,10 +1,10 @@
 # AGENTS.md
 
-Operating rules for AI agents maintaining `pig`, the Go port of upstream `pi`. This file is context, not human marketing. Keep it small, current, and enforceable.
+Operating rules for AI agents maintaining `ompig`, the Go port of upstream `pi`. This file is context, not human marketing. Keep it small, current, and enforceable.
 
 ## Mission
 
-`pig` must match upstream `pi` observable behavior unless `docs/parity/DIVERGENCES.md` records a numbered, scrutinized exception. Treat the port as a compiler from upstream TypeScript behavior to Go behavior: `docs/parity/PORT_MAP.md` defines the file map, parity scenarios define behavior, `test/parity/coverage.md` reports proof, and gates keep the claims honest.
+`ompig` must match upstream `pi` observable behavior unless `docs/parity/DIVERGENCES.md` records a numbered, scrutinized exception. Treat the port as a compiler from upstream TypeScript behavior to Go behavior: `docs/parity/PORT_MAP.md` defines the file map, parity scenarios define behavior, `test/parity/coverage.md` reports proof, and gates keep the claims honest.
 
 Source of truth:
 - `.upstream/current/` is the upstream mirror.
@@ -14,7 +14,7 @@ Source of truth:
 - `test/parity/interfaces/upstream-v<version>.json` is the compiler-derived public
   package interface denominator; observable adapter inventories such as
   `cli-v<version>.json` extend it for non-package user contracts;
-  `mapping-v<version>.json` records each Pig disposition and closure evidence. Generated inventory drift and strict mapping
+  `mapping-v<version>.json` records each Ompig disposition and closure evidence. Generated inventory drift and strict mapping
   are Foundation gates. PORT_MAP remains the file navigation roll-up until
   Foundation I finishes generating its statuses from these ledgers.
 - `test/parity/upstream-sync/v<version>.toml` accounts for every changed tracked source file in a version leap.
@@ -33,45 +33,45 @@ Use partial until behavioral closure is reviewed; source existence is not proof.
 
 ## Product-extension boundary
 
-Stock PiG contains upstream-parity behavior and the inert, product-neutral mechanisms needed to discover, validate, select, build, verify, load, isolate, and run Packages, Resources, extensions, Piglets, and Piglet Binaries. A Piglet selects and activates product behavior. PiG Standard owns branded presentation, opinionated defaults, selected extensions, onboarding, games, and other optional product workflows.
+Stock Ompig contains upstream-parity behavior and the inert, product-neutral mechanisms needed to discover, validate, select, build, verify, load, isolate, and run Packages, Resources, extensions, Ompiglets, and Ompiglet Binaries. A Ompiglet selects and activates product behavior. Ompig Standard owns branded presentation, opinionated defaults, selected extensions, onboarding, games, and other optional product workflows.
 
 Classify every proposed additive capability before implementation:
 
-1. `required substrate` remains in Stock PiG.
-2. `inert capability` remains in Stock PiG only when an extension or Piglet must select it.
-3. Composition, presentation, policy, and branded behavior belong in PiG Standard or another explicit Piglet or Package.
+1. `required substrate` remains in Stock Ompig.
+2. `inert capability` remains in Stock Ompig only when an extension or Ompiglet must select it.
+3. Composition, presentation, policy, and branded behavior belong in Ompig Standard or another explicit Ompiglet or Package.
 4. Caller-free or unneeded behavior is deleted.
 5. Behavior that overlaps Pi but differs observably is fixed or recorded in `docs/parity/DIVERGENCES.md` after explicit approval.
 
-Use `product-neutral diagnostics` for generic reports that describe Stock mechanisms. Use `explicit unsafe opt-in` only for a capability that stays off by default, is visible at configuration boundaries, and must not be selected by PiG Standard.
+Use `product-neutral diagnostics` for generic reports that describe Stock mechanisms. Use `explicit unsafe opt-in` only for a capability that stays off by default, is visible at configuration boundaries, and must not be selected by Ompig Standard.
 
-A Piglet cannot supply the parser, resolver, verifier, SDK bridge, isolation boundary, or build machinery needed to load itself. Do not move those bootstrap mechanisms into PiG Standard. Do not activate Standard behavior in Stock PiG. Do not put product UI, Piglet-specific recommendations, workflow-specific logic, or linked extension products under `internal/` or `cmd/` except for the minimum generic host capability.
+A Ompiglet cannot supply the parser, resolver, verifier, SDK bridge, isolation boundary, or build machinery needed to load itself. Do not move those bootstrap mechanisms into Ompig Standard. Do not activate Standard behavior in Stock Ompig. Do not put product UI, Ompiglet-specific recommendations, workflow-specific logic, or linked extension products under `internal/` or `cmd/` except for the minimum generic host capability.
 
-Additive records use `docs/additive-features.md`. Observable Stock PiG differences use `docs/parity/DIVERGENCES.md`. Place one short typed source marker at each production decision point. Tests do not satisfy the source-marker requirement.
+Additive records use `docs/additive-features.md`. Observable Stock Ompig differences use `docs/parity/DIVERGENCES.md`. Place one short typed source marker at each production decision point. Tests do not satisfy the source-marker requirement.
 
 Change the version only with `make set-version VERSION=x.y.z`.
 
-## Pig-owned format and update policy
+## Ompig-owned format and update policy
 
-Pig-owned source, manifest, record, graph/plan, builder, Marketplace,
+Ompig-owned source, manifest, record, graph/plan, builder, Marketplace,
 publication, and subprocess formats have one strict current unversioned shape
-while Pig and its clients upgrade atomically. Release/content identity, exact
+while Ompig and its clients upgrade atomically. Release/content identity, exact
 upstream-owned schema versions, and external-standard versions remain. Do not
-add a Pig-owned format discriminator, negotiation, compatibility reader,
+add a Ompig-owned format discriminator, negotiation, compatibility reader,
 migration, redirect, or dual write unless exact upstream regularly versions the
 equivalent schema or the user explicitly approves independently deployed
 compatibility.
 
 Self-update preserves Pi's command routing but uses one proven native ownership
 tier per operation. Standalone download, package-manager, immutable
-Piglet Binary, OCI/Image, and unsupported/read-only paths must
+Ompiglet Binary, OCI/Image, and unsupported/read-only paths must
 not substitute for one another after work starts. Downloads require complete
 checksum and overflow-safe size verification; startup checks remain bounded and
 best-effort, while explicit update failures remain actionable.
 
 ## Extension API porting rules
 
-The pig extension system is a **port** of the upstream pi extension API,
+The ompig extension system is a **port** of the upstream pi extension API,
 not a replacement for it. Two downstream-only constructs exist so we can
 stay subprocess-only without giving up the pi extension API:
 
@@ -122,7 +122,7 @@ stay subprocess-only without giving up the pi extension API:
 Do not, without an explicit approved spec:
 - add a WASM or embedded-JS extension runtime,
 - add a dynamic Go plugin / `plugin.Open` extension loader,
-- add a linked/in-process production extension runtime, except the compiled-in extension factory form of `docs/specs/extension-factory-trust.md`: an `extension.ExtensionFactory` that the source of the binary's own `main` package passes to the loader by value (Stock PiG's built-in rows, or an embedding program's own factories). A Piglet member, including a D31 fused extension, never uses it. Settings and `-e builtin:<name>` may select or disable a registered built-in by name, as Pi does; no user, project, Package, file, settings entry, Piglet, or wire peer can supply or add factory code,
+- add a linked/in-process production extension runtime, except the compiled-in extension factory form of `docs/specs/extension-factory-trust.md`: an `extension.ExtensionFactory` that the source of the binary's own `main` package passes to the loader by value (Stock Ompig's built-in rows, or an embedding program's own factories). A Ompiglet member, including a D31 fused extension, never uses it. Settings and `-e builtin:<name>` may select or disable a registered built-in by name, as Pi does; no user, project, Package, file, settings entry, Ompiglet, or wire peer can supply or add factory code,
 - introduce multi-register (`RegisterPayload.Extensions`,
   `RequestPayload.TargetExtension`): packed cells deliberately stay on
   one socket and one registration per extension,
@@ -137,13 +137,13 @@ matrix row in `docs/extension-api-parity.md` → numbered divergence if
 needed.
 
 `extensions/sdk-ts` is a declaration-only adapter. It re-exports the exact
-pinned Pi extension declarations and augments them with PiG-only types. The
+pinned Pi extension declarations and augments them with Ompig-only types. The
 Node subprocess runtime remains the implementation, so do not duplicate Pi's
 TypeScript runtime in this package. Keep its Pi dependency equal to
 `coding.UpstreamVersion` and verify it with `make test-sdk-ts`.
 
 Extension authoring has two source forms. A conventional factory uses the one
-standard symbol for its language; an exact standalone is always isolated. Pig
+standard symbol for its language; an exact standalone is always isolated. Ompig
 derives wire, SDK, runner, placement, and registration details. Runtime
 registration owns identity and capabilities. Do not add an authored extension
 manifest or another global extension configuration plane. Isolated, packed, and
@@ -189,7 +189,7 @@ Probe upstream call sites, not only the declared return type: an `async` functio
 ## Reward function
 
 Highest-value work, in order:
-1. Find a pig-vs-pi behavior difference and fix it at the source, or number it in `docs/parity/DIVERGENCES.md`.
+1. Find a ompig-vs-pi behavior difference and fix it at the source, or number it in `docs/parity/DIVERGENCES.md`.
 2. Tighten an existing scenario comparator: `wait_contains` → `output_normalized_equal` → `output_equal` → `escaped_output_equal`, or increase `runs` where flake risk matters.
 3. Promote silent drift to a numbered divergence with call-site markers, remove condition, and parity coverage or explicit allowance.
 4. Add honest file coverage where the asserted output actually exercises the claimed `covers` paths.
@@ -336,7 +336,7 @@ Full per-file detail: `test/parity/coverage.md`.
 
 ## Reliability contexts
 
-Define the upstream contract, complete user path, and material failure modes before implementation. Follow the verification sequence below. Use the complete PiG path as the primary proof for behavior that crosses a Provider, Session, mode, Extension Host, process, or terminal boundary. Retain repeatable evidence.
+Define the upstream contract, complete user path, and material failure modes before implementation. Follow the verification sequence below. Use the complete Ompig path as the primary proof for behavior that crosses a Provider, Session, mode, Extension Host, process, or terminal boundary. Retain repeatable evidence.
 
 Test empty, ordinary, boundary, and representative stress inputs. Verify ordering, cancellation, replacement, cleanup, and retained state. Measure latency, memory, allocation, and backpressure on critical paths. A small-input pass does not prove bounded behavior.
 
@@ -349,7 +349,7 @@ Use a term from `docs/project/CONTEXT.md` when that file defines it. Do not rede
 | Session, Model Runtime, execution mode | `coding/AGENTS.md` |
 | Extension Host, SDK, topology, lifecycle | `coding/extension/AGENTS.md` |
 | upstream oracle, scenario, comparator, evidence | `test/parity/AGENTS.md` |
-| Stock PiG artifact, PiG Standard Piglet release, provenance, publication | `.github/AGENTS.md` |
+| Stock Ompig artifact, Ompig Standard Ompiglet release, provenance, publication | `.github/AGENTS.md` |
 
 Apply these rules to new work. Do not delete or weaken accepted tests to conform. Coordinate with the lane owner before changing evidence. Brief or restart active agents after an instruction change.
 
@@ -420,7 +420,7 @@ A surface is done only when:
 12. interaction and state-machine behavior found during probing is closed in
     `test/parity/behavior-contracts.toml` when declaration shape cannot express it.
     Contracts bind a hashed current-upstream source range and its complete
-    keybinding/event inventory to Pig targets, a failing unit regression, and a
+    keybinding/event inventory to Ompig targets, a failing unit regression, and a
     behavioral parity scenario. Boundary transitions such as first/last
     wraparound, empty/singleton states, cancellation, ordering, and persistence
     are separate obligations; interface presence does not prove them.
@@ -444,7 +444,7 @@ must be tied to one commit, upstream version, and owner family, and are proposal
 for the coordinator to re-probe. Production/evidence edits (`family` and
 `tighten`) remain serialized in the canonical workspace.
 
-Choose the option that makes the next upstream sync smaller. Do not embed pig-specific behavior in mirrored code unless it is a documented divergence.
+Choose the option that makes the next upstream sync smaller. Do not embed ompig-specific behavior in mirrored code unless it is a documented divergence.
 
 ## Parity scenario rules
 
@@ -455,8 +455,8 @@ Scenario quality rules:
 - Boot-only scenarios may exist but cannot claim deep file coverage and do not count as behavioral verification.
 - Registration-only scenarios (for example `--list-models`) prove catalog visibility only. They must be tagged `registration-only`; they may cover registry/catalog/auth-wiring paths but must not claim provider stream/payload conversion files.
 - Smoke-only scenarios must be tagged `smoke-only`; they are useful tripwires but not acceptance evidence.
-- If output differs, fix pig or cite a numbered divergence. Comments alone are not enough.
-- Do not weaken a comparator to keep a pig bug green.
+- If output differs, fix ompig or cite a numbered divergence. Comments alone are not enough.
+- Do not weaken a comparator to keep a ompig bug green.
 - Scenario comments must explain any `normalize_replace`, `lint-known-gap`, `skip`, `serial`, group override, or weak-quality tag.
 - Keep `covers` narrow. Broad claims inflate the dashboard and hide untested behavior.
 - Re-probe affected cross-family scenarios when a fix changes shared behavior.
@@ -465,7 +465,7 @@ Isolation rules for parallel parity:
 - Agent/home dirs are ephemeral copies. Never write into checked-in fixture roots.
 - Use `{{TEMP}}` for writable paths; do not hardcode `/tmp` paths.
 - tmux session names must be unique and cleanup may kill only `parity-*` sessions.
-- `PIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` win over `PIG_HOME`, and every child process inherits them, including a tmux session started from your shell. A manual probe or test that runs pig must set or clear all of `PIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`, `PIG_HOME`, `PI_HOME` and `HOME`, or `/logout` and login rewrite the real credentials (the 2026-10-06 lane `auth.json` wipe). A package whose `TestMain` calls `testenv.ScopeTempDir` or `testenv.RunScoped` replaces the agent-directory variables. Other packages inherit them, so a plain `go test` run from an agent shell sets `PIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`, `PIG_HOME` and `PI_HOME` to scratch directories first. `make test` runs each group under seeded directories and fails a group that adds, removes or changes any file or directory in them (`automation/ci/agent-dir-guard.sh`).
+- `OMPIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` win over `OMPIG_HOME`, and every child process inherits them, including a tmux session started from your shell. A manual probe or test that runs ompig must set or clear all of `OMPIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`, `OMPIG_HOME`, `PI_HOME` and `HOME`, or `/logout` and login rewrite the real credentials (the 2026-10-06 lane `auth.json` wipe). A package whose `TestMain` calls `testenv.ScopeTempDir` or `testenv.RunScoped` replaces the agent-directory variables. Other packages inherit them, so a plain `go test` run from an agent shell sets `OMPIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`, `OMPIG_HOME` and `PI_HOME` to scratch directories first. `make test` runs each group under seeded directories and fails a group that adds, removes or changes any file or directory in them (`automation/ci/agent-dir-guard.sh`).
 - `pre_clear_paths` is deprecated; prefer fresh temp dirs.
 - Use the default scheduler groups unless a justified `group = "..."` or `serial` tag is required.
 - Deferred scenarios stay visible in coverage; do not use skip/defer to hide known drift.
@@ -484,12 +484,12 @@ A divergence is allowed only when it is user-visible or interop-relevant and can
 - `D<N>` id in `docs/parity/DIVERGENCES.md`;
 - `SCRUTINIZED:approved`;
 - remove-when condition;
-- `// pig divergence (D<N>): ...` at each call site;
+- `// ompig divergence (D<N>): ...` at each call site;
 - parity coverage or an explicit parity allowance.
 
 Each record is one file, `docs/parity/divergences/D<N>.md`: an active record is a `## D<N> <title>` section, a retired record is one `- D<N> — ...` line. Edit that file only. `make divergences` generates `docs/parity/DIVERGENCES.md` from the files, and a lane does not commit the generated ledger; the merger regenerates it (`TestDivergenceLedgerEqualsItsRecordFiles` fails when they differ).
 
-`make divergence-guard` (part of `make check`) catches divergences nobody recorded. It flags, in the agent, ai, coding, internal/codingagent, tui and cmd/pig packages: duration and cap literals with no upstream counterpart (`magic-literal`), event sends that race a context-done case (`cancel-drop-send`), non-blocking sends that drop their value (`default-drop-send`), decode errors skipped inside loops (`stream-parse-continue`), unknown or missing stop reasons mapped to success (`stop-reason-success`), SSE fields parsed outside `ai/sse.go` (`hand-rolled-sse`), `recover()` that discards the panic (`bare-recover`), discarded persistence errors (`discarded-io-error`), hooks that proceed when their handler fails (`hook-fail-open`), errors classified by status-code substrings (`error-status-substring`), and agent `Send`/`Continue` outside `coding/session*.go` (`agent-run-outside-session`). `bare-recover` scans every non-test Go file in the repository, not only those packages. A hit passes only with a `// pig divergence (D<N>): ...` marker on its line or the line above, or, when Pi really does the same, `// upstream: <file>:<symbol>` there; the file must exist in `.upstream/current` or be a SHA-256-verified dependency snapshot whose exact version matches a dependency pin in that mirror (`test/parity/dependency-sources.json`; see `docs/parity/dependency-source-proof.md`), the symbol must appear in it, and for a literal the value must appear too. A literal whose value appears in an upstream file that `docs/parity/PORT_MAP.md` maps to the Go file also passes. Every current hit is listed in `automation/ci/divguard/baseline.toml` with its finding and owning slice. The gate compares the scan with that file in both directions: a new hit fails, and so does an entry whose hit is gone, so a fix deletes its entries in the same change. It does not compare the file with its previous version, so keeping it shrink-only is a review rule: never add an entry for new code. A green guard shows these patterns are absent or accounted for, not that the code matches Pi; allow markers prove only that the cited file and symbol exist (and, for literals, that the value appears there).
+`make divergence-guard` (part of `make check`) catches divergences nobody recorded. It flags, in the agent, ai, coding, internal/codingagent, tui and cmd/ompig packages: duration and cap literals with no upstream counterpart (`magic-literal`), event sends that race a context-done case (`cancel-drop-send`), non-blocking sends that drop their value (`default-drop-send`), decode errors skipped inside loops (`stream-parse-continue`), unknown or missing stop reasons mapped to success (`stop-reason-success`), SSE fields parsed outside `ai/sse.go` (`hand-rolled-sse`), `recover()` that discards the panic (`bare-recover`), discarded persistence errors (`discarded-io-error`), hooks that proceed when their handler fails (`hook-fail-open`), errors classified by status-code substrings (`error-status-substring`), and agent `Send`/`Continue` outside `coding/session*.go` (`agent-run-outside-session`). `bare-recover` scans every non-test Go file in the repository, not only those packages. A hit passes only with a `// ompig divergence (D<N>): ...` marker on its line or the line above, or, when Pi really does the same, `// upstream: <file>:<symbol>` there; the file must exist in `.upstream/current` or be a SHA-256-verified dependency snapshot whose exact version matches a dependency pin in that mirror (`test/parity/dependency-sources.json`; see `docs/parity/dependency-source-proof.md`), the symbol must appear in it, and for a literal the value must appear too. A literal whose value appears in an upstream file that `docs/parity/PORT_MAP.md` maps to the Go file also passes. Every current hit is listed in `automation/ci/divguard/baseline.toml` with its finding and owning slice. The gate compares the scan with that file in both directions: a new hit fails, and so does an entry whose hit is gone, so a fix deletes its entries in the same change. It does not compare the file with its previous version, so keeping it shrink-only is a review rule: never add an entry for new code. A green guard shows these patterns are absent or accounted for, not that the code matches Pi; allow markers prove only that the cited file and symbol exist (and, for literals, that the value appears there).
 
 Do not record ordinary TS-to-Go mechanics, test harness differences, or an
 SDK's implementation of a capability every SDK has (naming convention, `Result`
@@ -513,7 +513,7 @@ Set up the toolchain at the pinned versions:
 
 Reproduce a Windows CI job locally before you change code. Run the same command the job runs (see the `windows` job in `.github/workflows/ci.yml`). Use `go test -v` and a `-timeout` below the job limit, so a stall prints a stack.
 
-Set `PIG_HOME` and `PIG_CODING_AGENT_DIR` to a directory with a space in its path, as CI does. Many Windows bugs are path bugs: separators, drive letters, 8.3 short names, and `D:\work\project` against `/work/project`. Compare with what Pi does on Windows before you change a path rule.
+Set `OMPIG_HOME` and `OMPIG_CODING_AGENT_DIR` to a directory with a space in its path, as CI does. Many Windows bugs are path bugs: separators, drive letters, 8.3 short names, and `D:\work\project` against `/work/project`. Compare with what Pi does on Windows before you change a path rule.
 
 Work on a branch named `team/<name>/<topic>`. Push it to the staging remote, not to the public repository. The integrator stacks verified branches into the release branch. Each commit follows Commit hygiene below: `git commit --signoff -S`.
 
@@ -604,7 +604,7 @@ make schedule-report
 make test-stress
 make parity-stress
 make parity-perf
-make test-timing   # blocking wall-clock/ratio gates (internal/testenv.TimingGate); PR CI only warns (PIG_PERF_TIMING_REPORT_ONLY=1)
+make test-timing   # blocking wall-clock/ratio gates (internal/testenv.TimingGate); PR CI only warns (OMPIG_PERF_TIMING_REPORT_ONLY=1)
 make parity-live
 make release-check
 go tool govulncheck ./...
@@ -614,7 +614,7 @@ go fix -diff ./...
 
 Choose the test tier by the moment, as `docs/project/test-economy.md` defines: `go test ./<pkg> -run '<Tests>'` while iterating, `make test-changed`, `make lint-changed` and `go vet` on touched packages before a handoff commit, `make ci-drift ci-contracts` and the affected `make parity-family` runs before reporting ready, and the full suites (`make test`, `make check`, `make verify`, `make parity`, `go test ./...`) in CI, integration and release preview. Do not pass `-count=1` unless the test reads inputs through a child process. Use `-race` on edited packages, not the whole module. Bound `go test -fuzz` with `-parallel` and `-fuzztime`. On a shared host, build with `-trimpath`.
 
-`make test` requires and exercises the Go, Node, Python, and Rust toolchains; fixture build failures are fatal. `make check` combines deterministic gates with one strict Pig/Pi pair per hermetic scenario. `make verify` is the end-of-loop gate: it runs each scenario's declared durability and regenerates coverage. `make parity` runs declared scenario pairs in parallel with default concurrency groups and suppresses `runtime_ratio_max` because parallel CPU contention makes that metric unreliable. `make parity-perf` runs serially and enforces runtime ratios; use it for release gates or cron, not normal loops.
+`make test` requires and exercises the Go, Node, Python, and Rust toolchains; fixture build failures are fatal. `make check` combines deterministic gates with one strict Ompig/Pi pair per hermetic scenario. `make verify` is the end-of-loop gate: it runs each scenario's declared durability and regenerates coverage. `make parity` runs declared scenario pairs in parallel with default concurrency groups and suppresses `runtime_ratio_max` because parallel CPU contention makes that metric unreliable. `make parity-perf` runs serially and enforces runtime ratios; use it for release gates or cron, not normal loops.
 
 ## Documentation language
 
@@ -622,22 +622,22 @@ Write instructions, references, procedures, and operational documentation as sim
 
 Do not hard-wrap Markdown prose to a terminal width. Use structural newlines only where Markdown or the content requires them.
 
-Where Pig differs from Pi in a way a user can observe, state the difference at
+Where Ompig differs from Pi in a way a user can observe, state the difference at
 the point of use and cite its `D<N>`. An agent carrying Pi pretraining does the
-Pi thing wherever Pig's difference is undocumented.
+Pi thing wherever Ompig's difference is undocumented.
 
 ## Public project writing
 
-Write about PiG as a faithful Go implementation of Pi. Name Pi as the reference
+Write about Ompig as a faithful Go implementation of Pi. Name Pi as the reference
 implementation and link to its repository and documentation. Credit Michael
-Kinsy as PiG's creator and state that PiG was originally developed at Hewlett
+Kinsy as Ompig's creator and state that Ompig was originally developed at Hewlett
 Packard Enterprise. Keep those facts separate from legal notices.
 
-Do not call PiG an official Pi project or imply endorsement by Pi's maintainers.
+Do not call Ompig an official Pi project or imply endorsement by Pi's maintainers.
 Do not claim HPE sponsorship, Open Program Office approval, public release,
 community governance, certification, or trademark approval until the relevant
 decision is recorded and public. Do not use HPE logos, wordmarks, or exact
-corporate styling without recorded Brand approval. Keep Stock PiG branding
+corporate styling without recorded Brand approval. Keep Stock Ompig branding
 product-neutral.
 
 Use direct technical prose. Avoid slogans, superlatives, invented motives,
@@ -661,7 +661,7 @@ Forbidden commands:
 - `git commit --no-verify`
 - `git push -f`
 - `tmux kill-server`
-- `go install ./cmd/pig`
+- `go install ./cmd/ompig`
 
 Only `tmux kill-session -t <name>` is allowed. Commit only files changed in this session.
 
@@ -669,4 +669,4 @@ Do not dispatch subagents to read local files available in this worktree. Read t
 
 ## When unsure
 
-Read upstream source, read upstream tests, probe upstream behavior, then make pig match it. Ask the user instead of guessing.
+Read upstream source, read upstream tests, probe upstream behavior, then make ompig match it. Ask the user instead of guessing.

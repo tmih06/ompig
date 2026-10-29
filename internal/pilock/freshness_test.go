@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Pi 0.87.1 auth-storage.ts:69-93,119-155 and proper-lockfile 4.1.2 lib/lockfile.js:51-85 use mtime, not file type, to decide contention. Only PiG recovers stale empty regular sidecars.
+// Pi 0.87.1 auth-storage.ts:69-93,119-155 and proper-lockfile 4.1.2 lib/lockfile.js:51-85 use mtime, not file type, to decide contention. Only Ompig recovers stale empty regular sidecars.
 func TestLockMtimeThresholds(t *testing.T) {
 	for _, kind := range []string{"file", "directory"} {
 		for _, mode := range []struct {

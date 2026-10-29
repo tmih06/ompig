@@ -24,7 +24,7 @@ VERSION = "0.2.0"
 def make_archives(directory: pathlib.Path, version: str = VERSION) -> None:
     lines = []
     for goos, goarch in sorted(pack_npm.TARGETS):
-        prefix = f"pig-{version}-{goos}-{goarch}"
+        prefix = f"ompig-{version}-{goos}-{goarch}"
         files = {
             pack_npm.binary_name(goos): f"binary {goos}/{goarch}".encode(),
             "LICENSE": b"MIT License\n",
@@ -66,11 +66,11 @@ class ManifestTest(unittest.TestCase):
 
     def test_platform_manifest(self):
         m = pack_npm.platform_manifest("0.2.0", "win32", "arm64", "windows", "0.87.1")
-        self.assertEqual(m["name"], "@pi-in-go/pig-win32-arm64")
+        self.assertEqual(m["name"], "@ompig/ompig-win32-arm64")
         self.assertEqual(m["version"], "0.2.0")
         self.assertEqual(m["os"], ["win32"])
         self.assertEqual(m["cpu"], ["arm64"])
-        self.assertIn("pig.exe", m["files"])
+        self.assertIn("ompig.exe", m["files"])
         self.assertIn("LICENSE", m["files"])
         self.assertIn("NOTICE", m["files"])
         self.assertIn("Pi 0.87.1", m["description"])
@@ -81,27 +81,27 @@ class ManifestTest(unittest.TestCase):
         # Node on Termux reports process.platform "android"; npm installs a package only when its os field names that platform.
         self.assertEqual(pack_npm.TARGETS[("android", "arm64")], ("android", "arm64"))
         m = pack_npm.platform_manifest("0.2.0", "android", "arm64", "android", None)
-        self.assertEqual((m["name"], m["os"], m["cpu"]), ("@pi-in-go/pig-android-arm64", ["android"], ["arm64"]))
+        self.assertEqual((m["name"], m["os"], m["cpu"]), ("@ompig/ompig-android-arm64", ["android"], ["arm64"]))
         self.assertEqual(pack_npm.platform_manifest("0.2.0", "linux", "arm64", "linux", None)["os"], ["linux"])
 
     def test_launcher_manifest(self):
         m = pack_npm.launcher_manifest("0.2.0", "0.87.1")
-        self.assertEqual(m["name"], "@pi-in-go/pig")
-        self.assertEqual(m["bin"], {"pig": "bin/pig.js"})
+        self.assertEqual(m["name"], "@ompig/ompig")
+        self.assertEqual(m["bin"], {"ompig": "bin/ompig.js"})
         self.assertEqual(m["engines"], {"node": ">=18"})
         self.assertEqual(len(m["optionalDependencies"]), 7)
-        self.assertEqual(m["optionalDependencies"]["@pi-in-go/pig-android-arm64"], "0.2.0")
+        self.assertEqual(m["optionalDependencies"]["@ompig/ompig-android-arm64"], "0.2.0")
         self.assertTrue(all(v == "0.2.0" for v in m["optionalDependencies"].values()))
-        self.assertIn("@pi-in-go/pig-linux-x64", m["optionalDependencies"])
+        self.assertIn("@ompig/ompig-linux-x64", m["optionalDependencies"])
         self.assertIn("Pi 0.87.1", m["description"])
         self.assertNotIn("scripts", m, "no install scripts: binaries arrive as packages, not downloads")
         self.assertNotIn("dependencies", m)
 
     def test_launcher_package_names_match_generator(self):
-        launcher = (pathlib.Path(pack_npm.HERE) / "launcher" / "bin" / "pig.js").read_text()
+        launcher = (pathlib.Path(pack_npm.HERE) / "launcher" / "bin" / "ompig.js").read_text()
         self.assertIn(f'const SCOPE = "{pack_npm.SCOPE}";', launcher)
         for npm_os, npm_cpu in pack_npm.TARGETS.values():
-            self.assertIn(f'"{npm_os} {npm_cpu}": `${{SCOPE}}/pig-{npm_os}-{npm_cpu}`', launcher)
+            self.assertIn(f'"{npm_os} {npm_cpu}": `${{SCOPE}}/ompig-{npm_os}-{npm_cpu}`', launcher)
 
     def test_upstream_version_reads_pigversion(self):
         self.assertRegex(pack_npm.upstream_version() or "", r"^\d+\.\d+\.\d+")
@@ -122,12 +122,12 @@ class GenerateTest(unittest.TestCase):
     def test_generates_eight_packages_in_publish_order(self):
         order = pack_npm.generate(self.archives, VERSION, self.out, "0.87.1")
         self.assertEqual(len(order), 8)
-        self.assertEqual(order[-1].name, "pig")
+        self.assertEqual(order[-1].name, "ompig")
         for pkg_dir in order[:-1]:
             manifest = json.loads((pkg_dir / "package.json").read_text())
             npm_os, npm_cpu = manifest["os"][0], manifest["cpu"][0]
-            self.assertEqual(pkg_dir.name, f"pig-{npm_os}-{npm_cpu}")
-            binary = pkg_dir / ("pig.exe" if npm_os == "win32" else "pig")
+            self.assertEqual(pkg_dir.name, f"ompig-{npm_os}-{npm_cpu}")
+            binary = pkg_dir / ("ompig.exe" if npm_os == "win32" else "ompig")
             goos = {"win32": "windows"}.get(npm_os, npm_os)
             goarch = {"x64": "amd64"}.get(npm_cpu, npm_cpu)
             self.assertEqual(binary.read_bytes(), f"binary {goos}/{goarch}".encode())
@@ -136,8 +136,8 @@ class GenerateTest(unittest.TestCase):
                 self.assertTrue((pkg_dir / notice).is_file(), notice)
             self.assertFalse((pkg_dir / "LICENSES").exists())
         launcher = order[-1]
-        self.assertTrue((launcher / "bin" / "pig.js").is_file())
-        self.assertIn("npm install -g @pi-in-go/pig", (launcher / "README.md").read_text())
+        self.assertTrue((launcher / "bin" / "ompig.js").is_file())
+        self.assertIn("npm install -g @ompig/ompig", (launcher / "README.md").read_text())
 
     def test_rejects_checksum_mismatch(self):
         archive = self.archives / pack_npm.archive_name(VERSION, "linux", "arm64")
@@ -170,7 +170,7 @@ class PackShellTest(unittest.TestCase):
             out = root / "packages&echo.INJECTED" / "%TOKEN%!bang!"
             package = root / "package"
             package.mkdir()
-            (package / "package.json").write_text('{"name":"@pig/pack-test"}')
+            (package / "package.json").write_text('{"name":"@ompig/pack-test"}')
             for platform in ("win32", "linux"):
                 with self.subTest(platform=platform):
                     def run(argv, **kwargs):
@@ -178,7 +178,7 @@ class PackShellTest(unittest.TestCase):
                         self.assertEqual(kwargs["cwd"], package)
                         self.assertEqual(kwargs["env"]["npm_config_pack_destination"], str(out.resolve()))
                         self.assertEqual(kwargs["shell"], platform == "win32")
-                        return pack_npm.subprocess.CompletedProcess(argv, 0, stdout='[{"name":"@pig/pack-test","filename":"package.tgz"}]')
+                        return pack_npm.subprocess.CompletedProcess(argv, 0, stdout='[{"name":"@ompig/pack-test","filename":"package.tgz"}]')
 
                     with patch.object(pack_npm.sys, "platform", platform), patch.object(pack_npm.subprocess, "run", side_effect=run):
                         self.assertEqual(pack_npm.npm_pack(package, out), out / "package.tgz")
@@ -188,25 +188,25 @@ class PackedFilenameTest(unittest.TestCase):
     """npm 11 prints an array, npm 12 an object keyed by package name (Pi 6fb2e781)."""
 
     def test_npm11_array(self):
-        self.assertEqual(pack_npm.packed_filename([{"name": "pig", "filename": "pig-1.tgz"}], "pig"), "pig-1.tgz")
+        self.assertEqual(pack_npm.packed_filename([{"name": "ompig", "filename": "ompig-1.tgz"}], "ompig"), "ompig-1.tgz")
 
     def test_npm12_object_keyed_by_package_name(self):
-        parsed = {"@pig/linux-x64": {"name": "@pig/linux-x64", "filename": "pig-linux-x64-1.tgz"}}
-        self.assertEqual(pack_npm.packed_filename(parsed, "@pig/linux-x64"), "pig-linux-x64-1.tgz")
+        parsed = {"@ompig/linux-x64": {"name": "@ompig/linux-x64", "filename": "ompig-linux-x64-1.tgz"}}
+        self.assertEqual(pack_npm.packed_filename(parsed, "@ompig/linux-x64"), "ompig-linux-x64-1.tgz")
 
     def test_rejects_unexpected_results(self):
-        entry = {"name": "pig", "filename": "pig-1.tgz"}
+        entry = {"name": "ompig", "filename": "ompig-1.tgz"}
         for label, parsed in {
             "empty array": [],
             "two entries": [entry, entry],
             "other package": {"other": {"name": "other", "filename": "x.tgz"}},
-            "key without entry for the name": {"pig": {"name": "other", "filename": "x.tgz"}},
-            "no filename": [{"name": "pig"}],
-            "non-string filename": [{"name": "pig", "filename": 3}],
-            "scalar": "pig-1.tgz",
+            "key without entry for the name": {"ompig": {"name": "other", "filename": "x.tgz"}},
+            "no filename": [{"name": "ompig"}],
+            "non-string filename": [{"name": "ompig", "filename": 3}],
+            "scalar": "ompig-1.tgz",
         }.items():
-            with self.subTest(label), self.assertRaisesRegex(pack_npm.PackError, "unexpected result for pig"):
-                pack_npm.packed_filename(parsed, "pig")
+            with self.subTest(label), self.assertRaisesRegex(pack_npm.PackError, "unexpected result for ompig"):
+                pack_npm.packed_filename(parsed, "ompig")
 
 
 if __name__ == "__main__":

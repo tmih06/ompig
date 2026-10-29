@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/src/core/package-manager.ts (updateConfiguredSources, updateNpmBatch, installNpmBatch).

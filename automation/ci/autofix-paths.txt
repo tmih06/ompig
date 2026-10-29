@@ -5,10 +5,10 @@
 # A new generated file must land here, in its own reviewed change, before the bot may regenerate it.
 .github/badges/parity-coverage.svg
 AGENTS.md
-coding/piglet/piglet.schema.json
+coding/ompiglet/ompiglet.schema.json
 docs/bug-ledger.json
-docs/knowledge-graph/pig-knowledge-graph.jsonld
-docs/knowledge-graph/pig.mmd
+docs/knowledge-graph/ompig-knowledge-graph.jsonld
+docs/knowledge-graph/ompig.mmd
 docs/parity/DIVERGENCES.md
 docs/parity/KNOWN-GAPS-0.3.x.md
 docs/performance/scoreboard.md

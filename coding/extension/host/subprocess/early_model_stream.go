@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // earlyModelStream is the model stream a Host with no UI bridge uses for the pi-ai calls a module makes while it loads. Pi runs pi-ai in the extension's own process,

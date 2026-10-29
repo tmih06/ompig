@@ -5,7 +5,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // upstream 0.99.1 tui.ts consumes a color reply before focused-editor work can delay it.

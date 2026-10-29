@@ -16,7 +16,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // fakeBinfmtMisc points binfmtMiscDir at a directory holding status and the given entries, each written as entry_status (fs/binfmt_misc.c) prints it, in name order.

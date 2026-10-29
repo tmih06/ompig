@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // terminalInputUI is a minimal UIContext that captures the handler the bridge
@@ -37,7 +37,7 @@ func (u *terminalInputUI) handler(data string) extension.TerminalInputResult {
 }
 
 // TestTerminalInputConsumeRoundTrip pins that a subprocess extension can
-// consume raw input, which upstream supports and pig previously refused.
+// consume raw input, which upstream supports and ompig previously refused.
 func TestTerminalInputConsumeRoundTrip(t *testing.T) {
 	ui := &terminalInputUI{UIContext: extension.NoopUIContext}
 	bridge, conn, stop := newTerminalInputBridge(t, ui, func(data string) (bool, time.Duration) {
@@ -274,7 +274,7 @@ func writeEnvelope(c net.Conn, env *Envelope) error {
 // TestTerminalInputNodeShimEndToEnd drives a pi-shaped TypeScript extension
 // through the real node runtime: subscribe, consume a sentinel, pass an
 // ordinary key, then unsubscribe. The node shim previously threw on
-// onTerminalInput, so every pi extension reading raw input was dead under pig.
+// onTerminalInput, so every pi extension reading raw input was dead under ompig.
 func TestTerminalInputNodeShimEndToEnd(t *testing.T) {
 	skipWithoutNodeExtensions(t)
 	if testing.Short() {

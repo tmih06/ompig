@@ -56,7 +56,7 @@ func TestTerminalInterfaceOutputMatchesUpstreamSequences(t *testing.T) {
 		{"clearLine", term.ClearLine, "\x1b[K"},
 		{"clearFromCursor", term.ClearFromCursor, "\x1b[J"},
 		{"clearScreen", term.ClearScreen, "\x1b[2J\x1b[H"},
-		{"setTitle", func() { term.SetTitle("pig · x") }, "\x1b]0;pig · x\x07"},
+		{"setTitle", func() { term.SetTitle("ompig · x") }, "\x1b]0;ompig · x\x07"},
 		{"write", func() { term.Write("raw\x1b[0m") }, "raw\x1b[0m"},
 		{"setProgress true", func() { term.SetProgress(true) }, "\x1b]9;4;3\x07"},
 		{"setProgress false", func() { term.SetProgress(false) }, "\x1b]9;4;0\x07"},

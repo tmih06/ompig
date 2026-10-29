@@ -14,9 +14,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // startupModelRuntime is the ModelRuntime surface startup model selection
@@ -285,12 +285,12 @@ func selectSessionOptionModel(rt *startupModelRuntime, modelRuntime *coding.Mode
 }
 
 // testFauxCLIModel selects the test-only test-faux provider for a --model naming it, without the registry resolution a real --model takes
-// (ResolveCliModel, which builds every runtime model). It exists only when PIG_TEST_FAUX=1. The provider is registered in the model registry
+// (ResolveCliModel, which builds every runtime model). It exists only when OMPIG_TEST_FAUX=1. The provider is registered in the model registry
 // (registerHarnessTestFaux), so every consumer of the registry sees it as Pi's harness-registered one; only this selection is a shortcut, and
 // the startup allocation ceilings (TestStartupAllocationBudget, test/perfgate), which only move down, are measured with it: the registry
 // resolution adds about 6,100 allocations and 380 KB to the warm first prompt.
 func testFauxCLIModel(options startupModelOptions) (*codingagent.RuntimeModel, string, bool) {
-	if os.Getenv("PIG_TEST_FAUX") != "1" {
+	if os.Getenv("OMPIG_TEST_FAUX") != "1" {
 		return nil, "", false
 	}
 	spec := options.CLIModel

@@ -18,9 +18,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 // readToolFiles are Pi-Bolt's benchmark fixtures (bench/fixtures at bolt-v0.8.5) by path and size: the headless scenario's fake model reads them in this order.
@@ -101,10 +101,10 @@ func readToolsServer(t *testing.T) *httptest.Server {
 func printReadTools(t *testing.T, env ...string) func() profiling.ProcessMetrics {
 	t.Helper()
 	home := newPigHome(t)
-	home.env = append(home.env, "PI_OFFLINE=1", "PIG_OFFLINE=1") // As Pi-Bolt's harness runs it.
+	home.env = append(home.env, "PI_OFFLINE=1", "OMPIG_OFFLINE=1") // As Pi-Bolt's harness runs it.
 	home.env = append(home.env, env...)
 	server := readToolsServer(t)
-	agent := strings.TrimPrefix(envValue(home.env, "PIG_CODING_AGENT_DIR"), "PIG_CODING_AGENT_DIR=")
+	agent := strings.TrimPrefix(envValue(home.env, "OMPIG_CODING_AGENT_DIR"), "OMPIG_CODING_AGENT_DIR=")
 	models := `{"providers":{"fake":{"baseUrl":"` + server.URL + `/v1","api":"openai-completions","apiKey":"fake","models":[{"id":"fake-model","contextWindow":200000,"maxTokens":8192}]}}}`
 	files := map[string]string{
 		filepath.Join(agent, "models.json"):   models,
@@ -132,7 +132,7 @@ func printReadTools(t *testing.T, env ...string) func() profiling.ProcessMetrics
 			stdout = string(data)
 		})
 		if !strings.Contains(stdout, "Done: read all four files") {
-			t.Fatalf("pig -p did not answer after the four reads:\n%s", stdout)
+			t.Fatalf("ompig -p did not answer after the four reads:\n%s", stdout)
 		}
 		return record
 	}
@@ -169,7 +169,7 @@ func TestPrintModeKeepsUsersGOGC(t *testing.T) {
 func TestPrintModeGCTargetFallsBackOnLargeHeap(t *testing.T) {
 	home := newPigHome(t)
 	// The loaders run at four Ps whatever the host, so the two arms' peaks compare at a fixed width.
-	home.env = append(home.env, "PI_OFFLINE=1", "PIG_OFFLINE=1", "GOMAXPROCS=4")
+	home.env = append(home.env, "PI_OFFLINE=1", "OMPIG_OFFLINE=1", "GOMAXPROCS=4")
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.Copy(io.Discard, r.Body)
 		w.Header().Set("Content-Type", "text/event-stream")
@@ -184,7 +184,7 @@ func TestPrintModeGCTargetFallsBackOnLargeHeap(t *testing.T) {
 	}))
 	t.Cleanup(server.Close)
 	const window = 32_000_000 // Above the session's context, so the run does not compact.
-	agent := strings.TrimPrefix(envValue(home.env, "PIG_CODING_AGENT_DIR"), "PIG_CODING_AGENT_DIR=")
+	agent := strings.TrimPrefix(envValue(home.env, "OMPIG_CODING_AGENT_DIR"), "OMPIG_CODING_AGENT_DIR=")
 	if err := longsession.WriteAgentDir(agent, window, server.URL+"/v1"); err != nil {
 		t.Fatal(err)
 	}
@@ -211,7 +211,7 @@ func TestPrintModeGCTargetFallsBackOnLargeHeap(t *testing.T) {
 			stdout = string(data)
 		})
 		if !strings.Contains(stdout, "Done") {
-			t.Fatalf("pig -p --session did not answer:\n%s", stdout)
+			t.Fatalf("ompig -p --session did not answer:\n%s", stdout)
 		}
 		_ = os.Remove(path)
 		return record

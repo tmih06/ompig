@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // effectSteps answers each event with the next step of a script: one step whose effects carry the given IDs.

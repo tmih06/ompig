@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // interactive-mode.ts:3378-3383 (steer) and :4493-4498 (follow-up): a message submitted while the agent streams is shown in the pending

@@ -129,12 +129,12 @@ func TestRunCallsAnMCPToolThroughTheProvider(t *testing.T) {
 		}
 	}
 	t.Chdir(t.TempDir())
-	// A lane or the agent-dir guard exports PIG_CODING_AGENT_DIR, which DefaultAgentDir reads before PIG_HOME: every
+	// A lane or the agent-dir guard exports OMPIG_CODING_AGENT_DIR, which DefaultAgentDir reads before OMPIG_HOME: every
 	// variable that names the agent directory must point at this test's.
-	for _, name := range []string{"PIG_HOME", "PI_HOME"} {
+	for _, name := range []string{"OMPIG_HOME", "PI_HOME"} {
 		t.Setenv(name, home)
 	}
-	for _, name := range []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+	for _, name := range []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 		t.Setenv(name, agentDir)
 	}
 	t.Setenv("ANTHROPIC_API_KEY", "sk-test")

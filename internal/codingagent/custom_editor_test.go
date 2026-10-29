@@ -10,7 +10,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // customEditorProbe is a CustomEditor over a plain editor; superKeys records the keys that fall through to the editor's own handling.
@@ -183,8 +183,10 @@ func TestAppKeybindingIsTheClosedSetOfAppKeybindingDefinitions(t *testing.T) {
 			t.Errorf("%q has no keybinding definition", id)
 		}
 	}
-	if len(seen) != 43 {
-		t.Errorf("%d app keybindings, want the 43 properties of upstream AppKeybindings", len(seen))
+	// ompig divergence (D-SUBAGENT-5): app.agents.hub is ompig-only, so the set
+	// is upstream's 43 plus one.
+	if len(seen) != 44 {
+		t.Errorf("%d app keybindings, want the 43 properties of upstream AppKeybindings plus app.agents.hub", len(seen))
 	}
 	for id := range appKeybindingDefinitions {
 		if !seen[AppKeybinding(id)] {

@@ -73,7 +73,7 @@ class JobMeterTest(unittest.TestCase):
         self.assertEqual(meter.max_proc_rss_mib(), 70.0)  # its 20 MiB peak is kept
 
     def test_a_child_that_exits_before_any_sample_keeps_its_peak(self):
-        # `pig --version` runs about 20 ms, less than the 25 ms sampling interval: the job lists no process by the time it is sampled.
+        # `ompig --version` runs about 20 ms, less than the 25 ms sampling interval: the job lists no process by the time it is sampled.
         from types import SimpleNamespace
         api = FakeApi()
         meter = winplat.JobMeter(api)
@@ -139,12 +139,12 @@ class ArchiveTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             z = os.path.join(tmp, "a.zip")
             with zipfile.ZipFile(z, "w") as f:
-                f.writestr("pig-0.4.1-windows-amd64/pig.exe", b"MZ-bytes")
-                f.writestr("pig-0.4.1-windows-amd64/README.md", b"x")
+                f.writestr("ompig-0.4.1-windows-amd64/ompig.exe", b"MZ-bytes")
+                f.writestr("ompig-0.4.1-windows-amd64/README.md", b"x")
             out = os.path.join(tmp, "o")
             os.makedirs(out)
-            arms.extract_member(z, "pig.exe", out, "t", "a.zip")
-            self.assertEqual(open(os.path.join(out, "pig.exe"), "rb").read(), b"MZ-bytes")
+            arms.extract_member(z, "ompig.exe", out, "t", "a.zip")
+            self.assertEqual(open(os.path.join(out, "ompig.exe"), "rb").read(), b"MZ-bytes")
             t = os.path.join(tmp, "a.tar.xz")
             src = os.path.join(tmp, "bin")
             open(src, "wb").write(b"ELF")

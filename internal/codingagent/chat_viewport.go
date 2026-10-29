@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // ChatViewportOptions mirrors upstream ChatViewportOptions (chat-viewport.ts).
 // WidgetsAbove and WidgetsBelow are optional (nil omits the dock slot);

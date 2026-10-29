@@ -5,9 +5,9 @@ package harness
 import (
 	"context"
 
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // rootTelemetry is `options.telemetry ?? NOOP_TELEMETRY_CONTEXT`: the Harness's root adapter.

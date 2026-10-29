@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/toolsearch"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/toolsearch"
 )
 
 // Scores and ties measured on upstream 0.99.1's own Bm25Ranker (dist/extensions/tool-search/tool.js) for the same

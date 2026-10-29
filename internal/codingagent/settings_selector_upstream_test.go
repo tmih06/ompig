@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // initSettingsSelectorTheme is the test file's beforeAll: initTheme("dark") and setKeybindings(new KeybindingsManager()).

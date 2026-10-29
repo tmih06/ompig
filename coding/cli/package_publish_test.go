@@ -9,14 +9,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
 const goodPackageJSON = `{
   "name": "@acme/review",
   "version": "1.2.0",
-  "description": "Review helpers for PiG",
-  "keywords": ["pig-package", "review"],
+  "description": "Review helpers for Ompig",
+  "keywords": ["ompig-package", "review"],
   "repository": {"type": "git", "url": "git+https://github.com/acme/review.git"},
   "pi": {"extensions": ["extensions/*"]}
 }`
@@ -47,7 +47,7 @@ func runPackagePublishForTest(t *testing.T, args ...string) (int, string, string
 }
 
 func TestPackagePublishDryRunValidatesAndPublishesNothing(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fake := npmtest.Install(t)
 	dir := writePublishablePackage(t, goodPackageJSON)
 
@@ -81,7 +81,7 @@ func mustEval(t *testing.T, path string) string {
 }
 
 func TestPackagePublishYesRunsPlainNPMPublishInThePackage(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fake := npmtest.Install(t)
 	dir := writePublishablePackage(t, goodPackageJSON)
 
@@ -96,7 +96,7 @@ func TestPackagePublishYesRunsPlainNPMPublishInThePackage(t *testing.T) {
 	if !fake.Published("@acme/review", "1.2.0") {
 		t.Fatal("not published")
 	}
-	for _, want := range []string{"Published @acme/review@1.2.0 to npm.", "Install it with: pig install npm:@acme/review"} {
+	for _, want := range []string{"Published @acme/review@1.2.0 to npm.", "Install it with: ompig install npm:@acme/review"} {
 		if !strings.Contains(stdout, want) {
 			t.Errorf("stdout lacks %q:\n%s", want, stdout)
 		}
@@ -108,7 +108,7 @@ func TestPackagePublishYesRunsPlainNPMPublishInThePackage(t *testing.T) {
 }
 
 func TestPackagePublishDefaultsToTheCurrentDirectory(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fake := npmtest.Install(t)
 	dir := writePublishablePackage(t, goodPackageJSON)
 	t.Chdir(dir)
@@ -126,19 +126,19 @@ func TestPackagePublishRefusesWhatTheCatalogCannotList(t *testing.T) {
 		packageJSON string
 		want        string
 	}{
-		"no keyword":      {`{"name":"@acme/review","version":"1.2.0","description":"d","keywords":["review"]}`, `keywords lack "pig-package"`},
-		"no keywords":     {`{"name":"@acme/review","version":"1.2.0","description":"d"}`, `keywords lack "pig-package"`},
-		"no description":  {`{"name":"@acme/review","version":"1.2.0","keywords":["pig-package"]}`, "needs a description"},
-		"no name":         {`{"version":"1.2.0","description":"d","keywords":["pig-package"]}`, "requires a non-empty name"},
-		"bad name":        {`{"name":"Review","version":"1.2.0","description":"d","keywords":["pig-package"]}`, "is not an npm package name"},
-		"no version":      {`{"name":"@acme/review","description":"d","keywords":["pig-package"]}`, "needs a version"},
-		"bad version":     {`{"name":"@acme/review","version":"v1","description":"d","keywords":["pig-package"]}`, "not a version npm publishes"},
-		"short version":   {`{"name":"@acme/review","version":"1.2","description":"d","keywords":["pig-package"]}`, "not a version npm publishes"},
-		"private":         {`{"name":"@acme/review","version":"1.2.0","private":true,"description":"d","keywords":["pig-package"]}`, "is private"},
-		"invalid package": {`{"name":"@acme/review","version":"1.2.0","description":"d","keywords":["pig-package"],"pi":{"extensions":["missing/*.js","../escape"]}}`, "Package invalid"},
+		"no keyword":      {`{"name":"@acme/review","version":"1.2.0","description":"d","keywords":["review"]}`, `keywords lack "ompig-package"`},
+		"no keywords":     {`{"name":"@acme/review","version":"1.2.0","description":"d"}`, `keywords lack "ompig-package"`},
+		"no description":  {`{"name":"@acme/review","version":"1.2.0","keywords":["ompig-package"]}`, "needs a description"},
+		"no name":         {`{"version":"1.2.0","description":"d","keywords":["ompig-package"]}`, "requires a non-empty name"},
+		"bad name":        {`{"name":"Review","version":"1.2.0","description":"d","keywords":["ompig-package"]}`, "is not an npm package name"},
+		"no version":      {`{"name":"@acme/review","description":"d","keywords":["ompig-package"]}`, "needs a version"},
+		"bad version":     {`{"name":"@acme/review","version":"v1","description":"d","keywords":["ompig-package"]}`, "not a version npm publishes"},
+		"short version":   {`{"name":"@acme/review","version":"1.2","description":"d","keywords":["ompig-package"]}`, "not a version npm publishes"},
+		"private":         {`{"name":"@acme/review","version":"1.2.0","private":true,"description":"d","keywords":["ompig-package"]}`, "is private"},
+		"invalid package": {`{"name":"@acme/review","version":"1.2.0","description":"d","keywords":["ompig-package"],"pi":{"extensions":["missing/*.js","../escape"]}}`, "Package invalid"},
 	} {
 		t.Run(name, func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
 			fake := npmtest.Install(t)
 			dir := writePublishablePackage(t, tc.packageJSON)
 			code, stdout, stderr := runPackagePublishForTest(t, dir, "--to", "npm", "--yes")
@@ -153,7 +153,7 @@ func TestPackagePublishRefusesWhatTheCatalogCannotList(t *testing.T) {
 }
 
 func TestPackagePublishRefusesAnExistingVersion(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fake := npmtest.Install(t)
 	fake.Seed("@acme/review", "1.2.0")
 	dir := writePublishablePackage(t, goodPackageJSON)
@@ -177,7 +177,7 @@ func TestPackagePublishArgumentErrors(t *testing.T) {
 	} {
 		t.Run(name, func(t *testing.T) {
 			code, _, stderr := runPackagePublishForTest(t, tc.args...)
-			if code != 2 || !strings.Contains(stderr, tc.want) || !strings.Contains(stderr, "pig package publish [<dir>] --to npm") {
+			if code != 2 || !strings.Contains(stderr, tc.want) || !strings.Contains(stderr, "ompig package publish [<dir>] --to npm") {
 				t.Fatalf("code=%d stderr=%s\nwant %q", code, stderr, tc.want)
 			}
 		})
@@ -188,7 +188,7 @@ func TestPackagePublishArgumentErrors(t *testing.T) {
 }
 
 func TestPackageCommandRoutesPublish(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fake := npmtest.Install(t)
 	dir := writePublishablePackage(t, goodPackageJSON)
 	out, errOut, code := captureStdoutStderr(t, func() int {

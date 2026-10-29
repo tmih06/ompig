@@ -41,7 +41,7 @@ type Widget struct {
 }
 
 func (w *Widget) Grow() {
-	// pig divergence (D7): growth is capped.
+	// ompig divergence (D7): growth is capped.
 	w.Size++
 }
 
@@ -88,7 +88,7 @@ func TestGoSnippetCentersTheMarkerAndHighlights(t *testing.T) {
 	if sn.Start != 10 || sn.End != 13 || sn.Unavailable != "" {
 		t.Fatalf("the snippet is the enclosing method: %+v", sn)
 	}
-	if !strings.Contains(sn.HTML, `<span class="kd">func</span>`) || !strings.Contains(sn.HTML, `<span class="c1">// pig divergence (D7)`) {
+	if !strings.Contains(sn.HTML, `<span class="kd">func</span>`) || !strings.Contains(sn.HTML, `<span class="c1">// ompig divergence (D7)`) {
 		t.Errorf("the code is not highlighted: %s", sn.HTML)
 	}
 	if got := goSnippet(x, Site{"sample/none.go", 3}); got.Unavailable == "" {
@@ -187,9 +187,9 @@ func TestFindCites(t *testing.T) {
 func TestScanTreeFindsMarkersTestsAndScenarios(t *testing.T) {
 	dir := t.TempDir()
 	writeFile(t, dir, "sample/w.go", sampleGo)
-	writeFile(t, dir, "sample/w_test.go", "package sample\n\n// pig additive (D8, D9): x\nfunc TestGrow(t *testing.T) {}\n")
+	writeFile(t, dir, "sample/w_test.go", "package sample\n\n// ompig additive (D8, D9): x\nfunc TestGrow(t *testing.T) {}\n")
 	writeFile(t, dir, "test/parity/scenarios/settings/10-one.toml", "x = 1\n")
-	writeFile(t, dir, "node_modules/p/z.go", "// pig divergence (D99)\n")
+	writeFile(t, dir, "node_modules/p/z.go", "// ompig divergence (D99)\n")
 	ts, err := scanTree(dir)
 	if err != nil {
 		t.Fatal(err)
@@ -242,7 +242,7 @@ func TestClassifyUsesTheBugLedgerBeforeKeywords(t *testing.T) {
 		{Divergence{ID: "D6", Title: "Bounded caches"}, ClassPerf},
 		{Divergence{ID: "D6", Title: "Windows owner-only files"}, ClassPlatform},
 		{Divergence{ID: "D6", Title: "Separate command identity"}, ClassOther},
-		{Divergence{ID: "D6", Title: "Piglets", Status: DivAdditive}, ClassAdditive},
+		{Divergence{ID: "D6", Title: "Ompiglets", Status: DivAdditive}, ClassAdditive},
 		{Divergence{ID: "D6", Title: "Overflow", Raw: "Pi overflows the stack in wordWrapLine"}, ClassOther},
 	}
 	for _, c := range cases {
@@ -445,7 +445,7 @@ func TestEvaluateBarJudgesEachItemFromData(t *testing.T) {
 		t.Error("item 1: an empty baseline is met")
 	}
 	if items[1].Met {
-		t.Error("item 2: PiG loses warm wall and CPU at 50 turns, so the item is not met")
+		t.Error("item 2: Ompig loses warm wall and CPU at 50 turns, so the item is not met")
 	}
 	lost := 0
 	for _, c := range items[1].Cells {

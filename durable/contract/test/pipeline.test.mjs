@@ -87,7 +87,7 @@ test("candidate alias: a directory laid out like durable/src replaces the refere
 		'import { SqliteStorage } from "./sqlite/storage.ts";',
 		"export class MemoryStorage {",
 		"	constructor() {",
-		'		const ready = globalThis[Symbol.for("pig.contract")].openDatabase(":memory:").then((db) => SqliteStorage.open(db));',
+		'		const ready = globalThis[Symbol.for("ompig.contract")].openDatabase(":memory:").then((db) => SqliteStorage.open(db));',
 		'		return new Proxy({}, { get: (_, prop) => (prop === "then" ? undefined : async (...args) => (await ready)[prop](...args)) });',
 		"	}",
 		"}",
@@ -212,7 +212,7 @@ test("facade candidate: the bench scenario runs through a candidate_dir whose st
 	// What a candidate's storage/sqlite/node.ts must be: a store over the contract's database (openDatabase) or its own host-loop store (openStore), not a file opened behind capsql's back.
 	writeFileSync(join(cand, "storage/sqlite/node.ts"), [
 		'import { SqliteStorage } from "./storage.ts";',
-		'export const openNodeSqliteStorage = async (path: string) => SqliteStorage.open(await (globalThis as any)[Symbol.for("pig.contract")].openDatabase(path));',
+		'export const openNodeSqliteStorage = async (path: string) => SqliteStorage.open(await (globalThis as any)[Symbol.for("ompig.contract")].openDatabase(path));',
 	].join("\n") + "\n")
 	// The start-up module of a candidate runs before the scenario, with the candidate's env.
 	writeFileSync(join(out, "setup.ts"), 'import { writeFileSync } from "node:fs";\nwriteFileSync(`${process.env.CONTRACT_STORE_DIR}/setup.txt`, `${process.env.MIRROR}:${process.env.DCORE_WASM}`);\n')

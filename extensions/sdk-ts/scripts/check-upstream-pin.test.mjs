@@ -10,7 +10,7 @@ const validator = fileURLToPath(new URL("./check-upstream-pin.mjs", import.meta.
 const version = "9.8.7";
 
 async function fixture(t, { mismatch, source, legacyVersion, onlyLegacy = false, readme } = {}) {
-  const root = await mkdtemp(join(tmpdir(), "pig-sdk-pin-"));
+  const root = await mkdtemp(join(tmpdir(), "ompig-sdk-pin-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const sdk = join(root, "extensions", "sdk-ts");
   const script = join(sdk, "scripts", "check-upstream-pin.mjs");

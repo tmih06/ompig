@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // createXToolDefinition (core/tools/{read,bash,edit,write,grep,find,ls,powershell}.ts) returns the ToolDefinition of each built-in tool. The data members of

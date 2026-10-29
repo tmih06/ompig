@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type loaderProbe struct {
@@ -65,7 +65,7 @@ func TestBorderedLoaderHandleInputMatchesPi(t *testing.T) {
 		}
 		loader.Dispose()
 		if !reflect.DeepEqual(got, expected[i].States) {
-			t.Errorf("probe %d %+v:\n  Pig %+v\n  Pi  %+v", i, probe, got, expected[i].States)
+			t.Errorf("probe %d %+v:\n  Ompig %+v\n  Pi  %+v", i, probe, got, expected[i].States)
 		}
 	}
 }

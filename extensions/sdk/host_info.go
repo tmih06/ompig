@@ -10,10 +10,10 @@ import (
 
 // hostInfoEnv is the environment variable the host starts every extension process with: Pi's getAgentDir(), CONFIG_DIR_NAME, VERSION and getPackageDir() (config.ts) and
 // the default getShellConfig() (utils/shell.ts) as the host resolves them. They are callable while an extension's factory runs, before the ready message, so they travel in the environment.
-const hostInfoEnv = "PIG_EXT_HOST_INFO"
+const hostInfoEnv = "OMPIG_EXT_HOST_INFO"
 
-// ErrHostInfoUnavailable reports that this process was not started by a PiG host that provides its configuration facts.
-var ErrHostInfoUnavailable = errors.New("sdk: the PiG host did not provide its configuration facts (PIG_EXT_HOST_INFO)")
+// ErrHostInfoUnavailable reports that this process was not started by a Ompig host that provides its configuration facts.
+var ErrHostInfoUnavailable = errors.New("sdk: the Ompig host did not provide its configuration facts (OMPIG_EXT_HOST_INFO)")
 
 type hostInfo struct {
 	AgentDir      string `json:"agentDir"`
@@ -40,7 +40,7 @@ func readHostInfo() (hostInfo, error) {
 	return info, nil
 }
 
-// AgentDir is Pi's getAgentDir(): the agent configuration directory the host runs with (for PiG its own tree, not Pi's). It returns
+// AgentDir is Pi's getAgentDir(): the agent configuration directory the host runs with (for Ompig its own tree, not Pi's). It returns
 // [ErrHostInfoUnavailable] when the process was not started by a host that provides it, or when the host could not resolve the directory.
 func AgentDir() (string, error) {
 	info, err := readHostInfo()
@@ -53,7 +53,7 @@ func AgentDir() (string, error) {
 	return info.AgentDir, nil
 }
 
-// ConfigDirName is Pi's CONFIG_DIR_NAME: the per-project configuration directory name the host uses (".pig"; ".pi" when it shares Pi's tree).
+// ConfigDirName is Pi's CONFIG_DIR_NAME: the per-project configuration directory name the host uses (".ompig"; ".pi" when it shares Pi's tree).
 func ConfigDirName() (string, error) {
 	info, err := readHostInfo()
 	if err != nil {
@@ -71,7 +71,7 @@ func Version() (string, error) {
 	return info.Version, nil
 }
 
-// PackageDir is Pi's getPackageDir(): the install directory the host runs from. For PiG it is PI_PACKAGE_DIR when that is set, else the directory of the host
+// PackageDir is Pi's getPackageDir(): the install directory the host runs from. For Ompig it is PI_PACKAGE_DIR when that is set, else the directory of the host
 // executable, which is Pi's own answer for a compiled binary. It returns [ErrHostInfoUnavailable] when the process was not started by a host that provides it, or the
 // host could not resolve it.
 func PackageDir() (string, error) {

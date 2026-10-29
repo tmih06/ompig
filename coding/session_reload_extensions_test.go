@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // agent-session.ts:3547-3567 (_buildRuntime) and 3591-3609: the rebuild replaces the runner, the old one goes stale, and the tool registry is rebuilt from the new runner's tools, activating the tools newly added to defaultTools.

@@ -18,7 +18,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsdiff"
+	"github.com/tmih06/ompig/internal/jsdiff"
 )
 
 // GenerateUnifiedPatch returns a unified diff for path byte-identical to

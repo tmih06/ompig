@@ -1,4 +1,4 @@
-// pig-specific: serves Pi's createExtensionRuntime() result (packages/coding-agent/src/core/extensions/loader.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is the runtime's own *extension.ExtensionRuntime: a DefaultResourceLoader given the handle loads its extensions against it, and an ExtensionRunner over those extensions binds its actions into it. The Node runtime serves Pi's own function.
+// ompig-specific: serves Pi's createExtensionRuntime() result (packages/coding-agent/src/core/extensions/loader.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is the runtime's own *extension.ExtensionRuntime: a DefaultResourceLoader given the handle loads its extensions against it, and an ExtensionRunner over those extensions binds its actions into it. The Node runtime serves Pi's own function.
 
 package coding
 
@@ -9,10 +9,10 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // GraphExtensionRuntime is an ExtensionRuntime an extension created, or the runtime a loader's extensions share.

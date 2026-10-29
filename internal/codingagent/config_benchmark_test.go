@@ -14,14 +14,14 @@ func BenchmarkNativeSelfUpdateOwnership(b *testing.B) {
 	if err := os.MkdirAll(bin, 0o755); err != nil {
 		b.Fatal(err)
 	}
-	executable := filepath.Join(bin, "pig")
+	executable := filepath.Join(bin, "ompig")
 	if runtime.GOOS == "windows" {
 		executable += ".exe"
 	}
 	if err := os.WriteFile(executable, []byte("native fixture"), 0o755); err != nil {
 		b.Fatal(err)
 	}
-	b.Setenv("PIG_INSTALL_TIER", "")
+	b.Setenv("OMPIG_INSTALL_TIER", "")
 	runner := fakeCmdRunner{outputs: map[string]string{"npm root -g": root}}
 	target := SelfUpdatePackageTarget{PackageName: "@earendil-works/pi-coding-agent", InstallSpec: "@earendil-works/pi-coding-agent@1.2.3"}
 	b.ReportAllocs()

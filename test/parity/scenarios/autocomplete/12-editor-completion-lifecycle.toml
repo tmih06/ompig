@@ -3,7 +3,7 @@
 # Editor.ts:766-810,2208-2224,2389-2434 owns acceptance, undo and best-match selection.
 # Both fixtures drive the actual Editor, flush its owner/event queue and capture
 # text bytes, UTF-16 cursor, popup state and every complete popup row (including ANSI).
-# The invalid-result case enters PiG through a real Node command factory; its
+# The invalid-result case enters Ompig through a real Node command factory; its
 # temporary prefix marker proves callback invocation before the null result reaches Editor.
 # Border/input-row rendering belongs to separate editor scenarios; no popup byte is normalized.
 name = "12-editor-completion-lifecycle"
@@ -14,9 +14,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/editor-completion-helper/pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/editor-completion-helper/ompig"]
 pi_args = ["node", "./test/parity/testdata/editor-completion-helper/pi.mjs"]
 
 [cli]

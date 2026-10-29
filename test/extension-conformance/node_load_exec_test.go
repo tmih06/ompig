@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
 )
 
 // Pi's loader gives the factory a pi.exec that spawns the child directly (loader.ts:411-414, core/exec.ts), so a factory can run a program before the extension registers and before any session binds. The fixture's factory awaits several children while it loads and its command reports each outcome. The host's exec is the production ExecCommand and the in-process call is the reference, so every outcome must equal it, including the loader's working directory when the call names none (`options?.cwd ?? cwd`), the rejection message of an empty command and a timeout's kill. A host that serves exec only after registration rejects each call with "extension connection closed or replaced".
@@ -85,7 +85,7 @@ func TestNodeFactoryExecDuringLoad(t *testing.T) {
 	}
 }
 
-// Pi's pi.exec spawns the child whenever it is called (loader.ts:411-414), including from a callback the factory scheduled that runs after the factory returned. In PiG that callback can run while the runtime opens the connection it registers on. The call must wait for that connection; opening a second one leaves the call or the registration on a connection the host does not read.
+// Pi's pi.exec spawns the child whenever it is called (loader.ts:411-414), including from a callback the factory scheduled that runs after the factory returned. In Ompig that callback can run while the runtime opens the connection it registers on. The call must wait for that connection; opening a second one leaves the call or the registration on a connection the host does not read.
 func TestNodeExecBetweenLoadAndRegister(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping conformance suite in short mode (builds subprocess fixtures)")

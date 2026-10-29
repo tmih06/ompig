@@ -7,8 +7,8 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // GetProvider returns the composed provider with the given ID: a registered native or composed provider, else the built-in provider composed with models.json and legacy registrations.
@@ -186,7 +186,7 @@ func (runtime *ModelRuntime) failedStream(model *ai.Model, err error) *ai.Assist
 func (runtime *ModelRuntime) builtinStream(id string) ai.ModelsStreamFunction {
 	return func(ctx context.Context, model *ai.Model, transcript ai.TranscriptContext, options ai.StreamOptions) (*ai.AssistantMessageEventStream, error) {
 		entry := icodingagent.NativeModelEntry(model)
-		// pig additive (D36): the provider's TLS opt-in reaches the transport its API builds.
+		// ompig additive (D36): the provider's TLS opt-in reaches the transport its API builds.
 		entry.Insecure = runtime.services.Registry().ProviderInsecure(id)
 		provider, err := buildProviderForEntry(id, model.ID, model.ProviderMeta.API, entry, runtime.services, options.APIKey, true, false)
 		if err != nil {

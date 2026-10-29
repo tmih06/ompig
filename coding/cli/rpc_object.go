@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // rpcObject carries source insertion order and UTF-16 string content for JSON/RPC objects. Nested wire values remain raw JSON when read so removing a field does not reorder its siblings or descendants.
@@ -45,7 +45,7 @@ var rpcObjectType = reflect.TypeFor[rpcObject]()
 
 // AppendStringify appends the JSON.stringify text of MarshalJSON's output to dst (json.StringifyAppender), writing each member into dst itself instead of encoding it apart and compacting the result.
 //
-//pig:hotpath
+//ompig:hotpath
 func (object rpcObject) AppendStringify(dst []byte) ([]byte, error) {
 	start := len(dst)
 	dst = append(dst, '{')

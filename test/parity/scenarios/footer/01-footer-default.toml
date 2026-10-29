@@ -31,13 +31,13 @@
 #     <working-directory>
 #     $0.000 (sub) 0.0%/1.0M (auto)                                                       gpt-5.4 • medium
 #
-#   raw cropped pig block (plain, ANSI stripped):
+#   raw cropped ompig block (plain, ANSI stripped):
 #
 #     <working-directory>
 #     $0.000 (sub) 0.0%/1.0M (auto)                                                       gpt-5.4 • medium
 #
 # ANSI-level match: both binaries now emit the same dim color escape.
-# pig's dim() uses the theme's truecolor Dim field (\x1b[38;2;102;102;102m
+# ompig's dim() uses the theme's truecolor Dim field (\x1b[38;2;102;102;102m
 # for the dark theme) and fg-only reset (\x1b[39m), matching upstream's
 # theme.fg("dim", text). Promoted from output_normalized_equal to
 # escaped_output_equal in this loop.
@@ -75,7 +75,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 20
 capture_start = "parity-snap-cwd-"
@@ -84,9 +84,9 @@ git_branch = "parity-fixture"
 settle_seconds = 2
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../footer/testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../footer/testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=../footer/testdata/pi-agent"]
-pig_args = ["--no-extensions"]
+ompig_args = ["--no-extensions"]
 pi_args = ["--no-extensions"]
 
 [assert]

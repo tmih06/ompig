@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Pi packages/durable/src/storage/memory.ts:207 PreparedMemoryCommit.seq is the sequence the mutation applies at; Apply returns that same sequence and a later prepare takes the next one.

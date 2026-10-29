@@ -6,7 +6,7 @@ import (
 
 	"github.com/rivo/uniseg"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // screen is a minimal terminal model for the escape sequences the differential

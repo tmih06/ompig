@@ -18,10 +18,10 @@
 #
 #   3. The component is reachable only from extensions importing it
 #      directly via pi.import("@mariozechner/pi-coding-agent"). This
-#      import path is not available through pig's subprocess extension
+#      import path is not available through ompig's subprocess extension
 #      bridge (Go types cannot be constructed from TypeScript).
 #
-# pig has a faithful port in tui/show_images_selector.go
+# ompig has a faithful port in tui/show_images_selector.go
 # (FilterableList-backed bordered selector) but also never
 # instantiates it in any user-facing flow.
 #
@@ -31,7 +31,7 @@
 # user-facing entry point.
 
 # Not tmux-assertable: ShowImagesSelectorComponent is never instantiated by a
-# user-facing flow in either binary, so pig and upstream are identical here.
+# user-facing flow in either binary, so ompig and upstream are identical here.
 
 name = "08-show-images-selector"
 description = "show-images-selector.ts is an upstream-only public component with no user-facing entry point in tmux (faithful port, not assertable)."
@@ -45,8 +45,8 @@ driver = "interactive-tmux"
 width = 100
 height = 35
 # Both sides start typing after their startup rebind, which sets the autocomplete provider and then prints this
-# warning; "(auto)" paints before PiG's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
-ready_pattern_pig = "Warning: No models available."
+# warning; "(auto)" paints before Ompig's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
+ready_pattern_ompig = "Warning: No models available."
 ready_pattern_pi = "Warning: No models available."
 ready_timeout_seconds = 25
 capture_start = "Show Images"
@@ -54,9 +54,9 @@ capture_end = "Show text placeholder"
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-home"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

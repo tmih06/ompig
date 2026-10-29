@@ -7,7 +7,7 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // prepareDocActions returns its map, so the map is a heap object natively too: a commit without a document write makes none.

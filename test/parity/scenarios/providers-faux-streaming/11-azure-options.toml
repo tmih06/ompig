@@ -1,5 +1,5 @@
 # Pi 0.87.1 azure-openai-tool-choice.test.ts:21,50 and azure-openai-base-url.test.ts:155.
-# The oracle runs Pi's Azure provider through fetch; PiG sends to a local HTTP server.
+# The oracle runs Pi's Azure provider through fetch; Ompig sends to a local HTTP server.
 # Assert the wire choice, retained tool name/count, terminal result, and invalid-URL diagnostic contract.
 # Include object-valued choice because the provider-specific upstream option is a union, not a string.
 name = "11-azure-options"
@@ -10,9 +10,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/azure-options-pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/azure-options-ompig"]
 pi_args = ["node", "./test/parity/testdata/azure-options-pi.mjs"]
 
 [cli]

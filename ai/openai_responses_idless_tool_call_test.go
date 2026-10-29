@@ -11,7 +11,7 @@ import (
 // pi-mono #10299 on the Responses path. Pi stores a streamed function_call under `${item.call_id}|${item.id}`
 // (openai-responses-shared.ts createSlot). An absent call_id is "undefined" and null is "null", which replay as a non-empty call_id.
 // An empty call_id is stored as "|<item id>" and replays as call_id "" for the call and for its output, so every later request fails.
-// pig divergence (D129): a call streamed with an empty call_id gets a generated call_id, and a stored "|"-prefixed id is omitted from a
+// ompig divergence (D129): a call streamed with an empty call_id gets a generated call_id, and a stored "|"-prefixed id is omitted from a
 // Responses replay with its result. Every other target replays that call as Pi does.
 func TestResponsesToolCallWithoutCallIDDoesNotWedgeReplay(t *testing.T) {
 	stream := func(callID string) string {

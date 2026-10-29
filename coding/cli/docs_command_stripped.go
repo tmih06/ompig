@@ -1,4 +1,4 @@
-//go:build pig_strip_docs
+//go:build ompig_strip_docs
 
 package cli
 
@@ -7,19 +7,19 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// pig additive (D92): this Piglet Binary compiled out the PiG documentation bundle.
+// ompig additive (D92): this Ompiglet Binary compiled out the Ompig documentation bundle.
 func init() { pigstrip.Strip(pigstrip.ListFeatures, pigstrip.Docs) }
 
-// runDocsCommand reports that `pig docs` is unavailable in this build.
+// runDocsCommand reports that `ompig docs` is unavailable in this build.
 func runDocsCommand(args []string, _, _ io.Writer) int {
 	if len(args) == 0 || args[0] != "docs" {
 		return -1
 	}
-	return reportStrippedFeature("pig docs", pigstrip.Docs, "")
+	return reportStrippedFeature("ompig docs", pigstrip.Docs, "")
 }
 
 // prepareDocsBundle does nothing: this build has no documentation bundle.

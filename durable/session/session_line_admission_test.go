@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/internal/lineadmission"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/internal/lineadmission"
 )
 
 // Upstream commitWith extends the line's Promise chain in its synchronous prefix, so a caller knows the commit's position

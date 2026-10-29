@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 var (

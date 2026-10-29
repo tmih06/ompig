@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 type reloadContextKey struct{}
@@ -23,7 +23,7 @@ func (l *contextReloadLoader) ReloadWith(ctx context.Context, _ ...ResourceLoade
 
 // Session.Reload reloads a loader that can take a context under the context of the reload call, so the caller's request values reach the resource reload (agent-session.ts reload awaits resourceLoader.reload for its caller).
 func TestSessionReloadPassesItsContextToTheResourceLoader(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -56,7 +56,7 @@ func (l *runtimeReloadLoader) GetExtensions() LoadExtensionsResult {
 	return LoadExtensionsResult{Runtime: l.runtime}
 }
 
-// Pi's reload marks the old runner and its runtime stale right after session_shutdown (agent-session.ts:3663-3664, runner.ts:722-728), and the resource loader then loads the extensions against a fresh runtime (loader.ts:689). A Pig loader can hand the rebuilt runner the runtime the old runner bound (the CLI build's host runtime): that runtime must stay active, or every built-in extension of the reloaded Session reads a stale ctx. A runtime the rebuilt runner does not bind goes stale, and so does the old runtime when the reload fails.
+// Pi's reload marks the old runner and its runtime stale right after session_shutdown (agent-session.ts:3663-3664, runner.ts:722-728), and the resource loader then loads the extensions against a fresh runtime (loader.ts:689). A Ompig loader can hand the rebuilt runner the runtime the old runner bound (the CLI build's host runtime): that runtime must stay active, or every built-in extension of the reloaded Session reads a stale ctx. A runtime the rebuilt runner does not bind goes stale, and so does the old runtime when the reload fails.
 // mutation-checked: invalidating the old runtime even when the rebuilt runner binds it fails the "kept" case; dropping the deferred invalidation fails the "replaced" and "failed" cases.
 func TestSessionReloadInvalidatesTheOldRuntimeUnlessTheRebuiltRunnerKeepsIt(t *testing.T) {
 	for _, tc := range []struct {
@@ -70,7 +70,7 @@ func TestSessionReloadInvalidatesTheOldRuntimeUnlessTheRebuiltRunnerKeepsIt(t *t
 		{name: "failed", err: errors.New("resource reload failed"), wantStale: true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
 			services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 			if err != nil {
 				t.Fatal(err)

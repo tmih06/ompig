@@ -5,7 +5,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // SetAvailabilityRefresh binds the Services-owned snapshot reconciler before the registry is shared with consumers. It runs after catalog publication and inside credential synchronization.
@@ -35,7 +35,7 @@ func (r *ModelRegistry) AvailabilityReadContext(ctx context.Context) context.Con
 	return r.readSnapshotContext(ctx, false)
 }
 
-// readSnapshotContext starts an operation's file-read snapshot. When the credential store, and with catalogs also the models store, are PiG's
+// readSnapshotContext starts an operation's file-read snapshot. When the credential store, and with catalogs also the models store, are Ompig's
 // own, their reads wait on nothing but their files, so the operation's providers may run on the caller (ai.WithFileReadSnapshotOnCaller). A
 // caller-supplied store (CreateModelRuntimeOptions.Credentials, ModelsStore) reads with the caller's code: its operation keeps the one view of
 // the files the store may read through, and a goroutine per provider.

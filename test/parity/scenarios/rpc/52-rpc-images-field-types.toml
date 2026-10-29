@@ -4,11 +4,11 @@
 # Pi 1.1.0 rpc-mode.ts hands command.images to session.prompt/steer/followUp unchecked. prompt converts each image (Buffer.from(data, "base64") then
 # mimeType.split) and answers the first failure with Node's or V8's message; a truthy non-array answers "images is not iterable"; steer and follow_up
 # spread the array ("Spread syntax requires ...iterable[Symbol.iterator] to be a function" for a truthy non-iterable) and queue malformed images.
-# Pig answered with Go decoder messages and started a run for a malformed image. Known differences kept out of the probes: Pi queues malformed
-# images in steer and follow_up, Pig drops them; and when steer/follow_up fail on the spread, Pi has already put the text in its queue display state (the
-# next clear_queue returns it), Pig fails before queueing. clear_queue after each probe keeps both queues empty. A valid image that starts a run is not probed
+# Ompig answered with Go decoder messages and started a run for a malformed image. Known differences kept out of the probes: Pi queues malformed
+# images in steer and follow_up, Ompig drops them; and when steer/follow_up fail on the spread, Pi has already put the text in its queue display state (the
+# next clear_queue returns it), Ompig fails before queueing. clear_queue after each probe keeps both queues empty. A valid image that starts a run is not probed
 # here (scenario 06 covers prompt through the faux provider). A falsy images value (false, 0, an empty array) is no image, so its prompt
-# does start a run; those steps wait for agent_settled, because the next clear_queue otherwise races the run's streamed events and Pig and Pi
+# does start a run; those steps wait for agent_settled, because the next clear_queue otherwise races the run's streamed events and Ompig and Pi
 # interleave them differently by timing.
 
 name = "52-rpc-images-field-types"
@@ -657,8 +657,8 @@ wait_contains = ['"id":"i138","type":"response"']
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--no-session"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--no-session"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--no-session"]
 

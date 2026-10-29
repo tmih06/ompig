@@ -16,19 +16,19 @@ HERE = Path(__file__).resolve().parent
 DIRS = {'tests': 'test', 'parity': 'test/parity', 'evals': 'test/evals', 'media': 'docs/media'}
 FILES = {name: 'docs/parity/' + name for name in ('DIVERGENCES.md', 'PORT_MAP.md', 'DIVERGENCE-IDS.txt')}
 MOVES = DIRS | FILES
-MODULE = 'github.com/MichaelKinsy/PiG/'
+MODULE = 'github.com/tmih06/ompig/'
 ROOT_ENTRIES = {
     'README.md', 'LICENSE', 'LICENSES', 'NOTICE', 'THIRD_PARTY_NOTICES.md',
     'REUSE.toml', 'CITATION.cff', 'CHANGELOG.md', 'AGENTS.md', 'Makefile',
     'go.mod', 'go.sum', 'go.work', 'go.work.sum', 'embed.go',
-    'agent', 'ai', 'coding', 'tui', 'cmd', 'internal', 'extensions', 'piglets',
+    'agent', 'ai', 'coding', 'tui', 'cmd', 'internal', 'extensions', 'ompiglets',
     'examples', 'docs', 'automation', 'test', 'changelog.d', 'telemetry',
 }
 IMPORT = re.compile(re.escape(MODULE) + r'((?:tests|parity|evals)(?:/[\w.-]+)*)(?=$|[/#.\s"`])')
 TOKEN = re.compile(build.PATH_START + r'(?P<path>(?:tests|parity|evals|media)(?:/[^\s`"\'()<>\[\],;|#?:{}]*|(?(prefix)(?=[\s`"\'),;:]|$)|(?!)))|(?:DIVERGENCES\.md|PORT_MAP\.md|DIVERGENCE-IDS\.txt))')
 QUOTED_RELATIVE = re.compile(r'(?P<quote>["\'`])(?P<path>(?:\.\./|\./)[^\s"\'`<>]*)(?P=quote)')
 DESTINATION = re.compile(r'(?P<lead>\]\(<?|^\s*\[[^\]\n]+\]:\s*<?|(?:href|src)=["\'])(?P<path>[^\s<>"\')]+)', re.MULTILINE)
-GENERATED = re.compile(r'parity/interfaces/(?:pig-go\.json|(?:recommendations|upstream|upstream-tests|behavior-inputs|delta|custom-factory-call-surface-draft)-v[^/]+\.json)$')
+GENERATED = re.compile(r'parity/interfaces/(?:ompig-go\.json|(?:recommendations|upstream|upstream-tests|behavior-inputs|delta|custom-factory-call-surface-draft)-v[^/]+\.json)$')
 SUFFIXES = {'.go','.md','.toml','.json','.jsonl','.yaml','.yml','.py','.sh','.mjs','.js','.ts','.tsx','.html','.css','.txt','.tsv','.mod','.sum','.work','.svg','.mmd','.jsonld','.rs','.cfg','.in','.lock','.mk','.cjs'}
 
 
@@ -91,7 +91,7 @@ class Rewriter:
 
     def references(self, text):
         text = IMPORT.sub(lambda m: MODULE + moved(m[1]), text)
-        text = re.sub(r'(https://(?:github\.com/MichaelKinsy/PiG/(?:blob|tree)|raw\.githubusercontent\.com/MichaelKinsy/PiG)/(?:main|master|HEAD)/)([^\s\"\'`<>#)]+)', lambda m:m[1]+moved(m[2]), text)
+        text = re.sub(r'(https://(?:github\.com/tmih06/ompig/(?:blob|tree)|raw\.githubusercontent\.com/tmih06/ompig)/(?:main|master|HEAD)/)([^\s\"\'`<>#)]+)', lambda m:m[1]+moved(m[2]), text)
         return TOKEN.sub(lambda m: (m['prefix'] or '') + moved(m['path']), text)
 
     def text(self, text, source):
@@ -182,7 +182,7 @@ def owned(name):
 
 # These consumers derive a repository root or a family from the old physical layout.
 STRUCTURAL = {
-    'automation/release/set-version/main_test.go': [('{"add", "--", "coding", "piglets"', '{"add", "--", "internal", "piglets"')],
+    'automation/release/set-version/main_test.go': [('{"add", "--", "coding", "ompiglets"', '{"add", "--", "internal", "ompiglets"')],
     'evals/pigeval/registry.py': [('REPO_ROOT = os.path.dirname(EVALS_DIR)', 'REPO_ROOT = os.path.dirname(os.path.dirname(EVALS_DIR))')],
     'docs/project/repository-quality.md': [('Keep `AGENTS.md`, `docs/parity/PORT_MAP.md`, and `docs/parity/DIVERGENCES.md` at the root as maintenance authorities.', 'Keep `AGENTS.md` at the root. Keep the parity maintenance authorities in `docs/parity/`.')],
     'automation/make/parity.mk': [
@@ -307,7 +307,7 @@ def apply(root):
     if changed_go:subprocess.run(['gofmt','-w',*changed_go],cwd=root,check=True)
     fragments=root/'changelog.d'
     if fragments.is_dir() and not any(fragments.iterdir()):fragments.rmdir()
-    if (root/'docs/knowledge-graph/pig.graph.json').is_file():
+    if (root/'docs/knowledge-graph/ompig.graph.json').is_file():
         subprocess.run(['python3','-B','automation/gen/gen-knowledge-graph.py'],cwd=root,check=True)
     print(f'layout-release: moved {sum(moved(p)!=p for p in paths) if relocating else 0} tracked files; rewrote {len(changes)} files')
 

@@ -3,14 +3,14 @@ package codingagent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // promptUserInput has two dispatch strategies, and they differ only in who runs
 // the input handlers.
 //
-// PiG dispatches input handlers synchronously from promptUserInput, which the
+// Ompig dispatches input handlers synchronously from promptUserInput, which the
 // owner loop calls from its Enter handling. That made a handler part of the
 // loop, and a handler that opens a dialog and waits for an answer was then
 // waiting for the loop that was waiting for the handler: the terminal stopped

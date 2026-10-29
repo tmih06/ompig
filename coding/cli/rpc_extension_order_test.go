@@ -25,7 +25,7 @@ func TestRPCInitialExtensionToolsKeepRegistrationOrder(t *testing.T) {
 	if err := os.WriteFile(path, []byte(source.String()), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, cwd, []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session", "--no-extensions", "--provider", "test-faux", "--model", "faux-1", "-e", path)
+	p := startRPCProcessAt(t, cwd, []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session", "--no-extensions", "--provider", "test-faux", "--model", "faux-1", "-e", path)
 	p.send(`{"id":"prompt","type":"prompt","message":"What is 20+22?"}`)
 	p.await("settled prompt", func(record rpcRecord) bool { return record["type"] == "agent_settled" })
 	p.send(`{"id":"messages","type":"get_messages"}`)

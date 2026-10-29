@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi packages/coding-agent/src/core/extensions/wrapper.ts wrapRegisteredTool and tool-definition-wrapper.ts wrapToolDefinition: the wrapped tool declares the schema the

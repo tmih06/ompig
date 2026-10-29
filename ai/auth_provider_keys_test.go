@@ -9,7 +9,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Pi auth-storage.ts:363,464,477-488 retains JSON.parse key identity through Object.entries and JSON.stringify, including lone UTF-16 units.

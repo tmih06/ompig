@@ -1,6 +1,6 @@
 package cli
 
-// pig additive (D41): Pig adds a side-effect-free aggregate status surface.
+// ompig additive (D41): Ompig adds a side-effect-free aggregate status surface.
 
 import (
 	"encoding/json"
@@ -10,10 +10,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 type statusOutput struct {
@@ -21,7 +21,7 @@ type statusOutput struct {
 	Paths     statusPaths     `json:"paths"`
 	Packages  statusPackages  `json:"packages"`
 	Resources statusResources `json:"resources"`
-	Piglets   statusPiglets   `json:"piglets"`
+	Ompiglets statusPiglets   `json:"ompiglets"`
 	Errors    []string        `json:"errors"`
 	Warnings  []string        `json:"warnings"`
 }
@@ -74,10 +74,10 @@ func runStatusCommand(args []string) int {
 			jsonMode = true
 		case "--no-input":
 		case "-h", "--help":
-			fmt.Println("Usage: pig status [--json] [--no-input]")
+			fmt.Println("Usage: ompig status [--json] [--no-input]")
 			return 0
 		default:
-			fmt.Fprintln(os.Stderr, "Usage: pig status [--json] [--no-input]")
+			fmt.Fprintln(os.Stderr, "Usage: ompig status [--json] [--no-input]")
 			return 2
 		}
 	}
@@ -85,7 +85,7 @@ func runStatusCommand(args []string) int {
 	if jsonMode {
 		data, err := json.Marshal(status)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pig status: encode JSON: %v\n", err)
+			fmt.Fprintf(os.Stderr, "ompig status: encode JSON: %v\n", err)
 			return 1
 		}
 		fmt.Println(string(data))
@@ -132,7 +132,7 @@ func collectStatus() statusOutput {
 			status.Packages.User++
 		}
 		if pkg.InstalledPath == "" {
-			status.Errors = append(status.Errors, fmt.Sprintf("%s Package %q is not materialized; run pig update %s", pkg.Scope, pkg.Source.Source, pkg.Source.Source))
+			status.Errors = append(status.Errors, fmt.Sprintf("%s Package %q is not materialized; run ompig update %s", pkg.Scope, pkg.Source.Source, pkg.Source.Source))
 			continue
 		}
 		filters, filterErr := effectiveConfiguredPackageFilters(pkg)
@@ -153,7 +153,7 @@ func collectStatus() statusOutput {
 		// the fatal error status treats a duplicate as here. Skills, prompts
 		// and themes, by contrast, key their runtime set by name (dedupeSkills/
 		// dedupePrompts/dedupeThemes), so a same-scope duplicate is unusable
-		// and stays an error. pig additive (D41)
+		// and stays an error. ompig additive (D41)
 		seenIdentities := make(map[string]string, len(resources))
 		for _, resource := range resources {
 			kind := packagecontent.Kind(resource.ResourceType)
@@ -203,16 +203,16 @@ func collectStatus() statusOutput {
 			return 0
 		})
 	}
-	if piglets, err := piglet.List(); err != nil {
-		status.Errors = append(status.Errors, "Piglet inventory: "+err.Error())
+	if ompiglets, err := ompiglet.List(); err != nil {
+		status.Errors = append(status.Errors, "Ompiglet inventory: "+err.Error())
 	} else {
-		status.Piglets.Total = len(piglets)
-		for _, item := range piglets {
+		status.Ompiglets.Total = len(ompiglets)
+		for _, item := range ompiglets {
 			if item.Path != "" {
-				status.Piglets.WithSource++
+				status.Ompiglets.WithSource++
 			}
 			if len(item.Records) > 0 {
-				status.Piglets.WithBinary++
+				status.Ompiglets.WithBinary++
 			}
 		}
 	}
@@ -227,11 +227,11 @@ func renderStatus(status statusOutput) {
 	if !status.Healthy {
 		state = "invalid"
 	}
-	fmt.Printf("Pig status: %s\n", state)
+	fmt.Printf("Ompig status: %s\n", state)
 	fmt.Printf("  paths: home=%s agent=%s project=%s\n", status.Paths.Home, status.Paths.Agent, status.Paths.Project)
 	fmt.Printf("  packages: %d (user=%d project=%d)\n", status.Packages.Total, status.Packages.User, status.Packages.Project)
 	fmt.Printf("  resources: %d (enabled=%d disabled=%d)\n", status.Resources.Total, status.Resources.Enabled, status.Resources.Disabled)
-	fmt.Printf("  piglets: %d (source=%d binary=%d)\n", status.Piglets.Total, status.Piglets.WithSource, status.Piglets.WithBinary)
+	fmt.Printf("  ompiglets: %d (source=%d binary=%d)\n", status.Ompiglets.Total, status.Ompiglets.WithSource, status.Ompiglets.WithBinary)
 	for _, message := range status.Errors {
 		printCLIError("%s", message)
 	}

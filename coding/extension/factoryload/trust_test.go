@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-const modulePath = "github.com/MichaelKinsy/PiG/"
+const modulePath = "github.com/tmih06/ompig/"
 
 type listedPackage struct {
 	ImportPath string
@@ -49,7 +49,7 @@ func goList(t *testing.T, args ...string) []listedPackage {
 	return packages
 }
 
-// subprocessSide are the packages that load, serve or build subprocess-form extensions, fused Piglet members and Piglet frontends. Nothing in
+// subprocessSide are the packages that load, serve or build subprocess-form extensions, fused Ompiglet members and Ompiglet frontends. Nothing in
 // their transitive imports may be the compiled-in factory loader or the built-in table (docs/specs/extension-factory-trust.md, property 3).
 var subprocessSide = []string{
 	"./coding/extension/host/subprocess", "./coding/extension/host/runtimecell", "./coding/extension/host/cellpack",

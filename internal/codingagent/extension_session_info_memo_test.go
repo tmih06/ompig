@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The session info an extension holds follows every value it is built from (cwd, session directory, persistence, header): the memo answers an unchanged read from its encoding and rebuilds when any one changes, and each answer equals a direct encoding.

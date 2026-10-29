@@ -13,15 +13,15 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // nodeTransportError gives Go transport failures the message emitted by the equivalent Node fetch boundary while retaining the Go cause for diagnostics.
 type nodeTransportError struct {
 	message string
 	cause   error
-	// withCause appends the cause to the message. pig divergence (D144): undici's "terminated" carries the real failure in error.cause and Pi drops it (Pi #10697).
+	// withCause appends the cause to the message. ompig divergence (D144): undici's "terminated" carries the real failure in error.cause and Pi drops it (Pi #10697).
 	withCause bool
 	// headersTimeout marks a "fetch failed" whose undici cause is HeadersTimeoutError (code UND_ERR_HEADERS_TIMEOUT): the idle deadline passed on an established connection before the response headers arrived.
 	headersTimeout bool

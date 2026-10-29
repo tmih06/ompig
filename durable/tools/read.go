@@ -6,12 +6,12 @@ import (
 	"math"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/output"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/output"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Ports packages/durable/src/tools/read.ts.

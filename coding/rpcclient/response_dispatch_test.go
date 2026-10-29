@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // rpc-client.ts handleLine: a response whose id has a pending request resolves it and is removed (pendingRequests.delete(id)); anything else with that shape, such as a second

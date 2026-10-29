@@ -4,5 +4,5 @@ set -e
 mkdir -p dist
 echo "compiling..."
 sleep 20
-printf 'pig-build-artifact-v1\n' > dist/app.bin
+printf 'ompig-build-artifact-v1\n' > dist/app.bin
 echo "build finished: dist/app.bin"

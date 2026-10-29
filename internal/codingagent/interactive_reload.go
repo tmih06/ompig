@@ -6,9 +6,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/ctxowner"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/ctxowner"
+	"github.com/tmih06/ompig/tui"
 )
 
 // errReloadBlocked reports a reload refused while a response streams or a compaction runs. The refusal is already shown as a warning, and the caller's reload completes without error.

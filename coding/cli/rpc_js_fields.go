@@ -2,7 +2,7 @@ package cli
 
 // Ports packages/coding-agent/src/modes/rpc/rpc-mode.ts handleCommand: Pi reads each command's fields without checking their types, so a
 // missing or wrongly typed field takes the JavaScript path: a template string coerces it, a method call on it throws a TypeError whose message
-// the response carries, and a truthiness test reads it. Pig decodes commands into typed structs, which reject such a field with a decoder
+// the response carries, and a truthiness test reads it. Ompig decodes commands into typed structs, which reject such a field with a decoder
 // message; this adapter answers the same way Pi does for the fields below before the typed decode runs.
 
 import (
@@ -11,7 +11,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // rpcJSValue is one command field as JavaScript sees it after JSON.parse.
@@ -100,7 +100,7 @@ func (v rpcJSValue) cannotRead(property, expression string) string {
 
 // rpcJSAdapt applies Pi's untyped reading of a command's fields. It returns the message of the error Pi's handler throws or answers, or rewrites
 // the command's fields to the typed values Pi's handler ends up using. Known difference: set_steering_mode, set_follow_up_mode,
-// set_auto_compaction and set_auto_retry store and report any JSON value in Pi (get_state echoes it); Pig coerces a non-boolean `enabled` to
+// set_auto_compaction and set_auto_retry store and report any JSON value in Pi (get_state echoes it); Ompig coerces a non-boolean `enabled` to
 // its truthiness and rejects a non-string `mode` with the decoder's message. A compact `customInstructions` that is not a string is rejected
 // with the decoder's message where Pi's compaction reads it (state-dependent TypeErrors), and new_session and export_html treat a non-string
 // field as absent. images are read as rpcJSImages describes.
@@ -207,7 +207,7 @@ const nodeBufferFromMessage = "The first argument must be of type string or an i
 
 // rpcJSImages reads a command's images the way Pi's handlers do. prompt validates each image while it converts it (Buffer.from(data, "base64"), then
 // mimeType.split), so the first malformed image fails with Node's or V8's message. steer and follow_up only spread the array, so a malformed image
-// queues; Pig cannot queue what it cannot decode, so it drops such an image and keeps the well-formed ones. A falsy value or a string (whose
+// queues; Ompig cannot queue what it cannot decode, so it drops such an image and keeps the well-formed ones. A falsy value or a string (whose
 // characters are not images) is no image. The second result replaces the field when images were dropped.
 func rpcJSImages(images rpcJSValue, isPrompt bool) (string, []json.RawMessage) {
 	if !images.truthy() {
@@ -257,7 +257,7 @@ func rpcJSImageError(raw json.RawMessage, element map[string]json.RawMessage) st
 	data := rpcJSValue{raw: element["data"], present: element != nil && element["data"] != nil}
 	switch {
 	case !data.isString() && data.present && len(data.raw) > 0 && data.raw[0] == '[':
-		// An array is an array-like Buffer source; Pig cannot decode it as base64 text.
+		// An array is an array-like Buffer source; Ompig cannot decode it as base64 text.
 	case !data.isString():
 		return nodeBufferFromMessage + rpcJSReceived(data)
 	}

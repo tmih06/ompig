@@ -15,13 +15,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/cli"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/sessiongraph"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/cli"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/sessiongraph"
 )
 
 // The session graph: the classes an extension constructs around a session. Each SDK runs the same script (testfixture/sessiongraph for Go, testdata/session-graph-rust, testdata/session_graph_python.py, and testdata/session-graph.mjs, where Node runs Pi's own SessionManager) against the real host and reports what it saw; every report must equal the literal table below. The table is Pi's behavior (session-manager.ts) as the Node row shows it, so an SDK that returns a constant, never calls the host, or builds the object differently fails its own row.
@@ -189,7 +189,7 @@ func sessionGraphSDKs() map[string]sessionGraphLoader {
 			cfg := subprocess.ExtConfig{
 				Name: sessiongraph.Name, Source: filepath.Join(root, "test/extension-conformance/testdata/session-graph-go"), Enabled: true, Isolation: "strict",
 				RuntimeKind: "subprocess", RuntimeLanguage: "go", EntrypointKind: "factory", Factory: "Extension",
-				SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/session-graph-go", Package: "example.com/session-graph-go",
+				SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/session-graph-go", Package: "example.com/session-graph-go",
 			}
 			r.load(t, cfg)
 		},
@@ -321,7 +321,7 @@ func normalizeSessionGraphFor(report map[string]any, root string, backslash bool
 
 // A Windows report names its tree with backslashes, in values and in member names and in paths relative to the tree; a POSIX report keeps a backslash it holds.
 func TestNormalizeSessionGraphWindowsPaths(t *testing.T) {
-	windowsRoot := `D:\a\_temp\pig extension acceptance\run\004`
+	windowsRoot := `D:\a\_temp\ompig extension acceptance\run\004`
 	report := map[string]any{
 		"cwd":    windowsRoot + `\project`,
 		"list":   []any{map[string]any{"cwd": windowsRoot + `\project`, "id": "0b1c2d3e-4f50-4162-8394-a5b6c7d8e9f0", "n": float64(1), "ok": true, "none": nil}},
@@ -588,11 +588,11 @@ const servicesProbe = `export default function (pi) {
 func TestSessionGraphAgentSessionServicesAcrossSDKs(t *testing.T) {
 	// Not parallel: the agent directory is the process environment's, which the host resolves a missing agentDir to and every SDK reads back as its host info.
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_USE_PI_DIRS", "")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_USE_PI_DIRS", "")
 	newRig := func(t testing.TB) *sessionGraphRig {
 		r := newSessionGraphRigWithChildren(t)
-		r.host.SetHostInfo(subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".pig", Version: coding.UpstreamPackageVersion})
+		r.host.SetHostInfo(subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".ompig", Version: coding.UpstreamPackageVersion})
 		return r
 	}
 	eachSessionGraphSDKWith(t, newRig, func(t *testing.T, r *sessionGraphRig, _ string) {

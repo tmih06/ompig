@@ -713,7 +713,7 @@ impl Lines {
 // The conversation kinds are Pi's conversation components, which Pi exports
 // to extensions: a user message, an assistant message with its thinking, a
 // tool call's card, a `!` command and a colored diff. The host draws each with
-// the port PiG's main transcript uses, and a frontend draws them as it draws
+// the port Ompig's main transcript uses, and a frontend draws them as it draws
 // the transcript. A node with an id keeps its host component across frames
 // while its constructor arguments stay the same, as a Pi author keeps a
 // component and calls its update methods; then a field that differs from the

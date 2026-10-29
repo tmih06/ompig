@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // oracleSlot is one top-level part: either the lines Pi returned or a real Image component, as the step's set chose.
@@ -52,7 +52,7 @@ func setOracleEnv(t *testing.T, name string, set bool, value string) {
 	_ = os.Unsetenv(name)
 }
 
-// altScreenOracleStartMarker is what the oracle terminal writes from Terminal.start; Pig's Start never calls a Terminal (the driver owns it), so
+// altScreenOracleStartMarker is what the oracle terminal writes from Terminal.start; Ompig's Start never calls a Terminal (the driver owns it), so
 // the marker and the cursor hide Pi's start() issues right after it are the only bytes left out of the comparison.
 // altScreenOracleStopMarker is what Pi's stop() writes between the renderer's own two writes: the terminal's showCursor and stop.
 const altScreenOracleStopMarker = "\x1b[?25h<terminal.stop>"
@@ -269,7 +269,7 @@ func TestAltScreenFramesMatchPiOracle(t *testing.T) {
 }
 
 // TestAltScreenFixtureIsCurrent reruns testdata/alt-screen-oracle.mjs against the installed Pi and requires the committed fixture to be
-// byte-identical, so the frames Pig is compared with are the pinned version's, not a stale capture.
+// byte-identical, so the frames Ompig is compared with are the pinned version's, not a stale capture.
 func TestAltScreenFixtureIsCurrent(t *testing.T) {
 	t.Parallel()
 	root, err := filepath.EvalSymlinks("../extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent")

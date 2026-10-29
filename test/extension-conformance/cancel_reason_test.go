@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // The host names why it cancelled a request in the cancel frame (subprocess CancelPayload.Reason), and every SDK hands that

@@ -11,13 +11,13 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust/tlsdistrusttest"
+	"github.com/tmih06/ompig/internal/tlsdistrust/tlsdistrusttest"
 )
 
 // The update transport CA sidecar adds a trust anchor for a private update server. Pointing it at a compromised eMudhra intermediate (or a
 // root above it) still does not let a certificate that the recovered key signed through: Go 1.27.3's verifier and the hook check every verified chain.
 func TestSelfUpdateRefusesACompromisedCAEvenWhenTheSidecarTrustsIt(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	var issuer = tlsdistrusttest.Intermediates(t)[0]
 	for _, certificate := range tlsdistrusttest.Intermediates(t) {
 		if tlsdistrusttest.IsTLS(certificate) {

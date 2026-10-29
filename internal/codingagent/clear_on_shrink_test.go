@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.87.1 honors PI_CLEAR_ON_SHRINK only in SettingsManager.getClearOnShrink

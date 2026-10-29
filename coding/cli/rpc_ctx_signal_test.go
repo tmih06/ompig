@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi gives an extension `ctx.signal` as runner.getSignalFn() (runner.ts:917-920), bound to `() => this.agent.signal` (agent-session.ts:3368): the signal of the run in progress (agent.ts:336-338), undefined while no run is active.
@@ -41,7 +41,7 @@ func startCtxSignalPig(t *testing.T, extraEnv ...string) (*rpcProcess, string) {
 	}
 	home := t.TempDir()
 	report := filepath.Join(t.TempDir(), "report.jsonl")
-	env := append([]string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "CTX_SIGNAL_REPORT=" + report, "CTX_SIGNAL_POLL_REPORT=" + ctxSignalPollReport(report)}, extraEnv...)
+	env := append([]string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "CTX_SIGNAL_REPORT=" + report, "CTX_SIGNAL_POLL_REPORT=" + ctxSignalPollReport(report)}, extraEnv...)
 	return startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1", "-e", fixture, "-e", pollFixture), report
 }
 
@@ -248,7 +248,7 @@ func TestExtensionContextSignalComparedWithPi(t *testing.T) {
 	impls := []struct {
 		name  string
 		start func(t *testing.T, extraEnv ...string) (*rpcProcess, string)
-	}{{"pig", startCtxSignalPig}, {"pi", startCtxSignalPi}}
+	}{{"ompig", startCtxSignalPig}, {"pi", startCtxSignalPi}}
 	for _, impl := range impls {
 		for _, scenario := range scenarios {
 			t.Run(impl.name+"/"+scenario.name, func(t *testing.T) {

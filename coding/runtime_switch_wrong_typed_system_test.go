@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's switchSession builds the destination's Session after it tears the current one down, and the AgentSession constructor restores the loadout the transcript declares (agent-session.ts:526, _restoreToolsFromTranscript). That reads the toolsAdded and toolsRemoved of every system message on the branch, which throws a TypeError for a member the replay cannot read, so the switch fails with the TypeError and the runtime keeps the outgoing Session object. A content it cannot read does not fail the restore.

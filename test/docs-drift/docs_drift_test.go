@@ -2,7 +2,7 @@
 // describes.
 //
 // The bundle in internal/pigdocs/content is what a user reads and
-// what an agent loads to answer questions about Pig, so a stale claim there is
+// what an agent loads to answer questions about Ompig, so a stale claim there is
 // not cosmetic: it sends both down a path that no longer exists. Prose intent
 // cannot be machine-checked, but the enumerable claims can be, and those are the
 // ones that rot silently as commands and settings move.
@@ -19,7 +19,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 const contentDir = "../../internal/pigdocs/content"
@@ -77,31 +77,31 @@ func TestDocumentedSlashCommandsExist(t *testing.T) {
 	// Commands the docs name in order to say they do not exist. Pi has neither,
 	// and readers arrive expecting both, so the absence is worth stating.
 	documentedAsAbsent := map[string]string{
-		"/exit":       "Pi has no /exit; use /quit",
-		"/clear":      "Pi has no /clear; app.clear is a keybinding",
-		"/runner":     "Stock Pig has no runner command",
-		"/pig-runner": "Stock Pig has no runner alias",
+		"/exit":         "Pi has no /exit; use /quit",
+		"/clear":        "Pi has no /clear; app.clear is a keybinding",
+		"/runner":       "Stock Ompig has no runner command",
+		"/ompig-runner": "Stock Ompig has no runner alias",
 	}
 	hidden := map[string]string{
 		"/arminsayshi":   "hidden easter egg the editor submit handler recognizes (interactive-mode.ts:3266; D87)",
-		"/pigsayhi":      "PiG's name for /arminsayshi (D87)",
+		"/pigsayhi":      "Ompig's name for /arminsayshi (D87)",
 		"/dementedelves": "hidden easter egg the editor submit handler recognizes (interactive-mode.ts:3271)",
 	}
 	fromExtensions := map[string]string{
 		"/llama":     "built-in llama.cpp extension (extensions/index.ts builtInExtensions)",
 		"/mcp":       "built-in mcp extension (mcp.md)",
 		"/acp":       "command of the Pigpen acp Package (packages.md)",
-		"/piglet":    "generic Piglet runtime extension",
-		"/sprite":    "PiG Standard piglogin extension",
+		"/ompiglet":  "generic Ompiglet runtime extension",
+		"/sprite":    "Ompig Standard piglogin extension",
 		"/review":    "example prompt template a user creates (prompt-templates.md)",
 		"/component": "example prompt template a user creates (prompt-templates.md)",
 		"/greet":     "command of the tour extension the reader writes in first-extension.md",
 		"/ask":       "command of the tour extension the reader writes in first-extension.md",
-		// piglets/README.md and piglets/standard/README.md document the commands their Piglets register.
-		"/pig-porter":  "the porter Piglet's command (piglets/porter)",
-		"/angry-pigs":  "the PiG Standard game extension (piglets/standard)",
-		"/bun-runtime": "the PiG Standard Bun runtime extension (piglets/standard/extensions/bunruntime)",
-		"/aot-runtime": "the pig-aot Piglet's compiled-extensions runtime extension (piglets/aot/extensions/aotruntime)",
+		// ompiglets/README.md and ompiglets/standard/README.md document the commands their Ompiglets register.
+		"/ompig-porter": "the porter Ompiglet's command (ompiglets/porter)",
+		"/angry-pigs":   "the Ompig Standard game extension (ompiglets/standard)",
+		"/bun-runtime":  "the Ompig Standard Bun runtime extension (ompiglets/standard/extensions/bunruntime)",
+		"/aot-runtime":  "the ompig-aot Ompiglet's compiled-extensions runtime extension (ompiglets/aot/extensions/aotruntime)",
 		// The bug ledger entry for tui.showOverlay names the commands of Pi's overlay QA example extension.
 		"/overlay-focus":     "Pi's overlay QA example extension (coding-agent examples/extensions/overlay-qa-tests.ts)",
 		"/overlay-passive":   "Pi's overlay QA example extension (coding-agent examples/extensions/overlay-qa-tests.ts)",
@@ -191,7 +191,7 @@ func TestInternalLinksResolve(t *testing.T) {
 }
 
 func TestGeneratedTroubleshootingLinksUseDocumentationSite(t *testing.T) {
-	const siteDocs = "https://pi-in-go.dev/docs/latest/"
+	const siteDocs = "https://ompig.dev/docs/latest/"
 
 	source, err := os.ReadFile("../../docs/site/docs/install-troubleshooting.md")
 	if err != nil {
@@ -227,15 +227,15 @@ func TestGeneratedTroubleshootingLinksUseDocumentationSite(t *testing.T) {
 // this bundle goes stale, and the reader has no way to tell which is current.
 func TestNoRetiredCommandNamesSurvive(t *testing.T) {
 	retired := map[string]string{
-		"pig sdk":       "replaced by `pig reload`",
-		"pig --profile": "replaced by `pig --piglet`",
-		"pig profile":   "replaced by `pig piglet`",
-		"`/profile`":    "replaced by `/piglet`",
-		// PIG_PROFILE and PIG_PROFILE_DIR are live Go profiling variables;
-		// only the Piglet-selection names were retired.
-		"PIG_PROFILE_NAME": "replaced by `PIG_PIGLET_NAME`",
-		"PIG_PROFILE_PATH": "replaced by `PIG_PIGLET_PATH`",
-		"profile.yaml":     "replaced by `piglet.yaml`",
+		"ompig sdk":       "replaced by `ompig reload`",
+		"ompig --profile": "replaced by `ompig --ompiglet`",
+		"ompig profile":   "replaced by `ompig ompiglet`",
+		"`/profile`":      "replaced by `/ompiglet`",
+		// OMPIG_PROFILE and OMPIG_PROFILE_DIR are live Go profiling variables;
+		// only the Ompiglet-selection names were retired.
+		"OMPIG_PROFILE_NAME": "replaced by `OMPIG_OMPIGLET_NAME`",
+		"OMPIG_PROFILE_PATH": "replaced by `OMPIG_OMPIGLET_PATH`",
+		"profile.yaml":       "replaced by `ompiglet.yaml`",
 	}
 	for name, body := range docFiles(t) {
 		for phrase, replacement := range retired {
@@ -251,14 +251,14 @@ func TestPigOwnedInstructionsUsePiglets(t *testing.T) {
 		"../../docs/additive-features.md",
 	}
 	retired := []string{
-		"pig --profile",
-		"pig profile",
+		"ompig --profile",
+		"ompig profile",
 		"`/profile`",
-		"PIG_PROFILE_",
-		"/opt/pig/profile.yaml",
+		"OMPIG_PROFILE_",
+		"/opt/ompig/profile.yaml",
 		"Profile Binary",
 		"Profile Image",
-		"Pig Profile",
+		"Ompig Profile",
 	}
 	for _, path := range paths {
 		body, err := os.ReadFile(path)
@@ -267,7 +267,7 @@ func TestPigOwnedInstructionsUsePiglets(t *testing.T) {
 		}
 		for _, phrase := range retired {
 			if strings.Contains(string(body), phrase) {
-				t.Errorf("%s still names retired Pig capability %q", path, phrase)
+				t.Errorf("%s still names retired Ompig capability %q", path, phrase)
 			}
 		}
 	}
@@ -278,7 +278,7 @@ func TestPigOwnedInstructionsUsePiglets(t *testing.T) {
 // first check a page can promise behavior no longer approved; without the
 // second, an approved difference reaches nobody. Agents are the reason this
 // matters most: one that carries Pi knowledge will confidently do the Pi thing
-// wherever Pig's difference is undocumented.
+// wherever Ompig's difference is undocumented.
 func TestDocumentedDivergenceIDsExistInTheLedger(t *testing.T) {
 	// IDs are global across the parity ledger and the additive ledger, so both
 	// are the denominator. Reading one alone reports a true entry as missing.

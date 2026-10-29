@@ -4,7 +4,7 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // maxDeltaOperations is tracker.ts MAX_DELTA_OPERATIONS: a larger batch folds

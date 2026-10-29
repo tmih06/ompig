@@ -13,11 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // countHeldStorage is memory storage that holds every commit recording an acknowledged call count until released.

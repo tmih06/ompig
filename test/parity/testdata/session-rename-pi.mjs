@@ -10,8 +10,8 @@ assert.equal(JSON.parse(readFileSync(join(root, "package.json"), "utf8")).versio
 const packageURL = pathToFileURL(join(root, "package.json")).href;
 const moduleURL = code => "data:text/javascript;base64," + Buffer.from(code).toString("base64");
 const state = { cases: [], before: [], each: [] };
-globalThis.__pigRename = state;
-const framework = moduleURL(`import assert from "node:assert/strict";const s=globalThis.__pigRename;
+globalThis.__ompigRename = state;
+const framework = moduleURL(`import assert from "node:assert/strict";const s=globalThis.__ompigRename;
 export const describe=(_name,run)=>run(),beforeAll=run=>s.before.push(run),beforeEach=run=>s.each.push(run),it=(name,run)=>s.cases.push({name,run});
 export const vi={fn:fn=>{const wrapped=(...args)=>{wrapped.calls.push(args);return fn(...args);};wrapped.calls=[];return wrapped;}};
 export function expect(value){return {toContain:expected=>assert.ok(value.includes(expected)),not:{toContain:expected=>assert.ok(!value.includes(expected))},toHaveBeenCalledTimes:expected=>assert.equal(value.calls.length,expected),toHaveBeenCalledWith:(...args)=>assert.ok(value.calls.some(call=>{try{assert.deepStrictEqual(call,args);return true;}catch{return false;}}))};}
@@ -34,5 +34,5 @@ try {
     await test.run();
     console.log("SESSION_RENAME " + JSON.stringify([sites[index], test.name]));
   }
-} finally { delete globalThis.__pigRename; }
+} finally { delete globalThis.__ompigRename; }
 await import("./session-rename-input-pi.mjs");

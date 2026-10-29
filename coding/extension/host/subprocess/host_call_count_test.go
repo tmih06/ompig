@@ -10,7 +10,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // heldSelectUI answers a dialog when release closes, after it marked the call initiated.

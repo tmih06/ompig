@@ -24,8 +24,8 @@ import time
 
 SIDE = sys.argv[1]
 ROOT = Path(__file__).resolve().parents[3]
-BINARY = ([os.environ.get("PIG_PARITY_PIG_BIN", str(ROOT / "bin/pig"))]
-          if SIDE == "pig" else [os.environ.get("PIG_PARITY_PI_BIN", str(ROOT / "extensions/sdk-ts/node_modules/.bin/pi"))])
+BINARY = ([os.environ.get("OMPIG_PARITY_OMPIG_BIN", str(ROOT / "bin/ompig"))]
+          if SIDE == "ompig" else [os.environ.get("OMPIG_PARITY_PI_BIN", str(ROOT / "extensions/sdk-ts/node_modules/.bin/pi"))])
 
 
 def drain_until_exit(child, master, output):
@@ -95,7 +95,7 @@ def run_case(root, provider, model, api, requested, expected, resumed=False, suf
             config["compat"] = {"supportsReasoningEffort": True}
         (agent / "models.json").write_text(json.dumps({"providers": {provider: config}}))
         (agent / "settings.json").write_text(json.dumps({"defaultThinkingLevel": "off" if resumed else "medium", "quietStartup": True, "enableInstallTelemetry": False}))
-        env = {**os.environ, "HOME": str(root), "PIG_CODING_AGENT_DIR": str(agent), "PI_CODING_AGENT_DIR": str(agent), "PI_SKIP_VERSION_CHECK": "1", "TERM": "xterm-256color"}
+        env = {**os.environ, "HOME": str(root), "OMPIG_CODING_AGENT_DIR": str(agent), "PI_CODING_AGENT_DIR": str(agent), "PI_SKIP_VERSION_CHECK": "1", "TERM": "xterm-256color"}
         spec = f"{provider}/{model}"
         if requested and suffix:
             spec += ":" + requested

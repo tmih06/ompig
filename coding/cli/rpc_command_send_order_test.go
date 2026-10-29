@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // rpcCommandSendOrderExtension starts a turn from an extension command without awaiting it. Its before_agent_start handler writes a setStatus request, which marks where the run's preparation lands among the records.
@@ -55,7 +55,7 @@ func rpcRecordTag(r rpcRecord) string {
 // async-followup: Pi 1.2.0's sendCustomMessage calls _startRun (Pi PR #10739), whose _prepareRun calls emitBeforeAgentStart, which calls the handler before its first await, so setStatus precedes the response; agent_start follows the awaits of the handler result and of _prepareRun, after the response (agent-session.ts:1832-1877, runner.ts emitBeforeAgentStart). Pi 1.1.0 itself runs no before_agent_start here and writes agent_start first.
 func TestRPCCommandTurnStartOrderMatchesPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and runs a Node extension")
+		t.Skip("builds the ompig binary and runs a Node extension")
 	}
 	for _, tc := range rpcCommandSendOrderCases {
 		t.Run(strings.TrimPrefix(tc.command, "/"), func(t *testing.T) {
@@ -90,7 +90,7 @@ func TestRPCInlineCommandTurnStartOrderMatchesPi(t *testing.T) {
 }
 
 // embeddedSendOrderEnv makes the test binary a program whose own extension starts turns from its commands.
-const embeddedSendOrderEnv = "PIG_TEST_EMBEDDED_SEND_ORDER"
+const embeddedSendOrderEnv = "OMPIG_TEST_EMBEDDED_SEND_ORDER"
 
 // sendOrderFactory is rpcCommandSendOrderExtension as an in-process Go extension.
 func sendOrderFactory(api extension.API) error {
@@ -130,7 +130,7 @@ var rpcCommandSendOrderCases = []struct {
 var rpcCommandSendOrderArgs = []string{"--offline", "--no-extensions", "--no-skills", "--no-context-files", "--no-session", "--system-prompt", "P.", "--model", "test-faux/faux-1"}
 
 func rpcCommandSendOrderEnv(home string) []string {
-	return []string{"HOME=" + home, "USERPROFILE=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}
+	return []string{"HOME=" + home, "USERPROFILE=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}
 }
 
 // assertRPCCommandSendOrder runs command and compares the records up to agent_settled with want.
@@ -173,7 +173,7 @@ const rpcCommandAwaitsRunExtension = `export default function (pi) {
 // run, which a held start would never begin.
 func TestRPCCommandThatAwaitsTheRunItSentAnswersAfterIt(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and runs a Node extension")
+		t.Skip("builds the ompig binary and runs a Node extension")
 	}
 	home := t.TempDir()
 	extensionPath := filepath.Join(t.TempDir(), "await-run.mjs")

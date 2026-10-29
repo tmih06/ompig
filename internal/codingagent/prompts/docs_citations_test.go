@@ -1,4 +1,4 @@
-//go:build !pig_strip_docs
+//go:build !ompig_strip_docs
 
 package prompts
 
@@ -11,16 +11,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
 // The system prompt tells the model which documentation to read for each topic. A citation of a page that the
 // binary does not ship sends the model to a file that does not exist, so every cited page must be in the
-// embedded docs bundle, exist in the directory `pig docs` materializes (the "Additional docs" root the prompt
-// names), and resolve through `pig docs show`.
+// embedded docs bundle, exist in the directory `ompig docs` materializes (the "Additional docs" root the prompt
+// names), and resolve through `ompig docs show`.
 func TestDocsSectionCitesOnlyShippedPages(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	docsDir := pigdocs.DocsDir(root)
 	if _, err := pigdocs.Sync(root); err != nil {
 		t.Fatal(err)
@@ -44,7 +44,7 @@ func TestDocsSectionCitesOnlyShippedPages(t *testing.T) {
 		}
 		var stdout, stderr bytes.Buffer
 		if code := pigdocs.RunCommand([]string{"docs", "show", strings.TrimSuffix(page, ".md")}, &stdout, &stderr); code != 0 || stdout.Len() == 0 {
-			t.Errorf("pig docs show %s: code=%d stderr=%q", strings.TrimSuffix(page, ".md"), code, stderr.String())
+			t.Errorf("ompig docs show %s: code=%d stderr=%q", strings.TrimSuffix(page, ".md"), code, stderr.String())
 		}
 	}
 	if !strings.Contains(section, filepath.Join(docsDir, "README.md")) {

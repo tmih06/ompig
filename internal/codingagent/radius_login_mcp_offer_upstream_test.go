@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package codingagent
 
@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The Radius MCP endpoint Pi 1.0.0 offers after a Radius sign-in:
@@ -141,7 +141,7 @@ func TestRadiusLoginOffersTheRadiusMCPServerUpstream(t *testing.T) {
 		}
 	})
 
-	// pig additive (D92): a runtime strip of mcp (cmd/pig applyPigletStrip records it in pigstrip) offers nothing.
+	// ompig additive (D92): a runtime strip of mcp (cmd/ompig applyPigletStrip records it in pigstrip) offers nothing.
 	t.Run("a stripped mcp offers nothing", func(t *testing.T) {
 		t.Cleanup(pigstrip.Strip(pigstrip.ListExtensions, "mcp"))
 		m := newPostLoginTestMode(t)

@@ -5,8 +5,6 @@ package sts
 import (
 	"context"
 	"fmt"
-	internalauthsmithy "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/auth/smithy"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/internal/v4a"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	smithyauth "github.com/aws/smithy-go/auth"
@@ -15,6 +13,8 @@ import (
 	"github.com/aws/smithy-go/middleware"
 	"github.com/aws/smithy-go/tracing"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	internalauthsmithy "github.com/tmih06/ompig/third_party/awssdk/internal/auth/smithy"
+	"github.com/tmih06/ompig/third_party/awssdk/internal/v4a"
 	"net/http"
 )
 

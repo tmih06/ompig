@@ -26,17 +26,17 @@ driver = "interactive-tmux"
 model = "fixture/current"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent-radius", "PI_OFFLINE=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent-radius", "PI_OFFLINE=1"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-radius", "PI_SKIP_VERSION_CHECK=1", "PI_OFFLINE=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/radius-metadata.mjs"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/radius-metadata.mjs"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["testdata/radius-metadata.mjs"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 capture_start = "radius-metadata:"

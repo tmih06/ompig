@@ -73,7 +73,7 @@ lockfile.lock(file, options).then((release) => {
 // jsonPath is path as JSON.stringify writes it inside a string.
 func jsonPath(path string) string { return strings.ReplaceAll(path, `\`, `\\`) }
 
-// proper-lockfile's heartbeat stats its lock with fs.stat (lib/lockfile.js:114). While another process is removing the directory, Node's stat still reads it from the parent directory entry with the owner's mtime, so the heartbeat goes on to utimes (lib/lockfile.js:143), which fails with EPERM because the name is delete-pending. The update is retried after a second; past the stale threshold that utime failure is the compromise (lib/lockfile.js:153-156). PiG's heartbeat reports the same failure: its chtimes (utime) error, not a stat error.
+// proper-lockfile's heartbeat stats its lock with fs.stat (lib/lockfile.js:114). While another process is removing the directory, Node's stat still reads it from the parent directory entry with the owner's mtime, so the heartbeat goes on to utimes (lib/lockfile.js:143), which fails with EPERM because the name is delete-pending. The update is retried after a second; past the stale threshold that utime failure is the compromise (lib/lockfile.js:153-156). Ompig's heartbeat reports the same failure: its chtimes (utime) error, not a stat error.
 func TestHeartbeatReadsLockBeingRemovedAsNodeStatDoesUpstream(t *testing.T) {
 	t.Run("proper-lockfile", func(t *testing.T) {
 		path := filepath.Join(t.TempDir(), "owned")
@@ -83,7 +83,7 @@ func TestHeartbeatReadsLockBeingRemovedAsNodeStatDoesUpstream(t *testing.T) {
 			t.Fatalf("proper-lockfile heartbeat on a lock being removed:\n got %s\nwant %s", got, want)
 		}
 	})
-	t.Run("pig", func(t *testing.T) {
+	t.Run("ompig", func(t *testing.T) {
 		path := filepath.Join(t.TempDir(), "owned")
 		compromised := make(chan error, 1)
 		lock, err := AcquireWithOptions(t.Context(), path, AcquireOptions{Stale: 200 * time.Millisecond, Update: 20 * time.Millisecond, Retry: time.Millisecond, OnCompromised: func(err error) { compromised <- err }})
@@ -172,7 +172,7 @@ func TestCompromisedErrorsNameWindowsErrorsLibuvTranslates(t *testing.T) {
 	}
 }
 
-// proper-lockfile's check (lib/lockfile.js:296-321) stats with fs.stat, so a lock whose directory another process is removing still counts as held. Releasing it runs rmdir (lib/lockfile.js:88-96,268-293), which fails with EPERM because the name is delete-pending. PiG's Check keeps the lock, and Release reports rmdir's ERROR_ACCESS_DENIED rather than a compromise.
+// proper-lockfile's check (lib/lockfile.js:296-321) stats with fs.stat, so a lock whose directory another process is removing still counts as held. Releasing it runs rmdir (lib/lockfile.js:88-96,268-293), which fails with EPERM because the name is delete-pending. Ompig's Check keeps the lock, and Release reports rmdir's ERROR_ACCESS_DENIED rather than a compromise.
 func TestCheckAndReleaseReadLockBeingRemovedAsNodeStatDoesUpstream(t *testing.T) {
 	t.Run("proper-lockfile", func(t *testing.T) {
 		path := filepath.Join(t.TempDir(), "owned")
@@ -182,7 +182,7 @@ func TestCheckAndReleaseReadLockBeingRemovedAsNodeStatDoesUpstream(t *testing.T)
 			t.Fatalf("proper-lockfile check and release of a lock being removed:\n got %s\nwant %s", got, want)
 		}
 	})
-	t.Run("pig", func(t *testing.T) {
+	t.Run("ompig", func(t *testing.T) {
 		path := filepath.Join(t.TempDir(), "owned")
 		lock, err := AcquireSync(path)
 		if err != nil {

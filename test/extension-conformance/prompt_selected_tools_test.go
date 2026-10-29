@@ -11,10 +11,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi runner.ts:1317-1363 awaits each before_agent_start handler and hands every handler one normalized options object, so a handler's selectedTools edit is visible to the next handler and survives a handler error; agent-session.ts:1702-1714 then makes an edited list the run's tool loadout. Each handler appends or assigns its own extension name, a value no SDK fallback can produce. Subprocess handlers wait before editing, so a runtime that answers before its handler finishes loses the edit.
@@ -217,7 +217,7 @@ func promptSelectedToolsFactory(t *testing.T, root, language, name string) subpr
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package selected
-import ("errors"; "time"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("errors"; "time"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension {
  e:=sdk.New(%[1]q)
  e.OnEvent("before_agent_start",func(_ sdk.Context,data map[string]any)(any,error){
@@ -235,9 +235,9 @@ func Extension()*sdk.Extension {
 	case "python":
 		path = filepath.Join(cfg.Source, name+".py")
 		source = fmt.Sprintf(`import time
-import pig_sdk
+import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%[1]q)
+ e=ompig_sdk.Extension(%[1]q)
  def handler(ctx,data):
   options=data["systemPromptOptions"]
   time.sleep(0.02)
@@ -259,7 +259,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%[1]q);
  e.on_before_agent_start(|_,event| {

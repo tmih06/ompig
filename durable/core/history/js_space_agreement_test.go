@@ -4,7 +4,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // The WTF-8 trim walker is kept apart from jsstring for the byte-level hot path. It must agree with the shared JavaScript whitespace predicate on every code point.

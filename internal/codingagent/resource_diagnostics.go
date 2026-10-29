@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // findSourceInfoForPath is upstream findSourceInfoForPath: the path's own entry, else the entry of the nearest

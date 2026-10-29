@@ -160,7 +160,7 @@ func TestGoSDKReplicatedFieldsAreAssignedFromStateUpdates(t *testing.T) {
 }
 
 func TestPythonSDKReplicatedFieldsAreAssignedFromStateUpdates(t *testing.T) {
-	src := readRepoFile(t, "extensions/sdk-py/pig_sdk/__init__.py")
+	src := readRepoFile(t, "extensions/sdk-py/ompig_sdk/__init__.py")
 	// Context's replicated getters: `with self.extension._state_lock: return self.extension._x`.
 	read := regexp.MustCompile(`with self\.extension\._state_lock:\s*\n\s*return ([^\n]+)`)
 	attr := regexp.MustCompile(`self\.extension\._(\w+)`)

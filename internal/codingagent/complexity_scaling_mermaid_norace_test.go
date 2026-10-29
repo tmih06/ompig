@@ -1,4 +1,4 @@
-//go:build !race && !pig_strip_mermaid
+//go:build !race && !ompig_strip_mermaid
 
 package codingagent
 
@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 func TestScalingMermaidTransformOfAStreamedMessage(t *testing.T) {

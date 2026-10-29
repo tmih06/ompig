@@ -15,12 +15,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 // The memory half of the per-TEST-TIP scaling sweep: the M6 rows at three history sizes, 0, 1x and 10x, so bench/memsweep/memsweep.py can
 // tell memory that follows the context from memory that follows the history, and flag retained
-// bytes that grow faster than the history. It measures and writes; it gates nothing. It runs only with PIG_MEMSWEEP_OUT set, the JSONL file
+// bytes that grow faster than the history. It measures and writes; it gates nothing. It runs only with OMPIG_MEMSWEEP_OUT set, the JSONL file
 // it appends one record per point to.
 
 // memSweepPrompts are the long row's history sizes in prompts: 0, 1x and 10x.
@@ -41,23 +41,23 @@ type memSweepPoint struct {
 	Scenario string `json:"scenario"`
 	// N is the history size in the scenario's unit: prompts, or for "resume" longsession turns before the compaction.
 	N int `json:"n"`
-	// HistoryBytes is what the session holds on disk or has sent in total; ContextBytes is the last request body, the context pig sent.
+	// HistoryBytes is what the session holds on disk or has sent in total; ContextBytes is the last request body, the context ompig sent.
 	HistoryBytes int64  `json:"history_bytes"`
 	ContextBytes int64  `json:"context_bytes"`
 	HeapLive     uint64 `json:"heap_live_bytes"`
 	// Nonreleased is /memory/classes/total less /memory/classes/heap/released at idle (tmux only).
 	Nonreleased uint64 `json:"go_nonreleased_bytes,omitempty"`
 	GoMaxProcs  string `json:"gomaxprocs"`
-	// CPUsAllowed is the size of pig's CPU affinity mask just before it exits. With GOMAXPROCS unset and a mask no wider than pig's cap the
+	// CPUsAllowed is the size of ompig's CPU affinity mask just before it exits. With GOMAXPROCS unset and a mask no wider than ompig's cap the
 	// runtime follows the mask, and a cgroup cpuset update that resets the mask to the whole host leaves a host-wide P set live (about 3 MB
 	// at 164 CPUs); the driver drops such points.
 	CPUsAllowed int `json:"cpus_allowed"`
 }
 
 // memSweepCPUsAllowed counts the CPUs in /proc/<pid>/status's Cpus_allowed_list.
-func memSweepCPUsAllowed(t *testing.T, pig *ptyPig) int {
+func memSweepCPUsAllowed(t *testing.T, ompig *ptyPig) int {
 	t.Helper()
-	data, err := os.ReadFile(fmt.Sprintf("/proc/%d/status", pig.command.Process.Pid))
+	data, err := os.ReadFile(fmt.Sprintf("/proc/%d/status", ompig.command.Process.Pid))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -87,19 +87,19 @@ func memSweepCPUsAllowed(t *testing.T, pig *ptyPig) int {
 
 func memSweepOut(t *testing.T) string {
 	t.Helper()
-	out := os.Getenv("PIG_MEMSWEEP_OUT")
+	out := os.Getenv("OMPIG_MEMSWEEP_OUT")
 	if out == "" {
-		t.Skip("PIG_MEMSWEEP_OUT is not set: the memory scaling sweep runs from bench/memsweep/memsweep.py")
+		t.Skip("OMPIG_MEMSWEEP_OUT is not set: the memory scaling sweep runs from bench/memsweep/memsweep.py")
 	}
 	return out
 }
 
-// memSweepHome is newPigHome with GOMAXPROCS from PIG_MEMSWEEP_GOMAXPROCS: a number, or "default" to leave it unset so pig's own policy
+// memSweepHome is newPigHome with GOMAXPROCS from OMPIG_MEMSWEEP_GOMAXPROCS: a number, or "default" to leave it unset so ompig's own policy
 // applies. Unset keeps newPigHome's 1.
-func memSweepHome(t *testing.T) (*pigHome, string) {
+func memSweepHome(t *testing.T) (*ompigHome, string) {
 	t.Helper()
 	home := newPigHome(t)
-	procs := os.Getenv("PIG_MEMSWEEP_GOMAXPROCS")
+	procs := os.Getenv("OMPIG_MEMSWEEP_GOMAXPROCS")
 	if procs == "" {
 		return home, "1"
 	}
@@ -116,12 +116,12 @@ func memSweepHome(t *testing.T) (*pigHome, string) {
 	return home, procs
 }
 
-// memSweepStart is startPTY, through taskset -c $PIG_MEMSWEEP_CPUS when that is set: pig's own start pins it again, because a cgroup cpuset
+// memSweepStart is startPTY, through taskset -c $OMPIG_MEMSWEEP_CPUS when that is set: ompig's own start pins it again, because a cgroup cpuset
 // update can reset the CPU mask the test process inherited from the driver's taskset, and the runtime sizes its startup P set from the
-// mask pig starts with. taskset execs pig, so the process is still pig.
-func memSweepStart(t *testing.T, home *pigHome, binary string, args []string, cols, rows uint16, extra ...string) *ptyPig {
+// mask ompig starts with. taskset execs ompig, so the process is still ompig.
+func memSweepStart(t *testing.T, home *ompigHome, binary string, args []string, cols, rows uint16, extra ...string) *ptyPig {
 	t.Helper()
-	if cpus := os.Getenv("PIG_MEMSWEEP_CPUS"); cpus != "" {
+	if cpus := os.Getenv("OMPIG_MEMSWEEP_CPUS"); cpus != "" {
 		args = append([]string{"-c", cpus, binary}, args...)
 		binary = "taskset"
 	}
@@ -150,7 +150,7 @@ func memSweepWrite(t *testing.T, out string, point memSweepPoint) {
 // asks is that the heap less the context stays flat as the prompts grow.
 func TestMemoryScalingSweepLong(t *testing.T) {
 	out := memSweepOut(t)
-	binary, err := pigBinary()
+	binary, err := ompigBinary()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -166,13 +166,13 @@ func TestMemoryScalingSweepLong(t *testing.T) {
 				warm := memSweepStart(t, home, binary, boltArgs, 120, 40)
 				warm.ready()
 				warm.exit()
-				pig := memSweepStart(t, home, binary, boltArgs, 120, 40)
-				pig.ready()
+				ompig := memSweepStart(t, home, binary, boltArgs, 120, 40)
+				ompig.ready()
 				for n := 1; n <= prompts; n++ {
-					pig.prompt(n, 100*time.Millisecond)
+					ompig.prompt(n, 100*time.Millisecond)
 				}
-				cpus := memSweepCPUsAllowed(t, pig)
-				record := pig.exit()
+				cpus := memSweepCPUsAllowed(t, ompig)
+				record := ompig.exit()
 				sent := int64(model.lastRequestBytes())
 				memSweepWrite(t, out, memSweepPoint{Scenario: variant.name, N: prompts, HistoryBytes: sent, ContextBytes: sent, HeapLive: record.HeapLiveBytes, GoMaxProcs: procs, CPUsAllowed: cpus})
 			})
@@ -197,32 +197,32 @@ func TestMemoryScalingSweepTmux(t *testing.T) {
 			warm.ready()
 			warm.exit()
 			snapshots := t.TempDir()
-			pig := memSweepStart(t, home, binary, boltArgs, 160, 48, "PIG_PERFGATE_SNAPSHOT_DIR="+snapshots)
-			pig.ready()
+			ompig := memSweepStart(t, home, binary, boltArgs, 160, 48, "OMPIG_PERFGATE_SNAPSHOT_DIR="+snapshots)
+			ompig.ready()
 			for i := range 40 {
-				pig.send(string("abcdefghij"[i%10]))
+				ompig.send(string("abcdefghij"[i%10]))
 				time.Sleep(5 * time.Millisecond)
 			}
-			pig.settle(200 * time.Millisecond)
-			pig.send("\x15")
-			pig.settle(200 * time.Millisecond)
+			ompig.settle(200 * time.Millisecond)
+			ompig.send("\x15")
+			ompig.settle(200 * time.Millisecond)
 			lines := make([]string, 400)
 			for i := range lines {
 				lines[i] = fmt.Sprintf("line %d: lorem ipsum dolor sit amet", i)
 			}
-			pig.send("\x1b[200~" + strings.Join(lines, "\r") + "\x1b[201~")
-			pig.settle(300 * time.Millisecond)
-			pig.send("\x15")
-			pig.settle(100 * time.Millisecond)
-			pig.send("\x1b")
-			pig.settle(300 * time.Millisecond)
+			ompig.send("\x1b[200~" + strings.Join(lines, "\r") + "\x1b[201~")
+			ompig.settle(300 * time.Millisecond)
+			ompig.send("\x15")
+			ompig.settle(100 * time.Millisecond)
+			ompig.send("\x1b")
+			ompig.settle(300 * time.Millisecond)
 			for n := 1; n <= prompts; n++ {
-				pig.prompt(n, 300*time.Millisecond)
+				ompig.prompt(n, 300*time.Millisecond)
 			}
-			pig.settle(idleCollectionWait)
-			values := pig.snapshot(snapshots, 1)
-			cpus := memSweepCPUsAllowed(t, pig)
-			pig.exit()
+			ompig.settle(idleCollectionWait)
+			values := ompig.snapshot(snapshots, 1)
+			cpus := memSweepCPUsAllowed(t, ompig)
+			ompig.exit()
 			sent := int64(model.lastRequestBytes())
 			memSweepWrite(t, out, memSweepPoint{
 				Scenario: "tmux_idle", N: prompts, HistoryBytes: sent, ContextBytes: sent, GoMaxProcs: procs, CPUsAllowed: cpus,
@@ -238,7 +238,7 @@ func TestMemoryScalingSweepTmux(t *testing.T) {
 // heap at exit should not follow the history (M7).
 func TestMemoryScalingSweepResume(t *testing.T) {
 	out := memSweepOut(t)
-	binary, err := pigBinary()
+	binary, err := ompigBinary()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -252,15 +252,15 @@ func TestMemoryScalingSweepResume(t *testing.T) {
 			warm := memSweepStart(t, home, binary, boltArgs, 120, 40)
 			warm.ready()
 			warm.exit()
-			pig := memSweepStart(t, home, binary, args, 120, 40)
-			pig.ready()
-			since := pig.mark()
-			pig.send(boltPrompt)
+			ompig := memSweepStart(t, home, binary, args, 120, 40)
+			ompig.ready()
+			since := ompig.mark()
+			ompig.send(boltPrompt)
 			time.Sleep(50 * time.Millisecond)
-			pig.send("\r")
-			pig.waitFor(since, "Done: read all four files", 100*time.Millisecond)
-			cpus := memSweepCPUsAllowed(t, pig)
-			record := pig.exit()
+			ompig.send("\r")
+			ompig.waitFor(since, "Done: read all four files", 100*time.Millisecond)
+			cpus := memSweepCPUsAllowed(t, ompig)
+			record := ompig.exit()
 			memSweepWrite(t, out, memSweepPoint{Scenario: "resume", N: history, HistoryBytes: historyBytes, ContextBytes: int64(model.lastRequestBytes()), HeapLive: record.HeapLiveBytes, GoMaxProcs: procs, CPUsAllowed: cpus})
 		})
 	}

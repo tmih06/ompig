@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // createMcpToolName and convertMcpResult against Pi's tools.js: text, image, audio, resource-link, text and binary embedded resources (mime types with parameters and case, URIs with and

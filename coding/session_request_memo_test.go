@@ -8,9 +8,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // recordingDeltaProvider answers like scalingDeltaProvider and keeps the request it received.
@@ -39,7 +39,7 @@ var requestTimestamp = regexp.MustCompile(`"timestamp":\d+`)
 
 // A Session's requests are the same whatever the agent remembers of earlier conversions: after each of a context edit, a fork back and forward, and a thinking-level change, the next request equals the one an agent that converts the whole history every time builds (agent.ConvertToLLM as its ConvertToLlm).
 func TestSessionRequestsMatchTheStandardConversionAfterHistoryOperations(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

@@ -246,7 +246,7 @@ func toJSUnits(text string) string {
 func jsAlternation(patterns ...string) *regexp.Regexp { return jsRegexp(strings.Join(patterns, "|")) }
 
 // overflowPatterns, nonOverflowPatterns and cerebrasBodylessOverflowPattern are overflow.ts's OVERFLOW_PATTERNS, NON_OVERFLOW_PATTERNS and CEREBRAS_BODYLESS_OVERFLOW_PATTERN. Each
-// alternative is tried on its own, as Pi's .some() does, so its anchors keep their meaning. Every pattern compiles on first use: the pig binary links this package, and compiling at
+// alternative is tried on its own, as Pi's .some() does, so its anchors keep their meaning. Every pattern compiles on first use: the ompig binary links this package, and compiling at
 // package initialization cost startup allocations on every run (TestPackageInitWorkBudget).
 var (
 	overflowPatterns = lazyEach(

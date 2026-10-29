@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestNodeContextExposesRunMode pins ctx.mode for node extensions.
@@ -81,7 +81,7 @@ func TestNodeContextExposesRunMode(t *testing.T) {
 //
 // Upstream declares it on ExtensionContext (core/extensions/types.ts:332) and
 // resolves it live through the settings manager, since trust can be granted
-// mid-session. pig had the project_trust event but not the accessor, so an
+// mid-session. ompig had the project_trust event but not the accessor, so an
 // extension calling it threw: pi-atelier died at startup with
 // "initializationContext.isProjectTrusted is not a function".
 func TestNodeContextExposesProjectTrust(t *testing.T) {
@@ -143,7 +143,7 @@ func TestNodeContextExposesProjectTrust(t *testing.T) {
 // components.
 //
 // Upstream TUI exposes `terminal` (tui.ts:333) and Terminal declares
-// columns/rows getters (terminal.ts:79-80). pig's overlay shim offered only
+// columns/rows getters (terminal.ts:79-80). ompig's overlay shim offered only
 // width/height, so a component reading tui.terminal.rows threw inside its own
 // render: pi-atelier failed with "Cannot read properties of undefined (reading
 // 'rows')" for ui.custom and 'columns' for its sidebar.
@@ -201,7 +201,7 @@ func TestCustomOverlayExposesTerminalGeometry(t *testing.T) {
 // factory as upstream's ReadonlyFooterDataProvider (footer-data-provider.ts:387):
 // getGitBranch, getExtensionStatuses, getAvailableProviderCount, onBranchChange.
 //
-// pig passed the raw state object instead, so pi-atelier's footer died with
+// ompig passed the raw state object instead, so pi-atelier's footer died with
 // "footerData.onBranchChange is not a function" and the extension crash-looped.
 func TestFooterFactoryReceivesProvider(t *testing.T) {
 	shortSockDir(t)
@@ -285,7 +285,7 @@ func TestFooterFactoryReceivesProvider(t *testing.T) {
 // calls this.ui.requestRender() synchronously in the same in-process
 // runtime, so the next render always sees the new value.
 //
-// Pig's footer factory runs in a separate Node subprocess and only
+// Ompig's footer factory runs in a separate Node subprocess and only
 // re-renders on a pushed state_update (runtime.mjs applyState ->
 // renderSpecialSurface). Before UIBridge.OnStateChanged was wired to
 // Host.BroadcastStateUpdate, ui.setStatus never triggered that push, so a

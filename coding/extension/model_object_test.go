@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 type modelObjectIDProvider struct{ ai.Provider }
@@ -22,7 +22,7 @@ func modelObjectString(t *testing.T, model ai.AnyModel) string {
 }
 
 // A model that no catalog record describes is Pi's composed model object: its members in provider-composer.ts:230-248's order,
-// absent members left out, and none of PiG's own (no modelId, displayName or flat prices).
+// absent members left out, and none of Ompig's own (no modelId, displayName or flat prices).
 func TestModelObjectOfAComposedModelHasPisMembersInPisOrder(t *testing.T) {
 	low := "low"
 	model := &ai.Model{

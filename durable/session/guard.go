@@ -7,8 +7,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/internal/entryscan"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/internal/entryscan"
 )
 
 // failureLatch is the Session's failure state, which the guard reads and sets, and the end of the publication a Storage

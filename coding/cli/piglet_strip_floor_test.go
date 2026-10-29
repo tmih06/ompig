@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// The functional floor (D92) holds at startup as Piglet validation does: a
-// Piglet whose effective strip removes every built-in tool and /quit is
-// refused like any other invalid requested Piglet (the resolution warning,
-// then exit 1 before a session). A Piglet that strips /quit alone or every
+// The functional floor (D92) holds at startup as Ompiglet validation does: a
+// Ompiglet whose effective strip removes every built-in tool and /quit is
+// refused like any other invalid requested Ompiglet (the resolution warning,
+// then exit 1 before a session). A Ompiglet that strips /quit alone or every
 // tool alone loads and answers.
 func TestPigletStripFloorAtStartup(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
@@ -28,7 +28,7 @@ func TestPigletStripFloorAtStartup(t *testing.T) {
 		return path
 	}
 	write("chat", "name: chat\nstrip:\n  tools: ["+tools+"]\n")
-	floor := "a Piglet can't strip every tool and /quit (strip.tools: " + tools + "; strip.commands: /quit); keep at least one tool or /quit"
+	floor := "a Ompiglet can't strip every tool and /quit (strip.tools: " + tools + "; strip.commands: /quit); keep at least one tool or /quit"
 	for _, tc := range []struct {
 		name, source string
 		refused      bool
@@ -40,20 +40,20 @@ func TestPigletStripFloorAtStartup(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			path := write(strings.ReplaceAll(tc.name, " ", "-"), tc.source)
 			home := t.TempDir()
-			command := exec.CommandContext(t.Context(), binary, "--piglet", path, "--model", "test-faux/faux-1", "--no-session", "-p", "What is 20+22?")
+			command := exec.CommandContext(t.Context(), binary, "--ompiglet", path, "--model", "test-faux/faux-1", "--no-session", "-p", "What is 20+22?")
 			command.Dir = t.TempDir()
-			command.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_OFFLINE=1")
+			command.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1")
 			var stdout, stderr strings.Builder
 			command.Stdout, command.Stderr = &stdout, &stderr
 			err := command.Run()
-			warning := "warning: piglet " + path + ": "
+			warning := "warning: ompiglet " + path + ": "
 			if tc.refused {
 				var exit *exec.ExitError
 				if !errors.As(err, &exit) || exit.ExitCode() != 1 || stdout.Len() != 0 {
 					t.Fatalf("err = %v, stdout = %q, want exit 1 with no answer\nstderr:\n%s", err, stdout.String(), stderr.String())
 				}
-				if !strings.Contains(stderr.String(), warning) || !strings.Contains(stderr.String(), floor) || !strings.Contains(stderr.String(), "pig: the requested Piglet could not be loaded") {
-					t.Fatalf("stderr does not refuse the Piglet with the floor rule:\n%s", stderr.String())
+				if !strings.Contains(stderr.String(), warning) || !strings.Contains(stderr.String(), floor) || !strings.Contains(stderr.String(), "ompig: the requested Ompiglet could not be loaded") {
+					t.Fatalf("stderr does not refuse the Ompiglet with the floor rule:\n%s", stderr.String())
 				}
 				return
 			}
@@ -61,7 +61,7 @@ func TestPigletStripFloorAtStartup(t *testing.T) {
 				t.Fatalf("err = %v\nstderr:\n%s", err, stderr.String())
 			}
 			if strings.TrimSpace(stdout.String()) != "42" || strings.Contains(stderr.String(), warning) {
-				t.Fatalf("allowed Piglet: stdout = %q\nstderr:\n%s", stdout.String(), stderr.String())
+				t.Fatalf("allowed Ompiglet: stdout = %q\nstderr:\n%s", stdout.String(), stderr.String())
 			}
 		})
 	}

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // diff.ts:renderDiff against pinned Pi: line classification, tab replacement, and the intra-line word diff (the npm diff package's
@@ -102,7 +102,7 @@ func TestRenderDiffMatchesPi(t *testing.T) {
 			if failures++; failures > 5 {
 				continue
 			}
-			t.Errorf("diff %q:\n  Pig %q\n  Pi  %q", diff, got, expected[i])
+			t.Errorf("diff %q:\n  Ompig %q\n  Pi  %q", diff, got, expected[i])
 		}
 	}
 	if failures > 5 {

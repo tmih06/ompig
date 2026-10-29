@@ -6,9 +6,9 @@
 package docs
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // AgentDef is AgentDoc: the conversation's agent state, rewindable so forks start from the agent at their fork entry. Its

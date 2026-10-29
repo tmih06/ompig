@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's TreeList.getSearchableText and getEntryCopyText (modes/interactive/components/tree-selector.js) run against the vendored Pi module over the shared tree-entry corpus, with and without a branch label.

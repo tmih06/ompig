@@ -12,9 +12,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["python3", "test/parity/testdata/session-wire.py", "--case", "modal-shutdown"]
+ompig_args = ["python3", "test/parity/testdata/session-wire.py", "--case", "modal-shutdown"]
 pi_args = ["python3", "test/parity/testdata/session-wire.py", "--bin", "extensions/sdk-ts/node_modules/.bin/pi", "--case", "modal-shutdown"]
 
 [cli]

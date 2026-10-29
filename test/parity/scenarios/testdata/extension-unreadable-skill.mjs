@@ -7,7 +7,7 @@ import { join } from "node:path";
 export default function (pi) {
 	let file;
 	pi.on("resources_discover", () => {
-		const root = mkdtempSync(join(tmpdir(), "pig-parity-skill-"));
+		const root = mkdtempSync(join(tmpdir(), "ompig-parity-skill-"));
 		mkdirSync(join(root, "boom"));
 		file = join(root, "boom", "SKILL.md");
 		writeFileSync(file, "---\nname: boom\ndescription: Unreadable once the prompt starts.\n---\nbody\n");

@@ -1,6 +1,6 @@
 # Extension Language Decision Rubric
 
-When writing a new pig extension, use this rubric to decide between Go and Rust.
+When writing a new ompig extension, use this rubric to decide between Go and Rust.
 
 ## Quick Decision
 
@@ -10,7 +10,7 @@ When writing a new pig extension, use this rubric to decide between Go and Rust.
 
 | Factor | Why |
 |--------|-----|
-| **Session/context access** | Go extensions share types with Pig's `agent` package, such as `AgentMessage`. |
+| **Session/context access** | Go extensions share types with Ompig's `agent` package, such as `AgentMessage`. |
 | **File system heavy** | `os.ReadFile`, `filepath.Walk`, `json.Unmarshal` are simpler than Rust equivalents. |
 | **Prototype / iterate fast** | Faster compile (Go: ~1s, Rust: ~5-15s first build, ~2s incremental). |
 | **Complex JSON handling** | `encoding/json` with `map[string]any` is ergonomic for dynamic shapes. Rust requires `serde_json::Value` gymnastics. |

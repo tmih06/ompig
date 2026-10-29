@@ -11,9 +11,9 @@ from typing import Any
 
 import pytest
 
-import pig_sdk
-from pig_sdk import _WithSessionRegistry
-from pig_sdk.session_manager import SetupSessionManager
+import ompig_sdk
+from ompig_sdk import _WithSessionRegistry
+from ompig_sdk.session_manager import SetupSessionManager
 
 
 class _Ctx:
@@ -85,10 +85,10 @@ def test_new_session_names_the_setup_callback_by_handle() -> None:
         extension=SimpleNamespace(name="py-ext", _setups=setups),
         _call_replacement=call_replacement,
     )
-    result = pig_sdk.Context.new_session(self_, {"parentSession": "/p.jsonl", "setup": lambda manager: None})  # type: ignore[arg-type]
+    result = ompig_sdk.Context.new_session(self_, {"parentSession": "/p.jsonl", "setup": lambda manager: None})  # type: ignore[arg-type]
     assert result == {"cancelled": False}
     assert len(sent) == 1 and sent[0]["method"] == "newSession" and sent[0]["parentSession"] == "/p.jsonl"
     assert isinstance(sent[0]["setup"], str) and holder["registered"] is True
     assert setups._entries == {}  # noqa: SLF001  the handle is released once the call returns
     with pytest.raises(TypeError, match="setup must be callable"):
-        pig_sdk.Context.new_session(self_, {"setup": "nope"})  # type: ignore[arg-type]
+        ompig_sdk.Context.new_session(self_, {"setup": "nope"})  # type: ignore[arg-type]

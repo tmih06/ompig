@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
-// Pi has ONE withFileMutationQueue (core/tools/file-mutation-queue.ts: a module-level map) that the built-in edit and write tools and every extension share. PiG's
+// Pi has ONE withFileMutationQueue (core/tools/file-mutation-queue.ts: a module-level map) that the built-in edit and write tools and every extension share. Ompig's
 // extension SDKs run in processes of their own, so the queue is the host's (the one the built-in tools use) and each SDK asks it for the file's turn over the wire.
 // An SDK that kept a private queue would admit its task at once while a built-in tool (or an extension in another process) holds the file, and would leave the
 // host's queue free while its own task holds the file: a lost update, which these rows observe from outside. The host's side of "held" is read through

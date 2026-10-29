@@ -213,9 +213,9 @@ function stripBom(content) {
 __name(stripBom, "stripBom");
 
 // pi-dist/pi-coding-agent/config.js
-import { CONFIG_DIR_NAME } from "../../../pig-config.mjs";
-import { ENV_AGENT_DIR } from "../../../pig-config.mjs";
-import { CONFIG_DIR_NAME as CONFIG_DIR_NAME2, getAgentDir } from "../../../pig-config.mjs";
+import { CONFIG_DIR_NAME } from "../../../ompig-config.mjs";
+import { ENV_AGENT_DIR } from "../../../ompig-config.mjs";
+import { CONFIG_DIR_NAME as CONFIG_DIR_NAME2, getAgentDir } from "../../../ompig-config.mjs";
 var __filename = fileURLToPath2(new URL("../config.js", import.meta.url).href);
 var __dirname = dirname(__filename);
 var isBunBinary = new URL("../config.js", import.meta.url).href.includes("$bunfs") || new URL("../config.js", import.meta.url).href.includes("~BUN") || new URL("../config.js", import.meta.url).href.includes("%7EBUN");
@@ -599,7 +599,7 @@ try {
 }
 var piConfigName = pkg.piConfig?.name;
 var PACKAGE_NAME = pkg.name || "@earendil-works/pi-coding-agent";
-var APP_NAME = "pig";
+var APP_NAME = "ompig";
 var APP_TITLE = piConfigName ? APP_NAME : "\u03C0";
 var VERSION = pkg.version || "0.0.0";
 var ENV_SESSION_DIR = `${APP_NAME.toUpperCase()}_CODING_AGENT_SESSION_DIR`;

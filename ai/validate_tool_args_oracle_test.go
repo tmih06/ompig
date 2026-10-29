@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 const pinnedTypeboxVersion = "1.3.27"
@@ -170,7 +170,7 @@ func validateProbes() []validateProbe {
 	}...)
 }
 
-// validateToolArguments (Pi's validation.ts, typebox 1.3.27 Value.Convert, the JSON-schema coercion pass and Compile/Check/Errors) runs in Node on the same schemas and arguments: Pig's ValidateToolArgumentsSchema must
+// validateToolArguments (Pi's validation.ts, typebox 1.3.27 Value.Convert, the JSON-schema coercion pass and Compile/Check/Errors) runs in Node on the same schemas and arguments: Ompig's ValidateToolArgumentsSchema must
 // return the same coerced arguments, or fail with the same message.
 func TestValidateToolArgumentsMatchesPiOnSeededSchemas(t *testing.T) {
 	probes := validateProbes()
@@ -221,7 +221,7 @@ func TestValidateToolArgumentsMatchesPiOnSeededSchemas(t *testing.T) {
 				if want.Err != nil {
 					wantText = "ERR " + *want.Err
 				}
-				t.Errorf("schema %s\n args %s\n  Pig %s\n  Pi  %s", probe.Schema, probe.Args, have, wantText)
+				t.Errorf("schema %s\n args %s\n  Ompig %s\n  Pi  %s", probe.Schema, probe.Args, have, wantText)
 			}
 		}
 	}

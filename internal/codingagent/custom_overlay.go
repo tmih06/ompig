@@ -5,9 +5,9 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // customOverlay is the Go-side counterpart to a remote (subprocess) custom
@@ -18,7 +18,7 @@ import (
 //
 // Render copies cached rows on the owning TUI loop and performs no subprocess I/O. UpdateLines accepts concurrent producer updates.
 //
-// pig-specific: no upstream equivalent. Upstream's CustomComponent is
+// ompig-specific: no upstream equivalent. Upstream's CustomComponent is
 // constructed in-process by the extension; the subprocess shim instead
 // caches lines and forwards input.
 type customOverlay struct {
@@ -256,7 +256,7 @@ var (
 // overlay options. Upstream showOverlay mounts the component with no frame and
 // resolves width/maxHeight/anchor/margin from overlayOptions (defaulting to
 // min(80, available) centred), so that is the path unless the caller used
-// pig's legacy modal fields (title/widthFraction/heightFraction) without
+// ompig's legacy modal fields (title/widthFraction/heightFraction) without
 // upstream overlayOptions.
 func remoteOverlayTUIOptions(opts extension.RemoteOverlayOptions) tui.OverlayOptions {
 	legacyModal := opts.Title != "" || opts.WidthFraction > 0 || opts.HeightFraction > 0

@@ -1,4 +1,4 @@
-//go:build !pig_strip_docs
+//go:build !ompig_strip_docs
 
 package prompts
 
@@ -16,7 +16,7 @@ func TestDocsSectionNamesTheGivenReadmeAndDocsPaths(t *testing.T) {
 	if !strings.Contains(section, "- Main documentation: "+readme+"\n") || !strings.Contains(section, "- Additional docs: "+docs+"\n") || !strings.Contains(section, "- Examples: examples-here (extensions") {
 		t.Fatalf("docs section does not name the given paths:\n%s", section)
 	}
-	if section := docsSectionAt(docs, "", ""); !strings.Contains(section, "- Main documentation: "+filepath.Join(docs, "README.md")+"\n") || !strings.Contains(section, "- Examples: "+PigExamplesLocation+" (") {
+	if section := docsSectionAt(docs, "", ""); !strings.Contains(section, "- Main documentation: "+filepath.Join(docs, "README.md")+"\n") || !strings.Contains(section, "- Examples: "+OmpigExamplesLocation+" (") {
 		t.Fatalf("an empty readme is not README.md inside the docs path:\n%s", section)
 	}
 }

@@ -8,11 +8,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // ctxReadEdit is the append text the handlers write into the emission's shared options before they read the prompt.
@@ -164,7 +164,7 @@ func ctxReadFactory(t *testing.T, root, language, name string) subprocess.ExtCon
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package ctxread
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.OnEvent("before_agent_start",func(ctx sdk.Context,data map[string]any)(any,error){
@@ -178,9 +178,9 @@ func Extension()*sdk.Extension {
 }`, name, ctxReadEdit)
 	case "python":
 		path = filepath.Join(cfg.Source, name+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  def handler(ctx,data):
   before=ctx.get_system_prompt()
   data["systemPromptOptions"]["appendSystemPrompt"]=%q
@@ -191,7 +191,7 @@ def new_extension():
 `, name, ctxReadEdit)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.on_before_agent_start(|ctx,event| {

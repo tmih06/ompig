@@ -22,11 +22,11 @@ func TestSourceReadable(t *testing.T) {
 			t.Fatalf("embedded %s is empty", name)
 		}
 	}
-	// The package init is 300 KB of text, so the bundle embeds it as pig_sdk/__init__.py.gz.
-	if !slices.Contains(BundledFiles(), "pig_sdk/__init__.py.gz") {
-		t.Fatal("BundledFiles must include the pig_sdk package init so the staged SDK is importable")
+	// The package init is 300 KB of text, so the bundle embeds it as ompig_sdk/__init__.py.gz.
+	if !slices.Contains(BundledFiles(), "ompig_sdk/__init__.py.gz") {
+		t.Fatal("BundledFiles must include the ompig_sdk package init so the staged SDK is importable")
 	}
-	compressed, err := Source.ReadFile("pig_sdk/__init__.py.gz")
+	compressed, err := Source.ReadFile("ompig_sdk/__init__.py.gz")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,14 +36,14 @@ func TestSourceReadable(t *testing.T) {
 	}
 	data, err := io.ReadAll(reader)
 	if err != nil || !strings.Contains(string(data), "class Extension") {
-		t.Fatalf("embedded pig_sdk/__init__.py.gz is not the SDK module: err=%v", err)
+		t.Fatalf("embedded ompig_sdk/__init__.py.gz is not the SDK module: err=%v", err)
 	}
 }
 
 // A module the package imports at load must be staged: a staged SDK that lacks one fails to import in every Python extension.
 func TestEveryPackageSourceIsBundled(t *testing.T) {
 	bundled := BundledFiles()
-	err := filepath.WalkDir("pig_sdk", func(path string, entry fs.DirEntry, err error) error {
+	err := filepath.WalkDir("ompig_sdk", func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -67,7 +67,7 @@ func TestEveryPackageSourceIsBundled(t *testing.T) {
 // A compressed copy is the file it stands for: staging writes the decompressed text under the name without .gz.
 func TestCompressedCopiesHoldTheirFilesText(t *testing.T) {
 	found := 0
-	err := filepath.WalkDir("pig_sdk", func(path string, entry fs.DirEntry, err error) error {
+	err := filepath.WalkDir("ompig_sdk", func(path string, entry fs.DirEntry, err error) error {
 		if err != nil || entry.IsDir() || !strings.HasSuffix(path, ".py.gz") {
 			return err
 		}

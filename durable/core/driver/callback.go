@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/payload"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/payload"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // Callback is host code Pi runs inside an open commit callback: the core holds a transaction (tx) open and waits for the

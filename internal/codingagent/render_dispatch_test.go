@@ -11,8 +11,8 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // drainMainLoopOnce runs, like inputLoop, every posted UI task and scheduled
@@ -33,7 +33,7 @@ func (m *InteractiveMode) drainMainLoopOnce() {
 // A throttled render requested while the UI task queue is saturated (the main
 // loop stalled under load while spinner ticks and worker posts piled up) must
 // still paint once the loop catches up. Upstream's requestRender timer callback
-// always runs; pig used to post the render into the bounded task queue with a
+// always runs; ompig used to post the render into the bounded task queue with a
 // non-blocking send and silently drop it, leaving the screen stale until the
 // next keystroke.
 func TestScheduledRenderSurvivesSaturatedUITaskQueue(t *testing.T) {

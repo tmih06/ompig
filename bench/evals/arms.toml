@@ -2,18 +2,18 @@
 #
 # How each arm is run. What it is (version, source, checksums) is pinned in arms.lock, never here.
 #
-#   family        pig | pi | claude | codex | copilot: how the harness is pointed at the mock endpoint
+#   family        ompig | pi | claude | codex | copilot: how the harness is pointed at the mock endpoint
 #   no_extensions the arm cannot load extensions (its runtime is stripped)
-#   piglet        a Piglet file built into a stripped Binary by the pig-0.5 arm
+#   ompiglet        a Ompiglet file built into a stripped Binary by the ompig-0.5 arm
 #   version_args  argv whose output must contain the pinned version
 
-[arms.pig-0_5]
-name = "PiG 0.5.0 line (this checkout, stock build)"
-family = "pig"
+[arms.ompig-0_5]
+name = "Ompig 0.5.0 line (this checkout, stock build)"
+family = "ompig"
 
-[arms.pig-0_4_1]
-name = "PiG 0.4.1 (release binary)"
-family = "pig"
+[arms.ompig-0_4_1]
+name = "Ompig 0.4.1 (release binary)"
+family = "ompig"
 
 [arms.pi-1_1_0]
 name = "Pi 1.1.0"
@@ -31,15 +31,15 @@ family = "codex"
 name = "GitHub Copilot CLI (BYOK)"
 family = "copilot"
 
-[arms.pig-core]
-name = "Piglet pig-core (deny-mode strip, built from this checkout)"
-family = "pig"
-piglet = "piglets/pig-core.yaml"
+[arms.ompig-core]
+name = "Ompiglet ompig-core (deny-mode strip, built from this checkout)"
+family = "ompig"
+ompiglet = "ompiglets/ompig-core.yaml"
 
-[arms.pig-min]
-name = "Piglet pig-min (keep-mode strip, built from this checkout)"
-family = "pig"
-piglet = "piglets/pig-min.yaml"
+[arms.ompig-min]
+name = "Ompiglet ompig-min (keep-mode strip, built from this checkout)"
+family = "ompig"
+ompiglet = "ompiglets/ompig-min.yaml"
 no_extensions = true
 
 # The Rust port of Pi run from its own release binary (built with the release flags of their authors). They read Pi's models.json, so the
@@ -75,7 +75,7 @@ family = "opencode"
 third_party = true
 no_extensions = true
 
-# The same checkout built with the locked CPU profile (locks/pig-0.5.pgo): the Go half of the build 2x2 (default vs profile-guided).
-[arms.pig-0_5-pgo]
-name = "PiG 0.5.0 line (this checkout, profile-guided build)"
-family = "pig"
+# The same checkout built with the locked CPU profile (locks/ompig-0.5.pgo): the Go half of the build 2x2 (default vs profile-guided).
+[arms.ompig-0_5-pgo]
+name = "Ompig 0.5.0 line (this checkout, profile-guided build)"
+family = "ompig"

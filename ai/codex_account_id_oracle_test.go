@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // codexTokenInputs wrap payloads that carry (or lack) the account claim in JWT shapes Pi's atob-based decodeJwt reads differently from a base64url
@@ -80,7 +80,7 @@ func TestCodexAccountIDMatchesPi(t *testing.T) {
 		}
 		if got := CodexAccountID(token); got != expected[i] {
 			if differing++; differing <= 12 {
-				t.Errorf("token %q: Pig %q, Pi %q", strings.TrimSpace(token), got, expected[i])
+				t.Errorf("token %q: Ompig %q, Pi %q", strings.TrimSpace(token), got, expected[i])
 			}
 		}
 	}

@@ -4,7 +4,7 @@
 No model is called. The mock answers a scripted turn but fails chosen requests with HTTP 429 or 500, or drops the connection before a
 reply or part-way through a stream; the host kills the harness while a tool call runs, or sends SIGTERM during a stream.
 
-Expectations come from Pi 1.1.0, never from PiG. Every fault has an invariant that must hold for every arm (the process ends within
+Expectations come from Pi 1.1.0, never from Ompig. Every fault has an invariant that must hold for every arm (the process ends within
 the time limit; a session file stays parseable) and a signature of what the user observes (exit class, whether the reply arrived,
 how many times it printed, and for a kill, the message roles the model receives after resume). An arm passes a fault when the
 invariants hold and its signature equals the Pi arm's signature for the same fault. The Pi arm passes when the invariants hold.
@@ -235,7 +235,7 @@ def judge(result):
             reasons = sorted({f for r in runs for f in r["invariant_failures"]})
             if sig is None:
                 reasons.append("outcome differs between repetitions")
-            compare = arm_id.startswith(("pig", "pi-"))
+            compare = arm_id.startswith(("ompig", "pi-"))
             if compare and arm_id != oracle:
                 if want is None:
                     reasons.append(f"no stable {oracle} signature to compare with")
@@ -243,5 +243,5 @@ def judge(result):
                     reasons.append(f"differs from {oracle}: {json.dumps(sig, sort_keys=True)} vs {json.dumps(want, sort_keys=True)}")
             verdicts.setdefault(name, {})[arm_id] = {"pass": not reasons, "reasons": reasons, "signature": sig, "scored_against": oracle if compare and arm_id != oracle else ("invariants" if compare else "invariants only")}
     result["verdicts"] = verdicts
-    result["ok"] = all(v["pass"] for by in verdicts.values() for a, v in by.items() if a.startswith(("pig", "pi-"))) and not result["egress"]["violations"]
+    result["ok"] = all(v["pass"] for by in verdicts.values() for a, v in by.items() if a.startswith(("ompig", "pi-"))) and not result["egress"]["violations"]
     return result

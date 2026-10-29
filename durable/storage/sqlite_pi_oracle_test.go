@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func runPigSQLite(t *testing.T, programs []oracleProgram, dirs []string, readsOnly bool) [][]oracleResult {
@@ -37,7 +37,7 @@ func runPigSQLite(t *testing.T, programs []oracleProgram, dirs []string, readsOn
 	return out
 }
 
-// Pi's SQLite storage and Pig's run the same seeded programs on their own database files, then each opens the other's file: the answers, and what a reopened storage reads back, must agree, so the two implementations share one schema and one row encoding.
+// Pi's SQLite storage and Ompig's run the same seeded programs on their own database files, then each opens the other's file: the answers, and what a reopened storage reads back, must agree, so the two implementations share one schema and one row encoding.
 func TestSqliteStorageMatchesPiOnSeededPrograms(t *testing.T) {
 	const seeded = 150
 	programs := make([]oracleProgram, seeded)
@@ -51,29 +51,29 @@ func TestSqliteStorageMatchesPiOnSeededPrograms(t *testing.T) {
 	programs = append(programs, statusPrecedencePrograms()...)
 	programs = append(programs, indexedStringPrograms()...)
 	base := t.TempDir()
-	piDirs, pigDirs := make([]string, len(programs)), make([]string, len(programs))
+	piDirs, ompigDirs := make([]string, len(programs)), make([]string, len(programs))
 	for i := range programs {
-		piDirs[i], pigDirs[i] = filepath.Join(base, fmt.Sprintf("pi-%d", i)), filepath.Join(base, fmt.Sprintf("pig-%d", i))
-		for _, dir := range []string{piDirs[i], pigDirs[i]} {
+		piDirs[i], ompigDirs[i] = filepath.Join(base, fmt.Sprintf("pi-%d", i)), filepath.Join(base, fmt.Sprintf("ompig-%d", i))
+		for _, dir := range []string{piDirs[i], ompigDirs[i]} {
 			if err := os.MkdirAll(dir, 0o755); err != nil {
 				t.Fatal(err)
 			}
 		}
 	}
 	piWrite := runPiJSONL(t, "sqlite-write", programs, piDirs)
-	pigWrite := runPigSQLite(t, programs, pigDirs, false)
+	ompigWrite := runPigSQLite(t, programs, ompigDirs, false)
 	ops, failures, differing := map[string]int{}, 0, 0
 	for i, program := range programs {
-		differing += compareOracleResults(t, fmt.Sprintf("write program %d", i), program, pigWrite[i], piWrite[i], differing, ops, &failures)
+		differing += compareOracleResults(t, fmt.Sprintf("write program %d", i), program, ompigWrite[i], piWrite[i], differing, ops, &failures)
 	}
 	// What each writer left, before any reopen: the same schema, and the same rows byte for byte.
-	differing += compareSQLiteFiles(t, piDirs, pigDirs)
+	differing += compareSQLiteFiles(t, piDirs, ompigDirs)
 	piReadsPi := runPiJSONL(t, "sqlite-read", programs, piDirs)
-	piReadsPig := runPiJSONL(t, "sqlite-read", programs, pigDirs)
-	pigReadsPi := runPigSQLite(t, programs, piDirs, true)
-	pigReadsPig := runPigSQLite(t, programs, pigDirs, true)
+	piReadsPig := runPiJSONL(t, "sqlite-read", programs, ompigDirs)
+	ompigReadsPi := runPigSQLite(t, programs, piDirs, true)
+	ompigReadsPig := runPigSQLite(t, programs, ompigDirs, true)
 	for i, program := range programs {
-		for label, got := range map[string][]oracleResult{"Pi reads Pig's file": piReadsPig[i], "Pig reads Pi's file": pigReadsPi[i], "Pig reads its own file": pigReadsPig[i]} {
+		for label, got := range map[string][]oracleResult{"Pi reads Ompig's file": piReadsPig[i], "Ompig reads Pi's file": ompigReadsPi[i], "Ompig reads its own file": ompigReadsPig[i]} {
 			differing += compareOracleResults(t, fmt.Sprintf("%s, program %d", label, i), program, got, piReadsPi[i], differing, map[string]int{}, new(int))
 		}
 	}
@@ -115,17 +115,17 @@ func dumpSQLite(t *testing.T, dirs []string) []sqliteDump {
 	return dumps
 }
 
-// compareSQLiteFiles compares the schema and every row of Pi's and Pig's files. Indexed text columns (task kind, request ID, document kind and key) must match byte for byte, because a lookup compares them as stored; so must every record column except tasks', submissions' and entries' with model, edits or byTaskId, whose member order the generator does not reproduce (those compare decoded).
-func compareSQLiteFiles(t *testing.T, piDirs, pigDirs []string) int {
+// compareSQLiteFiles compares the schema and every row of Pi's and Ompig's files. Indexed text columns (task kind, request ID, document kind and key) must match byte for byte, because a lookup compares them as stored; so must every record column except tasks', submissions' and entries' with model, edits or byTaskId, whose member order the generator does not reproduce (those compare decoded).
+func compareSQLiteFiles(t *testing.T, piDirs, ompigDirs []string) int {
 	t.Helper()
-	piDumps, pigDumps := dumpSQLite(t, piDirs), dumpSQLite(t, pigDirs)
+	piDumps, ompigDumps := dumpSQLite(t, piDirs), dumpSQLite(t, ompigDirs)
 	differing := 0
 	for i := range piDumps {
-		pi, pig := piDumps[i], pigDumps[i]
+		pi, ompig := piDumps[i], ompigDumps[i]
 		for _, table := range []string{"tasks", "submissions", "entries"} {
-			for _, rows := range [][]map[string]any{pi.Tables[table], pig.Tables[table]} {
+			for _, rows := range [][]map[string]any{pi.Tables[table], ompig.Tables[table]} {
 				for _, row := range rows {
-					// An entry's model, data, edits and byTaskId come in the generator's order in Pi's row and in the record's field order in Pig's, as in compareJSONLBytes.
+					// An entry's model, data, edits and byTaskId come in the generator's order in Pi's row and in the record's field order in Ompig's, as in compareJSONLBytes.
 					if text := row["record"].(string); table == "entries" && !strings.Contains(text, `"model":`) && !strings.Contains(text, `"edits":`) && !strings.Contains(text, `"byTaskId":`) {
 						continue
 					}
@@ -137,21 +137,21 @@ func compareSQLiteFiles(t *testing.T, piDirs, pigDirs []string) int {
 				}
 			}
 		}
-		if !reflect.DeepEqual(pi.Schema, pig.Schema) {
+		if !reflect.DeepEqual(pi.Schema, ompig.Schema) {
 			if differing++; differing <= 4 {
-				t.Errorf("program %d: schema differs\n  Pig %v\n  Pi  %v", i, pig.Schema, pi.Schema)
+				t.Errorf("program %d: schema differs\n  Ompig %v\n  Pi  %v", i, ompig.Schema, pi.Schema)
 			}
 		}
 		for table, rows := range pi.Tables {
-			if !reflect.DeepEqual(rows, pig.Tables[table]) {
+			if !reflect.DeepEqual(rows, ompig.Tables[table]) {
 				if differing++; differing <= 4 {
-					t.Errorf("program %d: table %s differs\n  Pig %.1500v\n  Pi  %.1500v", i, table, pig.Tables[table], rows)
+					t.Errorf("program %d: table %s differs\n  Ompig %.1500v\n  Pi  %.1500v", i, table, ompig.Tables[table], rows)
 				}
 			}
 		}
-		if len(pig.Tables) != len(pi.Tables) {
+		if len(ompig.Tables) != len(pi.Tables) {
 			differing++
-			t.Errorf("program %d: Pig's file has %d tables, Pi's %d", i, len(pig.Tables), len(pi.Tables))
+			t.Errorf("program %d: Ompig's file has %d tables, Pi's %d", i, len(ompig.Tables), len(pi.Tables))
 		}
 	}
 	return differing

@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 
 # Source provenance
 
-This file records the source families distributed in the PiG repository. It complements file-level SPDX metadata and [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).
+This file records the source families distributed in the Ompig repository. It complements file-level SPDX metadata and [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).
 
 ## Repository history
 
@@ -12,7 +12,7 @@ The public repository starts from a reviewed clean source root. Earlier private 
 
 ## Upstream Pi
 
-PiG translates and adapts source from [Pi](https://github.com/earendil-works/pi).
+Ompig translates and adapts source from [Pi](https://github.com/earendil-works/pi).
 
 - Upstream release: `v0.99.1`
 - Upstream commit: `d86654abb8862e201933517d6f1fce9f88dd117f`
@@ -23,22 +23,22 @@ PiG translates and adapts source from [Pi](https://github.com/earendil-works/pi)
 
 The main translated families are `agent/`, `ai/`, `cmd/`, `coding/`,
 `internal/codingagent/`, `tui/`, and parity fixtures derived from observed Pi
-behavior. The REUSE annotations retain both upstream and PiG copyright
+behavior. The REUSE annotations retain both upstream and Ompig copyright
 information for translated families.
 
 The `.upstream/current/` directory is a local, ignored mirror. Run `make
 upstream-mirror` to obtain the pinned upstream source and verify its tag and
-commit. The mirror is not part of the PiG source archive.
+commit. The mirror is not part of the Ompig source archive.
 
 ## Public documentation website
 
-The website at https://pi-in-go.dev is built and hosted from a separate,
+The website at https://ompig.dev is built and hosted from a separate,
 private hosting repository, as pi.dev is for Pi. It renders the user
 documentation in `docs/site/docs/` and serves the installer in
 `docs/site/public/install.sh` and the knowledge graph JSON-LD in
 `docs/knowledge-graph/`, all from this repository. Portions of that
 documentation adapt Pi documentation under the upstream MIT license.
-PiG-specific pages and revisions carry the project MIT license. `REUSE.toml`
+Ompig-specific pages and revisions carry the project MIT license. `REUSE.toml`
 records both copyright families for adapted website documents. The hosting
 repository records the provenance of its own site code, data snapshots, and
 assets.
@@ -71,7 +71,7 @@ The exact distributed files and license texts are listed in [`NOTICE`](../../NOT
 
 ## Other adapted source
 
-PiG ports Pi code that identifies material from:
+Ompig ports Pi code that identifies material from:
 
 - OpenTUI;
 - `ansi-regex`; and
@@ -79,9 +79,9 @@ PiG ports Pi code that identifies material from:
 
 The relevant source files carry SPDX information. The corresponding notices are in [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).
 
-## PiG-authored material
+## Ompig-authored material
 
-PiG-specific extension hosting, Piglet infrastructure, parity tooling, schemas, documentation, and original artwork are licensed under MIT and carry the project copyright declaration through in-file SPDX headers or [`REUSE.toml`](../../REUSE.toml).
+Ompig-specific extension hosting, Ompiglet infrastructure, parity tooling, schemas, documentation, and original artwork are licensed under MIT and carry the project copyright declaration through in-file SPDX headers or [`REUSE.toml`](../../REUSE.toml).
 
 ## Release validation
 

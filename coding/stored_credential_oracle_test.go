@@ -13,9 +13,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 type storedCredentialProbe struct {
@@ -46,7 +46,7 @@ func TestReadStoredCredentialMatchesPi(t *testing.T) {
 	}
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_CODING_AGENT_DIR", agent)
 	t.Chdir(home)
 
@@ -146,7 +146,7 @@ func TestReadStoredCredentialMatchesPi(t *testing.T) {
 			credential = ReadStoredCredential(probe.Provider, path)
 		}
 		answer := answers[i]
-		// Pi returns the entry as written, falsy or not; Pig folds absent, undefined and falsy values into nil, which a caller testing the result treats alike.
+		// Pi returns the entry as written, falsy or not; Ompig folds absent, undefined and falsy values into nil, which a caller testing the result treats alike.
 		wantEntry := answer.Truthy
 		bad := ""
 		switch {

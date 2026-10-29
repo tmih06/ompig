@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/engine"
+import "github.com/tmih06/ompig/extensions/sdk/tui/internal/engine"
 
 // Keybinding is pi-tui's Keybinding: a keybinding id such as "tui.select.confirm" or "app.interrupt".
 type Keybinding = string

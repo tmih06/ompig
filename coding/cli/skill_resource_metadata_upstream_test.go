@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 type skillMetadataFixture struct {
@@ -20,8 +20,8 @@ func newSkillMetadataFixture(t *testing.T) skillMetadataFixture {
 	cwd, agent := t.TempDir(), t.TempDir()
 	t.Setenv("HOME", cwd)
 	t.Setenv("USERPROFILE", cwd)
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_OFFLINE", "1")
 	return skillMetadataFixture{cwd, agent, codingagent.NewSettingsManager(cwd, agent)}

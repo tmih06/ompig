@@ -5,7 +5,7 @@ package journeys
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 const (
@@ -24,7 +24,7 @@ var estimatedContext = []harness.Normalizer{
 
 // The bug-report hint names the running product.
 var bugReportHint = harness.Normalizer{
-	Pattern: `If this looks like a pig bug`, With: "If this looks like a pi bug", Kinds: []harness.Kind{harness.PiG},
+	Pattern: `If this looks like a ompig bug`, With: "If this looks like a pi bug", Kinds: []harness.Kind{harness.Ompig},
 	Reason: "the hint names the product (D2, product name)",
 }
 

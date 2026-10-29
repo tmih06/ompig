@@ -1,4 +1,4 @@
-// Pi 1.1.0 buildSystemPromptSections over the corpus the Go test TestSystemPromptProbesDump prints: one JSON line [ok, entries] or [error, message] per probe, without the product preamble and the docs section (PiG differs there by design: D22, D92).
+// Pi 1.1.0 buildSystemPromptSections over the corpus the Go test TestSystemPromptProbesDump prints: one JSON line [ok, entries] or [error, message] per probe, without the product preamble and the docs section (Ompig differs there by design: D22, D92).
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';

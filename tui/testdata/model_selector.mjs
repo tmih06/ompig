@@ -19,7 +19,7 @@ for (const test of JSON.parse(input)) {
   setKeybindings(new KeybindingsManager(test.bindings ?? {}));
   const models = test.all.map((m) => ({ ...m, api: "openai-responses", baseUrl: "", reasoning: false, input: ["text"], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 1000, maxTokens: 100 }));
   const find = (provider, id) => models.find((m) => m.provider === provider && m.id === id);
-  // The catalog refresh never settles, so the status stays "Refreshing model catalogs…" as Pig's picker shows it.
+  // The catalog refresh never settles, so the status stays "Refreshing model catalogs…" as Ompig's picker shows it.
   const runtime = { getAvailableSnapshot: () => models, getModel: find, getError: () => undefined, refresh: () => new Promise(() => {}) };
   const events = [];
   const component = new ModelSelectorComponent(

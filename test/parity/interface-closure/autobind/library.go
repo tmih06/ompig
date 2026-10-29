@@ -19,10 +19,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
-// Rule P1(b), the library route (LEAD-DECISION-P1): a Go field or method that no production path from cmd/pig reaches still closes
+// Rule P1(b), the library route (LEAD-DECISION-P1): a Go field or method that no production path from cmd/ompig reaches still closes
 // its row when all of these hold.
 //
 //	L1 the row's upstream package is a library: its package.json publishes an index (exports or main). The package that ships the
@@ -1396,7 +1396,7 @@ func (d *detector) testDouble(nt namedType) bool {
 // conformanceEvidence finds the cross-SDK conformance test that exercises a member of a double-only interface (L7): a test function
 // of test/extension-conformance (or named TestConformance*) whose body uses the upstream member name as an identifier or string literal (and, for an overload row, the
 // overload's literal such as the event name) as a word and whose comments cite a Pi file:line of a file that names the member. The
-// conformance suites drive the same capability through every SDK and the host wire, which is where Pig implements the interface.
+// conformance suites drive the same capability through every SDK and the host wire, which is where Ompig implements the interface.
 func (d *detector) conformanceEvidence(pkg string, s *sym) string {
 	lr := d.lib
 	member := d.row.Shape.Name

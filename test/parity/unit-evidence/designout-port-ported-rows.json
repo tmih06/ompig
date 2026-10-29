@@ -6,7 +6,7 @@
       "TestClientListToolsMatchesPiOnScriptedPages"
     ],
     "upstream_reference": "packages/mcp/src/client.ts:294-296 listTools; packages/mcp/src/client.ts:355-374 listAll",
-    "mutation": "mcp/client.go ListTools: replace 'tools = append(tools, tool)' with 'tools = append(tools, tool); break'; go test ./mcp -run TestClientListToolsMatchesPiOnScriptedPages fails ('PiG 1 tools, Pi 3'). Replacing 'return tools, nil' with 'return tools[:0], nil' fails it with 'PiG 0 tools, Pi 3'."
+    "mutation": "mcp/client.go ListTools: replace 'tools = append(tools, tool)' with 'tools = append(tools, tool); break'; go test ./mcp -run TestClientListToolsMatchesPiOnScriptedPages fails ('Ompig 1 tools, Pi 3'). Replacing 'return tools, nil' with 'return tools[:0], nil' fails it with 'Ompig 0 tools, Pi 3'."
   },
   {
     "upstream": "packages/chord/src/types.ts",

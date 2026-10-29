@@ -3,8 +3,8 @@ package jsonl_test
 import (
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi durable/src/storage/jsonl/storage.ts JsonlStorage forwards every read to the store it opened: drive the concrete

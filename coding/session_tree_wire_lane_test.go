@@ -6,8 +6,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // wireCapturingProviderLane records the transcript of every request it receives.
@@ -154,7 +154,7 @@ func buildWireOracleTreeLane(t *testing.T, sess *Session) []string {
 // Pi builds the context from the session path, converts it, and
 // transformMessages closes every pending tool call at the next user turn, so a
 // navigation point between a tool call and one of its results never leaves a
-// tool_result without its tool_use. Pig normalizes before converting; this
+// tool_result without its tool_use. Ompig normalizes before converting; this
 // drives /tree navigation to every entry of a forked tree, with and without a
 // branch summary, sends a new prompt and checks the transcript the provider
 // receives.

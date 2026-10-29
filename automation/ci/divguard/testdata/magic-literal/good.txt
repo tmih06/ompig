@@ -20,7 +20,7 @@ const maxBytes = 50 * 1024 // upstream: agent/src/agent-loop.ts:DEFAULT_MAX_BYTE
 // queueLimit appears in agent/src/mapped.ts, which PORT_MAP maps here.
 const queueLimit = 250
 
-// pig divergence (D56): a recorded divergence allows its literal.
+// ompig divergence (D56): a recorded divergence allows its literal.
 const heartbeat = 5 * time.Second
 
 const maxSafeInteger = 1<<53 - 1

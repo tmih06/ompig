@@ -45,7 +45,7 @@ FAIL TestToolsWithDefaultActiveFalseAreActiveOnlyWhenNamed ::     session_tool_o
 --- FAIL: TestCompactionFileOperationsIncludeFilesTouchedByNestedCallsRecordedOnToolResults (0.00s)
     nested_calls_upstream_test.go:31: readFiles = [], want [a.ts]
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent/compaction	0.040s
+FAIL	github.com/tmih06/ompig/internal/codingagent/compaction	0.040s
 FAIL
 
 ## TestUpstreamConcurrentPrompt (changed upstream: steer/followUp resolve "queued")
@@ -55,7 +55,7 @@ FAIL
     --- FAIL: TestUpstreamConcurrentPrompt/should_allow_followUp()_while_streaming (0.01s)
         session_concurrent_upstream_test.go:242: followUp = "", <nil>; want "queued"
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.106s
+FAIL	github.com/tmih06/ompig/coding	0.106s
 FAIL
 
 ## TestManualCompactionResolvesAuthOnlyWhenPiSummarizesItself + changed 'throws when compacting without configured auth' (passes in red: Go resolved auth first, so an unseeded and a seeded session both report the auth error)
@@ -65,5 +65,5 @@ FAIL
     --- FAIL: TestManualCompactionResolvesAuthOnlyWhenPiSummarizesItself/an_extension-supplied_summary_needs_no_auth (0.00s)
         session_compaction_suite_upstream_test.go:350: result=<nil> error=No API key found for faux.
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.056s
+FAIL	github.com/tmih06/ompig/coding	0.056s
 FAIL

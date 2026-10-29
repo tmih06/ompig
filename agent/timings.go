@@ -8,7 +8,7 @@ import (
 
 // Recorder captures per-turn and per-tool timing data for one agent
 // session: turn start/end and tool execution latencies, so the status line,
-// /cost, and --diagnose can all read from a single source. It is PiG's own
+// /cost, and --diagnose can all read from a single source. It is Ompig's own
 // recorder; Pi's startup profiler (core/timings.ts) is
 // internal/codingagent/timings.
 //

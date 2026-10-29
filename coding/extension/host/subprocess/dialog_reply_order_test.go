@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // settleUI is a dialog UI whose answers a test controls: each Select hands the test the settle function its call carries

@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The host-surface rows (SdkCore3Plus): OnThemeChange, OnToolsExpandedChange, SetWidgetRenderer, Bell, ToolCallIndex, ToolInput and ToolParams, ExtensionSourceInfo, OnLoaded and a factory-time events.emit, in every SDK against the real subprocess Host. The Go fixture (testfixture/modeltypes/host_surface.go), the Rust fixture (testdata/modeltypes-rust), the Python fixture (model_types_test.go) and the Node fixture (testdata/model-types.mjs) carry the same tools, so one table of rows proves each SDK. Every value a row asserts is one the host or the fixture's own logic produces and no SDK fallback can: the theme the host switched to, the state the host toggled, the width it announced, the bell count its UI recorded, the batch position and argument order the agent loop produced.

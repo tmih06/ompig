@@ -24,7 +24,7 @@ Branch `port-99-catalog-gen`, base `staging/porter/pin-move` (6e8986038). Item 1
 
 ## Gates run
 
-`go build ./...`, `go vet` (ai, cmd, coding, codingagent), gofmt, `go fix -diff`, `GOOS=windows go vet` (ai, gen-models, check-model-data, codingagent), golangci-lint (0 issues) on ai, cmd/gen-models, cmd/check-model-data, internal/codingagent, cmd/pig. `go test ./ai` with `PI_SKIP_VERSION_CHECK=1`: only `TestAPIKeyProvidersMatchPinnedProviderDefinitions` (typesafe provider, family 3), `TestOpenAIHTTPErrorMatchesPi` and `TestOpenCodeModelsSmokeUpstream` (0.87.1 oracle guards, pin-move item 6) fail; all three failed at baseline. A wide run (`coding`, `internal`, `cmd`, `tui`, `test`) shows no failure caused by removed or changed models; the failures are ledgers for 0.99.1 (item 5), 0.87.1 oracles (6), missing python/rust toolchains, and the interface-extractor `typescript` module.
+`go build ./...`, `go vet` (ai, cmd, coding, codingagent), gofmt, `go fix -diff`, `GOOS=windows go vet` (ai, gen-models, check-model-data, codingagent), golangci-lint (0 issues) on ai, cmd/gen-models, cmd/check-model-data, internal/codingagent, cmd/ompig. `go test ./ai` with `PI_SKIP_VERSION_CHECK=1`: only `TestAPIKeyProvidersMatchPinnedProviderDefinitions` (typesafe provider, family 3), `TestOpenAIHTTPErrorMatchesPi` and `TestOpenCodeModelsSmokeUpstream` (0.87.1 oracle guards, pin-move item 6) fail; all three failed at baseline. A wide run (`coding`, `internal`, `cmd`, `tui`, `test`) shows no failure caused by removed or changed models; the failures are ledgers for 0.99.1 (item 5), 0.87.1 oracles (6), missing python/rust toolchains, and the interface-extractor `typescript` module.
 
 ## Loop self-report
 
@@ -33,7 +33,7 @@ Family: catalog generators (ai model data)
 Bugs found and fixed at the source (count: 4):
   - `check-model-data` still schema 3 (no type, no typed keys) -> schema 6 port @ cmd/check-model-data/model_data.go:20, model_data_json.go
   - `TestCodegenByteIdentical` resolved `.upstream/current` (0.87.1) and the removed image barrel -> published package / versioned mirror, three outputs @ ai/registry_test.go
-  - `TestDefaultModelPerProviderMatchesPinnedUpstream` read `.upstream/current` -> `.upstream/v<UpstreamVersion>` @ cmd/pig/model_test.go
+  - `TestDefaultModelPerProviderMatchesPinnedUpstream` read `.upstream/current` -> `.upstream/v<UpstreamVersion>` @ cmd/ompig/model_test.go
   - defaults pointed at models the regenerated catalog dropped -> 0.99.1 defaults @ internal/codingagent/default_models.go
 
 Comparators tightened (count: 3):
@@ -51,7 +51,7 @@ New file coverage (count: 0 PORT_MAP rows changed here; see below)
 Band-aids consciously chosen (count: 0)
 
 Scope expansion (count: 5 files outside the nominal item):
-  - internal/codingagent/default_models.go, cmd/pig/model_test.go, cmd/pig/model_resolver_defaults_upstream_test.go, internal/codingagent/interactive_post_login_integration_test.go: defaults forced by the regeneration; call sites audited via the cmd/pig and codingagent runs
+  - internal/codingagent/default_models.go, cmd/ompig/model_test.go, cmd/ompig/model_resolver_defaults_upstream_test.go, internal/codingagent/interactive_post_login_integration_test.go: defaults forced by the regeneration; call sites audited via the cmd/ompig and codingagent runs
   - test/parity/scenarios/model-runtime-store-catalog/16-image-model-data.toml + testdata: its oracle imported the deleted upstream script
 
 Cross-family scenarios re-probed/tightened (count: 1): model-runtime-store-catalog/16-image-model-data (oracle run by hand: identical output; `make parity` not run).

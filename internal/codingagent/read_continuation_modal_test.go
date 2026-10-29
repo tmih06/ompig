@@ -6,7 +6,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The main loop handles a terminal read whole: after a chunk that announces more of its read, it waits for the rest.

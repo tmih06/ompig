@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package codingagent
 
@@ -12,12 +12,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/text"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/text"
+	"github.com/tmih06/ompig/tui"
 )
 
 // RadiusMcpURL is the MCP endpoint of the gateway the built-in Radius provider signs in to (core/radius.ts:6).
@@ -27,7 +27,7 @@ var RadiusMcpURL = ai.NormalizeRadiusGatewayURL(ai.DefaultRadiusGateway) + "/mcp
 // server when missing. Nothing is asked when a global server already uses this login. Mirrors Pi's
 // offerRadiusMcpServer (interactive-mode.ts:6292-6343).
 func (m *InteractiveMode) offerRadiusMcpServer(providerID, providerName string) {
-	// pig additive (D92): a runtime stripped mcp offers nothing, like a build without it (interactive_radius_mcp_stripped.go).
+	// ompig additive (D92): a runtime stripped mcp offers nothing, like a build without it (interactive_radius_mcp_stripped.go).
 	if pigstrip.Has(pigstrip.ListExtensions, "mcp") {
 		return
 	}

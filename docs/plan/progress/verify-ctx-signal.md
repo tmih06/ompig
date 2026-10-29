@@ -6,11 +6,11 @@ Base: `staging/porter/pi-0.99.1`. Upstream 0.99.1 and 0.99.2 are identical for t
 
 Pi: `get signal()` returns `runner.getSignalFn()`, bound to `() => this.agent.signal` (`.upstream/v0.99.1/packages/coding-agent/src/core/agent-session.ts:3368`, `runner.ts:917-920`, `agent.ts:336-338`): the signal of the run in progress. It is `undefined` while no run is active, one object for the whole run, aborted with the run, and cleared before `agent_settled`.
 
-PiG, Node runtime (before this lane): the base context's `signal` was `undefined`, but every request context redefined it as that request's own `AbortController` signal (`runtime.mjs` request context, former line ~2004). The report's `runtime.mjs:838` is only the base context, so the Node behavior was "always defined, per request" rather than "undefined". The Go, Python and Rust SDKs had no run signal at all: Go `ctx.Done()`/`Err()` and Rust/Python `is_cancelled()` were the request's cancellation, and `docs/extension-api-parity.md` listed `ctx.signal` as "complete" against that stand-in.
+Ompig, Node runtime (before this lane): the base context's `signal` was `undefined`, but every request context redefined it as that request's own `AbortController` signal (`runtime.mjs` request context, former line ~2004). The report's `runtime.mjs:838` is only the base context, so the Node behavior was "always defined, per request" rather than "undefined". The Go, Python and Rust SDKs had no run signal at all: Go `ctx.Done()`/`Err()` and Rust/Python `is_cancelled()` were the request's cancellation, and `docs/extension-api-parity.md` listed `ctx.signal` as "complete" against that stand-in.
 
-Probed with one fixture (`cmd/pig/testdata/ctx-signal.mjs`) under the real Pi package (0.99.1 build) in RPC mode and under PiG RPC (`TestExtensionContextSignalComparedWithPi`):
+Probed with one fixture (`cmd/ompig/testdata/ctx-signal.mjs`) under the real Pi package (0.99.1 build) in RPC mode and under Ompig RPC (`TestExtensionContextSignalComparedWithPi`):
 
-| point | Pi | PiG before |
+| point | Pi | Ompig before |
 |---|---|---|
 | `session_start`, idle command | `undefined` | defined, a fresh signal each |
 | `agent_start`, `tool_execution_start`, `tool_call`, tool `execute`, command issued during the run | one object (`s1`), `aborted:false` | a different signal per request |
@@ -19,12 +19,12 @@ Probed with one fixture (`cmd/pig/testdata/ctx-signal.mjs`) under the real Pi pa
 | `agent_end` after an abort | same object, `aborted:true` | new signal, `aborted:false` |
 | `agent_settled` | `undefined` | defined |
 
-Question 3 of the task: it is the run's signal in Pi (aborting the run aborts it while a handler's request is in flight); PiG's was the request's only.
+Question 3 of the task: it is the run's signal in Pi (aborting the run aborts it while a handler's request is in flight); Ompig's was the request's only.
 
 ## Fix (Pi-faithful, every path)
 
 - Host (`coding/extension/host/subprocess/run_signal.go`): `ctx.signal` is replicated, as `isIdle` is, because a runtime cannot read the host's `context.Context`. A `run_signal` notify `{run, active, aborted}` precedes every request a runtime serves (`pushStateTo`), and a watcher (`context.AfterFunc` on the run's signal) forwards the abort to every runtime at once. `Conn.beforeCancel` sends the abort before the cancel frame of a cancelled request, so a handler never sees its own cancellation before `ctx.signal` aborted (Pi aborts one signal for both). Per-Conn state is updated under one lock, so a later state never overtakes an earlier one.
-- Binding: `ContextActions.GetSignal` / `HostCallbacks.GetSignal` (Pi `ExtensionContextActions.getSignal`, `types.ts:2158`) is bound to the agent's run signal in every mode: `Session.Signal` (SDK Session, `bindExtensionCore`, `bindExtensionCommandActions`), `cmd/pig/session_extension_actions.go` (print, JSON, RPC, bridge host action `getSignal`), and interactive mode (`InteractiveMode.extensionSignal`, context actions and bridge). `TestInteractiveModeBindsEveryHostCallback` now also guards the new callback.
+- Binding: `ContextActions.GetSignal` / `HostCallbacks.GetSignal` (Pi `ExtensionContextActions.getSignal`, `types.ts:2158`) is bound to the agent's run signal in every mode: `Session.Signal` (SDK Session, `bindExtensionCore`, `bindExtensionCommandActions`), `cmd/ompig/session_extension_actions.go` (print, JSON, RPC, bridge host action `getSignal`), and interactive mode (`InteractiveMode.extensionSignal`, context actions and bridge). `TestInteractiveModeBindsEveryHostCallback` now also guards the new callback.
 - Node: `ctx.signal` is a getter of the replicated run signal (`runtime.runSignal`, `applyRunSignal`); the request's own AbortSignal moves to a private symbol key (`requestSignal`) used by the runtime's internals (tool `signal` parameter, provider and OAuth callbacks, `event.signal` of `session_before_compact`/`session_before_tree`, autocomplete).
 - Go SDK `Context.Signal() context.Context` (nil while no run is active); Python `Context.signal` and Rust `Context::signal()` (`ProviderSignal`, `None` while no run is active); in-process `extension.Context.Signal()`. `Done`/`Err`/`is_cancelled` keep reporting the handler's own request. Answer to question 4: before, a Go extension used `ctx.Done()` (request cancellation); it was never wired to the turn abort except through the host cancelling a tool request, and it was documented as `ctx.signal` "complete".
 - Docs: `docs/extension-authoring.md`, `docs/extension-api-parity.md` rows, SDK READMEs, `test/parity/sdk-surface.toml` (the `ctx.signal` row is no longer a stand-in), changelog fragment.
@@ -41,17 +41,17 @@ Round 1 (ctx.signal is the run's). Red commit `daaa74788` (`test(extensions): po
 
 | test | red result (before the fix) |
 |---|---|
-| `cmd/pig` `TestExtensionContextSignalComparedWithPi` (the real Pi package, a 0.99.1 build installed as 0.99.2, Node RPC; scenarios idle, abort a running tool, abort while a turn_start handler is in flight; pig and pi) | pi: pass; pig: fail (rows in the table above) |
+| `cmd/ompig` `TestExtensionContextSignalComparedWithPi` (the real Pi package, a 0.99.1 build installed as 0.99.2, Node RPC; scenarios idle, abort a running tool, abort while a turn_start handler is in flight; ompig and pi) | pi: pass; ompig: fail (rows in the table above) |
 | `test/extension-conformance` `TestContextSignalIsTheActiveRunsSignalInEverySDK` (inproc-go, subprocess go/node/rust/python, node packed, fused-go, packed go/rust/python) | 10/10 fail: Node `signal:live` when idle; the rest `signal:none` during a run |
 | `coding` `TestSessionBindsExtensionSignalToTheActiveRun` | fail: `ctx.signal is nil during agent_start` |
 | `internal/codingagent` `TestExtensionSignalIsTheAgentRunSignal` | fail: `ctx.signal = <nil> during a run` |
-| parity scenario `extensions-runtime/68-extension-context-signal-abort` (interactive tmux, Escape abort) | run on the base tree: pig stuck at `signal-live:true`, Pi shows `signal-aborted:true signal-end:true signal-settled:true` |
+| parity scenario `extensions-runtime/68-extension-context-signal-abort` (interactive tmux, Escape abort) | run on the base tree: ompig stuck at `signal-live:true`, Pi shows `signal-aborted:true signal-end:true signal-settled:true` |
 
 Round 2 (tool `signal` identity, lead answer b). Red commit `7261a5fee` (`test(extensions): port Pi tool signal identity tests with signature stubs (red)`), green `f57d74a48`.
 
 | test | red result |
 |---|---|
-| `TestExtensionContextSignalComparedWithPi` (`signal === ctx.signal` in a top-level tool; nested call without and with `options.signal`) | pig: fail (`sameAsCtx` false; the explicit nested tool never saw its caller's signal object, 120 s wait); pi passes |
+| `TestExtensionContextSignalComparedWithPi` (`signal === ctx.signal` in a top-level tool; nested call without and with `options.signal`) | ompig: fail (`sameAsCtx` false; the explicit nested tool never saw its caller's signal object, 120 s wait); pi passes |
 | `sdk` `TestExecuteToolMarksAnExplicitSignalOnTheWire`, Rust `execute_tool_marks_an_explicit_signal`, Python `test_execute_tool_marks_an_explicit_signal` (the Python test runs under a local `pytest` stub: pytest is not installed here) | fail: no `ownSignal` on the executeTool call |
 | conformance own-signal rows (Go, Python, Node placements) and `inproc` `TestRunnerToolContextRunsNestedCallsForTheCallingTool` | fail: the host action's context is not marked |
 

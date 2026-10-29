@@ -201,9 +201,9 @@ func TestRenderHasOnlyConfiguredValues(t *testing.T) {
 		for k, val := range jobLabels(pl) {
 			constants[k], constants[val] = true, true
 		}
-		for _, c := range []string{"/opt/pig/bin/k8sbench", "pod", "K8SBENCH_DELIVERY", "K8SBENCH_IMAGE_REF", "K8SBENCH_BUNDLE_SHA256", "K8SBENCH_BUNDLE_ARCH", "amd64", "K8SBENCH_ROOT", "PATH",
-			deliveryImage, deliveryBundle, defaultBaseImage, "sh", "-c", podBundleScript, bundleDir + "/pig",
-			bundleDir + "/pig/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"} {
+		for _, c := range []string{"/opt/ompig/bin/k8sbench", "pod", "K8SBENCH_DELIVERY", "K8SBENCH_IMAGE_REF", "K8SBENCH_BUNDLE_SHA256", "K8SBENCH_BUNDLE_ARCH", "amd64", "K8SBENCH_ROOT", "PATH",
+			deliveryImage, deliveryBundle, defaultBaseImage, "sh", "-c", podBundleScript, bundleDir + "/ompig",
+			bundleDir + "/ompig/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"} {
 			constants[c] = true
 		}
 		var walk func(any)
@@ -398,7 +398,7 @@ func TestRenderCalibrationRunsTheReferenceAlone(t *testing.T) {
 		t.Errorf("run id %q is not a usable Job name", pl.Run)
 	}
 	cmp := testPlan(t, v, modeCompare)
-	if !slices.Equal(cmp.Targets, []string{"pig", "pi"}) {
+	if !slices.Equal(cmp.Targets, []string{"ompig", "pi"}) {
 		t.Fatalf("compare targets %v", cmp.Targets)
 	}
 	v.CPUs = 3

@@ -15,8 +15,8 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // Hop chains and the step order list (ABI section 5.3), mirroring host/cf/test/hops.test.ts: the owner's mailbox is the one

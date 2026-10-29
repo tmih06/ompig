@@ -25,7 +25,7 @@ bash automation/layout/run.sh --keep-public-libraries /absolute/path/to/disposab
 | `tests/` | `test/`, including `test/integration/` |
 | `evals/` | `test/evals/` |
 | `media/` | `docs/media/` |
-| `cmd/`, existing `internal/`, `extensions/`, `piglets/`, `examples/`, `docs/`, `automation/` | Keep at the root |
+| `cmd/`, existing `internal/`, `extensions/`, `ompiglets/`, `examples/`, `docs/`, `automation/` | Keep at the root |
 | `changelog.d/` | Preserve nonempty release notes; remove the directory when empty |
 
 Keep root licensing and discovery files, the Go module/workspace manifests, `Makefile`, `AGENTS.md`, `embed.go`, and dotfiles. The public `extensions/sdk` module retains every tracked byte. `coding/doc.go` retains its public-SDK wording and bytes. The root `embed.go` resource-only exception remains unchanged.
@@ -56,7 +56,7 @@ docs/                embed.go              evals/
 examples/            extensions/           go.mod
 go.sum               go.work               go.work.sum
 internal/            media/                parity/
-piglets/             tests/                tui/
+ompiglets/             tests/                tui/
 ```
 
 After, 39 entries:
@@ -74,7 +74,7 @@ changelog.d/         cmd/                  coding/
 docs/                embed.go              examples/
 extensions/          go.mod                go.sum
 go.work              go.work.sum           internal/
-piglets/             test/                 tui/
+ompiglets/             test/                 tui/
 ```
 
 ## Implementation and regression evidence
@@ -98,7 +98,7 @@ The Python codemod suite has 47 passing tests. The count is a measurement, not a
 
 ## Reproduction
 
-Use physical Go 1.27.2 on PATH, not a shim that selects another toolchain inside fixture modules. Use the isolation procedure from [REHEARSAL.md](REHEARSAL.md): temporary HOME, PiG agent, and Pi agent directories; a system temporary directory; shared compiler caches; and read-only links to the pinned mirror and installed Node dependencies.
+Use physical Go 1.27.2 on PATH, not a shim that selects another toolchain inside fixture modules. Use the isolation procedure from [REHEARSAL.md](REHEARSAL.md): temporary HOME, Ompig agent, and Pi agent directories; a system temporary directory; shared compiler caches; and read-only links to the pinned mirror and installed Node dependencies.
 
 Run the complete entry point twice and compare tracked contents, modes, and the raw index. Then run the same gates as before, using the relocated parity command:
 
@@ -116,12 +116,12 @@ make ci-drift
 make -k format-version-inventory custom-factory-ledger-drift sdk-surface-drift divergence-guard source-hygiene docs-drift
 go test -json -count=1 ./... > "$isolation/go-tests.jsonl"
 make parity-bin
-PIG_PARITY_PIG_BIN="$PWD/bin/pig-parity" \
-PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi" \
+OMPIG_PARITY_OMPIG_BIN="$PWD/bin/ompig-parity" \
+OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi" \
 go test -tags=parity -count=1 -timeout 20m ./test/parity/runner -args \
-  -pig-parity.dir="$PWD/test/parity/scenarios/json" \
-  -pig-parity.tags=hermetic \
-  -pig-parity.results="$isolation/json-parity.json"
+  -ompig-parity.dir="$PWD/test/parity/scenarios/json" \
+  -ompig-parity.tags=hermetic \
+  -ompig-parity.results="$isolation/json-parity.json"
 make evals-test
 ```
 
@@ -150,9 +150,9 @@ The three closure failures are `TestImportCurrentDenominatorsAccountsEveryLedger
 
 `TestProviderObjectsAcrossSDKs/go-reader-packed` fails with `Provider stream ended without a terminal event`. This failure was already recorded in the earlier all-internal rehearsal. A new diagnostic probe of the unmoved input reproduces it in 2 of 10 invocations. The B+ full run also fails it. All failures are retained; no later pass, retry, longer timeout, or skip is used to claim a fix. It remains an owner blocker outside the layout change.
 
-The extra eval check exposes an inherited failure in `test_repository_registry_reads_pig_own_version`: it expects `own_version_args == ["version"]`, while the current registry returns `[]`. The unmoved and corrected B+ trees fail that same assertion. The ResourceWarnings from the existing eval suite also remain. No eval assertion or budget is changed.
+The extra eval check exposes an inherited failure in `test_repository_registry_reads_ompig_own_version`: it expects `own_version_args == ["version"]`, while the current registry returns `[]`. The unmoved and corrected B+ trees fail that same assertion. The ResourceWarnings from the existing eval suite also remain. No eval assertion or budget is changed.
 
-JSON scenario `04-json-real-provider-error` still fails at `/7/message/api`: PiG emits an empty string and Pi emits `openai-completions`. Pi initializes that field at `packages/ai/src/api/openai-completions.ts:308-325` and formats the error at `:701-713`. The passing event/command behavior follows `packages/coding-agent/src/modes/print-mode.ts:107-126` and `packages/coding-agent/src/core/agent-session.ts:1616-1625`. Outcome comparison removes only checkout prefixes and measured runtimes from report metadata; no product output or scenario comparator is changed.
+JSON scenario `04-json-real-provider-error` still fails at `/7/message/api`: Ompig emits an empty string and Pi emits `openai-completions`. Pi initializes that field at `packages/ai/src/api/openai-completions.ts:308-325` and formats the error at `:701-713`. The passing event/command behavior follows `packages/coding-agent/src/modes/print-mode.ts:107-126` and `packages/coding-agent/src/core/agent-session.ts:1616-1625`. Outcome comparison removes only checkout prefixes and measured runtimes from report metadata; no product output or scenario comparator is changed.
 
 The strict process comparisons cover version, help, empty model-list diagnostics, a faux-provider print turn, RPC command enumeration, and an invalid flag. They compare raw output and exit status against the unmoved binary, not a normalized transcript.
 

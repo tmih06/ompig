@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 
 # Supply-chain evidence
 
-PiG uses a scanner-agnostic evidence process. A scanner result is a starting point. The release inventory and SPDX SBOM are the reviewed records.
+Ompig uses a scanner-agnostic evidence process. A scanner result is a starting point. The release inventory and SPDX SBOM are the reviewed records.
 
 ## Required process
 
@@ -45,7 +45,7 @@ Generate a separate inventory for each distributed artifact:
 - source archive;
 - each operating-system and architecture binary archive;
 - each published OCI image;
-- each published Piglet Binary or Piglet Image;
+- each published Ompiglet Binary or Ompiglet Image;
 - the documentation site when it contains vendored runtime assets.
 
 Do not substitute a source-directory scan for an artifact SBOM. A source inventory can contain test and build dependencies that are absent from a binary. A binary or image can contain toolchain and operating-system components that are absent from the source tree.

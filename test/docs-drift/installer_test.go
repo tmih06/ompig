@@ -15,7 +15,7 @@ func TestInstallScriptVariablesAreDocumented(t *testing.T) {
 		t.Fatal(err)
 	}
 	header, _, _ := strings.Cut(string(data), "\n#\n# On Android")
-	vars := regexp.MustCompile(`(?m)^#   (PIG_[A-Z_]+)\s`).FindAllStringSubmatch(header, -1)
+	vars := regexp.MustCompile(`(?m)^#   (OMPIG_[A-Z_]+)\s`).FindAllStringSubmatch(header, -1)
 	if len(vars) < 6 {
 		t.Fatalf("read %d variables from the install.sh header; the reader is broken", len(vars))
 	}

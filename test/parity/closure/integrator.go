@@ -11,7 +11,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 // AppliedPatch records the disposable candidate checkout a confined Translator
@@ -127,7 +127,7 @@ func (g *Graph) footprintBoundaries(path string) []string {
 	boundaries := newStringSet()
 	for _, pinID := range g.recordIDs(KindPin) {
 		pin := g.Records[pinID].(*Pin)
-		if pin.Repository != "pig" || pin.Path != path {
+		if pin.Repository != "ompig" || pin.Path != path {
 			continue
 		}
 		for _, targetID := range g.recordIDs(KindTarget) {

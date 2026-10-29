@@ -5,14 +5,14 @@ import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSyn
 import { join, resolve } from "node:path";
 
 const [side, temp] = process.argv.slice(2);
-assert.ok(side === "pig" || side === "pi");
+assert.ok(side === "ompig" || side === "pi");
 assert.ok(temp, "scenario-owned temporary root is required");
 const root = mkdtempSync(join(temp, "startup-metadata-"));
 try {
   const piRoot = process.env.PI_PACKAGE_ROOT ?? resolve("extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent");
   if (side === "pi") assert.equal(JSON.parse(readFileSync(join(piRoot, "package.json"), "utf8")).version, PI_PACKAGE_VERSION, "pinned Pi package");
-  const [program, prefix] = side === "pig" ? ["./test/parity/testdata/prebuilt-go-run.sh", ["./cmd/pig"]] : [process.execPath, [join(piRoot, "dist/cli.js")]];
-  const binary = side === "pig" ? resolve(program) : program;
+  const [program, prefix] = side === "ompig" ? ["./test/parity/testdata/prebuilt-go-run.sh", ["./cmd/ompig"]] : [process.execPath, [join(piRoot, "dist/cli.js")]];
+  const binary = side === "ompig" ? resolve(program) : program;
   const records = path => readFileSync(path, "utf8").trim().split("\n").map(line => JSON.parse(line));
   const names = path => records(path).filter(entry => entry.type === "session_info").map(entry => entry.name);
   const outcomes = [];
@@ -27,7 +27,7 @@ try {
     ].map(entry => JSON.stringify(entry)).join("\n") + "\n");
     const args = mode === "resume" ? ["--session", source] : ["--fork", source, "--session-id", "chosen-fork-id", "--session-dir", sessions];
     const result = spawnSync(binary, [...prefix, ...args, "--name", "  CLI Named Session  ", "--model", "missing-model", "-p", "hi"], {
-      cwd, env: { ...process.env, HOME: cwd, PIG_CODING_AGENT_DIR: agent, PI_CODING_AGENT_DIR: agent, PIG_OFFLINE: "1", PI_OFFLINE: "1" }, encoding: "utf8", timeout: 10000,
+      cwd, env: { ...process.env, HOME: cwd, OMPIG_CODING_AGENT_DIR: agent, PI_CODING_AGENT_DIR: agent, OMPIG_OFFLINE: "1", PI_OFFLINE: "1" }, encoding: "utf8", timeout: 10000,
     });
     if (result.error) throw result.error;
     assert.equal(result.status, 1, result.stderr);

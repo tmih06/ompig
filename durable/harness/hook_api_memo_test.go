@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // packages/durable/src/harness/types.ts:604-608 HookApi.memo(name): a hook reads a durable memo of its task; it is absent until memoCandidate stores one, and the first

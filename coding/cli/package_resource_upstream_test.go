@@ -9,9 +9,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/tui"
 )
 
 type packageResourceFixture struct {
@@ -23,10 +23,10 @@ func newPackageResourceFixture(t *testing.T) packageResourceFixture {
 	t.Helper()
 	cwd, agent := physicalTempDir(t), t.TempDir()
 	t.Setenv("HOME", cwd)
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	return packageResourceFixture{cwd, agent, codingagent.NewSettingsManager(cwd, agent)}
 }
 func (f packageResourceFixture) items(t *testing.T) []codingagent.ResourceSourceInfo {

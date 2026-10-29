@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // compactResourceFileNames is upstream read.ts COMPACT_RESOURCE_FILE_NAMES.
@@ -31,7 +31,7 @@ func classifyCompactRead(rawPath, cwd string) (tui.CompactReadClassification, bo
 		}
 		return tui.CompactReadClassification{Kind: "skill", Label: label}, true
 	}
-	if label, ok := pigDocsLabel(absolutePath, GetDocsPath()); ok {
+	if label, ok := ompigDocsLabel(absolutePath, GetDocsPath()); ok {
 		return tui.CompactReadClassification{Kind: "docs", Label: label}, true
 	}
 	if compactResourceFileNames[fileName] {
@@ -40,13 +40,13 @@ func classifyCompactRead(rawPath, cwd string) (tui.CompactReadClassification, bo
 	return tui.CompactReadClassification{}, false
 }
 
-// pigDocsLabel is upstream read.ts getPiDocsClassification for PiG's
+// ompigDocsLabel is upstream read.ts getPiDocsClassification for Ompig's
 // documentation bundle. Upstream labels README.md and docs/ and examples/
-// relative to its package root. The system prompt points PiG's model at
+// relative to its package root. The system prompt points Ompig's model at
 // <docs>/README.md and resolves docs/... under <docs> (prompts docsSection),
 // so a file there is labelled as upstream labels the same page: README.md,
 // or docs/<path>.
-func pigDocsLabel(absolutePath, docsRoot string) (string, bool) {
+func ompigDocsLabel(absolutePath, docsRoot string) (string, bool) {
 	relativePath, err := filepath.Rel(filepath.Clean(docsRoot), filepath.Clean(absolutePath))
 	if err != nil || relativePath == "." || relativePath == ".." || strings.HasPrefix(relativePath, ".."+string(filepath.Separator)) || filepath.IsAbs(relativePath) {
 		return "", false

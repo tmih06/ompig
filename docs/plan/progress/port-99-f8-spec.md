@@ -66,7 +66,7 @@ Red run (`docs/plan/evidence/port-99-f8-codemode-red.txt`): 57 of 57 cases fail 
 | merge of `porter/pi-0.99.1` | family 6 landed (ToolContext, exposure, loadout) |
 | red 3a `test(codemode): port upstream tool-search and codemode description tests` | 12 tests, 11 red |
 | `5309a659f` | green 2a: tool-search ranking and the codemode description catalog |
-| `3d97d80b3` | green 2b: the native `builtin:codemode` and `builtin:tool-search` extensions, `cmd/pig` wiring, `nocodemode` tag |
+| `3d97d80b3` | green 2b: the native `builtin:codemode` and `builtin:tool-search` extensions, `cmd/ompig` wiring, `nocodemode` tag |
 | `fef0c2547` | green 3: the codemode renderer |
 
 ### Test counts
@@ -106,7 +106,7 @@ Interrupt handler off; interrupt flag not raised; pending nested calls not cance
 - 2 Session cases (`runs nested calls in parallel`, `keeps structured content that tool_result handlers replace`) use Node fixture tools: the Node extension runtime in this base does not send `outputSchema` or `structured_content` over the wire (the wire has them, `protocol.go:804`). Owner: the Node SDK path (pin move / family 6F-ts).
 - 1 Session case (`resolves bash calls to structured results`): the built-in `bash` tool declares no `outputSchema` in this base. Owner: the tools family.
 - `PORT_MAP` rows for the added upstream files (`packages/codemode/src/**`, `extensions/codemode/**`, `extensions/tool-search/**`) and the interface-inventory mapping: the lead's Phase 1 / generated files.
-- `-builtin:codemode` selection, `--no-extensions`, and the Piglet ambient-extension rule already exist in the loader (`cmd/pig/extension_set.go`); no Piglet field was needed.
+- `-builtin:codemode` selection, `--no-extensions`, and the Ompiglet ambient-extension rule already exist in the loader (`cmd/ompig/extension_set.go`); no Ompiglet field was needed.
 - No changelog fragment: the tools are registered inactive and are reachable only through `--tools`, the `defaultTools` setting or another extension; the MCP extension activates codemode in its lane.
 
 ### Deviations from upstream (Go mechanics or unreachable edges; none is an observable Pi behavior)

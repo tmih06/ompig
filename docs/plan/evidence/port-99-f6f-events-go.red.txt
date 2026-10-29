@@ -6,13 +6,13 @@
 --- FAIL: TestEventBusDispatchRunsHandlerThenAnswers (0.00s)
     event_bus_test.go:95: not implemented
 --- FAIL: TestEventBusHandlerErrorAndPanicFailOnlyTheirDispatch (5.01s)
-    event_bus_test.go:130: read header: read unix /tmp/pt/pig-sdk-test/test.sock->@: i/o timeout
+    event_bus_test.go:130: read header: read unix /tmp/pt/ompig-sdk-test/test.sock->@: i/o timeout
 --- FAIL: TestEventBusEmitCarriesPayloadAndParent (5.00s)
-    event_bus_test.go:172: read header: read unix /tmp/pt/pig-sdk-test/test.sock->@: i/o timeout
+    event_bus_test.go:172: read header: read unix /tmp/pt/ompig-sdk-test/test.sock->@: i/o timeout
 --- FAIL: TestEventBusUnsubscribeSendsOneOff (5.00s)
-    event_bus_test.go:203: read header: read unix /tmp/pt/pig-sdk-test/test.sock->@: i/o timeout
+    event_bus_test.go:203: read header: read unix /tmp/pt/ompig-sdk-test/test.sock->@: i/o timeout
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/extensions/sdk	15.028s
+FAIL	github.com/tmih06/ompig/extensions/sdk	15.028s
 FAIL
 
 ## go test ./test/extension-conformance -run TestNativeEventBus (node control subtests pass; go subtests fail on the not-implemented stub)

@@ -13,7 +13,7 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestCacheLifecycleClassifiesHardRootsAndRetention(t *testing.T) {
@@ -251,11 +251,11 @@ func lifecyclePaths(t *testing.T, root string) []string {
 }
 
 const (
-	cacheLeaseHelperEnv = "PIG_CACHE_LEASE_HELPER"
-	cacheLeaseEntryEnv  = "PIG_CACHE_LEASE_ENTRY"
-	cacheLeaseReadyEnv  = "PIG_CACHE_LEASE_READY"
-	cacheGCHelperEnv    = "PIG_CACHE_GC_LOCK_HELPER"
-	cacheGCRootEnv      = "PIG_CACHE_GC_ROOT"
+	cacheLeaseHelperEnv = "OMPIG_CACHE_LEASE_HELPER"
+	cacheLeaseEntryEnv  = "OMPIG_CACHE_LEASE_ENTRY"
+	cacheLeaseReadyEnv  = "OMPIG_CACHE_LEASE_READY"
+	cacheGCHelperEnv    = "OMPIG_CACHE_GC_LOCK_HELPER"
+	cacheGCRootEnv      = "OMPIG_CACHE_GC_ROOT"
 )
 
 func TestCacheLifecycleLockHelper(t *testing.T) {

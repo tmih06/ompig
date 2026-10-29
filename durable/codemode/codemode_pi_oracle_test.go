@@ -12,9 +12,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's createCodemodeTool and createCodemodeExtension, its module constants and its three documents (codemode.ts,
@@ -182,11 +182,11 @@ func TestCodemodeDeclarationsMatchPi(t *testing.T) {
 			label := fmt.Sprintf("section %d (budget %v, %d callable)", i, op.Options.InlineBudget, len(callable))
 			switch {
 			case want == nil && got != nil:
-				t.Errorf("%s: PiG renders %q, Pi omits the section", label, *got)
+				t.Errorf("%s: Ompig renders %q, Pi omits the section", label, *got)
 			case want != nil && got == nil:
-				t.Errorf("%s: PiG omits the section, Pi renders %q", label, *want)
+				t.Errorf("%s: Ompig omits the section, Pi renders %q", label, *want)
 			case want != nil && *got != *want:
-				t.Errorf("%s differs from Pi\nPiG:\n%s\nPi:\n%s", label, *got, *want)
+				t.Errorf("%s differs from Pi\nOmpig:\n%s\nPi:\n%s", label, *got, *want)
 			}
 		}
 	}

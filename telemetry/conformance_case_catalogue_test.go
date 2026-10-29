@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 // Pi: packages/telemetry/src/testing/conformance.ts createTelemetryAdapterConformance and

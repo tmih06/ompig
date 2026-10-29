@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 type portBashOperations func(context.Context, string, string, BashOperationsExecOptions) (BashOperationsResult, error)

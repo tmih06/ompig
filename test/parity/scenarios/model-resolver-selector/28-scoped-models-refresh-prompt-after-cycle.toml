@@ -3,8 +3,8 @@
 #
 # Upstream evidence: Pi 1.3.0+1402973a source (interactive-mode.ts showModelsSelector): the refresh result republishes the scope through
 # updateSessionModels over this.session.modelRuntime.getAvailableSnapshot(), whose entries are runtime-bound models. The sequence below
-# is the one reported in PiG issue #259: /scoped-models, wait for "Model catalogs refreshed.", Escape without changing the selection,
-# then Ctrl+P and submit a prompt twice. Pi answers each prompt with the connection error of the unreachable fixture endpoint; PiG answered
+# is the one reported in Ompig issue #259: /scoped-models, wait for "Model catalogs refreshed.", Escape without changing the selection,
+# then Ctrl+P and submit a prompt twice. Pi answers each prompt with the connection error of the unreachable fixture endpoint; Ompig answered
 # "No model selected." and dropped the user message.
 
 name = "28-scoped-models-refresh-prompt-after-cycle"
@@ -20,7 +20,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 20
 capture_start = "first prompt"
@@ -58,9 +58,9 @@ wait_timeout_seconds = 15
 settle_seconds = 3
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/scoped-refresh-prompt"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/scoped-refresh-prompt"]
 pi = ["PI_CODING_AGENT_DIR=testdata/scoped-refresh-prompt", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--no-session"]
+ompig_args = ["--no-extensions", "--offline", "--no-session"]
 pi_args = ["--no-extensions", "--offline", "--no-session"]
 
 [assert]

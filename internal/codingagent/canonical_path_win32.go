@@ -3,7 +3,7 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // The Windows canonical-path walk follows Node's fs.realpathSync (lib/fs.js splitRoot, nextPart and realpathSync) and path.win32.resolve (lib/path.js) with Windows semantics. The code carries no operating-system dependency: filepath's behavior follows the host, but a rooted link target such as \dir is resolved by Node against the device of the path that reached the link, not the process drive. Tests run it on every host against Node's own functions.

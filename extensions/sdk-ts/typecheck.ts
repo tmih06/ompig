@@ -25,13 +25,13 @@ import type {
   McpServerConfig as AdapterMcpServerConfig,
   ModelRegistry as AdapterModelRegistry,
   ProviderConfig as AdapterProviderConfig,
-  PiGLoginDefinition,
-  PiGSpriteDefinition,
-  PiGViewLines,
-  PiGViewTheme,
-} from "@michaelkinsy/pig-extension-types";
+  OmpigLoginDefinition,
+  OmpigSpriteDefinition,
+  OmpigViewLines,
+  OmpigViewTheme,
+} from "@michaelkinsy/ompig-extension-types";
 
-const login: PiGLoginDefinition = {
+const login: OmpigLoginDefinition = {
   brand: ["."],
   hero: ["."],
   mascot: ["."],
@@ -41,7 +41,7 @@ const login: PiGLoginDefinition = {
   tagline: "Pi-compatible extension",
 };
 
-const sprite: PiGSpriteDefinition = {
+const sprite: OmpigSpriteDefinition = {
   id: "example",
   name: "Example",
   tagline: "Type declaration check",
@@ -55,7 +55,7 @@ export default function extension(pi: ExtensionAPI): void {
     await ctx.ui.registerSprite(sprite);
     ctx.ui.notify("ready", "info");
   });
-  // PiG emits Pi's UI prompt lifecycle for every SDK; the kinds and the
+  // Ompig emits Pi's UI prompt lifecycle for every SDK; the kinds and the
   // optional title come from the pinned Pi declarations.
   pi.on("ui_prompt_start", (event) => {
     const kind: "select" | "confirm" | "input" | "editor" | "custom" = event.kind;
@@ -271,7 +271,7 @@ export const adapterReexportsPinnedTypes: [
   Same<AdapterProviderConfig, ProviderConfig>,
 ] = [true, true, true, true];
 
-// PiG's component kit (D107): a surface root's token overrides and the
+// Ompig's component kit (D107): a surface root's token overrides and the
 // frontend-only annotations of a component's rows, on any pi-tui component.
 export function kitAnnotations(root: Container, table: Component): void {
   const surface: Component = root;
@@ -281,8 +281,8 @@ export function kitAnnotations(root: Container, table: Component): void {
     progress: { value: 30, max: 200 },
     image: { data: "", mimeType: "image/png" },
   };
-  const theme: PiGViewTheme | undefined = surface.viewTheme;
-  const lines: PiGViewLines | undefined = table.viewLines;
+  const theme: OmpigViewTheme | undefined = surface.viewTheme;
+  const lines: OmpigViewLines | undefined = table.viewLines;
   void [theme, lines];
   // @ts-expect-error only the closed token set can be overridden
   surface.viewTheme = { accent2: "#ffffff" };

@@ -4,11 +4,11 @@ package main
 
 // Source classes. Every entry has exactly one.
 const (
-	// ClassOwn is a defect PiG introduced: it differed from Pi, or failed where Pi does not.
+	// ClassOwn is a defect Ompig introduced: it differed from Pi, or failed where Pi does not.
 	ClassOwn = "own"
-	// ClassAheadOfPi is a defect Pi has and PiG fixed first. It carries a divergence number and a remove-when condition.
+	// ClassAheadOfPi is a defect Pi has and Ompig fixed first. It carries a divergence number and a remove-when condition.
 	ClassAheadOfPi = "ahead-of-pi"
-	// ClassPiPort is a fix Pi shipped that PiG ported.
+	// ClassPiPort is a fix Pi shipped that Ompig ported.
 	ClassPiPort = "pi-port"
 )
 

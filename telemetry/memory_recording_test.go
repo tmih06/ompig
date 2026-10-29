@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // packages/telemetry/src/memory.ts: ids count from 1 (nextSpanId: 1, :195) in start order; setAttributes (:152, mergeAttributes) overwrites

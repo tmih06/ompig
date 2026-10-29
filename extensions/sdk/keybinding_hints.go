@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui"
+	"github.com/tmih06/ompig/extensions/sdk/tui"
 )
 
 // keyHintGOOS is the platform key hints are written for (Pi reads process.platform); a test sets it to run another platform's cases.

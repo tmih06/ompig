@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream agent-session.ts:1661-1665,2020: every prompt applies the whole tool loadout (_preparePromptAndToolLoadout calls _applyToolLoadout), so the descriptions a prepareLoadout hook sets are the ones the request declares. The loadout must not fall back to the registered descriptions when a prompt starts.

@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
-// pig additive (D91): a TuiSurface retains the main region per component,
+// ompig additive (D91): a TuiSurface retains the main region per component,
 // so a frame costs what changed, not the transcript's length. A component
 // that embeds invalidatable reports each Invalidate to the surface that
 // draws it, and a container each change of its children. A frame rebuilds

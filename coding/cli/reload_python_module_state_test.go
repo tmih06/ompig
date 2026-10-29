@@ -8,21 +8,21 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // pythonModuleStateProbeSource is a Python extension whose factory logs the versions its helper modules define, joined by "+", the number of factory calls its module has seen and its process. Each probe writes its own log, because the probes' factories run on concurrent threads of one process.
 const pythonModuleStateProbeSource = `import os
 
-import pig_sdk
+import ompig_sdk
 IMPORTS
 calls = 0
 
 
-def new_extension() -> pig_sdk.Extension:
+def new_extension() -> ompig_sdk.Extension:
     global calls
     calls += 1
-    ext = pig_sdk.Extension("NAME")
+    ext = ompig_sdk.Extension("NAME")
     with open(os.path.join(os.environ["RELOAD_PROBE_LOG"], "NAME.log"), "a", newline="") as log:
         log.write("NAME:" + VERSIONS + ":" + str(calls) + ":" + str(os.getpid()) + "\n")
 COMMAND    return ext
@@ -45,7 +45,7 @@ func pythonModuleStateProbe(name string, command bool, helpers ...string) string
 // The Python runner holds every packed Python extension in one process and re-imports an extension on /reload only when a module it uses changed. An edit to a module of one extension must not reset the module state of another: rp_b shares rp_a's directory and imports a different helper, and rp_c lies in a directory nested under it. rp_a and rp_b both import rp_shared, and their factories start on concurrent threads, so either may import it first; an edit to rp_shared re-imports both. Each /reload re-invokes every factory in the retained process; an extension that kept its module counts on.
 func TestReloadKeepsTheModuleStateOfAnUneditedPythonExtensionBesideAnEditedOne(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and starts Python extensions")
+		t.Skip("builds the ompig binary and starts Python extensions")
 	}
 	dir := t.TempDir()
 	files := map[string]string{
@@ -67,14 +67,14 @@ func TestReloadKeepsTheModuleStateOfAnUneditedPythonExtensionBesideAnEditedOne(t
 		}
 	}
 	home, cwd, sessionDir, logDir := t.TempDir(), t.TempDir(), t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(`{"quietStartup":true}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logDir}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logDir}
 	process := startRPCProcessAt(t, cwd, env, "--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir,
 		"-e", filepath.Join(dir, "rp_a.py"), "-e", filepath.Join(dir, "rp_b.py"), "-e", filepath.Join(dir, "sub", "rp_c.py"))
 	wait := testbudget.Wait(t)

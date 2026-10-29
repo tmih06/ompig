@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # run-porter-tasks.sh <tasks.tsv> <log-dir> [worktree]
 #
-# Runs one headless Pig Porter task per tasks.tsv line (kind, scope, rows; the file `follow.py` writes), serially, in the worktree,
+# Runs one headless Ompig Porter task per tasks.tsv line (kind, scope, rows; the file `follow.py` writes), serially, in the worktree,
 # and commits what each task left on the worktree's branch. The commit is the maintainer's step, never the Porter's.
 #
 # A task's commit is honest about its state: its subject says `complete` only when the task exited 0 and the tree builds; otherwise
@@ -9,20 +9,20 @@
 # finished output. Every file the task created is committed with the edits (git add -A, within .gitignore), so a clean checkout
 # contains everything the task's tests need.
 #
-# Environment: PIG_PORTER_TASK_TIMEOUT (seconds, default 3600), PIG_PORTER_MODEL, PIG_PORTER_REF (PI_UPSTREAM_REF),
-# PIG_PORTER_BUILD_CMD (default "go build ./..."), PIG_PORTER_RUNLOG (default <log-dir>/runlog.tsv).
+# Environment: OMPIG_PORTER_TASK_TIMEOUT (seconds, default 3600), OMPIG_PORTER_MODEL, OMPIG_PORTER_REF (PI_UPSTREAM_REF),
+# OMPIG_PORTER_BUILD_CMD (default "go build ./..."), OMPIG_PORTER_RUNLOG (default <log-dir>/runlog.tsv).
 set -u
 
 [ "$#" -ge 2 ] || { echo "usage: run-porter-tasks.sh <tasks.tsv> <log-dir> [worktree]" >&2; exit 2; }
 TASKS=$1
 LOGS=$2
 WT=${3:-$PWD}
-TIMEOUT=${PIG_PORTER_TASK_TIMEOUT:-3600}
-BUILD=${PIG_PORTER_BUILD_CMD:-go build ./...}
-RUNLOG=${PIG_PORTER_RUNLOG:-$LOGS/runlog.tsv}
+TIMEOUT=${OMPIG_PORTER_TASK_TIMEOUT:-3600}
+BUILD=${OMPIG_PORTER_BUILD_CMD:-go build ./...}
+RUNLOG=${OMPIG_PORTER_RUNLOG:-$LOGS/runlog.tsv}
 mkdir -p "$LOGS" "$(dirname "$RUNLOG")"
 cd "$WT" || exit 1
-[ -z "${PIG_PORTER_REF:-}" ] || export PI_UPSTREAM_REF=$PIG_PORTER_REF
+[ -z "${OMPIG_PORTER_REF:-}" ] || export PI_UPSTREAM_REF=$OMPIG_PORTER_REF
 
 can_sign() {
   [ -n "$(git config --get user.signingkey)" ] || gpg --list-secret-keys 2>/dev/null | grep -q '^sec'
@@ -30,10 +30,10 @@ can_sign() {
 
 # foreign_work: a task's new file that is byte-identical to the same path on another lane's branch that HEAD does not contain is that lane's
 # unmerged work, copied (a durable delta task once landed seven such files in one PARTIAL commit). The recent unmerged branches are checked;
-# PIG_PORTER_FOREIGN_REFS overrides the list and PIG_PORTER_FOREIGN_MIN_BYTES (default 64) skips files too small to be distinctive.
+# OMPIG_PORTER_FOREIGN_REFS overrides the list and OMPIG_PORTER_FOREIGN_MIN_BYTES (default 64) skips files too small to be distinctive.
 foreign_work() {
-  local refs ref path size found=1 min=${PIG_PORTER_FOREIGN_MIN_BYTES:-64}
-  refs=${PIG_PORTER_FOREIGN_REFS:-$(git for-each-ref --no-merged HEAD --sort=-committerdate --count=80 --format='%(refname)' refs/remotes/staging/team refs/heads)}
+  local refs ref path size found=1 min=${OMPIG_PORTER_FOREIGN_MIN_BYTES:-64}
+  refs=${OMPIG_PORTER_FOREIGN_REFS:-$(git for-each-ref --no-merged HEAD --sort=-committerdate --count=80 --format='%(refname)' refs/remotes/staging/team refs/heads)}
   [ -n "$refs" ] || return 1
   while IFS= read -r path; do
     [ -n "$path" ] || continue
@@ -98,14 +98,14 @@ while IFS=$'\t' read -r kind scope rows; do
   [ -f "$LOGS/$name.done" ] && continue
   require_clean_tree
   start=$(date +%s)
-  echo "$(date -u +%FT%TZ) PORTER start [${PIG_PORTER_REF:-pin}] $kind $scope (${rows:-?})" >> "$RUNLOG"
+  echo "$(date -u +%FT%TZ) PORTER start [${OMPIG_PORTER_REF:-pin}] $kind $scope (${rows:-?})" >> "$RUNLOG"
   model_args=()
-  [ -z "${PIG_PORTER_MODEL:-}" ] || model_args=("PORTER_ARGS=--model $PIG_PORTER_MODEL")
-  # The task must not read this loop's task list through stdin: its pig did once, and the loop ended after one task.
+  [ -z "${OMPIG_PORTER_MODEL:-}" ] || model_args=("PORTER_ARGS=--model $OMPIG_PORTER_MODEL")
+  # The task must not read this loop's task list through stdin: its ompig did once, and the loop ended after one task.
   timeout "$TIMEOUT" make porter-task TASK="$kind $scope" "${model_args[@]}" > "$LOGS/$name.log" 2>&1 < /dev/null
   rc=$?
   git diff --stat > "$LOGS/$name.diffstat" 2>&1
-  echo "$(date -u +%FT%TZ) PORTER end [${PIG_PORTER_REF:-pin}] rc=$rc secs=$(( $(date +%s) - start )) $kind $scope" >> "$RUNLOG"
+  echo "$(date -u +%FT%TZ) PORTER end [${OMPIG_PORTER_REF:-pin}] rc=$rc secs=$(( $(date +%s) - start )) $kind $scope" >> "$RUNLOG"
   commit_task "$kind" "$scope" "$rc"
   status=$?
   [ "$status" -ne 6 ] || { echo "$(date -u +%FT%TZ) PORTER foreign work, not committed $kind $scope" >> "$RUNLOG"; exit 6; }
@@ -116,4 +116,4 @@ while IFS=$'\t' read -r kind scope rows; do
   fi
   touch "$LOGS/$name.done"
 done < "$TASKS"
-echo "$(date -u +%FT%TZ) PORTER all tasks done [${PIG_PORTER_REF:-pin}] $WT" >> "$RUNLOG"
+echo "$(date -u +%FT%TZ) PORTER all tasks done [${OMPIG_PORTER_REF:-pin}] $WT" >> "$RUNLOG"

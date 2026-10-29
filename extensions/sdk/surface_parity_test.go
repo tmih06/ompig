@@ -17,7 +17,7 @@ func surfaceHost(t *testing.T, ext *Extension, ready *readyMsg) (*mockHost, *reg
 	t.Helper()
 	host := newMockHost(t)
 	t.Cleanup(host.close)
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)
@@ -264,7 +264,7 @@ func TestDialogsWithOptionsSendTimeout(t *testing.T) {
 		case "ui.confirm":
 			return &callResultMsg{Result: json.RawMessage(`{"confirmed":true}`)}
 		default:
-			return &callResultMsg{Result: json.RawMessage(`{"text":"pig","ok":true}`)}
+			return &callResultMsg{Result: json.RawMessage(`{"text":"ompig","ok":true}`)}
 		}
 	})
 	if resp.Error != nil || len(calls) != 3 {
@@ -286,7 +286,7 @@ func TestDialogsWithOptionsSendTimeout(t *testing.T) {
 			t.Fatalf("%s args = %#v, want %#v", w.method, args, w.args)
 		}
 	}
-	if o := <-got; o != (outcome{selected: "b", selectOK: true, confirmed: true, text: "pig", inputOK: true}) {
+	if o := <-got; o != (outcome{selected: "b", selectOK: true, confirmed: true, text: "ompig", inputOK: true}) {
 		t.Fatalf("dialog results = %+v", o)
 	}
 	surfaceShutdown(t, host, done)

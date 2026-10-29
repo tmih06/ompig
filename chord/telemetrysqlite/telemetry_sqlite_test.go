@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 // sqliteConformanceFixture is upstream's fixture(): getSpans flushes, then reads the committed rows back as normalized

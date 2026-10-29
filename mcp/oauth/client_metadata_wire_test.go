@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // RFC 7591 client metadata (packages/mcp/src/oauth.ts OAuthClientMetadata): dynamic registration sends every member the

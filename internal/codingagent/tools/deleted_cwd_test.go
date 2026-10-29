@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi resolves each tool path with path.resolve, which throws ENOENT from

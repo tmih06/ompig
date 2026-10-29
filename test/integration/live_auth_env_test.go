@@ -15,7 +15,7 @@ func TestLiveAuthUsesOnlyExplicitEnv(t *testing.T) {
 		home     func(*testing.T) string
 		authPath string
 	}{
-		{"pig", extIsolatedHome, filepath.Join("agent", "auth.json")},
+		{"ompig", extIsolatedHome, filepath.Join("agent", "auth.json")},
 		{"pi", upstreamIsolatedHome, filepath.Join(".pi", "agent", "auth.json")},
 	} {
 		for _, tc := range []struct{ name, key string }{{"missing", ""}, {"configured", "explicit-test-bearer"}} {
@@ -27,7 +27,7 @@ func TestLiveAuthUsesOnlyExplicitEnv(t *testing.T) {
 				t.Setenv("HOME", home)
 				t.Setenv("COPILOT_GITHUB_TOKEN", key)
 				// Ambient auth must neither enable a credential-free run nor replace the supplied bearer.
-				for _, root := range []string{".pig", ".pi"} {
+				for _, root := range []string{".ompig", ".pi"} {
 					dir := filepath.Join(home, root, "agent")
 					if err := os.MkdirAll(dir, 0o700); err != nil {
 						t.Fatal(err)

@@ -36,16 +36,16 @@ case "$base_dir" in
   /|.) echo "unsafe CI_BASE_DIR: $base_dir" >&2; exit 2 ;;
 esac
 if [ -e "$base_dir" ]; then
-  if [ ! -f "$base_dir/.pig-ci-base-dir" ]; then
+  if [ ! -f "$base_dir/.ompig-ci-base-dir" ]; then
     echo "refusing to replace unowned CI_BASE_DIR: $base_dir" >&2
     exit 2
   fi
   rm -rf "$base_dir"
 fi
 mkdir -p "$base_dir"
-touch "$base_dir/.pig-ci-base-dir"
+touch "$base_dir/.ompig-ci-base-dir"
 
-temporary="$(mktemp -d "${TMPDIR:-/tmp}/pig.XXXXXXXX")"
+temporary="$(mktemp -d "${TMPDIR:-/tmp}/ompig.XXXXXXXX")"
 trap 'rm -rf "$temporary"' EXIT
 crane_archive="$temporary/crane.tar.gz"
 crane="$temporary/crane"
@@ -93,17 +93,17 @@ for base in "${bases[@]}"; do
     buildkit)
       load_image \
         'moby/buildkit:buildx-stable-1@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8' \
-        'pig-ci-base-buildkit:0.32.2'
+        'ompig-ci-base-buildkit:0.32.2'
       ;;
     syft)
       load_image \
         'anchore/syft@sha256:c6d5719f48f5a5986acf2847eb1ed7c53176e712d5721fcd156184cfb262f6eb' \
-        'pig-ci-base-syft:1.45.1'
+        'ompig-ci-base-syft:1.45.1'
       ;;
     grype)
       load_image \
         'anchore/grype@sha256:7a9fc7f89ccef78ae5a7691a115d3f0d41b1f319d589dd8cc1dcb9ab3f01dd28' \
-        'pig-ci-base-grype:0.114.0'
+        'ompig-ci-base-grype:0.114.0'
       ;;
   esac
 done

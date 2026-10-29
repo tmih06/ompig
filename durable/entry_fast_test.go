@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // decodeEntryFast must return what the general codec returns whenever it accepts a text. The general codec is the oracle.

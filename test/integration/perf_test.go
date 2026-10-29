@@ -51,13 +51,13 @@ func launchDirect(t *testing.T, name, bin string, args []string, env []string, p
 	return session, time.Since(t0).Milliseconds(), cleanup
 }
 
-// installedGopiBin returns the path to the installed pig binary.
+// installedGopiBin returns the path to the installed ompig binary.
 func installedGopiBin(t *testing.T) string {
 	t.Helper()
 	home, _ := os.UserHomeDir()
-	bin := filepath.Join(home, ".local", "bin", "pig")
+	bin := filepath.Join(home, ".local", "bin", "ompig")
 	if _, err := os.Stat(bin); err != nil {
-		t.Skipf("installed pig not found at %s", bin)
+		t.Skipf("installed ompig not found at %s", bin)
 	}
 	return bin
 }
@@ -65,10 +65,10 @@ func installedGopiBin(t *testing.T) string {
 // TestPerf_DirectStartupNoExtensions measures startup without extensions
 // to isolate extension loading overhead.
 func TestPerf_DirectStartupNoExtensions(t *testing.T) {
-	pigBin := installedGopiBin(t)
+	ompigBin := installedGopiBin(t)
 	piBin := upstreamPiBin(t)
 
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	// No extension settings are written; the home is clean.
 
 	type run struct {
@@ -81,10 +81,10 @@ func TestPerf_DirectStartupNoExtensions(t *testing.T) {
 
 	systems := []run{
 		{
-			name:   "pig",
-			bin:    pigBin,
+			name:   "ompig",
+			bin:    ompigBin,
 			args:   []string{"--model", "github-copilot/gpt-5-mini", "--no-extensions"},
-			env:    []string{"PIG_HOME=" + pigHome, "PIG_QUIET_STARTUP=1"},
+			env:    []string{"OMPIG_HOME=" + ompigHome, "OMPIG_QUIET_STARTUP=1"},
 			prompt: interactiveReadyMarker,
 		},
 		{
@@ -119,15 +119,15 @@ func TestPerf_DirectStartupNoExtensions(t *testing.T) {
 }
 
 // TestPerf_PrintMode measures headless --print mode latency (includes
-// LLM round-trip). This is where pig's Go advantage shows most clearly.
+// LLM round-trip). This is where ompig's Go advantage shows most clearly.
 func TestPerf_PrintMode(t *testing.T) {
-	pigBin := installedGopiBin(t)
+	ompigBin := installedGopiBin(t)
 	piBin := upstreamPiBin(t)
 	piExt := piSubagentExtFlag(t)
 
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	subSrc := subagentSourceDir(t)
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	type run struct {
 		name string
@@ -138,10 +138,10 @@ func TestPerf_PrintMode(t *testing.T) {
 
 	systems := []run{
 		{
-			name: "pig",
-			bin:  pigBin,
+			name: "ompig",
+			bin:  ompigBin,
 			args: []string{"--print", "say the word PINEAPPLE and nothing else", "--model", "github-copilot/gpt-5-mini"},
-			env:  []string{"PIG_HOME=" + pigHome},
+			env:  []string{"OMPIG_HOME=" + ompigHome},
 		},
 		{
 			name: "pi",

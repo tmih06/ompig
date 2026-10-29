@@ -42,7 +42,7 @@ The existing Pi oracle `ai/oauth_page_upstream_test.go#TestOAuthPageMatchesThePi
 | :99 shows environment API key auth as configured | excludes `not configured` | `...#TestOAuthSelectorUpstreamStatuses/openai` | ported-green (still green: the exclusion is weaker than before) |
 | :18, :87, :112, :130 | unchanged | existing evidence | ported-green |
 
-Pig tests that pinned the removed 0.99.2 text now pin the 1.0.0 text: `tui/oauth_selector_test.go#TestOAuthSelector_Render` and `#TestOAuthSelector_StatusIndicators/oauth_not_configured` (ported-red, `oauth-selector.ts:37`).
+Ompig tests that pinned the removed 0.99.2 text now pin the 1.0.0 text: `tui/oauth_selector_test.go#TestOAuthSelector_Render` and `#TestOAuthSelector_StatusIndicators/oauth_not_configured` (ported-red, `oauth-selector.ts:37`).
 
 ### `packages/ai/test/constrained-sampling.test.ts` (changed)
 
@@ -70,7 +70,7 @@ These 1.0.0 changes have no upstream test. Each test cites the Pi source and, wh
 | Unknown Anthropic login method fails before a flow starts | `anthropic.ts:286-288` | `ai/anthropic_oauth_upstream_test.go#TestAnthropicCopyCodeLoginImplementation/rejects_an_unknown_login_method` | red |
 | Copy code login instructions | `anthropic.ts:203-207` | `...#TestAnthropicCopyCodeLoginImplementation/copy_code_login_shows_its_own_instructions` | red |
 | Copy code login rejects a mismatched pasted state | `anthropic.ts:216` | `...#TestAnthropicCopyCodeLoginImplementation/copy_code_login_rejects_a_mismatched_state` | green (the browser flow checks the state too) |
-| Anthropic `/login` shows the method selector | `anthropic.ts:273-291`, `interactive-mode.ts:6168-6206` | `test/parity/scenarios/oauth/25-anthropic-login-method-selector.toml` | red (Pig opens the browser flow at once) |
+| Anthropic `/login` shows the method selector | `anthropic.ts:273-291`, `interactive-mode.ts:6168-6206` | `test/parity/scenarios/oauth/25-anthropic-login-method-selector.toml` | red (Ompig opens the browser flow at once) |
 | `/login` offers "Sign in with Radius" with its status as the last top-level option | `interactive-mode.ts:5809-5831`, `oauth-selector.ts:36-53` | `selectors/06-oauth-selector.toml`, `oauth/16-login-provider-back.toml` (re-probed, see below), `oauth/27-login-radius-method-intro.toml`, `oauth/28-login-radius-cancel-returns-to-menu.toml` | red |
 | The Radius method prompt shows `RADIUS_LOGIN_INTRO` | `interactive-mode.ts:367`, `6168-6200` | `oauth/27-login-radius-method-intro.toml` | red |
 | Cancelling a login returns to the menu it was started from | `interactive-mode.ts:5850-5853`, `5912-5914`, `6283-6286` | `oauth/26-login-cancel-returns-to-provider-list.toml`, `oauth/28-login-radius-cancel-returns-to-menu.toml` | red |
@@ -78,16 +78,16 @@ These 1.0.0 changes have no upstream test. Each test cites the Pi source and, wh
 | `/logout` labels a non-subscription OAuth sign-in "account" | `interactive-mode.ts:5747-5759`, `oauth-selector.ts:27-33` | `oauth/29-logout-radius-account-label.toml` (one differing line: `Radius [subscription]` vs `Radius [account]`) | red |
 | `/login <provider>` completion says "account" for non-subscription OAuth | `interactive-mode.ts:405-417` | `oauth/22-login-scoped-methods.toml` (wait step re-probed: `OpenRouter · account/API key`) | red. The upstream case in `interactive-mode-status.test.ts` is ported by p1-tui. |
 | "No account providers available." | `interactive-mode.ts:5886-5895` | `internal/codingagent/login_no_providers_upstream_test.go#TestLoginWithoutProvidersOfTheChosenAuthTypeSaysSoUpstream` | `oauth` red, `api_key` green |
-| `--provider` without `--model` is an error (#10236) | `main.ts:469-474` | `cmd/pig/provider_requires_model_upstream_test.go#TestCLIProviderRequiresModelUpstream` (built-in, built-in with message, unknown provider); `cli-utils/22-cli-provider-requires-model.toml` | red |
+| `--provider` without `--model` is an error (#10236) | `main.ts:469-474` | `cmd/ompig/provider_requires_model_upstream_test.go#TestCLIProviderRequiresModelUpstream` (built-in, built-in with message, unknown provider); `cli-utils/22-cli-provider-requires-model.toml` | red |
 | `/mcp login` shows the sign-in URL as an OSC 8 link and a "Ctrl+click to open" line in the TUI (#10186) | `extensions/mcp/index.ts:929-938`, `tui/src/terminal-image.ts:700-702` | `coding/mcpext/sign_in_link_internal_test.go#TestMcpLoginShowsTheSignInURLAsALinkInTheTerminalUI` | `tui` red; `print` and `rpc` green |
 | The `mcp_servers` section intro names only the reaches its servers use | `extensions/mcp/index.ts:158-164`, `193-197` | `coding/mcpext/servers_section_intro_upstream_test.go#TestMCPServersSectionIntroExplainsOnlyTheReachesOfTheListedServers` | red (3 subtests) |
 | Bash and PowerShell output schema descriptions | `core/tools/bash.ts:56-62` | `internal/codingagent/tools/shell_structured_test.go#TestShellToolOutputSchema` now pins the schema recorded from npm `@earendil-works/pi-coding-agent@1.0.0` | red (2 subtests) |
 
 ## Parity scenarios
 
-Probed against Pi 1.0.0 (`extensions/sdk-ts/node_modules/.bin/pi`). Every Pi side reaches all steps; every Pig failure is the 1.0.0 behavior gap named below.
+Probed against Pi 1.0.0 (`extensions/sdk-ts/node_modules/.bin/pi`). Every Pi side reaches all steps; every Ompig failure is the 1.0.0 behavior gap named below.
 
-| Scenario | Change | Pig result |
+| Scenario | Change | Ompig result |
 |---|---|---|
 | `selectors/06-oauth-selector` | waits for and asserts `Sign in with Radius • not configured` | red |
 | `selectors/10-login-subscription-providers` | `unconfigured` → `not configured` in crop end, wait and assertions | red |
@@ -111,7 +111,7 @@ Probed against Pi 1.0.0 (`extensions/sdk-ts/node_modules/.bin/pi`). Every Pi sid
    - `TestAnthropicUpstreamOAuth/offers_browser_login_first_and_uses_the_selected_Anthropic_copy_code_flow`
    - `TestAnthropicCopyCodeLoginImplementation/rejects_an_unknown_login_method`, `/copy_code_login_shows_its_own_instructions`
    - `oauth/25-anthropic-login-method-selector`
-   - Fix notes: `runLoginRegisteredOAuth.selectMethod` (`internal/codingagent/interactive_auth.go:291-301`) rejects an interactive select prompt unless a method was preselected; Pi shows it in the editor slot (`showAuthSelect`). The Pig parity probe `probeOAuthAnthropic` (`internal/codingagent/parity_harness.go:267`) calls `ai.LoginAnthropic` directly; route it through the provider with `OnSelect` → `browser` when the flow changes. `ai/anthropic_oauth_lifecycle_test.go` calls `LoginAnthropic` (the browser flow) directly; keep that function as the browser flow or route those tests through the provider with `OnSelect`.
+   - Fix notes: `runLoginRegisteredOAuth.selectMethod` (`internal/codingagent/interactive_auth.go:291-301`) rejects an interactive select prompt unless a method was preselected; Pi shows it in the editor slot (`showAuthSelect`). The Ompig parity probe `probeOAuthAnthropic` (`internal/codingagent/parity_harness.go:267`) calls `ai.LoginAnthropic` directly; route it through the provider with `OnSelect` → `browser` when the flow changes. `ai/anthropic_oauth_lifecycle_test.go` calls `LoginAnthropic` (the browser flow) directly; keep that function as the browser flow or route those tests through the provider with `OnSelect`.
 2. **OAuth pages use the white logo.** `ai/oauth_page.go:10` `logoSVG` is the 0.99.2 SVG (`utils/oauth-page.ts:1`).
    - `TestOAuthCallbackServerUpstream/ignores_stray_requests_and_resolves_with_the_completed_code`, `TestOAuthPageMatchesThePinnedPackage`
 3. **"unconfigured" label.** `tui/oauth_selector.go:143, 161` (`oauth-selector.ts:37`).
@@ -121,13 +121,13 @@ Probed against Pi 1.0.0 (`extensions/sdk-ts/node_modules/.bin/pi`). Every Pi sid
    - `oauth/29-logout-radius-account-label`, `oauth/22-login-scoped-methods`; p1-tui's `TestInteractiveLoginArgumentCompletionUpstream` has the same cause.
 5. **No top-level Radius option, no Radius intro, no return to the previous menu on cancel.** `showLoginAuthTypeSelector` offers two options (`internal/codingagent/interactive_login.go:182-198`); `handleLoginCommand` has no Radius branch and returns after a cancelled login (`internal/codingagent/slash_auth.go:13-61`); `selectOAuthLoginMethod` shows the Radius prompt without `RADIUS_LOGIN_INTRO` (`internal/codingagent/interactive_auth.go:215-230`). The shimmering selected Radius row (`radius-login-selector.ts`, PORT_MAP ⬜) is not ported.
    - `selectors/06`, `oauth/16`, `oauth/26`, `oauth/27`, `oauth/28`
-6. **No Radius MCP server offer after a Radius sign-in.** Pig has no `offerRadiusMcpServer` and no `RADIUS_MCP_URL` (`core/radius.ts:5-6`, `interactive-mode.ts:6296-6343`).
+6. **No Radius MCP server offer after a Radius sign-in.** Ompig has no `offerRadiusMcpServer` and no `RADIUS_MCP_URL` (`core/radius.ts:5-6`, `interactive-mode.ts:6296-6343`).
    - `TestRadiusLoginOffersTheRadiusMCPServerUpstream` (2 subtests)
 7. **"No subscription providers available."** `internal/codingagent/slash_auth.go:46-52` (`interactive-mode.ts:5890`).
    - `TestLoginWithoutProvidersOfTheChosenAuthTypeSaysSoUpstream/oauth`
 8. **Grammar replay keeps foreign item ids.** The Responses converter keeps a normalized foreign `fc_…` id on a `custom_tool_call`; Pi 1.0.0 drops every id when the model differs or the prefix does not match the replayed item type (`openai-responses-shared.ts:296-305`).
    - `TestConstrainedSamplingGrammarReplayDropsForeignItemIDsUpstream`
-9. **`--provider` without `--model` is ignored.** `cmd/pig` resolves the default model of another provider (`main.ts:469-474`).
+9. **`--provider` without `--model` is ignored.** `cmd/ompig` resolves the default model of another provider (`main.ts:469-474`).
    - `TestCLIProviderRequiresModelUpstream` (3 subtests), `cli-utils/22-cli-provider-requires-model`
 10. **`/mcp login` prints a plain URL in the TUI.** `coding/mcpext/command.go:267-270` (`index.ts:929-938`, #10186).
     - `TestMcpLoginShowsTheSignInURLAsALinkInTheTerminalUI/tui`
@@ -161,13 +161,13 @@ The experimental server's move onto the new `@earendil-works/pi-durable` package
 
 ## Gates
 
-Commands ran with `HOME`, `PIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` set to temp directories.
+Commands ran with `HOME`, `OMPIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` set to temp directories.
 
-- `go vet` and `GOOS=windows go vet` on `./ai ./tui ./internal/codingagent ./internal/codingagent/tools ./cmd/pig ./coding/mcpext`: clean.
+- `go vet` and `GOOS=windows go vet` on `./ai ./tui ./internal/codingagent ./internal/codingagent/tools ./cmd/ompig ./coding/mcpext`: clean.
 - `go tool golangci-lint run` on the same packages: 1 finding, pre-existing and in an untouched file (`ai/provider_payload_helpers_test.go:22` unused `newAnthropicTestProvider`).
 - `make lint-scenarios`: pass.
 - `make ci-drift`: lint-scenarios, port-map-drift, coverage-drift (after a local `make coverage RESULTS=`, restored before commit), divergence-consistency and divergence-quality pass; divergence-guard fails on 3 pre-existing `magic-literal` hits in untouched files (`agent/harness/utils/adaptive_publisher.go:69`, `output_capture.go:18`, `internal/codingagent/tools/harness_bash.go:107`); docs-drift fails on a pre-existing claim of the old pin (`docs/extension-sdk-surface.md:2933`).
 - `make ci-contracts`: fails on the pin, not on this lane: correspondence-check (`quietStartup`/`tuiMode`, p1-tui), test-porting-release and known-gaps-drift (every changed 1.0.0 test file is `pending`), sdk-surface-drift (`ctx.modelRegistry.generateImages`, codemode).
 - `go test ./ai ./tui`: only the tests listed above, plus p1-tui's `TestGenerateSystemThemeColorsMatchesUpstream`, fail.
-- `go test ./internal/codingagent ./cmd/pig`: besides the tests above, Python/Rust SDK fixture tests fail because the temp `HOME` hides the toolchains, and `cmd/pig` reaches its 10-minute package timeout in `TestRPCBedrockConverseStreamObservation`. Neither involves a file this lane changed.
-- Parity (`-pig-parity.runs=1`): `oauth/02` passes; the 12 other listed scenarios fail on Pig only.
+- `go test ./internal/codingagent ./cmd/ompig`: besides the tests above, Python/Rust SDK fixture tests fail because the temp `HOME` hides the toolchains, and `cmd/ompig` reaches its 10-minute package timeout in `TestRPCBedrockConverseStreamObservation`. Neither involves a file this lane changed.
+- Parity (`-ompig-parity.runs=1`): `oauth/02` passes; the 12 other listed scenarios fail on Ompig only.

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi's createAgentSessionRuntime and AgentSessionRuntime (core/agent-session-runtime.ts). The runtime owns the current AgentSession and its cwd-bound services; the factory that builds them stays in this process and is called on every session replacement, as Pi's is. The host answers the calls the

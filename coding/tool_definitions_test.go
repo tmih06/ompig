@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // .upstream/current/packages/coding-agent/src/core/tools/write.ts:44-57 createWriteToolDefinition(cwd, options): a ToolDefinition named and labelled "write" with the write description, the write guidelines, the path/content schema and strict constrained sampling, whose execute writes through options.operations at the cwd-resolved path (write.ts:65-82).

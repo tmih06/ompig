@@ -1,6 +1,6 @@
 package ai
 
-import "github.com/MichaelKinsy/PiG/internal/pigstrip"
+import "github.com/tmih06/ompig/internal/pigstrip"
 
 // Go links provider factories statically instead of using dynamic imports.
 
@@ -66,7 +66,7 @@ var builtInProviders = map[API]ProviderFactory{
 
 // LookupBuiltInProvider returns the factory for a built-in API, if registered.
 func LookupBuiltInProvider(api API) (ProviderFactory, bool) {
-	// pig additive (D92): an API a Piglet strips (strip.apis) is not registered, as in a Binary that compiles it out.
+	// ompig additive (D92): an API a Ompiglet strips (strip.apis) is not registered, as in a Binary that compiles it out.
 	if pigstrip.Has(pigstrip.ListAPIs, string(api)) {
 		return nil, false
 	}
@@ -78,7 +78,7 @@ func LookupBuiltInProvider(api API) (ProviderFactory, bool) {
 func RegisteredAPIs() []API {
 	apis := make([]API, 0, len(builtInProviders))
 	for api := range builtInProviders {
-		// pig additive (D92): see LookupBuiltInProvider.
+		// ompig additive (D92): see LookupBuiltInProvider.
 		if !pigstrip.Has(pigstrip.ListAPIs, string(api)) {
 			apis = append(apis, api)
 		}

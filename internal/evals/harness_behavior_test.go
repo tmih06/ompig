@@ -109,13 +109,13 @@ func TestSettledResponseRejectsRunsWithoutAUsableAssistantMessage(t *testing.T) 
 	}
 }
 
-// TestApplyIsolatedEnvironmentSendsPiGStateRootsIntoTheIsolatedHome pins the isolation the with_docs/without_docs runs
-// rely on: pig materializes its documentation under PIG_HOME (or PI_HOME), or under XDG_CONFIG_HOME/pig, when one is set, and not under the
-// isolated home, so a runner started with PIG_HOME or XDG_CONFIG_HOME in its environment (as CI does) served docs from outside the run and
-// the without_docs removal missed them. harness.ts isolateProcessEnvironment keeps no such state root; PiG does, so the
+// TestApplyIsolatedEnvironmentSendsOmpigStateRootsIntoTheIsolatedHome pins the isolation the with_docs/without_docs runs
+// rely on: ompig materializes its documentation under OMPIG_HOME (or PI_HOME), or under XDG_CONFIG_HOME/ompig, when one is set, and not under the
+// isolated home, so a runner started with OMPIG_HOME or XDG_CONFIG_HOME in its environment (as CI does) served docs from outside the run and
+// the without_docs removal missed them. harness.ts isolateProcessEnvironment keeps no such state root; Ompig does, so the
 // harness unsets both for the run and restores them afterwards.
-func TestApplyIsolatedEnvironmentSendsPiGStateRootsIntoTheIsolatedHome(t *testing.T) {
-	outer := map[string]string{"PIG_HOME": "/outer/pig-home", "PI_HOME": "/outer/pi-home", "XDG_CONFIG_HOME": "/outer/xdg-config", "XDG_DATA_HOME": "/outer/xdg-data", "XDG_CACHE_HOME": "/outer/xdg-cache", "XDG_STATE_HOME": "/outer/xdg-state"}
+func TestApplyIsolatedEnvironmentSendsOmpigStateRootsIntoTheIsolatedHome(t *testing.T) {
+	outer := map[string]string{"OMPIG_HOME": "/outer/ompig-home", "PI_HOME": "/outer/pi-home", "XDG_CONFIG_HOME": "/outer/xdg-config", "XDG_DATA_HOME": "/outer/xdg-data", "XDG_CACHE_HOME": "/outer/xdg-cache", "XDG_STATE_HOME": "/outer/xdg-state"}
 	for name, value := range outer {
 		t.Setenv(name, value)
 	}
@@ -132,11 +132,11 @@ func TestApplyIsolatedEnvironmentSendsPiGStateRootsIntoTheIsolatedHome(t *testin
 		}
 	}
 
-	unsetEnv(t, "PIG_HOME")
+	unsetEnv(t, "OMPIG_HOME")
 	restore = ApplyIsolatedEnvironment("/tmp/eval-home", "/tmp/eval-agent")
-	t.Setenv("PIG_HOME", "set during the run")
+	t.Setenv("OMPIG_HOME", "set during the run")
 	restore()
-	if value, ok := os.LookupEnv("PIG_HOME"); ok {
-		t.Errorf("PIG_HOME after restore = %q, want it unset as before the run", value)
+	if value, ok := os.LookupEnv("OMPIG_HOME"); ok {
+		t.Errorf("OMPIG_HOME after restore = %q, want it unset as before the run", value)
 	}
 }

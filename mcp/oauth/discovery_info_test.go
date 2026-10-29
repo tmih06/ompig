@@ -5,10 +5,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// PiG-only: packages/mcp/test/oauth.test.ts reaches discoverProtectedResourceMetadata and discoverOAuthServerInfo only
+// Ompig-only: packages/mcp/test/oauth.test.ts reaches discoverProtectedResourceMetadata and discoverOAuthServerInfo only
 // through the authorization flow, so the path-aware lookup, the root fallback, the explicit metadata URL, the
 // protocol-version header and the configured authorization-server metadata document have no direct test.
 func TestDiscoverProtectedResourceMetadataTriesThePathAwareURLThenTheRoot(t *testing.T) {

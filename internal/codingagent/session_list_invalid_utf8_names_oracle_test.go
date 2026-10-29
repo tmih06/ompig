@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/session-manager.ts
@@ -48,6 +48,6 @@ emit(infos.map((s) => path.basename(s.path) + "|" + s.id));`, map[string]any{"cw
 		got = append(got, filepath.Base(s.Path)+"|"+s.ID)
 	}
 	if !slices.Equal(got, want) {
-		t.Errorf("PiG %q\nPi  %q", got, want)
+		t.Errorf("Ompig %q\nPi  %q", got, want)
 	}
 }

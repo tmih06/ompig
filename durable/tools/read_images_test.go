@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi 42a3497d tools/read.ts: `read` returns an image as one image block instead of an unsupported_image error. Without an

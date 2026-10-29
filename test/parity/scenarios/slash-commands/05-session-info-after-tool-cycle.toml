@@ -1,7 +1,7 @@
 # Behavior family: slash-commands
 # Surface: /session info output AFTER a tool round-trip
 #
-# Regression test for the bug where Pig's sessionHandler counted entries
+# Regression test for the bug where Ompig's sessionHandler counted entries
 # by Base.Type ("user", "assistant", "tool_result"): which never matched
 # because all session entries use type="message" with role inside the
 # message payload.  The fix uses AsMessage().Message.Role.
@@ -38,16 +38,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 120
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 # Crop to the /session block from Messages through the cache-warming status;

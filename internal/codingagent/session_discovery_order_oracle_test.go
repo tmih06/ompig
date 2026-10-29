@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // session-manager.ts findMostRecentSession lists the session directory with readdirSync and stable-sorts it by mtime, and findById takes
 // the first file in readdirSync order whose header has the id. Node's readdirSync order is libuv's scandir: strcmp on Unix, the file
-// system's order on Windows, which on NTFS ignores case. With two sessions of equal mtime, and the same id, in B.jsonl and a.jsonl, Pig
+// system's order on Windows, which on NTFS ignores case. With two sessions of equal mtime, and the same id, in B.jsonl and a.jsonl, Ompig
 // picks the file Pi picks.
 func TestSessionDiscoveryKeepsNodesReaddirOrder(t *testing.T) {
 	work := t.TempDir()

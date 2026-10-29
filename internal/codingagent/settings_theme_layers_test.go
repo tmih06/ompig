@@ -64,7 +64,7 @@ func TestSettingsProjectNonStringThemeClearsGlobalTheme(t *testing.T) {
 	}
 }
 
-// Real Pi 0.87.1 SettingsManager reads the same layers to the same theme setting as PiG.
+// Real Pi 0.87.1 SettingsManager reads the same layers to the same theme setting as Ompig.
 func TestSettingsThemeLayerPresenceMatchesPi(t *testing.T) {
 	projects := append([]string{"", `{}`, `{"theme":""}`, `{"theme":"dark"}`}, themePresenceProjectValues...)
 	type result struct {
@@ -100,7 +100,7 @@ console.log(JSON.stringify(results));
 	}
 	for i, project := range projects {
 		if got[i] != pi[i] {
-			t.Errorf("project %s: PiG theme setting %+v, Pi %+v", project, got[i], pi[i])
+			t.Errorf("project %s: Ompig theme setting %+v, Pi %+v", project, got[i], pi[i])
 		}
 	}
 	t.Logf("Pi theme settings over global light: %+v", pi)

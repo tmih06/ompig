@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // lookTrash resolves `trash` as libuv's Windows spawn search does: each PATH directory in order, trying trash.com and then trash.exe. It does not implicitly search the current directory or run batch files. An explicit relative PATH entry is resolved before passing it to Go's executable lookup.

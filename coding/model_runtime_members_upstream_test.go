@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi model-runtime.ts getProviders, getAllAvailable, getAuth, getCompatibilityRequestConfig, getRegistered*, listCredentials, setRuntimeApiKey, removeRuntimeApiKey, unregisterProvider; model-registry.ts isUsingOAuth.

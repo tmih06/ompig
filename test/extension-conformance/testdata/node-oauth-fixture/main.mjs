@@ -1,6 +1,6 @@
 // Registers an OAuth provider through the upstream config.oauth shape. The same
-// file loads on upstream pi (in-process) and on pig (bridged through the node
-// runtime), so it drives both the node OAuth bridge test and the pi-vs-pig
+// file loads on upstream pi (in-process) and on ompig (bridged through the node
+// runtime), so it drives both the node OAuth bridge test and the pi-vs-ompig
 // parity scenario. login/refreshToken/getApiKey mirror the Go/Rust/Python
 // conformance fixtures; config.oauth has no credential store (upstream does not
 // define one), so this provider is a store-less OAuth provider.

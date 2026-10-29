@@ -3,10 +3,10 @@
 # rounds, with the native build measured by the core's bench --timing in the same rotation. Raw outputs go to $OUT; nothing
 # is edited afterwards. Run it in one tmux session on the benchmark machine, after the CONTRACT gate is green.
 #
-#   BENCH=<durable-bench checkout, e9abffa + gate-cpus.patch + pig-targets.patch, node_modules installed>
-#   PIG_SOURCE=<PiG checkout at the gated core>  PIG_VERSION=<core commit>  PI_SOURCE=<pi checkout at the reference>
+#   BENCH=<durable-bench checkout, e9abffa + gate-cpus.patch + ompig-targets.patch, node_modules installed>
+#   OMPIG_SOURCE=<Ompig checkout at the gated core>  OMPIG_VERSION=<core commit>  PI_SOURCE=<pi checkout at the reference>
 #   NATIVE_BIN=<bench binary built from the gated core>  NATIVE_FIXTURES=<dir of pi-main-<n>.sqlite standard fixtures>
-#   OUT=<output dir>  [TARGETS="pi-head tardie pig-tinygo pig-go pig-native empty"] [SIZES="50 250 1000 3500"] [ROUNDS=12]
+#   OUT=<output dir>  [TARGETS="pi-head tardie ompig-tinygo ompig-go ompig-native empty"] [SIZES="50 250 1000 3500"] [ROUNDS=12]
 #   [CPU=23] [PROBE_ROUNDS=3] [PROBE_SIZES=$SIZES: count probes] [PROBE_TIME_SIZES="50 3500"] [DRY=1: print the commands]
 #   [CLIENT=bun: the runtime of durable-bench's scripts; node 24 runs them unchanged] [STEP_TIMEOUT=1800: seconds per step,
 #   each step is tried up to 3 times and every retry is written to ENV.txt] [RESUME=1: keep the seeds already in $OUT]
@@ -18,7 +18,7 @@
 # high-water mark) and BENCH_PROBE=time samples at PROBE_TIME_SIZES.
 set -euo pipefail
 
-TARGETS=${TARGETS:-"pi-head tardie pig-tinygo pig-go pig-native empty"}
+TARGETS=${TARGETS:-"pi-head tardie ompig-tinygo ompig-go ompig-native empty"}
 SIZES=${SIZES:-"50 250 1000 3500"}
 ROUNDS=${ROUNDS:-12}
 CPU=${CPU:-23}
@@ -29,10 +29,10 @@ PROBE_SIZES=${PROBE_SIZES:-$SIZES}
 PROBE_TIME_SIZES=${PROBE_TIME_SIZES:-"50 3500"}
 ((ROUNDS * 9 >= 100)) || echo "run-session: ROUNDS=$ROUNDS gives $((ROUNDS * 9)) warm turns per cell; a final deck needs 100" >&2
 : "${BENCH:?}" "${OUT:?}"
-case " $TARGETS " in *" pig-"*) : "${PIG_SOURCE:?}" "${PIG_VERSION:?}" ;; esac
-case " $TARGETS " in *" pig-native "*) : "${NATIVE_BIN:?}" "${NATIVE_FIXTURES:?}" ;; esac
+case " $TARGETS " in *" ompig-"*) : "${OMPIG_SOURCE:?}" "${OMPIG_VERSION:?}" ;; esac
+case " $TARGETS " in *" ompig-native "*) : "${NATIVE_BIN:?}" "${NATIVE_FIXTURES:?}" ;; esac
 case " $TARGETS " in *" pi-head "*) : "${PI_HEAD_VERSION:?pi-head lines must carry the reference commit}" ;; esac
-export PIG_SOURCE PIG_VERSION PI_SOURCE PI_HEAD_VERSION
+export OMPIG_SOURCE OMPIG_VERSION PI_SOURCE PI_HEAD_VERSION
 
 # durable-bench's published seed fingerprints (workload.mjs SEED_FINGERPRINTS).
 declare -A FINGERPRINT=([50]=b017b487524e44a4 [250]=dcea9f30b0917245 [1000]=ac520308146f2a8f [3500]=0a8c8e4b0d9a0794)
@@ -56,7 +56,7 @@ run() {
 }
 
 # Seedable targets: every durable-bench target but the floor. The native build has no seed time (RUNNER-SPEC "Native build").
-seedable() { for t in $TARGETS; do [[ $t == pig-native || $t == empty ]] || printf '%s\n' "$t"; done; }
+seedable() { for t in $TARGETS; do [[ $t == ompig-native || $t == empty ]] || printf '%s\n' "$t"; done; }
 
 seed() { # seed <target> <size> <run>
 	local t=$1 n=$2 k=$3
@@ -73,11 +73,11 @@ seed() { # seed <target> <size> <run>
 
 measure() { # measure <target> <size> <round>
 	local t=$1 n=$2 r=$3
-	if [[ $t == pig-native ]]; then
+	if [[ $t == ompig-native ]]; then
 		local db="<fresh dir>/s.sqlite"
 		[[ ${DRY:-} == 1 ]] || db=$(mktemp -d)/s.sqlite
 		run cp "$NATIVE_FIXTURES/pi-main-$n.sqlite" "$db"
-		run taskset -c "$CPU" "$NATIVE_BIN" --db "$db" --timing "$OUT/native.jsonl" --version "$PIG_VERSION" --size "$n" --sample "$r" --turns 10 --tools 8
+		run taskset -c "$CPU" "$NATIVE_BIN" --db "$db" --timing "$OUT/native.jsonl" --version "$OMPIG_VERSION" --size "$n" --sample "$r" --turns 10 --tools 8
 		[[ ${DRY:-} == 1 ]] || rm -rf "$(dirname "$db")"
 	else
 		(cd "$BENCH" && SAMPLES=1 run taskset -c "$CPU" "$CLIENT" bench/run.ts "$t" "$n")
@@ -85,7 +85,7 @@ measure() { # measure <target> <size> <round>
 }
 
 # The Durable Object targets the where-it-runs probe compares (pi-durable main and the Wasm builds).
-probed() { for t in $TARGETS; do case $t in pi-head | pig-tinygo | pig-go) printf '%s\n' "$t" ;; esac; done; }
+probed() { for t in $TARGETS; do case $t in pi-head | ompig-tinygo | ompig-go) printf '%s\n' "$t" ;; esac; done; }
 
 for f in results.jsonl probe.jsonl size.jsonl; do
 	if [[ ${DRY:-} != 1 && ${RESUME:-} != 1 && -e $BENCH/results/$f ]]; then
@@ -99,9 +99,9 @@ mkdir -p "$OUT/seeds"
 	echo "host $(hostname) $(uname -sr)"
 	lscpu | grep -E '^Model name' || true
 	echo "client $CLIENT; node $(node --version) bun $(bun --version 2>/dev/null || echo none); STEP_TIMEOUT ${STEP_TIMEOUT:-1800}; GATE_CPUS $GATE_CPUS; CPU_MAX ${CPU_MAX:-default}"
-	echo "targets $TARGETS; sizes $SIZES; rounds $ROUNDS; cpu $CPU; pig $PIG_VERSION"
+	echo "targets $TARGETS; sizes $SIZES; rounds $ROUNDS; cpu $CPU; ompig $OMPIG_VERSION"
 	sha256sum "$(dirname "$0")"/*.patch
-	[[ -z ${PIG_SOURCE:-} ]] || sha256sum "$PIG_SOURCE"/durable/core/host/cf/dist/core-*.wasm
+	[[ -z ${OMPIG_SOURCE:-} ]] || sha256sum "$OMPIG_SOURCE"/durable/core/host/cf/dist/core-*.wasm
 	[[ -z ${NATIVE_BIN:-} ]] || sha256sum "$NATIVE_BIN"
 	echo "load $(cut -d' ' -f1-3 /proc/loadavg)"
 } >>"$OUT/ENV.txt"

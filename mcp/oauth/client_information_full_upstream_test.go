@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // OAuthClientInformationFull is OAuthClientInformation & OAuthClientMetadata (packages/mcp/src/oauth/types.ts:72); parseClientInformation
@@ -16,7 +16,7 @@ import (
 func TestParseClientInformationReturnsEveryMemberOfTheFullShape(t *testing.T) {
 	const response = `{"client_id":"cid","client_secret":"sec","client_id_issued_at":1700000000,"client_secret_expires_at":1800000000,` +
 		`"redirect_uris":["http://localhost/cb","http://127.0.0.1/cb"],"token_endpoint_auth_method":"client_secret_basic",` +
-		`"grant_types":["authorization_code","refresh_token"],"response_types":["code"],"application_type":"native","client_name":"Pig",` +
+		`"grant_types":["authorization_code","refresh_token"],"response_types":["code"],"application_type":"native","client_name":"Ompig",` +
 		`"client_uri":"https://c.example","logo_uri":"https://c.example/l.png","scope":"a b","contacts":["x@y.z"],"tos_uri":"https://c.example/tos",` +
 		`"policy_uri":"https://c.example/pol","jwks_uri":"https://c.example/jwks","jwks":{"keys":[]},"software_id":"sid","software_version":"1.2",` +
 		`"software_statement":"stmt"}`
@@ -31,7 +31,7 @@ func TestParseClientInformationReturnsEveryMemberOfTheFullShape(t *testing.T) {
 	meta := info.OAuthClientMetadata
 	if !reflect.DeepEqual(meta.RedirectURIs, []string{"http://localhost/cb", "http://127.0.0.1/cb"}) || meta.TokenEndpointAuthMethod != "client_secret_basic" ||
 		!reflect.DeepEqual(meta.GrantTypes, []string{"authorization_code", "refresh_token"}) || !reflect.DeepEqual(meta.ResponseTypes, []string{"code"}) ||
-		meta.ApplicationType != "native" || meta.ClientName != "Pig" || meta.ClientURI != "https://c.example" || meta.LogoURI != "https://c.example/l.png" ||
+		meta.ApplicationType != "native" || meta.ClientName != "Ompig" || meta.ClientURI != "https://c.example" || meta.LogoURI != "https://c.example/l.png" ||
 		meta.Scope != "a b" || !reflect.DeepEqual(meta.Contacts, []string{"x@y.z"}) || meta.TosURI != "https://c.example/tos" ||
 		meta.PolicyURI != "https://c.example/pol" || meta.JwksURI != "https://c.example/jwks" || string(meta.Jwks) != `{"keys":[]}` ||
 		meta.SoftwareID != "sid" || meta.SoftwareVersion != "1.2" || meta.SoftwareStatement != "stmt" {

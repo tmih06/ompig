@@ -1,6 +1,6 @@
 # Keybindings
 
-PiG reads keybindings from `~/.pig/agent/keybindings.json`. The file is optional. If it is absent, PiG uses the defaults in this page. The action names and defaults are those of Pi 1.4.0 ([Pi's keybindings reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/keybindings.md)).
+Ompig reads keybindings from `~/.ompig/agent/keybindings.json`. The file is optional. If it is absent, Ompig uses the defaults in this page. The action names and defaults are those of Pi 1.4.0 ([Pi's keybindings reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/keybindings.md)).
 
 Each entry maps one action to one key or a list of keys. To change a binding, write the action name and the keys you want:
 
@@ -13,19 +13,19 @@ Each entry maps one action to one key or a list of keys. To change a binding, wr
 
 A binding in the file replaces the default for that action. It does not add to it. Bindings you do not name keep their defaults. Set an action to `[]` to leave the action with no key.
 
-For validation and completion in your editor, add `"$schema": "https://pi.dev/schemas/keybindings.schema.json"` to the file. PiG ignores the `$schema` key when it loads the bindings. Pi 1.4.0 added this schema.
+For validation and completion in your editor, add `"$schema": "https://pi.dev/schemas/keybindings.schema.json"` to the file. Ompig ignores the `$schema` key when it loads the bindings. Pi 1.4.0 added this schema.
 
-Set `PIG_CODING_AGENT_DIR` to read the file from a different directory. After you edit the file, run `/reload` to apply the change to the running session.
+Set `OMPIG_CODING_AGENT_DIR` to read the file from a different directory. After you edit the file, run `/reload` to apply the change to the running session.
 
 Use `/hotkeys` to list the keys that are active in the current session.
 
-A custom `tui.input.submit` binding submits messages and slash commands through the normal interactive handler. Enabling `PIG_DEBUG_KEYS` does not change that binding.
+A custom `tui.input.submit` binding submits messages and slash commands through the normal interactive handler. Enabling `OMPIG_DEBUG_KEYS` does not change that binding.
 
-If two actions claim the same key, PiG records the conflict and keeps both bindings. Both actions then answer that key, so give one of them a different key.
+If two actions claim the same key, Ompig records the conflict and keeps both bindings. Both actions then answer that key, so give one of them a different key.
 
 ## Worked example: move the tool-output key
 
-Tool output longer than a few lines folds, and a hint names the key that expands it. Take this request, whose command prints 30 lines. PiG shows the last five and a hint with the key (checked on PiG; `ctrl+o` is the default):
+Tool output longer than a few lines folds, and a hint names the key that expands it. Take this request, whose command prints 30 lines. Ompig shows the last five and a hint with the key (checked on Ompig; `ctrl+o` is the default):
 
 ```text
  $ seq 1 30
@@ -38,7 +38,7 @@ Tool output longer than a few lines folds, and a hint names the key that expands
  30
 ```
 
-Put this in `~/.pig/agent/keybindings.json`, then type `/reload` (or start PiG again):
+Put this in `~/.ompig/agent/keybindings.json`, then type `/reload` (or start Ompig again):
 
 ```json
 {
@@ -54,7 +54,7 @@ The hint now names the new key, and the old key stops working:
 
 Pressing `alt+o` expands all 30 lines and prints `Tool output: expanded`. Pressing `ctrl+o` does nothing. `/hotkeys` lists the change as `Alt+O | Toggle tool output expansion`.
 
-Choose a key that no other action uses. The key `ctrl+e` is the editor's "End of line", so a binding of `app.tools.expand` to `ctrl+e` leaves both actions on the key (checked: `/hotkeys` listed `End/Ctrl+E` and `Ctrl+E | Toggle tool output expansion`). PiG keeps both bindings and answers with both, which is rarely what you want. Pick an unused key, and check `/hotkeys` after every change.
+Choose a key that no other action uses. The key `ctrl+e` is the editor's "End of line", so a binding of `app.tools.expand` to `ctrl+e` leaves both actions on the key (checked: `/hotkeys` listed `End/Ctrl+E` and `Ctrl+E | Toggle tool output expansion`). Ompig keeps both bindings and answers with both, which is rarely what you want. Pick an unused key, and check `/hotkeys` after every change.
 
 ## Defaults
 
@@ -78,6 +78,7 @@ The keys below are the macOS defaults. Platform differences are listed after the
 | `app.session.toggleSort` | `ctrl+s` | Toggle session sort mode |
 | `app.session.tree` | none | Open session tree |
 | `app.suspend` | `ctrl+z` | Suspend to background |
+| `app.agents.hub` | `alt+a` | Open the Agent Hub roster of subagents |
 
 ### Editing and messages
 
@@ -89,7 +90,7 @@ The keys below are the macOS defaults. Platform differences are listed after the
 | `app.message.dequeue` | `alt+up` | Restore queued messages |
 | `app.message.followUp` | `alt+enter` | Queue follow-up message |
 
-Clipboard image helper commands reject stdout larger than 50 MiB. PiG cancels and joins an oversized helper instead of retaining its output. Unsupported image formats such as BMP are converted to PNG; a failed conversion produces no image.
+Clipboard image helper commands reject stdout larger than 50 MiB. Ompig cancels and joins an oversized helper instead of retaining its output. Unsupported image formats such as BMP are converted to PNG; a failed conversion produces no image.
 
 ### Models
 
@@ -192,7 +193,7 @@ During initial theme detection and managed-tool setup, submitting keeps the text
 | `tui.select.confirm` | `enter` | Confirm selection |
 | `tui.select.cancel` | `escape`, `ctrl+c` | Cancel selection |
 
-PiG moves the selection by one visible page on PageUp and PageDown in every selection list: select and settings lists, the open autocomplete list, and the model, session, tree, OAuth, scoped-models, config, trust and extension selectors. The transcript behind an open list does not scroll. Pi 1.4.0 scrolls the fullscreen transcript on these keys while a selector is open, and lists without a page action ignore them (D155, [Pi #7629](https://github.com/earendil-works/pi/issues/7629)). An extension overlay cannot capture the page keys yet, so they still scroll the transcript there.
+Ompig moves the selection by one visible page on PageUp and PageDown in every selection list: select and settings lists, the open autocomplete list, and the model, session, tree, OAuth, scoped-models, config, trust and extension selectors. The transcript behind an open list does not scroll. Pi 1.4.0 scrolls the fullscreen transcript on these keys while a selector is open, and lists without a page action ignore them (D155, [Pi #7629](https://github.com/earendil-works/pi/issues/7629)). An extension overlay cannot capture the page keys yet, so they still scroll the transcript there.
 
 ### Fullscreen transcript
 
@@ -217,7 +218,7 @@ These actions apply when `tuiMode` is `fullscreen`. They take precedence over ed
 
 ## Platform differences
 
-Some actions use a different key on each platform, because the terminal or the operating system reserves the macOS key. WSL uses the Windows keys, except that `ctrl+z` still suspends and `alt+z` undoes. PiG detects WSL from `WSL_DISTRO_NAME` or `WSL_INTEROP`.
+Some actions use a different key on each platform, because the terminal or the operating system reserves the macOS key. WSL uses the Windows keys, except that `ctrl+z` still suspends and `alt+z` undoes. Ompig detects WSL from `WSL_DISTRO_NAME` or `WSL_INTEROP`.
 
 | Action | macOS | Linux | WSL | Windows |
 |---|---|---|---|---|
@@ -233,7 +234,7 @@ Some actions use a different key on each platform, because the terminal or the o
 | `tui.altScreen.nextPrompt` | `ctrl+shift+down, ctrl+down` | `ctrl+shift+down, ctrl+down` | `ctrl+down` | `ctrl+down` |
 | `tui.altScreen.search` | `ctrl+shift+f` | `ctrl+shift+f` | `ctrl+f` | `ctrl+f` |
 
-On native Windows, `app.suspend` has no default because Windows terminals do not support Unix job control. If you assign it, PiG shows a status message instead of suspending.
+On native Windows, `app.suspend` has no default because Windows terminals do not support Unix job control. If you assign it, Ompig shows a status message instead of suspending.
 
 ## Actions with no default key
 
@@ -262,10 +263,10 @@ A `super` binding needs a terminal that reports the modifier on its own, usually
 
 A shifted symbol such as `+` matches the character the key produces, so `ctrl++` responds under the Kitty keyboard protocol and modifyOtherKeys. Pi 1.1.0 did not match these bindings; Pi 1.4.0 does.
 
-Terminals do not all report the same keys. If a binding does not respond, the terminal usually consumed the key before PiG saw it. See [terminal setup](/docs/latest/terminal-setup).
+Terminals do not all report the same keys. If a binding does not respond, the terminal usually consumed the key before Ompig saw it. See [terminal setup](/docs/latest/terminal-setup).
 
 ## Related
 
 - [Slash commands](/docs/latest/slash-commands) lists the slash commands.
-- [Settings](/docs/latest/settings) lists the files and settings PiG reads.
+- [Settings](/docs/latest/settings) lists the files and settings Ompig reads.
 - [Terminal setup](/docs/latest/terminal-setup) covers keys the terminal intercepts.

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func TestServicesOwnBackgroundModelTasksNotBorrowingRuntime(t *testing.T) {
@@ -73,7 +73,7 @@ func TestStandaloneModelRuntimeHasTheSameCloseOwner(t *testing.T) {
 	})
 }
 
-// Services.Close drains Services-owned model tasks only. A caller-owned stream on a Models-collection provider belongs to its Session, and cmd/pig's exitProcess calls Services.Close before it stops extension transports (coding/cli/profiling.go), so waiting for that stream could hold process exit behind an extension response. Pi has no equivalent wait: its process exits.
+// Services.Close drains Services-owned model tasks only. A caller-owned stream on a Models-collection provider belongs to its Session, and cmd/ompig's exitProcess calls Services.Close before it stops extension transports (coding/cli/profiling.go), so waiting for that stream could hold process exit behind an extension response. Pi has no equivalent wait: its process exits.
 func TestServicesCloseDoesNotAwaitCallerOwnedStream(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		services, _ := nativeCompatServices(t, "", nil)

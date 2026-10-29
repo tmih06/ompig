@@ -15,7 +15,7 @@ import (
 // position of a key params already has and appends a new one (packages/ai/src/api/openai-completions.ts:802-1009: the literal at :822-831,
 // then stream_options :834, store :838, max tokens :842-849, temperature :851, tools :855-863, tool_choice :869, priority :873, the
 // thinking-format members :879-976, the budget field :982-984, provider :988, providerOptions :992-1000, samplingParams :1004-1007).
-// Pi's own buildParams writes the oracle bytes through onPayload; PiG's bytes are the HTTP request body.
+// Pi's own buildParams writes the oracle bytes through onPayload; Ompig's bytes are the HTTP request body.
 func TestOpenAICompletionsRequestKeysFollowPiAssignmentOrder(t *testing.T) {
 	type keyOrderCase struct {
 		Name     string          `json:"name"`

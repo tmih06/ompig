@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // benchReplacementBuilder returns the process-fixed builder print mode uses, configured with one Node extension, and the startup build.
@@ -18,10 +18,10 @@ func benchReplacementBuilder(b testing.TB, extensions int) (*cliRuntimeBuilder, 
 	home := b.TempDir()
 	agentDir := filepath.Join(home, "agent")
 	cwd := b.TempDir()
-	b.Setenv("PIG_HOME", home)
-	b.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	b.Setenv("PIG_TEST_FAUX", "1")
-	b.Setenv("PIG_TEST_REPLACE_LOG", filepath.Join(home, "replace.log"))
+	b.Setenv("OMPIG_HOME", home)
+	b.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	b.Setenv("OMPIG_TEST_FAUX", "1")
+	b.Setenv("OMPIG_TEST_REPLACE_LOG", filepath.Join(home, "replace.log"))
 	fixture, err := filepath.Abs(filepath.Join("testdata", "session-replace.mjs"))
 	if err != nil {
 		b.Fatal(err)

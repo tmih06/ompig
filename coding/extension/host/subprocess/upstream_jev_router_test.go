@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The unchanged Pi 0.99.1 example examples/extensions/jev-router.ts runs in the production Node subprocess. Its route function reads `ctx.modelRegistry.find`, `request.previous`, `request.state` and `request.messages`, so these cases drive every branch that does not need the Jev classifier (`ctx.modelRegistry.findOfType` and `classify`, which lane port-99-f6h-model-types owns). The two cases of test/jev-router-example.test.ts that go through the classifier are ported in test/extension-conformance/node_jev_router_test.go.

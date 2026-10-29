@@ -12,7 +12,7 @@ import (
 
 // pi-mono #10770: the sessions directory holds every conversation, tool output and secret a model saw, yet Pi creates it with the umask default (0755),
 // so other users of the machine can list and read it.
-// pig divergence (D132): every directory PiG creates for sessions is 0700.
+// ompig divergence (D132): every directory Ompig creates for sessions is 0700.
 func TestSessionDirectoriesAreCreatedOwnerOnly(t *testing.T) {
 	assertOwnerOnly := func(t *testing.T, root string) {
 		t.Helper()

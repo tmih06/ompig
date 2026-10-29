@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type findTrimCase struct {
@@ -18,7 +18,7 @@ type findTrimCase struct {
 }
 
 // core/tools/find.ts:270 trims each fd output line with String.prototype.trim, which strips U+FEFF and U+00A0 and leaves U+0085 alone; strings.TrimSpace strips U+0085 and
-// U+00A0 and leaves U+FEFF. A file name that begins or ends with one of them must be listed as Pi lists it. Pi's find and PiG's FindTool run over the same directories.
+// U+00A0 and leaves U+FEFF. A file name that begins or ends with one of them must be listed as Pi lists it. Pi's find and Ompig's FindTool run over the same directories.
 func TestFindTrimsOutputLinesLikeJavaScript(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skip("file names with these characters are only portable on Linux")
@@ -67,7 +67,7 @@ emit(out);`, cases, &want)
 			got += err.Error()
 		}
 		if got != want[i] {
-			t.Errorf("case %d names %q\n  PiG %q\n  Pi  %q", i, c.Names, got, want[i])
+			t.Errorf("case %d names %q\n  Ompig %q\n  Pi  %q", i, c.Names, got, want[i])
 		}
 	}
 }

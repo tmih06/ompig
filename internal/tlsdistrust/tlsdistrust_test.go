@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust"
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust/tlsdistrusttest"
+	"github.com/tmih06/ompig/internal/tlsdistrust"
+	"github.com/tmih06/ompig/internal/tlsdistrust/tlsdistrusttest"
 )
 
 // The SHA-256 fingerprints Mozilla bug 2083449 lists (description and comment 2) for the eight certificates eMudhra issued and the

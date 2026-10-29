@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // fakeMutationQueue is a minimal, test-local stand-in for

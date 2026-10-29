@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // session.ts snapshot (163-173) and snapshotAsOf (317-332) resolve the address before queueing, and a read that has to queue re-checks the Session's health

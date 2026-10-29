@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // goroutineGrace bounds how long a goroutine may take to return after its Host shut down.
@@ -30,8 +30,8 @@ func TestHostLeavesNoGoroutineBehindAfterUseReloadAndShutdown(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	result, err := ext.Tools["greet"].Definition.Execute(ctx, "tc-1", json.RawMessage(`{"name":"pig"}`), nil)
-	if err != nil || result.Text() != "Hello, pig!" {
+	result, err := ext.Tools["greet"].Definition.Execute(ctx, "tc-1", json.RawMessage(`{"name":"ompig"}`), nil)
+	if err != nil || result.Text() != "Hello, ompig!" {
 		t.Fatalf("greet = %q, %v", result.Text(), err)
 	}
 	if err := ext.Commands["hello"].Handler(ctx, "args"); err != nil {

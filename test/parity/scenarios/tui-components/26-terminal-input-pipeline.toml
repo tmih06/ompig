@@ -1,7 +1,7 @@
 # Upstream evidence: Pi 1.1.0 packages/tui/src/tui.ts:1044-1120 (TuiBase.handleTerminalInput), driven through a real TuiMainScreen's terminal start() callback.
 # Seven cases cover the listener chain (transform, consume, empty replacement), the debug key (callback required, after the listeners), the key-release filter
-# (wantsKeyRelease, listeners see releases) and the overlay visibility redirect. Pig's side is tui.HandleTerminalInput, the method cmd/pig's config selector drives.
-# Exact equality of the JSON observation lines; no normalization. The Pig probe is a Go test whose observations the wrapper prints, so a failing test fails the run.
+# (wantsKeyRelease, listeners see releases) and the overlay visibility redirect. Ompig's side is tui.HandleTerminalInput, the method cmd/ompig's config selector drives.
+# Exact equality of the JSON observation lines; no normalization. The Ompig probe is a Go test whose observations the wrapper prints, so a failing test fails the run.
 name = "26-terminal-input-pipeline"
 description = "The renderer's terminal input path orders listeners, debug key, release filter and overlay focus as Pi's handleTerminalInput does."
 covers = ["packages/tui/src/tui.ts"]
@@ -9,11 +9,11 @@ tags = ["fast", "hermetic", "tui"]
 driver = "cli-mode"
 
 [env]
-pig_go_tests = ["./tui"]
+ompig_go_tests = ["./tui"]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/terminal-input-pipeline-pig.mjs"]
+ompig_args = ["node", "./test/parity/testdata/terminal-input-pipeline-ompig.mjs"]
 pi_args = ["node", "./test/parity/testdata/terminal-input-pipeline-pi.mjs"]
 
 [cli]

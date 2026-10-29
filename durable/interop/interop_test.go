@@ -1,4 +1,4 @@
-// Cross-runtime proof that PiG's Go Pi Durable and Pi Durable 1.0.4 (Node, the pinned packages) share one store.
+// Cross-runtime proof that Ompig's Go Pi Durable and Pi Durable 1.0.4 (Node, the pinned packages) share one store.
 //
 //   - TestScriptedSessionStoresMatchPiDurable: the same scripted session (documents, a tool that starts a task, a
 //     fork with an init, compaction, a reset) run by each runtime on a fresh SQLite file leaves the same rows.
@@ -23,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // node runs a script of this directory and returns its standard output.

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's TreeList.getEntryDisplayText (modes/interactive/components/tree-selector.js) runs against the vendored Pi module for chains of session entries: user, assistant (text, tool calls, aborted, error), tool result, bash, custom, branch-summary, compaction and metadata entries with ASCII, CJK and astral text across the 50, 80, 200 and 40 length limits.

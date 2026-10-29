@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A registerProvider call after the factory finished carries the declaration the register payload's ProviderDecl does, so the provider keeps the images, classifiers and streamSimple the extension implements. Pi applies pi.registerProvider's whole ProviderConfig at once once the runner is bound (.upstream/v0.99.2/packages/coding-agent/src/core/extensions/types.ts:1766-1803,1875-1903, loader.ts:449-457, runner.ts:517-523).

@@ -6,17 +6,17 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
+	"github.com/tmih06/ompig/coding/piglogin"
 )
 
-// The catalogue and the persisted selection are PiG Standard's piglogin (extension_test.go and login_art_test.go at
-// MichaelKinsy/PiG d86eb93), which the Pigpen games read: the IDs and the state file location are a contract with them.
-// The character sprites of the owner's earlier PiG piglogin follow the color sprites, with the sheriff, in that
+// The catalogue and the persisted selection are Ompig Standard's piglogin (extension_test.go and login_art_test.go at
+// tmih06/ompig d86eb93), which the Pigpen games read: the IDs and the state file location are a contract with them.
+// The character sprites of the owner's earlier Ompig piglogin follow the color sprites, with the sheriff, in that
 // piglogin's order (owner decision 2026-10-01: the default first, then the colors, then the characters).
 
 var wantIDs = []string{
-	"pig-default", "pink", "green", "mint", "sandy", "grey", "blush", "lavender", "cloud",
-	"pigrogu", "darth-vader", "kratos", "piglet", "spider-ham", "sheriff",
+	"ompig-default", "pink", "green", "mint", "sandy", "grey", "blush", "lavender", "cloud",
+	"pigrogu", "darth-vader", "kratos", "ompiglet", "spider-ham", "sheriff",
 }
 
 func TestCatalogueHasEverySpriteInOrder(t *testing.T) {
@@ -30,15 +30,15 @@ func TestCatalogueHasEverySpriteInOrder(t *testing.T) {
 	if !slices.Equal(ids, wantIDs) {
 		t.Fatalf("ids = %v, want %v", ids, wantIDs)
 	}
-	if piglogin.DefaultID != "pig-default" || piglogin.Default().ID != "pig-default" {
-		t.Fatalf("default = %q / %q, want pig-default", piglogin.DefaultID, piglogin.Default().ID)
+	if piglogin.DefaultID != "ompig-default" || piglogin.Default().ID != "ompig-default" {
+		t.Fatalf("default = %q / %q, want ompig-default", piglogin.DefaultID, piglogin.Default().ID)
 	}
 }
 
 func TestDefaultSpriteIsTheWebsiteGreenPig(t *testing.T) {
-	// assets/pig/website-art.txt of the pig-play Package: the modal colors of the website's pixel pig and wordmark.
+	// assets/ompig/website-art.txt of the ompig-play Package: the modal colors of the website's pixel ompig and wordmark.
 	got := piglogin.Default()
-	if got.Name != "PiG" || got.Tagline != "The minimal coding agent, in Go." {
+	if got.Name != "Ompig" || got.Tagline != "The minimal coding agent, in Go." {
 		t.Errorf("default = %q %q", got.Name, got.Tagline)
 	}
 	body, snout := got.Body, got.Snout
@@ -82,7 +82,7 @@ func TestVariantStateDefaultsAndPersists(t *testing.T) {
 	if got := piglogin.LoadVariant(root); got.ID != "green" {
 		t.Fatalf("persisted variant = %q, want green", got.ID)
 	}
-	if want := filepath.Join(root, "state", "pig-standard", "login.json"); piglogin.StatePath(root) != want {
+	if want := filepath.Join(root, "state", "ompig-standard", "login.json"); piglogin.StatePath(root) != want {
 		t.Fatalf("state path = %s, want %s", piglogin.StatePath(root), want)
 	}
 	data, err := os.ReadFile(piglogin.StatePath(root))
@@ -116,7 +116,7 @@ func TestUnreadableSavedSelectionFallsBackToDefault(t *testing.T) {
 	}
 }
 
-// The sprite selection lives under the one config root (internal/configroot: PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig), the root the
+// The sprite selection lives under the one config root (internal/configroot: OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig), the root the
 // Pigpen games read through the SDK's ConfigHome. Activate saves there, Active reads from there, and an unresolvable root is an error, never a
 // relative path.
 func TestSpriteStateFollowsTheConfigRoot(t *testing.T) {
@@ -124,12 +124,12 @@ func TestSpriteStateFollowsTheConfigRoot(t *testing.T) {
 	xdg := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", "")
+	t.Setenv("OMPIG_HOME", "")
 	t.Setenv("XDG_CONFIG_HOME", xdg)
 	if err := piglogin.Activate("cloud"); err != nil {
 		t.Fatal(err)
 	}
-	want := piglogin.StatePath(filepath.Join(xdg, "pig"))
+	want := piglogin.StatePath(filepath.Join(xdg, "ompig"))
 	if _, err := os.Stat(want); err != nil {
 		t.Fatalf("selection not saved under the XDG config root: %v", err)
 	}
@@ -139,7 +139,7 @@ func TestSpriteStateFollowsTheConfigRoot(t *testing.T) {
 	t.Setenv("XDG_CONFIG_HOME", "")
 	t.Setenv("HOME", "")
 	t.Setenv("USERPROFILE", "")
-	if err := piglogin.Activate("pig-default"); err == nil {
+	if err := piglogin.Activate("ompig-default"); err == nil {
 		t.Fatal("Activate succeeded without a home directory")
 	}
 	if got := piglogin.Active().ID; got != piglogin.DefaultID {
@@ -149,7 +149,7 @@ func TestSpriteStateFollowsTheConfigRoot(t *testing.T) {
 
 func TestActivateSavesAndSelects(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	piglogin.Refresh()
 	if got := piglogin.Active(); got.ID != piglogin.DefaultID {
 		t.Fatalf("active = %q before any selection", got.ID)
@@ -173,19 +173,19 @@ func TestActivateSavesAndSelects(t *testing.T) {
 
 func TestActiveFollowsAnotherWriterAfterRefresh(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	piglogin.Refresh()
 	if err := piglogin.SaveVariant(root, "cloud"); err != nil {
 		t.Fatal(err)
 	}
 	piglogin.Refresh()
 	if got := piglogin.Active(); got.ID != "cloud" {
-		t.Fatalf("active = %q after Refresh, want cloud (a game or another PiG wrote it)", got.ID)
+		t.Fatalf("active = %q after Refresh, want cloud (a game or another Ompig wrote it)", got.ID)
 	}
 	other := t.TempDir()
-	t.Setenv("PIG_HOME", other)
+	t.Setenv("OMPIG_HOME", other)
 	if got := piglogin.Active(); got.ID != piglogin.DefaultID {
-		t.Fatalf("active = %q under another PIG_HOME, want the default", got.ID)
+		t.Fatalf("active = %q under another OMPIG_HOME, want the default", got.ID)
 	}
 }
 

@@ -8,11 +8,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/third_party/jsonschema"
+	"github.com/tmih06/ompig/third_party/jsonschema"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // The expressions of the format checks. Formats creates them with the format table on first use, so package initialization allocates
@@ -27,7 +27,7 @@ var formats struct {
 	table map[string]func(string) bool
 }
 
-// Formats returns the formats of typebox's registry that Pig ports, by name. Every call returns the same map.
+// Formats returns the formats of typebox's registry that Ompig ports, by name. Every call returns the same map.
 func Formats() map[string]func(string) bool {
 	formats.once.Do(func() {
 		formatDateTimeSeparator = lazyregexp.New(`[Tt]`) // /T/i in value.split(/T/i)

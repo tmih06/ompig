@@ -7,7 +7,7 @@ import (
 
 // rpc-mode.ts awaits executeBash after Session subscribers publish every correlated output update.
 func TestRPCBashUpdatesPrecedeResponse(t *testing.T) {
-	process := startRPCProcessAt(t, t.TempDir(), []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
+	process := startRPCProcessAt(t, t.TempDir(), []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
 	for _, id := range []*string{new("bash-1"), nil, new("")} {
 		command := map[string]any{"type": "bash", "command": "printf 'hello world'"}
 		if id != nil {

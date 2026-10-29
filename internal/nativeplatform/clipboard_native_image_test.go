@@ -9,7 +9,7 @@ import (
 	"image/color"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/imageprocessing"
 )
 
 // nativeImageFixture is a 3x2 opaque image with a distinct color per pixel, so a swapped channel, a flipped row or a wrong stride

@@ -4,10 +4,10 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// pig divergence (D203): Pi's registerProvider(id, {apiKey: ""}) keeps the empty string as a configured raw key (provider-composer.ts:397 `extension?.apiKey ?? config?.apiKey`), so the provider reads configured and its models available after the refresh settles, and every request then fails with "No API key". PiG reads an empty apiKey as no key: the provider stays unconfigured until a key, a credential or an environment variable supplies one. A non-empty key is configured in both.
+// ompig divergence (D203): Pi's registerProvider(id, {apiKey: ""}) keeps the empty string as a configured raw key (provider-composer.ts:397 `extension?.apiKey ?? config?.apiKey`), so the provider reads configured and its models available after the refresh settles, and every request then fails with "No API key". Ompig reads an empty apiKey as no key: the provider stays unconfigured until a key, a credential or an environment variable supplies one. A non-empty key is configured in both.
 func TestRegisterProviderWithEmptyAPIKeyIsNotConfigured(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		services := newRegistrationServices(t)

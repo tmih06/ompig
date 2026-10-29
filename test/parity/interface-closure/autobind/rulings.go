@@ -695,7 +695,7 @@ func (d *detector) typeLevelAlias(e *upstreamEntry) string {
 		return "" // no Go type carries a shape the alias computes from
 	}
 	return "TL: " + e.Name + "<" + strings.Join(names, ", ") + "> is a TypeScript type-level computation over its type parameters (" + truncate(strings.Join(strings.Fields(b), " "), 120) +
-		"); it has no value, member or call, so nothing of it exists at run time and Go generics cannot express it. PiG's concrete Go types carry the shapes it computes where they are used, here " + carrier.Target() + ". " + rulingsDecl
+		"); it has no value, member or call, so nothing of it exists at run time and Go generics cannot express it. Ompig's concrete Go types carry the shapes it computes where they are used, here " + carrier.Target() + ". " + rulingsDecl
 }
 
 // typeLevelReference reports whether a body is one instantiation of another type-level alias of the row's package

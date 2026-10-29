@@ -8,9 +8,9 @@ import (
 	"testing"
 )
 
-// scriptEchoEnv makes a copy of this test binary stand in for pig: it prints
+// scriptEchoEnv makes a copy of this test binary stand in for ompig: it prints
 // its working directory and then each argument, one per line.
-const scriptEchoEnv = "PIG_TEST_SCRIPT_ECHO"
+const scriptEchoEnv = "OMPIG_TEST_SCRIPT_ECHO"
 
 func echoWorkingDirectoryAndArgs() int {
 	cwd, err := os.Getwd()

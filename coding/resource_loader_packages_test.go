@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func loaderFor(t *testing.T, f resourceLoaderFixture, settings icodingagent.Settings, trusted bool, mutate func(*DefaultResourceLoaderOptions)) *DefaultResourceLoader {
@@ -169,7 +169,7 @@ func TestDefaultLoaderInstallsMissingNPMPackages(t *testing.T) {
 	newFixture := func(t *testing.T, fail bool) (resourceLoaderFixture, string) {
 		f := newResourceLoaderFixture(t)
 		t.Setenv("PI_OFFLINE", "")
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		command, record := fakeNPM(t, t.TempDir(), fail)
 		settings, err := json.Marshal(map[string]any{"npmCommand": command, "packages": []string{"npm:installed-pkg"}})
 		if err != nil {
@@ -430,9 +430,9 @@ func TestDefaultResourceLoaderResolvesItsDirectories(t *testing.T) {
 func TestDefaultLoaderResolvesGitPackagesUnderItsAgentDir(t *testing.T) {
 	f := newResourceLoaderFixture(t)
 	t.Setenv("PI_OFFLINE", "1")
-	checkout := filepath.Join(f.agentDir, "git", "github.com", "example", "pig-review")
+	checkout := filepath.Join(f.agentDir, "git", "github.com", "example", "ompig-review")
 	writeSkill(t, filepath.Join(checkout, "skills"), "git-skill")
-	loader := loaderFor(t, f, icodingagent.Settings{Packages: []icodingagent.PackageSource{{Source: "git:github.com/example/pig-review"}}}, true, nil)
+	loader := loaderFor(t, f, icodingagent.Settings{Packages: []icodingagent.PackageSource{{Source: "git:github.com/example/ompig-review"}}}, true, nil)
 	if got := skillNames(loader); !slices.Equal(got, []string{"git-skill"}) {
 		t.Fatalf("skills = %v, want the Package installed under %s", got, f.agentDir)
 	}
@@ -445,18 +445,18 @@ func TestDefaultLoaderInstallsGitPackagesUnderItsAgentDir(t *testing.T) {
 	}
 	f := newResourceLoaderFixture(t)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	bin := t.TempDir()
 	writeResource(t, filepath.Join(bin, "git"), "#!/bin/sh\nif [ \"$1\" = clone ]; then mkdir -p \"$3/skills/git-skill\"; printf -- '---\\nname: git-skill\\ndescription: Git skill\\n---\\nBody\\n' > \"$3/skills/git-skill/SKILL.md\"; fi\n")
 	if err := os.Chmod(filepath.Join(bin, "git"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
-	loader := loaderFor(t, f, icodingagent.Settings{Packages: []icodingagent.PackageSource{{Source: "git:github.com/example/pig-review"}}}, true, nil)
+	loader := loaderFor(t, f, icodingagent.Settings{Packages: []icodingagent.PackageSource{{Source: "git:github.com/example/ompig-review"}}}, true, nil)
 	if got := skillNames(loader); !slices.Equal(got, []string{"git-skill"}) {
 		t.Fatalf("skills = %v", got)
 	}
-	if _, err := os.Stat(filepath.Join(f.agentDir, "git", "github.com", "example", "pig-review", "skills")); err != nil {
+	if _, err := os.Stat(filepath.Join(f.agentDir, "git", "github.com", "example", "ompig-review", "skills")); err != nil {
 		t.Errorf("the clone is not below the loader's agent directory: %v", err)
 	}
 	if _, err := os.Stat(filepath.Join(filepath.Dir(f.agentDir), "ambient")); err == nil {
@@ -647,7 +647,7 @@ func TestDefaultLoaderExplicitExclusionDisablesAutoDiscoveredResources(t *testin
 func TestDefaultLoaderLoadsProjectResourcesWhenProjectDirIsTheConfigRoot(t *testing.T) {
 	f := newResourceLoaderFixture(t)
 	projectDir := icodingagent.ProjectConfigDir(f.cwd)
-	t.Setenv("PIG_HOME", projectDir)
+	t.Setenv("OMPIG_HOME", projectDir)
 	writeSkill(t, filepath.Join(projectDir, "skills"), "project-skill")
 	writePrompt(t, filepath.Join(projectDir, "prompts", "project-prompt.md"), "Project prompt")
 	loader := loaderFor(t, f, icodingagent.Settings{}, true, nil)
@@ -798,7 +798,7 @@ func TestDefaultLoaderReloadResolvesSourcesInPiOrder(t *testing.T) {
 	t.Run("missing npm Package installed before a malformed entry rejects", func(t *testing.T) {
 		f := newResourceLoaderFixture(t)
 		t.Setenv("PI_OFFLINE", "")
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		command, record := fakeNPM(t, t.TempDir(), false)
 		settings, err := json.Marshal(map[string]any{"npmCommand": command, "packages": []string{"npm:installed-pkg"}, "skills": []string{"file:///%ZZ"}})
 		if err != nil {

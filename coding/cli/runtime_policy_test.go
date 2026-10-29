@@ -11,12 +11,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // runtimePolicyChildEnv makes the test binary run the command line as a child: "1" runs Main(--version) and prints, as it exits, the
 // GOMAXPROCS it started with, the GOMAXPROCS it exits with and its GC percent; "rpc" runs Main(--mode rpc).
-const runtimePolicyChildEnv = "PIG_TEST_RUNTIME_POLICY_CHILD"
+const runtimePolicyChildEnv = "OMPIG_TEST_RUNTIME_POLICY_CHILD"
 
 // D174: when the environment does not set GOMAXPROCS, Main caps it at min(2, the runtime default) before anything else runs; a user's
 // GOMAXPROCS and GOGC stay as set. 2 is the cap E12b chose (procpolicy.Cap). At a5f9b338cf the unset case exits at the runtime default.
@@ -45,7 +45,7 @@ func TestRuntimePolicyRespectsUserEnv(t *testing.T) {
 		t.Helper()
 		home := t.TempDir()
 		command := exec.Command(os.Args[0], "-test.run=^TestRuntimePolicyRespectsUserEnv$")
-		command.Env = append(append(append([]string(nil), environment...), runtimePolicyChildEnv+"=1", "HOME="+home, "USERPROFILE="+home, "PIG_OFFLINE=1"), extra...)
+		command.Env = append(append(append([]string(nil), environment...), runtimePolicyChildEnv+"=1", "HOME="+home, "USERPROFILE="+home, "OMPIG_OFFLINE=1"), extra...)
 		out, err := command.Output()
 		if err != nil {
 			t.Fatalf("child: %v\n%s", err, out)
@@ -78,7 +78,7 @@ func TestRuntimePolicyRespectsUserEnv(t *testing.T) {
 }
 
 // D174: an rpc run caps GOMAXPROCS at procpolicy.RPCCap when the environment does not set it, and a user's GOMAXPROCS still wins. The
-// child is the real command line in rpc mode; stdin ends at once, so it exits through exitProcess, which writes the PIG_PROFILE=metrics
+// child is the real command line in rpc mode; stdin ends at once, so it exits through exitProcess, which writes the OMPIG_PROFILE=metrics
 // record with the width at exit. At 0c3963388f the unset case exits at the general cap, 2.
 func TestRPCRunsOnTheRPCCap(t *testing.T) {
 	if os.Getenv(runtimePolicyChildEnv) == "rpc" {
@@ -90,7 +90,7 @@ func TestRPCRunsOnTheRPCCap(t *testing.T) {
 	}
 	var environment []string
 	for _, kv := range os.Environ() {
-		if !strings.HasPrefix(kv, "GOMAXPROCS=") && !strings.HasPrefix(kv, "PIG_PROFILE") {
+		if !strings.HasPrefix(kv, "GOMAXPROCS=") && !strings.HasPrefix(kv, "OMPIG_PROFILE") {
 			environment = append(environment, kv)
 		}
 	}
@@ -98,8 +98,8 @@ func TestRPCRunsOnTheRPCCap(t *testing.T) {
 		t.Helper()
 		home, profiles := t.TempDir(), t.TempDir()
 		command := exec.Command(os.Args[0], "-test.run=^TestRPCRunsOnTheRPCCap$")
-		command.Env = append(append(append([]string(nil), environment...), runtimePolicyChildEnv+"=rpc", "HOME="+home, "USERPROFILE="+home, "PIG_HOME="+filepath.Join(home, ".pig"),
-			"PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_OFFLINE=1", "PIG_PROFILE=metrics", "PIG_PROFILE_DIR="+profiles), extra...)
+		command.Env = append(append(append([]string(nil), environment...), runtimePolicyChildEnv+"=rpc", "HOME="+home, "USERPROFILE="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"),
+			"OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "OMPIG_PROFILE=metrics", "OMPIG_PROFILE_DIR="+profiles), extra...)
 		if out, err := command.CombinedOutput(); err != nil {
 			t.Fatalf("child: %v\n%s", err, out)
 		}

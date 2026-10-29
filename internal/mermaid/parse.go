@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Source-text-to-model parsing, ported from grok-mermaid parse.ts. Every parseX

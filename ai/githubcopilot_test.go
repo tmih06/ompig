@@ -945,7 +945,7 @@ func TestHasCopilotVisionInput_DetectsToolResultImages(t *testing.T) {
 
 // ─── env-token fallback (upstream auth-storage.getApiKey step 4) ───────────────
 
-// TestCopilotEnvTokenFallback proves pig matches upstream: when auth.json has no
+// TestCopilotEnvTokenFallback proves ompig matches upstream: when auth.json has no
 // github-copilot OAuth credential, the env API key is used directly as the
 // bearer and the base URL is parsed from its proxy-ep claim. Before the fix,
 // getAccessToken refused with "not logged in" regardless of the env var.
@@ -1011,7 +1011,7 @@ func TestCopilotEnvTokenFallback(t *testing.T) {
 // TestParseGitHubCopilotModelCatalog mirrors upstream parseGitHubCopilotModelCatalog
 // (github-copilot.ts:93-133): only a model whose account policy state is
 // "unconfigured" needs a policy-enable POST, and an unconfigured model that
-// pig's catalog doesn't recognize is never enabled.
+// ompig's catalog doesn't recognize is never enabled.
 func TestParseGitHubCopilotModelCatalog(t *testing.T) {
 	item := func(id string, pickerEnabled bool, policyState string, toolCalls any) map[string]any {
 		m := map[string]any{"id": id, "model_picker_enabled": pickerEnabled}
@@ -1174,7 +1174,7 @@ func copilotJSONResp(status int, body string) *http.Response {
 // account policy is "unconfigured" (github-copilot.ts:93-133, 471-480), and
 // only prints "Enabling models..." when that list is non-empty.
 //
-// This test fails on the pre-fix pig behavior: the old enableAllCopilotModels
+// This test fails on the pre-fix ompig behavior: the old enableAllCopilotModels
 // posted a policy update to a fixed 14-model list unconditionally, so it
 // would have made a policy POST (and reported "Enabling models...") even
 // though this catalog says the model's policy is already "enabled".

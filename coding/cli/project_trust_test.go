@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestResolveProjectTrustedDefaultsToDeniedWithoutUI(t *testing.T) {
@@ -85,7 +85,7 @@ func TestResolveProjectTrustedInteractiveSelectionPersists(t *testing.T) {
 	if !trusted {
 		t.Fatal("interactive Trust selection was denied")
 	}
-	wantPrompt := "Trust project folder?\n" + project + "\n\nThis allows pig to load .pig settings and resources, install missing project packages, and execute project extensions."
+	wantPrompt := "Trust project folder?\n" + project + "\n\nThis allows ompig to load .ompig settings and resources, install missing project packages, and execute project extensions."
 	if ui.title != wantPrompt {
 		t.Fatalf("trust prompt = %q, want %q", ui.title, wantPrompt)
 	}
@@ -151,7 +151,7 @@ func TestProjectTrustNoninteractiveDoesNotPromptOrWarn(t *testing.T) {
 			}
 			cmd := exec.CommandContext(t.Context(), binary, args...)
 			cmd.Dir = cwd
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+t.TempDir())
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+t.TempDir())
 			output, err := cmd.CombinedOutput()
 			if err != nil {
 				t.Fatalf("%s: %v\n%s", mode, err, output)
@@ -216,8 +216,8 @@ func TestTrustPromptNamesTheShadowedWorkspacePiglet(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(ui.title, `Piglet "demo"`) || !strings.Contains(ui.title, "not used for this run") {
-		t.Fatalf("trust prompt does not name the shadowed Piglet:\n%s", ui.title)
+	if !strings.Contains(ui.title, `Ompiglet "demo"`) || !strings.Contains(ui.title, "not used for this run") {
+		t.Fatalf("trust prompt does not name the shadowed Ompiglet:\n%s", ui.title)
 	}
 	ui.title = ""
 	if _, err := resolveProjectTrusted(context.Background(), projectTrustResolutionOptions{
@@ -225,7 +225,7 @@ func TestTrustPromptNamesTheShadowedWorkspacePiglet(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(ui.title, "defines the Piglet") {
-		t.Fatalf("trust prompt names a Piglet when none is shadowed:\n%s", ui.title)
+	if strings.Contains(ui.title, "defines the Ompiglet") {
+		t.Fatalf("trust prompt names a Ompiglet when none is shadowed:\n%s", ui.title)
 	}
 }

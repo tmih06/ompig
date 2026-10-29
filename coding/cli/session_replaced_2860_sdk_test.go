@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // replaced2860Fixtures returns the -e argument of each SDK realization of testdata/session-replaced-2860: the Node module, the Python module, and the Go and Rust executables built from their testdata sources.
@@ -47,20 +47,20 @@ func replaced2860Fixtures(t *testing.T) map[string]string {
 	}
 }
 
-// runReplaced2860 runs pig in print mode with the fixture and messages, and returns the fixture's log with each process id replaced by its first-seen ordinal.
+// runReplaced2860 runs ompig in print mode with the fixture and messages, and returns the fixture's log with each process id replaced by its first-seen ordinal.
 func runReplaced2860(t *testing.T, bin, fixture string, messages ...string) []string {
 	t.Helper()
 	dir := t.TempDir()
 	log := filepath.Join(dir, "2860.log")
 	args := []string{"--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", filepath.Join(dir, "sessions"), "--model", "test-faux/faux-1", "-e", fixture, "-p"}
-	// A blocked extension keeps pig running, so each run has a bound.
+	// A blocked extension keeps ompig running, so each run has a bound.
 	ctx := testbudget.Context(t)
 	cmd := exec.CommandContext(ctx, bin, append(args, messages...)...)
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+filepath.Join(dir, "home"), "PIG_CODING_AGENT_DIR="+filepath.Join(dir, "agent"), "PIG_TEST_FAUX=1",
-		"PIG_TEST_2860_LOG="+log, "PIG_TEST_2860_MARKS="+filepath.Join(dir, "marks.json"))
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+filepath.Join(dir, "home"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(dir, "agent"), "OMPIG_TEST_FAUX=1",
+		"OMPIG_TEST_2860_LOG="+log, "OMPIG_TEST_2860_MARKS="+filepath.Join(dir, "marks.json"))
 	if out, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("pig -p %q: %v\n%s", messages, err, out)
+		t.Fatalf("ompig -p %q: %v\n%s", messages, err, out)
 	}
 	data, err := os.ReadFile(log)
 	if err != nil {
@@ -86,7 +86,7 @@ func runReplaced2860(t *testing.T, bin, fixture string, messages ...string) []st
 // Pi's 2860-replaced-session-context.test.ts:147, 211 and 243 run a withSession callback from an extension command after newSession, fork and switchSession. Each SDK realization runs the same bodies through print mode: the callback receives a context of the replacement Session after it is rebound (start:2 precedes with:1), the command's captured context and API throw or fail, the replacement context's sendUserMessage returns after the replacement Session's turn, its session and state reads see the replacement Session, and a callback's error rejects the call with that error. Each Session's extensions run in their own process (D70), so process ordinals name the instances. The faux model answers "reply with exactly: <text>" with <text>, in place of the test's scripted replies.
 func TestReplacedSession2860AcrossSDKs(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes in four languages")
+		t.Skip("starts the ompig binary and extension processes in four languages")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	fixtures := replaced2860Fixtures(t)

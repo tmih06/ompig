@@ -8,7 +8,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
+	"github.com/tmih06/ompig/internal/jsparity"
 )
 
 // Call runs the member of TypeBox's `Type` namespace named member on args, as JavaScript would: arguments past the

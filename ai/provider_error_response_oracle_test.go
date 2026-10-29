@@ -6,13 +6,13 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/*.ts error handling, packages/ai/src/utils/provider-errors
 
 // Error responses (a status other than 200 with a JSON, text or empty body, a 200 that is not an event stream) answered to each API module: the
-// pinned pi-ai and PiG must end with the same events, stop reason and error message. Statuses that Pi retries (408, 409, 429, 5xx) are left out.
+// pinned pi-ai and Ompig must end with the same events, stop reason and error message. Statuses that Pi retries (408, 409, 429, 5xx) are left out.
 func TestProviderErrorResponseEventsMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(139))
 	pick := func(items ...string) string { return items[rng.Intn(len(items))] }

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/knowngaps"
+	"github.com/tmih06/ompig/test/parity/knowngaps"
 )
 
 type upstreamKeybindingInventory struct {
@@ -82,7 +82,7 @@ func TestTUIKeybindingDefinitionsMatchUpstreamInventory(t *testing.T) {
 		for id := range definitions {
 			if !upstream[id] && !reported[id] {
 				reported[id] = true
-				report(id, "PiG defines a TUI keybinding the pinned Pi does not")
+				report(id, "Ompig defines a TUI keybinding the pinned Pi does not")
 			}
 		}
 	}

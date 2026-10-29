@@ -245,12 +245,12 @@ func derivedRow(l *ledger, d *decision, hash string) (orderedRow, bool) {
 	}
 	how := "an asserting Go test"
 	if len(d.Info.Tests) == 0 {
-		how = "a function reachable from cmd/pig"
+		how = "a function reachable from cmd/ompig"
 	}
 	rationale := fmt.Sprintf("%s: %s is Go %s (name rule %s), every shape rule holds, and it is exercised by %s. The row is re-derived on every run of make interface-gaps-update.", derivedPrefix, shortName(d.ID), target, rule, how)
 	row := orderedRow{
 		{"id", jsonValue(d.ID)}, {"disposition", jsonValue("ported")}, {"upstreamShapeHash", jsonValue(hash)}, {"rationale", jsonValue(rationale)},
-		{"pigTargets", jsonValue(append([]string{target}, d.Targets...))},
+		{"ompigTargets", jsonValue(append([]string{target}, d.Targets...))},
 		{"layers", jsonValue(layers)},
 		{"production", jsonValue(production)}, {"evidence", jsonValue(evidence)},
 	}
@@ -321,7 +321,7 @@ func syncMapping(l *ledger, doc *mappingDoc, decisions map[string]*decision) syn
 		if d.DesignedOut != "" {
 			doc.Mappings[i] = orderedRow{
 				{"id", jsonValue(id)}, {"disposition", jsonValue("designed-out")}, {"upstreamShapeHash", jsonValue(current)},
-				{"rationale", jsonValue(d.DesignedOut)}, {"pigTargets", jsonValue([]string{d.Candidate})},
+				{"rationale", jsonValue(d.DesignedOut)}, {"ompigTargets", jsonValue([]string{d.Candidate})},
 			}
 			st.Derived++
 			continue
@@ -398,10 +398,10 @@ func (r orderedRow) list(key string) []string {
 func (l *ledger) referencesResolve(row orderedRow) bool {
 	for _, ref := range row.list("production") {
 		if file, _, _ := strings.Cut(strings.TrimPrefix(strings.TrimPrefix(strings.TrimPrefix(ref, "call:"), "tested:"), "public-api:"), "#"); filepath.Base(file) == "parity_harness.go" {
-			return false // a parity-harness probe runs only under PIG_PARITY_HARNESS=1 and is not a production caller
+			return false // a parity-harness probe runs only under OMPIG_PARITY_HARNESS=1 and is not a production caller
 		}
 	}
-	refs := append(row.list("pigTargets"), row.list("production")...)
+	refs := append(row.list("ompigTargets"), row.list("production")...)
 	for _, ref := range row.list("evidence") {
 		if strings.HasPrefix(ref, "test:") {
 			refs = append(refs, ref)

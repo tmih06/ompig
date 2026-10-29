@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/automation/release/modulehash"
+	"github.com/tmih06/ompig/automation/release/modulehash"
 )
 
 func writeTree(t *testing.T, root string, files map[string]int) {

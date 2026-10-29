@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's convertToLlm and bashExecutionToText (core/messages.ts) run against the vendored Pi module for the same custom-role messages.

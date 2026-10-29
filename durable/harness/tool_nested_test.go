@@ -13,11 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Pi 1.2.0 harness/tool.ts executeTool and test/harness-nested-tools.test.ts: a tool calls another tool as a nested
@@ -183,7 +183,7 @@ func TestToolHooksSeeTheParentOfANestedCall(t *testing.T) {
 	}
 }
 
-// PiG coverage beyond the Pi file: types.ts ToolHookCall = ToolCall & { parent? }: a hook reads the call's `type` ("toolCall")
+// Ompig coverage beyond the Pi file: types.ts ToolHookCall = ToolCall & { parent? }: a hook reads the call's `type` ("toolCall")
 // for a model-issued and for a nested call.
 func TestToolHookCallsCarryTheToolCallType(t *testing.T) {
 	setup := chatSetup(t)
@@ -1042,7 +1042,7 @@ func TestToolTaskMigratesVersion1InputToAModelIssuedCall(t *testing.T) {
 	}
 }
 
-// PiG coverage beyond the Pi file: executeTool after the caller settled rejects.
+// Ompig coverage beyond the Pi file: executeTool after the caller settled rejects.
 func TestANestedCallAfterItsCallerSettledIsRejected(t *testing.T) {
 	setup := chatSetup(t)
 	addTool(t, setup.Registry, echoRegistration())

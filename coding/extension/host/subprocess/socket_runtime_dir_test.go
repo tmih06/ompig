@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestSocketRuntimeBaseKeepsADirectoryWhoseSocketsFit(t *testing.T) {
@@ -16,11 +16,11 @@ func TestSocketRuntimeBaseKeepsADirectoryWhoseSocketsFit(t *testing.T) {
 		goos string
 		dir  string
 	}{
-		{"linux", "/run/user/1000/pig"},
-		{"darwin", "/var/folders/zz/zyxvpxvq6csfxvn_n0000000000000/T/pig-501"},
+		{"linux", "/run/user/1000/ompig"},
+		{"darwin", "/var/folders/zz/zyxvpxvq6csfxvn_n0000000000000/T/ompig-501"},
 		{"linux", "/" + strings.Repeat("d", unixSocketPathLimit("linux")-worstRuntimeSocketSuffix-1)},
 		{"darwin", "/" + strings.Repeat("d", unixSocketPathLimit("darwin")-worstRuntimeSocketSuffix-1)},
-		{"windows", `C:\Users\runner\AppData\Local\Temp\pig`},
+		{"windows", `C:\Users\runner\AppData\Local\Temp\ompig`},
 		{"windows", `D:\` + strings.Repeat("d", unixSocketPathLimit("windows")-worstRuntimeSocketSuffix-3)},
 	} {
 		if got := socketRuntimeBase(test.goos, test.dir, 501, `C:\Users\runner\AppData\Local`); got != test.dir {
@@ -34,11 +34,11 @@ func TestSocketRuntimeBaseFallsBackWhenASocketPathCouldExceedTheLimit(t *testing
 	for _, test := range []struct {
 		goos, dir, want string
 	}{
-		{"linux", "/" + strings.Repeat("d", unixSocketPathLimit("linux")-worstRuntimeSocketSuffix), "/tmp/pig-501"},
-		{"darwin", "/" + strings.Repeat("d", unixSocketPathLimit("darwin")-worstRuntimeSocketSuffix), "/tmp/pig-501"},
+		{"linux", "/" + strings.Repeat("d", unixSocketPathLimit("linux")-worstRuntimeSocketSuffix), "/tmp/ompig-501"},
+		{"darwin", "/" + strings.Repeat("d", unixSocketPathLimit("darwin")-worstRuntimeSocketSuffix), "/tmp/ompig-501"},
 		// The CI geometry: a TEMP with spaces, a scoped test directory, and a test-named directory below it.
-		{"windows", `D:\a\_temp\pig extension acceptance\pig-sp-375215422\pig-model-presence-2689393714\pig`, localAppData + `\pig\s`},
-		{"windows", `D:\` + strings.Repeat("d", unixSocketPathLimit("windows")-worstRuntimeSocketSuffix-2), localAppData + `\pig\s`},
+		{"windows", `D:\a\_temp\ompig extension acceptance\ompig-sp-375215422\ompig-model-presence-2689393714\ompig`, localAppData + `\ompig\s`},
+		{"windows", `D:\` + strings.Repeat("d", unixSocketPathLimit("windows")-worstRuntimeSocketSuffix-2), localAppData + `\ompig\s`},
 	} {
 		got := socketRuntimeBase(test.goos, test.dir, 501, localAppData)
 		if test.goos == "windows" {
@@ -64,7 +64,7 @@ func TestSocketRuntimeBaseWindowsWithoutLocalAppDataKeepsTheDirectory(t *testing
 // (a uint32 in decimal): every real directory name stays at or under the worst case.
 func TestSocketRuntimeBaseKeptDirectoryHoldsEveryRuntimeSocketPath(t *testing.T) {
 	for _, dir := range []string{
-		`D:\a\_temp\pig extension acceptance\pig-sp-4294967295\pig ext 4294967295\pig`,
+		`D:\a\_temp\ompig extension acceptance\ompig-sp-4294967295\ompig ext 4294967295\ompig`,
 	} {
 		if got := socketRuntimeBase("windows", dir, 0, `C:\L`); got != dir {
 			t.Fatalf("socketRuntimeBase fell back for %q: %q", dir, got)
@@ -125,7 +125,7 @@ func TestSockPathForUsesAShortDirectoryWhenTheSocketDirectoryIsDeep(t *testing.T
 	}
 }
 
-// The fallback base /tmp/pig-<uid> sits in a shared directory: a base another user could write lets that user rename
+// The fallback base /tmp/ompig-<uid> sits in a shared directory: a base another user could write lets that user rename
 // the Host's private runtime directory and substitute its own before the Host binds its sockets. A Host takes a base
 // only when it is a real directory it owns, and makes an owned base private again.
 func TestEnsureSockRuntimeDirRequiresAPrivateOwnedBase(t *testing.T) {
@@ -133,7 +133,7 @@ func TestEnsureSockRuntimeDirRequiresAPrivateOwnedBase(t *testing.T) {
 		t.Skip("owner and mode checks are Unix-only; Windows accepts its per-user directory as is")
 	}
 	// A short base under /tmp, so socketRuntimeBase keeps it rather than falling back.
-	parent, err := os.MkdirTemp("/tmp", "pig-base-")
+	parent, err := os.MkdirTemp("/tmp", "ompig-base-")
 	if err != nil {
 		t.Fatal(err)
 	}

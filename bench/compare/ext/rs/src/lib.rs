@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
 // SPDX-License-Identifier: MIT
 //! Benchmark extension (Rust): a tool_call handler that does about 2 ms of work per call and counts its calls in $BENCHEXT_COUNTER.
-use pig_sdk::{Extension, ToolResult};
+use ompig_sdk::{Extension, ToolResult};
 use serde_json::json;
 use std::io::Write;
 

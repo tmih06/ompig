@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// pig divergence (D132): /import creates a missing session directory owner-only, like every session directory.
+// ompig divergence (D132): /import creates a missing session directory owner-only, like every session directory.
 func TestImportFromJsonlCreatesAnOwnerOnlySessionDirectory(t *testing.T) {
 	sessionDir := filepath.Join(t.TempDir(), "agent", "sessions", "--proj--")
 	sess, err := NewSession(newTestServices(t), SessionOptions{Model: fakeModel(), SessionDir: sessionDir})

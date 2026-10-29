@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi hands every tool_call handler the one event object. A handler edits event.input in place and the agent loop runs the tool with that object (runner.ts emitToolCall, agent-loop.ts prepareToolCall), so a command rewriter, a guard that normalizes a path or a redactor changes what executes. Every SDK must write its handler's edit back to the Go event's Input, in handler order, whether or not the handler also blocks the call. The in-process Go handler is the reference. The edited values (a rewritten command, a deleted key, an added key, an added nested object) are distinct from the input, so an SDK that never writes its edit back, or that writes back the input it received, cannot match.

@@ -3,7 +3,7 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // section(key, render, {}) leaves tag absent, so the section stays tagged; only an explicit false unwraps it (define.ts:20-26).

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/markdowntransform"
 )
 
 // RequestMarkdownTransform runs an extension's registered display rewrite. A null answer keeps the input, as Pi does for a throwing or non-string transformer.
@@ -25,7 +25,7 @@ type MarkdownTransformPayload struct {
 
 // markdownTransformProxy waits on the caller-owned off-loop generation. It does not cache across messages: two identical messages can have different results from a stateful transformer.
 //
-// pig divergence (D56): a transform the renderer inactivity boundary abandoned returns its input, and the proxy asks again for the same message and context after a renderRetry backoff, then marks the message changed through the context's Retry so its next frame transforms it again. Pi runs transformers in process, so its message always shows the transformed text.
+// ompig divergence (D56): a transform the renderer inactivity boundary abandoned returns its input, and the proxy asks again for the same message and context after a renderRetry backoff, then marks the message changed through the context's Retry so its next frame transforms it again. Pi runs transformers in process, so its message always shows the transformed text.
 type markdownTransformProxy struct {
 	conn       func() *Conn
 	inactivity time.Duration
@@ -57,7 +57,7 @@ type markdownRetryEntry struct {
 }
 
 // markdownRetryMaxWaiters bounds the messages one transform key remembers; messages with identical text and context are rare.
-// pig divergence (D56): Pi runs transformers in process and has no abandoned transform to retry; the bound limits what one abandoned transform asks again.
+// ompig divergence (D56): Pi runs transformers in process and has no abandoned transform to retry; the bound limits what one abandoned transform asks again.
 const markdownRetryMaxWaiters = 256
 
 func (e *markdownRetryEntry) wait(retry markdowntransform.RetryRequester) {
@@ -190,7 +190,7 @@ func (p *markdownTransformProxy) transform(markdown string, transformContext ext
 		// A retry is asked even while the abandoned body still runs, as a render proxy asks its extension: the backoff, not the body, bounds the requests.
 		e.inFlight = true
 	case p.disabledLocked():
-		// pig divergence (D56): while a body the renderer inactivity boundary abandoned still runs, later chains skip this transformer instead of waiting for it.
+		// ompig divergence (D56): while a body the renderer inactivity boundary abandoned still runs, later chains skip this transformer instead of waiting for it.
 		settled := p.stalled
 		p.mu.Unlock()
 		p.giveUp(conn, makeKey(), transformContext.Retry, settled)

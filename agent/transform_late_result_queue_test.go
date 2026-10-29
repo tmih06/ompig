@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A provider may number its tool calls per response, so call id "0" opens a new call every turn. The result of the second turn's call arrives after the next user message; the slot of that call must carry the second result ("two"), not the first turn's result that already answered the first call ("one").

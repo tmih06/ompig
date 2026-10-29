@@ -4,8 +4,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // Pi 1.0.1 (.upstream/v1.0.1/packages/coding-agent/src/extensions/mcp/index.ts loginCommand): outside the terminal UI,

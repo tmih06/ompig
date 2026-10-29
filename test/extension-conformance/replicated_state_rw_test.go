@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // replicatedStateCases are every realization of an SDK the row compares: isolated, packed and fused.
@@ -14,7 +14,7 @@ func replicatedStateCases() []harnessCase {
 	return append(sdkHarnessCases(), packedSDKHarnessCases()...)
 }
 
-// newReplicatedStateSession builds a Session over the harness's extension runner and a faux model, and binds the host actions an SDK reads and writes its replicated state through, as every mode does (cmd/pig bindSessionExtensionActions, coding.BindExtensionHostSessionActions).
+// newReplicatedStateSession builds a Session over the harness's extension runner and a faux model, and binds the host actions an SDK reads and writes its replicated state through, as every mode does (cmd/ompig bindSessionExtensionActions, coding.BindExtensionHostSessionActions).
 func newReplicatedStateSession(t *testing.T, h *harness) (*coding.Session, *ai.FauxProviderHandle) {
 	t.Helper()
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir(), AgentDir: t.TempDir()})

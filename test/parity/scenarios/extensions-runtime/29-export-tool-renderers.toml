@@ -8,7 +8,7 @@
 # partial) and renderResult (collapsed and expanded, final) and converts the
 # ANSI lines to HTML in renderedTools; a renderer that throws leaves the
 # default rendering. RPC export_html goes through the same path.
-# PiG skipped renderers that run in an extension process, and RPC
+# Ompig skipped renderers that run in an extension process, and RPC
 # export_html rendered no extension tool at all.
 # The export-only wrapper declares sequential tool execution (Pi 0.87.1
 # agent-loop.ts:511-526). Parallel timers do not define a cross-runtime
@@ -44,9 +44,9 @@ wait_contains = ['"id":"dump","type":"response","command":"bash"']
 wait_timeout_seconds = 20
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "Export renderers probe.", "--no-context-files", "--no-skills", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/export-tool-renderers.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "Export renderers probe.", "--no-context-files", "--no-skills", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/ext/export-tool-renderers.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/export-tool-renderers.mjs",

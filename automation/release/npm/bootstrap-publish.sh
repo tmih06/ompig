@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
 #
-# ONE-TIME bootstrap publish of PiG's npm packages from a maintainer's machine.
+# ONE-TIME bootstrap publish of Ompig's npm packages from a maintainer's machine.
 #
 # npm can require a package to exist before a trusted publisher (OIDC) can be
 # configured for it. Run this once, after `npm login` as an owner of the
-# @pi-in-go npm org, to publish the eight packages for an already PUBLISHED
+# @ompig npm org, to publish the eight packages for an already PUBLISHED
 # GitHub Release. npm prompts for your one-time password (2FA) as usual.
 # Afterwards, configure the trusted publisher printed at the end on each
 # package; every later release publishes from .github/workflows/npm-publish.yml.
@@ -13,13 +13,13 @@
 # The binaries come only from the published release archives, verified against
 # SHA256SUMS, exactly as in CI. Versions already on npm are skipped.
 #
-# Usage: automation/release/npm/bootstrap-publish.sh [TAG]   (default v<PigVersion>)
-# Env:   PIG_REPO (default MichaelKinsy/PiG), DRY_RUN=1 to pack without publishing.
+# Usage: automation/release/npm/bootstrap-publish.sh [TAG]   (default v<OmpigVersion>)
+# Env:   OMPIG_REPO (default tmih06/ompig), DRY_RUN=1 to pack without publishing.
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "$0")/../../.." && pwd)
-gh_repo=${PIG_REPO:-MichaelKinsy/PiG}
-default_version=$(sed -nE 's/^const PigVersion = "([^"]+)"$/\1/p' "$repo_root/internal/coding/pigversion/pigversion.go")
+gh_repo=${OMPIG_REPO:-tmih06/ompig}
+default_version=$(sed -nE 's/^const OmpigVersion = "([^"]+)"$/\1/p' "$repo_root/internal/coding/pigversion/pigversion.go")
 tag=${1:-v$default_version}
 [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?$ ]] || { echo "bootstrap: bad tag $tag" >&2; exit 1; }
 version=${tag#v}
@@ -39,11 +39,11 @@ fi
 draft=$(gh release view "$tag" --repo "$gh_repo" --json isDraft --jq .isDraft)
 [ "$draft" = false ] || { echo "bootstrap: release $tag is still a draft; publish it first" >&2; exit 1; }
 
-work=$(mktemp -d "${TMPDIR:-/tmp}/pig-npm-bootstrap.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/ompig-npm-bootstrap.XXXXXX")
 echo "bootstrap: workdir $work"
 mkdir -p "$work/release"
 gh release download "$tag" --repo "$gh_repo" --dir "$work/release" \
-  --pattern SHA256SUMS --pattern 'pig-*.tar.gz' --pattern 'pig-*.zip'
+  --pattern SHA256SUMS --pattern 'ompig-*.tar.gz' --pattern 'ompig-*.zip'
 (cd "$work/release" && "${sha256_check[@]}" SHA256SUMS)
 
 python3 "$repo_root/automation/release/npm/pack_npm.py" \

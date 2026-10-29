@@ -6,10 +6,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
-// A tool_call reply carries the input the handler left (`_pigToolCallInput`) beside its block result (`_pigToolCallResult`). The host writes the input into the event's own Input map, which the agent loop reads after the handlers ran, and answers the block result alone (runner.ts emitToolCall). The edit holds when the handler failed, a reply with no input leaves the event as it was, and an input that is not an object is not an input a tool accepts. The reply has exactly these two members: any other shape is an error, which blocks the call, so a block result cannot be lost.
+// A tool_call reply carries the input the handler left (`_ompigToolCallInput`) beside its block result (`_ompigToolCallResult`). The host writes the input into the event's own Input map, which the agent loop reads after the handlers ran, and answers the block result alone (runner.ts emitToolCall). The edit holds when the handler failed, a reply with no input leaves the event as it was, and an input that is not an object is not an input a tool accepts. The reply has exactly these two members: any other shape is an error, which blocks the call, so a block result cannot be lost.
 func TestToolCallReplyEditsTheEventInputInPlace(t *testing.T) {
 	const wireBefore = `{"timeout":5,"drop":"dropped","command":"git status"}`
 	cases := []struct {
@@ -20,19 +20,19 @@ func TestToolCallReplyEditsTheEventInputInPlace(t *testing.T) {
 		wantResult string
 		wantErr    string
 	}{
-		{name: "edit and block", reply: `{"result":{"_pigToolCallInput":{"command":"git status --short","added":true},"_pigToolCallResult":{"block":true,"reason":"no"}}}`, wantInput: map[string]any{"command": "git status --short", "added": true}, wantWire: `{"command":"git status --short","added":true}`, wantResult: `{"block":true,"reason":"no"}`},
-		{name: "edit only", reply: `{"result":{"_pigToolCallInput":{"command":"x"},"_pigToolCallResult":null}}`, wantInput: map[string]any{"command": "x"}, wantWire: `{"command":"x"}`},
-		{name: "no edit", reply: `{"result":{"_pigToolCallResult":{"block":false}}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore, wantResult: `{"block":false}`},
-		{name: "edit then failure", reply: `{"result":{"_pigToolCallInput":{"command":"y"},"_pigToolCallResult":null},"error":{"message":"handler failed"}}`, wantInput: map[string]any{"command": "y"}, wantWire: `{"command":"y"}`, wantErr: "handler failed"},
-		{name: "input is not an object", reply: `{"result":{"_pigToolCallInput":null,"_pigToolCallResult":null}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore},
-		{name: "array input", reply: `{"result":{"_pigToolCallInput":["a"],"_pigToolCallResult":null}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore},
+		{name: "edit and block", reply: `{"result":{"_ompigToolCallInput":{"command":"git status --short","added":true},"_ompigToolCallResult":{"block":true,"reason":"no"}}}`, wantInput: map[string]any{"command": "git status --short", "added": true}, wantWire: `{"command":"git status --short","added":true}`, wantResult: `{"block":true,"reason":"no"}`},
+		{name: "edit only", reply: `{"result":{"_ompigToolCallInput":{"command":"x"},"_ompigToolCallResult":null}}`, wantInput: map[string]any{"command": "x"}, wantWire: `{"command":"x"}`},
+		{name: "no edit", reply: `{"result":{"_ompigToolCallResult":{"block":false}}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore, wantResult: `{"block":false}`},
+		{name: "edit then failure", reply: `{"result":{"_ompigToolCallInput":{"command":"y"},"_ompigToolCallResult":null},"error":{"message":"handler failed"}}`, wantInput: map[string]any{"command": "y"}, wantWire: `{"command":"y"}`, wantErr: "handler failed"},
+		{name: "input is not an object", reply: `{"result":{"_ompigToolCallInput":null,"_ompigToolCallResult":null}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore},
+		{name: "array input", reply: `{"result":{"_ompigToolCallInput":["a"],"_ompigToolCallResult":null}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore},
 		// Pi's handler leaves the object it edited, in its member order (JSON.stringify): command kept its place, aaa followed. Python writes `1.0` and spaces, and the host keeps the JSON.stringify form.
-		{name: "insertion order", reply: `{"result":{"_pigToolCallInput":{"timeout":5,"command":"echo rewritten","aaa":1.0},"_pigToolCallResult":null}}`, wantInput: map[string]any{"timeout": 5.0, "command": "echo rewritten", "aaa": 1.0}, wantWire: `{"timeout":5,"command":"echo rewritten","aaa":1}`},
-		{name: "reorder only", reply: `{"result":{"_pigToolCallInput":{"drop":"dropped","command":"git status","timeout":5},"_pigToolCallResult":null}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: `{"drop":"dropped","command":"git status","timeout":5}`},
+		{name: "insertion order", reply: `{"result":{"_ompigToolCallInput":{"timeout":5,"command":"echo rewritten","aaa":1.0},"_ompigToolCallResult":null}}`, wantInput: map[string]any{"timeout": 5.0, "command": "echo rewritten", "aaa": 1.0}, wantWire: `{"timeout":5,"command":"echo rewritten","aaa":1}`},
+		{name: "reorder only", reply: `{"result":{"_ompigToolCallInput":{"drop":"dropped","command":"git status","timeout":5},"_ompigToolCallResult":null}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: `{"drop":"dropped","command":"git status","timeout":5}`},
 		// A Node handler that returns undefined and leaves the input sends neither member.
 		{name: "empty reply", reply: `{"result":{}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore},
 		// A reply in another shape, such as the bare block result of an extension built against an older SDK, fails the call instead of losing its block.
-		{name: "reply without the envelope", reply: `{"result":{"block":true,"reason":"legacy"}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore, wantErr: `decode tool_call response: json: unknown field "block": "observe" ships a prebuilt binary; if you updated pig, rebuild it against the current pig SDK`},
+		{name: "reply without the envelope", reply: `{"result":{"block":true,"reason":"legacy"}}`, wantInput: map[string]any{"command": "git status", "drop": "dropped", "timeout": 5.0}, wantWire: wireBefore, wantErr: `decode tool_call response: json: unknown field "block": "observe" ships a prebuilt binary; if you updated ompig, rebuild it against the current ompig SDK`},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -107,7 +107,7 @@ func TestToolCallReplyKeepsTheHandlersMemberOrder(t *testing.T) {
 		t.Errorf("request args = %s, want %s", request.Request.Args, want)
 	}
 	var reply ResponsePayload
-	if err := json.Unmarshal([]byte(`{"result":{"_pigToolCallInput":{"command":"git status --short", "zz":1,"aa":{"y":2,"b":3}},"_pigToolCallResult":null}}`), &reply); err != nil {
+	if err := json.Unmarshal([]byte(`{"result":{"_ompigToolCallInput":{"command":"git status --short", "zz":1,"aa":{"y":2,"b":3}},"_ompigToolCallResult":null}}`), &reply); err != nil {
 		t.Fatal(err)
 	}
 	writeLivenessEnvelope(t, peer, Envelope{Type: MsgResponse, ID: request.ID, Response: &reply})

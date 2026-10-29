@@ -266,7 +266,7 @@ func TestLintRules(t *testing.T) {
 			source: "# some comment",
 			sc: scenario{
 				Name:        "deferred-ok",
-				Description: "parked: pig renders error differently",
+				Description: "parked: ompig renders error differently",
 				Driver:      "interactive-tmux",
 				Covers:      []string{"packages/tui/src/autocomplete.ts"},
 				Tags:        []string{"deferred"},
@@ -553,7 +553,7 @@ func TestLintEnvDirPaths(t *testing.T) {
 	// Create a real testdata dir so we can test resolution.
 	dir := t.TempDir()
 	scenarioPath := filepath.Join(dir, "family", "01-test.toml")
-	_ = os.MkdirAll(filepath.Join(dir, "family", "testdata", "pig-agent"), 0o700)
+	_ = os.MkdirAll(filepath.Join(dir, "family", "testdata", "ompig-agent"), 0o700)
 
 	tests := []struct {
 		name      string
@@ -565,7 +565,7 @@ func TestLintEnvDirPaths(t *testing.T) {
 			sc: scenario{
 				Name: "valid",
 				Env: envBlock{
-					Pig: []string{"PIG_CODING_AGENT_DIR=testdata/pig-agent"},
+					Ompig: []string{"OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"},
 				},
 			},
 			wantRules: nil,
@@ -575,7 +575,7 @@ func TestLintEnvDirPaths(t *testing.T) {
 			sc: scenario{
 				Name: "missing",
 				Env: envBlock{
-					Pig: []string{"PIG_CODING_AGENT_DIR=../nonexistent/path"},
+					Ompig: []string{"OMPIG_CODING_AGENT_DIR=../nonexistent/path"},
 				},
 			},
 			wantRules: []string{"env-dir-missing"},
@@ -585,7 +585,7 @@ func TestLintEnvDirPaths(t *testing.T) {
 			sc: scenario{
 				Name: "stray",
 				Env: envBlock{
-					Pig: []string{"PIG_CODING_AGENT_DIR=../scenarios/settings/testdata/pig-agent"},
+					Ompig: []string{"OMPIG_CODING_AGENT_DIR=../scenarios/settings/testdata/ompig-agent"},
 				},
 			},
 			wantRules: []string{"env-dir-missing"},
@@ -595,7 +595,7 @@ func TestLintEnvDirPaths(t *testing.T) {
 			sc: scenario{
 				Name: "ignored",
 				Env: envBlock{
-					Pig: []string{"SOME_OTHER_VAR=../nonexistent"},
+					Ompig: []string{"SOME_OTHER_VAR=../nonexistent"},
 				},
 			},
 			wantRules: nil,
@@ -635,12 +635,12 @@ func TestLintNoLiteralTmpPaths(t *testing.T) {
 	mkSC := func(field string, val string) *scenario {
 		sc := &scenario{Name: "test"}
 		switch field {
-		case "pig_args":
-			sc.Env.PigArgs = []string{"--session-dir", val}
+		case "ompig_args":
+			sc.Env.OmpigArgs = []string{"--session-dir", val}
 		case "pi_args":
 			sc.Env.PiArgs = []string{"--session-dir", val}
-		case "pig_env":
-			sc.Env.Pig = []string{"PIG_HOME=" + val}
+		case "ompig_env":
+			sc.Env.Ompig = []string{"OMPIG_HOME=" + val}
 		case "pre_clear":
 			sc.Tmux.PreClearPaths = []string{val}
 		case "cwd":
@@ -653,15 +653,15 @@ func TestLintNoLiteralTmpPaths(t *testing.T) {
 		sc      *scenario
 		wantTmp bool
 	}{
-		{"clean pig_args", mkSC("pig_args", "{{TEMP}}/sessions"), false},
+		{"clean ompig_args", mkSC("ompig_args", "{{TEMP}}/sessions"), false},
 		{"clean pi_args", mkSC("pi_args", "{{TEMP}}/sessions"), false},
-		{"literal /tmp in pig_args", mkSC("pig_args", "/tmp/pig-parity-x-sessions"), true},
+		{"literal /tmp in ompig_args", mkSC("ompig_args", "/tmp/ompig-parity-x-sessions"), true},
 		{"literal /tmp in pi_args", mkSC("pi_args", "/tmp/pi-parity-x-sessions"), true},
-		{"literal /tmp embedded in env", mkSC("pig_env", "/tmp/foo"), true},
+		{"literal /tmp embedded in env", mkSC("ompig_env", "/tmp/foo"), true},
 		{"literal /tmp in pre_clear_paths", mkSC("pre_clear", "/tmp/anything"), true},
 		{"literal /tmp in cwd", mkSC("cwd", "/tmp/cwd-fixture"), true},
 		{"relative cwd is fine", mkSC("cwd", "testdata/foo"), false},
-		{"embedded =/tmp/ form caught", mkSC("pig_args", "--log=/tmp/x.log"), true},
+		{"embedded =/tmp/ form caught", mkSC("ompig_args", "--log=/tmp/x.log"), true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -729,7 +729,7 @@ replace = "Took Ns"
 	}
 }
 
-// The runner prebuilds the Go test binaries and programs a script lists in env.pig_go_tests, env.pi_go_tests, env.pig_go_programs and
+// The runner prebuilds the Go test binaries and programs a script lists in env.ompig_go_tests, env.pi_go_tests, env.ompig_go_programs and
 // env.pi_go_programs (test/parity/runner/schema.go). The lint decodes the same scenarios, so it must know every key the runner does.
 func TestDecodeScenarioAcceptsTheGoPrebuildEnvKeys(t *testing.T) {
 	source := `
@@ -740,9 +740,9 @@ tags = ["hermetic"]
 driver = "interactive-tmux"
 
 [env]
-pig_go_tests = ["./tui"]
+ompig_go_tests = ["./tui"]
 pi_go_tests = ["./tui"]
-pig_go_programs = ["./cmd/probe"]
+ompig_go_programs = ["./cmd/probe"]
 pi_go_programs = ["./cmd/probe"]
 `
 	var sc scenario

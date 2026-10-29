@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // principalsKey is principals.test.ts principalKey: a guest is `guest:<id>`, anything else its kind.

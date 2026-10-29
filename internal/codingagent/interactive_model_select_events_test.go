@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 // modelSelectCountingRunner is an extension runner whose model_select handler counts its events.
@@ -25,7 +25,7 @@ func modelSelectCountingRunner(t *testing.T, events *[]any) *inproc.Runner {
 	return inproc.NewRunner([]extension.Extension{ext}, t.TempDir())
 }
 
-// Pi's AgentSession emits model_select once per changed selection, from setModel (source "set") and cycleModel (source "cycle") alone (agent-session.ts:2372-2384, 2411, 2480, 2512); interactive mode only calls them (interactive-mode.ts handleModelCommand, cycleModel). Pig's Session emits the event with the full model when the mode calls it; the mode emitted a second event of its own, built by modelToExtModel from the model's id and display name, with no provider. The /model path therefore reached an extension twice, the second time as `undefined/undefined`.
+// Pi's AgentSession emits model_select once per changed selection, from setModel (source "set") and cycleModel (source "cycle") alone (agent-session.ts:2372-2384, 2411, 2480, 2512); interactive mode only calls them (interactive-mode.ts handleModelCommand, cycleModel). Ompig's Session emits the event with the full model when the mode calls it; the mode emitted a second event of its own, built by modelToExtModel from the model's id and display name, with no provider. The /model path therefore reached an extension twice, the second time as `undefined/undefined`.
 func TestInteractiveModelCommandEmitsNoModelSelectOfItsOwn(t *testing.T) {
 	m := modelPickerTestMode(t)
 	handle := &recordingCompactHandle{agent: m.agent}
@@ -44,7 +44,7 @@ func TestInteractiveModelCommandEmitsNoModelSelectOfItsOwn(t *testing.T) {
 	}
 }
 
-// Cycling a model reaches the Session as a cycle (agent-session.ts:2480, 2512), so the Session's one model_select carries source "cycle". Pig's cycle called SetModel, whose event says source "set", and then added its own event.
+// Cycling a model reaches the Session as a cycle (agent-session.ts:2480, 2512), so the Session's one model_select carries source "cycle". Ompig's cycle called SetModel, whose event says source "set", and then added its own event.
 func TestInteractiveModelCycleReachesTheSessionAsACycle(t *testing.T) {
 	m := modelPickerTestMode(t)
 	next := &ai.Model{ID: "next", ProviderMeta: ai.ProviderMetadata{ProviderID: "capture"}}

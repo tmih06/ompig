@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.87.1 session-manager.ts:1633-1738 rebuilds labels from the resolved

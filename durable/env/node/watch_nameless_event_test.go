@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // fsnotify's kqueue backend (macOS and the BSDs) names an event for a descriptor whose watch it already removed, such as a directory

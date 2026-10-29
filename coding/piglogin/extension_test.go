@@ -8,15 +8,15 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// The `/sprite` command is PiG Standard's piglogin command (extension.go at MichaelKinsy/PiG d86eb93): its subcommands,
+// The `/sprite` command is Ompig Standard's piglogin command (extension.go at tmih06/ompig d86eb93): its subcommands,
 // messages and usage text carry over; only the dialog title no longer says "Standard".
 
 type note struct{ message, kind string }
@@ -111,9 +111,9 @@ type spriteHarness struct {
 func newSpriteHarness(t *testing.T) *spriteHarness {
 	t.Helper()
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	piglogin.Refresh()
-	ext, err := factoryload.LoadExtensionFromFactory(piglogin.Extension, ".", extension.CreateEventBus(), extension.CreateExtensionRuntime(), "builtin:pig-login")
+	ext, err := factoryload.LoadExtensionFromFactory(piglogin.Extension, ".", extension.CreateEventBus(), extension.CreateExtensionRuntime(), "builtin:ompig-login")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func TestExtensionRegistersOnlyTheSpriteCommand(t *testing.T) {
 	if len(h.ext.Commands) != 1 || len(h.ext.CommandOrder) != 1 || h.ext.CommandOrder[0] != "sprite" {
 		t.Fatalf("commands = %v, order %v", h.ext.Commands, h.ext.CommandOrder)
 	}
-	if got, want := h.ext.Commands["sprite"].Description, "Select the PiG login sprite."; got != want {
+	if got, want := h.ext.Commands["sprite"].Description, "Select the Ompig login sprite."; got != want {
 		t.Errorf("description = %q, want %q", got, want)
 	}
 	if len(h.ext.Tools) != 0 {
@@ -160,7 +160,7 @@ func TestSpriteListNotifiesEverySprite(t *testing.T) {
 			t.Errorf("line %d = %q, want %q", i, lines[i], want)
 		}
 	}
-	if !strings.HasPrefix(lines[0], "pig-default: PiG: ") {
+	if !strings.HasPrefix(lines[0], "ompig-default: Ompig: ") {
 		t.Errorf("first line = %q", lines[0])
 	}
 }
@@ -174,7 +174,7 @@ func TestSpriteSetPersistsAndSelects(t *testing.T) {
 		t.Fatalf("active = %q, want green", got.ID)
 	}
 	if got := piglogin.LoadVariant(h.root); got.ID != "green" {
-		t.Fatalf("saved = %q, want green (the games read $PIG_HOME/state/pig-standard/login.json)", got.ID)
+		t.Fatalf("saved = %q, want green (the games read $OMPIG_HOME/state/ompig-standard/login.json)", got.ID)
 	}
 	if !h.ui.restoredHeader() {
 		t.Fatalf("setHeader calls = %v, want one setHeader(undefined) so the header shows the new sprite now", h.ui.headers)
@@ -211,7 +211,7 @@ func TestSpriteWithoutArgumentsPicksFromTheList(t *testing.T) {
 	if err := h.run(""); err != nil {
 		t.Fatal(err)
 	}
-	if len(h.ui.asked) != 1 || len(h.ui.asked[0]) != len(wantIDs)+1 || h.ui.asked[0][len(wantIDs)] != piglogin.CreateOption || h.ui.titles[0] != "Choose a PiG sprite" {
+	if len(h.ui.asked) != 1 || len(h.ui.asked[0]) != len(wantIDs)+1 || h.ui.asked[0][len(wantIDs)] != piglogin.CreateOption || h.ui.titles[0] != "Choose a Ompig sprite" {
 		t.Fatalf("asked %v with %v", h.ui.titles, h.ui.asked)
 	}
 	if got := piglogin.Active(); got.ID != "mint" {
@@ -256,7 +256,7 @@ func TestSpritePickerDismissedAndBroken(t *testing.T) {
 func TestSpriteSetReportsAFailureToSave(t *testing.T) {
 	h := newSpriteHarness(t)
 	// A file where the state directory belongs.
-	t.Setenv("PIG_HOME", h.root+"/file")
+	t.Setenv("OMPIG_HOME", h.root+"/file")
 	if err := writeFile(h.root + "/file"); err != nil {
 		t.Fatal(err)
 	}
@@ -270,7 +270,7 @@ func TestSpriteSetReportsAFailureToSave(t *testing.T) {
 	}
 }
 
-// `/sprite preview` shows a sprite's full art (wordmark and pig), name and tagline in an overlay, the active sprite without
+// `/sprite preview` shows a sprite's full art (wordmark and ompig), name and tagline in an overlay, the active sprite without
 // an argument; any key closes it, and it does not change the saved sprite.
 func TestSpritePreviewShowsTheFullArt(t *testing.T) {
 	h := newSpriteHarness(t)

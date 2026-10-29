@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // The real child processes of manager.test.ts (Unix and Windows): ForkDriver forks testdata/manager_relay.mjs under

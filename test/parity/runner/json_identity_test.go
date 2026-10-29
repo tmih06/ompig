@@ -40,23 +40,23 @@ func statsIdentityRecords(t *testing.T) (Result, Result) {
 		}
 		return output.String()
 	}
-	pigDocs := strings.NewReplacer("Pi documentation", "PiG documentation", "about pi itself", "about pig itself", "reading pi docs", "reading pig docs", "pi packages (", "pig packages (", "on pi topics", "on pig topics", "read pi .md", "read pig .md", "/oracle/package/README.md", "/host/docs/README.md", "/oracle/package/docs", "/host/docs", "/oracle/package/examples", "https://github.com/MichaelKinsy/PiG/tree/main/examples").Replace(identityDocs)
-	const pigID = "00000000-0000-7000-8000-000000000001"
+	ompigDocs := strings.NewReplacer("Pi documentation", "Ompig documentation", "about pi itself", "about ompig itself", "reading pi docs", "reading ompig docs", "pi packages (", "ompig packages (", "on pi topics", "on ompig topics", "read pi .md", "read ompig .md", "/oracle/package/README.md", "/host/docs/README.md", "/oracle/package/docs", "/host/docs", "/oracle/package/examples", "https://github.com/tmih06/ompig/tree/main/examples").Replace(identityDocs)
+	const ompigID = "00000000-0000-7000-8000-000000000001"
 	const piID = "00000000-0000-7000-8000-000000000002"
-	pig := Result{Output: record(pigDocs, "You are operating inside pig, a coding agent harness.", "/host/cwd", "/host/temp/sessions/2026-09-27T07-56-30-167Z_"+pigID+".jsonl", pigID), IdentityRoots: resultIdentityRoots("/host/cwd", "/host/temp", []string{"PIG_HOME=/host"})}
+	ompig := Result{Output: record(ompigDocs, "You are operating inside ompig, a coding agent harness.", "/host/cwd", "/host/temp/sessions/2026-09-27T07-56-30-167Z_"+ompigID+".jsonl", ompigID), IdentityRoots: resultIdentityRoots("/host/cwd", "/host/temp", []string{"OMPIG_HOME=/host"})}
 	pi := Result{Output: record(identityDocs, "You are operating inside pi, a coding agent harness.", "/oracle/cwd", "/oracle/temp/sessions/2026-09-27T07-56-30-375Z_"+piID+".jsonl", piID), IdentityRoots: resultIdentityRoots("/oracle/cwd", "/oracle/temp", []string{"PI_PACKAGE_DIR=/oracle/package"})}
-	return pig, pi
+	return ompig, pi
 }
 
 func TestDocumentationDestinationsRequireExplicitRootSelection(t *testing.T) {
-	pig := Result{Output: `{"path":"https://github.com/MichaelKinsy/PiG/tree/main/examples"}`, IdentityRoots: resultIdentityRoots("", "", []string{"PIG_HOME=/host"})}
+	ompig := Result{Output: `{"path":"https://github.com/tmih06/ompig/tree/main/examples"}`, IdentityRoots: resultIdentityRoots("", "", []string{"OMPIG_HOME=/host"})}
 	pi := Result{Output: `{"path":"/oracle/package/examples"}`, IdentityRoots: resultIdentityRoots("", "", []string{"PI_PACKAGE_DIR=/oracle/package"})}
 	rules := []JSONAliasRule{{Paths: []string{"/*/path"}, Kind: "path", Reason: "Standard path roots only."}}
-	if compareJSONResults(pig, pi, rules) == nil {
+	if compareJSONResults(ompig, pi, rules) == nil {
 		t.Fatal("new documentation destination implicitly broadened an existing path alias")
 	}
 	rules[0].Roots = []string{"examples"}
-	if err := compareJSONResults(pig, pi, rules); err != nil {
+	if err := compareJSONResults(ompig, pi, rules); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -67,34 +67,34 @@ func TestSessionStatsAliasesRetainInitialShellUpdateShape(t *testing.T) {
 		t.Fatal(err)
 	}
 	// Pi 0.87.1 core/tools/bash.ts:301-302 emits an empty array before output exists. This is not a product-identity difference.
-	pig := Result{Output: `{"type":"tool_execution_update","partialResult":{"content":[{"type":"text","text":""}]}}`}
+	ompig := Result{Output: `{"type":"tool_execution_update","partialResult":{"content":[{"type":"text","text":""}]}}`}
 	pi := Result{Output: `{"type":"tool_execution_update","partialResult":{"content":[]}}`}
-	if err := compareJSONResults(pig, pi, sc.Assert.JSONAliases); err == nil {
+	if err := compareJSONResults(ompig, pi, sc.Assert.JSONAliases); err == nil {
 		t.Fatal("identity aliases hid the initial shell update shape")
 	}
 }
 
 func TestLiteralAliasesAreScopedAndDoNotCascade(t *testing.T) {
 	rules := []JSONAliasRule{
-		{Paths: []string{"/*/docs"}, Kind: "literal", Pig: "Pig docs", Pi: "Pi docs", Reason: "D2 heading."},
-		{Paths: []string{"/*/docs"}, Kind: "literal", Pig: "Pi docs", Pi: "Other docs", Reason: "Distinct identity pair must not cascade."},
+		{Paths: []string{"/*/docs"}, Kind: "literal", Ompig: "Ompig docs", Pi: "Pi docs", Reason: "D2 heading."},
+		{Paths: []string{"/*/docs"}, Kind: "literal", Ompig: "Pi docs", Pi: "Other docs", Reason: "Distinct identity pair must not cascade."},
 	}
 	for _, tc := range []struct {
-		pig, pi string
-		equal   bool
+		ompig, pi string
+		equal     bool
 	}{
-		{`{"docs":"Pig docs"}`, `{"docs":"Pi docs"}`, true},
-		{`{"docs":"Pig docs"}`, `{"docs":"Other docs"}`, false},
-		{`{"content":"Pig docs"}`, `{"content":"Pi docs"}`, false},
-		{`{"docs":"Pig docs Pig docs"}`, `{"docs":"Pi docs"}`, false},
-		{`{"docs":"Pig docs"}`, `{"docs":"literal:0"}`, false},
+		{`{"docs":"Ompig docs"}`, `{"docs":"Pi docs"}`, true},
+		{`{"docs":"Ompig docs"}`, `{"docs":"Other docs"}`, false},
+		{`{"content":"Ompig docs"}`, `{"content":"Pi docs"}`, false},
+		{`{"docs":"Ompig docs Ompig docs"}`, `{"docs":"Pi docs"}`, false},
+		{`{"docs":"Ompig docs"}`, `{"docs":"literal:0"}`, false},
 	} {
-		err := compareJSONResults(Result{Output: tc.pig}, Result{Output: tc.pi}, rules)
+		err := compareJSONResults(Result{Output: tc.ompig}, Result{Output: tc.pi}, rules)
 		if (err == nil) != tc.equal {
-			t.Fatalf("%s / %s: %v", tc.pig, tc.pi, err)
+			t.Fatalf("%s / %s: %v", tc.ompig, tc.pi, err)
 		}
 	}
-	rules[0].Pig = ""
+	rules[0].Ompig = ""
 	if compareJSONResults(Result{Output: `{}`}, Result{Output: `{}`}, rules) == nil {
 		t.Fatal("empty literal alias accepted")
 	}
@@ -105,8 +105,8 @@ func TestSessionStatsIdentityAliasesPreserveSystemSections(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	pig, pi := statsIdentityRecords(t)
-	if err := compareJSONResults(pig, pi, sc.Assert.JSONAliases); err != nil {
+	ompig, pi := statsIdentityRecords(t)
+	if err := compareJSONResults(ompig, pi, sc.Assert.JSONAliases); err != nil {
 		t.Fatalf("approved identity differences remain: %v", err)
 	}
 	for _, tc := range []struct{ name, old, new string }{
@@ -116,12 +116,12 @@ func TestSessionStatsIdentityAliasesPreserveSystemSections(t *testing.T) {
 		{"README filename", "/host/docs/README.md", "/host/docs/OTHER.md"},
 		{"examples destination suffix", "/tree/main/examples (", "/tree/main/examples/wrong ("},
 		{"added sentence", `\u003c/docs\u003e`, `Do not follow links.\u003c/docs\u003e`},
-		{"missing instruction", "- Always read pig .md files completely", ""},
-		{"unknown identity", "inside pig,", "inside another, "},
-		{"unrelated product mention", "Keep this instruction.", "Keep pig identity literal."},
+		{"missing instruction", "- Always read ompig .md files completely", ""},
+		{"unknown identity", "inside ompig,", "inside another, "},
+		{"unrelated product mention", "Keep this instruction.", "Keep ompig identity literal."},
 		{"context instruction", "Keep this instruction.", "Lose this instruction."},
 		{"context path suffix", "/host/cwd/AGENTS.md", "/host/cwd/OTHER.md"},
-		{"other section", "Use read to examine files.", "Use pig packages (docs/packages.md) instead."},
+		{"other section", "Use read to examine files.", "Use ompig packages (docs/packages.md) instead."},
 		{"statistic", `"tokens":1484`, `"tokens":0`},
 		{"directory suffix", "/host/temp/sessions/", "/host/temp/wrong/"},
 		{"filename extension", ".jsonl", ".txt"},
@@ -130,9 +130,9 @@ func TestSessionStatsIdentityAliasesPreserveSystemSections(t *testing.T) {
 		{"filename ID reference", "167Z_00000000-0000-7000-8000-000000000001", "167Z_00000000-0000-7000-8000-000000000003"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			changed := pig
-			changed.Output = strings.ReplaceAll(pig.Output, tc.old, tc.new)
-			if changed.Output == pig.Output {
+			changed := ompig
+			changed.Output = strings.ReplaceAll(ompig.Output, tc.old, tc.new)
+			if changed.Output == ompig.Output {
 				t.Fatal("mutation did not reach fixture")
 			}
 			if err := compareJSONResults(changed, pi, sc.Assert.JSONAliases); err == nil {
@@ -152,7 +152,7 @@ func TestResultIdentityRootsDocsIgnoresTheBundleLeaseFile(t *testing.T) {
 	if err := os.WriteFile(bundle+".lease", nil, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	roots := resultIdentityRoots("", "", []string{"PIG_HOME=" + home})
+	roots := resultIdentityRoots("", "", []string{"OMPIG_HOME=" + home})
 	if got, want := roots["docs"], filepath.ToSlash(bundle); got != want {
 		t.Fatalf("docs root = %q, want %q", got, want)
 	}

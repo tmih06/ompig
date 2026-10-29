@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // TestReachLibrariesPortPublishedEntryPoints holds libraryEntries to the pinned Pi and PORT_MAP:
@@ -19,7 +19,7 @@ import (
 //   - every Go package that PORT_MAP records as porting a file the entry point publishes (its source and the `export ... from`
 //     closure of it) is listed for that entry, so the seed does not leave out part of an entry point's API.
 func TestReachLibrariesPortPublishedEntryPoints(t *testing.T) {
-	// A published entry point PiG designs out has no Go package to seed. Its PORT_MAP row must say so: the row's file is n/a.
+	// A published entry point Ompig designs out has no Go package to seed. Its PORT_MAP row must say so: the row's file is n/a.
 	designedOutEntries := map[string]string{
 		"durable:./storage/indexeddb": "packages/durable/src/storage/indexeddb.ts", // browser-only IDBDatabase (Pi 16f5f0af)
 	}

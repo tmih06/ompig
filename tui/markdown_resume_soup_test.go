@@ -50,11 +50,11 @@ func markdownSoupDocument(rng *rand.Rand) string {
 func TestResumedMarkdownSoupEqualsAFreshRender(t *testing.T) {
 	mdCaseSetup(t)
 	seed := uint64(7)
-	if s := os.Getenv("PIG_MD_SOUP_SEED"); s != "" {
+	if s := os.Getenv("OMPIG_MD_SOUP_SEED"); s != "" {
 		seed, _ = strconv.ParseUint(s, 10, 64)
 	}
 	documents := 300
-	if s := os.Getenv("PIG_MD_SOUP_DOCS"); s != "" {
+	if s := os.Getenv("OMPIG_MD_SOUP_DOCS"); s != "" {
 		documents, _ = strconv.Atoi(s)
 	}
 	rng := rand.New(rand.NewPCG(seed, 99))

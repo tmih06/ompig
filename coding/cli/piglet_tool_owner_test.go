@@ -3,7 +3,7 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi: packages/coding-agent/src/core/extensions/types.ts:2044 (RegisteredTool.sourceInfo).
@@ -18,7 +18,7 @@ func TestPigletToolOwnerNamesTheRegisteringEntry(t *testing.T) {
 	owner := pigletToolOwner(func() []extension.Extension { return extensions })
 	for tool, want := range map[string]string{
 		"plain":   "first",    // no per-tool source: the registering extension
-		"scoped":  "mcp:docs", // pig additive D23: the tool's own source attribution wins
+		"scoped":  "mcp:docs", // ompig additive D23: the tool's own source attribution wins
 		"object":  "first",    // a provenance object names no entry
 		"other":   "second",
 		"read":    "", // registered by no extension: scoped as a built-in

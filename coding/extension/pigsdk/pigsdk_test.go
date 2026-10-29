@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_go && !pig_strip_extension_sdk_rust && !pig_strip_extension_sdk_python
+//go:build !ompig_strip_extension_sdk_go && !ompig_strip_extension_sdk_rust && !ompig_strip_extension_sdk_python
 
 package pigsdk
 
@@ -14,10 +14,10 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	pysdk "github.com/MichaelKinsy/PiG/extensions/sdk-py"
-	rssdk "github.com/MichaelKinsy/PiG/extensions/sdk-rs"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	pysdk "github.com/tmih06/ompig/extensions/sdk-py"
+	rssdk "github.com/tmih06/ompig/extensions/sdk-rs"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 func TestSDKStagingWaitsForBuildLock(t *testing.T) {
@@ -83,8 +83,8 @@ func TestSyncStagesAllLanguages(t *testing.T) {
 		}
 	}
 	// Python: subdir package must be recreated on disk.
-	if _, err := os.Stat(filepath.Join(dirs["python"], "pig_sdk", "__init__.py")); err != nil {
-		t.Fatalf("missing staged python pig_sdk/__init__.py: %v", err)
+	if _, err := os.Stat(filepath.Join(dirs["python"], "ompig_sdk", "__init__.py")); err != nil {
+		t.Fatalf("missing staged python ompig_sdk/__init__.py: %v", err)
 	}
 	// Rust: crate root + src subdir.
 	for _, rel := range []string{"Cargo.toml", filepath.Join("src", "lib.rs")} {
@@ -111,7 +111,7 @@ func TestSyncExpandsTheCompressedFiles(t *testing.T) {
 		compressed   string
 	}{
 		{"go", "../../../extensions/sdk", sdk.BundledFiles, "tui/internal/widthx/unicode_tables.go.gz"},
-		{"python", "../../../extensions/sdk-py", pysdk.BundledFiles, "pig_sdk/tui/_tables.py.gz"},
+		{"python", "../../../extensions/sdk-py", pysdk.BundledFiles, "ompig_sdk/tui/_tables.py.gz"},
 		{"rust", "../../../extensions/sdk-rs", rssdk.BundledFiles, "src/tui/tables.rs.gz"},
 	} {
 		dir, err := SDKDirFor(root, bundle.lang)
@@ -283,7 +283,7 @@ func TestEnsureSyncedLangUnknown(t *testing.T) {
 
 // TestStagedSDKBuildsOffline is the property that matters for Go: an extension
 // whose go.mod replaces the SDK with the staged directory must `go build` with
-// no network and no pig source checkout. This is what `pig extension init`
+// no network and no ompig source checkout. This is what `ompig extension init`
 // produces on a clean binary-only host.
 func TestStagedSDKBuildsOffline(t *testing.T) {
 	if _, err := exec.LookPath("go"); err != nil {
@@ -297,14 +297,14 @@ func TestStagedSDKBuildsOffline(t *testing.T) {
 
 	extDir := t.TempDir()
 	goMod := "module example.com/interview-ext\n\ngo 1.26\n\n" +
-		"require github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\n" +
-		"replace github.com/MichaelKinsy/PiG/extensions/sdk => " + modfile.AutoQuote(filepath.ToSlash(staged)) + "\n"
+		"require github.com/tmih06/ompig/extensions/sdk v0.0.0\n\n" +
+		"replace github.com/tmih06/ompig/extensions/sdk => " + modfile.AutoQuote(filepath.ToSlash(staged)) + "\n"
 	if err := os.WriteFile(filepath.Join(extDir, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatalf("write go.mod: %v", err)
 	}
 	main := `package main
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	e := sdk.New("interview-ext")

@@ -16,8 +16,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type loopTool struct {
@@ -433,14 +433,14 @@ func TestAgentLoopMatchesPi(t *testing.T) {
 		}
 		call := 0
 		streamFn := func(streamCtx context.Context, _ *ai.Model, transcript ai.TranscriptContext, streamOptions ai.StreamOptions) (*ai.AssistantMessageEventStream, error) {
-			// pig divergence (D48): the request option that makes a real provider repair the tool results; the messages above stay Pi's.
+			// ompig divergence (D48): the request option that makes a real provider repair the tool results; the messages above stay Pi's.
 			if !streamOptions.RepairToolFlow {
 				t.Error("the loop did not ask the provider to repair the tool flow")
 			}
 			messages := []any{}
 			for _, message := range transcript.Messages() {
 				projected := projectLoopMessage(t, message)
-				// Pig runs transformMessages for the target model when it builds the request; Pi runs it inside each provider, so Pi's stream function sees an orphaned tool call without the synthetic result (transform.go).
+				// Ompig runs transformMessages for the target model when it builds the request; Pi runs it inside each provider, so Pi's stream function sees an orphaned tool call without the synthetic result (transform.go).
 				if blocks, ok := projected["content"].([]any); ok && projected["role"] == "toolResult" && len(blocks) == 1 && blocks[0].(map[string]any)["text"] == "No result provided" {
 					continue
 				}
@@ -705,13 +705,13 @@ func TestAgentLoopMatchesPi(t *testing.T) {
 						k++
 					}
 					if k < len(wr) && k < len(gr) {
-						t.Logf("%d vs %d requests; request %d differs\n  Pi  %s\n  Pig %s", len(wr), len(gr), k, summary(wr[k:k+1]), summary(gr[k:k+1]))
+						t.Logf("%d vs %d requests; request %d differs\n  Pi  %s\n  Ompig %s", len(wr), len(gr), k, summary(wr[k:k+1]), summary(gr[k:k+1]))
 					} else {
 						t.Logf("%d vs %d requests", len(wr), len(gr))
 					}
 					_, _ = wantReq, gotReq
 				}
-				t.Errorf("program %d abortAt %q: err %v / %q; %d vs %d events, first difference at %d\n  Pi  %.700s\n  Pig %.700s", i, p.AbortAt, runErr, wantErr, len(wantEvents), len(gotEvents), first, at(wantEvents), at(gotEvents))
+				t.Errorf("program %d abortAt %q: err %v / %q; %d vs %d events, first difference at %d\n  Pi  %.700s\n  Ompig %.700s", i, p.AbortAt, runErr, wantErr, len(wantEvents), len(gotEvents), first, at(wantEvents), at(gotEvents))
 			}
 		}
 	}

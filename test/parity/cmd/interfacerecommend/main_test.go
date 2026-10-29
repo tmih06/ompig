@@ -9,12 +9,12 @@ func TestRecommendationsNeverPromoteNameMatchesToPorted(t *testing.T) {
 		{ID: "pkg:coding-agent/.#Missing", Name: "Missing", ShapeHash: "sha256:missing"},
 		{ID: "cli:pi/--approve", Flag: "--approve", ShapeHash: "sha256:cli"},
 	}}
-	pig := goInventory{Interfaces: []goEntry{{ID: "go:example#ExtensionAPI", Name: "ExtensionAPI", ShapeHash: "sha256:pig"}}}
-	ledger := recommend(upstream, pig)
+	ompig := goInventory{Interfaces: []goEntry{{ID: "go:example#ExtensionAPI", Name: "ExtensionAPI", ShapeHash: "sha256:ompig"}}}
+	ledger := recommend(upstream, ompig)
 	if got := ledger.Recommendations[1]; got.RecommendedDisposition != "partial" || got.Confidence != "low" {
 		t.Fatalf("exact candidate recommendation = %+v", got)
 	}
-	if got := ledger.Recommendations[2]; got.RecommendedDisposition != "pending" || got.Confidence != "low" || len(got.PigCandidates) != 0 {
+	if got := ledger.Recommendations[2]; got.RecommendedDisposition != "pending" || got.Confidence != "low" || len(got.OmpigCandidates) != 0 {
 		t.Fatalf("member recommendation = %+v", got)
 	}
 	for _, item := range ledger.Recommendations {

@@ -9,15 +9,15 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/coding/mcpext/mcptui"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/coding/mcpext/mcptui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports .upstream/v1.0.1/packages/coding-agent/test/suite/regressions/10285-mcp-tool-renderers.test.ts: a resumed

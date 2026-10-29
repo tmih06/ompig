@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // bug-report.ts:119 describeProvider lists Object.keys(provider.headers ?? {}).sort(); a native Provider object declares its headers itself

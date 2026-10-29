@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 func TestGoWaitsUntilTheGoroutineParksOrReturns(t *testing.T) {

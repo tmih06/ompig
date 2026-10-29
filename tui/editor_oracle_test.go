@@ -13,8 +13,8 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 func markLoneSurrogatesOracle(text string) string {
@@ -79,7 +79,7 @@ func TestEditorMatchesPiOracle(t *testing.T) {
 	replayEditorOracleCases(t, cases)
 }
 
-// replayEditorOracleCases runs each recorded sequence through Pig's Editor and reports where text, cursor, lines, callbacks or rendering leave Pi's log.
+// replayEditorOracleCases runs each recorded sequence through Ompig's Editor and reports where text, cursor, lines, callbacks or rendering leave Pi's log.
 func replayEditorOracleCases(t *testing.T, cases []editorOracleCase) {
 	t.Helper()
 	// Pi's editor resolves keys through getKeybindings(), which defaults to TUI_KEYBINDINGS on every platform.

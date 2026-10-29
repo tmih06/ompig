@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestNodeLoadTimeActionsMatchPiLoader runs one factory that calls every action method of the pinned Pi's ExtensionAPI while it loads
-// (core/extensions/loader.ts createExtensionRuntime), through Pi's own loadExtensionFromFactory and through the PiG Node runtime, and
+// (core/extensions/loader.ts createExtensionRuntime), through Pi's own loadExtensionFromFactory and through the Ompig Node runtime, and
 // compares the outcome of every call: what it throws, rejects or returns.
 func TestNodeLoadTimeActionsMatchPiLoader(t *testing.T) {
 	node, err := exec.LookPath("node")
@@ -50,6 +50,6 @@ process.exit(0);`
 	}
 	got := ext.Commands["probe"].Description
 	if want := strings.TrimSpace(string(piOut)); got != want {
-		t.Errorf("load-time action outcomes differ\n pig: %s\n  pi: %s", got, want)
+		t.Errorf("load-time action outcomes differ\n ompig: %s\n  pi: %s", got, want)
 	}
 }

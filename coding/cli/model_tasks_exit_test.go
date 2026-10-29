@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 func TestExitProcessDrainsModelTasksBeforeExtensionTransports(t *testing.T) {
-	const helper = "PIG_TEST_MODEL_TASK_EXIT_HELPER"
+	const helper = "OMPIG_TEST_MODEL_TASK_EXIT_HELPER"
 	if os.Getenv(helper) != "" {
 		path := os.Getenv(helper)
 		appendTrace := func(text string) {

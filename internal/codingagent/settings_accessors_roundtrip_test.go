@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/coding-agent/src/core/settings-manager.ts: every getXxx reads the key its setter writes, with the documented default when the key is absent,

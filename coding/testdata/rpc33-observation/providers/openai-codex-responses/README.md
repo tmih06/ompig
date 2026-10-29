@@ -16,6 +16,6 @@ node coding/testdata/rpc33-observation/providers/openai-codex-responses/probe.mj
 
 Compare against the checked-in file after removing `node` and `runs`. Review any difference before replacing the oracle.
 
-The Go replays are `TestCodexSSEObservationMatchesNodeOracle` (`ai`, the full tick log) and `TestRPCCodexSSEStartMatchesPi` (`cmd/pig`, the real RPC binary; `PIG_D82_ORACLE_RUNS=200` for the declared 200 runs per fixture).
+The Go replays are `TestCodexSSEObservationMatchesNodeOracle` (`ai`, the full tick log) and `TestRPCCodexSSEStartMatchesPi` (`cmd/ompig`, the real RPC binary; `OMPIG_D82_ORACLE_RUNS=200` for the declared 200 runs per fixture).
 
 Codex WebSocket mode is out of scope: it stays an external completion.

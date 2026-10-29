@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // eventBusReference is the Go reference for extension.API.Events: the production in-memory bus (extension.CreateEventBus) the host gives a Go extension as pi.events.

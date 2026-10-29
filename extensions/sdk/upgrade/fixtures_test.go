@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 // sdkRoot is the SDK module the fixtures build against.

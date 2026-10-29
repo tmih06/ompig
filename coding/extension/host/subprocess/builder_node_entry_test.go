@@ -12,7 +12,7 @@ import (
 // package.json "pi.extensions" list names the entry files and is consulted
 // before the conventional index/main names.
 //
-// pig previously looked only for a root index.ts, so it could not load a pi
+// ompig previously looked only for a root index.ts, so it could not load a pi
 // package in its published form. pi-atelier declares
 // "pi": {"extensions": ["./extensions/index.ts"]} and kept nothing at the root,
 // which is the shape that failed.
@@ -129,7 +129,7 @@ func TestResolveNodeEntrypointImportsADeclaredDirectoryAsJiti(t *testing.T) {
 	}
 }
 
-// A directory with no package manifest and no index.ts or index.js is itself the extension path (package-manager.ts:1379-1384); the loader's jiti import of the directory loads its index.mjs, so Pi loads it and Pig must too.
+// A directory with no package manifest and no index.ts or index.js is itself the extension path (package-manager.ts:1379-1384); the loader's jiti import of the directory loads its index.mjs, so Pi loads it and Ompig must too.
 func TestResolveNodeEntrypointImportsAnIndexMjsDirectoryAsJiti(t *testing.T) {
 	dir := t.TempDir()
 	want := filepath.Join(dir, "index.mjs")

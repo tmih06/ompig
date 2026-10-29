@@ -27,7 +27,7 @@ func (*chunkedBody) Close() error { return nil }
 // pi-mono #10390: Pi's consumeLine ends a line at a "\r" that closes a network chunk; the "\n" of the CRLF
 // then arrives as an empty line, flushes the record without its data, and the turn aborts with
 // "Could not parse Anthropic SSE event message_start: Unexpected end of JSON input; data=".
-// pig divergence (D121): a trailing "\r" waits for the next chunk, so a CRLF split across chunks is one line break.
+// ompig divergence (D121): a trailing "\r" waits for the next chunk, so a CRLF split across chunks is one line break.
 func TestAnthropicStreamSurvivesCRLFSplitAcrossChunks(t *testing.T) {
 	crlf := strings.ReplaceAll(anthropicMinimalFixture(), "\n", "\r\n")
 	var chunks []string

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // packages/durable errors.ts:4-28 and env/index.ts:45-75: ReadAfterWrite, SessionFailed, ConversationBusy, FileError and ExecutionError are Error

@@ -6,7 +6,7 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // settings.documentRetentionMs (harness/agent.ts resolveSettings) reaches the Session: the host's number as given, none for a

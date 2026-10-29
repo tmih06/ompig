@@ -73,7 +73,7 @@ class ModalReadinessTest(unittest.TestCase):
             for name, replacement in replacements.items():
                 stack.enter_context(mock.patch.object(WIRE, name, replacement) if "." not in name
                                     else mock.patch("session_wire." + name, replacement))
-            WIRE.modal_shutdown_probe(["pig-fixture"], Path(directory))
+            WIRE.modal_shutdown_probe(["ompig-fixture"], Path(directory))
         self.assertEqual([s["signal"] for s in states], [signal.SIGHUP, signal.SIGTERM])
         for observed in states:
             self.assertEqual(observed["writes"], [b"/scoped-models\r"])
@@ -118,7 +118,7 @@ class TerminalDisconnectBusyTest(unittest.TestCase):
             for name, replacement in replacements.items():
                 stack.enter_context(mock.patch.object(WIRE, name, replacement) if "." not in name
                                     else mock.patch("session_wire." + name, replacement))
-            WIRE.terminal_probe(["pig-fixture"], Path(directory), "disconnect")
+            WIRE.terminal_probe(["ompig-fixture"], Path(directory), "disconnect")
         self.assertEqual(seen["env"]["WIRE_BUSY"], "1")
         self.assertIn("setInterval", seen["extension"])
         self.assertIn("ctx.ui.setStatus", seen["extension"])
@@ -160,7 +160,7 @@ class TerminalDisconnectBusyTest(unittest.TestCase):
                 stack.enter_context(mock.patch.object(WIRE, name, replacement) if "." not in name
                                     else mock.patch("session_wire." + name, replacement))
             stack.enter_context(mock.patch("session_wire.subprocess.run", git))
-            WIRE.terminal_probe(["pig-fixture"], Path(directory), "disconnect-repo")
+            WIRE.terminal_probe(["ompig-fixture"], Path(directory), "disconnect-repo")
         self.assertEqual(seen["git"], [(["git", "init", "-q"], Path(directory))])
         self.assertNotIn("WIRE_BUSY", seen["env"])
         self.assertTrue(seen["controlling_tty"])

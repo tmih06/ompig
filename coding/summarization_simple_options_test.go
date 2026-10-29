@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
-// completeSummarization calls pi-ai's completeSimple when the session has no stream override (compaction.ts:634-637), so the request is a simple stream: buildBaseOptions keeps the output budget within the room the model's context window leaves after the request and a 4096-token margin, never below one token (packages/ai/src/api/simple-options.ts:18-22, 46), and an omitted reasoning level sends the API's native thinking off (anthropic-messages.ts and google-generative-ai.ts streamSimple). Real Pi sent max_completion_tokens 1 for a 3000-token window where PiG sent 500.
+// completeSummarization calls pi-ai's completeSimple when the session has no stream override (compaction.ts:634-637), so the request is a simple stream: buildBaseOptions keeps the output budget within the room the model's context window leaves after the request and a 4096-token margin, never below one token (packages/ai/src/api/simple-options.ts:18-22, 46), and an omitted reasoning level sends the API's native thinking off (anthropic-messages.ts and google-generative-ai.ts streamSimple). Real Pi sent max_completion_tokens 1 for a 3000-token window where Ompig sent 500.
 func TestSummarizationOfARegistryProviderIsASimpleStream(t *testing.T) {
 	for _, test := range []struct {
 		name          string

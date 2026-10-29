@@ -13,14 +13,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/extensionapi"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/extensionapi"
 )
 
 // The rows of the Pi 0.99.1 extension API additions (registerMcpServer, registerVirtualModel, getSettings, executeTool and ctx.tools, tool exposure fields, structured results, provider_stream_event, mcp_servers_change, typed provider models) for the Go SDK. Every value a row asserts comes from the host or from the extension's own logic, so an SDK that never makes the call cannot pass by defaulting: the settings are a distinctive object, the router echoes the request it saw, and the nested tools return text only the real tools produce.
@@ -100,7 +100,7 @@ func newExtensionAPIHarness(t *testing.T, placement string) *extensionAPIHarness
 		cfg := subprocess.ExtConfig{
 			Name: extensionapi.Name, Source: filepath.Join(root, "test/extension-conformance/testdata/extension-api-go"), Enabled: true, Isolation: "strict",
 			RuntimeKind: "subprocess", RuntimeLanguage: "go", EntrypointKind: "factory", Factory: "Extension",
-			SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", ModulePath: "example.com/extension-api-go", Package: "example.com/extension-api-go",
+			SDKName: "github.com/tmih06/ompig/extensions/sdk", ModulePath: "example.com/extension-api-go", Package: "example.com/extension-api-go",
 		}
 		configs := []subprocess.ExtConfig{cfg}
 		if placement == "packed" {

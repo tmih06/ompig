@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package longsession writes a long Pi session fixture: a version 3 session file whose active context holds a chosen number of tokens, the agent directory that declares a scripted model with a chosen context window, and a metadata record. Pi, PiG and any harness that reads Pi session files open the same file, so memory measured with a loaded session compares like with like.
+// Package longsession writes a long Pi session fixture: a version 3 session file whose active context holds a chosen number of tokens, the agent directory that declares a scripted model with a chosen context window, and a metadata record. Pi, Ompig and any harness that reads Pi session files open the same file, so memory measured with a loaded session compares like with like.
 //
 // Tokens are counted as Pi's compaction.ts estimateTokens counts them: a quarter of the characters of each message's text, tool-call name and JSON arguments, and tool-result text, rounded up. All text is ASCII, so characters equal UTF-16 code units. Each assistant message reports usage whose input is the context before it, so the footer and the context gauge read the size the file holds.
 //

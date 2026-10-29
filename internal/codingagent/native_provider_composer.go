@@ -11,8 +11,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // ExtensionOAuthConfig is the extension host's OAuth configuration for a registered provider (provider-composer.ts ExtensionOAuthConfig).
@@ -224,7 +224,7 @@ func withModelsJSONCompat(model ai.AnyModel, compat *providerCompat) ai.AnyModel
 }
 
 // overlaySystemOneCompat overlays the System One fields of a provider compat object (imageInput, sendImageOptInHeader, which
-// PiG keeps among a compat object's additional properties) on base.
+// Ompig keeps among a compat object's additional properties) on base.
 func overlaySystemOneCompat(base *ai.SystemOneCompat, compat *providerCompat) ai.SystemOneCompat {
 	merged := ai.SystemOneCompat{}
 	if base != nil {

@@ -1,6 +1,6 @@
 package runtimecell
 
-import "github.com/MichaelKinsy/PiG/internal/fsretry"
+import "github.com/tmih06/ompig/internal/fsretry"
 
 // renameRetryable reports whether a rename failed on a transient Windows lock.
 func renameRetryable(err error) bool { return fsretry.TransientRename(err) }

@@ -8,8 +8,8 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["testdata/ext/flag-values.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["testdata/ext/flag-values.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/flag-values.mjs"]
 
 [cli]

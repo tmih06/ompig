@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // execvpOutcome is what Node's spawnSync reports: the error code of a spawn
@@ -345,24 +345,24 @@ process.stdout.write(JSON.stringify(cases.map(({ file, args, cwd, env }) => {
 	}
 }
 
-// A nil cmd.Env is PiG's environment, and libuv's execvp searches its PATH the
+// A nil cmd.Env is Ompig's environment, and libuv's execvp searches its PATH the
 // same way: exec.Command's own lookup reports ENOENT for a name that only
 // matches without execute permission.
-func TestSetProgramSearchesPiGPathAsExecvpDoes(t *testing.T) {
+func TestSetProgramSearchesOmpigPathAsExecvpDoes(t *testing.T) {
 	if runtime.GOOS == "darwin" {
 		t.Skip("libuv searches the path with posix_spawn on macOS")
 	}
 	root := t.TempDir()
-	writeFile(t, filepath.Join(root, "denied", "pig-denied-command"), "#!/bin/sh\n", 0o644)
-	writeFile(t, filepath.Join(root, "plain", "pig-plain-command"), "printf ran", 0o755)
+	writeFile(t, filepath.Join(root, "denied", "ompig-denied-command"), "#!/bin/sh\n", 0o644)
+	writeFile(t, filepath.Join(root, "plain", "ompig-plain-command"), "printf ran", 0o755)
 	t.Setenv("PATH", filepath.Join(root, "denied"))
-	denied := exec.Command("pig-denied-command")
+	denied := exec.Command("ompig-denied-command")
 	SetProgram(denied)
 	if _, err := denied.Output(); goErrorCode(err) != "EACCES" {
 		t.Errorf("a file without execute permission: error = %v; Node emits EACCES", err)
 	}
 	t.Setenv("PATH", filepath.Join(root, "plain"))
-	plain := exec.Command("pig-plain-command")
+	plain := exec.Command("ompig-plain-command")
 	SetProgram(plain)
 	if output, err := plain.Output(); err != nil || string(output) != "ran" {
 		t.Errorf("a script without #!: %q, %v; Node runs it with /bin/sh", output, err)

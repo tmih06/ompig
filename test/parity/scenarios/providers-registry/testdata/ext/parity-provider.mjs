@@ -1,5 +1,5 @@
 // parity-provider: registers a model provider so --list-models exposes it.
-// Both pig (-e) and pi (-e) load this extension; the extension-registered
+// Both ompig (-e) and pi (-e) load this extension; the extension-registered
 // provider must appear in --list-models on both, proving that extension
 // providers are registered before the model catalog is listed.
 export default function (pi) {

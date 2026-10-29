@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 func BenchmarkNodeAdmissionStartup(b *testing.B) {
@@ -29,12 +29,12 @@ func BenchmarkNodeAdmissionStartup(b *testing.B) {
 	if err != nil {
 		b.Fatal(err)
 	}
-	mod := fmt.Sprintf("module example.com/bench\n\ngo 1.26.0\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v%s\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", pigversion.PigVersion, filepath.ToSlash(sdk))
+	mod := fmt.Sprintf("module example.com/bench\n\ngo 1.26.0\nrequire github.com/tmih06/ompig/extensions/sdk v%s\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", pigversion.OmpigVersion, filepath.ToSlash(sdk))
 	if err := os.WriteFile(filepath.Join(native, "go.mod"), []byte(mod), 0o644); err != nil {
 		b.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(native, "extension.go"), []byte(`package bench
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension()*sdk.Extension{return sdk.New("native")}
 `), 0o644); err != nil {
 		b.Fatal(err)

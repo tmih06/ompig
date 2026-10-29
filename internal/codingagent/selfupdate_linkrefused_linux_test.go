@@ -15,10 +15,10 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Android refuses hard links in Termux's prefix, so the rollback backup is a copy there; under Android's common umask 077 the restored pig must keep its 0755 mode.
+// Android refuses hard links in Termux's prefix, so the rollback backup is a copy there; under Android's common umask 077 the restored ompig must keep its 0755 mode.
 func TestSelfReplaceAtWithCommitRestoresPreviousExecutableWhereLinksAreRefused(t *testing.T) {
 	requireStandaloneSelfUpdateTier(t)
 	if !testenv.RunWithHardLinksRefused(t) {
@@ -34,7 +34,7 @@ func TestSelfReplaceAtWithCommitRestoresPreviousExecutableWhereLinksAreRefused(t
 	defer srv.Close()
 
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "pig")
+	exe := filepath.Join(dir, "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +58,7 @@ func TestSelfReplaceAtWithCommitRestoresPreviousExecutableWhereLinksAreRefused(t
 	if info, statErr := os.Stat(exe); statErr != nil || info.Mode().Perm() != 0o755 {
 		t.Fatalf("restored executable mode = %v (err=%v), want 0755", info.Mode().Perm(), statErr)
 	}
-	matches, globErr := filepath.Glob(filepath.Join(dir, ".pig-update-backup-*"))
+	matches, globErr := filepath.Glob(filepath.Join(dir, ".ompig-update-backup-*"))
 	if globErr != nil || len(matches) != 0 {
 		t.Fatalf("rollback backups remain: %v (err=%v)", matches, globErr)
 	}

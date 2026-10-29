@@ -17,8 +17,8 @@
 #   [Prompts]
 #     /fixture-prompt, /local-prompt
 #   [Extensions]
-#     auto-dir, auto-one.ts, pig-parity/listing-fixture:alpha.ts, pig-parity/listing-fixture:beta
-# PiG used to print each heading and its list on one Markdown line, label
+#     auto-dir, auto-one.ts, ompig-parity/listing-fixture:alpha.ts, ompig-parity/listing-fixture:beta
+# Ompig used to print each heading and its list on one Markdown line, label
 # extensions by entry name ("alpha", "beta", "index"), and listed the themes.
 name = "05-startup-loaded-resources"
 description = "The startup listing puts each section's list under its heading and labels Package extensions by package and entry."
@@ -27,7 +27,7 @@ tags = ["fast", "hermetic", "tui"]
 driver = "interactive-tmux"
 
 [env]
-pig = ["PIG_OFFLINE=1", "PIG_CODING_AGENT_DIR=testdata/listing/pig-agent"]
+ompig = ["OMPIG_OFFLINE=1", "OMPIG_CODING_AGENT_DIR=testdata/listing/ompig-agent"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/listing/pi-agent"]
 # The base arguments pass --no-extensions, which also drops Packages and
 # auto-discovered extensions from the listing under test.
@@ -36,7 +36,7 @@ override_base_args = true
 [tmux]
 width = 100
 height = 45
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "[Skills]"
@@ -47,6 +47,6 @@ wait_visible_contains = ["listing-fixture:beta"]
 
 [assert]
 both_reach_ready = true
-both_contain = ["[Extensions]", "auto-dir, auto-one.ts, pig-parity/listing-fixture:alpha.ts, pig-parity/listing-fixture:beta"]
+both_contain = ["[Extensions]", "auto-dir, auto-one.ts, ompig-parity/listing-fixture:alpha.ts, ompig-parity/listing-fixture:beta"]
 escaped_output_equal = true
 runs = 3

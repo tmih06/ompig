@@ -1,1 +1,1 @@
-pub fn new_extension()->pig_sdk::Extension{pig_sdk::Extension::new("provider-sibling")}
+pub fn new_extension()->ompig_sdk::Extension{ompig_sdk::Extension::new("provider-sibling")}

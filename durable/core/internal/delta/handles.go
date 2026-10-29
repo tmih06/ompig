@@ -5,7 +5,7 @@ import (
 	"math"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // Obj is a draft handle of a JSON object. It is usable only while its change

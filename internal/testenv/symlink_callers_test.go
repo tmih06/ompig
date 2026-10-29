@@ -113,7 +113,7 @@ var fileSymlinkCallers = map[string]string{
 	"durable/tools/tools_test.go::TestEditSerializesConcurrentEditsThroughCanonicalAndSymlinkPaths":                            "file link",
 	"coding/pigletbuild/records_test.go::TestHashTreeExcludesVirtualenvArtifacts":                                              "file link",
 	"coding/pigletbuild/records_test.go::TestHashTreeIgnoresMarkdownSymlinksAndRejectsSourceSymlinks":                          "file link",
-	"coding/piglet/release/store_security_test.go::TestInventoryRejectsManagedSymlinkAncestors":                                "file link; the directory case uses RequireDirectoryLink",
+	"coding/ompiglet/release/store_security_test.go::TestInventoryRejectsManagedSymlinkAncestors":                              "file link; the directory case uses RequireDirectoryLink",
 	"internal/codingagent/context_files_oracle_test.go::compareContextTrees":                                                   "file link; a context file reached through a link",
 	"internal/codingagent/skills_oracle_test.go::skillFixture":                                                                 "file link and a link to a missing target",
 	"internal/codingagent/prompt_templates_oracle_test.go::promptFixture":                                                      "file link and a link to a missing target",
@@ -163,7 +163,7 @@ func TestSymlinkCallersAreFileOrUnresolvableLinks(t *testing.T) {
 			local = "."
 		}
 		for _, spec := range parsed.Imports {
-			if spec.Path.Value != `"github.com/MichaelKinsy/PiG/internal/testenv"` {
+			if spec.Path.Value != `"github.com/tmih06/ompig/internal/testenv"` {
 				continue
 			}
 			local = "testenv"

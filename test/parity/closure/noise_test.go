@@ -121,7 +121,7 @@ func setFakeGoNoise(t *testing.T, directory, role, noise string) {
 
 func TestExecuteMutationRequestVerdictIgnoresStderrNoise(t *testing.T) {
 	directory := installFakeGo(t)
-	telemetry := "error acquiring upload taken: statting token file: stat /home/pig/.config/go/telemetry/local/upload.token: operation not permitted\n"
+	telemetry := "error acquiring upload taken: statting token file: stat /home/ompig/.config/go/telemetry/local/upload.token: operation not permitted\n"
 	cases := []struct{ name, baseline, mutant string }{
 		{name: "none"},
 		{name: "baseline only", baseline: telemetry},

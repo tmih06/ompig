@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // pi.getSettings(), ctx.tools and ctx.executeTool() (.upstream/v0.99.1/packages/coding-agent/src/core/agent-session.ts:3339, 3382-3383 bind them to every extension runner in every mode) reach a subprocess extension only through the mode's bridge wiring. These tests run the real binary in each mode with a Node and a Go extension and read what the extension saw from inside its tool: the settings value the agent directory holds, the tools the session lets a tool call, and the outcome of a nested call.
@@ -89,7 +89,7 @@ import (
 	"strings"
 	"sync"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func Extension() *sdk.Extension {
@@ -229,7 +229,7 @@ func writeWiredExtension(t *testing.T, language string) string {
 			t.Fatal(err)
 		}
 		for name, content := range map[string]string{
-			"go.mod":       "module example.test/wired\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n",
+			"go.mod":       "module example.test/wired\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n",
 			"extension.go": wiredProbeGo,
 		} {
 			if err := os.WriteFile(filepath.Join(root, name), []byte(content), 0o600); err != nil {
@@ -246,14 +246,14 @@ func writeWiredExtension(t *testing.T, language string) string {
 func wiredEnvironment(t *testing.T) (env []string, cwd, sessionDir string) {
 	t.Helper()
 	home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(`{"quietStartup":true}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	env = []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1"}
+	env = []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1"}
 	return env, cwd, sessionDir
 }
 
@@ -310,7 +310,7 @@ func assertWiredProbe(t *testing.T, probe wiredProbe) {
 
 func TestExtensionToolContextIsWiredInEveryMode(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and extensions")
+		t.Skip("builds the ompig binary and extensions")
 	}
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -389,7 +389,7 @@ func runWiredInteractive(t *testing.T, binary, cwd string, env, args []string) {
 		}
 		select {
 		case <-done:
-			t.Fatalf("pig exited before the extension's tool ran; screen:\n%s", output.since(0))
+			t.Fatalf("ompig exited before the extension's tool ran; screen:\n%s", output.since(0))
 		default:
 		}
 	}

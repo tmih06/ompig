@@ -18,7 +18,7 @@ import (
 // compiler output. The compiler output never travels in the error, so a
 // failed build cannot fill a terminal.
 //
-// pig additive (D20): PiG compiles extensions, which Pi does not, so Pi has no
+// ompig additive (D20): Ompig compiles extensions, which Pi does not, so Pi has no
 // counterpart to this report.
 type BuildFailure struct {
 	// Summary is one line naming what failed.
@@ -44,7 +44,7 @@ func (e *BuildFailure) Unwrap() error { return e.cause }
 
 // RetryCachedBuildCommand is the command that clears recorded build failures so
 // the next start compiles again.
-const RetryCachedBuildCommand = "pig extensions cache prune --failures"
+const RetryCachedBuildCommand = "ompig extensions cache prune --failures"
 
 func (e *BuildFailure) Error() string {
 	prefix := ""
@@ -75,7 +75,7 @@ func (e *BuildFailure) Detail(lead string) string {
 }
 
 // maxSummaryRunes bounds a summary line. Compiler messages quote user code.
-// pig additive (D20): PiG compiles extensions, which Pi does not.
+// ompig additive (D20): Ompig compiles extensions, which Pi does not.
 const maxSummaryRunes = 240
 
 func oneLine(text string) string {
@@ -87,7 +87,7 @@ func oneLine(text string) string {
 	return line
 }
 
-// pig additive (D20): the newest maxBuildLogs build logs are kept, each at most maxBuildLogBytes, so failures cannot grow the cache without bound.
+// ompig additive (D20): the newest maxBuildLogs build logs are kept, each at most maxBuildLogBytes, so failures cannot grow the cache without bound.
 const (
 	buildLogDirectory = "logs"
 	maxBuildLogs      = 64

@@ -16,7 +16,7 @@ from . import stats
 OS_KEYS = {"linux": "linux", "darwin": "darwin", "windows": "windows"}
 ARCH_KEYS = {"x86_64": "x64", "amd64": "x64", "aarch64": "arm64", "arm64": "arm64"}
 HEADLINE = ["wall_ms", "first_request_ms", "first_frame_ms", "first_input_accepted_ms", "ready_ms", "ready_pss_mib", "peak_rss_mib", "turn_cpu_ms", "turn_cpu_mean_ms", "turn_harness_added_ms"]
-SUBJECT = "pig-0.5"
+SUBJECT = "ompig-0.5"
 
 
 def arch_key(env):

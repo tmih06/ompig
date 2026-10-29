@@ -191,11 +191,11 @@ func renderJob(v values, pl *plan, b bundleRef) ([]byte, error) {
 		data.Env = append(data.Env,
 			envVar{"K8SBENCH_BUNDLE_SHA256", b.sha256},
 			envVar{"K8SBENCH_BUNDLE_ARCH", b.arch},
-			envVar{"K8SBENCH_ROOT", bundleDir + "/pig"},
-			envVar{"PATH", bundleDir + "/pig/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"},
+			envVar{"K8SBENCH_ROOT", bundleDir + "/ompig"},
+			envVar{"PATH", bundleDir + "/ompig/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"},
 		)
 	} else {
-		data.Command = []string{"/opt/pig/bin/k8sbench", "pod"}
+		data.Command = []string{"/opt/ompig/bin/k8sbench", "pod"}
 	}
 	for _, s := range slices.Sorted(slices.Values(v.ImagePullSecrets)) {
 		data.ImagePullSecrets = append(data.ImagePullSecrets, map[string]string{"name": s})

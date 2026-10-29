@@ -9,13 +9,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/tui"
 )
 
 // expandableText is upstream's ExpandableText: a Text whose content is

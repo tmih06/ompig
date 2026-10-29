@@ -12,7 +12,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The remote catalog overlay reaches the built-in providers of a registry: a refresh with credentials fetches it, persists it, and the

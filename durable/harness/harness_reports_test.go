@@ -8,7 +8,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 func TestAFailedSessionIsReportedAsSessionFailed(t *testing.T) {

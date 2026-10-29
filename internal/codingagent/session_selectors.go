@@ -21,13 +21,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // forkAndRebuild moves the session leaf to entryID and: critically -
@@ -129,7 +129,7 @@ func (m *InteractiveMode) showModelSelector(ms *tui.ModelSelectorComponent) (don
 	} else {
 		m.editorContainer.SetChildren(ms)
 		m.tuiInst.SetFocus(ms)
-		// PiG's extension dialogs take the keys without taking focus, so a disposed selector also gives focus back.
+		// Ompig's extension dialogs take the keys without taking focus, so a disposed selector also gives focus back.
 		dispose = func() {
 			ms.Dispose()
 			if m.tuiInst.GetFocusedComponent() == ms {

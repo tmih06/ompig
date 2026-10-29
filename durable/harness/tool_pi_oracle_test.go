@@ -13,12 +13,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	chordoutput "github.com/MichaelKinsy/PiG/chord/output"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	chordoutput "github.com/tmih06/ompig/chord/output"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type toolDiagDesc struct {
@@ -277,7 +277,7 @@ func TestToolResultHelpersMatchPi(t *testing.T) {
 			if differing <= 5 {
 				gotJSON, _ := json.Marshal(got)
 				opJSON, _ := json.Marshal(op)
-				t.Errorf("op %d\n  op  %.600s\n  Pi  %.700s err %v\n  Pig %.700s err %v", i, opJSON, want.OK, ptrOutputText(want.Err), gotJSON, gotErr)
+				t.Errorf("op %d\n  op  %.600s\n  Pi  %.700s err %v\n  Ompig %.700s err %v", i, opJSON, want.OK, ptrOutputText(want.Err), gotJSON, gotErr)
 			}
 		}
 	}

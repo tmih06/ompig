@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/durabletest"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // gitBash is the shell the conformance cases use on Windows, where `sh` is not a program.

@@ -3,7 +3,7 @@ package sdk
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A tool_call handler's edit reaches the tool in the member order a JavaScript object would hold: a member the host sent keeps its place, a member the handler added follows, a removed member is gone, at every depth.

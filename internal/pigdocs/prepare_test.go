@@ -9,7 +9,7 @@ import (
 
 // Prepare writes nothing: a missing bundle is named when the config root lets this process create it and stays pending until EnsureSynced runs.
 func TestPrepareDefersTheWriteOfAMissingBundle(t *testing.T) {
-	root := filepath.Join(t.TempDir(), "pig")
+	root := filepath.Join(t.TempDir(), "ompig")
 	present, pending, err := Prepare(root)
 	if err != nil || !present || !pending {
 		t.Fatalf("Prepare(fresh root) = present %v, pending %v, err %v; want present and pending", present, pending, err)
@@ -44,7 +44,7 @@ func TestPrepareNamesNoBundleItCannotWrite(t *testing.T) {
 		{"only an ancestor exists", func(t *testing.T) string {
 			parent := t.TempDir()
 			readOnly(t, parent)
-			return filepath.Join(parent, "pig", "nested")
+			return filepath.Join(parent, "ompig", "nested")
 		}},
 		{"docs exists", func(t *testing.T) string {
 			root := t.TempDir()

@@ -3,7 +3,7 @@ package tools
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream createReadTool, createEditTool, createWriteTool, createGrepTool, createFindTool and createLsTool each build their tool from (cwd, options): the working

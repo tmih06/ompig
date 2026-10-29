@@ -3,7 +3,7 @@ package session
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // appendEntry takes ownership of the record through copyJson (session/transaction.ts:368), which keeps a present empty `edits` list.

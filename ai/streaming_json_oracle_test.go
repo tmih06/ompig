@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type streamingJSONAnswer struct {
@@ -164,7 +164,7 @@ func TestStreamingJSONMatchesPiOnSeededInput(t *testing.T) {
 	var repaired, parsed, objects, differing int
 	report := func(i int, what string, got, want any) {
 		if differing++; differing <= 12 {
-			t.Errorf("%s of %q differs from Pi:\n  Pig %v\n  Pi  %v", what, inputs[i], got, want)
+			t.Errorf("%s of %q differs from Pi:\n  Ompig %v\n  Pi  %v", what, inputs[i], got, want)
 		}
 	}
 	for i, text := range inputs {

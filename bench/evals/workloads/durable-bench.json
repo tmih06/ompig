@@ -29,7 +29,7 @@
     "3500": "0a8c8e4b0d9a0794"
   },
   "runtimes": {
-    "pig-durable": "bench/durableperf (Go), scripted walk model with the faux provider",
+    "ompig-durable": "bench/durableperf (Go), scripted walk model with the faux provider",
     "pi-durable": "durable/interop/bench.mjs (Node), pi-durable at the version locked in durable/interop/package-lock.json"
   },
   "reporting": {

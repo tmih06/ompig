@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // SetWorkingStatusIndicator selects the status displayed by an opted-in editor.
@@ -35,7 +35,7 @@ func (e *Editor) NeedsRedraw() bool {
 	return dirty
 }
 
-// pig additive (D91): SurfaceLive reports that the embedded indicator, which changes without
+// ompig additive (D91): SurfaceLive reports that the embedded indicator, which changes without
 // invalidating the editor, draws in the editor.
 func (e *Editor) SurfaceLive() bool {
 	return e.EmbedWorkingStatus && e.workingStatusIndicator != nil

@@ -7,7 +7,7 @@ package mermaid
 import "strings"
 
 // ANSI rendering, ported from grok-mermaid ansi.ts. A convenience over mapping
-// art.Styled yourself: pig's markdown integration maps Cls to its own theme
+// art.Styled yourself: ompig's markdown integration maps Cls to its own theme
 // instead, but this keeps the upstream helper faithful.
 
 // AnsiTheme maps a semantic class to an SGR parameter, e.g. "2" (dim), "36"

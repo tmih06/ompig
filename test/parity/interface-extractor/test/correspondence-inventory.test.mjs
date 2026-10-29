@@ -6,10 +6,10 @@ import test from "node:test";
 import { extractCorrespondenceInventory } from "../src/correspondence-inventory.mjs";
 import { scratchDir } from "./scratch.mjs";
 
-const VERSION = process.env.PIG_UPSTREAM_VERSION || fs.readFileSync(new URL("../../../../internal/coding/pigversion/pigversion.go", import.meta.url), "utf8").match(/const UpstreamVersion = "([^"]+)"/)[1];
+const VERSION = process.env.OMPIG_UPSTREAM_VERSION || fs.readFileSync(new URL("../../../../internal/coding/pigversion/pigversion.go", import.meta.url), "utf8").match(/const UpstreamVersion = "([^"]+)"/)[1];
 
 function fixture() {
-  const root = scratchDir("pig-correspondence-");
+  const root = scratchDir("ompig-correspondence-");
   const settingsPath = path.join(root, "packages/coding-agent/src/modes/interactive/components/settings-selector.ts");
   const compactionPath = path.join(root, "packages/coding-agent/src/core/compaction/compaction.ts");
   const managerPath = path.join(root, "packages/coding-agent/src/core/settings-manager.ts");

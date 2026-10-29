@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type promptOracleTemplate struct {
@@ -148,7 +148,7 @@ func TestLoadPromptTemplatesMatchesPi(t *testing.T) {
 		if !reflect.DeepEqual(gotTemplates, w.Templates) {
 			t.Errorf("load %d templates differ:\n got %+v\nwant %+v", i, gotTemplates, w.Templates)
 		}
-		// The text of a YAML syntax error is the YAML library's: Pig's library words most classes differently (see the frontmatter survey test); the warning, its path and its place in the order are compared.
+		// The text of a YAML syntax error is the YAML library's: Ompig's library words most classes differently (see the frontmatter survey test); the warning, its path and its place in the order are compared.
 		for j := range min(len(gotDiagnostics), len(w.Diagnostics)) {
 			if strings.Contains(w.Diagnostics[j].Path, "bad") || strings.HasSuffix(w.Diagnostics[j].Path, "dup.md") || strings.HasSuffix(w.Diagnostics[j].Path, "tabs.md") {
 				if filepath.Base(w.Diagnostics[j].Path) == "badyaml2.md" {
@@ -177,8 +177,8 @@ emit({
 	expanded: input.lines.map((line) => mod.expandPromptTemplate(line, input.known.map((n) => ({ name: n, content: "[" + n + " $1|$@|${@:2}]" })))),
 });`
 
-// TestPromptArgumentHandlingMatchesPi compares parseCommandArgs, substituteArgs and expandPromptTemplate of Pi 1.0.4 with Pig over argument strings and templates that exercise quoting, JavaScript whitespace, every placeholder form, defaults, slices and non-recursive substitution.
-// The pinned Pi drops an empty quoted argument and PiG carries Pi 9fe3f371, which keeps it, so no input here holds an empty quote pair (TestUpstreamPromptTemplatesArguments covers them).
+// TestPromptArgumentHandlingMatchesPi compares parseCommandArgs, substituteArgs and expandPromptTemplate of Pi 1.0.4 with Ompig over argument strings and templates that exercise quoting, JavaScript whitespace, every placeholder form, defaults, slices and non-recursive substitution.
+// The pinned Pi drops an empty quoted argument and Ompig carries Pi 9fe3f371, which keeps it, so no input here holds an empty quote pair (TestUpstreamPromptTemplatesArguments covers them).
 func TestPromptArgumentHandlingMatchesPi(t *testing.T) {
 	argStrings := []string{"", "a b c", `"a b" c`, `'a "b"' c`, `a"b c"d e`, `a\ b`, "a\tb\nc", "a\u00a0b\u2003c\ufeffd\u0085e", `unterminated "quote here`, "   lead  trail   ", "é 😀 \"😀 😀\""}
 	templates := []string{

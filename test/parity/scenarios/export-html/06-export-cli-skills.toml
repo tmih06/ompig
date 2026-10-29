@@ -9,8 +9,8 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
-pig_args = ["--export", "testdata/sessions/skills.jsonl", "{{TEMP}}/out.html"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--export", "testdata/sessions/skills.jsonl", "{{TEMP}}/out.html"]
 pi_args = ["--export", "testdata/sessions/skills.jsonl", "{{TEMP}}/out.html"]
 
 [cli]
@@ -27,6 +27,6 @@ runs = 3
 
 # normalize-rationale: only the independently allocated destination root varies; no artifact content is normalized.
 [[assert.normalize_replace]]
-pattern = '(?m)^(Exported to: )/[^\r\n]*/parity-cli-06-export-cli-skills-(pig|pi)-[0-9]+'
+pattern = '(?m)^(Exported to: )/[^\r\n]*/parity-cli-06-export-cli-skills-(ompig|pi)-[0-9]+'
 with = '${1}<TEMP>'
 reason = "D2: replace only this scenario's allocated temporary root, preserving the destination suffix and the full HTML artifact."

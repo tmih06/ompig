@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type flashOp struct {
@@ -53,7 +53,7 @@ func TestAltScreenFlashContainerMatchesPi(t *testing.T) {
 		got := runFlashProbe(ops)
 		if !reflect.DeepEqual(got, expected[i]) {
 			if failures++; failures <= 4 {
-				t.Errorf("probe %d %s:\n  Pig %+v\n  Pi  %+v", i, mustJSON(ops), got, expected[i])
+				t.Errorf("probe %d %s:\n  Ompig %+v\n  Pi  %+v", i, mustJSON(ops), got, expected[i])
 			}
 		}
 	}
@@ -141,7 +141,7 @@ func flashProbes() [][]flashOp {
 	return probes
 }
 
-// runFlashProbe replays one probe on Pig's container with a manual clock and returns the rows and render count after every operation.
+// runFlashProbe replays one probe on Ompig's container with a manual clock and returns the rows and render count after every operation.
 func runFlashProbe(ops []flashOp) []flashStep {
 	var renders int
 	container := NewAltScreenFlashContainer(func() { renders++ })
@@ -177,7 +177,7 @@ func TestAltScreenFlashProbeDump(t *testing.T) {
 	fmt.Printf("flash-probes:%s\n", mustJSON(flashProbes()))
 }
 
-// TestAltScreenFlashParity prints Pig's steps for the corpus, one JSON line per probe, for the alt-screen-flash parity scenario.
+// TestAltScreenFlashParity prints Ompig's steps for the corpus, one JSON line per probe, for the alt-screen-flash parity scenario.
 func TestAltScreenFlashParity(t *testing.T) {
 	for _, ops := range flashProbes() {
 		var line bytes.Buffer

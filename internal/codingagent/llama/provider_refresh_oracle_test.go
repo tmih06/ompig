@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type llamaRefreshProbe struct {
@@ -30,7 +30,7 @@ type llamaRefreshOutcome struct {
 	Models []any  `json:"models"`
 }
 
-// Left out of the corpus: n_ctx sent as a fraction, a string or a boolean (Pi forwards the JSON value as the model's contextWindow, a string included; Go's contextWindow is an int: a divergence awaiting owner sign-off in handoffs/owner-signoff.md, "llama.cpp n_ctx that is not an integer"; no D record or marker until the owner decides). Servers that send modalities as a string and stored models with no, partial or extended compat objects are in it. A reasoning model's thinkingLevelMap and thinkingTokenBudgetField are PiG's (D90) and are removed on both sides.
+// Left out of the corpus: n_ctx sent as a fraction, a string or a boolean (Pi forwards the JSON value as the model's contextWindow, a string included; Go's contextWindow is an int: a divergence awaiting owner sign-off in handoffs/owner-signoff.md, "llama.cpp n_ctx that is not an integer"; no D record or marker until the owner decides). Servers that send modalities as a string and stored models with no, partial or extended compat objects are in it. A reasoning model's thinkingLevelMap and thinkingTokenBudgetField are Ompig's (D90) and are removed on both sides.
 // The llama.cpp provider's refreshModels (llama/provider.js) against Pi over a local router server: which catalog entries are selectable (loaded, sleeping, autoload presets, failed and non-preset ones), chat versus decision models, the context window choice (loaded n_ctx, --ctx-size / -c / -ctx
 // arguments with Number() parsing, the stored window, n_ctx_train, 128000), the thinking template check on loaded models, image input, classifier models and their API and base URL, restored models, and a failing props request. The published models are compared as JSON.
 func TestLlamaProviderRefreshMatchesPi(t *testing.T) {

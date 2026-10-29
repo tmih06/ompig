@@ -4,7 +4,7 @@
 # and /clone position "at" (262-269, interactive-mode.ts:5351-5399), and /new
 # emits reason "new". A cancel result ends each command without output
 # (handleClearCommand, showUserMessageSelector, handleCloneCommand).
-# Pi's own examples/extensions/confirm-destructive.ts froze PiG here before.
+# Pi's own examples/extensions/confirm-destructive.ts froze Ompig here before.
 # The wait barriers observe each dialog in both binaries. Pi clears transient
 # notifications when the next command opens, so the fixture accumulates the
 # cancellation trace and reports it again after each refusal. The strict crop
@@ -17,16 +17,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/session-before-dialogs.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/session-before-dialogs.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/session-before-dialogs.mjs"]
 
 [tmux]
 width = 100
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Fork cancelled position=before"

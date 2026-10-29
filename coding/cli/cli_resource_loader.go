@@ -6,11 +6,11 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/ctxowner"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/ctxowner"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // cliResourceLoader is the resource loader of a print, JSON or RPC Session: the prompt templates and skills of its build, each carrying the sourceInfo command discovery reports for it, the resources its extensions contribute, the build's system prompt inputs and context files, and its extensions (resource-loader.ts DefaultResourceLoader). Its other methods answer as [coding.NoResources] does.

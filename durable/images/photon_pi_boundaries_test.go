@@ -9,11 +9,11 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // Pi's index.ts decides, for each image, whether it passes through, how it is turned, what size it is given, which
-// encoding fits and how far it shrinks. photon_pi_oracle_test.go compares PiG with Pi (the real createPhotonImages,
+// encoding fits and how far it shrinks. photon_pi_oracle_test.go compares Ompig with Pi (the real createPhotonImages,
 // Photon 0.3.3 under Node) on a corpus of ordinary images. The cases here sit on the boundaries of those decisions:
 // a size or byte count exactly at its limit, a size that rounds at one half, a size that rounds to zero, an image of
 // one pixel across, a shrink that must keep going past the first step, and each JPEG quality of the ladder. Every
@@ -73,7 +73,7 @@ func TestPhotonImagesMatchPiWhenAnImageOnePixelAcrossKeepsShrinking(t *testing.T
 
 // A JPEG that must be re-encoded is tried at quality 80, 70, 55 and 40, the first whose base64 fits. The quantization
 // table in the output says which quality was used. The limits sit between the sizes both encoders give at neighbouring
-// qualities, so the same quality fits in Pi and in PiG.
+// qualities, so the same quality fits in Pi and in Ompig.
 func TestPhotonImagesMatchPiOnTheJPEGQualityLadder(t *testing.T) {
 	// Mirrored (EXIF orientation 2), so it is re-encoded rather than returned as it is.
 	source := withOrientation(encodeJPEG(t, noisy(300, 300)), 2, false, false)
@@ -85,7 +85,7 @@ func TestPhotonImagesMatchPiOnTheJPEGQualityLadder(t *testing.T) {
 	comparePhotonToPi(t, corpus)
 }
 
-// The base64 of an encoding that is exactly as long as the byte limit fits. Photon's PNG is byte-for-byte PiG's, so the
+// The base64 of an encoding that is exactly as long as the byte limit fits. Photon's PNG is byte-for-byte Ompig's, so the
 // limit is the length of Pi's own PNG for the image.
 func TestPhotonImagesMatchPiWhenAPNGIsExactlyAsLongAsTheByteLimit(t *testing.T) {
 	def := tools.DEFAULT_IMAGE_LIMITS

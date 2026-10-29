@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type sessionOracleInfo struct {
@@ -203,7 +203,7 @@ func TestSessionSelectorInputMatchesPi(t *testing.T) {
 		selector.deleteSession = func(string) sessionDeleteResult { return sessionDeleteResult{ok: true, method: sessionDeleteTrash} }
 		got := sessionOracleResult{Steps: [][]string{}, Frames: [][]string{piJSONLines(selector.Render(probe.Width))}}
 		reported := 0
-		// Pig reports completion through Done(), which the host polls before routing the next key; Pi calls onSelect/onCancel on
+		// Ompig reports completion through Done(), which the host polls before routing the next key; Pi calls onSelect/onCancel on
 		// every later key, so a script is compared up to the key that completes the selector.
 		completedAt := len(probe.Keys)
 		for keyIndex, key := range probe.Keys {
@@ -242,7 +242,7 @@ func randomSessionSelectorProbes(bindings []map[string][]string) []sessionOracle
 	rng := rand.New(rand.NewSource(20261022))
 	names := []string{"", "", "", "named", "  padded  ", "\ufeff\u00a0spaced\u0085", "日本語", "e\u0301clair", "😀 party", "a very long session name that will not fit in a narrow terminal row"}
 	texts := []string{"fix the login bug", "deploy to staging", "日本語のメッセージ", "refactor", "e\u0301", "tab\there", "line\nbreak", "😀", "x", "a long first message with many words that has to be truncated in the row"}
-	// Page keys stay out: over an empty list Pig keeps the index valid (Pi PR #7680, D155) where Pi 1.1.0 leaves -1.
+	// Page keys stay out: over an empty list Ompig keeps the index valid (Pi PR #7680, D155) where Pi 1.1.0 leaves -1.
 	keys := []string{"\x1b[A", "\x1b[B", "\r", "\x1b", "\x03", "\t", "\x13", "\x0e", "\x10", "\x04", "\x12", "\x7f", "\x1b[3~", "\x08", "y", "n", "t", "o", "p", "i", "c", "日", " ", "d"}
 	mkSessions := func(n int, cwd string, base int) []sessionOracleInfo {
 		out := make([]sessionOracleInfo, n)
@@ -297,7 +297,7 @@ func firstFrameDifference(got, want [][]string) string {
 				w = want[f][l]
 			}
 			if g != w {
-				return fmt.Sprintf("frame %d line %d:\n  pig %q\n  Pi  %q", f, l, g, w)
+				return fmt.Sprintf("frame %d line %d:\n  ompig %q\n  Pi  %q", f, l, g, w)
 			}
 		}
 	}

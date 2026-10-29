@@ -15,8 +15,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/storehost"
+	"github.com/tmih06/ompig/durable/core/contracttest"
+	"github.com/tmih06/ompig/durable/core/contracttest/storehost"
 )
 
 func main() {

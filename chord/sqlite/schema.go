@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 var sqliteSchemaPrefixPattern = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)

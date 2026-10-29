@@ -11,10 +11,10 @@ import (
 )
 
 const (
-	helperEnv        = "PIG_TEST_SDK_LOCK_HELPER"
-	configEnv        = "PIG_TEST_SDK_LOCK_CONFIG"
-	readyEnv         = "PIG_TEST_SDK_LOCK_READY"
-	releaseSignalEnv = "PIG_TEST_SDK_LOCK_RELEASE"
+	helperEnv        = "OMPIG_TEST_SDK_LOCK_HELPER"
+	configEnv        = "OMPIG_TEST_SDK_LOCK_CONFIG"
+	readyEnv         = "OMPIG_TEST_SDK_LOCK_READY"
+	releaseSignalEnv = "OMPIG_TEST_SDK_LOCK_RELEASE"
 )
 
 func TestBuildLockHelper(t *testing.T) {

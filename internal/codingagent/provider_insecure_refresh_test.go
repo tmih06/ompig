@@ -6,8 +6,8 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestRegistrationWithRefreshModelsKeepsItsTLSOptIn (D36, wire:e8a6c64b): a registerProvider configuration with refreshModels is composed in the

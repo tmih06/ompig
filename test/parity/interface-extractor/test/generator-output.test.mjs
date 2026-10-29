@@ -12,7 +12,7 @@ for (const [script, target] of [
   ["extract-behavior-inputs.mjs", "behavior-input-inventory"],
 ]) {
   test(`${script} warns for implicit stdout and preserves explicit outputs`, (t) => {
-    const root = scratchDir("pig-generator-output-");
+    const root = scratchDir("ompig-generator-output-");
     t.after(() => fs.rmSync(root, { recursive: true, force: true }));
     for (const [name, source] of [
       ["packages/coding-agent/src/cli/args.ts", "export function parseArgs(args: string[]) {}\nexport function printHelp() {}\n"],

@@ -286,7 +286,7 @@ path = "packages/agent/src/harness/result.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "`(TS Result<T,E> monad + TaggedError/matchError; pig uses Go-native (T,error)/(T,*Error) tuples and typed errors e.g. session.Error{Code}: language mechanics, designed out)`"
+rationale = "`(TS Result<T,E> monad + TaggedError/matchError; ompig uses Go-native (T,error)/(T,*Error) tuples and typed errors e.g. session.Error{Code}: language mechanics, designed out)`"
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive.ts"
@@ -832,7 +832,7 @@ path = "packages/ai/src/api/cloudflare-ai-binding.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "`(designed out: fetch adapter over a Cloudflare Workers env.AI binding; PiG runs as a native process, not inside a Worker, so no AI binding exists; HTTPS AI Gateway stays in ai/cloudflare.go)`"
+rationale = "`(designed out: fetch adapter over a Cloudflare Workers env.AI binding; Ompig runs as a native process, not inside a Worker, so no AI binding exists; HTTPS AI Gateway stays in ai/cloudflare.go)`"
 
 [[files]]
 path = "packages/ai/src/api/constrained-sampling.ts"
@@ -874,7 +874,7 @@ path = "packages/ai/src/api/openai-codex-responses.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/openai_codex_terminal_test.go#TestOpenAICodexResponses_ResponseDoneNormalizesStatusAndEndTurn"]
-rationale = "PiG now mirrors the 0.87.1 mapCodexEvents delta: response.done terminates the stream, end_turn is retained, and statuses outside Codex's closed set are omitted before shared stop-reason mapping."
+rationale = "Ompig now mirrors the 0.87.1 mapCodexEvents delta: response.done terminates the stream, end_turn is retained, and statuses outside Codex's closed set are omitted before shared stop-reason mapping."
 
 [[files]]
 path = "packages/ai/src/api/openai-completions.ts"
@@ -902,7 +902,7 @@ path = "packages/ai/src/api/pi-messages.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⏸ deferred: `(deferred: requires the PiG-owned hosted transport, authentication, privacy, and operational contract)`"
+rationale = "PORT_MAP marks this file ⏸ deferred: `(deferred: requires the Ompig-owned hosted transport, authentication, privacy, and operational contract)`"
 
 [[files]]
 path = "packages/ai/src/api/simple-options.ts"
@@ -1091,7 +1091,7 @@ path = "packages/ai/src/providers/radius.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file 🟡 partial: `ai/models_generated.go + ai/registry.go (0.87.1 published catalog retained; runtime discovery and construction fail closed until the PiG-owned service and pi-messages transport are implemented)`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file 🟡 partial: `ai/models_generated.go + ai/registry.go (0.87.1 published catalog retained; runtime discovery and construction fail closed until the Ompig-owned service and pi-messages transport are implemented)`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/ai/src/providers/xai.ts"
@@ -1119,7 +1119,7 @@ path = "packages/ai/src/utils/deferred-tools.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "upstream removed this tool-name normalization utility by 0.87.1 with no replacement in the current tree; PiG's tool registry has no corresponding normalizer to port."
+rationale = "upstream removed this tool-name normalization utility by 0.87.1 with no replacement in the current tree; Ompig's tool registry has no corresponding normalizer to port."
 
 [[files]]
 path = "packages/ai/src/utils/diagnostics.ts"
@@ -1217,7 +1217,7 @@ path = "packages/coding-agent/src/bun/register-bedrock.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Bun-runtime provider registration entrypoint; PiG has no Bun runtime target (Go binary, not a Node/Bun module host), matching the existing packages/agent/src/harness/env/nodejs.ts n/a treatment for runtime-specific entrypoints."
+rationale = "Bun-runtime provider registration entrypoint; Ompig has no Bun runtime target (Go binary, not a Node/Bun module host), matching the existing packages/agent/src/harness/env/nodejs.ts n/a treatment for runtime-specific entrypoints."
 
 [[files]]
 path = "packages/coding-agent/src/bun/runtime-setup.ts"
@@ -1273,7 +1273,7 @@ path = "packages/coding-agent/src/cli/credential-print.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⏸ deferred: `deferred: security-sensitive auth print-api-key/print-bearer-token CLI; requires a model-runtime request-auth resolution surface (getAuth with OAuth refresh/persist, listCredentials, getProviders) pig does not yet expose. Port after that lands`"
+rationale = "PORT_MAP marks this file ⏸ deferred: `deferred: security-sensitive auth print-api-key/print-bearer-token CLI; requires a model-runtime request-auth resolution surface (getAuth with OAuth refresh/persist, listCredentials, getProviders) ompig does not yet expose. Port after that lands`"
 
 [[files]]
 path = "packages/coding-agent/src/cli/experimental/auth.ts"
@@ -1357,7 +1357,7 @@ path = "packages/coding-agent/src/cli/startup-ui.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file 🟡 partial: `partial: ShowStartupSelector/ShowStartupInput ported in internal/codingagent/startup_ui.go. The upstream first-time setup branch is designed out because PiG is not the official Pi distribution, so upstream shouldRunFirstTimeSetup returns false for this binary. Remaining: interactive OSC-11 background query for startup selectors`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file 🟡 partial: `partial: ShowStartupSelector/ShowStartupInput ported in internal/codingagent/startup_ui.go. The upstream first-time setup branch is designed out because Ompig is not the official Pi distribution, so upstream shouldRunFirstTimeSetup returns false for this binary. Remaining: interactive OSC-11 background query for startup selectors`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/client/index.ts"
@@ -1413,7 +1413,7 @@ path = "packages/coding-agent/src/core/bug-report-upload.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "`(designed out: D62, PiG never uploads bug reports)`"
+rationale = "`(designed out: D62, Ompig never uploads bug reports)`"
 
 [[files]]
 path = "packages/coding-agent/src/core/bug-report.ts"
@@ -1630,7 +1630,7 @@ path = "packages/coding-agent/src/core/radius.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⏸ deferred: `(deferred: PiG-owned hosted service integration is not ratified)`"
+rationale = "PORT_MAP marks this file ⏸ deferred: `(deferred: Ompig-owned hosted service integration is not ratified)`"
 
 [[files]]
 path = "packages/coding-agent/src/core/remote-catalog-provider.ts"
@@ -1812,14 +1812,14 @@ path = "packages/coding-agent/src/core/tools/renderers/read.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file 🟡 partial: `partial: tui/tool_execution.go (FormatReadHeader) + internal/codingagent/tool_render.go (renderReadLines). Remaining: compact read call for SKILL.md/AGENTS.md/CLAUDE.md/Pi docs, str() invalid-arg path, expanded result without the pig line-number gutter and path header, truncation warning rows, rendering persisted results from call args`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file 🟡 partial: `partial: tui/tool_execution.go (FormatReadHeader) + internal/codingagent/tool_render.go (renderReadLines). Remaining: compact read call for SKILL.md/AGENTS.md/CLAUDE.md/Pi docs, str() invalid-arg path, expanded result without the ompig line-number gutter and path header, truncation warning rows, rendering persisted results from call args`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/core/tools/renderers/write.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file 🟡 partial: `partial: tui/tool_execution.go (FormatWriteHeader) + internal/codingagent/tool_render.go (renderWriteContent). Remaining: content preview in the call while arguments stream (incremental highlight cache), no pig \"@@ path created @@\" header, toolOutput styling of unhighlighted lines, invalid content-arg marker, error-only result`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file 🟡 partial: `partial: tui/tool_execution.go (FormatWriteHeader) + internal/codingagent/tool_render.go (renderWriteContent). Remaining: content preview in the call while arguments stream (incremental highlight cache), no ompig \"@@ path created @@\" header, toolOutput styling of unhighlighted lines, invalid content-arg marker, error-only result`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/core/tools/write.ts"
@@ -1847,7 +1847,7 @@ path = "packages/coding-agent/src/experimental/cli.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⬜ not started (`(pending owner decision: source-only: tsconfig.build.json excludes src/experimental from Pi's npm package and binaries; this development entrypoint dispatches server/client when PI_EXPERIMENTAL=1, else falls through to main(). The published pi bin never dispatches them, pinned by coding/cli/experimental_entry_test.go. A PiG analog needs a separate unshipped binary whose only targets are the pending server/client rows)`); delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file ⬜ not started (`(pending owner decision: source-only: tsconfig.build.json excludes src/experimental from Pi's npm package and binaries; this development entrypoint dispatches server/client when PI_EXPERIMENTAL=1, else falls through to main(). The published pi bin never dispatches them, pinned by coding/cli/experimental_entry_test.go. A Ompig analog needs a separate unshipped binary whose only targets are the pending server/client rows)`); delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/experimental/client-runtime.ts"
@@ -1889,7 +1889,7 @@ path = "packages/coding-agent/src/experimental/coordinator-entry.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⬜ not started (`(pending: entry for the internal \"coordinator\" process role, spawned only by server.ts ensureCoordinator; no PiG caller until server.ts lands)`); delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file ⬜ not started (`(pending: entry for the internal \"coordinator\" process role, spawned only by server.ts ensureCoordinator; no Ompig caller until server.ts lands)`); delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/experimental/coordinator.ts"
@@ -2043,7 +2043,7 @@ path = "packages/coding-agent/src/experimental/plugin.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "`(Node-runtime-only: the source-only \"@earendil-works/pi-coding-agent/experimental/plugin\" import specifier that plugins/bundled.ts resolvePluginExternal hands to in-process TypeScript facet bundles; PiG has no in-process JS module loader (AGENTS.md forbids an embedded-JS or in-process extension runtime))`"
+rationale = "`(Node-runtime-only: the source-only \"@earendil-works/pi-coding-agent/experimental/plugin\" import specifier that plugins/bundled.ts resolvePluginExternal hands to in-process TypeScript facet bundles; Ompig has no in-process JS module loader (AGENTS.md forbids an embedded-JS or in-process extension runtime))`"
 
 [[files]]
 path = "packages/coding-agent/src/experimental/plugins/bundled.ts"
@@ -2064,7 +2064,7 @@ path = "packages/coding-agent/src/experimental/process.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⬜ not started (`(pending: spawns detached coordinator/server/session-worker roles via __PI_INTERNAL_SPAWN for the server stack; its source-mode branch (--import source-resolver.ts) is Node-runtime-only; no PiG caller until server.ts lands)`); delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file ⬜ not started (`(pending: spawns detached coordinator/server/session-worker roles via __PI_INTERNAL_SPAWN for the server stack; its source-mode branch (--import source-resolver.ts) is Node-runtime-only; no Ompig caller until server.ts lands)`); delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/experimental/radius-auth.ts"
@@ -2288,7 +2288,7 @@ path = "packages/coding-agent/src/modes/interactive/components/custom-editor.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file 🟡 partial: `internal/codingagent/interactive.go realizes the CustomEditor app-keybinding precedence (extension shortcuts -> paste-image -> interrupt with autocomplete/empty guards -> exit-on-empty -> app.session actions -> editor fallthrough) as InteractiveMode dispatch rather than an Editor subclass (structural, observably equivalent). NOT foundation-blocked. Fixed a Ctrl+D exit-guard divergence: app.exit exits only when the editor is empty; a non-empty editor deletes-char-forward (dual-bound tui.editor.deleteCharForward): pig was exiting unconditionally. Guarded by mutation-proven unit tests (TestResolveOutcome, TestResolveOutcomeMatrix). ✅ pending a hermetic precedence parity scenario`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file 🟡 partial: `internal/codingagent/interactive.go realizes the CustomEditor app-keybinding precedence (extension shortcuts -> paste-image -> interrupt with autocomplete/empty guards -> exit-on-empty -> app.session actions -> editor fallthrough) as InteractiveMode dispatch rather than an Editor subclass (structural, observably equivalent). NOT foundation-blocked. Fixed a Ctrl+D exit-guard divergence: app.exit exits only when the editor is empty; a non-empty editor deletes-char-forward (dual-bound tui.editor.deleteCharForward): ompig was exiting unconditionally. Guarded by mutation-proven unit tests (TestResolveOutcome, TestResolveOutcomeMatrix). ✅ pending a hermetic precedence parity scenario`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/extension-editor.ts"
@@ -2470,7 +2470,7 @@ path = "packages/coding-agent/src/modes/rpc/rpc-client.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file ⏸ deferred: `(deferred: PiG exposes the RPC server protocol but does not yet ship a Go subprocess client library)`"
+rationale = "PORT_MAP marks this file ⏸ deferred: `(deferred: Ompig exposes the RPC server protocol but does not yet ship a Go subprocess client library)`"
 
 [[files]]
 path = "packages/coding-agent/src/modes/rpc/rpc-mode.ts"
@@ -2512,7 +2512,7 @@ path = "packages/coding-agent/src/utils/clipboard-native.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Node native clipboard module loader (createRequire dynamic .node binding); PiG's internal/codingagent/clipboard.go uses a portable Go clipboard library instead of the Node native-module mechanism, matching the language-mechanics treatment already applied to packages/coding-agent/src/utils/clipboard.ts."
+rationale = "Node native clipboard module loader (createRequire dynamic .node binding); Ompig's internal/codingagent/clipboard.go uses a portable Go clipboard library instead of the Node native-module mechanism, matching the language-mechanics treatment already applied to packages/coding-agent/src/utils/clipboard.ts."
 
 [[files]]
 path = "packages/coding-agent/src/utils/clipboard.ts"
@@ -2596,7 +2596,7 @@ path = "packages/coding-agent/src/utils/tools-manager.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "PORT_MAP marks this file 🟡 partial: `internal/codingagent/tools/tools.go + tools_manager.go (asset table, releases/latest redirect version lookup, fetchWithRetry downloads, extraction per D14; tools_manager_test.go, tools_manager_latest_test.go ports the getLatestVersion cases); missing: ensureTool reports through an onStatus ToolStatus callback that interactive mode shows via showManagedToolStatus and grep/find keep silent, where PiG prints to stderr unless silent, and the failure message does not join the error cause chain`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
+rationale = "PORT_MAP marks this file 🟡 partial: `internal/codingagent/tools/tools.go + tools_manager.go (asset table, releases/latest redirect version lookup, fetchWithRetry downloads, extraction per D14; tools_manager_test.go, tools_manager_latest_test.go ports the getLatestVersion cases); missing: ensureTool reports through an onStatus ToolStatus callback that interactive mode shows via showManagedToolStatus and grep/find keep silent, where Ompig prints to stderr unless silent, and the failure message does not join the error cause chain`; delivery/unresolved.tsv row 'Review the v0.87.1 denominators'"
 
 [[files]]
 path = "packages/coding-agent/src/utils/wsl.ts"
@@ -2736,7 +2736,7 @@ path = "packages/tui/src/native-modifiers.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:internal/nativeplatform/modifiers_darwin_test.go#TestDarwinModifierBridgeResolvesCoreGraphics", "test:tui/terminal_native_shift_enter_test.go#TestIsNativeModifierPressedUnknownKey", "test:tui/terminal_native_shift_enter_test.go#TestNormalizeProcessInputSequenceFor"]
-rationale = "The 0.87.1 delta routes isNativeModifierPressed through the shared native-platform helper. PiG calls the same system functions without Node addons: CGEventSourceFlagsState from a lazily dlopen'ed CoreGraphics on macOS and user32 GetAsyncKeyState on Windows, reporting false when unavailable or for an unknown key."
+rationale = "The 0.87.1 delta routes isNativeModifierPressed through the shared native-platform helper. Ompig calls the same system functions without Node addons: CGEventSourceFlagsState from a lazily dlopen'ed CoreGraphics on macOS and user32 GetAsyncKeyState on Windows, reporting false when unavailable or for an unknown key."
 
 [[files]]
 path = "packages/tui/src/native-module-path.ts"
@@ -2764,7 +2764,7 @@ path = "packages/tui/src/terminal-image.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:tui/terminal_capability_overrides_test.go#TestDetectCapabilitiesFromEnvironmentMatchesPi", "test:tui/terminal_capability_overrides_test.go#TestDetectCapabilitiesEnvironmentOverrides", "test:tui/terminal_capability_overrides_test.go#TestGetCapabilitiesSettingOverridesBeatEnvironment", "test:tui/terminal_capability_overrides_test.go#TestSetCapabilityOverridesInvalidatesOnlyOnChange", "test:internal/codingagent/terminal_capability_wiring_test.go#TestReloadAppliesTerminalCapabilitySettings"]
-rationale = "PiG ports the 0.87.1 delta: detectCapabilitiesFromEnvironment (including zed and the tmux client_termfeatures probe), parseBooleanCapabilityOverride, detectCapabilities with PI_HYPERLINKS, PI_IMAGE_PROTOCOL, and PI_TRUE_COLOR, and setCapabilityOverrides/getCapabilities with settings overrides above the environment. D44 (Herdr) remains."
+rationale = "Ompig ports the 0.87.1 delta: detectCapabilitiesFromEnvironment (including zed and the tmux client_termfeatures probe), parseBooleanCapabilityOverride, detectCapabilities with PI_HYPERLINKS, PI_IMAGE_PROTOCOL, and PI_TRUE_COLOR, and setCapabilityOverrides/getCapabilities with settings overrides above the environment. D44 (Herdr) remains."
 
 [[files]]
 path = "packages/tui/src/terminal.ts"

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestRPCModeSessionReplacementAndExport(t *testing.T) {
@@ -67,7 +67,7 @@ func TestRPCModeSessionReplacementAndExport(t *testing.T) {
 	}
 	// Pi dispatches every line at once, and the replacing commands await, so each command is sent after the previous one answered
 	// (TestRPCSessionReplacementAnswersAfterALaterCommandOfItsBatch covers the pipelined order).
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + home},
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + home},
 		"--model", "test-faux/faux-1",
 		"--session", session.Path(),
 		"--session-dir", sessionDir,

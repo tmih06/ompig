@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // modelObjectMembers decodes a model object's members.
@@ -61,7 +61,7 @@ func TestModelObjectPreservesPiModelShape(t *testing.T) {
 			t.Errorf("serialized model is missing %q: %s", field, object)
 		}
 	}
-	// Pi's model object has none of PiG's former aliases.
+	// Pi's model object has none of Ompig's former aliases.
 	for _, field := range []string{"modelId", "displayName", "maxOutputTokens", "inputCostPer1M", "outputCostPer1M", "cacheReadCostPer1M", "cacheWriteCostPer1M"} {
 		if _, ok := got[field]; ok {
 			t.Errorf("serialized model carries %q: %s", field, object)

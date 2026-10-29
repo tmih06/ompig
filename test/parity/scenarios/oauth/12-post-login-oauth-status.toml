@@ -9,7 +9,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 200
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Logged in to GitHub Copilot."
@@ -29,9 +29,9 @@ wait_contains = ["GitHub Enterprise URL/domain"]
 keys = ["Enter"]
 wait_visible_contains = ["Logged in to GitHub Copilot. Selected gpt-6.1-sol. Credentials saved to"]
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../selectors/testdata/pi-agent-noauth", "PI_CODING_AGENT_DIR=", "PIG_HOME=../selectors/testdata/pig-home-noauth", "PIG_PARITY_HARNESS=1", "PIG_PARITY_LOGIN_DIALOG=complete", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]  # gitleaks:allow -- synthetic parity fixture
-pi = ["PIG_CODING_AGENT_DIR=", "PIG_HOME=", "PI_CODING_AGENT_DIR=../selectors/testdata/pi-agent-noauth", "PI_PARITY_LOGIN_DIALOG=complete", "PATH={{FAKE_BIN}}:{{PATH}}"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../selectors/testdata/pi-agent-noauth", "PI_CODING_AGENT_DIR=", "OMPIG_HOME=../selectors/testdata/ompig-home-noauth", "OMPIG_PARITY_HARNESS=1", "OMPIG_PARITY_LOGIN_DIALOG=complete", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]  # gitleaks:allow -- synthetic parity fixture
+pi = ["OMPIG_CODING_AGENT_DIR=", "OMPIG_HOME=", "PI_CODING_AGENT_DIR=../selectors/testdata/pi-agent-noauth", "PI_PARITY_LOGIN_DIALOG=complete", "PATH={{FAKE_BIN}}:{{PATH}}"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/oauth-harness.ts"]
 [assert]

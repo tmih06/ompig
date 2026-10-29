@@ -29,7 +29,7 @@ func walkSchemas(s *Schema, path string, visit func(*Schema, string)) {
 	}
 }
 
-// ValidateModelsConfig runs on every models.json Pig loads, and the validator panics on a keyword it does not model rather
+// ValidateModelsConfig runs on every models.json Ompig loads, and the validator panics on a keyword it does not model rather
 // than accept it unchecked. A node is only checked when a document reaches it, so a keyword the oracle documents never reach
 // would panic on the first user file that sets that property. Every node of the tree is checked here against each JSON kind,
 // and a record must use the one pattern Type.Record(Type.String(), ...) renders.

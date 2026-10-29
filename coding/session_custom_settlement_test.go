@@ -8,9 +8,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:_emitAgentSettled — extension handlers complete before the public agent_settled event. Their custom messages precede settlement on listener and mode-output paths.
@@ -80,7 +80,7 @@ func TestSettledCustomMessagePrecedesSettlementPublication(t *testing.T) {
 			if !reflect.DeepEqual(output, want) {
 				t.Errorf("mode output order=%v want=%v", output, want)
 			}
-			if os.Getenv("PIG_CUSTOM_SETTLED_PROBE") == "1" && !t.Failed() {
+			if os.Getenv("OMPIG_CUSTOM_SETTLED_PROBE") == "1" && !t.Failed() {
 				data, err := json.Marshal([]any{count, listeners, output})
 				if err != nil {
 					t.Fatal(err)

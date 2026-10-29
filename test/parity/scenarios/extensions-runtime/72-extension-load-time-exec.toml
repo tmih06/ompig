@@ -4,7 +4,7 @@
 # parity-load-exec.mjs awaits a child process at the top of its default export, before any session
 # binds, as Pi's loader allows (loader.ts:411-414: the factory's exec spawns the child itself). Its
 # tool_result handler reports the outcome through the bash result: "[parity-modified]" when the child
-# printed what it should, an error text otherwise. PiG 0.4.1 rejected the call with "extension
+# printed what it should, an error text otherwise. Ompig 0.4.1 rejected the call with "extension
 # connection closed or replaced" (issue #165), so the model saw an error text and answered
 # "not-modified".
 #
@@ -26,10 +26,10 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/parity-load-exec.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/parity-load-exec.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/parity-load-exec.mjs",

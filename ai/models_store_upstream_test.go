@@ -11,7 +11,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 func upstreamStoredModel(provider, id string) json.RawMessage {

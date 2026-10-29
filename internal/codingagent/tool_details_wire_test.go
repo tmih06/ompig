@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // Pi 0.87.1 tools/renderers/grep.ts and ls.ts interpolate the requested limit without integer rounding, both live and after session replay.

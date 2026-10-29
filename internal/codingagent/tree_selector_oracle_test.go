@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type treeOracleNode struct {
@@ -264,7 +264,7 @@ func TestTreeSelectorInputMatchesPi(t *testing.T) {
 		var events []string
 		selector := tui.NewTreeSelectWithInitialFilter("Session tree", &treeNodeAdapter{n: root, f: newTreeRowFormatter(nil)}, probe.Filter)
 		selector.MaxVisibleLines = tui.TreeVisibleLines(probe.Height)
-		// testdata/tree_selector.mjs focuses Pi's component, so a label input draws the IME cursor marker; focus Pig's alike.
+		// testdata/tree_selector.mjs focuses Pi's component, so a label input draws the IME cursor marker; focus Ompig's alike.
 		focus := func(selector *tui.TreeSelectorComponent) { selector.SetFocused(true) }
 		focus(selector)
 		selector.SetInitialCursor(probe.Leaf, probe.InitialSelected)

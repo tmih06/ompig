@@ -613,7 +613,7 @@ pub struct ErrorInfo {
 
 // ─── Connection ──────────────────────────────────────────────────────────────
 
-// pig additive (D19): normal response publication retires only the request parent, not a retained Context's connection.
+// ompig additive (D19): normal response publication retires only the request parent, not a retained Context's connection.
 pub(crate) struct RequestParent {
     id: String,
     state: AtomicU8,
@@ -1057,7 +1057,7 @@ impl Connection {
         if self.is_closed() || scope.is_some_and(RequestParent::cancelled) {
             return Err(io::Error::new(io::ErrorKind::ConnectionAborted, "host call owner is cancelled or closed"));
         }
-        // pig additive (D189): a call made through a request's scope after its handler returned is deferred work, which Pi runs once its loop turns; the host holds it for that turn.
+        // ompig additive (D189): a call made through a request's scope after its handler returned is deferred work, which Pi runs once its loop turns; the host holds it for that turn.
         let timer = scope.is_some_and(RequestParent::completed);
         let parent_request_id = match scope {
             Some(parent) if parent.completed() => None,

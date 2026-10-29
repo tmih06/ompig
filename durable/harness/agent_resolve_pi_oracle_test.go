@@ -14,9 +14,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type agentWrapSpec struct {
@@ -274,7 +274,7 @@ func TestResolveAgentMatchesPi(t *testing.T) {
 			if differing <= 5 {
 				gotJSON, _ := json.Marshal(got)
 				caseJSON, _ := json.Marshal(spec)
-				t.Errorf("case %d\n  case %.1500s\n  Pi  %.900s\n  Pig %.900s reports %v", i, caseJSON, expected[i], gotJSON, reports)
+				t.Errorf("case %d\n  case %.1500s\n  Pi  %.900s\n  Ompig %.900s reports %v", i, caseJSON, expected[i], gotJSON, reports)
 			}
 		}
 	}

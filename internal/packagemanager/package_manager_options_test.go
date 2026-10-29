@@ -3,7 +3,7 @@ package packagemanager
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // .upstream/current/packages/coding-agent/src/core/package-manager.ts:821 `new DefaultPackageManager(options)` stores options.cwd,

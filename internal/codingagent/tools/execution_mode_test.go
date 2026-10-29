@@ -3,7 +3,7 @@ package tools
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // TOOL-18: upstream's tool definitions set no executionMode, so every

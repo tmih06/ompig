@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// pig additive (D20): Pi loads every highlight.js grammar in one synchronous pass in a process that serves nothing else. A Node member serves the host's requests on the same thread under the renderer inactivity lease (D56), and that pass took more than the five seconds of the lease on a starved machine (125 ms on an idle one), so a Markdown transform, a render or a mouse event queued behind it was abandoned while the extension was healthy. The load must give the event loop back between grammar modules, and the languages must still become available together, as the one registration pass of Pi's lib/index.js makes them.
+// ompig additive (D20): Pi loads every highlight.js grammar in one synchronous pass in a process that serves nothing else. A Node member serves the host's requests on the same thread under the renderer inactivity lease (D56), and that pass took more than the five seconds of the lease on a starved machine (125 ms on an idle one), so a Markdown transform, a render or a mouse event queued behind it was abandoned while the extension was healthy. The load must give the event loop back between grammar modules, and the languages must still become available together, as the one registration pass of Pi's lib/index.js makes them.
 func TestNodeLoadsHighlightLanguagesWithoutHoldingTheEventLoop(t *testing.T) {
 	root := filepath.Join(findModuleRoot(t), "coding", "extension", "host", "subprocess", "runtime-node")
 	script := `import { registerHooks } from "node:module";

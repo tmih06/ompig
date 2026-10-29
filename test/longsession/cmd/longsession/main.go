@@ -3,12 +3,12 @@
 // Command longsession writes long Pi session fixtures and measures a harness's memory with one loaded.
 //
 //	longsession gen -tokens 1000000 -window 5000000 -out DIR
-//	longsession measure -bin pig -dir DIR [-mode rpc|interactive] [-prompts 5] [-profile heap,metrics]
-//	longsession curve -bin pig -out DIR [-from 100000 -to 1000000 -step 100000] [-extra 850000]
+//	longsession measure -bin ompig -dir DIR [-mode rpc|interactive] [-prompts 5] [-profile heap,metrics]
+//	longsession curve -bin ompig -out DIR [-from 100000 -to 1000000 -step 100000] [-extra 850000]
 //
 // gen writes DIR/session.jsonl, DIR/agent (models.json declaring the scripted model with the window, settings.json selecting it) and DIR/meta.json.
 //
-// measure starts the binary with the fixture's agent directory as PIG_CODING_AGENT_DIR and PI_CODING_AGENT_DIR, a private HOME, and --session on a fresh copy of DIR/session.jsonl (the harness appends its prompts to the session it opens; the copy is removed afterwards), in RPC mode over pipes or in interactive mode in a tmux session. It serves the scripted model itself (an OpenAI-compatible stream that answers "ok" and reports the request's bytes/4 as input tokens) and points the fixture at it. It prints one JSON line per stage to stdout: "loaded" once the harness answers (RPC get_state, or the interactive footer naming the model), then "prompts" after the prompts. Memory is the process tree's Rss, Pss and Private_Dirty from /proc/<pid>/smaps_rollup, in MiB. With -profile, PIG_PROFILE names the kinds and the files land in DIR/profile; the heap profile is written at exit after a forced collection, while the session is still open.
+// measure starts the binary with the fixture's agent directory as OMPIG_CODING_AGENT_DIR and PI_CODING_AGENT_DIR, a private HOME, and --session on a fresh copy of DIR/session.jsonl (the harness appends its prompts to the session it opens; the copy is removed afterwards), in RPC mode over pipes or in interactive mode in a tmux session. It serves the scripted model itself (an OpenAI-compatible stream that answers "ok" and reports the request's bytes/4 as input tokens) and points the fixture at it. It prints one JSON line per stage to stdout: "loaded" once the harness answers (RPC get_state, or the interactive footer naming the model), then "prompts" after the prompts. Memory is the process tree's Rss, Pss and Private_Dirty from /proc/<pid>/smaps_rollup, in MiB. With -profile, OMPIG_PROFILE names the kinds and the files land in DIR/profile; the heap profile is written at exit after a forced collection, while the session is still open.
 //
 // curve runs gen and measure for each size from -from to -to by -step, plus each -extra size, and prints every line.
 package main
@@ -32,7 +32,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 func main() {
@@ -89,9 +89,9 @@ type measureOptions struct {
 
 func measureFlags(fs *flag.FlagSet) *measureOptions {
 	m := &measureOptions{}
-	fs.StringVar(&m.bin, "bin", "pig", "harness binary")
+	fs.StringVar(&m.bin, "bin", "ompig", "harness binary")
 	fs.StringVar(&m.mode, "mode", "rpc", "rpc or interactive")
-	fs.StringVar(&m.profile, "profile", "", "PIG_PROFILE kinds, for example heap,metrics")
+	fs.StringVar(&m.profile, "profile", "", "OMPIG_PROFILE kinds, for example heap,metrics")
 	fs.IntVar(&m.prompts, "prompts", 5, "prompts to send after loading")
 	fs.DurationVar(&m.timeout, "timeout", 10*time.Minute, "limit for each stage")
 	return m
@@ -207,8 +207,8 @@ func measure(m measureOptions, enc *json.Encoder) error {
 		}
 	}
 	env := []string{
-		"HOME=" + home, "PIG_HOME=" + home, "PI_HOME=" + home,
-		"PIG_CODING_AGENT_DIR=" + meta.AgentDir, "PI_CODING_AGENT_DIR=" + meta.AgentDir,
+		"HOME=" + home, "OMPIG_HOME=" + home, "PI_HOME=" + home,
+		"OMPIG_CODING_AGENT_DIR=" + meta.AgentDir, "PI_CODING_AGENT_DIR=" + meta.AgentDir,
 		"PATH=" + os.Getenv("PATH"), "TERM=xterm-256color", "LANG=C.UTF-8",
 		"PI_SKIP_VERSION_CHECK=1", "PI_OFFLINE=1",
 	}
@@ -219,7 +219,7 @@ func measure(m measureOptions, enc *json.Encoder) error {
 		}
 	}
 	if m.profile != "" {
-		env = append(env, "PIG_PROFILE="+m.profile, "PIG_PROFILE_DIR="+profileDir)
+		env = append(env, "OMPIG_PROFILE="+m.profile, "OMPIG_PROFILE_DIR="+profileDir)
 	}
 	base := Line{Bin: m.bin, Mode: m.mode, Tokens: meta.Tokens, Window: meta.Window, Bytes: meta.Bytes, SHA256: meta.SHA256}
 	var h harness
@@ -266,7 +266,7 @@ func measure(m measureOptions, enc *json.Encoder) error {
 	if m.profile != "" {
 		line := base
 		line.Stage = "exit"
-		files, _ := filepath.Glob(filepath.Join(profileDir, fmt.Sprintf("pig-%d-*", h.pid())))
+		files, _ := filepath.Glob(filepath.Join(profileDir, fmt.Sprintf("ompig-%d-*", h.pid())))
 		line.Profiles = files
 		return enc.Encode(line)
 	}

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// The P1(b) fixture: nothing is reachable from cmd/pig, so every member of Config and Widget can close only through the library
+// The P1(b) fixture: nothing is reachable from cmd/ompig, so every member of Config and Widget can close only through the library
 // route. The upstream package fx publishes an index that re-exports types.ts, and PORT_MAP records lib/lib.go as its port.
 
 const fxLibTypes = "export type Mode = \"a\" | \"b\";\n" +
@@ -24,7 +24,7 @@ const fxLibIndex = "export * from \"./types.ts\";\n"
 
 const fxLibPackage = `{"name": "fx", "main": "./dist/index.js", "exports": {".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"}}}`
 
-const fxLibPortMap = "| upstream | pig | status |\n|---|---|---|\n| `packages/fx/src/types.ts` | `lib/lib.go` | ✅ |\n"
+const fxLibPortMap = "| upstream | ompig | status |\n|---|---|---|\n| `packages/fx/src/types.ts` | `lib/lib.go` | ✅ |\n"
 
 // fxCitedTest asserts Config.name, Config.retries and Widget.name and cites the upstream declaration that names them.
 const fxCitedTest = `

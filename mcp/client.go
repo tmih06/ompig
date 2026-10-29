@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/jsloop"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // Ports packages/mcp/src/client.ts.

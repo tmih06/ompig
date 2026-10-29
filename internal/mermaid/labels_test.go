@@ -20,7 +20,7 @@ type labelsGolden struct {
 	SrcLines []string `json:"srcLines"`
 }
 
-// TestLabelsMatchUpstream diffs pig's label helpers against grok-mermaid's own
+// TestLabelsMatchUpstream diffs ompig's label helpers against grok-mermaid's own
 // exported functions (labels.js) over an entity/tag/markdown/wrapping corpus.
 func TestLabelsMatchUpstream(t *testing.T) {
 	f, err := os.Open("testdata/labels-golden.jsonl")

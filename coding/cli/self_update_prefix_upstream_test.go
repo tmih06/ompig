@@ -1,4 +1,4 @@
-//go:build !pig_strip_self_update
+//go:build !ompig_strip_self_update
 
 package cli
 
@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestNativeSelfUpdateCallerRetainsProvenPrefix(t *testing.T) {
@@ -28,7 +28,7 @@ func TestNativeSelfUpdateCallerRetainsProvenPrefix(t *testing.T) {
 	if err := os.MkdirAll(installed, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	executable := filepath.Join(installed, "pig")
+	executable := filepath.Join(installed, "ompig")
 	if runtime.GOOS == "windows" {
 		executable += ".exe"
 	}
@@ -37,7 +37,7 @@ func TestNativeSelfUpdateCallerRetainsProvenPrefix(t *testing.T) {
 		_, _ = fmt.Fprint(w, `{"version":"9.9.9","packageName":"@new-scope/pi","binaries":{}}`)
 	}))
 	defer server.Close()
-	t.Setenv("PIG_UPDATE_URL", server.URL)
+	t.Setenv("OMPIG_UPDATE_URL", server.URL)
 	provenance := &codingagent.SelfUpdateProvenance{Tier: codingagent.TierPackageManager, ExePath: executable, PackageOwner: "npm", PackageName: "@old-scope/pi", PackageDir: filepath.Dir(installed), NpmPrefix: prefix}
 	if err := applyPackageManagerUpdate(provenance, nil, false); err != nil {
 		t.Fatal(err)

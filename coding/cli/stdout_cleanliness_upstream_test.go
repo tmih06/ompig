@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Upstream 0.99.1 changes only how its harness starts the CLI: `--import` receives the source resolver as a file URL (pathToFileURL) instead of a path
@@ -64,7 +64,7 @@ func TestStdoutCleanlinessUpstream(t *testing.T) {
 			defer cancel()
 			cmd := exec.CommandContext(ctx, bin, tc.args...)
 			cmd.Dir = project
-			cmd.Env = append(os.Environ(), "PIG_HOME="+filepath.Join(root, "home"), codingagent.ENV_AGENT_DIR+"="+agentDir, "PIG_OFFLINE=", "PI_OFFLINE=", "PI_SKIP_VERSION_CHECK=1", "PIG_SKIP_VERSION_CHECK=1")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+filepath.Join(root, "home"), codingagent.ENV_AGENT_DIR+"="+agentDir, "OMPIG_OFFLINE=", "PI_OFFLINE=", "PI_SKIP_VERSION_CHECK=1", "OMPIG_SKIP_VERSION_CHECK=1")
 			var stdout, stderr strings.Builder
 			cmd.Stdout = &stdout
 			cmd.Stderr = &stderr

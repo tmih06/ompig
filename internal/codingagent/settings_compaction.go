@@ -10,7 +10,7 @@ import (
 	"maps"
 	"math"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // Ports packages/coding-agent/src/core/settings-manager.ts (getCompactionTokenSetting).

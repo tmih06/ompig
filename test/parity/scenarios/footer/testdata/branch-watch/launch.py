@@ -26,10 +26,10 @@ fake.write_text('#!/usr/bin/env python3\nimport os,sys\nfrom pathlib import Path
     f'if sys.argv[1:] == ["--no-optional-locks","symbolic-ref","--quiet","--short","HEAD"]:\n Path({str(ready)!r}).touch()\n print(Path({str(branch)!r}).read_text().strip())\nelse: os.execv({real_git!r}, [{real_git!r}]+sys.argv[1:])\n')
 fake.chmod(0o755)
 kind = sys.argv[1]
-if kind == 'pig':
-    binary = os.environ.get('PIG_PARITY_PIG_BIN') or os.environ.get('PIG_BIN') or shutil.which('pig')
+if kind == 'ompig':
+    binary = os.environ.get('OMPIG_PARITY_OMPIG_BIN') or os.environ.get('OMPIG_BIN') or shutil.which('ompig')
 else:
-    binary = os.environ.get('PIG_PARITY_PI_BIN') or os.environ.get('PI_BIN') or shutil.which('pi')
+    binary = os.environ.get('OMPIG_PARITY_PI_BIN') or os.environ.get('PI_BIN') or shutil.which('pi')
 if not binary:
     raise RuntimeError('Pinned CLI binary is not configured')
 env = dict(os.environ, PATH=str(bin_dir)+os.pathsep+os.environ['PATH'])

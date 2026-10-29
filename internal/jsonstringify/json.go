@@ -12,8 +12,8 @@ import (
 	"strconv"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/internal/jsparity"
 )
 
 // Canonicalize applies JSON.parse/stringify semantics to validated JSON, preserving object insertion order and lone UTF-16 surrogates. Text that JSON.stringify would write unchanged is copied, without a decode and re-encode.

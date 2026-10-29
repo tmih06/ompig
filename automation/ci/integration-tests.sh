@@ -35,7 +35,7 @@ case "$CATEGORY" in
     fast)
         # No LLM. Behavior_* + tui_* + structural ext tests,
         # plus the signal guards (faux provider, no network).
-        # NOTE: TestExt_StartupWithSubagent etc. spawn pig but don't hit the
+        # NOTE: TestExt_StartupWithSubagent etc. spawn ompig but don't hit the
         # LLM, so they're "fast" for our purposes.
         PATTERN='^(TestBehavior_|TestSlash|TestShiftEnter|TestExitClean|TestSignalEmits|TestInteractiveSigint|TestExt_StartupWith|TestExt_Subagent|TestExt_NoExtensions|TestExt_StartupWithout|TestExt_Convention|TestExt_Cached)'
         TIMEOUT=300s

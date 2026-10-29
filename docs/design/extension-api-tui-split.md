@@ -38,7 +38,7 @@ Because the aliases in (1) can stay for one release (`type Component = interface
 - In-process Go factories (the compiled-in form of `docs/specs/extension-factory-trust.md`) that call `ui.Custom` with a `CustomFactory`, or set headers, footers, editors and widgets, change their import to `exttui` for those types. Code that only registers tools, commands, events and MCP servers does not change.
 - Type aliases make `extension.Component` interchangeable with the new interface, but `extension.CustomFactory(func(host extension.TUI, theme *tui.Theme, ...)` has a concrete `*tui.Theme` parameter today. Keeping `Theme` as `any` and passing it unchanged keeps the value; authors then assert `theme.(*tui.Theme)` (the pattern `mcptui.themeOf` already uses). This is a source break for factories that name `*tui.Theme` in the signature.
 - Subprocess SDK extensions (Node, Python, Rust, Go SDK) use the wire protocol and are not affected. The remote editor and overlay bridges keep their wire shape.
-- Per AGENTS.md there is no Pig-owned compatibility reader; this is an atomic change of the Go API, done with `make generate` for the interface ledgers.
+- Per AGENTS.md there is no Ompig-owned compatibility reader; this is an atomic change of the Go API, done with `make generate` for the interface ledgers.
 
 ## Risks
 

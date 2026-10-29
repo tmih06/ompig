@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 // LoadRustPackedCell starts a generated Rust packed-cell runner and registers

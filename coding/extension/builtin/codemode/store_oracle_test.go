@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // execute.ts readCodemodeStore folds the codemode-store entries of a branch, and host.ts serializeStore turns the result into the JSON text the script's
@@ -96,7 +96,7 @@ emit(input.map((branch) => {
 		}
 		if fmt.Sprint(got) != fmt.Sprint(wantMap) {
 			if bad++; bad <= 6 {
-				t.Errorf("branch %v\n  PiG %v\n  Pi  %v", branch, got, wantMap)
+				t.Errorf("branch %v\n  Ompig %v\n  Pi  %v", branch, got, wantMap)
 			}
 		}
 	}

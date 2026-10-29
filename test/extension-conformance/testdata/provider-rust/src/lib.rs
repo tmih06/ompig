@@ -1,4 +1,4 @@
-use pig_sdk::{Extension,ModelEventStream};
+use ompig_sdk::{Extension,ModelEventStream};
 use serde_json::json;
 use std::sync::Arc;
 

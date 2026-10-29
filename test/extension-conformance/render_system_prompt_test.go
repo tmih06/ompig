@@ -9,11 +9,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi 1.2.0 runner.ts:1426-1450 renderCurrentSystemPrompt: in a before_agent_start handler, event.systemPrompt and
@@ -212,7 +212,7 @@ func renderSystemPromptFactory(t *testing.T, root, language, name string) subpro
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package render
-import ("strings"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("strings"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  var seen []string
@@ -245,9 +245,9 @@ func Extension()*sdk.Extension {
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, name+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  seen=[]
  def read(ctx,data):
   return "event="+data["systemPrompt"]+" ctx="+ctx.get_system_prompt()
@@ -270,7 +270,7 @@ def new_extension():
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
 		// A Rust handler edits and reads the emission's options through the BeforeAgentStartEvent it receives, which shares them with ctx.
-		source = fmt.Sprintf(`use pig_sdk::{BeforeAgentStartEvent,Context,Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{BeforeAgentStartEvent,Context,Extension,Schema};
 use std::sync::{Arc,Mutex};
 fn read(ctx:&Context,event:&BeforeAgentStartEvent)->Result<String,String> {
  let from_event=event.system_prompt().map_err(|e| e.to_string())?;

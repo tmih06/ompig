@@ -8,11 +8,11 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 // ─── PowerShell Tool ──────────────────────────────────────────────────────────

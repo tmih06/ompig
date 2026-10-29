@@ -1,13 +1,13 @@
-# bench/compare: PiG against Pi-Bolt, gi, omp and Pi (PROVISIONAL)
+# bench/compare: Ompig against Pi-Bolt, gi, omp and Pi (PROVISIONAL)
 
-Same-machine comparison of PiG with the other Pi-family harnesses on a scripted mock model (no network, no live keys). Everything in this
-directory is PROVISIONAL until a gate (lead or pig-evals) accepts it; do not publish a number from it.
+Same-machine comparison of Ompig with the other Pi-family harnesses on a scripted mock model (no network, no live keys). Everything in this
+directory is PROVISIONAL until a gate (lead or ompig-evals) accepts it; do not publish a number from it.
 
 | file | purpose |
 |---|---|
 | `arms.lock` | The permanent arms: version, source URL, artifact sha256 (also checked against each project's own SHA256SUMS), source commit. |
 | `arms.py` | `install` downloads, verifies and unpacks every arm into a fresh root and builds the source arms; `specs` prints the harness `--build` specs; `record` prints the run record. No `curl \| sh`. |
-| `adapters/` | One-exec launchers that translate the Pi-Bolt harness's `PI_CODING_AGENT_DIR` contract into an arm's own config (PiG, gi, omp, OpenCode, rpi). Pi, Pi-Bolt and Pi on Node/Bun run natively. HOME is per agent directory. |
+| `adapters/` | One-exec launchers that translate the Pi-Bolt harness's `PI_CODING_AGENT_DIR` contract into an arm's own config (Ompig, gi, omp, OpenCode, rpi). Pi, Pi-Bolt and Pi on Node/Bun run natively. HOME is per agent directory. |
 | `run_suite.py` | Runs Pi-Bolt's published suite (`bench/` of `opensec-git/Pi-Bolt` at the commit in `arms.lock`, unmodified, not vendored) in interleaved rounds with the arm order rotated. |
 | `fake_model_ctx.py` | Scripted OpenAI-compatible mock with honest usage and a per-request log (bytes, tools, system prompt). |
 | `ctx_scale.py` | Memory/CPU/latency while the conversation grows to 100k, 500k, 850k, 1M, 2M and 4M tokens (RSS, PSS, private dirty). |
@@ -18,8 +18,8 @@ directory is PROVISIONAL until a gate (lead or pig-evals) accepts it; do not pub
 | `shapes_report.py` | Aggregates `stream_shapes.py` rows: samples that did not run, per-cell medians with A/A deltas, and the ratio and wire-API ranges a summary may quote. |
 | `startup_ready.py` | The end of a Pi-family TUI's startup for a harness: the terminal title the TUI sets once startup bound the session (after Pi's "Startup is still in progress" window); a quiet settle for arms that never set a title. |
 | `idle_settled.py` | Pi-Bolt's `idle.py`, unmodified, whose first prompt waits for `startup_ready.py`'s marker instead of going out at the first "fake-model". |
-| `screen_ready.py` | Pi-Bolt's `e2e_screen.py`, unmodified, with the same wait on the tmux pane title. Takes the bench directory of a whole Pi-Bolt checkout (the scenario streams `scripts/lib/training.md`); PiG goes through `adapters/pig`, since tmux passes only `PI_*` variables. |
-| `tests/` | Unit tests for the statistics, failure accounting, mock, reports, streaming-shapes driver and lock checks: `python3 -m unittest discover -s bench/compare/tests`; `arms.py check` fails when a PiG source arm is not a full commit with `repo = "self"`, or when an artifact here is pinned with another sha256 in `bench/evals/arms.lock`. |
+| `screen_ready.py` | Pi-Bolt's `e2e_screen.py`, unmodified, with the same wait on the tmux pane title. Takes the bench directory of a whole Pi-Bolt checkout (the scenario streams `scripts/lib/training.md`); Ompig goes through `adapters/ompig`, since tmux passes only `PI_*` variables. |
+| `tests/` | Unit tests for the statistics, failure accounting, mock, reports, streaming-shapes driver and lock checks: `python3 -m unittest discover -s bench/compare/tests`; `arms.py check` fails when a Ompig source arm is not a full commit with `repo = "self"`, or when an artifact here is pinned with another sha256 in `bench/evals/arms.lock`. |
 
 Quick start:
 

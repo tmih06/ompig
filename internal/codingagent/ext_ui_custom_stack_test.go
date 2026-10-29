@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 1.2.0 interactive-mode.ts:2966-3043 showExtensionCustom has no cross-call mutex: a second custom component opens while the

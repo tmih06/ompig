@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // collapsedArgsChars is COLLAPSED_ARGS_CHARS (render-utils.ts:71), counted in UTF-16 units like String.length.

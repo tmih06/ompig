@@ -3,7 +3,7 @@
 
 package rec
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // ScopeKind is the owner kind of a document (spec §3.2).
 type ScopeKind uint8

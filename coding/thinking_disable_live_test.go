@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestThinkingDisableLiveUpstream(t *testing.T) {
@@ -56,5 +56,5 @@ func thinkingDisableLiveAuth(t *testing.T, tc thinkingDisableCase) (string, ai.P
 		// The Model Runtime owns ADC resolution, including errors from invalid supplied credentials.
 		return "", ai.ProviderEnv{"GOOGLE_CLOUD_PROJECT": os.Getenv(projectEnv), "GOOGLE_CLOUD_LOCATION": os.Getenv("GOOGLE_CLOUD_LOCATION")}
 	}
-	return testenv.RequireLiveEnv(t, strings.TrimPrefix(tc.keyEnv, "PIG_LIVE_")), nil
+	return testenv.RequireLiveEnv(t, strings.TrimPrefix(tc.keyEnv, "OMPIG_LIVE_")), nil
 }

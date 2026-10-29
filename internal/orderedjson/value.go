@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"slices"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // Value and UnmarshalFields use the shared host/Go-SDK codec, which keeps an unmatched UTF-16 unit as the WTF-8 representation (extensions/sdk/json/README.md); a raw container keeps a lone surrogate as its lowercase escape, as JSON.stringify writes it.

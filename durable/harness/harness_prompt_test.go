@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 func promptSection(key string, render func(ctx context.Context, input durable.PromptInput) (*string, error), tag ...bool) *durable.PromptSection {

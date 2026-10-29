@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi keeps the objects JSON.parse read from auth.json and writes them back with JSON.stringify(data, null, 2) (auth-storage.ts:465-467), so every credential keeps its property order, its env order and JavaScript's integer-key-first order. The expected text is node's JSON.stringify output for the same input.

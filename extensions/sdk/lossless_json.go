@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // protectSurrogates carries JSON text that holds an unpaired surrogate through code written over decoded Go values. `JSON.stringify` writes the unpaired surrogate

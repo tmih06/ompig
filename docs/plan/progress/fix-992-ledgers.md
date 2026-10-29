@@ -33,18 +33,18 @@ Result: **150 ported, 57 partial, 0 pending** among the 207.
 
 Partial rows and why:
 
-- `Models`/`MutableModels` members `classify`, `complete`, `completeSimple`, `generateImages`, `getAllModels`, `getAvailableOfType`, `getModelOfType`, `getModelsOfType`, `clearProviders` (and their `::call` rows): the type scan finds no production call on an `*ai.Models`. Production reaches these operations through `coding.ModelRuntime` (its own implementations, `coding/model_runtime_*.go`) or the typed provider. `clearProviders` is called by Pi's `ModelRuntime.reload` (`model-runtime.ts:319`) while PiG unregisters one provider at a time.
-- `Provider.baseUrl`/`headers`: only Pi's bug report reads them (`bug-report.ts:118-119`); PiG's bug report is built from registry data.
+- `Models`/`MutableModels` members `classify`, `complete`, `completeSimple`, `generateImages`, `getAllModels`, `getAvailableOfType`, `getModelOfType`, `getModelsOfType`, `clearProviders` (and their `::call` rows): the type scan finds no production call on an `*ai.Models`. Production reaches these operations through `coding.ModelRuntime` (its own implementations, `coding/model_runtime_*.go`) or the typed provider. `clearProviders` is called by Pi's `ModelRuntime.reload` (`model-runtime.ts:319`) while Ompig unregisters one provider at a time.
+- `Provider.baseUrl`/`headers`: only Pi's bug report reads them (`bug-report.ts:118-119`); Ompig's bug report is built from registry data.
 - `CreateProviderOptions` `baseUrl`, `headers`, `fetchModels`, `filterModels`, `filterAllModels`: no production caller sets them; the registry composes `ModelsProvider` by hand.
 - `calculateCost`: takes `AnyModel` upstream, `*Model` in Go (image and classifier models price through the unexported `calculateUsageCost`).
-- `hasApi`: no production caller in Pi or PiG; behavior tested.
+- `hasApi`: no production caller in Pi or Ompig; behavior tested.
 - `ModelsError` (`name`, `stack`, parent): no Go counterpart for inherited `Error.name`/`stack`.
 - `ModelsImagesOptions`: consumed in production only by the `coding.ModelRuntime` re-implementation.
 - `makeStrictJsonSchema`, `resolveJsonSchemaStrictSampling` (+ calls): behavior partial, F5.
 
 `resolveJsonSchemaStrictSampling` is no longer `pending`: it is `partial` with the F5 reason (it had been `deferred` in 0.99.1, a carried scope decision that a behavior change must re-open).
 
-A premise I got wrong and corrected while verifying: I first wrote that Pi's coding agent never passes `providers` to `refresh`. It does (`model-runtime.ts:602`), and PiG's `synchronizeCredentialState` does too (`internal/codingagent/native_credential_operations.go:94`), so `ModelsRefreshOptions.providers` is `ported`.
+A premise I got wrong and corrected while verifying: I first wrote that Pi's coding agent never passes `providers` to `refresh`. It does (`model-runtime.ts:602`), and Ompig's `synchronizeCredentialState` does too (`internal/codingagent/native_credential_operations.go:94`), so `ModelsRefreshOptions.providers` is `ported`.
 
 ## C. PORT_MAP
 

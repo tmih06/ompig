@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // StateSink is a state frame as a binding receives it (its hold and member select the binding and the stream).

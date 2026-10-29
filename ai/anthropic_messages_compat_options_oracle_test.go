@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/anthropic-messages.ts
 
 // The members the base anthropic-messages payload oracle never draws: compat.supportsMidConvoEffort, supportsMidConvoSystemMessages, supportsMidConvoToolChanges and allowedFallbackModels (betas, native tool
 // changes, thinking-level messages, fallbacks), the options interleavedThinking, thinkingBudgets, env cache retention, object tool choices and non-string metadata, a model maxTokens other than 16384, and
-// mid-conversation system messages with named sections and tool additions/removals. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal as parsed JSON.
+// mid-conversation system messages with named sections and tool additions/removals. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal as parsed JSON.
 func TestAnthropicMessagesCompatAndOptionsPayloadMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(113))
 	g := &payloadGen{rng: rng, api: "anthropic-messages", provider: "anthropic", model: "claude-test", thinkingSignatures: []string{"", `,"thinkingSignature":"sig"`, `,"thinkingSignature":"EqQB"`, `,"redacted":true`}}
@@ -214,7 +214,7 @@ func TestAnthropicMessagesCompatAndOptionsPayloadMatchesPi(t *testing.T) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d reasoning=%v simple=%v maxTokens=%d compat=%s levels=%s options=%v", i, p.Reasoning, p.Simple, p.ModelMaxTokens, p.Compat, p.Levels, p.Options), got, want[i], &failures, classes)
 	}

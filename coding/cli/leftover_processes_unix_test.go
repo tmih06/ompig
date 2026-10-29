@@ -9,9 +9,9 @@ import (
 	"syscall"
 )
 
-// killProcessesIn sends SIGKILL to every process whose working directory is dir. A test that ends pig with a signal Pi
+// killProcessesIn sends SIGKILL to every process whose working directory is dir. A test that ends ompig with a signal Pi
 // leaves to the default action (SIGINT) kills its own leftovers this way: the shell of an interrupted bash call runs in
-// its own process group and outlives pig, as it does under Pi. Where /proc does not exist it does nothing.
+// its own process group and outlives ompig, as it does under Pi. Where /proc does not exist it does nothing.
 func killProcessesIn(dir string) {
 	want, err := filepath.EvalSymlinks(dir)
 	if err != nil {

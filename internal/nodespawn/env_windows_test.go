@@ -13,14 +13,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Node's normalizeSpawnArguments keeps the first, in UTF-16 order, of the env
 // names whose String.prototype.toUpperCase values are equal
 // (lib/child_process.js). toUpperCase applies Unicode's full case mapping, so
-// "ß" uppercases to "SS", "ﬁ" to "FI", and "ŉ" to "ʼN": PIG_SS drops PIG_ß,
-// PIG_FI drops PIG_ﬁ, and PIG_ŉ drops PIG_ʼN, which sorts after it. Node's
+// "ß" uppercases to "SS", "ﬁ" to "FI", and "ŉ" to "ʼN": OMPIG_SS drops OMPIG_ß,
+// OMPIG_FI drops OMPIG_ﬁ, and OMPIG_ŉ drops OMPIG_ʼN, which sorts after it. Node's
 // spawn with that env object is the oracle; the test binary reports the
 // environment it received. Both environments are compared sorted, since
 // os/exec orders the block of non-ASCII names differently from libuv.
@@ -31,10 +31,10 @@ func TestSetEnvDropsNamesThatUppercaseAlikeAsNodeDoes(t *testing.T) {
 	}
 	env := []string{
 		testenv.EnvironHelper + "=1",
-		"PIG_ß=sharp", "PIG_SS=double",
-		"PIG_ﬁ=ligature", "PIG_FI=letters",
-		"PIG_ʼN=apostrophe", "PIG_ŉ=preceded",
-		"PIG_Ω=omega", "PIG_ω=small-omega",
+		"OMPIG_ß=sharp", "OMPIG_SS=double",
+		"OMPIG_ﬁ=ligature", "OMPIG_FI=letters",
+		"OMPIG_ʼN=apostrophe", "OMPIG_ŉ=preceded",
+		"OMPIG_Ω=omega", "OMPIG_ω=small-omega",
 	}
 	object := map[string]string{}
 	for _, pair := range env {
@@ -61,8 +61,8 @@ process.stdout.write(result.stdout);
 	if err := json.Unmarshal(out, &want); err != nil {
 		t.Fatalf("decode %q: %v", out, err)
 	}
-	if slices.Contains(want, "PIG_ß=sharp") || !slices.Contains(want, "PIG_SS=double") {
-		t.Fatalf("Node's child environment %q: want PIG_SS without PIG_ß", want)
+	if slices.Contains(want, "OMPIG_ß=sharp") || !slices.Contains(want, "OMPIG_SS=double") {
+		t.Fatalf("Node's child environment %q: want OMPIG_SS without OMPIG_ß", want)
 	}
 	cmd := exec.Command(exe)
 	SetEnv(cmd, env)

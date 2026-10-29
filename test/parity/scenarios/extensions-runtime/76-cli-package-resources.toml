@@ -17,7 +17,7 @@
 #   - /skill:same-skill: the Package's wins over the project's
 #     (source cli, scope temporary, origin top-level, no baseDir)
 #   - /flag: the user's wins over --prompt-template, which is merged last
-# PiG never loaded prompts or skills from -e, listed --prompt-template first,
+# Ompig never loaded prompts or skills from -e, listed --prompt-template first,
 # and tried to load the Package directory as an extension.
 
 name = "76-cli-package-resources"
@@ -40,9 +40,9 @@ settle_seconds = 1
 [env]
 # The base arguments pass --no-extensions, which keeps -e Package resources.
 override_base_args = true
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/cli-package-resources/pig-agent"]
-pig_args = ["--no-extensions", "--model", "test-faux/faux-1", "--no-session", "--prompt-template", "flag/flag.md"]
-pig_extensions = ["testdata/cli-package-resources/pkg"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/cli-package-resources/ompig-agent"]
+ompig_args = ["--no-extensions", "--model", "test-faux/faux-1", "--no-session", "--prompt-template", "flag/flag.md"]
+ompig_extensions = ["testdata/cli-package-resources/pkg"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/cli-package-resources/pi-agent"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/cli-package-resources/pkg"]
 pi_args = ["--no-extensions", "--model", "test-faux/faux-1", "--no-session", "--prompt-template", "flag/flag.md"]
@@ -61,18 +61,18 @@ both_not_contain = ["Failed to load extension", "panic:", '"description":"projec
 
 # normalize-rationale: each binary runs in its own snapshot of the agent and
 # project fixtures, and the agent and project config directories are named
-# .pi and .pig.
+# .pi and .ompig.
 [[assert.normalize_replace]]
-pattern = '/[^"]*parity-snap-(PI|PIG)_CODING_AGENT_DIR-[0-9]+'
+pattern = '/[^"]*parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[0-9]+'
 with = '<agent>'
 reason = "D2: the isolated agent-root prefix varies; retain resource paths, precedence and content."
 
 [[assert.normalize_replace]]
-pattern = '/[^"]*parity-snap-cwd-[0-9]+/\.pig?'
+pattern = '/[^"]*parity-snap-cwd-[0-9]+/\.ompig?'
 with = '<project>'
-reason = "D2: the isolated project configuration root is .pig versus .pi; preserve all resource-relative paths."
+reason = "D2: the isolated project configuration root is .ompig versus .pi; preserve all resource-relative paths."
 
 [[assert.normalize_replace]]
-pattern = '\{"(?:name":"sprite","description":"Select the PiG login sprite\.","source":"extension","sourceInfo":\{"path":"builtin:pig-login","source":"builtin","scope":"temporary","origin":"top-level"\}|description":"Select the PiG login sprite\.","name":"sprite","source":"extension","sourceInfo":\{"origin":"top-level","path":"builtin:pig-login","scope":"temporary","source":"builtin"\})\},?'
+pattern = '\{"(?:name":"sprite","description":"Select the Ompig login sprite\.","source":"extension","sourceInfo":\{"path":"builtin:ompig-login","source":"builtin","scope":"temporary","origin":"top-level"\}|description":"Select the Ompig login sprite\.","name":"sprite","source":"extension","sourceInfo":\{"origin":"top-level","path":"builtin:ompig-login","scope":"temporary","source":"builtin"\})\},?'
 with = ""
-reason = "D2: PiG's built-in pig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."
+reason = "D2: Ompig's built-in ompig-login extension registers /sprite, which Pi has no counterpart for. Only that one command entry is removed; every other command, its order and its sourceInfo stay compared."

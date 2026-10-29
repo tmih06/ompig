@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // On Android, where the app data directory is not executable, SetProgram starts the program through the linker, and

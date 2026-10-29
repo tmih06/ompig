@@ -464,12 +464,12 @@ catch (e) {
 }
 const piConfigName = pkg.piConfig?.name;
 export const PACKAGE_NAME = pkg.name || "@earendil-works/pi-coding-agent";
-export const APP_NAME = "pig"; // pig divergence (D2): host configuration identity.
+export const APP_NAME = "ompig"; // ompig divergence (D2): host configuration identity.
 export const APP_TITLE = piConfigName ? APP_NAME : "π";
-export { CONFIG_DIR_NAME } from "../../pig-config.mjs"; // pig divergence (D2): selected host configuration tree.
+export { CONFIG_DIR_NAME } from "../../ompig-config.mjs"; // ompig divergence (D2): selected host configuration tree.
 export const VERSION = pkg.version || "0.0.0";
 // e.g., PI_CODING_AGENT_DIR or TAU_CODING_AGENT_DIR
-export { ENV_AGENT_DIR } from "../../pig-config.mjs";
+export { ENV_AGENT_DIR } from "../../ompig-config.mjs";
 export const ENV_SESSION_DIR = `${APP_NAME.toUpperCase()}_CODING_AGENT_SESSION_DIR`;
 export function expandTildePath(path) {
     return normalizePath(path);
@@ -484,8 +484,8 @@ export function getShareViewerUrl(gistId) {
 // User Config Paths (~/.pi/agent/*)
 // =============================================================================
 /** Get the agent config directory (e.g., ~/.pi/agent/) */
-// pig divergence (D2): independent SDK instances share the host's default config root.
-import { CONFIG_DIR_NAME, getAgentDir } from "../../pig-config.mjs";
+// ompig divergence (D2): independent SDK instances share the host's default config root.
+import { CONFIG_DIR_NAME, getAgentDir } from "../../ompig-config.mjs";
 export { getAgentDir };
 /** Get path to user's custom themes directory */
 export function getCustomThemesDir() {

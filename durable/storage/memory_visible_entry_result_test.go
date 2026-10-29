@@ -6,8 +6,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Pi storage/memory.ts:471-492, types.ts:1036: the visible lookup returns the entry with the commitSeq of the commit that wrote it,

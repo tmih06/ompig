@@ -11,15 +11,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Upstream execCommand spawns the program with shell: false, so shell builtins
 // such as echo and pwd are not commands on Windows. The tests run this test
 // binary as the child program instead, which behaves the same on every
 // platform.
-const execHelperEnv = "PIG_EXEC_TEST_HELPER"
+const execHelperEnv = "OMPIG_EXEC_TEST_HELPER"
 
 func TestExecHelperProcess(t *testing.T) {
 	if os.Getenv(execHelperEnv) != "1" {

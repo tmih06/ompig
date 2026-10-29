@@ -13,14 +13,14 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/handleryield"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/handleryield"
+	"github.com/tmih06/ompig/internal/jsloop"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/coding-agent/src/extensions/mcp/index.ts.
@@ -58,7 +58,7 @@ import (
 // command and [Extension.Manage] its manager, shown in a view the [McpUi] implements (package mcptui).
 
 // Host is the part of the extension API the MCP extension uses. The runner
-// implements it; a Piglet that leaves the extension out never needs it.
+// implements it; a Ompiglet that leaves the extension out never needs it.
 type Host interface {
 	// RegisterTool registers a tool, replacing an earlier registration of the
 	// name. Tools with `direct` exposure are activated on registration.

@@ -14,7 +14,7 @@
 // The asset table selects platform-specific release archives. On darwin/x64, fd uses a pinned release.
 //
 // Extraction divergence (D14: documented in docs/parity/DIVERGENCES.md): upstream
-// spawns `tar`, `unzip`, and PowerShell. pig uses Go stdlib
+// spawns `tar`, `unzip`, and PowerShell. ompig uses Go stdlib
 // (archive/tar + compress/gzip + archive/zip) on all platforms. The
 // extracted binary is byte-identical; only the error message text on
 // extraction failure differs.
@@ -37,12 +37,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/managementhttp"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	_ "github.com/MichaelKinsy/PiG/internal/tlsdistrust" // hardens http.DefaultTransport, which the tool downloads use (pig additive (D191))
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/managementhttp"
+	"github.com/tmih06/ompig/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	_ "github.com/tmih06/ompig/internal/tlsdistrust" // hardens http.DefaultTransport, which the tool downloads use (ompig additive (D191))
 )
 
 const (
@@ -259,7 +259,7 @@ func (m *ToolsManager) BeginEnsureTool(tool string, onStatus func(ToolStatus)) (
 		return "", nil
 	}
 
-	// pig additive (D81): coalesce same-tool downloads within this manager.
+	// ompig additive (D81): coalesce same-tool downloads within this manager.
 	if m.beforeInflightLock != nil {
 		m.beforeInflightLock(tool)
 	}
@@ -328,18 +328,18 @@ func toolFailureMessage(err error) string {
 	return strings.Join(messages, ": ")
 }
 
-// IsOfflineModeEnabled mirrors the env-var check used elsewhere in pig.
-// Duplicated here (instead of imported from cmd/pig) because tools is a
+// IsOfflineModeEnabled mirrors the env-var check used elsewhere in ompig.
+// Duplicated here (instead of imported from cmd/ompig) because tools is a
 // lower-level package that cannot depend on the CLI.
 func IsOfflineModeEnabled() bool {
-	// tools-manager.ts compares PI_OFFLINE exactly; PIG_OFFLINE is PiG's alias.
+	// tools-manager.ts compares PI_OFFLINE exactly; OMPIG_OFFLINE is Ompig's alias.
 	if v := os.Getenv("PI_OFFLINE"); v != "" {
 		l := jsstring.ToLower(v)
 		if v == "1" || l == "true" || l == "yes" {
 			return true
 		}
 	}
-	v := strings.ToLower(strings.TrimSpace(os.Getenv("PIG_OFFLINE")))
+	v := strings.ToLower(strings.TrimSpace(os.Getenv("OMPIG_OFFLINE")))
 	return v == "1" || v == "true" || v == "yes"
 }
 
@@ -445,7 +445,7 @@ func localArchiveEntry(name string) bool {
 	return !strings.Contains(name, "..") && filepath.IsLocal(filepath.FromSlash(name))
 }
 
-// pig divergence (D14): use Go archive readers. Ignore links that the fd and
+// ompig divergence (D14): use Go archive readers. Ignore links that the fd and
 // rg binaries do not require.
 func extractTarGz(archivePath, extractDir string) error {
 	f, err := os.Open(archivePath)
@@ -495,7 +495,7 @@ func extractTarGz(archivePath, extractDir string) error {
 	}
 }
 
-// pig divergence (D14): use Go's ZIP reader instead of external tools.
+// ompig divergence (D14): use Go's ZIP reader instead of external tools.
 func extractZip(archivePath, extractDir string) error {
 	r, err := zip.OpenReader(archivePath)
 	if err != nil {

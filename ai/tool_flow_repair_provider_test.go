@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
-// pig divergence (D48): every real provider repairs the tool flow of its request when StreamOptions.RepairToolFlow is set, before its
+// ompig divergence (D48): every real provider repairs the tool flow of its request when StreamOptions.RepairToolFlow is set, before its
 // transformMessages builds the payload, and sends Pi's request otherwise. An orphaned result reaches the native payload without the option
 // (transform-messages.ts:36-190 keeps it; Gemini sends it without the ID, so the test finds its text) and is gone with it.
 func TestRepairToolFlowReachesEveryProviderPayload(t *testing.T) {

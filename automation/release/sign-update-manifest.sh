@@ -5,7 +5,7 @@
 #
 # Signs the self-update manifest MANIFEST with every Ed25519 private key in
 # the PEM file SIGNING_KEYS and prints the signatures as one line of
-# comma-separated base64, the update.json.sig format pig reads
+# comma-separated base64, the update.json.sig format ompig reads
 # (internal/codingagent verifyReleaseSignature accepts the manifest when any
 # signature verifies against any key it trusts).
 #

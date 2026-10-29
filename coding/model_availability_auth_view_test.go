@@ -13,7 +13,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 const (
@@ -218,7 +218,7 @@ func (s *rewriteAround) arm(before, after func()) {
 //
 // Pi 1.1.0 (auth-storage.ts readLatestData) stats auth.json on every credential read. Its warm catalog restore and availability pass make every
 // stat in one macrotask, so nothing in the process runs between those reads and a write by another process is ordered against them only by
-// time: a write landing after the pass's last stat is a schedule Pi allows for any write that lands during the pass. Pig's pass reads auth.json
+// time: a write landing after the pass's last stat is a schedule Pi allows for any write that lands during the pass. Ompig's pass reads auth.json
 // through one view, so a write after its first read publishes exactly what Pi publishes when the write lands after the pass, and the next pass sees
 // the write as Pi's next pass does. A write before the first read reaches the whole pass in both.
 func TestAvailabilityPassAuthViewMatchesPiUpstream(t *testing.T) {
@@ -261,7 +261,7 @@ func TestAvailabilityPassAuthViewMatchesPiUpstream(t *testing.T) {
 			}
 		}
 		slices.Sort(available)
-		// Pi's hasConfiguredAuth reads snapshot.configuredProviders (model-runtime.ts:544-546), as Pig's does.
+		// Pi's hasConfiguredAuth reads snapshot.configuredProviders (model-runtime.ts:544-546), as Ompig's does.
 		return authViewOutcome{Anthropic: runtime.HasConfiguredAuth("anthropic"), OpenAI: runtime.HasConfiguredAuth("openai"), Available: available}
 	}
 	pass := func() {
@@ -284,15 +284,15 @@ func TestAvailabilityPassAuthViewMatchesPiUpstream(t *testing.T) {
 	}
 	toNew := func() { rewrite(authViewNew) }
 	for _, check := range []struct {
-		name    string
-		pig, pi authViewScenario
+		name      string
+		ompig, pi authViewScenario
 	}{
 		{"rewrite before the first read", scenario(toNew, nil, nil), pi.BeforeFirstRead},
 		{"rewrite after the first read", scenario(nil, toNew, nil), pi.AfterThePass},
 		{"rewrite after the pass", scenario(nil, nil, toNew), pi.AfterThePass},
 	} {
-		if !reflect.DeepEqual(check.pig, check.pi) {
-			t.Errorf("%s: Pig published %+v, Pi %+v", check.name, check.pig, check.pi)
+		if !reflect.DeepEqual(check.ompig, check.pi) {
+			t.Errorf("%s: Ompig published %+v, Pi %+v", check.name, check.ompig, check.pi)
 		}
 	}
 	rewrite(`{"anthropic":`)
@@ -302,6 +302,6 @@ func TestAvailabilityPassAuthViewMatchesPiUpstream(t *testing.T) {
 	}
 	corrupt.GetError = runtime.GetError()
 	if corrupt != pi.Corrupt {
-		t.Errorf("a pass over a corrupt auth.json: Pig %+v, Pi %+v", corrupt, pi.Corrupt)
+		t.Errorf("a pass over a corrupt auth.json: Ompig %+v, Pi %+v", corrupt, pi.Corrupt)
 	}
 }

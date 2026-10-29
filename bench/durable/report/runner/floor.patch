@@ -1,8 +1,8 @@
 --- a/bench/targets.ts
 +++ b/bench/targets.ts
 @@ -29,5 +29,7 @@
-   "pig-tinygo": { entry: "src/pig.ts", objects: { PI: "PiDO" }, version: process.env.PIG_VERSION ?? "head", core: "core-tinygo.wasm" },
-   "pig-go": { entry: "src/pig.ts", objects: { PI: "PiDO" }, version: process.env.PIG_VERSION ?? "head", core: "core-go.wasm" },
+   "ompig-tinygo": { entry: "src/ompig.ts", objects: { PI: "PiDO" }, version: process.env.OMPIG_VERSION ?? "head", core: "core-tinygo.wasm" },
+   "ompig-go": { entry: "src/ompig.ts", objects: { PI: "PiDO" }, version: process.env.OMPIG_VERSION ?? "head", core: "core-go.wasm" },
 -} as Record<string, { entry: string; objects: Record<string, string>; version: string; core?: string }>
 +  // The empty-target floor (src/empty.ts): the same request path with no agent; it has no history to seed.
 +  empty: { entry: "src/empty.ts", objects: { PI: "PiDO" }, version: "floor", empty: true },

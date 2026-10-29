@@ -11,18 +11,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Upstream ToolExecutionComponent draws a registered definition's renderCall
 // and renderResult: both share one state per card, each gets its last
 // component, renderResult gets the streamed partial result and then the final
-// one, and a result never changes the expansion. PiG used to draw every
+// one, and a result never changes the expansion. Ompig used to draw every
 // extension tool with its generic header.
 // Pi: packages/coding-agent/src/core/extensions/types.ts:463 (ToolRenderResultOptions.isPartial).
 func TestInteractiveModeDrawsToolDefinitionRenderers(t *testing.T) {

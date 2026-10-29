@@ -8,10 +8,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
-const initStateChildEnv = "PIG_TEST_INIT_STATE_CHILD"
+const initStateChildEnv = "OMPIG_TEST_INIT_STATE_CHILD"
 
 // interactive-mode.ts:943-1100 init(): everything before the Session bind runs in order and leaves the interactive state the later steps read: the startup marks in
 // order, the TUI with its raw mode and hardware-cursor settings, the keybindings, the header/footer/chat containers, the editor focused in its container, the

@@ -2,7 +2,7 @@
 
 // Package store owns pi-durable's SQLite format inside the core: the SQL table, the rows every commit writes (CONTRACT
 // section 3.1, row identity with pi-durable main), the single-writer guard, the in-memory metadata, cold open of the
-// live state (ADR D5), loads of committed non-live records, and the pig_ sidecar (ADR D6). Transcripts (entries, forks,
+// live state (ADR D5), loads of committed non-live records, and the ompig_ sidecar (ADR D6). Transcripts (entries, forks,
 // head markers, context derivation) live in package history; the store writes entry rows that history encodes and
 // serves the reads history asks for (history.Need).
 //
@@ -23,9 +23,9 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/rec"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/rec"
 )
 
 // ErrPending means the store emitted reads the caller's operation depends on. Read-only.

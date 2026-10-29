@@ -21,12 +21,12 @@ import (
 
 	"go.yaml.in/yaml/v3"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Equivalence port of packages/coding-agent/test/package-distribution.test.ts (Pi 1.2.0). Pi asserts that its npm
-// package runs a bundle as the executable and exposes modular output to libraries. PiG ships the same two channels
-// differently: the executable is the @pi-in-go/pig npm launcher plus one native binary package per release target,
+// package runs a bundle as the executable and exposes modular output to libraries. Ompig ships the same two channels
+// differently: the executable is the @ompig/ompig npm launcher plus one native binary package per release target,
 // and the library is the Go module. The invariants are the same: every supported os/arch reaches an executable and
 // the published packages contain exactly what their manifests list.
 
@@ -74,10 +74,10 @@ func writeReleaseArchives(t *testing.T, dir, version string, targets [][2]string
 	var sums strings.Builder
 	for _, target := range targets {
 		goos, goarch := target[0], target[1]
-		prefix := "pig-" + version + "-" + goos + "-" + goarch
-		binary := "pig"
+		prefix := "ompig-" + version + "-" + goos + "-" + goarch
+		binary := "ompig"
 		if goos == "windows" {
-			binary = "pig.exe"
+			binary = "ompig.exe"
 		}
 		files := map[string]string{binary: "binary " + goos + "/" + goarch, "LICENSE": "MIT\n", "NOTICE": "notice\n", "THIRD_PARTY_NOTICES.md": "third party\n", "LICENSES/MIT.txt": "mit\n"}
 		names := slices.Sorted(func(yield func(string) bool) {
@@ -204,26 +204,26 @@ func TestPackageDistributionUpstream(t *testing.T) {
 	}
 	targets := releaseTargets(t, root)
 	out, manifests := packNpm(t, root, targets)
-	launcherSource, err := os.ReadFile(filepath.Join(root, "automation", "release", "npm", "launcher", "bin", "pig.js"))
+	launcherSource, err := os.ReadFile(filepath.Join(root, "automation", "release", "npm", "launcher", "bin", "ompig.js"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	byLine := map[int]func(t *testing.T){
 		// uses the bundle for executables and modular output for libraries: bin is the executable entrypoint and
-		// nothing else is. PiG's launcher maps every release target to a platform package that carries that
+		// nothing else is. Ompig's launcher maps every release target to a platform package that carries that
 		// target's native binary, and each package publishes exactly its files list.
 		18: func(t *testing.T) {
-			launcher, ok := manifests["pig"]
-			if !ok || launcher.Name != "@pi-in-go/pig" {
+			launcher, ok := manifests["ompig"]
+			if !ok || launcher.Name != "@ompig/ompig" {
 				t.Fatalf("launcher package = %+v", launcher)
 			}
-			if !sameStringMap(launcher.Bin, map[string]string{"pig": "bin/pig.js"}) {
-				t.Errorf("launcher bin = %v, want pig -> bin/pig.js", launcher.Bin)
+			if !sameStringMap(launcher.Bin, map[string]string{"ompig": "bin/ompig.js"}) {
+				t.Errorf("launcher bin = %v, want ompig -> bin/ompig.js", launcher.Bin)
 			}
 			if launcher.Main != nil || launcher.Exports != nil || launcher.Scripts != nil {
-				t.Errorf("launcher main/exports/scripts = %v/%s/%s; the Go module, not npm, is PiG's library and nothing runs at install", launcher.Main, launcher.Exports, launcher.Scripts)
+				t.Errorf("launcher main/exports/scripts = %v/%s/%s; the Go module, not npm, is Ompig's library and nothing runs at install", launcher.Main, launcher.Exports, launcher.Scripts)
 			}
-			if got, want := packageFiles(t, filepath.Join(out, "pig")), slices.Sorted(slices.Values(launcher.Files)); !slices.Equal(got, want) {
+			if got, want := packageFiles(t, filepath.Join(out, "ompig")), slices.Sorted(slices.Values(launcher.Files)); !slices.Equal(got, want) {
 				t.Errorf("launcher publishes %v, files lists %v", got, want)
 			}
 			var wantPackages []string
@@ -233,13 +233,13 @@ func TestPackageDistributionUpstream(t *testing.T) {
 				if platform == "" || cpu == "" {
 					t.Fatalf("release target %s/%s has no npm platform", goos, goarch)
 				}
-				name := "@pi-in-go/pig-" + platform + "-" + cpu
+				name := "@ompig/ompig-" + platform + "-" + cpu
 				wantPackages = append(wantPackages, name)
-				binary := "pig"
+				binary := "ompig"
 				if goos == "windows" {
-					binary = "pig.exe"
+					binary = "ompig.exe"
 				}
-				dir := "pig-" + platform + "-" + cpu
+				dir := "ompig-" + platform + "-" + cpu
 				manifest, ok := manifests[dir]
 				if !ok || manifest.Name != name || !slices.Equal(manifest.OS, []string{platform}) || !slices.Equal(manifest.CPU, []string{cpu}) {
 					t.Errorf("platform package for %s/%s = %+v", goos, goarch, manifest)
@@ -255,8 +255,8 @@ func TestPackageDistributionUpstream(t *testing.T) {
 				if err != nil || string(data) != "binary "+goos+"/"+goarch {
 					t.Errorf("%s carries %q (%v), want the %s/%s release binary", name, data, err, goos, goarch)
 				}
-				if !strings.Contains(string(launcherSource), `"`+platform+` `+cpu+`": `+"`${SCOPE}/pig-"+platform+"-"+cpu+"`") {
-					t.Errorf("launcher bin/pig.js does not map %s %s to %s", platform, cpu, name)
+				if !strings.Contains(string(launcherSource), `"`+platform+` `+cpu+`": `+"`${SCOPE}/ompig-"+platform+"-"+cpu+"`") {
+					t.Errorf("launcher bin/ompig.js does not map %s %s to %s", platform, cpu, name)
 				}
 			}
 			sort.Strings(wantPackages)
@@ -270,7 +270,7 @@ func TestPackageDistributionUpstream(t *testing.T) {
 			if !slices.Equal(got, wantPackages) {
 				t.Errorf("launcher optionalDependencies = %v, want every release target %v", got, wantPackages)
 			}
-			if mapped := regexp.MustCompile(`"(\w+ \w+)": `+"`"+`\$\{SCOPE\}/pig-`).FindAllStringSubmatch(string(launcherSource), -1); len(mapped) != len(targets) {
+			if mapped := regexp.MustCompile(`"(\w+ \w+)": `+"`"+`\$\{SCOPE\}/ompig-`).FindAllStringSubmatch(string(launcherSource), -1); len(mapped) != len(targets) {
 				t.Errorf("launcher maps %d platforms, release builds %d", len(mapped), len(targets))
 			}
 			if len(manifests) != len(targets)+1 {

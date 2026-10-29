@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi types.ts:1930 ProviderConfig.refreshModels and provider-composer.ts:613-640: a registered provider's refresh callback runs when the provider refreshes, and the models it returns replace the extension-provided models.

@@ -13,7 +13,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream 7027:40 uses in-memory credentials and a network refresh that never observes cancellation. Cleanup releases the Go callback only after every source assertion has completed.

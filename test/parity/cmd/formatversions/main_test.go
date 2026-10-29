@@ -12,7 +12,7 @@ func TestScanCandidatesFindsNamedVersionFieldsAndSkipsIdentityFreeFields(t *test
 	path := filepath.Join(root, "shape.go")
 	data := `package shape
 
-const CurrentAPIVersion = "pig.dev/" + "v1"
+const CurrentAPIVersion = "ompig.dev/" + "v1"
 
 type Document struct {
 	Version int ` + "`json:\"version\"`" + `
@@ -41,11 +41,11 @@ type Document struct {
 
 func TestScanRemovedMarkersRejectsFormerPigFormats(t *testing.T) {
 	root := t.TempDir()
-	if err := os.WriteFile(filepath.Join(root, "piglet.yaml"), []byte("version: 1\nname: old\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "ompiglet.yaml"), []byte("version: 1\nname: old\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(root, "manifest.go"), []byte(`package old
-const manifest = "pig.dev/`+`v1"
+const manifest = "ompig.dev/`+`v1"
 `), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -53,7 +53,7 @@ const manifest = "pig.dev/`+`v1"
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"version: 1", "pig.dev/" + "v1"} {
+	for _, want := range []string{"version: 1", "ompig.dev/" + "v1"} {
 		if !containsProblem(problems, want) {
 			t.Fatalf("problems missing %q: %v", want, problems)
 		}
@@ -84,12 +84,12 @@ func TestValidateFailsClosedOnMissingStaleAndStrictPigFormat(t *testing.T) {
 	reviewed := manifest{Fields: []fieldDisposition{{
 		ID: current.ID, Path: current.Path, Owner: current.Owner,
 		Field: current.Field, WireName: current.WireName,
-		Classification: "pig-format", Rationale: "remove before strict format-policy acceptance",
+		Classification: "ompig-format", Rationale: "remove before strict format-policy acceptance",
 	}}}
 	if problems := validate([]candidate{current}, reviewed, false); len(problems) != 0 {
 		t.Fatalf("non-strict tracked debt problems = %v", problems)
 	}
-	if problems := validate([]candidate{current}, reviewed, true); !containsProblem(problems, "remains a Pig-owned format discriminator") {
+	if problems := validate([]candidate{current}, reviewed, true); !containsProblem(problems, "remains a Ompig-owned format discriminator") {
 		t.Fatalf("strict problems = %v", problems)
 	}
 

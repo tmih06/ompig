@@ -22,7 +22,7 @@ class ReleaseTest(unittest.TestCase):
             'parity/interfaces/upstream-v1.json': '{"path":"tests/example"}\n',
             'automation/make/check.mk': 'run:\n\tgo test ./parity/...\n',
             'automation/ci/check.py': 'args = ["go", "run", "./parity/cmd/coverage"]\n',
-            'tests/integration/example.go': 'package integration\nimport _ "github.com/MichaelKinsy/PiG/parity/runner"\nvar fixture = "../../parity/testdata/probe.mjs"\n',
+            'tests/integration/example.go': 'package integration\nimport _ "github.com/tmih06/ompig/parity/runner"\nvar fixture = "../../parity/testdata/probe.mjs"\n',
             'evals/README.md': 'evals/README.md\n',
             'media/demo.svg': '<svg/>\n',
             'extensions/sdk/go.mod': 'module example.org/sdk\n',
@@ -54,7 +54,7 @@ class ReleaseTest(unittest.TestCase):
             self.assertEqual((root/'test/parity/interfaces/upstream-v1.json').read_text(), '{"path":"tests/example"}\n')
             self.assertIn('go test ./test/parity/...', (root/'automation/make/check.mk').read_text())
             self.assertIn('"./test/parity/cmd/coverage"', (root/'automation/ci/check.py').read_text())
-            self.assertIn('PiG/test/parity/runner', (root/'test/integration/example.go').read_text())
+            self.assertIn('Ompig/test/parity/runner', (root/'test/integration/example.go').read_text())
             self.assertIn('"../parity/testdata/probe.mjs"', (root/'test/integration/example.go').read_text())
             self.assertEqual((root/'docs/guide.md').read_text(), '[demo](media/demo.svg)\n')
             paths = subprocess.check_output(['git','-C',str(root),'ls-files']).decode().splitlines()
@@ -103,8 +103,8 @@ class ReleaseTest(unittest.TestCase):
 
     def test_explicit_checkout_variables_and_current_urls(self):
         rewriter = release.Rewriter(Path('.'), [], False)
-        source = '$(CURDIR)/evals $root/parity ./tests https://github.com/MichaelKinsy/PiG/blob/main/media/demo.svg'
-        expected = '$(CURDIR)/test/evals $root/test/parity ./test https://github.com/MichaelKinsy/PiG/blob/main/docs/media/demo.svg'
+        source = '$(CURDIR)/evals $root/parity ./tests https://github.com/tmih06/ompig/blob/main/media/demo.svg'
+        expected = '$(CURDIR)/test/evals $root/test/parity ./test https://github.com/tmih06/ompig/blob/main/docs/media/demo.svg'
         self.assertEqual(rewriter.references(source), expected)
         self.assertEqual(rewriter.references(expected), expected)
 

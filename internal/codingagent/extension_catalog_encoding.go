@@ -7,8 +7,8 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // extensionCatalogEncoding caches only the model projection: the chat catalog and the typed (image and classifier) models. It compares an owned snapshot of the composed metadata and registration order for the chat catalog, and drops the typed encoding on every committed registry change (invalidateTyped, called from the registry change observer that also publishes the catalog) or chat catalog change; provider auth and errors are read on every publication. The cache is owned by one bridge binding and retains one catalog, not a history of revisions.

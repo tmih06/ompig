@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi SessionManager exposes Node filesystem errors without Go-specific wrappers. The append case is _persist's appendFileSync (session-manager.ts:1166,1185). The flush case is writeSessionLines, whose Node counterpart is openSync(file, "w") in _rewriteFile (session-manager.ts:1126); Node 24.19.0 reports EISDIR for both on a directory. _persist's first flush opens with "wx" (session-manager.ts:1175) and createSessionFile does the same; TestFirstFlushDoesNotOverwriteAnExistingFile covers its EEXIST. An attempted file open on a directory fails regardless of the test user's privileges.

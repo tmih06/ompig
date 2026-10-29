@@ -146,7 +146,7 @@ func providerWireEvidenceCommands(requestName string) ([]EvidenceCommand, string
 	case "differential":
 		return []EvidenceCommand{
 			{Name: "node", Args: []string{"test/parity/testdata/provider-wire-pi.mjs"}},
-			{Name: "go", Args: []string{"run", "./test/parity/testdata/provider-wire-pig"}},
+			{Name: "go", Args: []string{"run", "./test/parity/testdata/provider-wire-ompig"}},
 		}, "output-equal", nil
 	case "finish-reason":
 		return testCommand(requestName, "./ai", "TestMapOAIFinishReasonCompatibility"), "exit-zero", nil

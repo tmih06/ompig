@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// Wrong-typed values and keys outside PiG's typed Settings are not compared: Pi keeps any JSON value in memory, PiG's Settings struct keeps its typed fields.
+// Wrong-typed values and keys outside Ompig's typed Settings are not compared: Pi keeps any JSON value in memory, Ompig's Settings struct keeps its typed fields.
 // pi: packages/coding-agent/src/core/settings-manager.ts create / tryLoadFromStorage / migrateSettings / deepMergeSettings. A settings.json with legacy keys, wrong-typed values, a BOM, invalid JSON or a non-object value loads the same layers, merged view and errors.
 func TestSettingsLoadMatchesPiOnCorruptedFiles(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
@@ -97,7 +97,7 @@ func TestSettingsLoadMatchesPiOnCorruptedFiles(t *testing.T) {
 		encode := func(s Settings) any { b, _ := json.Marshal(s); return parse(string(b)) }
 		var gotErrors []piErr
 		for _, e := range sm.DrainErrors() {
-			gotErrors = append(gotErrors, piErr{e.Scope, e.Error.Error(), strings.Replace(strings.Replace(e.Path, base, "$BASE", 1), string(filepath.Separator)+".pig"+string(filepath.Separator), string(filepath.Separator)+".pi"+string(filepath.Separator), 1)})
+			gotErrors = append(gotErrors, piErr{e.Scope, e.Error.Error(), strings.Replace(strings.Replace(e.Path, base, "$BASE", 1), string(filepath.Separator)+".ompig"+string(filepath.Separator), string(filepath.Separator)+".pi"+string(filepath.Separator), 1)})
 		}
 		desc := func(name string, got, w any) {
 			// A key Pi holds that Go's typed Settings does not model (a leftover legacy key, null) is not compared.
@@ -132,7 +132,7 @@ func TestSettingsLoadMatchesPiOnCorruptedFiles(t *testing.T) {
 	}
 }
 
-// settingsLoadComparedKeys are keys PiG models: if Pi holds one, PiG must hold it too. The legacy queueMode and websockets keys are not listed: Pi keeps one only
+// settingsLoadComparedKeys are keys Ompig models: if Pi holds one, Ompig must hold it too. The legacy queueMode and websockets keys are not listed: Pi keeps one only
 // when the key it migrates to is already set, and no Pi reader uses the leftover.
 var settingsLoadComparedKeys = map[string]bool{
 	"theme": true, "defaultProvider": true, "defaultModel": true, "defaultThinkingLevel": true, "steeringMode": true, "followUpMode": true, "transport": true, "retry": true,

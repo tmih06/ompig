@@ -53,6 +53,6 @@ One row per capability; the Rust realization and its conformance row. Naming fol
 ## make parity-family FAMILY=extensions-runtime
 88 of the 91 pairs pass; 3 fail, none of them loads a Rust extension (the scenario files and their testdata contain no Rust):
 - `52-interleaved-node-admission`: the packed Python member exits at start with `mise ERROR` (the run used a temporary HOME, which has no mise Python), an environment failure.
-- `29-export-tool-renderers`: `/20/message/thinkingLevel: field presence differs (pig=true pi=false)`. Family 2 records `thinkingLevel` on assistant messages and the oracle is still 0.87.1 until the pin move.
+- `29-export-tool-renderers`: `/20/message/thinkingLevel: field presence differs (ompig=true pi=false)`. Family 2 records `thinkingLevel` on assistant messages and the oracle is still 0.87.1 until the pin move.
 - `56-failed-factory-api`: a Node factory-failure text differs from the 0.87.1 oracle; the host code that emits it is not in this lane.
 The same three are expected on the unchanged base; they were not re-run there (a base build of the family takes about 5 minutes and none touches sdk-rs). The `extension-host` family passes.

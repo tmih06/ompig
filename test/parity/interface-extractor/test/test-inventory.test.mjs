@@ -8,7 +8,7 @@ import { scratchDir } from "./scratch.mjs";
 // fixture writes upstream-shaped test files (including a nested workspace package
 // and every call form the extractor must handle) and returns the source root.
 function fixture() {
-  const root = scratchDir("pig-test-inventory-");
+  const root = scratchDir("ompig-test-inventory-");
   const write = (relative, contents) => {
     const file = path.join(root, relative);
     fs.mkdirSync(path.dirname(file), { recursive: true });

@@ -18,7 +18,7 @@ func TestRPCModelMutationsDoNotRewriteDefaults(t *testing.T) {
 	if err := os.WriteFile(path, []byte(original), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + home}, "--model", "test-faux/faux-1", "--no-session", "--no-extensions")
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + home}, "--model", "test-faux/faux-1", "--no-session", "--no-extensions")
 	for _, command := range []string{
 		`{"id":"set-model","type":"set_model","provider":"test-faux","modelId":"faux-1"}`,
 		`{"id":"set-thinking","type":"set_thinking_level","level":"low"}`,

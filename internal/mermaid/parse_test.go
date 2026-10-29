@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// TestParseMatchesUpstream diffs pig's parser model against grok-mermaid's own
+// TestParseMatchesUpstream diffs ompig's parser model against grok-mermaid's own
 // exported parse functions (parse.js), structurally, before layout lands. It
 // covers diagramKind dispatch and the parsed nodes/edges/groups/infos/items of
 // all five diagram types plus every fallback (null-model) path.

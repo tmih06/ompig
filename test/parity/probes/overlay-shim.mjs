@@ -4,12 +4,12 @@
 //
 // The probe runs Pi's unmodified overlay-qa-tests.ts commands twice through the existing Node loader, with the same keys:
 // - Pi: the installed Pi's InteractiveMode.prototype.showExtensionCustom on Pi's TuiMainScreen (painting suppressed only).
-// - PiG: the production Runtime.openCustomOverlay factory path. Its host calls (ui.custom, ui.custom.showOverlay, ui.custom.control,
+// - Ompig: the production Runtime.openCustomOverlay factory path. Its host calls (ui.custom, ui.custom.showOverlay, ui.custom.control,
 //   ui.custom.hideOverlay, ui.custom.setFocus) are answered by a second Pi TuiMainScreen holding one placeholder per key, keys go to
-//   the placeholder that holds focus as ui.custom.input, and focus changes reach the runtime as ui.custom.focus, as the PiG host
+//   the placeholder that holds focus as ui.custom.input, and focus changes reach the runtime as ui.custom.focus, as the Ompig host
 //   sends them. The Go host's side of the same calls is covered by the Go tests named in docs/findings/fix-overlay-shim.md.
 // After every step both sides must show the same overlay stack: the same components in order, each rendering the same lines, the
-// same one focused. Each PiG component's last frame must equal what it renders, so a redraw the runtime missed fails.
+// same one focused. Each Ompig component's last frame must equal what it renders, so a redraw the runtime missed fails.
 // setInterval is replaced by a manual clock and toLocaleTimeString by a constant, so timer and stream redraws are deterministic.
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
@@ -18,8 +18,8 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { PI_PACKAGE_VERSION } from "../testdata/pi-version.mjs";
 
-const temporary = mkdtempSync(join(tmpdir(), "pig-overlay-probe-"));
-process.env.PIG_HOME = temporary;
+const temporary = mkdtempSync(join(tmpdir(), "ompig-overlay-probe-"));
+process.env.OMPIG_HOME = temporary;
 process.env.PI_CODING_AGENT_DIR = join(temporary, "pi-agent");
 process.on("exit", () => rmSync(temporary, { recursive: true, force: true }));
 const fromRoot = (path) => pathToFileURL(resolve(path));
@@ -70,13 +70,13 @@ const pi = {
   leaks: () => piScreen.overlayStack.length,
 };
 
-// PiG's side: the runtime with a host whose TUI is a Pi TuiMainScreen of placeholders.
+// Ompig's side: the runtime with a host whose TUI is a Pi TuiMainScreen of placeholders.
 const hostScreen = newScreen();
 const placeholders = new Map(); // key -> { component, handle, options }
 const frames = new Map();
 const closers = new Map();
 const published = new Map();
-const pigNotes = [];
+const ompigNotes = [];
 const failures = [];
 const placeholder = (key) => ({ key, render: () => [], invalidate() {} });
 const focusedKey = () => [...placeholders].find(([, mounted]) => hostScreen.getFocusedComponent() === mounted.component)?.[0] ?? "";
@@ -85,7 +85,7 @@ const stateOf = (key) => {
   const mounted = hostScreen.overlayStack.some((entry) => entry.component === component);
   return { hidden: handle.isHidden(), focused: handle.isFocused(), visible: mounted && !handle.isHidden() };
 };
-// The PiG host publishes each focus change of a mounted component after the call that made it, from the component's input loop.
+// The Ompig host publishes each focus change of a mounted component after the call that made it, from the component's input loop.
 const publishFocus = () => setImmediate(() => {
   for (const [key, mounted] of placeholders) {
     const focused = hostScreen.getFocusedComponent() === mounted.component;
@@ -158,14 +158,14 @@ runtime.notify = (method, args) => {
 runtime.fireAndForget = (method, args) => {
   if (method === "ui.notify") failures.push(args.message);
 };
-const pig = {
-  name: "PiG",
+const ompig = {
+  name: "Ompig",
   ui: {
     setEditorText() {},
-    notify: (message) => pigNotes.push(message),
+    notify: (message) => ompigNotes.push(message),
     custom: (...args) => runtime.openCustomOverlay(...args),
   },
-  notes: pigNotes,
+  notes: ompigNotes,
   press(data) {
     const key = focusedKey();
     if (key) runtime.handleNotify({ method: "ui.custom.input", args: { key, data, state: stateOf(key) } });
@@ -217,14 +217,14 @@ const scenarios = {
 };
 for (const [name, steps] of Object.entries(scenarios)) {
   piNotes.length = 0;
-  pigNotes.length = 0;
+  ompigNotes.length = 0;
   const reference = await run(pi, name, steps);
-  const actual = await run(pig, name, steps);
+  const actual = await run(ompig, name, steps);
   const mounted = Math.max(...reference.map((stack) => stack.length));
   for (let step = 0; step < reference.length; step++) {
-    assert.deepEqual(actual[step], reference[step], `${name}: after step ${step} (${JSON.stringify(steps[step - 1] ?? "open")}) PiG's overlays differ from Pi's`);
+    assert.deepEqual(actual[step], reference[step], `${name}: after step ${step} (${JSON.stringify(steps[step - 1] ?? "open")}) Ompig's overlays differ from Pi's`);
   }
-  assert.deepEqual(pigNotes, piNotes, `${name}: notifications differ`);
+  assert.deepEqual(ompigNotes, piNotes, `${name}: notifications differ`);
   assert.deepEqual(failures, [], `${name}: the runtime reported errors`);
   console.log(`${name}: ${reference.length} states equal, up to ${mounted} overlays shown`);
 }

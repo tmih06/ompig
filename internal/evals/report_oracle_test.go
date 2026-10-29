@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type reportProbe struct {
@@ -138,7 +138,7 @@ func TestEvalReportMatchesPiOnSeededDesigns(t *testing.T) {
 		}
 		if expected[i].Err != "" || !reflect.DeepEqual(got, expected[i]) {
 			if differing++; differing <= 3 {
-				t.Errorf("probe %d differs from Pi (Pi error %q):\n  Pig %s\n  Pi  %s\n  Pig report %v\n  Pi  report %v", i, expected[i].Err, got.Text, expected[i].Text, got.Report, expected[i].Report)
+				t.Errorf("probe %d differs from Pi (Pi error %q):\n  Ompig %s\n  Pi  %s\n  Ompig report %v\n  Pi  report %v", i, expected[i].Err, got.Text, expected[i].Text, got.Report, expected[i].Report)
 			}
 		}
 	}

@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Name is the extension's registered name.

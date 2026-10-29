@@ -5,8 +5,8 @@
 # session_start handler starts, after the handler has returned.
 #
 # Upstream evidence (Pi 0.87.1, tmux 100x35, probed 2026-09-26): the overlay
-# shows. PiG before the fix drew none: the timer's ui.custom call carried the
-# finished session_start request as its parent, and PiG cancelled it with
+# shows. Ompig before the fix drew none: the timer's ui.custom call carried the
+# finished session_start request as its parent, and Ompig cancelled it with
 # that request ("cancelled: context canceled").
 
 name = "34-late-overlay"
@@ -19,14 +19,14 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-# 256 colors in both binaries: PiG's header then takes Pi's two logo lines with
-# the PiG. text mark (D2), so the transcript behind the centered overlay has the
-# same rows in both binaries. In truecolor PiG's 7-line pig head makes the
+# 256 colors in both binaries: Ompig's header then takes Pi's two logo lines with
+# the Ompig. text mark (D2), so the transcript behind the centered overlay has the
+# same rows in both binaries. In truecolor Ompig's 7-line ompig head makes the
 # header 2 rows taller and the overlay covers different rows.
-pig = ["PIG_TEST_FAUX=1", "COLORTERM="]
+ompig = ["OMPIG_TEST_FAUX=1", "COLORTERM="]
 pi = ["COLORTERM="]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/late-welcome.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/late-welcome.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/late-welcome.mjs",
@@ -38,7 +38,7 @@ pi_extensions = [
 # faux provider extension.
 width = 52
 height = 42
-ready_pattern_pig = "LATE WELCOME"
+ready_pattern_ompig = "LATE WELCOME"
 ready_pattern_pi = "LATE WELCOME"
 ready_timeout_seconds = 30
 capture_start = "╭──────────────────╮"

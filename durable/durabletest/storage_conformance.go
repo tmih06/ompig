@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"slices"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 var conformanceContext = context.Background()

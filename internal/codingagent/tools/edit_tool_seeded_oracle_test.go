@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/tools/edit.ts
@@ -139,7 +139,7 @@ func TestEditToolMatchesPiOverSeededFiles(t *testing.T) {
 		wantJSON, _ := json.Marshal([]any{expected.Text, wantDetails, expected.Thrown, expected.File})
 		if !bytes.Equal(gotJSON, wantJSON) {
 			if failures++; failures <= 4 {
-				t.Errorf("probe %d: content %q args %s\n PiG %.600s\n Pi  %.600s", i, content, args, gotJSON, wantJSON)
+				t.Errorf("probe %d: content %q args %s\n Ompig %.600s\n Pi  %.600s", i, content, args, gotJSON, wantJSON)
 			}
 		}
 	}

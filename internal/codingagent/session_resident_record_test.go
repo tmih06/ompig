@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/internal/sessionentry"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 // holdsItsRecord reports whether entry keeps a record: Raw returns that record's bytes on every call, while an entry without one encodes its

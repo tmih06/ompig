@@ -10,7 +10,7 @@ import (
 func TestParsePortMapPathsKeepsEveryPigCellShapeAndRejectsMalformedRows(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "PORT_MAP.md")
-	rows := "| Upstream | PiG | Status |\n|---|---|---|\n" +
+	rows := "| Upstream | Ompig | Status |\n|---|---|---|\n" +
 		"| _(downstream: Go SDK bridge)_ | `extensions/sdk/...` | 🔀 D19 |\n" +
 		"| `a/one.ts` | `x/one.go` | ✅ |\n" +
 		"| `a/many.ts` | `x/a.go`, `x/b.go` | ✅ |\n" +

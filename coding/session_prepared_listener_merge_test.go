@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi awaits synchronous listeners without a Session mutex blocking their reads. Prepared-prompt admission must not reintroduce that lock around the provider run.

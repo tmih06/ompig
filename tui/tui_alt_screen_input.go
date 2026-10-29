@@ -5,9 +5,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Viewport input for TuiAltScreen: focus reports, keyboard navigation, and
@@ -136,7 +136,7 @@ func (t *TuiAltScreen) matchViewportAction(data string) (TUIKeybinding, bool) {
 	if t.shouldDeferViewportInputToOverlay() {
 		return "", false
 	}
-	// pig divergence (D155): a focused selection that handles the selection page keys keeps them, even when they are also bound to a viewport action (Pi #7629).
+	// ompig divergence (D155): a focused selection that handles the selection page keys keeps them, even when they are also bound to a viewport action (Pi #7629).
 	if (keybindings.Matches(data, KBSelectPageUp) || keybindings.Matches(data, KBSelectPageDown)) && CapturesSelectPageInput(t.GetFocusedComponent()) {
 		return "", false
 	}
@@ -205,7 +205,7 @@ func (t *TuiAltScreen) IsSearchFocused() bool {
 
 // HandleFocusedSearchInput delivers a key to the transcript search box when it
 // has focus and reports whether it did. Upstream's TUI hands focused-component
-// input to the search box itself; PiG's driver owns input routing, so the
+// input to the search box itself; Ompig's driver owns input routing, so the
 // driver calls this where upstream would reach the focused component.
 func (t *TuiAltScreen) HandleFocusedSearchInput(data string) bool {
 	search := t.activeSearchSnapshot()

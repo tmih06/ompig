@@ -8,7 +8,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 type startTurnKey struct{}
@@ -71,7 +71,7 @@ func (a *memberAdmission) publish(staged []stagedManagedExt, err error) {
 }
 
 // stageCellsInOrder prepares cells concurrently. The host admits Node factories individually, allowing a shared Node process to span native cells without starting a later factory early. Each admission commits before the next configured factory starts.
-// pig additive (D20): per-member admission preserves one shared Node process and configured factory order.
+// ompig additive (D20): per-member admission preserves one shared Node process and configured factory order.
 func (h *Host) stageCellsInOrder(ctx context.Context, cells []CellSpec, commit func(CellSpec, stageOutcome, error)) {
 	parent := runtimeParent(ctx)
 	stageCtx, cancel := context.WithCancel(ctx)
@@ -124,7 +124,7 @@ func (h *Host) stageCellsInOrder(ctx context.Context, cells []CellSpec, commit f
 	}
 	ctx = context.WithValue(ctx, memberAdmissionKey{}, admissions)
 	if len(units) > 1 {
-		// pig additive (D174): extension startup waits on these preparations; they are admitted and run at the runtime default width.
+		// ompig additive (D174): extension startup waits on these preparations; they are admitted and run at the runtime default width.
 		defer procpolicy.Widen()()
 	}
 	slots := make(chan struct{}, maxConcurrentCellPreparations())

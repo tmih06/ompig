@@ -9,10 +9,10 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// DefaultAgentIdentity is the request identity of agent loops: the ai package's defaults with provider attribution to PiG. The loop config's Identity overrides it field by field (agent-loop.ts DEFAULT_AGENT_IDENTITY).
+// DefaultAgentIdentity is the request identity of agent loops: the ai package's defaults with provider attribution to Ompig. The loop config's Identity overrides it field by field (agent-loop.ts DEFAULT_AGENT_IDENTITY).
 var DefaultAgentIdentity = ai.ClientIdentity{Attribution: new(ai.PiAttribution)}
 
 // createLoopConfig mirrors upstream Agent.createLoopConfig. With
@@ -205,7 +205,7 @@ func (r *loopRun) loop() error {
 		hasMoreToolCalls := true
 		for hasMoreToolCalls || len(pendingMessages) > 0 {
 			if limit := r.h.cfg.MaxTurns; limit > 0 && r.turnIndex >= limit {
-				// A pig-only safety cap. Stopping here leaves tool results or
+				// A ompig-only safety cap. Stopping here leaves tool results or
 				// queued messages unanswered, so it must not look like a
 				// finished task.
 				r.endRun()
@@ -484,7 +484,7 @@ func (r *loopRun) streamAssistantResponse() (*AssistantMessage, []pendingToolCal
 	if transform := h.cfg.TransformLLMMessages; transform != nil {
 		llmMsgs = transform(llmMsgs)
 	}
-	// pig divergence (D137): the request keeps at most the model's inputLimits.images.maxPerRequest images; upstream sends every image (Pi #10162).
+	// ompig divergence (D137): the request keeps at most the model's inputLimits.images.maxPerRequest images; upstream sends every image (Pi #10162).
 	llmMsgs = limitImagesPerRequest(llmMsgs, r.model)
 	if h.cfg.SystemPromptOverride != nil {
 		if prompt := h.cfg.SystemPromptOverride(); prompt != nil {
@@ -504,7 +504,7 @@ func (r *loopRun) streamAssistantResponse() (*AssistantMessage, []pendingToolCal
 			streamOpts.APIKey = key
 		}
 	}
-	// pig divergence (D48): a real provider repairs orphaned, repeated and out-of-order tool results; the stream function still receives Pi's messages.
+	// ompig divergence (D48): a real provider repairs orphaned, repeated and out-of-order tool results; the stream function still receives Pi's messages.
 	streamOpts.RepairToolFlow = true
 	streamOpts.Identity = ai.MergeClientIdentity(&DefaultAgentIdentity, streamOpts.Identity)
 	streamOpts.Thinking = r.thinking.ReasoningOption()

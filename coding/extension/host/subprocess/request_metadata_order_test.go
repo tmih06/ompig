@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // An extension's requestMetadata is a JavaScript object whose key order Pi's Bedrock request keeps (bedrock-converse-stream.ts passes

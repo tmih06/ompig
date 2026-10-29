@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // requireExtensionTool fails the test loud when a required extension
@@ -38,7 +38,7 @@ func buildExecSDKFixture(t *testing.T) string {
 	return buildGoSDKFixture(t, "exec-sdk-fixture")
 }
 
-// buildGoSDKFixture compiles testdata/<name>, a Go SDK extension. The build is CGO-free, so it drops -race from an inherited GOFLAGS, which the run that builds a race-enabled pig sets.
+// buildGoSDKFixture compiles testdata/<name>, a Go SDK extension. The build is CGO-free, so it drops -race from an inherited GOFLAGS, which the run that builds a race-enabled ompig sets.
 func buildGoSDKFixture(t *testing.T, name string) string {
 	t.Helper()
 	binPath := testExecutable(filepath.Join(t.TempDir(), name))
@@ -65,7 +65,7 @@ func buildGoSDKFixture(t *testing.T, name string) string {
 // handleExec always returned code 127 ("exec not available") for a subprocess
 // extension running under those modes.
 //
-// Both fixtures ask pi.exec to run PIG_TEST_EXEC_HELPER_PATH (this test
+// Both fixtures ask pi.exec to run OMPIG_TEST_EXEC_HELPER_PATH (this test
 // binary itself, in "echo" mode via execEchoHelperEnv) instead of an external
 // echo binary, so the exec call spawns a real, natively executable command on
 // every OS the test binary runs on, including native Windows.
@@ -101,9 +101,9 @@ func TestSharedSubprocessExecAcrossModes(t *testing.T) {
 					requireExtensionTool(t, fc.requireTool)
 				}
 				t.Setenv(execEchoHelperEnv, "1")
-				t.Setenv("PIG_TEST_EXEC_HELPER_PATH", self)
-				t.Setenv("PIG_TEST_FAUX", "1")
-				t.Setenv("PIG_TEST_FAUX_SCENARIO", "parity-basic")
+				t.Setenv("OMPIG_TEST_EXEC_HELPER_PATH", self)
+				t.Setenv("OMPIG_TEST_FAUX", "1")
+				t.Setenv("OMPIG_TEST_FAUX_SCENARIO", "parity-basic")
 				agentDir := t.TempDir()
 				config := `{"providers":{"test-faux":{"baseUrl":"http://localhost:0","api":"test-faux","authHeader":false,"models":[{"id":"faux-1","name":"Test Faux","api":"test-faux","input":["text"],"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0},"contextWindow":128000,"maxTokens":4096}]}}}`
 				if err := os.WriteFile(filepath.Join(agentDir, "models.json"), []byte(config), 0o644); err != nil {

@@ -1,13 +1,13 @@
 package piglogin
 
-// The art tests of PiG Standard's piglogin (extension_test.go and login_art_test.go at MichaelKinsy/PiG d86eb93, carried by
-// Pigpen's pig-login and pig-play/libraries/sprite). Renamed identifiers only: the default sprite is pig-default (was
+// The art tests of Ompig Standard's piglogin (extension_test.go and login_art_test.go at tmih06/ompig d86eb93, carried by
+// Pigpen's ompig-login and ompig-play/libraries/sprite). Renamed identifiers only: the default sprite is ompig-default (was
 // hpe-agentic), loadVariant/saveVariant/variantByID/defaultVariant/defaultVariantID are LoadVariant/SaveVariant/ByID/
-// Default/DefaultID, ActiveVariant(root) is LoadVariant(root), and the goldens are testdata/login-pig-default-*.golden,
+// Default/DefaultID, ActiveVariant(root) is LoadVariant(root), and the goldens are testdata/login-ompig-default-*.golden,
 // byte-identical to the original login-hpe-agentic-*.golden. TestVariantStateDefaultsAndPersists and
 // TestUnknownSavedVariantFallsBackToDefault are state_test.go's TestVariantStateDefaultsAndPersists and
 // TestUnreadableSavedSelectionFallsBackToDefault. TestEveryVariantSpriteIsTheSharedGrid, TestFindVariantFallsBackToDefault
-// and TestEveryVariantPaletteCoversItsSprite are pig-play's additions.
+// and TestEveryVariantPaletteCoversItsSprite are ompig-play's additions.
 
 import (
 	"image/color"
@@ -18,11 +18,11 @@ import (
 	"testing"
 )
 
-// websiteArt is testdata/website-art.txt: colors sampled from the PiG
+// websiteArt is testdata/website-art.txt: colors sampled from the Ompig
 // website art, with the SHA-256 of each source file in its header.
 type websiteArt struct {
-	logo map[string]color.RGBA
-	pig  [][]color.RGBA
+	logo  map[string]color.RGBA
+	ompig [][]color.RGBA
 }
 
 func loadWebsiteArt(t *testing.T) websiteArt {
@@ -45,36 +45,36 @@ func loadWebsiteArt(t *testing.T) websiteArt {
 			}
 			colors = append(colors, color.RGBA{uint8(value >> 16), uint8(value >> 8), uint8(value), 0xFF})
 		}
-		if fields[0] == "pig" {
-			art.pig = append(art.pig, colors)
+		if fields[0] == "ompig" {
+			art.ompig = append(art.ompig, colors)
 		} else if len(colors) == 1 {
 			art.logo[fields[0]] = colors[0]
 		}
 	}
-	if len(art.pig) != 12 || len(art.pig[0]) != 14 || len(art.logo) != 4 {
-		t.Fatalf("website-art.txt: %d pig rows, %d logo colors", len(art.pig), len(art.logo))
+	if len(art.ompig) != 12 || len(art.ompig[0]) != 14 || len(art.logo) != 4 {
+		t.Fatalf("website-art.txt: %d ompig rows, %d logo colors", len(art.ompig), len(art.logo))
 	}
 	return art
 }
 
 func TestDefaultVariantIsTheWebsiteGreenPig(t *testing.T) {
-	if Variants[0].ID != "pig-default" || DefaultID != "pig-default" {
-		t.Fatalf("default variant = %q (Variants[0] = %q), want pig-default", DefaultID, Variants[0].ID)
+	if Variants[0].ID != "ompig-default" || DefaultID != "ompig-default" {
+		t.Fatalf("default variant = %q (Variants[0] = %q), want ompig-default", DefaultID, Variants[0].ID)
 	}
-	if got := LoadVariant(t.TempDir()); got.ID != "pig-default" {
-		t.Fatalf("fresh config loads %q, want pig-default", got.ID)
+	if got := LoadVariant(t.TempDir()); got.ID != "ompig-default" {
+		t.Fatalf("fresh config loads %q, want ompig-default", got.ID)
 	}
-	if got := LoadVariant(t.TempDir()); got.ID != "pig-default" {
-		t.Fatalf("ActiveVariant on a fresh config = %q, want pig-default", got.ID)
+	if got := LoadVariant(t.TempDir()); got.ID != "ompig-default" {
+		t.Fatalf("ActiveVariant on a fresh config = %q, want ompig-default", got.ID)
 	}
 }
 
 func TestPigDefaultResolvesByIDAndFromSavedState(t *testing.T) {
-	if got := FindVariant("pig-default"); got.ID != "pig-default" || got.Logo == nil {
-		t.Fatalf("FindVariant(pig-default) = %q", got.ID)
+	if got := FindVariant("ompig-default"); got.ID != "ompig-default" || got.Logo == nil {
+		t.Fatalf("FindVariant(ompig-default) = %q", got.ID)
 	}
-	if _, ok := ByID("pig-default"); !ok {
-		t.Fatal("/sprite set pig-default would be rejected")
+	if _, ok := ByID("ompig-default"); !ok {
+		t.Fatal("/sprite set ompig-default would be rejected")
 	}
 	root := t.TempDir()
 	if err := SaveVariant(root, "pink"); err != nil {
@@ -83,23 +83,23 @@ func TestPigDefaultResolvesByIDAndFromSavedState(t *testing.T) {
 	if got := LoadVariant(root); got.ID != "pink" {
 		t.Fatalf("saved pink loads %q; other variants must stay selectable", got.ID)
 	}
-	if err := SaveVariant(root, "pig-default"); err != nil {
+	if err := SaveVariant(root, "ompig-default"); err != nil {
 		t.Fatal(err)
 	}
-	if got := LoadVariant(root); got.ID != "pig-default" {
-		t.Fatalf("saved pig-default loads %q", got.ID)
+	if got := LoadVariant(root); got.ID != "ompig-default" {
+		t.Fatalf("saved ompig-default loads %q", got.ID)
 	}
-	if !strings.Contains(spriteList(), "pig-default: PiG: ") {
-		t.Fatalf("sprite list lacks pig-default:\n%s", spriteList())
+	if !strings.Contains(spriteList(), "ompig-default: Ompig: ") {
+		t.Fatalf("sprite list lacks ompig-default:\n%s", spriteList())
 	}
 }
 
-// The website pig is a 14-by-12 pixel grid. The mascot grid is the same pig
+// The website ompig is a 14-by-12 pixel grid. The mascot grid is the same ompig
 // with a one-pixel transparent margin, and every cell matches the sampled
 // website color.
 func TestPigDefaultMascotMatchesWebsitePig(t *testing.T) {
 	art := loadWebsiteArt(t)
-	variant := FindVariant("pig-default")
+	variant := FindVariant("ompig-default")
 	palette := MascotPalette(variant)
 	sprite := MascotSpriteFor(variant)
 	for gy := range 12 {
@@ -109,8 +109,8 @@ func TestPigDefaultMascotMatchesWebsitePig(t *testing.T) {
 			if symbol == '.' || !opaque {
 				continue
 			}
-			if got := art.pig[gy][gx]; distance(got, want) > 6 {
-				t.Fatalf("cell (%d,%d) symbol %q = %s, website pig = %s", gx, gy, symbol, rgbaHex(want), rgbaHex(got))
+			if got := art.ompig[gy][gx]; distance(got, want) > 6 {
+				t.Fatalf("cell (%d,%d) symbol %q = %s, website ompig = %s", gx, gy, symbol, rgbaHex(want), rgbaHex(got))
 			}
 		}
 	}
@@ -123,7 +123,7 @@ func distance(a, b color.RGBA) int {
 
 func TestPigDefaultLogoMatchesWebsiteWordmark(t *testing.T) {
 	art := loadWebsiteArt(t)
-	logo := LogoFor(FindVariant("pig-default"))
+	logo := LogoFor(FindVariant("ompig-default"))
 	for _, tc := range []struct {
 		name      string
 		got, want color.RGBA
@@ -151,7 +151,7 @@ func TestOtherVariantLogosFollowTheirPig(t *testing.T) {
 	}
 }
 
-func TestHeroDrawsPiGWithPeriodInsideTheGrid(t *testing.T) {
+func TestHeroDrawsOmpigWithPeriodInsideTheGrid(t *testing.T) {
 	definition := LoginDefinitionFor(Default())
 	var periodCells int
 	for y, row := range definition.Hero {
@@ -295,12 +295,12 @@ func TestEveryVariantSpriteIsTheSharedGrid(t *testing.T) {
 
 // An unknown or empty ID resolves to the default sprite, never to a zero value.
 func TestFindVariantFallsBackToDefault(t *testing.T) {
-	for _, id := range []string{"", "no-such-pig"} {
+	for _, id := range []string{"", "no-such-ompig"} {
 		if got := FindVariant(id); got.ID != DefaultID {
 			t.Fatalf("FindVariant(%q) = %q, want %q", id, got.ID, DefaultID)
 		}
 	}
-	if _, ok := ByID("no-such-pig"); ok {
+	if _, ok := ByID("no-such-ompig"); ok {
 		t.Fatal("ByID accepted an unknown sprite")
 	}
 }
@@ -322,7 +322,7 @@ func TestEveryVariantPaletteCoversItsSprite(t *testing.T) {
 	}
 }
 
-// The default wordmark is PiG's own, not the classic blue Pi logo color.
+// The default wordmark is Ompig's own, not the classic blue Pi logo color.
 func TestDefaultWordmarkIsNotTheClassicBlue(t *testing.T) {
 	definition := LoginDefinitionFor(Default())
 	for _, row := range definition.Hero {

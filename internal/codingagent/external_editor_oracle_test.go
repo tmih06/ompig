@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type externalEditorScenario struct {
@@ -50,7 +50,7 @@ type externalEditorKit struct {
 	replace func(i int, payload []byte) string
 }
 
-// shellScriptEditors are #! scripts that Pi and PiG start directly, as upstream does outside Windows. A script is no program cmd.exe can start.
+// shellScriptEditors are #! scripts that Pi and Ompig start directly, as upstream does outside Windows. A script is no program cmd.exe can start.
 func shellScriptEditors(t *testing.T, dir string) externalEditorKit {
 	script := func(name, body string) string {
 		path := filepath.Join(dir, name)
@@ -76,7 +76,7 @@ func shellScriptEditors(t *testing.T, dir string) externalEditorKit {
 	}
 }
 
-// testBinaryEditors are this test binary, which runs the same scripts in Go (runExternalEditorScenario) under any command shell. Pi and PiG name it through PATH, so a command line stays free of the spaces that Pi's split on single spaces would cut.
+// testBinaryEditors are this test binary, which runs the same scripts in Go (runExternalEditorScenario) under any command shell. Pi and Ompig name it through PATH, so a command line stays free of the spaces that Pi's split on single spaces would cut.
 func testBinaryEditors(t *testing.T, dir string) externalEditorKit {
 	name := editorHelperName(t)
 	t.Setenv(externalEditorScenarioEnv, "1")

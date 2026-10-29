@@ -3,7 +3,7 @@ package session
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // Cancel is a cancellation signal: the AbortSignal of an invocation or of a

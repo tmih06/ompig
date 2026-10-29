@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi rpc-types.ts RpcSessionState.model is a Model<any> whose optional `type` ("chat", ai/src/types.ts:1119) is serialized

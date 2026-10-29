@@ -12,10 +12,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // volatileEventFields are the members a rerun changes: clocks, generated entry and call identifiers and the faux provider's per-instance API name.
@@ -46,7 +46,7 @@ func (l *deliveryLog) add(source string, value any) {
 // recordedDelivery runs one scripted prompt (a streamed write tool call, then a streamed text) with an in-process extension and a Session listener. hooks is the interleaving of every Session listener call and extension handler call; events is what Events delivered, when drained. executor forces every event onto the Session executor goroutine, the delivery of 4cfaf24153; otherwise producers execute their events inline whenever nothing is queued ahead. drain reads Events as RPC mode does; otherwise the Session discards Events as print mode does.
 func recordedDelivery(t *testing.T, executor, drain bool) (hooks, events []string) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

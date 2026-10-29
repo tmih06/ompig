@@ -9,11 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 type packedAuthFixture struct {
@@ -37,7 +37,7 @@ func TestEmbeddedPackedAuthDiscoveryAndLoginByLanguage(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
 			t.Cleanup(ai.ResetOAuthProviders)
 			fixture := tc.build(t)
 			if fixture.cell.Extensions[0].Name != fixture.sibling || fixture.cell.Extensions[1].Name != fixture.owner {
@@ -47,10 +47,10 @@ func TestEmbeddedPackedAuthDiscoveryAndLoginByLanguage(t *testing.T) {
 			if len(selected) != 1 || selected[0].BinaryPath != fixture.cell.BinaryPath || selected[0].Key != fixture.cell.Key || len(selected[0].Extensions) != 1 || selected[0].Extensions[0].Name != fixture.owner {
 				t.Fatalf("owner selection changed compiled artifact or packed-cell identity: selected=%#v source=%#v", selected, fixture.cell)
 			}
-			t.Setenv("PIG_TEST_AUTH_SIBLING_FACTORY", fixture.siblingMarker)
-			t.Setenv("PIG_TEST_AUTH_HANDLER", fixture.handlerMarker)
-			t.Setenv("PIG_TEST_AUTH_LOGIN", fixture.loginMarker)
-			t.Setenv("PIG_TEST_AUTH_EXIT_AFTER_LOGIN", "1")
+			t.Setenv("OMPIG_TEST_AUTH_SIBLING_FACTORY", fixture.siblingMarker)
+			t.Setenv("OMPIG_TEST_AUTH_HANDLER", fixture.handlerMarker)
+			t.Setenv("OMPIG_TEST_AUTH_LOGIN", fixture.loginMarker)
+			t.Setenv("OMPIG_TEST_AUTH_EXIT_AFTER_LOGIN", "1")
 
 			discoveryCtx, discoveryCancel := context.WithTimeout(t.Context(), testbudget.Wait(t))
 			discovery := &authContributionRegistry{
@@ -166,21 +166,21 @@ func buildGoPackedAuthFixture(t *testing.T) packedAuthFixture {
 import (
  "os"
  "time"
- sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+ sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 func mark(env, text string) { if path := os.Getenv(env); path != "" { f, _ := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600); if f != nil { _, _ = f.WriteString(text+"\n"); _ = f.Close() } } }
 func Extension() *sdk.Extension {
  ext := sdk.New(%q)
- ext.Tool("must-not-run", "probe", sdk.Schema{"type":"object"}, func(sdk.Context, map[string]any) (any,error) { mark("PIG_TEST_AUTH_HANDLER", "tool"); return nil,nil })
- ext.Command("must-not-run", "probe", func(sdk.Context,string) error { mark("PIG_TEST_AUTH_HANDLER", "command"); return nil })
- ext.OnSessionStart(func(sdk.Context,map[string]any) (any,error) { mark("PIG_TEST_AUTH_HANDLER", "session"); return nil,nil })
- ext.RegisterProvider(%q, sdk.ProviderConfig{"name":%q, "oauth":&sdk.OAuthProvider{Name:%q, Login:func(*sdk.OAuthLoginCallbacks)(sdk.OAuthCredentials,error){ mark("PIG_TEST_AUTH_LOGIN", "login"); if os.Getenv("PIG_TEST_AUTH_EXIT_AFTER_LOGIN") == "1" { go func(){ time.Sleep(150*time.Millisecond); os.Exit(0) }() }; return sdk.OAuthCredentials{Access:"owner-access"},nil }}})
+ ext.Tool("must-not-run", "probe", sdk.Schema{"type":"object"}, func(sdk.Context, map[string]any) (any,error) { mark("OMPIG_TEST_AUTH_HANDLER", "tool"); return nil,nil })
+ ext.Command("must-not-run", "probe", func(sdk.Context,string) error { mark("OMPIG_TEST_AUTH_HANDLER", "command"); return nil })
+ ext.OnSessionStart(func(sdk.Context,map[string]any) (any,error) { mark("OMPIG_TEST_AUTH_HANDLER", "session"); return nil,nil })
+ ext.RegisterProvider(%q, sdk.ProviderConfig{"name":%q, "oauth":&sdk.OAuthProvider{Name:%q, Login:func(*sdk.OAuthLoginCallbacks)(sdk.OAuthCredentials,error){ mark("OMPIG_TEST_AUTH_LOGIN", "login"); if os.Getenv("OMPIG_TEST_AUTH_EXIT_AFTER_LOGIN") == "1" { go func(){ time.Sleep(150*time.Millisecond); os.Exit(0) }() }; return sdk.OAuthCredentials{Access:"owner-access"},nil }}})
  return ext
 }
 `, owner, provider, provider, provider))
 	writeGoModule(t, siblingRoot, "example.com/sibling/goauth", fmt.Sprintf(`package sibling
-import ("os"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
-func Extension() *sdk.Extension { if path:=os.Getenv("PIG_TEST_AUTH_SIBLING_FACTORY"); path!="" { f,_:=os.OpenFile(path,os.O_CREATE|os.O_WRONLY|os.O_APPEND,0600); if f!=nil { _,_=f.WriteString("factory\n"); _=f.Close() } }; panic("sibling factory failure"); return sdk.New(%q) }
+import ("os"; sdk "github.com/tmih06/ompig/extensions/sdk")
+func Extension() *sdk.Extension { if path:=os.Getenv("OMPIG_TEST_AUTH_SIBLING_FACTORY"); path!="" { f,_:=os.OpenFile(path,os.O_CREATE|os.O_WRONLY|os.O_APPEND,0600); if f!=nil { _,_=f.WriteString("factory\n"); _=f.Close() } }; panic("sibling factory failure"); return sdk.New(%q) }
 `, sibling))
 	cell, err := runtimecell.BuildGoPackedCell(t.Context(), t.TempDir(), "go-auth-cell", []runtimecell.GoExtension{
 		{Name: owner, Root: ownerRoot, ModulePath: "example.com/owner/goauth", Package: "example.com/owner/goauth", Factory: "Extension", Hash: "owner"},
@@ -194,7 +194,7 @@ func Extension() *sdk.Extension { if path:=os.Getenv("PIG_TEST_AUTH_SIBLING_FACT
 
 func writeGoModule(t *testing.T, root, module, source string) {
 	t.Helper()
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", module), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", module), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(root, "extension.go"), []byte(source), 0o644); err != nil {
@@ -209,20 +209,20 @@ func buildRustPackedAuthFixture(t *testing.T) packedAuthFixture {
 	}
 	owner, sibling := "owner-rust-auth", "sibling-rust-auth"
 	provider := "provider-rust-auth"
-	ownerRoot := writeRustAuthCrate(t, "owner_rust_auth", fmt.Sprintf(`use pig_sdk::{empty_schema, CommandResult, Extension, OAuthCredentials, OAuthProvider, ToolResult};
+	ownerRoot := writeRustAuthCrate(t, "owner_rust_auth", fmt.Sprintf(`use ompig_sdk::{empty_schema, CommandResult, Extension, OAuthCredentials, OAuthProvider, ToolResult};
 use serde_json::json;
 fn mark(env: &str, text: &str) { if let Ok(path)=std::env::var(env) { use std::io::Write; if let Ok(mut f)=std::fs::OpenOptions::new().create(true).append(true).open(path) { let _=writeln!(f,"{}",text); } } }
 pub fn new_extension() -> Extension {
  let mut ext=Extension::new(%q);
- ext.tool("must-not-run","probe",empty_schema(),|_,_| { mark("PIG_TEST_AUTH_HANDLER","tool"); ToolResult::text("no") });
- ext.command("must-not-run","probe",|_,_| { mark("PIG_TEST_AUTH_HANDLER","command"); CommandResult::Ok });
- ext.on_event("session_start",|_,_| { mark("PIG_TEST_AUTH_HANDLER","session"); None });
- ext.register_oauth_provider(%q,json!({"name":%q}),OAuthProvider{name:%q.to_string(),is_subscription:false,login:Box::new(|_| { mark("PIG_TEST_AUTH_LOGIN","login"); if std::env::var("PIG_TEST_AUTH_EXIT_AFTER_LOGIN").as_deref()==Ok("1") { std::thread::spawn(|| { std::thread::sleep(std::time::Duration::from_millis(150)); std::process::exit(0); }); } Ok(OAuthCredentials{access:"owner-access".to_string(),..Default::default()}) }),refresh_token:None,get_api_key:None,credential_store:None});
+ ext.tool("must-not-run","probe",empty_schema(),|_,_| { mark("OMPIG_TEST_AUTH_HANDLER","tool"); ToolResult::text("no") });
+ ext.command("must-not-run","probe",|_,_| { mark("OMPIG_TEST_AUTH_HANDLER","command"); CommandResult::Ok });
+ ext.on_event("session_start",|_,_| { mark("OMPIG_TEST_AUTH_HANDLER","session"); None });
+ ext.register_oauth_provider(%q,json!({"name":%q}),OAuthProvider{name:%q.to_string(),is_subscription:false,login:Box::new(|_| { mark("OMPIG_TEST_AUTH_LOGIN","login"); if std::env::var("OMPIG_TEST_AUTH_EXIT_AFTER_LOGIN").as_deref()==Ok("1") { std::thread::spawn(|| { std::thread::sleep(std::time::Duration::from_millis(150)); std::process::exit(0); }); } Ok(OAuthCredentials{access:"owner-access".to_string(),..Default::default()}) }),refresh_token:None,get_api_key:None,credential_store:None});
  ext
 }
 `, owner, provider, provider, provider))
-	siblingRoot := writeRustAuthCrate(t, "sibling_rust_auth", fmt.Sprintf(`use pig_sdk::Extension;
-pub fn new_extension() -> Extension { if let Ok(path)=std::env::var("PIG_TEST_AUTH_SIBLING_FACTORY") { use std::io::Write; if let Ok(mut f)=std::fs::OpenOptions::new().create(true).append(true).open(path) { let _=writeln!(f,"factory"); } } panic!("sibling factory failure"); #[allow(unreachable_code)] Extension::new(%q) }
+	siblingRoot := writeRustAuthCrate(t, "sibling_rust_auth", fmt.Sprintf(`use ompig_sdk::Extension;
+pub fn new_extension() -> Extension { if let Ok(path)=std::env::var("OMPIG_TEST_AUTH_SIBLING_FACTORY") { use std::io::Write; if let Ok(mut f)=std::fs::OpenOptions::new().create(true).append(true).open(path) { let _=writeln!(f,"factory"); } } panic!("sibling factory failure"); #[allow(unreachable_code)] Extension::new(%q) }
 `, sibling))
 	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Minute)
 	defer cancel()
@@ -265,21 +265,21 @@ func buildPythonPackedAuthFixture(t *testing.T) packedAuthFixture {
 	provider := "provider-python-auth"
 	ownerRoot := t.TempDir()
 	ownerSource := fmt.Sprintf(`import os, pathlib, threading
-import pig_sdk
+import ompig_sdk
 def mark(env,text):
     path=os.environ.get(env)
     if path:
         with open(path,"a") as f: f.write(text+"\n")
 def new_extension():
-    ext=pig_sdk.Extension(%q)
-    ext.tool("must-not-run","probe",{"type":"object"},lambda ctx,args: mark("PIG_TEST_AUTH_HANDLER","tool"))
-    ext.command("must-not-run","probe",lambda ctx,args: mark("PIG_TEST_AUTH_HANDLER","command"))
-    ext.on_event("session_start",lambda ctx,data: mark("PIG_TEST_AUTH_HANDLER","session"))
+    ext=ompig_sdk.Extension(%q)
+    ext.tool("must-not-run","probe",{"type":"object"},lambda ctx,args: mark("OMPIG_TEST_AUTH_HANDLER","tool"))
+    ext.command("must-not-run","probe",lambda ctx,args: mark("OMPIG_TEST_AUTH_HANDLER","command"))
+    ext.on_event("session_start",lambda ctx,data: mark("OMPIG_TEST_AUTH_HANDLER","session"))
     def login(_cb):
-        mark("PIG_TEST_AUTH_LOGIN","login")
-        if os.environ.get("PIG_TEST_AUTH_EXIT_AFTER_LOGIN")=="1": threading.Timer(0.15,lambda: os._exit(0)).start()
-        return pig_sdk.OAuthCredentials(access="owner-access")
-    ext.register_oauth_provider(%q,{"name":%q},pig_sdk.OAuthProvider(name=%q,login=login))
+        mark("OMPIG_TEST_AUTH_LOGIN","login")
+        if os.environ.get("OMPIG_TEST_AUTH_EXIT_AFTER_LOGIN")=="1": threading.Timer(0.15,lambda: os._exit(0)).start()
+        return ompig_sdk.OAuthCredentials(access="owner-access")
+    ext.register_oauth_provider(%q,{"name":%q},ompig_sdk.OAuthProvider(name=%q,login=login))
     return ext
 `, owner, provider, provider, provider)
 	if err := os.WriteFile(filepath.Join(ownerRoot, "owner_python_auth.py"), []byte(ownerSource), 0o644); err != nil {
@@ -287,13 +287,13 @@ def new_extension():
 	}
 	siblingRoot := t.TempDir()
 	siblingSource := fmt.Sprintf(`import os
-import pig_sdk
+import ompig_sdk
 def new_extension():
-    path=os.environ.get("PIG_TEST_AUTH_SIBLING_FACTORY")
+    path=os.environ.get("OMPIG_TEST_AUTH_SIBLING_FACTORY")
     if path:
         with open(path,"a") as f: f.write("factory\n")
     raise RuntimeError("sibling factory failure")
-    return pig_sdk.Extension(%q)
+    return ompig_sdk.Extension(%q)
 `, sibling)
 	if err := os.WriteFile(filepath.Join(siblingRoot, "sibling_python_auth.py"), []byte(siblingSource), 0o644); err != nil {
 		t.Fatal(err)

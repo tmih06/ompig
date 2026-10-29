@@ -28,7 +28,7 @@ func TestParity_MarkdownInteractiveTmuxCapture(t *testing.T) {
 		cfg := cfg
 		t.Run(cfg.name, func(t *testing.T) {
 			var markers []string
-			if cfg.name == "pig" {
+			if cfg.name == "ompig" {
 				markers = []string{interactiveReadyMarker}
 			} else {
 				markers = []string{"Press ctrl+o to show full startup help"}
@@ -67,12 +67,12 @@ func TestParity_MarkdownInteractiveTmuxCapture(t *testing.T) {
 	}
 
 	up := results["upstream"]
-	gp := results["pig"]
+	gp := results["ompig"]
 	if gp.block != up.block {
-		t.Errorf("interactive markdown visible capture mismatch\n--- pig ---\n%s\n--- upstream ---\n%s", gp.block, up.block)
+		t.Errorf("interactive markdown visible capture mismatch\n--- ompig ---\n%s\n--- upstream ---\n%s", gp.block, up.block)
 	}
 	if normalizeMarkdownEscapedTmuxBlock(gp.escBlock) != normalizeMarkdownEscapedTmuxBlock(up.escBlock) {
-		t.Errorf("interactive markdown escaped capture mismatch\n--- pig ---\n%s\n--- upstream ---\n%s", gp.escBlock, up.escBlock)
+		t.Errorf("interactive markdown escaped capture mismatch\n--- ompig ---\n%s\n--- upstream ---\n%s", gp.escBlock, up.escBlock)
 	}
 }
 

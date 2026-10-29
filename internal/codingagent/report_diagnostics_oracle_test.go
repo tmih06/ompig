@@ -6,11 +6,11 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Upstream main.ts reportDiagnostics wraps each diagnostic in chalk.red, chalk.yellow or chalk.dim. chalk keeps an empty string empty, re-opens its color after
-// a close code already in the text, and closes and re-opens it around every line break (keeping a carriage return before the break). PiG wrapped the whole
+// a close code already in the text, and closes and re-opens it around every line break (keeping a carriage return before the break). Ompig wrapped the whole
 // text once, so a multi-line diagnostic carried its color across line breaks, an embedded reset ended it early and an empty info line printed bare codes.
 func TestFormatReportedDiagnosticMatchesChalk(t *testing.T) {
 	type diagnostic struct {

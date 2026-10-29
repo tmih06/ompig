@@ -21,11 +21,11 @@ wait_contains = ['"id":"m1","type":"response","command":"set_model"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model"]
+ompig = ["OMPIG_HOME=testdata/multi-model"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model/agent"]
-pig_extensions = ["testdata/command-chain-io-timer-send.mjs"]
+ompig_extensions = ["testdata/command-chain-io-timer-send.mjs"]
 pi_extensions = ["testdata/command-chain-io-timer-send.mjs"]
-pig_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
 
 [assert]

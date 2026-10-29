@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // ApplyExtensionFlagValues checks ServicesOptions.ExtensionFlagValues against the flags the loaded extensions registered and

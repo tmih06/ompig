@@ -1,6 +1,6 @@
 # PORT_MAP
 
-Minimal upstream to pig file map.
+Minimal upstream to ompig file map.
 
 - `docs/parity/PORT_MAP.md` answers where code lives
 - `test/parity/coverage.md` answers what is verified and at what quality
@@ -20,7 +20,7 @@ Release history and open work belong in the tracked sync plan and generated cove
 
 ## Package scope
 
-PORT_MAP maps every source file of every package in the upstream monorepo: the fourteen packages listed in `test/parity/upstreampackages/packages.json`, which a test requires to equal the package directories of the pinned mirror. A package that upstream adds fails `make port-map-drift` until it is listed and mapped. The coverage report counts each package and the sums in `test/parity/coverage.md`; PiG's experimental remote Session stack (`packages/client`, `packages/protocol` and `packages/server`) and the experimental parts of `packages/coding-agent` are reported separately as the part of the monorepo that Pi does not ship in its npm package.
+PORT_MAP maps every source file of every package in the upstream monorepo: the fourteen packages listed in `test/parity/upstreampackages/packages.json`, which a test requires to equal the package directories of the pinned mirror. A package that upstream adds fails `make port-map-drift` until it is listed and mapped. The coverage report counts each package and the sums in `test/parity/coverage.md`; Ompig's experimental remote Session stack (`packages/client`, `packages/protocol` and `packages/server`) and the experimental parts of `packages/coding-agent` are reported separately as the part of the monorepo that Pi does not ship in its npm package.
 
 Package scope, one line each:
 
@@ -38,7 +38,7 @@ require reviewed mappings; code presence alone never automatically earns ✅.
 - `ai/auth.go`: auth.json lock via `LockFileEx`/`UnlockFileEx` (upstream `flock` equivalent).
 - `tui/terminal.go`: raw mode over `CONIN$`/`CONOUT$`; ANSI via
   `ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN`; terminal resize by polling
-  `GetConsoleScreenBufferInfo` (a pig-internal mechanism under upstream's observable resize→re-render;
+  `GetConsoleScreenBufferInfo` (a ompig-internal mechanism under upstream's observable resize→re-render;
   windows has no SIGWINCH); `DrainInput` is a documented no-op.
 - `internal/codingagent/interactive.go`: SIGHUP not registered (Go maps console-close to SIGTERM);
   resize watcher polls; Ctrl+Z suspend shows upstream's "not supported" status.
@@ -55,18 +55,18 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/ai/scripts/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/ai/scripts/models-dev-reasoning-options.ts` | `internal/modelgen/reasoning_options.go` | ✅ |
 | `packages/ai/scripts/openrouter-reasoning-options.ts` | `internal/modelgen/reasoning_options.go` | ✅ |
-| `packages/ai/scripts/generate-models.ts` | `cmd/gen-models/main.go + cmd/gen-models/reasoning.go + cmd/gen-models/models_dev.go (catalog emission, raw vendor reasoning snapshots, models.dev Fireworks/Qwen stages and strict JSON publication; the MiniMax direct-provider stage (the effort-level thinkingLevelMap and forceAdaptiveThinking of MiniMax-M3.1-Flash, the hidden M2, M2.1, M2.5 and M2.5-highspeed models) runs in the pinned Pi's generator at `make pin-bump` and reaches PiG through the frozen provider data, asserted by ai/minimax_models_upstream_test.go; other source-provider stages and TypeScript publication remain unported: Go can port the deterministic transform over fetched snapshots, with Pi's patch tables as data)` | 🟡 |
+| `packages/ai/scripts/generate-models.ts` | `cmd/gen-models/main.go + cmd/gen-models/reasoning.go + cmd/gen-models/models_dev.go (catalog emission, raw vendor reasoning snapshots, models.dev Fireworks/Qwen stages and strict JSON publication; the MiniMax direct-provider stage (the effort-level thinkingLevelMap and forceAdaptiveThinking of MiniMax-M3.1-Flash, the hidden M2, M2.1, M2.5 and M2.5-highspeed models) runs in the pinned Pi's generator at `make pin-bump` and reaches Ompig through the frozen provider data, asserted by ai/minimax_models_upstream_test.go; other source-provider stages and TypeScript publication remain unported: Go can port the deterministic transform over fetched snapshots, with Pi's patch tables as data)` | 🟡 |
 | `packages/ai/scripts/check-model-data.ts` | `cmd/check-model-data/main.go (validation command)` | ✅ |
 | `packages/ai/scripts/model-data.ts` | `cmd/check-model-data/model_data.go + model_data_json.go (identity, shard, manifest, hash and metadata validation; Node supplies Date.parse and JSON syntax diagnostics)` | ✅ |
 | `packages/ai/scripts/hydrate-model-catalog.ts` | `cmd/check-model-data/hydrate.go (-hydrate <models.all.json>; groupProviderModelData, staging, validation and replacement; hydration cases of model-data-validation.test.ts in hydrate_upstream_test.go)` | ✅ |
 
 ## `packages/agent/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/agent/src/agent.ts` | `agent/agent.go + agent/lifecycle.go + agent/queue.go (StreamFunction exposes the caller override; nil denotes the stock path, whose DefaultStreamFn is stored separately because Go cannot compare functions)`, `agent/agent_prompt.go`, `agent/agent_state.go` | ✅ |
 | `packages/agent/src/agent-loop.ts` | `agent/agent_loop.go + agent/standalone_loop.go + agent/run_tool_call.go + agent/agent.go + agent/message_json.go + agent/tool_execution.go + agent/system_state.go; shallow stream views use ai/assistant_observation.go and ai/stream_observation.go (all 35 agent-loop.test.ts cases, the standalone loop API and runToolCall are ported; docs/parity/gap-closure/gap-agent-tui.md)` | ✅ |
@@ -76,7 +76,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/ai/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/ai/src/types.ts` | `ai/types.go + ai/model_compat_json.go + ai/provider_streams.go + ai/deferred_option.go + coding/extension/model_stream.go + coding/extension/host/subprocess/model_fetch.go + coding/extension/host/subprocess/runtime-node/model-fetch.mjs (per-request fetch carrier)`, `agent/standalone_loop.go`, `agent/agent.go`, `agent/proxy.go`, `ai/openai.go`, `ai/model_types.go`, `ai/images.go`, `ai/messages.go`, `ai/events.go`, `ai/model_utils.go`, `ai/types_unions.go`, `ai/classifier.go`, `ai/transcript.go`, `ai/models_runtime.go`, `ai/known_provider.go`, `ai/provider_env.go`, `ai/models_provider.go`, `ai/openai_responses.go`, `ai/simple_options.go`, `ai/azure_config.go` | ✅ |
 | `packages/ai/src/models.generated.ts` | `ai/models_generated.go` | ✅ |
@@ -203,11 +203,11 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/ai/src/providers/xiaomi.ts` | `ai/models_generated.go + internal/codingagent/model_registry.go (provider metadata/catalog registration)`, `ai/builtin_providers.go` | ✅ |
 | `packages/ai/src/providers/zai-coding-cn.ts` | `ai/models_generated.go + internal/codingagent/model_registry.go (provider metadata/catalog registration)`, `ai/provider_constructors.go` | ✅ |
 | `packages/ai/src/providers/zai.ts` | `ai/models_generated.go + internal/codingagent/model_registry.go (provider metadata/catalog registration)`, `ai/provider_constructors.go` | ✅ |
-| `packages/coding-agent/src/modes/interactive/components/easter-egg-3d.lazy.ts` | `internal/codingagent/pig_logo_animation_play.go + internal/codingagent/startup_header.go + internal/codingagent/interactive_easter_eggs.go (header click and fullscreen /arminsayshi; D87: PiG's pig models; the dynamic import is designed out, Go links the module)` | ✅ |
-| `packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts` | `internal/codingagent/pig_egg3d.go + internal/codingagent/pig_logo_animation.go + internal/codingagent/pig_logo_animation_play.go (D87: the Pi-logo kind with the pig of the PiG mark and its running pig; the Armin kind with the sprite's pig head)` | ✅ |
+| `packages/coding-agent/src/modes/interactive/components/easter-egg-3d.lazy.ts` | `internal/codingagent/ompig_logo_animation_play.go + internal/codingagent/startup_header.go + internal/codingagent/interactive_easter_eggs.go (header click and fullscreen /arminsayshi; D87: Ompig's ompig models; the dynamic import is designed out, Go links the module)` | ✅ |
+| `packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts` | `internal/codingagent/ompig_egg3d.go + internal/codingagent/ompig_logo_animation.go + internal/codingagent/ompig_logo_animation_play.go (D87: the Pi-logo kind with the ompig of the Ompig mark and its running ompig; the Armin kind with the sprite's ompig head)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/radius-login-selector.ts` | `internal/codingagent/radius_login_selector.go (Radius top-level login option shimmer; static rows proven by oauth/27-28, shimmer frames compared with the pinned Pi by TestRadiusLoginMenuRendersLikePi)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/status-indicator.ts` | `internal/codingagent/interactive_status.go + interactive_events.go + tui/status_indicator.go + tui/editor_status.go (working/compaction/retry border, branchSummary, summarization retry replacement and session-clear lifecycle)` | ✅ |
-| `packages/coding-agent/src/rpc-entry.ts` | `(npm package export wrapper for --mode rpc; pig exposes the CLI mode directly)` | n/a |
+| `packages/coding-agent/src/rpc-entry.ts` | `(npm package export wrapper for --mode rpc; ompig exposes the CLI mode directly)` | n/a |
 | `packages/coding-agent/src/utils/image-process.ts` | `internal/imageprocessing/images.go` | ✅ |
 | `packages/ai/src/api/lazy.ts` | `ai/provider_streams.go + ai/models_runtime_stream.go + ai/continuation.go + coding/model_stream_forwarding.go (owned setup, promise reactions, ordered reference forwarding, and result settlement; dynamic module loading is statically linked in Go)` | ✅ |
 | `packages/agent/src/stream-fn.ts` | `agent/stream_fn.go + agent/agent.go + agent/agent_loop.go (configured host stream fallback and explicit StreamFn injection; NewAgent returns an error where Pi's constructor throws)` | ✅ |
@@ -255,11 +255,11 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/ai/src/utils/sanitize-unicode.ts` | `ai/sanitize_unicode.go` | ✅ |
 | `packages/ai/src/utils/typebox-helpers.ts` | `ai/typebox_helpers.go (StringEnum only, as a JSON-schema map; the TypeBox runtime and type-level helpers stay designed out; production caller internal/evals/evalsuites/audit.go)` | ✅ |
 | `packages/ai/src/utils/validation.ts` | `ai/validate.go + ai/validate_arguments.go + ai/validate_convert.go + ai/validate_errors.go + internal/typebox/compiler.go + ai/validate_json.go` | ✅ |
-| `packages/ai/src/utils/version.ts` | `ai/user_agent.go (ProductVersion: PiG's composite release version stands for PI_AI_VERSION as the default version of a detailed User-Agent, D65; TestClientIdentityVersionDefaultsToTheProductVersion)` | ✅ |
+| `packages/ai/src/utils/version.ts` | `ai/user_agent.go (ProductVersion: Ompig's composite release version stands for PI_AI_VERSION as the default version of a detailed User-Agent, D65; TestClientIdentityVersionDefaultsToTheProductVersion)` | ✅ |
 | `packages/ai/src/providers/baseten.models.ts` | `(not ported: Baseten provider declined)` | n/a |
 | `packages/ai/src/providers/baseten.ts` | `(not ported: Baseten provider declined)` | n/a |
-| `packages/ai/src/utils/abort.ts` | `(AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; pig uses context.Context cancellation + select (D3): runtime mechanics, designed out)` | n/a |
-| `packages/ai/src/api/cloudflare-ai-binding.ts` | `ai/cloudflare_ai_binding.go (AIBinding, CreateAIBindingFetch and the auth sentinel as a library fetch adapter; no PiG product path builds a Workers binding, so it has no in-product caller; cloudflare-ai-binding.test.ts cases in ai/cloudflare_ai_binding_test.go; HTTPS AI Gateway stays in ai/cloudflare.go)` | ✅ |
+| `packages/ai/src/utils/abort.ts` | `(AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; ompig uses context.Context cancellation + select (D3): runtime mechanics, designed out)` | n/a |
+| `packages/ai/src/api/cloudflare-ai-binding.ts` | `ai/cloudflare_ai_binding.go (AIBinding, CreateAIBindingFetch and the auth sentinel as a library fetch adapter; no Ompig product path builds a Workers binding, so it has no in-product caller; cloudflare-ai-binding.test.ts cases in ai/cloudflare_ai_binding_test.go; HTTPS AI Gateway stays in ai/cloudflare.go)` | ✅ |
 | `packages/ai/src/auth/oauth/meta.ts` | `ai/oauth_meta.go (device flow + Muse Code key mint, registered in ai/oauth_registry.go; meta-oauth.test.ts cases in ai/oauth_meta_test.go)` | ✅ |
 | `packages/ai/src/providers/meta.models.ts` | `ai/models_generated.go (0.87.1 catalog shard; ai/meta_provider_test.go)`, `ai/builtin_providers.go`, `ai/images_registry.go`, `ai/registry.go` | ✅ |
 | `packages/ai/src/providers/meta.ts` | `ai/models_generated.go + ai/openai_responses.go + ai/oauth_meta.go + ai/auth_env_keys.go (catalog, openai-responses request shape, Muse subscription OAuth, META_API_KEY discovery; ai/meta_provider_test.go + internal/codingagent/model_registry_test.go)`, `ai/provider_constructors.go` | ✅ |
@@ -267,8 +267,8 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/ai/src/providers/qwen-token-plan-individual.models.ts` | `ai/models_generated.go (0.87.1 catalog shard; qwen-token-plan-models.test.ts cases in ai/qwen_token_plan_models_test.go)`, `ai/builtin_providers.go`, `ai/images_registry.go`, `ai/registry.go` | ✅ |
 | `packages/ai/src/providers/qwen-token-plan-individual.ts` | `ai/models_generated.go + ai/openai.go + ai/auth_env_keys.go (catalog base URL, openai-completions, qwen enable_thinking + reasoning_effort payload; shared QWEN_TOKEN_PLAN_API_KEY discovery tested in ai/auth_env_keys_test.go + internal/codingagent/model_registry_test.go)`, `ai/provider_constructors.go` | ✅ |
 | `packages/ai/src/providers/radius.models.ts` | `ai/models_generated.go (0.87.1 radius shard, served for the default gateway by ai/radius.go: ai/registry_test.go TestRuntimeDiscoveryIncludesRadiusCatalog, ai/radius_test.go TestRadiusProviderShipsPublicCatalogForDefaultGateway)`, `ai/builtin_providers.go`, `ai/images_registry.go`, `ai/registry.go` | ✅ |
-| `packages/ai/src/utils/identity.ts` | `ai/identity.go (ClientIdentity, UserAgentMode, ClientAttribution, MergeClientIdentity, FormatUserAgent, GetAttributionHeaders, GetOpenCodeSessionHeaders, PiAttribution) and ai/identity_models.go (WithClientIdentity over ClientIdentityModels: Go has no Proxy); every API module applies the identity headers below model and request headers (Bedrock adds the product to the AWS SDK user agent); PiG's product and attribution values are D65 and D26 (the release in the user agent comes from uname on unix and RtlGetVersion on Windows); ai/identity_test.go, ai/identity_oracle_test.go TestProviderIdentityHeadersMatchPi and ai/identity_images_oracle_test.go TestOpenRouterImagesHeadersMatchPi compare the headers with the pinned Pi; every identity.test.ts case is ported (test-mapping-v1.3.0+bd3c9b82.json)` | ✅ |
-| `packages/coding-agent/src/core/client-identity.ts` | `coding/client_identity.go (getClientIdentity: PiG's attribution while install telemetry is on, none otherwise; set per request in Session.buildRequestOptions); coding/client_identity_test.go, sdk-client-identity.test.ts ported (D26)` | ✅ |
+| `packages/ai/src/utils/identity.ts` | `ai/identity.go (ClientIdentity, UserAgentMode, ClientAttribution, MergeClientIdentity, FormatUserAgent, GetAttributionHeaders, GetOpenCodeSessionHeaders, PiAttribution) and ai/identity_models.go (WithClientIdentity over ClientIdentityModels: Go has no Proxy); every API module applies the identity headers below model and request headers (Bedrock adds the product to the AWS SDK user agent); Ompig's product and attribution values are D65 and D26 (the release in the user agent comes from uname on unix and RtlGetVersion on Windows); ai/identity_test.go, ai/identity_oracle_test.go TestProviderIdentityHeadersMatchPi and ai/identity_images_oracle_test.go TestOpenRouterImagesHeadersMatchPi compare the headers with the pinned Pi; every identity.test.ts case is ported (test-mapping-v1.3.0+bd3c9b82.json)` | ✅ |
+| `packages/coding-agent/src/core/client-identity.ts` | `coding/client_identity.go (getClientIdentity: Ompig's attribution while install telemetry is on, none otherwise; set per request in Session.buildRequestOptions); coding/client_identity_test.go, sdk-client-identity.test.ts ported (D26)` | ✅ |
 | `packages/ai/src/utils/sleep.ts` | `ai/provider_retry.go abortableSleep (context-cancelled timer: immediate rejection when already aborted, rejection on abort mid-wait; ai/sleep_test.go)`, `ai/abort_utils.go` | ✅ |
 | `packages/ai/src/utils/transcript.ts` | `ai/transcript.go (system-message-replay.test.ts cases and provider fold payloads for anthropic-messages, openai-responses, openai-completions in ai/system_message_replay_test.go; resolveTranscriptTools and the native transcript-tool-changes.test.ts cases in ai/transcript_tool_changes_test.go)`, `ai/types_unions.go` | ✅ |
 | `packages/ai/src/api/cloudflare-workers-ai-system-one.lazy.ts` | `(lazy dynamic-import wrapper; Go providers are statically linked)` | n/a |
@@ -293,12 +293,12 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/coding-agent/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/coding-agent/src/cli.ts` | `coding/cli/main.go` | ✅ |
 | `packages/coding-agent/src/main.ts` | `coding/cli/main.go + coding/cli/startup_session.go + coding/cli/extensions.go (mode/metadata routing)` | ✅ |
 | `packages/coding-agent/src/index.ts` | `coding/extension/host/subprocess/runtime-node/shims/pi-coding-agent.mjs (pinned Node barrel; independent SDK objects; main-process identity remains D73)` | ✅ |
-| `packages/coding-agent/src/config.ts` | `internal/codingagent/paths.go + internal/codingagent/selfupdate_package_command.go + internal/codingagent/selfupdate_tier.go (D2 directory opt-in; D39 native update ownership); the 1.0.3 quickJSWasmPath cache and in-memory codemode worker URL are designed out: PiG embeds its code in one native executable, as Pi's Bun binary does; detectInstallChange is ported as the additive D95 in internal/installchange/installchange.go`, `internal/codingagent/windows_self_update.go`, `coding/upstream.go` | ✅ |
+| `packages/coding-agent/src/config.ts` | `internal/codingagent/paths.go + internal/codingagent/selfupdate_package_command.go + internal/codingagent/selfupdate_tier.go (D2 directory opt-in; D39 native update ownership); the 1.0.3 quickJSWasmPath cache and in-memory codemode worker URL are designed out: Ompig embeds its code in one native executable, as Pi's Bun binary does; detectInstallChange is ported as the additive D95 in internal/installchange/installchange.go`, `internal/codingagent/windows_self_update.go`, `coding/upstream.go` | ✅ |
 | `packages/coding-agent/src/migrations.ts` | `internal/codingagent/migrations.go` | ✅ |
 | `packages/coding-agent/src/package-manager-cli.ts` | `coding/cli/package_commands.go + coding/cli/cli_error.go + coding/cli/package_command_trust.go + coding/cli/package_model_catalogs.go + coding/cli/config_command.go + coding/packagecontent/packagecontent.go; Pi 1.4.0 pruneManagedReleases (#10392, keeps the new and the previous release) has no managed release directory to prune under D39: a standalone replacement keeps only the new executable, locked by internal/codingagent/selfupdate_test.go TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable)` | ✅ |
 | `packages/coding-agent/src/cli/args.ts` | `coding/cli/args.go` | ✅ |
@@ -309,7 +309,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/cli/credential-print.ts` | `coding/cli/credential_print.go + internal/codingagent/request_auth_runtime.go (request-auth surface: getProviders/getAuth/listCredentials with OAuth refresh+persist) + ai/auth_resolve.go` | ✅ |
 | `packages/coding-agent/src/cli/session-picker.ts` | `internal/codingagent/startup_ui.go (SelectStartupSession, hosting the SessionSelectorComponent of internal/codingagent/session_selector.go; called from coding/cli/main.go for --resume)` | ✅ |
 | `packages/coding-agent/src/cli/project-trust.ts` | `coding/cli/project_trust.go` | ✅ |
-| `packages/coding-agent/src/cli/startup-ui.ts` | `internal/codingagent/startup_ui.go (ShowStartupSelector/ShowStartupInput/SelectStartupSession; startStartupTui color-scheme + OSC 11 background query with reply consumption). First-time setup: upstream shouldRunFirstTimeSetup (startup-ui.ts:122-140, called from main.ts:674) returns false unless package @earendil-works/pi-coding-agent, app pi and .pi config dir; PiG's own gate (D88) is coding/cli/extensions.go shouldRunFirstTimeSetup and showFirstTimeSetup is ShowFirstTimeSetup in internal/codingagent/first_time_setup.go, run on its own startup screen before runtime services as main.ts:674 does. The four shouldRunFirstTimeSetup cases in test/first-time-setup.test.ts stay designedOutCases (their real-CLI inputs assert PiG's D88 gate) and its four analytics cases stay ported` | ✅ |
+| `packages/coding-agent/src/cli/startup-ui.ts` | `internal/codingagent/startup_ui.go (ShowStartupSelector/ShowStartupInput/SelectStartupSession; startStartupTui color-scheme + OSC 11 background query with reply consumption). First-time setup: upstream shouldRunFirstTimeSetup (startup-ui.ts:122-140, called from main.ts:674) returns false unless package @earendil-works/pi-coding-agent, app pi and .pi config dir; Ompig's own gate (D88) is coding/cli/extensions.go shouldRunFirstTimeSetup and showFirstTimeSetup is ShowFirstTimeSetup in internal/codingagent/first_time_setup.go, run on its own startup screen before runtime services as main.ts:674 does. The four shouldRunFirstTimeSetup cases in test/first-time-setup.test.ts stay designedOutCases (their real-CLI inputs assert Ompig's D88 gate) and its four analytics cases stay ported` | ✅ |
 | `packages/coding-agent/src/core/sdk.ts` | `coding/session.go + coding/resource_loader.go (resourceLoader option; DefaultResourceLoader resolves skills, prompt templates, context files and SYSTEM.md/APPEND_SYSTEM.md from the default and settings-configured locations, ~/.agents/skills, ancestor .agents/skills, configured Packages (installing missing npm and git ones) and additional paths under project trust, with Pi's resource metadata and option and override callbacks; extensions, themes, extension-discovered resources and inline extension factories stay with the Extension Host and the theme controller) + coding/session_manager.go + coding/session_tool_registry.go + coding/session_extension_hooks.go + coding/session_cache_warming.go + coding/runtime.go + coding/services.go + coding/extension/host/subprocess/runtime-node/shims/independent-session.mjs (independent Node Session composition and owned shutdown)`, `coding/create_agent_session.go`, `coding/runtime_replacement.go` | ✅ |
 | `packages/coding-agent/src/core/agent-session.ts` | `coding/session.go + coding/session_boundaries.go + coding/session_bind.go + coding/session_replaced.go + coding/session_custom_messages.go + coding/session_prompt_resources.go + internal/codingagent/skills.go + coding/session_summarization_auth.go + coding/session_model_cycle.go + coding/session_prompt.go + coding/session_scoped_models.go + coding/session_preflight.go + coding/session_retry_scheduler.go + coding/session_transcript.go + coding/session_extension_hooks.go + coding/session_tools.go + coding/session_tool_registry.go + internal/codingagent/prompts/tool_definitions.go + ai/assistant_retry.go + internal/codingagent/auto_recovery.go (SDK tool-registry, abort/admission and next-turn tool prompt regressions ported; every covering test file is ported in the reviewed test mapping; the forced-prompt request shape and the JSON round-trip case of system-prompt-updates.test.ts are ported in coding/session_system_prompt_updates_upstream_test.go)`, `coding/session_run_state.go`, `coding/session_state.go`, `coding/session_cache_warming.go`, `coding/session_loadout.go`, `coding/session_recovery.go`, `coding/virtual_models.go`, `coding/session_manager.go`, `coding/bug_report.go`, `coding/services.go`, `coding/runtime_replacement.go`, `agent/agent.go`, `internal/codingagent/session_handle.go` | ✅ |
 | `packages/coding-agent/src/core/agent-session-runtime.ts` | `coding/runtime.go, coding/runtime_replacement.go, coding/session_bind.go, coding/session.go, coding/session_ops.go, coding/session_extension_replacement.go, coding/session_import.go, internal/codingagent/session_selectors.go, and coding/cli/rpc_mode.go; native factory/replacement callbacks and retirement implemented; CLI/extension factory ownership and subprocess callback transport follow D30 and D61` | ✅ |
@@ -337,7 +337,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/core/models-store.ts` | `ai/models_store.go + ai/models_store_read.go + internal/pilock/lock.go (FileModelsStore; upstream read-cache cases and Pi directory-lock/concurrent-writer regressions) + internal/codingagent/model_registry.go + internal/codingagent/radius_models.go (<agentDir>/models-store.json)` | ✅ |
 | `packages/coding-agent/src/core/provider-composer.ts` | `coding/extension/provider.go + coding/registered_stream_provider.go + coding/model_stream_forwarding.go + internal/codingagent/provider_registration_namespace.go + internal/codingagent/model_registry.go + internal/codingagent/native_provider_composer.go + internal/codingagent/model_data.go + internal/codingagent/registry_request_auth.go + internal/codingagent/native_provider_oauth.go + internal/codingagent/request_auth_runtime.go (auth composition)` | ✅ |
 | `packages/coding-agent/src/core/radius.ts` | `internal/codingagent/radius.go (internal/codingagent/radius_test.go)` | ✅ |
-| `packages/coding-agent/src/core/remote-catalog-provider.ts` | `internal/codingagent/remote_catalog_provider.go (WithRemoteCatalog: TestRemoteCatalogProviderUpstream) + internal/codingagent/remote_catalog_registry.go (built-in provider wiring: TestRegistryAppliesTheRemoteCatalogOverlayToBuiltInProviders; TestModelCatalogProtocolWithTheCurrentClient); D64 routes the endpoint to pi-in-go.dev. The bundled catalog's generation time comes from cmd/gen-models, so a stored remote catalog applies only when newer (TestRemoteCatalogProviderUpstream)` | ✅ |
+| `packages/coding-agent/src/core/remote-catalog-provider.ts` | `internal/codingagent/remote_catalog_provider.go (WithRemoteCatalog: TestRemoteCatalogProviderUpstream) + internal/codingagent/remote_catalog_registry.go (built-in provider wiring: TestRegistryAppliesTheRemoteCatalogOverlayToBuiltInProviders; TestModelCatalogProtocolWithTheCurrentClient); D64 routes the endpoint to ompig.dev. The bundled catalog's generation time comes from cmd/gen-models, so a stored remote catalog applies only when newer (TestRemoteCatalogProviderUpstream)` | ✅ |
 | `packages/coding-agent/src/core/runtime-credentials.ts` | `ai/runtime_credentials.go + internal/codingagent/model_registry.go` | ✅ |
 | `packages/coding-agent/src/core/usage-totals.ts` | `internal/codingagent/session_stats.go + internal/codingagent/status_line.go + internal/codingagent/slash_commands.go + internal/usagetotals/usagetotals.go (combineUsage)` | ✅ |
 | `packages/coding-agent/src/core/model-resolver.ts` | `coding/cli/model.go + coding/cli/startup_model.go + coding/cli/resolve_cli_model.go + coding/extension/scoped_models.go + internal/codingagent/default_models.go + internal/codingagent/model_pattern.go + internal/codingagent/model_scope.go + internal/codingagent/model_registry_runtime_models.go`, `coding/model_resolver.go` | ✅ |
@@ -355,7 +355,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/core/slash-commands.ts` | `internal/codingagent/slash_commands.go`, `internal/codingagent/extension_host_info.go`, `coding/extension/opaque_types.go` | ✅ |
 | `packages/coding-agent/src/core/source-info.ts` | `internal/codingagent/resource_source_info.go + coding/cli/resource_source_info.go + coding/cli/rpc_mode.go`, `internal/codingagent/extension_host_info.go`, `coding/source/source_info.go` | ✅ |
 | `packages/coding-agent/src/core/system-prompt.ts` | `internal/codingagent/prompts/coding.go (default/explicit-empty tools and opaque forced prompt state) + internal/codingagent/prompts/custom_sections.go + coding/extension/system_prompt_options.go (collection-complete option normalization)` | ✅ |
-| `packages/coding-agent/src/core/telemetry.ts` | `internal/codingagent/settings.go (IsInstallTelemetryEnabled, isTruthyTelemetryEnvFlag, TestSettingsManager_IsInstallTelemetryEnabled) gates the attribution headers (D26) and internal/codingagent/install_telemetry.go (reportInstallTelemetry, recordChangelogVersionAndMaybeReportInstall), wired at the same two call sites as interactive-mode.ts:1265-1307 in internal/codingagent/interactive.go's Run, now sends the install/update ping to PiG's own endpoint (D64) instead of pi.dev; tests in internal/codingagent/install_telemetry_test.go` | ✅ |
+| `packages/coding-agent/src/core/telemetry.ts` | `internal/codingagent/settings.go (IsInstallTelemetryEnabled, isTruthyTelemetryEnvFlag, TestSettingsManager_IsInstallTelemetryEnabled) gates the attribution headers (D26) and internal/codingagent/install_telemetry.go (reportInstallTelemetry, recordChangelogVersionAndMaybeReportInstall), wired at the same two call sites as interactive-mode.ts:1265-1307 in internal/codingagent/interactive.go's Run, now sends the install/update ping to Ompig's own endpoint (D64) instead of pi.dev; tests in internal/codingagent/install_telemetry_test.go` | ✅ |
 | `packages/coding-agent/src/core/timings.ts` | `internal/codingagent/timings/timings.go` | ✅ |
 | `packages/coding-agent/src/core/index.ts` | `(barrel)` | n/a |
 | `packages/coding-agent/src/core/compaction/compaction.ts` | `internal/codingagent/compaction/compaction.go (internal/codingagent/compaction/compaction_summary_reasoning_test.go; coding/session_summarization_test.go)`, `agent/context_tokens.go`, `coding/session.go`, `internal/codingagent/session_handle.go`, `coding/compaction_api.go`, `internal/codingagent/compaction/estimate.go` | ✅ |
@@ -367,7 +367,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/core/extensions/loader.ts` | `coding/cli/extensions.go + coding/extension/provider_runtime.go (shared ordered provider queue and bind actions) + coding/extension/host/subprocess/builder_node.go + coding/extension/host/subprocess/runtime-node/jiti-loader.mjs + coding/extension/host/subprocess/runtime-node/runtime.mjs + coding/extension/host/subprocess/reload_cells.go + coding/extension/host/subprocess/reload_report.go (the reload's placement report) + coding/extension/host/subprocess/host.go + coding/extension/host/subprocess/tool_registration.go (synchronous late registration updates) + coding/extension/host/subprocess/ui_bridge.go (flag defaults, tool-schema and command validation, failed Node factory API rejection, factory-time action stubs and awaited exec, rollback and concurrent-provider preservation are covered by Pi-differential and mutation-checked tests (TestNodeLoadTimeActionsMatchPiLoader, TestUpstreamFactoryFailure*, TestNodeRunnerRejectsInvalidCommandRegistration); the module-level factory cache (loadExtensionsCached, clearExtensionCache) is the recorded divergence D70, and discoverAndLoadExtensions has no production caller in Pi, which discovers through the package manager (coding/packagecontent); reload and Session replacement re-invoke factories in the retained process: retention.go, runtime-node/generations.mjs)`, `coding/discover_extensions.go` | ✅ |
 | `packages/coding-agent/src/core/extensions/wrapper.ts` | `coding/extension_bridge.go + coding/session_tool_registry.go` | ✅ |
 | `packages/coding-agent/src/core/extensions/index.ts` | `(barrel)` | n/a |
-| `packages/coding-agent/src/extensions/index.ts` | `coding/cli/llama.go + internal/codingagent/llama/host.go (built-in llama.cpp provider and /llama registered natively in every mode; Stock PiG has no inline-extension runtime)` | ✅ |
+| `packages/coding-agent/src/extensions/index.ts` | `coding/cli/llama.go + internal/codingagent/llama/host.go (built-in llama.cpp provider and /llama registered natively in every mode; Stock Ompig has no inline-extension runtime)` | ✅ |
 | `packages/coding-agent/src/extensions/llama/client.ts` | `internal/codingagent/llama/client.go + internal/codingagent/llama/fetch.go` | ✅ |
 | `packages/coding-agent/src/extensions/llama/huggingface.ts` | `internal/codingagent/llama/huggingface.go` | ✅ |
 | `packages/coding-agent/src/extensions/llama/index.ts` | `internal/codingagent/llama/index.go + internal/codingagent/interactive_llama.go + internal/codingagent/slash_commands.go + coding/cli/rpc_mode.go` | ✅ |
@@ -399,14 +399,14 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/modes/interactive/interactive-mode.ts` | `internal/codingagent/interactive.go (formatResumeCommand preserves TTY/persistence gates and the default-directory decision), internal/codingagent/auth_warnings.go, internal/codingagent/interactive_input.go, internal/codingagent/startup_input.go, internal/codingagent/interactive_turn.go, internal/codingagent/interactive_user_bash.go, internal/codingagent/ext_ui_editor_snapshot.go, internal/codingagent/interactive_commands.go, internal/codingagent/interactive_reload.go, internal/codingagent/interactive_rebind.go, internal/codingagent/model_command.go, internal/codingagent/scoped_models_selection.go, internal/codingagent/interactive_auth.go, internal/codingagent/interactive_login.go, internal/codingagent/interactive_api_key_login.go, internal/codingagent/slash_auth.go, internal/codingagent/interactive_post_login.go, internal/codingagent/interactive_events.go, internal/codingagent/interactive_tui.go, internal/codingagent/startup_header.go, internal/codingagent/ext_ui_context.go, internal/codingagent/interactive_signals_unix.go, internal/codingagent/interactive_signals_windows.go, internal/codingagent/suspend.go, internal/codingagent/session_selectors.go, internal/codingagent/interactive_theme_modal.go, internal/codingagent/interactive_theme_watcher.go, internal/codingagent/interactive_models.go, internal/codingagent/interactive_extensions.go, internal/codingagent/interactive_chat.go, internal/codingagent/interactive_changelog.go, internal/codingagent/interactive_layout.go, internal/codingagent/interactive_editor.go, internal/codingagent/remote_editor.go, internal/codingagent/interactive_transcript.go, internal/codingagent/interactive_compaction.go, internal/codingagent/interactive_thinking.go, internal/codingagent/interactive_helpers.go, internal/codingagent/interactive_hotkeys.go, internal/codingagent/loaded_resources.go, internal/codingagent/extension_diagnostics.go (quiet resource diagnostics), internal/codingagent/project_trust_warning.go (startup transcript warning), internal/codingagent/resource_diagnostics.go, internal/codingagent/autocomplete_wrappers.go, internal/codingagent/extension_ui_phase.go, coding/extension/autocomplete.go, coding/extension/host/subprocess/runtime-node/widget-component.mjs`, `internal/codingagent/interactive_lifecycle.go`, internal/codingagent/ext_ui_dialog_stack.go (extension dialog stack: select, confirm, input, editor and editor-slot custom dialogs stack, a hidden dialog's abort removes only itself, session replacement and /reload dispose every dialog; Pi 38847563) | ✅ |
 | `packages/coding-agent/src/modes/interactive/external-editor.ts` | `internal/codingagent/external_editor.go (opened by the interactive editor, the extension UI context and the session selectors)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/trust-selector.ts` | `internal/codingagent/trust_selector.go; internal/codingagent/slash_session_handlers.go (trustHandler)` | ✅ |
-| `packages/coding-agent/src/modes/interactive/components/first-time-setup.ts` | `internal/codingagent/first_time_setup.go (FirstTimeSetupComponent; D88 adds the sprite step and the pig-head logo)` | ✅ |
+| `packages/coding-agent/src/modes/interactive/components/first-time-setup.ts` | `internal/codingagent/first_time_setup.go (FirstTimeSetupComponent; D88 adds the sprite step and the ompig-head logo)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/theme/theme.ts` | `tui/theme.go + tui/theme_loader.go + tui/theme_watcher.go (indexed-color load/var/ANSI/CSS/export coverage in TestLoadThemeFileIndexedColors; complete optional-color fallbacks and authored key order in scrollbar_theme_test.go) + exact pinned dark/light JSON; tui/component_themes.go (getMarkdownTheme, getSelectListTheme, getSettingsListTheme against an explicit theme); internal/codingagent/interactive_tui.go (foreground scrollbarThumb style); internal/codingagent/extension_diagnostics.go (getCustomThemeInfos availability)`, `tui/highlight.go`, `tui/markdown_style.go`, `tui/select_list.go`, `tui/settings_list.go`, `coding/cli/theme_init.go`, `tui/theme_tokens.go` | ✅ |
 | `packages/coding-agent/src/modes/interactive/theme/theme-controller.ts` | `internal/codingagent/presentation_theme.go + interactive_theme.go + interactive_theme_modal.go + startup_ui.go (terminal color query, live scheme notifications, selection, preview, persistence and lifecycle); theme_controller_native_upstream_test.go; interactive_theme_autoswitch_test.go; interactive-rendering/36–37` | ✅ |
 | `packages/coding-agent/src/modes/interactive/model-search.ts` | `tui/model_search.go (ModelSearchItem, GetModelSearchText, GetModelSelectorSearchText); GetModelSelectorSearchText feeds tui/model_select.go applyFilter over ModelSelectorItem.Name (raw model name), GetModelSearchText feeds tui/scoped_models_list.go refresh and internal/codingagent/interactive_commands.go modelArgCompletions. tui/model_search_test.go proxy-provider fixture (openrouter/vercel-ai-gateway openai/gpt-5 ids) asserts the upstream 0.99.1 fuzzyFilter order for both functions and the selector` | ✅ |
-| `packages/coding-agent/src/modes/print-mode.ts` | `coding/cli/print_mode.go (text) and coding/cli/json_mode.go (json): upstream runs both modes from one function, pig splits them by mode. json streams the session event stream as JSONL while the turn runs; text still prints only the final assistant message. Behavioral coverage: print/01-print-mode-arithmetic, json/01-json-mode-streams-events` | ✅ |
+| `packages/coding-agent/src/modes/print-mode.ts` | `coding/cli/print_mode.go (text) and coding/cli/json_mode.go (json): upstream runs both modes from one function, ompig splits them by mode. json streams the session event stream as JSONL while the turn runs; text still prints only the final assistant message. Behavioral coverage: print/01-print-mode-arithmetic, json/01-json-mode-streams-events` | ✅ |
 | `packages/coding-agent/src/modes/rpc/rpc-mode.ts` | `coding/cli/rpc_mode.go + coding/cli/rpc_dispatch.go + coding/cli/rpc_admission.go + coding/cli/rpc_json_diagnostic.go + internal/text/quote_utf16.go + coding/cli/rpc_ui.go` | ✅ |
 | `packages/coding-agent/src/modes/rpc/rpc-types.ts` | `coding/cli/rpc_types.go`, `coding/cli/rpc_ui.go`, `coding/rpcclient/types.go` | ✅ |
-| `packages/coding-agent/src/modes/rpc/rpc-client.ts` | `coding/rpcclient/rpc_client.go + commands.go + types.go + process_unix.go/process_windows.go (RpcClient spawns the pig executable in --mode rpc where upstream spawns node cliPath; typed wire structs replace the TypeScript imports, with raw JSON kept for entries, messages, and events). coding/rpcclient/rpc_client_test.go ports rpc-client-clear-queue/clone/process-exit tests against scripted child processes; rpc_mode_test.go ports rpc.test.ts against a pig binary built in TestMain, using test-faux in place of the live Anthropic model` | ✅ |
+| `packages/coding-agent/src/modes/rpc/rpc-client.ts` | `coding/rpcclient/rpc_client.go + commands.go + types.go + process_unix.go/process_windows.go (RpcClient spawns the ompig executable in --mode rpc where upstream spawns node cliPath; typed wire structs replace the TypeScript imports, with raw JSON kept for entries, messages, and events). coding/rpcclient/rpc_client_test.go ports rpc-client-clear-queue/clone/process-exit tests against scripted child processes; rpc_mode_test.go ports rpc.test.ts against a ompig binary built in TestMain, using test-faux in place of the live Anthropic model` | ✅ |
 | `packages/coding-agent/src/modes/rpc/jsonl.ts` | `coding/rpcclient/jsonl.go (the RPC types of coding/cli and internal/text/quote_utf16 serve its framing)` | ✅ |
 | `packages/coding-agent/src/modes/index.ts` | `(barrel)` | n/a |
 | `packages/coding-agent/src/utils/changelog.ts` | `internal/codingagent/changelog.go + internal/codingagent/changelog_links.go (the bundled CHANGELOG.md is embedded by the root embed package)` | ✅ |
@@ -424,7 +424,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/utils/image-resize.ts` | `internal/imageprocessing/images.go` | ✅ |
 | `packages/coding-agent/src/utils/mime.ts` | `internal/imageprocessing/images.go` | ✅ |
 | `packages/coding-agent/src/utils/paths.ts` | `internal/resolvepath/resolvepath.go; internal/codingagent/paths.go, canonical_path_other.go, canonical_path_win32.go, canonical_path_windows.go (IsLocalPath is consumed by coding/cli/main.go resolveCLIResourceFlags; ResolvePath is shared by skills_loader.go; CanonicalizePath preserves Node volume-mount identity and resolves rooted link targets on the link's device through the Node realpathSync walk)` | ✅ |
-| `packages/coding-agent/src/utils/pi-user-agent.ts` | `internal/codingagent/bug_report.go (codingAgentUserAgent supplies the owner-approved Q4/D65 pig/<coding.Version> identity to exported report metadata; TestBugReportEnvironmentUsesPiGUserAgent). Other upstream call sites are accounted by their owning rows: version-check.ts and package-manager-cli.ts self-update are replaced by D39, remote-catalog-provider.ts sends the same User-Agent through the remote catalog provider (see its row), and the interactive report-install call is ported under core/telemetry.ts (the install telemetry), which sends this same User-Agent (ai.FormatUserAgent(nil)) with the ping.` | ✅ |
+| `packages/coding-agent/src/utils/pi-user-agent.ts` | `internal/codingagent/bug_report.go (codingAgentUserAgent supplies the owner-approved Q4/D65 ompig/<coding.Version> identity to exported report metadata; TestBugReportEnvironmentUsesOmpigUserAgent). Other upstream call sites are accounted by their owning rows: version-check.ts and package-manager-cli.ts self-update are replaced by D39, remote-catalog-provider.ts sends the same User-Agent through the remote catalog provider (see its row), and the interactive report-install call is ported under core/telemetry.ts (the install telemetry), which sends this same User-Agent (ai.FormatUserAgent(nil)) with the ping.` | ✅ |
 | `packages/coding-agent/src/utils/photon.ts` | `(not ported: WASM)` | n/a |
 | `packages/coding-agent/src/utils/shell.ts` | `internal/codingagent/tools/shell_config.go + bash_session_env.go (getShellEnv) + sanitize.go (sanitizeBinaryOutput) + bash_group_*.go + powershell.go + taskkill.go (killProcessTree; native Windows execution unproven; detached-child tracking and the signal and crash kills are ported)`, `internal/shellconfig/shellconfig.go + find.go + default_*.go (isLegacyWslBashPath, findExecutableOnPath, the platform default shell)`, `internal/nodefs/access_*.go (accessSync F_OK, shellPathExists)` | ✅ |
 | `packages/coding-agent/src/utils/syntax-highlight.ts` | `tui/highlight.go (highlight, renderHighlightedHtml, supportsLanguage, loadAllHighlightLanguages; theme.ts highlightCode, getCliHighlightTheme and getLanguageFromPath; utils/html.ts decodeHtmlEntityAt) + tui/internal/hljs/ (highlight.js 10.7.3 lib/core.js compiler, highlighter and HTML emitter, JavaScript RegExp semantics over UTF-16 code units, V8 Array.prototype.sort, the language callbacks; grammars snapshotted from the exact Pi package by automation/gen/generate-highlight-grammars.mjs) + internal/codingagent/interactive.go (loads the remaining grammars after the startup frame, then repaints). tui/highlight_oracle_test.go replays Pi's highlightCode, Markdown highlightCode and highlight.js HTML for the highlight.js 10.7.3 test inputs before and after every language loads, and mutated samples in every language` | ✅ |
@@ -436,7 +436,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/utils/image-resize-worker.ts` | `(Node worker thread: Go uses goroutines in-process; Pi 1.4.0 tags worker replies and ignores Node's own channel messages under node --watch (#10527), which has no counterpart because Go resizes with no worker message channel)` | n/a |
 | `packages/coding-agent/src/utils/json.ts` | `internal/codingagent/model_registry.go (stripJSONComments; strip_json_comments_oracle_test.go)` | ✅ |
 | `packages/coding-agent/src/utils/open-browser.ts` | `internal/codingagent/interactive_auth.go (openBrowser passes Windows URLs directly to rundll32; native TestOpenBrowserPassesURLToWindowsHandlerWithoutShell); detached launcher ported` | ✅ |
-| `packages/coding-agent/src/utils/windows-self-update.ts` | `internal/codingagent/windows_self_update.go (the running pig.exe is the loaded native image an npm update quarantines; TestQuarantineNativeDependenciesMovesLoadedImagesAndCopiesThemBack, TestWindowsNpmSelfUpdateReplacesTheRunningInstallation)` | ✅ |
+| `packages/coding-agent/src/utils/windows-self-update.ts` | `internal/codingagent/windows_self_update.go (the running ompig.exe is the loaded native image an npm update quarantines; TestQuarantineNativeDependenciesMovesLoadedImagesAndCopiesThemBack, TestWindowsNpmSelfUpdateReplacesTheRunningInstallation)` | ✅ |
 | `packages/coding-agent/src/bun/cli.ts` | `(Bun-only entrypoint)` | n/a |
 | `packages/coding-agent/src/bun/restore-sandbox-env.ts` | `(Bun-only sandbox helper)` | n/a |
 | `packages/coding-agent/src/modes/interactive/components/assistant-message.ts` | `tui/assistant_message_block.go` | ✅ |
@@ -447,7 +447,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/modes/interactive/components/config-selector.ts` | `tui/config_selector.go` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/countdown-timer.ts` | `tui/countdown_timer.go` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/custom-editor.ts` | `internal/codingagent/custom_editor.go, tui/editor.go and tui/editor_status.go hold the CustomEditor members. InteractiveMode mounts that CustomEditor as its default editor and registers the app handlers on it (defaultCustomEditor and setupKeyHandlers in the codingagent interactive_input source), with the CustomEditor app-keybinding precedence: extension shortcuts -> paste-image -> interrupt with autocomplete/empty guards -> exit-on-empty -> app.session actions -> editor fallthrough. Ctrl+D exits only when the editor has zero-length text; nonempty text, including whitespace, falls through to tui.editor.deleteCharForward. Conflicting paste-image/interrupt/exit bindings use CustomEditor order rather than registry declaration order. Guarded by mutation-proven TestCustomEditorHighPriorityBindingOrder, TestCustomEditorDispatchPrecedence, and test/parity/scenarios/custom-editor-precedence.toml.` | ✅ |
-| `packages/coding-agent/src/modes/interactive/components/custom-entry.ts` | `internal/codingagent/interactive.go addCustomEntryToChat (rebuild + live-append, Spacer(1) + expand-toggle) over the entry-renderer wire in coding/extension/host/subprocess/{protocol.go,host.go,render_proxy.go} + RegisterEntryRenderer in extensions/sdk{,-rs,-py} + runtime-node. Cross-SDK verified by extension-conformance (inproc-go reference vs subprocess go/rust/python) + parity scenario extensions-runtime/18-subprocess-entry-renderer (pi 0.84.0 vs pig byte-identical, mutation-proven)` | ✅ |
+| `packages/coding-agent/src/modes/interactive/components/custom-entry.ts` | `internal/codingagent/interactive.go addCustomEntryToChat (rebuild + live-append, Spacer(1) + expand-toggle) over the entry-renderer wire in coding/extension/host/subprocess/{protocol.go,host.go,render_proxy.go} + RegisterEntryRenderer in extensions/sdk{,-rs,-py} + runtime-node. Cross-SDK verified by extension-conformance (inproc-go reference vs subprocess go/rust/python) + parity scenario extensions-runtime/18-subprocess-entry-renderer (pi 0.84.0 vs ompig byte-identical, mutation-proven)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/custom-message.ts` | `tui/custom_message.go` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/diff.ts` | `tui/diff_render.go (renderDiff, RenderDiffOptions) + tui/diff_component.go (the transcript component that renders it)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/dynamic-border.ts` | `tui/dynamic_border.go`, `tui/tui.go` | ✅ |
@@ -475,13 +475,13 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/modes/interactive/components/user-message.ts` | `tui/user_message_block.go + internal/codingagent/interactive_chat.go (user transform construction)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/user-message-selector.ts` | `tui/user_message_selector.go + internal/codingagent/session_selectors.go (D66 bounds list rows at unusually narrow widths instead of emitting fatal over-wide rows)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/visual-truncate.ts` | `tui/visual_truncate.go` | ✅ |
-| `packages/coding-agent/src/modes/interactive/components/armin.ts` | `internal/codingagent/armin.go + internal/codingagent/interactive_easter_eggs.go (D87: a pig head labeled pigsayhi; /pigsayhi is an alias)` | ✅ |
+| `packages/coding-agent/src/modes/interactive/components/armin.ts` | `internal/codingagent/armin.go + internal/codingagent/interactive_easter_eggs.go (D87: a ompig head labeled pigsayhi; /pigsayhi is an alias)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/earendil-announcement.ts` | `internal/codingagent/earendil_announcement.go (shown by the interactive easter-egg code)` | ✅ |
 | `packages/coding-agent/src/core/pi-manifest.ts` | `coding/packagecontent/pi_manifest.go ReadPiManifest (BOM strip, object-only package and "pi", per-field string arrays), used by coding/extension/host/subprocess/builder_node.go piPackageEntrypoints; coding/packagecontent/packagecontent.go readPackageManifest applies the same parse for package discovery (pi_manifest_test.go, builder_node_entry_test.go)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/markdown-transform.ts` | `coding/extension/markdowntransform/markdowntransform.go, internal/codingagent/interactive_chat.go, tui/markdown_async.go (chain order and context, a throwing transformer keeping the current Markdown, stale-generation publication, and a body that outlives an extension disconnect publishing nothing are covered and mutation-checked; D56: a body the renderer inactivity boundary abandoned disables its transformer in later chains while it runs)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/mermaid.ts` | `internal/codingagent/mermaid_transform.go + internal/codingagent/mermaid_fence_parser.go + internal/codingagent/mermaid_definition_parser.go + internal/codingagent/mermaid_html_parser.go + internal/codingagent/mermaid_heading_parser.go (natural-layout raw fallback and display-only partial warnings: mermaid_fallback_upstream_test.go; exact transform corpus: mermaid_transform_test.go)` | ✅ |
 | `packages/coding-agent/src/modes/json-event.ts` | `coding/cli/rpc_events.go + coding/cli/rpc_object.go + ai/assistant_observation.go + agent/messages.go (ordered JSON/RPC conversion; field-only live projections exclude partials before serialization and read toolcall_start identity)`, `coding/rpcclient/types.go` | ✅ |
-| `packages/coding-agent/src/utils/abort.ts` | `(AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; pig uses context.Context cancellation + select (D3): runtime mechanics, designed out)` | n/a |
+| `packages/coding-agent/src/utils/abort.ts` | `(AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; ompig uses context.Context cancellation + select (D3): runtime mechanics, designed out)` | n/a |
 | `packages/coding-agent/src/utils/management-http.ts` | `internal/managementhttp/managementhttp.go FetchWithRetry (management-http.test.ts cases in managementhttp_test.go), used by internal/codingagent/tools/tools_manager.go getLatestVersion and downloadFile; its other upstream callers are remote-catalog-provider.ts, which internal/codingagent/remote_catalog_provider.go ports and routes through the same FetchWithRetry (see its row), and version-check.ts, which is not ported (see its row)` | ✅ |
 | `packages/coding-agent/src/utils/tool-result-images.ts` | `internal/imageprocessing/images.go + coding/session_images.go: ordered text/image content, adjacent hints, unchanged-slice identity, model profile after hooks; tool_result_images_upstream_test.go ports all seven tests` | ✅ |
 | `packages/coding-agent/src/bun/runtime-setup.ts` | `(Bun-only runtime setup)` | n/a |
@@ -489,7 +489,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/cli/auth-check.ts` | `coding/cli/auth_check.go + coding/cli/auth_run.go (main.ts runAuthCommand)` | ✅ |
 | `packages/coding-agent/src/cli/auth-command.ts` | `coding/cli/auth_command.go + coding/cli/resolve_cli_model.go (resolveCliModel for --model)` | ✅ |
 | `packages/coding-agent/src/cli/setup.ts` | `coding/cli/setup_cli.go (PI_CODING_AGENT/AI_AGENT process markers; process.title is the executable name, Node warning suppression has no Go analogue, configureHttpDispatcher is mapped under core/http-dispatcher.ts)` | ✅ |
-| `packages/coding-agent/src/core/bug-report-upload.ts` | `(designed out: D62, PiG never uploads bug reports)` | n/a |
+| `packages/coding-agent/src/core/bug-report-upload.ts` | `(designed out: D62, Ompig never uploads bug reports)` | n/a |
 | `packages/coding-agent/src/core/bug-report.ts` | `internal/codingagent/bug_report.go (export subset: metadata, redaction, diagnostics, archive; D62) + internal/codingagent/compaction/bug_report_summary.go (coding/bug_report.go; internal/codingagent/compaction/bug_report_summary_test.go)` | ✅ |
 | `packages/coding-agent/src/core/cache-warmer.ts` | `internal/codingagent/cache_warmer.go + coding/extension/cache_warming.go (retention, lifecycle, scheduling and awaited extension decisions; the sdk.ts streamFn and agent-session.ts wiring that drives the warmer lives in coding session_cache_warming, cited by core/sdk.ts)` | ✅ |
 | `packages/coding-agent/src/core/crash-log.ts` | `internal/codingagent/crash_log.go + interactive_crash.go (crash persistence, startup notice, /bug attachment and cleanup, fatal create/resume/import reporting, and loaded-extension stack attribution; D98 adds the Go goroutine trace form; TestCrashLogMatchesPi compares the pinned Pi's module over generated crash records)` | ✅ |
@@ -512,7 +512,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/modes/interactive/chat-viewport.ts` | `internal/codingagent/chat_viewport.go (CreateChatViewport; mounted by buildChatViewport in internal/codingagent/interactive_tui.go)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/components/settings-submenu.ts` | `tui/select_submenu.go (SelectSubmenu) + internal/codingagent/settings_submenu.go (SteppedSubmenu)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/model-catalog-refresh.ts` | `internal/codingagent/model_catalog_refresh.go` | ✅ |
-| `packages/coding-agent/src/modes/interactive/session-share.ts` | `internal/codingagent/session_share.go (createShareTrailingEntries, ExportSessionForShare, explicit /share upload with privacy notice; sessionShareDestination does not change the destination, D64); hosted counterpart: private PiG-platform worker/src/share.ts (bounded R2 artifact route, 30-day expiry, unlisted viewer)` | ✅ |
+| `packages/coding-agent/src/modes/interactive/session-share.ts` | `internal/codingagent/session_share.go (createShareTrailingEntries, ExportSessionForShare, explicit /share upload with privacy notice; sessionShareDestination does not change the destination, D64); hosted counterpart: private Ompig-platform worker/src/share.ts (bounded R2 artifact route, 30-day expiry, unlisted viewer)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/theme/theme-schema.ts` | `tui/theme_json.go (ValidateThemeJSON, wired in tui/theme_loader.go LoadThemeFile; live Pi oracle TestThemeJSONValidationMatchesPi; goldens in tui/testdata/theme_json_cases.json re-recorded by testdata/regenerate_theme_json_cases.mjs; real-loader union coverage in TestLoadThemeFileIndexedColors)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/theme/theme-tokens.ts` | `tui/theme_tokens.go (token metadata, slots and fallbacks; live Pi oracle theme_tokens_oracle_test.go)` | ✅ |
 | `packages/coding-agent/src/modes/interactive/tui-renderer.ts` | `internal/codingagent/interactive_tui.go (createInteractiveTui, fullscreenTuiOptions), internal/codingagent/clipboard_text.go (right-click paste); createInteractiveTuiReference designed out: the driver reads m.tuiInst at call time under rendererMu, so no proxy is needed` | ✅ |
@@ -544,13 +544,13 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/coding-agent/src/extensions/mcp/ui.ts` | `coding/mcpext/manager.go` | ✅ |
 | `packages/coding-agent/src/extensions/tool-search/index.ts` | `coding/extension/builtin/toolsearch/tool.go (Extension)` | ✅ |
 | `packages/coding-agent/src/extensions/tool-search/tool.ts` | `coding/extension/builtin/toolsearch/{toolsearch,tool}.go (Bm25Ranker, tokenize, documents, description, tool_search)` | ✅ |
-| `packages/coding-agent/src/modes/interactive/components/pi-logo.ts` | `(designed out: D2 draws the PiG mark, coding/piglogin, instead of Pi's logo)` | n/a |
+| `packages/coding-agent/src/modes/interactive/components/pi-logo.ts` | `(designed out: D2 draws the Ompig mark, coding/piglogin, instead of Pi's logo)` | n/a |
 | `packages/coding-agent/src/modes/interactive/components/themed-text.ts` | `tui/themed_text.go (ThemedText, NewDynamicBorderToken); tui/themed_text_upstream_test.go; internal/codingagent/themed_notices_upstream_test.go` | ✅ |
 | `packages/coding-agent/src/modes/interactive/theme/system-theme.ts` | `tui/system_theme.go; tui/theme_terminal_colors.go; tui/system_theme_upstream_test.go; tui/system_theme_oracle_test.go` | ✅ |
 
 ## `packages/tui/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/tui/src/tui.ts` | `tui/tui.go, tui/terminal_color_query.go (FIFO background-query lifetime), tui/overlay_command.go (input-boundary focus restoration), tui/cell_size.go (CSI 16t query and response consumption), tui/mouse.go (mouse event API, Container/Box dispatch, overlay bounds and hit testing), internal/codingagent/interactive_input.go + interactive_theme.go + startup_ui.go (driver-owned terminal input routing and theme detection)`, `tui/bash_execution.go`, `tui/login_dialog.go`, `tui/theme_selector.go`, `tui/tree_select.go`, `tui/user_message_block.go`, `tui/stack.go`, `tui/widthx/cursor_marker.go`, `tui/tui_alt_screen.go`, `tui/overlay_compositor.go`, `tui/overlay_spec.go`, `tui/renderer.go`, `tui/tui_input.go`, `tui/renderer_terminal.go`, `tui/tui_mode_debug.go`, `tui/tui_mode.go` | ✅ |
 | `packages/tui/src/editor-component.ts` | `tui/editor_component.go (EditorComponent and its optional-member interfaces)`, `tui/editor.go` | ✅ |
@@ -601,7 +601,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/mcp/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/mcp/src/auth-provider.ts` | `mcp/auth_provider.go` | ✅ |
 | `packages/mcp/src/client.ts` | `mcp/client.go` | ✅ |
@@ -624,7 +624,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/codemode/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/codemode/src/cloudflare-modules.d.ts` | `(typing artefact: declares Wrangler's CompiledWasm import for the TypeScript entry; Go has no module import rule)` | n/a |
 | `packages/codemode/src/cloudflare.ts` | `codemode/cloudflare/cloudflare.go (QuickJSWasm, CreateInlineSandbox, SandboxDurableObject); durable/core/host/cf/src/codemode/ (the Worker module and the Durable Object class)` | ✅ |
@@ -646,7 +646,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/chord/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 | `packages/chord/src/index.ts` | `(re-export barrel: every runtime export has its Go counterpart in chord/host, chord/delta, chord/context and chord/json.go; each is mapped by its own source row)` | n/a |
 | `packages/chord/src/types.ts` | `chord/host/types.go (Context is context.Context; JsonRepresentation, RemoteServiceContract, IsAny are compile-time TypeScript machinery with no Go form, replaced by reflection classification at provide time)` | ✅ |
@@ -692,22 +692,22 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/protocol/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 
 ## `packages/client/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 
 ## `packages/server/src/`
 
-| upstream | pig | status |
+| upstream | ompig | status |
 |---|---|---|
 
 ## `packages/durable/src/`
 
-| Upstream | PiG | Status |
+| Upstream | Ompig | Status |
 |---|---|---|
 | `packages/durable/src/documents.ts` | `durable/documents.go` | ✅ |
 | `packages/durable/src/entries.ts` | `durable/entries.go` | ✅ |
@@ -749,7 +749,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 | `packages/durable/src/session/forks.ts` | `durable/session/forks.go` | ✅ |
 | `packages/durable/src/session/session.ts` | `durable/session/session.go` | ✅ |
 | `packages/durable/src/session/transaction.ts` | `durable/session/transaction.go` | ✅ |
-| `packages/durable/src/storage/indexeddb.ts` | `(browser-only Storage backed by window IndexedDB: the file opens with /// <reference lib="dom" /> and every method drives IDBDatabase/IDBTransaction, which exist only in a browser; PiG is a Go process with no browser or WebAssembly build, so no caller can reach it. The Storage contract it implements is the one durable/storage/memory.go, jsonl, sqlite and the Cloudflare SQLite driver already satisfy; Pi 16f5f0af4d)` | n/a |
+| `packages/durable/src/storage/indexeddb.ts` | `(browser-only Storage backed by window IndexedDB: the file opens with /// <reference lib="dom" /> and every method drives IDBDatabase/IDBTransaction, which exist only in a browser; Ompig is a Go process with no browser or WebAssembly build, so no caller can reach it. The Storage contract it implements is the one durable/storage/memory.go, jsonl, sqlite and the Cloudflare SQLite driver already satisfy; Pi 16f5f0af4d)` | n/a |
 | `packages/durable/src/storage/jsonl/index.ts` | `(re-export barrel: the exports are the Go package surface)` | n/a |
 | `packages/durable/src/storage/jsonl/node.ts` | `durable/storage/jsonl/node/node.go` | ✅ |
 | `packages/durable/src/storage/jsonl/storage.ts` | `durable/storage/jsonl/storage.go` | ✅ |
@@ -797,7 +797,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 ## `packages/env/src/`
 
-| Upstream | PiG | Status |
+| Upstream | Ompig | Status |
 |---|---|---|
 | `packages/env/src/connection.ts` | `env/connection.go + env/frame_json.go` | ✅ |
 | `packages/env/src/errors.ts` | `env/errors.go` | ✅ |
@@ -812,7 +812,7 @@ The tmux scenario harness cannot drive a Windows `.exe`. Windows verification re
 
 The daemon is a Go program with Pi's command line and wire protocol (D96); the Rust files map to the Go package `env/daemon`. A 🟡 row is exercised through the `env` package's tests, some of which also run against Pi's own daemon, but has no marker test with a mutant yet.
 
-| Upstream | PiG | Status |
+| Upstream | Ompig | Status |
 |---|---|---|
 | `packages/env/daemon/build.rs` | `(Cargo build script: the daemon's version is env/cmd/pi-env's pigversion.UpstreamPackageVersion)` | n/a |
 | `packages/env/daemon/src/decode.rs` | `durable/env/decode.go` (StreamDecoder; tests in env/daemon/decode_test.go) | ✅ |
@@ -832,17 +832,17 @@ The daemon is a Go program with Pi's command line and wire protocol (D96); the R
 
 ## `packages/evals/src/`
 
-| Upstream | PiG | Status |
+| Upstream | Ompig | Status |
 |---|---|---|
-| `packages/evals/src/cli.ts` | `internal/evals/cli.go + cmd/pig-evals/main.go` | ✅ |
+| `packages/evals/src/cli.ts` | `internal/evals/cli.go + cmd/ompig-evals/main.go` | ✅ |
 | `packages/evals/src/docker.ts` | `internal/evals/docker.go` | ✅ |
-| `packages/evals/src/harness.ts` | `internal/evals/harness.go + internal/evals/harness_run.go + internal/evals/agent_process.go + internal/evals/bridge + cmd/pig-eval-extension` | ✅ |
+| `packages/evals/src/harness.ts` | `internal/evals/harness.go + internal/evals/harness_run.go + internal/evals/agent_process.go + internal/evals/bridge + cmd/ompig-eval-extension` | ✅ |
 | `packages/evals/src/plan.ts` | `internal/evals/plan.go` | ✅ |
 | `packages/evals/src/report.ts` | `internal/evals/report.go` | ✅ |
 
 ## `packages/telemetry/src/`
 
-| Upstream | PiG | Status |
+| Upstream | Ompig | Status |
 |---|---|---|
 | `packages/telemetry/src/index.ts` | `telemetry/context.go + telemetry/schema.go + telemetry/store.go + chord/telemetrysqlite/index.go (SqliteTelemetry, the TelemetryStore the package implements)` | ✅ |
 | `packages/telemetry/src/memory.ts` | `telemetry/memory.go` | ✅ |

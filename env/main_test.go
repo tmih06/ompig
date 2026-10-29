@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/env/daemon"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/env/daemon"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestMain makes the test binary a pi-env daemon when it is started as `<binary> serve --token <hex>`, so the tests
@@ -26,7 +26,7 @@ func TestMain(m *testing.M) {
 		}
 		os.Exit(0)
 	}
-	code := testenv.RunScoped(m, "pig-env-")
+	code := testenv.RunScoped(m, "ompig-env-")
 	removeOracleBuild()
 	os.Exit(code)
 }

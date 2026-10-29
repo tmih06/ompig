@@ -4,9 +4,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Ports packages/coding-agent/test/default-tools-setting.test.ts (Pi bd3c9b8237, #11062/#11075) describe("resume").
@@ -146,6 +146,8 @@ func TestResumeRestoresTheRecordedLoadoutPort(t *testing.T) {
 			t.Fatal(err)
 		}
 		appendRestoreUserMessage(t, manager, "hi")
-		check(t, resumeDefaultToolsPort(t, manager, SessionOptions{}), []string{"active_tool", "bash", "edit", "read", "write"})
+		// ompig divergence (D-SUBAGENT-4): the default set also carries the
+		// subagent tools.
+		check(t, resumeDefaultToolsPort(t, manager, SessionOptions{}), []string{"active_tool", "agents", "bash", "edit", "read", "task", "wait", "write"})
 	})
 }

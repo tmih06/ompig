@@ -147,7 +147,7 @@ func TestAssistantMessageBlock_CJKWrapUsesBothHorizontalPaddingColumns(t *testin
 
 func TestAssistantMessageBlock_ErrorRendersInsideAssistantBlock(t *testing.T) {
 	b := NewAssistantMessageComponent(nil, false, nil, "", nil, nil, "", "")
-	b.SetTerminalError("error", "GitHub Copilot credentials expired or were revoked. Run `pig login` and retry.")
+	b.SetTerminalError("error", "GitHub Copilot credentials expired or were revoked. Run `ompig login` and retry.")
 	lines := b.Render(52)
 	if len(lines) < 2 {
 		t.Fatalf("error block: got %d lines, want spacer + error text: %#v", len(lines), lines)

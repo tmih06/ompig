@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/closure"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/closure"
 )
 
 func TestRequestValidationIsStrictAndOperationScoped(t *testing.T) {
@@ -72,7 +72,7 @@ func TestRequestValidationAcceptsTheSharedReadOnlyEnvelope(t *testing.T) {
 func TestExecuteUsesOneDeterministicContract(t *testing.T) {
 	root := t.TempDir()
 	hash := closure.HashBytes([]byte("fixture"))
-	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:status", SnapshotID: "snapshot:status", Repository: "pig", Commit: strings.Repeat("a", 40), Path: "status.go", SemanticID: "status", StartLine: 1, EndLine: 1, QuoteHash: hash}
+	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:status", SnapshotID: "snapshot:status", Repository: "ompig", Commit: strings.Repeat("a", 40), Path: "status.go", SemanticID: "status", StartLine: 1, EndLine: 1, QuoteHash: hash}
 	snapshot := &closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:status", UpstreamCommit: strings.Repeat("b", 40), TargetCommit: strings.Repeat("a", 40), ToolchainHash: hash, EnvironmentHash: hash}
 	behavior := &closure.Behavior{Kind: closure.KindBehavior, ID: "behavior:status", Name: "status", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	graph, err := closure.Build([]closure.Record{snapshot, pin, behavior})
@@ -110,7 +110,7 @@ func TestExecuteReadsGraphDerivedReport(t *testing.T) {
 	root := t.TempDir()
 	hash := closure.HashBytes([]byte("report"))
 	snapshot := &closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:denominator", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: strings.Repeat("b", 40), ToolchainHash: hash, EnvironmentHash: hash}
-	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:denominator", SnapshotID: snapshot.ID, Repository: "pig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 2, QuoteHash: hash}
+	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:denominator", SnapshotID: snapshot.ID, Repository: "ompig", Commit: strings.Repeat("b", 40), Path: "docs/parity/PORT_MAP.md", SemanticID: "denominator:port-map", StartLine: 1, EndLine: 2, QuoteHash: hash}
 	value, err := json.Marshal(map[string]any{"fields": []string{"`packages/example.ts`", "`example.go`", "✅"}})
 	if err != nil {
 		t.Fatal(err)
@@ -144,7 +144,7 @@ func TestExecuteReadsOneValidatedEvidenceRequest(t *testing.T) {
 	commit := strings.Repeat("a", 40)
 	upstreamCommit := strings.Repeat("b", 40)
 	snapshot := &closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:evidence", UpstreamCommit: upstreamCommit, TargetCommit: commit, ToolchainHash: hash, EnvironmentHash: hash}
-	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:evidence", SnapshotID: snapshot.ID, Repository: "pig", Commit: commit, Path: "evidence.go", SemanticID: "evidence", StartLine: 1, EndLine: 1, QuoteHash: hash}
+	pin := &closure.Pin{Kind: closure.KindPin, ID: "pin:evidence", SnapshotID: snapshot.ID, Repository: "ompig", Commit: commit, Path: "evidence.go", SemanticID: "evidence", StartLine: 1, EndLine: 1, QuoteHash: hash}
 	behavior := &closure.Behavior{Kind: closure.KindBehavior, ID: "behavior:evidence", Name: "evidence", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	facet := &closure.Facet{Kind: closure.KindFacet, ID: "facet:result", Name: "result"}
 	rule := &closure.Rule{Kind: closure.KindRule, ID: "rule:evidence", Name: "evidence", DefinitionHash: hash}
@@ -193,7 +193,7 @@ func TestExecutePlanUnitsReturnsDerivedWorkUnits(t *testing.T) {
 	h := func(v string) string { return closure.HashBytes([]byte(v)) }
 	snapshot := &closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:plan", UpstreamCommit: strings.Repeat("b", 40), TargetCommit: strings.Repeat("a", 40), ToolchainHash: h("t"), EnvironmentHash: h("e")}
 	originPin := &closure.Pin{Kind: closure.KindPin, ID: "pin:origin", SnapshotID: snapshot.ID, Repository: "upstream", Commit: snapshot.UpstreamCommit, Path: "packages/x/wire.ts", SemanticID: "wire:shape", StartLine: 1, EndLine: 1, QuoteHash: h("q")}
-	prodPin := &closure.Pin{Kind: closure.KindPin, ID: "pin:prod", SnapshotID: snapshot.ID, Repository: "pig", Commit: snapshot.TargetCommit, Path: "ai/openai.go", SemanticID: "sym.wire", StartLine: 1, EndLine: 1, QuoteHash: h("p"), APIHash: h("a"), BodyHash: h("b")}
+	prodPin := &closure.Pin{Kind: closure.KindPin, ID: "pin:prod", SnapshotID: snapshot.ID, Repository: "ompig", Commit: snapshot.TargetCommit, Path: "ai/openai.go", SemanticID: "sym.wire", StartLine: 1, EndLine: 1, QuoteHash: h("p"), APIHash: h("a"), BodyHash: h("b")}
 	target := &closure.Target{Kind: closure.KindTarget, ID: "target:wire", SnapshotID: snapshot.ID, PinIDs: []string{prodPin.ID}, Language: "go", Symbol: "sym.wire"}
 	behavior := &closure.Behavior{Kind: closure.KindBehavior, ID: "behavior:wire", Name: "wire", OriginPinIDs: []string{originPin.ID}, Profile: "application"}
 	facet := &closure.Facet{Kind: closure.KindFacet, ID: "facet:wire", Name: "wire"}
@@ -237,7 +237,7 @@ func leaseFixtureStore(t *testing.T) (string, string, string) {
 	h := func(v string) string { return closure.HashBytes([]byte(v)) }
 	snapshot := &closure.Snapshot{Kind: closure.KindSnapshot, ID: "snapshot:lease", UpstreamCommit: strings.Repeat("b", 40), TargetCommit: strings.Repeat("a", 40), ToolchainHash: h("t"), EnvironmentHash: h("e")}
 	originPin := &closure.Pin{Kind: closure.KindPin, ID: "pin:origin", SnapshotID: snapshot.ID, Repository: "upstream", Commit: snapshot.UpstreamCommit, Path: "packages/x/wire.ts", SemanticID: "wire:shape", StartLine: 1, EndLine: 1, QuoteHash: h("q")}
-	prodPin := &closure.Pin{Kind: closure.KindPin, ID: "pin:prod", SnapshotID: snapshot.ID, Repository: "pig", Commit: snapshot.TargetCommit, Path: "ai/openai.go", SemanticID: "sym.wire", StartLine: 1, EndLine: 1, QuoteHash: h("p"), APIHash: h("a"), BodyHash: h("b")}
+	prodPin := &closure.Pin{Kind: closure.KindPin, ID: "pin:prod", SnapshotID: snapshot.ID, Repository: "ompig", Commit: snapshot.TargetCommit, Path: "ai/openai.go", SemanticID: "sym.wire", StartLine: 1, EndLine: 1, QuoteHash: h("p"), APIHash: h("a"), BodyHash: h("b")}
 	target := &closure.Target{Kind: closure.KindTarget, ID: "target:wire", SnapshotID: snapshot.ID, PinIDs: []string{prodPin.ID}, Language: "go", Symbol: "sym.wire"}
 	behavior := &closure.Behavior{Kind: closure.KindBehavior, ID: "behavior:wire", Name: "wire", OriginPinIDs: []string{originPin.ID}, Profile: "application"}
 	facet := &closure.Facet{Kind: closure.KindFacet, ID: "facet:wire", Name: "wire"}

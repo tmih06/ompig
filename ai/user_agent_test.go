@@ -1,6 +1,6 @@
 package ai
 
-// Serialized-request tests for PiG's default provider User-Agent header
+// Serialized-request tests for Ompig's default provider User-Agent header
 // (D65, owner decision delivery/OWNER-DECISIONS.md Q4): the exact default
 // value, upstream-specific configured-header precedence, and format. Ordinary
 // providers allow a configured override; Codex forces the product identity.
@@ -20,40 +20,40 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 func TestPiUserAgentFormat(t *testing.T) {
 	got := FormatUserAgent(nil)
-	wantPrefix := "pig/" + pigversion.Version + " ("
+	wantPrefix := "ompig/" + pigversion.Version + " ("
 	if !strings.HasPrefix(got, wantPrefix) {
 		t.Fatalf("FormatUserAgent(nil) = %q, want prefix %q", got, wantPrefix)
 	}
-	// pig/<version> (<platform> <release>; <arch>), mirroring upstream's
-	// "pi (<platform> <release>; <arch>)" shape with PiG's product name.
-	if !regexp.MustCompile(`^pig/\S+ \([^;()]+; [^()]+\)$`).MatchString(got) {
-		t.Fatalf("FormatUserAgent(nil) = %q, want pig/<version> (<platform> <release>; <arch>)", got)
+	// ompig/<version> (<platform> <release>; <arch>), mirroring upstream's
+	// "pi (<platform> <release>; <arch>)" shape with Ompig's product name.
+	if !regexp.MustCompile(`^ompig/\S+ \([^;()]+; [^()]+\)$`).MatchString(got) {
+		t.Fatalf("FormatUserAgent(nil) = %q, want ompig/<version> (<platform> <release>; <arch>)", got)
 	}
 
-	// Upstream's AI helper reads node:os. Obtain its machine identity independently of PiG's mappings; D65 changes only the product identity on this surface.
+	// Upstream's AI helper reads node:os. Obtain its machine identity independently of Ompig's mappings; D65 changes only the product identity on this surface.
 	t.Setenv("NODE_OPTIONS", "")
 	machine, err := exec.CommandContext(t.Context(), "node", "--input-type=module", "-e", `import os from "node:os"; process.stdout.write(" (" + os.platform() + " " + os.release() + "; " + os.arch() + ")");`).Output()
 	if err != nil {
 		t.Fatalf("read Node OS identity: %v", err)
 	}
-	if want := "pig/" + pigversion.Version + string(machine); got != want {
+	if want := "ompig/" + pigversion.Version + string(machine); got != want {
 		t.Fatalf("FormatUserAgent(nil) = %q, want independent Node OS identity %q", got, want)
 	}
 }
 
 // TestProductVersionAvailableWithoutMain is the regression guard for library
-// consumers, which do not run cmd/pig's main function.
+// consumers, which do not run cmd/ompig's main function.
 func TestProductVersionAvailableWithoutMain(t *testing.T) {
 	if ProductVersion != pigversion.Version {
 		t.Fatalf("ProductVersion = %q, want %q", ProductVersion, pigversion.Version)
 	}
-	if got, want := FormatUserAgent(nil), "pig/"+pigversion.Version+" ("; !strings.HasPrefix(got, want) {
+	if got, want := FormatUserAgent(nil), "ompig/"+pigversion.Version+" ("; !strings.HasPrefix(got, want) {
 		t.Fatalf("FormatUserAgent(nil) = %q, want prefix %q", got, want)
 	}
 }

@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.99.1 config-selector.ts:22 calls initTheme(settingsManager.getTheme(), true). getTheme (settings-manager.ts:854-857) hides an automatic slash setting, so it and an unset theme select the system theme (theme.ts initTheme: themeName ?? SYSTEM_THEME_NAME); an explicitly empty or unknown name fails to load and falls back to the system theme. COLORFGBG no longer selects a built-in theme. Node on the pinned 0.99.1 dist: initTheme over these settings gives ["system","system","system","system","dark"].
@@ -30,7 +30,7 @@ func TestConfigSelectorThemeMatchesPiInitTheme(t *testing.T) {
 			writeStartupSettings(t, filepath.Join(agentDir, "settings.json"), tc.global)
 			settings := codingagent.NewSettingsManagerWithProjectTrust(cwd, agentDir, false)
 			selector := tui.NewScopedConfigSelector(nil, nil, 0, "global", false)
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 			t.Cleanup(closeThemeWatcher)
 			newConfigSelectorUI(selector, settings, agentDir)

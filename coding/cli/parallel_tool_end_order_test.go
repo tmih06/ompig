@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -15,7 +15,7 @@ import (
 // Pi runs the calls of one assistant message through Promise.all(map) (agent-loop.ts:586-647): each call's tool_execution_end
 // follows its own execute promise, so calls whose tools settle back to back end in the order they settled. Eight calls wait on
 // timers of equal length that the one event loop creates in call order and fires in call order, so Pi ends them 1..8 on every run.
-// PiG reads the eight answers of the extension's runtime in that order and woke the goroutines that waited for them in none:
+// Ompig reads the eight answers of the extension's runtime in that order and woke the goroutines that waited for them in none:
 // the ends came out in a different order on most runs.
 const settleOrderExtension = `export default function (pi) {
   pi.registerTool({
@@ -44,7 +44,7 @@ func TestNodeExtensionParallelToolCallsEndInTheOrderTheirToolsSettle(t *testing.
 	// run that races passes by luck.
 	for run := range 5 {
 		home, cwd := t.TempDir(), t.TempDir()
-		agentDir := filepath.Join(home, "pig")
+		agentDir := filepath.Join(home, "ompig")
 		if err := os.MkdirAll(agentDir, 0o700); err != nil {
 			t.Fatal(err)
 		}
@@ -58,7 +58,7 @@ func TestNodeExtensionParallelToolCallsEndInTheOrderTheirToolsSettle(t *testing.
 		}
 		cmd := exec.CommandContext(t.Context(), binary, "--no-extensions", "-e", extension, "--model", "fixture/test", "--no-skills", "--no-prompt-templates", "--no-context-files", "--no-session", "--mode", "json", "go")
 		cmd.Dir = cwd
-		cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
+		cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
 		cmd.Stdin = strings.NewReader("")
 		out, err := cmd.Output()
 		if err != nil {

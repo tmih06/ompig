@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ApplyPackageAutoloadStates keeps only touched resources in first-match order, including disabled resources that shadow inherited entries (applyPackageDeltaFilter, package-manager.ts:2308-2324). A pattern minimatch cannot compile stops at its kind: the items of the kinds before it come back with a *packagecontent.PackagePatternError.
@@ -54,7 +54,7 @@ func CollectResolvedPackageResourceItems(cwd, agentDir string, sm *codingagent.S
 		}
 		root := pkg.InstalledPath
 		if root == "" {
-			errs = append(errs, fmt.Errorf("%s Package %q is not materialized; run pig update %s", pkg.Scope, pkg.Source.Source, pkg.Source.Source))
+			errs = append(errs, fmt.Errorf("%s Package %q is not materialized; run ompig update %s", pkg.Scope, pkg.Source.Source, pkg.Source.Source))
 			continue
 		}
 		if ConfiguredPackageNeedsInstall(pkg) {

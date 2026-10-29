@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Upstream types.ts:579-607 (outputSchema, exposure, namespace, annotations, defaultActive, prepareLoadout) as the host's ToolDecl receives them. An unset field is not on the wire, so an undeclared tool keeps the host's defaults.

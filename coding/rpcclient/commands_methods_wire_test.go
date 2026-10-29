@@ -104,7 +104,7 @@ func TestRpcClientStartLaunchesTheAgentWithItsOptions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			client := NewRpcClient(RpcClientOptions{
 				CliPath: os.Args[0], Cwd: cwd, Provider: tc.provider, Model: tc.model, Args: tc.args,
-				Env: map[string]string{childModeEnv: "report-launch", "PIG_RPCCLIENT_TEST_LOG": logPath, "PIG_RPCCLIENT_TEST_MARK": "from-options"},
+				Env: map[string]string{childModeEnv: "report-launch", "OMPIG_RPCCLIENT_TEST_LOG": logPath, "OMPIG_RPCCLIENT_TEST_MARK": "from-options"},
 			})
 			t.Cleanup(client.Stop)
 			if err := client.Start(); err != nil {

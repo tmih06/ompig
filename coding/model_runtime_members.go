@@ -6,8 +6,8 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // CompatibilityRequestConfig is the request configuration a model falls back to when its provider auth is unconfigured.

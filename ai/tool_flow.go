@@ -16,7 +16,7 @@ func prepareProviderToolFlow(transcript TranscriptContext) TranscriptContext {
 	var pending []ToolCall
 	existing := map[string]bool{}
 	var held []Message
-	// pig divergence (D120): a tool call without a name, or still without an id after ID normalization, cannot be replayed to any provider, so it and the results that name its id are omitted (pi-mono #10299).
+	// ompig divergence (D120): a tool call without a name, or still without an id after ID normalization, cannot be replayed to any provider, so it and the results that name its id are omitted (pi-mono #10299).
 	var dropped map[string]bool
 	closePending := func() {
 		for _, call := range pending {

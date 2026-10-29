@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/bodyreadhook"
+	"github.com/tmih06/ompig/internal/bodyreadhook"
 )
 
 type addressConn struct {

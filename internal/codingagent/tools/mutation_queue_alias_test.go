@@ -9,8 +9,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The edit contract preserves disjoint changes to one file, including when callers use different names for it.
@@ -163,7 +163,7 @@ func mutationAlias(t *testing.T, target, kind string) string {
 	return alias
 }
 
-// D190's parity allowance. Pinned Pi keys its queue by realpath, so two calls through hard links of one file run at once (both callbacks start while the first is held); PiG starts the second only after the first ends.
+// D190's parity allowance. Pinned Pi keys its queue by realpath, so two calls through hard links of one file run at once (both callbacks start while the first is held); Ompig starts the second only after the first ends.
 func TestHardLinkAliasesDifferFromPi(t *testing.T) {
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, "a"), nil, 0o600); err != nil {

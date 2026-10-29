@@ -3,7 +3,7 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // StartupKeybindHints renders the compact keybinding hint line shown under the

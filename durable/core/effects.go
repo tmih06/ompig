@@ -6,7 +6,7 @@ package core
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // pending is a started effect waiting for its completion events (ABI sections 5 and 6). progress receives the

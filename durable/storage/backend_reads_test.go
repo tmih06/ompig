@@ -9,12 +9,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/durabletest"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 // readFixtureIds are the literal IDs the fixture commits, so every backend stores identical records.

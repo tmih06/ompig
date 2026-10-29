@@ -56,7 +56,7 @@ type spliceNode struct {
 // A payload through marshalSpliced is the bytes marshalRequestBody gives it, for every shape a provider's payload takes, and the payload is not written to.
 func TestMarshalSplicedIsByteIdenticalToMarshalRequestBody(t *testing.T) {
 	random := rand.New(rand.NewPCG(5, 6))
-	atoms := []string{"func main() {\n\tfmt.Println(\"<hi> & bye\")\n}\n", "\u2028\u2029", "\x00\x01\x1f", "😀 café 漢字", "\\\"", "pig-splice-0-", `"pig-splice-deadbeef-0"`}
+	atoms := []string{"func main() {\n\tfmt.Println(\"<hi> & bye\")\n}\n", "\u2028\u2029", "\x00\x01\x1f", "😀 café 漢字", "\\\"", "ompig-splice-0-", `"ompig-splice-deadbeef-0"`}
 	var pool []string
 	for _, size := range []int{0, 1, requestSpliceMinBytes - 1, requestSpliceMinBytes, 3 * requestSpliceMinBytes} {
 		var builder strings.Builder

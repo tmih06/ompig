@@ -12,7 +12,7 @@ import (
 
 // The @google/genai SDK passes Pi's function declarations through: convertTools' members (name, description, then parameters or
 // parametersJsonSchema: google-shared.ts:388-397) with the tool's own schema object inside. Pi's own stream posts the oracle body to a
-// local server; PiG's provider posts to another.
+// local server; Ompig's provider posts to another.
 func TestGoogleToolDeclarationsFollowPiMemberOrder(t *testing.T) {
 	type bodyCase struct {
 		Name   string          `json:"name"`

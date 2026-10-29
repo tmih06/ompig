@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
-// pig divergence (D111): every SDK realization in its own process, packed, or fused settles an aborted tool call by one rule.
+// ompig divergence (D111): every SDK realization in its own process, packed, or fused settles an aborted tool call by one rule.
 // A tool that honours its signal settles with its own result, as Pi's executePreparedToolCall awaits tool.execute and keeps
 // its result (agent-loop.ts:831-853): abort_tool answers "aborted". A tool that ignores its signal fails with Pi's abort text
 // "Operation aborted" (agent-loop.ts:623) once subprocess.ToolAbortGrace has passed, where Pi would await it indefinitely:

@@ -10,12 +10,12 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // Pi packages/chord/src/watch.ts #schedule/#drain, harness/submissions.ts wait, harness/scheduler.ts waitForIdle and

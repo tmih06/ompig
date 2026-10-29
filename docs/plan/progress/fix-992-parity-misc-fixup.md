@@ -15,9 +15,9 @@ Both reported failures do not reproduce on the base. The investigation below is 
 
 ### 2. parity `interactive-rendering/27-compact-read-labels`
 
-- Pi renders `[skill] <dir>` collapsed and `read <path>` expanded deterministically (`.upstream/v0.99.2/packages/coding-agent/src/core/tools/renderers/read.ts:67-111,151-160`). Fixture and PiG are consistent with 0.99.2.
-- The scenario passes 25/25 pairs (`-pig-parity.runs=25`) on the base under a host load average of 65, and 3/3 on a merge of the aggregate tip `328306114` (scratch archive).
-- The retained aggregate artifact (`agg-992/test/parity/artifacts/27-compact-read-labels/20261001T074323Z/context.json`) records `capture-pane: exit status 1 (server pid exited ... no server running)` for the Pi run: the tmux server vanished, so the Pi capture was empty. That is the host-sharing harness flake routed to `fix-992-parity-harness`, not a Pi-vs-PiG difference. The older artifact (`20261001T062403Z`) differs only by Pi's tmux `extended-keys` warning, an environment line.
+- Pi renders `[skill] <dir>` collapsed and `read <path>` expanded deterministically (`.upstream/v0.99.2/packages/coding-agent/src/core/tools/renderers/read.ts:67-111,151-160`). Fixture and Ompig are consistent with 0.99.2.
+- The scenario passes 25/25 pairs (`-ompig-parity.runs=25`) on the base under a host load average of 65, and 3/3 on a merge of the aggregate tip `328306114` (scratch archive).
+- The retained aggregate artifact (`agg-992/test/parity/artifacts/27-compact-read-labels/20261001T074323Z/context.json`) records `capture-pane: exit status 1 (server pid exited ... no server running)` for the Pi run: the tmux server vanished, so the Pi capture was empty. That is the host-sharing harness flake routed to `fix-992-parity-harness`, not a Pi-vs-Ompig difference. The older artifact (`20261001T062403Z`) differs only by Pi's tmux `extended-keys` warning, an environment line.
 
 ## Verification
 

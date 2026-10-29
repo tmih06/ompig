@@ -19,7 +19,7 @@ type ReloadCellReport struct {
 	Reason        string        // short human reason ("factory shared-ok", "isolated source", ...)
 }
 
-// pig additive (D21): ReloadReport exposes subprocess placement diagnostics.
+// ompig additive (D21): ReloadReport exposes subprocess placement diagnostics.
 // ReloadReport records the latest Reload operation.
 type ReloadReport struct {
 	StartedAt time.Time

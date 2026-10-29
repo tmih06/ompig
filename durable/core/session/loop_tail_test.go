@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // tickLoop drives a Loop on a virtual microtask clock: Hold keeps each job for its duration in ticks, and Tail and Begin

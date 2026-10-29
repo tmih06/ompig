@@ -2,6 +2,6 @@
 // (see durable/core/host/cf/tools/build-codemode-wasm.sh). The module's exports live in package codemode (serve_tinygo.go).
 package main
 
-import _ "github.com/MichaelKinsy/PiG/codemode"
+import _ "github.com/tmih06/ompig/codemode"
 
 func main() {}

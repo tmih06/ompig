@@ -7,10 +7,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-const imageHelper = "PIG_NODESPAWN_IMAGE_HELPER"
+const imageHelper = "OMPIG_NODESPAWN_IMAGE_HELPER"
 
 // TestMain lets copies of the test binary stand in for spawned programs: one
 // reports the image file it runs from, one its environment.

@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type stackOracleChild struct {
@@ -81,7 +81,7 @@ func stackOracleProbes() []stackOracleProbe {
 	return probes
 }
 
-// renderStackProbe renders probe with Pig's stacks and ScrollView at every width of the probe.
+// renderStackProbe renders probe with Ompig's stacks and ScrollView at every width of the probe.
 func renderStackProbe(probe stackOracleProbe) [][]string {
 	var children []StackChild
 	for _, c := range probe.Children {
@@ -126,7 +126,7 @@ func TestStackProbeDump(t *testing.T) {
 	fmt.Printf("stack-probes:%s\n", line)
 }
 
-// TestStackRenderParity prints Pig's renders of the corpus, one JSON line per probe, for the stack-render parity scenario.
+// TestStackRenderParity prints Ompig's renders of the corpus, one JSON line per probe, for the stack-render parity scenario.
 func TestStackRenderParity(t *testing.T) {
 	previous := GetCapabilities()
 	t.Cleanup(func() { SetCapabilities(previous) })
@@ -168,7 +168,7 @@ func TestStackRenderMatchesPi(t *testing.T) {
 		for j, got := range renderStackProbe(probe) {
 			if !reflect.DeepEqual(got, expected[i][j]) {
 				if failures++; failures <= 5 {
-					t.Errorf("%s stack %+v at width %d:\n  Pig %q\n  Pi  %q", probe.Kind, probe, probe.Widths[j], got, expected[i][j])
+					t.Errorf("%s stack %+v at width %d:\n  Ompig %q\n  Pi  %q", probe.Kind, probe, probe.Widths[j], got, expected[i][j])
 				}
 			}
 		}

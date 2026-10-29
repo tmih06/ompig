@@ -21,7 +21,7 @@ package engine
 import (
 	"math"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/jsnumber"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/jsnumber"
 )
 
 type vector3 [3]float64

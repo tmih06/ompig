@@ -6,7 +6,7 @@ This report records the intermediate `fa0830224` result. Its remaining H1 admiss
 
 Merge `818a61134` (the strict-comparison harness) into the RPC branch in `cba8dc6ea`. Keep the existing malformed-input cases and CRLF batch, but resolve their comparator conflicts in favor of `json_output_equal`, `stderr_equal` and correlated `wait_event` barriers. Regenerate the normalization inventory and static coverage from the merged tree. Do not sort output records or restore erased error text.
 
-The original strict `20-rpc-runtime-boundary-values` fails before the production changes: at record 5, PiG writes the steer response while Pi writes the second queue event. A direct Pi 0.87.1 probe with one pipe write containing steer, follow-up and abort-retry records produces both queue events, then the abort-retry response, then the two queue responses. `TestRPCQueueRepliesYieldToInputBatch` encodes that complete record sequence and fails on the base.
+The original strict `20-rpc-runtime-boundary-values` fails before the production changes: at record 5, Ompig writes the steer response while Pi writes the second queue event. A direct Pi 0.87.1 probe with one pipe write containing steer, follow-up and abort-retry records produces both queue events, then the abort-retry response, then the two queue responses. `TestRPCQueueRepliesYieldToInputBatch` encodes that complete record sequence and fails on the base.
 
 ## Source fixes
 
@@ -20,7 +20,7 @@ Pi references are relative to `packages/coding-agent/src/` in the pinned 0.87.1 
 | Queue rejection text | The new rejection guard exposes the missing slash in the quoted command name. Both queue rejection paths now report the slash-prefixed invocation. | `core/agent-session.ts:1913-1920`; `TestRPCQueueErrorsYieldToInputBatch` fails with the old diagnostic |
 | Faux fixture error start | The Go parity fixture emits only its classified error, while the Pi fixture's `emitPlan` snapshots an empty pending start first. Start the Go classified-error stream before publishing its error. This changes no real Provider implementation. | `test/parity/testdata/test-faux-provider.ts:emitPlan`; red-first `TestTestFauxClassifiedErrorStartsPending` |
 
-The main production changes are in `cmd/pig/rpc_mode.go` and `coding/session.go`. `ai/test_faux.go` is the additional fixture correction. The Session text constructor is shared by fresh prompts and queue messages. No SDK interface, wire format, new runtime task, timeout or divergence is added.
+The main production changes are in `cmd/ompig/rpc_mode.go` and `coding/session.go`. `ai/test_faux.go` is the additional fixture correction. The Session text constructor is shared by fresh prompts and queue messages. No SDK interface, wire format, new runtime task, timeout or divergence is added.
 
 ## Scenario determinism
 
@@ -35,7 +35,7 @@ Scenario 20 retains all original commands and complete records. It now defines:
 
 Both hosts receive the same explicit system prompt and disable ambient context files. This controls D2/D22 inputs instead of replacing a documentation section in captured output. Only exact cwd prefixes and typed timestamps are aliased. Empty text, errors, booleans, arrays, every output record and stderr remain compared. No records are dropped or sorted. The scenario still fails with the original immediate queue replies after these fixture changes.
 
-This is not a claim that the unbarriered shell and faux-provider completion always have one order. The original stimulus remains in scenario 35, with one explicit input batch and complete comparison, so the prompt-preflight gap cannot disappear behind scenario 20's barriers. Its first current failure is `/7/command: pig="steer" pi="prompt"`. The full RPC async ledger remains deferred for that broader interaction; no artificial wait-for-idle policy is added.
+This is not a claim that the unbarriered shell and faux-provider completion always have one order. The original stimulus remains in scenario 35, with one explicit input batch and complete comparison, so the prompt-preflight gap cannot disappear behind scenario 20's barriers. Its first current failure is `/7/command: ompig="steer" pi="prompt"`. The full RPC async ledger remains deferred for that broader interaction; no artificial wait-for-idle policy is added.
 
 ## Red and mutation proof
 
@@ -51,9 +51,9 @@ Run the strict scenario with the pinned executable and package root:
 
 ```bash
 export PATH="/absolute/toolchain/bin:$PATH"
-go build -o bin/pig-parity ./cmd/pig
-export PIG_PARITY_PIG_BIN="$PWD/bin/pig-parity"
-export PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
+go build -o bin/ompig-parity ./cmd/ompig
+export OMPIG_PARITY_OMPIG_BIN="$PWD/bin/ompig-parity"
+export OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
 export PI_PACKAGE_ROOT="$PWD/extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent"
 go test -tags=parity ./test/parity/runner -count=1 -run '^TestParity/20-rpc-runtime-boundary-values$'
 ```

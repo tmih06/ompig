@@ -18,8 +18,8 @@ import (
 	// Registers the pure-Go "sqlite" database/sql driver.
 	_ "modernc.org/sqlite"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/chord/sqlite/cloudflare"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/chord/sqlite/cloudflare"
 )
 
 // fakeStorage is a stand-in for a SQLite-backed Durable Object's `ctx.storage` over a native SQLite connection, with

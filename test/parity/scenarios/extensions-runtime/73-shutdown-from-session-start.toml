@@ -6,7 +6,7 @@
 # session_shutdown with reason "quit", prints "To resume this session: <cmd>" only when the session file exists, and
 # calls process.exit(0). It never awaits the session_start handler that asked for the shutdown.
 # Probed with Pi 1.0.3 in tmux (2026-10-11): the final frame, then "SHUTDOWN_EVENT quit", no resume line (no turn
-# was persisted, so no session file exists), exit 0. Pig had restored the terminal and then waited forever for the
+# was persisted, so no session file exists), exit 0. Ompig had restored the terminal and then waited forever for the
 # startup phase that requested the shutdown.
 # The fixture's handler returns a Promise that never settles, so the host must exit without waiting for it; it
 # reports session_shutdown on the controlling terminal, after the TUI has stopped, in both hosts.
@@ -21,16 +21,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "SHUTDOWN_AT=session_start"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "SHUTDOWN_AT=session_start"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1", "SHUTDOWN_AT=session_start"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/shutdown-in-awaited-phase.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/shutdown-in-awaited-phase.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/shutdown-in-awaited-phase.mjs"]
 
 [tmux]
 width = 120
 height = 30
-ready_pattern_pig = "SHUTDOWN_EVENT"
+ready_pattern_ompig = "SHUTDOWN_EVENT"
 ready_pattern_pi = "SHUTDOWN_EVENT"
 ready_timeout_seconds = 30
 capture_start = "SHUTDOWN_EVENT"

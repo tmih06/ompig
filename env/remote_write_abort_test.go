@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // countedAbort is a context whose Err turns into context.Canceled after a set number of reads and whose Done never closes: it aborts at an exact check of an operation and never makes the connection send a cancel.

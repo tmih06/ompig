@@ -3,8 +3,8 @@ package inproc_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi agent-session.ts:3095-3107 binds abort alongside, not instead of, the mode's other context actions.

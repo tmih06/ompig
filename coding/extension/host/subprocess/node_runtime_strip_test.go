@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // D92: with node-extensions stripped at runtime, a TypeScript extension build,
 // a packed Node cell and the Node preflight all report the strip the way a
-// pig_strip_node_extensions Binary does; unstripped they proceed as before.
+// ompig_strip_node_extensions Binary does; unstripped they proceed as before.
 func TestStripNodeExtensionsRuntimeReportsStrip(t *testing.T) {
-	want := "The TypeScript and JavaScript extension runtime is stripped from this Piglet (strip.features: node-extensions)"
+	want := "The TypeScript and JavaScript extension runtime is stripped from this Ompiglet (strip.features: node-extensions)"
 	src := filepath.Join(t.TempDir(), "hello.ts")
 	if err := os.WriteFile(src, []byte("export default function (pi: any) {}\n"), 0o644); err != nil {
 		t.Fatal(err)

@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type layoutOracleChild struct {
@@ -231,7 +231,7 @@ func TestRenderLayoutFrameMatchesPi(t *testing.T) {
 		if !reflect.DeepEqual(have, want) {
 			if failures++; failures <= 3 {
 				spec, _ := json.Marshal(probe)
-				t.Errorf("%s\n  Pig %.1500s\n  Pi  %.1500s", spec, got, expected[i])
+				t.Errorf("%s\n  Ompig %.1500s\n  Pi  %.1500s", spec, got, expected[i])
 			}
 		}
 	}

@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-const module = "github.com/MichaelKinsy/PiG/"
+const module = "github.com/tmih06/ompig/"
 
 // chordHelpers are the module packages outside chord/ that Chord may link.
 var chordHelpers = []string{

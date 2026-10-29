@@ -118,7 +118,7 @@ func TestEnvAPIKeysQwenIndividualReusesInternationalTokenPlanVariable(t *testing
 }
 
 // TestEnvAPIKeysTableMatchesUpstream checks every entry of upstream
-// getApiKeyEnvVars, including the entries PiG previously resolved nowhere
+// getApiKeyEnvVars, including the entries Ompig previously resolved nowhere
 // (meta, qwen-token-plan*, ant-ling, baseten, nvidia, zai-coding-cn).
 func TestEnvAPIKeysTableMatchesUpstream(t *testing.T) {
 	want := map[string][]string{

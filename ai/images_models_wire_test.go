@@ -76,7 +76,7 @@ func TestModelsGenerateImagesAuthThroughOpenRouter(t *testing.T) {
 	if !reflect.DeepEqual(seenEnv, wantEnv) {
 		t.Fatalf("env=%v", seenEnv)
 	}
-	if os.Getenv("PIG_PARITY_PROBE") == "1" {
+	if os.Getenv("OMPIG_PARITY_PROBE") == "1" {
 		data, err := json.Marshal(struct {
 			Env        map[string]string `json:"env"`
 			Output     []ContentBlock    `json:"output"`

@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 var promptChainNames = []string{"chain-a", "chain-b", "chain-c", "chain-d"}
@@ -20,9 +20,9 @@ var promptChainNames = []string{"chain-a", "chain-b", "chain-c", "chain-d"}
 // Pi runner.ts:1411-1462 gives every before_agent_start handler the one shared options object and renders event.systemPrompt from it (renderCurrentSystemPrompt, :1426) before each handler, so handler k+1 reads the prompt that includes the edit handler k made. Each extension here appends "|<name>=<length of the prompt it read>" to appendSystemPrompt. The in-process chain is the reference; every SDK in every placement must produce the same string, and the prompt length it reports must grow by exactly the text the previous handler appended. A fallback reader (empty prompt) reports 0.
 func TestBeforeAgentStartChainSeesEveryEarlierEditAcrossSDKs(t *testing.T) {
 	root := findModuleRoot(t)
-	t.Setenv("PIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
-	t.Setenv("PIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
-	t.Setenv("PIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
+	t.Setenv("OMPIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
+	t.Setenv("OMPIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
 
 	reference := make([]extension.Extension, len(promptChainNames))
 	for i, name := range promptChainNames {
@@ -168,7 +168,7 @@ func promptChainFactory(t *testing.T, root, language, name string) subprocess.Ex
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package chain
-import ("strconv"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("strconv"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.OnEvent("before_agent_start",func(_ sdk.Context,data map[string]any)(any,error){
@@ -182,9 +182,9 @@ func Extension()*sdk.Extension {
 }`, name, name)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  def handler(ctx,data):
   data["systemPromptOptions"]["appendSystemPrompt"]+="|%s="+str(len(data["systemPrompt"].encode("utf-8")))
  e.on_event("before_agent_start",handler)
@@ -192,7 +192,7 @@ def new_extension():
 `, name, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.on_before_agent_start(|_,event| {

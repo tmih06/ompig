@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // coveredByScenarios is every wire method the SDK conformance table says it

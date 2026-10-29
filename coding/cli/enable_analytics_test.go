@@ -37,17 +37,17 @@ func TestEnableAnalyticsSendsNothing(t *testing.T) {
 		cmd.Dir = t.TempDir()
 		cmd.Env = append(os.Environ(),
 			"HOME="+home,
-			"PIG_HOME="+home,
-			"PIG_CODING_AGENT_DIR="+agentDir,
-			"PIG_TEST_FAUX=1",
-			"PIG_TEST_FAUX_SCENARIO=parity-basic",
+			"OMPIG_HOME="+home,
+			"OMPIG_CODING_AGENT_DIR="+agentDir,
+			"OMPIG_TEST_FAUX=1",
+			"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 			"HTTP_PROXY="+proxy.URL, "HTTPS_PROXY="+proxy.URL, "http_proxy="+proxy.URL, "https_proxy="+proxy.URL,
 			"NO_PROXY=", "no_proxy=",
 		)
 		var stderr strings.Builder
 		cmd.Stderr = &stderr
 		if err := cmd.Run(); err != nil {
-			t.Fatalf("pig --print (enableAnalytics %s): %v\n%s", enabled, err, stderr.String())
+			t.Fatalf("ompig --print (enableAnalytics %s): %v\n%s", enabled, err, stderr.String())
 		}
 		if strings.Contains(stderr.String(), "enableAnalytics") || strings.Contains(stderr.String(), "Invalid settings") {
 			t.Fatalf("settings with enableAnalytics %s reported a problem:\n%s", enabled, stderr.String())

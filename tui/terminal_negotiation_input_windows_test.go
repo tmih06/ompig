@@ -16,12 +16,12 @@ import (
 )
 
 const (
-	terminalInputCaseEnv = "PIG_TUI_TERMINAL_INPUT_CASE"
-	terminalInputKeysEnv = "PIG_TUI_TERMINAL_INPUT_KEYS"
+	terminalInputCaseEnv = "OMPIG_TUI_TERMINAL_INPUT_CASE"
+	terminalInputKeysEnv = "OMPIG_TUI_TERMINAL_INPUT_KEYS"
 )
 
 // withTerminalInput runs body in a child process attached to a pseudo console,
-// which is how interactive input reaches pig on Windows. An anonymous pipe is
+// which is how interactive input reaches ompig on Windows. An anonymous pipe is
 // not a Windows terminal: waiting on its handle signals no readiness, so a
 // pipe cannot show whether the console reader stops without another key. The
 // child reads the console in raw mode, and each send asks this process to type

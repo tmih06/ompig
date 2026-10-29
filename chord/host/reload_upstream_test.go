@@ -15,8 +15,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // reloadGreeter is reload.test.ts:32-36 Greeter.
@@ -841,7 +841,7 @@ func (events *reloadEvents) emit(value any) {
 var reloadSum = Local("t.sum", LocalDef{Version: 1, Input: tObject(), Members: Fields[any]{{"sum", tObject("v", tNumber())}}})
 
 // reloadSelectSource is reload.test.ts:432 `(source) => source`: one function (Pi compares select functions by
-// source text, PiG by code pointer, so both reloads' selects are the same).
+// source text, Ompig by code pointer, so both reloads' selects are the same).
 func reloadSelectSource(value any) Subscribable[any] { return value.(Subscribable[any]) }
 
 func reloadSumFacet(events *reloadEvents, log *reloadLog, factor float64) *Facet {

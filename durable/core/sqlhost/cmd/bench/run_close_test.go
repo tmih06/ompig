@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // A run that fails after opening its session still closes it: the session's host goroutine must not outlive the run. A refused

@@ -1,14 +1,14 @@
 package codingagent
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/installchange"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/installchange"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // installChangeCause states what changed. A replaced or removed executable uses Pi's sentence for a removed install
-// (interactive-mode.ts maybeShowInstallChangeWarning, kind "removed"): PiG reads no version from the replaced file, so
+// (interactive-mode.ts maybeShowInstallChangeWarning, kind "removed"): Ompig reads no version from the replaced file, so
 // it cannot use Pi's "was updated to <version>" sentence.
-// pig additive (D95): a pruned extension cell or runtime file has no Pi counterpart and names the extension files.
+// ompig additive (D95): a pruned extension cell or runtime file has no Pi counterpart and names the extension files.
 func installChangeCause(change *installchange.Change) string {
 	if change.Kind == installchange.FilesPruned {
 		return "The " + AppName + " extension files this session runs from were removed or replaced"
@@ -38,7 +38,7 @@ func (m *InteractiveMode) resumeHintCommand() string {
 // process runs from, and warns once. Code started on demand then fails until restart. It returns true once the install changed.
 // The check runs only when an error is shown, never on a timer, and stats the executable and the cell files this process recorded.
 // Ports packages/coding-agent/src/modes/interactive/interactive-mode.ts maybeShowInstallChangeWarning (#10439).
-// pig additive (D95): the change is detected from the executable and cache files, not from a package.json.
+// ompig additive (D95): the change is detected from the executable and cache files, not from a package.json.
 func (m *InteractiveMode) maybeShowInstallChangeWarning() bool {
 	if m.installChangeWarningShown {
 		return true

@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // interactive-mode.ts:6181-6190 showApiKeyLoginDialog focuses the mounted LoginDialogComponent, whose focused setter focuses its prompt input

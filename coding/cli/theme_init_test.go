@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // writeCustomTheme writes the built-in dark theme as `<agentDir>/themes/<file>.json` with the JSON name and accent given.
@@ -73,7 +73,7 @@ func TestInitThemeAppliesTheConfiguredTheme(t *testing.T) {
 					t.Fatal(err)
 				}
 			}
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 			initTheme(configuredThemeName(settings), false)
 			if got := tui.ActiveTheme().Name; got != tc.wantName {
@@ -95,7 +95,7 @@ func TestInitThemeWatcherFollowsEditsOnlyWhenEnabled(t *testing.T) {
 		t.Helper()
 		closeThemeWatcher()
 		agentDir := t.TempDir()
-		t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+		t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 		t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 		writeCustomTheme(t, agentDir, "mine", "mine", "#102030")
 		t.Cleanup(func() { closeThemeWatcher(); tui.SetThemeRegistry(nil); tui.SetTheme("dark") })

@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // outputFile writes a file of the result under a fixed name; its path, or why it could not be written.

@@ -33,17 +33,17 @@ func TestEstimateTextTokensIsCeilOfUTF16LengthOverThreePointFive(t *testing.T) {
 
 // utils/provider-env.ts getProviderEnvValue: `env?.[name] || process.env[name]`: a scoped override wins, an empty override falls through to the process environment, and neither yields the empty string.
 func TestGetProviderEnvValueScopedOverrideThenProcessEnvironment(t *testing.T) {
-	t.Setenv("PIG_TEST_PROVIDER_ENV_VALUE", "from-process")
-	if got := getProviderEnvValue("PIG_TEST_PROVIDER_ENV_VALUE", ProviderEnv{"PIG_TEST_PROVIDER_ENV_VALUE": "scoped"}); got != "scoped" {
+	t.Setenv("OMPIG_TEST_PROVIDER_ENV_VALUE", "from-process")
+	if got := getProviderEnvValue("OMPIG_TEST_PROVIDER_ENV_VALUE", ProviderEnv{"OMPIG_TEST_PROVIDER_ENV_VALUE": "scoped"}); got != "scoped" {
 		t.Errorf("scoped override = %q, want scoped", got)
 	}
-	if got := getProviderEnvValue("PIG_TEST_PROVIDER_ENV_VALUE", ProviderEnv{"PIG_TEST_PROVIDER_ENV_VALUE": ""}); got != "from-process" {
+	if got := getProviderEnvValue("OMPIG_TEST_PROVIDER_ENV_VALUE", ProviderEnv{"OMPIG_TEST_PROVIDER_ENV_VALUE": ""}); got != "from-process" {
 		t.Errorf("empty override = %q, want the process value", got)
 	}
-	if got := getProviderEnvValue("PIG_TEST_PROVIDER_ENV_VALUE", nil); got != "from-process" {
+	if got := getProviderEnvValue("OMPIG_TEST_PROVIDER_ENV_VALUE", nil); got != "from-process" {
 		t.Errorf("no override = %q, want the process value", got)
 	}
-	if got := getProviderEnvValue("PIG_TEST_PROVIDER_ENV_VALUE_UNSET", nil); got != "" {
+	if got := getProviderEnvValue("OMPIG_TEST_PROVIDER_ENV_VALUE_UNSET", nil); got != "" {
 		t.Errorf("unset variable = %q, want empty", got)
 	}
 }

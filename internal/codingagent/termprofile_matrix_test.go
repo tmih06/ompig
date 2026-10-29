@@ -3,15 +3,15 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Terminal capability-profile matrix for decoder B (classifyKey).
 //
-// Why this exists: pig decodes raw terminal bytes in multiple places, and each
+// Why this exists: ompig decodes raw terminal bytes in multiple places, and each
 // decoder was historically tested against the byte forms its author *assumed*
 // terminals send (legacy \x1b[A, bare \x1b), never the forms a Kitty-protocol
-// terminal actually emits after pig negotiates \x1b[>7u. That gap shipped four
+// terminal actually emits after ompig negotiates \x1b[>7u. That gap shipped four
 // input bugs behind a green suite (Ctrl+C/D dead, double-Esc no tree, arrows,
 // key-release double-input). This matrix crosses one semantic expectation table
 // against N capability profiles so a regression in any profile goes red.
@@ -22,13 +22,13 @@ import (
 //
 // Encoding provenance: `kitty7` forms are derived from the Kitty keyboard
 // protocol spec for flags 1+2+4 (disambiguate + report-events +
-// report-alternate), which is exactly what pig negotiates
+// report-alternate), which is exactly what ompig negotiates
 // (tui/terminal.go extendedKeyInit). The contract asserted is that the
 // decoder accepts EVERY spec-conformant form for a key, since a conformant
 // terminal may pick any of them.
 //
 // Verified against a real terminal: a Windows Terminal capture (Windows 11
-// 24H2) answers pig's query with "\x1b[?7u" and emits the spec forms asserted
+// 24H2) answers ompig's query with "\x1b[?7u" and emits the spec forms asserted
 // here, including a release for every press. See
 // TestWindowsTerminalMeasuredEncodings for the measured bytes.
 

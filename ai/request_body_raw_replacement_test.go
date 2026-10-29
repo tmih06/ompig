@@ -6,7 +6,7 @@ import (
 )
 
 // A payload hook's replacement reaches the SDK as a parsed value (`options.onPayload` returns an object), and the SDK writes it with JSON.stringify
-// (openai 7.19.0 internal/request-options.js:29, anthropic client body serialization). PiG holds the replacement as the JSON text an extension
+// (openai 7.19.0 internal/request-options.js:29, anthropic client body serialization). Ompig holds the replacement as the JSON text an extension
 // returned, so it must write what JSON.parse then JSON.stringify gives: escapes decoded, numbers in JavaScript's spelling, a repeated key kept at its first
 // position with its last value, and a lone surrogate left escaped.
 func TestRawReplacementBodiesAreWrittenAsJSONStringifyWritesThem(t *testing.T) {

@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // widthTableLong is long, space-separated prose that forces word wrapping in
@@ -31,7 +31,7 @@ func widthTableComponents() []widthTableComponent {
 		{"ExtensionSelectorPreview", func() Component {
 			c := NewExtensionSelectorComponent("Choose the sprite the startup header shows", []string{widthTableLong, "Cancel"}, nil, nil)
 			c.SetPreview(func(int) []string {
-				// A seven-line preview, the height of the pig head Pig's sprite picker draws beside the rows.
+				// A seven-line preview, the height of the ompig head Ompig's sprite picker draws beside the rows.
 				lines := make([]string, 7)
 				for i := range lines {
 					lines[i] = "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"

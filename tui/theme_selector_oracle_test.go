@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type themeSelProbe struct {
@@ -29,7 +29,7 @@ type themeSelResult struct {
 }
 
 // randomThemeSelectorProbes registers 0 to 25 extra themes with random names (wide, combining, long, case variants), a current theme among them or unknown,
-// widths from 6 to 100, bindings and key scripts. PageUp and PageDown stay out: Pi 1.1.0 has no select page keys and Pig pages the selection (D155, Pi PR #7680).
+// widths from 6 to 100, bindings and key scripts. PageUp and PageDown stay out: Pi 1.1.0 has no select page keys and Ompig pages the selection (D155, Pi PR #7680).
 func randomThemeSelectorProbes() []themeSelProbe {
 	rng := rand.New(rand.NewSource(20261027))
 	pieces := []string{"custom", "theme", "Solar", "dracula", "日本語", "e\u0301", "😀", "very-long-theme-name-0123456789-abcdefghijklmnop", "-", "_", " ", "Z", "9"}
@@ -73,7 +73,7 @@ func TestThemeSelectorMatchesPi(t *testing.T) {
 		{"\x1b"},
 		{"\x03"},
 		{"y"},
-		// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+		// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 		{"\x1b[H", "\x1b[F", "\r"},
 		{"\x1b[B", "x", "\r", "\x1b"},
 		{"\x13"},
@@ -167,7 +167,7 @@ func TestThemeSelectorMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got.Steps, expected[i].Steps) || !reflect.DeepEqual(got.Frames, expected[i].Frames) {
 			if failures++; failures <= 3 {
-				t.Errorf("probe %d %+v:\n steps Pig %q Pi %q\n frames Pig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
+				t.Errorf("probe %d %+v:\n steps Ompig %q Pi %q\n frames Ompig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
 			}
 		}
 	}

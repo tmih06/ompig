@@ -3,7 +3,7 @@ package subprocess
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // wireMessage decodes a wire-shaped message into the host AgentMessage, as the

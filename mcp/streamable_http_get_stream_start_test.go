@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Pi: packages/mcp/src/transports/streamable-http.ts:238, 406-409. After notifications/initialized the transport starts the GET stream without waiting for its

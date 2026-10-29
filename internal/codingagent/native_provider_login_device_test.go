@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // /login passes the installation's device ID to a provider object's OAuth login: Pi's loginProvider gives Models.login { getDeviceId: () => settingsManager.getOrCreateDeviceId() } (interactive-mode.ts:6331), which hands it to oauth.login(interaction, options) (models.ts:776, auth/types.ts:231).

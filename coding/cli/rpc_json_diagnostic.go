@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // rpcJSONErrorResponse preserves UTF-16 diagnostics on the JSON boundary without changing ordinary Go error strings or the RPC response shape.

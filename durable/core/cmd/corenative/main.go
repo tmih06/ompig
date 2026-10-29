@@ -13,7 +13,7 @@
 // 3 session_new, 4 step, 5 session_free, 6 mem_stats, 9 alloc_stats, 10 heap_threads (the count gate's heap net of the runtime's
 // threads). A response is u8 type, u32 length, then length bytes: type 0 is
 // the op's answer; type 1 asks the host for one pi-ai uuidv7() (the host answers with a request of op 7 whose payload is
-// the 36 ASCII bytes); type 2 asks the host to run one read statement (the payload is the pig.read request of ABI section
+// the 36 ASCII bytes); type 2 asks the host to run one read statement (the payload is the ompig.read request of ABI section
 // 4.2; the host answers with a request of op 8 whose payload is the read's answer). The response to the original op
 // follows them.
 package main
@@ -30,9 +30,9 @@ import (
 	"runtime/metrics"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/guard"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/contracttest/guard"
 )
 
 type server struct {
@@ -93,7 +93,7 @@ func (s *server) uuid() string {
 	return string(r.payload)
 }
 
-// readRows asks the host to run one read statement in the middle of a step (the pig.read import).
+// readRows asks the host to run one read statement in the middle of a step (the ompig.read import).
 func (s *server) readRows(sql uint16, params []abi.Value) ([][]abi.Value, error) {
 	if err := s.write(2, abi.AppendReadRequest(nil, sql, params)); err != nil {
 		return nil, err

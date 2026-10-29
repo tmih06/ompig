@@ -1,6 +1,6 @@
 #![cfg(unix)]
 
-use pig_sdk::{
+use ompig_sdk::{
     Extension, JsString, RemoteComponent, RemoteComponentResult, ToolResult, empty_schema,
 };
 use serde_json::{Value, json};
@@ -63,7 +63,7 @@ impl Drop for Runtime {
 // listener result to the focused component without converting its JS string.
 #[test]
 fn custom_component_receives_lone_units_without_disconnect() {
-    let root = std::env::temp_dir().join(format!("pig-custom-surrogate-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("ompig-custom-surrogate-{}", std::process::id()));
     std::fs::create_dir(&root).unwrap();
     let socket = root.join("sock");
     let listener = UnixListener::bind(&socket).unwrap();

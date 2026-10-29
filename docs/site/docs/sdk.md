@@ -1,25 +1,25 @@
 # Go SDK
 
-PiG exposes its coding agent as Go packages. Use the SDK when a Go application needs to create and control PiG sessions without starting the command-line interface as a child process.
+Ompig exposes its coding agent as Go packages. Use the SDK when a Go application needs to create and control Ompig sessions without starting the command-line interface as a child process.
 
 Use RPC mode when the caller is not a Go program or when a process boundary is required.
 
 ## Module
 
 ```text
-github.com/MichaelKinsy/PiG
+github.com/tmih06/ompig
 ```
 
-PiG is under active development. Pin an exact release or commit when you embed it. Do not assume API stability before the first public release.
+Ompig is under active development. Pin an exact release or commit when you embed it. Do not assume API stability before the first public release.
 
 After the repository and version tags are public, use the generated API reference on pkg.go.dev:
 
-- [`github.com/MichaelKinsy/PiG`](https://pkg.go.dev/github.com/MichaelKinsy/PiG)
-- [`github.com/MichaelKinsy/PiG/agent`](https://pkg.go.dev/github.com/MichaelKinsy/PiG/agent)
-- [`github.com/MichaelKinsy/PiG/ai`](https://pkg.go.dev/github.com/MichaelKinsy/PiG/ai)
-- [`github.com/MichaelKinsy/PiG/coding`](https://pkg.go.dev/github.com/MichaelKinsy/PiG/coding)
-- [`github.com/MichaelKinsy/PiG/tui`](https://pkg.go.dev/github.com/MichaelKinsy/PiG/tui)
-- [`github.com/MichaelKinsy/PiG/extensions/sdk`](https://pkg.go.dev/github.com/MichaelKinsy/PiG/extensions/sdk)
+- [`github.com/tmih06/ompig`](https://pkg.go.dev/github.com/tmih06/ompig)
+- [`github.com/tmih06/ompig/agent`](https://pkg.go.dev/github.com/tmih06/ompig/agent)
+- [`github.com/tmih06/ompig/ai`](https://pkg.go.dev/github.com/tmih06/ompig/ai)
+- [`github.com/tmih06/ompig/coding`](https://pkg.go.dev/github.com/tmih06/ompig/coding)
+- [`github.com/tmih06/ompig/tui`](https://pkg.go.dev/github.com/tmih06/ompig/tui)
+- [`github.com/tmih06/ompig/extensions/sdk`](https://pkg.go.dev/github.com/tmih06/ompig/extensions/sdk)
 
 The extension SDK is a nested Go module. Its module version uses the tag prefix `extensions/sdk/`, while the command and other public packages use the root module tag.
 
@@ -42,7 +42,7 @@ import (
     "context"
     "log"
 
-    "github.com/MichaelKinsy/PiG/coding"
+    "github.com/tmih06/ompig/coding"
 )
 
 func main() {
@@ -98,8 +98,8 @@ import (
     "log"
     "os"
 
-    "github.com/MichaelKinsy/PiG/agent"
-    "github.com/MichaelKinsy/PiG/coding"
+    "github.com/tmih06/ompig/agent"
+    "github.com/tmih06/ompig/coding"
 )
 
 func main() {
@@ -176,7 +176,7 @@ The three message start/end pairs are the system message, your prompt and the re
 Two things in this example catch people out:
 
 1. **`Send` does not return an error when the provider fails.** A missing credential ends the run with `err == nil`. The failure is in the returned assistant message. Check `StopReason` and `ErrorMessage` on it. When this program ran without a credential for the provider, a variant that printed those two fields of the assistant message showed `stop="error" err="provider is not configured: mock"` and `LastAssistantText` returned `nil`, so no `reply:` line was printed. Pi behaves the same way: its prompt call resolves and the error is on the assistant message.
-2. **`coding.DefaultAgentDir()` is the directory the `pig` command uses, so `PIG_CODING_AGENT_DIR` wins.** It returns the value of `PIG_CODING_AGENT_DIR` (with a leading `~` expanded), else `<root>/agent`, where `<root>` is the [configuration root](/docs/latest/configuration): `$PIG_HOME`, else `$XDG_CONFIG_HOME/pig`, else `~/.pig` (`internal/codingagent/settings.go:1770-1785`, `internal/configroot/configroot.go:50-66`). With `PIG_USE_PI_DIRS=1` it returns `PI_CODING_AGENT_DIR`, else `~/.pi/agent`. This is Pi's `getAgentDir()` (`.upstream/current/packages/coding-agent/src/config.ts:605-611`) with PiG's directory names: Pi reads only `PI_CODING_AGENT_DIR`, else `~/.pi/agent`. This is divergence D2. Checked on a build that has this behaviour (commit `086395a8bd`): with `PIG_CODING_AGENT_DIR` naming the folder that holds `models.json` and `PIG_HOME` set to a different, empty folder, a variant of the program that printed `DefaultAgentDir:` first printed the `PIG_CODING_AGENT_DIR` folder and then `reply: Hello from the test model.`. Without `PIG_CODING_AGENT_DIR` it printed `<PIG_HOME>/agent`, found no `models.json` there, and printed no reply. Check which directory you got: `fmt.Println(coding.DefaultAgentDir())`. Builds before that commit returned `<PIG_HOME>/agent` and ignored `PIG_CODING_AGENT_DIR` (`pig` itself read it), so a program started with only that variable set read a different `models.json` and `auth.json` than `pig` and failed as in point 1. Against such a build, leave `AgentDir` out of `CreateAgentSessionServicesOptions`: `CreateAgentSessionServices` then resolves the directory as the `pig` command does (`coding/services.go:161-166`), as Pi's `createAgentSessionServices` falls back to `getAgentDir()` (`.upstream/current/packages/coding-agent/src/core/agent-session-services.ts:139`). Setting `PIG_HOME`, or passing the directory in `AgentDir` yourself, also works.
+2. **`coding.DefaultAgentDir()` is the directory the `ompig` command uses, so `OMPIG_CODING_AGENT_DIR` wins.** It returns the value of `OMPIG_CODING_AGENT_DIR` (with a leading `~` expanded), else `<root>/agent`, where `<root>` is the [configuration root](/docs/latest/configuration): `$OMPIG_HOME`, else `$XDG_CONFIG_HOME/ompig`, else `~/.ompig` (`internal/codingagent/settings.go:1770-1785`, `internal/configroot/configroot.go:50-66`). With `OMPIG_USE_PI_DIRS=1` it returns `PI_CODING_AGENT_DIR`, else `~/.pi/agent`. This is Pi's `getAgentDir()` (`.upstream/current/packages/coding-agent/src/config.ts:605-611`) with Ompig's directory names: Pi reads only `PI_CODING_AGENT_DIR`, else `~/.pi/agent`. This is divergence D2. Checked on a build that has this behaviour (commit `086395a8bd`): with `OMPIG_CODING_AGENT_DIR` naming the folder that holds `models.json` and `OMPIG_HOME` set to a different, empty folder, a variant of the program that printed `DefaultAgentDir:` first printed the `OMPIG_CODING_AGENT_DIR` folder and then `reply: Hello from the test model.`. Without `OMPIG_CODING_AGENT_DIR` it printed `<OMPIG_HOME>/agent`, found no `models.json` there, and printed no reply. Check which directory you got: `fmt.Println(coding.DefaultAgentDir())`. Builds before that commit returned `<OMPIG_HOME>/agent` and ignored `OMPIG_CODING_AGENT_DIR` (`ompig` itself read it), so a program started with only that variable set read a different `models.json` and `auth.json` than `ompig` and failed as in point 1. Against such a build, leave `AgentDir` out of `CreateAgentSessionServicesOptions`: `CreateAgentSessionServices` then resolves the directory as the `ompig` command does (`coding/services.go:161-166`), as Pi's `createAgentSessionServices` falls back to `getAgentDir()` (`.upstream/current/packages/coding-agent/src/core/agent-session-services.ts:139`). Setting `OMPIG_HOME`, or passing the directory in `AgentDir` yourself, also works.
 
 ## Services
 
@@ -187,10 +187,10 @@ Set the working directory and agent directory explicitly when your application d
 The normal agent directory is:
 
 ```text
-~/.pig/agent
+~/.ompig/agent
 ```
 
-Use `PIG_HOME` or explicit options for isolated tests and applications.
+Use `OMPIG_HOME` or explicit options for isolated tests and applications.
 
 Use `coding.NewInMemorySettingsManager(initialSettings)` to keep settings without file I/O. Pass that manager through `CreateAgentSessionServicesOptions.SettingsManager`. The Services container retains it, and Session setting changes survive `Reload` in memory. An explicit `CreateAgentSessionServicesOptions.ProjectTrusted` value applies to the supplied manager; otherwise its trust state remains unchanged. File-backed settings remain the default. Reload discards transient overrides, and explicit empty tool and Resource lists remain empty.
 
@@ -214,7 +214,7 @@ In a UI host, render the replacement Session and attach its event consumer befor
 
 Native Go replacement options accept `WithSession func(*extension.ReplacedSessionContext) error`. The Runtime invokes it after rebinding and returns its error to the caller. Use the supplied context, not a retained old command context. Its `SendMessage` and `SendUserMessage` calls await the Session operation. User-message command/template expansion defaults to false. `NewSessionOptions.Setup` runs before rebinding and refreshes the Session from the initialized log.
 
-The `pig` CLI creates and replaces its Session through this path in print, JSON, RPC and interactive mode. Its factory rebuilds the destination working directory's Services, resources and extension host for every replacement. The `Session` methods `NewSession`, `SwitchSession`, `CloneInPlace`, `ForkToNewSession`, `ForkToNewSessionWithText`, the headless `Session.DispatchSlash` `/fork` path and `ImportFromJsonl`, and the default `Session.ExtensionCommandActions` new, fork and switch actions, do not use a factory. They keep the host-scoped runner and the startup project's Services, so D30 (Part 2) and D61 still apply to code that calls them. D30 (Part 1) also applies to subprocess extensions in the CLI modes: after a replacement their host rejects later calls with Pi's stale message, but SDK-local getters return the outgoing Session's values and host calls do not throw at the call site (they return or raise an error, or write to stderr, by SDK). The subprocess extension SDKs do not yet expose the `withSession` callback. See [divergences](https://github.com/MichaelKinsy/PiG/blob/main/docs/parity/DIVERGENCES.md).
+The `ompig` CLI creates and replaces its Session through this path in print, JSON, RPC and interactive mode. Its factory rebuilds the destination working directory's Services, resources and extension host for every replacement. The `Session` methods `NewSession`, `SwitchSession`, `CloneInPlace`, `ForkToNewSession`, `ForkToNewSessionWithText`, the headless `Session.DispatchSlash` `/fork` path and `ImportFromJsonl`, and the default `Session.ExtensionCommandActions` new, fork and switch actions, do not use a factory. They keep the host-scoped runner and the startup project's Services, so D30 (Part 2) and D61 still apply to code that calls them. D30 (Part 1) also applies to subprocess extensions in the CLI modes: after a replacement their host rejects later calls with Pi's stale message, but SDK-local getters return the outgoing Session's values and host calls do not throw at the call site (they return or raise an error, or write to stderr, by SDK). The subprocess extension SDKs do not yet expose the `withSession` callback. See [divergences](https://github.com/tmih06/ompig/blob/main/docs/parity/DIVERGENCES.md).
 
 ## Sessions
 
@@ -273,7 +273,7 @@ Direct calls to a Session's tools receive its current identity, model and thinki
 
 ### Supply an Agent or a cache warmer
 
-`SessionOptions.Agent` is an `*agent.Agent` you built. The Session drives it instead of building its own, as Pi's `AgentSessionConfig.agent` does (`agent-session.ts:253,486`). The Session installs its hooks into it: it chains a `FinishTurn`, `PrepareRequest`, `PrepareNextTurn` and `TransformLLMMessages` hook the Agent already had, replaces `BeforeToolCall`, `AfterToolCall`, `PreparePrompt`, `PrepareToolResult` and `SessionFile`, and sets the tools and session ID. You own the rest of the Agent's configuration: the stream function, `TransformContext`, `OnPayload` and header hooks (so no `before_provider_request` or `before_provider_headers` event fires unless your hooks emit it), steering and follow-up modes, thinking budgets, transport and image conversion. A nil `Model` and `ThinkingLevel` take the Agent's, so the Session does not restore them from history. An Agent serves one Session: `Clone` and replacements build their own. Without it the Session builds its Agent with the cache-warming stream function. Pi's `extensionRunnerRef` cell does not exist in PiG (D113): read `Session.ExtensionRunner()` after construction.
+`SessionOptions.Agent` is an `*agent.Agent` you built. The Session drives it instead of building its own, as Pi's `AgentSessionConfig.agent` does (`agent-session.ts:253,486`). The Session installs its hooks into it: it chains a `FinishTurn`, `PrepareRequest`, `PrepareNextTurn` and `TransformLLMMessages` hook the Agent already had, replaces `BeforeToolCall`, `AfterToolCall`, `PreparePrompt`, `PrepareToolResult` and `SessionFile`, and sets the tools and session ID. You own the rest of the Agent's configuration: the stream function, `TransformContext`, `OnPayload` and header hooks (so no `before_provider_request` or `before_provider_headers` event fires unless your hooks emit it), steering and follow-up modes, thinking budgets, transport and image conversion. A nil `Model` and `ThinkingLevel` take the Agent's, so the Session does not restore them from history. An Agent serves one Session: `Clone` and replacements build their own. Without it the Session builds its Agent with the cache-warming stream function. Pi's `extensionRunnerRef` cell does not exist in Ompig (D113): read `Session.ExtensionRunner()` after construction.
 
 `SessionOptions.CacheWarmer` is a `coding.CacheWarmer` you built, as Pi's `AgentSessionConfig.cacheWarmer` is (`agent-session.ts:266,494-497`). The Session wires its `OnWarmed` to the `entry_appended` event, reports its `Status`, forwards `OnAgentSettled` and `OnModeChanged`, and cancels it when the Session closes. Your stream function starts it. A Session replacement builds its own warmer for the new Session.
 
@@ -291,12 +291,12 @@ The Agent owns stream creation and iterator adoption on one continuation. Direct
 
 ## Models and authentication
 
-`coding.BuildModel` resolves a provider and model through the Services container. Authenticate with the standalone `pig` command or provide the application-specific credential mechanism before creating the model.
+`coding.BuildModel` resolves a provider and model through the Services container. Authenticate with the standalone `ompig` command or provide the application-specific credential mechanism before creating the model.
 
 Verify a model from the command line:
 
 ```bash
-pig --print --model github-copilot/gpt-4o-mini "hello"
+ompig --print --model github-copilot/gpt-4o-mini "hello"
 ```
 
 Do not copy credentials into source code.
@@ -353,54 +353,54 @@ Use `[]ai.ToolResultMessageContent{}` for no content and `[]ai.ToolResultMessage
 
 Pass extension definitions through `coding.RuntimeOptions` when your application owns their configuration. The same public extension behavior applies to command-line and embedded use.
 
-`coding.DiscoverAndLoadExtensions(ctx, configuredPaths, cwd, agentDir)` discovers extensions in the project, global and configured locations with Pi's `discoverAndLoadExtensions` order and entry-point rules, and loads them in the extension host. Call `Close()` on the returned `LoadExtensionsResult` to shut the host down. Pi's function takes an event bus; PiG's does not (D117).
+`coding.DiscoverAndLoadExtensions(ctx, configuredPaths, cwd, agentDir)` discovers extensions in the project, global and configured locations with Pi's `discoverAndLoadExtensions` order and entry-point rules, and loads them in the extension host. Call `Close()` on the returned `LoadExtensionsResult` to shut the host down. Pi's function takes an event bus; Ompig's does not (D117).
 
-Use a Piglet when the composition should also be usable from the `pig` executable or built as a Piglet Binary.
+Use a Ompiglet when the composition should also be usable from the `ompig` executable or built as a Ompiglet Binary.
 
 ## Headless embedding and binary size
 
-A program that embeds PiG without a terminal still links everything the session API can reach. `examples/headless` is a complete small program: the session API, MCP servers from `mcp.json` and one provider (Anthropic). It has no terminal and no extension files. Build it the way PiG builds its releases:
+A program that embeds Ompig without a terminal still links everything the session API can reach. `examples/headless` is a complete small program: the session API, MCP servers from `mcp.json` and one provider (Anthropic). It has no terminal and no extension files. Build it the way Ompig builds its releases:
 
 ```text
 CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o headless ./examples/headless
 ```
 
-On linux/amd64 this is 40.1 MB, against 69.8 MB for the `pig` command. Three things are already left out of such a program without any option: the terminal MCP view and tool renderers (package `mcptui`, see below), the terminal editor with the word dictionaries behind it (6.3 MB), and the announcement image of the interactive mode (0.5 MB). The rest is features you can remove with build tags.
+On linux/amd64 this is 40.1 MB, against 69.8 MB for the `ompig` command. Three things are already left out of such a program without any option: the terminal MCP view and tool renderers (package `mcptui`, see below), the terminal editor with the word dictionaries behind it (6.3 MB), and the announcement image of the interactive mode (0.5 MB). The rest is features you can remove with build tags.
 
 ### Strip tags
 
-Every feature that can be left out of a build has a Go build tag, `pig_strip_<id>`. They are the same tags a [Piglet Binary](piglet-binaries.md) uses, so one mechanism covers both. Pass the ones you do not need to `go build -tags`. A stripped feature is not linked and acts as if it were absent: a request for it reports that it was stripped from this build, and model lists leave out the models of a stripped API.
+Every feature that can be left out of a build has a Go build tag, `ompig_strip_<id>`. They are the same tags a [Ompiglet Binary](ompiglet-binaries.md) uses, so one mechanism covers both. Pass the ones you do not need to `go build -tags`. A stripped feature is not linked and acts as if it were absent: a request for it reports that it was stripped from this build, and model lists leave out the models of a stripped API.
 
 | Tag | Leaves the binary | Saves on `examples/headless` (linux/amd64) |
 | --- | --- | ---: |
-| `pig_strip_node_extensions` | The embedded Node runtime that runs TypeScript and JavaScript extensions | 5.07 MB |
-| `pig_strip_bedrock_converse_stream` | The Amazon Bedrock API and the AWS SDK | 3.29 MB |
-| `pig_strip_syntax_highlight` | Code highlighting grammars | 0.63 MB |
-| `pig_strip_google_vertex` | The Google Vertex API and its OAuth code | 0.46 MB |
-| `pig_strip_mistral_conversations` | The Mistral conversations API | 0.10 MB |
-| `pig_strip_mermaid` | Mermaid diagram drawing | 0.07 MB |
-| `pig_strip_word_dictionaries` | The CJK, Thai, Lao, Khmer and Burmese word dictionaries | 0, already absent (6.3 MB in the `pig` command) |
+| `ompig_strip_node_extensions` | The embedded Node runtime that runs TypeScript and JavaScript extensions | 5.07 MB |
+| `ompig_strip_bedrock_converse_stream` | The Amazon Bedrock API and the AWS SDK | 3.29 MB |
+| `ompig_strip_syntax_highlight` | Code highlighting grammars | 0.63 MB |
+| `ompig_strip_google_vertex` | The Google Vertex API and its OAuth code | 0.46 MB |
+| `ompig_strip_mistral_conversations` | The Mistral conversations API | 0.10 MB |
+| `ompig_strip_mermaid` | Mermaid diagram drawing | 0.07 MB |
+| `ompig_strip_word_dictionaries` | The CJK, Thai, Lao, Khmer and Burmese word dictionaries | 0, already absent (6.3 MB in the `ompig` command) |
 
-The remaining tags (`pig_strip_llama_cpp`, `pig_strip_codemode`, `pig_strip_tool_search`, `pig_strip_pig_login`, `pig_strip_docs`, `pig_strip_changelog`, `pig_strip_export_html`, `pig_strip_self_update`, `pig_strip_piglet_builder`, `pig_strip_extension_sdk_go`, `pig_strip_extension_sdk_python` and `pig_strip_extension_sdk_rust`) remove features the session API does not link by itself. They matter when your program also links the `pig` command's packages, and they do no harm here. Passing all of them except `pig_strip_mcp` takes `examples/headless` to 30.4 MB on linux/amd64, 29.0 MB on darwin/arm64 and 31.7 MB on windows/amd64.
+The remaining tags (`ompig_strip_llama_cpp`, `ompig_strip_codemode`, `ompig_strip_tool_search`, `ompig_strip_ompig_login`, `ompig_strip_docs`, `ompig_strip_changelog`, `ompig_strip_export_html`, `ompig_strip_self_update`, `ompig_strip_piglet_builder`, `ompig_strip_extension_sdk_go`, `ompig_strip_extension_sdk_python` and `ompig_strip_extension_sdk_rust`) remove features the session API does not link by itself. They matter when your program also links the `ompig` command's packages, and they do no harm here. Passing all of them except `ompig_strip_mcp` takes `examples/headless` to 30.4 MB on linux/amd64, 29.0 MB on darwin/arm64 and 31.7 MB on windows/amd64.
 
 Notes:
 
-- Leave `pig_strip_mcp` out. It removes MCP from the `pig` command's built-in extension list. A program that calls `mcpext` itself, as `examples/headless` does, needs the package.
-- `pig_strip_node_extensions` means the program cannot load TypeScript or JavaScript extension files. Set `DefaultResourceLoaderOptions.NoExtensions` if the program loads none, as the example does.
+- Leave `ompig_strip_mcp` out. It removes MCP from the `ompig` command's built-in extension list. A program that calls `mcpext` itself, as `examples/headless` does, needs the package.
+- `ompig_strip_node_extensions` means the program cannot load TypeScript or JavaScript extension files. Set `DefaultResourceLoaderOptions.NoExtensions` if the program loads none, as the example does.
 - There is no tag that keeps one provider and removes the others. The tags above remove whole APIs that bring their own large dependencies (Bedrock, Vertex, Mistral). The other providers share one code path and stay linked. The code of one provider is small next to these dependencies.
 - The tags apply to the whole program and to every package it links. Check the result with `go build -tags` and the size of the file.
 
 ### MCP without a terminal
 
-`mcpext.CreateMcpExtension(mcpext.Options{...})` is the headless entry point. Leave `Options.Terminal` nil: then the extension has no `/mcp` manager view and no tool renderers, and nothing from package `mcptui` is linked. The `pig` command sets `Options.Terminal` to `mcptui.Terminal()`. `mcpext.NewHeadless` does the same for a caller that builds the extension from a `Host` of its own.
+`mcpext.CreateMcpExtension(mcpext.Options{...})` is the headless entry point. Leave `Options.Terminal` nil: then the extension has no `/mcp` manager view and no tool renderers, and nothing from package `mcptui` is linked. The `ompig` command sets `Options.Terminal` to `mcptui.Terminal()`. `mcpext.NewHeadless` does the same for a caller that builds the extension from a `Host` of its own.
 
 ### Editors in extension views
 
-Extensions can put an editor in a view they draw. The component that builds it uses the terminal editor, which pulls in the word dictionaries. The `pig` command enables it with `subprocess.EnableEditorViews()` where it creates the extension host. A program that never draws an extension's editor does not call it, and the editor is not linked. A program that serves extension views to its own terminal calls `subprocess.EnableEditorViews()` once before the first view is built. Until then a view with an editor fails with an error that names the call, and an editor node that is not valid is rejected as before.
+Extensions can put an editor in a view they draw. The component that builds it uses the terminal editor, which pulls in the word dictionaries. The `ompig` command enables it with `subprocess.EnableEditorViews()` where it creates the extension host. A program that never draws an extension's editor does not call it, and the editor is not linked. A program that serves extension views to its own terminal calls `subprocess.EnableEditorViews()` once before the first view is built. Until then a view with an editor fails with an error that names the call, and an editor node that is not valid is rejected as before.
 
 ### Size gate
 
-`TestHeadlessEmbedBinarySizeGate` builds `examples/headless` for every release platform, with no tags and with every strip tag except `pig_strip_mcp`, and fails when a binary is larger than its ceiling in `automation/perf/ratchet.toml` (`binary.headless.*`). A ceiling only moves down. It is the same gate that holds the `pig` command's size (`binary.pig.*`).
+`TestHeadlessEmbedBinarySizeGate` builds `examples/headless` for every release platform, with no tags and with every strip tag except `ompig_strip_mcp`, and fails when a binary is larger than its ceiling in `automation/perf/ratchet.toml` (`binary.headless.*`). A ceiling only moves down. It is the same gate that holds the `ompig` command's size (`binary.ompig.*`).
 
 ## Go API changes in 0.5.0
 
@@ -431,7 +431,7 @@ Do not replay a failed extension operation automatically unless the application 
 
 ### Contexts that print and cancel like Pi's
 
-`github.com/MichaelKinsy/PiG/chord/context` (package `chordctx`) ports Pi's `@earendil-works/chord/context` onto `context.Context`. It was `internal/chord/chordctx` before 0.5.0. An abort signal is cancellation, and the abort reason is the cancellation cause. `Background()` and `TODO()` are Pi's `BACKGROUND_CONTEXT` and `TODO_CONTEXT`, and contexts derived from them print as Pi's do. `NewKey` makes a typed key from a description that names it in diagnostics only. `WithValue` and `Value` store and read a value, and the parent is unchanged. `WithAbortSignal(parent, signal)` is cancelled by the parent or the signal, whichever is first, with that one's cause. `WithoutAbortSignal` keeps every value and ignores caller cancellation, for mandatory cleanup only. `WithCancel` returns a child and a `cancel(cause)` function. `Await[T](ctx, work)` returns the work's outcome, or the cancellation cause from this waiter only: it does not cancel the work. `Telemetry(ctx)` is Pi's `Context.telemetry`: the explicit telemetry parent, never nil, which is `telemetry.NoopTelemetryContext` for `Background()`, `TODO()`, and any context that carries none. `WithTelemetry(parent, telemetry)` derives a context with a telemetry parent and changes neither the parent, its cancellation, nor its values. `TraceIn[T](ctx, options, fn)` starts a child span of `Telemetry(ctx)` and calls `fn(child)`, where `child` is derived from `ctx` and `Telemetry(child)` is that span, so spans nest through the contexts passed down and there is no ambient current span. `fn`'s result and error pass through unchanged. Pi's callback receives one context typed with a narrowed `telemetry` member; Go cannot narrow a context's type, so the span is a second argument. These helpers do not instrument Chord hosts, methods, or network frames.
+`github.com/tmih06/ompig/chord/context` (package `chordctx`) ports Pi's `@earendil-works/chord/context` onto `context.Context`. It was `internal/chord/chordctx` before 0.5.0. An abort signal is cancellation, and the abort reason is the cancellation cause. `Background()` and `TODO()` are Pi's `BACKGROUND_CONTEXT` and `TODO_CONTEXT`, and contexts derived from them print as Pi's do. `NewKey` makes a typed key from a description that names it in diagnostics only. `WithValue` and `Value` store and read a value, and the parent is unchanged. `WithAbortSignal(parent, signal)` is cancelled by the parent or the signal, whichever is first, with that one's cause. `WithoutAbortSignal` keeps every value and ignores caller cancellation, for mandatory cleanup only. `WithCancel` returns a child and a `cancel(cause)` function. `Await[T](ctx, work)` returns the work's outcome, or the cancellation cause from this waiter only: it does not cancel the work. `Telemetry(ctx)` is Pi's `Context.telemetry`: the explicit telemetry parent, never nil, which is `telemetry.NoopTelemetryContext` for `Background()`, `TODO()`, and any context that carries none. `WithTelemetry(parent, telemetry)` derives a context with a telemetry parent and changes neither the parent, its cancellation, nor its values. `TraceIn[T](ctx, options, fn)` starts a child span of `Telemetry(ctx)` and calls `fn(child)`, where `child` is derived from `ctx` and `Telemetry(child)` is that span, so spans nest through the contexts passed down and there is no ambient current span. `fn`'s result and error pass through unchanged. Pi's callback receives one context typed with a narrowed `telemetry` member; Go cannot narrow a context's type, so the span is a second argument. These helpers do not instrument Chord hosts, methods, or network frames.
 
 ## Harness events
 
@@ -443,29 +443,29 @@ Low-level harness event batches clone every payload before binding recipients. F
 
 ## RPC alternative
 
-Start PiG in RPC mode when the caller needs a language-neutral process boundary:
+Start Ompig in RPC mode when the caller needs a language-neutral process boundary:
 
 ```bash
-pig --mode rpc
+ompig --mode rpc
 ```
 
 See [RPC mode](/docs/latest/rpc).
 
 ## TypeScript extension declarations
 
-Node extensions use the TypeScript API from `@earendil-works/pi-coding-agent`. PiG maps those imports to compatible runtime modules when it starts the extension.
+Node extensions use the TypeScript API from `@earendil-works/pi-coding-agent`. Ompig maps those imports to compatible runtime modules when it starts the extension.
 
-The source tree includes `extensions/sdk-ts`, a declaration-only package that pins the exact Pi version and adds types for PiG-only APIs such as `ui.setLogin`. It does not contain a second TypeScript runtime. It is not published to npm; install it from the source tree.
+The source tree includes `extensions/sdk-ts`, a declaration-only package that pins the exact Pi version and adds types for Ompig-only APIs such as `ui.setLogin`. It does not contain a second TypeScript runtime. It is not published to npm; install it from the source tree.
 
 ## Pi reference
 
-The npm package `@earendil-works/pi-coding-agent` is Pi's TypeScript SDK. PiG's Go SDK and non-TypeScript bridges do not replace it.
+The npm package `@earendil-works/pi-coding-agent` is Pi's TypeScript SDK. Ompig's Go SDK and non-TypeScript bridges do not replace it.
 
 See [upstream Pi's SDK documentation](https://pi.dev/docs/latest/sdk) for the reference implementation.
 
 ## Related documentation
 
 - [Extensions](/docs/latest/extensions)
-- [Piglets](/docs/latest/piglets)
+- [Ompiglets](/docs/latest/ompiglets)
 - [Derivative harnesses](/docs/latest/derivative-harnesses)
 - [RPC mode](/docs/latest/rpc)

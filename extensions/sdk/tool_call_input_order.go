@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // marshalInSourceOrder encodes value with the object member order of the JSON text source, as a JavaScript object keeps the order of the members its handler edited: a member the source lists keeps its place, a member it does not list follows in sorted order, and a removed member is gone. A Go map has no insertion order, so the order of two members a handler added is sorted. An array is matched element by element.

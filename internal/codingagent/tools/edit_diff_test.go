@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // TestEditMultipleReplacementsPositionBased verifies that multiple replacements are matched against
@@ -103,14 +103,14 @@ func TestEditBOMPreserved(t *testing.T) {
 	et := &EditTool{CWD: dir, Queue: NewFileMutationQueue()}
 	args, _ := json.Marshal(editParams{
 		Path:  "x.txt",
-		Edits: []editEntry{{OldText: "world", NewText: "pig"}},
+		Edits: []editEntry{{OldText: "world", NewText: "ompig"}},
 	})
 	res, err := et.Execute(context.Background(), "", args, nil)
 	if err != nil || res.IsError {
 		t.Fatalf("edit failed: err=%v res=%s", err, res.Text())
 	}
 	got, _ := os.ReadFile(path)
-	want := "\uFEFFhello pig\n"
+	want := "\uFEFFhello ompig\n"
 	if string(got) != want {
 		t.Errorf("BOM not preserved: got %q want %q", got, want)
 	}
@@ -145,13 +145,13 @@ func TestEditPrepareArgumentsLegacy(t *testing.T) {
 	}
 	et := &EditTool{CWD: dir, Queue: NewFileMutationQueue()}
 	// Legacy shape: top-level oldText/newText, no edits[].
-	args := json.RawMessage(`{"path":"x.txt","oldText":"world","newText":"pig"}`)
+	args := json.RawMessage(`{"path":"x.txt","oldText":"world","newText":"ompig"}`)
 	res, err := et.Execute(context.Background(), "", args, nil)
 	if err != nil || res.IsError {
 		t.Fatalf("legacy edit failed: err=%v res=%s", err, res.Text())
 	}
 	got, _ := os.ReadFile(path)
-	if string(got) != "hello pig\n" {
+	if string(got) != "hello ompig\n" {
 		t.Errorf("legacy edit produced wrong content: %q", got)
 	}
 }
@@ -165,13 +165,13 @@ func TestEditPrepareArgumentsEditsAsJSONString(t *testing.T) {
 		t.Fatal(err)
 	}
 	et := &EditTool{CWD: dir, Queue: NewFileMutationQueue()}
-	args := json.RawMessage(`{"path":"x.txt","edits":"[{\"oldText\":\"world\",\"newText\":\"pig\"}]"}`)
+	args := json.RawMessage(`{"path":"x.txt","edits":"[{\"oldText\":\"world\",\"newText\":\"ompig\"}]"}`)
 	res, err := et.Execute(context.Background(), "", args, nil)
 	if err != nil || res.IsError {
 		t.Fatalf("string-edits failed: err=%v res=%s", err, res.Text())
 	}
 	got, _ := os.ReadFile(path)
-	if string(got) != "hello pig\n" {
+	if string(got) != "hello ompig\n" {
 		t.Errorf("string-edits produced wrong content: %q", got)
 	}
 }

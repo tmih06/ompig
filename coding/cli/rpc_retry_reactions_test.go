@@ -18,7 +18,7 @@ func TestRPCRetryCancellationReactionBatches(t *testing.T) {
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			home := t.TempDir()
-			p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--no-context-files", "--no-skills", "--system-prompt", "RPC retry probe.", "--model", "test-faux/faux-1")
+			p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--no-context-files", "--no-skills", "--system-prompt", "RPC retry probe.", "--model", "test-faux/faux-1")
 			p.send(`{"id":"p","type":"prompt","message":"Trigger: retryable provider error"}`)
 			p.await("retry start", func(record rpcRecord) bool { return record["type"] == "auto_retry_start" })
 			p.send("{\"id\":\"a\",\"type\":\"abort_retry\"}\n" + strings.ReplaceAll(test.middle, `\n`, "\n"))

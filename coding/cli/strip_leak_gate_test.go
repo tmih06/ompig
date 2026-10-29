@@ -11,24 +11,24 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip/leakgate"
+	"github.com/tmih06/ompig/ai"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip/leakgate"
 )
 
-// The strip leak gate of the CLI surfaces, the half of internal/codingagent's TestStripLeakGate that needs cmd/pig. It
+// The strip leak gate of the CLI surfaces, the half of internal/codingagent's TestStripLeakGate that needs cmd/ompig. It
 // takes its cases from the generated strip ID table (pigstrip.Lists, pigstrip.Known) and the names from leakgate's
 // tables, so a new ID is covered without an edit here. The in-process surfaces record a runtime strip of each ID in
-// pigstrip, as `pig` does for an active Piglet; the session surfaces run `pig --mode rpc --piglet` with a Piglet that
-// strips the ID; the stripped-Binary surfaces run cmd/pig built with every strip build tag.
+// pigstrip, as `ompig` does for an active Ompiglet; the session surfaces run `ompig --mode rpc --ompiglet` with a Ompiglet that
+// strips the ID; the stripped-Binary surfaces run cmd/ompig built with every strip build tag.
 //
 // Pi's getCommands and RPC get_commands list no built-in slash command, so the interactive gate covers those; the
-// session gate covers the command IDs those surfaces do list: the Piglet extension's /piglet, which any session with an
-// active Piglet shows. RPC commands of stripped slash commands stay (D92 decision #11).
+// session gate covers the command IDs those surfaces do list: the Ompiglet extension's /ompiglet, which any session with an
+// active Ompiglet shows. RPC commands of stripped slash commands stay (D92 decision #11).
 //
-// pig additive (D92): Stock PiG strips nothing, so every surface here is Pi's.
+// ompig additive (D92): Stock Ompig strips nothing, so every surface here is Pi's.
 
 // cliLeakSurface renders one CLI surface as plain text. lists names the strip lists whose IDs the surface can show.
 type cliLeakSurface struct {
@@ -43,15 +43,15 @@ type cliLeakSurface struct {
 var cliLeakIncidental = map[string][]string{
 	"--help": {
 		// The example session path is a file name, not the /session command.
-		"~/.pig/agent/sessions/--path--/session.jsonl",
+		"~/.ompig/agent/sessions/--path--/session.jsonl",
 		"Edit files with find/replace",
 	},
 	"system prompt": {
 		"- bash: Execute bash commands (ls, grep, find, etc.)",
 		"- Use bash for file operations like ls, rg, find",
-		"PiG documentation (read only when the user asks",
+		"Ompig documentation (read only when the user asks",
 		"read the docs and examples",
-		"Always read pig .md files completely",
+		"Always read ompig .md files completely",
 	},
 }
 
@@ -74,7 +74,7 @@ var stripLeakProviderEnv = map[string]string{
 	"AWS_ACCESS_KEY_ID": "x", "AWS_SECRET_ACCESS_KEY": "y", "AWS_REGION": "us-east-1",
 }
 
-// cliLeakSurfaces are the surfaces cmd/pig renders in this process from its registries.
+// cliLeakSurfaces are the surfaces cmd/ompig renders in this process from its registries.
 func cliLeakSurfaces(agentDir string) []cliLeakSurface {
 	return []cliLeakSurface{
 		{name: "--help", lists: []string{pigstrip.ListTools, pigstrip.ListExtensions, pigstrip.ListAPIs, pigstrip.ListFeatures}, render: func(t *testing.T) string {
@@ -86,14 +86,14 @@ func cliLeakSurfaces(agentDir string) []cliLeakSurface {
 			printHelp(&out, false)
 			return out.String()
 		}},
-		{name: "pig piglet usage", lists: []string{pigstrip.ListFeatures}, render: func(t *testing.T) string {
+		{name: "ompig ompiglet usage", lists: []string{pigstrip.ListFeatures}, render: func(t *testing.T) string {
 			var stdout, stderr bytes.Buffer
-			if code := piglet.RunCommand([]string{"piglet"}, &stdout, &stderr); code != 0 {
-				t.Fatalf("pig piglet exited %d: %s", code, stderr.String())
+			if code := ompiglet.RunCommand([]string{"ompiglet"}, &stdout, &stderr); code != 0 {
+				t.Fatalf("ompig ompiglet exited %d: %s", code, stderr.String())
 			}
 			return stdout.String()
 		}},
-		{name: "pig config", lists: []string{pigstrip.ListExtensions, pigstrip.ListFeatures}, render: func(t *testing.T) string {
+		{name: "ompig config", lists: []string{pigstrip.ListExtensions, pigstrip.ListFeatures}, render: func(t *testing.T) string {
 			cwd := t.TempDir()
 			settings := codingagent.NewSettingsManagerWithProjectTrust(cwd, agentDir, false)
 			selector, err := newScopedConfigSelector(cwd, agentDir, settings, settings, false, false, cliBuiltinExtensionNames())
@@ -134,7 +134,7 @@ func writeStripLeakResources(t *testing.T, agentDir string) {
 }
 
 // TestStripLeakGate strips every generated strip ID in turn and fails when a CLI, extension API, RPC or system prompt
-// surface still shows it, and when cmd/pig built with every strip build tag shows a built-in it compiled out. It fails
+// surface still shows it, and when cmd/ompig built with every strip build tag shows a built-in it compiled out. It fails
 // too when a strip list maps to no surface here.
 func TestStripLeakGate(t *testing.T) {
 	sessionLists := []string{pigstrip.ListTools, pigstrip.ListCommands, pigstrip.ListExtensions, pigstrip.ListAPIs, pigstrip.ListFeatures}
@@ -156,7 +156,7 @@ func TestStripLeakGate(t *testing.T) {
 		agentDir := t.TempDir()
 		writeStripLeakResources(t, agentDir)
 		setStripTestEnv(t, stripLeakProviderEnv)
-		t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+		t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 		surfaces := cliLeakSurfaces(agentDir)
 		for _, surface := range surfaces {
 			if strings.TrimSpace(surface.render(t)) == "" {
@@ -188,7 +188,7 @@ func TestStripLeakGate(t *testing.T) {
 	})
 	t.Run("session", func(t *testing.T) {
 		if testing.Short() {
-			t.Skip("runs pig --mode rpc for every strip ID")
+			t.Skip("runs ompig --mode rpc for every strip ID")
 		}
 		stock := runStripLeakSession(t, nil)
 		for _, surface := range stripLeakSessionSurfaces {
@@ -196,7 +196,7 @@ func TestStripLeakGate(t *testing.T) {
 				t.Fatalf("stock %s renders nothing; the gate would pass vacuously", surface.name)
 			}
 		}
-		// The command surfaces list only extension commands; /piglet needs an active Piglet. A Piglet that strips
+		// The command surfaces list only extension commands; /ompiglet needs an active Ompiglet. A Ompiglet that strips
 		// nothing shows which command IDs a session surface lists, and only those get a stripped session.
 		withPiglet := runStripLeakSession(t, map[string][]string{})
 		sessionCommands := 0
@@ -233,14 +233,14 @@ func TestStripLeakGate(t *testing.T) {
 			}
 		}
 		if sessionCommands == 0 {
-			t.Fatal("no session surface lists a command ID under an active Piglet; the commands gate would pass vacuously")
+			t.Fatal("no session surface lists a command ID under an active Ompiglet; the commands gate would pass vacuously")
 		}
 	})
 	t.Run("session keep mode", func(t *testing.T) {
 		if testing.Short() {
-			t.Skip("runs pig --mode rpc")
+			t.Skip("runs ompig --mode rpc")
 		}
-		// A keep-mode Piglet strips every ID of its keep-mode lists but the kept ones; the same surfaces leave the
+		// A keep-mode Ompiglet strips every ID of its keep-mode lists but the kept ones; the same surfaces leave the
 		// expanded IDs out, and the kept tools stay.
 		kept := map[string][]string{pigstrip.ListTools: {"read", "bash", "edit", "write"}, pigstrip.ListExtensions: {}}
 		rendered := runStripLeakSessionYAML(t, "name: leak\nstrip:\n  keep:\n    tools: [read, bash, edit, write]\n    extensions: []\n")
@@ -270,7 +270,7 @@ func TestStripLeakGate(t *testing.T) {
 		}
 	})
 	t.Run("stripped binary", func(t *testing.T) {
-		tags := piglet.StripBuildTags()
+		tags := ompiglet.StripBuildTags()
 		type strippedID struct{ list, id string }
 		var compiledOut []strippedID
 		for _, list := range pigstrip.Lists() {
@@ -284,7 +284,7 @@ func TestStripLeakGate(t *testing.T) {
 			t.Fatal("no strip ID has a build tag; the gate would pass vacuously")
 		}
 		filterAllProviderEnv(t)
-		for _, args := range [][]string{{"--help"}, {"piglet"}, {"--list-models"}} {
+		for _, args := range [][]string{{"--help"}, {"ompiglet"}, {"--list-models"}} {
 			if args[0] == "--list-models" {
 				for name, value := range stripLeakProviderEnv {
 					t.Setenv(name, value)
@@ -292,7 +292,7 @@ func TestStripLeakGate(t *testing.T) {
 			}
 			stdout, stderr, code := runStrippedPig(t, "", args...)
 			if code != 0 {
-				t.Fatalf("stripped pig %s exited %d: %s", strings.Join(args, " "), code, stderr)
+				t.Fatalf("stripped ompig %s exited %d: %s", strings.Join(args, " "), code, stderr)
 			}
 			if args[0] == "--list-models" {
 				stdout = modelProviders(stdout)
@@ -303,7 +303,7 @@ func TestStripLeakGate(t *testing.T) {
 					t.Fatal(err)
 				}
 				if found := leakgate.Find(stdout, cliLeakIncidental["--help"], patterns); len(found) > 0 {
-					t.Errorf("stripped pig %s still shows compiled-out %s %s:\n  %s", strings.Join(args, " "), stripped.list, stripped.id, strings.Join(found, "\n  "))
+					t.Errorf("stripped ompig %s still shows compiled-out %s %s:\n  %s", strings.Join(args, " "), stripped.list, stripped.id, strings.Join(found, "\n  "))
 				}
 			}
 		}
@@ -341,8 +341,8 @@ const stripLeakProbe = `export default function(pi) {
 }
 `
 
-// runStripLeakSession runs `pig --mode rpc` with every built-in extension, codemode and tool search active, the probe
-// extension, a skill and a prompt template, under a Piglet that strips strip (no Piglet when strip is nil, a Piglet that
+// runStripLeakSession runs `ompig --mode rpc` with every built-in extension, codemode and tool search active, the probe
+// extension, a skill and a prompt template, under a Ompiglet that strips strip (no Ompiglet when strip is nil, a Ompiglet that
 // strips nothing when it is empty), and returns each session surface.
 func runStripLeakSession(t *testing.T, strip map[string][]string) map[string]string {
 	t.Helper()
@@ -364,8 +364,8 @@ func runStripLeakSession(t *testing.T, strip map[string][]string) map[string]str
 	return runStripLeakSessionYAML(t, doc)
 }
 
-// runStripLeakSessionYAML is runStripLeakSession with the Piglet document as YAML; empty runs without a Piglet.
-func runStripLeakSessionYAML(t *testing.T, piglet string) map[string]string {
+// runStripLeakSessionYAML is runStripLeakSession with the Ompiglet document as YAML; empty runs without a Ompiglet.
+func runStripLeakSessionYAML(t *testing.T, ompiglet string) map[string]string {
 	t.Helper()
 	home, cwd := t.TempDir(), t.TempDir()
 	agentDir := filepath.Join(home, "agent")
@@ -374,7 +374,7 @@ func runStripLeakSessionYAML(t *testing.T, piglet string) map[string]string {
 	if err := os.WriteFile(probe, []byte(stripLeakProbe), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	env := []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "NO_COLOR=1"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "NO_COLOR=1"}
 	for _, provider := range ai.ListRuntimeProviders() {
 		for _, key := range ai.FindEnvKeys(provider, nil) {
 			env = append(env, key+"=")
@@ -393,12 +393,12 @@ func runStripLeakSessionYAML(t *testing.T, piglet string) map[string]string {
 	for _, name := range pigstrip.Known(pigstrip.ListExtensions) {
 		args = append(args, "-e", "builtin:"+name)
 	}
-	if piglet != "" {
+	if ompiglet != "" {
 		path := filepath.Join(t.TempDir(), "leak.yaml")
-		if err := os.WriteFile(path, []byte(piglet), 0o600); err != nil {
+		if err := os.WriteFile(path, []byte(ompiglet), 0o600); err != nil {
 			t.Fatal(err)
 		}
-		args = append(args, "--piglet", path)
+		args = append(args, "--ompiglet", path)
 	}
 	p := startRPCProcessAt(t, cwd, env, args...)
 	rendered := map[string]string{}

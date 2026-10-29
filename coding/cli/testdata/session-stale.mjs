@@ -1,11 +1,11 @@
 // session-stale.mjs keeps the pi API and command ctx of the Session that called
 // ctx.newSession() and uses them after the replacement. Pi invalidates the
 // outgoing runner (agent-session-runtime.ts:167-177), so each use throws the
-// runner's stale message. Lines go to the file named by PIG_TEST_STALE_LOG.
+// runner's stale message. Lines go to the file named by OMPIG_TEST_STALE_LOG.
 import { appendFileSync } from "node:fs";
 
 export default function sessionStaleExtension(pi) {
-  const log = (line) => appendFileSync(process.env.PIG_TEST_STALE_LOG, `${line}\n`);
+  const log = (line) => appendFileSync(process.env.OMPIG_TEST_STALE_LOG, `${line}\n`);
   const attempt = async (name, use) => {
     try {
       await use();

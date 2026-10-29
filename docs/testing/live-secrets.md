@@ -2,9 +2,9 @@
 
 Live provider tests skip when their required environment variables are unset or empty. The skip message names the missing variables. Setting credentials enables the corresponding tests; authentication failures, network failures, and model assertion failures then fail the test. A skip is not evidence of provider behavior.
 
-Use Pi's provider environment names from [`packages/ai/src/env-api-keys.ts`](../../.upstream/current/packages/ai/src/env-api-keys.ts), mirrored by [`ai/auth_env_keys.go`](../../ai/auth_env_keys.go). Do not use `PIG_LIVE_*_API_KEY`, `PIG_LIVE_VERTEX_API_KEY`, `PIG_LIVE_AZURE_OPENAI_BASE_URL`, or `PIG_LIVE_COPILOT_TOKEN`. Those aliases are not read by the live tests.
+Use Pi's provider environment names from [`packages/ai/src/env-api-keys.ts`](../../.upstream/current/packages/ai/src/env-api-keys.ts), mirrored by [`ai/auth_env_keys.go`](../../ai/auth_env_keys.go). Do not use `OMPIG_LIVE_*_API_KEY`, `OMPIG_LIVE_VERTEX_API_KEY`, `OMPIG_LIVE_AZURE_OPENAI_BASE_URL`, or `OMPIG_LIVE_COPILOT_TOKEN`. Those aliases are not read by the live tests.
 
-Codex has no provider key environment variable in Pi. `PIG_LIVE_CODEX_TOKEN` is a test-only input containing a resolved OAuth access token, not an OpenAI API key. Pi's equivalent tests resolve this token through `packages/ai/test/oauth.ts`. PiG's live tests do not read or refresh the developer's auth files.
+Codex has no provider key environment variable in Pi. `OMPIG_LIVE_CODEX_TOKEN` is a test-only input containing a resolved OAuth access token, not an OpenAI API key. Pi's equivalent tests resolve this token through `packages/ai/test/oauth.ts`. Ompig's live tests do not read or refresh the developer's auth files.
 
 ## Run
 
@@ -26,7 +26,7 @@ BEDROCK_EXTENSIVE_MODEL_TEST=1 go test -tags live ./ai -run '^TestPortWave13Bedr
 
 The integration package also contains credential-gated tests under the `integration` tag alone. Run the Session directory cases with `-run 'TestSessionDir|TestRPCModeHonorsSessionFlags'`, the subagent parity cases with `-run '^TestParity_Sub'`, or the performance cases with `-run '^TestPerf_'`. Those tests require the same Copilot credential. Subagent tests additionally need an external subagent extension, agent definitions, and tmux. Paired tests need the pinned Pi installation. These are tool and fixture requirements, not additional provider secrets.
 
-For a credential-free CI job, leave every credential in the table below unset and use an empty temporary `HOME`, `PIG_HOME`, `PIG_CODING_AGENT_DIR`, and `PI_CODING_AGENT_DIR`. Do not source a developer's auth environment. Preserve the installed toolchain paths and Go build caches when changing `HOME`.
+For a credential-free CI job, leave every credential in the table below unset and use an empty temporary `HOME`, `OMPIG_HOME`, `OMPIG_CODING_AGENT_DIR`, and `PI_CODING_AGENT_DIR`. Do not source a developer's auth environment. Preserve the installed toolchain paths and Go build caches when changing `HOME`.
 
 A negative authentication probe is expected to exit nonzero, not skip:
 
@@ -87,7 +87,7 @@ The test labels in this table expand to exact test names in the next section. En
 | `MINIMAX_API_KEY` | `minimax` | Compatibility |
 | `MINIMAX_CN_API_KEY` | `minimax-cn` | Compatibility |
 | `AI_GATEWAY_API_KEY` | `vercel-ai-gateway` | Compatibility |
-| `PIG_LIVE_CODEX_TOKEN` | `openai-codex` test input | Codex cache affinity and Images; resolved OAuth access token |
+| `OMPIG_LIVE_CODEX_TOKEN` | `openai-codex` test input | Codex cache affinity and Images; resolved OAuth access token |
 | `AWS_PROFILE` | `amazon-bedrock` | Bedrock; named profile alternative |
 | `AWS_ACCESS_KEY_ID` | `amazon-bedrock` | Bedrock; requires `AWS_SECRET_ACCESS_KEY` |
 | `AWS_SECRET_ACCESS_KEY` | `amazon-bedrock` | Bedrock; requires `AWS_ACCESS_KEY_ID` |
@@ -121,7 +121,7 @@ All AI tests below require `-tags live`.
 
 ## Shared skip convention
 
-Import `github.com/MichaelKinsy/PiG/internal/testenv` and call:
+Import `github.com/tmih06/ompig/internal/testenv` and call:
 
 ```go
 key := testenv.RequireLiveEnv(t, "OPENAI_API_KEY")
@@ -139,6 +139,6 @@ A live test records `t.Logf("live provider: %s", providerID)` before its credent
 
 The inventory scans build tags, `Getenv`, `LookupEnv`, provider environment discovery, auth-file gates, and SDK-language environment reads across `ai/`, `coding/`, `internal/`, `cmd/`, `extensions/`, and `test/integration/`.
 
-No live-provider test resides in `internal/`, `cmd/`, or the Go, Rust, Python, and TypeScript SDK test sources. Their environment reads configure hermetic fixtures, select subprocess helper entry points, or enable local probes and benchmarks. Do not route those through the live-secret helper. In particular, leave `PIG_RUNTIME_ORIGINAL_PROBE`, `PIG_RUNTIME_REPLACEMENT_PROBE`, `PIG_REPLACED_2860_PROBE`, `PIG_CUSTOM_SETTLED_PROBE`, `PIG_SDK_MANAGER_PROBE`, `PIG_PT_SHUTDOWN_PROBE`, `PIG_TEST_MODEL_INFO_CYCLE`, `PIG_PROBE_RENDER_RACE`, `PIG_NODE_CELL_MEMORY_PROBE`, `PIG_PARITY_PROBE`, `PIG_WAVE12_CATALOG`, and `PIG_BENCH_SESSION_*` behavior unchanged.
+No live-provider test resides in `internal/`, `cmd/`, or the Go, Rust, Python, and TypeScript SDK test sources. Their environment reads configure hermetic fixtures, select subprocess helper entry points, or enable local probes and benchmarks. Do not route those through the live-secret helper. In particular, leave `OMPIG_RUNTIME_ORIGINAL_PROBE`, `OMPIG_RUNTIME_REPLACEMENT_PROBE`, `OMPIG_REPLACED_2860_PROBE`, `OMPIG_CUSTOM_SETTLED_PROBE`, `OMPIG_SDK_MANAGER_PROBE`, `OMPIG_PT_SHUTDOWN_PROBE`, `OMPIG_TEST_MODEL_INFO_CYCLE`, `OMPIG_PROBE_RENDER_RACE`, `OMPIG_NODE_CELL_MEMORY_PROBE`, `OMPIG_PARITY_PROBE`, `OMPIG_WAVE12_CATALOG`, and `OMPIG_BENCH_SESSION_*` behavior unchanged.
 
 The integration files `live_render_test.go` and `markdown_live_parity_test.go` use faux-provider terminal fixtures, not remote credentials. Their names do not make them live-provider tests. The ordinary AI and coding companion tests likewise use faux endpoints; their inputs and assertions are unchanged.

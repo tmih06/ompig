@@ -38,10 +38,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/parity-lifecycle.mjs"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/ext/parity-lifecycle.mjs"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
@@ -51,7 +51,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 # Upstream readiness re-probed 2026-09-25 against the repository pin: the idle editor renders 0.0%/128k (auto) with faux-1, not a Ready paragraph. Wait for that footer before invoking the command.
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30

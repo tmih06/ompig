@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsdiff"
+	"github.com/tmih06/ompig/internal/jsdiff"
 )
 
 // The display diff and the unified patch as they were built before they read the lines of a jsdiff.LineDiff on demand: from the change

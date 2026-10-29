@@ -34,7 +34,7 @@ for entry in spec:
         if row["disposition"] != "ported":
             sys.exit(f"{child} is {row['disposition']}; close it first")
         props[child.split("::property:")[1]] = {
-            "targets": row["pigTargets"], "evidence": row["evidence"], "production": row["production"], "rationale": row["rationale"],
+            "targets": row["ompigTargets"], "evidence": row["evidence"], "production": row["production"], "rationale": row["rationale"],
         }
         if row.get("asyncContract") and "async" not in entry:
             entry["async"] = row["asyncContract"]

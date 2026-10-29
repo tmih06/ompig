@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // promptEndSource records each call that can end a print-mode prompt, and session_shutdown, then queues an immediate that records whether the ctx was still live when it ran. session_shutdown also records which of those immediates had not run yet.
@@ -324,7 +324,7 @@ func TestNodePromptEndWaitEndsWhenAnotherProcessTurnsTheLoop(t *testing.T) {
 	}
 }
 
-// loadLoopTurnPair loads loopTurnFirstSource and then second in mode, in layout: one packed process, isolated processes, or quarantined. quarantined is the layout Pig's own crash recovery gives Node factories: each in a packed cell of its own process (planCells), which is how pig -p comes to run Node factories in separate processes.
+// loadLoopTurnPair loads loopTurnFirstSource and then second in mode, in layout: one packed process, isolated processes, or quarantined. quarantined is the layout Ompig's own crash recovery gives Node factories: each in a packed cell of its own process (planCells), which is how ompig -p comes to run Node factories in separate processes.
 func loadLoopTurnPair(t *testing.T, layout, mode, second string) (*promptEndFixture, []extension.Extension) {
 	t.Helper()
 	nodeCellRequireNode(t)

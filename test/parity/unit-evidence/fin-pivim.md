@@ -13,7 +13,7 @@ Artifacts live under `/tmp/fin-pivim-evidence`. The qualified final replay uses 
 
 ## Root causes and boundaries
 
-- The old shim exported an empty SettingsManager class. Pi's `core/settings-manager.ts:354-405` supplies synchronous factories, merges, migration and file-backed storage. The handoff vendors that implementation with PiG path and shared-lock adapters.
+- The old shim exported an empty SettingsManager class. Pi's `core/settings-manager.ts:354-405` supplies synchronous factories, merges, migration and file-backed storage. The handoff vendors that implementation with Ompig path and shared-lock adapters.
 - The old CustomEditor only conveyed decorations. Pi's `modes/interactive/components/custom-editor.ts:89-149` receives actual input and invokes its handlers synchronously. The handoff installs the actual Pi component and proxies its input, frames, text, history, autocomplete and cursor operations.
 - The handoff invoked app actions through notifications only. `super.handleInput` returned before a clear reached the component, and a late host clear could erase the next key. Editor-local mutations now run synchronously in the component process. The action carries the pre-action text to the host, which executes the remaining host effects without replaying already applied editor mutations.
 - Host-owned input effects now have an input-completion barrier. The existing input ticket holds the pump, not the UI loop, until the component's callbacks arrive. A host callback releases the ticket before entering a nested modal loop; subsequent main-screen input cannot run until that owner-loop callback returns. Disconnect and replacement release pending input.
@@ -62,15 +62,15 @@ This classification does not turn host-dependent operations into fabricated sync
 | `TestExtensionEditorExternalHint` | `external editor hint missing` | The rendered hint includes the external-editor action. |
 | `TestExtensionEditorExternalAction` | New component regression after the hint fix. | Configured app binding, multiline input, asynchronous completion, submission and ignored late completion. |
 | `TestInteractiveTerminalReaderHandsInputToExternalEditor` | New ownership regression. | After pause, a separate consumer reads the child's bytes; resume receives later bytes. |
-| `35-custom-editor-component` | Handoff evidence records the pre-port failure. | Three escaped-output Pi/PiG pairs exercise SettingsManager, modal input, render, bash border and submit. |
+| `35-custom-editor-component` | Handoff evidence records the pre-port failure. | Three escaped-output Pi/Ompig pairs exercise SettingsManager, modal input, render, bash border and submit. |
 | `35b-editor-action-sync` | Lead's P1 notification-only adapter fails the same-turn read; this lane independently reproduced the unit failure. | Three escaped-output pairs require `editor-action-result:"":end`. |
-| `35c-extension-editor-external` | Pi returns the edited dialog; PiG initially leaves the old dialog and appends a partial repaint below it. | Three escaped-output pairs compare the title, multiline edited buffer, borders and external-editor hint. The child reads stdin itself. |
+| `35c-extension-editor-external` | Pi returns the edited dialog; Ompig initially leaves the old dialog and appends a partial repaint below it. | Three escaped-output pairs compare the title, multiline edited buffer, borders and external-editor hint. The child reads stdin itself. |
 
 The initial scenario authoring mistakes (unsupported `C-g` spelling and a cwd outside `[tmux]`) failed both binaries and were corrected before using the scenario as behavioral evidence. A diagnostic run removed the crop to inspect the complete physical screen; the canonical crop was restored unchanged, not narrowed to hide the repaint defect.
 
 ## Corpus replay
 
-`/tmp/fin-pivim-evidence/e2e.py` records the real npm package under separate Pi/PiG homes and working directories. The final `e2e-clean` run uses `env -i`, a local scripted OpenAI-compatible provider, non-reasoning and reasoning models, and tmux 3.7b. It drives 65 named checkpoints, preserving full ANSI panes, editor crops and cursor coordinates, shape, visibility and blinking. Cursor rows in editor comparisons are relative to the editor's top border. Full raw panes remain available for reviewing host UI differences.
+`/tmp/fin-pivim-evidence/e2e.py` records the real npm package under separate Pi/Ompig homes and working directories. The final `e2e-clean` run uses `env -i`, a local scripted OpenAI-compatible provider, non-reasoning and reasoning models, and tmux 3.7b. It drives 65 named checkpoints, preserving full ANSI panes, editor crops and cursor coordinates, shape, visibility and blinking. Cursor rows in editor comparisons are relative to the editor's top border. Full raw panes remain available for reviewing host UI differences.
 
 The installed npm lock records `pi-vim@0.14.2` at `https://registry.npmjs.org/pi-vim/-/pi-vim-0.14.2.tgz`, integrity `sha512-CFSKJvOCNToueIMyBgsujT+gHa4sAlLOnT4VYZ6iCGKJ7M24eCVWFKKnnMt6tmP1rDE6T7k/AqBrb6LWzCzRaQ==`.
 
@@ -88,14 +88,14 @@ Final verification:
 
 - `go vet ./...` and `GOOS=windows go vet ./tui/... ./internal/codingagent/... ./coding/extension/...` pass.
 - `go tool golangci-lint config verify`, touched-package lint, `make lint-changed LINT_BASE=da3b0ffb4b`, and full `make lint` pass with zero issues. `go fix -diff ./...` is empty.
-- `make ci-contracts` passes after regenerating `pig-go.json`, interface recommendations and coverage.
+- `make ci-contracts` passes after regenerating `ompig-go.json`, interface recommendations and coverage.
 - `make ci-drift` stops at D77's missing owner approval. `divergence-guard`, `source-hygiene`, and `docs-drift` pass when run independently. No approval is invented.
 - The fixture-prebuilt full `go test ./...` run passes the production packages, all SDK conformance and upstream API tests. Only the three `test/parity/closure` approval/accounting tests fail on pending D77. The final native-modal source correction also passes the complete codingagent, TUI and upstream-parity packages.
 - `go test -race ./tui` and the focused codingagent editor/input-lifetime race tests pass.
 - `make parity-family FAMILY=extensions-runtime`, `interactive-rendering`, and `fullscreen` pass their declared durability after the native-modal fix. The three new editor scenarios each pass three escaped-output pairs. The final qualified commands use tmux 3.7b, not the older helper wrapper.
 - `reuse lint` passes using the existing cached REUSE 6.2.0 executable. The vendored SettingsManager, CustomEditor, path and HTTP-parser modules pass pinned-package provenance tests after combining the runtime lane's full path-helper closure.
 
-The inherited `settingsLockStale` magic-literal finding is accounted at the D73 shared-lock boundary with the exact proper-lockfile 4.1.2 dependency reference (`lib/lockfile.js:208`), not a fabricated literal in Pi's settings-manager source. This is one guard marker, not approval for a PiG-specific timeout or a new divergence ID.
+The inherited `settingsLockStale` magic-literal finding is accounted at the D73 shared-lock boundary with the exact proper-lockfile 4.1.2 dependency reference (`lib/lockfile.js:208`), not a fabricated literal in Pi's settings-manager source. This is one guard marker, not approval for a Ompig-specific timeout or a new divergence ID.
 
 ## Performance and resource ownership
 

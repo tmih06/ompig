@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // String.prototype.trim removes U+FEFF and keeps U+0085; Go's strings.TrimSpace does the reverse. These cases tell the

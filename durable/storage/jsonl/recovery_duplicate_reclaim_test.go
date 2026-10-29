@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi storage/jsonl/storage.ts:570-577: a sidecar whose (seq, ordinal) does not strictly increase is corrupt, and that includes a record repeated at the same

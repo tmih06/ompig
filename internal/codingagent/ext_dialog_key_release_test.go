@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestExtensionDialogDropsKittyKeyRelease pins that an open extension dialog
 // receives key presses only.
 //
-// pig pushes \x1b[>7u at startup, whose flag 2 makes the terminal report
+// ompig pushes \x1b[>7u at startup, whose flag 2 makes the terminal report
 // press/repeat/release event types, so every arrow keypress arrives as two
 // chunks. dispatchKey filters releases before the editor and keybinding
 // dispatch, but the extension-dialog branch returns earlier, so a dialog

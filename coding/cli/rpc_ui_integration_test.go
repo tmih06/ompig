@@ -13,11 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 type lockedBuffer struct {
@@ -39,7 +39,7 @@ func (b *lockedBuffer) String() string {
 
 type rpcRecord = map[string]any
 
-// rpcProcess drives one `pig --mode rpc` child over its JSONL stdin/stdout.
+// rpcProcess drives one `ompig --mode rpc` child over its JSONL stdin/stdout.
 // Every wait synchronizes on the awaited stdout record; testbudget.Wait only
 // bounds how long a hang takes to fail.
 type rpcProcess struct {
@@ -86,7 +86,7 @@ func startRPCCommandAt(t *testing.T, cwd string, env []string, binary string, ar
 		budget:  testbudget.Wait(t),
 	}
 	cmd.Stderr = p.stderr
-	// A descendant that outlives pig and holds the stderr copy open must not hold cleanup and waitForExit: on Windows Kill ends only pig, and Wait would otherwise wait for that descendant with no bound.
+	// A descendant that outlives ompig and holds the stderr copy open must not hold cleanup and waitForExit: on Windows Kill ends only ompig, and Wait would otherwise wait for that descendant with no bound.
 	cmd.WaitDelay = 10 * time.Second
 	if err := cmd.Start(); err != nil {
 		t.Fatal(err)
@@ -155,14 +155,14 @@ func (p *rpcProcess) scanOutput(stdout io.Reader) {
 // startRPCUIFixture starts RPC mode with the rpc-ui.mjs extension and returns
 // once get_commands lists the fixture's commands. RPC mode reads stdin only
 // after extension loading settles, so this waits on the load itself, and a
-// load failure fails here with pig's stderr instead of as a later timeout.
+// load failure fails here with ompig's stderr instead of as a later timeout.
 func startRPCUIFixture(t *testing.T, env []string, args ...string) *rpcProcess {
 	t.Helper()
 	fixture, err := filepath.Abs(filepath.Join("testdata", "rpc-ui.mjs"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, append([]string{"PIG_TEST_FAUX=1"}, env...), append(args, "-e", fixture)...)
+	p := startRPCProcess(t, append([]string{"OMPIG_TEST_FAUX=1"}, env...), append(args, "-e", fixture)...)
 	p.send(`{"id":"fixture-commands","type":"get_commands"}`)
 	p.await("rpc-ui fixture command listing", func(record rpcRecord) bool {
 		if record["type"] != "response" || record["id"] != "fixture-commands" {
@@ -271,7 +271,7 @@ func isUISelect(record rpcRecord, title string) bool {
 
 func TestRPCModeStartsWithUnknownModelAndRejectsPromptBeforeAcceptance(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--no-session")
+	p := startRPCProcess(t, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--no-session")
 
 	p.send(`{"id":"state","type":"get_state"}`)
 	p.await("unknown state", func(record rpcRecord) bool {
@@ -312,7 +312,7 @@ func TestRPCModeStartsWithUnknownModelAndRejectsPromptBeforeAcceptance(t *testin
 }
 
 func TestRPCModeEOFStopsSessionTransitionWaitingOnExtensionUI(t *testing.T) {
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
 
 	p.send(`{"id":"arm","type":"prompt","message":"/block-session-switch"}`)
 	p.await("session-switch arm response", func(record rpcRecord) bool { return isSuccessResponse(record, "arm") })
@@ -351,7 +351,7 @@ func TestRPCModePromptRejectsWhileCompactionWaitsOnExtensionUI(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + home},
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + home},
 		"--model", "test-faux/faux-1", "--session", session.Path(), "--session-dir", sessionDir,
 	)
 
@@ -394,7 +394,7 @@ func TestRPCModePromptRejectsWhileCompactionWaitsOnExtensionUI(t *testing.T) {
 }
 
 func TestRPCModeExtensionUIRoundTrip(t *testing.T) {
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
 
 	p.send(`{"id":"ask","type":"prompt","message":"/ask"}`)
 	var requestID string
@@ -535,7 +535,7 @@ func TestRPCModeEOFStopsModelSelectionWaitingOnExtensionUI(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(agentDir, "models.json"), []byte(models), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + home}, "--model", "fixture/model-one", "--no-session")
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + home}, "--model", "fixture/model-one", "--no-session")
 
 	p.send(`{"id":"arm","type":"prompt","message":"/block-model-select"}`)
 	p.await("model-select arm response", func(record rpcRecord) bool { return isSuccessResponse(record, "arm") })
@@ -550,7 +550,7 @@ func TestRPCModeEOFStopsModelSelectionWaitingOnExtensionUI(t *testing.T) {
 // set_steering_mode, set_follow_up_mode and set_auto_compaction write them through the same session.
 func TestRPCStateReflectsQueueModesAndAutoCompaction(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--no-session")
+	p := startRPCProcess(t, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--no-session")
 	state := func(id string) map[string]any {
 		var data map[string]any
 		p.send(`{"id":"` + id + `","type":"get_state"}`)

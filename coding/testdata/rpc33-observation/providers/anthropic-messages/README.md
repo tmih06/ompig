@@ -8,7 +8,7 @@
   - An **epoch** is one macrotask: a timer, immediate or I/O completion. Promise jobs and `process.nextTick` callbacks belong to the macrotask that scheduled them. The probe numbers macrotasks with `async_hooks` and renumbers them over the epochs that hold a record, because the loopback server's own macrotasks are noise.
   - A **tick** is one round of a self-rescheduling Promise chain that restarts at every macrotask, so equal `(epoch, tick)` plus `seq` totally orders the microtask interleaving. The first epoch is measured from its first record, Pi's `start` push, because the request and header phases run before the pipeline this API models.
   - Clocks are pinned to `0`.
-- `rpc[]` is the first assistant `message_start` that `pi --mode rpc --no-extensions` prints for the tool fixture under each delivery (`--rpc <cli>`); the same command with a PiG binary reproduces it.
+- `rpc[]` is the first assistant `message_start` that `pi --mode rpc --no-extensions` prints for the tool fixture under each delivery (`--rpc <cli>`); the same command with a Ompig binary reproduces it.
 
 ## Fixtures
 
@@ -36,8 +36,8 @@ export PI_PACKAGE_ROOT="$(realpath extensions/sdk-ts/node_modules/@earendil-work
 node probe.mjs --rpc "$PI_PACKAGE_ROOT/dist/cli.js" pi.json inputs.json
 # Trace only, for a second Node version; the cases must equal pi.json's
 node probe.mjs /tmp/pi-node26.json
-# PiG through the same RPC fixtures
-node probe.mjs --rpc <pig-binary> /tmp/pig.json
+# Ompig through the same RPC fixtures
+node probe.mjs --rpc <ompig-binary> /tmp/ompig.json
 go test ./ai -run TestAnthropicMicrotaskTrace -count=3 -race
-node ../check.mjs <pig-binary> 200 anthropic-messages
+node ../check.mjs <ompig-binary> 200 anthropic-messages
 ```

@@ -2,7 +2,7 @@ package ai
 
 import "testing"
 
-// openrouter-images.ts:101 matches generated image URLs with /^data:([^;]+);base64,(.+)$/. PiG used to accept media type parameters
+// openrouter-images.ts:101 matches generated image URLs with /^data:([^;]+);base64,(.+)$/. Ompig used to accept media type parameters
 // and an empty media type, reject payloads that are not valid base64, and accept a payload with a line break.
 func TestParseDataImageURLMatchesPiRegex(t *testing.T) {
 	for _, tc := range []struct {

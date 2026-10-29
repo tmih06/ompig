@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
+	"github.com/tmih06/ompig/durable/durabletest"
 )
 
 // Pi packages/durable/src/testing/storage-benchmark.ts: STORAGE_READ_BENCHMARKS (lines 278-380: run(storage, dataset) returns the number expected(dataset) names;

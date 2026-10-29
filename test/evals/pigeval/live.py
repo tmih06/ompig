@@ -117,7 +117,7 @@ def run(args):
               "model": args.model, "runs": args.runs, "tasks": [t["id"] for t in tasks], "harnesses": {}, "results": [], "summary": {}}
     work = tempfile.mkdtemp(prefix="pigeval-live-")
     for h in harnesses:
-        binary = registry.resolve(h, args.pig)
+        binary = registry.resolve(h, args.ompig)
         entry = report["harnesses"].setdefault(h.id, {"name": h.name})
         if not h.live_args or binary is None:
             entry["skipped"] = "no live argv in harnesses.toml" if not h.live_args else f"not installed; run: make setup SETUP_ARGS=--harnesses={h.id}"

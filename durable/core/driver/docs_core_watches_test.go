@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Ports of packages/durable/test/session-watches.test.ts through driver.Session over the REAL core (docs_core_test.go rig).

@@ -42,7 +42,7 @@ var registry []Check
 func All() []Check { return registry }
 
 // modulePath is the import path of the module the checks guard.
-const modulePath = "github.com/MichaelKinsy/PiG"
+const modulePath = "github.com/tmih06/ompig"
 
 // toolingDirs hold harnesses, build automation and examples. They never feed
 // Pi-facing wire output, so the porting checks skip them. The test-hygiene

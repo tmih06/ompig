@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // cached-gate.sh replays a gate's passing run while every tracked, modified and untracked file is unchanged, restores the gate's output directory, and runs the gate again after any change, after a failure, and under CI.
@@ -34,9 +34,9 @@ func TestCachedGateReplaysOnlyAnUnchangedPass(t *testing.T) {
 	runs := filepath.Join(t.TempDir(), "runs")
 	gate := `echo run >> "$RUNS"; mkdir -p out; cp input.txt out/copy; echo "gate output"; test ! -e fail`
 	t.Setenv("RUNS", runs)
-	t.Setenv("PIG_CACHE_HOME", t.TempDir())
+	t.Setenv("OMPIG_CACHE_HOME", t.TempDir())
 	t.Setenv("CI", "")
-	t.Setenv("PIG_GATE_CACHE", "")
+	t.Setenv("OMPIG_GATE_CACHE", "")
 	script := repoScript(t, "automation/ci/cached-gate.sh")
 	run := func() (string, error) {
 		t.Helper()
@@ -118,9 +118,9 @@ func TestCachedGateStoresTheLogOfALateTee(t *testing.T) {
 			t.Fatalf("git %v: %v\n%s", args, err, out)
 		}
 	}
-	t.Setenv("PIG_CACHE_HOME", t.TempDir())
+	t.Setenv("OMPIG_CACHE_HOME", t.TempDir())
 	t.Setenv("CI", "")
-	t.Setenv("PIG_GATE_CACHE", "")
+	t.Setenv("OMPIG_GATE_CACHE", "")
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
 	script := repoScript(t, "automation/ci/cached-gate.sh")
 	for _, name := range []string{"first run", "replay"} {

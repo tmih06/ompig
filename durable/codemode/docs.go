@@ -5,7 +5,7 @@ package codemode
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // ModuleVersion is the version of everything in this package that turns stored results into what a script sees: result

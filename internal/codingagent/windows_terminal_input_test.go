@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ground truth captured from a real Windows Terminal (Windows 11 24H2, build
@@ -11,7 +11,7 @@ import (
 // an application requests DECSET 9001.
 //
 // The capture settles what Windows actually sends. Windows Terminal answers
-// pig's Kitty query (extendedKeyInit: "\x1b[?2004h\x1b[>7u\x1b[?u\x1b[c") with
+// ompig's Kitty query (extendedKeyInit: "\x1b[?2004h\x1b[>7u\x1b[?u\x1b[c") with
 // "\x1b[?7u": it enables the same Kitty keyboard protocol flags Ghostty does
 // (1+2+4: disambiguate + report-events + report-alternate) and it reports key
 // releases. Windows is therefore not a separate input protocol needing its own
@@ -19,9 +19,9 @@ import (
 // correct there.
 //
 // win32-input-mode records ("\x1b[Vk;Sc;Uc;Kd;Cs;Rc_") appear only while an
-// application holds DECSET 9001 open. pig never enables it (asserted by
+// application holds DECSET 9001 open. ompig never enables it (asserted by
 // TestExtendedKeyInitDoesNotEnableWin32InputMode in tui), so those
-// records cannot reach pig's decoders.
+// records cannot reach ompig's decoders.
 //
 // These encodings are measured, not derived from the spec. That distinction
 // matters: every input bug this session came from a decoder tested against the
@@ -82,7 +82,7 @@ func TestWindowsTerminalMeasuredEncodings(t *testing.T) {
 	})
 
 	// The capture's UnicodeChar 8 for Backspace is the console input record,
-	// which reaches pig only under win32-input-mode. Without it Windows
+	// which reaches ompig only under win32-input-mode. Without it Windows
 	// Terminal sends DEL for Backspace and a bare "\x08" for Ctrl+Backspace,
 	// so upstream reads "\x08" as ctrl+backspace in a local Windows Terminal
 	// session and as backspace over SSH or elsewhere (keys.ts:1287,

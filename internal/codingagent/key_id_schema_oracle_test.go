@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // keyIDCandidates are the strings both validators answer: every run of zero to five modifiers (repeats and every order) before each base key of Pi's

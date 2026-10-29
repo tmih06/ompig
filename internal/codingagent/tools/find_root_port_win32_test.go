@@ -3,7 +3,7 @@ package tools
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 func TestFindRootRelativizationWindowsPort(t *testing.T) {

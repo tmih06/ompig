@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // codemode.ts:263-285 builds the namespaces of the start data: every tool whose name starts with a namespace's prefix is in
@@ -81,8 +81,8 @@ func TestResumeAtTheDeadlineEndsTheCallAndOneMillisecondBeforeDoesNot(t *testing
 
 // A script's text is cut to a preview in UTF-16 units. A cut inside a surrogate pair leaves a lone surrogate. This pins what
 // each side does with it today, so the difference stays visible until it is decided: Pi's JSON holds the escape `\ud83d`,
-// PiG's string holds the unit as three bytes that encoding/json writes as three U+FFFD characters.
-func TestACutInsideASurrogatePairIsAJSONEscapeInPiAndThreeReplacementCharactersInPiG(t *testing.T) {
+// Ompig's string holds the unit as three bytes that encoding/json writes as three U+FFFD characters.
+func TestACutInsideASurrogatePairIsAJSONEscapeInPiAndThreeReplacementCharactersInOmpig(t *testing.T) {
 	text := strings.Repeat("😀", 6)
 	const max = 4
 	input, err := json.Marshal([]helperOp{{Op: "cut", Text: text, Max: max}})
@@ -107,7 +107,7 @@ func TestACutInsideASurrogatePairIsAJSONEscapeInPiAndThreeReplacementCharactersI
 		t.Fatal(err)
 	}
 	if want := "\"\uFFFD\uFFFD\uFFFD...\""; string(marshaled) != want {
-		t.Errorf("PiG's JSON = %s, want %s", marshaled, want)
+		t.Errorf("Ompig's JSON = %s, want %s", marshaled, want)
 	}
 }
 

@@ -15,18 +15,18 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Ports packages/durable/test/harness-submissions.test.ts through the real core and the native driver (chat-support.ts openChat).
 //
 // Not natively portable: ":149 rejects a wait whose submission read spans the start of close" holds a Storage.submission read open
-// (HeldReads). The native store answers pig.read inside the core step and has no per-read hold, the same gap as harness-tasks :655.
+// (HeldReads). The native store answers ompig.read inside the core step and has no per-read hold, the same gap as harness-tasks :655.
 // The in-process port (durable/harness/harness_submissions_test.go) covers it.
 
 // chat is chat-support.ts chatSetup: the faux provider, its models, a registry and a settable clock.

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/7911-json-stream-usage.test.ts:13

@@ -14,7 +14,7 @@ func TestSetLabelReturnsHostError(t *testing.T) {
 	ext.Command("label", "label an entry", func(ctx Context, _ string) error {
 		return ctx.SetLabel("missing-entry", "tag")
 	})
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)

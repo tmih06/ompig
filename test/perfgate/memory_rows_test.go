@@ -26,13 +26,13 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// The memory rows of Pi-Bolt's benchmark suite (bolt-v0.8.5 bench/long_session.py and bench/tmux_check.py) as ratchet guards: pig on a pseudo-terminal against Pi-Bolt's scripted model, the retained heap read at the end. They pass at the base; each change that lowers what pig retains lowers their ceilings.
+// The memory rows of Pi-Bolt's benchmark suite (bolt-v0.8.5 bench/long_session.py and bench/tmux_check.py) as ratchet guards: ompig on a pseudo-terminal against Pi-Bolt's scripted model, the retained heap read at the end. They pass at the base; each change that lowers what ompig retains lowers their ceilings.
 
 // boltPrompt is the prompt Pi-Bolt's harness types (bench/harness.py PROMPT).
 const boltPrompt = "Read the four fixture files"
@@ -141,10 +141,10 @@ func (m *boltModel) answer(t *testing.T, w http.ResponseWriter, r *http.Request)
 }
 
 // writeBoltHome configures the fake model as Pi-Bolt's bench/harness.py pi_home does, offline, and writes the fixtures it reads into the working directory: the four of readToolFiles, and with distinct a copy of them per prompt under fixture/p<n>/ that starts with its own line.
-func writeBoltHome(t *testing.T, home *pigHome, model *boltModel, prompts int) {
+func writeBoltHome(t *testing.T, home *ompigHome, model *boltModel, prompts int) {
 	t.Helper()
-	home.env = append(home.env, "PI_OFFLINE=1", "PIG_OFFLINE=1")
-	agent := strings.TrimPrefix(envValue(home.env, "PIG_CODING_AGENT_DIR"), "PIG_CODING_AGENT_DIR=")
+	home.env = append(home.env, "PI_OFFLINE=1", "OMPIG_OFFLINE=1")
+	agent := strings.TrimPrefix(envValue(home.env, "OMPIG_CODING_AGENT_DIR"), "OMPIG_CODING_AGENT_DIR=")
 	models := `{"providers":{"fake":{"baseUrl":"` + model.URL + `/v1","api":"openai-completions","apiKey":"fake","models":[{"id":"fake-model","contextWindow":200000,"maxTokens":8192}]}}}`
 	files := map[string]string{
 		filepath.Join(agent, "models.json"):   models,
@@ -178,7 +178,7 @@ var boltArgs = []string{"--no-session", "--model", "fake/fake-model"}
 // ptyKeep bounds the terminal output a ptyPig keeps: waits look only at the output since a recent mark.
 const ptyKeep = 4 << 20
 
-// ptyPig is pig on a pseudo-terminal with PIG_PROFILE=metrics. It keeps what pig writes and answers the cursor position and device attribute queries as a terminal does.
+// ptyPig is ompig on a pseudo-terminal with OMPIG_PROFILE=metrics. It keeps what ompig writes and answers the cursor position and device attribute queries as a terminal does.
 type ptyPig struct {
 	t          *testing.T
 	command    *exec.Cmd
@@ -186,7 +186,7 @@ type ptyPig struct {
 	profileDir string
 
 	mu sync.Mutex
-	// out is the tail of the output; written counts every byte pig has written, so written-len(out) is the offset of out[0].
+	// out is the tail of the output; written counts every byte ompig has written, so written-len(out) is the offset of out[0].
 	out     []byte
 	written int
 	last    time.Time
@@ -196,7 +196,7 @@ type ptyPig struct {
 }
 
 // startPTY starts binary with args in home's working directory and environment on a cols x rows pseudo-terminal, with extra appended to the environment.
-func startPTY(t *testing.T, home *pigHome, binary string, args []string, cols, rows uint16, extra ...string) *ptyPig {
+func startPTY(t *testing.T, home *ompigHome, binary string, args []string, cols, rows uint16, extra ...string) *ptyPig {
 	t.Helper()
 	master, err := os.OpenFile("/dev/ptmx", os.O_RDWR|syscall.O_NOCTTY|syscall.O_CLOEXEC, 0)
 	if err != nil {
@@ -226,7 +226,7 @@ func startPTY(t *testing.T, home *pigHome, binary string, args []string, cols, r
 			env = append(env, entry)
 		}
 	}
-	p.command.Env = append(append(env, "TERM=xterm-256color", "PIG_PROFILE=metrics", "PIG_PROFILE_DIR="+p.profileDir), extra...)
+	p.command.Env = append(append(env, "TERM=xterm-256color", "OMPIG_PROFILE=metrics", "OMPIG_PROFILE_DIR="+p.profileDir), extra...)
 	p.command.Stdin, p.command.Stdout, p.command.Stderr = slave, slave, slave
 	p.command.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true, Ctty: 0}
 	if err := p.command.Start(); err != nil {
@@ -272,7 +272,7 @@ func startPTY(t *testing.T, home *pigHome, binary string, args []string, cols, r
 	return p
 }
 
-// mark is the offset of the next byte pig writes.
+// mark is the offset of the next byte ompig writes.
 func (p *ptyPig) mark() int {
 	p.mu.Lock()
 	defer p.mu.Unlock()
@@ -282,7 +282,7 @@ func (p *ptyPig) mark() int {
 func (p *ptyPig) send(text string) {
 	p.t.Helper()
 	if _, err := p.master.WriteString(text); err != nil {
-		p.t.Fatalf("write to pig: %v", err)
+		p.t.Fatalf("write to ompig: %v", err)
 	}
 }
 
@@ -293,7 +293,7 @@ func (p *ptyPig) tail() string {
 	return string(p.out[max(0, len(p.out)-1500):])
 }
 
-// waitFor waits until pig has written marker since the offset since, then until it has written nothing for quiet.
+// waitFor waits until ompig has written marker since the offset since, then until it has written nothing for quiet.
 func (p *ptyPig) waitFor(since int, marker string, quiet time.Duration) {
 	p.t.Helper()
 	deadline := time.Now().Add(testbudget.Wait(p.t))
@@ -301,7 +301,7 @@ func (p *ptyPig) waitFor(since int, marker string, quiet time.Duration) {
 	for time.Now().Before(deadline) {
 		select {
 		case <-p.exited:
-			p.t.Fatalf("pig exited (%v) before %q:\n%s", p.waitErr, marker, p.tail())
+			p.t.Fatalf("ompig exited (%v) before %q:\n%s", p.waitErr, marker, p.tail())
 		default:
 		}
 		p.mu.Lock()
@@ -316,10 +316,10 @@ func (p *ptyPig) waitFor(since int, marker string, quiet time.Duration) {
 		}
 		time.Sleep(10 * time.Millisecond)
 	}
-	p.t.Fatalf("pig did not write %q:\n%s", marker, p.tail())
+	p.t.Fatalf("ompig did not write %q:\n%s", marker, p.tail())
 }
 
-// settle waits until pig has written nothing for quiet.
+// settle waits until ompig has written nothing for quiet.
 func (p *ptyPig) settle(quiet time.Duration) { p.waitFor(p.mark(), "", quiet) }
 
 // ready waits for the first ready frame: the footer names the model.
@@ -335,21 +335,21 @@ func (p *ptyPig) prompt(n int, quiet time.Duration) {
 	p.waitFor(since, boltDone(n), quiet)
 }
 
-// exit sends Ctrl+D to the empty editor and returns the exit record PIG_PROFILE=metrics wrote.
+// exit sends Ctrl+D to the empty editor and returns the exit record OMPIG_PROFILE=metrics wrote.
 func (p *ptyPig) exit() profiling.ProcessMetrics {
 	p.t.Helper()
 	p.send("\x04")
 	select {
 	case <-p.exited:
 	case <-time.After(testbudget.Wait(p.t)):
-		p.t.Fatalf("pig did not exit after Ctrl+D:\n%s", p.tail())
+		p.t.Fatalf("ompig did not exit after Ctrl+D:\n%s", p.tail())
 	}
 	if p.waitErr != nil {
-		p.t.Fatalf("pig: %v\n%s", p.waitErr, p.tail())
+		p.t.Fatalf("ompig: %v\n%s", p.waitErr, p.tail())
 	}
-	matches, _ := filepath.Glob(filepath.Join(p.profileDir, "pig-*-metrics.json"))
+	matches, _ := filepath.Glob(filepath.Join(p.profileDir, "ompig-*-metrics.json"))
 	if len(matches) != 1 {
-		p.t.Fatalf("pig wrote no metrics record (%v)\n%s", matches, p.tail())
+		p.t.Fatalf("ompig wrote no metrics record (%v)\n%s", matches, p.tail())
 	}
 	data, err := os.ReadFile(matches[0])
 	if err != nil {
@@ -365,7 +365,7 @@ func (p *ptyPig) exit() profiling.ProcessMetrics {
 // longSessionPrompts is the length of the long row's session: Pi-Bolt runs 75 prompts and samples every 25; the guard stops at the first sample.
 const longSessionPrompts = 25
 
-// Pi-Bolt's long row (bench/long_session.py, "memory after a 4.2M-token session") at its first sample point: one interactive --no-session process, 25 prompts of four read tool calls on 47-239 KB files and an answer, then Ctrl+D. Gated: the live heap after two collections at exit, and that heap less the last request body, which is what pig retains beyond the context it sends (memory bounded by the context). "same contents" is Pi-Bolt's script, four distinct texts read 25 times each; "distinct contents" reads 100 distinct texts, as a real session does, which the request splice cache's quoted copies show.
+// Pi-Bolt's long row (bench/long_session.py, "memory after a 4.2M-token session") at its first sample point: one interactive --no-session process, 25 prompts of four read tool calls on 47-239 KB files and an answer, then Ctrl+D. Gated: the live heap after two collections at exit, and that heap less the last request body, which is what ompig retains beyond the context it sends (memory bounded by the context). "same contents" is Pi-Bolt's script, four distinct texts read 25 times each; "distinct contents" reads 100 distinct texts, as a real session does, which the request splice cache's quoted copies show.
 func TestLongSessionMemoryGate(t *testing.T) {
 	for _, variant := range []struct {
 		name, heap, minusContext string
@@ -375,7 +375,7 @@ func TestLongSessionMemoryGate(t *testing.T) {
 		{"distinct contents", "process.mem_long25_distinct.heap_live_bytes", "process.mem_long_distinct.heap_live_minus_context_bytes", true},
 	} {
 		t.Run(variant.name, func(t *testing.T) {
-			binary, err := pigBinary()
+			binary, err := ompigBinary()
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -385,12 +385,12 @@ func TestLongSessionMemoryGate(t *testing.T) {
 			warm := startPTY(t, home, binary, boltArgs, 120, 40) // The first start in a new home materializes caches; gate the next one.
 			warm.ready()
 			warm.exit()
-			pig := startPTY(t, home, binary, boltArgs, 120, 40)
-			pig.ready()
+			ompig := startPTY(t, home, binary, boltArgs, 120, 40)
+			ompig.ready()
 			for n := 1; n <= longSessionPrompts; n++ {
-				pig.prompt(n, 100*time.Millisecond)
+				ompig.prompt(n, 100*time.Millisecond)
 			}
-			record := pig.exit()
+			record := ompig.exit()
 			sent := model.lastRequestBytes()
 			t.Logf("perfgate: %s record %+v; last request body %d B", variant.heap, record, sent)
 			perfgate.Check(t, variant.heap, float64(record.HeapLiveBytes))
@@ -399,7 +399,7 @@ func TestLongSessionMemoryGate(t *testing.T) {
 	}
 }
 
-// memProbeSource is added to cmd/pig's package main (go build -overlay) for the memory snapshot of an idle process: with PIG_PERFGATE_SNAPSHOT_DIR set, SIGUSR1 reads runtime/metrics without a collection and writes the values as snapshot-<n>.json there, and SIGUSR2 writes the cumulative allocation counters, flushed as the exit record flushes them, as allocs-<n>.json. Without it the binary is cmd/pig.
+// memProbeSource is added to cmd/ompig's package main (go build -overlay) for the memory snapshot of an idle process: with OMPIG_PERFGATE_SNAPSHOT_DIR set, SIGUSR1 reads runtime/metrics without a collection and writes the values as snapshot-<n>.json there, and SIGUSR2 writes the cumulative allocation counters, flushed as the exit record flushes them, as allocs-<n>.json. Without it the binary is cmd/ompig.
 const memProbeSource = `// SPDX-License-Identifier: MIT
 
 package main
@@ -416,7 +416,7 @@ import (
 )
 
 func init() {
-	dir := os.Getenv("PIG_PERFGATE_SNAPSHOT_DIR")
+	dir := os.Getenv("OMPIG_PERFGATE_SNAPSHOT_DIR")
 	if dir == "" {
 		return
 	}
@@ -467,9 +467,9 @@ func init() {
 }
 `
 
-// memProbeBinary is cmd/pig with memProbeSource, built beside pigBinary so TestMain removes it.
+// memProbeBinary is cmd/ompig with memProbeSource, built beside ompigBinary so TestMain removes it.
 var memProbeBinary = sync.OnceValues(func() (string, error) {
-	pig, err := pigBinary()
+	ompig, err := ompigBinary()
 	if err != nil {
 		return "", err
 	}
@@ -477,7 +477,7 @@ var memProbeBinary = sync.OnceValues(func() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	dir := filepath.Join(filepath.Dir(pig), "memprobe")
+	dir := filepath.Join(filepath.Dir(ompig), "memprobe")
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return "", err
 	}
@@ -485,7 +485,7 @@ var memProbeBinary = sync.OnceValues(func() (string, error) {
 	if err := os.WriteFile(source, []byte(memProbeSource), 0o600); err != nil {
 		return "", err
 	}
-	overlay, err := json.Marshal(map[string]any{"Replace": map[string]string{filepath.Join(root, "cmd", "pig", "zz_perfgate_memprobe.go"): source}})
+	overlay, err := json.Marshal(map[string]any{"Replace": map[string]string{filepath.Join(root, "cmd", "ompig", "zz_perfgate_memprobe.go"): source}})
 	if err != nil {
 		return "", err
 	}
@@ -493,12 +493,12 @@ var memProbeBinary = sync.OnceValues(func() (string, error) {
 	if err := os.WriteFile(overlayPath, overlay, 0o600); err != nil {
 		return "", err
 	}
-	out := filepath.Join(dir, "pig")
-	build := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-overlay", overlayPath, "-o", out, "./cmd/pig")
+	out := filepath.Join(dir, "ompig")
+	build := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-overlay", overlayPath, "-o", out, "./cmd/ompig")
 	build.Dir = root
 	build.Env = append(os.Environ(), "CGO_ENABLED=0")
 	if data, err := build.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("go build ./cmd/pig with the memory probe: %w\n%s", err, data)
+		return "", fmt.Errorf("go build ./cmd/ompig with the memory probe: %w\n%s", err, data)
 	}
 	return out, nil
 })
@@ -521,7 +521,7 @@ func (p *ptyPig) snapshot(dir string, n int) map[string]uint64 {
 		}
 		time.Sleep(10 * time.Millisecond)
 	}
-	p.t.Fatalf("pig wrote no %s", path)
+	p.t.Fatalf("ompig wrote no %s", path)
 	return nil
 }
 
@@ -532,12 +532,12 @@ const tmuxIdlePrompts = 6
 const tmuxModelLatency = 100 * time.Millisecond
 
 // tmuxIdleSamples is how many times the tmux row runs; its gate reads the minimum, as the fused dispatch gate does
-// (545fa6f364). What an idle pig holds moves by tens of kilobytes between runs of one build (a run's spinner ticks and
+// (545fa6f364). What an idle ompig holds moves by tens of kilobytes between runs of one build (a run's spinner ticks and
 // renders land differently: CI 39063579995 read 6,334,080 bytes where five runs of the same tree read 6,313,416 to
 // 6,318,392), so one run's reading crossed a ceiling no change had moved. The minimum is what the build holds at least.
 const tmuxIdleSamples = 3
 
-// idleCollectionWait is how long the tmux row leaves pig idle before it reads its memory: the interactive idle collection (D172) runs 2 s after a run ends.
+// idleCollectionWait is how long the tmux row leaves ompig idle before it reads its memory: the interactive idle collection (D172) runs 2 s after a run ends.
 const idleCollectionWait = 3 * time.Second
 
 // Pi-Bolt's tmux row (bench/tmux_check.py, "memory of a session in tmux") on a 160x48 pseudo-terminal: 40 typed keys, a 400-line bracketed paste, cleared, then six prompts of four read tool calls and an answer, then idle until the idle collection has run. Gated from runtime/metrics in the idle process: the live heap and the memory the Go runtime holds and has not returned to the OS (/memory/classes/total less /memory/classes/heap/released).
@@ -566,31 +566,31 @@ func tmuxIdleSample(t *testing.T, binary string) (live, nonreleased float64) {
 	warm.ready()
 	warm.exit()
 	snapshots := t.TempDir()
-	pig := startPTY(t, home, binary, boltArgs, 160, 48, "PIG_PERFGATE_SNAPSHOT_DIR="+snapshots)
-	pig.ready()
+	ompig := startPTY(t, home, binary, boltArgs, 160, 48, "OMPIG_PERFGATE_SNAPSHOT_DIR="+snapshots)
+	ompig.ready()
 	for i := range 40 {
-		pig.send(string("abcdefghij"[i%10]))
+		ompig.send(string("abcdefghij"[i%10]))
 		time.Sleep(5 * time.Millisecond)
 	}
-	pig.settle(200 * time.Millisecond)
-	pig.send("\x15") // Ctrl+U
-	pig.settle(200 * time.Millisecond)
+	ompig.settle(200 * time.Millisecond)
+	ompig.send("\x15") // Ctrl+U
+	ompig.settle(200 * time.Millisecond)
 	lines := make([]string, 400)
 	for i := range lines {
 		lines[i] = fmt.Sprintf("line %d: lorem ipsum dolor sit amet", i)
 	}
-	pig.send("\x1b[200~" + strings.Join(lines, "\r") + "\x1b[201~")
-	pig.settle(300 * time.Millisecond)
-	pig.send("\x15")
-	pig.settle(100 * time.Millisecond)
-	pig.send("\x1b")
-	pig.settle(300 * time.Millisecond)
+	ompig.send("\x1b[200~" + strings.Join(lines, "\r") + "\x1b[201~")
+	ompig.settle(300 * time.Millisecond)
+	ompig.send("\x15")
+	ompig.settle(100 * time.Millisecond)
+	ompig.send("\x1b")
+	ompig.settle(300 * time.Millisecond)
 	for n := 1; n <= tmuxIdlePrompts; n++ {
-		pig.prompt(n, 300*time.Millisecond)
+		ompig.prompt(n, 300*time.Millisecond)
 	}
-	pig.settle(idleCollectionWait)
-	values := pig.snapshot(snapshots, 1)
-	record := pig.exit()
+	ompig.settle(idleCollectionWait)
+	values := ompig.snapshot(snapshots, 1)
+	record := ompig.exit()
 	live = float64(values["/gc/heap/live:bytes"])
 	nonreleased = float64(values["/memory/classes/total:bytes"]) - float64(values["/memory/classes/heap/released:bytes"])
 	t.Logf("perfgate: process.mem_tmux_idle idle runtime/metrics %v; exit record %+v", values, record)

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/test/longsession"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/test/longsession"
 )
 
 // replaceJSONField's splice of a canonical record writes what the member-by-member rewrite and Canonicalize write, over every record of the

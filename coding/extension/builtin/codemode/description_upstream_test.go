@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
 )
 
 // Ports the "codemode description catalog" cases of packages/coding-agent/test/tool-search.test.ts (v1.0.0).

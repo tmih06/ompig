@@ -1,6 +1,6 @@
 # fix-114-tui-models
 
-Gap: a codemode script sees `models` in `pig -p` but not in the interactive TUI (demo-040 Gap 1).
+Gap: a codemode script sees `models` in `ompig -p` but not in the interactive TUI (demo-040 Gap 1).
 
 ## Root cause
 
@@ -23,7 +23,7 @@ Fix at the source: `BindCore` keeps the Session's registry when the mode omits i
 
 - Mutation: disabling the fallback fails both tests.
 - `-race -count=24` on the inproc BindCore tests and the interactive test; `GOMAXPROCS=4`; `taskset -c 0-3` with 4 burner loops (PIDs recorded, killed): all pass.
-- Whole-suite comparison on `coding/...`, `cmd/pig`, `internal/codingagent` (-short) against the base commit: no new failing test. The remaining failures exist on the base too and need `extensions/sdk-ts/node_modules` (Pi npm package, cooldown-blocked) or Node/Pi comparison fixtures.
+- Whole-suite comparison on `coding/...`, `cmd/ompig`, `internal/codingagent` (-short) against the base commit: no new failing test. The remaining failures exist on the base too and need `extensions/sdk-ts/node_modules` (Pi npm package, cooldown-blocked) or Node/Pi comparison fixtures.
 - Gates: build, vet, `GOOS=windows go vet` (inproc, codingagent), gofmt, golangci-lint (0 issues), `go fix -diff`.
 
 ## Audit of other in-process readers of ctx.modelRegistry

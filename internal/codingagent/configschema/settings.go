@@ -1,6 +1,6 @@
 package configschema
 
-import "github.com/MichaelKinsy/PiG/ai"
+import "github.com/tmih06/ompig/ai"
 
 // Ports packages/coding-agent/src/core/settings-schema.ts and settings-defaults.ts.
 

@@ -1,6 +1,6 @@
 # Disposition of every runtime export (and public class member) of the modules Pi
 # serves to extensions (pi-coding-agent, pi-tui, pi-ai, pi-ai/compat,
-# pi-agent-core) in each PiG extension runtime. Type-only exports (interfaces,
+# pi-agent-core) in each Ompig extension runtime. Type-only exports (interfaces,
 # type aliases) have no runtime and are identity by kind: they take no row.
 #
 # The generator (go run ./test/parity/cmd/sdksurface) writes this file in one

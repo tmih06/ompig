@@ -32,10 +32,10 @@ import (
 	xdraw "golang.org/x/image/draw"
 	_ "golang.org/x/image/webp" // decoder for the WebP entry of the supported-format allowlist
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodebase64"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodebase64"
 )
 
 const (
@@ -526,7 +526,7 @@ func findWebpTiffOffset(data []byte) int {
 		// RIFF chunks are padded to even size.
 		next := dataStart + chunkSize + chunkSize%2
 		if next <= offset {
-			// pig: a negative size would revisit this chunk forever upstream;
+			// ompig: a negative size would revisit this chunk forever upstream;
 			// stop with upstream's not-found result instead.
 			return -1
 		}

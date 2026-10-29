@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // strippedAPIAuthCases are strippable APIs, each the only API of its catalog provider, with the environment that
@@ -31,7 +31,7 @@ func setStripTestEnv(t *testing.T, env map[string]string) {
 	}
 }
 
-// `pig --list-models` with a stripped API lists none of its models, even with its provider authenticated, and still
+// `ompig --list-models` with a stripped API lists none of its models, even with its provider authenticated, and still
 // lists the models of other authenticated providers.
 func TestPrintModelListOmitsStrippedAPIModels(t *testing.T) {
 	for _, tc := range strippedAPIAuthCases {
@@ -97,7 +97,7 @@ func TestSelectStartupModelSkipsStrippedAPIModels(t *testing.T) {
 }
 
 // A models.json custom model under a provider whose only API is stripped, without its own baseUrl, composes from the
-// full catalog as in Stock PiG: the strip adds no `"baseUrl" is required` models.json error, `--list-models` still
+// full catalog as in Stock Ompig: the strip adds no `"baseUrl" is required` models.json error, `--list-models` still
 // offers no model of the provider, and naming the model reports the strip.
 func TestStrippedProviderCustomModelIsNeitherOfferedNorALoadError(t *testing.T) {
 	for _, tc := range strippedAPIAuthCases {
@@ -129,11 +129,11 @@ func TestStrippedProviderCustomModelIsNeitherOfferedNorALoadError(t *testing.T) 
 	}
 }
 
-// RPC get_available_models, under a runtime strip of the active Piglet, lists no model of a stripped API, even with
+// RPC get_available_models, under a runtime strip of the active Ompiglet, lists no model of a stripped API, even with
 // its provider authenticated.
 func TestRPCGetAvailableModelsOmitsStrippedAPIModels(t *testing.T) {
 	home := t.TempDir()
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_OFFLINE=1", "FORCE_COLOR=0"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "FORCE_COLOR=0"}
 	for _, entry := range os.Environ() {
 		name, _, _ := strings.Cut(entry, "=")
 		if strings.HasSuffix(name, "_API_KEY") || strings.HasSuffix(name, "_TOKEN") || strings.HasSuffix(name, "_KEY") || strings.HasPrefix(name, "AWS_") || name == "ANTHROPIC_FEDERATION_RULE_ID" {
@@ -152,7 +152,7 @@ func TestRPCGetAvailableModelsOmitsStrippedAPIModels(t *testing.T) {
 	if err := os.WriteFile(pigletPath, []byte("name: lean\nstrip:\n  apis: ["+strings.Join(apis, ", ")+"]\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "--no-session", "--piglet", pigletPath, "--model", "anthropic/claude-haiku-4-5")
+	p := startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "--no-session", "--ompiglet", pigletPath, "--model", "anthropic/claude-haiku-4-5")
 	p.send(`{"id":"models","type":"get_available_models"}`)
 	var models []any
 	p.await("get_available_models", func(record rpcRecord) bool {

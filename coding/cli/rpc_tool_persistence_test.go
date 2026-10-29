@@ -13,7 +13,7 @@ func TestRPCToolDetailsPersistAndReplay(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(cwd, "parity-read-target.txt"), []byte("READ-PROBE\nsecond line\n"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	env := []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}
 	args := []string{"--offline", "--no-extensions", "--no-context-files", "--no-skills", "--system-prompt", "Test", "--model", "test-faux/faux-1"}
 	f := &upstreamRPC{p: startRPCProcessAt(t, cwd, env, args...), agentDir: filepath.Join(home, "agent")}
 	f.prompt("Run: read parity-read-target.txt")
@@ -60,7 +60,7 @@ func TestRPCEmptyReadTextPersistsAndReplays(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(cwd, "parity-read-target.txt"), nil, 0600); err != nil {
 		t.Fatal(err)
 	}
-	env := []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}
 	args := []string{"--offline", "--no-extensions", "--no-context-files", "--no-skills", "--system-prompt", "Test", "--model", "test-faux/faux-1"}
 	f := &upstreamRPC{p: startRPCProcessAt(t, cwd, env, args...), agentDir: filepath.Join(home, "agent")}
 	f.prompt("Run: read parity-read-target.txt")

@@ -3,7 +3,7 @@ package hljs
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // treeNode is a TokenTree data node. A child is either text or a nested node.

@@ -15,10 +15,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 func tkOpenSqlite(t *testing.T, path string) durable.Storage {

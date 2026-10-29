@@ -399,7 +399,7 @@ func TestTranscriptToolChangesAnthropicPoisonedHistory(t *testing.T) {
 	signatureError := `{"type":"error","error":{"type":"invalid_request_error","message":"Invalid signature in thinking block"}}`
 	requests := captureAnthropicToolChanges(t, "custom-claude", nativeAnthropicCompat, poisonedToolChangeContext(),
 		toolChangeReply{400, signatureError}, toolChangeReply{200, anthropicToolChangeStop})
-	// pig divergence (D37): the retry without thinking signatures keeps the native blocks.
+	// ompig divergence (D37): the retry without thinking signatures keeps the native blocks.
 	if len(requests) != 2 {
 		t.Fatalf("requests = %d, want the D37 retry", len(requests))
 	}

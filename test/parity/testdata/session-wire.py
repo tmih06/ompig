@@ -42,8 +42,8 @@ def setup(root, url):
     (agent / "settings.json").write_text(json.dumps({"theme": "dark", "quietStartup": True,
         "enableInstallTelemetry": False, "compaction": {"enabled": False}, "retry": {"enabled": False}}))
     env = {"PATH": os.environ["PATH"], "HOME": str(home), "LANG": "C.UTF-8", "TERM": "xterm-256color",
-           "PI_CODING_AGENT_DIR": str(agent), "PIG_CODING_AGENT_DIR": str(agent),
-           "PIG_HOME": str(home / ".pig"), "PI_OFFLINE": "1", "PIG_OFFLINE": "1", "PI_TELEMETRY": "0"}
+           "PI_CODING_AGENT_DIR": str(agent), "OMPIG_CODING_AGENT_DIR": str(agent),
+           "OMPIG_HOME": str(home / ".ompig"), "PI_OFFLINE": "1", "OMPIG_OFFLINE": "1", "PI_TELEMETRY": "0"}
     args = ["--provider", "wire-audit", "--model", "wire-model", "--thinking", "medium",
             "--system-prompt", "Wire audit.", "--no-context-files", "--no-skills", "--no-extensions",
             "--no-prompt-templates", "--no-themes"]
@@ -380,11 +380,11 @@ def tool_signal_probe(binary, root, sig, shutdown=None, mode="json"):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--bin", default=os.environ.get("PIG_PARITY_PIG_BIN"))
+    parser.add_argument("--bin", default=os.environ.get("OMPIG_PARITY_OMPIG_BIN"))
     parser.add_argument("--case", choices=["session", "print", "json", "json-tool-term", "json-tool-hup", "json-tool-throwing-shutdown", "json-tool-slow-shutdown", "text-tool-throwing-shutdown", "text-tool-slow-shutdown", "disconnect", "disconnect-repo", "live-hup", "modal-shutdown"], required=True, action="append")
     options = parser.parse_args()
     if not options.bin:
-        parser.error("--bin or PIG_PARITY_PIG_BIN is required")
+        parser.error("--bin or OMPIG_PARITY_OMPIG_BIN is required")
     path = Path(options.bin).resolve()
     binary = [str(path)]
     if path.suffix in (".js", ".mjs", ".cjs"):

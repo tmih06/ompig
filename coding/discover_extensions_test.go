@@ -6,9 +6,9 @@ import (
 	"slices"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func writeExtensionTree(t *testing.T, root string, files map[string]string) {
@@ -235,7 +235,7 @@ func TestDiscoverExtensionPathsReadsManifestsLinksAndConfiguredPathsAsPi(t *test
 // loader.ts:828-833 discoverAndLoadExtensions(configuredPaths, cwd, agentDir = getAgentDir()): an omitted agent directory is the configured agent directory, whose extensions/ folder is the global location.
 func TestDiscoverExtensionPathsDefaultsTheAgentDirectoryToTheConfiguredOne(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 	writeExtensionTree(t, agentDir, map[string]string{"extensions/global.ts": discoverCommandExtension})
 	got, _, err := discoverExtensionPaths(nil, cwd, "")

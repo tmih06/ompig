@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 func previewDefinition() extension.LoginDefinition {
@@ -31,7 +31,7 @@ func previewDefinition() extension.LoginDefinition {
 }
 
 // useLoginPreviewTestBudget bounds preview-login by the test wait budget: each
-// test builds the fixture extension into a fresh PIG_HOME, which can exceed
+// test builds the fixture extension into a fresh OMPIG_HOME, which can exceed
 // the 30 s product bound on a loaded machine.
 func useLoginPreviewTestBudget(t *testing.T) {
 	t.Helper()
@@ -43,9 +43,9 @@ func useLoginPreviewTestBudget(t *testing.T) {
 func TestExtensionLoginPreviewRendersProductionOutputWithoutSessionOrSettingsMutation(t *testing.T) {
 	home := t.TempDir()
 	useLoginPreviewTestBudget(t)
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_LOGIN_PREVIEW_FIXTURE", "valid")
-	t.Setenv("PIG_LOGO_GLYPHFREE", "0")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_LOGIN_PREVIEW_FIXTURE", "valid")
+	t.Setenv("OMPIG_LOGO_GLYPHFREE", "0")
 	t.Setenv("COLORTERM", "truecolor")
 	old := extensionLoginPreviewWidth
 	extensionLoginPreviewWidth = func() int { return 80 }
@@ -88,9 +88,9 @@ func TestExtensionLoginPreviewRendersProductionOutputWithoutSessionOrSettingsMut
 
 func TestExtensionLoginPreviewMatchesGlyphFreeProductionOutput(t *testing.T) {
 	useLoginPreviewTestBudget(t)
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_LOGIN_PREVIEW_FIXTURE", "valid")
-	t.Setenv("PIG_LOGO_GLYPHFREE", "1")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_LOGIN_PREVIEW_FIXTURE", "valid")
+	t.Setenv("OMPIG_LOGO_GLYPHFREE", "1")
 	old := extensionLoginPreviewWidth
 	extensionLoginPreviewWidth = func() int { return 130 }
 	t.Cleanup(func() { extensionLoginPreviewWidth = old })
@@ -126,8 +126,8 @@ func TestExtensionLoginPreviewRejectsInvalidNoLoginHandlerAndArguments(t *testin
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			useLoginPreviewTestBudget(t)
-			t.Setenv("PIG_HOME", t.TempDir())
-			t.Setenv("PIG_LOGIN_PREVIEW_FIXTURE", tc.mode)
+			t.Setenv("OMPIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_LOGIN_PREVIEW_FIXTURE", tc.mode)
 			_, stderr, code := captureStdoutStderr(t, func() int { return runExtensionCommand(tc.args) })
 			if code != 1 || !strings.Contains(strings.ToLower(stderr), strings.ToLower(tc.want)) {
 				t.Fatalf("code=%d stderr=%q want=%q", code, stderr, tc.want)
@@ -159,8 +159,8 @@ func sessionFiles(t *testing.T, root string) string {
 }
 
 func TestGeneratedLoginExtensionIsIdentifiedThroughPigletResolution(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_LOGIN_PREVIEW_FIXTURE", "valid")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_LOGIN_PREVIEW_FIXTURE", "valid")
 	if err := pigsdk.EnsureSynced(codingagent.ConfigRoot()); err != nil {
 		t.Fatal(err)
 	}
@@ -176,16 +176,16 @@ func TestGeneratedLoginExtensionIsIdentifiedThroughPigletResolution(t *testing.T
 	if err := os.WriteFile(filepath.Join(extensionPath, "main.go"), mainSource, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	goMod := "module example.com/login-preview\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	goMod := "module example.com/login-preview\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(extensionPath, "go.mod"), []byte(goMod), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(pigletDir, "generated-login.piglet.yaml")
+	pigletPath := filepath.Join(pigletDir, "generated-login.ompiglet.yaml")
 	source := "name: generated-login\nextensions:\n  - name: login-preview\n    origins:\n      - local:./login-preview\n"
 	if err := os.WriteFile(pigletPath, []byte(source), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -205,7 +205,7 @@ func TestGeneratedLoginExtensionIsIdentifiedThroughPigletResolution(t *testing.T
 	host.SetWidthFunc(func() int { return 80 })
 	loaded, loadErrors := host.LoadAll(ctx, configs)
 	if len(loadErrors) != 0 || len(loaded) != 1 {
-		t.Fatalf("Piglet extension load errors=%v count=%d", loadErrors, len(loaded))
+		t.Fatalf("Ompiglet extension load errors=%v count=%d", loadErrors, len(loaded))
 	}
 	runner := inproc.NewRunner(loaded, pigletDir)
 	runner.SetUIContext(ui, extension.ModeTUI)
@@ -214,13 +214,13 @@ func TestGeneratedLoginExtensionIsIdentifiedThroughPigletResolution(t *testing.T
 		t.Fatal(err)
 	}
 	if !ui.accepted || ui.definition.Name() != "Preview" {
-		t.Fatalf("Piglet session_start active login accepted=%t name=%q", ui.accepted, ui.definition.Name())
+		t.Fatalf("Ompiglet session_start active login accepted=%t name=%q", ui.accepted, ui.definition.Name())
 	}
 }
 
 func TestExtensionCommandHelpIncludesLoginPreview(t *testing.T) {
 	stdout, stderr, code := captureStdoutStderr(t, func() int { return runExtensionCommand([]string{"extension", "--help"}) })
-	if code != 0 || stderr != "" || !strings.Contains(stdout, "pig extension preview-login <path>") {
+	if code != 0 || stderr != "" || !strings.Contains(stdout, "ompig extension preview-login <path>") {
 		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout, stderr)
 	}
 }

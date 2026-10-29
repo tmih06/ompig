@@ -3,7 +3,7 @@
 //! The frame shapes are `protocol_extension_api.go` and `protocol.go` in the host's subprocess package.
 #![cfg(unix)]
 
-use pig_sdk::{
+use ompig_sdk::{
     AgentToolResult, ExecuteToolOptions, Extension, ModelRoute, ProviderSignal, ToolAnnotations,
     ToolDefinition, ToolExposure, ToolLoadoutChanges, ToolNamespace, ToolReach, ToolResult, VirtualModel,
     empty_schema,
@@ -43,7 +43,7 @@ struct Host {
 impl Host {
     fn start(ext: Extension, state: Value) -> Host {
         let root = std::env::temp_dir().join(format!(
-            "pig-extapi-{}-{}",
+            "ompig-extapi-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
@@ -241,8 +241,8 @@ fn get_settings_without_host_settings_and_tools_outside_a_tool_fail() {
         Err(err) => ToolResult::Error(err.to_string()),
     });
     ext.command("list", "List", |ctx, _| match ctx.tools() {
-        Ok(tools) => pig_sdk::CommandResult::Error(format!("tools outside a tool call: {tools:?}")),
-        Err(err) => pig_sdk::CommandResult::Error(err.to_string()),
+        Ok(tools) => ompig_sdk::CommandResult::Error(format!("tools outside a tool call: {tools:?}")),
+        Err(err) => ompig_sdk::CommandResult::Error(err.to_string()),
     });
     let mut host = Host::start(ext, json!({"callableTools": [tool("read")]}));
     host.tool_call("r1", "probe", "call-1", json!({}));
@@ -728,7 +728,7 @@ fn exec_signal_cancels_the_command() {
     ext.tool("caller", "Caller", empty_schema(), move |ctx, _| {
         started_tx.lock().unwrap().send(()).unwrap();
         let result = ctx
-            .exec_with_options("sleep", &["30"], &pig_sdk::ExecOptions { timeout: Some(5000.0), signal: Some(tool_signal.clone()), ..Default::default() })
+            .exec_with_options("sleep", &["30"], &ompig_sdk::ExecOptions { timeout: Some(5000.0), signal: Some(tool_signal.clone()), ..Default::default() })
             .unwrap();
         ToolResult::json(json!({"content":"returned","details":{"stdout":result.stdout,"code":result.exit_code,"killed":result.killed}}))
     });
@@ -755,7 +755,7 @@ fn exec_with_a_cancelled_signal_sends_the_cancel_behind_the_call() {
     signal.cancel();
     let mut ext = Extension::new("api");
     ext.tool("caller", "Caller", empty_schema(), move |ctx, _| {
-        let result = ctx.exec_with_options("sleep", &["30"], &pig_sdk::ExecOptions { signal: Some(signal.clone()), ..Default::default() }).unwrap();
+        let result = ctx.exec_with_options("sleep", &["30"], &ompig_sdk::ExecOptions { signal: Some(signal.clone()), ..Default::default() }).unwrap();
         ToolResult::json(json!({"content":"returned","details":{"killed":result.killed}}))
     });
     let mut host = Host::start(ext, json!({}));
@@ -774,8 +774,8 @@ fn exec_with_a_cancelled_signal_sends_the_cancel_behind_the_call() {
 fn execute_tool_outside_a_tool_call_is_an_error() {
     let mut ext = Extension::new("api");
     ext.command("nested", "Nested", |ctx, _| match ctx.execute_tool("read", json!({}), ExecuteToolOptions::default()) {
-        Ok(_) => pig_sdk::CommandResult::Ok,
-        Err(err) => pig_sdk::CommandResult::Error(err.to_string()),
+        Ok(_) => ompig_sdk::CommandResult::Ok,
+        Err(err) => ompig_sdk::CommandResult::Error(err.to_string()),
     });
     let mut host = Host::start(ext, json!({}));
     host.request("c1", json!({"method":"command","tool":"nested","args":""}));
@@ -895,14 +895,14 @@ fn mcp_servers_change_and_provider_stream_event_reach_handlers() {
     let seen: Arc<Mutex<Vec<Value>>> = Arc::new(Mutex::new(Vec::new()));
     let mut ext = Extension::new("api");
     let recorded = seen.clone();
-    ext.on_event(pig_sdk::EVENT_MCP_SERVERS_CHANGE, move |ctx, data| {
+    ext.on_event(ompig_sdk::EVENT_MCP_SERVERS_CHANGE, move |ctx, data| {
         // loader.ts:473-476: getMcpServers answers the live registry, which the host replicates before it delivers the event, not the
         // event's snapshot (runner.ts:458 emits without awaiting, so a later change can precede the handler).
         recorded.lock().unwrap().push(json!({"event": data.clone(), "getMcpServers": ctx.get_mcp_servers()}));
         None
     });
     let recorded = seen.clone();
-    ext.on_event(pig_sdk::EVENT_PROVIDER_STREAM_EVENT, move |_, data| {
+    ext.on_event(ompig_sdk::EVENT_PROVIDER_STREAM_EVENT, move |_, data| {
         recorded.lock().unwrap().push(data.clone());
         None
     });

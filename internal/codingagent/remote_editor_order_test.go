@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's native input callback can open a synchronous modal. Its input listener pass must release the pump before entering that callback; the remote-editor acknowledgement is not a native modal barrier.

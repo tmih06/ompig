@@ -13,6 +13,6 @@ if (result.status !== 0) {
  process.stderr.write(result.stderr ?? '');
  throw new Error(`tool renderer oracle exited ${result.status}`);
 }
-// Pig omits empty members and spells them html, collapsed, expanded; JSON.stringify writes U+2028 and U+2029 raw where Go's encoder escapes them.
+// Ompig omits empty members and spells them html, collapsed, expanded; JSON.stringify writes U+2028 and U+2029 raw where Go's encoder escapes them.
 const compact = out => Object.fromEntries(['html', 'collapsed', 'expanded'].filter(key => out[key]).map(key => [key, out[key]]));
 for (const scenario of JSON.parse(result.stdout)) process.stdout.write(JSON.stringify(scenario.map(compact)).replaceAll('\u2028', '\\u2028').replaceAll('\u2029', '\\u2029') + '\n');

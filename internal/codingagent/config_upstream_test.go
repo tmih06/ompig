@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 const configPiPackage = "@earendil-works/pi-coding-agent"
@@ -64,7 +64,7 @@ func emitConfigCommand(t *testing.T, name string, command *SelfUpdateCommand, pr
 
 func configNativeInstall(t *testing.T, owner PackageManagerOwner, packageName string, spaced bool) (*SelfUpdateProvenance, string, string) {
 	t.Helper()
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	prefix := t.TempDir()
 	if spaced {
 		prefix = filepath.Join(prefix, "pi prefix ")
@@ -146,9 +146,9 @@ func TestConfigWindowsPnpmPathOriginal(t *testing.T) {
 
 // .upstream/v0.87.1/packages/coding-agent/test/config.test.ts:174
 func TestConfigUnknownWrapperCannotSelfUpdateOriginal(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TIER", "")
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	provenance, err := resolveTierForExe(t, "/usr/local/bin/node", fakeCmdRunner{})
 	if err != nil || provenance.Tier != TierUnsupported {
 		t.Fatalf("unknown ownership=%+v err=%v", provenance, err)
@@ -269,7 +269,7 @@ func TestConfigOtherManagerSelfUpdateCommandsOriginal(t *testing.T) {
 
 // .upstream/v0.87.1/packages/coding-agent/test/config.test.ts:348
 func TestConfigPnpmStoreEntrypointOwnershipOriginal(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	temp := t.TempDir()
 	root := filepath.Join(temp, "Library", "pnpm", "global", "v11")
 	global := filepath.Join(root, "11e9a", "node_modules", "@earendil-works", "pi-coding-agent")
@@ -347,7 +347,7 @@ func TestConfigReadOnlyPackageRootRejectsSelfUpdateOriginal(t *testing.T) {
 	if testenv.RunUnprivileged(t) {
 		return
 	}
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	prefix := t.TempDir()
 	root := filepath.Join(prefix, "lib", "node_modules")
 	pkg := filepath.Join(root, "@earendil-works", "pi-coding-agent")

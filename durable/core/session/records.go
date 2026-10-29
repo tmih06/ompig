@@ -15,7 +15,7 @@ package session
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // ID is the number of a conversation, entry, task, submission or document.

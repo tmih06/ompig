@@ -3,7 +3,7 @@ package tui
 import (
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // jsUpperFirstUnit is `s.charAt(0).toUpperCase() + s.slice(1)`: the first UTF-16 unit of s uppercased. A character beyond the BMP starts with a

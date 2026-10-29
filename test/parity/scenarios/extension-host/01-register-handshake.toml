@@ -1,13 +1,13 @@
 # Behavior family: extension-host
-# Surface: Pig subprocess extension validation path.
+# Surface: Ompig subprocess extension validation path.
 #
-# Downstream evidence: docs/additive-features.md D19/D20 define Pig's subprocess SDK bridges and packed
+# Downstream evidence: docs/additive-features.md D19/D20 define Ompig's subprocess SDK bridges and packed
 # runtime-cell host as intentional downstream mechanics. The quality-control
 # contract is still production-path: this scenario shells through
-# `pig install <source> --validate-only --json`, not a test-only host shim.
+# `ompig install <source> --validate-only --json`, not a test-only host shim.
 
 name = "01-register-handshake"
-description = "Pig extension host validates a factory SDK extension and reports registered tools."
+description = "Ompig extension host validates a factory SDK extension and reports registered tools."
 covers = [
   "packages/coding-agent/src/core/extensions/types.ts",
   "packages/coding-agent/src/core/extensions/loader.ts",

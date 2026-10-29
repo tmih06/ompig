@@ -9,24 +9,24 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // runDiagnose writes a human-readable diagnostic report covering
 // version, build, config root, auth providers, registered tools,
-// default model, and relevant environment variables. This Pig-specific
+// default model, and relevant environment variables. This Ompig-specific
 // report is designed for paste-
 // into-bug-report ergonomics, not machine parsing.
 func runDiagnose(w io.Writer, binaryPath string) {
 	hr := strings.Repeat("─", 60)
 
 	// ─── Build info ──────────────────────────────────────
-	_, _ = fmt.Fprintf(w, "pig diagnostics\n%s\n", hr)
-	_, _ = fmt.Fprintf(w, "pig-version:       %s\n", PigVersion)
+	_, _ = fmt.Fprintf(w, "ompig diagnostics\n%s\n", hr)
+	_, _ = fmt.Fprintf(w, "ompig-version:       %s\n", OmpigVersion)
 	_, _ = fmt.Fprintf(w, "upstream-pin:      %s\n", UpstreamVersion)
 	_, _ = fmt.Fprintf(w, "build:             %s\n", buildIdentity())
 	_, _ = fmt.Fprintf(w, "go runtime:        %s\n", runtime.Version())
@@ -55,22 +55,22 @@ func runDiagnose(w io.Writer, binaryPath string) {
 	_, _ = fmt.Fprintf(w, "\npaths\n%s\n", hr)
 	configRoot := codingagent.ConfigRoot()
 	_, _ = fmt.Fprintf(w, "config root:       %s\n", configRoot)
-	// pig divergence (D157): startup is silent on a read-only config root, so the report says what it does not write.
-	if probe, err := os.CreateTemp(configRoot, ".pig-diagnose-*"); err == nil {
+	// ompig divergence (D157): startup is silent on a read-only config root, so the report says what it does not write.
+	if probe, err := os.CreateTemp(configRoot, ".ompig-diagnose-*"); err == nil {
 		_ = probe.Close()
 		_ = os.Remove(probe.Name())
 	} else if isReadOnlyConfigRootError(err) {
-		_, _ = fmt.Fprintln(w, "                   read-only: no docs bundle, staged extension SDKs or Piglet Binary verification cache are written; a signed Piglet Binary checks itself in full at every start")
+		_, _ = fmt.Fprintln(w, "                   read-only: no docs bundle, staged extension SDKs or Ompiglet Binary verification cache are written; a signed Ompiglet Binary checks itself in full at every start")
 	}
 	_, _ = fmt.Fprintf(w, "agent dir:         %s\n", agentDirForModel())
 	_, _ = fmt.Fprintf(w, "auth.json:         %s\n", agentDirForModel()+"/auth.json")
 	if cwd, err := os.Getwd(); err == nil {
 		_, _ = fmt.Fprintf(w, "cwd:               %s\n", cwd)
 	}
-	// pig additive (D102): where a vanished session leaves its trace.
+	// ompig additive (D102): where a vanished session leaves its trace.
 	_, _ = fmt.Fprintf(w, "crash log:         %s\n", codingagent.CrashLogPath(agentDirForModel()))
 	_, _ = fmt.Fprintf(w, "exit log:          %s\n", codingagent.ExitLogPath(agentDirForModel()))
-	_, _ = fmt.Fprintf(w, "debug log:         %s (written when PIG_DEBUG is set)\n", filepath.Join(os.TempDir(), "pig-debug.log"))
+	_, _ = fmt.Fprintf(w, "debug log:         %s (written when OMPIG_DEBUG is set)\n", filepath.Join(os.TempDir(), "ompig-debug.log"))
 	if tail := codingagent.ReadExitLogTail(agentDirForModel(), 5); len(tail) > 0 {
 		_, _ = fmt.Fprintf(w, "\nrecent unexpected exits (newest last)\n%s\n", hr)
 		for _, line := range tail {
@@ -82,7 +82,7 @@ func runDiagnose(w io.Writer, binaryPath string) {
 	_, _ = fmt.Fprintf(w, "\nauth (logged-in providers)\n%s\n", hr)
 	authPath := agentDirForModel() + "/auth.json"
 	if _, err := os.Stat(authPath); err != nil {
-		_, _ = fmt.Fprintf(w, "  (no auth.json: run `pig login`)\n")
+		_, _ = fmt.Fprintf(w, "  (no auth.json: run `ompig login`)\n")
 	} else if storage, err := ai.NewAuthStorage(authPath); err != nil {
 		_, _ = fmt.Fprintf(w, "  error opening auth: %v\n", err)
 	} else if creds, err := storage.Load(); err != nil {
@@ -153,7 +153,7 @@ func runDiagnose(w io.Writer, binaryPath string) {
 	// ─── Env vars ─────────────────────────────────────────
 	_, _ = fmt.Fprintf(w, "\nenvironment\n%s\n", hr)
 	for _, k := range []string{
-		"PIG_CONFIG", "PIG_AGENT_DIR", "PIG_NO_NOTIFY",
+		"OMPIG_CONFIG", "OMPIG_AGENT_DIR", "OMPIG_NO_NOTIFY",
 		"OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY",
 		"GROQ_API_KEY", "CEREBRAS_API_KEY", "GITHUB_TOKEN",
 		"PATH", "SHELL", "TERM", "COLORTERM", "NO_COLOR",
@@ -174,7 +174,7 @@ func credentialKindLabel(c ai.Credential) string {
 }
 
 // maskEnv truncates secret-shaped env vars to first 6 + "…" so
-// `pig --diagnose` output is bug-report-pasteable. PATH and
+// `ompig --diagnose` output is bug-report-pasteable. PATH and
 // non-secrets pass through verbatim.
 func maskEnv(key, value string) string {
 	switch {

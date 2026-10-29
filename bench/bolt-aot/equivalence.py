@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
 # SPDX-License-Identifier: MIT
-"""Equivalence of PiG's TypeScript extension runtimes on the ten pigbench extensions (bench/evals/fixtures/extensions/bench-ext-NN.ts).
-Each arm runs the same scripted session through pig --mode rpc: get_commands, the tools the first model request declares, one prompt per extension
+"""Equivalence of Ompig's TypeScript extension runtimes on the ten pigbench extensions (bench/evals/fixtures/extensions/bench-ext-NN.ts).
+Each arm runs the same scripted session through ompig --mode rpc: get_commands, the tools the first model request declares, one prompt per extension
 whose scripted model calls bench_tool_NN (the tool result and details are recorded), the /bench-NN commands, and a last prompt that reads every
 handler's cumulative event count back. Each section is canonicalised to JSON and hashed; the arms are equivalent when every hash is equal.
 node2 repeats node as the A/A control: it shows the session is deterministic before it is used to compare runtimes.
-usage: equivalence.py --out DIR --pig PIG --slot SLOT [--exts DIR] [--arms node,node2,bun,aot] [--build-cmd CMD]"""
+usage: equivalence.py --out DIR --ompig OMPIG --slot SLOT [--exts DIR] [--arms node,node2,bun,aot] [--build-cmd CMD]"""
 import argparse, glob, hashlib, json, os, shutil, socket, subprocess, sys, tempfile, threading, time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -54,10 +54,10 @@ def canon(x):
 
 
 def session(arm, agent_dir, home, work, exts, model):
-    env = {"PATH": os.environ["PATH"], "HOME": home, "PIG_HOME": f"{home}/.pig", "PIG_CODING_AGENT_DIR": agent_dir, "PI_CODING_AGENT_DIR": agent_dir,
-           "PIG_OFFLINE": "1", "PI_OFFLINE": "1", "PIG_TELEMETRY": "0", "PIG_SKIP_VERSION_CHECK": "1", "TERM": "dumb", "TMPDIR": f"{home}/tmp", **bench.arm_env(arm)}
+    env = {"PATH": os.environ["PATH"], "HOME": home, "OMPIG_HOME": f"{home}/.ompig", "OMPIG_CODING_AGENT_DIR": agent_dir, "PI_CODING_AGENT_DIR": agent_dir,
+           "OMPIG_OFFLINE": "1", "PI_OFFLINE": "1", "OMPIG_TELEMETRY": "0", "OMPIG_SKIP_VERSION_CHECK": "1", "TERM": "dumb", "TMPDIR": f"{home}/tmp", **bench.arm_env(arm)}
     os.makedirs(env["TMPDIR"], exist_ok=True)
-    argv = [bench.CFG["pig"], "--mode", "rpc", "--no-session", "--offline", "-ne", "--provider", "fake", "--model", "fake-model"]
+    argv = [bench.CFG["ompig"], "--mode", "rpc", "--no-session", "--offline", "-ne", "--provider", "fake", "--model", "fake-model"]
     for e in exts: argv += ["-e", e]
     rpc = bench.Rpc(argv, env, work)
     obs, n0 = {}, len(model.requests)
@@ -100,9 +100,9 @@ def session(arm, agent_dir, home, work, exts, model):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--out", required=True); ap.add_argument("--arms", default="node,node2,bun,aot")
-    ap.add_argument("--pig", required=True); ap.add_argument("--slot", required=True); ap.add_argument("--exts", default=DEFAULT_EXTS); ap.add_argument("--build-cmd")
+    ap.add_argument("--ompig", required=True); ap.add_argument("--slot", required=True); ap.add_argument("--exts", default=DEFAULT_EXTS); ap.add_argument("--build-cmd")
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
-    bench.CFG.update(pig=os.path.abspath(a.pig), slot=os.path.abspath(a.slot), exts=os.path.abspath(a.exts))
+    bench.CFG.update(ompig=os.path.abspath(a.ompig), slot=os.path.abspath(a.slot), exts=os.path.abspath(a.exts))
     exts = sorted(glob.glob(os.path.join(os.path.abspath(a.exts), "bench-ext-*.ts")))
     if len(exts) != N: raise SystemExit(f"{a.exts}: expected {N} extension fixtures, found {len(exts)}")
     arms = a.arms.split(",")

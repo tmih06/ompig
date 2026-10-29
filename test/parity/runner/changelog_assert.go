@@ -10,12 +10,12 @@ import (
 	"slices"
 	"strings"
 
-	pig "github.com/MichaelKinsy/PiG"
+	ompig "github.com/tmih06/ompig"
 )
 
 func readChangelogSource(bin BinaryRef, env []string) (string, error) {
-	if bin.Label == "pig" {
-		return pig.Changelog(), nil
+	if bin.Label == "ompig" {
+		return ompig.Changelog(), nil
 	}
 	var root string
 	for _, kv := range env {
@@ -37,7 +37,7 @@ func readChangelogSource(bin BinaryRef, env []string) (string, error) {
 var changelogSourceHeader = regexp.MustCompile(`^##[ \t]+\[?([0-9]+\.[0-9]+\.[0-9]+)\]?`)
 var changelogRenderedHeader = regexp.MustCompile(`(?m)^\s*\[([0-9]+\.[0-9]+\.[0-9]+)\]`)
 
-// expectedChangelogHeaders derives the denominator from the document input, independently of Pig's parser and renderer. Pi utils/changelog.ts accepts release headings and interactive-mode.ts renders all entries in reverse source order.
+// expectedChangelogHeaders derives the denominator from the document input, independently of Ompig's parser and renderer. Pi utils/changelog.ts accepts release headings and interactive-mode.ts renders all entries in reverse source order.
 func expectedChangelogHeaders(source string) []string {
 	var headers []string
 	for line := range strings.SplitSeq(source, "\n") {
@@ -56,7 +56,7 @@ func evaluateChangelogHeaders(o *ScenarioOutcome) {
 	for _, system := range []struct {
 		name string
 		runs []Result
-	}{{"pig", o.Pig.Runs}, {"pi", o.Pi.Runs}} {
+	}{{"ompig", o.Ompig.Runs}, {"pi", o.Pi.Runs}} {
 		for index, result := range system.runs {
 			expected := expectedChangelogHeaders(result.ChangelogSource)
 			if len(expected) == 0 {

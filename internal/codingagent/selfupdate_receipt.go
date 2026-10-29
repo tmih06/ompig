@@ -11,22 +11,22 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/ownerfile"
+	"github.com/tmih06/ompig/internal/ownerfile"
 )
 
 const standaloneReceiptName = "install-receipt"
 
-// InstalledPigVersion is the running Pig distribution version. cmd/pig sets it
+// InstalledPigVersion is the running Ompig distribution version. cmd/ompig sets it
 // before dispatch so receipt validation can bind the executable to its release.
 var InstalledPigVersion string
 
 // StandaloneReceipt binds a standalone install to the exact executable,
 // release, update source, and installed bytes. The installer writes this
-// owner-only receipt; Pig only validates it.
+// owner-only receipt; Ompig only validates it.
 type StandaloneReceipt struct {
 	Kind              string
 	ExecutablePath    string
-	PigVersion        string
+	OmpigVersion      string
 	SHA256            string
 	UpdateSource      string
 	UpdateTransportCA string
@@ -81,7 +81,7 @@ func WriteStandaloneReceipt(exe, version, source string) error {
 		transportCA = hex.EncodeToString(sum[:])
 	}
 	content := fmt.Sprintf(
-		"kind=standalone\nexecutable=%s\npig-version=%s\nsha256=%s\nupdate-source=%s\n",
+		"kind=standalone\nexecutable=%s\nompig-version=%s\nsha256=%s\nupdate-source=%s\n",
 		exe, version, hex.EncodeToString(digest.Sum(nil)), source,
 	)
 	if transportCA != "" {
@@ -126,7 +126,7 @@ func readStandaloneReceipt() (*StandaloneReceipt, error) {
 			return nil, fmt.Errorf("standalone receipt %s has malformed entry", path)
 		}
 		switch key {
-		case "kind", "executable", "pig-version", "sha256", "update-source", "update-ca-sha256":
+		case "kind", "executable", "ompig-version", "sha256", "update-source", "update-ca-sha256":
 		default:
 			return nil, fmt.Errorf("standalone receipt %s has unknown field %q", path, key)
 		}
@@ -141,12 +141,12 @@ func readStandaloneReceipt() (*StandaloneReceipt, error) {
 	receipt := &StandaloneReceipt{
 		Kind:              values["kind"],
 		ExecutablePath:    values["executable"],
-		PigVersion:        values["pig-version"],
+		OmpigVersion:      values["ompig-version"],
 		SHA256:            values["sha256"],
 		UpdateSource:      values["update-source"],
 		UpdateTransportCA: values["update-ca-sha256"],
 	}
-	if receipt.Kind == "" || receipt.ExecutablePath == "" || receipt.PigVersion == "" || receipt.SHA256 == "" || receipt.UpdateSource == "" {
+	if receipt.Kind == "" || receipt.ExecutablePath == "" || receipt.OmpigVersion == "" || receipt.SHA256 == "" || receipt.UpdateSource == "" {
 		return nil, fmt.Errorf("standalone receipt %s is incomplete", path)
 	}
 	return receipt, nil
@@ -160,15 +160,15 @@ func validateStandaloneReceipt(exe string) error {
 	if receipt.Kind != "standalone" {
 		return fmt.Errorf("standalone receipt kind is %q, want standalone", receipt.Kind)
 	}
-	// canonicalPath is Node's realpathSync and keeps the case each path was spelled in; the receipt names an executable on a filesystem that, on Windows, does not tell `C:\Pig\pig.exe` from `c:\pig\PIG.EXE`.
+	// canonicalPath is Node's realpathSync and keeps the case each path was spelled in; the receipt names an executable on a filesystem that, on Windows, does not tell `C:\Ompig\ompig.exe` from `c:\ompig\OMPIG.EXE`.
 	if ownershipPath(runtime.GOOS, receipt.ExecutablePath) != ownershipPath(runtime.GOOS, exe) {
 		return fmt.Errorf("standalone receipt executable %s does not match %s", receipt.ExecutablePath, exe)
 	}
 	if InstalledPigVersion == "" {
-		return fmt.Errorf("running Pig release identity is unavailable")
+		return fmt.Errorf("running Ompig release identity is unavailable")
 	}
-	if receipt.PigVersion != InstalledPigVersion {
-		return fmt.Errorf("standalone receipt release %s does not match running Pig %s", receipt.PigVersion, InstalledPigVersion)
+	if receipt.OmpigVersion != InstalledPigVersion {
+		return fmt.Errorf("standalone receipt release %s does not match running Ompig %s", receipt.OmpigVersion, InstalledPigVersion)
 	}
 	if receipt.UpdateSource != UpdateSourceURL() {
 		return fmt.Errorf("standalone receipt update source %s does not match configured source %s", receipt.UpdateSource, UpdateSourceURL())

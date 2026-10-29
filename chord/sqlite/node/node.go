@@ -20,7 +20,7 @@ import (
 	// Registers the pure-Go "sqlite" database/sql driver.
 	_ "modernc.org/sqlite"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // DatabaseSyncOptions configures one native SQLite connection.
@@ -45,7 +45,7 @@ type DatabaseSync struct {
 
 // ObservePrepare calls observe with the SQL text of every statement Prepare compiles from now on. It stands in for a
 // subclass overriding DatabaseSync.prepare, as Pi's storage tests count compilations.
-// pig additive (D104): Go has no subclassing of the connection, so an observer takes the override's place.
+// ompig additive (D104): Go has no subclassing of the connection, so an observer takes the override's place.
 func (database *DatabaseSync) ObservePrepare(observe func(sqlText string)) {
 	database.mu.Lock()
 	defer database.mu.Unlock()

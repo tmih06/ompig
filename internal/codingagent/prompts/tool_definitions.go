@@ -4,9 +4,9 @@ import (
 	"maps"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // WithToolDefinitions applies registered definitions over built-in prompt metadata.

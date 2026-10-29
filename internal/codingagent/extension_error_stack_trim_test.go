@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactive-mode.ts:3056 renders each stack line after the first as `  ${line.trim()}`: String.prototype.trim strips U+FEFF and U+00A0 and keeps

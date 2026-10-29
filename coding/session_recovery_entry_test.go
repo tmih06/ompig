@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi 0.87.1 agent-session.ts:1015-1028 publishes each durable recovery omission before continuing the retry.

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 func validityToolCall(id string) ToolCall {
@@ -102,7 +102,7 @@ func TestProviderSendSeamChecksEveryAPIsRequest(t *testing.T) {
 			}
 			rule := " result-has-call"
 			if model.API == APIBedrockConverseStream {
-				// PiG's Converse converter merges adjacent user messages (D116), so the orphan results land in the summary's user message after its text.
+				// Ompig's Converse converter merges adjacent user messages (D116), so the orphan results land in the summary's user message after its text.
 				rule = " result-first"
 			}
 			if !strings.Contains(strings.Join(got, "\n"), wireAPI+rule) {

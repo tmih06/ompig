@@ -7,7 +7,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's StreamableHttpTransport constructor (transports/streamable-http.js) runs `new URL(options.url)`: it throws for an unparsable URL and keeps the WHATWG-serialized URL that every request then uses.

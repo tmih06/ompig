@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -8,8 +8,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust"
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust/tlsdistrusttest"
+	"github.com/tmih06/ompig/internal/tlsdistrust"
+	"github.com/tmih06/ompig/internal/tlsdistrust/tlsdistrusttest"
 )
 
 // The Bedrock runtime client and the credential client (the STS, SSO, SSO OIDC and sign-in calls) are both built by newBedrockHTTPClient.

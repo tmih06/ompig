@@ -67,8 +67,8 @@ def cmd_get(args: argparse.Namespace) -> None:
 def cmd_env(_: argparse.Namespace) -> None:
     pin, override = pinlib.effective()
     for key in KEYS:
-        print(f"export PIG_UPSTREAM_{key.upper()}={shlex.quote(field(pin, key, override, pin))}")
-    print(f"export PIG_UPSTREAM_OVERRIDE={'true' if override else 'false'}")
+        print(f"export OMPIG_UPSTREAM_{key.upper()}={shlex.quote(field(pin, key, override, pin))}")
+    print(f"export OMPIG_UPSTREAM_OVERRIDE={'true' if override else 'false'}")
     if override:
         flag = pinlib.overlay(pin)
         print(f'export GOFLAGS="${{GOFLAGS:+$GOFLAGS }}{flag}"')
@@ -107,7 +107,7 @@ def readme(pin: Pin, text: str) -> str:
     text = sub(r"^\[!\[Pi pin [^\]]*\]\(https://img\.shields\.io/badge/Pi%20pin-[^)]*\)\]\([^)]*\)",
                f"[![Pi pin {pin.version}](https://img.shields.io/badge/Pi%20pin-{badge}-8A2BE2)]({link})", text, "README.md", 1)
     text = sub(r"(checked against Pi )\S+( with paired parity scenarios)", rf"\g<1>{pin.version}\g<2>", text, "README.md", 1)
-    text = sub(r"(prints PiG's version as `<PiG release>\+<Pi release>`, for example `\d+\.\d+\.\d+\+)[^`]+(`)", rf"\g<1>{pin.version}\g<2>", text, "README.md", 1)
+    text = sub(r"(prints Ompig's version as `<Ompig release>\+<Pi release>`, for example `\d+\.\d+\.\d+\+)[^`]+(`)", rf"\g<1>{pin.version}\g<2>", text, "README.md", 1)
     sentence = (f"The pinned Pi release is {pin.version} at commit `{pin.commit}`." if pin.kind == "tag"
                 else f"The pinned Pi build is {pin.version}, commit `{pin.commit}` of the main branch.")
     return sub(r"The pinned Pi (?:release|build) is [^`]*at commit `[0-9a-f]{40}`\.|The pinned Pi build is [^`]*, commit `[0-9a-f]{40}` of the main branch\.", sentence, text, "README.md", 1)
@@ -158,7 +158,7 @@ RULES: list[tuple[str, object, str | None]] = [
 
 
 def derived(pin: Pin) -> dict[str, str]:
-    out = {"internal/coding/pigversion/pigversion.go": pinlib.render_pigversion(pin, pinlib.pig_version())}
+    out = {"internal/coding/pigversion/pigversion.go": pinlib.render_pigversion(pin, pinlib.ompig_version())}
     for rel, transform, _lock in RULES:
         path = ROOT / rel
         text = path.read_text(encoding="utf-8")
@@ -372,7 +372,7 @@ def install_generated(pin: Pin, written: list[str], dest: Path) -> None:
         print(f"pin-ledgers: {rel} is now the generated ledger of Pi {pin.version}")
 
 
-PUBLISHED_ENV = "PIG_PARITY_PI_PUBLISHED"
+PUBLISHED_ENV = "OMPIG_PARITY_PI_PUBLISHED"
 
 
 def published_opt_in() -> bool:
@@ -380,7 +380,7 @@ def published_opt_in() -> bool:
 
 
 def cmd_install_oracle(args: argparse.Namespace) -> None:
-    """Build Pi from source at the pin and link it as the oracle; PIG_PARITY_PI_PUBLISHED=1 installs the published release instead."""
+    """Build Pi from source at the pin and link it as the oracle; OMPIG_PARITY_PI_PUBLISHED=1 installs the published release instead."""
     import oracle
 
     pin, _override = pinlib.effective()

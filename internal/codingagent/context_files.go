@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // ContextFile holds a loaded project context file (AGENTS.override.md,
@@ -28,7 +28,7 @@ var contextCandidates = []string{"AGENTS.override.md", "AGENTS.md", "AGENTS.MD",
 // filesystem root.
 //
 // Load order (matches upstream resource-loader.ts:76-115):
-//  1. Agent config dir (e.g. ~/.pig/): global context
+//  1. Agent config dir (e.g. ~/.ompig/): global context
 //  2. Ancestor directories from root down to cwd: project context
 //
 // Within each directory, AGENTS.override.md replaces that directory's regular

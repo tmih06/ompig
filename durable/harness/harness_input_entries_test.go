@@ -13,11 +13,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // requestLog is a faux response that records the role and text of each request message, as the provider receives them.

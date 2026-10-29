@@ -8,9 +8,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // McpMenuItem is one row of a [McpMenu]; it has the fields of tui.SelectItem so a terminal view converts it directly.
@@ -194,7 +194,7 @@ func (e *Extension) serverMenu(name string) McpMenu {
 		scope = "config"
 	}
 	details := []string{describeTransport(entry)}
-	// pig divergence (D156): the server connects to the expansion of its url, so the menu shows it under the url as written.
+	// ompig divergence (D156): the server connects to the expansion of its url, so the menu shows it under the url as written.
 	if entry.Config.IsHTTP() {
 		if expanded := extension.ExpandMcpURL(entry.Config.URL); expanded != entry.Config.URL {
 			details = append(details, "connects to: "+expanded)

@@ -14,10 +14,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Ports packages/coding-agent/test/mcp-oauth-refresh.test.ts.

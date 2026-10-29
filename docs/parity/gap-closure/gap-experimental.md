@@ -2,7 +2,7 @@
 
 Slice: `packages/coding-agent/src/experimental` (excluding `services/`) and `experimental/plugins`. Base `12429f15b` (Pi 1.0.4). The integration step applies these verdicts to `docs/parity/PORT_MAP.md`; this lane does not edit it.
 
-Method: read each upstream file against its Go side; run the whole `internal/experimental/...` tree (with the pinned upstream oracles, which need `make parity-deps`); mutate the Go side and keep every mutation a test did not kill as a finding; qualify the composed path through the built `pig_experimental` executable.
+Method: read each upstream file against its Go side; run the whole `internal/experimental/...` tree (with the pinned upstream oracles, which need `make parity-deps`); mutate the Go side and keep every mutation a test did not kill as a finding; qualify the composed path through the built `ompig_experimental` executable.
 
 Upstream 1.0.0 → 1.0.4 left every file of this slice and every covering `test/experimental-*.test.ts` byte-identical (`diff` of the mirrors), so the 1.0.0 port the Go side carries is the 1.0.4 behaviour. Pi's `experimental/` is not in the published package, so no real-Pi run of `cli.ts` exists to pair against: the upstream source needs generated `packages/ai/src/providers/data/.manifest.json`, which the mirror lacks. The `internal/experimental` oracle tests execute the pinned `coordinator-entry.ts`, `radius-*.ts` and `process.ts` directly where they can.
 
@@ -12,7 +12,7 @@ All 15 rows are DONE. None needed a new port; the open ⬜ rows were stale (the 
 
 | row (upstream path) | verdict | evidence |
 |---|---|---|
-| `experimental/cli.ts` | DONE | `cmd/pig/main_experimental.go` role dispatch and stable fallback: `cmd/pig-experimental` `TestDevelopmentCLIEntryUpstream` (ports `experimental-cli-entry.test.ts`) and `TestDevelopmentEntryServerClientSessionLifecycle` |
+| `experimental/cli.ts` | DONE | `cmd/ompig/main_experimental.go` role dispatch and stable fallback: `cmd/ompig-experimental` `TestDevelopmentCLIEntryUpstream` (ports `experimental-cli-entry.test.ts`) and `TestDevelopmentEntryServerClientSessionLifecycle` |
 | `experimental/client-runtime.ts` | DONE (Radius :57-68,125-133,156-169 is D64) | `TestOpenClientRuntimeValidationPrecedesDiscovery`, new `TestClientRuntimeRejectsAmbiguousServerSelection`, new `TestRouteFromExplicitPathRequiresAServerIDSocketName`, `TestExperimentalDurableServerCompositionA` and `...RemoteB`, the lifecycle test |
 | `experimental/client-tui-chat.ts` | DONE | `TestClientChatViewReusesStreamingComponentAndRebasesDivergentPrefix`, `TestClientQueueWhitespacePreservesBoundarySpaces`, new `TestClientChatViewStatusText` and `TestClientChatViewMarksCompactionAndReset`, new `TestClientTuiStatusTexts` (the interim and final status of an unknown slash command, a prompt, a steering message and a follow-up; thirteen message mutations, all killed; review added the accepted-prompt row, because removing the `client-tui.ts:588` clear survived) |
 | `experimental/client-tui.ts` | DONE (Radius status text is D64) | `TestExperimentalClientTuiUpstream` (ports `experimental-client-tui.test.ts`), the `TestClientTui*` component tests, new `TestClientTuiStatusTexts`, `TestRunClientTuiOwnsTheCustomThemeWatcherOnARealTerminal` |
@@ -32,7 +32,7 @@ All 15 rows are DONE. None needed a new port; the open ⬜ rows were stale (the 
 
 1. Bug fixed at the source (`internal/experimental/server_runtime.go`): the backend closure aggregate said "Server and catalog shutdown failed"; `server.ts:469` says "Server and repository shutdown failed".
 2. Tests added for behaviour that mutation showed unpinned: the `radius-auth.ts:48` refresh threshold, the `package.ts` on-disk names (shared with a Pi server under D2's Pi namespace), three user-visible client diagnostics, the chat view status line, and the compaction/reset markers.
-3. Composed qualification: `TestDevelopmentEntryServerClientSessionLifecycle` builds the `pig_experimental` executable and drives a cold prompt against a local OpenAI-compatible stub: activation of a detached server, coordinator and Session worker; the answer through the real coding Harness; list; resume with the durable `user, assistant, user` history; foreground server with `--connect`; SIGTERM exit 0. Unix only (Windows rejects the Unix transport, as Pi does).
+3. Composed qualification: `TestDevelopmentEntryServerClientSessionLifecycle` builds the `ompig_experimental` executable and drives a cold prompt against a local OpenAI-compatible stub: activation of a detached server, coordinator and Session worker; the answer through the real coding Harness; list; resume with the durable `user, assistant, user` history; foreground server with `--connect`; SIGTERM exit 0. Unix only (Windows rejects the Unix transport, as Pi does).
 4. `make divergence-guard` does not pin time constants: it accepts a literal whose digits appear anywhere in the cited upstream file. Review showed `HOST_RETRY_MAX_MS` 30 s → 20 s surviving both the tests and the guard ("20" occurs in `radius-relay.ts:613`), and added the backoff tests above.
 
 ## Observations for the integrator

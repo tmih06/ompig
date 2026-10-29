@@ -6,7 +6,7 @@ The Host side of every capability already exists (6D) and the Go, Rust and Pytho
 
 ## Capability map
 
-Each row is one upstream 0.99.1 capability (`.upstream/v0.99.1/packages/coding-agent/src/core/`) and the Node behavior. The Node spelling is Pi's own (`pi.registerMcpServer`, ...), so the interface is the upstream one; only the wire names below are PiG's.
+Each row is one upstream 0.99.1 capability (`.upstream/v0.99.1/packages/coding-agent/src/core/`) and the Node behavior. The Node spelling is Pi's own (`pi.registerMcpServer`, ...), so the interface is the upstream one; only the wire names below are Ompig's.
 
 | upstream | Node | wire |
 |---|---|---|
@@ -40,8 +40,8 @@ Signature stub: `Session.ToolActions` (`coding/session_loadout.go`), exported so
 
 `HostCallbacks.GetSettings`, `GetCallableTools` and `ExecuteTool` could only be set through `UIBridge.SetActions`, which no mode called. In the real binary every subprocess SDK (Go, Rust, Python, Node) therefore saw no settings, an empty `ctx.tools` and the "Nested tool calls are not available" outcome; the conformance rows of the other SDK lanes passed only because they call `SetActions`. Lead approved the fix (`questions/port-99-f6f-node.md`).
 
-- Red: `cmd/pig/extension_tool_context_wiring_test.go`, `TestExtensionToolContextIsWiredInEveryMode`: the real binary in print, json, rpc and interactive (PTY) mode with a Node and a Go extension whose tool reads `pi.getSettings()`, `ctx.tools` and runs `ctx.executeTool()`. 8 subtests, all red (`docs/plan/evidence/port-99-f6f-node-wiring-red.txt`).
-- Green (own commit): `SetHostAction` keys `getSettings`, `getCallableTools`, `executeTool`; bound in `cmd/pig/session_extension_actions.go` (print, json, RPC) and `internal/codingagent/interactive_extensions.go`; `Session.ToolActions` exported; `SettingsManager.ExtensionSettings`; `subprocess.UnavailableNestedCall` exported. Mutations (the interactive and the print/RPC bindings each disabled) fail all 8 subtests.
+- Red: `cmd/ompig/extension_tool_context_wiring_test.go`, `TestExtensionToolContextIsWiredInEveryMode`: the real binary in print, json, rpc and interactive (PTY) mode with a Node and a Go extension whose tool reads `pi.getSettings()`, `ctx.tools` and runs `ctx.executeTool()`. 8 subtests, all red (`docs/plan/evidence/port-99-f6f-node-wiring-red.txt`).
+- Green (own commit): `SetHostAction` keys `getSettings`, `getCallableTools`, `executeTool`; bound in `cmd/ompig/session_extension_actions.go` (print, json, RPC) and `internal/codingagent/interactive_extensions.go`; `Session.ToolActions` exported; `SettingsManager.ExtensionSettings`; `subprocess.UnavailableNestedCall` exported. Mutations (the interactive and the print/RPC bindings each disabled) fail all 8 subtests.
 
 ## Green
 
@@ -74,7 +74,7 @@ Design notes:
 
 ## Parity family run (`make parity-family FAMILY=extensions-runtime`, hermetic, this host)
 
-The base commit `113a10ba9` fails 23 scenarios; this branch fails 19 to 21 across three runs. The set is a subset of the base's failures plus `36-model-registry-session-manager`, which failed once (the Pig side missed the `prompt` response) and passed on the rerun. The scenarios compare against a Pi oracle whose install differs from the pinned one on this host, so most failures are path and version differences (`.pig` versus `.pi` in `sourceInfo`), not Node runtime behavior. Scenario `56-failed-factory-api` fails at the base and passes here after the `probe.mjs` update.
+The base commit `113a10ba9` fails 23 scenarios; this branch fails 19 to 21 across three runs. The set is a subset of the base's failures plus `36-model-registry-session-manager`, which failed once (the Ompig side missed the `prompt` response) and passed on the rerun. The scenarios compare against a Pi oracle whose install differs from the pinned one on this host, so most failures are path and version differences (`.ompig` versus `.pi` in `sourceInfo`), not Node runtime behavior. Scenario `56-failed-factory-api` fails at the base and passes here after the `probe.mjs` update.
 
 ## ctx.compact (audit-host-wiring)
 

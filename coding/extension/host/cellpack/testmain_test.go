@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestMain(m *testing.M) {
-	testRoot, err := os.MkdirTemp("", "pig-cellpack-")
+	testRoot, err := os.MkdirTemp("", "ompig-cellpack-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "create isolated test home:", err)
 		os.Exit(2)
@@ -27,10 +27,10 @@ func TestMain(m *testing.M) {
 		os.Exit(2)
 	}
 	for key, value := range map[string]string{
-		"PIG_HOME":        filepath.Join(testRoot, "pig"),
-		"PIG_SDK_GO_ROOT": filepath.Join(sourceRoot, "extensions", "sdk"),
-		"PIG_SDK_PY_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-py"),
-		"PIG_SDK_RS_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-rs"),
+		"OMPIG_HOME":        filepath.Join(testRoot, "ompig"),
+		"OMPIG_SDK_GO_ROOT": filepath.Join(sourceRoot, "extensions", "sdk"),
+		"OMPIG_SDK_PY_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-py"),
+		"OMPIG_SDK_RS_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-rs"),
 	} {
 		if err := os.Setenv(key, value); err != nil {
 			fmt.Fprintf(os.Stderr, "set isolated %s: %v\n", key, err)

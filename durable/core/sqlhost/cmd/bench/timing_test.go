@@ -14,7 +14,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // seededContext is the full-walk transcript of size history turns as the scripted model sees it, and the context of the
@@ -122,7 +122,7 @@ func TestATimingRunAppendsOneResultLineForItsFixture(t *testing.T) {
 		}
 	})
 	results := filepath.Join(dir, "results.jsonl")
-	o := options{db: db, timing: results, target: "pig-native", version: "abc1234", size: 4, sample: 2, turns: 2, tools: 1, variant: "full", label: "m"}
+	o := options{db: db, timing: results, target: "ompig-native", version: "abc1234", size: 4, sample: 2, turns: 2, tools: 1, variant: "full", label: "m"}
 	if err := run(t.Context(), o); err != nil {
 		t.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func TestATimingRunAppendsOneResultLineForItsFixture(t *testing.T) {
 		t.Fatalf("results = %q (%v)", raw, err)
 	}
 	_, lastCall := seededContext(4)
-	if line.Target != "pig-native" || line.Version != "abc1234" || line.Turns != 4 || line.Sample != 2 || len(line.Turn) != 2 || line.Open <= 0 || line.Turn[0] <= 0 {
+	if line.Target != "ompig-native" || line.Version != "abc1234" || line.Turns != 4 || line.Sample != 2 || len(line.Turn) != 2 || line.Open <= 0 || line.Turn[0] <= 0 {
 		t.Fatalf("line = %+v", line)
 	}
 	if line.Fingerprint != fingerprint(lastCall) {
@@ -167,7 +167,7 @@ func TestModelRequestsNameTheirContext(t *testing.T) {
 		bytes int
 	}
 	var requests []sent
-	o := options{db: db, timing: filepath.Join(dir, "results.jsonl"), target: "pig-native", version: "abc1234", size: 4, turns: 2, tools: 2, variant: "full", label: "m"}
+	o := options{db: db, timing: filepath.Join(dir, "results.jsonl"), target: "ompig-native", version: "abc1234", size: 4, turns: 2, tools: 2, variant: "full", label: "m"}
 	o.observe = func(e abi.Effect) {
 		if e.Kind != abi.EffectModelContext {
 			return

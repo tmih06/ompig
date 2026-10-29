@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // TestSessionSearchTokensMatchPi: filterAndSortSessions (session-selector-search.ts) in both sort modes over random sessions (words, names, cwd paths with Unicode, no-name sessions, equal timestamps) and random token queries (fuzzy words that are subsequences, substrings, scrambles; quoted phrases; unbalanced quotes; mixed whitespace), against the pinned Pi: the order of every result.
@@ -107,7 +107,7 @@ emit(input.queries.map((q) => ["recent", "relevance"].map((mode) => mod.filterAn
 			}
 			if !slices.Equal(got, want[i][k]) {
 				if failures++; failures <= 8 {
-					t.Errorf("%q mode %d:\n Pig %q\n Pi  %q", query, k, got, want[i][k])
+					t.Errorf("%q mode %d:\n Ompig %q\n Pi  %q", query, k, got, want[i][k])
 				}
 			}
 		}

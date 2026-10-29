@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestResolveConventionalForms(t *testing.T) {
@@ -24,7 +24,7 @@ func TestResolveConventionalForms(t *testing.T) {
 			name: "go factory", language: "go", form: Factory, packable: true,
 			prepare: func(t *testing.T, root string) string {
 				writeSourceTestFile(t, filepath.Join(root, "go.mod"), "module example.com/review\n\ngo 1.26\n")
-				writeSourceTestFile(t, filepath.Join(root, "extension.go"), "package review\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+				writeSourceTestFile(t, filepath.Join(root, "extension.go"), "package review\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 				return root
 			},
 		},
@@ -40,7 +40,7 @@ func TestResolveConventionalForms(t *testing.T) {
 			name: "rust factory", language: "rust", form: Factory, packable: true,
 			prepare: func(t *testing.T, root string) string {
 				writeSourceTestFile(t, filepath.Join(root, "Cargo.toml"), "[package]\nname = \"review-ext\"\nversion = \"0.1.0\"\n")
-				writeSourceTestFile(t, filepath.Join(root, "src", "lib.rs"), "pub fn new_extension() -> pig_sdk::Extension { todo!() }\n")
+				writeSourceTestFile(t, filepath.Join(root, "src", "lib.rs"), "pub fn new_extension() -> ompig_sdk::Extension { todo!() }\n")
 				return root
 			},
 		},
@@ -106,7 +106,7 @@ func TestResolveGoMultiFactoryModuleRequiresExactPackageSelection(t *testing.T) 
 	root := t.TempDir()
 	writeSourceTestFile(t, filepath.Join(root, "go.mod"), "module example.com/multi\n\ngo 1.26\n")
 	for _, name := range []string{"alpha", "beta"} {
-		writeSourceTestFile(t, filepath.Join(root, name, "extension.go"), "package "+name+"\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+		writeSourceTestFile(t, filepath.Join(root, name, "extension.go"), "package "+name+"\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 	}
 
 	if _, err := Resolve(root); err == nil || !strings.Contains(err.Error(), "example.com/multi/alpha") || !strings.Contains(err.Error(), "example.com/multi/beta") {
@@ -140,7 +140,7 @@ func TestResolveRejectsAmbiguousAndNonstandardFactories(t *testing.T) {
 			name: "go nonstandard", want: "func Extension() *sdk.Extension",
 			prepare: func(t *testing.T, root string) {
 				writeSourceTestFile(t, filepath.Join(root, "go.mod"), "module example.com/x\n")
-				writeSourceTestFile(t, filepath.Join(root, "extension.go"), "package x\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc NewExtension() *sdk.Extension { return nil }\n")
+				writeSourceTestFile(t, filepath.Join(root, "extension.go"), "package x\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc NewExtension() *sdk.Extension { return nil }\n")
 			},
 		},
 		{
@@ -212,24 +212,24 @@ func TestResolvePythonRejectsUnimportableFactoryModuleName(t *testing.T) {
 }
 
 // TestResolveGoFactoryRecordsSDKModulePath pins AK-001: a factory importing
-// the Pig 0.84 SDK module path is the same conventional factory as one
+// the Ompig 0.84 SDK module path is the same conventional factory as one
 // importing the current path, differing only in the recorded SDK identity.
 func TestResolveGoFactoryRecordsSDKModulePath(t *testing.T) {
 	tests := []struct {
 		name, imports, sdkModulePath string
 	}{
-		{name: "current", imports: `import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"`, sdkModulePath: GoSDKModulePath},
-		{name: "legacy", imports: `import sdk "github.com/mainstai/pig/extensions/sdk"`, sdkModulePath: LegacyGoSDKModulePath},
-		{name: "legacy implicit name", imports: `import "github.com/mainstai/pig/extensions/sdk"`, sdkModulePath: LegacyGoSDKModulePath},
-		{name: "legacy alias", imports: "import (\n\t\"os\"\n\tpig \"github.com/mainstai/pig/extensions/sdk\"\n)\nvar _ = os.Getenv", sdkModulePath: LegacyGoSDKModulePath},
+		{name: "current", imports: `import sdk "github.com/tmih06/ompig/extensions/sdk"`, sdkModulePath: GoSDKModulePath},
+		{name: "legacy", imports: `import sdk "github.com/mainstai/ompig/extensions/sdk"`, sdkModulePath: LegacyGoSDKModulePath},
+		{name: "legacy implicit name", imports: `import "github.com/mainstai/ompig/extensions/sdk"`, sdkModulePath: LegacyGoSDKModulePath},
+		{name: "legacy alias", imports: "import (\n\t\"os\"\n\tpig \"github.com/mainstai/ompig/extensions/sdk\"\n)\nvar _ = os.Getenv", sdkModulePath: LegacyGoSDKModulePath},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
 			writeSourceTestFile(t, filepath.Join(root, "go.mod"), "module example.com/ask\n\ngo 1.26\n\nrequire "+test.sdkModulePath+" v0.0.0\n")
 			result := "*sdk.Extension"
-			if strings.Contains(test.imports, "pig \"") {
-				result = "*pig.Extension"
+			if strings.Contains(test.imports, "ompig \"") {
+				result = "*ompig.Extension"
 			}
 			writeSourceTestFile(t, filepath.Join(root, "main.go"), "package ask\n"+test.imports+"\nfunc Extension() "+result+" { return nil }\n")
 			definition, err := Resolve(root)
@@ -249,7 +249,7 @@ func TestResolveGoFactoryRecordsSDKModulePath(t *testing.T) {
 func TestResolveGoFactoryRejectsUnrelatedExtensionType(t *testing.T) {
 	root := t.TempDir()
 	writeSourceTestFile(t, filepath.Join(root, "go.mod"), "module example.com/other\n\ngo 1.26\n")
-	writeSourceTestFile(t, filepath.Join(root, "main.go"), "package other\nimport sdk \"example.com/not/the/pig/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+	writeSourceTestFile(t, filepath.Join(root, "main.go"), "package other\nimport sdk \"example.com/not/the/ompig/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 	if _, err := Resolve(root); err == nil || !strings.Contains(err.Error(), "has no func Extension() *sdk.Extension factory") {
 		t.Fatalf("Resolve error = %v", err)
 	}
@@ -402,9 +402,9 @@ func TestResolveGoModuleThroughDirectoryLink(t *testing.T) {
 		name, file, source string
 		form               Form
 	}{
-		{name: "factory", file: "extension.go", source: "package x\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n", form: Factory},
+		{name: "factory", file: "extension.go", source: "package x\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n", form: Factory},
 		{name: "standalone", file: "main.go", source: "package main\nfunc main() {}\n", form: Standalone},
-		{name: "nested factory", file: filepath.Join("ext", "extension.go"), source: "package ext\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n", form: Factory},
+		{name: "nested factory", file: filepath.Join("ext", "extension.go"), source: "package ext\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n", form: Factory},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			parent := t.TempDir()
@@ -457,7 +457,7 @@ func TestResolveGoModuleThroughDirectoryLinkKeepsTargetWorkspace(t *testing.T) {
 	writeSourceTestFile(t, filepath.Join(workspace, "lib", "go.mod"), "module example.com/lib\n\ngo 1.26\n")
 	target := filepath.Join(workspace, "extension")
 	writeSourceTestFile(t, filepath.Join(target, "go.mod"), "module example.com/x\n\ngo 1.26\n")
-	writeSourceTestFile(t, filepath.Join(target, "extension.go"), "package x\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+	writeSourceTestFile(t, filepath.Join(target, "extension.go"), "package x\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 	link := filepath.Join(parent, "extensions", "x")
 	if err := os.MkdirAll(filepath.Dir(link), 0o755); err != nil {
 		t.Fatal(err)
@@ -494,7 +494,7 @@ func TestResolveGoWorkspaceMemberSelectsItsOwnFactory(t *testing.T) {
 	writeSourceTestFile(t, filepath.Join(workspace, "go.work"), "go 1.26\n\nuse (\n\t./a\n\t./b\n)\n")
 	for _, name := range []string{"a", "b"} {
 		writeSourceTestFile(t, filepath.Join(workspace, name, "go.mod"), "module example.com/"+name+"\n\ngo 1.26\n")
-		writeSourceTestFile(t, filepath.Join(workspace, name, "extension.go"), "package "+name+"\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+		writeSourceTestFile(t, filepath.Join(workspace, name, "extension.go"), "package "+name+"\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 	}
 	a, b := filepath.Join(workspace, "a"), filepath.Join(workspace, "b")
 	for _, tc := range []struct{ root, module string }{{a, "example.com/a"}, {b, "example.com/b"}} {

@@ -175,8 +175,8 @@ func runTrialAgent(ctx context.Context, tp trialPlan, d trialDirs, res *trialRes
 	if err := os.MkdirAll(home, 0o755); err != nil {
 		return err
 	}
-	env := append(os.Environ(), "PIG_CODING_AGENT_DIR="+home, "PI_CODING_AGENT_DIR="+home,
-		"PI_OFFLINE=1", "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_TELEMETRY=0")
+	env := append(os.Environ(), "OMPIG_CODING_AGENT_DIR="+home, "PI_CODING_AGENT_DIR="+home,
+		"PI_OFFLINE=1", "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_TELEMETRY=0")
 	models, err := trialModelsJSON(tp)
 	if err != nil {
 		return err
@@ -191,7 +191,7 @@ func runTrialAgent(ctx context.Context, tp trialPlan, d trialDirs, res *trialRes
 	var argv []string
 	switch tp.Arm {
 	case armPig:
-		argv = []string{filepath.Join(d.root, "bin", "pig")}
+		argv = []string{filepath.Join(d.root, "bin", "ompig")}
 	case armPi:
 		argv = []string{filepath.Join(d.root, "node", "bin", "node"), filepath.Join(d.root, filepath.FromSlash(piAgentCLI))}
 	default:

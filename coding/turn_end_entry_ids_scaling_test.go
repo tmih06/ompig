@@ -6,14 +6,14 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // turn_end hands extensions the entry id of each tool result of the turn. The event carries copies of the results message_end persisted, so the lookup by message object misses and resolves by tool call id: it must read the newest entries of the projection and not copy the whole history for each result (agent-session.ts _findPersistedMessageEntryId finds the object it persisted).
 func TestTurnEndEntryIDsScaleWithTheTurnNotTheHistory(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

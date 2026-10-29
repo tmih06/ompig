@@ -8,7 +8,7 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // When no native watch can be created (out of inotify instances), the watcher polls and reports overflow, as node-watch.ts does when its first fs.watch throws: #reconcileWatchers catches the error (node-watch.ts:458-462) and #switchToPolling delivers { overflow: true } (node-watch.ts:469-478), during open. Changes are then found by polling.

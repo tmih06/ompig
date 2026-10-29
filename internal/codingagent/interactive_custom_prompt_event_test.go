@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi #5581, fixed by Pi 1.2.0 (PR #10739): a custom-message run emits before_agent_start with messageType "custom" and the message (agent-session.ts:1885-1894 _prepareRun). Pi 1.1.0 seeded it directly through _runAgentPrompt and emitted nothing.

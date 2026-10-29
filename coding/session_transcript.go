@@ -6,11 +6,11 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	codingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	codingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 // restoreAgentMessages retains the current instruction baseline when a session branch or compaction context contains only conversation entries.

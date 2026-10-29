@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/MichaelKinsy/PiG/main/test/parity/interface-extractor/schema/mapping.schema.json",
-  "title": "Pig semantic interface mapping",
+  "$id": "https://raw.githubusercontent.com/tmih06/ompig/main/test/parity/interface-extractor/schema/mapping.schema.json",
+  "title": "Ompig semantic interface mapping",
   "type": "object",
   "additionalProperties": false,
   "required": ["upstreamVersion", "mappings"],
@@ -17,7 +17,7 @@
           "id": { "type": "string" },
           "disposition": { "enum": ["ported", "partial", "deferred", "designed-out", "divergence", "pending"] },
           "upstreamShapeHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
-          "pigTargets": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "ompigTargets": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
           "layers": {
             "type": "object",
             "propertyNames": { "enum": ["shape", "api", "parser", "help", "consumer", "wire", "host-dispatch", "sdk-go", "sdk-rust", "sdk-python", "isolated-conformance", "packed-conformance", "production", "behavior", "persistence", "tui", "async"] },

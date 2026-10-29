@@ -3,8 +3,8 @@ package extensionconformance
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // providerStreamFn streams through the model's own Provider, as the removed agent fallback did.

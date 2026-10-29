@@ -8,7 +8,7 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // translateJSRegExp reads pattern as V8 reads the source of new RegExp(pattern, "i"): the Annex B grammar of a pattern without the u flag. It returns the same pattern in regexp2's syntax, or V8's message when the pattern is a SyntaxError (jsRegExpErrorMessage adds the "Invalid regular expression" prefix).

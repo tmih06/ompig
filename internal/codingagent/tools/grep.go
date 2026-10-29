@@ -13,10 +13,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // ─── Grep Tool ────────────────────────────────────────────────────────────────
@@ -254,7 +254,7 @@ type ripgrepRun struct {
 func runRipgrep(ctx context.Context, rgPath, dir string, args []string, limit float64) ([]grepMatch, ripgrepRun, error) {
 	cmd := exec.CommandContext(ctx, rgPath, args...)
 	// Upstream's spawn has no cwd option, so on Windows libuv finds rg from
-	// PiG's working directory: the lookup precedes cmd.Dir.
+	// Ompig's working directory: the lookup precedes cmd.Dir.
 	nodespawn.SetProgram(cmd)
 	cmd.Dir = dir
 	var stderr strings.Builder
@@ -331,7 +331,7 @@ func parseRipgrepMatch(line string) (*grepMatch, bool) {
 }
 
 // grepFormatter mirrors upstream's formatPath, getFileLines and formatBlock.
-// pig divergence (D151): context lines come from a window over the
+// ompig divergence (D151): context lines come from a window over the
 // matched file, not a whole-file array, so memory follows the context size and
 // not the file size.
 type grepFormatter struct {

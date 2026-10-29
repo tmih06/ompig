@@ -5,10 +5,10 @@
 # Upstream evidence (pi 1.0.0, probed in tmux at 100x30 with tuiMode fullscreen): a click on the logo (column 3, row 2)
 # dissolves the screen into braille dust, the logo flies to the center and spins, "escape to return" fades in centered on
 # the second-to-last row after 1.4 s, and a sparse braille starfield fades in from 2.5 s. The starfield is a hash of the
-# cell index, so its glyphs sit on the same cells in pig and pi; only their colors flicker. Everything outside the 3D
+# cell index, so its glyphs sit on the same cells in ompig and pi; only their colors flicker. Everything outside the 3D
 # object is the same cell for cell: 18 of 30 rows were byte-identical in plain capture during the probe.
 #
-# pig divergence (D87): the 3D object is the pig of the PiG mark (D2), and a running pig takes its place during Pi's puzzle, so the
+# ompig divergence (D87): the 3D object is the ompig of the Ompig mark (D2), and a running ompig takes its place during Pi's puzzle, so the
 # rows it covers differ. The crop is the hint row and the last row, below the object, after the stars are fully in:
 # plain-text equal (output_equal). Star colors flicker with time, so the escaped capture is not compared.
 # runs = 3: the animation is timer-driven.
@@ -23,15 +23,15 @@ tags = ["hermetic", "tui", "fullscreen"]
 driver = "interactive-tmux"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 30
-ready_pattern_pig = "can explain its own features"
+ready_pattern_ompig = "can explain its own features"
 ready_pattern_pi = "can explain its own features"
 ready_timeout_seconds = 30
 capture_start = "escape to return"

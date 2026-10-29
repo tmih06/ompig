@@ -4,19 +4,19 @@ SPDX-License-Identifier: MIT
 
 # Quickstart recording and evidence
 
-This is a **local rehearsal against an unpublished PiG source build**, not proof of a public installation. The faux provider returns scripted responses without credentials. The Bash tool, Session persistence, `/resume`, and generated Go extension run through PiG's real production paths. No product Piglet, remote package, login, curl shim, Git shim, or alternate release server is used.
+This is a **local rehearsal against an unpublished Ompig source build**, not proof of a public installation. The faux provider returns scripted responses without credentials. The Bash tool, Session persistence, `/resume`, and generated Go extension run through Ompig's real production paths. No product Ompiglet, remote package, login, curl shim, Git shim, or alternate release server is used.
 
-See [`docs/project/QUICKSTART.md`](../../project/QUICKSTART.md) for the commands and captured output. Pi is the [reference implementation](https://github.com/earendil-works/pi), with its own [documentation](https://pi.dev/docs/latest). Michael Kinsy created PiG, originally developed at Hewlett Packard Enterprise. This recording implies no Pi-maintainer endorsement or public-release approval.
+See [`docs/project/QUICKSTART.md`](../../project/QUICKSTART.md) for the commands and captured output. Pi is the [reference implementation](https://github.com/earendil-works/pi), with its own [documentation](https://pi.dev/docs/latest). Michael Kinsy created Ompig, originally developed at Hewlett Packard Enterprise. This recording implies no Pi-maintainer endorsement or public-release approval.
 
 ## Reproduce with already-installed tools
 
-Use a Linux source checkout with its dependencies already cached. Put existing native executables on PATH, not auto-installing version-manager shims. The recording needs Go, VHS, ttyd, ffmpeg, ffprobe, Chrome, Bash, Python 3, ripgrep, fd, and DejaVu Sans Mono. Missing prerequisites are errors; the scripts never install them. The local command verifier needs only the existing PiG binary, Go, Python, Bash, and cached dependencies.
+Use a Linux source checkout with its dependencies already cached. Put existing native executables on PATH, not auto-installing version-manager shims. The recording needs Go, VHS, ttyd, ffmpeg, ffprobe, Chrome, Bash, Python 3, ripgrep, fd, and DejaVu Sans Mono. Missing prerequisites are errors; the scripts never install them. The local command verifier needs only the existing Ompig binary, Go, Python, Bash, and cached dependencies.
 
 Build and verify the credential-free command path from the repository root:
 
 ```bash
-go build -o /tmp/qs-bin/pig ./cmd/pig
-python3 docs/media/quickstart/verify-local.py /tmp/qs-bin/pig
+go build -o /tmp/qs-bin/ompig ./cmd/ompig
+python3 docs/media/quickstart/verify-local.py /tmp/qs-bin/ompig
 ```
 
 Render the tape and verify the resulting files:
@@ -26,11 +26,11 @@ bash docs/media/quickstart/render.sh
 python3 docs/media/quickstart/verify-media.py
 ```
 
-`render.sh` creates a fresh temporary HOME and an empty `~/demo` directory. It clears inherited credentials, PiG overrides, shell history, and user startup files. It disables package/catalog update checks and Go downloads. It resolves the existing Go toolchain before changing HOME. The build and extension compiler reuse the existing Go caches; the scripts do not modify source dependencies or install tools. Use a short temporary root outside your real HOME for a recording with no personal paths on screen.
+`render.sh` creates a fresh temporary HOME and an empty `~/demo` directory. It clears inherited credentials, Ompig overrides, shell history, and user startup files. It disables package/catalog update checks and Go downloads. It resolves the existing Go toolchain before changing HOME. The build and extension compiler reuse the existing Go caches; the scripts do not modify source dependencies or install tools. Use a short temporary root outside your real HOME for a recording with no personal paths on screen.
 
-The tape builds PiG from the current checkout into the disposable HOME on camera. It shows the composite version emitted by that binary. The pin and Go requirements come from the source checkout, not from tape constants. The visible version in the committed recording is an observation, not a public-release claim.
+The tape builds Ompig from the current checkout into the disposable HOME on camera. It shows the composite version emitted by that binary. The pin and Go requirements come from the source checkout, not from tape constants. The visible version in the committed recording is an observation, not a public-release claim.
 
-The renderer prints the temporary evidence directory before it starts. That directory retains the VHS log, ASCII screen snapshots, raw MP4, generated extension, and saved sessions for inspection. [`quickstart.ascii`](quickstart.ascii) retains the committed run's raw VHS snapshots. Fullscreen snapshots show the actual TUI; shell snapshots can include stale scrollback because of the VHS limitation below. Use the video and local command verifier for shell output, not those stale snapshots. VHS owns the browser and ttyd lifetime. The tape exits both PiG processes with Ctrl+D. The renderer does not upload or publish anything.
+The renderer prints the temporary evidence directory before it starts. That directory retains the VHS log, ASCII screen snapshots, raw MP4, generated extension, and saved sessions for inspection. [`quickstart.ascii`](quickstart.ascii) retains the committed run's raw VHS snapshots. Fullscreen snapshots show the actual TUI; shell snapshots can include stale scrollback because of the VHS limitation below. Use the video and local command verifier for shell output, not those stale snapshots. VHS owns the browser and ttyd lifetime. The tape exits both Ompig processes with Ctrl+D. The renderer does not upload or publish anything.
 
 ## What the checks prove
 
@@ -48,7 +48,7 @@ These are tutorial acceptance checks, not additional Pi parity-coverage claims. 
 
 The recording is silent, 1280×720, with a 20-pixel DejaVu Sans Mono font. VHS captures 15 frames per second. ffmpeg encodes H.264/yuv420p with faststart and derives an 8-frame-per-second GIF using a 64-color palette without dithering. The GIF retains the full resolution and duration. The poster is extracted from the delivered MP4, not composed separately.
 
-Fullscreen mode is explicitly selected with `--tui-mode fullscreen`; Stock PiG's default remains regular mode. The installed VHS screen reader reads the first terminal-buffer rows without applying the scrollback offset. In regular mode, a wait for `Took …s` timed out even though the live visible terminal already showed the successful tool result. Fullscreen uses the alternate buffer and makes those assertions observe the displayed screen. No PiG renderer changes or output normalization hide this recorder limitation.
+Fullscreen mode is explicitly selected with `--tui-mode fullscreen`; Stock Ompig's default remains regular mode. The installed VHS screen reader reads the first terminal-buffer rows without applying the scrollback offset. In regular mode, a wait for `Took …s` timed out even though the live visible terminal already showed the successful tool result. Fullscreen uses the alternate buffer and makes those assertions observe the displayed screen. No Ompig renderer changes or output normalization hide this recorder limitation.
 
 A restored tool result has no live elapsed-time line. The tape therefore asserts the restored command and exact `42` result after the resume confirmation, rather than waiting for a duration that is not in Session history. The initial live tool call still waits for its completion timing line.
 
@@ -56,16 +56,16 @@ A restored tool result has no live elapsed-time line. The tape therefore asserts
 
 | Reproduction | Observed result | Disposition |
 |---|---|---|
-| Public `curl -fsSL https://pi-in-go.dev/install.sh \| sh` | The script downloads, but release discovery ends in HTTP 404 after transient 502 responses; installer exits 1. | No successful public install is claimed. Exact output is in the guide. |
-| Public `go install github.com/MichaelKinsy/PiG/cmd/pig@latest` with a fresh HOME and Git terminal prompting disabled | GitHub requires authentication; exits 1. | Public module installation is unavailable in this verification. |
-| Source-built `pig update` | Refuses unknown installation ownership; exits 1 without changing the binary. | Expected D39 behavior, not a product bug or update success. |
+| Public `curl -fsSL https://ompig.dev/install.sh \| sh` | The script downloads, but release discovery ends in HTTP 404 after transient 502 responses; installer exits 1. | No successful public install is claimed. Exact output is in the guide. |
+| Public `go install github.com/tmih06/ompig/cmd/ompig@latest` with a fresh HOME and Git terminal prompting disabled | GitHub requires authentication; exits 1. | Public module installation is unavailable in this verification. |
+| Source-built `ompig update` | Refuses unknown installation ownership; exits 1 without changing the binary. | Expected D39 behavior, not a product bug or update success. |
 | VHS wait for a literal trailing space after `$` | VHS trims trailing spaces; the initial shell wait times out. | The tape matches the prompt with optional trailing whitespace. |
-| VHS regular-screen wait after the transcript scrolls | The visible tool completes, but VHS reads stale buffer rows and times out. | Explicit fullscreen recording; no change to PiG defaults. |
+| VHS regular-screen wait after the transcript scrolls | The visible tool completes, but VHS reads stale buffer rows and times out. | Explicit fullscreen recording; no change to Ompig defaults. |
 | Waiting for `Took …s` after `/resume` | The restored command and result appear without a live timing line. | Assert the persisted command/result, not non-persisted timing. |
 
 The public installation probes are historical evidence, not part of the reproduction scripts. The scripts use existing tools and cached dependencies only. They do not install software or exercise a login flow.
 
-Successful standalone-download installation and self-update are not yet verified against a published release. The guide does not claim either succeeds. The local rehearsal does not contact Earendil services or change PiG's defaults.
+Successful standalone-download installation and self-update are not yet verified against a published release. The guide does not claim either succeeds. The local rehearsal does not contact Earendil services or change Ompig's defaults.
 
 ## Delivered files
 

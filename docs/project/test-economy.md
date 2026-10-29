@@ -1,6 +1,6 @@
 # Test economy
 
-PiG's suites are large: `make test` takes about 7,800 CPU-seconds and 31 minutes on a 196-core host, and `make ci-drift ci-contracts` about 1,400 CPU-seconds. Many agents and developers run tests on one host at the same time. This document defines which tier of tests to run when, and the rules that keep each run's cost proportional to the change. CI and the release preview still run every suite in full. Nothing here removes a test or lowers what CI proves.
+Ompig's suites are large: `make test` takes about 7,800 CPU-seconds and 31 minutes on a 196-core host, and `make ci-drift ci-contracts` about 1,400 CPU-seconds. Many agents and developers run tests on one host at the same time. This document defines which tier of tests to run when, and the rules that keep each run's cost proportional to the change. CI and the release preview still run every suite in full. Nothing here removes a test or lowers what CI proves.
 
 ## Tiers
 
@@ -31,8 +31,8 @@ It then adds every package whose tests import one of those packages, directly or
 - Bound fuzzing. `go test -fuzz` starts one worker per `GOMAXPROCS` by default, which on a 196-core host is 196 workers. Pass `-parallel` (at most 4 on a shared host) and `-fuzztime` (at most `2m`). Long fuzzing campaigns run on a dedicated machine.
 - Build with `-trimpath` on a shared host. Without it every package's build-cache key contains its absolute directory, so each checkout recompiles the whole module: 280 CPU-seconds for `go build ./...`, 776 for `go vet ./...` and 921 for `GOOS=windows go vet ./...` in a fresh worktree. With `-trimpath` a second checkout of the same source links only.
 - Set `GOCACHE` and `GOMODCACHE` explicitly. The go command derives both from `HOME`, so a test or script that replaces `HOME` would otherwise compile into an empty cache.
-- Set `PIG_NODE_MODULES_STORE` to a host directory to share the locked Node trees (`extensions/sdk-ts`, the interface extractor, `durable/interop`) between checkouts. Each checkout otherwise holds its own 333 MB copy.
-- `make port-lint` and `make interface-gaps` replay a stored passing run while no tracked, modified or untracked file has changed (`automation/ci/cached-gate.sh`). A failure always reruns. `PIG_GATE_CACHE=0` forces a run; CI always runs them.
+- Set `OMPIG_NODE_MODULES_STORE` to a host directory to share the locked Node trees (`extensions/sdk-ts`, the interface extractor, `durable/interop`) between checkouts. Each checkout otherwise holds its own 333 MB copy.
+- `make port-lint` and `make interface-gaps` replay a stored passing run while no tracked, modified or untracked file has changed (`automation/ci/cached-gate.sh`). A failure always reruns. `OMPIG_GATE_CACHE=0` forces a run; CI always runs them.
 
 ## Rules for writing tests
 
@@ -40,7 +40,7 @@ It then adds every package whose tests import one of those packages, directly or
 - Start an expensive oracle (a Node or Pi process, a built binary, a type-checked module) once per package with `sync.Once` or `TestMain`, not once per case.
 - Wait on a channel, a file, a process exit or a condition, never on `time.Sleep`. A sleep makes the test slow on an idle host and flaky on a busy one.
 - Stop every process a test starts, on every path. Kill the process group in `t.Cleanup` when the process may start children or ignore signals. `make test` fails a group that leaves a process running under its scratch `TMPDIR` (`automation/ci/reap-test-processes.sh`) and kills it.
-- Scope temporary files. A package whose tests start pig, build binaries or create temporary files outside `t.TempDir()` calls `testenv.RunScoped` or `testenv.ScopeTempDir` from `TestMain`. `make test` fails a group that leaves anything in its scratch `TMPDIR`.
+- Scope temporary files. A package whose tests start ompig, build binaries or create temporary files outside `t.TempDir()` calls `testenv.RunScoped` or `testenv.ScopeTempDir` from `TestMain`. `make test` fails a group that leaves anything in its scratch `TMPDIR`.
 - A test that runs the go command with a fresh `HOME` writes `go/telemetry/mode` containing `off` into that home's configuration directory. Otherwise the go command starts a detached telemetry child that writes into the directory after the test removed it.
 - Keep CPU-heavy loops (fuzzing, mutation, stress repetition) out of the default run. Gate them behind an explicit flag or environment variable and run them in a dedicated job.
 
@@ -52,7 +52,7 @@ A test earns its CI minutes by catching a bug. Tests are classified by where the
 |---|---|---|
 | A | Running Pi, Pi's own tests, or a cited Pi source line | Keep. |
 | B | A rule over generated or looped inputs (invariant, property, fuzz) | Keep. |
-| C | PiG's own output: a golden regenerated from PiG, a value copied from a PiG run, an expectation edited to pass when the code changed | Convert to an A test if the behavior is Pi's, to a B test if it is PiG's, and delete it if neither adds coverage. |
+| C | Ompig's own output: a golden regenerated from Ompig, a value copied from a Ompig run, an expectation edited to pass when the code changed | Convert to an A test if the behavior is Pi's, to a B test if it is Ompig's, and delete it if neither adds coverage. |
 | D | Nothing: it checks that a type, method or field exists | Delete. The interface ledger proves existence. |
 | E | A rule another test already checks: it adds no statement or branch coverage over the A and B tests and the journeys | Delete. |
 
@@ -61,7 +61,7 @@ A test earns its CI minutes by catching a bug. Tests are classified by where the
 - `inventory` classifies every Go test function from mechanical signals (it runs Pi, reads a golden, only reflects, cites Pi). The classes are a starting point for review.
 - `history` lists test files whose expected values changed in a commit that also changed production code of the same directory.
 - `redundant -pkg P` runs each test of `P` alone under coverage and lists the tests whose blocks other tests repeat. It never lists a test with no in-package coverage, an A or B test, or the last cover of a block.
-- `redundant -journeys FILE` counts a block that the end-to-end journeys reach as covered by another test (`JOURNEY_PIG_VARIANT=cover JOURNEY_COVERDIR=DIR go test -tags parity ./test/journeys`, then `go tool covdata textfmt -i=DIR -o FILE`). `-only-classes D-shape` limits the candidates to one class. `journeycover -pkg P -tests A,B -journeys FILE` lists the blocks of the named tests that the journeys do not reach, with a verdict per test: `journeys_cover_all_blocks`, `keeps_blocks`, `no_in_package_coverage` (a reflection or declaration guard, which the journeys never stand in for), or `protected` (a class in `-classes` or an oracle, ordering or cancellation name). Build the journey profile from the same commit as the package: a block is matched by file, position and statement count. Executing a block is not asserting on it: a journey asserts the rendered screen, not each edge case of a helper, so a list from these flags is a proposal that a mutation run must confirm, and it never covers tests that port a Pi test.
+- `redundant -journeys FILE` counts a block that the end-to-end journeys reach as covered by another test (`JOURNEY_OMPIG_VARIANT=cover JOURNEY_COVERDIR=DIR go test -tags parity ./test/journeys`, then `go tool covdata textfmt -i=DIR -o FILE`). `-only-classes D-shape` limits the candidates to one class. `journeycover -pkg P -tests A,B -journeys FILE` lists the blocks of the named tests that the journeys do not reach, with a verdict per test: `journeys_cover_all_blocks`, `keeps_blocks`, `no_in_package_coverage` (a reflection or declaration guard, which the journeys never stand in for), or `protected` (a class in `-classes` or an oracle, ordering or cancellation name). Build the journey profile from the same commit as the package: a block is matched by file, position and statement count. Executing a block is not asserting on it: a journey asserts the rendered screen, not each edge case of a helper, so a list from these flags is a proposal that a mutation run must confirm, and it never covers tests that port a Pi test.
 - `coverdiff -pkg P -against CHECKOUT` (or `-skip REGEXP`) runs the suite before and after a change and fails when a block loses all coverage. `-also PKGS` counts the tests of those packages as covering `P`. A deletion batch lists its lost blocks, and the list must be empty or covered by A tests, B tests or journeys.
 - `mutate -pkg P -blocks FILE -out TSV` runs a seeded sample of mutants (operator swaps, negated conditions, off-by-one constants, flipped boolean returns) against the suite. Run it in the checkout before the batch and in the checkout after it, with the same seed, then `mutcompare BEFORE AFTER`: a mutant killed before and alive after fails the batch.
 
@@ -69,7 +69,7 @@ A pruning batch covers one package area and reports the test count, the lost-cov
 
 ### Ratchet
 
-- `make test-provenance` fails on a golden or snapshot data file that `test/testdata-provenance.toml` does not declare. A Pi golden names the script that regenerates it from Pi. A PiG-owned golden names the invariant test that asserts the rule and says why a value snapshot is needed.
+- `make test-provenance` fails on a golden or snapshot data file that `test/testdata-provenance.toml` does not declare. A Pi golden names the script that regenerates it from Pi. A Ompig-owned golden names the invariant test that asserts the rule and says why a value snapshot is needed.
 - `make test-expectation-lint` (and the `DCO` job on pull requests) fails when a commit changes an expected value in a test file together with production code of the same directory, unless the commit cites the Pi source line whose behavior changed: a `Pi-Behavior-Change: <pi file.ts:line>` trailer, or a `name.ts:line` citation on a line the commit adds to the test file. The cited file must be a Pi source or test file that `docs/parity/PORT_MAP.md`, `test/parity/interfaces/test-mapping-v*.json` or `test/parity/upstream-sync/*.toml` names. Adding a test, renaming an identifier, moving a file or package path and refactoring code without changing an expected value pass. Commits authored before `expectations_from` in `test/testdata-provenance.toml` are not checked. A test that fails after a code change is a finding about the code until a Pi source line says the behavior changed.
 
 ## Top costs measured
@@ -78,7 +78,7 @@ Measured on a shared 196-core, 1 TB development host at commit `54220fb62` on 20
 
 | Rank | Cost | CPU-seconds | Wall | Peak memory |
 |---:|---|---:|---:|---:|
-| 1 | `make test`, all groups (fast 2,773; `cmd/pig` 8 shards 2,908; conformance 1,136; subprocess 1,005) | 7,822 | 31 min | 6.6 GB |
+| 1 | `make test`, all groups (fast 2,773; `cmd/ompig` 8 shards 2,908; conformance 1,136; subprocess 1,005) | 7,822 | 31 min | 6.6 GB |
 | 2 | A fresh worktree's first build per configuration, without `-trimpath`: `go vet ./...` | 776-940 | 32-36 s | 6.6 GB |
 | 3 | `GOOS=windows go vet ./...` in a fresh worktree | 921 | 35 s | 6.9 GB |
 | 4 | `make ci-contracts` (of which `interface-gaps` 431-512) | 753-794 | 4 min | 6.6 GB |

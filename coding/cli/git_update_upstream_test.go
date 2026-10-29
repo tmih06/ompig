@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func runGitUpdateTest(t *testing.T, cwd string, args ...string) string {
@@ -35,8 +35,8 @@ func newGitUpdateFixture(t *testing.T) (string, string, string, *codingagent.Set
 	cwd := t.TempDir()
 	agentDir := filepath.Join(cwd, "agent")
 	remote := filepath.Join(cwd, "remote")
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	if err := os.MkdirAll(remote, 0o755); err != nil {
 		t.Fatal(err)

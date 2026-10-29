@@ -9,21 +9,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
 )
 
 func TestAC2ResolutionRecordIncludesComponentPlan(t *testing.T) {
 	t.Parallel()
 
 	root := t.TempDir()
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	if err := os.WriteFile(pigletPath, []byte("name: review\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,12 +54,12 @@ func TestAC2RecordLocksSelectedExtensionOrigin(t *testing.T) {
 	if err := os.MkdirAll(extensionDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	data := []byte("name: review\nextensions:\n  - name: review\n    origins:\n      - local:extensions/missing\n      - local:extensions/review\n")
 	if err := os.WriteFile(pigletPath, data, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,12 +110,12 @@ func TestAC2RecordLocksSelectedPackageMemberOrigin(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(extensionDir, "index.js"), []byte("export default function extension(pi) {}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	pigletYAML := "name: review\npackages:\n  base: local:./package\nextensions:\n  - name: review\n    origins: [package:base]\n"
 	if err := os.WriteFile(pigletPath, []byte(pigletYAML), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -166,15 +166,15 @@ func TestAC7NativeBuildProducesLinkedBinaryRecord(t *testing.T) {
 	t.Parallel()
 
 	root := t.TempDir()
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	if err := os.WriteFile(pigletPath, []byte("name: review\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	artifactPath := writeFakePigArtifact(t, root, "pig-review")
+	artifactPath := writeFakePigArtifact(t, root, "ompig-review")
 	host := Target{OS: runtime.GOOS, Arch: runtime.GOARCH}
 	lock, err := buildNativeLock(parsed, nil, Options{
 		Targets: []Target{host}, Sandbox: Sandbox{Native: host},
@@ -191,7 +191,7 @@ func TestAC7NativeBuildProducesLinkedBinaryRecord(t *testing.T) {
 		t.Fatalf("ValidateBinaryLink() error = %v", err)
 	}
 	if records.Binary.Binary.ResolutionDigest != records.Resolution.Digest {
-		t.Fatalf("Piglet Binary record = %#v", records.Binary.Binary)
+		t.Fatalf("Ompiglet Binary record = %#v", records.Binary.Binary)
 	}
 }
 
@@ -278,7 +278,7 @@ func TestAC2AdapterPreservesRuntimeDecisions(t *testing.T) {
 // A TypeScript or JavaScript extension is a Node subprocess component that the
 // Binary carries (binary materialization) and runs with the user's installed
 // Node, so the plan records its node runtime, packed or isolated. Without the
-// runtime the plan refused every Piglet with a Node extension.
+// runtime the plan refused every Ompiglet with a Node extension.
 func TestComponentPlanRecordsTheNodeRuntime(t *testing.T) {
 	t.Parallel()
 

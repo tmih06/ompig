@@ -5,16 +5,16 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// TestMain scopes the temporary directory and the agent directories to one tree that it removes after the run. The pig binaries builtBinaries links and the pig-ext-*.log files of the pig processes the harness tests start stay inside that tree.
+// TestMain scopes the temporary directory and the agent directories to one tree that it removes after the run. The ompig binaries builtBinaries links and the ompig-ext-*.log files of the ompig processes the harness tests start stay inside that tree.
 func TestMain(m *testing.M) {
 	os.Exit(runScoped(m))
 }
 
 func runScoped(m *testing.M) int {
-	root, err := os.MkdirTemp("", "pig-evals-")
+	root, err := os.MkdirTemp("", "ompig-evals-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "create scoped test temp directory:", err)
 		return 2

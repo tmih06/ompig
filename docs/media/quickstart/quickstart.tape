@@ -23,7 +23,7 @@ Set WaitTimeout 120s
 Set WaitPattern /\$\s*$/
 
 Hide
-Type `export PS1='$ ' HISTFILE=/dev/null; cd "$QS_SOURCE"; clear; printf '\n  PiG quickstart\n\n  Local rehearsal / unpublished release\n  Source build + credential-free faux provider\n  Real terminal, Bash tool, sessions and extension\n\n  Public install paths: see QUICKSTART.md\n'`
+Type `export PS1='$ ' HISTFILE=/dev/null; cd "$QS_SOURCE"; clear; printf '\n  Ompig quickstart\n\n  Local rehearsal / unpublished release\n  Source build + credential-free faux provider\n  Real terminal, Bash tool, sessions and extension\n\n  Public install paths: see QUICKSTART.md\n'`
 Enter
 Wait
 Show
@@ -32,10 +32,10 @@ Ctrl+L
 
 Type "# 1. Build from a source checkout"
 Enter
-Type `go build -o "$HOME/.local/bin/pig" ./cmd/pig`
+Type `go build -o "$HOME/.local/bin/ompig" ./cmd/ompig`
 Enter
 Wait
-Type "pig --version"
+Type "ompig --version"
 Enter
 Wait
 Sleep 2s
@@ -43,9 +43,9 @@ Ctrl+L
 
 Type "# 2. Select the local test model (not a live AI service)"
 Enter
-Type "export PIG_TEST_FAUX=1 PIG_OFFLINE=1"
+Type "export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1"
 Enter
-Type "cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1"
+Type "cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1"
 Enter
 # The current Pi-compatible header replaces the former Ready. banner.
 Wait+Screen /Press ctrl\+o to show full startup help and loaded resources\./
@@ -83,7 +83,7 @@ Ctrl+L
 
 Type "# 3. Print mode: one answer, then exit"
 Enter
-Type `pig --model test-faux/faux-1 -p "What is 20+22?"`
+Type `ompig --model test-faux/faux-1 -p "What is 20+22?"`
 Enter
 Wait
 Sleep 2s
@@ -91,11 +91,11 @@ Ctrl+L
 
 Type "# 4. Scaffold and explicitly load a Go extension"
 Enter
-Type "pig extension init ./hello --lang go"
+Type "ompig extension init ./hello --lang go"
 Enter
 Wait
 Sleep 2s
-Type "pig -e ./hello --tui-mode fullscreen --model test-faux/faux-1"
+Type "ompig -e ./hello --tui-mode fullscreen --model test-faux/faux-1"
 Enter
 Wait+Screen /hello loaded/
 Sleep 2s
@@ -109,7 +109,7 @@ Ctrl+L
 
 Type "# 5. Source builds are updated by rebuilding, not self-update"
 Enter
-Type `pig update; echo "exit=$?"`
+Type `ompig update; echo "exit=$?"`
 Enter
 Wait
 Sleep 4s

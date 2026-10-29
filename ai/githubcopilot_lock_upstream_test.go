@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Pi refreshes an expiring stored OAuth credential under the store's lock, with double-checked locking: resolveStoredOAuth reads the credential optimistically, then calls credentials.modify and checks again under the lock, refreshing only when the current credential still expires (resolve.ts:126-150). credentials.modify is FileAuthStorageBackend.withLockAsync, whose lock waits up to 30 seconds for another process's lock. So when another process holds the lock while it refreshes the same credential, Pi waits, finds the new credential and uses it without refreshing again. PiG's Copilot token manager does the same. Pi's own resolveProviderAuth runs on the same state first.
+// Pi refreshes an expiring stored OAuth credential under the store's lock, with double-checked locking: resolveStoredOAuth reads the credential optimistically, then calls credentials.modify and checks again under the lock, refreshing only when the current credential still expires (resolve.ts:126-150). credentials.modify is FileAuthStorageBackend.withLockAsync, whose lock waits up to 30 seconds for another process's lock. So when another process holds the lock while it refreshes the same credential, Pi waits, finds the new credential and uses it without refreshing again. Ompig's Copilot token manager does the same. Pi's own resolveProviderAuth runs on the same state first.
 func TestCopilotTokenRefreshWaitsForAnotherProcessUpstream(t *testing.T) {
 	expired := time.Now().Add(-10 * time.Minute).UnixMilli()
 	fresh := time.Now().Add(time.Hour).UnixMilli()

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // An extension's createAgentSession builds a child over the model runtime of the mode's build, in every mode (sdk.ts createAgentSession; createAgentSessionServices is not mode-specific). The fixture registers a provider, creates a child over it from a command, prompts it and records what the child answered.
@@ -18,7 +18,7 @@ func TestExtensionChildSessionsAcrossModes(t *testing.T) {
 	setup := func(t *testing.T) (env []string, log string, args []string) {
 		dir := t.TempDir()
 		log = filepath.Join(dir, "child.log")
-		env = []string{"HOME=" + dir, "PIG_HOME=" + filepath.Join(dir, "home"), "PIG_CODING_AGENT_DIR=" + filepath.Join(dir, "agent"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_TEST_CHILD_LOG=" + log}
+		env = []string{"HOME=" + dir, "OMPIG_HOME=" + filepath.Join(dir, "home"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(dir, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_TEST_CHILD_LOG=" + log}
 		args = []string{"--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1", "-e", fixture}
 		return env, log, args
 	}
@@ -33,7 +33,7 @@ func TestExtensionChildSessionsAcrossModes(t *testing.T) {
 			cmd.Dir = t.TempDir()
 			cmd.Env = append(os.Environ(), env...)
 			if out, err := cmd.CombinedOutput(); err != nil {
-				t.Fatalf("pig %s mode: %v\n%s", mode, err, out)
+				t.Fatalf("ompig %s mode: %v\n%s", mode, err, out)
 			}
 			if got, _ := os.ReadFile(log); string(got) != want {
 				t.Fatalf("the child answered %q, want %q", got, want)

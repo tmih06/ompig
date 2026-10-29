@@ -10,9 +10,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // QueuedInputDisposition is how Steer and FollowUp dealt with their input: an input handler consumed it (`handled`) or it was queued (`queued`).

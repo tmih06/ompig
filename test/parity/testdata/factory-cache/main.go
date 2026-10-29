@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func run(mode string) (resultErr error) {
 		return err
 	}
 	defer func() { resultErr = errors.Join(resultErr, os.RemoveAll(root)) }()
-	for key, value := range map[string]string{"PIG_FACTORY_CACHE_ROOT": root, "PIG_FACTORY_CACHE_CASE": mode, "PIG_FACTORY_CACHE_DIST": ""} {
+	for key, value := range map[string]string{"OMPIG_FACTORY_CACHE_ROOT": root, "OMPIG_FACTORY_CACHE_CASE": mode, "OMPIG_FACTORY_CACHE_DIST": ""} {
 		if err := os.Setenv(key, value); err != nil {
 			return err
 		}

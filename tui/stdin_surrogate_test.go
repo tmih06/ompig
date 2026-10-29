@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // .upstream/v0.87.1/packages/tui/src/stdin-buffer.ts:202-253 indexes strings by UTF-16 unit, including inside Meta/SS3/X10 sequences.

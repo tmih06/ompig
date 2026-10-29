@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type submenuProbe struct {
@@ -61,7 +61,7 @@ func TestSettingsSubmenusMatchPi(t *testing.T) {
 		{"\x1b[B", "\r"},
 		{"\x1b[A", "\x1b[A", "\r"},
 		{"\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\r"},
-		// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+		// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 		{"\r"},
 		{"\x1b"},
 		{"b", "e", "\x1b[B", "\r"},
@@ -204,7 +204,7 @@ func TestSettingsSubmenusMatchPi(t *testing.T) {
 			got.Steps = append(got.Steps, append([]string{}, events...))
 			got.Frames = append(got.Frames, component.Render(probe.Width))
 			// The settings host closes a submenu on its first select or cancel callback (a stepped menu's completion is followed by a
-			// cancel unless it loops); keys after that are unreachable, and Pig's Done state would only repeat the callback.
+			// cancel unless it loops); keys after that are unreachable, and Ompig's Done state would only repeat the callback.
 			if len(events) > 0 && (events[len(events)-1] == "cancel" || (probe.Kind == "select" && strings.HasPrefix(events[len(events)-1], "select:"))) {
 				break
 			}

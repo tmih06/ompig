@@ -1,6 +1,6 @@
 # Pi 0.87.1 auth-storage.ts:69-93, settings-manager.ts:241-265 and
 # trust-manager.ts:137-176 use proper-lockfile directories. Probe: real CLI
-# --print with project resources requiring a stored trust decision. The PiG
+# --print with project resources requiring a stored trust decision. The Ompig
 # fixture includes its own v0.2.0 empty sidecars; Pi never created those files.
 # After reclamation, both first and subsequent runs must print the exact same
 # response with no lock/settings warnings and no persistent sidecars.
@@ -16,9 +16,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/lock-upgrade.mjs", "pig"]
+ompig_args = ["node", "./test/parity/testdata/lock-upgrade.mjs", "ompig"]
 pi_args = ["node", "./test/parity/testdata/lock-upgrade.mjs", "pi"]
 
 [cli]

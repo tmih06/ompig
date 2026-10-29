@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Ports packages/chord/test/delta-apply-immutable.test.ts. JavaScript freezes its fixtures to prove they are not written; Go maps cannot be frozen, so each case compares the inputs with a deep snapshot taken before the call.

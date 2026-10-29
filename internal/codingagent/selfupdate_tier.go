@@ -12,31 +12,31 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/crossspawn"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/crossspawn"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
-// pig divergence (D39): SelfUpdateTier selects one owner before mutation.
+// ompig divergence (D39): SelfUpdateTier selects one owner before mutation.
 type SelfUpdateTier string
 
 const (
-	// TierStandalone is a writable standalone binary that pig replaces in
+	// TierStandalone is a writable standalone binary that ompig replaces in
 	// place from the configured update source.
 	TierStandalone SelfUpdateTier = "standalone"
 	// TierPackageManager is an installation owned by a global npm/pnpm/yarn/bun
-	// install. The owning manager's exact command applies the update; pig does
+	// install. The owning manager's exact command applies the update; ompig does
 	// not overwrite its file.
 	TierPackageManager SelfUpdateTier = "package-manager"
-	// TierImmutableBinary is a baked Piglet/Piglet Binary release. Its owning
-	// release is rebuilt and re-pulled; pig does not drift the baked
+	// TierImmutableBinary is a baked Ompiglet/Ompiglet Binary release. Its owning
+	// release is rebuilt and re-pulled; ompig does not drift the baked
 	// composition in place.
 	TierImmutableBinary SelfUpdateTier = "immutable-binary"
-	// TierContainer is an OCI image or Piglet Image deployment. The
-	// authenticated pull/redeploy path is reported; pig does not rewrite a
+	// TierContainer is an OCI image or Ompiglet Image deployment. The
+	// authenticated pull/redeploy path is reported; ompig does not rewrite a
 	// running image.
 	TierContainer SelfUpdateTier = "container"
 	// TierUnsupported covers read-only, Windows in-place-unsupported, and
-	// unknown-provenance installations. Pig refuses mutation and reports the
+	// unknown-provenance installations. Ompig refuses mutation and reports the
 	// executable path plus concrete remediation.
 	TierUnsupported SelfUpdateTier = "unsupported"
 )
@@ -186,13 +186,13 @@ func (e *configuredNpmProbeError) Unwrap() error { return e.cause }
 // returns a *TierError and the caller must refuse to update. Explicit npm probe failures surface unless another proven owner selects the route.
 //
 // Resolution order follows the tier ladder: explicit product override
-// (Piglet Binary baked version, or PIG_INSTALL_TIER for deployments), then
+// (Ompiglet Binary baked version, or OMPIG_INSTALL_TIER for deployments), then
 // package-manager ownership, then writable standalone, then read-only/Windows/
 // unknown remediation.
 func ResolveSelfUpdateTier() (*SelfUpdateProvenance, error) {
 	exe, err := linkerexec.Executable()
 	if err != nil {
-		return nil, fmt.Errorf("locate pig executable: %w", err)
+		return nil, fmt.Errorf("locate ompig executable: %w", err)
 	}
 	cwd, _ := os.Getwd()
 	settings := NewSettingsManager(cwd, AgentDir())
@@ -219,14 +219,14 @@ func resolveSelfUpdateTierForExe(exe string, runner cmdRunner) (*SelfUpdateProve
 func resolveSelfUpdateTierOn(goos, exe string, runner cmdRunner, entrypoints ...string) (*SelfUpdateProvenance, error) {
 	entrypoints = append([]string{exe}, entrypoints...)
 	// Follow symlinks to the real target so ownership and writability are
-	// evaluated against the binary pig would actually replace. Mirrors
+	// evaluated against the binary ompig would actually replace. Mirrors
 	// upstream realpathSync in isManagedByGlobalPackageManager. Node's realpathSync, not filepath.EvalSymlinks: on Windows the first keeps the spelling of
 	// a component that is not a link (case, 8.3 short names such as RUNNER~1), the second rewrites it to the stored long name.
 	if resolved, err := evalCanonicalPath(exe); err == nil {
 		exe = resolved
 	}
 
-	// A baked Piglet/Piglet Binary release is immutable by construction: its
+	// A baked Ompiglet/Ompiglet Binary release is immutable by construction: its
 	// composition is fixed at build time and cannot be drifted in place.
 	if PigletBinaryRelease != "" {
 		return &SelfUpdateProvenance{
@@ -235,16 +235,16 @@ func resolveSelfUpdateTierOn(goos, exe string, runner cmdRunner, entrypoints ...
 		}, nil
 	}
 
-	// PIG_INSTALL_TIER lets a product deployment declare its provenance when
+	// OMPIG_INSTALL_TIER lets a product deployment declare its provenance when
 	// filesystem detection is unreliable inside a container or image. Only
 	// container provenance is accepted this way: a deployment cannot claim
 	// standalone or package-manager ownership without filesystem proof, and
 	// must not anonymously re-enter a mutating tier.
 	var npmProbeErr error
-	switch strings.ToLower(strings.TrimSpace(os.Getenv("PIG_INSTALL_TIER"))) {
+	switch strings.ToLower(strings.TrimSpace(os.Getenv("OMPIG_INSTALL_TIER"))) {
 	case "container", "image":
 		return &SelfUpdateProvenance{Tier: tierContainer, ExePath: exe}, nil
-	case "immutable-binary", "piglet-binary":
+	case "immutable-binary", "ompiglet-binary":
 		return &SelfUpdateProvenance{Tier: tierImmutableBinary, ExePath: exe}, nil
 	case "":
 		runner, npmProbeErr = preparePackageManagerProbes(runner)
@@ -252,7 +252,7 @@ func resolveSelfUpdateTierOn(goos, exe string, runner cmdRunner, entrypoints ...
 		return nil, &TierError{
 			Tier:        tierUnsupported,
 			ExePath:     exe,
-			Remediation: fmt.Sprintf("unknown PIG_INSTALL_TIER value %q; unset it or set it to one of: container, image, immutable-binary, piglet-binary", os.Getenv("PIG_INSTALL_TIER")),
+			Remediation: fmt.Sprintf("unknown OMPIG_INSTALL_TIER value %q; unset it or set it to one of: container, image, immutable-binary, ompiglet-binary", os.Getenv("OMPIG_INSTALL_TIER")),
 		}
 	}
 
@@ -267,7 +267,7 @@ func resolveSelfUpdateTierOn(goos, exe string, runner cmdRunner, entrypoints ...
 		return nil, &TierError{
 			Tier:        tierPackageManager,
 			ExePath:     exe,
-			Remediation: fmt.Sprintf("pig executable %s is managed by more than one package manager; update it with the single manager that owns it", exe),
+			Remediation: fmt.Sprintf("ompig executable %s is managed by more than one package manager; update it with the single manager that owns it", exe),
 		}
 	} else if owned != nil {
 		if goos == "windows" && owned.PackageOwner != ownerNPM && owned.PackageOwner != ownerPNPM {
@@ -287,7 +287,7 @@ func resolveSelfUpdateTierOn(goos, exe string, runner cmdRunner, entrypoints ...
 		if npmProbeErr != nil {
 			return nil, npmProbeErr
 		}
-		// pig divergence (D39): a standalone pig.exe is not replaced in place.
+		// ompig divergence (D39): a standalone ompig.exe is not replaced in place.
 		return &SelfUpdateProvenance{Tier: tierUnsupported, ExePath: exe}, nil
 	}
 
@@ -553,27 +553,27 @@ func RunPackageManagerUpdate(cmd *SelfUpdateCommand) error {
 }
 
 // ImmutableBinaryRemediation is the exact, non-looping instruction for a baked
-// Piglet/Piglet Binary release. Pig does not drift the baked composition in
+// Ompiglet/Ompiglet Binary release. Ompig does not drift the baked composition in
 // place; the owning release is rebuilt and re-pulled.
 func ImmutableBinaryRemediation(exePath string) string {
 	return fmt.Sprintf(
-		"%s is an immutable Piglet/Piglet Binary (built release %s). It cannot be updated in place. "+
-			"Rebuild it from its Piglet source (`pig piglet build <name> --format binary`) or pull the new release artifact from your provider, then replace %s.",
+		"%s is an immutable Ompiglet/Ompiglet Binary (built release %s). It cannot be updated in place. "+
+			"Rebuild it from its Ompiglet source (`ompig ompiglet build <name> --format binary`) or pull the new release artifact from your provider, then replace %s.",
 		AppName, releaseLabel(), exePath)
 }
 
 // ContainerRemediation is the exact authenticated pull/redeploy instruction for
-// an OCI image or Piglet Image deployment. Raw Pig performs no
+// an OCI image or Ompiglet Image deployment. Raw Ompig performs no
 // transport and knows no product topology, so a deployment that owns a specific
-// redeploy operation supplies it verbatim through PIG_REDEPLOY_INSTRUCTION.
-// Pig still owns the surrounding facts (artifact identity, executable, and the
+// redeploy operation supplies it verbatim through OMPIG_REDEPLOY_INSTRUCTION.
+// Ompig still owns the surrounding facts (artifact identity, executable, and the
 // guarantee that the running image is never rewritten); only the operation comes
-// from the product. Without that metadata Pig falls back to the generic image
+// from the product. Without that metadata Ompig falls back to the generic image
 // pull, which is correct for a plain OCI/container install but not for an
 // orchestrator-managed deployment.
 func ContainerRemediation(exePath string) string {
-	ref := strings.TrimSpace(os.Getenv("PIG_IMAGE_REF"))
-	if instruction := strings.TrimSpace(os.Getenv("PIG_REDEPLOY_INSTRUCTION")); instruction != "" {
+	ref := strings.TrimSpace(os.Getenv("OMPIG_IMAGE_REF"))
+	if instruction := strings.TrimSpace(os.Getenv("OMPIG_REDEPLOY_INSTRUCTION")); instruction != "" {
 		if ref != "" {
 			return fmt.Sprintf(
 				"%s is running from image %s. %s The running image is not rewritten. Executable: %s.",
@@ -590,7 +590,7 @@ func ContainerRemediation(exePath string) string {
 	}
 	return fmt.Sprintf(
 		"%s is running inside a container or deployment image. Pull the new image (authenticate to your registry first) and re-deploy. The running image is not rewritten. Executable: %s. "+
-			"Set PIG_IMAGE_REF to emit the exact image reference and pull command.",
+			"Set OMPIG_IMAGE_REF to emit the exact image reference and pull command.",
 		AppName, exePath)
 }
 
@@ -612,7 +612,7 @@ func releaseLabel() string {
 }
 
 func imagePullCommand() string {
-	if c := strings.TrimSpace(os.Getenv("PIG_IMAGE_PULL_CMD")); c != "" {
+	if c := strings.TrimSpace(os.Getenv("OMPIG_IMAGE_PULL_CMD")); c != "" {
 		return c
 	}
 	return "docker"

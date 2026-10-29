@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // sessionEntrySurrogateFixture holds raw Pi session lines whose non-message fields carry lone UTF-16 units. Pi session-manager.ts parses each line with JSON.parse and writes entries with JSON.stringify, so every unit survives as the same \udXXX escape.
@@ -57,7 +57,7 @@ func runSessionEntryRPCResponses(t *testing.T, binary, home, path string, comman
 	t.Helper()
 	cmd := exec.Command(binary, "--offline", "--mode", "rpc", "--model", "test-faux/faux-1", "--session", path, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-themes", "--no-context-files")
 	cmd.Dir = home
-	cmd.Env = append(os.Environ(), "PIG_TEST_FAUX=1", "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"))
+	cmd.Env = append(os.Environ(), "OMPIG_TEST_FAUX=1", "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"))
 	cmd.Stdin = strings.NewReader(strings.Join(commands, "\n") + "\n")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr

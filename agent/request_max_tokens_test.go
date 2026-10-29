@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's agent loop passes its config to the stream function without a maxTokens (agent-loop.ts streamAssistantResponse; agent.ts sets

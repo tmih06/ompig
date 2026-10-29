@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 
-if (process.argv[2] === "pig") {
+if (process.argv[2] === "ompig") {
   process.stdout.write(execFileSync("./test/parity/testdata/prebuilt-go-run.sh", ["./test/parity/testdata/native-provider-compat-go"], { encoding: "utf8" }));
 } else {
   const root = process.env.PI_PACKAGE_ROOT;

@@ -42,7 +42,7 @@ fn resolve(path: &Path) -> io::Result<PathBuf> {
 /// and with every other extension process, as Pi's one queue does. The turn is held by the extension's process: a packed cell's
 /// members share it, so one member stopping while another's `f` runs does not release the file, and the host releases it when the
 /// process's last connection closes. Like the other host helpers it may be called
-/// before `run`; with no connection to the host (`PIG_EXT_SOCKET` unset) it returns an error without running `f`.
+/// before `run`; with no connection to the host (`OMPIG_EXT_SOCKET` unset) it returns an error without running `f`.
 pub fn with_file_mutation_queue<T>(file_path: impl AsRef<Path>, f: impl FnOnce() -> T) -> io::Result<T> {
     run_queued(&queue_call, file_path.as_ref(), f)
 }

@@ -1,26 +1,26 @@
 // Package pigdocs materializes the reference documentation embedded in Stock
-// Pig under the user's config root.
+// Ompig under the user's config root.
 //
-// Pig ships as a standalone binary. Unlike upstream Pi, which installs package
-// documentation beside its npm entry point, Pig cannot assume that a source
+// Ompig ships as a standalone binary. Unlike upstream Pi, which installs package
+// documentation beside its npm entry point, Ompig cannot assume that a source
 // checkout exists. The embedded bundle lets the running agent inspect the exact
-// extension, Package, and Piglet contracts that its binary implements.
+// extension, Package, and Ompiglet contracts that its binary implements.
 //
-// Each build writes its bundle to its own content-addressed directory, so PiG
-// builds that share a config root (two installed versions, or stock PiG beside
-// a Piglet Binary) never rewrite each other's docs, and a running session's
+// Each build writes its bundle to its own content-addressed directory, so Ompig
+// builds that share a config root (two installed versions, or stock Ompig beside
+// a Ompiglet Binary) never rewrite each other's docs, and a running session's
 // docs never change under it. Users can also force a sync or read the bundle
-// through `pig docs`. A session leases its bundle ([HoldBundle]), so another build's eviction never removes the pages the session's prompt names. This is stock distribution infrastructure; it does not
-// activate an extension or optional Piglet.
+// through `ompig docs`. A session leases its bundle ([HoldBundle]), so another build's eviction never removes the pages the session's prompt names. This is stock distribution infrastructure; it does not
+// activate an extension or optional Ompiglet.
 //
 // Output layout
 //
-//	~/.pig/docs/
+//	~/.ompig/docs/
 //	  bundle-<hash>/       one build's bundle; <hash> is its content digest
 //	    README.md          index
 //	    commands.md        slash commands + CLI verbs
 //	    ...                one page per embedded content/*.md
-//	    .pig-docs-digest   the full digest, written last
+//	    .ompig-docs-digest   the full digest, written last
 package pigdocs
 
 import (
@@ -39,8 +39,8 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/contentdirs"
 )
 
 //go:embed content/*.md
@@ -51,13 +51,13 @@ const (
 	stagingPrefix = ".docs-stage-"
 	// stagingLockFile excludes the leftover sweep and eviction, which hold it exclusively, from live syncs, which hold it shared. It does not match stagingPrefix.
 	stagingLockFile = ".docs-stage.lock"
-	// SubDir is the docs directory name under the pig config root.
+	// SubDir is the docs directory name under the ompig config root.
 	SubDir = "docs"
 	// bundleBase names each build's bundle directory, bundle-<hash>.
 	bundleBase = "bundle"
 	// markerFile records the digest of the embedded bundle that owns the
 	// materialized directory.
-	markerFile = ".pig-docs-digest"
+	markerFile = ".ompig-docs-digest"
 )
 
 func init() { configroot.RegisterDocsBundle(bundleName) }
@@ -82,7 +82,7 @@ func DocsDir(configRoot string) string {
 }
 
 // List returns the embedded doc filenames in stable alphabetical
-// order. It is the canonical source for `pig docs list` and for any
+// order. It is the canonical source for `ompig docs list` and for any
 // caller that needs to enumerate available topics.
 func List() []string {
 	entries, err := content.ReadDir("content")
@@ -113,19 +113,19 @@ func computeContentDigest() (string, error) {
 	for _, name := range List() {
 		file, err := content.Open("content/" + name)
 		if err != nil {
-			return "", fmt.Errorf("pig docs: read %s for digest: %w", name, err)
+			return "", fmt.Errorf("ompig docs: read %s for digest: %w", name, err)
 		}
 		info, err := file.Stat()
 		if err != nil {
 			_ = file.Close()
-			return "", fmt.Errorf("pig docs: read %s for digest: %w", name, err)
+			return "", fmt.Errorf("ompig docs: read %s for digest: %w", name, err)
 		}
 		_, _ = fmt.Fprintf(hash, "%s\x00%d\x00", name, info.Size())
 		// The embedded file's reader is the only method used; hiding the other methods keeps io.CopyBuffer on the supplied buffer.
 		_, err = io.CopyBuffer(hash, struct{ io.Reader }{file}, buffer)
 		_ = file.Close()
 		if err != nil {
-			return "", fmt.Errorf("pig docs: read %s for digest: %w", name, err)
+			return "", fmt.Errorf("ompig docs: read %s for digest: %w", name, err)
 		}
 	}
 	return hex.EncodeToString(hash.Sum(nil)), nil
@@ -137,10 +137,10 @@ func computeContentDigest() (string, error) {
 func Read(name string) ([]byte, error) {
 	name = strings.TrimSpace(name)
 	if name == "" {
-		return nil, errors.New("pig docs: empty doc name")
+		return nil, errors.New("ompig docs: empty doc name")
 	}
 	if strings.ContainsAny(name, "/\\") || strings.Contains(name, "..") {
-		return nil, fmt.Errorf("pig docs: invalid doc name %q", name)
+		return nil, fmt.Errorf("ompig docs: invalid doc name %q", name)
 	}
 	if !strings.HasSuffix(name, ".md") {
 		name += ".md"
@@ -149,7 +149,7 @@ func Read(name string) ([]byte, error) {
 }
 
 // Sync writes this build's bundle directory from the embedded docs, replacing a directory already there, and returns the page names written.
-// `pig docs sync` uses it to repair edited or removed pages.
+// `ompig docs sync` uses it to repair edited or removed pages.
 func Sync(configRoot string) ([]string, error) { return syncBundle(configRoot, true) }
 
 // syncAttempts bounds the syncs one call runs. A sync that started while another process held the staging lock exclusively may lose its staging
@@ -172,7 +172,7 @@ func syncBundle(configRoot string, replace bool) ([]string, error) {
 	dir := DocsDir(configRoot)
 	parent := filepath.Dir(dir)
 	if err := os.MkdirAll(parent, 0o755); err != nil {
-		return nil, fmt.Errorf("pig docs: mkdir %s: %w", parent, err)
+		return nil, fmt.Errorf("ompig docs: mkdir %s: %w", parent, err)
 	}
 	housekeep(parent, dir)
 	var errs []error
@@ -253,32 +253,32 @@ func install(staging, dir, digest string, replace bool) error {
 				// Another sync moved the directory aside first; the next rename may install this tree.
 				continue
 			}
-			return fmt.Errorf("pig docs: replace %s: %w", dir, errors.Join(installErr, err))
+			return fmt.Errorf("ompig docs: replace %s: %w", dir, errors.Join(installErr, err))
 		}
 		_ = os.RemoveAll(aside)
 	}
 	if current(dir, digest) {
 		return nil
 	}
-	return fmt.Errorf("pig docs: install %s: %w", dir, installErr)
+	return fmt.Errorf("ompig docs: install %s: %w", dir, installErr)
 }
 
 // buildStaging writes the complete bundle, marker last, into a new private tree in parent and returns the tree and the page names written.
 func buildStaging(parent, digest string) (staging string, written []string, err error) {
 	entries, err := fs.ReadDir(content, "content")
 	if err != nil {
-		return "", nil, fmt.Errorf("pig docs: read embed: %w", err)
+		return "", nil, fmt.Errorf("ompig docs: read embed: %w", err)
 	}
 	staging, err = os.MkdirTemp(parent, stagingPrefix)
 	if err != nil {
-		return "", nil, fmt.Errorf("pig docs: stage: %w", err)
+		return "", nil, fmt.Errorf("ompig docs: stage: %w", err)
 	}
 	fail := func(err error) (string, []string, error) {
 		if _, statErr := os.Lstat(staging); errors.Is(statErr, fs.ErrNotExist) {
 			err = errors.Join(err, errStagingRemoved)
 		}
 		_ = os.RemoveAll(staging)
-		return "", nil, fmt.Errorf("pig docs: stage: %w", err)
+		return "", nil, fmt.Errorf("ompig docs: stage: %w", err)
 	}
 	if err := os.Chmod(staging, 0o755); err != nil {
 		return fail(err)
@@ -328,7 +328,7 @@ func current(dir, digest string) bool {
 // HoldBundle leases this build's bundle in configRoot for as long as the process lives, so another build's eviction does not remove the pages a running
 // session's prompt names. It does nothing when the bundle is not complete on disk, and nothing is written. A session does not call the returned release until it
 // exits (the exit path calls it just before the exit record counts descriptors) and tests call it. The bundle is read again once leased, so an eviction between the check and the lease is not mistaken for a held bundle.
-// pig additive (D22): Pi's package docs stay where they are for as long as Pi runs; PiG's bundle lives in a directory that other builds evict.
+// ompig additive (D22): Pi's package docs stay where they are for as long as Pi runs; Ompig's bundle lives in a directory that other builds evict.
 func HoldBundle(configRoot string) (release func()) {
 	digest, err := contentDigest()
 	if err != nil {
@@ -347,10 +347,10 @@ func HoldBundle(configRoot string) (release func()) {
 }
 
 // Prepare is the startup check that defers the write of the bundle until something can read it. It returns present, whether text may name the
-// bundle, and pending, whether [EnsureSynced] must run before anything other than PiG reads it. A complete bundle of this build costs one
+// bundle, and pending, whether [EnsureSynced] must run before anything other than Ompig reads it. A complete bundle of this build costs one
 // marker read and, at most hourly, a recorded use time; it is present and nothing is pending. Otherwise the bundle is named when the config
 // root lets this process create it, the condition under which [EnsureSynced] writes it; nothing is written here.
-// pig additive (D22): Pi's package docs exist before it starts; PiG writes its bundle before the first reader instead of at every start.
+// ompig additive (D22): Pi's package docs exist before it starts; Ompig writes its bundle before the first reader instead of at every start.
 func Prepare(configRoot string) (present, pending bool, err error) {
 	digest, err := contentDigest()
 	if err != nil {
@@ -380,7 +380,7 @@ func canCreate(dir string) bool {
 }
 
 // EnsureSynced is the idempotent startup helper. A complete bundle of this build costs one marker read and, at most hourly, a recorded use time;
-// otherwise it syncs. All errors are returned to the caller; Pig core treats any failure as the bundle being absent.
+// otherwise it syncs. All errors are returned to the caller; Ompig core treats any failure as the bundle being absent.
 func EnsureSynced(configRoot string) error {
 	digest, err := contentDigest()
 	if err != nil {
@@ -394,14 +394,14 @@ func EnsureSynced(configRoot string) error {
 	return err
 }
 
-// RunCommand implements the stock pre-session `pig docs` command. It returns
+// RunCommand implements the stock pre-session `ompig docs` command. It returns
 // -1 when the arguments target another command.
 //
-//	pig docs                       sync + summary (default)
-//	pig docs sync                  force re-sync embedded docs
-//	pig docs path                  print docs dir
-//	pig docs list                  list available doc files
-//	pig docs show <name>           print one doc to stdout
+//	ompig docs                       sync + summary (default)
+//	ompig docs sync                  force re-sync embedded docs
+//	ompig docs path                  print docs dir
+//	ompig docs list                  list available doc files
+//	ompig docs show <name>           print one doc to stdout
 func RunCommand(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 || args[0] != "docs" {
 		return -1
@@ -414,24 +414,24 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 	}
 	root, err := configroot.Resolve()
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig docs: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig docs: %v\n", err)
 		return 1
 	}
 	switch sub {
 	case "", "sync":
 		written, err := Sync(root)
 		if err != nil {
-			_, _ = fmt.Fprintf(stderr, "pig docs: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "ompig docs: %v\n", err)
 			return 1
 		}
-		_, _ = fmt.Fprintf(stdout, "pig docs: synced %d files to %s\n", len(written), DocsDir(root))
+		_, _ = fmt.Fprintf(stdout, "ompig docs: synced %d files to %s\n", len(written), DocsDir(root))
 		for _, name := range written {
 			_, _ = fmt.Fprintf(stdout, "  %s\n", name)
 		}
 		return 0
 	case "path":
 		// The printed directory exists for whoever reads it next. The command prints it either way: on a config root this user cannot write,
-		// `pig docs show` still reads the embedded pages.
+		// `ompig docs show` still reads the embedded pages.
 		_ = EnsureSynced(root)
 		_, _ = fmt.Fprintln(stdout, DocsDir(root))
 		return 0
@@ -442,12 +442,12 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 		return 0
 	case "show":
 		if len(rest) == 0 {
-			_, _ = fmt.Fprintln(stderr, "pig docs show <name>")
+			_, _ = fmt.Fprintln(stderr, "ompig docs show <name>")
 			return 2
 		}
 		data, err := Read(rest[0])
 		if err != nil {
-			_, _ = fmt.Fprintf(stderr, "pig docs: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "ompig docs: %v\n", err)
 			return 1
 		}
 		_, _ = stdout.Write(data)
@@ -456,15 +456,15 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 		printUsage(stdout)
 		return 0
 	default:
-		_, _ = fmt.Fprintf(stderr, "pig docs: unknown subcommand %q\n", sub)
+		_, _ = fmt.Fprintf(stderr, "ompig docs: unknown subcommand %q\n", sub)
 		printUsage(stderr)
 		return 2
 	}
 }
 
 func printUsage(w io.Writer) {
-	_, _ = fmt.Fprintln(w, "Usage: pig docs [sync|path|list|show <name>]")
-	_, _ = fmt.Fprintln(w, "  sync     write this build's docs bundle under ~/.pig/docs (default)")
+	_, _ = fmt.Fprintln(w, "Usage: ompig docs [sync|path|list|show <name>]")
+	_, _ = fmt.Fprintln(w, "  sync     write this build's docs bundle under ~/.ompig/docs (default)")
 	_, _ = fmt.Fprintln(w, "  path     write this build's docs bundle when missing and print its absolute directory")
 	_, _ = fmt.Fprintln(w, "  list     list available doc filenames")
 	_, _ = fmt.Fprintln(w, "  show     print one doc to stdout")

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi 1.2.0 types.ts:2122-2130 picks reachesTools into ToolInfo and agent-session.ts:1507 copies the definition's hook, which an

@@ -10,7 +10,7 @@ import (
 	"maps"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func (r *ModelRegistry) registryAuthConfig(id string) (ai.ProviderAuth, providerConfig, bool) {

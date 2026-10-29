@@ -3,7 +3,7 @@ package mcpext
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // callbackSettings (extensions/mcp/oauth.ts:86-107) is not exported by Pi's module, so the oracle body transcribes it and runs it on Node's own URL implementation: the listen host, redirect host, port, path and exact redirect URI for every callbackUrl spelling and callbackPort.

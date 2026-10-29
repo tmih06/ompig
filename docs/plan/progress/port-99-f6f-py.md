@@ -1,6 +1,6 @@
 # Lane port-99-f6f-py: the Python SDK for the upstream 0.99.1 extension API (family 6, sub-lane 6F-py)
 
-Branch `port-99-f6f-py` from the 6D contract commit `906c8fe28`, then merged with staging `port-99-f6d` (`88d5d92ea`) so the Host side of every capability is real: the lane changes only the Python SDK. Scope: `docs/plan/progress/family-6-split.md` section 3 lane 6F (Python) and section 4 (`pi.events`). Owned: `extensions/sdk-py/**` (the only editor of `pig_sdk/__init__.py`) and new files under `test/extension-conformance/`.
+Branch `port-99-f6f-py` from the 6D contract commit `906c8fe28`, then merged with staging `port-99-f6d` (`88d5d92ea`) so the Host side of every capability is real: the lane changes only the Python SDK. Scope: `docs/plan/progress/family-6-split.md` section 3 lane 6F (Python) and section 4 (`pi.events`). Owned: `extensions/sdk-py/**` (the only editor of `ompig_sdk/__init__.py`) and new files under `test/extension-conformance/`.
 
 ## Capability map
 
@@ -30,7 +30,7 @@ Cases that pass at red on purpose, because they pin behavior the SDK already has
 
 ## Green
 
-Commits, in order (see `git log`): red; green (`feat(sdk-py): Python SDK for the upstream 0.99.1 extension API and pi.events`); merge of the events lane (`staging port-99-f6f-events`); `feat(sdk-py): implement pi.events in pig_sdk/event_bus.py`; style; this progress commit with `events.release`. Evidence: `docs/plan/evidence/port-99-f6f-py-green.txt`.
+Commits, in order (see `git log`): red; green (`feat(sdk-py): Python SDK for the upstream 0.99.1 extension API and pi.events`); merge of the events lane (`staging port-99-f6f-events`); `feat(sdk-py): implement pi.events in ompig_sdk/event_bus.py`; style; this progress commit with `events.release`. Evidence: `docs/plan/evidence/port-99-f6f-py-green.txt`.
 
 Changes to ported tests, each cited in place:
 - `test_mcp_servers_registered_by_the_factory_travel_in_the_register_frame`: the red commit expected `[wiki, docs-v2]`; `mcp-servers.ts:212-215` (`servers.set`) keeps the position of a replaced key, so the answer is `[docs-v2, wiki]`. Mis-port of mine.
@@ -43,7 +43,7 @@ Design notes:
 - `get_settings` raises until the host sent settings (upstream `notInitialized`); no constant stands in.
 - `pi.events` follows the events lane's wire (`value: true`, `json`, `events.dispatch`, `events.release`). A listener stays callable after `unsubscribe()` until the host releases it, so memory follows the host's snapshots, not the number of subscribe calls.
 
-Overlap with the events lane: it declared `EventBus` in `pig_sdk/event_bus.py` and a `Context.events` and `Extension.events` in `__init__.py` in its red commit (`c7b15a3d1`), and its red tests for the Python wire. This lane implemented `event_bus.py` on that layout and merged the branch. If the events lane also writes a Python green, its `event_bus.py` and `__init__.py` hunks conflict with this lane's; keep this lane's (its rows and the events lane's Python rows all pass).
+Overlap with the events lane: it declared `EventBus` in `ompig_sdk/event_bus.py` and a `Context.events` and `Extension.events` in `__init__.py` in its red commit (`c7b15a3d1`), and its red tests for the Python wire. This lane implemented `event_bus.py` on that layout and merged the branch. If the events lane also writes a Python green, its `event_bus.py` and `__init__.py` hunks conflict with this lane's; keep this lane's (its rows and the events lane's Python rows all pass).
 
 ## Mutation and load
 

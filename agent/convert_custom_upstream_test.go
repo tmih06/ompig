@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream convertToLlm (coding-agent core/messages.ts) turns every custom
@@ -169,7 +169,7 @@ func upstreamOrderShape(wire []ai.Message) string {
 // pinned Pi 0.87.1 (convertToLlm, then the pi-ai openai-completions and
 // anthropic-messages stream functions against a capturing server). Upstream
 // sends every custom message as a text-block array, never as a plain string.
-// The contents are compared as decoded JSON: Pig's encoder escapes "<" as
+// The contents are compared as decoded JSON: Ompig's encoder escapes "<" as
 // \u003c where JSON.stringify does not, which is the same JSON value.
 func TestCustomMessagesReachProvidersAsUpstreamContentBlocks(t *testing.T) {
 	history := []AgentMessage{

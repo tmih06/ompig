@@ -7,7 +7,7 @@ import (
 )
 
 // TestCountOutcomesMissingFileIsZeroNotError is the case that matters most:
-// TestParity skipping wholesale (PIG_PARITY_PIG_BIN unset, tmux/pi missing)
+// TestParity skipping wholesale (OMPIG_PARITY_OMPIG_BIN unset, tmux/pi missing)
 // never writes the results file at all. That must read as "0 scenarios ran",
 // not as an error the Makefile could mistake for something benign.
 func TestCountOutcomesMissingFileIsZeroNotError(t *testing.T) {

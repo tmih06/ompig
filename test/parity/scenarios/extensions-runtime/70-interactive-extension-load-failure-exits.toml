@@ -12,8 +12,8 @@
 #   Error: Failed to load extension "<path>/load-failure.ts": Failed to load extension: pi.notAThing is not a function
 #   Hint: Start without extensions using "pi -ne".
 #   exit: 1
-# A demo take ended the same way for PiG with user extensions that failed to
-# build; this pins that the interactive exit is Pi's behavior, not a PiG crash.
+# A demo take ended the same way for Ompig with user extensions that failed to
+# build; this pins that the interactive exit is Pi's behavior, not a Ompig crash.
 
 name = "70-interactive-extension-load-failure-exits"
 description = "An extension load failure ends an interactive start with Pi's error, -ne hint and status 1"
@@ -25,17 +25,17 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-session"]
+ompig_args = ["--no-session"]
 pi_args = ["--no-session"]
-pig_extensions = ["testdata/ext/load-failure.ts"]
+ompig_extensions = ["testdata/ext/load-failure.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/load-failure.ts"]
 
 [tmux]
 width = 120
 height = 30
-ready_pattern_pig = "Start without extensions using"
+ready_pattern_ompig = "Start without extensions using"
 ready_pattern_pi = "Start without extensions using"
 ready_timeout_seconds = 30
 capture_start = "Error: Failed to load extension"
@@ -54,7 +54,7 @@ runs = 3
 
 # normalize-rationale: the hint names each binary's own command.
 [[assert.normalize_replace]]
-pattern = '"pig? -ne"'
+pattern = '"ompig? -ne"'
 with = '"<bin> -ne"'
 reason = "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type bugFilesCase struct {
@@ -30,16 +30,16 @@ type bugFilesOut struct {
 }
 
 // TestBugReportFilesMatchPi runs core/bug-report.ts collectBugReportDiagnostics and bugReportFiles against a SessionManager opened on the case's session file and
-// the crash log read from the case's file, and PiG's CollectBugReportDiagnostics and BugReportFiles over the same files. Sessions hold user, assistant and tool-result
+// the crash log read from the case's file, and Ompig's CollectBugReportDiagnostics and BugReportFiles over the same files. Sessions hold user, assistant and tool-result
 // messages, other entry types, assistant turns that stopped, errored or were aborted, with or without diagnostics, an error message, a raw stop reason, and details objects with integer-like keys in any order; the crash log (a JSON array) holds records with and without notified, malformed records and non-array roots. The bytes of diagnostics.json, the member list, and the session.jsonl
-// and summary.md members (an empty string is present; a summary gets one trailing newline) must match. Not compared: an empty errorMessage or rawStopReason (PiG's AssistantMessage cannot tell "" from absent, Pi keeps the empty string), the insertion order of non-index details keys (PiG decodes details into a map), report.json (covered by the metadata tests) and the zip container.
+// and summary.md members (an empty string is present; a summary gets one trailing newline) must match. Not compared: an empty errorMessage or rawStopReason (Ompig's AssistantMessage cannot tell "" from absent, Pi keeps the empty string), the insertion order of non-index details keys (Ompig decodes details into a map), report.json (covered by the metadata tests) and the zip container.
 func TestBugReportFilesMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(20261124))
 	pick := func(xs ...string) string { return xs[rng.Intn(len(xs))] }
 	jsonString := func(s string) string { data, _ := json.Marshal(s); return string(data) }
 	ts := func() string { return fmt.Sprintf("2026-01-0%dT0%d:00:00.000Z", 1+rng.Intn(9), rng.Intn(9)) }
 	details := func() string {
-		// PiG decodes details into a Go map, so the order of its non-index keys is lexicographic, not insertion order: the keys here are generated in that order (see the doc comment).
+		// Ompig decodes details into a Go map, so the order of its non-index keys is lexicographic, not insertion order: the keys here are generated in that order (see the doc comment).
 		keys := []string{"a", "b", "z", "é", "0", "2", "10"}
 		var picked []string
 		for _, key := range keys {

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // print-mode.ts:138-158: in text mode, after the prompts, the session's last message decides the output. An assistant message that stopped with

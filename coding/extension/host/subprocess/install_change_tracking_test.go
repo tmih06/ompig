@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/installchange"
+	"github.com/tmih06/ompig/internal/installchange"
 )
 
-// pig additive (D95): a process records the cell files it starts, so a later error can tell that another pig pruned them.
+// ompig additive (D95): a process records the cell files it starts, so a later error can tell that another ompig pruned them.
 
 // trackedUnder returns the tracked files below root, as other tests in the binary may track their own.
 func trackedUnder(t *testing.T, root string) []string {
@@ -37,7 +37,7 @@ func TestHostTracksTheNodeCellItStarts(t *testing.T) {
 		t.Fatal(err)
 	}
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	h := NewHost(t.TempDir())
 	t.Cleanup(func() { h.Shutdown("test done") })
 	h.SetConfigLoader(func() ([]ExtConfig, error) {
@@ -58,7 +58,7 @@ func TestHostTracksTheNodeCellItStarts(t *testing.T) {
 			t.Errorf("tracked cell file: %v", err)
 		}
 	}
-	// Another pig prunes the cache: the next check names the missing file. That pig could only prune cell files no running
+	// Another ompig prunes the cache: the next check names the missing file. That ompig could only prune cell files no running
 	// cell holds open (Windows refuses to delete a file a live process has open), so stop this host's cell and wait for it to
 	// release its cache usage lease first (Shutdown reaps every process before it returns).
 	h.Shutdown("prune the cell cache")

@@ -24,7 +24,7 @@ Pi runs the provider, the event queue, the forwarders, the Agent, the Session an
 
 Probe: real Pi 0.87.1 CLI in `--mode rpc --no-extensions`, one loopback server per API that writes headers and the complete RPC33-shaped tool-call body in one write. The value is the first assistant `message_start`. Eight runs each on Node 24.19.0 (`.node-version`) and Node 26.7.0. Scripts: `server.mjs`, `drive.mjs` in the lane evidence directory (they move into `coding/testdata/rpc33-observation/providers/` in step W6).
 
-| API | Pi start (all 16 runs identical) | PiG base | WIP port |
+| API | Pi start (all 16 runs identical) | Ompig base | WIP port |
 |---|---|---|---|
 | openai-completions | tool call with parsed args, `partialArgs`, `streamIndex:0`; `toolUse`; usage 13 | empty, `pending` | = Pi |
 | openai-responses | empty, `pending`, `responseId` set | = Pi | = Pi |
@@ -36,9 +36,9 @@ Conclusions:
 
 1. Pi is deterministic per API and identical across Node 24 and 26 for this input. The start state differs per API because each pipeline has a different microtask depth. No shared rule such as "one record of lookahead" reproduces all five.
 2. Anthropic shows a mid-record state (two SSE records handled, the delta not yet). Exact parity therefore needs microtask-accurate modeling, not per-provider constants.
-3. Separate drift found: Pi names generated Google tool-call IDs `${name}_${Date.now()}_${++counter}` (`google-generative-ai.ts:199`); PiG uses `name_N` (`ai/google.go:944`). This is fixed independently of D82 (W0).
+3. Separate drift found: Pi names generated Google tool-call IDs `${name}_${Date.now()}_${++counter}` (`google-generative-ai.ts:199`); Ompig uses `name_N` (`ai/google.go:944`). This is fixed independently of D82 (W0).
 
-## 2. Current PiG state and reusable checkpoints
+## 2. Current Ompig state and reusable checkpoints
 
 Base (`606595120`): `ai/event_stream.go:Push` snapshots each nonterminal partial; `agent/agent.go` copies again. Deterministic, but every API except Responses differs from Pi. Strict RPC33 is red at `/7/message/content`.
 
@@ -50,7 +50,7 @@ WIP port (now cherry-picked onto the base as the lane's first commits):
 - `ai/openai_stream_decoder.go`: OpenAI SDK `iterSSEChunks`/`_iterSSEMessages`/`Stream` generator chain. Reusable for Completions, Responses and Azure Responses.
 - `ai/assistant_observation.go`, `ai/assistant_publication.go`: producer-owned revisions in a cell, full and shallow views. Reusable, but the public surface is the stale trap (below).
 - `coding/rpc33_observation_matrix_test.go` + `coding/testdata/rpc33-observation/`: the 216-case exact-Pi matrix for both OpenAI APIs. Reusable; extend to all APIs.
-- `coding/session.go`, `cmd/pig/rpc_events.go`, `cmd/pig/print_mode.go`: Session and RPC/print observation points. Reusable.
+- `coding/session.go`, `cmd/ompig/rpc_events.go`, `cmd/ompig/print_mode.go`: Session and RPC/print observation points. Reusable.
 
 Known defects in the WIP:
 
@@ -71,8 +71,8 @@ Emit an immutable snapshot at emission time: **accepted with a precise definitio
 
 - The producer mutates private construction state and publishes a revision into its cell at the end of each synchronous segment (before it awaits). Queue entries carry the cell reference, not data.
 - Every delivery boundary materializes an owned `AssistantMessage` at its tick: the `ai` iterator yield, the Agent event sink, `agent.Subscribe` listener dispatch, the Session's subscriber dispatch, and the extension-host serializer. Exported fields always equal the state at that delivery. `MarshalJSON` serializes fields only; there is no hidden re-observation.
-- The Agent's shallow copy is a materialized message plus an unexported shallow link (pinned top-level values, referenced nested objects). Only PiG dispatchers use the link to re-materialize at a later tick, for example Session → RPC after the awaited extension emission. Consumers never need to call anything.
-- Exported surface after the change: none of the WIP's `Observe*`/`ShallowCopy`/`StreamObservation`/`StreamContinuation` types stay exported unless a production caller outside the package needs them. Where a cross-package caller in PiG needs them (`agent`, `coding`, `cmd/pig`), they move behind `internal/` helpers or unexported accessors. `pig-go.json` is regenerated. There is no base API to alias because none of these existed in `606595120`.
+- The Agent's shallow copy is a materialized message plus an unexported shallow link (pinned top-level values, referenced nested objects). Only Ompig dispatchers use the link to re-materialize at a later tick, for example Session → RPC after the awaited extension emission. Consumers never need to call anything.
+- Exported surface after the change: none of the WIP's `Observe*`/`ShallowCopy`/`StreamObservation`/`StreamContinuation` types stay exported unless a production caller outside the package needs them. Where a cross-package caller in Ompig needs them (`agent`, `coding`, `cmd/ompig`), they move behind `internal/` helpers or unexported accessors. `ompig-go.json` is regenerated. There is no base API to alias because none of these existed in `606595120`.
 - A Go consumer that retains a delivered message and reads it later sees the delivery state (ordinary Go value semantics, documented in `docs/site/docs/sdk.md`). A foreign listener (extension process) that retains an event likewise keeps its snapshot. That is the residual cross-process case, covered by narrowed D82 (section 7).
 
 ### 3.3 Execution: a microtask-accurate model of the JavaScript constructs involved
@@ -134,7 +134,7 @@ Each item is a focused commit with its own red-then-green test and is pushed whe
 - W3. Determinism first: every provider not yet transcribed runs its loop as an executor turn whose body reads are external completions. This makes every API deterministic (Pi-exact only for pending-body input) before per-provider work. 200-run determinism test per API.
 - W4. Shared primitives 3.3 (items 1-7) with Node differential tick-order tests (a checked-in Node probe prints the tick order; Go replays it).
 - W5. Per-provider transcription, one commit each, each flipping that API's row in the multi-provider oracle to exact: Anthropic, Mistral, pi-messages, Codex SSE, Azure Responses, Google (tslib generators), Bedrock (Node `Readable` + smithy event stream), faux and test-faux. Codex WebSocket mode stays external-completion only (no buffered-frame parity claim) unless probing shows a deterministic Pi state.
-- W6. Multi-provider oracle: move `server.mjs`/`drive.mjs` into `coding/testdata/rpc33-observation/providers/`; generate `pi.json` per API; Go differential test through the real `cmd/pig` RPC path for every API; 200-run determinism per API.
+- W6. Multi-provider oracle: move `server.mjs`/`drive.mjs` into `coding/testdata/rpc33-observation/providers/`; generate `pi.json` per API; Go differential test through the real `cmd/ompig` RPC path for every API; 200-run determinism per API.
 - W7. Remaining D3 gaps: `lazyStream` synchronous setup prefix, extension IPC scoped wait, stdout backpressure wait (RPC Agent listener), print/JSON observation point, cancellation text.
 - W8. Parity: RPC scenarios for Anthropic, Google and Mistral records with the runner's provider fixture extended by API (strict `json_output_equal`, `runs = 3`).
 - W9. Docs, PORT_MAP, D82 narrowing or removal, `make generate`, READY.
@@ -150,7 +150,7 @@ Nothing is loosened: RPC33 keeps `json_output_equal`, `stderr_equal`, `runs = 3`
 - Multi-provider oracle (W6): every API's start state equals Pi's in 200 consecutive runs, using the real RPC binary path; red on base for every API except Responses.
 - Primitive tick-order differential tests against Node 24.19.0 output (W4), each with a compiling mutation that changes one reaction and must fail.
 - Ownership: race tests for producer versus materialization; goroutine-leak and retained-heap checks; benchmark and CPU/alloc profile for `Events` + Agent + Session dispatch on a 10k-delta stream, compared with base.
-- Gates: `go build ./...`, `go vet ./...` (plus GOOS=windows/darwin vet), `-race -count=3` on `ai`, `agent`, `coding`, `cmd/pig`, `make lint`, `make test-porting-release`.
+- Gates: `go build ./...`, `go vet ./...` (plus GOOS=windows/darwin vet), `-race -count=3` on `ai`, `agent`, `coding`, `cmd/ompig`, `make lint`, `make test-porting-release`.
 
 ## 7. Conditions for removing or narrowing the record
 
@@ -167,9 +167,9 @@ The part that cannot be met in one Go process talking to another process is an e
 
 Landed on `team/the bench host/gap-d82`; rebase or merge it before your READY.
 
-1. **Managed provider.** A provider is under the executor when it (a) obtains its body as `*observedResponseBody` (PiG's HTTP transport; see `openai.go:1697`), (b) sets `builder.managed = true`, and (c) runs everything after the response headers inside `builder.responseTurn(...)` (`ai/native_body_iterator.go`), which sets `stream.producer` and gives the turn. Only then do pushes publish live cells; every other push stores an emission-time snapshot (W3, D82 marker in `assistant_publication.go`).
+1. **Managed provider.** A provider is under the executor when it (a) obtains its body as `*observedResponseBody` (Ompig's HTTP transport; see `openai.go:1697`), (b) sets `builder.managed = true`, and (c) runs everything after the response headers inside `builder.responseTurn(...)` (`ai/native_body_iterator.go`), which sets `stream.producer` and gives the turn. Only then do pushes publish live cells; every other push stores an emission-time snapshot (W3, D82 marker in `assistant_publication.go`).
 2. **One await, one call.** Each JavaScript `await`/generator boundary in the Pi or SDK source becomes `suspendContinuation(turn)` (already-resolved await) or `awaitContinuation(turn, promise)` (pending). Body reads go through `newNativeBodyIterator(...)`; set `reader.started = true` when Pi uses `getReader().read()` rather than `values().next()` (`pi_messages.go:96-99`). Cite the Pi or SDK line of every yield in a comment.
-3. **Tests.** Use `runManagedBuilder` / `runAsExecutorProducer` (`ai/event_stream_test.go`) for producer-turn tests. A lane is closed for its API when `node coding/testdata/rpc33-observation/providers/check.mjs <pig> 200 <api>` reports `200/200 equal Pi` (add the API's fixture to `server.mjs` and oracle to `pi-start.json` if it is not there; regenerate the oracle with `--oracle`), plus a Pi tick-order oracle test like the OpenAI ones.
+3. **Tests.** Use `runManagedBuilder` / `runAsExecutorProducer` (`ai/event_stream_test.go`) for producer-turn tests. A lane is closed for its API when `node coding/testdata/rpc33-observation/providers/check.mjs <ompig> 200 <api>` reports `200/200 equal Pi` (add the API's fixture to `server.mjs` and oracle to `pi-start.json` if it is not there; regenerate the oracle with `--oracle`), plus a Pi tick-order oracle test like the OpenAI ones.
 4. **Delivered partials (W2).** Iterators deliver a fresh handle whose exported fields equal the stream state at the consumer's tick. Do not call `Observe()` to read a delivered partial. Forwarders must use the raw iterator (`events(ctx, false)`).
 5. **No new exported API** without the integrator. Extending unexported helpers in `ai` is fine.
 6. **Environment.** `/home` is full: use `GOCACHE`, `GOMODCACHE` and `TMPDIR` under `/var/tmp` (the lane's `env.sh`).
@@ -178,12 +178,12 @@ Landed on `team/the bench host/gap-d82`; rebase or merge it before your READY.
 
 All units are merged on `team/the bench host/gap-d82`: W0, W2, W3 (integrator), W4a/b/c primitives, W5 Anthropic, Azure, Bedrock, Codex (SSE), faux/test-faux, Google, Mistral, pi-messages, W7 and W8.
 
-Integration fixes made here: the Anthropic undici read hops moved onto W4c's Web Streams body source; Anthropic and Bedrock share one open-block `index` scratch; the Google abort watcher is restored on the merged executor; provider hooks await on the running producer turn (parity extensions-runtime 50/51 hung); fixture sleeps are replaced with a socket-read barrier (reviewer blocker); RPC/JSON records go through output-guard's ordered tail (reviewer HIGH); three Pig fixture programs read request failures from the stream result as their Pi fixtures do.
+Integration fixes made here: the Anthropic undici read hops moved onto W4c's Web Streams body source; Anthropic and Bedrock share one open-block `index` scratch; the Google abort watcher is restored on the merged executor; provider hooks await on the running producer turn (parity extensions-runtime 50/51 hung); fixture sleeps are replaced with a socket-read barrier (reviewer blocker); RPC/JSON records go through output-guard's ordered tail (reviewer HIGH); three Ompig fixture programs read request failures from the stream result as their Pi fixtures do.
 
 Evidence (lane evidence directory):
 - Strict `rpc/33-rpc-real-provider-records` and its Anthropic, Google and Mistral variants: 3/3 pairs each.
-- `check.mjs <pig> 200`: 200/200 runs equal Pi, one state, for openai-completions, openai-responses, azure-openai-responses, openai-codex-responses, anthropic-messages, google-generative-ai, mistral-conversations, bedrock-converse-stream, pi-messages and test-faux.
-- `rpc` family 45/45 and `json` family 4/4 at declared durability; `make parity-fast`: 604/605 hermetic scenarios. The one failure, `rpc/33-rpc-wire-mutations` (`estimatedTokensAfter` pig=788 pi=787), also fails on the unmodified release base 606595120 (run 3 of 8); it is a pre-existing intermittent outside D82 and is not fixed here.
+- `check.mjs <ompig> 200`: 200/200 runs equal Pi, one state, for openai-completions, openai-responses, azure-openai-responses, openai-codex-responses, anthropic-messages, google-generative-ai, mistral-conversations, bedrock-converse-stream, pi-messages and test-faux.
+- `rpc` family 45/45 and `json` family 4/4 at declared durability; `make parity-fast`: 604/605 hermetic scenarios. The one failure, `rpc/33-rpc-wire-mutations` (`estimatedTokensAfter` ompig=788 pi=787), also fails on the unmodified release base 606595120 (run 3 of 8); it is a pre-existing intermittent outside D82 and is not fixed here.
 - `go test -race -count=3 ./ai ./agent ./coding`; `TestRPC33AzureTickOrder` `-race -count=60` x3; Mistral and pi-messages RPC oracles with `message_update.usage` compared, 100 runs.
 - `make lint` 0 issues; `make ci-drift`, `make divergence-quality`, `make divergence-guard`, `make interface-go-drift`, `make test-porting-release` pass.
 

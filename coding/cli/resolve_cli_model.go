@@ -1,6 +1,6 @@
 package cli
 
-import "github.com/MichaelKinsy/PiG/internal/codingagent"
+import "github.com/tmih06/ompig/internal/codingagent"
 
 // ResolveCliModelResult is the shared model-selection result used by CLI and auth commands.
 type ResolveCliModelResult = codingagent.ResolveCliModelResult

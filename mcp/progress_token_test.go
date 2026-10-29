@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // client.ts:403-407 sends progressToken (the request id) in params._meta only when the call has onProgress, keeping the caller's own _meta members;

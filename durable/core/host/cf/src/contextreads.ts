@@ -57,9 +57,9 @@ export function estimateContext(view: {
 
 
 // The statements of the core's sql_table the host answers from its kept ranges instead of SQL (store/sql.go).
-export const CONTEXT_SUMMARY = "SELECT pig_context_summary(?, ?, ?, ?, ?)"
-export const CONTEXT_MESSAGES = "SELECT pig_context_messages(?, ?, ?, ?)"
-export const CONTEXT_RELEASE = "SELECT pig_context_release(?)"
+export const CONTEXT_SUMMARY = "SELECT ompig_context_summary(?, ?, ?, ?, ?)"
+export const CONTEXT_MESSAGES = "SELECT ompig_context_messages(?, ?, ?, ?)"
+export const CONTEXT_RELEASE = "SELECT ompig_context_release(?)"
 
 const enc = new TextEncoder()
 

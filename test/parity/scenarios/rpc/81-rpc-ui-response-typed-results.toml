@@ -2,7 +2,7 @@
 # Surface: the answer to an RPC extension dialog. rpc-mode.ts:137-150 and 254-266 resolve a dialog with whatever JSON the client's extension_ui_response carries and check no
 # type: `"value" in r ? r.value : undefined` for select, input and editor (so 5, null, an object and an array reach the extension; an absent `value` is undefined),
 # `"confirmed" in r ? r.confirmed : false` for confirm (so "yes", null and 0 reach the extension), and `"cancelled" in r && r.cancelled` by JavaScript truthiness.
-# PiG decoded `value` into a string, `confirmed` into a bool and `cancelled` into a bool, so a wrong-typed response was dropped and the dialog stayed pending.
+# Ompig decoded `value` into a string, `confirmed` into a bool and `cancelled` into a bool, so a wrong-typed response was dropped and the dialog stayed pending.
 # ui.custom() resolves undefined in RPC mode without a request.
 
 name = "81-rpc-ui-response-typed-results"
@@ -85,9 +85,9 @@ wait_contains = ['"message":"results:']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["testdata/ui-typed-results.mjs"]
-pig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["testdata/ui-typed-results.mjs"]
+ompig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["testdata/ui-typed-results.mjs", "../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 

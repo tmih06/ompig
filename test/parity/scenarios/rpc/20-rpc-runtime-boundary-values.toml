@@ -42,10 +42,10 @@ wait_event = '{"type":"response","id":"bash","command":"bash"}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 # Use the same explicit prompt to isolate runtime values from D2/D22's documented built-in prompt differences. No output section is removed.
-pig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions", "--system-prompt", "RPC runtime values.", "--no-context-files", "--no-skills"]
-pig_extensions = ["testdata/queue-target.mjs"]
+ompig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions", "--system-prompt", "RPC runtime values.", "--no-context-files", "--no-skills"]
+ompig_extensions = ["testdata/queue-target.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/queue-target.mjs"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions", "--system-prompt", "RPC runtime values.", "--no-context-files", "--no-skills"]
 

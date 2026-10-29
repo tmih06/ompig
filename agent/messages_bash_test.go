@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A bashExecution message with excludeFromContext=false becomes a "Ran `cmd`"
@@ -87,7 +87,7 @@ func messageText(t *testing.T, message ai.Message) string {
 // TestConvertToLLM_ToolResultCarriesToolName pins that the neutral->provider
 // conversion preserves ToolName on the tool_result content block. This is the
 // live request path; Gemini's functionResponse.name reads it. Dropping it (as
-// pig did) makes every Google tool-result request diverge from pi 0.84.0.
+// ompig did) makes every Google tool-result request diverge from pi 0.84.0.
 func TestConvertToLLM_ToolResultCarriesToolName(t *testing.T) {
 	msgs := []AgentMessage{
 		{Assistant: &AssistantMessage{

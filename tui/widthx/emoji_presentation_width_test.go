@@ -9,7 +9,7 @@ import "testing"
 //
 // go-runewidth measures code points rather than grapheme clusters, so it
 // reports 1 for both: the base character is neutral-width and VS16 is
-// zero-width. Pig took that fast path for every string without Thai/Lao AM
+// zero-width. Ompig took that fast path for every string without Thai/Lao AM
 // vowels, so any row containing a warning or info emoji was measured one cell
 // narrower than the terminal drew it.
 //

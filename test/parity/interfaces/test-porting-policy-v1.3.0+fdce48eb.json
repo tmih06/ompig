@@ -2106,14 +2106,14 @@
       "upstreamTestHash": "sha256:b5833c31edec90166992614ea37641770a6ecd953ab0f3b28cd7d653ef29bb39",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/bindings.test.ts",
       "upstreamTestHash": "sha256:c0ff59197f52cc1aafc3926b3d4350bb3a459452623ab735f0b46e514d970e4e",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/boundary.test.ts",
@@ -2129,7 +2129,7 @@
       "upstreamTestHash": "sha256:4abfefffea6daa3ba13a51974f41c1655d5440d58184d55964d6cd517ee0652b",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (cross-host reload coordination). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (cross-host reload coordination). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/context.test.ts",
@@ -2145,7 +2145,7 @@
       "upstreamTestHash": "sha256:3452c8b5fb08fbf23ead17e9ac4f7ea44809917dd58adf71b211ec7aacc95631",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet contracts). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet contracts). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/delta-apply-immutable.test.ts",
@@ -2206,42 +2206,42 @@
       "upstreamTestHash": "sha256:f2b4be5d31a27802314090be39533fa712d1271044e9c87782a9ef168bd5b978",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/flow.test.ts",
       "upstreamTestHash": "sha256:0a4b30a7aca05ca1e5d8be3ec647a4a779a31fe1722ec2534c0fa5676c842b30",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi main db6497c3: Chord's multi-host runtime (link review). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi main db6497c3: Chord's multi-host runtime (link review). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/generations.test.ts",
       "upstreamTestHash": "sha256:1fc7f72bb45bc5ead9e782b12f468e3d47d80970ee99e822ae22942129b1845f",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/host-objects-reload.test.ts",
       "upstreamTestHash": "sha256:dc534e146666e7f86a32d4c1c614ac3baada3cef5bbdac438fb0dc771d46caa0",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/host.test.ts",
       "upstreamTestHash": "sha256:76b8609d0d45f51bff65da5717a6919ae3662df4507f6fa36e9165690322720d",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (host activation and lifetime). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (host activation and lifetime). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/hydration.test.ts",
       "upstreamTestHash": "sha256:fb3b1d40e165862f720f9cb2385fc88e194dfc2e68be144972806068877f75b9",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/json.test.ts",
@@ -2257,28 +2257,28 @@
       "upstreamTestHash": "sha256:7041d487bbf0822b1ee69279998dfa2877b609acbab684a0f140b2cd9c08ff07",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (links between hosts). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (links between hosts). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/links-review.test.ts",
       "upstreamTestHash": "sha256:43a9326950d5ecc1c0b3573f409ddabe50c4d46552679cf7acc12322dc75df78",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (link review). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (link review). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/loader.test.ts",
       "upstreamTestHash": "sha256:09fe23a11040097edf383f03e305319d6c989718d635cc917ffe9273466c4cf0",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the Node facet module loader). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the Node facet module loader). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/manager.test.ts",
       "upstreamTestHash": "sha256:26e16cf93f248a342ec43bc156bf426847e1a39d6b65ef4f1711cf3eba0fea19",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the host manager). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the host manager). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/output-skip.test.ts",
@@ -2303,35 +2303,35 @@
       "upstreamTestHash": "sha256:4a62bb83ace13dc9b0a6257396f1e77701199869e1ad57a6de986427ee9829e8",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/principals.test.ts",
       "upstreamTestHash": "sha256:681780b8ae3d7d76347338e6cdfc564878134048518b074fee475384a24cdfe0",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/provider-cost.test.ts",
       "upstreamTestHash": "sha256:115175a3ed310cd404ed8a6a07510474227b05185e21dd32144bfea2c826db13",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/readiness.test.ts",
       "upstreamTestHash": "sha256:89f902a5f6cd7fbf5e2bb3761cf750496deae8e04e69084c9b7c9e09e81a4766",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet readiness). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet readiness). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/reload.test.ts",
       "upstreamTestHash": "sha256:9e7bd409ea4675ca3c08ece08f834ae015cbc264086171079619b7316c57c9c5",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet reload). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet reload). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/replicated-state-delivery.test.ts",
@@ -2359,14 +2359,14 @@
       "upstreamTestHash": "sha256:1fd0e51ff2dd2dd8a22d143323e69a839dc5999963b52aa8119872858526fb70",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet requests). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet requests). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/review.test.ts",
       "upstreamTestHash": "sha256:b83c33f3dda420770a57374981c0a7c16661d6886da7875a19fc4d868b5dd855",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet review). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (facet review). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/sqlite/cloudflare.test.ts",
@@ -2402,7 +2402,7 @@
       "tags": [
         "hot-path"
       ],
-      "rationale": "Production-path review at Pi 1.3.0+fdce48eb: the replicated connection wrapper opens a database file with automatic checkpoints off and runs the close hook before the WAL is checkpointed and deleted; it is the connection Pi Durable's SQLite replication reads the WAL through. PiG ports it without a production caller, as Pi has none yet."
+      "rationale": "Production-path review at Pi 1.3.0+fdce48eb: the replicated connection wrapper opens a database file with automatic checkpoints off and runs the close hook before the WAL is checkpointed and deleted; it is the connection Pi Durable's SQLite replication reads the WAL through. Ompig ports it without a production caller, as Pi has none yet."
     },
     {
       "path": "packages/chord/test/state-diff.test.ts",
@@ -2436,7 +2436,7 @@
       "upstreamTestHash": "sha256:963531c8a92ac7d95c54005bf6984b7c1278419c53bb694ed3601238a062ca66",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/state-value.test.ts",
@@ -2479,28 +2479,28 @@
       "upstreamTestHash": "sha256:a2a66f6d85f48f2a3f57b123bbd46b917833504a3b3e02d08eeba326189e7c14",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the tutorial's facets and hosts). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the tutorial's facets and hosts). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/chord/test/types.test.ts",
       "upstreamTestHash": "sha256:3629b28e2dc29463f45dced5e36f576cd0a4f5608684f6945719d20ffcbbac38",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/variants.test.ts",
       "upstreamTestHash": "sha256:4c0527704e6c4daac0f578087a4ea033c6dd4dc9c5eeaf8fc7cdd671651fe16a",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a PiG product hot path."
+      "rationale": "Production-path review at Pi 1.2.0+b06c1f2c: chord/host protocol 3/4 behavior; chord/host has no consumer outside chord/, so it is not on a Ompig product hot path."
     },
     {
       "path": "packages/chord/test/websocket.test.ts",
       "upstreamTestHash": "sha256:a034800588719771ffa2a24e9014842b043da96c4cc4939d310498aed26cfa79",
       "area": "extensions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the WebSocket transport). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock PiG production package imports chord/host. Not tagged hot-path."
+      "rationale": "Production-path review at Pi 1.2.0: Chord's multi-host runtime (the WebSocket transport). Neither Pi's coding agent nor Pi Durable reaches it: Durable imports only Context, the JSON and delta helpers, Draft and replicatedState from chord, the coding agent does not depend on chord, and no Stock Ompig production package imports chord/host. Not tagged hot-path."
     },
     {
       "path": "packages/codemode/test/declarations.test.ts",
@@ -3164,7 +3164,7 @@
         "shouldRunFirstTimeSetup › returns false when a custom agent dir is set",
         "shouldRunFirstTimeSetup › returns false when settings.json already exists"
       ],
-      "rationale": "CLI startup, selected execution mode, settings, or command routing. Four official-distribution cases are designed out, SCRUTINIZED:approved by owner Michael Kinsy on 2026-09-29: Pi shows first-time setup only for its official distribution identity (src/cli/startup-ui.ts:122-140; caller src/main.ts:661), which PiG never has. The mapping row test-mapping-v0.99.1.json#packages/coding-agent/test/first-time-setup.test.ts must list exactly these ids."
+      "rationale": "CLI startup, selected execution mode, settings, or command routing. Four official-distribution cases are designed out, SCRUTINIZED:approved by owner Michael Kinsy on 2026-09-29: Pi shows first-time setup only for its official distribution identity (src/cli/startup-ui.ts:122-140; caller src/main.ts:661), which Ompig never has. The mapping row test-mapping-v0.99.1.json#packages/coding-agent/test/first-time-setup.test.ts must list exactly these ids."
     },
     {
       "path": "packages/coding-agent/test/footer-data-provider.test.ts",
@@ -3756,7 +3756,7 @@
       "upstreamTestHash": "sha256:e9a25e5e160394561ca1893b5080d447424909678f503a3043bcf99c3dd43bdb",
       "area": "utilities",
       "tags": [],
-      "rationale": "New in Pi 8efd314f (1.3.0+8efd314f): a docs check of the generated models.json reference; no production path. Designed out: PiG has no generated reference doc, and the schemas are byte-identical to Pi's."
+      "rationale": "New in Pi 8efd314f (1.3.0+8efd314f): a docs check of the generated models.json reference; no production path. Designed out: Ompig has no generated reference doc, and the schemas are byte-identical to Pi's."
     },
     {
       "path": "packages/coding-agent/test/remote-catalog-provider.test.ts",
@@ -5298,14 +5298,14 @@
       "upstreamTestHash": "sha256:7396929be7361f01dc10b73a1bb2705b5213d1e876c5e70e876a1555a4fb4c58",
       "area": "sessions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.3.0+e17e2e10: workerd tests of Pi Durable's SQLite storage on a Durable Object (schema version 2, the storage conformance suite). The runtime is Cloudflare Workers, which no Stock PiG production package runs in; the storage cases are ported on Go's fake Durable Object storage."
+      "rationale": "Production-path review at Pi 1.3.0+e17e2e10: workerd tests of Pi Durable's SQLite storage on a Durable Object (schema version 2, the storage conformance suite). The runtime is Cloudflare Workers, which no Stock Ompig production package runs in; the storage cases are ported on Go's fake Durable Object storage."
     },
     {
       "path": "packages/durable/test-workers/wake.test.ts",
       "upstreamTestHash": "sha256:eed12b884ddb5b10b99856488ec19324ad1d165a7cab51d1bef5e1f09218b3c2",
       "area": "sessions",
       "tags": [],
-      "rationale": "Production-path review at Pi 1.3.0+e17e2e10: workerd tests of a Harness hosted by a Durable Object (alarm wakeups and eviction). The runtime is Cloudflare Workers, which no Stock PiG production package runs in; the Harness behavior they depend on is ported on both engines in harness-sleep.test.ts."
+      "rationale": "Production-path review at Pi 1.3.0+e17e2e10: workerd tests of a Harness hosted by a Durable Object (alarm wakeups and eviction). The runtime is Cloudflare Workers, which no Stock Ompig production package runs in; the Harness behavior they depend on is ported on both engines in harness-sleep.test.ts."
     },
     {
       "path": "packages/durable/test/codemode-checkpoints.test.ts",
@@ -5323,7 +5323,7 @@
       "tags": [
         "hot-path"
       ],
-      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (the tool description and system-prompt section), the tool a durable turn runs scripts and model calls through (PiG durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
+      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (the tool description and system-prompt section), the tool a durable turn runs scripts and model calls through (Ompig durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
     },
     {
       "path": "packages/durable/test/codemode-models.test.ts",
@@ -5332,7 +5332,7 @@
       "tags": [
         "hot-path"
       ],
-      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (model calls from scripts), the tool a durable turn runs scripts and model calls through (PiG durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
+      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (model calls from scripts), the tool a durable turn runs scripts and model calls through (Ompig durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
     },
     {
       "path": "packages/durable/test/codemode.test.ts",
@@ -5341,7 +5341,7 @@
       "tags": [
         "hot-path"
       ],
-      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (scripts, model calls, journal and output), the tool a durable turn runs scripts and model calls through (PiG durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
+      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (scripts, model calls, journal and output), the tool a durable turn runs scripts and model calls through (Ompig durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
     },
     {
       "path": "packages/durable/test/env-line-scan.test.ts",
@@ -5905,7 +5905,7 @@
       "tags": [
         "hot-path"
       ],
-      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (deferred tools loaded by tool search), the tool a durable turn runs scripts and model calls through (PiG durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
+      "rationale": "Production-path review at Pi 1.2.0: Durable code mode (deferred tools loaded by tool search), the tool a durable turn runs scripts and model calls through (Ompig durable/codemode, durable/toolsearch); hot-path with the sibling packages/durable/test/ rows."
     },
     {
       "path": "packages/durable/test/tools-images.test.ts",

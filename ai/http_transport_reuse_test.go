@@ -14,7 +14,7 @@ import (
 
 // Pi reuses connections through one process-wide undici dispatcher (packages/coding-agent/src/core/http-dispatcher.ts
 // configureHttpDispatcher). Every provider build used to create its own http.Transport, so each model request opened a
-// new TCP connection and left an idle socket with its goroutines behind (comb-audit row 6, audit-go-pig H1).
+// new TCP connection and left an idle socket with its goroutines behind (comb-audit row 6, audit-go-ompig H1).
 // Providers of the same TLS mode, idle timeout and proxy environment share one transport.
 func TestProvidersReuseOneConnectionAcrossBuilds(t *testing.T) {
 	var conns atomic.Int64

@@ -1,6 +1,6 @@
 # Rows newly accepted by the lg-rules families
 
-Measured with `autobind -reach` on one prodreach file (`./cmd/pig ./cmd/pig-experimental`). Baseline b3 = the same tree (integrate-042 merged) with the lg-rules commits reverted: NOT-A-GAP 5860, GAP 6374. After (35cd0c842): NOT-A-GAP 6645, GAP 5589 (+785, 0 lost). The two runs share the code under test, so every row below changed only because of a rule or rename entry. The list is the set difference of the two `not-a-gap.tsv` files.
+Measured with `autobind -reach` on one prodreach file (`./cmd/ompig ./cmd/ompig-experimental`). Baseline b3 = the same tree (integrate-042 merged) with the lg-rules commits reverted: NOT-A-GAP 5860, GAP 6374. After (35cd0c842): NOT-A-GAP 6645, GAP 5589 (+785, 0 lost). The two runs share the code under test, so every row below changed only because of a rule or rename entry. The list is the set difference of the two `not-a-gap.tsv` files.
 
 ## provider-options-rename (651 rows)
 

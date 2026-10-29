@@ -14,10 +14,10 @@ import (
 	"strconv"
 	"strings"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // defaultTraceLimit is `query.limit ?? 20`.

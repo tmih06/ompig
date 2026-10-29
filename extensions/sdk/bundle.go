@@ -8,13 +8,13 @@ import (
 	"strings"
 )
 
-// Source carries this package's own module sources so an installed pig can
+// Source carries this package's own module sources so an installed ompig can
 // stage a buildable copy of the SDK to disk.
 //
-// A clean, binary-only host has no pig source checkout to point a `replace`
-// directive at, and this module (github.com/MichaelKinsy/PiG/extensions/sdk) is a
+// A clean, binary-only host has no ompig source checkout to point a `replace`
+// directive at, and this module (github.com/tmih06/ompig/extensions/sdk) is a
 // nested module that is not published to a public proxy. Without a local copy,
-// `go build` cannot resolve the SDK, so `pig install`/`-e` and packed runtime
+// `go build` cannot resolve the SDK, so `ompig install`/`-e` and packed runtime
 // cells fail to build any out-of-tree Go extension. Staging these embedded
 // files (see coding/extension/pigsdk) gives every such build a local SDK
 // module that always matches the running binary.
@@ -30,7 +30,7 @@ import (
 // this package adds to every binary that stages them, and source text is a
 // fifth of its size compressed. A named list silently
 // shipped extensions a partial SDK when session_mirror.go was added: the file
-// compiled into pig, was never staged, and every extension kept building against
+// compiled into ompig, was never staged, and every extension kept building against
 // an SDK missing it. TestBundledFilesCoversModule fails when the list and the
 // source tree disagree, and its message names the command that regenerates it.
 //
@@ -56,7 +56,7 @@ func BundledFiles() []string {
 		return nil
 	})
 	if err != nil {
-		panic("pig sdk: read embedded source: " + err.Error())
+		panic("ompig sdk: read embedded source: " + err.Error())
 	}
 	slices.Sort(files)
 	return files

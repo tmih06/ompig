@@ -97,9 +97,9 @@ func TestUseThemeExplicitEmptyIsNotOmitted(t *testing.T) {
 	}
 }
 
-// Every option in Pi's help must be one PiG parses; a listed option that PiG
+// Every option in Pi's help must be one Ompig parses; a listed option that Ompig
 // ignores would be a false claim.
-func TestHelpListsOnlyOptionsPiGParses(t *testing.T) {
+func TestHelpListsOnlyOptionsOmpigParses(t *testing.T) {
 	option := regexp.MustCompile(`(?m)^  (--[a-z][a-z-]*)(?:, (-[a-z]+))?(?: <[^>]+>)?`)
 	values := map[string]string{"--mode": "json", "--tui-mode": "regular", "--thinking": "low"}
 	for _, match := range option.FindAllStringSubmatch(upstreamHelp, -1) {
@@ -127,16 +127,16 @@ func TestHelpListsOnlyOptionsPiGParses(t *testing.T) {
 	}
 }
 
-func TestHelpIsPisHelpWithPiGCommandsAfterPisCommands(t *testing.T) {
+func TestHelpIsPisHelpWithOmpigCommandsAfterPisCommands(t *testing.T) {
 	var out bytes.Buffer
 	printHelp(&out, false)
 	text := out.String()
-	if !strings.HasPrefix(text, "pig - AI coding assistant with read, bash, edit, write tools\n") {
+	if !strings.HasPrefix(text, "ompig - AI coding assistant with read, bash, edit, write tools\n") {
 		t.Fatalf("help starts %q", text[:min(80, len(text))])
 	}
-	commands, pig, options := strings.Index(text, "Commands:\n"), strings.Index(text, "PiG Commands:\n"), strings.Index(text, "Options:\n")
-	if commands < 0 || pig < commands || options < pig {
-		t.Fatalf("section order: Commands %d, PiG Commands %d, Options %d", commands, pig, options)
+	commands, ompig, options := strings.Index(text, "Commands:\n"), strings.Index(text, "Ompig Commands:\n"), strings.Index(text, "Options:\n")
+	if commands < 0 || ompig < commands || options < ompig {
+		t.Fatalf("section order: Commands %d, Ompig Commands %d, Options %d", commands, ompig, options)
 	}
 	var colored bytes.Buffer
 	printHelp(&colored, true)

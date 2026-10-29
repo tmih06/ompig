@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/durable"
 )
 
 // 00-conversation.ts: a Session stores conversations, transcript entries, tasks, and documents.

@@ -11,16 +11,16 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's synchronous chain (markdown-transform.ts:18-29) finishes a callback body before any later render starts another chain. Cancelling host correlation does not finish a remote body.
 func TestMarkdownModeReplacementWaitsForCallbackBody(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	synctest.Test(t, func(t *testing.T) {
 		var mu sync.Mutex
 		var trace []string
@@ -144,7 +144,7 @@ func logMarkdownOrder(t *testing.T, name string, trace []string) {
 // five-second renderer inactivity boundary (D56) abandons the request when the body reports no progress, which must not let the next
 // generation enter the same extension while the abandoned body still runs.
 func TestMarkdownAbandonedBodyKeepsCallbackOrder(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	synctest.Test(t, func(t *testing.T) {
 		var mu sync.Mutex
 		var trace []string
@@ -209,7 +209,7 @@ func TestMarkdownAbandonedBodyKeepsCallbackOrder(t *testing.T) {
 func TestMarkdownBodyOutlivingDisconnectOrShutdownPublishesNothing(t *testing.T) {
 	for _, exit := range []string{"disconnect", "shutdown"} {
 		t.Run(exit, func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
 			synctest.Test(t, func(t *testing.T) {
 				var mu sync.Mutex
 				var trace []string

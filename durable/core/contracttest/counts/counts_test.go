@@ -15,10 +15,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/abitest"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/fuel"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/abitest"
+	"github.com/tmih06/ompig/durable/core/contracttest/fuel"
 )
 
 const fixedUUID = "0190a6b2-0000-7000-8000-000000000001"
@@ -236,7 +236,7 @@ func TestCellsAreTheContractsCells(t *testing.T) {
 // TestReplayOfAProductionRun records the bench workload on the native stack (SQLite, driver, scripted model) in two processes,
 // seeding on an empty store and then reopening it, and replays both recordings through the native core and the Go wasip1 build:
 // every step, read and uuid the production run took must come out again. The first recording takes uuids (a conversation is
-// created), the second reads the store back (pig.read).
+// created), the second reads the store back (ompig.read).
 func TestReplayOfAProductionRun(t *testing.T) {
 	dir := t.TempDir()
 	exe := filepath.Join(dir, "bench")
@@ -244,8 +244,8 @@ func TestReplayOfAProductionRun(t *testing.T) {
 	if b, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("go build bench: %v\n%s", err, b)
 	}
-	env := append(os.Environ(), "HOME="+filepath.Join(dir, "home"), "PIG_CODING_AGENT_DIR="+filepath.Join(dir, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(dir, "agent"),
-		"PIG_HOME="+filepath.Join(dir, "pig"), "PI_HOME="+filepath.Join(dir, "pig"), "TZ=UTC", "DETENV_EPOCH=1800000000000")
+	env := append(os.Environ(), "HOME="+filepath.Join(dir, "home"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(dir, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(dir, "agent"),
+		"OMPIG_HOME="+filepath.Join(dir, "ompig"), "PI_HOME="+filepath.Join(dir, "ompig"), "TZ=UTC", "DETENV_EPOCH=1800000000000")
 	db := filepath.Join(dir, "s.sqlite")
 	run := func(name string, args ...string) *Recording {
 		cmd := exec.Command(exe, append([]string{"--db", db, "--trace", filepath.Join(dir, name+".trace"), "--record", filepath.Join(dir, name+".rec"), "--tools", "1", "--variant", "incr"}, args...)...)
@@ -332,14 +332,14 @@ func testDivergences(t *testing.T, seedRec, reopenRec string, wasm []byte) {
 	}{
 		{"a uuid missing", seedRec, withUUID, func(e *Entry) { e.UUIDs = e.UUIDs[1:] }, "took a uuid the recorded run did not take"},
 		{"an extra uuid", seedRec, withUUID, func(e *Entry) { e.UUIDs = append(e.UUIDs, e.UUIDs[0]) }, "uuids, the recorded run"},
-		{"a read missing", reopenRec, withRead, func(e *Entry) { e.Reads = nil }, "a pig.read call the recorded run did not make"},
+		{"a read missing", reopenRec, withRead, func(e *Entry) { e.Reads = nil }, "a ompig.read call the recorded run did not make"},
 		{"an extra read", reopenRec, withRead, func(e *Entry) { e.Reads = append(e.Reads, e.Reads[0]) }, "reads and took"},
 		{"another read", reopenRec, withRead, func(e *Entry) {
 			r := e.Reads[0]
 			r.Request = append([]byte(nil), r.Request...)
 			r.Request[0] ^= 1 // the statement id
 			e.Reads = append([]ReadCall{r}, e.Reads[1:]...)
-		}, "asked a different pig.read"},
+		}, "asked a different ompig.read"},
 		{"another step", reopenRec, withRead, func(e *Entry) { e.Digest[0] ^= 1 }, "differs from the recorded step"},
 	} {
 		for _, build := range []string{"native", "go"} {

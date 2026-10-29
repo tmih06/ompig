@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // agent-session.ts setModel, setThinkingLevel, setAutoCompactionEnabled and setAutoRetryEnabled persist through SettingsManager setters,
@@ -23,7 +23,7 @@ func TestSessionSettingsWriteFailureDoesNotFailTheChange(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte("{not json"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	settings := icodingagent.NewSettingsManager(cwd, agentDir)
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: cwd, SettingsManager: settings})
 	if err != nil {

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ParseJSONWithRepair parses json into T and, when strict parsing fails, parses the repairJSON rewrite instead. It returns the strict error when the repair changes nothing (upstream utils/json-parse.ts parseJsonWithRepair).

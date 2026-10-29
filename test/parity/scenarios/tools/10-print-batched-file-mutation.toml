@@ -18,8 +18,8 @@
 #   output: "batched-done"
 #   exit: 0
 #
-#   PIG_TEST_FAUX=1 PIG_HOME=test/parity/scenarios/tools/testdata/pig-home \
-#     pig --no-extensions --model test-faux/faux-1 \
+#   OMPIG_TEST_FAUX=1 OMPIG_HOME=test/parity/scenarios/tools/testdata/ompig-home \
+#     ompig --no-extensions --model test-faux/faux-1 \
 #     --print "Run: write then edit parity-batched-target.txt"
 #   output: "batched-done"
 #   exit: 0
@@ -34,8 +34,8 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--no-extensions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--no-extensions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
 [print]

@@ -30,7 +30,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 const (
@@ -276,7 +276,7 @@ func derive(root string, r row, inv *inventory, reviewed reviewedEntry, markers 
 			res.Reasons = append(res.Reasons, "LEDGER-GAP "+shortID(id)+" is "+m.Disposition)
 			continue
 		}
-		targets := m.PigTargets
+		targets := m.OmpigTargets
 		if t, ok := reviewed.Members[id]; ok {
 			if !symbolIn(root, t, cited) {
 				res.Reasons = append(res.Reasons, "reviewed symbol "+t+" for "+shortID(id)+" is not defined in a cited file")
@@ -448,9 +448,9 @@ func citedFiles(root, cell string) []string {
 }
 
 type mappingRow struct {
-	Disposition string   `json:"disposition"`
-	PigTargets  []string `json:"pigTargets"`
-	Evidence    []string `json:"evidence"`
+	Disposition  string   `json:"disposition"`
+	OmpigTargets []string `json:"ompigTargets"`
+	Evidence     []string `json:"evidence"`
 }
 
 type inventory struct {

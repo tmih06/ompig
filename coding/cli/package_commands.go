@@ -9,10 +9,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 type packageCommand string
@@ -30,8 +30,8 @@ type packageCLIOptions struct {
 	sources              []string
 	local                bool
 	projectTrustOverride *bool
-	allPackages          bool // pig update --all: self-update plus every configured package
-	extensionsOnly       bool // pig update --extensions: update every package, not pig itself
+	allPackages          bool // ompig update --all: self-update plus every configured package
+	extensionsOnly       bool // ompig update --extensions: update every package, not ompig itself
 	selfOnly             bool
 	modelsOnly           bool
 	extensionSource      string
@@ -43,14 +43,14 @@ type packageCLIOptions struct {
 	missingValue         string
 	invalidArgument      string
 	conflict             string
-	// showExtensionsSkippedNote marks a bare `pig update`, which updates pig only.
+	// showExtensionsSkippedNote marks a bare `ompig update`, which updates ompig only.
 	showExtensionsSkippedNote bool
 }
 
-// isSelfUpdateTarget reports whether an update target names pig itself.
+// isSelfUpdateTarget reports whether an update target names ompig itself.
 // Mirrors upstream `source === "self" || source === "<app-name>"`
-// (package-manager-cli.ts): pig accepts "self" and the app name "pig". These
-// are synonyms, not backward-compat aliases; bare `pig update` means the same.
+// (package-manager-cli.ts): ompig accepts "self" and the app name "ompig". These
+// are synonyms, not backward-compat aliases; bare `ompig update` means the same.
 func isSelfUpdateTarget(source string) bool {
 	switch strings.TrimSpace(strings.ToLower(source)) {
 	case "self", codingagent.AppName:
@@ -92,7 +92,7 @@ func parsePackageCommand(args []string) (*packageCLIOptions, bool) {
 		case arg == "--no-approve" || arg == "-na":
 			opts.projectTrustOverride = new(false)
 		case arg == "--validate-only" || arg == "--check":
-			// pig additive (D28): validate-only install mode; see
+			// ompig additive (D28): validate-only install mode; see
 			// docs/additive-features.md.
 			if opts.command == packageInstall {
 				opts.validateOnly = true
@@ -193,7 +193,7 @@ func parsePackageCommand(args []string) (*packageCLIOptions, bool) {
 		opts.source = opts.sources[0]
 	}
 	// The first positional is the source and the next one is unexpected.
-	// pig additive (D28): --validate-only installs accept several sources.
+	// ompig additive (D28): --validate-only installs accept several sources.
 	if len(positionals) > 1 && (opts.command != packageInstall || !opts.validateOnly) {
 		opts.invalidArgument = positionals[1]
 	}
@@ -253,28 +253,28 @@ func parsePackageCommand(args []string) (*packageCLIOptions, bool) {
 func packageUsage(cmd packageCommand) string {
 	switch cmd {
 	case packageInstall:
-		return "pig install <source> [-l] [--approve|--no-approve]"
+		return "ompig install <source> [-l] [--approve|--no-approve]"
 	case packageRemove:
-		return "pig remove <source> [-l] [--approve|--no-approve]"
+		return "ompig remove <source> [-l] [--approve|--no-approve]"
 	case packageUpdate:
-		return "pig update [source|self|pig] [--self|--extensions|--models|--all] [--extension <source>] [--approve|--no-approve] [--force]"
+		return "ompig update [source|self|ompig] [--self|--extensions|--models|--all] [--extension <source>] [--approve|--no-approve] [--force]"
 	case packageList:
-		return "pig list [--approve|--no-approve]"
+		return "ompig list [--approve|--no-approve]"
 	default:
-		return "pig <package-command>"
+		return "ompig <package-command>"
 	}
 }
 
 func printPackageCommandHelp(cmd packageCommand) {
 	switch cmd {
 	case packageInstall:
-		fmt.Print(chalkBold("Usage:") + "\n  pig install <source> [-l] [--approve|--no-approve]\n  pig install --validate-only [--json] <source>...\n  pig install --validate-only [--json] --set <source[,source...]>\n\nInstall a package and add it to settings. With --validate-only, validate/build/start one or more packages without installing them.\n\nOptions:\n  -l, --local        Install project-locally (.pig/settings.json)\n  -a, --approve     Trust project-local files for this command\n  -na, --no-approve Ignore project-local files for this command\n  --validate-only    Validate/build/start package refs without installing them\n  --json             Emit JSON validation output with --validate-only\n  --set              Validate a comma- or whitespace-separated extension set\n\nExamples:\n  pig install npm:@foo/bar\n  pig install git:github.com/user/repo\n  pig install git:git@github.com:user/repo\n  pig install https://github.com/user/repo\n  pig install ssh://git@github.com/user/repo\n  pig install ./local/path\n  pig install ./local/path --validate-only --json\n  pig install --validate-only --json ./ext-a ./ext-b\n")
+		fmt.Print(chalkBold("Usage:") + "\n  ompig install <source> [-l] [--approve|--no-approve]\n  ompig install --validate-only [--json] <source>...\n  ompig install --validate-only [--json] --set <source[,source...]>\n\nInstall a package and add it to settings. With --validate-only, validate/build/start one or more packages without installing them.\n\nOptions:\n  -l, --local        Install project-locally (.ompig/settings.json)\n  -a, --approve     Trust project-local files for this command\n  -na, --no-approve Ignore project-local files for this command\n  --validate-only    Validate/build/start package refs without installing them\n  --json             Emit JSON validation output with --validate-only\n  --set              Validate a comma- or whitespace-separated extension set\n\nExamples:\n  ompig install npm:@foo/bar\n  ompig install git:github.com/user/repo\n  ompig install git:git@github.com:user/repo\n  ompig install https://github.com/user/repo\n  ompig install ssh://git@github.com/user/repo\n  ompig install ./local/path\n  ompig install ./local/path --validate-only --json\n  ompig install --validate-only --json ./ext-a ./ext-b\n")
 	case packageRemove:
-		fmt.Print(chalkBold("Usage:") + "\n  pig remove <source> [-l] [--approve|--no-approve]\n\nRemove a package and its source from settings.\nAlias: pig uninstall <source> [-l]\n\nOptions:\n  -l, --local       Remove from project settings (.pig/settings.json)\n  -a, --approve     Trust project-local files for this command\n  -na, --no-approve Ignore project-local files for this command\n\nExamples:\n  pig remove npm:@foo/bar\n  pig uninstall npm:@foo/bar\n\n")
+		fmt.Print(chalkBold("Usage:") + "\n  ompig remove <source> [-l] [--approve|--no-approve]\n\nRemove a package and its source from settings.\nAlias: ompig uninstall <source> [-l]\n\nOptions:\n  -l, --local       Remove from project settings (.ompig/settings.json)\n  -a, --approve     Trust project-local files for this command\n  -na, --no-approve Ignore project-local files for this command\n\nExamples:\n  ompig remove npm:@foo/bar\n  ompig uninstall npm:@foo/bar\n\n")
 	case packageUpdate:
-		fmt.Print(chalkBold("Usage:") + "\n  " + packageUsage(packageUpdate) + "\n\nUpdate pig, installed packages, or model catalogs.\n\nOptions:\n  --self                  Update pig only (default when no target is given)\n  --extensions            Update installed packages only\n  --models                Refresh model catalogs only\n  --all                   Update pig and installed packages\n  --extension <source>    Update one package only\n  -a, --approve           Trust project-local files for this command\n  -na, --no-approve       Ignore project-local files for this command\n  --force                 Reinstall pig even if the current version is latest\n\nShort forms:\n  pig update                Update pig only\n  pig update --all          Update pig and all extensions\n  pig update --models       Refresh model catalogs only\n  pig update <source>       Update one package\n  pig update pig            Update pig only (self works as alias to pig)\n\n")
+		fmt.Print(chalkBold("Usage:") + "\n  " + packageUsage(packageUpdate) + "\n\nUpdate ompig, installed packages, or model catalogs.\n\nOptions:\n  --self                  Update ompig only (default when no target is given)\n  --extensions            Update installed packages only\n  --models                Refresh model catalogs only\n  --all                   Update ompig and installed packages\n  --extension <source>    Update one package only\n  -a, --approve           Trust project-local files for this command\n  -na, --no-approve       Ignore project-local files for this command\n  --force                 Reinstall ompig even if the current version is latest\n\nShort forms:\n  ompig update                Update ompig only\n  ompig update --all          Update ompig and all extensions\n  ompig update --models       Refresh model catalogs only\n  ompig update <source>       Update one package\n  ompig update ompig            Update ompig only (self works as alias to ompig)\n\n")
 	case packageList:
-		fmt.Print(chalkBold("Usage:") + "\n  pig list [--approve|--no-approve]\n\nList installed packages from user and project settings.\n\nOptions:\n  -a, --approve      Trust project-local files for this command\n  -na, --no-approve  Ignore project-local files for this command\n\n")
+		fmt.Print(chalkBold("Usage:") + "\n  ompig list [--approve|--no-approve]\n\nList installed packages from user and project settings.\n\nOptions:\n  -a, --approve      Trust project-local files for this command\n  -na, --no-approve  Ignore project-local files for this command\n\n")
 	}
 }
 
@@ -284,7 +284,7 @@ func packageContext() (cwd, agentDir string, sm *codingagent.SettingsManager, er
 		return "", "", nil, err
 	}
 	agentDir = codingagent.AgentDir()
-	// pig additive (D40): pre-session inspection resolves saved/default trust without invoking extension handlers.
+	// ompig additive (D40): pre-session inspection resolves saved/default trust without invoking extension handlers.
 	sm = codingagent.NewSettingsManagerWithOptions(cwd, agentDir, codingagent.SettingsManagerCreateOptions{ProjectTrusted: new(false)})
 	trusted, err := resolveProjectTrusted(context.Background(), projectTrustResolutionOptions{
 		CWD: cwd, Store: codingagent.NewProjectTrustStore(agentDir), Default: sm.GetGlobalSettings().DefaultProjectTrust,
@@ -303,7 +303,7 @@ func reportSettingsErrors(sm *codingagent.SettingsManager, context string) {
 }
 
 func init() {
-	// pig additive (D18): Piglets materialize Package/direct sources through
+	// ompig additive (D18): Ompiglets materialize Package/direct sources through
 	// the core installer without mutating Package settings.
 	installresolver.SetMaterializer(func(cwd, source, scope string, options installresolver.MaterializeOptions, stdout, _ io.Writer) (string, error) {
 		local := scope == "project"
@@ -318,7 +318,7 @@ func init() {
 			return "", errors.New("Project is not trusted; refusing to access project package storage")
 		}
 		source = strings.TrimSpace(source)
-		// pig additive (D194): Piglet resolution installs Packages without running lifecycle scripts unless the user opts in.
+		// ompig additive (D194): Ompiglet resolution installs Packages without running lifecycle scripts unless the user opts in.
 		var installOptions []packagemanager.InstallOption
 		if !options.AllowInstallScripts {
 			installOptions = append(installOptions, packagemanager.WithIgnoreScripts())
@@ -336,7 +336,7 @@ func init() {
 			return root, nil
 		case "npm":
 			_, _ = fmt.Fprintf(stdout, "[%s] fetching %s\n", scope, source)
-			// pig additive (D194): npm reinstalls a Package whose --prefix runs through a symbolic link, which would
+			// ompig additive (D194): npm reinstalls a Package whose --prefix runs through a symbolic link, which would
 			// drop the files an opted-in install built, so the install root is the real path.
 			if err := packagemanager.InstallManagedNPM(canonicalExistingPrefix(cwd), canonicalExistingPrefix(sm.AgentDir()), sm, source, local, installOptions...); err != nil {
 				return "", err
@@ -375,7 +375,7 @@ func runPackageCommand(args []string, runtimeOptions ...packageCommandRuntimeOpt
 	}
 	if opts.invalidOption != "" {
 		fmt.Fprintln(os.Stderr, chalkRed(fmt.Sprintf("Unknown option %s for %q.", opts.invalidOption, opts.command)))
-		fmt.Fprintln(os.Stderr, chalkDim(fmt.Sprintf("Use %q or %q.", "pig --help", packageUsage(opts.command))))
+		fmt.Fprintln(os.Stderr, chalkDim(fmt.Sprintf("Use %q or %q.", "ompig --help", packageUsage(opts.command))))
 		return 1
 	}
 	if opts.missingValue != "" {
@@ -428,7 +428,7 @@ func runPackageCommand(args []string, runtimeOptions ...packageCommandRuntimeOpt
 	reportSettingsErrors(sm, "package command")
 
 	if opts.command == packageUpdate {
-		// pig divergence (D39): route bare update to the proven binary owner.
+		// ompig divergence (D39): route bare update to the proven binary owner.
 		return runUpdateCommand(cwd, sm, opts)
 	}
 
@@ -436,7 +436,7 @@ func runPackageCommand(args []string, runtimeOptions ...packageCommandRuntimeOpt
 	case packageInstall:
 		installSources := append([]string(nil), opts.sources...)
 		if opts.validateOnly {
-			// pig additive (D28): emit the validation report instead of installing.
+			// ompig additive (D28): emit the validation report instead of installing.
 			return validateInstallSources(cwd, sm, installSources, opts.jsonOutput)
 		}
 		installSource := installSources[0]
@@ -467,7 +467,7 @@ func runPackageCommand(args []string, runtimeOptions ...packageCommandRuntimeOpt
 	}
 }
 
-// runUpdateCommand routes `pig update`. Bare or a self target self-updates the
+// runUpdateCommand routes `ompig update`. Bare or a self target self-updates the
 // binary (D39); `<source>` updates one package; `--all` refreshes packages and
 // then self-updates, matching upstream's observable operation order.
 func runUpdateCommand(cwd string, sm *codingagent.SettingsManager, opts *packageCLIOptions) int {
@@ -483,7 +483,7 @@ func runUpdateCommand(cwd string, sm *codingagent.SettingsManager, opts *package
 		return 0
 	}
 
-	// --extensions updates every package without touching pig itself.
+	// --extensions updates every package without touching ompig itself.
 	if opts.extensionsOnly && !opts.allPackages {
 		if err := packageManagerFor(cwd, sm, packageProgressPrinter(os.Stdout)).Update(""); err != nil {
 			printCLIError("%v", err)

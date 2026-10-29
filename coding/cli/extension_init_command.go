@@ -9,8 +9,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 type extensionInitOptions struct {
@@ -44,7 +44,7 @@ type scaffoldFile struct {
 var initLanguages = []string{"go", "python", "rust"}
 
 // runExtensionInit scaffolds a minimal, self-contained extension whose
-// versioned SDK dependency is resolved by Pig to the staged copy under the
+// versioned SDK dependency is resolved by Ompig to the staged copy under the
 // active config root, so a clean, binary-only host needs no source checkout. Go is fully offline;
 // Python needs only python3; Rust needs cargo and (on a cold cache) crates.io
 // for transitive dependencies.
@@ -91,7 +91,7 @@ func runExtensionInit(args []string) int {
 		return printExtensionInitReport(extensionInitReport{Path: root, Name: name, Language: opts.lang, Error: "extension identity comes from the selected directory name; use a matching --name or rename the directory"}, opts.jsonOutput)
 	}
 
-	// Stage the SDK for this language so the first Pig-managed cold build is
+	// Stage the SDK for this language so the first Ompig-managed cold build is
 	// ready even when no interactive session has run under this config root.
 	configRoot := codingagent.ConfigRoot()
 	if err := pigsdk.EnsureSyncedLang(configRoot, opts.lang); err != nil {
@@ -141,8 +141,8 @@ func runExtensionInit(args []string) int {
 	}
 	fmt.Printf("\nSDK: %s\n", sdkDir)
 	fmt.Printf("\nNext steps:\n")
-	fmt.Printf("  pig install %s --validate-only --json\n", root)
-	fmt.Printf("  pig -e %s          # load it into a session, then edit and /reload\n", root)
+	fmt.Printf("  ompig install %s --validate-only --json\n", root)
+	fmt.Printf("  ompig -e %s          # load it into a session, then edit and /reload\n", root)
 	return 0
 }
 
@@ -274,8 +274,8 @@ func goModTemplate(name string) string {
 
 go 1.26
 
-// Pig resolves this requirement to the version-matched staged SDK at build time.
-require github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0
+// Ompig resolves this requirement to the version-matched staged SDK at build time.
+require github.com/tmih06/ompig/extensions/sdk v0.0.0
 `, name)
 }
 
@@ -287,7 +287,7 @@ func goExtensionTemplate(name string) string {
 	return fmt.Sprintf(`package %[2]s
 
 import (
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func Extension() *sdk.Extension {
@@ -317,7 +317,7 @@ func Extension() *sdk.Extension {
 func goStandaloneTemplate(name string) string {
 	return fmt.Sprintf(`package main
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func main() {
 	ext := sdk.New(%[1]q)
@@ -365,7 +365,7 @@ func goLoginExtensionTemplate(name string) string {
 	return fmt.Sprintf(`package %[2]s
 
 import (
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func Extension() *sdk.Extension {
@@ -420,16 +420,16 @@ func goStringMap(values map[string]string) string {
 
 func pythonModuleTemplate(name, module string) string {
 	return fmt.Sprintf(`#!/usr/bin/env python3
-"""%[1]s: a pig subprocess extension scaffolded by `+"`pig extension init`"+`.
+"""%[1]s: a ompig subprocess extension scaffolded by `+"`ompig extension init`"+`.
 
-Pig imports `+"`new_extension`"+` into a generated runner. Pig supplies the staged
+Ompig imports `+"`new_extension`"+` into a generated runner. Ompig supplies the staged
 SDK on PYTHONPATH.
 """
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension(%[1]q)
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension(%[1]q)
 
     ext.tool(
         "%[2]s_ping",
@@ -452,9 +452,9 @@ def new_extension() -> pig_sdk.Extension:
 
 func pythonStandaloneTemplate(name string) string {
 	return fmt.Sprintf(`#!/usr/bin/env python3
-import pig_sdk
+import ompig_sdk
 
-ext = pig_sdk.Extension(%[1]q)
+ext = ompig_sdk.Extension(%[1]q)
 ext.tool("%[1]s_ping", "Return a short pong.", {"type": "object"}, lambda ctx, args: {"content": "pong from %[1]s"})
 ext.run()
 `, name)
@@ -469,14 +469,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-# Pig resolves this dependency to the version-matched staged SDK at build time.
-pig-sdk = "0.1.0"
+# Ompig resolves this dependency to the version-matched staged SDK at build time.
+ompig-sdk = "0.1.0"
 serde_json = "1"
 `, crate)
 }
 
 func rustFactoryTemplate(name string) string {
-	return fmt.Sprintf(`use pig_sdk::{CommandResult, Extension, ToolResult};
+	return fmt.Sprintf(`use ompig_sdk::{CommandResult, Extension, ToolResult};
 use serde_json::{Value, json};
 
 pub fn new_extension() -> Extension {
@@ -489,7 +489,7 @@ pub fn new_extension() -> Extension {
 }
 
 func rustStandaloneTemplate(name string) string {
-	return fmt.Sprintf(`use pig_sdk::{Extension, ToolResult};
+	return fmt.Sprintf(`use ompig_sdk::{Extension, ToolResult};
 use serde_json::{Value, json};
 
 fn main() {
@@ -505,7 +505,7 @@ func printExtensionInitReport(report extensionInitReport, jsonOut bool) int {
 		data, _ := json.MarshalIndent(report, "", "  ")
 		fmt.Println(string(data))
 	} else if report.Error != "" {
-		fmt.Fprintf(os.Stderr, "pig extension init: %s\n", report.Error)
+		fmt.Fprintf(os.Stderr, "ompig extension init: %s\n", report.Error)
 	}
 	if report.Error != "" {
 		return 1
@@ -514,15 +514,15 @@ func printExtensionInitReport(report extensionInitReport, jsonOut bool) int {
 }
 
 func printExtensionInitHelp() {
-	fmt.Print("Usage:\n  pig extension init <path> [--name <name>] [--lang go|python|rust] [--login] [--isolated] [--force] [--json]\n\n" +
-		"Scaffold a new extension whose versioned SDK dependency Pig resolves to its\n" +
-		"staged copy, so it builds with no Pig source checkout or committed SDK path.\n" +
+	fmt.Print("Usage:\n  ompig extension init <path> [--name <name>] [--lang go|python|rust] [--login] [--isolated] [--force] [--json]\n\n" +
+		"Scaffold a new extension whose versioned SDK dependency Ompig resolves to its\n" +
+		"staged copy, so it builds with no Ompig source checkout or committed SDK path.\n" +
 		"Go builds fully offline; Python needs python3; Rust needs cargo (and crates.io\n" +
 		"on a cold cache for transitive dependencies).\n\n" +
 		"Options:\n" +
 		"  --name <name>   Extension name; it must match the sanitized directory base name.\n" +
 		"  --lang <lang>   Language to scaffold: go (default), python, or rust.\n" +
-		"  --login         Scaffold a conventional Go login factory with standard PiG art.\n" +
+		"  --login         Scaffold a conventional Go login factory with standard Ompig art.\n" +
 		"  --isolated      Generate an exact standalone instead of a factory.\n" +
 		"  --force, -f     Overwrite existing files.\n" +
 		"  --json          Machine-readable output.\n")

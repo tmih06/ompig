@@ -12,16 +12,16 @@
 #
 # Hermeticity:
 #   - No credentials are inherited from the host. Both binaries point at
-#     empty per-scenario agent dirs (testdata/{pig-home-noauth,pi-agent-noauth}).
+#     empty per-scenario agent dirs (testdata/{ompig-home-noauth,pi-agent-noauth}).
 #   - {{FAKE_BIN}} PATH-shadows `open`/`xdg-open`/`start` so neither
 #     binary actually launches a browser tab during tests.
-#   - PIG/PI_PARITY_LOGIN_DIALOG installs process-local device-code stubs; no
+#   - OMPIG/PI_PARITY_LOGIN_DIALOG installs process-local device-code stubs; no
 #     GitHub request or ambient proxy participates in the hermetic gate.
 #   - The OAuth device code contains random bytes, so normalize_replace strips
 #     it before comparing the LoginDialogComponent layout.
 #
-# This scenario used to be deferred because pig silently imported
-# ~/.pi/agent/auth.json into fresh PIG_HOME via ImportLegacyPiAuthIfNeeded.
+# This scenario used to be deferred because ompig silently imported
+# ~/.pi/agent/auth.json into fresh OMPIG_HOME via ImportLegacyPiAuthIfNeeded.
 # That import was removed (see docs/parity/DIVERGENCES.md / commit decoupling
 # MigrateLegacyAuth) so this path is now reachable on developer machines
 # without contamination from the user's real upstream pi credentials.
@@ -39,7 +39,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 # Upstream readiness re-probed 2026-09-25 against the repository pin: the idle editor renders 0.0%/0 with unknown, not a Ready paragraph. Wait for that footer before /login.
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
@@ -73,10 +73,10 @@ wait_visible_contains = ["Login to GitHub Copilot", "https://github.com/login/de
 wait_timeout_seconds = 20
 
 [env]
-pig = [
-  "PIG_HOME=testdata/pig-home-noauth", # gitleaks:allow -- synthetic parity path
-  "PIG_PARITY_HARNESS=1",
-  "PIG_PARITY_LOGIN_DIALOG=1",
+ompig = [
+  "OMPIG_HOME=testdata/ompig-home-noauth", # gitleaks:allow -- synthetic parity path
+  "OMPIG_PARITY_HARNESS=1",
+  "OMPIG_PARITY_LOGIN_DIALOG=1",
   "HOME={{TEMP}}/home",
   "PATH={{FAKE_BIN}}:{{PATH}}",
 ]
@@ -85,7 +85,7 @@ pi = [
   "PI_PARITY_LOGIN_DIALOG=1",
   "PATH={{FAKE_BIN}}:{{PATH}}",
 ]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/oauth-harness.ts"]
 

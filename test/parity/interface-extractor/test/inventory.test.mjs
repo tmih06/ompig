@@ -19,7 +19,7 @@ function manifest(name, extra = {}) {
 }
 
 function buildFixture() {
-  const root = scratchDir("pig-interface-inventory-");
+  const root = scratchDir("ompig-interface-inventory-");
   const source = path.join(root, "source");
   const published = path.join(root, "published", "coding-agent");
 
@@ -217,13 +217,13 @@ test("a package missing from the published install is read from the pinned sourc
 });
 
 test("normalizes compiler dependency source paths", () => {
-  const root = path.join(os.tmpdir(), "pig-interface-root");
+  const root = path.join(os.tmpdir(), "ompig-interface-root");
   assert.equal(stableSourcePath(root, path.join(root, "packages", "agent", "src", "index.ts")), "packages/agent/src/index.ts");
   assert.equal(stableSourcePath(root, path.join(root, "..", "deps", "node_modules", "typescript", "lib", "lib.es5.d.ts")), "node_modules/typescript/lib/lib.es5.d.ts");
   assert.throws(() => stableSourcePath(root, path.join(root, "..", "vendor", "typescript", "lib.d.ts")), /stable dependency path/);
   // A source build's workspace dependency (durable re-exports chord since Pi c268154c) resolves to the sibling package; it is named as the
   // published install names it.
-  const workspace = fs.mkdtempSync(path.join(os.tmpdir(), "pig-interface-workspace-"));
+  const workspace = fs.mkdtempSync(path.join(os.tmpdir(), "ompig-interface-workspace-"));
   const chord = path.join(workspace, "packages", "chord");
   fs.mkdirSync(path.join(chord, "dist", "sqlite"), { recursive: true });
   fs.writeFileSync(path.join(chord, "package.json"), JSON.stringify({ name: "@earendil-works/chord" }));

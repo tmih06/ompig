@@ -18,7 +18,7 @@ import (
 // The fake editor is this test binary: an editor command names it, runs only
 // TestEditorHelperProcess, and passes a mode after "--". The same fake runs on
 // every platform, through cmd.exe on Windows as upstream's shell: true does.
-const editorHelperEnv = "PIG_TEST_EDITOR_HELPER"
+const editorHelperEnv = "OMPIG_TEST_EDITOR_HELPER"
 
 var editorHelperContent = map[string]string{
 	"roundtrip":  "edited content from fake editor\n",
@@ -178,7 +178,7 @@ func editorHelperName(t *testing.T) string {
 	}
 	dir, name := filepath.Dir(binary), filepath.Base(binary)
 	if strings.ContainsAny(name, " \t") {
-		dir, name = t.TempDir(), "pig-editor-helper"
+		dir, name = t.TempDir(), "ompig-editor-helper"
 		if runtime.GOOS == "windows" {
 			name += ".exe"
 		}
@@ -389,16 +389,16 @@ func TestOpenExternalEditorRunsThroughTheWindowsShell(t *testing.T) {
 	}
 	fake := fakeEditor(t, "roundtrip")
 	binary, rest, _ := strings.Cut(fake, " ")
-	t.Setenv("PIG_TEST_EDITOR_BINARY", binary)
+	t.Setenv("OMPIG_TEST_EDITOR_BINARY", binary)
 	t.Setenv("VISUAL", "")
-	t.Setenv("EDITOR", "%PIG_TEST_EDITOR_BINARY% "+rest)
+	t.Setenv("EDITOR", "%OMPIG_TEST_EDITOR_BINARY% "+rest)
 
 	got, err := OpenExternalEditor(context.Background(), "original", "")
 	if err != nil {
 		t.Fatalf("OpenExternalEditor: %v", err)
 	}
 	if got != "edited content from fake editor" {
-		t.Fatalf("got %q, want the editor named through %%PIG_TEST_EDITOR_BINARY%%", got)
+		t.Fatalf("got %q, want the editor named through %%OMPIG_TEST_EDITOR_BINARY%%", got)
 	}
 }
 

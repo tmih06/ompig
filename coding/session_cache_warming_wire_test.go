@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // anthropicWarmServer records every Messages API request body and header and
@@ -65,7 +65,7 @@ func TestCacheWarmingReplaysTheExactProviderPayload(t *testing.T) {
 	defer httpServer.Close()
 
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	t.Setenv("PI_CACHE_RETENTION", "")
 	agentDir := filepath.Join(tmp, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {

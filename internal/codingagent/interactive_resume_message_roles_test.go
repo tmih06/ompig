@@ -5,15 +5,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi renderSessionEntries (interactive-mode.ts:4053) turns a message entry into its message whatever the role
 // (sessionEntryToContextMessages), and addMessageToChat (:3880-3936) draws a displayed "custom" message as a
 // CustomMessageComponent, a "compactionSummary" or "branchSummary" message as a spacer and its summary component,
 // and skips a "system" message and a custom message with display false. A Session file written by hand or by
-// another tool can hold such messages in message entries; each Pig path that rebuilds the transcript must draw them.
+// another tool can hold such messages in message entries; each Ompig path that rebuilds the transcript must draw them.
 func TestResumedSessionRendersCustomAndSummaryMessageRoles(t *testing.T) {
 	messages := []map[string]any{
 		{"role": agent.RoleCustom, "customType": "note", "content": "shown note", "display": true, "details": map[string]any{"k": 1}, "timestamp": 1760000000000},

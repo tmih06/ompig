@@ -1,6 +1,6 @@
-# PiG fork of yuin/goldmark v1.8.5 (ast, parser, text, util)
+# Ompig fork of yuin/goldmark v1.8.5 (ast, parser, text, util)
 
-These four directories are the non-test sources of `github.com/yuin/goldmark/{ast,parser,text,util}` v1.8.5, copied from the module proxy (MIT, `LICENSE`). They are packages of the root module (`github.com/MichaelKinsy/PiG/third_party/goldmark/...`); a `replace` directive would make `go install github.com/MichaelKinsy/PiG/cmd/pig@latest` fail. Only the packages the Mermaid fence, heading, definition and HTML parsers of `internal/codingagent` import are copied.
+These four directories are the non-test sources of `github.com/yuin/goldmark/{ast,parser,text,util}` v1.8.5, copied from the module proxy (MIT, `LICENSE`). They are packages of the root module (`github.com/tmih06/ompig/third_party/goldmark/...`); a `replace` directive would make `go install github.com/tmih06/ompig/cmd/ompig@latest` fail. Only the packages the Mermaid fence, heading, definition and HTML parsers of `internal/codingagent` import are copied.
 
 The `parser` and `util` packages compiled eleven regular expressions in package initializers, so every process that linked them paid about 160 KB and 1,500 allocations at start whether or not it parsed Markdown. The fork compiles each expression on first use.
 

@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type toolOracleTool struct {
@@ -331,7 +331,7 @@ func TestToolHTMLRendererMatchesPi(t *testing.T) {
 					}
 					lo := max(at-120, 0)
 					op, _ := json.Marshal(scenario.Ops[k])
-					t.Errorf("scenario %d op %d %s (earlier ops: %d):\n  Pig ...%s\n  Pi  ...%s", i, k, op, k, gk[lo:min(at+160, len(gk))], ek[lo:min(at+160, len(ek))])
+					t.Errorf("scenario %d op %d %s (earlier ops: %d):\n  Ompig ...%s\n  Pi  ...%s", i, k, op, k, gk[lo:min(at+160, len(gk))], ek[lo:min(at+160, len(ek))])
 					break
 				}
 			}
@@ -352,7 +352,7 @@ func TestToolHTMLRendererProbeDump(t *testing.T) {
 	fmt.Printf("toolrenderer-probes:%s\n", line)
 }
 
-// TestToolHTMLRendererParity prints Pig's outputs, one JSON line per scenario, for the tool-renderer parity scenario.
+// TestToolHTMLRendererParity prints Ompig's outputs, one JSON line per scenario, for the tool-renderer parity scenario.
 func TestToolHTMLRendererParity(t *testing.T) {
 	for _, scenario := range toolOracleScenarios() {
 		// The stream keeps Go's escapes for U+2028 and U+2029: the reader's line pattern would stop at a raw one.

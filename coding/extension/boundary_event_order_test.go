@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
-// extensions/runner.ts emitBoundary hands a handler `{...baseEvent, entries, continue, context}`: turn_end's base event is {type, turnIndex, message, toolResults, messageEntryId, toolResultEntryIds, outcome} (agent-session.ts:867-875) and agent_before_settle's is {type, outcome} (agent-session.ts:1984). A TS extension that stringifies or iterates the event saw those members in that order under real Pi; PiG wrote the boundary members first.
+// extensions/runner.ts emitBoundary hands a handler `{...baseEvent, entries, continue, context}`: turn_end's base event is {type, turnIndex, message, toolResults, messageEntryId, toolResultEntryIds, outcome} (agent-session.ts:867-875) and agent_before_settle's is {type, outcome} (agent-session.ts:1984). A TS extension that stringifies or iterates the event saw those members in that order under real Pi; Ompig wrote the boundary members first.
 func TestBoundaryEventsKeepPiMemberOrder(t *testing.T) {
 	keys := func(t *testing.T, event any) []string {
 		t.Helper()

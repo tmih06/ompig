@@ -5,7 +5,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // models.ts:586-597 sets each failure in the errors Map when that provider's refresh settles, so RefreshModelRuntime reports failures in completion

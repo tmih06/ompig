@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/filelock"
+	"github.com/tmih06/ompig/internal/filelock"
 )
 
 // noLock is the lock of a file system that refuses file locks: an NFS mount without a lock manager answers every flock with ENOLCK.
@@ -47,7 +47,7 @@ func requireExplainsMissingFileLocks(t *testing.T, err error, dir string) {
 	if err == nil {
 		t.Fatal("no error on a file system without file locks")
 	}
-	for _, want := range []string{"does not support file locks", dir, "PIG_HOME"} {
+	for _, want := range []string{"does not support file locks", dir, "OMPIG_HOME"} {
 		if !strings.Contains(err.Error(), want) {
 			t.Errorf("error %q does not contain %q", err, want)
 		}

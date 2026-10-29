@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/mcp"
 )
 
 type oracleResourceServer struct {

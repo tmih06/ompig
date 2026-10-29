@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
-// packages/codemode/src/types.ts:98-100 `globals` (CodemodeSandbox options: tool-like globals beside the built-in ones, in registration order). PiG-only readback: packages/codemode/test does not read sandbox.globals or sandbox.tools back, nor the name checks of the
+// packages/codemode/src/types.ts:98-100 `globals` (CodemodeSandbox options: tool-like globals beside the built-in ones, in registration order). Ompig-only readback: packages/codemode/test does not read sandbox.globals or sandbox.tools back, nor the name checks of the
 // constructor options.
 // Pi source: packages/codemode/src/runtime/host.ts
 // mutation-checked: zeroing the results of Sandbox.Globals, Sandbox.Tools fails it

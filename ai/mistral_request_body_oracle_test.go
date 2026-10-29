@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -17,7 +17,7 @@ import (
 
 // Pi sends JSON.stringify(toMistralWirePayload(payload)) (mistral-conversations.ts:312): the payload's members in the order buildChatPayload creates them
 // (model, stream, messages, tools, temperature, maxTokens, toolChoice, ..., :519-532), messages and chunks in toChatMessages' order (:794-890), and each SDK
-// property renamed by remapMistralProperty, which puts a new snake_case member last (:433-437). Pi's stream and PiG's post to the same server; the bodies must
+// property renamed by remapMistralProperty, which puts a new snake_case member last (:433-437). Pi's stream and Ompig's post to the same server; the bodies must
 // be identical.
 func TestMistralRequestBodyMatchesPi(t *testing.T) {
 	type bodyCase struct {
@@ -133,7 +133,7 @@ func TestMistralRequestBodyMatchesPi(t *testing.T) {
 			if c.Images {
 				input = append(input, "image")
 			}
-			baseURL := server.URL + "/pig/" + string(rune('0'+index))
+			baseURL := server.URL + "/ompig/" + string(rune('0'+index))
 			provider := NewMistralProvider(MistralConfig{Model: "mistral-small", ProviderID: "mistral", BaseURL: baseURL, APIKey: "k",
 				ModelMetadata: &Model{ID: "mistral-small", Input: input, ProviderMeta: ProviderMetadata{ProviderID: "mistral", API: APIMistralConversations, BaseURL: baseURL}}})
 			tools := mustTools(t, `[{"name":"lookup","description":"Look up","parameters":{"type":"object","properties":{"z":{"type":"string"},"a":{"type":"number"}},"required":["z"]}}]`)
@@ -142,7 +142,7 @@ func TestMistralRequestBodyMatchesPi(t *testing.T) {
 				_ = stream.Result()
 			}
 			mu.Lock()
-			got := bodies["pig/"+string(rune('0'+index))]
+			got := bodies["ompig/"+string(rune('0'+index))]
 			mu.Unlock()
 			if got != want {
 				t.Fatalf("request body\n got: %s\nwant: %s", got, want)

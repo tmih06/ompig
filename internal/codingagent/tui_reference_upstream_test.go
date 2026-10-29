@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 type countingRenderer struct {
@@ -14,7 +14,7 @@ type countingRenderer struct {
 func (r *countingRenderer) Render()               { r.renders++ }
 func (r *countingRenderer) RequestRender(...bool) { r.requests++ }
 
-// packages/coding-agent/test/suite/regressions/7731-tui-method-wrapping.test.ts: upstream's createInteractiveTuiReference Proxy is designed out. PiG resolves m.tuiInst at call time, so a method value captured before a renderer replacement is the observable contract.
+// packages/coding-agent/test/suite/regressions/7731-tui-method-wrapping.test.ts: upstream's createInteractiveTuiReference Proxy is designed out. Ompig resolves m.tuiInst at call time, so a method value captured before a renderer replacement is the observable contract.
 func TestTUIMethodWrappingUpstream(t *testing.T) {
 	// 7731-tui-method-wrapping.test.ts:6 "calls the method captured before a replacement": a captured method wrapped by a replacement still reaches the renderer.
 	t.Run("calls the method captured before a replacement", func(t *testing.T) {

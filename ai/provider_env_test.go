@@ -6,18 +6,18 @@ import "testing"
 // over the process environment, with fallback when absent or empty. Mirrors
 // upstream provider-env.ts getProviderEnvValue.
 func TestGetProviderEnvValue(t *testing.T) {
-	t.Setenv("PIG_PE_VAR", "from-process")
+	t.Setenv("OMPIG_PE_VAR", "from-process")
 
-	if got := getProviderEnvValue("PIG_PE_VAR", ProviderEnv{"PIG_PE_VAR": "from-scope"}); got != "from-scope" {
+	if got := getProviderEnvValue("OMPIG_PE_VAR", ProviderEnv{"OMPIG_PE_VAR": "from-scope"}); got != "from-scope" {
 		t.Errorf("scoped env should win: got %q want from-scope", got)
 	}
-	if got := getProviderEnvValue("PIG_PE_VAR", nil); got != "from-process" {
+	if got := getProviderEnvValue("OMPIG_PE_VAR", nil); got != "from-process" {
 		t.Errorf("nil scope should use process env: got %q want from-process", got)
 	}
-	if got := getProviderEnvValue("PIG_PE_VAR", ProviderEnv{"PIG_PE_VAR": ""}); got != "from-process" {
+	if got := getProviderEnvValue("OMPIG_PE_VAR", ProviderEnv{"OMPIG_PE_VAR": ""}); got != "from-process" {
 		t.Errorf("empty scoped value should fall back to process env: got %q want from-process", got)
 	}
-	if got := getProviderEnvValue("PIG_PE_UNSET", ProviderEnv{"OTHER": "x"}); got != "" {
+	if got := getProviderEnvValue("OMPIG_PE_UNSET", ProviderEnv{"OTHER": "x"}); got != "" {
 		t.Errorf("unset var should return empty: got %q", got)
 	}
 }

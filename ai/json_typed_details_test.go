@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The shapes of internal/codingagent/tools' details (ReadDetails, EditToolDetails, BashDetails over tui.TruncationResult), which ai cannot import.

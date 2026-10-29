@@ -1,4 +1,4 @@
-> PiG can create prompt templates. Ask it to build one for your workflow.
+> Ompig can create prompt templates. Ask it to build one for your workflow.
 
 # Prompt Templates
 
@@ -6,10 +6,10 @@ Prompt templates are Markdown snippets that expand into full prompts. Type `/nam
 
 ## Locations
 
-PiG loads prompt templates from:
+Ompig loads prompt templates from:
 
-- Global: `~/.pig/agent/prompts/*.md`
-- Project: `.pig/prompts/*.md` (only after the project is trusted)
+- Global: `~/.ompig/agent/prompts/*.md`
+- Project: `.ompig/prompts/*.md` (only after the project is trusted)
 - Packages: `prompts/` directories or `pi.prompts` entries in `package.json`
 - Settings: `prompts` array with files or directories
 - CLI: `--prompt-template <path>` (repeatable)
@@ -56,7 +56,7 @@ This renders in the autocomplete dropdown as:
 
 ## Usage
 
-Type `/` followed by the template name in the editor. Autocomplete shows available templates with descriptions. PiG expands the template before the text reaches the agent. Extensions receive the raw input first through the `input` event, unless an extension command with the same name handles it.
+Type `/` followed by the template name in the editor. Autocomplete shows available templates with descriptions. Ompig expands the template before the text reaches the agent. Extensions receive the raw input first through the `input` event, unless an extension command with the same name handles it.
 
 ```
 /review                           # Expands review.md
@@ -102,7 +102,7 @@ Usage: `/component Button "onClick handler" "disabled support"`
 
 ## Worked example
 
-Save this as `~/.pig/agent/prompts/review.md`:
+Save this as `~/.ompig/agent/prompts/review.md`:
 
 ```markdown
 ---
@@ -120,14 +120,14 @@ Type a slash and the first letters of the name (here `re`) in the editor. The au
   review      [focus] — [u] Review staged git changes
 ```
 
-Type `/review security` and press `Enter`. PiG sends the expanded text, not the command. Checked in the provider request:
+Type `/review security` and press `Enter`. Ompig sends the expanded text, not the command. Checked in the provider request:
 
 ```text
 Review the staged changes (`git diff --cached`). Focus on: security
 Bugs, security issues and error handling gaps.
 ```
 
-The argument forms, checked on PiG. For the template `Create a React component named $1 with features: $@`, typing `/component Button "onClick handler" "disabled support"` sends:
+The argument forms, checked on Ompig. For the template `Create a React component named $1 with features: $@`, typing `/component Button "onClick handler" "disabled support"` sends:
 
 ```text
 Create a React component named Button with features: Button onClick handler disabled support
@@ -137,10 +137,10 @@ Create a React component named Button with features: Button onClick handler disa
 
 ```text
 you type:   /sum
-PiG sends:  Summarize the current state in 7 bullet points. Rest:
+Ompig sends:  Summarize the current state in 7 bullet points. Rest:
 
 you type:   /sum 3 alpha beta
-PiG sends:  Summarize the current state in 3 bullet points. Rest: alpha beta
+Ompig sends:  Summarize the current state in 3 bullet points. Rest: alpha beta
 ```
 
 A template whose name matches a built-in command never runs: the built-in wins ([Slash commands](/docs/latest/slash-commands)).

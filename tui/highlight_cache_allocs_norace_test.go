@@ -1,4 +1,4 @@
-//go:build !race && !pig_strip_syntax_highlight
+//go:build !race && !ompig_strip_syntax_highlight
 
 package tui
 

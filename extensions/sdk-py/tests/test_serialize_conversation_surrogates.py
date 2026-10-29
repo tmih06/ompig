@@ -1,6 +1,6 @@
 import json
 
-from pig_sdk.serialize_conversation import serialize_conversation
+from ompig_sdk.serialize_conversation import serialize_conversation
 
 # Pi's serializeConversation (core/compaction/utils.ts:120-155) runs on JavaScript strings, which can hold an unpaired surrogate: JSON.stringify writes it
 # as its \uXXXX escape, and the truncateForSummary slice that cuts a pair keeps the high surrogate. The expected strings are Node's output.

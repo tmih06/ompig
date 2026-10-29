@@ -4,9 +4,9 @@
 // their event (agent-session.ts sendCustomMessage under PR #10739, setSessionName), so neither command may wait on the other.
 package nestedevents
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
-// Extension is the row's Go extension. The fused placement links it into the pig binary and the isolated placement runs it as
+// Extension is the row's Go extension. The fused placement links it into the ompig binary and the isolated placement runs it as
 // a standalone executable; the packed placement builds the same source from a factory module the test writes.
 func Extension(name string) *sdk.Extension {
 	ext := sdk.New(name)

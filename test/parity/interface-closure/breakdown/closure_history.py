@@ -26,7 +26,7 @@ for sha,ct in revs:
             print('unparseable',sha[:10],f,file=sys.stderr); continue
         for x in rows:
             if x['disposition'] in('ported','designed-out') and x['id'] not in first:
-                first[x['id']]={'sha':sha[:10],'ct':int(ct),'disp':x['disposition'],'rat':(x.get('rationale') or '')[:200],'ev':bool(x.get('evidence')),'tgt':x.get('pigTargets',[])[:2]}
+                first[x['id']]={'sha':sha[:10],'ct':int(ct),'disp':x['disposition'],'rat':(x.get('rationale') or '')[:200],'ev':bool(x.get('evidence')),'tgt':x.get('ompigTargets',[])[:2]}
     n+=1
     if n%100==0: print(n,len(revs),len(first),file=sys.stderr,flush=True)
 json.dump(first,open(OUT,'w'))

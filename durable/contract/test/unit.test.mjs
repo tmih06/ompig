@@ -87,8 +87,8 @@ test("capsql: tables the sidecar and workerd own never reach a commit line", () 
 	try {
 		const lines = []
 		const cap = new Capture(join(dir, "s.sqlite"), { label: "s", sink: l => lines.push(l) })
-		cap.exec("CREATE TABLE pig_index (id INTEGER PRIMARY KEY, v TEXT); CREATE TABLE _cf_KV (id INTEGER PRIMARY KEY, v TEXT)")
-		cap.begin(); cap.run("INSERT INTO pig_index VALUES (1, 'x')"); cap.run("INSERT INTO _cf_KV VALUES (1, 'x')"); cap.commit()
+		cap.exec("CREATE TABLE ompig_index (id INTEGER PRIMARY KEY, v TEXT); CREATE TABLE _cf_KV (id INTEGER PRIMARY KEY, v TEXT)")
+		cap.begin(); cap.run("INSERT INTO ompig_index VALUES (1, 'x')"); cap.run("INSERT INTO _cf_KV VALUES (1, 'x')"); cap.commit()
 		assert.equal(lines.filter(l => l.t === "commit").length, 0)
 		cap.finish()
 	} finally { rmSync(dir, { recursive: true, force: true }) }
@@ -150,7 +150,7 @@ test("CONTRACT_DEPTH_DEBUG writes only its own file: the trace is the same set o
 	const { wrapModels } = await import("../lib/tape.mjs")
 	const { readFileSync } = await import("node:fs")
 	const dir = mkdtempSync(join(tmpdir(), "depth-debug-"))
-	const saved = { tape: process.env.CONTRACT_TAPE, debug: process.env.CONTRACT_DEPTH_DEBUG, trace: globalThis[Symbol.for("pig.contract.trace")] }
+	const saved = { tape: process.env.CONTRACT_TAPE, debug: process.env.CONTRACT_DEPTH_DEBUG, trace: globalThis[Symbol.for("ompig.contract.trace")] }
 	delete process.env.CONTRACT_TAPE
 	const model = { provider: "faux", id: "m" }
 	const context = { messages: [{ role: "user", content: "hi", timestamp: 0 }] }
@@ -184,7 +184,7 @@ test("CONTRACT_DEPTH_DEBUG writes only its own file: the trace is the same set o
 	} finally {
 		if (saved.tape === undefined) delete process.env.CONTRACT_TAPE; else process.env.CONTRACT_TAPE = saved.tape
 		if (saved.debug === undefined) delete process.env.CONTRACT_DEPTH_DEBUG; else process.env.CONTRACT_DEPTH_DEBUG = saved.debug
-		globalThis[Symbol.for("pig.contract.trace")] = saved.trace
+		globalThis[Symbol.for("ompig.contract.trace")] = saved.trace
 		rmSync(dir, { recursive: true, force: true })
 	}
 })

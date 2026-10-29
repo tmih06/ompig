@@ -1,7 +1,7 @@
 """The Python SDK version of the robust-notes fixture (../node/index.mjs)."""
 from __future__ import annotations
 
-import pig_sdk
+import ompig_sdk
 import robust_words
 
 
@@ -16,18 +16,18 @@ class Picker:
             lines.append(f"{'>' if index == self.selected else ' '} {item}")
         return lines
 
-    def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
+    def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
         if data == "j":
             self.selected = (self.selected + 1) % len(self.items)
         elif data == "s":
-            return pig_sdk.RemoteComponentResult(done=True, value=self.items[self.selected])
+            return ompig_sdk.RemoteComponentResult(done=True, value=self.items[self.selected])
         elif data == "q":
-            return pig_sdk.RemoteComponentResult(done=True)
-        return pig_sdk.RemoteComponentResult()
+            return ompig_sdk.RemoteComponentResult(done=True)
+        return ompig_sdk.RemoteComponentResult()
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("python")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("python")
     tool_runs = 0
     ext.flag("robust-prefix", "Prefix for robust_words output", "string", "rw")
 

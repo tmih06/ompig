@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/yaml12"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/yaml12"
 )
 
 // piYAMLCorpus is frontmatter YAML that Pi's YAML library (eemeli/yaml) reads and writes in many shapes: values, scalar types, and the exact wording of each syntax error.
@@ -73,7 +73,7 @@ emit(input.map((y) => { try { const r = fm.parseFrontmatter("---\n" + y + "\n---
 		}
 		wantFM, _ := json.Marshal(want[i].Fm)
 		if got != want[i].Err || (got == "" && !bytes.Equal(fm, wantFM)) {
-			t.Errorf("YAML %q:\n  Pig err=%q fm=%s\n  Pi  err=%q fm=%s", y, got, fm, want[i].Err, wantFM)
+			t.Errorf("YAML %q:\n  Ompig err=%q fm=%s\n  Pi  err=%q fm=%s", y, got, fm, want[i].Err, wantFM)
 		}
 	}
 }

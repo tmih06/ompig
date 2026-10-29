@@ -6,12 +6,12 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // interactive-mode.ts:676-700 getAutocompleteSourceTag takes the git part of a tag from utils/git.ts parseGitUrl. The source strings
-// here run through the pinned Pi's parseGitUrl, and the tag PiG builds must equal the tag Pi's rule builds from that result.
+// here run through the pinned Pi's parseGitUrl, and the tag Ompig builds must equal the tag Pi's rule builds from that result.
 func TestAutocompleteSourceTagGitPartMatchesPiParseGitUrl(t *testing.T) {
 	sources := []string{
 		"https://github.com/user/repo", "https://github.com/user/repo.git", "https://github.com/user/repo@v1.2.3", "https://github.com/user/repo.git@main",
@@ -58,7 +58,7 @@ func TestAutocompleteSourceTagGitPartMatchesPiParseGitUrl(t *testing.T) {
 		got := autocompleteSourceTag(&PiSourceInfo{Source: src, Scope: "user"})
 		if got != want {
 			if failures++; failures <= 10 {
-				t.Errorf("%q: PiG tag %q, Pi rule %q", src, got, want)
+				t.Errorf("%q: Ompig tag %q, Pi rule %q", src, got, want)
 			}
 		}
 	}

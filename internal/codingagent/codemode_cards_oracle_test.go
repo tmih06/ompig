@@ -11,11 +11,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The codemode tool card (codemode/renderer.ts codemodeRenderers: code preview, nested call rows, model-call cost total, output preview,
@@ -42,7 +42,7 @@ func TestCodemodeCardsMatchPi(t *testing.T) {
 	for i, got := range renderCodemodeCards(t, probes) {
 		if strings.Join(got, "\n") != strings.Join(expected[i], "\n") {
 			if failures++; failures <= 4 {
-				t.Errorf("%s:\n  Pig %q\n  Pi  %q", names[i], got, expected[i])
+				t.Errorf("%s:\n  Ompig %q\n  Pi  %q", names[i], got, expected[i])
 			}
 		}
 	}
@@ -61,7 +61,7 @@ func TestCodemodeCardsProbeDump(t *testing.T) {
 	fmt.Printf("codemodecard-probes:%s\n", line)
 }
 
-// TestCodemodeCardsParity prints Pig's rows, one JSON line per probe, for the tools/25 parity scenario.
+// TestCodemodeCardsParity prints Ompig's rows, one JSON line per probe, for the tools/25 parity scenario.
 func TestCodemodeCardsParity(t *testing.T) {
 	probes, _ := codemodeCardProbes(t)
 	for _, rows := range renderCodemodeCards(t, probes) {

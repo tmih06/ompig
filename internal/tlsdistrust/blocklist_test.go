@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust/tlsdistrusttest"
+	"github.com/tmih06/ompig/internal/tlsdistrust/tlsdistrusttest"
 )
 
 // TestBlocklist re-derives every digest in the source from the public certificates and checks that no entry is a stranger.

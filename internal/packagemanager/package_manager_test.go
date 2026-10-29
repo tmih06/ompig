@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func trustedSettings(t *testing.T) (cwd string, sm *codingagent.SettingsManager) {
@@ -16,7 +16,7 @@ func trustedSettings(t *testing.T) (cwd string, sm *codingagent.SettingsManager)
 	return cwd, sm
 }
 
-// package-manager.ts:881-899 getInstalledPath: a local source resolves against the base directory of the scope (user: agent dir, project: <cwd>/.pig) and is undefined unless the path exists; addSourceToSettings (:826-851) stores an added path relative to that base and listConfiguredPackages (:977-1000) reports the same path per scope.
+// package-manager.ts:881-899 getInstalledPath: a local source resolves against the base directory of the scope (user: agent dir, project: <cwd>/.ompig) and is undefined unless the path exists; addSourceToSettings (:826-851) stores an added path relative to that base and listConfiguredPackages (:977-1000) reports the same path per scope.
 func TestPackageManagerReportsInstalledPathsPerScope(t *testing.T) {
 	cwd, sm := trustedSettings(t)
 	userPkg := filepath.Join(cwd, "pkgs", "user-pkg")
@@ -28,7 +28,7 @@ func TestPackageManagerReportsInstalledPathsPerScope(t *testing.T) {
 	}
 	m := NewPackageManager(PackageManagerOptions{CWD: cwd, SettingsManager: sm})
 	userRel, _ := filepath.Rel(sm.AgentDir(), userPkg)
-	projectRel, _ := filepath.Rel(filepath.Join(cwd, ".pig"), projectPkg)
+	projectRel, _ := filepath.Rel(filepath.Join(cwd, ".ompig"), projectPkg)
 	if got := m.GetInstalledPath(userRel, "user"); got != userPkg {
 		t.Errorf("user scope = %q, want %q", got, userPkg)
 	}

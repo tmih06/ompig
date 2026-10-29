@@ -1,6 +1,6 @@
 # fix-99-j5-rpc: joint run 5 and parity-fast rpc failures
 
-Base `113a10ba9` on `porter/pi-0.99.1`. Oracle for the parity runs: upstream 0.99.1 installed into a scratch directory with `npm install --min-release-age=0` (the mise install holds 0.87.1 only), passed as `PIG_PARITY_PI_BIN`. `extensions/sdk-ts` was installed with `npm ci --min-release-age=0`, which lets the Pi legs of the `cmd/pig` comparison tests run.
+Base `113a10ba9` on `porter/pi-0.99.1`. Oracle for the parity runs: upstream 0.99.1 installed into a scratch directory with `npm install --min-release-age=0` (the mise install holds 0.87.1 only), passed as `OMPIG_PARITY_PI_BIN`. `extensions/sdk-ts` was installed with `npm ci --min-release-age=0`, which lets the Pi legs of the `cmd/ompig` comparison tests run.
 
 ## Item 1: four `TestRPCInputEnd*ComparedWithPi` tests
 
@@ -10,9 +10,9 @@ Evidence: all `TestRPCInputEnd*` tests pass with upstream 0.99.1 installed (156 
 
 ## Item 2: parity rpc 41 and 26 (`/15/result/structuredContent`)
 
-Cause: `cmd/pig/rpc_events.go` wrote `tool_execution_end.result` with content and details only. Pi emits the finalized AgentToolResult (`packages/agent/src/agent-loop.ts:912-919`), whose `structuredContent` (`packages/agent/src/types.ts:433`) is the bash `BashToolOutput` (`packages/coding-agent/src/core/tools/bash.ts:395-406`). The Go bash tool already returned it (`internal/codingagent/tools/shell_tool.go`); the wire dropped it. Fix: append `structuredContent` after `details` when present. The same serializer writes the JSON mode, so print/json get it too.
+Cause: `cmd/ompig/rpc_events.go` wrote `tool_execution_end.result` with content and details only. Pi emits the finalized AgentToolResult (`packages/agent/src/agent-loop.ts:912-919`), whose `structuredContent` (`packages/agent/src/types.ts:433`) is the bash `BashToolOutput` (`packages/coding-agent/src/core/tools/bash.ts:395-406`). The Go bash tool already returned it (`internal/codingagent/tools/shell_tool.go`); the wire dropped it. Fix: append `structuredContent` after `details` when present. The same serializer writes the JSON mode, so print/json get it too.
 
-Red: `TestRPCToolExecutionEndCarriesStructuredContent`, `TestRPCBashToolExecutionEndCarriesItsStructuredOutput` (`cmd/pig/rpc_tool_structured_test.go`). Green: the same tests plus scenarios `rpc/26` and `rpc/41` against upstream 0.99.1.
+Red: `TestRPCToolExecutionEndCarriesStructuredContent`, `TestRPCBashToolExecutionEndCarriesItsStructuredOutput` (`cmd/ompig/rpc_tool_structured_test.go`). Green: the same tests plus scenarios `rpc/26` and `rpc/41` against upstream 0.99.1.
 
 Not done (same class, not in the failing scenarios): Pi's `result` also carries `isError`, `usage` and `terminate` when the tool set them. Go's `AgentToolResult.IsError` cannot tell a returned `isError:true` (in the result) from a thrown error (only beside the result), and `TestRPCToolExecutionResultExactWire` pins the current no-injection behavior, so it is left alone.
 
@@ -25,14 +25,14 @@ Red: `TestTestFauxRetryableErrorStartsWithTheErrorState` (`ai/test_faux_retry_te
 ## Runs
 
 - Red commits: `8b30f6a28` (ai), `19dc37530` (rpc structuredContent). Test fix: `9a20851b0`. Green: see the git log.
-- `go build ./...`, `go vet` and `GOOS=windows go vet` on `./ai ./cmd/pig`, gofmt, `go fix -diff`, golangci-lint on `./ai/... ./cmd/pig/...`: clean.
-- `go test -race`: `./ai`, `./agent/...` pass. `./coding` and `./cmd/pig` fail only in tests that belong to other lanes (below).
+- `go build ./...`, `go vet` and `GOOS=windows go vet` on `./ai ./cmd/ompig`, gofmt, `go fix -diff`, golangci-lint on `./ai/... ./cmd/ompig/...`: clean.
+- `go test -race`: `./ai`, `./agent/...` pass. `./coding` and `./cmd/ompig` fail only in tests that belong to other lanes (below).
 - `make parity-family` equivalents with upstream 0.99.1 as oracle: `rpc` (47), `json`, `print` pass. `providers-faux-streaming`: 4 scenarios fail (`09-orphaned-tool-result-wire`, `10-responses-tool-identity`, `23-metadata-refresh-and-native-result`: the Pi side fails to load its modules from the scratch install layout; `19-http-proxy-connect`: Pi issues two CONNECTs for openai-completions, Go one; none touches this change).
-- `-race -count=24`, `GOMAXPROCS=4`, `taskset -c 0-3` with four CPU burners: the new tests in `./ai` and `./cmd/pig`.
+- `-race -count=24`, `GOMAXPROCS=4`, `taskset -c 0-3` with four CPU burners: the new tests in `./ai` and `./cmd/ompig`.
 
 ## Failures seen that belong to other lanes
 
-`coding`: `TestUpstreamAgentSessionCodemodeTool`, `TestUpstreamCodemodeOptionsAndStore`, `TestUpstreamCodemodeModels` (classifier and codemode), `TestReplacedSession2860New` (f8-spec `SessionManager` binding). `cmd/pig`: `TestRPCPlanModeEmptyToolsSurviveProcessResume`, `TestRPCFreshPromptDeclaresStructuredSystemOnce`, `TestSystemPromptOptionsThroughHeadlessStartup` (codemode and tool_search enabled by default), `TestLinkedPackagesCompileNoRegexpAtInit` (`tool_codemode_renderer.go:34`, `toolsearch.go:53-56`).
+`coding`: `TestUpstreamAgentSessionCodemodeTool`, `TestUpstreamCodemodeOptionsAndStore`, `TestUpstreamCodemodeModels` (classifier and codemode), `TestReplacedSession2860New` (f8-spec `SessionManager` binding). `cmd/ompig`: `TestRPCPlanModeEmptyToolsSurviveProcessResume`, `TestRPCFreshPromptDeclaresStructuredSystemOnce`, `TestSystemPromptOptionsThroughHeadlessStartup` (codemode and tool_search enabled by default), `TestLinkedPackagesCompileNoRegexpAtInit` (`tool_codemode_renderer.go:34`, `toolsearch.go:53-56`).
 
 ## Stubs other families must fill
 

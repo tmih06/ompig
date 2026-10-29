@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // unsetMembersUI implements the optional interfaces that tell Pi's undefined from an empty string: [extension.StatusClearer], [extension.PlaceholderOmitter]

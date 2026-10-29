@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type appKeybindingsConflict struct {
@@ -57,7 +57,7 @@ func appKeybindingsCandidates() []string {
 
 // core/keybindings.ts KeybindingsManager (the merged tui.* and app.* table) against pinned Pi: every action against raw terminal input
 // under default and user-overridden bindings, with and without the Kitty protocol; the matched set, the resolved keys and the set of
-// conflicts agree. Pi orders conflicts by the user's JSON key order, which Pig's map decoding does not keep, so conflicts compare sorted.
+// conflicts agree. Pi orders conflicts by the user's JSON key order, which Ompig's map decoding does not keep, so conflicts compare sorted.
 func TestAppKeybindingsManagerMatchesPi(t *testing.T) {
 	candidates := appKeybindingsCandidates()
 	bindingSets := []map[string][]string{
@@ -160,11 +160,11 @@ func TestAppKeybindingsManagerMatchesPi(t *testing.T) {
 						onlyPi = append(onlyPi, fmt.Sprintf("%q", candidates[i]))
 					}
 				}
-				report("kitty=%v bindings=%v %s: only Pig %v; only Pi %v", probe.Kitty, probe.Bindings, action, onlyPig, onlyPi)
+				report("kitty=%v bindings=%v %s: only Ompig %v; only Pi %v", probe.Kitty, probe.Bindings, action, onlyPig, onlyPi)
 			}
 			keys := keysOf(action)
 			if !slices.Equal(keys, want.Keys[action]) && (len(keys) != 0 || len(want.Keys[action]) != 0) {
-				report("kitty=%v bindings=%v %s keys: Pig %v, Pi %v", probe.Kitty, probe.Bindings, action, keys, want.Keys[action])
+				report("kitty=%v bindings=%v %s keys: Ompig %v, Pi %v", probe.Kitty, probe.Bindings, action, keys, want.Keys[action])
 			}
 		}
 		var conflicts []appKeybindingsConflict
@@ -180,7 +180,7 @@ func TestAppKeybindingsManagerMatchesPi(t *testing.T) {
 		sortConflicts(conflicts)
 		sortConflicts(want.Conflicts)
 		if len(conflicts) != len(want.Conflicts) || (len(conflicts) > 0 && !reflect.DeepEqual(conflicts, want.Conflicts)) {
-			report("kitty=%v bindings=%v conflicts: Pig %v, Pi %v", probe.Kitty, probe.Bindings, conflicts, want.Conflicts)
+			report("kitty=%v bindings=%v conflicts: Ompig %v, Pi %v", probe.Kitty, probe.Bindings, conflicts, want.Conflicts)
 		}
 	}
 	if hits == 0 {

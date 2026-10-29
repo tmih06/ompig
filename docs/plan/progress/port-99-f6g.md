@@ -16,7 +16,7 @@ Scope: plan section 4.4 "Tools". Owned code: `internal/codingagent/tools/**` (th
 | `tool-definition-wrapper.ts` `ToolContextFactory(toolCallId, signal)`, `outputSchema` passthrough | `ExtensionToolContext` and the wrapper are lane 6D; the tool `OutputSchema()` method is the tool side |
 | `tools.test.ts` `ExtensionContext` to `ExtensionToolContext` (fakeCtx) | type rename only; Go tools take a `context.Context` |
 | `edit-tool-legacy-input.test.ts` same rename | per-case: the eight cases keep their inputs; existing `TestEditPrepareArgumentsUpstreamCases` passes unchanged |
-| `experimental-cli-entry.test.ts` `--import` now takes a file URL | per-case designed-out: the Go tests build and run the `cmd/pig` entries, so no Node `--import` specifier exists (`cmd/pig-experimental/entry_upstream_test.go`, `cmd/pig/experimental_entry_test.go` pass unchanged) |
+| `experimental-cli-entry.test.ts` `--import` now takes a file URL | per-case designed-out: the Go tests build and run the `cmd/ompig` entries, so no Node `--import` specifier exists (`cmd/ompig-experimental/entry_upstream_test.go`, `cmd/ompig/experimental_entry_test.go` pass unchanged) |
 
 ## Stubs and dependencies
 
@@ -43,4 +43,4 @@ Counts: red run 23 failing subtests and 43 passing (evidence `docs/plan/evidence
 ## Deferred
 - Renderer cache of `renderers/bash.ts` (perf only). `formatToolCallWithArgs` (family 9).
 - The `ReadFullOutput` error branch inside `executeShellTool` (temp file removed between `Snapshot` and read) is covered at the accumulator level only.
-- `cmd/pig` has five failing tests on the unchanged base as well (TestRPCBedrockConverseStreamObservation, TestRPCMistralMatchesPi, TestRPCPiMessagesMatchesPi, TestRPCStdoutBackpressureLetsProviderFinishBufferedBody, TestJSONModeStdoutBackpressureMatchesPi); `./coding` has the four known oracle-version-guard failures.
+- `cmd/ompig` has five failing tests on the unchanged base as well (TestRPCBedrockConverseStreamObservation, TestRPCMistralMatchesPi, TestRPCPiMessagesMatchesPi, TestRPCStdoutBackpressureLetsProviderFinishBufferedBody, TestJSONModeStdoutBackpressureMatchesPi); `./coding` has the four known oracle-version-guard failures.

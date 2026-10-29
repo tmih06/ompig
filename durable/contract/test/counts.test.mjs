@@ -172,7 +172,7 @@ test("the Go core build is a function of the source, not of the caller's VCS sta
 	const out = mkdtempSync(join(tmpdir(), "counts-buildvcs-"))
 	const build = (name, goflags) => {
 		const file = join(out, `${name}.wasm`)
-		execFileSync("sh", [join(root, "durable/core/budget/build-wasm.sh"), "go", join(root, "durable/core/cmd/corewasm"), file], { env: { ...process.env, GOFLAGS: goflags, PIG_BUILDVCS: "1" }, stdio: ["ignore", "ignore", "pipe"] })
+		execFileSync("sh", [join(root, "durable/core/budget/build-wasm.sh"), "go", join(root, "durable/core/cmd/corewasm"), file], { env: { ...process.env, GOFLAGS: goflags, OMPIG_BUILDVCS: "1" }, stdio: ["ignore", "ignore", "pipe"] })
 		return readFileSync(file)
 	}
 	const stamped = build("stamped", "-buildvcs=auto"), unstamped = build("unstamped", "-buildvcs=false")
@@ -234,12 +234,12 @@ test("the native counts take valgrind only from VALGRIND: without it they refuse
 	}
 })
 
-test("only a core's calls are crossings: an instance that imports pig counts its export and import calls, others none", async () => {
+test("only a core's calls are crossings: an instance that imports ompig counts its export and import calls, others none", async () => {
 	const Instance = WebAssembly.Instance
-	const key = Symbol.for("pig.contract.counts")
+	const key = Symbol.for("ompig.contract.counts")
 	try {
 		await install()
-		// (import "pig" "f" (func)) (func (export "g") call 0): one export call that makes one import call.
+		// (import "ompig" "f" (func)) (func (export "g") call 0): one export call that makes one import call.
 		const core = new Uint8Array([
 			0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,
 			0x01, 0x04, 0x01, 0x60, 0x00, 0x00,
@@ -249,8 +249,8 @@ test("only a core's calls are crossings: an instance that imports pig counts its
 			0x0a, 0x06, 0x01, 0x04, 0x00, 0x10, 0x00, 0x0b,
 		])
 		let called = 0
-		const g = new WebAssembly.Instance(new WebAssembly.Module(core), { pig: { f: () => { called++ } } }).exports.g
-		// (func (export "h")): a module that does not import pig.
+		const g = new WebAssembly.Instance(new WebAssembly.Module(core), { ompig: { f: () => { called++ } } }).exports.g
+		// (func (export "h")): a module that does not import ompig.
 		const plain = new Uint8Array([
 			0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,
 			0x01, 0x04, 0x01, 0x60, 0x00, 0x00,
@@ -260,7 +260,7 @@ test("only a core's calls are crossings: an instance that imports pig counts its
 		])
 		const other = new WebAssembly.Instance(new WebAssembly.Module(plain)).exports
 		other.h(); other.h()
-		assert.equal(counters().crossings, 0, "a module that does not import pig is not the core")
+		assert.equal(counters().crossings, 0, "a module that does not import ompig is not the core")
 		g()
 		assert.equal(called, 1)
 		assert.equal(counters().crossings, 2)
@@ -301,11 +301,11 @@ test("ir: the wrapper runs the core under cachegrind with the clock-driven runti
 	assert.match(script, /^#!\/bin\/sh\nGODEBUG=asyncpreemptoff=1,gcstoptheworld=1 exec "\/vg\/valgrind" --tool=cachegrind -q --cache-sim=no --cachegrind-out-file="\$CONTRACT_COUNTS_IR\/cg\.%p" "\/core" "\$@"\n$/)
 	assert.throws(() => readIr(dir), /no cachegrind output/)
 	// The core's own code and the standard library it calls count; the runtime, the poller, the fifo I/O, timers and locks do not.
-	writeFileSync(join(dir, "cg.11"), "desc: --cache-sim=no\ncmd: /core\nevents: Ir\nfl=./github.com/MichaelKinsy/PiG/durable/core/core.go\nfn=core.step\n1 500\n2 400\nfl=./runtime/proc.go\nfn=runtime.findRunnable\n7 90000\nfl=./encoding/json/encode.go\nfn=encoding/json.Marshal\n3 100\nfl=./runtime/metrics/sample.go\nfn=runtime/metrics.Read\n4 7\nfl=./internal/runtime/maps/map.go\nfn=x\n5 8\nfl=./internal/poll/fd_unix.go\nfn=y\n6 9\nfl=./os/file.go\nfn=z\n8 10\nfl=./runtimex/a.go\nfn=w\n9 34\nsummary: 91068\n")
+	writeFileSync(join(dir, "cg.11"), "desc: --cache-sim=no\ncmd: /core\nevents: Ir\nfl=./github.com/tmih06/ompig/durable/core/core.go\nfn=core.step\n1 500\n2 400\nfl=./runtime/proc.go\nfn=runtime.findRunnable\n7 90000\nfl=./encoding/json/encode.go\nfn=encoding/json.Marshal\n3 100\nfl=./runtime/metrics/sample.go\nfn=runtime/metrics.Read\n4 7\nfl=./internal/runtime/maps/map.go\nfn=x\n5 8\nfl=./internal/poll/fd_unix.go\nfn=y\n6 9\nfl=./os/file.go\nfn=z\n8 10\nfl=./runtimex/a.go\nfn=w\n9 34\nsummary: 91068\n")
 	writeFileSync(join(dir, "cg.12"), "events: Ir\nfl=???\nfn=???\n0 200\nsummary: 200\n")
 	writeFileSync(join(dir, "cg.12.1"), "events: Ir\nfl=a.go\n1 999999\nsummary: 999999\n")
 	assert.equal(readIr(dir), 500 + 400 + 100 + 34 + 200)
-	for (const [file, clocked] of [["./runtime/proc.go", true], ["runtime/asm_amd64.s", true], ["./internal/runtime/atomic/types.go", true], ["./sync/mutex.go", true], ["./time/sleep.go", true], ["./bufio/bufio.go", true], ["./math/bits/bits.go", true], ["./github.com/MichaelKinsy/PiG/durable/core/contracttest/guard/guard.go", true], ["./github.com/MichaelKinsy/PiG/durable/core/core.go", false], ["./encoding/json/encode.go", false], ["./math/big/nat.go", false], ["./internal/runtimex/a.go", false], ["./github.com/x/runtime/a.go", false], ["././<autogenerated>", false], ["???", false]]) assert.equal(irClocked(file), clocked, file)
+	for (const [file, clocked] of [["./runtime/proc.go", true], ["runtime/asm_amd64.s", true], ["./internal/runtime/atomic/types.go", true], ["./sync/mutex.go", true], ["./time/sleep.go", true], ["./bufio/bufio.go", true], ["./math/bits/bits.go", true], ["./github.com/tmih06/ompig/durable/core/contracttest/guard/guard.go", true], ["./github.com/tmih06/ompig/durable/core/core.go", false], ["./encoding/json/encode.go", false], ["./math/big/nat.go", false], ["./internal/runtimex/a.go", false], ["./github.com/x/runtime/a.go", false], ["././<autogenerated>", false], ["???", false]]) assert.equal(irClocked(file), clocked, file)
 	writeFileSync(join(dir, "cg.13"), "events: Ir\nfl=a.go\n1 5\nsummary: 6\n")
 	assert.throws(() => readIr(dir), /add up to 5, not its summary 6/)
 	writeFileSync(join(dir, "cg.13"), "events: Ir\n")

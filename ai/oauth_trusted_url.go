@@ -1,7 +1,7 @@
 package ai
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // trustedURLHref is `new URL(value).href` for a verification URI the user's browser will open: ok is false where `new URL` throws or the protocol is

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
-// Pi's TuiMainScreen owns terminal input; PiG's InteractiveMode owns that same
+// Pi's TuiMainScreen owns terminal input; Ompig's InteractiveMode owns that same
 // dispatch path. These cases route through it, not just the response parser.
 func TestUpstreamTUICellSizeInput(t *testing.T) {
 	newMode := func(t *testing.T, initial *tui.CellDimensions) (*InteractiveMode, *focusedInputProbe) {

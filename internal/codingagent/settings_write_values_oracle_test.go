@@ -7,8 +7,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type settingsValueProbe struct {
@@ -134,9 +134,9 @@ for (const p of input) {
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), "settingsv-"));
 	const agentDir = path.join(root, "agent");
 	const cwd = path.join(root, "proj");
-	fs.mkdirSync(agentDir); fs.mkdirSync(path.join(cwd, ".pig"), { recursive: true });
+	fs.mkdirSync(agentDir); fs.mkdirSync(path.join(cwd, ".ompig"), { recursive: true });
 	const file = path.join(agentDir, "settings.json");
-	const pfile = path.join(cwd, ".pig", "settings.json");
+	const pfile = path.join(cwd, ".ompig", "settings.json");
 	if (p.seed !== "") fs.writeFileSync(file, p.seed);
 	if (p.projectSeed !== "") fs.writeFileSync(pfile, p.projectSeed);
 	const threw = [];
@@ -169,8 +169,8 @@ emit(out);
 		root := t.TempDir()
 		agentDir, cwd := filepath.Join(root, "agent"), filepath.Join(root, "proj")
 		_ = os.Mkdir(agentDir, 0o755)
-		_ = os.MkdirAll(filepath.Join(cwd, ".pig"), 0o755)
-		file, pfile := filepath.Join(agentDir, "settings.json"), filepath.Join(cwd, ".pig", "settings.json")
+		_ = os.MkdirAll(filepath.Join(cwd, ".ompig"), 0o755)
+		file, pfile := filepath.Join(agentDir, "settings.json"), filepath.Join(cwd, ".ompig", "settings.json")
 		if p.Seed != "" {
 			_ = os.WriteFile(file, []byte(p.Seed), 0o600)
 		}

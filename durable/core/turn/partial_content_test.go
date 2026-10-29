@@ -3,7 +3,7 @@ package turn
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // A partial message shows nothing until it has content (generation.ts streams only partials with content). hasContent reads that

@@ -52,7 +52,7 @@ func (c *CustomMessageComponent) IsDirty() bool {
 	return ok && dirty.IsDirty()
 }
 
-// pig additive (D91): SurfaceLive reports a renderer component that changes on its own, which
+// ompig additive (D91): SurfaceLive reports a renderer component that changes on its own, which
 // IsDirty reads, so a TuiSurface rebuilds the message every frame.
 func (c *CustomMessageComponent) SurfaceLive() bool {
 	_, ok := c.customComponent.(interface{ IsDirty() bool })

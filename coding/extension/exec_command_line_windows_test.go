@@ -11,8 +11,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 // Pi's execCommand (core/exec.ts) spawns with shell: false, so an extension's

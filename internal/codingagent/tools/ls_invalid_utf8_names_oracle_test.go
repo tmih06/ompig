@@ -10,11 +10,11 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// Pi's ls (core/tools/ls.ts) reads names with fs.readdir, which decodes them as UTF-8 and writes U+FFFD for each ill-formed subpart; the stat on the decoded name then fails with ENOENT and the entry is skipped like a broken link. Pig must list the same names, not the raw bytes.
+// Pi's ls (core/tools/ls.ts) reads names with fs.readdir, which decodes them as UTF-8 and writes U+FFFD for each ill-formed subpart; the stat on the decoded name then fails with ENOENT and the entry is skipped like a broken link. Ompig must list the same names, not the raw bytes.
 func TestLsSkipsNamesThatAreNotValidUTF8LikePi(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skip("file names are arbitrary bytes only on Linux")
@@ -49,6 +49,6 @@ func TestLsSkipsNamesThatAreNotValidUTF8LikePi(t *testing.T) {
 	}
 	got := result.Content[0].(ai.TextContent).Text
 	if got != want.Text {
-		t.Errorf("Pig lists %q, Pi lists %q", got, want.Text)
+		t.Errorf("Ompig lists %q, Pi lists %q", got, want.Text)
 	}
 }

@@ -12,12 +12,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // fakeGHStateEnv makes this test binary act as the GitHub CLI. The value is
 // the per-test directory that records invocations and uploaded assets.
-const fakeGHStateEnv = "PIG_TEST_FAKE_GH_STATE"
+const fakeGHStateEnv = "OMPIG_TEST_FAKE_GH_STATE"
 
 var (
 	fakeGHOnce sync.Once
@@ -32,7 +32,7 @@ func TestMain(m *testing.M) {
 	if state := os.Getenv(fakeGHStateEnv); state != "" {
 		os.Exit(runFakeGH(state, os.Args[1:]))
 	}
-	code := testenv.RunScoped(m, "pig-plb-")
+	code := testenv.RunScoped(m, "ompig-plb-")
 	if fakeGHBin != "" {
 		_ = os.RemoveAll(fakeGHBin)
 	}
@@ -153,7 +153,7 @@ type fakeGH struct {
 func installFakeGH(t *testing.T) fakeGH {
 	t.Helper()
 	fakeGHOnce.Do(func() {
-		fakeGHBin, fakeGHErr = os.MkdirTemp("", "pig-fake-gh-*")
+		fakeGHBin, fakeGHErr = os.MkdirTemp("", "ompig-fake-gh-*")
 		if fakeGHErr != nil {
 			return
 		}
@@ -173,7 +173,7 @@ func installFakeGH(t *testing.T) fakeGH {
 	state := t.TempDir()
 	t.Setenv("PATH", fakeGHBin+string(os.PathListSeparator)+os.Getenv("PATH"))
 	t.Setenv(fakeGHStateEnv, state)
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	return fakeGH{t: t, state: state}
 }

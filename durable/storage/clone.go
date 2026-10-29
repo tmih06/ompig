@@ -3,10 +3,10 @@ package storage
 import (
 	"maps"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/internal/detach"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/writes"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/internal/detach"
+	"github.com/tmih06/ompig/durable/storage/internal/writes"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Storage keeps values detached from callers: every write is copied before it is retained and every read returns a

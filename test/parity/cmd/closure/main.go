@@ -12,8 +12,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/closure"
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/closure"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 type inputPaths []string
@@ -185,7 +185,7 @@ func runImportDenominators(ctx context.Context, args []string, stdout, stderr io
 	root := set.String("root", ".", "repository root")
 	databasePath := set.String("db", "tmp/closure/graph.db", "derived SQLite graph path")
 	upstreamCommit := set.String("upstream-commit", "", "exact pinned upstream commit")
-	targetCommit := set.String("target-commit", "", "exact Pig commit")
+	targetCommit := set.String("target-commit", "", "exact Ompig commit")
 	toolchainHash := set.String("toolchain-hash", "", "exact toolchain manifest hash")
 	environmentHash := set.String("environment-hash", "", "typed evidence environment hash")
 	var decisionPaths inputPaths
@@ -400,11 +400,11 @@ func runCoverageAudit(ctx context.Context, args []string, stdout, stderr io.Writ
 	if *profilePath == "" {
 		return errors.New("coverage-audit requires -profile")
 	}
-	piglet, err := resolveWithinRoot(*root, *profilePath)
+	ompiglet, err := resolveWithinRoot(*root, *profilePath)
 	if err != nil {
 		return err
 	}
-	file, err := os.Open(piglet)
+	file, err := os.Open(ompiglet)
 	if err != nil {
 		return fmt.Errorf("open coverage profile: %w", err)
 	}

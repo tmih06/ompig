@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // agent-loop.ts emits message_start from a spread of the start partial when it consumes the event, so a response that starts and fails in one tick carries durationMs on message_start, as on message_end.

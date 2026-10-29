@@ -12,7 +12,7 @@ import { countCommit, countRead, countWrite } from "./counts.mjs"
 import { emit } from "./trace.mjs"
 
 /** Tables that are not part of Pi's store: workerd's, SQLite's and the core's sidecar (CONTRACT section 2.1). */
-export const EXCLUDED = /^(pig_|_cf_|__cf_|sqlite_)/
+export const EXCLUDED = /^(ompig_|_cf_|__cf_|sqlite_)/
 
 const plain = v => v instanceof Uint8Array || v instanceof ArrayBuffer ? { blob: Buffer.from(v).toString("hex") } : typeof v === "bigint" ? Number(v) : v
 const jsonable = c => ({ ...c, before: c.before?.map(plain), after: c.after?.map(plain) })
@@ -25,7 +25,7 @@ const crash = { after: process.env.CONTRACT_CRASH_AFTER === undefined ? undefine
  * in process and the program carries on: a crash point whose restart is the host's own recovery.
  */
 const recycle = { after: process.env.CONTRACT_RECYCLE_AFTER === undefined ? undefined : Number(process.env.CONTRACT_RECYCLE_AFTER), armed: false }
-export const TRAP_NEXT = Symbol.for("pig.contract.trapNext")
+export const TRAP_NEXT = Symbol.for("ompig.contract.trapNext")
 
 let storeCount = 0
 

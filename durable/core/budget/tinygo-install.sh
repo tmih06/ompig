@@ -5,11 +5,11 @@
 # Install the TinyGo release the Durable core builds with (the tinygo row of automation/dev/toolchains.lock) and print the path
 # of its binary. The archive's SHA-256 must equal the lock's digest. An installed release is reused.
 #   TINYGO=$(sh durable/core/budget/tinygo-install.sh) sh durable/core/budget/build-wasm.sh tinygo ...
-# Environment: DCORE_TINYGO_CACHE (default ${XDG_CACHE_HOME:-$HOME/.cache}/pig-dev/tinygo).
+# Environment: DCORE_TINYGO_CACHE (default ${XDG_CACHE_HOME:-$HOME/.cache}/ompig-dev/tinygo).
 set -eu
 here=$(cd "$(dirname "$0")" && pwd)
 lock=$here/../../../automation/dev/toolchains.lock
-cache=${DCORE_TINYGO_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/pig-dev/tinygo}
+cache=${DCORE_TINYGO_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/ompig-dev/tinygo}
 die() { echo "tinygo-install.sh: $*" >&2; exit 1; }
 sha256() { if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | cut -d' ' -f1; else shasum -a 256 "$1" | cut -d' ' -f1; fi; }
 

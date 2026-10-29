@@ -64,7 +64,7 @@ type RemoteEditorConfig struct {
 }
 
 // RemoteEditorStatus is a border-status snapshot.
-// pig divergence (D94): the host advances the animation and sends snapshots; Pi's editor-side indicator runs its own timer.
+// ompig divergence (D94): the host advances the animation and sends snapshots; Pi's editor-side indicator runs its own timer.
 type RemoteEditorStatus struct {
 	Kind              string   `json:"kind"`
 	Message           string   `json:"message"`

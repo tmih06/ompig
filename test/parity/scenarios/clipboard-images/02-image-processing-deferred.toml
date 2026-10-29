@@ -22,7 +22,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 capture_start = "Ready. Type a message"
@@ -30,7 +30,7 @@ capture_end = "$0.000"
 settle_seconds = 1
 
 [env]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

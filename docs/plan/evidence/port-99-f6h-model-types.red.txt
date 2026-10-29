@@ -11,13 +11,13 @@ $ go test ./coding -run TestModelRuntimeClassifiersUpstream|TestExtensionRegistr
         model_runtime_classifiers_upstream_test.go:108: classifier result = {API:test-classifier Provider:extension-operations Model:shared Answers:[] Usage:<nil> StopReason:error ErrorMessage:classification is not imple
     --- FAIL: TestModelRuntimeClassifiersUpstream/does_not_add_classification_to_composed_chat-only_providers (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.198s
+FAIL	github.com/tmih06/ompig/coding	0.198s
 FAIL
 
 $ go test ./coding/extension -run TestAnyModelInfo
 --- FAIL: TestAnyModelInfoProjectsImageAndClassifierModels (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension	0.022s
+FAIL	github.com/tmih06/ompig/coding/extension	0.022s
 FAIL
 
 $ go test ./coding/extension/host/subprocess -run TestGetAvailableOfType|TestClassifyCall|TestTypedModelCalls
@@ -31,7 +31,7 @@ $ go test ./coding/extension/host/subprocess -run TestGetAvailableOfType|TestCla
     model_types_calls_test.go:88: classify rejected: classify is not implemented
 --- FAIL: TestTypedModelCallsStartAsync (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension/host/subprocess	0.054s
+FAIL	github.com/tmih06/ompig/coding/extension/host/subprocess	0.054s
 FAIL
 
 $ go test . -run TestOrderedObject|TestModelRegistry|TestProviderConfigImpl|TestProviderObjectDecl
@@ -48,7 +48,7 @@ $ go test . -run TestOrderedObject|TestModelRegistry|TestProviderConfigImpl|Test
 --- FAIL: TestProviderConfigImplementationsAreDeclaredAndRunInTheExtension (0.00s)
 --- FAIL: TestProviderObjectDeclaresAndRunsGenerateImagesAndClassify (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/extensions/sdk	0.027s
+FAIL	github.com/tmih06/ompig/extensions/sdk	0.027s
 FAIL
 
 $ cargo test --quiet --test model_types_wire
@@ -84,7 +84,7 @@ E       TypeError: Object of type function is not JSON serializable
         except (TypeError, ValueError) as exc:
 >           raise TypeError(f"{what} must be JSON-serializable") from exc
 E           TypeError: provider config for ops must be JSON-serializable
-pig_sdk/__init__.py:615: TypeError
+ompig_sdk/__init__.py:615: TypeError
 >       with pytest.raises(TypeError, match="test-images"):
 E       Failed: DID NOT RAISE TypeError
 E           AssertionError: {'type': 'response', 'id': 'obj-1', 'response': {'result': None, 'error': {'message': "'dict' object has no attribute 'events'"}}}
@@ -156,6 +156,6 @@ $ go test -run TestModelTypes .
     --- FAIL: TestModelTypesProviderOperationCancellationAcrossSDKs/python-strict (0.20s)
     --- FAIL: TestModelTypesProviderOperationCancellationAcrossSDKs/python-shared-ok (0.21s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/test/extension-conformance	67.617s
+FAIL	github.com/tmih06/ompig/test/extension-conformance	67.617s
 FAIL
 

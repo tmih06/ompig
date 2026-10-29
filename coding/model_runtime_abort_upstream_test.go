@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi api/lazy.ts:46-59 keeps a rejected setup as an error, even if cancellation caused that rejection.

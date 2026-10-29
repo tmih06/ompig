@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // eng carries what TypeBox keeps in module state: the instantiation counters of call/instantiate.mjs. One engine

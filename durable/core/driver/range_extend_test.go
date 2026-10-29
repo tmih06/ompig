@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // TestRangeMessagesEqualAFullDecodeAndLeaveEarlierListsIntact gives the executor ranges as a host does: a range of the

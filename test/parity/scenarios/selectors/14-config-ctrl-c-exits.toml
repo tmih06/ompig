@@ -1,5 +1,5 @@
 # Behavior family: selectors
-# Surface: `pi config` / `pig config` Ctrl-C closes the resource selector (issue #89)
+# Surface: `pi config` / `ompig config` Ctrl-C closes the resource selector (issue #89)
 #
 # Upstream evidence (Pi 0.87.1): config-selector.ts:487-493 maps tui.select.cancel
 # (escape, ctrl+c by default) to onCancel and matchesKey(data, "ctrl+c") to
@@ -13,7 +13,7 @@
 # park, compared byte-for-byte after the documented D2 path folding.
 
 name = "14-config-ctrl-c-exits"
-description = "Ctrl-C closes pi config / pig config with status 0 and leaves the same screen."
+description = "Ctrl-C closes pi config / ompig config with status 0 and leaves the same screen."
 covers = [
   "packages/coding-agent/src/modes/interactive/components/config-selector.ts",
   "packages/coding-agent/src/cli/config-selector.ts",
@@ -24,7 +24,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "sample-skill"
+ready_pattern_ompig = "sample-skill"
 ready_pattern_pi = "sample-skill"
 ready_timeout_seconds = 15
 keys = ["C-c"]
@@ -34,9 +34,9 @@ cwd = "testdata/empty-project"
 
 [env]
 override_base_args = true
-pig = ["PIG_HOME=testdata/pig-home-full", "HOME=testdata/home-empty"]
+ompig = ["OMPIG_HOME=testdata/ompig-home-full", "HOME=testdata/home-empty"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-full", "HOME=testdata/home-empty"]
-pig_args = ["config"]
+ompig_args = ["config"]
 pi_args = ["config"]
 
 [assert]
@@ -49,17 +49,17 @@ runs = 3
 
 # normalize-rationale: D2 config-root names and isolated snapshot suffixes differ by binary.
 [[assert.normalize_replace]]
-pattern = '~/\.pig/agent/'
+pattern = '~/\.ompig/agent/'
 with    = '~/.pi/agent/'
 reason = "D2: the selector subtitle names the host configuration directory."
 
 # normalize-rationale: Replace only a complete allocated agent-root path inside the User label. Never consume its closing parenthesis, trailing text or a wrapped row.
 [[assert.normalize_replace]]
-pattern = '(User \()/[^\n)]*/parity-snap-(?:PIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/'
+pattern = '(User \()/[^\n)]*/parity-snap-(?:OMPIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/'
 with = '${1}<agent>/'
 reason = "D2: separate agent roots vary by host and run. Preserve the complete label suffix, row structure and resource names."
 
 [[assert.normalize_replace]]
-pattern = '\n {6}\[x\] pig-login *'
+pattern = '\n {6}\[x\] ompig-login *'
 with    = ""
-reason = "D2: PiG's built-in pig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."
+reason = "D2: Ompig's built-in ompig-login extension (the /sprite command) is listed with the other built-in extensions; Pi has no such entry. Only that one row is removed; the others, their order and the selector chrome stay compared."

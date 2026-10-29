@@ -8,7 +8,7 @@
 # Whole coding-agent modules, docs, examples, themes and image-worker assets
 # remain available for source verification and absolute package-root imports.
 # bundle-pi-sdk.mjs compiles the same graph without changing its API bodies.
-# pi-identity-patches.mjs replaces Pi's identity literals with PiG's (D26).
+# pi-identity-patches.mjs replaces Pi's identity literals with Ompig's (D26).
 # vendor-manifest.json records package identities, input/output hashes and seams.
 set -euo pipefail
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
@@ -28,7 +28,7 @@ telemetry="$agent/node_modules/@earendil-works/pi-telemetry"
 mcp="$agent/node_modules/@earendil-works/pi-mcp"
 ignore="$agent/node_modules/ignore"
 jsdiff="$agent/node_modules/diff"
-shims=${PIG_VENDOR_SHIMS:-"$root/coding/extension/host/subprocess/runtime-node/shims"} # PIG_VENDOR_SHIMS writes the vendored runtime elsewhere, so a pin leap can try a new Pi without touching the committed one
+shims=${OMPIG_VENDOR_SHIMS:-"$root/coding/extension/host/subprocess/runtime-node/shims"} # OMPIG_VENDOR_SHIMS writes the vendored runtime elsewhere, so a pin leap can try a new Pi without touching the committed one
 dist="$shims/pi-dist"
 
 # copy <package dist> <target dir> <file>...: verbatim copies, keeping paths.
@@ -79,9 +79,9 @@ sdk_only="google-shared"
   copy "$ai/dist" "$dist/pi-ai" "$file"
 done
 for api in $bridged_apis; do
-  printf '// PiG: the %s implementation runs in PiG'"'"'s host (D74); see automation/gen/vendor-pi-dist.sh.\nimport { bridgeApi } from "../../../pi-ai-bridge.mjs";\nexport const { stream, streamSimple } = bridgeApi("%s");\n' "$api" "$api" >"$dist/pi-ai/api/$api.js"
+  printf '// Ompig: the %s implementation runs in Ompig'"'"'s host (D74); see automation/gen/vendor-pi-dist.sh.\nimport { bridgeApi } from "../../../pi-ai-bridge.mjs";\nexport const { stream, streamSimple } = bridgeApi("%s");\n' "$api" "$api" >"$dist/pi-ai/api/$api.js"
 done
-printf '// PiG: image generation has no host provider (D74); see automation/gen/vendor-pi-dist.sh.\nimport { bridgeImages } from "../../../pi-ai-bridge.mjs";\nexport const generateImages = bridgeImages("openrouter-images");\n' >"$dist/pi-ai/api/openrouter-images.js"
+printf '// Ompig: image generation has no host provider (D74); see automation/gen/vendor-pi-dist.sh.\nimport { bridgeImages } from "../../../pi-ai-bridge.mjs";\nexport const generateImages = bridgeImages("openrouter-images");\n' >"$dist/pi-ai/api/openrouter-images.js"
 sed 's#^export { Type } from "typebox";$#export { Type } from "../../typebox.mjs";#' "$ai/dist/index.js" >"$dist/pi-ai/index.js"
 sed 's#^\(import .* from \)"@earendil-works/pi-telemetry";$#\1"../pi-telemetry/index.js";#' "$ai/dist/telemetry.js" >"$dist/pi-ai/telemetry.js"
 sed 's#^import { parse as partialParse } from "partial-json";$#import { parse as partialParse } from "../../../partial-json/dist/index.js";#' \
@@ -158,7 +158,7 @@ rm -rf "$shims/photon-node"
 node "$root/automation/gen/vendor-node-dependencies.mjs" "$agent/node_modules/@silvia-odwyer/photon-node/package.json" "$shims/photon-node"
 node "$root/automation/gen/vendor-pi-session-seams.mjs" "$agent" "$dist/pi-coding-agent"
 node "$root/automation/gen/vendor-pi-startup-seams.mjs" "$dist/pi-coding-agent"
-# PiG's product identity for Pi's outbound identity literals and hosted endpoints (D26); the same values the Go host sends.
+# Ompig's product identity for Pi's outbound identity literals and hosted endpoints (D26); the same values the Go host sends.
 node "$root/automation/gen/pi-identity-patches.mjs" "$dist"
 rm -rf "$shims/cross-spawn"
 node "$root/automation/gen/vendor-node-dependencies.mjs" "$agent/node_modules/cross-spawn/package.json" "$shims/cross-spawn"

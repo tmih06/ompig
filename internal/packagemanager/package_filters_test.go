@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // A Package's configured filters go through minimatch as Pi's applyPackageFilter applies them (package-manager.ts:2280-2306, 661-685), and a filter minimatch cannot compile throws in collectPackageResources: a local Package keeps the kinds before it (resolveLocalExtensionSource's catch, :1372-1389), and an npm Package's throw rejects resolve() (:1315-1327). Probed with Pi 1.1.0 over RPC get_commands: braces keep a and b, "+(a|b)" keeps ab, a skills filter that throws drops the skills and the later prompts, and an npm Package's skills filter error comes before its prompts glob error.
 func TestPackageFiltersFollowMinimatch(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	enabledPrompts := func(t *testing.T, resolved ResolvedPaths) []string {
 		t.Helper()
 		var names []string

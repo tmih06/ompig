@@ -5,19 +5,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // TestFusepackResolver proves the contract generated code relies on: factory
 // registration is lazy, and the resolver matches by extension name while
-// rejecting names this Piglet Binary did not fuse.
+// rejecting names this Ompiglet Binary did not fuse.
 func TestFusepackResolver(t *testing.T) {
 	orig := fusedServes
 	t.Cleanup(func() { fusedServes = orig; subprocess.SetFusedResolver(nil) })
 	fusedServes = map[string]func(net.Conn) error{}
 
-	// Empty Piglet Binary: Register installs nothing.
+	// Empty Ompiglet Binary: Register installs nothing.
 	Register()
 
 	factoryCalls := 0
@@ -36,7 +36,7 @@ func TestFusepackResolver(t *testing.T) {
 		t.Fatal("resolver did not resolve fused 'demo'")
 	}
 	if _, ok := r.FusedServe(subprocess.ExtConfig{Name: "other"}); ok {
-		t.Fatal("resolver matched a name this Piglet Binary did not fuse")
+		t.Fatal("resolver matched a name this Ompiglet Binary did not fuse")
 	}
 }
 

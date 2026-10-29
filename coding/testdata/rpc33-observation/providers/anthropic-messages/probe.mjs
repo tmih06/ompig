@@ -10,9 +10,9 @@
 //   2. "rpc" (with --rpc <pi cli>): the first assistant message_start serialized by `pi --mode rpc`.
 //
 // Usage: node probe.mjs <out.json> [inputs.json]        (needs PI_PACKAGE_ROOT)
-//        node probe.mjs --rpc <cli.js|pig-binary> <out.json>   (adds the "rpc" section)
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+//        node probe.mjs --rpc <cli.js|ompig-binary> <out.json>   (adds the "rpc" section)
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { createServer } from 'node:http';
 import { createHook } from 'node:async_hooks';
@@ -296,7 +296,7 @@ async function rpcStart(shape, delivery) {
   await writeFile(join(agent, 'models.json'), JSON.stringify({ providers: { p: { api: 'anthropic-messages', baseUrl: `http://127.0.0.1:${port}`, apiKey: 'k', models: [{ id: 'probe', name: 'probe', reasoning: false, input: ['text'], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 128000, maxTokens: 1000 }] } } }));
   await writeFile(join(dir, 'parity-read-target.txt'), 'x\n');
   const isNodeScript = rpcBinary.endsWith('.js');
-  const child = spawn(isNodeScript ? process.execPath : rpcBinary, [...(isNodeScript ? [rpcBinary] : []), '--mode', 'rpc', '--offline', '--no-extensions', '--model', 'p/probe', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], { cwd: dir, env: { ...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, PIG_CODING_AGENT_DIR: agent, PIG_HOME: join(dir, 'pighome') }, stdio: ['pipe', 'pipe', 'inherit'] });
+  const child = spawn(isNodeScript ? process.execPath : rpcBinary, [...(isNodeScript ? [rpcBinary] : []), '--mode', 'rpc', '--offline', '--no-extensions', '--model', 'p/probe', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], { cwd: dir, env: { ...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, OMPIG_CODING_AGENT_DIR: agent, OMPIG_HOME: join(dir, 'pighome') }, stdio: ['pipe', 'pipe', 'inherit'] });
   const starts = [];
   await new Promise(resolve => {
     createInterface({ input: child.stdout }).on('line', line => {
@@ -325,9 +325,9 @@ function persistPlan(plan) {
   }) };
 }
 if (inputsPath) {
-  await writeFile(inputsPath, JSON.stringify({ piVersion: PIG_UPSTREAM_VERSION, anthropicSdkVersion: anthropicVersion, nodeVersion: process.version, axes, bodies: Object.fromEntries(shapes.map(shape => [shape, Buffer.from(bodyOf(shape), 'latin1').toString('utf8')])), replyBody: Buffer.from(replyBody, 'latin1').toString('utf8'), plans: Object.fromEntries(shapes.map(shape => [shape, Object.fromEntries(Object.keys(deliveries).map(name => [name, persistPlan(deliveries[name](bodyOf(shape)))]))])) }, null, 2) + '\n');
+  await writeFile(inputsPath, JSON.stringify({ piVersion: OMPIG_UPSTREAM_VERSION, anthropicSdkVersion: anthropicVersion, nodeVersion: process.version, axes, bodies: Object.fromEntries(shapes.map(shape => [shape, Buffer.from(bodyOf(shape), 'latin1').toString('utf8')])), replyBody: Buffer.from(replyBody, 'latin1').toString('utf8'), plans: Object.fromEntries(shapes.map(shape => [shape, Object.fromEntries(Object.keys(deliveries).map(name => [name, persistPlan(deliveries[name](bodyOf(shape)))]))])) }, null, 2) + '\n');
 }
-const output = { piVersion: PIG_UPSTREAM_VERSION, anthropicSdkVersion: anthropicVersion, nodeVersion: process.version, axes };
+const output = { piVersion: OMPIG_UPSTREAM_VERSION, anthropicSdkVersion: anthropicVersion, nodeVersion: process.version, axes };
 output.cases = [];
 if (!process.env.PROBE_RPC_ONLY) for (const shape of shapes) for (const layers of layersFor(shape)) for (const delivery of Object.keys(deliveries)) {
   output.cases.push(await traceCase(shape, delivery, layers));

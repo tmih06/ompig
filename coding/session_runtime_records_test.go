@@ -9,7 +9,7 @@ import (
 
 func recordRuntimeOriginal(t *testing.T, site int) {
 	t.Helper()
-	if os.Getenv("PIG_RUNTIME_REPLACEMENT_PROBE") == "" {
+	if os.Getenv("OMPIG_RUNTIME_REPLACEMENT_PROBE") == "" {
 		return
 	}
 	titles := map[int]string{

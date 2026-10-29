@@ -11,7 +11,7 @@ model = "google/gemini-2.5-flash"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "gemini-2.5-flash"
+ready_pattern_ompig = "gemini-2.5-flash"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 20
 capture_start = "Model Configuration"
@@ -24,9 +24,9 @@ wait_visible_contains = ["Model Configuration", "Model catalogs refreshed."]
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/scoped-google-agent", "GEMINI_API_KEY=scoped-catalog-test-key"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/scoped-google-agent", "GEMINI_API_KEY=scoped-catalog-test-key"]
 pi = ["PI_CODING_AGENT_DIR=testdata/scoped-google-agent", "GEMINI_API_KEY=scoped-catalog-test-key"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

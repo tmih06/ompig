@@ -11,13 +11,13 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/tui"
 )
 
 // extensionLoginPreviewTimeout bounds building, loading, and rendering the
@@ -34,7 +34,7 @@ var extensionLoginPreviewWidth = func() int {
 }
 
 func loginPreviewGlyphFreeEnabled() bool {
-	switch strings.TrimSpace(os.Getenv("PIG_LOGO_GLYPHFREE")) {
+	switch strings.TrimSpace(os.Getenv("OMPIG_LOGO_GLYPHFREE")) {
 	case "1":
 		return true
 	case "0":
@@ -44,7 +44,7 @@ func loginPreviewGlyphFreeEnabled() bool {
 	}
 }
 
-// pig additive (D60): preview the typed native login without starting a
+// ompig additive (D60): preview the typed native login without starting a
 // model session or restoring the retired authored extension manifest.
 type loginPreviewUI struct {
 	extension.UIContext

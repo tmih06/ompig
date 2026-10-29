@@ -1,4 +1,4 @@
-// parity-load-exec: the factory runs a child with pi.exec while it loads, before any session binds (Pi's loader gives it an exec that spawns the child itself, loader.ts:411-414). The tool_result handler reports the outcome to the model through the result text, so a rejection (PiG's "extension connection closed or replaced") reads "not-modified" where a resolved child reads "modified:parity-modified".
+// parity-load-exec: the factory runs a child with pi.exec while it loads, before any session binds (Pi's loader gives it an exec that spawns the child itself, loader.ts:411-414). The tool_result handler reports the outcome to the model through the result text, so a rejection (Ompig's "extension connection closed or replaced") reads "not-modified" where a resolved child reads "modified:parity-modified".
 export default async function (pi) {
   let outcome;
   try {

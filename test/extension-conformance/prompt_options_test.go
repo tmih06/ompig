@@ -9,18 +9,18 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi runner.ts:1411-1462 hands every before_agent_start handler one options object and returns it, and agent-session.ts:1669-1683 builds the run's prompt from it. An edit to toolSnippets, toolGuidelines or appendSystemPrompt, not only to sections and selectedTools, therefore reaches the run, also when the handler then fails. The values below are not any SDK's fallback.
 func TestPromptOptionEditsAcrossSDKs(t *testing.T) {
 	root := findModuleRoot(t)
-	t.Setenv("PIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
-	t.Setenv("PIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
-	t.Setenv("PIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
+	t.Setenv("OMPIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
+	t.Setenv("OMPIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
 	t.Run("inproc", func(t *testing.T) {
 		ext := extension.Extension{Handlers: map[string][]extension.HandlerFn{"before_agent_start": {func(args ...any) (any, error) {
 			event := args[0].(extension.BeforeAgentStartEvent)
@@ -141,7 +141,7 @@ func promptOptionsFactory(t *testing.T, root, language, name string) subprocess.
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package sections
-import ("errors"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("errors"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.OnEvent("before_agent_start",func(_ sdk.Context,data map[string]any)(any,error){
@@ -156,9 +156,9 @@ func Extension()*sdk.Extension {
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, name+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  def handler(ctx,data):
   o=data["systemPromptOptions"]
   o["toolSnippets"]["read"]="edited read snippet"
@@ -170,7 +170,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.on_before_agent_start(|_,event| {

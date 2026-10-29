@@ -34,15 +34,15 @@ Keep `AGENTS.md`, `PORT_MAP.md`, and `DIVERGENCES.md` at the root. They are main
 
 The path tables update:
 
-- PiG target paths in `PORT_MAP.md`, divergence call-site references, additive records, and module `AGENTS.md` files;
+- Ompig target paths in `PORT_MAP.md`, divergence call-site references, additive records, and module `AGENTS.md` files;
 - repository-relative Markdown links, including outgoing links from moved documents, fragment identifiers, reference definitions, and HTML `src`/`href` destinations;
-- public and embedded documentation references, current-branch PiG source URLs, and Go import examples;
+- public and embedded documentation references, current-branch Ompig source URLs, and Go import examples;
 - reviewed parity mapping targets, unit evidence, scenario path references, and oracle-helper version-pin reads;
 - `parity/interface-extractor/test/inventory.test.mjs` and `parity/interface-extractor/test/correspondence-inventory.test.mjs`, whose relative pin becomes `../../../internal/coding/pigversion/pigversion.go` through `RELATIVE_PIN_PATHS`;
 - field IDs and paths in `parity/format-versions.toml`, retaining each complete reviewed record and sorting by its rewritten ID; and
-- `docs/knowledge-graph/pig.graph.json`, followed by its existing generator to refresh the site, embedded reference, JSON-LD, Mermaid, and troubleshooting mirror.
+- `docs/knowledge-graph/ompig.graph.json`, followed by its existing generator to refresh the site, embedded reference, JSON-LD, Mermaid, and troubleshooting mirror.
 
-Upstream `packages/...` paths, abbreviated TypeScript source references, canonical `pkg:ai/...` interface IDs, external URLs, commit-pinned source links, and user configuration paths such as `~/.pig/agent` remain unchanged. The script does not edit source/published denominators, historical text captures, or generated candidate/coverage inventories. The entry point regenerates Go candidates, recommendations, coverage, the custom-factory ledger, and the normalization inventory through their owning commands. No comparator, coverage status, divergence approval, or interface disposition is promoted.
+Upstream `packages/...` paths, abbreviated TypeScript source references, canonical `pkg:ai/...` interface IDs, external URLs, commit-pinned source links, and user configuration paths such as `~/.ompig/agent` remain unchanged. The script does not edit source/published denominators, historical text captures, or generated candidate/coverage inventories. The entry point regenerates Go candidates, recommendations, coverage, the custom-factory ledger, and the normalization inventory through their owning commands. No comparator, coverage status, divergence approval, or interface disposition is promoted.
 
 The script preflights required tracked files, source/destination conflicts, symlinks, and reviewed prose replacements before moving governance files with `git mv`. It enumerates only Git-tracked edit targets. Missing inputs and unknown prose shapes fail rather than silently skipping work. A completed or partially completed governance move can resume; a second complete application reports no moves or rewrites. Relative instruction references use an explicit `./` when rebasing would otherwise make them indistinguishable from root paths.
 

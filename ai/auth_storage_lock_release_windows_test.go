@@ -14,7 +14,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // runPiStoreWithLockHandshake runs op on Pi's own store for file. While the store holds its lock, the operation calls handshake(lockPath): whileHeld then runs in this process on that lock directory before the operation continues. It returns the message the operation throws, or "" when it succeeds. auth-async and auth-sync write through FileAuthStorageBackend.withLockAsync and withLock, auth-sync-throw throws from withLock's callback, and models-write is FileModelsStore.write with the handshake inside its backend's callback.
@@ -103,7 +103,7 @@ func runPiStoreWithLockHandshake(t *testing.T, op, file string, whileHeld func(l
 	}
 }
 
-// runPiThenReset runs op on Pi's store for a fresh file holding content, marking the lock directory for deletion while Pi holds it. Once Pi has finished, the removal completes and the file is reset to content, so PiG then runs on the same path and lock state. It returns the path, Pi's thrown message ("" for success) and the file Pi left.
+// runPiThenReset runs op on Pi's store for a fresh file holding content, marking the lock directory for deletion while Pi holds it. Once Pi has finished, the removal completes and the file is reset to content, so Ompig then runs on the same path and lock state. It returns the path, Pi's thrown message ("" for success) and the file Pi left.
 func runPiThenReset(t *testing.T, op, name, content string) (path, piErr, piData string) {
 	t.Helper()
 	path = filepath.Join(t.TempDir(), name)
@@ -136,7 +136,7 @@ func runPiThenReset(t *testing.T, op, name, content string) (path, piErr, piData
 	return path, piErr, string(data)
 }
 
-// A lock directory that another process is removing makes the release's rmdir fail with EPERM (lib/lockfile.js:88-96, 268-293; see TestCheckAndReleaseReadLockBeingRemovedAsNodeStatDoesUpstream). Pi's withLockAsync ignores that unlock error (auth-storage.ts:191-198), so the write stands and the operation succeeds. withLock releases in a finally block (auth-storage.ts:109-113), so the unlock error is thrown after the write, and it replaces an error the callback threw. Each row runs Pi's store first, then PiG's on the same path, with the lock directory marked for deletion while the store holds it.
+// A lock directory that another process is removing makes the release's rmdir fail with EPERM (lib/lockfile.js:88-96, 268-293; see TestCheckAndReleaseReadLockBeingRemovedAsNodeStatDoesUpstream). Pi's withLockAsync ignores that unlock error (auth-storage.ts:191-198), so the write stands and the operation succeeds. withLock releases in a finally block (auth-storage.ts:109-113), so the unlock error is thrown after the write, and it replaces an error the callback threw. Each row runs Pi's store first, then Ompig's on the same path, with the lock directory marked for deletion while the store holds it.
 func TestAuthStorageLockReleaseFailureFollowsPiUpstream(t *testing.T) {
 	const stored = `{"anthropic":{"type":"api_key","key":"stored"}}`
 	written := `{"anthropic":{"type":"api_key","key":"stored"},"openai":{"type":"api_key","key":"new"}}`
@@ -193,7 +193,7 @@ func TestAuthStorageLockReleaseFailureFollowsPiUpstream(t *testing.T) {
 	})
 }
 
-// FileModelsStore writes through FileAuthStorageBackend.withLockAsync (models-store.ts:128-137), which ignores an unlock error (auth-storage.ts:191-198). PiG's models store keeps the write and reports success when its release fails.
+// FileModelsStore writes through FileAuthStorageBackend.withLockAsync (models-store.ts:128-137), which ignores an unlock error (auth-storage.ts:191-198). Ompig's models store keeps the write and reports success when its release fails.
 func TestFileModelsStoreLockReleaseFailureIsIgnoredUpstream(t *testing.T) {
 	path, want, piData := runPiThenReset(t, "models-write", "models-store.json", "")
 	if want != "" {

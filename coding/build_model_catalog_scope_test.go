@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A model id another provider catalogs must not lend that provider's API to an extension provider's model.

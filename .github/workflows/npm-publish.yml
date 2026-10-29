@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   npm:
-    name: Publish @pi-in-go/pig
+    name: Publish @ompig/ompig
     permissions:
       contents: read
       id-token: write
@@ -74,7 +74,7 @@ jobs:
           set -euo pipefail
           mkdir -p release
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir release \
-            --pattern SHA256SUMS --pattern 'pig-*.tar.gz' --pattern 'pig-*.zip'
+            --pattern SHA256SUMS --pattern 'ompig-*.tar.gz' --pattern 'ompig-*.zip'
           cd release
           # Verify every downloaded archive; pack_npm.py re-verifies each one
           # it extracts from.

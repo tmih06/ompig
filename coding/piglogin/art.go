@@ -14,7 +14,7 @@ var mascotPaletteBase = map[byte]color.RGBA{
 	'e': {0xFF, 0x90, 0xA4, 0xFF},
 }
 
-// Logo colors the hero "PiG." wordmark.
+// Logo colors the hero "Ompig." wordmark.
 type Logo struct {
 	// Ramp colors the letter rows from top to bottom.
 	Ramp [logoRows]color.RGBA
@@ -27,7 +27,7 @@ type Logo struct {
 // logoRows is the height of the hero glyphs in pixels.
 const logoRows = 12
 
-// classicLogoRamp is the original cyan-to-navy PiG wordmark gradient.
+// classicLogoRamp is the original cyan-to-navy Ompig wordmark gradient.
 var classicLogoRamp = [logoRows]color.RGBA{
 	{0x67, 0xE8, 0xF9, 0xFF},
 	{0x5A, 0xDC, 0xF4, 0xFF},
@@ -96,7 +96,7 @@ var letterPeriod = []string{
 	"111",
 }
 
-// heroGlyph places one glyph of the "PiG." wordmark in the 32-by-14 hero
+// heroGlyph places one glyph of the "Ompig." wordmark in the 32-by-14 hero
 // grid. The layout mirrors the website wordmark: tight letter spacing and a
 // period set close to the G on the baseline.
 type heroGlyph struct {
@@ -112,7 +112,7 @@ var heroGlyphs = []heroGlyph{
 	{rows: letterPeriod, x: 28, y: logoRows - 3, period: true},
 }
 
-var pigMascot = []string{
+var ompigMascot = []string{
 	"................",
 	"...OOOO..OOOO...",
 	"...OeeO..OeeO...",

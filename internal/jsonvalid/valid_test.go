@@ -7,7 +7,7 @@ import (
 
 	stdjson "encoding/json"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Every verdict equals the scanner's: the session loader skipped exactly the lines sdkjson.Valid rejected.

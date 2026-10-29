@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type dockEntry struct {
@@ -90,14 +90,14 @@ func TestFooterNodeCarriesThePiFooterData(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("PI_EXPERIMENTAL", "")
-	t.Setenv("PIG_EXPERIMENTAL", "")
+	t.Setenv("OMPIG_EXPERIMENTAL", "")
 	provider := ai.NewFauxProvider(ai.FauxConfig{ProviderID: "anthropic"})
 	reasoning := &ai.Model{ID: "claude", Provider: provider, Capabilities: ai.ModelCapabilities{ContextWindow: 200_000, MaxThinking: ai.ThinkingLevelHigh}}
 	plain := &ai.Model{ID: "gpt-4o", Provider: provider, Capabilities: ai.ModelCapabilities{ContextWindow: 128_000}}
 	rate := 60.0
 	data := footerData{
 		model:              reasoning,
-		cwd:                filepath.Join(home, "src", "pig"),
+		cwd:                filepath.Join(home, "src", "ompig"),
 		gitBranch:          "main",
 		sessionName:        "fix",
 		usage:              footerUsageTotals{input: 1200, output: 340, cacheRead: 900, cacheWrite: 10, cost: 0.0125, latestCacheHitRate: &rate},
@@ -108,7 +108,7 @@ func TestFooterNodeCarriesThePiFooterData(t *testing.T) {
 		extensionStatuses:  map[string]string{"b": "two\n  words", "a": "one", "c": " \t"},
 	}
 	want := frontend.Footer{
-		Cwd:                filepath.Join("~", "src", "pig"),
+		Cwd:                filepath.Join("~", "src", "ompig"),
 		GitBranch:          "main",
 		SessionName:        "fix",
 		UsageTotals:        frontend.UsageTotals{Input: 1200, Output: 340, CacheRead: 900, CacheWrite: 10, Cost: 0.0125},

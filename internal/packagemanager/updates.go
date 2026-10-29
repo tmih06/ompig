@@ -6,15 +6,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Network timeout for update checks. Mirrors upstream NETWORK_TIMEOUT_MS
 // (package-manager.ts).
 const UpdateCheckNetworkTimeout = 10 * time.Second
 
-// IsOfflineModeEnabled returns true when the PIG_OFFLINE (or legacy
+// IsOfflineModeEnabled returns true when the OMPIG_OFFLINE (or legacy
 // PI_OFFLINE) env var is set to a truthy value. Mirrors upstream
 // isOfflineModeEnabled (package-manager.ts:29).
 func IsOfflineModeEnabled() bool {
@@ -22,7 +22,7 @@ func IsOfflineModeEnabled() bool {
 		lower := jsstring.ToLower(value)
 		return value == "1" || lower == "true" || lower == "yes"
 	}
-	v := strings.ToLower(strings.TrimSpace(os.Getenv("PIG_OFFLINE")))
+	v := strings.ToLower(strings.TrimSpace(os.Getenv("OMPIG_OFFLINE")))
 	return v == "1" || v == "true" || v == "yes"
 }
 

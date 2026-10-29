@@ -4,10 +4,10 @@ import { fileURLToPath } from "node:url";
 
 // Use this file's own (per-binary, per-run) snapshotted directory rather than
 // process.cwd(). The parity runner copies this extension into a fresh
-// temp directory for each of pig/pi and for each declared run
+// temp directory for each of ompig/pi and for each declared run
 // (test/parity/runner/snapshot.go snapshotExtensionPath), but launches both
 // binaries from the same working directory by default. Keying the counter on
-// process.cwd() let pig and pi race on one shared file across the two sides.
+// process.cwd() let ompig and pi race on one shared file across the two sides.
 const generationPath = join(dirname(fileURLToPath(import.meta.url)), ".footer-status-generation");
 
 // Advance the generation in the factory, not at module scope. Pi 0.87.1's

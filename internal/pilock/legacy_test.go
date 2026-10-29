@@ -15,7 +15,7 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // v0.2.0 (c318b771) settings.go:2343 and trust_manager.go:210 use
@@ -86,7 +86,7 @@ func TestHeldLegacySidecarUsesNormalTimeout(t *testing.T) {
 	if lease != nil {
 		_ = lease.Release()
 	}
-	if !errors.Is(err, ErrLocked) || !strings.Contains(err.Error(), "older PiG") {
+	if !errors.Is(err, ErrLocked) || !strings.Contains(err.Error(), "older Ompig") {
 		t.Fatalf("held legacy lock: %v", err)
 	}
 	if time.Since(start) < (SyncAttempts-1)*SyncDelay {
@@ -179,7 +179,7 @@ func TestLegacyUpgradePreservesOtherPaths(t *testing.T) {
 	}
 }
 
-// A regular file with content at the lock path is never a PiG legacy sidecar (D73 covers only an empty one), so it follows proper-lockfile 4.1.2: mkdir reports EEXIST, fs.stat reads the file (lib/lockfile.js:56), and a fresh file is ELOCKED (lib/lockfile.js:67-69). A stale file goes to removeLock's rmdir (lib/lockfile.js:71-79,88-96): libuv on Windows reports rmdir of a file as ENOENT (src/win/fs.c fs__unlink_rmdir), which proper-lockfile ignores before the repeated mkdir reports EEXIST, so the result is ELOCKED again; Unix rmdir(2) fails with ENOTDIR, which is thrown. The file is never removed. Each row runs Pi's pinned proper-lockfile on the file first, then PiG on the same path.
+// A regular file with content at the lock path is never a Ompig legacy sidecar (D73 covers only an empty one), so it follows proper-lockfile 4.1.2: mkdir reports EEXIST, fs.stat reads the file (lib/lockfile.js:56), and a fresh file is ELOCKED (lib/lockfile.js:67-69). A stale file goes to removeLock's rmdir (lib/lockfile.js:71-79,88-96): libuv on Windows reports rmdir of a file as ENOENT (src/win/fs.c fs__unlink_rmdir), which proper-lockfile ignores before the repeated mkdir reports EEXIST, so the result is ELOCKED again; Unix rmdir(2) fails with ENOTDIR, which is thrown. The file is never removed. Each row runs Pi's pinned proper-lockfile on the file first, then Ompig on the same path.
 func TestAcquireOnNonEmptyFileFollowsProperLockfileUpstream(t *testing.T) {
 	for _, stale := range []bool{false, true} {
 		for i, api := range []string{"sync", "async"} {
@@ -230,7 +230,7 @@ func TestAcquireOnNonEmptyFileFollowsProperLockfileUpstream(t *testing.T) {
 					t.Fatalf("message = %q, want proper-lockfile's %q", err.Error(), message)
 				}
 				if data, err := os.ReadFile(path + ".lock"); err != nil || string(data) != "keep" {
-					t.Fatalf("PiG changed the file: %q, %v", data, err)
+					t.Fatalf("Ompig changed the file: %q, %v", data, err)
 				}
 			})
 		}
@@ -238,7 +238,7 @@ func TestAcquireOnNonEmptyFileFollowsProperLockfileUpstream(t *testing.T) {
 }
 
 func TestLegacyLockProcessHelper(t *testing.T) {
-	path := os.Getenv("PIG_TEST_LEGACY_LOCK_PATH")
+	path := os.Getenv("OMPIG_TEST_LEGACY_LOCK_PATH")
 	if path == "" {
 		return
 	}
@@ -264,7 +264,7 @@ func TestLegacySubprocessWriterUpgrade(t *testing.T) {
 		t.Fatal(err)
 	}
 	cmd := exec.CommandContext(t.Context(), binary, "-test.run=^TestLegacyLockProcessHelper$")
-	cmd.Env = append(os.Environ(), "PIG_TEST_LEGACY_LOCK_PATH="+path)
+	cmd.Env = append(os.Environ(), "OMPIG_TEST_LEGACY_LOCK_PATH="+path)
 	input, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)

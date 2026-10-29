@@ -5,8 +5,8 @@ import (
 	"net"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // BenchmarkLoadInProcessProviders is the cost of loading one extension that registers providers while it loads into a host bound to a registry beforehand, as the CLI binds its host, followed by the bind that applies what the extension queued (agent-session-services.ts:157-169): each op is one host, one load and one apply, and the registry accepts every registration.

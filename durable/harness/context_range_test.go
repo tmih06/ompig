@@ -8,10 +8,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 // A kept context range must return exactly what DeriveContext derives, through every sequence of commits and reads.

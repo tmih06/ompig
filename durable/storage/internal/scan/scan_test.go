@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/scan"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/internal/scan"
 )
 
 // Ports packages/durable/src/storage/scan.ts scanStart: a cursor continues in its own order, a different requested order

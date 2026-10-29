@@ -9,21 +9,21 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// Name is the name of the built-in extension: its path is `builtin:pig-login`.
-const Name = "pig-login"
+// Name is the name of the built-in extension: its path is `builtin:ompig-login`.
+const Name = "ompig-login"
 
-// Extension is the built-in `pig-login` extension. It registers `/sprite`, which chooses the sprite the startup header
+// Extension is the built-in `ompig-login` extension. It registers `/sprite`, which chooses the sprite the startup header
 // shows. The header itself is the host's built-in header (the one Pi's setHeader(undefined) restores), which draws the
 // active sprite's head, so an extension replaces it with setHeader exactly as in Pi. `/sprite preview` shows a sprite's
-// full art, the wordmark and the pig, in an overlay until a key is pressed.
+// full art, the wordmark and the ompig, in an overlay until a key is pressed.
 func Extension(pi extension.API) error {
-	pi.RegisterCommand("sprite", extension.CommandOptions{Description: "Select the PiG login sprite.", Handler: selectSprite})
+	pi.RegisterCommand("sprite", extension.CommandOptions{Description: "Select the Ompig login sprite.", Handler: selectSprite})
 	return nil
 }
 
@@ -99,7 +99,7 @@ func selectSpriteInteractively(ctx context.Context) error {
 const CreateOption = "Create your own..."
 
 // CreateHint explains how to create a sprite.
-const CreateHint = "To create your own sprite: log in with /login and pick a model with /model, then run /sprite create and describe your pig. PiG writes a sprite extension and loads it with /reload."
+const CreateHint = "To create your own sprite: log in with /login and pick a model with /model, then run /sprite create and describe your ompig. Ompig writes a sprite extension and loads it with /reload."
 
 // CreateNeedsModel is what `/sprite create` shows when no model is selected.
 const CreateNeedsModel = "Designing a sprite needs a working model. Run /login to log into a provider, select a model with /model, then run /sprite create."
@@ -128,11 +128,11 @@ func createSprite(ctx context.Context) error {
 	return c.SendUserMessage(prompt, nil)
 }
 
-// runAgentDir is the run's agent directory, as the PiG CLI resolves it (codingagent.AgentDir): Pi's directory in shared mode
-// (PIG_USE_PI_DIRS=1), else PIG_CODING_AGENT_DIR, else the agent directory under the config root (internal/configroot).
+// runAgentDir is the run's agent directory, as the Ompig CLI resolves it (codingagent.AgentDir): Pi's directory in shared mode
+// (OMPIG_USE_PI_DIRS=1), else OMPIG_CODING_AGENT_DIR, else the agent directory under the config root (internal/configroot).
 // The global extensions directory under it is loaded on /reload.
 func runAgentDir() (string, error) {
-	if os.Getenv("PIG_USE_PI_DIRS") == "1" {
+	if os.Getenv("OMPIG_USE_PI_DIRS") == "1" {
 		if dir := os.Getenv("PI_CODING_AGENT_DIR"); dir != "" {
 			return configroot.ExpandTilde(dir), nil
 		}
@@ -142,7 +142,7 @@ func runAgentDir() (string, error) {
 		}
 		return filepath.Join(home, ".pi", "agent"), nil
 	}
-	if dir := os.Getenv("PIG_CODING_AGENT_DIR"); dir != "" {
+	if dir := os.Getenv("OMPIG_CODING_AGENT_DIR"); dir != "" {
 		return configroot.ExpandTilde(dir), nil
 	}
 	root, err := configroot.Resolve()
@@ -164,7 +164,7 @@ func hasConfiguredProvider(c *extension.Context) bool {
 }
 
 // CreatePrompt is the user turn `/sprite create` sends: it asks the model to design a sprite with the user and write a
-// TypeScript extension that registers it in the run's global extensions directory, starting from the default pig's mascot
+// TypeScript extension that registers it in the run's global extensions directory, starting from the default ompig's mascot
 // and palette. It fails when the run's agent directory cannot be resolved, as it needs no home directory otherwise.
 func CreatePrompt() (string, error) {
 	agentDir, err := runAgentDir()
@@ -185,16 +185,16 @@ func CreatePrompt() (string, error) {
 	for i, symbol := range symbols {
 		paletteLines[i] = fmt.Sprintf("        %q: %q,", symbol, rgbaHex(palette[symbol[0]]))
 	}
-	mascotLines := make([]string, len(pigMascot))
-	for i, row := range pigMascot {
+	mascotLines := make([]string, len(ompigMascot))
+	for i, row := range ompigMascot {
 		mascotLines[i] = fmt.Sprintf("        %q,", row)
 	}
 	return strings.Join([]string{
-		"Help me create my own PiG sprite: the pig my startup header shows.",
-		"Start by asking me one plain-language question: what character, colors or style should my pig have? Handle every technical detail yourself and ask me only for decisions that need my preference. After I answer, describe the design in plain language and ask for my approval before writing any file.",
-		"After I approve, write one TypeScript extension file in the global extensions directory: `" + filepath.Join(agentDir, "extensions", "<id>.ts") + "`. Do not modify PiG itself or its built-in sprites.",
-		"The extension registers the sprite in `session_start` with `await ctx.ui.registerSprite({ id, name, tagline, mascot, palette })`. `id` is a lowercase slug of at most 32 characters (letters, digits and single hyphens) that is not a built-in sprite's id (" + strings.Join(builtInIDs(), ", ") + "). `name` and `tagline` are one line each. `mascot` is exactly 14 strings of exactly 16 characters; each character is a palette symbol, and `.` is transparent. `palette` maps each symbol to a `#RRGGBB` color. Keep the pig's silhouette and change its colors and details.",
-		"Start from PiG's standard pig:\n\n```ts\nexport default function (pi) {\n  pi.on(\"session_start\", async (_event, ctx) => {\n    await ctx.ui.registerSprite({\n      id: \"my-pig\",\n      name: \"My PiG\",\n      tagline: \"One line about my pig.\",\n      mascot: [\n" + strings.Join(mascotLines, "\n") + "\n      ],\n      palette: {\n" + strings.Join(paletteLines, "\n") + "\n      },\n    });\n  });\n}\n```",
+		"Help me create my own Ompig sprite: the ompig my startup header shows.",
+		"Start by asking me one plain-language question: what character, colors or style should my ompig have? Handle every technical detail yourself and ask me only for decisions that need my preference. After I answer, describe the design in plain language and ask for my approval before writing any file.",
+		"After I approve, write one TypeScript extension file in the global extensions directory: `" + filepath.Join(agentDir, "extensions", "<id>.ts") + "`. Do not modify Ompig itself or its built-in sprites.",
+		"The extension registers the sprite in `session_start` with `await ctx.ui.registerSprite({ id, name, tagline, mascot, palette })`. `id` is a lowercase slug of at most 32 characters (letters, digits and single hyphens) that is not a built-in sprite's id (" + strings.Join(builtInIDs(), ", ") + "). `name` and `tagline` are one line each. `mascot` is exactly 14 strings of exactly 16 characters; each character is a palette symbol, and `.` is transparent. `palette` maps each symbol to a `#RRGGBB` color. Keep the ompig's silhouette and change its colors and details.",
+		"Start from Ompig's standard ompig:\n\n```ts\nexport default function (pi) {\n  pi.on(\"session_start\", async (_event, ctx) => {\n    await ctx.ui.registerSprite({\n      id: \"my-ompig\",\n      name: \"My Ompig\",\n      tagline: \"One line about my ompig.\",\n      mascot: [\n" + strings.Join(mascotLines, "\n") + "\n      ],\n      palette: {\n" + strings.Join(paletteLines, "\n") + "\n      },\n    });\n  });\n}\n```",
 		"After writing the file, tell me to run /reload and then /sprite set <id> to use it, and /sprite preview <id> to see its full art.",
 	}, "\n\n"), nil
 }
@@ -208,7 +208,7 @@ func builtInIDs() []string {
 }
 
 // activate selects the sprite and shows it at once. Nothing else repaints the header after a command, so it restores the
-// built-in header (setHeader(undefined)), which draws the active sprite; PiG Standard's login showed a chosen sprite the same
+// built-in header (setHeader(undefined)), which draws the active sprite; Ompig Standard's login showed a chosen sprite the same
 // way, by setting its login over whatever header was in place.
 func activate(ctx context.Context, id string) error {
 	if err := Activate(id); err != nil {

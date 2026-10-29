@@ -12,9 +12,9 @@ import (
 	"time"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // pendingWarmProvider delays a refresh's completion after cancellation, including creation of a session-scoped resource during provider teardown.
@@ -205,7 +205,7 @@ func BenchmarkSessionReplaceInnerCacheWarming(b *testing.B) {
 			name = "history"
 		}
 		b.Run(name, func(b *testing.B) {
-			b.Setenv("PIG_HOME", b.TempDir())
+			b.Setenv("OMPIG_HOME", b.TempDir())
 			services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: b.TempDir()})
 			if err != nil {
 				b.Fatal(err)

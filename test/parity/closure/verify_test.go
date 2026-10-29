@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// verificationOnlyStore builds a complete store for one behavior pig already
+// verificationOnlyStore builds a complete store for one behavior ompig already
 // matches: mapping, reachability, a bound passing test, an admissible assertion,
 // and an EvidenceRequest: but no attested evidence yet, so the obligation starts
 // open. targetValue controls the source under test so a caller can force the
@@ -29,7 +29,7 @@ func verificationOnlyStore(t *testing.T, targetValue int) (root, storePath, requ
 		t.Fatal(err)
 	}
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:verify", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: commit, ToolchainHash: toolchainHash, EnvironmentHash: environmentHash}
-	pin := &Pin{Kind: KindPin, ID: "pin:verify", SnapshotID: snapshot.ID, Repository: "pig", Commit: commit, Path: "target.go", SemanticID: "target.Value", StartLine: 1, EndLine: 3, QuoteHash: hash("target"), APIHash: hash("api"), BodyHash: hash("body")}
+	pin := &Pin{Kind: KindPin, ID: "pin:verify", SnapshotID: snapshot.ID, Repository: "ompig", Commit: commit, Path: "target.go", SemanticID: "target.Value", StartLine: 1, EndLine: 3, QuoteHash: hash("target"), APIHash: hash("api"), BodyHash: hash("body")}
 	target := &Target{Kind: KindTarget, ID: "target:verify", SnapshotID: snapshot.ID, PinIDs: []string{pin.ID}, Language: "go", Symbol: "target.Value"}
 	behavior := &Behavior{Kind: KindBehavior, ID: "behavior:verify", Name: "verify", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	facet := &Facet{Kind: KindFacet, ID: "facet:result", Name: "result"}
@@ -64,14 +64,14 @@ func verificationOnlyStore(t *testing.T, targetValue int) (root, storePath, requ
 }
 
 // initializeVerifyRepository builds a git repository whose module path is
-// github.com/MichaelKinsy/PiG so that Go coverage paths normalize to repository
+// github.com/tmih06/ompig so that Go coverage paths normalize to repository
 // pins. Value returns targetValue, letting a caller force the bound test to
 // fail. It stubs the executor-source files ExecuteRequest hashes.
 func initializeVerifyRepository(t *testing.T, targetValue int) string {
 	t.Helper()
 	root := t.TempDir()
 	files := map[string]string{
-		"go.mod":                             "module github.com/MichaelKinsy/PiG\n\ngo 1.26\n",
+		"go.mod":                             "module github.com/tmih06/ompig\n\ngo 1.26\n",
 		"target.go":                          "package target\n\nfunc Value() int { return " + strconv.Itoa(targetValue) + " }\n",
 		"target_test.go":                     "package target\n\nimport \"testing\"\n\nfunc TestValue(t *testing.T) {\n\tif got := Value(); got != 1 {\n\t\tt.Fatalf(\"Value() = %d, want 1\", got)\n\t}\n}\n",
 		"test/parity/closure/attestation.go": "package closure\n",

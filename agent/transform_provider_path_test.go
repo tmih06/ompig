@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // captureStreamWire drives a provider's real Stream path against an httptest

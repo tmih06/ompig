@@ -8,10 +8,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 // hotkeysMarkdown is the /hotkeys tables (interactive-mode.ts:6809-6919). shortcuts are the extension-registered shortcuts, listed in
@@ -20,7 +20,7 @@ func hotkeysMarkdown(shortcuts []extension.ExtensionShortcut) string {
 	var b strings.Builder
 	section := func(title string) { fmt.Fprintf(&b, "\n**%s**\n| Key | Action |\n|-----|--------|\n", title) }
 	row := func(description string, actions ...string) {
-		// pig additive (D92): an action whose built-in the process strips has no key and no row.
+		// ompig additive (D92): an action whose built-in the process strips has no key and no row.
 		if slices.ContainsFunc(actions, appActionStripped) {
 			return
 		}
@@ -69,7 +69,7 @@ func hotkeysMarkdown(shortcuts []extension.ExtensionShortcut) string {
 	row("Restore queued messages", "app.message.dequeue")
 	row("Paste files on macOS, images, or text from clipboard", "app.clipboard.pasteImage")
 	b.WriteString("| `/` | Slash commands |\n")
-	// pig additive (D92): `!` and `!!` run the user bash the bash tool owns.
+	// ompig additive (D92): `!` and `!!` run the user bash the bash tool owns.
 	if !pigstrip.Has(pigstrip.ListTools, "bash") {
 		b.WriteString("| `!` | Run bash command |\n| `!!` | Run bash command (excluded from context) |\n")
 	}

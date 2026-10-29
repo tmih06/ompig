@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // wireToolFlowError checks the tool-flow rule Anthropic Messages (and the other
@@ -71,7 +71,7 @@ func boundaryUserPrompt(text string) AgentMessage {
 // for tool-flow accounting. Upstream converts before transformMessages, so a
 // branch summary, compaction summary, bash execution or custom message that
 // lands between a tool call and its remaining results interrupts the tool flow
-// and the missing result is synthesized before it. Pig normalizes before the
+// and the missing result is synthesized before it. Ompig normalizes before the
 // conversion; treating those messages as non-interrupting left the synthetic
 // result after the user message, an orphan tool_result Anthropic rejects with
 // "unexpected tool_use_id in tool_result blocks".

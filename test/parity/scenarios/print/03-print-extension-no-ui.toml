@@ -13,8 +13,8 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/ui.json"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["../testdata/extension-ui-context.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["../testdata/extension-ui-context.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../testdata/extension-ui-context.mjs"]
 
 [assert]

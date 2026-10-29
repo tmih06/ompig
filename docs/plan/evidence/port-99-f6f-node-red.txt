@@ -1,4 +1,4 @@
-# port-99-f6f-node red run: each test run alone against the tree before the Node runtime implements the 0.99.1 extension API (go1.27.1, node v24.19.0, isolated HOME/PIG_HOME)
+# port-99-f6f-node red run: each test run alone against the tree before the Node runtime implements the 0.99.1 extension API (go1.27.1, node v24.19.0, isolated HOME/OMPIG_HOME)
 
 ## test/extension-conformance
 ### TestNodeMcpServerRegistration

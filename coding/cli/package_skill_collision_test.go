@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/test/suite/regressions/2781-skill-collision-precedence.test.ts:66,81,96,112.
@@ -24,7 +24,7 @@ func TestSkillCollisionPrecedenceUpstream(t *testing.T) {
 			home, cwd, agentDir := filepath.Join(root, "home"), filepath.Join(root, "project"), filepath.Join(root, "agent")
 			t.Setenv("HOME", home)
 			t.Setenv("USERPROFILE", home)
-			t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
+			t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
 			pkg := filepath.Join(root, "fake-package-web-fetch")
 			writeSkill := func(dir, description, content string) string {
 				t.Helper()
@@ -79,7 +79,7 @@ func TestConfiguredPackageSkillCollisionFirstWins(t *testing.T) {
 	home, cwd, agentDir, pkg := t.TempDir(), t.TempDir(), t.TempDir(), t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
 	if err := os.WriteFile(filepath.Join(pkg, "package.json"), []byte(`{"name":"collision","pi":{"skills":["second/SKILL.md","first/SKILL.md"]}}`), 0o600); err != nil {
 		t.Fatal(err)
 	}

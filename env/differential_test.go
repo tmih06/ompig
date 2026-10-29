@@ -20,11 +20,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/env/node"
-	"github.com/MichaelKinsy/PiG/durable/tools"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/env/node"
+	"github.com/tmih06/ompig/durable/tools"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // pair is a NodeExecutionEnv and a RemoteExecutionEnv over the same machine, each in its own root.
@@ -371,7 +371,7 @@ func TestRemoteExecutionEnvAgainstNodeExecutionEnv(t *testing.T) {
 		}
 		ctx := context.Background()
 		// Node decodes the names with replacement characters and lstats them under that name, so listDir fails with
-		// ENOENT for them and a directory reader skips them. (The local NodeExecutionEnv of PiG lists the raw names, so
+		// ENOENT for them and a directory reader skips them. (The local NodeExecutionEnv of Ompig lists the raw names, so
 		// this case states Node's results instead of comparing with it.)
 		if _, err := remote.ListDir(ctx, "."); errorCodeOf(err) != "not_found" {
 			t.Fatalf("listDir code %s, want not_found", errorCodeOf(err))

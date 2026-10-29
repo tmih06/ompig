@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ProviderConfig is the registration payload for [API.RegisterProvider].
@@ -39,7 +39,7 @@ type ProviderConfig struct {
 	OAuth         *ProviderOAuth        `json:"oauth,omitempty"`
 	// Insecure skips TLS certificate verification for this provider's
 	// endpoint. Opt-in only, for self-signed/internal-CA on-prem gateways.
-	// pig additive (D36): additive optional field; no upstream per-provider TLS-skip.
+	// ompig additive (D36): additive optional field; no upstream per-provider TLS-skip.
 	Insecure bool `json:"insecure,omitempty"`
 }
 

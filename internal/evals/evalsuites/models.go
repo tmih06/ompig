@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/internal/evals"
+	"github.com/tmih06/ompig/internal/evals"
 )
 
 const (
@@ -36,7 +36,7 @@ func Models() evals.Suite {
 		Judges:           []evals.Judge{mustJudge(expected)},
 		NoJudgeThreshold: true,
 		Cases: []evals.Case{singleCase("adds the model without replacing existing models", promptThenReload(fmt.Sprintf(
-			"Configure this running PiG installation with a new `%s/%s` model. Do not create project-local configuration. Show it as “%s”. It accepts text, supports reasoning, has a 32,768-token context window and a 4,096-token maximum output, and has no usage cost.",
+			"Configure this running Ompig installation with a new `%s/%s` model. Do not create project-local configuration. Show it as “%s”. It accepts text, supports reasoning, has a 32,768-token context window and a 4,096-token maximum output, and has no usage cost.",
 			modelsProviderID, modelsModelID, modelsModelName)))},
 	}
 }

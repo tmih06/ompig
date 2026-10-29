@@ -49,7 +49,7 @@ var (
 
 func readReleaseWorkflow(t *testing.T) (releaseWorkflow, string) {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("..", "..", "docs", "examples", "piglet-release.yml"))
+	data, err := os.ReadFile(filepath.Join("..", "..", "docs", "examples", "ompiglet-release.yml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -67,13 +67,13 @@ func readReleaseWorkflow(t *testing.T) (releaseWorkflow, string) {
 func TestPigletReleaseWorkflowIsPinnedReusableAndDeclared(t *testing.T) {
 	workflow, text := readReleaseWorkflow(t)
 	call := workflow.On.WorkflowCall
-	for _, name := range []string{"piglet", "pig-ref"} {
+	for _, name := range []string{"ompiglet", "ompig-ref"} {
 		if input, ok := call.Inputs[name]; !ok || !input.Required || input.Type != "string" {
 			t.Errorf("workflow_call input %q = %+v, want a required string", name, input)
 		}
 	}
-	if secret, ok := call.Secrets["piglet-signing-key"]; !ok || !secret.Required {
-		t.Error("workflow_call must require the piglet-signing-key secret")
+	if secret, ok := call.Secrets["ompiglet-signing-key"]; !ok || !secret.Required {
+		t.Error("workflow_call must require the ompiglet-signing-key secret")
 	}
 	if len(workflow.Permissions) != 1 || workflow.Permissions["contents"] != "read" {
 		t.Errorf("top-level permissions = %v, want contents: read", workflow.Permissions)
@@ -133,21 +133,21 @@ func TestPigletReleaseWorkflowIsPinnedReusableAndDeclared(t *testing.T) {
 	}
 }
 
-// The workflow's pig commands parse with the current flags, build into the
+// The workflow's ompig commands parse with the current flags, build into the
 // directory it uploads, and publish from the directory it downloads.
 func TestPigletReleaseWorkflowRunsCurrentPigCommands(t *testing.T) {
 	workflow, _ := readReleaseWorkflow(t)
-	build := workflowCommand(t, workflow, "build", "piglet build")
+	build := workflowCommand(t, workflow, "build", "ompiglet build")
 	if _, opts, _, out, err := parseArgs(build); err != nil || opts.Format != "binary" || opts.Builder != "native" || opts.SignKeyPath == "" || !strings.HasPrefix(out, "dist/") {
-		t.Fatalf("build job runs pig piglet build %q: opts=%+v out=%q err=%v", build, opts, out, err)
+		t.Fatalf("build job runs ompig ompiglet build %q: opts=%+v out=%q err=%v", build, opts, out, err)
 	}
-	publish := workflowCommand(t, workflow, "publish", "piglet publish")
+	publish := workflowCommand(t, workflow, "publish", "ompiglet publish")
 	request, help, err := parsePublishArgs(publish)
 	if err == nil {
 		err = request.validate()
 	}
 	if err != nil || help || !request.yes || request.artifacts != "dist" || request.commit == "" || request.signKeyPath == "" {
-		t.Fatalf("publish job runs pig piglet publish %q: request=%+v err=%v", publish, request, err)
+		t.Fatalf("publish job runs ompig ompiglet publish %q: request=%+v err=%v", publish, request, err)
 	}
 	var uploaded, downloaded string
 	for _, step := range workflow.Jobs["build"].Steps {
@@ -168,7 +168,7 @@ func TestPigletReleaseWorkflowRunsCurrentPigCommands(t *testing.T) {
 	}
 }
 
-// workflowCommand returns the arguments after `pig <marker>` in the one run
+// workflowCommand returns the arguments after `ompig <marker>` in the one run
 // step of job that invokes it, with GitHub-provided variables replaced by
 // representative values.
 func workflowCommand(t *testing.T, workflow releaseWorkflow, job, marker string) []string {
@@ -182,7 +182,7 @@ func workflowCommand(t *testing.T, workflow releaseWorkflow, job, marker string)
 				continue
 			}
 			if found != nil {
-				t.Fatalf("job %s runs pig %s more than once", job, marker)
+				t.Fatalf("job %s runs ompig %s more than once", job, marker)
 			}
 			after = strings.NewReplacer(
 				"$GITHUB_REPOSITORY", "acme/porter",
@@ -192,7 +192,7 @@ func workflowCommand(t *testing.T, workflow releaseWorkflow, job, marker string)
 		}
 	}
 	if found == nil {
-		t.Fatalf("job %s never runs pig %s", job, marker)
+		t.Fatalf("job %s never runs ompig %s", job, marker)
 	}
 	return found
 }

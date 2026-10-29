@@ -5,7 +5,7 @@ package extension_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/test/suite/regressions/7193-event-bus-lifecycle.test.ts:15-62 (the bus half) and src/core/event-bus.ts:3-10, 12-33.

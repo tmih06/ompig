@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
 // buildLine is the one live status line a load pass shows while it compiles
@@ -19,7 +19,7 @@ import (
 // extensions are compiling now. It rewrites itself in place, so sixteen cells
 // compiling in parallel are one line, not sixteen.
 //
-// pig additive (D20): Pi loads extension source in process and never compiles.
+// ompig additive (D20): Pi loads extension source in process and never compiles.
 type buildLine struct {
 	mu        sync.Mutex
 	out       io.Writer
@@ -95,7 +95,7 @@ type buildLineKey struct{}
 // withBuildLine returns ctx carrying the load pass's status line and the
 // function that removes it. It shows a line only for interactive mode on a
 // terminal, and never when an explicit build observer owns progress.
-// pig additive (D20): native cold-build notices belong to interactive mode, not to a terminal file descriptor alone.
+// ompig additive (D20): native cold-build notices belong to interactive mode, not to a terminal file descriptor alone.
 func (h *Host) withBuildLine(ctx context.Context, cells []CellSpec) (context.Context, func()) {
 	if ctx.Value(buildLineKey{}) != nil || buildprogress.Enabled(ctx) || h.mode != "tui" || !term.IsTerminal(int(os.Stderr.Fd())) {
 		return ctx, func() {}

@@ -10,7 +10,7 @@ import (
 )
 
 // D197: the Go runtime raises the soft limit of open files to one below the hard one (syscall/rlimit.go) when the process
-// starts, so PiG's daemon (this test binary runs under the same runtime) has nearly the hard limit. Pi's daemon keeps the
+// starts, so Ompig's daemon (this test binary runs under the same runtime) has nearly the hard limit. Pi's daemon keeps the
 // soft limit it inherits, which TestDaemonDescriptorLimitIsTheHardLimitUnlikePisDaemon (env) shows against Pi's own daemon.
 func TestDescriptorLimitIsTheHardLimit(t *testing.T) {
 	var limit syscall.Rlimit

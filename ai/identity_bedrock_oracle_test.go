@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // bedrockApplicationAgent is the application part of an AWS SDK user agent: the tokens after the SDK's api/ pair, without its m/ metadata token.
@@ -20,7 +20,7 @@ var (
 )
 
 // Pi's bedrockUserAgent hands the client identity to the AWS SDK as customUserAgent pairs. The JavaScript SDK writes them after its api/ pair;
-// the Go SDK does the same, so the pair after api/ is compared. PiG's product name replaces Pi's (D65).
+// the Go SDK does the same, so the pair after api/ is compared. Ompig's product name replaces Pi's (D65).
 func TestBedrockUserAgentMatchesPi(t *testing.T) {
 	identities := []map[string]any{
 		nil,
@@ -90,7 +90,7 @@ func TestBedrockUserAgentMatchesPi(t *testing.T) {
 		got := bedrockApplicationAgent.FindStringSubmatch((<-requests).header.Get("User-Agent"))
 		piAgent := bedrockApplicationAgent.FindStringSubmatch(want[i])
 		if got == nil || piAgent == nil {
-			t.Fatalf("identity %v: no application agent in PiG %q or Pi %q", identity, got, want[i])
+			t.Fatalf("identity %v: no application agent in Ompig %q or Pi %q", identity, got, want[i])
 		}
 		got[1], piAgent[1] = strings.TrimSpace(bedrockSDKMetadata.ReplaceAllString(got[1], "")), strings.TrimSpace(bedrockSDKMetadata.ReplaceAllString(piAgent[1], ""))
 		expected := piAgent[1]
@@ -101,7 +101,7 @@ func TestBedrockUserAgentMatchesPi(t *testing.T) {
 			}
 		}
 		if got[1] != expected {
-			t.Errorf("identity %v: PiG %q, Pi %q (full Pi agent %q)", identity, got[1], piAgent[1], want[i])
+			t.Errorf("identity %v: Ompig %q, Pi %q (full Pi agent %q)", identity, got[1], piAgent[1], want[i])
 		}
 	}
 }

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi 1.2.0 test/harness-nested-tools.test.ts "tool task version 1 records" (:1276-1342): a pi.tool task stored by version 1

@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream types.ts:1929-1991 (ProviderChatModelConfig, ProviderImageModelConfig, ProviderClassifierModelConfig, ProviderModelConfig): an entry round-trips with exactly its variant's fields. `type` is kept as the extension wrote it (omitted stays omitted; the registry normalizes it to "chat").

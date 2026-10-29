@@ -7,9 +7,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/wordsegmenter"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/wordsegmenter"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type SegmentData = wordsegmenter.SegmentData

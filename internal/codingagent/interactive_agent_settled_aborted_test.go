@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // holdThenAnswerProvider blocks its first request until the request context is cancelled and answers every later one.
@@ -48,7 +48,7 @@ func (p *holdThenAnswerProvider) Stream(ctx context.Context, _ ai.TranscriptCont
 // Escape (abort() sets _agentRunAbortRequested while the run is active) and aborted=false for the next, finished run.
 func TestInteractiveAgentSettledReportsEscapeAbort(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -107,7 +107,7 @@ func TestInteractiveAgentSettledReportsEscapeAbort(t *testing.T) {
 // hear it there: without it every run stays working after it ends, on an OSC 7501 terminal and in a frontend session.
 func TestInteractiveRunSettlesTheProgramStatus(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

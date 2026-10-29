@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // RangeDecoder is a streaming UTF-8 decoder for a byte range, like a TextDecoder with ignoreBOM: a character split

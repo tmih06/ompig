@@ -9,7 +9,7 @@ import (
 )
 
 // hotpathDirective marks a function that runs once per event, frame, token or turn. The passes below flag the allocations a hot path must not make.
-const hotpathDirective = "//pig:hotpath"
+const hotpathDirective = "//ompig:hotpath"
 
 // hotpathFunc reports whether the function declaration carries the directive in its doc comment.
 func hotpathFunc(fn *ast.FuncDecl) bool {
@@ -24,7 +24,7 @@ func hotpathFunc(fn *ast.FuncDecl) bool {
 	return false
 }
 
-// eachHotpathNode calls visit for every node inside a //pig:hotpath function, closures included: a closure built on the hot path runs on it.
+// eachHotpathNode calls visit for every node inside a //ompig:hotpath function, closures included: a closure built on the hot path runs on it.
 func (p *Pass) eachHotpathNode(visit func(ast.Node)) {
 	p.Inspect.Preorder([]ast.Node{(*ast.FuncDecl)(nil)}, func(n ast.Node) {
 		fn := n.(*ast.FuncDecl)
@@ -54,9 +54,9 @@ func anyMap(t types.Type) bool {
 	return ok && elem.Empty()
 }
 
-// HotpathJSON flags reflection JSON and map[string]any on a function marked //pig:hotpath (pattern P3: typed encoding).
+// HotpathJSON flags reflection JSON and map[string]any on a function marked //ompig:hotpath (pattern P3: typed encoding).
 var HotpathJSON = newCheck("hotpathjson",
-	"reflection JSON (Marshal, Unmarshal, NewEncoder, NewDecoder) or a map[string]any built on a //pig:hotpath function: every event, frame or turn pays the reflection walk and the map; append the bytes with a typed encoder and decode into a struct",
+	"reflection JSON (Marshal, Unmarshal, NewEncoder, NewDecoder) or a map[string]any built on a //ompig:hotpath function: every event, frame or turn pays the reflection walk and the map; append the bytes with a typed encoder and decode into a struct",
 	Med, "complexity-audit hotpath-sweep P3: rpcAgentEvent, makeEventHandler and the extension frame encoders marshal through reflection per event",
 	func(p *Pass) {
 		p.eachHotpathNode(func(n ast.Node) {
@@ -97,9 +97,9 @@ var timers = map[string]map[string]bool{
 	"time": {"After": true, "NewTimer": true, "Tick": true},
 }
 
-// HotpathAlloc flags per-call allocation a //pig:hotpath function can share or pool (pattern P5: reuse).
+// HotpathAlloc flags per-call allocation a //ompig:hotpath function can share or pool (pattern P5: reuse).
 var HotpathAlloc = newCheck("hotpathalloc",
-	"formatting (fmt.Sprint*), a slice or map copy (slices.Clone, maps.Clone, bytes.Clone, append([]T(nil), ...)) or a timer (time.After, time.NewTimer) on a //pig:hotpath function: every event, frame or turn allocates what could be built once, shared by reference or pooled",
+	"formatting (fmt.Sprint*), a slice or map copy (slices.Clone, maps.Clone, bytes.Clone, append([]T(nil), ...)) or a timer (time.After, time.NewTimer) on a //ompig:hotpath function: every event, frame or turn allocates what could be built once, shared by reference or pooled",
 	Low, "complexity-audit hotpath-sweep P5: three clones of every published message per event, a timer per wait",
 	func(p *Pass) {
 		p.eachHotpathNode(func(n ast.Node) {

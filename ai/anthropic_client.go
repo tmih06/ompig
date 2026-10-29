@@ -13,7 +13,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // claudeCodeVersion is the Claude Code release named in the user-agent of

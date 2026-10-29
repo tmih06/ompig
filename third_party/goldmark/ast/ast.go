@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	textm "github.com/MichaelKinsy/PiG/third_party/goldmark/text"
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/util"
+	textm "github.com/tmih06/ompig/third_party/goldmark/text"
+	"github.com/tmih06/ompig/third_party/goldmark/util"
 )
 
 // A NodeType indicates what type a node belongs to.

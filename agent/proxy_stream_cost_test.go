@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // proxy.ts processProxyEvent appends every delta to the block (`textContent.text += event.delta`, `partialJson += event.delta`) and re-parses the whole

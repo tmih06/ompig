@@ -28,7 +28,7 @@ var forbiddenImports = []string{
 	"log", "log/slog", "io/ioutil", "net", "math/rand", "math/rand/v2", "crypto/rand", "encoding/gob", "text/template",
 }
 
-const modulePrefix = "github.com/MichaelKinsy/PiG/durable/core"
+const modulePrefix = "github.com/tmih06/ompig/durable/core"
 
 // TestCorePurity enforces the core rules of package doc: no reflection, encoding/json, fmt, OS, clock, sync or
 // network packages; no goroutines or channels; no package-level mutable state; imports only down the layer list.

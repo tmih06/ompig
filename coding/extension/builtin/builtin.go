@@ -1,4 +1,4 @@
-// Package builtin is the registry of upstream's built-in extensions that PiG implements natively: the
+// Package builtin is the registry of upstream's built-in extensions that Ompig implements natively: the
 // `builtin:<name>` extension paths of codemode and tool-search (docs/specs/builtin-codemode-tool-search.md).
 //
 // Ports packages/coding-agent/src/extensions/index.ts (builtInExtensions).
@@ -7,7 +7,7 @@ package builtin
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // PathPrefix starts the path of a built-in extension, as in `builtin:codemode`.
@@ -30,20 +30,20 @@ func (e Extension) Path() string { return PathPrefix + e.Name }
 
 // Options configures the built-in extensions that need the session's settings or a cache location.
 type Options struct {
-	// Codemode configures the codemode extension (unused when built with the `pig_strip_codemode` tag).
+	// Codemode configures the codemode extension (unused when built with the `ompig_strip_codemode` tag).
 	Codemode CodemodeOptions
-	// Mcp configures the MCP extension (unused when built with the `pig_strip_mcp` tag).
+	// Mcp configures the MCP extension (unused when built with the `ompig_strip_mcp` tag).
 	Mcp McpOptions
 }
 
-// All lists the built-in extensions in upstream's order, then PiG's own `pig-login`. A stripped built-in has no row.
-// pig additive (D92): each row comes from a registration shim a Piglet Binary compiles out with pig_strip_<name>.
+// All lists the built-in extensions in upstream's order, then Ompig's own `ompig-login`. A stripped built-in has no row.
+// ompig additive (D92): each row comes from a registration shim a Ompiglet Binary compiles out with ompig_strip_<name>.
 func All(options Options) []Extension {
 	registerCompiledInReferences()
 	entries := append(codemodeEntries(options), toolSearchEntries()...)
 	entries = append(entries, mcpEntries(options)...)
-	// pig divergence (D2): the sprite login is PiG's own built-in; upstream's index.ts lists no such entry.
-	return append(entries, pigLoginEntries()...)
+	// ompig divergence (D2): the sprite login is Ompig's own built-in; upstream's index.ts lists no such entry.
+	return append(entries, ompigLoginEntries()...)
 }
 
 // registerCompiledInReferences makes the built-ins that are linked the ones an extension names by reference (createCodemodeExtension, createToolSearchExtension), as

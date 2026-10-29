@@ -12,9 +12,9 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // availabilityGate holds every full and provider availability pass at its credential read, so a snapshot change observed while it is closed cannot come from the scheduled refresh.
@@ -59,7 +59,7 @@ func registrationServices(t *testing.T, credentials map[string]ai.Credential) *A
 	t.Helper()
 	dir := t.TempDir()
 	t.Setenv("HOME", dir)
-	t.Setenv("PIG_HOME", filepath.Join(dir, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(dir, "home"))
 	if credentials != nil {
 		data, err := json.Marshal(credentials)
 		if err != nil {
@@ -95,7 +95,7 @@ func coreRegistration(id, apiKey string) ProviderConfigInput {
 	return ProviderConfigInput{API: ai.APIOpenAICompletions, BaseURL: "https://registered.invalid/v1", APIKey: apiKey, Models: []ai.AnyModel{nativeCompatModel("registered", id, "https://registered.invalid/v1")}}
 }
 
-// Pi model-runtime.ts:753-797 updates the shared snapshot synchronously in registerProvider and unregisterProvider; model-registry.ts:54-56 and every selector read that snapshot. AgentSession (agent-session.ts:3128-3139) and interactive listeners run after the update, so Pig's change observers must see it too. The gate proves the scheduled refresh is not the source.
+// Pi model-runtime.ts:753-797 updates the shared snapshot synchronously in registerProvider and unregisterProvider; model-registry.ts:54-56 and every selector read that snapshot. AgentSession (agent-session.ts:3128-3139) and interactive listeners run after the update, so Ompig's change observers must see it too. The gate proves the scheduled refresh is not the source.
 func TestProviderRegistrationUpdatesAvailabilityBeforeReturn(t *testing.T) {
 	const id = "registered-provider"
 	for _, entry := range []string{"extension-config", "extension-runtime", "core-input"} {
@@ -170,8 +170,8 @@ func TestProviderRegistrationProvisionalAvailabilityUpstream(t *testing.T) {
 	}{
 		{name: "literal key", apiKey: "literal-key", available: true, authType: ai.CredentialAPIKey},
 		{name: "stored credential", credentials: map[string]ai.Credential{id: {Type: ai.CredentialAPIKey, Key: "stored-key"}}, available: true, authType: ai.CredentialAPIKey},
-		{name: "configured environment", env: "configured", apiKey: "$PIG_REGISTRATION_TEST_KEY", available: true, authType: ai.CredentialAPIKey},
-		{name: "unset environment", apiKey: "$PIG_REGISTRATION_TEST_KEY"},
+		{name: "configured environment", env: "configured", apiKey: "$OMPIG_REGISTRATION_TEST_KEY", available: true, authType: ai.CredentialAPIKey},
+		{name: "unset environment", apiKey: "$OMPIG_REGISTRATION_TEST_KEY"},
 		{name: "unconfigured"},
 		{name: "stored oauth without key", credentials: storedOAuth, oauth: true, available: true, authType: ai.CredentialOAuth},
 		{name: "stored oauth with key", credentials: storedOAuth, apiKey: "literal-key", oauth: true, available: true, authType: ai.CredentialAPIKey},
@@ -180,7 +180,7 @@ func TestProviderRegistrationProvisionalAvailabilityUpstream(t *testing.T) {
 	for _, entry := range []string{"extension-config", "core-input"} {
 		for _, tc := range cases {
 			t.Run(entry+"/"+tc.name, func(t *testing.T) {
-				t.Setenv("PIG_REGISTRATION_TEST_KEY", tc.env)
+				t.Setenv("OMPIG_REGISTRATION_TEST_KEY", tc.env)
 				synctest.Test(t, func(t *testing.T) {
 					services := registrationServices(t, tc.credentials)
 					runtime := services.ModelRuntime()
@@ -272,7 +272,7 @@ func TestProviderReRegistrationKeepsRealAuthCheck(t *testing.T) {
 	})
 }
 
-// Pi model-runtime.ts:744-750 publishes a native provider's catalog synchronously and leaves availability to the unawaited local refresh, which PiG queues and starts on the caller's next awaited model-runtime call or an extension host callback (D84).
+// Pi model-runtime.ts:744-750 publishes a native provider's catalog synchronously and leaves availability to the unawaited local refresh, which Ompig queues and starts on the caller's next awaited model-runtime call or an extension host callback (D84).
 func TestNativeProviderRegistrationSchedulesLocalRefresh(t *testing.T) {
 	const id = "native-registered"
 	synctest.Test(t, func(t *testing.T) {
@@ -350,7 +350,7 @@ func TestSessionCycleModelSeesExtensionProviderRegistration(t *testing.T) {
 	})
 }
 
-// Pi's updateModelSnapshot (model-runtime.ts:277-284) widens every configured provider to its unfiltered catalog on registration or removal, and the unawaited local refresh queued by that call recomputes the account filter (model-runtime.ts:797, models.ts getAvailable filterModels). Pig queues that refresh (D84), so the widening lasts until the caller's next awaited model-runtime call.
+// Pi's updateModelSnapshot (model-runtime.ts:277-284) widens every configured provider to its unfiltered catalog on registration or removal, and the unawaited local refresh queued by that call recomputes the account filter (model-runtime.ts:797, models.ts getAvailable filterModels). Ompig queues that refresh (D84), so the widening lasts until the caller's next awaited model-runtime call.
 func TestProviderRegistrationWidensOtherProvidersUntilTheQueuedRefresh(t *testing.T) {
 	const filteredID, registeredID = "filtered-provider", "registered-provider"
 	synctest.Test(t, func(t *testing.T) {
@@ -400,7 +400,7 @@ func TestProviderRegistrationWidensOtherProvidersUntilTheQueuedRefresh(t *testin
 	})
 }
 
-// Pi registers providers on one event loop, so every registerProvider call that has returned is in the snapshot (model-runtime.ts:753-789). Pig's extension hosts register concurrently; the latest projection must read the provider order after it takes its sequence, or it can commit an order that lacks a provider registered just before it. The gate keeps the scheduled refreshes from repairing the snapshot.
+// Pi registers providers on one event loop, so every registerProvider call that has returned is in the snapshot (model-runtime.ts:753-789). Ompig's extension hosts register concurrently; the latest projection must read the provider order after it takes its sequence, or it can commit an order that lacks a provider registered just before it. The gate keeps the scheduled refreshes from repairing the snapshot.
 func TestConcurrentProviderRegistrationsAllReachSnapshot(t *testing.T) {
 	const providers = 16
 	for iteration := range 40 {

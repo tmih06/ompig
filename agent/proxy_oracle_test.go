@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 const proxyOracleUsage = `{"input":1,"output":2,"cacheRead":0,"cacheWrite":0,"totalTokens":3,"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0,"total":0}}`
@@ -69,7 +69,7 @@ func TestStreamProxyToolCallEndWireMembersOverrideStreamedOnes(t *testing.T) {
 }
 
 // Oracle: Pi's EventStream ignores pushes after done, so a later event is not delivered and does not change the stop reason.
-// Pi still applies the late event to the delivered message (its final content becomes [{text:""}]); PiG leaves the message
+// Pi still applies the late event to the delivered message (its final content becomes [{text:""}]); Ompig leaves the message
 // as the terminal event delivered it, because changing it afterwards races with the consumer (proposed divergence).
 func TestStreamProxyEventAfterDoneIsNotDelivered(t *testing.T) {
 	events, result := streamProxyOracle(t,
@@ -86,7 +86,7 @@ func TestStreamProxyEventAfterDoneIsNotDelivered(t *testing.T) {
 }
 
 // Pi's catch block sets stopReason "error" on the already delivered message when a line after done is not JSON (probed);
-// PiG keeps the delivered message unchanged (proposed divergence, see TestStreamProxyEventAfterDoneIsNotDelivered).
+// Ompig keeps the delivered message unchanged (proposed divergence, see TestStreamProxyEventAfterDoneIsNotDelivered).
 func TestStreamProxyMalformedLineAfterDoneLeavesTheResult(t *testing.T) {
 	events, result := streamProxyOracle(t,
 		`{"type":"start"}`,

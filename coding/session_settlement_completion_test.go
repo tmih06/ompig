@@ -4,8 +4,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:1468-1489,831-834 — prompt awaits _emitAgentSettled, including synchronous public subscribers, even when no extension subscribes.

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type authPathOut struct {
@@ -21,7 +21,7 @@ type authPathOut struct {
 	Files   []string `json:"files"`
 }
 
-// pi: packages/coding-agent/src/core/auth-storage.ts AuthStorage.create (normalizePath of the auth path): a path spelled absolute, relative to the process directory, with `~` or `~/x`, as a file:// URL, with dot segments, doubled separators or a no-break space reaches the same file in Pi and in Pig.
+// pi: packages/coding-agent/src/core/auth-storage.ts AuthStorage.create (normalizePath of the auth path): a path spelled absolute, relative to the process directory, with `~` or `~/x`, as a file:// URL, with dot segments, doubled separators or a no-break space reaches the same file in Pi and in Ompig.
 func TestAuthStorageAuthPathSpellingsMatchPi(t *testing.T) {
 	probes := []string{
 		"{S}/a/auth.json", "rel/auth.json", "./rel/../r2/auth.json", "~/auth.json", "~/sub/../auth.json", "~/deep/er/auth.json", "~user/auth.json",
@@ -32,7 +32,7 @@ func TestAuthStorageAuthPathSpellingsMatchPi(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	piSandbox, pigSandbox := t.TempDir(), t.TempDir()
+	piSandbox, ompigSandbox := t.TempDir(), t.TempDir()
 	cmd := exec.CommandContext(t.Context(), "node", "testdata/auth_path.mjs", pigversion.UpstreamPackageVersion, piSandbox)
 	cmd.Stdin = bytes.NewReader(input)
 	var stderr bytes.Buffer
@@ -49,7 +49,7 @@ func TestAuthStorageAuthPathSpellingsMatchPi(t *testing.T) {
 		t.Fatalf("Pi returned %d results for %d probes", len(want), len(probes))
 	}
 	for i, probe := range probes {
-		base := filepath.Join(pigSandbox, fmt.Sprintf("p%d", i))
+		base := filepath.Join(ompigSandbox, fmt.Sprintf("p%d", i))
 		if err := os.MkdirAll(filepath.Join(base, "home"), 0o755); err != nil {
 			t.Fatal(err)
 		}

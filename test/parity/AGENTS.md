@@ -17,7 +17,7 @@ Pinned Pi is the behavior oracle. A scenario proves only its asserted path. Gene
 | Failure | Detection | Required result |
 |---|---|---|
 | A scenario passes without reaching the feature | Mutate the owning branch | The scenario fails behaviorally |
-| Normalization hides a defect | Inspect raw and normalized output | Fix PiG or cite an approved divergence |
+| Normalization hides a defect | Inspect raw and normalized output | Fix Ompig or cite an approved divergence |
 | A crop excludes the difference | Compare the complete owning surface | Keep the difference visible |
 | Timing changes queue order | Use barriers and acknowledgements | Assert exact order without retries |
 | A generated count is treated as proof | Trace it to reviewed mappings and execution | Keep denominator and evidence separate |

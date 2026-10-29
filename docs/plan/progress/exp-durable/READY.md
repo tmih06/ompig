@@ -15,7 +15,7 @@ Branch `team/the bench host/exp-durable`. Merged: d-foundation, d-storage, d-ses
 | Worker over `durableadapter.Session`: task-graph activity, `Resume`, no fault hook | `installWorkerLifecycle` over Go harness events | `TestWorkerStaysOpenWhileTheHarnessHasLiveTasks` (mutation: removing the subscription turns it red), `TestWorkerRetiresAfterTheInitialGraceWithoutLiveTasks`, cleanup-failure tests |
 | `client_run.go` through `waitForPrompt`; chat view and client TUI on the durable view | streaming and lane-snapshot tests | `TestPromptClientSessionWaitsForTheAnswer`, `TestExperimentalClientTuiUpstream` (3 rows), `TestClientChatViewReusesStreamingComponentAndRebasesDivergentPrefix`, remote-runtime prompt cases |
 
-`go test ./internal/experimental/...` green; `-race` on the worker, client and remote-runtime tests clean; `golangci-lint` clean for `internal/experimental` and `cmd/pig`; `go vet -tags pig_experimental ./cmd/...` clean.
+`go test ./internal/experimental/...` green; `-race` on the worker, client and remote-runtime tests clean; `golangci-lint` clean for `internal/experimental` and `cmd/ompig`; `go vet -tags ompig_experimental ./cmd/...` clean.
 
 Test mapping: agent-controller, transcript-provider, plugin-reload, client-tui, cli-command, cli-resolution `ported`; remote-runtime `partial`. Upstream-sync: no experimental row pending; `session-worker.ts`, `durable/*`, `vacation/*` `deferred`.
 

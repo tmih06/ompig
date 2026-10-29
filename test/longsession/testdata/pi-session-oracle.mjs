@@ -1,4 +1,4 @@
-// Open each session file in the installed Pi's SessionManager and report what a caller observes: every read accessor, the files that branching, forking, appending and migration write, with new ids and clocks replaced by placeholders. session_oracle_test.go runs PiG's SessionManager through the same steps and compares the reports byte for byte.
+// Open each session file in the installed Pi's SessionManager and report what a caller observes: every read accessor, the files that branching, forking, appending and migration write, with new ids and clocks replaced by placeholders. session_oracle_test.go runs Ompig's SessionManager through the same steps and compares the reports byte for byte.
 import { copyFileSync, mkdirSync, readFileSync, realpathSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";

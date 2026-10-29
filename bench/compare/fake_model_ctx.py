@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
 # SPDX-License-Identifier: MIT
-"""Scripted OpenAI-compatible model for the context-scale and agent-scale scenarios (PiG's own code; same task script as Pi-Bolt's
+"""Scripted OpenAI-compatible model for the context-scale and agent-scale scenarios (Ompig's own code; same task script as Pi-Bolt's
 fake_model.py so every arm does the same work): after each user prompt it reads four fixture files with the `read` tool, one per
 turn, then answers "Done: read all four files (prompt N)". Differences from Pi-Bolt's server, all deliberate:
   * usage.prompt_tokens is the request body length / 4, so a harness that trusts the provider's usage sees the real context size

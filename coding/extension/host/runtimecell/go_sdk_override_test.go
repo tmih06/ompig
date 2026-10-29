@@ -7,19 +7,19 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestGoSDKPathOverrideIgnoresMissingReplace guards the field bug where a packed
 // Go cell emitted an SDK replace pointing at a path that only existed on the
-// extension author's machine (for example, /Users/example/PiG/extensions/sdk).
+// extension author's machine (for example, /Users/example/Ompig/extensions/sdk).
 // A foreign or stale replace directory must be ignored so findSDKRoot can fall
 // back to the staged / source-tree SDK, rather than baked into the generated
 // go.mod as a broken replacement directory.
 func TestGoSDKPathOverrideIgnoresMissingReplace(t *testing.T) {
 	root := t.TempDir()
 	missing := filepath.Join(root, "does", "not", "exist")
-	writeGoMod(t, root, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+modfile.AutoQuote(missing)+"\n")
+	writeGoMod(t, root, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+modfile.AutoQuote(missing)+"\n")
 
 	if got := GoSDKPathOverride(root); got != "" {
 		t.Fatalf("override for a non-existent replace path should be ignored, got %q", got)
@@ -35,8 +35,8 @@ func TestGoSDKPathOverrideResolvesRealReplace(t *testing.T) {
 	if err := os.MkdirAll(sdk, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	writeGoMod(t, sdk, "module github.com/MichaelKinsy/PiG/extensions/sdk\n\ngo 1.26\n")
-	writeGoMod(t, root, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ./vendor-sdk\n")
+	writeGoMod(t, sdk, "module github.com/tmih06/ompig/extensions/sdk\n\ngo 1.26\n")
+	writeGoMod(t, root, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/tmih06/ompig/extensions/sdk => ./vendor-sdk\n")
 
 	got := GoSDKPathOverride(root)
 	want := filepath.Clean(sdk)
@@ -48,7 +48,7 @@ func TestGoSDKPathOverrideResolvesRealReplace(t *testing.T) {
 // TestGoSDKPathOverrideNoReplace returns empty when no SDK replace is declared.
 func TestGoSDKPathOverrideNoReplace(t *testing.T) {
 	root := t.TempDir()
-	writeGoMod(t, root, "module example.com/ext\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n")
+	writeGoMod(t, root, "module example.com/ext\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n")
 
 	if got := GoSDKPathOverride(root); got != "" {
 		t.Fatalf("override with no SDK replace should be empty, got %q", got)
@@ -56,17 +56,17 @@ func TestGoSDKPathOverrideNoReplace(t *testing.T) {
 }
 
 // retiredStagedSDKFixture builds a config root whose staging area holds both the
-// SDK this binary stages for lang and an unhashed directory an earlier pig staged
+// SDK this binary stages for lang and an unhashed directory an earlier ompig staged
 // there (still on disk, since staging never deletes it), and an extension module
 // whose ../.sdk link points at that retired directory, as a link made with
-// `pig reload --sdk-path` before updating pig does.
+// `ompig reload --sdk-path` before updating ompig does.
 func retiredStagedSDKFixture(t *testing.T, lang, base, marker string) (configRoot, staged, extension string) {
 	t.Helper()
 	configRoot = t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	t.Setenv("XDG_CONFIG_HOME", "")
-	t.Setenv("PIG_SDK_GO_ROOT", "")
-	t.Setenv("PIG_SDK_RS_ROOT", "")
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_SDK_RS_ROOT", "")
 	staged = testStagedSDKDir(t, configRoot, lang)
 	stageSDKMarker(t, staged, marker)
 	retired := filepath.Join(configRoot, "state", "pigsdk", base)
@@ -81,11 +81,11 @@ func retiredStagedSDKFixture(t *testing.T, lang, base, marker string) (configRoo
 }
 
 // TestGoSDKPathOverrideIgnoresRetiredStagedSDK proves a replace that resolves to
-// an SDK an earlier pig staged is treated like a missing one: the build falls
+// an SDK an earlier ompig staged is treated like a missing one: the build falls
 // back to the SDK staged now instead of compiling against the old copy.
 func TestGoSDKPathOverrideIgnoresRetiredStagedSDK(t *testing.T) {
 	configRoot, staged, extension := retiredStagedSDKFixture(t, "go", "sdk", "go.mod")
-	writeGoMod(t, extension, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ../.sdk\n")
+	writeGoMod(t, extension, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/tmih06/ompig/extensions/sdk => ../.sdk\n")
 
 	if got := GoSDKPathOverride(extension); got != "" {
 		t.Fatalf("override through a link to a retired staged SDK should be ignored, got %q", got)
@@ -96,15 +96,15 @@ func TestGoSDKPathOverrideIgnoresRetiredStagedSDK(t *testing.T) {
 	}
 	// The preferred staged directory names the config root even when the
 	// ambient one differs.
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	got, err = findSDKRootWithPreferred([]GoExtension{{Root: extension}}, staged)
 	if err != nil || got != staged {
 		t.Fatalf("findSDKRootWithPreferred under another ambient root = %q, %v; want %q", got, err, staged)
 	}
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 
 	direct := filepath.Join(configRoot, "state", "pigsdk", "sdk")
-	writeGoMod(t, extension, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+modfile.AutoQuote(direct)+"\n")
+	writeGoMod(t, extension, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+modfile.AutoQuote(direct)+"\n")
 	if got := GoSDKPathOverride(extension); got != "" {
 		t.Fatalf("override naming a retired staged SDK directly should be ignored, got %q", got)
 	}
@@ -114,7 +114,7 @@ func TestGoSDKPathOverrideIgnoresRetiredStagedSDK(t *testing.T) {
 // staged now still resolves as the author's override.
 func TestGoSDKPathOverrideKeepsCurrentStagedSDK(t *testing.T) {
 	_, staged, extension := retiredStagedSDKFixture(t, "go", "sdk", "go.mod")
-	writeGoMod(t, extension, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+modfile.AutoQuote(staged)+"\n")
+	writeGoMod(t, extension, "module example.com/ext\n\ngo 1.26\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+modfile.AutoQuote(staged)+"\n")
 	if got := GoSDKPathOverride(extension); got != staged {
 		t.Fatalf("override naming the current staged SDK = %q, want %q", got, staged)
 	}

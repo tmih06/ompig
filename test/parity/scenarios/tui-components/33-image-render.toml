@@ -11,11 +11,11 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/image-render-pig.mjs"]
+ompig_args = ["node", "./test/parity/testdata/image-render-ompig.mjs"]
 pi_args = ["node", "./test/parity/testdata/image-render-pi.mjs"]
-pig_go_tests = ["./tui"]
+ompig_go_tests = ["./tui"]
 pi_go_tests = ["./tui"]
 
 [cli]

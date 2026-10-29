@@ -4,9 +4,9 @@
 package core
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // modelContextPayload builds the payload of a model request (ABI section 6, effect 3, and section 10.2). A request carries

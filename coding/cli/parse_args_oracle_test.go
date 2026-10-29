@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // canonicalArgs is Pi's Args as parseArgs returns it: a property is present only when parseArgs set it.
@@ -175,7 +175,7 @@ func TestParseArgsMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got, expected[i]) {
 			if failures++; failures <= 8 {
-				t.Errorf("parseArgs(%q):\n  Pig %v\n  Pi  %v", vector, got, expected[i])
+				t.Errorf("parseArgs(%q):\n  Ompig %v\n  Pi  %v", vector, got, expected[i])
 			}
 		}
 	}

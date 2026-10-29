@@ -11,8 +11,8 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/probe"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/probe"
 )
 
 var (
@@ -114,7 +114,7 @@ func allocStats() unsafe.Pointer {
 	return unsafe.Pointer(&allocs[0])
 }
 
-//go:wasmimport pig uuidv7
+//go:wasmimport ompig uuidv7
 func hostUUIDv7(dst unsafe.Pointer)
 
 // hostUUID asks the host for one pi-ai uuidv7() value (36 ASCII bytes).

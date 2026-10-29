@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-// Modulesize gates the root module zip that `go install github.com/MichaelKinsy/PiG/cmd/pig@<version>` downloads.
+// Modulesize gates the root module zip that `go install github.com/tmih06/ompig/cmd/ompig@<version>` downloads.
 //
-// It lists the tracked files with Go's module zip rules (golang.org/x/mod/zip, as automation/release/modulehash does), sums their uncompressed bytes, and fails above the committed budget with the largest files and directories. With -install it also builds the module zip, serves it through a file:// GOPROXY, and runs `go install ./cmd/pig` from that zip, so a missing go:embed target, a replace directive, or an oversized tree fails here and not after publication.
+// It lists the tracked files with Go's module zip rules (golang.org/x/mod/zip, as automation/release/modulehash does), sums their uncompressed bytes, and fails above the committed budget with the largest files and directories. With -install it also builds the module zip, serves it through a file:// GOPROXY, and runs `go install ./cmd/ompig` from that zip, so a missing go:embed target, a replace directive, or an oversized tree fails here and not after publication.
 package main
 
 import (
@@ -25,7 +25,7 @@ import (
 	"golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/MichaelKinsy/PiG/automation/release/modulehash"
+	"github.com/tmih06/ompig/automation/release/modulehash"
 )
 
 const defaultBudgetFile = "automation/release/module-size-budget.txt"
@@ -53,7 +53,7 @@ func main() {
 	flag.StringVar(&root, "root", ".", "repository root")
 	flag.StringVar(&budgetFile, "budget-file", defaultBudgetFile, "budget file, relative to -root")
 	flag.IntVar(&top, "top", 20, "number of largest files and directories to list")
-	flag.BoolVar(&install, "install", false, "also run go install of cmd/pig from the module zip through a file:// GOPROXY")
+	flag.BoolVar(&install, "install", false, "also run go install of cmd/ompig from the module zip through a file:// GOPROXY")
 	flag.Parse()
 	if err := run(root, budgetFile, top, install); err != nil {
 		fmt.Fprintln(os.Stderr, "module-size:", err)
@@ -180,7 +180,7 @@ func overBudget(rep report, budget int64, top int) string {
 	return b.String()
 }
 
-// proveInstall serves the module zip of root through a file:// GOPROXY and runs `go install` of cmd/pig at that version outside any workspace.
+// proveInstall serves the module zip of root through a file:// GOPROXY and runs `go install` of cmd/ompig at that version outside any workspace.
 func proveInstall(root string, files []modzip.File) error {
 	goMod, err := os.ReadFile(filepath.Join(root, "go.mod"))
 	if err != nil {
@@ -190,7 +190,7 @@ func proveInstall(root string, files []modzip.File) error {
 	if modPath == "" {
 		return errors.New("go.mod has no module path")
 	}
-	work, err := os.MkdirTemp("", "pig-module-size-*")
+	work, err := os.MkdirTemp("", "ompig-module-size-*")
 	if err != nil {
 		return err
 	}
@@ -235,7 +235,7 @@ func proveInstall(root string, files []modzip.File) error {
 			return err
 		}
 	}
-	target := modPath + "/cmd/pig@" + version
+	target := modPath + "/cmd/ompig@" + version
 	// The file proxy serves only this module; every other module falls through to the configured proxy. GONOSUMDB applies to the module under test, which no checksum database lists.
 	env := append(os.Environ(),
 		"GOPROXY="+fileProxyURL(filepath.Join(work, "proxy"))+","+upstreamProxy,
@@ -252,7 +252,7 @@ func proveInstall(root string, files []modzip.File) error {
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("go install %s failed: %w", target, err)
 	}
-	exe := filepath.Join(bin, "pig")
+	exe := filepath.Join(bin, "ompig")
 	if _, err := os.Stat(exe); err != nil {
 		exe += ".exe"
 	}
@@ -260,14 +260,14 @@ func proveInstall(root string, files []modzip.File) error {
 	probe.Dir = work
 	probe.Env = append(os.Environ(),
 		"HOME="+scratch, "USERPROFILE="+scratch,
-		"PIG_HOME="+scratch, "PI_HOME="+scratch,
-		"PIG_CODING_AGENT_DIR="+filepath.Join(scratch, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(scratch, "agent"),
+		"OMPIG_HOME="+scratch, "PI_HOME="+scratch,
+		"OMPIG_CODING_AGENT_DIR="+filepath.Join(scratch, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(scratch, "agent"),
 	)
 	out, err := probe.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("the installed pig does not run: %w\n%s", err, out)
+		return fmt.Errorf("the installed ompig does not run: %w\n%s", err, out)
 	}
-	fmt.Printf("module-size: installed pig runs: %s\n", bytes.TrimSpace(out))
+	fmt.Printf("module-size: installed ompig runs: %s\n", bytes.TrimSpace(out))
 	return nil
 }
 

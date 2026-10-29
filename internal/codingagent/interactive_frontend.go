@@ -12,16 +12,16 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// pig additive (D91): a Piglet frontend member can draw the interactive
+// ompig additive (D91): a Ompiglet frontend member can draw the interactive
 // mode in place of Pi's ANSI renderer. Pi has no such member; with none
 // fused, nothing here runs and the ANSI path is unchanged.
 
@@ -47,7 +47,7 @@ func (m *InteractiveMode) openFrontend() {
 	if m.rendererOut != nil {
 		out = m.rendererOut
 	}
-	// The session writes from its own goroutines too, and PiG writes its
+	// The session writes from its own goroutines too, and Ompig writes its
 	// terminal queries while it draws: each Write reaches the terminal whole.
 	out = &frontendTerminal{out: out}
 	// The first fallback request names the reason; later ones, such as each
@@ -73,7 +73,7 @@ func (m *InteractiveMode) openFrontend() {
 			m.postFrontendAction(func() { m.sendFrontendPrompt(m.runCtx, text) })
 		},
 		Act: m.postFrontendAct,
-		// pig additive (D91): a click on a node's Click area reaches the
+		// ompig additive (D91): a click on a node's Click area reaches the
 		// component that drew it on the owner loop.
 		Click: func(click frontend.Click) {
 			m.postFrontendAction(func() { m.surface.Click(click) })
@@ -124,7 +124,7 @@ func (m *InteractiveMode) reportFrontend() {
 }
 
 // frontendTerminal is the terminal while a frontend session draws: the
-// session's writes and PiG's own, one Write at a time. A write larger than
+// session's writes and Ompig's own, one Write at a time. A write larger than
 // the terminal's output buffer can otherwise take turns with another one in
 // the kernel, and a query inside a frame would break both.
 type frontendTerminal struct {
@@ -168,13 +168,13 @@ func (m *InteractiveMode) frontendSurfaceHooks() tui.SurfaceHooks {
 			return ""
 		},
 		Mark: m.frontendMark.read,
-		// pig additive (D91): a click on an extension's view reaches its
+		// ompig additive (D91): a click on an extension's view reaches its
 		// component only in the mode where Pi's terminal reports the mouse.
 		Mouse: func() bool { return m.opts.TuiMode == "fullscreen" },
 	}
 }
 
-// frontendMarkCache keeps PiG's mark, the pig head of the active sprite, with
+// frontendMarkCache keeps Ompig's mark, the ompig head of the active sprite, with
 // the sprite and the color mode it was built from, so a frame rebuilds it
 // only after one of them changed.
 type frontendMarkCache struct {
@@ -194,7 +194,7 @@ func (c *frontendMarkCache) read() frontend.Mark {
 	return c.mark
 }
 
-// headMark is the variant's pig head as HeadLines draws it in mode: its
+// headMark is the variant's ompig head as HeadLines draws it in mode: its
 // opaque pixels, each in the color its half block takes.
 func headMark(variant piglogin.Variant, mode tui.TerminalColorMode) frontend.Mark {
 	head := piglogin.HeadPixels(variant)
@@ -500,7 +500,7 @@ func (m *InteractiveMode) leaveFrontend(reason string) {
 	m.showWarning(message)
 }
 
-// frontendInputReady tells the session that PiG's input loop is about to
+// frontendInputReady tells the session that Ompig's input loop is about to
 // run, after startup has painted the first frame, and repaints the editor as
 // sendable.
 func (m *InteractiveMode) frontendInputReady() {
@@ -523,7 +523,7 @@ func (m *InteractiveMode) frontendInput(data string) bool {
 	return true
 }
 
-// closeFrontend stops drawing and closes the session while PiG still reads
+// closeFrontend stops drawing and closes the session while Ompig still reads
 // input, so the session's last replies are drained instead of reaching the
 // shell. The error is reported after cooked mode returns.
 func (m *InteractiveMode) closeFrontend() {

@@ -18,14 +18,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Every driver copies its cwd fixture under a validated temporary root. Ancestor context discovery remains enabled in both binaries, so the root must be outside the checkout and have no discoverable ancestor context files.
 
 // snapshotIDDigits is the width of the random suffix of every per-binary
 // snapshot directory. A fixed width keeps each path that embeds one the same
-// length for pig and pi, so layout, truncation, and the system-prompt size
+// length for ompig and pi, so layout, truncation, and the system-prompt size
 // cannot differ between the binaries or between runs.
 const snapshotIDDigits = 10
 
@@ -108,23 +108,23 @@ func mkdirFixed(root, prefix string) (string, error) {
 // Documentation paths in the system prompt.
 //
 // With no provider usage, the footer's context percentage is a chars/4
-// estimate of the system prompt. The prompts of pig and pi differ only in the
-// docs section and preamble (D22): pig names itself and points at
-// <PIG_HOME>/docs twice, and Pi points at its package directory three times.
+// estimate of the system prompt. The prompts of ompig and pi differ only in the
+// docs section and preamble (D22): ompig names itself and points at
+// <OMPIG_HOME>/docs twice, and Pi points at its package directory three times.
 // If those directories lived under the temp root or the checkout, the two
 // estimates would move apart with the host's path lengths and round to
 // different percentages. The runner therefore places both under the fixed
 // promptPathRoot with lengths that make the two prompts equally long:
 //
-//	3*len(piPackageDir) == 2*(len(pigHome)+len("/docs")+pigBundleDirLen) + d22ConstantGap
+//	3*len(piPackageDir) == 2*(len(ompigHome)+len("/docs")+ompigBundleDirLen) + d22ConstantGap
 //
-// d22ConstantGap is how many more characters pig's fixed docs and preamble
+// d22ConstantGap is how many more characters ompig's fixed docs and preamble
 // text has than Pi's, measured against Pi 0.87.1. TestPromptPathLengthsBalance
 // checks the arithmetic; the rpc get_session_stats scenario checks the
 // estimate itself.
 //
 // promptPathRoot is /tmp on Unix. Pi prints PI_PACKAGE_DIR resolved to an
-// absolute path while pig prints PIG_HOME as given, so on Windows the root is
+// absolute path while ompig prints OMPIG_HOME as given, so on Windows the root is
 // an absolute path of the same four characters: the temp directory's drive
 // and \t (C:\t).
 var promptPathRoot = func() string {
@@ -135,23 +135,23 @@ var promptPathRoot = func() string {
 }()
 
 // checkPromptPathRoot reports a promptPathRoot other than four characters,
-// which would make pig's and Pi's system prompts differ in length. On Windows
+// which would make ompig's and Pi's system prompts differ in length. On Windows
 // that happens when TMP is a UNC path (\\server\share\...).
 func checkPromptPathRoot() error {
 	if len(promptPathRoot) != len("/tmp") {
-		return fmt.Errorf("PIG_HOME's snapshot root %q must be four characters, as /tmp is, so the pig and Pi system prompts stay the same length; set TMP to a directory on a drive letter (C:\\...), not a UNC path", promptPathRoot)
+		return fmt.Errorf("OMPIG_HOME's snapshot root %q must be four characters, as /tmp is, so the ompig and Pi system prompts stay the same length; set TMP to a directory on a drive letter (C:\\...), not a UNC path", promptPathRoot)
 	}
 	return nil
 }
 
 const (
-	pigHomePrefix   = "parity-snap-PIG_HOME-"
+	ompigHomePrefix = "parity-snap-OMPIG_HOME-"
 	piPackagePrefix = "parity-pi-pkg-"
-	// piPackageLink is padded so that Pi's three package paths are as long as pig's two docs paths, which name the docs bundle directory.
+	// piPackageLink is padded so that Pi's three package paths are as long as ompig's two docs paths, which name the docs bundle directory.
 	piPackageLink  = "pi-coding-pkg-with-bundle-pad"
 	d22ConstantGap = 47
-	// pigBundleDirLen is len("/bundle-") plus the 16 hex digits of the content hash that names pig's docs bundle directory (internal/pigdocs).
-	pigBundleDirLen = len("/bundle-") + 16
+	// ompigBundleDirLen is len("/bundle-") plus the 16 hex digits of the content hash that names ompig's docs bundle directory (internal/pigdocs).
+	ompigBundleDirLen = len("/bundle-") + 16
 )
 
 // defaultCWDFixture returns test/parity/testdata/default-cwd.
@@ -170,7 +170,7 @@ func defaultCWD(t *testing.T) (string, error) {
 }
 
 // initSnapshotGitBranch makes dir an empty git repository whose HEAD names
-// the unborn branch, when branch is set. Pi and pig both ask git for the
+// the unborn branch, when branch is set. Pi and ompig both ask git for the
 // branch (git symbolic-ref --short HEAD), so the repository must be real.
 func initSnapshotGitBranch(ctx context.Context, dir, branch string) error {
 	if branch == "" {
@@ -193,7 +193,7 @@ var snapshotID = regexp.MustCompile(`(parity-snap-(?:cwd|extension)-)([0-9]{1,` 
 
 // maskSnapshotIDs replaces the random digits of every cwd and extension
 // snapshot directory name with zeros of the same count. The digits are the
-// only part of the path that differs between pig and pi, and the equal count
+// only part of the path that differs between ompig and pi, and the equal count
 // keeps padding and truncation byte-identical.
 func maskSnapshotIDs(s string) string {
 	if !strings.Contains(s, "parity-snap-") {

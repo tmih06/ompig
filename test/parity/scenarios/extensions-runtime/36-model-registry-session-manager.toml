@@ -24,10 +24,10 @@ wait_contains = ["registry-artifact-written"]
 wait_timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--fork", "registry-session.jsonl", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--fork", "registry-session.jsonl", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--fork", "registry-session.jsonl", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../testdata/extension-registry-session.mjs"]
+ompig_extensions = ["../testdata/extension-registry-session.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../testdata/extension-registry-session.mjs"]
 
 [assert]

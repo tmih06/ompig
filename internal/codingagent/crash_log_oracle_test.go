@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // crashLogCorpus holds crashes.json texts a crash log can hold besides what Pi writes: members Pi does not know, members of other types, hand edits.
@@ -90,7 +90,7 @@ func jsonSemanticallyEqual(t *testing.T, got []byte, want any) bool {
 	return reflect.DeepEqual(decoded, want)
 }
 
-// TestCrashLogMatchesPi runs readCrashLog, takeUnnotifiedCrash and recordCrash of Pi 1.0.4 and of Pig over the same crashes.json texts and compares what they return and what they leave in the file.
+// TestCrashLogMatchesPi runs readCrashLog, takeUnnotifiedCrash and recordCrash of Pi 1.0.4 and of Ompig over the same crashes.json texts and compares what they return and what they leave in the file.
 func TestCrashLogMatchesPi(t *testing.T) {
 	corpus := crashLogCorpus()
 	now := time.Now()
@@ -172,7 +172,7 @@ func stackExtension(path, source, origin, baseDir string) stackExtensionCase {
 	return e
 }
 
-// TestFindExtensionStackMatchesMatchesPi compares findExtensionStackMatches of Pi 1.0.4 and of Pig over stacks that differ in the places the matching is sensitive to: separators, spacing, percent escapes, case of drive letters, and what follows the path.
+// TestFindExtensionStackMatchesMatchesPi compares findExtensionStackMatches of Pi 1.0.4 and of Ompig over stacks that differ in the places the matching is sensitive to: separators, spacing, percent escapes, case of drive letters, and what follows the path.
 func TestFindExtensionStackMatchesMatchesPi(t *testing.T) {
 	extensions := []stackExtensionCase{
 		stackExtension("/ext/a.ts", "/ext/a.ts", "top-level", "/ext"),

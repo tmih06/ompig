@@ -11,8 +11,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ModelScope discriminates the two views of the picker.
@@ -486,7 +486,7 @@ func (m *ModelSelectorComponent) moveCursor(delta int, wrap bool) {
 var modelScopeTabs = []frontend.SelectorTab{{ID: "all", Label: "all"}, {ID: "scoped", Label: "scoped"}}
 
 // NativeNode reports the picker as a selector whose item ids are the models'
-// provider/id. pig additive (D91): the scope line becomes the all/scoped tabs
+// provider/id. ompig additive (D91): the scope line becomes the all/scoped tabs
 // and the no-auth warning the description.
 func (m *ModelSelectorComponent) NativeNode() (frontend.Node, bool) {
 	node := frontend.Selector{

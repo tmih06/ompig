@@ -21,7 +21,7 @@ func TestAnthropicLoginAcceptsPastedRedirectURL(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	h.startArgsAt([]string{"--model", "test-faux/faux-1"}, t.TempDir(), "PIG_TEST_FAUX=1", "PATH="+stubBin+":$PATH")
+	h.startArgsAt([]string{"--model", "test-faux/faux-1"}, t.TempDir(), "OMPIG_TEST_FAUX=1", "PATH="+stubBin+":$PATH")
 	h.expectContains(startupReadyWait, interactiveReadyMarker, "faux-1")
 
 	h.send("/login\r")

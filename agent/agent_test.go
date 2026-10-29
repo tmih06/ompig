@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent.ts:DEFAULT_MODEL declares input: [], not an absent value that adapters may infer as text support.

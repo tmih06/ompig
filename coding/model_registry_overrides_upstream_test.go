@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func registryWithOverride(t *testing.T, provider, id string, override map[string]any) *AgentSessionServices {

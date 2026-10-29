@@ -135,7 +135,7 @@ func TestOAuthPastedInputUsesECMAScriptTrim(t *testing.T) {
 
 func TestAuthEnvironmentUsesECMAScriptTrim(t *testing.T) {
 	// auth/context.ts:27 uses trim only for presence: credentials retain all nonblank bytes.
-	const key = "PIG_TEST_UNICODE_AUTH"
+	const key = "OMPIG_TEST_UNICODE_AUTH"
 	for _, tc := range ecmaTrimCases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Setenv(key, tc.input)

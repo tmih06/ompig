@@ -14,10 +14,10 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // OpenNodeJsonlStorage opens or creates a JSONL storage directory on the local file system, resolving a relative

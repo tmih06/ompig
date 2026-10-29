@@ -16,9 +16,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodespawn"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports utils/clipboard.ts copyToClipboard and

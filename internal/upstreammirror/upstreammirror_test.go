@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 func writeMirror(t *testing.T, root string, marker map[string]string, pkgVersion string) {
@@ -26,7 +26,7 @@ func writeMirror(t *testing.T, root string, marker map[string]string, pkgVersion
 		}
 	}
 	if marker != nil {
-		write(filepath.Join(current, ".pig-upstream-source.json"), marker)
+		write(filepath.Join(current, ".ompig-upstream-source.json"), marker)
 	}
 	write(filepath.Join(current, "packages", "coding-agent", "package.json"), map[string]string{"version": pkgVersion})
 }

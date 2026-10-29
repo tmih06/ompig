@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/agent-loop.ts:408-453. A held sink retains live nested content but the stopReason copied before its await does not advance.

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // agentCountingAPI answers Agent with an error and counts the calls.

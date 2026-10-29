@@ -14,6 +14,6 @@ if (result.status !== 0) {
  throw new Error(`llama view oracle exited ${result.status}`);
 }
 // Go's JSON encoder spells U+2028 and U+2029 as escapes where JSON.stringify writes them raw; both are the same JSON text, so spell them as Go does.
-// Pig's settlement object is a Go map, whose members JSON writes sorted: model before type.
+// Ompig's settlement object is a Go map, whose members JSON writes sorted: model before type.
 const sorted = value => (value !== null && typeof value === 'object' && 'type' in value ? { model: value.model, type: value.type } : value);
 for (const record of JSON.parse(result.stdout)) process.stdout.write(JSON.stringify({ ...record, settled: record.settled.map(sorted) }).replaceAll('\u2028', '\\u2028').replaceAll('\u2029', '\\u2029') + '\n');

@@ -1,7 +1,7 @@
 # Issue #128. Pi's AgentSession sets the model and thinking level before it
 # emits model_select and thinking_level_select (agent-session.ts setModel,
 # cycleModel, setThinkingLevel), and an extension's ctx.model reads the Session
-# live (runner.ts createContext `get model()`). Interactive PiG bound ctx.model
+# live (runner.ts createContext `get model()`). Interactive Ompig bound ctx.model
 # to the mode's own copy, updated after the Session returned, so the handlers
 # saw the previous model. The extension lists every observation in a widget;
 # Ctrl+P (hex 10) cycles the scoped models (beta clamps low to high) and Shift+Tab (CSI Z)
@@ -25,17 +25,17 @@ driver = "interactive-tmux"
 model = "fixture/alpha"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/model-select-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/model-select-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/model-select-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--models", "fixture/alpha,fixture/beta", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--models", "fixture/alpha,fixture/beta", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--models", "fixture/alpha,fixture/beta", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/model-select-context.mjs"]
+ompig_extensions = ["testdata/ext/model-select-context.mjs"]
 pi_extensions = ["testdata/ext/model-select-context.mjs"]
 
 [tmux]
 width = 120
 height = 30
-ready_pattern_pig = "MODEL SELECT PROBE"
+ready_pattern_ompig = "MODEL SELECT PROBE"
 ready_pattern_pi = "MODEL SELECT PROBE"
 ready_timeout_seconds = 30
 capture_start = "MODEL SELECT PROBE"

@@ -11,9 +11,9 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/durable/images/cloudflare"
-	"github.com/MichaelKinsy/PiG/durable/images/node"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/images/cloudflare"
+	"github.com/tmih06/ompig/durable/images/node"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // Pi 1.2.0 packages/durable/test/images-wasm-module.test.ts:8 "createPhotonImages takes a compiled WebAssembly module, as

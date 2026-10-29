@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/tui/src/terminal-colors.ts
@@ -97,7 +97,7 @@ emit(input.map((data) => ({ osc: mod.parseOscColorResponse(data) ?? null, scheme
 		wantOK := w.Osc != nil
 		if ok != wantOK || scheme != w.Scheme || (ok && (fmt.Sprint(gotTarget) != fmt.Sprint(w.Osc.Target) || fmt.Sprint(gotRGB) != fmt.Sprint(w.Osc.RGB))) {
 			if failures++; failures <= 10 {
-				t.Errorf("%q: PiG ok=%v %v %v scheme=%q, Pi %+v scheme=%q", data, ok, gotTarget, gotRGB, scheme, w.Osc, w.Scheme)
+				t.Errorf("%q: Ompig ok=%v %v %v scheme=%q, Pi %+v scheme=%q", data, ok, gotTarget, gotRGB, scheme, w.Osc, w.Scheme)
 			}
 		}
 	}

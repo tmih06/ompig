@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 const toolAbortGraceExtension = `export default function (pi) {
@@ -63,7 +63,7 @@ func abortToolAfterItStarts(t *testing.T, runner *inproc.Runner, name string) (e
 	return extension.AgentToolResult{}, 0, nil
 }
 
-// pig divergence (D111): an aborted extension tool call waits ToolAbortGrace for the tool to settle. A tool that honours its
+// ompig divergence (D111): an aborted extension tool call waits ToolAbortGrace for the tool to settle. A tool that honours its
 // AbortSignal settles as in Pi, whose executePreparedToolCall awaits tool.execute and makes its result or thrown message the
 // tool result (agent-loop.ts:831-853). A tool that ignores the signal, which Pi awaits indefinitely, fails with Pi's abort text
 // "Operation aborted" (agent-loop.ts:623) once the grace period ends.

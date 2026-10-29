@@ -3,8 +3,8 @@ package codingagent
 import (
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // setPostLoginAPIKey supplies the persisted credential boundary to post-login state-machine tests. Login dialog tests drive the command and provider callbacks separately.

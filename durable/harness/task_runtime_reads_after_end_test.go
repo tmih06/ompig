@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // scheduler.ts:1188-1195 builds the runtime's snapshot and snapshotAsOf (the DocumentReader of types.ts:886) through #read, which throws endedError once

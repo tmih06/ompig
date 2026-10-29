@@ -4,7 +4,7 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // modelScopeLine is the "Model scope: ..." line init() prints with console.log before the terminal UI starts (interactive-mode.ts:950-963): the scoped model ids with their thinking levels in dim, and the cycle key in muted. It is empty when no model is scoped or the startup details are hidden.

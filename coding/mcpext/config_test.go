@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
 // Ports packages/coding-agent/test/mcp-extension.test.ts ("MCP config").
@@ -165,7 +165,7 @@ func TestMCPConfigValidatesTheOAuthCallbackURLScopeAndClientName(t *testing.T) {
 	for _, s := range loaded.Servers {
 		names = append(names, s.Name)
 	}
-	// cimdDots and cimdIPv6 are PiG additions: `new URL()` removes dot segments, and IPv6 loopback is rejected.
+	// cimdDots and cimdIPv6 are Ompig additions: `new URL()` removes dot segments, and IPv6 loopback is rejected.
 	jsonEqual(t, names, `["ok","ipv6","same","named","metadata","cimd","cimdDots"]`)
 	wants := []string{
 		`server "remote": oauth.callbackUrl must be an http URI on localhost`,

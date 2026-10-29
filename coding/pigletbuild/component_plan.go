@@ -3,8 +3,8 @@ package pigletbuild
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
 )
 
 func buildPigletComponentPlan(cells []subprocess.CellSpec, delivery Plan, inputs []buildInput) (pigletartifact.Plan, error) {
@@ -49,7 +49,7 @@ func buildPigletComponentPlan(cells []subprocess.CellSpec, delivery Plan, inputs
 				component.Materialization = sidecarMaterialization(cell.Language, extension)
 				// An interpreted component records the runtime it runs on: Python's
 				// comes from the agent environment, and an embedded Node cell runs with
-				// the user's installed Node, as Stock PiG runs it.
+				// the user's installed Node, as Stock Ompig runs it.
 				if cell.Language == string(Python) || cell.Language == string(Node) {
 					component.Runtime = &pigletartifact.RuntimeRequirement{Name: cell.Language}
 				}

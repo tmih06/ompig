@@ -121,7 +121,7 @@ func TestDriversRejectAncestorContextBeforeLaunch(t *testing.T) {
 	}
 	t.Setenv(tempDirVar, root)
 	for name, driver := range DriverRegistry {
-		for _, label := range []string{"pig", "pi"} {
+		for _, label := range []string{"ompig", "pi"} {
 			t.Run(name+"/"+label, func(t *testing.T) {
 				sc := &Scenario{Name: "reject-context", SourcePath: filepath.Join(defaultCWDFixture(), "scenario.toml")}
 				sc.Tmux.Width, sc.Tmux.Height = 100, 35

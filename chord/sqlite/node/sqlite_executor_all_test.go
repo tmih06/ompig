@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // packages/durable/src/storage/sqlite/database.ts SqliteExecutor.all: every row with positional bindings, in statement order, through

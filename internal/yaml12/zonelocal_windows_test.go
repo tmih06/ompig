@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // nodeDateStrings asks the Node on this host for Date.prototype.toString of each instant. Node starts with the test process's environment, so the TZ of the test is the TZ Node sees.

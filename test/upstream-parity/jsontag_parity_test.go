@@ -6,15 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestJSONTags_AllEventFieldsAreCamelCase asserts that every Go event struct
 // field has a `json:"<camelCaseName>"` tag matching the upstream TS field
 // name. This guarantees:
 //
-//  1. Session JSONL written by upstream pi can be round-tripped through pig
+//  1. Session JSONL written by upstream pi can be round-tripped through ompig
 //     without field-name mismatch.
 //  2. The subprocess JSON protocol derived from these structs uses the same
 //     field names as upstream's JSON, so cross-language SDKs see identical
@@ -61,7 +61,7 @@ func TestJSONTags_AllEventFieldsAreCamelCase(t *testing.T) {
 			if tag == "-" {
 				// Explicitly excluded from wire format. Common for fields
 				// that hold non-serialisable Go types (e.g. context.Context
-				// from the D8 AbortSignal→context migration). The pig side
+				// from the D8 AbortSignal→context migration). The ompig side
 				// has consciously chosen not to wire-format the field; the
 				// divergence is documented in docs/parity/DIVERGENCES.md.
 				continue
@@ -75,7 +75,7 @@ func TestJSONTags_AllEventFieldsAreCamelCase(t *testing.T) {
 	}
 }
 
-// allowedExtraJSONFieldDivergences names wire members PiG writes that Pi's interface does not declare. Each value is the
+// allowedExtraJSONFieldDivergences names wire members Ompig writes that Pi's interface does not declare. Each value is the
 // divergence that records it.
 var allowedExtraJSONFieldDivergences = map[string]map[string]string{}
 
@@ -117,7 +117,7 @@ func TestJSONTags_NoExtraGoFieldsBeyondUpstream(t *testing.T) {
 		}
 		upstreamFields, ok := upstreamFieldsByType[typeName]
 		if !ok {
-			continue // pig-only type (currently none in registry)
+			continue // ompig-only type (currently none in registry)
 		}
 		if writesItsOwnJSON(goType) {
 			members := marshaledMembers(t, typeName, goType)

@@ -5,7 +5,7 @@ package sdk
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ToolConstrainedSampling is Pi's tool-level false-or-configuration union

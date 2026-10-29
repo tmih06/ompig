@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/internal/sdk"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/internal/shareddefaults"
+	"github.com/tmih06/ompig/third_party/awssdk/internal/sdk"
+	"github.com/tmih06/ompig/third_party/awssdk/internal/shareddefaults"
 )
 
 var osUserHomeDur = shareddefaults.UserHomeDir

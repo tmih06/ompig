@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type piColorCase struct {
@@ -173,7 +173,7 @@ func TestColorDetectionProbesDump(t *testing.T) {
 	fmt.Printf("capability-probes:%s\n", line)
 }
 
-// TestColorDetectionProbesParity prints PiG's detected capabilities of each environment as one JSON line [images, trueColor, hyperlinks] for the tui-components/37 parity scenario.
+// TestColorDetectionProbesParity prints Ompig's detected capabilities of each environment as one JSON line [images, trueColor, hyperlinks] for the tui-components/37 parity scenario.
 func TestColorDetectionProbesParity(t *testing.T) {
 	oldOS := capabilityDetectGOOS
 	t.Cleanup(func() { capabilityDetectGOOS = oldOS; ResetCapabilitiesCache() })

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-// Pi's selector deletes whichever listed session the user confirms (session-selector.ts:842-866); it has no directory check. PiG bounds deletion to the directory the All scope lists, so every listed session stays deletable, including another project's.
+// Pi's selector deletes whichever listed session the user confirms (session-selector.ts:842-866); it has no directory check. Ompig bounds deletion to the directory the All scope lists, so every listed session stays deletable, including another project's.
 func TestSessionManagerDeletesEveryListedSession(t *testing.T) {
 	t.Setenv("PATH", t.TempDir()) // Keep deletion local; do not invoke an installed desktop trash service.
 	for _, custom := range []bool{false, true} {

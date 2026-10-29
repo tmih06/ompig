@@ -13,7 +13,7 @@ import (
 // root is read-only, ENOENT, because node_file.cc MKDirpSync stats the directory after an EROFS and reports the stat's error.
 func TestMkdirAllAndFromPathErrorMatchNode(t *testing.T) {
 	root := t.TempDir()
-	underRoot := "/nonexistent-dir-for-pig-mkdir/a"
+	underRoot := "/nonexistent-dir-for-ompig-mkdir/a"
 	if os.Geteuid() == 0 {
 		underRoot = filepath.Join(root, "new", "dir") // root could create it under /
 	}

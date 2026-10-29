@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 type startupComponent interface {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // ensureManagedTools awaits both installers before enabling input. Pi executes each ensureTool up to its first await in Promise.all argument order (fd, then rg): a present tool, or one offline mode does not download, reports its status and settles there, without reading input. Only downloads run concurrently, sharing the startup cancellation lifetime, while the owner goroutine gives terminal input to the startup editor and renders each status as it arrives.

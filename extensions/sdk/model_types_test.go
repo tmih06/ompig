@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // What an extension reaches through ctx.modelRegistry for the typed model operations of Pi 0.99.1 (.upstream/v0.99.1/packages/coding-agent/src/core/model-registry.ts:71-79,135-177) and through the image and classifier implementations of a provider (core/extensions/types.ts:1896-1898).

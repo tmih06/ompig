@@ -22,7 +22,7 @@ func TestGetAllToolsAndGetCommandsDecodeUpstreamInfo(t *testing.T) {
 		commands, err = ctx.GetCommands()
 		return err
 	})
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)

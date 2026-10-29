@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi: packages/coding-agent/src/cli/args.ts:14 (Args.provider); packages/coding-agent/src/cli/args.ts:20 (Args.continue); packages/coding-agent/src/cli/args.ts:54 (Args.messages); packages/coding-agent/src/cli/args.ts:55 (Args.fileArgs); packages/coding-agent/src/cli/args.ts:57 (Args.unknownFlags); packages/coding-agent/src/main.ts:113 (Args.mode).

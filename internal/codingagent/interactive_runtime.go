@@ -7,11 +7,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // InteractiveForkResult is the outcome of a runtime fork. SelectedText is absent when the fork is at an entry, and for a cancelled fork.
@@ -20,7 +20,7 @@ type InteractiveForkResult struct {
 	SelectedText *string
 }
 
-// InteractiveRuntime is the Session replacement contract InteractiveMode needs from the runtime host that created its Session. *coding.Runtime satisfies it through the adapter in cmd/pig; the interface exists because internal/codingagent cannot import coding.
+// InteractiveRuntime is the Session replacement contract InteractiveMode needs from the runtime host that created its Session. *coding.Runtime satisfies it through the adapter in cmd/ompig; the interface exists because internal/codingagent cannot import coding.
 type InteractiveRuntime interface {
 	NewSession(ctx context.Context, options *extension.NewSessionOptions) (extension.CancelledResult, error)
 	// SwitchSession opens path and replaces the Session. projectTrustUI supplies the UI of the destination's project trust prompt, as Pi's projectTrustContextFactory does.

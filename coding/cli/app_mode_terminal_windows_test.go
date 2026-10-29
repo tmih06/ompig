@@ -14,7 +14,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // A pseudoconsole is Windows' pseudo-terminal. The size is wider than the 80
@@ -142,7 +142,7 @@ type conPTYTerminal struct{ *conPTYProcess }
 func (t conPTYTerminal) Read(p []byte) (int, error)  { return t.output.Read(p) }
 func (t conPTYTerminal) Write(p []byte) (int, error) { return t.input.Write(p) }
 
-// runPigOnTerminalStdinToFile runs pig the way `pig "q" > out.txt` runs from a
+// runPigOnTerminalStdinToFile runs ompig the way `ompig "q" > out.txt` runs from a
 // terminal: stdin is a console and stdout is the file at outPath. The
 // redirection comes from cmd.exe running inside the pseudoconsole, as it does
 // in a console window; stderr is redirected to a file as well so that the
@@ -157,7 +157,7 @@ func runPigOnTerminalStdinToFile(t *testing.T, bin, outPath string, args ...stri
 	go func() { _, _ = io.Copy(io.Discard, process.output) }()
 	code, exited, err := process.wait(testbudget.Wait(t))
 	if err != nil || !exited {
-		t.Fatalf("pig %v on a console stdin did not exit: exited=%v err=%v", args, exited, err)
+		t.Fatalf("ompig %v on a console stdin did not exit: exited=%v err=%v", args, exited, err)
 	}
 	stderr, _ := os.ReadFile(stderrPath)
 	return string(stderr), code

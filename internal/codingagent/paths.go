@@ -7,29 +7,29 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // AppName is the binary/CLI name, independent of the selected configuration directories.
-const AppName = "pig"
+const AppName = "ompig"
 
-// PackageName is PiG's npm package: the launcher that a global npm-family
+// PackageName is Ompig's npm package: the launcher that a global npm-family
 // install owns and that the signed update manifest names. Mirrors upstream
-// PACKAGE_NAME export. automation/release/pig_package.py reads this line, so keep
+// PACKAGE_NAME export. automation/release/ompig_package.py reads this line, so keep
 // the declaration on one line.
-const PackageName = "@pi-in-go/pig"
+const PackageName = "@ompig/ompig"
 
 // CONFIG_DIR_NAME is the default per-project config directory name.
 const CONFIG_DIR_NAME = "." + AppName
 
 // UsePiDirs reports whether the user explicitly selected Pi's configuration directories.
 func UsePiDirs() bool {
-	// pig divergence (D2): sharing Pi state requires an explicit process-level opt-in.
-	return os.Getenv("PIG_USE_PI_DIRS") == "1"
+	// ompig divergence (D2): sharing Pi state requires an explicit process-level opt-in.
+	return os.Getenv("OMPIG_USE_PI_DIRS") == "1"
 }
 
 // ConfigDirName returns the selected per-project configuration directory name.
@@ -42,16 +42,16 @@ func ConfigDirName() string {
 
 // ENV_AGENT_DIR overrides the config directory.
 // Mirrors upstream ENV_AGENT_DIR export.
-const ENV_AGENT_DIR = "PIG_CODING_AGENT_DIR"
+const ENV_AGENT_DIR = "OMPIG_CODING_AGENT_DIR"
 
 // ENV_SESSION_DIR overrides the session storage directory.
 // Mirrors upstream ENV_SESSION_DIR export.
-const ENV_SESSION_DIR = "PIG_CODING_AGENT_SESSION_DIR"
+const ENV_SESSION_DIR = "OMPIG_CODING_AGENT_SESSION_DIR"
 
-// pig divergence (D2): title says "PiG", not "pi": separate binary and config root.
-const APP_TITLE = "PiG"
+// ompig divergence (D2): title says "Ompig", not "pi": separate binary and config root.
+const APP_TITLE = "Ompig"
 
-// AgentDir returns the writable agent directory. Shared mode uses Pi's environment override; otherwise it uses PiG's. Both expand a leading tilde. It panics
+// AgentDir returns the writable agent directory. Shared mode uses Pi's environment override; otherwise it uses Ompig's. Both expand a leading tilde. It panics
 // with a [configroot.UnresolvedError] when the home directory is needed and unavailable; [ResolveAgentDir] reports that as an error.
 func AgentDir() string {
 	return DefaultAgentDir()
@@ -102,7 +102,7 @@ func CatalogRoot(agentDir string) string {
 // Namespaces are code-owned identifiers, not user-provided paths.
 func StateDir(namespace string) string {
 	if namespace == "" || namespace == "." || namespace == ".." || filepath.Clean(namespace) != namespace || strings.ContainsAny(namespace, `/\\`) {
-		panic("invalid Pig state namespace: " + namespace)
+		panic("invalid Ompig state namespace: " + namespace)
 	}
 	return filepath.Join(ConfigRoot(), "state", namespace)
 }
@@ -110,25 +110,25 @@ func StateDir(namespace string) string {
 // ProjectStateDir returns one additive capability's workspace-scoped state directory.
 func ProjectStateDir(cwd, namespace string) string {
 	if namespace == "" || namespace == "." || namespace == ".." || filepath.Clean(namespace) != namespace || strings.ContainsAny(namespace, `/\\`) {
-		panic("invalid Pig state namespace: " + namespace)
+		panic("invalid Ompig state namespace: " + namespace)
 	}
 	return filepath.Join(ProjectConfigDir(cwd), "state", namespace)
 }
 
-// PigletArtifactsDir returns the managed Piglet artifact store.
+// PigletArtifactsDir returns the managed Ompiglet artifact store.
 func PigletArtifactsDir() string {
-	return filepath.Join(ConfigRoot(), "artifacts", "piglets")
+	return filepath.Join(ConfigRoot(), "artifacts", "ompiglets")
 }
 
-// PigletRecordsDir returns the managed Piglet record store. Records live
-// outside Piglet discovery so they never masquerade as editable source.
+// PigletRecordsDir returns the managed Ompiglet record store. Records live
+// outside Ompiglet discovery so they never masquerade as editable source.
 func PigletRecordsDir() string {
-	return filepath.Join(ConfigRoot(), "receipts", "piglets")
+	return filepath.Join(ConfigRoot(), "receipts", "ompiglets")
 }
 
-// PigletsDir returns the user-owned Piglet source directory.
+// PigletsDir returns the user-owned Ompiglet source directory.
 func PigletsDir() string {
-	return filepath.Join(ConfigRoot(), "piglets")
+	return filepath.Join(ConfigRoot(), "ompiglets")
 }
 
 // SelfUpdateCommand describes the command a proven package-manager installation runs to update itself.
@@ -242,20 +242,20 @@ func selfUpdateUninstallStep(command string, argsPrefix []string, installedPacka
 
 // ─── Config Root ──────────────────────────────────────────────────────────────
 
-// ConfigRoot returns the pig configuration root directory (internal/configroot, the one resolver the host and every extension SDK share).
+// ConfigRoot returns the ompig configuration root directory (internal/configroot, the one resolver the host and every extension SDK share).
 //
 // Resolution order:
-//  1. $PIG_HOME if set and non-empty
-//  2. $XDG_CONFIG_HOME/pig if XDG_CONFIG_HOME is set and non-empty
-//  3. ~/.pig (default)
+//  1. $OMPIG_HOME if set and non-empty
+//  2. $XDG_CONFIG_HOME/ompig if XDG_CONFIG_HOME is set and non-empty
+//  3. ~/.ompig (default)
 //
-// A leading ~ expands to the home directory. PiG-owned state stays here even when the agent and project directories are shared with Pi. It panics with
+// A leading ~ expands to the home directory. Ompig-owned state stays here even when the agent and project directories are shared with Pi. It panics with
 // a [configroot.UnresolvedError] when the home directory is needed and unavailable.
 func ConfigRoot() string { return configroot.Dir() }
 
 // GetDocsPath is the directory of this binary's documentation bundle, which the system prompt, the login help and the codemode description point
 // at, or "" when the bundle is not on disk: the binary embeds none, or startup could not write it.
-// upstream: config.ts:449 getDocsPath (join(getPackageDir(), "docs")); pig additive (D22): PiG materializes its documentation bundle under the configuration root, one content-addressed directory per build, instead of shipping it in the package directory.
+// upstream: config.ts:449 getDocsPath (join(getPackageDir(), "docs")); ompig additive (D22): Ompig materializes its documentation bundle under the configuration root, one content-addressed directory per build, instead of shipping it in the package directory.
 func GetDocsPath() string {
 	dir, ok := configroot.DocsDir()
 	if !ok || !configroot.DocsPresent() {
@@ -266,7 +266,7 @@ func GetDocsPath() string {
 
 // GetReadmePath is the README of the documentation bundle, the "Main documentation" entry of the system prompt, or "" when the bundle is not on
 // disk.
-// upstream: config.ts:444 getReadmePath (join(getPackageDir(), "README.md")); pig additive (D22): the README is the bundle's own.
+// upstream: config.ts:444 getReadmePath (join(getPackageDir(), "README.md")); ompig additive (D22): the README is the bundle's own.
 func GetReadmePath() string {
 	if docs := GetDocsPath(); docs != "" {
 		return filepath.Join(docs, "README.md")
@@ -274,9 +274,9 @@ func GetReadmePath() string {
 	return ""
 }
 
-// GetExamplesPath is where the system prompt says PiG's examples are.
-// upstream: config.ts:454 getExamplesPath (join(getPackageDir(), "examples")); pig additive (D22): PiG's examples are published in its repository, so the location is [prompts.PigExamplesLocation], a URL, not a directory.
-func GetExamplesPath() string { return prompts.PigExamplesLocation }
+// GetExamplesPath is where the system prompt says Ompig's examples are.
+// upstream: config.ts:454 getExamplesPath (join(getPackageDir(), "examples")); ompig additive (D22): Ompig's examples are published in its repository, so the location is [prompts.OmpigExamplesLocation], a URL, not a directory.
+func GetExamplesPath() string { return prompts.OmpigExamplesLocation }
 
 // CanonicalizePath resolves a nonempty path to its absolute canonical filesystem form, following symlinks and drive junctions while preserving Windows volume mount points as directories. It preserves the raw input if resolution fails, including an empty or missing path.
 // Mirrors upstream canonicalizePath.

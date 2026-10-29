@@ -1,7 +1,7 @@
-// Package tsruntime selects the runtime that runs PiG's TypeScript and JavaScript extension host.
+// Package tsruntime selects the runtime that runs Ompig's TypeScript and JavaScript extension host.
 //
-// pig additive (D19): Pi runs extensions inside its own Node process. PiG runs them in a subprocess, which Node runs by default. A
-// user may request another runtime that an extension or Piglet installed into the runtime slot; PiG itself downloads nothing. The
+// ompig additive (D19): Pi runs extensions inside its own Node process. Ompig runs them in a subprocess, which Node runs by default. A
+// user may request another runtime that an extension or Ompiglet installed into the runtime slot; Ompig itself downloads nothing. The
 // slot is a directory per runtime under Root, each holding a runtime.json Manifest. A requested runtime that cannot be used falls
 // back to Node once, with a typed Reason.
 package tsruntime
@@ -23,31 +23,31 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Node is the default runtime: the node executable on PATH.
 const Node = "node"
 
 // EnvRuntime names the requested runtime for this process. It takes precedence over the setting.
-const EnvRuntime = "PIG_TS_RUNTIME"
+const EnvRuntime = "OMPIG_TS_RUNTIME"
 
 // EnvRoot replaces the slot root, for CI rows and evaluation arms that keep runtimes outside the agent directory.
-const EnvRoot = "PIG_TS_RUNTIMES_DIR"
+const EnvRoot = "OMPIG_TS_RUNTIMES_DIR"
 
 // ManifestFile is the manifest file name inside a runtime's directory.
 const ManifestFile = "runtime.json"
 
-// RequestsDir is the directory inside an executable runtime's directory where PiG records the extension sets it lacked an image for.
+// RequestsDir is the directory inside an executable runtime's directory where Ompig records the extension sets it lacked an image for.
 const RequestsDir = "requests"
 
-// Kind is how PiG launches a runtime.
+// Kind is how Ompig launches a runtime.
 type Kind string
 
 const (
-	// KindBun is a stock Bun executable that runs PiG's runtime tree: <exe> --no-install --no-env-file --config=<empty> --preload <loader> <cli.mjs|cell.mjs> <args>.
+	// KindBun is a stock Bun executable that runs Ompig's runtime tree: <exe> --no-install --no-env-file --config=<empty> --preload <loader> <cli.mjs|cell.mjs> <args>.
 	KindBun Kind = "bun"
-	// KindExecutable is a host executable built from PiG's runtime tree: <exe> cli|cell <args>, with the runtime tree in PIG_TS_RUNTIME_TREE.
+	// KindExecutable is a host executable built from Ompig's runtime tree: <exe> cli|cell <args>, with the runtime tree in OMPIG_TS_RUNTIME_TREE.
 	KindExecutable Kind = "executable"
 )
 
@@ -90,7 +90,7 @@ type Request struct {
 	Source Source `json:"source"`
 }
 
-// RequestFrom returns the request of a process: PIG_TS_RUNTIME when set, else the setting, else Node.
+// RequestFrom returns the request of a process: OMPIG_TS_RUNTIME when set, else the setting, else Node.
 func RequestFrom(env, setting string) Request {
 	if env = strings.TrimSpace(env); env != "" {
 		return Request{ID: env, Source: SourceEnv}
@@ -110,7 +110,7 @@ func ValidID(id string) bool {
 
 var hexPattern = lazyregexp.New(`^[0-9a-f]{64}$`)
 
-// Root is the slot root for an agent directory: PIG_TS_RUNTIMES_DIR when set, else <agentDir>/runtimes/typescript. It returns "" when neither is known.
+// Root is the slot root for an agent directory: OMPIG_TS_RUNTIMES_DIR when set, else <agentDir>/runtimes/typescript. It returns "" when neither is known.
 func Root(agentDir string) string {
 	if root := os.Getenv(EnvRoot); root != "" {
 		return root
@@ -121,7 +121,7 @@ func Root(agentDir string) string {
 	return filepath.Join(agentDir, "runtimes", "typescript")
 }
 
-// Platform names the running platform as PiG's release targets do: <os>-<arch> with os linux, darwin, windows or android and arch x64 or arm64.
+// Platform names the running platform as Ompig's release targets do: <os>-<arch> with os linux, darwin, windows or android and arch x64 or arm64.
 func Platform() string {
 	return platformOf(runtime.GOOS, runtime.GOARCH, os.Getenv("TERMUX_VERSION") != "")
 }
@@ -137,7 +137,7 @@ func platformOf(goos, goarch string, termux bool) string {
 	return goos + "-" + arch
 }
 
-// Input is a file an executable image was built from. PiG treats the image as stale once the file's size or modification time differs.
+// Input is a file an executable image was built from. Ompig treats the image as stale once the file's size or modification time differs.
 type Input struct {
 	Path    string `json:"path"`
 	Size    int64  `json:"size"`
@@ -151,7 +151,7 @@ type Image struct {
 	// SHA256 is the lowercase hex SHA-256 digest of the executable.
 	SHA256 string `json:"sha256"`
 	// Inputs are the files the image was built from; empty for a runtime that compiles nothing in.
-	//portlint:allow emptydrop PiG-only format with no Pi counterpart (Pi has no Piglets or runtime slot)
+	//portlint:allow emptydrop Ompig-only format with no Pi counterpart (Pi has no Ompiglets or runtime slot)
 	Inputs []Input `json:"inputs,omitempty"`
 }
 
@@ -161,14 +161,14 @@ type Manifest struct {
 	Kind     Kind   `json:"kind"`
 	Version  string `json:"version"`
 	Platform string `json:"platform"`
-	// Provider names the extension or Piglet that installed the runtime, for status output.
+	// Provider names the extension or Ompiglet that installed the runtime, for status output.
 	Provider string `json:"provider"`
 	// Image is the executable for any extension set. A Bun runtime has exactly this one.
 	Image *Image `json:"image,omitempty"`
 	// Sets holds an executable runtime's images per extension set, keyed by SetKey.
-	//portlint:allow emptydrop PiG-only format with no Pi counterpart (Pi has no Piglets or runtime slot)
+	//portlint:allow emptydrop Ompig-only format with no Pi counterpart (Pi has no Ompiglets or runtime slot)
 	Sets map[string]Image `json:"sets,omitempty"`
-	// Fallback names the slot runtime PiG tries when this one cannot run a set, before Node. Empty means Node.
+	// Fallback names the slot runtime Ompig tries when this one cannot run a set, before Node. Empty means Node.
 	Fallback string `json:"fallback,omitempty"`
 }
 
@@ -279,7 +279,7 @@ type Selection struct {
 	// Fallback is set when the requested runtime does not run this set: why it does not.
 	Fallback *Fallback `json:"fallback,omitempty"`
 	// Skipped lists every runtime tried before the one that runs the set, in order: the requested one, then its manifest's fallback.
-	//portlint:allow emptydrop PiG-only format with no Pi counterpart (Pi has no Piglets or runtime slot)
+	//portlint:allow emptydrop Ompig-only format with no Pi counterpart (Pi has no Ompiglets or runtime slot)
 	Skipped []Skip `json:"skipped,omitempty"`
 }
 
@@ -389,12 +389,12 @@ func (r *Resolver) tryRuntime(ctx context.Context, id string, set Set) (verified
 	return verifiedImage{manifest: manifest, executable: executable}, "", nil
 }
 
-// UsedFile is the file inside an image's directory whose modification time records when PiG last started a set from the image. A provider that
+// UsedFile is the file inside an image's directory whose modification time records when Ompig last started a set from the image. A provider that
 // prunes images reads it to evict the least recently used first.
 const UsedFile = ".used"
 
 // usedGranularity bounds how often one image's use is recorded.
-// pig additive (D19): Pi has no runtime slot whose images a provider prunes.
+// ompig additive (D19): Pi has no runtime slot whose images a provider prunes.
 const usedGranularity = time.Minute
 
 // touchUsed records that a launch selected the image in dir. It is best effort: a read-only slot only loses the recency.
@@ -425,7 +425,7 @@ func staleInput(inputs []Input) string {
 
 // requestRefresh is how long a recorded build request stands before a launch of the same set writes it again, so a provider that
 // polls requests/ sees one write per set and minute however often the set launches.
-// pig additive (D19): Pi has no runtime slot to request builds from.
+// ompig additive (D19): Pi has no runtime slot to request builds from.
 const requestRefresh = time.Minute
 
 // recordRequest writes <dir>/requests/<key>.json for an executable runtime, unless a request for the key was written within
@@ -438,7 +438,7 @@ func recordRequest(dir string, manifest Manifest, set Set) string {
 	if info, err := os.Stat(path); err == nil && time.Since(info.ModTime()) < requestRefresh {
 		return ""
 	}
-	//portlint:allow jsonescape PiG-only build-request record for an executable runtime's image builder, with no Pi counterpart (Pi has no runtime slot); any JSON parser reads \u003c and \u0026 as the same text
+	//portlint:allow jsonescape Ompig-only build-request record for an executable runtime's image builder, with no Pi counterpart (Pi has no runtime slot); any JSON parser reads \u003c and \u0026 as the same text
 	data, err := json.MarshalIndent(set, "", "  ")
 	if err == nil {
 		err = writeFileAtomic(path, append(data, '\n'))

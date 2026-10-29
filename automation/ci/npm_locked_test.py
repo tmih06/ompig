@@ -33,7 +33,7 @@ class NpmLockedTest(unittest.TestCase):
         environment = patch.dict(os.environ)
         environment.start()
         self.addCleanup(environment.stop)
-        os.environ.pop("PIG_NODE_MODULES_STORE", None)
+        os.environ.pop("OMPIG_NODE_MODULES_STORE", None)
 
     def test_content_stamp_and_shared_tree(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -91,7 +91,7 @@ class NpmLockedTest(unittest.TestCase):
                 installs.append(Path(kwargs["cwd"]))
                 (Path(kwargs["cwd"]) / "node_modules").mkdir()
 
-            with patch.object(module.subprocess, "run", side_effect=fake_npm), patch.dict(os.environ, {"PIG_NODE_MODULES_STORE": str(store)}):
+            with patch.object(module.subprocess, "run", side_effect=fake_npm), patch.dict(os.environ, {"OMPIG_NODE_MODULES_STORE": str(store)}):
                 for checkout in checkouts:
                     module.ensure(checkout)
                 self.assertEqual(len(installs), 1)
@@ -100,7 +100,7 @@ class NpmLockedTest(unittest.TestCase):
                 self.assertEqual(len(targets), 1)
                 shared = targets.pop()
                 self.assertTrue(shared.is_relative_to(store))
-                self.assertEqual((shared / ".pig-deps-ready").read_text(), module.manifest_digest(checkouts[0]))
+                self.assertEqual((shared / ".ompig-deps-ready").read_text(), module.manifest_digest(checkouts[0]))
                 self.assertFalse((shared / "stale").exists())
                 module.ensure(checkouts[0])
                 self.assertEqual(len(installs), 1)
@@ -119,11 +119,11 @@ class NpmLockedTest(unittest.TestCase):
             with patch.object(module.subprocess, "run", side_effect=OSError("fixture failure")):
                 with self.assertRaises(OSError):
                     module.ensure(root)
-            self.assertFalse((root / "node_modules" / ".pig-deps-ready").exists())
+            self.assertFalse((root / "node_modules" / ".ompig-deps-ready").exists())
             with patch.object(module.subprocess, "run", side_effect=lambda *args, **kwargs: (root / "package.json").write_text('{"changed":true}')):
                 with self.assertRaisesRegex(ValueError, "changed during install"):
                     module.ensure(root)
-            self.assertFalse((root / "node_modules" / ".pig-deps-ready").exists())
+            self.assertFalse((root / "node_modules" / ".ompig-deps-ready").exists())
 
     def test_runs_npm_as_installed_on_path(self):
         # Node's Windows installer provides npm.cmd, not npm.exe. CreateProcess
@@ -155,7 +155,7 @@ class NpmLockedTest(unittest.TestCase):
             with patch.dict(os.environ, {"PATH": str(bin_dir)}):
                 module.ensure(project)
             self.assertEqual((project / "node_modules" / "npm-args.txt").read_text().split(), ["ci", "--ignore-scripts", "--no-audit", "--no-fund"])
-            self.assertTrue((project / "node_modules" / ".pig-deps-ready").is_file())
+            self.assertTrue((project / "node_modules" / ".ompig-deps-ready").is_file())
 
 
 if __name__ == "__main__":

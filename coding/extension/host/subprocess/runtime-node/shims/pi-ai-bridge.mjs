@@ -1,10 +1,10 @@
-// pig divergence (D74): the provider implementations behind pi-ai's builtin
-// APIs (api/<api>.js in the pinned release) run in PiG's host instead of the
+// ompig divergence (D74): the provider implementations behind pi-ai's builtin
+// APIs (api/<api>.js in the pinned release) run in Ompig's host instead of the
 // extension process. Pi's own lazy wrappers, api registry, compat dispatch and
 // env-key injection load these bridges in place of the SDK-backed modules
 // (automation/gen/vendor-pi-dist.sh writes the one-line stubs), so an extension
 // sees Pi's dispatch, credential order and result shapes, and the request runs
-// on PiG's port of the same provider.
+// on Ompig's port of the same provider.
 import { currentRuntime } from "../state.mjs";
 import { bridgeStream } from "./provider-bridge-client.mjs";
 import { AssistantMessageEventStream } from "./pi-dist/pi-ai/sdk-bundle/index.js";
@@ -107,7 +107,7 @@ export function bridgeApi(api) {
 }
 
 // bridgeImages returns openrouter-images' generateImages. Image generation has
-// no host provider in PiG, so it ends the way upstream ends a request whose
+// no host provider in Ompig, so it ends the way upstream ends a request whose
 // provider cannot load.
 export function bridgeImages(api) {
   return async (model) => ({
@@ -116,7 +116,7 @@ export function bridgeImages(api) {
     model: model?.id,
     output: [],
     stopReason: "error",
-    errorMessage: "Image generation is not available to extensions running in PiG (see docs/parity/DIVERGENCES.md D74)",
+    errorMessage: "Image generation is not available to extensions running in Ompig (see docs/parity/DIVERGENCES.md D74)",
     timestamp: Date.now(),
   });
 }

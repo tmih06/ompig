@@ -13,10 +13,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/coding-agent/test/mcp-extension.test.ts ("MCP tools").

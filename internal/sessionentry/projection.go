@@ -1,8 +1,8 @@
 package sessionentry
 
 import (
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // SessionTreeNode is a defensive copy of the session's branch

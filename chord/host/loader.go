@@ -33,7 +33,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 //go:embed loader_child.mjs
@@ -59,7 +59,7 @@ type NodeLoaderImpl struct {
 }
 
 // NewNodeLoader makes a Node facet loader.
-// pig divergence (D178): the loader owns isolated Node children, not in-process module copies.
+// ompig divergence (D178): the loader owns isolated Node children, not in-process module copies.
 func NewNodeLoader(options NodeLoaderOptions) *NodeLoaderImpl {
 	return &NodeLoaderImpl{options: options, hosts: map[*nodeFacetHost]struct{}{}}
 }
@@ -111,7 +111,7 @@ func nodeLoaderEntry() (path string, remove func(), err error) {
 
 // Load imports the facet modules in a child process and returns their facets, named by module URL, in module order.
 // A module whose default export is not a facet fails the load with a TypeError, as loader.ts does.
-// pig divergence (D178): Load runs the facet modules in an isolated Node child, not in this process.
+// ompig divergence (D178): Load runs the facet modules in an isolated Node child, not in this process.
 func (loader *NodeLoaderImpl) Load(modules []string) ([]Facet, error) {
 	if len(modules) == 0 {
 		return []Facet{}, nil
@@ -460,7 +460,7 @@ func nodeContract(description Description) *Contract {
 // factory serves one contract: the object holds the child's object for its input (a resource, opened before the
 // object is live and released when it is disposed) and every member forwards its call to it.
 func (owner *nodeFacetOwner) factory(contract *Contract, description Description) Factory {
-	// pig divergence (D178): the principal is not carried to the child, and the facet cannot reach the Go host.
+	// ompig divergence (D178): the principal is not carried to the child, and the facet cannot reach the Go host.
 	return func(input any, _ Principal, self Self) (Implementation, error) {
 		// The closures refer to the owner, not its host: the child stays up for as long as an implementation can call it.
 		ref := owner.host.refs.Add(1)
@@ -489,7 +489,7 @@ func (owner *nodeFacetOwner) factory(contract *Contract, description Description
 			}
 			for _, member := range variant.Value {
 				name := member.Name
-				// pig divergence (D178): the call runs in the isolated child; only ctx.Signal crosses, and an error keeps its code, reason and message.
+				// ompig divergence (D178): the call runs in the isolated child; only ctx.Signal crosses, and an error keeps its code, reason and message.
 				implementation.Set(name, func(args any, ctx Ctx) (any, error) {
 					//portlint:allow ctxbackground a method called outside a root has no ctx (Pi's ctx argument is optional)
 					signal := context.Background()

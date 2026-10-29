@@ -10,7 +10,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // MaxFrameSize is the maximum allowed message size (128 MB). Bounds a single
@@ -110,7 +110,7 @@ type toolDef struct {
 	PromptSnippet       string     `json:"prompt_snippet,omitempty"`
 	ExecutionMode       string     `json:"execution_mode,omitempty"`
 	PromptGuidelines    []string   `json:"prompt_guidelines,omitempty"` // Bullets injected into system prompt Guidelines section when tool is active
-	Source              string     `json:"source,omitempty"`            // pig additive (D23): optional per-tool source; defaults to extension name
+	Source              string     `json:"source,omitempty"`            // ompig additive (D23): optional per-tool source; defaults to extension name
 	RenderShell         string     `json:"render_shell,omitempty"`      // "self" when the renderers draw their own framing
 	RendersCall         bool       `json:"renders_call,omitempty"`      // the tool has a call renderer
 	RendersResult       bool       `json:"renders_result,omitempty"`    // the tool has a result renderer

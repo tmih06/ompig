@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -17,8 +17,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // pi: packages/ai/src/api/bedrock-converse-stream.ts
@@ -43,7 +43,7 @@ func bedrockFrames(rng *rand.Rand) [][2]string {
 		return pick("hello", "", "line1\nline2", "😀 é", "  padded  ", `quote " and \ slash`, "<&>\u2028", "x")
 	}
 	var frames [][2]string
-	// A stream with no messageStart is not drawn: Pi then emits no "start" event and PiG's builder always emits one (open finding, questions/lg-help-4.md).
+	// A stream with no messageStart is not drawn: Pi then emits no "start" event and Ompig's builder always emits one (open finding, questions/lg-help-4.md).
 	frames = append(frames, [2]string{"messageStart", pick(`{"role":"assistant"}`, `{"role":"assistant"}`, `{"role":"user"}`, `{}`)})
 	blocks := rng.Intn(4)
 	for index := range blocks {
@@ -97,7 +97,7 @@ func bedrockFrames(rng *rand.Rand) [][2]string {
 		}
 		return [2]string{"metadata", `{"usage":{` + strings.Join(members, ",") + `},"metrics":{"latencyMs":5}}`}
 	}
-	// A second messageStop never carries an empty stop reason: Pi then sets rawStopReason to "" and PiG's AssistantMessage cannot tell "" from unset (open ruling).
+	// A second messageStop never carries an empty stop reason: Pi then sets rawStopReason to "" and Ompig's AssistantMessage cannot tell "" from unset (open ruling).
 	stopFrame := func(reasons ...string) [2]string {
 		fields := pick("", "", `,"additionalModelResponseFields":{"source":"test"}`)
 		return [2]string{"messageStop", `{"stopReason":` + quote(pick(reasons...)) + fields + `}`}
@@ -137,7 +137,7 @@ func bedrockFrames(rng *rand.Rand) [][2]string {
 }
 
 // The message and events Pi builds from a ConverseStream response (processing of messageStart, contentBlockStart/Delta/Stop, messageStop and metadata, usage and cost, the stop reason
-// mapping, and the errors of a malformed or truncated stream) against PiG's, over random scripted responses served to both.
+// mapping, and the errors of a malformed or truncated stream) against Ompig's, over random scripted responses served to both.
 func TestBedrockResponseStreamMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(131))
 	var probes []bedrockResponseProbe
@@ -224,11 +224,11 @@ func TestBedrockResponseStreamMatchesPi(t *testing.T) {
 		wantParts := map[string]any{"events": want[i].Events, "message": want[i].Message}
 		gotJSON, _ := json.Marshal(got)
 		wantJSON, _ := json.Marshal(wantParts)
-		// D120: a tool call streamed without an id gets a generated "<name>_<epoch ms>_<counter>" id in PiG where Pi stores "".
+		// D120: a tool call streamed without an id gets a generated "<name>_<epoch ms>_<counter>" id in Ompig where Pi stores "".
 		gotJSON = bedrockOracleGeneratedID.ReplaceAll(gotJSON, []byte(`"id":""`))
 		// A diagnostic carries the clock.
 		gotJSON, wantJSON = bedrockOracleClock.ReplaceAll(gotJSON, []byte(`"timestamp":0`)), bedrockOracleClock.ReplaceAll(wantJSON, []byte(`"timestamp":0`))
-		// An empty rawStopReason is a present member in Pi and an omitted one in PiG (open ruling: AssistantMessage "" vs omitted).
+		// An empty rawStopReason is a present member in Pi and an omitted one in Ompig (open ruling: AssistantMessage "" vs omitted).
 		gotJSON, wantJSON = bytes.ReplaceAll(gotJSON, []byte(`"rawStopReason":"",`), nil), bytes.ReplaceAll(wantJSON, []byte(`"rawStopReason":"",`), nil)
 		var gotValue, wantValue any
 		_ = json.Unmarshal(gotJSON, &gotValue)
@@ -265,7 +265,7 @@ func bedrockOracleDiff(got, want []byte) string {
 		i++
 	}
 	from := max(0, i-80)
-	return fmt.Sprintf(" PiG …%.500s\n Pi  …%.500s", got[from:], want[from:])
+	return fmt.Sprintf(" Ompig …%.500s\n Pi  …%.500s", got[from:], want[from:])
 }
 
 // bedrockOracleClass names the departures a failing probe's frames contain.

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // pasteFilePathsHarness runs .upstream/v0.99.1/packages/coding-agent/test/clipboard-paste-file-paths.test.ts's paste through the real InteractiveMode worker and owner-loop hop. Upstream mocks readClipboardFilePaths, readClipboardImage, and readClipboardText; here the same three reads come from the native clipboard seam, so the image and text reads are counted at that boundary.

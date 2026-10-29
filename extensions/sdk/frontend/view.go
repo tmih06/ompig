@@ -21,7 +21,7 @@ type View struct {
 	// that receives keys, or "". [Env.Act] reaches it through
 	// [Action.ViewNode].
 	Focus string
-	// Seq is PiG's revision of the producer's view: two views of one node
+	// Seq is Ompig's revision of the producer's view: two views of one node
 	// with the same Seq and root Width are the same view.
 	Seq uint64
 }
@@ -142,12 +142,12 @@ type ViewNode struct {
 	// Lines are a lines node's rows.
 	Lines []string
 
-	// Transcript are the nodes PiG's main transcript reports for the same
+	// Transcript are the nodes Ompig's main transcript reports for the same
 	// component, so a session draws a conversation node as it draws the
 	// transcript: a user message's [MarkdownText], an assistant message's
 	// [MarkdownText] and [Thinking] parts and its error line as [Lines], a
 	// tool call's [ToolCard]. A bash-execution node has none: the
-	// transcript reports a `!` command as lines. They are shared with PiG
+	// transcript reports a `!` command as lines. They are shared with Ompig
 	// and must not be modified.
 	Transcript []Node
 	// Diff is a diff node's diff, Path its file path or "".
@@ -206,7 +206,7 @@ type ViewItem struct {
 	Submenu bool
 }
 
-// ViewImage is an image's bytes. Data is shared with PiG and must not be
+// ViewImage is an image's bytes. Data is shared with Ompig and must not be
 // modified.
 type ViewImage struct {
 	// Ref is the lowercase hex SHA-256 of Data.

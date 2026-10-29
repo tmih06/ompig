@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // packages/durable/src/harness/submissions.ts:140-166 admitSubmission: "A busy conversation queues it in `pi.inbox`, or rejects `whenBusy: "reject"`

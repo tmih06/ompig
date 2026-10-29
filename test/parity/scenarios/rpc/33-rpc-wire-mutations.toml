@@ -11,9 +11,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["python3", "./test/parity/testdata/rpc-wire-drift.py", "pig", "{{TEMP}}/rpc"]
+ompig_args = ["python3", "./test/parity/testdata/rpc-wire-drift.py", "ompig", "{{TEMP}}/rpc"]
 pi_args = ["python3", "./test/parity/testdata/rpc-wire-drift.py", "pi", "{{TEMP}}/rpc"]
 
 [cli]
@@ -51,7 +51,7 @@ paths = ["/**/cwd"]
 kind = "id"
 group = "cwd"
 pattern = '^/.+/rpc-wire-[a-z0-9_]{8}$'
-reason = "rpc-wire-drift.py runs each side in its own tempfile.mkdtemp(prefix='rpc-wire-') directory, which has the same length on both sides; only its 8 random characters differ. Pi and PiG estimate tokens from the system prompt's cwd characters, so an equal-length cwd is what makes estimatedTokensAfter comparable (a cwd under {{TEMP}} differed by the -pig-/-pi- infix and the random digits: 786 against 787 in 3-5 of 150 pairs, 2026-10-18). Preserve the cwd's shape and every reference to it."
+reason = "rpc-wire-drift.py runs each side in its own tempfile.mkdtemp(prefix='rpc-wire-') directory, which has the same length on both sides; only its 8 random characters differ. Pi and Ompig estimate tokens from the system prompt's cwd characters, so an equal-length cwd is what makes estimatedTokensAfter comparable (a cwd under {{TEMP}} differed by the -ompig-/-pi- infix and the random digits: 786 against 787 in 3-5 of 150 pairs, 2026-10-18). Preserve the cwd's shape and every reference to it."
 [[assert.json_aliases]]
 paths = ["/**/sessionFile"]
 kind = "path"

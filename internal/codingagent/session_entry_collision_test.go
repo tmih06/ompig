@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi session-manager.ts:277-284 retries short IDs against byId for every entry producer, not only reconstructed labels.

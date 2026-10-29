@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // responseFromRedirectUrl (extensions/mcp/oauth.ts:395-413) is not exported by Pi's module, so the oracle body transcribes it and runs it on Node's own URL implementation: the pasted URL is parsed, compared with the sign-in's redirect URL by origin and pathname, and read through URLSearchParams.

@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // InboxMode is the mode of a queued submission: user input for a run (steer or followUp) or a passive entry write.

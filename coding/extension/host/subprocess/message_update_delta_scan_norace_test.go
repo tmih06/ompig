@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // streamMessageUpdates prepares and sends n message_update deltas of chunk to one connection's stream, as the provider's accumulator publishes them: each text extends the bytes of the one before, in a buffer that grows by doubling.

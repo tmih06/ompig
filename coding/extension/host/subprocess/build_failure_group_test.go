@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 func loadError(name string, err error) error {

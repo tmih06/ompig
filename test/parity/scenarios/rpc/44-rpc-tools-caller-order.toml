@@ -3,9 +3,9 @@
 # Upstream rule (Pi 1.0.4): createAgentSession passes --tools both as the allowlist and as initialActiveToolNames (sdk.ts:271-276), and
 # _refreshToolRegistry activates the initial names in the caller's order before the registered tools the allowlist matches
 # (agent-session.ts:3552-3562, _applyToolLoadout 1561-1565). `--tools bash,ls,read` therefore declares bash, ls, read in that order: the
-# initial system message's toolsAdded and the prompt's tool list follow it. PiG activated them in registry order (read, bash, ls).
+# initial system message's toolsAdded and the prompt's tool list follow it. Ompig activated them in registry order (read, bash, ls).
 #
-# Full JSON records are compared (canonical_json sorts keys only). An explicit system prompt removes the pig/pi naming difference.
+# Full JSON records are compared (canonical_json sorts keys only). An explicit system prompt removes the ompig/pi naming difference.
 
 name = "44-rpc-tools-caller-order"
 description = "RPC --tools bash,ls,read declares the tools in the --tools order"
@@ -32,8 +32,8 @@ wait_contains = ['"command":"get_messages","success":true']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--offline", "--model", "test-faux/faux-1", "--tools", "bash,ls,read", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--offline", "--model", "test-faux/faux-1", "--tools", "bash,ls,read", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--offline", "--model", "test-faux/faux-1", "--tools", "bash,ls,read", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 

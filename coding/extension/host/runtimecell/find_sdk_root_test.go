@@ -8,28 +8,28 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-// An installed pig (running outside its own source tree, no env override, and
+// An installed ompig (running outside its own source tree, no env override, and
 // no replace in the extension's go.mod) must still resolve the SDK from the
 // source tree it staged at install time.
 func TestFindSDKRoot_InstalledSourceRoot(t *testing.T) {
-	// Run outside any pig checkout so the cwd-walk strategy cannot fire.
+	// Run outside any ompig checkout so the cwd-walk strategy cannot fire.
 	tmp := t.TempDir()
 	t.Chdir(tmp)
 	t.Setenv("HOME", filepath.Join(tmp, "home"))
 	t.Setenv("USERPROFILE", filepath.Join(tmp, "home"))
 	// This case exercises source-root fallback without an ambient staged SDK.
-	t.Setenv("PIG_HOME", "")
-	t.Setenv("PIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_HOME", "")
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
 
-	srcRoot := filepath.Join(tmp, "pig-source")
+	srcRoot := filepath.Join(tmp, "ompig-source")
 	sdk := filepath.Join(srcRoot, "extensions", "sdk")
 	if err := os.MkdirAll(sdk, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdk, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdk, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SOURCE_ROOT", srcRoot)
+	t.Setenv("OMPIG_SOURCE_ROOT", srcRoot)
 
 	got, err := findSDKRoot(nil)
 	if err != nil {
@@ -47,9 +47,9 @@ func TestFindSDKRoot_NoSourceRootErrors(t *testing.T) {
 	t.Chdir(tmp)
 	t.Setenv("HOME", filepath.Join(tmp, "home"))
 	t.Setenv("USERPROFILE", filepath.Join(tmp, "home"))
-	t.Setenv("PIG_HOME", "")
-	t.Setenv("PIG_SDK_GO_ROOT", "")
-	t.Setenv("PIG_SOURCE_ROOT", filepath.Join(tmp, "does-not-exist"))
+	t.Setenv("OMPIG_HOME", "")
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_SOURCE_ROOT", filepath.Join(tmp, "does-not-exist"))
 
 	if _, err := findSDKRoot(nil); err == nil {
 		t.Fatal("expected error when no SDK source root is resolvable")
@@ -57,16 +57,16 @@ func TestFindSDKRoot_NoSourceRootErrors(t *testing.T) {
 }
 
 func TestFindSDKRoot_ExplicitExtensionOverrideWins(t *testing.T) {
-	t.Setenv("PIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
 	root := t.TempDir()
 	sdk := filepath.Join(t.TempDir(), "author-sdk")
 	if err := os.MkdirAll(sdk, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdk, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdk, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	goMod := "module example.com/ext\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => " + modfile.AutoQuote(filepath.ToSlash(sdk)) + "\n"
+	goMod := "module example.com/ext\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => " + modfile.AutoQuote(filepath.ToSlash(sdk)) + "\n"
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -75,10 +75,10 @@ func TestFindSDKRoot_ExplicitExtensionOverrideWins(t *testing.T) {
 	if err := os.MkdirAll(staged, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(staged, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(staged, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", stagedHome)
+	t.Setenv("OMPIG_HOME", stagedHome)
 
 	got, err := findSDKRoot([]GoExtension{{Root: root}})
 	if err != nil {
@@ -90,20 +90,20 @@ func TestFindSDKRoot_ExplicitExtensionOverrideWins(t *testing.T) {
 }
 
 func TestFindSDKRoot_DefaultUsesRunningConfigStage(t *testing.T) {
-	t.Setenv("PIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
 	root := t.TempDir()
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/ext\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/ext\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigHome := t.TempDir()
-	staged := testStagedSDKDir(t, pigHome, "go")
+	ompigHome := t.TempDir()
+	staged := testStagedSDKDir(t, ompigHome, "go")
 	if err := os.MkdirAll(staged, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(staged, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(staged, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", pigHome)
+	t.Setenv("OMPIG_HOME", ompigHome)
 
 	got, err := findSDKRoot([]GoExtension{{Root: root}})
 	if err != nil {
@@ -115,10 +115,10 @@ func TestFindSDKRoot_DefaultUsesRunningConfigStage(t *testing.T) {
 }
 
 func TestFindRustSDKRootExplicitOverrideWins(t *testing.T) {
-	t.Setenv("PIG_SDK_RS_ROOT", "")
+	t.Setenv("OMPIG_SDK_RS_ROOT", "")
 	extRoot := t.TempDir()
 	sdkRoot := t.TempDir()
-	if err := os.WriteFile(filepath.Join(sdkRoot, "Cargo.toml"), []byte("[package]\nname='pig-sdk'\nversion='0.1.0'\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkRoot, "Cargo.toml"), []byte("[package]\nname='ompig-sdk'\nversion='0.1.0'\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	cargo := "[package]\nname='ext'\nversion='0.1.0'\n[dependencies]\npig-sdk={path='" + filepath.ToSlash(sdkRoot) + "'}\n"
@@ -135,16 +135,16 @@ func TestFindRustSDKRootExplicitOverrideWins(t *testing.T) {
 }
 
 func TestFindPythonSDKRootUsesRunningConfigStage(t *testing.T) {
-	t.Setenv("PIG_SDK_PY_ROOT", "")
-	pigHome := t.TempDir()
-	staged := filepath.Join(testStagedSDKDir(t, pigHome, "python"), "pig_sdk")
+	t.Setenv("OMPIG_SDK_PY_ROOT", "")
+	ompigHome := t.TempDir()
+	staged := filepath.Join(testStagedSDKDir(t, ompigHome, "python"), "ompig_sdk")
 	if err := os.MkdirAll(staged, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(staged, "__init__.py"), []byte(""), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", pigHome)
+	t.Setenv("OMPIG_HOME", ompigHome)
 	got, err := findPythonSDKRoot()
 	if err != nil {
 		t.Fatal(err)

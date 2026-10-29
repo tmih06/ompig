@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // Pi keeps the Infinity JSON.parse reads for 1e999 (and the -Infinity, NaN and Infinity that partial-json reads) in a tool call's arguments, and every

@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // piCodingAgentPackage is Pi 0.87.1's pinned pi-coding-agent package.
@@ -74,7 +74,7 @@ func staleNonEmptyLock(t *testing.T, lock string) {
 	}
 }
 
-// Pi's FileAuthStorageBackend rethrows proper-lockfile's error unchanged from both lock paths (auth-storage.ts:82,141), and pi-ai's Models.logout wraps it only in "Credential store delete failed for <provider>: <message>" (models.ts:619-628, resolve.ts:36-42). PiG's auth storage returns the same error, not one prefixed with "auth: acquire lock: ". Each row runs Pi's own store on the same lock state first and compares the exact message.
+// Pi's FileAuthStorageBackend rethrows proper-lockfile's error unchanged from both lock paths (auth-storage.ts:82,141), and pi-ai's Models.logout wraps it only in "Credential store delete failed for <provider>: <message>" (models.ts:619-628, resolve.ts:36-42). Ompig's auth storage returns the same error, not one prefixed with "auth: acquire lock: ". Each row runs Pi's own store on the same lock state first and compares the exact message.
 func TestAuthStorageLockErrorIsProperLockfileErrorUpstream(t *testing.T) {
 	const stored = `{"anthropic":{"type":"api_key","key":"stored"}}`
 	t.Run("sync-held", func(t *testing.T) {
@@ -125,7 +125,7 @@ func TestAuthStorageLockErrorIsProperLockfileErrorUpstream(t *testing.T) {
 	})
 }
 
-// FileModelsStore locks through FileAuthStorageBackend.withLockAsync (models-store.ts:55,128), which rethrows proper-lockfile's error unchanged. PiG's models store returns the same error, not one prefixed with "models store: acquire lock: ".
+// FileModelsStore locks through FileAuthStorageBackend.withLockAsync (models-store.ts:55,128), which rethrows proper-lockfile's error unchanged. Ompig's models store returns the same error, not one prefixed with "models store: acquire lock: ".
 func TestFileModelsStoreLockErrorIsProperLockfileErrorUpstream(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "models-store.json")
 	staleNonEmptyLock(t, path+".lock")
@@ -139,7 +139,7 @@ func TestFileModelsStoreLockErrorIsProperLockfileErrorUpstream(t *testing.T) {
 	}
 }
 
-// withLockAsync's throwIfCompromised throws the error its lock's heartbeat reported (auth-storage.ts:168-189), not an abort, and its release, which then fails with ERELEASED, is ignored (auth-storage.ts:191-198). Here the lock directory's mtime changes while the callback runs, so the heartbeat reports "Unable to update lock within the stale threshold" (lib/lockfile.js:129-138). PiG's Modify returns that compromise alone and writes nothing. The heartbeat interval is shortened on both sides: PiG's through the acquire seam, Pi's by running proper-lockfile's timers of a second or more after 20 ms.
+// withLockAsync's throwIfCompromised throws the error its lock's heartbeat reported (auth-storage.ts:168-189), not an abort, and its release, which then fails with ERELEASED, is ignored (auth-storage.ts:191-198). Here the lock directory's mtime changes while the callback runs, so the heartbeat reports "Unable to update lock within the stale threshold" (lib/lockfile.js:129-138). Ompig's Modify returns that compromise alone and writes nothing. The heartbeat interval is shortened on both sides: Ompig's through the acquire seam, Pi's by running proper-lockfile's timers of a second or more after 20 ms.
 func TestAuthStorageLockCompromisedDuringModifyUpstream(t *testing.T) {
 	const stored = `{"anthropic":{"type":"api_key","key":"stored"}}`
 	piFile := filepath.Join(t.TempDir(), "auth.json")
@@ -202,7 +202,7 @@ func TestAuthStorageLockCompromisedDuringModifyUpstream(t *testing.T) {
 	authPortDisk(t, path, stored)
 }
 
-// After the write, Pi's withLockAsync checks only throwIfCompromised, not the signal (auth-storage.ts:184-189), so an abort that arrives while auth.json is being written does not fail the committed modify: it returns the credential, and AuthStorage.modify records the new state (auth-storage.ts:456-470). PiG's Modify and Delete do the same. The oracle aborts from inside Pi's writeFileSync.
+// After the write, Pi's withLockAsync checks only throwIfCompromised, not the signal (auth-storage.ts:184-189), so an abort that arrives while auth.json is being written does not fail the committed modify: it returns the credential, and AuthStorage.modify records the new state (auth-storage.ts:456-470). Ompig's Modify and Delete do the same. The oracle aborts from inside Pi's writeFileSync.
 func TestAuthStorageLockAbortDuringWriteKeepsTheCommitUpstream(t *testing.T) {
 	const stored = `{"anthropic":{"type":"api_key","key":"stored"}}`
 	piFile := filepath.Join(t.TempDir(), "auth.json")
@@ -265,7 +265,7 @@ func TestAuthStorageLockAbortDuringWriteKeepsTheCommitUpstream(t *testing.T) {
 	authPortDisk(t, path, stored)
 }
 
-// FileModelsStore goes through FileAuthStorageBackend.withLockAsync, which creates the missing store as "{}" before it waits for the lock (auth-storage.ts:158-163). A write aborted while another process holds the lock therefore leaves "{}" behind. PiG's models store creates the file at the same point.
+// FileModelsStore goes through FileAuthStorageBackend.withLockAsync, which creates the missing store as "{}" before it waits for the lock (auth-storage.ts:158-163). A write aborted while another process holds the lock therefore leaves "{}" behind. Ompig's models store creates the file at the same point.
 func TestFileModelsStoreLockWaitAbortedAfterCreatingTheStoreUpstream(t *testing.T) {
 	const script = `(async () => {
   const [root, file] = process.argv.slice(1);

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactionLoginProvider is a provider object's OAuth login: it takes Pi's AuthInteraction, sends an info event with links and a progress event, then asks one text prompt so the dialog stays open.
@@ -72,7 +72,7 @@ func (p secretInteractionLoginProvider) LoginInteraction(ctx context.Context, in
 	return ai.OAuthCredentials{Access: token, Refresh: "r", Expires: time.Now().Add(time.Hour).UnixMilli()}, nil
 }
 
-// A secret prompt of a provider object's OAuth login follows maskSecretInput (D80), as the same prompt in its API-key login does: Pi's showAuthPrompt shows it with showPrompt (interactive-mode.ts:6278-6286), and PiG's default masks a prompt the flow marked secret.
+// A secret prompt of a provider object's OAuth login follows maskSecretInput (D80), as the same prompt in its API-key login does: Pi's showAuthPrompt shows it with showPrompt (interactive-mode.ts:6278-6286), and Ompig's default masks a prompt the flow marked secret.
 func TestOAuthInteractionSecretPromptHonorsMaskSecretInput(t *testing.T) {
 	m := newPostLoginTestMode(t)
 	m.layout = tui.NewContainer(m.chatContainer, m.editorContainer)
@@ -85,7 +85,7 @@ func TestOAuthInteractionSecretPromptHonorsMaskSecretInput(t *testing.T) {
 	deliverModalInput(t, m, []byte(token))
 	deliverModalInput(t, m, []byte(""))
 	frame := plainRender(m.editorContainer)
-	if strings.Contains(frame, token) || !strings.Contains(frame, "Input hidden (PiG default)") || !strings.Contains(frame, "9876") {
+	if strings.Contains(frame, token) || !strings.Contains(frame, "Input hidden (Ompig default)") || !strings.Contains(frame, "9876") {
 		t.Fatalf("secret prompt is not masked:\n%s", frame)
 	}
 	deliverModalInput(t, m, []byte("\r"))

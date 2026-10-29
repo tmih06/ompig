@@ -14,10 +14,10 @@ import (
 	"time"
 )
 
-// TestSessionListingBigSynthetic lists a 300+ MB session plus 160 small ones: rows and order must equal the full-decode reference. Set PIG_BIG_SESSION_TEST=1 to run it.
+// TestSessionListingBigSynthetic lists a 300+ MB session plus 160 small ones: rows and order must equal the full-decode reference. Set OMPIG_BIG_SESSION_TEST=1 to run it.
 func TestSessionListingBigSynthetic(t *testing.T) {
-	if os.Getenv("PIG_BIG_SESSION_TEST") == "" {
-		t.Skip("set PIG_BIG_SESSION_TEST=1")
+	if os.Getenv("OMPIG_BIG_SESSION_TEST") == "" {
+		t.Skip("set OMPIG_BIG_SESSION_TEST=1")
 	}
 	dir := t.TempDir()
 	var files []string

@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // decodeEntryFast decodes the stored form of an entry record in one pass. It accepts the shapes pi-durable and this

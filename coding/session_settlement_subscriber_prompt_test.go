@@ -7,8 +7,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // RST-001: agent-session.ts:870-892 guards both extension and public settlement callbacks; prompt at 1607-1609 queues their requests before taking any run lock. The outer prompt awaits those requests after dispatch.

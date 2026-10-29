@@ -8,10 +8,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi 1.2.0 types.ts:932-957 (Pi PR #10739): before_agent_start carries messageType "user" with prompt and images, or "custom" with the
@@ -24,9 +24,9 @@ const (
 
 func TestBeforeAgentStartTriggerAcrossSDKs(t *testing.T) {
 	root := findModuleRoot(t)
-	t.Setenv("PIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
-	t.Setenv("PIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
-	t.Setenv("PIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
+	t.Setenv("OMPIG_SDK_PY_ROOT", filepath.Join(root, "extensions", "sdk-py"))
+	t.Setenv("OMPIG_SDK_RS_ROOT", filepath.Join(root, "extensions", "sdk-rs"))
 	t.Run("inproc", func(t *testing.T) {
 		ext := extension.Extension{Handlers: map[string][]extension.HandlerFn{"before_agent_start": {func(args ...any) (any, error) {
 			event := args[0].(extension.BeforeAgentStartEvent)
@@ -133,7 +133,7 @@ func triggerFactory(t *testing.T, root, language, name string) subprocess.ExtCon
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		source = fmt.Sprintf(`package trigger
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.OnEvent("before_agent_start",func(_ sdk.Context,data map[string]any)(any,error){
@@ -150,9 +150,9 @@ func Extension()*sdk.Extension {
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, name+".py")
-		source = fmt.Sprintf(`import pig_sdk
+		source = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  def handler(ctx,data):
   o=data["systemPromptOptions"]
   suffix="|"+data["messageType"]
@@ -167,7 +167,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		source = fmt.Sprintf(`use pig_sdk::{Extension,Schema};
+		source = fmt.Sprintf(`use ompig_sdk::{Extension,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.on_before_agent_start(|_,event| {

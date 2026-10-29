@@ -1,5 +1,5 @@
 {
-  "name": "pig-ci-parity-oracle",
+  "name": "ompig-ci-parity-oracle",
   "private": true,
   "version": "0.0.0",
   "dependencies": {

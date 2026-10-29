@@ -6,12 +6,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
-// The entry built from a typed message is the entry decoding its record gives: the expectation is the decoded record, never PiG's direct form.
+// The entry built from a typed message is the entry decoding its record gives: the expectation is the decoded record, never Ompig's direct form.
 func TestDirectMessageEntryMatchesDecode(t *testing.T) {
 	i64 := func(n int64) *int64 { return &n }
 	one := 1

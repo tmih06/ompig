@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // UserMessageItem is one selectable user message (user-message-selector.ts UserMessageItem).
@@ -96,7 +96,7 @@ func (s *UserMessageSelectorComponent) HandleInput(data string) {
 
 func (s *UserMessageList) Render(width int) []string {
 	th := ActiveTheme()
-	// pig divergence (D66): Bound every user-message list row after adding
+	// ompig divergence (D66): Bound every user-message list row after adding
 	// cursors and metadata. Upstream leaves these rows over-wide in narrow panes.
 	fit := func(line string) string { return widthx.TruncateToWidth(line, width, "", false) }
 

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type userMessageProbe struct {
@@ -24,7 +24,7 @@ type userMessageProbe struct {
 	Keys     []string            `json:"keys"`
 }
 
-// randomUserMessageProbes draws (without page keys: Pi 1.1.0 has none and Pig pages the selection, D155) 0 to 30 messages of random text (newlines, tabs, wide, combining and ANSI text, blanks, very long lines) with key scripts over every selector binding, at widths from 25 to 120.
+// randomUserMessageProbes draws (without page keys: Pi 1.1.0 has none and Ompig pages the selection, D155) 0 to 30 messages of random text (newlines, tabs, wide, combining and ANSI text, blanks, very long lines) with key scripts over every selector binding, at widths from 25 to 120.
 func randomUserMessageProbes(bindings []map[string][]string) []userMessageProbe {
 	rng := rand.New(rand.NewSource(20261023))
 	pieces := []string{"fix", "the login bug", "line\nbreak", "\ttab", "  spaces   ", "日本語のメッセージ", "e\u0301", "😀", "\x1b[31mred\x1b[0m", "", "x", strings.Repeat("long ", 30), "\r\n", "a-b_c"}
@@ -161,7 +161,7 @@ func TestUserMessageSelectorInputMatchesPi(t *testing.T) {
 				break
 			}
 		}
-		// Pig bounds every row to the width (D66) and closes colors with SGR 0; trailing blanks and style sequences are ignored.
+		// Ompig bounds every row to the width (D66) and closes colors with SGR 0; trailing blanks and style sequences are ignored.
 		if !reflect.DeepEqual(got.Steps, want.Steps) || !reflect.DeepEqual(userMessageText(got.Frames), userMessageText(want.Frames)) {
 			failures++
 			if failures <= 6 {
@@ -188,7 +188,7 @@ func userMessageDifference(got, want [][]string) string {
 				w = want[f][l]
 			}
 			if g != w {
-				return fmt.Sprintf("frame %d line %d:\n  pig %q\n  Pi  %q", f, l, g, w)
+				return fmt.Sprintf("frame %d line %d:\n  ompig %q\n  Pi  %q", f, l, g, w)
 			}
 		}
 	}

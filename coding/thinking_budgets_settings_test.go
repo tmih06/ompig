@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A settings budget of zero or below is configured and wins over the default (simple-options.ts:82 spreads settings.thinkingBudgets over the defaults); an unset level keeps the default, and an empty settings

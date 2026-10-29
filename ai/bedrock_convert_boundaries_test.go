@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	bdoc "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
+	bdoc "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
 )
 
 func TestProviderSurrogateSanitizationPreservesValidScalars(t *testing.T) {

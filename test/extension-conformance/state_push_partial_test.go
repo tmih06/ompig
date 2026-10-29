@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The host sends an extension only the state that changed since its last push and skips a push the extension already holds, as the runtime's applyState keeps the fields a state_update omits. Every realization must report the same system prompt options after an identical state, a change to the options alone, and a change back; the Node runtime reads them from the replicated state, so a push that dropped or kept a stale copy shows up here.

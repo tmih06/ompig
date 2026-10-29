@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // RequestProviderOperation runs an image or classifier implementation of a provider config in its owning extension. The request carries the provider in Tool and {kind, api, model, context, options} in Args; the response is the AssistantImages or ClassifierResult, and a callback failure is the request's error.
@@ -74,7 +74,7 @@ func classifierOptionsWire(o ai.ClassifierOptions) map[string]any {
 }
 
 // attachProviderOperations wires the implementations a provider declaration names to the extension that owns them: the streamSimple callback, and the image and classifier APIs.
-// pig additive (D19): connection-owned callbacks carry the image and classifier implementations across the SDK boundary without changing registry scope.
+// ompig additive (D19): connection-owned callbacks carry the image and classifier implementations across the SDK boundary without changing registry scope.
 func (h *Host) attachProviderOperations(me *managedExt, provider ProviderDecl, cfg *extension.ProviderConfig) {
 	if provider.StreamSimple {
 		cfg.StreamSimple = h.providerStreamCallback(me, provider.Name)

@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // compaction-summary-message.ts:40 tokensBefore.toLocaleString() against pinned Pi: separators every three digits and a minus sign in front, for every size from 0 to the int64 range.

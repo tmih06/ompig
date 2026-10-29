@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The host sends the whole options object, including customPrompt and forceSystemPrompt whenever they are defined (BuildSystemPromptOptions.MarshalJSON), and the SDK returns the handler's whole object. runner.ts:1411-1462 shares that object between handlers, so a handler's `delete options.forceSystemPrompt` or `delete options.customPrompt` leaves the field undefined for later handlers and the run (agent-session.ts:1724), while a collection the response omits keeps its value.
@@ -53,7 +53,7 @@ func TestApplyPromptOptionEditsTreatsAnOmittedOptionalFieldAsDeleted(t *testing.
 	}
 }
 
-// A before_agent_start handler receives `{...trigger, type, get systemPrompt, systemPromptOptions}` (runner.ts:1446-1452), whose accessor V8 defines after the data members of a literal that spreads: Object.keys under real Pi (Node 24) is messageType, prompt, images, type, systemPromptOptions, systemPrompt whose options follow normalizeBuildSystemPromptOptions (system-prompt.ts:61-75). Re-encoding the event to carry the retained selectedTools sorted every member alphabetically, so Object.keys(event) read messageType, prompt, systemPrompt, systemPromptOptions, type in PiG.
+// A before_agent_start handler receives `{...trigger, type, get systemPrompt, systemPromptOptions}` (runner.ts:1446-1452), whose accessor V8 defines after the data members of a literal that spreads: Object.keys under real Pi (Node 24) is messageType, prompt, images, type, systemPromptOptions, systemPrompt whose options follow normalizeBuildSystemPromptOptions (system-prompt.ts:61-75). Re-encoding the event to carry the retained selectedTools sorted every member alphabetically, so Object.keys(event) read messageType, prompt, systemPrompt, systemPromptOptions, type in Ompig.
 func TestPromptOptionsEventArgsKeepPiMemberOrder(t *testing.T) {
 	options := &extension.BuildSystemPromptOptions{Cwd: "/work", SelectedTools: []string{"read"}}
 	systemPrompt := extension.NewSystemPrompt(func() (string, error) { return "sys", nil })

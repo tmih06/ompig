@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 // extractedAt is where extraction writes the cell binary embedded at rel:
@@ -105,7 +105,7 @@ func TestResolve_KnownHashMismatchFailsClosed(t *testing.T) {
 func TestResolve_UnknownHashToleratedOnNames(t *testing.T) {
 	base := stageBinary(t, "cells/go/aaaa/runner")
 	r := NewResolver(manifestFor("cells/go/aaaa/runner"), base)
-	// A source-less Piglet Binary's runtime request carries no hashes; match on names.
+	// A source-less Ompiglet Binary's runtime request carries no hashes; match on names.
 	if _, ok := r.ResolvePrebuilt(goReq("go-core",
 		runtimecell.PrebuiltExtension{Name: "context-info"},
 		runtimecell.PrebuiltExtension{Name: "subagent"})); !ok {

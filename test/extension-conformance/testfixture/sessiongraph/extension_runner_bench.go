@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // extensionRunnerBench times n repetitions of one operation of the extension_runner row's objects, from inside the extension (BenchmarkSessionGraphExtensionRunner reads "nsPerOp"):

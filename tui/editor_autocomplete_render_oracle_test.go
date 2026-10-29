@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type acCommand struct {
@@ -71,8 +71,8 @@ func acProbes() []acProbe {
 	names := []string{"alpha", "alpine", "beta", "build", "clear", "compact", "copy", "debug", "diff", "export", "fork", "help", "import", "login", "logout", "model", "name", "new", "quit", "reload", "resume", "session", "settings", "share", "tree", "a-command-name-that-is-longer-than-thirty-two-columns", "日本語のコマンド名", "x"}
 	descriptions := []string{"", "Short", "A considerably longer description that has to be clipped at narrow widths", "日本語の説明 wide chars", "Tabs\tand\x1b[1mansi\x1b[0m"}
 	random := rand.New(rand.NewSource(11))
-	// Moving the cursor with the popup open and then accepting is left out: Pig re-queries the provider at the new cursor (AutocompleteAccept), Pi applies the stale popup there (Q10).
-	// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+	// Moving the cursor with the popup open and then accepting is left out: Ompig re-queries the provider at the new cursor (AutocompleteAccept), Pi applies the stale popup there (Q10).
+	// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 	keys := []string{"/", "a", "b", "c", "m", "o", "l", "x", " ", "\x1b[A", "\x1b[B", "\x1b[A", "\x1b[B", "\t", "\x1b", "\x7f"}
 	widths := []int{1, 2, 3, 4, 5, 7, 10, 20, 33, 40, 60, 80, 120}
 	var probes []acProbe
@@ -87,7 +87,7 @@ func acProbes() []acProbe {
 			v := []int{1, 3, 5, 8, 20, 50}[random.Intn(6)]
 			probe.MaxVis = &v
 		}
-		// Pig clips a popup row wider than the content width and draws the end-of-line cursor over the last cell at width 1 where Pi overflows
+		// Ompig clips a popup row wider than the content width and draws the end-of-line cursor over the last cell at width 1 where Pi overflows
 		// (D66, Q8), so the corpus keeps at least two content cells.
 		pick := func() int {
 			for {
@@ -189,7 +189,7 @@ func TestEditorAutocompleteRenderMatchesPi(t *testing.T) {
 			if failures++; failures <= 3 {
 				for step := range got {
 					if step >= len(expected[i]) || !reflect.DeepEqual(got[step], expected[i][step]) {
-						t.Errorf("probe %d step %d ops %s theme=%s paddingX=%d max=%v commands=%d:\n  Pig %q %q\n  Pi  %q %q", i, step, mustJSON(probe.Ops[:step+1]), probe.Theme, probe.PaddingX, probe.MaxVis, len(probe.Commands), got[step].Text, got[step].Rows, expected[i][step].Text, expected[i][step].Rows)
+						t.Errorf("probe %d step %d ops %s theme=%s paddingX=%d max=%v commands=%d:\n  Ompig %q %q\n  Pi  %q %q", i, step, mustJSON(probe.Ops[:step+1]), probe.Theme, probe.PaddingX, probe.MaxVis, len(probe.Commands), got[step].Text, got[step].Rows, expected[i][step].Text, expected[i][step].Rows)
 						break
 					}
 				}
@@ -209,7 +209,7 @@ func TestEditorAutocompleteRenderProbeDump(t *testing.T) {
 	fmt.Printf("acrender-probes:%s\n", mustJSON(acProbes()))
 }
 
-// TestEditorAutocompleteRenderParity prints Pig's frames for the corpus, one JSON line per probe, for the editor-autocomplete-render parity scenario.
+// TestEditorAutocompleteRenderParity prints Ompig's frames for the corpus, one JSON line per probe, for the editor-autocomplete-render parity scenario.
 func TestEditorAutocompleteRenderParity(t *testing.T) {
 	previousCaps, previousTheme, previousKeys := GetCapabilities(), ActiveTheme(), GetKeybindings()
 	t.Cleanup(func() {

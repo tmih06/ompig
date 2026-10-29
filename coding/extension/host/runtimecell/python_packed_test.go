@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 func TestBuildPythonPackedCellBuildsCachedRunner(t *testing.T) {
@@ -26,7 +26,7 @@ func TestBuildPythonPackedCellBuildsCachedRunner(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SDK_PY_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_PY_ROOT", sdkRoot)
 	rootA := writePythonFactoryModule(t, "py_a", "a-ext", "a")
 	rootB := writePythonFactoryModule(t, "py_b", "b-ext", "b")
 	cache := t.TempDir()
@@ -78,11 +78,11 @@ func TestBuildPythonPackedCellBuildsCachedRunner(t *testing.T) {
 func writePythonFactoryModule(t *testing.T, moduleName, extName, toolName string) string {
 	t.Helper()
 	dir := t.TempDir()
-	src := fmt.Sprintf(`import pig_sdk
+	src := fmt.Sprintf(`import ompig_sdk
 
 
 def new_extension():
-    ext = pig_sdk.Extension(%q)
+    ext = ompig_sdk.Extension(%q)
     ext.tool(%q, "test tool", {"type": "object"}, lambda ctx, params: {"content": "ok"})
     return ext
 `, extName, toolName)

@@ -15,14 +15,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	envnode "github.com/tmih06/ompig/durable/env/node"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 var modelsUsage = ai.Usage{Input: 10, Output: 2, TotalTokens: 12, Cost: ai.UsageCost{Input: 0.001, Output: 0.0002, Total: 0.0012}}
@@ -248,7 +248,7 @@ func TestCodeModeModels(t *testing.T) {
 		}
 	})
 
-	// PiG addition (no Pi case): the provider gets the questions in the order the script wrote them.
+	// Ompig addition (no Pi case): the provider gets the questions in the order the script wrote them.
 	t.Run("keeps the order of the questions the script wrote", func(t *testing.T) {
 		f := modelsChat(t)
 		run := f.run(t, `const model = await models.getModelOfType("classifier", "test", "judge");

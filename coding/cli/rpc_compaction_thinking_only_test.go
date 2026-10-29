@@ -83,7 +83,7 @@ func TestRPCCompactionSurvivesThinkingOnlyMessagesTheRequestsOmit(t *testing.T) 
 	if err := os.WriteFile(current, []byte(session.String()), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, dir, []string{"PIG_CODING_AGENT_DIR=" + agentDir, "PI_CODING_AGENT_DIR=" + agentDir, "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--session", current, "--model", "mock/qwen")
+	p := startRPCProcessAt(t, dir, []string{"OMPIG_CODING_AGENT_DIR=" + agentDir, "PI_CODING_AGENT_DIR=" + agentDir, "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--session", current, "--model", "mock/qwen")
 	if _, err := io.WriteString(p.stdin, `{"id":"c","type":"compact"}`+"\n"); err != nil {
 		t.Fatal(err)
 	}

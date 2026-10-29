@@ -7,9 +7,9 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/entered"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/entered"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // Ports packages/chord/src/watch.ts (Watch, NativeWatch, NativeWatchHandle and their shared lifecycle).

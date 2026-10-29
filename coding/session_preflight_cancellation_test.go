@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // agent-session.ts:1857-1876 and agent.ts:341-345: when agent.prompt rejects a start because another run holds the Agent, _startRun's

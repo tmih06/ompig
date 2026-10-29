@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -11,7 +11,7 @@ import (
 // an extension's pi.events.on() listener is called once per emit before any
 // reload, once after each reload (the old generation's listener is gone, not
 // duplicated), and never after the host is shut down. The upstream host-owned
-// listener half has no PiG counterpart: the Go host exposes no event bus and the Node
+// listener half has no Ompig counterpart: the Go host exposes no event bus and the Node
 // bus is shared with every Node realm (D83), so the survival of a host-side listener is not
 // observable here; a reload re-invokes the factory in the retained process and
 // retires the old generation with its connection. The old generation's captured API

@@ -19,7 +19,7 @@ func TestGitPackageCLIComparedWithPi(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	pig := buildPigBinaryForSignalTest(t)
+	ompig := buildPigBinaryForSignalTest(t)
 	pi := filepath.Join(repo, "extensions/sdk-ts/node_modules/.bin/pi")
 	remote := t.TempDir()
 	git := func(dir string, args ...string) {
@@ -69,7 +69,7 @@ func TestGitPackageCLIComparedWithPi(t *testing.T) {
 		}
 		return c
 	}
-	p, g := makeCLI(pi), makeCLI(pig)
+	p, g := makeCLI(pi), makeCLI(ompig)
 	run := func(c cli, fail bool, args []string) (string, string, int) {
 		t.Helper()
 		cmd := exec.CommandContext(t.Context(), c.binary, append(args, "--approve")...)
@@ -78,7 +78,7 @@ func TestGitPackageCLIComparedWithPi(t *testing.T) {
 		if fail {
 			failure = "1"
 		}
-		cmd.Env = append(os.Environ(), "HOME="+c.home, "PIG_HOME="+filepath.Join(c.home, ".pig"), "PIG_CODING_AGENT_DIR="+c.agent, "PI_CODING_AGENT_DIR="+c.agent, "GIT_CONFIG_NOSYSTEM=1", "GIT_CONFIG_GLOBAL="+config, "PIG_OFFLINE=", "PI_OFFLINE=", "NO_COLOR=1", "FORCE_COLOR=0", "FAIL_INSTALL="+failure)
+		cmd.Env = append(os.Environ(), "HOME="+c.home, "OMPIG_HOME="+filepath.Join(c.home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+c.agent, "PI_CODING_AGENT_DIR="+c.agent, "GIT_CONFIG_NOSYSTEM=1", "GIT_CONFIG_GLOBAL="+config, "OMPIG_OFFLINE=", "PI_OFFLINE=", "NO_COLOR=1", "FORCE_COLOR=0", "FAIL_INSTALL="+failure)
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout = &stdout
 		cmd.Stderr = &stderr
@@ -98,7 +98,7 @@ func TestGitPackageCLIComparedWithPi(t *testing.T) {
 		wo, we, wc := run(p, fail, args)
 		go_, ge, gc := run(g, fail, args)
 		if go_ != wo || ge != we || gc != wc {
-			t.Errorf("%v: pig=(%d,%q,%q), pi=(%d,%q,%q)", args, gc, go_, ge, wc, wo, we)
+			t.Errorf("%v: ompig=(%d,%q,%q), pi=(%d,%q,%q)", args, gc, go_, ge, wc, wo, we)
 		}
 	}
 	const source = "git:https://fixture.invalid/owner/repo"

@@ -8,7 +8,7 @@ The pipeline never changes the committed pin and never merges. It runs every com
 PI_UPSTREAM_REF override, records each step's start, end and exit code in
 tmp/pin-follow/<version>/state.json (a rerun resumes after the last passing step), and reports the minutes
 from the upstream commit to the gap list (target 30) and to the Porter output (target 120). READY and FINDING lines go to
---ready-log, else PIG_PIN_FOLLOW_READY_LOG, else tmp/pin-follow/<version>/ready.log.
+--ready-log, else OMPIG_PIN_FOLLOW_READY_LOG, else tmp/pin-follow/<version>/ready.log.
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ import pinlib  # noqa: E402
 TARGET_MINUTES = {"gaps": 30, "porter": 120}
 MAX_ROWS = 25  # one Porter task closes at most this many rows; a 12-row group once ran past the one-hour task limit with no report
 STATE_DIR = "tmp/pin-follow"
-LANE = os.environ.get("PIG_LANE_SLICE", "pin-follow")
+LANE = os.environ.get("OMPIG_LANE_SLICE", "pin-follow")
 DECLARATION = r"export\s+(?:declare\s+)?(?:abstract\s+)?(?:const|let|var|type|interface|function\*?|async\s+function|class|enum)\s+%s\b"
 
 
@@ -271,7 +271,7 @@ class Pipeline:
         self.dry_run, self.run_porter, self.porter_timeout, self.until = dry_run, run_porter, porter_timeout, until
         self.out = root / STATE_DIR / version
         self.state_file = self.out / "state.json"
-        named = os.environ.get("PIG_PIN_FOLLOW_READY_LOG")
+        named = os.environ.get("OMPIG_PIN_FOLLOW_READY_LOG")
         self.ready_log = ready_log or (Path(named) if named else self.out / "ready.log")
         self.env = dict(os.environ, PI_UPSTREAM_REF=ref)
         self.state = {"ref": ref, "commit": commit, "version": version, "upstream_time": upstream_time.isoformat(), "steps": []}
@@ -285,7 +285,7 @@ class Pipeline:
     def frozen_names(self) -> set[str]:
         return {p.name for p in self.frozen().parent.glob(f"{self.commit}.*")}
 
-    INCREMENTAL = {"PIG_INTERFACE_EXTRACT_INCREMENTAL": "1"}
+    INCREMENTAL = {"OMPIG_INTERFACE_EXTRACT_INCREMENTAL": "1"}
 
     def commands(self, name: str) -> list[tuple[list[str], int]]:
         pin = ["python3", "automation/pin/pin.py"]
@@ -454,7 +454,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="print the plan; run nothing")
     parser.add_argument("--until", choices=Pipeline.ORDER, help="stop after this step; a rerun resumes after it")
     parser.add_argument("--run-porter", action="store_true", help="also run one Porter task per group (headless, serial)")
-    parser.add_argument("--ready-log", help="append READY and FINDING lines here (default: PIG_PIN_FOLLOW_READY_LOG, else the run's state directory)")
+    parser.add_argument("--ready-log", help="append READY and FINDING lines here (default: OMPIG_PIN_FOLLOW_READY_LOG, else the run's state directory)")
     parser.add_argument("--closure", metavar="FILE", help="print the gap rows of one upstream file and exit")
     parser.add_argument("--freeze-rows", action="store_true", help="freeze every file group's gap rows (never overwrites) and exit")
     parser.add_argument("--part", metavar="I/N", help="with --closure or --delta: only part I of N of the frozen rows or files")

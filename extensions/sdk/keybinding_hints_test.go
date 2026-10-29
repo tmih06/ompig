@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui"
+	"github.com/tmih06/ompig/extensions/sdk/tui"
 )
 
 // The vectors are what pi-coding-agent's own formatKeyText, keyText, keyDisplayText, keyHint and rawKeyHint return

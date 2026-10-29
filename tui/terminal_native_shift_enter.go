@@ -36,7 +36,7 @@ func NormalizeAppleTerminalInput(data string, isAppleTerminal, isShiftPressed bo
 // ProcessTerminal.forwardInputSequence to one complete StdinBuffer sequence.
 // Apple Terminal (and the Windows console) can send plain Return for
 // Shift+Enter even with enhanced key reporting requested, so Pi asks the local
-// OS whether Shift is held. Pig's input loops split sequences outside
+// OS whether Shift is held. Ompig's input loops split sequences outside
 // ProcessTerminal, so each loop calls this before dispatch.
 func NormalizeProcessInputSequence(sequence string) string {
 	return normalizeProcessInputSequenceFor(sequence, runtime.GOOS, os.Getenv("TERM_PROGRAM"), IsNativeModifierPressed)

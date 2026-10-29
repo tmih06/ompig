@@ -3,7 +3,7 @@ package modeltypes
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // lateConfig is the provider config the late_provider tool registers after the factory finished: Pi's pi.registerProvider takes the whole ProviderConfig, callbacks included, at any time (.upstream/v0.99.2/packages/coding-agent/src/core/extensions/types.ts:1875-1903, loader.ts:449-457, runner.ts:517-523).

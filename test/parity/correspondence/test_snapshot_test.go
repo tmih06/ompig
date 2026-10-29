@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/internal/gitsnapshot"
+	"github.com/tmih06/ompig/test/parity/internal/gitsnapshot"
 )
 
 // repositorySnapshotCommit writes an unreachable commit for the current test

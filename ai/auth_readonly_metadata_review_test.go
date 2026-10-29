@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi ReadOnlyAuthStorage.read retains every field in the validated credential, not a projection that deletes provider-owned fields.

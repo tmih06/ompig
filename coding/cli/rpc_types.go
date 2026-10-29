@@ -15,15 +15,15 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	codingcompaction "github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/codingagent"
+	codingcompaction "github.com/tmih06/ompig/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ─── Commands (stdin) ─────────────────────────────────────────────────────────
@@ -875,7 +875,7 @@ func rpcSessionInfoChanged(name string) RPCSessionInfoChangedEvent {
 	return RPCSessionInfoChangedEvent{Type: "session_info_changed", Name: name}
 }
 
-// pig additive (D112): maxPooledJSONLine bounds the line buffer writeJSONLine keeps between calls (golang/go#23199).
+// ompig additive (D112): maxPooledJSONLine bounds the line buffer writeJSONLine keeps between calls (golang/go#23199).
 const maxPooledJSONLine = 64 << 10
 
 var jsonLineBuffers = sync.Pool{New: func() any { return new([]byte) }}

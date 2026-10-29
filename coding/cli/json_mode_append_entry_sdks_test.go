@@ -30,11 +30,11 @@ func TestJSONModePrintsEntryAppendedForEveryExtensionSDK(t *testing.T) {
 			defer cancel()
 			cmd := exec.CommandContext(ctx, binary, "--mode", "json", "--model", "test-faux/faux-1", "--no-session", "-e", filepath.Join(fixtures, sdk), "-p", "/robust-note first")
 			cmd.Dir = t.TempDir()
-			cmd.Env = append(cmd.Environ(), "PIG_HOME="+home, "PI_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_SDK_GO_ROOT="+filepath.Join(root, "extensions", "sdk"))
+			cmd.Env = append(cmd.Environ(), "OMPIG_HOME="+home, "PI_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_SDK_GO_ROOT="+filepath.Join(root, "extensions", "sdk"))
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			if err := cmd.Run(); err != nil {
-				t.Fatalf("pig: %v (context: %v)\nstderr: %s", err, ctx.Err(), stderr.String())
+				t.Fatalf("ompig: %v (context: %v)\nstderr: %s", err, ctx.Err(), stderr.String())
 			}
 			// Pi emits one entry_appended per pi.appendEntry (agent-session.ts appendEntry), so the line appears exactly once.
 			found := 0

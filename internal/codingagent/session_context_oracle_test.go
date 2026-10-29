@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // contextTrees are session entry trees (JSON entries, parent links) that exercise what buildSessionContext decides: branch walking, compaction and the entries it keeps, branch summaries, custom messages, context edits, and the model and thinking settings on the path.
@@ -128,7 +128,7 @@ emit(input.requests.map((r) => {
 			if failures++; failures > 4 {
 				continue
 			}
-			t.Errorf("tree %d default=%v leaf %v:\n  Pig %s\n  Pi  %s", r.Tree, r.Default, ptrString(r.Leaf), strings.TrimSpace(string(g)), strings.TrimSpace(string(x)))
+			t.Errorf("tree %d default=%v leaf %v:\n  Ompig %s\n  Pi  %s", r.Tree, r.Default, ptrString(r.Leaf), strings.TrimSpace(string(g)), strings.TrimSpace(string(x)))
 		}
 	}
 }

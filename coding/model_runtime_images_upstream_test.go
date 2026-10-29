@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports .upstream/v0.99.1/packages/coding-agent/test/model-runtime-images.test.ts.

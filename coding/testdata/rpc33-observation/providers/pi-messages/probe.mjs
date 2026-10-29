@@ -32,8 +32,8 @@
 // original promises and values unchanged, so it adds no microtask.
 //
 // usage: node probe.mjs <out.json>     (env PI_PACKAGE_ROOT = the installed pi-coding-agent package)
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { createServer } from 'node:http';
 import { once } from 'node:events';
@@ -304,7 +304,7 @@ for (const [name, fixture, delivery, abort] of [['pending-body', 'tool', 'pendin
   cancels.push({ name, fixture, delivery, abort, ...(await runPath('direct', fixture, fixtures[fixture], delivery, abort)) });
 }
 await writeFile(outPath, JSON.stringify({
-  piVersion: PIG_UPSTREAM_VERSION,
+  piVersion: OMPIG_UPSTREAM_VERSION,
   node: process.version,
   api: 'pi-messages',
   bodies: Object.fromEntries(Object.entries(fixtures).map(([name, records]) => [name, wire(records).join('')])),

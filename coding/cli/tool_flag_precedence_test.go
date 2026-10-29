@@ -10,7 +10,7 @@ import (
 // Pi's sdk.ts:258-265 gives an explicit --tools list precedence over --no-tools and --no-builtin-tools: allowedToolNames = tools ?? (noTools === "all" ? [] : undefined) and initialActiveToolNames = tools ?? (noTools ? [] : defaults), then the denylist is subtracted. Measured against the exact Pi 0.87.1 oracle in --mode json with the faux provider (bash, read and write prompts).
 func TestToolsAllowlistOverridesNoToolsFlagsInJSONMode(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	devNull, err := os.Open(os.DevNull)

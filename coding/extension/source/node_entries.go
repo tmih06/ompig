@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/ignorerules"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
+	"github.com/tmih06/ompig/internal/ignorerules"
+	"github.com/tmih06/ompig/internal/nodefs"
 )
 
 // NodeManifestEntries returns the extension entry files a Node package's

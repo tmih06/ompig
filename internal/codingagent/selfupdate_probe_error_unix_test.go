@@ -30,7 +30,7 @@ func TestConfiguredNpmProbeFailurePreservesActionableErrorAndOwner(t *testing.T)
 			}
 			t.Setenv("PATH", bin)
 			t.Setenv("HOME", root)
-			t.Setenv("PIG_INSTALL_TIER", "")
+			t.Setenv("OMPIG_INSTALL_TIER", "")
 			dir := filepath.Join(root, "lib", "node_modules", "@earendil-works", "pi-coding-agent", "dist")
 			if mode == "bun owner" {
 				dir = filepath.Join(root, ".bun", "install", "global", "node_modules", "@earendil-works", "pi-coding-agent", "dist")
@@ -110,7 +110,7 @@ func BenchmarkConfiguredNpmProbeFailure(b *testing.B) {
 	if err := os.WriteFile(wrapper, []byte("#!/bin/sh\nprintf 'probe denied' >&2\nexit 23\n"), 0o700); err != nil {
 		b.Fatal(err)
 	}
-	b.Setenv("PIG_INSTALL_TIER", "")
+	b.Setenv("OMPIG_INSTALL_TIER", "")
 	b.Setenv("HOME", b.TempDir())
 	b.Setenv("PATH", b.TempDir())
 	runner := osCmdRunner{npmCommand: []string{wrapper, "--wrapper-option"}, ctx: b.Context()}

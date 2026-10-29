@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Exercise real HTTP, provider parsing, runtime forwarding, FIFO draining, and terminal-result ownership rather than a prebuilt event stream.

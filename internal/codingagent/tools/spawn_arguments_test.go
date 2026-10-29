@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // spawnCall is one child_process.spawn(file, args) call.

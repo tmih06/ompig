@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // skillLoadResult holds the outcome of resolving and loading all skills for a
-// session: from the piglet (if any), --skill flags, and convention dirs.
+// session: from the ompiglet (if any), --skill flags, and convention dirs.
 type skillLoadResult struct {
 	// Defs are the fully-loaded skill definitions, ready for the system prompt
 	// and /skill: command registration.
@@ -23,34 +23,34 @@ type skillLoadResult struct {
 
 // resolveAndLoadSkills resolves and loads every skill for the session.
 //
-// When a piglet declares skills, they are resolved and loaded *in addition
+// When a ompiglet declares skills, they are resolved and loaded *in addition
 // to* (not instead of) the marketplace/convention skills that
 // collectSkillInputs already gathered. This is the union semantics documented
-// in the adwaraki piglet:
+// in the adwaraki ompiglet:
 //
 //	"Marketplace skills ... are inherited globally via settings.json packages:,
-//	 so they load for any piglet ... without being redeclared here."
+//	 so they load for any ompiglet ... without being redeclared here."
 //
-// If a piglet skill has the same name as a marketplace skill, the piglet
+// If a ompiglet skill has the same name as a marketplace skill, the ompiglet
 // version wins (it is the explicit declaration). Deduplication is by name,
 // not by path: the two sources have different paths for the same skill.
 //
-// Extracted from main() so the piglet-skills → loadSkills wiring: the site
+// Extracted from main() so the ompiglet-skills → loadSkills wiring: the site
 // of a bug where NoSkills was passed as loadSkills's kill-switch: is unit
 // testable. The loadSkills call inside this function always passes false for
 // noSkills: we always want to load explicitly-resolved inputs.
-func resolveAndLoadSkills(p *piglet.Piglet, collectedSkillInputs []string) (*skillLoadResult, error) {
+func resolveAndLoadSkills(p *ompiglet.Ompiglet, collectedSkillInputs []string) (*skillLoadResult, error) {
 	if p == nil || len(p.Skills) == 0 {
-		// No piglet skills: just load whatever collectSkillInputs gathered.
+		// No ompiglet skills: just load whatever collectSkillInputs gathered.
 		defs, diagnostics, err := loadSkills(collectedSkillInputs, false)
 		return &skillLoadResult{Defs: defs, Paths: collectedSkillInputs, Diagnostics: diagnostics}, err
 	}
 
-	// Piglet declares skills: resolve origins and build the piglet skill
+	// Ompiglet declares skills: resolve origins and build the ompiglet skill
 	// inputs (filesystem paths + inline content).
-	resolved, errs := piglet.ResolveSkills(p)
+	resolved, errs := ompiglet.ResolveSkills(p)
 	if len(errs) > 0 {
-		return nil, fmt.Errorf("resolve Piglet skills: %w", errors.Join(errs...))
+		return nil, fmt.Errorf("resolve Ompiglet skills: %w", errors.Join(errs...))
 	}
 
 	var pigletSkillInputs []string
@@ -69,10 +69,10 @@ func resolveAndLoadSkills(p *piglet.Piglet, collectedSkillInputs []string) (*ski
 		pigletSkillInputs = append(pigletSkillInputs, s.Path)
 	}
 
-	// Union: load marketplace/convention skills first, then piglet skills on
-	// top. Deduplicate by NAME (not path) so the piglet version wins for
+	// Union: load marketplace/convention skills first, then ompiglet skills on
+	// top. Deduplicate by NAME (not path) so the ompiglet version wins for
 	// overlaps. Load each set separately so ambient first-wins collision
-	// handling does not suppress an explicit Piglet selection.
+	// handling does not suppress an explicit Ompiglet selection.
 	marketDefs, diagnostics, err := loadSkills(collectedSkillInputs, false)
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func resolveAndLoadSkills(p *piglet.Piglet, collectedSkillInputs []string) (*ski
 	}
 
 	// Build a name→def map. Start with marketplace skills, then overlay
-	// piglet skills (piglet wins on name conflict).
+	// ompiglet skills (ompiglet wins on name conflict).
 	byName := make(map[string]*codingagent.SkillDef, len(marketDefs)+len(pigletDefs))
 	var orderedNames []string
 	for _, d := range marketDefs {
@@ -94,11 +94,11 @@ func resolveAndLoadSkills(p *piglet.Piglet, collectedSkillInputs []string) (*ski
 	}
 	for _, d := range pigletDefs {
 		if _, exists := byName[d.Name]; !exists {
-			// New piglet-only skill: add it (keep stable ordering).
+			// New ompiglet-only skill: add it (keep stable ordering).
 			byName[d.Name] = d
 			orderedNames = append(orderedNames, d.Name)
 		} else {
-			// Name conflict: piglet version wins (replace).
+			// Name conflict: ompiglet version wins (replace).
 			byName[d.Name] = d
 		}
 	}
@@ -115,7 +115,7 @@ func resolveAndLoadSkills(p *piglet.Piglet, collectedSkillInputs []string) (*ski
 		defs = append(defs, byName[name])
 	}
 
-	// SkillPaths: union of marketplace + piglet paths, for /reload.
+	// SkillPaths: union of marketplace + ompiglet paths, for /reload.
 	allPaths := dedupStrings(append(append([]string{}, pigletSkillInputs...), collectedSkillInputs...))
 
 	return &skillLoadResult{Defs: defs, Paths: allPaths, Diagnostics: append(diagnostics, pigletDiagnostics...)}, nil

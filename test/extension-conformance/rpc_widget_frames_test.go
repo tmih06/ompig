@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's RPC mode forwards ctx.ui.setWidget for a string array and for a clear, and ignores a component factory without calling it (rpc-mode.ts

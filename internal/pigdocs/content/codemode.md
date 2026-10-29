@@ -1,10 +1,10 @@
 # Codemode and tool search
 
-`codemode` lets the model write a short JavaScript program that calls PiG's other tools, instead of calling them one at a time. Only the script's output reaches the model. `tool_search` finds tools that are not declared to the model and declares the matches for the next call.
+`codemode` lets the model write a short JavaScript program that calls Ompig's other tools, instead of calling them one at a time. Only the script's output reaches the model. `tool_search` finds tools that are not declared to the model and declares the matches for the next call.
 
-The scripts run in [QuickJS](https://bellard.org/quickjs/) compiled to WebAssembly and executed by [wazero](https://wazero.io) inside the `pig` process. PiG needs no Node.js for codemode, and a script can reach only the tools you give it.
+The scripts run in [QuickJS](https://bellard.org/quickjs/) compiled to WebAssembly and executed by [wazero](https://wazero.io) inside the `ompig` process. Ompig needs no Node.js for codemode, and a script can reach only the tools you give it.
 
-PiG ships two built-in extensions that add tools. Both are written in Go and are off by default. The `mcp` extension turns them on when an MCP server needs them (see [MCP](mcp.md#control-tool-exposure)). To enable them yourself, name them in `--tools` or `defaultTools`.
+Ompig ships two built-in extensions that add tools. Both are written in Go and are off by default. The `mcp` extension turns them on when an MCP server needs them (see [MCP](mcp.md#control-tool-exposure)). To enable them yourself, name them in `--tools` or `defaultTools`.
 
 | Tool | Purpose |
 |---|---|
@@ -13,7 +13,7 @@ PiG ships two built-in extensions that add tools. Both are written in Go and are
 
 ## Enable codemode
 
-To turn on `codemode` for every session, add it to the default tools in `~/.pig/agent/settings.json` or a project's `.pig/settings.json`:
+To turn on `codemode` for every session, add it to the default tools in `~/.ompig/agent/settings.json` or a project's `.ompig/settings.json`:
 
 ```json
 {
@@ -24,7 +24,7 @@ To turn on `codemode` for every session, add it to the default tools in `~/.pig/
 This keeps `read`, `bash`, `edit`, and `write` and adds `codemode`. For one invocation, list every tool, since `--tools` replaces the selection:
 
 ```sh
-pig --tools read,bash,edit,write,codemode
+ompig --tools read,bash,edit,write,codemode
 ```
 
 Codemode is useful without MCP: scripts can run several tool calls in parallel, filter large output before it reaches the model, call classifier models through `models.classify()`, and generate images through `models.generateImages()` (see [Models](#models)).
@@ -44,7 +44,7 @@ A script may start with an options line:
 
 The result starts with `Script completed` or `Script failed`, the wall time, and the output. Text and image items appear in order, each on its own line. When the output has more than one text item (from `text()` or `return`), each starts with a `==> text N/M <==` line. `console` calls follow in one `<console_output>` block with one line per call. A failed script keeps its partial output, followed by `Script error:` and the error. Tool calls are real: calls made before a failure are not undone. Calls still running when the script ends are cancelled, and unawaited promises are discarded.
 
-The `codemode` description lists each script global in one line and points the model to this page for the details, such as the `models` API. A copy of this page ships with `pig` in its docs bundle under `~/.pig/docs/` (`pig docs path` prints the directory), so the model can read it with the `read` tool.
+The `codemode` description lists each script global in one line and points the model to this page for the details, such as the `models` API. A copy of this page ships with `ompig` in its docs bundle under `~/.ompig/docs/` (`ompig docs path` prints the directory), so the model can read it with the `read` tool.
 
 ## Globals
 
@@ -90,7 +90,7 @@ The store is for small state such as IDs, cursors, or summaries. One value may h
 
 ## Models
 
-`models` reaches the model catalog and runs non-LLM models with the session's credentials: classifiers, which answer typed questions about JSON state and, for some models, images, and image models, which generate images. Chat models are listed but cannot be run from scripts. PiG lists OpenRouter's image models under the `openrouter` provider. Its built-in catalog also lists classifier models under `cloudflare-workers-ai`, `opencode`, `openrouter`, `typesafe` and `vercel-ai-gateway` (see [Providers](providers.md)); an extension can register a provider that lists more.
+`models` reaches the model catalog and runs non-LLM models with the session's credentials: classifiers, which answer typed questions about JSON state and, for some models, images, and image models, which generate images. Chat models are listed but cannot be run from scripts. Ompig lists OpenRouter's image models under the `openrouter` provider. Its built-in catalog also lists classifier models under `cloudflare-workers-ai`, `opencode`, `openrouter`, `typesafe` and `vercel-ai-gateway` (see [Providers](providers.md)); an extension can register a provider that lists more.
 
 ```ts
 type ModelType = "chat" | "image" | "classifier";
@@ -258,7 +258,7 @@ Extensions generate images without codemode through `ctx.modelRegistry.generateI
 
 - A script's VM has 256 MB of memory. Running out throws `InternalError: out of memory`; filter or aggregate large data instead of accumulating it.
 - Stopping a script or reaching its deadline ends the call promptly. A built-in that does not poll QuickJS's interrupt handler can keep its VM computing after that, until it returns or the VM is halted half a second after the stop.
-- At most two codemode VMs may be alive across all sessions in one pig process; `PI_CODEMODE_MAX_WORKERS` changes the limit. A cancelled VM occupies its slot until it exits. At capacity, new scripts wait for a free VM in arrival order. A script that gets no VM within 60 seconds, or before its `timeout_ms`, fails without running.
+- At most two codemode VMs may be alive across all sessions in one ompig process; `PI_CODEMODE_MAX_WORKERS` changes the limit. A cancelled VM occupies its slot until it exits. At capacity, new scripts wait for a free VM in arrival order. A script that gets no VM within 60 seconds, or before its `timeout_ms`, fails without running.
 - A script that waits on a promise that can never settle (no tool call pending) fails immediately, since there are no timers.
 - Scripts cannot start other `codemode` scripts.
 

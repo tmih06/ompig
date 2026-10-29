@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/agent-loop.ts:188 and :228 (`currentContext = update.context ?? currentContext`) and types.ts:161-170

@@ -1,18 +1,18 @@
 # Provenance of every golden or snapshot data file.
 #
 # A golden is expected output stored as a file. Its value is evidence only when
-# it comes from Pi. A golden whose bytes are PiG's own output pins PiG against
+# it comes from Pi. A golden whose bytes are Ompig's own output pins Ompig against
 # itself: regenerating it silences a behavior change instead of catching one.
 #
 #   owner = "pi"   Produced by running Pi (or Node on Pi's code). `generator` is
 #                  the tracked script that regenerates the file from Pi, and the
-#                  test that reads the file compares PiG with it.
-#   owner = "pig"  PiG's own output. Allowed only when a value snapshot is the
+#                  test that reads the file compares Ompig with it.
+#   owner = "ompig"  Ompig's own output. Allowed only when a value snapshot is the
 #                  one way to state the rule. `invariant` names the test that
 #                  asserts the rule itself, and `why` says what the snapshot adds.
 #
 # `testprune lint` (make test-provenance) fails on a golden file that no entry
-# matches. A PiG-owned golden needs the same review as new behavior.
+# matches. A Ompig-owned golden needs the same review as new behavior.
 #
 # A Go file that rewrites its own expected files (UPDATE_GOLDEN or an -update flag)
 # puts every non-code file of its testdata directory under the same rule. An
@@ -104,27 +104,27 @@ generator = "test/parity/testdata/markdown-marked-pi.mjs"
 
 [[golden]]
 paths = ["durable/core/probe/testdata/*.steps"]
-owner = "pig"
+owner = "ompig"
 invariant = "TestScripts"
-why = "The durable ABI step bytes are PiG's own wire format (ABI section 12). The shim's Wasm conformance test replays the same scripts and compares the same bytes, so the golden is the byte contract between the native and Wasm hosts."
+why = "The durable ABI step bytes are Ompig's own wire format (ABI section 12). The shim's Wasm conformance test replays the same scripts and compares the same bytes, so the golden is the byte contract between the native and Wasm hosts."
 
 [[golden]]
 paths = ["durable/core/contracttest/binding/testdata/*.steps"]
-owner = "pig"
+owner = "ompig"
 invariant = "TestBindingConformance"
-why = "The durable ABI step bytes are PiG's own wire format (ABI section 12). Every Wasm build must replay the script to these bytes, so the golden is the byte contract between the native and Wasm hosts."
+why = "The durable ABI step bytes are Ompig's own wire format (ABI section 12). Every Wasm build must replay the script to these bytes, so the golden is the byte contract between the native and Wasm hosts."
 
 [[golden]]
-paths = ["coding/piglet/testdata/lineage/lineage_source.golden"]
-owner = "pig"
+paths = ["coding/ompiglet/testdata/lineage/lineage_source.golden"]
+owner = "ompig"
 invariant = "TestLineageOfASourceChainsRootFirstWithEachLinksChanges"
-why = "Pi has no Piglets, so the text of `pig piglet lineage` (D170) is PiG's own format. The invariant test asserts the chain order, versions, digests and per-link changes as values; the snapshot adds the exact rendered layout (indentation, labels, change lines) a user reads."
+why = "Pi has no Ompiglets, so the text of `ompig ompiglet lineage` (D170) is Ompig's own format. The invariant test asserts the chain order, versions, digests and per-link changes as values; the snapshot adds the exact rendered layout (indentation, labels, change lines) a user reads."
 
 [[golden]]
-paths = ["coding/piglet/testdata/lineage/tree.golden", "coding/piglet/testdata/lineage/tree_depth1.golden"]
-owner = "pig"
+paths = ["coding/ompiglet/testdata/lineage/tree.golden", "coding/ompiglet/testdata/lineage/tree_depth1.golden"]
+owner = "ompig"
 invariant = "TestTreeDepthLimitAndJSON"
-why = "Pi has no Piglets, so the text of `pig piglet tree` (D170) is PiG's own format. The invariant test asserts the depth limit and the JSON nodes as values; the snapshots add the exact box-drawing layout and markers (`*`, `[installed]`) a user reads."
+why = "Pi has no Ompiglets, so the text of `ompig ompiglet tree` (D170) is Ompig's own format. The invariant test asserts the depth limit and the JSON nodes as values; the snapshots add the exact box-drawing layout and markers (`*`, `[installed]`) a user reads."
 
 [[input]]
 paths = ["durable/core/probe/testdata/*.events", "durable/core/contracttest/binding/testdata/*.events"]
@@ -143,10 +143,10 @@ owner = "pi"
 generator = "durable/codemode/testdata/output-oracle.mjs"
 
 [[golden]]
-paths = ["coding/cli/testdata/piglet-inventory/*.txt"]
-owner = "pig"
+paths = ["coding/cli/testdata/ompiglet-inventory/*.txt"]
+owner = "ompig"
 invariant = "TestStripLeakGate"
-why = "Pi has no Piglets, so which tools, commands and extensions each shipped Piglet exposes is PiG's own. TestStripLeakGate asserts that a stripped ID leaves every surface; the inventory adds the reviewed per-Piglet list of which IDs each one strips, regenerated only after review."
+why = "Pi has no Ompiglets, so which tools, commands and extensions each shipped Ompiglet exposes is Ompig's own. TestStripLeakGate asserts that a stripped ID leaves every surface; the inventory adds the reviewed per-Ompiglet list of which IDs each one strips, regenerated only after review."
 
 [[golden]]
 paths = ["test/parity/sdk-vectors/*/*.json"]

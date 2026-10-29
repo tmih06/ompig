@@ -8,15 +8,15 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/header-spacers.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/header-spacers.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/header-spacers.mjs"]
 
 [tmux]
 width = 100
 height = 30
-ready_pattern_pig = "HEADER PROBE READY"
+ready_pattern_ompig = "HEADER PROBE READY"
 ready_pattern_pi = "HEADER PROBE READY"
 ready_timeout_seconds = 30
 # Stop at the first loaded-resource heading, before the host-specific provider fixture inventory.

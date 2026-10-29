@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // provider-composer.ts:382 throws "authHeader requires a resolved API key", and model-registry.ts:113 turns exactly that failure into

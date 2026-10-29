@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 const brokenCustomProvider = `{"providers":{"%s":{"api":"openai-completions","apiKey":"x","models":[{"id":"m1"}]}}}`

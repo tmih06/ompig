@@ -18,15 +18,15 @@ import (
 // A request re-sends the whole conversation, so encoding every earlier tool result's text again on every turn made a long session's per-turn CPU grow with its history. The completions request encodes each large message string once and splices the cached encoding into the body. The bytes are identical to what marshalRequestBody (JSON.stringify) of the same request produces.
 const (
 	// requestSpliceMinBytes is the smallest string worth a cache entry.
-	// pig additive (D112): Pi serializes the whole request on every send; caching an encoding is a Go CPU choice and the body is unchanged.
+	// ompig additive (D112): Pi serializes the whole request on every send; caching an encoding is a Go CPU choice and the body is unchanged.
 	requestSpliceMinBytes = 4 << 10
 	// requestSpliceCacheBytes bounds the bytes the cache retains: each entry's source string and its encoding.
-	// pig additive (D112): see requestSpliceMinBytes.
+	// ompig additive (D112): see requestSpliceMinBytes.
 	requestSpliceCacheBytes = 64 << 20
 	// requestSpliceKeepRequests is how many request builds an entry outlives unused. A build re-sends the conversation, so an entry the last
 	// builds did not use belongs to history that a compaction, /new, /resume or branch switch left behind. Two keep a second session or a
 	// subagent that alternates with the first warm.
-	// pig additive (D112): see requestSpliceMinBytes.
+	// ompig additive (D112): see requestSpliceMinBytes.
 	requestSpliceKeepRequests = 2
 )
 
@@ -190,7 +190,7 @@ func (c *quotedStringCache) beginRequest() {
 }
 
 // ReleaseRequestCaches forgets every encoding the request caches hold: large strings and finalized messages. The next request encodes what it sends again, as it would have the first time; a build that runs meanwhile finds nothing to splice and encodes its values itself, so its body is the same.
-// pig additive (D112): an interactive session that went idle calls it from its idle collection (D172), so the encodings of the conversation it sent do not stay live while it waits.
+// ompig additive (D112): an interactive session that went idle calls it from its idle collection (D172), so the encodings of the conversation it sent do not stay live while it waits.
 func ReleaseRequestCaches() {
 	requestStrings.release()
 }
@@ -320,5 +320,5 @@ func newSpliceNonce() string {
 	if _, err := rand.Read(raw[:]); err != nil {
 		panic("ai: random source failed: " + err.Error())
 	}
-	return "pig-splice-" + hex.EncodeToString(raw[:])
+	return "ompig-splice-" + hex.EncodeToString(raw[:])
 }

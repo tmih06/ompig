@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/profiling"
+	"github.com/tmih06/ompig/internal/profiling"
 )
 
 // haveRusage reports whether processCPU and peakResidentMB measure this process.

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 const repoRoot = "../../../.."
@@ -237,10 +237,10 @@ class Thing:
 func TestKitSymbolsAreModuleQualified(t *testing.T) {
 	root := t.TempDir()
 	for path, src := range map[string]string{
-		"extensions/sdk/kit/kit.go":          "package kit\n\ntype View struct{ Focus string }\n\nfunc NewContainer() {}\n",
-		"extensions/sdk-rs/src/kit/mod.rs":   "pub struct Container {}\nimpl Container {\n    pub fn new() -> Self { Container {} }\n}\n",
-		"extensions/sdk-py/pig_sdk/kit.py":   "class Container:\n    def view(self, width):\n        pass\n\n\nclass Stub(Protocol):\n    def view(self, width: int) -> View: ...\n\n\nclass Next(Protocol):\n    def handle(self, event: Event) -> Any: ...\n",
-		"extensions/sdk-py/pig_sdk/other.py": "class Other:\n    pass\n",
+		"extensions/sdk/kit/kit.go":            "package kit\n\ntype View struct{ Focus string }\n\nfunc NewContainer() {}\n",
+		"extensions/sdk-rs/src/kit/mod.rs":     "pub struct Container {}\nimpl Container {\n    pub fn new() -> Self { Container {} }\n}\n",
+		"extensions/sdk-py/ompig_sdk/kit.py":   "class Container:\n    def view(self, width):\n        pass\n\n\nclass Stub(Protocol):\n    def view(self, width: int) -> View: ...\n\n\nclass Next(Protocol):\n    def handle(self, event: Event) -> Any: ...\n",
+		"extensions/sdk-py/ompig_sdk/other.py": "class Other:\n    pass\n",
 	} {
 		full := filepath.Join(root, path)
 		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {

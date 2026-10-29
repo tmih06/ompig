@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's getToolListError, applyToolModifiers and isToolModifier (core/settings-manager.js) run against the vendored Pi module over seeded random tool lists.

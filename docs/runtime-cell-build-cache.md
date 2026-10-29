@@ -1,10 +1,10 @@
 # Runtime-cell build and cache
 
-This page covers how Pig classifies extension sets, generates cell runners, builds native artifacts, and keys caches. Start with the [runtime-cell overview](extension-runtime-cells.md).
+This page covers how Ompig classifies extension sets, generates cell runners, builds native artifacts, and keys caches. Start with the [runtime-cell overview](extension-runtime-cells.md).
 
 ## Planner inputs
 
-The planner consumes normalized extension configs/specs, not piglet/package syntax directly. Relevant facts include:
+The planner consumes normalized extension configs/specs, not ompiglet/package syntax directly. Relevant facts include:
 
 | Input | Use |
 |---|---|
@@ -16,7 +16,7 @@ The planner consumes normalized extension configs/specs, not piglet/package synt
 | quarantine state | native fission or Node culprit/diagnostic partition |
 | content/source hash | invalidate changed artifacts |
 
-Piglets and package settings resolve to concrete extension configs before planning.
+Ompiglets and package settings resolve to concrete extension configs before planning.
 
 ## Placement rules
 
@@ -35,7 +35,7 @@ Candidates are grouped only with compatible same-language members. Native groups
 
 A Python cell cannot contain independent source roots with the same top-level factory module name. Python caches imports by module name. The planner starts a separate cell at that collision, preserving configured order and each factory's identity. Factories in one source root may share their package.
 
-A selected Go factory package may use helper and `internal` packages from its containing module or workspace. Pig retains that module or workspace as compiler closure. A module or workspace root containing multiple factory packages is ambiguous. Select one exact factory package directory.
+A selected Go factory package may use helper and `internal` packages from its containing module or workspace. Ompig retains that module or workspace as compiler closure. A module or workspace root containing multiple factory packages is ambiguous. Select one exact factory package directory.
 
 ## Generated runners
 
@@ -70,11 +70,11 @@ The extension wire has no independent version, so no protocol version enters the
 
 A cache hit skips compilation but runtime startup and registration still validate the artifact.
 
-The compiler reads the sources after the identity was computed, past the wait for a peer's build lock and through its own compile. A Go or Rust build therefore reads its inputs again when the compiler returns (the SDK tree, workspace modules, toolchain and generated runner it hashed itself, and the extension sources a caller derived `ContentHash` from) and publishes nothing when they differ: the build fails with `changed while it was being built`, and the next start hashes the edited source and builds it. Without the check, an edit saved during a build was compiled into an artifact stored under the identity of the original source, and putting the original source back served the build of the edit. A Rust crate's `Cargo.lock`, which `cargo` writes into the source directory, does not count as a change. A hash a caller supplies (a Piglet's pinned content hash) is not read again. Python and Node cells bake no extension source: their runner reads it when the process starts.
+The compiler reads the sources after the identity was computed, past the wait for a peer's build lock and through its own compile. A Go or Rust build therefore reads its inputs again when the compiler returns (the SDK tree, workspace modules, toolchain and generated runner it hashed itself, and the extension sources a caller derived `ContentHash` from) and publishes nothing when they differ: the build fails with `changed while it was being built`, and the next start hashes the edited source and builds it. Without the check, an edit saved during a build was compiled into an artifact stored under the identity of the original source, and putting the original source back served the build of the edit. A Rust crate's `Cargo.lock`, which `cargo` writes into the source directory, does not count as a change. A hash a caller supplies (a Ompiglet's pinned content hash) is not read again. Python and Node cells bake no extension source: their runner reads it when the process starts.
 
 A Go source compiler or type-check diagnostic is cached under the same packed artifact identity. An unchanged source and staged SDK report the saved diagnostic without running `go build` again. A source or SDK change selects a new identity and rebuilds. Module resolution, network, toolchain, cancellation, filesystem, and other setup failures remain retryable. Normal cache retention may remove an old failure entry.
 
-When a Go build fails only on SDK symbols that changed, the diagnostic says `written for an older SDK`, names each changed API with its old and new shape, and names the `pig extension upgrade` command (D109).
+When a Go build fails only on SDK symbols that changed, the diagnostic says `written for an older SDK`, names each changed API with its old and new shape, and names the `ompig extension upgrade` command (D109).
 
 ## Cache layout
 
@@ -89,7 +89,7 @@ Representative current paths:
 <cacheRoot>/cells/node/<hash>/runner        packed Node (runtime copy + manifest.json, no compiled artifact)
 ```
 
-Cache paths are rebuildable implementation details. They are not package versions, Piglet source identity, or Piglet release records.
+Cache paths are rebuildable implementation details. They are not package versions, Ompiglet source identity, or Ompiglet release records.
 
 Node extensions use Jiti's persistent transform cache under `<config-root>/cache/jiti`. The cache separates loader content, Jiti and Node versions, and Jiti environment options. Jiti reads and hashes each source before reusing its compiled output. Evaluated extension modules remain uncached between loads, so every load creates a fresh factory. `JITI_FS_CACHE=false` retains Jiti's cache-disable behavior. This disposable transform cache is separate from published cell artifacts and their pruning commands.
 
@@ -97,22 +97,22 @@ Node also requests a source-validated native bytecode cache under `<config-root>
 
 Toolchain version records are keyed by the resolved executable's file identity and selector state such as Go, rustup, and Python version files. An unchanged warm lookup does not spawn the tool. Replacing the executable or selector state re-probes it, and a failed compiled build invalidates the relevant record before the next attempt. Each fingerprint has its own record and lock, so two projects whose selectors differ do not replace each other's record or wait for each other's probe, and a command keeps its eight newest records. A probe is bounded (2 minutes, after which the version is an error), and a start that finds a peer probing the same record waits for it at most 5 minutes before it probes for itself.
 
-## Piglet component build
+## Ompiglet component build
 
-`pig piglet build` resolves the Piglet's component set and invokes the same builders eagerly. Compatible Go factories may fuse; Go/Rust/Python/Node or isolation-required components may be materialized as exact subprocess closure in the binary, registered release, or required `agentEnv`.
+`ompig ompiglet build` resolves the Ompiglet's component set and invokes the same builders eagerly. Compatible Go factories may fuse; Go/Rust/Python/Node or isolation-required components may be materialized as exact subprocess closure in the binary, registered release, or required `agentEnv`.
 
-The Piglet record stores exact source pins/content hashes, Pig/core and toolchain identities, target, component realization/materialization plan, artifact/closure digests, and verification. Reusing a cache is acceptable only when its full identity matches that record.
+The Ompiglet record stores exact source pins/content hashes, Ompig/core and toolchain identities, target, component realization/materialization plan, artifact/closure digests, and verification. Reusing a cache is acceptable only when its full identity matches that record.
 
 ## Validation
 
 ```bash
-pig install ./extension --validate-only --json
-pig install --validate-only --set ./ext-a,./ext-b --json
+ompig install ./extension --validate-only --json
+ompig install --validate-only --set ./ext-a,./ext-b --json
 ```
 
 Individual validation exercises spec resolution, build, startup, protocol handshake, registration, and declared contribution checks. Set validation also exercises placement, grouping, generated runners, cross-extension collisions, and fallback/fission behavior.
 
-In automatic placement, a pack conflict may fall back to isolated cells with a structured warning. A command that explicitly requires packing fails instead of silently changing process placement. Piglet artifact planning records the final realization rather than exposing a user-facing fusion tier.
+In automatic placement, a pack conflict may fall back to isolated cells with a structured warning. A command that explicitly requires packing fails instead of silently changing process placement. Ompiglet artifact planning records the final realization rather than exposing a user-facing fusion tier.
 
 ## Diagnostics
 
@@ -127,15 +127,15 @@ Structured reports should expose facts, not policy:
 | artifact | resolved executable/runner path |
 | warning | code, member/target, message, remedy |
 
-A consuming product may use these facts in validation and policy, but Pig does not embed product policy in the planner.
+A consuming product may use these facts in validation and policy, but Ompig does not embed product policy in the planner.
 
 ## Cache lifecycle
 
-Pig manages only `<config-root>/cache/ext`, `<config-root>/cache/cells`, and the bounded version records under `<config-root>/cache/toolchains`. It does not manage Sessions, credentials, trust, receipts, SpecOps state, Piglet artifacts, or Piglet Binaries.
+Ompig manages only `<config-root>/cache/ext`, `<config-root>/cache/cells`, and the bounded version records under `<config-root>/cache/toolchains`. It does not manage Sessions, credentials, trust, receipts, SpecOps state, Ompiglet artifacts, or Ompiglet Binaries.
 
-Each published entry keeps immutable integrity data in `ready.json`. Pig writes the last successful use to the separate atomic `usage.json` sidecar. A cache hit, publication, process start, and unchanged reload count as successful use. Inspection and dry-run do not update use.
+Each published entry keeps immutable integrity data in `ready.json`. Ompig writes the last successful use to the separate atomic `usage.json` sidecar. A cache hit, publication, process start, and unchanged reload count as successful use. Inspection and dry-run do not update use.
 
-Pig classifies each entry in this order:
+Ompig classifies each entry in this order:
 
 1. active process lease;
 2. current startup resolution;
@@ -148,15 +148,15 @@ The first three classes are hard roots. Age and size pressure cannot delete a ha
 
 A cache hit holds no lease until the extension process starts, so it also takes the shared lock while it checks the entry and records its use, and the collector reads the entry's `ready.json` and `usage.json` again under its exclusive lock. An entry whose record changed since the classification is skipped and counted: a peer reused it. A hit that finds the lock held by a collector is not a hit, and the entry is built again. A lease for a cache artifact whose entry is gone fails with `cache_lease_failed` ("no longer exists"); an artifact outside the cache has no lease and no error.
 
-The locks are advisory file locks (`flock`; `LockFileEx` on Windows) on the cache and SDK staging directories under the config root. A file system that refuses them, such as an NFS mount without a lock manager (`ENOLCK`) or a FUSE or SMB share (`ENOSYS`, `EOPNOTSUPP`), cannot hold the cache: Pig does not run an extension from a cache it cannot protect, and does not build without the per-entry build lock. The cell build, the lease at spawn, the collector and the SDK staging then fail with an error that names the directory, says the file system does not support file locks, wraps the errno and names the remedy: point `PIG_HOME` at a directory on a file system that does, such as a local disk. Any other lock failure keeps its own message.
+The locks are advisory file locks (`flock`; `LockFileEx` on Windows) on the cache and SDK staging directories under the config root. A file system that refuses them, such as an NFS mount without a lock manager (`ENOLCK`) or a FUSE or SMB share (`ENOSYS`, `EOPNOTSUPP`), cannot hold the cache: Ompig does not run an extension from a cache it cannot protect, and does not build without the per-entry build lock. The cell build, the lease at spawn, the collector and the SDK staging then fail with an error that names the directory, says the file system does not support file locks, wraps the errno and names the remedy: point `OMPIG_HOME` at a directory on a file system that does, such as a local disk. Any other lock failure keeps its own message.
 
 Automatic pruning removes obsolete SDK fingerprints, entries older than 30 days since successful use, and incomplete entries after the crash-safety grace. Automatic pruning applies no size limit. It runs after successful extension resolution at most once per day and outside the TUI input and render loops.
 
 Use these commands for inspection and explicit pressure:
 
 ```bash
-pig extensions cache stats [--json]
-pig extensions cache prune [--retention <duration>] [--max-size <bytes>] [--failures] [--dry-run] [--json]
+ompig extensions cache stats [--json]
+ompig extensions cache prune [--retention <duration>] [--max-size <bytes>] [--failures] [--dry-run] [--json]
 ```
 
-Explicit size pressure removes inactive entries from oldest successful use to newest. If hard roots exceed the limit, the JSON report sets `limitSatisfied` to `false` and reports `protectedBytes`. Pig does not delete a hard root to satisfy the requested limit.
+Explicit size pressure removes inactive entries from oldest successful use to newest. If hard roots exceed the limit, the JSON report sets `limitSatisfied` to `false` and reports `protectedBytes`. Ompig does not delete a hard root to satisfy the requested limit.

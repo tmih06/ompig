@@ -7,7 +7,7 @@
 #   ready_pattern: "Warning: No models available."
 #   raw upstream observation:
 #     Upstream renders DynamicBorder + bold accent "What's New" header + Markdown(entries) + DynamicBorder.
-#     PiG renders Markdown("---\n\n**What's New**\n\n<entries>\n\n---").
+#     Ompig renders Markdown("---\n\n**What's New**\n\n<entries>\n\n---").
 #     Both render "What's New" in the pane.
 #
 # Content differs between binaries (different CHANGELOG.md), so output_equal
@@ -33,8 +33,8 @@ driver = "interactive-tmux"
 width = 100
 height = 60
 # Both sides start typing after their startup rebind, which sets the autocomplete provider and then prints this
-# warning; "(auto)" paints before PiG's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
-ready_pattern_pig = "Warning: No models available."
+# warning; "(auto)" paints before Ompig's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
+ready_pattern_ompig = "Warning: No models available."
 ready_pattern_pi = "Warning: No models available."
 ready_timeout_seconds = 25
 
@@ -54,9 +54,9 @@ wait_timeout_seconds = 5
 settle_seconds = 2
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -9,7 +9,7 @@ import (
 
 // haltExport names the mutable i32 global instrumentHalt adds to the module: a non-zero value makes the guest trap at
 // its next loop iteration.
-const haltExport = "pig_halt"
+const haltExport = "ompig_halt"
 
 const (
 	sectionImport = 2
@@ -26,8 +26,8 @@ type wasmSection struct {
 	payload []byte
 }
 
-// instrumentHalt returns wasm with a halt check at the head of every loop: `global.get $pig_halt; if; unreachable;
-// end`, with $pig_halt exported as haltExport. The check is a load and a branch in the compiled code.
+// instrumentHalt returns wasm with a halt check at the head of every loop: `global.get $ompig_halt; if; unreachable;
+// end`, with $ompig_halt exported as haltExport. The check is a load and a branch in the compiled code.
 //
 // A running guest cannot be stopped from outside, and the check wazero emits for WithCloseOnContextDone calls back
 // into Go on every loop iteration, which made QuickJS about four times slower and the native loops of its string

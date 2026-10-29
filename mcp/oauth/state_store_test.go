@@ -3,10 +3,10 @@ package oauth_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// PiG-only: packages/mcp/test/oauth.test.ts uses MemoryOAuthStateStore as a backing store but never tests its own
+// Ompig-only: packages/mcp/test/oauth.test.ts uses MemoryOAuthStateStore as a backing store but never tests its own
 // contract: load() is undefined until a save, and both directions copy (structuredClone) so a caller's later mutation
 // never reaches the stored state.
 func TestMemoryOAuthStateStoreLoadsNothingUntilASaveAndCopiesBothWays(t *testing.T) {

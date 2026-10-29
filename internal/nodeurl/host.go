@@ -1,4 +1,4 @@
-// Package nodeurl ports the Node URL host/path handling and fileURLToPath semantics used by PiG.
+// Package nodeurl ports the Node URL host/path handling and fileURLToPath semantics used by Ompig.
 package nodeurl
 
 import (

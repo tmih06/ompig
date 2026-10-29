@@ -108,7 +108,7 @@ func TestEditorPasteClosesOpenAutocomplete(t *testing.T) {
 // A fast typed slash command name can leave the popup's cached items/prefix
 // pinned to an early, shorter prefix if the host only gets a chance to drain
 // queued SetAsyncApply callbacks once, early in the burst, and never again
-// before Enter arrives. This reproduces that on a Linux parity host: pig's
+// before Enter arrives. This reproduces that on a Linux parity host: ompig's
 // input loop (internal/codingagent/interactive_input.go priorityInput)
 // always favors newly-arrived terminal input over draining m.uiTaskCh, so a
 // whole command typed via one tmux send-keys burst can race ahead of the

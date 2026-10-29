@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's findCutPoint, findTurnStartIndex, getLastAssistantUsage and estimateContextTokens (core/compaction/compaction.js) run against the vendored Pi module over seeded random session branches that mix user, assistant (usage, aborted, error, tool calls), tool-result, bash, custom, branch-summary, compaction and metadata entries.

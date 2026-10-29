@@ -24,9 +24,9 @@ class PublicLayoutTest(unittest.TestCase):
             files = {
                 "coding/pigversion/pigversion.go": "package pigversion\nconst Version = \"test\"\n",
                 "tui/termsim/termsim.go": "package termsim\n",
-                "tui/parity/parity.go": 'package parity\nimport _ "github.com/MichaelKinsy/PiG/tui/termsim"\n',
-                "coding/doc.go": '// Package coding is the public SDK for embedding the pig coding\n// agent as a Go library.\npackage coding\n',
-                "coding/version.go": 'package coding\nimport "github.com/MichaelKinsy/PiG/coding/pigversion"\nconst Version = pigversion.Version\n',
+                "tui/parity/parity.go": 'package parity\nimport _ "github.com/tmih06/ompig/tui/termsim"\n',
+                "coding/doc.go": '// Package coding is the public SDK for embedding the ompig coding\n// agent as a Go library.\npackage coding\n',
+                "coding/version.go": 'package coding\nimport "github.com/tmih06/ompig/coding/pigversion"\nconst Version = pigversion.Version\n',
                 "parity/pin.go": 'package parity\nvar pin = filepath.Join(root, "coding", "pigversion", "pigversion.go")\n',
                 "automation/release/set-version/main.go": 'package main\nconst pin = "coding/pigversion/pigversion.go"\n',
             }
@@ -46,15 +46,15 @@ class PublicLayoutTest(unittest.TestCase):
             self.assertIn('"internal/coding/pigversion/pigversion.go"', (root / "automation/release/set-version/main.go").read_text())
             with tempfile.TemporaryDirectory() as consumer:
                 consumer = Path(consumer)
-                (consumer / "go.mod").write_text(f'module example.org/consumer\n\ngo 1.26\nreplace github.com/MichaelKinsy/PiG => {root}\nrequire github.com/MichaelKinsy/PiG v0.0.0\n')
-                (consumer / "main.go").write_text('package main\nimport (\n' + ''.join(f'_ "github.com/MichaelKinsy/PiG/{name}"\n' for name in plan.PUBLIC_ROOTS) + ')\nfunc main() {}\n')
+                (consumer / "go.mod").write_text(f'module example.org/consumer\n\ngo 1.26\nreplace github.com/tmih06/ompig => {root}\nrequire github.com/tmih06/ompig v0.0.0\n')
+                (consumer / "main.go").write_text('package main\nimport (\n' + ''.join(f'_ "github.com/tmih06/ompig/{name}"\n' for name in plan.PUBLIC_ROOTS) + ')\nfunc main() {}\n')
                 subprocess.run(["go", "build", "."], cwd=consumer, check=True)
             snapshot = {p: (root / p).read_bytes() for p in layout.git(root, "ls-files").decode().splitlines()}
             layout.apply(root, keep_public_libraries=True)
             self.assertEqual(snapshot, {p: (root / p).read_bytes() for p in snapshot})
 
     def test_private_package_comment_references(self):
-        source = b'// Pins live in coding/pigversion/pigversion.go, not ~/.pig/agent/settings.json.\npackage coding\n'
+        source = b'// Pins live in coding/pigversion/pigversion.go, not ~/.ompig/agent/settings.json.\npackage coding\n'
         comment = source.splitlines()[0]
         with patch.object(layout, "MOVES", plan.package_moves(True)):
             actual = layout.rewrite_go("coding/upstream.go", source, [], False,
@@ -64,8 +64,8 @@ class PublicLayoutTest(unittest.TestCase):
 
     def test_private_package_boundaries(self):
         with patch.object(build, "PACKAGE_MOVES", plan.package_moves(True)), patch.object(docs, "GO_MOVES", plan.package_moves(True)):
-            source = 'coding/pigversion coding/pigversionish/file.go internal/coding/pigversion/file.go packages/tui/termsim/test.ts ./tui/parity/... $PIG_HOME/agent/'
-            expected = 'internal/coding/pigversion coding/pigversionish/file.go internal/coding/pigversion/file.go packages/tui/termsim/test.ts ./internal/tui/parity/... $PIG_HOME/agent/'
+            source = 'coding/pigversion coding/pigversionish/file.go internal/coding/pigversion/file.go packages/tui/termsim/test.ts ./tui/parity/... $OMPIG_HOME/agent/'
+            expected = 'internal/coding/pigversion coding/pigversionish/file.go internal/coding/pigversion/file.go packages/tui/termsim/test.ts ./internal/tui/parity/... $OMPIG_HOME/agent/'
             self.assertEqual(build.rewrite("Makefile", source), expected)
             self.assertEqual(build.rewrite("Makefile", expected), expected)
 

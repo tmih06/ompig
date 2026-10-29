@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // directoryHelper makes the test binary report its working directory.
-const directoryHelper = "PIG_CROSSSPAWN_DIRECTORY_HELPER"
+const directoryHelper = "OMPIG_CROSSSPAWN_DIRECTORY_HELPER"
 
 // directoryOutcome is an emitted spawn error or the working directory the
 // started receiver reports.

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// A process with no extension runtime reaches PiG's providers through `pig provider-bridge` (shims/provider-bridge-client.mjs). The fake bridge below speaks the wire the Go bridge
+// A process with no extension runtime reaches Ompig's providers through `ompig provider-bridge` (shims/provider-bridge-client.mjs). The fake bridge below speaks the wire the Go bridge
 // speaks (coding/cli/provider_bridge.go) so each contract of the client is checked alone: provider order, one terminal outcome per stream id, cancellation, callbacks that run in the
 // caller, the bridge ending under a live stream, and a process that exits when no stream is in flight.
 const fakeProviderBridge = `
@@ -83,10 +83,10 @@ out.dyingStop = dyingResult.stopReason;
 out.dyingMessage = dyingResult.errorMessage;
 
 out.fetch = bridgeStream(model, ctx("ok"), { fetch: () => {} }, true, failed).failedWith;
-const binary = process.env.PIG_HARNESS_BINARY;
-delete process.env.PIG_HARNESS_BINARY;
+const binary = process.env.OMPIG_HARNESS_BINARY;
+delete process.env.OMPIG_HARNESS_BINARY;
 out.noBinary = bridgeStream(model, ctx("ok"), {}, true, failed).failedWith;
-process.env.PIG_HARNESS_BINARY = binary;
+process.env.OMPIG_HARNESS_BINARY = binary;
 
 // A later request starts a new bridge; once its stream ends, that live, idle bridge must not keep this process alive.
 const again = bridgeStream(model, ctx("ok"), { apiKey: "K2" }, true, failed);
@@ -119,7 +119,7 @@ func TestProviderBridgeClientHonoursTheBridgeWire(t *testing.T) {
 	}
 	script := write("client.mjs", providerBridgeClientScript, 0o644)
 	command := exec.Command(node, script, filepath.Join(runtime, "shims", "provider-bridge-client.mjs"))
-	command.Env = append(os.Environ(), "PIG_HARNESS_BINARY="+binary, fakeProviderBridgeNodeEnv+"="+node, fakeProviderBridgeScriptEnv+"="+fake)
+	command.Env = append(os.Environ(), "OMPIG_HARNESS_BINARY="+binary, fakeProviderBridgeNodeEnv+"="+node, fakeProviderBridgeScriptEnv+"="+fake)
 	done := make(chan struct{})
 	var output []byte
 	go func() {
@@ -176,7 +176,7 @@ func TestProviderBridgeClientHonoursTheBridgeWire(t *testing.T) {
 	if got.AgainText != "pong:true:K2" {
 		t.Errorf("a request after the bridge exited starts a new bridge, got %q", got.AgainText)
 	}
-	if !strings.Contains(str(raw["fetch"]), "fetch cannot be used") || !strings.Contains(str(raw["noBinary"]), "PIG_HARNESS_BINARY") {
+	if !strings.Contains(str(raw["fetch"]), "fetch cannot be used") || !strings.Contains(str(raw["noBinary"]), "OMPIG_HARNESS_BINARY") {
 		t.Errorf("fetch %v, missing binary %v", raw["fetch"], raw["noBinary"])
 	}
 }

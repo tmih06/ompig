@@ -7,7 +7,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // SerializeJsonLine is JSON.stringify(value) followed by the LF that frames a record (jsonl.ts serializeJsonLine).

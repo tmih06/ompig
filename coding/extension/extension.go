@@ -10,7 +10,7 @@ import (
 // flags, shortcuts, providers and event handlers on it, and returns the error upstream's factory throws.
 //
 // Only the source of a binary's own main package supplies one, by value, to the loader in package factoryload
-// (docs/specs/extension-factory-trust.md). No run-time input, Package, Piglet or wire peer can produce one. The subprocess SDKs keep upstream's
+// (docs/specs/extension-factory-trust.md). No run-time input, Package, Ompiglet or wire peer can produce one. The subprocess SDKs keep upstream's
 // `pi` argument on their own side of the wire.
 //
 // upstream: core/extensions/types.ts:2017 (ExtensionFactory)
@@ -32,7 +32,7 @@ type NamedInlineExtension struct {
 	// Replaceable leaves the extension out when another extension registers a tool, command or flag with a name it registers during loading, instead
 	// of reporting a conflict. The factory still runs, so it should only register tools, commands, flags and event handlers.
 	Replaceable bool
-	// Builtin supplies the code of the `builtin:<name>` extension resource instead of loading as an inline extension: it loads by default, `pig config`
+	// Builtin supplies the code of the `builtin:<name>` extension resource instead of loading as an inline extension: it loads by default, `ompig config`
 	// lists it, `-builtin:<name>` in the `extensions` setting and --no-extensions disable it, and `-e builtin:<name>` loads it explicitly. It is hidden
 	// from the startup Extensions list and loads after project trust is resolved, so it cannot handle `project_trust`.
 	Builtin bool
@@ -138,7 +138,7 @@ type Extension struct {
 	Hidden bool
 
 	// EventLoopTurn, when set, returns once the extension's own event loop took one turn and the host applied the calls that turn sent. Pi runs every extension on the event loop its tools run on; a host whose extension runs elsewhere sets it so the callbacks a handler queued run before a tool's result reaches the extensions.
-	// pig additive (D19): only the Node subprocess runtime sets it.
+	// ompig additive (D19): only the Node subprocess runtime sets it.
 	EventLoopTurn func(context.Context) error
 }
 

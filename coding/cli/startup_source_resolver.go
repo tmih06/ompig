@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
 type extensionSourceResolution struct {

@@ -1,5 +1,5 @@
 {
-  "name": "pig-durable-report",
+  "name": "ompig-durable-report",
   "private": true,
   "type": "module",
   "description": "Renders the Durable benchmark slides from one results file.",

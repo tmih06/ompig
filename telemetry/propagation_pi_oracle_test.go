@@ -8,20 +8,20 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // pi: packages/telemetry/src/memory.ts
 
-// Pi and PiG exchange carriers in both directions: PiG's inject output continues a span in Pi's recorder under the injecting span's context, and Pi's carrier continues a PiG span
+// Pi and Ompig exchange carriers in both directions: Ompig's inject output continues a span in Pi's recorder under the injecting span's context, and Pi's carrier continues a Ompig span
 // under it, so the carrier is the wire contract between the two implementations and not only within one.
 func TestInMemoryCarriersInteroperateWithPi(t *testing.T) {
-	pig := telemetry.NewInMemoryTelemetryContext()
+	ompig := telemetry.NewInMemoryTelemetryContext()
 	var carriers []telemetry.TelemetryCarrier
 	for _, name := range []string{"first", "second"} {
-		if err := pig.StartSpan(telemetry.SpanOptions{Name: name}, func(span telemetry.TelemetrySpan) error {
-			carriers = append(carriers, pig.Inject(span))
+		if err := ompig.StartSpan(telemetry.SpanOptions{Name: name}, func(span telemetry.TelemetrySpan) error {
+			carriers = append(carriers, ompig.Inject(span))
 			return nil
 		}); err != nil {
 			t.Fatal(err)
@@ -51,13 +51,13 @@ func TestInMemoryCarriersInteroperateWithPi(t *testing.T) {
 		t.Fatal(err)
 	}
 	for index, carrier := range carriers {
-		name := fmt.Sprintf("from-pig-%d", index)
+		name := fmt.Sprintf("from-ompig-%d", index)
 		found := false
 		for _, span := range pi.Spans {
 			if span.Name == name {
 				found = true
 				if span.ParentID != nil || !reflect.DeepEqual(span.ParentContext, carrier) {
-					t.Errorf("Pi span %s has parent %v and parent context %v, want PiG's carrier %v as a remote parent", name, span.ParentID, span.ParentContext, carrier)
+					t.Errorf("Pi span %s has parent %v and parent context %v, want Ompig's carrier %v as a remote parent", name, span.ParentID, span.ParentContext, carrier)
 				}
 			}
 		}
@@ -68,12 +68,12 @@ func TestInMemoryCarriersInteroperateWithPi(t *testing.T) {
 	if len(pi.PiCarrier) == 0 {
 		t.Fatal("Pi injected no carrier")
 	}
-	if err := pig.Extract(pi.PiCarrier).StartSpan(telemetry.SpanOptions{Name: "from-pi"}, func(telemetry.TelemetrySpan) error { return nil }); err != nil {
+	if err := ompig.Extract(pi.PiCarrier).StartSpan(telemetry.SpanOptions{Name: "from-pi"}, func(telemetry.TelemetrySpan) error { return nil }); err != nil {
 		t.Fatal(err)
 	}
-	spans := pig.GetSpans()
+	spans := ompig.GetSpans()
 	continued := spans[len(spans)-1]
 	if continued.Name != "from-pi" || continued.ParentID != nil || !reflect.DeepEqual(continued.ParentContext, pi.PiCarrier) {
-		t.Fatalf("PiG span %+v, want Pi's carrier %v as a remote parent", continued, pi.PiCarrier)
+		t.Fatalf("Ompig span %+v, want Pi's carrier %v as a remote parent", continued, pi.PiCarrier)
 	}
 }

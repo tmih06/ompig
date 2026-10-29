@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/prompt-templates.ts
 
 // Pi's loadTemplatesFromDir joins each entry's name as readdirSync decoded it and takes the entry type from the directory entry, so a template file named with invalid UTF-8 is read at
-// the decoded path and warns ENOENT; PiG must report the same templates and diagnostics.
+// the decoded path and warns ENOENT; Ompig must report the same templates and diagnostics.
 func TestLoadPromptTemplatesFromDirWithNamesThatAreNotValidUTF8MatchesPi(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skip("file names are arbitrary bytes only on Linux")
@@ -54,7 +54,7 @@ emit({ result: { templates: r.templates.map((x) => x.name + "|" + x.filePath), d
 				shapedGot.Diagnostics = append(shapedGot.Diagnostics, d.Type+"|"+d.Message+"|"+d.Path)
 			}
 			if !slices.Equal(shapedGot.Templates, want.Result.Templates) || !slices.Equal(shapedGot.Diagnostics, want.Result.Diagnostics) {
-				t.Errorf("PiG %q\nPi  %q", strings.Join(append(shapedGot.Templates, shapedGot.Diagnostics...), "\n    "), strings.Join(append(want.Result.Templates, want.Result.Diagnostics...), "\n    "))
+				t.Errorf("Ompig %q\nPi  %q", strings.Join(append(shapedGot.Templates, shapedGot.Diagnostics...), "\n    "), strings.Join(append(want.Result.Templates, want.Result.Diagnostics...), "\n    "))
 			}
 		})
 	}

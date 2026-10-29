@@ -18,7 +18,7 @@ package engine
 
 import (
 	"errors"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/jsstring"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/jsstring"
 	"math"
 	"strconv"
 	"strings"
@@ -551,7 +551,7 @@ var (
 )
 
 // keyIDCacheLimit bounds the identifiers the cache holds: the default and user bindings of a session number in the low hundreds, so 4096 leaves room for extension-registered identifiers; reaching it empties the cache and the identifiers in use are parsed again once.
-// pig additive (D112): Pi parses an identifier on every call (keys.ts matchesKey); the bound keeps a stream of distinct identifiers from growing memory.
+// ompig additive (D112): Pi parses an identifier on every call (keys.ts matchesKey); the bound keeps a stream of distinct identifiers from growing memory.
 const keyIDCacheLimit = 4096
 
 func lookupKeyID(keyID string) *keyIDInfo {

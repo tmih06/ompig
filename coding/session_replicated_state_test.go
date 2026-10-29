@@ -5,9 +5,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's extension context reads the live Session at every call (runner.ts:906 `get model()`, loader.ts:411-414 getSettings, agent-session.ts getSessionName and thinkingLevel), so a change the Session makes with no extension call, a user's model switch, a settings edit, the /name command, a resumed Session, reaches an extension that reads between requests. A runtime replicates that state, so the Session reports each change to its owner.

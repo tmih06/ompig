@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // subscribeRPCEvents observes each mode event after awaited extension handling and before Session persistence, as rpc-mode.ts:354-363 subscribes to AgentSession. The separate Events consumer only drains and acknowledges delivery barriers.
@@ -49,7 +49,7 @@ func subscribeStdoutBackpressure(a *agent.Agent, wait func()) func() {
 
 // rpcAgentEvent observes retained messages and converts events to Pi JSON/RPC shapes in source insertion order. Conversion errors are returned so writer paths can terminate loudly.
 //
-//pig:hotpath
+//ompig:hotpath
 func rpcAgentEvent(event agent.AgentEvent) ([]any, error) {
 	switch event := event.(type) {
 	case agent.AgentStartEvent:
@@ -212,7 +212,7 @@ type rpcSessionEntryAppendedEvent struct {
 	Entry json.RawMessage `json:"entry"`
 }
 
-//pig:hotpath
+//ompig:hotpath
 func rpcMessageUpdate(event agent.MessageUpdateEvent) (any, error) {
 	if event.Message.Assistant == nil {
 		return nil, fmt.Errorf("message_update message is not an assistant message")
@@ -223,7 +223,7 @@ func rpcMessageUpdate(event agent.MessageUpdateEvent) (any, error) {
 	var wire rpcObject
 	fields := rpcAssistantEventFields(event.AssistantMessageEvent)
 	if object, ok := fields.(rpcObject); ok && !holdsToolCall(event.AssistantMessageEvent) {
-		// pig additive (D112): the members of these events are strings and integers, which encode without error, carry no partial, and read back from their encoding as they were written, so the object is the wire without the round trip through its encoding.
+		// ompig additive (D112): the members of these events are strings and integers, which encode without error, carry no partial, and read back from their encoding as they were written, so the object is the wire without the round trip through its encoding.
 		wire = object
 	} else {
 		encoded, err := json.Marshal(fields)
@@ -256,7 +256,7 @@ func holdsToolCall(event ai.AssistantMessageEvent) bool {
 
 // rpcAssistantEventFields excludes cumulative partials before invoking any JSON marshaler. Retained fields keep their existing serialization, order and error handling.
 //
-//pig:hotpath
+//ompig:hotpath
 func rpcAssistantEventFields(event ai.AssistantMessageEvent) any {
 	switch event := event.(type) {
 	case ai.StartEvent:

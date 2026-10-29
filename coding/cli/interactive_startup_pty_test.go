@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi's interactive startup draws the first frame, with the editor (which owns the TUI and reads tui.terminal.rows while it renders,
@@ -21,7 +21,7 @@ import (
 // renderer lock left the pane blank and dead to input.
 func TestInteractiveStartupRendersTheEditorAndAcceptsInput(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary")
+		t.Skip("starts the ompig binary")
 	}
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -41,12 +41,12 @@ func TestInteractiveStartupRendersTheEditorAndAcceptsInput(t *testing.T) {
 			t.Cleanup(func() { _ = master.Close() })
 			cmd := exec.Command(binary, "--model", "test-faux/faux-1", "--no-session", "--no-extensions")
 			cmd.Dir = cwd
-			cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+home, "PI_HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
-				"PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "TERM=xterm-256color")
+			cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+home, "PI_HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
+				"OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "TERM=xterm-256color")
 			cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			_ = slave.Close()
 			exited := make(chan struct{})
@@ -79,11 +79,11 @@ func TestInteractiveStartupRendersTheEditorAndAcceptsInput(t *testing.T) {
 // Pi starts the TUI and paints the editor and footer first, then queries the terminal's colors and only after that adds the startup
 // header, because the header bakes theme colors into its text (interactive-mode.ts init(): ui.start(), themeController.applyFromSettings(),
 // await waitForTerminalColors(), then the header container children). A terminal that answers no color query therefore shows the editor at
-// once and the header 100 ms later. PiG painted both in one frame after that wait, so the first frame of a silent terminal took 114 ms.
+// once and the header 100 ms later. Ompig painted both in one frame after that wait, so the first frame of a silent terminal took 114 ms.
 // This test never answers a query and reads the startup trace from the same stream as the frames, so the order of the trace line that ends the wait and the first appearance of the footer shows whether startup painted before it waited.
 func TestInteractiveStartupPaintsTheEditorBeforeTheHeaderWhenTheTerminalIsSilent(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary")
+		t.Skip("starts the ompig binary")
 	}
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -103,12 +103,12 @@ func TestInteractiveStartupPaintsTheEditorBeforeTheHeaderWhenTheTerminalIsSilent
 			t.Cleanup(func() { _ = master.Close() })
 			cmd := exec.Command(binary, "--model", "test-faux/faux-1", "--no-session", "--no-extensions")
 			cmd.Dir = cwd
-			cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+home, "PI_HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
-				"PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "TERM=xterm-256color", "PIG_STARTUP_TRACE=1")
+			cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+home, "PI_HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
+				"OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "TERM=xterm-256color", "OMPIG_STARTUP_TRACE=1")
 			cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			_ = slave.Close()
 			exited := make(chan struct{})

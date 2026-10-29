@@ -176,9 +176,9 @@ func TestInstallGoRejectsUnknownVersionsAndTargets(t *testing.T) {
 
 func TestGoFallsBackToTheManagedToolchain(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	t.Setenv("PATH", t.TempDir())
-	if _, err := Go(); err == nil || !strings.Contains(err.Error(), "pig setup go") {
+	if _, err := Go(); err == nil || !strings.Contains(err.Error(), "ompig setup go") {
 		t.Fatalf("err = %v, want the setup hint", err)
 	}
 	managed := filepath.Join(ManagedGoRoot(root), "bin", exeName("go"))

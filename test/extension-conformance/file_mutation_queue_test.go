@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestConformance_FileMutationQueueAgreesAcrossSDKs: Pi exports withFileMutationQueue (coding-agent index.ts:389, core/tools/file-mutation-queue.ts) so an extension's edit and

@@ -22,8 +22,8 @@ import (
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 var googleObservationOutput = flag.String("rpc33-google-output", "", "directory for complete Google observations and diffs; each execution creates a separate child")
@@ -61,7 +61,7 @@ var googleGeneratedID = regexp.MustCompile(`_\d{13}_\d+"`)
 // upstream: packages/ai/src/api/google-generative-ai.ts:59-268; packages/ai/src/utils/event-stream.ts:44-91; packages/agent/src/agent-loop.ts:408-453
 // testdata/rpc33-observation/providers/google-generative-ai/probe.mjs is the exact-Pi oracle.
 func TestRPC33GoogleObservationMatrix(t *testing.T) {
-	for _, key := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+	for _, key := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 		t.Setenv(key, t.TempDir())
 	}
 	var inputs googleObservationInputs

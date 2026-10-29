@@ -1,10 +1,10 @@
 package codingagent
 
-// install_telemetry_test.go proves PiG's install/update ping matches upstream
+// install_telemetry_test.go proves Ompig's install/update ping matches upstream
 // reportInstallTelemetry (packages/coding-agent/src/modes/interactive/
 // interactive-mode.ts:1292-1307) and its two getChangelogForDisplay call
-// sites (interactive-mode.ts:1265-1291), pointed at PiG's own endpoint
-// instead of pi.dev. Every test sets PIG_INSTALL_TELEMETRY_URL to a local
+// sites (interactive-mode.ts:1265-1291), pointed at Ompig's own endpoint
+// instead of pi.dev. Every test sets OMPIG_INSTALL_TELEMETRY_URL to a local
 // httptest server (or leaves telemetry disabled) so nothing ever reaches the
 // network, including pi.dev.
 
@@ -93,7 +93,7 @@ func assertNoRequestSpawned(t *testing.T, fn func()) {
 
 func TestReportInstallTelemetry_SendsOnlyVersionToConfiguredEndpoint(t *testing.T) {
 	server, ch := newCapturingServer(t)
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", server.URL+"/api/report-install")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", server.URL+"/api/report-install")
 	t.Setenv("PI_OFFLINE", "")
 	_ = os.Unsetenv("PI_OFFLINE")
 	t.Setenv("PI_TELEMETRY", "")
@@ -119,7 +119,7 @@ func TestReportInstallTelemetry_SendsOnlyVersionToConfiguredEndpoint(t *testing.
 		t.Errorf("method = %q, want GET", req.Method)
 	}
 	if ua := req.Header.Get("User-Agent"); ua == "" || ua == "Go-http-client/1.1" {
-		t.Errorf("User-Agent = %q, want PiG's own product identity", ua)
+		t.Errorf("User-Agent = %q, want Ompig's own product identity", ua)
 	}
 }
 
@@ -127,7 +127,7 @@ func TestReportInstallTelemetry_SendsOnlyVersionToConfiguredEndpoint(t *testing.
 // carries extra query parameters, the wire request must carry only version.
 func TestReportInstallTelemetry_DiscardsExtraQueryParamsOnConfiguredEndpoint(t *testing.T) {
 	server, ch := newCapturingServer(t)
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", server.URL+"/api/report-install?operator=secret&version=leaked")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", server.URL+"/api/report-install?operator=secret&version=leaked")
 	_ = os.Unsetenv("PI_OFFLINE")
 	_ = os.Unsetenv("PI_TELEMETRY")
 
@@ -145,9 +145,9 @@ func TestReportInstallTelemetry_DiscardsExtraQueryParamsOnConfiguredEndpoint(t *
 }
 
 func TestReportInstallTelemetry_DefaultURLIsPiInGoDevNotPiDev(t *testing.T) {
-	_ = os.Unsetenv("PIG_INSTALL_TELEMETRY_URL")
+	_ = os.Unsetenv("OMPIG_INSTALL_TELEMETRY_URL")
 	got := installTelemetryURL()
-	want := "https://pi-in-go.dev/api/report-install"
+	want := "https://ompig.dev/api/report-install"
 	if got != want {
 		t.Errorf("default install telemetry URL = %q, want %q", got, want)
 	}
@@ -157,7 +157,7 @@ func TestReportInstallTelemetry_DefaultURLIsPiInGoDevNotPiDev(t *testing.T) {
 }
 
 func TestReportInstallTelemetry_SettingDisabledSkipsRequest(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
 	_ = os.Unsetenv("PI_OFFLINE")
 	_ = os.Unsetenv("PI_TELEMETRY")
 
@@ -170,7 +170,7 @@ func TestReportInstallTelemetry_SettingDisabledSkipsRequest(t *testing.T) {
 }
 
 func TestReportInstallTelemetry_EnvOverrideDisablesEvenWhenSettingIsOn(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
 	_ = os.Unsetenv("PI_OFFLINE")
 	t.Setenv("PI_TELEMETRY", "0")
 
@@ -183,7 +183,7 @@ func TestReportInstallTelemetry_EnvOverrideDisablesEvenWhenSettingIsOn(t *testin
 }
 
 func TestReportInstallTelemetry_PIOfflineSkipsEvenWhenTelemetryIsOn(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
 	t.Setenv("PI_OFFLINE", "1")
 	_ = os.Unsetenv("PI_TELEMETRY")
 
@@ -232,7 +232,7 @@ func TestInstallTelemetryAllowed_PIOfflineUnsetDoesNotSuppress(t *testing.T) {
 }
 
 // CTEL-002 (codex review of 8b9142d69): the prior sendInstallTelemetry took
-// target.Query() (whatever PIG_INSTALL_TELEMETRY_URL's configured endpoint
+// target.Query() (whatever OMPIG_INSTALL_TELEMETRY_URL's configured endpoint
 // already carried) and only added "version" to it, so any extra parameter
 // baked into the endpoint leaked onto the wire. Upstream sends only
 // `?version=<version>`. This is a pure, zero-network, zero-wait test of the
@@ -262,19 +262,19 @@ func TestBuildInstallTelemetryRequestURL_RejectsInvalidEndpoint(t *testing.T) {
 }
 
 func TestReportInstallTelemetry_NeverContactsPiDotDev(t *testing.T) {
-	// Regression guard: without PIG_INSTALL_TELEMETRY_URL and without any
-	// network access, the default endpoint host must be pi-in-go.dev.
+	// Regression guard: without OMPIG_INSTALL_TELEMETRY_URL and without any
+	// network access, the default endpoint host must be ompig.dev.
 	// This test does not perform the request (that would hit the network);
 	// it locks the constant that governs where every real call goes.
-	if defaultInstallTelemetryURL != "https://pi-in-go.dev/api/report-install" {
-		t.Fatalf("defaultInstallTelemetryURL changed to %q; must stay on pi-in-go.dev, never pi.dev", defaultInstallTelemetryURL)
+	if defaultInstallTelemetryURL != "https://ompig.dev/api/report-install" {
+		t.Fatalf("defaultInstallTelemetryURL changed to %q; must stay on ompig.dev, never pi.dev", defaultInstallTelemetryURL)
 	}
 }
 
 // Pi: packages/coding-agent/src/core/settings-manager.ts:787 (SettingsManager.getLastChangelogVersion).
 func TestRecordChangelogVersionAndMaybeReportInstall_FreshInstallPingsAndRecordsNoBanner(t *testing.T) {
 	server, ch := newCapturingServer(t)
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", server.URL)
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", server.URL)
 	_ = os.Unsetenv("PI_OFFLINE")
 	_ = os.Unsetenv("PI_TELEMETRY")
 
@@ -297,7 +297,7 @@ func TestRecordChangelogVersionAndMaybeReportInstall_FreshInstallPingsAndRecords
 
 func TestRecordChangelogVersionAndMaybeReportInstall_UpdateWithNewEntriesPingsAndShowsBanner(t *testing.T) {
 	server, ch := newCapturingServer(t)
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", server.URL)
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", server.URL)
 	_ = os.Unsetenv("PI_OFFLINE")
 	_ = os.Unsetenv("PI_TELEMETRY")
 
@@ -325,7 +325,7 @@ func TestRecordChangelogVersionAndMaybeReportInstall_UpdateWithNewEntriesPingsAn
 }
 
 func TestRecordChangelogVersionAndMaybeReportInstall_SameVersionNeverPings(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
 	_ = os.Unsetenv("PI_OFFLINE")
 	_ = os.Unsetenv("PI_TELEMETRY")
 
@@ -349,7 +349,7 @@ func TestRecordChangelogVersionAndMaybeReportInstall_VersionBumpWithNoNewEntries
 	// Mirrors upstream's `if (newEntries.length > 0)` guard: a version bump
 	// whose changelog has nothing newer than lastSeen neither records the
 	// version nor pings.
-	t.Setenv("PIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
+	t.Setenv("OMPIG_INSTALL_TELEMETRY_URL", "https://example.invalid/api/report-install")
 	_ = os.Unsetenv("PI_OFFLINE")
 	_ = os.Unsetenv("PI_TELEMETRY")
 

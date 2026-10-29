@@ -7,7 +7,7 @@
 # TestExtensionOAuthSubscriptionFooter asserts the complete plain stats line
 # for those cases and removal. This scenario compares the real CLI's ANSI.
 # A compiled mutation making the host proxy return false fails readiness on
-# PiG while Pi still renders "$0.000 (sub)" (2026-09-25).
+# Ompig while Pi still renders "$0.000 (sub)" (2026-09-25).
 # PI_OFFLINE and PI_SKIP_VERSION_CHECK prevent startup network access.
 
 name = "07-footer-extension-subscription"
@@ -21,17 +21,17 @@ driver = "interactive-tmux"
 model = "subscription-yes/label-test"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/subscription-agent", "PI_OFFLINE=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/subscription-agent", "PI_OFFLINE=1"]
 pi = ["PI_CODING_AGENT_DIR=testdata/subscription-agent", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/subscription.mjs"]
+ompig_extensions = ["testdata/subscription.mjs"]
 pi_extensions = ["testdata/subscription.mjs"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "$0.000 (sub)"
+ready_pattern_ompig = "$0.000 (sub)"
 ready_pattern_pi = "$0.000 (sub)"
 ready_timeout_seconds = 25
 capture_start = "$0.000 (sub)"

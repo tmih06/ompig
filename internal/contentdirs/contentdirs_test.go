@@ -23,7 +23,7 @@ func makeDir(t *testing.T, parent, name string, age time.Duration) string {
 }
 
 // Eviction keeps the Keep most recently used directories of one base, counting the caller's own even when it is the least recently used, and
-// never touches another base's directories or names that are not <base>-<16 hex digits>, such as an older PiG's unhashed directory.
+// never touches another base's directories or names that are not <base>-<16 hex digits>, such as an older Ompig's unhashed directory.
 func TestEvictKeepsTheMostRecentlyUsedAndTheCallersOwn(t *testing.T) {
 	parent := t.TempDir()
 	own := makeDir(t, parent, "sdk-0000000000000000", 50*time.Hour)
@@ -111,7 +111,7 @@ func TestEvictLeavesADirectoryAProcessHolds(t *testing.T) {
 	}
 }
 
-// A directory with no lease file has no holder (an older PiG never holds one), and a lease file nobody holds, such as a dead holder's, does not keep its directory.
+// A directory with no lease file has no holder (an older Ompig never holds one), and a lease file nobody holds, such as a dead holder's, does not keep its directory.
 func TestEvictRemovesADirectoryWithNoLiveHolder(t *testing.T) {
 	parent := t.TempDir()
 	own := makeDir(t, parent, "docs-0000000000000000", time.Hour)

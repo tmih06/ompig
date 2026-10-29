@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // agent-session.ts:1679-1690: when the provider has no usable auth but the published availability reports OAuth, prompt() asks for a new login instead of reporting a missing API key.

@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // piDifferentialOutcome is one apply result: the JSON value, or the error class name and message Pi throws.

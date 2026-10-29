@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's ModelRuntime.hasConfiguredAuth reads snapshot.configuredProviders (model-runtime.ts:544-546 in 1.1.0 and 1.2.0): a credential written or

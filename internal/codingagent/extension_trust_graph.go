@@ -9,8 +9,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // GraphProjectTrustStore is a ProjectTrustStore an extension constructed.

@@ -1,4 +1,4 @@
-import pig_sdk
+import ompig_sdk
 
 
 class _RaisingInvalidator:
@@ -21,7 +21,7 @@ def test_raising_set_invalidate_on_cleanup_is_reported_and_dispose_still_runs(ca
     # extension log (stderr); the Python SDK reports the same failure and still
     # disposes the component.
     component = _RaisingInvalidator()
-    pig_sdk._dispose_remote_component(component)
+    ompig_sdk._dispose_remote_component(component)
     err = capsys.readouterr().err
     assert "set_invalidate(None)" in err
     assert "detach exploded" in err

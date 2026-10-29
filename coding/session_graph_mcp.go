@@ -1,6 +1,6 @@
-// pig-specific: the function options of createMcpExtension (extensions/mcp/index.ts McpExtensionOptions: loadConfig, createTransport, credentials, openUrl, updateConfig) for an extension that passes the compiled-in MCP extension to a DefaultResourceLoader it constructs. Pi's options are functions of the caller; they stay in the caller's process and the host calls them over the wire that exists, the session graph callback (subprocess.RequestSessionGraphCallback), with JSON in and JSON out. No request kind is added.
+// ompig-specific: the function options of createMcpExtension (extensions/mcp/index.ts McpExtensionOptions: loadConfig, createTransport, credentials, openUrl, updateConfig) for an extension that passes the compiled-in MCP extension to a DefaultResourceLoader it constructs. Pi's options are functions of the caller; they stay in the caller's process and the host calls them over the wire that exists, the session graph callback (subprocess.RequestSessionGraphCallback), with JSON in and JSON out. No request kind is added.
 
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package coding
 
@@ -14,14 +14,14 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	_ "github.com/MichaelKinsy/PiG/internal/tlsdistrust" // hardens http.DefaultClient, which the token fetch of an MCP auth provider uses (pig additive (D191))
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	_ "github.com/tmih06/ompig/internal/tlsdistrust" // hardens http.DefaultClient, which the token fetch of an MCP auth provider uses (ompig additive (D191))
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // mcpFactory is createMcpExtension: the data options logPath and startupWaitMs, and the function options (loadConfig, createTransport, credentials, openUrl, updateConfig), which the extension names by callback id.

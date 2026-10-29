@@ -19,7 +19,7 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 type toolchainVersionRecord struct {
@@ -29,12 +29,12 @@ type toolchainVersionRecord struct {
 
 // Bounds on a version probe. A toolchain manager can take minutes to answer (rustup downloading the toolchain a rust-toolchain.toml names), so the probe is bounded rather than left to hang a start, and a start that waits for a peer's probe of the same record waits no longer than toolchainLockWait before it probes for itself.
 var (
-	toolchainProbeTimeout = 2 * time.Minute // pig additive (D20): the shared cell cache and its version probes have no upstream equivalent
-	toolchainLockWait     = 5 * time.Minute // pig additive (D20): see toolchainProbeTimeout
+	toolchainProbeTimeout = 2 * time.Minute // ompig additive (D20): the shared cell cache and its version probes have no upstream equivalent
+	toolchainLockWait     = 5 * time.Minute // ompig additive (D20): see toolchainProbeTimeout
 )
 
 // toolchainProbeKillDelay is how long a killed probe may keep its output pipes open before Wait gives up on them: a rustup proxy leaves its download running in a child that holds them.
-// pig additive (D20): see toolchainProbeTimeout.
+// ompig additive (D20): see toolchainProbeTimeout.
 const toolchainProbeKillDelay = 5 * time.Second
 
 // toolchainSlotsPerCommand is how many fingerprints' records a command keeps; the least recently written go first.
@@ -62,7 +62,7 @@ func commandVersion(cacheRoot, name string, args ...string) string {
 	lock := flock.New(cachePath + ".lock")
 	//portlint:allow ctxbackground commandVersion has no caller context: it runs under hashing a cell's inputs, and toolchainLockWait bounds the wait
 	lockCtx, cancelLock := context.WithTimeout(context.Background(), toolchainLockWait)
-	locked, err := lock.TryLockContext(lockCtx, 25*time.Millisecond) // pig additive (D20): poll interval of the bounded wait
+	locked, err := lock.TryLockContext(lockCtx, 25*time.Millisecond) // ompig additive (D20): poll interval of the bounded wait
 	cancelLock()
 	if err != nil && !errors.Is(err, context.DeadlineExceeded) {
 		return "error:" + err.Error()

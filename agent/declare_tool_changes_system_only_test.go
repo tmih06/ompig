@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // declareToolChangesReference is declareToolChanges replaying the whole context, as it did before the replay read only the system messages.

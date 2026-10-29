@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/extensiontest"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/extensiontest"
 )
 
 // Pi runner.ts:1020-1040 awaits every snapshotted handler, reports rejection, and keeps the last explicit action.

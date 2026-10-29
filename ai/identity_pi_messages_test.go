@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // Pi adc5fa9f: pi-messages.ts layers getIdentityHeaders below the fixed request headers and the request headers.

@@ -31,7 +31,7 @@ func TestNodeRuntimeHeartbeatAndRequestStatesBypassHandlers(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	root, err := os.MkdirTemp(parent, "pig-node-liveness-")
+	root, err := os.MkdirTemp(parent, "ompig-node-liveness-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,7 +54,7 @@ func TestNodeRuntimeHeartbeatAndRequestStatesBypassHandlers(t *testing.T) {
 	defer func() { _ = listener.Close() }()
 	runtimePath := filepath.Join("runtime-node", "cli.mjs")
 	cmd := exec.CommandContext(t.Context(), node, runtimePath, entry)
-	cmd.Env = append(os.Environ(), "PIG_EXT_SOCKET="+address, "PIG_EXT_NAME=node-liveness")
+	cmd.Env = append(os.Environ(), "OMPIG_EXT_SOCKET="+address, "OMPIG_EXT_NAME=node-liveness")
 	peer := startAndAccept(t, cmd, listener)
 	defer func() { _ = peer.Close() }()
 	if register := readLivenessEnvelope(t, peer); register.Type != MsgRegister {

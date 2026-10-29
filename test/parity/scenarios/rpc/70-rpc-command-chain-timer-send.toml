@@ -1,5 +1,5 @@
 # Behavior family: rpc
-# Surface: set_model whose model_select handler queues setTimeout(0) -> pi.sendMessage. Pi runs the command's microtasks and writes its response before its loop runs any timer (24/24 probes, ClassLFinish), so the custom message follows the response. PiG's Node runtime ran the timer while the host waited for the handler, and the message preceded the response in about one run in ten.
+# Surface: set_model whose model_select handler queues setTimeout(0) -> pi.sendMessage. Pi runs the command's microtasks and writes its response before its loop runs any timer (24/24 probes, ClassLFinish), so the custom message follows the response. Ompig's Node runtime ran the timer while the host waited for the handler, and the message preceded the response in about one run in ten.
 
 name = "70-rpc-command-chain-timer-send"
 description = "RPC: a pi.sendMessage a setTimeout(0) callback makes while set_model runs reaches the client after the set_model response."
@@ -21,11 +21,11 @@ wait_contains = ['"id":"m1","type":"response","command":"set_model"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model"]
+ompig = ["OMPIG_HOME=testdata/multi-model"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model/agent"]
-pig_extensions = ["testdata/command-chain-timer-send.mjs"]
+ompig_extensions = ["testdata/command-chain-timer-send.mjs"]
 pi_extensions = ["testdata/command-chain-timer-send.mjs"]
-pig_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
 
 [assert]

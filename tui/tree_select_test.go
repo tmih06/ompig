@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // rowPrefixes returns the non-empty prefix slice for assertion. We
@@ -583,7 +583,7 @@ func TestFindBranchSegmentStartLinearChainWalksToRootAndLeaf(t *testing.T) {
 // fakeNodeTagged implements TreeNode + TreeNodeWithFilterTags so
 // the filter-mode tests can build trees with `settings`-tagged rows
 // without dragging in the real session adapter. Mirrors the
-// minimal contract pig's adapter populates.
+// minimal contract ompig's adapter populates.
 type fakeNodeTagged struct {
 	id    string
 	label string

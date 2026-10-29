@@ -21,7 +21,7 @@ summary = "Reviewed, permanent: a Node built-in default that no pinned Pi or dep
 [[finding]]
 id = "GUARD-14"
 owner = "reviewed-wire-encoding"
-summary = "Reviewed, permanent: coding/extension/host/subprocess/conn.go encodedRawSize adds the bytes Go's encoding/json emits when it escapes <, >, & (six bytes for one, so +5) and U+2028/U+2029 (six bytes for three, so +3). The subprocess wire is a Pig-owned format that Pi does not have, so no pinned Pi file spells these sizes and no `// upstream:` marker can verify them. They are byte counts of the encoder's output, not caps or limits; TestEncodedRawSize_MatchesEncoder proves them against the encoder. Not a Pi divergence."
+summary = "Reviewed, permanent: coding/extension/host/subprocess/conn.go encodedRawSize adds the bytes Go's encoding/json emits when it escapes <, >, & (six bytes for one, so +5) and U+2028/U+2029 (six bytes for three, so +3). The subprocess wire is a Ompig-owned format that Pi does not have, so no pinned Pi file spells these sizes and no `// upstream:` marker can verify them. They are byte counts of the encoder's output, not caps or limits; TestEncodedRawSize_MatchesEncoder proves them against the encoder. Not a Pi divergence."
 
 [[finding]]
 id = "GUARD-15"
@@ -76,37 +76,37 @@ summary = "Smaller TUI extras: a 500 ms synchronous fd timeout and a 20-row defa
 [[finding]]
 id = "D18"
 owner = "div-ext-host"
-summary = "Piglet build tooling (pig setup) timeouts; add `pig additive (D18)` at the literal."
+summary = "Ompiglet build tooling (ompig setup) timeouts; add `ompig additive (D18)` at the literal."
 
 [[finding]]
 id = "D19"
 owner = "div-ext-host"
-summary = "Subprocess protocol frame limits; add `pig additive (D19)` at the literal."
+summary = "Subprocess protocol frame limits; add `ompig additive (D19)` at the literal."
 
 [[finding]]
 id = "D20"
 owner = "div-ext-host"
-summary = "Runtime-cell cache retention and lock timings; add `pig additive (D20)` at the literal."
+summary = "Runtime-cell cache retention and lock timings; add `ompig additive (D20)` at the literal."
 
 [[finding]]
 id = "D28"
 owner = "div-ext-host"
-summary = "Extension validation deadline; add `pig additive (D28)` at the literal."
+summary = "Extension validation deadline; add `ompig additive (D28)` at the literal."
 
 [[finding]]
 id = "D39"
 owner = "div-modes-headless"
-summary = "Self-update deadlines and size limits; add `pig divergence (D39)` at the literal."
+summary = "Self-update deadlines and size limits; add `ompig divergence (D39)` at the literal."
 
 [[finding]]
 id = "D56"
 owner = "div-ext-host"
-summary = "Subprocess heartbeat interval and timeout; add `pig divergence (D56)` at the literal."
+summary = "Subprocess heartbeat interval and timeout; add `ompig divergence (D56)` at the literal."
 
 [[finding]]
 id = "D60"
 owner = "div-ext-host"
-summary = "Extension login preview deadline; add `pig additive (D60)` at the literal."
+summary = "Extension login preview deadline; add `ompig additive (D60)` at the literal."
 
 [[hit]]
 check = "default-drop-send"

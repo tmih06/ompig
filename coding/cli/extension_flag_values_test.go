@@ -3,13 +3,13 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
-// main.ts:753 passes `extensionFlagValues: parsed.unknownFlags`, a Map in command-line order. PiG's own flags (--piglet, --unsafe-host,
+// main.ts:753 passes `extensionFlagValues: parsed.unknownFlags`, a Map in command-line order. Ompig's own flags (--ompiglet, --unsafe-host,
 // --container-engine, --workspace) are not extension flags, and a repeated flag keeps its first position with its last value.
 func TestExtensionFlagValuesKeepCommandLineOrderAndSkipPigFlags(t *testing.T) {
-	flags := parseArgs([]string{"--zeta", "--piglet", "p", "--plan", "fast", "--unsafe-host", "--alpha=1", "--zeta=z"})
+	flags := parseArgs([]string{"--zeta", "--ompiglet", "p", "--plan", "fast", "--unsafe-host", "--alpha=1", "--zeta=z"})
 	want := []coding.ExtensionFlagValue{{Name: "zeta", Value: "z"}, {Name: "plan", Value: "fast"}, {Name: "alpha", Value: "1"}}
 	got := flags.extensionFlagValues()
 	if len(got) != len(want) {

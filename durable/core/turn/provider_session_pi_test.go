@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // provider.ts:23-39: a legacy conversation without `pi.provider` gets its session identity in one migration commit before the request starts; when the commit yields no identity the generation throws

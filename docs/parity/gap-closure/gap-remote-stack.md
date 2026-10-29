@@ -74,7 +74,7 @@ Audit of the other goroutine-per-message sites in `internal/experimental` (clien
 - Windows and macOS: the interop tests are `!windows`, as the upstream Unix transport is. `GOOS=darwin` and `GOOS=windows` vet only.
 - Pi 1.0.4 ships no WebSocket transport in these packages; the browser/mobile route is a custom `ServerListener` and `ByteTransportFactory` over the same envelopes.
 
-## Notes for pig-pocket-arch
+## Notes for ompig-pocket-arch
 
 - Protocol version 8, CBOR subset, 4-byte big-endian length frames, 16 MiB default limit: proven wire-compatible in both directions with Pi's Node client and server.
 - The Go server hosts any `routing.ServerHost`; a Session host supplies `ResolveSession`, `OpenSession`, and server services. The Node client reaches it unchanged over a Unix socket.

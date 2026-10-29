@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's applyPackageFilter matches each member's absolute path with the Package root as the base (package-manager.ts:2280-2306, 661-685), so a configured filter can name a member by its absolute path.
 func TestPackageFilterMatchesAbsolutePaths(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	_, agentDir, sm, pm := resolveFixture(t)
 	root := filepath.Join(agentDir, "pkg")
 	for _, name := range []string{"a", "b"} {
@@ -43,7 +43,7 @@ func TestPackageFilterMatchesAbsolutePaths(t *testing.T) {
 // Pi's resolve() rejects when a settings array's pattern, an auto-discovered resource's override or a built-in extension's override cannot compile (package-manager.ts:933-986, 2398-2411, 2413-2575), each only once a path reaches it.
 func TestResolveRejectsSettingsPatternErrors(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	const syntax = `Invalid regular expression: /^(?!\.)[\p{L}\p{Nl}]\-`
 	for _, tc := range []struct {
 		name, settings string
@@ -75,7 +75,7 @@ func TestResolveRejectsSettingsPatternErrors(t *testing.T) {
 // A filter that throws ends a local Package's collection at its kind (collectPackageResources; resolveLocalExtensionSource's catch, package-manager.ts:1372-1389), so the inventory lists neither the members nor the missing members of that kind and the later ones.
 func TestPackageInventoryStopsAtAFilterThrow(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	root := t.TempDir()
 	writeResolveFile(t, filepath.Join(root, "package.json"), `{"name":"p","pi":{"extensions":["extensions/missing.js"],"skills":["skills"],"prompts":["prompts/a.md","prompts/missing.md"]}}`)
 	writeResolveFile(t, filepath.Join(root, "skills", "s", "SKILL.md"), "---\nname: s\ndescription: d\n---\nBody\n")
@@ -97,7 +97,7 @@ func TestPackageInventoryStopsAtAFilterThrow(t *testing.T) {
 // A settings array applies its patterns to the files its plain entries collect (resolveLocalEntries, package-manager.ts:2398-2411), so a "!" pattern that cannot compile throws for an entry outside the auto-discovery directory too. Probed with Pi 1.1.0 (r26): {"prompts":["../other","![[:alpha:]]-x"]} with other/b.md and no auto-discovered prompt exits 1 with the SyntaxError.
 func TestResolveRejectsAnExcludeOverAnEntry(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	cwd, agentDir := t.TempDir(), t.TempDir()
 	other := filepath.Join(t.TempDir(), "other")
 	writeResolveFile(t, filepath.Join(other, "b.md"), "x\n")
@@ -134,7 +134,7 @@ func TestPackageInventoryMissingMemberOfAThrowingFilter(t *testing.T) {
 // An npm Package's manifest overrides go through applyPatterns when its kind is collected (collectManifestFiles, package-manager.ts:2258-2278), outside any catch, so one that cannot compile rejects resolve() once a file reaches it.
 func TestResolveRejectsAManifestOverrideThrow(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	cwd, agentDir, sm, pm := resolveFixture(t)
 	root := filepath.Join(codingagent.NPMInstallRoot(cwd, agentDir, false), "node_modules", "overrideprobe")
 	writeResolveFile(t, filepath.Join(root, "package.json"), `{"name":"overrideprobe","version":"1.0.0","pi":{"prompts":["prompts/*.md","![[:alpha:]]-x"]}}`)
@@ -151,7 +151,7 @@ func TestResolveRejectsAManifestOverrideThrow(t *testing.T) {
 // An autoload-disabled Project delta applies its patterns with applyAutoloadDisabledPatterns (applyPackageDeltaFilter, package-manager.ts:2316-2333, 793-810), outside any catch for an npm Package, so a pattern that cannot compile rejects resolve() once a file reaches it. Probed with Pi 1.1.0 (r27): the delta exits 1 with the SyntaxError.
 func TestResolveRejectsADeltaPatternThrow(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	cwd, agentDir, sm, pm := resolveFixture(t)
 	root := filepath.Join(codingagent.NPMInstallRoot(cwd, agentDir, false), "node_modules", "deltaprobe")
 	writeResolveFile(t, filepath.Join(root, "package.json"), `{"name":"deltaprobe","version":"1.0.0","pi":{"prompts":["prompts/*.md"]}}`)

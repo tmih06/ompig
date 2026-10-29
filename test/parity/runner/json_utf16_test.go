@@ -7,8 +7,8 @@ import "testing"
 // JSON.parse preserves UTF-16 code units: lone surrogates are not replacement characters, and distinct lone surrogates are not equal.
 func TestJSONComparisonKeepsUTF16StringIdentity(t *testing.T) {
 	for _, tc := range []struct {
-		name, pig, pi string
-		equal         bool
+		name, ompig, pi string
+		equal           bool
 	}{
 		{"high-versus-replacement", `"\ud800"`, `"�"`, false},
 		{"different-high-surrogates", `"\ud800"`, `"\ud801"`, false},
@@ -22,13 +22,13 @@ func TestJSONComparisonKeepsUTF16StringIdentity(t *testing.T) {
 		{"nested", `{"a":[{"x":"\ud800"}]}`, `{"a":[{"x":"�"}]}`, false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			pig, pi := tc.pig, tc.pi
-			if pig[0] == '"' {
-				pig, pi = `{"value":`+pig+`}`, `{"value":`+pi+`}`
+			ompig, pi := tc.ompig, tc.pi
+			if ompig[0] == '"' {
+				ompig, pi = `{"value":`+ompig+`}`, `{"value":`+pi+`}`
 			}
-			err := compareJSONResults(Result{Output: pig}, Result{Output: pi}, nil)
+			err := compareJSONResults(Result{Output: ompig}, Result{Output: pi}, nil)
 			if (err == nil) != tc.equal {
-				t.Fatalf("comparison=%v, equal=%t for %s versus %s", err, tc.equal, tc.pig, tc.pi)
+				t.Fatalf("comparison=%v, equal=%t for %s versus %s", err, tc.equal, tc.ompig, tc.pi)
 			}
 		})
 	}

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 // agent-session.ts getSessionStats, usage-totals.ts getUsageCostBreakdown, cache-stats.ts computeCacheWaste and footer.ts formatTokens against
@@ -151,7 +151,7 @@ func TestSessionAccountingMatchesPi(t *testing.T) {
 	report := func(i int, what string, got, pi any) {
 		if failures++; failures <= 8 {
 			raw, _ := json.Marshal(sessions[i].Entries)
-			t.Errorf("session %d %s:\n  Pig %+v\n  Pi  %+v\n  entries %s", i, what, got, pi, raw)
+			t.Errorf("session %d %s:\n  Ompig %+v\n  Pi  %+v\n  entries %s", i, what, got, pi, raw)
 		}
 	}
 	for i, s := range sessions {
@@ -343,7 +343,7 @@ func TestSessionInfoCommandMatchesPi(t *testing.T) {
 		if got != want.Infos[i] {
 			if failures++; failures <= 4 {
 				raw, _ := json.Marshal(p)
-				t.Errorf("session %d:\n  Pig %q\n  Pi  %q\n  probe %s", i, got, want.Infos[i], raw)
+				t.Errorf("session %d:\n  Ompig %q\n  Pi  %q\n  probe %s", i, got, want.Infos[i], raw)
 			}
 		}
 	}
@@ -351,7 +351,7 @@ func TestSessionInfoCommandMatchesPi(t *testing.T) {
 		status := decodeStatus(t, p.Status)
 		if got := FormatCacheWarmingStatus(*status, p.Now); got != want.Formatted[i] {
 			if failures++; failures <= 8 {
-				t.Errorf("status %v at %d:\n  Pig %q\n  Pi  %q", p.Status, p.Now, got, want.Formatted[i])
+				t.Errorf("status %v at %d:\n  Ompig %q\n  Pi  %q", p.Status, p.Now, got, want.Formatted[i])
 			}
 		}
 	}

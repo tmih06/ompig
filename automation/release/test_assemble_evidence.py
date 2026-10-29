@@ -14,7 +14,7 @@ class ReleaseEvidenceTests(unittest.TestCase):
     def fixture(self, root):
         expected = {}
         for target in assembler.TARGETS:
-            name = f'pig-0.2.0-{target}'
+            name = f'ompig-0.2.0-{target}'
             prefix = 'source' if target == 'source' else 'sbom'
             archive = name + ('.zip' if target.startswith('windows-') else '.tar.gz')
             names = [archive, archive + '.sigstore.json'] + ['evidence/' + suffix for suffix in
@@ -40,7 +40,7 @@ class ReleaseEvidenceTests(unittest.TestCase):
             assembler.assemble(root / 'candidates', root / 'release', '0.2.0')
             # Each target keeps its archive, its signing bundle and five evidence files.
             self.assertEqual(len(expected), 7 * len(assembler.TARGETS))
-            self.assertIn('pig-0.2.0-android-arm64.tar.gz', expected)
+            self.assertIn('ompig-0.2.0-android-arm64.tar.gz', expected)
             actual = {p.name: p.read_bytes() for p in (root / 'release').iterdir() if p.name != 'EVIDENCE-SHA256SUMS'}
             self.assertEqual(actual, expected)
             manifest = (root / 'release/EVIDENCE-SHA256SUMS').read_text().splitlines()
@@ -53,18 +53,18 @@ class ReleaseEvidenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             self.fixture(root / 'candidates')
-            (root / 'candidates/pig-0.2.0-linux-amd64/pig-0.2.0-linux-amd64.tar.gz').write_bytes(b'changed')
+            (root / 'candidates/ompig-0.2.0-linux-amd64/ompig-0.2.0-linux-amd64.tar.gz').write_bytes(b'changed')
             with self.assertRaisesRegex(ValueError, 'Build checksum mismatch'):
                 assembler.assemble(root / 'candidates', root / 'release', '0.2.0')
             self.assertFalse((root / 'release').exists())
 
     def test_missing_bundle_or_inventory_refuses_release(self):
-        for missing in ['pig-0.2.0-source.tar.gz.sigstore.json', 'evidence/source.spdx.json',
+        for missing in ['ompig-0.2.0-source.tar.gz.sigstore.json', 'evidence/source.spdx.json',
                         'evidence/licenses.csv', 'evidence/grype-report.sarif']:
             with self.subTest(missing=missing), tempfile.TemporaryDirectory() as tmp:
                 root = Path(tmp)
                 self.fixture(root / 'candidates')
-                (root / 'candidates/pig-0.2.0-source' / missing).unlink()
+                (root / 'candidates/ompig-0.2.0-source' / missing).unlink()
                 with self.assertRaisesRegex(ValueError, 'Missing or invalid'):
                     assembler.assemble(root / 'candidates', root / 'release', '0.2.0')
                 self.assertFalse((root / 'release').exists())

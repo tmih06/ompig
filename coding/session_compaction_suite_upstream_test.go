@@ -14,10 +14,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func suiteCompactionSeed(t *testing.T, s *Session) {
@@ -161,7 +161,7 @@ func TestAgentSessionCompactionSuiteUpstream(t *testing.T) {
 		if rootErr != nil {
 			t.Fatal(rootErr)
 		}
-		t.Setenv("PIG_HOME", root)
+		t.Setenv("OMPIG_HOME", root)
 		_, err := h.session.Compact(t.Context(), "")
 		if err == nil || !strings.Contains(err.Error(), "No model selected") {
 			t.Fatalf("error=%v", err)
@@ -184,7 +184,7 @@ func TestAgentSessionCompactionSuiteUpstream(t *testing.T) {
 		if rootErr != nil {
 			t.Fatal(rootErr)
 		}
-		t.Setenv("PIG_HOME", root)
+		t.Setenv("OMPIG_HOME", root)
 		_, err = h.session.Compact(t.Context(), "")
 		if err == nil || !strings.Contains(err.Error(), "No API key found for faux.") {
 			t.Fatalf("error=%v", err)

@@ -15,8 +15,8 @@ func TestBuildSDKFixtureUsesConformancePrebuild(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	t.Setenv("PIG_TEST_SDK_FIXTURE_BIN", host)
-	t.Setenv("PIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN", conformance)
+	t.Setenv("OMPIG_TEST_SDK_FIXTURE_BIN", host)
+	t.Setenv("OMPIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN", conformance)
 	if got := buildSDKFixture(t); got != conformance {
 		t.Fatalf("buildSDKFixture = %q, want conformance fixture %q", got, conformance)
 	}

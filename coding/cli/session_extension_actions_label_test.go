@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // agent-session.ts:3419 binds setLabel to sessionManager.appendLabelChange in the Session's runner: the bridge host action reaches that handler, a label sets the entry's label and an empty one clears it (types.ts:2106 SetLabelHandler takes `string | undefined`).
 // mutation-checked: a SetLabel action that drops the label (always clearing) fails it.
 // Pi: packages/coding-agent/src/core/session-manager.ts:1432 (Session.getLabel).
 func TestSessionExtensionActionsBindSetLabel(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

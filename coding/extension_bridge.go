@@ -4,7 +4,7 @@
 // `coding/extension/tool.go` defines `RegisteredTool` and
 // `ToolDefinition` to match upstream pi's wire shape (TypeBox
 // `json.RawMessage` parameters; Execute returns the agent's
-// AgentToolResult). `agent.AgentTool` is pig's interface used by
+// AgentToolResult). `agent.AgentTool` is ompig's interface used by
 // every callsite in the agent loop. This bridge owns the schema
 // marshalling required to span the two.
 //
@@ -23,10 +23,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // bridgeTool adapts a single `extension.RegisteredTool` onto the

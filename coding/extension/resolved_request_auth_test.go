@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: model-registry.ts:97-104 returns headers: resolution.auth.headers and env: resolution.env as resolved, so an empty object

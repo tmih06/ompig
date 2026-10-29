@@ -23,10 +23,10 @@ go test ./coding/extension/host/subprocess -run '^$' -bench 'BenchmarkConn' -ben
 
 # Open-loop round trip per SDK through the real host (fixed schedule, latency from the intended start).
 go test ./test/extension-conformance -run TestExtensionRoundTripLatencyOpenLoop -v
-PIG_EXT_RT_RATE=200 PIG_EXT_RT_SECONDS=30 PIG_EXT_RT_REPORT=$PWD/out go test ./test/extension-conformance -run TestExtensionRoundTripLatencyOpenLoop -v
+OMPIG_EXT_RT_RATE=200 OMPIG_EXT_RT_SECONDS=30 OMPIG_EXT_RT_REPORT=$PWD/out go test ./test/extension-conformance -run TestExtensionRoundTripLatencyOpenLoop -v
 
 # Random traffic with leak and latency budgets; the default is a six-second smoke test per SDK.
-PIG_EXT_SOAK_SECONDS=7200 go test ./test/extension-conformance -run TestExtensionSoak -timeout 0 -v
+OMPIG_EXT_SOAK_SECONDS=7200 go test ./test/extension-conformance -run TestExtensionSoak -timeout 0 -v
 ```
 
 Host-side cost of one frame (Go 1.27.2, Linux amd64, Xeon 6746E, loopback TCP):
@@ -55,5 +55,5 @@ Soak (six seconds, four workers, about 8,000 calls per SDK): no call fails, no g
 | Large frames arrive intact | `TestLargeFrameChunksArriveIntact` | Exact. |
 | Stderr bounded, tail kept | `TestStderrLogKeepsHeadAndTail`, `TestFloodingChildNeitherBlocksNorFillsTheDisk` | Exact bounds. |
 | Round trip p50 | `TestExtensionRoundTripLatencyOpenLoop` (`roundTripP50BudgetMS`) | Budget in the test. |
-| Round trip p99 | same, `PIG_EXT_RT_STRICT=1` on dedicated hardware (`roundTripP99StrictMS`) | Fails above the budget and more than 20% under it. |
+| Round trip p99 | same, `OMPIG_EXT_RT_STRICT=1` on dedicated hardware (`roundTripP99StrictMS`) | Fails above the budget and more than 20% under it. |
 | Soak leak and latency budgets | `TestExtensionSoak` | Constants at the top of `soak_test.go`. |

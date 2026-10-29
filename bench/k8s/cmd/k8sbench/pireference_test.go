@@ -17,7 +17,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 func npmIntegrity(data []byte) string {
@@ -247,9 +247,9 @@ func TestImageInstallsThePinnedReferences(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"--mount=type=bind,from=pi,target=/pi", "cp /pi/pi-durable/package.json /pi/pi-durable/package-lock.json durable/interop/bench.mjs /opt/pig/pi-durable/",
-		"cp -r /pi/pi-durable/packs /opt/pig/pi-durable/", `echo "pi-durable=$(cat /pi/pi-durable/VERSION)"`, "pi-durable/package-lock.json $(ls pi-durable/packs/*.tgz 2>/dev/null)",
-		"cp /pi/pi-agent/package.json /pi/pi-agent/package-lock.json /opt/pig/pi-agent/", "cp -r /pi/pi-agent/packs /opt/pig/pi-agent/", "/opt/pig/bin/k8sbench pi-packages -check /opt/pig",
+	for _, want := range []string{"--mount=type=bind,from=pi,target=/pi", "cp /pi/pi-durable/package.json /pi/pi-durable/package-lock.json durable/interop/bench.mjs /opt/ompig/pi-durable/",
+		"cp -r /pi/pi-durable/packs /opt/ompig/pi-durable/", `echo "pi-durable=$(cat /pi/pi-durable/VERSION)"`, "pi-durable/package-lock.json $(ls pi-durable/packs/*.tgz 2>/dev/null)",
+		"cp /pi/pi-agent/package.json /pi/pi-agent/package-lock.json /opt/ompig/pi-agent/", "cp -r /pi/pi-agent/packs /opt/ompig/pi-agent/", "/opt/ompig/bin/k8sbench pi-packages -check /opt/ompig",
 		`echo "pi-agent=$(cat /pi/pi-agent/VERSION)"`, "pi-agent/package-lock.json $(ls pi-agent/packs/*.tgz 2>/dev/null) " + piAgentCLI} {
 		if !strings.Contains(string(dockerfile), want) {
 			t.Errorf("bench/k8s/image/Dockerfile does not carry %s", want)

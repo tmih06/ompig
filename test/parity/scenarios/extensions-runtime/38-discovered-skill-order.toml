@@ -10,8 +10,8 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["testdata/ext/skill-order.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["testdata/ext/skill-order.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/skill-order.mjs"]
 
 [cli]

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/markdowntransform"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestMermaidAssistantBlockPreservesNestedCode(t *testing.T) {
@@ -25,7 +25,7 @@ func TestMermaidAssistantBlockPreservesNestedCode(t *testing.T) {
 // TestMermaidBlockWiring pins the integration seam: a ```mermaid block set on an
 // AssistantMessageComponent is replaced by a rendered diagram at the block's render
 // width via the Markdown.Transform hook, and the MermaidRenderingMode gating
-// applies. Themed output is not byte-comparable to pi (pig's theme colours
+// applies. Themed output is not byte-comparable to pi (ompig's theme colours
 // differ), so this asserts the structural outcome; the transform itself is
 // byte-verified against pi in TestMermaidTransformMatchesUpstream.
 func TestMermaidBlockWiring(t *testing.T) {

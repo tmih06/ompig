@@ -14,7 +14,7 @@ import (
 
 // macOS runs the packages whose tests reached macOS-only failures (104-byte
 // socket paths, /var -> /private/var temporary directories, small PTY buffers,
-// fsnotify gaps) next to the native smoke run: every cmd/pig shard that make
+// fsnotify gaps) next to the native smoke run: every cmd/ompig shard that make
 // test-cli runs on Linux, the extension host in three parts, and the other
 // packages. GitHub runs at most five macOS jobs at a time, so the units share
 // at most five jobs; each unit still runs in its own go test process.
@@ -81,14 +81,14 @@ func TestMacOSShardsTestTheMacOSSensitivePackages(t *testing.T) {
 	script := string(data)
 	cliRun := regexp.MustCompile(`test-shard-pattern\.sh "\$\{unit#cli-\}" ([0-9]+) ` + regexp.QuoteMeta(cliPkg) + `\); then\n\s*go test -timeout 30m -run "\$run" ` + regexp.QuoteMeta(cliPkg) + ` \|\| failed=1\n`)
 	if match := cliRun.FindStringSubmatch(script); match == nil {
-		t.Error("macos-units.sh does not run a cmd/pig unit as its own go test of one test-shard-pattern.sh shard")
+		t.Error("macos-units.sh does not run a cmd/ompig unit as its own go test of one test-shard-pattern.sh shard")
 	} else if match[1] != strconv.Itoa(shards) {
-		t.Errorf("macos-units.sh splits cmd/pig into %s shards, want %d as make test-cli runs", match[1], shards)
+		t.Errorf("macos-units.sh splits cmd/ompig into %s shards, want %d as make test-cli runs", match[1], shards)
 	}
 	if !regexp.MustCompile(`test-shard-pattern\.sh "\$\{unit##\*-\}" 3 \./coding/extension/host/subprocess\); then\n\s*go test -timeout 30m -run "\$run" \./coding/extension/host/subprocess \|\| failed=1\n`).MatchString(script) {
 		t.Error("macos-units.sh does not run an extension host unit as its own go test of one third")
 	}
-	if !strings.Contains(script, "go test -timeout 30m ./env ./coding/piglet || failed=1\n") {
+	if !strings.Contains(script, "go test -timeout 30m ./env ./coding/ompiglet || failed=1\n") {
 		t.Error("macos-units.sh does not run the packages unit")
 	}
 }

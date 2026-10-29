@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // Ports the subset of packages/durable/src/harness/types.ts that packages/durable/src/types.ts references:

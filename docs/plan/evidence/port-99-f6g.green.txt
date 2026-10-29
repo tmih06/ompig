@@ -88,10 +88,10 @@
     --- PASS: TestTruncateMiddle/counts_lines_of_the_whole_content (0.00s)
     --- PASS: TestTruncateMiddle/does_not_split_a_four-byte_character (0.00s)
     --- PASS: TestTruncateMiddle/cuts_multi-byte_text_only_at_character_boundaries (0.00s)
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	1.431s
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	5.210s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	1.431s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	5.210s
 --- PASS: TestReadHeadersTreatNullRangeAsOmitted (0.00s)
-ok  	github.com/MichaelKinsy/PiG/tui	0.041s
+ok  	github.com/tmih06/ompig/tui	0.041s
 
 ## Existing tests changed in the green commit (not ported tests)
 - failure_details_test.go TestBuiltinFailureDetails/bash/failure and shell_tool_unix_test.go TestShellToolSignalExitCode asserted 0.87.1's `details: {}` for a non-zero exit. Upstream 0.99.1 returns that case as an error result with details undefined (bash.ts:401-407), verified against the real 0.99.1 package (oracle below). They now assert no details and, for the first, structuredContent.
@@ -123,5 +123,5 @@ ok  	github.com/MichaelKinsy/PiG/tui	0.041s
 - Scenarios whose Pi probes import the 0.87.1 install by path or assert its version (17-shell-operations, 15-edit-access-abort, 16-tool-context-cwd, 12-managed-tool-status, the sdk-* probes) move with the pin.
 
 ## Handoff to other lanes (stubs this lane cannot fill)
-- Family 7 (`cmd/pig/rpc_events.go`, `tool_execution_end`): the `result` object must carry `structuredContent` after `details`, and `isError: true` when the tool itself returned an error result (real 0.99.1: `{"content":[..],"structuredContent":{..},"isError":true}`; a thrown error carries `details: {}` and no `isError` inside `result`). Go's `AgentToolResult.IsError` is also set for loop-generated errors, so the distinction needs family 4's result plumbing. With both fields added in a scratch tree scenario 17 passes.
+- Family 7 (`cmd/ompig/rpc_events.go`, `tool_execution_end`): the `result` object must carry `structuredContent` after `details`, and `isError: true` when the tool itself returned an error result (real 0.99.1: `{"content":[..],"structuredContent":{..},"isError":true}`; a thrown error carries `details: {}` and no `isError` inside `result`). Go's `AgentToolResult.IsError` is also set for loop-generated errors, so the distinction needs family 4's result plumbing. With both fields added in a scratch tree scenario 17 passes.
 - Families 4/6D/6E: `structuredContent` through `afterToolCall` (`agent-loop.ts:879-889`), the session `tool_result` hook (`agent-session.ts:657-680`) and nested calls.

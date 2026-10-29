@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // writeOrderFixture writes a Node extension that registers one provider,
@@ -34,7 +34,7 @@ export default async function (pi) {
 }
 
 // Upstream loader.ts awaits each extension factory before loading the next,
-// so factories run one at a time in plan order. PiG prepares cells (discovery
+// so factories run one at a time in plan order. Ompig prepares cells (discovery
 // and build checks) concurrently but starts each process, which runs its
 // factory, only after earlier cells committed. alpha's factory waits until
 // beta's build check has published beta's launcher, which serial preparation

@@ -62,7 +62,7 @@
 "process.large_write.record_bytes" = 18000
 # process: Pi-Bolt's headless scenario in print mode, one prompt with four read tool calls on 47-239 KB files (test/perfgate TestPrintReadToolsProcessGate), under GOMAXPROCS=1. auth_stats counts the auth.json revision stats (internal/profiling FileRevisionStats less ModelsFileStats). Measured at f22240330e on the Linux lab host (linux/amd64), three runs: 85896-85898 allocs, 13008200-13013048 B, 3-4 GC cycles, 535 goroutines created, 433 auth.json stats. Lowered after lw-pfast-registry (one auth.json view per offline model operation), measured at its merge e330f6b791: 84446-84453 allocs, 12905824-12908400 B, 4 GC cycles, 107 goroutines created, 15 auth.json stats. Lowered again after each JSON Schema draft's metaschema compiles on first use (third_party/jsonschema FORK.md), ten runs at 2a05b4ab0c+F4: 68203-68381 allocs, 11444144-11482688 B, 3 GC cycles. Each ceiling is the tighter of the two measurements (maximum plus about 6%; GC cycles maximum plus one). Lowered after F2 (session-f2 33904230a8: a typed tool result is appended without decoding its record), measured at integrate-042 1166362571 on the Linux lab host, three runs: 66442-66458 allocs, 9529136-9531584 B, 2 GC cycles, 107 goroutines created, 15 auth.json stats.
 # gc_cycles lowered to 0 by D175 (print runs collect at GOGC 400 unless GOGC is set): 0 GC cycles and 107 goroutines created in every run at fb18cdb01b + F1b on the Linux lab host, against 2 GC cycles and 107 at GOGC=100. goroutines_created stays: with no GC cycle it rose to 191 until refresh signals shared one forwarder per caller (4f9ee731bd).
-# goroutines_created raised 114 -> 118 with the owner's approval (2026-10-25): PIG_TEST_FAUX registers the harness's test-faux provider through the model registry, as Pi's parity harness registers it from an extension, so the run carries one more registered provider and its deferred registration refresh pass (the pass goroutine plus the new provider's refresh and auth-check operations). Measured on the Linux lab host, print_tools: 114 -> 118, allocs 47,225 and bytes 8,291,424 stay under their ceilings. Production runs (no PIG_TEST_FAUX) are unchanged. Profiles: alloc_objects diff of a warm print run, branch fix/faux-footer-prefix against main (xd670 ~/tern-v5/trees/faux-reg/tmp/prof1, ~/tern-v5/trees/faux-main/tmp/prof0).
+# goroutines_created raised 114 -> 118 with the owner's approval (2026-10-25): OMPIG_TEST_FAUX registers the harness's test-faux provider through the model registry, as Pi's parity harness registers it from an extension, so the run carries one more registered provider and its deferred registration refresh pass (the pass goroutine plus the new provider's refresh and auth-check operations). Measured on the Linux lab host, print_tools: 114 -> 118, allocs 47,225 and bytes 8,291,424 stay under their ceilings. Production runs (no OMPIG_TEST_FAUX) are unchanged. Profiles: alloc_objects diff of a warm print run, branch fix/faux-footer-prefix against main (xd670 ~/tern-v5/trees/faux-reg/tmp/prof1, ~/tern-v5/trees/faux-main/tmp/prof0).
 "process.print_tools.allocs" = 70500
 "process.print_tools.bytes" = 10110000
 "process.print_tools.gc_cycles" = 0
@@ -78,19 +78,19 @@
 "coding.pipeline.extension.wakes_per_delta" = 5.5
 "coding.pipeline.openai_text.wakes_per_delta" = 12.1
 
-# rows: pig's median over Pi-Bolt 0.8.5's on the same host, both run by Pi-Bolt's bench tools in alternation (bench/lw/row.sh; bench/lw/rows.py check enforces these, no Go test reads them). A ratio, not a count: it does not depend on the machine's speed, only on its noise. Measured at 3a16c00a42 on the shared darwin-arm64 Mac (load 45-114, 2 rounds, A/A): 6.0, 3.0, 0.51, 0.82, 3.5, 1.36; the ceilings add the A/A spread of that run and the 0.1 s resolution of large_write.py.
+# rows: ompig's median over Pi-Bolt 0.8.5's on the same host, both run by Pi-Bolt's bench tools in alternation (bench/lw/row.sh; bench/lw/rows.py check enforces these, no Go test reads them). A ratio, not a count: it does not depend on the machine's speed, only on its noise. Measured at 3a16c00a42 on the shared darwin-arm64 Mac (load 45-114, 2 rounds, A/A): 6.0, 3.0, 0.51, 0.82, 3.5, 1.36; the ceilings add the A/A spread of that run and the 0.1 s resolution of large_write.py.
 "lw.row.large_write.200KB.cpu_s.ratio_vs_bolt" = 7.0
 "lw.row.large_write.50KB.cpu_s.ratio_vs_bolt" = 4.0
 "lw.row.long_answer.60000ch.cpu_s.ratio_vs_bolt" = 0.6
 "lw.row.long_answer.20000ch.cpu_s.ratio_vs_bolt" = 1.0
 "lw.row.interactive.interactive.cpu_ms.ratio_vs_bolt" = 4.0
 "lw.row.long_session.prompt75.cpu_ms_per_prompt.ratio_vs_bolt" = 1.6
-# rows: Pi-Bolt's benchmark.py headless scenario (pig -p, one prompt, four read tool calls, then the answer; LW roadmap S22). A ceiling per platform, kept apart by rows.py's PLATFORMS: on darwin the instructions retired (instr_m, which only macOS reports) at most 1.7x Pi-Bolt's; on linux the CPU time at most Pi-Bolt's (the S22 target, not yet met at the base).
+# rows: Pi-Bolt's benchmark.py headless scenario (ompig -p, one prompt, four read tool calls, then the answer; LW roadmap S22). A ceiling per platform, kept apart by rows.py's PLATFORMS: on darwin the instructions retired (instr_m, which only macOS reports) at most 1.7x Pi-Bolt's; on linux the CPU time at most Pi-Bolt's (the S22 target, not yet met at the base).
 "lw.row.headless.headless.instr_m.ratio_vs_bolt" = 1.7
 "lw.row.headless.headless.cpu_ms.ratio_vs_bolt" = 1.0
-# rows: peak RSS (benchmark.py's ru_maxrss of the pig or Pi-Bolt process, peak_rss_mb) of the headless and interactive rows, so the
+# rows: peak RSS (benchmark.py's ru_maxrss of the ompig or Pi-Bolt process, peak_rss_mb) of the headless and interactive rows, so the
 # memory the GOMAXPROCS policy (lw-procs) costs cannot creep. Linux only (rows.py's PLATFORMS): on macOS Pi-Bolt's ru_maxrss is not
-# comparable with pig's. Measured at integrate-042 e85ec79e85 with the policy on (LW E16, Linux lab bench slot, 2026-10-13, 3 rounds):
+# comparable with ompig's. Measured at integrate-042 e85ec79e85 with the policy on (LW E16, Linux lab bench slot, 2026-10-13, 3 rounds):
 # headless 38 MB / 89 MB = 0.43, interactive 46 MB / 115 MB = 0.40; the ceilings add about 15%.
 "lw.row.headless.headless.peak_rss_mb.ratio_vs_bolt" = 0.5
 "lw.row.interactive.interactive.peak_rss_mb.ratio_vs_bolt" = 0.46
@@ -142,7 +142,7 @@
 # peer read (1) + host read loop (1) + requester response (1) + 0.5; without the peer term it is 2.5 (a tightening). Measured 2.0.
 "extension.dispatch.host_wakes" = 2.5
 
-# process: whole-process counts from PIG_PROFILE=metrics under GOMAXPROCS=1 (test/perfgate). Allocation counts vary a few percent with goroutine interleaving; the ceilings carry that margin.
+# process: whole-process counts from OMPIG_PROFILE=metrics under GOMAXPROCS=1 (test/perfgate). Allocation counts vary a few percent with goroutine interleaving; the ceilings carry that margin.
 "process.print.allocs" = 24500
 "process.print.bytes" = 3900000
 "process.print.gc_cycles" = 2
@@ -184,15 +184,15 @@
 "process.rpc_turn.children_at_exit" = 0
 "process.rpc_turn.temp_entries_at_exit" = 0
 
-# binary: stripped stock pig per release platform (TestReleaseBinarySizeGate).
+# binary: stripped stock ompig per release platform (TestReleaseBinarySizeGate).
 # 0.5.2 batch: owner-approved 2026-10-21, ceilings raised to the measured sizes (rounded up to 8 KiB): linux_amd64 67,009,312 -> 69918720 (+4.3%), linux_arm64 62,821,600 -> 65413120, darwin_arm64 64,504,688 -> 67190784, windows_amd64 68,666,240 -> 71606272. Train 3 alone measured 66,826,400 on linux_amd64; the growth is train 4: the Python and Rust SDK sources embedded in the binary (extensions/sdk-py 0.78 -> 1.41 MB, extensions/sdk-rs 1.2 -> 2.0 MB) and about 1.4 MB of new Go code (SDK tui kit, pi-ai helpers, session graph, TLS distrust, classifier images). Shrink in 0.5.3.
-"binary.pig.linux_amd64.bytes" = 69918720
-"binary.pig.linux_arm64.bytes" = 65413120
-"binary.pig.darwin_arm64.bytes" = 67190784
+"binary.ompig.linux_amd64.bytes" = 69918720
+"binary.ompig.linux_arm64.bytes" = 65413120
+"binary.ompig.darwin_arm64.bytes" = 67190784
 # windows_amd64: owner-approved 2026-10-16 for the Pi v1.3.0 pin. Stripped size 72,289,792 at 9db1ecc0a3 -> 72,310,272 (+20,480 B); symbol growth: type data +12.8 KB, ai +6.1 KB, go/types +2.8 KB, tui/widthx +1.5 KB, coding/cli +0.6 KB.
-"binary.pig.windows_amd64.bytes" = 71606272
+"binary.ompig.windows_amd64.bytes" = 71606272
 
-# binary: the headless embed example (examples/headless: session API, MCP, one provider, no terminal) per release platform, stripped as released (TestHeadlessEmbedBinarySizeGate). "default" is a plain build; "stripped" passes every strip tag except pig_strip_mcp. Measured at the change that stopped the Node view kit's editor builder (tui.Editor and the 6.3 MB word dictionaries behind it) and the announcement image (539 KB) from linking into programs that never draw an interactive editor, rounded up to 8 KiB with one 4 KiB page of linker alignment as headroom (the same program built by the test and by hand differed by a page). A ceiling only moves down.
+# binary: the headless embed example (examples/headless: session API, MCP, one provider, no terminal) per release platform, stripped as released (TestHeadlessEmbedBinarySizeGate). "default" is a plain build; "stripped" passes every strip tag except ompig_strip_mcp. Measured at the change that stopped the Node view kit's editor builder (tui.Editor and the 6.3 MB word dictionaries behind it) and the announcement image (539 KB) from linking into programs that never draw an interactive editor, rounded up to 8 KiB with one 4 KiB page of linker alignment as headroom (the same program built by the test and by hand differed by a page). A ceiling only moves down.
 "binary.headless.default.linux_amd64.bytes" = 40148992
 "binary.headless.default.linux_arm64.bytes" = 37363712
 "binary.headless.default.darwin_arm64.bytes" = 38576128
@@ -212,7 +212,7 @@
 "compaction.prepare_entry.allocs" = 7.3
 "compaction.prepare_entry.bytes" = 1150
 
-# process: anonymous memory (smaps_rollup Anonymous: heap, stacks, written data) when RPC mode has answered its first command (TestRPCReadyMemoryGate; rpi's "RSS at ready"). The ceiling is the owner's choice of gated figure over RSS and PSS, which also count the binary's page-cache pages and so moved 42.5-47.4 MB between runs of one binary on one idle host (5 of 24 runs over the old 46 MB ceiling). Measured on the Linux lab host (linux/amd64, 4-CPU container, kernel THP policy "madvise", go1.27.3, PIG_TEST_FAUX, GOMAXPROCS=1): 40 idle runs 3,903,488-4,014,080 B and 40 runs beside 12 busy loops 3,883,008-4,026,368 B; the ceiling is the largest of them plus 12%, rounded up to 0.5 MB. The test process turns transparent huge pages off for the processes it starts (perfgate.DisableTransparentHugePages), because GitHub's ubuntu-24.04 runners (kernel 6.17 azure, AMD EPYC 7763, 4 vCPU) use THP "always", where the same binary held 6.3 MB of its anonymous memory in huge pages and measured 5.65-7.82 MB (the ceiling failure in CI: 7,770,112 B); with THP off there, 50 gate runs (20 idle, 20 beside 4 busy loops, 10 beside a module-wide go vet) measured 3,948,544-4,034,560 B, and the lab host measured 3,878,912-4,014,080 B (20 + 20 runs) with the setting too. The ceiling did not change: the difference was the host's page size policy, not the code. A measured process that still has AnonHugePages fails the gate instead of being compared. RSS, PSS and peak RSS are still logged and recorded (scoreboard-measured.json), not gated.
+# process: anonymous memory (smaps_rollup Anonymous: heap, stacks, written data) when RPC mode has answered its first command (TestRPCReadyMemoryGate; rpi's "RSS at ready"). The ceiling is the owner's choice of gated figure over RSS and PSS, which also count the binary's page-cache pages and so moved 42.5-47.4 MB between runs of one binary on one idle host (5 of 24 runs over the old 46 MB ceiling). Measured on the Linux lab host (linux/amd64, 4-CPU container, kernel THP policy "madvise", go1.27.3, OMPIG_TEST_FAUX, GOMAXPROCS=1): 40 idle runs 3,903,488-4,014,080 B and 40 runs beside 12 busy loops 3,883,008-4,026,368 B; the ceiling is the largest of them plus 12%, rounded up to 0.5 MB. The test process turns transparent huge pages off for the processes it starts (perfgate.DisableTransparentHugePages), because GitHub's ubuntu-24.04 runners (kernel 6.17 azure, AMD EPYC 7763, 4 vCPU) use THP "always", where the same binary held 6.3 MB of its anonymous memory in huge pages and measured 5.65-7.82 MB (the ceiling failure in CI: 7,770,112 B); with THP off there, 50 gate runs (20 idle, 20 beside 4 busy loops, 10 beside a module-wide go vet) measured 3,948,544-4,034,560 B, and the lab host measured 3,878,912-4,014,080 B (20 + 20 runs) with the setting too. The ceiling did not change: the difference was the host's page size policy, not the code. A measured process that still has AnonHugePages fails the gate instead of being compared. RSS, PSS and peak RSS are still logged and recorded (scoreboard-measured.json), not gated.
 "process.rpc_ready.anon_bytes" = 4500000
 # process: anonymous memory at the first ready frame of an interactive start under tmux (TestInteractiveFirstFrameProcessGate), second start in the same home. Measured on the same host, 30 runs 6,725,632-6,823,936 B (RSS 47.6-54.2 MB, peak 47.9-54.5 MB), and on a GitHub ubuntu-24.04 runner with THP disabled for the tmux server and its pane (see process.rpc_ready.anon_bytes), 4 runs 6,828,032-6,852,608 B; the ceiling is the largest plus 10%, rounded up to 0.5 MB. RSS, PSS and peak RSS are logged, not gated.
 "process.interactive_first_frame.anon_bytes_at_ready" = 7500000

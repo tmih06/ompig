@@ -9,12 +9,12 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func reloadOriginalPair(t testing.TB, handler extension.HandlerFn) (*coding.Session, *icodingagent.TestHarness, *inproc.Runner) {
@@ -82,7 +82,7 @@ func TestExtensionReloadUsesUIOwnerAndRequestContext(t *testing.T) {
 
 func reloadOriginalRecord(t *testing.T, site int, title string) {
 	t.Helper()
-	if os.Getenv("PIG_RUNTIME_ORIGINAL_PROBE") == "" {
+	if os.Getenv("OMPIG_RUNTIME_ORIGINAL_PROBE") == "" {
 		return
 	}
 	data, err := json.Marshal([]any{"notify", site, title})

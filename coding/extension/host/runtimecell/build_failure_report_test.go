@@ -19,13 +19,13 @@ func goExtensionFixture(t *testing.T, name string, body string) GoExtension {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SDK_GO_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", sdkRoot)
 	root := t.TempDir()
-	goMod := "module example.com/" + name + "\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	goMod := "module example.com/" + name + "\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	source := "package " + name + "\n\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n\nfunc Extension() *sdk.Extension { return " + body + " }\n"
+	source := "package " + name + "\n\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\n\nfunc Extension() *sdk.Extension { return " + body + " }\n"
 	if err := os.WriteFile(filepath.Join(root, "extension.go"), []byte(source), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -37,7 +37,7 @@ func goExtensionFixture(t *testing.T, name string, body string) GoExtension {
 // another release. The build must use the installation of the go command it runs.
 func TestBuildGoPackedCellIgnoresInheritedGOROOT(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	t.Setenv("GOROOT", t.TempDir())
 	extension := goExtensionFixture(t, "fine", `sdk.New("fine")`)
 	cell, err := BuildGoPackedCell(context.Background(), filepath.Join(configRoot, "cache"), "fine-cell", []GoExtension{extension})
@@ -62,7 +62,7 @@ import (
 func main() {
 	args := os.Args[1:]
 	if len(args) > 0 && args[0] == "build" {
-		countPath := os.Getenv("PIG_TEST_GO_BUILD_COUNT")
+		countPath := os.Getenv("OMPIG_TEST_GO_BUILD_COUNT")
 		count := 0
 		if data, err := os.ReadFile(countPath); err == nil {
 			count, _ = strconv.Atoi(string(data))
@@ -76,7 +76,7 @@ func main() {
 		}
 		os.Exit(1)
 	}
-	cmd := exec.Command(os.Getenv("PIG_TEST_REAL_GO"), args...)
+	cmd := exec.Command(os.Getenv("OMPIG_TEST_REAL_GO"), args...)
 	for _, kv := range os.Environ() {
 		if !strings.HasPrefix(kv, "GOROOT=") {
 			cmd.Env = append(cmd.Env, kv)
@@ -117,8 +117,8 @@ func installMismatchedGo(t *testing.T) (countPath, compilerPath string) {
 		t.Fatalf("build fake go: %v\n%s", err, output)
 	}
 	countPath = filepath.Join(t.TempDir(), "count")
-	t.Setenv("PIG_TEST_REAL_GO", realGo)
-	t.Setenv("PIG_TEST_GO_BUILD_COUNT", countPath)
+	t.Setenv("OMPIG_TEST_REAL_GO", realGo)
+	t.Setenv("OMPIG_TEST_GO_BUILD_COUNT", countPath)
 	t.Setenv("PATH", binDir+string(os.PathListSeparator)+os.Getenv("PATH"))
 	t.Setenv("GOROOT", "")
 	return countPath, filepath.Join(toolDir, exeNameForRuntime("compile"))
@@ -142,7 +142,7 @@ func buildCount(t *testing.T, path string) string {
 // the compiler is replaced.
 func TestBuildGoPackedCellReportsReleaseMismatchOnceAndRecordsIt(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	countPath, compiler := installMismatchedGo(t)
 	extension := goExtensionFixture(t, "mismatch", `sdk.New("mismatch")`)
 	cacheRoot := filepath.Join(configRoot, "cache")
@@ -205,7 +205,7 @@ func TestBuildGoPackedCellReportsReleaseMismatchOnceAndRecordsIt(t *testing.T) {
 // A compile error is reported as its first diagnostic; the rest stays in the log.
 func TestBuildGoPackedCellCompileErrorIsOneLineWithLog(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	extension := goExtensionFixture(t, "broken", `sdk.New("broken", "extra")`)
 	_, err := BuildGoPackedCell(context.Background(), filepath.Join(configRoot, "cache"), "broken-cell", []GoExtension{extension})
 	failure, ok := errors.AsType[*BuildFailure](err)

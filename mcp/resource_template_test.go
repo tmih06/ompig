@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // protocol/types.ts:106-114 ResourceTemplate: uriTemplate and name are required, title, description, mimeType, annotations and _meta optional. The typed

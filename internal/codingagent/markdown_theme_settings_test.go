@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactive-mode.ts:1378-1383 getMarkdownThemeWithSettings: the markdown.codeBlockIndent setting reaches every chat Markdown

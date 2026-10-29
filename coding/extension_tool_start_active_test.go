@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 0.99.1 agent-session.ts:3487-3506 (_refreshToolRegistry) and :3510-3519 (_isDeclarable, _isActivatedOnRegistration).

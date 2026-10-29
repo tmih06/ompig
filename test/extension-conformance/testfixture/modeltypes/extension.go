@@ -9,8 +9,8 @@ import (
 	"strings"
 	"sync/atomic"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Name is the extension's registered name.

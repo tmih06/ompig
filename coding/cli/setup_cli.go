@@ -3,7 +3,7 @@ package cli
 import (
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // setupCli mirrors upstream packages/coding-agent/src/cli/setup.ts, which the
@@ -13,7 +13,7 @@ import (
 // HTTP transport is configured from settings in main.
 func setupCli() {
 	_ = os.Setenv("PI_CODING_AGENT", "true") // Setenv fails only for invalid names.
-	// pig divergence (D26): upstream exports AI_AGENT=pi so tools can name the
-	// agent that launched them. Tools that report it must hear PiG's name.
+	// ompig divergence (D26): upstream exports AI_AGENT=pi so tools can name the
+	// agent that launched them. Tools that report it must hear Ompig's name.
 	_ = os.Setenv("AI_AGENT", pigidentity.AgentMarker)
 }

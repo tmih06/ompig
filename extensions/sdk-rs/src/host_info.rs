@@ -1,24 +1,24 @@
-//! Pi's `getAgentDir()`, `CONFIG_DIR_NAME`, `VERSION` and `getPackageDir()` (`config.ts`) and the default `getShellConfig()` (`utils/shell.ts`) as the PiG host resolves them.
+//! Pi's `getAgentDir()`, `CONFIG_DIR_NAME`, `VERSION` and `getPackageDir()` (`config.ts`) and the default `getShellConfig()` (`utils/shell.ts`) as the Ompig host resolves them.
 //!
 //! They are callable while an extension's factory runs, before the host's ready message, so the host starts every extension process with
-//! them in `PIG_EXT_HOST_INFO`.
+//! them in `OMPIG_EXT_HOST_INFO`.
 
 use serde_json::Value;
 use std::io;
 
-const ENV: &str = "PIG_EXT_HOST_INFO";
+const ENV: &str = "OMPIG_EXT_HOST_INFO";
 
 fn unavailable(detail: &str) -> io::Error {
-    io::Error::new(io::ErrorKind::NotFound, format!("the PiG host did not provide its configuration facts ({detail})"))
+    io::Error::new(io::ErrorKind::NotFound, format!("the Ompig host did not provide its configuration facts ({detail})"))
 }
 
 fn read(key: &str) -> io::Result<String> {
-    let raw = std::env::var(ENV).map_err(|_| unavailable("PIG_EXT_HOST_INFO is not set"))?;
-    let info: Value = serde_json::from_str(&raw).map_err(|err| unavailable(&format!("PIG_EXT_HOST_INFO is not valid JSON: {err}")))?;
+    let raw = std::env::var(ENV).map_err(|_| unavailable("OMPIG_EXT_HOST_INFO is not set"))?;
+    let info: Value = serde_json::from_str(&raw).map_err(|err| unavailable(&format!("OMPIG_EXT_HOST_INFO is not valid JSON: {err}")))?;
     Ok(info.get(key).and_then(Value::as_str).unwrap_or_default().to_string())
 }
 
-/// Pi's `getAgentDir()`: the agent configuration directory the host runs with (for PiG its own tree, not Pi's). It fails when the process
+/// Pi's `getAgentDir()`: the agent configuration directory the host runs with (for Ompig its own tree, not Pi's). It fails when the process
 /// was not started by a host that provides it, or when the host could not resolve the directory.
 pub fn get_agent_dir() -> io::Result<String> {
     let dir = read("agentDir")?;
@@ -28,7 +28,7 @@ pub fn get_agent_dir() -> io::Result<String> {
     Ok(dir)
 }
 
-/// Pi's `CONFIG_DIR_NAME`: the per-project configuration directory name the host uses (".pig"; ".pi" when it shares Pi's tree).
+/// Pi's `CONFIG_DIR_NAME`: the per-project configuration directory name the host uses (".ompig"; ".pi" when it shares Pi's tree).
 pub fn get_config_dir_name() -> io::Result<String> {
     read("configDirName")
 }
@@ -38,7 +38,7 @@ pub fn get_version() -> io::Result<String> {
     read("version")
 }
 
-/// Pi's `getPackageDir()`: the install directory the host runs from. For PiG it is `PI_PACKAGE_DIR` when that is set, else the directory of the host executable, which is Pi's own
+/// Pi's `getPackageDir()`: the install directory the host runs from. For Ompig it is `PI_PACKAGE_DIR` when that is set, else the directory of the host executable, which is Pi's own
 /// answer for a compiled binary. It fails when the process was not started by a host that provides it, or when the host could not resolve it.
 pub fn get_package_dir() -> io::Result<String> {
     let dir = read("packageDir")?;
@@ -83,8 +83,8 @@ pub fn get_shell_config(custom_shell_path: Option<&str>) -> io::Result<ShellConf
             ShellConfig { shell: path.to_string(), args: vec!["-c".to_string()], command_transport: None }
         });
     }
-    let raw = std::env::var(ENV).map_err(|_| unavailable("PIG_EXT_HOST_INFO is not set"))?;
-    let info: Value = serde_json::from_str(&raw).map_err(|err| unavailable(&format!("PIG_EXT_HOST_INFO is not valid JSON: {err}")))?;
+    let raw = std::env::var(ENV).map_err(|_| unavailable("OMPIG_EXT_HOST_INFO is not set"))?;
+    let info: Value = serde_json::from_str(&raw).map_err(|err| unavailable(&format!("OMPIG_EXT_HOST_INFO is not valid JSON: {err}")))?;
     let shell = info.get("shell").filter(|shell| shell.is_object()).ok_or_else(|| unavailable("the host did not provide a default shell"))?;
     if let Some(message) = shell.get("error").and_then(Value::as_str).filter(|message| !message.is_empty()) {
         return Err(io::Error::other(message.to_string()));
@@ -106,10 +106,10 @@ mod tests {
     fn reads_the_entry_and_fails_without_a_host_that_provides_it() {
         let _guard = crate::extension::registration_tests::env_lock().lock().unwrap();
         let set = |value: &str| unsafe { std::env::set_var(ENV, value) };
-        set(r#"{"agentDir":"/home/u/.pig/agent","configDirName":".pig","version":"1.1.0"}"#);
+        set(r#"{"agentDir":"/home/u/.ompig/agent","configDirName":".ompig","version":"1.1.0"}"#);
         let answers = (get_agent_dir().ok(), get_config_dir_name().ok(), get_version().ok());
         let mut failures = Vec::new();
-        for (name, value) in [("not JSON", "{"), ("no agent directory", r#"{"configDirName":".pig"}"#)] {
+        for (name, value) in [("not JSON", "{"), ("no agent directory", r#"{"configDirName":".ompig"}"#)] {
             set(value);
             if get_agent_dir().is_ok() {
                 failures.push(name);
@@ -117,23 +117,23 @@ mod tests {
         }
         unsafe { std::env::remove_var(ENV) };
         let unset = get_agent_dir().is_err();
-        assert_eq!(answers, (Some("/home/u/.pig/agent".to_string()), Some(".pig".to_string()), Some("1.1.0".to_string())));
+        assert_eq!(answers, (Some("/home/u/.ompig/agent".to_string()), Some(".ompig".to_string()), Some("1.1.0".to_string())));
         assert!(failures.is_empty(), "get_agent_dir answered for {failures:?}");
-        assert!(unset, "get_agent_dir answered with no PIG_EXT_HOST_INFO");
+        assert!(unset, "get_agent_dir answered with no OMPIG_EXT_HOST_INFO");
     }
 
     #[test]
     fn package_dir_and_the_default_shell_come_from_the_host() {
         let _guard = crate::extension::registration_tests::env_lock().lock().unwrap();
         let set = |value: &str| unsafe { std::env::set_var(ENV, value) };
-        set(r#"{"agentDir":"/a","packageDir":"/opt/pig","shell":{"shell":"/bin/bash","args":["-c"]}}"#);
+        set(r#"{"agentDir":"/a","packageDir":"/opt/ompig","shell":{"shell":"/bin/bash","args":["-c"]}}"#);
         let answers = (get_package_dir().ok(), get_shell_config(None).ok());
         set(r#"{"agentDir":"/a","shell":{"error":"No bash shell found."}}"#);
         let error = get_shell_config(None).err().map(|e| e.to_string());
         let no_package_dir = get_package_dir().is_err();
         unsafe { std::env::remove_var(ENV) };
         let no_host = get_shell_config(None).is_err();
-        assert_eq!(answers, (Some("/opt/pig".to_string()), Some(ShellConfig { shell: "/bin/bash".into(), args: vec!["-c".into()], command_transport: None })));
+        assert_eq!(answers, (Some("/opt/ompig".to_string()), Some(ShellConfig { shell: "/bin/bash".into(), args: vec!["-c".into()], command_transport: None })));
         assert_eq!(error.as_deref(), Some("No bash shell found."));
         assert!(no_package_dir && no_host);
     }

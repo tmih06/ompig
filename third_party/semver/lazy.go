@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-// lazyRegexp is a regular expression compiled on first use. PiG fork: upstream compiles them in init, which costs every process that links the package.
+// lazyRegexp is a regular expression compiled on first use. Ompig fork: upstream compiles them in init, which costs every process that links the package.
 type lazyRegex struct {
 	expr string
 	once sync.Once

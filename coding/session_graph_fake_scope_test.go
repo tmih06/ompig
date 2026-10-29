@@ -7,9 +7,9 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // mcpFakeScope is a connection whose extension is a function: it answers each callback the host sends, and holds the objects the host added.

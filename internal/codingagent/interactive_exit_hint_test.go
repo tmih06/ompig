@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func setStdoutTTY(t *testing.T, value bool) {
@@ -88,7 +88,7 @@ func TestInteractiveQuitPrintsOneHintAfterTerminalRestore(t *testing.T) {
 			if restores != 1 || !strings.HasPrefix(got, "<cooked>\n") {
 				t.Errorf("hint precedes cooked-mode restore (restores=%d): %q", restores, got)
 			}
-			want := "<cooked>\n\x1b[2mTo resume this session:\x1b[22m pig --session exit-regression\n"
+			want := "<cooked>\n\x1b[2mTo resume this session:\x1b[22m ompig --session exit-regression\n"
 			if got != want {
 				t.Errorf("exit hint bytes = %q, want Pi's terminal-faint label %q", got, want)
 			}

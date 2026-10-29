@@ -17,13 +17,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
-// `pig mcp` cases that mcp-command.test.ts does not run: the help text, argument errors, and the OAuth commands. Every expected text below was also produced by upstream 0.99.1's `pi mcp` for the same input (compared with PiG's identity substituted), except where a case says otherwise.
+// `ompig mcp` cases that mcp-command.test.ts does not run: the help text, argument errors, and the OAuth commands. Every expected text below was also produced by upstream 0.99.1's `pi mcp` for the same input (compared with Ompig's identity substituted), except where a case says otherwise.
 
 func TestMcpCommandHelpIsPisHelpWithPiGsIdentity(t *testing.T) {
-	// cli.ts:31-70, HELP; testdata/mcp_help.txt is `pi mcp --help` of Pi 148622bc6 (the --timeout line) with `pi` → `pig` and `.pi` → `.pig`.
+	// cli.ts:31-70, HELP; testdata/mcp_help.txt is `pi mcp --help` of Pi 148622bc6 (the --timeout line) with `pi` → `ompig` and `.pi` → `.ompig`.
 	golden, err := os.ReadFile(filepath.Join("testdata", "mcp_help.txt"))
 	if err != nil {
 		t.Fatal(err)
@@ -41,32 +41,32 @@ func TestMcpCommandStylesHelpAndHintsLikeChalk(t *testing.T) {
 	var output []string
 	add := func(line string) { output = append(output, line) }
 	options := mcpext.McpCommandOptions{Cwd: t.TempDir(), AgentDir: t.TempDir(), Color: true, Log: add, Error: add}
-	if code := mcpext.RunMcpCommand(context.Background(), []string{"--help"}, options); code != 0 || !strings.HasPrefix(output[0], "\x1b[1mUsage:\x1b[22m\n  pig mcp add") {
+	if code := mcpext.RunMcpCommand(context.Background(), []string{"--help"}, options); code != 0 || !strings.HasPrefix(output[0], "\x1b[1mUsage:\x1b[22m\n  ompig mcp add") {
 		t.Fatalf("help = %d %q", code, output)
 	}
 	output = nil
-	if code := mcpext.RunMcpCommand(context.Background(), []string{"frobnicate"}, options); code != 1 || output[0] != "Unknown mcp command \"frobnicate\".\n\x1b[2mUse \"pig mcp --help\" for usage.\x1b[22m" {
+	if code := mcpext.RunMcpCommand(context.Background(), []string{"frobnicate"}, options); code != 1 || output[0] != "Unknown mcp command \"frobnicate\".\n\x1b[2mUse \"ompig mcp --help\" for usage.\x1b[22m" {
 		t.Fatalf("unknown command = %d %q", code, output)
 	}
 }
 
 func TestMcpCommandReportsArgumentErrors(t *testing.T) {
-	const hint = `Use "pig mcp --help" for usage.`
+	const hint = `Use "ompig mcp --help" for usage.`
 	cases := []struct {
 		args []string
 		want string
 	}{
 		{[]string{"frobnicate"}, "Unknown mcp command \"frobnicate\".\n" + hint},
-		{[]string{"list", "extra"}, "Usage: pig mcp list [--json]\n" + hint},
+		{[]string{"list", "extra"}, "Usage: ompig mcp list [--json]\n" + hint},
 		{[]string{"list", "--bogus"}, "Unknown option --bogus.\n" + hint},
 		{[]string{"list", "-l"}, "Unknown option --local.\n" + hint},
-		{[]string{"login"}, "Usage: pig mcp login <server>\n" + hint},
-		{[]string{"logout", "a", "b"}, "Usage: pig mcp logout <server>\n" + hint},
+		{[]string{"login"}, "Usage: ompig mcp login <server>\n" + hint},
+		{[]string{"logout", "a", "b"}, "Usage: ompig mcp logout <server>\n" + hint},
 		{[]string{"login", "x", "--timeout"}, "--timeout needs a value."},
 		{[]string{"logout", "x", "--timeout", "5"}, "Unknown option --timeout.\n" + hint},
-		{[]string{"remove"}, "Usage: pig mcp remove <server> [-l]\n" + hint},
-		{[]string{"remove", "x", "y"}, "Usage: pig mcp remove <server> [-l]\n" + hint},
-		{[]string{"add"}, "Usage: pig mcp add <server> [options] (--url <url> | -- <command> [args...])\n" + hint},
+		{[]string{"remove"}, "Usage: ompig mcp remove <server> [-l]\n" + hint},
+		{[]string{"remove", "x", "y"}, "Usage: ompig mcp remove <server> [-l]\n" + hint},
+		{[]string{"add"}, "Usage: ompig mcp add <server> [options] (--url <url> | -- <command> [args...])\n" + hint},
 		{[]string{"add", "x", "--url"}, "--url needs a value."},
 		{[]string{"add", "x", "--bogus", "--", "c"}, "Unknown option --bogus.\n" + hint},
 		{[]string{"add", "x", "--env", "NOVALUE", "--", "c"}, `--env expects KEY=VALUE, got "NOVALUE".`},
@@ -96,7 +96,7 @@ func TestMcpCommandReportsArgumentErrors(t *testing.T) {
 
 func TestMcpCommandListsAnEmptyConfigurationAndKeepsTheOptionOrder(t *testing.T) {
 	empty := runMcp(t, []string{"list"}, nil, "")
-	if empty.exitCode != 0 || empty.output != "No MCP servers configured. Add them to "+filepath.Join(empty.agentDir, "mcp.json")+" or .pig/mcp.json." {
+	if empty.exitCode != 0 || empty.output != "No MCP servers configured. Add them to "+filepath.Join(empty.agentDir, "mcp.json")+" or .ompig/mcp.json." {
 		t.Fatalf("empty list = %d %q", empty.exitCode, empty.output)
 	}
 	emptyJSON := runMcp(t, []string{"list", "--json"}, nil, "")
@@ -139,7 +139,7 @@ func TestMcpCommandListsAnEmptyConfigurationAndKeepsTheOptionOrder(t *testing.T)
 // An untrusted project's `mcp.json` is ignored with a note (cli.ts:196-200), and a trusted one is read.
 func TestMcpCommandReadsProjectServersOnlyWhenTheProjectIsTrusted(t *testing.T) {
 	agentDir := t.TempDir()
-	projectConfig := filepath.Join(agentDir, ".pig", "mcp.json")
+	projectConfig := filepath.Join(agentDir, ".ompig", "mcp.json")
 	if err := os.MkdirAll(filepath.Dir(projectConfig), 0o700); err != nil {
 		t.Fatal(err)
 	}
@@ -155,7 +155,7 @@ func TestMcpCommandReadsProjectServersOnlyWhenTheProjectIsTrusted(t *testing.T) 
 		return code, strings.Join(output, "\n")
 	}
 	code, output := run(nil, "list")
-	if want := projectConfig + " is ignored because the project is not trusted. Start pig in the project to trust it."; code != 0 || output != "No MCP servers configured. Add them to "+filepath.Join(agentDir, "mcp.json")+" or .pig/mcp.json.\n"+want {
+	if want := projectConfig + " is ignored because the project is not trusted. Start ompig in the project to trust it."; code != 0 || output != "No MCP servers configured. Add them to "+filepath.Join(agentDir, "mcp.json")+" or .ompig/mcp.json.\n"+want {
 		t.Fatalf("untrusted list = %d %q", code, output)
 	}
 	code, output = run(func(string) (bool, error) { return true, nil }, "list")
@@ -229,7 +229,7 @@ func follow(t *testing.T, wg *sync.WaitGroup) func(string) {
 func TestMcpCommandSignsInAndOutOfAnOAuthServer(t *testing.T) {
 	o := newOAuthRun(t)
 	if code, output := o.run(t, mcpext.McpCommandOptions{}, "list"); code != 1 ||
-		!strings.Contains(output, "oauth: needs sign-in (codemode, global)\n  "+o.server.URL+"\n  sign in with: pig mcp login oauth") {
+		!strings.Contains(output, "oauth: needs sign-in (codemode, global)\n  "+o.server.URL+"\n  sign in with: ompig mcp login oauth") {
 		t.Fatalf("list before sign-in = %d %q", code, output)
 	}
 
@@ -275,8 +275,8 @@ func TestMcpLoginRegistersWithTheConfiguredClientName(t *testing.T) {
 		t.Fatalf("login = %d %q", code, output)
 	}
 	browsers.Wait()
-	if got := fallback.server.registrationClientNames(); !reflect.DeepEqual(got, []any{"pig"}) {
-		t.Fatalf("client names = %v, want [pig]", got)
+	if got := fallback.server.registrationClientNames(); !reflect.DeepEqual(got, []any{"ompig"}) {
+		t.Fatalf("client names = %v, want [ompig]", got)
 	}
 	// OpenID Connect servers reject the loopback redirect URI of a `web` client (agent-session-mcp-oauth.test.ts, 1.0.4, #10493).
 	if got := fallback.server.registrationApplicationTypes(); !reflect.DeepEqual(got, []any{"native"}) {

@@ -13,8 +13,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepeers"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepeers"
 )
 
 func writeTree(t *testing.T, root string, files map[string]string) {

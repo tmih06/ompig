@@ -5,7 +5,7 @@ package storage_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
+	"github.com/tmih06/ompig/durable/durabletest"
 )
 
 // Every read scenario of the benchmark suite runs through the public Storage contract (Conversation, ScanConversations,

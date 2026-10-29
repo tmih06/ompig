@@ -17,7 +17,7 @@ Supported:
 
 1. "amd64": needs W1 to W6 to pass on amd64. Without native arm64 evidence the draft says arm64 is unverified. If an arm64 run passes, replace that sentence with the supported architecture list.
 2. The terminal and install paths the page names must each have a recorded native pass. The draft names `install.ps1`, npm, `go install` and the zip.
-3. Add to the 0.4.0 notes: "Windows is supported on amd64. A standalone `pig.exe` still does not update itself (D39); rerun the installer."
+3. Add to the 0.4.0 notes: "Windows is supported on amd64. A standalone `ompig.exe` still does not update itself (D39); rerun the installer."
 
 Preview:
 

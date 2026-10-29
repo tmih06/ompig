@@ -17,7 +17,7 @@ SCENARIOS = [
     ("round-trip", "One prompt, streamed reply"),
     ("resumed-session", "One prompt after resuming a large Session"),
 ]
-CREDENTIAL_PREFIXES = ("OPENAI_", "ANTHROPIC_", "GEMINI_", "GOOGLE_", "AZURE_", "AWS_", "PI_", "PIG_", "CODEX_", "CLAUDE_", "OPENCODE_", "COPILOT_", "GH_", "GITHUB_")
+CREDENTIAL_PREFIXES = ("OPENAI_", "ANTHROPIC_", "GEMINI_", "GOOGLE_", "AZURE_", "AWS_", "PI_", "OMPIG_", "CODEX_", "CLAUDE_", "OPENCODE_", "COPILOT_", "GH_", "GITHUB_")
 
 
 def pi_models(base_url):
@@ -125,7 +125,7 @@ def run(args):
         ready = {}
         for h in harnesses:
             entry = report["harnesses"].setdefault(h.id, {"name": h.name, "npm": h.npm})
-            binary = registry.resolve(h, args.pig)
+            binary = registry.resolve(h, args.ompig)
             if not h.mock:
                 entry["skipped"] = "cannot use a custom model endpoint; measured by pigeval live only"
             elif binary is None:

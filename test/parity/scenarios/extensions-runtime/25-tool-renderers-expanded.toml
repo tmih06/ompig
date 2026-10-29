@@ -11,7 +11,7 @@
 # streams. A renderer that throws falls back to the tool name and the
 # first-ten-lines result preview. A result never changes the expansion, so an
 # error result stays collapsed until Ctrl+O.
-# PiG used to draw every extension tool with its generic header.
+# Ompig used to draw every extension tool with its generic header.
 
 name = "25-tool-renderers-expanded"
 description = "Node extension tool renderers draw the tool card as upstream does (expanded with Ctrl+O)"
@@ -24,9 +24,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/tool-renderers.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/tool-renderers.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/tool-renderers.mjs",
@@ -40,7 +40,7 @@ height = 60
 # a valid keyboard setup is silent. The recorded two-host idle editor/footer
 # is the real readiness boundary, shared with the collapsed renderer scenario.
 # Keep asynchronous diagnostics visible; do not require or normalize one.
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Run: extension render cards"

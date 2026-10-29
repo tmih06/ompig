@@ -1,4 +1,4 @@
-// Command run runs the official MCP client conformance suite against PiG (../client) and compares every check with the
+// Command run runs the official MCP client conformance suite against Ompig (../client) and compares every check with the
 // committed baseline (../baseline.json). It fails when a check that passed in the baseline no longer passes, or when a
 // check fails that the baseline does not list. Known failures stay visible in the output. See ../README.md.
 //
@@ -24,7 +24,7 @@ import (
 // conformancePackage is the pinned upstream suite. Bumping it requires reviewing and regenerating the baseline.
 const conformancePackage = "@modelcontextprotocol/conformance@0.2.0-alpha.11"
 
-// modes are the protocol versions PiG negotiates. 2026-07-28 is a different (stateless) protocol PiG does not speak.
+// modes are the protocol versions Ompig negotiates. 2026-07-28 is a different (stateless) protocol Ompig does not speak.
 var modes = []string{"2025-03-26", "2025-06-18", "2025-11-25"}
 
 const scenarioTimeout = 30 * time.Second
@@ -166,7 +166,7 @@ func runScenario(mode, scenario, launcher, workDir string, verbose bool) (*scena
 	}
 	reportPath := filepath.Join(scenarioDir, "pi-client.json")
 	result := &scenarioResult{mode: mode, scenario: scenario, checks: map[string]bool{}, messages: map[string]string{}}
-	run, err := runCommand(workDir, conformanceEnv("PIG_MCP_CONFORMANCE_REPORT="+reportPath), scenarioTimeout+30*time.Second, "npx",
+	run, err := runCommand(workDir, conformanceEnv("OMPIG_MCP_CONFORMANCE_REPORT="+reportPath), scenarioTimeout+30*time.Second, "npx",
 		"--yes", conformancePackage, "client", "--command", launcher, "--scenario", scenario, "--spec-version", mode,
 		"--timeout", fmt.Sprint(scenarioTimeout.Milliseconds()), "--output-dir", scenarioDir)
 	if err != nil {
@@ -197,7 +197,7 @@ func runScenario(mode, scenario, launcher, workDir string, verbose bool) (*scena
 		id := text(check.ID, text(check.Name, "unnamed"))
 		result.record(id, status == "SUCCESS", text(check.ErrorMessage, text(check.Description, "")))
 	}
-	// Whether PiG completed the scenario. Some scenarios expect the client to give up, so this is baselined like any
+	// Whether Ompig completed the scenario. Some scenarios expect the client to give up, so this is baselined like any
 	// other check. The id stays `pi-client`, as upstream names it, so the two baselines compare line by line.
 	var client struct {
 		Success bool   `json:"success"`
@@ -351,7 +351,7 @@ func realMain() int {
 	}
 	wanted := func(scenario string) bool { return len(onlyScenarios) == 0 || slices.Contains(onlyScenarios, scenario) }
 
-	workDir, err := os.MkdirTemp("", "pig-mcp-conformance-")
+	workDir, err := os.MkdirTemp("", "ompig-mcp-conformance-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
@@ -374,7 +374,7 @@ func realMain() int {
 		return 1
 	}
 	// The upstream runner splits --command on spaces, so use a launcher path without any.
-	launcher := filepath.Join(workDir, "pig-client")
+	launcher := filepath.Join(workDir, "ompig-client")
 	if err := os.WriteFile(launcher, []byte("#!/bin/sh\nexec "+shellQuote(client)+" \"$@\"\n"), 0o755); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return 1

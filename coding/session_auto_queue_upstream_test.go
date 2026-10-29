@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 type compactionDecisionCall struct {
@@ -217,7 +217,7 @@ func TestPrePromptCompactionDoesNotContinueFromAssistant(t *testing.T) {
 }
 
 func BenchmarkCheckCompactionDecision(b *testing.B) {
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: b.TempDir()})
 	if err != nil {
 		b.Fatal(err)

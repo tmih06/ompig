@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Helpers shared by the ports of packages/chord/test/delta-tracker/*.test.ts, delta-clone.test.ts and state-*.test.ts: upstream's replay, expectAliasFree and state-fuzz random source and mutate.

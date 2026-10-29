@@ -68,7 +68,7 @@ func releaseNotes(root, since, target string) (string, error) {
 	}
 
 	var b strings.Builder
-	fmt.Fprintf(&b, "# PiG %s release notes (draft)\n\n", target)
+	fmt.Fprintf(&b, "# Ompig %s release notes (draft)\n\n", target)
 	fmt.Fprintf(&b, "> **Draft. Not published.** `make release-notes-draft` generated this file from CHANGELOG.md, `changelog.d`, the [bug fix ledger](../site/docs/bug-ledger.md) and the divergence records. The owner edits and posts it.\n\n")
 	b.WriteString("## Summary\n\n")
 	counts := map[string]int{}
@@ -82,11 +82,11 @@ func releaseNotes(root, since, target string) (string, error) {
 		}
 	}
 	slices.Sort(upgrading)
-	fmt.Fprintf(&b, "- %d additions, %d changes and %d recorded fixes since PiG %s.\n", len(bySection["Added"]), len(bySection["Changed"]), len(bySection["Fixed"]), since)
-	fmt.Fprintf(&b, "- The bug fix ledger lists %d bugs: %d PiG defects, %d Pi defects PiG fixed first, %d Pi fixes ported.\n", len(ledger.Entries), counts[ClassOwn], counts[ClassAheadOfPi], counts[ClassPiPort])
+	fmt.Fprintf(&b, "- %d additions, %d changes and %d recorded fixes since Ompig %s.\n", len(bySection["Added"]), len(bySection["Changed"]), len(bySection["Fixed"]), since)
+	fmt.Fprintf(&b, "- The bug fix ledger lists %d bugs: %d Ompig defects, %d Pi defects Ompig fixed first, %d Pi fixes ported.\n", len(ledger.Entries), counts[ClassOwn], counts[ClassAheadOfPi], counts[ClassPiPort])
 	if pin, err := os.ReadFile(filepath.Join(root, "internal", "coding", "pigversion", "pigversion.go")); err == nil {
 		if m := pinConstRE.FindStringSubmatch(string(pin)); m != nil {
-			fmt.Fprintf(&b, "- PiG %s follows Pi %s.\n", target, m[1])
+			fmt.Fprintf(&b, "- Ompig %s follows Pi %s.\n", target, m[1])
 		}
 	}
 	b.WriteString("\n")
@@ -128,7 +128,7 @@ func writeBullets(b *strings.Builder, items []string) {
 // writeFixed lists the fixes that matter most in full and the rest by count, and leaves the details to the ledger.
 func writeFixed(b *strings.Builder, l *Ledger) {
 	b.WriteString("## Fixed\n\n")
-	fmt.Fprintf(b, "PiG fixed %d bugs since %s. The [bug fix ledger](../site/docs/bug-ledger.md) gives each one's symptom, root cause, platform, fix commits and guarding tests. Counts by user impact:\n\n", len(l.Entries), l.Since)
+	fmt.Fprintf(b, "Ompig fixed %d bugs since %s. The [bug fix ledger](../site/docs/bug-ledger.md) gives each one's symptom, root cause, platform, fix commits and guarding tests. Counts by user impact:\n\n", len(l.Entries), l.Since)
 	byImpact := map[string][]Entry{}
 	for _, e := range l.Entries {
 		byImpact[e.Impact] = append(byImpact[e.Impact], e)
@@ -171,7 +171,7 @@ func writeFixed(b *strings.Builder, l *Ledger) {
 		}
 	}
 	if len(ahead) > 0 {
-		b.WriteString("### Pi defects PiG fixed first\n\nEach is a numbered divergence that ends when Pi fixes the defect.\n\n")
+		b.WriteString("### Pi defects Ompig fixed first\n\nEach is a numbered divergence that ends when Pi fixes the defect.\n\n")
 		for _, e := range ahead {
 			issue := e.PiIssue
 			if issue == "" {
@@ -182,7 +182,7 @@ func writeFixed(b *strings.Builder, l *Ledger) {
 		b.WriteString("\n")
 	}
 	if len(port) > 0 {
-		b.WriteString("### Pi fixes PiG ported\n\n")
+		b.WriteString("### Pi fixes Ompig ported\n\n")
 		for _, e := range port {
 			fmt.Fprintf(b, "- %s (%s)\n", e.Title, e.ID)
 		}
@@ -243,7 +243,7 @@ func writeContributors(b *strings.Builder, r repo, base string) error {
 	seenEmail, seenName := map[string]bool{}, map[string]bool{}
 	credit := func(name, email string) {
 		name, email = strings.TrimSpace(name), strings.ToLower(strings.TrimSpace(email))
-		if name == "" || email == "" || name == "Michael Kinsy" || name == "pig-ci" || strings.Contains(name, "[bot]") || agentEmails[email] {
+		if name == "" || email == "" || name == "Michael Kinsy" || name == "ompig-ci" || strings.Contains(name, "[bot]") || agentEmails[email] {
 			return
 		}
 		known := seenEmail[email] || seenName[name]

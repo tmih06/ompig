@@ -16,15 +16,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// pigTx runs "tx" steps on Pig's Session, naming ids as the Pi driver does ({lit} or {ref}, a created conversation or entry modulo the count).
-type pigTx struct {
+// ompigTx runs "tx" steps on Ompig's Session, naming ids as the Pi driver does ({lit} or {ref}, a created conversation or entry modulo the count).
+type ompigTx struct {
 	session *session.SessionImpl
 	convs   []int64
 	entries []int64
@@ -41,8 +41,8 @@ var probeTask = durable.DefineTask(durable.TaskDefinition[durable.JsonValue, dur
 	},
 })
 
-func newPigTx(store durable.Storage) *pigTx {
-	return &pigTx{session: session.CreateSession(store), owner: map[int64]int64{}}
+func newPigTx(store durable.Storage) *ompigTx {
+	return &ompigTx{session: session.CreateSession(store), owner: map[int64]int64{}}
 }
 
 type txOp struct {
@@ -135,7 +135,7 @@ func pickID(ref *txRef, list []int64) int64 {
 	return list[ref.Ref%len(list)]
 }
 
-func (p *pigTx) ownership(o *txOwnership, tasks []int64) durable.ConversationOwnership {
+func (p *ompigTx) ownership(o *txOwnership, tasks []int64) durable.ConversationOwnership {
 	if o.Kind == "task" {
 		id := o.TaskID
 		if o.TaskRef != nil {
@@ -146,7 +146,7 @@ func (p *pigTx) ownership(o *txOwnership, tasks []int64) durable.ConversationOwn
 	return durable.ConversationOwnership{Kind: durable.ConversationOwnerless}
 }
 
-func (p *pigTx) run(t *testing.T, step oracleStep) oracleResult {
+func (p *ompigTx) run(t *testing.T, step oracleStep) oracleResult {
 	t.Helper()
 	var scope session.TransactionScope
 	if step.Scope != nil {
@@ -391,7 +391,7 @@ func (p *pigTx) run(t *testing.T, step oracleStep) oracleResult {
 		}
 		return outcomes, nil
 	}, scope)
-	// A failed Session closes its Storage on the microtasks that follow the failure; Pig's close runs on its own goroutine, so
+	// A failed Session closes its Storage on the microtasks that follow the failure; Ompig's close runs on its own goroutine, so
 	// the next step waits for it as the oracle's awaited step does.
 	if p.session.Failure() != nil {
 		<-p.session.Closed()

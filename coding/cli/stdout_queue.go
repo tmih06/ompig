@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-// pig additive (D112): maxRetainedStdoutBatch bounds the buffer the writer keeps between batches (golang/go#23199).
+// ompig additive (D112): maxRetainedStdoutBatch bounds the buffer the writer keeps between batches (golang/go#23199).
 const maxRetainedStdoutBatch = 256 << 10
 
 // stdoutQueue is output-guard.ts's raw stdout tail: writeRawStdout appends a serialized chunk and returns at once, one writer drains the chunks in order, and waitForRawStdoutBackpressure resolves when the tail is empty. A Session listener therefore never blocks on a slow or stopped stdout reader. A failed write stops output and reports once, as the tail's catch calls process.exit(1).

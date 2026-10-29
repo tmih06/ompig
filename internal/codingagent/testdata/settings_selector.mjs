@@ -1,6 +1,6 @@
-// Drive the installed Pi's SettingsSelectorComponent, never a translated oracle. Pi has no PiG "Mask secret input" row (D80), so the
-// driver loads a copy of Pi's settings-selector.js with that one row and its callback inserted where Pig puts them. PiG's /share uploads
-// only to pi-in-go.dev (D64), so /settings has no "Session share destination" row (Pi cea25743): the copy drops that row and its case.
+// Drive the installed Pi's SettingsSelectorComponent, never a translated oracle. Pi has no Ompig "Mask secret input" row (D80), so the
+// driver loads a copy of Pi's settings-selector.js with that one row and its callback inserted where Ompig puts them. Ompig's /share uploads
+// only to ompig.dev (D64), so /settings has no "Session share destination" row (Pi cea25743): the copy drops that row and its case.
 import { mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -28,7 +28,7 @@ if (!source.includes(rowAnchor) || !source.includes(caseAnchor)) throw new Error
 source = source.replace(rowAnchor, `            {
                 id: "mask-secret-input",
                 label: "Mask secret input",
-                description: "PiG default: hide secret input with a count and last four characters. Differs from Pi; false restores Pi's plain-text behavior.",
+                description: "Ompig default: hide secret input with a count and last four characters. Differs from Pi; false restores Pi's plain-text behavior.",
                 currentValue: config.maskSecretInput ? "true" : "false",
                 values: ["true", "false"],
             },

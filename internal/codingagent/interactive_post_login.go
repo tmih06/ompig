@@ -10,11 +10,11 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
-// isUnknownModel includes the nil model used by PiG for Pi's initial unknown/unknown/unknown sentinel.
+// isUnknownModel includes the nil model used by Ompig for Pi's initial unknown/unknown/unknown sentinel.
 func isUnknownModel(model *ai.Model) bool {
 	return model == nil || (model.ID == "unknown" && model.ProviderMeta.ProviderID == "unknown" && model.ProviderMeta.API == "unknown")
 }

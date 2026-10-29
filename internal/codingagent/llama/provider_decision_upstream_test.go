@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports the two decision-model cases of packages/coding-agent/test/llama-extension.test.ts (v1.1.0, f6127a1b):

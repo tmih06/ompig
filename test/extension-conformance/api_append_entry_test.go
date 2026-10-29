@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // TestConformance_ExtensionAPIAppendEntry pins Pi's pi.appendEntry(customType, data)

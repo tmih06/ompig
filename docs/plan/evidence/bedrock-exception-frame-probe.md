@@ -8,7 +8,7 @@ Result (real Pi): `{"received":[["messageStart"]],"stop":"error","err":"Internal
 
 Reason: `@smithy/core` `getMessageUnmarshaller` (`event-streams/eventstream-serde-universal/getUnmarshalledStream.js`) throws the deserialized exception for `:message-type` exception frames before Pi's `for await` body runs, so an exception frame never reaches `item.internalServerException` (bedrock-converse-stream.ts:318-327).
 
-PiG on the same frames (`TestBedrockProviderStreamEventsUpstream/forwards_SDK_stream_items_before_an_exception_frame_ends_the_request`): hook receives `[messageStart]`, result `error` with `Internal server error: bedrock stream failed`. Identical.
+Ompig on the same frames (`TestBedrockProviderStreamEventsUpstream/forwards_SDK_stream_items_before_an_exception_frame_ends_the_request`): hook receives `[messageStart]`, result `error` with `Internal server error: bedrock stream failed`. Identical.
 
 ## Correction: the item branch is reachable through event frames
 
@@ -23,4 +23,4 @@ serviceUnavailableException [messageStart, {serviceUnavailableException}] error 
 somethingUnknown            [messageStart]                                error "Bedrock stream ended without a stop reason"
 ```
 
-PiG dropped all five members and reported `Bedrock stream ended without a stop reason`. `bedrock-raw-stop-reason.test.ts:91` is therefore ported, not designed out: `TestBedrockProviderStreamEventsUpstream/forwards_SDK_error_items_before_reporting_them/<kind>` asserts the rows above, and the observer receives the Go SDK's `*types.UnknownUnionMember` for the member.
+Ompig dropped all five members and reported `Bedrock stream ended without a stop reason`. `bedrock-raw-stop-reason.test.ts:91` is therefore ported, not designed out: `TestBedrockProviderStreamEventsUpstream/forwards_SDK_error_items_before_reporting_them/<kind>` asserts the rows above, and the observer receives the Go SDK's `*types.UnknownUnionMember` for the member.

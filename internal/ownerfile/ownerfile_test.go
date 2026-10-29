@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/ownerfile"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/ownerfile"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func ownerOnly(t *testing.T, path string) bool {

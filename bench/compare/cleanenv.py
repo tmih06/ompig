@@ -3,16 +3,16 @@
 """The environment every arm runs in: nothing from the lane shell that changes what a build does.
 
 A lane shell exports GOMAXPROCS (24), GOMEMLIMIT, GOFLAGS, GOTRACEBACK and lane/agent variables. A Go arm pinned to one core with GOMAXPROCS=24 pays
-scheduler and GC overhead for 24 Ps on one core (complexity-audit measured 15-25% of PiG's 6k-char streaming CPU lost to rpi from it), and Pi-Bolt's harness
-strips only PI_*, BUN_* and NODE_*. clean_env() drops every Go runtime/toolchain variable and every PIG_*, PI_*, NODE_*, BUN_*, LANE* and agent-credential
+scheduler and GC overhead for 24 Ps on one core (complexity-audit measured 15-25% of Ompig's 6k-char streaming CPU lost to rpi from it), and Pi-Bolt's harness
+strips only PI_*, BUN_* and NODE_*. clean_env() drops every Go runtime/toolchain variable and every OMPIG_*, PI_*, NODE_*, BUN_*, LANE* and agent-credential
 variable, so each arm sizes itself from the cores it is pinned to (Go reads the affinity mask) exactly as it would on a user's machine; the arm launchers
-(bench/compare/adapters) set what an arm needs (HOME, PIG_CODING_AGENT_DIR, ...)."""
+(bench/compare/adapters) set what an arm needs (HOME, OMPIG_CODING_AGENT_DIR, ...)."""
 import os
 from pathlib import Path
 
 NODE_BIN = Path(os.environ.get("BENCH_NODE_BIN", Path.home() / ".local/share/mise/installs/node/24.19.0/bin"))  # the pinned Node of arms.lock (24.19.0)
 
-DROP_PREFIXES = ("GO", "PIG_", "PI_", "NODE_", "BUN_", "LANE", "COPILOT", "GITHUB", "OPENAI", "ANTHROPIC", "GEMINI", "CODEX", "CLAUDE", "MISE_", "RUST", "CARGO", "TINYGO")
+DROP_PREFIXES = ("GO", "OMPIG_", "PI_", "NODE_", "BUN_", "LANE", "COPILOT", "GITHUB", "OPENAI", "ANTHROPIC", "GEMINI", "CODEX", "CLAUDE", "MISE_", "RUST", "CARGO", "TINYGO")
 
 def clean_env(env=None):
     """A copy of env (default os.environ) without the variables above."""

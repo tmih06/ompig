@@ -12,17 +12,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestPorterValidationIgnoresCallerConfiguration(t *testing.T) {
 	root := repoRoot(t)
-	name := "pig"
+	name := "ompig"
 	if runtime.GOOS == "windows" {
 		name += ".exe"
 	}
 	binary := filepath.Join(t.TempDir(), name)
-	build := exec.CommandContext(t.Context(), "go", "build", "-buildvcs=false", "-o", binary, "./cmd/pig")
+	build := exec.CommandContext(t.Context(), "go", "build", "-buildvcs=false", "-o", binary, "./cmd/ompig")
 	build.Dir = root
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build validation binary: %v\n%s", err, output)
@@ -54,15 +54,15 @@ func TestPorterValidationIgnoresCallerConfiguration(t *testing.T) {
 				}
 			}
 			for _, args := range [][]string{
-				{"install", "--validate-only", "--json", filepath.Join(root, "piglets/porter/extensions/pig-porter")},
-				{"piglet", "validate", filepath.Join(root, "piglets/porter/pig-porter.yaml")},
+				{"install", "--validate-only", "--json", filepath.Join(root, "ompiglets/porter/extensions/ompig-porter")},
+				{"ompiglet", "validate", filepath.Join(root, "ompiglets/porter/ompig-porter.yaml")},
 			} {
-				cmd := exec.CommandContext(t.Context(), testenv.Bash(t), append([]string{filepath.Join(root, "automation/ci/with-isolated-pig-home.sh"), binary}, args...)...)
+				cmd := exec.CommandContext(t.Context(), testenv.Bash(t), append([]string{filepath.Join(root, "automation/ci/with-isolated-ompig-home.sh"), binary}, args...)...)
 				cmd.Dir = root
 				cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home,
-					"PIG_HOME="+filepath.Join(home, ".pig"), "XDG_CONFIG_HOME="+filepath.Join(home, "config"),
-					"PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
-					"PIG_USE_PI_DIRS="+piDirs, "GOWORK=off", "GOCACHE="+caches[0], "GOMODCACHE="+caches[1], "GOROOT="+caches[2])
+					"OMPIG_HOME="+filepath.Join(home, ".ompig"), "XDG_CONFIG_HOME="+filepath.Join(home, "config"),
+					"OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
+					"OMPIG_USE_PI_DIRS="+piDirs, "GOWORK=off", "GOCACHE="+caches[0], "GOMODCACHE="+caches[1], "GOROOT="+caches[2])
 				var stderr bytes.Buffer
 				cmd.Stderr = &stderr
 				output, err := cmd.Output()
@@ -92,7 +92,7 @@ func TestIsolatedPigHomePreservesCommandAndCleansUp(t *testing.T) {
 		t.Fatal(err)
 	}
 	goRoot := strings.TrimSpace(string(goRootOutput))
-	rootKeys := []string{"HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "PIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"}
+	rootKeys := []string{"HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"}
 	keys := append(slices.Clone(rootKeys), "GOCACHE", "GOMODCACHE")
 	for _, exit := range []int{0, 37} {
 		t.Run(strconv.Itoa(exit), func(t *testing.T) {
@@ -106,7 +106,7 @@ func TestIsolatedPigHomePreservesCommandAndCleansUp(t *testing.T) {
 			// The MSYS runtime shows HOME to an MSYS program in POSIX form (/tmp/...) and to a native program as the Windows path the wrapper exported; the probe prints the Windows form.
 			script := `go version >/dev/null || exit $?
 [[ "$(go env GOTELEMETRY)" == off ]] || exit 99
-for key in HOME USERPROFILE APPDATA LOCALAPPDATA XDG_CONFIG_HOME PIG_HOME PIG_CODING_AGENT_DIR PI_CODING_AGENT_DIR GOCACHE GOMODCACHE; do
+for key in HOME USERPROFILE APPDATA LOCALAPPDATA XDG_CONFIG_HOME OMPIG_HOME OMPIG_CODING_AGENT_DIR PI_CODING_AGENT_DIR GOCACHE GOMODCACHE; do
   value=${!key}
   case "$key:$OSTYPE" in HOME:msys*|HOME:cygwin*) value=$(cygpath -m "$value") ;; esac
   printf '%s\n' "$value"
@@ -120,7 +120,7 @@ exit "$status"`
 				// Git for Windows' bin\bash.exe is a native launcher. From the MSYS wrapper it would receive the arguments through a Windows command line, which its MSYS bash parses and globs again; the MSYS bash on the wrapper's PATH receives them as argv.
 				command = "bash"
 			}
-			commandArgs := []string{filepath.Join(repoRoot(t), "automation/ci/with-isolated-pig-home.sh"), command, "-c", script, "probe", strconv.Itoa(exit)}
+			commandArgs := []string{filepath.Join(repoRoot(t), "automation/ci/with-isolated-ompig-home.sh"), command, "-c", script, "probe", strconv.Itoa(exit)}
 			cmd := exec.CommandContext(t.Context(), bash, append(commandArgs, args...)...)
 			testenv.VerbatimArgs(cmd)
 			cmd.Env = append(os.Environ(), "HOME="+parent, "USERPROFILE="+parent, "TMPDIR="+parent,

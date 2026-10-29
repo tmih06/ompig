@@ -26,8 +26,8 @@ driver = "interactive-tmux"
 width = 160
 height = 35
 # Both sides start typing after their startup rebind, which sets the autocomplete provider and then prints this
-# warning; "(auto)" paints before PiG's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
-ready_pattern_pig = "Warning: No models available."
+# warning; "(auto)" paints before Ompig's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
+ready_pattern_ompig = "Warning: No models available."
 ready_pattern_pi = "Warning: No models available."
 ready_timeout_seconds = 25
 capture_start = "oauth-shared:ids="
@@ -40,15 +40,15 @@ wait_timeout_seconds = 10
 settle_seconds = 1
 
 [env]
-pig = [
-  "PIG_CODING_AGENT_DIR=../clipboard-images/testdata/pig-agent",
-  "PIG_PARITY_HARNESS=1",
+ompig = [
+  "OMPIG_CODING_AGENT_DIR=../clipboard-images/testdata/ompig-agent",
+  "OMPIG_PARITY_HARNESS=1",
 ]
 pi = [
   "PI_CODING_AGENT_DIR=../clipboard-images/testdata/pi-agent",
   "PI_SKIP_VERSION_CHECK=1",
 ]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/oauth-harness.ts"]
 

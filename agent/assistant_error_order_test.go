@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The AgentMessage encoder writes the key order the assistant message was built in (faux.ts: errorMessage before timestamp; a

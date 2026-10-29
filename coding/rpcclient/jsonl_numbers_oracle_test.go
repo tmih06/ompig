@@ -60,7 +60,7 @@ func TestSerializeJsonLineNumbersMatchNode(t *testing.T) {
 		}
 		wantFrame := `{"v":` + string(node.V) + `,"a":[` + string(node.A[0]) + "]}\n"
 		if string(frame) != wantFrame {
-			t.Errorf("%s: Pig %q, Node %q", token, frame, wantFrame)
+			t.Errorf("%s: Ompig %q, Node %q", token, frame, wantFrame)
 		}
 	}
 }

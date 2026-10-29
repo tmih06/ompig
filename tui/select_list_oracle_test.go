@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type selectListProbe struct {
@@ -65,7 +65,7 @@ func TestSelectListInputMatchesPi(t *testing.T) {
 		{"\x1b[B", "\x1b[B", "\x1b[A", "\r"},
 		{"\x1b[A", "\x1b[A", "\r"},
 		{"\x1b[A", "\x1b[B", "\x1b[B"},
-		// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+		// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 		{"\x1b[H", "\x1b[F", "x", "\r"},
 		{"\x1b", "\x1b"},
 		{"\x03", "\x1b[B", "\x03"},
@@ -241,7 +241,7 @@ func selectListFrameDifference(got, want [][]string) string {
 				w = want[f][l]
 			}
 			if g != w {
-				return fmt.Sprintf("frame %d line %d:\n  pig %q\n  Pi  %q", f, l, g, w)
+				return fmt.Sprintf("frame %d line %d:\n  ompig %q\n  Pi  %q", f, l, g, w)
 			}
 		}
 	}

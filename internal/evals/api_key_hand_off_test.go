@@ -1,7 +1,7 @@
 package evals
 
 // Pins the credential hand-off of harness.ts runPiCodingAgent (the agent's auth.json holds a command that fetches the API
-// key from the bridge). The case needs no pig process, so it runs on every platform, including the Windows quoting of
+// key from the bridge). The case needs no ompig process, so it runs on every platform, including the Windows quoting of
 // shellQuote.
 
 import (
@@ -11,7 +11,7 @@ import (
 )
 
 func TestAPIKeyHandOff(t *testing.T) {
-	command := "!" + shellQuote("/opt/x/pig-eval-extension") + " credential"
+	command := "!" + shellQuote("/opt/x/ompig-eval-extension") + " credential"
 	cases := []struct {
 		name, stored, apiKey, wantEntry, wantServed string
 	}{
@@ -25,12 +25,12 @@ func TestAPIKeyHandOff(t *testing.T) {
 		if c.stored != "" {
 			stored = json.RawMessage(c.stored)
 		}
-		entry, served, err := apiKeyHandOff(stored, c.apiKey, "/opt/x/pig-eval-extension")
+		entry, served, err := apiKeyHandOff(stored, c.apiKey, "/opt/x/ompig-eval-extension")
 		if err != nil || string(entry) != c.wantEntry || served != c.wantServed {
 			t.Errorf("%s: entry = %s, served = %q, err = %v; want %s, %q", c.name, entry, served, err, c.wantEntry, c.wantServed)
 		}
 	}
-	if _, _, err := apiKeyHandOff(nil, "k", ""); err == nil || err.Error() != "Set PI_EVAL_EXTENSION to the pig-eval-extension binary." {
+	if _, _, err := apiKeyHandOff(nil, "k", ""); err == nil || err.Error() != "Set PI_EVAL_EXTENSION to the ompig-eval-extension binary." {
 		t.Errorf("missing extension: %v", err)
 	}
 	if runtime.GOOS != "windows" {

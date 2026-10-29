@@ -11,7 +11,7 @@ from typing import Any
 
 import pytest
 
-import pig_sdk
+import ompig_sdk
 
 ESC = "\x1b["
 
@@ -32,8 +32,8 @@ def _palette(mode: str) -> dict[str, Any]:
     }
 
 
-def _theme(mode: str = "truecolor", palette: dict[str, Any] | None = None) -> pig_sdk.Theme:
-    theme = pig_sdk.Theme()
+def _theme(mode: str = "truecolor", palette: dict[str, Any] | None = None) -> ompig_sdk.Theme:
+    theme = ompig_sdk.Theme()
     theme._set_palette(_palette(mode) if palette is None else palette)
     return theme
 
@@ -52,8 +52,8 @@ def test_appearance_and_colors_come_from_the_palette() -> None:
     assert theme.colors["success"] == {"kind": "rgb", "r": 1, "g": 2, "b": 3}
     assert "extra" not in theme.colors
     # Before any palette there is no appearance and no color.
-    assert pig_sdk.Theme().appearance is None
-    assert pig_sdk.Theme().colors == {}
+    assert ompig_sdk.Theme().appearance is None
+    assert ompig_sdk.Theme().colors == {}
     # A color of an unknown kind is dropped, as a token without an escape sequence is.
     sparse = _theme(palette={"appearance": "dark", "colors": {"b": {"kind": "rgb", "r": 1, "g": 2, "b": 3}, "bad": {"kind": "nope"}, "worse": "x"}})
     assert sparse.appearance == "dark"
@@ -134,4 +134,4 @@ def test_get_bg_ansi_uses_upstreams_unknown_color_message() -> None:
 
 
 def test_fg_is_unstyled_before_the_first_palette() -> None:
-    assert pig_sdk.Theme().fg("accent", "x") == "x"
+    assert ompig_sdk.Theme().fg("accent", "x") == "x"

@@ -9,11 +9,11 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// pig additive (D109): see extension_upgrade_command.go.
+// ompig additive (D109): see extension_upgrade_command.go.
 
 // startupUpgradeOptions selects how startup answers extensions written for an older SDK.
 type startupUpgradeOptions struct {
@@ -116,7 +116,7 @@ func startupUpgrade(ctx context.Context, items []extensionDrift, interactive, au
 	})
 }
 
-// upgradeExtensionsAfterUpdate runs the extension upgrade rules of the pig that `pig update` just installed, when the extensionsAutoUpgrade setting is on. This process holds the previous rules and SDK, so the new binary does the work. A failure is a warning: the update itself succeeded.
+// upgradeExtensionsAfterUpdate runs the extension upgrade rules of the ompig that `ompig update` just installed, when the extensionsAutoUpgrade setting is on. This process holds the previous rules and SDK, so the new binary does the work. A failure is a warning: the update itself succeeded.
 func upgradeExtensionsAfterUpdate(enabled bool, run func() error) {
 	if !enabled {
 		return
@@ -126,7 +126,7 @@ func upgradeExtensionsAfterUpdate(enabled bool, run func() error) {
 	}
 }
 
-// runUpdatedExtensionUpgrade starts the installed pig to upgrade every Go extension, printing one line each.
+// runUpdatedExtensionUpgrade starts the installed ompig to upgrade every Go extension, printing one line each.
 func runUpdatedExtensionUpgrade() error {
 	path, err := os.Executable()
 	if err != nil {

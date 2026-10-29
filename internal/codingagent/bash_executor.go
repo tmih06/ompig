@@ -9,7 +9,7 @@ package codingagent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // BashResult is a type alias for tools.BashResult.

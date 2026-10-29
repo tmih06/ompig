@@ -5,8 +5,8 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // writeTable gives the table names checkGlobalIDs reports an ID's owner by. A document change or retire writes no record of its own.

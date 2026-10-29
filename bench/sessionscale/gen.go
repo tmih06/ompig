@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package sessionscale writes synthetic long-lived Pi session files and the agent directory that resumes them, so the memory and per-prompt cost of a resumed session can be measured on Pi and PiG with the same bytes.
+// Package sessionscale writes synthetic long-lived Pi session files and the agent directory that resumes them, so the memory and per-prompt cost of a resumed session can be measured on Pi and Ompig with the same bytes.
 //
 // The default shape is the one reported for a five-day session (owner, 2026-10-10): 299 MB, 46,100 entries, of which 25,171 tool results (130 MB) and 20,138 assistant messages (166 MB), 700 user messages, 63 compactions, 17 leaves and a longest line of 1.06 MB. Only those shape statistics are used; the content is pseudo-random prose, code and base64 from a fixed seed, so a shape and seed always produce the same bytes.
 //
@@ -605,7 +605,7 @@ func (g *generator) assistantRound(calls int) {
 const p1TextShare = 0.08
 
 // p1Usage is a priced response usage with prompt caching: the prompt the previous response sent is read from cache, the rest is written to it,
-// except that every P1MissEvery-th response (and the first after a model change) reads nothing, a cache miss PiG prices with the model's cache-read price.
+// except that every P1MissEvery-th response (and the first after a model change) reads nothing, a cache miss Ompig prices with the model's cache-read price.
 func (g *generator) p1Usage(prompt, output int) map[string]any {
 	prices := p1Prices[g.model]
 	read := min(g.prevPrompt, prompt)

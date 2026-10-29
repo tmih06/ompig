@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
 )
 
 // The catalog rules upstream states in tool.ts (selectCatalog, createCodemodeDescription) that the upstream tests

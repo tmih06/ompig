@@ -12,19 +12,19 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
-// pig additive (D19): the runtime that runs the TypeScript extension host is Node unless the process requests a runtime from the
-// slot (tsruntime). The request is PIG_TS_RUNTIME, else the extensionsTypescriptRuntime setting the CLI registers here.
+// ompig additive (D19): the runtime that runs the TypeScript extension host is Node unless the process requests a runtime from the
+// slot (tsruntime). The request is OMPIG_TS_RUNTIME, else the extensionsTypescriptRuntime setting the CLI registers here.
 var typeScriptRuntimeSetting atomic.Pointer[string]
 
 // The verifier is process-wide, so every Host of the process hashes and start-checks one executable state once. It is built on
 // first use, so a process that runs no TypeScript extension on a slot runtime pays nothing at start.
 var typeScriptRuntimeVerifier = sync.OnceValue(func() *tsruntime.Verifier { return tsruntime.NewVerifier(tsruntime.Lock) })
 
-// SetTypeScriptRuntimeSetting registers the extensionsTypescriptRuntime setting for this process. PIG_TS_RUNTIME takes precedence.
+// SetTypeScriptRuntimeSetting registers the extensionsTypescriptRuntime setting for this process. OMPIG_TS_RUNTIME takes precedence.
 func SetTypeScriptRuntimeSetting(id string) {
 	typeScriptRuntimeSetting.Store(&id)
 }
@@ -141,12 +141,12 @@ func typeScriptRuntimeCommand(ctx context.Context, sel tsruntime.Selection, runt
 }
 
 // typeScriptRuntimeEnv is the environment a selected runtime needs beyond the host's: a host executable finds the runtime tree,
-// which holds the harness and shims it did not compile in, through PIG_TS_RUNTIME_TREE.
+// which holds the harness and shims it did not compile in, through OMPIG_TS_RUNTIME_TREE.
 func typeScriptRuntimeEnv(sel tsruntime.Selection, set tsruntime.Set) []string {
 	if sel.Kind != tsruntime.KindExecutable {
 		return nil
 	}
-	return []string{"PIG_TS_RUNTIME_TREE=" + set.RuntimeTree}
+	return []string{"OMPIG_TS_RUNTIME_TREE=" + set.RuntimeTree}
 }
 
 // typeScriptBuildNeedsNode reports whether building a Node launcher should check for Node: only when the process runs its
@@ -220,7 +220,7 @@ func isStartFailure(err error) bool {
 }
 
 // resolveUnlessNodeOnly resolves req for set, except that a set recorded as starting only on Node runs there without trying the slot runtimes again.
-// pig additive (D19): the record lasts until a file the set was recorded from changes, so a set that fails on every launch costs one failed start.
+// ompig additive (D19): the record lasts until a file the set was recorded from changes, so a set that fails on every launch costs one failed start.
 func (h *Host) resolveUnlessNodeOnly(ctx context.Context, req tsruntime.Request, set tsruntime.Set) tsruntime.Selection {
 	resolver := h.typeScriptResolver()
 	if detail, ok := tsruntime.ReadNodeOnly(resolver.Root, set); ok {
@@ -266,7 +266,7 @@ func (h *Host) rememberMemberStartFailure(label, member string, err error) {
 }
 
 // dropStaleTier gives back a claimed process that runs a compiled host the launcher's set no longer resolves to, and returns nil; any other process comes back unchanged.
-// pig additive (D19): a compiled host cannot re-evaluate an edited extension, so /reload starts a new process on the runtime the set resolves to now.
+// ompig additive (D19): a compiled host cannot re-evaluate an edited extension, so /reload starts a new process on the runtime the set resolves to now.
 func (h *Host) dropStaleTier(ctx context.Context, share *processShare, binPath, label string) *processShare {
 	if share == nil || share.tier == "" {
 		return share

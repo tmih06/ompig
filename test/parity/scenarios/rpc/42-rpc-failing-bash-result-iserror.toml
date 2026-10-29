@@ -20,8 +20,8 @@ wait_contains = ['"type":"agent_settled"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--offline", "--model", "test-faux/faux-1", "--system-prompt", "RPC wire probe.", "--no-context-files", "--no-skills", "--no-session"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--offline", "--model", "test-faux/faux-1", "--system-prompt", "RPC wire probe.", "--no-context-files", "--no-skills", "--no-session"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--offline", "--model", "test-faux/faux-1", "--system-prompt", "RPC wire probe.", "--no-context-files", "--no-skills", "--no-session"]
 

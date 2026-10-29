@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-ROOT="${PIG_DIVERGENCE_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+ROOT="${OMPIG_DIVERGENCE_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
 cd "$ROOT"
 
 if [[ ! -f docs/parity/DIVERGENCES.md ]]; then
@@ -19,7 +19,7 @@ headings() {
 
 markers() {
   local kind=$1
-  grep -rohE "pig ${kind} \(D[0-9]+\)" \
+  grep -rohE "ompig ${kind} \(D[0-9]+\)" \
     --include='*.go' --include='*.js' --include='*.mjs' --include='*.py' --include='*.rs' \
     --exclude='*_test.go' --exclude-dir=.git --exclude-dir=.upstream \
     --exclude-dir=.next --exclude-dir=node_modules --exclude-dir=out . \
@@ -31,7 +31,7 @@ additive=$(headings docs/additive-features.md | sort -u)
 all=$(printf '%s\n%s\n' "$core" "$additive" | sed '/^$/d' | sort)
 divergence_refs=$(markers divergence)
 additive_refs=$(markers additive)
-untyped_markers=$(grep -RInE '^[[:space:]]*(//|#).*pig (divergence|additive)(:| [^(])' \
+untyped_markers=$(grep -RInE '^[[:space:]]*(//|#).*ompig (divergence|additive)(:| [^(])' \
   --include='*.go' --include='*.js' --include='*.mjs' --include='*.py' --include='*.rs' \
   --exclude-dir=.git --exclude-dir=.upstream --exclude-dir=.next \
   --exclude-dir=node_modules --exclude-dir=out . || true)
@@ -61,22 +61,22 @@ if [[ -n "$duplicates" ]]; then
   failed=1
 fi
 if [[ -n "$missing_divergence" ]]; then
-  echo "FAIL: core divergences without 'pig divergence' source markers:"
+  echo "FAIL: core divergences without 'ompig divergence' source markers:"
   bullets "$missing_divergence"
   failed=1
 fi
 if [[ -n "$unknown_divergence" ]]; then
-  echo "FAIL: 'pig divergence' markers without core divergence records:"
+  echo "FAIL: 'ompig divergence' markers without core divergence records:"
   bullets "$unknown_divergence"
   failed=1
 fi
 if [[ -n "$missing_additive" ]]; then
-  echo "FAIL: additive features without 'pig additive' source markers:"
+  echo "FAIL: additive features without 'ompig additive' source markers:"
   bullets "$missing_additive"
   failed=1
 fi
 if [[ -n "$unknown_additive" ]]; then
-  echo "FAIL: 'pig additive' markers without additive feature records:"
+  echo "FAIL: 'ompig additive' markers without additive feature records:"
   bullets "$unknown_additive"
   failed=1
 fi

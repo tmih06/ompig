@@ -9,8 +9,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // canonValue renders a parsed value the way the JavaScript side of the oracle does, so -0, NaN and Infinity survive JSON. A collection that contains itself renders as ["cycle", depth of the enclosing occurrence].

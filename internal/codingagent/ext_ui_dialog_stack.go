@@ -4,8 +4,8 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The extension dialog stack of upstream's InteractiveMode (packages/coding-agent/src/modes/interactive/interactive-mode.ts:

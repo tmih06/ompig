@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // admitSubmission (packages/durable/src/harness/submissions.ts:149-166) looks a known request ID up before it checks whether the conversation is busy:

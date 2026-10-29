@@ -15,16 +15,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Pi's harness-tasks.test.ts cases that use ControlledStorage and have no native port here, with the reason for each:
 //   - :1330 "starts no next phase when close seals during a step that decided to continue": the core holds the registry snapshot
 //     and decides inside one step, so no native callback sits between the decision and the commit; the U-row run of the same
 //     file (the unmodified Pi test over the core through the facade) is its coverage.
-//   - :654 "stops a watch whose acquisition finishes after the invocation ended": needs a held pig.read (holdFindDocument); the
+//   - :654 "stops a watch whose acquisition finishes after the invocation ended": needs a held ompig.read (holdFindDocument); the
 //     native store answers reads inside the step and has no hold for them.
 //   - :745 "fails the Harness on a failed reservation commit; reopening runs the task" and :777 "fails the Harness instead of
 //     running a task again when its fault write fails": they fail one chosen commit; OpenHarnessFault's onCommit hook can

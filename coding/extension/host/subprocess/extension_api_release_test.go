@@ -3,7 +3,7 @@ package subprocess
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func loadRegistering(t *testing.T, host *Host, name string) *wireExt {

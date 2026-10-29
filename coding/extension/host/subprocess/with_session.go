@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // Pi's withSession callback runs in the extension that requested the replacement, with a context of the replacement Session (agent-session-runtime.ts:187-194, agent-session.ts:4325-4333). Here that extension is a process of the outgoing Session's host. The host sends it a with_session request on the connection that made the call and serves the calls of that request from the replacement: the extension's member in the replacement Session's host answers context calls, and the replacement context's awaited sendMessage and sendUserMessage run on the replacement Session.
@@ -54,7 +54,7 @@ func (c *Conn) setWithSessionRoute(requestID string, route *withSessionRoute) {
 
 // withSessionCallback returns the WithSession option of a newSession, fork or switchSession call that extName made on owner under handle.
 func (h *Host) withSessionCallback(ctx context.Context, extName string, owner *Conn, handle string) func(*extension.ReplacedSessionContext) error {
-	// pig additive (D19): the callback crosses the subprocess wire as a with_session request whose calls the replacement Session serves.
+	// ompig additive (D19): the callback crosses the subprocess wire as a with_session request whose calls the replacement Session serves.
 	return func(replaced *extension.ReplacedSessionContext) error {
 		route := &withSessionRoute{replaced: replaced}
 		if resolve := h.replacementHost.Load(); resolve != nil {
@@ -86,7 +86,7 @@ func (h *Host) withSessionCallback(ctx context.Context, extName string, owner *C
 
 // setupCallback returns the Setup option of a newSession call that made extName's connection owner name the setup callback handle. It crosses the wire as a setup request whose sessionRead and sessionWrite calls act on the replacement Session's SessionManager, which Pi hands the callback (agent-session-runtime.ts:254-257).
 func (h *Host) setupCallback(ctx context.Context, extName string, owner *Conn, handle string) func(any) error {
-	// pig additive (D19): the callback crosses the subprocess wire as a setup request whose calls the replacement Session serves.
+	// ompig additive (D19): the callback crosses the subprocess wire as a setup request whose calls the replacement Session serves.
 	return func(manager any) error {
 		route := &withSessionRoute{manager: manager}
 		if resolve := h.replacementHost.Load(); resolve != nil {

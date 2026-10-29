@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // virtualBranchCorpus holds session branches (JSON entries) that differ in what getBranchSelection and getVirtualModelState branch on: model changes of virtual and physical models, assistant messages of either kind, custom state entries, and entries with missing or ill-typed members.
@@ -66,7 +66,7 @@ type virtualOracleResult struct {
 	State any `json:"state"`
 }
 
-// TestBranchSelectionAndStateMatchPi runs getBranchSelection and getVirtualModelState of Pi 1.0.4 and of Pig over the same session branches. A model counts as virtual when its API is pi-virtual, and `virt` and `virt2` are the registered virtual models.
+// TestBranchSelectionAndStateMatchPi runs getBranchSelection and getVirtualModelState of Pi 1.0.4 and of Ompig over the same session branches. A model counts as virtual when its API is pi-virtual, and `virt` and `virt2` are the registered virtual models.
 func TestBranchSelectionAndStateMatchPi(t *testing.T) {
 	corpus := virtualBranchCorpus()
 	branches := make([][]json.RawMessage, len(corpus))

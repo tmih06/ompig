@@ -18,17 +18,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/linkerexec"
 
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/semver"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // GoExtension describes one factory-style Go SDK extension that can be packed
@@ -54,7 +54,7 @@ type GoExtension struct {
 // goPackedBuildFlags are the `go build` flags for a packed cell.
 // VCS stamping is disabled so the cell does not depend on metadata in the generated build directory or an extension's repository.
 // -s -w drop the symbol table and DWARF, which a cell never needs. Go stack traces come from pclntab, so panics stay legible and only debugger attachment is given up.
-// Cells are embedded verbatim in Piglet/Piglet Binaries, so the saving is paid back per fused cell.
+// Cells are embedded verbatim in Ompiglet/Ompiglet Binaries, so the saving is paid back per fused cell.
 // These flags are part of the cell hash below because they change the produced binary. A cached cell built with different flags must not be reused.
 var goPackedBuildFlags = []string{"-buildvcs=false", "-trimpath", "-ldflags", "-s -w"}
 
@@ -113,7 +113,7 @@ type GoPackedCell struct {
 	BuildDuration time.Duration
 	Extensions    []GoExtension
 	// Generation is this spawn attempt's packed-cell generation number
-	// (pig additive, CNC-002), claimed by the caller before any build work so
+	// (ompig additive, CNC-002), claimed by the caller before any build work so
 	// an async crash report for a process this attempt is replacing cannot
 	// mistake itself for still current. Zero (the default, for callers that
 	// never claim one) makes the host claim the generation at spawn.
@@ -156,7 +156,7 @@ func buildGoPackedCell(ctx context.Context, cacheRoot, key string, extensions []
 	if cell, ok := reuseGoPackedCell(cacheRoot, key, normalized, preferredSDKRoot); ok {
 		return cell, nil
 	}
-	lockCandidates := []string{preferredSDKRoot, os.Getenv("PIG_SDK_GO_ROOT")}
+	lockCandidates := []string{preferredSDKRoot, os.Getenv("OMPIG_SDK_GO_ROOT")}
 	for _, extension := range normalized {
 		lockCandidates = append(lockCandidates, goSDKPathOverride(extension.Root, currentGoStagedSDK(preferredSDKRoot)))
 	}
@@ -183,7 +183,7 @@ func buildGoPackedCell(ctx context.Context, cacheRoot, key string, extensions []
 				// an unrelated or malformed .git directory; Go VCS discovery must not bind
 				// a generated cell to that parent repository. The finished artifact is
 				// still published atomically from the cache-local scratch directory.
-				buildDir, err := os.MkdirTemp("", "pig-go-cell-build-*")
+				buildDir, err := os.MkdirTemp("", "ompig-go-cell-build-*")
 				if err != nil {
 					return "", fmt.Errorf("create generated Go build directory: %w", err)
 				}
@@ -309,7 +309,7 @@ func goPackedCellHash(cacheRoot, key string, extensions []GoExtension, sdkRoot s
 		return sdkHash
 	}
 	h := sha256.New()
-	h.Write([]byte("pig-go-packed-cell\x00"))
+	h.Write([]byte("ompig-go-packed-cell\x00"))
 	h.Write([]byte(key))
 	h.Write([]byte("\x00"))
 	hashBuildInput(h, "sdk", sdkHash)
@@ -342,11 +342,11 @@ func goPackedCellHash(cacheRoot, key string, extensions []GoExtension, sdkRoot s
 }
 
 // findSDKRoot locates the Go SDK source directory. Explicit author overrides
-// win; otherwise packed builds use the running Pig config root's staged SDK,
+// win; otherwise packed builds use the running Ompig config root's staged SDK,
 // matching ordinary source builds. Checkout/source-tree fallbacks serve tests
 // and development binaries that have not staged an SDK yet. Every candidate is
 // validated for its go.mod before use: a stale override (a moved checkout, a
-// dead PIG_SDK_GO_ROOT) falls through to the stable staged SDK instead of
+// dead OMPIG_SDK_GO_ROOT) falls through to the stable staged SDK instead of
 // baking a dead replace path into the generated go.mod.
 func findSDKRoot(extensions []GoExtension) (string, error) {
 	return findSDKRootWithPreferred(extensions, "")
@@ -365,14 +365,14 @@ func findSDKRootWithPreferred(extensions []GoExtension, preferred string) (strin
 			}
 		}
 	}
-	if root := strings.TrimSpace(os.Getenv("PIG_SDK_GO_ROOT")); root != "" {
+	if root := strings.TrimSpace(os.Getenv("OMPIG_SDK_GO_ROOT")); root != "" {
 		if abs, err := filepath.Abs(root); err == nil {
 			if _, err := os.Stat(filepath.Join(abs, "go.mod")); err == nil {
 				return abs, nil
 			}
 		}
 	}
-	// pig additive (D92): only an author override serves a Go SDK the active Piglet strips; this binary staged none.
+	// ompig additive (D92): only an author override serves a Go SDK the active Ompiglet strips; this binary staged none.
 	if err := StrippedSDKError("go"); err != nil {
 		return "", err
 	}
@@ -385,7 +385,7 @@ func findSDKRootWithPreferred(extensions []GoExtension, preferred string) (strin
 	if err == nil {
 		for dir := wd; ; dir = filepath.Dir(dir) {
 			data, err := os.ReadFile(filepath.Join(dir, "go.mod"))
-			if err == nil && strings.Contains(string(data), "module github.com/MichaelKinsy/PiG") {
+			if err == nil && strings.Contains(string(data), "module github.com/tmih06/ompig") {
 				if sdk := filepath.Join(dir, "extensions", "sdk"); statHasFile(sdk, "go.mod") {
 					return sdk, nil
 				}
@@ -402,7 +402,7 @@ func findSDKRootWithPreferred(extensions []GoExtension, preferred string) (strin
 			return sdk, nil
 		}
 	}
-	return "", fmt.Errorf("cannot locate github.com/MichaelKinsy/PiG SDK; install pig (so ~/.pig/source exists), run inside the pig source tree, or set PIG_SDK_GO_ROOT")
+	return "", fmt.Errorf("cannot locate github.com/tmih06/ompig SDK; install ompig (so ~/.ompig/source exists), run inside the ompig source tree, or set OMPIG_SDK_GO_ROOT")
 }
 
 // GoSDKPathOverride returns an extension module's explicit local SDK replace,
@@ -432,7 +432,7 @@ func goSDKPathOverride(root, stagedDir string) string {
 		return ""
 	}
 	for _, replacement := range file.Replace {
-		if replacement.Old.Path != "github.com/MichaelKinsy/PiG/extensions/sdk" || replacement.New.Version != "" {
+		if replacement.Old.Path != "github.com/tmih06/ompig/extensions/sdk" || replacement.New.Version != "" {
 			continue
 		}
 		candidate := replacement.New.Path
@@ -459,7 +459,7 @@ func stagedGoSDKRoots() []string {
 }
 
 // statHasFile reports whether dir/name exists. It validates a candidate SDK root
-// by its marker file (go.mod / Cargo.toml / pig_sdk/__init__.py) before the root
+// by its marker file (go.mod / Cargo.toml / ompig_sdk/__init__.py) before the root
 // is baked into a generated manifest, so a stale override never emits a dead
 // replace/path directive.
 func statHasFile(dir, name string) bool {
@@ -480,13 +480,13 @@ func stagedSDKRoots(lang string) []string {
 	return []string{dir}
 }
 
-// installedPigSourceRoots returns candidate pig source roots staged outside the
-// build cwd: PIG_SOURCE_ROOT and the copy under the config root (source/) that
-// pig writes at install time. These let an installed pig resolve its SDK with no
+// installedPigSourceRoots returns candidate ompig source roots staged outside the
+// build cwd: OMPIG_SOURCE_ROOT and the copy under the config root (source/) that
+// ompig writes at install time. These let an installed ompig resolve its SDK with no
 // per-extension configuration.
 func installedPigSourceRoots() []string {
 	var roots []string
-	if r := strings.TrimSpace(os.Getenv("PIG_SOURCE_ROOT")); r != "" {
+	if r := strings.TrimSpace(os.Getenv("OMPIG_SOURCE_ROOT")); r != "" {
 		roots = append(roots, r)
 	}
 	if root, err := configroot.Resolve(); err == nil {
@@ -497,8 +497,8 @@ func installedPigSourceRoots() []string {
 
 func renderGoMod(extensions []GoExtension, sdkRoot string) string {
 	var b strings.Builder
-	b.WriteString("module pig.generated/packed-cell\n\ngo 1.26.0\n\n")
-	fmt.Fprintf(&b, "require github.com/MichaelKinsy/PiG/extensions/sdk %s // indirect\n", sdkVersionFor(extensions))
+	b.WriteString("module ompig.generated/packed-cell\n\ngo 1.26.0\n\n")
+	fmt.Fprintf(&b, "require github.com/tmih06/ompig/extensions/sdk %s // indirect\n", sdkVersionFor(extensions))
 	legacySDK := requiresLegacyGoSDK(extensions)
 	if legacySDK {
 		fmt.Fprintf(&b, "require %s v0.0.0 // indirect\n", extsource.LegacyGoSDKModulePath)
@@ -531,7 +531,7 @@ func renderGoMod(extensions []GoExtension, sdkRoot string) string {
 			extraVersions[fields[0]] = fields[1]
 		}
 	}
-	// pig additive (D20): local source replacements retain the maximum required version.
+	// ompig additive (D20): local source replacements retain the maximum required version.
 	for _, modulePath := range modulePaths {
 		version := extraVersions[modulePath]
 		if version == "" {
@@ -549,10 +549,10 @@ func renderGoMod(extensions []GoExtension, sdkRoot string) string {
 		fmt.Fprintf(&b, "require %s %s // indirect\n", modulePath, extraVersions[modulePath])
 	}
 	b.WriteString("\n")
-	fmt.Fprintf(&b, "replace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", modfile.AutoQuote(filepath.ToSlash(sdkRoot)))
+	fmt.Fprintf(&b, "replace github.com/tmih06/ompig/extensions/sdk => %s\n", modfile.AutoQuote(filepath.ToSlash(sdkRoot)))
 	// A legacy SDK import resolves to a build-local copy of the current SDK
 	// (see StageLegacyGoSDK). The extension's own legacy replace is dropped with
-	// its other SDK lines: it names the SDK staged by an older Pig, whose wire
+	// its other SDK lines: it names the SDK staged by an older Ompig, whose wire
 	// may not match this host.
 	if legacySDK {
 		fmt.Fprintf(&b, "replace %s => ./%s\n", extsource.LegacyGoSDKModulePath, legacyGoSDKDir)
@@ -599,7 +599,7 @@ func sdkVersionFor(extensions []GoExtension) string {
 			continue
 		}
 		for _, requirement := range file.Require {
-			if requirement.Mod.Path == "github.com/MichaelKinsy/PiG/extensions/sdk" && semver.Compare(requirement.Mod.Version, version) > 0 {
+			if requirement.Mod.Path == "github.com/tmih06/ompig/extensions/sdk" && semver.Compare(requirement.Mod.Version, version) > 0 {
 				version = requirement.Mod.Version
 			}
 		}
@@ -634,7 +634,7 @@ func requiresLegacyGoSDK(extensions []GoExtension) bool {
 }
 
 // StageLegacyGoSDK copies the SDK module and its subpackages into dst under the legacy import path. Self-imports follow the alias, including internal packages. Authored SDK sources remain untouched.
-// pig additive (D19): legacy Go imports use the running host's SDK contract.
+// ompig additive (D19): legacy Go imports use the running host's SDK contract.
 func StageLegacyGoSDK(sdkRoot, dst string) error {
 	return filepath.WalkDir(sdkRoot, func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
@@ -738,7 +738,7 @@ func renderGoRunner(extensions []GoExtension) string {
 	return b.String()
 }
 
-// goRunnerFactoryScope builds one member at a time with PIG_EXT_SOCKET set to that member's socket, which is what an isolated extension's factory sees: a
+// goRunnerFactoryScope builds one member at a time with OMPIG_EXT_SOCKET set to that member's socket, which is what an isolated extension's factory sees: a
 // helper the factory calls before Run (the SDK's ParseFrontmatter, ParseDate) dials that socket. The members' factories run one at a time, as Pi loads
 // extensions one at a time.
 const goRunnerFactoryScope = `	type runnable interface{ RunWithSocket(string) error }
@@ -746,13 +746,13 @@ const goRunnerFactoryScope = `	type runnable interface{ RunWithSocket(string) er
 	build := func(sock string, factory func() runnable) runnable {
 		factoryMu.Lock()
 		defer factoryMu.Unlock()
-		previous, had := os.LookupEnv("PIG_EXT_SOCKET")
-		_ = os.Setenv("PIG_EXT_SOCKET", sock)
+		previous, had := os.LookupEnv("OMPIG_EXT_SOCKET")
+		_ = os.Setenv("OMPIG_EXT_SOCKET", sock)
 		defer func() {
 			if had {
-				_ = os.Setenv("PIG_EXT_SOCKET", previous)
+				_ = os.Setenv("OMPIG_EXT_SOCKET", previous)
 			} else {
-				_ = os.Unsetenv("PIG_EXT_SOCKET")
+				_ = os.Unsetenv("OMPIG_EXT_SOCKET")
 			}
 		}()
 		return factory()
@@ -788,11 +788,11 @@ const goRunnerBody = `	var mu sync.Mutex
 		}()
 		return ready
 	}
-	active := os.Getenv("PIG_EXT_ACTIVE_MEMBERS")
+	active := os.Getenv("OMPIG_EXT_ACTIVE_MEMBERS")
 	for _, it := range items {
 		if active != "" && !slices.Contains(strings.Split(active, ","), it.name) { continue }
 		sock := os.Getenv(it.env)
-		if sock == "" && len(items) == 1 { sock = os.Getenv("PIG_EXT_SOCKET") }
+		if sock == "" && len(items) == 1 { sock = os.Getenv("OMPIG_EXT_SOCKET") }
 		if sock == "" { mu.Lock(); failures = append(failures, fmt.Errorf("%s not set for %s", it.env, it.name)); mu.Unlock(); continue }
 		// The host accepts the members in order and serves a connection only after the members before it. A factory that calls the host before it returns (a subscription on the event bus) waits for that service, so a later member must not take the factory turn before an earlier one: it would hold the turn while the host waits for the earlier member's connection.
 		<-start(it, sock)
@@ -843,7 +843,7 @@ var nonEnv = lazyregexp.New(`[^A-Za-z0-9_]`)
 // socket into a packed-cell runner.
 func SocketEnvName(name string) string {
 	name = strings.ToUpper(nonEnv.ReplaceAllString(name, "_"))
-	return "PIG_EXT_SOCKET_" + name
+	return "OMPIG_EXT_SOCKET_" + name
 }
 
 // extPackageName converts an extension name to a valid Go package name for
@@ -949,7 +949,7 @@ func CurrentGoPackedCellEntry(cacheRoot, key string, extensions []GoExtension) (
 	if err != nil {
 		return "", false, err
 	}
-	lockCandidates := []string{os.Getenv("PIG_SDK_GO_ROOT")}
+	lockCandidates := []string{os.Getenv("OMPIG_SDK_GO_ROOT")}
 	for _, extension := range normalized {
 		lockCandidates = append(lockCandidates, GoSDKPathOverride(extension.Root))
 	}

@@ -11,11 +11,11 @@ import (
 )
 
 // The overhead bench's ten extensions (bench/evals/fixtures/extensions/bench-ext-NN.ts) have Go SDK ports in bench/evals/fixtures/extensions-go: ten conventional
-// factories (packed cell, or fused into a Piglet Binary) and ten exact standalones (one isolated process each). A bench arm may only compare realizations of the
+// factories (packed cell, or fused into a Ompiglet Binary) and ten exact standalones (one isolated process each). A bench arm may only compare realizations of the
 // same extensions, so each realization must register exactly what the TypeScript original registers: name, tools with label and description, commands, handlers.
-// This runs all three sets through the real `pig install --validate-only` path (source resolution, build, process start, registration over the wire).
+// This runs all three sets through the real `ompig install --validate-only` path (source resolution, build, process start, registration over the wire).
 func TestBenchExt10GoPortsRegisterWhatTheTypeScriptOriginalsRegister(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fixtures := filepath.Join("..", "..", "bench", "evals", "fixtures")
 	var ts, factories, standalones []string
 	for i := 1; i <= 10; i++ {

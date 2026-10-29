@@ -9,12 +9,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/payload"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/payload"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Envs builds and keeps the environments of tasks. The core asks for one with an env effect before a task's sections and

@@ -221,10 +221,10 @@ func parsePosition(value string) (int, int, error) {
 
 func normalizeCoveragePath(root, path string) (string, error) {
 	path = filepath.ToSlash(path)
-	path = strings.TrimPrefix(path, "github.com/MichaelKinsy/PiG/")
+	path = strings.TrimPrefix(path, "github.com/tmih06/ompig/")
 	// Tracked closure evidence predates the repository move. Normalize its
 	// recorded module prefix without rewriting the attested artifact bytes.
-	path = strings.TrimPrefix(path, "github.com/MichaelKinsy/PiG/")
+	path = strings.TrimPrefix(path, "github.com/tmih06/ompig/")
 	if filepath.IsAbs(path) {
 		relative, err := filepath.Rel(root, path)
 		if err != nil {

@@ -8,7 +8,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // anyModelFromDefinition materializes a provider model definition of any type: an image or classifier definition keeps its own api, headers and output, and a chat definition is the composed chat model (types.ts:1953-1976 ProviderModelConfig).

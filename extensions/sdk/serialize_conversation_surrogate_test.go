@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // TestSerializeConversationKeepsUnpairedSurrogates: a JavaScript string can hold an unpaired surrogate, which this SDK keeps as WTF-8. Pi's

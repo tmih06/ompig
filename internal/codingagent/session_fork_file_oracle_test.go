@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // SessionManager.forkFrom (session-manager.ts:1815-1865) against ForkFromFile on one corpus of source files: Pi loads the entries (malformed and falsy lines are dropped, the header must come first) and writes every non-header entry back with JSON.stringify, so the copy is normalized, not verbatim, and a failed load reports "source session file is empty or invalid". Known gap left out of the corpus: a truthy scalar record (1, "str", true, [1,2]) that Pi copies and tolerates on reload, where the Go session loader refuses a non-object record.

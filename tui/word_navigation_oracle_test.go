@@ -9,7 +9,7 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/tui/src/word-navigation.ts

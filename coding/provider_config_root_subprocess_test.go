@@ -5,9 +5,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // TestNodeConfigProviderRootAcrossCellMembers drives two ordinary Node factories in one cell through the production host and Model Runtime. Pi 0.87.1 keeps one effective registered root per provider (model-runtime.ts:438-443,753-766), passes it as streamSimple's receiver (provider-composer.ts:500-501), and a later registrant owns the merged registration.

@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // seedFingerprints are workload.mjs SEED_FINGERPRINTS: the context the last seeding model call saw, per published fixture.

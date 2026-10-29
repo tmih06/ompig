@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestProcessExitHelper is the child of the waitProcessExit tests: "exit" ends at once, "block" runs until its stdin closes.
 func TestProcessExitHelper(t *testing.T) {
-	switch os.Getenv("PIG_TEST_PROCESS_EXIT_HELPER") {
+	switch os.Getenv("OMPIG_TEST_PROCESS_EXIT_HELPER") {
 	case "exit":
 		os.Exit(0)
 	case "block":
@@ -25,7 +25,7 @@ func TestProcessExitHelper(t *testing.T) {
 func startProcessExitHelper(t *testing.T, mode string) (*exec.Cmd, io.WriteCloser) {
 	t.Helper()
 	cmd := exec.Command(os.Args[0], "-test.run=^TestProcessExitHelper$")
-	cmd.Env = append(os.Environ(), "PIG_TEST_PROCESS_EXIT_HELPER="+mode)
+	cmd.Env = append(os.Environ(), "OMPIG_TEST_PROCESS_EXIT_HELPER="+mode)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A write card redraws on every streamed delta of its arguments, and the arguments arrive whole each time: the cost of one redraw is the cost of reading a growing JSON object, so it is measured at the size of a large file.

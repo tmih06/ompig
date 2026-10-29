@@ -1,18 +1,18 @@
 # Themes
 
-PiG uses themes to style its terminal interface. Select a theme through `/settings` or the `theme` setting.
+Ompig uses themes to style its terminal interface. Select a theme through `/settings` or the `theme` setting.
 
 ## Select a theme
 
-Start PiG and open settings:
+Start Ompig and open settings:
 
 ```text
 /settings
 ```
 
-Select the active theme. PiG writes the choice to the applicable settings file.
+Select the active theme. Ompig writes the choice to the applicable settings file.
 
-You can also set the name directly in `~/.pig/agent/settings.json`:
+You can also set the name directly in `~/.ompig/agent/settings.json`:
 
 ```json
 {
@@ -30,27 +30,27 @@ Choose **Automatic** in the theme submenu to select separate themes for light an
 }
 ```
 
-The first name is the light theme. The second name is the dark theme. Live switching requires terminal support for color-scheme notifications (DEC mode 2031). PiG preserves the pair when the terminal appearance changes. Selecting a single theme, including through an extension, disables automatic switching.
+The first name is the light theme. The second name is the dark theme. Live switching requires terminal support for color-scheme notifications (DEC mode 2031). Ompig preserves the pair when the terminal appearance changes. Selecting a single theme, including through an extension, disables automatic switching.
 
 ## Theme sources
 
-PiG can load theme Resources from:
+Ompig can load theme Resources from:
 
-- `~/.pig/agent/themes/`;
+- `~/.ompig/agent/themes/`;
 - trusted project Resources;
 - configured Package members;
 - explicit settings paths;
-- an active Piglet's permitted Resource set.
+- an active Ompiglet's permitted Resource set.
 
 Project theme discovery requires project trust.
 
-## Packages and Piglets
+## Packages and Ompiglets
 
 A Package can distribute a theme Resource. Installing the Package makes the theme available to normal Resource discovery and filters.
 
-A Piglet can select Resources for one agent application and control ambient discovery. The Piglet does not copy or rewrite the theme.
+A Ompiglet can select Resources for one agent application and control ambient discovery. The Ompiglet does not copy or rewrite the theme.
 
-A Package never activates a Piglet.
+A Package never activates a Ompiglet.
 
 ## Reload
 
@@ -74,7 +74,7 @@ A theme is data, but the Package that distributes it can also contain executable
 
 ## Upstream compatibility
 
-PiG follows Pi theme behavior where the Go TUI exposes the same observable contract. The TypeScript package `@earendil-works/pi-tui` remains an upstream Pi package, not a PiG Go API.
+Ompig follows Pi theme behavior where the Go TUI exposes the same observable contract. The TypeScript package `@earendil-works/pi-tui` remains an upstream Pi package, not a Ompig Go API.
 
 See [upstream Pi's theme documentation](https://pi.dev/docs/latest/themes) for the reference implementation's complete theme format.
 
@@ -82,5 +82,5 @@ See [upstream Pi's theme documentation](https://pi.dev/docs/latest/themes) for t
 
 - [Settings](/docs/latest/settings)
 - [Packages](/docs/latest/packages)
-- [Piglets](/docs/latest/piglets)
+- [Ompiglets](/docs/latest/ompiglets)
 - [Terminal UI](/docs/latest/tui)

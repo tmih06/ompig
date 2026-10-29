@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepack"
 )
 
 // pi-tui's utils.js imports the vendored get-east-asian-width package, so the

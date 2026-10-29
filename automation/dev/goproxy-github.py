@@ -13,7 +13,7 @@ for a module that go.sum lists. GOSUMDB=off is safe with this server only
 because of that check.
 
     python3 automation/dev/goproxy-github.py --root . --daemon
-    GOPROXY=http://127.0.0.1:8765 GOSUMDB=off go build ./cmd/pig
+    GOPROXY=http://127.0.0.1:8765 GOSUMDB=off go build ./cmd/ompig
 
 Only the Python standard library is required.
 """
@@ -59,7 +59,7 @@ VANITY_OWNER = {
     "github.com/": None,
 }
 PSEUDO = re.compile(r"^v\d+\.\d+\.\d+-(?:.*\.)?\d{14}-([0-9a-f]{12})$")
-DEV_HOME = os.environ.get("PIG_DEV_HOME") or os.path.expanduser("~/.cache/pig-dev")
+DEV_HOME = os.environ.get("OMPIG_DEV_HOME") or os.path.expanduser("~/.cache/ompig-dev")
 CACHE = os.path.join(DEV_HOME, "goproxy-github")
 CACHE_LIMIT = 1 << 30  # Oldest archives beyond this total are deleted; the Go module cache keeps the built zips.
 SUMS = {}
@@ -99,7 +99,7 @@ def repo_for(module):
 
 
 def fetch(url):
-    request = urllib.request.Request(url, headers={"User-Agent": "pig-goproxy-github"})
+    request = urllib.request.Request(url, headers={"User-Agent": "ompig-goproxy-github"})
     with urllib.request.urlopen(request, timeout=600) as response:
         return response.read()
 
@@ -331,7 +331,7 @@ def start_background(argv, port):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--port", type=int, default=int(os.environ.get("PIG_GOPROXY_PORT", "8765")))
+    parser.add_argument("--port", type=int, default=int(os.environ.get("OMPIG_GOPROXY_PORT", "8765")))
     parser.add_argument("--sum", action="append", default=[], help="go.sum file whose hashes every response must match")
     parser.add_argument("--root", action="append", default=[], help="load every go.sum under this directory (node_modules excluded)")
     parser.add_argument("--daemon", action="store_true", help="(re)start in a new session and return once it answers")

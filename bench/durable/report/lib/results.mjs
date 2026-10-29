@@ -4,9 +4,9 @@ import { createHash } from "node:crypto";
 
 export const SIZES = [50, 250, 1000, 3500];
 export const STATUSES = ["placeholder", "draft", "final"];
-export const KINDS = ["pi", "tardigrade", "pig", "control", "floor"];
-// detail: another build of the gated PiG core. control: a design control (the vendored TS core of the gate), shown
-// only on the builds slide under its own label, never as PiG Durable.
+export const KINDS = ["pi", "tardigrade", "ompig", "control", "floor"];
+// detail: another build of the gated Ompig core. control: a design control (the vendored TS core of the gate), shown
+// only on the builds slide under its own label, never as Ompig Durable.
 // floor: the empty target (durable-bench src/empty.ts), the request path with no agent; latencies are reported net of it.
 export const ROLES = ["headline", "reference", "contender", "detail", "control", "floor"];
 // Every number is tagged with the rule it was measured under. Rule A: durable-bench's JS model on the same path as
@@ -38,10 +38,10 @@ export const LIMITS = { memoryBytes: 128e6, uploadBytes: 64 * 1024 * 1024, cpuFr
 export const IDENTITY_ROWS = { standard: Object.fromEntries([50, 250, 1000, 3500].map((n) => [n, `W1-${n}`])) };
 
 // durable-bench's context fingerprint of the seeded history (8 bytes of sha256 in plan.ts form), the same for
-// pi-durable 1.0.4, pi-durable main and tardigrade fixtures (durable-bench-pig fixtures README, repro step 1).
+// pi-durable 1.0.4, pi-durable main and tardigrade fixtures (durable-bench-ompig fixtures README, repro step 1).
 export const SEED_FINGERPRINTS = {
 	standard: { 50: "b017b487524e44a4", 250: "dcea9f30b0917245", 1000: "ac520308146f2a8f", 3500: "0a8c8e4b0d9a0794" },
-	// Realistic variants written by pi-durable main (durable-bench-pig b3af4572e, bench/durable/fixtures/README.md).
+	// Realistic variants written by pi-durable main (durable-bench-ompig b3af4572e, bench/durable/fixtures/README.md).
 	// Changing a variant's agent changes its fingerprints: update these together with the variant.
 	compact: { 50: "b017b487524e44a4", 250: "dcea9f30b0917245", 1000: "0d02b0801c0f29cf", 3500: "e34c4c0615e83ae4" },
 	big: { 50: "d46fda2bd29cb113", 250: "60709a6a093c8d8d", 1000: "aada075064a4b5d0", 3500: "68e9ddb1d0c051bb" },
@@ -49,7 +49,7 @@ export const SEED_FINGERPRINTS = {
 };
 
 // Benchmark-slice prototype cores. Owner rule: no public numbers from them, in any status.
-// wasm-spike 872c81bf5 (durable-repro step 2 pigwasm targets), durable-perf 407c624b7 (durable-bench-pig native).
+// wasm-spike 872c81bf5 (durable-repro step 2 pigwasm targets), durable-perf 407c624b7 (durable-bench-ompig native).
 export const PROTOTYPE_CORES = ["872c81bf5", "407c624b7"];
 
 export class ResultsError extends Error {}
@@ -104,7 +104,7 @@ export function roles(meta) {
 
 /**
  * Checks shape, consistency and the honesty gates. Returns a list of warnings; throws ResultsError on a violation.
- * Gates: placeholder files are wholly synthetic; real PiG numbers require a green CONTRACT gate on that exact core;
+ * Gates: placeholder files are wholly synthetic; real Ompig numbers require a green CONTRACT gate on that exact core;
  * prototype cores never render; final files are complete and like-for-like.
  */
 export function validate(data) {
@@ -121,7 +121,7 @@ export function validate(data) {
 		need(KINDS.includes(t.kind), `target ${k}: kind must be one of ${KINDS.join(", ")}`);
 		need(ROLES.includes(t.role), `target ${k}: role must be one of ${ROLES.join(", ")}`);
 		need(typeof t.version === "string" && t.version, `target ${k}: version missing`);
-		if (t.kind === "pig" || t.kind === "control") need(typeof t.build === "string" && t.build, `target ${k}: PiG and control targets name their build (TinyGo, Go, native, TS)`);
+		if (t.kind === "ompig" || t.kind === "control") need(typeof t.build === "string" && t.build, `target ${k}: Ompig and control targets name their build (TinyGo, Go, native, TS)`);
 		need((t.kind === "control") === (t.role === "control"), `target ${k}: a design control has kind and role "control", and nothing else does`);
 		need((t.kind === "floor") === (t.role === "floor"), `target ${k}: the empty-target floor has kind and role "floor", and nothing else does`);
 		// durable-bench cannot run a native process; the native host runs its own port of the scripted model, and says so.
@@ -129,10 +129,10 @@ export function validate(data) {
 	}
 	const r = roles(meta);
 	const count = (role) => Object.values(meta.targets).filter((t) => t.role === role).length;
-	need(count("headline") === 1 && meta.targets[r.headline].kind === "pig", "exactly one headline target, of kind pig");
+	need(count("headline") === 1 && meta.targets[r.headline].kind === "ompig", "exactly one headline target, of kind ompig");
 	need(count("reference") === 1 && meta.targets[r.reference].kind === "pi", "exactly one reference target, of kind pi (pi-durable main)");
 	need(count("contender") === 1 && meta.targets[r.contender].kind === "tardigrade", "exactly one contender target, of kind tardigrade");
-	for (const k of r.detail) need(meta.targets[k].kind === "pig", `detail target ${k} must be a PiG build`);
+	for (const k of r.detail) need(meta.targets[k].kind === "ompig", `detail target ${k} must be a Ompig build`);
 	need(r.control.length <= 1, "at most one design control target");
 	need(count("floor") <= 1, "at most one floor target");
 
@@ -175,11 +175,11 @@ export function validate(data) {
 	}
 
 	// Where-it-runs probe lines (durable-bench bench/probe.ts, RUNNER-SPEC 4a) and upload sizes (bench/size.ts): only
-	// targets that run in a Durable Object, i.e. pi-durable main and the Wasm builds of PiG.
-	const inDO = (k) => meta.targets[k] && (meta.targets[k].kind === "pi" || (meta.targets[k].kind === "pig" && meta.targets[k].build !== "native"));
+	// targets that run in a Durable Object, i.e. pi-durable main and the Wasm builds of Ompig.
+	const inDO = (k) => meta.targets[k] && (meta.targets[k].kind === "pi" || (meta.targets[k].kind === "ompig" && meta.targets[k].build !== "native"));
 	for (const p of probes) {
 		const at = `line ${p.line}`;
-		need(inDO(p.target), `${at}: probe target ${p.target} must be pi-durable main or a Wasm build of PiG`);
+		need(inDO(p.target), `${at}: probe target ${p.target} must be pi-durable main or a Wasm build of Ompig`);
 		need(p.version === meta.targets[p.target].version, `${at}: probe version ${p.version} is not target ${p.target}'s ${meta.targets[p.target].version}`);
 		need(PROBE_MODES.includes(p.mode), `${at}: probe mode must be one of ${PROBE_MODES.join(", ")}`);
 		need(p.host === "miniflare" || p.host === "cloudflare", `${at}: probe host must be miniflare or cloudflare`);
@@ -198,7 +198,7 @@ export function validate(data) {
 	}
 	for (const z of sizes) {
 		const at = `line ${z.line}`;
-		need(inDO(z.target), `${at}: size target ${z.target} must be pi-durable main or a Wasm build of PiG`);
+		need(inDO(z.target), `${at}: size target ${z.target} must be pi-durable main or a Wasm build of Ompig`);
 		need(z.version === meta.targets[z.target].version, `${at}: size version ${z.version} is not target ${z.target}'s ${meta.targets[z.target].version}`);
 		need(num(z.bytes) && num(z.gzip) && num(z.wasm ?? 0), `${at}: bytes and gzip required`);
 		need(!!z.placeholder === placeholder, `${at}: ${placeholder ? "placeholder files hold only placeholder lines" : "placeholder line in a measured results file"}`);
@@ -216,13 +216,13 @@ export function validate(data) {
 		else byWorkloadSize.set(k, s);
 	}
 
-	// PiG gate. Applies to every non-placeholder file that holds a PiG line.
-	const pigTargets = Object.keys(meta.targets).filter((k) => meta.targets[k].kind === "pig");
-	for (const k of [...pigTargets, ...r.control]) need(!isPrototype(meta.targets[k].version), `target ${k}: ${meta.targets[k].version} is a benchmark-slice prototype core; owner rule: no numbers from it`);
-	const pigLines = [...samples, ...seeds, ...probes, ...sizes].filter((s) => meta.targets[s.target].kind === "pig");
-	if (!placeholder && pigLines.length > 0) {
-		const c = meta.contract ?? fail("PiG lines present but meta.contract is missing: render real PiG numbers only after the CONTRACT gate is green");
-		need(c.status === "pass", `meta.contract.status is ${JSON.stringify(c.status)}: PiG numbers render only from a production core that passed the CONTRACT gate`);
+	// Ompig gate. Applies to every non-placeholder file that holds a Ompig line.
+	const ompigTargets = Object.keys(meta.targets).filter((k) => meta.targets[k].kind === "ompig");
+	for (const k of [...ompigTargets, ...r.control]) need(!isPrototype(meta.targets[k].version), `target ${k}: ${meta.targets[k].version} is a benchmark-slice prototype core; owner rule: no numbers from it`);
+	const ompigLines = [...samples, ...seeds, ...probes, ...sizes].filter((s) => meta.targets[s.target].kind === "ompig");
+	if (!placeholder && ompigLines.length > 0) {
+		const c = meta.contract ?? fail("Ompig lines present but meta.contract is missing: render real Ompig numbers only after the CONTRACT gate is green");
+		need(c.status === "pass", `meta.contract.status is ${JSON.stringify(c.status)}: Ompig numbers render only from a production core that passed the CONTRACT gate`);
 		need(c.corpus === "full", "meta.contract.corpus must be \"full\" (row identity on the full corpus)");
 		need(c.crash_matrix === "pass", "meta.contract.crash_matrix must be \"pass\"");
 		need(c.reference === meta.targets[r.reference].version, `meta.contract.reference ${c.reference} is not the reference target's version ${meta.targets[r.reference].version}`);
@@ -231,7 +231,7 @@ export function validate(data) {
 		need(Array.isArray(c.builds), "meta.contract.builds: the builds the CONTRACT gate ran (each build is gated, not only the core source)");
 		// The slides state how many corpus rows passed and how many the gate skips; contract-record.mjs writes both.
 		need(Number.isInteger(c.rows?.ready) && c.rows.ready > 0 && Number.isInteger(c.rows?.skipped) && c.rows.skipped >= 0, "meta.contract.rows: { ready, skipped } corpus row counts (contract-record.mjs)");
-		for (const k of pigTargets) {
+		for (const k of ompigTargets) {
 			need(meta.targets[k].version === c.core, `target ${k}: version ${meta.targets[k].version} is not the gated core ${c.core}`);
 			need(c.builds.includes(meta.targets[k].build), `target ${k}: build ${meta.targets[k].build} did not pass the CONTRACT gate (meta.contract.builds)`);
 			// The measured module is the gated module, byte for byte.
@@ -256,7 +256,7 @@ export function validate(data) {
 		// would report 1,000 -> 3,500 as "3,500". The final session seeds every size from zero in its own invocation.
 		// "chain": contiguous fingerprinted segments 0 -> 50 -> ... -> n of one pass add up to the time from zero.
 		need(SEED_PROTOCOLS.includes(meta.protocol?.seed), `final: meta.protocol.seed must be one of ${SEED_PROTOCOLS.join(", ")} (RUNNER-SPEC.md)`);
-		if (pigLines.length > 0) for (const n of SIZES) need(meta.contract.identity?.standard?.[n], `final: meta.contract.identity.standard.${n}: the gate row proving row identity at that size`);
+		if (ompigLines.length > 0) for (const n of SIZES) need(meta.contract.identity?.standard?.[n], `final: meta.contract.identity.standard.${n}: the gate row proving row identity at that size`);
 		need(typeof meta.session?.id === "string", "final: meta.session.id required");
 		const min = meta.protocol?.samples ?? fail("final: meta.protocol.samples required");
 		need(r.floor, "final: a floor target (durable-bench's empty target): latencies are reported net of it");
@@ -269,8 +269,8 @@ export function validate(data) {
 				if (k !== r.floor) need(seedTimes(seeds, k, n, "standard").length > 0, `final: ${k} standard ${n}: no from-scratch seed run or complete seed chain`);
 			}
 		}
-		// The owner's where-it-runs question (RUNNER-SPEC 4a) is answered in every final deck with PiG numbers.
-		if (pigLines.length > 0) {
+		// The owner's where-it-runs question (RUNNER-SPEC 4a) is answered in every final deck with Ompig numbers.
+		if (ompigLines.length > 0) {
 			// Rows written and the Wasm memory high-water mark are reported at every size.
 			for (const k of [r.headline, r.reference])
 				for (const n of SIZES) need(probes.some((p) => p.target === k && p.turns === n && p.mode === "count" && p.host === "miniflare"), `final: ${k} ${n}: no where-it-runs probe sample (BENCH_PROBE=count)`);
@@ -283,7 +283,7 @@ export function validate(data) {
 		if (cf) need(meta.cloudflare?.status === "measured" && typeof meta.cloudflare.label === "string", "final: Cloudflare samples need meta.cloudflare {status: measured, label}");
 	}
 	if (meta.status !== "placeholder" && [...samples, ...probes].some((s) => s.host === "cloudflare") && meta.cloudflare?.status !== "measured") fail("Cloudflare samples need meta.cloudflare.status \"measured\"");
-	if (!placeholder && pigLines.length === 0) warnings.push("no PiG lines: the PiG series render as dashes");
+	if (!placeholder && ompigLines.length === 0) warnings.push("no Ompig lines: the Ompig series render as dashes");
 	return warnings;
 }
 

@@ -11,13 +11,13 @@ import (
 )
 
 // resizePollInterval is how often the Windows resize watcher samples the
-// console size. Windows has no SIGWINCH, so pig polls; ~120ms is imperceptible
+// console size. Windows has no SIGWINCH, so ompig polls; ~120ms is imperceptible
 // for re-render yet cheap.
 const resizePollInterval = 120 * time.Millisecond
 
 // installResizeHandler polls the console size and drives onTerminalResize on
 // change. Returns a stop func; the goroutine also exits when ctx is cancelled.
-// This is pig's mechanism for the same observable "resize -> re-render" that
+// This is ompig's mechanism for the same observable "resize -> re-render" that
 // upstream gets from Node's stdout "resize" event.
 func (m *InteractiveMode) installResizeHandler(ctx context.Context) func() {
 	go func() {

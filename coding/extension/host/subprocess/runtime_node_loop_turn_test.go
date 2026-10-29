@@ -53,7 +53,7 @@ func startLoopTurnShutdown(t *testing.T, before []Envelope) (net.Conn, string) {
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	root, err := os.MkdirTemp(parent, "pig-loop-turn-")
+	root, err := os.MkdirTemp(parent, "ompig-loop-turn-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func startLoopTurnShutdown(t *testing.T, before []Envelope) (net.Conn, string) {
 	}
 	t.Cleanup(func() { _ = listener.Close() })
 	cmd := exec.CommandContext(t.Context(), node, filepath.Join("runtime-node", "cli.mjs"), entry)
-	cmd.Env = append(os.Environ(), "PIG_EXT_SOCKET="+address, "PIG_EXT_NAME=loop-turn")
+	cmd.Env = append(os.Environ(), "OMPIG_EXT_SOCKET="+address, "OMPIG_EXT_NAME=loop-turn")
 	peer := startAndAccept(t, cmd, listener)
 	t.Cleanup(func() { _ = peer.Close() })
 	register := readLivenessEnvelope(t, peer)
@@ -124,7 +124,7 @@ func waitLoopTurnLog(t *testing.T, log, want string, also ...string) {
 	}
 }
 
-// A run beginning is the host's next step, but the host sends a run's run_signal frames to each connection, and a packed process reads its sockets in no fixed order: a member with no request during the run reads the run's frames before its first request, which can come after another member answered session_shutdown and began the wait. Pig 75-print-shutdown-loop-turn printed "a immediate live" before "b session_shutdown" in a quarter of runs. A run the process has already read of is no run beginning: a frame of it leaves the wait, and the callbacks the handler queued, for the host's real next step, here the invalidate.
+// A run beginning is the host's next step, but the host sends a run's run_signal frames to each connection, and a packed process reads its sockets in no fixed order: a member with no request during the run reads the run's frames before its first request, which can come after another member answered session_shutdown and began the wait. Ompig 75-print-shutdown-loop-turn printed "a immediate live" before "b session_shutdown" in a quarter of runs. A run the process has already read of is no run beginning: a frame of it leaves the wait, and the callbacks the handler queued, for the host's real next step, here the invalidate.
 func TestNodePromptEndWaitIgnoresAFinishedRunsSignal(t *testing.T) {
 	t.Parallel()
 	run := func(active bool) Envelope {

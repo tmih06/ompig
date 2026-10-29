@@ -27,10 +27,10 @@ function finalMeta() {
 		model: { label: "durable-bench's JS scripted model" },
 		contract: { status: "pass", corpus: "full", crash_matrix: "pass", reference: "da866ada", core: CORE, builds: ["TinyGo", "Go"], artifacts: SHA, identity: IDENTITY_ROWS, rows: { ready: 98, skipped: 16, crash_matrix: 7 }, report_url: "https://example.org/contract" },
 		targets: {
-			"pig-tinygo": { label: "PiG Durable", build: "TinyGo", kind: "pig", role: "headline", version: CORE, artifact: { sha256: SHA.TinyGo, bytes: 1, gzip: 1 } },
+			"ompig-tinygo": { label: "Ompig Durable", build: "TinyGo", kind: "ompig", role: "headline", version: CORE, artifact: { sha256: SHA.TinyGo, bytes: 1, gzip: 1 } },
 			"pi-head": { label: "pi-durable main", kind: "pi", role: "reference", version: "da866ada" },
 			tardie: { label: "Tardigrade", kind: "tardigrade", role: "contender", version: "0.44.0" },
-			"pig-go": { label: "PiG Durable", build: "Go", kind: "pig", role: "detail", version: CORE, artifact: { sha256: SHA.Go, bytes: 1, gzip: 1 } },
+			"ompig-go": { label: "Ompig Durable", build: "Go", kind: "ompig", role: "detail", version: CORE, artifact: { sha256: SHA.Go, bytes: 1, gzip: 1 } },
 			empty: { label: "Empty target", kind: "floor", role: "floor", version: "floor" },
 		},
 		workloads: { standard: { title: "standard", description: "as published" } },
@@ -154,13 +154,13 @@ test("Cloudflare samples are not in the session's rotation: they neither hide no
 	const without = makeQuery(parse(text([])));
 	assert.deepEqual(without.contended.map(({ turns, round }) => [turns, round]), [[1000, 1]]);
 	// bench/cloud.ts runs one sample per target and size, outside the interleaved session (RUNNER-SPEC 5).
-	const data = parse(text([cf("pi-head"), cf("pig-tinygo")]));
-	assert.deepEqual(check(text([cf("pi-head"), cf("pig-tinygo")])), []);
+	const data = parse(text([cf("pi-head"), cf("ompig-tinygo")]));
+	assert.deepEqual(check(text([cf("pi-head"), cf("ompig-tinygo")])), []);
 	const q = makeQuery(data);
 	assert.deepEqual(q.contended, without.contended);
 	assert.equal(q.latency("warm", "pi-head", 1000).p95, without.latency("warm", "pi-head", 1000).p95);
 	// Three Cloudflare samples per target: their rank 1 is no Miniflare round 1, so it is not left out.
-	const three = parse(text([0, 1, 2].flatMap((k) => ["pi-head", "pig-tinygo"].map((t) => ({ ...cf(t), sample: k, turn: [100, ...WARM.map((w) => w * (k === 1 ? 9 : 1))] })))));
+	const three = parse(text([0, 1, 2].flatMap((k) => ["pi-head", "ompig-tinygo"].map((t) => ({ ...cf(t), sample: k, turn: [100, ...WARM.map((w) => w * (k === 1 ? 9 : 1))] })))));
 	const c = makeQuery(three).latency("warm", "pi-head", 1000, { host: "cloudflare" });
 	assert.equal(c.nTail, c.n);
 	assert.equal(c.max, c.maxAll);
@@ -173,7 +173,7 @@ test("the committed placeholder file is wholly synthetic and validates", () => {
 	assert.ok([...data.samples, ...data.seeds].every((l) => l.placeholder === true));
 });
 
-test("PiG numbers need a green CONTRACT gate", () => {
+test("Ompig numbers need a green CONTRACT gate", () => {
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, status: "pending" } })), /CONTRACT gate/);
 	rejects(finalText((m) => ({ ...m, contract: undefined })), /meta.contract is missing/);
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, crash_matrix: "fail" } })), /crash_matrix/);
@@ -181,7 +181,7 @@ test("PiG numbers need a green CONTRACT gate", () => {
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, report_url: "" } })), /report_url/);
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, reference: "7c10bd43" } })), /reference/);
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, rows: undefined } })), /contract.rows/);
-	// A draft is gated too: real PiG numbers never render before the core is green, watermark or not.
+	// A draft is gated too: real Ompig numbers never render before the core is green, watermark or not.
 	rejects(finalText((m) => ({ ...m, status: "draft", contract: { ...m.contract, status: "pending" } })), /CONTRACT gate/);
 	// Provisional marks a draft only, and says why; it never relaxes the contract gate.
 	rejects(finalText((m) => ({ ...m, provisional: "core not merged yet" })), /only a draft is provisional/);
@@ -189,15 +189,15 @@ test("PiG numbers need a green CONTRACT gate", () => {
 	rejects(finalText((m) => ({ ...m, status: "draft", provisional: "core not merged yet", contract: { ...m.contract, status: "pending" } })), /CONTRACT gate/);
 });
 
-test("every PiG build is the gated core and a gated build", () => {
+test("every Ompig build is the gated core and a gated build", () => {
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, builds: ["TinyGo"] } })), /build Go did not pass/);
 	const other = finalText((m) => {
-		m.targets["pig-go"].version = "1111111";
+		m.targets["ompig-go"].version = "1111111";
 		return m;
 	});
 	assert.throws(() => check(other), ResultsError);
 	const rebuilt = finalText((m) => {
-		m.targets["pig-go"].artifact.sha256 = "c".repeat(64);
+		m.targets["ompig-go"].artifact.sha256 = "c".repeat(64);
 		return m;
 	});
 	rejects(rebuilt, /measured module sha256 c+ is not the gated b+/);
@@ -207,7 +207,7 @@ test("every PiG build is the gated core and a gated build", () => {
 test("benchmark-slice prototype cores never render, in any status", () => {
 	for (const proto of ["872c81bf5", "407c624b7", "872c81bf5a77"]) {
 		const text = finalText((m) => {
-			for (const t of Object.values(m.targets)) if (t.kind === "pig") t.version = proto;
+			for (const t of Object.values(m.targets)) if (t.kind === "ompig") t.version = proto;
 			m.contract.core = proto;
 			return m;
 		});
@@ -227,7 +227,7 @@ test("placeholder and measured lines never mix", () => {
 
 test("like-for-like: seeded histories must match durable-bench's fingerprints", () => {
 	const lines = finalText().trim().split("\n");
-	const i = lines.findIndex((l) => l.includes('"t":"seed"') && l.includes('"target":"pig-tinygo"'));
+	const i = lines.findIndex((l) => l.includes('"t":"seed"') && l.includes('"target":"ompig-tinygo"'));
 	const bad = { ...JSON.parse(lines[i]), fingerprint: "0000000000000000" };
 	lines[i] = JSON.stringify(bad);
 	rejects(lines.join("\n"), /fingerprint 0000000000000000/);
@@ -322,7 +322,7 @@ test("the session meta template carries every field the final gates read", () =>
 	const build = (m) => {
 		for (const [k, t] of Object.entries(m.targets)) for (const n of SIZES) for (let i = 0; i < m.protocol.samples; i++) raw.push(sample(k, t.version, n, i));
 		const seeds = Object.entries(m.targets).filter(([, t]) => t.kind !== "floor").flatMap(([k, t]) => SIZES.map((n) => ({ file: `${k}-${n}.json`, kind: "seed", text: JSON.stringify({ target: k, version: t.version, turns: n, seedMs: 1, fingerprint: SEED_FINGERPRINTS.standard[n] }) })));
-		const extra = Object.values(m.targets).some((t) => t.kind === "pig") ? [{ file: "probe.jsonl", kind: "probe", text: rawProbes(m).map((l) => JSON.stringify(l)).join("\n") }, { file: "size.jsonl", kind: "size", text: rawSizes(m).map((l) => JSON.stringify(l)).join("\n") }] : [];
+		const extra = Object.values(m.targets).some((t) => t.kind === "ompig") ? [{ file: "probe.jsonl", kind: "probe", text: rawProbes(m).map((l) => JSON.stringify(l)).join("\n") }, { file: "size.jsonl", kind: "size", text: rawSizes(m).map((l) => JSON.stringify(l)).join("\n") }] : [];
 		return assemble(m, [{ file: "r.jsonl", kind: "sample", text: raw.map((l) => JSON.stringify(l)).join("\n") }, ...seeds, ...extra]);
 	};
 	assert.throws(() => validate(parse(build(meta))), ResultsError);
@@ -331,7 +331,7 @@ test("the session meta template carries every field the final gates read", () =>
 	const filled = JSON.parse(JSON.stringify(meta).replaceAll('"TODO pass"', '"pass"').replaceAll('"TODO core commit"', `"${CORE}"`).replace('"TODO dcore-integrate commit"', `"${CORE}"`).replace('"TODO https link to the committed CONTRACT report"', '"https://example.org/c"').replace(/"TODO scratch[^"]*"/, '"scratch"').replace(/"[^"]*TODO[^"]*"/g, '"filled"'));
 	filled.contract.artifacts = { TinyGo: "a".repeat(64), Go: "b".repeat(64), native: "c".repeat(64) };
 	filled.contract.rows = { ready: 98, skipped: 16, crash_matrix: 7 };
-	for (const t of Object.values(filled.targets)) if (t.kind === "pig") t.artifact.sha256 = filled.contract.artifacts[t.build];
+	for (const t of Object.values(filled.targets)) if (t.kind === "ompig") t.artifact.sha256 = filled.contract.artifacts[t.build];
 	assert.deepEqual(validate(parse(build(filled))), []);
 });
 
@@ -340,8 +340,8 @@ test("assemble reads durable-repro's run-session and seed-time lines", () => {
 	meta.status = "draft";
 	meta.contract = undefined;
 	meta.bench_targets = { empty: null, "pigwasm-tinygo-sc-js": null };
-	for (const k of ["pig-tinygo", "pig-go"]) delete meta.targets[k];
-	meta.targets["pig-tinygo"] = { label: "PiG Durable", build: "TinyGo", kind: "pig", role: "headline", version: CORE };
+	for (const k of ["ompig-tinygo", "ompig-go"]) delete meta.targets[k];
+	meta.targets["ompig-tinygo"] = { label: "Ompig Durable", build: "TinyGo", kind: "ompig", role: "headline", version: CORE };
 	const run = (target, version, turns) => ({
 		session: "s",
 		interleaved: true,
@@ -411,7 +411,7 @@ ${SIZES.map((n) => `\n[[scenario]]\nid = "W1-${n}"\nrunner = "bench"\nstatus = "
 	// The record feeds the final gates as is.
 	const meta = finalMeta();
 	meta.contract = { ...rec, builds: ["TinyGo", "Go"], artifacts: { ...rec.artifacts, Go: SHA.Go } };
-	meta.targets["pig-tinygo"].artifact.sha256 = rec.artifacts.TinyGo;
+	meta.targets["ompig-tinygo"].artifact.sha256 = rec.artifacts.TinyGo;
 	assert.doesNotThrow(() => check(finalText(() => meta)));
 	for (const [why, report] of [
 		["crash matrix pending", { pi: run(), "wasm-tinygo": run("pending") }],
@@ -465,8 +465,8 @@ test("assemble takes fixture facts from pi-durable main's run-session lines only
 	const meta = finalMeta();
 	meta.status = "draft";
 	meta.contract = undefined;
-	for (const k of ["pig-tinygo", "pig-go"]) delete meta.targets[k];
-	meta.targets["pig-tinygo"] = { label: "PiG Durable", build: "TinyGo", kind: "pig", role: "headline", version: CORE };
+	for (const k of ["ompig-tinygo", "ompig-go"]) delete meta.targets[k];
+	meta.targets["ompig-tinygo"] = { label: "Ompig Durable", build: "TinyGo", kind: "ompig", role: "headline", version: CORE };
 	meta.workloads.big = { title: "big", description: "multi-KB tool results" };
 	const fixture = (entries) => ({ path: "fixtures/x", meta: { entries, entryBytes: entries * 1400, compactions: 0, activeEntries: entries } });
 	const run = (target, version, f) => ({ session: "s", target, version, turns: 1000, variant: "big", fixture: f, samples: [{ sample: 0, wakeWallMs: 10, turnWallMs: [100, 20, 30], stats: { bytes: 1 } }] });
@@ -506,28 +506,28 @@ test("the builds slide: TinyGo, Go, native of the gated core; the TS core only a
 	const withControl = (edit = (t) => t) => (m) => ({ ...m, targets: { ...m.targets, "ts-control": edit({ label: "Durable core", build: "TS", kind: "control", role: "control", version: "de1fac200" }) } });
 	// The control is not the gated core and needs no gated module.
 	assert.deepEqual(check(finalText(withControl())), []);
-	rejects(finalText(withControl((t) => ({ ...t, kind: "pig" }))), /design control/);
+	rejects(finalText(withControl((t) => ({ ...t, kind: "ompig" }))), /design control/);
 	rejects(finalText(withControl((t) => ({ ...t, version: "872c81bf5" }))), /prototype/);
 	// native runs on host native, and nothing else does.
 	const native = finalText((m) => {
-		m.targets["pig-native"] = { label: "PiG Durable", build: "native", kind: "pig", role: "detail", version: CORE, model: "Go port of the scripted model", artifact: { sha256: "c".repeat(64), bytes: 1, gzip: 1 } };
+		m.targets["ompig-native"] = { label: "Ompig Durable", build: "native", kind: "ompig", role: "detail", version: CORE, model: "Go port of the scripted model", artifact: { sha256: "c".repeat(64), bytes: 1, gzip: 1 } };
 		m.contract = { ...m.contract, builds: [...m.contract.builds, "native"], artifacts: { ...m.contract.artifacts, native: "c".repeat(64) } };
 		return m;
 	});
-	assert.match(native, /"target":"pig-native"/);
+	assert.match(native, /"target":"ompig-native"/);
 	rejects(native, /only the native build runs on host native/); // rawSamples writes no host, so they default to miniflare
-	assert.deepEqual(check(native.replace(/("target":"pig-native")/g, '$1,"host":"native"')), []);
-	rejects(finalText().replace('"target":"pig-go"', '"target":"pig-go","host":"native"'), /only the native build/);
+	assert.deepEqual(check(native.replace(/("target":"ompig-native")/g, '$1,"host":"native"')), []);
+	rejects(finalText().replace('"target":"ompig-go"', '"target":"ompig-go","host":"native"'), /only the native build/);
 	rejects(native.replace(',"model":"Go port of the scripted model"', ""), /names the model it ran/);
 	// Every number carries its rule: the native build is Rule B (no floor), the rest Rule A, and a mixed slide says which.
-	const data = parse(native.replace(/("target":"pig-native")/g, '$1,"host":"native"'));
+	const data = parse(native.replace(/("target":"ompig-native")/g, '$1,"host":"native"'));
 	const q = makeQuery(data);
-	assert.equal(q.latency("warm", "pig-native", 50, { host: "native" }).floor, 0);
-	assert.equal(q.latency("warm", "pig-go", 50).floor, 2);
+	assert.equal(q.latency("warm", "ompig-native", 50, { host: "native" }).floor, 0);
+	assert.equal(q.latency("warm", "ompig-go", 50).floor, 2);
 	const slides = renderSlides(data, { fonts: { inter: join(root, "fonts.css"), mono: join(root, "fonts.css") } });
 	const html = (n) => slides.find((x) => x.name === n).html;
-	assert.match(html("builds"), /PiG Durable \(native\) <span class="muted mono">abcdef1234567<\/span> <span class="muted">· Rule B<\/span>/);
-	assert.match(html("builds"), /PiG Durable \(Go\) <span class="muted mono">abcdef1234567<\/span> <span class="muted">· Rule A<\/span>/);
+	assert.match(html("builds"), /Ompig Durable \(native\) <span class="muted mono">abcdef1234567<\/span> <span class="muted">· Rule B<\/span>/);
+	assert.match(html("builds"), /Ompig Durable \(Go\) <span class="muted mono">abcdef1234567<\/span> <span class="muted">· Rule A<\/span>/);
 	for (const n of ["cover", "latency", "storage", "growth", "where-it-runs"]) {
 		assert.match(html(n), /<span class="rule">Rule A<\/span><\/h1>/, n);
 		assert.doesNotMatch(html(n), /Rule B/, n);
@@ -545,20 +545,20 @@ test("per-size row identity names the gate's W1 rows", () => {
 	rejects(finalText((m) => ({ ...m, contract: { ...m.contract, identity: { ...IDENTITY_ROWS, big: { 50: "W4c-50" } } } })), /no bench row for this workload/);
 });
 
-test("where it runs: probe lines are gated like every PiG line, and the final deck must answer the question", () => {
+test("where it runs: probe lines are gated like every Ompig line, and the final deck must answer the question", () => {
 	// The final gate: every headline/reference probe cell and both upload sizes.
 	rejects(finalText().split("\n").filter((l) => !l.includes('"t":"size"')).join("\n"), /no upload size line/);
 	rejects(finalText().split("\n").filter((l) => !(l.includes('"t":"probe"') && l.includes('"mode":"time"'))).join("\n"), /BENCH_PROBE=time/);
-	// Only targets that run in a Durable Object; whole probe records; the PiG gate covers probe lines.
+	// Only targets that run in a Durable Object; whole probe records; the Ompig gate covers probe lines.
 	const add = (line) => `${finalText()}${JSON.stringify(line)}\n`;
 	const meta = finalMeta();
 	rejects(add({ t: "probe", mode: "count", target: "tardie", version: "0.44.0", turns: 50, open: req(), turn: [req(), req()] }), /pi-durable main or a Wasm build/);
-	rejects(add({ t: "probe", mode: "count", target: "pig-tinygo", version: CORE, turns: 50, open: req(), turn: [req({ cpuMs: undefined }), req()] }), /each need/);
+	rejects(add({ t: "probe", mode: "count", target: "ompig-tinygo", version: CORE, turns: 50, open: req(), turn: [req({ cpuMs: undefined }), req()] }), /each need/);
 	// The memory row needs the retained reading on the headline's and reference's count probes.
 	rejects(finalText().replace(/,"retained":\{[^}]*\}/, ""), /without the retained-memory reading/);
-	rejects(add({ t: "probe", mode: "count", target: "pig-tinygo", version: CORE, turns: 50, open: req(), turn: [req(), req()], retained: { heapUsed: 1 } }), /retained needs/);
-	rejects(add({ t: "probe", mode: "warm", target: "pig-tinygo", version: CORE, turns: 50, open: req(), turn: [req(), req()] }), /probe mode/);
-	rejects(add({ t: "probe", placeholder: true, mode: "count", target: "pig-tinygo", version: CORE, turns: 50, open: req(), turn: [req(), req()] }), /placeholder line in a measured/);
+	rejects(add({ t: "probe", mode: "count", target: "ompig-tinygo", version: CORE, turns: 50, open: req(), turn: [req(), req()], retained: { heapUsed: 1 } }), /retained needs/);
+	rejects(add({ t: "probe", mode: "warm", target: "ompig-tinygo", version: CORE, turns: 50, open: req(), turn: [req(), req()] }), /probe mode/);
+	rejects(add({ t: "probe", placeholder: true, mode: "count", target: "ompig-tinygo", version: CORE, turns: 50, open: req(), turn: [req(), req()] }), /placeholder line in a measured/);
 	const draft = { ...meta, status: "draft", contract: undefined };
 	rejects([draft, ...tagged(rawProbes(meta))].map((l) => JSON.stringify(l)).join("\n"), /meta.contract is missing/);
 	// Assemble keeps only bench/probe.ts and bench/size.ts lines in those inputs.
@@ -584,13 +584,13 @@ test("where it runs: every loss is flagged, and no win under 1.3x is claimed", a
 	// A latency net of the floor below zero is not a measurement to rank.
 	assert.equal(verdict(-1, 10).kind, "none");
 	assert.equal(verdict(10, -1).kind, "none");
-	// Rendered: PiG worse on memory and crossings, better on CPU; the heading lists exactly the losses.
+	// Rendered: Ompig worse on memory and crossings, better on CPU; the heading lists exactly the losses.
 	const meta = finalMeta();
 	const text = finalText((m) => m).split("\n").filter((l) => !l.includes('"t":"probe"')).join("\n");
 	const probes = rawProbes(meta).map((l) => {
-		const pig = l.target === "pig-tinygo";
-		const x = () => req({ cpuMs: pig ? 2 : 8, crossings: pig ? 1300 : 0, wasmBytes: pig ? 9e6 : 0 });
-		return { ...l, open: x(), turn: [x(), x(), x()], retained: { heapUsed: 1, backing: 1, wasmBytes: pig ? 9e6 : 0 } };
+		const ompig = l.target === "ompig-tinygo";
+		const x = () => req({ cpuMs: ompig ? 2 : 8, crossings: ompig ? 1300 : 0, wasmBytes: ompig ? 9e6 : 0 });
+		return { ...l, open: x(), turn: [x(), x(), x()], retained: { heapUsed: 1, backing: 1, wasmBytes: ompig ? 9e6 : 0 } };
 	});
 	const data = parse(`${text}${tagged(probes).map((l) => JSON.stringify(l)).join("\n")}\n`);
 	validate(data);
@@ -610,7 +610,7 @@ test("where it runs: every loss is flagged, and no win under 1.3x is claimed", a
 	assert.equal(times(1.3), "1.3");
 	assert.equal(times(12.4), "12");
 	const close = parse(`${text}${tagged(probes.map((l) => {
-		const x = () => req({ cpuMs: l.target === "pig-tinygo" ? 8.4 : 8, crossings: 0, wasmBytes: 0 });
+		const x = () => req({ cpuMs: l.target === "ompig-tinygo" ? 8.4 : 8, crossings: 0, wasmBytes: 0 });
 		return { ...l, open: x(), turn: [x(), x(), x()], retained: { heapUsed: 1, backing: 1, wasmBytes: 0 } };
 	})).map((l) => JSON.stringify(l)).join("\n")}\n`);
 	const html3 = renderSlides(close, { fonts }).find((s) => s.name === "where-it-runs").html;
@@ -621,13 +621,13 @@ test("where it runs: every loss is flagged, and no win under 1.3x is claimed", a
 test("where it runs: main-thread CPU is optional, whole, at most the all-thread CPU, and reported beside it, never gated", () => {
 	const meta = finalMeta();
 	const add = (line) => `${finalText()}${JSON.stringify(line)}\n`;
-	const probe = (over, open = over) => ({ t: "probe", mode: "count", target: "pig-tinygo", version: CORE, turns: 50, open: req(open), turn: [req(over), req(over)], retained: { heapUsed: 1, backing: 1, wasmBytes: 1 } });
+	const probe = (over, open = over) => ({ t: "probe", mode: "count", target: "ompig-tinygo", version: CORE, turns: 50, open: req(open), turn: [req(over), req(over)], retained: { heapUsed: 1, backing: 1, wasmBytes: 1 } });
 	check(add(probe({ mainCpuMs: 0.5 })));
 	rejects(add(probe({ mainCpuMs: 0.5 }, {})), /mainCpuMs is on every request or none/);
 	rejects(add(probe({ mainCpuMs: 2 })), /at most cpuMs/);
 	rejects(add(probe({ mainCpuMs: -1 })), /mainCpuMs/);
 	const cfReq = (over = {}) => req({ heapUsed: null, heapTotal: null, backing: null, ...over });
-	const cf = { t: "probe", host: "cloudflare", mode: "count", target: "pig-tinygo", version: CORE, turns: 50, open: cfReq({ mainCpuMs: 0.5 }), turn: [cfReq({ mainCpuMs: 0.5 }), cfReq({ mainCpuMs: 0.5 })] };
+	const cf = { t: "probe", host: "cloudflare", mode: "count", target: "ompig-tinygo", version: CORE, turns: 50, open: cfReq({ mainCpuMs: 0.5 }), turn: [cfReq({ mainCpuMs: 0.5 }), cfReq({ mainCpuMs: 0.5 })] };
 	rejects(`${finalText((m) => ({ ...m, cloudflare: { status: "measured", label: "Workers Paid, colo X." } }))}${JSON.stringify(cf)}\n`, /Miniflare only/);
 	const p = { open: req({ cpuMs: 9, mainCpuMs: 6 }), turn: [req({ cpuMs: 100, mainCpuMs: 70 }), req({ cpuMs: 4, mainCpuMs: 3 }), req({ cpuMs: 6, mainCpuMs: 5 })] };
 	assert.equal(probeMetric.cpuMainWarm(p), 4);
@@ -638,7 +638,7 @@ test("where it runs: main-thread CPU is optional, whole, at most the all-thread 
 	assert.equal(probeMetric.wallCold(w), 230);
 	// Tables: both columns side by side; lines without the field show a dash; the verdict column stays all-thread CPU.
 	const lines = [];
-	for (const t of ["pig-tinygo", "pi-head"]) lines.push({ ...probe({ cpuMs: 10, mainCpuMs: t === "pi-head" ? 9 : 6 }), target: t, version: meta.targets[t].version, turns: 1000 });
+	for (const t of ["ompig-tinygo", "pi-head"]) lines.push({ ...probe({ cpuMs: 10, mainCpuMs: t === "pi-head" ? 9 : 6 }), target: t, version: meta.targets[t].version, turns: 1000 });
 	// The final file's own pi-head 1,000-turn count probe gains a main-thread reading (0.5 per request); TinyGo's does not.
 	const withMain = (l) => {
 		const p = JSON.parse(l);
@@ -676,7 +676,7 @@ test("where it runs: main-thread CPU is optional, whole, at most the all-thread 
 	// other three cells (headline 3,500, reference 50 and 3,500) with their main-thread line.
 	const warmMain = (html) => html.match(/<div class="sub">main thread 0\.5<\/div>/g)?.length ?? 0;
 	assert.equal(warmMain(wir(allMain)), 4);
-	assert.equal(warmMain(wir(`${allMain}${JSON.stringify({ ...probe({}), target: "pig-tinygo", version: meta.targets["pig-tinygo"].version, turns: 50, sample: 1 })}\n`)), 3);
+	assert.equal(warmMain(wir(`${allMain}${JSON.stringify({ ...probe({}), target: "ompig-tinygo", version: meta.targets["ompig-tinygo"].version, turns: 50, sample: 1 })}\n`)), 3);
 });
 
 test("where it runs on Cloudflare: count probes only, no invented heap, a measured account, and memory is not a verdict", async () => {
@@ -684,14 +684,14 @@ test("where it runs on Cloudflare: count probes only, no invented heap, a measur
 	const cfReq = (over = {}) => req({ heapUsed: null, heapTotal: null, backing: null, ...over });
 	const cfProbe = (target, turns, over = {}) => ({ t: "probe", host: "cloudflare", mode: "count", target, version: meta.targets[target].version, turns, sample: 0, open: cfReq(over), turn: [cfReq(over), cfReq(over), cfReq(over)] });
 	const add = (...lines) => `${finalText((m) => ({ ...m, cloudflare: { status: "measured", label: "Workers Paid, colo X." } }))}${lines.map((l) => JSON.stringify(l)).join("\n")}\n`;
-	check(add(cfProbe("pig-tinygo", 50)));
-	rejects(add({ ...cfProbe("pig-tinygo", 50), open: req() }), /null \(not observable on Cloudflare\)/);
-	rejects(add({ ...cfProbe("pig-tinygo", 50), mode: "time" }), /only count probes run there/);
-	rejects(`${finalText()}${JSON.stringify(cfProbe("pig-tinygo", 50))}\n`, /Cloudflare samples need meta.cloudflare/);
+	check(add(cfProbe("ompig-tinygo", 50)));
+	rejects(add({ ...cfProbe("ompig-tinygo", 50), open: req() }), /null \(not observable on Cloudflare\)/);
+	rejects(add({ ...cfProbe("ompig-tinygo", 50), mode: "time" }), /only count probes run there/);
+	rejects(`${finalText()}${JSON.stringify(cfProbe("ompig-tinygo", 50))}\n`, /Cloudflare samples need meta.cloudflare/);
 	assert.equal(probeMetric.wasmMB({ open: cfReq({ wasmBytes: 2e6 }), turn: [cfReq({ wasmBytes: 5e6 }), cfReq({ wasmBytes: 3e6 })] }), 5);
-	// Rendered: a second slide; PiG's Wasm memory against pi-durable's none is shown, not counted as a loss.
+	// Rendered: a second slide; Ompig's Wasm memory against pi-durable's none is shown, not counted as a loss.
 	const lines = [];
-	for (const t of ["pig-tinygo", "pi-head"]) for (const n of [50, 3500]) lines.push(cfProbe(t, n, { cpuMs: t === "pi-head" ? 8 : 2, crossings: t === "pi-head" ? 0 : 1300, wasmBytes: t === "pi-head" ? 0 : 9e6 }));
+	for (const t of ["ompig-tinygo", "pi-head"]) for (const n of [50, 3500]) lines.push(cfProbe(t, n, { cpuMs: t === "pi-head" ? 8 : 2, crossings: t === "pi-head" ? 0 : 1300, wasmBytes: t === "pi-head" ? 0 : 9e6 }));
 	const data = parse(add(...lines));
 	validate(data);
 	const fonts = { inter: join(root, "fonts.css"), mono: join(root, "fonts.css") };
@@ -706,10 +706,10 @@ test("where it runs on Cloudflare: count probes only, no invented heap, a measur
 });
 
 test("the cover's ratios follow the deck verdict: a tie within 3%, no win under 1.3x", () => {
-	// PiG TinyGo at 3,500 turns: seeds 1.2x faster than pi-durable main, half the database, warm and cold the same.
+	// Ompig TinyGo at 3,500 turns: seeds 1.2x faster than pi-durable main, half the database, warm and cold the same.
 	const text = finalText()
-		.replace(/("t":"seed","target":"pig-tinygo","version":"abcdef1234567","turns":3500,"seedMs":)35000/, "$129000")
-		.replace(/("target":"pig-tinygo"[^\n]*"turns":3500[^\n]*"bytes":)(\d+)/g, (_, head, bytes) => `${head}${Number(bytes) / 2}`);
+		.replace(/("t":"seed","target":"ompig-tinygo","version":"abcdef1234567","turns":3500,"seedMs":)35000/, "$129000")
+		.replace(/("target":"ompig-tinygo"[^\n]*"turns":3500[^\n]*"bytes":)(\d+)/g, (_, head, bytes) => `${head}${Number(bytes) / 2}`);
 	const data = parse(text);
 	assert.deepEqual(validate(data), []);
 	const cover = renderSlides(data, { fonts: { inter: join(root, "fonts.css"), mono: join(root, "fonts.css") } }).find((s) => s.name === "cover").html;
@@ -720,8 +720,8 @@ test("the cover's ratios follow the deck verdict: a tie within 3%, no win under 
 });
 
 test("the cover keeps a small loss's size: 1.04× slower, not 1.0×", () => {
-	// PiG TinyGo seeds at 3,500 turns 4% slower than pi-durable main (36.4 s against 35 s): a loss beyond the 3% tie, under 1.3×.
-	const text = finalText().replace(/("t":"seed","target":"pig-tinygo","version":"abcdef1234567","turns":3500,"seedMs":)35000/, "$136400");
+	// Ompig TinyGo seeds at 3,500 turns 4% slower than pi-durable main (36.4 s against 35 s): a loss beyond the 3% tie, under 1.3×.
+	const text = finalText().replace(/("t":"seed","target":"ompig-tinygo","version":"abcdef1234567","turns":3500,"seedMs":)35000/, "$136400");
 	const data = parse(text);
 	assert.deepEqual(validate(data), []);
 	const cover = renderSlides(data, { fonts: { inter: join(root, "fonts.css"), mono: join(root, "fonts.css") } }).find((s) => s.name === "cover").html;

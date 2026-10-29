@@ -15,9 +15,9 @@ import (
 	"testing"
 	"time"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
 func writeBuilderConfig(t *testing.T, home, body string) {
@@ -33,8 +33,8 @@ func writeBuilderConfig(t *testing.T, home, body string) {
 
 func TestLoadContainerBuilderConfigsRequiresDigestPinnedImage(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	writeBuilderConfig(t, home, `{"builders":[{"name":"docker","engine":"docker","image":"example.com/pig-builder:latest"}]}`)
+	t.Setenv("OMPIG_HOME", home)
+	writeBuilderConfig(t, home, `{"builders":[{"name":"docker","engine":"docker","image":"example.com/ompig-builder:latest"}]}`)
 	if _, err := loadContainerBuilderConfigs(); err == nil || !strings.Contains(err.Error(), "digest-pinned") {
 		t.Fatalf("error = %v", err)
 	}
@@ -42,7 +42,7 @@ func TestLoadContainerBuilderConfigsRequiresDigestPinnedImage(t *testing.T) {
 
 func TestLoadContainerBuilderConfigsRejectsRemovedVersionField(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	writeBuilderConfig(t, home, `{"version":1,"builders":[]}`)
 	if _, err := loadContainerBuilderConfigs(); err == nil || !strings.Contains(err.Error(), "unknown field \"version\"") {
 		t.Fatalf("error = %v, want removed version field rejection", err)
@@ -51,11 +51,11 @@ func TestLoadContainerBuilderConfigsRejectsRemovedVersionField(t *testing.T) {
 
 func TestLoadContainerBuilderConfigsRejectsSecretsAndDuplicateNames(t *testing.T) {
 	for _, body := range []string{
-		`{"builders":[{"name":"docker","engine":"docker","image":"user:token@example.com/pig@sha256:` + strings.Repeat("a", 64) + `"}]}`,
-		`{"builders":[{"name":"docker","engine":"docker","image":"example.com/pig@sha256:` + strings.Repeat("a", 64) + `"},{"name":"docker","engine":"podman","image":"example.com/pig@sha256:` + strings.Repeat("b", 64) + `"}]}`,
+		`{"builders":[{"name":"docker","engine":"docker","image":"user:token@example.com/ompig@sha256:` + strings.Repeat("a", 64) + `"}]}`,
+		`{"builders":[{"name":"docker","engine":"docker","image":"example.com/ompig@sha256:` + strings.Repeat("a", 64) + `"},{"name":"docker","engine":"podman","image":"example.com/ompig@sha256:` + strings.Repeat("b", 64) + `"}]}`,
 	} {
 		home := t.TempDir()
-		t.Setenv("PIG_HOME", home)
+		t.Setenv("OMPIG_HOME", home)
 		writeBuilderConfig(t, home, body)
 		if _, err := loadContainerBuilderConfigs(); err == nil {
 			t.Fatalf("config accepted: %s", body)
@@ -65,7 +65,7 @@ func TestLoadContainerBuilderConfigsRejectsSecretsAndDuplicateNames(t *testing.T
 
 func TestConfiguredBuildersPreservesConfiguredOrderBeforeNativeAndContainer(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	body := `{"builders":[` +
 		`{"name":"docker","engine":"docker","image":"example.com/docker@sha256:` + strings.Repeat("a", 64) + `"},` +
 		`{"name":"podman","engine":"podman","image":"example.com/podman@sha256:` + strings.Repeat("b", 64) + `"}` +
@@ -81,7 +81,7 @@ func TestConfiguredBuildersPreservesConfiguredOrderBeforeNativeAndContainer(t *t
 }
 
 func TestConfiguredBuildersWithoutConfigTriesNativeThenContainer(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	builders, err := configuredBuilders()
 	if err != nil {
 		t.Fatal(err)
@@ -121,12 +121,12 @@ func TestLocalizeContainerPigletUsesOnlyResolvedReadOnlyInputs(t *testing.T) {
 	if err := os.WriteFile(prompt, []byte("Prompt"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigletPath := filepath.Join(root, "piglet.yaml")
+	pigletPath := filepath.Join(root, "ompiglet.yaml")
 	pigletData := "name: release\nextensions:\n  - name: trace\n    origins: [local:./extension]\nskills:\n  - name: review\n    origins: [local:./skill]\nsystemPrompt:\n  file: ./prompt.md\n"
 	if err := os.WriteFile(pigletPath, []byte(pigletData), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -134,8 +134,8 @@ func TestLocalizeContainerPigletUsesOnlyResolvedReadOnlyInputs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := piglet.ParseBytes(localized); err != nil {
-		t.Fatalf("localized Piglet violates source schema: %v\n%s", err, localized)
+	if _, err := ompiglet.ParseBytes(localized); err != nil {
+		t.Fatalf("localized Ompiglet violates source schema: %v\n%s", err, localized)
 	}
 	wantTargets := map[string]string{
 		extension:      "/input/sources/extensions/trace/extension",
@@ -157,34 +157,34 @@ func TestLocalizeContainerPigletUsesOnlyResolvedReadOnlyInputs(t *testing.T) {
 		"file: ./sources/prompts/prompt.md",
 	} {
 		if !strings.Contains(string(localized), want) {
-			t.Fatalf("localized Piglet missing %q:\n%s", want, localized)
+			t.Fatalf("localized Ompiglet missing %q:\n%s", want, localized)
 		}
 	}
 	if parsed.SystemPrompt == nil || parsed.SystemPrompt.File != "./prompt.md" {
-		t.Fatalf("localization mutated source Piglet prompt: %#v", parsed.SystemPrompt)
+		t.Fatalf("localization mutated source Ompiglet prompt: %#v", parsed.SystemPrompt)
 	}
 	if strings.Contains(string(localized), "./extension") || strings.Contains(string(localized), "./skill") || strings.Contains(string(localized), "./prompt.md") {
-		t.Fatalf("localized Piglet retained relative host paths:\n%s", localized)
+		t.Fatalf("localized Ompiglet retained relative host paths:\n%s", localized)
 	}
 }
 
 func TestContainerBuilderBuildProducesHostArtifactAndContainerIdentity(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	pigletPath := filepath.Join(t.TempDir(), "release.yaml")
 	if err := os.WriteFile(pigletPath, []byte("name: release\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
 	target := Target{OS: "linux", Arch: "amd64"}
 	opts := Options{Targets: []Target{target}, Sandbox: Sandbox{Native: target}, Version: "1.0.0", BakedSettings: []byte("name: release\n")}
-	output := filepath.Join(t.TempDir(), "pig-release")
+	output := filepath.Join(t.TempDir(), "ompig-release")
 	var runArgs []string
 	builder := containerBuilder{
-		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/pig@sha256:" + strings.Repeat("a", 64)},
+		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/ompig@sha256:" + strings.Repeat("a", 64)},
 		lookPath: func(string) (string, error) { return "/usr/bin/docker", nil },
 		run: func(_ context.Context, _ string, args ...string) ([]byte, error) {
 			runArgs = append([]string(nil), args...)
@@ -208,9 +208,9 @@ func TestContainerBuilderBuildProducesHostArtifactAndContainerIdentity(t *testin
 				return nil, err
 			}
 			binary, err := pigletartifact.NewBinaryRecord("release", opts.Version, time.Unix(2, 0), resolution, pigletartifact.BinaryInput{
-				Target: target.String(), PigVersion: "test", PigSourceRevision: "revision", PigSourceDigest: "sha256:" + strings.Repeat("c", 64),
+				Target: target.String(), OmpigVersion: "test", OmpigSourceRevision: "revision", OmpigSourceDigest: "sha256:" + strings.Repeat("c", 64),
 				Builder: "native", BuilderIdentity: "native:revision", Toolchains: map[string]string{"go": "go version test"},
-				Artifact:     pigletartifact.Artifact{Digest: digestBytes(artifactData), Size: int64(len(artifactData)), FileName: "pig-release"},
+				Artifact:     pigletartifact.Artifact{Digest: digestBytes(artifactData), Size: int64(len(artifactData)), FileName: "ompig-release"},
 				Verification: pigletartifact.Verification{Policy: "basic", Passed: true, Checks: []string{"artifact-sha256", "artifact-version-smoke"}},
 			})
 			if err != nil {
@@ -222,7 +222,7 @@ func TestContainerBuilderBuildProducesHostArtifactAndContainerIdentity(t *testin
 				if err != nil {
 					return nil, err
 				}
-				path := filepath.Join(recordHome, "receipts", "piglets", name)
+				path := filepath.Join(recordHome, "receipts", "ompiglets", name)
 				if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 					return nil, err
 				}
@@ -235,7 +235,7 @@ func TestContainerBuilderBuildProducesHostArtifactAndContainerIdentity(t *testin
 	}
 	var phases []string
 	ctx := buildprogress.Observe(context.Background(), func(event buildprogress.Event) { phases = append(phases, event.Phase) }, true)
-	result, err := builder.Build(ctx, BuilderRequest{Piglet: parsed, Options: opts, Output: output, Stdout: io.Discard, Stderr: io.Discard})
+	result, err := builder.Build(ctx, BuilderRequest{Ompiglet: parsed, Options: opts, Output: output, Stdout: io.Discard, Stderr: io.Discard})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -260,7 +260,7 @@ func TestContainerBuilderBuildProducesHostArtifactAndContainerIdentity(t *testin
 		t.Fatalf("record builder = %q identity=%q", record.Binary.Builder, record.Binary.BuilderIdentity)
 	}
 	joined := strings.Join(runArgs, " ")
-	for _, required := range []string{"run --rm --pull=never", "--platform linux/amd64", "dst=/out", "dst=/input,readonly", "dst=/records-home", "--entrypoint pig " + builder.config.Image + " piglet build"} {
+	for _, required := range []string{"run --rm --pull=never", "--platform linux/amd64", "dst=/out", "dst=/input,readonly", "dst=/records-home", "--entrypoint ompig " + builder.config.Image + " ompiglet build"} {
 		if !strings.Contains(joined, required) {
 			t.Fatalf("run args missing %q: %s", required, joined)
 		}
@@ -293,7 +293,7 @@ func TestContainerBuilderProbeSupportsDockerAndPodman(t *testing.T) {
 		t.Run(engine, func(t *testing.T) {
 			var executable string
 			builder := containerBuilder{
-				config:   ContainerBuilderConfig{Name: engine, Engine: engine, Image: "example.com/pig@sha256:" + strings.Repeat("a", 64)},
+				config:   ContainerBuilderConfig{Name: engine, Engine: engine, Image: "example.com/ompig@sha256:" + strings.Repeat("a", 64)},
 				lookPath: func(name string) (string, error) { executable = name; return "/usr/bin/" + name, nil },
 				run: func(_ context.Context, _ string, args ...string) ([]byte, error) {
 					if len(args) > 1 && args[0] == "image" && args[1] == "inspect" {
@@ -313,7 +313,7 @@ func TestContainerBuilderProbeSupportsDockerAndPodman(t *testing.T) {
 func TestContainerBuilderProbeDoesNotPullOrAuthenticate(t *testing.T) {
 	var calls [][]string
 	builder := containerBuilder{
-		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/pig@sha256:" + strings.Repeat("a", 64)},
+		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/ompig@sha256:" + strings.Repeat("a", 64)},
 		lookPath: func(name string) (string, error) { return "/usr/bin/" + name, nil },
 		run: func(_ context.Context, _ string, args ...string) ([]byte, error) {
 			calls = append(calls, append([]string(nil), args...))
@@ -340,7 +340,7 @@ func TestContainerBuilderProbeDoesNotPullOrAuthenticate(t *testing.T) {
 
 func TestContainerBuilderProbeAcceptsDigestPinnedImageWithoutProtocolVersion(t *testing.T) {
 	builder := containerBuilder{
-		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/pig@sha256:" + strings.Repeat("a", 64)},
+		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/ompig@sha256:" + strings.Repeat("a", 64)},
 		lookPath: func(string) (string, error) { return "/usr/bin/docker", nil },
 		run: func(_ context.Context, _ string, args ...string) ([]byte, error) {
 			if len(args) > 1 && args[0] == "image" && args[1] == "inspect" {
@@ -357,7 +357,7 @@ func TestContainerBuilderProbeAcceptsDigestPinnedImageWithoutProtocolVersion(t *
 
 func TestContainerBuilderProbeRejectsWrongLocalImagePlatform(t *testing.T) {
 	builder := containerBuilder{
-		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/pig@sha256:" + strings.Repeat("a", 64)},
+		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/ompig@sha256:" + strings.Repeat("a", 64)},
 		lookPath: func(string) (string, error) { return "/usr/bin/docker", nil },
 		run: func(_ context.Context, _ string, args ...string) ([]byte, error) {
 			if len(args) > 1 && args[0] == "image" && args[1] == "inspect" {
@@ -374,7 +374,7 @@ func TestContainerBuilderProbeRejectsWrongLocalImagePlatform(t *testing.T) {
 
 func TestContainerBuilderProbeReportsMissingLocalImage(t *testing.T) {
 	builder := containerBuilder{
-		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/pig@sha256:" + strings.Repeat("a", 64)},
+		config:   ContainerBuilderConfig{Name: "docker", Engine: "docker", Image: "example.com/ompig@sha256:" + strings.Repeat("a", 64)},
 		lookPath: func(string) (string, error) { return "/usr/bin/docker", nil },
 		run: func(_ context.Context, _ string, args ...string) ([]byte, error) {
 			if len(args) > 0 && args[0] == "info" {

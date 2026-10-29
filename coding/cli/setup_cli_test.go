@@ -9,11 +9,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // D26: Pi's setupCli exports AI_AGENT=pi so tools can name the agent that
-// launched them (cli/setup.ts:7, rpc-entry.ts:8). PiG names itself.
+// launched them (cli/setup.ts:7, rpc-entry.ts:8). Ompig names itself.
 
 func TestSetupCliSetsInheritedProcessMarkers(t *testing.T) {
 	t.Setenv("PI_CODING_AGENT", "")
@@ -23,7 +23,7 @@ func TestSetupCliSetsInheritedProcessMarkers(t *testing.T) {
 		t.Fatalf("PI_CODING_AGENT = %q, want true", got)
 	}
 	if got := os.Getenv("AI_AGENT"); got != pigidentity.AgentMarker || got == "" || got == "pi" {
-		t.Fatalf("AI_AGENT = %q, want PiG's %q", got, pigidentity.AgentMarker)
+		t.Fatalf("AI_AGENT = %q, want Ompig's %q", got, pigidentity.AgentMarker)
 	}
 	if runtime.GOOS == "windows" {
 		return

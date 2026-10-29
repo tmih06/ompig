@@ -1,8 +1,8 @@
 package extension
 
 import (
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ViewSurface is an extension surface whose lines the host draws from a view
@@ -11,7 +11,7 @@ import (
 // The terminal always draws Render; FrontendView only adds structure for a
 // D91 frontend.
 //
-// pig additive (D107): Pi passes components in-process.
+// ompig additive (D107): Pi passes components in-process.
 type ViewSurface interface {
 	// Render returns the lines at width. It performs no I/O.
 	Render(width int) []string

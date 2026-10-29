@@ -11,13 +11,13 @@ import (
 	"testing"
 )
 
-// Pig resolves the Rust scaffold's registry-form pig-sdk requirement to the staged SDK through a crates-io patch, and Cargo applies a patch only when the
+// Ompig resolves the Rust scaffold's registry-form ompig-sdk requirement to the staged SDK through a crates-io patch, and Cargo applies a patch only when the
 // patched crate's version satisfies the requirement (caret semantics: 0.x requires the same minor). The scaffold must therefore accept the SDK crate the
-// running binary stages, or `pig extension init --lang rust` writes an extension that cannot build.
+// running binary stages, or `ompig extension init --lang rust` writes an extension that cannot build.
 func TestRustScaffoldRequirementAcceptsTheStagedSDKVersion(t *testing.T) {
-	req := regexp.MustCompile(`(?m)^pig-sdk = "([^"]+)"`).FindStringSubmatch(rustCargoTemplate("x"))
+	req := regexp.MustCompile(`(?m)^ompig-sdk = "([^"]+)"`).FindStringSubmatch(rustCargoTemplate("x"))
 	if req == nil {
-		t.Fatal("the Rust scaffold has no registry-form pig-sdk requirement")
+		t.Fatal("the Rust scaffold has no registry-form ompig-sdk requirement")
 	}
 	data, err := os.ReadFile(filepath.Join("..", "..", "extensions", "sdk-rs", "Cargo.toml"))
 	if err != nil {
@@ -45,6 +45,6 @@ func TestRustScaffoldRequirementAcceptsTheStagedSDKVersion(t *testing.T) {
 	r, h := parse(req[1]), parse(have)
 	compatible := r[0] == h[0] && (r[0] != 0 || r[1] == h[1]) && (h[1] > r[1] || (h[1] == r[1] && h[2] >= r[2]))
 	if !compatible {
-		t.Fatalf("scaffold requires pig-sdk %q, which does not accept the staged SDK crate %s", req[1], have)
+		t.Fatalf("scaffold requires ompig-sdk %q, which does not accept the staged SDK crate %s", req[1], have)
 	}
 }

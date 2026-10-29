@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture"
 )
 
 func main() {

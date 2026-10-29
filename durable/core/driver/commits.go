@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // Commit publications (PROTOCOL.md, `commits`): while at least one listener is subscribed, the core attaches the complete

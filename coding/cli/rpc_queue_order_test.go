@@ -11,7 +11,7 @@ import (
 // queue_update before those calls return and before the RPC response is written.
 func TestRPCQueueUpdatePrecedesResponse(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session")
+	p := startRPCProcess(t, []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session")
 	for _, command := range []string{"steer", "follow_up"} {
 		p.sendJSON(map[string]any{"id": command, "type": command, "message": "queued " + command})
 		updates := 0
@@ -42,13 +42,13 @@ func TestRPCQueueUpdatePrecedesResponse(t *testing.T) {
 // before returning the removed steering/followUp arrays, and rpc-mode's
 // success() runs after that synchronous call returns; the emptying
 // queue_update wire event therefore always precedes the clear_queue
-// response. Parity scenario 25-rpc-clear-queue observed pig writing the
+// response. Parity scenario 25-rpc-clear-queue observed ompig writing the
 // clear_queue response before its queue_update, because ClearQueue's event
 // travels through the Session's async forwarder while the response is
 // written directly by the RPC command loop.
 func TestRPCClearQueueUpdatePrecedesResponse(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session")
+	p := startRPCProcess(t, []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session")
 	p.sendJSON(map[string]any{"id": "steer", "type": "steer", "message": "steer me"})
 	p.await("steer response", func(record rpcRecord) bool {
 		return record["type"] == "response" && record["id"] == "steer"
@@ -95,7 +95,7 @@ func TestRPCClearQueueUpdatePrecedesResponse(t *testing.T) {
 // the success response (agent-session.ts prompt, rpc-mode.ts "prompt").
 func TestRPCStreamingPromptQueueUpdatePrecedesResponse(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCProcess(t, []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session", "--model", "test-faux/faux-1")
 	p.sendJSON(map[string]any{"id": "stream", "type": "prompt", "message": "TUI_LIVE_STREAM_PAUSE"})
 	p.await("paused stream", func(record rpcRecord) bool {
 		return record["type"] == "message_update" && strings.Contains(fmt.Sprint(record), "LIVE-STREAM-08")

@@ -12,14 +12,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/auth-storage.ts
 
 // The bytes of auth.json after credential writes (modify and delete: `JSON.stringify({ ...current, [provider]: next }, null, 2)` and
 // `delete current[provider]`): provider order kept, array-index provider names first, the value forms, and the members of each credential. The
-// pinned AuthStorage and PiG's write the same scripted calls over the same starting file.
+// pinned AuthStorage and Ompig's write the same scripted calls over the same starting file.
 func TestAuthFileBytesMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(53))
 	quote := func(s string) string { b, _ := json.Marshal(s); return string(b) }
@@ -140,7 +140,7 @@ func TestAuthFileBytesMatchPi(t *testing.T) {
 		}
 		if got != expected {
 			if failures++; failures <= 4 {
-				t.Errorf("script %d: initial %v ops %v\n PiG %q\n Pi  %q", i, s.Initial, s.Ops, got, expected)
+				t.Errorf("script %d: initial %v ops %v\n Ompig %q\n Pi  %q", i, s.Initial, s.Ops, got, expected)
 			}
 		}
 	}

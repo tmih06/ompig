@@ -1,17 +1,17 @@
 # Message types
 
-PiG uses one message format in session files, in JSON and RPC events, and in the Go SDK. This page defines the messages and the content blocks inside them. The JSON field names match Pi 1.4.0 ([Pi's message types reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/message-types.md)).
+Ompig uses one message format in session files, in JSON and RPC events, and in the Go SDK. This page defines the messages and the content blocks inside them. The JSON field names match Pi 1.4.0 ([Pi's message types reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/message-types.md)).
 
 Every message has a `role` field that names its type. A message `timestamp` is a Unix time in milliseconds. Session entries use ISO 8601 timestamps instead. See [session file format](/docs/latest/session-format).
 
 The Go definitions live in two packages:
 
-- `github.com/MichaelKinsy/PiG/ai` defines the content blocks, `Usage`, and the provider-facing messages.
-- `github.com/MichaelKinsy/PiG/agent` defines `AgentMessage`, the message type that sessions and events carry.
+- `github.com/tmih06/ompig/ai` defines the content blocks, `Usage`, and the provider-facing messages.
+- `github.com/tmih06/ompig/agent` defines `AgentMessage`, the message type that sessions and events carry.
 
 ## Content blocks
 
-A content block has a `type` field. PiG knows four block types.
+A content block has a `type` field. Ompig knows four block types.
 
 ### Text
 
@@ -48,7 +48,7 @@ Go type: `ai.ImageContent`.
 | Field | Type | Meaning |
 |---|---|---|
 | `thinking` | string | The model's visible reasoning. |
-| `thinkingSignature` | string, optional | Provider data that lets PiG send the block back later. Pass it through unchanged. |
+| `thinkingSignature` | string, optional | Provider data that lets Ompig send the block back later. Pass it through unchanged. |
 | `redacted` | boolean, optional | `true` when the provider hid the reasoning. The text can then be empty while the signature holds encrypted data. |
 
 Go type: `ai.ThinkingContent`.
@@ -121,7 +121,7 @@ Go type: `ai.SystemMessage`.
 {"role":"user","content":[{"type":"text","text":"Fix the failing test."}],"timestamp":1768485601000}
 ```
 
-`content` holds text and image blocks. PiG also accepts a plain string when it reads a message, and it turns the string into one text block. It always writes an array.
+`content` holds text and image blocks. Ompig also accepts a plain string when it reads a message, and it turns the string into one text block. It always writes an array.
 
 Go type: `agent.UserMessage`, or `ai.UserMessage` for a provider request.
 
@@ -187,11 +187,11 @@ Go type: `agent.ToolResultMessage`.
 
 ## Coding agent messages
 
-PiG adds four roles for the coding agent. Before a model request, PiG turns each of them into user-role text, with the exceptions that this section names.
+Ompig adds four roles for the coding agent. Before a model request, Ompig turns each of them into user-role text, with the exceptions that this section names.
 
 ### Shell execution
 
-PiG records a shell command that you run with `!` or `!!`, or through the RPC `bash` command. It is not a tool result.
+Ompig records a shell command that you run with `!` or `!!`, or through the RPC `bash` command. It is not a tool result.
 
 ```json
 {"role":"bashExecution","command":"go test ./...","output":"ok ...","exitCode":0,"cancelled":false,"truncated":false,"timestamp":1768485610000}
@@ -203,9 +203,9 @@ PiG records a shell command that you run with `!` or `!!`, or through the RPC `b
 | `output` | string | The combined output. |
 | `exitCode` | number | The exit status. |
 | `cancelled` | boolean | Whether the command was stopped. |
-| `truncated` | boolean | Whether PiG shortened the output. |
-| `fullOutputPath` | string, optional | The file that holds the full output when PiG shortened it. |
-| `excludeFromContext` | boolean, optional | `true` for `!!` commands. PiG does not send them to the model. |
+| `truncated` | boolean | Whether Ompig shortened the output. |
+| `fullOutputPath` | string, optional | The file that holds the full output when Ompig shortened it. |
+| `excludeFromContext` | boolean, optional | `true` for `!!` commands. Ompig does not send them to the model. |
 
 ### Custom message
 
@@ -222,7 +222,7 @@ An extension creates a custom message when it sends a message into the session.
 | `display` | boolean | Whether the terminal UI shows the message. |
 | `details` | any, optional | Extension data. The model does not see it. |
 
-PiG sends a custom message to the model as a user message. String `content` becomes one text block, and an array of text and image blocks passes through unchanged, as in Pi.
+Ompig sends a custom message to the model as a user message. String `content` becomes one text block, and an array of text and image blocks passes through unchanged, as in Pi.
 
 ### Branch summary
 
@@ -230,7 +230,7 @@ PiG sends a custom message to the model as a user message. String `content` beco
 {"role":"branchSummary","summary":"Tried a cache fix; it did not help.","fromId":"e5f6a7b8","timestamp":1768485630000}
 ```
 
-PiG builds this message from a `branch_summary` session entry. `fromId` is the entry the branch started from, or `null`.
+Ompig builds this message from a `branch_summary` session entry. `fromId` is the entry the branch started from, or `null`.
 
 ### Compaction summary
 
@@ -238,7 +238,7 @@ PiG builds this message from a `branch_summary` session entry. `fromId` is the e
 {"role":"compactionSummary","summary":"## Goal\n...","tokensBefore":50000,"timestamp":1768485640000}
 ```
 
-PiG builds this message from a `compaction` session entry. `tokensBefore` is the context size before compaction. See [compaction](/docs/latest/compaction).
+Ompig builds this message from a `compaction` session entry. `tokensBefore` is the context size before compaction. See [compaction](/docs/latest/compaction).
 
 ## AgentMessage in Go
 

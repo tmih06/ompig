@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The Pi 0.99.1 extension API additions through the Python SDK and the real Host (.upstream/v0.99.1/packages/coding-agent/src/core/extensions/{types,loader,runner}.ts). Each row binds its assertion to a value only the Host or the Python SDK's answer can produce: a host-assigned extension path, a router's computed state, a description built from the loadout the Host sent, the id the host gave a nested call. A Python SDK that never makes the call, or that returns a default, cannot match.
@@ -144,7 +144,7 @@ func (r *pyAPIRig) execute(ext, tool, id string) (agent.AgentToolResult, error) 
 }
 
 const pyAPIPrelude = `import json, threading
-import pig_sdk
+import ompig_sdk
 
 def lines(ctx, *values):
     ctx.notify("|".join(str(v) for v in values))
@@ -154,7 +154,7 @@ def lines(ctx, *values):
 
 const pyMcpFixture = pyAPIPrelude + `
 def new_extension():
-    e = pig_sdk.Extension("pyapi-mcp")
+    e = ompig_sdk.Extension("pyapi-mcp")
     e.register_mcp_server("py-load", {"url": "https://mcp.example/py-load"})
     e.register_mcp_server("py-dropped", {"url": "https://mcp.example/dropped"})
     e.unregister_mcp_server("py-dropped")
@@ -174,14 +174,14 @@ def new_extension():
         try:
             ctx.register_mcp_server("owned-by-sibling", {"url": "https://mcp.example/stolen"})
             lines(ctx, "steal", "no error")
-        except pig_sdk.HostCallError as exc:
+        except ompig_sdk.HostCallError as exc:
             lines(ctx, "steal", exc.message)
 
     def invalid(ctx, args):
         try:
             ctx.register_mcp_server("py-invalid", {})
             lines(ctx, "invalid", "no error")
-        except pig_sdk.HostCallError as exc:
+        except ompig_sdk.HostCallError as exc:
             lines(ctx, "invalid", exc.message)
 
     def show(ctx, args):
@@ -195,10 +195,10 @@ def new_extension():
     return e
 `
 
-const pyMcpSiblingFixture = `import pig_sdk
+const pyMcpSiblingFixture = `import ompig_sdk
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-sibling")
+    e = ompig_sdk.Extension("pyapi-sibling")
     e.register_mcp_server("owned-by-sibling", {"url": "https://mcp.example/sibling"})
     return e
 `
@@ -273,13 +273,13 @@ def route(ctx, request):
     }
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-vm")
-    e.register_virtual_model(pig_sdk.VirtualModel(
+    e = ompig_sdk.Extension("pyapi-vm")
+    e.register_virtual_model(ompig_sdk.VirtualModel(
         provider="pyrouter", id="auto", name="Py Auto", route=route,
         thinking_levels=["off", "low"], context_window=123456, max_tokens=4321, input=["text"]))
-    e.register_virtual_model(pig_sdk.VirtualModel(provider="pyrouter", id="dropped", name="Dropped", route=route))
+    e.register_virtual_model(ompig_sdk.VirtualModel(provider="pyrouter", id="dropped", name="Dropped", route=route))
     e.unregister_virtual_model("pyrouter", "dropped")
-    e.command("add", "", lambda ctx, args: ctx.register_virtual_model(pig_sdk.VirtualModel(provider="pyrouter", id="late", name="Late", route=route)))
+    e.command("add", "", lambda ctx, args: ctx.register_virtual_model(ompig_sdk.VirtualModel(provider="pyrouter", id="late", name="Late", route=route)))
     e.command("drop", "", lambda ctx, args: ctx.unregister_virtual_model("pyrouter", "auto"))
     return e
 `
@@ -351,14 +351,14 @@ def reaches(args):
     return "all" if args.get("all") else ["py:" + key for key in sorted(args)]
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-tools")
-    e.register_tool(pig_sdk.ToolDefinition(
+    e = ompig_sdk.Extension("pyapi-tools")
+    e.register_tool(ompig_sdk.ToolDefinition(
         name="search", label="Search", description="Search docs", parameters={"type": "object"},
         output_schema={"type": "object", "properties": {"rows": {"type": "array"}}},
         exposure="codemode", namespace={"name": "mcp__py", "aliases": ["py", "py-docs"], "description": "Py server", "instructions": "Search the py docs."},
         annotations={"readOnlyHint": True, "openWorldHint": False}, default_active=False,
         prepare_loadout=prepare, reaches_tools=reaches, execute=lambda ctx, args: "unused"))
-    e.register_tool(pig_sdk.ToolDefinition(
+    e.register_tool(ompig_sdk.ToolDefinition(
         name="plain", label="Plain", description="Plain", parameters={"type": "object"}, execute=lambda ctx, args: "plain"))
     e.tool("structured", "Structured result", {"type": "object"}, lambda ctx, args: {
         "content": "model-visible text", "structured_content": {"rows": [3, 1, 4]}, "is_error": True, "details": {"k": "v"}})
@@ -495,19 +495,19 @@ func TestPythonSDKProviderConfigWithImageAndClassifierModels(t *testing.T) {
 
 const pyNestFixture = pyAPIPrelude + `
 def new_extension():
-    e = pig_sdk.Extension("pyapi-nest")
+    e = ompig_sdk.Extension("pyapi-nest")
 
     def nest(ctx, args):
         seen = []
-        out = ctx.execute_tool("echo", {"v": 7}, pig_sdk.ExecuteToolOptions(on_update=lambda p: seen.append(p["content"][0]["text"])))
+        out = ctx.execute_tool("echo", {"v": 7}, ompig_sdk.ExecuteToolOptions(on_update=lambda p: seen.append(p["content"][0]["text"])))
         names = ",".join(t["name"] for t in ctx.tools)
         return "%s|%s|%s|%s|%s" % (names, out["toolCall"]["id"], out["result"]["content"][0]["text"], out["isError"], ",".join(seen))
 
     def cancel_nest(ctx, args):
-        signal = pig_sdk.ProviderSignal()
+        signal = ompig_sdk.ProviderSignal()
         timer = threading.Timer(0.2, signal.set)
         timer.start()
-        out = ctx.execute_tool("wait", {}, pig_sdk.ExecuteToolOptions(signal=signal))
+        out = ctx.execute_tool("wait", {}, ompig_sdk.ExecuteToolOptions(signal=signal))
         return "isError=%s text=%s" % (out["isError"], out["result"]["content"][0]["text"])
 
     e.tool("nest", "Runs echo", {"type": "object"}, nest)
@@ -625,10 +625,10 @@ func TestPythonSDKToolEventsAndNewEvents(t *testing.T) {
 	})
 }
 
-const pyPreviewFixture = `import pig_sdk
+const pyPreviewFixture = `import ompig_sdk
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-preview")
+    e = ompig_sdk.Extension("pyapi-preview")
     e.tool("previewed", "Returns a result with a preview", {"type": "object"}, lambda ctx, args: {"content": "full output for the model", "preview": "preview-python-9b2e"})
     e.tool("plain", "Returns a result without a preview", {"type": "object"}, lambda ctx, args: "plain text")
     return e
@@ -656,13 +656,13 @@ func TestPythonSDKToolResultPreview(t *testing.T) {
 	})
 }
 
-const pyOwnSignalFixture = `import pig_sdk
+const pyOwnSignalFixture = `import ompig_sdk
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-own-signal")
+    e = ompig_sdk.Extension("pyapi-own-signal")
 
     def own(ctx, args):
-        ctx.execute_tool("wait_release", {}, pig_sdk.ExecuteToolOptions(signal=pig_sdk.ProviderSignal()))
+        ctx.execute_tool("wait_release", {}, ompig_sdk.ExecuteToolOptions(signal=ompig_sdk.ProviderSignal()))
         return "done"
 
     e.tool("own_signal", "Runs wait_release under its own signal", {"type": "object"}, own)
@@ -727,7 +727,7 @@ const pyBusSiblingFixture = pyAPIPrelude + `
 NAME = %q
 
 def new_extension():
-    e = pig_sdk.Extension(NAME)
+    e = ompig_sdk.Extension(NAME)
     subs = []
     e.command("sub", "", lambda ctx, args: subs.append(ctx.events.on("ch", lambda c, data: lines(c, NAME, data))))
     e.command("unsub", "", lambda ctx, args: subs.pop()())

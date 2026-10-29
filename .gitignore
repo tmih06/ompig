@@ -59,11 +59,11 @@ secrets.json
 # Tmux captures and other ad-hoc test artefacts.
 tmp/
 test/parity/artifacts/
-.pig-faux-tool-started
+.ompig-faux-tool-started
 
-# Live-integration test bookkeeping (in case anyone overrides PIG_HOME
+# Live-integration test bookkeeping (in case anyone overrides OMPIG_HOME
 # into the repo: we never want auth.json committed).
-.pig/
+.ompig/
 auth.json
 # Exception: a hermetic, non-secret auth.json fixture for the
 # 02-list-models-oauth-builtins parity scenario. It stages a placeholder
@@ -71,39 +71,39 @@ auth.json
 # the access token is never validated for listing) and carries no real secret.
 !test/parity/scenarios/providers-registry/testdata/oauth-agent/auth.json
 # Exception: the print-extension-tool-bridge parity scenario's echo_bridge
-# extension lives under a .pig/ dir otherwise caught by the broad .pig/ rule.
-!test/parity/scenarios/tools/testdata/.pig/
-!test/parity/scenarios/tools/testdata/.pig/extensions/
-!test/parity/scenarios/tools/testdata/.pig/extensions/parity-echo.mjs
-!test/parity/scenarios/footer/testdata/multi-pig-agent/auth.json
+# extension lives under a .ompig/ dir otherwise caught by the broad .ompig/ rule.
+!test/parity/scenarios/tools/testdata/.ompig/
+!test/parity/scenarios/tools/testdata/.ompig/extensions/
+!test/parity/scenarios/tools/testdata/.ompig/extensions/parity-echo.mjs
+!test/parity/scenarios/footer/testdata/multi-ompig-agent/auth.json
 !test/parity/scenarios/footer/testdata/multi-pi-agent/auth.json
 # Exception: 05-footer-experimental-indicator needs a configured provider in
 # both agent dirs, and without these two the scenario fails on a clean
 # checkout. Placeholder OAuth values only: presence gates provider
 # registration and the tokens are never validated offline.
 !test/parity/scenarios/footer/testdata/pi-agent/auth.json
-!test/parity/scenarios/footer/testdata/pig-agent/auth.json
+!test/parity/scenarios/footer/testdata/ompig-agent/auth.json
 # Exception: model-expiry and login-selector scenarios use placeholder OAuth
 # values to exercise stored and expired credential state without network access.
 !test/parity/scenarios/model-resolver-selector/testdata/pi-agent-expired/auth.json
-!test/parity/scenarios/model-resolver-selector/testdata/pig-agent-expired/auth.json
+!test/parity/scenarios/model-resolver-selector/testdata/ompig-agent-expired/auth.json
 !test/parity/scenarios/selectors/testdata/pi-agent/auth.json
-!test/parity/scenarios/selectors/testdata/pig-home/agent/auth.json
+!test/parity/scenarios/selectors/testdata/ompig-home/agent/auth.json
 # Exception: the project-trust scenarios need an auto-discovered project
-# extension in the fixture project itself, which the broad .pig/ rule (and the
+# extension in the fixture project itself, which the broad .ompig/ rule (and the
 # repo-root .pi/ rule) would otherwise swallow. These register a probe provider
 # that must not execute before trust is granted; they hold no credentials.
 # Without the exception the fixtures stay local to whoever wrote them and the
 # scenarios fail on a clean checkout.
-!test/parity/scenarios/project-trust/testdata/project-*/.pig/
-!test/parity/scenarios/project-trust/testdata/project-*/.pig/**
+!test/parity/scenarios/project-trust/testdata/project-*/.ompig/
+!test/parity/scenarios/project-trust/testdata/project-*/.ompig/**
 !test/parity/scenarios/project-trust/testdata/project-*/.pi/
 !test/parity/scenarios/project-trust/testdata/project-*/.pi/**
 # Exception: the extension load-order scenario's fixture project holds project
-# settings and an auto-discovered extension under .pig/; they hold no
+# settings and an auto-discovered extension under .ompig/; they hold no
 # credentials.
-!test/parity/scenarios/extensions-runtime/testdata/load-order/project/.pig/
-!test/parity/scenarios/extensions-runtime/testdata/load-order/project/.pig/**
+!test/parity/scenarios/extensions-runtime/testdata/load-order/project/.ompig/
+!test/parity/scenarios/extensions-runtime/testdata/load-order/project/.ompig/**
 # Exception: this named fixture directory represents the Session target cwd. It
 # is source data, not Rust build output.
 !test/parity/scenarios/project-trust/testdata/session-target-cwd/target/
@@ -115,14 +115,14 @@ auth.json
 .upstream/*
 !.upstream/pin
 
-/pig
+/ompig
 .gopi/
 
 # Runtime session traces written into testdata dirs during parity runs.
 # Parity runner snapshots testdata to ephemeral temp dirs before launch,
 # so these are leftover from older runs and never affect correctness.
-test/parity/scenarios/*/testdata/pig-home/agent/sessions/--Users-*/
-test/parity/scenarios/*/testdata/pig-home/agent/sessions/--tmp-*/
+test/parity/scenarios/*/testdata/ompig-home/agent/sessions/--Users-*/
+test/parity/scenarios/*/testdata/ompig-home/agent/sessions/--tmp-*/
 
 # Conformance fixture build/cache output.
 test/extension-conformance/testdata/python-sdk-fixture/**/__pycache__/
@@ -135,10 +135,10 @@ examples/extensions/python-factory/**/*.py[cod]
 
 # SDK staging content-hash markers are derived runtime state. They may appear
 # when a source SDK directory is used as a staging target, but are never inputs.
-extensions/sdk*/.pig-sdk-version
+extensions/sdk*/.ompig-sdk-version
 
 # Python SDK build/cache output. The Python SDK ships as source and is
-# loaded into generated packed/standalone runners via PIG_SDK_PY_ROOT;
+# loaded into generated packed/standalone runners via OMPIG_SDK_PY_ROOT;
 # we never want bytecode caches, build artefacts, or virtual envs in git.
 extensions/sdk-py/**/__pycache__/
 extensions/sdk-py/**/*.py[cod]
@@ -152,13 +152,13 @@ extensions/sdk-py/.venv/
 
 # Generated packed-cell artefacts. These are rebuilt deterministically
 # from extension/SDK sources; we never want the cache contents in git.
-# The cache lives under the resolved pig home (PIG_HOME / ~/.pig) or a
+# The cache lives under the resolved ompig home (OMPIG_HOME / ~/.ompig) or a
 # test-temp cache root, so this guard catches accidental in-tree builds.
 coding/extension/host/runtimecell/cache/
 coding/extension/host/runtimecell/**/__pycache__/
 coding/extension/host/runtimecell/**/*.py[cod]
 
-# Stray local builds of the pig binary (the Makefile installs to ~/.local/bin/pig)
+# Stray local builds of the ompig binary (the Makefile installs to ~/.local/bin/ompig)
 /gopi
 
 # npm launcher source (automation/release/npm), not a build output.

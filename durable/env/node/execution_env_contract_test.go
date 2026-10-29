@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // The local environment satisfies the portable ExecutionEnv; these checks go through the interface the way a conversation's tools do.

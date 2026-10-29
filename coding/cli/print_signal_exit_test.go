@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestPrintModeSignalExitCodes pins print mode's termination contract.
@@ -43,14 +43,14 @@ func TestPrintModeSignalExitCodes(t *testing.T) {
 			cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-extensions", "--print", "Run: sleep for a while")
 			cmd.Dir = workDir
 			cmd.Env = append(os.Environ(),
-				"PIG_HOME="+t.TempDir(),
-				"PIG_TEST_FAUX=1",
-				"PIG_TEST_FAUX_SCENARIO=parity-basic",
+				"OMPIG_HOME="+t.TempDir(),
+				"OMPIG_TEST_FAUX=1",
+				"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 			)
 			// Own process group so the signal reaches only this run.
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 
 			// Wait for the faux tool to actually be running, so the signal
@@ -72,7 +72,7 @@ func TestPrintModeSignalExitCodes(t *testing.T) {
 			if err := cmd.Process.Signal(tc.signal); err != nil {
 				t.Fatalf("signal %s: %v", tc.signal, err)
 			}
-			// SIGINT takes the default action, as in Pi: pig dies at once, and the faux call's shell, which runs in its own
+			// SIGINT takes the default action, as in Pi: ompig dies at once, and the faux call's shell, which runs in its own
 			// process group, keeps sleeping. The test kills what is left of it in its working directory when it ends.
 			t.Cleanup(func() { killProcessesIn(workDir) })
 
@@ -98,7 +98,7 @@ func TestPrintModeSignalExitCodes(t *testing.T) {
 // waits for piped stdin. Upstream main.ts reads piped stdin to its end before
 // print mode registers any signal handler, so a writer that never closes the
 // pipe (a harness that leaves stdin open) keeps it waiting, and SIGTERM ends
-// the process through the default action: status 143, nothing printed. pig
+// the process through the default action: status 143, nothing printed. ompig
 // read stdin with a blocking io.ReadAll after its own SIGTERM handler had
 // replaced the default action, so the signal only cancelled a context nobody
 // was waiting on and the process hung.
@@ -109,7 +109,7 @@ func TestPrintModeSignalDuringPipedStdinRead(t *testing.T) {
 	bin := buildPigBinaryForSignalTest(t)
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-extensions", "--print", "/probe")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_TEST_FAUX=1", "PIG_STARTUP_TRACE=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_TEST_FAUX=1", "OMPIG_STARTUP_TRACE=1")
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
@@ -121,11 +121,11 @@ func TestPrintModeSignalDuringPipedStdinRead(t *testing.T) {
 		t.Fatal(err)
 	}
 	if err := cmd.Start(); err != nil {
-		t.Fatalf("start pig: %v", err)
+		t.Fatalf("start ompig: %v", err)
 	}
 	defer func() { _ = cmd.Process.Kill() }()
 
-	// Signal once pig is waiting on stdin, which the startup trace marks.
+	// Signal once ompig is waiting on stdin, which the startup trace marks.
 	reading := make(chan struct{})
 	stderrDone := make(chan struct{})
 	var trace strings.Builder
@@ -147,7 +147,7 @@ func TestPrintModeSignalDuringPipedStdinRead(t *testing.T) {
 	select {
 	case <-reading:
 	case <-time.After(testbudget.Wait(t)):
-		t.Fatal("pig never started reading stdin")
+		t.Fatal("ompig never started reading stdin")
 	}
 	if err := cmd.Process.Signal(syscall.SIGTERM); err != nil {
 		t.Fatalf("signal: %v", err)
@@ -157,7 +157,7 @@ func TestPrintModeSignalDuringPipedStdinRead(t *testing.T) {
 	select {
 	case <-stderrDone:
 	case <-time.After(testbudget.Wait(t)):
-		t.Fatal("pig ignored SIGTERM while waiting for piped stdin")
+		t.Fatal("ompig ignored SIGTERM while waiting for piped stdin")
 	}
 	err = cmd.Wait()
 	var exitErr *exec.ExitError
@@ -183,7 +183,7 @@ func TestPrintModeJSONSignalStopsOutputAndPersistence(t *testing.T) {
 	bin := buildPigBinaryForSignalTest(t)
 	// A session_shutdown handler that takes a while keeps the process alive after the tracked child is killed, so the aborted
 	// tool settles and the run goes on while disposeRuntime awaits it. Pi has unsubscribed the JSON writer first, so stdout
-	// still ends at the signal; the session file does get the run's next records then, in Pi as in PiG (probed with Pi
+	// still ends at the signal; the session file does get the run's next records then, in Pi as in Ompig (probed with Pi
 	// 1.1.0: toolResult and a second toolUse assistant message, two provider requests), so it is not asserted for this case.
 	slowShutdown := filepath.Join(t.TempDir(), "slow-shutdown.mjs")
 	if err := os.WriteFile(slowShutdown, []byte(`export default function (pi) { pi.on("session_shutdown", () => new Promise((resolve) => setTimeout(resolve, 1500))); }`), 0o600); err != nil {
@@ -208,12 +208,12 @@ func TestPrintModeJSONSignalStopsOutputAndPersistence(t *testing.T) {
 			cmd := exec.Command(bin, append(args, "-p", "Run: sleep for a while")...)
 			cmd.Dir = workDir
 			agentDir := t.TempDir()
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 			var stdout strings.Builder
 			cmd.Stdout = &stdout
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			t.Cleanup(func() { _ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL) })
 			marker := filepath.Join(workDir, ai.TestFauxToolStartedMarker)
@@ -235,7 +235,7 @@ func TestPrintModeJSONSignalStopsOutputAndPersistence(t *testing.T) {
 			if !errors.As(err, &exitErr) || exitErr.ExitCode() != tc.want {
 				t.Fatalf("wait = %v, want exit status %d", err, tc.want)
 			}
-			// pig additive (D102): every exit by a termination signal leaves its line, whichever signal handler exits first.
+			// ompig additive (D102): every exit by a termination signal leaves its line, whichever signal handler exits first.
 			if exitLog, _ := os.ReadFile(codingagent.ExitLogPath(agentDir)); !strings.Contains(string(exitLog), "received "+codingagent.SignalName(tc.signal)) {
 				t.Fatalf("exit.log = %q, want a line with %q", exitLog, "received "+codingagent.SignalName(tc.signal))
 			}
@@ -268,11 +268,11 @@ func TestPrintModeJSONSignalStopsOutputAndPersistence(t *testing.T) {
 // session_shutdown handlers. Pi's handler (print-mode.ts:50-63) starts disposeRuntime on its one event loop and exits
 // when it settles; runPrintMode's finally finds it started (print-mode.ts:42-48,162-167).
 //   - A handler that throws at once ends the disposal within microtasks, before the killed tool's exit is seen: the run
-//     stops at the tool (the session ends at the toolUse message) and stderr has the handler's error. PiG let the run go
+//     stops at the tool (the session ends at the toolUse message) and stderr has the handler's error. Ompig let the run go
 //     on during the handler's IPC round trip and, closing the runtime under it, printed "connection closed".
 //   - A handler that waits on a timer lets the loop turn: the killed tool settles, the run makes its next request, and
 //     the prompt resolves, so text mode reports the result (here the faux's unhandled-request error) before the exit.
-//     PiG printed nothing after any signal.
+//     Ompig printed nothing after any signal.
 //
 // Probed with Pi 1.1.0 through an openai-completions mock (scenario print/09, the *-shutdown cases).
 func TestPrintModeSignalDisposalRunsLikePisEventLoop(t *testing.T) {
@@ -298,11 +298,11 @@ func TestPrintModeSignalDisposalRunsLikePisEventLoop(t *testing.T) {
 	if err := os.MkdirAll(waitsForIdle, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(waitsForIdle, "waits_for_idle.py"), []byte(`import pig_sdk
+	if err := os.WriteFile(filepath.Join(waitsForIdle, "waits_for_idle.py"), []byte(`import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    e = pig_sdk.Extension("waits_for_idle")
+def new_extension() -> ompig_sdk.Extension:
+    e = ompig_sdk.Extension("waits_for_idle")
     e.on_event("session_shutdown", lambda ctx, data: ctx.wait_for_idle())
     return e
 `), 0o600); err != nil {
@@ -322,12 +322,12 @@ def new_extension() -> pig_sdk.Extension:
 			workDir, agentDir, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
 			cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-extensions", "-e", tc.extension, "--mode", tc.mode, "--session-dir", sessionDir, "-p", "Run: sleep for a while")
 			cmd.Dir = workDir
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 			var stderr strings.Builder
 			cmd.Stderr = &stderr
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			t.Cleanup(func() { _ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL) })
 			marker := filepath.Join(workDir, ai.TestFauxToolStartedMarker)
@@ -352,7 +352,7 @@ def new_extension() -> pig_sdk.Extension:
 			case <-time.After(testbudget.Wait(t)):
 				_ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
 				<-waited
-				t.Fatalf("pig did not exit after SIGTERM; stderr:\n%s", stderr.String())
+				t.Fatalf("ompig did not exit after SIGTERM; stderr:\n%s", stderr.String())
 			}
 			var exitErr *exec.ExitError
 			if !errors.As(err, &exitErr) || exitErr.ExitCode() != 143 {

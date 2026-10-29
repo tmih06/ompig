@@ -31,7 +31,7 @@ func rpcToolFlagsProcess(t *testing.T, args ...string) *rpcProcess {
 		t.Fatal(err)
 	}
 	base := []string{"--no-session", "--no-extensions", "--no-context-files", "--provider", "test-faux", "--model", "faux-1", "-e", probe}
-	return startRPCProcessAt(t, cwd, []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, append(base, args...)...)
+	return startRPCProcessAt(t, cwd, []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, append(base, args...)...)
 }
 
 // The expected loadouts were measured against the exact Pi 0.87.1 oracle in `--mode rpc` with a probe extension registering ext_a and ext_b and calling pi.getActiveTools()/pi.getAllTools() from a command. Pi's main.ts:532-543 forwards --no-tools, --no-builtin-tools, --tools and --exclude-tools to createAgentSessionFromServices for every mode (main.ts:822-830), and sdk.ts:258-265 derives the allowlist, denylist and initial active names from them.

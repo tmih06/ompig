@@ -3,7 +3,7 @@ package delta
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // A host's tracker continues the draft the core edited, so its operations follow the core's own (a conversation created by

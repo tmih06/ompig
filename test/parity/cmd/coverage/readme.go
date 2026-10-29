@@ -69,7 +69,7 @@ func upstreamPackages(entries []portMapEntry) []string {
 func newUpstreamRows(entries []portMapEntry, pinned string) int {
 	n := 0
 	for _, e := range entries {
-		if m := newUpstreamNote.FindStringSubmatch(e.PigPath); e.Status == "⬜" && m != nil && m[1] == pinned {
+		if m := newUpstreamNote.FindStringSubmatch(e.OmpigPath); e.Status == "⬜" && m != nil && m[1] == pinned {
 			n++
 		}
 	}
@@ -110,9 +110,9 @@ func (s statusStats) remainderClause(newRows int, pinned string) string {
 	clause := fmt.Sprintf(" Of the other %d, %s.", s.intendedPortable()-s.Ported, strings.Join(parts, " and "))
 	switch {
 	case newRows == s.NotStarted && newRows > 0:
-		clause += fmt.Sprintf(" The not-started rows are files new in Pi %s that PiG has not ported yet.", pinned)
+		clause += fmt.Sprintf(" The not-started rows are files new in Pi %s that Ompig has not ported yet.", pinned)
 	case newRows > 0:
-		clause += fmt.Sprintf(" Not started includes %d files new in Pi %s that PiG has not ported yet.", newRows, pinned)
+		clause += fmt.Sprintf(" Not started includes %d files new in Pi %s that Ompig has not ported yet.", newRows, pinned)
 	}
 	return clause
 }

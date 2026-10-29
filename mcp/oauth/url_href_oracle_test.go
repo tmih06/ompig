@@ -13,8 +13,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // piOAuthURLs runs Pi's own packages/mcp OAuth source from the upstream mirror on the cases and returns, for each, the

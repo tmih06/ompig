@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi pi.registerToolRenderer (packages/coding-agent/src/core/extensions/types.ts:1685; runner.ts resolveToolRenderers): every SDK's common

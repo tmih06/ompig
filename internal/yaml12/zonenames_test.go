@@ -11,7 +11,7 @@ import (
 	"time"
 	_ "time/tzdata" // the zone rules the comparison needs, whatever the host provides
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // zoneProbeInstants are instants from 1850 to 2100 at an irregular step, so every month, hour and weekday pairing occurs, plus the edges of V8's equivalent-year range.

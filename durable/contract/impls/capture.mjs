@@ -8,7 +8,7 @@ import { Capture } from "../lib/capsql.mjs"
 import { copyStore } from "../lib/store.mjs"
 import { emit } from "../lib/trace.mjs"
 
-const KEY = Symbol.for("pig.contract.stores")
+const KEY = Symbol.for("ompig.contract.stores")
 const state = () => (globalThis[KEY] ??= { dir: process.env.CONTRACT_STORE_DIR ?? mkdtempSync(join(tmpdir(), "contract-stores-")), files: new Map(), open: new Set(), hooked: false })
 
 /** The capsql database for a requested path (a stable file per path), opened as the next store. */

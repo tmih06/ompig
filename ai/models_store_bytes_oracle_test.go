@@ -13,14 +13,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/ai/src/models-store.ts
 
 // The bytes of a models store file after writes and deletes (FileModelsStore: `JSON.stringify({ ...current, [provider]: entry }, null, 2)`): the member
 // order of every catalog model as the catalog sent it, unknown members and unknown model types kept, the optional entry members, and the provider order.
-// The pinned FileModelsStore and PiG's write the same entries over the same starting files.
+// The pinned FileModelsStore and Ompig's write the same entries over the same starting files.
 func TestModelsStoreFileBytesMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(71))
 	// number spells an integer the way JSON.parse reads it back unchanged: plain, 12.0, or 12E0.
@@ -158,7 +158,7 @@ func TestModelsStoreFileBytesMatchPi(t *testing.T) {
 		}
 		if got != expected {
 			if failures++; failures <= 3 {
-				t.Errorf("script %d: initial %v ops %v\n PiG %q\n Pi  %q", i, s.Initial, s.Ops, got, expected)
+				t.Errorf("script %d: initial %v ops %v\n Ompig %q\n Pi  %q", i, s.Initial, s.Ops, got, expected)
 			}
 		}
 	}

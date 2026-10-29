@@ -14,15 +14,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 const (
-	envFixtureExtBin = "PIG_TEST_FIXTURE_EXT_BIN"
-	envSDKFixtureBin = "PIG_TEST_SDK_FIXTURE_BIN"
+	envFixtureExtBin = "OMPIG_TEST_FIXTURE_EXT_BIN"
+	envSDKFixtureBin = "OMPIG_TEST_SDK_FIXTURE_BIN"
 )
 
 func mustUsePrebuilt(t *testing.T, envKey string) (string, bool) {
@@ -55,7 +55,7 @@ func buildFixture(t *testing.T) string {
 
 // shortSockDir returns an isolated short socket directory path (macOS
 // 104-byte Unix socket limit). Each test gets its own /tmp child: using a
-// shared /tmp/pig-test directory made subprocess tests flaky under package
+// shared /tmp/ompig-test directory made subprocess tests flaky under package
 // parallelism because one package's cleanup could remove another package's
 // live listener socket.
 func shortSockDir(t *testing.T) string {
@@ -64,7 +64,7 @@ func shortSockDir(t *testing.T) string {
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	sockDir, err := os.MkdirTemp(parent, "pig-test-*")
+	sockDir, err := os.MkdirTemp(parent, "ompig-test-*")
 	if err != nil {
 		t.Fatalf("mkdir short socket dir: %v", err)
 	}
@@ -138,7 +138,7 @@ func TestHost_Integration_RunnerToolsSurface(t *testing.T) {
 		t.Fatalf("Load: %v", err)
 	}
 
-	// Feed the extension into inproc.Runner: exactly what cmd/pig does.
+	// Feed the extension into inproc.Runner: exactly what cmd/ompig does.
 	runner := inproc.NewRunner([]extension.Extension{*ext}, "/tmp")
 
 	// Runner.Tools() must include the subprocess tool.
@@ -315,7 +315,7 @@ func TestHost_Integration_WidgetPushAndUICall(t *testing.T) {
 	}
 
 	// Execute a tool: fixture sends ui.notify + widget_push + response.
-	params := json.RawMessage(`{"name":"pig"}`)
+	params := json.RawMessage(`{"name":"ompig"}`)
 	result, err := ext.Tools["greet"].Definition.Execute(ctx, "tc-1", params, nil)
 	if err != nil {
 		t.Fatalf("Execute: %v", err)
@@ -325,7 +325,7 @@ func TestHost_Integration_WidgetPushAndUICall(t *testing.T) {
 	if !ok {
 		t.Fatalf("result type = %T, want agent.AgentToolResult", result)
 	}
-	if tr.Text() != "Hello, pig!" {
+	if tr.Text() != "Hello, ompig!" {
 		t.Errorf("content = %q", tr.Text())
 	}
 
@@ -345,8 +345,8 @@ func TestHost_Integration_WidgetPushAndUICall(t *testing.T) {
 
 	if notifyCount == 0 {
 		t.Error("ui.notify was never called: extension→host call did not arrive")
-	} else if lastNotify != "Greeting pig:info" {
-		t.Errorf("notify = %q, want %q", lastNotify, "Greeting pig:info")
+	} else if lastNotify != "Greeting ompig:info" {
+		t.Errorf("notify = %q, want %q", lastNotify, "Greeting ompig:info")
 	}
 
 	// Verify widget was updated after tool execution.
@@ -357,7 +357,7 @@ func TestHost_Integration_WidgetPushAndUICall(t *testing.T) {
 			return false
 		}
 		lines := proxy.Render(80)
-		return len(lines) == 1 && lines[0] == " fixture: greeted pig"+strings.Repeat(" ", 80-1-len("fixture: greeted pig"))
+		return len(lines) == 1 && lines[0] == " fixture: greeted ompig"+strings.Repeat(" ", 80-1-len("fixture: greeted ompig"))
 	})
 
 	h.Shutdown("test done")
@@ -451,7 +451,7 @@ func TestHost_Integration_SpawnAndRegister(t *testing.T) {
 	}
 
 	// Execute the tool.
-	params := json.RawMessage(`{"name":"pig"}`)
+	params := json.RawMessage(`{"name":"ompig"}`)
 	result, err := greet.Definition.Execute(ctx, "tc-1", params, nil)
 	if err != nil {
 		t.Fatalf("Execute: %v", err)
@@ -461,8 +461,8 @@ func TestHost_Integration_SpawnAndRegister(t *testing.T) {
 	if !ok {
 		t.Fatalf("result type = %T, want agent.AgentToolResult", result)
 	}
-	if tr.Text() != "Hello, pig!" {
-		t.Errorf("content = %q, want %q", tr.Text(), "Hello, pig!")
+	if tr.Text() != "Hello, ompig!" {
+		t.Errorf("content = %q, want %q", tr.Text(), "Hello, ompig!")
 	}
 
 	// Execute the command.
@@ -1640,8 +1640,8 @@ func TestHost_Integration_TSFileShim(t *testing.T) {
 		t.Errorf("auth/exec/complete details = %+v", res.Details)
 	}
 	// Pi c60de42e9: pi.exec resolves a program that cannot start as code 1 with the spawn error as stderr.
-	if m := res.Details.MissingExec; m == nil || m.Code != 1 || m.Stdout != "" || m.Stderr != "spawn pig-test-missing-program ENOENT" || m.Killed {
-		t.Errorf("missing-program exec = %+v, want {code:1 stderr:spawn pig-test-missing-program ENOENT}", m)
+	if m := res.Details.MissingExec; m == nil || m.Code != 1 || m.Stdout != "" || m.Stderr != "spawn ompig-test-missing-program ENOENT" || m.Killed {
+		t.Errorf("missing-program exec = %+v, want {code:1 stderr:spawn ompig-test-missing-program ENOENT}", m)
 	}
 	if res.Details.ContextUsage.Tokens != 42 || res.Details.ContextUsage.ContextWindow != 1000 {
 		t.Errorf("contextUsage = %+v, want {Tokens:42 ContextWindow:1000}", res.Details.ContextUsage)

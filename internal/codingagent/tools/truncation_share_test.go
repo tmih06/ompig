@@ -9,7 +9,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // sharesReturnedText fails unless tr is a truncation whose content is the start of text, the same bytes, followed by a notice.

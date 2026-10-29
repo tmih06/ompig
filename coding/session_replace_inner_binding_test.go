@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Upstream runner.ts:889-891 (`get sessionManager()`) returns the SessionManager of the AgentSession the runner is bound to, and a replacement builds a new AgentSession and binds a new runner (agent-session-runtime.ts). Go's Session swaps its log in place with ReplaceInner, so the runner must follow: a context made after the swap exposes the new log, never the old one.

@@ -3,7 +3,7 @@ package nilslicenull
 import (
 	"encoding/json"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 func bad(active []string) ([]byte, error) {

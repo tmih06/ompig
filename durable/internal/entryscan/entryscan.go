@@ -5,7 +5,7 @@ package entryscan
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Ranger is implemented by a storage that serves a conversation's visible entry range from decoded entries it retains.

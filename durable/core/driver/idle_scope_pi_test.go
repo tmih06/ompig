@@ -5,7 +5,7 @@ package driver
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 type graphTask = struct {

@@ -2,7 +2,7 @@
 
 Base `porter/pi-0.99.1` (4a03576fe). Scope: the family 2 RPC oracle regressions, the Darwin pasteboard file-path test, and the `internal/codingagent` clipboard tests that died under memory pressure.
 
-## 1. Family 2 RPC (`cmd/pig`)
+## 1. Family 2 RPC (`cmd/ompig`)
 
 Both reds are deterministic on the base tree (`TestRPCPiMessagesMatchesPi` tool/buffered and tool/pending; `TestRPCBedrockConverseStreamObservation` buffered text, thinking, tool and mixed: 100 of 100 runs on the base, not 1 in 10). Cherry-picking `909b8ae54`, `2ae76304e`, `588ac54b4` and `2973753a5` from `rev-fix-rpc-buffered` (as `-x` commits, same content as the accepted branch) fixes neither: they address the lazy-stream forwarder registration, the Responses wire test and the fixture server, which is a different defect. They are kept because they are the reviewed fix for the 0.3.1 buffered race and are not on this line yet.
 
@@ -10,7 +10,7 @@ Method: a copy of upstream's real 0.99.1 `pi --mode rpc` was run under `node --i
 
 ### pi-messages: earlier shallow copies keep the old usage object
 
-Pi: `pi-messages.ts:195-217` `Object.assign(partial, { usage: event.usage })` assigns a new usage object (and `appendAssistantMessageDiagnostic`, `diagnostics.ts:42-47`, a new diagnostics array). `agent-loop.ts:408-416` emits `{ ...partialMessage }` at `start`; that copy keeps the usage the partial had, while its `content` array stays shared. The real trace has `rpc:message_start usage=0` after `push:s0:done`, with the tool call in `content`. PiG published the terminal usage in place, so a shallow copy saw 10/3/13.
+Pi: `pi-messages.ts:195-217` `Object.assign(partial, { usage: event.usage })` assigns a new usage object (and `appendAssistantMessageDiagnostic`, `diagnostics.ts:42-47`, a new diagnostics array). `agent-loop.ts:408-416` emits `{ ...partialMessage }` at `start`; that copy keeps the usage the partial had, while its `content` array stays shared. The real trace has `rpc:message_start usage=0` after `push:s0:done`, with the tool call in `content`. Ompig published the terminal usage in place, so a shallow copy saw 10/3/13.
 
 Fix: `AssistantMessageEventStream.push(event, replacements)` (unexported) carries the nested objects a producer assigned; `Push` passes none. The pi-messages converter records `Usage` (and `Diagnostics` for a rewrite) on `done` and `error`. `ai/event_stream.go`, `ai/assistant_publication.go`, `ai/pi_messages.go`, `ai/pi_messages_events.go`.
 
@@ -18,7 +18,7 @@ Tests: `ai.TestPiMessagesDoneReplacesUsageRetainedByEarlierShallowCopy` (pure la
 
 ### Bedrock: the Session listener ran one reaction early
 
-Pi: `agent-session.ts:1098` awaits `_emitExtensionEvent`, which awaits `runner.emit` (`:1267`): public listeners run two reactions after the Agent emits `message_start`. PiG modeled one (`emitSynchronousSessionEvent`). Provider production timing matched Pi exactly (`s0:start` to `s0:text_start` = 26 jobs in Node and in Go; layer spacing equal); the RPC serialization was at +25 in Go and +27 in Pi, so it fell before the second Bedrock item. 0.99.1's extra per-event `await onProviderStreamEvent` slowed the provider by a round and exposed the latent shortfall; the 0.87.1 oracle windows were wide enough to hide it. The earlier hypothesis (PiG passes no observer) is not the cause: `await undefined` and `await asyncFn()` both cost two jobs in Node 24.19.0, measured.
+Pi: `agent-session.ts:1098` awaits `_emitExtensionEvent`, which awaits `runner.emit` (`:1267`): public listeners run two reactions after the Agent emits `message_start`. Ompig modeled one (`emitSynchronousSessionEvent`). Provider production timing matched Pi exactly (`s0:start` to `s0:text_start` = 26 jobs in Node and in Go; layer spacing equal); the RPC serialization was at +25 in Go and +27 in Pi, so it fell before the second Bedrock item. 0.99.1's extra per-event `await onProviderStreamEvent` slowed the provider by a round and exposed the latent shortfall; the 0.87.1 oracle windows were wide enough to hide it. The earlier hypothesis (Ompig passes no observer) is not the cause: `await undefined` and `await asyncFn()` both cost two jobs in Node 24.19.0, measured.
 
 Fix: `coding/session_boundaries.go` `handleAgentEvent` yields once after the extension hook, before `emitSynchronousSessionEvent`, for events that carry a stream observation.
 
@@ -26,7 +26,7 @@ Tests: `TestSessionListenerSeesMessageStartAfterTwoExtensionEventRounds` (`codin
 
 ### Regression check
 
-`go test ./cmd/pig`, `./coding`, `./agent`, `./ai`, `./internal/codingagent` failure sets equal the base's, except the two fixed tests. With `UpstreamVersion` set to 0.99.1 locally, the `TestRPC33*` matrix passes before and after. Load: `GOMAXPROCS=4`, 12 CPU burners pinned to the same 8 CPUs: `go test -race -count=24` on the `ai` pi-messages tests and the new coding test pass; `go test ./cmd/pig -run "TestRPCPiMessagesMatchesPi|TestRPCBedrockConverseStreamObservation" -count=3` passes (1317 s under load).
+`go test ./cmd/ompig`, `./coding`, `./agent`, `./ai`, `./internal/codingagent` failure sets equal the base's, except the two fixed tests. With `UpstreamVersion` set to 0.99.1 locally, the `TestRPC33*` matrix passes before and after. Load: `GOMAXPROCS=4`, 12 CPU burners pinned to the same 8 CPUs: `go test -race -count=24` on the `ai` pi-messages tests and the new coding test pass; `go test ./cmd/ompig -run "TestRPCPiMessagesMatchesPi|TestRPCBedrockConverseStreamObservation" -count=3` passes (1317 s under load).
 
 ## 2. Darwin pasteboard file paths
 

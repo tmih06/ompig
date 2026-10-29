@@ -29,9 +29,9 @@ func TestRPCAbortMidToolExtensionEventsComparedWithPi(t *testing.T) {
 	if !slices.Contains(piEvents, "turn_end") {
 		t.Fatalf("Pi extension events = %v, want turn_end after the abort", piEvents)
 	}
-	pigProcess, pigReport := startRPCShutdownFixture(t)
-	pigStdout, pigEvents := run(t, pigProcess, pigReport)
-	if !slices.Equal(pigEvents, piEvents) || !slices.Equal(pigStdout, piStdout) {
-		t.Fatalf("pig extension events = %v, stdout = %v; Pi extension events = %v, stdout = %v", pigEvents, pigStdout, piEvents, piStdout)
+	ompigProcess, ompigReport := startRPCShutdownFixture(t)
+	ompigStdout, ompigEvents := run(t, ompigProcess, ompigReport)
+	if !slices.Equal(ompigEvents, piEvents) || !slices.Equal(ompigStdout, piStdout) {
+		t.Fatalf("ompig extension events = %v, stdout = %v; Pi extension events = %v, stdout = %v", ompigEvents, ompigStdout, piEvents, piStdout)
 	}
 }

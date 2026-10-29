@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 func drainIntegratedCatalogTasks(m *InteractiveMode) {
@@ -78,7 +78,7 @@ func TestPostLoginModelBranches(t *testing.T) {
 }
 
 func TestPostLoginKeepsSelectedModel(t *testing.T) {
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	for _, provider := range []string{"opencode-go", "radius", "custom", "llama.cpp"} {
 		t.Run(provider, func(t *testing.T) {
 			m := newPostLoginTestMode(t)
@@ -209,7 +209,7 @@ func TestPostLoginDeferredCatalog(t *testing.T) {
 	for _, change := range []string{"none", "model", "session", "failure", "cancel"} {
 		t.Run(change, func(t *testing.T) {
 			m := newPostLoginTestMode(t)
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			if err := os.Unsetenv("PI_OFFLINE"); err != nil {
 				t.Fatal(err)

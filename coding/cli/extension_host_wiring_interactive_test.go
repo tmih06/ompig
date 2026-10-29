@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // waitReportLines polls report until it holds at least n lines and returns them.
@@ -37,7 +37,7 @@ func waitReportLines(t *testing.T, report string, n int, output *ptyOutput) []st
 // Interactive mode binds the same Session actions as the headless modes (agent-session.ts:3275-3408 _bindExtensionCore through interactive-mode.ts's session.bindExtensions), and builds its Session through the same factory, so the fixtures record what they record in print, JSON and RPC mode, and the Python extension's virtual model reaches the Session's model runtime before session_start.
 func TestInteractiveExtensionHostWiringMatchesHeadlessModes(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -56,11 +56,11 @@ func TestInteractiveExtensionHostWiringMatchesHeadlessModes(t *testing.T) {
 	t.Cleanup(func() { _ = master.Close() })
 	cmd := exec.Command(binary, args...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "WIRING_REPORT="+report, "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "WIRING_REPORT="+report, "TERM=xterm-256color")
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {
-		t.Fatalf("start pig: %v", err)
+		t.Fatalf("start ompig: %v", err)
 	}
 	_ = slave.Close()
 	exited := make(chan struct{})

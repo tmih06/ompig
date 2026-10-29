@@ -7,7 +7,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // yamlCorpus holds YAML texts of every shape the frontmatter of a prompt or skill takes, and the malformed ones.

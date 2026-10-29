@@ -9,25 +9,25 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func BenchmarkResourceLoaderExtensionDiscovery(b *testing.B) {
 	for _, count := range []int{0, 32, 128} {
 		b.Run(fmt.Sprint(count), func(b *testing.B) {
 			root := b.TempDir()
-			b.Setenv("PIG_HOME", filepath.Join(root, "home"))
+			b.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 			cwd, agentDir, shared := filepath.Join(root, "project"), filepath.Join(root, "agent"), filepath.Join(root, "shared")
-			for _, dir := range []string{filepath.Join(cwd, ".pig"), agentDir, shared} {
+			for _, dir := range []string{filepath.Join(cwd, ".ompig"), agentDir, shared} {
 				if err := os.MkdirAll(dir, 0o755); err != nil {
 					b.Fatal(err)
 				}
 			}
-			for _, dir := range []string{filepath.Join(cwd, ".pig"), agentDir} {
+			for _, dir := range []string{filepath.Join(cwd, ".ompig"), agentDir} {
 				testenv.RequireDirectoryLink(b, shared, filepath.Join(dir, "extensions"))
 			}
 			for i := range count {
@@ -60,20 +60,20 @@ func writeResourceLoaderFixture(t *testing.T, path, content string) {
 // Ports packages/coding-agent/test/resource-loader.test.ts:183-211. Discovery must retain the first (project) alias and run the shared factory only once.
 func TestResourceLoaderUpstreamSymlinkedExtensions(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 	shared := filepath.Join(root, "shared-extensions")
 	writeResourceLoaderFixture(t, filepath.Join(shared, "shared.ts"), `export default function(pi) {
  pi.registerCommand("shared", {description: "shared command", handler: async () => {}});
 }`)
-	for _, dir := range []string{agentDir, filepath.Join(cwd, ".pig")} {
+	for _, dir := range []string{agentDir, filepath.Join(cwd, ".ompig")} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
 		}
 		testenv.RequireDirectoryLink(t, shared, filepath.Join(dir, "extensions"))
 	}
 	configs := collectExtensionConfigs(cwd, agentDir, codingagent.NewSettingsManager(cwd, agentDir), Args{}, nil)
-	wantPath := filepath.Join(cwd, ".pig", "extensions", "shared.ts")
+	wantPath := filepath.Join(cwd, ".ompig", "extensions", "shared.ts")
 	if len(configs) != 1 {
 		t.Fatalf("extension configs = %#v, want only project alias %s", configs, wantPath)
 	}
@@ -92,12 +92,12 @@ func TestResourceLoaderUpstreamExtensionConflicts(t *testing.T) {
 		for _, kind := range []string{"commands", "tools", "explicit CLI"} {
 			t.Run(isolation+"/"+kind, func(t *testing.T) {
 				root := t.TempDir()
-				t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+				t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 				cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 				if err := os.MkdirAll(cwd, 0o755); err != nil {
 					t.Fatal(err)
 				}
-				firstPath := filepath.Join(cwd, ".pig", "extensions", "project.ts")
+				firstPath := filepath.Join(cwd, ".ompig", "extensions", "project.ts")
 				secondPath := filepath.Join(agentDir, "extensions", "user.ts")
 				first, second := "project", "user"
 				flags := Args{}
@@ -193,7 +193,7 @@ func TestResourceLoaderUpstreamDiscovery(t *testing.T) {
 	for _, kind := range []string{"skill", "skill siblings", "prompt", "invalid prompt", "disabled", "no skills", "additional skill"} {
 		t.Run(kind, func(t *testing.T) {
 			root := t.TempDir()
-			t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+			t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 			t.Setenv("HOME", filepath.Join(root, "home"))
 			cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 			for _, dir := range []string{cwd, agentDir} {
@@ -288,10 +288,10 @@ func TestResourceLoaderUpstreamPreTrustExtensions(t *testing.T) {
 	for _, isolation := range []string{"isolated", "shared-ok"} {
 		t.Run(isolation, func(t *testing.T) {
 			root := t.TempDir()
-			t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+			t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 			cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 			userPath := filepath.Join(agentDir, "extensions", "user.ts")
-			projectPath := filepath.Join(cwd, ".pig", "extensions", "project.ts")
+			projectPath := filepath.Join(cwd, ".ompig", "extensions", "project.ts")
 			countPath := filepath.Join(root, "load-count")
 			writeResourceLoaderFixture(t, userPath, fmt.Sprintf(`import { appendFileSync } from "node:fs";
 appendFileSync(%q, "loaded\n");
@@ -337,18 +337,18 @@ export default function(pi) {
 // Ports packages/coding-agent/test/resource-loader.test.ts:440-484. Context text remains visible when executable/configured project resources are not trusted.
 func TestResourceLoaderUpstreamUntrustedProject(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	t.Setenv("HOME", filepath.Join(root, "home"))
 	cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 	for path, content := range map[string]string{
-		filepath.Join(cwd, ".pig", "SYSTEM.md"):                           "Project system prompt.",
-		filepath.Join(agentDir, "SYSTEM.md"):                              "Global system prompt.",
-		filepath.Join(agentDir, "AGENTS.md"):                              "Global instructions",
-		filepath.Join(cwd, "AGENTS.md"):                                   "Project instructions",
-		filepath.Join(cwd, ".pig", "extensions", "project.ts"):            `throw new Error("should not load");`,
-		filepath.Join(cwd, ".pig", "skills", "project-skill", "SKILL.md"): "---\nname: project-skill\ndescription: Project skill\n---\nProject skill content",
-		filepath.Join(cwd, ".pig", "prompts", "project.md"):               "Project prompt",
-		filepath.Join(cwd, ".pig", "themes", "project.json"):              resourceLoaderTheme(t, "project-theme"),
+		filepath.Join(cwd, ".ompig", "SYSTEM.md"):                           "Project system prompt.",
+		filepath.Join(agentDir, "SYSTEM.md"):                                "Global system prompt.",
+		filepath.Join(agentDir, "AGENTS.md"):                                "Global instructions",
+		filepath.Join(cwd, "AGENTS.md"):                                     "Project instructions",
+		filepath.Join(cwd, ".ompig", "extensions", "project.ts"):            `throw new Error("should not load");`,
+		filepath.Join(cwd, ".ompig", "skills", "project-skill", "SKILL.md"): "---\nname: project-skill\ndescription: Project skill\n---\nProject skill content",
+		filepath.Join(cwd, ".ompig", "prompts", "project.md"):               "Project prompt",
+		filepath.Join(cwd, ".ompig", "themes", "project.json"):              resourceLoaderTheme(t, "project-theme"),
 	} {
 		writeResourceLoaderFixture(t, path, content)
 	}
@@ -379,10 +379,10 @@ func resourceLoaderTheme(t *testing.T, name string) string {
 // Ports packages/coding-agent/test/resource-loader.test.ts:123-181. Project resources win collisions independently for prompts, skills, and the ordered theme inputs consumed by loadThemePaths.
 func TestResourceLoaderUpstreamProjectPrecedence(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	t.Setenv("HOME", filepath.Join(root, "home"))
 	cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
-	projectRoot := filepath.Join(cwd, ".pig")
+	projectRoot := filepath.Join(cwd, ".ompig")
 	for _, dir := range []string{agentDir, projectRoot} {
 		label := "User"
 		if dir == projectRoot {
@@ -426,7 +426,7 @@ await loader.reload(); result = loader.getSystemPrompt();`, `"Custom system prom
 		} {
 			t.Run(isolation+"/"+tc.name, func(t *testing.T) {
 				root := t.TempDir()
-				t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+				t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 				cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 				for _, dir := range []string{cwd, agentDir} {
 					if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -510,7 +510,7 @@ func TestCollectStartupThemePathsUsesOnlyGlobalPackageFiltersBeforeTrust(t *test
 	if err := trusted.SetPackages([]codingagent.PackageSource{{Source: filepath.ToSlash(globalSource), Themes: []string{"-themes/alpha.json"}}}); err != nil {
 		t.Fatal(err)
 	}
-	projectSource, err := filepath.Rel(filepath.Join(cwd, ".pig"), packageRoot)
+	projectSource, err := filepath.Rel(filepath.Join(cwd, ".ompig"), packageRoot)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -538,7 +538,7 @@ func TestValidateConfiguredPackageContentsReportsInvalidPackage(t *testing.T) {
 	if err := os.MkdirAll(packageRoot, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"pkg","pig":{"hooks":["hooks/missing.json"]}}`), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"pkg","ompig":{"hooks":["hooks/missing.json"]}}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
@@ -590,11 +590,11 @@ func TestMergeExtConfigsPreservesFirstSeenOrder(t *testing.T) {
 }
 
 func TestCollectExtensionConfigs_UsesSettingsAndCLI(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
 	globalExt := filepath.Join(agentDir, "ext-global")
-	projectExt := filepath.Join(cwd, ".pig", "ext-project")
+	projectExt := filepath.Join(cwd, ".ompig", "ext-project")
 	cliExt := filepath.Join(cwd, "ext-cli")
 	for _, dir := range []string{globalExt, projectExt, cliExt} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -626,7 +626,7 @@ func TestCollectExtensionConfigs_UsesSettingsAndCLI(t *testing.T) {
 }
 
 func TestCollectExtensionConfigsCLIExactStandaloneWithNoExtensions(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
 	binary := filepath.Join(cwd, "cmd-ext")
@@ -641,7 +641,7 @@ func TestCollectExtensionConfigsCLIExactStandaloneWithNoExtensions(t *testing.T)
 }
 
 func TestCollectExtensionConfigsAutoDiscoveryUsesSelectedDirectoryIdentity(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
 	extDir := filepath.Join(agentDir, "extensions", "auto-ext")
@@ -651,7 +651,7 @@ func TestCollectExtensionConfigsAutoDiscoveryUsesSelectedDirectoryIdentity(t *te
 	if err := os.WriteFile(filepath.Join(extDir, "go.mod"), []byte("module example.com/auto-ext\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	source := "package autoext\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"auto-ext\") }\n"
+	source := "package autoext\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"auto-ext\") }\n"
 	if err := os.WriteFile(filepath.Join(extDir, "extension.go"), []byte(source), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -662,7 +662,7 @@ func TestCollectExtensionConfigsAutoDiscoveryUsesSelectedDirectoryIdentity(t *te
 }
 
 func TestCollectPackageBackedResources_NoSymlinkMaterializationNeeded(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
 	pkgRoot := filepath.Join(cwd, "pkg")
@@ -686,10 +686,10 @@ func TestCollectPackageBackedResources_NoSymlinkMaterializationNeeded(t *testing
 	mustWrite(filepath.Join(pkgRoot, "themes", "pkg.json"), `{}`)
 	mustWrite(filepath.Join(pkgRoot, "skills", "skill-a", "SKILL.md"), `# skill`)
 	mustWrite(filepath.Join(pkgRoot, "extensions", "ext-a", "go.mod"), "module example.com/ext\ngo 1.26\n")
-	mustWrite(filepath.Join(pkgRoot, "extensions", "ext-a", "extension.go"), "package exta\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"ext-a\") }\n")
+	mustWrite(filepath.Join(pkgRoot, "extensions", "ext-a", "extension.go"), "package exta\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"ext-a\") }\n")
 
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
-	storedSource, _ := filepath.Rel(filepath.Join(cwd, ".pig"), pkgRoot)
+	storedSource, _ := filepath.Rel(filepath.Join(cwd, ".ompig"), pkgRoot)
 	if !strings.HasPrefix(storedSource, ".") {
 		storedSource = "." + string(filepath.Separator) + storedSource
 	}
@@ -721,7 +721,7 @@ func TestCollectPackageBackedResources_NoSymlinkMaterializationNeeded(t *testing
 		t.Fatalf("package extension missing from collectExtensionConfigs: %#v", exts)
 	}
 
-	// No symlink materialization into PIG_HOME config tree should be required.
+	// No symlink materialization into OMPIG_HOME config tree should be required.
 	if _, err := os.Stat(filepath.Join(codingagent.ConfigRoot(), "prompts", "pkg.md")); !os.IsNotExist(err) {
 		t.Fatalf("expected no symlink/materialized prompt under config root, stat err=%v", err)
 	}
@@ -753,7 +753,7 @@ func TestCollectPackageBackedResources_FilterChangesApplyOnNextRead(t *testing.T
 		t.Fatal(err)
 	}
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
-	storedSource, _ := filepath.Rel(filepath.Join(cwd, ".pig"), pkgRoot)
+	storedSource, _ := filepath.Rel(filepath.Join(cwd, ".ompig"), pkgRoot)
 	if !strings.HasPrefix(storedSource, ".") {
 		storedSource = "." + string(filepath.Separator) + storedSource
 	}
@@ -805,7 +805,7 @@ func TestCollectPromptPathsPreservesUpstreamPrecedence(t *testing.T) {
 		}
 	}
 	writePrompt(filepath.Join(agentDir, "prompts", "same.md"), "USER")
-	writePrompt(filepath.Join(cwd, ".pig", "prompts", "same.md"), "PROJECT")
+	writePrompt(filepath.Join(cwd, ".ompig", "prompts", "same.md"), "PROJECT")
 	writePrompt(filepath.Join(agentDir, "prompts", "cli.md"), "USER")
 	cliPath := filepath.Join(t.TempDir(), "cli.md")
 	writePrompt(cliPath, "CLI")
@@ -994,7 +994,7 @@ func TestCollectPackagePromptPaths_DedupesSharedPackageWithProjectPrecedence(t *
 func TestPigletAmbientScopesFilterExtensionsAndSkills(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv("HOME", t.TempDir())
 	writeExtension := func(path, module string) {
 		t.Helper()
@@ -1018,13 +1018,13 @@ func TestPigletAmbientScopesFilterExtensionsAndSkills(t *testing.T) {
 		}
 	}
 	userExt := filepath.Join(agentDir, "extensions", "user-ext")
-	workspaceExt := filepath.Join(cwd, ".pig", "extensions", "workspace-ext")
+	workspaceExt := filepath.Join(cwd, ".ompig", "extensions", "workspace-ext")
 	cliExt := filepath.Join(cwd, "cli-ext")
 	writeExtension(userExt, "example.test/user")
 	writeExtension(workspaceExt, "example.test/workspace")
 	writeExtension(cliExt, "example.test/cli")
 	userSkill := filepath.Join(agentDir, "skills", "user-skill")
-	workspaceSkill := filepath.Join(cwd, ".pig", "skills", "workspace-skill")
+	workspaceSkill := filepath.Join(cwd, ".ompig", "skills", "workspace-skill")
 	cliSkill := filepath.Join(cwd, "cli-skill")
 	writeSkill(userSkill, "user-skill")
 	writeSkill(workspaceSkill, "workspace-skill")
@@ -1112,13 +1112,13 @@ func TestPigletAmbientScopesFilterPackageScope(t *testing.T) {
 	}
 }
 
-// Project trust alone gates <cwd>/.pig resources, so a cwd whose config directory is the user config root loads its skills as Project skills as Pi does for <home>/.pi (package-manager.ts:2398-2401, 2417, 2453).
+// Project trust alone gates <cwd>/.ompig resources, so a cwd whose config directory is the user config root loads its skills as Project skills as Pi does for <home>/.pi (package-manager.ts:2398-2401, 2417, 2453).
 func TestHomeDirectoryProjectConfigDirIsNotSkippedAsUserConfigRoot(t *testing.T) {
 	home := t.TempDir()
-	configRoot := filepath.Join(home, ".pig")
+	configRoot := filepath.Join(home, ".ompig")
 	agentDir := filepath.Join(configRoot, "agent")
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	skill := filepath.Join(configRoot, "skills", "duplicate")
 	if err := os.MkdirAll(skill, 0o755); err != nil {
 		t.Fatal(err)
@@ -1172,7 +1172,7 @@ func TestSkillInputOrderPreservesPiCollisionPrecedence(t *testing.T) {
 	// upstream's os.homedir().
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
 
 	makeNamedSkill := func(root, relative, description string) string {
 		t.Helper()
@@ -1191,9 +1191,9 @@ func TestSkillInputOrderPreservesPiCollisionPrecedence(t *testing.T) {
 	userPackageSkill := makeNamedSkill(userPackage, "skills/review", "user package")
 	projectPackageSkill := makeNamedSkill(projectPackage, "skills/review", "project package")
 	userAgentsSkill := makeNamedSkill(home, ".agents/skills/review", "user agents")
-	userPigSkill := makeNamedSkill(agentDir, "skills/review", "user pig")
+	userPigSkill := makeNamedSkill(agentDir, "skills/review", "user ompig")
 	projectAgentsSkill := makeNamedSkill(cwd, ".agents/skills/review", "project agents")
-	projectPigSkill := makeNamedSkill(cwd, ".pig/skills/review", "project pig")
+	projectPigSkill := makeNamedSkill(cwd, ".ompig/skills/review", "project ompig")
 	cliSkill := makeNamedSkill(t.TempDir(), "review", "cli")
 
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
@@ -1212,7 +1212,7 @@ func TestSkillInputOrderPreservesPiCollisionPrecedence(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(loaded) != 1 || loaded[0].Description != "project pig" {
+	if len(loaded) != 1 || loaded[0].Description != "project ompig" {
 		t.Fatalf("same-name winner = %+v, want project skill", loaded)
 	}
 	if got := collectSkillInputs(cwd, agentDir, sm, Args{Skills: []string{cliSkill}, NoSkills: true}, nil); !slices.Equal(got, []string{cliSkill}) {
@@ -1221,14 +1221,14 @@ func TestSkillInputOrderPreservesPiCollisionPrecedence(t *testing.T) {
 }
 
 func TestCollectExtensionConfigsIgnoresRetiredTOMLPlanes(t *testing.T) {
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	t.Setenv("OMPIG_HOME", ompigHome)
 	retiredFile := "extensions." + "toml"
 	for _, path := range []string{
-		filepath.Join(pigHome, retiredFile),
-		filepath.Join(cwd, ".pig", retiredFile),
+		filepath.Join(ompigHome, retiredFile),
+		filepath.Join(cwd, ".ompig", retiredFile),
 	} {
 		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 			t.Fatal(err)
@@ -1245,11 +1245,11 @@ func TestCollectExtensionConfigsIgnoresRetiredTOMLPlanes(t *testing.T) {
 }
 
 func TestCollectExtensionConfigsDoesNotRediscoverLegacyGlobalDirectory(t *testing.T) {
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
-	legacy := filepath.Join(pigHome, "extensions", "legacy")
+	t.Setenv("OMPIG_HOME", ompigHome)
+	legacy := filepath.Join(ompigHome, "extensions", "legacy")
 	if err := os.MkdirAll(legacy, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -1307,7 +1307,7 @@ func TestCollectSkillInputsExplicitExclusionDisablesAutoDiscoveredSkill(t *testi
 		t.Run(name, func(t *testing.T) {
 			cwd, agentDir := t.TempDir(), filepath.Join(t.TempDir(), "agent")
 			for _, skill := range []string{"shared-skill", "other-skill"} {
-				dir := filepath.Join(cwd, ".pig", "skills", skill)
+				dir := filepath.Join(cwd, ".ompig", "skills", skill)
 				if err := os.MkdirAll(dir, 0o755); err != nil {
 					t.Fatal(err)
 				}
@@ -1315,7 +1315,7 @@ func TestCollectSkillInputsExplicitExclusionDisablesAutoDiscoveredSkill(t *testi
 					t.Fatal(err)
 				}
 			}
-			shared := entry(filepath.Join(cwd, ".pig", "skills", "shared-skill"))
+			shared := entry(filepath.Join(cwd, ".ompig", "skills", "shared-skill"))
 			if err := os.MkdirAll(agentDir, 0o755); err != nil {
 				t.Fatal(err)
 			}

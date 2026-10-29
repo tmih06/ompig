@@ -5,10 +5,10 @@
 # createAgentSessionFromServices; sdk.ts:261-265 removes them from the initial active tools and
 # agent-session.ts:3147-3150 (isAllowedTool) removes them from the registry. In `--mode rpc` the faux
 # "Run: expr 20 + 22" bash call therefore ends with the unknown-tool error "Tool bash not found" and
-# the declared tools are read, edit and write. PiG 0.3.0 ignored the flag in RPC mode and ran the command (42).
+# the declared tools are read, edit and write. Ompig 0.3.0 ignored the flag in RPC mode and ran the command (42).
 #
 # Full JSON records are compared (canonical_json sorts keys only): the initial system message's toolsAdded, the tool_execution_end
-# result and the persisted messages must equal Pi's. An explicit system prompt removes the pig/pi naming difference.
+# result and the persisted messages must equal Pi's. An explicit system prompt removes the ompig/pi naming difference.
 
 name = "40-rpc-exclude-tools"
 description = "RPC --exclude-tools makes an excluded tool undeclared and uncallable as in every other mode"
@@ -35,8 +35,8 @@ wait_contains = ['"command":"get_messages","success":true']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--offline", "--model", "test-faux/faux-1", "--exclude-tools", "bash", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--offline", "--model", "test-faux/faux-1", "--exclude-tools", "bash", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--offline", "--model", "test-faux/faux-1", "--exclude-tools", "bash", "--system-prompt", "RPC tool flag probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 

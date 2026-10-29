@@ -19,10 +19,10 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/payload"
-	"github.com/MichaelKinsy/PiG/durable/core/probe"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/payload"
+	"github.com/tmih06/ompig/durable/core/probe"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 const openJSON = `{"settings":{},"agent":{"provider":"probe","modelId":"probe-1"},"models":[],"registry":[],"sidecar":"index","delta":false}`

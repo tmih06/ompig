@@ -22,7 +22,7 @@ const (
 //
 // The queue is the host's: it serializes this extension's mutations with the host's built-in edit and write tools and with every other extension process, as Pi's
 // one queue does. The turn is held by the extension's process: a packed cell's members share it, so one member stopping while another's fn runs does not release
-// the file, and the host releases it when the process's last connection closes. Like the other host helpers it may be called before Run, and with no connection to the host (PIG_EXT_SOCKET unset) it returns an error without running fn.
+// the file, and the host releases it when the process's last connection closes. Like the other host helpers it may be called before Run, and with no connection to the host (OMPIG_EXT_SOCKET unset) it returns an error without running fn.
 func WithFileMutationQueue[T any](filePath string, fn func() (T, error)) (T, error) {
 	var result T
 	// Pi resolves the path against the process's working directory; the host resolves nothing relative, so the SDK sends it absolute.

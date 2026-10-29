@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// pig divergence (D158): a setting of the wrong JSON type is dropped and the rest of the file loads. Pi 1.1.0 exits 1 with
+// ompig divergence (D158): a setting of the wrong JSON type is dropped and the rest of the file loads. Pi 1.1.0 exits 1 with
 // `TypeError: entries is not iterable` for {"skills":5} and {"extensions":{}}, and `pattern.includes is not a function`
 // for {"enabledModels":[5]}; for {"enabledModels":"ab"} it iterates the string and warns once per character.
 func TestSettingsDropWrongTypedValuesAndKeepTheRest(t *testing.T) {
@@ -28,7 +28,7 @@ func TestSettingsDropWrongTypedValuesAndKeepTheRest(t *testing.T) {
 	}
 }
 
-// pig divergence (D158), owner-approved addition: a setting that is ignored for its wrong JSON type is reported once per settings file, naming the
+// ompig divergence (D158), owner-approved addition: a setting that is ignored for its wrong JSON type is reported once per settings file, naming the
 // setting and the type it expects, so the user is not left wondering why it had no effect.
 func TestSettingsWarnOnceNamingTheIgnoredSettingAndItsExpectedType(t *testing.T) {
 	agentDir := t.TempDir()

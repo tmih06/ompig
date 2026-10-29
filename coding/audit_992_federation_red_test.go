@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Red test from the 0.99.1 -> 0.99.2 packages/ai audit (audit-992-ai finding F3).
@@ -15,7 +15,7 @@ import (
 // models as available and selects one by default.
 // Probe (isolated HOME, only ANTHROPIC_FEDERATION_RULE_ID, ANTHROPIC_ORGANIZATION_ID, ANTHROPIC_IDENTITY_TOKEN_FILE):
 // `pi --list-models claude-sonnet-4-5` lists anthropic/claude-sonnet-4-5 and `pi -p hi` exchanges the identity token
-// and answers; pig prints "No models available." and "No API key found for the selected model."
+// and answers; ompig prints "No models available." and "No API key found for the selected model."
 func TestAudit992FederationEnvConfiguresAnthropic(t *testing.T) {
 	for _, name := range []string{ai.AnthropicAuthTokenEnv, ai.AnthropicOAuthTokenEnv, ai.AnthropicAPIKeyEnv, ai.AnthropicServiceAccountIDEnv, ai.AnthropicWorkspaceIDEnv} {
 		t.Setenv(name, "")

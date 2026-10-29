@@ -16,13 +16,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports .upstream/v0.99.2/packages/coding-agent/test/model-catalog-protocol.test.ts (1 case, regression test for #9099).
 //
 // Upstream imports the catalog selection that pi.dev performs from scripts/model-catalog-protocol.ts, a file copied verbatim between
-// the pi and pi.dev repositories. PiG has no pi.dev server, so the functions the stand-in server uses are ported below as test
+// the pi and pi.dev repositories. Ompig has no pi.dev server, so the functions the stand-in server uses are ported below as test
 // support, with the same regular expressions and ordering rules (scripts/model-catalog-protocol.ts:30-260).
 
 const (
@@ -339,8 +339,8 @@ func TestModelCatalogProtocolWithTheCurrentClient(t *testing.T) {
 	}
 
 	catalogURL := "/api/models/providers/openrouter?types=chat%2Cimage%2Cclassifier"
-	// pig divergence (D65): Pi's client identifies as pi/<VERSION>, which the stand-in redirects to a URL carrying pi-version
-	// (upstream :110 expects [catalogUrl, catalogUrl&pi-version=VERSION]). PiG identifies as pig/<version>, which the catalog
+	// ompig divergence (D65): Pi's client identifies as pi/<VERSION>, which the stand-in redirects to a URL carrying pi-version
+	// (upstream :110 expects [catalogUrl, catalogUrl&pi-version=VERSION]). Ompig identifies as ompig/<version>, which the catalog
 	// protocol does not recognize as Pi, so the request is answered without a redirect.
 	mu.Lock()
 	gotRequests := slices.Clone(requests)
@@ -349,7 +349,7 @@ func TestModelCatalogProtocolWithTheCurrentClient(t *testing.T) {
 		t.Fatalf("catalog requests = %v, want [%s]", gotRequests, catalogURL)
 	}
 
-	// selectModelCatalog(index, VERSION): PiG's version is below every minimum, so the default (mixed API) revision applies.
+	// selectModelCatalog(index, VERSION): Ompig's version is below every minimum, so the default (mixed API) revision applies.
 	version := Version
 	expected := mixedAPIModel
 	if selected := selectModelCatalog(index, &version); selected != nil && selected.Revision == catalogLegacyRevision {

@@ -6,7 +6,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // A message that streams many tool calls in a row costs each event what the event costs when one call streams: a call that is finished is not parsed, copied or published again by the events after it. The reader reads the tool calls at every event, as a renderer does (ObserveProjection reads what the publication holds, without copying it for an owner), so what grows with the calls is what settling and publishing do for the calls an event leaves alone. Parsing or copying a finished call again allocates, so the allocations of the stream grow with its events (linearly) only when they do not.

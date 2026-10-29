@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // EditorRemote is an extension's editor component standing in for the

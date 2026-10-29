@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // asyncPreemptionChildEnv marks the process RerunWithoutAsyncPreemption started.
-const asyncPreemptionChildEnv = "PIG_TEST_WITHOUT_ASYNC_PREEMPTION_CHILD"
+const asyncPreemptionChildEnv = "OMPIG_TEST_WITHOUT_ASYNC_PREEMPTION_CHILD"
 
 // RerunWithoutAsyncPreemption makes a test whose two ends of a FIFO are both blocking opens immune to macOS's signal-interrupted FIFO open. Call it first in such a test and return
 // when it reports true.

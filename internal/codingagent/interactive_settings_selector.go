@@ -1,7 +1,7 @@
 package codingagent
 
 import (
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // runModalSettingsSelector shows the settings selector in the editor slot and blocks until its onCancel callback calls done. Each change runs its callback while the list stays open with its selection and search, as upstream SettingsList's onChange does (settings-list.ts:264-291). Mirrors upstream showSelector (interactive-mode.ts:3655-3666).

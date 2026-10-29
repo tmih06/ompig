@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // cloudflareStreams forwards stream and streamSimple unchanged after endpoint

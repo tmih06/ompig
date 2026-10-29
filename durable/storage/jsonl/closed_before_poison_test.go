@@ -3,9 +3,9 @@ package jsonl_test
 import (
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
 )
 
 // Pi storage.ts:842-843 assertUsable checks closed before the poison: a poisoned storage that is then closed answers "JsonlStorage is closed", not

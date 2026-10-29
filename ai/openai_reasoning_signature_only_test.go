@@ -6,7 +6,7 @@ import "testing"
 // delta that has no `text` field. Pi's isOpenAIReasoningDetail (openai-completions.ts:144-148)
 // requires typeof detail.text === "string", so the delta is dropped and the replayed
 // reasoning_details lose the signature.
-// pig divergence (D122): a reasoning.text delta without text but with a string signature is kept and merged.
+// ompig divergence (D122): a reasoning.text delta without text but with a string signature is kept and merged.
 func TestOpenAICompletionsKeepsSignatureOnlyReasoningText(t *testing.T) {
 	const textChunk = `{"type":"reasoning.text","text":"I should call the read tool.","id":"reasoning-text-1","format":"anthropic-claude-v1","index":0}`
 	const signatureChunk = `{"type":"reasoning.text","signature":"sha256:signed-text","id":"reasoning-text-1","format":"anthropic-claude-v1","index":0}`

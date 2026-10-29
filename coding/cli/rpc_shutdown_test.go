@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // startRPCShutdownFixture starts RPC mode with testdata/rpc-shutdown.mjs and
@@ -23,7 +23,7 @@ import (
 // rpcShutdownSecondExtension in extraEnv also loads rpc-shutdown-second.mjs.
 const rpcShutdownSecondExtension = "RPC_SHUTDOWN_SECOND=1"
 
-// rpcShutdownQuarantinedExtension in extraEnv also loads rpc-shutdown-quarantine.mjs. Under pig its factory crashes the Node process once, so the host quarantines it into a Node process apart from the quit handler's; under Pi the crash marker exists already and every extension shares one process.
+// rpcShutdownQuarantinedExtension in extraEnv also loads rpc-shutdown-quarantine.mjs. Under ompig its factory crashes the Node process once, so the host quarantines it into a Node process apart from the quit handler's; under Pi the crash marker exists already and every extension shares one process.
 const rpcShutdownQuarantinedExtension = "RPC_SHUTDOWN_QUARANTINE=1"
 
 // quarantineCrashMarker returns the environment entry naming the crash marker of rpc-shutdown-quarantine.mjs. precreate makes the extension skip its crash.
@@ -46,7 +46,7 @@ func startRPCShutdownFixture(t *testing.T, extraEnv ...string) (*rpcProcess, str
 	}
 	home := t.TempDir()
 	report := filepath.Join(t.TempDir(), "report.txt")
-	env := append([]string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "RPC_SHUTDOWN_REPORT=" + report}, extraEnv...)
+	env := append([]string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "RPC_SHUTDOWN_REPORT=" + report}, extraEnv...)
 	args := []string{"--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1", "-e", fixture}
 	if slices.Contains(extraEnv, rpcShutdownSecondExtension) {
 		second, err := filepath.Abs(filepath.Join("testdata", "rpc-shutdown-second.mjs"))
@@ -102,18 +102,18 @@ func startPiRPCShutdownFixture(t *testing.T, extraEnv ...string) (*rpcProcess, s
 	return startJSONLProcessAt(t, t.TempDir(), env, node, args...), report
 }
 
-// rpcShutdownImplementations start the fixture under pig and under the pinned
+// rpcShutdownImplementations start the fixture under ompig and under the pinned
 // Pi, so a test can compare their observable output.
 var rpcShutdownImplementations = []struct {
 	name  string
 	start func(t *testing.T, extraEnv ...string) (*rpcProcess, string)
 }{
-	{"pig", startRPCShutdownFixture},
+	{"ompig", startRPCShutdownFixture},
 	{"pi", startPiRPCShutdownFixture},
 }
 
 // startJSONLProcessAt starts command with a JSONL stdout reader, as
-// startRPCProcessAt does for the pig binary.
+// startRPCProcessAt does for the ompig binary.
 func startJSONLProcessAt(t *testing.T, cwd string, env []string, command string, args ...string) *rpcProcess {
 	t.Helper()
 	cmd := exec.Command(command, args...)
@@ -247,7 +247,7 @@ var (
 	}
 )
 
-// After stdin ends mid-prompt, pig writes only the session_shutdown
+// After stdin ends mid-prompt, ompig writes only the session_shutdown
 // notification and the turn_end boundary's extension_error to stdout, and
 // delivers session_shutdown, the tool-call turn's turn_end and agent_settled
 // to the extension, in Pi's order.
@@ -289,11 +289,11 @@ func TestRPCInputEndAfterExtensionCommandComparedWithPi(t *testing.T) {
 		response bool
 		dialog   bool
 		// afterExit marks a command that runs after Pi's exit. Pi records nothing
-		// for it. Pig's runtime is a separate process that its host stops after the
+		// for it. Ompig's runtime is a separate process that its host stops after the
 		// exit decision, so the continuation may record its event before then.
-		// pig divergence (D85): the afterExit tolerance is D85's first difference; the Pi rows stay strict.
+		// ompig divergence (D85): the afterExit tolerance is D85's first difference; the Pi rows stay strict.
 		afterExit bool
-		// piRacy marks a Pi row whose outcome is not fixed on this OS. On Windows, libuv reads a non-overlapped stdin pipe on a reader thread that posts its completions to the IOCP, so when the end of input lands is not tied to an event-loop phase, and whether two nested setImmediate ticks beat it varies by host: Pi answered every run of both immediate2 rows on one Windows host and 1 of 5 on a loaded Windows runner (TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi). The pig rows stay strict.
+		// piRacy marks a Pi row whose outcome is not fixed on this OS. On Windows, libuv reads a non-overlapped stdin pipe on a reader thread that posts its completions to the IOCP, so when the end of input lands is not tied to an event-loop phase, and whether two nested setImmediate ticks beat it varies by host: Pi answered every run of both immediate2 rows on one Windows host and 1 of 5 on a loaded Windows runner (TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi). The ompig rows stay strict.
 		piRacy bool
 	}{
 		{command: "micro", response: true},
@@ -317,7 +317,7 @@ func TestRPCInputEndAfterExtensionCommandComparedWithPi(t *testing.T) {
 	starts = append(starts, struct {
 		name  string
 		start func(t *testing.T, extraEnv ...string) (*rpcProcess, string)
-	}{"pig-with-sibling", startRPCShutdownFixtureWithSibling})
+	}{"ompig-with-sibling", startRPCShutdownFixtureWithSibling})
 	for _, impl := range starts {
 		for _, handler := range []bool{true, false} {
 			for _, tc := range cases {
@@ -360,7 +360,7 @@ func TestRPCInputEndAfterExtensionCommandComparedWithPi(t *testing.T) {
 						wantEvents = append(wantEvents, "session_shutdown")
 					}
 					slices.Sort(wantEvents)
-					if tc.afterExit && strings.HasPrefix(impl.name, "pig") {
+					if tc.afterExit && strings.HasPrefix(impl.name, "ompig") {
 						events = slices.DeleteFunc(events, func(event string) bool { return event == tc.command })
 					}
 					if !slices.Equal(events, wantEvents) {
@@ -440,14 +440,14 @@ func startRPCShutdownFixtureWithSibling(t *testing.T, extraEnv ...string) (*rpcP
 	}
 	home := t.TempDir()
 	report := filepath.Join(t.TempDir(), "report.txt")
-	env := append([]string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "RPC_SHUTDOWN_REPORT=" + report}, extraEnv...)
+	env := append([]string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "RPC_SHUTDOWN_REPORT=" + report}, extraEnv...)
 	return startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1", "-e", sibling, "-e", fixture), report
 }
 
 // Pi 0.87.1: when stdin ends and a session_shutdown handler waits on a
 // promise that never settles, nothing keeps Node's event loop alive, so the
 // process exits 0 without finishing the dispose (rpc-mode.ts:738 never
-// resumes). Pig's Node runtime reports that drain, and pig exits 0 the same.
+// resumes). Ompig's Node runtime reports that drain, and ompig exits 0 the same.
 func TestRPCInputEndWithPendingShutdownPromiseExitsZero(t *testing.T) {
 	for _, impl := range rpcShutdownImplementations {
 		t.Run(impl.name, func(t *testing.T) {
@@ -650,13 +650,13 @@ func TestRPCShutdownTriggers(t *testing.T) {
 // setImmediate does (measured with Pi 0.87.1 through the CLI: nested
 // setImmediate never answered; fs.stat, fs.access and fs.readdir answered 0 of
 // 20 runs each in one measurement and fs.readdir once in 5 under load, so only
-// pig's side is asserted for those; microimmediate and awaits5immediate 10 of
+// ompig's side is asserted for those; microimmediate and awaits5immediate 10 of
 // 10). The window closes in the
 // first loop iteration's close-callbacks phase, after that iteration's check
 // phase and before its next poll phase.
 func TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi(t *testing.T) {
 	const runs = 5
-	// piRacy marks a row whose Pi answer is not fixed, so only pig's side is
+	// piRacy marks a row whose Pi answer is not fixed, so only ompig's side is
 	// asserted for it. The threadpool rows: Pi answered 0 of 20 runs of each in
 	// one measurement, but under load in this harness it answered fs.readdir
 	// once in 5.
@@ -677,7 +677,7 @@ func TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, impl := range []string{"pig", "pi"} {
+	for _, impl := range []string{"ompig", "pi"} {
 		for _, k := range kinds {
 			if impl == "pi" && k.piRacy {
 				continue
@@ -688,8 +688,8 @@ func TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi(t *testing.T) {
 					home := t.TempDir()
 					env := []string{"HOME=" + home, "RPC_WINDOW_KIND=" + k.kind}
 					var p *rpcProcess
-					if impl == "pig" {
-						env = append(env, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_TEST_FAUX=1")
+					if impl == "ompig" {
+						env = append(env, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1")
 						p = startRPCProcessAt(t, t.TempDir(), env, "--no-session", "--offline", "--model", "test-faux/faux-1", "-e", fixture)
 					} else {
 						root, err := filepath.Abs("../..")

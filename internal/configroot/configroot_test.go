@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
-// matrixCase is one row of the env matrix every PiG config root getter (host, Go, Python, Rust and Node SDKs) must answer identically.
+// matrixCase is one row of the env matrix every Ompig config root getter (host, Go, Python, Rust and Node SDKs) must answer identically.
 type matrixCase struct {
 	Name string             `json:"name"`
 	Env  map[string]*string `json:"env"`
@@ -37,13 +37,13 @@ func loadMatrix(t *testing.T) []matrixCase {
 	return matrix.Cases
 }
 
-// The shared matrix: PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig; an empty override falls through; a leading ~ or ~/ expands; a non-tilde value is literal;
+// The shared matrix: OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig; an empty override falls through; a leading ~ or ~/ expands; a non-tilde value is literal;
 // an unavailable home directory is an error, never a relative path.
 func TestResolveMatchesTheSharedMatrix(t *testing.T) {
 	for _, tc := range loadMatrix(t) {
 		t.Run(tc.Name, func(t *testing.T) {
 			home := t.TempDir()
-			for _, name := range []string{"PIG_HOME", "XDG_CONFIG_HOME"} {
+			for _, name := range []string{"OMPIG_HOME", "XDG_CONFIG_HOME"} {
 				t.Setenv(name, "")
 				_ = os.Unsetenv(name)
 			}
@@ -97,7 +97,7 @@ func TestExpandHomeFailsWithoutAHomeDirectoryOnlyWhenItIsNeeded(t *testing.T) {
 
 // Dir cannot report a failure, so it panics instead of returning a path relative to the working directory.
 func TestDirPanicsInsteadOfReturningARelativePath(t *testing.T) {
-	t.Setenv("PIG_HOME", "")
+	t.Setenv("OMPIG_HOME", "")
 	t.Setenv("XDG_CONFIG_HOME", "")
 	t.Setenv("HOME", "")
 	t.Setenv("USERPROFILE", "")
@@ -122,22 +122,22 @@ func TestExpandTilde(t *testing.T) {
 	}
 }
 
-// The config root is PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig, and a leading ~ in the variables is expanded.
+// The config root is OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig, and a leading ~ in the variables is expanded.
 func TestDirPrefersPigHomeThenXDGThenTheHomeDirectory(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", "~/p")
+	t.Setenv("OMPIG_HOME", "~/p")
 	t.Setenv("XDG_CONFIG_HOME", "~/x")
 	if got, want := configroot.Dir(), filepath.Join(home, "p"); got != want {
-		t.Fatalf("PIG_HOME wins: %q, want %q", got, want)
+		t.Fatalf("OMPIG_HOME wins: %q, want %q", got, want)
 	}
-	t.Setenv("PIG_HOME", "")
-	if got, want := configroot.Dir(), filepath.Join(home, "x", "pig"); got != want {
+	t.Setenv("OMPIG_HOME", "")
+	if got, want := configroot.Dir(), filepath.Join(home, "x", "ompig"); got != want {
 		t.Fatalf("XDG_CONFIG_HOME next: %q, want %q", got, want)
 	}
 	t.Setenv("XDG_CONFIG_HOME", "")
-	if got, want := configroot.Dir(), filepath.Join(home, ".pig"); got != want {
+	if got, want := configroot.Dir(), filepath.Join(home, ".ompig"); got != want {
 		t.Fatalf("the home directory last: %q, want %q", got, want)
 	}
 }
@@ -145,7 +145,7 @@ func TestDirPrefersPigHomeThenXDGThenTheHomeDirectory(t *testing.T) {
 // DocsDir is the directory pigdocs registered for this binary's bundle: one content-addressed directory per build under <config root>/docs (D22).
 // It spells the docs directory name itself so that a Binary that strips docs does not link pigdocs.
 func TestDocsDirIsThePigdocsBundleUnderTheConfigRoot(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	got, ok := configroot.DocsDir()
 	if want := pigdocs.DocsDir(configroot.Dir()); !ok || got != want {
 		t.Fatalf("DocsDir() = %q, %t, want %q, true", got, ok, want)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/nestedevents"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/nestedevents"
 )
 
 func main() {

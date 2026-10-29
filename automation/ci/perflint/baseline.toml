@@ -845,7 +845,7 @@ class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shr
 
 [[hit]]
 file = "coding/cli/build_command.go"
-func = "pigBuildTarget"
+func = "ompigBuildTarget"
 pattern = "env-stat"
 detail = "os.Getenv"
 count = 1
@@ -853,7 +853,7 @@ class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shr
 
 [[hit]]
 file = "coding/cli/build_command.go"
-func = "pigSourceRootCandidates"
+func = "ompigSourceRootCandidates"
 pattern = "env-stat"
 detail = "os.Getenv"
 count = 1
@@ -2596,7 +2596,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/extends.go"
+file = "coding/ompiglet/extends.go"
 func = "canonicalDirectory"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2604,7 +2604,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/extends.go"
+file = "coding/ompiglet/extends.go"
 func = "canonicalPigletPath"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2612,7 +2612,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/extends.go"
+file = "coding/ompiglet/extends.go"
 func = "ensureNoSymlinkEscape"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2620,23 +2620,23 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/lineage.go"
+file = "coding/ompiglet/lineage.go"
 func = "canonicalJSON"
 pattern = "decode-own-encode"
 detail = "v3.Marshal->v3.Unmarshal"
 count = 1
-class = "cold: piglet build and lineage, once per command"
+class = "cold: ompiglet build and lineage, once per command"
 
 [[hit]]
-file = "coding/piglet/lineage.go"
+file = "coding/ompiglet/lineage.go"
 func = "fieldsJSON"
 pattern = "decode-own-encode"
 detail = "v3.Marshal->v3.Unmarshal"
 count = 1
-class = "cold: piglet build and lineage, once per command"
+class = "cold: ompiglet build and lineage, once per command"
 
 [[hit]]
-file = "coding/piglet/lineage_cli.go"
+file = "coding/ompiglet/lineage_cli.go"
 func = "Lineage"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2644,7 +2644,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "buildExtensionWithOwner"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2652,7 +2652,7 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "cmdAddHuman"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2660,7 +2660,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "cmdRemoveHuman"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2668,7 +2668,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "findMaterializedPiglet"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2676,15 +2676,15 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "pigletJSONValue"
 pattern = "decode-own-encode"
 detail = "v3.Marshal->v3.Unmarshal"
 count = 1
-class = "cold: piglet build and lineage, once per command"
+class = "cold: ompiglet build and lineage, once per command"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "remotePigletAddOffline"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2692,7 +2692,7 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "removePigletFacets"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2700,7 +2700,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "resolvePigletAddSource"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2708,7 +2708,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "tracef"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2716,7 +2716,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "validatePigletAddOrigins"
 pattern = "loop-format"
 detail = "fmt.Sprintf"
@@ -2724,7 +2724,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/monorepo_add.go"
+file = "coding/ompiglet/monorepo_add.go"
 func = "pigletClosure.collect"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2732,7 +2732,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/monorepo_add.go"
+file = "coding/ompiglet/monorepo_add.go"
 func = "pigletClosure.collect"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2740,7 +2740,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/monorepo_add.go"
+file = "coding/ompiglet/monorepo_add.go"
 func = "pigletClosure.copy"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2748,7 +2748,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/monorepo_add.go"
+file = "coding/ompiglet/monorepo_add.go"
 func = "rejectPigletDestinationSymlinks"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2756,7 +2756,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/monorepo_add.go"
+file = "coding/ompiglet/monorepo_add.go"
 func = "verifyPigletOriginFiles"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2764,15 +2764,15 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/origins.go"
-func = "Piglet.FrontendDir"
+file = "coding/ompiglet/origins.go"
+func = "Ompiglet.FrontendDir"
 pattern = "env-stat"
 detail = "os.Stat"
 count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/origins.go"
+file = "coding/ompiglet/origins.go"
 func = "resolveOrigins"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2780,7 +2780,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/prune.go"
+file = "coding/ompiglet/prune.go"
 func = "pruneItems"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2788,7 +2788,7 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/asset.go"
+file = "coding/ompiglet/release/asset.go"
 func = "fileSHA256"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2796,7 +2796,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/github.go"
+file = "coding/ompiglet/release/github.go"
 func = "githubURL"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2804,7 +2804,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/list.go"
+file = "coding/ompiglet/release/list.go"
 func = "verifyArtifact"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2812,7 +2812,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/pull.go"
+file = "coding/ompiglet/release/pull.go"
 func = "loopbackHTTPAllowed"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2820,7 +2820,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/store.go"
+file = "coding/ompiglet/release/store.go"
 func = "lockStore"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2828,7 +2828,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/store.go"
+file = "coding/ompiglet/release/store.go"
 func = "openDirectory"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2836,7 +2836,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/store.go"
+file = "coding/ompiglet/release/store.go"
 func = "openManagedFile"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2844,7 +2844,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/release/update.go"
+file = "coding/ompiglet/release/update.go"
 func = "discoverGitHubVersion"
 pattern = "loop-format"
 detail = "fmt.Sprintf"
@@ -2852,7 +2852,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "ResolveWithTrust"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2860,7 +2860,7 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "ResolveWithTrust"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2868,7 +2868,7 @@ count = 4
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "ShadowedWorkspacePiglet"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2876,7 +2876,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "ambientPigletPathFor"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2884,7 +2884,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "findOrphanManagedArtifacts"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2892,7 +2892,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "listManagedRecords"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2900,7 +2900,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/resolve.go"
+file = "coding/ompiglet/resolve.go"
 func = "validateManagedArtifact"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2908,7 +2908,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "ActiveAgentEnvironmentIdentity"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2916,7 +2916,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "RunAgentEnvironment"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2924,7 +2924,7 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "resolveMountSource"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2932,7 +2932,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "runtimeContainerArgs"
 pattern = "loop-format"
 detail = "string+="
@@ -2940,7 +2940,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "runtimeWorkspace"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2948,7 +2948,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "verifyActiveAgentEnvironment"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -2956,7 +2956,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/schema.go"
+file = "coding/ompiglet/schema.go"
 func = "schemaInstance"
 pattern = "json-roundtrip"
 detail = "marshal+unmarshal"
@@ -2964,7 +2964,7 @@ count = 1
 class = "cold: startup, config, registration, login, export or command code that runs once per user action"
 
 [[hit]]
-file = "coding/piglet/secrets.go"
+file = "coding/ompiglet/secrets.go"
 func = "ResolveRequiredSecrets"
 pattern = "env-stat"
 detail = "os.LookupEnv"
@@ -2972,7 +2972,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/secrets.go"
+file = "coding/ompiglet/secrets.go"
 func = "resolveSecretDeclaration"
 pattern = "env-stat"
 detail = "os.LookupEnv"
@@ -2980,7 +2980,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/secrets.go"
+file = "coding/ompiglet/secrets.go"
 func = "resolveSecretDeclaration"
 pattern = "env-stat"
 detail = "os.Lstat"
@@ -2988,7 +2988,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/signature/signature.go"
+file = "coding/ompiglet/signature/signature.go"
 func = "CheckFile"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -2996,7 +2996,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/signature/signature.go"
+file = "coding/ompiglet/signature/signature.go"
 func = "Sign"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -3004,7 +3004,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/signature/trust.go"
+file = "coding/ompiglet/signature/trust.go"
 func = "LoadTrust"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -3012,7 +3012,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/signature/verifycache.go"
+file = "coding/ompiglet/signature/verifycache.go"
 func = "CheckCached"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -3020,7 +3020,7 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/signature/verifycache.go"
+file = "coding/ompiglet/signature/verifycache.go"
 func = "readVerifyCache"
 pattern = "env-stat"
 detail = "os.Stat"
@@ -3028,7 +3028,7 @@ count = 1
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/tree_cli.go"
+file = "coding/ompiglet/tree_cli.go"
 func = "cmdTree"
 pattern = "env-stat"
 detail = "os.Getenv"
@@ -3036,15 +3036,15 @@ count = 2
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/types.go"
-func = "Piglet.Validate"
+file = "coding/ompiglet/types.go"
+func = "Ompiglet.Validate"
 pattern = "loop-format"
 detail = "fmt.Sprintf"
 count = 3
 class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shrink-only"
 
 [[hit]]
-file = "coding/piglet/types.go"
+file = "coding/ompiglet/types.go"
 func = "validateAgentMounts"
 pattern = "loop-format"
 detail = "fmt.Sprintf"
@@ -3125,7 +3125,7 @@ class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shr
 
 [[hit]]
 file = "coding/pigletbuild/native_build.go"
-func = "pigSourceRoot"
+func = "ompigSourceRoot"
 pattern = "env-stat"
 detail = "os.Getenv"
 count = 1
@@ -3197,7 +3197,7 @@ class = "hot-kept: unfixed at integrate-042 tip, fix pending on a port lane; shr
 
 [[hit]]
 file = "coding/pigletbuild/records.go"
-func = "pigSourceIdentity"
+func = "ompigSourceIdentity"
 pattern = "env-stat"
 detail = "os.Lstat"
 count = 1

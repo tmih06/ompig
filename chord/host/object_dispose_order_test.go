@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // object.ts:1186-1205 call, with #invoke (:1213-1222): the invocation's settle handler (which removes it and runs

@@ -14,7 +14,7 @@ import (
 // upstream regression targets the openai JS SDK's APIError, which reports
 // "<status> status code (no body)" and keeps the parsed body only on error.error,
 // so a body-blind catch surfaces an opaque message and hides the gateway's real
-// reason. pig's Go image provider reads resp.Body directly, so it surfaces the
+// reason. ompig's Go image provider reads resp.Body directly, so it surfaces the
 // body by construction. This guards that a non-2xx with a body yields an error
 // carrying the body reason, never the opaque "no body" form.
 func TestGenerateImagesOpenRouter_SurfacesErrorBodyReason(t *testing.T) {

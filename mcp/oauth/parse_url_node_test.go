@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 func TestParseURLMatchesNodeNewURL(t *testing.T) {
@@ -64,7 +64,7 @@ func TestParseURLMatchesNodeNewURL(t *testing.T) {
 	}
 }
 
-// A caller outside PiG cannot import internal/nodeurl, so ParseURL is the way to build the URL that
+// A caller outside Ompig cannot import internal/nodeurl, so ParseURL is the way to build the URL that
 // AuthorizationServerMetadataURL takes; Href serializes what it parsed.
 func TestParseURLIsHowACallerMakesAURL(t *testing.T) {
 	parsed, err := ParseURL("https://auth.example.com/meta#f")

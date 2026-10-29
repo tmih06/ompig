@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/compactiontypes"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/compactiontypes"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/sessionentry"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Opaque compatibility aliases preserve upstream extension payloads that cross
@@ -69,7 +69,7 @@ type SimpleStreamOptions = ai.StreamOptions
 type AssistantMessageEventStream = *ai.AssistantMessageEventStream
 
 // AIContext mirrors @earendil-works/pi-ai Context (the per-call provider
-// context, distinct from pig's ExtensionContext).
+// context, distinct from ompig's ExtensionContext).
 type AIContext = ai.TranscriptContext
 
 // API is represented by ai.API in concrete provider declarations.
@@ -128,7 +128,7 @@ type TerminalInputResult struct {
 // arrives, the connection fails, or ctx ends. A failure returns the zero
 // result, which leaves the input unchanged.
 //
-// pig additive (D19): upstream's TerminalInputHandler answers synchronously in
+// ompig additive (D19): upstream's TerminalInputHandler answers synchronously in
 // process. A subprocess listener's answer crosses a socket, so the host calls
 // this off its input loop.
 type RemoteTerminalInputHandler = func(ctx context.Context, data string) TerminalInputResult
@@ -338,7 +338,7 @@ type LsToolInput struct {
 // ─── Cancellation ─────────────────────────────────────────────────────────
 
 // AbortSignal was the upstream cancellation primitive (DOM AbortSignal).
-// Pig uses context.Context for cancellation (see docs/parity/DIVERGENCES.md D3). This
+// Ompig uses context.Context for cancellation (see docs/parity/DIVERGENCES.md D3). This
 // deprecated alias preserves source compatibility while giving callers the real
 // cancellation contract instead of an untyped value.
 //

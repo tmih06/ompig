@@ -10,9 +10,9 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // handlerKey names one host function or object by identity. Go funcs are not comparable, so a function is keyed by the

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The pi.events bridge fixtures. Every language runs one interpreter over the same configuration, so a scenario states its expectation once and every realm kind must produce it: node is the control that runs upstream's own bus semantics (packages/coding-agent/src/core/event-bus.ts:12-33), a native realm must produce the same lines.
@@ -24,7 +24,7 @@ import (
 //	burst <channel> <count>        emit {"i":n} count times
 //	report                         log "<name>|counts|{channel: deliveries}" for the count action
 //	emitmark <channel> <json>      emit, then log "<channel>:returned" (a native emitter)
-//	collect                        node only, under PIG_TEST_XREF_COLLECT=1: collect the process's garbage and release the cross-process references it freed
+//	collect                        node only, under OMPIG_TEST_XREF_COLLECT=1: collect the process's garbage and release the cross-process references it freed
 //	kept                           node only: log "<name>|kept|[payloads kept by the keep action]"
 //	unkeep                         node only: drop the payloads the keep action kept
 //
@@ -105,7 +105,7 @@ export default function (pi) {
   pi.registerCommand("emitmark", { description: "emitmark", handler: async args => { const [channel, ...rest] = args.split(" "); pi.events.emit(channel, JSON.parse(rest.join(" "))); log(channel + ":returned", null); } });
   pi.registerCommand("report", { description: "report", handler: async () => { log("counts", counts); } });
   pi.registerCommand("burst", { description: "burst", handler: async args => { const [channel, count] = args.split(" "); for (let i = 0; i < Number(count); i++) pi.events.emit(channel, { i }); } });
-  pi.registerCommand("collect", { description: "collect", handler: async () => { globalThis[Symbol.for("pig.test.xrefCollect")](); } });
+  pi.registerCommand("collect", { description: "collect", handler: async () => { globalThis[Symbol.for("ompig.test.xrefCollect")](); } });
   pi.registerCommand("kept", { description: "kept", handler: async () => { log("kept", kept); } });
   pi.registerCommand("unkeep", { description: "unkeep", handler: async () => { kept.length = 0; } });
 }
@@ -123,7 +123,7 @@ import (
 	"sync"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // The configuration is read at start-up from the extension's working directory, which is its Host's own directory, so every rig of the same fixture name runs one compiled program.
@@ -327,7 +327,7 @@ import os
 import threading
 import time
 
-import pig_sdk
+import ompig_sdk
 
 with open(%s, encoding="utf-8") as config_file:
     CFG = json.load(config_file)
@@ -338,7 +338,7 @@ with open(%s, encoding="utf-8") as config_file:
 
 def new_extension():
     name = CFG["name"]
-    e = pig_sdk.Extension(name + "-rejected" if CFG.get("failLoad") else name)
+    e = ompig_sdk.Extension(name + "-rejected" if CFG.get("failLoad") else name)
     lock = threading.Lock()
     subs = []
     counts = {}
@@ -429,7 +429,7 @@ def new_extension():
     return e
 `
 
-const rustBusFixture = `use pig_sdk::{CommandResult, Context, EventBus, Extension, Subscription};
+const rustBusFixture = `use ompig_sdk::{CommandResult, Context, EventBus, Extension, Subscription};
 use serde_json::{json, Value};
 use std::collections::BTreeMap;
 use std::io::Write;
@@ -628,7 +628,7 @@ func newBusRig(t *testing.T, specs ...busFixture) *busRig {
 
 func newBusRigWithFailures(t *testing.T, specs ...busFixture) (*busRig, []error) {
 	t.Helper()
-	// TestMain exports the three PIG_SDK_*_ROOT variables for this module root; a rig does not set them again, so rigs run in parallel tests.
+	// TestMain exports the three OMPIG_SDK_*_ROOT variables for this module root; a rig does not set them again, so rigs run in parallel tests.
 	root := findModuleRoot(t)
 	log := filepath.Join(t.TempDir(), "bus.log")
 	cwd := t.TempDir()

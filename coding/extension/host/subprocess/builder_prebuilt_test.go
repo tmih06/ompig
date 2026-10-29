@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 // fakeResolver serves one composition and records what it was asked for.
@@ -68,7 +68,7 @@ func TestBuilderBuild_PrebuiltShortCircuits(t *testing.T) {
 }
 
 func TestBuilderBuild_NilResolverBuildsFromSource(t *testing.T) {
-	// With no resolver (stock pig), the broken source must actually be built
+	// With no resolver (stock ompig), the broken source must actually be built
 	// and fail: proving the short-circuit is the only thing that skipped it.
 	runtimecell.SetPrebuiltResolver(nil)
 	b := NewBuilder(t.TempDir())

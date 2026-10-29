@@ -16,7 +16,7 @@ func TestRPCStartupDiscoversExtensionResourcesOnce(t *testing.T) {
 	home := t.TempDir()
 	log := filepath.Join(home, "discover.log")
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"HOME=" + home, "USERPROFILE=" + home, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "PIG_TEST_DISCOVER_LOG=" + log,
+		"HOME=" + home, "USERPROFILE=" + home, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "OMPIG_TEST_DISCOVER_LOG=" + log,
 	}, "--no-session", "--model", "test-faux/faux-1", "-e", extension)
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	p.await("the command catalog", func(record rpcRecord) bool {

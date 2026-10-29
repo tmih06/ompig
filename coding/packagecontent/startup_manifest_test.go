@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
 // Pi 0.87.1 pi-manifest.ts:16-33 and package-manager.ts:2153-2202 treat

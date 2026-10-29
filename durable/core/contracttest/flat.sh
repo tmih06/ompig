@@ -13,7 +13,7 @@ work=$(mktemp -d "${TMPDIR:-/tmp}/dcore-flat.XXXXXX")
 trap 'rm -rf "$work"' EXIT
 go build -buildvcs=false -o "$work/bench" ./durable/core/sqlhost/cmd/bench
 go build -buildvcs=false -o "$work/countgate" ./durable/core/contracttest/cmd/countgate
-env HOME="$work/home" PIG_CODING_AGENT_DIR="$work/agent" PI_CODING_AGENT_DIR="$work/agent" PIG_HOME="$work/pig" PI_HOME="$work/pig" \
+env HOME="$work/home" OMPIG_CODING_AGENT_DIR="$work/agent" PI_CODING_AGENT_DIR="$work/agent" OMPIG_HOME="$work/ompig" PI_HOME="$work/ompig" \
 	TZ=UTC DETENV_EPOCH=1800000000000 "$work/bench" --db "$work/s.sqlite" --trace "$work/t.trace" --record "$work/r.rec" \
 	--seed 3 --turns "${TURNS:-300}" --tools 8 --variant incr >/dev/null
 "$work/countgate" flat --rec "$work/r.rec"

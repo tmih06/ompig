@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 type discoverEntry struct {
@@ -129,14 +129,14 @@ func discoverProbes() []discoverProbe {
 	return probes
 }
 
-// discoverAndLoadExtensions (core/extensions/loader.ts:828-875, discoverExtensionsInDir, resolveExtensionEntries) against pinned Pi over 300 seeded trees: the project, agent and configured locations in order, direct files, one-level subdirectories with index.ts/index.js or a package.json `pi.extensions` manifest (missing and unreadable manifests, entries outside the directory), symbolic links, configured files, directories, `~`, file:// URLs, relative and no-break-space spellings, and deduplication by absolute path. Pi's loaded and failed extension paths equal Pig's discovered paths split by whether the path is a regular file.
+// discoverAndLoadExtensions (core/extensions/loader.ts:828-875, discoverExtensionsInDir, resolveExtensionEntries) against pinned Pi over 300 seeded trees: the project, agent and configured locations in order, direct files, one-level subdirectories with index.ts/index.js or a package.json `pi.extensions` manifest (missing and unreadable manifests, entries outside the directory), symbolic links, configured files, directories, `~`, file:// URLs, relative and no-break-space spellings, and deduplication by absolute path. Pi's loaded and failed extension paths equal Ompig's discovered paths split by whether the path is a regular file.
 func TestDiscoverExtensionPathsMatchPi(t *testing.T) {
 	probes := discoverProbes()
 	input, err := json.Marshal(probes)
 	if err != nil {
 		t.Fatal(err)
 	}
-	piSandbox, pigSandbox := t.TempDir(), t.TempDir()
+	piSandbox, ompigSandbox := t.TempDir(), t.TempDir()
 	cmd := exec.CommandContext(t.Context(), "node", "testdata/discover_extensions.mjs", pigversion.UpstreamPackageVersion, piSandbox)
 	cmd.Stdin = bytes.NewReader(input)
 	var stderr bytes.Buffer
@@ -153,7 +153,7 @@ func TestDiscoverExtensionPathsMatchPi(t *testing.T) {
 		t.Fatalf("Pi returned %d results for %d probes", len(want), len(probes))
 	}
 	for i, probe := range probes {
-		base := filepath.Join(pigSandbox, fmt.Sprintf("p%d", i))
+		base := filepath.Join(ompigSandbox, fmt.Sprintf("p%d", i))
 		fill := func(s string) string {
 			return strings.ReplaceAll(strings.ReplaceAll(s, "{S}", base), "{CFG}", icodingagent.ConfigDirName())
 		}

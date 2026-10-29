@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // A subprocess extension's concurrent ui.select and ui.confirm calls (a Promise.all of ctx.ui calls, or one thread per dialog) reach the

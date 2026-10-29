@@ -2,14 +2,14 @@
 
 ## Contract and cause
 
-Pi 0.87.1 assembles builtin commands, prompt templates, extension commands, then skills in `packages/coding-agent/src/modes/interactive/interactive-mode.ts:747-776`. `packages/tui/src/autocomplete.ts:335-341` strips `skill:` when scoring an unqualified query. Equal scores preserve insertion order. PiG assembled skills before extension commands, so `/btw` selected `skill:btw` instead of the package's `btw` command.
+Pi 0.87.1 assembles builtin commands, prompt templates, extension commands, then skills in `packages/coding-agent/src/modes/interactive/interactive-mode.ts:747-776`. `packages/tui/src/autocomplete.ts:335-341` strips `skill:` when scoring an unqualified query. Equal scores preserve insertion order. Ompig assembled skills before extension commands, so `/btw` selected `skill:btw` instead of the package's `btw` command.
 
-The installed Pi `CombinedAutocompleteProvider` probe returns `["btw","skill:btw"]` for Pi's order and the reverse for PiG's old order. The fix changes only the host catalog assembly order. It does not alter fuzzy scoring, command dispatch, or skill expansion.
+The installed Pi `CombinedAutocompleteProvider` probe returns `["btw","skill:btw"]` for Pi's order and the reverse for Ompig's old order. The fix changes only the host catalog assembly order. It does not alter fuzzy scoring, command dispatch, or skill expansion.
 
 ## Red and green
 
 - `TestExtensionCommandPrecedesSameNameSkillAutocomplete` fails before the fix: the suggestions are reversed and Tab accepts `/skill:btw ` instead of `/btw `. It drives the production catalog builder and editor input path.
-- `autocomplete/08-extension-command-before-skill` fails before the fix against real Pi: Pi executes the command and emits `AUTOCOMPLETE COMMAND SELECTED`; PiG expands the skill and sends it to the provider. It passes three paired runs after the fix with escaped equality.
+- `autocomplete/08-extension-command-before-skill` fails before the fix against real Pi: Pi executes the command and emits `AUTOCOMPLETE COMMAND SELECTED`; Ompig expands the skill and sends it to the provider. It passes three paired runs after the fix with escaped equality.
 - The first scenario attempt used a skill path outside the copied cwd and failed on both hosts. That attempt is not red evidence. The corrected scenario copies the fixture cwd and names its `SKILL.md` explicitly.
 - The complete autocomplete and extensions-runtime families pass after the fix. No existing comparator is weakened.
 - Full Linux vet, Windows vet for `internal/codingagent`, lint configuration verification, changed-file lint, full lint, `make ci-contracts ci-drift`, and `go test ./internal/codingagent ./test/parity/...` pass. The first scenario-lint run rejected the missing `Upstream evidence` comment label; the comment is corrected.

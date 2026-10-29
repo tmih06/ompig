@@ -54,8 +54,8 @@ libs  ./internal/entered
 libs  ./internal/requestvalidity
 libs  ./internal/testenv
 libs  ./mcp/mcptest
-libs  ./piglets/aot
-libs  ./piglets/porter/extensions/pig-porter
-libs  ./piglets/standard
+libs  ./ompiglets/aot
+libs  ./ompiglets/porter/extensions/ompig-porter
+libs  ./ompiglets/standard
 libs  ./durable/images
 libs  ./internal/nativeplatform

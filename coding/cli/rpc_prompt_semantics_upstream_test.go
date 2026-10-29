@@ -81,12 +81,12 @@ func TestRPCPromptResponseSemanticsUpstream(t *testing.T) {
 		if err := os.MkdirAll(dir, 0700); err != nil {
 			t.Fatal(err)
 		}
-		// Pi's test hands this model (contextWindow 0, maxTokens 0) to the session directly. Pig reaches it through models.json, where Pi rejects a non-positive contextWindow or maxTokens (provider-composer.ts:224-229), so the fixture uses positive limits.
+		// Pi's test hands this model (contextWindow 0, maxTokens 0) to the session directly. Ompig reaches it through models.json, where Pi rejects a non-positive contextWindow or maxTokens (provider-composer.ts:224-229), so the fixture uses positive limits.
 		models := `{"providers":{"fake-provider":{"baseUrl":"https://example.invalid","api":"openai-completions","models":[{"id":"fake-model","name":"Fake Model","reasoning":false,"input":[],"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0},"contextWindow":128000,"maxTokens":4096}]}}}`
 		if err := os.WriteFile(filepath.Join(dir, "models.json"), []byte(models), 0600); err != nil {
 			t.Fatal(err)
 		}
-		f := &upstreamRPC{p: startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + dir}, "--offline", "--no-extensions", "--model", "fake-provider/fake-model", "--no-session")}
+		f := &upstreamRPC{p: startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + dir}, "--offline", "--no-extensions", "--model", "fake-provider/fake-model", "--no-session")}
 		f.p.send(`{"id":"b1","type":"prompt","message":"Hello"}`)
 		f.response("b1")
 		f.finish()

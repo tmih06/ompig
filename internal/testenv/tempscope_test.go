@@ -21,7 +21,7 @@ func TestScopeTempDirRedirectsParentAndChildren(t *testing.T) {
 	if got := os.TempDir(); got != root {
 		t.Fatalf("os.TempDir() = %q, want %q", got, root)
 	}
-	file, err := os.CreateTemp("", "pig-ext-scope-*.log")
+	file, err := os.CreateTemp("", "ompig-ext-scope-*.log")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestRequireScopedTempDirAcceptsScopeAndRejectsShared(t *testing.T) {
 	for _, key := range []string{"TMPDIR", "TMP", "TEMP"} {
 		t.Setenv(key, os.Getenv(key))
 	}
-	root, err := os.MkdirTemp("", "pig-scope-test-")
+	root, err := os.MkdirTemp("", "ompig-scope-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,15 +50,15 @@ func TestRequireScopedTempDirAcceptsScopeAndRejectsShared(t *testing.T) {
 	if err := ScopeTempDir(root); err != nil {
 		t.Fatal(err)
 	}
-	RequireScopedTempDir(t, "pig-scope-test-")
-	leaks, err := filepath.Glob(filepath.Join(root, "pig-scope-probe-*"))
+	RequireScopedTempDir(t, "ompig-scope-test-")
+	leaks, err := filepath.Glob(filepath.Join(root, "ompig-scope-probe-*"))
 	if err != nil || len(leaks) != 0 {
 		t.Fatalf("probe files left behind: %v, %v", leaks, err)
 	}
 	fake := &recordingTB{TB: t}
 	func() {
 		defer func() { _ = recover() }()
-		RequireScopedTempDir(fake, "pig-other-")
+		RequireScopedTempDir(fake, "ompig-other-")
 	}()
 	if !fake.failed {
 		t.Fatal("a temporary directory without the package prefix was accepted")
@@ -76,7 +76,7 @@ func (r *recordingTB) Fatalf(string, ...any) {
 	panic("fatal")
 }
 
-// A test that replaces HOME must not move the go command's build and module caches: the child `go build` of PiG would start from empty caches and recompile the module graph.
+// A test that replaces HOME must not move the go command's build and module caches: the child `go build` of Ompig would start from empty caches and recompile the module graph.
 func TestKeepGoBuildCachesSurvivesAHomeChange(t *testing.T) {
 	t.Setenv("GOCACHE", "")
 	t.Setenv("GOMODCACHE", "")
@@ -115,10 +115,10 @@ func TestKeepGoBuildCachesSurvivesAHomeChange(t *testing.T) {
 	}
 }
 
-// A lane exports PIG_CODING_AGENT_DIR for its own pig process and every child inherits it. ScopeTempDir must replace it, and every sibling that selects the agent directory, with directories under the scoped root.
+// A lane exports OMPIG_CODING_AGENT_DIR for its own ompig process and every child inherits it. ScopeTempDir must replace it, and every sibling that selects the agent directory, with directories under the scoped root.
 func TestScopeTempDirIsolatesAgentDirectoryEnvironment(t *testing.T) {
 	real := t.TempDir()
-	keys := []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME", "PIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_SESSION_DIR", "TMPDIR", "TMP", "TEMP"}
+	keys := []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME", "OMPIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_SESSION_DIR", "TMPDIR", "TMP", "TEMP"}
 	for _, key := range keys {
 		t.Setenv(key, real)
 	}
@@ -147,7 +147,7 @@ func TestRequireIsolatedAgentEnvAcceptsOnlyTheScopedDirectories(t *testing.T) {
 	t.Setenv("TMPDIR", scoped)
 	t.Setenv("TMP", scoped)
 	t.Setenv("TEMP", scoped)
-	for _, key := range append([]string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME"}, agentSessionEnv...) {
+	for _, key := range append([]string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME"}, agentSessionEnv...) {
 		t.Setenv(key, t.TempDir())
 	}
 	if err := IsolateAgentEnv(scoped); err != nil {
@@ -156,7 +156,7 @@ func TestRequireIsolatedAgentEnvAcceptsOnlyTheScopedDirectories(t *testing.T) {
 	RequireIsolatedAgentEnv(t) // passes after isolation
 
 	probe := &errorRecorder{TB: t}
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	RequireIsolatedAgentEnv(probe)
 	if !probe.failed {
 		t.Fatal("an agent directory outside the scoped root passed")

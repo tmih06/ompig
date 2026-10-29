@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type thinkingLevelMapCase struct {
@@ -72,7 +72,7 @@ emit(input.map((c) => {
 		}
 		if fmt.Sprint(got) != fmt.Sprint(want[i]) || !slices.Equal(got.Supported, want[i].Supported) {
 			if failures++; failures <= 6 {
-				t.Errorf("reasoning %t map %v:\n  Pig %v\n  Pi  %v", c.Reasoning, describeLevelMap(c.Map), got, want[i])
+				t.Errorf("reasoning %t map %v:\n  Ompig %v\n  Pi  %v", c.Reasoning, describeLevelMap(c.Map), got, want[i])
 			}
 		}
 	}

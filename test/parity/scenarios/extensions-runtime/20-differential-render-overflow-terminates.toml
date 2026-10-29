@@ -8,13 +8,13 @@
 # uncaughtException handler (interactive-mode.ts:4199-4222) prints
 # "<app> exiting due to uncaughtException:" and the error, records the crash,
 # and exits 1. The widget is added after the first frame, so its over-wide row
-# reaches the differential loop. The pane is tall enough to hold PiG's Go
+# reaches the differential loop. The pane is tall enough to hold Ompig's Go
 # stack as well as Pi's JavaScript stack; the stack frames themselves differ
 # by runtime and are not compared. The row index is not asserted because the
 # two startup headers differ in height (see OVERFLOW-FAITHFUL.md).
 # lint-known-gap: no equality comparator because the report ends with the
-# runtime stack (Go frames for PiG, JavaScript frames for Pi), and the row index
-# differs while PiG's compact [Extensions] header row and widget spacing do not
+# runtime stack (Go frames for Ompig, JavaScript frames for Pi), and the row index
+# differs while Ompig's compact [Extensions] header row and widget spacing do not
 # match Pi's. The error text, widths, log name, and exit status are asserted.
 
 name = "20-differential-render-overflow-terminates"
@@ -28,12 +28,12 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
+ompig = ["OMPIG_TEST_FAUX=1"]
 # Fullscreen is the default TUI mode, so both binaries select the main-screen
 # renderer this scenario exercises.
-pig_args = ["--no-extensions", "--tui-mode", "regular"]
+ompig_args = ["--no-extensions", "--tui-mode", "regular"]
 pi_args = ["--tui-mode", "regular"]
-pig_extensions = ["testdata/ext/overflow-widget.mjs"]
+ompig_extensions = ["testdata/ext/overflow-widget.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/overflow-widget.mjs",
@@ -42,7 +42,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 72
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "exiting due to uncaughtException:"

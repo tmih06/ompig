@@ -15,13 +15,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/migrations.ts
 
 // runMigrations over fixture trees: legacy oauth.json and settings.json apiKeys into auth.json, session files at the agent root into their cwd
-// directory, tools/ binaries into bin/, commands/ into prompts/, the keybinding rewrite, and the deprecation warnings. The pinned runMigrations and PiG's
+// directory, tools/ binaries into bin/, commands/ into prompts/, the keybinding rewrite, and the deprecation warnings. The pinned runMigrations and Ompig's
 // RunMigrations run on the same tree (file contents are Latin-1 strings so the bytes are exact); the returned values and the whole resulting tree
 // (paths, contents, the auth.json mode; Pi's project .pi is ConfigDirName here) must be equal. Fixture paths are relative to a base directory holding agent/ and project/.
 func TestRunMigrationsTreeMatchesPi(t *testing.T) {
@@ -162,7 +162,7 @@ func compareMigrationTrees(t *testing.T, fixtures []map[string]*string) {
 				t.Fatal(err)
 			}
 		}
-		// The oracle writes the entries in Object.entries order of json.Marshal's sorted keys; on a case-insensitive filesystem two spellings of one name are one entry holding the later write, so PiG's tree is the oracle's only in the same order.
+		// The oracle writes the entries in Object.entries order of json.Marshal's sorted keys; on a case-insensitive filesystem two spellings of one name are one entry holding the later write, so Ompig's tree is the oracle's only in the same order.
 		for _, path := range slices.Sorted(maps.Keys(f)) {
 			content := f[path]
 			target := filepath.Join(base, strings.Replace(path, "project/.pi/", "project/"+ConfigDirName()+"/", 1))
@@ -190,7 +190,7 @@ func compareMigrationTrees(t *testing.T, fixtures []map[string]*string) {
 			if rel == "." {
 				return nil
 			}
-			// PiG names the project configuration directory by ConfigDirName; Pi's is .pi.
+			// Ompig names the project configuration directory by ConfigDirName; Pi's is .pi.
 			if rel == "project/"+ConfigDirName() || strings.HasPrefix(rel, "project/"+ConfigDirName()+"/") {
 				rel = "project/.pi" + strings.TrimPrefix(rel, "project/"+ConfigDirName())
 			}
@@ -222,7 +222,7 @@ func compareMigrationTrees(t *testing.T, fixtures []map[string]*string) {
 		}
 		if !reflect.DeepEqual(providers, want[i].Providers) || !reflect.DeepEqual(warnings, want[i].Warnings) || !reflect.DeepEqual(tree, want[i].Tree) {
 			if failures++; failures <= 3 {
-				t.Errorf("fixture %d: %v\n PiG providers %q warnings %q\n Pi  providers %q warnings %q\n%s", i, fixturePaths(f), providers, warnings, want[i].Providers, want[i].Warnings, migrationTreeDiff(tree, want[i].Tree))
+				t.Errorf("fixture %d: %v\n Ompig providers %q warnings %q\n Pi  providers %q warnings %q\n%s", i, fixturePaths(f), providers, warnings, want[i].Providers, want[i].Warnings, migrationTreeDiff(tree, want[i].Tree))
 			}
 		}
 	}
@@ -261,9 +261,9 @@ func migrationTreeDiff(got, want map[string]*string) string {
 		other, ok := want[path]
 		switch {
 		case !ok:
-			out = append(out, "  only in PiG: "+path)
+			out = append(out, "  only in Ompig: "+path)
 		case (text == nil) != (other == nil) || (text != nil && *text != *other):
-			out = append(out, fmt.Sprintf("  differs: %s\n   PiG %.300q\n   Pi  %.300q", path, migrationText(text), migrationText(other)))
+			out = append(out, fmt.Sprintf("  differs: %s\n   Ompig %.300q\n   Pi  %.300q", path, migrationText(text), migrationText(other)))
 		}
 	}
 	for path := range want {

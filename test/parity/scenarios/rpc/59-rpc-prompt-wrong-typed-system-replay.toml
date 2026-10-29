@@ -1,6 +1,6 @@
 # Behavior family: rpc
 # Surface: switch_session to a Session whose system message has a numeric content succeeds and the prompt that follows fails with Pi's TypeError before any run starts; switch_session to a Session whose system message has a numeric toolsAdded fails with Pi's TypeError, the Runtime keeps the Session it had, and the prompt on it fails the same way.
-# Pi 1.3.0 (pin bd3c9b82, probed 2026-10-21 on the pinned build): the AgentSession constructor restores the recorded loadout from the branch's system messages with getCurrentTools only (agent-session.ts:526 and :1815-1842 _restoreToolsFromTranscript; the spread of message.toolsAdded at :1827 throws "(message.toolsAdded ?? []) is not iterable" for toolsAdded 5, and nothing on that path reads message.content). Pin 3daa2028 (Pi 1.2.0) replayed each system message there with getCurrentSystemMessage (pi-ai utils/transcript.ts:73-97, contentText at :80, utils/text.ts:6), so a numeric content failed the switch and the prompt ran on the disposed outgoing Session; Pi 1.1.0 already switched successfully and reported the error on the prompt, as bd3c9b82 does. Now the content-5 switch_session succeeds (success true, cancelled false) and the prompt response carries "content.filter is not a function": AgentSession.prompt reaches contentText through _prepareRun (agent-session.ts:1911, :1958) -> _preparePromptAndToolLoadout (:1743-1755) -> getCurrentSystemMessage, and rpc-mode.ts:394-413 answers a prompt with the error when preflight never succeeded. The toolsAdded-5 switch_session then fails with "(message.toolsAdded ?? []) is not iterable", the active Session stays the content Session (get_state sessionId rpc-replay-content, messageCount 2), and the prompt on it fails with "content.filter is not a function" again; get_messages returns its two messages (system content 5, user "earlier"). Probed raw stream: switch-content success, prompt-content error, switch-tools error, prompt-tools error, messageCount 2 after each prompt; PiG's stream is identical.
+# Pi 1.3.0 (pin bd3c9b82, probed 2026-10-21 on the pinned build): the AgentSession constructor restores the recorded loadout from the branch's system messages with getCurrentTools only (agent-session.ts:526 and :1815-1842 _restoreToolsFromTranscript; the spread of message.toolsAdded at :1827 throws "(message.toolsAdded ?? []) is not iterable" for toolsAdded 5, and nothing on that path reads message.content). Pin 3daa2028 (Pi 1.2.0) replayed each system message there with getCurrentSystemMessage (pi-ai utils/transcript.ts:73-97, contentText at :80, utils/text.ts:6), so a numeric content failed the switch and the prompt ran on the disposed outgoing Session; Pi 1.1.0 already switched successfully and reported the error on the prompt, as bd3c9b82 does. Now the content-5 switch_session succeeds (success true, cancelled false) and the prompt response carries "content.filter is not a function": AgentSession.prompt reaches contentText through _prepareRun (agent-session.ts:1911, :1958) -> _preparePromptAndToolLoadout (:1743-1755) -> getCurrentSystemMessage, and rpc-mode.ts:394-413 answers a prompt with the error when preflight never succeeded. The toolsAdded-5 switch_session then fails with "(message.toolsAdded ?? []) is not iterable", the active Session stays the content Session (get_state sessionId rpc-replay-content, messageCount 2), and the prompt on it fails with "content.filter is not a function" again; get_messages returns its two messages (system content 5, user "earlier"). Probed raw stream: switch-content success, prompt-content error, switch-tools error, prompt-tools error, messageCount 2 after each prompt; Ompig's stream is identical.
 # Barrier: no run starts on either side (each prompt fails in preflight; the raw stream holds only responses and no agent_settled or other run event), so nothing can lag. Each prompt is still followed by a get_state poll that waits for the exact settled state, isStreaming false and 2 messages, to prove no run began; the driver drops the poll responses from the comparison. get_messages returns the transcript as it stands (rpc-mode.ts:672-673).
 
 name = "59-rpc-prompt-wrong-typed-system-replay"
@@ -52,8 +52,8 @@ wait_contains = ['"id":"messages","type":"response","command":"get_messages"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 
@@ -77,54 +77,54 @@ reason = "Message wall clocks vary per process; retain field presence and type."
 paths = ["/**/sections/docs"]
 kind = "path"
 roots = ["readme", "docs", "examples"]
-reason = "D2/D22: compare Pi's package README/docs/examples destinations with PiG's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
+reason = "D2/D22: compare Pi's package README/docs/examples destinations with Ompig's materialized README/docs and hosted examples root. Alias only those exact runtime destinations; retain filenames, URL/path suffixes, all surrounding wording and whitespace."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/preamble"]
 kind = "literal"
-pig = "operating inside pig,"
+ompig = "operating inside ompig,"
 pi = "operating inside pi,"
 reason = "D2: only the host command identity differs in the preamble; retain the rest of the complete sentence."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/docs"]
 kind = "literal"
-pig = "PiG documentation ("
+ompig = "Ompig documentation ("
 pi = "Pi documentation ("
 reason = "D2/D22: the documentation heading names the product; all usage conditions and topic wording remain compared."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/docs"]
 kind = "literal"
-pig = "asks about pig itself,"
+ompig = "asks about ompig itself,"
 pi = "asks about pi itself,"
 reason = "D2: this exact heading clause names the host command; no other words in the read-only condition are aliased."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/docs"]
 kind = "literal"
-pig = "When reading pig docs or examples,"
+ompig = "When reading ompig docs or examples,"
 pi = "When reading pi docs or examples,"
 reason = "D2/D22: the path-resolution instruction names its product; retain its complete resolution rule and relative paths."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/docs"]
 kind = "literal"
-pig = "pig packages (docs/packages.md)"
+ompig = "ompig packages (docs/packages.md)"
 pi = "pi packages (docs/packages.md)"
 reason = "D2: only the product name in the Package topic differs; the packages.md destination and every other topic remain literal."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/docs"]
 kind = "literal"
-pig = "When working on pig topics,"
+ompig = "When working on ompig topics,"
 pi = "When working on pi topics,"
 reason = "D2: this exact instruction prefix names the host product; retain its complete-read and cross-reference requirements."
 
 [[assert.json_aliases]]
 paths = ["/**/sections/docs"]
 kind = "literal"
-pig = "Always read pig .md files"
+ompig = "Always read ompig .md files"
 pi = "Always read pi .md files"
 reason = "D2/D22: this exact instruction prefix names the product documentation; retain completely, link-following instructions, and the TUI example."
 

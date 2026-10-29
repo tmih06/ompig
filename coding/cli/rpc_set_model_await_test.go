@@ -22,7 +22,7 @@ func TestRPCSetModelAppliesAfterTheBatchesLaterCommands(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(home, "agent", "models.json"), models, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_HOME=" + home}, "--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one")
+	p := startRPCProcess(t, []string{"OMPIG_HOME=" + home}, "--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one")
 	if _, err := io.WriteString(p.stdin, `{"id":"set","type":"set_model","provider":"fixture","modelId":"model-three"}`+"\n"+`{"id":"cycle","type":"cycle_model"}`+"\n"); err != nil {
 		t.Fatal(err)
 	}

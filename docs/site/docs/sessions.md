@@ -1,28 +1,28 @@
 # Sessions
 
-A session is one conversation with its full history. By default, PiG saves its log from the first user message. Use `--no-session` to keep the Session log in memory. Sessions work as in Pi 1.4.0 ([Pi's sessions guide](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/sessions.md)), apart from the differences named on this page.
+A session is one conversation with its full history. By default, Ompig saves its log from the first user message. Use `--no-session` to keep the Session log in memory. Sessions work as in Pi 1.4.0 ([Pi's sessions guide](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/sessions.md)), apart from the differences named on this page.
 
 Every Session has an ID, including print (`-p`), JSON, RPC, and `--no-session` runs. A new Session gets a UUIDv7 unless you supply `--session-id`. Extensions can read the ID before the first model response. `--no-session` disables Session file persistence; it does not remove the ID or prevent an extension from keeping its own session-keyed data.
 
-A saved Session keeps in memory only the entries its current context uses: the latest compaction's kept messages, everything after them, and the small entries such as model and label changes. PiG reads older entries back from the session file when a command needs them, for example `/tree`, `/fork` or an export, so a long session costs memory in proportion to its context, not its history. Pi keeps every entry in memory (D112). Do not rewrite a session file while PiG has it open; appends by another PiG or Pi process are safe.
+A saved Session keeps in memory only the entries its current context uses: the latest compaction's kept messages, everything after them, and the small entries such as model and label changes. Ompig reads older entries back from the session file when a command needs them, for example `/tree`, `/fork` or an export, so a long session costs memory in proportion to its context, not its history. Pi keeps every entry in memory (D112). Do not rewrite a session file while Ompig has it open; appends by another Ompig or Pi process are safe.
 
 ## Where sessions are stored
 
-Sessions live under `~/.pig/agent/sessions/`, in a directory per project. The directory name is the project path with separators replaced, wrapped in `--`, so sessions for different projects never mix. PiG creates these directories with mode 0700, so only you can list them. Pi 1.4.0 creates them with the process umask (D132, [Pi #10770](https://github.com/earendil-works/pi/issues/10770)).
+Sessions live under `~/.ompig/agent/sessions/`, in a directory per project. The directory name is the project path with separators replaced, wrapped in `--`, so sessions for different projects never mix. Ompig creates these directories with mode 0700, so only you can list them. Pi 1.4.0 creates them with the process umask (D132, [Pi #10770](https://github.com/earendil-works/pi/issues/10770)).
 
-Each persisted session uses a JSON Lines file. PiG selects its path when the Session is created, but the file does not exist until the session holds a user or assistant message. Setup entries alone, such as a model or thinking-level change, do not create it.
+Each persisted session uses a JSON Lines file. Ompig selects its path when the Session is created, but the file does not exist until the session holds a user or assistant message. Setup entries alone, such as a model or thinking-level change, do not create it.
 
-Set `sessionDir` in [settings](/docs/latest/settings) to store sessions elsewhere. `PIG_CODING_AGENT_SESSION_DIR` and `--session-dir` override it.
+Set `sessionDir` in [settings](/docs/latest/settings) to store sessions elsewhere. `OMPIG_CODING_AGENT_SESSION_DIR` and `--session-dir` override it.
 
-When PiG resumes a session that has messages, the tools that the session's latest system message lists as active are active again, in that order, including tools that you or an extension turned on during the session. A listed tool that is not registered yet, such as a tool of an MCP server that is still connecting, turns on when it registers. Pi 1.4.0 restores the default tools instead, so a tool you had turned off comes back (D166, [Pi #10785](https://github.com/earendil-works/pi/issues/10785)).
+When Ompig resumes a session that has messages, the tools that the session's latest system message lists as active are active again, in that order, including tools that you or an extension turned on during the session. A listed tool that is not registered yet, such as a tool of an MCP server that is still connecting, turns on when it registers. Pi 1.4.0 restores the default tools instead, so a tool you had turned off comes back (D166, [Pi #10785](https://github.com/earendil-works/pi/issues/10785)).
 
-PiG saves a new session when the first user message is added, so the prompt stays on disk if the first turn never finishes. On exit, the resume hint uses `pig --session <id>`. It adds `--session-dir` only when the session directory differs from the default for the working directory, including after `-c`, `-r`, or `--session`.
+Ompig saves a new session when the first user message is added, so the prompt stays on disk if the first turn never finishes. On exit, the resume hint uses `ompig --session <id>`. It adds `--session-dir` only when the session directory differs from the default for the working directory, including after `-c`, `-r`, or `--session`.
 
-If `--session <id-or-prefix>` or `--fork <id-or-prefix>` finds no matching session, PiG writes `No session found matching '<id-or-prefix>'` to standard error and exits with status 1. It writes nothing to standard output and does not start a model request.
+If `--session <id-or-prefix>` or `--fork <id-or-prefix>` finds no matching session, Ompig writes `No session found matching '<id-or-prefix>'` to standard error and exits with status 1. It writes nothing to standard output and does not start a model request.
 
-Use `--session-id <id>` to reopen an exact ID in the current project or create a Session with that ID. Lookup reads Session headers without building full transcript listings and still finds renamed files. PiG warns when it creates a missing ID. Metadata commands such as `--help` do not persist it. With `--fork`, the ID names the new fork; an existing target ID is rejected before the source is forked.
+Use `--session-id <id>` to reopen an exact ID in the current project or create a Session with that ID. Lookup reads Session headers without building full transcript listings and still finds renamed files. Ompig warns when it creates a missing ID. Metadata commands such as `--help` do not persist it. With `--fork`, the ID names the new fork; an existing target ID is rejected before the source is forked.
 
-Use `--name <name>` to set the selected Session's initial name. PiG applies it before validating the requested model, so a later model-selection failure does not undo a saved Session's name. RPC exposes the initial name without emitting a runtime name-change event.
+Use `--name <name>` to set the selected Session's initial name. Ompig applies it before validating the requested model, so a later model-selection failure does not undo a saved Session's name. RPC exposes the initial name without emitting a runtime name-change event.
 
 ## Working with sessions
 
@@ -35,7 +35,7 @@ Use `--name <name>` to set the selected Session's initial name. PiG applies it b
 | `/clone` | Duplicate the active branch at the current position and switch to the copy |
 | `/name` | Give the session a name |
 | `/export` | Write the session to a file |
-| `/share` | Upload the session to PiG's unlisted, expiring share service. |
+| `/share` | Upload the session to Ompig's unlisted, expiring share service. |
 
 ## Cloning and forking
 
@@ -45,7 +45,7 @@ If no user messages exist, `/fork` reports `No messages to fork from`. Cancellin
 
 ## Resuming after exit
 
-On an interactive quit, PiG prints a resume command only when stdout is a terminal and the Session has an existing file. In-memory Sessions do not produce a resume command. A custom Session directory appears as `--session-dir` with shell quoting when needed.
+On an interactive quit, Ompig prints a resume command only when stdout is a terminal and the Session has an existing file. In-memory Sessions do not produce a resume command. A custom Session directory appears as `--session-dir` with shell quoting when needed.
 
 ## Fork storage
 
@@ -53,7 +53,7 @@ Forks and clones of an in-memory Session stay in memory. A disk-backed fork with
 
 ## Importing and exporting
 
-`/import <path>` asks before replacing the active Session. Relative paths start at the process working directory. Importing an external file never overwrites a stored Session: PiG uses the first free `name-N` suffix. A file already in the Session directory opens in place. If its working directory is missing, PiG offers the current directory.
+`/import <path>` asks before replacing the active Session. Relative paths start at the process working directory. Importing an external file never overwrites a stored Session: Ompig uses the first free `name-N` suffix. A file already in the Session directory opens in place. If its working directory is missing, Ompig offers the current directory.
 
 HTML export requires a Session file that has been written. `/export` uses the first path argument, with optional quotes, exactly as supplied. It does not append `.html` or create parent directories. Use a `.jsonl` path to export the current branch as JSON Lines.
 
@@ -61,11 +61,11 @@ After `/fork`, `/clone`, `/new`, or `/resume`, the transcript and footer reflect
 
 ## Sharing a session
 
-Run `/share` to upload the active branch, including an in-memory Session, to `https://pi-in-go.dev` (D64). PiG shows a privacy notice before it uploads. The artifact includes prompts, model responses, tool calls, tool output, the effective system prompt, and active tool schemas.
+Run `/share` to upload the active branch, including an in-memory Session, to `https://ompig.dev` (D64). Ompig shows a privacy notice before it uploads. The artifact includes prompts, model responses, tool calls, tool output, the effective system prompt, and active tool schemas.
 
-A share is unlisted, not private. Anyone with its URL can read and download it. The service accepts artifacts up to 8 MiB and deletes them after 30 days. Press `Escape` while the upload indicator is open to cancel the request. PiG never uploads a Session automatically. Use `/export` instead when the Session must stay local.
+A share is unlisted, not private. Anyone with its URL can read and download it. The service accepts artifacts up to 8 MiB and deletes them after 30 days. Press `Escape` while the upload indicator is open to cancel the request. Ompig never uploads a Session automatically. Use `/export` instead when the Session must stay local.
 
-Pi's `sessionShareDestination` setting (`auto`, `gist`, or `radius`) has no effect in PiG. PiG never uploads a share to Radius or a GitHub gist (D64).
+Pi's `sessionShareDestination` setting (`auto`, `gist`, or `radius`) has no effect in Ompig. Ompig never uploads a share to Radius or a GitHub gist (D64).
 
 ## The session tree
 
@@ -85,13 +85,13 @@ Session names replace each run of carriage returns or line feeds with a space an
 
 An unnamed session is identified by its time and first message, which is hard to recognize later. `/name` gives it a name, and `ctrl+n` in the session list filters to named sessions.
 
-Run `pig -r` or `/resume` to open the session picker. Search matches the session ID, name, user and assistant message text, and working directory. Separate words must all match. Unquoted words use fuzzy matching; double quotes match a phrase with whitespace normalized. Use `re:<pattern>` for a case-insensitive regular expression.
+Run `ompig -r` or `/resume` to open the session picker. Search matches the session ID, name, user and assistant message text, and working directory. Separate words must all match. Unquoted words use fuzzy matching; double quotes match a phrase with whitespace normalized. Use `re:<pattern>` for a case-insensitive regular expression.
 
 The `/resume` picker includes the current Session when its file is saved and matches the selected scope and filters. Its name or first-message preview uses the accent color. Selecting it reloads the same Session and reports `Resumed session`. `Ctrl+D` reports that it cannot delete the active Session, including when the file is reached through a symlink alias. For another Session, `Ctrl+D` opens deletion confirmation even with a search query. `Ctrl+Backspace` opens confirmation only when the query is empty.
 
 Press `ctrl+s` to cycle Threaded, Recent, and Fuzzy order. Threaded mode orders roots and siblings by the newest activity anywhere in each subtree. A nonempty search uses match quality in Threaded and Fuzzy modes, with newer activity breaking score ties. Recent mode keeps the incoming session order. The picker starts on the first row. Editing the search retains the selected row index and clamps it when results shrink. Press `Enter` to resume the highlighted session.
 
-After successful deletion, the row disappears before the Session list refresh starts. Other rows remain selectable during the refresh; the deleted row does not. Deletion first runs the `trash` command when it is on `PATH`. If `trash` succeeds or the file is already gone, PiG reports `Session moved to trash`. Otherwise PiG attempts permanent deletion and reports `Session deleted` on success or an error on failure. On Windows only `trash.com` or `trash.exe` counts, as in Pi.
+After successful deletion, the row disappears before the Session list refresh starts. Other rows remain selectable during the refresh; the deleted row does not. Deletion first runs the `trash` command when it is on `PATH`. If `trash` succeeds or the file is already gone, Ompig reports `Session moved to trash`. Otherwise Ompig attempts permanent deletion and reports `Session deleted` on success or an error on failure. On Windows only `trash.com` or `trash.exe` counts, as in Pi.
 
 In the interactive `/resume` picker, press `ctrl+r` to rename the selected Session. The first rename starts with the cursor before the existing name. Later visits retain the rename cursor, clamped to the new name's length. Press `Enter` to save a nonempty name or `Escape` to cancel. An empty submission keeps the rename field open. The startup `--resume` picker does not offer renaming or show the rename hint.
 
@@ -109,19 +109,19 @@ The model sees less than the file holds. Compaction replaces older entries with 
 
 ## Worked example: pick up, branch and name a conversation
 
-These commands were run in a folder called `ss` against a test model. They use print mode (`-p`), so that each prints one reply. The same flags work with the interactive screen. Session files here are in `~/.pig/agent/sessions/--<project path>--/`.
+These commands were run in a folder called `ss` against a test model. They use print mode (`-p`), so that each prints one reply. The same flags work with the interactive screen. Session files here are in `~/.ompig/agent/sessions/--<project path>--/`.
 
 **Start and name a conversation.** `--name` sets the display name when the session is created:
 
 ```bash
-pig --name "Budget review" -p "Summarise the budget"
+ompig --name "Budget review" -p "Summarise the budget"
 ```
 
 ```text
 First answer.
 ```
 
-PiG wrote one file for it, named `<time>_<id>.jsonl`:
+Ompig wrote one file for it, named `<time>_<id>.jsonl`:
 
 ```text
 2026-10-11T16-53-22-789Z_01a12be2-22e5-7383-b1d3-c19c74fbda06.jsonl
@@ -130,7 +130,7 @@ PiG wrote one file for it, named `<time>_<id>.jsonl`:
 **Continue the latest conversation in this folder.** `--continue` (`-c`) reopens it and appends to the same file (it held 9 lines afterwards):
 
 ```bash
-pig -c -p "Now the risks"
+ompig -c -p "Now the risks"
 ```
 
 ```text
@@ -140,7 +140,7 @@ Second answer.
 **Reopen a specific one.** `--session` takes the file path or the start of its ID. Eight characters were enough here:
 
 ```bash
-pig --session 01a12be2 -p "One more"
+ompig --session 01a12be2 -p "One more"
 ```
 
 ```text
@@ -152,7 +152,7 @@ The same file grew to 11 lines, so this was the same conversation and the model 
 **Branch without touching the original.** `--fork` copies the conversation into a new file and continues there:
 
 ```bash
-pig --fork 01a12be2 -p "Different angle"
+ompig --fork 01a12be2 -p "Different angle"
 ```
 
 ```text
@@ -161,17 +161,17 @@ Fourth.
 
 The folder now holds two session files. The first is unchanged.
 
-**A wrong ID stops at once.** PiG writes to standard error, exits 1 and sends nothing to the model:
+**A wrong ID stops at once.** Ompig writes to standard error, exits 1 and sends nothing to the model:
 
 ```bash
-pig --session nosuch -p hi
+ompig --session nosuch -p hi
 ```
 
 ```text
 No session found matching 'nosuch'
 ```
 
-**Choose from a list.** `pig --resume` (`-r`) opens the picker. The fork shows under its parent. The number on the right is the message count and the age:
+**Choose from a list.** `ompig --resume` (`-r`) opens the picker. The fork shows under its parent. The number on the right is the message count and the age:
 
 ```text
 Resume Session (Current Folder)                  ◉ Current Folder | ○ All  Name: All  Sort: Threaded
@@ -191,5 +191,5 @@ ctrl+s sort · ctrl+n named · ctrl+d delete · ctrl+p path (off)
 {"type":"session_info","id":"e9a4391c","parentId":null,"timestamp":"2026-10-11T16:53:22.789Z","name":"Budget review"}
 ```
 
-The file holds everything you sent and everything the model and tools returned. To delete a conversation, delete the file, or press `ctrl+d` in the picker (PiG uses the `trash` command when it exists). See [Session format](/docs/latest/session-format) for the entries.
+The file holds everything you sent and everything the model and tools returned. To delete a conversation, delete the file, or press `ctrl+d` in the picker (Ompig uses the `trash` command when it exists). See [Session format](/docs/latest/session-format) for the entries.
 

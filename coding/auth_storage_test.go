@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // auth-storage.ts:496-506 readStoredCredential: parse stripBom(readFileSync(authPath)), return data[providerId], and undefined for any failure.
@@ -60,7 +60,7 @@ func TestReadStoredCredentialReadsOneProviderWithoutAStore(t *testing.T) {
 	}
 	t.Run("the default path is the agent directory's auth.json", func(t *testing.T) {
 		agentDir := t.TempDir()
-		t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+		t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 		t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 		if err := os.WriteFile(filepath.Join(agentDir, "auth.json"), []byte(file), 0o600); err != nil {
 			t.Fatal(err)

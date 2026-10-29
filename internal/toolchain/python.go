@@ -2,7 +2,7 @@ package toolchain
 
 import "strings"
 
-// pig additive (D19): PiG runs Python extensions, which Pi does not, and every launch and packed-cell key resolves the interpreter here.
+// ompig additive (D19): Ompig runs Python extensions, which Pi does not, and every launch and packed-cell key resolves the interpreter here.
 //
 // PythonExecutable returns the Python interpreter for goos: the first of python and python3 on Windows, or python3
 // elsewhere, that lookPath finds. On Windows a clean profile resolves python.exe to the Microsoft Store app-execution

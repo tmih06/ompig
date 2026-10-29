@@ -16,9 +16,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // Ports packages/chord/src/state.ts (StateSubscriber, ReplicatedStatePublisher, MutableReplicatedStateImpl,

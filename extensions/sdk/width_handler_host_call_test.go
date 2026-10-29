@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
-// Pi runs every extension handler in one process and a handler can always await a host call (packages/coding-agent/src/core/extensions/types.ts: the `ctx.ui` dialogs `select`, `confirm` and `input`, `exec` and `executeTool` return promises; `notify` and `setFooter` are synchronous in-process calls that cannot wait on anything). A pig handler that makes a blocking host call therefore has to complete whatever else the host sends meanwhile. A width handler is a pig-only trigger (OnWidthChange); it makes the same calls any other handler makes.
+// Pi runs every extension handler in one process and a handler can always await a host call (packages/coding-agent/src/core/extensions/types.ts: the `ctx.ui` dialogs `select`, `confirm` and `input`, `exec` and `executeTool` return promises; `notify` and `setFooter` are synchronous in-process calls that cannot wait on anything). A ompig handler that makes a blocking host call therefore has to complete whatever else the host sends meanwhile. A width handler is a ompig-only trigger (OnWidthChange); it makes the same calls any other handler makes.
 
 // armWidthHandler registers the width handler through a command, the way an extension subscribes, and runs that command.
 func armWidthHandler(t *testing.T, host *mockHost) {

@@ -8,7 +8,7 @@ Pi 0.87.1 `packages/coding-agent/src/modes/interactive/interactive-mode.ts:4278-
 
 ## Signal ordering
 
-The temporary SIGINT listener is a userspace dispatch rule, not kernel SIG_IGN. When SIGINT is dispatched before continuation cleanup, it is ignored. After continuation cleanup, SIGINT follows the normal termination path. Simultaneously pending SIGINT and SIGCONT therefore have no guaranteed survival outcome. D51 owns PiG's numeric exit 130 and terminal restoration; this change does not expand that divergence.
+The temporary SIGINT listener is a userspace dispatch rule, not kernel SIG_IGN. When SIGINT is dispatched before continuation cleanup, it is ignored. After continuation cleanup, SIGINT follows the normal termination path. Simultaneously pending SIGINT and SIGCONT therefore have no guaranteed survival outcome. D51 owns Ompig's numeric exit 130 and terminal restoration; this change does not expand that divergence.
 
 ## Evidence
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // EmitExtensionEvent is `hasHandlers(event.type)` then `extensionRunner.emit(event)` on the Session's runner, as agent-session-runtime.ts does around a session replacement. event is one of the events the runner's generic emit takes, in Pi's JSON shape. emitted is false, and no handler ran, when no extension has a handler for the type; result is what emit answered, nil for nothing.

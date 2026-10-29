@@ -33,13 +33,13 @@ type imageRequestTool struct {
 func responsesImageCases() []responsesImageTestCase {
 	return []responsesImageTestCase{
 		// .upstream/v0.87.1/packages/ai/test/openai-responses-tool-result-images.test.ts:150
-		{"openai", "gpt-5-mini", "PIG_LIVE_OPENAI_API_KEY"},
+		{"openai", "gpt-5-mini", "OMPIG_LIVE_OPENAI_API_KEY"},
 		// .upstream/v0.87.1/packages/ai/test/openai-responses-tool-result-images.test.ts:160
-		{"azure", "gpt-4o-mini", "PIG_LIVE_AZURE_OPENAI_API_KEY"},
+		{"azure", "gpt-4o-mini", "OMPIG_LIVE_AZURE_OPENAI_API_KEY"},
 		// .upstream/v0.87.1/packages/ai/test/openai-responses-tool-result-images.test.ts:168
-		{"github-copilot", "gpt-6-luna", "PIG_LIVE_COPILOT_TOKEN"},
+		{"github-copilot", "gpt-6-luna", "OMPIG_LIVE_COPILOT_TOKEN"},
 		// .upstream/v0.87.1/packages/ai/test/openai-responses-tool-result-images.test.ts:183
-		{"openai-codex", "gpt-6.1-sol", "PIG_LIVE_CODEX_TOKEN"},
+		{"openai-codex", "gpt-6.1-sol", "OMPIG_LIVE_CODEX_TOKEN"},
 	}
 }
 

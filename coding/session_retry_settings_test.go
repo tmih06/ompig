@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // failOnceCompleter fails its first summarization with a retryable error.
@@ -27,7 +27,7 @@ func (c *failOnceCompleter) CompleteSimple(context.Context, *ai.Model, string, [
 // settings.retry.maxAgentDelayMs, 60000 by default.
 func TestCompactionRetryDelayIsCappedByMaxAgentDelay(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

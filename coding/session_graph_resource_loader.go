@@ -1,4 +1,4 @@
-// pig-specific: serves Pi's DefaultResourceLoader (packages/coding-agent/src/core/resource-loader.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is the runtime's own *DefaultResourceLoader, so a session created from it reads the resources it loaded. The Node runtime serves Pi's own class in the extension process.
+// ompig-specific: serves Pi's DefaultResourceLoader (packages/coding-agent/src/core/resource-loader.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is the runtime's own *DefaultResourceLoader, so a session created from it reads the resources it loaded. The Node runtime serves Pi's own class in the extension process.
 
 package coding
 
@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // GraphResourceLoader is a DefaultResourceLoader an extension constructed.
@@ -456,7 +456,7 @@ func (g *GraphResourceLoader) reload(ctx context.Context, args icodingagent.Grap
 	var reloadOptions []ResourceLoaderReloadOptions
 	if id := options.ResolveProjectTrust; id != "" {
 		reloadOptions = append(reloadOptions, ResourceLoaderReloadOptions{ResolveProjectTrust: func(callCtx context.Context, input ResolveProjectTrustInput) (bool, error) {
-			//portlint:allow mapkeyorder graphExtensionsOf is a data view PiG defines (Pi's extension objects hold functions), which the extension reads by member name
+			//portlint:allow mapkeyorder graphExtensionsOf is a data view Ompig defines (Pi's extension objects hold functions), which the extension reads by member name
 			encoded, err := jsstring.AppendMarshalJSON([]byte{'['}, graphExtensionsOf(input.ExtensionsResult))
 			if err != nil {
 				return false, err

@@ -1,10 +1,10 @@
-// Command k8sbench runs PiG benchmarks on Kubernetes: one Job per session, PiG and the reference interleaved in the
+// Command k8sbench runs Ompig benchmarks on Kubernetes: one Job per session, Ompig and the reference interleaved in the
 // same pod on the same pinned cores, results in durable-report's tracker format. See
 // docs/site/docs/benchmarking.md.
 //
 //	k8sbench render    [flags]          print the Job manifest; touches no cluster
 //	k8sbench calibrate [flags]          the reference against itself; CV of every metric
-//	k8sbench compare   [flags]          PiG and the reference interleaved; one tracker line per size
+//	k8sbench compare   [flags]          Ompig and the reference interleaved; one tracker line per size
 //	k8sbench report    -run DIR [flags] recompute a collected session's result offline
 //	k8sbench pod                        the in-pod session (reads K8SBENCH_PLAN)
 //	k8sbench stage|model|trials [flags] print the GPU task-completion manifests; applies nothing
@@ -43,7 +43,7 @@ const usage = `usage: k8sbench <command> [flags]
 
   render      print the Job manifest for a session (dry run; no cluster access)
   calibrate   run the reference against itself N times; report each metric's coefficient of variation
-  compare     run PiG and the reference interleaved in one pod; write one tracker line per size
+  compare     run Ompig and the reference interleaved in one pod; write one tracker line per size
   report      recompute a collected session (-run DIR) offline
   bundle      build the artifact bundle for -bundle (no image, no registry)
   arms        install pinned agents of bench/evals/arms.lock into a directory (the image's build runs it)
@@ -125,7 +125,7 @@ type analysisFlags struct {
 
 func addAnalysisFlags(fs *flag.FlagSet) analysisFlags {
 	return analysisFlags{
-		baseline:    fs.String("baseline", "", "JSON objects of tracker values to report deltas against (track-row's BASELINE), comma-separated; with several pig targets each names its line's \"rule\""),
+		baseline:    fs.String("baseline", "", "JSON objects of tracker values to report deltas against (track-row's BASELINE), comma-separated; with several ompig targets each names its line's \"rule\""),
 		history:     fs.String("history", "", "comma-separated tracker files for the rolling reference median (default: the -track file)"),
 		track:       fs.String("track", "", "tracker file the comparison line is appended to (default <out>/track.jsonl)"),
 		calibration: fs.String("calibration", "", "calibration.json from k8sbench calibrate; refuse when its noise floor exceeds -max-cv"),

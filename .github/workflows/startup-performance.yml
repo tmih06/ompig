@@ -52,16 +52,16 @@ jobs:
           export PATH="$PWD/automation/ci/npm-toolchain/node_modules/.bin:$PATH"
           npm ci --prefix extensions/sdk-ts --no-audit --no-fund
           mkdir -p bin/startup-timing tmp/startup-timing
-          go build -p 6 -trimpath -ldflags='-s -w' -o bin/startup-timing/pig ./cmd/pig
-          (cd _startup-baseline && go build -p 6 -trimpath -ldflags='-s -w' -o ../bin/startup-timing/baseline ./cmd/pig)
+          go build -p 6 -trimpath -ldflags='-s -w' -o bin/startup-timing/ompig ./cmd/ompig
+          (cd _startup-baseline && go build -p 6 -trimpath -ldflags='-s -w' -o ../bin/startup-timing/baseline ./cmd/ompig)
           git -C _startup-baseline rev-parse HEAD > tmp/startup-timing/baseline-commit.txt
-          go version -m bin/startup-timing/pig > tmp/startup-timing/pig-buildinfo.txt
+          go version -m bin/startup-timing/ompig > tmp/startup-timing/ompig-buildinfo.txt
           go version -m bin/startup-timing/baseline > tmp/startup-timing/baseline-buildinfo.txt
       - name: Record 25 cold and warm trials without retries
         shell: bash
         run: |
-          automation/ci/with-isolated-pig-home.sh python3 automation/perf/startup_timing.py \
-            --pig bin/startup-timing/pig \
+          automation/ci/with-isolated-ompig-home.sh python3 automation/perf/startup_timing.py \
+            --ompig bin/startup-timing/ompig \
             --baseline bin/startup-timing/baseline \
             --pi extensions/sdk-ts/node_modules/.bin/pi \
             --runs 25 --out tmp/startup-timing

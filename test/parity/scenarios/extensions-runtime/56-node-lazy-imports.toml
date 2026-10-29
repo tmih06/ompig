@@ -18,8 +18,8 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["testdata/lazy-imports.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["testdata/lazy-imports.ts"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/lazy-imports.ts"]
 

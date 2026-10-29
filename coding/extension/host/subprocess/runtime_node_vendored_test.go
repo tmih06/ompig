@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/tui"
 )
 
 // pinnedPiPackages is where `npm ci` in extensions/sdk-ts installs the Pi
@@ -72,33 +72,33 @@ var vendoredImportRewrites = map[string][2]string{
 	"pi-ai/index.js": {`export { Type } from "typebox";`,
 		`export { Type } from "../../typebox.mjs";`},
 	"pi-coding-agent/utils/shell.js": {`import { getBinDir } from "../config.js";`,
-		`import { getBinDir } from "../../../pig-config.mjs";`},
+		`import { getBinDir } from "../../../ompig-config.mjs";`},
 	"pi-coding-agent/utils/frontmatter.js": {`import { parse } from "yaml";`,
 		`import { parse } from "../../../yaml/index.js";`},
 	"pi-coding-agent/modes/interactive/components/custom-editor.js": {`import { Editor, visibleWidth } from "@earendil-works/pi-tui";`,
 		`import { Editor, visibleWidth } from "../../../../../pi-tui.mjs";`},
 }
 
-// settings-manager.js rewrites three imports: PiG's config paths (D2), the
-// settings lock PiG's host shares, and pi-ai from the vendored root.
+// settings-manager.js rewrites three imports: Ompig's config paths (D2), the
+// settings lock Ompig's host shares, and pi-ai from the vendored root.
 var vendoredSettingsManagerRewrites = [][2]string{
 	{`import { DEFAULT_MAX_AGENT_RETRY_DELAY_MS } from "@earendil-works/pi-ai";`,
 		`import { DEFAULT_MAX_AGENT_RETRY_DELAY_MS } from "../../pi-ai/index.js";`},
 	{`import lockfile from "proper-lockfile";`, `import lockfile from "../../../proper-lockfile.mjs";`},
 	{`import { CONFIG_DIR_NAME, getAgentDir } from "../config.js";`,
-		`import { CONFIG_DIR_NAME, getAgentDir } from "../../../pig-config.mjs";`},
+		`import { CONFIG_DIR_NAME, getAgentDir } from "../../../ompig-config.mjs";`},
 }
 
 // vendoredBridgeStubs are pi-ai's builtin API implementations, which import
-// vendor SDKs; each is a stub that loads PiG's bridge to its host providers.
+// vendor SDKs; each is a stub that loads Ompig's bridge to its host providers.
 var vendoredBridgeStubs = func() map[string]string {
 	stubs := map[string]string{
-		"pi-ai/api/openrouter-images.js": "// PiG: image generation has no host provider (D74); see automation/gen/vendor-pi-dist.sh.\n" +
+		"pi-ai/api/openrouter-images.js": "// Ompig: image generation has no host provider (D74); see automation/gen/vendor-pi-dist.sh.\n" +
 			"import { bridgeImages } from \"../../../pi-ai-bridge.mjs\";\nexport const generateImages = bridgeImages(\"openrouter-images\");\n",
 	}
 	for _, api := range []string{"anthropic-messages", "azure-openai-responses", "bedrock-converse-stream", "google-generative-ai", "google-vertex",
 		"mistral-conversations", "openai-codex-responses", "openai-completions", "openai-responses", "pi-messages"} {
-		stubs["pi-ai/api/"+api+".js"] = "// PiG: the " + api + " implementation runs in PiG's host (D74); see automation/gen/vendor-pi-dist.sh.\n" +
+		stubs["pi-ai/api/"+api+".js"] = "// Ompig: the " + api + " implementation runs in Ompig's host (D74); see automation/gen/vendor-pi-dist.sh.\n" +
 			"import { bridgeApi } from \"../../../pi-ai-bridge.mjs\";\nexport const { stream, streamSimple } = bridgeApi(\"" + api + "\");\n"
 	}
 	return stubs
@@ -205,7 +205,7 @@ func TestVendoredPiDistMatchesThePinnedPackage(t *testing.T) {
 			continue
 		}
 		if stub, ok := vendoredBridgeStubs[rel]; ok {
-			// The pinned implementation imports a vendor SDK; PiG's host runs
+			// The pinned implementation imports a vendor SDK; Ompig's host runs
 			// it instead (D74).
 			readPinned(t, append(append([]string{}, pinnedPackageDist["pi-ai"]...), strings.Split(strings.TrimPrefix(rel, "pi-ai/"), "/")...)...)
 			if string(got) != stub {
@@ -274,7 +274,7 @@ func TestVendoredPiDistMatchesThePinnedPackage(t *testing.T) {
 			rewrites = append(rewrites, vendoredValidationRewrites...)
 		}
 		if rel == "pi-coding-agent/core/session-manager.js" {
-			rewrites = append(rewrites, [2]string{`import { getCurrentSystemMessage, uuidv7, } from "@earendil-works/pi-ai";`, `import { getCurrentSystemMessage, uuidv7, } from "../../../pi-ai.mjs";`}, [2]string{`import { APP_NAME, getAgentDir as getDefaultAgentDir, getSessionsDir } from "../config.js";`, `import { APP_NAME, getAgentDir as getDefaultAgentDir, getSessionsDir } from "../../../pig-config.mjs";`})
+			rewrites = append(rewrites, [2]string{`import { getCurrentSystemMessage, uuidv7, } from "@earendil-works/pi-ai";`, `import { getCurrentSystemMessage, uuidv7, } from "../../../pi-ai.mjs";`}, [2]string{`import { APP_NAME, getAgentDir as getDefaultAgentDir, getSessionsDir } from "../config.js";`, `import { APP_NAME, getAgentDir as getDefaultAgentDir, getSessionsDir } from "../../../ompig-config.mjs";`})
 		}
 		if rel == "pi-coding-agent/core/provider-composer.js" {
 			rewrites = append(rewrites, [2]string{`import { lazyStream, } from "@earendil-works/pi-ai";`, `import { lazyStream, } from "../../../pi-ai.mjs";`}, [2]string{`import { getApiProvider } from "@earendil-works/pi-ai/compat";`, `import { getApiProvider } from "../../../pi-ai.mjs";`})
@@ -459,7 +459,7 @@ func runPinnedComparison(t *testing.T, pinnedEntry []string, shim, script string
 // through the keybindings manager.
 func TestPiTuiComponentsMatchThePinnedPackage(t *testing.T) {
 	runPinnedComparison(t, []string{"node_modules", "@earendil-works", "pi-tui", "dist", "index.js"}, "pi-tui.mjs", `
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 const setCaps = (m, caps) => m.setCapabilities(caps);
 const bg = (s) => "\x1b[44m" + s + "\x1b[49m";
 const bold = (s) => "\x1b[1m" + s + "\x1b[22m";
@@ -618,7 +618,7 @@ async function scene(m) {
   log(await provider.getSuggestions(["/he"], 0, 3, { signal: new AbortController().signal }));
   return JSON.stringify(out);
 }
-const want = await scene(pi), got = await scene(pig);
+const want = await scene(pi), got = await scene(ompig);
 if (want !== got) { console.log("pinned: " + want + "\npig:    " + got); process.exit(1); }
 `)
 }
@@ -626,7 +626,7 @@ if (want !== got) { console.log("pinned: " + want + "\npig:    " + got); process
 // The runtime's pi-ai utilities behave exactly like the pinned package's.
 func TestPiAiUtilitiesMatchThePinnedPackage(t *testing.T) {
 	runPinnedComparison(t, []string{"node_modules", "@earendil-works", "pi-ai", "dist", "index.js"}, "pi-ai.mjs", `
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 const model = { id: "m", provider: "p", api: "anthropic-messages", reasoning: true, thinkingLevelMap: { xhigh: "x", minimal: null },
   cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 3.75, tiers: [{ inputTokensAbove: 200000, input: 6, output: 22.5, cacheRead: 0.6, cacheWrite: 7.5 }] } };
 const usage = (input) => ({ input, output: 1000, cacheRead: 500, cacheWrite: 300, cacheWrite1h: 100, cost: {} });
@@ -679,14 +679,14 @@ async function scene(m) {
   log(JSON.stringify(m.StringEnum(["a", "b"], { description: "d", default: "a", title: "t" })), /^[0-9a-f-]{36}$/.test(m.uuidv7(5)), m.uuidv7(5).slice(0, 14));
   return JSON.stringify(out);
 }
-const want = await scene(pi), got = await scene(pig);
+const want = await scene(pi), got = await scene(ompig);
 if (want !== got) { console.log("pinned: " + want + "\npig:    " + got); process.exit(1); }
 `)
 }
 
 // The pi-coding-agent theme helpers color text as Pi's do for the same
 // theme: Pi 0.87.1's own theme and keybinding-hints modules against the shim
-// with ctx.ui.theme carrying PiG's dark theme palette, as the host sends it.
+// with ctx.ui.theme carrying Ompig's dark theme palette, as the host sends it.
 func TestPiThemeHelpersMatchThePinnedPackage(t *testing.T) {
 	// The palette below is declared "truecolor", so the theme must resolve in truecolor whatever the terminal that runs the test reports.
 	previousCaps := tui.GetCapabilities()
@@ -703,15 +703,15 @@ func TestPiThemeHelpersMatchThePinnedPackage(t *testing.T) {
 	}
 	t.Setenv("FORCE_COLOR", "3")
 	t.Setenv("COLORTERM", "truecolor")
-	t.Setenv("PIG_TEST_THEME_PALETTE", string(palette))
+	t.Setenv("OMPIG_TEST_THEME_PALETTE", string(palette))
 	runPinnedComparison(t, []string{"dist", "modes", "interactive", "theme", "theme.js"}, "pi-coding-agent.mjs", `
 import assert from "node:assert/strict";
-const [piTheme, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [piTheme, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 const piHints = await import(new URL("../components/keybinding-hints.js", process.argv[1]).href);
 const { ThemeShim } = await import(new URL("../runtime.mjs", process.argv[2]).href);
 const { setRuntime } = await import(new URL("../state.mjs", process.argv[2]).href);
 const shim = new ThemeShim();
-shim.setPalette(JSON.parse(process.env.PIG_TEST_THEME_PALETTE));
+shim.setPalette(JSON.parse(process.env.OMPIG_TEST_THEME_PALETTE));
 setRuntime({ ui: { theme: shim } });
 piTheme.initTheme("dark");
 function scene(m, hints) {
@@ -739,7 +739,7 @@ function themeScene(t) {
     t.getThinkingBorderColor("high")("h"), t.getThinkingBorderColor("unknown")("i"), t.getBashModeBorderColor()("j")];
 }
 assert.deepEqual(themeScene(shim), themeScene(piTheme.theme));
-const got = scene(pig, pig);
+const got = scene(ompig, ompig);
 if (!got.some((v) => JSON.stringify(v).includes("\\u001b[38;2;"))) throw new Error("theme helpers drew no truecolor text: " + JSON.stringify(got).slice(0, 300));
 assert.deepEqual(got, scene(piTheme, piHints));
 `)
@@ -768,7 +768,7 @@ func TestVendoredJitiIsThePinnedDependency(t *testing.T) {
 }
 
 // The harness entry an extension re-launches is named like Pi's CLI package
-// and carries the Pi version PiG ports, as process.argv[1] does in Pi.
+// and carries the Pi version Ompig ports, as process.argv[1] does in Pi.
 func TestHarnessEntryIsNamedLikePinnedPi(t *testing.T) {
 	var pinned, harness struct {
 		Name    string
@@ -806,21 +806,21 @@ func TestPiToolFactoriesMatchThePinnedPackage(t *testing.T) {
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 const fail = (message) => { console.log(message); process.exitCode = 1; };
 const describe = (value) => typeof value === "function" ? "function" : JSON.stringify(value);
 for (const tool of ["Read", "Bash", "Edit", "Write", "Grep", "Find", "Ls"]) {
   for (const suffix of ["Tool", "ToolDefinition"]) {
     const name = "create" + tool + suffix;
-    const want = pi[name]("/tmp"), got = pig[name]("/tmp");
-    if (Object.keys(want).join() !== Object.keys(got).join()) fail(name + " keys: pi " + Object.keys(want) + " pig " + Object.keys(got));
+    const want = pi[name]("/tmp"), got = ompig[name]("/tmp");
+    if (Object.keys(want).join() !== Object.keys(got).join()) fail(name + " keys: pi " + Object.keys(want) + " ompig " + Object.keys(got));
     for (const key of Object.keys(want)) {
-      if (describe(want[key]) !== describe(got[key])) fail(name + "." + key + ": pi " + describe(want[key]) + " pig " + describe(got[key]));
+      if (describe(want[key]) !== describe(got[key])) fail(name + "." + key + ": pi " + describe(want[key]) + " ompig " + describe(got[key]));
     }
   }
 }
 const run = async (mod, dir) => {
-  const other = mkdtempSync(join(tmpdir(), "pig-tools-other-"));
+  const other = mkdtempSync(join(tmpdir(), "ompig-tools-other-"));
   const ctx = { cwd: dir };
   const results = [];
   const call = async (factory, params) => {
@@ -840,11 +840,11 @@ const run = async (mod, dir) => {
   await call("createReadToolDefinition", { path: "missing.txt" });
   return results;
 };
-const piDir = mkdtempSync(join(tmpdir(), "pig-tools-pi-")), pigDir = mkdtempSync(join(tmpdir(), "pig-tools-pig-"));
-const [want, got] = [await run(pi, piDir), await run(pig, pigDir)];
+const piDir = mkdtempSync(join(tmpdir(), "ompig-tools-pi-")), ompigDir = mkdtempSync(join(tmpdir(), "ompig-tools-ompig-"));
+const [want, got] = [await run(pi, piDir), await run(ompig, ompigDir)];
 for (let i = 0; i < want.length; i++) {
   const normalize = (text, dir) => text.split(dir).join("<dir>");
-  if (normalize(want[i], piDir) !== normalize(got[i], pigDir)) fail("call " + i + ":\npi:  " + want[i] + "\npig: " + got[i]);
+  if (normalize(want[i], piDir) !== normalize(got[i], ompigDir)) fail("call " + i + ":\npi:  " + want[i] + "\npig: " + got[i]);
 }
 `)
 }

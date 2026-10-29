@@ -16,12 +16,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // stepTimeout bounds one host-side step. A step that waits on an SDK that never
@@ -627,7 +627,7 @@ func (r *scenarioRig) runToolResultEvent(ctx context.Context, step sdkscenarios.
 				text, _ = block["text"].(string)
 			}
 		}
-		// Pi's result carries the event's flag, false unless a handler set it; Pig's nil leaves the call's own flag.
+		// Pi's result carries the event's flag, false unless a handler set it; Ompig's nil leaves the call's own flag.
 		isError := result.IsError != nil && *result.IsError
 		details, _ := json.Marshal(result.Details)
 		scenariof(lines, "tool_result %s content=%q isError=%t details=%s", step.Name, text, isError, details)

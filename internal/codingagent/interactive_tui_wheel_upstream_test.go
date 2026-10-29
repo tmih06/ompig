@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Upstream 0.99.1: createInteractiveTui passes `wheelScrollLines: options.fullscreenWheelScrollLines ?? "auto"` to the fullscreen renderer (tui-renderer.ts:38); InteractiveMode reads getFullscreenWheelScrollLines() when it creates (interactive-mode.ts:593) or switches (interactive-mode.ts:881) the renderer and again when settings apply (interactive-mode.ts:2001). interactive-tui.test.ts:128-152 supplies that getter to the renderer switch.

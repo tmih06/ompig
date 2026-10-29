@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // sym is a Go declaration that may stand for an upstream one.

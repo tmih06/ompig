@@ -6,7 +6,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // A command handler that requests a Session replacement is still running while the replacement retires its Runner. The Runner reports the running handler so the retirement waits for it.

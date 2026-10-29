@@ -13,17 +13,17 @@ import (
 
 func TestBuildGoPackedCellCachesCompileFailure(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	sdkRoot, err := filepath.Abs(filepath.Join("..", "..", "..", "..", "extensions", "sdk"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SDK_GO_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", sdkRoot)
 	extensionRoot := t.TempDir()
-	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/broken\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/broken\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(extensionRoot, "extension.go"), []byte("package broken\n\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n\nfunc Extension() *sdk.Extension { return sdk.New(\"broken\", \"extra\") }\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "extension.go"), []byte("package broken\n\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\n\nfunc Extension() *sdk.Extension { return sdk.New(\"broken\", \"extra\") }\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	extensions := []GoExtension{{
@@ -120,7 +120,7 @@ func TestBuildGoPackedCellRetriesTransientGoFailure(t *testing.T) {
 		t.Fatal(err)
 	}
 	// The wrapper is its own installation (bin/go beside pkg/tool), as a real
-	// toolchain is. PiG runs it with that installation's GOROOT, so it delegates
+	// toolchain is. Ompig runs it with that installation's GOROOT, so it delegates
 	// to the real go with GOROOT removed, letting the real go use its own.
 	fakeRoot := t.TempDir()
 	if err := os.MkdirAll(filepath.Join(fakeRoot, "pkg", "tool"), 0o755); err != nil {
@@ -143,24 +143,24 @@ func TestBuildGoPackedCellRetriesTransientGoFailure(t *testing.T) {
 	}
 
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	sdkRoot, err := filepath.Abs(filepath.Join("..", "..", "..", "..", "extensions", "sdk"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_SDK_GO_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", sdkRoot)
 	extensionRoot := t.TempDir()
-	goMod := "module example.com/transient\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	goMod := "module example.com/transient\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte(goMod), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	source := "package transient\n\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n\nfunc Extension() *sdk.Extension { return sdk.New(\"transient\") }\n"
+	source := "package transient\n\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\n\nfunc Extension() *sdk.Extension { return sdk.New(\"transient\") }\n"
 	if err := os.WriteFile(filepath.Join(extensionRoot, "extension.go"), []byte(source), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	countPath := filepath.Join(t.TempDir(), "build-count")
-	t.Setenv("PIG_TEST_REAL_GO", realGo)
-	t.Setenv("PIG_TEST_GO_BUILD_COUNT", countPath)
+	t.Setenv("OMPIG_TEST_REAL_GO", realGo)
+	t.Setenv("OMPIG_TEST_GO_BUILD_COUNT", countPath)
 	t.Setenv("PATH", binDir+string(os.PathListSeparator)+os.Getenv("PATH"))
 	extensions := []GoExtension{{
 		Name: "transient", Root: extensionRoot, ModulePath: "example.com/transient", Package: "example.com/transient", Factory: "Extension", Hash: "source-a",
@@ -190,7 +190,7 @@ import (
 func main() {
 	args := os.Args[1:]
 	if len(args) > 0 && args[0] == "build" {
-		countPath := os.Getenv("PIG_TEST_GO_BUILD_COUNT")
+		countPath := os.Getenv("OMPIG_TEST_GO_BUILD_COUNT")
 		count := 0
 		if data, err := os.ReadFile(countPath); err == nil {
 			count, _ = strconv.Atoi(string(data))
@@ -205,7 +205,7 @@ func main() {
 			os.Exit(1)
 		}
 	}
-	cmd := exec.Command(os.Getenv("PIG_TEST_REAL_GO"), args...)
+	cmd := exec.Command(os.Getenv("OMPIG_TEST_REAL_GO"), args...)
 	for _, kv := range os.Environ() {
 		if !strings.HasPrefix(kv, "GOROOT=") {
 			cmd.Env = append(cmd.Env, kv)

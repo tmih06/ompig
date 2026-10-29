@@ -376,7 +376,7 @@ func (portMapPlacement) Dirs(upstreamPackage string) []string {
 	return PortMapDirs(portMapMarkdown(), upstreamPackage)
 }
 
-// ShapeDirs keeps the directories that hold the port of this package only. cmd/pig and internal/codingagent also hold coding-agent
+// ShapeDirs keeps the directories that hold the port of this package only. cmd/ompig and internal/codingagent also hold coding-agent
 // ports, so for ai they are searched by name only: a unique shape match there is an unrelated declaration, not a counterpart.
 func (portMapPlacement) ShapeDirs(upstreamPackage string) []string {
 	return PortMapExclusiveDirs(portMapMarkdown(), upstreamPackage)

@@ -16,11 +16,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -378,7 +378,7 @@ func GenerateBranchSummary(ctx context.Context, entries []codingagent.SessionEnt
 	}
 	tokenBudget := contextWindow - reserveTokens
 
-	// pig divergence (D167): pi sends one request for the newest entries that fit tokenBudget by the character estimate and reports the provider's context overflow when the real token count is higher. PiG retries with the newest half of what it sent until the provider accepts it or one message is left, whose overflow error is then reported.
+	// ompig divergence (D167): pi sends one request for the newest entries that fit tokenBudget by the character estimate and reports the provider's context overflow when the real token count is higher. Ompig retries with the newest half of what it sent until the provider accepts it or one message is left, whose overflow error is then reported.
 	var refused error
 	refusedCount := 0
 	for {
@@ -405,7 +405,7 @@ func GenerateBranchSummary(ctx context.Context, entries []codingagent.SessionEnt
 			if len(prep.Messages) > 1 && ai.IsContextOverflow(ai.AssistantMessage{StopReason: ai.StopReasonError, ErrorMessage: err.Error()}, 0) {
 				// The newest message always fits the next budget, so the halving ends at one message as the error path below expects; a zero budget would mean no limit.
 				refused, refusedCount = err, len(prep.Messages)
-				//portlint:allow numbers Go-only overflow retry (pig divergence (D167), no Pi counterpart); halving a non-negative token count by floor is the intended budget
+				//portlint:allow numbers Go-only overflow retry (ompig divergence (D167), no Pi counterpart); halving a non-negative token count by floor is the intended budget
 				tokenBudget = max(prep.TotalTokens/2, EstimateTokens(prep.Messages[len(prep.Messages)-1]), 1)
 				continue
 			}

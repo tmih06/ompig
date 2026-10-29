@@ -3,7 +3,7 @@
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/../../.." && pwd)
-work=$(mktemp -d "${TMPDIR:-/tmp}/pig-quickstart.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/ompig-quickstart.XXXXXX")
 out="$root/docs/media/quickstart"
 for tool in go vhs ttyd ffmpeg ffprobe google-chrome rg fd python3; do
   command -v "$tool" >/dev/null || { printf 'Missing recording tool: %s\n' "$tool" >&2; exit 1; }
@@ -24,7 +24,7 @@ env -i HOME="$work/home" PATH="$path" TMPDIR="$work/tmp" \
   GOROOT="$goroot" GOPATH="$gopath" GOCACHE="$gocache" \
   GOPROXY=off GOSUMDB=off GOTOOLCHAIN=local \
   QS_SOURCE="$root" TERM=xterm-256color COLORTERM=truecolor \
-  PIG_OFFLINE=1 PI_OFFLINE=1 PI_TELEMETRY=0 \
+  OMPIG_OFFLINE=1 PI_OFFLINE=1 PI_TELEMETRY=0 \
   vhs "$out/quickstart.tape" > "$work/vhs.log" 2>&1
 
 test -s quickstart-raw.mp4

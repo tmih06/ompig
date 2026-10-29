@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // resumedBashCase is one persisted bashExecution message and the block Pi's addMessageToChat case "bashExecution"
@@ -126,7 +126,7 @@ func assertResumedBashBlocks(t *testing.T, m *InteractiveMode, cases []resumedBa
 }
 
 // Pi renderSessionEntries (interactive-mode.ts:4053) feeds every bashExecution message, including a `!!` one, to
-// addMessageToChat, whose case "bashExecution" (:3847-3859) draws a completed BashExecutionComponent. Every Pig path
+// addMessageToChat, whose case "bashExecution" (:3847-3859) draws a completed BashExecutionComponent. Every Ompig path
 // that rebuilds the transcript from Session history shares renderSessionEntryList, so each must draw the blocks.
 func TestResumedSessionRendersPersistedBashExecutionBlocks(t *testing.T) {
 	cases := resumedBashCases()
@@ -172,7 +172,7 @@ func TestResumedBashExecutionBlockStartsCollapsed(t *testing.T) {
 	}
 }
 
-// With no Session, Pig renders the agent's messages through the same message renderer.
+// With no Session, Ompig renders the agent's messages through the same message renderer.
 func TestAgentMessageFallbackRendersBashExecutionBlock(t *testing.T) {
 	m := &InteractiveMode{
 		chatContainer: tui.NewContainer(),
@@ -220,7 +220,7 @@ func writeRawBashSession(t *testing.T, messages ...map[string]any) (dir, path st
 // nothing, a missing or null exit code completes without a status, a non-zero exit shows it, cancellation wins over
 // the exit code, truncation without a full-output path shows no notice, and ANSI escapes and carriage returns are
 // cleaned. Pi 1.0.3 crashes at startup when command or output is missing (compaction.ts:338 estimateTokens reads
-// their length for the footer), so for those two Pig only must not panic and draws the remaining fields.
+// their length for the footer), so for those two Ompig only must not panic and draws the remaining fields.
 func TestResumedPoisonedBashExecutionMessages(t *testing.T) {
 	for _, tc := range []struct {
 		name    string

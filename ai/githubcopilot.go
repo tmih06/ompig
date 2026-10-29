@@ -21,9 +21,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // CopilotClientID is the OAuth client ID used by the upstream pi-ai package
@@ -833,7 +833,7 @@ func (m *copilotTokenManager) loadCred() (Credential, error) {
 		return Credential{}, err
 	}
 	if !ok {
-		return Credential{}, errors.New("github-copilot: not logged in (run `pig login github-copilot`)")
+		return Credential{}, errors.New("github-copilot: not logged in (run `ompig login github-copilot`)")
 	}
 	if cred.Refresh == "" {
 		return Credential{}, errors.New("github-copilot: missing refresh token; re-login required")
@@ -884,7 +884,7 @@ func (m *copilotTokenManager) getAccessToken(ctx context.Context) (string, error
 		// cancellation directly so callers can distinguish user abort
 		// from real auth failure. Without this, "context canceled"
 		// gets wrapped as "refresh failed" and triggers false
-		// "run pig login" auth guidance.
+		// "run ompig login" auth guidance.
 		if ctx.Err() != nil {
 			return "", ctx.Err()
 		}
@@ -900,7 +900,7 @@ func (m *copilotTokenManager) getAccessToken(ctx context.Context) (string, error
 	}
 	if post == nil || post.Type != CredentialOAuth {
 		// Logged out meanwhile.
-		return "", errors.New("github-copilot: not logged in (run `pig login github-copilot`)")
+		return "", errors.New("github-copilot: not logged in (run `ompig login github-copilot`)")
 	}
 	return post.Access, nil
 }

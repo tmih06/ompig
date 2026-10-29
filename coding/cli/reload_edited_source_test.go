@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // reloadSourceProbe is one extension whose factory logs the version its helper source file defines and whose /rl command awaits the reload. entry is the path that -e names and version the file the test edits, both relative to the probe directory; build is the longest a cold build of the probe may take.
@@ -47,7 +47,7 @@ func reloadSourceProbes(t *testing.T) []reloadSourceProbe {
 		{
 			name: "python",
 			files: map[string]string{
-				"reload_probe.py":         "import os\n\nimport pig_sdk\nfrom reload_probe_version import VERSION\n\n\ndef new_extension() -> pig_sdk.Extension:\n    ext = pig_sdk.Extension(\"reload_probe\")\n    with open(os.environ[\"RELOAD_PROBE_LOG\"], \"a\", newline=\"\") as log:\n        log.write(\"factory:\" + VERSION + \"\\n\")\n    ext.command(\"rl\", \"Reload\", lambda ctx, args: ctx.reload())\n    return ext\n",
+				"reload_probe.py":         "import os\n\nimport ompig_sdk\nfrom reload_probe_version import VERSION\n\n\ndef new_extension() -> ompig_sdk.Extension:\n    ext = ompig_sdk.Extension(\"reload_probe\")\n    with open(os.environ[\"RELOAD_PROBE_LOG\"], \"a\", newline=\"\") as log:\n        log.write(\"factory:\" + VERSION + \"\\n\")\n    ext.command(\"rl\", \"Reload\", lambda ctx, args: ctx.reload())\n    return ext\n",
 				"reload_probe_version.py": "VERSION = \"v1\"\n",
 			},
 			entry:   "reload_probe.py",
@@ -56,8 +56,8 @@ func reloadSourceProbes(t *testing.T) []reloadSourceProbe {
 		{
 			name: "go",
 			files: map[string]string{
-				"reloadprobego/go.mod":       "module example.test/reloadprobego\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n",
-				"reloadprobego/extension.go": "package reloadprobego\n\nimport (\n\t\"os\"\n\n\tsdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n)\n\nfunc Extension() *sdk.Extension {\n\tif file, err := os.OpenFile(os.Getenv(\"RELOAD_PROBE_LOG\"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600); err == nil {\n\t\t_, _ = file.WriteString(\"factory:\" + Version + \"\\n\")\n\t\t_ = file.Close()\n\t}\n\te := sdk.New(\"reloadprobego\")\n\te.Command(\"rl\", \"Reload\", func(ctx sdk.Context, _ string) error { return ctx.Reload() })\n\treturn e\n}\n",
+				"reloadprobego/go.mod":       "module example.test/reloadprobego\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n",
+				"reloadprobego/extension.go": "package reloadprobego\n\nimport (\n\t\"os\"\n\n\tsdk \"github.com/tmih06/ompig/extensions/sdk\"\n)\n\nfunc Extension() *sdk.Extension {\n\tif file, err := os.OpenFile(os.Getenv(\"RELOAD_PROBE_LOG\"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600); err == nil {\n\t\t_, _ = file.WriteString(\"factory:\" + Version + \"\\n\")\n\t\t_ = file.Close()\n\t}\n\te := sdk.New(\"reloadprobego\")\n\te.Command(\"rl\", \"Reload\", func(ctx sdk.Context, _ string) error { return ctx.Reload() })\n\treturn e\n}\n",
 				"reloadprobego/version.go":   "package reloadprobego\n\nconst Version = \"v1\"\n",
 			},
 			entry:   "reloadprobego",
@@ -67,7 +67,7 @@ func reloadSourceProbes(t *testing.T) []reloadSourceProbe {
 			name: "rust",
 			files: map[string]string{
 				"reload_probe_rs/Cargo.toml":     "[package]\nname = \"reload_probe_rs\"\nversion = \"0.0.0\"\nedition = \"2024\"\n\n[dependencies]\npig-sdk = { path = " + strconv.Quote(filepath.ToSlash(rustSDK)) + " }\n",
-				"reload_probe_rs/src/lib.rs":     "use pig_sdk::{CommandResult, Extension};\nuse std::io::Write;\n\nmod version;\n\npub fn new_extension() -> Extension {\n    if let Ok(mut log) = std::fs::OpenOptions::new().create(true).append(true).open(std::env::var(\"RELOAD_PROBE_LOG\").unwrap_or_default()) {\n        let _ = writeln!(log, \"factory:{}\", version::VERSION);\n    }\n    let mut ext = Extension::new(\"reload_probe_rs\");\n    ext.command(\"rl\", \"Reload\", |ctx, _| match ctx.reload() {\n        Ok(()) => CommandResult::Ok,\n        Err(error) => CommandResult::Error(error.to_string()),\n    });\n    ext\n}\n",
+				"reload_probe_rs/src/lib.rs":     "use ompig_sdk::{CommandResult, Extension};\nuse std::io::Write;\n\nmod version;\n\npub fn new_extension() -> Extension {\n    if let Ok(mut log) = std::fs::OpenOptions::new().create(true).append(true).open(std::env::var(\"RELOAD_PROBE_LOG\").unwrap_or_default()) {\n        let _ = writeln!(log, \"factory:{}\", version::VERSION);\n    }\n    let mut ext = Extension::new(\"reload_probe_rs\");\n    ext.command(\"rl\", \"Reload\", |ctx, _| match ctx.reload() {\n        Ok(()) => CommandResult::Ok,\n        Err(error) => CommandResult::Error(error.to_string()),\n    });\n    ext\n}\n",
 				"reload_probe_rs/src/version.rs": "pub const VERSION: &str = \"v1\";\n",
 			},
 			entry:   "reload_probe_rs",
@@ -77,10 +77,10 @@ func reloadSourceProbes(t *testing.T) []reloadSourceProbe {
 		}}
 }
 
-// Pi's loader imports extensions through jiti with moduleCache: false (core/extensions/loader.ts:569-572), so /reload runs a TypeScript extension's factory from the source as it is now, its local imports included: an -e extension edited after it loaded reloads the edit (probed with Pi 1.0.0 in RPC mode). Pi keeps an edited .mjs extension's old code, which Node's ES module cache holds; PiG evaluates it again (D93). PiG re-invokes the factory in the process that holds the extension, and the Python runner re-imports an extension whose source changed since its import, so a Python extension reloads its edit as a TypeScript one does. A Go or Rust extension's source identifies its build, so an edit rebuilds it.
+// Pi's loader imports extensions through jiti with moduleCache: false (core/extensions/loader.ts:569-572), so /reload runs a TypeScript extension's factory from the source as it is now, its local imports included: an -e extension edited after it loaded reloads the edit (probed with Pi 1.0.0 in RPC mode). Pi keeps an edited .mjs extension's old code, which Node's ES module cache holds; Ompig evaluates it again (D93). Ompig re-invokes the factory in the process that holds the extension, and the Python runner re-imports an extension whose source changed since its import, so a Python extension reloads its edit as a TypeScript one does. A Go or Rust extension's source identifies its build, so an edit rebuilds it.
 func TestReloadRunsTheCurrentSourceOfACommandLineExtension(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary and starts Node, Python, Go and Rust extensions")
+		t.Skip("builds the ompig binary and starts Node, Python, Go and Rust extensions")
 	}
 	for _, probe := range reloadSourceProbes(t) {
 		t.Run(probe.name, func(t *testing.T) {
@@ -98,7 +98,7 @@ func TestReloadRunsTheCurrentSourceOfACommandLineExtension(t *testing.T) {
 				}
 			}
 			home, cwd, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
-			agentDir := filepath.Join(home, "pig")
+			agentDir := filepath.Join(home, "ompig")
 			if err := os.MkdirAll(agentDir, 0o755); err != nil {
 				t.Fatal(err)
 			}
@@ -108,7 +108,7 @@ func TestReloadRunsTheCurrentSourceOfACommandLineExtension(t *testing.T) {
 			logPath := filepath.Join(t.TempDir(), "reload.log")
 			// HOME is fresh, so keep the real cargo and rustup homes: their toolchain and crate registry, as other Rust
 			// extension tests do. Without them cargo looks under the empty HOME.
-			env := []string{rustHome("CARGO_HOME", ".cargo"), rustHome("RUSTUP_HOME", ".rustup"), "HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
+			env := []string{rustHome("CARGO_HOME", ".cargo"), rustHome("RUSTUP_HOME", ".rustup"), "HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "RELOAD_PROBE_LOG=" + logPath}
 			process := startRPCProcessAt(t, cwd, env, "--no-extensions", "--model", "test-faux/faux-1", "--session-dir", sessionDir, "-e", filepath.Join(dir, probe.entry))
 			// The load and the reload each build the probe, so both waits allow its build.
 			process.budget = probeWait(t, probe.build)

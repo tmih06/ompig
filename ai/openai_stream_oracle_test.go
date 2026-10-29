@@ -81,7 +81,7 @@ func openAICompletionsStreamBodies() [][][]byte {
 	return bodies
 }
 
-// TestOpenAICompletionsProviderStreamMatchesPi compares Pi's openai-completions provider with Pig's over seeded chunk streams.
+// TestOpenAICompletionsProviderStreamMatchesPi compares Pi's openai-completions provider with Ompig's over seeded chunk streams.
 func TestOpenAICompletionsProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"openai-completions", "openAICompletionsApi", "openai-completions", "openai"}, true, openAICompletionsStreamBodies(), func(baseURL string) Provider {
 		return NewOpenAIProvider(OpenAIConfig{APIKey: "k", Model: "m", BaseURL: baseURL})

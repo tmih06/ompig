@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // viewFrame is one frame the SDK wrote: kind is the envelope type, method the
@@ -41,7 +41,7 @@ func startViewHost(t *testing.T, state string, register func(ext *Extension)) *v
 	host := newMockHost(t)
 	ext := New("kit-view")
 	register(ext)
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	h := &viewHost{t: t, host: host, frames: make(chan viewFrame, 256), done: make(chan error, 1)}
 	go func() { h.done <- ext.Run() }()
 	host.accept(t)

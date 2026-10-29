@@ -16,10 +16,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/configvalue"
 )
 
 // CatalogRefreshOptions selects providers and whether network access is allowed.
@@ -39,12 +39,12 @@ type CatalogRefreshResult struct {
 }
 
 // ModelNetworkEnabled mirrors ModelRuntime.modelNetworkEnabled
-// (PI_OFFLINE === undefined). PIG_OFFLINE is Pig's product-neutral alias.
+// (PI_OFFLINE === undefined). OMPIG_OFFLINE is Ompig's product-neutral alias.
 func ModelNetworkEnabled() bool {
 	if _, set := os.LookupEnv("PI_OFFLINE"); set {
 		return false
 	}
-	value := strings.ToLower(strings.TrimSpace(os.Getenv("PIG_OFFLINE")))
+	value := strings.ToLower(strings.TrimSpace(os.Getenv("OMPIG_OFFLINE")))
 	return value != "1" && value != "true" && value != "yes"
 }
 
@@ -94,7 +94,7 @@ func (c *modelsConfig) recordComposeFailure(providerID, message string) {
 // missing api is judged later, against its catalog.
 func firstModelDefinitionFailure(providerID string, provider providerConfig) string {
 	var builtIn []*ai.Model
-	// pig additive (D92): a stripped API leaves the offered catalog, not the defaults a models.json entry composes from.
+	// ompig additive (D92): a stripped API leaves the offered catalog, not the defaults a models.json entry composes from.
 	for i := range ai.GeneratedModels {
 		if generated := &ai.GeneratedModels[i]; generated.Provider == providerID {
 			builtIn = append(builtIn, generated.ToModel())

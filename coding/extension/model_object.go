@@ -3,7 +3,7 @@ package extension
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ModelObject is the JSON of the model object Pi hands an extension (ctx.model, model_select, ctx.modelRegistry, a provider

@@ -19,7 +19,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // fileURL is url.pathToFileURL(path).href on the host's path flavour: "file://" + a Windows path is not a URL.

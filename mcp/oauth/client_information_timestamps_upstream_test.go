@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // parseClientInformation (packages/mcp/src/oauth/types.ts:198-209) spreads the response, then overrides client_id_issued_at and

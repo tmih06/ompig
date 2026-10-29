@@ -10,7 +10,7 @@ type Rules struct {
 	ID                 string                       `json:"id"`
 	TableTargets       map[string]string            `json:"tableTargets"`
 	AdditiveTableItems map[string]map[string]string `json:"additiveTableItems,omitempty"`
-	// DesignedOutTableItems maps a Pig table to the Pi items it omits, each to the divergence that designs it out.
+	// DesignedOutTableItems maps a Ompig table to the Pi items it omits, each to the divergence that designs it out.
 	DesignedOutTableItems map[string]map[string]string `json:"designedOutTableItems,omitempty"`
 	ConstantTargets       map[string]string            `json:"constantTargets"`
 	FunctionTargets       map[string]string            `json:"functionTargets"`
@@ -133,7 +133,7 @@ func compareTransitionContracts(report *Report, source, target *Inventory, rules
 			report.Findings = append(report.Findings, Finding{
 				ID: "finding:transition:" + contract.ID, Severity: "error", Kind: "function-transition",
 				SourceID: sourceFunction.ID, TargetID: targetFunction.ID,
-				Detail: fmt.Sprintf("transition contract %s matched Pi=%d Pig=%d, want one each", contract.ID, sourceCount, targetCount),
+				Detail: fmt.Sprintf("transition contract %s matched Pi=%d Ompig=%d, want one each", contract.ID, sourceCount, targetCount),
 			})
 		}
 	}
@@ -167,7 +167,7 @@ func compareFunctions(report *Report, source, target *Inventory, rules Rules) {
 	}
 	for targetName := range targetFunctions {
 		if _, claimed := claimedTargets[targetName]; !claimed {
-			report.Findings = append(report.Findings, Finding{ID: "finding:function:unclaimed-target:" + targetName, Severity: "error", Kind: "unclaimed-target-function", TargetID: targetName, Detail: "Pig function lacks a Pi correspondence or additive lineage"})
+			report.Findings = append(report.Findings, Finding{ID: "finding:function:unclaimed-target:" + targetName, Severity: "error", Kind: "unclaimed-target-function", TargetID: targetName, Detail: "Ompig function lacks a Pi correspondence or additive lineage"})
 		}
 	}
 	for sourceName, targetName := range rules.FunctionTargets {
@@ -187,10 +187,10 @@ func compareFunctions(report *Report, source, target *Inventory, rules Rules) {
 		sourceSequence, sourceCalls := normalizedCalls(sourceFunction.Calls, rules.CalleeTargets, false)
 		targetSequence, targetCalls := normalizedCalls(targetFunction.Calls, rules.CalleeTargets, true)
 		if !slices.Equal(sourceSequence, targetSequence) {
-			report.Findings = append(report.Findings, Finding{ID: "finding:function-order:" + sourceName, Severity: "error", Kind: "function-call-order", SourceID: sourceFunction.ID, TargetID: targetFunction.ID, Detail: fmt.Sprintf("Pi calls %q differ from Pig calls %q", sourceSequence, targetSequence)})
+			report.Findings = append(report.Findings, Finding{ID: "finding:function-order:" + sourceName, Severity: "error", Kind: "function-call-order", SourceID: sourceFunction.ID, TargetID: targetFunction.ID, Detail: fmt.Sprintf("Pi calls %q differ from Ompig calls %q", sourceSequence, targetSequence)})
 		}
 		if sourceProfile, targetProfile := callConditionProfile(sourceCalls), callConditionProfile(targetCalls); !slices.Equal(sourceProfile, targetProfile) {
-			report.Findings = append(report.Findings, Finding{ID: "finding:function-branches:" + sourceName, Severity: "error", Kind: "function-call-branches", SourceID: sourceFunction.ID, TargetID: targetFunction.ID, Detail: fmt.Sprintf("Pi call branches %q differ from Pig call branches %q", sourceProfile, targetProfile)})
+			report.Findings = append(report.Findings, Finding{ID: "finding:function-branches:" + sourceName, Severity: "error", Kind: "function-call-branches", SourceID: sourceFunction.ID, TargetID: targetFunction.ID, Detail: fmt.Sprintf("Pi call branches %q differ from Ompig call branches %q", sourceProfile, targetProfile)})
 		}
 		compareCancellationFlow(report, sourceFunction, targetFunction, sourceCalls, targetCalls, rules)
 	}
@@ -266,7 +266,7 @@ func compareCancellationFlow(report *Report, source, target Function, sourceCall
 			continue
 		}
 		if !argumentsContain(call.Arguments, target.CancellationInputs) {
-			report.Findings = append(report.Findings, Finding{ID: fmt.Sprintf("finding:function-cancellation-target:%s:%d", source.Name, call.Ordinal), Severity: "error", Kind: "function-cancellation-flow", SourceID: source.ID, TargetID: target.ID, Detail: "Pig blocking call does not receive its cancellation input"})
+			report.Findings = append(report.Findings, Finding{ID: fmt.Sprintf("finding:function-cancellation-target:%s:%d", source.Name, call.Ordinal), Severity: "error", Kind: "function-cancellation-flow", SourceID: source.ID, TargetID: target.ID, Detail: "Ompig blocking call does not receive its cancellation input"})
 		}
 	}
 }
@@ -301,7 +301,7 @@ func compareTables(report *Report, source, target *Inventory, rules Rules) {
 		if _, claimed := claimedTargets[targetID]; !claimed {
 			report.Findings = append(report.Findings, Finding{
 				ID: "finding:table:unclaimed-target:" + targetID, Severity: "error", Kind: "unclaimed-target-table", TargetID: targetID,
-				Detail: "Pig table lacks a Pi correspondence or additive lineage",
+				Detail: "Ompig table lacks a Pi correspondence or additive lineage",
 			})
 		}
 	}
@@ -328,7 +328,7 @@ func compareTables(report *Report, source, target *Inventory, rules Rules) {
 				report.Findings = append(report.Findings, Finding{
 					ID: "finding:table-item:missing:" + sourceItem.ID, Severity: "error", Kind: "missing-table-item",
 					SourceID: sourceID + "#" + sourceItem.ID, TargetID: targetID + "#" + sourceItem.ID,
-					Detail: "Pig table has no item with the Pi identity",
+					Detail: "Ompig table has no item with the Pi identity",
 				})
 				continue
 			}
@@ -342,7 +342,7 @@ func compareTables(report *Report, source, target *Inventory, rules Rules) {
 			_, inSource := sourceItems[id]
 			_, inTarget := targetItems[id]
 			if !inSource || inTarget || lineage == "" {
-				report.Findings = append(report.Findings, Finding{ID: "finding:table-item:designed-out:" + id, Severity: "error", Kind: "designed-out-table-item", SourceID: sourceID + "#" + id, TargetID: targetID + "#" + id, Detail: "declared designed-out item is not a Pi item the Pig table omits, or its lineage is missing"})
+				report.Findings = append(report.Findings, Finding{ID: "finding:table-item:designed-out:" + id, Severity: "error", Kind: "designed-out-table-item", SourceID: sourceID + "#" + id, TargetID: targetID + "#" + id, Detail: "declared designed-out item is not a Pi item the Ompig table omits, or its lineage is missing"})
 			}
 		}
 		additions := rules.AdditiveTableItems[targetID]
@@ -360,7 +360,7 @@ func compareTables(report *Report, source, target *Inventory, rules Rules) {
 				report.Findings = append(report.Findings, Finding{
 					ID: "finding:table-item:extra:" + targetItem.ID, Severity: "error", Kind: "extra-table-item",
 					SourceID: sourceID, TargetID: targetID + "#" + targetItem.ID,
-					Detail: "Pig table item lacks a Pi counterpart or additive lineage",
+					Detail: "Ompig table item lacks a Pi counterpart or additive lineage",
 				})
 			}
 		}
@@ -370,7 +370,7 @@ func compareTables(report *Report, source, target *Inventory, rules Rules) {
 			report.Findings = append(report.Findings, Finding{
 				ID: "finding:table-order:" + sourceID, Severity: "error", Kind: "table-order",
 				SourceID: sourceID, TargetID: targetID,
-				Detail: fmt.Sprintf("Pi order %q differs from Pig order %q", sourceOrder, targetOrder),
+				Detail: fmt.Sprintf("Pi order %q differs from Ompig order %q", sourceOrder, targetOrder),
 			})
 		}
 	}
@@ -382,19 +382,19 @@ func compareTableItem(report *Report, sourceTableID, targetTableID string, sourc
 	if source.Label != target.Label {
 		report.Findings = append(report.Findings, Finding{
 			ID: "finding:table-label:" + source.ID, Severity: "error", Kind: "table-label", SourceID: sourceID, TargetID: targetID,
-			Detail: fmt.Sprintf("Pi label %q differs from Pig label %q", source.Label, target.Label),
+			Detail: fmt.Sprintf("Pi label %q differs from Ompig label %q", source.Label, target.Label),
 		})
 	}
 	if source.Description != "" && target.Description != "" && source.Description != target.Description {
 		report.Findings = append(report.Findings, Finding{
 			ID: "finding:table-description:" + source.ID, Severity: "error", Kind: "table-description", SourceID: sourceID, TargetID: targetID,
-			Detail: fmt.Sprintf("Pi description %q differs from Pig description %q", source.Description, target.Description),
+			Detail: fmt.Sprintf("Pi description %q differs from Ompig description %q", source.Description, target.Description),
 		})
 	}
 	if len(source.Values) > 0 && len(target.Values) > 0 && !slices.Equal(source.Values, target.Values) {
 		report.Findings = append(report.Findings, Finding{
 			ID: "finding:table-values:" + source.ID, Severity: "error", Kind: "table-values", SourceID: sourceID, TargetID: targetID,
-			Detail: fmt.Sprintf("Pi values %q differ from Pig values %q", source.Values, target.Values),
+			Detail: fmt.Sprintf("Pi values %q differ from Ompig values %q", source.Values, target.Values),
 		})
 	}
 }
@@ -418,7 +418,7 @@ func compareConstants(report *Report, source, target *Inventory, rules Rules) {
 		if _, claimed := claimedTargets[targetName]; !claimed {
 			report.Findings = append(report.Findings, Finding{
 				ID: "finding:constant:unclaimed-target:" + targetName, Severity: "error", Kind: "unclaimed-target-constant",
-				TargetID: targetConstant.ID, Detail: "Pig constant lacks a Pi correspondence or additive lineage",
+				TargetID: targetConstant.ID, Detail: "Ompig constant lacks a Pi correspondence or additive lineage",
 			})
 		}
 	}
@@ -441,7 +441,7 @@ func compareConstants(report *Report, source, target *Inventory, rules Rules) {
 			report.Findings = append(report.Findings, Finding{
 				ID: "finding:constant-value:" + sourceName, Severity: "error", Kind: "constant-value",
 				SourceID: sourceConstant.ID, TargetID: targetConstant.ID,
-				Detail: fmt.Sprintf("Pi value %s/%d differs from Pig value %s/%d", sourceConstant.ValueHash, sourceConstant.UTF16Length, targetConstant.ValueHash, targetConstant.UTF16Length),
+				Detail: fmt.Sprintf("Pi value %s/%d differs from Ompig value %s/%d", sourceConstant.ValueHash, sourceConstant.UTF16Length, targetConstant.ValueHash, targetConstant.UTF16Length),
 			})
 		}
 	}

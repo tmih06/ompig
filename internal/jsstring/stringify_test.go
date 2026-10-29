@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"testing"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // JSON.stringify writes <, >, & and U+2028/U+2029 raw and escapes only quotes, backslashes and C0 controls; an escaped backslash before literal "u2028" text

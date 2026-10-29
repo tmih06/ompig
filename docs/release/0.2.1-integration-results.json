@@ -36,7 +36,7 @@
     ]
   },
   "upstream_version": "0.87.1",
-  "pig_binary_sha256": "2cc39f4b7f2ae5ac87491f851c184e65c23b8b9d0cb0d3ee08cb156b7afe6a8e",
+  "ompig_binary_sha256": "2cc39f4b7f2ae5ac87491f851c184e65c23b8b9d0cb0d3ee08cb156b7afe6a8e",
   "gate_runs": [
     {
       "command": "go test ./...",
@@ -129,7 +129,7 @@
       "exit": 0
     },
     {
-      "command": "env GOOS=windows go vet ./ai/... ./coding/... ./internal/codingagent/... ./tui/... ./cmd/pig/... ./test/parity/...",
+      "command": "env GOOS=windows go vet ./ai/... ./coding/... ./internal/codingagent/... ./tui/... ./cmd/ompig/... ./test/parity/...",
       "start": "2026-09-26T18:40:47-07:00",
       "end": "2026-09-26T18:41:05-07:00",
       "exit": 0
@@ -199,7 +199,7 @@
       "lock_sha256": "2d3fc2dd94bffb09ebfe4fab9f3577b2b1ab91658a8c28436fe00ea2ab14ec93",
       "main_command": "mcp-auth",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-subagents",
@@ -208,7 +208,7 @@
       "lock_sha256": "1f15e98f19b7d51dfe0a78383c9302fa0147f4135045ef1641bd700a37067705",
       "main_command": "subagents",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@langfuse/pi-observability-plugin",
@@ -217,7 +217,7 @@
       "lock_sha256": "058fcca3bbdb6af32ee2129610833f898bbf51ad571f02267c2041876a9e74a7",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-web-access",
@@ -226,7 +226,7 @@
       "lock_sha256": "ce1850d9ddc3b96e41f03d2e6f68290e97a04d305aff6164b0804e26ded93c11",
       "main_command": "websearch",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "billion-context",
@@ -235,7 +235,7 @@
       "lock_sha256": "c24967aa4f23faa49c06c43a735e5c9ccec2af1338396718fb8d1117f98dc7af",
       "main_command": "acp",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@juicesharp/rpiv-ask-user-question",
@@ -244,7 +244,7 @@
       "lock_sha256": "91b72e2430006bf2d0cc5547d610840e7231be7578b0e348747d5b5ad5dbe174",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-mcp-extension",
@@ -253,7 +253,7 @@
       "lock_sha256": "3ccbdc866723ed758100fa7ba76f530d6fb42f77dc20f448a9ea8f02db2038ca",
       "main_command": "mcp",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@juicesharp/rpiv-todo",
@@ -262,7 +262,7 @@
       "lock_sha256": "63cb54f5c2e9be37b8182b5b1b877323dadb6b6845b113b2b4a6e94ce942fab8",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@companion-ai/feynman",
@@ -271,7 +271,7 @@
       "lock_sha256": "378b5990dfb8eb6a4bf410a413d2aca64a870ca22f133a6c4c5b449c703482fd",
       "main_command": "service-tier",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-goal-x",
@@ -280,7 +280,7 @@
       "lock_sha256": "94f820171439c13124980770c59e855c6b5022c695e8e947e0fe9de3cd66c0ac",
       "main_command": "goal",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@plannotator/pi-extension",
@@ -289,7 +289,7 @@
       "lock_sha256": "6b102e66a748a43ba82617c9ff6168583a71ac697c113226b008aa3fd728a1fa",
       "main_command": "plannotator-plan-mode",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "bigpowers",
@@ -298,7 +298,7 @@
       "lock_sha256": "1a7138d1ef3d768e320bc210f4062e3799c4363c82eed64165e30600cdbc96b4",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-lens",
@@ -307,7 +307,7 @@
       "lock_sha256": "c4f288e557045b724d9cd3a17724bb8832d374ac1412df9c4af143241a03247f",
       "main_command": "lens-toggle",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-powerline-footer",
@@ -316,7 +316,7 @@
       "lock_sha256": "108201f012af5540dda951373d9382fdcee5a4d4321a05698918c0ce29efe448",
       "main_command": "powerline",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@narumitw/pi-usage",
@@ -325,7 +325,7 @@
       "lock_sha256": "77ea02759038b18d59f338e4297d9387f981fe1015ddc0830966374dfb815ebb",
       "main_command": "usage",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@dietrichgebert/ponytail",
@@ -334,7 +334,7 @@
       "lock_sha256": "71f1570056391241171b5f2b830d10ead5e5807c295eb31453a2e2842f0f4375",
       "main_command": "ponytail",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "context-mode",
@@ -343,7 +343,7 @@
       "lock_sha256": "0a453ab23f180061fcb90426af94633605994c53ffe1aafdc9235482f9051481",
       "main_command": "ctx-stats",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-claude-bridge",
@@ -352,7 +352,7 @@
       "lock_sha256": "3b3261b2527d2e1139eb2a160b897d0ab924b1467a387b3ec21e3c28d683c797",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-cc-extensions",
@@ -361,7 +361,7 @@
       "lock_sha256": "38664d42223466821d73641a3dbc16d385882a44b3295d0e2543bb71d888163c",
       "main_command": "ccstyle",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@moyai/pi-session-hoarder",
@@ -370,7 +370,7 @@
       "lock_sha256": "ccd8a30e1ae054f5e86a821b42d755d77c4fd6e982cf975750280d70d2670006",
       "main_command": "hoarder",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "agent-comms",
@@ -379,7 +379,7 @@
       "lock_sha256": "18f584240e8d1571f983ba4a98634adfd99777fb81be7e613bf971939ad2433f",
       "main_command": "comms-url",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@henryqw/pi-subagent",
@@ -388,7 +388,7 @@
       "lock_sha256": "dcc8269a4469a17e01c55ee2fe9b245a623f306e2ea9e75ee97809ed50bd0a36",
       "main_command": "subagent",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@langchain/langsmith-pi-extension",
@@ -397,7 +397,7 @@
       "lock_sha256": "9d93d18b18be59038c3043732febd68e30e613cff20f38b55e6424ed615c6c3a",
       "main_command": "langsmith-tracing",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@gotgenes/pi-permission-system",
@@ -406,7 +406,7 @@
       "lock_sha256": "f927bcd749e692ea9c48062cd4b95f208880a6fcce79905390af39db2db0b1a0",
       "main_command": "permission-system",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "billion-context-pi",
@@ -415,7 +415,7 @@
       "lock_sha256": "c870ec3a65bb3b8955e8c7a9a8a17a73a071aa0c72d9da90ac59f76fb2ad90cb",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@raindrop-ai/pi-agent",
@@ -424,7 +424,7 @@
       "lock_sha256": "7265cbf24d2112914ef40f9bc6fce7dbd131f19e49d9bdd6c5e87e001cfd733a",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@schovest/pi-goal",
@@ -433,7 +433,7 @@
       "lock_sha256": "5e8ae74dde38fc97ac2a0df17cf9a2b077f4fe63d3bc94ee2755c3df242286a7",
       "main_command": "goal",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@ff-labs/pi-fff",
@@ -442,7 +442,7 @@
       "lock_sha256": "6a507bd2e6e9aee584f076e0808d5378612787fa89a04aaf9ce9e234a06030c5",
       "main_command": "fff-mode",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-advisor-flow",
@@ -451,7 +451,7 @@
       "lock_sha256": "6a6995c28419a17434cf5ffc0198cbd6198578a8ddff504f71ff743e4301b4ad",
       "main_command": "advisor",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@henryqw/pi-task-models",
@@ -460,7 +460,7 @@
       "lock_sha256": "44c95c086d6272404bcd1f5f26c38ca851873994e11c08d8d94baf652b6983d6",
       "main_command": "task-models",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "gentle-pi",
@@ -469,7 +469,7 @@
       "lock_sha256": "3a27b51cfb03a7cd3e44d29a75b9a781c523ef8a6c6bd2bb2c2cdb13dbda0d6a",
       "main_command": "gentle-live-research-probe",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-simplify",
@@ -478,7 +478,7 @@
       "lock_sha256": "91a4a63259dafe45c4bb7b48e1ec2230ba4d47412fa3c5347f857742875eb4a9",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "confluence-cli",
@@ -487,7 +487,7 @@
       "lock_sha256": "8ceb4813f1c2bdcf019fdf86a3dffc57821f8668a3112c147c82d3b1a4f9be2d",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-btw",
@@ -496,7 +496,7 @@
       "lock_sha256": "43faa182eff083cffa2650270f60906ef81872ae1a405b85fa0caace376eb566",
       "main_command": "btw",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@kontextmind/kxm",
@@ -505,7 +505,7 @@
       "lock_sha256": "176e7c37c271e079d612afbbb68516b245e2759b64f6cba88e4686907403a875",
       "main_command": "kxm",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@akagilnc/pi-workflow-roles",
@@ -514,7 +514,7 @@
       "lock_sha256": "e64c9bd2c7f12fb71c6c08b17126dab72f7e438330003a9198ff0f6c77e790ed",
       "main_command": "navigator-model",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@agimon-ai/log-sink-mcp",
@@ -523,7 +523,7 @@
       "lock_sha256": "cc7db2a99b973d15757fa7c3c2fd98672271934b81e4d819cf24933bfeaae851",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-memory",
@@ -532,7 +532,7 @@
       "lock_sha256": "552c2b4afa6a4b9c693949e8fa0662ceddce350a09a3a14f94e70a50dcd11abb",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@narumitw/pi-btw",
@@ -541,7 +541,7 @@
       "lock_sha256": "28ca10ab4184a46700b77e8f27603bd32ec25b70bdcfadaf61c8674bdd074f5a",
       "main_command": "btw",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@narumitw/pi-goal",
@@ -550,7 +550,7 @@
       "lock_sha256": "54a79cb35155f4c2fa11bde0fef191f861e15109fcaf7fcc6bcef3b79e68548d",
       "main_command": "goal",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-vim",
@@ -559,7 +559,7 @@
       "lock_sha256": "cb7ddb97a07dac2ab38543054813f29f21fbd92cdeb2ff1c8f4e01d289ee8252",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-rtk-optimizer",
@@ -568,7 +568,7 @@
       "lock_sha256": "8138d5209b2b1d3f7fb29b5ccf3a7221e27402d3ef6f43b0d06a11ff0a752ffb",
       "main_command": "rtk",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-auto-update",
@@ -577,7 +577,7 @@
       "lock_sha256": "cfd12fe42b1d440842838f4aa25bd0b8ff77fa99f3e892aa344825bd556beffd",
       "main_command": "auto-update-now",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "@upstash/context7-pi",
@@ -586,7 +586,7 @@
       "lock_sha256": "0fbfc1832a21d70f0c488ddede49797a158e9516fc2584553fad3fb0ba02f7fe",
       "main_command": null,
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-hermes-memory",
@@ -595,7 +595,7 @@
       "lock_sha256": "35565fee6938fa1a2b104d8f5c549a32b86a87f4e6bb99eedb9319d932246154",
       "main_command": "memory-insights",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     },
     {
       "package": "pi-msg-queue",
@@ -604,7 +604,7 @@
       "lock_sha256": "eec65c43e40d5248593c2ccb984d3dc8946377ed269d60c38e70ed40f7569fdd",
       "main_command": "q",
       "pi_print_exit": 0,
-      "pig_print_exit": 0
+      "ompig_print_exit": 0
     }
   ],
   "interactions": [
@@ -625,7 +625,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -658,7 +658,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -690,7 +690,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -727,7 +727,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -769,7 +769,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -806,7 +806,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -834,7 +834,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -862,7 +862,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -894,7 +894,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -920,7 +920,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -947,7 +947,7 @@
           }
         ]
       },
-      "pig": {
+      "ompig": {
         "status": "completed",
         "steps": [
           {
@@ -1118,131 +1118,131 @@
     "corpus/pi-web-access/pi/command.txt": "06e96939afd46a2cc3ee7d4ffac8da41430ba86f1f29ecea593cb5918118317a",
     "corpus/pi-web-access/pi/startup.txt": "979711dd88a0a50568f9d85b6208338984d7f9db9e82470e3b9ad96065bc8049",
     "corpus/pi-web-access/pi/turn.txt": "b1e8f9f436fc5f7cab7b474d74a314ebe01bf870a16166a1bfd320e1087b1e76",
-    "corpus/_agimon-ai_log-sink-mcp/pig/startup.txt": "ecda732f8387868d1d86df5ef2fe0c5df6f62eed7c166fd8c02432fa5f0205fc",
-    "corpus/_agimon-ai_log-sink-mcp/pig/turn.txt": "e5f05a6bfc530ab20e8d6780770586981d47e33005cfadb7d6bf468f8c69e71f",
-    "corpus/_akagilnc_pi-workflow-roles/pig/command.txt": "a20a451b5b46b2526f4a02662595420c81a381b0ba1daeff8af2ac86a7c3149f",
-    "corpus/_akagilnc_pi-workflow-roles/pig/startup.txt": "4db5b0dfab9f53eee0892b8d66663905de7d26fd7b27644be010a90762462f30",
-    "corpus/_akagilnc_pi-workflow-roles/pig/turn.txt": "a855a487a1e5eb69f3465eb3c614b14cab239f514a31795f30ac79169f65dca8",
-    "corpus/_companion-ai_feynman/pig/command.txt": "09ee61b0bd53254a8ccc1bf653c7d79cc52611fb9d56cb2a11eb80c5b73d6d23",
-    "corpus/_companion-ai_feynman/pig/startup.txt": "89ef79c13824552048eabcc2fc6a22f2289c830bc53f92f1ceebd8178843612e",
-    "corpus/_companion-ai_feynman/pig/turn.txt": "ec627d481f01a595f19eb3c69566d129a7c54f78ba314f65ba63429dfed4128a",
-    "corpus/_dietrichgebert_ponytail/pig/command.txt": "2fee64880628232feae7e4686835d9586b69a988ecb32f68761733e21d71343a",
-    "corpus/_dietrichgebert_ponytail/pig/startup.txt": "0364ae221825578c84d6dfefec7d5d3d67de7e8cfd532350cee74bff55997c0d",
-    "corpus/_dietrichgebert_ponytail/pig/turn.txt": "8b32d258f2e4ffc089b35eef0189fab321a2a6fa7b702637aab33fa04f820bbd",
-    "corpus/_ff-labs_pi-fff/pig/command.txt": "1137834f02ff05fd4f2c111d5f2fa67ba3b9830f195c66752ed10329f40ac5e9",
-    "corpus/_ff-labs_pi-fff/pig/startup.txt": "5248708f606b4e8a85ef8e83ddfa297a7791c40c233b5f19a36754a90dec65be",
-    "corpus/_ff-labs_pi-fff/pig/turn.txt": "8cc27883f82515be6725a78b3537624af51013a678fd6c034d2c1e7354d5d63f",
-    "corpus/_gotgenes_pi-permission-system/pig/command.txt": "03f10d26fd3c6b922414419bf683651f342253b6a288817a887bc944bc7faea2",
-    "corpus/_gotgenes_pi-permission-system/pig/startup.txt": "5d8f1659c762f34fb092225444bdfa2042c5d360631920fe307b80f9645d6699",
-    "corpus/_gotgenes_pi-permission-system/pig/turn.txt": "6627d3a507e869e9de549b2021ab39f69643060352bf1273b008f6071c10d5a3",
-    "corpus/_henryqw_pi-subagent/pig/command.txt": "33ca92f62a2b40cc09e4b62c29ae8c30efbccb2483463805d7a96965082de0e5",
-    "corpus/_henryqw_pi-subagent/pig/startup.txt": "1a4374db6f41874da1f7ea918fb41596fef1a8792708d21af4b82145f74f0e09",
-    "corpus/_henryqw_pi-subagent/pig/turn.txt": "7a3ce47d0451ab55bee85f21e40589e005cb5e538a18aa23e0a93dcfd95537a3",
-    "corpus/_henryqw_pi-task-models/pig/command.txt": "884d9715ceaf78eaebe080bbc6fa9d39754adea040a5ad1d75808e67c585b41d",
-    "corpus/_henryqw_pi-task-models/pig/startup.txt": "567e0a0581f2fbfe5d0cd20db5e2b95f6f5882add35ced3ee0dc8f2073a2f3a7",
-    "corpus/_henryqw_pi-task-models/pig/turn.txt": "bc5d8c4c9b278c3c38bcaac58ee8ac6c5079306bcd7f5bc1f1a6bbc6d0676841",
-    "corpus/_juicesharp_rpiv-ask-user-question/pig/startup.txt": "cd18cd8d42623b25047bb0742fc72e6815959ea645d0c3df2889d504e2e52f45",
-    "corpus/_juicesharp_rpiv-ask-user-question/pig/turn.txt": "a0286a3d43f41f163a3979147f68e3c18b3d9b23996c9c88561d50446c023f93",
-    "corpus/_juicesharp_rpiv-todo/pig/startup.txt": "8ad78601e400458d53e827e87f664c09867c8dd6b1f3a66fe4d1f4be9b2b5a46",
-    "corpus/_juicesharp_rpiv-todo/pig/turn.txt": "c885f610f221e7a4529a9fba014b5c25e5f824f76d0a4672de2c10d6a666d9fe",
-    "corpus/_kontextmind_kxm/pig/command.txt": "5140df363ccea5ceb708f6a5a32cced8340861c0886b0d60d7665096f165cbd2",
-    "corpus/_kontextmind_kxm/pig/startup.txt": "5140df363ccea5ceb708f6a5a32cced8340861c0886b0d60d7665096f165cbd2",
-    "corpus/_kontextmind_kxm/pig/turn.txt": "945ca071c71d620b1474b9c6d275ecf67e110aa14d99b03d45cd9679baca3c4e",
-    "corpus/_langchain_langsmith-pi-extension/pig/command.txt": "16c013a8d53c7eba9e76318390b6d925d7264178cfafbdae5723dba3eb0012e1",
-    "corpus/_langchain_langsmith-pi-extension/pig/startup.txt": "b9435bfbc5da2a5128e6260a3fe797ec234a20f21a99c995052db0a35ebba7ad",
-    "corpus/_langchain_langsmith-pi-extension/pig/turn.txt": "3a94583c365ca7d3cfa5091bb6dcfd36fda3b6a8df505e12057d52c32fca50e7",
-    "corpus/_langfuse_pi-observability-plugin/pig/startup.txt": "20a624231e9dbf025acb8fbdaa24a1d66df789c51193ad0e19a0524630557a29",
-    "corpus/_langfuse_pi-observability-plugin/pig/turn.txt": "2fd1e792ee512f5a41ee49fe595c6ae379e210416af8dc6b79e457d9714e03da",
-    "corpus/_moyai_pi-session-hoarder/pig/command.txt": "69b9a61fd995cff516bd893dd931e5aebcb4a80a1142b910bf0167a7d21e96d9",
-    "corpus/_moyai_pi-session-hoarder/pig/startup.txt": "8ac6580fc4b5fa953555dd45fd4adca310a7591ce9d1c8efcd2f4a95c1e2c622",
-    "corpus/_moyai_pi-session-hoarder/pig/turn.txt": "5d2c519e4b261afc141b1f9bec76640d1fd53b1125fbb25fba3f5f33c2a4eabf",
-    "corpus/_narumitw_pi-btw/pig/command.txt": "4caf6b9cf8d1414714ff79a2639a761f25883752998bf8583edfdfc61e9ccdb4",
-    "corpus/_narumitw_pi-btw/pig/startup.txt": "8de42b71e32cf69bd07826cbb05af664e81c0bca1803f8943c4d929ef2a01c33",
-    "corpus/_narumitw_pi-btw/pig/turn.txt": "d425736bcc19822f659b172bb3c3181c40223cd561363b841f89b6b1019453b0",
-    "corpus/_narumitw_pi-goal/pig/command.txt": "f454f6a9e49864d603647c4428229a15e77d0147e0bd24e8084029c1667043aa",
-    "corpus/_narumitw_pi-goal/pig/startup.txt": "b4afcd0cf5df5d60d91c6c510265af2270eea965f3da271644f58cf35e2565f2",
-    "corpus/_narumitw_pi-goal/pig/turn.txt": "502956c6ea7607ea3c7fa8cc9eb655a69c880455f9208bcaf5beeece63c326d3",
-    "corpus/_narumitw_pi-usage/pig/command.txt": "593eae0cb0863ba33b91114d9b9ad94a3629f3d0bdaef1b4e69d52217e043e67",
-    "corpus/_narumitw_pi-usage/pig/startup.txt": "1ca7a1bbd94837ca441e3df8ace4ebf3d38a68133472e8de162408c7da5a8052",
-    "corpus/_narumitw_pi-usage/pig/turn.txt": "7fd2e5455a677432d38238d8a8f757c33e66cb6c1f3df33d1d405be19441ba62",
-    "corpus/_plannotator_pi-extension/pig/command.txt": "919a0aaaec9e46a04a8311f50e8b85b1f5248db0594ab5b704ba3b7d600017de",
-    "corpus/_plannotator_pi-extension/pig/startup.txt": "a2c87d9c9154c3433acc60ebe7db58b663cc2d77be5e7d97a434069687412667",
-    "corpus/_plannotator_pi-extension/pig/turn.txt": "e91cdbe795cdf0bc98a8652f5a6138f01f1ec9932b4c4e98c4ab2c687be6e623",
-    "corpus/_raindrop-ai_pi-agent/pig/startup.txt": "fc85e1c71ad7031ab0cb4dbfdeee46e0d45e25ca893189ab620dbbb9d95fb34b",
-    "corpus/_raindrop-ai_pi-agent/pig/turn.txt": "81b5a59b4890ad67a7d6bf862f1fa31c259c16655d3fb79e86775da06b4bc979",
-    "corpus/_schovest_pi-goal/pig/command.txt": "5c0458c31a1c33d7df24b3bc2ed383971a855283d6ee91d24f44ac2c43d0357f",
-    "corpus/_schovest_pi-goal/pig/startup.txt": "d3abe9c9e312c9e92a892ee59f8e2cec410b3c95107c77e2fb9d572bc663b99c",
-    "corpus/_schovest_pi-goal/pig/turn.txt": "d10e83960248c26064ca4dd8e89426f27d1767ca3a5b2cf5b3b8b367c9f22693",
-    "corpus/_upstash_context7-pi/pig/startup.txt": "b51e40a412afb2f924c6e6d7c8a16b9b5913e34b004f2ed3dac690df66b412b2",
-    "corpus/_upstash_context7-pi/pig/turn.txt": "ac54fef961ace1cc32ac9c66872ed5271ed2cd9f6347eea5a0f6ea731b75b6f6",
-    "corpus/agent-comms/pig/command.txt": "86237a469f2e5261ea9b09f950db5fd43b785163b1a528319421969cd6547846",
-    "corpus/agent-comms/pig/startup.txt": "4db5b0dfab9f53eee0892b8d66663905de7d26fd7b27644be010a90762462f30",
-    "corpus/agent-comms/pig/turn.txt": "1c59368bcce1c601368df99724c203d65e4bf3cff99b796c32576a4c0863ee85",
-    "corpus/bigpowers/pig/startup.txt": "f308bff3f53d5f16d2af6048e63b093f71862d6a7c41d6e76c0f26424deb4a46",
-    "corpus/bigpowers/pig/turn.txt": "b1bd8df95d21b60c91c04960808dcb15bc8050a6526b4edeba9b9f957a81a1a8",
-    "corpus/billion-context/pig/command.txt": "af62eb6bf9ef2b3c4e27488adf4d3d32073ae3def1478ecee525fd6379f2bf73",
-    "corpus/billion-context/pig/startup.txt": "0e1747b3a8aa7201e85940492fb56ed581a358ef78252df5a03c9985c11b2203",
-    "corpus/billion-context/pig/turn.txt": "3e61b2060c5fc775ed68cc9cc10c9c36556b1f72733a730327cc071a6d648f87",
-    "corpus/billion-context-pi/pig/startup.txt": "6e6333c7b210d1c77c7a0e9cdd44a7ec57e0c4f75e30c4a04661908aff836285",
-    "corpus/billion-context-pi/pig/turn.txt": "fb867348213b3acbd153c98af7a822b61891a8c2dc7d8c5253c8e230c7909352",
-    "corpus/confluence-cli/pig/startup.txt": "0434fe18d1033aa17ee97c877de8c87f15f85d0053803333bd2ef3b6ad03c029",
-    "corpus/confluence-cli/pig/turn.txt": "c6f645bc5c62f682a164cd42f6ec84434bfeda1e1607a80c3e67e876b8c5232e",
-    "corpus/context-mode/pig/command.txt": "1f11937b589f169bf72f37975bf5d50319475ddfd0f64b7ee2b5eae5ab02f948",
-    "corpus/context-mode/pig/startup.txt": "42ebaf2d282ce590df4f20cf6407adcf0f3bd12738df27091e56f98217d99132",
-    "corpus/context-mode/pig/turn.txt": "1a45e8c903d51382db4f867ba4ba66c28c78f381ea35ad489282f1087ec36ed5",
-    "corpus/gentle-pi/pig/command.txt": "d489c0d04603ad40574a99066af8d603c90624289f7aa8dd710b4aa47e5c7599",
-    "corpus/gentle-pi/pig/startup.txt": "eae1003363e32bc3b32b13bfb6dd8ebc46594dc0f05da5e80006e920f152f893",
-    "corpus/gentle-pi/pig/turn.txt": "831be723721f8f4e0fc285a55900bf4be023e364e45f338217e915b2476eca49",
-    "corpus/pi-advisor-flow/pig/command.txt": "fcb0b5d08d33f1f02bffee414663dda7e79dbab24f49ede3e365c487bc83210b",
-    "corpus/pi-advisor-flow/pig/startup.txt": "1bcdf8a6302bf000dc56bcd14fb4203d971142346c22852610a4f382ab3815ac",
-    "corpus/pi-advisor-flow/pig/turn.txt": "0cacd093ac855d0170867cb1102da3427091dd426544205b6d3b85dda2cb9267",
-    "corpus/pi-auto-update/pig/command.txt": "5862fe91e3c6bf0f4712a246bb67079478132ea3d1fd0f8ea6d6600502019bbf",
-    "corpus/pi-auto-update/pig/startup.txt": "aeafbf2c90afed68c7fee7d039499c11de2fcd2b960e514f12bdcc670425dcd6",
-    "corpus/pi-auto-update/pig/turn.txt": "002471d9af41d7ac0985cf2ddd01dc83b25faccf99f70b865df878ce2c0329ca",
-    "corpus/pi-btw/pig/command.txt": "94f5ebfec7b26eb9804e5ed4a2c7c34a7f53f0cf3ec68c75ec38e8206efdd13c",
-    "corpus/pi-btw/pig/startup.txt": "d75b4a30b5a9a09e1acf7622941fe711a2d05957e211df29453f3a8f7e062528",
-    "corpus/pi-btw/pig/turn.txt": "0ed37129915df9774686768eee326c6601331134c0cb5ad35b9588f014c37da2",
-    "corpus/pi-cc-extensions/pig/command.txt": "f2f6e4bcbd0c2b093c61792c3f9eada852911c87039d68c5ff2d2a204af0b459",
-    "corpus/pi-cc-extensions/pig/startup.txt": "6a9fe03e05199723859ce6185f45bf8f07f15e110e7a950f2680de8d12805aa0",
-    "corpus/pi-cc-extensions/pig/turn.txt": "4dbf97b4abe6f8274c1727bfc86ba734b002af63ff26b36c457104f2c027d953",
-    "corpus/pi-claude-bridge/pig/startup.txt": "dd5b0702a35491daa7e67a7b38d4c3df8bc8e96cc3f385b8a30a9de5ab838068",
-    "corpus/pi-claude-bridge/pig/turn.txt": "301aec650951557de51221deec40007a96792f220b0d18dff821e400413509f9",
-    "corpus/pi-goal-x/pig/command.txt": "9195375df3ed38c7bf2af16c8ae1cd064b126211e219de4152e385a9f6c41bb8",
-    "corpus/pi-goal-x/pig/startup.txt": "180f7d2dd972bf569324d6d97e37daf3ec962e540c92c19886b801d6b9a7aef4",
-    "corpus/pi-goal-x/pig/turn.txt": "0fd3078e527c3164189f08ca80e0d01ae90bebb638f09c62adfe67a63c25a137",
-    "corpus/pi-hermes-memory/pig/command.txt": "f1d52bf0883275c4cd233c29cf4f27f433a2ddfe4f889e79002b73f47f5691d9",
-    "corpus/pi-hermes-memory/pig/startup.txt": "6f24eadd6e9a387e91a98b72ccc5eb7e3c03994de00ef84cedffb52d951a5a97",
-    "corpus/pi-hermes-memory/pig/turn.txt": "797c550df257f07b28e4810ca9eb0788f44002bb5ab0848e5dbb900e5927f154",
-    "corpus/pi-lens/pig/command.txt": "5040eae8f77dc4853171803c1fb8c4128508fdd8e3b7b25103b8480518f12c55",
-    "corpus/pi-lens/pig/startup.txt": "62a5cb9cbd7b3a9726ed1c2277eb6093411e8dca3051819452543cac5b1640aa",
-    "corpus/pi-lens/pig/turn.txt": "a86c98603e86f17323f2fb994610e8a8d390c37d2e0fd08948056f2d58484f32",
-    "corpus/pi-mcp-adapter/pig/command.txt": "5b84dadeb5ba8316a5198dc72dfe7caafc434146830fdaaddf4663ca3844ba5e",
-    "corpus/pi-mcp-adapter/pig/startup.txt": "3110fa0eefecc75f31a8ca0287de72665c2ec23d1017b87dda0584f2bfd92bca",
-    "corpus/pi-mcp-adapter/pig/turn.txt": "e74108010cecd08546d814f23aa5834ad56c6d374c60d3f873f2b58308e47f74",
-    "corpus/pi-mcp-extension/pig/command.txt": "431444b90c380d0237354c632d63ef51de541130da366bd89a97993fa517ec9c",
-    "corpus/pi-mcp-extension/pig/startup.txt": "77e0033df9a850c27b3f74fc20cf1e7dcaf5c34b1c5b823789a189088424507f",
-    "corpus/pi-mcp-extension/pig/turn.txt": "06c0f7f8bf9671c5984397addcd6dccf651a72c9d103377a11f387b36148400c",
-    "corpus/pi-memory/pig/startup.txt": "4731556e93a41eff16cad07335a0074d13abad70e6a44e322b99343e30eb5b38",
-    "corpus/pi-memory/pig/turn.txt": "501bce2418d3e3baae71ae6f65579dff1c59c413a60465d4dcc675aa8c6d19c0",
-    "corpus/pi-msg-queue/pig/command.txt": "61bcc6f02148b638c4fb98f61d87bafd7f21f080d4ee09c57ac90a702f5b3e21",
-    "corpus/pi-msg-queue/pig/startup.txt": "0a9da21bbdee9288b09785abf33772b6231cd61c2fce9833b392fc4796c2d6d3",
-    "corpus/pi-msg-queue/pig/turn.txt": "0fd46b9ae31789a667adbab5b3db47f92250a66ffddc1b33b3e31917a82ab481",
-    "corpus/pi-powerline-footer/pig/command.txt": "4695845efc3002eec4295fb49cae1822d8d73848aef837c40545af550d783a18",
-    "corpus/pi-powerline-footer/pig/startup.txt": "ff4f316924c1b346f59d7c1e1af9cba267086b74d3d862c5653719ecd0de5d90",
-    "corpus/pi-powerline-footer/pig/turn.txt": "929ceee8b7c0877e7e298466b6937cb10454668c1e9aa613e6a8acb35eb95269",
-    "corpus/pi-rtk-optimizer/pig/command.txt": "06973f0878ddfa684d60b7c1d33720324823aaa3a9613a63e54116b17656e40b",
-    "corpus/pi-rtk-optimizer/pig/startup.txt": "8b2a442e272ff7dc657a4ed69868a8517445270a45af09f4b4c8aa9a4263b29e",
-    "corpus/pi-rtk-optimizer/pig/turn.txt": "5cd6c51c7924f4cb373968f50961d8a30f67287f10f770ac93bea4943e6d1991",
-    "corpus/pi-simplify/pig/startup.txt": "336df5f2574462f39b98d95b650fed50ba568e5a7ddb56b2930620446d228a3b",
-    "corpus/pi-simplify/pig/turn.txt": "031b8a63ba315d4665bd22322b65b4824420a661a532807130f3fedc713ad6a4",
-    "corpus/pi-subagents/pig/command.txt": "5d4849a804260574c6e17be2cd258cdd3c7883aed4736ed1cc1bb9d65907ac16",
-    "corpus/pi-subagents/pig/startup.txt": "e88b79c9767b5f18df7c1dffa636b9c225f52c28de66127336712fe56fcb82c5",
-    "corpus/pi-subagents/pig/turn.txt": "26c9ceb17c3ab2d9a452065114161e1ca6eab2a2d20c5b6a54352f183e691b17",
-    "corpus/pi-vim/pig/startup.txt": "9f507f95cc411267dafb1855c1945345d42c0a8e9e1416669f0575c94710f957",
-    "corpus/pi-vim/pig/turn.txt": "9f507f95cc411267dafb1855c1945345d42c0a8e9e1416669f0575c94710f957",
-    "corpus/pi-web-access/pig/command.txt": "693ab2fe94595707d3d787ac11d3e48b76a0c3a0d768fedc41bcaa85e95d7aa7",
-    "corpus/pi-web-access/pig/startup.txt": "1637598f0fbc5a2dcd28a0893640cb3cde337074b7e9a123eca6f7b270190833",
-    "corpus/pi-web-access/pig/turn.txt": "756af15eb8078dda32938d7ceb5c15fc07402c57fbd1be25e44d911261bb0be9",
+    "corpus/_agimon-ai_log-sink-mcp/ompig/startup.txt": "ecda732f8387868d1d86df5ef2fe0c5df6f62eed7c166fd8c02432fa5f0205fc",
+    "corpus/_agimon-ai_log-sink-mcp/ompig/turn.txt": "e5f05a6bfc530ab20e8d6780770586981d47e33005cfadb7d6bf468f8c69e71f",
+    "corpus/_akagilnc_pi-workflow-roles/ompig/command.txt": "a20a451b5b46b2526f4a02662595420c81a381b0ba1daeff8af2ac86a7c3149f",
+    "corpus/_akagilnc_pi-workflow-roles/ompig/startup.txt": "4db5b0dfab9f53eee0892b8d66663905de7d26fd7b27644be010a90762462f30",
+    "corpus/_akagilnc_pi-workflow-roles/ompig/turn.txt": "a855a487a1e5eb69f3465eb3c614b14cab239f514a31795f30ac79169f65dca8",
+    "corpus/_companion-ai_feynman/ompig/command.txt": "09ee61b0bd53254a8ccc1bf653c7d79cc52611fb9d56cb2a11eb80c5b73d6d23",
+    "corpus/_companion-ai_feynman/ompig/startup.txt": "89ef79c13824552048eabcc2fc6a22f2289c830bc53f92f1ceebd8178843612e",
+    "corpus/_companion-ai_feynman/ompig/turn.txt": "ec627d481f01a595f19eb3c69566d129a7c54f78ba314f65ba63429dfed4128a",
+    "corpus/_dietrichgebert_ponytail/ompig/command.txt": "2fee64880628232feae7e4686835d9586b69a988ecb32f68761733e21d71343a",
+    "corpus/_dietrichgebert_ponytail/ompig/startup.txt": "0364ae221825578c84d6dfefec7d5d3d67de7e8cfd532350cee74bff55997c0d",
+    "corpus/_dietrichgebert_ponytail/ompig/turn.txt": "8b32d258f2e4ffc089b35eef0189fab321a2a6fa7b702637aab33fa04f820bbd",
+    "corpus/_ff-labs_pi-fff/ompig/command.txt": "1137834f02ff05fd4f2c111d5f2fa67ba3b9830f195c66752ed10329f40ac5e9",
+    "corpus/_ff-labs_pi-fff/ompig/startup.txt": "5248708f606b4e8a85ef8e83ddfa297a7791c40c233b5f19a36754a90dec65be",
+    "corpus/_ff-labs_pi-fff/ompig/turn.txt": "8cc27883f82515be6725a78b3537624af51013a678fd6c034d2c1e7354d5d63f",
+    "corpus/_gotgenes_pi-permission-system/ompig/command.txt": "03f10d26fd3c6b922414419bf683651f342253b6a288817a887bc944bc7faea2",
+    "corpus/_gotgenes_pi-permission-system/ompig/startup.txt": "5d8f1659c762f34fb092225444bdfa2042c5d360631920fe307b80f9645d6699",
+    "corpus/_gotgenes_pi-permission-system/ompig/turn.txt": "6627d3a507e869e9de549b2021ab39f69643060352bf1273b008f6071c10d5a3",
+    "corpus/_henryqw_pi-subagent/ompig/command.txt": "33ca92f62a2b40cc09e4b62c29ae8c30efbccb2483463805d7a96965082de0e5",
+    "corpus/_henryqw_pi-subagent/ompig/startup.txt": "1a4374db6f41874da1f7ea918fb41596fef1a8792708d21af4b82145f74f0e09",
+    "corpus/_henryqw_pi-subagent/ompig/turn.txt": "7a3ce47d0451ab55bee85f21e40589e005cb5e538a18aa23e0a93dcfd95537a3",
+    "corpus/_henryqw_pi-task-models/ompig/command.txt": "884d9715ceaf78eaebe080bbc6fa9d39754adea040a5ad1d75808e67c585b41d",
+    "corpus/_henryqw_pi-task-models/ompig/startup.txt": "567e0a0581f2fbfe5d0cd20db5e2b95f6f5882add35ced3ee0dc8f2073a2f3a7",
+    "corpus/_henryqw_pi-task-models/ompig/turn.txt": "bc5d8c4c9b278c3c38bcaac58ee8ac6c5079306bcd7f5bc1f1a6bbc6d0676841",
+    "corpus/_juicesharp_rpiv-ask-user-question/ompig/startup.txt": "cd18cd8d42623b25047bb0742fc72e6815959ea645d0c3df2889d504e2e52f45",
+    "corpus/_juicesharp_rpiv-ask-user-question/ompig/turn.txt": "a0286a3d43f41f163a3979147f68e3c18b3d9b23996c9c88561d50446c023f93",
+    "corpus/_juicesharp_rpiv-todo/ompig/startup.txt": "8ad78601e400458d53e827e87f664c09867c8dd6b1f3a66fe4d1f4be9b2b5a46",
+    "corpus/_juicesharp_rpiv-todo/ompig/turn.txt": "c885f610f221e7a4529a9fba014b5c25e5f824f76d0a4672de2c10d6a666d9fe",
+    "corpus/_kontextmind_kxm/ompig/command.txt": "5140df363ccea5ceb708f6a5a32cced8340861c0886b0d60d7665096f165cbd2",
+    "corpus/_kontextmind_kxm/ompig/startup.txt": "5140df363ccea5ceb708f6a5a32cced8340861c0886b0d60d7665096f165cbd2",
+    "corpus/_kontextmind_kxm/ompig/turn.txt": "945ca071c71d620b1474b9c6d275ecf67e110aa14d99b03d45cd9679baca3c4e",
+    "corpus/_langchain_langsmith-pi-extension/ompig/command.txt": "16c013a8d53c7eba9e76318390b6d925d7264178cfafbdae5723dba3eb0012e1",
+    "corpus/_langchain_langsmith-pi-extension/ompig/startup.txt": "b9435bfbc5da2a5128e6260a3fe797ec234a20f21a99c995052db0a35ebba7ad",
+    "corpus/_langchain_langsmith-pi-extension/ompig/turn.txt": "3a94583c365ca7d3cfa5091bb6dcfd36fda3b6a8df505e12057d52c32fca50e7",
+    "corpus/_langfuse_pi-observability-plugin/ompig/startup.txt": "20a624231e9dbf025acb8fbdaa24a1d66df789c51193ad0e19a0524630557a29",
+    "corpus/_langfuse_pi-observability-plugin/ompig/turn.txt": "2fd1e792ee512f5a41ee49fe595c6ae379e210416af8dc6b79e457d9714e03da",
+    "corpus/_moyai_pi-session-hoarder/ompig/command.txt": "69b9a61fd995cff516bd893dd931e5aebcb4a80a1142b910bf0167a7d21e96d9",
+    "corpus/_moyai_pi-session-hoarder/ompig/startup.txt": "8ac6580fc4b5fa953555dd45fd4adca310a7591ce9d1c8efcd2f4a95c1e2c622",
+    "corpus/_moyai_pi-session-hoarder/ompig/turn.txt": "5d2c519e4b261afc141b1f9bec76640d1fd53b1125fbb25fba3f5f33c2a4eabf",
+    "corpus/_narumitw_pi-btw/ompig/command.txt": "4caf6b9cf8d1414714ff79a2639a761f25883752998bf8583edfdfc61e9ccdb4",
+    "corpus/_narumitw_pi-btw/ompig/startup.txt": "8de42b71e32cf69bd07826cbb05af664e81c0bca1803f8943c4d929ef2a01c33",
+    "corpus/_narumitw_pi-btw/ompig/turn.txt": "d425736bcc19822f659b172bb3c3181c40223cd561363b841f89b6b1019453b0",
+    "corpus/_narumitw_pi-goal/ompig/command.txt": "f454f6a9e49864d603647c4428229a15e77d0147e0bd24e8084029c1667043aa",
+    "corpus/_narumitw_pi-goal/ompig/startup.txt": "b4afcd0cf5df5d60d91c6c510265af2270eea965f3da271644f58cf35e2565f2",
+    "corpus/_narumitw_pi-goal/ompig/turn.txt": "502956c6ea7607ea3c7fa8cc9eb655a69c880455f9208bcaf5beeece63c326d3",
+    "corpus/_narumitw_pi-usage/ompig/command.txt": "593eae0cb0863ba33b91114d9b9ad94a3629f3d0bdaef1b4e69d52217e043e67",
+    "corpus/_narumitw_pi-usage/ompig/startup.txt": "1ca7a1bbd94837ca441e3df8ace4ebf3d38a68133472e8de162408c7da5a8052",
+    "corpus/_narumitw_pi-usage/ompig/turn.txt": "7fd2e5455a677432d38238d8a8f757c33e66cb6c1f3df33d1d405be19441ba62",
+    "corpus/_plannotator_pi-extension/ompig/command.txt": "919a0aaaec9e46a04a8311f50e8b85b1f5248db0594ab5b704ba3b7d600017de",
+    "corpus/_plannotator_pi-extension/ompig/startup.txt": "a2c87d9c9154c3433acc60ebe7db58b663cc2d77be5e7d97a434069687412667",
+    "corpus/_plannotator_pi-extension/ompig/turn.txt": "e91cdbe795cdf0bc98a8652f5a6138f01f1ec9932b4c4e98c4ab2c687be6e623",
+    "corpus/_raindrop-ai_pi-agent/ompig/startup.txt": "fc85e1c71ad7031ab0cb4dbfdeee46e0d45e25ca893189ab620dbbb9d95fb34b",
+    "corpus/_raindrop-ai_pi-agent/ompig/turn.txt": "81b5a59b4890ad67a7d6bf862f1fa31c259c16655d3fb79e86775da06b4bc979",
+    "corpus/_schovest_pi-goal/ompig/command.txt": "5c0458c31a1c33d7df24b3bc2ed383971a855283d6ee91d24f44ac2c43d0357f",
+    "corpus/_schovest_pi-goal/ompig/startup.txt": "d3abe9c9e312c9e92a892ee59f8e2cec410b3c95107c77e2fb9d572bc663b99c",
+    "corpus/_schovest_pi-goal/ompig/turn.txt": "d10e83960248c26064ca4dd8e89426f27d1767ca3a5b2cf5b3b8b367c9f22693",
+    "corpus/_upstash_context7-pi/ompig/startup.txt": "b51e40a412afb2f924c6e6d7c8a16b9b5913e34b004f2ed3dac690df66b412b2",
+    "corpus/_upstash_context7-pi/ompig/turn.txt": "ac54fef961ace1cc32ac9c66872ed5271ed2cd9f6347eea5a0f6ea731b75b6f6",
+    "corpus/agent-comms/ompig/command.txt": "86237a469f2e5261ea9b09f950db5fd43b785163b1a528319421969cd6547846",
+    "corpus/agent-comms/ompig/startup.txt": "4db5b0dfab9f53eee0892b8d66663905de7d26fd7b27644be010a90762462f30",
+    "corpus/agent-comms/ompig/turn.txt": "1c59368bcce1c601368df99724c203d65e4bf3cff99b796c32576a4c0863ee85",
+    "corpus/bigpowers/ompig/startup.txt": "f308bff3f53d5f16d2af6048e63b093f71862d6a7c41d6e76c0f26424deb4a46",
+    "corpus/bigpowers/ompig/turn.txt": "b1bd8df95d21b60c91c04960808dcb15bc8050a6526b4edeba9b9f957a81a1a8",
+    "corpus/billion-context/ompig/command.txt": "af62eb6bf9ef2b3c4e27488adf4d3d32073ae3def1478ecee525fd6379f2bf73",
+    "corpus/billion-context/ompig/startup.txt": "0e1747b3a8aa7201e85940492fb56ed581a358ef78252df5a03c9985c11b2203",
+    "corpus/billion-context/ompig/turn.txt": "3e61b2060c5fc775ed68cc9cc10c9c36556b1f72733a730327cc071a6d648f87",
+    "corpus/billion-context-pi/ompig/startup.txt": "6e6333c7b210d1c77c7a0e9cdd44a7ec57e0c4f75e30c4a04661908aff836285",
+    "corpus/billion-context-pi/ompig/turn.txt": "fb867348213b3acbd153c98af7a822b61891a8c2dc7d8c5253c8e230c7909352",
+    "corpus/confluence-cli/ompig/startup.txt": "0434fe18d1033aa17ee97c877de8c87f15f85d0053803333bd2ef3b6ad03c029",
+    "corpus/confluence-cli/ompig/turn.txt": "c6f645bc5c62f682a164cd42f6ec84434bfeda1e1607a80c3e67e876b8c5232e",
+    "corpus/context-mode/ompig/command.txt": "1f11937b589f169bf72f37975bf5d50319475ddfd0f64b7ee2b5eae5ab02f948",
+    "corpus/context-mode/ompig/startup.txt": "42ebaf2d282ce590df4f20cf6407adcf0f3bd12738df27091e56f98217d99132",
+    "corpus/context-mode/ompig/turn.txt": "1a45e8c903d51382db4f867ba4ba66c28c78f381ea35ad489282f1087ec36ed5",
+    "corpus/gentle-pi/ompig/command.txt": "d489c0d04603ad40574a99066af8d603c90624289f7aa8dd710b4aa47e5c7599",
+    "corpus/gentle-pi/ompig/startup.txt": "eae1003363e32bc3b32b13bfb6dd8ebc46594dc0f05da5e80006e920f152f893",
+    "corpus/gentle-pi/ompig/turn.txt": "831be723721f8f4e0fc285a55900bf4be023e364e45f338217e915b2476eca49",
+    "corpus/pi-advisor-flow/ompig/command.txt": "fcb0b5d08d33f1f02bffee414663dda7e79dbab24f49ede3e365c487bc83210b",
+    "corpus/pi-advisor-flow/ompig/startup.txt": "1bcdf8a6302bf000dc56bcd14fb4203d971142346c22852610a4f382ab3815ac",
+    "corpus/pi-advisor-flow/ompig/turn.txt": "0cacd093ac855d0170867cb1102da3427091dd426544205b6d3b85dda2cb9267",
+    "corpus/pi-auto-update/ompig/command.txt": "5862fe91e3c6bf0f4712a246bb67079478132ea3d1fd0f8ea6d6600502019bbf",
+    "corpus/pi-auto-update/ompig/startup.txt": "aeafbf2c90afed68c7fee7d039499c11de2fcd2b960e514f12bdcc670425dcd6",
+    "corpus/pi-auto-update/ompig/turn.txt": "002471d9af41d7ac0985cf2ddd01dc83b25faccf99f70b865df878ce2c0329ca",
+    "corpus/pi-btw/ompig/command.txt": "94f5ebfec7b26eb9804e5ed4a2c7c34a7f53f0cf3ec68c75ec38e8206efdd13c",
+    "corpus/pi-btw/ompig/startup.txt": "d75b4a30b5a9a09e1acf7622941fe711a2d05957e211df29453f3a8f7e062528",
+    "corpus/pi-btw/ompig/turn.txt": "0ed37129915df9774686768eee326c6601331134c0cb5ad35b9588f014c37da2",
+    "corpus/pi-cc-extensions/ompig/command.txt": "f2f6e4bcbd0c2b093c61792c3f9eada852911c87039d68c5ff2d2a204af0b459",
+    "corpus/pi-cc-extensions/ompig/startup.txt": "6a9fe03e05199723859ce6185f45bf8f07f15e110e7a950f2680de8d12805aa0",
+    "corpus/pi-cc-extensions/ompig/turn.txt": "4dbf97b4abe6f8274c1727bfc86ba734b002af63ff26b36c457104f2c027d953",
+    "corpus/pi-claude-bridge/ompig/startup.txt": "dd5b0702a35491daa7e67a7b38d4c3df8bc8e96cc3f385b8a30a9de5ab838068",
+    "corpus/pi-claude-bridge/ompig/turn.txt": "301aec650951557de51221deec40007a96792f220b0d18dff821e400413509f9",
+    "corpus/pi-goal-x/ompig/command.txt": "9195375df3ed38c7bf2af16c8ae1cd064b126211e219de4152e385a9f6c41bb8",
+    "corpus/pi-goal-x/ompig/startup.txt": "180f7d2dd972bf569324d6d97e37daf3ec962e540c92c19886b801d6b9a7aef4",
+    "corpus/pi-goal-x/ompig/turn.txt": "0fd3078e527c3164189f08ca80e0d01ae90bebb638f09c62adfe67a63c25a137",
+    "corpus/pi-hermes-memory/ompig/command.txt": "f1d52bf0883275c4cd233c29cf4f27f433a2ddfe4f889e79002b73f47f5691d9",
+    "corpus/pi-hermes-memory/ompig/startup.txt": "6f24eadd6e9a387e91a98b72ccc5eb7e3c03994de00ef84cedffb52d951a5a97",
+    "corpus/pi-hermes-memory/ompig/turn.txt": "797c550df257f07b28e4810ca9eb0788f44002bb5ab0848e5dbb900e5927f154",
+    "corpus/pi-lens/ompig/command.txt": "5040eae8f77dc4853171803c1fb8c4128508fdd8e3b7b25103b8480518f12c55",
+    "corpus/pi-lens/ompig/startup.txt": "62a5cb9cbd7b3a9726ed1c2277eb6093411e8dca3051819452543cac5b1640aa",
+    "corpus/pi-lens/ompig/turn.txt": "a86c98603e86f17323f2fb994610e8a8d390c37d2e0fd08948056f2d58484f32",
+    "corpus/pi-mcp-adapter/ompig/command.txt": "5b84dadeb5ba8316a5198dc72dfe7caafc434146830fdaaddf4663ca3844ba5e",
+    "corpus/pi-mcp-adapter/ompig/startup.txt": "3110fa0eefecc75f31a8ca0287de72665c2ec23d1017b87dda0584f2bfd92bca",
+    "corpus/pi-mcp-adapter/ompig/turn.txt": "e74108010cecd08546d814f23aa5834ad56c6d374c60d3f873f2b58308e47f74",
+    "corpus/pi-mcp-extension/ompig/command.txt": "431444b90c380d0237354c632d63ef51de541130da366bd89a97993fa517ec9c",
+    "corpus/pi-mcp-extension/ompig/startup.txt": "77e0033df9a850c27b3f74fc20cf1e7dcaf5c34b1c5b823789a189088424507f",
+    "corpus/pi-mcp-extension/ompig/turn.txt": "06c0f7f8bf9671c5984397addcd6dccf651a72c9d103377a11f387b36148400c",
+    "corpus/pi-memory/ompig/startup.txt": "4731556e93a41eff16cad07335a0074d13abad70e6a44e322b99343e30eb5b38",
+    "corpus/pi-memory/ompig/turn.txt": "501bce2418d3e3baae71ae6f65579dff1c59c413a60465d4dcc675aa8c6d19c0",
+    "corpus/pi-msg-queue/ompig/command.txt": "61bcc6f02148b638c4fb98f61d87bafd7f21f080d4ee09c57ac90a702f5b3e21",
+    "corpus/pi-msg-queue/ompig/startup.txt": "0a9da21bbdee9288b09785abf33772b6231cd61c2fce9833b392fc4796c2d6d3",
+    "corpus/pi-msg-queue/ompig/turn.txt": "0fd46b9ae31789a667adbab5b3db47f92250a66ffddc1b33b3e31917a82ab481",
+    "corpus/pi-powerline-footer/ompig/command.txt": "4695845efc3002eec4295fb49cae1822d8d73848aef837c40545af550d783a18",
+    "corpus/pi-powerline-footer/ompig/startup.txt": "ff4f316924c1b346f59d7c1e1af9cba267086b74d3d862c5653719ecd0de5d90",
+    "corpus/pi-powerline-footer/ompig/turn.txt": "929ceee8b7c0877e7e298466b6937cb10454668c1e9aa613e6a8acb35eb95269",
+    "corpus/pi-rtk-optimizer/ompig/command.txt": "06973f0878ddfa684d60b7c1d33720324823aaa3a9613a63e54116b17656e40b",
+    "corpus/pi-rtk-optimizer/ompig/startup.txt": "8b2a442e272ff7dc657a4ed69868a8517445270a45af09f4b4c8aa9a4263b29e",
+    "corpus/pi-rtk-optimizer/ompig/turn.txt": "5cd6c51c7924f4cb373968f50961d8a30f67287f10f770ac93bea4943e6d1991",
+    "corpus/pi-simplify/ompig/startup.txt": "336df5f2574462f39b98d95b650fed50ba568e5a7ddb56b2930620446d228a3b",
+    "corpus/pi-simplify/ompig/turn.txt": "031b8a63ba315d4665bd22322b65b4824420a661a532807130f3fedc713ad6a4",
+    "corpus/pi-subagents/ompig/command.txt": "5d4849a804260574c6e17be2cd258cdd3c7883aed4736ed1cc1bb9d65907ac16",
+    "corpus/pi-subagents/ompig/startup.txt": "e88b79c9767b5f18df7c1dffa636b9c225f52c28de66127336712fe56fcb82c5",
+    "corpus/pi-subagents/ompig/turn.txt": "26c9ceb17c3ab2d9a452065114161e1ca6eab2a2d20c5b6a54352f183e691b17",
+    "corpus/pi-vim/ompig/startup.txt": "9f507f95cc411267dafb1855c1945345d42c0a8e9e1416669f0575c94710f957",
+    "corpus/pi-vim/ompig/turn.txt": "9f507f95cc411267dafb1855c1945345d42c0a8e9e1416669f0575c94710f957",
+    "corpus/pi-web-access/ompig/command.txt": "693ab2fe94595707d3d787ac11d3e48b76a0c3a0d768fedc41bcaa85e95d7aa7",
+    "corpus/pi-web-access/ompig/startup.txt": "1637598f0fbc5a2dcd28a0893640cb3cde337074b7e9a123eca6f7b270190833",
+    "corpus/pi-web-access/ompig/turn.txt": "756af15eb8078dda32938d7ceb5c15fc07402c57fbd1be25e44d911261bb0be9",
     "interactions/_dietrichgebert_ponytail/pi/0-command.txt": "5f7df142acecdfeeb92b6cc3c2965a63fa726d0c1616f840e1b282e2907681aa",
     "interactions/_dietrichgebert_ponytail/pi/1-command.txt": "75b90a151ff6668b55ecc6788d268891f1936ef8b735de0b72be55dcef3aa197",
     "interactions/_dietrichgebert_ponytail/pi/startup.txt": "389049fc4017ed2ebf66725f25dac83543eb9cf948cfaad619f3c9cadb264d69",
@@ -1285,47 +1285,47 @@
     "interactions/pi-web-access/pi/0-command.txt": "2516c1af4bcebcbef18da40f467fa7a6b4235c922e9037095574c11b79a2a8ab",
     "interactions/pi-web-access/pi/startup.txt": "979711dd88a0a50568f9d85b6208338984d7f9db9e82470e3b9ad96065bc8049",
     "interactions/pi-web-access/pi/submitted-results.txt": "b702a9103b2201327ef899c70bbe79a5116e7d3716beccb3557bd7d8421c14e9",
-    "interactions/_dietrichgebert_ponytail/pig/0-command.txt": "2fee64880628232feae7e4686835d9586b69a988ecb32f68761733e21d71343a",
-    "interactions/_dietrichgebert_ponytail/pig/1-command.txt": "e5ee38304b06eb90e0d821b4e7b8880954e54005017050103c5eb7dfbf73b8a5",
-    "interactions/_dietrichgebert_ponytail/pig/startup.txt": "0364ae221825578c84d6dfefec7d5d3d67de7e8cfd532350cee74bff55997c0d",
-    "interactions/_upstash_context7-pi/pig/0-command.txt": "ac54fef961ace1cc32ac9c66872ed5271ed2cd9f6347eea5a0f6ea731b75b6f6",
-    "interactions/_upstash_context7-pi/pig/startup.txt": "b51e40a412afb2f924c6e6d7c8a16b9b5913e34b004f2ed3dac690df66b412b2",
-    "interactions/pi-auto-update/pig/0-command.txt": "5862fe91e3c6bf0f4712a246bb67079478132ea3d1fd0f8ea6d6600502019bbf",
-    "interactions/pi-auto-update/pig/1-command.txt": "002471d9af41d7ac0985cf2ddd01dc83b25faccf99f70b865df878ce2c0329ca",
-    "interactions/pi-auto-update/pig/startup.txt": "aeafbf2c90afed68c7fee7d039499c11de2fcd2b960e514f12bdcc670425dcd6",
-    "interactions/pi-hermes-memory/pig/0-command.txt": "9866165cc40d395dbade5a8c60836c4554b2469950d11a7d1550a522ea4c396f",
-    "interactions/pi-hermes-memory/pig/1-command.txt": "27aaf589ab08cafb8a12f297dc55ab5eee921ae3c37e5cbb54761ba51168e2fc",
-    "interactions/pi-hermes-memory/pig/consolidated.txt": "27aaf589ab08cafb8a12f297dc55ab5eee921ae3c37e5cbb54761ba51168e2fc",
-    "interactions/pi-hermes-memory/pig/startup.txt": "60b911867f6865b2762ab63669fe8801d2afac4c0aac8b9abffe6e29b7b71953",
-    "interactions/pi-lens/pig/0-command.txt": "5040eae8f77dc4853171803c1fb8c4128508fdd8e3b7b25103b8480518f12c55",
-    "interactions/pi-lens/pig/1-command.txt": "d444d3168e735e3629502971c361c973d77117bb62e08c8036928b6d0ee171fb",
-    "interactions/pi-lens/pig/2-command.txt": "03e2225f05da10eb565a4133b155f55eb4e608a7b77f058a3129f82e797fa01c",
-    "interactions/pi-lens/pig/startup.txt": "62a5cb9cbd7b3a9726ed1c2277eb6093411e8dca3051819452543cac5b1640aa",
-    "interactions/pi-mcp-adapter/pig/0-command.txt": "b596066d226cf12706795563d127df47423e2522afc96639d03cba4f4334d564",
-    "interactions/pi-mcp-adapter/pig/1-command.txt": "5b84dadeb5ba8316a5198dc72dfe7caafc434146830fdaaddf4663ca3844ba5e",
-    "interactions/pi-mcp-adapter/pig/Down.txt": "438282233047a24549d07db767bdb1d07a15fc3ffd6d88d39630d514dabb0d45",
-    "interactions/pi-mcp-adapter/pig/Enter.txt": "a4b9d1dc0dcaf78fc329bcd67347702ccc1efd70892e9436658a6f7f5b4eeb8f",
-    "interactions/pi-mcp-adapter/pig/Escape.txt": "3110fa0eefecc75f31a8ca0287de72665c2ec23d1017b87dda0584f2bfd92bca",
-    "interactions/pi-mcp-adapter/pig/startup.txt": "3110fa0eefecc75f31a8ca0287de72665c2ec23d1017b87dda0584f2bfd92bca",
-    "interactions/pi-msg-queue/pig/0-command.txt": "0db2fe9222d83fd6ccb471b93a7ac841a5ab279f87d4292952a9ccceb03e5ea8",
-    "interactions/pi-msg-queue/pig/queued-order.txt": "0db2fe9222d83fd6ccb471b93a7ac841a5ab279f87d4292952a9ccceb03e5ea8",
-    "interactions/pi-msg-queue/pig/startup.txt": "0a9da21bbdee9288b09785abf33772b6231cd61c2fce9833b392fc4796c2d6d3",
-    "interactions/pi-powerline-footer/pig/0-command.txt": "96fcf7bfbbde79ef53987b4aabe3a9b5e83103271e60a3063576d87ea54a23cc",
-    "interactions/pi-powerline-footer/pig/1-command.txt": "e1abe680d0a032cbf5d2f51c88b4e3cc453e613cae3f9d1f7971f538c56aa278",
-    "interactions/pi-powerline-footer/pig/startup.txt": "87363e6fdbb0690911e083dd79e5873eca3e995453cf4278d334bf5176c41122",
-    "interactions/pi-powerline-footer/pig/welcome-dismissed.txt": "4695845efc3002eec4295fb49cae1822d8d73848aef837c40545af550d783a18",
-    "interactions/pi-powerline-footer/pig/welcome.txt": "87363e6fdbb0690911e083dd79e5873eca3e995453cf4278d334bf5176c41122",
-    "interactions/pi-rtk-optimizer/pig/0-command.txt": "179f5b86b2b8759d3d7d415ccaa039487a074c7099a5f098aaf84a63454e245c",
-    "interactions/pi-rtk-optimizer/pig/1-command.txt": "12bf0c9b000276c0333b7fd2cba97bd289631f87a173d430c60f9d4a0c079b1f",
-    "interactions/pi-rtk-optimizer/pig/startup.txt": "8b2a442e272ff7dc657a4ed69868a8517445270a45af09f4b4c8aa9a4263b29e",
-    "interactions/pi-rtk-optimizer/pig/tab-navigation.txt": "195a01afe99fe676f64774423fb67c47ead594c2a33f0a67a8fcf3318fbe354f",
-    "interactions/pi-rtk-optimizer/pig/toggle.txt": "179f5b86b2b8759d3d7d415ccaa039487a074c7099a5f098aaf84a63454e245c",
-    "interactions/pi-vim/pig/ex-name.txt": "ab8befb7298afe95d5fbeaabd3c29bf0f231480b0d147fca21b318cd82cf08d7",
-    "interactions/pi-vim/pig/normal-delete-word.txt": "32a4facd9e1f23a03327ae8146e1d725ff4f64f736b165c9b60ed388f3b157dd",
-    "interactions/pi-vim/pig/startup.txt": "9f507f95cc411267dafb1855c1945345d42c0a8e9e1416669f0575c94710f957",
-    "interactions/pi-vim/pig/undo.txt": "d4d8866abec84da3dbe87faa70611f2a60a12d41dc41c709d428a33939073322",
-    "interactions/pi-web-access/pig/0-command.txt": "ea23f399d96bf577e8e4608110ec401e2d60ea6609d8992007c3a2d13edb73b8",
-    "interactions/pi-web-access/pig/startup.txt": "1637598f0fbc5a2dcd28a0893640cb3cde337074b7e9a123eca6f7b270190833",
-    "interactions/pi-web-access/pig/submitted-results.txt": "b80b8c08665f0136f5253e3da16ebebfaa7654d9d0fbf007f8aaab9e4da877b0"
+    "interactions/_dietrichgebert_ponytail/ompig/0-command.txt": "2fee64880628232feae7e4686835d9586b69a988ecb32f68761733e21d71343a",
+    "interactions/_dietrichgebert_ponytail/ompig/1-command.txt": "e5ee38304b06eb90e0d821b4e7b8880954e54005017050103c5eb7dfbf73b8a5",
+    "interactions/_dietrichgebert_ponytail/ompig/startup.txt": "0364ae221825578c84d6dfefec7d5d3d67de7e8cfd532350cee74bff55997c0d",
+    "interactions/_upstash_context7-pi/ompig/0-command.txt": "ac54fef961ace1cc32ac9c66872ed5271ed2cd9f6347eea5a0f6ea731b75b6f6",
+    "interactions/_upstash_context7-pi/ompig/startup.txt": "b51e40a412afb2f924c6e6d7c8a16b9b5913e34b004f2ed3dac690df66b412b2",
+    "interactions/pi-auto-update/ompig/0-command.txt": "5862fe91e3c6bf0f4712a246bb67079478132ea3d1fd0f8ea6d6600502019bbf",
+    "interactions/pi-auto-update/ompig/1-command.txt": "002471d9af41d7ac0985cf2ddd01dc83b25faccf99f70b865df878ce2c0329ca",
+    "interactions/pi-auto-update/ompig/startup.txt": "aeafbf2c90afed68c7fee7d039499c11de2fcd2b960e514f12bdcc670425dcd6",
+    "interactions/pi-hermes-memory/ompig/0-command.txt": "9866165cc40d395dbade5a8c60836c4554b2469950d11a7d1550a522ea4c396f",
+    "interactions/pi-hermes-memory/ompig/1-command.txt": "27aaf589ab08cafb8a12f297dc55ab5eee921ae3c37e5cbb54761ba51168e2fc",
+    "interactions/pi-hermes-memory/ompig/consolidated.txt": "27aaf589ab08cafb8a12f297dc55ab5eee921ae3c37e5cbb54761ba51168e2fc",
+    "interactions/pi-hermes-memory/ompig/startup.txt": "60b911867f6865b2762ab63669fe8801d2afac4c0aac8b9abffe6e29b7b71953",
+    "interactions/pi-lens/ompig/0-command.txt": "5040eae8f77dc4853171803c1fb8c4128508fdd8e3b7b25103b8480518f12c55",
+    "interactions/pi-lens/ompig/1-command.txt": "d444d3168e735e3629502971c361c973d77117bb62e08c8036928b6d0ee171fb",
+    "interactions/pi-lens/ompig/2-command.txt": "03e2225f05da10eb565a4133b155f55eb4e608a7b77f058a3129f82e797fa01c",
+    "interactions/pi-lens/ompig/startup.txt": "62a5cb9cbd7b3a9726ed1c2277eb6093411e8dca3051819452543cac5b1640aa",
+    "interactions/pi-mcp-adapter/ompig/0-command.txt": "b596066d226cf12706795563d127df47423e2522afc96639d03cba4f4334d564",
+    "interactions/pi-mcp-adapter/ompig/1-command.txt": "5b84dadeb5ba8316a5198dc72dfe7caafc434146830fdaaddf4663ca3844ba5e",
+    "interactions/pi-mcp-adapter/ompig/Down.txt": "438282233047a24549d07db767bdb1d07a15fc3ffd6d88d39630d514dabb0d45",
+    "interactions/pi-mcp-adapter/ompig/Enter.txt": "a4b9d1dc0dcaf78fc329bcd67347702ccc1efd70892e9436658a6f7f5b4eeb8f",
+    "interactions/pi-mcp-adapter/ompig/Escape.txt": "3110fa0eefecc75f31a8ca0287de72665c2ec23d1017b87dda0584f2bfd92bca",
+    "interactions/pi-mcp-adapter/ompig/startup.txt": "3110fa0eefecc75f31a8ca0287de72665c2ec23d1017b87dda0584f2bfd92bca",
+    "interactions/pi-msg-queue/ompig/0-command.txt": "0db2fe9222d83fd6ccb471b93a7ac841a5ab279f87d4292952a9ccceb03e5ea8",
+    "interactions/pi-msg-queue/ompig/queued-order.txt": "0db2fe9222d83fd6ccb471b93a7ac841a5ab279f87d4292952a9ccceb03e5ea8",
+    "interactions/pi-msg-queue/ompig/startup.txt": "0a9da21bbdee9288b09785abf33772b6231cd61c2fce9833b392fc4796c2d6d3",
+    "interactions/pi-powerline-footer/ompig/0-command.txt": "96fcf7bfbbde79ef53987b4aabe3a9b5e83103271e60a3063576d87ea54a23cc",
+    "interactions/pi-powerline-footer/ompig/1-command.txt": "e1abe680d0a032cbf5d2f51c88b4e3cc453e613cae3f9d1f7971f538c56aa278",
+    "interactions/pi-powerline-footer/ompig/startup.txt": "87363e6fdbb0690911e083dd79e5873eca3e995453cf4278d334bf5176c41122",
+    "interactions/pi-powerline-footer/ompig/welcome-dismissed.txt": "4695845efc3002eec4295fb49cae1822d8d73848aef837c40545af550d783a18",
+    "interactions/pi-powerline-footer/ompig/welcome.txt": "87363e6fdbb0690911e083dd79e5873eca3e995453cf4278d334bf5176c41122",
+    "interactions/pi-rtk-optimizer/ompig/0-command.txt": "179f5b86b2b8759d3d7d415ccaa039487a074c7099a5f098aaf84a63454e245c",
+    "interactions/pi-rtk-optimizer/ompig/1-command.txt": "12bf0c9b000276c0333b7fd2cba97bd289631f87a173d430c60f9d4a0c079b1f",
+    "interactions/pi-rtk-optimizer/ompig/startup.txt": "8b2a442e272ff7dc657a4ed69868a8517445270a45af09f4b4c8aa9a4263b29e",
+    "interactions/pi-rtk-optimizer/ompig/tab-navigation.txt": "195a01afe99fe676f64774423fb67c47ead594c2a33f0a67a8fcf3318fbe354f",
+    "interactions/pi-rtk-optimizer/ompig/toggle.txt": "179f5b86b2b8759d3d7d415ccaa039487a074c7099a5f098aaf84a63454e245c",
+    "interactions/pi-vim/ompig/ex-name.txt": "ab8befb7298afe95d5fbeaabd3c29bf0f231480b0d147fca21b318cd82cf08d7",
+    "interactions/pi-vim/ompig/normal-delete-word.txt": "32a4facd9e1f23a03327ae8146e1d725ff4f64f736b165c9b60ed388f3b157dd",
+    "interactions/pi-vim/ompig/startup.txt": "9f507f95cc411267dafb1855c1945345d42c0a8e9e1416669f0575c94710f957",
+    "interactions/pi-vim/ompig/undo.txt": "d4d8866abec84da3dbe87faa70611f2a60a12d41dc41c709d428a33939073322",
+    "interactions/pi-web-access/ompig/0-command.txt": "ea23f399d96bf577e8e4608110ec401e2d60ea6609d8992007c3a2d13edb73b8",
+    "interactions/pi-web-access/ompig/startup.txt": "1637598f0fbc5a2dcd28a0893640cb3cde337074b7e9a123eca6f7b270190833",
+    "interactions/pi-web-access/ompig/submitted-results.txt": "b80b8c08665f0136f5253e3da16ebebfaa7654d9d0fbf007f8aaab9e4da877b0"
   }
 }

@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-import pig_sdk
-from pig_sdk import pi_ai_helpers as helpers
-from pig_sdk.provider import APIKeyAuthInput, AuthContext, AuthInteraction, ProviderSignal
-from pig_sdk.serialize_conversation import _json_stringify
+import ompig_sdk
+from ompig_sdk import pi_ai_helpers as helpers
+from ompig_sdk.provider import APIKeyAuthInput, AuthContext, AuthInteraction, ProviderSignal
+from ompig_sdk.serialize_conversation import _json_stringify
 
 VECTORS = Path(__file__).resolve().parents[3] / "test" / "parity" / "sdk-vectors"
 
@@ -113,7 +113,7 @@ def test_every_helper_matches_the_pinned_package():
 def test_exports_are_on_the_package():
     for name in ("string_enum", "get_supported_thinking_levels", "clamp_thinking_level", "calculate_cost", "content_text", "get_current_tools", "get_current_system_message",
                  "get_current_system_prompt", "normalize_context", "is_retryable_assistant_error", "is_context_overflow", "env_api_key_auth"):
-        assert getattr(pig_sdk, name) is getattr(helpers, name)
+        assert getattr(ompig_sdk, name) is getattr(helpers, name)
 
 
 def test_env_api_key_auth_matches_the_pinned_package():
@@ -151,7 +151,7 @@ def run_timing(case):
     """The golden file's "timing" scenarios: how the final message reaches a stream made by create_assistant_message_event_stream and what it carries."""
     import time
 
-    stream = pig_sdk.create_assistant_message_event_stream()
+    stream = ompig_sdk.create_assistant_message_event_stream()
 
     def message():
         result = {"role": "assistant", "content": [], "stopReason": "error" if case["kind"] == "error" else "stop"}
@@ -191,7 +191,7 @@ def test_the_event_stream_times_its_final_message_as_pi_does():
 
 
 def test_a_stream_the_sdk_makes_for_a_host_operation_is_not_timed():
-    stream = pig_sdk.ModelEventStream()
+    stream = ompig_sdk.ModelEventStream()
     message = {"role": "assistant", "content": [], "stopReason": "stop", "timestamp": 2**50}
     stream.push({"type": "done", "reason": "stop", "message": message})
     assert "durationMs" not in message
@@ -203,5 +203,5 @@ def test_read_stored_credential_matches_the_pinned_package(tmp_path):
         path = tmp_path / (case["name"].replace(" ", "-") + ".json")
         if not _is_undefined(text):
             path.write_text(text, encoding="utf-8")
-        got = pig_sdk.read_stored_credential(provider, str(path))
+        got = ompig_sdk.read_stored_credential(provider, str(path))
         assert _json_stringify(got) == _json_stringify(case["result"]["credential"]), case["name"]

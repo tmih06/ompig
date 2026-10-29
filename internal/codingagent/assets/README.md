@@ -7,4 +7,4 @@
 - License: MIT, as declared by the upstream `packages/coding-agent/package.json` and repository `LICENSE`.
 - Copyright: Copyright (c) 2025 Mario Zechner.
 
-The pinned upstream package contains no separate license or notice for this asset. `REUSE.toml` records the upstream attribution. The MIT text is in `LICENSES/MIT.txt`. The embedded asset serves only the upstream hidden `/dementedelves` command; it is not PiG branding or a PiG announcement.
+The pinned upstream package contains no separate license or notice for this asset. `REUSE.toml` records the upstream attribution. The MIT text is in `LICENSES/MIT.txt`. The embedded asset serves only the upstream hidden `/dementedelves` command; it is not Ompig branding or a Ompig announcement.

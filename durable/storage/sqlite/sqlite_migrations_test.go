@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
+	"github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 func databasePath(t *testing.T) string {

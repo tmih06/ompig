@@ -6,7 +6,7 @@
 # Upstream evidence (Pi 0.84.0): /entry-probe calls pi.appendEntry with
 # customType=parity-entry. Pi appends a custom session entry, fires
 # "entry_appended", and CustomEntryComponent renders the registered renderer's
-# line `entryrenderer:hello:expanded=false`. Pig loads the same source through
+# line `entryrenderer:hello:expanded=false`. Ompig loads the same source through
 # its Node subprocess bridge; the appendEntry host action renders live via
 # addCustomEntryToChat (marshalled through runOnMain), and the async entry
 # render proxy invalidates the TUI to the same final line.
@@ -23,9 +23,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/entry-renderer.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/entry-renderer.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/entry-renderer.mjs",
@@ -34,7 +34,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 32
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "entryrenderer:hello:expanded=false"

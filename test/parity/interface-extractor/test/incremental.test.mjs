@@ -10,7 +10,7 @@ let MODULES;
 const DEPENDS = { "coding-agent": ["codemode", "ai"], durable: ["ai"], ai: [] };
 
 function fixture() {
-  const root = scratchDir("pig-incremental-");
+  const root = scratchDir("ompig-incremental-");
   const source = path.join(root, "source");
   const published = path.join(root, "published");
   for (const { key, name } of PACKAGE_LIST) {

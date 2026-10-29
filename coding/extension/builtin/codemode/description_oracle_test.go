@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // createCodemodeDescription against Pi's tool.js: the whole model-facing description for random tool sets (identifier-hostile names, descriptions with padding and non-ASCII,
@@ -206,7 +206,7 @@ func descriptionProbes() []descriptionProbe {
 	return probes
 }
 
-// goDescription is PiG's description of a probe and the text of its error.
+// goDescription is Ompig's description of a probe and the text of its error.
 func goDescription(p descriptionProbe) (string, string) {
 	var tools []extension.AgentTool
 	for _, tl := range p.Tools {
@@ -240,7 +240,7 @@ func TestCodemodeDescriptionProbesDump(t *testing.T) {
 	fmt.Printf("codemode-description-probes:%s\n", line)
 }
 
-// TestCodemodeDescriptionProbesParity prints PiG's description of each probe as one JSON line [text, error], the docs path replaced, for the extensions-runtime/79 parity scenario.
+// TestCodemodeDescriptionProbesParity prints Ompig's description of each probe as one JSON line [text, error], the docs path replaced, for the extensions-runtime/79 parity scenario.
 func TestCodemodeDescriptionProbesParity(t *testing.T) {
 	for _, p := range descriptionProbes() {
 		text, errText := goDescription(p)

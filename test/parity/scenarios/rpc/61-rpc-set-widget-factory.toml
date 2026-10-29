@@ -12,9 +12,9 @@ timeout_seconds = 15
 settle_seconds = 2
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["testdata/widget-factory-ui.mjs"]
-pig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["testdata/widget-factory-ui.mjs"]
+ompig_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["testdata/widget-factory-ui.mjs", "../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "{{TEMP}}/sessions"]
 

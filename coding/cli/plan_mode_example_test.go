@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's plan-mode example persists [] distinctly from an absent snapshot. Drive the actual Go factory, RPC bridge, disk Session, process restart, and next model turn.
@@ -27,9 +27,9 @@ func TestRPCPlanModeEmptyToolsSurviveProcessResume(t *testing.T) {
 		t.Fatal(err)
 	}
 	env := []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + agentDir,
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic",
-		"PIG_SDK_GO_ROOT=" + filepath.Join(root, "extensions", "sdk"),
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + agentDir,
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_SDK_GO_ROOT=" + filepath.Join(root, "extensions", "sdk"),
 	}
 	cwd := t.TempDir()
 	p := startRPCProcessAt(t, cwd, env, "--model", "test-faux/faux-1", "--session-dir", filepath.Join(home, "sessions"), "-e", example)
@@ -136,8 +136,8 @@ func TestRPCPlanModeResumeRebuildsOnlyWholeDoneMarkers(t *testing.T) {
 		t.Fatal(err)
 	}
 	p := startRPCProcessAt(t, cwd, []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1",
-		"PIG_SDK_GO_ROOT=" + filepath.Join(root, "extensions", "sdk"),
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1",
+		"OMPIG_SDK_GO_ROOT=" + filepath.Join(root, "extensions", "sdk"),
 	}, "--model", "test-faux/faux-1", "--session", session.Path(), "-e", filepath.Join(root, "examples", "extensions", "plan-mode"))
 	awaitPlanModeCommand(t, p)
 	p.send(`{"id":"todos","type":"prompt","message":"/todos"}`)

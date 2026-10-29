@@ -3,8 +3,8 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // A read of a cached call returns the caller's own copy: changing what one read returned changes neither the cache

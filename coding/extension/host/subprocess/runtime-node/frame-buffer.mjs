@@ -1,4 +1,4 @@
-// pig additive (D19): the subprocess wire assembles one bounded length-prefixed frame without repeatedly copying an incomplete body.
+// ompig additive (D19): the subprocess wire assembles one bounded length-prefixed frame without repeatedly copying an incomplete body.
 // A body of sharedMin bytes or more is backed by its own SharedArrayBuffer, so it can reach another thread without a copy. repeatOf(size) may name an earlier body of that size: the incoming bytes are compared with it as they arrive, and a frame that repeats it is delivered as that body, with no allocation or copy.
 export class FrameBuffer {
   constructor(maxFrameSize, onFrame, { sharedMin = Infinity, repeatOf } = {}) {

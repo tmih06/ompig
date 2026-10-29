@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/codemode/cloudflare"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/codemode/cloudflare"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // objectRemote lets a RemoteSandbox use an object as its remote, as it would use a Durable Object stub.

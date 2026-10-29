@@ -17,16 +17,16 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
-// Pi's loader awaits factories without a deadline. PiG's subprocess load must
+// Pi's loader awaits factories without a deadline. Ompig's subprocess load must
 // nevertheless stop promptly when its process exits. The two-second bound
 // measures only local spawn/reap/error delivery: no compiler or factory work.
 // The general test budget bounds hangs but must not replace this latency proof.
@@ -745,7 +745,7 @@ func TestHost_MixedFusedPackedAndIsolatedExtensions(t *testing.T) {
 	}
 
 	// One fused dialog reports ui_prompt_start/ui_prompt_end to every
-	// realization in the Piglet: fused, both packed members, and isolated.
+	// realization in the Ompiglet: fused, both packed members, and isolated.
 	promptMu.Lock()
 	prompts = nil
 	promptMu.Unlock()
@@ -1270,7 +1270,7 @@ func packedPythonFactoryConfig(name, root, packageName, hash string) ExtConfig {
 		Source:          root,
 		RuntimeKind:     "subprocess",
 		RuntimeLanguage: "python",
-		SDKName:         "pig-sdk-py",
+		SDKName:         "ompig-sdk-py",
 		Isolation:       "shared-ok",
 		EntrypointKind:  "factory",
 		Package:         packageName,
@@ -1286,7 +1286,7 @@ func packedRustFactoryConfig(name, root, packageName, hash string) ExtConfig {
 		Source:          root,
 		RuntimeKind:     "subprocess",
 		RuntimeLanguage: "rust",
-		SDKName:         "pig-sdk",
+		SDKName:         "ompig-sdk",
 		Isolation:       "shared-ok",
 		EntrypointKind:  "factory",
 		Package:         packageName,
@@ -1302,7 +1302,7 @@ func packedFactoryConfig(name, root, modulePath, hash string) ExtConfig {
 		Source:          root,
 		RuntimeKind:     "subprocess",
 		RuntimeLanguage: "go",
-		SDKName:         "github.com/MichaelKinsy/PiG/extensions/sdk",
+		SDKName:         "github.com/tmih06/ompig/extensions/sdk",
 		Isolation:       "shared-ok",
 		EntrypointKind:  "factory",
 		ModulePath:      modulePath,
@@ -1315,7 +1315,7 @@ func packedFactoryConfig(name, root, modulePath, hash string) ExtConfig {
 func writePackedPythonFactoryModule(t *testing.T, moduleName, extName, toolName string) string {
 	t.Helper()
 	dir := t.TempDir()
-	src := fmt.Sprintf(`import pig_sdk
+	src := fmt.Sprintf(`import ompig_sdk
 import threading
 
 
@@ -1327,9 +1327,9 @@ class Focused:
     def handle_input(self, data):
         if data == "\x1b[B": self.selected = 1
         if data == "\x1b[6~": self.selected = 1
-        if data == "\r": return pig_sdk.RemoteComponentResult(done=True, value="beta")
-        if data == "\x1b": return pig_sdk.RemoteComponentResult(done=True)
-        return pig_sdk.RemoteComponentResult()
+        if data == "\r": return ompig_sdk.RemoteComponentResult(done=True, value="beta")
+        if data == "\x1b": return ompig_sdk.RemoteComponentResult(done=True)
+        return ompig_sdk.RemoteComponentResult()
 
 
 class TimerFocused:
@@ -1348,8 +1348,8 @@ class TimerFocused:
     def render(self, width):
         return [f"timer frame={self.frame} width={width}"]
     def handle_input(self, data):
-        if data == "\r": return pig_sdk.RemoteComponentResult(done=True, value=self.frame)
-        return pig_sdk.RemoteComponentResult()
+        if data == "\r": return ompig_sdk.RemoteComponentResult(done=True, value=self.frame)
+        return ompig_sdk.RemoteComponentResult()
     def set_invalidate(self, invalidate):
         self.invalidate = invalidate
         self.detached = invalidate is None
@@ -1430,7 +1430,7 @@ def boundary_result(ctx, data):
 
 
 def new_extension():
-    ext = pig_sdk.Extension(%q)
+    ext = ompig_sdk.Extension(%q)
     ext.tool(%q, "test tool", {"type": "object"}, lambda ctx, params: {"content": "ok"})
     ext.command("focused", "focused component", lambda ctx, args: ctx.notify("focused=" + str(ctx.custom(Focused()) or ""), "info"))
     ext.command("timer", "timer component", timer_command)
@@ -1484,7 +1484,7 @@ func writePackedRustFactoryCrate(t *testing.T, packageName, extName, toolName st
 	if err := os.Mkdir(filepath.Join(dir, "src"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	src := fmt.Sprintf(`use pig_sdk::{empty_schema, CommandResult, Extension, ProjectTrustDecision, ProjectTrustResult, RemoteComponent, RemoteComponentInvalidate, RemoteComponentResult, ToolResult};
+	src := fmt.Sprintf(`use ompig_sdk::{empty_schema, CommandResult, Extension, ProjectTrustDecision, ProjectTrustResult, RemoteComponent, RemoteComponentInvalidate, RemoteComponentResult, ToolResult};
 use serde_json::json;
 use std::sync::{Arc, Mutex, atomic::{AtomicBool, Ordering}};
 use std::{thread, time::Duration};
@@ -1492,7 +1492,7 @@ use std::{thread, time::Duration};
 struct Focused { selected: usize }
 impl RemoteComponent for Focused {
     fn render(&self, width: u32) -> Vec<String> { vec![format!("focused width={width}"), if self.selected == 0 { "> alpha".into() } else { "  alpha".into() }, if self.selected == 1 { "> beta".into() } else { "  beta".into() }] }
-    fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+    fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
         if data == "\u{1b}[B" { self.selected = 1; }
         if data == "\u{1b}[6~" { self.selected = 1; }
         if data == "\r" { return Ok(RemoteComponentResult::done(Some(json!("beta")))); }
@@ -1525,7 +1525,7 @@ impl TimerFocused {
 }
 impl RemoteComponent for TimerFocused {
     fn render(&self, width: u32) -> Vec<String> { vec![format!("timer frame={} width={width}", *self.frame.lock().unwrap())] }
-    fn handle_input(&mut self, data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> { if data == "\r" { return Ok(RemoteComponentResult::done(Some(json!(*self.frame.lock().unwrap())))); } Ok(RemoteComponentResult::pending()) }
+    fn handle_input(&mut self, data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> { if data == "\r" { return Ok(RemoteComponentResult::done(Some(json!(*self.frame.lock().unwrap())))); } Ok(RemoteComponentResult::pending()) }
     fn set_invalidate(&mut self, invalidate: Option<RemoteComponentInvalidate>) { self.detached.store(invalidate.is_none(), Ordering::Release); *self.invalidate.lock().unwrap() = invalidate; }
     fn dispose(&mut self) { self.stop.store(true, Ordering::Release); if let Some(worker) = self.worker.take() { let _ = worker.join(); } self.disposed.store(true, Ordering::Release); }
 }
@@ -1568,7 +1568,7 @@ pub fn new_extension() -> Extension {
 func writePackedFactoryModule(t testing.TB, modulePath, extName, toolName string, includeModelRuntime ...bool) string {
 	t.Helper()
 	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	src := fmt.Sprintf(`package ext
@@ -1580,7 +1580,7 @@ import (
     "strings"
     "sync"
     "time"
-    "github.com/MichaelKinsy/PiG/extensions/sdk"
+    "github.com/tmih06/ompig/extensions/sdk"
 )
 
 type focused struct { selected int }
@@ -1715,7 +1715,7 @@ func assertUnchangedContextReplyOmitsList(t *testing.T, ext extension.Extension)
 			t.Fatalf("%s %s no-op handler: %v", ext.Path, event.name, err)
 		}
 		raw, ok := reply.(json.RawMessage)
-		if !ok || string(raw) != `{"_pigContextUnchanged":true}` {
+		if !ok || string(raw) != `{"_ompigContextUnchanged":true}` {
 			t.Fatalf("%s %s no-op reply = %#v, want the unchanged report alone", ext.Path, event.name, reply)
 		}
 	}
@@ -1741,7 +1741,7 @@ func TestHost_LoadGoPackedCellRejectsRegisteredIdentityMismatchActionably(t *tes
 		t.Fatalf("LoadGoPackedCell error = %v, want the member's *LoadError", err)
 	}
 	message := loadErr.Error()
-	for _, want := range []string{"name_mismatch", `selected identity "selected-name"`, `registered identity "pack-real"`, "renamed/reselected", "Package/Piglet declaration"} {
+	for _, want := range []string{"name_mismatch", `selected identity "selected-name"`, `registered identity "pack-real"`, "renamed/reselected", "Package/Ompiglet declaration"} {
 		if !strings.Contains(message, want) {
 			t.Fatalf("member load error = %s, want actionable identity detail %q", message, want)
 		}

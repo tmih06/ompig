@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // However a block is cut into deltas, the converter holds what Pi's proxy holds after `content.text += delta` and `arguments: args.append(delta)` (proxy.ts:272, 304, 342-343): the concatenation and the arguments the stream reads from the whole text so far, at every delta. The arguments compare as JSON.stringify writes them, so member order (the model's, not sorted) and a non-object or falsy value count. A block that starts again at the same index starts from empty.

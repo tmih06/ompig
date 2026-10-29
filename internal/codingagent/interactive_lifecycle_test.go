@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi interactive-mode.ts:7090 stop(): the teardowns of init() and run() are released in reverse order, once, and a second stop() does nothing.
@@ -59,7 +59,7 @@ func TestInteractiveModeStopTakesTheFullscreenExitOutputArgument(t *testing.T) {
 // mutation-checked: an Init that rebuilds when initialized, or a Stop that skips a partial Init, fails it.
 func TestInteractiveModeInitIsGuardedAndAFailedInitIsStoppable(t *testing.T) {
 	restoreStartupTheme(t)
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	done := NewInteractiveMode(nil, InteractiveModeOptions{CWD: t.TempDir(), AgentDir: t.TempDir(), NoThemes: true})
 	done.isInitialized = true
 	if err := done.Init(t.Context()); err != nil || done.backgroundCtx != nil {

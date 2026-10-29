@@ -15,8 +15,8 @@ type Kind string
 
 // The two products every journey runs on.
 const (
-	PiG Kind = "pig"
-	Pi  Kind = "pi"
+	Ompig Kind = "ompig"
+	Pi    Kind = "pi"
 )
 
 // SandboxOpts customises one product's sandbox.
@@ -138,8 +138,8 @@ func NewSandbox(o SandboxOpts) (*Sandbox, error) {
 		}
 	}
 	switch o.Kind {
-	case PiG:
-		env = append(env, "PIG_HOME="+filepath.Join(s.Home, ".pig"), "PIG_CODING_AGENT_DIR="+s.Agent, "PIG_QUIET_STARTUP=1", "PIG_USE_PI_DIRS=")
+	case Ompig:
+		env = append(env, "OMPIG_HOME="+filepath.Join(s.Home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+s.Agent, "OMPIG_QUIET_STARTUP=1", "OMPIG_USE_PI_DIRS=")
 	case Pi:
 		env = append(env, "PI_CODING_AGENT_DIR="+s.Agent)
 	}

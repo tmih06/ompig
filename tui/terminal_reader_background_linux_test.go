@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-const backgroundReadResultEnv = "PIG_TUI_BACKGROUND_READ_RESULT"
+const backgroundReadResultEnv = "OMPIG_TUI_BACKGROUND_READ_RESULT"
 
 // A read from a terminal that is alive but whose foreground belongs to another process group fails with EIO when SIGTTIN is ignored, as for an orphaned background process group. Only a hung-up terminal's EIO is the end of input; this EIO must stay an error, so the interactive loop treats the terminal as gone (interactive-mode.ts terminalErrorHandler -> isDeadTerminalError -> emergencyTerminalExit).
 func TestTerminalReaderKeepsEIOFromABackgroundReadAnError(t *testing.T) {

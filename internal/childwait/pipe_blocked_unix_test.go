@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // The grace expires while the pipe's reader is parked in a read of it, which is when a quiet holder is released. The question the grace asks must not

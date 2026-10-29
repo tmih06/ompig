@@ -1,5 +1,5 @@
 // Generates tui/widthx/unicode_tables.go from the SAME sources upstream
-// pi-tui's graphemeWidth uses at runtime, so PiG's width is Pi's by
+// pi-tui's graphemeWidth uses at runtime, so Ompig's width is Pi's by
 // construction:
 //   - get-east-asian-width@1.6.0 (upstream packages/tui dependency, pinned)
 //   - V8/ICU property escapes (\p{Default_Ignorable_Code_Point}, \p{Mark},

@@ -4,10 +4,10 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/internal/latex"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/latex"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // LaTeX math rendering inside markdown. Faithful port of the latex tokenizer

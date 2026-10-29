@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // bedrockRegionProbes build base URLs around the standard Bedrock runtime host: regions and partitions, fips, mixed case, trailing dots, userinfo, ports, IDN and full-width letters
@@ -34,7 +34,7 @@ func bedrockRegionProbes() []string {
 	return probes
 }
 
-// getStandardBedrockEndpointRegion (cut from Pi's source) runs in Node on the same base URLs: the WHATWG hostname (lowercased, IDN-folded, port and userinfo removed) must match Pig's
+// getStandardBedrockEndpointRegion (cut from Pi's source) runs in Node on the same base URLs: the WHATWG hostname (lowercased, IDN-folded, port and userinfo removed) must match Ompig's
 // bedrockEndpointRegion, which gives "" where Pi gives undefined.
 func TestBedrockEndpointRegionMatchesPi(t *testing.T) {
 	probes := bedrockRegionProbes()
@@ -67,7 +67,7 @@ func TestBedrockEndpointRegionMatchesPi(t *testing.T) {
 		}
 		if got := bedrockEndpointRegion(probe); got != want {
 			if differing++; differing <= 12 {
-				t.Errorf("%q\n  Pig %q\n  Pi  %q", probe, got, want)
+				t.Errorf("%q\n  Ompig %q\n  Pi  %q", probe, got, want)
 			}
 		}
 	}

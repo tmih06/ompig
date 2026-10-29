@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const detachedChildSleepEnv = "PIG_TEST_DETACHED_CHILD_SLEEP"
+const detachedChildSleepEnv = "OMPIG_TEST_DETACHED_CHILD_SLEEP"
 
 // TestDetachedChildSleepHelper is the child process TestTrackedShellKillsAStartedShell starts.
 func TestDetachedChildSleepHelper(t *testing.T) {
@@ -18,7 +18,7 @@ func TestDetachedChildSleepHelper(t *testing.T) {
 }
 
 // The kill and a shell start share one lock: the start registers the shell before the kill can run, so the kill finds
-// it. A shell started between its spawn and its registration would outlive pig.
+// it. A shell started between its spawn and its registration would outlive ompig.
 func TestTrackedShellKillsAStartedShell(t *testing.T) {
 	cmd := exec.Command(os.Args[0], "-test.run=^TestDetachedChildSleepHelper$")
 	cmd.Env = append(os.Environ(), detachedChildSleepEnv+"=1")

@@ -10,7 +10,7 @@ import (
 	"slices"
 	"sync"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // upstream: .upstream/v0.99.1/packages/ai/src/utils/validation.ts:317-339 (validateToolArguments returns structuredClone of
@@ -50,7 +50,7 @@ func (content ToolCall) ArgumentsJSON() ([]byte, error) {
 // never replaced compares two pointers, so a hit costs a walk of the tree's members and no pass over its text.
 // An encoding lives as long as the arguments object it encodes: the runtime releases it once the arguments are unreachable, so the cache
 // holds the encodings of the history a session keeps and never those of calls it has dropped.
-// pig additive (D112): Pi stringifies the arguments for each request; the bytes are the same.
+// ompig additive (D112): Pi stringifies the arguments for each request; the bytes are the same.
 const argumentEncodingCacheBytes = 16 << 20
 
 // argumentEncoding is the bytes ArgumentsJSON wrote for an arguments object.
@@ -168,7 +168,7 @@ func snapshotArgumentObject(object JsonObject) (map[string]any, bool) {
 }
 
 // argumentSnapshotDepth bounds the copy: a tree nested deeper (or a cycle) is not kept.
-// pig additive (D112): Pi stringifies the arguments for each request; an argument tree that is not kept is stringified again and gives the same bytes.
+// ompig additive (D112): Pi stringifies the arguments for each request; an argument tree that is not kept is stringified again and gives the same bytes.
 const argumentSnapshotDepth = 256
 
 func snapshotArgumentMap(object map[string]any, depth int) (map[string]any, bool) {

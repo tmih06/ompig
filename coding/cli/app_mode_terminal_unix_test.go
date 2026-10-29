@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-// runPigOnTerminalStdinToFile runs pig the way `pig "q" > out.txt` runs from a
+// runPigOnTerminalStdinToFile runs ompig the way `ompig "q" > out.txt` runs from a
 // terminal: stdin is a pseudo-terminal and stdout is the file at outPath.
 func runPigOnTerminalStdinToFile(t *testing.T, bin, outPath string, args ...string) (string, int) {
 	t.Helper()

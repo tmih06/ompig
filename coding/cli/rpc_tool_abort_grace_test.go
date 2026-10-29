@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 const toolAbortGraceExtension = `export default function (pi) {
@@ -29,14 +29,14 @@ const toolAbortGraceExtension = `export default function (pi) {
 }
 `
 
-// pig divergence (D111): through a real Session in RPC mode, an abort while an extension tool ignores its signal ends the tool with Pi's abort text "Operation aborted" (agent-loop.ts:623) once subprocess.ToolAbortGrace has passed, the run settles, and the Session accepts the next prompt. A tool that honours its signal keeps Pi's exact outcome: its thrown message is the tool result (agent-loop.ts:831-853), well before the grace period ends.
+// ompig divergence (D111): through a real Session in RPC mode, an abort while an extension tool ignores its signal ends the tool with Pi's abort text "Operation aborted" (agent-loop.ts:623) once subprocess.ToolAbortGrace has passed, the run settles, and the Session accepts the next prompt. A tool that honours its signal keeps Pi's exact outcome: its thrown message is the tool result (agent-loop.ts:831-853), well before the grace period ends.
 func TestRPCAbortedExtensionToolSettlesAndFreesTheSession(t *testing.T) {
 	t.Parallel()
 	fixture := filepath.Join(t.TempDir(), "tool-abort-grace.mjs")
 	if err := os.WriteFile(fixture, []byte(toolAbortGraceExtension), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1"}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1"}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
 
 	abortRunningTool := func(id, tool string) (string, bool, time.Duration) {
 		t.Helper()

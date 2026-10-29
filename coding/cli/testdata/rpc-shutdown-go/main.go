@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func main() {

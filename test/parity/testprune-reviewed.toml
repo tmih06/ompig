@@ -61,7 +61,7 @@ path = "tui/terminal_pipe_windows_test.go"
 commit = "8c2fe46dda772e91ad0cdab8441177c06e2045b1"
 class = "NOBEHAVIOR"
 cite = ""
-reason = "The Windows pipe tests are PiG-original: Pi reads a pipe stdin through libuv and has no counterpart, so no Pi line governs them. The commit makes the reader read a Windows pipe in one cancellable ReadFile instead of waiting on the handle first (a pipe handle is signalled whether or not input is queued), so the tests move from asserting terminalInputWaiter.wait's ready or not-ready answer to asserting what terminalReader.read returns: the bytes, nil for a timeout, io.EOF for the end of the pipe, the context's error for a cancel. Each case keeps the behavior it proved (an empty pipe times out, input is delivered, an emptied pipe times out again, a closed writer ends the input, a cancel ends a read of an empty pipe, input wakes a blocked read, a timed-out read leaves no stale abort, an idle read costs no CPU); only the call that reports it changed."
+reason = "The Windows pipe tests are Ompig-original: Pi reads a pipe stdin through libuv and has no counterpart, so no Pi line governs them. The commit makes the reader read a Windows pipe in one cancellable ReadFile instead of waiting on the handle first (a pipe handle is signalled whether or not input is queued), so the tests move from asserting terminalInputWaiter.wait's ready or not-ready answer to asserting what terminalReader.read returns: the bytes, nil for a timeout, io.EOF for the end of the pipe, the context's error for a cancel. Each case keeps the behavior it proved (an empty pipe times out, input is delivered, an emptied pipe times out again, a closed writer ends the input, a cancel ends a read of an empty pipe, input wakes a blocked read, a timed-out read leaves no stale abort, an idle read costs no CPU); only the call that reports it changed."
 
 [[entry]]
 path = "coding/cli/rpc_model_type_binary_test.go"
@@ -306,21 +306,21 @@ path = "telemetry/memory_ids_detached_test.go"
 commit = "4ca61cee8c939660e13fe5a86c60c7b98890c1f7"
 class = "CITE"
 cite = "packages/telemetry/src/memory.ts:110"
-reason = "Pi records a span's and an event's attributes as an object copied with Object.entries (memory.ts:110-115), keeping insertion order and copying array values, so PiG's SpanAttributes is an ordered list of Attr values (Set and Value replace the map index): the detached-copy test builds the attributes with Attr and reads them with Value, and expects the same copied values (n stays 1, the list keeps its first element)."
+reason = "Pi records a span's and an event's attributes as an object copied with Object.entries (memory.ts:110-115), keeping insertion order and copying array values, so Ompig's SpanAttributes is an ordered list of Attr values (Set and Value replace the map index): the detached-copy test builds the attributes with Attr and reads them with Value, and expects the same copied values (n stays 1, the list keeps its first element)."
 
 [[entry]]
 path = "telemetry/memory_recording_test.go"
 commit = "4ca61cee8c939660e13fe5a86c60c7b98890c1f7"
 class = "CITE"
 cite = "packages/telemetry/src/memory.ts:221"
-reason = "Pi's setAttributes merges the new attributes over the span's (`{ ...recordedSpan.attributes, ...copyAttributes(attributes) }`, memory.ts:221), keeping the first position of an overridden name and appending the new ones in order, so PiG's recorder and its expected SpanAttributes are the ordered lists keep, over (new), added and the copy test reads the recorded value with Value; values are the same as before."
+reason = "Pi's setAttributes merges the new attributes over the span's (`{ ...recordedSpan.attributes, ...copyAttributes(attributes) }`, memory.ts:221), keeping the first position of an overridden name and appending the new ones in order, so Ompig's recorder and its expected SpanAttributes are the ordered lists keep, over (new), added and the copy test reads the recorded value with Value; values are the same as before."
 
 [[entry]]
 path = "telemetry/conformance_capability_cases_test.go"
 commit = "8a01515289e7382bbefcc61ed66dff855ad5eccc"
 class = "CITE"
 cite = "packages/telemetry/src/testing/conformance.ts:51"
-reason = "The ported conformance suite of Pi (telemetry/src/testing/conformance.ts) names its cases \"carries adapter capabilities through contexts and spans\" (:51), \"copies instrument metadata and measurement attributes\" (:109) and \"links / ignores links added after source settlement\" (:149) where PiG's older suite had \"copies inputs and suppresses invalid measurements atomically\" and \"suppresses malformed links atomically and ignores settled sources\", so the lists of the cases each broken store must fail use Pi's names and gain the capabilities case."
+reason = "The ported conformance suite of Pi (telemetry/src/testing/conformance.ts) names its cases \"carries adapter capabilities through contexts and spans\" (:51), \"copies instrument metadata and measurement attributes\" (:109) and \"links / ignores links added after source settlement\" (:149) where Ompig's older suite had \"copies inputs and suppresses invalid measurements atomically\" and \"suppresses malformed links atomically and ignores settled sources\", so the lists of the cases each broken store must fail use Pi's names and gain the capabilities case."
 
 [[entry]]
 path = "chord/context/chordctx_upstream_test.go"
@@ -369,21 +369,21 @@ path = "automation/ci/changelogfrag/history_test.go"
 commit = "2719b6854d8fb4a81f69a6ef4bd3be561daa6f86"
 class = "NOBEHAVIOR"
 cite = ""
-reason = "The changelog fragment tool is PiG-original CI automation (PiG's own changelog.d fragments, fix markers and bug ledger), which Pi does not have, so no Pi line governs it. The commit changes PiG's own rule, which the reason spells out: a legacy fragment is exempt from the name rule and from the reachability of its markers, no longer from the marker itself, because the fold copies its \"### Fixed\" bullets into CHANGELOG.md, where the bug ledger refuses a bullet without one (42 of them broke make bug-ledger-check on main). The test pins that rule with a marked and an unmarked legacy bullet, and that it needs no git checkout."
+reason = "The changelog fragment tool is Ompig-original CI automation (Ompig's own changelog.d fragments, fix markers and bug ledger), which Pi does not have, so no Pi line governs it. The commit changes Ompig's own rule, which the reason spells out: a legacy fragment is exempt from the name rule and from the reachability of its markers, no longer from the marker itself, because the fold copies its \"### Fixed\" bullets into CHANGELOG.md, where the bug ledger refuses a bullet without one (42 of them broke make bug-ledger-check on main). The test pins that rule with a marked and an unmarked legacy bullet, and that it needs no git checkout."
 
 [[entry]]
 path = "automation/ci/changelogfrag/main_test.go"
 commit = "2719b6854d8fb4a81f69a6ef4bd3be561daa6f86"
 class = "NOBEHAVIOR"
 cite = ""
-reason = "The changelog fragment tool is PiG-original CI automation with no Pi counterpart, so no Pi line governs it. The fold now refuses any fragment, legacy or not, whose \"### Fixed\" bullet has no `<!-- fix: <sha> -->` marker, so the fold tests' fixture bullets carry a marker and their expected CHANGELOG text carries it too, and a new test pins the refusal of an unmarked bullet and the acceptance of a marked one, for a legacy and a normal fragment."
+reason = "The changelog fragment tool is Ompig-original CI automation with no Pi counterpart, so no Pi line governs it. The fold now refuses any fragment, legacy or not, whose \"### Fixed\" bullet has no `<!-- fix: <sha> -->` marker, so the fold tests' fixture bullets carry a marker and their expected CHANGELOG text carries it too, and a new test pins the refusal of an unmarked bullet and the acceptance of a marked one, for a legacy and a normal fragment."
 
 [[entry]]
 path = "ai/user_agent_release_cache_test.go"
 commit = "dcc5ef43ee75a3d4110b5159424fa0ab4d016428"
 class = "CITE"
 cite = "packages/ai/src/utils/identity.ts:75"
-reason = "Pi adc5fa9f80 and 04a93bad8f move the client User-Agent into the ai package as formatUserAgent(identity?) (identity.ts:75), where PiG's PiUserAgent() was; with no identity it is the same string, so the test calls FormatUserAgent(nil) and expects the same kernel release in the string."
+reason = "Pi adc5fa9f80 and 04a93bad8f move the client User-Agent into the ai package as formatUserAgent(identity?) (identity.ts:75), where Ompig's PiUserAgent() was; with no identity it is the same string, so the test calls FormatUserAgent(nil) and expects the same kernel release in the string."
 
 [[entry]]
 path = "ai/user_agent_test.go"

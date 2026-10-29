@@ -22,7 +22,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-const argvHelper = "PIG_DAEMON_ARGV_HELPER"
+const argvHelper = "OMPIG_DAEMON_ARGV_HELPER"
 
 // TestMain lets the test binary act as the child that reports how it was started.
 func TestMain(m *testing.M) {

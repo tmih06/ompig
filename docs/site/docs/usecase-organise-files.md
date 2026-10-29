@@ -2,18 +2,18 @@
 
 **Goal:** sort a messy folder (a Downloads folder, a pile of scans) into tidy subfolders, with a plan you approve first and a log that undoes every move.
 
-**You need:** PiG signed in to a model ([Your first ten minutes](/docs/latest/first-run)) and a folder to tidy. This is the walkthrough that changes your files most, so it uses every habit from [Applied use cases](/docs/latest/applied-use-cases#five-habits-that-make-undo-possible): a copy, a plan first, a log and no deletion.
+**You need:** Ompig signed in to a model ([Your first ten minutes](/docs/latest/first-run)) and a folder to tidy. This is the walkthrough that changes your files most, so it uses every habit from [Applied use cases](/docs/latest/applied-use-cases#five-habits-that-make-undo-possible): a copy, a plan first, a log and no deletion.
 
 **Time:** ten minutes.
 
 ## Before you start
 
-Work on a copy the first time. Copy the folder, then start PiG in the copy:
+Work on a copy the first time. Copy the folder, then start Ompig in the copy:
 
 ```bash
 cp -R ~/Downloads ~/Downloads-copy
 cd ~/Downloads-copy
-pig
+ompig
 ```
 
 The screens below come from a folder with eight files: two invoices, a budget, a notes file, two photos, a screenshot and an installer.
@@ -24,7 +24,7 @@ The screens below come from a folder with eight files: two invoices, a budget, a
 Look at the files in this folder. Do not move or rename anything yet. Propose folders by kind of file, and write the plan as a table to plan.md.
 ```
 
-PiG lists the folder, writes `plan.md` and stops. The only change so far is the new file `plan.md`:
+Ompig lists the folder, writes `plan.md` and stops. The only change so far is the new file `plan.md`:
 
 ```text
  $ ls -1
@@ -67,7 +67,7 @@ Nothing has moved yet, so you can ask for as many changes to the plan as you lik
 The plan is good. Do it. Use mv, never delete. Record every move in moves.log as a command that reverses it.
 ```
 
-PiG creates the folders and moves the files with `mv`. It also writes one reversing command per move into `moves.log`. The model chooses the exact commands. This is the screen after one run, with the file list printed at the end:
+Ompig creates the folders and moves the files with `mv`. It also writes one reversing command per move into `moves.log`. The model chooses the exact commands. This is the screen after one run, with the file list printed at the end:
 
 ```text
  ... (5 earlier lines, ctrl+o to expand)
@@ -109,21 +109,21 @@ Two checks catch most mistakes. Count the files before and after (the number in 
 
 ## Undo
 
-You can undo with PiG or without it. Without it is better, because it does not depend on the model.
+You can undo with Ompig or without it. Without it is better, because it does not depend on the model.
 
-1. In PiG, type a line that starts with `!`. PiG runs it as a shell command itself and shows the output. The model is not involved. A line that starts with `!!` runs it too but keeps the output out of the conversation (Pi `packages/coding-agent/src/modes/interactive/interactive-mode.ts:3347-3348`):
+1. In Ompig, type a line that starts with `!`. Ompig runs it as a shell command itself and shows the output. The model is not involved. A line that starts with `!!` runs it too but keeps the output out of the conversation (Pi `packages/coding-agent/src/modes/interactive/interactive-mode.ts:3347-3348`):
 
    ```text
    !sh moves.log
    ```
 
-2. Or leave PiG and run it in the folder:
+2. Or leave Ompig and run it in the folder:
 
    ```bash
    sh moves.log
    ```
 
-All eight files are back where they started. The empty folders PiG made stay behind. `rmdir` removes an empty folder and refuses to remove one with anything in it, so it is safe. Name the folders from your own `plan.md`, deepest first. `find . -mindepth 1 -type d` lists them. For the plan above the command is:
+All eight files are back where they started. The empty folders Ompig made stay behind. `rmdir` removes an empty folder and refuses to remove one with anything in it, so it is safe. Name the folders from your own `plan.md`, deepest first. `find . -mindepth 1 -type d` lists them. For the plan above the command is:
 
 ```bash
 rmdir Documents/Invoices Documents/Notes Documents Pictures Installers
@@ -135,7 +135,7 @@ Delete `plan.md` and `moves.log` when you are done. If you worked in a copy, you
 
 ## When the model skips the log
 
-A model can forget a request. Check that `moves.log` exists and has one line per file **before** you rely on it. If it is missing, you have not lost anything: ask PiG to write the log from the plan (`Write moves.log from plan.md, as commands that move each file back`).
+A model can forget a request. Check that `moves.log` exists and has one line per file **before** you rely on it. If it is missing, you have not lost anything: ask Ompig to write the log from the plan (`Write moves.log from plan.md, as commands that move each file back`).
 
 ## Variations
 

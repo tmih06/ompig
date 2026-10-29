@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 type savedCapabilities struct{ caps tui.TerminalCapabilities }
 

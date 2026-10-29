@@ -8,7 +8,7 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
+ompig = ["OMPIG_TEST_FAUX=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
 [cli]

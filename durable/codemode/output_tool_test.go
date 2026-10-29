@@ -13,10 +13,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	envnode "github.com/tmih06/ompig/durable/env/node"
 )
 
 const tinyPNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
@@ -91,7 +91,7 @@ func TestDurableCodeModeOutputAndToolSearch(t *testing.T) {
 		}
 	})
 
-	// PiG addition (no Pi case): the default budget of formatResult.
+	// Ompig addition (no Pi case): the default budget of formatResult.
 	t.Run("cuts to 10,000 tokens (4 characters each) when the script sets no budget", func(t *testing.T) {
 		within := runScript(t, `return "y".repeat(39000);`)
 		over := runScript(t, `return "y".repeat(41000);`)

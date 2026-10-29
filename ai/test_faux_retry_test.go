@@ -2,7 +2,7 @@ package ai
 
 import "testing"
 
-// test/parity/testdata/test-faux-provider.ts:527-538 (the Pi twin of this provider) sets stopReason "error" and errorMessage on its output, then pushes `start` and `error` for the first "Trigger: retryable provider error" request. Pi's agent loop copies that start partial into message_start (packages/agent/src/agent-loop.ts:416-421) and records thinkingLevel only on the final result (:409), so the RPC message_start carries no thinkingLevel. Without the start event pig's agent emits message_start from the final message (agent.go consumeStream !started path), which carries thinkingLevel.
+// test/parity/testdata/test-faux-provider.ts:527-538 (the Pi twin of this provider) sets stopReason "error" and errorMessage on its output, then pushes `start` and `error` for the first "Trigger: retryable provider error" request. Pi's agent loop copies that start partial into message_start (packages/agent/src/agent-loop.ts:416-421) and records thinkingLevel only on the final result (:409), so the RPC message_start carries no thinkingLevel. Without the start event ompig's agent emits message_start from the final message (agent.go consumeStream !started path), which carries thinkingLevel.
 func TestTestFauxRetryableErrorStartsWithTheErrorState(t *testing.T) {
 	testFauxRetryState.Delete("retryable-provider-error")
 	t.Cleanup(func() { testFauxRetryState.Delete("retryable-provider-error") })

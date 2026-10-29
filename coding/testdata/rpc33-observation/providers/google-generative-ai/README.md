@@ -52,17 +52,17 @@ Generated tool-call ids are `read_<ms>_<counter>` (`google-generative-ai.ts:199`
 | `TestGoogleProviderRoundsMatchNodeRealSockets` (`ai`) | This oracle's layer-0 direct cases through real HTTP: exact (socket read, round) of every event before the end of the body. |
 | `TestGoogleUndiciConstantsMatchProbe` (`ai`) | The model's Node constants equal `undici.json`. |
 | `TestRPC33GoogleObservationMatrix` (`coding`) | All 288 in-process cases (every shape, delivery, consumer and layer) equal Pi record for record. |
-| `node check.mjs <pig> <runs> [concurrency] [shape/delivery]` | PiG's `--mode rpc` binary equals the 12 real-Pi RPC observations over N runs. |
+| `node check.mjs <ompig> <runs> [concurrency] [shape/delivery]` | Ompig's `--mode rpc` binary equals the 12 real-Pi RPC observations over N runs. |
 
-`providers/check.mjs <pig> 200 google-generative-ai` (the integrator's start-state oracle) reports 200/200 equal Pi.
+`providers/check.mjs <ompig> 200 google-generative-ai` (the integrator's start-state oracle) reports 200/200 equal Pi.
 
-Known limit: `check.mjs` is 200/200 for eleven of the twelve cases; `thinking/buffered` (three records in one body read, usage on the last) differs from Pi in most runs and `text/split` in about one run in two hundred. The difference is the RPC `message_update` `usage`: Pi serializes it after a fixed number of microtasks, while PiG's Session waits for its ordered worker over a real channel, so how much of the body the provider has read by then depends on wall-clock time. A three-record buffered OpenAI Completions stream shows the same two-way split through the same Session, so the cause is the Session/RPC wait, not the provider. The in-process matrix, which has no Session, is exact.
+Known limit: `check.mjs` is 200/200 for eleven of the twelve cases; `thinking/buffered` (three records in one body read, usage on the last) differs from Pi in most runs and `text/split` in about one run in two hundred. The difference is the RPC `message_update` `usage`: Pi serializes it after a fixed number of microtasks, while Ompig's Session waits for its ordered worker over a real channel, so how much of the body the provider has read by then depends on wall-clock time. A three-record buffered OpenAI Completions stream shows the same two-way split through the same Session, so the cause is the Session/RPC wait, not the provider. The in-process matrix, which has no Session, is exact.
 
 ## Files
 
 - `probe.mjs`: the oracle.
 - `undici.mjs`, `undici.json`: undici/Web Streams round constants.
 - `trace.mjs`: per-job trace of one case.
-- `check.mjs`: PiG RPC binary against the twelve real-Pi RPC observations.
+- `check.mjs`: Ompig RPC binary against the twelve real-Pi RPC observations.
 - `server.mjs`: fixture server, forked so the probe process sees only client sockets.
 - `inputs.json`, `pi.json`: exported bodies and the recorded oracle.

@@ -4,10 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
-// goAPIType is the reflected type of the pig extension.API interface.
+// goAPIType is the reflected type of the ompig extension.API interface.
 func goAPIType() reflect.Type {
 	return reflect.TypeFor[extension.API]()
 }
@@ -30,9 +30,9 @@ var goOverloads = map[string]string{
 	"RegisterNativeProvider": "RegisterProvider",
 }
 
-// TestAPI_NoExtraGoMethodsBeyondUpstream asserts that pig's extension.API
+// TestAPI_NoExtraGoMethodsBeyondUpstream asserts that ompig's extension.API
 // does not invent methods that don't exist upstream. Methods on the
-// allowedDivergences map are intentional pig divergences; each MUST have
+// allowedDivergences map are intentional ompig divergences; each MUST have
 // a corresponding entry in docs/parity/DIVERGENCES.md.
 func TestAPI_NoExtraGoMethodsBeyondUpstream(t *testing.T) {
 	s, err := LoadUpstream()

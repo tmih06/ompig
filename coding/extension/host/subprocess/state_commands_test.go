@@ -4,7 +4,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The command catalog is encoded once per version the host reports and again whenever the version moves, and the bytes equal a direct encoding. A host that reports no version encodes it on every push.

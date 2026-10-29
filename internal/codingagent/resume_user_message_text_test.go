@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactive-mode.ts addMessageToChat (user) shows getUserMessageText(message) without trimming when a session is rebuilt, as the live message_start does: an indented first line stays an indented code block and a message of

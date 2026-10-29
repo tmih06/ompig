@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Settings is the effective settings object [Context.GetSettings] returns: the JSON object of the global and project settings merged, with overrides.

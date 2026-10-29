@@ -40,7 +40,7 @@ const cases = { content: [], jsonrpc: [], challenge: [], discoveryUrls: [], reso
 // toLlmContent
 const STR = ["", "a", "é", "x\ny", "😀", "image/png", "image/", "IMAGE/png", "audio/wav", "text/plain", "application/octet-stream", "http://x/y"];
 // Blocks carry the members their type requires, as the MCP schema does. A server that omits one makes Pi render
-// "undefined" (JavaScript has no empty-string default); the accounting document records Pig's different choice.
+// "undefined" (JavaScript has no empty-string default); the accounting document records Ompig's different choice.
 function block() {
 	const t = pick(["text", "image", "audio", "resource_link", "resource", "resource", "weird", "text", "image"]);
 	const o = { type: t };
@@ -151,7 +151,7 @@ for (const header of ["", "Bearer", "Bearer scope=a", 'Bearer scope="a b", error
 	// JavaScript's \s includes Unicode spaces: they separate fields and end an unquoted value.
 	"Bearer\u00a0scope=a", "Bearer realm=x\u2028scope=a", "Bearer scope=a\u3000b", "Bearer error=x\ufeffy", "Bearer\u00a0x scope=a\u00a0b"]) cases.challenge.push({ header, ...call(() => JSON.stringify(((c) => ({ resourceMetadataUrl: c.resourceMetadataUrl?.href ?? null, scope: c.scope ?? null, error: c.error ?? null, errorDescription: c.errorDescription ?? null }))(discovery.parseWwwAuthenticate(header)))) });
 
-// URL cases. ftp:, ws:, wss: and blob: are left out: Pig keeps net/url for schemes other than http and https (see the
+// URL cases. ftp:, ws:, wss: and blob: are left out: Ompig keeps net/url for schemes other than http and https (see the
 // accounting in docs/parity/gap-closure/gap-mcp-codemode-libs.md), and MCP OAuth endpoints must be http(s).
 const URLS = [
 	"https://example.com", "https://example.com/", "https://example.com/mcp", "https://example.com/mcp/", "https://example.com:443/mcp", "http://example.com:80/x", "https://example.com:8443/a/b?q=1#frag",

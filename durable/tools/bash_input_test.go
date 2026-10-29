@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // packages/durable/src/tools/bash.ts:6-12,20 bashSchema and BashToolInput = Static<typeof bashSchema>: `command` is the required

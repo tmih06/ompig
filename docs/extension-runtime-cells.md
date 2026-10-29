@@ -1,8 +1,8 @@
 # Extension runtime cells
 
-Pig hosts normal third-party extensions as subprocesses over the current subprocess wire. A **runtime cell** is the host's scheduling/process unit: one cell may run one extension or pack several compatible factories into one process.
+Ompig hosts normal third-party extensions as subprocesses over the current subprocess wire. A **runtime cell** is the host's scheduling/process unit: one cell may run one extension or pack several compatible factories into one process.
 
-Runtime cells are internal. Authors declare extensions; Piglets and Package settings choose extension sets; Pig chooses cells. Read the [ecosystem ontology](piglet-resource-ontology.md) before mapping these internal process choices into Piglet artifacts.
+Runtime cells are internal. Authors declare extensions; Ompiglets and Package settings choose extension sets; Ompig chooses cells. Read the [ecosystem ontology](ompiglet-resource-ontology.md) before mapping these internal process choices into Ompiglet artifacts.
 
 Return to the [maintainer docs router](README.md).
 
@@ -14,18 +14,18 @@ Return to the [maintainer docs router](README.md).
 | atomic reload, quarantine/fission, reports, protocol boundary | [Reload and operations](runtime-cell-reload.md) |
 | author an extension source | [Extension authoring](extension-authoring.md) |
 | compare public APIs across SDKs/hosts | [Extension API parity](extension-api-parity.md) |
-| understand Piglet component realization/materialization | [Ecosystem ontology](piglet-resource-ontology.md), then [Piglet design](pig-piglet-spec.md) |
+| understand Ompiglet component realization/materialization | [Ecosystem ontology](ompiglet-resource-ontology.md), then [Ompiglet design](ompig-ompiglet-spec.md) |
 
 ## Invariants
 
 - Normal dynamic extensions are subprocesses.
-- Pig does not run extensions in WASM, embedded JavaScript, `plugin.Open`, or dynamic Go plugin runtimes.
+- Ompig does not run extensions in WASM, embedded JavaScript, `plugin.Open`, or dynamic Go plugin runtimes.
 - Every contained extension keeps its own registration socket and identity, even when several share one process.
 - Packing is an optimization, never an author-facing grouping model.
 - Node crash recovery quarantines only an attributable culprit. It restarts an unknown group once, then bisects repeated failures and rejoins healthy members after identification. It never replays interrupted callbacks.
 - Incompatible or quarantined extensions run in isolated cells.
 - Reload publishes the staged replacement registry. A failed extension is reported and removed; a config-loading failure preserves the existing registry.
-- Stock Pig carries no Piglet-specific fused registrations or managed component closure; generic support is inert until a Piglet build/release populates it.
+- Stock Ompig carries no Ompiglet-specific fused registrations or managed component closure; generic support is inert until a Ompiglet build/release populates it.
 
 ## Terms
 
@@ -35,8 +35,8 @@ Return to the [maintainer docs router](README.md).
 | cell | one supervised process hosting one or more extensions |
 | isolated | one extension in one process |
 | packed | compatible same-language factories in one process |
-| release-materialized | prebuilt component stored in a managed Piglet release or `agentEnv` |
-| fused | compatible Go factory linked into a Piglet Binary and registered in-process |
+| release-materialized | prebuilt component stored in a managed Ompiglet release or `agentEnv` |
+| fused | compatible Go factory linked into a Ompiglet Binary and registered in-process |
 | quarantine/fission | contain a failed native cell; diagnose a Node culprit and keep healthy Node members together |
 
 ## Placement summary
@@ -50,22 +50,22 @@ Return to the [maintainer docs router](README.md).
 
 Packing requires a conventional Go, Rust, Python, or Node factory. All exact standalones (including a shebang Node script) stay isolated. A Node cell packs without compiling anything: it caches one copy of the embedded Node runtime plus a manifest naming each member's resolved entry, and reads every member's TS/JS source fresh through the same jiti loader an isolated Node extension uses. The host admits each Node member in configured order over a private startup channel, so `[Node A, Go B, Node C]` starts factories A, B, C while A and C share one bus. Authors do not configure groups.
 
-## Runtime and Piglet artifacts
+## Runtime and Ompiglet artifacts
 
-The same component builder can support runtime cache and Piglet release materialization:
+The same component builder can support runtime cache and Ompiglet release materialization:
 
 ```text
 source extension -> first runtime load -> cached cell
-source extension -> Piglet build      -> locked release/environment component
+source extension -> Ompiglet build      -> locked release/environment component
 ```
 
-A matching prebuilt component can satisfy a Piglet Binary request without rebuilding. Cache reuse is only an optimization; Piglet records preserve exact source/core/toolchain/target/component identity.
+A matching prebuilt component can satisfy a Ompiglet Binary request without rebuilding. Cache reuse is only an optimization; Ompiglet records preserve exact source/core/toolchain/target/component identity.
 
-Compatible Go factories may be fused as an in-process optimization. Fused and subprocess paths must remain observationally equivalent to the current subprocess wire and are governed by D31 plus extension conformance tests. The Piglet plan, not a binary kind or user tier, selects the realization.
+Compatible Go factories may be fused as an in-process optimization. Fused and subprocess paths must remain observationally equivalent to the current subprocess wire and are governed by D31 plus extension conformance tests. The Ompiglet plan, not a binary kind or user tier, selects the realization.
 
 ## Boundaries
 
-Pig owns facts and runtime mechanics:
+Ompig owns facts and runtime mechanics:
 
 - conventional source resolution;
 - placement decisions and reason strings;
@@ -73,7 +73,7 @@ Pig owns facts and runtime mechanics:
 - startup, registration, cancellation, and reload;
 - structured validation/reload reports;
 - release-materialized/fused component support;
-- Piglet Binary signing (`pig piglet keygen`, `--sign-key`) and the local signer trust store (`pig piglet trust`).
+- Ompiglet Binary signing (`ompig ompiglet keygen`, `--sign-key`) and the local signer trust store (`ompig ompiglet trust`).
 
 Consuming products own policy and transport:
 
@@ -84,7 +84,7 @@ Consuming products own policy and transport:
 - build-environment scheduling;
 - artifact provenance policy.
 
-Piglets are Pig-owned composition/build declarations. Product controllers may materialize piglets/resources and invoke Pig validation, but they do not duplicate fields from the conventional source and runtime registration contract.
+Ompiglets are Ompig-owned composition/build declarations. Product controllers may materialize ompiglets/resources and invoke Ompig validation, but they do not duplicate fields from the conventional source and runtime registration contract.
 
 ## Source and tests
 

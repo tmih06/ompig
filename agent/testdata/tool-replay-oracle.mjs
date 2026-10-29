@@ -1,4 +1,4 @@
-// Replay each case's system messages as Pi's _restoreToolsFromTranscript does and report the TypeError message it throws, or "ok". tool_replay_error_test.go compares PiG's ToolReplayError with this report.
+// Replay each case's system messages as Pi's _restoreToolsFromTranscript does and report the TypeError message it throws, or "ok". tool_replay_error_test.go compares Ompig's ToolReplayError with this report.
 // The collection of the tools the branch ever added or removed is the expression of agent-session.ts _restoreToolsFromTranscript (Pi bd3c9b8237); getCurrentTools is the installed Pi's.
 import { readFileSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";

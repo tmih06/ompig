@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type stoppedOracleTimer struct{}
@@ -142,11 +142,11 @@ func TestMainScreenFramesMatchPiOracle(t *testing.T) {
 			if spec.Force {
 				ui.ForceFullRender()
 			}
-			// A step Pi threw on (a line wider than the terminal) must make Pig panic with the same message; the scenario ends there.
+			// A step Pi threw on (a line wider than the terminal) must make Ompig panic with the same message; the scenario ends there.
 			message := renderPanicMessage(ui.Render)
 			if want := sc.Log[step].Error; want != "" || message != "" {
 				if want == "" || !strings.HasPrefix(message, want) {
-					t.Errorf("scenario %d step %d: Pig panicked %q, Pi threw %q", index, step, message, want)
+					t.Errorf("scenario %d step %d: Ompig panicked %q, Pi threw %q", index, step, message, want)
 					failures++
 				}
 				break
@@ -225,7 +225,7 @@ func newManualRenderTUI(out io.Writer, cols, rows int) *TuiMainScreen {
 }
 
 // TestMainScreenFixtureIsCurrent reruns testdata/main-screen-oracle.mjs against the installed Pi and requires the committed fixture to be
-// byte-identical, so the frames Pig is compared with are the pinned version's, not a stale capture.
+// byte-identical, so the frames Ompig is compared with are the pinned version's, not a stale capture.
 func TestMainScreenFixtureIsCurrent(t *testing.T) {
 	t.Parallel()
 	root, err := filepath.EvalSymlinks("../extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent")

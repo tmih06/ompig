@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // agent-session.ts:3591-3609 (reload): `addedDefaultTools` is a local of one reload() call. It reaches _buildRuntime only when

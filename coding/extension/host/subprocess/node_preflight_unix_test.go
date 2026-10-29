@@ -1,4 +1,4 @@
-//go:build unix && !pig_strip_node_extensions
+//go:build unix && !ompig_strip_node_extensions
 
 package subprocess
 
@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestBuilderBuildContextCancelsAndDrainsNodeRuntimePreflight(t *testing.T) {

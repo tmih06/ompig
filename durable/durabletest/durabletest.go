@@ -15,9 +15,9 @@ import (
 	"strings"
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // StorageConformanceAssertions are the checks a conformance case makes. A failing check ends the case.

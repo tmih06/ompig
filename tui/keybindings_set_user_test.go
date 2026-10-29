@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// PiG-only: upstream's keybinding tests build a manager with user bindings but never call setUserBindings afterwards.
+// Ompig-only: upstream's keybinding tests build a manager with user bindings but never call setUserBindings afterwards.
 func TestTUIKeybindingsManagerSetUserBindingsReplacesOverridesAndRebuilds(t *testing.T) {
 	kb := NewTUIKeybindingsManager(nil)
 	if !kb.Matches("\x1b", KBSelectCancel) {

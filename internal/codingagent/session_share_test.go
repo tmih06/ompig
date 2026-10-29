@@ -17,10 +17,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Mirrors upstream test/export-jsonl-share.test.ts "adds presentation data
@@ -156,7 +156,7 @@ func TestBugTranscriptEndsWithTheShareEntry(t *testing.T) {
 	if err := bugHandler(sc); err != nil {
 		t.Fatal(err)
 	}
-	matches, _ := filepath.Glob(filepath.Join(dir, "pig-bug-report-*.zip"))
+	matches, _ := filepath.Glob(filepath.Join(dir, "ompig-bug-report-*.zip"))
 	if len(matches) != 1 {
 		t.Fatalf("archives = %v", matches)
 	}
@@ -180,7 +180,7 @@ func shareTestSession(t *testing.T, marker string) *Session {
 func TestShareSessionUploadsJSONLWithPrivacyNotice(t *testing.T) {
 	var uploaded []byte
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
-		if request.URL.Path != "/v1/artifacts" || request.URL.Query().Get("visibility") != "unlisted" || request.URL.Query().Get("title") != "PiG session" {
+		if request.URL.Path != "/v1/artifacts" || request.URL.Query().Get("visibility") != "unlisted" || request.URL.Query().Get("title") != "Ompig session" {
 			t.Errorf("request URL = %s", request.URL)
 		}
 		if request.Method != http.MethodPost {
@@ -202,7 +202,7 @@ func TestShareSessionUploadsJSONLWithPrivacyNotice(t *testing.T) {
 
 	var statuses []string
 	state := ShareState{SystemPrompt: "SYSTEM", Tools: []ShareTool{{Name: "read", Description: "Read a file"}}}
-	result, err := shareSession(t.Context(), shareTestSession(t, "SHARE-MARKER"), state, server.URL+"/v1/artifacts?visibility=unlisted&title=PiG+session", server.Client(), func(message string) {
+	result, err := shareSession(t.Context(), shareTestSession(t, "SHARE-MARKER"), state, server.URL+"/v1/artifacts?visibility=unlisted&title=Ompig+session", server.Client(), func(message string) {
 		statuses = append(statuses, message)
 	})
 	if err != nil {
@@ -340,7 +340,7 @@ func TestUploadShareArtifactHonorsCancellationAndCanonicalOrigin(t *testing.T) {
 	t.Run("cancelled", func(t *testing.T) {
 		ctx, cancel := context.WithCancel(t.Context())
 		cancel()
-		_, err := uploadShareArtifact(ctx, http.DefaultClient, "https://pi-in-go.dev/api/share", path)
+		_, err := uploadShareArtifact(ctx, http.DefaultClient, "https://ompig.dev/api/share", path)
 		if !errors.Is(err, context.Canceled) {
 			t.Fatalf("err = %v", err)
 		}
@@ -367,12 +367,12 @@ func TestShareHandlerUsesExplicitGatewayOperation(t *testing.T) {
 			t.Fatalf("share args = %p %+v", got, state)
 		}
 		showStatus(sharePrivacyNotice)
-		return "Share URL: https://pi-in-go.dev/session/p_test", nil
+		return "Share URL: https://ompig.dev/session/p_test", nil
 	}
 	if err := shareHandler(sc); err != nil {
 		t.Fatal(err)
 	}
-	want := sharePrivacyNotice + "\nShare URL: https://pi-in-go.dev/session/p_test\n"
+	want := sharePrivacyNotice + "\nShare URL: https://ompig.dev/session/p_test\n"
 	if out.String() != want {
 		t.Fatalf("output = %q, want %q", out.String(), want)
 	}
@@ -513,12 +513,12 @@ func TestShareHandlerSharesInMemorySession(t *testing.T) {
 	shared := false
 	sc.ShareSession = func(got *Session, _ ShareState, _ func(string)) (string, error) {
 		shared = got == session
-		return "Share URL: https://pi-in-go.dev/session/p_memory", nil
+		return "Share URL: https://ompig.dev/session/p_memory", nil
 	}
 	if err := shareHandler(sc); err != nil {
 		t.Fatal(err)
 	}
-	if !shared || out.String() != "Share URL: https://pi-in-go.dev/session/p_memory\n" {
+	if !shared || out.String() != "Share URL: https://ompig.dev/session/p_memory\n" {
 		t.Fatalf("shared = %v, output = %q", shared, out.String())
 	}
 }

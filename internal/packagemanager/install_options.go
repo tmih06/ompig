@@ -9,7 +9,7 @@ type installOptions struct {
 
 // WithIgnoreScripts runs the package manager with `--ignore-scripts`, so no lifecycle script of the installed Package or of its dependencies runs during the install. Npm, pnpm and bun accept the same flag.
 //
-// pig additive (D194): Piglet resolution installs Packages without running lifecycle scripts unless the user opts in.
+// ompig additive (D194): Ompiglet resolution installs Packages without running lifecycle scripts unless the user opts in.
 func WithIgnoreScripts() InstallOption {
 	return func(options *installOptions) { options.ignoreScripts = true }
 }

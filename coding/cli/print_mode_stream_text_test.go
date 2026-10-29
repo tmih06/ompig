@@ -5,12 +5,12 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // print-mode.ts:146 console.error(assistantMsg.errorMessage) and :151 writeRawStdout(`${content.text}\n`) write a JavaScript string, so Node sends a lone
-// surrogate as U+FFFD (`node -e "console.error('e\ud83d')"` prints 65 ef bf bd 0a). PiG carries the unit as WTF-8 (ED A0 BD), as a String.slice of an error
+// surrogate as U+FFFD (`node -e "console.error('e\ud83d')"` prints 65 ef bf bd 0a). Ompig carries the unit as WTF-8 (ED A0 BD), as a String.slice of an error
 // body leaves it (ai TruncateErrorText, the Anthropic token-exchange body), and text mode must convert it as Node does.
 func TestPrintModeResultWritesALoneSurrogateAsNodeDoes(t *testing.T) {
 	var stdout, stderr bytes.Buffer

@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // txProxy is durable.Tx over one extension transaction (ABI section 8): every method is one request on the channel. The core

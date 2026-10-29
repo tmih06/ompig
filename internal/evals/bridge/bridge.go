@@ -1,9 +1,9 @@
 // Package bridge connects the eval harness to the extension that runs inside the agent process under test.
 //
 // Pi's harness registers an inline extension and custom tools inside its own process (harness.ts:287-301, 345-355,
-// createAgentSessionFromServices) and keeps the API key in that process's memory. A PiG Session runs as a separate
-// pig process, so the harness serves these over a Unix socket: the system prompt transform, the custom tool executions
-// and the API key. The extension binary (cmd/pig-eval-extension) is the client.
+// createAgentSessionFromServices) and keeps the API key in that process's memory. A Ompig Session runs as a separate
+// ompig process, so the harness serves these over a Unix socket: the system prompt transform, the custom tool executions
+// and the API key. The extension binary (cmd/ompig-eval-extension) is the client.
 package bridge
 
 import (
@@ -18,14 +18,14 @@ import (
 // Environment names the variables the harness sets for the extension process.
 const (
 	// EnvSocket is the Unix socket the harness serves.
-	EnvSocket = "PIG_EVAL_BRIDGE_SOCKET"
+	EnvSocket = "OMPIG_EVAL_BRIDGE_SOCKET"
 	// EnvSpec is the path of the JSON Spec file.
-	EnvSpec = "PIG_EVAL_BRIDGE_SPEC"
+	EnvSpec = "OMPIG_EVAL_BRIDGE_SPEC"
 )
 
-// ExtensionName is the registered name of the bridge extension. PiG requires it to equal the extension executable's file
+// ExtensionName is the registered name of the bridge extension. Ompig requires it to equal the extension executable's file
 // name (Pi's inline extension is named "eval-system-prompt-transform", harness.ts:292).
-const ExtensionName = "pig-eval-extension"
+const ExtensionName = "ompig-eval-extension"
 
 // Tool declares one custom tool the extension registers.
 type Tool struct {

@@ -5,10 +5,10 @@
 //! connection and again after an eviction, and frontend-only annotations
 //! only while a frontend draws.
 
-use pig_sdk::kit::{
+use ompig_sdk::kit::{
     Container, Event, EventKind, Image, Lines, SelectItem, SelectList, Spacer, Text, View,
 };
-use pig_sdk::{
+use ompig_sdk::{
     Extension, JsString, RemoteComponentResult, ToolDefinition, ToolRenderResult,
     ToolRendererSet, ToolResult, ViewComponent, empty_schema,
 };
@@ -67,7 +67,7 @@ struct Runtime {
 
 impl Runtime {
     fn start(name: &str, ext: Extension, state: Value) -> Self {
-        let root = std::env::temp_dir().join(format!("pig-kit-{name}-{}", std::process::id()));
+        let root = std::env::temp_dir().join(format!("ompig-kit-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&root);
         std::fs::create_dir(&root).unwrap();
         let socket = root.join("sock");

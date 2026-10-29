@@ -7,7 +7,7 @@ import (
 	"image/png"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // BenchmarkProcessImagePassThrough measures ProcessImage on a 1600x1000 PNG (about 2.6 MB) that is already within the limits,

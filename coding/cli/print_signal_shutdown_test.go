@@ -13,15 +13,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestPrintModeSignalDeliversSessionShutdown pins that a termination signal
 // reaches extensions as session_shutdown before print mode exits. Pi 1.0.3
 // print-mode.ts registerSignalHandlers awaits disposeRuntime(), which emits
 // session_shutdown (agent-session-runtime.ts dispose), and only then calls
-// process.exit(143|129). Pig's root signal handler cancelled the process
+// process.exit(143|129). Ompig's root signal handler cancelled the process
 // context, which owns the extension subprocesses, while print mode was still
 // disposing, so extensions were killed before the event reached them.
 func TestPrintModeSignalDeliversSessionShutdown(t *testing.T) {
@@ -46,14 +46,14 @@ func TestPrintModeSignalDeliversSessionShutdown(t *testing.T) {
 			cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-session", "-e", fixture, "--print", "Run: sleep for a while")
 			cmd.Dir = workDir
 			cmd.Env = append(os.Environ(),
-				"PIG_HOME="+t.TempDir(),
-				"PIG_TEST_FAUX=1",
-				"PIG_TEST_FAUX_SCENARIO=parity-basic",
-				"PIG_TEST_EVENT_LOG="+eventLog,
+				"OMPIG_HOME="+t.TempDir(),
+				"OMPIG_TEST_FAUX=1",
+				"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
+				"OMPIG_TEST_EVENT_LOG="+eventLog,
 			)
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			defer func() { _ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL) }()
 

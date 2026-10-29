@@ -65,7 +65,7 @@ Commit `167ecfbef` (`feat(ai): implement the classifiers, the shared OAuth callb
 - `llama_cpp_classify_upstream_test.go`: `maps.Copy` (`go fix`); no input or expectation changed.
 - `TestOpenRouterCancelWaitRespectsClaim` removed: the internals it drove are the shared callback server now, covered by the ported `TestOAuthCallbackServerUpstream`.
 
-Verification (isolated HOME, PIG_HOME and PIG_CODING_AGENT_DIR; real toolchain on PATH):
+Verification (isolated HOME, OMPIG_HOME and OMPIG_CODING_AGENT_DIR; real toolchain on PATH):
 
 - `go test -race ./ai/... ./agent/... ./internal/codingagent/... ./coding/... ./internal/... ./extensions/... ./cmd/...`: green apart from the environment failures below.
 - Load: `GOMAXPROCS=4 taskset -c 0-3` with four CPU burners pinned to the same cores, `-race -count=24` over the classifier, callback-server, OAuth and ChatGPT tests.
@@ -79,7 +79,7 @@ Environment failures, not from this lane: `internal/experimental` `TestPinnedUps
 - `.upstream/current` still pins 0.87.1, so the three new `// upstream:` markers (`system-one-shared.ts`, `llama-cpp-classify.ts`) cannot resolve in `make divergence-guard` until `make upstream-mirror` moves the mirror. `oauthCallbackHeaderTimeout` (10s `ReadHeaderTimeout`; Node has its own default, Go has none) replaces the two stale baseline entries for the OpenRouter and Radius servers with one entry.
 - `ai/classifier_models_generated.go` comes from `go run ./cmd/gen-classifier-models -src <pi-ai 0.99.1 dist>/models.generated.js -out ai/classifier_models_generated.go`. `automation/gen/generate-model-catalogs.sh` is untouched; the lead wires the generator in.
 - `ClassifierContext.State` is a `JsonObject` (a Go map): multi-key state is rendered in sorted key order, JS uses insertion order.
-- Sign in with ChatGPT needs a device ID: `OAuthAuth.Login` and `Models.Login` take `LoginOptions{GetDeviceID}` and `OAuthLoginCallbacks` has `GetDeviceID`. Nothing in the app supplies one yet (settings `getOrCreateDeviceId`, `cmd/pig/auth_commands.go`, interactive login belong to later families), so `/login openai` reports that a device ID is required.
+- Sign in with ChatGPT needs a device ID: `OAuthAuth.Login` and `Models.Login` take `LoginOptions{GetDeviceID}` and `OAuthLoginCallbacks` has `GetDeviceID`. Nothing in the app supplies one yet (settings `getOrCreateDeviceId`, `cmd/ompig/auth_commands.go`, interactive login belong to later families), so `/login openai` reports that a device ID is required.
 - `ai.BuiltinProviders`, `BuiltinModels` and `BuiltinProvider` are a minimal assembly for the classifier catalog and chat routing. Family 6 may replace them.
 - Not in this lane: `model-runtime-classifiers` and `llama-extension` (coding-agent, family 6); `openai-responses-usage-limit` and the retry test (family 2). Shared file with family 2: `ai/openai_responses.go` (API key resolved before the payload is built; `isChatGPTSignIn` omissions).
-- `test/parity/testdata/provider-models/pig/main.go` still uses the old `Models []*ai.Model` (family 1 carry-over).
+- `test/parity/testdata/provider-models/ompig/main.go` still uses the old `Models []*ai.Model` (family 1 carry-over).

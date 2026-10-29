@@ -13,7 +13,7 @@ func TestRustPackedRunnerUsesSDKTransportForLoadFailure(t *testing.T) {
 	if strings.Contains(source, "std::os::unix") {
 		t.Fatal("generated runner bypasses the SDK transport with a Unix-only API")
 	}
-	if !strings.Contains(source, "pig_sdk::report_load_failure(&sock)") {
+	if !strings.Contains(source, "ompig_sdk::report_load_failure(&sock)") {
 		t.Fatal("generated runner does not report the failed member through its SDK socket")
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	subprocess "github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	subprocess "github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestHost_LoadErrors_RetainedForVisibility verifies the error-visibility
@@ -30,7 +30,7 @@ func TestHost_LoadErrors_RetainedForVisibility(t *testing.T) {
 	loaded, errs := h.LoadAll(ctx, []subprocess.ExtConfig{{
 		Name:    "broken",
 		Enabled: true,
-		Source:  "/nonexistent/pig-extension-path-xyz",
+		Source:  "/nonexistent/ompig-extension-path-xyz",
 	}})
 	if len(errs) == 0 {
 		t.Fatalf("expected LoadAll to error on a nonexistent source; loaded=%d", len(loaded))

@@ -2,7 +2,7 @@
 # Replay a whole-repository gate's passing result when nothing it reads has changed.
 # Usage: cached-gate.sh <name> [--out <dir>]... -- <command...>
 #
-# The key hashes the go toolchain version, the command, the gate's GOFLAGS/GOOS/GOARCH/CGO_ENABLED/GOWORK, the pinned upstream mirror version, every tracked file's index entry, the working tree's difference from the index, and every untracked, unignored file's content. A gate keyed this way reads nothing else: Go sources, ledgers, lockfiles and the upstream mirror are all tracked or pinned. On a hit the stored output is printed again, the stored --out directories are restored, and the script exits 0. Only passing runs are stored, so a failure always runs again and reports paths of the current checkout. The store is $PIG_CACHE_HOME/pig-gates (default ~/.cache), shared by every checkout on the host. CI (CI set) and PIG_GATE_CACHE=0 always run the command.
+# The key hashes the go toolchain version, the command, the gate's GOFLAGS/GOOS/GOARCH/CGO_ENABLED/GOWORK, the pinned upstream mirror version, every tracked file's index entry, the working tree's difference from the index, and every untracked, unignored file's content. A gate keyed this way reads nothing else: Go sources, ledgers, lockfiles and the upstream mirror are all tracked or pinned. On a hit the stored output is printed again, the stored --out directories are restored, and the script exits 0. Only passing runs are stored, so a failure always runs again and reports paths of the current checkout. The store is $OMPIG_CACHE_HOME/ompig-gates (default ~/.cache), shared by every checkout on the host. CI (CI set) and OMPIG_GATE_CACHE=0 always run the command.
 set -euo pipefail
 
 name=${1:?usage: cached-gate.sh <name> [--out <dir>]... -- <command...>}
@@ -17,7 +17,7 @@ done
 [[ "${1:-}" == -- ]] || { echo "usage: cached-gate.sh <name> [--out <dir>]... -- <command...>" >&2; exit 2; }
 shift
 
-if [[ -n "${CI:-}" || "${PIG_GATE_CACHE:-1}" == 0 ]]; then
+if [[ -n "${CI:-}" || "${OMPIG_GATE_CACHE:-1}" == 0 ]]; then
   exec "$@"
 fi
 
@@ -35,7 +35,7 @@ key=$(
     git ls-files --others --exclude-standard -z -- . "${excludes[@]}" | xargs -0 -r "${hasher[@]}"
   } | "${hasher[@]}" | cut -c1-40
 )
-store="${PIG_CACHE_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}}/pig-gates/$name"
+store="${OMPIG_CACHE_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}}/ompig-gates/$name"
 entry="$store/$key"
 
 if [[ -f "$entry/ok" ]]; then
@@ -46,7 +46,7 @@ if [[ -f "$entry/ok" ]]; then
     tar -C "${outs[i]}" -xf "$entry/out-$i.tar"
   done
   touch "$entry"
-  echo "[cached-gate] $name: unchanged inputs; replayed the passing run from $(date -r "$entry/log" -u +%FT%TZ) (PIG_GATE_CACHE=0 reruns)" >&2
+  echo "[cached-gate] $name: unchanged inputs; replayed the passing run from $(date -r "$entry/log" -u +%FT%TZ) (OMPIG_GATE_CACHE=0 reruns)" >&2
   exit 0
 fi
 

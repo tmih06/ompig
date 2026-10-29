@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // usage.ts:7-12 types both ledgers as Record<string, JsonRepresentation<Usage>>: UsageState.Models and .Tools hold the ai.Usage itself, so the

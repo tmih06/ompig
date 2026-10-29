@@ -5,9 +5,9 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A message entry appends what its MarshalJSON writes in the JSON.stringify mode: built in memory with a string, null or non-string

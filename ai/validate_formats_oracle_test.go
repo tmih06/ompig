@@ -10,8 +10,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/internal/typebox"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/internal/typebox"
 )
 
 type formatProbe struct {
@@ -108,7 +108,7 @@ func TestTypeboxFormatsMatchPiOnSeededStrings(t *testing.T) {
 		}
 		if got != expected[i] {
 			if differing++; differing <= 12 {
-				t.Errorf("format %s %q: Pig %v, typebox %v", probe.Format, probe.Value, got, expected[i])
+				t.Errorf("format %s %q: Ompig %v, typebox %v", probe.Format, probe.Value, got, expected[i])
 			}
 		}
 	}

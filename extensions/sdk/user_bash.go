@@ -7,7 +7,7 @@ import (
 	"maps"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // requestUserBashExec (host→ext) runs the exec of the BashOperations a user_bash reply named; notifyBashOperationsRelease (host→ext) drops that object.
@@ -85,7 +85,7 @@ func (e *Extension) userBashEventResult(value any) (any, error) {
 	result = maps.Clone(result)
 	exitCode, present := result["exitCode"]
 	undefined := present && exitCode == nil
-	object["_pigUserBashExitCodeUndefined"] = undefined
+	object["_ompigUserBashExitCodeUndefined"] = undefined
 	if undefined {
 		delete(result, "exitCode")
 	}

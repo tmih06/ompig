@@ -6,7 +6,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/profiling"
+	"github.com/tmih06/ompig/internal/profiling"
 )
 
 type modelsFileReload struct {

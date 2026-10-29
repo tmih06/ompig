@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestDriveConfigSelectorParksCursorAfterClose(t *testing.T) {
@@ -79,8 +79,8 @@ func TestCollectConfigResourceItems_IncludesAutoAndExplicitResolvedEntries(t *te
 		}
 	}
 
-	projectAuto := filepath.Join(cwd, ".pig", "prompts", "project-auto.md")
-	projectLocal := filepath.Join(cwd, ".pig", "prompts", "project-local.md")
+	projectAuto := filepath.Join(cwd, ".ompig", "prompts", "project-auto.md")
+	projectLocal := filepath.Join(cwd, ".ompig", "prompts", "project-local.md")
 	userAuto := filepath.Join(agentDir, "prompts", "user-auto.md")
 	userLocal := filepath.Join(agentDir, "prompts", "user-local.md")
 	projectAgentSkill := filepath.Join(cwd, ".agents", "skills", "project-skill", "SKILL.md")
@@ -95,7 +95,7 @@ func TestCollectConfigResourceItems_IncludesAutoAndExplicitResolvedEntries(t *te
 	mustWriteFile(filepath.Join(agentDir, "settings.json"), `{
   "prompts": ["prompts/user-local.md", "-prompts/user-local.md", "-prompts/user-auto.md"]
 }`)
-	mustWriteFile(filepath.Join(cwd, ".pig", "settings.json"), `{
+	mustWriteFile(filepath.Join(cwd, ".ompig", "settings.json"), `{
   "prompts": ["prompts/project-local.md", "-prompts/project-local.md"]
 }`)
 
@@ -154,8 +154,8 @@ func TestCollectConfigResourceItems_IncludesAutoAndExplicitResolvedEntries(t *te
 
 func TestConfigSelectorDisablesEnabledMissingPackageMember(t *testing.T) {
 	cwd, agentDir, packageRoot := t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"pkg","pi":{"extensions":["extensions/missing-extension"]}}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -165,14 +165,14 @@ func TestConfigSelectorDisablesEnabledMissingPackageMember(t *testing.T) {
 	}
 
 	// Upstream skips a declared member that matches nothing, so startup
-	// proceeds; pig config still lists it so it can be disabled.
+	// proceeds; ompig config still lists it so it can be disabled.
 	if err := startupPackageValidationError(cwd, settings); err != nil {
 		t.Fatalf("missing member blocked startup: %v", err)
 	}
 
 	selector, err := newConfigSelector(cwd, agentDir, settings)
 	if err != nil {
-		t.Fatalf("pig config refused recovery inventory: %v", err)
+		t.Fatalf("ompig config refused recovery inventory: %v", err)
 	}
 	if rendered := strings.Join(selector.Render(100), "\n"); !strings.Contains(rendered, "missing-extension") || !strings.Contains(rendered, "missing") {
 		t.Fatalf("selector did not show enabled missing extension:\n%s", rendered)
@@ -191,14 +191,14 @@ func TestConfigSelectorDisablesEnabledMissingPackageMember(t *testing.T) {
 
 func TestProjectConfigPackageOverrideIsDeltaOverInheritedGlobalPackage(t *testing.T) {
 	cwd, agentDir, packageRoot := t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	for path, content := range map[string]string{
 		"package.json":                  `{"name":"pkg","pi":{"extensions":["extensions/*"],"prompts":["prompts/*.md"]}}`,
 		"extensions/alpha/go.mod":       "module example.com/alpha\n\ngo 1.26\n",
-		"extensions/alpha/extension.go": "package alpha\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
+		"extensions/alpha/extension.go": "package alpha\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
 		"extensions/beta/go.mod":        "module example.com/beta\n\ngo 1.26\n",
-		"extensions/beta/extension.go":  "package beta\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
+		"extensions/beta/extension.go":  "package beta\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n",
 		"prompts/review.md":             "review",
 	} {
 		if err := os.MkdirAll(filepath.Dir(filepath.Join(packageRoot, path)), 0o755); err != nil {
@@ -309,7 +309,7 @@ func TestProjectDeltaBindsNormalizedRelativeGlobalPackage(t *testing.T) {
 	if len(projectPackages) != 1 {
 		t.Fatalf("project packages = %#v", projectPackages)
 	}
-	projectSource, err := filepath.Rel(filepath.Join(cwd, ".pig"), packageRoot)
+	projectSource, err := filepath.Rel(filepath.Join(cwd, ".ompig"), packageRoot)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -336,8 +336,8 @@ func TestProjectPackageDeltaDrivesStartupStatusAndResourceCollectors(t *testing.
 			t.Fatal(err)
 		}
 	}
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	files := map[string]string{
 		"package.json":     `{"name":"pkg","pi":{"extensions":["extensions/*"],"skills":["skills/*"],"prompts":["prompts/*.md"],"themes":["themes/*.json"]}}`,
@@ -347,7 +347,7 @@ func TestProjectPackageDeltaDrivesStartupStatusAndResourceCollectors(t *testing.
 	}
 	for _, name := range []string{"alpha", "beta"} {
 		files["extensions/"+name+"/go.mod"] = "module example.com/" + name + "\n\ngo 1.26\n"
-		files["extensions/"+name+"/extension.go"] = "package " + name + "\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n"
+		files["extensions/"+name+"/extension.go"] = "package " + name + "\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n"
 	}
 	for name, content := range files {
 		path := filepath.Join(packageRoot, filepath.FromSlash(name))
@@ -459,7 +459,7 @@ func TestProjectPackageDeltaPreservesStrictManifestValidation(t *testing.T) {
 			if err := settings.SetPackages([]codingagent.PackageSource{{Source: packageRoot}}); err != nil {
 				t.Fatal(err)
 			}
-			projectSource, err := filepath.Rel(filepath.Join(cwd, ".pig"), packageRoot)
+			projectSource, err := filepath.Rel(filepath.Join(cwd, ".ompig"), packageRoot)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -483,10 +483,10 @@ func TestProjectPackageDeltaPreservesStrictManifestValidation(t *testing.T) {
 func TestProjectConfigTopLevelOverridesPersistExactScopeShape(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
-	projectPath := filepath.Join(cwd, ".pig", "prompts", "local.md")
+	projectPath := filepath.Join(cwd, ".ompig", "prompts", "local.md")
 	projectItem := &tui.ResourceItem{
 		Path: projectPath, ResourceType: tui.ResourcePrompts, Scope: "project",
-		Origin: "top-level", Source: "local", BaseDir: filepath.Join(cwd, ".pig"),
+		Origin: "top-level", Source: "local", BaseDir: filepath.Join(cwd, ".ompig"),
 	}
 	for _, state := range []string{"unload", "unload", "load"} {
 		if err := applyProjectConfigOverride(cwd, settings, projectItem, state); err != nil {
@@ -531,8 +531,8 @@ func TestProjectConfigTopLevelOverridesPersistExactScopeShape(t *testing.T) {
 
 func TestProjectConfigCyclesInheritedMissingMemberToUnload(t *testing.T) {
 	cwd, agentDir, packageRoot := t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"pkg","pi":{"extensions":["extensions/missing"]}}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -568,8 +568,8 @@ func TestProjectConfigCyclesInheritedMissingMemberToUnload(t *testing.T) {
 
 func TestRunConfigCommandLocalRequiresTrustedProject(t *testing.T) {
 	home, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Chdir(cwd)
 	_, stderr, code := captureStdoutStderr(t, func() int {
 		return runConfigCommand([]string{"--local", "--no-approve"})
@@ -584,8 +584,8 @@ func TestRunConfigCommandLocalRequiresTrustedProject(t *testing.T) {
 // and an unknown option is named in the error.
 func TestRunConfigCommandFlagsMatchPi(t *testing.T) {
 	home, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Chdir(cwd)
 	stdout, _, code := captureStdoutStderr(t, func() int { return runConfigCommand([]string{"--bogus", "--help"}) })
 	if code != 0 || !strings.Contains(stdout, "-na, --no-approve") {

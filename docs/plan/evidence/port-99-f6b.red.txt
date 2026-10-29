@@ -13,7 +13,7 @@ $ go test ./coding -run TestModelRuntimeImagesUpstream -count=1
     --- FAIL: TestModelRuntimeImagesUpstream/does_not_add_image_generation_to_composed_chat-only_providers (0.00s)
         model_runtime_images_upstream_test.go:241: anthropic = <nil>
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.056s
+FAIL	github.com/tmih06/ompig/coding	0.056s
 FAIL
 
 $ go test ./internal/codingagent/llama -count=1
@@ -24,13 +24,13 @@ $ go test ./internal/codingagent/llama -count=1
 --- FAIL: TestRefreshModelsExposesUnloadedPresetsOnlyWhenRouterAutoloadIsEnabled (0.00s)
     provider_test.go:307: cached = [[preset openai-completions]], want [[preset openai-completions] [preset llama-cpp-classify]]
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent/llama	2.517s
+FAIL	github.com/tmih06/ompig/internal/codingagent/llama	2.517s
 FAIL
 
-$ go test ./cmd/pig -run TestModelResolverDefaultsUpstream -count=1
+$ go test ./cmd/ompig -run TestModelResolverDefaultsUpstream -count=1
 --- FAIL: TestModelResolverDefaultsUpstream (0.00s)
     --- FAIL: TestModelResolverDefaultsUpstream/openai_defaults_track_current_models (0.00s)
         model_resolver_defaults_upstream_test.go:29: openai-codex default="gpt-5.5", want "gpt-6.1-sol"
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/cmd/pig	0.043s
+FAIL	github.com/tmih06/ompig/cmd/ompig	0.043s
 FAIL

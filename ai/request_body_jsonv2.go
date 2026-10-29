@@ -13,14 +13,14 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // requestBodyOptions are encoding/json's own options without its two JavaScript-unsafe escapes, which JSON.stringify does not make.
 var requestBodyOptions = jsonv2.JoinOptions(json.DefaultOptionsV1(), jsontext.EscapeForHTML(false), jsontext.EscapeForJS(false))
 
 // maxKeptRequestScratch bounds the encode buffer kept between requests: a larger one is dropped with the request that grew it.
-// pig additive (D112): Pi keeps no encode buffer between JSON.stringify calls; a dropped buffer is made again and encodes the same bytes.
+// ompig additive (D112): Pi keeps no encode buffer between JSON.stringify calls; a dropped buffer is made again and encodes the same bytes.
 const maxKeptRequestScratch = 4 << 20
 
 // requestScratch is the buffer requests are encoded into. The encoder writes straight into a *bytes.Buffer, and jsonv2.Marshal's own buffer

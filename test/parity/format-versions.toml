@@ -77,7 +77,7 @@ owner = "dependencySource"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies the exact upstream npm dependency release whose source and archive hashes are verified; it does not select a Pig-owned schema reader."
+rationale = "Identifies the exact upstream npm dependency release whose source and archive hashes are verified; it does not select a Ompig-owned schema reader."
 
 [[fields]]
 id = "automation/portlens/ledger.go#PinLedger.Version:go:-"
@@ -86,7 +86,7 @@ owner = "PinLedger"
 field = "Version"
 wire_name = "-"
 classification = "upstream"
-rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Pig-owned format."
+rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Ompig-owned format."
 
 [[fields]]
 id = "automation/portlens/overview.go#LedgerSummary.Version:go:-"
@@ -95,7 +95,7 @@ owner = "LedgerSummary"
 field = "Version"
 wire_name = "-"
 classification = "upstream"
-rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Pig-owned format."
+rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Ompig-owned format."
 
 [[fields]]
 id = "automation/portlens/portmap.go#ledgerData.Version:json:version"
@@ -104,7 +104,7 @@ owner = "ledgerData"
 field = "Version"
 wire_name = "version"
 classification = "upstream"
-rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Pig-owned format."
+rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Ompig-owned format."
 
 [[fields]]
 id = "automation/portlens/repo.go#Pin.Version:json:version"
@@ -113,7 +113,7 @@ owner = "Pin"
 field = "Version"
 wire_name = "version"
 classification = "upstream"
-rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Pig-owned format."
+rationale = "The pinned upstream Pi version the PortLens report tool shows; it names the exact upstream release and is not a Ompig-owned format."
 
 [[fields]]
 id = "bench/durableperf/main.go#result.Version:json:version"
@@ -122,7 +122,7 @@ owner = "result"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Names the runtime release that produced a durable-bench sample (\"pig\" here, the pi-durable release in durable/interop/bench.mjs); no reader selects a schema by it."
+rationale = "Names the runtime release that produced a durable-bench sample (\"ompig\" here, the pi-durable release in durable/interop/bench.mjs); no reader selects a schema by it."
 
 [[fields]]
 id = "bench/k8s/cmd/k8sbench/arms.go#armPin.Version:json:version"
@@ -131,7 +131,7 @@ owner = "armPin"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "The npm package version an arms.lock arm pins for an npm install; it identifies released content and does not select a Pig schema reader."
+rationale = "The npm package version an arms.lock arm pins for an npm install; it identifies released content and does not select a Ompig schema reader."
 
 [[fields]]
 id = "bench/k8s/cmd/k8sbench/bundle.go#const.nodeVersion:go:-"
@@ -140,7 +140,7 @@ owner = "<package>"
 field = "nodeVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
 id = "chord/host/contract.go#Contract.Version:go:-"
@@ -149,7 +149,7 @@ owner = "Contract"
 field = "Version"
 wire_name = "-"
 classification = "upstream"
-rationale = "pi-chord ContractBase.version (packages/chord/src/contract.ts): the version a contract is declared with, checked by checkHeader as a positive integer; the application owns it, not Pig."
+rationale = "pi-chord ContractBase.version (packages/chord/src/contract.ts): the version a contract is declared with, checked by checkHeader as a positive integer; the application owns it, not Ompig."
 
 [[fields]]
 id = "chord/host/contract.go#Description.Version:go:-"
@@ -185,7 +185,7 @@ owner = "ResourceDeclaration"
 field = "Version"
 wire_name = "-"
 classification = "upstream"
-rationale = "pi-chord resource declaration version (packages/chord/src/declare.ts:12): declared by the application's object; a bump replaces the resource at the next reload. The application owns it, not Pig."
+rationale = "pi-chord resource declaration version (packages/chord/src/declare.ts:12): declared by the application's object; a bump replaces the resource at the next reload. The application owns it, not Ompig."
 
 [[fields]]
 id = "chord/host/object.go#StateOptions.Version:go:-"
@@ -203,7 +203,7 @@ owner = "<package>"
 field = "ProtocolVersion"
 wire_name = "-"
 classification = "upstream"
-rationale = "pi-chord PROTOCOL_VERSION (packages/chord/src/wire.ts:24), announced in hello; peers of another version close the link. Pig speaks 2 while the pinned Pi speaks 4: protocols 3 and 4 are the owner-approved 0.5.0 Chord exception finished in 0.5.1."
+rationale = "pi-chord PROTOCOL_VERSION (packages/chord/src/wire.ts:24), announced in hello; peers of another version close the link. Ompig speaks 2 while the pinned Pi speaks 4: protocols 3 and 4 are the owner-approved 0.5.0 Chord exception finished in 0.5.1."
 
 [[fields]]
 id = "chord/sqlite/migrations.go#SqliteMigration.Version:go:-"
@@ -221,7 +221,7 @@ owner = "ModelDataManifest"
 field = "SchemaVersion"
 wire_name = "schemaVersion"
 classification = "upstream"
-rationale = "Reads the exact Pi model-data manifest field from packages/ai/scripts/model-data.ts:10-15; this is not a Pig-owned format."
+rationale = "Reads the exact Pi model-data manifest field from packages/ai/scripts/model-data.ts:10-15; this is not a Ompig-owned format."
 
 [[fields]]
 id = "cmd/check-model-data/model_data.go#const.ModelDataSchemaVersion:go:-"
@@ -260,13 +260,13 @@ classification = "upstream"
 rationale = "Represents the exact upstream-compatible --version CLI action, not a schema discriminator."
 
 [[fields]]
-id = "coding/cli/main.go#const.PigVersion:go:-"
+id = "coding/cli/main.go#const.OmpigVersion:go:-"
 path = "coding/cli/main.go"
 owner = "<package>"
-field = "PigVersion"
+field = "OmpigVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "Identifies the running Pig release."
+rationale = "Identifies the running Ompig release."
 
 [[fields]]
 id = "coding/cli/main.go#const.UpstreamPackageVersion:go:-"
@@ -293,7 +293,7 @@ owner = "<package>"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Aliases coding.Version (in turn internal/coding/pigversion/pigversion.go's Version), the combined Pig+upstream release string shown to users."
+rationale = "Aliases coding.Version (in turn internal/coding/pigversion/pigversion.go's Version), the combined Ompig+upstream release string shown to users."
 
 [[fields]]
 id = "coding/cli/package_publish.go#publishableManifest.Version:json:version"
@@ -302,7 +302,7 @@ owner = "publishableManifest"
 field = "Version"
 wire_name = "version"
 classification = "external"
-rationale = "Reads the version of a Package's own npm package.json before it is published. npm owns that manifest and its version grammar; PiG selects no schema reader from it."
+rationale = "Reads the version of a Package's own npm package.json before it is published. npm owns that manifest and its version grammar; Ompig selects no schema reader from it."
 
 [[fields]]
 id = "coding/extension/host/subprocess/builder_node.go#const.minimumNodeRuntimeVersion:go:-"
@@ -329,7 +329,7 @@ owner = "HostInfo"
 field = "Version"
 wire_name = "-"
 classification = "upstream"
-rationale = "Pi's VERSION from config.ts, passed to extension processes; it carries the exact upstream package version and is not a Pig-owned format."
+rationale = "Pi's VERSION from config.ts, passed to extension processes; it carries the exact upstream package version and is not a Ompig-owned format."
 
 [[fields]]
 id = "coding/extension/host/subprocess/protocol.go#RegisterPayload.Version:json:version"
@@ -338,7 +338,7 @@ owner = "RegisterPayload"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
 id = "coding/extension/host/subprocess/terminal_capabilities_env.go#const.productVersionEnv:go:-"
@@ -347,7 +347,7 @@ owner = "<package>"
 field = "productVersionEnv"
 wire_name = "-"
 classification = "release-content"
-rationale = "Names the environment variable that carries PiG's composite release version to a Node extension process for its user agent. It identifies released content and selects no Pig schema reader."
+rationale = "Names the environment variable that carries Ompig's composite release version to a Node extension process for its user agent. It identifies released content and selects no Ompig schema reader."
 
 [[fields]]
 id = "coding/extension/host/tsruntime/lock.go#LockEntry.Version:go:-"
@@ -356,7 +356,7 @@ owner = "LockEntry"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "The pinned slot-runtime release (for example the Bun release) a lock entry downloads and verifies by SHA-256; it identifies released content and selects no Pig schema reader."
+rationale = "The pinned slot-runtime release (for example the Bun release) a lock entry downloads and verifies by SHA-256; it identifies released content and selects no Ompig schema reader."
 
 [[fields]]
 id = "coding/extension/host/tsruntime/tsruntime.go#Manifest.Version:json:version"
@@ -374,142 +374,142 @@ owner = "Selection"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "The release of the slot runtime selected for an extension set, copied from its runtime manifest; it selects no Pig schema reader."
+rationale = "The release of the slot runtime selected for an extension set, copied from its runtime manifest; it selects no Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/artifact/plan.go#Origin.Version:json:version"
-path = "coding/piglet/artifact/plan.go"
+id = "coding/ompiglet/artifact/plan.go#Origin.Version:json:version"
+path = "coding/ompiglet/artifact/plan.go"
 owner = "Origin"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/artifact/plan.go#RuntimeRequirement.Version:json:version"
-path = "coding/piglet/artifact/plan.go"
+id = "coding/ompiglet/artifact/plan.go#RuntimeRequirement.Version:json:version"
+path = "coding/ompiglet/artifact/plan.go"
 owner = "RuntimeRequirement"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/artifact/record.go#InputPin.Version:json:version"
-path = "coding/piglet/artifact/record.go"
+id = "coding/ompiglet/artifact/record.go#InputPin.Version:json:version"
+path = "coding/ompiglet/artifact/record.go"
 owner = "InputPin"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/extends.go#LineageEntry.Version:json:version"
-path = "coding/piglet/extends.go"
+id = "coding/ompiglet/extends.go#LineageEntry.Version:json:version"
+path = "coding/ompiglet/extends.go"
 owner = "LineageEntry"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/lineage.go#LineageLink.Version:json:version"
-path = "coding/piglet/lineage.go"
+id = "coding/ompiglet/lineage.go#LineageLink.Version:json:version"
+path = "coding/ompiglet/lineage.go"
 owner = "LineageLink"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "The release version of a Piglet in a lineage report, copied from its release metadata; diagnostic output, not a schema reader selector."
+rationale = "The release version of a Ompiglet in a lineage report, copied from its release metadata; diagnostic output, not a schema reader selector."
 
 [[fields]]
-id = "coding/piglet/lineage_cli.go#BinaryLineage.Version:json:version"
-path = "coding/piglet/lineage_cli.go"
+id = "coding/ompiglet/lineage_cli.go#BinaryLineage.Version:json:version"
+path = "coding/ompiglet/lineage_cli.go"
 owner = "BinaryLineage"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "The release version a Piglet Binary was built from, reported by lineage; it identifies released content and selects no schema reader."
+rationale = "The release version a Ompiglet Binary was built from, reported by lineage; it identifies released content and selects no schema reader."
 
 [[fields]]
-id = "coding/piglet/npmsource.go#NPMSource.Version:go:-"
-path = "coding/piglet/npmsource.go"
+id = "coding/ompiglet/npmsource.go#NPMSource.Version:go:-"
+path = "coding/ompiglet/npmsource.go"
 owner = "NPMSource"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Holds the release.version of the Piglet being published to npm. It identifies released content and selects no Pig schema reader."
+rationale = "Holds the release.version of the Ompiglet being published to npm. It identifies released content and selects no Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/npmsource.go#npmManifest.Version:json:version"
-path = "coding/piglet/npmsource.go"
+id = "coding/ompiglet/npmsource.go#npmManifest.Version:json:version"
+path = "coding/ompiglet/npmsource.go"
 owner = "npmManifest"
 field = "Version"
 wire_name = "version"
 classification = "external"
-rationale = "Writes the version of the generated npm package.json from the Piglet's release.version. npm owns that manifest and its version grammar; PiG selects no schema reader from it."
+rationale = "Writes the version of the generated npm package.json from the Ompiglet's release.version. npm owns that manifest and its version grammar; Ompig selects no schema reader from it."
 
 [[fields]]
-id = "coding/piglet/release/index.go#Index.Version:json:version"
-path = "coding/piglet/release/index.go"
+id = "coding/ompiglet/release/index.go#Index.Version:json:version"
+path = "coding/ompiglet/release/index.go"
 owner = "Index"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies the published Piglet release selected by the signed index, not a Pig-owned schema reader."
+rationale = "Identifies the published Ompiglet release selected by the signed index, not a Ompig-owned schema reader."
 
 [[fields]]
-id = "coding/piglet/release/pull.go#Options.Version:go:-"
-path = "coding/piglet/release/pull.go"
+id = "coding/ompiglet/release/pull.go#Options.Version:go:-"
+path = "coding/ompiglet/release/pull.go"
 owner = "Options"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Selects an exact Piglet release version for a pull operation."
+rationale = "Selects an exact Ompiglet release version for a pull operation."
 
 [[fields]]
-id = "coding/piglet/release/pull.go#Result.Version:go:-"
-path = "coding/piglet/release/pull.go"
+id = "coding/ompiglet/release/pull.go#Result.Version:go:-"
+path = "coding/ompiglet/release/pull.go"
 owner = "Result"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Reports the exact Piglet release version installed by a pull operation."
+rationale = "Reports the exact Ompiglet release version installed by a pull operation."
 
 [[fields]]
-id = "coding/piglet/tree_cli.go#TreeNode.Version:json:version"
-path = "coding/piglet/tree_cli.go"
+id = "coding/ompiglet/tree_cli.go#TreeNode.Version:json:version"
+path = "coding/ompiglet/tree_cli.go"
 owner = "TreeNode"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "The release version of a Piglet shown in the tree report; diagnostic output, not a schema reader selector."
+rationale = "The release version of a Ompiglet shown in the tree report; diagnostic output, not a schema reader selector."
 
 [[fields]]
-id = "coding/piglet/types.go#AgentPigRuntime.Version:yaml:version"
-path = "coding/piglet/types.go"
+id = "coding/ompiglet/types.go#AgentPigRuntime.Version:yaml:version"
+path = "coding/ompiglet/types.go"
 owner = "AgentPigRuntime"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/types.go#ExtendsSpec.Version:yaml:version"
-path = "coding/piglet/types.go"
+id = "coding/ompiglet/types.go#ExtendsSpec.Version:yaml:version"
+path = "coding/ompiglet/types.go"
 owner = "ExtendsSpec"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
-id = "coding/piglet/types.go#ReleaseSpec.Version:yaml:version"
-path = "coding/piglet/types.go"
+id = "coding/ompiglet/types.go#ReleaseSpec.Version:yaml:version"
+path = "coding/ompiglet/types.go"
 owner = "ReleaseSpec"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
 id = "coding/pigletbuild/plan.go#Options.Version:go:-"
@@ -539,13 +539,13 @@ classification = "external"
 rationale = "Module version reported by `go mod download -json`; the Go toolchain owns the field."
 
 [[fields]]
-id = "coding/upstream.go#const.PigVersion:go:-"
+id = "coding/upstream.go#const.OmpigVersion:go:-"
 path = "coding/upstream.go"
 owner = "<package>"
-field = "PigVersion"
+field = "OmpigVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "Aliases internal/coding/pigversion/pigversion.go's PigVersion for existing callers of coding.PigVersion."
+rationale = "Aliases internal/coding/pigversion/pigversion.go's OmpigVersion for existing callers of coding.OmpigVersion."
 
 [[fields]]
 id = "coding/upstream.go#const.UpstreamPackageVersion:go:-"
@@ -581,7 +581,7 @@ owner = "<package>"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Aliases internal/coding/pigversion/pigversion.go's Version, the combined Pig+upstream release string."
+rationale = "Aliases internal/coding/pigversion/pigversion.go's Version, the combined Ompig+upstream release string."
 
 [[fields]]
 id = "durable/codecs.go#documentContentWire.Version:json:version"
@@ -878,7 +878,7 @@ owner = "hostInfo"
 field = "Version"
 wire_name = "version"
 classification = "upstream"
-rationale = "Pi's VERSION from config.ts as the host reports it in PIG_EXT_HOST_INFO; it carries the exact upstream package version and is not a Pig-owned format."
+rationale = "Pi's VERSION from config.ts as the host reports it in OMPIG_EXT_HOST_INFO; it carries the exact upstream package version and is not a Ompig-owned format."
 
 [[fields]]
 id = "extensions/sdk/session_skill_helpers.go#const.CurrentSessionVersion:go:-"
@@ -896,16 +896,16 @@ owner = "<package>"
 field = "unicodeTablesVersion"
 wire_name = "-"
 classification = "external"
-rationale = "The SDK module's copy of tui/widthx/unicode_tables.go (tui/sdk_tui_copy_test.go): it identifies the Unicode standard data and upstream get-east-asian-width dependency used to generate terminal width tables; it does not select a Pig-owned format reader."
+rationale = "The SDK module's copy of tui/widthx/unicode_tables.go (tui/sdk_tui_copy_test.go): it identifies the Unicode standard data and upstream get-east-asian-width dependency used to generate terminal width tables; it does not select a Ompig-owned format reader."
 
 [[fields]]
-id = "internal/coding/pigversion/pigversion.go#const.PigVersion:go:-"
+id = "internal/coding/pigversion/pigversion.go#const.OmpigVersion:go:-"
 path = "internal/coding/pigversion/pigversion.go"
 owner = "<package>"
-field = "PigVersion"
+field = "OmpigVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "Literal source of coding.PigVersion; ai imports it directly since ai cannot import coding (coding imports ai)."
+rationale = "Literal source of coding.OmpigVersion; ai imports it directly since ai cannot import coding (coding imports ai)."
 
 [[fields]]
 id = "internal/coding/pigversion/pigversion.go#const.UpstreamPackageVersion:go:-"
@@ -941,7 +941,7 @@ owner = "BugReportDiagnostics"
 field = "SchemaVersion"
 wire_name = "schemaVersion"
 classification = "upstream"
-rationale = "Mirrors upstream core/bug-report.ts BUG_REPORT_SCHEMA_VERSION so PiG and Pi report archives share one exact upstream-owned format."
+rationale = "Mirrors upstream core/bug-report.ts BUG_REPORT_SCHEMA_VERSION so Ompig and Pi report archives share one exact upstream-owned format."
 
 [[fields]]
 id = "internal/codingagent/bug_report.go#BugReportEnvironment.Version:json:version"
@@ -950,7 +950,7 @@ owner = "BugReportEnvironment"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Records the running PiG release in a bug report."
+rationale = "Records the running Ompig release in a bug report."
 
 [[fields]]
 id = "internal/codingagent/bug_report.go#BugReportInputs.Version:go:-"
@@ -959,7 +959,7 @@ owner = "BugReportInputs"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Carries the running PiG release into a bug report."
+rationale = "Carries the running Ompig release into a bug report."
 
 [[fields]]
 id = "internal/codingagent/bug_report.go#BugReportMetadata.SchemaVersion:json:schemaVersion"
@@ -968,7 +968,7 @@ owner = "BugReportMetadata"
 field = "SchemaVersion"
 wire_name = "schemaVersion"
 classification = "upstream"
-rationale = "Mirrors upstream core/bug-report.ts BUG_REPORT_SCHEMA_VERSION so PiG and Pi report archives share one exact upstream-owned format."
+rationale = "Mirrors upstream core/bug-report.ts BUG_REPORT_SCHEMA_VERSION so Ompig and Pi report archives share one exact upstream-owned format."
 
 [[fields]]
 id = "internal/codingagent/bug_report.go#const.bugReportSchemaVersion:go:-"
@@ -977,7 +977,7 @@ owner = "<package>"
 field = "bugReportSchemaVersion"
 wire_name = "-"
 classification = "upstream"
-rationale = "Mirrors upstream core/bug-report.ts BUG_REPORT_SCHEMA_VERSION so PiG and Pi report archives share one exact upstream-owned format."
+rationale = "Mirrors upstream core/bug-report.ts BUG_REPORT_SCHEMA_VERSION so Ompig and Pi report archives share one exact upstream-owned format."
 
 [[fields]]
 id = "internal/codingagent/crash_log.go#CrashInput.Version:go:-"
@@ -986,7 +986,7 @@ owner = "CrashInput"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Identifies the running Pig release (InstalledPigVersion) that produced the crash record, mirroring upstream core/crash-log.ts's version field."
+rationale = "Identifies the running Ompig release (InstalledPigVersion) that produced the crash record, mirroring upstream core/crash-log.ts's version field."
 
 [[fields]]
 id = "internal/codingagent/crash_log.go#CrashRecord.Version:json:version"
@@ -995,7 +995,7 @@ owner = "CrashRecord"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies the running Pig release (InstalledPigVersion) that produced the crash record, mirroring upstream core/crash-log.ts's version field."
+rationale = "Identifies the running Ompig release (InstalledPigVersion) that produced the crash record, mirroring upstream core/crash-log.ts's version field."
 
 [[fields]]
 id = "internal/codingagent/selfupdate.go#LatestPiRelease.Version:go:-"
@@ -1004,7 +1004,7 @@ owner = "LatestPiRelease"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
 id = "internal/codingagent/selfupdate.go#UpdateManifest.Version:json:version"
@@ -1013,7 +1013,7 @@ owner = "UpdateManifest"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Pig schema reader."
+rationale = "Identifies released content, a dependency constraint, or a runtime/toolchain requirement rather than selecting a Ompig schema reader."
 
 [[fields]]
 id = "internal/codingagent/session.go#const.CurrentSessionVersion:go:-"
@@ -1058,7 +1058,7 @@ owner = "<package>"
 field = "mainVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Regular-expression fragment of the npm node-semver version grammar, which the external semver package owns; it is not a Pig-owned format."
+rationale = "Regular-expression fragment of the npm node-semver version grammar, which the external semver package owns; it is not a Ompig-owned format."
 
 [[fields]]
 id = "internal/nodesemver/semver.go#const.mainVersionLoose:go:-"
@@ -1067,7 +1067,7 @@ owner = "<package>"
 field = "mainVersionLoose"
 wire_name = "-"
 classification = "external"
-rationale = "Regular-expression fragment of the npm node-semver version grammar, which the external semver package owns; it is not a Pig-owned format."
+rationale = "Regular-expression fragment of the npm node-semver version grammar, which the external semver package owns; it is not a Ompig-owned format."
 
 [[fields]]
 id = "internal/npmpublish/npmpublish.go#Package.Version:go:-"
@@ -1076,7 +1076,7 @@ owner = "Package"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "Names the version of the package that npm is asked to publish. It identifies released content and selects no Pig schema reader."
+rationale = "Names the version of the package that npm is asked to publish. It identifies released content and selects no Ompig schema reader."
 
 [[fields]]
 id = "internal/sessionentry/entry.go#SessionHeader.Version:json:version"
@@ -1103,7 +1103,7 @@ owner = "<package>"
 field = "MinGoVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "The oldest Go release that builds extensions (the go directive of extensions/sdk/go.mod): a toolchain requirement, not a Pig-owned format version."
+rationale = "The oldest Go release that builds extensions (the go directive of extensions/sdk/go.mod): a toolchain requirement, not a Ompig-owned format version."
 
 [[fields]]
 id = "internal/toolchain/toolchain.go#goFile.Version:json:version"
@@ -1130,7 +1130,7 @@ owner = "ClientOptions"
 field = "ProtocolVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Pig-owned format."
+rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Ompig-owned format."
 
 [[fields]]
 id = "mcp/oauth/discovery.go#DiscoveryOptions.ProtocolVersion:go:-"
@@ -1139,7 +1139,7 @@ owner = "DiscoveryOptions"
 field = "ProtocolVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Pig-owned format."
+rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Ompig-owned format."
 
 [[fields]]
 id = "mcp/types.go#Implementation.Version:json:version"
@@ -1157,7 +1157,7 @@ owner = "InitializeParams"
 field = "ProtocolVersion"
 wire_name = "protocolVersion"
 classification = "external"
-rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Pig-owned format."
+rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Ompig-owned format."
 
 [[fields]]
 id = "mcp/types.go#InitializeResult.ProtocolVersion:json:protocolVersion"
@@ -1166,7 +1166,7 @@ owner = "InitializeResult"
 field = "ProtocolVersion"
 wire_name = "protocolVersion"
 classification = "external"
-rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Pig-owned format."
+rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Ompig-owned format."
 
 [[fields]]
 id = "mcp/types.go#const.LatestProtocolVersion:go:-"
@@ -1175,20 +1175,20 @@ owner = "<package>"
 field = "LatestProtocolVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Pig-owned format."
+rationale = "Model Context Protocol revision negotiated in initialize and sent as the MCP-Protocol-Version header; owned by the external MCP specification and mirrored from packages/mcp/src/protocol/types.ts (LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS), not a Ompig-owned format."
 
 [[fields]]
-id = "piglets/aot/extensions/aotruntime/build.go#buildOptions.Version:go:-"
-path = "piglets/aot/extensions/aotruntime/build.go"
+id = "ompiglets/aot/extensions/aotruntime/build.go#buildOptions.Version:go:-"
+path = "ompiglets/aot/extensions/aotruntime/build.go"
 owner = "buildOptions"
 field = "Version"
 wire_name = "-"
 classification = "release-content"
-rationale = "The release version of the extension set being compiled, written into the runtime entry; in-memory build input, not a serialized Pig format."
+rationale = "The release version of the extension set being compiled, written into the runtime entry; in-memory build input, not a serialized Ompig format."
 
 [[fields]]
-id = "piglets/aot/extensions/aotruntime/images.go#manifest.Version:json:version"
-path = "piglets/aot/extensions/aotruntime/images.go"
+id = "ompiglets/aot/extensions/aotruntime/images.go#manifest.Version:json:version"
+path = "ompiglets/aot/extensions/aotruntime/images.go"
 owner = "manifest"
 field = "Version"
 wire_name = "version"
@@ -1196,17 +1196,17 @@ classification = "release-content"
 rationale = "The Pi-Bolt toolchain release the runtime image was built with; the reader compares it to the pinned release and does not select a schema by it."
 
 [[fields]]
-id = "piglets/aot/extensions/aotruntime/lock.go#const.toolchainVersion:go:-"
-path = "piglets/aot/extensions/aotruntime/lock.go"
+id = "ompiglets/aot/extensions/aotruntime/lock.go#const.toolchainVersion:go:-"
+path = "ompiglets/aot/extensions/aotruntime/lock.go"
 owner = "<package>"
 field = "toolchainVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "The Pi-Bolt release this Piglet downloads and verifies; a pinned dependency, not a Pig schema discriminator."
+rationale = "The Pi-Bolt release this Ompiglet downloads and verifies; a pinned dependency, not a Ompig schema discriminator."
 
 [[fields]]
-id = "piglets/aot/extensions/aotruntime/toolchain.go#const.versionTimeout:go:-"
-path = "piglets/aot/extensions/aotruntime/toolchain.go"
+id = "ompiglets/aot/extensions/aotruntime/toolchain.go#const.versionTimeout:go:-"
+path = "ompiglets/aot/extensions/aotruntime/toolchain.go"
 owner = "<package>"
 field = "versionTimeout"
 wire_name = "-"
@@ -1214,17 +1214,17 @@ classification = "external"
 rationale = "A duration bounding the toolchain's --version probe; a timeout, not a format version."
 
 [[fields]]
-id = "piglets/aot/extensions/aotruntime/toolchain.go#toolchainRecord.Version:json:version"
-path = "piglets/aot/extensions/aotruntime/toolchain.go"
+id = "ompiglets/aot/extensions/aotruntime/toolchain.go#toolchainRecord.Version:json:version"
+path = "ompiglets/aot/extensions/aotruntime/toolchain.go"
 owner = "toolchainRecord"
 field = "Version"
 wire_name = "version"
 classification = "release-content"
-rationale = "The Pi-Bolt release recorded beside an installed toolchain and compared to the pinned release; it selects no Pig schema reader."
+rationale = "The Pi-Bolt release recorded beside an installed toolchain and compared to the pinned release; it selects no Ompig schema reader."
 
 [[fields]]
-id = "piglets/standard/extensions/bunruntime/install.go#const.versionTimeout:go:-"
-path = "piglets/standard/extensions/bunruntime/install.go"
+id = "ompiglets/standard/extensions/bunruntime/install.go#const.versionTimeout:go:-"
+path = "ompiglets/standard/extensions/bunruntime/install.go"
 owner = "<package>"
 field = "versionTimeout"
 wire_name = "-"
@@ -1232,8 +1232,8 @@ classification = "external"
 rationale = "A duration bounding the Bun --version probe; a timeout, not a format version."
 
 [[fields]]
-id = "piglets/standard/extensions/bunruntime/install.go#manifest.Version:json:version"
-path = "piglets/standard/extensions/bunruntime/install.go"
+id = "ompiglets/standard/extensions/bunruntime/install.go#manifest.Version:json:version"
+path = "ompiglets/standard/extensions/bunruntime/install.go"
 owner = "manifest"
 field = "Version"
 wire_name = "version"
@@ -1241,13 +1241,13 @@ classification = "release-content"
 rationale = "The Bun release an installed runtime.json describes; the reader compares it to the pinned release and does not select a schema by it."
 
 [[fields]]
-id = "piglets/standard/extensions/bunruntime/lock.go#const.bunVersion:go:-"
-path = "piglets/standard/extensions/bunruntime/lock.go"
+id = "ompiglets/standard/extensions/bunruntime/lock.go#const.bunVersion:go:-"
+path = "ompiglets/standard/extensions/bunruntime/lock.go"
 owner = "<package>"
 field = "bunVersion"
 wire_name = "-"
 classification = "release-content"
-rationale = "The Bun release this Piglet installs, equal to the runtime lock's pin; a pinned dependency, not a Pig schema discriminator."
+rationale = "The Bun release this Ompiglet installs, equal to the runtime lock's pin; a pinned dependency, not a Ompig schema discriminator."
 
 [[fields]]
 id = "telemetry/schema.go#TelemetrySchemaDefinition.Version:json:version"
@@ -1283,7 +1283,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/credentials/go_module_metadata.go#const.goModuleVersion:go:-"
@@ -1292,7 +1292,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/internal/configsources/go_module_metadata.go#const.goModuleVersion:go:-"
@@ -1301,7 +1301,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/internal/endpoints/v2/go_module_metadata.go#const.goModuleVersion:go:-"
@@ -1310,7 +1310,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/internal/v4a/go_module_metadata.go#const.goModuleVersion:go:-"
@@ -1319,7 +1319,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/internal/v4a/v4a.go#const.Version:go:-"
@@ -1346,7 +1346,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/service/internal/accept-encoding/go_module_metadata.go#const.goModuleVersion:go:-"
@@ -1355,7 +1355,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/service/internal/presigned-url/go_module_metadata.go#const.goModuleVersion:go:-"
@@ -1364,7 +1364,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/service/signin/api_client.go#const.ServiceAPIVersion:go:-"
@@ -1382,7 +1382,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/service/sso/api_client.go#const.ServiceAPIVersion:go:-"
@@ -1400,7 +1400,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/service/ssooidc/api_client.go#const.ServiceAPIVersion:go:-"
@@ -1418,7 +1418,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/awssdk/service/sts/api_client.go#const.ServiceAPIVersion:go:-"
@@ -1436,7 +1436,7 @@ owner = "<package>"
 field = "goModuleVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Pig-owned format version."
+rationale = "Module release of the forked aws-sdk-go-v2 package (third_party/awssdk/FORK.md), which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "third_party/semver/version.go#const.MaxVersionLen:go:-"
@@ -1445,7 +1445,7 @@ owner = "<package>"
 field = "MaxVersionLen"
 wire_name = "-"
 classification = "external"
-rationale = "Input-length bound of the vendored semver package, which owns it; it is not a Pig-owned format version."
+rationale = "Input-length bound of the vendored semver package, which owns it; it is not a Ompig-owned format version."
 
 [[fields]]
 id = "tui/widthx/unicode_tables.go#const.unicodeTablesVersion:go:-"
@@ -1454,5 +1454,5 @@ owner = "<package>"
 field = "unicodeTablesVersion"
 wire_name = "-"
 classification = "external"
-rationale = "Identifies the Unicode standard data and upstream get-east-asian-width dependency used to generate terminal width tables; it does not select a Pig-owned format reader."
+rationale = "Identifies the Unicode standard data and upstream get-east-asian-width dependency used to generate terminal width tables; it does not select a Ompig-owned format reader."
 

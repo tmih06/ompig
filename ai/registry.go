@@ -111,7 +111,7 @@ func LookupModel(spec string) (*GeneratedModel, bool) {
 	if entries := registryByID[id]; len(entries) > 0 {
 		return entries[0], true
 	}
-	// pig divergence (D199): an OpenRouter routing variant is derived from its base entry; the catalog stores none.
+	// ompig divergence (D199): an OpenRouter routing variant is derived from its base entry; the catalog stores none.
 	return lookupOpenRouterVariant(spec, func(base string) (*GeneratedModel, bool) {
 		if entry, ok := LookupModel(base); ok && isOpenRouterBase(entry) {
 			return entry, true
@@ -140,7 +140,7 @@ func LookupModelExact(spec string) (*GeneratedModel, bool) {
 	if ok {
 		return m, true
 	}
-	// pig divergence (D199): an OpenRouter routing variant is derived from its base entry; the catalog stores none.
+	// ompig divergence (D199): an OpenRouter routing variant is derived from its base entry; the catalog stores none.
 	return lookupOpenRouterVariant(spec, LookupModelExact)
 }
 
@@ -248,7 +248,7 @@ func (m *GeneratedModel) catalogView() *Model {
 // of a stripped API (OfferedModels); LookupModel and LookupModelExact
 // still find them.
 //
-// pig divergence (D199): the list of OpenRouter, or of every provider, also holds each OpenRouter model's routing variants
+// ompig divergence (D199): the list of OpenRouter, or of every provider, also holds each OpenRouter model's routing variants
 // (WithOpenRouterRoutingVariants), derived for the list and not stored in the catalog.
 func ListModels(provider string) []GeneratedModel {
 	stripped := strippedAPIs()

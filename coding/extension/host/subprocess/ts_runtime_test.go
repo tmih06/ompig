@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions && !windows
+//go:build !ompig_strip_node_extensions && !windows
 
 package subprocess
 
@@ -18,13 +18,13 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
 )
 
 // tsRuntimeProbe is an extension whose factory records the runtime that ran it.
 const tsRuntimeProbe = `import fs from "node:fs";
 export default function () {
-  fs.appendFileSync(process.env.PIG_TS_PROBE_OUT, JSON.stringify({ name: process.env.PIG_EXT_NAME, fake: process.env.PIG_FAKE_RUNTIME ?? "", mode: process.env.PIG_FAKE_MODE ?? "", tree: process.env.PIG_TS_RUNTIME_TREE ?? "" }) + "\n");
+  fs.appendFileSync(process.env.OMPIG_TS_PROBE_OUT, JSON.stringify({ name: process.env.OMPIG_EXT_NAME, fake: process.env.OMPIG_FAKE_RUNTIME ?? "", mode: process.env.OMPIG_FAKE_MODE ?? "", tree: process.env.OMPIG_TS_RUNTIME_TREE ?? "" }) + "\n");
 }
 `
 
@@ -39,7 +39,7 @@ func loadTSRuntimeProbes(t *testing.T, isolation string, names ...string) (*Host
 	t.Helper()
 	dir := t.TempDir()
 	out := filepath.Join(dir, "probe.jsonl")
-	t.Setenv("PIG_TS_PROBE_OUT", out)
+	t.Setenv("OMPIG_TS_PROBE_OUT", out)
 	var configs []ExtConfig
 	for _, name := range names {
 		source := filepath.Join(dir, name+".mjs")
@@ -103,11 +103,11 @@ func warmFakeHost(t *testing.T, path string) {
 	}
 }
 
-// installFakeRuntime installs executable runtime id that marks its runs with PIG_FAKE_RUNTIME=marker; marker "fail" makes every
+// installFakeRuntime installs executable runtime id that marks its runs with OMPIG_FAKE_RUNTIME=marker; marker "fail" makes every
 // launch exit 1 after answering --version.
 func installFakeRuntime(t *testing.T, root, id, marker, fallback string) {
 	t.Helper()
-	run := `PIG_FAKE_RUNTIME=` + marker + ` PIG_FAKE_MODE=$mode exec node --import "$PIG_TS_RUNTIME_TREE/register-loader.mjs" "$PIG_TS_RUNTIME_TREE/$mode.mjs" "$@"`
+	run := `OMPIG_FAKE_RUNTIME=` + marker + ` OMPIG_FAKE_MODE=$mode exec node --import "$OMPIG_TS_RUNTIME_TREE/register-loader.mjs" "$OMPIG_TS_RUNTIME_TREE/$mode.mjs" "$@"`
 	if marker == "fail" {
 		run = `echo "this runtime cannot load extensions" >&2; exit 1`
 	}
@@ -136,7 +136,7 @@ mode=$1; shift
 }
 
 // A slot runtime runs isolated and packed launches: each member's factory runs in the runtime the slot names, started in the
-// script's mode with the runtime tree in PIG_TS_RUNTIME_TREE.
+// script's mode with the runtime tree in OMPIG_TS_RUNTIME_TREE.
 func TestTypeScriptRuntimeRunsASlotExecutable(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
 		t.Skip("node is not installed")
@@ -253,24 +253,24 @@ func TestTypeScriptRuntimeRetriesAFailedStartOnTheNextRuntime(t *testing.T) {
 // A project's .env files do not reach the extension process on any runtime, as on Node. Pi builds its Bun binaries with
 // --no-compile-autoload-dotenv so that project env files do not leak into its environment (scripts/build-binaries.sh:129-135, Pi
 // #10473); stock Bun loads .env, .env.local and .env.<NODE_ENV> from its cwd, which is the project. The test runs on the runtime this
-// process requests, so the Bun row of the runtime matrix (PIG_TS_RUNTIME=bun with Bun in the slot) checks the Bun launch.
+// process requests, so the Bun row of the runtime matrix (OMPIG_TS_RUNTIME=bun with Bun in the slot) checks the Bun launch.
 func TestTypeScriptRuntimeIgnoresProjectEnvFiles(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
 		t.Skip("node is not installed")
 	}
 	project := t.TempDir()
 	for _, name := range []string{".env", ".env.local", ".env.development", ".env.production"} {
-		if err := os.WriteFile(filepath.Join(project, name), []byte("PIG_TS_PROBE_DOTENV=leaked-from-"+name+"\n"), 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(project, name), []byte("OMPIG_TS_PROBE_DOTENV=leaked-from-"+name+"\n"), 0o644); err != nil {
 			t.Fatal(err)
 		}
 	}
 	dir := t.TempDir()
 	out := filepath.Join(dir, "probe.txt")
-	t.Setenv("PIG_TS_PROBE_OUT", out)
+	t.Setenv("OMPIG_TS_PROBE_OUT", out)
 	source := filepath.Join(dir, "dotenv.mjs")
 	probe := `import fs from "node:fs";
 export default function () {
-  fs.appendFileSync(process.env.PIG_TS_PROBE_OUT, (process.env.PIG_TS_PROBE_DOTENV ?? "unset") + "\n");
+  fs.appendFileSync(process.env.OMPIG_TS_PROBE_OUT, (process.env.OMPIG_TS_PROBE_DOTENV ?? "unset") + "\n");
 }
 `
 	if err := os.WriteFile(source, []byte(probe), 0o644); err != nil {
@@ -298,13 +298,13 @@ export default function () {
 			t.Fatal(err)
 		}
 		if got := strings.TrimSpace(string(data)); got != "unset" {
-			t.Errorf("isolation %q on %s: the extension read PIG_TS_PROBE_DOTENV=%s from the project's env files", isolation, request.ID, got)
+			t.Errorf("isolation %q on %s: the extension read OMPIG_TS_PROBE_DOTENV=%s from the project's env files", isolation, request.ID, got)
 		}
 	}
 }
 
 // An extension that imports a package nobody installed fails to load on every runtime, as on Node, and the runtime asks no
-// registry for it. Stock Bun installs a missing package on import when no node_modules directory is in reach; PiG starts it with
+// registry for it. Stock Bun installs a missing package on import when no node_modules directory is in reach; Ompig starts it with
 // --no-install. Every registry variable points at a local server that counts requests, so an install attempt fails the test even
 // offline. The test runs on the runtime this process requests, so the Bun row of the runtime matrix checks the Bun launch.
 func TestTypeScriptRuntimeNeverInstallsMissingPackages(t *testing.T) {
@@ -320,7 +320,7 @@ func TestTypeScriptRuntimeNeverInstallsMissingPackages(t *testing.T) {
 	for _, name := range []string{"BUN_CONFIG_REGISTRY", "NPM_CONFIG_REGISTRY", "npm_config_registry"} {
 		t.Setenv(name, registry.URL)
 	}
-	const missing = "pig-ts-probe-missing-package"
+	const missing = "ompig-ts-probe-missing-package"
 	dir := t.TempDir()
 	source := filepath.Join(dir, "missing.mjs")
 	if err := os.WriteFile(source, []byte(fmt.Sprintf("import probe from %q;\nexport default function () { probe(); }\n", missing)), 0o644); err != nil {
@@ -383,12 +383,12 @@ func TestTypeScriptRuntimeRetriesOnlyStartFailures(t *testing.T) {
 	}
 }
 
-// slotOnlyThrowProbe is an extension whose factory records the runtime that ran it. On a slot runtime, the member PIG_TS_THROW names
+// slotOnlyThrowProbe is an extension whose factory records the runtime that ran it. On a slot runtime, the member OMPIG_TS_THROW names
 // fails to evaluate, as an extension that imports an API the runtime lacks does.
 const slotOnlyThrowProbe = `import fs from "node:fs";
-if (process.env.PIG_EXT_NAME === process.env.PIG_TS_THROW && process.env.PIG_FAKE_RUNTIME) throw new Error("this runtime lacks an API");
+if (process.env.OMPIG_EXT_NAME === process.env.OMPIG_TS_THROW && process.env.OMPIG_FAKE_RUNTIME) throw new Error("this runtime lacks an API");
 export default function () {
-  fs.appendFileSync(process.env.PIG_TS_PROBE_OUT, process.env.PIG_EXT_NAME + ":" + (process.env.PIG_FAKE_RUNTIME || "node") + "\n");
+  fs.appendFileSync(process.env.OMPIG_TS_PROBE_OUT, process.env.OMPIG_EXT_NAME + ":" + (process.env.OMPIG_FAKE_RUNTIME || "node") + "\n");
 }
 `
 
@@ -403,10 +403,10 @@ func TestTypeScriptRuntimeLaterPackedMemberFailureKeepsTheSetOnNode(t *testing.T
 	installFakeRuntime(t, root, "good", "good", "")
 	t.Setenv(tsruntime.EnvRoot, root)
 	t.Setenv(tsruntime.EnvRuntime, "good")
-	t.Setenv("PIG_TS_THROW", "second")
+	t.Setenv("OMPIG_TS_THROW", "second")
 	dir := t.TempDir()
 	out := filepath.Join(dir, "probe.txt")
-	t.Setenv("PIG_TS_PROBE_OUT", out)
+	t.Setenv("OMPIG_TS_PROBE_OUT", out)
 	var configs []ExtConfig
 	for _, name := range []string{"first", "second"} {
 		source := filepath.Join(dir, name+".mjs")

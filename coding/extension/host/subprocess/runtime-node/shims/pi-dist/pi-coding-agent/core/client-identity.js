@@ -8,8 +8,8 @@ import { isInstallTelemetryEnabled } from "./telemetry.js";
 export function getClientIdentity(settingsManager) {
     return {
         userAgent: "detailed",
-// pig divergence (D26, D65): PiG's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.
-        version: process.env.PIG_PRODUCT_VERSION ?? VERSION,
+// ompig divergence (D26, D65): Ompig's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.
+        version: process.env.OMPIG_PRODUCT_VERSION ?? VERSION,
         attribution: isInstallTelemetryEnabled(settingsManager) ? PI_ATTRIBUTION : null,
     };
 }

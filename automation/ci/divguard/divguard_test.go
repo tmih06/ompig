@@ -107,7 +107,7 @@ func TestMagicLiteralNamesTheLiteralAndItsDeclaration(t *testing.T) {
 // The marker is assembled at run time so the repository's divergence
 // consistency gate never sees an unrecorded id in a source file.
 func TestUnrecordedDivergenceMarkerIsAProblem(t *testing.T) {
-	src := []byte("package agent\n\n// pig divergence (D" + "999): not in the ledger.\nconst maxQueue = 64\n")
+	src := []byte("package agent\n\n// ompig divergence (D" + "999): not in the ledger.\nconst maxQueue = 64\n")
 	hits, problems, err := scanSource("agent/x.go", src, fixtureEnv(t), []check{magicLiteral})
 	if err != nil {
 		t.Fatal(err)

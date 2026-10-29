@@ -13,7 +13,7 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Share only build artifacts. Every harness owns fresh processes, connections, and state; build failures are retained for the package run. Each build ends at the go test deadline (testbudget.Once), not at a fixed bound: it waits behind every other build into the shared Cargo target, and a cold compile on a slow host outlasts any fixed one.

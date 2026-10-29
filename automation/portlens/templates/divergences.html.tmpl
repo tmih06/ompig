@@ -27,10 +27,10 @@
 <h4>Note</h4>
 <div class="prose">{{raw .NoteHTML}}</div>
 {{if or .PiSnips .GoSnips}}
-<h4>Pi and PiG side by side</h4>
+<h4>Pi and Ompig side by side</h4>
 <div class="pair">
 <div><h5>Pi {{$.PiVersion}}: cited ranges</h5>{{range .PiSnips}}{{template "snip" .}}{{else}}<p class="small muted">{{if eq .Status "additive"}}Additive: Pi has no counterpart.{{else}}The note cites no Pi source range.{{end}}</p>{{end}}</div>
-<div><h5>PiG: marker call sites</h5>{{range .GoSnips}}{{template "snip" .}}{{else}}<p class="small muted">No <code>pig divergence</code> marker for this record was found in source.</p>{{end}}</div>
+<div><h5>Ompig: marker call sites</h5>{{range .GoSnips}}{{template "snip" .}}{{else}}<p class="small muted">No <code>ompig divergence</code> marker for this record was found in source.</p>{{end}}</div>
 </div>
 {{end}}
 {{if .Tests}}<h4>Tests that pin it ({{len .Tests}})</h4><ul class="reflist">{{range .Tests}}<li>{{.Name}}{{if .File}} <span class="muted">{{.File}}:{{.Line}}</span>{{else}} <span class="muted">(declaration not found)</span>{{end}}</li>{{end}}</ul>{{end}}

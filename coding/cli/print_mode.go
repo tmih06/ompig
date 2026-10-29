@@ -12,16 +12,16 @@ import (
 	"sync/atomic"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/handleryield"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/handleryield"
+	"github.com/tmih06/ompig/internal/jsstring"
 
 	"golang.org/x/term"
 )
@@ -40,7 +40,7 @@ var errPrintModeHandled = fmt.Errorf("print mode: error already written")
 // (`process.exit(signal === "SIGHUP" ? 129 : 143)`), and leaves SIGINT to
 // Node's default handler, which terminates by signal. Callers therefore distinguish "a
 // timeout or supervisor killed the run" from "the run failed" by exit code, so
-// pig must report the same codes and must not print an internal cancellation
+// ompig must report the same codes and must not print an internal cancellation
 // error. The handler disposes the runtime as upstream's does and exits; a signal
 // that is not a syscall.Signal returns this error to the caller instead.
 type signalExitError struct {
@@ -613,7 +613,7 @@ func writePrintModeResult(messages []agent.AgentMessage, stdout, stderr io.Write
 		if errMsg == "" {
 			errMsg = "Request " + string(last.StopReason)
 		}
-		// console.error and writeRawStdout send a lone surrogate, which PiG strings carry as WTF-8, as U+FFFD.
+		// console.error and writeRawStdout send a lone surrogate, which Ompig strings carry as WTF-8, as U+FFFD.
 		_, _ = fmt.Fprintln(stderr, jsstring.StreamText(errMsg))
 		return errPrintModeHandled
 	}

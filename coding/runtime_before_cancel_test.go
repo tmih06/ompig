@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Subprocess extension handlers return their session_before_switch and session_before_fork results as JSON, not as the typed result. Runtime replacement must still honor `cancel: true` (agent-session-runtime.ts emitBeforeSwitch and emitBeforeFork read result?.cancel === true).

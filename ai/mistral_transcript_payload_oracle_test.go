@@ -7,14 +7,14 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // pi: packages/ai/src/api/mistral-conversations.ts
 
 // The request payload mistral-conversations builds (buildChatPayload, toChatMessages, tool call id normalization) over random transcripts, with and
-// without image input, tools and stream options. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal as parsed JSON.
+// without image input, tools and stream options. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal as parsed JSON.
 func TestMistralTranscriptPayloadMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(113))
 	g := &payloadGen{rng: rng, api: "mistral-conversations", provider: "mistral", model: "mistral-test", thinkingSignatures: []string{"", `,"thinkingSignature":"sig"`}}
@@ -94,7 +94,7 @@ func TestMistralTranscriptPayloadMatchesPi(t *testing.T) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d reasoning=%v simple=%v input=%v options=%v", i, p.Reasoning, p.Simple, p.Input, p.Options), got, want[i], &failures, classes)
 	}

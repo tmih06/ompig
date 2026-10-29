@@ -5,9 +5,9 @@ package coding
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // builtinToolDefinition is the ToolDefinition of a built-in tool: the one [toolDefinition] builds for the session registry. A built-in tool's

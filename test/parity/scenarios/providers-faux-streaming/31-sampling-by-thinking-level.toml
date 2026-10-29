@@ -7,7 +7,7 @@
 # extension-registered model (provider-composer.ts extensionModelFromDefinition
 # spreads its samplingParamsByThinkingLevel), at every thinking level. Every
 # recorded sampling and reasoning field is compared. The extension case fails on
-# a PiG build whose registerProvider decode drops the field.
+# a Ompig build whose registerProvider decode drops the field.
 name = "31-sampling-by-thinking-level"
 description = "models.json samplingParamsByThinkingLevel reaches OpenAI-compatible requests at the effective thinking level"
 covers = ["packages/ai/src/api/openai-completions.ts", "packages/ai/src/api/openai-responses.ts", "packages/ai/src/api/simple-options.ts", "packages/coding-agent/src/core/model-config.ts", "packages/coding-agent/src/core/provider-composer.ts"]
@@ -16,10 +16,10 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-# The probe defaults to PIG_PARITY_PIG_BIN so it uses the verified harness build.
-pig_args = ["python3", "test/parity/testdata/sampling-by-thinking-level.py"]
+# The probe defaults to OMPIG_PARITY_OMPIG_BIN so it uses the verified harness build.
+ompig_args = ["python3", "test/parity/testdata/sampling-by-thinking-level.py"]
 pi_args = ["python3", "test/parity/testdata/sampling-by-thinking-level.py", "--bin", "extensions/sdk-ts/node_modules/.bin/pi"]
 
 [cli]

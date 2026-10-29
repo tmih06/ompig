@@ -24,7 +24,7 @@ func TestRPCPromptsOfOneBatchAnswerInRequestOrder(t *testing.T) {
 		if err := os.WriteFile(current, source, 0o600); err != nil {
 			t.Fatal(err)
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		if _, err := io.WriteString(p.stdin, `{"id":"p","type":"prompt","message":"hi"}`+"\n"+`{"id":"p2","type":"prompt","message":"hi2"}`+"\n"); err != nil {
 			t.Fatal(err)
 		}
@@ -66,7 +66,7 @@ func TestRPCPromptsWithDueCompactionsAnswerInRequestOrder(t *testing.T) {
 		if err := os.WriteFile(current, []byte(session), 0o600); err != nil {
 			t.Fatal(err)
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "TEST_FAUX_SLOW_COMPACTION=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "TEST_FAUX_SLOW_COMPACTION=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		if _, err := io.WriteString(p.stdin, `{"id":"p","type":"prompt","message":"hi"}`+"\n"+`{"id":"p2","type":"prompt","message":"hi2"}`+"\n"); err != nil {
 			t.Fatal(err)
 		}

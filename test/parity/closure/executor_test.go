@@ -72,7 +72,7 @@ func TestExecuteRequestProducesContentAddressedUntrustedRun(t *testing.T) {
 		t.Fatal(err)
 	}
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:executor", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: commit, ToolchainHash: toolchainHash, EnvironmentHash: environmentHash}
-	pin := &Pin{Kind: KindPin, ID: "pin:executor", SnapshotID: snapshot.ID, Repository: "pig", Commit: commit, Path: "target.go", SemanticID: "target.Run", StartLine: 1, EndLine: 1, QuoteHash: hash("target"), APIHash: hash("api"), BodyHash: hash("body")}
+	pin := &Pin{Kind: KindPin, ID: "pin:executor", SnapshotID: snapshot.ID, Repository: "ompig", Commit: commit, Path: "target.go", SemanticID: "target.Run", StartLine: 1, EndLine: 1, QuoteHash: hash("target"), APIHash: hash("api"), BodyHash: hash("body")}
 	target := &Target{Kind: KindTarget, ID: "target:executor", SnapshotID: snapshot.ID, PinIDs: []string{pin.ID}, Language: "go", Symbol: "target.Run"}
 	behavior := &Behavior{Kind: KindBehavior, ID: "behavior:executor", Name: "executor", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	facet := &Facet{Kind: KindFacet, ID: "facet:result", Name: "result"}
@@ -181,7 +181,7 @@ func newMutationExecutorFixture(t *testing.T) mutationExecutorFixture {
 	t.Helper()
 	root := initializeExecutorRepository(t)
 	commit := gitOutput(t, root, "rev-parse", "HEAD")
-	environment := []string{"PIG_MUTATION_HELPER=1"}
+	environment := []string{"OMPIG_MUTATION_HELPER=1"}
 	toolchainHash, err := CurrentToolchainHash(t.Context())
 	if err != nil {
 		t.Fatal(err)
@@ -192,7 +192,7 @@ func newMutationExecutorFixture(t *testing.T) mutationExecutorFixture {
 	}
 	hash := func(value string) string { return HashBytes([]byte(value)) }
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:mutation-executor", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: commit, ToolchainHash: toolchainHash, EnvironmentHash: environmentHash}
-	pin := &Pin{Kind: KindPin, ID: "pin:mutation-executor", SnapshotID: snapshot.ID, Repository: "pig", Commit: commit, Path: "target.go", SemanticID: "target.Run", StartLine: 1, EndLine: 1, QuoteHash: hash("target")}
+	pin := &Pin{Kind: KindPin, ID: "pin:mutation-executor", SnapshotID: snapshot.ID, Repository: "ompig", Commit: commit, Path: "target.go", SemanticID: "target.Run", StartLine: 1, EndLine: 1, QuoteHash: hash("target")}
 	target := &Target{Kind: KindTarget, ID: "target:mutation-executor", SnapshotID: snapshot.ID, PinIDs: []string{pin.ID}, Language: "go", Symbol: "target.Run"}
 	behavior := &Behavior{Kind: KindBehavior, ID: "behavior:mutation-executor", Name: "mutation executor", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	facet := &Facet{Kind: KindFacet, ID: "facet:result", Name: "result"}

@@ -6,15 +6,15 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// A Python extension directory loads at startup and on /reload from the agent's extensions directory and from a settings entry, as `pig install DIR --validate-only` already accepts it. Discovery used to skip it, so only `pig -e DIR` loaded one.
+// A Python extension directory loads at startup and on /reload from the agent's extensions directory and from a settings entry, as `ompig install DIR --validate-only` already accepts it. Discovery used to skip it, so only `ompig -e DIR` loaded one.
 func TestPythonExtensionDirectoriesLoadFromDiscoveryAndSettings(t *testing.T) {
 	root := t.TempDir()
 	cwd, agentDir := filepath.Join(root, "work"), filepath.Join(root, "agent")
 	factory := func(name string) string {
-		return "import pig_sdk\n\n\ndef new_extension() -> pig_sdk.Extension:\n    return pig_sdk.Extension(\"" + name + "\")\n"
+		return "import ompig_sdk\n\n\ndef new_extension() -> ompig_sdk.Extension:\n    return ompig_sdk.Extension(\"" + name + "\")\n"
 	}
 	for path, content := range map[string]string{
 		filepath.Join(agentDir, "extensions", "hello-python", "hello_python.py"): factory("hello-python"),

@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodehome"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodehome"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestPackageAgentsSkillDiscoveryOriginal(t *testing.T) {
@@ -192,7 +192,7 @@ func TestPackageManagerHomeDirFallsBackToSystemHome(t *testing.T) {
 			out, err := exec.CommandContext(t.Context(), strings.TrimSpace(string(binary)), "-p", `process.env.HOME || require('node:os').homedir()`).Output()
 			if err != nil {
 				// With no HOME and no entry for the user in the system's user database (a container run as a uid that its passwd file does not list), Node's os.homedir() throws SystemError
-				// uv_os_homedir ENOENT, and Pi's getHomeDir with it; PiG's throws the same error. Any other failure of the oracle is the test's.
+				// uv_os_homedir ENOENT, and Pi's getHomeDir with it; Ompig's throws the same error. Any other failure of the oracle is the test's.
 				var exit *exec.ExitError
 				if !errors.As(err, &exit) || !strings.Contains(string(exit.Stderr), noHomeDirectoryMessage) {
 					t.Fatal(err)

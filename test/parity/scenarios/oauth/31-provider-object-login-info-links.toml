@@ -9,7 +9,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 120
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 120
 capture_start = "Login to Info Node"
@@ -22,11 +22,11 @@ keys = ["/login info-node", "Escape", "Enter"]
 wait_visible_contains = ["Use your work account", "Paste the sign-in code"]
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/provider-object-info/agent", "PI_CODING_AGENT_DIR=", "PIG_HOME=../selectors/testdata/pig-home-noauth", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
-pi = ["PI_CODING_AGENT_DIR=testdata/provider-object-info/agent", "PIG_CODING_AGENT_DIR=", "PIG_HOME=", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/provider-object-info/agent", "PI_CODING_AGENT_DIR=", "OMPIG_HOME=../selectors/testdata/ompig-home-noauth", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
+pi = ["PI_CODING_AGENT_DIR=testdata/provider-object-info/agent", "OMPIG_CODING_AGENT_DIR=", "OMPIG_HOME=", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/provider-object-info/info.mjs"]
+ompig_extensions = ["testdata/provider-object-info/info.mjs"]
 pi_extensions = ["testdata/provider-object-info/info.mjs"]
 
 [assert]

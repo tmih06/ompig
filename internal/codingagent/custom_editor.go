@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // Ports packages/coding-agent/src/modes/interactive/components/custom-editor.ts
 //
@@ -93,7 +93,7 @@ func (e *CustomEditor) HandleInput(data string) {
 	}
 
 	// custom-editor.ts (Pi PR #7680): with the autocomplete list open the selection page keys reach it before any app action.
-	// pig divergence (D155): an open autocomplete list takes the selection page keys before any app action (Pi PR #7680).
+	// ompig divergence (D155): an open autocomplete list takes the selection page keys before any app action (Pi PR #7680).
 	if e.AutocompleteOpen() && e.keybindings.MatchesSelectPage(data) {
 		e.superInput(data)
 		return

@@ -11,13 +11,13 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Node's spawn without an env option passes process.env to the child as it is
 // (normalizeSpawnArguments in lib/child_process.js: `options.env ||
 // process.env`), and the cwd option only changes the child's directory, so a
-// child started in another directory still sees PiG's PWD. A shell's pwd then
+// child started in another directory still sees Ompig's PWD. A shell's pwd then
 // prints the physical directory, as under Pi, not the symlinked name it was
 // given. Node's spawn with the same cwd is the oracle; the test binary reports
 // the environment it received, in block order.

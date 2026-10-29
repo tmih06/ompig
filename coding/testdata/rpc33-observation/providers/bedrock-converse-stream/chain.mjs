@@ -8,8 +8,8 @@
 // Records are (epoch, tick, what) with the probe.mjs tick model (async_hooks microtask jobs; an epoch is a byte-delivery macrotask). `hooks` installs Pi's deserialize
 // middleware, which awaits `onResponse` (bedrock-converse-stream.ts:510-523), as when the caller passes `onResponse`; without it Pi awaits `options?.onResponse?.()`
 // itself after send (bedrock-converse-stream.ts:289-296).
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { createRequire } from 'node:module';
 import { fork } from 'node:child_process';
 import { createHook } from 'node:async_hooks';
@@ -77,7 +77,7 @@ async function run(delivery, http, hooks) {
   return records;
 }
 
-const out = {piVersion: PIG_UPSTREAM_VERSION, awsSdkClientBedrockRuntime: '3.1127.0', smithyCore: '3.36.2', node: process.version, cases: {}};
+const out = {piVersion: OMPIG_UPSTREAM_VERSION, awsSdkClientBedrockRuntime: '3.1127.0', smithyCore: '3.36.2', node: process.version, cases: {}};
 for (const http of ['h1', 'h2']) for (const delivery of ['buffered', 'pending']) for (const hooks of [true, false]) {
   out.cases[`${http}/${delivery}/${hooks ? 'hooks' : 'nohooks'}`] = await run(delivery, http, hooks);
 }

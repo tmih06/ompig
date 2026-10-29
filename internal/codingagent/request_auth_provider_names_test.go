@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream packages/coding-agent/test/model-runtime-auth-options.test.ts:73 projects provider-owned names and auth methods, not labels derived from provider IDs.

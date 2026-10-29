@@ -9,7 +9,7 @@
 # "To resume this session: <cmd>" and calls process.exit(0) without awaiting the pending handler or the rest of the
 # reload.
 # Probed with Pi 1.1.0 in tmux (2026-10-13): the capture from the first SHUTDOWN_EVENT is "SHUTDOWN_EVENT quit", then
-# "To resume this session: pi --session <id>", exit 0. Pig kept the "Reloading keybindings, extensions, ..." box on
+# "To resume this session: pi --session <id>", exit 0. Ompig kept the "Reloading keybindings, extensions, ..." box on
 # screen and never exited: awaitReloadStep ignored the shutdown request until the never-settling handler returned.
 # The "reload" session_shutdown line is written while the TUI still draws, which repaints over it in both hosts.
 
@@ -23,16 +23,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "SHUTDOWN_AT=session_start", "SHUTDOWN_REASON=reload"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "SHUTDOWN_AT=session_start", "SHUTDOWN_REASON=reload"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1", "SHUTDOWN_AT=session_start", "SHUTDOWN_REASON=reload"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/shutdown-in-awaited-phase.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/shutdown-in-awaited-phase.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/shutdown-in-awaited-phase.mjs"]
 
 [tmux]
 width = 120
 height = 30
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "SHUTDOWN_EVENT"
@@ -57,6 +57,6 @@ runs = 3
 
 # normalize-rationale: the resume command names each binary and the session's random id.
 [[assert.normalize_replace]]
-pattern = 'pig? --session [0-9a-f-]{36}'
+pattern = 'ompig? --session [0-9a-f-]{36}'
 with = '<bin> --session <session-id>'
 reason = "D2: the resume command names the host executable; the session id is random per run. The rest of the line and the session_shutdown line stay compared."

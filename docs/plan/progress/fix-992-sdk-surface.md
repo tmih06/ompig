@@ -18,7 +18,7 @@ Commit `test(sdk-surface): port upstream 0.99.2 SDK-surface tests with signature
 
 Upstream tests in scope: `packages/coding-agent/test/theme-style.test.ts` (token styling, unknown/wrong-slot tokens, OKLCH, appearance, terminal-default colors), whose inputs the SDK tests reuse. The SDK-language behavior has no upstream test (Pi's TypeScript is the reference implementation), so the typed-model rows (`model-registry.ts:71-79,135-177,211-217`, `types.ts:1896-1903`) are conformance rows with new inputs.
 
-Stubs: `extensions/sdk/ui_theme.go` (`Color`, `ThemeStyle`, `UITheme.Appearance/Colors/Style` return zero values), `extensions/sdk-rs/src/theme.rs` (`Color`, `ThemeStyle`, `Theme::appearance/colors/style`; the private `style` helper became `modifier` so the public name is free), `extensions/sdk-py/pig_sdk/__init__.py` (`Theme.appearance/colors/style`; private `_style` became `_modifier`), `internal/codingagent/ext_ui_context.go` (`extensionThemePalette` exported as `ExtensionThemePalette` for the conformance test; no behavior change).
+Stubs: `extensions/sdk/ui_theme.go` (`Color`, `ThemeStyle`, `UITheme.Appearance/Colors/Style` return zero values), `extensions/sdk-rs/src/theme.rs` (`Color`, `ThemeStyle`, `Theme::appearance/colors/style`; the private `style` helper became `modifier` so the public name is free), `extensions/sdk-py/ompig_sdk/__init__.py` (`Theme.appearance/colors/style`; private `_style` became `_modifier`), `internal/codingagent/ext_ui_context.go` (`extensionThemePalette` exported as `ExtensionThemePalette` for the conformance test; no behavior change).
 
 Red run (all failures are behavior failures, none a compile error):
 

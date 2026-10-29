@@ -17,14 +17,14 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsonvalid"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonvalid"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/sessionentry"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // FileEntry is one record of a session file: the header (SessionHeader) or an entry (SessionEntry) (session-manager.ts FileEntry).
@@ -313,7 +313,7 @@ func streamSessionFileBatched(path string, batching lineBatching) (*Session, err
 	}
 	if batching == (lineBatching{}) {
 		if info.Size() > indexBatchBytes {
-			// pig additive (D174): the workers count and run at the runtime default width.
+			// ompig additive (D174): the workers count and run at the runtime default width.
 			defer procpolicy.Widen()()
 		}
 		batching = defaultLineBatching()
@@ -418,7 +418,7 @@ func streamSessionFileBatched(path string, batching lineBatching) (*Session, err
 
 // indexBatchBytes is the size of the runs of lines forEachPreparedLine prepares as one piece of work, and indexInFlightBytes bounds the bytes
 // of the runs read ahead of the index.
-// pig additive (D112): Pi reads the whole file and parses its lines in order on one thread; the index applies the prepared lines in file order, so it holds what the serial load holds.
+// ompig additive (D112): Pi reads the whole file and parses its lines in order on one thread; the index applies the prepared lines in file order, so it holds what the serial load holds.
 const (
 	indexBatchBytes    = 128 << 10
 	indexInFlightBytes = 4 << 20

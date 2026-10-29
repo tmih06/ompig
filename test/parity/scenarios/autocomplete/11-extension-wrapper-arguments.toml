@@ -14,7 +14,7 @@ height = 35
 # wrapper provider (interactive-mode.ts:951-1036, 1911-1980). The no-model
 # warning follows init in both binaries (interactive-mode.ts:1149-1150), so
 # typing starts only after the wrapper and command completions are in place.
-ready_pattern_pig = "No models available"
+ready_pattern_ompig = "No models available"
 ready_pattern_pi = "No models available"
 ready_timeout_seconds = 30
 capture_start = "Argument results"
@@ -31,11 +31,11 @@ wait_contains = ["Argument results"]
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../selectors/testdata/dialogs-default"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../selectors/testdata/dialogs-default"]
 pi = ["PI_CODING_AGENT_DIR=../selectors/testdata/dialogs-default"]
-pig_extensions = ["testdata/wrapper-arguments.ts"]
+ompig_extensions = ["testdata/wrapper-arguments.ts"]
 pi_extensions = ["testdata/wrapper-arguments.ts"]
-pig_args = ["--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--no-skills", "--no-prompt-templates", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

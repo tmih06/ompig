@@ -8,12 +8,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// extensionsRuntimeStatus is the JSON shape of `pig extensions runtime status --json`.
+// extensionsRuntimeStatus is the JSON shape of `ompig extensions runtime status --json`.
 type extensionsRuntimeStatus struct {
 	Request   tsruntime.Request     `json:"request"`
 	Platform  string                `json:"platform"`
@@ -21,13 +21,13 @@ type extensionsRuntimeStatus struct {
 	Selection tsruntime.Selection   `json:"selection"`
 	Installed []tsruntime.Installed `json:"installed"`
 	// NodeOnly lists the extension sets that failed to start on a slot runtime and started on Node: they run on Node until a file of the set changes.
-	//portlint:allow emptydrop PiG-only `pig extensions runtime status --json` (pig additive (D19), no Pi counterpart); an absent nodeOnly means no set runs on Node only
+	//portlint:allow emptydrop Ompig-only `ompig extensions runtime status --json` (ompig additive (D19), no Pi counterpart); an absent nodeOnly means no set runs on Node only
 	NodeOnly []tsruntime.NodeOnlyEntry `json:"nodeOnly,omitempty"`
 }
 
-// runExtensionsRuntime runs `pig extensions runtime status`: the TypeScript extension runtime this configuration requests, the
+// runExtensionsRuntime runs `ompig extensions runtime status`: the TypeScript extension runtime this configuration requests, the
 // runtime a launch would use with the reason for a fallback to Node, and the runtimes installed in the slot.
-// pig additive (D19): Pi has one extension runtime, its own process.
+// ompig additive (D19): Pi has one extension runtime, its own process.
 func runExtensionsRuntime(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 || args[0] != "status" {
 		printExtensionsRuntimeHelp(stderr)
@@ -42,18 +42,18 @@ func runExtensionsRuntime(ctx context.Context, args []string, stdout, stderr io.
 			printExtensionsRuntimeHelp(stdout)
 			return 0
 		default:
-			_, _ = fmt.Fprintf(stderr, "pig extensions runtime status: unknown argument %q\n", arg)
+			_, _ = fmt.Fprintf(stderr, "ompig extensions runtime status: unknown argument %q\n", arg)
 			return 2
 		}
 	}
 	agentDir, err := codingagent.ResolveAgentDir()
 	if err != nil {
-		_, _ = fmt.Fprintln(stderr, "pig extensions runtime status:", err)
+		_, _ = fmt.Fprintln(stderr, "ompig extensions runtime status:", err)
 		return 1
 	}
 	cwd, err := os.Getwd()
 	if err != nil {
-		_, _ = fmt.Fprintln(stderr, "pig extensions runtime status:", err)
+		_, _ = fmt.Fprintln(stderr, "ompig extensions runtime status:", err)
 		return 1
 	}
 	subprocess.SetTypeScriptRuntimeSetting(codingagent.NewSettingsManager(cwd, agentDir).GetExtensionsTypescriptRuntime())
@@ -65,15 +65,15 @@ func runExtensionsRuntime(ctx context.Context, args []string, stdout, stderr io.
 	}
 	status.NodeOnly = tsruntime.ListNodeOnly(status.Root)
 	if status.Installed, err = tsruntime.List(status.Root); err != nil {
-		_, _ = fmt.Fprintln(stderr, "pig extensions runtime status:", err)
+		_, _ = fmt.Fprintln(stderr, "ompig extensions runtime status:", err)
 		return 1
 	}
 	if jsonOutput {
-		//portlint:allow jsonescape PiG-only `pig extensions runtime status --json` (pig additive (D19), no Pi counterpart)
+		//portlint:allow jsonescape Ompig-only `ompig extensions runtime status --json` (ompig additive (D19), no Pi counterpart)
 		encoder := json.NewEncoder(stdout)
 		encoder.SetIndent("", "  ")
 		if err := encoder.Encode(status); err != nil {
-			_, _ = fmt.Fprintln(stderr, "pig extensions runtime status:", err)
+			_, _ = fmt.Fprintln(stderr, "ompig extensions runtime status:", err)
 			return 1
 		}
 		return 0
@@ -135,5 +135,5 @@ func writeExtensionsRuntimeStatus(w io.Writer, status extensionsRuntimeStatus) {
 }
 
 func printExtensionsRuntimeHelp(w io.Writer) {
-	_, _ = fmt.Fprintf(w, "Usage:\n  pig extensions runtime status [--json]\n\nReports the runtime that runs TypeScript and JavaScript extensions: the extensionsTypescriptRuntime setting or %s, the runtime a launch uses (Node when the requested runtime cannot run, with the reason) and the runtimes installed under %s or <agent dir>/runtimes/typescript.\n", tsruntime.EnvRuntime, tsruntime.EnvRoot)
+	_, _ = fmt.Fprintf(w, "Usage:\n  ompig extensions runtime status [--json]\n\nReports the runtime that runs TypeScript and JavaScript extensions: the extensionsTypescriptRuntime setting or %s, the runtime a launch uses (Node when the requested runtime cannot run, with the reason) and the runtimes installed under %s or <agent dir>/runtimes/typescript.\n", tsruntime.EnvRuntime, tsruntime.EnvRoot)
 }

@@ -1,6 +1,6 @@
 # Gitleaks: the default rules, plus an allowlist for the values below. Each
 # one matches the generic-api-key rule but is not a credential.
-title = "PiG gitleaks configuration"
+title = "Ompig gitleaks configuration"
 
 [extend]
 useDefault = true
@@ -18,7 +18,7 @@ regexes = [
   '''^AAAAC3NzaC1lZDI1NTE5AAAAI(?:One|Two)$''',
   # env's fixed test session token, a counting pattern.
   '''^0123456789abcdef0123456789abcdef$''',
-  # The documented example Piglet signing key ID in docs/site/docs/cli-examples.md (a public key fingerprint).
+  # The documented example Ompiglet signing key ID in docs/site/docs/cli-examples.md (a public key fingerprint).
   '''^c74cf1a77b670764e896cfbf2800bb28$''',
   # A header-name constant in the vendored AWS SDK (third_party/awssdk stays verbatim; see its FORK.md).
   '''^v4Internal\.AmzSignedHeadersKey$''',

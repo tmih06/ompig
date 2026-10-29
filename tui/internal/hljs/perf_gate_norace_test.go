@@ -5,7 +5,7 @@ package hljs
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // Loading highlight.js on every interactive start: the eager grammars on the first highlight and the text tables on the first case-insensitive or non-ASCII comparison. Registering the rest of the languages (LoadAllLanguages) decodes none of them; it reads the embedded snapshots without building a generic JSON tree.

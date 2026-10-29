@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 // piSchemaNames are the names the Cloudflare Agents SDK's PiHarness (agents 0.28.0, harness/pi) renames: durable_schema
@@ -48,14 +48,14 @@ func renameTables(prefix string) func(string) string {
 	}
 }
 
-// The adapter's name list is Pi's; the core creates no other table or index under a Pi name. pig_sidecar is the core's
+// The adapter's name list is Pi's; the core creates no other table or index under a Pi name. ompig_sidecar is the core's
 // own table and is not in SQLITE_MIGRATIONS, so the adapter leaves it unrenamed.
 func TestRenamedNamesAreTheCoresSchema(t *testing.T) {
 	var got []string
 	for _, text := range store.SQL() {
 		for _, m := range createName.FindAllStringSubmatch(text, -1) {
 			// tasks_v2 is migration 2's temporary table: Pi renames it to tasks, and it never outlives the migration.
-			if m[1] != "pig_sidecar" && m[1] != "tasks_v2" && !slices.Contains(got, m[1]) {
+			if m[1] != "ompig_sidecar" && m[1] != "tasks_v2" && !slices.Contains(got, m[1]) {
 				got = append(got, m[1])
 			}
 		}

@@ -10,11 +10,11 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// TestMain builds ./cmd/pig once into a process-lifetime temp dir
+// TestMain builds ./cmd/ompig once into a process-lifetime temp dir
 // and stashes the path in binaryPath. Without this, each test's
 // t.TempDir() got cleaned up between subtests and the second test
 // in a run found no binary.
@@ -28,7 +28,7 @@ func runIntegrationTests(m *testing.M) int {
 		fmt.Fprintln(os.Stderr, "integration: can't find repo root:", err)
 		return 2
 	}
-	tmp, err := os.MkdirTemp("", "pig-integration-")
+	tmp, err := os.MkdirTemp("", "ompig-integration-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "integration: mktmp:", err)
 		return 2
@@ -44,7 +44,7 @@ func runIntegrationTests(m *testing.M) int {
 		}
 	}()
 	tmuxHomeRoot = tmp
-	// The anonymous-memory gate (TestInteractiveFirstFrameProcessGate) measures a pig under the private tmux server started below, which inherits this setting: without it the runners' THP policy ("always") makes the figure depend on 2 MiB page alignment.
+	// The anonymous-memory gate (TestInteractiveFirstFrameProcessGate) measures a ompig under the private tmux server started below, which inherits this setting: without it the runners' THP policy ("always") makes the figure depend on 2 MiB page alignment.
 	if err := perfgate.DisableTransparentHugePages(); err != nil {
 		fmt.Fprintln(os.Stderr, "integration:", err)
 		return 2
@@ -63,11 +63,11 @@ func runIntegrationTests(m *testing.M) int {
 			}
 		}()
 	}
-	bin := filepath.Join(tmp, "pig-it")
+	bin := filepath.Join(tmp, "ompig-it")
 	if runtime.GOOS == "windows" {
 		bin += ".exe"
 	}
-	cmd := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-o", bin, "./cmd/pig")
+	cmd := exec.Command("go", "build", "-trimpath", "-buildvcs=false", "-o", bin, "./cmd/ompig")
 	cmd.Env = append(os.Environ(), "CGO_ENABLED=0")
 	cmd.Dir = repoRoot
 	if out, err := cmd.CombinedOutput(); err != nil {

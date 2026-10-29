@@ -4,8 +4,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactive-mode.ts renderInitialMessages renders with populateHistory: true, so addMessageToChat adds each user message's text to the editor

@@ -25,22 +25,22 @@ func writeTree(t *testing.T, root string, files map[string]string) {
 func TestSubpackageSymbolsAreQualified(t *testing.T) {
 	root := t.TempDir()
 	writeTree(t, root, map[string]string{
-		"extensions/sdk/tui/text.go":                "package tui\n\nfunc VisibleWidth(s string) int { return len(s) }\nfunc hidden() {}\n\ntype Key struct{}\n\nfunc (Key) Matches() bool { return true }\n",
-		"extensions/sdk/tui/alias.go":               "package tui\n\nimport \"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/e\"\n\ntype KeybindingsManager = e.Manager\n",
-		"extensions/sdk/tui/internal/e/mgr.go":      "package e\n\ntype Manager struct{ Name string }\n\nfunc (Manager) GetKeys() []string { return nil }\nfunc (Manager) hidden() {}\n",
-		"extensions/sdk/tui/internal/e/e.go":        "package e\n\nfunc Engine() {}\n",
-		"extensions/sdk/upgrade/u.go":               "package upgrade\n\nfunc Rewrite() {}\n",
-		"extensions/sdk/frontend/f.go":              "package frontend\n\nfunc Draw() {}\n",
-		"extensions/sdk/testdata/t/ignored.txt":     "x",
-		"extensions/sdk-rs/src/tui/mod.rs":          "mod text;\nmod keys;\nmod secret;\n\npub use keys::*;\npub use text::{visible_width, Segments};\npub fn declared_in_mod() {}\npub(crate) use secret::internal_only;\n",
-		"extensions/sdk-rs/src/tui/text.rs":         "pub fn visible_width(s: &str) -> usize { s.len() }\npub fn not_reexported() {}\npub(crate) fn crate_only() {}\npub struct Segments {\n    pub width: usize,\n}\nimpl Segments {\n    pub fn first(&self) {}\n    pub(crate) fn private(&self) {}\n}\n",
-		"extensions/sdk-rs/src/tui/keys.rs":         "pub fn matches_key() {}\n",
-		"extensions/sdk-rs/src/tui/secret.rs":       "pub fn internal_only() {}\n",
-		"extensions/sdk-rs/src/tui/tests.rs":        "pub fn helper_in_tests() {}\n",
-		"extensions/sdk-rs/src/lib.rs":              "pub fn root_fn() {}\n",
-		"extensions/sdk-py/pig_sdk/tui/__init__.py": "from ._text import (\n    visible_width as visible_width,\n    Segments as Segments,\n    _private as _private,\n)\n\nCURSOR_MARKER = 'x'\n\ndef declared_here():\n    pass\n",
-		"extensions/sdk-py/pig_sdk/tui/_text.py":    "def visible_width(s):\n    return len(s)\n\ndef not_exported(s):\n    return s\n\nclass Segments:\n    def first(self):\n        pass\n\nclass Hidden:\n    def m(self):\n        pass\n",
-		"extensions/sdk-py/pig_sdk/__init__.py":     "def root_fn():\n    pass\n",
+		"extensions/sdk/tui/text.go":                  "package tui\n\nfunc VisibleWidth(s string) int { return len(s) }\nfunc hidden() {}\n\ntype Key struct{}\n\nfunc (Key) Matches() bool { return true }\n",
+		"extensions/sdk/tui/alias.go":                 "package tui\n\nimport \"github.com/tmih06/ompig/extensions/sdk/tui/internal/e\"\n\ntype KeybindingsManager = e.Manager\n",
+		"extensions/sdk/tui/internal/e/mgr.go":        "package e\n\ntype Manager struct{ Name string }\n\nfunc (Manager) GetKeys() []string { return nil }\nfunc (Manager) hidden() {}\n",
+		"extensions/sdk/tui/internal/e/e.go":          "package e\n\nfunc Engine() {}\n",
+		"extensions/sdk/upgrade/u.go":                 "package upgrade\n\nfunc Rewrite() {}\n",
+		"extensions/sdk/frontend/f.go":                "package frontend\n\nfunc Draw() {}\n",
+		"extensions/sdk/testdata/t/ignored.txt":       "x",
+		"extensions/sdk-rs/src/tui/mod.rs":            "mod text;\nmod keys;\nmod secret;\n\npub use keys::*;\npub use text::{visible_width, Segments};\npub fn declared_in_mod() {}\npub(crate) use secret::internal_only;\n",
+		"extensions/sdk-rs/src/tui/text.rs":           "pub fn visible_width(s: &str) -> usize { s.len() }\npub fn not_reexported() {}\npub(crate) fn crate_only() {}\npub struct Segments {\n    pub width: usize,\n}\nimpl Segments {\n    pub fn first(&self) {}\n    pub(crate) fn private(&self) {}\n}\n",
+		"extensions/sdk-rs/src/tui/keys.rs":           "pub fn matches_key() {}\n",
+		"extensions/sdk-rs/src/tui/secret.rs":         "pub fn internal_only() {}\n",
+		"extensions/sdk-rs/src/tui/tests.rs":          "pub fn helper_in_tests() {}\n",
+		"extensions/sdk-rs/src/lib.rs":                "pub fn root_fn() {}\n",
+		"extensions/sdk-py/ompig_sdk/tui/__init__.py": "from ._text import (\n    visible_width as visible_width,\n    Segments as Segments,\n    _private as _private,\n)\n\nCURSOR_MARKER = 'x'\n\ndef declared_here():\n    pass\n",
+		"extensions/sdk-py/ompig_sdk/tui/_text.py":    "def visible_width(s):\n    return len(s)\n\ndef not_exported(s):\n    return s\n\nclass Segments:\n    def first(self):\n        pass\n\nclass Hidden:\n    def m(self):\n        pass\n",
+		"extensions/sdk-py/ompig_sdk/__init__.py":     "def root_fn():\n    pass\n",
 	})
 	goSyms, rs, py := symbolSet{}, symbolSet{}, symbolSet{}
 	if err := addSubpackageSymbols(root, goSyms, rs, py); err != nil {

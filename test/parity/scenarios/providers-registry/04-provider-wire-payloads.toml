@@ -5,7 +5,7 @@
 # Upstream evidence: test/parity/testdata/provider-wire-pi.mjs imports the pinned
 # upstream @earendil-works/pi-ai provider dist files and drives each stream
 # function with a hermetic local HTTP endpoint plus onPayload capture. The Go
-# side drives the matching pig providers through Provider.Stream and the same
+# side drives the matching ompig providers through Provider.Stream and the same
 # OnPayload hook. This asserts request shape, endpoint path, auth header kind,
 # message roles, tool presence, token field names, reasoning/session fields, and
 # wrapper behavior without live model calls.
@@ -26,7 +26,7 @@
 # fixed SSE body where a usage object rides on content-bearing chunks (the
 # gemini-3.5-flash-via-copilot shape). Both must parse the full text, the stop
 # reason, and input/output usage identically: the parser records usage and keeps
-# processing rather than aborting on the first usage chunk. This pins pig's
+# processing rather than aborting on the first usage chunk. This pins ompig's
 # parseSSE to upstream openai-completions.ts response handling.
 
 name = "04-provider-wire-payloads"
@@ -58,9 +58,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/provider-wire-pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/provider-wire-ompig"]
 pi_args = ["node", "./test/parity/testdata/provider-wire-pi.mjs"]
 
 [cli]

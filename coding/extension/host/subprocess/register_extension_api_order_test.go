@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi commits a factory's runtime changes only when the factory returns (loader.ts:512-527, initializeExtension 593-610) and checks an MCP server when registerMcpServer is called (loader.ts:456-465), so a factory whose registration is invalid throws and discards every queued change, including an unregisterVirtualModel that would filter another extension's queued model (loader.ts:228-232, 491-494). A register frame whose MCP server the host rejects must therefore leave that queue as it was.

@@ -3,7 +3,7 @@ package main
 import (
 	"go/types"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // The built-in rules in rules.go, shape.go and detect.go run first; the registered family rules in rules/ run only when the

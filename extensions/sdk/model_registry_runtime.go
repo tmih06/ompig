@@ -1,7 +1,7 @@
 package sdk
 
 import (
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // NewModelRegistry is Pi's `new ModelRegistry(runtime)` (model-registry.ts:48-52): the compatibility facade over a ModelRuntime the extension built. Every member forwards to the runtime as Pi's does, so it answers from that runtime and not from the Session's registry. The members that take a provider configuration take the runtime's: no functions (see [ModelRuntime.RegisterProvider]).

@@ -23,11 +23,11 @@ const provenanceFile = "test/testdata-provenance.toml"
 type goldenEntry struct {
 	Paths []string `toml:"paths"`
 	// Owner is "pi" for values produced by running Pi (or Node on Pi's code) and
-	// "pig" for values PiG owns.
+	// "ompig" for values Ompig owns.
 	Owner string `toml:"owner"`
 	// Generator is the tracked script or oracle that produces a Pi golden.
 	Generator string `toml:"generator"`
-	// Invariant names the test that asserts the rule a PiG-owned golden pins.
+	// Invariant names the test that asserts the rule a Ompig-owned golden pins.
 	Invariant string `toml:"invariant"`
 	Why       string `toml:"why"`
 }
@@ -69,7 +69,7 @@ var goldenPathRE = regexp.MustCompile(`(?i)golden|\.snap$|__snapshots__|snapshot
 var goldenSkipExt = map[string]bool{".go": true, ".mjs": true, ".js": true, ".ts": true, ".py": true, ".sh": true, ".md": true, ".rs": true, ".cjs": true}
 
 // vendored reports whether a path is in third_party/, vendored upstream code (like node_modules):
-// its fixtures are the upstream library's own, not PiG goldens.
+// its fixtures are the upstream library's own, not Ompig goldens.
 func vendored(p string) bool { return strings.HasPrefix(p, "third_party/") }
 
 // isGoldenFile reports whether a tracked path is a golden or snapshot data file.
@@ -116,14 +116,14 @@ func checkProvenance(root string, tracked []string, prov provenance, hasTest fun
 			} else if !exists[e.Generator] {
 				problems = append(problems, where+": generator "+e.Generator+" is not a tracked file")
 			}
-		case "pig":
+		case "ompig":
 			if e.Invariant == "" || e.Why == "" {
-				problems = append(problems, where+": a PiG-owned golden names the invariant test that asserts its rule and why a value snapshot is needed")
+				problems = append(problems, where+": a Ompig-owned golden names the invariant test that asserts its rule and why a value snapshot is needed")
 			} else if !hasTest(e.Invariant) {
 				problems = append(problems, where+": invariant test "+e.Invariant+" does not exist")
 			}
 		default:
-			problems = append(problems, where+": owner must be pi or pig")
+			problems = append(problems, where+": owner must be pi or ompig")
 		}
 		hit := false
 		for _, pat := range e.Paths {
@@ -192,7 +192,7 @@ var piInventories = []string{"docs/parity/PORT_MAP.md", "test/parity/interfaces/
 var piPathRE = regexp.MustCompile(`packages/[A-Za-z0-9_./-]+\.ts\b`)
 
 // piSourceNames returns the file names of the Pi sources and tests the tracked inventories name. A citation counts only
-// when it names one of them, so a PiG TypeScript file or an invented name does not satisfy the expected-value rule.
+// when it names one of them, so a Ompig TypeScript file or an invented name does not satisfy the expected-value rule.
 func piSourceNames(root string) (map[string]bool, error) {
 	names := map[string]bool{}
 	for _, pattern := range piInventories {

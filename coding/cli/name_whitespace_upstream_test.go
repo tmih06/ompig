@@ -26,7 +26,7 @@ func runNameWhitespaceCLI(t *testing.T, bin, name string, extra ...string) (stri
 	args := append([]string{"--name", name, "--no-extensions", "--offline"}, extra...)
 	command := exec.CommandContext(t.Context(), bin, args...)
 	command.Dir = project
-	command.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+root, "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_USE_PI_DIRS=", "PIG_OFFLINE=1", "PI_OFFLINE=1", "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "FORCE_COLOR=0", "NO_COLOR=1")
+	command.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+root, "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_USE_PI_DIRS=", "OMPIG_OFFLINE=1", "PI_OFFLINE=1", "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "FORCE_COLOR=0", "NO_COLOR=1")
 	command.Stdin = strings.NewReader("{\"type\":\"get_state\",\"id\":\"name-state\"}\n")
 	var stdout, stderr bytes.Buffer
 	command.Stdout, command.Stderr = &stdout, &stderr

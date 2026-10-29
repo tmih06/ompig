@@ -7,14 +7,14 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // pi: packages/ai/src/api/google-generative-ai.ts
 
 // The request payload google-generative-ai builds (buildParams, convertMessages, convertTools) over random transcripts, model ids, thinking-level
-// maps and stream options. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal as parsed JSON.
+// maps and stream options. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal as parsed JSON.
 func TestGoogleGenerativeAIPayloadMatchesPi(t *testing.T) { checkGooglePayload(t, false) }
 
 // TestGoogleVertexPayloadMatchesPi is the same comparison for google-vertex (an API key selects the Vertex client; buildParams is the same shape).
@@ -166,7 +166,7 @@ func checkGooglePayload(t *testing.T, vertex bool) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d id=%s reasoning=%v simple=%v levels=%s options=%v", i, p.ID, p.Reasoning, p.Simple, p.Levels, p.Options), got, piPayloadWithD115(want[i]), &failures, classes)
 	}

@@ -27,14 +27,14 @@ def check(args):
                 print(f"budget: {'ok  ' if ok else 'FAIL'} {hid}/{sid} {metric} = {value} (ceiling {ceiling})")
     allowance = budgets.get("parity", {}).get("request_bytes_over_pi")
     if allowance is not None:
-        pig = rows.get("round-trip", {}).get("pig", {}).get("request_bytes")
+        ompig = rows.get("round-trip", {}).get("ompig", {}).get("request_bytes")
         pi = rows.get("round-trip", {}).get("pi", {}).get("request_bytes")
-        if pig is None or pi is None:
-            print("budget: skip parity request size (run the overhead evals with pig and pi)")
+        if ompig is None or pi is None:
+            print("budget: skip parity request size (run the overhead evals with ompig and pi)")
         else:
-            ok = pig - pi <= allowance
+            ok = ompig - pi <= allowance
             failures += not ok
-            print(f"budget: {'ok  ' if ok else 'FAIL'} parity request bytes: pig {pig} - pi {pi} = {pig - pi:+d} (allowance {allowance})")
+            print(f"budget: {'ok  ' if ok else 'FAIL'} parity request bytes: ompig {ompig} - pi {pi} = {ompig - pi:+d} (allowance {allowance})")
     return 1 if failures else 0
 
 

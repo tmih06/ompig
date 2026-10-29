@@ -1,4 +1,4 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 // © 2016 and later: Unicode, Inc. and others.
 // Copyright (C) 2006-2016, International Business Machines Corporation and others.
@@ -12,7 +12,7 @@ import (
 	"encoding/binary"
 	"sort"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 //go:embed thai_dictionary.bin
@@ -163,7 +163,7 @@ func seaMarkBest(words *[3]possibleWord, found int, text []rune, pos *int, dicti
 
 // seaDivide ports ICU 78.3's four divideUpDictionaryRange implementations. The engines share three-word lookahead and unknown-word resynchronization; Thai additionally consumes elision/repetition suffixes and requires more than four code points. Returned byte offsets exclude the range end, as in ICU's DictionaryCache.
 func seaDivide(text string, script rune, visit func(int)) {
-	// pig additive (D92): a Piglet that strips word-dictionaries finds no boundary inside a Thai, Lao, Khmer or Burmese run, as dictionaries_off.go does.
+	// ompig additive (D92): a Ompiglet that strips word-dictionaries finds no boundary inside a Thai, Lao, Khmer or Burmese run, as dictionaries_off.go does.
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.WordDictionaries) {
 		return
 	}

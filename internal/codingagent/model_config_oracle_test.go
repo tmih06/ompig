@@ -13,12 +13,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // model-config.ts ModelConfig.load: the text a models.json that fails the schema reports (typebox's localized errors,
 // formatted by formatValidationPath), against the pinned Pi. Documents are curated mistakes plus seeded corruptions of
-// a valid document; a document Pi accepts must load in Pig too.
+// a valid document; a document Pi accepts must load in Ompig too.
 func TestModelsJSONSchemaErrorsMatchPi(t *testing.T) {
 	base := `{"providers":{"custom":{"name":"Custom","baseUrl":"https://example.test/v1","apiKey":"k","api":"openai-completions","headers":{"x-a":"1"},"compat":{"supportsStore":true,"maxTokensField":"max_tokens","openRouterRouting":{"order":["a"],"sort":"price"}},"authHeader":true,"models":[{"id":"m1","name":"M1","reasoning":true,"thinkingLevelMap":{"off":null,"high":"hi"},"input":["text","image"],"cost":{"input":1,"output":2,"cacheRead":0.5,"cacheWrite":0.1,"tiers":[{"inputTokensAbove":1000,"input":1,"output":2,"cacheRead":0,"cacheWrite":0}]},"promptCache":{"short":5,"long":60},"contextWindow":128000,"maxTokens":4096,"inputLimits":{"maxRequestBytes":100,"images":{"resize":{"maxWidth":10,"jpegQuality":80},"maxPerMessage":2}},"samplingParams":{"temperature":0.2},"samplingParamsByThinkingLevel":{"high":{"top_p":1}},"headers":{"h":"v"},"compat":{"supportsDeveloperRole":false}}],"modelOverrides":{"m1":{"name":"N","cost":{"input":3},"compat":{"supportsStrictMode":true}}}}}}`
 	docs := []string{
@@ -144,13 +144,13 @@ func TestModelsJSONSchemaErrorsMatchPi(t *testing.T) {
 		if want == "" && got != "" && !strings.HasPrefix(got, "Provider ") {
 			// A provider that fails composition is reported by the composer (applyModelsJson), not by ModelConfig.
 			if failures++; failures <= 8 {
-				t.Errorf("doc %d %s\n  Pig %q\n  Pi accepts the document", i, doc, got)
+				t.Errorf("doc %d %s\n  Ompig %q\n  Pi accepts the document", i, doc, got)
 			}
 			continue
 		}
 		if want != "" && got != want {
 			if failures++; failures <= 8 {
-				t.Errorf("doc %d %s\n  Pig %q\n  Pi  %q", i, doc, got, want)
+				t.Errorf("doc %d %s\n  Ompig %q\n  Pi  %q", i, doc, got, want)
 			}
 		}
 	}

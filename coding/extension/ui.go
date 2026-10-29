@@ -71,7 +71,7 @@ type DialogValueUIContext interface {
 // matches upstream's module-level `noOpUIContext` constant at
 // runner.ts:188).
 //
-// **Method shape conventions (pig):**
+// **Method shape conventions (ompig):**
 //
 //   - Methods that upstream returns `Promise<T | undefined>` from
 //     map to `(T, error)` in Go. The error half carries cancellation
@@ -162,7 +162,7 @@ type UIContext interface {
 	// upstream: types.ts:181
 	SetHeader(factory HeaderFactory)
 
-	// pig additive (D60): SetLogin validates and installs Pig's native login
+	// ompig additive (D60): SetLogin validates and installs Ompig's native login
 	// definition in the shared header slot. Upstream Pi exposes only
 	// SetHeader because its in-process extensions can supply component factories.
 	SetLogin(definition LoginDefinition) error
@@ -256,7 +256,7 @@ type UIContext interface {
 	// overlay cannot be opened (e.g. no TUI bound, like in print or
 	// RPC modes).
 	//
-	// pig-specific: no upstream equivalent. Upstream's Custom()
+	// ompig-specific: no upstream equivalent. Upstream's Custom()
 	// can't cross a subprocess boundary because its factory captures
 	// in-process TUI references; this is the deserialised companion.
 	RunRemoteOverlay(opts RemoteOverlayOptions, host RemoteOverlayHost, onHandle func(RemoteOverlayHandle)) (any, bool)
@@ -267,7 +267,7 @@ type UIContext interface {
 	// handler on its input loop: it asks off the loop and applies the
 	// verdict in input order. Returns an unsubscribe function.
 	//
-	// pig additive (D19): upstream listeners run in process and answer
+	// ompig additive (D19): upstream listeners run in process and answer
 	// synchronously; a subprocess listener's verdict crosses a socket.
 	OnRemoteTerminalInput(extensionName string, handler RemoteTerminalInputHandler) (unsubscribe func())
 }
@@ -356,7 +356,7 @@ func (*noopUIContext) SetTheme(ThemeSelection) SetThemeResult {
 	// Mirrors the unavailable-UI result at runner.ts:214: `{ success: false,
 	// error: "UI not available" }`. The string is upstream-verbatim
 	// so an extension that pattern-matches on the error message
-	// works identically against pig's noop.
+	// works identically against ompig's noop.
 	return SetThemeResult{Success: false, Error: "UI not available"}
 }
 func (*noopUIContext) GetToolsExpanded() bool { return false }

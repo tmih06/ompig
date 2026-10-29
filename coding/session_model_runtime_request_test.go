@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi sdk.ts:375-385 routes the main request through ModelRuntime.streamSimple, whose lazy stream preserves setup errors as provider messages rather than Agent exceptions.

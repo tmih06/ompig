@@ -4,7 +4,7 @@ import json
 import struct
 import unittest
 
-import pig_sdk
+import ompig_sdk
 
 
 class _RecordingSocket:
@@ -17,7 +17,7 @@ class _RecordingSocket:
 
 class FrameWriteTests(unittest.TestCase):
     def test_a_frame_is_one_socket_write(self):
-        ext = pig_sdk.Extension("frame-write")
+        ext = ompig_sdk.Extension("frame-write")
         sock = _RecordingSocket()
         ext._sock = sock
         ext._send_locked({"type": "pong", "pong": {"nonce": "n1"}})
@@ -28,11 +28,11 @@ class FrameWriteTests(unittest.TestCase):
         self.assertEqual(json.loads(frame[4:]), {"type": "pong", "pong": {"nonce": "n1"}})
 
     def test_an_oversized_frame_is_refused_before_any_write(self):
-        ext = pig_sdk.Extension("frame-write")
+        ext = ompig_sdk.Extension("frame-write")
         sock = _RecordingSocket()
         ext._sock = sock
         with self.assertRaises(RuntimeError):
-            ext._send_locked({"type": "pong", "pong": {"nonce": "x" * (pig_sdk.MAX_FRAME_SIZE + 1)}})
+            ext._send_locked({"type": "pong", "pong": {"nonce": "x" * (ompig_sdk.MAX_FRAME_SIZE + 1)}})
         self.assertEqual(sock.writes, [])
 
 

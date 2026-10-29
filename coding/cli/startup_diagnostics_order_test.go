@@ -41,7 +41,7 @@ func TestStartupDiagnosticOrderMatchesPi(t *testing.T) {
 			t.Run(mode+"/"+tc.name, func(t *testing.T) {
 				args := append([]string{"--mode", mode, "-e", missing}, tc.args...)
 				run := runStartupDiagnosticProcess(t, binary, root, agentDir, args...)
-				want := tc.before + settingsWarning + extensionError + tc.after + "Hint: Start without extensions using \"pig -ne\".\n"
+				want := tc.before + settingsWarning + extensionError + tc.after + "Hint: Start without extensions using \"ompig -ne\".\n"
 				var exit *exec.ExitError
 				if !errors.As(run.err, &exit) || exit.ExitCode() != 1 || run.stdout != "" || run.stderr != want {
 					t.Fatalf("exit=%v stdout=%q\nstderr=%q\nwant=%q", run.err, run.stdout, run.stderr, want)
@@ -85,8 +85,8 @@ func TestHeadlessNoModelOutputMatchesPi(t *testing.T) {
 				run := runStartupDiagnosticProcess(t, binary, root, agentDir, args...)
 				wantError := ""
 				if prompt != "" {
-					// Each PiG build stages its docs in its own bundle directory under docs (D22): the message names that directory. A session also leaves the lease file beside it (bundle-<hash>.lease), which is no bundle.
-					bundles, globErr := filepath.Glob(filepath.Join(root, "pig", "docs", "bundle-????????????????"))
+					// Each Ompig build stages its docs in its own bundle directory under docs (D22): the message names that directory. A session also leaves the lease file beside it (bundle-<hash>.lease), which is no bundle.
+					bundles, globErr := filepath.Glob(filepath.Join(root, "ompig", "docs", "bundle-????????????????"))
 					if globErr != nil || len(bundles) != 1 {
 						t.Fatalf("docs bundle directories = %v (%v), want exactly one", bundles, globErr)
 					}
@@ -128,7 +128,7 @@ func runStartupDiagnosticProcess(t *testing.T, binary, root, agentDir string, ar
 	t.Helper()
 	cmd := exec.CommandContext(t.Context(), binary, append([]string{"--offline", "--no-session", "-ne"}, args...)...)
 	cmd.Dir = root
-	cmd.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+filepath.Join(root, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "FORCE_COLOR=0")
+	cmd.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+filepath.Join(root, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "FORCE_COLOR=0")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err := cmd.Run()

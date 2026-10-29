@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// TestAuthDiscriminatorParity verifies pig writes the same auth.json shape
+// TestAuthDiscriminatorParity verifies ompig writes the same auth.json shape
 // upstream pi reads (audit, ).
 func TestAuthDiscriminatorParity(t *testing.T) {
 	dir := t.TempDir()
@@ -43,7 +43,7 @@ func TestAuthDiscriminatorParity(t *testing.T) {
 	}
 }
 
-// TestAuthLegacyMigration verifies an auth.json written by an older pig
+// TestAuthLegacyMigration verifies an auth.json written by an older ompig
 // build (or hand-edited) with "type":"api"/"apiKey" reads in the current
 // shape without being rewritten on read (upstream never writes on read), and
 // that the next write stores the current shape.
@@ -134,7 +134,7 @@ func TestAuthOAuthRoundTrip(t *testing.T) {
 // bare names are literals and env references require the "$" sigil (the
 // startup migration rewrites legacy bare names to "$NAME").
 func TestAuthGetResolvesAPIKeyFromEnv(t *testing.T) {
-	t.Setenv("PIG_TEST_OPENAI_KEY_VIA_ENV", "sk-resolved-from-env")
+	t.Setenv("OMPIG_TEST_OPENAI_KEY_VIA_ENV", "sk-resolved-from-env")
 
 	dir := t.TempDir()
 	store, err := NewAuthStorage(filepath.Join(dir, "auth.json"))
@@ -142,7 +142,7 @@ func TestAuthGetResolvesAPIKeyFromEnv(t *testing.T) {
 		t.Fatalf("new: %v", err)
 	}
 	// Store an explicit env reference: {"openai":{"type":"api_key","key":"$OPENAI_API_KEY"}}.
-	if err := store.Set("openai", Credential{Type: CredentialAPIKey, Key: "$PIG_TEST_OPENAI_KEY_VIA_ENV"}); err != nil {
+	if err := store.Set("openai", Credential{Type: CredentialAPIKey, Key: "$OMPIG_TEST_OPENAI_KEY_VIA_ENV"}); err != nil {
 		t.Fatalf("set: %v", err)
 	}
 
@@ -159,7 +159,7 @@ func TestAuthGetResolvesAPIKeyFromEnv(t *testing.T) {
 	if err != nil {
 		t.Fatalf("getraw: %v", err)
 	}
-	if raw.Key != "$PIG_TEST_OPENAI_KEY_VIA_ENV" {
+	if raw.Key != "$OMPIG_TEST_OPENAI_KEY_VIA_ENV" {
 		t.Errorf("GetRaw should return on-disk value; got Key=%q", raw.Key)
 	}
 }
@@ -190,7 +190,7 @@ func TestAuthGetLiteralKeyPassesThrough(t *testing.T) {
 // Regression guard: we must NOT call configvalue.Resolve on OAuth
 // secrets: they're opaque values, not config strings.
 func TestAuthGetDoesNotResolveOAuthFields(t *testing.T) {
-	t.Setenv("PIG_TEST_OAUTH_LOOKALIKE", "this-must-not-leak")
+	t.Setenv("OMPIG_TEST_OAUTH_LOOKALIKE", "this-must-not-leak")
 
 	dir := t.TempDir()
 	store, err := NewAuthStorage(filepath.Join(dir, "auth.json"))
@@ -199,7 +199,7 @@ func TestAuthGetDoesNotResolveOAuthFields(t *testing.T) {
 	}
 	in := Credential{
 		Type:    CredentialOAuth,
-		Refresh: "PIG_TEST_OAUTH_LOOKALIKE",
+		Refresh: "OMPIG_TEST_OAUTH_LOOKALIKE",
 		Access:  "access-token-verbatim",
 	}
 	if err := store.Set("github-copilot", in); err != nil {
@@ -209,7 +209,7 @@ func TestAuthGetDoesNotResolveOAuthFields(t *testing.T) {
 	if err != nil {
 		t.Fatalf("get: %v", err)
 	}
-	if got.Refresh != "PIG_TEST_OAUTH_LOOKALIKE" {
+	if got.Refresh != "OMPIG_TEST_OAUTH_LOOKALIKE" {
 		t.Errorf("OAuth refresh must NOT be resolved; got %q", got.Refresh)
 	}
 }
@@ -314,7 +314,7 @@ func TestAuthGetProviderEnv(t *testing.T) {
 // precedence over the process environment. Mirrors upstream auth-storage.ts
 // resolveConfigValue(cred.key, cred.env).
 func TestAuthGetResolvesKeyAgainstProviderEnv(t *testing.T) {
-	t.Setenv("PIG_TEST_SCOPED_KEY", "from-process")
+	t.Setenv("OMPIG_TEST_SCOPED_KEY", "from-process")
 	dir := t.TempDir()
 	store, err := NewAuthStorage(filepath.Join(dir, "auth.json"))
 	if err != nil {
@@ -322,8 +322,8 @@ func TestAuthGetResolvesKeyAgainstProviderEnv(t *testing.T) {
 	}
 	if err := store.Set("openai", Credential{
 		Type: CredentialAPIKey,
-		Key:  "$PIG_TEST_SCOPED_KEY",
-		Env:  map[string]string{"PIG_TEST_SCOPED_KEY": "from-scope"},
+		Key:  "$OMPIG_TEST_SCOPED_KEY",
+		Env:  map[string]string{"OMPIG_TEST_SCOPED_KEY": "from-scope"},
 	}); err != nil {
 		t.Fatalf("Set: %v", err)
 	}

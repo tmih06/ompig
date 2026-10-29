@@ -6,8 +6,8 @@ package turn
 import (
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // request is the request phase: it clears a stale partial and marks the attempt, runs the beforeRequest hooks, streams

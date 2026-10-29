@@ -1,4 +1,4 @@
-//go:build !pig_strip_llama_cpp
+//go:build !ompig_strip_llama_cpp
 
 package codingagent
 
@@ -6,9 +6,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/llama"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/llama"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
 )
 
 // An extension's registered native provider with an API-key auth method (the built-in llama.cpp) is offered by /login, at its

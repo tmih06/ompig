@@ -44,7 +44,7 @@ Go SDK `go test -race ./extensions/sdk/...` passes. `go test ./coding/extension/
 
 SDK READMEs (`extensions/sdk`, `extensions/sdk-py`, `extensions/sdk-rs`): add a short `pi.events` section (`On`/`Emit` names, by-value JSON, call through the context inside a handler).
 
-`docs/parity/PORT_MAP.md`: `packages/coding-agent/src/core/event-bus.ts` maps to `coding/extension/eventbus.go` (in-process) and `coding/extension/host/subprocess/event_bus.go`, `protocol_events.go` (Host registry), `extensions/sdk/event_bus.go`, `extensions/sdk-py/pig_sdk/event_bus.py`, `extensions/sdk-rs/src/event_bus.rs` (native SDKs). `test/parity/interfaces/*` needs `make interface-go` (new exported Go API: `sdk.EventBus`, `sdk.EventBusHandler`, `Extension.Events`, `Context.Events`).
+`docs/parity/PORT_MAP.md`: `packages/coding-agent/src/core/event-bus.ts` maps to `coding/extension/eventbus.go` (in-process) and `coding/extension/host/subprocess/event_bus.go`, `protocol_events.go` (Host registry), `extensions/sdk/event_bus.go`, `extensions/sdk-py/ompig_sdk/event_bus.py`, `extensions/sdk-rs/src/event_bus.rs` (native SDKs). `test/parity/interfaces/*` needs `make interface-go` (new exported Go API: `sdk.EventBus`, `sdk.EventBusHandler`, `Extension.Events`, `Context.Events`).
 
 ## D86 draft (flagged for the owner; not merged)
 

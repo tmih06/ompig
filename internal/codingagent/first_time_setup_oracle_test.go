@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type firstSetupProbe struct {
@@ -25,8 +25,8 @@ type firstSetupOracleResult struct {
 }
 
 // first-time-setup.ts handleInput against pinned Pi: k/up and j/down clamp over the options and preview the theme only on a change,
-// confirm (or LF) continues then submits, the cancel binding skips. pig divergence (D88): Pig inserts a sprite step after the theme
-// step and draws its own logo and "PiG" name (Pi: APP_NAME "pi"), so the harness presses the key that entered the sprite step once more (Pi has no such
+// confirm (or LF) continues then submits, the cancel binding skips. ompig divergence (D88): Ompig inserts a sprite step after the theme
+// step and draws its own logo and "Ompig" name (Pi: APP_NAME "pi"), so the harness presses the key that entered the sprite step once more (Pi has no such
 // step) and the frames compare from the "Welcome" line down with the app name read as Pi's; events, results and every option line must agree.
 func TestFirstTimeSetupMatchesPi(t *testing.T) {
 	bindings := []map[string][]string{
@@ -75,7 +75,7 @@ func TestFirstTimeSetupMatchesPi(t *testing.T) {
 		out := []string{}
 		seen := false
 		for _, line := range lines {
-			line = strings.NewReplacer("Welcome to PiG", "Welcome to pi", "within PiG", "within Pi").Replace(visibleText([][]string{{line}})[0][0])
+			line = strings.NewReplacer("Welcome to Ompig", "Welcome to pi", "within Ompig", "within Pi").Replace(visibleText([][]string{{line}})[0][0])
 			seen = seen || strings.Contains(line, "Welcome to")
 			if seen {
 				out = append(out, line)

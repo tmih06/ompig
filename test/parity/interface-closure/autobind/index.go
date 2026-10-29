@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/internal/ledgertarget"
+	"github.com/tmih06/ompig/test/parity/internal/ledgertarget"
 
 	"golang.org/x/tools/go/packages"
 )
@@ -682,7 +682,7 @@ func (ix *index) ctxConsumers(t types.Type) bool {
 	return ix.ctxCache[t]
 }
 
-// withoutHarnessProbes drops the parity-harness probes from a reach set: they run only under PIG_PARITY_HARNESS=1, so a member they
+// withoutHarnessProbes drops the parity-harness probes from a reach set: they run only under OMPIG_PARITY_HARNESS=1, so a member they
 // use has no production caller (the validator rejects them as production references). A nil set stays nil.
 func withoutHarnessProbes(reach map[string]bool) map[string]bool {
 	if reach == nil {

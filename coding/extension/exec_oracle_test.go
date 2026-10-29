@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type execScenario struct {
@@ -39,7 +39,7 @@ func execScenarios(dir string) []execScenario {
 		scenarios = append(scenarios, execScenario{Command: "sh", Args: sh(script), CWD: dir})
 	}
 	// A timer that fires leaves each script a second on either side: on a loaded host sh can take hundreds of milliseconds to
-	// start and run its first command (bash started as "sh" also searches the PATH for itself), in Pi as in PiG, so a shorter
+	// start and run its first command (bash started as "sh" also searches the PATH for itself), in Pi as in Ompig, so a shorter
 	// timeout races the child and the two runs can end differently.
 	for _, timeout := range []float64{1000, 0, -5, 1e9} {
 		for _, script := range []string{"sleep 2; echo late", "echo quick", "echo before; sleep 3", "trap '' TERM; sleep 2; echo trapped"} {
@@ -139,7 +139,7 @@ func TestExecCommandMatchesPi(t *testing.T) {
 		_ = json.Unmarshal(raw, &normalized)
 		want := expected[i]
 		if normalized.Thrown != "" && want.Thrown != "" {
-			// Pi's message starts with the Node error code; Pig reports Node's message text.
+			// Pi's message starts with the Node error code; Ompig reports Node's message text.
 			if _, message, ok := strings.Cut(want.Thrown, ":"); ok && strings.Contains(normalized.Thrown, strings.TrimSpace(message)[:min(len(strings.TrimSpace(message)), 40)]) {
 				continue
 			}
@@ -148,7 +148,7 @@ func TestExecCommandMatchesPi(t *testing.T) {
 			continue
 		}
 		// exec.ts kills a pre-aborted child right after spawn, so a fast command such as echo may or may not write before
-		// SIGTERM lands, in Pi as in Pig. Each side's output must then be a prefix of what the command writes.
+		// SIGTERM lands, in Pi as in Ompig. Each side's output must then be a prefix of what the command writes.
 		if scenario.Aborted && normalized.Killed && want.Killed && normalized.Code == want.Code && normalized.Thrown == want.Thrown {
 			full := strings.Join(scenario.Args, " ") + "\n"
 			if scenario.Command == "echo" && strings.HasPrefix(full, normalized.Stdout) && strings.HasPrefix(full, want.Stdout) && normalized.Stderr == want.Stderr {
@@ -160,7 +160,7 @@ func TestExecCommandMatchesPi(t *testing.T) {
 		}
 		in, _ := json.Marshal(scenario)
 		e, _ := json.Marshal(want)
-		t.Errorf("scenario %d %.300s\n  Pig %.400s\n  Pi  %.400s", i, in, raw, e)
+		t.Errorf("scenario %d %.300s\n  Ompig %.400s\n  Pi  %.400s", i, in, raw, e)
 	}
 	if failures > 8 {
 		t.Errorf("%d of %d scenarios differ from Pi", failures, len(scenarios))

@@ -12,7 +12,7 @@ package compaction
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // completeSimpleWithRetries runs call through ai.RetryAssistantCall, upstream's

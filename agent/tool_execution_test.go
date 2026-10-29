@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // findToolResult returns the single tool result for toolCallID from a finished
@@ -48,7 +48,7 @@ func TestPendingToolCallsArgumentsRemainMutableAfterCollection(t *testing.T) {
 // loop end to end: the model requests a tool whose Execute returns a Go error.
 // Upstream turns a thrown tool into an error tool-result the model can recover
 // from (agent-loop finalizeExecutedToolCall); it must not crash the run or drop
-// the turn. pig must produce an IsError result whose ToolCallID still matches the
+// the turn. ompig must produce an IsError result whose ToolCallID still matches the
 // call, so the tool_use/tool_result pair stays intact in history.
 func TestSend_ToolExecuteError_BecomesLinkedErrorResult(t *testing.T) {
 	tool := &fakeTool{name: "boom", mode: ToolModeSequential, execErr: errors.New("disk on fire")}
@@ -81,7 +81,7 @@ func TestSend_ToolExecuteError_BecomesLinkedErrorResult(t *testing.T) {
 
 // TestSend_InvalidToolArgs_BecomesLinkedErrorResult drives the loop when the
 // model calls a tool with arguments that fail the tool's JSON schema (here a
-// required field is missing). pig validates before Execute and must return an
+// required field is missing). ompig validates before Execute and must return an
 // IsError result with the calling ToolCallID rather than run the tool on bad
 // input or drop the call.
 func TestSend_InvalidToolArgs_BecomesLinkedErrorResult(t *testing.T) {
@@ -120,7 +120,7 @@ func TestSend_InvalidToolArgs_BecomesLinkedErrorResult(t *testing.T) {
 }
 
 // TestSend_UnknownTool_BecomesLinkedErrorResult drives the loop when the model
-// calls a tool that is not registered. pig must synthesize an IsError result
+// calls a tool that is not registered. ompig must synthesize an IsError result
 // ("not found") with the calling ToolCallID rather than crash or silently drop
 // the call, so the turn's tool pairing stays valid.
 func TestSend_UnknownTool_BecomesLinkedErrorResult(t *testing.T) {

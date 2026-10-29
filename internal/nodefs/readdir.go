@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ReadDir returns the entries of the directory named by name in the order Node's fs.readdirSync returns them. libuv's scandir sorts them

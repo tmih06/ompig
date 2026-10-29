@@ -8,10 +8,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Upstream runner.ts:948-985 createToolContext, wrapper.ts:14-19 and tool-definition-wrapper.ts:7-30: a tool call gets the extension context plus `tools` and `executeTool()`, backed by the actions bindCore installed. The call passes its own id and defaults the nested call's signal to the calling tool's.

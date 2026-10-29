@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // A config.oauth provider (registerProvider(name, {oauth})) whose login asks a select prompt and lets the user's cancel
@@ -25,7 +25,7 @@ const configOAuthCancelNodeFixture = `export default pi => {
 
 const configOAuthCancelGoFixture = `package fixture
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk"
+import "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	e := sdk.New("cfg-oauth")

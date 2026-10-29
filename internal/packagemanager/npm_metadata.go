@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/nodesemver"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/nodesemver"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // GetNpmVersionRange is Pi's getNpmVersionRange: the node-semver range a selector denotes, or "" when it is absent or not a valid npm range, such as a dist tag.

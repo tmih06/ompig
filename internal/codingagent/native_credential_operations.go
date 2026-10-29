@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // CredentialSynchronizationOperation identifies the credential change that committed before synchronization failed.

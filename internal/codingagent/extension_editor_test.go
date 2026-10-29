@@ -13,9 +13,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // extensionEditorProbe is an ExtensionEditorComponent with the state its callbacks report (extension-editor.ts constructor onSubmit/onCancel).
@@ -163,7 +163,7 @@ func TestExtensionEditorExternalAction(t *testing.T) {
 }
 
 // extension-editor.ts:134-138: after the external edit the forced repaint shows the edited text. Pi re-renders every component on requestRender(true);
-// PiG's parent containers reuse a child's cached lines until the child is invalidated, so the dialog must invalidate itself when the edit lands.
+// Ompig's parent containers reuse a child's cached lines until the child is invalidated, so the dialog must invalidate itself when the edit lands.
 func TestExtensionEditorExternalEditRepaintsThroughAParentContainer(t *testing.T) {
 	c := newExtensionEditorProbe(t, "Edit", "initial text", map[string][]string{"app.editor.external": {"ctrl+x"}}, nil)
 	var complete func(string)
@@ -204,7 +204,7 @@ type editorProbeState struct {
 func firstEditorStateDifference(got, want []editorProbeState) string {
 	for k := range max(len(got), len(want)) {
 		if k >= len(got) || k >= len(want) {
-			return fmt.Sprintf("step %d: Pig has %d states, Pi %d", k, len(got), len(want))
+			return fmt.Sprintf("step %d: Ompig has %d states, Pi %d", k, len(got), len(want))
 		}
 		if reflect.DeepEqual(got[k], want[k]) {
 			continue
@@ -218,10 +218,10 @@ func firstEditorStateDifference(got, want []editorProbeState) string {
 				b = want[k].Lines[j]
 			}
 			if a != b {
-				return fmt.Sprintf("step %d row %d:\n  Pig %q\n  Pi  %q", k, j, a, b)
+				return fmt.Sprintf("step %d row %d:\n  Ompig %q\n  Pi  %q", k, j, a, b)
 			}
 		}
-		return fmt.Sprintf("step %d:\n  Pig %+v\n  Pi  %+v", k, got[k], want[k])
+		return fmt.Sprintf("step %d:\n  Ompig %+v\n  Pi  %+v", k, got[k], want[k])
 	}
 	return ""
 }
@@ -247,7 +247,7 @@ func randomExtensionEditorProbes() []editorProbe {
 // Pi extension-editor.ts handleInput, run against the installed Pi: tui.select.cancel is tested before app.editor.external and every other key reaches the
 // editor. The probes never open the external editor (Pi would spawn it); a remapped external key equal to the cancel key shows the order.
 func TestExtensionEditorHandleInputMatchesPi(t *testing.T) {
-	// The oracle forces FORCE_COLOR=3 and draws 24-bit colors, so Pig must draw them whatever COLORTERM the shell exports.
+	// The oracle forces FORCE_COLOR=3 and draws 24-bit colors, so Ompig must draw them whatever COLORTERM the shell exports.
 	pinHeaderTerminal(t, tui.TerminalColorModeTrueColor)
 	probes := []editorProbe{
 		{Keys: []string{"a", "b", "\r"}},

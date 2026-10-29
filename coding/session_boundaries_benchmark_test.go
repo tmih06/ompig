@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Each sample owns a Session, a native boundary handler, two provider requests, a committed custom entry, acknowledged event delivery and joined shutdown. It measures before-settle delivery, not disk history or subprocess IPC.

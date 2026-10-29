@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -13,9 +13,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
 	"github.com/aws/smithy-go"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 const bedrockFailureRequestID = "11111111-2222-3333-4444-555555555555"
@@ -175,7 +175,7 @@ func TestBedrockUpstreamErrorMetadata(t *testing.T) {
 
 // Pi's Bedrock client is the AWS SDK on Node's http modules, so a refused connect fails with Node's own error (probed: Pi 1.1.0).
 // Through NodeHttpHandler (a proxy, or AWS_BEDROCK_FORCE_HTTP1=1) it is "connect ECONNREFUSED <address>:<port>", which matches
-// none of retry.ts's patterns, so Pi does not retry it; PiG's "fetch failed" was retried three times. Through the default
+// none of retry.ts's patterns, so Pi does not retry it; Ompig's "fetch failed" was retried three times. Through the default
 // NodeHttp2Handler it is "The pending stream has been canceled (caused by: connect ECONNREFUSED …)", which Pi retries.
 func TestBedrockRefusedConnectIsNodesErrorLikePi(t *testing.T) {
 	address := closedTCPAddress(t, "tcp4", "127.0.0.1:0")

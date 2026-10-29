@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/durabletest"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // lostWrites reports success for every write and stores nothing, so the first conformance case that reads a file back must fail.

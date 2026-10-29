@@ -9,9 +9,9 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsarray"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsarray"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Ports highlight.js 10.7.3 lib/core.js (the compiler, the highlighter and the HTML emitter), the highlighter Pi's packages/coding-agent/src/utils/syntax-highlight.ts drives.

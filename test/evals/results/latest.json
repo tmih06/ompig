@@ -12,12 +12,12 @@
   "prompt": "Say hello",
   "session_exchanges": 2000,
   "harnesses": {
-    "pig": {
-      "name": "PiG",
+    "ompig": {
+      "name": "Ompig",
       "npm": [],
       "version": null,
       "version_output": "0.87.1",
-      "version_command": "pig --version"
+      "version_command": "ompig --version"
     },
     "pi": {
       "name": "Pi",
@@ -34,7 +34,7 @@
       "scenario": "startup",
       "title": "Startup (--version)",
       "by": {
-        "pig": {
+        "ompig": {
           "runs": 10,
           "wall_ms_median": 21.5,
           "wall_ms_p90": 22.4,
@@ -56,7 +56,7 @@
       "scenario": "round-trip",
       "title": "One prompt, streamed reply",
       "by": {
-        "pig": {
+        "ompig": {
           "runs": 10,
           "wall_ms_median": 29.1,
           "wall_ms_p90": 30.7,
@@ -88,7 +88,7 @@
       "scenario": "resumed-session",
       "title": "One prompt after resuming a large Session",
       "by": {
-        "pig": {
+        "ompig": {
           "runs": 10,
           "wall_ms_median": 128.7,
           "wall_ms_p90": 135.1,

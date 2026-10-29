@@ -30,10 +30,10 @@
     --- PASS: TestPythonSDKToolEventsAndNewEvents/strict (0.44s)
     --- PASS: TestPythonSDKToolEventsAndNewEvents/shared-ok (0.44s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/test/extension-conformance	8.156s
+ok  	github.com/tmih06/ompig/test/extension-conformance	8.156s
 
 ## go test ./test/extension-conformance -run 'TestNativeEventBus.*/python' -count=1 (events lane's rows, python realm; 221 s including the 10,000-emit stress row)
-ok  	github.com/MichaelKinsy/PiG/test/extension-conformance	221.914s   (run after the events.release change)
+ok  	github.com/tmih06/ompig/test/extension-conformance	221.914s   (run after the events.release change)
 
 ## Mutation checks, Python unit tests (a mutant is applied to a copy of extensions/sdk-py; the run is the lane's three test files)
 KILLED   register frame omits mcp_servers  <- test_mcp_servers_registered_by_the_factory_travel_in_the_register_frame
@@ -65,7 +65,7 @@ KILLED   emit does not raise on an unhandled error  <- test_emit_carries_payload
 KILLED   emit sends no parent (extension-level call)  <- test_emit_carries_payload_and_parent
 27 killed, 0 survived of 27
 
-## Mutation checks, Host conformance rows (a mutant is applied to pig_sdk/__init__.py in place, one Go row runs, the file is restored)
+## Mutation checks, Host conformance rows (a mutant is applied to ompig_sdk/__init__.py in place, one Go row runs, the file is restored)
 KILLED register frame omits mcp_servers <- TestPythonSDKMcpServerRegistration
 KILLED callerId is not the calling tool call <- TestPythonSDKExecuteToolAndCallableTools
 KILLED nested updates dropped <- TestPythonSDKExecuteToolAndCallableTools

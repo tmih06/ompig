@@ -17,7 +17,7 @@ model = "fixture/thinking-model"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 capture_start = "Automatic Theme"
@@ -41,9 +41,9 @@ wait_contains = ["Light Theme", "→ ✓ dark", "Enter to select · Esc to go ba
 wait_timeout_seconds = 5
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/automatic-theme-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/automatic-theme-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/automatic-theme-agent"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

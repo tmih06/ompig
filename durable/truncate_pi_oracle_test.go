@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/internal/truncate"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/internal/truncate"
 )
 
 type truncateOp struct {

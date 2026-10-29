@@ -5,7 +5,7 @@ from . import stats
 
 
 def verdict(ratio, rules):
-    """pig/pi ratio of pooled warm medians, in durable-report's terms: a loss is more than 3% slower, a win is 1.3x faster or better."""
+    """ompig/pi ratio of pooled warm medians, in durable-report's terms: a loss is more than 3% slower, a win is 1.3x faster or better."""
     if ratio is None:
         return "n/a"
     if ratio > rules["loss_if_slower_than"]:
@@ -27,12 +27,12 @@ def durable(raw, out, seed, csv_rows):
     md += ["## Workload", "", f"{w['name']}. Sizes {w['sizes']}, {w['measured_turns']} measured turns of {w['tool_calls_per_measured_turn']} tool calls, history pattern {w['history_pattern_tool_calls']} tool calls per turn, "
            f"cold = {w['cold']}, warm = {w['warm']}. CPU-idle gate: busy fraction at most {w['cpu_idle_gate']['max_busy_fraction']} over {w['cpu_idle_gate']['window_s']} s. {w['reference']}.", ""]
     md += ["Runtimes: " + "; ".join(f"**{k}**: {v}" for k, v in w["runtimes"].items()), ""]
-    md += ["## Latency (ms), median with 95% bootstrap interval over samples", "", "| turns | metric | pig-durable | pi-durable | ratio pig/pi |", "|---|---|---|---|---|"]
+    md += ["## Latency (ms), median with 95% bootstrap interval over samples", "", "| turns | metric | ompig-durable | pi-durable | ratio ompig/pi |", "|---|---|---|---|---|"]
     for size, by in raw["samples"].items():
         for m in ("cold_ms", "warm_ms", "open_ms", "peak_rss_mib", "cpu_s", "bytes"):
-            vals = {rt: [s[m] for s in by.get(rt, []) if s.get(m) is not None] for rt in ("pig-durable", "pi-durable")}
-            cells = [R.cell(vals[rt], seed) for rt in ("pig-durable", "pi-durable")]
-            ratio = (stats.median(vals["pig-durable"]) / stats.median(vals["pi-durable"])) if vals["pig-durable"] and vals["pi-durable"] and stats.median(vals["pi-durable"]) else None
+            vals = {rt: [s[m] for s in by.get(rt, []) if s.get(m) is not None] for rt in ("ompig-durable", "pi-durable")}
+            cells = [R.cell(vals[rt], seed) for rt in ("ompig-durable", "pi-durable")]
+            ratio = (stats.median(vals["ompig-durable"]) / stats.median(vals["pi-durable"])) if vals["ompig-durable"] and vals["pi-durable"] and stats.median(vals["pi-durable"]) else None
             md.append(f"| {size} | {m} | {cells[0]} | {cells[1]} | {R.fmt(ratio)} |")
             for rt, vs in vals.items():
                 if vs:
@@ -41,11 +41,11 @@ def durable(raw, out, seed, csv_rows):
     rules = w["reporting"]
     md += ["", "## Warm turns, pooled over samples (ms)", "",
            f"Every sample contributes its nine warm turns. A cell needs {rules['min_warm_turns_per_cell']} of them to meet durable-report's rule ({rules['rounds_for_that']} rounds); cells below that are marked and are not for publication. "
-           f"Verdict on the ratio of the pooled medians: loss if pig is more than {round((rules['loss_if_slower_than'] - 1) * 100)}% slower, win if {rules['win_if_faster_by']}x faster or better, slightly better below {rules['slightly_better_below']}, otherwise tie. Only ratios from this session are claims.", "",
+           f"Verdict on the ratio of the pooled medians: loss if ompig is more than {round((rules['loss_if_slower_than'] - 1) * 100)}% slower, win if {rules['win_if_faster_by']}x faster or better, slightly better below {rules['slightly_better_below']}, otherwise tie. Only ratios from this session are claims.", "",
            "| turns | runtime | n warm | p50 | p95 | max | p50 95% interval |", "|---|---|---|---|---|---|---|"]
     verdicts = []
     for size, by in raw["samples"].items():
-        pooled = {rt: pooled_warm(by.get(rt, [])) for rt in ("pig-durable", "pi-durable")}
+        pooled = {rt: pooled_warm(by.get(rt, [])) for rt in ("ompig-durable", "pi-durable")}
         for rt, vals in pooled.items():
             if not vals:
                 continue
@@ -53,11 +53,11 @@ def durable(raw, out, seed, csv_rows):
             below = " (below the rule)" if len(vals) < rules["min_warm_turns_per_cell"] else ""
             md.append(f"| {size} | {rt} | {len(vals)}{below} | {R.fmt(stats.median(vals))} | {R.fmt(stats.percentile(vals, 95))} | {R.fmt(max(vals))} | [{R.fmt(lo)}, {R.fmt(hi)}] |")
             csv_rows.append(["durable", size, rt, "warm_pooled_ms", len(vals), stats.median(vals), stats.percentile(vals, 95), min(vals), max(vals), lo, hi])
-        if pooled["pig-durable"] and pooled["pi-durable"] and stats.median(pooled["pi-durable"]):
-            ratio = stats.median(pooled["pig-durable"]) / stats.median(pooled["pi-durable"])
+        if pooled["ompig-durable"] and pooled["pi-durable"] and stats.median(pooled["pi-durable"]):
+            ratio = stats.median(pooled["ompig-durable"]) / stats.median(pooled["pi-durable"])
             verdicts.append(f"| {size} | {R.fmt(ratio)} | {verdict(ratio, rules)} |")
     if verdicts:
-        md += ["", "| turns | ratio pig/pi (warm p50) | verdict |", "|---|---|---|"] + verdicts
+        md += ["", "| turns | ratio ompig/pi (warm p50) | verdict |", "|---|---|---|"] + verdicts
     md += ["", rules["rules"], "", w.get("not_measured_here", ""), ""]
     gates = raw["gate"]
     passed = sum(1 for g in gates if g["passed"])
@@ -71,7 +71,7 @@ def soak(raw, out, seed, csv_rows):
     md = ["# Soak bench", "", "No model was called and no live key was used.", "", R.env_block(raw["env"]), "", R.egress_block(raw["egress"]), ""]
     md += [f"Every arm ran the same scripted turns at the same time for {o['hours']:g} h, one RPC process each, with compaction on a 32k-token window so the transcript stays bounded: growth is a leak, not the work. "
            f"The process tree's processes, threads, descriptors and memory were sampled every {o['interval_s']:g} s. A series is flat when its second half stays within a band: processes, threads and descriptors within max({o['bands']['count'][0]}, "
-           f"{o['bands']['count'][1] * 100:g}% of the median), resident memory within {o['bands']['rss'] * 100:g}% of the median. Goroutines are not sampled live (PiG exposes no count); see `PIG_PROFILE=goroutine`.", "",
+           f"{o['bands']['count'][1] * 100:g}% of the median), resident memory within {o['bands']['rss'] * 100:g}% of the median. Goroutines are not sampled live (Ompig exposes no count); see `OMPIG_PROFILE=goroutine`.", "",
            "| arm | turns | samples | verdict | processes | threads | fds | rss MiB | pss MiB |", "|---|---|---|---|---|---|---|---|---|"]
     for aid in R.arm_order(raw["arms"]):
         a = raw["arms"][aid]
@@ -109,7 +109,7 @@ def startup(raw, out, seed, csv_rows):
     md += ["", R.table(groups, metrics, seed, csv_rows, "startup", "version"), ""]
     ratios = R.ratio_table(groups, R.ranked(groups, metrics, raw["env"].get("cpu_tick_ms")), seed)
     if ratios:
-        md += ["Ratio of medians against Pi 1.1.0 (arm / Pi) with a 95% bootstrap interval; below 1 is lower than Pi. Every metric is listed, including those PiG loses:", "", ratios, ""]
+        md += ["Ratio of medians against Pi 1.1.0 (arm / Pi) with a 95% bootstrap interval; below 1 is lower than Pi. Every metric is listed, including those Ompig loses:", "", ratios, ""]
     md += R.limitations(dict(raw, failures={"startup": raw["failures"]} if raw.get("failures") else {}))  # startup keeps {arm: [errors]} for its one scenario
     return "\n".join(md)
 

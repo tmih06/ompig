@@ -9,17 +9,17 @@ tags = ["hermetic", "tui", "fixture-auth"]
 driver = "interactive-tmux"
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["python3", "launch.py", "pig"]
+ompig_args = ["python3", "launch.py", "ompig"]
 pi_args = ["python3", "launch.py", "pi"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent", "OPENAI_API_KEY=fixture", "PI_OFFLINE=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent", "OPENAI_API_KEY=fixture", "PI_OFFLINE=1"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "OPENAI_API_KEY=fixture", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1"]
 [tmux]
 cwd = "testdata/branch-watch"
 width = 100
 height = 35
-ready_pattern_pig = "(final-branch)"
+ready_pattern_ompig = "(final-branch)"
 ready_pattern_pi = "(final-branch)"
 ready_timeout_seconds = 20
 capture_start = "parity-snap-cwd-"

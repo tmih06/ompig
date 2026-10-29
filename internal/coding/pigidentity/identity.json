@@ -1,11 +1,11 @@
 {
-  "attributionName": "PiG",
-  "attributionUrl": "https://github.com/MichaelKinsy/PiG",
+  "attributionName": "Ompig",
+  "attributionUrl": "https://github.com/tmih06/ompig",
   "attributionCategory": "cli-agent",
-  "codexOriginator": "pig",
-  "chatgptAgentName": "PiG",
-  "xaiReferrer": "pig",
-  "agentMarker": "pig",
-  "userAgentProduct": "pig",
-  "hostedOrigin": "https://pi-in-go.dev"
+  "codexOriginator": "ompig",
+  "chatgptAgentName": "Ompig",
+  "xaiReferrer": "ompig",
+  "agentMarker": "ompig",
+  "userAgentProduct": "ompig",
+  "hostedOrigin": "https://ompig.dev"
 }

@@ -23,7 +23,7 @@ func TestCLINameValidationFollowsSessionSelection(t *testing.T) {
 			args := append([]string{"--offline", "--no-extensions", "--session-dir", t.TempDir(), "-p"}, tc.args...)
 			cmd := exec.CommandContext(t.Context(), binary, args...)
 			cmd.Dir = t.TempDir()
-			cmd.Env = append(os.Environ(), "HOME="+t.TempDir(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+t.TempDir(), "FORCE_COLOR=0")
+			cmd.Env = append(os.Environ(), "HOME="+t.TempDir(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+t.TempDir(), "FORCE_COLOR=0")
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			err := cmd.Run()

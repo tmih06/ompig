@@ -4,7 +4,7 @@ Reference: Pi 0.87.1, `.upstream/v0.87.1/packages/coding-agent/test/`. The denom
 
 ## Settings manager
 
-The tests use isolated settings files or `NewInMemorySettingsManager`, as appropriate. `PIG_USE_PI_DIRS=1` selects the original `.pi` layout in the first-half tests. Other tests use the selected configuration directory under existing D2. Go uses an empty string for the tested absent path values, nil versus empty slices for absent versus empty tool lists, and a pointer for theme-setting presence. The external-editor platform rows exercise the production resolver for Windows, Darwin and Linux; the public getter also runs on the host platform.
+The tests use isolated settings files or `NewInMemorySettingsManager`, as appropriate. `OMPIG_USE_PI_DIRS=1` selects the original `.pi` layout in the first-half tests. Other tests use the selected configuration directory under existing D2. Go uses an empty string for the tested absent path values, nil versus empty slices for absent versus empty tool lists, and a pointer for theme-setting presence. The external-editor platform rows exercise the production resolver for Windows, Darwin and Linux; the public getter also runs on the host platform.
 
 All test paths in this table are under `internal/codingagent/`.
 
@@ -22,7 +22,7 @@ The theme/editor test now uses the actual theme-setting getter, awaits the synch
 
 ## Package manager
 
-All test paths in this table are under `cmd/pig/`. Package resolution is exercised through the production resource inventory, extension collector and managed-source resolver. These are the split Go implementation of Pi's manager. Child-process fixtures replace upstream command mocks with hermetic executable stubs. A mocked command rejection therefore becomes the real process exit error, while the original failure text remains on stderr. No network or user configuration is required.
+All test paths in this table are under `cmd/ompig/`. Package resolution is exercised through the production resource inventory, extension collector and managed-source resolver. These are the split Go implementation of Pi's manager. Child-process fixtures replace upstream command mocks with hermetic executable stubs. A mocked command rejection therefore becomes the real process exit error, while the original failure text remains on stderr. No network or user configuration is required.
 
 | Upstream case lines | Go evidence | Contract |
 |---|---|---|
@@ -73,10 +73,10 @@ Verification commands:
 
 ```sh
 go test -count=1 ./internal/codingagent -run '^(TestSettingsManager(Original.*|FirstHalf.*)|TestSettingsThemeAndEditorUpstream)$'
-go test -count=1 ./cmd/pig -run '^(TestPackage.*(Original|OriginalCases|Upstream)|TestTemporaryNpmPathUnderAgentRootUpstream|TestNpmUpdateVersionReconciliationUpstream|TestPackageChildOutputAndFailure|TestPackageRemovalProgressAndEmptySettings|TestPackageSourceReplacementPreservesFilters|TestPackageTasksStartOrderAndJoin)$'
-go test -count=1 -race ./cmd/pig -run '^(TestPackage(InstallFailureProgress|InstallCompletionProgress|LocalResolutionProgress|TemporaryRefreshProgress|UpdateFailureProgress|GitInstallRootTraversal|SettingsSourceNormalization)Upstream|TestPackageBatchedConcurrentUpdatesOriginal|TestGitCheckout.*|TestGitCloneRepoPerPlatform)$'
+go test -count=1 ./cmd/ompig -run '^(TestPackage.*(Original|OriginalCases|Upstream)|TestTemporaryNpmPathUnderAgentRootUpstream|TestNpmUpdateVersionReconciliationUpstream|TestPackageChildOutputAndFailure|TestPackageRemovalProgressAndEmptySettings|TestPackageSourceReplacementPreservesFilters|TestPackageTasksStartOrderAndJoin)$'
+go test -count=1 -race ./cmd/ompig -run '^(TestPackage(InstallFailureProgress|InstallCompletionProgress|LocalResolutionProgress|TemporaryRefreshProgress|UpdateFailureProgress|GitInstallRootTraversal|SettingsSourceNormalization)Upstream|TestPackageBatchedConcurrentUpdatesOriginal|TestGitCheckout.*|TestGitCloneRepoPerPlatform)$'
 go build ./...
-go vet ./cmd/pig ./internal/codingagent
+go vet ./cmd/ompig ./internal/codingagent
 make test-porting-release
 ```
 

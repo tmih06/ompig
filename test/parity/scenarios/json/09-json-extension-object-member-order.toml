@@ -2,7 +2,7 @@
 # Surface: a JSON object an extension supplies keeps the member order it was written in: a tool's partial result and details, a tool_result handler's replacement details, and the content and details that handler received.
 #
 # Upstream evidence (Pi 0.99.1, dist/cli.js, probed 2026-09-30; test-faux twin, prompt "Run: extension echo hello"): details {"zeta":1,"alpha":{"yy":2,"bb":3},"mid":[{"qq":1,"aa":2}]} stay in that order in tool_execution_update and in the tool_result event the handler received, and the handler's {"omega":1,"beta":{"zz":2,"cc":3}} in tool_execution_end and the toolResult message.
-# agent-loop.ts:778-786, 912-919; runner.ts:707-755; agent-session.ts:649-660 (the tool_result event's members). PiG decoded these values into Go maps, which sort members.
+# agent-loop.ts:778-786, 912-919; runner.ts:707-755; agent-session.ts:649-660 (the tool_result event's members). Ompig decoded these values into Go maps, which sort members.
 
 name = "09-json-extension-object-member-order"
 description = "--mode json keeps the member order of details an extension tool and a tool_result handler supplied"
@@ -22,9 +22,9 @@ args = ["--mode", "json", "--model", "test-faux/faux-1", "--system-prompt", "JSO
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../../scenarios/json/testdata/ext/parity-ordered-details.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["../../scenarios/json/testdata/ext/parity-ordered-details.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../../scenarios/json/testdata/ext/parity-ordered-details.mjs"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 

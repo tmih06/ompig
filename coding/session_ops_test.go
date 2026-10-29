@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // helper: append a user msg directly via inner session, bypassing Send
@@ -292,7 +292,7 @@ func TestDispatchSlashForkWithExplicitID(t *testing.T) {
 	sess.agent.SetMessages(sess.inner.BuildContext(nil))
 	srcPath := sess.Path()
 
-	// Pi's /fork takes no argument and opens a picker; the headless Session.DispatchSlash has no picker, so PiG's approved additive argument is
+	// Pi's /fork takes no argument and opens a picker; the headless Session.DispatchSlash has no picker, so Ompig's approved additive argument is
 	// the entry id to fork at (64691d5314, SlashRegistry.DispatchHeadless). The interactive submit path still matches only the exact "/fork".
 	out, err := sess.DispatchSlash("/fork " + deadEnd)
 	if err != nil {

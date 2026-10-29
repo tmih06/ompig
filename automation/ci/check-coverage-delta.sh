@@ -24,7 +24,7 @@ if [[ -z "$cur_covered" ]]; then
   echo "release-check: $CUR has no behavioral count (\"**Behavior verification:** N / M ported entries\")"
   exit 1
 fi
-previous=$(mktemp "${TMPDIR:-/tmp}/pig.XXXXXXXX")
+previous=$(mktemp "${TMPDIR:-/tmp}/ompig.XXXXXXXX")
 trap 'rm -f "$previous"' EXIT
 git show HEAD:test/parity/coverage.md >"$previous" 2>/dev/null || :
 prev_covered=$(behavioral_count "$previous")

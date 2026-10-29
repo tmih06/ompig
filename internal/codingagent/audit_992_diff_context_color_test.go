@@ -3,14 +3,14 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi colors diff context lines, and lines that do not parse as diff lines, with the theme's toolDiffContext token
 // (.upstream/v0.99.2/packages/coding-agent/src/modes/interactive/components/diff.ts:89,141; dark.json maps it to
 // "muted"). Found while probing the renderShell case of tool-renderer-examples.test.ts in a 100x35 tmux pane against
 // an OpenAI-compatible endpoint that asks for one edit of parity-edit-target.txt: real Pi 0.99.2 draws the context line
-// as "\x1b[38;2;157;165;169m 1 before line\x1b[39m" and PiG as SGR dim ("\x1b[2m 1 before line\x1b[22m" from renderDiffString). The interactive
+// as "\x1b[38;2;157;165;169m 1 before line\x1b[39m" and Ompig as SGR dim ("\x1b[2m 1 before line\x1b[22m" from renderDiffString). The interactive
 // edit card renders through renderDiffString, which hard-codes SGR dim; tui.RenderDiff uses the token.
 // interactive-rendering/10-edit-tool-diff compares the same block with output_normalized_equal, which strips the SGR.
 func TestAuditEditDiffContextLinesUseTheToolDiffContextColor(t *testing.T) {

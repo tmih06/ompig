@@ -44,18 +44,18 @@ class PgoBuildTest(unittest.TestCase):
     def test_build_flags_name_the_profile_or_turn_pgo_off(self):
         seen = []
         with mock.patch.object(lock, "run", side_effect=lambda argv, **kw: seen.append(argv)):
-            arms.build_pig("/tmp/out-default")
-            arms.build_pig("/tmp/out-pgo", "/x/pig.pgo")
+            arms.build_ompig("/tmp/out-default")
+            arms.build_ompig("/tmp/out-pgo", "/x/ompig.pgo")
         self.assertIn("-pgo=off", seen[0])  # a stray default.pgo must not change what a default arm measures
-        self.assertIn("-pgo=/x/pig.pgo", seen[1])
+        self.assertIn("-pgo=/x/ompig.pgo", seen[1])
         self.assertNotIn("-pgo=off", seen[1])
 
     def test_lock_verify_rejects_a_profile_that_no_longer_matches(self):
         data = lock.read()
-        data["arms"]["pig-0.5-pgo"]["build"]["pgo_sha256"] = "0" * 64
+        data["arms"]["ompig-0.5-pgo"]["build"]["pgo_sha256"] = "0" * 64
         with mock.patch.object(lock, "read", return_value=data):
             problems = lock.verify()
-        self.assertTrue(any("pig-0.5-pgo" in p and "PGO profile" in p for p in problems), problems)
+        self.assertTrue(any("ompig-0.5-pgo" in p and "PGO profile" in p for p in problems), problems)
 
     def test_the_workspace_builds_the_pgo_arm_with_the_locked_profile_and_the_default_arm_without(self):
         loaded = arms.load()
@@ -64,23 +64,23 @@ class PgoBuildTest(unittest.TestCase):
         def fake_build(out, pgo=None):
             built[os.path.basename(os.path.dirname(out))] = pgo
             return out
-        env = {k: v for k, v in os.environ.items() if not k.startswith("PIGBENCH_BIN_")}
-        with mock.patch.object(arms, "build_pig", side_effect=fake_build), mock.patch.dict(os.environ, env, clear=True):
+        env = {k: v for k, v in os.environ.items() if not k.startswith("OMPIGBENCH_BIN_")}
+        with mock.patch.object(arms, "build_ompig", side_effect=fake_build), mock.patch.dict(os.environ, env, clear=True):
             with arms.Workspace() as ws:
-                pgo_arm = ws.install(loaded["pig-0.5-pgo"])
-                default_arm = ws.install(loaded["pig-0.5"])
-        profile = os.path.join(lock.EVALS, "locks", "pig-0.5.pgo")
-        self.assertEqual(built["pig-0.5-pgo"], profile)
-        self.assertIsNone(built["pig-0.5"])
-        self.assertEqual(pgo_arm.record["install_method"], "go build -pgo=locks/pig-0.5.pgo")
+                pgo_arm = ws.install(loaded["ompig-0.5-pgo"])
+                default_arm = ws.install(loaded["ompig-0.5"])
+        profile = os.path.join(lock.EVALS, "locks", "ompig-0.5.pgo")
+        self.assertEqual(built["ompig-0.5-pgo"], profile)
+        self.assertIsNone(built["ompig-0.5"])
+        self.assertEqual(pgo_arm.record["install_method"], "go build -pgo=locks/ompig-0.5.pgo")
         self.assertEqual(pgo_arm.record["pgo_sha256"], lock.sha256_file(profile))
         self.assertEqual(default_arm.record["install_method"], "go build -pgo=off")
 
     def test_the_workspace_refuses_a_profile_that_does_not_match_the_lock(self):
-        arm = arms.load()["pig-0.5-pgo"]
+        arm = arms.load()["ompig-0.5-pgo"]
         arm.pin = dict(arm.pin, build=dict(arm.pin["build"], pgo_sha256="0" * 64))
-        env = {k: v for k, v in os.environ.items() if not k.startswith("PIGBENCH_BIN_")}
-        with mock.patch.object(arms, "build_pig") as build, mock.patch.dict(os.environ, env, clear=True), arms.Workspace() as ws:
+        env = {k: v for k, v in os.environ.items() if not k.startswith("OMPIGBENCH_BIN_")}
+        with mock.patch.object(arms, "build_ompig") as build, mock.patch.dict(os.environ, env, clear=True), arms.Workspace() as ws:
             with self.assertRaisesRegex(SystemExit, "does not match the locked sha256"):
                 ws.install(arm)
         build.assert_not_called()

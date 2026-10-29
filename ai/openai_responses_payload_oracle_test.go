@@ -8,14 +8,14 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // pi: packages/ai/src/api/openai-responses.ts
 
 // The request payload openai-responses builds (buildParams, convertResponsesMessages, convertResponsesTools) over random transcripts, providers,
-// thinking-level maps, compat flags and stream options. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal as parsed JSON.
+// thinking-level maps, compat flags and stream options. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal as parsed JSON.
 func TestOpenAIResponsesPayloadMatchesPi(t *testing.T) { checkResponsesPayload(t, "openai-responses") }
 
 // TestAzureOpenAIResponsesPayloadMatchesPi is the same comparison for azure-openai-responses (the deployment name replaces the model id).
@@ -200,7 +200,7 @@ func checkResponsesPayload(t *testing.T, api string) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d provider=%s reasoning=%v simple=%v compat=%s levels=%s options=%v", i, p.Provider, p.Reasoning, p.Simple, p.Compat, p.Levels, p.Options), got, want[i], &failures, classes)
 	}

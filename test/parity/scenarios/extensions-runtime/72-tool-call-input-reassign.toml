@@ -25,10 +25,10 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/parity-tool-call-reassign.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/parity-tool-call-reassign.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/parity-tool-call-reassign.mjs",

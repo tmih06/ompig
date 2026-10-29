@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // scalingDeltaProvider streams one text answer in a fixed number of deltas. Its own cost is linear in the deltas and does not read the transcript, so a gate measures the Session.

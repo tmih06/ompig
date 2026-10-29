@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // capture is an HTTP server that records the first request body of each path prefix and answers 400, so neither implementation retries.

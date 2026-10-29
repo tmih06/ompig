@@ -1,9 +1,9 @@
 import threading
 from types import SimpleNamespace
 
-import pig_sdk as sdk
+import ompig_sdk as sdk
 import pytest
-from pig_sdk.provider import dispatch_provider
+from ompig_sdk.provider import dispatch_provider
 
 
 def provider_request(stream, method):

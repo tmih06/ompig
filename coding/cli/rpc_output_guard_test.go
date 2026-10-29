@@ -17,8 +17,8 @@ func TestRPCProtocolUsesRawStdoutAfterStartupTakeover(t *testing.T) {
 		"--mode", "rpc", "--no-session", "--no-extensions", "--no-skills", "--offline",
 		"--model", "test-faux/faux-1")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+home,
-		"PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+home,
+		"OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1")
 	cmd.Stdin = strings.NewReader("{\"id\":\"state\",\"type\":\"get_state\"}\n")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr

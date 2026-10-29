@@ -14,9 +14,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
-	jsonlnode "github.com/MichaelKinsy/PiG/durable/storage/jsonl/node"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
+	jsonlnode "github.com/tmih06/ompig/durable/storage/jsonl/node"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func runPiJSONL(t *testing.T, mode string, programs []oracleProgram, dirs []string) [][]oracleResult {
@@ -91,7 +91,7 @@ func jsonlLines(t *testing.T, dir string) map[string][]any {
 	return files
 }
 
-// Pi's JSONL storage and Pig's run the same seeded programs on their own directories, then each reads its own directory and a copy of the other's: the answers, the files each writer left, the files after each recovery and the state read back must all agree.
+// Pi's JSONL storage and Ompig's run the same seeded programs on their own directories, then each reads its own directory and a copy of the other's: the answers, the files each writer left, the files after each recovery and the state read back must all agree.
 func TestJsonlStorageMatchesPiOnSeededPrograms(t *testing.T) {
 	const seeded = 150
 	programs := make([]oracleProgram, seeded)
@@ -104,41 +104,41 @@ func TestJsonlStorageMatchesPiOnSeededPrograms(t *testing.T) {
 	programs = append(programs, documentBoundaryPrograms()...)
 	programs = append(programs, indexedStringPrograms()...)
 	base := t.TempDir()
-	piDirs, pigDirs := make([]string, len(programs)), make([]string, len(programs))
+	piDirs, ompigDirs := make([]string, len(programs)), make([]string, len(programs))
 	for i := range programs {
-		piDirs[i], pigDirs[i] = filepath.Join(base, fmt.Sprintf("pi-%d", i)), filepath.Join(base, fmt.Sprintf("pig-%d", i))
+		piDirs[i], ompigDirs[i] = filepath.Join(base, fmt.Sprintf("pi-%d", i)), filepath.Join(base, fmt.Sprintf("ompig-%d", i))
 	}
 
 	piWrite := runPiJSONL(t, "jsonl-write", programs, piDirs)
-	pigWrite := runPigJSONL(t, programs, pigDirs, false)
+	ompigWrite := runPigJSONL(t, programs, ompigDirs, false)
 	ops, failures, differing := map[string]int{}, 0, 0
 	for i, program := range programs {
-		differing += compareOracleResults(t, fmt.Sprintf("write program %d", i), program, pigWrite[i], piWrite[i], differing, ops, &failures)
+		differing += compareOracleResults(t, fmt.Sprintf("write program %d", i), program, ompigWrite[i], piWrite[i], differing, ops, &failures)
 	}
 
 	// What each writer left, before any reopen: recovery reclaims superseded sidecar records and would hide a writer that never did.
 	for i := range programs {
-		differing += compareJSONLDirs(t, "after the writes", i, piDirs[i], pigDirs[i], differing)
+		differing += compareJSONLDirs(t, "after the writes", i, piDirs[i], ompigDirs[i], differing)
 	}
 
 	// Each reader opens its own copy, so no reader's recovery changes the files another reader starts from.
-	piOfPig, pigOfPi := copyJSONLDirs(t, pigDirs, base, "pi-reads-pig"), copyJSONLDirs(t, piDirs, base, "pig-reads-pi")
+	piOfPig, ompigOfPi := copyJSONLDirs(t, ompigDirs, base, "pi-reads-ompig"), copyJSONLDirs(t, piDirs, base, "ompig-reads-pi")
 	piReadsPi := runPiJSONL(t, "jsonl-read", programs, piDirs)
 	piReadsPig := runPiJSONL(t, "jsonl-read", programs, piOfPig)
-	pigReadsPi := runPigJSONL(t, programs, pigOfPi, true)
-	pigReadsPig := runPigJSONL(t, programs, pigDirs, true)
+	ompigReadsPi := runPigJSONL(t, programs, ompigOfPi, true)
+	ompigReadsPig := runPigJSONL(t, programs, ompigDirs, true)
 	for i := range programs {
 		if piReadsPi[i][0].Index < 0 {
 			t.Errorf("program %d: Pi cannot reopen its own directory: %s", i, piReadsPi[i][0].Err.Message)
 		}
 	}
 	for i, program := range programs {
-		for label, got := range map[string][]oracleResult{"Pi reads Pig's directory": piReadsPig[i], "Pig reads Pi's directory": pigReadsPi[i], "Pig reads its own directory": pigReadsPig[i]} {
+		for label, got := range map[string][]oracleResult{"Pi reads Ompig's directory": piReadsPig[i], "Ompig reads Pi's directory": ompigReadsPi[i], "Ompig reads its own directory": ompigReadsPig[i]} {
 			differing += compareOracleResults(t, fmt.Sprintf("%s, program %d", label, i), program, got, piReadsPi[i], differing, map[string]int{}, new(int))
 		}
 		// Recovery reclaims the same records: each storage's own directory, and each storage's copy of the other's.
-		differing += compareJSONLDirs(t, "after reopening its own directory", i, piDirs[i], pigDirs[i], differing)
-		differing += compareJSONLDirs(t, "after reopening the other's directory", i, pigOfPi[i], piOfPig[i], differing)
+		differing += compareJSONLDirs(t, "after reopening its own directory", i, piDirs[i], ompigDirs[i], differing)
+		differing += compareJSONLDirs(t, "after reopening the other's directory", i, ompigOfPi[i], piOfPig[i], differing)
 	}
 	if differing > 8 {
 		t.Errorf("%d answers differ", differing)
@@ -149,12 +149,12 @@ func TestJsonlStorageMatchesPiOnSeededPrograms(t *testing.T) {
 }
 
 // compareJSONLDirs compares two storage directories at one stage: every file's decoded records, and main.jsonl byte for byte (compareJSONLBytes).
-func compareJSONLDirs(t *testing.T, stage string, program int, piDir, pigDir string, reported int) int {
+func compareJSONLDirs(t *testing.T, stage string, program int, piDir, ompigDir string, reported int) int {
 	t.Helper()
-	differing := compareJSONLBytes(t, piDir, pigDir, program, reported)
-	if piFiles, pigFiles := jsonlLines(t, piDir), jsonlLines(t, pigDir); !reflect.DeepEqual(piFiles, pigFiles) {
+	differing := compareJSONLBytes(t, piDir, ompigDir, program, reported)
+	if piFiles, ompigFiles := jsonlLines(t, piDir), jsonlLines(t, ompigDir); !reflect.DeepEqual(piFiles, ompigFiles) {
 		if differing++; reported+differing <= 8 {
-			t.Errorf("program %d, %s: persisted records differ\n  Pig %v\n  Pi  %v", program, stage, pigFiles, piFiles)
+			t.Errorf("program %d, %s: persisted records differ\n  Ompig %v\n  Pi  %v", program, stage, ompigFiles, piFiles)
 		}
 	}
 	return differing
@@ -175,7 +175,7 @@ func copyJSONLDirs(t *testing.T, dirs []string, base, label string) []string {
 
 // compareJSONLBytes compares the persisted lines byte for byte, as Pi's JSON.stringify wrote them, except records whose member order the generator
 // does not control (tasks and submissions list their members in Pi's order of construction, which a seeded generator does not reproduce).
-func compareJSONLBytes(t *testing.T, piDir, pigDir string, program, reported int) int {
+func compareJSONLBytes(t *testing.T, piDir, ompigDir string, program, reported int) int {
 	t.Helper()
 	differing := 0
 	entries, err := os.ReadDir(piDir)
@@ -184,9 +184,9 @@ func compareJSONLBytes(t *testing.T, piDir, pigDir string, program, reported int
 	}
 	for _, entry := range entries {
 		a, _ := os.ReadFile(filepath.Join(piDir, entry.Name()))
-		b, _ := os.ReadFile(filepath.Join(pigDir, entry.Name()))
-		piLines, pigLines := strings.Split(string(a), "\n"), strings.Split(string(b), "\n")
-		if len(piLines) != len(pigLines) {
+		b, _ := os.ReadFile(filepath.Join(ompigDir, entry.Name()))
+		piLines, ompigLines := strings.Split(string(a), "\n"), strings.Split(string(b), "\n")
+		if len(piLines) != len(ompigLines) {
 			return differing + 1
 		}
 		if entry.Name() != "main.jsonl" {
@@ -196,9 +196,9 @@ func compareJSONLBytes(t *testing.T, piDir, pigDir string, program, reported int
 			if strings.Contains(piLines[k], `"type":"task"`) || strings.Contains(piLines[k], `"type":"submission"`) || strings.Contains(piLines[k], `"payload":{"type":"task"`) {
 				continue
 			}
-			if piLines[k] != pigLines[k] {
+			if piLines[k] != ompigLines[k] {
 				if differing++; reported+differing <= 8 {
-					t.Errorf("program %d %s line %d\n  Pi  %.400s\n  Pig %.400s", program, entry.Name(), k, piLines[k], pigLines[k])
+					t.Errorf("program %d %s line %d\n  Pi  %.400s\n  Ompig %.400s", program, entry.Name(), k, piLines[k], ompigLines[k])
 				}
 			}
 		}

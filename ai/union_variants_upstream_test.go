@@ -90,7 +90,7 @@ func TestSessionAffinityFormatVariantsMatchPi(t *testing.T) {
 }
 
 // Pi compat-schema.ts:24 ChatTemplateKwargValueSchema: a string, number, boolean or null, or a `{ $var, omitWhenOff? }` placeholder. Every kind
-// decodes from models.json compat into the value the request resolver reads. This checks the decode only: Pig's `any` accepts any object where Pi's
+// decodes from models.json compat into the value the request resolver reads. This checks the decode only: Ompig's `any` accepts any object where Pi's
 // schema allows only the three `$var` literals, and the payload test TestChatTemplateKwargValueKindsReachThePayload covers the resolver.
 func TestChatTemplateKwargValueAllKindsDecodeFromCompat(t *testing.T) {
 	var compat OpenAICompat

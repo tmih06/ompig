@@ -8,7 +8,7 @@ import (
 
 // interactive-mode.ts:5823-5836 getLogoutProviderOptions lists listCredentials() in the order of auth.json's members and sorts by
 // `a.name.localeCompare(b.name)`, which is stable: providers whose names compare equal (the two canonical forms of "é" do) keep the file's order.
-// PiG read the credentials through a Go map, so equal names came out in a random order.
+// Ompig read the credentials through a Go map, so equal names came out in a random order.
 func TestLogoutProviderOptionsKeepTheAuthFileOrderOfEqualNames(t *testing.T) {
 	composed, decomposed := "z\u00e9", "ze\u0301"
 	for _, order := range [][2]string{{composed, decomposed}, {decomposed, composed}} {

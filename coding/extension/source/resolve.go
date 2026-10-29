@@ -13,20 +13,20 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
 	"github.com/BurntSushi/toml"
 	"golang.org/x/mod/modfile"
 )
 
-// GoSDKModulePath is the Go SDK module path that current Pig scaffolds import.
-const GoSDKModulePath = "github.com/MichaelKinsy/PiG/extensions/sdk"
+// GoSDKModulePath is the Go SDK module path that current Ompig scaffolds import.
+const GoSDKModulePath = "github.com/tmih06/ompig/extensions/sdk"
 
-// LegacyGoSDKModulePath is the module path the same Go SDK carried in Pig
+// LegacyGoSDKModulePath is the module path the same Go SDK carried in Ompig
 // 0.84 and earlier. Factories written against it stay loadable: generated
 // runners alias it to the current SDK source, so the extension compiles
 // against the SDK that speaks the running host's protocol.
-const LegacyGoSDKModulePath = "github.com/mainstai/pig/extensions/sdk"
+const LegacyGoSDKModulePath = "github.com/mainstai/ompig/extensions/sdk"
 
 // IsGoSDKModulePath reports whether path names the Go SDK module under its
 // current or legacy module path.
@@ -559,7 +559,7 @@ func returnsSDKExtension(fn *ast.FuncDecl, aliases map[string]string) (string, b
 	return sdkModulePath, ok
 }
 
-var rustFactory = lazyregexp.New(`(?m)^\s*pub\s+fn\s+new_extension\s*\(\s*\)\s*->\s*(?:pig_sdk::)?Extension\b`)
+var rustFactory = lazyregexp.New(`(?m)^\s*pub\s+fn\s+new_extension\s*\(\s*\)\s*->\s*(?:ompig_sdk::)?Extension\b`)
 
 func resolveRust(root string) (Definition, error) {
 	var manifest struct {
@@ -606,7 +606,7 @@ func resolveRust(root string) (Definition, error) {
 // pythonModuleName is an importable Python module name.
 var pythonModuleName = lazyregexp.New(`^[A-Za-z_][A-Za-z0-9_]*$`)
 
-var pythonFactory = lazyregexp.New(`(?m)^def[ \t]+new_extension[ \t]*\([ \t]*\)[ \t]*->[ \t]*(?:pig_sdk\.)?Extension[ \t]*:`)
+var pythonFactory = lazyregexp.New(`(?m)^def[ \t]+new_extension[ \t]*\([ \t]*\)[ \t]*->[ \t]*(?:ompig_sdk\.)?Extension[ \t]*:`)
 
 func resolvePython(root string) (Definition, error) {
 	entries, err := os.ReadDir(root)

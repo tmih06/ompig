@@ -4,7 +4,7 @@
 # Each "package" line starts a section; "shards" names the shard count the
 # placement balances; with any other count every test is placed by name hash. A package that runs under two shard
 # counts (a Linux and a Windows job split) has one section for each. Each line "<shard> <test>" pins that
-# test to the shard, packed by measured duration (tests over 10 s for cmd/pig and 5 s for the extension packages, measured
+# test to the shard, packed by measured duration (tests over 10 s for cmd/ompig and 5 s for the extension packages, measured
 # with go test -json) on top of the hash-placed rest. A name that is no longer
 # listed is ignored; a test not named here is placed by hash, so every test
 # still lands in exactly one shard.
@@ -25,7 +25,7 @@ shards 8
 2 TestRPCInputEndResponsePrecedesShutdownNotificationComparedWithPi
 2 TestRPCPreflightAdmission
 3 TestExtensionVirtualModelFlushFailureStopsStartup
-3 TestNodeExtensionModelCallsCarryPiGIdentityNeverPis
+3 TestNodeExtensionModelCallsCarryOmpigIdentityNeverPis
 3 TestRPCMistralMatchesPi
 3 TestRPCPromptResponseSemanticsUpstream
 3 TestRPCUserBashFailurePort

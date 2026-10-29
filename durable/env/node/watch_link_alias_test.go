@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A target that is a symbolic link to a file reports changes to that file whatever its native watcher's events are

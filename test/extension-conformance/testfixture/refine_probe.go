@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"sync"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // The tool "refine-probe" (TestConformance_RefinedToolArgumentsAgreeAcrossSDKs): a refined string, an optional refined integer, a union whose branches are refined strings, an optional

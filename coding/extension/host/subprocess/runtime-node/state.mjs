@@ -27,7 +27,7 @@ export function currentRuntime() {
 export function getRuntime() {
   const runtime = currentRuntime();
   if (!runtime) {
-    throw new Error("pig TS runtime not initialized");
+    throw new Error("ompig TS runtime not initialized");
   }
   return runtime;
 }

@@ -9,15 +9,15 @@ import (
 
 func TestCandidatePackageExcludesTestAndParityHelpers(t *testing.T) {
 	for _, path := range []string{
-		"github.com/MichaelKinsy/PiG/coding/extension/extensiontest",
-		"github.com/MichaelKinsy/PiG/internal/tui/parity",
-		"github.com/MichaelKinsy/PiG/internal/tui/termsim",
+		"github.com/tmih06/ompig/coding/extension/extensiontest",
+		"github.com/tmih06/ompig/internal/tui/parity",
+		"github.com/tmih06/ompig/internal/tui/termsim",
 	} {
 		if candidatePackage(path) {
 			t.Errorf("candidatePackage(%q) = true", path)
 		}
 	}
-	if !candidatePackage("github.com/MichaelKinsy/PiG/internal/codingagent") {
+	if !candidatePackage("github.com/tmih06/ompig/internal/codingagent") {
 		t.Fatal("production package rejected")
 	}
 }
@@ -38,7 +38,7 @@ func TestRecordForObjectStableShapeHash(t *testing.T) {
 }
 
 func TestExtractIncludesExportedAndInternalProductionSymbols(t *testing.T) {
-	result, err := extract([]string{"github.com/MichaelKinsy/PiG/coding/extension"})
+	result, err := extract([]string{"github.com/tmih06/ompig/coding/extension"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,10 +47,10 @@ func TestExtractIncludesExportedAndInternalProductionSymbols(t *testing.T) {
 		seen[entry.ID] = true
 	}
 	for _, id := range []string{
-		"go:github.com/MichaelKinsy/PiG/coding/extension#API",
-		"go:github.com/MichaelKinsy/PiG/coding/extension#Context.CWD",
-		"go:github.com/MichaelKinsy/PiG/coding/extension#ProjectTrustEvent",
-		"go:github.com/MichaelKinsy/PiG/coding/extension#ctxKey",
+		"go:github.com/tmih06/ompig/coding/extension#API",
+		"go:github.com/tmih06/ompig/coding/extension#Context.CWD",
+		"go:github.com/tmih06/ompig/coding/extension#ProjectTrustEvent",
+		"go:github.com/tmih06/ompig/coding/extension#ctxKey",
 	} {
 		if !seen[id] {
 			t.Errorf("missing %s", id)

@@ -20,7 +20,7 @@ import (
 	_ "golang.org/x/image/bmp"
 	_ "golang.org/x/image/webp"
 
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // jpegQualities are the JPEG qualities tried in order.
@@ -44,7 +44,7 @@ func CreatePhotonImages() tools.ImageProcessor { return newSequential(photon{}) 
 func (photon) Prepare(ctx context.Context, data []byte, mimeType string, limits tools.ImageLimits) (*tools.PreparedImage, error) {
 	orientation := ExifOrientation(data)
 	inline := tools.INLINE_IMAGE_TYPES[mimeType]
-	// pig divergence (D165): Go's image decoders stand for Photon's `new_from_byteslice`.
+	// ompig divergence (D165): Go's image decoders stand for Photon's `new_from_byteslice`.
 	// Decoded even when it is returned as it is: a damaged file is an error, not an image the provider rejects.
 	decoded, _, err := image.Decode(bytes.NewReader(data))
 	if err != nil || decoded.Bounds().Empty() {
@@ -122,7 +122,7 @@ func encodeWithin(ctx context.Context, img *image.NRGBA, size tools.ImageSize, m
 	return nil, nil
 }
 
-// pig divergence (D165): Go's JPEG encoder, not Photon's `get_bytes_jpeg(quality)`; the quantization differs.
+// ompig divergence (D165): Go's JPEG encoder, not Photon's `get_bytes_jpeg(quality)`; the quantization differs.
 // encodeJPEG drops the alpha channel, as Photon's JPEG encoder does, rather than darkening transparent pixels.
 func encodeJPEG(img *image.NRGBA, quality int) ([]byte, error) {
 	opaque := image.NewNRGBA(img.Bounds())

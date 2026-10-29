@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func newExtensionErrorProbe(t *testing.T) *InteractiveMode {
@@ -31,7 +31,7 @@ func chatPlainText(m *InteractiveMode) string {
 	return strings.Join(lines, "\n")
 }
 
-// Upstream binds the extension runner's onError to showExtensionError. Pig had
+// Upstream binds the extension runner's onError to showExtensionError. Ompig had
 // no listener in interactive mode, so handler failures and host-reported
 // errors were never shown. The listener is wired with the runner, runs on the
 // failing goroutine without blocking, and the main loop shows the error.

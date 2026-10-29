@@ -8,8 +8,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // Authentic model-generated signatures are live-only. These fixtures exercise every available pinned pair's real converter with deterministic thinking/tool cycles and the original combined-history handoff assertion.

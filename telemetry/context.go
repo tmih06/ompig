@@ -4,7 +4,7 @@
 // The adapter contract trusts typed inputs: malformed input behavior is unspecified, as upstream states.
 package telemetry
 
-import "github.com/MichaelKinsy/PiG/internal/jsstring"
+import "github.com/tmih06/ompig/internal/jsstring"
 
 // AttributeValue is a string, number, boolean, or slice of those values.
 type AttributeValue = any

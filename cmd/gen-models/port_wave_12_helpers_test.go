@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type catalogFixtureTransport struct {
@@ -50,7 +50,7 @@ func (transport catalogFixtureTransport) RoundTrip(request *http.Request) (*http
 
 // TestPortWave12GeneratorSubprocess replaces only fetch, as the upstream --import preload does. The subprocess runs the real command main and preserves its exit status/stdout/stderr.
 func TestPortWave12GeneratorSubprocess(t *testing.T) {
-	catalog := os.Getenv("PIG_WAVE12_CATALOG")
+	catalog := os.Getenv("OMPIG_WAVE12_CATALOG")
 	if catalog == "" {
 		return
 	}
@@ -59,7 +59,7 @@ func TestPortWave12GeneratorSubprocess(t *testing.T) {
 		t.Fatal(err)
 	}
 	transport := catalogFixtureTransport{catalog: data}
-	if listings := os.Getenv("PIG_WAVE12_OPENROUTER"); listings != "" {
+	if listings := os.Getenv("OMPIG_WAVE12_OPENROUTER"); listings != "" {
 		encoded, err := os.ReadFile(listings)
 		if err != nil {
 			t.Fatal(err)
@@ -81,10 +81,10 @@ func TestPortWave12GeneratorSubprocess(t *testing.T) {
 
 func isolateGeneratorEnvironment(t *testing.T) {
 	t.Helper()
-	for _, name := range []string{"HOME", "PIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "XDG_STATE_HOME"} {
+	for _, name := range []string{"HOME", "OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "XDG_STATE_HOME"} {
 		t.Setenv(name, t.TempDir())
 	}
-	for _, name := range []string{"PI_SESSION_FILE", "PI_SESSION_ID", "PIG_SDK_GO_ROOT"} {
+	for _, name := range []string{"PI_SESSION_FILE", "PI_SESSION_ID", "OMPIG_SDK_GO_ROOT"} {
 		t.Setenv(name, "")
 	}
 }
@@ -112,7 +112,7 @@ func runGeneratorSubprocessWithOpenRouter(t *testing.T, cwd string, catalog any,
 	defer cancel()
 	command := exec.CommandContext(ctx, executable, append([]string{"-test.run=^TestPortWave12GeneratorSubprocess$", "--"}, args...)...)
 	command.Dir = cwd
-	command.Env = append(os.Environ(), "PIG_WAVE12_CATALOG="+preload)
+	command.Env = append(os.Environ(), "OMPIG_WAVE12_CATALOG="+preload)
 	if openRouter != nil {
 		encoded, err := json.Marshal(openRouter)
 		if err != nil {
@@ -120,7 +120,7 @@ func runGeneratorSubprocessWithOpenRouter(t *testing.T, cwd string, catalog any,
 		}
 		listings := filepath.Join(t.TempDir(), "openrouter.json")
 		writeFile(t, listings, string(encoded))
-		command.Env = append(command.Env, "PIG_WAVE12_OPENROUTER="+listings)
+		command.Env = append(command.Env, "OMPIG_WAVE12_OPENROUTER="+listings)
 	}
 	var stdout, stderr bytes.Buffer
 	command.Stdout, command.Stderr = &stdout, &stderr

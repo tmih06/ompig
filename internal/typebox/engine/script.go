@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ---- script/token ----
@@ -517,7 +517,7 @@ func keyword(word string, build func() any) parser {
 	return mapped(C(word), func(any) any { return build() })
 }
 
-// grammar builds the parsers on first use: the combinator closures are about 2 KB the pig binary must not allocate at startup.
+// grammar builds the parsers on first use: the combinator closures are about 2 KB the ompig binary must not allocate at startup.
 var grammarOnce sync.Once
 
 func grammar() { grammarOnce.Do(buildGrammar) }

@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // Pi: packages/durable/src/env/index.ts:159-168 (DirReader) and env/node.ts:543-597 (NodeDirReader). Entries come back with their kind (file, directory, symlink) from

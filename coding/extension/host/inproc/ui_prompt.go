@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // uiPromptTracker is the runner-owned state behind ui_prompt_start and
@@ -57,7 +57,7 @@ type uiPrompt struct {
 // through the subprocess UI bridge, which calls BeginUIPrompt when the host
 // call arrives, before it waits for terminal focus.
 //
-// upstream: runner.ts withUIPrompt (private; pig exposes it because the
+// upstream: runner.ts withUIPrompt (private; ompig exposes it because the
 // subprocess bridge sits outside the runner).
 func (r *Runner) BeginUIPrompt(kind extension.UIPromptKind, title string) (end func()) {
 	t := &r.uiPrompts

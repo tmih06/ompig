@@ -41,7 +41,7 @@ struct BusState {
     conn: Option<Arc<Connection>>,
     // A dispatch can arrive before events.on returns, and after events.off for a listener the Host had already snapshotted, so a listener stays until the Host releases it.
     subs: HashMap<String, Arc<Sub>>,
-    // The listeners subscribed where there is no Host to register them with (no PIG_EXT_SOCKET, as in a unit test), or while the extension connects, in subscription order: `go_live` registers them with the Host before the extension registers.
+    // The listeners subscribed where there is no Host to register them with (no OMPIG_EXT_SOCKET, as in a unit test), or while the extension connects, in subscription order: `go_live` registers them with the Host before the extension registers.
     pending: Vec<Arc<Sub>>,
 }
 
@@ -184,7 +184,7 @@ impl EventBus {
         Ok(result.result)
     }
 
-    /// Subscribes `handler` to `channel`. A listener subscribed while the factory runs is registered with the Host at once, over the connection the factory opened, as Pi's shared emitter holds it from that moment: it hears an emit another extension makes while the factory runs, while the factory waits for a host call of its own. With no Host to reach (no `PIG_EXT_SOCKET`, as in a unit test) it is queued and registered when the extension runs. A failure to register with the Host is returned, and nothing stays subscribed.
+    /// Subscribes `handler` to `channel`. A listener subscribed while the factory runs is registered with the Host at once, over the connection the factory opened, as Pi's shared emitter holds it from that moment: it hears an emit another extension makes while the factory runs, while the factory waits for a host call of its own. With no Host to reach (no `OMPIG_EXT_SOCKET`, as in a unit test) it is queued and registered when the extension runs. A failure to register with the Host is returned, and nothing stays subscribed.
     pub fn on(
         &self,
         channel: impl Into<String>,
@@ -233,7 +233,7 @@ impl EventBus {
 
     /// Delivers `data` to every listener of `channel`, in registration order, and returns when each has finished. Like EventEmitter, an emit on `"error"` with no listener fails.
     ///
-    /// Called through [`Extension::events`](crate::Extension::events) while the factory runs (before the extension runs), it does what Pi's synchronous emit does in a factory: the Host delivers it to every listener it holds, in registration order, the listeners of the extensions loaded before this one and then this extension's own, which [`on`](Self::on) registered with it at once; each finishes before `emit` returns, and an emit on `"error"` that nobody hears fails. The first factory-time bus call connects to the Host (as `parse_frontmatter` does) and `run` reuses the connection: a factory that runs with no Host (no `PIG_EXT_SOCKET`, as in a unit test) gets an error. A listener the factory's emit runs has a [`Context`] with no session state yet (its `cwd` and `mode` are empty), and until the extension registers the only host calls it can make are `pi.events` ones and the parse helpers (`parse_frontmatter`, `parse_date`). Use [`Extension::on_loaded`](crate::Extension::on_loaded) for work that needs the live session.
+    /// Called through [`Extension::events`](crate::Extension::events) while the factory runs (before the extension runs), it does what Pi's synchronous emit does in a factory: the Host delivers it to every listener it holds, in registration order, the listeners of the extensions loaded before this one and then this extension's own, which [`on`](Self::on) registered with it at once; each finishes before `emit` returns, and an emit on `"error"` that nobody hears fails. The first factory-time bus call connects to the Host (as `parse_frontmatter` does) and `run` reuses the connection: a factory that runs with no Host (no `OMPIG_EXT_SOCKET`, as in a unit test) gets an error. A listener the factory's emit runs has a [`Context`] with no session state yet (its `cwd` and `mode` are empty), and until the extension registers the only host calls it can make are `pi.events` ones and the parse helpers (`parse_frontmatter`, `parse_date`). Use [`Extension::on_loaded`](crate::Extension::on_loaded) for work that needs the live session.
     pub fn emit(&self, channel: &str, data: Value) -> io::Result<()> {
         let outcome = self.call("events.emit", json!({"channel": channel, "value": true, "json": data}))?;
         if outcome.is_some_and(|outcome| outcome["unhandledError"] == Value::Bool(true)) {

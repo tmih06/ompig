@@ -6,9 +6,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/childwait"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/childwait"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // A child that exits before the call's readers have taken a byte, by more than the post-exit grace (a machine too busy to schedule them), still

@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // pi-mono #10785: resuming a session resets the active tools to the registration defaults. agent-session.ts restores them from the transcript only when no initial

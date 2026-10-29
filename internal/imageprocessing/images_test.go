@@ -23,8 +23,8 @@ import (
 
 	"golang.org/x/image/bmp"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // makePNGImage builds a w×h RGBA image filled with `c` and encodes

@@ -3,7 +3,7 @@ package coding
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // These declarations are compile-time guards for the native invocation API consumed by the port helpers. Runtime behavior is exercised by the replacement and invocation tests.

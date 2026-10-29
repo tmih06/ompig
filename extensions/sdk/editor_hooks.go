@@ -5,7 +5,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // The app actions Pi's CustomEditor.handleInput dispatches to a handler of its own (custom-editor.ts).

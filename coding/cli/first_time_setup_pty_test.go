@@ -17,18 +17,18 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// firstTimeSetupSession drives an interactive PiG in a fresh PIG_HOME through first-time setup with keys, then proves the
-// session answers a prompt. It returns PIG_HOME.
+// firstTimeSetupSession drives an interactive Ompig in a fresh OMPIG_HOME through first-time setup with keys, then proves the
+// session answers a prompt. It returns OMPIG_HOME.
 func firstTimeSetupSession(t *testing.T, keys []string) string {
 	t.Helper()
 	binary := buildPigBinaryForSignalTest(t)
 	root := t.TempDir()
-	home, cwd, pigHome := filepath.Join(root, "home"), filepath.Join(root, "project"), filepath.Join(root, "pighome")
+	home, cwd, ompigHome := filepath.Join(root, "home"), filepath.Join(root, "project"), filepath.Join(root, "pighome")
 	for _, dir := range []string{home, cwd} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
@@ -36,9 +36,9 @@ func firstTimeSetupSession(t *testing.T, keys []string) string {
 	}
 	env := slices.DeleteFunc(os.Environ(), func(value string) bool {
 		name, _, _ := strings.Cut(value, "=")
-		return slices.Contains([]string{"HOME", "PIG_HOME", "XDG_CONFIG_HOME", "PI_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PI_PACKAGE_DIR", "PIG_USE_PI_DIRS", "PI_EXPERIMENTAL", "PIG_TEST_FAUX", "PIG_TEST_FAUX_SCENARIO", "PIG_STARTUP_TRACE", "PIG_OFFLINE", "PI_OFFLINE"}, name)
+		return slices.Contains([]string{"HOME", "OMPIG_HOME", "XDG_CONFIG_HOME", "PI_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PI_PACKAGE_DIR", "OMPIG_USE_PI_DIRS", "PI_EXPERIMENTAL", "OMPIG_TEST_FAUX", "OMPIG_TEST_FAUX_SCENARIO", "OMPIG_STARTUP_TRACE", "OMPIG_OFFLINE", "PI_OFFLINE"}, name)
 	})
-	env = append(env, "HOME="+home, "PIG_HOME="+pigHome, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color", "PIG_STARTUP_TRACE=1")
+	env = append(env, "HOME="+home, "OMPIG_HOME="+ompigHome, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color", "OMPIG_STARTUP_TRACE=1")
 	master, slave := openPTY(t, 60, 160)
 	defer func() { _ = master.Close() }()
 	defer func() { _ = slave.Close() }()
@@ -98,7 +98,7 @@ func firstTimeSetupSession(t *testing.T, keys []string) string {
 			}
 			select {
 			case err := <-done:
-				t.Fatalf("PiG exited before %s: %v\n%s", what, err, text)
+				t.Fatalf("Ompig exited before %s: %v\n%s", what, err, text)
 			case <-ctx.Done():
 				t.Fatalf("no %s: %v\n%s", what, ctx.Err(), text)
 			case <-tick.C:
@@ -125,12 +125,12 @@ func firstTimeSetupSession(t *testing.T, keys []string) string {
 		}
 		return false
 	}, "an answer after setup")
-	return pigHome
+	return ompigHome
 }
 
-func readSettingsFile(t *testing.T, pigHome string) map[string]any {
+func readSettingsFile(t *testing.T, ompigHome string) map[string]any {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join(pigHome, "agent", "settings.json"))
+	data, err := os.ReadFile(filepath.Join(ompigHome, "agent", "settings.json"))
 	if errors.Is(err, os.ErrNotExist) {
 		return map[string]any{}
 	}
@@ -146,26 +146,26 @@ func readSettingsFile(t *testing.T, pigHome string) map[string]any {
 
 // Esc skips setup: no theme, analytics or sprite is saved, and the session runs.
 func TestFirstTimeSetupEscSkipsOnInteractiveStart(t *testing.T) {
-	pigHome := firstTimeSetupSession(t, []string{"\x1b[B", "\x1b"})
-	settings := readSettingsFile(t, pigHome)
+	ompigHome := firstTimeSetupSession(t, []string{"\x1b[B", "\x1b"})
+	settings := readSettingsFile(t, ompigHome)
 	for _, key := range []string{"theme", "enableAnalytics"} {
 		if value, ok := settings[key]; ok {
 			t.Fatalf("Esc saved %s = %v", key, value)
 		}
 	}
-	if _, err := os.Stat(piglogin.StatePath(pigHome)); !errors.Is(err, os.ErrNotExist) {
+	if _, err := os.Stat(piglogin.StatePath(ompigHome)); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("Esc saved a sprite: %v", err)
 	}
 }
 
 // Completing setup saves the theme and analytics choice in settings.json and the sprite exactly as /sprite set does.
 func TestFirstTimeSetupSavesThemeSpriteAndAnalytics(t *testing.T) {
-	pigHome := firstTimeSetupSession(t, []string{"\x1b[B", "\r", "\x1b[B", "\r", "\x1b[B", "\r"})
-	settings := readSettingsFile(t, pigHome)
+	ompigHome := firstTimeSetupSession(t, []string{"\x1b[B", "\r", "\x1b[B", "\r", "\x1b[B", "\r"})
+	settings := readSettingsFile(t, ompigHome)
 	if settings["theme"] != "dark" || settings["enableAnalytics"] != false {
 		t.Fatalf("settings = %v", settings)
 	}
-	if got := piglogin.LoadVariant(pigHome).ID; got != piglogin.Variants[1].ID {
+	if got := piglogin.LoadVariant(ompigHome).ID; got != piglogin.Variants[1].ID {
 		t.Fatalf("saved sprite = %q, want %q", got, piglogin.Variants[1].ID)
 	}
 }

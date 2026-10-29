@@ -5,10 +5,10 @@ package evals
 // Ports packages/evals/docker/entrypoint.ts.
 //
 // Pi's entrypoint checks the installed workspace, the evaluator sources' permissions and the dist resolution of
-// pi-coding-agent, prepares the agent directory, and starts Vitest. PiG's image holds compiled binaries, so the
+// pi-coding-agent, prepares the agent directory, and starts Vitest. Ompig's image holds compiled binaries, so the
 // workspace check covers them, the evaluator is the root-only runner binary itself, and the suites run in this
 // process instead of a Vitest child. The 1.0.4 change to entrypoint.ts (no npm-shrinkwrap.json check) has no
-// counterpart: PiG's image has no npm install tree.
+// counterpart: Ompig's image has no npm install tree.
 
 import (
 	"context"
@@ -24,8 +24,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
 // EntrypointConfig locates the image's contents.
@@ -63,13 +63,13 @@ func assertWorkspace(config EntrypointConfig, variant string) error {
 	return assertDocumentation(variant)
 }
 
-// assertDocumentation is entrypoint.ts:48-62 over what PiG's agent sees. A pig run materializes its embedded
+// assertDocumentation is entrypoint.ts:48-62 over what Ompig's agent sees. A ompig run materializes its embedded
 // documentation under the config root it starts with, so the check materializes a fresh root, applies the variant's
 // removal, and then asserts the result: without_docs leaves no README.md, CHANGELOG.md, docs or examples; with_docs
-// leaves README.md and models.md in docs, non-empty, with every embedded page present. PiG's bundle has no
+// leaves README.md and models.md in docs, non-empty, with every embedded page present. Ompig's bundle has no
 // CHANGELOG.md or examples directory (D22), so with_docs cannot require them.
 func assertDocumentation(variant string) error {
-	root, err := os.MkdirTemp("", "pig-eval-docs-")
+	root, err := os.MkdirTemp("", "ompig-eval-docs-")
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func assertDocumentation(variant string) error {
 		}
 		for _, name := range []string{"README.md", "CHANGELOG.md", "docs", "examples"} {
 			if _, err := os.Lstat(filepath.Join(root, name)); err == nil {
-				return fmt.Errorf("without_docs contains pig %s.", name)
+				return fmt.Errorf("without_docs contains ompig %s.", name)
 			}
 		}
 		return nil

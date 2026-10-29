@@ -15,11 +15,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/output"
-	"github.com/MichaelKinsy/PiG/durable"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/output"
+	"github.com/tmih06/ompig/durable"
+	envnode "github.com/tmih06/ompig/durable/env/node"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // jsSliceLines is allLines.slice(start, end) with JavaScript's integer

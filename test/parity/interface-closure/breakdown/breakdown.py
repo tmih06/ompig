@@ -32,7 +32,7 @@ def sh(*a, **k):
 
 
 # The ledger of the effective pin (a commit pin's version is <release>+<commit[:8]>, which a release-only pattern never names).
-HEADFILE = 'mapping-v%s.json' % (os.environ.get('PIG_UPSTREAM_VERSION') or subprocess.check_output([sys.executable, 'automation/pin/pin.py', 'get', 'version'], text=True, timeout=120).strip())
+HEADFILE = 'mapping-v%s.json' % (os.environ.get('OMPIG_UPSTREAM_VERSION') or subprocess.check_output([sys.executable, 'automation/pin/pin.py', 'get', 'version'], text=True, timeout=120).strip())
 BASEFILE = 'mapping-v1.0.4.json'
 H = {x['id']: x for x in json.load(open('test/parity/interfaces/' + HEADFILE))['mappings']}
 B = {x['id']: x for x in json.loads(sh('git', 'show', f'{BASE}:test/parity/interfaces/{BASEFILE}'))['mappings']}
@@ -101,7 +101,7 @@ def idents(target):
 
 def behaviour(row):
     """'tested' | 'shape-only' | 'none', plus 'strict' flag (one test reaches the type and the member)."""
-    tgts = row.get('pigTargets') or []
+    tgts = row.get('ompigTargets') or []
     if not tgts:
         return 'none', False
     top, member = idents(tgts[0])
@@ -140,7 +140,7 @@ for i in new:
     f = first.get(i, {})
     derived = f.get('rat', r.get('rationale', '')).startswith('Derived by the interface gap detector')
     ev = [e for e in (r.get('evidence') or []) if e.startswith('test:')]
-    tgt = (r.get('pigTargets') or [''])[0]
+    tgt = (r.get('ompigTargets') or [''])[0]
     if r['disposition'] == 'designed-out':
         c = 4
     elif i not in B or B[i]['upstreamShapeHash'] != r['upstreamShapeHash']:
@@ -171,9 +171,9 @@ for i, c in cls.items():
         b, strict = behaviour(H[i])
         beh[(b, strict)] += 1
         if b == 'tested' and not strict:
-            weak.append((i, pkg(i), (H[i].get('pigTargets') or [''])[0]))
+            weak.append((i, pkg(i), (H[i].get('ompigTargets') or [''])[0]))
         if b != 'tested':
-            flag.append((i, pkg(i), b, (H[i].get('pigTargets') or [''])[0], ';'.join(e for e in (H[i].get('evidence') or []))[:160]))
+            flag.append((i, pkg(i), b, (H[i].get('ompigTargets') or [''])[0], ';'.join(e for e in (H[i].get('evidence') or []))[:160]))
 flag.sort()
 with open(os.path.join(OUT, 'no-behaviour-test.tsv'), 'w') as fh:
     fh.write('id\tpackage\tstate\tgo target\tevidence\n')

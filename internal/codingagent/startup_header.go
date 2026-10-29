@@ -5,12 +5,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // headerContainer keeps host spacing outside the replaceable header component, including when a custom header renders no rows. While startup waits for the terminal's colors (startupHeaderPending) it returns one empty container, so the first paint carries no header, as Pi's headerContainer has no children until after that wait (interactive-mode.ts init()); mountStartupHeader fills it.
@@ -53,7 +53,7 @@ func (m *InteractiveMode) mountStartupHeader() {
 // misaligns them, so the pixel art would break apart there; it gets the text mark. A variable so tests can select either.
 var supportsHalfBlockMark = func() bool { return !tui.IsAppleTerminalSession() }
 
-// builtInHeaderKey holds every input that changes the built-in header's lines. A theme carries its color mode, and the theme and the merged keybindings are replaced, never changed in place (tui.SetTheme and RefreshActiveThemeColorMode store a new theme, KeybindingsManager.rebuild a new manager), so their pointers stand for their content. Nil bindings draw the host platform's defaults, which do not change while PiG runs; the version is a constant. The sprite's ID with piglogin.Revision identifies what the sprite draws.
+// builtInHeaderKey holds every input that changes the built-in header's lines. A theme carries its color mode, and the theme and the merged keybindings are replaced, never changed in place (tui.SetTheme and RefreshActiveThemeColorMode store a new theme, KeybindingsManager.rebuild a new manager), so their pointers stand for their content. Nil bindings draw the host platform's defaults, which do not change while Ompig runs; the version is a constant. The sprite's ID with piglogin.Revision identifies what the sprite draws.
 type builtInHeaderKey struct {
 	width                 int
 	theme                 *tui.Theme
@@ -72,7 +72,7 @@ type builtInHeaderRender struct {
 }
 
 // renderBuiltInHeader renders the current startup help expansion. Verbose seeds this state only at initialization; tool toggles and header restoration subsequently select it.
-// The lines are kept until an input in builtInHeaderKey changes, as Pi's BuiltInHeader keeps its text until it is invalidated (themed-text.ts) and its Text keeps its lines per width (text.ts render); the frame loop calls this on every frame, and drawing the pig head and wrapping the hints beside it is most of a frame's allocations.
+// The lines are kept until an input in builtInHeaderKey changes, as Pi's BuiltInHeader keeps its text until it is invalidated (themed-text.ts) and its Text keeps its lines per width (text.ts render); the frame loop calls this on every frame, and drawing the ompig head and wrapping the hints beside it is most of a frame's allocations.
 func (m *InteractiveMode) renderBuiltInHeader(width int) []string {
 	key, variant := m.builtInHeaderInputs(width)
 	bindings := key.bindings
@@ -131,14 +131,14 @@ func drawBuiltInHeader(in builtInHeaderKey, bindings *tui.TUIKeybindingsManager,
 		return themeFg(theme.Dim, key) + themeFg(theme.Muted, " "+description)
 	}
 	hint := func(action, description string) string { return rawHint(key(action), description) }
-	// pig divergence (D2): PiG draws its pig head in Pi's logo slot (pi-logo.ts, interactive-mode.ts:998-1006), HeadRows lines
+	// ompig divergence (D2): Ompig draws its ompig head in Pi's logo slot (pi-logo.ts, interactive-mode.ts:998-1006), HeadRows lines
 	// tall where Pi's logo is 2. The head's first line carries the version and its other lines the next lines of the header,
 	// as Pi's logo carries the version and the first hint line. Where the head cannot be drawn but Pi draws its logo (no
 	// truecolor, or too narrow for the version beside the head) the one-line text mark takes the logo's 4-cell slot: its
 	// line carries the version and the slot's second line the first line of key hints, so the hints wrap where Pi's wrap. In
 	// Apple Terminal, where Pi draws its wordmark instead of the logo (supportsPiLogo), the text mark takes the wordmark's
 	// place.
-	// pig divergence (D63): the startup version is the composite PiG+Pi release identity.
+	// ompig divergence (D63): the startup version is the composite Ompig+Pi release identity.
 	version := themeFg(theme.Dim, "v"+pigversion.Version)
 	drawHead := in.halfBlock && mode == tui.TerminalColorModeTrueColor &&
 		width-2 >= piglogin.HeadCells+1+widthx.VisibleWidth(version)
@@ -152,8 +152,8 @@ func drawBuiltInHeader(in builtInHeaderKey, bindings *tui.TUIKeybindingsManager,
 		}
 		return piglogin.TextMark(variant, mode) + " " + version + "\n" + strings.Repeat(" ", piglogin.TextMarkWidth) + " " + hints
 	}
-	// pig additive (D92): a hint of a stripped built-in (an action of a stripped command, or `!` of a stripped bash tool) is
-	// left out. Stock PiG strips nothing and joins Pi's hints unchanged.
+	// ompig additive (D92): a hint of a stripped built-in (an action of a stripped command, or `!` of a stripped bash tool) is
+	// left out. Stock Ompig strips nothing and joins Pi's hints unchanged.
 	bashStripped := pigstrip.Has(pigstrip.ListTools, "bash")
 	unless := func(stripped bool, hint string) string {
 		if stripped {
@@ -202,11 +202,11 @@ func drawBuiltInHeader(in builtInHeaderKey, bindings *tui.TUIKeybindingsManager,
 		}
 		instructions = withLogo(instructions) + "\n" + themeFg(theme.Dim, "Press "+key("app.tools.expand")+" to show full startup help"+resources+".")
 	}
-	// pig divergence (D2): self-help names PiG rather than the separate Pi executable.
-	// pig additive (D92): without the docs bundle there are no docs to look up.
-	onboarding := themeFg(theme.Dim, "PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.")
+	// ompig divergence (D2): self-help names Ompig rather than the separate Pi executable.
+	// ompig additive (D92): without the docs bundle there are no docs to look up.
+	onboarding := themeFg(theme.Dim, "Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.")
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.Docs) {
-		onboarding = themeFg(theme.Dim, "PiG can explain its own features. Ask it how to use or extend PiG.")
+		onboarding = themeFg(theme.Dim, "Ompig can explain its own features. Ask it how to use or extend Ompig.")
 	}
 	text := instructions + "\n\n" + onboarding
 	if !drawHead {
@@ -223,12 +223,12 @@ func drawBuiltInHeader(in builtInHeaderKey, bindings *tui.TUIKeybindingsManager,
 }
 
 // piWordmark is the text fallback for the logo in a terminal color mode (pi-logo.ts piWordmark).
-// pig divergence (D2): it is the bold "PiG." text mark of the active sprite, its letters in the sprite's wordmark ramp (as Pi colors "Pi" in coral and yellow) and its period in the accent, not Pi's "Pi".
+// ompig divergence (D2): it is the bold "Ompig." text mark of the active sprite, its letters in the sprite's wordmark ramp (as Pi colors "Pi" in coral and yellow) and its period in the accent, not Pi's "Pi".
 func piWordmark(mode tui.TerminalColorMode) string {
 	return piglogin.TextMark(piglogin.Active(), mode)
 }
 
-// headBesideText lays the header's text beside the pig head after the one-cell padding, as Pi lays its first two lines beside
+// headBesideText lays the header's text beside the ompig head after the one-cell padding, as Pi lays its first two lines beside
 // its logo: Pi prefixes the logo's lines to the first two lines of the header text and renders it all as one Text (paddingX
 // 1). Here each logical line that starts beside the head is wrapped first in the cells right of the head, each wrapped line
 // gets the next head line (or, past the head, the head's width of spaces), a head line with no text left stands alone, and
@@ -256,7 +256,7 @@ func headBesideText(head []string, text string, width int) []string {
 	return tui.NewPaddedText(strings.Join(composed, "\n"), 1, 0, nil).Render(width)
 }
 
-// builtInHeaderLogoArea is the clickable logo of the built-in header as last drawn: the cells of the pig head, or of the text
+// builtInHeaderLogoArea is the clickable logo of the built-in header as last drawn: the cells of the ompig head, or of the text
 // mark where it stands in for Pi's logo, relative to the header's first line.
 type builtInHeaderLogoArea struct {
 	visible       bool
@@ -267,7 +267,7 @@ type builtInHeaderLogoArea struct {
 // handleBuiltInHeaderMouse plays the logo easter egg when the header's logo is clicked. Mirrors interactive-mode.ts
 // BuiltInHeader.handleMouse, which takes a click on the logo's cells (x 1 to 4 of its two lines, after one column of
 // padding) and passes the logo's top-left screen cell; Pi sets onLogoClick only when it draws its logo (interactive-mode.ts:1058).
-// pig divergence (D87): the logo is PiG's pig head (D2), piglogin.HeadCells cells by piglogin.HeadRows lines, or the 4-cell
+// ompig divergence (D87): the logo is Ompig's ompig head (D2), piglogin.HeadCells cells by piglogin.HeadRows lines, or the 4-cell
 // text mark where it stands in for Pi's logo.
 func (m *InteractiveMode) handleBuiltInHeaderMouse(event tui.TuiMouseEvent) *tui.TuiMouseDispatchResult {
 	area := m.builtInHeaderLogo.Load()
@@ -280,7 +280,7 @@ func (m *InteractiveMode) handleBuiltInHeaderMouse(event tui.TuiMouseEvent) *tui
 	return &tui.TuiMouseDispatchResult{TuiMouseEventResult: tui.TuiMouseEventResult{Handled: true}}
 }
 
-// pig additive (D91): builtInHeaderClickArea is the header's logo as a frontend session reports a click on it.
+// ompig additive (D91): builtInHeaderClickArea is the header's logo as a frontend session reports a click on it.
 func (m *InteractiveMode) builtInHeaderClickArea() (frontend.Area, bool) {
 	area := m.builtInHeaderLogo.Load()
 	if area == nil || !area.visible {

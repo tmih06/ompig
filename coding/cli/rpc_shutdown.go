@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // rpcShutdown is rpc-mode.ts shutdown(). Stdin end, an extension's
@@ -23,7 +23,7 @@ import (
 // exits 0 at once. Stdin end after the dispose finished does nothing, because
 // shutdown() detached the input then.
 //
-// Node's default action ends the process before anything else runs. Pig stops the extension processes first, and their exit completes a pending dispose or reports a drained event loop, which would exit 0 before the signal ends the process. So no exit starts once a termination signal's default action has begun.
+// Node's default action ends the process before anything else runs. Ompig stops the extension processes first, and their exit completes a pending dispose or reports a drained event loop, which would exit 0 before the signal ends the process. So no exit starts once a termination signal's default action has begun.
 type rpcShutdown struct {
 	// removeSignalHandlers makes a later termination signal take its
 	// default action.

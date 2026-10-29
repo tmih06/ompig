@@ -8,17 +8,17 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestGetAllTools_IncludesBuiltinTools verifies that the in-proc
 // GetAllTools callback returns built-in tool names (bash, read, write,
-// edit, etc.) alongside extension tools. Without this, the piglet
+// edit, etc.) alongside extension tools. Without this, the ompiglet
 // extension's applyScoping cannot see built-in tools, causing them to be
 // excluded from AllowedTools after a /reload or rescope: which is the
 // root cause of the "Tool bash not found" bug.
@@ -110,7 +110,7 @@ func TestGetActiveTools_IncludesBuiltinTools(t *testing.T) {
 	}
 }
 
-// defaultActiveBuiltinNames is PiG's full default built-in set: every
+// defaultActiveBuiltinNames is Ompig's full default built-in set: every
 // registered built-in except the opt-in powershell tool.
 var defaultActiveBuiltinNames = []string{"read", "bash", "edit", "write", "grep", "find", "ls"}
 
@@ -300,7 +300,7 @@ func TestSetActiveTools_PreservesBuiltinToolsAfterScoping(t *testing.T) {
 	}
 	m.wireInprocContextActions()
 
-	// Simulate what the piglet extension's applyScoping does:
+	// Simulate what the ompiglet extension's applyScoping does:
 	// 1. Get all tools (now includes builtins)
 	ctx := runner.CreateCommandContext()
 	allTools := ctx.GetAllTools()

@@ -1,11 +1,11 @@
-// Drives Pi 1.1.0 against PiG's paired test-faux fixture (test/parity/testdata/test-faux-provider.ts) for every scenario.
+// Drives Pi 1.1.0 against Ompig's paired test-faux fixture (test/parity/testdata/test-faux-provider.ts) for every scenario.
 //  - `rpc`: the real CLI in `--mode rpc` (recorder.mjs records push/serialization interleaving).
 //  - `direct`: the fixture's stream function behind 0..2 pi-ai `lazyStream` layers, consumed by `for await` or by
 //    pi-agent-core's `runAgentLoop`; every delivered event is copied at its delivery tick with the number of pushes so far.
 //  - `ticks`: an independent microtask loop started in the stream-creating segment, sampling the push count.
 // usage: node probe.mjs <out.json> [runs]. Requires PI_PACKAGE_ROOT.
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { spawn } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -68,7 +68,7 @@ async function rpc(scenario) {
 }
 
 // The fixture module registers one provider; capture its stream function. Its tool-call counter is module state, so every
-// observation imports a fresh instance (the query string defeats the module cache), as PiG's provider starts at 1.
+// observation imports a fresh instance (the query string defeats the module cache), as Ompig's provider starts at 1.
 let instances = 0;
 async function streamFunction() {
   const fixture = await import(`${pathToFileURL(provider).href}?instance=${instances++}`);
@@ -132,4 +132,4 @@ for (const scenario of scenarios) {
   directRuns.push(await ticks(scenario));
   results.push({ scenario, rpc: rpcRuns, direct: directRuns });
 }
-writeFileSync(out, JSON.stringify({ pi: PIG_UPSTREAM_VERSION, node: process.version, results }, null, 1));
+writeFileSync(out, JSON.stringify({ pi: OMPIG_UPSTREAM_VERSION, node: process.version, results }, null, 1));

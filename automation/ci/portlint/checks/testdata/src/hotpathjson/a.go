@@ -6,7 +6,7 @@ type event struct{ Type string }
 
 // A hot path marshals and decodes by reflection and builds maps per call.
 //
-//pig:hotpath
+//ompig:hotpath
 func hot(e event, raw []byte) ([]byte, error) {
 	out, err := json.Marshal(e) // want `json.Marshal on a hot path walks the value by reflection`
 	if err != nil {
@@ -23,7 +23,7 @@ func hot(e event, raw []byte) ([]byte, error) {
 
 // A closure built on the hot path runs on it.
 //
-//pig:hotpath
+//ompig:hotpath
 func hotClosure(e event) func() ([]byte, error) {
 	return func() ([]byte, error) { return json.Marshal(e) } // want `json.Marshal on a hot path`
 }
@@ -36,7 +36,7 @@ func cold(e event) ([]byte, error) {
 
 // A typed map or a hand-appended encoding is the fix.
 //
-//pig:hotpath
+//ompig:hotpath
 func hotGood(e event, dst []byte) []byte {
 	typed := map[string]string{"type": e.Type}
 	_ = typed

@@ -71,7 +71,7 @@ Test aliases:
 | 1114 | Ordinary repository keeps ancestor walk | ContextFiles / ordinary-repo |
 | 1130 | Missing gitdir target keeps ancestor walk | ContextFiles / missing-gitdir-target |
 
-No case is proposed as designed out. The `.pi` → `.pig` path spelling follows D2. Pre-trust module evaluation uses a file counter instead of process-global state because the native Host executes extensions in subprocesses. Both counters assert exactly one evaluation.
+No case is proposed as designed out. The `.pi` → `.ompig` path spelling follows D2. Pre-trust module evaluation uses a file counter instead of process-global state because the native Host executes extensions in subprocesses. Both counters assert exactly one evaluation.
 
 ## SDK skills cases
 
@@ -97,8 +97,8 @@ The focused tests pass with Go 1.27.1 on Linux. The installed Node is v26.7.0; t
 
 ```sh
 go build ./...
-go vet ./cmd/pig ./internal/codingagent
-go test -count=1 ./cmd/pig ./internal/codingagent -run 'Test(ResourceLoaderUpstream|UpstreamResourceLoader|UpstreamSDKSkillsSubprocess)'
+go vet ./cmd/ompig ./internal/codingagent
+go test -count=1 ./cmd/ompig ./internal/codingagent -run 'Test(ResourceLoaderUpstream|UpstreamResourceLoader|UpstreamSDKSkillsSubprocess)'
 go test -count=1 ./coding/extension/host/subprocess -run '^TestNodeSDKSessionDefaultsAndSkillsMatchPi$'
 make test-porting-release
 ```

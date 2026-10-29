@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepeers"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepeers"
 )
 
 // This source embed exists only in the test binary. New, removed and changed files must all invalidate the archive and its generated digest.

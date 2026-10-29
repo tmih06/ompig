@@ -5,10 +5,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // PiSourceInfo is upstream's SourceInfo (source-info.ts) as it travels to
@@ -207,8 +207,8 @@ func (c SlashCommandCatalog) recordedSourceInfo(path string) (PiSourceInfo, bool
 // defaultSourceInfo is resource-loader.ts getDefaultSourceInfoForPath: a user or project resource by directory, else a temporary one.
 func (c SlashCommandCatalog) defaultSourceInfo(path, kind string) PiSourceInfo {
 	info := CreateSyntheticSourceInfo(path, SyntheticSourceInfoOptions{Source: "local"})
-	if path == "builtin:piglet" {
-		info.Source = "piglet"
+	if path == "builtin:ompiglet" {
+		info.Source = "ompiglet"
 		return info
 	}
 	if path != "" {

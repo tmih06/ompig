@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type classifierAnswersProbe struct {
@@ -26,7 +26,7 @@ type classifierAnswersProbe struct {
 
 // ClassifierAnswer (types.ts:697) is what system-one-shared.ts:42 parseAnswers builds from a service response: a choice answer with a string choice,
 // finite probabilities and confidence, a score answer, a bool answer read from the wire's `noul`. A missing or ill-typed answer, probability or
-// number fails the whole classification with a named message. The pinned pi-ai typesafe-system-one classifier and PiG's ClassifyTypesafeSystemOne
+// number fails the whole classification with a named message. The pinned pi-ai typesafe-system-one classifier and Ompig's ClassifyTypesafeSystemOne
 // read the same canned responses and must agree on the stop reason, the error message, the answers and the usage.
 func TestClassifierAnswersMatchPi(t *testing.T) {
 	good := map[string]any{
@@ -194,7 +194,7 @@ func TestClassifierAnswersMatchPi(t *testing.T) {
 		mu.Unlock()
 		if !sameRequest(sent, want[i].Request) {
 			if failures++; failures <= 12 {
-				t.Errorf("probe %q request:\n PiG %s\n Pi  %s", probe.Name, sent, want[i].Request)
+				t.Errorf("probe %q request:\n Ompig %s\n Pi  %s", probe.Name, sent, want[i].Request)
 			}
 		}
 		wantMessage := ""
@@ -215,7 +215,7 @@ func TestClassifierAnswersMatchPi(t *testing.T) {
 		}
 		if string(result.StopReason) != want[i].StopReason || result.ErrorMessage != wantMessage || !reflect.DeepEqual(gotAnswers, want[i].Answers) || string(encoded) != want[i].AnswersJSON || !reflect.DeepEqual(gotUsage, want[i].Usage) {
 			if failures++; failures <= 12 {
-				t.Errorf("probe %q (%d %.60s):\n PiG %s %q answers=%v usage=%v\n Pi  %s %q answers=%v usage=%v", probe.Name, probe.Status, probe.Body, result.StopReason, result.ErrorMessage, gotAnswers, gotUsage, want[i].StopReason, wantMessage, want[i].Answers, want[i].Usage)
+				t.Errorf("probe %q (%d %.60s):\n Ompig %s %q answers=%v usage=%v\n Pi  %s %q answers=%v usage=%v", probe.Name, probe.Status, probe.Body, result.StopReason, result.ErrorMessage, gotAnswers, gotUsage, want[i].StopReason, wantMessage, want[i].Answers, want[i].Usage)
 			}
 		}
 	}
@@ -226,7 +226,7 @@ func TestClassifierAnswersMatchPi(t *testing.T) {
 }
 
 // sameRequest compares two request bodies member by member in the bytes each member is written in, so the order of the questions, the criteria and
-// the state is checked. Only the order of the top-level members (model, state, questions) is left out: PiG hands the request to the payload hook
+// the state is checked. Only the order of the top-level members (model, state, questions) is left out: Ompig hands the request to the payload hook
 // as a map, which writes them sorted, and no server reads them by position.
 func sameRequest(got []byte, want string) bool {
 	var gotMembers, wantMembers map[string]json.RawMessage

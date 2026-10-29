@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // gatedRefreshAuth is the authProvider of Pi's "does not retry requests that were cancelled while authorization was

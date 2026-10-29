@@ -3,7 +3,7 @@ package cli
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports .upstream/v0.99.1/packages/coding-agent/src/core/package-manager.ts:190-198 (resourcePrecedenceRank).

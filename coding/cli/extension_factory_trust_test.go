@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Negative test of docs/specs/extension-factory-trust.md (test 5), scoped to the routes a file extension has through the real subprocess host:

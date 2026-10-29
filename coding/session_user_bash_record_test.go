@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Interactive `!cmd` results go through recordBashResult (agent-session.ts): when idle the bashExecution message is
 // persisted and enters the live context the next prompt sends; while a run streams it is queued and flushed after the
-// run, so it cannot split a tool call from its result. PiG's interactive mode appended to the inner Session directly,
+// run, so it cannot split a tool call from its result. Ompig's interactive mode appended to the inner Session directly,
 // so the next prompt never carried the output and a streaming append landed mid-run.
 func TestRecordUserBashResultEntersContextAndDefersWhileStreaming(t *testing.T) {
 	sess, err := NewSession(newTestServices(t), SessionOptions{Model: fakeModel()})

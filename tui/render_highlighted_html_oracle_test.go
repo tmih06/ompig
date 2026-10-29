@@ -1,4 +1,4 @@
-//go:build !pig_strip_syntax_highlight
+//go:build !ompig_strip_syntax_highlight
 
 package tui
 
@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type highlightHTMLProbe struct {
@@ -155,7 +155,7 @@ func TestRenderHighlightedHtmlMatchesPi(t *testing.T) {
 				g, _ := json.Marshal(got)
 				e, _ := json.Marshal(expected[i])
 				p, _ := json.Marshal(probe)
-				t.Errorf("%s:\n  Pig %s\n  Pi  %s", p, g, e)
+				t.Errorf("%s:\n  Ompig %s\n  Pi  %s", p, g, e)
 			}
 		}
 	}
@@ -173,7 +173,7 @@ func TestRenderHighlightedHtmlProbeDump(t *testing.T) {
 	fmt.Printf("hlhtml-probes:%s\n", line)
 }
 
-// TestRenderHighlightedHtmlParity prints Pig's output for the corpus, one JSON line per probe, for the render-highlighted-html parity scenario.
+// TestRenderHighlightedHtmlParity prints Ompig's output for the corpus, one JSON line per probe, for the render-highlighted-html parity scenario.
 func TestRenderHighlightedHtmlParity(t *testing.T) {
 	for _, probe := range highlightHTMLProbes() {
 		var line bytes.Buffer

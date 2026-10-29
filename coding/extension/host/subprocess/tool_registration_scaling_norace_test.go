@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A registerTool made after load costs the host the same at any catalog size: the reply carries none of the catalog, and the next state push is not a full snapshot, because no runtime replica was written outside a state_update. The host actions the registration reaches (getAllTools, as the Session lists its registry) cost the size of the registry whenever they run, so a handler that calls them scales with the catalog and this test fails.

@@ -1,10 +1,10 @@
 # Extension API
 
-This document is the canonical reference for the wire protocol and host API surface that pig exposes to extensions. The same API is bridged by all official subprocess SDKs (Go in `extensions/sdk`, Rust in `extensions/sdk-rs`, Python in `extensions/sdk-py`). Node extensions use Pi's canonical TypeScript API through PiG's compatibility runtime. `extensions/sdk-ts` adds declarations for PiG-only calls. Method names below are normalized; SDK bindings use language-idiomatic spellings.
+This document is the canonical reference for the wire protocol and host API surface that ompig exposes to extensions. The same API is bridged by all official subprocess SDKs (Go in `extensions/sdk`, Rust in `extensions/sdk-rs`, Python in `extensions/sdk-py`). Node extensions use Pi's canonical TypeScript API through Ompig's compatibility runtime. `extensions/sdk-ts` adds declarations for Ompig-only calls. Method names below are normalized; SDK bindings use language-idiomatic spellings.
 
 ## Wire protocol (subprocess, current unversioned shape)
 
-The host and extension exchange length-prefixed JSON envelopes over a Unix domain socket. Each frame is a 4-byte big-endian unsigned length followed by exactly that many bytes of one JSON object; a single frame is capped at `MaxFrameSize` (128 MB), a constant the host and every SDK share. The host binds the listening socket and passes the path via `PIG_EXT_SOCKET` (or `PIG_EXT_SOCKET_<EXT_NAME>` for each contained extension in a packed cell). Every envelope carries a `type`, an optional `id` for request/response correlation, and a body field named after the type:
+The host and extension exchange length-prefixed JSON envelopes over a Unix domain socket. Each frame is a 4-byte big-endian unsigned length followed by exactly that many bytes of one JSON object; a single frame is capped at `MaxFrameSize` (128 MB), a constant the host and every SDK share. The host binds the listening socket and passes the path via `OMPIG_EXT_SOCKET` (or `OMPIG_EXT_SOCKET_<EXT_NAME>` for each contained extension in a packed cell). Every envelope carries a `type`, an optional `id` for request/response correlation, and a body field named after the type:
 
 ```json
 { "type": "request", "id": "r-7", "request": { ... } }
@@ -56,7 +56,7 @@ These are the call names the host accepts. SDK bindings wrap each into a method 
 
 - `getFlag(name)` - value of a host or extension flag.
 - `getActiveTools()` - names of tools currently active for the model.
-- `getAllTools()` - every tool in the session's registry, active or not, as Pi's `ToolInfo`: `name`, `description`, `parameters`, `promptGuidelines` (when set), `exposure`, `namespace` and `annotations` (when set), `reachesTools` (when the tool defines it) and `sourceInfo`. `reachesTools(input)` answers `"all"` or the words of the input that may name the tools a call reaches; in every SDK it runs the tool's hook through the host, wherever the tool is defined. The Go, Rust and Python SDKs' host call also returns PiG's per-tool `source`, which the Go SDK keeps as the deprecated `ToolInfo.Source`.
+- `getAllTools()` - every tool in the session's registry, active or not, as Pi's `ToolInfo`: `name`, `description`, `parameters`, `promptGuidelines` (when set), `exposure`, `namespace` and `annotations` (when set), `reachesTools` (when the tool defines it) and `sourceInfo`. `reachesTools(input)` answers `"all"` or the words of the input that may name the tools a call reaches; in every SDK it runs the tool's hook through the host, wherever the tool is defined. The Go, Rust and Python SDKs' host call also returns Ompig's per-tool `source`, which the Go SDK keeps as the deprecated `ToolInfo.Source`.
 - `getCommands()` - extension commands, prompt templates and skills, as Pi's `SlashCommandInfo`: `name`, `description`, `source` and `sourceInfo`.
 - `getThinkingLevel()` - `"none" | "low" | "medium" | "high" | "xhigh"`.
 - `setThinkingLevel(level)` - switch reasoning effort if the active model supports it.
@@ -98,8 +98,8 @@ All UI calls return after the user dismisses the dialog; pair them with `Context
 
 ### Focused custom components
 
-`ui.custom` runs a component in the extension process while PiG owns the focus
-shell. The extension sends replaceable line snapshots. PiG sends ordered input
+`ui.custom` runs a component in the extension process while Ompig owns the focus
+shell. The extension sends replaceable line snapshots. Ompig sends ordered input
 events only while that overlay owns terminal focus.
 
 Go components implement `RemoteComponent`. Implement
@@ -108,7 +108,7 @@ components implement `set_invalidate` on `RemoteComponent`. Python components
 can implement `set_invalidate(callback)`. Node component factories call the
 supplied `tui.requestRender()` function.
 
-Call the invalidation callback after state changes. PiG coalesces timer requests
+Call the invalidation callback after state changes. Ompig coalesces timer requests
 to one pending frame and limits timer rendering to the 16 ms TUI interval.
 Input-driven rendering remains immediate. The TUI render loop reads only the
 latest host-side cache and performs no extension IPC.
@@ -128,12 +128,12 @@ concurrently.
 > **Fit header and footer lines to `width()` yourself.**
 >
 > Upstream Pi takes a component factory here, so its `render(width)` is called on
-> every frame and always sees the current width. A PiG extension is a subprocess
+> every frame and always sees the current width. A Ompig extension is a subprocess
 > and cannot hand over a live component, so it sends **static strings** instead.
 > Nothing downstream re-measures them.
 >
 > As in Pi, a line wider than the terminal is not corrected by the host. When it
-> reaches a differential render, PiG writes `pi-tui-crash.log`, restores the
+> reaches a differential render, Ompig writes `pi-tui-crash.log`, restores the
 > terminal, and exits with `Rendered line N exceeds terminal width`, exactly as
 > Pi does for a component that does not truncate its output.
 >
@@ -177,16 +177,16 @@ one `#RRGGBB` palette color. Palette keys must be one printable non-space ASCII
 character. The palette can contain at most 32 colors, and each color must be
 used.
 
-PiG rejects unknown or duplicate fields, wrong grid sizes, non-ASCII grid data,
+Ompig rejects unknown or duplicate fields, wrong grid sizes, non-ASCII grid data,
 missing or unused symbols, invalid colors, and invalid text. All text must be
 non-empty valid UTF-8 without control or line-separator characters. The display
 width limits are 24 columns for `name`, 48 for `description`, and 76 for
 `tagline`. Name plus description and spacing are limited to 80 columns.
 
 `setLogin` and `setHeader` share one slot. The last successful call wins. Clear
-the header to restore Stock Pig's text header. A rejected definition returns a host
+the header to restore Stock Ompig's text header. A rejected definition returns a host
 error and keeps the current header. Quiet startup keeps the header hidden.
-Terminals below 66 columns show compact text without art. PiG caches validated
+Terminals below 66 columns show compact text without art. Ompig caches validated
 render data, so rendering performs no extension IPC.
 
 Minimal calls:
@@ -207,13 +207,13 @@ ctx.set_login(LoginDefinition(brand=brand, hero=hero, mascot=mascot, palette=pal
 await ctx.ui.setLogin({ brand, hero, mascot, palette, name: "Example Bot", description: "Custom coding agent", tagline: "Build with care." });
 ```
 
-Preview one extension with `pig extension preview-login <path>`. The command
+Preview one extension with `ompig extension preview-login <path>`. The command
 fails for zero or multiple resolved extensions, a failed `session_start`, a
 missing login, or an invalid definition. Use `/reload` after an edit. A login
-remains an extension Resource. Activate it through a Piglet `extensions` entry,
-user extension policy, or `pig -e <path>`. Verify activation by starting or
+remains an extension Resource. Activate it through a Ompiglet `extensions` entry,
+user extension policy, or `ompig -e <path>`. Verify activation by starting or
 reloading through that path and checking the identity name. Keep product
-identities outside Stock Pig and select them through an ordinary Piglet
+identities outside Stock Ompig and select them through an ordinary Ompiglet
 extension entry.
 
 ### Themes
@@ -225,7 +225,7 @@ extension entry.
 ### Autocomplete, terminal input, editor component
 
 - `addAutocompleteProvider(factory)` - install a custom completion source for the editor.
-- `onTerminalInput(handler)` - receive raw terminal input before normal handling; return `{ consume: true }` to swallow a chunk or `{ data }` to replace it; returns an unsubscribe. Handlers see chunks in the order they were typed. Input typed after a chunk, including Ctrl+C, waits for your verdict, so answer promptly. A listener can consume or rewrite Ctrl+C before normal handling. PiG waits off the TUI loop and cancels the request when the mode shuts down.
+- `onTerminalInput(handler)` - receive raw terminal input before normal handling; return `{ consume: true }` to swallow a chunk or `{ data }` to replace it; returns an unsubscribe. Handlers see chunks in the order they were typed. Input typed after a chunk, including Ctrl+C, waits for your verdict, so answer promptly. A listener can consume or rewrite Ctrl+C before normal handling. Ompig waits off the TUI loop and cancels the request when the mode shuts down.
 - `setEditorComponent(factory)` / `getEditorComponent()` - replace the editor widget.
   - Go: `Context.SetEditorComponent(factory sdk.EditorFactory) error` and `Context.GetEditorComponent() any` (a non-nil result is an `sdk.EditorFactory`). Rust: `Context::set_editor_component(factory)` and `Context::get_editor_component() -> Option<EditorFactory>`. Python: `Context.set_editor_component(factory)` and `Context.get_editor_component()`.
   - The factory receives the host's default editor, which the component embeds as its `super`. A nil or `undefined` factory, or the SDK's clear call, restores the host's editor.
@@ -239,12 +239,12 @@ extension entry.
 
 Terminal-input callbacks preserve JavaScript UTF-16 units, including lone surrogate halves. The wire represents an unmatched unit with a standard JSON `\u` escape. Do not join input chunks before returning a verdict.
 
-Go callback strings use WTF-8 for unmatched units. Use `github.com/MichaelKinsy/PiG/extensions/sdk/json` for your own serialization of those strings. Python and Node retain unmatched units in their native strings. Rust terminal and focused-component input callbacks receive `&JsString`, and verdict `data` is `Option<JsString>`. Read `as_units()` or construct `JsString::from_units(...)` for lossless handling. `to_string_lossy()` is an explicit display conversion. Rust editor getters return `JsString`; setters accept ordinary strings or `JsString`. Serialize Rust `JsString` directly, not through `serde_json::Value`.
+Go callback strings use WTF-8 for unmatched units. Use `github.com/tmih06/ompig/extensions/sdk/json` for your own serialization of those strings. Python and Node retain unmatched units in their native strings. Rust terminal and focused-component input callbacks receive `&JsString`, and verdict `data` is `Option<JsString>`. Read `as_units()` or construct `JsString::from_units(...)` for lossless handling. `to_string_lossy()` is an explicit display conversion. Rust editor getters return `JsString`; setters accept ordinary strings or `JsString`. Serialize Rust `JsString` directly, not through `serde_json::Value`.
 
 ### Process & filesystem
 
 - `exec(command, args, options)` - run a command with stdin/stdout/stderr piped back. Subject to permissions.
-- `configHome()` - pig's config root (`~/.pig` or `PIG_HOME`).
+- `configHome()` - ompig's config root (`~/.ompig` or `OMPIG_HOME`).
 - `cwd()` - working directory of the host session.
 - `width()` - terminal columns visible to the host.
 - `model()` - current model identifier.
@@ -266,14 +266,14 @@ Extensions may register additional inference providers. The registration payload
 
 ## Unsupported / typed-error APIs
 
-Any host call exposed by an SDK that is not wired in a given build returns a typed `unsupported` error rather than silently no-oping. Coverage is tracked in `docs/extension-api-parity.md` in the pig source tree; this file is a snapshot.
+Any host call exposed by an SDK that is not wired in a given build returns a typed `unsupported` error rather than silently no-oping. Coverage is tracked in `docs/extension-api-parity.md` in the ompig source tree; this file is a snapshot.
 
 ## SDK quickstart (Go)
 
 ```go
 package myextension
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
     e := sdk.New("my-extension")
@@ -294,14 +294,14 @@ func Extension() *sdk.Extension {
 
 ```
 
-The Go SDK is a nested module. `pig extension init ./my-extension` creates a
-factory and a portable `go.mod`. Each PiG build stages its own copy of the SDK
+The Go SDK is a nested module. `ompig extension init ./my-extension` creates a
+factory and a portable `go.mod`. Each Ompig build stages its own copy of the SDK
 under `<config-root>/state/pigsdk/sdk-<hash>`, named for the SDK's content hash,
-so PiG versions sharing a config root never replace each other's SDK. PiG adds
+so Ompig versions sharing a config root never replace each other's SDK. Ompig adds
 a temporary filesystem replacement during the build. The authored file contains
 no machine-specific path.
 
-Build PiG and Go extensions with Go 1.27.3. The generated module keeps Go 1.26
+Build Ompig and Go extensions with Go 1.27.3. The generated module keeps Go 1.26
 as its language floor:
 
 ```go.mod
@@ -309,11 +309,11 @@ module example.com/my-extension
 
 go 1.26
 
-require github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0
+require github.com/tmih06/ompig/extensions/sdk v0.0.0
 
 ```
 
-Run `pig reload --sdk-path` to print the running build's staged directory. See `extensions.md` for the full quickstart.
+Run `ompig reload --sdk-path` to print the running build's staged directory. See `extensions.md` for the full quickstart.
 
 ## Go SDK migration to 0.3.0
 
@@ -324,7 +324,7 @@ Replace `sdk.SendMessageOptions{TriggerTurn: true}` with `sdk.SendMessageOptions
 ## SDK quickstart (Python)
 
 ```python
-from pig_sdk import Extension, Context
+from ompig_sdk import Extension, Context
 
 def new_extension() -> Extension:
     ext = Extension("my-extension")
@@ -345,7 +345,7 @@ def new_extension() -> Extension:
 ## SDK quickstart (Rust)
 
 ```rust
-use pig_sdk::{Extension, Context, Schema};
+use ompig_sdk::{Extension, Context, Schema};
 
 pub fn new_extension() -> Extension {
     let mut ext = Extension::new("my-extension");

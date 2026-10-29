@@ -12,9 +12,9 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/ordered.json"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PARITY_ORDER_DIR={{TEMP}}"]
+ompig = ["OMPIG_TEST_FAUX=1", "PARITY_ORDER_DIR={{TEMP}}"]
 pi = ["PI_SKIP_VERSION_CHECK=1", "PARITY_ORDER_DIR={{TEMP}}"]
-pig_extensions = ["../../testdata/ordered-tool-images/observe.mjs"]
+ompig_extensions = ["../../testdata/ordered-tool-images/observe.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../../testdata/ordered-tool-images/observe.mjs"]
 
 [assert]

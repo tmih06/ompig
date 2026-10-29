@@ -1,0 +1,1116 @@
+package ompiglet
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"maps"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"slices"
+	"strings"
+	"testing"
+
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+)
+
+func assertNoPigletOutputVersion(t *testing.T, output string) {
+	t.Helper()
+	var document map[string]any
+	if err := json.Unmarshal([]byte(output), &document); err != nil {
+		t.Fatal(err)
+	}
+	if _, exists := document["version"]; exists {
+		t.Fatalf("Ompiglet JSON exposed a Ompig-owned format version: %s", output)
+	}
+}
+
+func TestPigletHelpListsCurrentSurface(t *testing.T) {
+	var stdout, stderr strings.Builder
+	if code := RunCommand([]string{"ompiglet", "--help"}, &stdout, &stderr); code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	commands := map[string]struct{}{}
+	for line := range strings.SplitSeq(stdout.String(), "\n") {
+		line = strings.TrimSpace(line)
+		if !strings.HasPrefix(line, "ompig ompiglet ") {
+			continue
+		}
+		fields := strings.Fields(line)
+		if len(fields) >= 3 {
+			commands[fields[2]] = struct{}{}
+		}
+	}
+	got := slices.Sorted(maps.Keys(commands))
+	want := []string{"add", "build", "keygen", "lineage", "list", "prune", "publish", "pull", "remove", "schema", "show", "tree", "trust", "update", "validate", "verify"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("Ompiglet help commands = %v, want %v\n%s", got, want, stdout.String())
+	}
+	for _, want := range []string{"add <path|npm:ref|git:ref>", "publish <name|path> --to github --repo <owner/repo> --sign-key <key>", "Catalog refs require", "image, --locked, and --record are reserved"} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Errorf("Ompiglet help missing %q:\n%s", want, stdout.String())
+		}
+	}
+	if strings.Contains(stdout.String(), "--image") {
+		t.Fatalf("Ompiglet help advertises the unavailable remove --image flag:\n%s", stdout.String())
+	}
+}
+
+func TestRunCommandRemoveRejectsUnavailableImageFacet(t *testing.T) {
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "remove", "example", "--image"}, &stdout, &stderr)
+	if code != 2 || stdout.Len() != 0 || !strings.Contains(stderr.String(), "[--source|--binary|--all]") {
+		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+}
+
+// TestRunCommandDispatch pins the current ompiglet verb set.
+func TestRunCommandRemoveJSONIsSingleStructuredResult(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	writeRecordFixture(t, root, "binary")
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "remove", "binary", "--binary", "--json", "--no-input"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	assertNoPigletOutputVersion(t, stdout.String())
+	var output pigletCommandOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	if output.Command != "remove" || !output.Success || !strings.Contains(output.Output, "removed Ompiglet Binary record") {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+func TestRemovePigletFacetsRollsBackStagedFilesOnFailure(t *testing.T) {
+	root := t.TempDir()
+	first := filepath.Join(root, "first")
+	if err := os.WriteFile(first, []byte("first"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	err := removePigletFacets([]pigletFacetRemoval{{path: first, label: "first"}, {path: filepath.Join(root, "missing"), label: "missing"}})
+	if err == nil || !strings.Contains(err.Error(), "missing") {
+		t.Fatalf("error = %v", err)
+	}
+	if data, err := os.ReadFile(first); err != nil || string(data) != "first" {
+		t.Fatalf("first facet was not restored: data=%q err=%v", data, err)
+	}
+}
+
+func TestRunCommandAddRejectsIncompleteDevContainerClosureCopy(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("OMPIG_HOME", home)
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, ".devcontainer"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, ".devcontainer", "devcontainer.json"), []byte(`{"image":"golang:1.26"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	source := filepath.Join(root, "ompiglet.yaml")
+	if err := os.WriteFile(source, []byte("name: dev\nagentEnv:\n  devContainer: .devcontainer/devcontainer.json\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "add", source, "--no-input"}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "cannot copy an agentEnv.devContainer closure") {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if _, err := os.Stat(filepath.Join(home, "ompiglets", "dev.yaml")); !os.IsNotExist(err) {
+		t.Fatalf("Ompiglet was partially added: %v", err)
+	}
+}
+
+func TestRunCommandAddRejectsRelativeLocalResourceOrigins(t *testing.T) {
+	cases := []struct {
+		name  string
+		setup func(*testing.T, string)
+		yaml  func(string) string
+		want  []string
+	}{
+		{
+			name: "extension",
+			setup: func(t *testing.T, root string) {
+				t.Helper()
+				if err := os.MkdirAll(filepath.Join(root, "extensions", "tools"), 0o755); err != nil {
+					t.Fatal(err)
+				}
+			},
+			yaml: func(string) string {
+				return "name: blocked\nextensions:\n  - name: tools\n    origins: [local:./extensions/tools]\n"
+			},
+			want: []string{"FAIL: extension tools (local:./extensions/tools)"},
+		},
+		{
+			name: "skill",
+			setup: func(t *testing.T, root string) {
+				t.Helper()
+				dir := filepath.Join(root, "skills", "review")
+				if err := os.MkdirAll(dir, 0o755); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(filepath.Join(dir, "SKILL.md"), []byte("---\nname: review\n---\n"), 0o644); err != nil {
+					t.Fatal(err)
+				}
+			},
+			yaml: func(string) string {
+				return "name: blocked\nskills:\n  - name: review\n    origins: [local:./skills/review]\n"
+			},
+			want: []string{"FAIL: skill review (local:./skills/review)"},
+		},
+		{
+			name: "unused fallback",
+			setup: func(t *testing.T, root string) {
+				t.Helper()
+				packageSkill := filepath.Join(root, "package", "skills", "fallback")
+				localSkill := filepath.Join(root, "skills", "fallback")
+				for _, dir := range []string{packageSkill, localSkill} {
+					if err := os.MkdirAll(dir, 0o755); err != nil {
+						t.Fatal(err)
+					}
+					if err := os.WriteFile(filepath.Join(dir, "SKILL.md"), []byte("---\nname: fallback\n---\n"), 0o644); err != nil {
+						t.Fatal(err)
+					}
+				}
+				if err := os.WriteFile(filepath.Join(root, "package", "package.json"), []byte(`{"name":"fallback-package"}`), 0o644); err != nil {
+					t.Fatal(err)
+				}
+			},
+			yaml: func(root string) string {
+				return "name: blocked\npackages:\n  base: local:" + filepath.Join(root, "package") + "\nskills:\n  - name: fallback\n    origins: [package:base, local:./skills/fallback]\n"
+			},
+			want: []string{"FAIL: skill fallback (local:./skills/fallback)"},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			home := t.TempDir()
+			t.Setenv("OMPIG_HOME", home)
+			root := t.TempDir()
+			tc.setup(t, root)
+			source := filepath.Join(root, "ompiglet.yaml")
+			if err := os.WriteFile(source, []byte(tc.yaml(root)), 0o644); err != nil {
+				t.Fatal(err)
+			}
+
+			var stdout, stderr strings.Builder
+			code := RunCommand([]string{"ompiglet", "add", source, "--no-input"}, &stdout, &stderr)
+			if code != 1 {
+				t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+			for _, want := range append(tc.want, "Run the Ompiglet from its source path", "portable origin") {
+				if !strings.Contains(stderr.String(), want) {
+					t.Fatalf("stderr %q missing %q", stderr.String(), want)
+				}
+			}
+			if count := strings.Count(stderr.String(), "Run the Ompiglet from its source path"); count != 1 {
+				t.Fatalf("guidance count = %d in stderr %q", count, stderr.String())
+			}
+			if _, err := os.Stat(filepath.Join(home, "ompiglets", "blocked.yaml")); !os.IsNotExist(err) {
+				t.Fatalf("Ompiglet was partially added: %v", err)
+			}
+		})
+	}
+}
+
+// A Pigpen-shaped Ompiglet selects extensions through package: aliases whose Package is a local source relative to
+// the Ompiglet. Add copies only the Ompiglet file, so the installed copy cannot resolve that Package: the loader anchors
+// local sources to the Ompiglet directory and rejects absolute ones.
+func TestRunCommandAddRejectsRelativeLocalPackageSource(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("OMPIG_HOME", home)
+	root := t.TempDir()
+	extensionDir := filepath.Join(root, "packages", "games", "extensions", "runner")
+	if err := os.MkdirAll(extensionDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(extensionDir, "index.js"), []byte("export default function extension(pi) {}\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "packages", "games", "package.json"), []byte(`{"name":"games"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	source := filepath.Join(root, "ompiglet.yaml")
+	if err := os.WriteFile(source, []byte("name: games\npackages:\n  games: local:./packages/games\nextensions:\n  - name: runner\n    origins: [package:games]\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	installresolver.SetMaterializer(func(_, source, _ string, _ installresolver.MaterializeOptions, _, _ io.Writer) (string, error) {
+		return source, nil
+	})
+	t.Cleanup(func() { installresolver.SetMaterializer(nil) })
+
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "add", source, "--no-input"}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "FAIL: package games (local:./packages/games)") || !strings.Contains(stderr.String(), "Run the Ompiglet from its source path") {
+		t.Fatalf("add code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if _, err := os.Stat(filepath.Join(home, "ompiglets", "games.yaml")); !os.IsNotExist(err) {
+		t.Fatalf("Ompiglet was partially added: %v", err)
+	}
+
+	// The guidance is truthful: from its source path the same Ompiglet resolves.
+	stdout.Reset()
+	stderr.Reset()
+	if code := RunCommand([]string{"ompiglet", "validate", source, "--workspace", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("validate from source code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestRunCommandAddRejectsAbsoluteLocalPackageSource(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("OMPIG_HOME", home)
+	root := t.TempDir()
+	packageRoot := filepath.Join(root, "games")
+	if err := os.MkdirAll(filepath.Join(packageRoot, "extensions", "runner"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(packageRoot, "extensions", "runner", "index.js"), []byte("export default function extension(pi) {}\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"games"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	source := filepath.Join(root, "ompiglet.yaml")
+	document := fmt.Sprintf("name: games\npackages:\n  games: %q\nextensions:\n  - name: runner\n    origins: [package:games]\n", "local:"+packageRoot)
+	if err := os.WriteFile(source, []byte(document), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	// The loader rejects the absolute Package source, so the source itself does not validate.
+	installresolver.SetMaterializer(func(_, source, _ string, _ installresolver.MaterializeOptions, _, _ io.Writer) (string, error) {
+		return source, nil
+	})
+	t.Cleanup(func() { installresolver.SetMaterializer(nil) })
+	var stdout, stderr strings.Builder
+	if code := RunCommand([]string{"ompiglet", "validate", source}, &stdout, &stderr); code == 0 || !strings.Contains(stdout.String()+stderr.String(), "must be a relative ompiglet: path") {
+		t.Fatalf("validate code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code := RunCommand([]string{"ompiglet", "add", source, "--no-input"}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), `packages["games"]`) || !strings.Contains(stderr.String(), "must be a relative ompiglet: path") {
+		t.Fatalf("add code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if _, err := os.Stat(filepath.Join(home, "ompiglets", "games.yaml")); !os.IsNotExist(err) {
+		t.Fatalf("unloadable Ompiglet was added: %v", err)
+	}
+}
+
+func TestValidatePigletAddOriginsChecksPackageSources(t *testing.T) {
+	absolute := "local:" + t.TempDir()
+	p := &Ompiglet{Packages: map[string]string{"games": "local:./packages/games", "abs": absolute, "npm": "npm:@acme/base@1.0.0"}}
+	err := validatePigletAddOrigins(p)
+	if err == nil || !strings.Contains(err.Error(), "FAIL: package games (local:./packages/games)") || strings.Contains(err.Error(), "FAIL: package abs") || strings.Contains(err.Error(), "FAIL: package npm") {
+		t.Fatalf("error = %v", err)
+	}
+	delete(p.Packages, "games")
+	if err := validatePigletAddOrigins(p); err != nil {
+		t.Fatalf("absolute and npm Package sources rejected: %v", err)
+	}
+}
+
+func TestValidatePigletAddOriginsPreservesAbsoluteLocalOrigin(t *testing.T) {
+	origin := "local:" + t.TempDir()
+	p := &Ompiglet{Skills: []SkillEntry{{Name: "review", Origins: []string{origin}}}}
+	if err := validatePigletAddOrigins(p); err != nil {
+		t.Fatalf("absolute local origin %q was rejected: %v", origin, err)
+	}
+}
+
+func TestRunCommandAddJSONIsSingleStructuredResult(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	source := filepath.Join(t.TempDir(), "release.yaml")
+	if err := os.WriteFile(source, []byte("name: release\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "add", source, "--json", "--no-input"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	assertNoPigletOutputVersion(t, stdout.String())
+	var output pigletCommandOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	if output.Command != "add" || !output.Success || !strings.Contains(output.Output, "Added release") {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+func TestRunCommandAddRemoteSourcesWritesOriginAndListsIt(t *testing.T) {
+	cases := []struct {
+		name                string
+		source              string
+		pigletName          string
+		manifestRelative    string
+		wantResolvedVersion string
+		wantIntegrity       string
+		git                 bool
+	}{
+		{
+			name: "npm package manifest path", source: "npm:@acme/review@^1.0.0", pigletName: "npm-review",
+			manifestRelative: "config/review.yaml", wantResolvedVersion: "1.2.3", wantIntegrity: "sha512-fixture",
+		},
+		{
+			name: "git fallback path", source: "git:ssh://git@github.example/acme/review.git@v2.0.0", pigletName: "git-review",
+			manifestRelative: "ompiglet.yaml", wantResolvedVersion: "v2.0.0", git: true,
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			home := t.TempDir()
+			t.Setenv("OMPIG_HOME", home)
+			t.Setenv("OMPIG_OFFLINE", "")
+			t.Setenv("PI_OFFLINE", "")
+			t.Chdir(t.TempDir())
+			var installRoot string
+			root := t.TempDir()
+			if !tc.git {
+				installRoot = root
+				root = filepath.Join(installRoot, "node_modules", "@acme", "review")
+			}
+			pigletPath := filepath.Join(root, filepath.FromSlash(tc.manifestRelative))
+			if err := os.MkdirAll(filepath.Dir(pigletPath), 0o755); err != nil {
+				t.Fatal(err)
+			}
+			pigletData := []byte("name: " + tc.pigletName + "\nsystemPrompt:\n  file: prompts/system.md\n")
+			if err := os.WriteFile(pigletPath, pigletData, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			promptPath := filepath.Join(filepath.Dir(pigletPath), "prompts", "system.md")
+			if err := os.MkdirAll(filepath.Dir(promptPath), 0o755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(promptPath, []byte("remote prompt\n"), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			if tc.manifestRelative != "ompiglet.yaml" {
+				manifest := fmt.Sprintf(`{"name":"@acme/review","version":"1.2.3","ompig":{"ompiglet":%q}}`, tc.manifestRelative)
+				if err := os.WriteFile(filepath.Join(root, "package.json"), []byte(manifest), 0o644); err != nil {
+					t.Fatal(err)
+				}
+				lock := `{"lockfileVersion":3,"packages":{"node_modules/@acme/review":{"version":"1.2.3","integrity":"sha512-fixture"}}}`
+				if err := os.WriteFile(filepath.Join(installRoot, "package-lock.json"), []byte(lock), 0o644); err != nil {
+					t.Fatal(err)
+				}
+			}
+			wantCommit := ""
+			if tc.git {
+				runGit := func(args ...string) string {
+					t.Helper()
+					command := exec.Command("git", args...)
+					command.Dir = root
+					output, err := command.CombinedOutput()
+					if err != nil {
+						t.Fatalf("git %s: %v\n%s", strings.Join(args, " "), err, output)
+					}
+					return strings.TrimSpace(string(output))
+				}
+				runGit("init", "-q")
+				runGit("add", ".")
+				runGit("-c", "user.name=Ompig Test", "-c", "user.email=ompig@example.test", "commit", "-q", "-m", "fixture")
+				wantCommit = runGit("rev-parse", "HEAD")
+			}
+			installresolver.SetMaterializer(func(_, source, scope string, _ installresolver.MaterializeOptions, _, _ io.Writer) (string, error) {
+				if source != tc.source || scope != "user" {
+					t.Fatalf("materialize = %q/%q", source, scope)
+				}
+				return root, nil
+			})
+			t.Cleanup(func() { installresolver.SetMaterializer(nil) })
+
+			var stdout, stderr strings.Builder
+			code := RunCommand([]string{"ompiglet", "add", tc.source, "--no-input"}, &stdout, &stderr)
+			if code != 0 || stderr.Len() != 0 {
+				t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+			installed := filepath.Join(home, "ompiglets", tc.pigletName+".yaml")
+			if data, err := os.ReadFile(installed); err != nil || !bytes.Equal(data, pigletData) {
+				t.Fatalf("installed Ompiglet = %q, %v", data, err)
+			}
+			if data, err := os.ReadFile(filepath.Join(home, "ompiglets", "prompts", "system.md")); err != nil || string(data) != "remote prompt\n" {
+				t.Fatalf("installed prompt = %q, %v", data, err)
+			}
+			origin, err := readPigletOrigin(installed)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if origin == nil || origin.Source != tc.source || origin.ResolvedVersion != tc.wantResolvedVersion || origin.Integrity != tc.wantIntegrity || origin.Commit != wantCommit {
+				t.Fatalf("origin = %#v", origin)
+			}
+
+			stdout.Reset()
+			stderr.Reset()
+			code = RunCommand([]string{"ompiglet", "list", "--json"}, &stdout, &stderr)
+			if code != 0 || stderr.Len() != 0 {
+				t.Fatalf("list code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+			var listed pigletListOutput
+			if err := json.Unmarshal([]byte(stdout.String()), &listed); err != nil {
+				t.Fatal(err)
+			}
+			if len(listed.Ompiglets) != 1 || listed.Ompiglets[0].Origin == nil || listed.Ompiglets[0].Origin.Source != tc.source {
+				t.Fatalf("list = %#v", listed)
+			}
+
+			stdout.Reset()
+			stderr.Reset()
+			code = RunCommand([]string{"ompiglet", "add", tc.source, "--no-input"}, &stdout, &stderr)
+			if code != 1 || !strings.Contains(stderr.String(), "already installed") || !strings.Contains(stderr.String(), "ompig ompiglet remove "+tc.pigletName+" --source") {
+				t.Fatalf("duplicate code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestRunCommandAddRemoteRejectsNonPortablePiglet(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_OFFLINE", "")
+	t.Setenv("PI_OFFLINE", "")
+	root := t.TempDir()
+	packageRoot := filepath.Join(root, "package")
+	if err := os.MkdirAll(packageRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"local"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	pigletData := "name: blocked\npackages:\n  base: local:./package\n"
+	if err := os.WriteFile(filepath.Join(root, "ompiglet.yaml"), []byte(pigletData), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	installresolver.SetMaterializer(func(_, _, _ string, _ installresolver.MaterializeOptions, _, _ io.Writer) (string, error) {
+		return root, nil
+	})
+	t.Cleanup(func() { installresolver.SetMaterializer(nil) })
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "add", "npm:blocked@1.0.0", "--no-input"}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "catalog Ompiglet package") || !strings.Contains(stderr.String(), "uses local source") {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if _, err := os.Stat(filepath.Join(home, "ompiglets", "blocked.yaml")); !os.IsNotExist(err) {
+		t.Fatalf("non-portable Ompiglet was partially installed: %v", err)
+	}
+}
+
+func TestRunCommandAddRemoteRejectsCredentialBearingGitURL(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_OFFLINE", "")
+	t.Setenv("PI_OFFLINE", "")
+	const credential = "origin-token-must-not-persist"
+	called := false
+	installresolver.SetMaterializer(func(_, _, _ string, _ installresolver.MaterializeOptions, _, _ io.Writer) (string, error) {
+		called = true
+		return "", nil
+	})
+	t.Cleanup(func() { installresolver.SetMaterializer(nil) })
+
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "add", "git:https://publisher:" + credential + "@github.example/acme/review.git@v1", "--no-input"}, &stdout, &stderr)
+	if code != 1 || called || !strings.Contains(stderr.String(), "must not include credentials") {
+		t.Fatalf("code=%d called=%v stdout=%s stderr=%s", code, called, stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), credential) || strings.Contains(stderr.String(), credential) {
+		t.Fatalf("credential leaked in command output: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	entries, err := os.ReadDir(filepath.Join(home, "ompiglets"))
+	if err != nil && !os.IsNotExist(err) {
+		t.Fatal(err)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("credential-bearing source wrote Ompiglet files: %v", entries)
+	}
+
+	pigletsDir := filepath.Join(home, "ompiglets")
+	if err := os.MkdirAll(pigletsDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	pigletData := []byte("name: leaked-origin\n")
+	pigletPath := filepath.Join(pigletsDir, "leaked-origin.yaml")
+	if err := os.WriteFile(pigletPath, pigletData, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	originData, err := marshalPigletOrigin(pigletOrigin{
+		Source:          "git:https://publisher:" + credential + "@github.example/acme/review.git@v1",
+		ResolvedVersion: "v1",
+		Commit:          strings.Repeat("a", 40),
+		PigletDigest:    digestPigletData(pigletData),
+		AddedAt:         "2026-09-24T00:00:00Z",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(originPathForPiglet(pigletPath), originData, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code = RunCommand([]string{"ompiglet", "list", "--json"}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "must not include credentials") {
+		t.Fatalf("list code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), credential) || strings.Contains(stderr.String(), credential) {
+		t.Fatalf("credential from existing origin leaked in list output: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+}
+
+func TestRunCommandAddRemoteOfflineFailsBeforeMaterialization(t *testing.T) {
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_OFFLINE", "1")
+	t.Setenv("PI_OFFLINE", "")
+	called := false
+	installresolver.SetMaterializer(func(_, _, _ string, _ installresolver.MaterializeOptions, _, _ io.Writer) (string, error) {
+		called = true
+		return "", nil
+	})
+	t.Cleanup(func() { installresolver.SetMaterializer(nil) })
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "add", "npm:offline@1.0.0", "--no-input"}, &stdout, &stderr)
+	if code != 1 || called || !strings.Contains(stderr.String(), "while offline") || !strings.Contains(stderr.String(), "OMPIG_OFFLINE") {
+		t.Fatalf("code=%d called=%v stdout=%s stderr=%s", code, called, stdout.String(), stderr.String())
+	}
+}
+
+// writeEffectiveShowLocalFixture creates a Ompiglet with each local Resource source and returns the expected canonical paths.
+func writeEffectiveShowLocalFixture(t *testing.T) (string, map[string]string) {
+	t.Helper()
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Chdir(t.TempDir())
+
+	root := t.TempDir()
+	canonicalRoot, err := filepath.EvalSymlinks(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	paths := map[string]string{
+		"package":   filepath.Join(canonicalRoot, "package"),
+		"extension": filepath.Join(canonicalRoot, "extensions", "demo"),
+		"skill":     filepath.Join(canonicalRoot, "skills", "review"),
+	}
+	for _, path := range []string{
+		filepath.Join(root, "package"),
+		filepath.Join(root, "extensions", "demo"),
+		filepath.Join(root, "skills", "review"),
+	} {
+		if err := os.MkdirAll(path, 0o755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	source := filepath.Join(root, "local.yaml")
+	data := `name: local
+packages:
+  base: local:./package
+extensions:
+  - name: demo
+    origins: [local:./extensions/demo]
+  - name: packaged
+    origins: [package:base]
+skills:
+  - name: review
+    origins: [local:./skills/review]
+agentEnv:
+  image: ghcr.io/acme/dev:1
+`
+	if err := os.WriteFile(source, []byte(data), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	return source, paths
+}
+
+// TestRunCommandShowEffectiveHumanResolvesLocalResourcePaths verifies that human output includes anchored Resource paths and environment defaults.
+func TestRunCommandShowEffectiveHumanResolvesLocalResourcePaths(t *testing.T) {
+	source, paths := writeEffectiveShowLocalFixture(t)
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", source, "--effective"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	for _, want := range []string{
+		"base  source=local:" + paths["package"],
+		"demo  tools=all  origin=local:" + paths["extension"],
+		"packaged  tools=all  origin=package:base",
+		"review  origin=local:" + paths["skill"],
+		"Ompig runtime: inject@latest",
+		"policy: standard",
+	} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Errorf("effective show output missing %q:\n%s", want, stdout.String())
+		}
+	}
+}
+
+// TestRunCommandShowEffectiveJSONResolvesLocalResourcePaths verifies that JSON output includes anchored Resource paths and environment defaults.
+func TestRunCommandShowEffectiveJSONResolvesLocalResourcePaths(t *testing.T) {
+	source, paths := writeEffectiveShowLocalFixture(t)
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", source, "--effective", "--json"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var output struct {
+		Effective bool `json:"effective"`
+		Ompiglet  struct {
+			Packages   map[string]string `json:"packages"`
+			Extensions []struct {
+				Name    string   `json:"name"`
+				Origins []string `json:"origins"`
+			} `json:"extensions"`
+			Skills []struct {
+				Name    string   `json:"name"`
+				Origins []string `json:"origins"`
+			} `json:"skills"`
+			AgentEnv struct {
+				OmpigRuntime struct {
+					Mode    string `json:"mode"`
+					Version string `json:"version"`
+				} `json:"ompigRuntime"`
+				Policy struct {
+					Preset string `json:"preset"`
+				} `json:"policy"`
+			} `json:"agentEnv"`
+		} `json:"ompiglet"`
+	}
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	if !output.Effective {
+		t.Fatalf("effective = false: %s", stdout.String())
+	}
+	if got, want := output.Ompiglet.Packages["base"], "local:"+paths["package"]; got != want {
+		t.Errorf("Package source = %q, want %q", got, want)
+	}
+	if len(output.Ompiglet.Extensions) != 2 || len(output.Ompiglet.Extensions[0].Origins) != 1 || len(output.Ompiglet.Extensions[1].Origins) != 1 {
+		t.Fatalf("extensions = %#v", output.Ompiglet.Extensions)
+	}
+	if got, want := output.Ompiglet.Extensions[0].Origins[0], "local:"+paths["extension"]; got != want {
+		t.Errorf("extension origin = %q, want %q", got, want)
+	}
+	if got := output.Ompiglet.Extensions[1].Origins[0]; got != "package:base" {
+		t.Errorf("Package extension origin = %q, want package:base", got)
+	}
+	if len(output.Ompiglet.Skills) != 1 || len(output.Ompiglet.Skills[0].Origins) != 1 {
+		t.Fatalf("skills = %#v", output.Ompiglet.Skills)
+	}
+	if got, want := output.Ompiglet.Skills[0].Origins[0], "local:"+paths["skill"]; got != want {
+		t.Errorf("skill origin = %q, want %q", got, want)
+	}
+	if runtime := output.Ompiglet.AgentEnv.OmpigRuntime; runtime.Mode != "inject" || runtime.Version != "latest" {
+		t.Errorf("effective Ompig runtime = %#v", runtime)
+	}
+	if got := output.Ompiglet.AgentEnv.Policy.Preset; got != "standard" {
+		t.Errorf("effective policy = %q, want standard", got)
+	}
+}
+
+// TestRunCommandShowEffectiveRejectsAuthoredAbsoluteLocalPaths verifies that effective inspection does not weaken source validation.
+func TestRunCommandShowEffectiveRejectsAuthoredAbsoluteLocalPaths(t *testing.T) {
+	absolute := filepath.ToSlash(t.TempDir())
+	cases := map[string]string{
+		"Package":   "name: invalid\npackages:\n  base: local:" + absolute + "\n",
+		"extension": "name: invalid\nextensions:\n  - name: demo\n    origins: [local:" + absolute + "]\n",
+		"skill":     "name: invalid\nskills:\n  - name: review\n    origins: [local:" + absolute + "]\n",
+	}
+	for name, data := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Setenv("OMPIG_HOME", t.TempDir())
+			t.Chdir(t.TempDir())
+			source := filepath.Join(t.TempDir(), "invalid.yaml")
+			if err := os.WriteFile(source, []byte(data), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			var stdout, stderr strings.Builder
+			code := RunCommand([]string{"ompiglet", "show", source, "--effective", "--json"}, &stdout, &stderr)
+			if code != 1 || stdout.Len() != 0 || !strings.Contains(stderr.String(), "must be a relative ompiglet: path") {
+				t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestRunCommandShowEffectiveExpandsAgentEnvironmentDefaults(t *testing.T) {
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Chdir(t.TempDir())
+	source := filepath.Join(t.TempDir(), "image.yaml")
+	if err := os.WriteFile(source, []byte("name: image\nagentEnv:\n  image: ghcr.io/acme/dev:1\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", source, "--effective", "--json"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var output pigletShowOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	encoded, _ := json.Marshal(output.Ompiglet)
+	if !output.Effective || !strings.Contains(string(encoded), `"mode":"inject"`) || !strings.Contains(string(encoded), `"version":"latest"`) || !strings.Contains(string(encoded), `"preset":"standard"`) {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+// Effective show/validate observe defaults without rewriting the user's source
+// (R17) and repeated show is stable (#476 AC-9). A show that clobbered the
+// hand-authored YAML with machine-expanded defaults is silent data loss, so the
+// source bytes must survive every effective read byte-for-byte.
+func TestRunCommandEffectiveShowIsStableAndNeverRewritesSource(t *testing.T) {
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Chdir(t.TempDir())
+	source := filepath.Join(t.TempDir(), "image.yaml")
+	original := []byte("name: image\nagentEnv:\n  image: ghcr.io/acme/dev:1\n")
+	if err := os.WriteFile(source, original, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	show := func() string {
+		t.Helper()
+		var stdout, stderr strings.Builder
+		code := RunCommand([]string{"ompiglet", "show", source, "--effective", "--json"}, &stdout, &stderr)
+		if code != 0 || stderr.Len() != 0 {
+			t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		}
+		return stdout.String()
+	}
+
+	first := show()
+	if second := show(); first != second {
+		t.Fatalf("effective show not stable across runs:\nfirst=%s\nsecond=%s", first, second)
+	}
+
+	// validate must also leave the source untouched even though this image
+	// ompiglet fails validation (host fallback forbidden).
+	var vout, verr strings.Builder
+	RunCommand([]string{"ompiglet", "validate", source, "--json", "--no-input"}, &vout, &verr)
+
+	after, err := os.ReadFile(source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(after, original) {
+		t.Fatalf("source rewritten by effective show/validate:\nwant=%q\ngot =%q", original, after)
+	}
+}
+
+// Resolved secret values must never be returned by an inspection API
+// (secrets.go ResolvedSecrets contract). "ompiglet show --effective" is exactly
+// such an API: it must project the declaration and its binding, never resolve
+// the live value, even when that value is present and resolvable in the
+// environment. Lower layers guard the struct marshal and the projection; this
+// drives the production RunCommand entrypoint with a resolvable secret present
+// so a future effective-show change that eagerly resolves and leaks a value is
+// caught end-to-end.
+func TestRunCommandEffectiveShowNeverLeaksResolvedSecretValue(t *testing.T) {
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Chdir(t.TempDir())
+	const secretValue = "SUPER-SECRET-VALUE-DO-NOT-LEAK"
+	t.Setenv("PROBE_ENV_SECRET", secretValue)
+	source := filepath.Join(t.TempDir(), "leak.yaml")
+	pigletYAML := "name: leak\nsecrets:\n" +
+		"  - name: token\n    from: {env: PROBE_ENV_SECRET}\n" +
+		"agentEnv:\n  image: dev:1\n  secrets:\n    - secretRef: token\n      target: {env: TOKEN}\n"
+	if err := os.WriteFile(source, []byte(pigletYAML), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", source, "--effective", "--json"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), secretValue) {
+		t.Fatalf("effective show leaked resolved secret value into inspection output:\n%s", stdout.String())
+	}
+	// The declaration and binding must still be present (the value is what is
+	// withheld, not the shape), so the assertion above cannot pass by emitting
+	// nothing.
+	if !strings.Contains(stdout.String(), "token") || !strings.Contains(stdout.String(), "TOKEN") {
+		t.Fatalf("effective show dropped the secret declaration/binding entirely:\n%s", stdout.String())
+	}
+}
+
+func TestRunCommandValidateJSONReportsFailureWithoutStderr(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	source := filepath.Join(t.TempDir(), "broken.yaml")
+	if err := os.WriteFile(source, []byte("name: broken\nskills:\n  - name: missing\n    origins: [local:./missing]\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "validate", source, "--json", "--no-input"}, &stdout, &stderr)
+	if code != 1 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	assertNoPigletOutputVersion(t, stdout.String())
+	var output pigletValidationOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	if output.Valid || len(output.Errors) == 0 || !strings.Contains(output.Errors[0], "missing") {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+func TestRunCommandValidateJSONReportsEffectiveAgentEnvironment(t *testing.T) {
+	source := filepath.Join(t.TempDir(), "image.yaml")
+	if err := os.WriteFile(source, []byte("name: image\nagentEnv:\n  image: ghcr.io/acme/dev:1\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "validate", source, "--json", "--no-input"}, &stdout, &stderr)
+	if code != 1 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var output pigletValidationOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	environment := output.AgentEnvironment
+	if environment == nil || environment.Form != "image" || environment.Value != "ghcr.io/acme/dev:1" || environment.RuntimeMode != "inject" || environment.RuntimeVersion != "latest" || environment.PolicyPreset != "standard" || output.Valid || len(output.Errors) != 1 || !strings.Contains(output.Errors[0], "host fallback is forbidden") {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+func TestRunCommandValidateAcceptsSupportedImageRuntimeSlice(t *testing.T) {
+	source := filepath.Join(t.TempDir(), "image.yaml")
+	if err := os.WriteFile(source, []byte("name: image\nagentEnv:\n  image: ghcr.io/acme/dev:1\n  ompigRuntime:\n    mode: image\n    version: 0.81.1\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "validate", source, "--json", "--no-input"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var output pigletValidationOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	if !output.Valid || output.AgentEnvironment == nil || output.AgentEnvironment.RuntimeMode != "image" {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+func TestRunCommandRemoveRequiresFacetWhenSourceAndBinaryExist(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	pigletsDir := filepath.Join(root, "ompiglets")
+	if err := os.MkdirAll(pigletsDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	source := filepath.Join(pigletsDir, "release.yaml")
+	if err := os.WriteFile(source, []byte("name: release\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	digest, err := pigletSourceDigest(source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	record := writeRecordFixtureWithPigletDigest(t, root, "release", strings.TrimPrefix(digest, "sha256:"))
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "remove", "release"}, &stdout, &stderr)
+	if code != 2 || !strings.Contains(stderr.String(), "choose --source, --binary, or --all") {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	for _, path := range []string{source, record} {
+		if _, err := os.Stat(path); err != nil {
+			t.Fatalf("facet changed after ambiguous remove: %s: %v", path, err)
+		}
+	}
+}
+
+func TestRunCommandRemoveBinaryKeepsSource(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	pigletsDir := filepath.Join(root, "ompiglets")
+	if err := os.MkdirAll(pigletsDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	source := filepath.Join(pigletsDir, "release.yaml")
+	if err := os.WriteFile(source, []byte("name: release\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	digest, err := pigletSourceDigest(source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	record := writeRecordFixtureWithPigletDigest(t, root, "release", strings.TrimPrefix(digest, "sha256:"))
+	ompiglets, err := List()
+	if err != nil || len(ompiglets) != 1 || len(ompiglets[0].Records) != 1 {
+		t.Fatalf("ompiglets=%v err=%v", ompiglets, err)
+	}
+	artifactPath := ompiglets[0].Records[0].ArtifactPath
+	resolutionRecord := ompiglets[0].Records[0].ResolutionPath
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "remove", "release", "--binary"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if _, err := os.Stat(source); err != nil {
+		t.Fatalf("source removed: %v", err)
+	}
+	if _, err := os.Stat(record); !os.IsNotExist(err) {
+		t.Fatalf("record remains: %v", err)
+	}
+	if _, err := os.Stat(artifactPath); !os.IsNotExist(err) {
+		t.Fatalf("managed artifact remains: %v", err)
+	}
+	if _, err := os.Stat(resolutionRecord); !os.IsNotExist(err) {
+		t.Fatalf("resolution record remains: %v", err)
+	}
+}
+
+func TestRunCommandListJSONIncludesFacets(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	writeRecordFixture(t, root, "binary-only")
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "list", "--json", "--no-input"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), `"receipts"`) || !strings.Contains(stdout.String(), `"records"`) {
+		t.Fatalf("list JSON retained removed receipt field: %s", stdout.String())
+	}
+	assertNoPigletOutputVersion(t, stdout.String())
+	var output pigletListOutput
+	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
+		t.Fatal(err)
+	}
+	if len(output.Ompiglets) != 1 || output.Ompiglets[0].Name != "binary-only" || len(output.Ompiglets[0].Records) != 1 {
+		t.Fatalf("output = %#v", output)
+	}
+}
+
+func TestRunCommandListShowsBinaryFacet(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	writeRecordFixture(t, root, "binary-only")
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "list"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 || !strings.Contains(stdout.String(), "BINARY") || !strings.Contains(stdout.String(), "linux/amd64") || !strings.Contains(stdout.String(), "binary-only") {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestRunCommandShowJSONUsesPigletSchemaFieldNames(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	pigletsDir := filepath.Join(root, "ompiglets")
+	if err := os.MkdirAll(pigletsDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(pigletsDir, "release.yaml"), []byte("name: release\nbuild:\n  outputName: ompig-release\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", "release", "--json"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 || !strings.Contains(stdout.String(), `"ompiglet": {`) || !strings.Contains(stdout.String(), `"build": {`) || strings.Contains(stdout.String(), `"Version"`) {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var document map[string]any
+	if err := json.Unmarshal([]byte(stdout.String()), &document); err != nil {
+		t.Fatal(err)
+	}
+	if _, exists := document["version"]; exists {
+		t.Fatalf("show envelope exposed a Ompig-owned format version: %s", stdout.String())
+	}
+	pigletDocument, _ := document["ompiglet"].(map[string]any)
+	if _, exists := pigletDocument["version"]; exists {
+		t.Fatalf("Ompiglet source exposed a Ompig-owned format version: %s", stdout.String())
+	}
+}
+
+func TestRunCommandShowRecordFile(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	record := writeRecordFixture(t, root, "release")
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", "--record", record, "--json"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 || !strings.Contains(stdout.String(), `"ompiglet": "release"`) || !strings.Contains(stdout.String(), `"passed": true`) {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestRunCommandShowBinaryOnlyPiglet(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("OMPIG_HOME", root)
+	t.Chdir(t.TempDir())
+	writeRecordFixture(t, root, "binary-only")
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "show", "binary-only"}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 || !strings.Contains(stdout.String(), "binary-only") || !strings.Contains(stdout.String(), "Source: none") || !strings.Contains(stdout.String(), "linux/amd64") {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestRunCommandValidateReportsInlineSkills(t *testing.T) {
+	pigletPath := filepath.Join(t.TempDir(), "porter.yaml")
+	if err := os.WriteFile(pigletPath, []byte("name: porter\nskills:\n  - name: porter\n    content: instructions\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr strings.Builder
+	code := RunCommand([]string{"ompiglet", "validate", pigletPath}, &stdout, &stderr)
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	for _, want := range []string{"OK: skill porter (<inline>)", "1 skill(s)"} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("stdout %q missing %q", stdout.String(), want)
+		}
+	}
+}
+
+func TestRunCommandDispatch(t *testing.T) {
+	t.Setenv("OMPIG_HOME", t.TempDir()) // empty home: no ompiglets discovered
+	t.Chdir(t.TempDir())                // empty cwd: no workspace .ompig/ompiglets
+
+	type want struct {
+		code      int
+		outHas    string
+		errHas    string
+		errNotHas string
+	}
+	cases := map[string]struct {
+		args []string
+		want want
+	}{
+		"list":               {[]string{"ompiglet", "list"}, want{code: 0}},
+		"validate needs arg": {[]string{"ompiglet", "validate"}, want{code: 2, errHas: "ompig ompiglet validate"}},
+		"add needs arg":      {[]string{"ompiglet", "add"}, want{code: 2, errHas: "ompig ompiglet add"}},
+		"pull needs arg":     {[]string{"ompiglet", "pull"}, want{code: 2, errHas: "release reference"}},
+		"remove needs arg":   {[]string{"ompiglet", "remove"}, want{code: 2, errHas: "Usage: ompig ompiglet remove"}},
+		"unknown verb":       {[]string{"ompiglet", "frobnicate"}, want{code: 1, errHas: "Unknown ompiglet command"}},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			var out, errb bytes.Buffer
+			code := RunCommand(tc.args, &out, &errb)
+			if code != tc.want.code {
+				t.Fatalf("code = %d, want %d (stderr=%q)", code, tc.want.code, errb.String())
+			}
+			if tc.want.outHas != "" && !strings.Contains(out.String(), tc.want.outHas) {
+				t.Errorf("stdout %q missing %q", out.String(), tc.want.outHas)
+			}
+			if tc.want.errHas != "" && !strings.Contains(errb.String(), tc.want.errHas) {
+				t.Errorf("stderr %q missing %q", errb.String(), tc.want.errHas)
+			}
+			if tc.want.errNotHas != "" && strings.Contains(errb.String(), tc.want.errNotHas) {
+				t.Errorf("stderr %q should not contain %q", errb.String(), tc.want.errNotHas)
+			}
+		})
+	}
+}

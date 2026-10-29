@@ -27,4 +27,4 @@ Go replays:
 
 - `TestFauxObservationOracle` and `TestFauxDeferredObservationOracle` (`ai`) replay `direct`, `ticks` and `deferred`, including the push count at every delivery. They run the consumer and the provider as turns of one executor, so the synchronous segment that creates the stream owns execution as it does in one JavaScript thread.
 - `TestFauxAgentObservationOracle` (`coding`) replays `agent` (delivered Agent events; the push count is not visible from outside `ai`).
-- `TestFauxRPCObservation` (`cmd/pig`) replays the `rpc` assistant records through the RPC serializer. `PIG_FAUX_RPC_RUNS=200` repeats each fixture. Usage numbers are canonicalized there because they derive from each product's system prompt.
+- `TestFauxRPCObservation` (`cmd/ompig`) replays the `rpc` assistant records through the RPC serializer. `OMPIG_FAUX_RPC_RUNS=200` repeats each fixture. Usage numbers are canonicalized there because they derive from each product's system prompt.

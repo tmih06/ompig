@@ -14,9 +14,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 type startupPackageFixture struct {
@@ -58,7 +58,7 @@ func writeStartupPackages(t *testing.T, root string, withGoodExtensions bool) st
 
 	goodExtension := func(dir, name string) {
 		writeStartupFixtureFile(t, filepath.Join(dir, "go.mod"), "module example.com/"+name+"\n\ngo 1.26\n")
-		writeStartupFixtureFile(t, filepath.Join(dir, "extension.go"), fmt.Sprintf("package %s\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(%q) }\n", name, name))
+		writeStartupFixtureFile(t, filepath.Join(dir, "extension.go"), fmt.Sprintf("package %s\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(%q) }\n", name, name))
 	}
 	mixedExtensions := `["extensions/bad"]`
 	healthyExtensions := `[]`
@@ -103,7 +103,7 @@ func startupPackageValidationError(cwd string, sm *codingagent.SettingsManager) 
 // and main.ts reports all of them together. Startup validation therefore does
 // not fail a Package for an unresolvable extension: the collector emits each
 // one as an unresolved config for the final extension load to report, and
-// Packages whose extensions are not loaded (`pig -ne`) skip resolution.
+// Packages whose extensions are not loaded (`ompig -ne`) skip resolution.
 func TestValidateConfiguredPackagesForStartupLeavesExtensionFailuresToTheLoad(t *testing.T) {
 	root := t.TempDir()
 	cwd, agentDir := filepath.Join(root, "work"), filepath.Join(root, "agent")
@@ -207,7 +207,7 @@ func runRPCStartup(t *testing.T, binary, home, agentDir, cwd string, args ...str
 	t.Helper()
 	cmd := exec.Command(binary, append([]string{"--mode", "rpc", "--model", "test-faux/faux-1", "--offline"}, args...)...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	cmd.Stdin = strings.NewReader(`{"id":"commands","type":"get_commands"}` + "\n")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
@@ -237,7 +237,7 @@ func runRPCStartup(t *testing.T, binary, home, agentDir, cwd string, args ...str
 // mode when a configured Package extension fails to
 // load, printing `Error: Failed to load extension "<path>": Failed to load
 // extension: <message>` and `Hint: Start without extensions using "pi -ne".`;
-// with -ne it starts. PiG used to abort with a Package validation error even
+// with -ne it starts. Ompig used to abort with a Package validation error even
 // under -ne, which made the hint's recovery impossible.
 func TestRPCStartupConfiguredPackageExtensionFailureMatchesUpstream(t *testing.T) {
 	home := t.TempDir()
@@ -262,7 +262,7 @@ func TestRPCStartupConfiguredPackageExtensionFailureMatchesUpstream(t *testing.T
 		t.Fatalf("RPC startup error = %v, want exit status 1\nstderr:\n%s", failed.err, failed.stderr)
 	}
 	wantError := fmt.Sprintf(`Error: Failed to load extension "%s": Failed to load extension: `, f.badExtension)
-	wantHint := `Hint: Start without extensions using "pig -ne".`
+	wantHint := `Hint: Start without extensions using "ompig -ne".`
 	lines := strings.Split(strings.TrimSpace(failed.stderr), "\n")
 	if len(lines) < 2 || !strings.HasPrefix(lines[len(lines)-2], wantError) || lines[len(lines)-1] != wantHint {
 		t.Fatalf("stderr does not end with the upstream extension failure and hint:\n%s", failed.stderr)

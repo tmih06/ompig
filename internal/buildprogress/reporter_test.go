@@ -37,7 +37,7 @@ func TestReporterTerminalAndPlainOutputAgree(t *testing.T) {
 		r.render()
 		r.Handle(Event{Member: "hello", Output: "  compiler line\n"})
 		now = now.Add(time.Second)
-		r.Success("/out/pig-small", 1024)
+		r.Success("/out/ompig-small", 1024)
 		before := output.String()
 		r.Handle(Event{Phase: "late event"})
 		r.Close()
@@ -66,7 +66,7 @@ func TestReporterTerminalAndPlainOutputAgree(t *testing.T) {
 	if last != len(phases)-1 {
 		t.Fatalf("plain output lacks a phase line: %q", plain)
 	}
-	if want := []string{"[hello]   compiler line", "Built /out/pig-small (1024 bytes) in 3s"}; !slices.Equal(permanent, want) {
+	if want := []string{"[hello]   compiler line", "Built /out/ompig-small (1024 bytes) in 3s"}; !slices.Equal(permanent, want) {
 		t.Fatalf("permanent lines = %q, want %q", permanent, want)
 	}
 	frames := frameThenClear.FindAllString(terminal, -1)
@@ -188,7 +188,7 @@ func TestPhaseEventsAndLiveToolOutput(t *testing.T) {
 	ctx = Member(ctx, "member-a, member-b")
 	Phase(ctx, "Compiling Go members", "member-a, member-b")
 	cmd := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestProgressToolHelper$")
-	cmd.Env = append(os.Environ(), "PIG_PROGRESS_TOOL_HELPER=1")
+	cmd.Env = append(os.Environ(), "OMPIG_PROGRESS_TOOL_HELPER=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -223,11 +223,11 @@ func TestPhaseEventsAndLiveToolOutput(t *testing.T) {
 }
 
 func TestProgressToolHelper(t *testing.T) {
-	if os.Getenv("PIG_PROGRESS_TOOL_HELPER") == "volume" {
+	if os.Getenv("OMPIG_PROGRESS_TOOL_HELPER") == "volume" {
 		_, _ = fmt.Fprint(os.Stdout, strings.Repeat("x", diagnosticTailBytes*2)+"\nlast diagnostic")
 		os.Exit(3)
 	}
-	if os.Getenv("PIG_PROGRESS_TOOL_HELPER") != "1" {
+	if os.Getenv("OMPIG_PROGRESS_TOOL_HELPER") != "1" {
 		return
 	}
 	_, _ = fmt.Fprintln(os.Stdout, "compiler started")
@@ -279,7 +279,7 @@ func TestToolVerbosityDoesNotChangeBuildInputs(t *testing.T) {
 
 func TestRunBoundsCompilerDiagnostics(t *testing.T) {
 	cmd := exec.Command(os.Args[0], "-test.run=^TestProgressToolHelper$")
-	cmd.Env = append(os.Environ(), "PIG_PROGRESS_TOOL_HELPER=volume")
+	cmd.Env = append(os.Environ(), "OMPIG_PROGRESS_TOOL_HELPER=volume")
 	err := Run(context.Background(), cmd)
 	var exit *exec.ExitError
 	if !errors.As(err, &exit) || exit.ExitCode() != 3 {
@@ -337,7 +337,7 @@ func TestToolOutputCancellationJoinsProcess(t *testing.T) {
 		}
 	}, false)
 	cmd := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestProgressToolHelper$")
-	cmd.Env = append(os.Environ(), "PIG_PROGRESS_TOOL_HELPER=1")
+	cmd.Env = append(os.Environ(), "OMPIG_PROGRESS_TOOL_HELPER=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -354,6 +354,6 @@ func BenchmarkBuildProgressOutput(b *testing.B) {
 	defer r.Close()
 	b.ReportAllocs()
 	for b.Loop() {
-		r.Handle(Event{Member: "chain-rs", Output: "   Compiling pig-sdk\n"})
+		r.Handle(Event{Member: "chain-rs", Output: "   Compiling ompig-sdk\n"})
 	}
 }

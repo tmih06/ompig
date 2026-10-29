@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // upstream: packages/durable/src/env/node.ts renameFile calls fs.rename, which libuv answers with the error of rename(2):

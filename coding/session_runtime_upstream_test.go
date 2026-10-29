@@ -6,11 +6,11 @@ import (
 	"os"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // packages/coding-agent/test/suite/agent-session-runtime.test.ts:125.
@@ -60,7 +60,7 @@ func TestAgentSessionRuntimeOriginalAssistantReplacement(t *testing.T) {
 			t.Fatalf("%s assistant = %+v, want cost.total 0.123", name, message)
 		}
 	}
-	if os.Getenv("PIG_RUNTIME_ORIGINAL_PROBE") != "" {
+	if os.Getenv("OMPIG_RUNTIME_ORIGINAL_PROBE") != "" {
 		data, err := json.Marshal([]any{"runtime", 125, []any{live.Role, live.Usage.Cost.Total, persisted.Role, persisted.Usage.Cost.Total}})
 		if err != nil {
 			t.Fatal(err)

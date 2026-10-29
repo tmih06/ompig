@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // binaryReadChunk is the largest single read of a BinaryReader, so a huge length allocates only as much as the file

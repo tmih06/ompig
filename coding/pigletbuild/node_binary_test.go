@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-// writeNodePiglet writes a Piglet whose only extension is a TypeScript
+// writeNodePiglet writes a Ompiglet whose only extension is a TypeScript
 // directory extension: a tool the faux model calls (echo_bridge, through a
 // relative import) and a command that writes a file in the working directory.
 func writeNodePiglet(t *testing.T, root, extra string) string {
@@ -39,10 +39,10 @@ export default function (pi: any) {
 	return filepath.Join(root, "nodebin.yaml")
 }
 
-// isolateBuildHome points the build's PiG and user homes at root.
+// isolateBuildHome points the build's Ompig and user homes at root.
 func isolateBuildHome(t *testing.T, root string) {
 	t.Helper()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	t.Setenv("HOME", filepath.Join(root, "home"))
 	t.Setenv("GOFLAGS", strings.TrimSpace(os.Getenv("GOFLAGS")+" -modcacherw"))
 }
@@ -55,8 +55,8 @@ func TestNodeExtensionStripConflictNamesTheStripEntry(t *testing.T) {
 	isolateBuildHome(t, root)
 	path := writeNodePiglet(t, root, "strip:\n  features: [node-extensions]\n")
 	var stdout, stderr strings.Builder
-	code := runBuild([]string{path, "--format", "binary", "--builder", "native", "--out", filepath.Join(root, nativeBinaryName("pig-nodebin"))}, &stdout, &stderr)
-	want := "strip.features names node-extensions, but the Piglet Binary runs extension cell"
+	code := runBuild([]string{path, "--format", "binary", "--builder", "native", "--out", filepath.Join(root, nativeBinaryName("ompig-nodebin"))}, &stdout, &stderr)
+	want := "strip.features names node-extensions, but the Ompiglet Binary runs extension cell"
 	if code == 0 || !strings.Contains(stderr.String(), want) {
 		t.Fatalf("build exit %d, want the strip conflict %q\nstderr:\n%s", code, want, stderr.String())
 	}
@@ -76,17 +76,17 @@ func runNodeBinary(t *testing.T, binary, pathEnv string, args ...string) (int, s
 		"HOME=" + home,
 		"USERPROFILE=" + home,
 		"XDG_CONFIG_HOME=" + filepath.Join(home, ".config"),
-		"PIG_HOME=" + filepath.Join(home, ".pig"),
-		"PIG_CODING_AGENT_DIR=" + filepath.Join(home, ".pig", "agent"),
+		"OMPIG_HOME=" + filepath.Join(home, ".ompig"),
+		"OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, ".ompig", "agent"),
 		"PI_CODING_AGENT_DIR=" + filepath.Join(home, ".pi", "agent"),
-		"PIG_TEST_FAUX=1",
+		"OMPIG_TEST_FAUX=1",
 		"TMPDIR=" + os.TempDir(),
 	}
 	if runtime.GOOS == "windows" {
 		// SystemRoot: Windows programs locate the system through it. LOCALAPPDATA:
 		// with no TEMP the Binary's temp directory is USERPROFILE, too deep for a
 		// Unix socket path (107 bytes), so the extension Host places its sockets in
-		// %LOCALAPPDATA%\pig\s as it does for any deep temp directory.
+		// %LOCALAPPDATA%\ompig\s as it does for any deep temp directory.
 		cmd.Env = append(cmd.Env, "SystemRoot="+os.Getenv("SystemRoot"), "LOCALAPPDATA="+os.Getenv("LOCALAPPDATA"))
 	}
 	var stdout, stderr strings.Builder
@@ -104,10 +104,10 @@ func runNodeBinary(t *testing.T, binary, pathEnv string, args ...string) (int, s
 	}
 }
 
-// A Piglet Binary carries a TypeScript extension: the build embeds its
+// A Ompiglet Binary carries a TypeScript extension: the build embeds its
 // sources, and the Binary runs it with the installed Node exactly as Stock
-// PiG runs it. The extension's tool runs for the model and its command runs.
-// Without Node on PATH the Binary stops at startup with Stock PiG's error for
+// Ompig runs it. The extension's tool runs for the model and its command runs.
+// Without Node on PATH the Binary stops at startup with Stock Ompig's error for
 // a missing Node, naming the extension and the Node version it needs.
 func TestPigletBinaryRunsItsNodeExtension(t *testing.T) {
 	// The Binary runs with PATH naming only Node's directory, so take the
@@ -121,10 +121,10 @@ func TestPigletBinaryRunsItsNodeExtension(t *testing.T) {
 	nodePath := strings.TrimSpace(string(execPath))
 	root := t.TempDir()
 	isolateBuildHome(t, root)
-	binary := filepath.Join(root, nativeBinaryName("pig-nodebin"))
+	binary := filepath.Join(root, nativeBinaryName("ompig-nodebin"))
 	var stdout, stderr strings.Builder
 	if code := runBuild([]string{writeNodePiglet(t, root, ""), "--format", "binary", "--builder", "native", "--out", binary}, &stdout, &stderr); code != 0 {
-		t.Fatalf("pig piglet build exit %d\nstdout:\n%s\nstderr:\n%s", code, stdout.String(), stderr.String())
+		t.Fatalf("ompig ompiglet build exit %d\nstdout:\n%s\nstderr:\n%s", code, stdout.String(), stderr.String())
 	}
 	if !strings.Contains(stderr.String(), "Checksumming embedded cells") || strings.Contains(stderr.String(), "not-embedded") {
 		t.Fatalf("the build did not embed the Node cell:\n%s", stderr.String())
@@ -150,19 +150,19 @@ func TestPigletBinaryRunsItsNodeExtension(t *testing.T) {
 			`Error: Failed to load extension "`,
 			filepath.Join("sources", "greeter") + `": Failed to load extension: `,
 			"TypeScript extensions need Node.js 22.13 or newer; node was not found on PATH",
-			`Hint: Start without extensions using "pig -ne".`,
+			`Hint: Start without extensions using "ompig -ne".`,
 		} {
 			if !strings.Contains(errOut, want) {
 				t.Errorf("stderr lacks %q", want)
 			}
 		}
 		if code != 1 || strings.Contains(out, "NODE-BINARY-ECHO") {
-			t.Fatalf("exit %d, want Stock PiG's startup exit 1\nstdout:\n%s\nstderr:\n%s", code, out, errOut)
+			t.Fatalf("exit %d, want Stock Ompig's startup exit 1\nstdout:\n%s\nstderr:\n%s", code, out, errOut)
 		}
 	})
 }
 
-// nativeBinaryName is the --out name of a native Piglet Binary: Windows rejects an output without an executable extension
+// nativeBinaryName is the --out name of a native Ompiglet Binary: Windows rejects an output without an executable extension
 // (nativeArtifactPath), so a build test that names its output adds .exe there.
 func nativeBinaryName(name string) string {
 	if runtime.GOOS == "windows" {

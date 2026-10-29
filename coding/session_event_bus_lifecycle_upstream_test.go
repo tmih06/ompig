@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // packages/coding-agent/test/suite/regressions/7193-event-bus-lifecycle.test.ts:67 and agent-session.ts:dispose. Closing a Session directly must invalidate retained extension contexts, not only closing its outer Runtime.

@@ -4,12 +4,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A Piglet that strips the changelog, at runtime or by compiling it out of its Binary, has no /changelog: the command
+// A Ompiglet that strips the changelog, at runtime or by compiling it out of its Binary, has no /changelog: the command
 // leaves the built-in list, so it neither resolves nor autocompletes, and the startup What's New parses an empty bundle.
-// Stock PiG shows the bundled changelog.
+// Stock Ompig shows the bundled changelog.
 func TestStripChangelogRemovesTheCommand(t *testing.T) {
 	if !pigstrip.Has(pigstrip.ListFeatures, pigstrip.Changelog) {
 		sc, out := newFakeSlashCtx()

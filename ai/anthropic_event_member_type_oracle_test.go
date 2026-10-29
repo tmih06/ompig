@@ -10,7 +10,7 @@ import (
 // comb-audit row 100 follow-up: an Anthropic message_start, content_block_start or message_delta that is valid JSON but holds a member of an unexpected type.
 // Pi reads each member with its own expression (anthropic-messages.ts:665-857): a non-object read through `.x` yields undefined, `|| 0` turns a falsy count into 0,
 // `?? ""` keeps a text member that `+=` later coerces, `if (event.usage)` skips nothing a non-object holds, and mapStopReason's === switch throws
-// `Unhandled stop reason: ${reason}` for a truthy reason that is not a string. The rows run Pi's own stream over each body and compare the final message with PiG's.
+// `Unhandled stop reason: ${reason}` for a truthy reason that is not a string. The rows run Pi's own stream over each body and compare the final message with Ompig's.
 // responseModel is compared in its String() form: Pi stores a non-string model raw.
 func TestAnthropicEventMistypedMembersMatchPi(t *testing.T) {
 	event := func(kind, data string) string { return "event: " + kind + "\ndata: " + data + "\n\n" }
@@ -170,7 +170,7 @@ process.exit(0);
 				want[i].Tools = "null"
 			}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}

@@ -76,7 +76,7 @@ Go test Output events follow verbatim; top-level completion events retain elapse
 --- PASS: TestHarnessImageMagicBoundaries/bmp-header-arithmetic (0.00s)
 --- FAIL: TestHarnessImageMagicBoundaries (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.038s
+FAIL	github.com/tmih06/ompig/internal/codingagent/tools	0.038s
 
 Top-level completion events:
-{"Time": "2026-09-24T22:00:24.797206243-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/internal/codingagent/tools", "Test": "TestHarnessImageMagicBoundaries", "Elapsed": 0}
+{"Time": "2026-09-24T22:00:24.797206243-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/internal/codingagent/tools", "Test": "TestHarnessImageMagicBoundaries", "Elapsed": 0}

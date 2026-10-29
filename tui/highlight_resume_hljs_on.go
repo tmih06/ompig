@@ -1,4 +1,4 @@
-//go:build !pig_strip_syntax_highlight
+//go:build !ompig_strip_syntax_highlight
 
 package tui
 
@@ -6,10 +6,10 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/internal/hljs"
+	"github.com/tmih06/ompig/tui/internal/hljs"
 )
 
-// pig additive (D112): see hlCacheMax. A streamed code block gains text at its end, and highlight.js restarts from a state recorded in an earlier run (hljs.HighlightResumable) instead of scanning the whole block again; the lines are those a whole run returns.
+// ompig additive (D112): see hlCacheMax. A streamed code block gains text at its end, and highlight.js restarts from a state recorded in an earlier run (hljs.HighlightResumable) instead of scanning the whole block again; the lines are those a whole run returns.
 
 // hlResumeMax bounds the blocks that keep a resume state, so a few blocks streaming at once each resume.
 const hlResumeMax = 4

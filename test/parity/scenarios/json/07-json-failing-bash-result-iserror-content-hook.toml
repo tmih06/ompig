@@ -6,7 +6,7 @@
 # bash.ts:403-409 returns {content, details, structuredContent, isError: true}; agent-loop.ts:912-919 emits the finalized result as `result` and the call's flag as `isError`.
 # A tool_result handler that replaces only the content (parity-result-modifier.mjs) drops structuredContent, which may no longer match it
 # (runner.ts:1187, agent-loop.ts:877-889). Pi 0.99.1 gives {"content":[...],"isError":true}; the returned isError survives the rebuilt result.
-# A thrown error would give createErrorToolResult (agent-loop.ts:906-910), which has no isError. Pig omitted result.isError for every failing bash call.
+# A thrown error would give createErrorToolResult (agent-loop.ts:906-910), which has no isError. Ompig omitted result.isError for every failing bash call.
 
 name = "07-json-failing-bash-result-iserror-content-hook"
 description = "--mode json keeps bash's returned isError inside tool_execution_end.result and drops structuredContent when a tool_result handler replaced the content"
@@ -26,9 +26,9 @@ args = ["--mode", "json", "--model", "test-faux/faux-1", "--system-prompt", "JSO
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../../scenarios/extensions-runtime/testdata/ext/parity-result-modifier.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["../../scenarios/extensions-runtime/testdata/ext/parity-result-modifier.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../../scenarios/extensions-runtime/testdata/ext/parity-result-modifier.mjs"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 

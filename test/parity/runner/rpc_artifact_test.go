@@ -41,7 +41,7 @@ for await (const line of createInterface({ input: process.stdin })) {
 	}
 	scenario := &Scenario{
 		Name: "rpc-artifact-barrier", SourcePath: filepath.Join(root, "scenario.toml"),
-		Env: EnvOverrides{Pig: []string{"ARTIFACT_OUTPUT={{TEMP}}/registry.json"}},
+		Env: EnvOverrides{Ompig: []string{"ARTIFACT_OUTPUT={{TEMP}}/registry.json"}},
 		RPC: RPCDriverConfig{
 			ArtifactPath: "{{TEMP}}/registry.json",
 			Steps: []RPCInputStep{{
@@ -50,7 +50,7 @@ for await (const line of createInterface({ input: process.stdin })) {
 			}},
 		},
 	}
-	result := (rpcModeDriver{}).Run(t.Context(), t, BinaryRef{Label: "pig", Path: node, Args: []string{script}}, scenario)
+	result := (rpcModeDriver{}).Run(t.Context(), t, BinaryRef{Label: "ompig", Path: node, Args: []string{script}}, scenario)
 	if result.Err != nil || result.ArtifactErr != nil || result.ExitCode != 0 {
 		t.Fatalf("RPC result: %+v", result)
 	}

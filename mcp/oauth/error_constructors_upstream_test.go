@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // packages/mcp/src/oauth/errors.ts (Pi 1.0.4): each class's constructor sets the message, `name` and its own members. OAuthError is `super(message || code)`

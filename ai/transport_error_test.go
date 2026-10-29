@@ -136,7 +136,7 @@ func TestProviderRetryDelayErrorIsNotTransportFailure(t *testing.T) {
 	}
 }
 
-// Pi #10697 (open): undici reports every body-stream failure as TypeError("terminated") with the real failure in error.cause, and Pi drops the cause, so a peer disconnect and a body timeout both read "terminated". PiG keeps the Go cause in the message.
+// Pi #10697 (open): undici reports every body-stream failure as TypeError("terminated") with the real failure in error.cause, and Pi drops the cause, so a peer disconnect and a body timeout both read "terminated". Ompig keeps the Go cause in the message.
 func TestProviderTransportFailureMidStreamKeepsTheCause(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, _ *http.Request) {
 		connection, buffered := closeHTTPConnection(t, writer)

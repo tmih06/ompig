@@ -5,7 +5,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // utf16LengthByRune is utf16Length before it became jsstring.Length (PF1 N6): a rune loop over valid UTF-8, jsstring.Length otherwise.

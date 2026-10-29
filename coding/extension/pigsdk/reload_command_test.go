@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_go && !pig_strip_extension_sdk_rust && !pig_strip_extension_sdk_python
+//go:build !ompig_strip_extension_sdk_go && !ompig_strip_extension_sdk_rust && !ompig_strip_extension_sdk_python
 
 package pigsdk
 
@@ -9,14 +9,14 @@ import (
 	"testing"
 )
 
-// `pig reload` is the pre-session counterpart to the interactive /reload: both
-// make what is loaded match what is on disk. It replaced `pig sdk`, whose five
-// verbs split one action across sync and prune and duplicated `pig diagnose`
+// `ompig reload` is the pre-session counterpart to the interactive /reload: both
+// make what is loaded match what is on disk. It replaced `ompig sdk`, whose five
+// verbs split one action across sync and prune and duplicated `ompig diagnose`
 // for reporting.
 
 func TestReloadStagesAndPrunesInOneCommand(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 
 	var out, errOut bytes.Buffer
 	if code := RunCommand([]string{"reload"}, &out, &errOut); code != 0 {
@@ -34,10 +34,10 @@ func TestReloadStagesAndPrunesInOneCommand(t *testing.T) {
 }
 
 // The accessors exist for build scripts. They must ensure the SDK is current
-// first, or a script wires an extension to a directory pig is about to restage.
+// first, or a script wires an extension to a directory ompig is about to restage.
 func TestReloadSDKPathStagesBeforePrinting(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 
 	var out, errOut bytes.Buffer
 	if code := RunCommand([]string{"reload", "--sdk-path"}, &out, &errOut); code != 0 {
@@ -69,7 +69,7 @@ func TestReloadSDKPathStagesBeforePrinting(t *testing.T) {
 
 func TestReloadSDKPathAcceptsALanguage(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 
 	for _, tc := range []struct {
 		args []string
@@ -97,7 +97,7 @@ func TestReloadSDKPathAcceptsALanguage(t *testing.T) {
 // anything a subsequent build would select.
 func TestReloadDryRunStagesNothing(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 
 	var out, errOut bytes.Buffer
 	if code := RunCommand([]string{"reload", "--dry-run"}, &out, &errOut); code != 0 {
@@ -126,13 +126,13 @@ func TestReloadDeclinesOtherCommands(t *testing.T) {
 // Erroring there told the user to run the very command they were previewing.
 func TestReloadDryRunOnAFreshRootIsNotCircular(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 
 	var out, errOut bytes.Buffer
 	if code := RunCommand([]string{"reload", "--dry-run"}, &out, &errOut); code != 0 {
 		t.Fatalf("exit %d, stderr=%s", code, errOut.String())
 	}
-	if got := errOut.String(); strings.Contains(got, "run `pig reload`") {
+	if got := errOut.String(); strings.Contains(got, "run `ompig reload`") {
 		t.Errorf("the preview told the user to run the command they are previewing:\n%s", got)
 	}
 	if got := out.String(); !strings.Contains(got, "would stage go") {

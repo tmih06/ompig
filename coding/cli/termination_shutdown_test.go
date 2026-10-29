@@ -8,7 +8,7 @@ import (
 
 // Upstream's signal shutdown awaits runtimeHost.dispose() with no deadline
 // before it exits, so extension cleanup that takes longer than a second still
-// finishes. Pig abandoned the hook after 1 s and cancelled the root context
+// finishes. Ompig abandoned the hook after 1 s and cancelled the root context
 // under it. GUARD-06.
 func TestTerminationShutdownHookRunsToCompletion(t *testing.T) {
 	var finished atomic.Bool

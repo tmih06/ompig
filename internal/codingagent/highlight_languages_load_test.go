@@ -1,4 +1,4 @@
-//go:build !pig_strip_syntax_highlight
+//go:build !ompig_strip_syntax_highlight
 
 package codingagent
 
@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/tui"
 )
 
 // repaintRecorder records the repaint calls a deferred grammar load makes; any other Renderer call panics.

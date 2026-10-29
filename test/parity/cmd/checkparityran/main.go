@@ -1,12 +1,12 @@
 // Command checkparityran answers one question: did the parity suite
-// actually compare pig against a real pi, or did it just skip?
+// actually compare ompig against a real pi, or did it just skip?
 //
-// TestParity (test/parity/runner/runner_test.go) resolves the pig-under-test and
-// upstream-pi binaries before it does anything else. When PIG_PARITY_PIG_BIN
-// (or PIG_BIN) is unset or the pinned pi is missing, those resolvers fail the
-// run unless PIG_PARITY_ALLOW_ZERO is set, in which case they call t.Skip and
+// TestParity (test/parity/runner/runner_test.go) resolves the ompig-under-test and
+// upstream-pi binaries before it does anything else. When OMPIG_PARITY_OMPIG_BIN
+// (or OMPIG_BIN) is unset or the pinned pi is missing, those resolvers fail the
+// run unless OMPIG_PARITY_ALLOW_ZERO is set, in which case they call t.Skip and
 // TestParity's body returns immediately - no scenario ever runs, and
-// `--pig-parity.results` is never written. `go test` still exits 0 for a
+// `--ompig-parity.results` is never written. `go test` still exits 0 for a
 // skip, and a scenario filter can also select nothing, so
 // `make parity` alone cannot tell "0 scenarios ran" apart from "every
 // scenario passed" without checking the results file.
@@ -29,7 +29,7 @@ import (
 // resultsFile mirrors the on-disk shape written by
 // test/parity/runner/results_json.go's writeResultsJSON. It is kept minimal and
 // independent of the (parity-build-tagged) runner package so this command
-// builds and tests without tmux, a pig/pi binary, or the parity build tag.
+// builds and tests without tmux, a ompig/pi binary, or the parity build tag.
 type resultsFile struct {
 	Outcomes []json.RawMessage `json:"outcomes"`
 }
@@ -55,7 +55,7 @@ func countOutcomes(path string) (int, error) {
 }
 
 func main() {
-	resultsPath := flag.String("results", "", "path to the --pig-parity.results JSON file")
+	resultsPath := flag.String("results", "", "path to the --ompig-parity.results JSON file")
 	flag.Parse()
 	if *resultsPath == "" {
 		fmt.Fprintln(os.Stderr, "checkparityran: -results is required")

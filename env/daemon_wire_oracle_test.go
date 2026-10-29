@@ -5,7 +5,7 @@ package env
 // Differential tests of the daemon's wire behavior against Pi's own Rust daemon (packages/env/daemon). Both daemons run the same
 // scripted requests over their stdin and stdout frames, in trees built alike, and every reply (result or error JSON, events and
 // payload bytes) must be equal once the temporary root and the values the system chooses (inode, device, times, process ids,
-// random names) are replaced by placeholders. The expectation is what Pi's daemon answered, not what PiG's does.
+// random names) are replaced by placeholders. The expectation is what Pi's daemon answered, not what Ompig's does.
 
 import (
 	"bufio"
@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/env/daemon"
+	"github.com/tmih06/ompig/env/daemon"
 )
 
 // wireDaemon is one daemon process driven frame by frame.
@@ -229,15 +229,15 @@ func daemonEnvironment(home, tmp string, extra ...string) []string {
 	return append(environment, extra...)
 }
 
-// bothDaemons runs body once per daemon with a fresh scoped tree and returns Pi's and PiG's outputs.
-func runOnBoth(t *testing.T, setup func(t *testing.T, root string), body func(d *wireDaemon, root string) string) (pi, pig string) {
+// bothDaemons runs body once per daemon with a fresh scoped tree and returns Pi's and Ompig's outputs.
+func runOnBoth(t *testing.T, setup func(t *testing.T, root string), body func(d *wireDaemon, root string) string) (pi, ompig string) {
 	t.Helper()
 	oracle := oracleDaemon(t)
 	for _, daemon := range []struct {
 		name   string
 		binary string
 		out    *string
-	}{{"pi", oracle, &pi}, {"pig", daemonBinary(t), &pig}} {
+	}{{"pi", oracle, &pi}, {"ompig", daemonBinary(t), &ompig}} {
 		base := t.TempDir()
 		root := filepath.Join(base, "root")
 		mustDo(os.MkdirAll(root, 0o755))
@@ -251,25 +251,25 @@ func runOnBoth(t *testing.T, setup func(t *testing.T, root string), body func(d 
 		d := startWireDaemon(t, daemon.binary, root, daemonEnvironment(home, tmp))
 		*daemon.out = body(d, root)
 	}
-	return pi, pig
+	return pi, ompig
 }
 
-func compareWire(t *testing.T, name, pi, pig string) {
+func compareWire(t *testing.T, name, pi, ompig string) {
 	t.Helper()
-	if pi == pig {
+	if pi == ompig {
 		return
 	}
-	piLines, pigLines := strings.Split(pi, "\n"), strings.Split(pig, "\n")
-	for index := range max(len(piLines), len(pigLines)) {
+	piLines, ompigLines := strings.Split(pi, "\n"), strings.Split(ompig, "\n")
+	for index := range max(len(piLines), len(ompigLines)) {
 		var a, b string
 		if index < len(piLines) {
 			a = piLines[index]
 		}
-		if index < len(pigLines) {
-			b = pigLines[index]
+		if index < len(ompigLines) {
+			b = ompigLines[index]
 		}
 		if a != b {
-			t.Fatalf("%s: line %d differs\nPi : %s\nPiG: %s", name, index+1, a, b)
+			t.Fatalf("%s: line %d differs\nPi : %s\nOmpig: %s", name, index+1, a, b)
 		}
 	}
 }
@@ -280,7 +280,7 @@ func runWireCase(t *testing.T, test wireCase) {
 	if test.needsUser && os.Geteuid() == 0 {
 		t.Skip("permissions do not stop root")
 	}
-	pi, pig := runOnBoth(t, test.setup, func(d *wireDaemon, root string) string {
+	pi, ompig := runOnBoth(t, test.setup, func(d *wireDaemon, root string) string {
 		var text strings.Builder
 		for index, step := range test.steps {
 			request := withRoot(step.request, root).(daemon.Object)
@@ -289,7 +289,7 @@ func runWireCase(t *testing.T, test wireCase) {
 		}
 		return text.String()
 	})
-	compareWire(t, test.name, pi, pig)
+	compareWire(t, test.name, pi, ompig)
 }
 
 // fsTree builds the tree the file system cases share.
@@ -563,14 +563,14 @@ func TestDaemonHandlesAreLimitedLikePisDaemon(t *testing.T) {
 		step(object("op", "opendir", "path", "{ROOT}/dir")),
 		step(object("op", "opendir", "path", "{ROOT}/dir")),
 	)
-	pi, pig := runOnBoth(t, fsTree, func(d *wireDaemon, root string) string {
+	pi, ompig := runOnBoth(t, fsTree, func(d *wireDaemon, root string) string {
 		var text strings.Builder
 		for _, step := range steps {
 			fmt.Fprint(&text, render(d.call(withRoot(step.request, root).(daemon.Object), nil), root, nil))
 		}
 		return text.String()
 	})
-	compareWire(t, "handle limit", pi, pig)
+	compareWire(t, "handle limit", pi, ompig)
 	if !strings.Contains(pi, "EMFILE: too many open files") {
 		t.Fatalf("Pi's daemon never reached its handle limit:\n%s", pi[len(pi)-400:])
 	}
@@ -611,7 +611,7 @@ func TestDaemonOpensASocketLikePisDaemon(t *testing.T) {
 
 // TestDaemonAnswersAFrameWhoseJSONDoesNotParseLikePisDaemon sends bytes that are no JSON inside a well-formed frame.
 func TestDaemonAnswersAFrameWhoseJSONDoesNotParseLikePisDaemon(t *testing.T) {
-	pi, pig := runOnBoth(t, nil, func(d *wireDaemon, root string) string {
+	pi, ompig := runOnBoth(t, nil, func(d *wireDaemon, root string) string {
 		var text strings.Builder
 		for _, raw := range []string{"{{{", "", "null", "[]", `"x"`, "7", `{"op":"lstat","path":"/nonexistent-pi-env"} trailing`} {
 			id := d.nextID
@@ -628,7 +628,7 @@ func TestDaemonAnswersAFrameWhoseJSONDoesNotParseLikePisDaemon(t *testing.T) {
 		}
 		return text.String()
 	})
-	compareWire(t, "unparseable JSON", pi, pig)
+	compareWire(t, "unparseable JSON", pi, ompig)
 }
 
 // TestDaemonEndsOnAFramingErrorLikePisDaemon: both daemons stop at once, with nothing sent for the bad frame.
@@ -653,7 +653,7 @@ func TestDaemonEndsOnAFramingErrorLikePisDaemon(t *testing.T) {
 			}
 		}
 		if outcomes[0] != outcomes[1] {
-			t.Fatalf("length bytes %v:\nPi : %s\nPiG: %s", length, outcomes[0], outcomes[1])
+			t.Fatalf("length bytes %v:\nPi : %s\nOmpig: %s", length, outcomes[0], outcomes[1])
 		}
 	}
 }

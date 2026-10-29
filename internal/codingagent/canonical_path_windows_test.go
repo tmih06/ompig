@@ -12,7 +12,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi paths.ts:28-33 uses Node realpathSync, not realpathSync.native. libuv fs.c:284-303 rejects volume-GUID mount targets as symbolic links; Node therefore retains the mount's directory name instead of replacing it with a volume GUID.
@@ -168,7 +168,7 @@ func TestCanonicalizePathResolvesRootedLinkTargetsBeyondVolumeMounts(t *testing.
 	}
 }
 
-// A rooted link target such as \inner names a path on a drive, and filepath.EvalSymlinks resolves it on the process drive, where a second absolute link gives its result a volume. The process drive, a subst drive that is the current directory, holds decoys under the names the rooted targets use. The links live on a second subst drive. There Windows resolves a rooted target on the drive's backing volume, where it does not exist: on Windows 10 19045, Node's realpathSync and realpathSync.native both throw ENOENT for such a link (probed with Node 24.19.0), and Pi's canonicalizePath (paths.ts:28-33) then returns the path it was given. Every PiG canonicalizer must return that path too, not a decoy. An absolute link on the link drive is the control that Node resolves.
+// A rooted link target such as \inner names a path on a drive, and filepath.EvalSymlinks resolves it on the process drive, where a second absolute link gives its result a volume. The process drive, a subst drive that is the current directory, holds decoys under the names the rooted targets use. The links live on a second subst drive. There Windows resolves a rooted target on the drive's backing volume, where it does not exist: on Windows 10 19045, Node's realpathSync and realpathSync.native both throw ENOENT for such a link (probed with Node 24.19.0), and Pi's canonicalizePath (paths.ts:28-33) then returns the path it was given. Every Ompig canonicalizer must return that path too, not a decoy. An absolute link on the link drive is the control that Node resolves.
 func TestCanonicalizePathResolvesRootedLinkOnLinkDriveNotProcessDrive(t *testing.T) {
 	processDrive := testenv.SubstDrive(t, t.TempDir()) + `\`
 	linkDrive := testenv.SubstDrive(t, t.TempDir()) + `\`

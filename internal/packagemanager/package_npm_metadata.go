@@ -8,11 +8,11 @@ import (
 	"os"
 	"path/filepath"
 
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/crossspawn"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodesemver"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/crossspawn"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodesemver"
 )
 
 // Ports packages/coding-agent/src/core/package-manager.ts (GetLatestNpmVersion, shouldUpdateNpmSource, npmHasAvailableUpdate).
@@ -22,7 +22,7 @@ func GetLatestNpmVersion(cwd string, sm *codingagent.SettingsManager, source sou
 		return "", errors.New("Project is not trusted; refusing to access project package storage")
 	}
 	if !local {
-		// pig divergence (D79): user-package metadata runs in managed storage, never the invoking project's cwd.
+		// ompig divergence (D79): user-package metadata runs in managed storage, never the invoking project's cwd.
 		cwd = NpmInstallRoot(cwd, sm.AgentDir(), source, false)
 		if err := EnsureManagedPackageRoot(cwd); err != nil {
 			return "", err
@@ -31,7 +31,7 @@ func GetLatestNpmVersion(cwd string, sm *codingagent.SettingsManager, source sou
 	command := DefaultNpmCommand(sm)
 	args := append([]string{}, command[1:]...)
 	args = append(args, "view", source.Locator, "version", "--json")
-	// pig additive (D18): a source-qualified registry keeps its explicitly selected endpoint.
+	// ompig additive (D18): a source-qualified registry keeps its explicitly selected endpoint.
 	if source.NPMRegistry != "" {
 		args = append(args, "--registry", source.NPMRegistry)
 	}

@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // The pinned Pi probe uses reversed project/global package orders. addResource keeps disabled project entries as well as enabled entries before inherited resources for every resource type.

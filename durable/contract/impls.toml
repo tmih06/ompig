@@ -2,7 +2,7 @@
 # available when its paths exist; a missing path makes its rows `pending`, never `pass`.
 #
 #   candidate_dir  a directory laid out like packages/durable/src whose modules replace the reference's (the JS facade of ADR D12);
-#                  runs the E, U and SC rows. Its storage modules open stores with globalThis[Symbol.for("pig.contract")].openStore.
+#                  runs the E, U and SC rows. Its storage modules open stores with globalThis[Symbol.for("ompig.contract")].openStore.
 #   wasm           the core module the facade runs (passed as DCORE_WASM); rows stay pending until the build produces it
 #   setup          a module of the candidate imported before the scenario program (it calls useCore with DCORE_WASM)
 #   env            environment passed to every run of the candidate (a table)

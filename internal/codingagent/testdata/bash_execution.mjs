@@ -28,7 +28,7 @@ const results = JSON.parse(input).map((test) => {
     frames.push(component.render(test.width));
   }
   component.loader.stop();
-  // The block draws truncateTail(getOutput()) at the bash tool's limits (updateDisplay); PiG keeps only that window (D176).
+  // The block draws truncateTail(getOutput()) at the bash tool's limits (updateDisplay); Ompig keeps only that window (D176).
   return { frames, output: truncateTail(component.getOutput(), { maxLines: DEFAULT_MAX_LINES, maxBytes: DEFAULT_MAX_BYTES }).content };
 });
 process.stdout.write(JSON.stringify(results), () => process.exit(0));

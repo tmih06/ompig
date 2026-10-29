@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // sequential prepares through inner one call at a time in call order, as Pi's prepare runs its synchronous work on the one

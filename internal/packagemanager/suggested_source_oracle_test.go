@@ -4,15 +4,15 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/package-manager.ts
 
 // buildNoMatchingPackageMessage (and so findSuggestedConfiguredSource) for a source the user typed against a list of configured packages: npm packages matched by
 // name or by spec, git packages by host/path or host/path@ref, local and unparsable ones never, the first configured package that matches winning, and the query
-// trimmed with JS whitespace. Sources whose parse PiG's source model answers differently on purpose (D18) stay out of the corpus.
+// trimmed with JS whitespace. Sources whose parse Ompig's source model answers differently on purpose (D18) stay out of the corpus.
 func TestNoMatchingPackageMessageMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(241))
 	pick := func(items ...string) string { return items[rng.Intn(len(items))] }
@@ -59,7 +59,7 @@ emit(input.map(({ source, configured }) => manager.buildNoMatchingPackageMessage
 		}
 		if got != want[i] {
 			if failures++; failures <= 10 {
-				t.Errorf("%q over %q: PiG %q, Pi %q", p.Source, p.Configured, got, want[i])
+				t.Errorf("%q over %q: Ompig %q, Pi %q", p.Source, p.Configured, got, want[i])
 			}
 		}
 	}

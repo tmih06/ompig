@@ -9,9 +9,9 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const (
@@ -92,7 +92,7 @@ func DecodeKittyPrintable(data string) (string, bool) {
 		if hasShiftedKey {
 			effectiveCodepoint = shiftedKey
 		} else if codepoint >= 'a' && codepoint <= 'z' {
-			// pig divergence (D185): Shift+letter with no shifted alternate (\x1b[97;2u)
+			// ompig divergence (D185): Shift+letter with no shifted alternate (\x1b[97;2u)
 			// decodes as the uppercase letter; Pi keeps the base letter. Without it a
 			// terminal that omits the shifted key loses every capital letter.
 			effectiveCodepoint = codepoint - 32

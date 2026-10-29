@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // TestDocDefinitionVersionMustBeAPositiveSafeInteger ports documents.ts:96-97: `!Number.isSafeInteger(version) || version < 1` throws

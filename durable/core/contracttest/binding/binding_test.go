@@ -26,16 +26,16 @@ import (
 	"github.com/tetratelabs/wazero/api"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/abitest"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/spec"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/abitest"
+	"github.com/tmih06/ompig/durable/core/abi/spec"
 )
 
 // fixedUUID is the uuidv7 every binding run uses, so steps are comparable.
 const fixedUUID = "0190a6b2-0000-7000-8000-000000000001"
 
-// noRead is the pig.read of a binding run: every Wasm build has the import, so the native core gets one too and all three
+// noRead is the ompig.read of a binding run: every Wasm build has the import, so the native core gets one too and all three
 // open the same way (ABI section 4.2). The scripts hold no record a step reads on demand.
 func noRead(uint16, []abi.Value) ([][]abi.Value, error) {
 	panic("binding: a script step read storage on demand")
@@ -65,7 +65,7 @@ func loadWasm(t *testing.T, path string) *wasmCore {
 	rt := wazero.NewRuntime(ctx)
 	t.Cleanup(func() { _ = rt.Close(ctx) })
 	wasi_snapshot_preview1.MustInstantiate(ctx, rt)
-	_, err = rt.NewHostModuleBuilder("pig").NewFunctionBuilder().
+	_, err = rt.NewHostModuleBuilder("ompig").NewFunctionBuilder().
 		WithFunc(func(_ context.Context, m api.Module, dst uint32) { m.Memory().Write(dst, []byte(fixedUUID)) }).
 		Export("uuidv7").
 		NewFunctionBuilder().

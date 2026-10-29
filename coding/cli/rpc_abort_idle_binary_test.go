@@ -8,10 +8,10 @@ import (
 	"testing"
 )
 
-// agent-session.ts abort ends with waitForIdle, which returns at once when no agent run is active at that point (isIdle). A prompt read just before it is still in its preflight, so Pi 1.1.0 answers the abort first and lets the prompt run: for `prompt` then `abort` in one input batch it writes the abort response, then the prompt response (stdin open or closed). PiG joined every admitted prompt before answering, so the abort answered after the run, or not at all when stdin ended.
+// agent-session.ts abort ends with waitForIdle, which returns at once when no agent run is active at that point (isIdle). A prompt read just before it is still in its preflight, so Pi 1.1.0 answers the abort first and lets the prompt run: for `prompt` then `abort` in one input batch it writes the abort response, then the prompt response (stdin open or closed). Ompig joined every admitted prompt before answering, so the abort answered after the run, or not at all when stdin ended.
 func TestRPCAbortWhileIdleAnswersBeforeALaterRun(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	input := `{"type":"prompt","id":"p","message":"hello"}` + "\n" + `{"type":"abort","id":"a"}` + "\n"
@@ -24,10 +24,10 @@ func TestRPCAbortWhileIdleAnswersBeforeALaterRun(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer func() { _ = stdin.Close() }()
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	stdout, stderr, code := runPigForModeTest(t, bin, stdin, nil, "--mode", "rpc", "--no-session", "--no-extensions", "--offline", "--model", "test-faux/faux-1")
 	if code != 0 {
-		t.Fatalf("pig --mode rpc exited %d\nstderr: %s", code, stderr)
+		t.Fatalf("ompig --mode rpc exited %d\nstderr: %s", code, stderr)
 	}
 	var order []string
 	for line := range strings.SplitSeq(strings.TrimSpace(stdout), "\n") {

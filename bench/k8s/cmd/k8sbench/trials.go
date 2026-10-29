@@ -387,9 +387,9 @@ func taskArtifacts(dir string) ([]string, error) {
 	return paths, err
 }
 
-// Trial arms: the bundle's own PiG (bin/pig) and the bundle's pinned Pi (pi-agent/, run by the bundle's node/).
+// Trial arms: the bundle's own Ompig (bin/ompig) and the bundle's pinned Pi (pi-agent/, run by the bundle's node/).
 const (
-	armPig = "pig"
+	armPig = "ompig"
 	armPi  = "pi"
 )
 
@@ -457,7 +457,7 @@ r=${K8SBENCH_PREPARE_ROOT:-` + trialRoot + `}
 mkdir -p "$r/bin" "$r/task"
 cp "$b/bin/k8sbench" "$r/bin/"
 case "$K8SBENCH_ARM" in
-pig) cp "$b/bin/pig" "$r/bin/" ;;
+ompig) cp "$b/bin/ompig" "$r/bin/" ;;
 pi) cp -a "$b/node" "$b/pi-agent" "$r/" ;;
 *) echo "unknown arm $K8SBENCH_ARM" >&2; exit 1 ;;
 esac
@@ -602,7 +602,7 @@ func cmdStage(args []string, stdout, stderr io.Writer, getenv func(string) strin
 	if _, err := inspectBundle(v.Bundle); err != nil {
 		return err
 	}
-	for _, need := range []string{"tasks/tasks.lock", nodeBinary, "bin/pig", piAgentCLI} {
+	for _, need := range []string{"tasks/tasks.lock", nodeBinary, "bin/ompig", piAgentCLI} {
 		if _, err := os.Stat(filepath.Join(v.Bundle, filepath.FromSlash(need))); err != nil {
 			return fmt.Errorf("the bundle has no %s: build it with k8sbench bundle -agents -tasks DIR", need)
 		}
@@ -634,7 +634,7 @@ func cmdTrials(args []string, stdout, stderr io.Writer, getenv func(string) stri
 	gf := addGPUFlags(fs)
 	model := fs.String("model", "", "model id in "+modelsLockFile+" (its server must be up)")
 	staged := fs.String("staged", "", "sha256 of the staged bundle (k8sbench stage prints it)")
-	armsFlag := fs.String("trial-arms", armPig+","+armPi, "comma-separated arms: pig, pi")
+	armsFlag := fs.String("trial-arms", armPig+","+armPi, "comma-separated arms: ompig, pi")
 	attempts := fs.Int("attempts", 5, "attempts per task and arm")
 	tasks := fs.String("tasks", "", "comma-separated task names (default: every task in "+tasksLockFile+")")
 	if err := fs.Parse(args); err != nil {

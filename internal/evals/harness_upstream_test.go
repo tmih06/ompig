@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 // unsetEnv removes name for the rest of the test and restores it afterwards.
@@ -22,9 +22,9 @@ func unsetEnv(t *testing.T, name string) {
 }
 
 // documentationEvalPrompt is buildSystemPrompt({ cwd: "/workspace", selectedTools: [...DOCUMENTATION_EVAL_TOOLS] })
-// with PiG's documentation bundle at docsRoot.
+// with Ompig's documentation bundle at docsRoot.
 func documentationEvalPrompt(docsRoot string) string {
-	return prompts.BuildDefaultPrompt(prompts.Options{Cwd: "/workspace", Tools: DocumentationEvalTools[:], PigDocsPath: docsRoot})
+	return prompts.BuildDefaultPrompt(prompts.Options{Cwd: "/workspace", Tools: DocumentationEvalTools[:], OmpigDocsPath: docsRoot})
 }
 
 // TestHarnessUpstream ports packages/evals/test/harness.test.ts. Each subtest names one upstream case.
@@ -114,7 +114,7 @@ func TestHarnessUpstream(t *testing.T) {
 
 	t.Run("documentation variant › strips only the documentation routing section from the default Pi prompt", func(t *testing.T) {
 		// upstream: packages/evals/test/harness.test.ts:72
-		const docsRoot = "/pig-docs-root"
+		const docsRoot = "/ompig-docs-root"
 		prompt := documentationEvalPrompt(docsRoot)
 		for _, want := range []string{documentationSectionStart, "\n<rules>\n", "\n<cwd>\n/workspace\n</cwd>", "docs/models.md"} {
 			if !strings.Contains(prompt, want) {
@@ -131,8 +131,8 @@ func TestHarnessUpstream(t *testing.T) {
 				t.Fatalf("stripped prompt lacks %q:\n%s", want, stripped)
 			}
 		}
-		// pig additive (D22): the section introduces PiG documentation at the materialized bundle and PiG's examples.
-		for _, absent := range []string{"<docs>", "PiG documentation", "docs/models.md", docsRoot + "/README.md", docsRoot, "https://github.com/MichaelKinsy/PiG/tree/main/examples"} {
+		// ompig additive (D22): the section introduces Ompig documentation at the materialized bundle and Ompig's examples.
+		for _, absent := range []string{"<docs>", "Ompig documentation", "docs/models.md", docsRoot + "/README.md", docsRoot, "https://github.com/tmih06/ompig/tree/main/examples"} {
 			if strings.Contains(stripped, absent) {
 				t.Fatalf("stripped prompt still contains %q:\n%s", absent, stripped)
 			}
@@ -144,7 +144,7 @@ func TestHarnessUpstream(t *testing.T) {
 
 	t.Run("documentation variant › verifies the prompt that was sent", func(t *testing.T) {
 		// upstream: packages/evals/test/harness.test.ts:93
-		prompt := documentationEvalPrompt("/pig-docs-root")
+		prompt := documentationEvalPrompt("/ompig-docs-root")
 		stripped, err := ExcludePiDocumentation(prompt)
 		if err != nil {
 			t.Fatal(err)
@@ -194,7 +194,7 @@ func TestCreatePiDocumentationEvalHarnessInSandbox(t *testing.T) {
 	if options.Name != "without_docs" || !reflect.DeepEqual(options.Tools, DocumentationEvalTools[:]) || options.ExpectedPiDocumentation == nil || *options.ExpectedPiDocumentation || options.TransformSystemPrompt == nil {
 		t.Fatalf("without_docs options = %+v", options)
 	}
-	prompt := documentationEvalPrompt("/pig-docs-root")
+	prompt := documentationEvalPrompt("/ompig-docs-root")
 	transformed, err := options.TransformSystemPrompt(prompt)
 	if err != nil {
 		t.Fatal(err)

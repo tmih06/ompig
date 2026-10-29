@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // latencyStats are the percentiles of one open-loop run, in milliseconds.
@@ -106,7 +106,7 @@ func envInt(name string, fallback int) int {
 // its core count still answers a noop command in about 2 ms. The p99 of such a
 // host is dominated by scheduling stalls of the host, not the SDK, so by default
 // only a gross p99 bound applies (an SDK that serializes or blocks requests
-// misses it by orders of magnitude). On dedicated hardware PIG_EXT_RT_STRICT=1
+// misses it by orders of magnitude). On dedicated hardware OMPIG_EXT_RT_STRICT=1
 // holds the tight per-SDK p99 budget and fails a run more than ratchetSlack under
 // it until the budget is lowered, so a latency win is kept.
 var (
@@ -128,15 +128,15 @@ const (
 // TestExtensionRoundTripLatencyOpenLoop measures, for every SDK through the real
 // host, the latency of one host-to-extension request (the command request a
 // slash command makes) under a fixed-rate open-loop schedule, and holds the p99
-// to its budgets. PIG_EXT_RT_RATE, PIG_EXT_RT_SECONDS and PIG_EXT_RT_REPORT (a
+// to its budgets. OMPIG_EXT_RT_RATE, OMPIG_EXT_RT_SECONDS and OMPIG_EXT_RT_REPORT (a
 // directory for the JSON of each run) tune a longer or recorded run.
 func TestExtensionRoundTripLatencyOpenLoop(t *testing.T) {
 	if testing.Short() {
 		t.Skip("builds subprocess fixtures")
 	}
-	rate := envInt("PIG_EXT_RT_RATE", roundTripRate)
-	seconds := envInt("PIG_EXT_RT_SECONDS", 4)
-	strict := os.Getenv("PIG_EXT_RT_STRICT") == "1"
+	rate := envInt("OMPIG_EXT_RT_RATE", roundTripRate)
+	seconds := envInt("OMPIG_EXT_RT_SECONDS", 4)
+	strict := os.Getenv("OMPIG_EXT_RT_STRICT") == "1"
 	spec := sdkscenarios.Spec{Commands: []sdkscenarios.Command{{Name: "noop", Description: "Return at once", Op: sdkscenarios.CommandNoop}}}
 	for _, sdk := range sdkscenarios.SDKs {
 		t.Run(string(sdk), func(t *testing.T) {
@@ -154,7 +154,7 @@ func TestExtensionRoundTripLatencyOpenLoop(t *testing.T) {
 			stats := summarize(string(sdk), latencies, failed)
 			t.Logf("%s: %d requests at %d/s: p50 %.2f ms, p90 %.2f ms, p99 %.2f ms, p99.9 %.2f ms, max %.2f ms, %d errors",
 				sdk, stats.Requests, rate, stats.P50, stats.P90, stats.P99, stats.P999, stats.Max, stats.Errors)
-			if dir := os.Getenv("PIG_EXT_RT_REPORT"); dir != "" {
+			if dir := os.Getenv("OMPIG_EXT_RT_REPORT"); dir != "" {
 				body, _ := json.MarshalIndent(stats, "", "  ")
 				if err := os.WriteFile(filepath.Join(dir, fmt.Sprintf("roundtrip-%s.json", sdk)), body, 0o600); err != nil {
 					t.Error(err)

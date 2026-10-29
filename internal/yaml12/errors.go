@@ -10,8 +10,8 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // pos is a [start, end, length] range of the source: start and end are byte offsets, and length, when not zero, replaces end: the range then ends length UTF-16 units after start, as the library's offset plus the length of a token's source does when the source is not the text at the offset (a block scalar's content lies after its header).

@@ -1,4 +1,4 @@
-// pig additive (D19): the runtime tree loads some modules on first use, so a process that never needs them does not pay to load them, and it starts its IO worker and reads its own source by URL. A TypeScript runtime that bundles this tree into one executable cannot follow a computed require or URL, so it registers globalThis[Symbol.for("pig.runtimeModules")] before the runtime loads: an object whose require(specifier) returns the module, source(specifier) the file's bytes and worker(specifier) the Worker URL, for each specifier listed below. Without it every specifier resolves in the runtime tree as before. Specifiers are relative to the runtime tree's root, and an unlisted specifier throws in both cases so that this list stays complete. The same host registers globalThis[Symbol.for("pig.compiledFactories")] for the extensions it compiled in (see compiledFactory).
+// ompig additive (D19): the runtime tree loads some modules on first use, so a process that never needs them does not pay to load them, and it starts its IO worker and reads its own source by URL. A TypeScript runtime that bundles this tree into one executable cannot follow a computed require or URL, so it registers globalThis[Symbol.for("ompig.runtimeModules")] before the runtime loads: an object whose require(specifier) returns the module, source(specifier) the file's bytes and worker(specifier) the Worker URL, for each specifier listed below. Without it every specifier resolves in the runtime tree as before. Specifiers are relative to the runtime tree's root, and an unlisted specifier throws in both cases so that this list stays complete. The same host registers globalThis[Symbol.for("ompig.compiledFactories")] for the extensions it compiled in (see compiledFactory).
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 
@@ -33,12 +33,12 @@ const listed = (list, kind, specifier) => {
   if (!list.includes(specifier)) throw new Error(`runtime ${kind} ${specifier} is not listed in runtime-modules.mjs`);
 };
 // The hook is read at each call: the TypeScript runtime's preload (register-loader.mjs) loads this module before a host registers it.
-const runtimeModules = () => globalThis[Symbol.for("pig.runtimeModules")];
+const runtimeModules = () => globalThis[Symbol.for("ompig.runtimeModules")];
 const fromTree = createRequire(import.meta.url);
 
-// A host that compiled extensions in registers globalThis[Symbol.for("pig.compiledFactories")], a Map from an extension's entry path to its default export. An entry the Map lacks loads through jiti, or fails where the host did not compile jiti in.
+// A host that compiled extensions in registers globalThis[Symbol.for("ompig.compiledFactories")], a Map from an extension's entry path to its default export. An entry the Map lacks loads through jiti, or fails where the host did not compile jiti in.
 export function compiledFactory(entry) {
-  return globalThis[Symbol.for("pig.compiledFactories")]?.get(entry);
+  return globalThis[Symbol.for("ompig.compiledFactories")]?.get(entry);
 }
 
 export function runtimeRequire(specifier) {

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // streamable-http.ts send: `await response.json()` rejects an invalid body

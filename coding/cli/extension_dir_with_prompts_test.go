@@ -7,20 +7,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// extensionDirKinds writes the sources of one extension directory in each SDK language PiG loads. Pi has only the Node
-// kind; the others are PiG's own, and every one of them meets the same Package test, which runs before the language is
+// extensionDirKinds writes the sources of one extension directory in each SDK language Ompig loads. Pi has only the Node
+// kind; the others are Ompig's own, and every one of them meets the same Package test, which runs before the language is
 // looked at (cliExtensionConfigs, configured_resources.go).
 var extensionDirKinds = []struct {
 	name  string
 	files map[string]string
 }{
 	{"node", map[string]string{"index.ts": "export default function (pi) {}\n", "package.json": `{"name":"x","type":"module"}`}},
-	{"go factory", map[string]string{"go.mod": "module example.com/x\n\ngo 1.26\n", "extension.go": "package x\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n"}},
+	{"go factory", map[string]string{"go.mod": "module example.com/x\n\ngo 1.26\n", "extension.go": "package x\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n"}},
 	{"go standalone", map[string]string{"go.mod": "module example.com/x\n\ngo 1.26\n", "main.go": "package main\nfunc main() {}\n"}},
-	{"rust factory", map[string]string{"Cargo.toml": "[package]\nname = \"x\"\nversion = \"0.1.0\"\n", "src/lib.rs": "pub fn new_extension() -> pig_sdk::Extension { todo!() }\n"}},
+	{"rust factory", map[string]string{"Cargo.toml": "[package]\nname = \"x\"\nversion = \"0.1.0\"\n", "src/lib.rs": "pub fn new_extension() -> ompig_sdk::Extension { todo!() }\n"}},
 	{"python factory", map[string]string{"x.py": "def new_extension() -> Extension:\n    pass\n"}},
 }
 
@@ -37,7 +37,7 @@ func newExtensionDirFixture(t *testing.T, files map[string]string, withPrompts b
 	home := filepath.Join(root, "home")
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
 	f := extensionDirFixture{cwd: filepath.Join(root, "project"), agentDir: filepath.Join(root, "agent"), dir: filepath.Join(root, "x")}
 	write := func(path, content string) {
 		t.Helper()

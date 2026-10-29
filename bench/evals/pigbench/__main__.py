@@ -41,7 +41,7 @@ def main(argv=None):
     p.add_argument("--long-runs", type=int, default=1)
     p.add_argument("--aa", nargs="*", default=[], help="arm ids to run twice (the copy is `<id>-b`, same binary, its own home): the A/A noise floor")
 
-    p = sub.add_parser("variants", help="build variants as arms (PGO, GOAMD64, stripped Piglets, GOGC): the overhead scenarios on id=path executables, each with an A/A copy")
+    p = sub.add_parser("variants", help="build variants as arms (PGO, GOAMD64, stripped Ompiglets, GOGC): the overhead scenarios on id=path executables, each with an A/A copy")
     p.add_argument("--out", help="output directory (default tmp/bench/variants)")
     p.add_argument("--seed", type=int, default=DEFAULT_SEED, help="seed for every random choice and bootstrap (recorded in the report)")
     p.add_argument("--timeout", type=float, default=120, help="per-turn / per-process timeout, seconds")
@@ -67,7 +67,7 @@ def main(argv=None):
     p.add_argument("--seed", type=int, default=DEFAULT_SEED)
     p.add_argument("--allow-mixed", action="store_true", help="accept runs from different arms.lock files or commits and say so in the report")
     p = sub.add_parser("soak", help="steady scripted turns for hours; sample processes, threads, descriptors and memory each interval and judge them flat")
-    p.add_argument("--arms", nargs="*", default=["pig-0.5", "pi-1.1.0"])
+    p.add_argument("--arms", nargs="*", default=["ompig-0.5", "pi-1.1.0"])
     p.add_argument("--hours", type=float, default=24)
     p.add_argument("--minutes", type=float, help="override --hours for a short run")
     p.add_argument("--interval", type=float, default=60, help="seconds between samples")
@@ -89,7 +89,7 @@ def main(argv=None):
     p.add_argument("--faults", nargs="*")
     p.add_argument("--reps", type=int, default=3)
 
-    p = sub.add_parser("durable", help="the durable-bench workload on PiG Durable and pi-durable")
+    p = sub.add_parser("durable", help="the durable-bench workload on Ompig Durable and pi-durable")
     common(p)
     p.add_argument("--sizes", nargs="*")
     p.add_argument("--rounds", "--samples", dest="rounds", type=int, help="rounds per size (default 3, durable-bench's own; 12 gives the 100 warm turns per cell durable-report requires)")
@@ -99,10 +99,10 @@ def main(argv=None):
     p = sub.add_parser("harbor-plan", help="write and validate Harbor job configs (prepared, never run)")
     p.add_argument("--claude-model", default="<claude-snapshot>")
     p.add_argument("--gpt-model", default="<gpt-snapshot>")
-    p.add_argument("--pig-binary")
+    p.add_argument("--ompig-binary")
     p.add_argument("--out")
 
-    p = sub.add_parser("harbor-compat", help="check Harbor's Pi converter against PiG and Pi, no model")
+    p = sub.add_parser("harbor-compat", help="check Harbor's Pi converter against Ompig and Pi, no model")
     common(p)
 
     p = sub.add_parser("harbor-analyze", help="paired analysis of finished Harbor job directories")
@@ -206,7 +206,7 @@ def main(argv=None):
     if args.cmd == "harbor-plan":
         from . import harbor
         args.out = args.out or os.path.join(armlib.REPO, "tmp", "bench", "harbor", "jobs")
-        paths = harbor.plan(args.out, args.claude_model, args.gpt_model, args.pig_binary)
+        paths = harbor.plan(args.out, args.claude_model, args.gpt_model, args.ompig_binary)
         ok, message = harbor.validate(paths)
         print(message)
         print(f"harbor: wrote {len(paths)} job configs to {args.out}. Not run: a job spends money and needs an explicit decision to spend it. Command: harbor run -c <config>")

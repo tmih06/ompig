@@ -23,7 +23,7 @@ func TestPiMessagesEventTypeConstantsMatchTheWireLiterals(t *testing.T) {
 
 // pi-messages.ts createEventConverter returns `{ ...event, partial }` for a type outside its switch, and the stream loop pushes it and keeps
 // reading; the agent loop's switch ignores it (agent-loop.ts streamAssistantResponse). Probed with Pi 1.1.0 (probe/sse/pm-unknown.txt): a
-// `{"type":"weird"}` record between a text delta and done ends with stop and "Hel". PiG ended the turn with an error.
+// `{"type":"weird"}` record between a text delta and done ends with stop and "Hel". Ompig ended the turn with an error.
 func TestPiMessagesUnknownEventTypeIsSkippedLikePi(t *testing.T) {
 	baseURL, _ := startPiMessagesServer(t, piMessagesResponder{events: []any{
 		map[string]any{"type": "start"},

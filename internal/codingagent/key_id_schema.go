@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // keyIDModifiers is the modifier list of key-id-schema.ts.

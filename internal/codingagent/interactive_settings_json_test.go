@@ -7,7 +7,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Interactive mode binds getSettingsJSON, so a state push before every tool, command and event dispatch reuses the settings encoding made once per settings generation instead of encoding getSettings again. The encoding holds the same members as getSettings before and after each settings write, in Pi's member order (the settings files' order, not json.Marshal's sorted one), so the test compares the decoded values.

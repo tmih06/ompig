@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // BenchmarkPrintPipelineDeltas is coding's BenchmarkPrintPipelineDeltas through the real output modes: the faux provider streams one write tool call whose arguments arrive in 16-byte deltas, the write tool runs, and a second response ends the run. It reports ns/delta (wall), cpu-ns/delta (process CPU from getrusage), B/delta and allocs/delta over the whole run.
@@ -63,7 +63,7 @@ func pipelineFaux(deltas int) *ai.FauxProviderHandle {
 }
 
 func pipelineServices(b *testing.B) *coding.AgentSessionServices {
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: b.TempDir(), AgentDir: b.TempDir()})
 	if err != nil {
 		b.Fatal(err)

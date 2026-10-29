@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 func tokenRequestTo(t *testing.T, status int, body string, resource string) (url.Values, error) {

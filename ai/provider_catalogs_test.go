@@ -64,7 +64,7 @@ func TestProviderCatalogExportsMatchPinnedData(t *testing.T) {
 		t.Run(tc.provider, func(t *testing.T) {
 			want := pinnedCatalogIDs(t, tc.provider)
 			chat, image, classifier := tc.chat(), tc.image(), tc.classifier()
-			// OpenRouter's :nitro and :floor variants are PiG's addition (D199); the pinned data has none.
+			// OpenRouter's :nitro and :floor variants are Ompig's addition (D199); the pinned data has none.
 			var chatIDs []string
 			for _, id := range chat.IDs() {
 				if _, _, variant := OpenRouterRoutingVariant(tc.provider, id); !variant {

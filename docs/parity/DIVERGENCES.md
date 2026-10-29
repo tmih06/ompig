@@ -13,25 +13,25 @@ Do not log:
 Every active divergence must have:
 
 - id `D<N>`
-- `// pig divergence (D<N>): ...` at each call site
+- `// ompig divergence (D<N>): ...` at each call site
 - parity coverage or an explicit parity allowance
 - `SCRUTINIZED:approved`
 
 ## Retired divergences
 
-- D35 — Hidden `/arminsayshi` and `/dementedelves` commands. Retired by the Pi component ports (`armin.ts` and `earendil-announcement.ts` are identical in upstream 0.87.1 through 1.0.0). The commands, their recognition and `/dementedelves`'s announcement remain Pi's. Since 2026-10-01, D87 replaces the art and label `/arminsayshi` shows with PiG's pig head and `pigsayhi`, keeps Pi's effects, and adds `/pigsayhi`. `TestArminFramesMatchPinnedPi` runs the pinned `armin.ts` with PiG's image and compares every frame of all seven effects, and `TestEarendilAnnouncementMatchesPinnedPi` compares styled announcement rows. The `slash-commands/12-earendil-announcement` scenario compares exact terminal output; `13-armin-bitmap` asserts each binary's settled image. The ID remains reserved.
+- D35 — Hidden `/arminsayshi` and `/dementedelves` commands. Retired by the Pi component ports (`armin.ts` and `earendil-announcement.ts` are identical in upstream 0.87.1 through 1.0.0). The commands, their recognition and `/dementedelves`'s announcement remain Pi's. Since 2026-10-01, D87 replaces the art and label `/arminsayshi` shows with Ompig's ompig head and `pigsayhi`, keeps Pi's effects, and adds `/pigsayhi`. `TestArminFramesMatchPinnedPi` runs the pinned `armin.ts` with Ompig's image and compares every frame of all seven effects, and `TestEarendilAnnouncementMatchesPinnedPi` compares styled announcement rows. The `slash-commands/12-earendil-announcement` scenario compares exact terminal output; `13-armin-bitmap` asserts each binary's settled image. The ID remains reserved.
 
 - D47 — Width stripping consumes DEC private-mode set/reset sequences. Retired by the width-parity change. `tui/widthx.ExtractAnsi` now delegates to the upstream-compatible `ExtractAnsiCode`; the ID remains reserved. `TestExtractAnsi_PrivateModeMatchesUpstream` and `TestPiWidthDifferential` verify the shared ANSI parsing behavior. No active divergence or source marker remains.
 
 - D50 — Extra unsupported/oversized Mermaid hints. Retired under the lead's parity-completion authority. upstream 0.99.1 `mermaid.ts:76-77` (unchanged since 0.87.1) preserves the raw code block; partial-parse warnings remain display-only. `TestMermaidUnsupportedAndOversizedRemainSource`, `TestMermaidFallbackAssistantBlockMatchesDisabledTransform`, and the now byte-exact `TestMermaidTransformMatchesUpstream` verify the contract. The ID remains reserved.
 
-- D54 — Fenced-code wrapping. Retired after re-probing Pi: `Markdown.render` already wraps every non-image rendered row, including code rows (`markdown.ts` at 0.99.1 still passes each non-image line through `wrapTextWithAnsi`; the only change since 0.87.1 is a token cache). PiG now uses that same final content-width pass and its continuation breakpoints. The ID remains reserved. Evidence: `tui/markdown_upstream_test.go`, `tui/markdown_codeblock_wrap_test.go`, and `test/parity/scenarios/tui-components/16-markdown-user-components.toml`.
+- D54 — Fenced-code wrapping. Retired after re-probing Pi: `Markdown.render` already wraps every non-image rendered row, including code rows (`markdown.ts` at 0.99.1 still passes each non-image line through `wrapTextWithAnsi`; the only change since 0.87.1 is a token cache). Ompig now uses that same final content-width pass and its continuation breakpoints. The ID remains reserved. Evidence: `tui/markdown_upstream_test.go`, `tui/markdown_codeblock_wrap_test.go`, and `test/parity/scenarios/tui-components/16-markdown-user-components.toml`.
 
 - D58 — Automatic Mermaid label narrowing. Retired under the same authority. The transformer uses the natural layout and preserves source when it is too wide. The caller-free fitting search and its private bookkeeping are removed. The oversized transformer/caller cases retain the wide diagram input, and the natural engine corpus remains unchanged. The ID remains reserved.
 
-- D59 — Generic extension tool cards exposed complete recoverable details. Retired by the upstream 0.99.1 port: `formatToolCallWithArgs` (`render-utils.ts:71-96`) now draws the fallback call header of a registered tool without `renderCall`, as `key=value` pairs cut at 100 characters while collapsed and one `key: value` line per argument when expanded (`tool-execution.ts:155-157`). PiG uses that function and the definition card path for every registered tool; the structured-argument card, its width-aware preview, the extra Ctrl+O scrollback rebuild and the "Toggle tool details" key description are removed, so Ctrl+O is "Toggle tool output" again. Tests: `TestFormatToolCallWithArgs`, `TestToolExecutionComponentUpstream/shows_arguments_in_the_fallback_call_header` and `TestRegisteredToolWithoutRenderersDrawsTheFallbackHeaderThroughTheEventPath`. The ID remains reserved.
+- D59 — Generic extension tool cards exposed complete recoverable details. Retired by the upstream 0.99.1 port: `formatToolCallWithArgs` (`render-utils.ts:71-96`) now draws the fallback call header of a registered tool without `renderCall`, as `key=value` pairs cut at 100 characters while collapsed and one `key: value` line per argument when expanded (`tool-execution.ts:155-157`). Ompig uses that function and the definition card path for every registered tool; the structured-argument card, its width-aware preview, the extra Ctrl+O scrollback rebuild and the "Toggle tool details" key description are removed, so Ctrl+O is "Toggle tool output" again. Tests: `TestFormatToolCallWithArgs`, `TestToolExecutionComponentUpstream/shows_arguments_in_the_fallback_call_header` and `TestRegisteredToolWithoutRenderersDrawsTheFallbackHeaderThroughTheEventPath`. The ID remains reserved.
 
-- D71 — Nonfatal main-screen overflow recovery. Withdrawn on 2026-09-25 by owner decision; the ID remains reserved. PiG now matches upstream `tui-main-screen.ts`: an over-wide non-image row that reaches the differential-render loop writes the TUI crash log (`pi-tui-crash.log` in the configured agent directory, or the OS temp directory when none is configured), stops the TUI, and ends the process through the uncaught-exception path with status 1. Initial, full, and resize renders emit the row unchanged. Tests: `tui/render_overflow_test.go` and parity scenario `extensions-runtime/20-differential-render-overflow-terminates.toml`. No active divergence or source marker remains.
+- D71 — Nonfatal main-screen overflow recovery. Withdrawn on 2026-09-25 by owner decision; the ID remains reserved. Ompig now matches upstream `tui-main-screen.ts`: an over-wide non-image row that reaches the differential-render loop writes the TUI crash log (`pi-tui-crash.log` in the configured agent directory, or the OS temp directory when none is configured), stops the TUI, and ends the process through the uncaught-exception path with status 1. Initial, full, and resize renders emit the row unchanged. Tests: `tui/render_overflow_test.go` and parity scenario `extensions-runtime/20-differential-render-overflow-terminates.toml`. No active divergence or source marker remains.
 
 - D76 — Untransformed Markdown before an extension reply. Retired by the off-loop transform-generation path. The complete ordered chain finishes before new Markdown content is painted. Each component retains at most one active and one replaceable pending generation; cancellation and stale-result rejection keep replacements from publishing late. Tests: `TestMarkdownTransformFirstPaintWaitsForWholeChain`, `TestAsyncMarkdownReplacesPendingGeneration`, `TestAsyncMarkdownOwnerCancellationDrains`, and `extensions-runtime/33-markdown-transformer`. D56 still governs failed or stalled subprocess rendering.
 
@@ -43,7 +43,7 @@ Every active divergence must have:
 
 - D125 — Anthropic strict "prefer" tools fall back when the provider rejects the strict tool set. Retired by the Pi 1.4.0 pin: Pi #10409 (`packages/ai/src/api/anthropic-messages.ts:644-689` in `stream`, `buildParams` `disablePreferredStrictTools`, `convertTools`) retries once with `prefer` tools non-strict when Anthropic rejects the strict tool set for grammar size, tool count or union limits, keeps `require` tools strict and appends the `anthropic_strict_tools_fallback` diagnostic. `ai/anthropic.go` ports it; `TestAnthropicPreferredStrictToolFallbackUpstream` ports Pi's `anthropic-strict-tool-fallback.test.ts`. The ID remains reserved.
 
-- D126 — Another model's thinking replays as `reasoning_content` on targets that require it (pi-mono #6167). Retired by Pi commit `91130942` (#11000, #10995; in Pi 1.4.0): `transformMessages` (`packages/ai/src/api/transform-messages.ts:129-137`) drops the thinking of another model for every target instead of inlining it as assistant text, so no target receives it. PiG follows Pi (owner decision 2026-10-16): `ai.TransformMessages` and `agent.normalizeAssistantReplayBlocks` drop it, and a target that requires `reasoning_content` gets the empty placeholder, as in Pi. The D126 code (`keepForeignThinking`, the unnamed-signature branch of `convertMessagesWithCompat`, `providerReplaysForeignThinking`), its tests and the oracle accommodations (`foldForeignReasoning`, the D126 probe skip and generator rule) are removed.
+- D126 — Another model's thinking replays as `reasoning_content` on targets that require it (pi-mono #6167). Retired by Pi commit `91130942` (#11000, #10995; in Pi 1.4.0): `transformMessages` (`packages/ai/src/api/transform-messages.ts:129-137`) drops the thinking of another model for every target instead of inlining it as assistant text, so no target receives it. Ompig follows Pi (owner decision 2026-10-16): `ai.TransformMessages` and `agent.normalizeAssistantReplayBlocks` drop it, and a target that requires `reasoning_content` gets the empty placeholder, as in Pi. The D126 code (`keepForeignThinking`, the unnamed-signature branch of `convertMessagesWithCompat`, `providerReplaysForeignThinking`), its tests and the oracle accommodations (`foldForeignReasoning`, the D126 probe skip and generator rule) are removed.
 
 - D127 — The Mistral request timeout covers only the wait for response headers. Retired by the Pi pin `1.1.0+42a3497d`: Pi commit `6b07b4e5` (pi-mono #10609) is in the pinned source and `ai/mistral.go` matches it (`TestMistralHTTPTransportUpstream`).
 
@@ -61,21 +61,21 @@ Every active divergence must have:
 
 - D171 — An errored Anthropic tool result carries no images (Pi #10792, #10794; Pi 34a8bb38). Retired by the Pi pin `1.2.0+5ab7fe74`: Pi commit `34a8bb38` replaced each image of an error tool result with a text note, and Pi commit `5ab7fe74` replaces it with a placeholder and sends the images after all tool results of the turn, in the same user message, under a caption naming the tool call (`splitErrorToolResultImages` in `packages/ai/src/api/transform-messages.ts`, used by `anthropic-messages.ts` and, for Claude, `bedrock-converse-stream.ts`). `ai.SplitErrorToolResultImages` and the Anthropic and Bedrock converters do the same, and the payload oracles no longer project Pi's payload.
 
-- D179 — No Windows host manager (ForkDriver and ProcessChannel Unix-only). Retired before release: the Windows port (`chord/host/manager_fork_windows.go`, `manager_pipe_windows.go`, `manager_ipc_frames.go`) replaces the fallback, so `ForkDriver` and `ProcessChannel` exist on Unix and Windows and `NewNodeLoader` (D178) works on both. Native Windows evidence: all 27 chord/host C2 tests pass x1 and x5 on a Windows x64 runner with Node 24.22.0 (2026-10-14, PiG c0adb3e3cf), including real Node IPC (`TestProcessChannelIsNodesIPCChannel`) and every child-host `HostManager` case. The ID remains reserved.
+- D179 — No Windows host manager (ForkDriver and ProcessChannel Unix-only). Retired before release: the Windows port (`chord/host/manager_fork_windows.go`, `manager_pipe_windows.go`, `manager_ipc_frames.go`) replaces the fallback, so `ForkDriver` and `ProcessChannel` exist on Unix and Windows and `NewNodeLoader` (D178) works on both. Native Windows evidence: all 27 chord/host C2 tests pass x1 and x5 on a Windows x64 runner with Node 24.22.0 (2026-10-14, Ompig c0adb3e3cf), including real Node IPC (`TestProcessChannelIsNodesIPCChannel`) and every child-host `HostManager` case. The ID remains reserved.
 
 ## Active divergences
 
 D78, D82 and D83 record owner-approved known gaps for 0.3.x (decision 2026-09-28). Approval records a difference; it does not prove parity, waive an unrelated defect, or turn a failing comparison into a pass. Same-process object behavior must remain Pi-exact. See `docs/findings/0.3.0-known-gaps.md` for the integration boundary and retained failures.
 
-## D2 PiG uses a separate command and configuration identity
+## D2 Ompig uses a separate command and configuration identity
 
-What: the command, startup banner, and terminal title use `pig`. Configuration defaults to `~/.pig` and project `.pig`. A binary resolved under the name `pi` exits with status 2 instead of shadowing Pi.
+What: the command, startup banner, and terminal title use `ompig`. Configuration defaults to `~/.ompig` and project `.ompig`. A binary resolved under the name `pi` exits with status 2 instead of shadowing Pi.
 
-The exact environment value `PIG_USE_PI_DIRS=1` explicitly selects Pi's agent and project directories. Shared mode uses `PI_CODING_AGENT_DIR` or `~/.pi/agent`, project `<cwd>/.pi`, and `PI_CODING_AGENT_SESSION_DIR` rather than the two `PIG_CODING_AGENT_*` overrides. `--session-dir` and the `sessionDir` setting keep Pi's precedence. Project trust, Package/resource discovery, system prompt files, sessions, and imported Node configuration helpers all use the selected directories. PiG-owned SDK caches, docs and user Piglet state keep the PiG configuration root. No files are copied, no trees are merged, and no setting inside a relocated directory controls the selection.
+The exact environment value `OMPIG_USE_PI_DIRS=1` explicitly selects Pi's agent and project directories. Shared mode uses `PI_CODING_AGENT_DIR` or `~/.pi/agent`, project `<cwd>/.pi`, and `PI_CODING_AGENT_SESSION_DIR` rather than the two `OMPIG_CODING_AGENT_*` overrides. `--session-dir` and the `sessionDir` setting keep Pi's precedence. Project trust, Package/resource discovery, system prompt files, sessions, and imported Node configuration helpers all use the selected directories. Ompig-owned SDK caches, docs and user Ompiglet state keep the Ompig configuration root. No files are copied, no trees are merged, and no setting inside a relocated directory controls the selection.
 
-Owner decision: 2026-09-27, release 0.3.0. Pi's config.ts:528-573 selects its directory identity before loading settings; a process-level opt-in avoids circular settings resolution. `PIG_CODING_AGENT_DIR=~/.pi/agent` alone remains an agent-only relocation and does not select project `.pi` or configure external adapters.
+Owner decision: 2026-09-27, release 0.3.0. Pi's config.ts:528-573 selects its directory identity before loading settings; a process-level opt-in avoids circular settings resolution. `OMPIG_CODING_AGENT_DIR=~/.pi/agent` alone remains an agent-only relocation and does not select project `.pi` or configure external adapters.
 
-Shared auth/settings/trust and dynamic catalog cache writes use Pi's lock-directory protocol. Auth JSON preserves provider fields and required empty OAuth fields; existing auth modes and ACLs remain intact. PiG reads but does not write models.json. Session JSONL is interoperable, but simultaneous edits of one session are not supported by either host. pi-acp owns `~/.pi/pi-acp/session-map.json`; PiG does not rewrite it. Use one adapter process per home and Pi-compatible resources in shared settings. This opt-in does not make Piglets or native PiG extensions loadable by Pi.
+Shared auth/settings/trust and dynamic catalog cache writes use Pi's lock-directory protocol. Auth JSON preserves provider fields and required empty OAuth fields; existing auth modes and ACLs remain intact. Ompig reads but does not write models.json. Session JSONL is interoperable, but simultaneous edits of one session are not supported by either host. pi-acp owns `~/.pi/pi-acp/session-map.json`; Ompig does not rewrite it. Use one adapter process per home and Pi-compatible resources in shared settings. This opt-in does not make Ompiglets or native Ompig extensions loadable by Pi.
 
 Evidence: `TestPiDirectoriesOptIn`, `TestPiDirectoriesProjectSettingsAndSessions`, `TestPiDirectoriesSessionOverridePrecedence`, `TestPiSharedFilesRoundTrip`, `TestPiSharedFilesConcurrentWriters`, and `settings/10-pi-directories-opt-in`. The real Powerline and pi-acp replay and file-lock limits are recorded in `docs/findings/pi-directories-opt-in.md`.
 
@@ -86,23 +86,23 @@ Remove when: never.
 
 Call-site markers: `coding/cli/guard.go`, `coding/cli/main.go`, `internal/codingagent/paths.go`, `internal/codingagent/startup_header.go`, `internal/codingagent/ext_ui_context.go`, `coding/piglogin/doc.go`, `coding/piglogin/registry.go`, `coding/extension/host/subprocess/ui_bridge.go`, `coding/extension/builtin/builtin.go`, `coding/cli/project_trust.go`, `coding/cli/extension_set.go`, and `internal/codingagent/project_trust_warning.go`, `internal/evals/harness.go`.
 
-Every message that tells the user to run a command names `pig`, never `pi`: the replaced built-in extension warning says `pig config` where Pi's resource-loader.ts says `pi config`, and the startup hint says `pig -ne`. `TestProductionStringsNeverInstructAPiCommand` rejects a production string literal that tells the user to run `pi`.
+Every message that tells the user to run a command names `ompig`, never `pi`: the replaced built-in extension warning says `ompig config` where Pi's resource-loader.ts says `pi config`, and the startup hint says `ompig -ne`. `TestProductionStringsNeverInstructAPiCommand` rejects a production string literal that tells the user to run `pi`.
 
-The trust prompt and warning name the selected project directory and the `pig` command. Their wording, styling, and conditions otherwise match Pi. `test/parity/scenarios/project-trust/09-cancel-trust-shows-warning-with-extensions-off.toml` and `10-startup-trust-prompt-wording.toml` compare these surfaces with only the D2 identity substitution.
+The trust prompt and warning name the selected project directory and the `ompig` command. Their wording, styling, and conditions otherwise match Pi. `test/parity/scenarios/project-trust/09-cancel-trust-shows-warning-with-extensions-off.toml` and `10-startup-trust-prompt-wording.toml` compare these surfaces with only the D2 identity substitution.
 
-The startup header shows PiG's pig head in Pi's logo slot, 7 rows instead of 2, so PiG never presents itself as Pi; the hints, help and resource listing otherwise match Pi. Owner approved 2026-10-01; after trying a smaller 12-by-8 head live, the owner chose the sprite's 16-by-14 pig at its original size, with the version and hint lines beside it.
+The startup header shows Ompig's ompig head in Pi's logo slot, 7 rows instead of 2, so Ompig never presents itself as Pi; the hints, help and resource listing otherwise match Pi. Owner approved 2026-10-01; after trying a smaller 12-by-8 head live, the owner chose the sprite's 16-by-14 ompig at its original size, with the version and hint lines beside it.
 
-The head is the sprite's 16-by-14 pig, drawn in half blocks as 16 cells by 7 lines: the standard pig recolored for the color sprites, and each character's original art. `TestEveryHeadIsTheSharedGrid` and `TestEveryHeadIsTheSpritesPig` hold each one to the shared grid and the sprite's own art. Pi prefixes its 2-line logo to the first two lines of the header text and renders all of it as one Text (interactive-mode.ts:998-1006 in the v1.0.0 upstream mirror); PiG prefixes the head's 7 lines to the first seven lines in the same way: the version beside the first, then in compact mode the first hint line, the `Press` line, the blank line and the onboarding line, or in expanded mode the first six hints. A line beside the head wraps in the cells right of the head; the rest wraps at Pi's full width. The compact header is therefore 2 lines taller than Pi's, the expanded header has Pi's 22 lines, and a line beside the head wraps in `width-19` cells where Pi's wraps in `width-7`.
+The head is the sprite's 16-by-14 ompig, drawn in half blocks as 16 cells by 7 lines: the standard ompig recolored for the color sprites, and each character's original art. `TestEveryHeadIsTheSharedGrid` and `TestEveryHeadIsTheSpritesPig` hold each one to the shared grid and the sprite's own art. Pi prefixes its 2-line logo to the first two lines of the header text and renders all of it as one Text (interactive-mode.ts:998-1006 in the v1.0.0 upstream mirror); Ompig prefixes the head's 7 lines to the first seven lines in the same way: the version beside the first, then in compact mode the first hint line, the `Press` line, the blank line and the onboarding line, or in expanded mode the first six hints. A line beside the head wraps in the cells right of the head; the rest wraps at Pi's full width. The compact header is therefore 2 lines taller than Pi's, the expanded header has Pi's 22 lines, and a line beside the head wraps in `width-19` cells where Pi's wraps in `width-7`.
 
-The head is drawn only when it fits with the version beside it (31 columns with a 12-character version), the terminal aligns half blocks, and the theme's color mode is truecolor. Otherwise, in 256-color terminals and narrow panes, the one-line text mark `PiG.` takes Pi's logo slot: it is 4 cells wide like Pi's logo, its line carries the version and the slot's second line the first line of key hints (interactive-mode.ts:1002-1006), so the hints wrap where Pi's wrap. In Apple Terminal, where Pi draws its text wordmark and the hints below it (`piWordmark`), PiG draws the same layout with the text mark. "PiG" is bold, and as Pi colors its "Pi" wordmark, each letter takes a mid or dark stop of the sprite's wordmark ramp (rows 8 to 10, at least 3:1 against both white and black, falling back to the period color where a ramp is too pale, as the default sprite's is); the period is in the sprite's wordmark period color. The 256- and 16-color fallbacks apply, as in Apple Terminal. Only the composite version (D63) and the onboarding product name otherwise use PiG's identity.
+The head is drawn only when it fits with the version beside it (31 columns with a 12-character version), the terminal aligns half blocks, and the theme's color mode is truecolor. Otherwise, in 256-color terminals and narrow panes, the one-line text mark `Ompig.` takes Pi's logo slot: it is 4 cells wide like Pi's logo, its line carries the version and the slot's second line the first line of key hints (interactive-mode.ts:1002-1006), so the hints wrap where Pi's wrap. In Apple Terminal, where Pi draws its text wordmark and the hints below it (`piWordmark`), Ompig draws the same layout with the text mark. "Ompig" is bold, and as Pi colors its "Pi" wordmark, each letter takes a mid or dark stop of the sprite's wordmark ramp (rows 8 to 10, at least 3:1 against both white and black, falling back to the period color where a ramp is too pale, as the default sprite's is); the period is in the sprite's wordmark period color. The 256- and 16-color fallbacks apply, as in Apple Terminal. Only the composite version (D63) and the onboarding product name otherwise use Ompig's identity.
 
-The built-in header is the one `setHeader(undefined)` and `/reload` restore, so Pi's logo never appears. An extension replaces it with `ctx.ui.setHeader` as in Pi, and an extension or Piglet replaces it with its own native login through `ctx.ui.setLogin` (D60). The built-in `pig-login` extension (`coding/piglogin`) registers `/sprite`, which chooses one of fifteen built-in sprites (`pig-default`, then the colors `pink`, `green`, `mint`, `sandy`, `grey`, `blush`, `lavender`, `cloud`, then the characters `pigrogu`, `darth-vader`, `kratos`, `piglet`, `spider-ham`, `sheriff`) and saves the choice in `$PIG_HOME/state/pig-standard/login.json`. `/sprite preview [id]` shows a sprite's full art, its `PiG.` wordmark and pig as the native login template draws them, with its name and tagline, in an overlay that any key closes. The picker `/sprite` opens draws the pig of the highlighted sprite right after its option rows, a few cells past the longest row and top-aligned with the first option (dropped on narrow terminals), so the choice shows its face before it is made; `Create your own...` is not a sprite and draws no pig, and the selector keeps its full-width rows there. A UI context that cannot mount a custom component (the RPC and no-op contexts) gets the same rows from the plain extension selector with no preview column. Pi has no `/sprite`. Clicking the head, or the text mark where it stands in for Pi's logo, plays PiG's version of Pi's logo animation (D87).
+The built-in header is the one `setHeader(undefined)` and `/reload` restore, so Pi's logo never appears. An extension replaces it with `ctx.ui.setHeader` as in Pi, and an extension or Ompiglet replaces it with its own native login through `ctx.ui.setLogin` (D60). The built-in `ompig-login` extension (`coding/piglogin`) registers `/sprite`, which chooses one of fifteen built-in sprites (`ompig-default`, then the colors `pink`, `green`, `mint`, `sandy`, `grey`, `blush`, `lavender`, `cloud`, then the characters `pigrogu`, `darth-vader`, `kratos`, `ompiglet`, `spider-ham`, `sheriff`) and saves the choice in `$OMPIG_HOME/state/ompig-standard/login.json`. `/sprite preview [id]` shows a sprite's full art, its `Ompig.` wordmark and ompig as the native login template draws them, with its name and tagline, in an overlay that any key closes. The picker `/sprite` opens draws the ompig of the highlighted sprite right after its option rows, a few cells past the longest row and top-aligned with the first option (dropped on narrow terminals), so the choice shows its face before it is made; `Create your own...` is not a sprite and draws no ompig, and the selector keeps its full-width rows there. A UI context that cannot mount a custom component (the RPC and no-op contexts) gets the same rows from the plain extension selector with no preview column. Pi has no `/sprite`. Clicking the head, or the text mark where it stands in for Pi's logo, plays Ompig's version of Pi's logo animation (D87).
 
-An extension or Piglet adds sprites with `ctx.ui.registerSprite` (wire call `ui.registerSprite`; Go `RegisterSprite`, Rust `register_sprite`, Python `register_sprite`, Node and TypeScript `registerSprite`). A `SpriteDefinition` has a lowercase slug `id` of at most 32 characters, a one-line `name` and `tagline`, a 16-by-14 `mascot` of palette symbols with `.` transparent, which the header draws as the head and the preview beside the wordmark, and a `palette` of `#RRGGBB` colors; unknown fields fail. The host validates the definition (`invalid_sprite`), rejects a built-in id or another extension's id (`ui_error`), and replaces the sprite when the same extension registers the id again. Registered sprites follow the built-in ones in `/sprite list` and the picker and are saved like them. The host replays them to each new UI and drops them when their extension goes away. While the saved sprite is not registered, the header draws `pig-default` and the saved choice stays. Pi has no sprites, so this is part of the same identity exception, approved with it (owner, 2026-10-01).
+An extension or Ompiglet adds sprites with `ctx.ui.registerSprite` (wire call `ui.registerSprite`; Go `RegisterSprite`, Rust `register_sprite`, Python `register_sprite`, Node and TypeScript `registerSprite`). A `SpriteDefinition` has a lowercase slug `id` of at most 32 characters, a one-line `name` and `tagline`, a 16-by-14 `mascot` of palette symbols with `.` transparent, which the header draws as the head and the preview beside the wordmark, and a `palette` of `#RRGGBB` colors; unknown fields fail. The host validates the definition (`invalid_sprite`), rejects a built-in id or another extension's id (`ui_error`), and replaces the sprite when the same extension registers the id again. Registered sprites follow the built-in ones in `/sprite list` and the picker and are saved like them. The host replays them to each new UI and drops them when their extension goes away. While the saved sprite is not registered, the header draws `ompig-default` and the saved choice stays. Pi has no sprites, so this is part of the same identity exception, approved with it (owner, 2026-10-01).
 
-Locked by: `test/parity/scenarios/startup/00-startup-banner.toml` (the head's lines with the version, the first hints and the `Press` line), `02-startup-compact-help.toml`, `03-startup-expanded-help.toml`, `04-startup-verbose-collapse.toml` and `14-startup-quiet-header.toml` (every hint byte for byte with Pi, with the head's 16 cells removed), `13-startup-narrow-mark-wrapping.toml` (26 columns, the text mark, byte-equal with Pi from the first hint on), `coding/piglogin` (the head and art goldens, the text mark, the registry, `/sprite list`, `set`, `preview`, the picker's rows, right-side pig, cursor follow, previewless create row and plain-selector fallback), `internal/codingagent/pi_logo_upstream_test.go` (the head against the goldens, the layout, the head threshold, the text mark in narrow, 256-color and Apple terminals, replacement by `setHeader` and by a Piglet's `setLogin`, `/reload`, the picker's pig and its Escape through the interactive host), `coding/extension/host/subprocess/ui_bridge_sprite_test.go`, the `sprite-probe` row of `test/extension-conformance`, `coding/cli/extension_sprite_pty_test.go` (a Go, Python and Rust extension's sprite through list, set, preview and restarts with and without the extension, and a click on the head in the default fullscreen mode, in the real binary),
+Locked by: `test/parity/scenarios/startup/00-startup-banner.toml` (the head's lines with the version, the first hints and the `Press` line), `02-startup-compact-help.toml`, `03-startup-expanded-help.toml`, `04-startup-verbose-collapse.toml` and `14-startup-quiet-header.toml` (every hint byte for byte with Pi, with the head's 16 cells removed), `13-startup-narrow-mark-wrapping.toml` (26 columns, the text mark, byte-equal with Pi from the first hint on), `coding/piglogin` (the head and art goldens, the text mark, the registry, `/sprite list`, `set`, `preview`, the picker's rows, right-side ompig, cursor follow, previewless create row and plain-selector fallback), `internal/codingagent/pi_logo_upstream_test.go` (the head against the goldens, the layout, the head threshold, the text mark in narrow, 256-color and Apple terminals, replacement by `setHeader` and by a Ompiglet's `setLogin`, `/reload`, the picker's ompig and its Escape through the interactive host), `coding/extension/host/subprocess/ui_bridge_sprite_test.go`, the `sprite-probe` row of `test/extension-conformance`, `coding/cli/extension_sprite_pty_test.go` (a Go, Python and Rust extension's sprite through list, set, preview and restarts with and without the extension, and a click on the head in the default fullscreen mode, in the real binary),
 `tui/terminal_test.go` (`TestBuildTerminalTitle_NoName`), and the command
-identity tests in `cmd/pig`.
+identity tests in `cmd/ompig`.
 SCRUTINIZED:approved
 
 ## D14 tools-manager archive extraction uses Go stdlib instead of spawning tar/unzip/PowerShell
@@ -113,20 +113,20 @@ unpack downloaded fd/rg release assets. Each platform has a fallback chain:
 Linux/macOS try `unzip` then `tar`; Windows tries `tar.exe` (bsdtar) then
 PowerShell.
 
-pig `internal/codingagent/tools/tools_manager.go` uses Go stdlib
+ompig `internal/codingagent/tools/tools_manager.go` uses Go stdlib
 (`archive/tar` + `compress/gzip` + `archive/zip`) on all platforms. The
 extracted binary is byte-identical for every fd/rg release asset published
 to date; only two observable differences exist:
 
 1. Error message text on extraction failure. Upstream produces e.g.
-   `Failed to extract X: unzip: ...; tar: ...`. pig produces e.g.
+   `Failed to extract X: unzip: ...; tar: ...`. ompig produces e.g.
    `Failed to extract X: <go-error>`. There is no parity scenario for the
    failure path (it requires a malformed archive on the GitHub CDN).
 
 2. Symlink and hardlink handling. Upstream `tar xzf` preserves them on
-   Unix. pig silently skips `TypeSymlink`/`TypeLink` entries. fd and rg
+   Unix. ompig silently skips `TypeSymlink`/`TypeLink` entries. fd and rg
    archives contain manpage symlinks (`man/man1/fd.1` → `fd.1`) that
-   neither binary actually needs; pig's behavior is therefore safe in
+   neither binary actually needs; ompig's behavior is therefore safe in
    practice but theoretically observable if a user `ls`-es the install
    dir.
 
@@ -137,7 +137,7 @@ PATH, and produces deterministic error text regardless of locale. The
 divergence is structural to the Go port: faithfully calling `os/exec.Command("unzip", ...)` would re-introduce the very brittleness Go's stdlib lets us
 avoid.
 
-Remove when: upstream uses an equivalent in-process archive reader, or PiG uses
+Remove when: upstream uses an equivalent in-process archive reader, or Ompig uses
 the same external extraction contract.
 
 Locked by: unit tests in `internal/codingagent/tools/tools_manager_test.go`
@@ -149,37 +149,37 @@ that exercise the full extract pipeline against synthetic fd/rg archives.
 PORT_MAP path: `packages/coding-agent/src/utils/tools-manager.ts`
 SCRUTINIZED:approved
 
-## D26 PiG never identifies itself as Pi to a service
+## D26 Ompig never identifies itself as Pi to a service
 
-What: every string upstream sends to identify Pi, and every Pi-owned endpoint it calls, is PiG's own. One file, `internal/coding/pigidentity/identity.json`, holds the values. The Go host reads it (`internal/coding/pigidentity`), and `automation/gen/pi-identity-patches.mjs` applies the same values to the Pi JavaScript the Node extension runtime vendors, so a Node extension that calls the Pi SDK (`createAgentSession`) or pi-ai sends the identity the Go host sends. The vendoring step (`automation/gen/vendor-pi-dist.sh`) runs the patch before it compiles the SDK bundle, so a re-vendor keeps it, and `vendor-manifest.json` labels each patched file. An exact-line patch that no longer matches a new Pi release fails the vendoring step.
+What: every string upstream sends to identify Pi, and every Pi-owned endpoint it calls, is Ompig's own. One file, `internal/coding/pigidentity/identity.json`, holds the values. The Go host reads it (`internal/coding/pigidentity`), and `automation/gen/pi-identity-patches.mjs` applies the same values to the Pi JavaScript the Node extension runtime vendors, so a Node extension that calls the Pi SDK (`createAgentSession`) or pi-ai sends the identity the Go host sends. The vendoring step (`automation/gen/vendor-pi-dist.sh`) runs the patch before it compiles the SDK bundle, so a re-vendor keeps it, and `vendor-manifest.json` labels each patched file. An exact-line patch that no longer matches a new Pi release fails the vendoring step.
 
 Replaced values (audited against upstream 0.87.1; `pi-identity-patches.mjs` applies them to the vendored 0.99.2 dist and fails when a literal is missing):
-- Provider attribution (`PI_ATTRIBUTION` in `packages/ai/src/utils/identity.ts`; the agent loop, the durable Harness and the coding agent send it, the coding agent only while install telemetry is enabled, unchanged gate): `{ name: "pi", url: "https://pi.dev", categories: ["cli-agent"] }` → `{ name: "PiG", url: "https://github.com/MichaelKinsy/PiG", categories: ["cli-agent"] }`, which `getAttributionHeaders` maps to OpenRouter `HTTP-Referer`, `X-OpenRouter-Title` and `X-OpenRouter-Categories`, NVIDIA NIM `X-BILLING-INVOKE-ORIGIN: PiG` and OpenCode `x-opencode-client: PiG` (it was `pig` before the name became one field). Pi's Cloudflare `User-Agent: pi-coding-agent` attribution no longer exists upstream and is gone. The OpenCode `x-opencode-session` header is not attribution and stays independent of the telemetry gate. Host and provider matching are unchanged. Node: `utils/identity.js` in the vendored pi-ai, which `createAgentSession` reaches through the coding agent's `getClientIdentity`.
-- User agents: D65 (`pig/<coding.Version> (<platform> <release>; <arch>)`) now also covers the vendored `getPiUserAgent` of coding-agent and pi-ai. The host names its composite version to each Node runtime process in `PIG_PRODUCT_VERSION`.
-- OpenAI Codex: `originator: pi` on the SSE request, the websocket handshake and the OAuth authorize URL → `pig`. xAI device-code `referrer: pi` → `pig`.
-- Child processes: `AI_AGENT=pi` → `AI_AGENT=pig` (Pi's `cli/setup.ts` and `rpc-entry.ts` export it so tools name the launching agent). `PI_CODING_AGENT=true` is unchanged, because Pi extensions read it to detect the harness.
-- Pi-owned endpoints the vendored Node code would call, routed as the Go host does (D62, D64): the version check (`utils/version-check.js`), the remote model catalog overlay (`core/remote-catalog-provider.js`), the install report (`interactive-mode.js`) and the managed installer API (`package-manager-cli.js`) go to `https://pi-in-go.dev`. The bug-report upload (`core/bug-report-upload.js`) refuses, because PiG never uploads bug reports (D62). The Radius share upload (`session-share.js` `tryShareViaRadius`) returns "unavailable", because PiG never sends a Radius token to Radius's share gateway (D64). None of these run in a PiG session today (the Go host implements the interactive commands), so the patches close paths that an extension could reach by importing Pi's `InteractiveMode`, `getLatestPiRelease`, `withRemoteCatalog` or `uploadBugReport`.
+- Provider attribution (`PI_ATTRIBUTION` in `packages/ai/src/utils/identity.ts`; the agent loop, the durable Harness and the coding agent send it, the coding agent only while install telemetry is enabled, unchanged gate): `{ name: "pi", url: "https://pi.dev", categories: ["cli-agent"] }` → `{ name: "Ompig", url: "https://github.com/tmih06/ompig", categories: ["cli-agent"] }`, which `getAttributionHeaders` maps to OpenRouter `HTTP-Referer`, `X-OpenRouter-Title` and `X-OpenRouter-Categories`, NVIDIA NIM `X-BILLING-INVOKE-ORIGIN: Ompig` and OpenCode `x-opencode-client: Ompig` (it was `ompig` before the name became one field). Pi's Cloudflare `User-Agent: pi-coding-agent` attribution no longer exists upstream and is gone. The OpenCode `x-opencode-session` header is not attribution and stays independent of the telemetry gate. Host and provider matching are unchanged. Node: `utils/identity.js` in the vendored pi-ai, which `createAgentSession` reaches through the coding agent's `getClientIdentity`.
+- User agents: D65 (`ompig/<coding.Version> (<platform> <release>; <arch>)`) now also covers the vendored `getPiUserAgent` of coding-agent and pi-ai. The host names its composite version to each Node runtime process in `OMPIG_PRODUCT_VERSION`.
+- OpenAI Codex: `originator: pi` on the SSE request, the websocket handshake and the OAuth authorize URL → `ompig`. xAI device-code `referrer: pi` → `ompig`.
+- Child processes: `AI_AGENT=pi` → `AI_AGENT=ompig` (Pi's `cli/setup.ts` and `rpc-entry.ts` export it so tools name the launching agent). `PI_CODING_AGENT=true` is unchanged, because Pi extensions read it to detect the harness.
+- Pi-owned endpoints the vendored Node code would call, routed as the Go host does (D62, D64): the version check (`utils/version-check.js`), the remote model catalog overlay (`core/remote-catalog-provider.js`), the install report (`interactive-mode.js`) and the managed installer API (`package-manager-cli.js`) go to `https://ompig.dev`. The bug-report upload (`core/bug-report-upload.js`) refuses, because Ompig never uploads bug reports (D62). The Radius share upload (`session-share.js` `tryShareViaRadius`) returns "unavailable", because Ompig never sends a Radius token to Radius's share gateway (D64). None of these run in a Ompig session today (the Go host implements the interactive commands), so the patches close paths that an extension could reach by importing Pi's `InteractiveMode`, `getLatestPiRelease`, `withRemoteCatalog` or `uploadBugReport`.
 
 Kept as Pi sends them, by design: GitHub Copilot's `GitHubCopilotChat/0.35.0`, `Editor-Version`, `Editor-Plugin-Version` and `Copilot-Integration-Id` headers and Anthropic OAuth's `claude-cli/…` user agent, because those providers accept requests only from the client they name; Radius's `radius.pi.dev` gateway, model catalog and `pi-gateway` OAuth client id, which the user selects by logging in to the `radius` provider (Pi's own product, the same in the Go host); Pi documentation and migration-guide links printed as text and the update notification's changelog link; `pi-messages` (a protocol name). The guard test `TestVendoredRuntimeCarriesNoPiIdentityOutsideTheAllowlist` scans every vendored file and lists each remaining literal with its reason.
 
-Why: every upstream identity value is pi-branded (`pi.dev`, `pi`, `Pi`, `pi-coding-agent`). A rebranded port must not misattribute its traffic to Pi, so PiG substitutes its own branding host-for-host and header-for-header instead of narrowing upstream's provider set, and sends nothing to a service PiG does not operate on the user's behalf. The Node extension runtime ships Pi's own JavaScript, which is a second way out of the process; the owner directive for 0.3.1 is that no path identify as Pi. Only the literal values and the disabled Pi-only uploads change; the provider and host matching, the telemetry gate and the OpenCode session pair are unchanged from upstream.
+Why: every upstream identity value is pi-branded (`pi.dev`, `pi`, `Pi`, `pi-coding-agent`). A rebranded port must not misattribute its traffic to Pi, so Ompig substitutes its own branding host-for-host and header-for-header instead of narrowing upstream's provider set, and sends nothing to a service Ompig does not operate on the user's behalf. The Node extension runtime ships Pi's own JavaScript, which is a second way out of the process; the owner directive for 0.3.1 is that no path identify as Pi. Only the literal values and the disabled Pi-only uploads change; the provider and host matching, the telemetry gate and the OpenCode session pair are unchanged from upstream.
 
-`IsInstallTelemetryEnabled` mirrors upstream `isInstallTelemetryEnabled` (telemetry.ts:8): `PI_TELEMETRY` env truthiness wins when set, otherwise the `enableInstallTelemetry` setting (default true). This is the same gate that also covers the install/update ping, sent to PiG's own `pi-in-go.dev` endpoint instead of pi.dev (D64; `internal/codingagent/install_telemetry.go`).
+`IsInstallTelemetryEnabled` mirrors upstream `isInstallTelemetryEnabled` (telemetry.ts:8): `PI_TELEMETRY` env truthiness wins when set, otherwise the `enableInstallTelemetry` setting (default true). This is the same gate that also covers the install/update ping, sent to Ompig's own `ompig.dev` endpoint instead of pi.dev (D64; `internal/codingagent/install_telemetry.go`).
 
 Unverified against the live services: OpenAI's Codex backend and login and xAI's device-code endpoint accept an `originator`/`referrer` other than `pi` (Pi's own client and other Codex clients use their own names). No credentials were available to run them.
 
-Remove when: PiG sends byte-identical (unbranded) identity to services, which would require PiG to claim it is Pi. Not planned.
+Remove when: Ompig sends byte-identical (unbranded) identity to services, which would require Ompig to claim it is Pi. Not planned.
 
 Call-site markers:
 - `internal/coding/pigidentity/pigidentity.go`: the values and their single source, `identity.json`.
 - `internal/coding/pigidentity/pigidentity.go`: `AttributionName`, `AttributionURL`, `AttributionCategory`, which `ai.PiAttribution` (`ai/identity.go`) spells; `coding/client_identity.go` (`getClientIdentity`) turns install telemetry into the Session's identity.
 - `ai/openai_responses.go`, `ai/openai_codex_responses.go`, `ai/openai_codex_websocket.go`, `ai/oauth_openai_codex.go`, `ai/oauth_xai.go`: the Codex originator and the xAI referrer. `ai/user_agent.go`: the product name in D65's user agent.
 - `coding/cli/setup_cli.go`: `AI_AGENT`.
-- `coding/extension/host/subprocess/terminal_capabilities_env.go`: `PIG_PRODUCT_VERSION` for the Node runtime.
-- `automation/gen/pi-identity-patches.mjs` and `coding/extension/host/subprocess/runtime-node/shims/pig-identity.mjs`: the Node runtime patches and the user-agent builder they call.
+- `coding/extension/host/subprocess/terminal_capabilities_env.go`: `OMPIG_PRODUCT_VERSION` for the Node runtime.
+- `automation/gen/pi-identity-patches.mjs` and `coding/extension/host/subprocess/runtime-node/shims/ompig-identity.mjs`: the Node runtime patches and the user-agent builder they call.
 - `internal/codingagent/settings.go`: `IsInstallTelemetryEnabled`, `isTruthyTelemetryEnvFlag`.
 
-Locked by: `internal/coding/pigidentity` `TestIdentityValuesAreThePiGBrand`, `TestIdentityJSONIsTheSingleSource`; `coding` `TestModelRuntimeRequestsCarryPiGAttributionNeverPis` (Go host, real HTTP), `TestMergeProviderAttributionHeadersMatchesPinnedProvidersAndHosts`, `TestProviderAttributionWrapperReachesHTTPRequest`, `TestBuildModelGatesAttributionHeadersOnInstallTelemetrySetting`; `cmd/pig` `TestNodeExtensionModelCallsCarryPiGIdentityNeverPis` (the real binary, a Node extension's `createAgentSession` and pi-ai `completeSimple` against OpenRouter-, NVIDIA- and OpenCode-shaped servers) and `TestSetupCliSetsInheritedProcessMarkers`; `test/extension-conformance` `TestSDKModelCallsCarryPiGIdentityNeverPis` (the Go, Python and Rust SDKs' host model calls); `coding/extension/host/subprocess` `TestVendoredRuntimeCarriesNoPiIdentityOutsideTheAllowlist`, `TestVendoredRuntimeRequestsAreNeverMadeAsPi`, `TestVendoredPiDistMatchesThePinnedPackage` (the patch table), `TestNodeExtensionUserAgentNamesPiGAndItsVersion`; `ai` `TestLoginOpenAICodexAuthorizeURLNamesPiGAsOriginator`, `TestCodexWebSocketHeadersNamePiGAsOriginator` and the Codex and xAI request tests; `internal/codingagent` `TestHostedEndpointsUseTheIdentityOrigin`, `TestSettingsManager_IsInstallTelemetryEnabled`; `ai` `TestProviderIdentityHeadersMatchPi` and `TestOpenRouterImagesHeadersMatchPi` (the pinned Pi and PiG map the same identity, Pi's own `{ name: "pi", ... }` included, to the same OpenRouter, NVIDIA and OpenCode headers, so PiG's `PiG` values differ only through `PiAttribution`).
+Locked by: `internal/coding/pigidentity` `TestIdentityValuesAreTheOmpigBrand`, `TestIdentityJSONIsTheSingleSource`; `coding` `TestModelRuntimeRequestsCarryOmpigAttributionNeverPis` (Go host, real HTTP), `TestMergeProviderAttributionHeadersMatchesPinnedProvidersAndHosts`, `TestProviderAttributionWrapperReachesHTTPRequest`, `TestBuildModelGatesAttributionHeadersOnInstallTelemetrySetting`; `cmd/ompig` `TestNodeExtensionModelCallsCarryOmpigIdentityNeverPis` (the real binary, a Node extension's `createAgentSession` and pi-ai `completeSimple` against OpenRouter-, NVIDIA- and OpenCode-shaped servers) and `TestSetupCliSetsInheritedProcessMarkers`; `test/extension-conformance` `TestSDKModelCallsCarryOmpigIdentityNeverPis` (the Go, Python and Rust SDKs' host model calls); `coding/extension/host/subprocess` `TestVendoredRuntimeCarriesNoPiIdentityOutsideTheAllowlist`, `TestVendoredRuntimeRequestsAreNeverMadeAsPi`, `TestVendoredPiDistMatchesThePinnedPackage` (the patch table), `TestNodeExtensionUserAgentNamesOmpigAndItsVersion`; `ai` `TestLoginOpenAICodexAuthorizeURLNamesOmpigAsOriginator`, `TestCodexWebSocketHeadersNameOmpigAsOriginator` and the Codex and xAI request tests; `internal/codingagent` `TestHostedEndpointsUseTheIdentityOrigin`, `TestSettingsManager_IsInstallTelemetryEnabled`; `ai` `TestProviderIdentityHeadersMatchPi` and `TestOpenRouterImagesHeadersMatchPi` (the pinned Pi and Ompig map the same identity, Pi's own `{ name: "pi", ... }` included, to the same OpenRouter, NVIDIA and OpenCode headers, so Ompig's `Ompig` values differ only through `PiAttribution`).
 
 PORT_MAP path: `packages/ai/src/utils/identity.ts`, `packages/coding-agent/src/core/client-identity.ts`, `packages/coding-agent/src/core/telemetry.ts` (setting/env gate ported; the install-report ping it also gates is D64), `packages/ai/src/auth/oauth/openai-codex.ts`, `packages/ai/src/auth/oauth/xai.ts`, `packages/coding-agent/src/cli/setup.ts`.
 
@@ -187,9 +187,9 @@ SCRUTINIZED:approved
 
 ## D27 Word segmentation always uses ICU's warm dictionary-engine cache
 
-What: PiG's word segmenter always behaves like an ICU process whose `CjkBreakEngine` is already loaded. In a fresh Pi process that has not yet built a CJK dictionary span, a span starting at U+30FC (`ー`) or U+FF70 (`ｰ`) goes to ICU's `UnhandledEngine` instead. For example, upstream 0.99.2 in a fresh Node process returns 0 for `findWordBackward("ー你好", 3)`. After any earlier Han or Kana span in the same process, or on a later call, it returns 1. PiG always returns 1.
+What: Ompig's word segmenter always behaves like an ICU process whose `CjkBreakEngine` is already loaded. In a fresh Pi process that has not yet built a CJK dictionary span, a span starting at U+30FC (`ー`) or U+FF70 (`ｰ`) goes to ICU's `UnhandledEngine` instead. For example, upstream 0.99.2 in a fresh Node process returns 0 for `findWordBackward("ー你好", 3)`. After any earlier Han or Kana span in the same process, or on a later call, it returns 1. Ompig always returns 1.
 
-Why: ICU's `ICULanguageBreakFactory::getEngineFor` (`brkeng.cpp`) caches break engines for the whole process, so Pi's result depends on what anything in its Node process, including in-process extensions that call `Intl.Segmenter`, segmented earlier. Emulating that needs process-global mutable segmenter state whose value PiG cannot observe from Pi's process history. PiG models the per-iterator engine stack (`rbbi.cpp`) and uses the stable warm-cache result.
+Why: ICU's `ICULanguageBreakFactory::getEngineFor` (`brkeng.cpp`) caches break engines for the whole process, so Pi's result depends on what anything in its Node process, including in-process extensions that call `Intl.Segmenter`, segmented earlier. Emulating that needs process-global mutable segmenter state whose value Ompig cannot observe from Pi's process history. Ompig models the per-iterator engine stack (`rbbi.cpp`) and uses the stable warm-cache result.
 
 Observable effect: only the first cold-cache segmentation of a dictionary span that starts at U+30FC or U+FF70 in a fresh Pi process. Every warm-process result, and the Thai, Lao, Khmer and Burmese dictionary engines, match Pi.
 
@@ -203,7 +203,7 @@ Evidence: `internal/wordsegmenter/testdata/sea-icu78.json` (warm-process Node 26
 
 Parity allowance: the differential corpus is generated in a warm process. No paired scenario asserts a fresh-process cold-cache result, because Pi's own answer changes with process history.
 
-Remove when: upstream ICU makes engine selection independent of process history, or PiG adopts an owned model of Pi's process-wide engine cache.
+Remove when: upstream ICU makes engine selection independent of process history, or Ompig adopts an owned model of Pi's process-wide engine cache.
 
 SCRUTINIZED:approved
 
@@ -217,13 +217,13 @@ them) throws `ErrStaleContext` on reuse. Upstream owns one `_extensionRunner`
 per `AgentSession`, so disposing the outgoing session invalidates exactly that
 runner and the incoming session gets a fresh one.
 
-Stock PiG's four modes (interactive, print, JSON, RPC) create and replace their Session through `coding.CreateAgentSessionRuntime`'s factory, as Pi's `main.ts` does. Every `/new`, `/fork`, `/clone`, `/resume`, RPC `new_session`, `fork`, `clone` and `switch_session`, and `ctx.newSession()`, `ctx.fork()` and `ctx.switchSession()` builds a new Session with its own extension runner and host, and `Runtime.teardownCurrent` (`coding/runtime_replacement.go`) invalidates the outgoing in-process runner (`TestReplacedSession2860New`, `TestReplacedSession2860Fork`, `TestReplacedSession2860Switch` in `coding/session_replaced_2860_upstream_test.go`). Two parts differ from Pi.
+Stock Ompig's four modes (interactive, print, JSON, RPC) create and replace their Session through `coding.CreateAgentSessionRuntime`'s factory, as Pi's `main.ts` does. Every `/new`, `/fork`, `/clone`, `/resume`, RPC `new_session`, `fork`, `clone` and `switch_session`, and `ctx.newSession()`, `ctx.fork()` and `ctx.switchSession()` builds a new Session with its own extension runner and host, and `Runtime.teardownCurrent` (`coding/runtime_replacement.go`) invalidates the outgoing in-process runner (`TestReplacedSession2860New`, `TestReplacedSession2860Fork`, `TestReplacedSession2860Switch` in `coding/session_replaced_2860_upstream_test.go`). Two parts differ from Pi.
 
-Part 1, Go, Rust and Python extensions in the Stock modes. The replaced Session's extension processes outlive the teardown while the command handler that requested the replacement runs. The factory makes their host reject every later extension-to-host call with Pi's stale message and sends each of their connections an `invalidate` notification with it (`subprocess.Host.Invalidate`). The Node runtime invalidates Pi's extension runtime with that message, so a captured `pi` or `ctx` in a Node extension throws it at the call site as Pi does, fire-and-forget calls included (`TestPrintModeReplacedSessionHostCallsFailWithThePiStaleMessage`, `TestReplacedSession2860AcrossSDKs`). A `withSession` callback receives a context of the replacement Session in every SDK (`TestReplacedSession2860AcrossSDKs`). A captured `ctx` in a Go, Rust or Python extension still differs in two ways: (a) getters the SDK answers from its own state (`Cwd`, `Mode`, `HasUI`, `Model`, the theme, and the session-mirror `GetBranch` and `GetEntries`) return the outgoing Session's values instead of failing; the session-manager reads and every other host call fail with the stale message; (b) the host rejects a call from the replaced Session's process with a reply that carries the stale message, but what the extension sees depends on its SDK and on the method. Go returns the error from `SendUserMessage`, `AppendEntry`, `SetSessionName` and from `SetWidget` in its option-bearing or non-`[]string` form (a `[]string` `SetWidget` goes through the unchecked widget push and returns nil), discards it in `Notify`, `SetStatus`, `SetActiveTools` and `Abort`, and writes the `pig: host call ... failed` line only for `On` subscriptions, to the Go process's own stderr; PiG copies only Node extension output to the terminal (`host.go:1920-1929`), so the user never sees it. Python raises `HostCallError` from every host-call method (`notify`, `set_status`, `send_user_message`, `append_entry`, `set_active_tools`, `abort`). Rust returns `Err` from `send_user_message`, `append_entry`, `set_session_name` and `set_widget_value` (`set_widget` goes through the unchecked widget push and returns `Ok`), and discards the error in `notify`, `set_status`, `set_active_tools` and `abort`. The host never applies any of these calls to the replacement Session. Two host inputs are not checked: a widget push and a `ui.custom` frame still reach the replaced Session's detached UI bridge, where they have no visible effect.
+Part 1, Go, Rust and Python extensions in the Stock modes. The replaced Session's extension processes outlive the teardown while the command handler that requested the replacement runs. The factory makes their host reject every later extension-to-host call with Pi's stale message and sends each of their connections an `invalidate` notification with it (`subprocess.Host.Invalidate`). The Node runtime invalidates Pi's extension runtime with that message, so a captured `pi` or `ctx` in a Node extension throws it at the call site as Pi does, fire-and-forget calls included (`TestPrintModeReplacedSessionHostCallsFailWithThePiStaleMessage`, `TestReplacedSession2860AcrossSDKs`). A `withSession` callback receives a context of the replacement Session in every SDK (`TestReplacedSession2860AcrossSDKs`). A captured `ctx` in a Go, Rust or Python extension still differs in two ways: (a) getters the SDK answers from its own state (`Cwd`, `Mode`, `HasUI`, `Model`, the theme, and the session-mirror `GetBranch` and `GetEntries`) return the outgoing Session's values instead of failing; the session-manager reads and every other host call fail with the stale message; (b) the host rejects a call from the replaced Session's process with a reply that carries the stale message, but what the extension sees depends on its SDK and on the method. Go returns the error from `SendUserMessage`, `AppendEntry`, `SetSessionName` and from `SetWidget` in its option-bearing or non-`[]string` form (a `[]string` `SetWidget` goes through the unchecked widget push and returns nil), discards it in `Notify`, `SetStatus`, `SetActiveTools` and `Abort`, and writes the `ompig: host call ... failed` line only for `On` subscriptions, to the Go process's own stderr; Ompig copies only Node extension output to the terminal (`host.go:1920-1929`), so the user never sees it. Python raises `HostCallError` from every host-call method (`notify`, `set_status`, `send_user_message`, `append_entry`, `set_active_tools`, `abort`). Rust returns `Err` from `send_user_message`, `append_entry`, `set_session_name` and `set_widget_value` (`set_widget` goes through the unchecked widget push and returns `Ok`), and discards the error in `notify`, `set_status`, `set_active_tools` and `abort`. The host never applies any of these calls to the replacement Session. Two host inputs are not checked: a widget push and a `ui.custom` frame still reach the replaced Session's detached UI bridge, where they have no visible effect.
 
 Part 2, library callers that hold a bare `coding.Session` and replace its state in place: `Session.NewSession`, `SwitchSession`, `CloneInPlace`, `ForkToNewSession`, `ForkToNewSessionWithText`, the headless `Session.DispatchSlash` `/fork` path, `ImportFromJsonl` and the default `Session.ExtensionCommandActions` new, fork and switch actions. They go through `Session.ReplaceInner`, which keeps the same host-scoped runner (`coding/extension/host/inproc/runner.go`) and does not invalidate it. The invalidation mechanism is fully ported (`Invalidate`, the byte-identical stale message, the `ErrStaleContext` sentinel) and fires on `ctx.reload()`, runtime close and runtime replacement.
 
-Observable effect: (Part 1) a Go, Rust or Python extension that captures `ctx` reads outgoing-Session state through its SDK-local getters after a replacement, and its host calls follow (b) instead of throwing the stale message as Pi does. (Part 2) an extension that captures a `ctx` and reuses it after an in-place replacement on a bare `coding.Session` operates against the current session instead of throwing `ErrStaleContext`. No Stock PiG mode reaches Part 2.
+Observable effect: (Part 1) a Go, Rust or Python extension that captures `ctx` reads outgoing-Session state through its SDK-local getters after a replacement, and its host calls follow (b) instead of throwing the stale message as Pi does. (Part 2) an extension that captures a `ctx` and reuses it after an in-place replacement on a bare `coding.Session` operates against the current session instead of throwing `ErrStaleContext`. No Stock Ompig mode reaches Part 2.
 
 Evidence: Pi's invalidation and access guards are `packages/coding-agent/src/core/extensions/runner.ts:679-690,809-888` and `loader.ts:157-190,238-454`; replacement is `packages/coding-agent/src/core/agent-session-runtime.ts:167-177`; the stale-context expectations are `test/suite/regressions/2860-replaced-session-context.test.ts:147-205`. The in-process stale behavior is proven by the three `TestReplacedSession2860*` tests. Part 1 probes: `TestPrintModeReplacedSessionHostCallsFailWithThePiStaleMessage` proves that a Node extension's awaited, synchronous and fire-and-forget calls throw the exact message and that a stale `pi.sendUserMessage` never starts a turn in the replacement; `TestReplacedSession2860AcrossSDKs` proves the #2860 stale and `withSession` cases for Node, Go, Python and Rust. This record grants no synchronization or comparator exception. `docs/parity/KNOWN-GAPS-0.3.x.md` SC10(a) tracks the SDK side.
 
@@ -233,7 +233,7 @@ Call site:
 - `coding/cli/cli_session_factory.go`: the factory's `Dispose` invalidates the replaced Session's extension host (Part 1).
 - `coding/session_extension_replacement.go`: the extension-driven replacement of a bare Session (Part 2).
 
-Parity allowance: no paired scenario drives either part. Part 1 needs an extension that uses a captured `ctx` after a replacement, which no parity fixture does; Part 2 is a library path no Stock PiG mode reaches. The Stock modes are covered by the paired session-replacement scenarios and the tests named above.
+Parity allowance: no paired scenario drives either part. Part 1 needs an extension that uses a captured `ctx` after a replacement, which no parity fixture does; Part 2 is a library path no Stock Ompig mode reaches. The Stock modes are covered by the paired session-replacement scenarios and the tests named above.
 
 Remove when: the Go, Rust and Python SDKs apply the invalidate notification and every SDK-local ctx and pi member fails with Pi's stale message after it (Part 1), and the in-place `Session` replacement methods and the default `Session.ExtensionCommandActions` replacement actions are deleted or routed through `Runtime`, so no caller can replace a Session without invalidating its runner (Part 2).
 
@@ -244,7 +244,7 @@ SCRUTINIZED:approved
 What: when the Anthropic Messages endpoint (including the github-copilot
 Claude proxy) rejects a request with a thinking-block signature error
 (`invalid_request_error` whose message contains both `signature` and
-`thinking`, e.g. "Invalid `signature` in `thinking` block"), pig retries the
+`thinking`, e.g. "Invalid `signature` in `thinking` block"), ompig retries the
 same request once with thinking signatures stripped: every assistant thinking
 block is downgraded to a plain text block (reasoning text preserved as
 context) and redacted thinking is dropped. If the retry also fails, the second
@@ -259,7 +259,7 @@ backend can become unreplayable: observed live on `github-copilot`
 one early same-model thinking block (valid when generated) is rejected as
 "Invalid `signature` in `thinking` block" while later ones still validate,
 which permanently wedges the session on every resume. This is a provider-side
-staleness that upstream shares; pig recovers instead of hard-failing, trading
+staleness that upstream shares; ompig recovers instead of hard-failing, trading
 the (already-broken) reasoning-continuity signature for a working turn. The
 reasoning text still reaches the model as text, so context is preserved.
 
@@ -268,7 +268,7 @@ the maintainer directive; remove when upstream gains equivalent recovery or an
 upstream issue resolves the provider signature staleness.
 
 Call-site markers:
-- `ai/anthropic.go`: `anthropicProvider.Stream` (`// pig divergence (D37)`),
+- `ai/anthropic.go`: `anthropicProvider.Stream` (`// ompig divergence (D37)`),
   `stripThinkingSignatures`, `isThinkingSignatureError`, `anthHTTPError`.
 Locked by: `ai/anthropic_test.go` -
 `TestAnthropicStream_D37_RetriesOnStaleThinkingSignature` (fail-then-retry,
@@ -282,12 +282,12 @@ SCRUTINIZED:approved
 
 ## D39 Standalone-binary self-update
 
-What: pig replaces upstream pi's package-manager self-update with a
+What: ompig replaces upstream pi's package-manager self-update with a
 standalone-binary update path. Upstream detects the install method
 (npm/pnpm/yarn/bun) and emits the matching `install -g` command, with the npm
-registry as both the version-of-truth and the transport. pig is a single Go
+registry as both the version-of-truth and the transport. ompig is a single Go
 binary (and, in production, a binary baked into a container image), so that
-model does not apply: `pig update` (bare): matching upstream's documented
+model does not apply: `ompig update` (bare): matching upstream's documented
 `pi update` "Update pi only": fetches a JSON update manifest from a configured
 source, compares the running version to the manifest version, and, when newer,
 downloads the platform binary, requires and verifies its SHA256, rejects declared
@@ -300,47 +300,47 @@ Explicit version checks use Pi's management HTTP policy: at most two immediate r
 The signed current
 manifest also carries the exact package identity used by package-manager
 installs, including an approved package rename.
-`pig update self`/`pig` are explicit self aliases; `pig update --extensions`
-refreshes every installed package (not pig), `pig update --all` refreshes
-all installed packages and then pig, and `pig update <source>` still updates one
+`ompig update self`/`ompig` are explicit self aliases; `ompig update --extensions`
+refreshes every installed package (not ompig), `ompig update --all` refreshes
+all installed packages and then ompig, and `ompig update <source>` still updates one
 package. `--self`, `--extension`, and `--force` follow the shared Pi routing and
-conflict rules. (Pig previously made bare `pig update`
+conflict rules. (Ompig previously made bare `ompig update`
 update all packages; this aligns it with upstream where bare update is the
 self-update.) A startup banner surfaces an available update with the command that applies it. When no source is configured, the source is unreachable, the
 platform is unsupported (a standalone Windows binary, or a read-only/containerized
-install), pig prints a next-tier fallback ladder: download a new binary or
-pull the container image and re-deploy without repeating `pig update`. Installation ownership is explicit before mutation: `ResolveSelfUpdateTier`
+install), ompig prints a next-tier fallback ladder: download a new binary or
+pull the container image and re-deploy without repeating `ompig update`. Installation ownership is explicit before mutation: `ResolveSelfUpdateTier`
 proves exactly one owner: writable standalone, package-manager, immutable
-Piglet Binary, OCI/Piglet Image, or
+Ompiglet Binary, OCI/Ompiglet Image, or
 read-only/Windows standalone/unknown: and rejects ambiguous ownership. Once a tier
 starts, its failure surfaces from that tier and never falls through to another.
 The package-manager tier invokes the proven owner's exact `install -g` command. An unconfigured npm command retains the prefix from its proven `lib/node_modules` root. A logical pnpm launcher supplies ownership evidence only when it resolves to the running native executable. Both the owning package directory and its parent must be writable. `SelfUpdateProvenance.GetSelfUpdateCommand` carries this evidence into the signed-release caller; it does not reclassify ownership after the operation starts. The original16 `config.test.ts` cases are covered by `internal/codingagent/config_upstream_test.go`, with caller evidence in `coding/cli/self_update_prefix_upstream_test.go` and byte-equal command-plan comparison in `cli-utils/16-native-self-update-command-ownership`.
 
-Pi 1.4.0 prunes managed releases after `pi update` and keeps the new release and the one that ran the update (`package-manager-cli.ts` `pruneManagedReleases`, #10392). A standalone pig has no release directory: a replacement leaves only the new executable, with the rollback link and the lock sidecar removed (`TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable`).
+Pi 1.4.0 prunes managed releases after `pi update` and keeps the new release and the one that ran the update (`package-manager-cli.ts` `pruneManagedReleases`, #10392). A standalone ompig has no release directory: a replacement leaves only the new executable, with the rollback link and the lock sidecar removed (`TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable`).
 
-Pi `476a303c1` (#11270) drops the `--min-release-age=0` override from the `npm ci` that a pi.dev installer update runs against its release lockfile (`package-manager-cli.ts` `runManagedNpmCi`). A standalone pig runs no managed `npm ci`, so the flag has no counterpart and nothing is ported; the update tiers above are unchanged.
+Pi `476a303c1` (#11270) drops the `--min-release-age=0` override from the `npm ci` that a pi.dev installer update runs against its release lockfile (`package-manager-cli.ts` `runManagedNpmCi`). A standalone ompig runs no managed `npm ci`, so the flag has no counterpart and nothing is ported; the update tiers above are unchanged.
 
 Immutable-binary and container tiers emit exact pull/rebuild/redeploy
 remediation rather than in-place drift; read-only/Windows standalone/unknown
 tiers refuse and report the executable path plus concrete remediation.
 
 Windows follows upstream for package-manager installs. An npm or pnpm install
-updates through its owner's command. Before an npm update, pig quarantines
-the running pig.exe under `node_modules/.pig-native-quarantine` and copies it
+updates through its owner's command. Before an npm update, ompig quarantines
+the running ompig.exe under `node_modules/.ompig-native-quarantine` and copies it
 back, as upstream `prepareWindowsNpmSelfUpdate` does for the native addons it
 loaded, because Windows refuses to delete a running image. Every Windows start
 clears that quarantine. A yarn or bun install on Windows is refused with
-upstream's message ("pig self-update on Windows is only supported for npm and
-pnpm installs."). Only a standalone pig.exe stays in the unsupported tier,
+upstream's message ("ompig self-update on Windows is only supported for npm and
+pnpm installs."). Only a standalone ompig.exe stays in the unsupported tier,
 because a running Windows executable is not replaced in place.
 
-The update source resolves as `PIG_UPDATE_URL` env, else a transport-neutral
+The update source resolves as `OMPIG_UPDATE_URL` env, else a transport-neutral
 sidecar at `<config-root>/update-url` (written by an installer that knows its
 origin at install time, e.g. the marketplace bootstrap), else an optional
 build-time `internal/codingagent.DefaultUpdateURL` set by a product's own
-release build. PiG's own release builds set it to the latest release's signed
+release build. Ompig's own release builds set it to the latest release's signed
 `update.json`, whose `update.json.sig` sits beside it because GitHub release
-assets cannot send the `X-Pig-Release-Signature` header, and `install.sh` writes
+assets cannot send the `X-Ompig-Release-Signature` header, and `install.sh` writes
 the standalone receipt, so a script installation updates in place. A Marketplace installer that used an explicit private CA copies
 those CA bytes into owner-only `<config-root>/update-ca.pem`; it never persists
 the caller's source path. The standalone receipt binds that file's SHA256 to the
@@ -349,42 +349,42 @@ to the host system pool, reject changed/unowned/malformed/world-readable CA
 material, and continue to require the separately signed release manifest. A
 public-CA reinstall removes a prior transport-CA sidecar transactionally.
 A managed container deployment that owns a specific redeploy
-operation supplies it verbatim through `PIG_REDEPLOY_INSTRUCTION`; Pig renders
+operation supplies it verbatim through `OMPIG_REDEPLOY_INSTRUCTION`; Ompig renders
 that operation inside its own frame (artifact identity, executable path, and the
 guarantee that the running image is never rewritten) instead of asserting a
 generic `docker pull`, which is wrong for an orchestrator-managed deployment.
-Pig performs no product transport and knows no product topology; without that
+Ompig performs no product transport and knows no product topology; without that
 metadata it falls back to the generic image pull.
-Piglet source/build fields and `pig piglet build` never carry
-an update endpoint. A Piglet Binary bakes only `release.version` into
+Ompiglet source/build fields and `ompig ompiglet build` never carry
+an update endpoint. A Ompiglet Binary bakes only `release.version` into
 `codingagent.PigletBinaryRelease` (published from `main.PigletBinaryVersion`
 at startup); update transport remains explicit product or environment policy.
-Stock Pig bakes neither a URL nor a Piglet release version.
+Stock Ompig bakes neither a URL nor a Ompiglet release version.
 
-Why: PiG previously returned nil for `GetSelfUpdateCommand` and used a stale,
+Why: Ompig previously returned nil for `GetSelfUpdateCommand` and used a stale,
 unconfigured fallback URL. That silently diverged from upstream because Pi
-self-updates and PiG did not. Upstream *does* check for and notify about a new version
-(`checkForNewPiVersion` / `showNewVersionNotification`); pig mirrors that
-notification ("Update Available. New version X is available. Run `pig update`"),
+self-updates and Ompig did not. Upstream *does* check for and notify about a new version
+(`checkForNewPiVersion` / `showNewVersionNotification`); ompig mirrors that
+notification ("Update Available. New version X is available. Run `ompig update`"),
 laid out identically (Spacer, warning DynamicBorder, bold-warning heading +
 muted/accent instruction, an optional muted release-note block between spacers,
 closing DynamicBorder), with the one-column padding Pi's `Text` and `Markdown`
 blocks use. Pi's trailing `Changelog: https://pi.dev/changelog` line names a
-hardcoded pi-product page. pig has no such page and bakes no URL: when the signed
-manifest's `notes` is a release page URL, pig shows it on the `Changelog:` line
-(and not again as a note block), and when the manifest carries no URL pig omits the
+hardcoded pi-product page. ompig has no such page and bakes no URL: when the signed
+manifest's `notes` is a release page URL, ompig shows it on the `Changelog:` line
+(and not again as a note block), and when the manifest carries no URL ompig omits the
 line. Any other manifest note is shown as the muted Markdown note block.
 Only the update *mechanism* diverges: upstream updates via the package manager,
-pig replaces the standalone binary. The self/package command surface matches upstream (`pi update` = self, `--self`, `--extensions`, `--all`,
+ompig replaces the standalone binary. The self/package command surface matches upstream (`pi update` = self, `--self`, `--extensions`, `--all`,
 `--extension`, `--force`, positional package source, and conflict handling),
-with `pig` replacing Pi's product name. Upstream's separate `--models` command uses the shared model runtime and is not part of D39. The remote model-catalog overlay is D64's (pi-in-go.dev); D39 does not claim that model-catalog surface.
+with `ompig` replacing Pi's product name. Upstream's separate `--models` command uses the shared model runtime and is not part of D39. The remote model-catalog overlay is D64's (ompig.dev); D39 does not claim that model-catalog surface.
 
 Skip conditions:
-- `PIG_OFFLINE`/`PI_OFFLINE` disables the startup update check
+- `OMPIG_OFFLINE`/`PI_OFFLINE` disables the startup update check
 - unparseable local versions never trigger an update notification
-- no update source configured → no check, actionable fallback on `pig update self`
+- no update source configured → no check, actionable fallback on `ompig update self`
 
-Remove when: upstream pi ships a standalone-binary self-update pig can mirror.
+Remove when: upstream pi ships a standalone-binary self-update ompig can mirror.
 This closes the mechanism's install-ownership, package-manager, immutable
 Binary/Image, OCI, Windows/read-only, and unknown-provenance gaps;
 this divergence remains only for the unavoidable native delivery mechanism
@@ -403,7 +403,7 @@ Call-site markers:
   remediation, no-fallthrough `ApplySelfUpdateTier`.
 - `internal/codingagent/paths.go`: `GetSelfUpdateUnavailableInstruction`
   delegates to the standalone-binary fallback.
-- `coding/cli/self_update.go`: `pig update` resolves one tier and applies it.
+- `coding/cli/self_update.go`: `ompig update` resolves one tier and applies it.
 - `coding/cli/package_commands.go`: update dispatch (`runUpdateCommand`): bare
   self-update, `--all`, per-package.
 - `coding/cli/main.go`: `PigletBinaryVersion` bake, `PigletBinaryRelease`
@@ -456,9 +456,9 @@ SCRUTINIZED:approved
 
 ## D44 Positive image capability for Herdr intermediaries
 
-What: when `HERDR_ENV=1`, Pig ignores inherited outer-terminal image hints unless Herdr explicitly sets `HERDR_KITTY_GRAPHICS=1`. Without that positive signal, image components render their compact textual fallback and reserve no graphics rows. `TERM_PROGRAM=herdr` follows upstream's Herdr branch (#10573; Kitty images since Pi 1.3.0, #10774): OSC 8 hyperlinks and Kitty images on, truecolor from the `COLORTERM`/`TERM` hint. Direct Ghostty/Kitty/WezTerm/iTerm sessions retain upstream capability detection. An intervening tmux or screen session still disables automatic image detection, regardless of Herdr's outer graphics hint. Explicit Pi image-protocol and settings overrides keep their upstream precedence.
+What: when `HERDR_ENV=1`, Ompig ignores inherited outer-terminal image hints unless Herdr explicitly sets `HERDR_KITTY_GRAPHICS=1`. Without that positive signal, image components render their compact textual fallback and reserve no graphics rows. `TERM_PROGRAM=herdr` follows upstream's Herdr branch (#10573; Kitty images since Pi 1.3.0, #10774): OSC 8 hyperlinks and Kitty images on, truecolor from the `COLORTERM`/`TERM` hint. Direct Ghostty/Kitty/WezTerm/iTerm sessions retain upstream capability detection. An intervening tmux or screen session still disables automatic image detection, regardless of Herdr's outer graphics hint. Explicit Pi image-protocol and settings overrides keep their upstream precedence.
 
-Why: upstream and Pig normally infer image support from variables such as
+Why: upstream and Ompig normally infer image support from variables such as
 `TERM_PROGRAM=ghostty`. Herdr panes inherit those variables, but Herdr is the
 terminal renderer and its experimental Kitty graphics support can be disabled.
 Treating an outer-terminal identity as forwarding evidence emits image bytes
@@ -489,7 +489,7 @@ survive, and drops a repeated result for a tool_use that already has one. Upstre
 only synthesizes results for orphaned tool *calls*; it never strips orphaned
 tool *results*: it pushes them through to the provider unchanged.
 
-Why: pig and upstream both drop errored/aborted assistant turns before provider
+Why: ompig and upstream both drop errored/aborted assistant turns before provider
 conversion (transform-messages.ts:153-159; `transform.go` StopReason check). When
 a dropped assistant held the only tool_use for a tool-result that was already
 persisted (an abort race where the tool ran and recorded its result before the
@@ -497,8 +497,8 @@ turn was marked aborted, a truncated/hand-built session, or a model switch that
 dropped the calling turn), the result is left orphaned. Upstream then sends that
 orphaned tool-result to the API, which rejects it (OpenAI "No tool call found for
 function call output with call_id ...", Anthropic "tool_use_id not found"),
-failing the whole request on poisoned history. pig strips it so the request
-still succeeds. Making pig faithful here would reintroduce that upstream API
+failing the whole request on poisoned history. ompig strips it so the request
+still succeeds. Making ompig faithful here would reintroduce that upstream API
 failure on exactly the poisoned-history sessions this risk-core surface must
 survive. The strip is inert on clean sessions: every tool-result on a
 well-formed session has a matching, surviving tool_use, so nothing is removed.
@@ -534,7 +534,7 @@ where every tool_use has exactly one result in position.
 
 Remove when: upstream `transformMessages` strips orphaned tool-results and
 enforces one result per tool_use (or otherwise guarantees the provider never
-receives a violation), at which point pig's second pass matches upstream and
+receives a violation), at which point ompig's second pass matches upstream and
 this divergence is retired.
 
 The agent loop hands the stream function Pi's messages (errored and aborted turns kept, no synthetic results) and sets `RepairToolFlow`; a direct provider call keeps Pi's request. `NormalizeMessages` (`agent/transform.go`) keeps the same strip for callers outside the loop.
@@ -558,24 +558,24 @@ reaches the OpenAI-completions, OpenAI-responses, or Anthropic request body;
 `TestCleanToolCycleSurvivesProviderRequest` proves the strip is inert on a clean
 cycle. Both are mutation-proven: neutering the strip leaks the orphan into all
 three wire formats, over-stripping drops the clean result side.
-PORT_MAP path: `packages/ai/src/api/transform-messages.ts` (pig-additive
+PORT_MAP path: `packages/ai/src/api/transform-messages.ts` (ompig-additive
 poisoned-history robustness beyond upstream's orphaned-call synthesis).
 Parity coverage:
 `test/parity/scenarios/providers-faux-streaming/09-orphaned-tool-result-wire.toml`
-drives the identical poisoned conversation through pig's `NormalizeMessages` and
+drives the identical poisoned conversation through ompig's `NormalizeMessages` and
 pinned pi 0.84's openai-completions transform against a hermetic endpoint; its
-`[diverge]` block asserts pig omits the orphaned `call_x` from the provider
+`[diverge]` block asserts ompig omits the orphaned `call_x` from the provider
 request (`tool_call_ids_in_request: []`) while pi sends it (`[call_x]`).
 Ratification: user-ratified (2026-08-10 review: approved, "do it properly").
 SCRUTINIZED:approved
 
 ## D51 Interactive SIGINT restores the terminal before numeric exit 130
 
-What: when SIGINT terminates interactive mode, pig pops its extended-key protocols, restores the cooked state captured at startup, and exits with numeric status 130. upstream 0.99.1 leaves SIGINT to Node's default signal action, so process APIs report signal termination and the terminal stays raw. This exception does not cover print/JSON SIGINT, which must terminate by signal, or a dead terminal, which must exit 129. Both products restore a live terminal and exit 0 on SIGTERM or SIGHUP (`packages/coding-agent/src/modes/interactive/interactive-mode.ts:4174-4186,4260-4278`).
+What: when SIGINT terminates interactive mode, ompig pops its extended-key protocols, restores the cooked state captured at startup, and exits with numeric status 130. upstream 0.99.1 leaves SIGINT to Node's default signal action, so process APIs report signal termination and the terminal stays raw. This exception does not cover print/JSON SIGINT, which must terminate by signal, or a dead terminal, which must exit 129. Both products restore a live terminal and exit 0 on SIGTERM or SIGHUP (`packages/coding-agent/src/modes/interactive/interactive-mode.ts:4174-4186,4260-4278`).
 
 Both halves matter. Without the tcsetattr the terminal stays raw, so the
 shell has no working Ctrl+C until `reset`. Without the protocol pop the Kitty
-flags pig pushed stay on the terminal's stack, so the shell inheriting the
+flags ompig pushed stay on the terminal's stack, so the shell inheriting the
 terminal receives CSI-u encoded keys it does not understand. The teardown goes
 out as a single write, which is what makes it safe to run from the signal
 goroutine alongside the render loop.
@@ -585,13 +585,13 @@ registers a general SIGINT handler, taking SIGINT only to ignore it while
 suspended, so the signal falls through to Node's default handler, which exits
 without unwinding pi's terminal restore.
 
-pig matches upstream on the part that matters most: SIGINT terminates the
+ompig matches upstream on the part that matters most: SIGINT terminates the
 session. It is not treated as an interrupt. Ctrl+C never reaches this path
-anyway, because pig holds the terminal in raw mode for the whole session, so
+anyway, because ompig holds the terminal in raw mode for the whole session, so
 `\x03` is consumed by the keymap. Measured on a live pty: `-isig` while idle
 and `-isig` while a bash tool runs. SIGINT is ignored while the temporary suspend listener is installed. If SIGINT and SIGCONT are pending together, a SIGINT dispatched after SIGCONT removes the listener can terminate the resumed process, matching upstream's dispatch-time listener semantics.
 
-Why: upstream 0.99.2 leaves the terminal raw after an external SIGINT. The wire audit re-probed this after a positional extension command completed, rather than at the first painted footer. The shell then has no working Ctrl+C until `reset`. The existing live-PTY regression checks PiG's restoration independently of tmux key encoding.
+Why: upstream 0.99.2 leaves the terminal raw after an external SIGINT. The wire audit re-probed this after a positional extension command completed, rather than at the first painted footer. The shell then has no working Ctrl+C until `reset`. The existing live-PTY regression checks Ompig's restoration independently of tmux key encoding.
 
 The signal handler uses only the signal-safe keyboard-protocol disable and termios restoration. Normal teardown also drains stdin for up to a second, which would race the input reader and the render loop. The single-main-loop ownership invariant is enforced by `make test-race`.
 
@@ -600,22 +600,22 @@ Call sites: `internal/codingagent/interactive_tui.go`: `handleInterruptSignal`;
 
 Locked by: `test/integration/signal_shutdown_test.go`
 (`TestInteractiveSigintTerminatesAndRestoresTerminal`): asserts the terminal is
-sane before launch, raw while pig runs, that pig exits on SIGINT, and that ISIG
+sane before launch, raw while ompig runs, that ompig exits on SIGINT, and that ISIG
 is back afterwards. Mutation-proven twice: dropping the restore reddens it with
 "without restoring the terminal", and surviving the signal reddens it with
-"pig survived SIGINT".
+"ompig survived SIGINT".
 
-Known gap: the captured state is taken at the first raw-mode entry, and pig
+Known gap: the captured state is taken at the first raw-mode entry, and ompig
 disables SUSP before that, so a restored terminal reports `susp = <undef>`
 where a pristine one reports `^Z`. ISIG and INTR are restored correctly.
 
 Remove when: upstream restores the terminal before exiting on SIGINT.
 
 Ratification: user-ratified. Verified by hand in a real terminal (Ghostty):
-kill -INT exits pig and leaves the shell with a working Ctrl+C, suspend and
+kill -INT exits ompig and leaves the shell with a working Ctrl+C, suspend and
 resume are clean, and the cost of matching upstream was accepted after
 exercising it directly, namely that Ctrl+C while $EDITOR is open now terminates
-pig as it does upstream.
+ompig as it does upstream.
 SCRUTINIZED:approved
 
 ## D53 Full-clear when a differential rewrite would under-clear wrapped rows
@@ -631,7 +631,7 @@ remnants of the previous frame visible above the new frame until a second
 resize happens to force a full clear.
 
 Upstream (`packages/tui/src/tui.ts`) uses the same logical-row model and can
-leave the same residue. PiG instead clears the full frame. The extra clear is
+leave the same residue. Ompig instead clears the full frame. The extra clear is
 observable and prevents stale terminal content.
 
 Why: pi-chain (a Node extension) renders a width-sensitive card pipeline.
@@ -669,7 +669,7 @@ with the wrapped-row guard removed (mutation-verified).
 
 ## D55 The global debug hotkey fires once per press
 
-What: pig drops Kitty key releases before matching the `ctrl+shift+d` debug
+What: ompig drops Kitty key releases before matching the `ctrl+shift+d` debug
 hotkey, so one press runs the debug handler once. Registered through
 `addKeyPressListener`, which filters before any in-tree terminal-input listener
 sees the chunk.
@@ -682,7 +682,7 @@ resolves through `matchesKittySequence` (`keys.ts:653`), which compares the
 codepoint and the modifier and ignores the Kitty event type, so it answers true
 for the release of the chord as readily as the press. Upstream therefore runs
 `onDebug` twice for one keypress whenever the Kitty protocol is active, which is
-pig's default because extendedKeyInit pushes flag 2.
+ompig's default because extendedKeyInit pushes flag 2.
 
 Why: the handler writes a debug log and appends a confirmation to the chat, so
 upstream's behaviour duplicates both on every use. The affordance exists to make
@@ -711,7 +711,7 @@ Locked by: `internal/codingagent/debug_hotkey_release_test.go`
 
 ## D56 Subprocess liveness and renderer isolation
 
-What: Pig heartbeats a subprocess only while it owns outstanding work or live
+What: Ompig heartbeats a subprocess only while it owns outstanding work or live
 provider state. Tools, commands, events, and shortcuts have no host completion
 or inactivity timeout. Their caller-owned context remains authoritative, and a
 healthy dispatcher keeps the connection alive while awaited work continues.
@@ -739,8 +739,8 @@ remains the packed-cell recovery authority. Node recovery isolates an attributab
 
 The lifecycle handler owns a failed connection's diagnostic when a crash handler is installed. Commands, shortcuts and events interrupted by that connection still fail, but do not emit duplicate notifications. Without a crash handler, the runner reports the invocation error. Ordinary handler rejections are not transport failures. Packed socket-close and process-exit detectors claim each member under the same registry lock, so a late observation neither reports it twice nor unregisters a replacement. Subprocess stderr logs are removed after teardown unless a load or lifecycle diagnostic names them.
 
-Remove when: Pig no longer hosts extensions across a subprocess boundary, or
-upstream provides an equivalent subprocess liveness contract that Pig can port
+Remove when: Ompig no longer hosts extensions across a subprocess boundary, or
+upstream provides an equivalent subprocess liveness contract that Ompig can port
 without this divergence.
 
 Call-site markers:
@@ -779,7 +779,7 @@ SCRUTINIZED:approved
 
 ## D57 Installing an npm or Git extension root as a package is refused
 
-What: `pig install npm:<name>` or `pig install git:<url>` fails when the installed root satisfies one complete conventional factory or standalone extension contract and contributes no Package resources. The source is not recorded. Upstream records it and reports success, but its `collectPackageResources` loads nothing from an npm or Git root without Package resources (`package-manager.ts:1317-1340`). A local directory is never refused: Pi's `resolveLocalExtensionSource` loads a local directory that declares no filter, `pi` manifest or conventional resource directory as one extension (`package-manager.ts:1377-1384`), and PiG does the same. A root with only a language or build marker still installs as an empty Package, matching Pi.
+What: `ompig install npm:<name>` or `ompig install git:<url>` fails when the installed root satisfies one complete conventional factory or standalone extension contract and contributes no Package resources. The source is not recorded. Upstream records it and reports success, but its `collectPackageResources` loads nothing from an npm or Git root without Package resources (`package-manager.ts:1317-1340`). A local directory is never refused: Pi's `resolveLocalExtensionSource` loads a local directory that declares no filter, `pi` manifest or conventional resource directory as one extension (`package-manager.ts:1377-1384`), and Ompig does the same. A root with only a language or build marker still installs as an empty Package, matching Pi.
 
 Why: an npm or Git root and a Package root have different ownership. A Package contributes only exact members under its `extensions` inventory. Promoting an arbitrary npm or Git root because it contains source would make ordinary npm, Cargo, Python, or Go packages executable extensions. The refusal names direct `-e`, the canonical agent extension directory, and Package `extensions/` as the working choices.
 
@@ -805,30 +805,30 @@ SCRUTINIZED:approved
 What: upstream `AgentSessionRuntime.switchSession()` opens the destination
 Session, then calls `createRuntime()` with the destination Session CWD. That
 constructs the incoming Session's settings, resource loader, system prompt, and
-built-in tools against the destination project. Stock PiG's four modes now create every replacement Session through `coding.CreateAgentSessionRuntime`'s factory, which rebuilds Services, settings, Resources, system prompt, built-in tools and the extension host for the destination cwd (`coding/cli/cli_session_factory.go`; RPC `switch_session` to another project is proven by `coding/cli/session_replacement_modes_test.go`). That path matches upstream and this record does not cover it.
+built-in tools against the destination project. Stock Ompig's four modes now create every replacement Session through `coding.CreateAgentSessionRuntime`'s factory, which rebuilds Services, settings, Resources, system prompt, built-in tools and the extension host for the destination cwd (`coding/cli/cli_session_factory.go`; RPC `switch_session` to another project is proven by `coding/cli/session_replacement_modes_test.go`). That path matches upstream and this record does not cover it.
 
 The divergence that remains is for library callers that replace a bare `coding.Session` in place (`Session.NewSession`, `SwitchSession`, `CloneInPlace`, `ForkToNewSession`, `ForkToNewSessionWithText`, the headless `Session.DispatchSlash` `/fork` path, `ImportFromJsonl` and the default `Session.ExtensionCommandActions` replacement actions). `coding.Session.ReplaceInner` swaps the Session history, identity, model, thinking level and persisted CWD inside one runtime. It does not reconstruct `coding.Services`, the resolved Resource set, or built-in tool instances.
 
-Observable effect: after such an in-place switch to a Session whose recorded CWD is a different project, built-in tools, project settings, context files, prompts, skills, themes and the system prompt still use the project the bare Session was built for. Same-project operations are unaffected. No Stock PiG mode reaches this path.
+Observable effect: after such an in-place switch to a Session whose recorded CWD is a different project, built-in tools, project settings, context files, prompts, skills, themes and the system prompt still use the project the bare Session was built for. Same-project operations are unaffected. No Stock Ompig mode reaches this path.
 
 Why deferred: a bare `coding.Session` has no factory that can build the destination's Services and Resources. Updating only tool CWD would leave settings, resources, and the system prompt stale while making the partial switch appear complete. The supported way to get Pi's behavior is `coding.CreateAgentSessionRuntime`.
 
 Call site:
-- `coding/session.go`: `Session.ReplaceInner`, the in-place replacement chokepoint of the library `Session` methods above. No Stock PiG mode calls it.
+- `coding/session.go`: `Session.ReplaceInner`, the in-place replacement chokepoint of the library `Session` methods above. No Stock Ompig mode calls it.
 
-Parity allowance: no paired scenario drives the library path, which no Stock PiG mode reaches. The Stock modes are covered by the paired session-replacement scenarios and the tests named above.
+Parity allowance: no paired scenario drives the library path, which no Stock Ompig mode reaches. The Stock modes are covered by the paired session-replacement scenarios and the tests named above.
 
 Remove when: the in-place `Session` replacement methods are deleted or routed through `Runtime`, so no caller can replace a Session without rebuilding Services, Resources and tools for the destination cwd.
 
 SCRUTINIZED:approved
 
-## D62 /bug exports locally and links to a PiG issue
+## D62 /bug exports locally and links to a Ompig issue
 
-What: Pi's `/bug` asks for consent, then either uploads the report to Earendil's report gateway or exports a zip archive. PiG runs the same consent flow (description, transcript consent, optional model-written summary) but offers only the export. It writes `pig-bug-report-<id>.zip` to the current directory, records the same `pi.bug-report` session entry with `delivery: "zip"`, and prints a prefilled link to the PiG bug issue form. The link carries only the form fields `title` (the first line of the description, at most 72 characters), `version`, `platform`, and `actual` (the report ID and archive name). It never carries session content. The user attaches the archive. The command description is "Export a bug report to attach to a PiG issue" instead of "Report a bug to the Pi developers".
+What: Pi's `/bug` asks for consent, then either uploads the report to Earendil's report gateway or exports a zip archive. Ompig runs the same consent flow (description, transcript consent, optional model-written summary) but offers only the export. It writes `ompig-bug-report-<id>.zip` to the current directory, records the same `pi.bug-report` session entry with `delivery: "zip"`, and prints a prefilled link to the Ompig bug issue form. The link carries only the form fields `title` (the first line of the description, at most 72 characters), `version`, `platform`, and `actual` (the report ID and archive name). It never carries session content. The user attaches the archive. The command description is "Export a bug report to attach to a Ompig issue" instead of "Report a bug to the Pi developers".
 
-Why: PiG is not an Earendil product. Sending PiG reports to Pi's gateway would misdirect them and share user data with a party the user did not choose. The owner ratified export-only plus a PiG issue link on 2026-09-23 (delivery/WORKSTREAMS.md 16).
+Why: Ompig is not an Earendil product. Sending Ompig reports to Pi's gateway would misdirect them and share user data with a party the user did not choose. The owner ratified export-only plus a Ompig issue link on 2026-09-23 (delivery/WORKSTREAMS.md 16).
 
-Observable effect: the delivery selector lists "Export as Zip" and "Cancel" with no "Upload Report". PiG makes no network request for a report; only the optional summary calls the session's own provider, after the same consent prompt as Pi. `diagnostics.json` carries the crash log (`<agentDir>/crashes.json`) as Pi's does, and a written report clears it.
+Observable effect: the delivery selector lists "Export as Zip" and "Cancel" with no "Upload Report". Ompig makes no network request for a report; only the optional summary calls the session's own provider, after the same consent prompt as Pi. `diagnostics.json` carries the crash log (`<agentDir>/crashes.json`) as Pi's does, and a written report clears it.
 
 Call sites:
 - `internal/codingagent/slash_bug.go`: the delivery selector and the issue link.
@@ -836,47 +836,47 @@ Call sites:
 
 Locked by: `internal/codingagent/bug_report_test.go` mirrors upstream `test/bug-report.test.ts` (redaction and the multi-line description prompt) and proves the export path makes no HTTP request and imports no network package. `test/upstream-parity` `TestBuiltinSlashCommands_CoverUpstream` covers the command's presence.
 
-Remove when: never, unless PiG gains its own report service that the owner approves.
+Remove when: never, unless Ompig gains its own report service that the owner approves.
 
 SCRUTINIZED:approved
 
-## D63 `--version` prints PiG's composite version
+## D63 `--version` prints Ompig's composite version
 
-What: `pi --version` prints Pi's bare version (for example `0.99.1`). By default, `pig --version` and `pig -v` print one composite version: PiG's release with the Pi release PiG ports as semver build metadata (for example `0.3.0+0.99.1`, `coding.Version`). The product-neutral `PIG_VERSION_FORMAT=pi` opt-in makes only these two flags print the pinned Pi package version (`coding.UpstreamPackageVersion`, what `pi --version` prints) for launchers that apply Pi's minimum-version check. The match is exact; an empty or any other value keeps the composite output. The help and diagnostics banner, the interactive startup line, `pig build`'s installed line, and `pig verify` show the composite and do not read this opt-in; neither do `pig version`, self-update identity, or SDK product versions. `pig version` keeps its separate `pig:` and `upstream pi:` fields, which the Piglet image check and `pig build` read.
+What: `pi --version` prints Pi's bare version (for example `0.99.1`). By default, `ompig --version` and `ompig -v` print one composite version: Ompig's release with the Pi release Ompig ports as semver build metadata (for example `0.3.0+0.99.1`, `coding.Version`). The product-neutral `OMPIG_VERSION_FORMAT=pi` opt-in makes only these two flags print the pinned Pi package version (`coding.UpstreamPackageVersion`, what `pi --version` prints) for launchers that apply Pi's minimum-version check. The match is exact; an empty or any other value keeps the composite output. The help and diagnostics banner, the interactive startup line, `ompig build`'s installed line, and `ompig verify` show the composite and do not read this opt-in; neither do `ompig version`, self-update identity, or SDK product versions. `ompig version` keeps its separate `ompig:` and `upstream pi:` fields, which the Ompiglet image check and `ompig build` read.
 
-Why: one string tells a user both which PiG they run and which Pi it ports. The owner chose this on 2026-09-23.
+Why: one string tells a user both which Ompig they run and which Pi it ports. The owner chose this on 2026-09-23.
 
-When the pin is a pi-mono commit rather than a release (`.upstream/pin`, [upstream-pin.md](upstream-pin.md)), the build metadata is the Pi version and the commit's first eight digits joined by a dot, for example `0.5.0+1.1.0.42a3497d`: semver allows one plus sign, and `pig version` prints the display version `1.1.0+42a3497d` in its `upstream pi:` field. `pi --version` still prints the package version, `1.1.0`.
+When the pin is a pi-mono commit rather than a release (`.upstream/pin`, [upstream-pin.md](upstream-pin.md)), the build metadata is the Pi version and the commit's first eight digits joined by a dot, for example `0.5.0+1.1.0.42a3497d`: semver allows one plus sign, and `ompig version` prints the display version `1.1.0+42a3497d` in its `upstream pi:` field. `pi --version` still prints the package version, `1.1.0`.
 
-Observable effect: by default, a script that runs `pig --version` and expects Pi's bare version sees `0.3.0+0.99.1`. Semver precedence ignores build metadata, so the composite sorts as `0.3.0`. With `PIG_VERSION_FORMAT=pi`, that script sees Pi's bare version, such as `0.99.1`; self-update comparisons, release tags, and the Piglet compatibility check still use `coding.PigVersion` itself.
+Observable effect: by default, a script that runs `ompig --version` and expects Pi's bare version sees `0.3.0+0.99.1`. Semver precedence ignores build metadata, so the composite sorts as `0.3.0`. With `OMPIG_VERSION_FORMAT=pi`, that script sees Pi's bare version, such as `0.99.1`; self-update comparisons, release tags, and the Ompiglet compatibility check still use `coding.OmpigVersion` itself.
 
-Owner decision: 2026-10-12, owner approved the `PIG_VERSION_FORMAT=pi` refinement (PR #207, contributor @PJalv): an inert, product-neutral interop opt-in that stays in Stock PiG because launchers such as T3 Code reject the composite version in a minimum-version check (`>=1.0.0` rejects `0.4.1+1.0.3`).
+Owner decision: 2026-10-12, owner approved the `OMPIG_VERSION_FORMAT=pi` refinement (PR #207, contributor @PJalv): an inert, product-neutral interop opt-in that stays in Stock Ompig because launchers such as T3 Code reject the composite version in a minimum-version check (`>=1.0.0` rejects `0.4.1+1.0.3`).
 
 Call sites:
-- `coding/cli/main.go`: `cliVersionString` (the `PIG_VERSION_FORMAT` check carries the `// pig divergence (D63)` marker).
+- `coding/cli/main.go`: `cliVersionString` (the `OMPIG_VERSION_FORMAT` check carries the `// ompig divergence (D63)` marker).
 
 Locked by: `coding/cli/main_test.go` `TestCLIVersionStringFormat` and `TestVersionFlagsHonorPiFormatWithoutChangingDetailedVersion`; the parity scenario `test/parity/scenarios/startup/01-version-flag.toml` asserts both outputs of the default in its `[diverge]` block.
 
-Remove when: never, unless the owner returns `--version` to Pi's bare version, or withdraws the `PIG_VERSION_FORMAT=pi` opt-in.
+Remove when: never, unless the owner returns `--version` to Pi's bare version, or withdraws the `OMPIG_VERSION_FORMAT=pi` opt-in.
 
 SCRUTINIZED:approved
 
-## D64 PiG's hosted endpoints live on pi-in-go.dev
+## D64 Ompig's hosted endpoints live on ompig.dev
 
-What: upstream 0.99.2 points its hosted endpoints at pi.dev and uploads shared-session artifacts to Earendil's Radius gateway at `radius.pi.dev`. PiG serves its hosted paths from `https://pi-in-go.dev` through the private PiG platform repository. The version check, install report, and managed installer API keep Pi's response shapes at the PiG host; the installer API serves PiG GitHub Release archives and returns 404 for npm-only `package.json` and `package-lock.json` paths because PiG has no npm package.
+What: upstream 0.99.2 points its hosted endpoints at pi.dev and uploads shared-session artifacts to Earendil's Radius gateway at `radius.pi.dev`. Ompig serves its hosted paths from `https://ompig.dev` through the private Ompig platform repository. The version check, install report, and managed installer API keep Pi's response shapes at the Ompig host; the installer API serves Ompig GitHub Release archives and returns 404 for npm-only `package.json` and `package-lock.json` paths because Ompig has no npm package.
 
-Pi's `/share` uploads an organization-visible JSONL artifact to Radius only when Radius auth is available, then otherwise falls back to a private GitHub gist. PiG always requires the explicit `/share` command, displays a persistent privacy notice before the request, and uploads the same `exportSessionForShare` JSONL shape to `https://pi-in-go.dev/v1/artifacts?visibility=unlisted&title=PiG+session`. PiG needs neither Radius nor `gh` login for this path. The PiG platform stores at most 8 MiB per artifact, gives it an unlisted `https://pi-in-go.dev/session/p_<id>` URL, and expires it after 30 days. `PI_SHARE_GATEWAY_URL` explicitly replaces the complete upload URL; `PI_INSTALLER_API_BASE` keeps its upstream meaning for the installer.
+Pi's `/share` uploads an organization-visible JSONL artifact to Radius only when Radius auth is available, then otherwise falls back to a private GitHub gist. Ompig always requires the explicit `/share` command, displays a persistent privacy notice before the request, and uploads the same `exportSessionForShare` JSONL shape to `https://ompig.dev/v1/artifacts?visibility=unlisted&title=Ompig+session`. Ompig needs neither Radius nor `gh` login for this path. The Ompig platform stores at most 8 MiB per artifact, gives it an unlisted `https://ompig.dev/session/p_<id>` URL, and expires it after 30 days. `PI_SHARE_GATEWAY_URL` explicitly replaces the complete upload URL; `PI_INSTALLER_API_BASE` keeps its upstream meaning for the installer.
 
-Pi's `sessionShareDestination` setting (`auto`, `gist`, `radius`; Pi cea25743) selects Pi's Radius-or-gist fallback, a forced GitHub gist, or Radius only with the error "Radius authentication is not configured. Run '/login radius' first.". PiG keeps the setting in `SettingsManager` (`GetSessionShareDestination`, `SetSessionShareDestination`) so a settings file shared with Pi keeps the value, but its `/share` uploads to the PiG gateway for every value, and `/settings` has no "Session share destination" item, because that item would change nothing.
+Pi's `sessionShareDestination` setting (`auto`, `gist`, `radius`; Pi cea25743) selects Pi's Radius-or-gist fallback, a forced GitHub gist, or Radius only with the error "Radius authentication is not configured. Run '/login radius' first.". Ompig keeps the setting in `SettingsManager` (`GetSessionShareDestination`, `SetSessionShareDestination`) so a settings file shared with Pi keeps the value, but its `/share` uploads to the Ompig gateway for every value, and `/settings` has no "Session share destination" item, because that item would change nothing.
 
-Pi's built-in providers read a remote model-catalog overlay from `https://pi.dev/api/models/providers/<provider>` (remote-catalog-provider.ts:DEFAULT_CATALOG_BASE_URL). PiG reads the same route from `https://pi-in-go.dev` and never calls pi.dev for it. `CreateModelRuntimeOptions.CatalogBaseURL` (Pi's `catalogBaseUrl`) replaces the endpoint. The request, the `?types=` query, the 4 hour freshness window, etag revalidation and the 404/501 unavailable path are Pi's; the `User-Agent` is PiG's (D65), so a server that redirects `pi/` agents to a `pi-version` URL (Pi's catalog protocol) sends PiG no redirect. A host that does not serve the route leaves the bundled catalog, exactly as Pi's unavailable overlay does. PiG's generated catalogs carry no generation timestamp, so a stored remote catalog is always newer than the bundled one (Pi compares the stored catalog's `Last-Modified` with `getBuiltinModelDataGeneratedAt`).
+Pi's built-in providers read a remote model-catalog overlay from `https://pi.dev/api/models/providers/<provider>` (remote-catalog-provider.ts:DEFAULT_CATALOG_BASE_URL). Ompig reads the same route from `https://ompig.dev` and never calls pi.dev for it. `CreateModelRuntimeOptions.CatalogBaseURL` (Pi's `catalogBaseUrl`) replaces the endpoint. The request, the `?types=` query, the 4 hour freshness window, etag revalidation and the 404/501 unavailable path are Pi's; the `User-Agent` is Ompig's (D65), so a server that redirects `pi/` agents to a `pi-version` URL (Pi's catalog protocol) sends Ompig no redirect. A host that does not serve the route leaves the bundled catalog, exactly as Pi's unavailable overlay does. Ompig's generated catalogs carry no generation timestamp, so a stored remote catalog is always newer than the bundled one (Pi compares the stored catalog's `Last-Modified` with `getBuiltinModelDataGeneratedAt`).
 
-Pi's `reportInstallTelemetry` (interactive-mode.ts:1312-1327) sends its anonymous install/update ping to `https://pi.dev/api/report-install?version=<version>`. PiG sends the identical ping — only the `version` query parameter, plus PiG's own `User-Agent` — to `https://pi-in-go.dev/api/report-install?version=<version>` instead, fired at the same two occasions Pi fires it (a fresh install, and an update whose changelog has new entries), gated by the same `enableInstallTelemetry` setting and `PI_TELEMETRY`/`PI_OFFLINE` env overrides, with the same 5s timeout and fire-and-forget error handling. `PIG_INSTALL_TELEMETRY_URL` explicitly replaces the endpoint (tests use it to point at a local server; there is no upstream equivalent).
+Pi's `reportInstallTelemetry` (interactive-mode.ts:1312-1327) sends its anonymous install/update ping to `https://pi.dev/api/report-install?version=<version>`. Ompig sends the identical ping — only the `version` query parameter, plus Ompig's own `User-Agent` — to `https://ompig.dev/api/report-install?version=<version>` instead, fired at the same two occasions Pi fires it (a fresh install, and an update whose changelog has new entries), gated by the same `enableInstallTelemetry` setting and `PI_TELEMETRY`/`PI_OFFLINE` env overrides, with the same 5s timeout and fire-and-forget error handling. `OMPIG_INSTALL_TELEMETRY_URL` explicitly replaces the endpoint (tests use it to point at a local server; there is no upstream equivalent).
 
 
-Why: PiG is not an Earendil product. Sending PiG users or Session data to pi.dev, radius.pi.dev, or an implicit third-party gist would misattribute PiG traffic and depend on a service PiG does not operate. The owner chose `pi-in-go.dev` on 2026-09-23 and approved the explicit, privacy-noted PiG share gateway on 2026-09-24 (delivery/OWNER-DECISIONS.md).
+Why: Ompig is not an Earendil product. Sending Ompig users or Session data to pi.dev, radius.pi.dev, or an implicit third-party gist would misattribute Ompig traffic and depend on a service Ompig does not operate. The owner chose `ompig.dev` on 2026-09-23 and approved the explicit, privacy-noted Ompig share gateway on 2026-09-24 (delivery/OWNER-DECISIONS.md).
 
-Observable effect: the `/share` command description is "Share session with an unlisted 30-day link" instead of "Share session as a secret GitHub gist" (slash-commands.ts:27). `/share` shows what Session data will be uploaded, runs the request behind an Escape-cancellable loader, and prints a 30-day unlisted PiG URL instead of a Radius or GitHub-gist URL. Anyone with that URL can read the artifact. The install/update ping goes to `pi-in-go.dev` instead of `pi.dev`; the PiG-hosted endpoint stores one Analytics Engine data point per call (the version and arrival time only) and rate-limits at 10 calls/minute per client. PiG does not read Pi's `PI_SHARE_VIEWER_URL`, so `--help` does not list it or its pi.dev default. Other hosted endpoint clients use `pi-in-go.dev` instead of `pi.dev` as they land.
+Observable effect: the `/share` command description is "Share session with an unlisted 30-day link" instead of "Share session as a secret GitHub gist" (slash-commands.ts:27). `/share` shows what Session data will be uploaded, runs the request behind an Escape-cancellable loader, and prints a 30-day unlisted Ompig URL instead of a Radius or GitHub-gist URL. Anyone with that URL can read the artifact. The install/update ping goes to `ompig.dev` instead of `pi.dev`; the Ompig-hosted endpoint stores one Analytics Engine data point per call (the version and arrival time only) and rate-limits at 10 calls/minute per client. Ompig does not read Pi's `PI_SHARE_VIEWER_URL`, so `--help` does not list it or its pi.dev default. Other hosted endpoint clients use `ompig.dev` instead of `pi.dev` as they land.
 
 Call sites:
 - `internal/codingagent/session_share.go`: `defaultShareGatewayURL`, `shareGatewayURL`, and `shareSession`.
@@ -889,39 +889,39 @@ Call sites:
 - `internal/codingagent/interactive.go`: the startup changelog/install-telemetry block in `Run`.
 - `automation/gen/gen-help.sh`: drops `PI_SHARE_VIEWER_URL` from the rendered `coding/cli/help_upstream.txt`.
 
-Locked by: `internal/codingagent` `TestShareSessionUploadsJSONLWithPrivacyNotice`, `TestShareSessionKeepsConcurrentExportsIsolated`, `TestUploadShareArtifactHonorsCancellationAndCanonicalOrigin`, `TestShareLoaderEscapeCancelsUpload`, `TestSharePrivacyNoticeRemainsVisibleAfterResult`, `TestShareGatewayURLDefaultAndOverride`, `TestShareBuiltinDescribesUnlistedExpiry`, `TestShareHandlerUploadsToPiGForEveryShareDestination`, and `TestSettingsSelectorOmitsShareDestination`; `cmd/pig` `TestHelpOmitsUnusedShareViewerURL`; the private-platform patch's `worker/test/share.test.ts` covers route shape, R2 limits, expiry, escaping, and hashed rate limiting. `TestReportInstallTelemetry_SendsOnlyVersionToConfiguredEndpoint`, `TestReportInstallTelemetry_DefaultURLIsPiInGoDevNotPiDev`, `TestReportInstallTelemetry_SettingDisabledSkipsRequest`, `TestReportInstallTelemetry_EnvOverrideDisablesEvenWhenSettingIsOn`, `TestReportInstallTelemetry_PIOfflineSkipsEvenWhenTelemetryIsOn`, `TestReportInstallTelemetry_NeverContactsPiDotDev`, `TestRecordChangelogVersionAndMaybeReportInstall_FreshInstallPingsAndRecordsNoBanner`, `TestRecordChangelogVersionAndMaybeReportInstall_UpdateWithNewEntriesPingsAndShowsBanner`, `TestRecordChangelogVersionAndMaybeReportInstall_SameVersionNeverPings`, and `TestRecordChangelogVersionAndMaybeReportInstall_VersionBumpWithNoNewEntriesNeverPings` lock the install-telemetry ping.
+Locked by: `internal/codingagent` `TestShareSessionUploadsJSONLWithPrivacyNotice`, `TestShareSessionKeepsConcurrentExportsIsolated`, `TestUploadShareArtifactHonorsCancellationAndCanonicalOrigin`, `TestShareLoaderEscapeCancelsUpload`, `TestSharePrivacyNoticeRemainsVisibleAfterResult`, `TestShareGatewayURLDefaultAndOverride`, `TestShareBuiltinDescribesUnlistedExpiry`, `TestShareHandlerUploadsToOmpigForEveryShareDestination`, and `TestSettingsSelectorOmitsShareDestination`; `cmd/ompig` `TestHelpOmitsUnusedShareViewerURL`; the private-platform patch's `worker/test/share.test.ts` covers route shape, R2 limits, expiry, escaping, and hashed rate limiting. `TestReportInstallTelemetry_SendsOnlyVersionToConfiguredEndpoint`, `TestReportInstallTelemetry_DefaultURLIsPiInGoDevNotPiDev`, `TestReportInstallTelemetry_SettingDisabledSkipsRequest`, `TestReportInstallTelemetry_EnvOverrideDisablesEvenWhenSettingIsOn`, `TestReportInstallTelemetry_PIOfflineSkipsEvenWhenTelemetryIsOn`, `TestReportInstallTelemetry_NeverContactsPiDotDev`, `TestRecordChangelogVersionAndMaybeReportInstall_FreshInstallPingsAndRecordsNoBanner`, `TestRecordChangelogVersionAndMaybeReportInstall_UpdateWithNewEntriesPingsAndShowsBanner`, `TestRecordChangelogVersionAndMaybeReportInstall_SameVersionNeverPings`, and `TestRecordChangelogVersionAndMaybeReportInstall_VersionBumpWithNoNewEntriesNeverPings` lock the install-telemetry ping.
 
-Remove when: never, unless PiG's owner selects another PiG-operated host, or returns `/share` to Pi's Radius/GitHub flow (update this entry and every call-site marker then).
+Remove when: never, unless Ompig's owner selects another Ompig-operated host, or returns `/share` to Pi's Radius/GitHub flow (update this entry and every call-site marker then).
 
 SCRUTINIZED:approved
 
-## D65 PiG identifies itself as `pig/<coding.Version>`
+## D65 Ompig identifies itself as `ompig/<coding.Version>`
 
-What: upstream `formatUserAgent(identity)` (`packages/ai/src/utils/identity.ts`) is the one `User-Agent` of every HTTP provider request and of the coding agent's management requests (its `getPiUserAgent(version)` calls it): detailed `pi/<version> (<platform>; <runtime>; <arch>)`, short `pi`, or a custom value. PiG has no browser build and always runs as a native process, so both PiG surfaces use the one owner-approved product identity: `pig/<coding.Version> (<platform> <release>; <arch>)`, for example `pig/0.3.0+0.99.1 (darwin 25.6.0; arm64)`. The release comes from `uname` on unix (`ai/user_agent_unix.go`, `internal/codingagent/bug_report_unix.go`) and from `RtlGetVersion` on Windows (`ai/user_agent_windows.go`, `internal/codingagent/bug_report_windows.go`), matching Node's `os.release()` on each platform.
+What: upstream `formatUserAgent(identity)` (`packages/ai/src/utils/identity.ts`) is the one `User-Agent` of every HTTP provider request and of the coding agent's management requests (its `getPiUserAgent(version)` calls it): detailed `pi/<version> (<platform>; <runtime>; <arch>)`, short `pi`, or a custom value. Ompig has no browser build and always runs as a native process, so both Ompig surfaces use the one owner-approved product identity: `ompig/<coding.Version> (<platform> <release>; <arch>)`, for example `ompig/0.3.0+0.99.1 (darwin 25.6.0; arm64)`. The release comes from `uname` on unix (`ai/user_agent_unix.go`, `internal/codingagent/bug_report_unix.go`) and from `RtlGetVersion` on Windows (`ai/user_agent_windows.go`, `internal/codingagent/bug_report_windows.go`), matching Node's `os.release()` on each platform.
 
-Why: PiG is not Pi; providers, diagnostics, and their logs should distinguish PiG traffic and artifacts from Pi's, and identify both the PiG release and the Pi release it ports. The owner chose this shape on 2026-09-23 (delivery/OWNER-DECISIONS.md Q4).
+Why: Ompig is not Pi; providers, diagnostics, and their logs should distinguish Ompig traffic and artifacts from Pi's, and identify both the Ompig release and the Pi release it ports. The owner chose this shape on 2026-09-23 (delivery/OWNER-DECISIONS.md Q4).
 
-Observable effect: every default provider `User-Agent` (Anthropic Messages, OpenAI Completions, OpenAI/Azure/Codex Responses, Google Generative AI/Vertex, Mistral Conversations) and the `report.json` environment identity in an exported bug report read `pig/...` instead of one of Pi's `pi...` forms. A user-configured provider `User-Agent` header overrides the default, including for OpenAI Codex Responses (`buildBaseCodexHeaders` sets `originator` and `User-Agent` first, #10429). An Anthropic OAuth (subscription-token) request keeps sending `claude-cli/2.1.280` regardless (D63's sibling decision, Q3): that identity is not `getPiUserAgent()`'s output and is untouched by this divergence.
+Observable effect: every default provider `User-Agent` (Anthropic Messages, OpenAI Completions, OpenAI/Azure/Codex Responses, Google Generative AI/Vertex, Mistral Conversations) and the `report.json` environment identity in an exported bug report read `ompig/...` instead of one of Pi's `pi...` forms. A user-configured provider `User-Agent` header overrides the default, including for OpenAI Codex Responses (`buildBaseCodexHeaders` sets `originator` and `User-Agent` first, #10429). An Anthropic OAuth (subscription-token) request keeps sending `claude-cli/2.1.280` regardless (D63's sibling decision, Q3): that identity is not `getPiUserAgent()`'s output and is untouched by this divergence.
 
 Call sites:
-- `ai/identity.go`: `FormatUserAgent` (detailed `pig/<version> (<platform> <release>; <arch>)`, short `pig`). `ai/anthropic_client.go`: `anthropicIdentityHeaders` (seeds the `User-Agent` key below the other client headers; an Anthropic OAuth request sends the Claude Code identity instead, as upstream). `ai/bedrock.go`: `bedrockUserAgent` adds `pig/<version>` to the AWS SDK for Go user agent, where Pi adds `pi/<version>` to the SDK for JavaScript.
+- `ai/identity.go`: `FormatUserAgent` (detailed `ompig/<version> (<platform> <release>; <arch>)`, short `ompig`). `ai/anthropic_client.go`: `anthropicIdentityHeaders` (seeds the `User-Agent` key below the other client headers; an Anthropic OAuth request sends the Claude Code identity instead, as upstream). `ai/bedrock.go`: `bedrockUserAgent` adds `ompig/<version>` to the AWS SDK for Go user agent, where Pi adds `pi/<version>` to the SDK for JavaScript.
 - `ai/openai.go`, `ai/openai_responses.go` (also reached by `ai/azure_openai_responses.go` and `ai/openai_codex_responses.go`, which delegate to the same request builder), `ai/google.go` (also reached by `ai/google_vertex.go`), `ai/mistral.go`: the `User-Agent` header construction. Model and request headers override the default, as upstream; Codex sets its `originator` and `User-Agent` defaults before them (`buildBaseCodexHeaders`, Pi 1.4.0).
 - `internal/codingagent/bug_report.go`: `codingAgentUserAgent`, used for the local bug-report metadata field retained by D62.
 - `internal/codingagent/selfupdate.go`: `FetchUpdateManifest`, which sends the identity with the update-manifest request as upstream `getLatestPiRelease` sends its `User-Agent` and `accept` headers to the version-check API.
 
-Locked by: `ai/identity_test.go` (`TestFormatUserAgentForms`), `ai/user_agent_test.go` (`TestPiUserAgentFormat`, `TestProviderDefaultUserAgent`, `TestProviderUserAgentOverridePrecedence`), `ai/anthropic_oauth_test.go` `TestAnthropicClientUserAgent`, `internal/codingagent/bug_report_test.go` `TestBugReportEnvironmentUsesPiGUserAgent`, and `internal/codingagent/version_check_upstream_test.go` `TestVersionChecks` (the update-manifest request).
+Locked by: `ai/identity_test.go` (`TestFormatUserAgentForms`), `ai/user_agent_test.go` (`TestPiUserAgentFormat`, `TestProviderDefaultUserAgent`, `TestProviderUserAgentOverridePrecedence`), `ai/anthropic_oauth_test.go` `TestAnthropicClientUserAgent`, `internal/codingagent/bug_report_test.go` `TestBugReportEnvironmentUsesOmpigUserAgent`, and `internal/codingagent/version_check_upstream_test.go` `TestVersionChecks` (the update-manifest request).
 
-Remove when: never, unless the owner changes PiG's product identity.
+Remove when: never, unless the owner changes Ompig's product identity.
 
 SCRUTINIZED:approved
 
 ## D66 Narrow TUI rows stay within the requested width
 
-What: PiG keeps three narrow-width component paths within their requested terminal-cell width. `TruncatedText.Render` reduces horizontal padding when the full padding plus one content cell would exceed the width. At width 1 with one column of horizontal padding, PiG renders `"A"`; upstream renders `" A "`, which is three cells wide. `UserMessageSelectorComponent.Render` also clips each list, metadata, empty-state, and scroll-indicator row after adding the cursor or indentation. Upstream's `UserMessageList` truncates only the message body and then adds its two-cell cursor, while metadata and other rows are unbounded. `Editor.Render` at width 1 without padding highlights the final grapheme of a line when the cursor is at its end, rendering `"g"` as one inverse `g`; upstream appends a highlighted space, two cells wide. At every wider width, and with padding, PiG appends the space as upstream does. `Editor.Render` clips an autocomplete row to the content width; upstream's `SelectList` keeps its two-cell `→ ` prefix, so a content width below three cells yields an over-wide row. `SettingsList.Render` clips any row wider than the requested width (a wrapped description or the empty-state text in a very narrow pane); upstream emits the over-wide row.
+What: Ompig keeps three narrow-width component paths within their requested terminal-cell width. `TruncatedText.Render` reduces horizontal padding when the full padding plus one content cell would exceed the width. At width 1 with one column of horizontal padding, Ompig renders `"A"`; upstream renders `" A "`, which is three cells wide. `UserMessageSelectorComponent.Render` also clips each list, metadata, empty-state, and scroll-indicator row after adding the cursor or indentation. Upstream's `UserMessageList` truncates only the message body and then adds its two-cell cursor, while metadata and other rows are unbounded. `Editor.Render` at width 1 without padding highlights the final grapheme of a line when the cursor is at its end, rendering `"g"` as one inverse `g`; upstream appends a highlighted space, two cells wide. At every wider width, and with padding, Ompig appends the space as upstream does. `Editor.Render` clips an autocomplete row to the content width; upstream's `SelectList` keeps its two-cell `→ ` prefix, so a content width below three cells yields an over-wide row. `SettingsList.Render` clips any row wider than the requested width (a wrapped description or the empty-state text in a very narrow pane); upstream emits the over-wide row.
 
-Why: both upstream paths can emit a row wider than the terminal. Upstream's main screen treats that as fatal only in its differential-render loop and stops with `Rendered line exceeds terminal width`; initial, full, and resize renders emit the over-wide row unchanged. PiG preserves the complete padding and rows at ordinary widths, but prioritizes keeping an unusually narrow pane usable instead of emitting an over-wide row.
+Why: both upstream paths can emit a row wider than the terminal. Upstream's main screen treats that as fatal only in its differential-render loop and stops with `Rendered line exceeds terminal width`; initial, full, and resize renders emit the over-wide row unchanged. Ompig preserves the complete padding and rows at ordinary widths, but prioritizes keeping an unusually narrow pane usable instead of emitting an over-wide row.
 
-Observable effect: at widths where fixed padding, cursor text, or metadata cannot fit, PiG removes padding or clips the row while Pi emits an over-wide row and terminates if that row reaches the main screen's differential-render overflow check.
+Observable effect: at widths where fixed padding, cursor text, or metadata cannot fit, Ompig removes padding or clips the row while Pi emits an over-wide row and terminates if that row reaches the main screen's differential-render overflow check.
 
 Call-site markers:
 - `tui/truncated_text.go`: the horizontal-padding clamp in `TruncatedText.Render`.
@@ -942,16 +942,16 @@ SCRUTINIZED:approved
 
 ## D68 Windows owner-only files are enforced by DACL
 
-What: PiG requires some files to be readable by their owner only and writes some that way: Piglet `secrets` read `from: {file: ...}`, the secret environment file staged for the agent container, a Piglet signing private key, the self-update transport CA sidecar, and the standalone self-update receipt. On Linux and macOS that is mode `0600` (no group or other permission bits). Windows has no POSIX mode bits, so there `internal/ownerfile` creates the file with a protected DACL (no inherited entries) whose only entry grants the current user full access, as part of the creation itself, and accepts a file only when its DACL allows no one but the file's owner, SYSTEM, and Administrators. A NULL DACL, an allow entry for any other principal, and object or callback allow entries are refused.
+What: Ompig requires some files to be readable by their owner only and writes some that way: Ompiglet `secrets` read `from: {file: ...}`, the secret environment file staged for the agent container, a Ompiglet signing private key, the self-update transport CA sidecar, and the standalone self-update receipt. On Linux and macOS that is mode `0600` (no group or other permission bits). Windows has no POSIX mode bits, so there `internal/ownerfile` creates the file with a protected DACL (no inherited entries) whose only entry grants the current user full access, as part of the creation itself, and accepts a file only when its DACL allows no one but the file's owner, SYSTEM, and Administrators. A NULL DACL, an allow entry for any other principal, and object or callback allow entries are refused.
 
-Why: mode bits do not exist on Windows (Go reports 0666 for every writable file), so the POSIX check refused every such file there and a written file got no protection. The DACL form gives the same guarantee, access by the owner only, while still allowing SYSTEM and Administrators, which Windows grants on user profile files by default. The lead chose this contract for Piglet secret files on 2026-09-25 (team/lead/inbox WIN-NOTES.md, Q4). Q4 does not establish approval for signing private keys, the update transport CA sidecar, or standalone update receipts. Their existing use of this policy remains pending the explicit Q15 scope decision; the approval marker below applies to the Piglet secret-file contract only.
+Why: mode bits do not exist on Windows (Go reports 0666 for every writable file), so the POSIX check refused every such file there and a written file got no protection. The DACL form gives the same guarantee, access by the owner only, while still allowing SYSTEM and Administrators, which Windows grants on user profile files by default. The lead chose this contract for Ompiglet secret files on 2026-09-25 (team/lead/inbox WIN-NOTES.md, Q4). Q4 does not establish approval for signing private keys, the update transport CA sidecar, or standalone update receipts. Their existing use of this policy remains pending the explicit Q15 scope decision; the approval marker below applies to the Ompiglet secret-file contract only.
 
-Observable effect: on Windows a file that inherits the default ACL of a user profile directory is accepted, a file with an Everyone, Users, or other-user allow entry is refused with the same "owner-only" error as on POSIX, and the files PiG writes carry a protected current-user-only DACL from the moment they exist, so no other principal can open them before they hold a secret. Upstream Pi has no Piglet secrets, signing keys, or standalone update receipts, so no Pi behavior changes.
+Observable effect: on Windows a file that inherits the default ACL of a user profile directory is accepted, a file with an Everyone, Users, or other-user allow entry is refused with the same "owner-only" error as on POSIX, and the files Ompig writes carry a protected current-user-only DACL from the moment they exist, so no other principal can open them before they hold a secret. Upstream Pi has no Ompiglet secrets, signing keys, or standalone update receipts, so no Pi behavior changes.
 
 Call-site markers:
-- `internal/ownerfile/ownerfile_windows.go`: `CreateNew` (and `CreateTemp` through it) and `OwnerOnly`, used by `coding/piglet` (secrets and the staged secret environment), `coding/piglet/signature` (private keys), and `internal/codingagent` (update transport CA and standalone receipt).
+- `internal/ownerfile/ownerfile_windows.go`: `CreateNew` (and `CreateTemp` through it) and `OwnerOnly`, used by `coding/ompiglet` (secrets and the staged secret environment), `coding/ompiglet/signature` (private keys), and `internal/codingagent` (update transport CA and standalone receipt).
 
-Locked by: `internal/ownerfile` `TestCreateNewIsOwnerOnlyBeforeItsFirstWrite` and `TestCreateTempIsOwnerOnlyBeforeItsFirstWrite` (in a directory whose new files Everyone can read); `coding/piglet/signature` `TestKeygenPrivateKeyIsOwnerOnlyBeforeItsFirstByte`; `coding/piglet` `TestSecretFileMustBeOwnerOnly` and `TestAC7PigletSecretsFailClosedAtResolution/unsafe_file_permissions` (an Everyone read entry on Windows, mode 0644 elsewhere, must be refused), `TestOwnerOnlySecretFileHasAProtectedCurrentUserDACL` (Windows), `TestAC7SecretEnvironmentFileIsProtectedAndValuesStayOffArgv`, and `TestAC7PigletSecretContract`; `coding/piglet/signature` `TestKeygenAndTrustStore`; `internal/codingagent` `TestUpdateTransportCASidecarRejectsUnsafeMaterial`. Making the Windows check accept every file fails the refusal tests.
+Locked by: `internal/ownerfile` `TestCreateNewIsOwnerOnlyBeforeItsFirstWrite` and `TestCreateTempIsOwnerOnlyBeforeItsFirstWrite` (in a directory whose new files Everyone can read); `coding/ompiglet/signature` `TestKeygenPrivateKeyIsOwnerOnlyBeforeItsFirstByte`; `coding/ompiglet` `TestSecretFileMustBeOwnerOnly` and `TestAC7PigletSecretsFailClosedAtResolution/unsafe_file_permissions` (an Everyone read entry on Windows, mode 0644 elsewhere, must be refused), `TestOwnerOnlySecretFileHasAProtectedCurrentUserDACL` (Windows), `TestAC7SecretEnvironmentFileIsProtectedAndValuesStayOffArgv`, and `TestAC7PigletSecretContract`; `coding/ompiglet/signature` `TestKeygenAndTrustStore`; `internal/codingagent` `TestUpdateTransportCASidecarRejectsUnsafeMaterial`. Making the Windows check accept every file fails the refusal tests.
 
 Parity allowance: none of these files has an upstream counterpart; the unit tests above lock the contract on each platform.
 
@@ -961,23 +961,23 @@ SCRUTINIZED:approved
 
 ## D70 Session replacement re-evaluates every extension module, not only its factory
 
-What: on every session replacement (`/new`, `/resume`, `/fork`, `/clone`, `ctx.newSession()`, `ctx.fork()`, `ctx.switchSession()`, and RPC `new_session`, `switch_session`, `fork` and `clone`), Pig starts a new extension host for the replacement Session and its extensions run in fresh runtime processes. (`/reload` is not affected: it re-invokes each factory inside the extension runtime process that already holds its module, as Pi does.) The new process imports the extension module and calls its factory, so module-level state (top-level `let` bindings, module-scope caches, counters, open handles) and process-wide state (`process.env` changes, `globalThis` properties) start over after every replacement. Factory-scoped state starts over in both Pi and Pig.
+What: on every session replacement (`/new`, `/resume`, `/fork`, `/clone`, `ctx.newSession()`, `ctx.fork()`, `ctx.switchSession()`, and RPC `new_session`, `switch_session`, `fork` and `clone`), Ompig starts a new extension host for the replacement Session and its extensions run in fresh runtime processes. (`/reload` is not affected: it re-invokes each factory inside the extension runtime process that already holds its module, as Pi does.) The new process imports the extension module and calls its factory, so module-level state (top-level `let` bindings, module-scope caches, counters, open handles) and process-wide state (`process.env` changes, `globalThis` properties) start over after every replacement. Factory-scoped state starts over in both Pi and Ompig.
 
 Upstream state: upstream 0.99.1's `DefaultResourceLoader.reload` calls `clearExtensionCache()` when its loader has loaded before (`resource-loader.ts:509`) and invokes every extension factory again inside the same Node process. `AgentSessionRuntime` builds the replacement Session's resource loader and extension factories again in the same process (`agent-session-runtime.ts:197-351`, `main.ts` `createRuntime`), but a replacement's new loader reads the module-level factory cache (`loader.ts:128-148`), which only `clearExtensionCache()` or a change of working directory empties. Whether the module body runs again therefore depends on the path. On reload, jiti (`moduleCache: false`) re-evaluates a `.ts` module, while a `.mjs` module stays in Node's native ESM cache and its module-level state survives. On a replacement in the same working directory, neither module is evaluated again. Both behaviors were probed directly on upstream 0.99.1, and the 0.87.1 release gave the same counts: two `ctx.reload()` calls logged `.ts` evaluated 3x with 3 factory calls and `.mjs` evaluated 1x with 3 factory calls, and two RPC `new_session` commands logged `.ts` evaluated 1x with 3 factory calls and `.mjs` evaluated 1x with 3 factory calls.
 
-Observable effect: an `.mjs`, `.ts` or natively imported `.js` extension that keeps state at module scope sees it reset by each session replacement, and retained by Pi's when the replacement keeps the working directory. An extension that assigns `process.env` or `globalThis` in one Session finds it in Pi's replacement Session and does not find it in Pig's. Extensions that keep state inside the factory behave the same on both.
+Observable effect: an `.mjs`, `.ts` or natively imported `.js` extension that keeps state at module scope sees it reset by each session replacement, and retained by Pi's when the replacement keeps the working directory. An extension that assigns `process.env` or `globalThis` in one Session finds it in Pi's replacement Session and does not find it in Ompig's. Extensions that keep state inside the factory behave the same on both.
 
-Why: Pig hosts extensions outside its own process, so an extension instance is a runtime process. Re-invoking a factory inside a retained process would need an in-process re-registration protocol and would keep a process whose registrations are being replaced, which the atomic start-beside/swap/stop-old reload transaction is built to avoid. A fresh process matches the part of the contract that holds for every Pi loader, which is that each factory runs again on reload and on session replacement. The outgoing process also has to outlive the command that requested the replacement, because that command awaits the replacement's result; the factory retires it when the command's handler returns. Once RPC mode's shutdown has started, retirement stops shutting hosts down, because a quit `session_shutdown` may still be pending on one and Pi leaves that handler pending; process exit terminates the held hosts.
+Why: Ompig hosts extensions outside its own process, so an extension instance is a runtime process. Re-invoking a factory inside a retained process would need an in-process re-registration protocol and would keep a process whose registrations are being replaced, which the atomic start-beside/swap/stop-old reload transaction is built to avoid. A fresh process matches the part of the contract that holds for every Pi loader, which is that each factory runs again on reload and on session replacement. The outgoing process also has to outlive the command that requested the replacement, because that command awaits the replacement's result; the factory retires it when the command's handler returns. Once RPC mode's shutdown has started, retirement stops shutting hosts down, because a quit `session_shutdown` may still be pending on one and Pi leaves that handler pending; process exit terminates the held hosts.
 
 Call-site markers:
 - `coding/cli/cli_session_factory.go`: `cliSessionFactory.create`, where a replacement Session's build starts its own extension host, and `cliRetirement.retire` and the held-retirement return in `cliSessionFactory.create`, where the replaced Session's host stops after its running command handlers return.
 - `coding/cli/cli_runtime_build.go`: `buildResources`, the extension load of every build, which a replacement runs again for the destination cwd.
 
-Locked by: `coding/cli/session_replacement_modes_test.go` `TestPrintModeNewSessionBuildsFreshExtensionInstances` and `TestRPCSessionCommandsReplaceThroughTheRuntimeFactory`, and `coding/cli/session_replacement_interactive_test.go` `TestInteractiveSessionCommandsReplaceThroughTheRuntimeFactory` and `TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns`. Each starts pig with `testdata/session-replace.mjs`, whose instance identity is module-scope state, and requires a different instance for every replacement Session; each fails when the replacement keeps the outgoing extension process.
+Locked by: `coding/cli/session_replacement_modes_test.go` `TestPrintModeNewSessionBuildsFreshExtensionInstances` and `TestRPCSessionCommandsReplaceThroughTheRuntimeFactory`, and `coding/cli/session_replacement_interactive_test.go` `TestInteractiveSessionCommandsReplaceThroughTheRuntimeFactory` and `TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns`. Each starts ompig with `testdata/session-replace.mjs`, whose instance identity is module-scope state, and requires a different instance for every replacement Session; each fails when the replacement keeps the outgoing extension process.
 
-Parity allowance: no paired scenario asserts module-scope state across `/reload`, because Pi's result depends on the extension's file type and Pig's is the same for all of them. Scenario 15 keeps its state in the factory, the per-reload contract both share. Scenarios `39-extension-session-replacement`, `40-json-extension-session-replacement`, `41-rpc-extension-session-replacement` and `42-tui-extension-session-replacement` (extensions-runtime) trace a session replacement through a fixture that assigns `process.env.FIN_REPLACEMENT_LOG` in one Session and reads it in the next; Pig's side of those scenarios receives the same value at startup, and each scenario's comment cites D70. No other comparator changes.
+Parity allowance: no paired scenario asserts module-scope state across `/reload`, because Pi's result depends on the extension's file type and Ompig's is the same for all of them. Scenario 15 keeps its state in the factory, the per-reload contract both share. Scenarios `39-extension-session-replacement`, `40-json-extension-session-replacement`, `41-rpc-extension-session-replacement` and `42-tui-extension-session-replacement` (extensions-runtime) trace a session replacement through a fixture that assigns `process.env.FIN_REPLACEMENT_LOG` in one Session and reads it in the next; Ompig's side of those scenarios receives the same value at startup, and each scenario's comment cites D70. No other comparator changes.
 
-Remove when: Pig re-invokes TS/JS extension factories inside a retained Node runtime on session replacement (the additive `subprocess.RuntimeRetention` host API exists for it), reusing each module's cached factory as Pi's module-level extension cache does for a replacement in the same working directory (`loader.ts:128-148`), or when upstream reload and session replacement re-evaluate every extension module.
+Remove when: Ompig re-invokes TS/JS extension factories inside a retained Node runtime on session replacement (the additive `subprocess.RuntimeRetention` host API exists for it), reusing each module's cached factory as Pi's module-level extension cache does for a replacement in the same working directory (`loader.ts:128-148`), or when upstream reload and session replacement re-evaluate every extension module.
 
 SCRUTINIZED:approved. The owner approved the session-replacement scope on 2026-09-29 (WSL QUESTIONS 04:50Z, lead note 04:50Z).
 
@@ -987,15 +987,15 @@ What: inside an extension process, `@earendil-works/pi-coding-agent`, `@earendil
 
 Pi's own code, copied verbatim from the pinned release into `shims/pi-dist` with the third-party releases Pi depends on (`yaml`, `marked`, `get-east-asian-width`, `partial-json`, `highlight.js`, `ignore`, `diff`, TypeBox):
 - pi-coding-agent: the complete published root module graph, including AgentSession, ModelRuntime, SessionManager, SettingsManager, ResourceLoader, tool factories and renderers, compaction, selectors, theme helpers, and the SDK factories. `createAgentSession` delegates to Pi's implementation and binds independent child cleanup to its extension connection. The main Go Session is not exposed as an imported JavaScript AgentSession.
-- pi-agent-core, the whole package (its `Agent`, agent loops, harness, compaction, session storage and tools), with the chord and pi-telemetry modules it imports. As Pi's SDK does, the runtime installs pi-ai's compat `streamSimple` as the default stream function, so an extension's `Agent` streams through PiG's providers (D74).
+- pi-agent-core, the whole package (its `Agent`, agent loops, harness, compaction, session storage and tools), with the chord and pi-telemetry modules it imports. As Pi's SDK does, the runtime installs pi-ai's compat `streamSimple` as the default stream function, so an extension's `Agent` streams through Ompig's providers (D74).
 - pi-tui: every public runtime export, including `ScrollView`, `Image`, image/capability/cell-dimension helpers, `ProcessTerminal`, `TuiMainScreen`, `TuiAltScreen`, and `getNativeClipboard`. The complete JavaScript module tree and Pi's native helper prebuilds are bundled. TypeScript-only types are not fabricated runtime classes. Caller-created screens operate on their supplied Terminal; importing a screen does not replace the host's live Main Screen.
-- pi-ai: its compat entry point, which Pi serves for the pi-ai root and `/compat`, and `providers/all`, with only its builtin API implementations running in PiG's host (D74).
+- pi-ai: its compat entry point, which Pi serves for the pi-ai root and `/compat`, and `providers/all`, with only its builtin API implementations running in Ompig's host (D74).
 
 The imported pure helpers, tool definitions, components, and themes execute Pi's code. The host publishes its active palette to the extension process's global theme and publishes measured terminal dimensions, including `process.stdout.columns` and `process.stdout.rows`. D74 still governs built-in provider execution. Independent imported objects do not expose the Go Main Screen or let a prototype patch modify a Go component.
 
-Independent file-backed stores use PiG's configuration root by default (D2). `PIG_USE_PI_DIRS=1` selects `PI_CODING_AGENT_DIR` or `~/.pi/agent` and project `.pi` instead. `SettingsManager` reads the selected project settings unless the caller passes `{ projectTrusted: false }`. Node uses the exact pinned proper-lockfile dependency. Go auth, model, settings and trust stores use the same directory-lock protocol, so a Node child can open those stores without encountering a regular-file sidecar from its host. PiG reclaims an empty regular sidecar from v0.2.0 only after its mtime passes the operation's stale threshold (10 seconds synchronous, 30 seconds asynchronous), taking its old OS lock and rechecking file identity and mtime. Fresh regular sidecars use normal contention retries or caller cancellation. A live older writer keeps its lock; stop that older PiG if acquisition times out. Only an empty regular file is a legacy sidecar. A nonempty file, a link and a lock directory at the lock path follow proper-lockfile's protocol, as in Pi: a fresh one is contention, and a stale one is removed with rmdir. That removes a stale lock directory, and on Windows a link to a stale directory, whose target stays. A stale nonempty file, a link to a stale file, and on Unix any stale link stay in place: acquisition fails with ELOCKED on Windows and ENOTDIR on Unix. A stale lock directory that is not empty stays in place, and acquisition fails with ENOTEMPTY. A dangling link stays in place, and acquisition reports ELOCKED. This recovers PiG-owned upgrade state; it does not change the directory protocol used by Pi and Node children.
+Independent file-backed stores use Ompig's configuration root by default (D2). `OMPIG_USE_PI_DIRS=1` selects `PI_CODING_AGENT_DIR` or `~/.pi/agent` and project `.pi` instead. `SettingsManager` reads the selected project settings unless the caller passes `{ projectTrusted: false }`. Node uses the exact pinned proper-lockfile dependency. Go auth, model, settings and trust stores use the same directory-lock protocol, so a Node child can open those stores without encountering a regular-file sidecar from its host. Ompig reclaims an empty regular sidecar from v0.2.0 only after its mtime passes the operation's stale threshold (10 seconds synchronous, 30 seconds asynchronous), taking its old OS lock and rechecking file identity and mtime. Fresh regular sidecars use normal contention retries or caller cancellation. A live older writer keeps its lock; stop that older Ompig if acquisition times out. Only an empty regular file is a legacy sidecar. A nonempty file, a link and a lock directory at the lock path follow proper-lockfile's protocol, as in Pi: a fresh one is contention, and a stale one is removed with rmdir. That removes a stale lock directory, and on Windows a link to a stale directory, whose target stays. A stale nonempty file, a link to a stale file, and on Unix any stale link stay in place: acquisition fails with ELOCKED on Windows and ENOTDIR on Unix. A stale lock directory that is not empty stays in place, and acquisition fails with ENOTEMPTY. A dangling link stays in place, and acquisition reports ELOCKED. This recovers Ompig-owned upgrade state; it does not change the directory protocol used by Pi and Node children.
 
-`CustomEditor` is Pi's, a subclass of pi-tui's `Editor`, and `ctx.ui.setEditorComponent` installs the factory's editor the way Pi's `setCustomEditorComponent` does. The editor runs in the extension process: the factory receives a TUI (terminal size, `requestRender`, `terminal.write`, `setShowHardwareCursor`/`getShowHardwareCursor`), Pi's editor theme and the keybindings manager below; the host sends it the editor text, padding, autocomplete size and focus Pi copies, every key while it is installed, a left click on its rows in fullscreen mode, and each `setText`, `insertTextAtCursor` and `addToHistory` Pi's host performs on its editor; it shows the rows the editor renders, cursor marker included, and runs the default editor's handlers for its callbacks (`onSubmit`, `onChange`, `onEscape`, `onCtrlD`, `onPasteImage`, `onExtensionShortcut` and the `app.*` action handlers). Editor-local clear, follow-up clearing and idle bash Escape run synchronously in the component process; their host callbacks do not replay those text mutations. An input-completion notification holds the input pump until the component's callbacks reach the owner loop, without blocking rendering or accumulating later keys. Its border color follows the thinking level and bash mode as Pi's `updateEditorBorderColor` sets it, and its autocomplete provider asks the host, which answers with the suggestions PiG's own editor would show for the same text.
+`CustomEditor` is Pi's, a subclass of pi-tui's `Editor`, and `ctx.ui.setEditorComponent` installs the factory's editor the way Pi's `setCustomEditorComponent` does. The editor runs in the extension process: the factory receives a TUI (terminal size, `requestRender`, `terminal.write`, `setShowHardwareCursor`/`getShowHardwareCursor`), Pi's editor theme and the keybindings manager below; the host sends it the editor text, padding, autocomplete size and focus Pi copies, every key while it is installed, a left click on its rows in fullscreen mode, and each `setText`, `insertTextAtCursor` and `addToHistory` Pi's host performs on its editor; it shows the rows the editor renders, cursor marker included, and runs the default editor's handlers for its callbacks (`onSubmit`, `onChange`, `onEscape`, `onCtrlD`, `onPasteImage`, `onExtensionShortcut` and the `app.*` action handlers). Editor-local clear, follow-up clearing and idle bash Escape run synchronously in the component process; their host callbacks do not replay those text mutations. An input-completion notification holds the input pump until the component's callbacks reach the owner loop, without blocking rendering or accumulating later keys. Its border color follows the thinking level and bash mode as Pi's `updateEditorBorderColor` sets it, and its autocomplete provider asks the host, which answers with the suggestions Ompig's own editor would show for the same text.
 
 The keybindings manager handed to editor and `ctx.ui.custom` factories, and installed as pi-tui's global keybindings, is Pi's full table: every `tui.*` and `app.*` definition with the user's `keybindings.json` overrides, sent by the host with each state snapshot.
 
@@ -1003,8 +1003,8 @@ Partial, with the reason:
 - The live Main Screen, arbitrary Go component references, and prototype patches to Go-owned UI objects do not cross into Node. Imported UI classes and `Theme` instances are independent objects. `initTheme` changes the extension process's theme; use `ctx.ui.setTheme` to request a host theme change.
 - `ui.custom` publishes its mounted overlay handle and supports visibility, focus, bounds and unfocus controls. `unfocus({target})` focuses exactly the target when it is `null` or `undefined`, the extension's installed editor component, or another mounted overlay of the same extension, as Pi's `tui.ts:745-775` does. A component that the extension has not mounted has no main-process identity, so `unfocus({target})` with it throws instead of focusing it.
 - An editor component's autocomplete provider carries no `triggerCharacters` from other extensions' provider wrappers; it uses Pi's default trigger characters.
-- `CONFIG_DIR_NAME` and `getAgentDir` name PiG's configuration tree (D2).
-- `getPackageDir` identifies the shipped private Node SDK and its assets, not the Node interpreter or PiG executable directory. The harness package also exports that SDK for absolute package-root imports.
+- `CONFIG_DIR_NAME` and `getAgentDir` name Ompig's configuration tree (D2).
+- `getPackageDir` identifies the shipped private Node SDK and its assets, not the Node interpreter or Ompig executable directory. The harness package also exports that SDK for absolute package-root imports.
 
 No manufactured class/function stand-ins remain in the coding-agent or TUI package exports. The export audit is `test/parity/unit-evidence/node-shim-audit.md`; the restored TUI module tests and `test/parity/unit-evidence/fix-node-scrollview.md` qualify the TUI portion. The fabricated pi-ai `registerSessionResourceCleanup` and `cleanupSessionResources` values are removed because neither was a runtime export of the Pi release that the audit read. Live main-process identity remains restricted as described above.
 
@@ -1027,23 +1027,23 @@ Remove when: live main-process object operations preserve Pi's identity and call
 
 SCRUTINIZED:approved
 
-## D74 Pi-ai's builtin API implementations run in PiG's host
+## D74 Pi-ai's builtin API implementations run in Ompig's host
 
-What: inside an extension process, pi-ai's compat layer, API registry, lazy API wrappers, model catalog and env-key lookup are Pi's own code (D73). The ten builtin API implementations they load (`anthropic-messages`, `openai-completions`, `openai-responses`, `azure-openai-responses`, `openai-codex-responses`, `google-generative-ai`, `google-vertex`, `mistral-conversations`, `bedrock-converse-stream`, `pi-messages`) are replaced by a bridge. For each request the bridge applies that API's upstream credential check (`options.apiKey`, the headers that stand in for one, or ambient credentials for Vertex and Bedrock) and upstream's `Request aborted` for a signal that already fired, then streams the request through PiG's Go port of the same provider: `options.apiKey` owns the request ahead of every configured credential, `options.reasoning` sets the thinking level (a `stream()` call and a `streamSimple()` call without one run without reasoning, not at the session's level), headers and env pass through, and an aborted `options.signal` cancels the host request. `openrouter-images` `generateImages` returns an error result, because PiG has no image-generation provider.
+What: inside an extension process, pi-ai's compat layer, API registry, lazy API wrappers, model catalog and env-key lookup are Pi's own code (D73). The ten builtin API implementations they load (`anthropic-messages`, `openai-completions`, `openai-responses`, `azure-openai-responses`, `openai-codex-responses`, `google-generative-ai`, `google-vertex`, `mistral-conversations`, `bedrock-converse-stream`, `pi-messages`) are replaced by a bridge. For each request the bridge applies that API's upstream credential check (`options.apiKey`, the headers that stand in for one, or ambient credentials for Vertex and Bedrock) and upstream's `Request aborted` for a signal that already fired, then streams the request through Ompig's Go port of the same provider: `options.apiKey` owns the request ahead of every configured credential, `options.reasoning` sets the thinking level (a `stream()` call and a `streamSimple()` call without one run without reasoning, not at the session's level), headers and env pass through, and an aborted `options.signal` cancels the host request. `openrouter-images` `generateImages` returns an error result, because Ompig has no image-generation provider.
 
-Why: the upstream implementations import the vendor SDKs (`@anthropic-ai/sdk`, `openai`, `@google/genai`, `@aws-sdk/client-bedrock-runtime`), which PiG does not ship to extensions, and PiG already carries parity-tested Go ports of these providers, which its own agent uses. Running every builtin API through one bridge keeps credential resolution and request behavior uniform. Owner-directed launch P0 fix (Reddit report on 2026-09-26: pi-hermes-memory calls `completeSimple` from `@earendil-works/pi-ai/compat`).
+Why: the upstream implementations import the vendor SDKs (`@anthropic-ai/sdk`, `openai`, `@google/genai`, `@aws-sdk/client-bedrock-runtime`), which Ompig does not ship to extensions, and Ompig already carries parity-tested Go ports of these providers, which its own agent uses. Running every builtin API through one bridge keeps credential resolution and request behavior uniform. Owner-directed launch P0 fix (Reddit report on 2026-09-26: pi-hermes-memory calls `completeSimple` from `@earendil-works/pi-ai/compat`).
 
-Observable effect: an extension's `stream`/`complete`/`streamSimple`/`completeSimple` sends the same request (credential, model, messages) and receives the same event and result shapes as under Pi, from PiG's provider; a request aborted in flight carries the Go provider's abort message rather than the vendor SDK's. A model whose provider an extension registered with its own `streamSimple` still reaches the API implementation its `api` names, as under Pi, and never re-enters that `streamSimple`. Provider-specific `stream()` options beyond the common ones (for example Anthropic `thinkingEnabled`) are not forwarded, results lack `responseId` and `rawStopReason`, and `generateImages` for OpenRouter returns an error result where Pi generates images. A direct pi-ai call carries only the identity's `User-Agent` and no attribution headers, as under Pi's pi-ai without an `identity` option; the bridge does not forward `identity`. A process with no extension runtime (a detached helper, a forked child or a worker an extension starts) streams through `pig provider-bridge`, which calls the API implementation directly (`StreamAPILeaf`, not `coding.BuildModel`): its requests carry no attribution headers, as under Pi, and a request with a `fetch` option ends with an error event on the same stream, where Pi sends it with that `fetch`. The vendored `api/<api>.js` stubs export only `stream` and `streamSimple`: Pi's other exports of those modules, such as `openai-completions` `convertMessages`, `pi-messages` `PiMessagesResponseError` and the `openai-codex-responses` WebSocket debug helpers, are absent.
+Observable effect: an extension's `stream`/`complete`/`streamSimple`/`completeSimple` sends the same request (credential, model, messages) and receives the same event and result shapes as under Pi, from Ompig's provider; a request aborted in flight carries the Go provider's abort message rather than the vendor SDK's. A model whose provider an extension registered with its own `streamSimple` still reaches the API implementation its `api` names, as under Pi, and never re-enters that `streamSimple`. Provider-specific `stream()` options beyond the common ones (for example Anthropic `thinkingEnabled`) are not forwarded, results lack `responseId` and `rawStopReason`, and `generateImages` for OpenRouter returns an error result where Pi generates images. A direct pi-ai call carries only the identity's `User-Agent` and no attribution headers, as under Pi's pi-ai without an `identity` option; the bridge does not forward `identity`. A process with no extension runtime (a detached helper, a forked child or a worker an extension starts) streams through `ompig provider-bridge`, which calls the API implementation directly (`StreamAPILeaf`, not `coding.BuildModel`): its requests carry no attribution headers, as under Pi, and a request with a `fetch` option ends with an error event on the same stream, where Pi sends it with that `fetch`. The vendored `api/<api>.js` stubs export only `stream` and `streamSimple`: Pi's other exports of those modules, such as `openai-completions` `convertMessages`, `pi-messages` `PiMessagesResponseError` and the `openai-codex-responses` WebSocket debug helpers, are absent.
 
 Call-site markers:
-- `coding/extension/host/subprocess/runtime-node/shims/pi-ai-bridge.mjs`: the bridge the vendored `api/<api>.js` stubs load. With no extension runtime in the process it streams through `shims/provider-bridge-client.mjs` and `pig provider-bridge` (`coding/cli/provider_bridge.go`, `internal/codingagent/provider_bridge.go`); see docs/extension-api-parity.md "Provider bridge for processes with no extension runtime".
+- `coding/extension/host/subprocess/runtime-node/shims/pi-ai-bridge.mjs`: the bridge the vendored `api/<api>.js` stubs load. With no extension runtime in the process it streams through `shims/provider-bridge-client.mjs` and `ompig provider-bridge` (`coding/cli/provider_bridge.go`, `internal/codingagent/provider_bridge.go`); see docs/extension-api-parity.md "Provider bridge for processes with no extension runtime".
 - `coding/model.go`: `requestOptionsProvider.Stream`, which streams a direct pi-ai call that the bridge sends through `coding.BuildModel`, without attribution.
 
 Locked by: `coding/extension/host/subprocess` `TestVendoredPiDistMatchesThePinnedPackage` (every vendored pi-ai file is verbatim except the listed bridge stubs), `TestNodeRuntimeShimsExportEveryPinnedPiValue` (the compat surface), and `TestNodeCompatCompletionAbortCancelsHostRequest` (the extension's `apiKey` reaches the host, no session thinking level is applied, and an aborted signal cancels the host request). The provider bridge is locked by `coding/cli` `TestProviderBridge*` (provider order, the aborted terminal event before the result, callbacks, the strict request shape, exit with the starter) and `coding/extension/host/subprocess` `TestProviderBridgeClientHonoursTheBridgeWire` (the client side, the `fetch` error and an idle bridge that does not keep its caller alive).
 
 Parity allowance: no paired scenario runs an extension's direct provider call; the Pi-extension end-to-end run compares pi-hermes-memory's consolidation request and result against the pinned Pi over a scripted OpenAI-compatible server.
 
-Remove when: PiG ships the vendor SDKs to extensions and runs upstream's API implementations, or upstream removes the compat entry point's global dispatch.
+Remove when: Ompig ships the vendor SDKs to extensions and runs upstream's API implementations, or upstream removes the compat entry point's global dispatch.
 
 SCRUTINIZED:approved
 
@@ -1060,7 +1060,7 @@ Scope: only the named SDK surface and cross-process configuration identity gaps.
 Owner decision: 2026-09-28, owner Michael Kinsy approves recording the remaining Provider surface and the foreign registered-config identity proposal as visible known gaps for 0.3.x. This supersedes D78's pending scrutiny, not its implementation obligations. It grants no comparator relaxation, fabricated callback result, compatibility reader or general lifecycle waiver.
 
 Call-site markers:
-- `extensions/sdk/provider_proxy.go`, `extensions/sdk-rs/src/context.rs`, and `extensions/sdk-py/pig_sdk/__init__.py`: builtin/composed raw Provider retrieval.
+- `extensions/sdk/provider_proxy.go`, `extensions/sdk-rs/src/context.rs`, and `extensions/sdk-py/ompig_sdk/__init__.py`: builtin/composed raw Provider retrieval.
 - `coding/extension/host/subprocess/runtime-node/runtime.mjs`: the native SDK author's registered-configuration snapshot returned by `getRegisteredProviderConfig`.
 
 Evidence: `TestProviderObjectsAcrossSDKs`, `TestNodeRemoteProviderObjectCarrier`, `TestProviderObjectReferenceLifetime`, and `TestNativeProviderRegistrationWinsBeforeAuthCompletes` cover implemented methods, not full configuration identity. `test/parity/unit-evidence/fin-d78-carriers.md` and `docs/findings/0.3.0-known-gaps.md` distinguish that integrated evidence from subsequent SDK checkpoints. Pi source: `packages/coding-agent/src/core/model-runtime.ts:438-443,744-797` returns retained objects and creates a fresh shallow effective configuration; `packages/coding-agent/src/core/model-registry.ts:162-171` delegates those getters.
@@ -1073,7 +1073,7 @@ SCRUTINIZED:approved
 
 ## D79 User-package metadata ignores the invoking project's npm configuration
 
-What: metadata lookups for user-scoped (global) npm packages run from that source's managed npm install root, including an explicit registry source's managed root. PiG retains the caller's selected `npmCommand` argv and user/environment configuration. This applies to explicit package updates and available-update checks, including commands that select npm, pnpm or Bun. Trusted project-scoped packages continue to query from the project cwd. Missing user roots are initialized as managed npm projects; an inaccessible root fails the lookup instead of falling back to the invoking directory.
+What: metadata lookups for user-scoped (global) npm packages run from that source's managed npm install root, including an explicit registry source's managed root. Ompig retains the caller's selected `npmCommand` argv and user/environment configuration. This applies to explicit package updates and available-update checks, including commands that select npm, pnpm or Bun. Trusted project-scoped packages continue to query from the project cwd. Missing user roots are initialized as managed npm projects; an inaccessible root fails the lookup instead of falling back to the invoking directory.
 
 Why: security. upstream 0.99.2 runs `npm view` in the invoking project even when project settings are denied. A repository's `.npmrc` can redirect global-package metadata requests, expose queried package names and influence update decisions without project approval. The owner selected the minimal cwd policy, not a new package-manager configuration sandbox.
 
@@ -1083,7 +1083,7 @@ Scope: user-package metadata only. The approved difference applies even when the
 
 Call-site marker: `internal/packagemanager/package_npm_metadata.go`: `GetLatestNpmVersion`, the shared scope-to-cwd decision.
 
-Locked by: `coding/cli/package_registry_scope_test.go` (`TestNpmMetadataLookupScope`, `TestPackageUpdatePerformsScopedMetadataLookup`, `TestNpmMetadataLookupRefusesUnavailableRootAndUntrustedProject`, and `TestNpmMetadataLookupCreatesManagedRootForLegacyInstall`). The selected-command test covers npm, pnpm and Bun argv with both scopes. The real npm loopback scenarios `project-trust/19-user-package-registry-isolation` and `20-trusted-project-package-registry` require a metadata lookup and no reinstall for a current package. The first records PiG's user registry versus Pi's project registry as the expected divergence; the second compares the complete measured result exactly.
+Locked by: `coding/cli/package_registry_scope_test.go` (`TestNpmMetadataLookupScope`, `TestPackageUpdatePerformsScopedMetadataLookup`, `TestNpmMetadataLookupRefusesUnavailableRootAndUntrustedProject`, and `TestNpmMetadataLookupCreatesManagedRootForLegacyInstall`). The selected-command test covers npm, pnpm and Bun argv with both scopes. The real npm loopback scenarios `project-trust/19-user-package-registry-isolation` and `20-trusted-project-package-registry` require a metadata lookup and no reinstall for a current package. The first records Ompig's user registry versus Pi's project registry as the expected divergence; the second compares the complete measured result exactly.
 
 Remove when: upstream isolates user-package metadata from the invoking project's configuration with equivalent command/configuration preservation, or the owner explicitly approves a different security boundary.
 
@@ -1092,13 +1092,13 @@ SCRUTINIZED:approved
 
 ## D80 Configurable secret-input privacy
 
-What: `maskSecretInput` is a boolean setting with default `true`. `/settings` exposes **Mask secret input** and explains that false restores Pi's plain-text behavior. Masked prompts show up to eight dots, a grapheme count and the last four graphemes. Inputs shorter than five graphemes expose no suffix. Submitted dialog history retains only the preview. The hint reads `Input hidden (PiG default). Show like Pi: /settings → Mask secret input`.
+What: `maskSecretInput` is a boolean setting with default `true`. `/settings` exposes **Mask secret input** and explains that false restores Pi's plain-text behavior. Masked prompts show up to eight dots, a grapheme count and the last four graphemes. Inputs shorter than five graphemes expose no suffix. Submitted dialog history retains only the preview. The hint reads `Input hidden (Ompig default). Show like Pi: /settings → Mask secret input`.
 
 False restores upstream 0.99.2's complete ordinary prompt and submitted-text rendering without the extra count or hint. Ordinary text and manual-code prompts are unaffected. A new dialog captures the setting; change it in `/settings`, then reopen `/login`. Normal project/global precedence applies. Pi ignores the extra JSON key and preserves it when updating shared settings.
 
 Authentication progress and errors redact masked input, including trimmed credential forms. Login input is not appended to Session messages. The authentication flow and authorized credential store still receive the credential: display privacy does not encrypt auth.json or a provider-owned store, and the shown suffix is intentionally visible.
 
-Why: the owner requires verification by length and suffix without echoing a complete secret, with a Pi-compatible opt-out. Pi's `packages/ai/src/auth/helpers.ts:12-16` declares secret prompts, but `packages/coding-agent/src/modes/interactive/interactive-mode.ts:6085-6093` routes them to ordinary showPrompt. The host owns authentication input and diagnostics; the approved default changes Stock PiG's visible behavior without activating a product workflow.
+Why: the owner requires verification by length and suffix without echoing a complete secret, with a Pi-compatible opt-out. Pi's `packages/ai/src/auth/helpers.ts:12-16` declares secret prompts, but `packages/coding-agent/src/modes/interactive/interactive-mode.ts:6085-6093` routes them to ordinary showPrompt. The host owns authentication input and diagnostics; the approved default changes Stock Ompig's visible behavior without activating a product workflow.
 
 Call-site markers:
 - `internal/codingagent/settings.go`: default and persistence.
@@ -1110,16 +1110,16 @@ Locked by: `TestLoginDialogMaskedPreview`, `TestLoginDialogSecretValueNeverRende
 
 Parity allowance: the owner-approved enabled default differs from Pi's plain-text input and is guarded by masked-preview, redaction and persisted-history tests. `test/parity/scenarios/oauth/14-login-secret-mask-disabled.toml` compares the disabled production dialog against real Pi with escaped-output equality.
 
-Remove when: upstream provides equivalent configurable privacy, or PiG removes the option.
+Remove when: upstream provides equivalent configurable privacy, or Ompig removes the option.
 
 Ratification: owner decision 2026-09-27 requires the configurable default-on feature, replacing unconditional masking. D80 retains that approval; its classification here does not change behavior or extend the approved scope.
 SCRUTINIZED:approved
 
 ## D82 Cross-process partial-message observation (RPC33)
 
-What: a partial assistant message that crosses the process boundary is an independently owned snapshot rather than Pi's live JavaScript reference. An extension process receives each event as JSON taken at dispatch; a partial it retains does not acquire the producer's later mutations. A provider implemented in an extension process delivers one snapshot per event rather than one mutated object. The host cannot see how many microtasks a foreign handler spends: it resumes after the handler's reply as an I/O completion, so the stream state that PiG's own listeners observe after an awaited foreign handler can differ from Pi's in-process count.
+What: a partial assistant message that crosses the process boundary is an independently owned snapshot rather than Pi's live JavaScript reference. An extension process receives each event as JSON taken at dispatch; a partial it retains does not acquire the producer's later mutations. A provider implemented in an extension process delivers one snapshot per event rather than one mutated object. The host cannot see how many microtasks a foreign handler spends: it resumes after the handler's reply as an I/O completion, so the stream state that Ompig's own listeners observe after an awaited foreign handler can differ from Pi's in-process count.
 
-Same-process observation is Pi-exact for every builtin API on PiG's HTTP/1 transport. Each provider body runs as a turn of a JavaScript-order executor that models Node 24.19.0's promise, async-generator, Web Streams and `Readable` rules and the exact Pi or SDK generator chain, and each delivery boundary (event iterator, Agent listener, Session listener) materializes the partial at its own tick. See `plans/0.3.x/gap-d82.md` for the design.
+Same-process observation is Pi-exact for every builtin API on Ompig's HTTP/1 transport. Each provider body runs as a turn of a JavaScript-order executor that models Node 24.19.0's promise, async-generator, Web Streams and `Readable` rules and the exact Pi or SDK generator chain, and each delivery boundary (event iterator, Agent listener, Session listener) materializes the partial at its own tick. See `plans/0.3.x/gap-d82.md` for the design.
 
 Why: a JSON frame cannot remain an alias of a heap object in another process, and a foreign runtime's microtask queue is not observable from the host. An owned cross-process reference/proxy mechanism would be required.
 
@@ -1132,7 +1132,7 @@ Owner decision: 2026-09-28, owner Michael Kinsy approves this visible known gap 
 Call-site markers:
 - `ai/assistant_publication.go`: `publishPartialLocked` stores an emission-time snapshot for a producer outside the executor (the extension-provider stream and the same-process producers listed as open defects).
 
-Evidence: `plans/0.3.x/gap-d82.md`, `coding/testdata/rpc33-observation/providers/` (Pi start-state oracle and per-API tick-order oracles), `docs/findings/0.3.0-known-gaps.md`. `node coding/testdata/rpc33-observation/providers/check.mjs <pig> 200` reports 200/200 runs equal to Pi for openai-completions, openai-responses, azure-openai-responses, openai-codex-responses (SSE), anthropic-messages, google-generative-ai, mistral-conversations, bedrock-converse-stream, pi-messages and test-faux. Pi source: `packages/ai/src/utils/event-stream.ts:44-91`, `packages/ai/src/api/lazy.ts:31-61`, `packages/agent/src/agent-loop.ts:408-453`, `packages/coding-agent/src/core/agent-session.ts:894-919`, `packages/coding-agent/src/modes/rpc/rpc-mode.ts:354-363`.
+Evidence: `plans/0.3.x/gap-d82.md`, `coding/testdata/rpc33-observation/providers/` (Pi start-state oracle and per-API tick-order oracles), `docs/findings/0.3.0-known-gaps.md`. `node coding/testdata/rpc33-observation/providers/check.mjs <ompig> 200` reports 200/200 runs equal to Pi for openai-completions, openai-responses, azure-openai-responses, openai-codex-responses (SSE), anthropic-messages, google-generative-ai, mistral-conversations, bedrock-converse-stream, pi-messages and test-faux. Pi source: `packages/ai/src/utils/event-stream.ts:44-91`, `packages/ai/src/api/lazy.ts:31-61`, `packages/agent/src/agent-loop.ts:408-453`, `packages/coding-agent/src/core/agent-session.ts:894-919`, `packages/coding-agent/src/modes/rpc/rpc-mode.ts:354-363`.
 
 Parity allowance: none needed for the hermetic scenarios; `rpc/33-rpc-real-provider-records*` keep `json_output_equal`, `stderr_equal` and three runs. No scenario exercises the foreign-retention difference as a pass.
 
@@ -1169,9 +1169,9 @@ Call-site markers:
 - `coding/extension/host/subprocess/runtime-node/runtime.mjs`: `pi.events.emit`, the shared-bus dispatch boundary, and the listener wait after a foreign prefix.
 - `coding/extension/host/subprocess/runtime-node/xref.mjs`: the proxy used for foreign objects, and the release of foreign aliases.
 
-Evidence: Pi `packages/coding-agent/src/core/event-bus.ts:12-33` passes one object to each listener and runs each synchronous prefix before `emit` returns. `coding/extension/host/subprocess/xref_event_bus_test.go` runs each scenario against Pi's own vendored `createEventBus` in one heap and against packed, strict-isolation and mixed PiG topologies: `TestXrefEventBusMatchesPiAcrossRealms`, `TestXrefEventBusListenerOrderMatchesPi`, `TestXrefEventBusPayloadLifetimeMatchesPi`, `TestXrefEventBusReentrantDispatchMatchesPi`, `TestXrefEventBusCrossingEmittersDoNotDeadlock`, `TestXrefEventBusForeignPrefixMutationMatchesPi`, `TestXrefEventBusIntegrityLevelsMatchPi`, `TestXrefEventBusRejectedWritesMatchPi`, `TestXrefEventBusInspectMatchesPi`, `TestXrefEventBusInspectNestedLayoutMatchesPi`, `TestXrefEventBusInspectReadsOnlyWhatNodePrints`, `TestXrefEventBusFormatFollowsToStringChanges`, `TestXrefEventBusCloneMatchesPi`, `TestXrefEventBusCloneLocalGraphsMatchPi`, `TestXrefEventBusSymbolLifetimeMatchesPi`, `TestXrefEventBusMaxListenersWarningIsSilentLikePi` and `TestXrefOwnerExitFailsRetainedAlias`. `TestXrefEventBusInspectProxyBoundaryIsStated` pins the approved prints against Pi's output for the running Node major (wrapped on 26.0.0 and later, unwrapped before), the approved `showProxy` and `isProxy` effects, the open layout defect listed under Scope, and that the payload arrives by reference (the listener's write reaches the emitter's object) on both. It passes on Node 24.19.0 and 26.7.0. Same-realm paths remain covered by `TestNodeRuntimeEventBusMatchesPi`, `TestNodeCellInterleavedGoFactoryKeepsOrderAndBus`, and scenarios `extensions-runtime/31-extension-runtime-surface` and `52-interleaved-node-admission`. Design: `plans/0.3.x/gap-xproc.md`.
+Evidence: Pi `packages/coding-agent/src/core/event-bus.ts:12-33` passes one object to each listener and runs each synchronous prefix before `emit` returns. `coding/extension/host/subprocess/xref_event_bus_test.go` runs each scenario against Pi's own vendored `createEventBus` in one heap and against packed, strict-isolation and mixed Ompig topologies: `TestXrefEventBusMatchesPiAcrossRealms`, `TestXrefEventBusListenerOrderMatchesPi`, `TestXrefEventBusPayloadLifetimeMatchesPi`, `TestXrefEventBusReentrantDispatchMatchesPi`, `TestXrefEventBusCrossingEmittersDoNotDeadlock`, `TestXrefEventBusForeignPrefixMutationMatchesPi`, `TestXrefEventBusIntegrityLevelsMatchPi`, `TestXrefEventBusRejectedWritesMatchPi`, `TestXrefEventBusInspectMatchesPi`, `TestXrefEventBusInspectNestedLayoutMatchesPi`, `TestXrefEventBusInspectReadsOnlyWhatNodePrints`, `TestXrefEventBusFormatFollowsToStringChanges`, `TestXrefEventBusCloneMatchesPi`, `TestXrefEventBusCloneLocalGraphsMatchPi`, `TestXrefEventBusSymbolLifetimeMatchesPi`, `TestXrefEventBusMaxListenersWarningIsSilentLikePi` and `TestXrefOwnerExitFailsRetainedAlias`. `TestXrefEventBusInspectProxyBoundaryIsStated` pins the approved prints against Pi's output for the running Node major (wrapped on 26.0.0 and later, unwrapped before), the approved `showProxy` and `isProxy` effects, the open layout defect listed under Scope, and that the payload arrives by reference (the listener's write reaches the emitter's object) on both. It passes on Node 24.19.0 and 26.7.0. Same-realm paths remain covered by `TestNodeRuntimeEventBusMatchesPi`, `TestNodeCellInterleavedGoFactoryKeepsOrderAndBus`, and scenarios `extensions-runtime/31-extension-runtime-surface` and `52-interleaved-node-admission`. Design: `plans/0.3.x/gap-xproc.md`.
 
-Parity allowance: no paired scenario runs two extension processes; the unit tests above compare PiG's full Host path with Pi's bus in one heap. Same-process paired scenarios remain strict.
+Parity allowance: no paired scenario runs two extension processes; the unit tests above compare Ompig's full Host path with Pi's bus in one heap. Same-process paired scenarios remain strict.
 
 Remove when: cross-realm scheduling is serialized into one task and microtask order, distributed cycle collection releases cross-realm cycles, and foreign objects pass internal-slot brand checks, or upstream restricts its event bus to a process-local contract.
 
@@ -1179,13 +1179,13 @@ SCRUTINIZED:approved
 
 ## D84 Direct Go provider registration refreshes availability on the next awaited call
 
-What: a Go caller that registers, replaces or removes a Provider directly on the Model Registry or the Model Runtime (`coding.ModelRuntime.RegisterProvider`, `RegisterNativeProvider`, `UnregisterProvider`, the equivalent `ModelRegistry` methods, and in-process callers such as the llama host), outside an extension host, gets Pi's synchronous projection immediately: the catalog, provisional configured auth and the removed models. Pi's unawaited local refresh (`void this.refresh({ allowNetwork: false })`) does not run by itself. It starts at that caller's next awaited model-runtime call (`Refresh`, `GetAvailable`, `CheckAuth`, `Login`, `Logout`, the catalog refresh coordinator). Extension-host registrations match Pi: `cmd/pig` starts the queued refresh when the host callback returns, and startup and `/reload` start it after every extension factory has loaded.
+What: a Go caller that registers, replaces or removes a Provider directly on the Model Registry or the Model Runtime (`coding.ModelRuntime.RegisterProvider`, `RegisterNativeProvider`, `UnregisterProvider`, the equivalent `ModelRegistry` methods, and in-process callers such as the llama host), outside an extension host, gets Pi's synchronous projection immediately: the catalog, provisional configured auth and the removed models. Pi's unawaited local refresh (`void this.refresh({ allowNetwork: false })`) does not run by itself. It starts at that caller's next awaited model-runtime call (`Refresh`, `GetAvailable`, `CheckAuth`, `Login`, `Logout`, the catalog refresh coordinator). Extension-host registrations match Pi: `cmd/ompig` starts the queued refresh when the host callback returns, and startup and `/reload` start it after every extension factory has loaded.
 
 Why: Pi's refresh is a continuation that lands on the event loop's next turn, after the registering caller's synchronous code and before any later I/O completes. Go has no implicit yield. A goroutine started by the registration would run Provider callbacks during the caller's own request sequence, which is not Pi's order: `providers-faux-streaming/23-metadata-refresh-and-native-result` prints Pi's `0,2` request counters only because no callback runs inside that sequence. No Go mechanism reproduces the JavaScript turn boundary for an arbitrary direct caller.
 
 Observable effect: a direct Go caller that registers a Provider and then reads only synchronous state (`GetAvailableSnapshot`, `HasConfiguredAuth`, `IsUsingOAuth`, `GetError`) sees the provisional projection, not the result of the Provider's auth check or local catalog refresh, until it awaits a model-runtime call. A Provider whose check would reject a provisional configured entry stays listed until then, and a refresh failure reaches `GetError` only after that call.
 
-Scope: only registrations made directly on the Go Model Registry or Model Runtime, with no extension host and no `cmd/pig` host binding. Extension-host registrations in every mode, the startup refresh, `/reload`, provider requests, scoped and unscoped refresh semantics, supersession, cancellation, `Services.Close` draining and error reporting are not waived and must match Pi.
+Scope: only registrations made directly on the Go Model Registry or Model Runtime, with no extension host and no `cmd/ompig` host binding. Extension-host registrations in every mode, the startup refresh, `/reload`, provider requests, scoped and unscoped refresh semantics, supersession, cancellation, `Services.Close` draining and error reporting are not waived and must match Pi.
 
 Owner decision: 2026-09-29, owner Michael Kinsy approves this divergence for direct Go registrations, because a background goroutine would break Pi's observable request order (scenario 23) and Go has no implicit yield. Approval covers only the scope above.
 
@@ -1201,13 +1201,13 @@ SCRUTINIZED:approved
 
 ## D85 RPC stdin end: a suspended extension command's continuation can run before its runtime stops, and one runtime's suspended session_shutdown does not keep another runtime's command alive
 
-What: when RPC stdin ends, PiG decides for each extension command whether Pi's process would still have answered it. A command answers if it settles inside the microtasks, ticks and check phase of its line's own event-loop iteration, or while a `session_shutdown` handler that awaits a timer or I/O keeps the process alive. Two differences remain in that decision.
-1. PiG stops a Node runtime process only after the host reaches its exit decision. A command handler that Pi never resumes (its continuation is a timer, file I/O, a nested `setImmediate` or a child process) is suspended in Pi's exited process. In PiG its continuation can still run in the runtime process between the suspension report and the host stopping that process, so its side effects (a file write, a recorded event, a host call the host still accepts) can happen. Pi never runs them. PiG never prints the held response.
-2. A suspended quit `session_shutdown` handler keeps Pi's process alive, so a suspended command can still settle and answer. PiG observes this only within one runtime process: a suspended `session_shutdown` handler in one runtime process does not keep a command of another runtime process alive. Node factories normally pack into one process, so this is reachable only with an extension in its own runtime process (a quarantined or isolated Node extension) or a non-Node runtime whose handler is suspended. Since the per-process drain reports (`runtime_drained`, `runtime_commands_drained`) the host also counts a command of another isolated Node process as able to answer until that process reports that nothing keeps its own loop alive (`TestDrainSpansIsolatedNodeProcesses`, `TestDrainAwaitsIsolatedNodeCommandThatWaitsForSessionChange`). That covers a command that awaits a session change, a Promise or a dialog; no test covers a command that a suspended quit handler in another process keeps alive, so this difference is recorded as remaining.
+What: when RPC stdin ends, Ompig decides for each extension command whether Pi's process would still have answered it. A command answers if it settles inside the microtasks, ticks and check phase of its line's own event-loop iteration, or while a `session_shutdown` handler that awaits a timer or I/O keeps the process alive. Two differences remain in that decision.
+1. Ompig stops a Node runtime process only after the host reaches its exit decision. A command handler that Pi never resumes (its continuation is a timer, file I/O, a nested `setImmediate` or a child process) is suspended in Pi's exited process. In Ompig its continuation can still run in the runtime process between the suspension report and the host stopping that process, so its side effects (a file write, a recorded event, a host call the host still accepts) can happen. Pi never runs them. Ompig never prints the held response.
+2. A suspended quit `session_shutdown` handler keeps Pi's process alive, so a suspended command can still settle and answer. Ompig observes this only within one runtime process: a suspended `session_shutdown` handler in one runtime process does not keep a command of another runtime process alive. Node factories normally pack into one process, so this is reachable only with an extension in its own runtime process (a quarantined or isolated Node extension) or a non-Node runtime whose handler is suspended. Since the per-process drain reports (`runtime_drained`, `runtime_commands_drained`) the host also counts a command of another isolated Node process as able to answer until that process reports that nothing keeps its own loop alive (`TestDrainSpansIsolatedNodeProcesses`, `TestDrainAwaitsIsolatedNodeCommandThatWaitsForSessionChange`). That covers a command that awaits a session change, a Promise or a dialog; no test covers a command that a suspended quit handler in another process keeps alive, so this difference is recorded as remaining.
 
 Why: extensions run in runtime processes outside the host. The host learns that a handler is suspended from a `request_state` frame and must then stop the process, so the continuation races the stop. An exact match would need the host to freeze or stop the runtime before the suspension frame is sent, which stays racy, or a keepalive aggregated across runtime processes with a new wire message for handler suspension. Pi runs every extension on its one event loop (`rpc-mode.ts:726-742,802-805`, `output-guard.ts:105-108`).
 
-Observable effect: (1) an extension whose command continues through a timer or I/O after stdin ended can perform that continuation's side effects under PiG and not under Pi, in a short window before its runtime stops. Stdout is identical. (2) With extensions in separate runtime processes, a command that Pi answers because another extension's shutdown handler holds the process open is not answered by PiG.
+Observable effect: (1) an extension whose command continues through a timer or I/O after stdin ended can perform that continuation's side effects under Ompig and not under Pi, in a short window before its runtime stops. Stdout is identical. (2) With extensions in separate runtime processes, a command that Pi answers because another extension's shutdown handler holds the process open is not answered by Ompig.
 
 Scope: only RPC stdin end, and only these two cases. Outside them, which commands answer, the held responses, the per-command window, the ordering of suspensions before responses, pending dialogs, `session_shutdown` delivery and exit codes are not waived and must match Pi.
 
@@ -1217,15 +1217,15 @@ Call-site markers: `coding/extension/host/subprocess/runtime-node/runtime.mjs`: 
 
 Evidence: `TestRPCInputEndAfterExtensionCommandComparedWithPi` (stdout and the extension's event records against Pi for each command shape, with and without the default shutdown handler, plus a sibling extension), `TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi` (stdout against Pi over repeated runs of the window-edge shapes), `TestRPCInputEndCommandSettlesDuringSlowShutdownHandler` and `TestRPCInputEndJoinsEachExtensionCommand` in `coding/cli/rpc_shutdown_test.go`, `TestCommandFlightsSuspendPerCommand` in `coding/extension/host/subprocess/command_flight_test.go`, and `TestConformance_SuspendedCommandFlush` in `test/extension-conformance/command_flush_test.go`. The stdin-end contract is in `docs/extension-api-parity.md`.
 
-Parity allowance: the Pi rows of the comparison tests are strict, except the rows where Pi's own answer varies, where only PiG's side is asserted: the threadpool rows of `TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi`, and a nested `setImmediate` on Windows in both comparison tests. The PiG rows drop the command's own event record for the shapes Pi does not answer (`afterExit`), which is difference 1. No test covers difference 2.
+Parity allowance: the Pi rows of the comparison tests are strict, except the rows where Pi's own answer varies, where only Ompig's side is asserted: the threadpool rows of `TestRPCInputEndWindowClosesBeforeNextPollComparedWithPi`, and a nested `setImmediate` on Windows in both comparison tests. The Ompig rows drop the command's own event record for the shapes Pi does not answer (`afterExit`), which is difference 1. No test covers difference 2.
 
-Remove when: the host stops or freezes a runtime process before a suspended continuation can run and the stdin-end window is aggregated across runtime processes, or PiG runs extensions on one shared event loop as Pi does.
+Remove when: the host stops or freezes a runtime process before a suspended continuation can run and the stdin-end window is aggregated across runtime processes, or Ompig runs extensions on one shared event loop as Pi does.
 
 SCRUTINIZED:approved
 
 ## D86 RPC settle tail: a settle-tail handler of a runtime that cannot report its wait holds stdin
 
-What: in RPC mode Pi emits `agent_settled` in the microtasks that follow a published `agent_end`, so its stdin reader, which runs between macrotasks, reads no line between them (`agent-session.ts:1044-1058,1752-1777`, `rpc-mode.ts:355-360,808-810`). When an `agent_before_settle` or `agent_settled` handler awaits a timer, I/O or another real wait, Pi reads stdin while it waits. PiG reads stdin on its own goroutine, so `rpcSettleGate` holds each stdin batch, and stdin's end, from a published `agent_end` until `agent_settled` is written. The gate is open during a compaction, an auto-retry delay, a new run, an extension dialog and a settle-tail handler whose wait the host can see: a Node handler reports a suspended window to the host, as a command does. A handler of a runtime with no microtask continuation (the Go, Rust and Python SDKs) reports no window. While such a handler runs, the gate stays closed. A command sent during its wait is answered after the handler settles and `agent_settled` is written, where Pi answers it during the wait. After stdin's end, such a running handler counts as waiting, so shutdown does not wait for it.
+What: in RPC mode Pi emits `agent_settled` in the microtasks that follow a published `agent_end`, so its stdin reader, which runs between macrotasks, reads no line between them (`agent-session.ts:1044-1058,1752-1777`, `rpc-mode.ts:355-360,808-810`). When an `agent_before_settle` or `agent_settled` handler awaits a timer, I/O or another real wait, Pi reads stdin while it waits. Ompig reads stdin on its own goroutine, so `rpcSettleGate` holds each stdin batch, and stdin's end, from a published `agent_end` until `agent_settled` is written. The gate is open during a compaction, an auto-retry delay, a new run, an extension dialog and a settle-tail handler whose wait the host can see: a Node handler reports a suspended window to the host, as a command does. A handler of a runtime with no microtask continuation (the Go, Rust and Python SDKs) reports no window. While such a handler runs, the gate stays closed. A command sent during its wait is answered after the handler settles and `agent_settled` is written, where Pi answers it during the wait. After stdin's end, such a running handler counts as waiting, so shutdown does not wait for it.
 
 Why: the host learns of a wait only from a runtime's report, and those runtimes have no equivalent of the Node window that closes unresponded. Without the gate, a command sent on seeing `agent_end` would be answered before `agent_settled`, which Pi never does.
 
@@ -1237,7 +1237,7 @@ Owner decision: 2026-10-01, owner Michael Kinsy approves this divergence as a te
 
 Call-site markers: `coding/cli/rpc_settle_gate.go`: `rpcSettleGate`.
 
-Evidence: `TestRPCCommandAfterAgentEndAnswersAfterAgentSettledComparedWithPi`, `TestRPCCommandDuringSuspendedSettleTailAnswersComparedWithPi` and `TestRPCInputEndDuringSuspendedSettleTailShutsDownComparedWithPi` in `coding/cli/rpc_input_end_order_test.go` (Pi and PiG for Node handlers), `TestRPCInputEndDuringGoSDKSettleTailHandlerShutsDown` in `coding/cli/rpc_shutdown_drain_go_test.go`, `TestRPCSettleGate*` in `coding/cli/rpc_settle_gate_test.go` and `TestSettleTailCountsHandlersPiServesStdinDuring` in `coding/extension/host/subprocess/command_window_test.go`.
+Evidence: `TestRPCCommandAfterAgentEndAnswersAfterAgentSettledComparedWithPi`, `TestRPCCommandDuringSuspendedSettleTailAnswersComparedWithPi` and `TestRPCInputEndDuringSuspendedSettleTailShutsDownComparedWithPi` in `coding/cli/rpc_input_end_order_test.go` (Pi and Ompig for Node handlers), `TestRPCInputEndDuringGoSDKSettleTailHandlerShutsDown` in `coding/cli/rpc_shutdown_drain_go_test.go`, `TestRPCSettleGate*` in `coding/cli/rpc_settle_gate_test.go` and `TestSettleTailCountsHandlersPiServesStdinDuring` in `coding/extension/host/subprocess/command_window_test.go`.
 
 Parity allowance: the Pi comparison rows cover Node handlers only. No test compares a command sent during a Go, Rust or Python handler's wait with Pi, because those handlers have no Pi counterpart.
 
@@ -1245,80 +1245,80 @@ Remove when: the Go, Rust and Python SDK runtimes report a settle-tail handler's
 
 SCRUTINIZED:approved
 
-## D87 PiG's versions of Pi's easter eggs
+## D87 Ompig's versions of Pi's easter eggs
 
-What: Pi has two easter eggs that show Pi's art. PiG plays them with its own art. Pi 1.4.0's `easter-egg-3d.ts` plays both the logo and, in fullscreen mode, a 3D Armin for `/arminsayshi`; PiG ports it with PiG's models. Its logo path draws exactly what the `pi-logo-animation.ts` of Pi's 1.0.0 release drew (lift-off cells, start scale, dust center and timeline are unchanged), so the header click keeps its pig behavior.
-1. Clicking the header logo in fullscreen mode (`interactive-mode.ts:1059`, `easter-egg-3d.lazy.ts` `playPiLogo3d`, `easter-egg-3d.ts`; Pi 1.0.0 `pi-logo-animation.lazy.ts` and `pi-logo-animation.ts`). The clickable logo is PiG's pig head (D2): cells 1 to 16 of the header's first seven lines, where Pi's logo takes cells 1 to 4 of two, or the 4 cells of the one-line `PiG.` text mark where it stands in for Pi's logo; Apple Terminal has no clickable logo, as Pi's text wordmark has none. The object that flies, grows and spins is that head, built from the active sprite's head pixels and colors (`/sprite`), not Pi's three-color logo. Where Pi's logo shuffles its blocks as a sliding puzzle (from 4.4 s, one 5.2 s cycle at a time), the spinning head gives way for the 3.6 s of Pi's shuffle to a side-view running pig, 38 pixels by 22, ray cast in braille dots with the head's shading and blocks the size of the head's, so it is more than twice the head's width: rounded body, ears, eye, snout with nostrils, cheek, curly tail and dark outline, four legs in a four-frame run cycle with a one-pixel bob. It runs in place where the head spins. In the first 0.6 s of the run the head's braille dots dissolve one by one into the pig's while the pig turns from the head's spin to face the camera, and in the last 0.6 s the pig dissolves back into the head the same way while it turns back to the head's spin, so no frame is empty or a hard swap; Esc during the run dissolves the pig back into the head over 0.6 s while Pi's exit plays. The head is back, whole and spinning, for Pi's 1 s return and 0.6 s hold. The ray caster holds up to 65535 faces where Pi's holds 255 (`Uint8Array`), because the running pig has more, and renders the head and the pig as two layers during a dissolve. The running pig takes the active sprite's colors: a color the head draws keeps its color, a body the head does not draw as `P` is the head's most common color (Kratos's skin, Spider-Ham's suit), a body too dark for a dark outline is outlined in its highlight (Vader), and characters keep accessories (the Sheriff's hat and star, Vader's red panel, Kratos's tattoo, Piglet's shirt, Spider-Ham's web, PiGrogu's robe). The dissolve, its timing and dust, the 3D ray caster and shading, the light-background halo, the starfield, the `escape to return` hint, the spin locked to the cycle, the reverse exit, the keys (`tui.select.cancel` and `app.clear`, a second press skips the exit) and the mouse handling are Pi's.
-2. `/arminsayshi` (`interactive-mode.ts:handleArminSaysHi`, `armin.ts`) draws a 31 by 34 pig head labeled `pigsayhi` instead of Armin's 31 by 36 image labeled `ARMIN SAYS HI`. The seven effects, their random selection and order of random calls, and their timing are Pi's. `/pigsayhi` is a second name for the same easter egg; Pi sends `/pigsayhi` to the model as an ordinary prompt.
+What: Pi has two easter eggs that show Pi's art. Ompig plays them with its own art. Pi 1.4.0's `easter-egg-3d.ts` plays both the logo and, in fullscreen mode, a 3D Armin for `/arminsayshi`; Ompig ports it with Ompig's models. Its logo path draws exactly what the `pi-logo-animation.ts` of Pi's 1.0.0 release drew (lift-off cells, start scale, dust center and timeline are unchanged), so the header click keeps its ompig behavior.
+1. Clicking the header logo in fullscreen mode (`interactive-mode.ts:1059`, `easter-egg-3d.lazy.ts` `playPiLogo3d`, `easter-egg-3d.ts`; Pi 1.0.0 `pi-logo-animation.lazy.ts` and `pi-logo-animation.ts`). The clickable logo is Ompig's ompig head (D2): cells 1 to 16 of the header's first seven lines, where Pi's logo takes cells 1 to 4 of two, or the 4 cells of the one-line `Ompig.` text mark where it stands in for Pi's logo; Apple Terminal has no clickable logo, as Pi's text wordmark has none. The object that flies, grows and spins is that head, built from the active sprite's head pixels and colors (`/sprite`), not Pi's three-color logo. Where Pi's logo shuffles its blocks as a sliding puzzle (from 4.4 s, one 5.2 s cycle at a time), the spinning head gives way for the 3.6 s of Pi's shuffle to a side-view running ompig, 38 pixels by 22, ray cast in braille dots with the head's shading and blocks the size of the head's, so it is more than twice the head's width: rounded body, ears, eye, snout with nostrils, cheek, curly tail and dark outline, four legs in a four-frame run cycle with a one-pixel bob. It runs in place where the head spins. In the first 0.6 s of the run the head's braille dots dissolve one by one into the ompig's while the ompig turns from the head's spin to face the camera, and in the last 0.6 s the ompig dissolves back into the head the same way while it turns back to the head's spin, so no frame is empty or a hard swap; Esc during the run dissolves the ompig back into the head over 0.6 s while Pi's exit plays. The head is back, whole and spinning, for Pi's 1 s return and 0.6 s hold. The ray caster holds up to 65535 faces where Pi's holds 255 (`Uint8Array`), because the running ompig has more, and renders the head and the ompig as two layers during a dissolve. The running ompig takes the active sprite's colors: a color the head draws keeps its color, a body the head does not draw as `P` is the head's most common color (Kratos's skin, Spider-Ham's suit), a body too dark for a dark outline is outlined in its highlight (Vader), and characters keep accessories (the Sheriff's hat and star, Vader's red panel, Kratos's tattoo, Ompiglet's shirt, Spider-Ham's web, PiGrogu's robe). The dissolve, its timing and dust, the 3D ray caster and shading, the light-background halo, the starfield, the `escape to return` hint, the spin locked to the cycle, the reverse exit, the keys (`tui.select.cancel` and `app.clear`, a second press skips the exit) and the mouse handling are Pi's.
+2. `/arminsayshi` (`interactive-mode.ts:handleArminSaysHi`, `armin.ts`) draws a 31 by 34 ompig head labeled `pigsayhi` instead of Armin's 31 by 36 image labeled `ARMIN SAYS HI`. The seven effects, their random selection and order of random calls, and their timing are Pi's. `/pigsayhi` is a second name for the same easter egg; Pi sends `/pigsayhi` to the model as an ordinary prompt.
 
-3. In fullscreen mode, `/arminsayshi` and `/pigsayhi` play the 3D pig (`interactive-mode.ts:handleArminSaysHi`, `easter-egg-3d.lazy.ts` `playArmin3d`, `easter-egg-3d.ts` `arminModel`). The only change is the model: Pi's bitmap is Armin's 31 by 36 portrait in the theme's accent color; PiG's is the active sprite's 16 by 14 head in its colors, one block per pixel extruded to Pi's depth. Pi's camera distance (80), width share (0.45), growth from a speck at the center, dust from the center, sliding puzzle (moves per step, candidate order, preference for blocks that did not just move, the flight home and the hold), spin, starfield, hint, halo, exit and keys are Pi's. Outside fullscreen mode both commands draw the inline pig head, as Pi draws the inline Armin, and with another overlay open they do nothing, as Pi does.
+3. In fullscreen mode, `/arminsayshi` and `/pigsayhi` play the 3D ompig (`interactive-mode.ts:handleArminSaysHi`, `easter-egg-3d.lazy.ts` `playArmin3d`, `easter-egg-3d.ts` `arminModel`). The only change is the model: Pi's bitmap is Armin's 31 by 36 portrait in the theme's accent color; Ompig's is the active sprite's 16 by 14 head in its colors, one block per pixel extruded to Pi's depth. Pi's camera distance (80), width share (0.45), growth from a speck at the center, dust from the center, sliding puzzle (moves per step, candidate order, preference for blocks that did not just move, the flight home and the hold), spin, starfield, hint, halo, exit and keys are Pi's. Outside fullscreen mode both commands draw the inline ompig head, as Pi draws the inline Armin, and with another overlay open they do nothing, as Pi does.
 
-`/dementedelves` keeps Pi's announcement, which still says "pi has joined Earendil" (`earendil-announcement.ts`). Pi 1.4.0 has no OpenCode Kimi easter egg (`daxnuts.ts`); PiG never ported it.
+`/dementedelves` keeps Pi's announcement, which still says "pi has joined Earendil" (`earendil-announcement.ts`). Pi 1.4.0 has no OpenCode Kimi easter egg (`daxnuts.ts`); Ompig never ported it.
 
-Why: PiG never presents itself as Pi (D2). Pi's logo animation and Armin's portrait are Pi's art; the owner wants PiG's own versions of them.
+Why: Ompig never presents itself as Pi (D2). Pi's logo animation and Armin's portrait are Pi's art; the owner wants Ompig's own versions of them.
 
-Owner decision: 2026-10-01, owner Michael Kinsy ("PiG versions of Pi's eggs").
+Owner decision: 2026-10-01, owner Michael Kinsy ("Ompig versions of Pi's eggs").
 
-Call-site markers: `internal/codingagent/pig_egg3d.go` (`pigLogoModel`, `pig3dModel`), `internal/codingagent/pig_logo_animation.go` (the object, `pigLogoBlocks`), `internal/codingagent/pig_logo_run.go` (the running pig), `internal/codingagent/startup_header.go` (`handleBuiltInHeaderMouse`), `internal/codingagent/armin.go` (the image and label) and `internal/codingagent/startup_input.go` (`/pigsayhi`).
+Call-site markers: `internal/codingagent/ompig_egg3d.go` (`ompigLogoModel`, `ompig3dModel`), `internal/codingagent/ompig_logo_animation.go` (the object, `ompigLogoBlocks`), `internal/codingagent/ompig_logo_run.go` (the running ompig), `internal/codingagent/startup_header.go` (`handleBuiltInHeaderMouse`), `internal/codingagent/armin.go` (the image and label) and `internal/codingagent/startup_input.go` (`/pigsayhi`).
 
-Evidence: `TestPigLogoAnimationMatchesPinnedPi` runs the `pi-logo-animation.ts` of Pi's 1.0.0 release (`internal/codingagent/testdata/pi-v1.0.0/`, since the mirrors from 1.0.1 on no longer contain it) with the pig's blocks and geometry and compares every frame of the flight, spin, dissolve, starfield, hint, halo, exit and skip with the Go port, without the running pig's layer. `TestPigLogoRunCycle` (the run's timeline and frames, the dot-by-dot dissolves into and out of the pig and on Esc, never fewer dots than either shape shows alone, the turn to and from the camera, the braille pig in place of the head and its return), `TestPigRunTurnStaysInFrame` (the turning pig stays within the face-on pig's size and the screen, and turns the short way), `TestPigLogoRasterHoldsMoreThan255Faces` (the wider face index), `TestPigRunFramesAreRecognizablePigs` (each built-in sprite's four frames draw the whole pig in the sprite's colors; `docs/plan/progress/egg-run-pig/run-strip.png` shows the ray-cast frames), `TestPigLogoAnimationDrawsThePigNotPisLogo`, `TestClickingTheHeaderPigPlaysTheAnimation`, `TestClickingTheTextMarkPlaysTheAnimation`, `TestHeaderPigClickNeedsTheBuiltInSprite`, `TestHeaderPigClickIgnoredWhileAnOverlayOrTheAnimationIsOpen`, `TestPigLogoAnimationColors` and `TestPigLogoAnimationTimer` cover the running pig, the art, the click, the overlay and the timer. `TestPig3dAnimationMatchesPinnedPi` runs the pinned Pi 1.4.0 `easter-egg-3d.ts` with the 3D pig's model in place of Armin's and compares every frame of the growth, dust, spin, three puzzle cycles, starfield, hint, light-background halo, exit (blocks gathering home) and skip with the Go port, for four sprites and screens; `TestPig3dFramesAreBoundedAndAnimate` keeps every phase's frame on the screen and distinct from the others; `TestPig3dPlaysOnlyInFullscreen` covers the fullscreen-only gate, an open overlay and the inline fallback. `TestArminFramesMatchPinnedPi` runs the pinned `armin.ts` with the pig head, `TestArminSaysHiDrawsThePigHead` pins the art and label, and the `TestHiddenEasterEggs*` tests cover `/pigsayhi`.
+Evidence: `TestPigLogoAnimationMatchesPinnedPi` runs the `pi-logo-animation.ts` of Pi's 1.0.0 release (`internal/codingagent/testdata/pi-v1.0.0/`, since the mirrors from 1.0.1 on no longer contain it) with the ompig's blocks and geometry and compares every frame of the flight, spin, dissolve, starfield, hint, halo, exit and skip with the Go port, without the running ompig's layer. `TestPigLogoRunCycle` (the run's timeline and frames, the dot-by-dot dissolves into and out of the ompig and on Esc, never fewer dots than either shape shows alone, the turn to and from the camera, the braille ompig in place of the head and its return), `TestPigRunTurnStaysInFrame` (the turning ompig stays within the face-on ompig's size and the screen, and turns the short way), `TestPigLogoRasterHoldsMoreThan255Faces` (the wider face index), `TestPigRunFramesAreRecognizablePigs` (each built-in sprite's four frames draw the whole ompig in the sprite's colors; `docs/plan/progress/egg-run-ompig/run-strip.png` shows the ray-cast frames), `TestPigLogoAnimationDrawsThePigNotPisLogo`, `TestClickingTheHeaderPigPlaysTheAnimation`, `TestClickingTheTextMarkPlaysTheAnimation`, `TestHeaderPigClickNeedsTheBuiltInSprite`, `TestHeaderPigClickIgnoredWhileAnOverlayOrTheAnimationIsOpen`, `TestPigLogoAnimationColors` and `TestPigLogoAnimationTimer` cover the running ompig, the art, the click, the overlay and the timer. `TestPig3dAnimationMatchesPinnedPi` runs the pinned Pi 1.4.0 `easter-egg-3d.ts` with the 3D ompig's model in place of Armin's and compares every frame of the growth, dust, spin, three puzzle cycles, starfield, hint, light-background halo, exit (blocks gathering home) and skip with the Go port, for four sprites and screens; `TestPig3dFramesAreBoundedAndAnimate` keeps every phase's frame on the screen and distinct from the others; `TestPig3dPlaysOnlyInFullscreen` covers the fullscreen-only gate, an open overlay and the inline fallback. `TestArminFramesMatchPinnedPi` runs the pinned `armin.ts` with the ompig head, `TestArminSaysHiDrawsThePigHead` pins the art and label, and the `TestHiddenEasterEggs*` tests cover `/pigsayhi`.
 
 Parity allowance: `test/parity/scenarios/fullscreen/11-logo-click-animation.toml` compares the hint and starfield rows with Pi; the rows the 3D object covers differ. `test/parity/scenarios/slash-commands/13-armin-bitmap.toml` asserts each binary's own settled image and label.
 
-Remove when: never; the easter eggs are PiG's.
+Remove when: never; the easter eggs are Ompig's.
 
 SCRUTINIZED:approved
 
-## D88 PiG runs its own first-time setup with a sprite step
+## D88 Ompig runs its own first-time setup with a sprite step
 
-What: Pi 1.4.0 shows its first-time setup dialog (`first-time-setup.ts`: theme with live preview, then analytics opt-in) only for its official distribution with `PI_EXPERIMENTAL=1`, the default agent directory and no `settings.json` (`startup-ui.ts:122-140`, `main.ts:676`). PiG shows it on an interactive start in the default agent directory that holds no `settings.json` yet, which includes every fresh `PIG_HOME`. As in Pi, a custom agent directory (`PIG_CODING_AGENT_DIR`) skips it (`startup-ui.ts:144-146`). Print, JSON and RPC modes never show it. Esc skips setup and saves nothing.
+What: Pi 1.4.0 shows its first-time setup dialog (`first-time-setup.ts`: theme with live preview, then analytics opt-in) only for its official distribution with `PI_EXPERIMENTAL=1`, the default agent directory and no `settings.json` (`startup-ui.ts:122-140`, `main.ts:676`). Ompig shows it on an interactive start in the default agent directory that holds no `settings.json` yet, which includes every fresh `OMPIG_HOME`. As in Pi, a custom agent directory (`OMPIG_CODING_AGENT_DIR`) skips it (`startup-ui.ts:144-146`). Print, JSON and RPC modes never show it. Esc skips setup and saves nothing.
 
-The dialog is a port of Pi's component with three steps: theme (System, Dark, Light, with live preview), then sprite, then analytics. The sprite step lists the fifteen built-in sprites in a scrolling window of eight rows with the position below it, then a last item, `Create your own...`. The dialog's logo is the pig head of the highlighted sprite on the sprite step and of the chosen sprite after it, never Pi's `SETUP_LOGO_LINES`. The welcome line says `Welcome to PiG` where Pi's says `Welcome to pi`, and the analytics text names PiG instead of Pi (D2). Finishing saves the theme and analytics choice in `settings.json` as Pi does, and saves the sprite exactly as `/sprite set` does (`$PIG_HOME/state/pig-standard/login.json`). `Create your own...` shows how to create a sprite (`/login`, `/model`, then `/sprite create`), and finishing with it keeps the active sprite. `/sprite create` sends a guided turn that writes a TypeScript extension registering the sprite with `ctx.ui.registerSprite` when a model with credentials exists, and explains `/login` otherwise.
+The dialog is a port of Pi's component with three steps: theme (System, Dark, Light, with live preview), then sprite, then analytics. The sprite step lists the fifteen built-in sprites in a scrolling window of eight rows with the position below it, then a last item, `Create your own...`. The dialog's logo is the ompig head of the highlighted sprite on the sprite step and of the chosen sprite after it, never Pi's `SETUP_LOGO_LINES`. The welcome line says `Welcome to Ompig` where Pi's says `Welcome to pi`, and the analytics text names Ompig instead of Pi (D2). Finishing saves the theme and analytics choice in `settings.json` as Pi does, and saves the sprite exactly as `/sprite set` does (`$OMPIG_HOME/state/ompig-standard/login.json`). `Create your own...` shows how to create a sprite (`/login`, `/model`, then `/sprite create`), and finishing with it keeps the active sprite. `/sprite create` sends a guided turn that writes a TypeScript extension registering the sprite with `ctx.ui.registerSprite` when a model with credentials exists, and explains `/login` otherwise.
 
-PiG shows the dialog as Pi does: on its own startup screen before runtime services start, after migrations and before session selection (`main.ts:672-676`). Extensions are not loaded yet, so the sprite step offers only the built-in sprites; extension sprites are chosen later with `/sprite`. The gate is observed before startup writes any file.
+Ompig shows the dialog as Pi does: on its own startup screen before runtime services start, after migrations and before session selection (`main.ts:672-676`). Extensions are not loaded yet, so the sprite step offers only the built-in sprites; extension sprites are chosen later with `/sprite`. The gate is observed before startup writes any file.
 
-Why: PiG never presents itself as Pi (D2), so Pi's official-only setup never runs for PiG; the owner wants a first-run setup that also chooses the sprite.
+Why: Ompig never presents itself as Pi (D2), so Pi's official-only setup never runs for Ompig; the owner wants a first-run setup that also chooses the sprite.
 
 Owner decision: 2026-10-02, owner Michael Kinsy (first-run-sprite, release 0.4.0).
 
 Call-site markers: `coding/cli/main.go` (gate observation), `coding/cli/extensions.go` (`shouldRunFirstTimeSetup`), `internal/codingagent/first_time_setup.go` (`FirstTimeSetupComponent`, the welcome line, `ShowFirstTimeSetup`).
 
-Evidence: `TestShouldRunFirstTimeSetupGate` (interactive with and without `settings.json`, print, piped stdin, JSON, RPC), `TestFirstTimeSetupOriginalCasesAsFork` and `TestForkedDistributionDoesNotBlockOnOfficialFirstTimeSetup` (Pi's original gate inputs against PiG's real CLI), `TestFirstTimeSetupEscSkipsOnInteractiveStart` and `TestFirstTimeSetupSavesThemeSpriteAndAnalytics` (real CLI in a PTY), `TestFirstTimeSetupSpriteStepListsExtensionSpritesAndSubmits`, `TestFirstTimeSetupKeepsTheHighlightedSpriteThroughAnalyticsAndSubmit`, `TestShowFirstTimeSetupSavesTheChoiceBeforeTheTUI`, `TestShowFirstTimeSetupSkipSavesNothing`, `TestFirstTimeSetupHintUsesLowercaseKeyText`, `TestSpriteCreate`, `TestSpritePickerCreateYourOwnShowsTheHint`, `TestFirstTimeSetupCreateYourOwnShowsTheHintAndKeepsTheSprite`, `TestFirstTimeSetupThemePreviewAndEscSkip` and `TestFirstTimeSetupLogoIsThePigHeadAndPreviewsTheSprite`. Pi's analytics cases in `first-time-setup.test.ts` stay ported unchanged (`TestAnalyticsSettings`).
+Evidence: `TestShouldRunFirstTimeSetupGate` (interactive with and without `settings.json`, print, piped stdin, JSON, RPC), `TestFirstTimeSetupOriginalCasesAsFork` and `TestForkedDistributionDoesNotBlockOnOfficialFirstTimeSetup` (Pi's original gate inputs against Ompig's real CLI), `TestFirstTimeSetupEscSkipsOnInteractiveStart` and `TestFirstTimeSetupSavesThemeSpriteAndAnalytics` (real CLI in a PTY), `TestFirstTimeSetupSpriteStepListsExtensionSpritesAndSubmits`, `TestFirstTimeSetupKeepsTheHighlightedSpriteThroughAnalyticsAndSubmit`, `TestShowFirstTimeSetupSavesTheChoiceBeforeTheTUI`, `TestShowFirstTimeSetupSkipSavesNothing`, `TestFirstTimeSetupHintUsesLowercaseKeyText`, `TestSpriteCreate`, `TestSpritePickerCreateYourOwnShowsTheHint`, `TestFirstTimeSetupCreateYourOwnShowsTheHintAndKeepsTheSprite`, `TestFirstTimeSetupThemePreviewAndEscSkip` and `TestFirstTimeSetupLogoIsThePigHeadAndPreviewsTheSprite`. Pi's analytics cases in `first-time-setup.test.ts` stay ported unchanged (`TestAnalyticsSettings`).
 
 Parity allowance: Pi never shows the dialog for a fork, and parity fixtures carry `settings.json`, so no paired scenario compares it.
 
-Remove when: never; the first-run setup is PiG's.
+Remove when: never; the first-run setup is Ompig's.
 
 SCRUTINIZED:approved
 
 ## D89 Tool renderer resolvers of subprocess extensions answer once per tool, off the UI loop, and cannot wrap next()
 
-What: Pi 1.4.0's `pi.registerToolRenderer()` resolvers run synchronously whenever a tool card is created (`interactive-mode.ts:getRegisteredToolDefinition`, `runner.ts:resolveToolRenderers`), and `next()` lazily runs the remaining resolvers and returns the registered tool's renderer functions, which a resolver may wrap. A PiG extension in another process (Node, Go, Python and Rust SDKs, isolated or packed) cannot be called on the UI loop. PiG therefore:
+What: Pi 1.4.0's `pi.registerToolRenderer()` resolvers run synchronously whenever a tool card is created (`interactive-mode.ts:getRegisteredToolDefinition`, `runner.ts:resolveToolRenderers`), and `next()` lazily runs the remaining resolvers and returns the registered tool's renderer functions, which a resolver may wrap. A Ompig extension in another process (Node, Go, Python and Rust SDKs, isolated or packed) cannot be called on the UI loop. Ompig therefore:
 1. Evaluates `next()` before asking the extension and sends what it draws (`renderShell`, whether `renderCall` and `renderResult` exist). The SDK's `next()` returns a marker for those renderers. A resolver that returns the marker keeps them; the marker's render functions are absent, so a resolver cannot call or wrap them. A marker or a copy of it that the resolver gives a call or result renderer is the resolver's own renderers: `next()`'s `renderShell` with only the render functions the resolver set.
 2. Asks each extension once per tool, on a host goroutine. Until it answers, the card draws with `next()`'s renderers; an answer other than `next()`'s renderers then draws the tool's cards again, starting their renderer state over. The answer is kept until the extension reloads, restarts, recovers or registers another resolver.
 In-process Go extensions, including the built-in MCP extension, resolve exactly as Pi does.
 
 Why: AGENTS.md forbids blocking extension IPC on the TUI loop, and a renderer function cannot cross the process boundary. Owner decision: 2026-10-03, owner Michael Kinsy (port-101 Option A: full SDK support with this design).
 
-Call-site markers: `coding/extension/host/subprocess/tool_renderer_resolvers.go` (`makeToolRendererResolver`), `coding/extension/host/subprocess/runtime-node/runtime.mjs` (`resolveToolRenderers`), `extensions/sdk/tool_renderer_resolvers.go` (`ToolRendererResolver`), `extensions/sdk-py/pig_sdk/__init__.py` (`ToolRendererResolver`), `extensions/sdk-rs/src/tool_render.rs` (`ToolRendererSet`).
+Call-site markers: `coding/extension/host/subprocess/tool_renderer_resolvers.go` (`makeToolRendererResolver`), `coding/extension/host/subprocess/runtime-node/runtime.mjs` (`resolveToolRenderers`), `extensions/sdk/tool_renderer_resolvers.go` (`ToolRendererResolver`), `extensions/sdk-py/ompig_sdk/__init__.py` (`ToolRendererResolver`), `extensions/sdk-rs/src/tool_render.rs` (`ToolRendererSet`).
 
 Evidence: `TestToolRendererResolversAcrossSDKs` (test/extension-conformance: every SDK, isolated and packed, against the in-process reference: own renderers drawn by the extension, none, `next() ?? own`, a `next()` copy given a call renderer in each SDK's idiom, unrelated tools deferred), `TestToolRendererRegisteredAfterLoadingAcrossSDKs` (a resolver registered by a command), `TestReapplyToolPresentationDrawsCardsWithALaterResolution` and `TestReapplyToolPresentationReturnsACardWithoutRenderersToThePlainCard` (a later answer draws the card again), `TestToolRendererAnswerOfNextDoesNotRedrawCards`, `TestToolRendererResolverSurvivesARuntimeToolRegistration`, and the in-process `TestUpstreamRunnerResolvesToolRenderersInExtensionLoadOrderEachAbleToDeferToTheNext` and `TestRegression10285*` tests.
 
 Parity allowance: Pi's own resolvers run in its single process; no paired scenario loads a third-party resolver extension.
 
-Remove when: PiG can run an extension's resolver synchronously without IPC on the UI loop and pass renderer functions across processes.
+Remove when: Ompig can run an extension's resolver synchronously without IPC on the UI loop and pass renderer functions across processes.
 
 SCRUTINIZED:approved
 
 ## D90 llama.cpp reasoning models offer every budgeted thinking level
 
-What: Pi's built-in llama.cpp provider (`extensions/llama/provider.ts` `toPiModel`, Pi 1.4.0) marks a model as reasoning when its chat template reads `enable_thinking`, and maps only the `off` and `medium` thinking levels. Its `qwen-chat-template` request sends `chat_template_kwargs.enable_thinking` and no budget, so every level other than `off` asks for the same unbounded thinking. PiG maps `off`, `minimal`, `low`, `medium` and `high` and sets `compat.thinkingTokenBudgetField` to `thinking_budget_tokens`, so each level sends Pi's budget for that level (1024, 2048, 8192 and 16384 tokens, or `thinkingBudgets`, clamped to leave answer room) with `enable_thinking`. `xhigh` stays unsupported because Pi's budgets give it the `high` budget. `off` sends `enable_thinking: false` and no budget, as Pi does.
+What: Pi's built-in llama.cpp provider (`extensions/llama/provider.ts` `toPiModel`, Pi 1.4.0) marks a model as reasoning when its chat template reads `enable_thinking`, and maps only the `off` and `medium` thinking levels. Its `qwen-chat-template` request sends `chat_template_kwargs.enable_thinking` and no budget, so every level other than `off` asks for the same unbounded thinking. Ompig maps `off`, `minimal`, `low`, `medium` and `high` and sets `compat.thinkingTokenBudgetField` to `thinking_budget_tokens`, so each level sends Pi's budget for that level (1024, 2048, 8192 and 16384 tokens, or `thinkingBudgets`, clamped to leave answer room) with `enable_thinking`. `xhigh` stays unsupported because Pi's budgets give it the `high` budget. `off` sends `enable_thinking: false` and no budget, as Pi does.
 
 Why: GitHub issue #129. Pi has the same bug and Pi 1.4.0 does not fix it. llama-server applies a per-request `thinking_budget_tokens` when its command line sets no reasoning budget; an older server ignores the field and thinks as Pi's request asks. Owner task decision: 2026-10-04 (port-102: implement the fix ahead of upstream and record it).
 
 Call-site markers: `internal/codingagent/llama/provider.go` (`toPiModel`).
 
-Evidence: `TestLlamaReasoningModelOffersBudgetedThinkingLevels` (cmd/pig: the built-in host's model offers off through high and each level's request carries its `thinking_budget_tokens`; red before the change with `[off medium]`), `TestRefreshModelsDiscoversChatTemplateThinkingSupportForLoadedModels` (the ported Pi test, with Pi's expected map recorded at the assertion).
+Evidence: `TestLlamaReasoningModelOffersBudgetedThinkingLevels` (cmd/ompig: the built-in host's model offers off through high and each level's request carries its `thinking_budget_tokens`; red before the change with `[off medium]`), `TestRefreshModelsDiscoversChatTemplateThinkingSupportForLoadedModels` (the ported Pi test, with Pi's expected map recorded at the assertion).
 
 Parity allowance: no paired scenario runs a llama.cpp server; Pi's own test `packages/coding-agent/test/llama-extension.test.ts` asserts the two-level map this entry replaces.
 
@@ -1330,7 +1330,7 @@ SCRUTINIZED:approved
 
 What: Pi 1.0.0 imports each extension through jiti with `moduleCache: false` (`core/extensions/loader.ts:569-572`, `loadExtensionModule`), so `/reload` evaluates a TypeScript or CommonJS extension and its local imports again. jiti 2.7.0 hands a file it treats as an ES module, an `.mjs` file or a `.js` file under `"type": "module"`, to Node's own `import()` when it imports asynchronously (`eval_evalModule`), and Node keeps an ES module for the life of the process by its URL. Pi therefore keeps running an edited ES module, an extension's entry or a local module it imports, until it restarts, even when the edit is a syntax error. This also holds for an `.mjs` module that a TypeScript extension imports. A TypeScript extension's own source runs its edit. This was probed with the pinned Pi in RPC mode.
 
-PiG's runtime hooks record, for each local extension module that Node loads, the source it loaded and the extension modules each evaluation imports. Local means outside the runtime and outside `node_modules`. When a reload pass starts, PiG gives a new URL, with a `pig-reload=<pass>` query, to each ES module whose source changed since Node loaded it and to each ES module that imports one, directly or through others. The resolve hook resolves every import of such a module to that URL, so the reload evaluates exactly those modules again:
+Ompig's runtime hooks record, for each local extension module that Node loads, the source it loaded and the extension modules each evaluation imports. Local means outside the runtime and outside `node_modules`. When a reload pass starts, Ompig gives a new URL, with a `ompig-reload=<pass>` query, to each ES module whose source changed since Node loaded it and to each ES module that imports one, directly or through others. The resolve hook resolves every import of such a module to that URL, so the reload evaluates exactly those modules again:
 - Every other module keeps its instance and its state, as in Pi.
 - Extensions, TypeScript ones included, that import one edited module share its one new evaluation.
 - An edit that breaks a module fails each extension that imports it on `/reload`, as an edited TypeScript extension's does in Pi, and the next valid edit loads it again.
@@ -1340,11 +1340,11 @@ PiG's runtime hooks record, for each local extension module that Node loads, the
 - An old generation that still serves until the swap and imports such a module dynamically gets the new evaluation.
 - A module evaluated again has the query in its `import.meta.url`, in what `import.meta.resolve` returns for it, and in the file names of its stack traces.
 - An import that adds its own query, such as `import("./x.mjs?t=1")`, counts as an import of `x.mjs`, so an edit of `x.mjs` evaluates the importer again.
-- The hooks need Node's synchronous module hooks (`module.registerHooks`, Node 22.15 or later); with an older Node release PiG keeps Pi's behavior.
-- On Bun (`PIG_TS_RUNTIME=bun`), which runs neither Node hook API, a Bun runtime plugin records the same facts when Bun resolves a module it is about to load, before Bun reads the source. A reload removes each such module from Bun's module registry, and the next import evaluates it again under its own URL: on Bun, `import.meta.url` and stack traces carry no query. An absolute path used as an import specifier is read as a URL path, as Node reads it, so jiti's import of an extension whose path holds a tab, a line break or a percent escape fails over to jiti's own evaluation on both runtimes.
+- The hooks need Node's synchronous module hooks (`module.registerHooks`, Node 22.15 or later); with an older Node release Ompig keeps Pi's behavior.
+- On Bun (`OMPIG_TS_RUNTIME=bun`), which runs neither Node hook API, a Bun runtime plugin records the same facts when Bun resolves a module it is about to load, before Bun reads the source. A reload removes each such module from Bun's module registry, and the next import evaluates it again under its own URL: on Bun, `import.meta.url` and stack traces carry no query. An absolute path used as an import specifier is read as a URL path, as Node reads it, so jiti's import of an extension whose path holds a tab, a line break or a percent escape fails over to jiti's own evaluation on both runtimes.
 - Node keeps every evaluation of a module until the process ends.
 
-Why: fixed ahead of upstream. The owner fixes a non-destructive inherited Pi bug in PiG when the fix only stops a failure and changes nothing for a user who does not hit it, and reports it upstream.
+Why: fixed ahead of upstream. The owner fixes a non-destructive inherited Pi bug in Ompig when the fix only stops a failure and changes nothing for a user who does not hit it, and reports it upstream.
 
 Owner decision: 2026-10-04, owner Michael Kinsy (FIXLANE 2: fix the `.mjs` reload in 0.4.1 instead of deferring it; ID assigned by the lead).
 
@@ -1364,12 +1364,12 @@ Evidence: these tests are in `coding/extension/host/subprocess`.
 - `TestNodeReloadEvaluatesAnEditedTypeModuleJsEntryAgain`: an edit runs, a broken edit fails the load, and the fix loads it again. It replaces the test that pinned Pi's behavior.
 - `TestSessionReplacementKeepsAnEditedESModuleUntilAReload`.
 - `TestHostReloadKeepsMjsModuleStateAndReevaluatesTsModules`: Pi's rule for an unedited `.mjs` module.
-- `TestReloadRunsTheCurrentSourceOfACommandLineExtension/node-mjs` (`cmd/pig`): the real CLI over RPC.
-- The Bun row (`PIG_TS_RUNTIME=bun` with Bun 1.4.2 in the runtime slot) runs every test above in `coding/extension/host/subprocess` and passes them; before the Bun plugin, nine of them failed there.
+- `TestReloadRunsTheCurrentSourceOfACommandLineExtension/node-mjs` (`cmd/ompig`): the real CLI over RPC.
+- The Bun row (`OMPIG_TS_RUNTIME=bun` with Bun 1.4.2 in the runtime slot) runs every test above in `coding/extension/host/subprocess` and passes them; before the Bun plugin, nine of them failed there.
 
 Each test fails with an earlier runtime: the CLI test with the runtime before D93, and the last four regression tests with the first D93 runtime. Each of ten mutations of the rules fails at least one test. Loading 19 more ES module extensions in one process takes the same 30 ms as before D93.
 
-Parity allowance: Pi keeps the old code of an edited ES module, so no paired scenario compares the reload; the tests above pin PiG's behavior.
+Parity allowance: Pi keeps the old code of an edited ES module, so no paired scenario compares the reload; the tests above pin Ompig's behavior.
 
 Remove when: Pi's loader evaluates an edited ES module extension again on `/reload` (upstream issue drafted 2026-10-04).
 
@@ -1377,7 +1377,7 @@ SCRUTINIZED:approved
 
 ## D94 Subprocess editor working status runs from host snapshots
 
-What: When a subprocess editor opts into embedded working status, Pi runs the StatusIndicator's own animation timer inside the editor and re-checks `isWorkingStatusEditor` each time a status is shown. PiG advances the animation on the host and sends the editor snapshots (`RemoteEditorStatus`), so the JavaScript side builds the indicator with empty initial frames and takes the frames and frame index from the snapshot. PiG also reads the opt-in once, at editor install, and the Go host places the status from it; an editor that changes `embedWorkingStatus` afterwards is not re-checked. The working and compaction colors match Pi 1.4.0: the editor's own `borderColor`, read at render time, or the thinking level's border color when the editor has none.
+What: When a subprocess editor opts into embedded working status, Pi runs the StatusIndicator's own animation timer inside the editor and re-checks `isWorkingStatusEditor` each time a status is shown. Ompig advances the animation on the host and sends the editor snapshots (`RemoteEditorStatus`), so the JavaScript side builds the indicator with empty initial frames and takes the frames and frame index from the snapshot. Ompig also reads the opt-in once, at editor install, and the Go host places the status from it; an editor that changes `embedWorkingStatus` afterwards is not re-checked. The working and compaction colors match Pi 1.4.0: the editor's own `borderColor`, read at render time, or the thinking level's border color when the editor has none.
 
 Why: One animation timer on the host keeps the spinner in step with the rest of the UI across the process boundary, and the host decides placement before the editor can answer.
 
@@ -1395,14 +1395,14 @@ SCRUTINIZED:approved
 
 ## D96 The remote execution daemon is a Go program, not Pi's Rust binary
 
-What: Pi 1.4.0's `@earendil-works/pi-env` runs a Rust daemon (`packages/env/daemon`, one `pi-env` binary per target) on the remote machine. PiG's daemon is a Go program (`env/cmd/pi-env`, `env/daemon`) with the same command line (`pi-env serve --token <hex>`) and the same wire protocol, framing and `hello` fields. It runs `exec` and `watch` through PiG's `durable/env/node`, which is the reference for the remote environment: `docs/semantics.md` of the package defines the remote as `NodeExecutionEnv` on the remote machine. Two effects are observable:
+What: Pi 1.4.0's `@earendil-works/pi-env` runs a Rust daemon (`packages/env/daemon`, one `pi-env` binary per target) on the remote machine. Ompig's daemon is a Go program (`env/cmd/pi-env`, `env/daemon`) with the same command line (`pi-env serve --token <hex>`) and the same wire protocol, framing and `hello` fields. It runs `exec` and `watch` through Ompig's `durable/env/node`, which is the reference for the remote environment: `docs/semantics.md` of the package defines the remote as `NodeExecutionEnv` on the remote machine. Two effects are observable:
 
-- Pi and PiG deploy to the same `~/.pi/mobile/tools` directory, and each deploy removes the other's daemon (`ssh.ts` upload scripts). A host used by both tools uploads again whenever the tool changes.
+- Pi and Ompig deploy to the same `~/.pi/mobile/tools` directory, and each deploy removes the other's daemon (`ssh.ts` upload scripts). A host used by both tools uploads again whenever the tool changes.
 - The Go daemons are 4.1 MB to 4.7 MB, and the Windows upload is base64, about 6 MB. On a link near 128 kbit/s the upload approaches `UPLOAD_TIMEOUT_MS` (300 s).
 
 Frame bodies are semantically equal to Pi's, not byte for byte: Go's JSON encoder sorts keys and escapes U+2028 and U+2029. Both daemons parse either form.
 
-Why: PiG is a Go port with Go release builds. One static binary per target (`make build-env-daemons`) avoids a second toolchain, and the daemon reuses the code that defines the local environment.
+Why: Ompig is a Go port with Go release builds. One static binary per target (`make build-env-daemons`) avoids a second toolchain, and the daemon reuses the code that defines the local environment.
 
 Owner decision: reviewer recommendation (rev-port-104-env), approved by owner Michael Kinsy 2026-10-06.
 
@@ -1418,15 +1418,15 @@ SCRUTINIZED:approved
 
 ## D98 The eval harness hands the agent process an OAuth credential file
 
-What: Pi's eval harness keeps the model credential in the model runtime's memory and deletes the runner's `auth.json` before the unprivileged sandbox drop (`packages/evals/src/harness.ts:312-335`), so the agent's file tools cannot read it. PiG's Session is a pig process. For an API key, PiG matches Pi: the key stays in the harness, and the isolated run's `auth.json` holds only a `!` command that fetches it from the harness's Unix socket, which the agent's file tools cannot open. An OAuth credential is written as stored to the isolated run's `auth.json`, owned by the sandbox user, and the agent's `read` tool can open it. The harness still deletes the runner's `auth.json` in the sandbox, removes the run's root afterwards, and strips the `PI_EVAL_*` variables and, in the sandbox, the credential's environment variable from the process environment.
+What: Pi's eval harness keeps the model credential in the model runtime's memory and deletes the runner's `auth.json` before the unprivileged sandbox drop (`packages/evals/src/harness.ts:312-335`), so the agent's file tools cannot read it. Ompig's Session is a ompig process. For an API key, Ompig matches Pi: the key stays in the harness, and the isolated run's `auth.json` holds only a `!` command that fetches it from the harness's Unix socket, which the agent's file tools cannot open. An OAuth credential is written as stored to the isolated run's `auth.json`, owned by the sandbox user, and the agent's `read` tool can open it. The harness still deletes the runner's `auth.json` in the sandbox, removes the run's root afterwards, and strips the `PI_EVAL_*` variables and, in the sandbox, the credential's environment variable from the process environment.
 
-Why: pig reads an OAuth credential only from `auth.json` and writes a refreshed token back to it, so the process that sends the provider request needs the file. A `!` command resolves only an API key value (`ai/auth.go` `AuthStorage.Get`, `internal/configvalue`).
+Why: ompig reads an OAuth credential only from `auth.json` and writes a refreshed token back to it, so the process that sends the provider request needs the file. A `!` command resolves only an API key value (`ai/auth.go` `AuthStorage.Get`, `internal/configvalue`).
 
 Owner decision: approved by owner Michael Kinsy 2026-10-06. Proposed by the lead under the owner's instruction of 2026-10-05 to port and account for packages/telemetry and packages/evals; narrowed to OAuth credentials by the rev-gap-telemetry-evals review.
 
 Call-site markers: `internal/evals/harness_run.go` (credential hand-off in `RunPiCodingAgent`).
 
-Remove when: pig accepts an OAuth credential from a source the sandboxed agent cannot read, such as an inherited file descriptor or a socket the harness serves.
+Remove when: ompig accepts an OAuth credential from a source the sandboxed agent cannot read, such as an inherited file descriptor or a socket the harness serves.
 
 Evidence: `TestRunPiCodingAgentKeepsTheAPIKeyOutOfTheAgentsFiles` and `TestAPIKeyHandOff` in `internal/evals/harness_run_test.go` prove that an API key reaches the provider and not the agent's files and that an OAuth entry is handed over as stored; `docs/parity/gap-closure/gap-telemetry-evals.md` lists the difference.
 
@@ -1436,19 +1436,19 @@ SCRUTINIZED:approved
 
 ## D99 The Windows npm self-update quarantine waits out a held image
 
-What: Before an npm self-update on Windows, Pi and PiG move each loaded image out of the package directory and copy it back (windows-self-update.ts:75-83). Pi moves it with one `renameSync`, which fails while another process holds the image open without delete sharing. PiG retries that rename while it fails with an access, sharing or lock error, with delays that double from 25 ms to 500 ms and add up to 10 seconds, and it stops early when the update's context ends. Any other error, and the error that remains after 10 seconds, fails the update as in Pi.
+What: Before an npm self-update on Windows, Pi and Ompig move each loaded image out of the package directory and copy it back (windows-self-update.ts:75-83). Pi moves it with one `renameSync`, which fails while another process holds the image open without delete sharing. Ompig retries that rename while it fails with an access, sharing or lock error, with delays that double from 25 ms to 500 ms and add up to 10 seconds, and it stops early when the update's context ends. Any other error, and the error that remains after 10 seconds, fails the update as in Pi.
 
 Pi bug: on Windows, Pi's npm self-update fails when another process, such as an anti-virus scanner or a search indexer, holds a loaded image open without delete sharing at the moment Pi renames it (`windows-self-update.ts:81` in Pi 1.4.0, one `renameSync` with no retry).
 
-Why: Anti-virus scanners and search indexers open a newly written or newly started executable without delete sharing for a short time. In PiG the quarantined image is `pig.exe` itself, which the user just started, so an update could fail in that window. npm's graceful-fs retries its own Windows renames in the same way.
+Why: Anti-virus scanners and search indexers open a newly written or newly started executable without delete sharing for a short time. In Ompig the quarantined image is `ompig.exe` itself, which the user just started, so an update could fail in that window. npm's graceful-fs retries its own Windows renames in the same way.
 
 Owner decision: lead task decision of 2026-10-05 for PR #161 (rev-test-flakes-041), approved by owner Michael Kinsy 2026-10-06.
 
 Call-site markers: `internal/codingagent/windows_self_update.go` (`quarantineNativeDependencies`). The retry is `internal/fsretry.Rename`.
 
-Evidence: `TestQuarantineWaitsOutAHandleHeldOnTheRunningImage` (internal/codingagent) and the `internal/fsretry` Windows tests hold the image open as a scanner does. `TestWindowsNpmSelfUpdateReplacesTheRunningInstallation` (cmd/pig) runs the update end to end.
+Evidence: `TestQuarantineWaitsOutAHandleHeldOnTheRunningImage` (internal/codingagent) and the `internal/fsretry` Windows tests hold the image open as a scanner does. `TestWindowsNpmSelfUpdateReplacesTheRunningInstallation` (cmd/ompig) runs the update end to end.
 
-Parity allowance: when no other process holds the image, PiG does exactly what Pi does. It differs only while another process holds the image.
+Parity allowance: when no other process holds the image, Ompig does exactly what Pi does. It differs only while another process holds the image.
 
 Remove when: Pi retries the quarantine rename, or Windows stops refusing to rename a file that another process holds open.
 
@@ -1456,7 +1456,7 @@ SCRUTINIZED:approved
 
 ## D103 JS Error.stack is not modelled
 
-What: Pi copies `error.stack` into a diagnostic's error info (`packages/ai/src/utils/diagnostics.ts:29`) and into any error snapshot that spreads an `Error`, so a persisted diagnostic or session entry can carry a JavaScript stack trace. PiG's error info (`ai.DiagnosticErrorInfo`) has a `Stack` field that stays empty, and PiG error types have no `stack` member. The inherited `name` is the error type's `Name()` method, which `ExtractDiagnosticError` reads, and `cause` is `Unwrap()`.
+What: Pi copies `error.stack` into a diagnostic's error info (`packages/ai/src/utils/diagnostics.ts:29`) and into any error snapshot that spreads an `Error`, so a persisted diagnostic or session entry can carry a JavaScript stack trace. Ompig's error info (`ai.DiagnosticErrorInfo`) has a `Stack` field that stays empty, and Ompig error types have no `stack` member. The inherited `name` is the error type's `Name()` method, which `ExtractDiagnosticError` reads, and `cause` is `Unwrap()`.
 
 Why: A Go program has no JavaScript stack. A Go stack names source files and functions of the build machine, so storing one in a session file would leak paths, and it would not match Pi's text in any case.
 
@@ -1468,13 +1468,13 @@ Remove when: Pi stops persisting `error.stack`, or an owner-approved sanitized G
 
 Evidence: `TestExtractDiagnosticErrorOmitsTheStack` in `ai/diagnostics_upstream_test.go` shows that a diagnostic built from an error has no stack. `docs/parity/gap-closure/ledger-autobind.md` lists the inherited `stack` rows this record closes.
 
-Parity allowance: a diagnostic differs from Pi's only in the missing `stack` text, which no PiG or Pi code reads back.
+Parity allowance: a diagnostic differs from Pi's only in the missing `stack` text, which no Ompig or Pi code reads back.
 
 SCRUTINIZED:approved
 
 ## D105 The interactive driver owns terminal input; extension input listeners run asynchronously
 
-What: Pi's `TUI.start()` owns the terminal. It reads stdin and runs `handleTerminalInput` (color reply, light/dark report, input-listener chain, cell-size reply, overlay focus fix-up, focused component), and `TUI.stop()` runs the protected `beforeTerminalStop` and `afterTerminalStop` hooks. In PiG the renderers (`tui.TUI`, `TuiAltScreen`) own frames, overlays, the listener chain (`RunInputListeners`), and the color and cell-size consumers (`ConsumeTerminalColorResponse`, `ConsumeTerminalColorSchemeReport`, `ConsumeCellSizeResponse`) with Pi's names and order. The interactive driver owns the raw-mode reader and calls those in that order for each chunk. An extension's terminal-input listener runs after them, asynchronously, with an ordering ticket per chunk. The `before` and `after` terminal start and stop hooks are inline in each renderer's `Start` and `Stop`.
+What: Pi's `TUI.start()` owns the terminal. It reads stdin and runs `handleTerminalInput` (color reply, light/dark report, input-listener chain, cell-size reply, overlay focus fix-up, focused component), and `TUI.stop()` runs the protected `beforeTerminalStop` and `afterTerminalStop` hooks. In Ompig the renderers (`tui.TUI`, `TuiAltScreen`) own frames, overlays, the listener chain (`RunInputListeners`), and the color and cell-size consumers (`ConsumeTerminalColorResponse`, `ConsumeTerminalColorSchemeReport`, `ConsumeCellSizeResponse`) with Pi's names and order. The interactive driver owns the raw-mode reader and calls those in that order for each chunk. An extension's terminal-input listener runs after them, asynchronously, with an ordering ticket per chunk. The `before` and `after` terminal start and stop hooks are inline in each renderer's `Start` and `Stop`.
 
 Upstream state: Pi runs extensions in-process, so an extension's `addInputListener` callback is a synchronous member of the listener chain, and TypeScript's protected virtuals let a subclass add the start and stop hooks.
 
@@ -1494,15 +1494,15 @@ SCRUTINIZED:approved
 
 ## D110 Git sources: `#subdirectory=` selects a subdirectory; `git://` and upper-case schemes yield usable repositories
 
-What: PiG parses Git package sources with a port of Pi's `parseGitUrl` (`packages/coding-agent/src/utils/git.ts`) and `hosted-git-info` (`coding/source/gitparse.go`, `coding/source/hostedgit.go`), and differs from Pi in four spellings. (1) A fragment that starts with `subdirectory=` (`git:https://host/org/repo@v1#subdirectory=plugins/review`) selects a subdirectory of the repository for a Piglet source (`docs/additive-features.md`); Pi has no such spelling and reads every `#<text>` as a ref. Any other fragment is a ref in PiG too, as in Pi. (2) A source that starts with `git://` is a protocol URL: its repository is `git://host/org/repo`. Pi reads the leading `git:` as the shorthand prefix and returns the repository `https:////host/org/repo`. (3) The scheme of a protocol URL is matched without regard to case when PiG decides whether to prefix `https://`: `HTTPS://host/org/repo` keeps its repository. Pi returns `https://HTTPS://host/org/repo`. (4) A `git:file://host/path` source (a local bare repository, used by Piglet installs) is a Git source whose host is the URL host, such as `localhost`; Pi's `parseGitUrl` returns null for it.
+What: Ompig parses Git package sources with a port of Pi's `parseGitUrl` (`packages/coding-agent/src/utils/git.ts`) and `hosted-git-info` (`coding/source/gitparse.go`, `coding/source/hostedgit.go`), and differs from Pi in four spellings. (1) A fragment that starts with `subdirectory=` (`git:https://host/org/repo@v1#subdirectory=plugins/review`) selects a subdirectory of the repository for a Ompiglet source (`docs/additive-features.md`); Pi has no such spelling and reads every `#<text>` as a ref. Any other fragment is a ref in Ompig too, as in Pi. (2) A source that starts with `git://` is a protocol URL: its repository is `git://host/org/repo`. Pi reads the leading `git:` as the shorthand prefix and returns the repository `https:////host/org/repo`. (3) The scheme of a protocol URL is matched without regard to case when Ompig decides whether to prefix `https://`: `HTTPS://host/org/repo` keeps its repository. Pi returns `https://HTTPS://host/org/repo`. (4) A `git:file://host/path` source (a local bare repository, used by Ompiglet installs) is a Git source whose host is the URL host, such as `localhost`; Pi's `parseGitUrl` returns null for it.
 
 Pi bug: for (2) and (3) Pi's `parseGitUrl` returns a repository no Git client can clone (`https:////host/org/repo`, `https://HTTPS://host/org/repo`), so `pi install` of such a source fails at clone time.
 
-Why: (1) is additive: `@<commit>#subdirectory=<path>` is how PiG installs a Piglet that lives in a repository subdirectory, and no Pi input is rejected for it. (2) and (3) are Pi results that no Git client can clone; PiG returns the repository the user wrote.
+Why: (1) is additive: `@<commit>#subdirectory=<path>` is how Ompig installs a Ompiglet that lives in a repository subdirectory, and no Pi input is rejected for it. (2) and (3) are Pi results that no Git client can clone; Ompig returns the repository the user wrote.
 
 Owner decision: lead ruling of 2026-10-09 on the Git source oracle findings (owner priorities: parity, then maintainability): port Pi's accepted spellings, keep `#subdirectory=` as an additive spelling, and record it as a numbered divergence. The number D110 is the next free ID after D109.
 
-Observable effect: `git:github.com/o/r#subdirectory=sub` has the subdirectory `sub` and no ref in PiG; Pi reads the ref `subdirectory=sub`. `git://github.com/o/r` and `HTTPS://github.com/o/r` resolve to a cloneable repository in PiG and to an unusable one in Pi; `git:file://localhost/tmp/r.git` is a source in PiG and null in Pi. Every other of the oracle's 170 spellings, including all hosted-git-info shorthand forms (`git:user/repo`, `github:`, `gitlab:`, `bitbucket:`, `gist:`, `sourcehut:`), `#<ref>`, `%2F` and backslashes, gives Pi's repository, host, path and ref.
+Observable effect: `git:github.com/o/r#subdirectory=sub` has the subdirectory `sub` and no ref in Ompig; Pi reads the ref `subdirectory=sub`. `git://github.com/o/r` and `HTTPS://github.com/o/r` resolve to a cloneable repository in Ompig and to an unusable one in Pi; `git:file://localhost/tmp/r.git` is a source in Ompig and null in Pi. Every other of the oracle's 170 spellings, including all hosted-git-info shorthand forms (`git:user/repo`, `github:`, `gitlab:`, `bitbucket:`, `gist:`, `sourcehut:`), `#<ref>`, `%2F` and backslashes, gives Pi's repository, host, path and ref.
 
 Call-site markers: `coding/source/gitparse.go` (`parseGitURL`), `coding/source/ref.go` (`parseGit`, `splitGitSubdirectory`).
 
@@ -1510,13 +1510,13 @@ Locked by: `TestParseGitMatchesPi` (`coding/source/parse_git_oracle_test.go`) ru
 
 Parity allowance: none beyond the four spellings above.
 
-Remove when: Pi accepts a `#subdirectory=` spelling or PiG stops installing Piglets from repository subdirectories (1); Pi fixes the `git://` and upper-case scheme repositories (2, 3) or parses `git:file://` sources (4).
+Remove when: Pi accepts a `#subdirectory=` spelling or Ompig stops installing Ompiglets from repository subdirectories (1); Pi fixes the `git://` and upper-case scheme repositories (2, 3) or parses `git:file://` sources (4).
 
 SCRUTINIZED:approved
 
 ## D111 Abort abandons a non-cooperative extension tool after a grace period
 
-What: Abort abandons a non-cooperative extension tool after a grace period: Pi awaits it indefinitely; a subprocess call must not block the agent loop forever. When a run aborts while an extension tool runs, PiG cancels the `tool_call` request, so the tool's AbortSignal fires (Node `AbortSignal`, Go `ctx.Done()`, Rust and Python `is_cancelled`), and waits `ToolAbortGrace` (3 s) for the tool to settle. A tool that settles within the grace period behaves exactly as in Pi: Pi's `executePreparedToolCall` awaits `tool.execute` and makes its result, or its thrown message, the tool result (`packages/agent/src/agent-loop.ts:831-853`). A tool that has not settled when the grace period ends fails with Pi's abort text `Operation aborted` (`agent-loop.ts:623`), the session is free, and the tool's late answer is discarded. Pi awaits such a tool indefinitely and stays "Working" through every further Escape.
+What: Abort abandons a non-cooperative extension tool after a grace period: Pi awaits it indefinitely; a subprocess call must not block the agent loop forever. When a run aborts while an extension tool runs, Ompig cancels the `tool_call` request, so the tool's AbortSignal fires (Node `AbortSignal`, Go `ctx.Done()`, Rust and Python `is_cancelled`), and waits `ToolAbortGrace` (3 s) for the tool to settle. A tool that settles within the grace period behaves exactly as in Pi: Pi's `executePreparedToolCall` awaits `tool.execute` and makes its result, or its thrown message, the tool result (`packages/agent/src/agent-loop.ts:831-853`). A tool that has not settled when the grace period ends fails with Pi's abort text `Operation aborted` (`agent-loop.ts:623`), the session is free, and the tool's late answer is discarded. Pi awaits such a tool indefinitely and stays "Working" through every further Escape.
 
 Pi bug: Pi awaits an aborted extension tool call without a limit, so a tool that never settles holds the agent loop and the Session until the process ends.
 
@@ -1538,9 +1538,9 @@ SCRUTINIZED:approved
 
 ## D113 A Session has no `extensionRunnerRef` cell
 
-What: Pi's `AgentSessionConfig.extensionRunnerRef` is a mutable `{ current?: ExtensionRunner }` that the caller creates before the Agent and that `AgentSession` assigns on every runtime build (`agent-session.ts:296,498,3644-3645`). `sdk.ts:333-476` creates the cell so the closures it gives the Agent and the cache warmer (cache-warming decision `:338`, request headers `:347`, `before_provider_request` `:383`, `after_provider_response` `:388`, `provider_stream_event` `:400` and `context` `:437`) read the current runner. PiG's `SessionOptions` has no such field. A Session reads its own current runner, and `Session.ExtensionRunner()` returns it after every replacement. A caller that builds an Agent or a CacheWarmer for `SessionOptions.Agent` or `SessionOptions.CacheWarmer` and needs the runner inside their closures reads it from the Session after construction instead of from a cell the Session fills in.
+What: Pi's `AgentSessionConfig.extensionRunnerRef` is a mutable `{ current?: ExtensionRunner }` that the caller creates before the Agent and that `AgentSession` assigns on every runtime build (`agent-session.ts:296,498,3644-3645`). `sdk.ts:333-476` creates the cell so the closures it gives the Agent and the cache warmer (cache-warming decision `:338`, request headers `:347`, `before_provider_request` `:383`, `after_provider_response` `:388`, `provider_stream_event` `:400` and `context` `:437`) read the current runner. Ompig's `SessionOptions` has no such field. A Session reads its own current runner, and `Session.ExtensionRunner()` returns it after every replacement. A caller that builds an Agent or a CacheWarmer for `SessionOptions.Agent` or `SessionOptions.CacheWarmer` and needs the runner inside their closures reads it from the Session after construction instead of from a cell the Session fills in.
 
-Why: Go closes over the Session in the hooks the Session installs, so no PiG code needs the cell. A cell shared with the caller would be a second source of truth for the runner of a Session that replaces its runner on reload and on session replacement.
+Why: Go closes over the Session in the hooks the Session installs, so no Ompig code needs the cell. A cell shared with the caller would be a second source of truth for the runner of a Session that replaces its runner on reload and on session replacement.
 
 Scope: only a caller that supplies an Agent or a CacheWarmer. The Session's own Agent and warmer, the CLI and the SDK entry points behave as in Pi.
 
@@ -1552,13 +1552,13 @@ Evidence: `TestNewAgentSessionDrivesTheSuppliedAgentAndChainsItsHooks` and `Test
 
 Parity allowance: no paired scenario builds an Agent through the public Pi constructor, because Pi's only caller is `sdk.ts`.
 
-Remove when: PiG's SDK needs a caller-owned runner cell.
+Remove when: Ompig's SDK needs a caller-owned runner cell.
 
 SCRUTINIZED:approved
 
 ## D114 `StdinBuffer` has no `getMaxListeners`, `setMaxListeners` or `MaxListenersExceededWarning`
 
-What: Pi's `StdinBuffer` extends Node's `EventEmitter` (`packages/tui/src/stdin-buffer.ts:281`). It inherits the listener limit of 10 per event (`EventEmitter.defaultMaxListeners`), `getMaxListeners()` and `setMaxListeners(n)`, and Node prints `MaxListenersExceededWarning` to stderr once per event when a registration takes that event past the limit. PiG's `tui.StdinBuffer` ports the rest of the listener surface (`On`, `Once`, `Off`, `Emit`, `ListenerCount`, `Listeners` and the others in `tui/stdin_buffer_events.go`), and its `ProcessBytes`, `ProcessString` and `Flush` also return the sequences they emit. It has no listener limit: any number of listeners register without a warning, and it has no `GetMaxListeners` or `SetMaxListeners`.
+What: Pi's `StdinBuffer` extends Node's `EventEmitter` (`packages/tui/src/stdin-buffer.ts:281`). It inherits the listener limit of 10 per event (`EventEmitter.defaultMaxListeners`), `getMaxListeners()` and `setMaxListeners(n)`, and Node prints `MaxListenersExceededWarning` to stderr once per event when a registration takes that event past the limit. Ompig's `tui.StdinBuffer` ports the rest of the listener surface (`On`, `Once`, `Off`, `Emit`, `ListenerCount`, `Listeners` and the others in `tui/stdin_buffer_events.go`), and its `ProcessBytes`, `ProcessString` and `Flush` also return the sequences they emit. It has no listener limit: any number of listeners register without a warning, and it has no `GetMaxListeners` or `SetMaxListeners`.
 
 Why: the lead ruled on 2026-10-08 against a `getMaxListeners` and `setMaxListeners` that carry a magic 10, and the owner kept that ruling. Go could match: `addRegistration` could count the registrations of the event against a per-buffer limit of 10 and print Node's warning to stderr once per event.
 
@@ -1572,13 +1572,13 @@ Evidence: none beyond the absence of any Pi caller. `TestStdinBufferEventsMatchP
 
 Parity allowance: no paired scenario adds an eleventh listener to a `StdinBuffer`.
 
-Remove when: PiG's `StdinBuffer` gets Node's listener limit and warning (design-out audit Q3 option B).
+Remove when: Ompig's `StdinBuffer` gets Node's listener limit and warning (design-out audit Q3 option B).
 
 SCRUTINIZED:approved
 
 ## D115 Gemini 2.x tool-result images follow the whole run of function responses
 
-What: for a Google (Generative AI and Vertex) model without multimodal function responses (a `gemini-*` or `gemini-live-*` id with a major version below 3; `google-shared.ts:180-186` `supportsMultimodalFunctionResponse` returns true for every other id, so Gemini 3 and non-Gemini ids nest the images in the function response), PiG sends the "Tool result image:" turns of a run of tool results after the last function response of the run, in result order, so every function response of one model turn stays in the single user turn after it. Pi 1.4.0 pushes each image turn right after its result (`packages/ai/src/api/google-shared.ts` `convertMessages`, the `toolResult` branch: "For Gemini < 3, add images in a separate user message"), so the next result starts a new turn. Pi's own test asserts that shape (`packages/ai/test/google-shared-image-tool-result-routing.test.ts:80-88`: contents[2] function responses, [3] image turn, [4] a function response). Pi main (earendil-works/pi, 2026-10-10) is unchanged.
+What: for a Google (Generative AI and Vertex) model without multimodal function responses (a `gemini-*` or `gemini-live-*` id with a major version below 3; `google-shared.ts:180-186` `supportsMultimodalFunctionResponse` returns true for every other id, so Gemini 3 and non-Gemini ids nest the images in the function response), Ompig sends the "Tool result image:" turns of a run of tool results after the last function response of the run, in result order, so every function response of one model turn stays in the single user turn after it. Pi 1.4.0 pushes each image turn right after its result (`packages/ai/src/api/google-shared.ts` `convertMessages`, the `toolResult` branch: "For Gemini < 3, add images in a separate user message"), so the next result starts a new turn. Pi's own test asserts that shape (`packages/ai/test/google-shared-image-tool-result-routing.test.ts:80-88`: contents[2] function responses, [3] image turn, [4] a function response). Pi main (earendil-works/pi, 2026-10-10) is unchanged.
 
 Pi bug: with a Gemini model below version 3, a parallel tool batch whose results carry an image in any result but the last splits the function responses of one model turn across user turns, and Gemini rejects every later turn of the session with HTTP 400 (`google-shared.ts` `convertMessages`, the `toolResult` branch).
 
@@ -1590,7 +1590,7 @@ Owner decision: 2026-10-10, owner rule "fix every confirmed bug now, Pi's includ
 
 Call-site markers: `ai/google.go` (`flushImageTurns`, `geminiConvertMessages`).
 
-Evidence: `TestGoogleImageToolResultsKeepFunctionResponsesInOneTurnD115` and `TestGoogleImageToolResultOfASingleCallMatchesPiD115` (`ai/google_image_tool_results_d115_test.go`), `TestGeminiToolResultImageOrderingMatchesUpstream`, the payload oracles `TestGoogleGenerativeAIPayloadMatchesPi` and `TestGoogleVertexPayloadMatchesPi` (Pi's payload rewritten by `piPayloadWithD115`), and the differential fuzz `TestPipelineMatchesPi` / `TestAIPipelineMatchesPi` (`test/pipeline-diff`, Pi's request rewritten by `withD115`, PiG's request checked against the Google contract without an allowance).
+Evidence: `TestGoogleImageToolResultsKeepFunctionResponsesInOneTurnD115` and `TestGoogleImageToolResultOfASingleCallMatchesPiD115` (`ai/google_image_tool_results_d115_test.go`), `TestGeminiToolResultImageOrderingMatchesUpstream`, the payload oracles `TestGoogleGenerativeAIPayloadMatchesPi` and `TestGoogleVertexPayloadMatchesPi` (Pi's payload rewritten by `piPayloadWithD115`), and the differential fuzz `TestPipelineMatchesPi` / `TestAIPipelineMatchesPi` (`test/pipeline-diff`, Pi's request rewritten by `withD115`, Ompig's request checked against the Google contract without an allowance).
 
 Parity allowance: the paired scenarios send no Gemini 2.x image tool results.
 
@@ -1600,7 +1600,7 @@ SCRUTINIZED:approved
 
 ## D116 Bedrock Converse messages of one role are merged
 
-What: PiG's Amazon Bedrock Converse request merges adjacent messages of the same role into one message whose content blocks keep their order (tool results first, then the user text that follows them). Pi 1.4.0 pushes every user message (`packages/ai/src/api/bedrock-converse-stream.ts:1014`, `result.push({ role: ConversationRole.USER, content })`) every run of tool results (`:1124`) and every assistant message (`:1087`) as a message of its own and never checks the previous message's role, so a user prompt right after tool results, two user messages, or user messages around a dropped (empty, errored or aborted) assistant turn put two user messages side by side. Pi main (earendil-works/pi, 2026-10-10) is unchanged.
+What: Ompig's Amazon Bedrock Converse request merges adjacent messages of the same role into one message whose content blocks keep their order (tool results first, then the user text that follows them). Pi 1.4.0 pushes every user message (`packages/ai/src/api/bedrock-converse-stream.ts:1014`, `result.push({ role: ConversationRole.USER, content })`) every run of tool results (`:1124`) and every assistant message (`:1087`) as a message of its own and never checks the previous message's role, so a user prompt right after tool results, two user messages, or user messages around a dropped (empty, errored or aborted) assistant turn put two user messages side by side. Pi main (earendil-works/pi, 2026-10-10) is unchanged.
 
 Pi bug: Pi's Bedrock Converse request can put two user messages side by side, for example a prompt sent after a turn aborted while tools ran, and Bedrock rejects every later turn of the session with a ValidationException (HTTP 400) (`bedrock-converse-stream.ts:1014,1087,1124`).
 
@@ -1622,7 +1622,7 @@ SCRUTINIZED:approved
 
 ## D117 `DiscoverAndLoadExtensions` takes no event bus
 
-What: Pi's `discoverAndLoadExtensions(configuredPaths, cwd, agentDir?, eventBus?)` (`packages/coding-agent/src/core/extensions/loader.ts:828`) hands the optional `eventBus` to every extension it loads, so the extensions of that call and the caller share one `pi.events` bus. PiG's `coding.DiscoverAndLoadExtensions(ctx, configuredPaths, cwd, agentDir)` takes a context instead and no bus. The Extension Host runs every extension in its own process and owns the routing of `pi.events` between the extensions it hosts (`coding/extension/host/subprocess/event_bus.go`), so the extensions of one call share that routed bus and a caller cannot join it.
+What: Pi's `discoverAndLoadExtensions(configuredPaths, cwd, agentDir?, eventBus?)` (`packages/coding-agent/src/core/extensions/loader.ts:828`) hands the optional `eventBus` to every extension it loads, so the extensions of that call and the caller share one `pi.events` bus. Ompig's `coding.DiscoverAndLoadExtensions(ctx, configuredPaths, cwd, agentDir)` takes a context instead and no bus. The Extension Host runs every extension in its own process and owns the routing of `pi.events` between the extensions it hosts (`coding/extension/host/subprocess/event_bus.go`), so the extensions of one call share that routed bus and a caller cannot join it.
 
 Why: the Host keeps one ordered `pi.events` registry for every realm it runs, and no Host API attaches a caller's bus to it. Accepting the parameter and ignoring it would hide the difference, so the parameter does not exist. Go could match: the Host could forward each routed emit to the caller's bus and, when an extension first listens on a channel, subscribe that channel on the caller's bus as a native (value) listener of its registry, with a marker that keeps an emission from coming back through the bridge. The compiled-in factories of a Session share a caller's bus through the Session loader, which does take one.
 
@@ -1642,13 +1642,13 @@ SCRUTINIZED:approved
 
 ## D118 A durable commit with an unknown task or submission status fails with "Unknown task status"
 
-What: a commit to PiG's MemoryStorage, or to the JSONL storage built on it, whose task or submission status is outside the closed set (`pending`, `running`, `waiting`, `completing`, `terminal`; `queued`, `placed`, `done`, `unanswered`) fails before anything is stored, with `Unknown task status "<status>"` or `Unknown submission status "<status>"`. Pi 1.4.0 has no such check. Its prepareCommit (`packages/durable/src/storage/memory.ts:268-289`) accepts the batch, and apply then indexes the status in the fixed-key `taskIdsByStatus` / `submissionIdsByStatus` objects (`:375-392`), which throws a V8 TypeError (`Cannot read properties of undefined (reading 'length')`, or `ids.push is not a function` / `ids.splice is not a function` for a status such as `toString` or `__proto__`). By then the earlier writes of the batch, the record type and the ID list are applied, so `scanTasks` later returns `[undefined]`. Pi's JsonlStorage.commit (`packages/durable/src/storage/jsonl/storage.ts:278-305`) appends the sidecar and main.jsonl lines before apply throws.
+What: a commit to Ompig's MemoryStorage, or to the JSONL storage built on it, whose task or submission status is outside the closed set (`pending`, `running`, `waiting`, `completing`, `terminal`; `queued`, `placed`, `done`, `unanswered`) fails before anything is stored, with `Unknown task status "<status>"` or `Unknown submission status "<status>"`. Pi 1.4.0 has no such check. Its prepareCommit (`packages/durable/src/storage/memory.ts:268-289`) accepts the batch, and apply then indexes the status in the fixed-key `taskIdsByStatus` / `submissionIdsByStatus` objects (`:375-392`), which throws a V8 TypeError (`Cannot read properties of undefined (reading 'length')`, or `ids.push is not a function` / `ids.splice is not a function` for a status such as `toString` or `__proto__`). By then the earlier writes of the batch, the record type and the ID list are applied, so `scanTasks` later returns `[undefined]`. Pi's JsonlStorage.commit (`packages/durable/src/storage/jsonl/storage.ts:278-305`) appends the sidecar and main.jsonl lines before apply throws.
 
-Why: Pi's message is a TypeError leaking from an undefined access, not a designed message, and the status is outside Pi's static type, so Pi never meets it from typed code. A Go `TaskStatus` or `SubmissionStatus` is a string and cannot exclude it. PiG reports the status by name and stores nothing, instead of corrupting the in-memory indexes and writing a commit that the next open rejects.
+Why: Pi's message is a TypeError leaking from an undefined access, not a designed message, and the status is outside Pi's static type, so Pi never meets it from typed code. A Go `TaskStatus` or `SubmissionStatus` is a string and cannot exclude it. Ompig reports the status by name and stores nothing, instead of corrupting the in-memory indexes and writing a commit that the next open rejects.
 
 Scope: `checkStatuses` in `durable/storage/memory.go`, run at the end of prepare, so every error Pi raises before apply (document actions, global IDs, sequence) takes precedence as in Pi. Recovery is unchanged: a stored commit with an unknown status fails to open with `Invalid committed state at sequence N`, exactly as in Pi (`jsonl/storage.ts:706-712`).
 
-Owner decision: 2026-10-10, lead ruling on rev-batch-ctor-recovery finding 10 (keep PiG's message; number from the lead block).
+Owner decision: 2026-10-10, lead ruling on rev-batch-ctor-recovery finding 10 (keep Ompig's message; number from the lead block).
 
 Call-site markers: `durable/storage/memory.go` (`checkStatuses`).
 
@@ -1662,7 +1662,7 @@ SCRUTINIZED:approved
 
 ## D120 A streamed tool call without an id or name no longer wedges the session (pi-mono #10299)
 
-What: Pi stores a tool call that a provider streams without an id (and, for OpenRouter/GLM and Xiaomi MiMo, without a function name) and replays it. Its tool result then carries `tool_call_id: ""`, and every later turn fails with `400 tool messages must include a non-empty string tool_call_id` or `tool_calls[0] is missing a function name`. PiG gives a call streamed without an id a unique `<name>_<epoch ms>_<counter>` id when its block ends (the form Pi's Google adapters generate, `google-generative-ai.ts:195-200`). Every provider's replay omits a tool call whose name is blank or whose id is still empty after the provider's ID normalization, together with the tool results that name its id (an empty id included). A tool result whose call is absent is passed on as in Pi. Stored sessions that already hold such a call replay again.
+What: Pi stores a tool call that a provider streams without an id (and, for OpenRouter/GLM and Xiaomi MiMo, without a function name) and replays it. Its tool result then carries `tool_call_id: ""`, and every later turn fails with `400 tool messages must include a non-empty string tool_call_id` or `tool_calls[0] is missing a function name`. Ompig gives a call streamed without an id a unique `<name>_<epoch ms>_<counter>` id when its block ends (the form Pi's Google adapters generate, `google-generative-ai.ts:195-200`). Every provider's replay omits a tool call whose name is blank or whose id is still empty after the provider's ID normalization, together with the tool results that name its id (an empty id included). A tool result whose call is absent is passed on as in Pi. Stored sessions that already hold such a call replay again.
 
 Why: the session is unusable after one malformed chunk. The fault is in the stored transcript, so a retry cannot recover it. The fix shape follows the `transformMessages` patch proposed in the issue thread.
 
@@ -1674,7 +1674,7 @@ Call-site markers: `ai/stream_builder.go` (`endToolCallWith`), `ai/tool_flow.go`
 
 Evidence: `TestOpenAICompletionsEmptyToolCallDoesNotWedgeReplay` (`ai/openai_empty_tool_call_test.go`) streams the malformed call from a mock server, replays the transcript and checks the second request. `TestReplayOmitsUnreplayableToolCallsOnEveryProviderPath` and `TestStreamedToolCallsWithoutIDGetDistinctIDsAcrossTurns` (`ai/unreplayable_tool_call_test.go`) check a stored id-less named call, a blank-named call and a call with neither on the Completions/Responses, Anthropic and Google/Bedrock replay paths, and that generated ids do not repeat across turns. Mutating the id generation, the call filter or the result filter fails them. `TestOpenAICompletionsReplayOmitsStoredToolCallsWithoutIDOrNameReviewed` and `TestOpenAICompletionsGeneratedToolCallIDsAreUnique` (`ai/openai_empty_tool_call_reviewer_test.go`, from rev-fix-pi-bugs-ai-1) check the same rules through `ConvertCompletionsMessages` and a mock stream, including that a `requiresAssistantAfterToolResult` target gets no bridge message after an all-omitted result group.
 
-Parity allowance: Pi 1.4.0 reproduces the 400, so no paired scenario can assert the fixed behavior. The Pi response oracle (`compareResponses` in `ai/response_oracle_support_test.go`) blanks PiG's generated `<name>_<ms>_<counter>` ids where Pi stores `""`, for every API except Google, whose adapters generate the same form in Pi (`google-generative-ai.ts:195-200`) so both sides carry one.
+Parity allowance: Pi 1.4.0 reproduces the 400, so no paired scenario can assert the fixed behavior. The Pi response oracle (`compareResponses` in `ai/response_oracle_support_test.go`) blanks Ompig's generated `<name>_<ms>_<counter>` ids where Pi stores `""`, for every API except Google, whose adapters generate the same form in Pi (`google-generative-ai.ts:195-200`) so both sides carry one.
 
 Remove when: Pi fills the id at stream end and omits unreplayable calls on replay.
 
@@ -1682,7 +1682,7 @@ SCRUTINIZED:approved
 
 ## D121 The Anthropic SSE reader holds back a carriage return that ends a chunk (pi-mono #10390)
 
-What: Pi's `consumeLine` (`anthropic-messages.ts:454-466`) ends a line at a `\r` that is the last character of a network chunk. The `\n` of a CRLF split that way then arrives as an empty line, flushes the record without its `data`, and the turn aborts with `Could not parse Anthropic SSE event message_start: Unexpected end of JSON input; data=`. PiG waits for the next chunk before it ends a line at a trailing `\r`; at the end of the stream the `\r` ends its line as before.
+What: Pi's `consumeLine` (`anthropic-messages.ts:454-466`) ends a line at a `\r` that is the last character of a network chunk. The `\n` of a CRLF split that way then arrives as an empty line, flushes the record without its `data`, and the turn aborts with `Could not parse Anthropic SSE event message_start: Unexpected end of JSON input; data=`. Ompig waits for the next chunk before it ends a line at a trailing `\r`; at the end of the stream the `\r` ends its line as before.
 
 Why: where a proxy flushes CR and LF separately, every turn through it fails. A CRLF is one line break in the SSE standard.
 
@@ -1702,7 +1702,7 @@ SCRUTINIZED:approved
 
 ## D122 OpenAI Completions keeps a signature-only `reasoning.text` delta (pi-mono #9534)
 
-What: OpenRouter streams the signature of an Anthropic `reasoning.text` block in a later delta that has `signature`, `type`, `format` and `index` but no `text`. Pi's `isOpenAIReasoningDetail` (`openai-completions.ts:144-148`) requires `typeof detail.text === "string"`, so it drops the delta, and the `reasoning_details` Pi replays after a tool call lose the signature. PiG accepts a `reasoning.text` detail without `text` when its `signature` is a string, merges the signature into the preceding `reasoning.text` detail, and replays it. A `reasoning.text` detail with neither `text` nor a string `signature` is still dropped.
+What: OpenRouter streams the signature of an Anthropic `reasoning.text` block in a later delta that has `signature`, `type`, `format` and `index` but no `text`. Pi's `isOpenAIReasoningDetail` (`openai-completions.ts:144-148`) requires `typeof detail.text === "string"`, so it drops the delta, and the `reasoning_details` Pi replays after a tool call lose the signature. Ompig accepts a `reasoning.text` detail without `text` when its `signature` is a string, merges the signature into the preceding `reasoning.text` detail, and replays it. A `reasoning.text` detail with neither `text` nor a string `signature` is still dropped.
 
 Why: OpenRouter documents that the original reasoning blocks, signatures included, must be passed back when a conversation continues after a tool call.
 
@@ -1722,7 +1722,7 @@ SCRUTINIZED:approved
 
 ## D128 OpenRouter image models that need the Images API are retried through `/images` (pi-mono #10652)
 
-What: for some OpenRouter image generation models (the report names `openai/gpt-image-2.5-flare`) `chat/completions` answers `404 <model> is an image generation model and cannot be used with the chat/completions endpoint. Use the /api/v1/images endpoint instead.` Pi 1.4.0 returns `stopReason: "error"` with no images. When PiG receives that refusal it sends the request once to `POST <baseUrl>/images` with `{model, prompt, input_references}` (the text input joined by newlines, the image input as data-URL `image_url` parts) and reads `data[].b64_json` (`media_type` or `image/png`) and `usage` into the result, priced at the model's flat rates as the chat path is. Any other failure, and every model that `chat/completions` accepts, keeps Pi's single chat request and error.
+What: for some OpenRouter image generation models (the report names `openai/gpt-image-2.5-flare`) `chat/completions` answers `404 <model> is an image generation model and cannot be used with the chat/completions endpoint. Use the /api/v1/images endpoint instead.` Pi 1.4.0 returns `stopReason: "error"` with no images. When Ompig receives that refusal it sends the request once to `POST <baseUrl>/images` with `{model, prompt, input_references}` (the text input joined by newlines, the image input as data-URL `image_url` parts) and reads `data[].b64_json` (`media_type` or `image/png`) and `usage` into the result, priced at the model's flat rates as the chat path is. Any other failure, and every model that `chat/completions` accepts, keeps Pi's single chat request and error.
 
 Why: the refusal is OpenRouter's own statement of which endpoint serves the model; the catalog carries no field that tells the two apart (FLUX and Gemini image models work through chat completions), so the endpoint is discovered from the response.
 
@@ -1738,13 +1738,13 @@ Parity allowance: Pi 1.4.0 returns the 404 error; no paired scenario can reprodu
 
 Remove when: Pi sends these models to the Images API.
 
-Pin re-check: owner HOLD 2026-10-10. The code stays. At every pin move, re-check Pi main for a fix of #10652 (OpenRouter image models refused by `chat/completions`): if Pi ships one, port it exactly and delete this record; if Pi picks a different approach (catalog flag, endpoint field), align PiG to it and reclassify.
+Pin re-check: owner HOLD 2026-10-10. The code stays. At every pin move, re-check Pi main for a fix of #10652 (OpenRouter image models refused by `chat/completions`): if Pi ships one, port it exactly and delete this record; if Pi picks a different approach (catalog flag, endpoint field), align Ompig to it and reclassify.
 
 SCRUTINIZED:approved
 
 ## D129 A Responses function call streamed with an empty call_id no longer wedges the session (pi-mono #10299)
 
-What: D120's Responses counterpart. Pi stores a streamed `function_call` or `custom_tool_call` under the id `${item.call_id}|${item.id}` (`openai-responses-shared.ts` `createSlot`). An absent `call_id` is stored as `undefined|<item id>` and `null` as `null|<item id>`; PiG stores the same ids, and both replay them. An empty `call_id` is stored as `|<item id>`, and its replay sends `call_id: ""` for the call and for its output, which the API rejects on every later request. PiG gives a call streamed with an empty `call_id` the generated `<name>_<epoch ms>_<counter>` call id of D120 (`<generated>|<item id>`), and on the Responses replay a stored id whose call part is still empty after ID normalization (`|`-prefixed) is omitted with the tool results that name it, as D120 omits an empty id. Other targets replay such a call as Pi does: Chat Completions normalizes `|fc_1` to `_fc_1`, Anthropic, Bedrock and Mistral normalize the whole id, and Gemini sends it unchanged.
+What: D120's Responses counterpart. Pi stores a streamed `function_call` or `custom_tool_call` under the id `${item.call_id}|${item.id}` (`openai-responses-shared.ts` `createSlot`). An absent `call_id` is stored as `undefined|<item id>` and `null` as `null|<item id>`; Ompig stores the same ids, and both replay them. An empty `call_id` is stored as `|<item id>`, and its replay sends `call_id: ""` for the call and for its output, which the API rejects on every later request. Ompig gives a call streamed with an empty `call_id` the generated `<name>_<epoch ms>_<counter>` call id of D120 (`<generated>|<item id>`), and on the Responses replay a stored id whose call part is still empty after ID normalization (`|`-prefixed) is omitted with the tool results that name it, as D120 omits an empty id. Other targets replay such a call as Pi does: Chat Completions normalizes `|fc_1` to `_fc_1`, Anthropic, Bedrock and Mistral normalize the whole id, and Gemini sends it unchanged.
 
 Why: the same fault and fix shape as D120; the Responses id has two parts, so an empty call part is not an empty id.
 
@@ -1764,11 +1764,11 @@ SCRUTINIZED:approved
 
 ## D130 A managed-effort Anthropic request sends each managed field only with its beta (Pi #10759)
 
-What: for a model with `compat.supportsMidConvoEffort`, Pi's `buildParams` (`anthropic-messages.ts:1154-1164`, `:1235-1241`) always sends `thinking.block_binding` and the `role: "system"` `output_config` effort markers. An explicit `anthropic-beta` header, from `model.headers` or the request headers, replaces the computed betas, and `null` removes them (`getBetaFeatures`, `:1080-1103`; pinned by `anthropic-auth-token.test.ts`). The override drops `thinking-binding-controls-2026-08-01` and `mid-conversation-output-config-2026-07-01`, but the body still uses them, so the API returns 400 (`messages.1.output_config: Extra inputs are not permitted`, or `thinking.adaptive.block_binding: Extra inputs are not permitted` without the markers). PiG keeps the override semantics and derives the managed fields from the betas it sends. `block_binding` goes only with `thinking-binding-controls-2026-08-01`. The markers go only with `mid-conversation-output-config-2026-07-01`. Without the markers, the active effort is the top-level `output_config.effort` instead of `high`. Without an override, or with an override that lists both betas, the request is Pi's.
+What: for a model with `compat.supportsMidConvoEffort`, Pi's `buildParams` (`anthropic-messages.ts:1154-1164`, `:1235-1241`) always sends `thinking.block_binding` and the `role: "system"` `output_config` effort markers. An explicit `anthropic-beta` header, from `model.headers` or the request headers, replaces the computed betas, and `null` removes them (`getBetaFeatures`, `:1080-1103`; pinned by `anthropic-auth-token.test.ts`). The override drops `thinking-binding-controls-2026-08-01` and `mid-conversation-output-config-2026-07-01`, but the body still uses them, so the API returns 400 (`messages.1.output_config: Extra inputs are not permitted`, or `thinking.adaptive.block_binding: Extra inputs are not permitted` without the markers). Ompig keeps the override semantics and derives the managed fields from the betas it sends. `block_binding` goes only with `thinking-binding-controls-2026-08-01`. The markers go only with `mid-conversation-output-config-2026-07-01`. Without the markers, the active effort is the top-level `output_config.effort` instead of `high`. Without an override, or with an override that lists both betas, the request is Pi's.
 
 Why: the override is how a user adds a beta, and on these models every such request fails. The issue reports the 400s from the live API for claude-opus-5-5.
 
-Scope: `buildParams` and `applySampling` in `ai/anthropic.go`, the Anthropic Messages path only. The `tool_addition` blocks of native tool changes without `inline-tools-2026-09-15` may fail the same way. The issue did not test that and PiG leaves it as Pi has it.
+Scope: `buildParams` and `applySampling` in `ai/anthropic.go`, the Anthropic Messages path only. The `tool_addition` blocks of native tool changes without `inline-tools-2026-09-15` may fail the same way. The issue did not test that and Ompig leaves it as Pi has it.
 
 Owner decision: 2026-10-10, lead assignment of Pi #10759 under the owner ruling "fix every confirmed bug now, ported from Pi or not".
 
@@ -1784,7 +1784,7 @@ SCRUTINIZED:approved
 
 ## D131 A stalled SSE stream that still sends keepalives ends after the HTTP idle timeout (pi-mono #10761, #10762)
 
-What: Pi's `httpIdleTimeoutMs` (default 300000) is a byte-level body timeout. A gateway that silently loses the generation but keeps the connection alive with comment lines (`: keepalive`) or `ping` events resets that timer for ever, so a headless `pi -p` run parks without an error or a retry. PiG measures the same timeout on semantic progress for every `text/event-stream` response of the provider HTTP clients: the timer restarts when a `data:` line of an event other than `ping` arrives. A reasoning or thinking event also makes keepalives count: while the last event with data was a reasoning event (Anthropic `thinking`, `thinking_delta`, `signature_delta` and `redacted_thinking`, OpenAI `reasoning` items and `response.reasoning*` events, OpenRouter, DeepSeek and Mistral `reasoning`, `reasoning_content`, `reasoning_text` and `reasoning_details`, Gemini `thought` parts), comment lines and `ping` events restart the timer too, because a model that reasons silently behind a gateway has not stalled. Any later event that is not about reasoning ends that state. When it expires the response body fails with `SSE Event Timeout Error: no event for <N>ms`, which the provider reports like any body error (`terminated`, with that cause) so the agent's retry policy applies. The timeout is the configured `httpIdleTimeoutMs`; `0` disables it, as it disables the byte-level timeout. A stream whose events arrive within the timeout is never cut off, however long it runs.
+What: Pi's `httpIdleTimeoutMs` (default 300000) is a byte-level body timeout. A gateway that silently loses the generation but keeps the connection alive with comment lines (`: keepalive`) or `ping` events resets that timer for ever, so a headless `pi -p` run parks without an error or a retry. Ompig measures the same timeout on semantic progress for every `text/event-stream` response of the provider HTTP clients: the timer restarts when a `data:` line of an event other than `ping` arrives. A reasoning or thinking event also makes keepalives count: while the last event with data was a reasoning event (Anthropic `thinking`, `thinking_delta`, `signature_delta` and `redacted_thinking`, OpenAI `reasoning` items and `response.reasoning*` events, OpenRouter, DeepSeek and Mistral `reasoning`, `reasoning_content`, `reasoning_text` and `reasoning_details`, Gemini `thought` parts), comment lines and `ping` events restart the timer too, because a model that reasons silently behind a gateway has not stalled. Any later event that is not about reasoning ends that state. When it expires the response body fails with `SSE Event Timeout Error: no event for <N>ms`, which the provider reports like any body error (`terminated`, with that cause) so the agent's retry policy applies. The timeout is the configured `httpIdleTimeoutMs`; `0` disables it, as it disables the byte-level timeout. A stream whose events arrive within the timeout is never cut off, however long it runs.
 
 Why: a reasonable user expects a stalled stream to end with an error, and a long silent reasoning turn is not a stall (owner sign-off 2026-10-10). The default equals the existing setting, so no new setting or literal exists. A reasoning model that emits no event at all before its answer (for example Chat Completions reasoning that never streams) is still cut after `httpIdleTimeoutMs` of keepalives, because nothing marks it as reasoning.
 
@@ -1804,7 +1804,7 @@ SCRUTINIZED:approved
 
 ## D132 Session directories are created with mode 0700 (pi-mono #10770)
 
-What: Pi creates the sessions directory and each project's session directory with the umask default (`mkdirSync(..., { recursive: true })`, 0755 under a 022 umask), so any other user of the machine can list and read every conversation, tool output and secret a model saw. PiG creates every directory it makes for sessions with mode 0700: the agent directory, `sessions` and the per-project directory when they do not exist yet, on session creation, clone, fork-from-file, `/import` and the migration of sessions out of the agent root. A directory that already exists keeps its mode; session files keep the default mode and are protected by their directory.
+What: Pi creates the sessions directory and each project's session directory with the umask default (`mkdirSync(..., { recursive: true })`, 0755 under a 022 umask), so any other user of the machine can list and read every conversation, tool output and secret a model saw. Ompig creates every directory it makes for sessions with mode 0700: the agent directory, `sessions` and the per-project directory when they do not exist yet, on session creation, clone, fork-from-file, `/import` and the migration of sessions out of the agent root. A directory that already exists keeps its mode; session files keep the default mode and are protected by their directory.
 
 Why: the sessions are private data, and the report calls the default a security problem.
 
@@ -1824,7 +1824,7 @@ SCRUTINIZED:approved
 
 ## D134 One SSE line is bounded at Node's maximum string length
 
-What: Pi's SSE readers (the OpenAI SDK's `LineDecoder`, the Google GenAI SDK reader and `iterateSseMessages` in `anthropic-messages.ts`) have no line cap of their own, but each one holds the line in a JavaScript string. Node cannot make a string longer than `buffer.constants.MAX_STRING_LENGTH` (536,870,888 UTF-16 code units on 64-bit V8), so a longer line ends Pi's stream with `Cannot create a string longer than 0x1fffffe8 characters` or `RangeError: Invalid string length`. PiG's shared SSE decoder (`ai/sse.go`, used by OpenAI Responses, Google and the Codex WebSocket path) ends the stream at the same bound in bytes, with `bufio.Scanner: token too long`. Before comb-audit row 4 it ended at 32 MiB; the lane's first fix removed every bound.
+What: Pi's SSE readers (the OpenAI SDK's `LineDecoder`, the Google GenAI SDK reader and `iterateSseMessages` in `anthropic-messages.ts`) have no line cap of their own, but each one holds the line in a JavaScript string. Node cannot make a string longer than `buffer.constants.MAX_STRING_LENGTH` (536,870,888 UTF-16 code units on 64-bit V8), so a longer line ends Pi's stream with `Cannot create a string longer than 0x1fffffe8 characters` or `RangeError: Invalid string length`. Ompig's shared SSE decoder (`ai/sse.go`, used by OpenAI Responses, Google and the Codex WebSocket path) ends the stream at the same bound in bytes, with `bufio.Scanner: token too long`. Before comb-audit row 4 it ended at 32 MiB; the lane's first fix removed every bound.
 
 Why: Go strings have no runtime length limit, so without this bound a server that never ends a line grows the buffer until the process runs out of memory. Pi's process fails at this length instead.
 
@@ -1844,9 +1844,9 @@ SCRUTINIZED:approved
 
 ## D135 clearQueue keeps queued extension custom messages (Pi #9886)
 
-What: Pi's `AgentSession.clearQueue()` returns the queued user-message text and then calls `agent.clearAllQueues()`, which also destroys the custom messages an extension queued with `sendMessage({ deliverAs: "followUp" | "steer" })` during a run. The extension never learns that its message was dropped. PiG's `Session.ClearQueue` (RPC `clear_queue`, SDK) and the interactive "restore queued messages to the editor" action remove and report only the queued user messages. Queued custom messages stay queued and run with the active run. After the interactive restore with abort (Escape), the run stops and the kept custom messages run with the next run, as any queued message does after an abort in Pi.
+What: Pi's `AgentSession.clearQueue()` returns the queued user-message text and then calls `agent.clearAllQueues()`, which also destroys the custom messages an extension queued with `sendMessage({ deliverAs: "followUp" | "steer" })` during a run. The extension never learns that its message was dropped. Ompig's `Session.ClearQueue` (RPC `clear_queue`, SDK) and the interactive "restore queued messages to the editor" action remove and report only the queued user messages. Queued custom messages stay queued and run with the active run. After the interactive restore with abort (Escape), the run stops and the kept custom messages run with the next run, as any queued message does after an abort in Pi.
 
-Why: A host that implements "edit queued messages" as clear and replay loses the extension's background notification, and the parent model is never woken. The issue thread (reporter and a contributor, no maintainer decision) proposes keeping extension messages queued; that proposal makes it an opt-in `clearQueue({ userMessagesOnly: true })` used by the TUI, while PiG applies it to every `ClearQueue` caller, including RPC `clear_queue`.
+Why: A host that implements "edit queued messages" as clear and replay loses the extension's background notification, and the parent model is never woken. The issue thread (reporter and a contributor, no maintainer decision) proposes keeping extension messages queued; that proposal makes it an opt-in `clearQueue({ userMessagesOnly: true })` used by the TUI, while Ompig applies it to every `ClearQueue` caller, including RPC `clear_queue`.
 
 Scope: `Session.ClearQueue`, `agent.Agent.ClearQueuedUserMessages` and the interactive restore action. `agent.ClearAllQueues` keeps Pi's behavior.
 
@@ -1864,7 +1864,7 @@ SCRUTINIZED:approved
 
 ## D136 A context edit after the usage anchor keeps the anchor (Pi #10287)
 
-What: Pi's `estimateProjectedContextTokens` discards the last assistant usage whenever any `context_edit` follows it on the branch. Omitting a zero-usage failed retry attempt (the edit `_omitRecoveryAttempt` appends) therefore replaces the usage total by an estimate of the whole history, and the context indicator and the compaction check jump (42k to 330k tokens in the report). PiG keeps the anchor when every later edit targets an entry after it, because the trailing estimate already counts the projected content of those entries. An edit of the anchor or of earlier input, and any later compaction, still discard it.
+What: Pi's `estimateProjectedContextTokens` discards the last assistant usage whenever any `context_edit` follows it on the branch. Omitting a zero-usage failed retry attempt (the edit `_omitRecoveryAttempt` appends) therefore replaces the usage total by an estimate of the whole history, and the context indicator and the compaction check jump (42k to 330k tokens in the report). Ompig keeps the anchor when every later edit targets an entry after it, because the trailing estimate already counts the projected content of those entries. An edit of the anchor or of earlier input, and any later compaction, still discard it.
 
 Why: The reported jump triggers needless compaction after a retryable network error.
 
@@ -1874,7 +1874,7 @@ Owner decision: 2026-10-10, owner ruling that every confirmed Pi bug is fixed no
 
 Call-site markers: `internal/codingagent/compaction/estimate.go` (`EstimateProjectedContextTokens`).
 
-Evidence: `TestEstimateKeepsUsageAnchorWhenARetryOmissionEditsOnlyTheTrailingSuffix`, `TestEstimateKeepsUsageAnchorWhenTrailingInputIsReplaced` and `TestEstimateDropsUsageAnchorWhenTheAnchorOrEarlierInputIsEdited` in `internal/codingagent/compaction/context_edit_retry_anchor_test.go`, and `TestContextUsageSurvivesAnOmittedFailedRetryAttempt` in `coding/session_pi_bugs_test.go`; the first, second and fourth fail on the former rule. The Pi-differential compaction oracle in `internal/codingagent/compaction/compaction_oracle_test.go` requires, for each generated case where an edit follows an assistant entry and `tokensBefore` differs, that PiG's `tokensBefore` equal Pi's own usage-anchored `estimateContextTokens` total, compares every other field, and fails when no case exercises the anchor.
+Evidence: `TestEstimateKeepsUsageAnchorWhenARetryOmissionEditsOnlyTheTrailingSuffix`, `TestEstimateKeepsUsageAnchorWhenTrailingInputIsReplaced` and `TestEstimateDropsUsageAnchorWhenTheAnchorOrEarlierInputIsEdited` in `internal/codingagent/compaction/context_edit_retry_anchor_test.go`, and `TestContextUsageSurvivesAnOmittedFailedRetryAttempt` in `coding/session_pi_bugs_test.go`; the first, second and fourth fail on the former rule. The Pi-differential compaction oracle in `internal/codingagent/compaction/compaction_oracle_test.go` requires, for each generated case where an edit follows an assistant entry and `tokensBefore` differs, that Ompig's `tokensBefore` equal Pi's own usage-anchored `estimateContextTokens` total, compares every other field, and fails when no case exercises the anchor.
 
 Parity allowance: `prep.tokensBefore` in `compaction_oracle_test.go` for sessions with an edit after an assistant entry, bound to Pi's anchored estimate.
 
@@ -1884,9 +1884,9 @@ SCRUTINIZED:approved
 
 ## D137 A request carries at most the model's maxPerRequest images (Pi #10162)
 
-What: Pi reads `inputLimits.images.maxPerRequest` from the catalog and from `models.json` and then ignores it, so a long run that reads many images sends every image on each request and ends with a provider 400 such as `Too many images in request: 31 > 30`. PiG replaces the oldest images of a request beyond the model's `maxPerRequest` with the text `[image omitted: this model accepts at most N images per request]` and keeps the newest N. The stored session is unchanged.
+What: Pi reads `inputLimits.images.maxPerRequest` from the catalog and from `models.json` and then ignores it, so a long run that reads many images sends every image on each request and ends with a provider 400 such as `Too many images in request: 31 > 30`. Ompig replaces the oldest images of a request beyond the model's `maxPerRequest` with the text `[image omitted: this model accepts at most N images per request]` and keeps the newest N. The stored session is unchanged.
 
-Why: The run stops on a provider error that the model's own metadata predicts. A model without a configured limit is unchanged, so the opencode-go models in the report need `inputLimits.images.maxPerRequest` in `models.json`; PiG does not learn a limit from the provider error text. A Pi maintainer lists compaction, dropping the oldest images and rejecting as open options and has not chosen one; each changes the prompt prefix. Once a run exceeds the limit, every request that adds an image moves the omitted set, so the provider's prompt cache misses from the oldest kept image onward. Catalog models with a limit, such as Anthropic's (100 or 600), are affected without configuration.
+Why: The run stops on a provider error that the model's own metadata predicts. A model without a configured limit is unchanged, so the opencode-go models in the report need `inputLimits.images.maxPerRequest` in `models.json`; Ompig does not learn a limit from the provider error text. A Pi maintainer lists compaction, dropping the oldest images and rejecting as open options and has not chosen one; each changes the prompt prefix. Once a run exceeds the limit, every request that adds an image moves the omitted set, so the provider's prompt cache misses from the oldest kept image onward. Catalog models with a limit, such as Anthropic's (100 or 600), are affected without configuration.
 
 Scope: user and tool-result images in the provider request of an agent run (`agent.limitImagesPerRequest`).
 
@@ -1904,7 +1904,7 @@ SCRUTINIZED:approved
 
 ## D138 session_compact custom messages reach the overflow retry (Pi #9051)
 
-What: A `session_compact` handler that publishes passive context with `sendMessage({ triggerTurn: false })` during an overflow recovery has its message deferred to the end of the active run, so the immediate retry runs without it. PiG appends the deferred custom messages to the session once the overflow compaction has finished and before the interrupted turn retries. The recovered turn is omitted first, so no append lands between a tool call and its result.
+What: A `session_compact` handler that publishes passive context with `sendMessage({ triggerTurn: false })` during an overflow recovery has its message deferred to the end of the active run, so the immediate retry runs without it. Ompig appends the deferred custom messages to the session once the overflow compaction has finished and before the interrupted turn retries. The recovered turn is omitted first, so no append lands between a tool call and its result.
 
 Why: An extension that republishes exact state after compaction loses it for the one request that needs it. Pi PR #9738 makes the same flush (closed, unmerged).
 
@@ -1924,7 +1924,7 @@ SCRUTINIZED:approved
 
 ## D142 Settlement keeps idle waiters pending and abort discards deferred prompts (Pi #10704, #10705)
 
-What: Pi 1.4.0 resolves a `waitForIdle()` waiter that was registered during a run as soon as the compaction an `agent_settled` handler awaits has finished, before the prompt the handler deferred has run (#10704). Pi's `abort()` called from a public `agent_settled` subscriber resolves, but a continuation an extension had already deferred still starts a provider request (#10705). PiG keeps a waiter that registered while the Session was busy pending until the `agent_settled` handlers and every prompt they deferred have finished. `waitForIdle()` on an idle Session still returns at once, so a handler can call it. An abort requested while settlement is in progress discards the prompts already deferred. Manual compaction's own abort keeps them, as Pi's `compact()` aborts only the run it replaces.
+What: Pi 1.4.0 resolves a `waitForIdle()` waiter that was registered during a run as soon as the compaction an `agent_settled` handler awaits has finished, before the prompt the handler deferred has run (#10704). Pi's `abort()` called from a public `agent_settled` subscriber resolves, but a continuation an extension had already deferred still starts a provider request (#10705). Ompig keeps a waiter that registered while the Session was busy pending until the `agent_settled` handlers and every prompt they deferred have finished. `waitForIdle()` on an idle Session still returns at once, so a handler can call it. An abort requested while settlement is in progress discards the prompts already deferred. Manual compaction's own abort keeps them, as Pi's `compact()` aborts only the run it replaces.
 
 Why: A host that waits for idle must not report completion while work is still queued, and a stopped Session must not start provider requests.
 
@@ -1944,7 +1944,7 @@ SCRUTINIZED:approved
 
 ## D143 A device-attributes reply split across slow reads is not forwarded as input (Pi #10657)
 
-What: when a terminal delivers a DA1 reply in several slow reads, Pi 1.4.0 forwards the leading fragment after its 150 ms fragment timeout and then emits the remaining digits, separators and final `c` as printable key input, so the composer fills with text such as `24;28;32;42c`. PiG ports the issue's reference fix: a buffered private CSI prefix (`ESC[?` and any digits and `;` after it) has no fragment timeout and waits for its final byte. The reassembled reply then takes Pi's path: a DA1 owed to the keyboard protocol query settles negotiation, and any other reply, such as the color query's DA1, is forwarded whole. Input that cannot continue the prefix releases the buffer as input first, as in Pi. A bare `ESC[` is still replayed as input after 150 ms, as Pi's tests require; while a DA reply is owed, PiG then absorbs for one second a continuation that extends it towards a Kitty flags or DA1 reply, so a `?`, digit or `;` typed in that second after a forwarded `ESC[` is consumed too.
+What: when a terminal delivers a DA1 reply in several slow reads, Pi 1.4.0 forwards the leading fragment after its 150 ms fragment timeout and then emits the remaining digits, separators and final `c` as printable key input, so the composer fills with text such as `24;28;32;42c`. Ompig ports the issue's reference fix: a buffered private CSI prefix (`ESC[?` and any digits and `;` after it) has no fragment timeout and waits for its final byte. The reassembled reply then takes Pi's path: a DA1 owed to the keyboard protocol query settles negotiation, and any other reply, such as the color query's DA1, is forwarded whole. Input that cannot continue the prefix releases the buffer as input first, as in Pi. A bare `ESC[` is still replayed as input after 150 ms, as Pi's tests require; while a DA reply is owed, Ompig then absorbs for one second a continuation that extends it towards a Kitty flags or DA1 reply, so a `?`, digit or `;` typed in that second after a forwarded `ESC[` is consumed too.
 
 Why: A reply to a terminal query is not user input.
 
@@ -1964,7 +1964,7 @@ SCRUTINIZED:approved
 
 ## D144 A dropped response stream keeps its cause in the error message (Pi #10697)
 
-What: undici reports every response-body failure that is not a user abort as `TypeError("terminated")` with the real failure in `error.cause`, such as `SocketError: other side closed` or `BodyTimeoutError`. Pi drops the cause, so a peer disconnect and an idle timeout both end a run with the message `terminated`. PiG ends the message with the Go cause: `terminated (cause: unexpected EOF)`. The message still contains `terminated`, so Pi's retry classification matches it as before. Failures before the response headers (`fetch failed`, the OpenAI SDK's `Connection error.`) are unchanged.
+What: undici reports every response-body failure that is not a user abort as `TypeError("terminated")` with the real failure in `error.cause`, such as `SocketError: other side closed` or `BodyTimeoutError`. Pi drops the cause, so a peer disconnect and an idle timeout both end a run with the message `terminated`. Ompig ends the message with the Go cause: `terminated (cause: unexpected EOF)`. The message still contains `terminated`, so Pi's retry classification matches it as before. Failures before the response headers (`fetch failed`, the OpenAI SDK's `Connection error.`) are unchanged.
 
 Why: A user cannot tell a server disconnect from a client timeout without instrumenting the process.
 
@@ -1984,7 +1984,7 @@ SCRUTINIZED:approved
 
 ## D145 Nested Errors keep their name and message in codemode output (Pi #10650)
 
-What: an Error's `name` and `message` are not enumerable, so Pi's codemode serializes a nested rejection as `{}`. `text(await Promise.allSettled([...]))`, console output and the returned value then show `"reason":{}` although the message is available in the VM. PiG serializes `text()`, console output and the returned value with a replacer that writes an Error as `{"name":...,"message":...}` followed by the own enumerable fields Pi already writes, such as `code` or `status`. A value whose prototype, `name` or `message` cannot be read is written as Pi writes it. Stacks are not written. Arguments a script passes to a tool, and an explicit `JSON.stringify` in the script, keep normal JavaScript semantics.
+What: an Error's `name` and `message` are not enumerable, so Pi's codemode serializes a nested rejection as `{}`. `text(await Promise.allSettled([...]))`, console output and the returned value then show `"reason":{}` although the message is available in the VM. Ompig serializes `text()`, console output and the returned value with a replacer that writes an Error as `{"name":...,"message":...}` followed by the own enumerable fields Pi already writes, such as `code` or `status`. A value whose prototype, `name` or `message` cannot be read is written as Pi writes it. Stacks are not written. Arguments a script passes to a tool, and an explicit `JSON.stringify` in the script, keep normal JavaScript semantics.
 
 Why: The output is the only view the model gets of a failed nested call.
 
@@ -2004,11 +2004,11 @@ SCRUTINIZED:approved
 
 ## D146 RPC stdin end answers a Session-replacing command that Pi leaves unanswered
 
-What: Pi dispatches every stdin line at once (`rpc-mode.ts:808-810`), so `new_session`, `fork`, `clone`, `switch_session` and `export_html` answer after a later command of the same batch, and PiG matches that order. When stdin ends while a replacement still awaits `createRuntime`, Pi exits at once (`rpc-mode.ts:802-805`) and never answers the command. PiG finishes the replacement and writes its response before it shuts down. Measured on the previous pin (Pi 1.4.0's `rpc-mode.ts` is unchanged): `printf '{"id":"1","type":"new_session"}\n{"id":"2","type":"get_state"}\n' | pi --mode rpc` prints only the `get_state` response. An extension command in the same batch as a pending replacement runs after the replacement, as before, because PiG finishes the replacement first (Pi's replacement reaches its `session_shutdown` before such a command's handler).
+What: Pi dispatches every stdin line at once (`rpc-mode.ts:808-810`), so `new_session`, `fork`, `clone`, `switch_session` and `export_html` answer after a later command of the same batch, and Ompig matches that order. When stdin ends while a replacement still awaits `createRuntime`, Pi exits at once (`rpc-mode.ts:802-805`) and never answers the command. Ompig finishes the replacement and writes its response before it shuts down. Measured on the previous pin (Pi 1.4.0's `rpc-mode.ts` is unchanged): `printf '{"id":"1","type":"new_session"}\n{"id":"2","type":"get_state"}\n' | pi --mode rpc` prints only the `get_state` response. An extension command in the same batch as a pending replacement runs after the replacement, as before, because Ompig finishes the replacement first (Pi's replacement reaches its `session_shutdown` before such a command's handler).
 
 Why: A script that pipes commands and closes stdin gets no answer to its replacement command from Pi, and cannot tell a failure from a drop. This is a Pi bug under the owner's rule that confirmed bugs are fixed whether or not Pi has them.
 
-Scope: `coding/cli/rpc_mode.go` (`awaitReplacement`, `finishReplacements`, the stdin-end wait). Replacements of one batch chain through `rpcAwaitInOrder`: each starts after the previous applied and answers after it. A fork or clone requested while an earlier replacement is pending reads its entry from the Session that was current when it was requested (`coding.WithForkSession`, `Session.ValidateFork`), so it succeeds as in Pi, and a failed check answers before that replacement does. `export_html` answers at stdin end in Pi and in PiG.
+Scope: `coding/cli/rpc_mode.go` (`awaitReplacement`, `finishReplacements`, the stdin-end wait). Replacements of one batch chain through `rpcAwaitInOrder`: each starts after the previous applied and answers after it. A fork or clone requested while an earlier replacement is pending reads its entry from the Session that was current when it was requested (`coding.WithForkSession`, `Session.ValidateFork`), so it succeeds as in Pi, and a failed check answers before that replacement does. `export_html` answers at stdin end in Pi and in Ompig.
 
 Owner decision: 2026-10-10, owner ruling that every confirmed Pi bug is fixed now, ported from Pi or not. Lead question for the stdin-end drop: `questions/comb-audit.md`, row 58.
 
@@ -2024,9 +2024,9 @@ SCRUTINIZED:approved
 
 ## D147 Compactions requested in one input batch run one after another
 
-What: Pi's `compact()` awaits `abort()` before it creates its abort controller, so two `compact` lines of one input batch both start, and neither aborts the other. For a Session that is too small both answer "Nothing to compact", and for a Session with enough history Pi compacts twice at the same time. PiG chains the compactions through `rpcAwaitInOrder`: each starts after the previous one settled. Both answer "Nothing to compact" for a small Session, as in Pi (measured on the previous pin, 6 of 6 runs; Pi 1.4.0's `compact()` is unchanged). For a Session with enough history Pi answers both compacts with success and writes two compaction entries (previous pin, 3 of 3 runs). PiG starts the second compaction after the first one wrote its entry, so the second answers "Already compacted" and the Session has one compaction entry.
+What: Pi's `compact()` awaits `abort()` before it creates its abort controller, so two `compact` lines of one input batch both start, and neither aborts the other. For a Session that is too small both answer "Nothing to compact", and for a Session with enough history Pi compacts twice at the same time. Ompig chains the compactions through `rpcAwaitInOrder`: each starts after the previous one settled. Both answer "Nothing to compact" for a small Session, as in Pi (measured on the previous pin, 6 of 6 runs; Pi 1.4.0's `compact()` is unchanged). For a Session with enough history Pi answers both compacts with success and writes two compaction entries (previous pin, 3 of 3 runs). Ompig starts the second compaction after the first one wrote its entry, so the second answers "Already compacted" and the Session has one compaction entry.
 
-Why: Concurrent compactions of one Session write overlapping compaction entries and cancel each other when the second claims the Session while the first starts (PiG answered "Compaction cancelled" in 2 of 3 runs).
+Why: Concurrent compactions of one Session write overlapping compaction entries and cancel each other when the second claims the Session while the first starts (Ompig answered "Compaction cancelled" in 2 of 3 runs).
 
 Scope: `coding/cli/rpc_mode.go` (`RPCCommandCompact`, `compactResolved`).
 
@@ -2044,7 +2044,7 @@ SCRUTINIZED:approved
 
 ## D148 An aborted compaction answers one error; two Pi defects of overlapping compacts are not reproduced
 
-What: Pi's replacement (`new_session`, `fork`, `clone`, `switch_session`) disposes the outgoing Session at its teardown, which aborts that Session's compaction (`agent-session.ts:1393-1399`) without waiting for it. A `compact` of the same batch yields before its summary request, so the teardown comes first: the compact fails with "This operation was aborted" (getAuth rejects with the signal's reason) and writes no compaction entry. A replacement that is refused or fails never reaches its teardown and leaves the compaction alone. PiG matches both: each compact of a batch waits after `compaction_start` until every replacement requested by the end of the batch tore down (which cancels it) or gave up. Where Pi's own code fails differently, PiG does not copy the failure. With `compact, compact, new_session` Pi answers the first compact with the TypeError "Cannot read properties of undefined (reading 'signal')", because the second compact clears the shared abort controller, and answers 2, 1, 3. PiG answers both compacts with "This operation was aborted" in request order. An abort after the summary request started answers "Compaction cancelled" for every provider, where Pi's text depends on whether the provider reports the abort as a message or as an error. PiG also writes a `compaction_end` event with `aborted: true` before the aborted compact's error answer; Pi writes none, because the outgoing Session is already unsubscribed.
+What: Pi's replacement (`new_session`, `fork`, `clone`, `switch_session`) disposes the outgoing Session at its teardown, which aborts that Session's compaction (`agent-session.ts:1393-1399`) without waiting for it. A `compact` of the same batch yields before its summary request, so the teardown comes first: the compact fails with "This operation was aborted" (getAuth rejects with the signal's reason) and writes no compaction entry. A replacement that is refused or fails never reaches its teardown and leaves the compaction alone. Ompig matches both: each compact of a batch waits after `compaction_start` until every replacement requested by the end of the batch tore down (which cancels it) or gave up. Where Pi's own code fails differently, Ompig does not copy the failure. With `compact, compact, new_session` Pi answers the first compact with the TypeError "Cannot read properties of undefined (reading 'signal')", because the second compact clears the shared abort controller, and answers 2, 1, 3. Ompig answers both compacts with "This operation was aborted" in request order. An abort after the summary request started answers "Compaction cancelled" for every provider, where Pi's text depends on whether the provider reports the abort as a message or as an error. Ompig also writes a `compaction_end` event with `aborted: true` before the aborted compact's error answer; Pi writes none, because the outgoing Session is already unsubscribed.
 
 Why: Letting the compaction finish wrote an entry into the Session file the replacement then left, and cancelling at dispatch aborted a compaction whose replacement was refused. The TypeError and the answer order are defects of Pi's shared controller, not behavior a user can rely on. The abort text after the request started is the Session's one cancellation answer.
 
@@ -2064,11 +2064,11 @@ SCRUTINIZED:approved
 
 ## D150 `--no-stdin` skips the startup read of piped stdin (Pi #10415)
 
-What: PiG adds `--no-stdin`. It skips the startup read of piped stdin in print and interactive-redirected runs. Without the flag PiG reads stdin until end of input and merges it into the prompt, as Pi does.
+What: Ompig adds `--no-stdin`. It skips the startup read of piped stdin in print and interactive-redirected runs. Without the flag Ompig reads stdin until end of input and merges it into the prompt, as Pi does.
 
-Why: `pi -p hi < <(sleep 15)` never starts: `readPipedStdin` (`packages/coding-agent/src/main.ts:80-97`) waits for `end` on a pipe whose writer stays open, and the same happens in PiG. An idle open pipe cannot be told from a slow producer, so a timeout would drop real input; an explicit opt-out is the only fix that cannot lose piped input. Callers that keep an input pipe open (agent harnesses, CI wrappers) pass the flag. Pi has no fix: Pi #10415 has an unmerged `--no-stdin` proposal and no PR. Pi #5571 discusses the same hang.
+Why: `pi -p hi < <(sleep 15)` never starts: `readPipedStdin` (`packages/coding-agent/src/main.ts:80-97`) waits for `end` on a pipe whose writer stays open, and the same happens in Ompig. An idle open pipe cannot be told from a slow producer, so a timeout would drop real input; an explicit opt-out is the only fix that cannot lose piped input. Callers that keep an input pipe open (agent harnesses, CI wrappers) pass the flag. Pi has no fix: Pi #10415 has an unmerged `--no-stdin` proposal and no PR. Pi #5571 discusses the same hang.
 
-Observable effect: `pig --no-stdin -p "prompt"` with an open stdin pipe runs the prompt; Pi hangs. Pi parses `--no-stdin` as an unknown extension flag.
+Observable effect: `ompig --no-stdin -p "prompt"` with an open stdin pipe runs the prompt; Pi hangs. Pi parses `--no-stdin` as an unknown extension flag.
 
 Call-site markers: `coding/cli/args.go` (`Args.NoStdin`, the `--no-stdin` case), `coding/cli/main.go` (the `readPipedStdin` call site).
 
@@ -2082,7 +2082,7 @@ SCRUTINIZED:approved
 
 ## D151 `grep` with context reads a window of each matched file (Pi #9276)
 
-What: PiG's `grep` tool with `context` above 0 reads each matched file as a stream and keeps only the lines its matches still need. Pi's `getFileLines` (`packages/coding-agent/src/core/tools/grep.ts`) reads and splits every matched file into one array and caches it.
+What: Ompig's `grep` tool with `context` above 0 reads each matched file as a stream and keeps only the lines its matches still need. Pi's `getFileLines` (`packages/coding-agent/src/core/tools/grep.ts`) reads and splits every matched file into one array and caches it.
 
 Why: with `context: 2` over a directory of 100 MB logs, Pi holds each matched file several times over (read string, split array) and exhausts the heap (Pi #9276). Pi has no fix. The output is the same: the window splits lines as `getFileLines` does, keeps the first `GrepMaxLineLength + 1` code points of a line (the rest cannot reach the output), and still prints overlapping context blocks for nearby matches.
 
@@ -2100,11 +2100,11 @@ SCRUTINIZED:approved
 
 ## D153 The bash truncation notice names the size of the last line, not the bytes after the final newline (Pi #10015)
 
-What: when the last line of bash or PowerShell output is over the byte limit, PiG's `[Showing last 50.0KB of line N (line is <size>)...]` notice gives the size of that line. If the output ends with a newline, Pi's `getLastLineBytes` (`packages/coding-agent/src/core/tools/output-accumulator.ts`) returns the bytes after the newline, so Pi's notice reads `line is 0B`.
+What: when the last line of bash or PowerShell output is over the byte limit, Ompig's `[Showing last 50.0KB of line N (line is <size>)...]` notice gives the size of that line. If the output ends with a newline, Pi's `getLastLineBytes` (`packages/coding-agent/src/core/tools/output-accumulator.ts`) returns the bytes after the newline, so Pi's notice reads `line is 0B`.
 
-Why: `node -e 'process.stdout.write("a".repeat(60000) + "\n")'` produces `[Showing last 50.0KB of line 1 (line is 0B)...]` in Pi (measured on the previous pin; the bash truncation notice is unchanged in Pi 1.4.0) and in PiG. The tail it shows belongs to line 1, which is 58.6KB. Pi has no fix (Pi #10015 is open, with no PR).
+Why: `node -e 'process.stdout.write("a".repeat(60000) + "\n")'` produces `[Showing last 50.0KB of line 1 (line is 0B)...]` in Pi (measured on the previous pin; the bash truncation notice is unchanged in Pi 1.4.0) and in Ompig. The tail it shows belongs to line 1, which is 58.6KB. Pi has no fix (Pi #10015 is open, with no PR).
 
-Observable effect: PiG prints `line is 58.6KB`; Pi prints `line is 0B`. Output without a trailing newline is the same in both.
+Observable effect: Ompig prints `line is 58.6KB`; Pi prints `line is 0B`. Output without a trailing newline is the same in both.
 
 Call-site markers: `internal/codingagent/tools/output_accumulator.go` (`LastLineBytes`).
 
@@ -2136,11 +2136,11 @@ SCRUTINIZED:approved
 
 ## D156 MCP server `url` expands environment references (Pi #10654)
 
-What: PiG expands the environment references of an MCP server's `url` (`$VAR`, `${VAR}`, `$$`) the way it resolves `headers` and `env` values. It validates the expanded URL when it loads `mcp.json` or registers a server, connects to it, and uses it as the OAuth server URL. A `url` that cannot be expanded now (a `!command`, or a variable that is unset or empty) is used as written, so a literal URL with a `$` keeps working. Pi uses the `url` as written in `validateMcpServerConfig` (`packages/coding-agent/src/core/mcp-servers.ts`), `createDefaultTransport` and `McpServerConnection.oauthUrl` (`packages/coding-agent/src/extensions/mcp/runtime.ts`).
+What: Ompig expands the environment references of an MCP server's `url` (`$VAR`, `${VAR}`, `$$`) the way it resolves `headers` and `env` values. It validates the expanded URL when it loads `mcp.json` or registers a server, connects to it, and uses it as the OAuth server URL. A `url` that cannot be expanded now (a `!command`, or a variable that is unset or empty) is used as written, so a literal URL with a `$` keeps working. Pi uses the `url` as written in `validateMcpServerConfig` (`packages/coding-agent/src/core/mcp-servers.ts`), `createDefaultTransport` and `McpServerConnection.oauthUrl` (`packages/coding-agent/src/extensions/mcp/runtime.ts`).
 
-Why: `{"url": "${MY_VAR}"}` is rejected with `url must be an http or https URL` in Pi 1.4.0 and in PiG, while `"http://${HOST}/mcp"` is accepted and then connects to the literal string. The reporter asks for the URL to be resolved with the same logic as headers and env values. Pi #10654 is open with no PR.
+Why: `{"url": "${MY_VAR}"}` is rejected with `url must be an http or https URL` in Pi 1.4.0 and in Ompig, while `"http://${HOST}/mcp"` is accepted and then connects to the literal string. The reporter asks for the URL to be resolved with the same logic as headers and env values. Pi #10654 is open with no PR.
 
-Observable effect: the `/mcp` server menu adds a `connects to: <expanded url>` line under a `url` that expands to something else (owner-approved; the expansion can contain a secret from the environment, and the menu shows it). An entry whose `url` is only a reference loads in PiG and is rejected by Pi. An entry whose `url` contains `$$`, or `$NAME` or `${NAME}` with `NAME` set, connects to the expanded URL in PiG and to the literal text in Pi. The stored config and `getMcpServers` keep the URL as written, and the server list shows it as written.
+Observable effect: the `/mcp` server menu adds a `connects to: <expanded url>` line under a `url` that expands to something else (owner-approved; the expansion can contain a secret from the environment, and the menu shows it). An entry whose `url` is only a reference loads in Ompig and is rejected by Pi. An entry whose `url` contains `$$`, or `$NAME` or `${NAME}` with `NAME` set, connects to the expanded URL in Ompig and to the literal text in Pi. The stored config and `getMcpServers` keep the URL as written, and the server list shows it as written.
 
 Call-site markers: `coding/extension/mcp_servers.go` (`ExpandMcpURL`, `ValidateMcpServerConfig`), `coding/mcpext/runtime.go` (`CreateDefaultTransport`, `Connection.OAuthURL`), `coding/mcpext/manager.go` (`serverMenu`).
 
@@ -2152,13 +2152,13 @@ Remove when: Pi expands the `url` of an MCP server.
 
 SCRUTINIZED:approved
 
-## D157 PiG's startup additions stay quiet when the config root cannot be written
+## D157 Ompig's startup additions stay quiet when the config root cannot be written
 
-What: PiG prints no `pig: warning: extension SDK staging failed: ...` line and no `pig: warning: write Piglet verification cache: ...` line when the write into the config root fails with a read-only file system or a permission denial (`EROFS`, `EACCES`, `EPERM`). Every other failure of either write still warns. The documentation bundle is not named when it could not be written (D22). `pig diagnose` reports a read-only config root and what PiG does not write there, including that a signed Piglet Binary checks itself in full at every start. The owner chose this on 2026-10-09 for both warnings.
+What: Ompig prints no `ompig: warning: extension SDK staging failed: ...` line and no `ompig: warning: write Ompiglet verification cache: ...` line when the write into the config root fails with a read-only file system or a permission denial (`EROFS`, `EACCES`, `EPERM`). Every other failure of either write still warns. The documentation bundle is not named when it could not be written (D22). `ompig diagnose` reports a read-only config root and what Ompig does not write there, including that a signed Ompiglet Binary checks itself in full at every start. The owner chose this on 2026-10-09 for both warnings.
 
-Why: a config root that is read-only (a Nix or container image home, a locked-down CI cache) failed these writes on every start, with up to four lines on stderr in every mode, including `-p`, json and rpc. Both writes are PiG additions with no Pi counterpart. Pi on the same root (measured on the previous pin; its settings lock and settings diagnostics are unchanged in Pi 1.4.0) warns on every start about its own settings lock (`Warning: Invalid settings file .../settings.json: EACCES: permission denied, mkdir '.../settings.json.lock'`, also for `--help`), and then crashes with an `EACCES` stack trace when it needs `auth.json` or the sessions directory. PiG keeps Pi's settings warning, which says the settings were not applied, and does not add its own warnings for a read-only deployment.
+Why: a config root that is read-only (a Nix or container image home, a locked-down CI cache) failed these writes on every start, with up to four lines on stderr in every mode, including `-p`, json and rpc. Both writes are Ompig additions with no Pi counterpart. Pi on the same root (measured on the previous pin; its settings lock and settings diagnostics are unchanged in Pi 1.4.0) warns on every start about its own settings lock (`Warning: Invalid settings file .../settings.json: EACCES: permission denied, mkdir '.../settings.json.lock'`, also for `--help`), and then crashes with an `EACCES` stack trace when it needs `auth.json` or the sessions directory. Ompig keeps Pi's settings warning, which says the settings were not applied, and does not add its own warnings for a read-only deployment.
 
-Observable effect: no extension SDK staging line and no verification cache line on a read-only config root. An unusable staged SDK still fails its build with the build's own error; a signed Piglet Binary still verifies itself in full at every start.
+Observable effect: no extension SDK staging line and no verification cache line on a read-only config root. An unusable staged SDK still fails its build with the build's own error; a signed Ompiglet Binary still verifies itself in full at every start.
 
 Call-site markers: `coding/cli/main.go` (`stageExtensionSDKsAtStartup`, `reportVerifyCacheError`), `coding/cli/diagnose.go`.
 
@@ -2166,7 +2166,7 @@ Locked by: `TestReadOnlyConfigRootError` and `TestVerifyCacheWarningIsQuietOnlyO
 
 Parity allowance: none. No Pi scenario has a read-only config root.
 
-Remove when: Pi stops warning on every start of a read-only config root, or PiG writes neither the staged extension SDK nor the Piglet Binary verification cache at startup.
+Remove when: Pi stops warning on every start of a read-only config root, or Ompig writes neither the staged extension SDK nor the Ompiglet Binary verification cache at startup.
 
 SCRUTINIZED:approved
 
@@ -2176,13 +2176,13 @@ What: `decodeSettingsWire` drops a `settings.json` value whose JSON type does no
 
 Why: a start that crashes on a mistyped setting, or reads a string as a list of one-character patterns, helps nobody. The user keeps every other setting, and the mistyped one has no effect. Pi does not intend the crash: it validates nothing.
 
-Observable effect: PiG exits 0 where Pi exits 1 or warns once per character, and prints one warning per settings file that held such values, naming each ignored setting and the type it expects (`Warning: Invalid settings file <path>: ignored settings of the wrong type: "skills" (expected an array of strings)`; an array that lost elements reads `"packages" (an element of the wrong type)`). Owner-approved on 2026-10-10: the warning, so a user is not left wondering why a setting had no effect.
+Observable effect: Ompig exits 0 where Pi exits 1 or warns once per character, and prints one warning per settings file that held such values, naming each ignored setting and the type it expects (`Warning: Invalid settings file <path>: ignored settings of the wrong type: "skills" (expected an array of strings)`; an array that lost elements reads `"packages" (an element of the wrong type)`). Owner-approved on 2026-10-10: the warning, so a user is not left wondering why a setting had no effect.
 
 Call-site markers: `internal/codingagent/settings.go` (`decodeSettingsWire`, `noteIgnoredSettings`).
 
 Locked by: `TestSettingsDropWrongTypedValuesAndKeepTheRest` and `TestSettingsWarnOnceNamingTheIgnoredSettingAndItsExpectedType` (`internal/codingagent/settings_wrong_type_test.go`).
 
-Parity allowance: the Pi settings-diagnostics oracle test (`TestSettingsFileDiagnosticsMatchPi`) skips PiG's ignored-settings warning. No paired scenario writes a wrong-typed setting.
+Parity allowance: the Pi settings-diagnostics oracle test (`TestSettingsFileDiagnosticsMatchPi`) skips Ompig's ignored-settings warning. No paired scenario writes a wrong-typed setting.
 
 Remove when: Pi validates the type of each setting, or the owner chooses to match Pi's crash.
 
@@ -2190,7 +2190,7 @@ SCRUTINIZED:approved
 
 ## D159 A single grapheme wider than the editor's wrap width stays one chunk instead of exhausting the stack
 
-What: `wordWrapLine` (`packages/tui/src/components/editor.ts:123`) re-wraps a segment wider than `maxWidth` by calling itself on that segment. A segment that is one grapheme (a tab, which `visibleWidth` counts as 3, at a content width of 2 or less; a double-width character at width 1) is its own re-wrap input, so Pi recurses until `RangeError: Maximum call stack size exceeded`. PiG's Go stack overflow is a fatal runtime error that no handler catches: the process dies. PiG keeps such a grapheme as one chunk that overflows the width, as the segment already does for cursor movement and editing, and re-wraps only segments of several graphemes (paste markers).
+What: `wordWrapLine` (`packages/tui/src/components/editor.ts:123`) re-wraps a segment wider than `maxWidth` by calling itself on that segment. A segment that is one grapheme (a tab, which `visibleWidth` counts as 3, at a content width of 2 or less; a double-width character at width 1) is its own re-wrap input, so Pi recurses until `RangeError: Maximum call stack size exceeded`. Ompig's Go stack overflow is a fatal runtime error that no handler catches: the process dies. Ompig keeps such a grapheme as one chunk that overflows the width, as the segment already does for cursor movement and editing, and re-wraps only segments of several graphemes (paste markers).
 
 Why: typing a tab into an editor at a width of 3 columns crashed the whole program. Found by `FuzzEditorInputKeepsRenderValid`.
 
@@ -2245,9 +2245,9 @@ SCRUTINIZED:approved
 
 ## D167 A history longer than the model's context window is summarized in chunks
 
-What: when the messages a compaction summarizes are longer than the model's context window, PiG splits them into consecutive chunks that fit one summary request and summarizes them in order. Each chunk's request carries the summary of the chunk before it in `<previous-summary>` and uses `UPDATE_SUMMARIZATION_PROMPT`, the prompt Pi uses when a compaction has a previous summary. The first chunk starts from the compaction's own previous summary, and the usage of every request is added. A chunk the provider still refuses as a context overflow (`ai.IsContextOverflow` on its error) is halved and retried until one message is left. A history that fits the window is one request, byte-identical to Pi's. When a compaction cuts inside a turn and the turn prefix is longer than the window by the same measure, all but the prefix's last window-sized part joins the history and is summarized by the chunked path; the turn-prefix request keeps the last part. A split turn whose prefix fits keeps Pi's two requests. `/tree` branch summarization keeps Pi's request for the newest entries that fit the window by the character estimate; when the provider still refuses it as a context overflow, PiG retries with the newest half of what it sent, never less than the newest message, until the provider accepts it or one message is left. A retry that would select no fewer messages ends with the provider's error.
+What: when the messages a compaction summarizes are longer than the model's context window, Ompig splits them into consecutive chunks that fit one summary request and summarizes them in order. Each chunk's request carries the summary of the chunk before it in `<previous-summary>` and uses `UPDATE_SUMMARIZATION_PROMPT`, the prompt Pi uses when a compaction has a previous summary. The first chunk starts from the compaction's own previous summary, and the usage of every request is added. A chunk the provider still refuses as a context overflow (`ai.IsContextOverflow` on its error) is halved and retried until one message is left. A history that fits the window is one request, byte-identical to Pi's. When a compaction cuts inside a turn and the turn prefix is longer than the window by the same measure, all but the prefix's last window-sized part joins the history and is summarized by the chunked path; the turn-prefix request keeps the last part. A split turn whose prefix fits keeps Pi's two requests. `/tree` branch summarization keeps Pi's request for the newest entries that fit the window by the character estimate; when the provider still refuses it as a context overflow, Ompig retries with the newest half of what it sent, never less than the newest message, until the provider accepts it or one message is left. A retry that would select no fewer messages ends with the provider's error.
 
-Pi bug: `generateSummaryWithUsage` (`packages/coding-agent/src/core/compaction/compaction.ts`) serializes every message of `messagesToSummarize` into one request and `serializeConversation` only caps tool results at 2000 characters. A session already longer than the model's window (a smaller-window model after a switch, or a long session on a 1M model) is refused with `prompt is too long: N tokens > W maximum`, and no later `/compact`, automatic compaction or overflow recovery can succeed. Pi (on the previous pin; its `compaction.ts` is unchanged in Pi 1.4.0) and the PiG integrate tip fail identically on the same session against the same mock endpoint (`prompt is too long: 12034 tokens > 6000 maximum`); Pi main has no chunking either. The owner hit it with `prompt is too long: 1,200,311 > 1,000,000`.
+Pi bug: `generateSummaryWithUsage` (`packages/coding-agent/src/core/compaction/compaction.ts`) serializes every message of `messagesToSummarize` into one request and `serializeConversation` only caps tool results at 2000 characters. A session already longer than the model's window (a smaller-window model after a switch, or a long session on a 1M model) is refused with `prompt is too long: N tokens > W maximum`, and no later `/compact`, automatic compaction or overflow recovery can succeed. Pi (on the previous pin; its `compaction.ts` is unchanged in Pi 1.4.0) and the Ompig integrate tip fail identically on the same session against the same mock endpoint (`prompt is too long: 12034 tokens > 6000 maximum`); Pi main has no chunking either. The owner hit it with `prompt is too long: 1,200,311 > 1,000,000`.
 
 Scope: `GenerateSummaryWithUsageUsing` in `internal/codingagent/compaction/compaction.go` and `GenerateBranchSummary` in `internal/codingagent/compaction/branch_summarization.go`, and `Compact` for the turn prefix of a split turn, so manual `/compact`, automatic compaction, overflow recovery and both halves of a split-turn compaction. A turn prefix whose last part the provider still refuses is not halved; the refusal stays the error, as in Pi. A model without a known context window, a history that fits, and a single message longer than the window keep Pi's single request and its provider error. The chunk size is the window minus twice the summary budget and the instructions, times 0.75, by the four-characters-per-token estimate.
 
@@ -2265,7 +2265,7 @@ SCRUTINIZED:approved
 
 ## D173 Tool search matches Chinese, Japanese and Korean queries (Pi #10816)
 
-What: Pi's tool-search tokenizer (`tokenize` in `packages/coding-agent/src/extensions/tool-search/tool.ts`) lowercases text and splits it on `/[^a-z0-9]+/`, so every Chinese, Japanese and Korean character is dropped: `tokenize("记录")` is empty and a query in those scripts never matches a tool whose name, description or schema holds the same words. `tool_search` and codemode `searchTools()` both rank with it. PiG makes each Han, Hiragana, Katakana or Hangul character a term of its own, so `记录` becomes the terms `记` and `录` and matches a tool whose metadata holds them, and `search_notes 搜索记录` keeps its ASCII terms beside the four characters. Text without those characters tokenizes exactly as in Pi: accented Latin letters still split a word (`café` is `caf`), Cyrillic and Arabic are still dropped, and the Japanese prolonged sound mark (script Common) still splits a term.
+What: Pi's tool-search tokenizer (`tokenize` in `packages/coding-agent/src/extensions/tool-search/tool.ts`) lowercases text and splits it on `/[^a-z0-9]+/`, so every Chinese, Japanese and Korean character is dropped: `tokenize("记录")` is empty and a query in those scripts never matches a tool whose name, description or schema holds the same words. `tool_search` and codemode `searchTools()` both rank with it. Ompig makes each Han, Hiragana, Katakana or Hangul character a term of its own, so `记录` becomes the terms `记` and `录` and matches a tool whose metadata holds them, and `search_notes 搜索记录` keeps its ASCII terms beside the four characters. Text without those characters tokenizes exactly as in Pi: accented Latin letters still split a word (`café` is `caf`), Cyrillic and Arabic are still dropped, and the Japanese prolonged sound mark (script Common) still splits a term.
 
 Why: A user who writes tool descriptions or queries in Chinese, Japanese or Korean cannot find their tools by search. Pi 1.4.0 and Pi main have the same tokenizer and no fix or pull request; the report was auto-closed.
 
@@ -2285,7 +2285,7 @@ SCRUTINIZED:approved
 
 ## D177 The calls of a parallel durable tool round start in unspecified order
 
-What: In a parallel tool round (the default `toolExecution`, no call's tool requiring sequential execution) PiG runs each call's tool task as its own goroutine, so the calls start concurrently and the order of their first side effects within one round is unspecified. Pi 1.4.0's generation creates every tool task of the round in one commit and its single event loop runs each `execute` up to its first await in call order, so `harness-tools.test.ts:263` observes `["start a", "start b"]` exactly. Pi does not specify that order; it follows from running on one thread.
+What: In a parallel tool round (the default `toolExecution`, no call's tool requiring sequential execution) Ompig runs each call's tool task as its own goroutine, so the calls start concurrently and the order of their first side effects within one round is unspecified. Pi 1.4.0's generation creates every tool task of the round in one commit and its single event loop runs each `execute` up to its first await in call order, so `harness-tools.test.ts:263` observes `["start a", "start b"]` exactly. Pi does not specify that order; it follows from running on one thread.
 
 Why: Go has no single event loop; ordering the starts would need a gate that holds each call until every earlier call of its round has reached a wait, which couples the harness to the scheduler and to how the runtime parks goroutines. The owner chose to leave the start order unspecified (option b).
 
@@ -2303,9 +2303,9 @@ SCRUTINIZED:approved
 
 ## D178 Facet modules load in an isolated Node child, not in the host process
 
-What: Pi 1.4.0's `nodeLoader` (`packages/chord/src/loader.ts`) imports facet modules into the host's own Node process. PiG's `NodeLoader` / `NewNodeLoader(...).Load` (`chord/host/loader.go`) runs them in an isolated Node child, one per load, over `ForkDriver` and a `HostManager`; the Go host serves the contracts the child's facets serve and forwards each method call to the child. Three observable limits follow: (1) a facet cannot reach the Go host: the contracts it serves, `ctx`, and the principal a record is made for; (2) a `ChordError` a method throws crosses with its code, reason and message only (details, cause and retryable are not carried; retryable is recomputed from the code); (3) contracts with state or opaque members, several variants, `accepts` adapters or state migrations are refused at load with a `TypeError`.
+What: Pi 1.4.0's `nodeLoader` (`packages/chord/src/loader.ts`) imports facet modules into the host's own Node process. Ompig's `NodeLoader` / `NewNodeLoader(...).Load` (`chord/host/loader.go`) runs them in an isolated Node child, one per load, over `ForkDriver` and a `HostManager`; the Go host serves the contracts the child's facets serve and forwards each method call to the child. Three observable limits follow: (1) a facet cannot reach the Go host: the contracts it serves, `ctx`, and the principal a record is made for; (2) a `ChordError` a method throws crosses with its code, reason and message only (details, cause and retryable are not carried; retryable is recomputed from the code); (3) contracts with state or opaque members, several variants, `accepts` adapters or state migrations are refused at load with a `TypeError`.
 
-Why: a Go host has no in-process JavaScript module loader, and PiG already runs Node for extensions. The owner chose an isolated-Node loader over designing the loader out. Process isolation replaces Pi's reload query, root set and `registerHooks` hook: every load is a fresh process, so a reload's copies are fresh and the facets of one load share one module graph. It also ends Pi's leak of replaced module copies (`TODO(loader)`): a child stops at `Close` or once nothing refers to its facets.
+Why: a Go host has no in-process JavaScript module loader, and Ompig already runs Node for extensions. The owner chose an isolated-Node loader over designing the loader out. Process isolation replaces Pi's reload query, root set and `registerHooks` hook: every load is a fresh process, so a reload's copies are fresh and the facets of one load share one module graph. It also ends Pi's leak of replaced module copies (`TODO(loader)`): a child stops at `Close` or once nothing refers to its facets.
 
 Scope: facet modules loaded through `chord/host` `NodeLoader`. Unchanged: facet naming by module URL, module order, Pi's `TypeError` message for a default export that is not a facet, `loader.test.ts` `:8` and `:17`, and the methods of method-only contracts, their results and their errors' codes and messages.
 
@@ -2321,7 +2321,7 @@ SCRUTINIZED:approved
 
 ## D180 A provider transport failure records its Go cause as a provider_transport_failure diagnostic
 
-What: when a provider request fails in transport (reset, refused, DNS, dial or TLS timeout, TLS certificate failure, dropped response stream), PiG appends one `provider_transport_failure` diagnostic to the failed assistant message's `diagnostics`. Pi emits that diagnostic type only for the Codex WebSocket path and nothing for the openai, anthropic and google SDK failures. The diagnostic has Pi's codex shape: `{type, timestamp, error: {name, message, code}, details: {eventsEmitted, phase}}`, with `phase` `before_message_stream_start` or `after_message_stream_start`. `error.message` is the Go cause, `error.code` a Node-style code (ECONNRESET, ECONNREFUSED, EPIPE, ETIMEDOUT, ENOTFOUND, EAI_AGAIN, UND_ERR_HEADERS_TIMEOUT, UND_ERR_SOCKET, CERT_* and TLS codes) when one applies. The codex-only `configuredTransport`, `fallbackTransport` and `requestBytes` details are not written. The `errorMessage`, stop reason, retry classification and event order are byte-identical to Pi. Caller aborts record nothing.
+What: when a provider request fails in transport (reset, refused, DNS, dial or TLS timeout, TLS certificate failure, dropped response stream), Ompig appends one `provider_transport_failure` diagnostic to the failed assistant message's `diagnostics`. Pi emits that diagnostic type only for the Codex WebSocket path and nothing for the openai, anthropic and google SDK failures. The diagnostic has Pi's codex shape: `{type, timestamp, error: {name, message, code}, details: {eventsEmitted, phase}}`, with `phase` `before_message_stream_start` or `after_message_stream_start`. `error.message` is the Go cause, `error.code` a Node-style code (ECONNRESET, ECONNREFUSED, EPIPE, ETIMEDOUT, ENOTFOUND, EAI_AGAIN, UND_ERR_HEADERS_TIMEOUT, UND_ERR_SOCKET, CERT_* and TLS codes) when one applies. The codex-only `configuredTransport`, `fallbackTransport` and `requestBytes` details are not written. The `errorMessage`, stop reason, retry classification and event order are byte-identical to Pi. Caller aborts record nothing.
 
 Why: a reset, a dial timeout and a DNS failure all read `Connection error.`, so a log cannot tell them apart (#87).
 
@@ -2341,9 +2341,9 @@ SCRUTINIZED:approved
 
 ## D181 The commits of an unawaited durable job are ordered by goroutine scheduling, not by Pi's microtask hops
 
-What: a job (a conversation-owned task) that its creator does not wait for commits its start, phase and terminal records in an order Pi fixes and PiG's reference harness (`durable/harness`) does not. In Pi one thread settles the job's commits against the generation chain's by microtask hops, the same every run: with the interop fixture's `note` tool leaving its `app.job` unawaited, Pi commits the tool call's settle, the job's first phase, the generation's tools outcome and the job's terminal commit as seq 13, 14, 15, 16 and the answer as 21 (300 of 300 fresh Pi runs of each variant and scenario, loaded or not, wrote one identical store). PiG orders the same commits by which goroutine reaches the Session line first, so now and then they land in another order: (A) the job's phase commits land before the tool call's settle commit; (B) the job's terminal commit lands after the generation's next turn, after the answer commit; (C) the job's phase and terminal commits both land after the generation's tools outcome; (D) a commit of the job merges into a neighbouring commit (one commit fewer, same writes). The effect on stored data is commit sequence numbers only: the content of every record is the same, and the only columns that differ from Pi's store are `entries.commit_seq` and `document_revisions.seq` (and `next_seq` after a merge). Every settled public read is unchanged: task receipts, `GetTask`, `ScanTasks`, `Inspect`, `WaitForIdle`, entries, `Context`, every document including `pi.inbox`, as-of reads and the `WatchEvents` sequence. One read taken at a moment differs: in shapes B and C the job's terminal commit is still pending when the answer commits, so a read taken as `Submission.Wait` returns can show the job live (`Inspect` lists it, `GetTask` shows it `running`), where Pi's order has it terminal. A model that takes a moment to answer makes B and C rare, and they need a busy machine: B and C were 38, 6 and 3 of 19,980 runs with the faux model delayed by 0 ms, 1 ms and 10 ms on an oversubscribed 14-CPU Mac (load average 50 to 100 with ten busy loops added), and 0 of 60,000 on a pinned 64-CPU socket of a 128-CPU Linux host (load average 29 to 35). Shape A, which has no transient, was 39, 54 and 63 on the Mac and 5, 11 and 12 on the Linux host.
+What: a job (a conversation-owned task) that its creator does not wait for commits its start, phase and terminal records in an order Pi fixes and Ompig's reference harness (`durable/harness`) does not. In Pi one thread settles the job's commits against the generation chain's by microtask hops, the same every run: with the interop fixture's `note` tool leaving its `app.job` unawaited, Pi commits the tool call's settle, the job's first phase, the generation's tools outcome and the job's terminal commit as seq 13, 14, 15, 16 and the answer as 21 (300 of 300 fresh Pi runs of each variant and scenario, loaded or not, wrote one identical store). Ompig orders the same commits by which goroutine reaches the Session line first, so now and then they land in another order: (A) the job's phase commits land before the tool call's settle commit; (B) the job's terminal commit lands after the generation's next turn, after the answer commit; (C) the job's phase and terminal commits both land after the generation's tools outcome; (D) a commit of the job merges into a neighbouring commit (one commit fewer, same writes). The effect on stored data is commit sequence numbers only: the content of every record is the same, and the only columns that differ from Pi's store are `entries.commit_seq` and `document_revisions.seq` (and `next_seq` after a merge). Every settled public read is unchanged: task receipts, `GetTask`, `ScanTasks`, `Inspect`, `WaitForIdle`, entries, `Context`, every document including `pi.inbox`, as-of reads and the `WatchEvents` sequence. One read taken at a moment differs: in shapes B and C the job's terminal commit is still pending when the answer commits, so a read taken as `Submission.Wait` returns can show the job live (`Inspect` lists it, `GetTask` shows it `running`), where Pi's order has it terminal. A model that takes a moment to answer makes B and C rare, and they need a busy machine: B and C were 38, 6 and 3 of 19,980 runs with the faux model delayed by 0 ms, 1 ms and 10 ms on an oversubscribed 14-CPU Mac (load average 50 to 100 with ten busy loops added), and 0 of 60,000 on a pinned 64-CPU socket of a 128-CPU Linux host (load average 29 to 35). Shape A, which has no transient, was 39, 54 and 63 on the Mac and 5, 11 and 12 on the Linux host.
 
-Why: Pi's spec orders work by waiting, not by commit sequence. "There are no free-standing task dependencies: ordering comes from a task waiting on other tasks" (`spec.md` section 5.3, line 2086); "The scheduler serially reserves eligible tasks, then runs handlers off the Session line" (5.4, line 2092), so an invocation's commits race the generation's and nothing in the spec relates them; "Ordering is judged on committed records: code a child runs after its terminal commit is not ordered" (line 2384); and `Seq` "strictly increases between commits; gaps are permitted" (line 100; the Storage contract says the same at line 5172). A job nothing waits for is neither owned by the generation nor held by it, so its commits are ordered against the generation's by implementation, and in Pi the implementation is the microtask hops of its event loop. PiG's invocations run on their own goroutines and the reference harness has no model of those hops, so the order of independent chains follows the Go scheduler. Ordering them as Pi does would need a virtual microtask queue with per-await tick accounting in the harness, or the core engine (`durable/core`), whose `Settle` hook and hop model reproduce Pi's order but are not the default engine.
+Why: Pi's spec orders work by waiting, not by commit sequence. "There are no free-standing task dependencies: ordering comes from a task waiting on other tasks" (`spec.md` section 5.3, line 2086); "The scheduler serially reserves eligible tasks, then runs handlers off the Session line" (5.4, line 2092), so an invocation's commits race the generation's and nothing in the spec relates them; "Ordering is judged on committed records: code a child runs after its terminal commit is not ordered" (line 2384); and `Seq` "strictly increases between commits; gaps are permitted" (line 100; the Storage contract says the same at line 5172). A job nothing waits for is neither owned by the generation nor held by it, so its commits are ordered against the generation's by implementation, and in Pi the implementation is the microtask hops of its event loop. Ompig's invocations run on their own goroutines and the reference harness has no model of those hops, so the order of independent chains follows the Go scheduler. Ordering them as Pi does would need a virtual microtask queue with per-await tick accounting in the harness, or the core engine (`durable/core`), whose `Settle` hook and hop model reproduce Pi's order but are not the default engine.
 
 Scope: the commit order, and a read taken before the job's terminal commit, of a conversation-owned task that nothing waits for, against its conversation's generation commits, in `durable/harness`. Unchanged: the final state of every record, every settled read, the `WatchEvents` sequence, a job its creator awaits (the shipped interop fixture: 0 of 2,000 runs differ from Pi in each cell measured, see Evidence) and an ownership tree (a task waits for its owned work, spec 5.5). The Harness API returns no commit sequence number; they show in the store's `commit_seq` and revision `seq` columns and to a custom `Storage`.
 
@@ -2365,7 +2365,7 @@ SCRUTINIZED:approved
 
 What: `StreamProxy` (`agent/proxy.go`) ends the stream with an error when a `text_start`, `thinking_start` or `toolcall_start` event names a content index that is past the end of the content array, or that is not a JavaScript array index (absent, null, negative, fractional, or a non-numeric string). Pi stores the block with `partial.content[contentIndex] = block`: an index past the end leaves holes in the array (`[null,null,{text:"x"}]` after JSON), and a non-index key becomes a property that JSON never shows. The stream then completes with `stopReason: "stop"` in Pi.
 
-Why: this is a Pi bug PiG does not reproduce, not a Go limitation. Pi's holes break Pi's own consumers of the message (a `for..of` over the content, or persistence of null blocks), and the stream still reports success. Go's content slice could carry an absent block, but every reader of assistant content (about 60 sites in `ai` and `agent`, on the hottest path) assumes each slot is filled; carrying holes would make each of them tolerate one, for a malformed proxy server only. PiG instead ends the stream at the unusable index with an error that names it.
+Why: this is a Pi bug Ompig does not reproduce, not a Go limitation. Pi's holes break Pi's own consumers of the message (a `for..of` over the content, or persistence of null blocks), and the stream still reports success. Go's content slice could carry an absent block, but every reader of assistant content (about 60 sites in `ai` and `agent`, on the hottest path) assumes each slot is filled; carrying holes would make each of them tolerate one, for a malformed proxy server only. Ompig instead ends the stream at the unusable index with an error that names it.
 
 Scope: sparse or non-index `contentIndex` values on the proxy wire only. Well-formed streams are byte-identical to Pi (differential tests run Pi's `proxy.js` against the same bodies).
 
@@ -2403,9 +2403,9 @@ SCRUTINIZED:approved
 
 ## D184 A script's unawaited tool call can be aborted before its tool starts, where Pi always starts it first
 
-What: a code mode script that calls a tool and does not await it (`tools.hold({}); await tools.echo({ text: "a" }); return 1;`) ends and aborts that call. Pi's call has always started its tool by then. PiG's call usually has, but when one goroutine of the call stalls for milliseconds while the next call's goroutine runs its whole round trip, the script ends first and the abort lands before the tool's `execute` ran. The call's nested task is `terminal` with outcome `aborted` either way. Only whether the tool code had started differs.
+What: a code mode script that calls a tool and does not await it (`tools.hold({}); await tools.echo({ text: "a" }); return 1;`) ends and aborts that call. Pi's call has always started its tool by then. Ompig's call usually has, but when one goroutine of the call stalls for milliseconds while the next call's goroutine runs its whole round trip, the script ends first and the abort lands before the tool's `execute` ran. The call's nested task is `terminal` with outcome `aborted` either way. Only whether the tool code had started differs.
 
-Why: Pi runs the launch of every call of a script in one thread. Both calls take the same chain of steps (memo, admission commit, scheduler reservation, call-phase commits, `execute`), the earlier one first, so the earlier one's `execute` precedes the later one's result by construction (`packages/durable/src/codemode/codemode.ts:765-831`, `harness/tool.ts:378-417`, `harness/scheduler.ts:1413-1417`, `1656`). That order is a consequence of one thread, not a rule: a step that waits for real time, such as a `beforeTool` hook awaiting an approval, lets a later call pass an earlier one in Pi too. PiG runs the calls on parallel goroutines. `spawnEntered` (the dispatch of a launched or replayed call) now returns only once the call's goroutine has entered, which removed the systematic overtake (the call started after the next one entered `ExecuteTool`; 36 of 12,000 runs of the Pi subtest failed at 8 CPUs, 573 of 3,000 at 3 CPUs). What is left is an operating-system stall of one goroutine between two steps of its task, while another runs on. Nothing the call waits on expresses it, so no ticket or queue orders it. Only an `entered`-style gate before `execute`, which waits while the earlier call's goroutine is running or runnable, would, and it needs a link from a nested task to its earlier sibling that the task runtime does not offer, in both `durable/harness` and `durable/core/driver`. The simpler orderings (each call waits for the previous to reach `execute`, or the script waits for earlier calls to start) change Pi's concurrency: a call stuck in an approval hook would hold up the calls after it, and a script would wait for the approval before it could end.
+Why: Pi runs the launch of every call of a script in one thread. Both calls take the same chain of steps (memo, admission commit, scheduler reservation, call-phase commits, `execute`), the earlier one first, so the earlier one's `execute` precedes the later one's result by construction (`packages/durable/src/codemode/codemode.ts:765-831`, `harness/tool.ts:378-417`, `harness/scheduler.ts:1413-1417`, `1656`). That order is a consequence of one thread, not a rule: a step that waits for real time, such as a `beforeTool` hook awaiting an approval, lets a later call pass an earlier one in Pi too. Ompig runs the calls on parallel goroutines. `spawnEntered` (the dispatch of a launched or replayed call) now returns only once the call's goroutine has entered, which removed the systematic overtake (the call started after the next one entered `ExecuteTool`; 36 of 12,000 runs of the Pi subtest failed at 8 CPUs, 573 of 3,000 at 3 CPUs). What is left is an operating-system stall of one goroutine between two steps of its task, while another runs on. Nothing the call waits on expresses it, so no ticket or queue orders it. Only an `entered`-style gate before `execute`, which waits while the earlier call's goroutine is running or runnable, would, and it needs a link from a nested task to its earlier sibling that the task runtime does not offer, in both `durable/harness` and `durable/core/driver`. The simpler orderings (each call waits for the previous to reach `execute`, or the script waits for earlier calls to start) change Pi's concurrency: a call stuck in an approval hook would hold up the calls after it, and a script would wait for the approval before it could end.
 
 Scope: a call the script does not await, still running when the script ends, in `durable/codemode`: whether its tool's `execute` started before the abort. Unchanged: the call's task is `terminal` and `aborted`, an awaited call, a replayed call and every result the script sees.
 
@@ -2425,31 +2425,31 @@ SCRUTINIZED:approved
 
 ## D185 A Kitty CSI-u Shift+letter with no shifted alternate decodes as the uppercase letter, where Pi keeps the base letter
 
-What: a terminal that reports Shift+a as `ESC[97;2u`, with a base codepoint and the Shift modifier but no shifted-key field, types `A` in PiG's editor and input. Pi's `decodeKittyPrintable` types `a`, because it replaces the codepoint only when the sequence carries a shifted key. The same sequence with the shifted key (`ESC[97:65;2u`) types `A` in both, and a Shift+digit with no shifted key (`ESC[49;2u`) types `1` in both.
+What: a terminal that reports Shift+a as `ESC[97;2u`, with a base codepoint and the Shift modifier but no shifted-key field, types `A` in Ompig's editor and input. Pi's `decodeKittyPrintable` types `a`, because it replaces the codepoint only when the sequence carries a shifted key. The same sequence with the shifted key (`ESC[97:65;2u`) types `A` in both, and a Shift+digit with no shifted key (`ESC[49;2u`) types `1` in both.
 
-Why: a terminal that reports Shift+letter without the shifted alternate would otherwise lose every capital letter: the user presses Shift+a and gets `a`. PiG decodes the Shift+letter case as the user pressed it.
+Why: a terminal that reports Shift+letter without the shifted alternate would otherwise lose every capital letter: the user presses Shift+a and gets `a`. Ompig decodes the Shift+letter case as the user pressed it.
 
 Scope: `DecodeKittyPrintable` (`tui/keys_decode.go`), used by `Input` and the `Editor` text path, for a Kitty CSI-u sequence whose modifier carries Shift (and no Alt or Ctrl) with a base codepoint `a` to `z` and no shifted-key field. A sequence with a shifted key, any other codepoint, the modifyOtherKeys form, `matchesKey` and `parseKey` are unchanged.
 
-Workaround: none needed in PiG; in Pi, enable the Kitty alternate-keys report (flag 4) in the terminal so it sends the shifted key.
+Workaround: none needed in Ompig; in Pi, enable the Kitty alternate-keys report (flag 4) in the terminal so it sends the shifted key.
 
-Owner decision: approved by owner Michael Kinsy on 2026-10-20 (choice, not impossibility: PiG keeps the uppercase fallback rather than Pi's lowercase result; user impact: capital letters are typed on terminals that omit the shifted alternate; parity cost: one sequence class differs from Pi).
+Owner decision: approved by owner Michael Kinsy on 2026-10-20 (choice, not impossibility: Ompig keeps the uppercase fallback rather than Pi's lowercase result; user impact: capital letters are typed on terminals that omit the shifted alternate; parity cost: one sequence class differs from Pi).
 
 Call-site markers: `tui/keys_decode.go` (`DecodeKittyPrintable`, the Shift branch with no shifted key).
 
 Evidence: `TestDecodeKittyPrintable_ShiftAndText` and `TestEditor_InsertsCapitalFromKittyCSIu` (`tui/key_csiu_text_test.go`) assert the Pi-compatible path (shifted key present) and the D185 path; `TestDecodePrintableKeyMatchesPi` (`tui/decode_printable_oracle_test.go`) runs the decoder against Pi's module over the whole sequence corpus.
 
-Parity allowance: `TestDecodePrintableKeyMatchesPi` accepts an uppercase letter from PiG where Pi returns the lowercase letter, and only for a Kitty CSI-u sequence with the Shift modifier, no Alt or Ctrl, and no shifted-key field. `TestEditorCharacterJumpMatchesPi` leaves the CSI-u Shift+letter probe out for the same reason. Every other sequence stays byte-equal with Pi.
+Parity allowance: `TestDecodePrintableKeyMatchesPi` accepts an uppercase letter from Ompig where Pi returns the lowercase letter, and only for a Kitty CSI-u sequence with the Shift modifier, no Alt or Ctrl, and no shifted-key field. `TestEditorCharacterJumpMatchesPi` leaves the CSI-u Shift+letter probe out for the same reason. Every other sequence stays byte-equal with Pi.
 
 Remove when: Pi decodes a base-only Shift+letter as the uppercase letter, or the owner reverses the decision; then the branch, the allowance and the D185 test cases go.
 
 SCRUTINIZED:approved
 
-## D186 A hung-up terminal under a session whose event loop holds nothing: Pi exits 0 or 129, PiG exits 129
+## D186 A hung-up terminal under a session whose event loop holds nothing: Pi exits 0 or 129, Ompig exits 129
 
-What: when the terminal's master closes under an interactive session, the kernel sends SIGHUP and ends the session's input. Pi's SIGHUP handler (`registerSignalHandlers`, `packages/coding-agent/src/modes/interactive/interactive-mode.ts:4402-4417`) runs a graceful shutdown whose terminal writes meet EIO and take `emergencyTerminalExit` (exit 129, `:4346-4352`). Node's signal watcher does not keep the event loop alive. A session with no other referenced handle (a plain directory, no extension timers or sockets, no git watcher) has an empty loop when its input ends, and Pi exits 0 before the handler runs unless a write is still pending. Measured on Pi 1402973a, idle plain-directory hangups taken after the status render settled: 16 of 20 exited 0 and 4 exited 129. In a git repository, whose footer watches `.git/HEAD` (`footer-data-provider.ts:316`), 20 of 20 exited 129. PiG always exits 129 (`exitIfDeadTerminal`) and writes the `exit.log` line `terminal gone: <error> (exit 129)` (D102).
+What: when the terminal's master closes under an interactive session, the kernel sends SIGHUP and ends the session's input. Pi's SIGHUP handler (`registerSignalHandlers`, `packages/coding-agent/src/modes/interactive/interactive-mode.ts:4402-4417`) runs a graceful shutdown whose terminal writes meet EIO and take `emergencyTerminalExit` (exit 129, `:4346-4352`). Node's signal watcher does not keep the event loop alive. A session with no other referenced handle (a plain directory, no extension timers or sockets, no git watcher) has an empty loop when its input ends, and Pi exits 0 before the handler runs unless a write is still pending. Measured on Pi 1402973a, idle plain-directory hangups taken after the status render settled: 16 of 20 exited 0 and 4 exited 129. In a git repository, whose footer watches `.git/HEAD` (`footer-data-provider.ts:316`), 20 of 20 exited 129. Ompig always exits 129 (`exitIfDeadTerminal`) and writes the `exit.log` line `terminal gone: <error> (exit 129)` (D102).
 
-Why: Pi's 0 is a timing outcome of an empty Node event loop, not a decision, and it contradicts the purpose of `emergencyTerminalExit`. PiG has no such loop whose emptiness it could reproduce. Exiting 0 on a dead terminal would leave no `exit.log` trace, which D102 forbids. This follows the owner ruling (D146) that a confirmed Pi bug is fixed whether or not Pi has it.
+Why: Pi's 0 is a timing outcome of an empty Node event loop, not a decision, and it contradicts the purpose of `emergencyTerminalExit`. Ompig has no such loop whose emptiness it could reproduce. Exiting 0 on a dead terminal would leave no `exit.log` trace, which D102 forbids. This follows the owner ruling (D146) that a confirmed Pi bug is fixed whether or not Pi has it.
 
 Scope: only a hung-up output terminal under a session that holds nothing open. A live SIGHUP (exit 0) and a render that meets EIO (exit 129) match Pi and are unchanged. A session with a handle (a git repository, a running turn, extension timers) matches Pi.
 
@@ -2477,7 +2477,7 @@ Workaround: start the work that blocks as a host call (`exec`, `getFlag`, any ca
 
 Owner decision: approved by owner Michael Kinsy on 2026-10-20 (choice, not impossibility: the SDK cannot observe a handler's own blocking work; user impact: only the moment a later call's dialog opens or its response is written, never their order unless the handler awaits work the SDK cannot see; parity cost: a native handler that blocks, outside a host call, before its first host call delays the later calls' dialogs of its batch).
 
-Call-site markers: `extensions/sdk/tool_start_order.go` (`toolStart.beforeCall`, the first-host-call wait, and `toolStart.respond`, the response gate), `extensions/sdk-py/pig_sdk/__init__.py` (`_ToolStart.before_call` and `_ToolStart.respond`), `extensions/sdk-rs/src/tool_start_order.rs` (`ToolStart::before_call` and `ToolStart::respond`).
+Call-site markers: `extensions/sdk/tool_start_order.go` (`toolStart.beforeCall`, the first-host-call wait, and `toolStart.respond`, the response gate), `extensions/sdk-py/ompig_sdk/__init__.py` (`_ToolStart.before_call` and `_ToolStart.respond`), `extensions/sdk-rs/src/tool_start_order.rs` (`ToolStart::before_call` and `ToolStart::respond`).
 
 Evidence: `TestToolBatchDialogsOpenInCallOrderAndResumeInAnswerOrderAcrossSDKs` (`test/extension-conformance`) fails for every native realization without the gates (the Go dialogs open as `[T0 T2 T3 T4 T5 T1]`, the ends follow no answer order) and passes for all nine with them; its last rounds make the first call await an `exec`, held until the other five dialogs are open, and fail for every native realization that keeps the dialog place across it (none of the later dialogs opens while the `exec` runs); the gate tests `TestToolDialogsOpenInCallOrder`, `TestToolFirstHostCallOfAnyKindPassesTheDialogPlace`, `TestToolResponsesFollowTheOrderTheAnswersWereRead` and `TestToolBatchOrdersAreIndependentAcrossBatches` (`extensions/sdk/tool_dialog_order_test.go`), `test_tool_dialog_order.py` (`extensions/sdk-py/tests`) and the `tool_start_order` and `tool_dispatch_wire` tests (`extensions/sdk-rs`) pin the held orders without a sleep and the independence of batches, including that a long call with no host call in one batch never holds another batch's dialog.
 
@@ -2489,19 +2489,19 @@ SCRUTINIZED:approved
 
 ## D188 Opening a store at an older Durable schema version keeps a copy of it first, where Pi upgrades it in place
 
-What: PiG's Durable writes SQLite schema version 2 (Pi main's `sleeping` task status, `packages/durable/src/storage/sqlite/migrations.ts`), which no Pi release writes yet: pi-durable 1.3.0 writes version 1 and refuses a newer store ("Durable SQLite schema version 2 is newer than supported version 1"). Pi upgrades a version 1 store in place when it opens it. PiG first copies the file to `<path>.schema-1.bak` (`VACUUM INTO`, which includes the WAL), then upgrades it as Pi does. If that name is taken it uses `<path>.schema-1-2.bak`, and so on: an earlier copy is never replaced. If the copy fails, the open fails and the store stays at version 1.
+What: Ompig's Durable writes SQLite schema version 2 (Pi main's `sleeping` task status, `packages/durable/src/storage/sqlite/migrations.ts`), which no Pi release writes yet: pi-durable 1.3.0 writes version 1 and refuses a newer store ("Durable SQLite schema version 2 is newer than supported version 1"). Pi upgrades a version 1 store in place when it opens it. Ompig first copies the file to `<path>.schema-1.bak` (`VACUUM INTO`, which includes the WAL), then upgrades it as Pi does. If that name is taken it uses `<path>.schema-1-2.bak`, and so on: an earlier copy is never replaced. If the copy fails, the open fails and the store stays at version 1.
 
-Why: without the copy, trying PiG on a store pi-durable 1.3.0 wrote is a one-way step: the user cannot go back to the released Pi with their data (issue #245). The copy is a store pi-durable 1.3.0 opens as it was.
+Why: without the copy, trying Ompig on a store pi-durable 1.3.0 wrote is a one-way step: the user cannot go back to the released Pi with their data (issue #245). The copy is a store pi-durable 1.3.0 opens as it was.
 
-Scope: the two openers that take a file path, `driver.OpenHarness` (`durable/core/driver/open.go`) and `node.OpenNodeSqliteStorage` (`durable/storage/sqlite/node/node.go`), through `schemabackup.BeforeUpgrade` (`durable/internal/schemabackup`). It copies only a file whose schema table holds a version from 1 up to one below the version PiG writes. A new or empty file, `:memory:`, a `file:` URI, a store at the current version, and storage opened over a database the caller already holds (`sqlite.Open`, the Cloudflare Durable Object storage, the contract gate's hosts) are unchanged.
+Scope: the two openers that take a file path, `driver.OpenHarness` (`durable/core/driver/open.go`) and `node.OpenNodeSqliteStorage` (`durable/storage/sqlite/node/node.go`), through `schemabackup.BeforeUpgrade` (`durable/internal/schemabackup`). It copies only a file whose schema table holds a version from 1 up to one below the version Ompig writes. A new or empty file, `:memory:`, a `file:` URI, a store at the current version, and storage opened over a database the caller already holds (`sqlite.Open`, the Cloudflare Durable Object storage, the contract gate's hosts) are unchanged.
 
-Workaround: none needed in PiG. In Pi, copy the database file before opening it with a newer release.
+Workaround: none needed in Ompig. In Pi, copy the database file before opening it with a newer release.
 
 Owner decision: approved by owner Michael Kinsy on 2026-10-20 ("proceed with your fix" on issue #245; choice: a copy before the upgrade rather than leaving version 1 stores unupgraded, because the harness relies on the `sleeping` status for retries and sleeps; user impact: one extra file the size of the store, written once per older store; parity cost: a file Pi does not write).
 
 Call-site markers: `durable/core/driver/open.go` (`openHarness`), `durable/storage/sqlite/node/node.go` (`OpenNodeSqliteStorage`).
 
-Evidence: `TestOpenNodeSqliteStorageCopiesAnOlderSchemaBeforeUpgrading` and `TestOpenNodeSqliteStorageDoesNotCopyANewOrCurrentStore` (`durable/storage/sqlite/node/schema_backup_test.go`), `TestOpenHarnessCopiesAnOlderSchemaBeforeUpgrading` (`durable/core/driver/schema_backup_core_test.go`). Checked by hand on 2026-10-20: a store pi-durable 1.3.0 created, opened by PiG, is refused by pi-durable 1.3.0, and its `.schema-1.bak` copy opens in pi-durable 1.3.0.
+Evidence: `TestOpenNodeSqliteStorageCopiesAnOlderSchemaBeforeUpgrading` and `TestOpenNodeSqliteStorageDoesNotCopyANewOrCurrentStore` (`durable/storage/sqlite/node/schema_backup_test.go`), `TestOpenHarnessCopiesAnOlderSchemaBeforeUpgrading` (`durable/core/driver/schema_backup_core_test.go`). Checked by hand on 2026-10-20: a store pi-durable 1.3.0 created, opened by Ompig, is refused by pi-durable 1.3.0, and its `.schema-1.bak` copy opens in pi-durable 1.3.0.
 
 Parity allowance: none needed. No paired scenario looks at the files next to a store, and the contract gate's hosts open stores without the copy, so every store, commit and order comparison is unchanged.
 
@@ -2511,7 +2511,7 @@ SCRUTINIZED:approved
 
 ## D190 The built-in file mutation queue also orders mutations of one existing file reached through a hard link or a case alias Pi's realpath key keeps apart
 
-What: Pi's `withFileMutationQueue` (`packages/coding-agent/src/core/tools/file-mutation-queue.ts`) keys each call by `realpath(resolve(path))`, and a path that does not exist keeps its resolved name. PiG's queue (`FileMutationQueue`, behind the `edit` and `write` tools and `WithFileMutationQueue`) keeps that key and also makes a call wait for every earlier call that is still queued for the same existing file under another key (`os.SameFile`): the hard links of a file, and the case aliases of a file on a case-insensitive filesystem. Pi runs those calls at once. On macOS Pi's native `realpath` returns the on-disk case, so Pi orders case aliases there (reported from the #270 author's run of the pinned Pi on macOS; not rerun here), while Go's `filepath.EvalSymlinks` keeps the name as typed; the identity check restores that order and is parity on macOS. Pi's probe on Linux (pinned `1402973a`, `fs.promises.realpath` through glibc): two calls through a hard link both start while the first is held, and so do two calls through `Target.txt` and `target.txt` on an ext4 casefold directory.
+What: Pi's `withFileMutationQueue` (`packages/coding-agent/src/core/tools/file-mutation-queue.ts`) keys each call by `realpath(resolve(path))`, and a path that does not exist keeps its resolved name. Ompig's queue (`FileMutationQueue`, behind the `edit` and `write` tools and `WithFileMutationQueue`) keeps that key and also makes a call wait for every earlier call that is still queued for the same existing file under another key (`os.SameFile`): the hard links of a file, and the case aliases of a file on a case-insensitive filesystem. Pi runs those calls at once. On macOS Pi's native `realpath` returns the on-disk case, so Pi orders case aliases there (reported from the #270 author's run of the pinned Pi on macOS; not rerun here), while Go's `filepath.EvalSymlinks` keeps the name as typed; the identity check restores that order and is parity on macOS. Pi's probe on Linux (pinned `1402973a`, `fs.promises.realpath` through glibc): two calls through a hard link both start while the first is held, and so do two calls through `Target.txt` and `target.txt` on an ext4 casefold directory.
 
 Why: both edits of two parallel `edit` calls through two names of one file read the same original text and each writes the whole file, so the later write silently drops the earlier edit while both calls report success.
 
@@ -2525,7 +2525,7 @@ Call-site markers: `internal/codingagent/tools/mutation_queue.go` (`FileMutation
 
 Evidence: `TestEditPreservesParallelAliasChanges` (`internal/codingagent/tools/mutation_queue_alias_test.go`) holds the first call's read until the second call has reached its queue wait or finished, then requires both edits through both names; its `hardlink` and `case` subtests fail without the identity check (the file ends as `ALPHA\nbeta\n`) and its `symlink` and `same` controls pass either way. `TestMutationAliasReservationsKeepDispatchOrder` checks the dispatcher's reservation order across an alias, for a file that exists and for one created while queued, and that a drained queue keeps no state.
 
-Parity allowance: `TestHardLinkAliasesDifferFromPi` runs the pinned Pi's queue and PiG's over two hard links of one file: Pi starts both callbacks (event counts 2, 3, 4), PiG starts the second after the first ends. The 120-run paired corpus `TestWithFileMutationQueueMatchesPi` has no hard link or case alias and is unchanged.
+Parity allowance: `TestHardLinkAliasesDifferFromPi` runs the pinned Pi's queue and Ompig's over two hard links of one file: Pi starts both callbacks (event counts 2, 3, 4), Ompig starts the second after the first ends. The 120-run paired corpus `TestWithFileMutationQueueMatchesPi` has no hard link or case alias and is unchanged.
 
 Remove when: Pi orders hard-link aliases (and, on a case-insensitive filesystem where its `realpath` keeps case, case aliases) by file identity, or an owner decision reverses this one; then the identity check, its marker, the allowance test and this record go.
 
@@ -2533,21 +2533,21 @@ SCRUTINIZED:approved
 
 ## D195 An empty AWS_BEARER_TOKEN_BEDROCK is no token, where Pi's AWS SDK treats the variable as set and the request fails before it is sent
 
-What: with `AWS_BEARER_TOKEN_BEDROCK` exported but empty, PiG's Bedrock provider ignores it and signs the request with SigV4 and the credentials it finds (static keys, a profile, the default chain, or the dummy keys of `AWS_BEDROCK_SKIP_AUTH=1`). Pi 1.4.0 sends nothing: its own lookup treats an empty value as unset (`getProviderEnvValue`, `packages/ai/src/utils/provider-env.ts:45-51`; `packages/ai/src/api/bedrock-converse-stream.ts:185-191`, so `skipAuth` stays on and no `config.token` is set at `:242-245`), but the AWS JavaScript SDK chooses bearer auth for a variable that is merely present (`@aws-sdk/core` `NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.environmentVariableSelector`: `if (bearerTokenKey in env) return ["httpBearerAuth"]`, and `@aws-sdk/token-providers` `fromEnvSigningName`: `bearerTokenKey in process.env`, reading the empty value), so the stream ends with "request could not be signed with `token` since the `token` is not defined". The difference shows with a workflow or a shell profile that maps an unset secret to an empty variable.
+What: with `AWS_BEARER_TOKEN_BEDROCK` exported but empty, Ompig's Bedrock provider ignores it and signs the request with SigV4 and the credentials it finds (static keys, a profile, the default chain, or the dummy keys of `AWS_BEDROCK_SKIP_AUTH=1`). Pi 1.4.0 sends nothing: its own lookup treats an empty value as unset (`getProviderEnvValue`, `packages/ai/src/utils/provider-env.ts:45-51`; `packages/ai/src/api/bedrock-converse-stream.ts:185-191`, so `skipAuth` stays on and no `config.token` is set at `:242-245`), but the AWS JavaScript SDK chooses bearer auth for a variable that is merely present (`@aws-sdk/core` `NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.environmentVariableSelector`: `if (bearerTokenKey in env) return ["httpBearerAuth"]`, and `@aws-sdk/token-providers` `fromEnvSigningName`: `bearerTokenKey in process.env`, reading the empty value), so the stream ends with "request could not be signed with `token` since the `token` is not defined". The difference shows with a workflow or a shell profile that maps an unset secret to an empty variable.
 
-Why: an empty variable names no credential. Failing every request because an unset secret was exported as an empty string breaks a working IAM or profile setup for no reason a user can act on, and PiG's own lookup, like Pi's, already treats the value as absent. The Go SDK PiG uses agrees: `resolveEnvBearerToken` returns on an empty value (`third_party/awssdk/service/bedrockruntime/api_client.go:980-984`).
+Why: an empty variable names no credential. Failing every request because an unset secret was exported as an empty string breaks a working IAM or profile setup for no reason a user can act on, and Ompig's own lookup, like Pi's, already treats the value as absent. The Go SDK Ompig uses agrees: `resolveEnvBearerToken` returns on an empty value (`third_party/awssdk/service/bedrockruntime/api_client.go:980-984`).
 
 Pi bug: the failure is an AWS JavaScript SDK side effect that Pi's own `getProviderEnvValue` does not intend. Pi decides "no token" and the SDK decides "bearer".
 
 Scope: `AWS_BEARER_TOKEN_BEDROCK` set to the empty string in the process environment (the AWS SDKs read only that one), on the `bedrock-converse-stream` API, with or without `AWS_BEDROCK_SKIP_AUTH`, static keys or a profile. An unset variable and a non-empty one behave as in Pi: the first signs with SigV4, the second sends `Authorization: Bearer <token>` (the case over `http://` with skip-auth is D196).
 
-Workaround: none needed in PiG. In Pi, unset the variable instead of exporting it empty.
+Workaround: none needed in Ompig. In Pi, unset the variable instead of exporting it empty.
 
 Owner decision: approved by owner Michael Kinsy on 2026-10-24 (record the difference, do not mirror the SDK's presence check: a stray empty variable must not break a working credential setup).
 
 Call-site markers: `ai/bedrock.go` (`loadBedrockConfig`, the bearer token selection).
 
-Evidence: `TestBedrockBearerTokenDivergencesFromPi` (`ai/bedrock_bearer_divergence_test.go`) runs Pi's `bedrock-converse-stream` through the Node oracle and PiG's provider against a loopback server with the variable empty, under skip-auth and under static keys: Pi sends nothing and ends with the signing error, PiG sends a SigV4 request; its controls (variable unset, with keys) agree. The test fails when either side changes.
+Evidence: `TestBedrockBearerTokenDivergencesFromPi` (`ai/bedrock_bearer_divergence_test.go`) runs Pi's `bedrock-converse-stream` through the Node oracle and Ompig's provider against a loopback server with the variable empty, under skip-auth and under static keys: Pi sends nothing and ends with the signing error, Ompig sends a SigV4 request; its controls (variable unset, with keys) agree. The test fails when either side changes.
 
 Parity allowance: none needed beyond that test. The paired Bedrock oracles (`TestBedrockRequestBodyMatchesPi` and the others) scrub every `AWS_*` variable before they run Pi, so they do not see the difference.
 
@@ -2557,45 +2557,45 @@ SCRUTINIZED:approved
 
 ## D196 Under skip-auth a bearer token from the process environment is not sent over an http:// endpoint, where Pi's AWS SDK sends it
 
-What: with `AWS_BEDROCK_SKIP_AUTH=1` and a non-empty `AWS_BEARER_TOKEN_BEDROCK` in the process environment, and a model `baseUrl` that is `http://` (a local proxy or a gateway that "needs no authentication"), PiG's request fails before it is sent with "bearer token with HTTP request requires HTTPS". Pi 1.4.0 sends it with `Authorization: Bearer <token>` over plain HTTP. In both products the AWS SDK selects bearer auth from the variable although `AWS_BEDROCK_SKIP_AUTH=1` asked for dummy keys (Pi: `packages/ai/src/api/bedrock-converse-stream.ts:185-191` sets no `config.token` under skip-auth, `@aws-sdk/core` `NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.environmentVariableSelector` picks `httpBearerAuth` and `@aws-sdk/token-providers` `fromEnvSigningName` reads the variable; PiG: `resolveEnvBearerToken`, `third_party/awssdk/service/bedrockruntime/api_client.go:980-984`). The difference is the signer: PiG's own bearer path installs `bedrockBearerSigner`, which sends the header over HTTP as Pi's SDK does, but only when `loadBedrockConfig` set a token, which it never does under skip-auth, so the SDK's default signer applies and refuses a request that is not HTTPS (`smithy-go` `auth/bearer/middleware.go:97`, `SignHTTPSMessage.SignWithBearerToken`). Without skip-auth, or over `https://`, PiG and Pi send the same header.
+What: with `AWS_BEDROCK_SKIP_AUTH=1` and a non-empty `AWS_BEARER_TOKEN_BEDROCK` in the process environment, and a model `baseUrl` that is `http://` (a local proxy or a gateway that "needs no authentication"), Ompig's request fails before it is sent with "bearer token with HTTP request requires HTTPS". Pi 1.4.0 sends it with `Authorization: Bearer <token>` over plain HTTP. In both products the AWS SDK selects bearer auth from the variable although `AWS_BEDROCK_SKIP_AUTH=1` asked for dummy keys (Pi: `packages/ai/src/api/bedrock-converse-stream.ts:185-191` sets no `config.token` under skip-auth, `@aws-sdk/core` `NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.environmentVariableSelector` picks `httpBearerAuth` and `@aws-sdk/token-providers` `fromEnvSigningName` reads the variable; Ompig: `resolveEnvBearerToken`, `third_party/awssdk/service/bedrockruntime/api_client.go:980-984`). The difference is the signer: Ompig's own bearer path installs `bedrockBearerSigner`, which sends the header over HTTP as Pi's SDK does, but only when `loadBedrockConfig` set a token, which it never does under skip-auth, so the SDK's default signer applies and refuses a request that is not HTTPS (`smithy-go` `auth/bearer/middleware.go:97`, `SignHTTPSMessage.SignWithBearerToken`). Without skip-auth, or over `https://`, Ompig and Pi send the same header.
 
-Why: the refusal keeps a bearer token off an unencrypted connection. Pi's behavior sends it in clear text to a host the user chose; PiG does not override the Go SDK's guard to repeat that.
+Why: the refusal keeps a bearer token off an unencrypted connection. Pi's behavior sends it in clear text to a host the user chose; Ompig does not override the Go SDK's guard to repeat that.
 
 Pi bug: Pi sends a credential over plain HTTP because the JavaScript SDK has no HTTPS check for bearer tokens, and its skip-auth option does not stop the SDK from picking up the token.
 
-Scope: `AWS_BEDROCK_SKIP_AUTH=1` with `AWS_BEARER_TOKEN_BEDROCK` non-empty in the process environment and an `http://` `baseUrl`, on the `bedrock-converse-stream` API. A token passed in the provider environment, as `bearerToken` or as the API key, is not read under skip-auth by either product's own code, and takes PiG's HTTP-tolerant path when skip-auth is off.
+Scope: `AWS_BEDROCK_SKIP_AUTH=1` with `AWS_BEARER_TOKEN_BEDROCK` non-empty in the process environment and an `http://` `baseUrl`, on the `bedrock-converse-stream` API. A token passed in the provider environment, as `bearerToken` or as the API key, is not read under skip-auth by either product's own code, and takes Ompig's HTTP-tolerant path when skip-auth is off.
 
-Workaround: none needed in PiG. Use an `https://` endpoint, or unset the variable. In Pi, the same two steps avoid sending the token in clear text.
+Workaround: none needed in Ompig. Use an `https://` endpoint, or unset the variable. In Pi, the same two steps avoid sending the token in clear text.
 
-Owner decision: approved by owner Michael Kinsy on 2026-10-24 (record the difference, do not mirror: PiG keeps the Go SDK's HTTPS-only bearer guard where skip-auth leaves the token to the SDK).
+Owner decision: approved by owner Michael Kinsy on 2026-10-24 (record the difference, do not mirror: Ompig keeps the Go SDK's HTTPS-only bearer guard where skip-auth leaves the token to the SDK).
 
 Call-site markers: `ai/bedrock.go` (`loadBedrockConfig`, the bearer token selection; `bedrockClientOptions`, the bearer signer).
 
-Evidence: `TestBedrockBearerTokenDivergencesFromPi` (`ai/bedrock_bearer_divergence_test.go`) runs Pi through the Node oracle and PiG's provider against an `http://` loopback server with skip-auth and a token: Pi's request arrives with `Authorization: Bearer tok`, PiG sends nothing and ends with the HTTPS error; its control (a token without skip-auth over `http://`) sends `Bearer tok` in both. The test fails when either side changes.
+Evidence: `TestBedrockBearerTokenDivergencesFromPi` (`ai/bedrock_bearer_divergence_test.go`) runs Pi through the Node oracle and Ompig's provider against an `http://` loopback server with skip-auth and a token: Pi's request arrives with `Authorization: Bearer tok`, Ompig sends nothing and ends with the HTTPS error; its control (a token without skip-auth over `http://`) sends `Bearer tok` in both. The test fails when either side changes.
 
 Parity allowance: none needed beyond that test. The paired Bedrock oracles scrub every `AWS_*` variable before they run Pi.
 
-Remove when: Pi refuses to send a bearer token over HTTP (its SDK adds an HTTPS check, or Pi installs a signer that does), or PiG installs `bedrockBearerSigner` under skip-auth and the owner approves sending the token over HTTP there; then the markers, the D196 case of the test and this record go.
+Remove when: Pi refuses to send a bearer token over HTTP (its SDK adds an HTTPS check, or Pi installs a signer that does), or Ompig installs `bedrockBearerSigner` under skip-auth and the owner approves sending the token over HTTP there; then the markers, the D196 case of the test and this record go.
 
 SCRUTINIZED:approved
 
 ## D197 The env daemon's limit of open files is the hard limit, where Pi's daemon keeps the soft limit it inherited
 
-What: PiG's env daemon (`env/daemon`) runs under the Go runtime, which raises the soft `RLIMIT_NOFILE` of the process to the hard limit (on Linux to one below it, `syscall/rlimit.go`) before `main` starts. Pi's daemon (`packages/env/daemon`, Rust) never touches the limit, so it runs under the soft limit the client's shell passed on. On a default shell (soft limit 1024) Pi's daemon answers an `open`, `write` or `opendir` with `EMFILE` once about 1020 handles are open (each handle holds one descriptor), where PiG's daemon goes on until the hard limit or its own handle table (4096 handles, the same `EMFILE` Pi's daemon reports at that count, `packages/env/daemon/src/main.rs:42-43` and `:116-120`) stops it. A client that opens fewer handles than the soft limit sees no difference. The commands the daemon starts are not affected: Go restores the inherited limit for a child process.
+What: Ompig's env daemon (`env/daemon`) runs under the Go runtime, which raises the soft `RLIMIT_NOFILE` of the process to the hard limit (on Linux to one below it, `syscall/rlimit.go`) before `main` starts. Pi's daemon (`packages/env/daemon`, Rust) never touches the limit, so it runs under the soft limit the client's shell passed on. On a default shell (soft limit 1024) Pi's daemon answers an `open`, `write` or `opendir` with `EMFILE` once about 1020 handles are open (each handle holds one descriptor), where Ompig's daemon goes on until the hard limit or its own handle table (4096 handles, the same `EMFILE` Pi's daemon reports at that count, `packages/env/daemon/src/main.rs:42-43` and `:116-120`) stops it. A client that opens fewer handles than the soft limit sees no difference. The commands the daemon starts are not affected: Go restores the inherited limit for a child process.
 
-Why: nothing in PiG reaches the limit on purpose. The Go runtime's raise is the toolchain's own behavior (every Go program on Unix has it), and undoing it to give a program Pi's smaller limit would make PiG fail on workloads that succeed, in a daemon whose handle table already caps the count.
+Why: nothing in Ompig reaches the limit on purpose. The Go runtime's raise is the toolchain's own behavior (every Go program on Unix has it), and undoing it to give a program Pi's smaller limit would make Ompig fail on workloads that succeed, in a daemon whose handle table already caps the count.
 
 Pi bug: none. Pi's daemon leaves the limit alone (no `setrlimit` call in any file of `packages/env/daemon/src`) and maps the system's `EMFILE` as it should (`src/sys/unix.rs:35`). The two counts differ because the two runtimes differ.
 
 Scope: Unix hosts only (Windows has no such limit), and only a daemon started with a soft limit below both its hard limit and 4096. On macOS the Go runtime raises the soft limit to the hard limit or `kern.maxfilesperproc`, whichever is lower. Everything else, including the handle table limit and its message, is equal to Pi's (`TestDaemonHandlesAreLimitedLikePisDaemon`).
 
-Workaround: none needed in PiG. Pi's count cannot be reproduced in PiG: the runtime raises the limit again whatever the daemon inherits.
+Workaround: none needed in Ompig. Pi's count cannot be reproduced in Ompig: the runtime raises the limit again whatever the daemon inherits.
 
 Owner decision: approved by owner Michael Kinsy on 2026-10-24 (record the difference, do not lower the limit to Pi's).
 
 Call-site markers: `env/daemon/server.go` (`Serve`, where the daemon's connection starts).
 
-Evidence: `TestDaemonDescriptorLimitIsTheHardLimitUnlikePisDaemon` (`env/daemon_descriptor_limit_divergence_test.go`) starts Pi's daemon (built from the pin) and PiG's with a soft limit of 64 and the host's hard limit, and opens directories until one fails: Pi's refuses with `EMFILE` before 64, PiG opens all 300. `TestDescriptorLimitIsTheHardLimit` (`env/daemon/descriptor_limit_linux_test.go`) pins that the runtime leaves PiG's soft limit at the hard limit or one below it. The first fails when either daemon changes its behavior, the second when the runtime stops raising the limit.
+Evidence: `TestDaemonDescriptorLimitIsTheHardLimitUnlikePisDaemon` (`env/daemon_descriptor_limit_divergence_test.go`) starts Pi's daemon (built from the pin) and Ompig's with a soft limit of 64 and the host's hard limit, and opens directories until one fails: Pi's refuses with `EMFILE` before 64, Ompig opens all 300. `TestDescriptorLimitIsTheHardLimit` (`env/daemon/descriptor_limit_linux_test.go`) pins that the runtime leaves Ompig's soft limit at the hard limit or one below it. The first fails when either daemon changes its behavior, the second when the runtime stops raising the limit.
 
 Parity allowance: the wire tests that open thousands of handles (`TestDaemonHandlesAreLimitedLikePisDaemon`) start both daemons with the soft limit raised to the hard limit (`startWireDaemon` in `env/daemon_wire_oracle_test.go`), so the count under test is the handle table's, equal on both sides.
 
@@ -2605,13 +2605,13 @@ SCRUTINIZED:approved
 
 ## D198 The Go, Rust and Python `Type` has no Codec family (`Codec`, `Decode`, `Encode`, `DecodeBuilder`, `EncodeBuilder`, `IsCodec`)
 
-What: pi-ai's `Type` is TypeBox 1.3.27's builder namespace. The Go (`sdk.Type`), Rust (`pig_sdk::Type`) and Python (`pig_sdk.Type`) ports serve its schema constructors and guards, but not the six members that attach a JavaScript decode/encode callback pair to a schema (`Codec(type).Decode(f).Encode(g)`, `Decode(type, f)`, `Encode(type, g)`, the `DecodeBuilder` and `EncodeBuilder` classes, and the guard `IsCodec`). They are absent: a call fails to compile in Go and Rust and raises `AttributeError` in Python. The Node runtime serves TypeBox's own and behaves as in Pi.
+What: pi-ai's `Type` is TypeBox 1.3.27's builder namespace. The Go (`sdk.Type`), Rust (`ompig_sdk::Type`) and Python (`ompig_sdk.Type`) ports serve its schema constructors and guards, but not the six members that attach a JavaScript decode/encode callback pair to a schema (`Codec(type).Decode(f).Encode(g)`, `Decode(type, f)`, `Encode(type, g)`, the `DecodeBuilder` and `EncodeBuilder` classes, and the guard `IsCodec`). They are absent: a call fails to compile in Go and Rust and raises `AttributeError` in Python. The Node runtime serves TypeBox's own and behaves as in Pi.
 
 Why: a Codec's callbacks have no consumer outside `Value.Decode` and `Value.Encode` (`typebox/build/value/codec/callback.mjs`, the only reader of `~codec`), which pi-ai does not export (`ai/src/index.ts` exports `Static`, `TSchema` and `Type` from typebox) and no SDK serves. Pi's own tool-argument validation does not call them (`ai/src/utils/validation.ts` uses `Value.Convert` and `Compile(schema).Check`). A port could store the callbacks, but nothing in any SDK or in the host could ever call them, which is an inert member that accepts the call and does nothing.
 
 Pi bug: none.
 
-Scope: the six members above only, in `extensions/sdk/type_schema.go`, `extensions/sdk-py/pig_sdk/type_schema.py` and `extensions/sdk-rs/src/type_schema.rs`. Every other member of `Type` is ported and tested against Pi's own answers (`test/parity/sdk-vectors/pi-ai/Type.json`); the schemas `Type` builds are plain JSON on the wire, so a schema that a Node extension builds with a Codec registers the same JSON it would without one (`~codec` is a hidden member that JSON drops).
+Scope: the six members above only, in `extensions/sdk/type_schema.go`, `extensions/sdk-py/ompig_sdk/type_schema.py` and `extensions/sdk-rs/src/type_schema.rs`. Every other member of `Type` is ported and tested against Pi's own answers (`test/parity/sdk-vectors/pi-ai/Type.json`); the schemas `Type` builds are plain JSON on the wire, so a schema that a Node extension builds with a Codec registers the same JSON it would without one (`~codec` is a hidden member that JSON drops).
 
 Owner decision: approved by owner Michael Kinsy on 2026-10-24 (Codec family of `Type`: numbered divergence; `Refine` and `IsRefine` are not part of it: the SDKs run an extension tool's refinements themselves).
 
@@ -2619,13 +2619,13 @@ SCRUTINIZED:approved
 
 Remove when: an SDK serves `Value.Decode`/`Value.Encode` (or a host call runs a codec) so a stored callback pair has a consumer.
 
-Call-site markers: `extensions/sdk/type_schema.go` (`Type`), `extensions/sdk-py/pig_sdk/type_schema.py` (module doc), `extensions/sdk-rs/src/type_schema.rs` (module doc).
+Call-site markers: `extensions/sdk/type_schema.go` (`Type`), `extensions/sdk-py/ompig_sdk/type_schema.py` (module doc), `extensions/sdk-rs/src/type_schema.rs` (module doc).
 
 Evidence: `TestTypeOmitsTheCodecFamily` (`extensions/sdk/type_vectors_test.go`) and `test_type_omits_the_codec_family` (`extensions/sdk-py/tests/test_pi_ai_type_vectors.py`) require that the six members do not exist; the Rust members are absent by construction (`type_schema.rs` doctest `compile_fail`). The Node row of `TestConformance_TypeSchemaToolParametersAgreeAcrossSDKs` (`test/extension-conformance/type_schema_registration_test.go`) runs TypeBox's own `Type`.
 
-## D199 PiG lists OpenRouter's :nitro and :floor routing variants beside every OpenRouter model, where Pi lists only what OpenRouter's /models returns
+## D199 Ompig lists OpenRouter's :nitro and :floor routing variants beside every OpenRouter model, where Pi lists only what OpenRouter's /models returns
 
-What: for every `openrouter` chat model of Pi's catalog that does not already end in a routing variant, PiG also lists `<id>:nitro` and `<id>:floor` (named `<name> (nitro)` and `<name> (floor)`), right after the model, and resolves a lookup of either. The variants are derived from the base entry when listed or looked up; the bundled catalog (`ai.GeneratedModels`) stays exactly Pi's. A variant is a copy of its base entry in everything but its id, name and JSON record: API, base URL, prices, limits, input types, reasoning and thinking levels are the base model's. `--list-models`, the model selector, `/scoped-models`, RPC `get_available_models` and the SDKs list them like any other built-in model.
+What: for every `openrouter` chat model of Pi's catalog that does not already end in a routing variant, Ompig also lists `<id>:nitro` and `<id>:floor` (named `<name> (nitro)` and `<name> (floor)`), right after the model, and resolves a lookup of either. The variants are derived from the base entry when listed or looked up; the bundled catalog (`ai.GeneratedModels`) stays exactly Pi's. A variant is a copy of its base entry in everything but its id, name and JSON record: API, base URL, prices, limits, input types, reasoning and thinking levels are the base model's. `--list-models`, the model selector, `/scoped-models`, RPC `get_available_models` and the SDKs list them like any other built-in model.
 
 Why: OpenRouter accepts `:nitro` (providers sorted by throughput, priority service tier endpoints admitted) and `:floor` (providers sorted by price, flex service tier endpoints admitted) on every model ID but never lists them in `GET /api/v1/models`, which is where Pi's catalog comes from, so a user cannot pick them in Pi's selector (issue #315). OpenRouter's variants page (https://openrouter.ai/docs/guides/routing/model-variants/overview, "Offering routing variants in a model picker") tells clients to derive them from the base entries and to read the metadata from the base entry.
 
@@ -2643,31 +2643,31 @@ Remove when: Pi lists the routing variants (or OpenRouter lists them in `/models
 
 SCRUTINIZED:approved
 
-## D200 With no home directory PiG still runs the commands that load no resources, where Pi crashes at import, and fails with Pi's error where Pi's home lookup would run
+## D200 With no home directory Ompig still runs the commands that load no resources, where Pi crashes at import, and fails with Pi's error where Pi's home lookup would run
 
-What: on a host where Node's `os.homedir()` throws (no `HOME`, and no entry for the process's user in the system's user database: a container run as a uid its passwd file does not list), the pinned Pi 1.4.0 fails to load in every mode, `--version` and `list` included. It exits 1 with Node's uncaught `SystemError [ERR_SYSTEM_ERROR]: A system error occurred: uv_os_homedir returned ENOENT (no such file or directory)`: `tools-manager.ts:11` evaluates `getBinDir()` at import, `getAgentDir()` expands even an explicit `PI_CODING_AGENT_DIR` through `normalizePath`, and `normalizePath` calls `homedir()` before it looks at its input (`utils/paths.ts:89`). PiG runs `--version`, `list` and every other command that loads no resources, and fails with the same message (exit 1, nothing on stdout) only where Pi's `resolve()` would look the home directory up, `getHomeDir()` at `package-manager.ts:2464`: startup in print, RPC and interactive mode, a reload and `pig config`.
+What: on a host where Node's `os.homedir()` throws (no `HOME`, and no entry for the process's user in the system's user database: a container run as a uid its passwd file does not list), the pinned Pi 1.4.0 fails to load in every mode, `--version` and `list` included. It exits 1 with Node's uncaught `SystemError [ERR_SYSTEM_ERROR]: A system error occurred: uv_os_homedir returned ENOENT (no such file or directory)`: `tools-manager.ts:11` evaluates `getBinDir()` at import, `getAgentDir()` expands even an explicit `PI_CODING_AGENT_DIR` through `normalizePath`, and `normalizePath` calls `homedir()` before it looks at its input (`utils/paths.ts:89`). Ompig runs `--version`, `list` and every other command that loads no resources, and fails with the same message (exit 1, nothing on stdout) only where Pi's `resolve()` would look the home directory up, `getHomeDir()` at `package-manager.ts:2464`: startup in print, RPC and interactive mode, a reload and `ompig config`.
 
-Why: PiG's config root (`PIG_HOME`, else `XDG_CONFIG_HOME/pig`, else `~/.pig`, internal/configroot) is meant to run without a home directory, as containers and CI jobs do; refusing `--version` and `list` there would remove the one thing `PIG_HOME` is for, and nothing in those commands needs a home directory.
+Why: Ompig's config root (`OMPIG_HOME`, else `XDG_CONFIG_HOME/ompig`, else `~/.ompig`, internal/configroot) is meant to run without a home directory, as containers and CI jobs do; refusing `--version` and `list` there would remove the one thing `OMPIG_HOME` is for, and nothing in those commands needs a home directory.
 
 Pi bug: none claimed; Pi's behaviour is a crash at load rather than a reported error, and is kept for the paths that need a home directory.
 
-Scope: `PackageManagerHomeDir` (`internal/codingagent/resource_paths.go`) is Pi's `getHomeDir` and returns Node's error where Node's call throws (`internal/nodehome`); `ValidateAutoDiscoveredOverrides` returns it first, at the position of `package-manager.ts:2464`, so startup, a reload and the config command fail there with exit status 1 and nothing on stdout. The collectors (`AgentsSkillScan`, `AmbientSkillResources`) list no user `~/.agents/skills` when asked without a home directory. PiG's other lenient home lookups (`resolvepath`'s `~` expansion, `configroot.ExpandTilde`) are not part of this record and unchanged. The record's condition is the host's, not an option: with a home directory PiG and Pi behave alike.
+Scope: `PackageManagerHomeDir` (`internal/codingagent/resource_paths.go`) is Pi's `getHomeDir` and returns Node's error where Node's call throws (`internal/nodehome`); `ValidateAutoDiscoveredOverrides` returns it first, at the position of `package-manager.ts:2464`, so startup, a reload and the config command fail there with exit status 1 and nothing on stdout. The collectors (`AgentsSkillScan`, `AmbientSkillResources`) list no user `~/.agents/skills` when asked without a home directory. Ompig's other lenient home lookups (`resolvepath`'s `~` expansion, `configroot.ExpandTilde`) are not part of this record and unchanged. The record's condition is the host's, not an option: with a home directory Ompig and Pi behave alike.
 
 Owner decision: approved by owner Michael Kinsy on 2026-10-24 (keep `--version`, `list` and resource-free modes running where Pi crashes at import; fail with Pi's error where Pi's home lookup runs).
 
 Call-site markers: `internal/codingagent/resource_paths.go` (`PackageManagerHomeDir`, `ValidateAutoDiscoveredOverrides`).
 
-Evidence: `TestNoHomeDirectoryPiCrashesAtImportWherePiGRunsResourceFreeCommands` (`coding/cli/no_home_directory_test.go`) runs the pinned Pi (`pi-coding-agent/dist/cli.js` with `os.homedir()` made to throw Node's error, so it runs on any host) and requires exit status 1, Node's message on stderr and an empty stdout for `--version` and `list`, then runs PiG's `--version` and `list` with no home directory and requires them to succeed. `TestStartupFailsWhereNoHomeDirectoryExists` requires print and RPC startup to exit 1 with that message and an empty stdout; `TestStartupFollowsNodeWhenThereIsNoHomeDirectory` runs the binary against `node -p "require('os').homedir()"` with `HOME` removed on the host itself, and on a host with no passwd entry for the uid (checked on xd670: Pi `--version`, `--mode rpc` and `-p` all exit 1 with the SystemError, PiG `--version` and `list` exit 0 with `PIG_HOME` set).
+Evidence: `TestNoHomeDirectoryPiCrashesAtImportWhereOmpigRunsResourceFreeCommands` (`coding/cli/no_home_directory_test.go`) runs the pinned Pi (`pi-coding-agent/dist/cli.js` with `os.homedir()` made to throw Node's error, so it runs on any host) and requires exit status 1, Node's message on stderr and an empty stdout for `--version` and `list`, then runs Ompig's `--version` and `list` with no home directory and requires them to succeed. `TestStartupFailsWhereNoHomeDirectoryExists` requires print and RPC startup to exit 1 with that message and an empty stdout; `TestStartupFollowsNodeWhenThereIsNoHomeDirectory` runs the binary against `node -p "require('os').homedir()"` with `HOME` removed on the host itself, and on a host with no passwd entry for the uid (checked on xd670: Pi `--version`, `--mode rpc` and `-p` all exit 1 with the SystemError, Ompig `--version` and `list` exit 0 with `OMPIG_HOME` set).
 
-Parity allowance: `TestNoHomeDirectoryPiCrashesAtImportWherePiGRunsResourceFreeCommands` is the allowance: the Pi half pins the crash, the PiG half pins the run. No paired corpus runs without a home directory, so none changes.
+Parity allowance: `TestNoHomeDirectoryPiCrashesAtImportWhereOmpigRunsResourceFreeCommands` is the allowance: the Pi half pins the crash, the Ompig half pins the run. No paired corpus runs without a home directory, so none changes.
 
-Remove when: Pi stops resolving the home directory at import (so `--version` and `list` run there without one), or an owner decision reverses this one; then PiG's startup fails at the same point as Pi's, the markers, the allowance test and this record go.
+Remove when: Pi stops resolving the home directory at import (so `--version` and `list` run there without one), or an owner decision reverses this one; then Ompig's startup fails at the same point as Pi's, the markers, the allowance test and this record go.
 
 SCRUTINIZED:approved
 
 ## D203 registerProvider with an empty `apiKey` leaves the provider unconfigured where Pi treats the empty string as a configured key
 
-What: Pi's `registerProvider(id, { apiKey: "" })` (the extension registration of `ModelRuntime` and `ModelRegistry`) keeps the empty string as the provider's configured raw key: `configuredApiKey` is `extension?.apiKey ?? config?.apiKey` (`packages/coding-agent/src/core/provider-composer.ts:397`), and `""` is not `undefined`. `configuredRequestAuthStatus` then reports `{ configured: true, source: "fallback" }` (`provider-composer.ts:723-736`, the `"fallback"` source is the extension's literal key), and the composed API-key `check` returns a configured check (`provider-composer.ts:450-457`: an empty key has no environment names to miss). After the availability refresh settles, `hasConfiguredAuth(provider)` is true, `getProviderAuthStatus` reads configured, and the provider's models are available. PiG reads an empty `apiKey` as no key (the registration's `APIKey` is a Go string, and `""` means unset on every path that reads it): the provider stays unconfigured and its models unavailable until a stored credential, an environment variable or a non-empty key supplies one.
+What: Pi's `registerProvider(id, { apiKey: "" })` (the extension registration of `ModelRuntime` and `ModelRegistry`) keeps the empty string as the provider's configured raw key: `configuredApiKey` is `extension?.apiKey ?? config?.apiKey` (`packages/coding-agent/src/core/provider-composer.ts:397`), and `""` is not `undefined`. `configuredRequestAuthStatus` then reports `{ configured: true, source: "fallback" }` (`provider-composer.ts:723-736`, the `"fallback"` source is the extension's literal key), and the composed API-key `check` returns a configured check (`provider-composer.ts:450-457`: an empty key has no environment names to miss). After the availability refresh settles, `hasConfiguredAuth(provider)` is true, `getProviderAuthStatus` reads configured, and the provider's models are available. Ompig reads an empty `apiKey` as no key (the registration's `APIKey` is a Go string, and `""` means unset on every path that reads it): the provider stays unconfigured and its models unavailable until a stored credential, an environment variable or a non-empty key supplies one.
 
 Why: Pi's behaviour is an accident of `??` on a string. The empty string is not a form the option documents (`packages/coding-agent/src/core/extensions/types.ts:1936`: "API key literal, env interpolation ($ENV_VAR or ${ENV_VAR}), or leading !command"), and Pi treats `""` as missing where it validates the same option (`provider-composer.ts:318`, `!config.apiKey`). Its effect is a provider that reads configured and available whose every request fails with `No API key for provider: <id>` (for example `packages/ai/src/api/openai-completions.ts:95`), so an extension that passes `process.env.KEY ?? ""` gets a selectable provider that cannot answer. Distinguishing `""` from an absent key needs presence tracking on the public `ProviderConfigInput.APIKey` string and on the models.json path, for a quirk no caller can use.
 
@@ -2689,7 +2689,7 @@ SCRUTINIZED:approved
 
 ## D204 The Go, Rust and Python SDKs do not yet export TuiAltScreen, Pi's alternate-screen TUI host, where the Node SDK does
 
-What: Pi's `pi-tui` exports `TuiAltScreen` (the alternate-screen, viewport-scrolling host that `createInteractiveTui` constructs beside `TuiMainScreen`) and its members. The Node SDK serves it, as Pi's own module. The Go, Rust and Python SDKs export no `TuiAltScreen` and none of its members (`mode`, `scrollBy`, `scrollToTop`, `scrollToBottom`, `viewportTop`, `isFollowingOutput`, `flash`, selection and copy-on-select calls, overlay and render members); a Go, Rust or Python extension cannot construct one. PiG's own interactive mode paints through its own alternate-screen renderer and is not affected.
+What: Pi's `pi-tui` exports `TuiAltScreen` (the alternate-screen, viewport-scrolling host that `createInteractiveTui` constructs beside `TuiMainScreen`) and its members. The Node SDK serves it, as Pi's own module. The Go, Rust and Python SDKs export no `TuiAltScreen` and none of its members (`mode`, `scrollBy`, `scrollToTop`, `scrollToBottom`, `viewportTop`, `isFollowingOutput`, `flash`, selection and copy-on-select calls, overlay and render members); a Go, Rust or Python extension cannot construct one. Ompig's own interactive mode paints through its own alternate-screen renderer and is not affected.
 
 Why: the host is a terminal-bound renderer whose members only make sense together with the rest of the `pi-tui` helper port (`TuiMainScreen`, `Terminal`, the component base), which the SdkTuiHelpers lane ports as one unit. Landing the export in all three SDKs needs that unit and its vector tests; it is not part of 0.6.0.
 
@@ -2706,5 +2706,168 @@ Evidence: `make sdk-surface-drift` and `make sdk-exports-release` read the rows:
 Parity allowance: the `divergence:D204` cells are the allowance; no paired Pi corpus constructs `TuiAltScreen` through an SDK, so none changes.
 
 Remove when: the 0.6.1 export of `TuiAltScreen` lands in the Go, Rust and Python SDKs; then the 46 cells become `native:` cells with their conformance or vector reach, and this record goes.
+
+SCRUTINIZED:approved
+
+## D205 The default built-in tool set also carries `task`, `wait` and `agents`
+
+What: a Session whose settings do not set `defaultTools` activates Pi's default four
+(`read`, `bash`, `edit`, `write`) plus the subagent tools `task`, `wait` and `agents`. The
+built-in registry lists all three, so a `*` pattern in an allowlist matches them and a
+`defaultTools` list that names its own tools still replaces the default set entirely. The
+tools are registered through the same built-in path, so `--no-builtin-tools`, an explicit
+`tools` allowlist and `BaseToolsOverride` behave as they do for the ported tools.
+
+The subagent runtime runs its spawns in the background (`Async`), caps nesting at
+two levels, bounds concurrency with a semaphore (32), applies each definition's
+`tools` as the child's allowlist, its `model` selectors, and its `spawns` policy,
+and parks an idle agent's session after seven minutes. None of these have a Pi
+counterpart because Pi has no subagents.
+
+Why: the subagent runtime is the reason this fork exists. A `task` tool the model cannot
+see without editing settings would make delegation opt-in, whereas omp exposes it by
+default. Keeping the tools in the built-in registry (rather than as an extension)
+preserves the extension-free startup path and the `--tools`/allowlist machinery.
+
+Scope: sessions that use the default tool selection. A caller that passes `Tools`,
+`InitialActiveToolNames`, `AllowedTools`, `BaseToolsOverride` or sets `defaultTools` keeps
+exact control, and `--no-builtin-tools` still removes them.
+
+Owner decision: 2026-10-29, required by the fork's objective (a Go subagent runtime with
+omp's delegation surface available by default).
+
+Call-site markers: `coding/subagent_tool.go` (`subagentToolNames`,
+`subagentToolsFor`), `coding/session_tool_registry.go` (default selection).
+
+Evidence: `TestSubagentToolsAreRegistered` (`coding/subagent_smoke_test.go`) asserts the
+three tools are active on a default session; `TestSubagentSpawnThroughAgentLoop`
+(`coding/subagent_loop_test.go`) drives a real model tool call through the agent loop to a
+child session and reads the answer back through `wait`;
+`TestAgentDefinitionToolsScopeTheChild`, `TestAgentDefinitionSpawnsGateNestedDelegation`,
+`TestAgentDefinitionDepthCap` and `TestAgentDefinitionModelSelector`
+(`coding/subagent_tools_test.go`) cover definition enforcement;
+`TestSubagentConcurrencyBound` and `TestIdleTTLParkingReleasesASession`
+(`coding/subagent_resource_test.go`) cover the concurrency and idle bounds. `TestSessionWithoutBaseToolsOverrideKeepsTheBuiltinTools` and
+`TestNewSessionPowerShellIsOptIn` record the enlarged default set.
+
+Parity allowance: the paired Pi scenarios that assert an active tool list
+(`session_tool_registry_port_test.go`, `session_test.go`,
+`session_tool_orchestration_upstream_test.go`, `session_active_builtin_extension_tools_test.go`,
+`session_resume_default_tools_port_test.go`) name the three tools explicitly.
+
+Remove when: the fork stops shipping the subagent runtime by default.
+
+SCRUTINIZED:approved
+
+## D206 An Agent Hub keybinding and roster that Pi has no equivalent of
+
+What: ompig defines the app keybinding `app.agents.hub` (default `alt+a`), the built-in
+slash command `/agents`, and opens an Agent Hub overlay that lists the session's subagents with status, current tool, model,
+elapsed time, tokens, requests, tool calls and cost, and offers focus, message, revive and
+kill. Pi has 43 `app.*` keybindings and 24 built-in slash commands, and no subagent concept,
+so ompig's closed set is Pi's plus this one keybinding and one command. The keybinding
+page documents the row.
+
+Why: the hub is the human control surface for the subagent runtime, which Pi does not
+have. It cannot be expressed as a Pi extension keybinding because the roster reads the
+session's subagent registry.
+
+Scope: the app keybinding inventory (`internal/codingagent/keybindings.go` and the
+`AppKeybinding` constants), the generated resolved-binding table, and the interactive
+mode's key dispatch. A user who binds `alt+a` to something else displaces the hub exactly
+as any other action.
+
+Owner decision: 2026-10-29, required by the fork's objective (an Agent Hub to inspect,
+steer and control subagents).
+
+Call-site markers: `internal/codingagent/app_keybinding.go` (`AppAgentsHub`),
+`internal/codingagent/keys.go` (`actionAgentsHub`, `outcomeAgentsHub`),
+`internal/codingagent/interactive_agenthub.go` (`openAgentHub`).
+
+Evidence: `TestAgentsSlashCommandOpensTheHub` (`internal/codingagent/agents_slash_test.go`)
+calls the real handler through the slash registry and asserts the roster opens, and reports
+unavailability when the session cannot spawn subagents.
+`TestAgentHubDrivesTheLiveRuntime` (`coding/subagent_hub_integration_test.go`)
+drives the hub's actions against a live registry;
+`internal/codingagent/agenthub/hub_test.go` covers the roster order, inspector columns,
+tree nesting, activity pane, filter and key map.
+
+Parity allowance: `TestAppKeybindingVariantsMatchPiAppKeybindings` inserts the extra
+constant where the table places it, `TestAppKeybindingIsTheClosedSetOfAppKeybindingDefinitions`
+expects 44, and the keybinding oracles skip the ompig-only action when comparing to Pi.
+`test/parity/known-gaps.toml` records `keybinding:app.agents.hub` under `app-keybindings`.
+`TestSlashPopupWithoutExtensionsListsPisTwentyFourBuiltins` and
+`TestSlashPopupListsLlamaAmongExtensionCommandsInLoadOrder` expect the 25th built-in, and
+`TestSlashRemovedCommandsAreUnknown` no longer lists `/agents` as removed.
+
+Remove when: Pi gains an equivalent roster, or the hub moves behind an extension key.
+
+SCRUTINIZED:approved
+
+## D207 Child sessions live beside the parent's session file, not in the project session bucket
+
+What: a subagent's transcript is written to `<parent session base>-agents/<agent-id>.jsonl`,
+and its output artifacts (`<id>.md`, `<id>.json`) to the same directory. Pi has no
+subagents; Pi's own session bucket (`~/.ompig/agent/sessions/<encoded-cwd>/`) holds only
+interactive sessions. A child therefore never appears in the `/resume` picker or the
+session list, and deleting a parent session's file does not delete its children's.
+
+Why: subagent transcripts are an implementation detail of one delegation, not sessions a
+user resumes. Bucketing them with the parent keeps them discoverable to the hub (which
+reads `TranscriptPath`) and keeps the picker clean.
+
+Scope: sessions that spawn subagents. `agent://<id>` and the hub's transcript view read
+these paths; nothing else depends on the location.
+
+Owner decision: 2026-10-29, required by the fork's objective (a subagent runtime whose
+children stay inspectable without polluting the session picker).
+
+Call-site markers: `coding/subagent_session.go` (`subagentSessionPath`,
+`subagentArtifactsDir`).
+
+A `<id>.session` sidecar beside the output records the transcript's real path,
+because the session manager names a child session file itself; the hub reads it
+to restore a resumed roster.
+
+Evidence: `TestAgentHubRestoresAResumedRoster` (`coding/subagent_hub_integration_test.go`)
+scans a persisted directory and revives a roster row from it;
+`TestSubagentArtifactLayout` (`coding/subagent_smoke_test.go`) asserts the
+`-agents` sibling directory and the `<id>.md` output; `TestAgentHubDrivesTheLiveRuntime`
+reads a parked agent's transcript from that path.
+
+Parity allowance: no paired Pi scenario spawns a subagent, so none observes the location.
+
+Remove when: ompig adopts an on-disk session layout that names subagents explicitly.
+
+SCRUTINIZED:approved
+
+## D208 Focusing an agent opens its transcript in an overlay instead of replacing the session
+
+What: the Agent Hub's `enter` on a roster row opens the selected agent's messages in a
+transcript overlay. omp instead re-parents the whole TUI to the child session, so the
+transcript, status line and editor belong to the subagent, and `enter` on a parked agent
+revives it. In ompig the main session stays the session the next prompt targets, `esc`
+closes the overlay, and reviving is the explicit `r` action.
+
+Why: omp's focus swaps the interactive mode's live session, which in this codebase is a
+session replacement with its own shutdown and runner lifetimes. Reading the transcript
+covers the inspection use; steering, revive and kill are separate actions that do not need
+the swap.
+
+Scope: the Agent Hub's focus action only. Steering, revive, kill, the roster and the
+inspector behave as in omp.
+
+Owner decision: 2026-10-29, scope decision for the fork's first hub release (inspect and
+control without a session replacement).
+
+Call-site markers: `internal/codingagent/interactive_agenthub.go`
+(`agentHubController.focus`).
+
+Evidence: `TestAgentHubDrivesTheLiveRuntime` reads a live and a parked agent's transcript
+through the same accessor the focus action uses.
+
+Parity allowance: no paired Pi scenario exercises a hub, so none changes.
+
+Remove when: the interactive mode can focus a child session without a replacement.
 
 SCRUTINIZED:approved

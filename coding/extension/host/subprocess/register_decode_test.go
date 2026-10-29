@@ -16,8 +16,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 func writeRawFrame(conn net.Conn, body string) error {
@@ -68,9 +68,9 @@ func rawRegisterServe(register string, first chan<- map[string]json.RawMessage, 
 	}
 }
 
-// copySDKSource copies the SDK source files under src into dst the way pig
+// copySDKSource copies the SDK source files under src into dst the way ompig
 // stages them (no tests, caches, or the embedding bundle.go), passing each file
-// through edit: the SDK another pig would have staged or built with.
+// through edit: the SDK another ompig would have staged or built with.
 func copySDKSource(t *testing.T, src, dst string, edit func(rel string, data []byte) []byte) {
 	t.Helper()
 	err := filepath.WalkDir(src, func(path string, entry os.DirEntry, err error) error {
@@ -136,8 +136,8 @@ func TestRegisterDecodeFailureNamesTheFieldAndTheRebuild(t *testing.T) {
 		source string
 		hint   string
 	}{
-		{"a runner pig builds from source", "/extensions/strict", "if pig or its SDK changed since this extension was built, run `pig reload` to rebuild it"},
-		{"a prebuilt binary", "", `"strict" ships a prebuilt binary; if you updated pig, rebuild it against the current pig SDK`},
+		{"a runner ompig builds from source", "/extensions/strict", "if ompig or its SDK changed since this extension was built, run `ompig reload` to rebuild it"},
+		{"a prebuilt binary", "", `"strict" ships a prebuilt binary; if you updated ompig, rebuild it against the current ompig SDK`},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -162,8 +162,8 @@ func TestRegisterDecodeFailureNamesTheFieldAndTheRebuild(t *testing.T) {
 }
 
 // A packed runner that imports an SDK whose registration differs from this
-// pig's fails with the field it sent and `pig reload`, which restages this
-// pig's SDKs so the runner is rebuilt against them.
+// ompig's fails with the field it sent and `ompig reload`, which restages this
+// ompig's SDKs so the runner is rebuilt against them.
 func TestPackedRunnerWithAnotherSDKsRegisterShapeNamesTheRebuild(t *testing.T) {
 	python := toolchain.PythonExecutable(runtime.GOOS, exec.LookPath)
 	if _, err := exec.LookPath(python); err != nil {
@@ -171,7 +171,7 @@ func TestPackedRunnerWithAnotherSDKsRegisterShapeNamesTheRebuild(t *testing.T) {
 	}
 	sdkRoot := filepath.Join(t.TempDir(), "sdk-py")
 	copySDKSource(t, filepath.Join(findModuleRoot(t), "extensions", "sdk-py"), sdkRoot, func(rel string, data []byte) []byte {
-		if rel != "pig_sdk/__init__.py" {
+		if rel != "ompig_sdk/__init__.py" {
 			return data
 		}
 		if bytes.Count(data, []byte(`"register": {`)) != 1 {
@@ -179,7 +179,7 @@ func TestPackedRunnerWithAnotherSDKsRegisterShapeNamesTheRebuild(t *testing.T) {
 		}
 		return bytes.Replace(data, []byte(`"register": {`), []byte(`"register": {"field_from_another_sdk": True, `), 1)
 	})
-	t.Setenv("PIG_SDK_PY_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_PY_ROOT", sdkRoot)
 	root := writePackedPythonFactoryModule(t, "shapeskew_py", "shapeskew-py", "skew_tool")
 
 	h := NewHostWithConfigRoot(t.TempDir(), t.TempDir())
@@ -187,5 +187,5 @@ func TestPackedRunnerWithAnotherSDKsRegisterShapeNamesTheRebuild(t *testing.T) {
 	issues := reloadIssues(t, h, []ExtConfig{packedPythonFactoryConfig("shapeskew-py", root, "shapeskew_py", "shapeskew-py")})
 	requireOneIssueContaining(t, issues,
 		`unknown field "field_from_another_sdk"`,
-		"if pig or its SDK changed since this extension was built, run `pig reload` to rebuild it")
+		"if ompig or its SDK changed since this extension was built, run `ompig reload` to rebuild it")
 }

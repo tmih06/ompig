@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 func TestPigletAddPinnedMonorepoThroughCoreMaterializer(t *testing.T) {
@@ -28,16 +28,16 @@ func TestPigletAddPinnedMonorepoThroughCoreMaterializer(t *testing.T) {
 		return out
 	}
 	git("init", "-q")
-	if err := os.WriteFile(filepath.Join(repo, "piglet.yaml"), []byte("name: wrong-root\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(repo, "ompiglet.yaml"), []byte("name: wrong-root\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	for _, name := range []string{"alpha", "beta"} {
-		root := filepath.Join(repo, "piglets", name)
+		root := filepath.Join(repo, "ompiglets", name)
 		if err := os.MkdirAll(filepath.Join(root, "skills", "review"), 0o755); err != nil {
 			t.Fatal(err)
 		}
 		for path, content := range map[string]string{
-			"piglet.yaml":            "name: " + name + "\nrelease: {version: 1.0.0}\nsystemPrompt: {file: prompt.md}\nskills:\n  - name: review\n    origins: [local:./skills/review]\n",
+			"ompiglet.yaml":          "name: " + name + "\nrelease: {version: 1.0.0}\nsystemPrompt: {file: prompt.md}\nskills:\n  - name: review\n    origins: [local:./skills/review]\n",
 			"prompt.md":              name + " prompt\n",
 			"skills/review/SKILL.md": "---\nname: review\ndescription: review\n---\n" + name + " skill\n",
 		} {
@@ -46,10 +46,10 @@ func TestPigletAddPinnedMonorepoThroughCoreMaterializer(t *testing.T) {
 			}
 		}
 	}
-	git("add", "piglets", "piglet.yaml")
+	git("add", "ompiglets", "ompiglet.yaml")
 	git("-c", "user.name=Test", "-c", "user.email=test@example.com", "commit", "-qm", "fixture")
 	commit := git("rev-parse", "HEAD")
-	bare := filepath.Join(shortTempDir(t), "owner", "piglets.git")
+	bare := filepath.Join(shortTempDir(t), "owner", "ompiglets.git")
 	if err := os.MkdirAll(filepath.Dir(bare), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -57,30 +57,30 @@ func TestPigletAddPinnedMonorepoThroughCoreMaterializer(t *testing.T) {
 		t.Fatal(err)
 	}
 	home := shortTempDir(t)
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	t.Chdir(t.TempDir())
 	for _, name := range []string{"alpha", "beta"} {
-		source := "git:file://localhost/" + strings.TrimPrefix(filepath.ToSlash(bare), "/") + "@" + commit + "#subdirectory=piglets%2F" + name
+		source := "git:file://localhost/" + strings.TrimPrefix(filepath.ToSlash(bare), "/") + "@" + commit + "#subdirectory=ompiglets%2F" + name
 		var out, stderr strings.Builder
-		if code := piglet.RunCommand([]string{"piglet", "add", source}, &out, &stderr); code != 0 {
+		if code := ompiglet.RunCommand([]string{"ompiglet", "add", source}, &out, &stderr); code != 0 {
 			t.Fatalf("add %s code=%d %s %s", name, code, out.String(), stderr.String())
 		}
-		installed := filepath.Join(home, "piglets", name+".yaml")
-		p, err := piglet.Parse(installed)
+		installed := filepath.Join(home, "ompiglets", name+".yaml")
+		p, err := ompiglet.Parse(installed)
 		if err != nil {
 			t.Fatal(err)
 		}
 		if p.Name != name {
-			t.Fatalf("selected wrong Piglet: %s", p.Name)
+			t.Fatalf("selected wrong Ompiglet: %s", p.Name)
 		}
 		prompt, err := os.ReadFile(filepath.Join(filepath.Dir(installed), p.SystemPrompt.File))
 		if err != nil || string(prompt) != name+" prompt\n" {
 			t.Fatalf("prompt=%q err=%v", prompt, err)
 		}
-		data, err := os.ReadFile(filepath.Join(home, "piglets", name+".origin.json"))
+		data, err := os.ReadFile(filepath.Join(home, "ompiglets", name+".origin.json"))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -103,7 +103,7 @@ func TestPigletAddPinnedMonorepoThroughCoreMaterializer(t *testing.T) {
 			}
 		}
 	}
-	if _, err := os.Stat(filepath.Join(home, "piglets", "wrong-root.yaml")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(home, "ompiglets", "wrong-root.yaml")); !os.IsNotExist(err) {
 		t.Fatalf("root agent registered: %v", err)
 	}
 	if _, err := os.Stat(filepath.Join(home, "agent", "settings.json")); !os.IsNotExist(err) {
@@ -114,11 +114,11 @@ func TestPigletAddPinnedMonorepoThroughCoreMaterializer(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, name := range []string{"alpha", "beta"} {
-		p, err := piglet.Parse(filepath.Join(home, "piglets", name+".yaml"))
+		p, err := ompiglet.Parse(filepath.Join(home, "ompiglets", name+".yaml"))
 		if err != nil {
 			t.Fatal(err)
 		}
-		skills, errs := piglet.ResolveSkills(p)
+		skills, errs := ompiglet.ResolveSkills(p)
 		if len(errs) != 0 || len(skills) != 1 {
 			t.Fatalf("skills=%v errs=%v", skills, errs)
 		}

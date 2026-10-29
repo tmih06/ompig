@@ -41,7 +41,7 @@ type Action struct {
 	Needs []string
 }
 
-// Normalizer rewrites rendered frames before comparison. Every rule states why PiG and Pi legitimately differ.
+// Normalizer rewrites rendered frames before comparison. Every rule states why Ompig and Pi legitimately differ.
 type Normalizer struct {
 	Pattern string // regexp (RE2)
 	With    string
@@ -55,22 +55,22 @@ type Journey struct {
 	Doc  string
 	// Touches lists module-relative path prefixes; a change under one selects the journey in lane gates.
 	Touches []string
-	// PigOnly journeys cover PiG-only features and have no Pi run.
-	PigOnly bool
-	Script  Script
-	Env     func(Kind) Env
+	// OmpigOnly journeys cover Ompig-only features and have no Pi run.
+	OmpigOnly bool
+	Script    Script
+	Env       func(Kind) Env
 	// Backbone runs first, in order; the first step normally launches.
 	Backbone []Step
 	// Pool actions run in seeded random order between Backbone and Tail.
 	Pool []Action
 	Tail []Step
-	// MemMaxMB bounds PiG's resident set (process tree) at any checkpoint of the plain build; the instrumented build scales it.
+	// MemMaxMB bounds Ompig's resident set (process tree) at any checkpoint of the plain build; the instrumented build scales it.
 	MemMaxMB int
 	// ExitCode is the expected final exit status of every launched process (default 0).
 	ExitCode int
 	// Normalizers extend the shared frame normalizers.
 	Normalizers []Normalizer
-	// SkipFrames lists frame names (substring match) that are recorded but not compared: the frame is a PiG-only surface or a timing-dependent picture with its own assertions in the step.
+	// SkipFrames lists frame names (substring match) that are recorded but not compared: the frame is a Ompig-only surface or a timing-dependent picture with its own assertions in the step.
 	SkipFrames []string
 	// AgentFiles are paths under the agent directory (settings.json, ...) whose final content is compared as JSON after both products exit.
 	AgentFiles []string

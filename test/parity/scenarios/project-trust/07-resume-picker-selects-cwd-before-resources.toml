@@ -30,7 +30,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "Resume Session (Current Folder)"
+ready_pattern_ompig = "Resume Session (Current Folder)"
 ready_pattern_pi = "Resume Session (Current Folder)"
 ready_timeout_seconds = 30
 capture_start = "remember picker-target-9137"
@@ -52,10 +52,10 @@ settle_seconds = 1
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-session", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent-session"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent-session"]
 override_base_args = true
 pi_args = ["--offline", "--session-dir", "sessions", "--resume", "--no-approve", "--verbose"]
-pig_args = ["--offline", "--session-dir", "sessions", "--resume", "--no-approve", "--verbose"]
+ompig_args = ["--offline", "--session-dir", "sessions", "--resume", "--no-approve", "--verbose"]
 
 [assert]
 both_reach_ready = true

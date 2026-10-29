@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/args.test.ts:203,208
@@ -22,7 +22,7 @@ func TestCLIRejectsEmptySessionNameUpstream(t *testing.T) {
 		t.Run("name="+name, func(t *testing.T) {
 			cmd := exec.CommandContext(t.Context(), binary, "--offline", "--no-extensions", "--name", name, "--no-session", "-p")
 			cmd.Dir = t.TempDir()
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+t.TempDir())
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+t.TempDir())
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			err := cmd.Run()
@@ -39,7 +39,7 @@ func TestCLINormalizesSessionNameUpstream(t *testing.T) {
 	dir := t.TempDir()
 	cmd := exec.CommandContext(t.Context(), binary, "--offline", "--no-extensions", "--name", "  named session  ", "--session-dir", dir, "--model", "test-faux/faux-1", "-p", "What is 20+22?")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+t.TempDir(), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+t.TempDir(), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	if output, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("named turn failed: %v: %s", err, output)
 	}
@@ -72,7 +72,7 @@ func TestCLIVersionPrecedesSessionValidationUpstream(t *testing.T) {
 	for _, args := range [][]string{{"--name", "", "--version"}, {"--name", "   ", "--version"}, {"--session-id", "invalid/id", "--version"}} {
 		cmd := exec.CommandContext(t.Context(), binary, args...)
 		cmd.Dir = t.TempDir()
-		cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+t.TempDir())
+		cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+t.TempDir())
 		output, err := cmd.CombinedOutput()
 		if err != nil || string(output) != cliVersionString()+"\n" {
 			t.Fatalf("%q: err=%v output=%q", args, err, output)
@@ -136,7 +136,7 @@ func TestCLISelectsSessionBeforeNameValidation(t *testing.T) {
 						for _, system := range []struct {
 							name, executable string
 							prefix           []string
-						}{{"pi", node, []string{filepath.Join(piRoot, "dist", "cli.js")}}, {"pig", binary, nil}} {
+						}{{"pi", node, []string{filepath.Join(piRoot, "dist", "cli.js")}}, {"ompig", binary, nil}} {
 							home, dir := t.TempDir(), t.TempDir()
 							args := append([]string{}, system.prefix...)
 							args = append(args, "--offline", "--no-extensions", "--mode", mode, "--name", name, "--session-dir", dir)
@@ -146,7 +146,7 @@ func TestCLISelectsSessionBeforeNameValidation(t *testing.T) {
 							args = append(args, tc.args...)
 							cmd := exec.CommandContext(t.Context(), system.executable, args...)
 							cmd.Dir = cwd
-							cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "pig"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "pi"), "FORCE_COLOR=0", "NO_COLOR=1")
+							cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "ompig"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "pi"), "FORCE_COLOR=0", "NO_COLOR=1")
 							var stdout, stderr bytes.Buffer
 							cmd.Stdout, cmd.Stderr = &stdout, &stderr
 							err := cmd.Run()

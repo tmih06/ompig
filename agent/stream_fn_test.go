@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // StreamFn receives every provider request with the loop's exact model,
@@ -104,7 +104,7 @@ func TestStreamFnOwnsCallerPrefixThroughIteratorAdoption(t *testing.T) {
 }
 
 // A nil StreamFn uses the model's provider directly. Pi installs the same
-// provider stream through its package-global default registry; PiG models carry
+// provider stream through its package-global default registry; Ompig models carry
 // that provider runtime explicitly instead.
 func TestStreamFnDefaultsToModelProvider(t *testing.T) {
 	provider := &fakeProvider{responses: []fakeResponse{{text: "default"}}}

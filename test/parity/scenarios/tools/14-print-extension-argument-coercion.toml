@@ -9,9 +9,9 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/coercion-probe.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/coercion-probe.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/coercion-probe.mjs"]
 
 [print]

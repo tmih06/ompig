@@ -36,7 +36,7 @@ The imported selector scenario used a retained cancel hint as a new-output barri
 
 ```text
 Pi:  {"selected":"chosen","expanded":true,"entered":"first-second"}
-PiG: {"selected":"chosen","expanded":false,"entered":"first-second"}
+Ompig: {"selected":"chosen","expanded":false,"entered":"first-second"}
 ```
 
 ### Named themes
@@ -54,7 +54,7 @@ PiG: {"selected":"chosen","expanded":false,"entered":"first-second"}
 `autocomplete/09-extension-wrapper-state` registers a wrapper, asks its current provider for a real registered command, and accepts its overridden completion. No model request is made. Before the fix, the final dialog differs in every owned result:
 
 ```text
-               Pi                 PiG
+               Pi                 Ompig
 registered     true               false
 base           true               false
 applied        true               false

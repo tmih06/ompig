@@ -36,10 +36,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/skill-system-pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/skill-system-ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/skill-system-pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--skill", "sample-skill", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/parity-system.mjs"]
+ompig_args = ["--no-extensions", "--skill", "sample-skill", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/ext/parity-system.mjs"]
 pi_args = ["--skill", "sample-skill", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
@@ -49,7 +49,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 capture_start = "skill-command-ok"

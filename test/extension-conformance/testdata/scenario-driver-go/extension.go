@@ -16,7 +16,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 type spec struct {

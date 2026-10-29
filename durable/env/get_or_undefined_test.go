@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // packages/durable/src/env/index.ts:19-21 getOrUndefined: the value of an ok result, undefined (nil) for a failure.

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/system-prompt.ts
@@ -43,7 +43,7 @@ type promptOracleProbe struct {
 
 // The structured system prompt of buildSystemPromptSections over random tool selections (hidden, with and without snippets and guidelines, bash/PowerShell/grep/find/ls
 // rule variants), guidelines that differ by JS whitespace, an appended prompt, custom sections, context files, skills with markup characters and cwd with backslashes.
-// PiG differs from Pi in the product name of the preamble and in the docs section (D22, D92), so the default preamble and the docs section are left out;
+// Ompig differs from Pi in the product name of the preamble and in the docs section (D22, D92), so the default preamble and the docs section are left out;
 // every other section must be equal, in order.
 func TestSystemPromptSectionsMatchPi(t *testing.T) {
 	probes := promptOracleProbes()
@@ -65,13 +65,13 @@ emit(input.map((probe) => {
 		if json.Unmarshal(want[i], &wantError) == nil && wantError.Error != "" {
 			if err == nil || err.Error() != wantError.Error {
 				failures++
-				t.Errorf("probe %d: PiG error %v, Pi %q", i, err, wantError.Error)
+				t.Errorf("probe %d: Ompig error %v, Pi %q", i, err, wantError.Error)
 			}
 			continue
 		}
 		if err != nil {
 			failures++
-			t.Errorf("probe %d: PiG error %v, Pi none", i, err)
+			t.Errorf("probe %d: Ompig error %v, Pi none", i, err)
 			continue
 		}
 		if err := json.Unmarshal(want[i], &wantEntries); err != nil {
@@ -79,7 +79,7 @@ emit(input.map((probe) => {
 		}
 		if !comparablePromptEntries(got, wantEntries, p.CustomPrompt != "") {
 			if failures++; failures <= 6 {
-				t.Errorf("probe %d (%s):\nPiG %s\nPi  %s", i, fmt.Sprintf("tools=%q hidden=%q custom=%q", p.SelectedTools, p.HiddenTools, p.CustomPrompt), render(got), render(wantEntries))
+				t.Errorf("probe %d (%s):\nOmpig %s\nPi  %s", i, fmt.Sprintf("tools=%q hidden=%q custom=%q", p.SelectedTools, p.HiddenTools, p.CustomPrompt), render(got), render(wantEntries))
 			}
 		}
 	}
@@ -97,7 +97,7 @@ func TestSystemPromptProbesDump(t *testing.T) {
 	fmt.Printf("system-prompt-probes:%s\n", line)
 }
 
-// TestSystemPromptProbesParity prints PiG's sections of each probe (without the product preamble and the docs section, which differ by design: D22, D92) as one JSON line per probe for the project-trust/23 parity scenario.
+// TestSystemPromptProbesParity prints Ompig's sections of each probe (without the product preamble and the docs section, which differ by design: D22, D92) as one JSON line per probe for the project-trust/23 parity scenario.
 func TestSystemPromptProbesParity(t *testing.T) {
 	for _, p := range promptOracleProbes() {
 		entries, err := goPromptEntries(p)
@@ -115,7 +115,7 @@ func TestSystemPromptProbesParity(t *testing.T) {
 	}
 }
 
-// goPromptEntries is PiG's structured prompt of a probe: the built sections with the custom sections applied.
+// goPromptEntries is Ompig's structured prompt of a probe: the built sections with the custom sections applied.
 func goPromptEntries(p promptOracleProbe) ([][2]string, error) {
 	options := Options{Cwd: p.Cwd, Tools: p.SelectedTools, HiddenTools: p.HiddenTools, ToolHints: p.ToolSnippets, ToolGuidelines: p.ToolGuidelines, PromptGuidelines: p.PromptGuidelines, CustomPrompt: p.CustomPrompt, AppendSystemPrompt: p.AppendSystemPrompt, AppendMode: "replace"}
 	for _, f := range p.ContextFiles {

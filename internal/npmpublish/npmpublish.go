@@ -1,8 +1,8 @@
-// Package npmpublish runs `npm publish` for Packages and Piglet source on the author's behalf.
+// Package npmpublish runs `npm publish` for Packages and Ompiglet source on the author's behalf.
 //
-// The author's own npm does the authentication, including a one-time password, a passkey, and npm trusted publishing from CI. PiG never reads, stores, or forwards an npm token: it passes its environment to npm unchanged and adds `--otp` only when the author gives a code.
+// The author's own npm does the authentication, including a one-time password, a passkey, and npm trusted publishing from CI. Ompig never reads, stores, or forwards an npm token: it passes its environment to npm unchanged and adds `--otp` only when the author gives a code.
 //
-// pig additive (D18): Packages and Piglet source publish to npm with a dry run by default.
+// ompig additive (D18): Packages and Ompiglet source publish to npm with a dry run by default.
 package npmpublish
 
 import (
@@ -21,10 +21,10 @@ import (
 
 	"golang.org/x/mod/semver"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/crossspawn"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/crossspawn"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // TrustedPublishingEnv is set by GitHub Actions when the workflow may request an OIDC token. npm then publishes with provenance and no stored credential.
@@ -41,7 +41,7 @@ var (
 
 var errNPMNotFound = errors.New("npm is not on PATH; install Node.js (npm publishes the package) or set the npmCommand setting")
 
-// Flags are the options `pig piglet publish --to npm` and `pig package publish --to npm` share.
+// Flags are the options `ompig ompiglet publish --to npm` and `ompig package publish --to npm` share.
 type Flags struct {
 	Yes    bool
 	DryRun bool
@@ -113,7 +113,7 @@ type Package struct {
 type Request struct {
 	Package
 	Flags
-	// Label names the kind of package in output: Piglet or Package.
+	// Label names the kind of package in output: Ompiglet or Package.
 	Label string
 	// Notes are printed under the package line of the plan.
 	Notes []string
@@ -156,7 +156,7 @@ func npmCmd(ctx context.Context, command, args []string, dir string) (*exec.Cmd,
 	return crossspawn.Command(ctx, dir, path, append(append([]string{}, command[1:]...), args...)...), nil
 }
 
-// findNPM returns the absolute path of the npm program name. A name with a path is a file relative to PiG's working directory. A bare name is looked up only in the absolute directories of PATH: Go's LookPath on Windows searches the working directory first and fails with ErrDot when it holds a match, and a relative PATH entry also names the working directory. Authors often publish from the Package's own directory, which may ship its own npm.
+// findNPM returns the absolute path of the npm program name. A name with a path is a file relative to Ompig's working directory. A bare name is looked up only in the absolute directories of PATH: Go's LookPath on Windows searches the working directory first and fails with ErrDot when it holds a match, and a relative PATH entry also names the working directory. Authors often publish from the Package's own directory, which may ship its own npm.
 func findNPM(name string) (string, error) {
 	if filepath.Base(name) != name {
 		path, err := exec.LookPath(name)

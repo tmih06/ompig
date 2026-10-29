@@ -3,7 +3,7 @@ package nodeurl
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // countCwdReads routes the working-directory reads of PathToFileURL through a counter for the duration of the test.

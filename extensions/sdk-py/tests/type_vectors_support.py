@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from typing import Any, Optional
 
-from pig_sdk import BigInt, TSchema, TSchemaArray, Type
+from ompig_sdk import BigInt, TSchema, TSchemaArray, Type
 
 VECTORS = Path(__file__).resolve().parents[3] / "test" / "parity" / "sdk-vectors" / "pi-ai" / "Type.json"
 
@@ -59,7 +59,7 @@ def resolve(node: Any) -> Any:
     return node
 
 
-# The members of Type the host's type engine serves (pig_sdk/type_engine.py): calling one needs a host, which a unit test cannot reach. The same cases run through the host socket
+# The members of Type the host's type engine serves (ompig_sdk/type_engine.py): calling one needs a host, which a unit test cannot reach. The same cases run through the host socket
 # (TestConformance_TypeEngineMembersAgreeAcrossSDKs) and through the Go SDK's fused path (TestTypeEngineMembersMatchPi).
 ENGINE_MEMBERS = {
     "Call", "Capitalize", "Conditional", "Constructor", "ConstructorParameters", "Cyclic", "Dependent", "Evaluate", "Exclude", "Extends", "Extract", "Function", "Generic",

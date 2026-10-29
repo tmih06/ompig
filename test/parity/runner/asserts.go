@@ -9,10 +9,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
-// EvaluateOutcome runs every configured assertion against the pig and
+// EvaluateOutcome runs every configured assertion against the ompig and
 // pi result groups, populating Outcome.Failures.
 //
 // The function is symmetric: every failure says which side(s) failed so
@@ -24,16 +24,16 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 			o.Failures = append(o.Failures, fmt.Sprintf("normalize_replace %q requires a reason", rule.Pattern))
 		}
 	}
-	o.Pig.MedianMs = medianRuntime(o.Pig.Runs)
+	o.Ompig.MedianMs = medianRuntime(o.Ompig.Runs)
 	o.Pi.MedianMs = medianRuntime(o.Pi.Runs)
 
 	// exit_code
 	if a.ExitCode != nil {
 		wantCode := *a.ExitCode
-		for _, r := range o.Pig.Runs {
+		for _, r := range o.Ompig.Runs {
 			if r.ExitCode != wantCode {
 				o.Failures = append(o.Failures,
-					fmt.Sprintf("pig exit_code=%d want %d", r.ExitCode, wantCode))
+					fmt.Sprintf("ompig exit_code=%d want %d", r.ExitCode, wantCode))
 				break
 			}
 		}
@@ -46,11 +46,11 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 		}
 	}
 
-	if a.PigExitCode != nil {
-		wantCode := *a.PigExitCode
-		for _, result := range o.Pig.Runs {
+	if a.OmpigExitCode != nil {
+		wantCode := *a.OmpigExitCode
+		for _, result := range o.Ompig.Runs {
 			if result.ExitCode != wantCode {
-				o.Failures = append(o.Failures, fmt.Sprintf("pig exit_code=%d want %d", result.ExitCode, wantCode))
+				o.Failures = append(o.Failures, fmt.Sprintf("ompig exit_code=%d want %d", result.ExitCode, wantCode))
 				break
 			}
 		}
@@ -68,13 +68,13 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 	// both_contain
 	for _, want := range a.BothContain {
 		// Allow this substring to be claimed by a divergence block.
-		if slices.Contains(o.Scenario.Diverge.PigContains, want) ||
+		if slices.Contains(o.Scenario.Diverge.OmpigContains, want) ||
 			slices.Contains(o.Scenario.Diverge.PiContains, want) {
 			continue
 		}
-		if !allRunsContain(o.Pig.Runs, want) {
+		if !allRunsContain(o.Ompig.Runs, want) {
 			o.Failures = append(o.Failures,
-				fmt.Sprintf("pig output missing %q", want))
+				fmt.Sprintf("ompig output missing %q", want))
 		}
 		if !allRunsContain(o.Pi.Runs, want) {
 			o.Failures = append(o.Failures,
@@ -84,9 +84,9 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 
 	// both_not_contain
 	for _, deny := range a.BothNotContain {
-		if anyRunContains(o.Pig.Runs, deny) {
+		if anyRunContains(o.Ompig.Runs, deny) {
 			o.Failures = append(o.Failures,
-				fmt.Sprintf("pig output unexpectedly contains %q", deny))
+				fmt.Sprintf("ompig output unexpectedly contains %q", deny))
 		}
 		if anyRunContains(o.Pi.Runs, deny) {
 			o.Failures = append(o.Failures,
@@ -94,18 +94,18 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 		}
 	}
 
-	// pig_contains / pi_contains (asymmetric: used for divergences too)
-	allPigContains := expandVersionTokens(a.PigContains, o.Scenario.Diverge.PigContains)
+	// ompig_contains / pi_contains (asymmetric: used for divergences too)
+	allPigContains := expandVersionTokens(a.OmpigContains, o.Scenario.Diverge.OmpigContains)
 	for _, want := range allPigContains {
-		if !allRunsContain(o.Pig.Runs, want) {
+		if !allRunsContain(o.Ompig.Runs, want) {
 			o.Failures = append(o.Failures,
-				fmt.Sprintf("pig output missing %q (asymmetric)", want))
+				fmt.Sprintf("ompig output missing %q (asymmetric)", want))
 		}
 	}
-	for _, deny := range a.PigNotContain {
-		if anyRunContains(o.Pig.Runs, deny) {
+	for _, deny := range a.OmpigNotContain {
+		if anyRunContains(o.Ompig.Runs, deny) {
 			o.Failures = append(o.Failures,
-				fmt.Sprintf("pig output unexpectedly contains %q (asymmetric)", deny))
+				fmt.Sprintf("ompig output unexpectedly contains %q (asymmetric)", deny))
 		}
 	}
 	allPiContains := expandVersionTokens(a.PiContains, o.Scenario.Diverge.PiContains)
@@ -133,9 +133,9 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 				fmt.Sprintf("invalid regex %q: %v", pat, err))
 			continue
 		}
-		if !allRunsMatchRegex(o.Pig.Runs, re) {
+		if !allRunsMatchRegex(o.Ompig.Runs, re) {
 			o.Failures = append(o.Failures,
-				fmt.Sprintf("pig output does not match /%s/", pat))
+				fmt.Sprintf("ompig output does not match /%s/", pat))
 		}
 		if !allRunsMatchRegex(o.Pi.Runs, re) {
 			o.Failures = append(o.Failures,
@@ -144,8 +144,8 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 	}
 
 	compareOutputs := func(label string, transform func(string) string) {
-		for run := range min(len(o.Pig.Runs), len(o.Pi.Runs)) {
-			g := transform(o.Pig.Runs[run].Output)
+		for run := range min(len(o.Ompig.Runs), len(o.Pi.Runs)) {
+			g := transform(o.Ompig.Runs[run].Output)
 			p := transform(o.Pi.Runs[run].Output)
 			for _, rule := range a.NormalizeReplace {
 				if strings.TrimSpace(rule.Reason) == "" {
@@ -163,24 +163,24 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 			}
 			if g != p {
 				o.Failures = append(o.Failures,
-					fmt.Sprintf("run %d %s mismatch: pig=%q pi=%q", run+1, label, trunc(g, 80), trunc(p, 80)))
+					fmt.Sprintf("run %d %s mismatch: ompig=%q pi=%q", run+1, label, trunc(g, 80), trunc(p, 80)))
 			}
 		}
 	}
 	if a.JSONOutputEqual {
-		for run := range min(len(o.Pig.Runs), len(o.Pi.Runs)) {
-			if err := compareJSONResults(o.Pig.Runs[run], o.Pi.Runs[run], a.JSONAliases); err != nil {
+		for run := range min(len(o.Ompig.Runs), len(o.Pi.Runs)) {
+			if err := compareJSONResults(o.Ompig.Runs[run], o.Pi.Runs[run], a.JSONAliases); err != nil {
 				o.Failures = append(o.Failures, fmt.Sprintf("run %d JSON output: %v", run+1, err))
 			}
 		}
 	}
 	if a.StderrEqual {
-		for run := range min(len(o.Pig.Runs), len(o.Pi.Runs)) {
-			g, p := o.Pig.Runs[run], o.Pi.Runs[run]
+		for run := range min(len(o.Ompig.Runs), len(o.Pi.Runs)) {
+			g, p := o.Ompig.Runs[run], o.Pi.Runs[run]
 			if !g.StderrCaptured || !p.StderrCaptured {
 				o.Failures = append(o.Failures, "stderr_equal requires separately captured stderr")
 			} else if g.Stderr != p.Stderr {
-				o.Failures = append(o.Failures, fmt.Sprintf("run %d stderr mismatch: pig=%q pi=%q", run+1, g.Stderr, p.Stderr))
+				o.Failures = append(o.Failures, fmt.Sprintf("run %d stderr mismatch: ompig=%q pi=%q", run+1, g.Stderr, p.Stderr))
 			}
 		}
 	}
@@ -196,7 +196,7 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 	// file it produced, so a scenario covering a file-producing surface needs
 	// these to exercise it at all.
 	if a.ArtifactEqual || a.ArtifactNormalizedEqual || len(a.ArtifactBothContain) > 0 || len(a.ArtifactBothNotContain) > 0 {
-		for _, sr := range []*SystemResults{&o.Pig, &o.Pi} {
+		for _, sr := range []*SystemResults{&o.Ompig, &o.Pi} {
 			for run := range sr.Runs {
 				if err := sr.Runs[run].ArtifactErr; err != nil {
 					o.Failures = append(o.Failures,
@@ -206,24 +206,24 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 		}
 	}
 	for _, want := range a.ArtifactBothContain {
-		if !allRunsArtifactContain(o.Pig.Runs, want) {
-			o.Failures = append(o.Failures, fmt.Sprintf("pig artifact missing %q", want))
+		if !allRunsArtifactContain(o.Ompig.Runs, want) {
+			o.Failures = append(o.Failures, fmt.Sprintf("ompig artifact missing %q", want))
 		}
 		if !allRunsArtifactContain(o.Pi.Runs, want) {
 			o.Failures = append(o.Failures, fmt.Sprintf("pi artifact missing %q", want))
 		}
 	}
 	for _, unwanted := range a.ArtifactBothNotContain {
-		if anyRunArtifactContains(o.Pig.Runs, unwanted) {
-			o.Failures = append(o.Failures, fmt.Sprintf("pig artifact unexpectedly contains %q", unwanted))
+		if anyRunArtifactContains(o.Ompig.Runs, unwanted) {
+			o.Failures = append(o.Failures, fmt.Sprintf("ompig artifact unexpectedly contains %q", unwanted))
 		}
 		if anyRunArtifactContains(o.Pi.Runs, unwanted) {
 			o.Failures = append(o.Failures, fmt.Sprintf("pi artifact unexpectedly contains %q", unwanted))
 		}
 	}
 	if a.ArtifactEqual || a.ArtifactNormalizedEqual {
-		for run := range min(len(o.Pig.Runs), len(o.Pi.Runs)) {
-			g := o.Pig.Runs[run].Artifact
+		for run := range min(len(o.Ompig.Runs), len(o.Pi.Runs)) {
+			g := o.Ompig.Runs[run].Artifact
 			p := o.Pi.Runs[run].Artifact
 			if a.ArtifactNormalizedEqual {
 				g, p = normalize(g), normalize(p)
@@ -240,7 +240,7 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 			}
 			if g != p {
 				o.Failures = append(o.Failures,
-					fmt.Sprintf("run %d artifact mismatch: pig=%q pi=%q", run+1, trunc(g, 120), trunc(p, 120)))
+					fmt.Sprintf("run %d artifact mismatch: ompig=%q pi=%q", run+1, trunc(g, 120), trunc(p, 120)))
 			}
 		}
 	}
@@ -251,8 +251,8 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 	// bg-painted box padding, compaction/branch summary spacing, tool block
 	// separation, etc.
 	if a.OutputLayoutEqual {
-		for run := range min(len(o.Pig.Runs), len(o.Pi.Runs)) {
-			g := normalizeLayout(o.Pig.Runs[run].Output)
+		for run := range min(len(o.Ompig.Runs), len(o.Pi.Runs)) {
+			g := normalizeLayout(o.Ompig.Runs[run].Output)
 			p := normalizeLayout(o.Pi.Runs[run].Output)
 			for _, rule := range a.NormalizeReplace {
 				re, err := regexp.Compile(rule.Pattern)
@@ -279,7 +279,7 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 						pl = pLines[i]
 					}
 					if gl != pl {
-						diffs = append(diffs, fmt.Sprintf("  line %d: pig=%q pi=%q", i+1, trunc(gl, 60), trunc(pl, 60)))
+						diffs = append(diffs, fmt.Sprintf("  line %d: ompig=%q pi=%q", i+1, trunc(gl, 60), trunc(pl, 60)))
 					}
 					if len(diffs) >= 5 {
 						diffs = append(diffs, "  ...")
@@ -287,7 +287,7 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 					}
 				}
 				o.Failures = append(o.Failures,
-					fmt.Sprintf("run %d layout mismatch (pig %d lines vs pi %d lines):\n%s",
+					fmt.Sprintf("run %d layout mismatch (ompig %d lines vs pi %d lines):\n%s",
 						run+1, len(gLines), len(pLines), strings.Join(diffs, "\n")))
 			}
 		}
@@ -295,8 +295,8 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 
 	// escaped_output_equal: compare every pair's escape-preserving capture.
 	if a.EscapedOutputEqual {
-		for run := range min(len(o.Pig.Runs), len(o.Pi.Runs)) {
-			g := o.Pig.Runs[run].Escaped
+		for run := range min(len(o.Ompig.Runs), len(o.Pi.Runs)) {
+			g := o.Ompig.Runs[run].Escaped
 			p := o.Pi.Runs[run].Escaped
 			// Apply scenario-declared regex replacements (e.g. timing-dependent
 			// "Took 0.1s") to the escaped stream too: the pattern matches the
@@ -314,16 +314,16 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 			}
 			if g != p {
 				o.Failures = append(o.Failures,
-					fmt.Sprintf("run %d escaped output mismatch: pig=%q pi=%q", run+1, trunc(g, 80), trunc(p, 80)))
+					fmt.Sprintf("run %d escaped output mismatch: ompig=%q pi=%q", run+1, trunc(g, 80), trunc(p, 80)))
 			}
 		}
 	}
 
 	// both_reach_ready (tmux-specific)
 	if a.BothReachReady {
-		for _, r := range o.Pig.Runs {
+		for _, r := range o.Ompig.Runs {
 			if !r.ReadyOK {
-				o.Failures = append(o.Failures, "pig did not reach ready pattern")
+				o.Failures = append(o.Failures, "ompig did not reach ready pattern")
 				break
 			}
 		}
@@ -336,25 +336,25 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 	}
 
 	// runtime_ratio_max: the performance gate.
-	// pig.median <= ratio * pi.median, when both have at least one run.
+	// ompig.median <= ratio * pi.median, when both have at least one run.
 	// Suppressed under parallel mode (CPU contention skews the
 	// measurement); use `make parity-perf` for an authoritative reading.
-	if a.RuntimeRatioMax > 0 && o.Pi.MedianMs > 0 && o.Pig.MedianMs > 0 && !o.SkipPerfGate {
-		ratio := float64(o.Pig.MedianMs) / float64(o.Pi.MedianMs)
+	if a.RuntimeRatioMax > 0 && o.Pi.MedianMs > 0 && o.Ompig.MedianMs > 0 && !o.SkipPerfGate {
+		ratio := float64(o.Ompig.MedianMs) / float64(o.Pi.MedianMs)
 		if ratio > a.RuntimeRatioMax {
 			o.Failures = append(o.Failures,
-				fmt.Sprintf("perf regression: pig=%dms pi=%dms ratio=%.2f max=%.2f",
-					o.Pig.MedianMs, o.Pi.MedianMs, ratio, a.RuntimeRatioMax))
+				fmt.Sprintf("perf regression: ompig=%dms pi=%dms ratio=%.2f max=%.2f",
+					o.Ompig.MedianMs, o.Pi.MedianMs, ratio, a.RuntimeRatioMax))
 		}
 	}
 
-	// Structured extension-host assertions (pig-only downstream runtime QC).
+	// Structured extension-host assertions (ompig-only downstream runtime QC).
 	evaluateExtensionAssertions(o, a.Extensions)
 
 	// Propagate per-run errors to failures so they surface.
-	for _, r := range o.Pig.Runs {
+	for _, r := range o.Ompig.Runs {
 		if r.Err != nil {
-			o.Failures = append(o.Failures, fmt.Sprintf("pig run error: %v", r.Err))
+			o.Failures = append(o.Failures, fmt.Sprintf("ompig run error: %v", r.Err))
 		}
 	}
 	for _, r := range o.Pi.Runs {
@@ -363,7 +363,7 @@ func EvaluateOutcome(o *ScenarioOutcome) {
 		}
 	}
 
-	o.Pig.AllOK = allRunsExitOK(o.Pig.Runs)
+	o.Ompig.AllOK = allRunsExitOK(o.Ompig.Runs)
 	o.Pi.AllOK = allRunsExitOK(o.Pi.Runs)
 }
 
@@ -476,7 +476,7 @@ func trunc(s string, n int) string {
 }
 
 // versionTokens lets asymmetric expectations name the pinned versions without
-// copying literals that go stale: {{VERSION}} is PiG's composite version and
+// copying literals that go stale: {{VERSION}} is Ompig's composite version and
 // {{UPSTREAM_VERSION}} is the version the pinned Pi build reports
 // (`pi --version`, the package version).
 var versionTokens = strings.NewReplacer(

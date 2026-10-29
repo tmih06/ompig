@@ -15,7 +15,7 @@ other phases' measures are flat camelCase fields that the longhistory profile de
 Nothing here reaches the network: the model is longhistory's local mock, and a phase whose processes opened a connection
 to anything but the mock fails the sample.
 
-`overhead-seed` and `overhead-sample` adapt the overhead bench (pigbench overhead) the same way, for comparing PiG with
+`overhead-seed` and `overhead-sample` adapt the overhead bench (pigbench overhead) the same way, for comparing Ompig with
 other agents on one node. A size is a number of tool rounds N. One sample runs the profile's scenarios in order, each a
 fresh process against the local mock: `version` (exec to exit), `print` (one prompt, one reply), `print-tools` (one
 prompt, N rounds of one tool call, then the reply), and where the agent has them `rpc` (ready, then N prompts of one
@@ -108,8 +108,8 @@ def sample_line(target, tokens, index, fingerprint, results):
 
 def sample(target, family, binary, tokens, seed, directory, index, phases, mode, timeout):
     """Run the phases for one agent on copies of the generated session and return the result line."""
-    if family not in ("pig", "pi"):
-        raise SystemExit(f"pigbench k8s: family {family!r} is not pig or pi")
+    if family not in ("ompig", "pi"):
+        raise SystemExit(f"pigbench k8s: family {family!r} is not ompig or pi")
     if "rpc" not in phases:
         raise SystemExit("pigbench k8s: the rpc phase gives the line's open and turn[]; it cannot be left out")
     with open(os.path.join(directory, f"k8s-{tokens}.json")) as f:
@@ -152,7 +152,7 @@ def sample(target, family, binary, tokens, seed, directory, index, phases, mode,
 OVERHEAD_SCENARIOS = ["version", "print", "print-tools", "rpc", "pty"]
 
 # Agent families the overhead sample can configure against the mock (pigbench.harness).
-OVERHEAD_FAMILIES = ["pig", "pi", "codex"]
+OVERHEAD_FAMILIES = ["ompig", "pi", "codex"]
 
 # overhead result field -> sample-line field, per scenario.
 OVERHEAD_FIELDS = {
@@ -286,7 +286,7 @@ def add_parser(sub):
     g.add_argument("--dir", required=True)
     s = k.add_parser("sample", help="measure one agent on a copy of the generated session; print one k8sbench result line")
     s.add_argument("--target", required=True, help="the profile's target name, echoed in the line")
-    s.add_argument("--family", required=True, choices=["pig", "pi"])
+    s.add_argument("--family", required=True, choices=["ompig", "pi"])
     s.add_argument("--binary", required=True, help="the agent's executable")
     s.add_argument("--tokens", type=int, required=True)
     s.add_argument("--seed", type=int, required=True)

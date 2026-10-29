@@ -29,7 +29,7 @@ CANNOT = {
            "long": "stalls at prompt 47 (~2.6M tokens): gi holds the next submission (\"draft: held submission; /draft check before another send\") and waits for the user"},
     "omp": {"long": "compacts the conversation itself at the 200k window (about prompt 8-9; its own token estimate, not the mock's usage): the mock's \"(prompt N)\" counter then restarts and the harness waits for a number that never comes; measured with a 5M window in ctx_scale instead"},
 }
-DEFAULT_ARMS = "pig-0.4.1,pig-tip,pibolt-0.7.4,pibolt-0.7.3,pi-node,pi-bun,gi,omp"
+DEFAULT_ARMS = "ompig-0.4.1,ompig-tip,pibolt-0.7.4,pibolt-0.7.3,pi-node,pi-bun,gi,omp"
 
 
 def suite_dir(root: Path) -> Path:
@@ -68,7 +68,7 @@ def tool(bench: Path, name: str, args: list[str], out: Path, timeout: int, pin: 
     with open(out, "w") as f:
         try:
             p = subprocess.run([*(["taskset", "-c", pin] if pin else []), sys.executable, str(bench / name), *args], stdout=f, stderr=subprocess.STDOUT, timeout=timeout,
-                               env={k: v for k, v in os.environ.items() if not k.startswith(("PIG_", "PI_", "NODE_", "BUN_"))})
+                               env={k: v for k, v in os.environ.items() if not k.startswith(("OMPIG_", "PI_", "NODE_", "BUN_"))})
             rc = p.returncode
         except subprocess.TimeoutExpired:
             rc = "timeout"

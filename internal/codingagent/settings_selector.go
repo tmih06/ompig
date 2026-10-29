@@ -7,9 +7,9 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
 )
 
 // SettingsConfig is upstream's SettingsConfig: the values the selector shows.
@@ -56,8 +56,8 @@ type SettingsConfig struct {
 	// FullscreenWheelScrollLines is upstream's WheelScrollLines: "auto" or a line count.
 	FullscreenWheelScrollLines WheelScrollLines
 	Warnings                   WarningSettings
-	// MaskSecretInput feeds the PiG-only "Mask secret input" row.
-	// pig divergence (D80): configurable input privacy leaves the upstream setting order intact.
+	// MaskSecretInput feeds the Ompig-only "Mask secret input" row.
+	// ompig divergence (D80): configurable input privacy leaves the upstream setting order intact.
 	MaskSecretInput bool
 }
 
@@ -99,8 +99,8 @@ type SettingsCallbacks struct {
 	OnFullscreenCopyOnSelectChange     func(enabled bool)
 	OnFullscreenWheelScrollLinesChange func(lines WheelScrollLines)
 	OnWarningsChange                   func(warnings WarningSettings)
-	// OnMaskSecretInputChange handles the PiG-only "Mask secret input" row.
-	// pig divergence (D80): configurable input privacy leaves the upstream setting order intact.
+	// OnMaskSecretInputChange handles the Ompig-only "Mask secret input" row.
+	// ompig divergence (D80): configurable input privacy leaves the upstream setting order intact.
 	OnMaskSecretInputChange func(enabled bool)
 	OnCancel                func()
 }
@@ -543,7 +543,7 @@ func NewSettingsSelectorComponent(config SettingsConfig, callbacks SettingsCallb
 		cycle("steering-mode", "Steering mode", "Enter while streaming queues steering messages. 'one-at-a-time': deliver one, wait for response. 'all': deliver all at once.", config.SteeringMode, "one-at-a-time", "all"),
 		cycle("follow-up-mode", "Follow-up mode", tui.ActionKeyDisplayTextOr("app.message.followUp", "alt+enter")+" queues follow-up messages until agent stops. 'one-at-a-time': deliver one, wait for response. 'all': deliver all at once.", config.FollowUpMode, "one-at-a-time", "all"),
 		cycle("transport", "Transport", "Preferred transport for providers that support multiple transports", config.Transport, "sse", "websocket", "websocket-cached", "auto"),
-		// pig divergence (D64): Pi's "share-destination" item (auto, gist, radius) is omitted because PiG's /share always uploads to the PiG gateway.
+		// ompig divergence (D64): Pi's "share-destination" item (auto, gist, radius) is omitted because Ompig's /share always uploads to the Ompig gateway.
 		cycle("http-idle-timeout", "HTTP idle timeout", "Maximum idle gap while waiting for HTTP headers or body chunks. Disable for local models that pause longer than five minutes.", formatHTTPIdleTimeoutMs(config.HttpIdleTimeoutMs), timeoutLabels...),
 		cycle("cache-warming-mode", "Cache warming", "off; streaming while the agent runs; idle also between runs while continuation stays profitable", string(config.CacheWarmingMode), cacheWarmingModes...),
 		toggle("hide-thinking", "Hide thinking", "Hide thinking blocks in assistant responses", config.HideThinkingBlock),
@@ -555,8 +555,8 @@ func NewSettingsSelectorComponent(config SettingsConfig, callbacks SettingsCallb
 		cycle("default-project-trust", "Default project trust", "Fallback behavior when no extension or saved trust decision decides project trust", defaultProjectTrustLabel(config.DefaultProjectTrust), trustLabels...),
 		cycle("double-escape-action", "Double-escape action", "Action when pressing Escape twice with empty editor", config.DoubleEscapeAction, doubleEscapeActions()...),
 		cycle("tree-filter-mode", "Tree filter mode", "Default filter when opening /tree", config.TreeFilterMode, "default", "no-tools", "user-only", "labeled-only", "all"),
-		// pig divergence (D80): configurable input privacy leaves the upstream setting order intact.
-		toggle("mask-secret-input", "Mask secret input", "PiG default: hide secret input with a count and last four characters. Differs from Pi; false restores Pi's plain-text behavior.", config.MaskSecretInput),
+		// ompig divergence (D80): configurable input privacy leaves the upstream setting order intact.
+		toggle("mask-secret-input", "Mask secret input", "Ompig default: hide secret input with a count and last four characters. Differs from Pi; false restores Pi's plain-text behavior.", config.MaskSecretInput),
 		tui.SettingItem{
 			ID: "warnings", Label: "Warnings", Description: "Enable or disable individual warnings", CurrentValue: "configure",
 			Submenu: func(_ string, doneWithOptions func(*string, *tui.SubmenuDoneOptions)) tui.Component {
@@ -604,7 +604,7 @@ func NewSettingsSelectorComponent(config SettingsConfig, callbacks SettingsCallb
 			},
 		},
 	)
-	// pig additive (D92): the rows of a stripped built-in are not offered.
+	// ompig additive (D92): the rows of a stripped built-in are not offered.
 	items = slices.DeleteFunc(items, func(item tui.SettingItem) bool { return settingStripped(item.ID) })
 
 	selector := &SettingsSelectorComponent{}
@@ -618,7 +618,7 @@ func (s *SettingsSelectorComponent) IsDirty() bool {
 	return s.Container.IsDirty() || s.settingsList.IsDirty()
 }
 
-// pig additive (D91): SurfaceLive reports that the list changes without invalidating the
+// ompig additive (D91): SurfaceLive reports that the list changes without invalidating the
 // selector, as IsDirty does, so a TuiSurface rebuilds it every frame.
 func (s *SettingsSelectorComponent) SurfaceLive() bool { return true }
 

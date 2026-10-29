@@ -29,14 +29,14 @@ func receiptStagingFDs(t *testing.T) int {
 
 // A failed receipt write must neither keep the staged temp file open nor leave
 // it behind. The CA sidecar is group-readable, so readUpdateTransportCA fails
-// after the temp file was created. Self-update and its receipt are PiG
+// after the temp file was created. Self-update and its receipt are Ompig
 // additions (D39); Pi has no counterpart.
 func TestWriteStandaloneReceiptFailureReleasesStagedFile(t *testing.T) {
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("x"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	root := ConfigRoot()
 	if err := os.MkdirAll(root, 0o700); err != nil {
 		t.Fatal(err)

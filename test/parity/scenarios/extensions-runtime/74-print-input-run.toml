@@ -25,9 +25,9 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "PRINT_INPUT_RUN_LOG={{TEMP}}/print-input-run.log"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "PRINT_INPUT_RUN_LOG={{TEMP}}/print-input-run.log"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PRINT_INPUT_RUN_LOG={{TEMP}}/print-input-run.log"]
-pig_extensions = ["testdata/ext/print-input-run.mjs"]
+ompig_extensions = ["testdata/ext/print-input-run.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/print-input-run.mjs",

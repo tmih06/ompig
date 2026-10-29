@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/session-export.ts
@@ -112,7 +112,7 @@ emit(input.probes.map(({ name, leaf }) => {
 		if got.Error != "" || want[i].Error != "" {
 			if got.Error != want[i].Error {
 				if failures++; failures <= 8 {
-					t.Errorf("%s leaf %q: PiG error %q, Pi error %q", p.Name, p.Leaf, got.Error, want[i].Error)
+					t.Errorf("%s leaf %q: Ompig error %q, Pi error %q", p.Name, p.Leaf, got.Error, want[i].Error)
 				}
 			}
 			continue
@@ -120,13 +120,13 @@ emit(input.probes.map(({ name, leaf }) => {
 		// The header line carries the export time.
 		if len(got.Lines) != len(want[i].Lines) {
 			failures++
-			t.Errorf("%s leaf %q: PiG %d lines, Pi %d", p.Name, p.Leaf, len(got.Lines), len(want[i].Lines))
+			t.Errorf("%s leaf %q: Ompig %d lines, Pi %d", p.Name, p.Leaf, len(got.Lines), len(want[i].Lines))
 			continue
 		}
 		for k := 1; k < len(got.Lines); k++ {
 			if got.Lines[k] != want[i].Lines[k] {
 				if failures++; failures <= 8 {
-					t.Errorf("%s leaf %q line %d:\nPiG %s\nPi  %s", p.Name, p.Leaf, k, got.Lines[k], want[i].Lines[k])
+					t.Errorf("%s leaf %q line %d:\nOmpig %s\nPi  %s", p.Name, p.Leaf, k, got.Lines[k], want[i].Lines[k])
 				}
 				break
 			}
@@ -141,7 +141,7 @@ emit(input.probes.map(({ name, leaf }) => {
 		}
 		if len(got.Lines) > 0 && stripTime(got.Lines[0]) != stripTime(want[i].Lines[0]) {
 			if failures++; failures <= 8 {
-				t.Errorf("%s header:\nPiG %s\nPi  %s", p.Name, got.Lines[0], want[i].Lines[0])
+				t.Errorf("%s header:\nOmpig %s\nPi  %s", p.Name, got.Lines[0], want[i].Lines[0])
 			}
 		}
 	}

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type overflowProbe struct {
@@ -126,7 +126,7 @@ func TestContextOverflowMatchesPiOnSeededMessages(t *testing.T) {
 				if probe.ErrorMessage != nil {
 					msg = *probe.ErrorMessage
 				}
-				t.Errorf("%+v message %q differs from Pi:\n  Pig %+v\n  Pi  %+v", probe, msg, got, expected[i])
+				t.Errorf("%+v message %q differs from Pi:\n  Ompig %+v\n  Pi  %+v", probe, msg, got, expected[i])
 			}
 		}
 	}

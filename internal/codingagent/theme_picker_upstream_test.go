@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // theme-picker.test.ts:34; startup's directory and explicit-file loading paths must expose the content name and its source path through getAllThemes.

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/yaml12"
+	"github.com/tmih06/ompig/internal/yaml12"
 )
 
 // ParseOrdered keeps the key order the yaml package inserts: document order, at every depth (the core schema reads `<<` as an ordinary key). Parse returns maps, which have none.

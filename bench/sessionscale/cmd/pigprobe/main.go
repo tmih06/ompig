@@ -2,7 +2,7 @@
 
 //go:build linux || darwin
 
-// Command pigprobe is cmd/pig with two additions for measurement: SIGUSR1 writes a heap profile (after a collection) to $SESSIONSCALE_HEAP_DIR/heap-<n>.pprof, then an empty heap-<n>.pprof.done marker; SIGUSR2 starts a CPU profile to $SESSIONSCALE_HEAP_DIR/cpu-<n>.pprof and the next SIGUSR2 stops it (then cpu-<n>.pprof.done). Everything else is cli.Main, the code path of the release binary.
+// Command pigprobe is cmd/ompig with two additions for measurement: SIGUSR1 writes a heap profile (after a collection) to $SESSIONSCALE_HEAP_DIR/heap-<n>.pprof, then an empty heap-<n>.pprof.done marker; SIGUSR2 starts a CPU profile to $SESSIONSCALE_HEAP_DIR/cpu-<n>.pprof and the next SIGUSR2 stops it (then cpu-<n>.pprof.done). Everything else is cli.Main, the code path of the release binary.
 package main
 
 import (
@@ -14,7 +14,7 @@ import (
 	"runtime/pprof"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/coding/cli"
+	"github.com/tmih06/ompig/coding/cli"
 )
 
 func main() {

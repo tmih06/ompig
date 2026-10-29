@@ -10,8 +10,8 @@ import (
 
 func validSpriteDefinition() SpriteDefinition {
 	return SpriteDefinition{
-		ID:      "blue-pig",
-		Name:    "Blue PiG",
+		ID:      "blue-ompig",
+		Name:    "Blue Ompig",
 		Tagline: "A sprite from an extension.",
 		Mascot: []string{
 			"................",
@@ -47,7 +47,7 @@ func TestValidateSpriteDefinitionCopiesAcceptedInput(t *testing.T) {
 	if validated.Mascot()[1] != "...OOOO..OOOO..." || validated.Palette()['P'] != (color.RGBA{0x5B, 0x8D, 0xEF, 0xFF}) {
 		t.Fatalf("validated definition shares the caller's data: %q %v", validated.Mascot()[1], validated.Palette()['P'])
 	}
-	if validated.ID() != "blue-pig" || validated.Name() != "Blue PiG" || validated.Tagline() != "A sprite from an extension." || len(validated.Mascot()) != LoginMascotHeight {
+	if validated.ID() != "blue-ompig" || validated.Name() != "Blue Ompig" || validated.Tagline() != "A sprite from an extension." || len(validated.Mascot()) != LoginMascotHeight {
 		t.Fatalf("validated = %+v", validated)
 	}
 }
@@ -61,7 +61,7 @@ func TestValidateSpriteDefinitionRejectsInvalidFields(t *testing.T) {
 		{"empty id", func(d *SpriteDefinition) { d.ID = "" }, "id"},
 		{"long id", func(d *SpriteDefinition) { d.ID = strings.Repeat("a", SpriteIDLimit+1) }, "id"},
 		{"uppercase id", func(d *SpriteDefinition) { d.ID = "Blue" }, "id"},
-		{"space in id", func(d *SpriteDefinition) { d.ID = "blue pig" }, "id"},
+		{"space in id", func(d *SpriteDefinition) { d.ID = "blue ompig" }, "id"},
 		{"leading hyphen", func(d *SpriteDefinition) { d.ID = "-blue" }, "id"},
 		{"trailing hyphen", func(d *SpriteDefinition) { d.ID = "blue-" }, "id"},
 		{"missing mascot", func(d *SpriteDefinition) { d.Mascot = nil }, "mascot"},
@@ -92,13 +92,13 @@ func TestValidateSpriteDefinitionRejectsInvalidFields(t *testing.T) {
 }
 
 func TestDecodeSpriteDefinitionJSONIsStrict(t *testing.T) {
-	valid := `{"id":"blue-pig","name":"Blue PiG","tagline":"t","mascot":["...............P","................","................","................","................","................","................","................","................","................","................","................","................","................"],"palette":{"P":"#5B8DEF"}}`
+	valid := `{"id":"blue-ompig","name":"Blue Ompig","tagline":"t","mascot":["...............P","................","................","................","................","................","................","................","................","................","................","................","................","................"],"palette":{"P":"#5B8DEF"}}`
 	if _, err := DecodeSpriteDefinitionJSON([]byte(valid)); err != nil {
 		t.Fatalf("valid sprite: %v", err)
 	}
 	for name, input := range map[string]string{
 		"unknown field":   strings.Replace(valid, `"tagline":"t"`, `"tagline":"t","extra":1`, 1),
-		"duplicate field": strings.Replace(valid, `"name":"Blue PiG"`, `"name":"Blue PiG","name":"Other"`, 1),
+		"duplicate field": strings.Replace(valid, `"name":"Blue Ompig"`, `"name":"Blue Ompig","name":"Other"`, 1),
 		"trailing value":  valid + " {}",
 		"not an object":   `[]`,
 	} {

@@ -740,7 +740,7 @@ func writeJSONField(output *bytes.Buffer, indent, name string, value json.RawMes
 func tableReportShape(dataset string) (int, []string, string, error) {
 	switch dataset {
 	case PortMapDataset:
-		return 3, []string{"upstream", "pig", "status"}, PortMapDataset, nil
+		return 3, []string{"upstream", "ompig", "status"}, PortMapDataset, nil
 	case CoverageDataset:
 		return 5, []string{"upstream", "port", "scenarios", "behavioral", "last run"}, PortMapDataset, nil
 	default:
@@ -797,7 +797,7 @@ func tomlReportDatasetShape(dataset string) (tomlReportShape, error) {
 			rowsField:      "contract",
 			identityField:  "id",
 			rowFields: []string{
-				"id", "upstream_id", "family", "kind", "claim", "status", "pig_targets", "evidence",
+				"id", "upstream_id", "family", "kind", "claim", "status", "ompig_targets", "evidence",
 			},
 			claimDataset: BehaviorContractDataset,
 			nestedField:  "upstream",

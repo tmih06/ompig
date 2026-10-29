@@ -25,7 +25,7 @@ Upstream: `.upstream/v1.0.0` against `.upstream/v0.99.2`. Base: `porter/pi-0.99.
 
 The cases the sibling reported green before the fixes stay green: the concurrent-401 refresh with invalid resource metadata, the two refresh cases, signing out of legacy credentials, the "drops" loadout case, and the next-prompt case. Mutation checks: each pending-tools step and each OAuth fix fails at least one of these tests when removed.
 
-## PiG regression tests added
+## Ompig regression tests added
 
 - `mcp/client_cursor_test.go`: `null`, `""` and numeric cursors.
 - `mcp/oauth/absent_test.go`: absent token, registration and metadata fields; invalid URL message; `received none`; StepUpScope (JavaScript `\s`); a present empty `iss`; empty `scopes_supported`; a configured metadata URL leaves cached discovery alone.
@@ -38,8 +38,8 @@ The cases the sibling reported green before the fixes stay green: the concurrent
 
 - `packages/coding-agent/src/extensions/mcp/index.ts` servers-section intro (only the reaches in use): part of the codemode prompt change, left to c1-codemode. Its upstream-sync row stays pending.
 - `test/mcp-conformance/` (npx conformance runner): see p1-mcp-oauth PROGRESS.
-- Generated files (`pig-go.json`, coverage) are left for the integrator per lane rules; `make interface-go` regenerates them cleanly.
+- Generated files (`ompig-go.json`, coverage) are left for the integrator per lane rules; `make interface-go` regenerates them cleanly.
 
 ## Gates
 
-`go vet` (linux and GOOS=windows) and golangci-lint on `mcp/...`, `coding`, `coding/mcpext`, `coding/extension`, `internal/codingagent`, `extensions/sdk`: clean. `go test -race -count=3` on `mcp/...`, `coding/mcpext` and the session MCP tests: green. `coding`, `cmd/pig` and `internal/codingagent` show only failures that the base commit shows too (oracles recorded from upstream 0.99.2, Node-comparison tests). `make ci-drift`/`ci-contracts` fail only on pre-existing 1.0.0 pin findings (divergence-guard markers on removed harness files, docs-drift claim, correspondence gaps, sdk-surface generateImages, pending hot-path tests of other areas); `make upstream-delta` and `make test-inventory` accept the rows this branch adds.
+`go vet` (linux and GOOS=windows) and golangci-lint on `mcp/...`, `coding`, `coding/mcpext`, `coding/extension`, `internal/codingagent`, `extensions/sdk`: clean. `go test -race -count=3` on `mcp/...`, `coding/mcpext` and the session MCP tests: green. `coding`, `cmd/ompig` and `internal/codingagent` show only failures that the base commit shows too (oracles recorded from upstream 0.99.2, Node-comparison tests). `make ci-drift`/`ci-contracts` fail only on pre-existing 1.0.0 pin findings (divergence-guard markers on removed harness files, docs-drift claim, correspondence gaps, sdk-surface generateImages, pending hot-path tests of other areas); `make upstream-delta` and `make test-inventory` accept the rows this branch adds.

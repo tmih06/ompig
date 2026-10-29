@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/configroot"
 )
 
 type configRootCase struct {
@@ -107,15 +107,15 @@ func rustProbeBinary(t *testing.T, root string) string {
 				Test bool `json:"test"`
 			} `json:"profile"`
 		}
-		if json.Unmarshal([]byte(line), &message) == nil && message.Executable != "" && message.Profile.Test && message.Target.Name == "pig_sdk" {
+		if json.Unmarshal([]byte(line), &message) == nil && message.Executable != "" && message.Profile.Test && message.Target.Name == "ompig_sdk" {
 			return message.Executable
 		}
 	}
-	t.Fatal("cargo reported no pig_sdk test executable")
+	t.Fatal("cargo reported no ompig_sdk test executable")
 	return ""
 }
 
-// The host's internal/configroot and the Go, Python, Rust and Node SDK getters answer one env matrix identically: PIG_HOME set/empty/tilde/literal,
+// The host's internal/configroot and the Go, Python, Rust and Node SDK getters answer one env matrix identically: OMPIG_HOME set/empty/tilde/literal,
 // XDG_CONFIG_HOME set/empty, and a failing home directory. Each case also matches the matrix's stated answer, so an agreement on a wrong value fails.
 func TestConfigRootGettersAgreeAcrossLanguages(t *testing.T) {
 	root := findModuleRoot(t)
@@ -129,13 +129,13 @@ func TestConfigRootGettersAgreeAcrossLanguages(t *testing.T) {
 	}
 	rustBinary := rustProbeBinary(t, root)
 	pyPath := filepath.Join(root, "extensions", "sdk-py")
-	nodeModule := filepath.Join(root, "coding", "extension", "host", "subprocess", "runtime-node", "shims", "pig-config.mjs")
+	nodeModule := filepath.Join(root, "coding", "extension", "host", "subprocess", "runtime-node", "shims", "ompig-config.mjs")
 	nodeScript := `import { pathToFileURL } from "node:url";
 const { getConfigRoot } = await import(pathToFileURL(process.argv[1]).href);
 try { console.log("CONFIG_HOME_OK=" + getConfigRoot()); } catch (error) { console.log("CONFIG_HOME_ERR=" + error.message); }`
-	pythonScript := `import pig_sdk
+	pythonScript := `import ompig_sdk
 try:
-    print("CONFIG_HOME_OK=" + pig_sdk.Context(extension=None).config_home)
+    print("CONFIG_HOME_OK=" + ompig_sdk.Context(extension=None).config_home)
 except RuntimeError as error:
     print("CONFIG_HOME_ERR=" + str(error))`
 
@@ -148,7 +148,7 @@ except RuntimeError as error:
 				want = "ok:" + strings.ReplaceAll(*tc.Want, "<HOME>", filepath.ToSlash(home))
 			}
 
-			for _, name := range []string{"PIG_HOME", "XDG_CONFIG_HOME"} {
+			for _, name := range []string{"OMPIG_HOME", "XDG_CONFIG_HOME"} {
 				t.Setenv(name, "")
 				_ = os.Unsetenv(name)
 			}

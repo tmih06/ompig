@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func isolateExampleHost(t *testing.T) {
@@ -19,14 +19,14 @@ func isolateExampleHost(t *testing.T) {
 	}
 	t.Setenv("PATH", filepath.Dir(strings.TrimSpace(string(node)))+string(os.PathListSeparator)+os.Getenv("PATH"))
 	root := t.TempDir()
-	for _, name := range []string{"HOME", "PIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_RUNTIME_DIR"} {
+	for _, name := range []string{"HOME", "OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_RUNTIME_DIR"} {
 		path := filepath.Join(root, name)
 		if err := os.MkdirAll(path, 0o700); err != nil {
 			t.Fatal(err)
 		}
 		t.Setenv(name, path)
 	}
-	for _, name := range []string{"PI_SESSION_FILE", "PI_SESSION_ID", "PIG_SDK_GO_ROOT"} {
+	for _, name := range []string{"PI_SESSION_FILE", "PI_SESSION_ID", "OMPIG_SDK_GO_ROOT"} {
 		t.Setenv(name, "")
 	}
 	// Socket paths must fit the platform limit independently of the test name and temporary HOME.

@@ -5,9 +5,9 @@ package sts
 import (
 	"context"
 	"fmt"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/sts/types"
 	smithy "github.com/aws/smithy-go"
 	"github.com/aws/smithy-go/middleware"
+	"github.com/tmih06/ompig/third_party/awssdk/service/sts/types"
 )
 
 type validateOpAssumeRole struct {

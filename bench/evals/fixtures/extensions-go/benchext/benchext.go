@@ -2,14 +2,14 @@
 
 // Package benchext is the Go SDK port of bench-ext-NN.ts, the ten identical trivial extensions of the overhead bench: a tool, a command and four
 // event handlers. The port is behaviour-equivalent to the TypeScript original (same tool result, same command, same handler set), so one scenario
-// measures the same ten extensions in every realization: isolated subprocess, packed cell and fused Piglet Binary.
+// measures the same ten extensions in every realization: isolated subprocess, packed cell and fused Ompiglet Binary.
 package benchext
 
 import (
 	"fmt"
 	"sync/atomic"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // New returns extension bench-ext-<nn> with tool bench_tool_<nn>, command bench-<nn> and handlers for session_start, before_agent_start, tool_call and

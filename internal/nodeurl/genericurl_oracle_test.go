@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // ParseURL against Node's own `new URL(value)` for every scheme (non-special, http, https, ws, wss, ftp and file): opaque paths,

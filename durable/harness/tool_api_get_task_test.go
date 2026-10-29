@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // packages/durable/src/harness/types.ts:200 ToolExecutionApi.getTask(id): the record of a task, or undefined when absent. A running tool reads its own task and

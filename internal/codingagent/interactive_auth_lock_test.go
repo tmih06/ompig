@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// Pi's interactive login stores the new credential through pi-ai's Models.login, which calls credentials.modify (models.ts:593-610): FileAuthStorageBackend.withLockAsync, whose lock waits up to 30 seconds for another process's lock (auth-storage.ts:118-146). A login that finishes while another Pi or PiG briefly holds auth.json's lock therefore still stores its credential. PiG's interactive logins store through saveLoginCredential with the same lock. Pi's own Models.login runs on the same state first: the test holds the lock for 300 ms after the store is opened, longer than the ten 20 ms attempts of the synchronous lock.
+// Pi's interactive login stores the new credential through pi-ai's Models.login, which calls credentials.modify (models.ts:593-610): FileAuthStorageBackend.withLockAsync, whose lock waits up to 30 seconds for another process's lock (auth-storage.ts:118-146). A login that finishes while another Pi or Ompig briefly holds auth.json's lock therefore still stores its credential. Ompig's interactive logins store through saveLoginCredential with the same lock. Pi's own Models.login runs on the same state first: the test holds the lock for 300 ms after the store is opened, longer than the ten 20 ms attempts of the synchronous lock.
 func TestInteractiveLoginStoresThroughAuthStorageLockContentionUpstream(t *testing.T) {
 	root, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk-ts", "node_modules", "@earendil-works", "pi-coding-agent"))
 	if err != nil {
@@ -36,7 +36,7 @@ func TestInteractiveLoginStoresThroughAuthStorageLockContentionUpstream(t *testi
 		return released
 	}
 
-	// On Windows, Pi's lock mkdir hits EPERM instead of EEXIST while the held lock directory is being deleted (a pending delete), and Pi's lock only retries EEXIST. That is Node's behavior, so the oracle half cannot hold the lock briefly there; PiG's own half below still runs.
+	// On Windows, Pi's lock mkdir hits EPERM instead of EEXIST while the held lock directory is being deleted (a pending delete), and Pi's lock only retries EEXIST. That is Node's behavior, so the oracle half cannot hold the lock briefly there; Ompig's own half below still runs.
 	if runtime.GOOS != "windows" {
 		piPath := filepath.Join(t.TempDir(), "auth.json")
 		if err := os.WriteFile(piPath, []byte(stored), 0o600); err != nil {

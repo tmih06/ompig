@@ -3,7 +3,7 @@ package testfixture
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 type noUIComponent struct{}

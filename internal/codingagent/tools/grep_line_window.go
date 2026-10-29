@@ -7,13 +7,13 @@ import (
 )
 
 const (
-	// pig divergence (D151): grepWindowChunk is the read size of the line window; Pi reads whole files.
+	// ompig divergence (D151): grepWindowChunk is the read size of the line window; Pi reads whole files.
 	grepWindowChunk = 64 << 10
 	// grepStoredLineRunes bounds a stored line. grep prints a line cut to GrepMaxLineLength UTF-16 units plus a notice when it is longer, so the first GrepMaxLineLength+1 code points decide the same output as the whole line.
 	grepStoredLineRunes = GrepMaxLineLength + 1
 )
 
-// pig divergence (D151): grepLineWindow reads a file's lines in order and keeps the lines a later match can still need,
+// ompig divergence (D151): grepLineWindow reads a file's lines in order and keeps the lines a later match can still need,
 // so the context of consecutive matches is served without holding the
 // file. Lines split as upstream getFileLines splits them: the text is decoded
 // as UTF-8, then "\r\n", "\r" and "\n" each end a line, and the text after the

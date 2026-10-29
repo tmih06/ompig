@@ -15,8 +15,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Ports packages/chord/test/manager.test.ts ("host manager (real child processes)"). The real-process cases fork
@@ -831,7 +831,7 @@ func TestProcessLockAdmitsOneHolderWhenTheTemporaryDirectoryIsTooDeepForASocketP
 // manager.ts:93-138 processLock: one holder per name; a second fails with unavailable/locked; release frees it; a
 // leftover socket file nobody accepts on is taken over (platforms with socket files).
 func TestProcessLock(t *testing.T) {
-	name := "pig-test-" + t.Name() + "-" + time.Now().Format("150405.000000000")
+	name := "ompig-test-" + t.Name() + "-" + time.Now().Format("150405.000000000")
 	release, err := ProcessLock(name)
 	if err != nil {
 		t.Fatal(err)

@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// OpenRouterRoutingVariants are the routing variants of OpenRouter that PiG offers for every OpenRouter chat model (D199): `:nitro`
+// OpenRouterRoutingVariants are the routing variants of OpenRouter that Ompig offers for every OpenRouter chat model (D199): `:nitro`
 // sorts the model's providers by throughput and `:floor` by price. OpenRouter accepts them on any model id and never lists them in
 // /models, so Pi's catalog has none; https://openrouter.ai/docs/guides/routing/model-variants/overview. The built-in catalog does
 // not store them: a variant is derived from its base entry when it is looked up (LookupModel, LookupModelExact) or listed
@@ -28,7 +28,7 @@ func OpenRouterRoutingVariant(provider, id string) (base, variant string, ok boo
 
 // OpenRouterVariant is the routing variant of m, an OpenRouter chat entry that is not itself a variant.
 //
-// pig divergence (D199): Pi lists only what OpenRouter's /models returns. OpenRouter's variants page tells model pickers to derive
+// ompig divergence (D199): Pi lists only what OpenRouter's /models returns. OpenRouter's variants page tells model pickers to derive
 // the routing variants from the base entries and to read every other property from the base entry ("Offering routing variants in a
 // model picker"), so a variant repeats its base model's api, endpoint, pricing, limits, capabilities and thinking levels and
 // differs in its id, its name ("<name> (nitro)") and its JSON record.

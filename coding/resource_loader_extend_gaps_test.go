@@ -7,9 +7,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // resource-loader.ts getExtensions returns the last load's extensions, errors, warnings and shared runtime; loadProjectTrustExtensions leaves the settings untrusted; an extension without source info gets the source info of its path on itself and its tools.

@@ -17,6 +17,8 @@ func TestAppKeybindingConstantsAreTheAppKeybindingTable(t *testing.T) {
 		AppSessionDelete, AppSessionDeleteNoninvasive, AppModelsSave, AppModelsEnableAll, AppModelsClearAll, AppModelsToggleProvider,
 		AppModelsReorderUp, AppModelsReorderDown, AppTreeFilterDefault, AppTreeFilterNoTools, AppTreeFilterUserOnly, AppTreeFilterLabeledOnly,
 		AppTreeFilterAll, AppTreeFilterCycleForward, AppTreeFilterCycleBackward,
+		// ompig divergence (D-SUBAGENT-5): the Agent Hub keybinding.
+		AppAgentsHub,
 	}
 	var got []string
 	for _, c := range constants {
@@ -42,6 +44,15 @@ func TestAppKeybindingVariantsMatchPiAppKeybindings(t *testing.T) {
 	var want []AppKeybinding
 	for _, m := range regexp.MustCompile(`(?m)^\t"(app\.[\w.]+)": \{`).FindAllSubmatch(raw, -1) {
 		want = append(want, AppKeybinding(m[1]))
+	}
+	// ompig divergence (D-SUBAGENT-5): app.agents.hub opens the Agent Hub, which
+	// Pi has no equivalent of. It sorts before app.models.save in the table.
+	if len(want) > 0 {
+		at := slices.Index(want, "app.models.save")
+		if at < 0 {
+			at = len(want)
+		}
+		want = slices.Insert(want, at, AppAgentsHub)
 	}
 	if len(want) == 0 || !slices.Equal(appKeybindingIDs, want) {
 		t.Fatalf("AppKeybinding variants\n got  %v\n Pi   %v", appKeybindingIDs, want)

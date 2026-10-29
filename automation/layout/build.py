@@ -37,8 +37,8 @@ REQUIRED_FILES = {
     ".github/workflows/ci.yml", ".github/workflows/security.yml",
 }
 # Only these variables designate a checkout root. In particular, $home/agent,
-# $PIG_HOME/agent, $agent/dist, and $ai/dist are not repository source paths.
-ROOT_VARIABLES = ("root", "repo", "repo_root", "root_dir", "source_root", "ROOT", "REPO_ROOT", "PIG_ROOT", "SOURCE_ROOT", "PWD")
+# $OMPIG_HOME/agent, $agent/dist, and $ai/dist are not repository source paths.
+ROOT_VARIABLES = ("root", "repo", "repo_root", "root_dir", "source_root", "ROOT", "REPO_ROOT", "OMPIG_ROOT", "SOURCE_ROOT", "PWD")
 VARIABLE = r"\$(?:" + "|".join(ROOT_VARIABLES) + r")|\$\{(?:" + "|".join(ROOT_VARIABLES) + r")\}|\$\(CURDIR\)"
 PATH_START = r"(?<![\w/.$-])(?P<prefix>\./|/|(?:" + VARIABLE + r")/)?"
 DOCUMENT_PATH = re.compile(PATH_START + r"(?P<name>" + "|".join(re.escape(name) for name in DOCUMENT_MOVES) + r")(?=[\s\"'`)|,:#]|\.(?:\s|$)|$)", re.MULTILINE)
@@ -80,8 +80,8 @@ def rewrite(name: str, text: str) -> str:
     text = package_path.sub(lambda m: (m["prefix"] or "") + PACKAGE_MOVES[m["name"]], text)
     text = DOCUMENT_PATH.sub(lambda m: (m["prefix"] or "") + DOCUMENT_MOVES[m["name"]], text)
     for old, new in DOCUMENT_MOVES.items():
-        text = text.replace("https://github.com/MichaelKinsy/PiG/blob/main/" + old,
-                            "https://github.com/MichaelKinsy/PiG/blob/main/" + new)
+        text = text.replace("https://github.com/tmih06/ompig/blob/main/" + old,
+                            "https://github.com/tmih06/ompig/blob/main/" + new)
     if name.endswith(".py"):
         # Match a Path division operand, not keywords such as npm's "ai".
         for old, new in PACKAGE_MOVES.items():
@@ -95,8 +95,8 @@ def rewrite(name: str, text: str) -> str:
             ('("agent", "ai", "coding", "cmd", "internal", "tui")', '("cmd", "internal")'),
         ],
         "automation/ci/check-divergence-quality.py": [
-            ('("internal/agent/", "internal/ai/", "cmd/", "internal/coding/", "extensions/", "internal/", "parity/", "piglets/", "automation/", "tests/", "internal/tui/")',
-             '("cmd/", "extensions/", "internal/", "parity/", "piglets/", "automation/", "tests/")'),
+            ('("internal/agent/", "internal/ai/", "cmd/", "internal/coding/", "extensions/", "internal/", "parity/", "ompiglets/", "automation/", "tests/", "internal/tui/")',
+             '("cmd/", "extensions/", "internal/", "parity/", "ompiglets/", "automation/", "tests/")'),
         ],
         "automation/ci/coverage_recipe_test.py": [
             ('(root / "internal" / "coding").mkdir()', '(root / "internal" / "coding").mkdir(parents=True)'),

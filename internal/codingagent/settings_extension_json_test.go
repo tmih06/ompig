@@ -10,7 +10,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // The extension settings encoding is made once per settings generation: unchanged settings hand back the same bytes without encoding, and

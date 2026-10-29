@@ -93,7 +93,7 @@ func nodeCellProcessesForMarker(t testing.TB, marker string) []int {
 		if line == "" || !strings.Contains(line, marker) {
 			continue
 		}
-		// The Bun row of the runtime matrix (PIG_TS_RUNTIME=bun) starts the same runtime tree with Bun.
+		// The Bun row of the runtime matrix (OMPIG_TS_RUNTIME=bun) starts the same runtime tree with Bun.
 		if !strings.Contains(line, "node") && !strings.Contains(line, "bun") {
 			continue
 		}
@@ -322,7 +322,7 @@ func TestNodeCellReloadKeepsOneProcessForAllExtensions(t *testing.T) {
 }
 
 // TestNodeCellProcessDeathStopsExtensionsAndReloadRecovers is acceptance test
-// 5: if the Node cell process is killed, pig keeps running, those extensions
+// 5: if the Node cell process is killed, ompig keeps running, those extensions
 // stop, and a reload brings them back. This mirrors
 // TestPackedProcessDeathQuarantinesAffectedCell (liveness_test.go) and
 // TestPackedCellFailureIsolatesFailingMember (reload_unresolved_test.go) for
@@ -369,7 +369,7 @@ func TestNodeCellProcessDeathStopsExtensionsAndReloadRecovers(t *testing.T) {
 
 	// Kill every Node process backing this session's extensions: on the
 	// fixed Node-cell host that is one shared process; on main (isolated
-	// per-extension processes) it is all of them. Either way, pig must keep
+	// per-extension processes) it is all of them. Either way, ompig must keep
 	// running, and the crash handler must report each extension.
 	for _, pid := range pids {
 		if err := killTestProcess(pid); err != nil {
@@ -392,7 +392,7 @@ loop:
 		t.Fatalf("crash handler saw no extension crash after killing the Node process(es) %v", pids)
 	}
 
-	// pig (the host) is still alive and can reload; the dead extensions come
+	// ompig (the host) is still alive and can reload; the dead extensions come
 	// back and work again.
 	loaded, err := h.Reload(ctx)
 	if err != nil {

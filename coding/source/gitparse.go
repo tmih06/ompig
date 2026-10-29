@@ -7,9 +7,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // gitSource is Pi's GitSource without its constant type and the derived pinned flag.
@@ -24,13 +24,13 @@ var (
 	protocolURLPrefix = lazyregexp.New(`^(?:[hH][tT][tT][pP][sS]?|[sS][sS][hH]|[gG][iI][tT])://`)
 )
 
-// parseRepoURL is `new URL(repository)` for a repository URL. pig divergence (D110): a file:// repository (a local bare repository, which Piglet
+// parseRepoURL is `new URL(repository)` for a repository URL. ompig divergence (D110): a file:// repository (a local bare repository, which Ompiglet
 // installs and tests use) is read as a non-special URL so its host, such as localhost, stays; Node's file URL would empty it.
 func parseRepoURL(raw string) (nodeurl.URL, error) {
 	//portlint:allow utf16units a 5-byte prefix folds to "file:" only when it is five ASCII bytes, so byte and UTF-16 offsets agree here
 	if len(raw) >= 5 && strings.EqualFold(raw[:5], "file:") {
 		//portlint:allow utf16units raw[:5] was checked to be the ASCII "file:", so offset 5 is the same in bytes and UTF-16 units
-		parsed, err := nodeurl.ParseURL("pig-file:" + raw[5:])
+		parsed, err := nodeurl.ParseURL("ompig-file:" + raw[5:])
 		parsed.Protocol = "file:"
 		return parsed, err
 	}
@@ -145,7 +145,7 @@ func parseGenericGitURL(rawURL string) *gitSource {
 
 // parseGitURL is parseGitUrl. Without the git: prefix only explicit protocol URLs are accepted.
 //
-// pig divergence (D110): a source starting with "git://" is a protocol URL, not the git: prefix followed by "//" (Pi gives the unusable repository
+// ompig divergence (D110): a source starting with "git://" is a protocol URL, not the git: prefix followed by "//" (Pi gives the unusable repository
 // "https:////host/..."), and the scheme of a protocol URL is matched without regard to case when deciding whether to prefix https:// (Pi gives
 // "https://HTTPS://host/...").
 func parseGitURL(source string) *gitSource {

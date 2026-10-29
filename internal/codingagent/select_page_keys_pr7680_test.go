@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports of packages/coding-agent/test/suite/regressions/7629-select-page-keys.test.ts of Pi PR #7680 (Pi #7629, D155) for the

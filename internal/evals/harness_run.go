@@ -21,12 +21,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/evals/bridge"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/evals/bridge"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
 // PiCodingAgentStepType selects what a step of an input does.
@@ -75,9 +75,9 @@ type AgentRun struct {
 	SystemPrompt string
 	AgentDir     string
 	Workspace    string
-	// Model and PigPath identify the Session's model and the pig binary, for outputs that start more pig processes.
+	// Model and OmpigPath identify the Session's model and the ompig binary, for outputs that start more ompig processes.
 	Model            PiCodingAgentModelSelection
-	PigPath          string
+	OmpigPath        string
 	Messages         []map[string]any
 	ExtensionErrors  []json.RawMessage
 	SuccessfulTools  map[string]string
@@ -343,7 +343,7 @@ func apiKeyHandOff(stored json.RawMessage, apiKey, extensionPath string) (entry 
 		return stored, "", nil
 	}
 	if extensionPath == "" {
-		return nil, "", errors.New("Set PI_EVAL_EXTENSION to the pig-eval-extension binary.")
+		return nil, "", errors.New("Set PI_EVAL_EXTENSION to the ompig-eval-extension binary.")
 	}
 	fields["type"] = "api_key"
 	fields["key"] = "!" + shellQuote(extensionPath) + " " + bridge.CredentialCommand
@@ -361,7 +361,7 @@ func tokenCount(stats map[string]any, path ...string) float64 {
 	return number
 }
 
-// RunPiCodingAgent runs input against a fresh PiG Session in an isolated root and normalizes the result. The root,
+// RunPiCodingAgent runs input against a fresh Ompig Session in an isolated root and normalizes the result. The root,
 // home, agent directory, workspace and Session directory are new for each run and removed afterwards.
 func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiCodingAgentHarnessOptions) (result *HarnessRun, failure error) {
 	startedAt := time.Now()
@@ -374,7 +374,7 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 	}
 	hostAgentDir := hostAgentDirectory()
 	// ApplyIsolatedEnvironment removes the PI_EVAL_* variables, so the binaries are named before it runs.
-	pigPath, err := resolveBinary(options.PigPath, "PI_EVAL_PIG", "pig")
+	ompigPath, err := resolveBinary(options.OmpigPath, "PI_EVAL_OMPIG", "ompig")
 	if err != nil {
 		return nil, err
 	}
@@ -390,7 +390,7 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 	}
 	workspace := filepath.Join(root, "workspace")
 	isolatedHome := filepath.Join(root, "home")
-	agentDir := filepath.Join(isolatedHome, ".pig", "agent")
+	agentDir := filepath.Join(isolatedHome, ".ompig", "agent")
 
 	var (
 		process          *agentProcess
@@ -454,7 +454,7 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 			return err
 		}
 		if credentials != nil {
-			// pig divergence (D98): an OAuth credential is written to the auth.json the pig process reads; Pi keeps it
+			// ompig divergence (D98): an OAuth credential is written to the auth.json the ompig process reads; Pi keeps it
 			// in memory. An API key entry holds only the command that fetches the key from the bridge.
 			encoded, _ := json.Marshal(map[string]json.RawMessage{selection.Provider: credentials})
 			if err := os.WriteFile(filepath.Join(agentDir, "auth.json"), encoded, 0o600); err != nil {
@@ -482,7 +482,7 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 		useExtension := spec.TransformSystemPrompt || len(spec.Tools) > 0
 		if useExtension {
 			if extensionPath == "" {
-				return errors.New("Set PI_EVAL_EXTENSION to the pig-eval-extension binary.")
+				return errors.New("Set PI_EVAL_EXTENSION to the ompig-eval-extension binary.")
 			}
 			specPath := filepath.Join(root, "bridge.json")
 			encoded, _ := json.Marshal(spec)
@@ -511,7 +511,7 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 			if sessionFile != "" {
 				args = append(args, "--session", sessionFile)
 			}
-			command := exec.CommandContext(context.WithoutCancel(ctx), pigPath, args...)
+			command := exec.CommandContext(context.WithoutCancel(ctx), ompigPath, args...)
 			command.Dir = workspace
 			command.Env = os.Environ()
 			if server != nil {
@@ -566,11 +566,11 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 					return err
 				}
 			}
-			// pig materializes its embedded documentation under the home's config root when it starts. Pi's
+			// ompig materializes its embedded documentation under the home's config root when it starts. Pi's
 			// without_docs image has no coding-agent docs on disk (README.md, CHANGELOG.md, docs/, examples/ are removed),
 			// so this variant removes them once startup has finished.
 			if options.ExpectedPiDocumentation != nil && !*options.ExpectedPiDocumentation {
-				return removePigDocumentation(filepath.Join(isolatedHome, ".pig"))
+				return removePigDocumentation(filepath.Join(isolatedHome, ".ompig"))
 			}
 			return nil
 		}
@@ -716,7 +716,7 @@ func RunPiCodingAgent(ctx context.Context, input PiCodingAgentInput, options PiC
 		}
 		var output any = response
 		if options.Output != nil {
-			if output, err = options.Output(ctx, AgentRun{Response: response, SystemPrompt: systemPrompt, AgentDir: agentDir, Workspace: workspace, Model: selection, PigPath: pigPath,
+			if output, err = options.Output(ctx, AgentRun{Response: response, SystemPrompt: systemPrompt, AgentDir: agentDir, Workspace: workspace, Model: selection, OmpigPath: ompigPath,
 				Messages: messages, ExtensionErrors: extensionErrors, SuccessfulTools: successfulTools, SessionStatistic: statistics}); err != nil {
 				return err
 			}
@@ -890,11 +890,11 @@ func harnessName(options PiCodingAgentHarnessOptions) string {
 	return "pi-coding-agent"
 }
 
-// builtinExtensionPrefix starts the path of each extension pig always loads (mcp, codemode and the others).
+// builtinExtensionPrefix starts the path of each extension ompig always loads (mcp, codemode and the others).
 const builtinExtensionPrefix = "builtin:"
 
 // verifyLoadedExtensions is harness.ts:357-363: the isolated Session must load no extension except the harness's own.
-// pig lists its loaded extensions through the get_extensions RPC command; the built-in extensions are PiG's stock
+// ompig lists its loaded extensions through the get_extensions RPC command; the built-in extensions are Ompig's stock
 // set and the bridge extension is the harness's inline extension.
 func verifyLoadedExtensions(ctx context.Context, process *agentProcess, bridgePath string, expectBridge bool) error {
 	data, err := process.request(ctx, map[string]any{"type": "get_extensions"})
@@ -926,7 +926,7 @@ func verifyLoadedExtensions(ctx context.Context, process *agentProcess, bridgePa
 	return nil
 }
 
-// removePigDocumentation is the without_docs variant's removal of the coding-agent documentation from disk (entrypoint.ts:48-52 asserts README.md, CHANGELOG.md, docs and examples are gone). pig materializes only docs/ under its config root, holding one bundle directory per build, so the whole docs directory is removed; its prompt points at GitHub for examples (D22), so the other names are removed only if present.
+// removePigDocumentation is the without_docs variant's removal of the coding-agent documentation from disk (entrypoint.ts:48-52 asserts README.md, CHANGELOG.md, docs and examples are gone). ompig materializes only docs/ under its config root, holding one bundle directory per build, so the whole docs directory is removed; its prompt points at GitHub for examples (D22), so the other names are removed only if present.
 func removePigDocumentation(configRoot string) error {
 	for _, path := range []string{filepath.Join(configRoot, pigdocs.SubDir), filepath.Join(configRoot, "README.md"), filepath.Join(configRoot, "CHANGELOG.md"), filepath.Join(configRoot, "examples")} {
 		if err := os.RemoveAll(path); err != nil {

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations && !pig_strip_openai_codex_responses && !pig_strip_google_vertex
+//go:build !ompig_strip_mistral_conversations && !ompig_strip_openai_codex_responses && !ompig_strip_google_vertex
 
 package ai
 
@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Every API module's `stream` (packages/ai/src/api/<api>.ts) runs its request inside its own `(async () => { try { ... } catch (error) { ... } })()`, so a failure there,

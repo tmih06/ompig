@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // packages/ai/src/utils/headers.ts:3-9 headersToRecord against Pi's own function fed a WHATWG Headers built with the same appends:

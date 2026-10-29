@@ -9,17 +9,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// pig additive (D109): two copies of one extension install, loaded from two directories, register the same tools. Pi reports the conflict only; PiG names the stale copy.
+// ompig additive (D109): two copies of one extension install, loaded from two directories, register the same tools. Pi reports the conflict only; Ompig names the stale copy.
 
 const (
 	// copyScanFileLimit and copyScanFileBytes bound the comparison of two extension directories.
-	// pig additive (D109): Pi has no copy comparison, so these caps have no Pi counterpart.
+	// ompig additive (D109): Pi has no copy comparison, so these caps have no Pi counterpart.
 	copyScanFileLimit = 2000
-	// pig additive (D109): see copyScanFileLimit.
+	// ompig additive (D109): see copyScanFileLimit.
 	copyScanFileBytes = 1 << 20
 	// copySimilarity is the share of files two directories must have in common, by path and content, for one to be a copy of the other.
 	copySimilarity = 0.5

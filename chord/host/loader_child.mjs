@@ -66,18 +66,18 @@ const checkServed = (facet, type, options) => {
 	const { description } = type;
 	const variants = Object.keys(description.variants);
 	if (description.scope === "remote" && variants.length !== 1) {
-		// pig divergence (D178): several variants are refused.
+		// ompig divergence (D178): several variants are refused.
 		throw unsupported(`${facet}: ${type.name} has ${variants.length} variants; the parent mirrors one`);
 	}
 	for (const members of Object.values(description.variants)) {
 		for (const [name, member] of Object.entries(members)) {
 			if (member.kind !== "method") {
-				// pig divergence (D178): state and opaque members are refused.
+				// ompig divergence (D178): state and opaque members are refused.
 				throw unsupported(`${facet}: ${type.name}.${name} is a ${member.kind} member; the parent mirrors methods`);
 			}
 		}
 	}
-	// pig divergence (D178): accepts adapters are refused.
+	// ompig divergence (D178): accepts adapters are refused.
 	if (options.accepts !== undefined) throw unsupported(`${facet}: ${type.name} serves with accepts adapters`);
 };
 

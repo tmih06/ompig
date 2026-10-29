@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -17,7 +17,7 @@ func TestRunPromptOptionEditsReachEveryTurnInEveryMode(t *testing.T) {
 	for _, mode := range []string{"print", "interactive"} {
 		t.Run(mode, func(t *testing.T) {
 			home, cwd := t.TempDir(), t.TempDir()
-			agentDir := filepath.Join(home, "pig")
+			agentDir := filepath.Join(home, "ompig")
 			if err := os.MkdirAll(agentDir, 0o700); err != nil {
 				t.Fatal(err)
 			}
@@ -47,7 +47,7 @@ func TestRunPromptOptionEditsReachEveryTurnInEveryMode(t *testing.T) {
 			}
 			cmd := exec.CommandContext(t.Context(), binary, args...)
 			cmd.Dir = cwd
-			cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
+			cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
 			var output strings.Builder
 			if mode == "interactive" {
 				driveInteractivePrompts(t, cmd, []string{"hello"}, func() int { return len(chat.recorded()) }, 2, &output)

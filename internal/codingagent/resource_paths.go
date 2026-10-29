@@ -12,18 +12,18 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/nodehome"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodehome"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // PackageManagerHomeDir is Pi's getHomeDir (package-manager.ts:233-235), `process.env.HOME || homedir()`: a nonempty HOME on every platform, else Node's os.homedir() (the platform home variable, an explicit empty value included, else the user database's home directory). Where Node's call throws, because no
 // home variable is set and the user database has no entry for the process's user, so does this, with *nodehome.Error: Pi's getHomeDir throws there, and a project that supplies a "user" skills directory through a path relative to the working directory must not be the answer.
-// pig divergence (D200): Pi never gets here without a home directory, because it crashes at import in every mode (tools-manager.ts:11 getBinDir -> getAgentDir -> normalizePath -> homedir(), utils/paths.ts:89); PiG, whose PIG_HOME needs no home directory, runs `--version`, `list` and the other commands that load no resources, and fails with Pi's error here, where Pi's home lookup would run.
+// ompig divergence (D200): Pi never gets here without a home directory, because it crashes at import in every mode (tools-manager.ts:11 getBinDir -> getAgentDir -> normalizePath -> homedir(), utils/paths.ts:89); Ompig, whose OMPIG_HOME needs no home directory, runs `--version`, `list` and the other commands that load no resources, and fails with Pi's error here, where Pi's home lookup would run.
 func PackageManagerHomeDir() (string, error) {
 	if home := os.Getenv("HOME"); home != "" {
 		return home, nil
@@ -147,7 +147,7 @@ func ValidateAutoDiscoveredOverrides(cwd, agentDir string, sm *SettingsManager, 
 	add := func(steps []step, dir string, paths func() []string, overrides []string, baseDir string, kind packagecontent.Kind) []step {
 		return append(steps, step{dir, paths, overrides, baseDir, kind})
 	}
-	// pig divergence (D200): the home lookup fails here, at Pi's resolve(), and not at load as in Pi; see PackageManagerHomeDir.
+	// ompig divergence (D200): the home lookup fails here, at Pi's resolve(), and not at load as in Pi; see PackageManagerHomeDir.
 	// package-manager.ts:2464 computes the user's ~/.agents/skills first, before any directory is checked, and getHomeDir throws there when no home directory can be found.
 	home, err := PackageManagerHomeDir()
 	if err != nil {
@@ -486,7 +486,7 @@ func ResourcePrecedenceRank(metadata PathMetadata) int {
 	return rank
 }
 
-// SkillEntryResources names each skill directory resource by its SKILL.md file, as Pi's collectSkillEntries does for settings entries, auto-discovery and Package manifests (package-manager.ts:365-400, 645-653, 2317-2327, 2518-2535). PiG's resource lists name the directory; Pi's accumulator and metadataByPath key the skill by the file, so a settings entry naming the file and one naming the directory reach the same resource.
+// SkillEntryResources names each skill directory resource by its SKILL.md file, as Pi's collectSkillEntries does for settings entries, auto-discovery and Package manifests (package-manager.ts:365-400, 645-653, 2317-2327, 2518-2535). Ompig's resource lists name the directory; Pi's accumulator and metadataByPath key the skill by the file, so a settings entry naming the file and one naming the directory reach the same resource.
 func SkillEntryResources(resources []ResolvedResource) []ResolvedResource {
 	named := make([]ResolvedResource, len(resources))
 	for i, resource := range resources {

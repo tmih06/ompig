@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/env"
 
 	"golang.org/x/text/unicode/norm"
 )

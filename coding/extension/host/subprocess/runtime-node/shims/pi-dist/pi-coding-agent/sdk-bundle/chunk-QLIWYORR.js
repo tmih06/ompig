@@ -12845,7 +12845,7 @@ var FileModelsStore = class {
 
 // pi-dist/pi-coding-agent/core/remote-catalog-provider.js
 import { getModelType, isModelType as isModelType3 } from "../../pi-ai/sdk-bundle/index.js";
-var DEFAULT_CATALOG_BASE_URL = "https://pi-in-go.dev";
+var DEFAULT_CATALOG_BASE_URL = "https://ompig.dev";
 var REMOTE_CATALOG_ATTEMPT_TIMEOUT_MS = 4e3;
 var REMOTE_CATALOG_REFRESH_INTERVAL_MS = 4 * 60 * 60 * 1e3;
 var REMOTE_CATALOG_MODEL_TYPES = ["chat", "image", "classifier"];

@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/mcptest"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/mcptest"
 )
 
 // failingCloseTransport is a transport whose Close fails after closing the underlying one.

@@ -4,10 +4,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A Piglet's strip.apis disables an API the way a pig_strip_<api> Binary compiles it out: building a provider for one of its models reports the strip, and the built-in registry omits it. Other APIs still build.
+// A Ompiglet's strip.apis disables an API the way a ompig_strip_<api> Binary compiles it out: building a provider for one of its models reports the strip, and the built-in registry omits it. Other APIs still build.
 func TestStrippedAPIProviderBuildReportsStrip(t *testing.T) {
 	for _, tc := range []struct {
 		api   API
@@ -16,21 +16,21 @@ func TestStrippedAPIProviderBuildReportsStrip(t *testing.T) {
 	}{
 		{
 			api:  APIBedrockConverseStream,
-			want: "Provider amazon-bedrock: API bedrock-converse-stream is stripped from this Piglet (strip.apis: bedrock-converse-stream)",
+			want: "Provider amazon-bedrock: API bedrock-converse-stream is stripped from this Ompiglet (strip.apis: bedrock-converse-stream)",
 			build: func(t *testing.T) (Provider, error) {
 				return directAPIProvider(mustGeneratedModel(t, "amazon-bedrock", "amazon.nova-2-lite-v1:0").ToModel(), "", nil)
 			},
 		},
 		{
 			api:  APIMistralConversations,
-			want: "Provider mistral: API mistral-conversations is stripped from this Piglet (strip.apis: mistral-conversations)",
+			want: "Provider mistral: API mistral-conversations is stripped from this Ompiglet (strip.apis: mistral-conversations)",
 			build: func(t *testing.T) (Provider, error) {
 				return directAPIProvider(mustGeneratedModel(t, "mistral", "codestral-latest").ToModel(), "key", nil)
 			},
 		},
 		{
 			api:  APIGoogleVertex,
-			want: "Provider google-vertex: API google-vertex is stripped from this Piglet (strip.apis: google-vertex)",
+			want: "Provider google-vertex: API google-vertex is stripped from this Ompiglet (strip.apis: google-vertex)",
 			build: func(*testing.T) (Provider, error) {
 				return NewGoogleVertexAPIProvider(GoogleVertexConfig{APIKey: "key", Model: "gemini-2.5-flash"})
 			},

@@ -3,7 +3,7 @@ package durable_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // packages/durable/src/types.ts:704-732: CommitChange is a TableCommitChange (a StorageWrite of type conversation, entry, task or submission) or a

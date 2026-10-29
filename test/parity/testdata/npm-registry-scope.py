@@ -14,8 +14,8 @@ def main():
     binary, scope = sys.argv[1:]
     node = subprocess.check_output(["node", "-p", "process.execPath"], text=True).strip()
     npm = str(Path(node).parent / "npm")
-    if binary == "pig":
-        command = [os.environ["PIG_PARITY_PIG_BIN"]]
+    if binary == "ompig":
+        command = [os.environ["OMPIG_PARITY_OMPIG_BIN"]]
     else:
         command = [node, str(Path(os.environ["PI_PACKAGE_DIR"]) / "dist/bundle/cli.js")]
     requests = []
@@ -40,7 +40,7 @@ def main():
         with tempfile.TemporaryDirectory(dir=os.environ["SCOPE_PROBE_TEMP"]) as tmp:
             root = Path(tmp)
             project, agent = root / "project", root / "agent"
-            config = project / (".pig" if binary == "pig" else ".pi")
+            config = project / (".ompig" if binary == "ompig" else ".pi")
             config.mkdir(parents=True)
             agent.mkdir()
             install_root = agent / "npm" if scope == "user" else config / "npm"
@@ -66,8 +66,8 @@ process.exit(result.status === null ? 1 : result.status);
             (agent / "settings.json").write_text(json.dumps(settings))
             (config / "settings.json").write_text(json.dumps({"packages": ["npm:fake-package"]} if scope == "project" else {}))
             (agent / "trust.json").write_text(json.dumps({str(project): scope == "project"}))
-            env = {k: v for k, v in os.environ.items() if not k.lower().startswith(("npm_", "http_proxy", "https_proxy", "all_proxy", "pi_", "pig_"))}
-            env.update({"HOME": str(root), "PIG_HOME": str(root / "home"), "PI_CODING_AGENT_DIR": str(agent), "PIG_CODING_AGENT_DIR": str(agent), "PI_SKIP_VERSION_CHECK": "1", "NPM_CONFIG_CACHE": str(root / "cache"), "PATH": str(Path(node).parent) + os.pathsep + os.environ["PATH"]})
+            env = {k: v for k, v in os.environ.items() if not k.lower().startswith(("npm_", "http_proxy", "https_proxy", "all_proxy", "pi_", "ompig_"))}
+            env.update({"HOME": str(root), "OMPIG_HOME": str(root / "home"), "PI_CODING_AGENT_DIR": str(agent), "OMPIG_CODING_AGENT_DIR": str(agent), "PI_SKIP_VERSION_CHECK": "1", "NPM_CONFIG_CACHE": str(root / "cache"), "PATH": str(Path(node).parent) + os.pathsep + os.environ["PATH"]})
             result = subprocess.run(command + ["update", "npm:fake-package"], cwd=project, env=env, text=True, capture_output=True, timeout=30)
             if result.returncode != 0:
                 raise AssertionError((result.returncode, result.stdout, result.stderr))

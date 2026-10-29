@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A rejected update sink ends runToolCall's promise chain, so the call rejects with the first sink error: executePreparedToolCall collects every update's promise and awaits them after the tool returns, in the try body and again in its catch, so the rethrow leaves executePreparedToolCall and skips finalizeExecutedToolCall. The tool still runs to the end, and every later update still reaches the sink.

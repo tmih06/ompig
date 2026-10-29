@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 // Pi packages/durable/src/storage/sqlite.ts SqliteStorage: each lookup and scan reads exactly what its writes committed, in ascending ID order, and a scan's cursor continues where its page stopped. Each method is called on the concrete SqliteStorage.

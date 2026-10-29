@@ -1,6 +1,6 @@
 package subprocess
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // View node kinds of the pi-tui widgets and coding-agent messages the kit
 // carries beyond the first set (D107, docs/plan/extension-component-kit.md
@@ -68,7 +68,7 @@ type ViewWidgetFields struct {
 	AutocompleteMaxVisible *int   `json:"autocompleteMaxVisible,omitempty"`
 	BorderColor            string `json:"borderColor,omitempty"`
 	DisableSubmit          bool   `json:"disableSubmit,omitempty"`
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty history mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty history mean the same: none
 	History      []string          `json:"history,omitempty"`
 	Autocomplete *ViewAutocomplete `json:"autocomplete,omitempty"`
 
@@ -100,7 +100,7 @@ type ViewSkill struct {
 // slash commands (without argument completion closures) and the directory
 // its path completion starts from.
 type ViewAutocomplete struct {
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty command list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty command list mean the same: none
 	Commands []ViewSlashCommand `json:"commands,omitempty"`
 	BasePath string             `json:"basePath,omitempty"`
 }
@@ -118,7 +118,7 @@ type ViewSlashCommand struct {
 // terminal at once with the result and reports each handled event to the
 // extension as a "mouse" view event. Handled defaults to true.
 type ViewMouseRegion struct {
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty type list mean the same: every type
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty type list mean the same: every type
 	Types   []string `json:"types,omitempty"`
 	Handled *bool    `json:"handled,omitempty"`
 	Capture bool     `json:"capture,omitempty"`

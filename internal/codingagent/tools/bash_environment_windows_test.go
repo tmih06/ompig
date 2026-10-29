@@ -13,7 +13,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's createLocalShellOperations (core/tools/bash.ts:96-102) spawns the shell
@@ -23,7 +23,7 @@ import (
 // "=ExitCode" (src/node_env_var.cc); Node's normalizeSpawnArguments sorts the
 // env names and keeps the first of names that differ only in case, and libuv
 // adds the required variables an env lacks (src/win/process.c). Node keeps
-// both "PIG_K" and "PIG_K" (KELVIN SIGN), whose toUpperCase values
+// both "OMPIG_K" and "OMPIG_K" (KELVIN SIGN), whose toUpperCase values
 // differ, though os/exec's lowercasing would merge them. The test binary
 // stands in for the shell and prints the environment it received; Pi's own
 // operations are the oracle.
@@ -38,8 +38,8 @@ func TestLocalShellOperationsGiveTheShellPisEnvironment(t *testing.T) {
 	cwd := t.TempDir()
 	// A spawn hook's env: names that differ only in case and no system
 	// variables.
-	hookEnv := []string{testenv.EnvironHelper + "=1", "Path=/pig-mixed", "PATH=/pig-upper", "path=/pig-lower", "pig_b=2", "PIG_A=1"}
-	kelvinEnv := []string{testenv.EnvironHelper + "=1", "PIG_K=letter", "PIG_K=kelvin"}
+	hookEnv := []string{testenv.EnvironHelper + "=1", "Path=/ompig-mixed", "PATH=/ompig-upper", "path=/ompig-lower", "ompig_b=2", "OMPIG_A=1"}
+	kelvinEnv := []string{testenv.EnvironHelper + "=1", "OMPIG_K=letter", "OMPIG_K=kelvin"}
 	envs := [][]string{nil, hookEnv, kelvinEnv}
 	root, err := filepath.EvalSymlinks("../../../extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent")
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 
 // EnvironHelper is the environment variable that makes a test binary whose
 // TestMain calls ReportEnvironIfRequested report its environment.
-const EnvironHelper = "PIG_TEST_ENVIRON_HELPER"
+const EnvironHelper = "OMPIG_TEST_ENVIRON_HELPER"
 
 // ReportEnvironIfRequested writes os.Environ, in the order of the process's
 // environment block, to stdout as a JSON array and exits when EnvironHelper is

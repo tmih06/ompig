@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // waitReplaceLog polls the fixture log until it holds at least n lines.
@@ -34,14 +34,14 @@ func waitReplaceLog(t *testing.T, path string, n int, what string) []string {
 }
 
 // Pi's interactive mode runs /new, /resume, /clone and /fork through runtimeHost, so each builds the replacement Session and its extensions through the Session factory and rebinds once (setRebindSession). The extension processes are fresh instances: A to E below.
-// interactivePig is one interactive pig process on a pseudo-terminal, started with the session-replace fixture.
+// interactivePig is one interactive ompig process on a pseudo-terminal, started with the session-replace fixture.
 type interactivePig struct {
 	t      *testing.T
 	master *os.File
 	exited chan struct{}
 	output *ptyOutput
 	log    string
-	// home is PIG_HOME and dir the startup working directory.
+	// home is OMPIG_HOME and dir the startup working directory.
 	home, dir string
 }
 
@@ -62,12 +62,12 @@ func startInteractivePigWith(t *testing.T, fixture string) *interactivePig {
 	t.Cleanup(func() { _ = master.Close() })
 	cmd := exec.Command(binary, "--model", "test-faux/faux-1", "-e", fixture, "--session-dir", filepath.Join(home, "sessions"))
 	cmd.Dir = p.dir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_TEST_REPLACE_LOG="+p.log, "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_TEST_REPLACE_LOG="+p.log, "TERM=xterm-256color")
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {
-		t.Fatalf("start pig: %v", err)
+		t.Fatalf("start ompig: %v", err)
 	}
 	_ = slave.Close()
 	p.exited = make(chan struct{})
@@ -111,7 +111,7 @@ func (p *interactivePig) quit() {
 // Pi's interactive mode runs /new, /resume, /clone and /fork through runtimeHost, so each builds the replacement Session and its extensions through the Session factory and rebinds once (setRebindSession). The extension processes are fresh instances: A to E below.
 func TestInteractiveSessionCommandsReplaceThroughTheRuntimeFactory(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	p := startInteractivePig(t)
@@ -158,7 +158,7 @@ func TestInteractiveSessionCommandsReplaceThroughTheRuntimeFactory(t *testing.T)
 // An extension command that awaits ctx.newSession() is still running while the replacement retires its Session. Its extension process must stay up until the command returns, then exit; the replacement runs in a fresh instance.
 func TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	p := startInteractivePig(t)
@@ -182,7 +182,7 @@ func TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns(t *test
 // Pi agent-session.ts:2941 discovers resources with reason "startup" for every Session start that is not a reload, so /new reports "startup" to resources_discover handlers.
 func TestInteractiveReplacementDiscoversResourcesWithStartupReason(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	t.Parallel()
 	fixture, err := filepath.Abs(filepath.Join("testdata", "session-resources.mjs"))

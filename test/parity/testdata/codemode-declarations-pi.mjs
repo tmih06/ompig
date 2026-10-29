@@ -1,5 +1,5 @@
 // Pi 1.2.0 packages/codemode declarations (schemaToType, renderToolSignature, renderToolSample, renderDeclarations, renderToolOutputType): the oracle
-// script regenerates its deterministic and seeded-random corpus with Pi, and this prints each result as one JSON line in the order PiG prints them.
+// script regenerates its deterministic and seeded-random corpus with Pi, and this prints each result as one JSON line in the order Ompig prints them.
 import { spawnSync } from 'node:child_process';
 const run = spawnSync('node', ['codemode/testdata/upstream-oracle.mjs'], { encoding: 'utf8', maxBuffer: 1 << 28 });
 if (run.status !== 0) {

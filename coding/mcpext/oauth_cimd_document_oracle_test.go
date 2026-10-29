@@ -3,8 +3,8 @@ package mcpext
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // clientMetadataDocument and callbackId (extensions/mcp/oauth.ts:238-271) are not exported by Pi's module, so the oracle body transcribes them and runs them on Node's own URL: the callback ID hashes String(new URL(serverUrl)) without its fragment, and the server-specific redirect URI is new URL(redirectUrl) with pathname "/callback/<id>".

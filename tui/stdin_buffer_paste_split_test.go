@@ -25,7 +25,7 @@ func feedChunks(text string, size int) (pastes, data []string) {
 
 // upstream: packages/tui/src/stdin-buffer.ts:324-343 (paste mode appends each chunk to pasteBuffer and looks for the end marker): however a paste is
 // split across reads, including inside the 6-byte end marker, the paste event carries the payload before the first end marker and the text after it
-// is processed as ordinary input. Pig keeps this a linear-time append that only searches the new bytes plus the marker-length seam.
+// is processed as ordinary input. Ompig keeps this a linear-time append that only searches the new bytes plus the marker-length seam.
 // mutation-checked: searching only the new chunk (not the seam), or dropping the text after the marker, fails it.
 func TestStdinBufferPasteSplitAtEveryByteBoundary(t *testing.T) {
 	const payload = "héllo\nwörld\x1b[A 😀 end"
@@ -56,7 +56,7 @@ func TestStdinBufferPasteJoinsASurrogatePairSplitAcrossChunks(t *testing.T) {
 }
 
 // A multi-megabyte paste arrives in terminal-sized reads. Pi's stdin-buffer.ts:325-328 re-searches the whole pasteBuffer per chunk, which is
-// quadratic in the paste; Pig must stay linear. Allocation is deterministic: the quadratic copy of a 4 MiB paste in 4 KiB chunks allocates
+// quadratic in the paste; Ompig must stay linear. Allocation is deterministic: the quadratic copy of a 4 MiB paste in 4 KiB chunks allocates
 // about 4 GiB, the linear append a small multiple of the paste.
 // mutation-checked: rebuilding the accumulated paste per chunk (the previous implementation) fails it.
 func TestStdinBufferPasteAllocatesLinearlyInChunks(t *testing.T) {

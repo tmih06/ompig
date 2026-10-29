@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // TestSDKScenarios runs the one table of conformance scenarios against every

@@ -169,12 +169,12 @@ func init() {
 		undeliveredHostFrames["notify tool_window_settled by "+sdk] = "answers a Node runtime's report that a tool's execute awaits something that is not a host call; native handlers send no such report"
 	}
 	for _, sdk := range []string{"go", "py", "rust"} {
-		// admitSurface reports a retired surface only when it has an id, which only the Node runtime assigns. Surface ids are Pig transport mechanics for
+		// admitSurface reports a retired surface only when it has an id, which only the Node runtime assigns. Surface ids are Ompig transport mechanics for
 		// the Node runtime's retained components, not a Pi API; a native SDK renders through host calls and retains no component.
 		undeliveredHostFrames["notify ui.surface_retired by "+sdk] = "transport mechanics, not a Pi API: sent only for a surface with an id, which only the Node runtime assigns"
 	}
 	for _, request := range []string{"oauth_credential_status", "oauth_store_credentials", "oauth_delete_credentials"} {
-		// oauth_bridge.go wraps a store proxy only for has_credential_store, which the Node runtime never declares. The D40 store is a Pig additive, not Pi;
+		// oauth_bridge.go wraps a store proxy only for has_credential_store, which the Node runtime never declares. The D40 store is a Ompig additive, not Pi;
 		// offering it from Node is an owner product item recorded in the release notes draft.
 		undeliveredHostFrames["request "+request+" by node"] = "sent only to an OAuth registration with has_credential_store, which the Node runtime never declares"
 	}

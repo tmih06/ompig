@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // benchmarkModelsStream drives one Models.Stream of a text, thinking and tool-call response through the lazy forwarding

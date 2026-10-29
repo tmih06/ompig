@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type bashExecScenario struct {
@@ -41,7 +41,7 @@ func bashExecScenarios() []bashExecScenario {
 	var scenarios []bashExecScenario
 	for range 900 {
 		var stream []byte
-		// A BOM is generated only first in the stream: Node's TextDecoder also drops a BOM that follows a first chunk ending inside a multi-byte character (Q17), which the WHATWG decoder Pig implements keeps.
+		// A BOM is generated only first in the stream: Node's TextDecoder also drops a BOM that follows a first chunk ending inside a multi-byte character (Q17), which the WHATWG decoder Ompig implements keeps.
 		if rng.IntN(6) == 0 {
 			stream = append(stream, "\xef\xbb\xbf"...)
 		}

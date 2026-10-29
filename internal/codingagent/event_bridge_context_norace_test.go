@@ -5,10 +5,10 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // A message_start, message_update or message_end of a streamed response carries its stream scope, which the handler's context holds (AgentEventContext). A runner with no handler for the event builds no context: the per-delta dispatch then allocates nothing (AS-F2/F12).

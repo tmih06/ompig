@@ -12,9 +12,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	_ "github.com/MichaelKinsy/PiG/internal/tlsdistrust" // hardens http.DefaultClient (pig additive (D191))
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	_ "github.com/tmih06/ompig/internal/tlsdistrust" // hardens http.DefaultClient (ompig additive (D191))
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/mcp/src/oauth/discovery.ts.

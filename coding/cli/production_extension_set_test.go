@@ -5,11 +5,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// productionExtensionSet is the extension set the production startup build (cliRuntimeBuilder.buildResources, the path cmd/pig runs) loads: the
+// productionExtensionSet is the extension set the production startup build (cliRuntimeBuilder.buildResources, the path cmd/ompig runs) loads: the
 // final extensions in load order and the diagnostics its load errors and warnings become.
 type productionExtensionSet struct {
 	Extensions  []extension.Extension
@@ -52,9 +52,9 @@ func tryProductionExtensionSetIn(t *testing.T, cwd, agentDir string, args []stri
 			t.Fatal(err)
 		}
 	}
-	t.Setenv("PIG_HOME", agentDir)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_HOME", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	flags := parseArgs(append([]string{"--model", "test-faux/faux-1", "--print"}, args...))
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
 	builder := &cliRuntimeBuilder{

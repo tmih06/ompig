@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // buildProviderErrorPattern is retry.ts buildProviderErrorPattern: new RegExp(patterns.join("|"), "i").

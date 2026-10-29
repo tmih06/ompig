@@ -158,7 +158,7 @@ func (h *OverlayHandle) focusTarget(target any) (map[string]any, error) {
 	if session != nil && session.component != nil && sameOverlayComponent(session.component, target) {
 		return map[string]any{"kind": "editor"}, nil
 	}
-	// pig divergence (D73): a component that is not mounted by this extension has no main-process identity to focus.
+	// ompig divergence (D73): a component that is not mounted by this extension has no main-process identity to focus.
 	return nil, errors.New("Overlay unfocus(target) requires nil, the editor component, or a mounted overlay of this extension (D73)")
 }
 

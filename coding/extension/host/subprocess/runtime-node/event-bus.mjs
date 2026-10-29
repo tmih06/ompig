@@ -1,5 +1,5 @@
 // Ports packages/coding-agent/src/core/event-bus.ts
-// pig additive (D19): the one pi.events bus shared by every Node realm. A process that is the Host's only Node realm keeps Pi's in-heap EventEmitter. With several realms, the Host holds the ordered listener registry and dispatches each listener's synchronous prefix in its own realm; payloads cross as xref references, so every listener sees the emitter's original object.
+// ompig additive (D19): the one pi.events bus shared by every Node realm. A process that is the Host's only Node realm keeps Pi's in-heap EventEmitter. With several realms, the Host holds the ordered listener registry and dispatches each listener's synchronous prefix in its own realm; payloads cross as xref references, so every listener sees the emitter's original object.
 import { EventEmitter } from "node:events";
 
 export class SharedBus {

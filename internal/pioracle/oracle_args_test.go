@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // A Pi oracle script compares the version it was handed with the installed package's package.json. Under a commit pin the display
@@ -81,7 +81,7 @@ func TestObservationProbesStampThePinDisplayVersion(t *testing.T) {
 		}
 	}
 	if len(offenders) > 0 {
-		t.Errorf("probes stamp a literal Pi version; use process.env.PIG_UPSTREAM_VERSION:\n  %s", strings.Join(offenders, "\n  "))
+		t.Errorf("probes stamp a literal Pi version; use process.env.OMPIG_UPSTREAM_VERSION:\n  %s", strings.Join(offenders, "\n  "))
 	}
 }
 

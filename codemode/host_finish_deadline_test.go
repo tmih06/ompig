@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // host.ts Execution.finish: `for (const pending of this.pending.values()) { if (pending.record) pending.record.durationMs =

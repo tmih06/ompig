@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // BenchmarkSessionScaleReads times the whole-history reads of a resumed session file (SESSIONSCALE_FIXTURE, for example the bench/sessionscale

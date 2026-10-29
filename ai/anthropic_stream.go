@@ -13,7 +13,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonparse"
 )
 
 // The chunk source is the body's ReadableStream reader: ReadChunk is `await reader.read()`, including the reactions Node spends before the read settles.
@@ -190,7 +190,7 @@ type anthropicSSEReader struct {
 // anthropicLineBufferReuse is the largest line buffer the reader keeps once its lines are consumed.
 const anthropicLineBufferReuse = 64 << 10
 
-// anthropicConsumeLine is consumeLine. pig divergence (D121): a carriage return at the end of the buffer waits for the next chunk unless the stream has ended, because Pi ends the line there and the line feed that follows flushes the record without its data (pi-mono #10390).
+// anthropicConsumeLine is consumeLine. ompig divergence (D121): a carriage return at the end of the buffer waits for the next chunk unless the stream has ended, because Pi ends the line there and the line feed that follows flushes the record without its data (pi-mono #10390).
 func anthropicConsumeLine(text string, final bool) (line, rest string, ok bool) {
 	index := strings.IndexAny(text, "\r\n")
 	if index < 0 {

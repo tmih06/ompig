@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // requireHasContextEditsMatchesTheEntries fails when the view's HasContextEdits differs from a scan of its entries, for the cached view and a fresh projection.

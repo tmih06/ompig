@@ -25,7 +25,7 @@
 #   - NO status line for exit==0 (upstream renders `(exit N)` only for
 #     error branch, i.e. exitCode !== 0)
 #
-# Bugs fixed in this loop (pig root-cause fixes):
+# Bugs fixed in this loop (ompig root-cause fixes):
 #   1. bash_execution.go stripped trailing newline via TrimRight("\n"),
 #      losing the second blank row inside the box.
 #   2. bash_execution.go emitted no blank line between header and first
@@ -42,7 +42,7 @@
 #
 #   \e[38;2;94;178;134m<border>
 # in both programs (ESC as \e, the run of ─ as <border>): the output in "muted" and the border in "bashMode", byte for byte.
-# PiG at main 50e81255d already drew these bytes, so this crop passes before and after the block port: the padding the port adds is trailing blanks tmux does not capture, and its other changes are outside this crop or exercised by 45 to 51. A crop through the editor's top border is not comparable, because the empty rows above the bottom-pinned editor depend on the startup header's height.
+# Ompig at main 50e81255d already drew these bytes, so this crop passes before and after the block port: the padding the port adds is trailing blanks tmux does not capture, and its other changes are outside this crop or exercised by 45 to 51. A crop through the editor's top border is not comparable, because the empty rows above the bottom-pinned editor depend on the startup header's height.
 
 name = "06-bash-execution-success"
 description = "BashExecutionComponent renders `!echo hello world` as a bordered block with a header, blank line, output, and final blank line. Exit 0 has no status line."
@@ -54,16 +54,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/bash-wrap-cwd"

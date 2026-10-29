@@ -8,15 +8,15 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-LAUNCHER = ROOT / "automation/porter/run-pig-porter.sh"
+LAUNCHER = ROOT / "automation/porter/run-ompig-porter.sh"
 
-FAKE_PIG = """#!/usr/bin/env bash
-if [ "$1" = piglet ]; then exit 0; fi
-dir="$PIG_CODING_AGENT_DIR"
+FAKE_OMPIG = """#!/usr/bin/env bash
+if [ "$1" = ompiglet ]; then exit 0; fi
+dir="$OMPIG_CODING_AGENT_DIR"
 {
   echo "dir=$dir"
   echo "pi_dir=$PI_CODING_AGENT_DIR"
-  echo "home=$PIG_HOME"
+  echo "home=$OMPIG_HOME"
   echo "settings=$(tr -d "\n" < "$dir/settings.json")"
   echo "auth=$(cat "$dir/auth.json" 2>/dev/null)"
   ls "$dir" | tr '\\n' ' ' | sed 's/^/files=/'; echo
@@ -41,12 +41,12 @@ class LauncherTests(unittest.TestCase):
             (operator / "settings.json").write_text(json.dumps(settings))
             (operator / "extensions").mkdir()
             (operator / "extensions" / "lane-compact").mkdir()
-            fake = scratch / "pig"
-            fake.write_text(FAKE_PIG)
+            fake = scratch / "ompig"
+            fake.write_text(FAKE_OMPIG)
             fake.chmod(0o755)
             out, dirfile = scratch / "out.txt", scratch / "dir.txt"
-            env = {**os.environ, "PIG_BIN": str(fake), "PIG_CODING_AGENT_DIR": str(operator), "FAKE_OUT": str(out), "FAKE_DIR": str(dirfile), **(extras or {})}
-            env.pop("PIG_HOME", None)
+            env = {**os.environ, "OMPIG_BIN": str(fake), "OMPIG_CODING_AGENT_DIR": str(operator), "FAKE_OUT": str(out), "FAKE_DIR": str(dirfile), **(extras or {})}
+            env.pop("OMPIG_HOME", None)
             subprocess.run([str(LAUNCHER), "--no-session", "-p", "x"], env=env, check=True, timeout=60)
             lines = dict(line.split("=", 1) for line in out.read_text().splitlines() if "=" in line)
             used = Path(dirfile.read_text().strip())
@@ -85,7 +85,7 @@ class LauncherTests(unittest.TestCase):
 
 class SkillTests(unittest.TestCase):
     def test_every_task_kind_the_pipeline_emits_is_a_skill_mode_with_its_listing_command(self):
-        skill = (ROOT / "piglets/porter/skills/pig-porter/SKILL.md").read_text()
+        skill = (ROOT / "ompiglets/porter/skills/ompig-porter/SKILL.md").read_text()
         follow = (ROOT / "automation/pin/follow.py").read_text()
         for kind, flag in (("closure", "--closure"), ("delta", "--delta")):
             self.assertIn(f'Task("{kind}"', follow)
@@ -96,7 +96,7 @@ class SkillTests(unittest.TestCase):
     def test_every_make_target_the_skill_names_is_a_repository_target(self):
         # A headless Porter run has only the repository: a target that exists in one operator's shell wrapper fails there.
         import re
-        skill = (ROOT / "piglets/porter/skills/pig-porter/SKILL.md").read_text()
+        skill = (ROOT / "ompiglets/porter/skills/ompig-porter/SKILL.md").read_text()
         makefiles = [ROOT / "Makefile", *sorted((ROOT / "automation/make").glob("*.mk"))]
         defined = {m.group(1) for f in makefiles for m in re.finditer(r"^([A-Za-z0-9_.-]+):", f.read_text(), re.M)}
         named = set(re.findall(r"(?:`|^)make ([a-z][a-z0-9-]*)", skill, re.M))
@@ -106,17 +106,17 @@ class SkillTests(unittest.TestCase):
 
     def test_closure_mode_does_not_accept_the_detectors_evidence_unread(self):
         """Round 4 review R4-3: the detector listed three tests as evidence for CodemodeToolContext.signal and none of them cancels the context."""
-        skill = (ROOT / "piglets/porter/skills/pig-porter/SKILL.md").read_text()
+        skill = (ROOT / "ompiglets/porter/skills/ompig-porter/SKILL.md").read_text()
         self.assertIn("Read every test you cite", skill)
         self.assertIn("exercises that property", skill)
 
     def test_the_skill_forbids_copying_another_lanes_branch(self):
         """Review R10-1: a delta task copied dflip-rest's unmerged durable images work."""
-        skill = (ROOT / "piglets/porter/skills/pig-porter/SKILL.md").read_text()
+        skill = (ROOT / "ompiglets/porter/skills/ompig-porter/SKILL.md").read_text()
         self.assertIn("never from another lane's branch", skill)
 
     def test_a_pin_move_run_names_its_target_branch_scope(self):
-        skill = (ROOT / "piglets/porter/skills/pig-porter/SKILL.md").read_text()
+        skill = (ROOT / "ompiglets/porter/skills/ompig-porter/SKILL.md").read_text()
         self.assertIn("pin-move branch", skill)
 
 

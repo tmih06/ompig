@@ -14,7 +14,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Dispatch is the shared state of one dispatch's handlers. Its methods are safe for concurrent use; on a nil Dispatch they record nothing and find nothing.

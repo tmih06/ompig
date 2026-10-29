@@ -37,7 +37,7 @@ func TestListModelsStdoutRouting(t *testing.T) {
 			args := append([]string{"--offline", "--no-extensions", "--list-models", "routing-model"}, tc.flags...)
 			cmd := exec.CommandContext(t.Context(), binary, args...)
 			cmd.Dir = root
-			cmd.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+filepath.Join(root, "home"), "PIG_CODING_AGENT_DIR="+agentDir, "FORCE_COLOR=0")
+			cmd.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+filepath.Join(root, "home"), "OMPIG_CODING_AGENT_DIR="+agentDir, "FORCE_COLOR=0")
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			if err := cmd.Run(); err != nil {
@@ -72,7 +72,7 @@ func TestRuntimeMetadataUsesLoadedExtensionsInEveryMode(t *testing.T) {
 		t.Helper()
 		cmd := exec.CommandContext(t.Context(), binary, append([]string{"--offline", "--no-extensions", "-e", provider, "-e", broken}, args...)...)
 		cmd.Dir = root
-		cmd.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+filepath.Join(root, "home"), "PIG_CODING_AGENT_DIR="+filepath.Join(root, "agent"), "FORCE_COLOR=0")
+		cmd.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+filepath.Join(root, "home"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(root, "agent"), "FORCE_COLOR=0")
 		var stdout, stderr bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &stdout, &stderr
 		if err := cmd.Run(); err != nil {
@@ -87,7 +87,7 @@ func TestRuntimeMetadataUsesLoadedExtensionsInEveryMode(t *testing.T) {
 		t.Errorf("plain list stdout=%q stderr=%q", listing, stderr)
 	}
 	help, stderr := run("--help")
-	if !strings.HasPrefix(help, "pig - ") || stderr != diagnostic {
+	if !strings.HasPrefix(help, "ompig - ") || stderr != diagnostic {
 		t.Errorf("plain help stdout=%q stderr=%q", help, stderr)
 	}
 	for _, mode := range []string{"json", "rpc"} {

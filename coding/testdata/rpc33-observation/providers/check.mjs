@@ -1,5 +1,5 @@
-// Compares PiG's first assistant message_start with the retained Pi oracle, per API, over N runs.
-// usage: node check.mjs <pig-binary> <runs> [api...]   (exit 1 unless every run of every API equals pi-start.json)
+// Compares Ompig's first assistant message_start with the retained Pi oracle, per API, over N runs.
+// usage: node check.mjs <ompig-binary> <runs> [api...]   (exit 1 unless every run of every API equals pi-start.json)
 // Regenerate the oracle: node check.mjs --oracle <pi cli.js> <runs> [api...]
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';

@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
-// Complexity gates for the built-in tools. Child processes (rg, fd) are not in the measured allocations; the gates measure what PiG does with their output.
+// Complexity gates for the built-in tools. Child processes (rg, fd) are not in the measured allocations; the gates measure what Ompig does with their output.
 
 func scalingFile(t *testing.T, dir string, lines int) string {
 	t.Helper()
@@ -31,7 +31,7 @@ func scalingFile(t *testing.T, dir string, lines int) string {
 
 func TestScalingTools(t *testing.T) {
 	rg := requireRG(t)
-	// grep formats limit x (2*context+1) lines for an output it cuts to 50KB (grep.ts:176-282). PiG measures the lines past those 50KB instead of building them (#9276), so with the file fixed the memory does not grow with the context.
+	// grep formats limit x (2*context+1) lines for an output it cuts to 50KB (grep.ts:176-282). Ompig measures the lines past those 50KB instead of building them (#9276), so with the file fixed the memory does not grow with the context.
 	bigDir := t.TempDir()
 	scalingFile(t, bigDir, 20000)
 	testscaling.Check(t, testscaling.Case{Name: "grep 100 matches with context n in a 20,000-line file", Size: 100, Bound: testscaling.Constant, Prepare: func(n int) func() {

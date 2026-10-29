@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: Copyright Hewlett Packard Enterprise Development LP
 # SPDX-License-Identifier: MIT
-"""Benchmark of PiG's TypeScript extension runtimes: Node, Bun and the compiled aot host, on one set of five extensions.
+"""Benchmark of Ompig's TypeScript extension runtimes: Node, Bun and the compiled aot host, on one set of five extensions.
 Derived from the Pi-Bolt hosting spike's harness (its bench/bolt-host/bench/bench.py), reduced to
-the tiers PiG ships and driven by PIG_TS_RUNTIME and a runtime slot instead of a `node` shim on PATH.
-Full path: pig --mode rpc with the extension set, a scripted local model, interleaved arms with the order rotated each round.
-Per run: launch-to-ready (spawn -> get_commands answered with the extension commands), memory (RSS/PSS/private) of pig and
+the tiers Ompig ships and driven by OMPIG_TS_RUNTIME and a runtime slot instead of a `node` shim on PATH.
+Full path: ompig --mode rpc with the extension set, a scripted local model, interleaved arms with the order rotated each round.
+Per run: launch-to-ready (spawn -> get_commands answered with the extension commands), memory (RSS/PSS/private) of ompig and
 of the extension process(es) at ready and after 5 prompts, /words hot loop (in-extension ms, wall, extension CPU), tool turn
 gap (model response with the tool call -> next model request) and prompt wall time.
-The aot arm needs compiled images for the set: run once with --build, which launches the set so that PiG records the build
-request and runs the Piglet's worker over the slot (PIG_AOT_BENCH_BUILD, see README.md).
-usage: bench.py --out DIR --rounds N --arms node,bun,aot --pig PIG --slot SLOT --exts DIR --bun BUN"""
+The aot arm needs compiled images for the set: run once with --build, which launches the set so that Ompig records the build
+request and runs the Ompiglet's worker over the slot (OMPIG_AOT_BENCH_BUILD, see README.md).
+usage: bench.py --out DIR --rounds N --arms node,bun,aot --ompig OMPIG --slot SLOT --exts DIR --bun BUN"""
 import argparse, json, os, random, shutil, signal, socket, statistics, subprocess, sys, tempfile, time
 CFG = {}
-TIER_EXE = {"node": "node", "bun": "bun", "aot": "pig-ts-host"}
+TIER_EXE = {"node": "node", "bun": "bun", "aot": "ompig-ts-host"}
 
 def exts():
     n = f"{CFG['exts']}/node_modules"
@@ -22,8 +22,8 @@ def exts():
     return [f"{n}/@tintinweb/pi-subagents", f"{os.path.normpath(upstream)}/todo.ts", f"{os.path.normpath(upstream)}/permission-gate.ts", f"{here}/exts/heavy-toolcall.ts", f"{here}/exts/word-count.ts"]
 
 def arm_env(arm):
-    if arm == "node": return {"PIG_TS_RUNTIME": "node"}
-    if arm in ("bun", "aot"): return {"PIG_TS_RUNTIME": arm, "PIG_TS_RUNTIMES_DIR": CFG["slot"]}
+    if arm == "node": return {"OMPIG_TS_RUNTIME": "node"}
+    if arm in ("bun", "aot"): return {"OMPIG_TS_RUNTIME": arm, "OMPIG_TS_RUNTIMES_DIR": CFG["slot"]}
     raise SystemExit(f"unknown arm {arm}")
 
 def proc_tree(root):
@@ -52,12 +52,12 @@ def mem(pid):
     except Exception: return None
     return r
 
-def snapshot(pig_pid):
-    procs = {p: mem(p) for p in proc_tree(pig_pid)}
+def snapshot(ompig_pid):
+    procs = {p: mem(p) for p in proc_tree(ompig_pid)}
     procs = {p: m for p, m in procs.items() if m}
-    ext = {p: m for p, m in procs.items() if p != pig_pid}
+    ext = {p: m for p, m in procs.items() if p != ompig_pid}
     tot = lambda d, k: sum(m.get(k, 0) for m in d.values())
-    return {"pig_rss_kb": procs.get(pig_pid, {}).get("Rss"), "pig_pss_kb": procs.get(pig_pid, {}).get("Pss"),
+    return {"ompig_rss_kb": procs.get(ompig_pid, {}).get("Rss"), "ompig_pss_kb": procs.get(ompig_pid, {}).get("Pss"),
             "ext_n": len(ext), "ext_rss_kb": tot(ext, "Rss"), "ext_pss_kb": tot(ext, "Pss"),
             "ext_private_kb": tot(ext, "Private_Dirty") + tot(ext, "Private_Clean"), "ext_private_dirty_kb": tot(ext, "Private_Dirty"),
             "ext_cpu_ticks": tot(ext, "cpu_ticks"),
@@ -74,7 +74,7 @@ class Rpc:
         end = time.time() + timeout
         while time.time() < end:
             line = self.p.stdout.readline()
-            if not line: raise RuntimeError("pig exited: " + self.p.stderr.read().decode()[-2000:])
+            if not line: raise RuntimeError("ompig exited: " + self.p.stderr.read().decode()[-2000:])
             try: ev = json.loads(line)
             except Exception: continue
             if pred(ev): return ev
@@ -86,11 +86,11 @@ class Rpc:
             except Exception: pass
 
 def run_once(arm, agent_dir, home, work, port, big, model_log):
-    env = {"PATH": os.environ["PATH"], "HOME": home, "PIG_HOME": f"{home}/.pig", "PIG_CODING_AGENT_DIR": agent_dir,
-           "PI_CODING_AGENT_DIR": agent_dir, "PIG_OFFLINE": "1", "PI_OFFLINE": "1", "PIG_TELEMETRY": "0", "PIG_SKIP_VERSION_CHECK": "1",
+    env = {"PATH": os.environ["PATH"], "HOME": home, "OMPIG_HOME": f"{home}/.ompig", "OMPIG_CODING_AGENT_DIR": agent_dir,
+           "PI_CODING_AGENT_DIR": agent_dir, "OMPIG_OFFLINE": "1", "PI_OFFLINE": "1", "OMPIG_TELEMETRY": "0", "OMPIG_SKIP_VERSION_CHECK": "1",
            "PI_TIMING": "1", "TERM": "dumb", "TMPDIR": f"{home}/tmp", **arm_env(arm)}
     os.makedirs(env["TMPDIR"], exist_ok=True)
-    argv = [CFG["pig"], "--mode", "rpc", "--no-session", "--offline", "-ne", "--provider", "fake", "--model", "fake-model"]
+    argv = [CFG["ompig"], "--mode", "rpc", "--no-session", "--offline", "-ne", "--provider", "fake", "--model", "fake-model"]
     for e in exts(): argv += ["-e", e]
     t0 = time.time(); rpc = Rpc(argv, env, work)
     out = {"arm": arm, "loadavg": open("/proc/loadavg").read().split()[:3]}
@@ -136,10 +136,10 @@ def run_once(arm, agent_dir, home, work, port, big, model_log):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--out", required=True); ap.add_argument("--rounds", type=int, default=5)
     ap.add_argument("--arms", default="node,bun,aot"); ap.add_argument("--port", type=int, default=0)
-    ap.add_argument("--pig", required=True); ap.add_argument("--slot", required=True); ap.add_argument("--exts", required=True)
-    ap.add_argument("--build-cmd", help="command that runs the Piglet's worker over the slot: it installs the aot manifest and the compiler, then builds the requests a launch recorded")
+    ap.add_argument("--ompig", required=True); ap.add_argument("--slot", required=True); ap.add_argument("--exts", required=True)
+    ap.add_argument("--build-cmd", help="command that runs the Ompiglet's worker over the slot: it installs the aot manifest and the compiler, then builds the requests a launch recorded")
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
-    CFG.update(pig=os.path.abspath(a.pig), slot=os.path.abspath(a.slot), exts=os.path.abspath(a.exts))
+    CFG.update(ompig=os.path.abspath(a.ompig), slot=os.path.abspath(a.slot), exts=os.path.abspath(a.exts))
     arms = a.arms.split(",")
     base = tempfile.mkdtemp(prefix="aot-bench-", dir=os.environ.get("TMPDIR", "/tmp"))
     work = f"{base}/work"; os.makedirs(work)
@@ -166,7 +166,7 @@ def main():
     try:
         for arm in arms:  # warm-up: launcher build, jiti and compile caches
             if arm == "aot" and a.build_cmd:
-                # The Piglet's worker installs the runtime's manifest and the compiler; the next launch runs on Bun and records the build request;
+                # The Ompiglet's worker installs the runtime's manifest and the compiler; the next launch runs on Bun and records the build request;
                 # the worker builds it; the launch after that runs on the compiled host.
                 subprocess.run(a.build_cmd, shell=True, check=True)
                 try: run_once(arm, homes[arm][0], homes[arm][1], work, port, big, model_log)

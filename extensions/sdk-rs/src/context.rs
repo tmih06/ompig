@@ -83,7 +83,7 @@ pub trait RemoteComponent: Send {
     /// while [`Self::handles_mouse`] is true: press, release, move, drag,
     /// click and wheel, in order; a left click arrives as press, release,
     /// then click. Pi routes the mouse to components only in fullscreen
-    /// mode, and so does PiG. The host answers the terminal at once, so a
+    /// mode, and so does Ompig. The host answers the terminal at once, so a
     /// component that takes the mouse handles every event in its bounds and
     /// text selection does not start over it. It runs on the worker
     /// [`Self::handle_input`] runs on, and its result means the same.
@@ -1080,7 +1080,7 @@ impl ModelEventStream {
         stopped: &crate::provider::ProviderSignal,
         mut emit: impl FnMut(serde_json::Value) -> Result<(), String>,
     ) -> Result<(), String> {
-        // pig additive (D19): teardown releases transport waits without settling the caller-owned stream.
+        // ompig additive (D19): teardown releases transport waits without settling the caller-owned stream.
         let stream = Arc::downgrade(self);
         let _wake = stopped.subscribe(Arc::new(move || {
             if let Some(stream) = stream.upgrade() {
@@ -1175,7 +1175,7 @@ impl ModelRegistry {
         let state=self.conn.provider_objects.get().ok_or_else(||io::Error::other("Provider runtime unavailable"))?;
         state.get(self.conn.clone(),declaration).map(Some).map_err(io::Error::other)
     }
-    // pig divergence (D78): builtin/composed Provider methods still need a native SDK carrier.
+    // ompig divergence (D78): builtin/composed Provider methods still need a native SDK carrier.
     pub fn get_provider(&self,id:&str)->io::Result<Option<Arc<crate::Provider>>>{
         if let Some(runtime) = &self.runtime {
             return runtime.get_provider(id);
@@ -2113,7 +2113,7 @@ impl Context {
         self.tool_call_id.as_deref()
     }
 
-    /// Returns the pig config root: `PIG_HOME`, else `XDG_CONFIG_HOME/pig`, else `~/.pig`. An empty variable falls through to the next choice, a
+    /// Returns the ompig config root: `OMPIG_HOME`, else `XDG_CONFIG_HOME/ompig`, else `~/.ompig`. An empty variable falls through to the next choice, a
     /// leading `~` or `~/` expands to the home directory, and any other value stays literal. It fails, and never returns a relative path, when the
     /// home directory is needed and cannot be found. The host's `internal/configroot` and the Go, Python and Node SDKs follow the same policy.
     pub fn config_home(&self) -> io::Result<String> {
@@ -2814,7 +2814,7 @@ impl Context {
         self.set_surface("ui.setFooter", None)
     }
 
-    /// Set the semantic login rendered by Pig's fixed native template.
+    /// Set the semantic login rendered by Ompig's fixed native template.
     /// Validation is performed by the host.
     pub fn set_login(&self, definition: &LoginDefinition) -> io::Result<()> {
         let args = serde_json::to_value(definition)
@@ -3028,7 +3028,7 @@ impl Context {
             let worker_request_parent = self.request_parent.clone();
             let worker_request_id = self.request_id.clone();
             thread::Builder::new()
-                .name(format!("pig-overlay-{key}"))
+                .name(format!("ompig-overlay-{key}"))
                 .spawn(move || {
                     run_remote_component_worker(
                         conn,
@@ -4609,7 +4609,7 @@ impl Drop for TerminalInputSubscription {
 
 /// A footer or header renderer, the subprocess form of Pi's component factory.
 ///
-/// pig additive (D19): Pi's TUI renders the in-process component every frame; a
+/// ompig additive (D19): Pi's TUI renders the in-process component every frame; a
 /// subprocess SDK renders at the host width itself and sends the width with the rows.
 ///
 /// The TUI calls `render(width)` for every frame (interactive-mode.ts:2418-2480).
@@ -4919,13 +4919,13 @@ fn config_home_from(get: impl Fn(&str) -> Option<String>) -> io::Result<String> 
             None => Ok(path),
         }
     };
-    if let Some(root) = var("PIG_HOME") {
+    if let Some(root) = var("OMPIG_HOME") {
         return expand(root);
     }
     if let Some(root) = var("XDG_CONFIG_HOME") {
-        return Ok(join_clean(&expand(root)?, "pig"));
+        return Ok(join_clean(&expand(root)?, "ompig"));
     }
-    Ok(join_clean(&home()?, ".pig"))
+    Ok(join_clean(&home()?, ".ompig"))
 }
 
 /// Go's `filepath.Join(base, rest)` as the host's `internal/configroot` uses it: the elements joined by the separator, then lexically cleaned
@@ -5308,8 +5308,8 @@ mod login_call_tests {
         let (extension_stream, host_stream) = UnixStream::pair().unwrap();
         let ctx = context(extension_stream);
         let definition = SpriteDefinition {
-            id: "blue-pig".to_string(),
-            name: "Blue PiG".to_string(),
+            id: "blue-ompig".to_string(),
+            name: "Blue Ompig".to_string(),
             tagline: "From an extension.".to_string(),
             mascot: vec!["mascot".to_string()],
             palette: HashMap::from([("P".to_string(), "#5B8DEF".to_string())]),

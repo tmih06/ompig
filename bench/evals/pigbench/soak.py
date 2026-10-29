@@ -5,8 +5,8 @@ Every arm runs at the same time on the same host, each in its own cgroup against
 Each interval the bench records processes, threads, open file descriptors, resident and proportional memory and CPU of the whole tree.
 Compaction on a small context window keeps the transcript bounded, so growth in any of these is a leak, not the work. After the run
 a series is judged flat when its second half stays within a declared band: descriptors, threads and processes within max(2, 5% of the
-median), resident memory within 10% of the median. Goroutines are not sampled during the run (PiG exposes no live count); PiG's
-`PIG_PROFILE=goroutine` profile is written when the process exits.
+median), resident memory within 10% of the median. Goroutines are not sampled during the run (Ompig exposes no live count); Ompig's
+`OMPIG_PROFILE=goroutine` profile is written when the process exits.
 """
 import copy
 import json
@@ -145,7 +145,7 @@ def with_aa_copies(arms, ids):
 
 def run(opts):
     opts.seconds = opts.hours * 3600 if opts.minutes is None else opts.minutes * 60
-    arm_list = [a for a in armlib.select(armlib.load(), opts.arms) if a.family in ("pig", "pi")]
+    arm_list = [a for a in armlib.select(armlib.load(), opts.arms) if a.family in ("ompig", "pi")]
     result = {"kind": "soak", "options": {"hours": opts.seconds / 3600, "interval_s": opts.interval, "think_ms": opts.think_ms, "seed": opts.seed,
                                           "bands": {"count": FLAT_COUNT_BAND, "rss": FLAT_RSS_BAND}}, "arms": {}, "failures": {}, "egress": dict(egress.describe(), violations=[])}
     with armlib.Workspace() as ws:

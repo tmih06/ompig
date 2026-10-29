@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports the error classes of packages/mcp/src/protocol/jsonrpc.ts:45-79 and transports/streamable-http.ts:126-153:

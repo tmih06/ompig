@@ -7,7 +7,7 @@ autofix-check: ## Unit-test the derived-file autofix tool that the bookkeeping j
 	@python3 -B -m unittest discover -s automation/ci -p test_autofix.py
 
 # ci-bookkeeping is the fail-fast job every other job waits for: the committed derived files, ledgers and policy gates that need only Go, Python and the Pi source mirror (no oracle build, no npm install, no test binaries). A stale ledger or a missing sign-off stops the run in minutes instead of after the 30-minute shards. CI runs it with make -k -j, so one failing gate does not hide the others; automation/ci/autofix-gates.txt names the gates whose remedy is make generate.
-ci-bookkeeping: autofix-check divergences-drift piglet-strip-ids-drift known-gaps-drift custom-factory-ledger-drift lint-scenarios port-map-drift coverage-drift divergence-consistency divergence-quality divergence-guard source-hygiene test-provenance docs-drift bug-ledger-check race-coverage perf-scoreboard-check go-fix-clean
+ci-bookkeeping: autofix-check divergences-drift ompiglet-strip-ids-drift known-gaps-drift custom-factory-ledger-drift lint-scenarios port-map-drift coverage-drift divergence-consistency divergence-quality divergence-guard source-hygiene test-provenance docs-drift bug-ledger-check race-coverage perf-scoreboard-check go-fix-clean
 ci-startup: startup-proxies
 ci-build: module-publication lint
 # The light pull-request run (automation/ci/ci-tiers.txt) lints the whole changed files (CI sets LINT_BASE=origin/main); the full run keeps the repository-wide lint.
@@ -38,7 +38,7 @@ parity-fast-2:
 # module-size's install proof is the one drift gate the light pull-request run leaves to the full run.
 ci-drift: ci-drift-pr module-size
 ci-drift-pr: port-lint any-trap perf-lint
-ci-contracts: correspondence-check porter-check interface-inventory interface-inventory-test interface-go-drift interface-recommendations-drift interface-mapping-quality interface-delta interface-gaps behavior-contracts test-inventory-drift test-inventory test-porting-release format-version-inventory sdk-surface-drift sdk-apidiff piglet-strip-build
+ci-contracts: correspondence-check porter-check interface-inventory interface-inventory-test interface-go-drift interface-recommendations-drift interface-mapping-quality interface-delta interface-gaps behavior-contracts test-inventory-drift test-inventory test-porting-release format-version-inventory sdk-surface-drift sdk-apidiff ompiglet-strip-build
 ci-closure: closure-check
 # portmap-check runs the evidence tests of every proven PORT_MAP row under coverage. It builds each evidence package's test binary once and
 # caches each green row in build/portmap-coverage, but a cold run is still about 18 CPU-minutes of 4-CPU runner time, so CI runs it as
@@ -62,12 +62,12 @@ portmap-check-3:
 ci-node-runtime:
 	go test -tags=parity -count=1 ./coding/extension/host/subprocess -run '^Test(Node|EmbeddedNode|ResolveNode|EnsureNode|Host.*Node|Builder.*Node|BuildExtCommand_Node|PiDiff|PiScrollView|PiTui|VendoredCrossSpawn|TerminalInputNode)'
 	go test -tags=parity -count=1 ./coding/cli -run '^TestRPCStartupMalformedPackageManifests$$'
-	@mkdir -p $(dir $(PARITY_PIG_BIN))
-	go build -o $(PARITY_PIG_BIN) ./cmd/pig
+	@mkdir -p $(dir $(PARITY_OMPIG_BIN))
+	go build -o $(PARITY_OMPIG_BIN) ./cmd/ompig
 	@results=$$($(MKTEMP)); trap 'rm -f "$$results"' EXIT; \
-		PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 ./test/parity/runner \
+		OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 ./test/parity/runner \
 		-run 'TestParity/(23-extension-directory-entries|26-extension-load-order|31-extension-runtime-surface|32-extension-load-failure-message|34-extension-(module-loading|process-identity)|55-(package-manifest-startup|node-package-entry-exports))$$' \
-		-args -pig-parity.results="$$results" && \
+		-args -ompig-parity.results="$$results" && \
 		$(MAKE) -s require-parity-ran RESULTS="$$results"
 
 .PHONY: ci-node-runtime

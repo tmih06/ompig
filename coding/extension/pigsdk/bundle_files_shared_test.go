@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_go && !pig_strip_extension_sdk_python && !pig_strip_extension_sdk_rust
+//go:build !ompig_strip_extension_sdk_go && !ompig_strip_extension_sdk_python && !ompig_strip_extension_sdk_rust
 
 package pigsdk
 
@@ -6,9 +6,9 @@ import (
 	"slices"
 	"testing"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	pysdk "github.com/MichaelKinsy/PiG/extensions/sdk-py"
-	rssdk "github.com/MichaelKinsy/PiG/extensions/sdk-rs"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	pysdk "github.com/tmih06/ompig/extensions/sdk-py"
+	rssdk "github.com/tmih06/ompig/extensions/sdk-rs"
 )
 
 var bundleFilesSink []sdkBundle

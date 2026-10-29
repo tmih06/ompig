@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // funcTool is a tool whose Execute is a function.
@@ -31,7 +31,7 @@ func (funcTool) ExecutionMode() agent.ToolExecutionMode { return agent.ToolModeP
 // TestAbortMidToolThenSendIsValid aborts a turn while one of three parallel tool calls still runs (the others finished, so their results exist and the third has none), then sends again. The request after the abort, and the one after a second abort of a lone call, must keep every tool call answered directly after its assistant message (Anthropic Messages tool_result contract; Pi: packages/ai/src/api/transform-messages.ts closePendingToolCalls) and meet each provider contract.
 func TestAbortMidToolThenSendIsValid(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir(), AgentDir: home})
 	if err != nil {
 		t.Fatal(err)

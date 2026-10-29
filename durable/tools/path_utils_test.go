@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/env"
 )
 
 // Not upstream cases (tools.test.ts has none for path-utils.ts): they pin

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // BenchmarkRecordSpan records one span with n start attributes, a SetAttributes call that overwrites half of them and

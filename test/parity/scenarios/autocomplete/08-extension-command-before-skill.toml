@@ -1,7 +1,7 @@
 # Upstream evidence: Pi 0.87.1 interactive-mode.ts:747-776 assembles extensions before skills.
 # autocomplete.ts:335-341 removes skill: for fuzzy scoring; ties keep that order.
 # The installed Pi CombinedAutocompleteProvider probe returns [btw, skill:btw]
-# for Pi's order, and [skill:btw, btw] for PiG's old order. This drives the real
+# for Pi's order, and [skill:btw, btw] for Ompig's old order. This drives the real
 # editor and asserts the selected command executes, not merely that it is listed.
 # --no-skills excludes ambient discovery; the explicit CLI skill still loads.
 name = "08-extension-command-before-skill"
@@ -12,10 +12,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--no-skills", "--skill", "SKILL.md"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--no-skills", "--skill", "SKILL.md"]
 pi_args = ["--no-extensions", "--no-skills", "--skill", "SKILL.md"]
-pig_extensions = ["testdata/command-skill-order/command.mjs"]
+ompig_extensions = ["testdata/command-skill-order/command.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/command-skill-order/command.mjs"]
 
 [tmux]
@@ -24,7 +24,7 @@ width = 100
 height = 40
 # Resource listings are rendered after the final startup provider rebuild. The
 # early (auto) footer is not readiness for a command/skill completion request.
-ready_pattern_pig = "[Extensions]"
+ready_pattern_ompig = "[Extensions]"
 ready_pattern_pi = "[Extensions]"
 ready_timeout_seconds = 30
 capture_start = "AUTOCOMPLETE COMMAND SELECTED"

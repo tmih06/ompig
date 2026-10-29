@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type sdkURLCase struct {
@@ -46,7 +46,7 @@ func sdkURLCases(apis ...string) []sdkURLCase {
 			cases = append(cases, sdkURLCase{API: api, BaseURL: base})
 		}
 		if api != "openrouter-images" {
-			// With no base URL the openai SDK requests api.openai.com; an image model always carries its catalog base URL, and Pig does not send an OpenRouter key to another host.
+			// With no base URL the openai SDK requests api.openai.com; an image model always carries its catalog base URL, and Ompig does not send an OpenRouter key to another host.
 			cases = append(cases, sdkURLCase{API: api, BaseURL: ""})
 		}
 		cases = append(cases, sdkURLCase{API: api, BaseURL: "not a url"}, sdkURLCase{API: api, BaseURL: "https://api.openai.com/v1"})
@@ -94,7 +94,7 @@ func recordingFetch(seen *string) *http.Client {
 	})}
 }
 
-// sdkAPIRequest sends one request through Pig's provider for api with baseURL and returns the error message the request reports.
+// sdkAPIRequest sends one request through Ompig's provider for api with baseURL and returns the error message the request reports.
 func sdkAPIRequest(t *testing.T, api, baseURL string, fetch *http.Client) string {
 	t.Helper()
 	user := NormalizeContext(Context{Messages: []Message{UserMessage{Content: UserContentBlocks{TextContent{Text: "hi"}}}}})
@@ -128,7 +128,7 @@ func sdkAPIRequest(t *testing.T, api, baseURL string, fetch *http.Client) string
 	return ""
 }
 
-// TestSDKProvidersRequestURLMatchesSDK compares the URL the openai and @anthropic-ai/sdk clients (pinned by Pi) build for a base URL, and what fetch does with it, with the URL Pig's openai-completions, openai-responses, openrouter-images and anthropic-messages providers request.
+// TestSDKProvidersRequestURLMatchesSDK compares the URL the openai and @anthropic-ai/sdk clients (pinned by Pi) build for a base URL, and what fetch does with it, with the URL Ompig's openai-completions, openai-responses, openrouter-images and anthropic-messages providers request.
 func TestSDKProvidersRequestURLMatchesSDK(t *testing.T) {
 	apis := []string{"openai-completions", "openai-responses", "openrouter-images", "anthropic-messages", "google-generative-ai", "pi-messages"}
 	cases := sdkURLCases(apis...)

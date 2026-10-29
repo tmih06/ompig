@@ -5,7 +5,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // .upstream/current/packages/coding-agent/src/core/messages.ts:148 convertToLlm(messages) only converts roles: it takes one

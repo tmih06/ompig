@@ -2,24 +2,24 @@
 SPDX-License-Identifier: MIT
 -->
 
-# PiG project context
+# Ompig project context
 
-This file defines the terms that public PiG documentation and implementation use.
+This file defines the terms that public Ompig documentation and implementation use.
 
 ## Pi
 
 Pi is the upstream TypeScript project at <https://github.com/earendil-works/pi>. Pi is the reference implementation for parity-bound behavior.
 
-## PiG
+## Ompig
 
-PiG is the Go implementation in this repository. The executable is `pig`. PiG follows the exact Pi build pinned in `.upstream/pin` (a release tag, or a pinned commit).
+Ompig is the Go implementation in this repository. The executable is `ompig`. Ompig follows the exact Pi build pinned in `.upstream/pin` (a release tag, or a pinned commit).
 
-## Stock PiG
+## Stock Ompig
 
-Stock PiG is the product-neutral binary built from this repository. It contains
-Pi-compatible behavior, generic extension and Piglet infrastructure, and the
+Stock Ompig is the product-neutral binary built from this repository. It contains
+Pi-compatible behavior, generic extension and Ompiglet infrastructure, and the
 reference documentation required to use those APIs. It activates no optional
-product Resource and no implicit Piglet composition.
+product Resource and no implicit Ompiglet composition.
 
 ## Resource
 
@@ -27,34 +27,34 @@ A Resource contributes one extension, skill, prompt, hook, MCP definition, theme
 
 ## Package
 
-A Package distributes a versioned collection of Resources. Installing a Package makes its Resources available through normal discovery. A Package does not own or activate a Piglet.
+A Package distributes a versioned collection of Resources. Installing a Package makes its Resources available through normal discovery. A Package does not own or activate a Ompiglet.
 
 ## Plugin
 
 A Plugin packages capabilities for more than one compatible agent harness through an Agent Plugin or another supported vendor format.
 
-## Piglet
+## Ompiglet
 
-A Piglet defines one named agent. It selects and scopes Resources and declares defaults and environment requirements.
+A Ompiglet defines one named agent. It selects and scopes Resources and declares defaults and environment requirements.
 
-## Piglet release
+## Ompiglet release
 
-A Piglet release pins the exact Resource closure and executable component plan for a Piglet.
+A Ompiglet release pins the exact Resource closure and executable component plan for a Ompiglet.
 
-## Piglet Binary
+## Ompiglet Binary
 
-A Piglet Binary is a target-native PiG executable built for one immutable Piglet composition. It can contain fused Go extensions and prebuilt Go or Rust extension cells. External services, configuration, secrets, and interpreted runtimes remain external requirements unless the release states otherwise.
+A Ompiglet Binary is a target-native Ompig executable built for one immutable Ompiglet composition. It can contain fused Go extensions and prebuilt Go or Rust extension cells. External services, configuration, secrets, and interpreted runtimes remain external requirements unless the release states otherwise.
 
-## PiG Standard
+## Ompig Standard
 
-PiG Standard is the optional curated Piglet at
-`piglets/standard/pig-standard.yaml`. It is not Stock PiG. A user must select
+Ompig Standard is the optional curated Ompiglet at
+`ompiglets/standard/ompig-standard.yaml`. It is not Stock Ompig. A user must select
 or build it explicitly. A Package can distribute its Resources but cannot own
-or activate the Piglet.
+or activate the Ompiglet.
 
-## Pig Porter
+## Ompig Porter
 
-Pig Porter is the local interactive and headless workbench for upstream-first parity work. It is a Piglet Resource in this repository. It does not define PiG product behavior.
+Ompig Porter is the local interactive and headless workbench for upstream-first parity work. It is a Ompiglet Resource in this repository. It does not define Ompig product behavior.
 
 ## Divergence
 

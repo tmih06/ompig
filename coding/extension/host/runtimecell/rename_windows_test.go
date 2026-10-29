@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// holdOpen opens path the way Go (and so a PiG process) does, which does not
+// holdOpen opens path the way Go (and so a Ompig process) does, which does not
 // share delete access, and releases it when the test ends or release runs.
 func holdOpen(t *testing.T, path string) (release func()) {
 	t.Helper()

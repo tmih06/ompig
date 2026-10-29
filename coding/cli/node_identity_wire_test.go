@@ -13,7 +13,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // piIdentity matches values Pi sends to identify itself: pi.dev, a bare "pi"
@@ -62,12 +62,12 @@ func realNodeDir(t *testing.T) string {
 // createAgentSession/prompt (Pi's core/sdk.ts client identity) and pi-ai's
 // completeSimple (D74's host bridge). Run through the real binary against a
 // recording server shaped like OpenRouter and OpenCode (Pi selects those by
-// provider id or base URL: identity.ts isOpenRouter), the session carries PiG's attribution, the direct call none, and neither carries Pi's
+// provider id or base URL: identity.ts isOpenRouter), the session carries Ompig's attribution, the direct call none, and neither carries Pi's
 // (D26).
-func TestNodeExtensionModelCallsCarryPiGIdentityNeverPis(t *testing.T) {
+func TestNodeExtensionModelCallsCarryOmpigIdentityNeverPis(t *testing.T) {
 	type shape struct {
 		name, provider, path string
-		// want is what the vendored SDK's createAgentSession sends: its client identity attributes the request to PiG.
+		// want is what the vendored SDK's createAgentSession sends: its client identity attributes the request to Ompig.
 		want func(sessionID string) map[string]string
 		// wantStream is what a direct pi-ai completeSimple sends: pi-ai attributes nothing unless the caller passes an identity.
 		wantStream func(sessionID string) map[string]string
@@ -102,8 +102,8 @@ func TestNodeExtensionModelCallsCarryPiGIdentityNeverPis(t *testing.T) {
 				recorder, server := newIdentityRecorder(t)
 				home := t.TempDir()
 				env := []string{
-					"HOME=" + home, "PIG_HOME=" + filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
-					"PIG_OFFLINE=1", "FORCE_COLOR=0", "PI_TELEMETRY=1", "PATH=" + nodeDir + string(os.PathListSeparator) + os.Getenv("PATH"),
+					"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
+					"OMPIG_OFFLINE=1", "FORCE_COLOR=0", "PI_TELEMETRY=1", "PATH=" + nodeDir + string(os.PathListSeparator) + os.Getenv("PATH"),
 				}
 				p := startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "-e", fixture, "--no-session")
 				id := "probe-" + shape.name

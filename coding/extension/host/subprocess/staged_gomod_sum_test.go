@@ -14,7 +14,7 @@ import (
 // "missing go.sum entry" for every imported module.
 func TestStagedGoModFileSeedsGoSum(t *testing.T) {
 	srcDir := t.TempDir()
-	const goMod = "module example.com/ext\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ../gone/sdk\n"
+	const goMod = "module example.com/ext\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => ../gone/sdk\n"
 	const goSum = "github.com/mattn/go-runewidth v0.0.23 h1:deadbeef=\ngithub.com/mattn/go-runewidth v0.0.23/go.mod h1:cafebabe=\n"
 	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
@@ -49,7 +49,7 @@ func TestStagedGoModFileSeedsGoSum(t *testing.T) {
 // (no go.sum) still stages successfully.
 func TestStagedGoModFileNoGoSum(t *testing.T) {
 	srcDir := t.TempDir()
-	const goMod = "module example.com/ext\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ../gone/sdk\n"
+	const goMod = "module example.com/ext\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => ../gone/sdk\n"
 	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}

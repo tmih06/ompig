@@ -59,20 +59,20 @@ func TestMigrateSessionsFromAgentRootMovesSessionIntoEncodedDir(t *testing.T) {
 	requireMigratedOrLeftAtRoot(t, agentDir, "--tmp-demo-project--", sessionName, content)
 }
 
-// Upstream migrateExtensionSystem targets join(cwd, CONFIG_DIR_NAME). PiG's
-// CONFIG_DIR_NAME is ".pig", so the project migration must rename
-// .pig/commands and must never touch Pi's own .pi project folder.
+// Upstream migrateExtensionSystem targets join(cwd, CONFIG_DIR_NAME). Ompig's
+// CONFIG_DIR_NAME is ".ompig", so the project migration must rename
+// .ompig/commands and must never touch Pi's own .pi project folder.
 func TestRunMigrationsProjectCommandsTargetPigConfigDirNotPi(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := t.TempDir()
 	piCommands := filepath.Join(cwd, ".pi", "commands")
-	pigCommands := filepath.Join(cwd, ".pig", "commands")
-	for _, dir := range []string{piCommands, pigCommands, filepath.Join(cwd, ".pi", "hooks"), filepath.Join(cwd, ".pi", "tools", "custom")} {
+	ompigCommands := filepath.Join(cwd, ".ompig", "commands")
+	for _, dir := range []string{piCommands, ompigCommands, filepath.Join(cwd, ".pi", "hooks"), filepath.Join(cwd, ".pi", "tools", "custom")} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
 		}
 	}
-	if err := os.MkdirAll(filepath.Join(cwd, ".pig", "hooks"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(cwd, ".ompig", "hooks"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 
@@ -87,15 +87,15 @@ func TestRunMigrationsProjectCommandsTargetPigConfigDirNotPi(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(cwd, ".pi", "prompts")); !os.IsNotExist(err) {
 		t.Fatalf(".pi/prompts must not be created, stat err = %v", err)
 	}
-	if _, err := os.Stat(pigCommands); !os.IsNotExist(err) {
-		t.Fatalf(".pig/commands still exists, stat err = %v", err)
+	if _, err := os.Stat(ompigCommands); !os.IsNotExist(err) {
+		t.Fatalf(".ompig/commands still exists, stat err = %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(cwd, ".pig", "prompts")); err != nil {
-		t.Fatalf(".pig/prompts missing after migration: %v", err)
+	if _, err := os.Stat(filepath.Join(cwd, ".ompig", "prompts")); err != nil {
+		t.Fatalf(".ompig/prompts missing after migration: %v", err)
 	}
 	want := []string{"Project hooks/ directory found. Hooks have been renamed to extensions."}
 	if strings.Join(warnings, "\n") != strings.Join(want, "\n") {
-		t.Fatalf("warnings = %q, want %q (from .pig only)", warnings, want)
+		t.Fatalf("warnings = %q, want %q (from .ompig only)", warnings, want)
 	}
 }
 

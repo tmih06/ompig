@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // Complexity gates for the per-delta and per-turn provider paths. Each gate measures the path at n and 10n and fails when allocations or allocated bytes grow faster than the declared bound.

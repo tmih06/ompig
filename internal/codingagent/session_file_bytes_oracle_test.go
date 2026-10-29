@@ -12,16 +12,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/session-manager.ts
 
 // The bytes of a session file (session-manager.ts _persist: `${JSON.stringify(entry)}\n` per entry, the header first, written at the first user
 // or assistant message): member order, escaping of U+2028/2029, <, & and DEL, number forms, the optional members. The pinned SessionManager and
-// PiG's Session write the same scripted appends; entry ids and timestamps, which differ by design, are masked and everything else must be equal.
+// Ompig's Session write the same scripted appends; entry ids and timestamps, which differ by design, are masked and everything else must be equal.
 func TestSessionFileBytesMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(31))
 	quote := func(s string) string { b, _ := json.Marshal(s); return string(b) }
@@ -285,7 +285,7 @@ func TestSessionFileBytesMatchPi(t *testing.T) {
 			}
 		}
 		if !slices.Equal(thrown, oracle[i].Errors) && (len(thrown) > 0 || len(oracle[i].Errors) > 0) {
-			t.Errorf("script %d: PiG refused operations %v, Pi %v", i, thrown, oracle[i].Errors)
+			t.Errorf("script %d: Ompig refused operations %v, Pi %v", i, thrown, oracle[i].Errors)
 		}
 		file := session.GetSessionFile()
 		raw, readErr := os.ReadFile(*file)
@@ -302,12 +302,12 @@ func TestSessionFileBytesMatchPi(t *testing.T) {
 				got, expected := strings.Split(mask(exported, true), "\n"), strings.Split(mask(oracle[i].Exported, true), "\n")
 				for j := range min(len(got), len(expected)) {
 					if got[j] != expected[j] {
-						t.Errorf("script %d exported line %d:\n PiG %.700s\n Pi  %.700s", i, j, got[j], expected[j])
+						t.Errorf("script %d exported line %d:\n Ompig %.700s\n Pi  %.700s", i, j, got[j], expected[j])
 						break
 					}
 				}
 				if len(got) != len(expected) {
-					t.Errorf("script %d exported: PiG %d lines, Pi %d", i, len(got), len(expected))
+					t.Errorf("script %d exported: Ompig %d lines, Pi %d", i, len(got), len(expected))
 				}
 			}
 		}
@@ -316,12 +316,12 @@ func TestSessionFileBytesMatchPi(t *testing.T) {
 				got, expected := strings.Split(mask(string(raw)), "\n"), strings.Split(mask(want[i]), "\n")
 				for j := range min(len(got), len(expected)) {
 					if got[j] != expected[j] {
-						t.Errorf("script %d line %d:\n PiG %.700s\n Pi  %.700s", i, j, got[j], expected[j])
+						t.Errorf("script %d line %d:\n Ompig %.700s\n Pi  %.700s", i, j, got[j], expected[j])
 						break
 					}
 				}
 				if len(got) != len(expected) {
-					t.Errorf("script %d: PiG %d lines, Pi %d", i, len(got), len(expected))
+					t.Errorf("script %d: Ompig %d lines, Pi %d", i, len(got), len(expected))
 				}
 			}
 		}

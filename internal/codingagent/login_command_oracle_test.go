@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // interactive-mode.ts handleLoginCommand and findLoginProviderOptions against pinned Pi: `/login <ref>` matches the trimmed, lower-cased reference with
@@ -97,7 +97,7 @@ func TestLoginCommandMatchesPi(t *testing.T) {
 		if err := handleLoginCommand(sc); err != nil {
 			t.Fatal(err)
 		}
-		// The no-reference selector search is null in Pi; Pig passes it as ""; a null search and an empty one open the same selector.
+		// The no-reference selector search is null in Pi; Ompig passes it as ""; a null search and an empty one open the same selector.
 		for _, step := range got {
 			if step[0] == "providers" && step[2] == "" {
 				step[2] = nil
@@ -106,7 +106,7 @@ func TestLoginCommandMatchesPi(t *testing.T) {
 		normalized := normalizeLoginRecord(want[i])
 		if !reflect.DeepEqual(normalizeLoginRecord(toRecord(got)), normalized) {
 			if failures++; failures <= 8 {
-				t.Errorf("/login %q over %v: Pig %v, Pi %v", p.Ref, p.Providers, got, want[i])
+				t.Errorf("/login %q over %v: Ompig %v, Pi %v", p.Ref, p.Providers, got, want[i])
 			}
 		}
 		if len(want[i]) > 0 {

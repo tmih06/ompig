@@ -1,4 +1,4 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 package wordsegmenter
 

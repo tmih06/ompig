@@ -77,7 +77,7 @@ test("a step record says what the event cost: kind, crossings, rows, bytes, memo
   assert.equal(open[0]!.bytesIn, new TextEncoder().encode(JSON.stringify(OPEN)).length)
   assert.ok(open[0]!.bytesOut > 0 && open[0]!.linearBytes > 0 && open[0]!.stepMs >= 0)
   assert.ok(open[0]!.liveBytes! > 0, "liveEvery asks the core for mem_stats")
-  assert.ok(open[0]!.crossings >= 1 + open[0]!.reads, "the step, and a crossing for every pig.read")
+  assert.ok(open[0]!.crossings >= 1 + open[0]!.reads, "the step, and a crossing for every ompig.read")
   // The empty database is migrated by the open: its commits and rows are the open's, not the next event's.
   const written = open.reduce((n, s) => n + s.rowsWritten, 0)
   assert.equal(written, r.store.counters.rowsWritten)
@@ -154,7 +154,7 @@ test("a ring that holds the whole session replays it: the same steps, from the r
   assert.ok(r.recorder.recordedEvents().some(e => e.reads.length > 0 || e.uuids.length > 0 || e.kind === EVENT.rows), "the open took inputs besides its event")
 })
 
-// The open of an empty store takes no pig.read and no uuid: the divergences of reads and uuids are pinned on the production
+// The open of an empty store takes no ompig.read and no uuid: the divergences of reads and uuids are pinned on the production
 // recordings below, which take both.
 test("a changed event changes the steps of a replay", () => {
   const r = rig()
@@ -303,14 +303,14 @@ test("recordings of the production native run replay through the Wasm core with 
   const exe = join(dir, "bench")
   execFileSync("go", ["build", "-o", exe, "./durable/core/sqlhost/cmd/bench"], { cwd: repo, env: { ...process.env, GOWORK: "" } })
   // A process that never touches a lane's or a user's agent directory; the same deterministic clock the gate uses.
-  const env = { ...process.env, HOME: join(dir, "home"), PIG_CODING_AGENT_DIR: join(dir, "agent"), PI_CODING_AGENT_DIR: join(dir, "agent"), PIG_HOME: join(dir, "pig"), PI_HOME: join(dir, "pig"), TZ: "UTC", DETENV_EPOCH: "1800000000000" }
+  const env = { ...process.env, HOME: join(dir, "home"), OMPIG_CODING_AGENT_DIR: join(dir, "agent"), PI_CODING_AGENT_DIR: join(dir, "agent"), OMPIG_HOME: join(dir, "ompig"), PI_HOME: join(dir, "ompig"), TZ: "UTC", DETENV_EPOCH: "1800000000000" }
   const db = join(dir, "s.sqlite")
   const bench = (name: string, ...args: string[]) => {
     execFileSync(exe, ["--db", db, "--trace", join(dir, `${name}.trace`), "--record", join(dir, `${name}.rec`), "--tools", "1", "--variant", "incr", ...args], { env, stdio: "ignore" })
     return decodeRecording(readFileSync(join(dir, `${name}.rec`)))
   }
   // Seed three turns on an empty store (the core mints its session id: a uuid), then run one in another process, which opens
-  // the store that now exists (the core reads it back: pig.read).
+  // the store that now exists (the core reads it back: ompig.read).
   const seeded = bench("seed", "--seed", "3", "--turns", "0")
   const reopened = bench("reopen", "--turns", "1")
   assert.ok(seeded.events.some(e => e.uuids.length > 0), "creating the conversation takes a uuid")
@@ -340,13 +340,13 @@ test("recordings of the production native run replay through the Wasm core with 
   diverges(altered, withUuid, /took \d+ reads and \d+ uuids, the recorded run/)
   altered = copy(reopened.events)
   altered[withRead]!.reads = altered[withRead]!.reads.slice(1)
-  diverges(altered, withRead, /asked a different pig\.read|pig\.read the recorded run did not make/)
+  diverges(altered, withRead, /asked a different ompig\.read|ompig\.read the recorded run did not make/)
   altered = copy(reopened.events)
   altered[withRead]!.reads = []
-  diverges(altered, withRead, /pig\.read the recorded run did not make/)
+  diverges(altered, withRead, /ompig\.read the recorded run did not make/)
   altered = copy(reopened.events)
   altered[withRead]!.reads[0]!.request[0]! ^= 1 // the statement id
-  diverges(altered, withRead, /asked a different pig\.read/)
+  diverges(altered, withRead, /asked a different ompig\.read/)
   altered = copy(reopened.events)
   altered[withRead]!.reads.push(altered[withRead]!.reads[0]!)
   diverges(altered, withRead, /took \d+ reads and \d+ uuids, the recorded run/)

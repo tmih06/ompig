@@ -4,8 +4,8 @@ package ops
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // ApplyBatches replays decoded operation batches over base without mutating it and returns the final value only.

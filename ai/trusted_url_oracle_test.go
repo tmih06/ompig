@@ -10,13 +10,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type trustedURLAnswer struct {
 	Trusted *string `json:"trusted"`
 	Xai     *string `json:"xai"`
-	// Copilot is PiG's startDeviceFlow check of verification_uri; Pi runs trustedHttpUrl there, so it must answer as Trusted does.
+	// Copilot is Ompig's startDeviceFlow check of verification_uri; Pi runs trustedHttpUrl there, so it must answer as Trusted does.
 	Copilot *string `json:"-"`
 }
 
@@ -85,7 +85,7 @@ func TestTrustedVerificationURLsMatchPi(t *testing.T) {
 		}
 		if str(got.Trusted) != str(want.Trusted) || str(got.Xai) != str(want.Xai) || str(got.Copilot) != str(want.Trusted) {
 			if differing++; differing <= 15 {
-				t.Errorf("%q differs from Pi:\n  Pig trusted %s, xai %s, copilot %s\n  Pi  trusted %s, xai %s", input, str(got.Trusted), str(got.Xai), str(got.Copilot), str(want.Trusted), str(want.Xai))
+				t.Errorf("%q differs from Pi:\n  Ompig trusted %s, xai %s, copilot %s\n  Pi  trusted %s, xai %s", input, str(got.Trusted), str(got.Xai), str(got.Copilot), str(want.Trusted), str(want.Xai))
 			}
 		}
 	}

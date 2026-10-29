@@ -9,7 +9,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // bodyReadiness is the transport side of the readiness bridge. It reports whether a body read completes in the current turn or becomes an external completion, using only what the transport knows: bytes its own buffer already holds are ready; a read that must wait for the network is pending. No sleep, goroutine schedule, or channel length decides it.

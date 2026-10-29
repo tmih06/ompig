@@ -38,7 +38,7 @@ function fixture(t) {
 	git(dir, "clone", "-q", "-o", "staging", origin, source)
 	const out = join(dir, "out")
 	const run = (extra = {}) => spawnSync("bash", [join(bin, "nightly.sh")], {
-		env: { ...env, BRANCH: "main", BENCH: dir, PIG_SOURCE: source, OUT: out, BASELINE: join(dir, "baseline.json"), NATIVE_FIXTURES: dir, ...extra },
+		env: { ...env, BRANCH: "main", BENCH: dir, OMPIG_SOURCE: source, OUT: out, BASELINE: join(dir, "baseline.json"), NATIVE_FIXTURES: dir, ...extra },
 		encoding: "utf8",
 	})
 	return { dir, origin, source, git, run }

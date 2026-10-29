@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type skillOracleSkill struct {
@@ -103,7 +103,7 @@ emit({
 	dirs: input.dirs.map((o) => shape(mod.loadSkillsFromDir(o))),
 });`
 
-// TestLoadSkillsMatchesPi runs loadSkills and loadSkillsFromDir of Pi 1.0.4 and of Pig over one tree of skills: SKILL.md and root documents, frontmatter and name/description validation, ignore files, symlinks, collisions, dot and node_modules directories, defaults and explicit paths.
+// TestLoadSkillsMatchesPi runs loadSkills and loadSkillsFromDir of Pi 1.0.4 and of Ompig over one tree of skills: SKILL.md and root documents, frontmatter and name/description validation, ignore files, symlinks, collisions, dot and node_modules directories, defaults and explicit paths.
 func TestLoadSkillsMatchesPi(t *testing.T) {
 	base := t.TempDir()
 	cwd := filepath.Join(base, "cwd")
@@ -203,7 +203,7 @@ func TestLoadSkillsMatchesPi(t *testing.T) {
 					w = wantLines[i]
 				}
 				if g != w {
-					t.Errorf("%s %s %d:\n  Pig %s\n  Pi  %s", label, kind, i, g, w)
+					t.Errorf("%s %s %d:\n  Ompig %s\n  Pi  %s", label, kind, i, g, w)
 				}
 			}
 		}

@@ -16,9 +16,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // DefaultRadiusGateway is the Radius gateway origin Pi uses by default.
@@ -305,7 +305,7 @@ func utf16Length(value string) int {
 	return jsstring.Length(value)
 }
 
-// truncateUTF16 is value.slice(0, limit) in UTF-16 units. A cut inside a surrogate pair keeps the lone high surrogate as WTF-8, as every PiG string carries a JavaScript string's unpaired unit.
+// truncateUTF16 is value.slice(0, limit) in UTF-16 units. A cut inside a surrogate pair keeps the lone high surrogate as WTF-8, as every Ompig string carries a JavaScript string's unpaired unit.
 func truncateUTF16(value string, limit int) string {
 	return jsstring.Slice(value, 0, limit)
 }
@@ -318,7 +318,7 @@ func utf16Units(r rune) int {
 }
 
 // LoadRadiusGatewayConfig fetches and sanitizes <gateway>/v1/config.
-// Mirrors upstream loadRadiusGatewayConfig. PiG sets no User-Agent here, so
+// Mirrors upstream loadRadiusGatewayConfig. Ompig sets no User-Agent here, so
 // net/http sends its default (owner question Q4 tracks Pi's User-Agent).
 func LoadRadiusGatewayConfig(ctx context.Context, gateway, apiKey string) (RadiusGatewayConfig, error) {
 	endpoint, err := resolveGatewayPath(gateway, "/v1/config")

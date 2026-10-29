@@ -8,7 +8,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/test/model-runtime-auth-options.test.ts:126. OAuth usage alone does not imply subscription billing.

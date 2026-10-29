@@ -6,8 +6,8 @@ import (
 	"net"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi hands an extension tool's `details` and each partial result to the agent as the JavaScript objects the tool wrote (agent-loop.ts:778-786, 912-919), and every later JSON.stringify of them keeps the member order. The host must not decode a details object into a Go map, which sorts its members, on the way from the extension process to the session, the wire and the other extensions.

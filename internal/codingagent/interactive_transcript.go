@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
 )
 
 func (m *InteractiveMode) rebuildChatFromSession() {
@@ -316,7 +316,7 @@ func (m *InteractiveMode) renderSessionEntryListWithHistory(entries []SessionEnt
 	// buildSessionContext().messages: the aligned context where
 	// everything before the latest compaction's kept tail collapses to
 	// that compaction's summary (interactive-mode.ts:3221; session-manager.ts
-	// buildSessionContext). Pig previously walked the full branch and
+	// buildSessionContext). Ompig previously walked the full branch and
 	// re-rendered the pre-compaction history that compaction summarized
 	// away: wrong visually (shows hidden history) and slow (the extra
 	// lines inflate the single synchronized-update write, which some
@@ -381,7 +381,7 @@ func (m *InteractiveMode) renderSessionEntryListWithHistory(entries []SessionEnt
 					comp.BodyRenderer = toolBodyRendererForCall(call, result, nil)
 					comp.SetResultValue(result)
 					comp.SetResult(abortedText, true, 0)
-					comp.MarkAborted() // pig additive (D91): a frontend shows it cancelled
+					comp.MarkAborted() // ompig additive (D91): a frontend shows it cancelled
 				case ai.StopReasonError:
 					errorMessage := msg.Assistant.ErrorMessage
 					if errorMessage == "" {
@@ -676,7 +676,7 @@ func (m *InteractiveMode) flushCompactionQueue(ctx context.Context, startTurn bo
 	// Preserve the queued message's delivery mode. Upstream passes
 	// streamingBehavior on the first prompt so a still-settling agent run queues
 	// it instead of starting a concurrent turn. turnActive is the same boundary
-	// in PiG; the idle path starts a new prompt, while a live run receives the
+	// in Ompig; the idle path starts a new prompt, while a live run receives the
 	// message through its requested queue.
 	m.handleSubmitWithImages(ctx, queued[firstIdx].text, queued[firstIdx].images)
 	// Remaining messages preserve their queued mode; later extension commands
@@ -801,7 +801,7 @@ func extractAgentMessageText(msg agent.AgentMessage) string {
 
 // userMessageImages are the image blocks of a user message with data and a
 // MIME type, in order, or nil. Pi's UserMessageComponent draws none; a
-// frontend session may show them with the message (pig additive, D91).
+// frontend session may show them with the message (ompig additive, D91).
 func userMessageImages(msg agent.AgentMessage) []tui.ImageBlock {
 	if msg.User == nil {
 		return nil

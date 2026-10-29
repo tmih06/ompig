@@ -5,12 +5,12 @@
 # registered tools the allowlist names, extension tools included; a Set keeps each name at its first position (3578).
 # The request's initial system message declares them in that order (toolsAdded), so
 # `-e tools-flag-order-tool.mjs --tools grep,ordered_tool,read` declares grep, ordered_tool, read.
-# 44-rpc-tools-caller-order covers built-in tools only. PiG's RPC startup listed the built-ins first and appended the
+# 44-rpc-tools-caller-order covers built-in tools only. Ompig's RPC startup listed the built-ins first and appended the
 # extension tools (rpcPrepare), declaring grep, read, ordered_tool. Probed against Pi 1.0.4 on 2026-10-08.
 #
 # Full JSON records are compared (canonical_json sorts object keys only, never arrays): the initial system message's
 # toolsAdded array, as get_messages reports it, must equal Pi's element for element. An explicit system prompt removes
-# the pig/pi naming difference.
+# the ompig/pi naming difference.
 
 name = "45-rpc-tools-flag-order"
 description = "RPC --tools grep,ordered_tool,read declares the extension tool between the built-ins, in the --tools order"
@@ -36,9 +36,9 @@ wait_contains = ['"command":"get_messages","success":true']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["../../testdata/tools-flag-order-tool.mjs"]
-pig_args = ["--offline", "--model", "test-faux/faux-1", "--tools", "grep,ordered_tool,read", "--system-prompt", "RPC tool order probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["../../testdata/tools-flag-order-tool.mjs"]
+ompig_args = ["--offline", "--model", "test-faux/faux-1", "--tools", "grep,ordered_tool,read", "--system-prompt", "RPC tool order probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/tools-flag-order-tool.mjs", "../../testdata/test-faux-provider.ts"]
 pi_args = ["--offline", "--model", "test-faux/faux-1", "--tools", "grep,ordered_tool,read", "--system-prompt", "RPC tool order probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 

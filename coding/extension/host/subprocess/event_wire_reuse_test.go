@@ -11,9 +11,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/eventwire"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/eventwire"
 )
 
 // eventWirePeer is an extension process that answers each event request with reply(args) and records the args it received.
@@ -137,9 +137,9 @@ func echoPromptOptions(edit func(options map[string]json.RawMessage)) func(args 
 			edit(options)
 		}
 		encoded, _ := json.Marshal(options)
-		reply := `{"_pigPromptSelectedTools":` + string(options["selectedTools"]) + `,"_pigPromptOptions":` + string(encoded)
+		reply := `{"_ompigPromptSelectedTools":` + string(options["selectedTools"]) + `,"_ompigPromptOptions":` + string(encoded)
 		if sections, ok := options["sections"]; ok {
-			reply += `,"_pigPromptSections":` + string(sections)
+			reply += `,"_ompigPromptSections":` + string(sections)
 		}
 		return reply + "}"
 	}
@@ -162,11 +162,11 @@ func TestBeforeAgentStartSubprocessHandlersShareTheEventEncodingUntilAnEdit(t *t
 		options["appendSystemPrompt"] = json.RawMessage(`"FROM-REPLY"`)
 	})
 	fixed := func([]byte) string {
-		return `{"_pigPromptSelectedTools":["read"],"_pigPromptOptions":{"appendSystemPrompt":"FIXED","cwd":"/work"}}`
+		return `{"_ompigPromptSelectedTools":["read"],"_ompigPromptOptions":{"appendSystemPrompt":"FIXED","cwd":"/work"}}`
 	}
 	// A reply whose options do not decode fails the handler after its sections and tools were written, and the edit stays (runner.ts:1339).
 	failing := func([]byte) string {
-		return `{"_pigPromptSelectedTools":["read","bash"],"_pigPromptOptions":{"cwd":5}}`
+		return `{"_ompigPromptSelectedTools":["read","bash"],"_ompigPromptOptions":{"cwd":5}}`
 	}
 	steps := []eventWireStep{
 		{reply: echo}, // 0: encodes; its reply is applied
@@ -241,9 +241,9 @@ func TestBeforeAgentStartSubprocessHandlersShareTheEventEncodingUntilAnEdit(t *t
 
 // upstream: runner.ts emitToolCall hands every handler the one event, so an input edit reaches the next handler. A subprocess handler's reply that carries an input, and a Go handler, change the event; the next handler receives the edited input, and a handler after one that edited nothing reuses the encoding.
 func TestToolCallSubprocessHandlersShareTheEventEncodingUntilAnInputEdit(t *testing.T) {
-	keep := func([]byte) string { return `{"_pigToolCallResult":null}` }
+	keep := func([]byte) string { return `{"_ompigToolCallResult":null}` }
 	editInput := func([]byte) string {
-		return `{"_pigToolCallInput":{"command":"from reply"},"_pigToolCallResult":null}`
+		return `{"_ompigToolCallInput":{"command":"from reply"},"_ompigToolCallResult":null}`
 	}
 	steps := []eventWireStep{
 		{reply: keep},      // 0: encodes

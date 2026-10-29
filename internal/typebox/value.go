@@ -17,9 +17,9 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/third_party/jsonschema"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/third_party/jsonschema"
 )
 
 // ValueError is one error of Errors, as TypeBox reports it: the keyword that failed, the schema path of the failing schema, the instance path of the failing value ("" for the root; member names appended unescaped, as TypeBox does) and the en_US message.

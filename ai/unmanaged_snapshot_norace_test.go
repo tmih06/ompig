@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A producer outside the executor that streams one long tool-call argument costs each push in proportion to what the push added, not to the argument so far: the snapshot reads the strings of the arguments for validity only where they grew. The cost does not allocate, so only the CPU time shows it: 8x the pushes take about 8x the CPU time, where a snapshot that validated the whole argument at every push takes 64x.

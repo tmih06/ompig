@@ -9,12 +9,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Runs Pi's createCodingTools and createReadTool (packages/durable/src/tools/{index,read}.ts, Node, types stripped) and PiG's
+// Runs Pi's createCodingTools and createReadTool (packages/durable/src/tools/{index,read}.ts, Node, types stripped) and Ompig's
 // CreateCodingTools and CreateReadTool over the same cases: the extension's tools, their descriptions and schemas with and
 // without an image processor, and what read returns for an image with a stub processor (the notes for a conversion and a
 // resize, the cannot-prepare error, the model's limits, a model without image input) or without one.
@@ -80,12 +80,12 @@ func TestCodingToolsMatchPi(t *testing.T) {
 		}
 		extension := CreateCodingTools(options)
 		if extension.Name != pi.Name || len(extension.Tools) != len(pi.Tools) {
-			t.Fatalf("images=%v: PiG %q with %d tools, Pi %q with %d", options != nil, extension.Name, len(extension.Tools), pi.Name, len(pi.Tools))
+			t.Fatalf("images=%v: Ompig %q with %d tools, Pi %q with %d", options != nil, extension.Name, len(extension.Tools), pi.Name, len(pi.Tools))
 		}
 		for j, tool := range extension.Tools {
 			want := pi.Tools[j]
 			if tool.Name != want.Name || tool.Description != want.Description || !reflect.DeepEqual(normalized(t, tool.Parameters), want.Parameters) {
-				t.Errorf("images=%v tool %d: PiG %q %q %v, Pi %q %q %v", options != nil, j, tool.Name, tool.Description, normalized(t, tool.Parameters), want.Name, want.Description, want.Parameters)
+				t.Errorf("images=%v tool %d: Ompig %q %q %v, Pi %q %q %v", options != nil, j, tool.Name, tool.Description, normalized(t, tool.Parameters), want.Name, want.Description, want.Parameters)
 			}
 		}
 	}
@@ -183,22 +183,22 @@ func TestReadOfImagesMatchesPi(t *testing.T) {
 		api := &fakeAPI{env: executionEnv, agent: durable.Agent{Model: &durable.ModelRef{Provider: "p", ModelId: "test"}}, models: knownModels{model: modelOrDefault(c.model)}}
 		got, err := runWith(CreateReadTool(options), map[string]any{"path": c.path}, api, background)
 		if err != nil {
-			t.Errorf("%s: PiG error %v", c.name, err)
+			t.Errorf("%s: Ompig error %v", c.name, err)
 			continue
 		}
 		if got.IsError != nil && *got.IsError != pi.IsError || got.IsError == nil && pi.IsError {
-			t.Errorf("%s: PiG isError %v, Pi %v", c.name, got.IsError, pi.IsError)
+			t.Errorf("%s: Ompig isError %v, Pi %v", c.name, got.IsError, pi.IsError)
 		}
 		if gotOut, wantOut := normalized(t, got.Output), normalized(t, rawList(pi.Output)); !reflect.DeepEqual(gotOut, wantOut) && (len(got.Output) != 0 || len(pi.Output) != 0) {
-			t.Errorf("%s: PiG output %v, Pi %v", c.name, gotOut, wantOut)
+			t.Errorf("%s: Ompig output %v, Pi %v", c.name, gotOut, wantOut)
 		}
 		if len(got.Diagnostics) != len(pi.Diagnostics) {
-			t.Errorf("%s: PiG diagnostics %+v, Pi %+v", c.name, got.Diagnostics, pi.Diagnostics)
+			t.Errorf("%s: Ompig diagnostics %+v, Pi %+v", c.name, got.Diagnostics, pi.Diagnostics)
 			continue
 		}
 		for j, d := range got.Diagnostics {
 			if want := pi.Diagnostics[j]; string(d.Severity) != want.Severity || d.Code != want.Code || d.Message != want.Message {
-				t.Errorf("%s: diagnostic %d: PiG %+v, Pi %+v", c.name, j, d, want)
+				t.Errorf("%s: diagnostic %d: Ompig %+v, Pi %+v", c.name, j, d, want)
 			}
 		}
 		if c.processor && (stub.gotMime != pi.Seen.MimeType || stub.gotSize != pi.Seen.Size ||

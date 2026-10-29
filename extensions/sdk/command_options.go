@@ -3,7 +3,7 @@ package sdk
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // AutocompleteItem mirrors @earendil-works/pi-tui AutocompleteItem: Value is

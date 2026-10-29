@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.99.1 keeps two error flags apart. `event.isError` and `outcome.isError` say the call failed. `result.isError`

@@ -1,12 +1,12 @@
 # fix-992-ci-flakes
 
-Scope: public-CI flakes on PR #111 (run 36822376858) and two joint-run-6 conformance items. Base: staging `porter/pi-0.99.1`. No upstream 0.99.2 test is ported by this lane: every case is Pig-owned (the behaviors are Pig additions or Go concurrency, with the Pi counterpart cited per case).
+Scope: public-CI flakes on PR #111 (run 36822376858) and two joint-run-6 conformance items. Base: staging `porter/pi-0.99.1`. No upstream 0.99.2 test is ported by this lane: every case is Ompig-owned (the behaviors are Ompig additions or Go concurrency, with the Pi counterpart cited per case).
 
 ## 1. packed-cell workspace hash racing the repository `tmp/` (FIXED)
 
-Failure: `pig install --validate-only piglets/porter/extensions/pig-porter` failed with `hash Go workspace module <repo>: lstat <repo>/tmp/test-fixtures/ru...`. The Porter extension's workspace modules include the whole repository (`replace github.com/MichaelKinsy/PiG => ../../../..`). `goPackedCellHash` hashed that module with `hashTree`, which walks every file (docs, `tmp/`, test output) and `lstat`s each one. `tmp/test-fixtures/rust-target` is the cargo target directory of the fixture build (`Makefile:75`), written by other packages' tests while this one ran, so a listed file vanished before `d.Info()`.
+Failure: `ompig install --validate-only ompiglets/porter/extensions/ompig-porter` failed with `hash Go workspace module <repo>: lstat <repo>/tmp/test-fixtures/ru...`. The Porter extension's workspace modules include the whole repository (`replace github.com/tmih06/ompig => ../../../..`). `goPackedCellHash` hashed that module with `hashTree`, which walks every file (docs, `tmp/`, test output) and `lstat`s each one. `tmp/test-fixtures/rust-target` is the cargo target directory of the fixture build (`Makefile:75`), written by other packages' tests while this one ran, so a listed file vanished before `d.Info()`.
 
-Root cause: the key covered the module's whole directory tree, not the files `go build` reads. Fix (`coding/extension/host/runtimecell/hash_go_module.go`): `hashGoModule` hashes exactly a Go module's build source set: root `go.mod`/`go.sum`, the non-test `.go` and cgo/asm/header sources of every package directory, and the files its `//go:embed` patterns select. It excludes nested modules (a directory with its own `go.mod`), `testdata`, `vendor`, `.`- and `_`-prefixed directories (cmd/go's package-pattern rules), `_test.go` files and everything else. A directory that disappears between its parent's listing and its own read held no source and is skipped; an unreadable package file or directory still fails closed. Workspace modules use it (`go_packed.go`), and so does the Piglet build lock's local Go replacement digest (`coding/pigletbuild/records.go`), which hashed the same repository root with the same walk (`piglet validate piglets/porter/pig-porter.yaml` reaches it). The SDK root keeps `hashTree`: `TestPackedCellHashesTrackSymlinkedSDKChanges` pins that tree-wide contract and the SDK root has no concurrent writers.
+Root cause: the key covered the module's whole directory tree, not the files `go build` reads. Fix (`coding/extension/host/runtimecell/hash_go_module.go`): `hashGoModule` hashes exactly a Go module's build source set: root `go.mod`/`go.sum`, the non-test `.go` and cgo/asm/header sources of every package directory, and the files its `//go:embed` patterns select. It excludes nested modules (a directory with its own `go.mod`), `testdata`, `vendor`, `.`- and `_`-prefixed directories (cmd/go's package-pattern rules), `_test.go` files and everything else. A directory that disappears between its parent's listing and its own read held no source and is skipped; an unreadable package file or directory still fails closed. Workspace modules use it (`go_packed.go`), and so does the Ompiglet build lock's local Go replacement digest (`coding/pigletbuild/records.go`), which hashed the same repository root with the same walk (`ompiglet validate ompiglets/porter/ompig-porter.yaml` reaches it). The SDK root keeps `hashTree`: `TestPackedCellHashesTrackSymlinkedSDKChanges` pins that tree-wide contract and the SDK root has no concurrent writers.
 
 Tests (all red on the stub commit, green after):
 - `TestHashGoModuleCoversExactlyTheBuildSourceSet`: 24 paths, each changed (and removed) with the hash required to move only for source-set members.
@@ -22,7 +22,7 @@ Mutation checks: tolerance for a vanished directory removed -> churn test fails 
 
 ## 2. `TestPiSharedFilesConcurrentWriters` ELOCKED (NOT REPRODUCED; no code change)
 
-Pi's synchronous stores (settings, trust) retry `lockfile.lockSync` 10 times 20 ms apart (`.upstream/v0.99.1/packages/coding-agent/src/core/settings-manager.ts:300-328`, `trust-manager.ts:137-164`, `auth-storage.ts:69-93`), a 200 ms window; its async stores (auth, models) retry for 30 s. `internal/pilock` ports the same budget and `stale` (10 s sync). Pi can throw ELOCKED only if PiG's writer holds a store's lock for the whole window.
+Pi's synchronous stores (settings, trust) retry `lockfile.lockSync` 10 times 20 ms apart (`.upstream/v0.99.1/packages/coding-agent/src/core/settings-manager.ts:300-328`, `trust-manager.ts:137-164`, `auth-storage.ts:69-93`), a 200 ms window; its async stores (auth, models) retry for 30 s. `internal/pilock` ports the same budget and `stale` (10 s sync). Pi can throw ELOCKED only if Ompig's writer holds a store's lock for the whole window.
 
 Measured on the current code (instrumented `pilock.Release`, not committed): typical hold 0.1-1 ms; over 240 runs x ~130 holds, the maximum was 23 ms with 8 concurrent instances; 57 ms on one CPU with 16 burners. Nothing in a hold sleeps, syncs or waits: mkdir, probe `utimes`+`stat`, read-modify-write, join the heartbeat goroutine, `rmdir`. No leftover lock directory was observed after any run.
 
@@ -33,7 +33,7 @@ Reproduction attempts, all PASS (every run on the unmodified test):
 - cgroup CPU quotas of 1.0, 0.3, 0.1 and 0.05 cores (quota verified to apply), 3 runs each.
 - The whole `internal/codingagent` package in one process on 4 cores (the test took 17 s instead of 1.2 s and passed).
 
-Conclusion: the budget is exhausted only when the PiG holder is descheduled or blocked on the file system for more than ~180 ms while holding a lock. That is a property of the shared runner's load, not a code path I can show; the pilock critical section already does the minimum Pi does. I did not weaken the test and did not add a retry. Open question QUESTION-1 (posted to the lead): the attempt-1 log (which store, which side) is needed to go further.
+Conclusion: the budget is exhausted only when the Ompig holder is descheduled or blocked on the file system for more than ~180 ms while holding a lock. That is a property of the shared runner's load, not a code path I can show; the pilock critical section already does the minimum Pi does. I did not weaken the test and did not add a retry. Open question QUESTION-1 (posted to the lead): the attempt-1 log (which store, which side) is needed to go further.
 
 ## 3. `TestExperimentalDurableServerCompositionRemoteB/server_runtime_replaces_an_exited_worker_on_the_next_attach` (FIXED at the source, e2e not reproduced)
 
@@ -49,7 +49,7 @@ Red/green: `TestRouterReattachAfterSignalledTerminationReplacesTheRetiredAttachm
 
 `TransportsMatch/subprocess-go`: 25 runs of `{inproc-go,subprocess-go}` under 24 burners on 4 cores and a `-race` run all passed; no data race is reported. The failing recording diff from AGG r1 is needed to find the diverging field (QUESTION-2). No code changed.
 
-`TestNativeEventBusStressKeepsEveryDeliveryAndBoundedState` (Pig-owned, D19; no upstream test). Measured cause: CPU-bound, linear in emits. Every emit makes 101 sequential `events.dispatch` round trips (`event_bus.go:dispatchEvent`, one request per listener), so 10000 emits are ~1M round trips per language; the Host (~190% CPU), each Node realm (~125%) and each Go runner (~50%) saturate 4 cores.
+`TestNativeEventBusStressKeepsEveryDeliveryAndBoundedState` (Ompig-owned, D19; no upstream test). Measured cause: CPU-bound, linear in emits. Every emit makes 101 sequential `events.dispatch` round trips (`event_bus.go:dispatchEvent`, one request per listener), so 10000 emits are ~1M round trips per language; the Host (~190% CPU), each Node realm (~125%) and each Go runner (~50%) saturate 4 cores.
 
 Per language, one subtest, on this loaded shared host:
 
@@ -70,6 +70,6 @@ Change (lead's option B): 1000 emits; the heap bound keeps its per-emit sensitiv
 
 ## Gates
 
-go build ./..., go vet and `GOOS=windows go vet` (runtimecell, pigletbuild, experimental/routing), gofmt, `go fix -diff`, golangci-lint (`--build-tags=integration,live,parity`, 0 issues), `go test -race` of runtimecell/pigletbuild(no race)/routing, `-race -count=24` of routing and the hash tests under 8 burners. `make generate` regenerates `test/parity/interfaces/pig-go.json` (the new exported `GoModuleSourceDigest`) and then stops at an existing release-policy error unrelated to this lane (`packages/ai/test/images-models.test.ts` designedOutCases).
+go build ./..., go vet and `GOOS=windows go vet` (runtimecell, pigletbuild, experimental/routing), gofmt, `go fix -diff`, golangci-lint (`--build-tags=integration,live,parity`, 0 issues), `go test -race` of runtimecell/pigletbuild(no race)/routing, `-race -count=24` of routing and the hash tests under 8 burners. `make generate` regenerates `test/parity/interfaces/ompig-go.json` (the new exported `GoModuleSourceDigest`) and then stops at an existing release-policy error unrelated to this lane (`packages/ai/test/images-models.test.ts` designedOutCases).
 
 Burners: every burner PID this lane started was recorded in a PID file under the temp directory and stopped with `kill <pid>`. Incident: before the host rule, one `pkill -f` of the burner pattern ran once and may have stopped other lanes' burners; reported to the lead.

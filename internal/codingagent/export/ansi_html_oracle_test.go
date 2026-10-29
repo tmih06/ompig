@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's ansiToHtml (core/export-html/ansi-to-html.js) runs against the vendored Pi module over hand-picked and seeded random SGR sequences: extended colors with missing or oversized parameters, empty parameters, leading zeros, large numbers (up to 65536; parameters beyond int64 are a known gap: Pi keeps a double, Go reads 0), unterminated sequences, HTML-special text and astral characters.

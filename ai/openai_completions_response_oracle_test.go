@@ -6,13 +6,13 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/openai-completions.ts
 
 // Scripted chat-completion SSE responses (text, reasoning in each field name, fragmented and parallel tool calls, finish reasons, usage chunks, error
-// chunks) read by the pinned pi-ai (through options.fetch) and by PiG (through a local server). The stream events and the final assistant message must
+// chunks) read by the pinned pi-ai (through options.fetch) and by Ompig (through a local server). The stream events and the final assistant message must
 // be equal as parsed JSON, partial snapshots and the timestamp aside.
 func TestOpenAICompletionsResponseMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(113))
@@ -39,7 +39,7 @@ func TestOpenAICompletionsResponseMatchesPi(t *testing.T) {
 				lines = append(lines, chunk(fmt.Sprintf(`%q:%s`, pick("reasoning_content", "reasoning", "reasoning_text"), quote(pick(texts...))), "null"))
 			case 4, 5:
 				index := rng.Intn(3)
-				// Arguments that are JSON but not an object (1, "x") are left out: Pi keeps the parsed value, PiG's ToolCall.Arguments is an object.
+				// Arguments that are JSON but not an object (1, "x") are left out: Pi keeps the parsed value, Ompig's ToolCall.Arguments is an object.
 				call := fmt.Sprintf(`"index":%d`, index)
 				if !toolIDs[index] || rng.Intn(5) == 0 {
 					toolIDs[index] = true

@@ -22,7 +22,7 @@ func newPhaseShutdownMode(t *testing.T) (*InteractiveMode, context.Context) {
 }
 
 // Pi's event-context shutdownHandler ends an idle session at once (interactive-mode.ts:2020-2024), so a session_start
-// handler that calls ctx.shutdown() while startup awaits bindCurrentSessionExtensions ends the process. Pig awaits that
+// handler that calls ctx.shutdown() while startup awaits bindCurrentSessionExtensions ends the process. Ompig awaits that
 // bind with awaitExtensionUI; the bind still has an owner-loop step after the handler returns, which the loop that
 // already shut down never runs. The phase must end instead of holding the exit forever, and its pending step must see
 // the cancellation.

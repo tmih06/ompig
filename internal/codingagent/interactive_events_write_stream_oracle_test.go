@@ -7,10 +7,10 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's interactive mode hands each tool card the partial arguments of every message_update (interactive-mode.ts handleEvent
@@ -138,7 +138,7 @@ emit(frames);`, input{Text: text, Prefixes: piPrefixes, Width: width, Cwd: m.opt
 	got = append(got, strings.Join(card.Render(width), "\n"))
 
 	if len(got) != len(want) {
-		t.Fatalf("Pig drew %d frames, Pi %d", len(got), len(want))
+		t.Fatalf("Ompig drew %d frames, Pi %d", len(got), len(want))
 	}
 	mismatches := 0
 	for i := range want {
@@ -151,7 +151,7 @@ emit(frames);`, input{Text: text, Prefixes: piPrefixes, Width: width, Cwd: m.opt
 				case i <= len(prefixes):
 					label = fmt.Sprintf("after %d argument bytes", prefixes[i-1])
 				}
-				t.Errorf("frame %d %s:\n Pig %q\n Pi  %q", i, label, got[i], want[i])
+				t.Errorf("frame %d %s:\n Ompig %q\n Pi  %q", i, label, got[i], want[i])
 			}
 		}
 	}

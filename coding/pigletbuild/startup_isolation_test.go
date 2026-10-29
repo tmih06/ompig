@@ -17,21 +17,21 @@ func assertPigletStartupIgnoresParentHomes(t *testing.T, artifact string) {
 		agentDir string
 		piDirs   string
 	}{
-		{name: "HOME", agentDir: ".pig/agent"},
-		{name: "PIG_HOME", env: "PIG_HOME", value: "pig-home", agentDir: "pig-home/agent"},
-		{name: "XDG_CONFIG_HOME", env: "XDG_CONFIG_HOME", value: "config", agentDir: "config/pig/agent"},
-		{name: "PIG_CODING_AGENT_DIR", env: "PIG_CODING_AGENT_DIR", value: "pig-agent", agentDir: "pig-agent"},
+		{name: "HOME", agentDir: ".ompig/agent"},
+		{name: "OMPIG_HOME", env: "OMPIG_HOME", value: "ompig-home", agentDir: "ompig-home/agent"},
+		{name: "XDG_CONFIG_HOME", env: "XDG_CONFIG_HOME", value: "config", agentDir: "config/ompig/agent"},
+		{name: "OMPIG_CODING_AGENT_DIR", env: "OMPIG_CODING_AGENT_DIR", value: "ompig-agent", agentDir: "ompig-agent"},
 		{name: "Pi HOME", piDirs: "1", agentDir: ".pi/agent"},
 		{name: "PI_CODING_AGENT_DIR", piDirs: "1", env: "PI_CODING_AGENT_DIR", value: "pi-agent", agentDir: "pi-agent"},
 	} {
 		t.Run("startup ignores parent "+tc.name, func(t *testing.T) {
 			parentHome := t.TempDir()
-			for _, key := range []string{"PIG_HOME", "XDG_CONFIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+			for _, key := range []string{"OMPIG_HOME", "XDG_CONFIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 				t.Setenv(key, "")
 			}
 			t.Setenv("HOME", parentHome)
 			t.Setenv("USERPROFILE", parentHome)
-			t.Setenv("PIG_USE_PI_DIRS", tc.piDirs)
+			t.Setenv("OMPIG_USE_PI_DIRS", tc.piDirs)
 			if tc.env != "" {
 				t.Setenv(tc.env, filepath.Join(parentHome, tc.value))
 			}
@@ -45,7 +45,7 @@ func assertPigletStartupIgnoresParentHomes(t *testing.T, artifact string) {
 			}
 			before := treeFiles(t, parentHome)
 			if code, output := startPigletBinary(t, artifact); code != 0 {
-				t.Fatalf("unsigned Piglet Binary inherited parent trust: exit %d\n%s", code, output)
+				t.Fatalf("unsigned Ompiglet Binary inherited parent trust: exit %d\n%s", code, output)
 			}
 			if data, err := os.ReadFile(lock); err != nil || string(data) != sentinel {
 				t.Fatalf("parent lock changed: %q, %v", data, err)

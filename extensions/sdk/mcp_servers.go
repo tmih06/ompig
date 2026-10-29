@@ -6,7 +6,7 @@ import (
 	"os"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Ports packages/coding-agent/src/core/mcp-servers.ts (McpServerConfig, RegisteredMcpServer).
@@ -164,7 +164,7 @@ func (e *Extension) unregisterMcpServer(c *Context, name string) {
 	if err := e.mcpServersCall(c, conn, "unregisterMcpServer", struct {
 		Name string `json:"name"`
 	}{name}); err != nil {
-		fmt.Fprintf(os.Stderr, "pig: host call unregisterMcpServer failed: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig: host call unregisterMcpServer failed: %v\n", err)
 	}
 }
 

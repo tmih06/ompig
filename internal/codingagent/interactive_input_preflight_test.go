@@ -6,18 +6,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 // An extension input handler that asks the user something is the normal case: Pi's
 // own extensions ask before running a tool on a destructive path, and pi-tweaks'
 // model guard asks before sending a prompt to a model the user did not choose.
 //
-// Pig dispatched input handlers on the goroutine that owns the terminal, and
+// Ompig dispatched input handlers on the goroutine that owns the terminal, and
 // every dialog is installed on that same goroutine (ExtUIContext.runDialog posts
 // through runOnMain and then waits for the answer). A handler that asked
 // therefore waited for the loop that was waiting for the handler: Enter did

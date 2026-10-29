@@ -77,7 +77,7 @@ func TestStderrLogWriteAfterCloseIsDropped(t *testing.T) {
 	}
 }
 
-const floodHelperEnv = "PIG_TEST_FLOOD_STDERR"
+const floodHelperEnv = "OMPIG_TEST_FLOOD_STDERR"
 
 // TestHelperFloodStderr is the child of TestFloodingChildNeitherBlocksNorFillsTheDisk: it writes floodHelperEnv bytes to stderr.
 func TestHelperFloodStderr(t *testing.T) {

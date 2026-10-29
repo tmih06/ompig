@@ -1,9 +1,9 @@
 package subprocess
 
 import (
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Wire shapes for the upstream 0.99.1 extension API additions: registerMcpServer, registerVirtualModel, getSettings, executeTool and prepareLoadout. They follow the conventions of protocol.go (one current wire, no version field). All SDKs speak them.

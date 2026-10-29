@@ -3,10 +3,10 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A Piglet's strip.apis disables an API when BuildModel builds the provider for one of its models, the way a Piglet
+// A Ompiglet's strip.apis disables an API when BuildModel builds the provider for one of its models, the way a Ompiglet
 // Binary that compiles the API out does; models of other APIs still build.
 func TestBuildModelReportsStrippedAPI(t *testing.T) {
 	svcs, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir(), AgentDir: t.TempDir()})
@@ -25,7 +25,7 @@ func TestBuildModelReportsStrippedAPI(t *testing.T) {
 				}
 			}
 			t.Cleanup(pigstrip.Strip(pigstrip.ListAPIs, tc.api))
-			want := "Provider " + tc.provider + ": API " + tc.api + " is stripped from this Piglet (strip.apis: " + tc.api + ")"
+			want := "Provider " + tc.provider + ": API " + tc.api + " is stripped from this Ompiglet (strip.apis: " + tc.api + ")"
 			if _, err := BuildModel(tc.spec, svcs); err == nil || err.Error() != want {
 				t.Fatalf("stripped BuildModel(%s) error = %v, want %q", tc.spec, err, want)
 			}

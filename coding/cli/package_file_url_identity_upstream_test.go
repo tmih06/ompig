@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // package-manager.ts:1373-1393,1428-1433 packageSourcesMatch computes the stored
@@ -18,7 +18,7 @@ import (
 func TestRemoveInvalidFileURLSourceSurfacesResolveError(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := filepath.Join(t.TempDir(), "agent")
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
 	removed, err := packageManagerFor(cwd, sm, nil).RemoveSourceFromSettings("file:///a%2Fb", false)
 	if err != nil || removed {
@@ -44,7 +44,7 @@ func TestRemoveInvalidFileURLSourceSurfacesResolveError(t *testing.T) {
 func TestUpdateInvalidFileURLSourceSurfacesResolveError(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := filepath.Join(t.TempDir(), "agent")
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
 	if err := packageManagerFor(cwd, sm, nil).Update("file:///a%2Fb"); err == nil || err.Error() != invalidFileURLMessage() {
 		t.Fatalf("update error = %v; want %q", err, invalidFileURLMessage())

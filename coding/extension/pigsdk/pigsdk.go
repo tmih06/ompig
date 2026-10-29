@@ -1,4 +1,4 @@
-// Package pigsdk stages Pig's extension SDKs (Go, Python, and Rust) into the
+// Package pigsdk stages Ompig's extension SDKs (Go, Python, and Rust) into the
 // config root so out-of-tree extension builds and packed runtime cells can use
 // the API that matches the running binary.
 //
@@ -6,21 +6,21 @@
 //
 // An extension resolves its SDK through a local filesystem path: Go via a
 // go.mod `replace`, Python via sys.path, Rust via a Cargo `path` dependency.
-// Those SDK modules are nested/unpublished, so a machine with only the pig
+// Those SDK modules are nested/unpublished, so a machine with only the ompig
 // binary has nothing to point at and packed cells fail to build. The host SDK
 // resolvers (coding/extension/host/runtimecell) use the staged copy, found
 // through pigsdklock.StagedSDKDir.
 //
-// The SDK bytes are embedded in the pig binary, so a staged copy always matches
+// The SDK bytes are embedded in the ompig binary, so a staged copy always matches
 // the running binary. Each build stages each language into its own directory
-// named for the SDK's content hash, so PiG builds that share a config root (two
-// installed versions, or stock PiG beside a Piglet Binary) never restage each
+// named for the SDK's content hash, so Ompig builds that share a config root (two
+// installed versions, or stock Ompig beside a Ompiglet Binary) never restage each
 // other's SDKs or strand each other's extension builds. A warm start does a
 // single marker read per language.
 //
 // After a stage, the least recently used SDK directories of other builds beyond
 // contentdirs.Keep per language are removed, and extension builds whose SDK is
-// no longer staged are pruned. The unhashed directories a PiG that predates
+// no longer staged are pruned. The unhashed directories a Ompig that predates
 // per-build directories stages into are never removed, and their builds are
 // kept.
 //
@@ -28,13 +28,13 @@
 //
 // Staging only writes source files to disk. It does not install or require a
 // language toolchain. This is generic extension-host infrastructure in Stock
-// Pig, not an optional product extension.
+// Ompig, not an optional product extension.
 //
 //	<config-root>/state/pigsdk/
 //	  sdk-<hash16>/      go.mod + *.go              (Go)
-//	  sdk-py-<hash16>/   pig_sdk/__init__.py + ...  (Python)
+//	  sdk-py-<hash16>/   ompig_sdk/__init__.py + ...  (Python)
 //	  sdk-rs-<hash16>/   Cargo.toml + src/*.rs      (Rust)
-//	each with a .pig-sdk-version content-hash marker.
+//	each with a .ompig-sdk-version content-hash marker.
 package pigsdk
 
 import (
@@ -56,16 +56,16 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/contentdirs"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 // markerFile records a staged SDK's content hash so warm starts skip work and
 // any SDK change forces a re-stage. One lives in each language's staged dir.
-const markerFile = ".pig-sdk-version"
+const markerFile = ".ompig-sdk-version"
 
 // sdkBundle describes one language's embedded SDK.
 type sdkBundle struct {
@@ -84,7 +84,7 @@ var bundleHashes = map[string]*bundleHashCache{
 	"go": {}, "python": {}, "rust": {},
 }
 
-// sdkBases names each language's staged directories under <config-root>/state/pigsdk: a build stages into <base>-<hash16>, and a PiG that predates per-build directories stages into <base> itself. It covers every language, embedded by this build or not, because another build sharing the config root may embed one this build strips.
+// sdkBases names each language's staged directories under <config-root>/state/pigsdk: a build stages into <base>-<hash16>, and a Ompig that predates per-build directories stages into <base> itself. It covers every language, embedded by this build or not, because another build sharing the config root may embed one this build strips.
 var sdkBases = [...]struct{ lang, base string }{{"go", "sdk"}, {"python", "sdk-py"}, {"rust", "sdk-rs"}}
 
 // sdkBase returns lang's directory base from sdkBases.
@@ -97,7 +97,7 @@ func sdkBase(lang string) string {
 	return ""
 }
 
-// registerBundle makes lang's staged directory resolvable through pigsdklock.StagedSDKDir. Its hash fails with the strip error while the active Piglet strips lang at run time.
+// registerBundle makes lang's staged directory resolvable through pigsdklock.StagedSDKDir. Its hash fails with the strip error while the active Ompiglet strips lang at run time.
 func registerBundle(lang string, bundle func() (sdkBundle, bool)) {
 	pigsdklock.RegisterSDK(lang, sdkBase(lang), func() (string, error) {
 		b, ok := bundle()
@@ -109,7 +109,7 @@ func registerBundle(lang string, bundle func() (sdkBundle, bool)) {
 }
 
 // bundles lists the embedded SDKs in staging order (go, python, rust).
-// pig additive (D92): each language's SDK lives in its sdk_<lang>_on.go shim, which a Piglet Binary compiles out with pig_strip_extension_sdk_<lang>; a stripped language is left out.
+// ompig additive (D92): each language's SDK lives in its sdk_<lang>_on.go shim, which a Ompiglet Binary compiles out with ompig_strip_extension_sdk_<lang>; a stripped language is left out.
 func bundles() []sdkBundle {
 	out := make([]sdkBundle, 0, 3)
 	for _, bundle := range [...]func() (sdkBundle, bool){goBundle, pythonBundle, rustBundle} {
@@ -131,7 +131,7 @@ func bundleFor(lang string) (sdkBundle, bool) {
 
 // unknownLanguage is the error for a language with no embedded SDK; prefix
 // leads the stock unknown-language message.
-// pig additive (D92): a language the active Piglet strips reports the strip, not an unknown language.
+// ompig additive (D92): a language the active Ompiglet strips reports the strip, not an unknown language.
 func unknownLanguage(prefix, lang string) error {
 	if err := runtimecell.StrippedSDKError(lang); err != nil {
 		return err
@@ -143,7 +143,7 @@ func unknownLanguage(prefix, lang string) error {
 func SDKDirFor(configRoot, lang string) (string, error) {
 	b, ok := bundleFor(lang)
 	if !ok {
-		return "", unknownLanguage("pig reload: ", lang)
+		return "", unknownLanguage("ompig reload: ", lang)
 	}
 	return b.stagedDir(configRoot)
 }
@@ -171,7 +171,7 @@ func (b sdkBundle) computeHash() (string, error) {
 	defer hashBuffers.Put(buffer)
 	for _, name := range b.files {
 		if err := hashEmbeddedFile(h, b, name, *buffer); err != nil {
-			return "", fmt.Errorf("pig reload: read embedded %s/%s: %w", b.lang, name, err)
+			return "", fmt.Errorf("ompig reload: read embedded %s/%s: %w", b.lang, name, err)
 		}
 	}
 	return hex.EncodeToString(h.Sum(nil))[:16], nil
@@ -212,12 +212,12 @@ func (b sdkBundle) sync(configRoot string) ([]string, error) {
 		return nil, err
 	}
 	if err := os.MkdirAll(filepath.Dir(dir), 0o755); err != nil {
-		return nil, fmt.Errorf("pig reload: mkdir %s: %w", filepath.Dir(dir), err)
+		return nil, fmt.Errorf("ompig reload: mkdir %s: %w", filepath.Dir(dir), err)
 	}
 	settleStaging(dir)
 	staging, err := os.MkdirTemp(filepath.Dir(dir), stagePrefix(dir))
 	if err != nil {
-		return nil, fmt.Errorf("pig reload: stage %s SDK: %w", b.lang, err)
+		return nil, fmt.Errorf("ompig reload: stage %s SDK: %w", b.lang, err)
 	}
 	renamed := false
 	defer func() {
@@ -226,25 +226,25 @@ func (b sdkBundle) sync(configRoot string) ([]string, error) {
 		}
 	}()
 	if err := os.Chmod(staging, 0o755); err != nil {
-		return nil, fmt.Errorf("pig reload: chmod %s: %w", staging, err)
+		return nil, fmt.Errorf("ompig reload: chmod %s: %w", staging, err)
 	}
 	written := make([]string, 0, len(b.files))
 	made := map[string]bool{staging: true}
 	for _, embedded := range b.files {
 		data, err := fs.ReadFile(b.fsys, embedded)
 		if err != nil {
-			return nil, fmt.Errorf("pig reload: read embedded %s/%s: %w", b.lang, embedded, err)
+			return nil, fmt.Errorf("ompig reload: read embedded %s/%s: %w", b.lang, embedded, err)
 		}
 		name := stagedName(embedded)
 		if name != embedded {
 			if data, err = gunzip(data); err != nil {
-				return nil, fmt.Errorf("pig reload: decompress embedded %s/%s: %w", b.lang, embedded, err)
+				return nil, fmt.Errorf("ompig reload: decompress embedded %s/%s: %w", b.lang, embedded, err)
 			}
 		}
 		target := filepath.Join(staging, filepath.FromSlash(name))
 		if parent := filepath.Dir(target); !made[parent] {
 			if err := os.MkdirAll(parent, 0o755); err != nil {
-				return nil, fmt.Errorf("pig reload: mkdir %s: %w", parent, err)
+				return nil, fmt.Errorf("ompig reload: mkdir %s: %w", parent, err)
 			}
 			made[parent] = true
 		}
@@ -257,7 +257,7 @@ func (b sdkBundle) sync(configRoot string) ([]string, error) {
 		return nil, err
 	}
 	if err := replaceDir(dir, staging); err != nil {
-		return nil, fmt.Errorf("pig reload: replace staged %s SDK: %w", b.lang, err)
+		return nil, fmt.Errorf("ompig reload: replace staged %s SDK: %w", b.lang, err)
 	}
 	renamed = true
 	sort.Strings(written)
@@ -440,11 +440,11 @@ func VerifyStaged(configRoot string) func(stagedDir, buildType string) error {
 		}
 		data, err := os.ReadFile(filepath.Join(stagedDir, markerFile))
 		if err != nil {
-			return fmt.Errorf("staged %s SDK at %s has no version marker; run `pig reload`", lang, stagedDir)
+			return fmt.Errorf("staged %s SDK at %s has no version marker; run `ompig reload`", lang, stagedDir)
 		}
 		if onDisk := strings.TrimSpace(string(data)); onDisk != embedded {
 			return fmt.Errorf(
-				"staged %s SDK at %s is %s but this pig embeds %s; extensions would build against the wrong SDK. Run `pig reload`",
+				"staged %s SDK at %s is %s but this ompig embeds %s; extensions would build against the wrong SDK. Run `ompig reload`",
 				lang, stagedDir, onDisk, embedded)
 		}
 		return nil
@@ -454,7 +454,7 @@ func VerifyStaged(configRoot string) func(stagedDir, buildType string) error {
 // stagedSDK is one staged SDK directory and the language it holds.
 type stagedSDK struct{ lang, dir string }
 
-// stagedSDKs lists every staged SDK directory under configRoot, whichever build staged it: each language's per-build directories and the unhashed directory a PiG that predates them stages into.
+// stagedSDKs lists every staged SDK directory under configRoot, whichever build staged it: each language's per-build directories and the unhashed directory a Ompig that predates them stages into.
 func stagedSDKs(configRoot string) ([]stagedSDK, error) {
 	parent := filepath.Join(configRoot, "state", "pigsdk")
 	var out []stagedSDK
@@ -476,7 +476,7 @@ func stagedSDKs(configRoot string) ([]stagedSDK, error) {
 
 // LiveFingerprints returns the fingerprints of every staged SDK still on disk:
 // this build's, the other builds' retained ones, and the unhashed ones an older
-// PiG uses. A cached extension build stays reachable while its recorded
+// Ompig uses. A cached extension build stays reachable while its recorded
 // fingerprint is among them, because the build's cache key folds the SDK in.
 func LiveFingerprints(configRoot string) (map[string]struct{}, error) {
 	sdks, err := stagedSDKs(configRoot)
@@ -511,7 +511,7 @@ func prune(configRoot string, dryRun, sized bool) (runtimecell.CacheReport, erro
 			return runtimecell.CacheReport{}, err
 		}
 		if len(sdks) == 0 {
-			return runtimecell.CacheReport{}, fmt.Errorf("no staged SDK found under %s; run `pig reload` first", configRoot)
+			return runtimecell.CacheReport{}, fmt.Errorf("no staged SDK found under %s; run `ompig reload` first", configRoot)
 		}
 		confirmed, err := runtimecell.PruneCaches(runtimecell.CacheLifecycleOptions{CacheRoot: cacheRoot, DryRun: true, Unsized: !sized})
 		if err != nil || len(confirmed.Entries) == 0 {
@@ -523,7 +523,7 @@ func prune(configRoot string, dryRun, sized bool) (runtimecell.CacheReport, erro
 		return runtimecell.CacheReport{}, err
 	}
 	if len(live) == 0 {
-		return runtimecell.CacheReport{}, fmt.Errorf("no staged SDK found under %s; run `pig reload` first", configRoot)
+		return runtimecell.CacheReport{}, fmt.Errorf("no staged SDK found under %s; run `ompig reload` first", configRoot)
 	}
 	return runtimecell.PruneCaches(runtimecell.CacheLifecycleOptions{
 		CacheRoot: cacheRoot, LiveFingerprints: live, DryRun: dryRun, Unsized: !sized,
@@ -608,7 +608,7 @@ func EnsureSyncedContext(ctx context.Context, configRoot string) error {
 func EnsureSyncedLang(configRoot, lang string) error {
 	b, ok := bundleFor(lang)
 	if !ok {
-		return unknownLanguage("pig reload: ", lang)
+		return unknownLanguage("ompig reload: ", lang)
 	}
 	dir, err := b.stagedDir(configRoot)
 	if err != nil {
@@ -662,18 +662,18 @@ func withSDKStageLock(ctx context.Context, configRoot string, work func() error)
 func writeFile(path string, data []byte, mode os.FileMode) error {
 	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
 	if err != nil {
-		return fmt.Errorf("pig reload: create %s: %w", path, err)
+		return fmt.Errorf("ompig reload: create %s: %w", path, err)
 	}
 	if _, err := f.Write(data); err != nil {
 		_ = f.Close()
-		return fmt.Errorf("pig reload: write %s: %w", path, err)
+		return fmt.Errorf("ompig reload: write %s: %w", path, err)
 	}
 	if err := f.Chmod(mode); err != nil {
 		_ = f.Close()
-		return fmt.Errorf("pig reload: chmod %s: %w", path, err)
+		return fmt.Errorf("ompig reload: chmod %s: %w", path, err)
 	}
 	if err := f.Close(); err != nil {
-		return fmt.Errorf("pig reload: close %s: %w", path, err)
+		return fmt.Errorf("ompig reload: close %s: %w", path, err)
 	}
 	return nil
 }
@@ -681,7 +681,7 @@ func writeFile(path string, data []byte, mode os.FileMode) error {
 // RunCommand is the pre-session bundled command entrypoint. Returns -1 when the
 // args do not target this command so the dispatcher can try the next.
 //
-// It implements `pig reload`, the pre-session counterpart to the interactive
+// It implements `ompig reload`, the pre-session counterpart to the interactive
 // /reload.
 //
 // Both mean the same thing: make what is loaded match what is on disk. The
@@ -691,7 +691,7 @@ func writeFile(path string, data []byte, mode os.FileMode) error {
 // Staging also happens at startup and inside /reload, so this is the explicit
 // form for a shell, not a step a user has to remember.
 //
-// Reporting lives in `pig diagnose`, which already covers staged-versus-embedded
+// Reporting lives in `ompig diagnose`, which already covers staged-versus-embedded
 // alongside paths, auth, models, and environment. Splitting a second report out
 // here would mean two places to look for one answer.
 func RunCommand(args []string, stdout, stderr io.Writer) int {
@@ -701,7 +701,7 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 	rest := args[1:]
 	root, err := configroot.Resolve()
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig reload: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig reload: %v\n", err)
 		return 1
 	}
 
@@ -726,12 +726,12 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 			continue
 		}
 		if err := EnsureSyncedLang(root, lang); err != nil {
-			_, _ = fmt.Fprintf(stderr, "pig reload: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "ompig reload: %v\n", err)
 			return 1
 		}
 		value, err := flag.emit(lang)
 		if err != nil {
-			_, _ = fmt.Fprintf(stderr, "pig reload: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "ompig reload: %v\n", err)
 			return 1
 		}
 		_, _ = fmt.Fprintln(stdout, value)
@@ -747,12 +747,12 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 	if slices.Contains(rest, "--dry-run") {
 		statuses, err := Status(root)
 		if err != nil {
-			_, _ = fmt.Fprintf(stderr, "pig reload: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "ompig reload: %v\n", err)
 			return 1
 		}
 		for _, st := range statuses {
 			if !st.Staged || !st.Current {
-				_, _ = fmt.Fprintf(stdout, "pig reload: would stage %s to %s (embedded %s)\n", st.Lang, st.Dir, st.Embedded)
+				_, _ = fmt.Fprintf(stdout, "ompig reload: would stage %s to %s (embedded %s)\n", st.Lang, st.Dir, st.Embedded)
 			}
 		}
 		// Prune needs a staged SDK to decide what is reachable. On a root that
@@ -761,10 +761,10 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 		// command they are previewing.
 		result, err := Prune(root, slices.Contains(rest, "--all"), true)
 		if err != nil {
-			_, _ = fmt.Fprintf(stdout, "pig reload: would drop no builds (none staged yet)\n")
+			_, _ = fmt.Fprintf(stdout, "ompig reload: would drop no builds (none staged yet)\n")
 			return 0
 		}
-		_, _ = fmt.Fprintf(stdout, "pig reload: would drop %d unreachable build(s), %.1f MB, keeping %d\n",
+		_, _ = fmt.Fprintf(stdout, "ompig reload: would drop %d unreachable build(s), %.1f MB, keeping %d\n",
 			result.Removed, float64(result.RemovedBytes)/(1024*1024), len(result.Entries)-result.Removed)
 		return 0
 	}
@@ -784,13 +784,13 @@ func RunCommand(args []string, stdout, stderr io.Writer) int {
 			err = errors.Join(err, dirErr)
 			continue
 		}
-		_, _ = fmt.Fprintf(stdout, "pig reload: staged %s (%d files) to %s\n", b.lang, written, dir)
+		_, _ = fmt.Fprintf(stdout, "ompig reload: staged %s (%d files) to %s\n", b.lang, written, dir)
 	}
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig reload: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig reload: %v\n", err)
 		return 1
 	}
-	_, _ = fmt.Fprintf(stdout, "pig reload: dropped %d unreachable build(s), %.1f MB, kept %d\n",
+	_, _ = fmt.Fprintf(stdout, "ompig reload: dropped %d unreachable build(s), %.1f MB, kept %d\n",
 		result.Removed, float64(result.RemovedBytes)/(1024*1024), len(result.Entries)-result.Removed)
 	return 0
 }
@@ -813,7 +813,7 @@ func flagValue(args []string, name string) (string, bool) {
 }
 
 func printUsage(w io.Writer) {
-	_, _ = fmt.Fprintln(w, "Usage: pig reload [--all] [--dry-run] [--sdk-path [lang]] [--sdk-version [lang]]")
+	_, _ = fmt.Fprintln(w, "Usage: ompig reload [--all] [--dry-run] [--sdk-path [lang]] [--sdk-version [lang]]")
 	_, _ = fmt.Fprintln(w, "")
 	_, _ = fmt.Fprintln(w, "Stages the extension SDKs this binary embeds into its own directories and")
 	_, _ = fmt.Fprintln(w, "drops extension builds whose SDK is no longer staged, so the next build")
@@ -825,5 +825,5 @@ func printUsage(w io.Writer) {
 	_, _ = fmt.Fprintln(w, "  --sdk-path [lang]     print this binary's staged SDK directory (go|python|rust, default go)")
 	_, _ = fmt.Fprintln(w, "  --sdk-version [lang]  print an embedded SDK content hash")
 	_, _ = fmt.Fprintln(w, "")
-	_, _ = fmt.Fprintln(w, "Staged-versus-embedded status is reported by `pig diagnose`.")
+	_, _ = fmt.Fprintln(w, "Staged-versus-embedded status is reported by `ompig diagnose`.")
 }

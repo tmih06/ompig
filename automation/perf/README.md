@@ -4,7 +4,7 @@
 
 `docs/performance/scoreboard.md` lists every hot path and resource metric with its current count, the gate that guards it, a target with its basis, and the owning lane. `make perf-scoreboard` renders it from `scoreboard.toml` (the registry), `ratchet.toml` (the ceilings) and `scoreboard-measured.json` (the last measurement); `make perf-scoreboard-check` fails when the registry names a test or ceiling that does not exist or the report is stale.
 
-Count gates call `internal/perfgate.Check` with a metric ID; the test fails when the count exceeds the ceiling in `ratchet.toml` and logs a `perfgate: <id>=<value>` line. `make perf-scoreboard-measure` runs every gate listed under `[[measure]]` and records those lines. A gate that counts allocations measures with `perfgate.Measure`, which runs the operation once to warm it and counts a second call with the collector off: a collection between the two calls would empty every `sync.Pool` and bill the refilled buffers to the operation. Whole-process gates in `test/perfgate` run a built pig with `PIG_PROFILE=metrics` under `GOMAXPROCS=1`. Ceilings only move down: `make perf-ratchet-check` (base `PERF_RATCHET_BASE`, default the branch's upstream) fails on a raised or removed ceiling unless a commit in the range carries `Perf-Ratchet-Raise: <id> <reason>` or `Perf-Ratchet-Retire: <id> <reason>`. Lower a ceiling in the change that lowers the count.
+Count gates call `internal/perfgate.Check` with a metric ID; the test fails when the count exceeds the ceiling in `ratchet.toml` and logs a `perfgate: <id>=<value>` line. `make perf-scoreboard-measure` runs every gate listed under `[[measure]]` and records those lines. A gate that counts allocations measures with `perfgate.Measure`, which runs the operation once to warm it and counts a second call with the collector off: a collection between the two calls would empty every `sync.Pool` and bill the refilled buffers to the operation. Whole-process gates in `test/perfgate` run a built ompig with `OMPIG_PROFILE=metrics` under `GOMAXPROCS=1`. Ceilings only move down: `make perf-ratchet-check` (base `PERF_RATCHET_BASE`, default the branch's upstream) fails on a raised or removed ceiling unless a commit in the range carries `Perf-Ratchet-Raise: <id> <reason>` or `Perf-Ratchet-Retire: <id> <reason>`. Lower a ceiling in the change that lowers the count.
 
 # Startup performance checks
 
@@ -27,7 +27,7 @@ The guards cover:
 - deferred presentation imports, complete shared library exports and identities, and exact bundle regeneration;
 - Jiti and native bytecode cache reuse with same-size/mtime source edits, compiler identity changes, explicit disabling, and ready-time publication;
 - unused private Unicode initialization and linear frame-copy volume, including malformed-frame termination;
-- package initializers of this module bounded by the runtime's init accounting (bytes and allocations, not time), no package-level `regexp.MustCompile` in any package linked into `pig`, and every lazy pattern compiling;
+- package initializers of this module bounded by the runtime's init accounting (bytes and allocations, not time), no package-level `regexp.MustCompile` in any package linked into `ompig`, and every lazy pattern compiling;
 - catalog materialization bounded by allocations per model, and `MaxThinking` selection equal to `GetSupportedThinkingLevels` for every catalog entry and level-map combination;
 - SDK staging that swaps a complete tree, leaves no staging directory, and skips SDK hashing when the extension cache has nothing to classify;
 - a streamed embedded-SDK marker digest equal to the whole-file digest, so a warm start never restages;
@@ -44,9 +44,9 @@ No blocking assertion compares wall-clock time. Allocation assertions use an ind
 Run it locally:
 
 ```bash
-automation/ci/with-isolated-pig-home.sh python3 automation/perf/startup_timing.py \
-  --pig bin/pig \
-  --baseline /path/to/pig-0.2.0 \
+automation/ci/with-isolated-ompig-home.sh python3 automation/perf/startup_timing.py \
+  --ompig bin/ompig \
+  --baseline /path/to/ompig-0.2.0 \
   --pi extensions/sdk-ts/node_modules/.bin/pi \
   --runs 25 --out tmp/startup-timing
 ```
@@ -57,7 +57,7 @@ The harness records every trial without retries, the source and binary identitie
 
 The relative budgets are 1.05 times the same-run 0.2.0 no-extension control and 1.15 times the same-run Pi extension/package control, for both cold and warm application caches. They are not absolute timing claims across different machines. The original 760/980 ms cold targets and each experiment's results remain in the performance findings.
 
-Pi loads the faux-provider extension to avoid network credentials; PiG uses its built-in faux provider. All other fixture inputs are the same. Request-size, memory, long-session and steady-state budgets remain owned by `make evals` and `make perf-check`; this startup job does not replace them.
+Pi loads the faux-provider extension to avoid network credentials; Ompig uses its built-in faux provider. All other fixture inputs are the same. Request-size, memory, long-session and steady-state budgets remain owned by `make evals` and `make perf-check`; this startup job does not replace them.
 
 ## Harness tests
 

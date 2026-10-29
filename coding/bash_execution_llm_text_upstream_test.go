@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports bashExecutionToText through convertToLlm (packages/coding-agent/src/core/messages.ts:90-108, 148-200): a recorded user-bash result reaches the next model turn as one user message with the command, the fenced output, and the exit status, cancellation, and truncation notes. This drives the live Session path, so the exit code travels from BashResult through the persisted entry to the LLM message.

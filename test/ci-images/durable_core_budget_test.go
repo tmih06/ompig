@@ -39,7 +39,7 @@ func TestCIRunsTheDurableCoreBudgetGate(t *testing.T) {
 // The checker fails a job that never runs the target and a job that runs it before it installs TinyGo.
 func TestDurableCoreBudgetGateCheckerRejectsMissingAndMisorderedSteps(t *testing.T) {
 	install := "      - name: Install the pinned TinyGo\n        run: echo \"TINYGO=$(sh durable/core/budget/tinygo-install.sh)\" >> \"$GITHUB_ENV\"\n"
-	gate := "      - name: Check the Durable core budget\n        run: automation/ci/with-isolated-pig-home.sh make durable-core-budget\n"
+	gate := "      - name: Check the Durable core budget\n        run: automation/ci/with-isolated-ompig-home.sh make durable-core-budget\n"
 	if got := budgetGateProblems(install + gate); len(got) != 0 {
 		t.Errorf("install then gate: unexpected problems %v", got)
 	}

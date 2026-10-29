@@ -5,8 +5,8 @@ package coding
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // extendResourcesFromExtensions asks the extensions' resources_discover handlers for resource paths after session_start and adds them to the Session's resource loader, then rebuilds the system prompt (agent-session.ts extendResourcesFromExtensions). A Session whose caller owns its resources (NoResources) has no loader to extend, and the caller runs resources_discover itself.

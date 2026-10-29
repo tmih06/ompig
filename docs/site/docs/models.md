@@ -1,6 +1,6 @@
 # Models
 
-A model in PiG is identified by a **provider-qualified spec**: `provider/modelID`. Model-selection options such as `--model`, `/model`, `Ctrl+P` cycling, and the extension `setModel()` call accept provider-qualified specs. Scoped model entries in settings also use that form. The saved default is an exception: set `defaultProvider` to the provider and `defaultModel` to the model ID without the provider prefix. A provider-qualified `defaultModel` does not select that model at startup.
+A model in Ompig is identified by a **provider-qualified spec**: `provider/modelID`. Model-selection options such as `--model`, `/model`, `Ctrl+P` cycling, and the extension `setModel()` call accept provider-qualified specs. Scoped model entries in settings also use that form. The saved default is an exception: set `defaultProvider` to the provider and `defaultModel` to the model ID without the provider prefix. A provider-qualified `defaultModel` does not select that model at startup.
 
 `--model` and `/model` resolve a bare model ID across all providers, as Pi does. The Go function `coding.BuildModel` is different: it reads a spec without a `/` as `openai/<id>`. Always pass `provider/id` to `BuildModel`.
 
@@ -8,7 +8,7 @@ A model in PiG is identified by a **provider-qualified spec**: `provider/modelID
 
 | Mechanism | Effect |
 |---|---|
-| `pig --model openai/gpt-5.5` | Override for this process. |
+| `ompig --model openai/gpt-5.5` | Override for this process. |
 | `/model` slash command | Open the selector. Enter selects for this session. Ctrl+S selects and saves the default. |
 | `Ctrl+P` / `Shift+Ctrl+P` | Cycle next/previous within scoped models. |
 | `/scoped-models` | Edit the cycle list interactively. |
@@ -21,13 +21,13 @@ An extension can add models that choose a physical model for each request. See [
 
 ## Connect local models
 
-PiG integrates with the llama.cpp router. The router discovers GGUF files and loads models on demand. The `/llama` command manages the router, and `/model` selects one of its models. See [llama.cpp](llama-cpp.md).
+Ompig integrates with the llama.cpp router. The router discovers GGUF files and loads models on demand. The `/llama` command manages the router, and `/model` selects one of its models. See [llama.cpp](llama-cpp.md).
 
 For Ollama, LM Studio, vLLM, SGLang, and other compatible servers, [configure a compatible endpoint](#configure-a-compatible-endpoint) in `models.json`.
 
 ## Configure a compatible endpoint
 
-Use `~/.pig/agent/models.json` when an endpoint speaks an API that PiG already supports. This includes most Ollama, LM Studio, vLLM, SGLang, and proxy deployments:
+Use `~/.ompig/agent/models.json` when an endpoint speaks an API that Ompig already supports. This includes most Ollama, LM Studio, vLLM, SGLang, and proxy deployments:
 
 ```json
 {
@@ -46,13 +46,13 @@ Use `~/.pig/agent/models.json` when an endpoint speaks an API that PiG already s
 
 The dummy key makes the model available; Ollama ignores it. For an authenticated endpoint, `apiKey` and header values can use `$NAME` or `${NAME}` environment interpolation, a literal value, or a leading `!command`. [Custom providers](custom-provider.md) has a worked example.
 
-A custom model needs an `api` on the model or on its provider, unless it replaces a built-in model of that provider. Without one, PiG reports `Provider "<provider>": Provider <provider>, model <model>: no "api" specified. Set at provider or model level.` and ignores that provider's `models.json` entry, as Pi does. PiG 0.4.x defaulted the `api`. A model whose `contextWindow` or `maxTokens` is zero or negative is rejected the same way (`Provider <provider>, model <model>: invalid contextWindow`).
+A custom model needs an `api` on the model or on its provider, unless it replaces a built-in model of that provider. Without one, Ompig reports `Provider "<provider>": Provider <provider>, model <model>: no "api" specified. Set at provider or model level.` and ignores that provider's `models.json` entry, as Pi does. Ompig 0.4.x defaulted the `api`. A model whose `contextWindow` or `maxTokens` is zero or negative is rejected the same way (`Provider <provider>, model <model>: invalid contextWindow`).
 
 A `models` entry adds or replaces a model with the same ID on that provider. Use `modelOverrides` to change the metadata of an existing built-in or extension-provided model without replacing the provider's model list. Unknown override IDs are ignored.
 
 ### Describe model input and caching
 
-Use `inputLimits.images.resize` to control how PiG encodes new image attachments, `read` results, and tool-result images before it stores them in the conversation history:
+Use `inputLimits.images.resize` to control how Ompig encodes new image attachments, `read` results, and tool-result images before it stores them in the conversation history:
 
 ```json
 {
@@ -73,7 +73,7 @@ Use `inputLimits.images.resize` to control how PiG encodes new image attachments
 
 `maxBytes` limits the base64-encoded payload. Omitted resize fields use defaults of 2000 by 2000 pixels, 4.5 MiB encoded, and JPEG quality 80. Images are encoded once; changing models does not rewrite historical images.
 
-`inputLimits.images.maxPerRequest` limits the images in one request. When a request carries more, PiG replaces the oldest images with the text `[image omitted: this model accepts at most N images per request]` and keeps the newest N. The stored session is unchanged. Pi reads the limit and ignores it, so the provider rejects the request (D137, Pi #10162). Catalog models with a limit, such as Anthropic's, are affected without configuration. Once a run passes the limit, each request that adds an image moves the omitted set, so the provider's prompt cache misses from the oldest kept image onward.
+`inputLimits.images.maxPerRequest` limits the images in one request. When a request carries more, Ompig replaces the oldest images with the text `[image omitted: this model accepts at most N images per request]` and keeps the newest N. The stored session is unchanged. Pi reads the limit and ignores it, so the provider rejects the request (D137, Pi #10162). Catalog models with a limit, such as Anthropic's, are affected without configuration. Once a run passes the limit, each request that adds an image moves the omitted set, so the provider's prompt cache misses from the oldest kept image onward.
 
 Use `promptCache` to declare the provider's cache lifetime in seconds for the `short` or `long` retention tier:
 
@@ -85,7 +85,7 @@ A model without a lifetime for the active tier is not eligible for cache warming
 
 ### Configure sampling by thinking level
 
-OpenAI-compatible APIs support free-form `samplingParams` model defaults and `samplingParamsByThinkingLevel` overrides in `models.json`. The keys of `samplingParamsByThinkingLevel` are PiG thinking levels (`off`, `minimal`, `low`, `medium`, `high`, `xhigh` and `max`), not the provider values from `thinkingLevelMap`:
+OpenAI-compatible APIs support free-form `samplingParams` model defaults and `samplingParamsByThinkingLevel` overrides in `models.json`. The keys of `samplingParamsByThinkingLevel` are Ompig thinking levels (`off`, `minimal`, `low`, `medium`, `high`, `xhigh` and `max`), not the provider values from `thinkingLevelMap`:
 
 ```json
 {
@@ -107,15 +107,15 @@ OpenAI-compatible APIs support free-form `samplingParams` model defaults and `sa
 }
 ```
 
-PiG first clamps an unsupported thinking level to a supported one. It then merges the model's `samplingParams`, the effective level's entry and the request's `samplingParams`, in that order; a later value wins per key. A level without an entry uses the model defaults. A `modelOverrides` entry merges each level per key with the base model's entry. These fields apply only to `openai-completions`, `openai-responses` and `azure-openai-responses`; other APIs ignore them.
+Ompig first clamps an unsupported thinking level to a supported one. It then merges the model's `samplingParams`, the effective level's entry and the request's `samplingParams`, in that order; a later value wins per key. A level without an entry uses the model defaults. A `modelOverrides` entry merges each level per key with the base model's entry. These fields apply only to `openai-completions`, `openai-responses` and `azure-openai-responses`; other APIs ignore them.
 
 ## Scoped models
 
-Scoped models are the list `Ctrl+P` cycles through. They are stored in settings as provider-qualified IDs; PiG accepts legacy bare IDs and rewrites them on next save. Cycling preserves both `provider` and `id`, including an `id` that contains a slash, such as `openrouter/openai/gpt-5.5`.
+Scoped models are the list `Ctrl+P` cycles through. They are stored in settings as provider-qualified IDs; Ompig accepts legacy bare IDs and rewrites them on next save. Cycling preserves both `provider` and `id`, including an `id` that contains a slash, such as `openrouter/openai/gpt-5.5`.
 
 ## Thinking levels
 
-PiG surfaces reasoning effort through these named levels:
+Ompig surfaces reasoning effort through these named levels:
 
 ```text
 off → minimal → low → medium → high → xhigh → max
@@ -155,13 +155,13 @@ OpenAI's Decisions API needs an API key. Sign in with ChatGPT credentials do not
 
 Classifier models do not appear in `/model`. The model reaches them through the [`codemode`](codemode.md) tool, which is off unless an MCP server turned it on. Enable it with `"defaultTools": ["+codemode"]` in [settings](settings.md#tools). Scripts list classifier models with `models.getAvailableOfType("classifier")` and call `models.classify(model, { state, questions })`. [Codemode](codemode.md#classify) describes the question and answer types.
 
-PiG adds the usage of a script's classifier calls to the `codemode` tool result, so it counts toward the session cost. The cost uses the model's catalog price; a model without one, such as TypeSafe's direct `jev-latest`, reports tokens at no cost.
+Ompig adds the usage of a script's classifier calls to the `codemode` tool result, so it counts toward the session cost. The cost uses the model's catalog price; a model without one, such as TypeSafe's direct `jev-latest`, reports tokens at no cost.
 
 Extensions call classifiers through `ctx.modelRegistry.classify()`, without codemode. [Virtual models](virtual-models.md) can use them to route requests.
 
 ## Use image models
 
-Image models generate images from a prompt and optional input images. PiG lists OpenRouter's image models, such as `google/gemini-2.5-flash-image` and `black-forest-labs/flux.2-pro`, under the `openrouter` provider; they use the same `OPENROUTER_API_KEY` or `/login` credential as its chat models. OpenRouter serves some image models, such as `openai/gpt-image-2.5-flare`, only through its Images API. When `chat/completions` refuses such a model, PiG sends the request once more to the Images API; Pi returns the refusal as an error (D128, Pi #10652).
+Image models generate images from a prompt and optional input images. Ompig lists OpenRouter's image models, such as `google/gemini-2.5-flash-image` and `black-forest-labs/flux.2-pro`, under the `openrouter` provider; they use the same `OPENROUTER_API_KEY` or `/login` credential as its chat models. OpenRouter serves some image models, such as `openai/gpt-image-2.5-flare`, only through its Images API. When `chat/completions` refuses such a model, Ompig sends the request once more to the Images API; Pi returns the refusal as an error (D128, Pi #10652).
 
 Image models do not appear in `/model`; the model reaches them through the `codemode` tool. Scripts list them with `models.getAvailableOfType("image")` and call `models.generateImages(model, { input })`. The result's `output` holds base64 image blocks, which `image()` attaches to the `codemode` result so the model sees them:
 
@@ -174,7 +174,7 @@ if (result.stopReason !== "stop") return result.errorMessage;
 for (const block of result.output) if (block.type === "image") image(block);
 ```
 
-`input` can also contain `{ type: "image", data, mimeType }` blocks to edit or use as references. PiG adds the usage of a script's image calls to the `codemode` tool result, like classifier calls. Generated images are not saved to disk. [Codemode](codemode.md#generate-images) describes the full API.
+`input` can also contain `{ type: "image", data, mimeType }` blocks to edit or use as references. Ompig adds the usage of a script's image calls to the `codemode` tool result, like classifier calls. Generated images are not saved to disk. [Codemode](codemode.md#generate-images) describes the full API.
 
 Extensions generate images through `ctx.modelRegistry.generateImages()`, without codemode.
 
@@ -184,11 +184,11 @@ New built-in models are generated into `ai/models_generated.go` from Pi's catalo
 
 ## Provider cost tiers
 
-An extension's registered model can include `cost.tiers`. Each tier supplies `inputTokensAbove` and the `input`, `output`, `cacheRead`, and `cacheWrite` rates per million tokens. PiG retains these thresholds and rates through Provider registration and model lookup. The cost calculation selects the applicable tier from total input usage.
+An extension's registered model can include `cost.tiers`. Each tier supplies `inputTokensAbove` and the `input`, `output`, `cacheRead`, and `cacheWrite` rates per million tokens. Ompig retains these thresholds and rates through Provider registration and model lookup. The cost calculation selects the applicable tier from total input usage.
 
 ## Common errors
 
-Model configuration read, JSON parse, and schema errors include a `File:` line that identifies the selected `models.json` path. Check that file's contents and permissions. A missing file is allowed. PiG leaves invalid files unchanged.
+Model configuration read, JSON parse, and schema errors include a `File:` line that identifies the selected `models.json` path. Check that file's contents and permissions. A missing file is allowed. Ompig leaves invalid files unchanged.
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -197,6 +197,6 @@ Model configuration read, JSON parse, and schema errors include a `File:` line t
 | A model routed to `openai` from Go code | Bare ID passed to `coding.BuildModel()` | Pass `provider/id`. |
 | A custom model is missing from `/model` | Its provider has no usable credential. | Configure `apiKey` or sign in. For llama.cpp, load the model first. |
 | Thinking cycle has no effect | The active model does not support reasoning. | Switch to a reasoning model. |
-| Model selector empty after `/login` | Credentials were written to another configuration root. | Check `PIG_HOME` against `~/.pig`. |
+| Model selector empty after `/login` | Credentials were written to another configuration root. | Check `OMPIG_HOME` against `~/.ompig`. |
 
 See [upstream Pi's model documentation](https://pi.dev/docs/latest/models) for the reference implementation.

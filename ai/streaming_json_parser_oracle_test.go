@@ -17,7 +17,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // streamingJSONOracleDocuments are the documents the parser is compared on: the vectors of Pi's test (partial-json and fixJson), the

@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // captureUIBridge is a minimal SubprocessUIBridge that records the host actions
@@ -82,7 +82,7 @@ func drainOneUITask(t *testing.T, m *InteractiveMode) {
 }
 
 // Upstream sendUserMessage routes through prompt(): while idle it STARTS a turn,
-// it does not merely queue. pig used to always enqueue, so an extension that
+// it does not merely queue. ompig used to always enqueue, so an extension that
 // injected a message while the agent was idle stalled silently. This asserts the
 // injected message reaches the provider (a turn started).
 func TestInteractiveMode_SendUserMessage_IdleStartsTurn(t *testing.T) {
@@ -368,7 +368,7 @@ func TestSendUserMessageAcceptsTheUpstreamDeliveryModes(t *testing.T) {
 // Upstream sendUserMessage is prompt(), which renders the user message only
 // when the agent emits message_start for it. A ctx.ui.notify the handler makes
 // right after pi.sendUserMessage (pi-msg-queue's /q) therefore appears before
-// the user message. pig used to render the prompt eagerly when the main loop
+// the user message. ompig used to render the prompt eagerly when the main loop
 // started the turn, which reversed the order.
 func TestInteractiveMode_SendUserMessageRendersAfterSameHandlerNotify(t *testing.T) {
 	m, seen, sendUserMessage := newSendUserMessageHarness(t)

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -17,7 +17,7 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // observedGeometry runs the named extension's height tool and returns the
@@ -81,7 +81,7 @@ func writeHeightReportingStandalone(t *testing.T, modulePath, extName string) st
 		t.Fatal(err)
 	}
 	sdkRoot := filepath.Join(findModuleRoot(t), "extensions", "sdk")
-	goMod := fmt.Sprintf("module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", modulePath, modfile.AutoQuote(filepath.ToSlash(sdkRoot)))
+	goMod := fmt.Sprintf("module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", modulePath, modfile.AutoQuote(filepath.ToSlash(sdkRoot)))
 	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}

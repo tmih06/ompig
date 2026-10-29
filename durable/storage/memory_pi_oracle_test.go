@@ -15,12 +15,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// oracleStep is one storage call of a seeded program. Writes, queries and cursors are Pi-shaped JSON, so the same step feeds Pi's MemoryStorage and Pig's.
+// oracleStep is one storage call of a seeded program. Writes, queries and cursors are Pi-shaped JSON, so the same step feeds Pi's MemoryStorage and Ompig's.
 type oracleStep struct {
 	Op             string            `json:"op"`
 	Writes         []json.RawMessage `json:"writes"`
@@ -106,8 +106,8 @@ func (g *oracleGen) entry() int64 {
 	return g.entries[g.random.Intn(len(g.entries))]
 }
 
-// data omits JSON null: Pi keeps an entry's present `data: null` while durable.EntryRecord.Data (an any) cannot tell null from absent, so Pig drops it (see questions/batch-ctor.md, "durable EntryRecord data null").
-// data leaves out JSON null (Pi keeps a present data:null, Pig drops it: patch with dcore-history). -0 and <, >, & and U+2028 in strings and keys check that the JSONL files are written as JSON.stringify writes them.
+// data omits JSON null: Pi keeps an entry's present `data: null` while durable.EntryRecord.Data (an any) cannot tell null from absent, so Ompig drops it (see questions/batch-ctor.md, "durable EntryRecord data null").
+// data leaves out JSON null (Pi keeps a present data:null, Ompig drops it: patch with dcore-history). -0 and <, >, & and U+2028 in strings and keys check that the JSONL files are written as JSON.stringify writes them.
 func (g *oracleGen) data() string {
 	return g.pick(``, ``, `"text"`, `0`, `-0`, `1.5`, `true`, `[]`, `{}`, `{"a":[1,{"b":null}],"c":"d"}`, `[null,"x"]`, `"é😀"`, `1e21`, `{"<k>":"a&b\u2028"}`, `[-0,"</x>"]`)
 }
@@ -170,7 +170,7 @@ func (g *oracleGen) json() string {
 	return g.pick(`null`, `"s"`, `0`, `7`, `true`, `[]`, `{}`, `{"k":[1,null]}`, `"é"`)
 }
 
-// checkpoint is never null: Pi keeps a present `checkpoint: null` where Pig's TaskState.Checkpoint (*any) decodes JSON null to a nil pointer (posted to dcore-history with the entry data:null patch).
+// checkpoint is never null: Pi keeps a present `checkpoint: null` where Ompig's TaskState.Checkpoint (*any) decodes JSON null to a nil pointer (posted to dcore-history with the entry data:null patch).
 func (g *oracleGen) checkpoint() string {
 	return g.pick(`"s"`, `0`, `7`, `true`, `[]`, `{}`, `{"k":[1,null]}`, `"é"`)
 }
@@ -182,7 +182,7 @@ func (g *oracleGen) taskID() int64 {
 	return g.tasks[g.random.Intn(len(g.tasks))]
 }
 
-// outcome never carries `error.detail: null`, and submissionWrite never `detail: null`: Pi keeps a present null detail where Pig's TaskOutcomeError.Detail and SubmissionRecord.Detail (any, omitempty) drop it (55 answers differ with null in; handed to dcore-history with the checkpoint:null note).
+// outcome never carries `error.detail: null`, and submissionWrite never `detail: null`: Pi keeps a present null detail where Ompig's TaskOutcomeError.Detail and SubmissionRecord.Detail (any, omitempty) drop it (55 answers differ with null in; handed to dcore-history with the checkpoint:null note).
 func (g *oracleGen) outcome() string {
 	return g.pick(`{"status":"completed","result":`+g.json()+`}`, `{"status":"failed","error":{"message":"boom"}}`, `{"status":"failed","error":{"message":"m","detail":{"a":1}},"result":1}`,
 		`{"status":"aborted"}`, `{"status":"aborted","reason":"r"}`, `{"status":"orphaned","reason":"gone"}`, `{"status":"faulted","error":{"message":"f"}}`)
@@ -682,7 +682,7 @@ func oracleProgramFor(seed int64, monotonicTasks bool) oracleProgram {
 	return program
 }
 
-// settleOracle turns one Pig storage answer into Pi's {ok|undef|err} shape.
+// settleOracle turns one Ompig storage answer into Pi's {ok|undef|err} shape.
 func settleOracle(value any, present bool, err error) oracleResult {
 	var result oracleResult
 	if err != nil {
@@ -717,13 +717,13 @@ func pagedOracle[T any](page durable.Page[T, durable.Cursor]) map[string]any {
 	return out
 }
 
-// runPigProgram runs the steps against one Pig storage; readsOnly skips the commits, as Pi's jsonl-read mode does.
+// runPigProgram runs the steps against one Ompig storage; readsOnly skips the commits, as Pi's jsonl-read mode does.
 func runPigProgram(t *testing.T, program oracleProgram, memory durable.Storage, readsOnly bool) []oracleResult {
 	t.Helper()
 	ctx := context.Background()
 	next := map[int]durable.Cursor{}
 	results := make([]oracleResult, 0, len(program.Steps))
-	var tx *pigTx
+	var tx *ompigTx
 	defer func() {
 		if tx != nil {
 			_ = tx.session.Close(ctx)
@@ -986,11 +986,11 @@ func TestMemoryStorageMatchesPiOnSeededPrograms(t *testing.T) {
 	}
 }
 
-// compareOracleResults compares Pig's answers with Pi's, matched by step index, and returns how many differ; it reports the first few (the caller passes how many were already reported).
+// compareOracleResults compares Ompig's answers with Pi's, matched by step index, and returns how many differ; it reports the first few (the caller passes how many were already reported).
 func compareOracleResults(t *testing.T, label string, program oracleProgram, got, want []oracleResult, reported int, ops map[string]int, failures *int) int {
 	t.Helper()
 	if len(got) != len(want) {
-		t.Errorf("%s: Pig answered %d steps, Pi %d", label, len(got), len(want))
+		t.Errorf("%s: Ompig answered %d steps, Pi %d", label, len(got), len(want))
 		return 1
 	}
 	differing := 0
@@ -999,7 +999,7 @@ func compareOracleResults(t *testing.T, label string, program oracleProgram, got
 		if j < 0 || got[k].Index < 0 { // the storage did not open
 			if got[k].Index != j || got[k].Err == nil || want[k].Err == nil || got[k].Err.Message != want[k].Err.Message || got[k].Err.Name != want[k].Err.Name {
 				if differing++; reported+differing <= 8 {
-					t.Errorf("%s: opening the directory: Pig %+v, Pi %+v", label, got[k].Err, want[k].Err)
+					t.Errorf("%s: opening the directory: Ompig %+v, Pi %+v", label, got[k].Err, want[k].Err)
 				}
 			}
 			continue
@@ -1026,7 +1026,7 @@ func compareOracleResults(t *testing.T, label string, program oracleProgram, got
 		}
 		if !same {
 			if differing++; reported+differing <= 8 {
-				t.Errorf("%s step %d %s\n  step %s\n  Pig %s %v\n  Pi  %s %v", label, j, step.Op, mustMarshalOracle(step), got[k].OK, got[k].Err, want[k].OK, want[k].Err)
+				t.Errorf("%s step %d %s\n  step %s\n  Ompig %s %v\n  Pi  %s %v", label, j, step.Op, mustMarshalOracle(step), got[k].OK, got[k].Err, want[k].OK, want[k].Err)
 			}
 		}
 	}

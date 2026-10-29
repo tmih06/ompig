@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
 )
 
 // openNodeJsonlStorage (packages/durable/src/storage/jsonl/node.ts:5-12) opens JsonlStorage on the local file system with

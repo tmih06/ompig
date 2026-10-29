@@ -11,8 +11,8 @@
 #   /model Enter, "model", Down  -> "Model Name: Model One"
 #   PageDown                     -> "Model Name: Model Two" (query stays "model")
 #   Down, Left                   -> "Model Name: Model Two"
-# Pig previously moved the cursor ten rows on PageDown and skipped the refilter
-# when the query did not change, so both waits below timed out on Pig.
+# Ompig previously moved the cursor ten rows on PageDown and skipped the refilter
+# when the query did not change, so both waits below timed out on Ompig.
 # Pi 1.0.0 draws fullscreen by default (re-probed 2026-10-02, 100x35): the alternate screen
 # binds PageDown to the viewport (tui.altScreen.pageDown, tui-alt-screen.ts:747) and consumes
 # it before the model selector, so PageDown is no longer an unbound picker key. Right is
@@ -20,7 +20,7 @@
 # so it carries the same refilter contract: the selection returns to the first match.
 # The last step pins the fullscreen PageDown contract itself. From "Model Name: Model One",
 # PageDown then Down must wrap to model-two on Pi (the viewport took PageDown, already at the
-# end, so the frame is unchanged). PiG previously handed PageDown to the selector, which
+# end, so the frame is unchanged). Ompig previously handed PageDown to the selector, which
 # refiltered to model-two, and Down then left model-one selected on the final frame.
 # The first step waits for the background refresh, the settled state that
 # re-anchors the selection on both sides (see 11-model-picker-arrow-wrap).
@@ -36,7 +36,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 15
 capture_start = "Only showing models"
@@ -85,9 +85,9 @@ wait_timeout_seconds = 5
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/pig-agent-local"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/ompig-agent-local"]
 pi = ["PI_CODING_AGENT_DIR=../model-resolver-selector/testdata/pi-agent-local"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

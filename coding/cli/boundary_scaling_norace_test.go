@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
-// The boundary scaling audit, RPC and JSON event lines: the bytes pig writes per agent event as the stream (M) or the history (H) grows. Pi writes the same lines (the parity scenarios rpc/* and json/* compare them byte for byte), so a quadratic row here is Pi's too. The measured cost is rpcAgentEvent plus rpcclient.SerializeJsonLine of each frame it returns, the work subscribeRPCEvents and writeJSONLine do per event.
+// The boundary scaling audit, RPC and JSON event lines: the bytes ompig writes per agent event as the stream (M) or the history (H) grows. Pi writes the same lines (the parity scenarios rpc/* and json/* compare them byte for byte), so a quadratic row here is Pi's too. The measured cost is rpcAgentEvent plus rpcclient.SerializeJsonLine of each frame it returns, the work subscribeRPCEvents and writeJSONLine do per event.
 var rpcLineSink int
 
 func encodeRPCEvent(event agent.AgentEvent) {

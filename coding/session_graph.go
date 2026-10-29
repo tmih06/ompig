@@ -1,4 +1,4 @@
-// pig-specific: serves the classes an extension builds around a Pi session (SessionManager, SettingsManager, DefaultResourceLoader, DefaultPackageManager, ProjectTrustStore, ModelRuntime, ExtensionRuntime, ExtensionRunner) to the Go, Python and Rust extension SDKs. The Node runtime serves Pi's own classes.
+// ompig-specific: serves the classes an extension builds around a Pi session (SessionManager, SettingsManager, DefaultResourceLoader, DefaultPackageManager, ProjectTrustStore, ModelRuntime, ExtensionRuntime, ExtensionRunner) to the Go, Python and Rust extension SDKs. The Node runtime serves Pi's own classes.
 
 package coding
 
@@ -6,9 +6,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // SessionGraph is the host's SessionGraphBackend: it builds the objects extensions construct and answers their static functions.

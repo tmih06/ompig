@@ -19,12 +19,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // The pi-messages row of the D82 multi-provider oracle. coding/testdata/rpc33-observation/providers/pi-messages/pi.json is the raw
 // output of the real `pi --mode rpc` binary of the Pi release its piVersion field names (probe.mjs in that directory). This test
-// serves the same wire bytes to the real cmd/pig binary and requires the first assistant turn's RPC records to equal Pi's.
+// serves the same wire bytes to the real cmd/ompig binary and requires the first assistant turn's RPC records to equal Pi's.
 
 const piMessagesOracleDir = "coding/testdata/rpc33-observation/providers/pi-messages"
 
@@ -60,7 +60,7 @@ func loadPiMessagesOracle(t *testing.T) piMessagesOracle {
 // equally faithful delivery. After each write the server therefore also waits until the client has recorded one RPC record for every
 // SSE record the writes so far completed. recorded receives one token per record runPiMessagesRPC reports. Every fixture record
 // yields exactly one RPC record (agent-loop.ts emits message_start on `start`, one message_update per content event and
-// message_end on the terminal or failing record), so a PiG run that drops a record stalls here until testbudget's hang bound
+// message_end on the terminal or failing record), so a Ompig run that drops a record stalls here until testbudget's hang bound
 // ends the run and reports its partial transcript.
 func servePiMessages(t *testing.T, body, reply, delivery string) (baseURL string, recorded chan struct{}) {
 	t.Helper()
@@ -188,7 +188,7 @@ func withoutTimestamps(value any) any {
 	return value
 }
 
-// runPiMessagesRPC runs one pig RPC session in dir against baseURL and returns the first assistant turn's records in probe.mjs's
+// runPiMessagesRPC runs one ompig RPC session in dir against baseURL and returns the first assistant turn's records in probe.mjs's
 // runRPC() shape: message_start/message_end carry the message, message_update its cumulative usage and assistantMessageEvent
 // (toJsonEvent drops the message). Each record it collects is announced on recorded, which servePiMessages paces its writes by.
 func runPiMessagesRPC(ctx context.Context, bin, dir, baseURL string, recorded chan<- struct{}) ([]string, error) {
@@ -206,7 +206,7 @@ func runPiMessagesRPC(ctx context.Context, bin, dir, baseURL string, recorded ch
 	defer cancel()
 	cmd := exec.CommandContext(ctx, bin, "--mode", "rpc", "--offline", "--no-extensions", "--model", "p/strict", "--no-context-files", "--no-skills", "--session-dir", filepath.Join(dir, "s"))
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "HOME="+dir, "PIG_HOME="+filepath.Join(dir, "pighome"), "PIG_CODING_AGENT_DIR="+agent)
+	cmd.Env = append(os.Environ(), "HOME="+dir, "OMPIG_HOME="+filepath.Join(dir, "pighome"), "OMPIG_CODING_AGENT_DIR="+agent)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		return nil, err
@@ -269,14 +269,14 @@ func runPiMessagesRPC(ctx context.Context, bin, dir, baseURL string, recorded ch
 // delivery shape, in every one of the runs. -pi-messages-runs raises the run count (the D82 evidence uses 200).
 func TestRPCPiMessagesMatchesPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and runs the pig binary")
+		t.Skip("builds and runs the ompig binary")
 	}
 	t.Parallel()
 	runs := 3
-	if value := os.Getenv("PIG_D82_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_D82_RUNS"); value != "" {
 		parsed, err := strconv.Atoi(value)
 		if err != nil || parsed < 1 {
-			t.Fatalf("PIG_D82_RUNS=%q", value)
+			t.Fatalf("OMPIG_D82_RUNS=%q", value)
 		}
 		runs = parsed
 	}

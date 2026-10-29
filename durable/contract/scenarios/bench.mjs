@@ -34,7 +34,7 @@ const label = arg("label", "m"), payloadKb = Number(arg("payload-kb", "0"))
 
 const script = scriptedModel({ fauxProvider, fauxAssistantMessage, fauxToolCall, createModels }, { variant, streaming: stream > 0, fault: arg("fault"), contextWindow: Number(arg("window", "0")) || undefined })
 // The bench fingerprint of every model call goes into the trace next to the ctx fingerprint (CONTRACT section 5.4).
-globalThis[Symbol.for("pig.contract.benchfp")] = messages => fingerprint(seenOf(messages))
+globalThis[Symbol.for("ompig.contract.benchfp")] = messages => fingerprint(seenOf(messages))
 // A tool result names its blocks `output` in Pi main (types.ts ToolExecutionResult) and `content` in the 1.0.4 release this scenario also
 // seeds (fixtures.mjs kind v1.0.4). The tool returns only the field of the release it runs on: with both, a candidate that still reads
 // `content` would store the same tool result as Pi main and pass the W, X1 and H rows.
@@ -108,7 +108,7 @@ if (heapSamples) (await import("node:v8")).setFlagsFromString("--expose-gc")
 const collect = heapSamples ? (await import("node:vm")).runInNewContext("gc") : undefined
 const sampleMemory = turn => {
 	if (!memFile) return
-	const cores = globalThis[Symbol.for("pig.contract")]?.cores
+	const cores = globalThis[Symbol.for("ompig.contract")]?.cores
 	const wasm = cores?.size ? [...cores].filter(core => typeof core.memoryBytes === "number") : []
 	const linear = wasm.length ? wasm.reduce((sum, core) => sum + core.memoryBytes, 0) : undefined
 	let heap

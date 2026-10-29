@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // decodeLax decodes a message object that decode rejects because a member has another JSON type than its field holds. JSON.parse keeps a member of any type, so Pi keeps such a message in the session, its context and get_messages (session-manager.ts parseSessionEntryLine, buildSessionContext). The fields read such a member as absent: an object or array member keeps the parts its field holds, and a content block or record element the field cannot hold is left out. A role that is not a non-empty string or one of the typed roles keeps the object as a custom message. A message that is a JSON number, string, boolean or array is a custom message without members; Pi keeps it too, while a null message fails Pi's context build (session-manager.ts getSessionContextSettings reads message.role), so decodeLax rejects null. The message keeps its text, so it is written as Pi writes it. decodeLax reports whether content is null or missing in data.

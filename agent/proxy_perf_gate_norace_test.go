@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // proxyLongSource is the content of a long file a model writes: source code with spaces, braces and newlines to escape.

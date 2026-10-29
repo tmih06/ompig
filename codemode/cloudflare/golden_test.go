@@ -10,9 +10,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/codemode/cloudflare"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/codemode/cloudflare"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // testdata/pi-golden.json is what Pi's packages/codemode/src/cloudflare.ts does at the pin, recorded by testdata/oracle.mjs
@@ -85,7 +85,7 @@ func goldenObject(name string, zero bool) *cloudflare.SandboxDurableObject {
 	return object
 }
 
-// preludeHash is the one part of a fingerprint that differs: PiG's prelude is Pi's with divergence D145 applied.
+// preludeHash is the one part of a fingerprint that differs: Ompig's prelude is Pi's with divergence D145 applied.
 var preludeHash = regexp.MustCompile(`prelude [0-9a-f]{8}`)
 
 func maskPreludeHash(value any) any {
@@ -154,7 +154,7 @@ func TestTheObjectsExecuteSendsThePiFrames(t *testing.T) {
 				if got, want := maskPreludeHash(decoded(t, frames)), maskPreludeHash(decoded(t, c.Frames)); !reflect.DeepEqual(got, want) {
 					gotJSON, _ := json.Marshal(got)
 					wantJSON, _ := json.Marshal(want)
-					t.Errorf("frames\nPiG %s\nPi  %s", gotJSON, wantJSON)
+					t.Errorf("frames\nOmpig %s\nPi  %s", gotJSON, wantJSON)
 				}
 			})
 		}
@@ -205,7 +205,7 @@ func TestCreateInlineSandboxResultsAreThoseOfPisCreateInlineCodemodeSandbox(t *t
 			if g, w := decoded(t, got), decoded(t, c.Result); !reflect.DeepEqual(g, w) {
 				gotJSON, _ := json.Marshal(g)
 				wantJSON, _ := json.Marshal(w)
-				t.Errorf("result\nPiG %s\nPi  %s", gotJSON, wantJSON)
+				t.Errorf("result\nOmpig %s\nPi  %s", gotJSON, wantJSON)
 			}
 		})
 	}

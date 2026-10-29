@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-// Variant selects how the PiG binary under test is built.
+// Variant selects how the Ompig binary under test is built.
 type Variant string
 
 // Build variants.
@@ -29,9 +29,9 @@ const (
 	Cover Variant = "cover"
 )
 
-const lockorderImport = "github.com/MichaelKinsy/PiG/internal/lockorder"
+const lockorderImport = "github.com/tmih06/ompig/internal/lockorder"
 
-// BuildPig builds ./cmd/pig of the module at moduleRoot into out, returning the build duration.
+// BuildPig builds ./cmd/ompig of the module at moduleRoot into out, returning the build duration.
 func BuildPig(moduleRoot, out string, v Variant) (time.Duration, error) {
 	start := time.Now()
 	moduleRoot, err := filepath.Abs(moduleRoot)
@@ -50,9 +50,9 @@ func BuildPig(moduleRoot, out string, v Variant) (time.Duration, error) {
 		}
 		args = append(args, "-race", "-overlay", overlay)
 	case Cover:
-		args = append(args, "-cover", "-coverpkg=github.com/MichaelKinsy/PiG/...")
+		args = append(args, "-cover", "-coverpkg=github.com/tmih06/ompig/...")
 	}
-	args = append(args, "./cmd/pig")
+	args = append(args, "./cmd/ompig")
 	cmd := exec.Command("go", args...)
 	cmd.Dir = moduleRoot
 	var buf bytes.Buffer

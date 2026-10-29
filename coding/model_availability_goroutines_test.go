@@ -5,7 +5,7 @@ import (
 	"runtime/metrics"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func goroutinesCreated() uint64 {
@@ -14,7 +14,7 @@ func goroutinesCreated() uint64 {
 	return sample[0].Value.Uint64()
 }
 
-// pig -p runs two offline model passes (lever-RegistryAuth Q1), and each started about 227 goroutines: three per remote catalog in the restore and
+// ompig -p runs two offline model passes (lever-RegistryAuth Q1), and each started about 227 goroutines: three per remote catalog in the restore and
 // one per provider, twice, in the availability pass. A pass that runs no extension code now runs its providers on the caller, in provider order.
 func TestOfflineModelPassesRunProvidersOnTheCaller(t *testing.T) {
 	clearProviderEnvKeys(t)

@@ -1,6 +1,6 @@
-// Package toolchain locates the build tools PiG uses for compiled extension
-// cells and Piglet Binaries, and installs a PiG-managed Go toolchain for users
-// who installed only the pig binary.
+// Package toolchain locates the build tools Ompig uses for compiled extension
+// cells and Ompiglet Binaries, and installs a Ompig-managed Go toolchain for users
+// who installed only the ompig binary.
 package toolchain
 
 import (
@@ -30,7 +30,7 @@ const GoDownloadBase = "https://go.dev/dl/"
 // about 70 MB.
 const maxArchiveBytes = 512 << 20
 
-// ManagedGoRoot is the GOROOT of the PiG-managed Go toolchain.
+// ManagedGoRoot is the GOROOT of the Ompig-managed Go toolchain.
 func ManagedGoRoot(configRoot string) string {
 	return filepath.Join(configRoot, "toolchains", "go")
 }
@@ -47,7 +47,7 @@ func exeNameFor(goos, name string) string {
 	return name
 }
 
-// Go returns the go command to run: the one on PATH, else the PiG-managed
+// Go returns the go command to run: the one on PATH, else the Ompig-managed
 // toolchain. The error names both places it looked and the setup command. A
 // caller that runs the command must also use ResolveGo's Environ, so the command
 // and its GOROOT come from one installation.
@@ -59,7 +59,7 @@ func Go() (string, error) {
 	return t.Command, nil
 }
 
-// ContainerRuntimes lists the container engines PiG can drive, in preference
+// ContainerRuntimes lists the container engines Ompig can drive, in preference
 // order.
 var ContainerRuntimes = []string{"docker", "podman", "nerdctl"}
 

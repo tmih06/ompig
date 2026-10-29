@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestDebugHotkeyFiresOncePerPress pins the count of handler runs for one
@@ -14,7 +14,7 @@ import (
 // terminal-input listeners see raw input. Registering raw therefore ran the
 // debug handler twice per press: the log was written twice and two
 // confirmations landed in the chat. Upstream has the same defect
-// (tui.ts:850 matches before its only filter at :887); pig diverges here as
+// (tui.ts:850 matches before its only filter at :887); ompig diverges here as
 // D55.
 func TestDebugHotkeyFiresOncePerPress(t *testing.T) {
 	// ctrl+shift+d press and its Kitty release (event type 3).

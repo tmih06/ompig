@@ -8,7 +8,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi model-runtime.ts:286-312 queries the Models collection and every provider's auth, including providers without models. Models applies the provider's credential-dependent filter before publication.

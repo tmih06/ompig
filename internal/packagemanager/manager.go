@@ -15,11 +15,11 @@ import (
 	"sync"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 type ConfiguredPackage struct {
@@ -153,7 +153,7 @@ func GetLegacyGlobalNpmInstallPath(sm *codingagent.SettingsManager, packageName 
 	return filepath.Join(root, filepath.FromSlash(packageName))
 }
 
-// GlobalNpmRoot is Pi's DefaultPackageManager globalNpmRoot and globalNpmRootCommandKey. Pi keeps that cache on each DefaultPackageManager, and creates fresh managers (with empty caches) around the same SettingsManager, for example for every interactive package-update check (interactive-mode.ts:1202-1206). Pig threads the SettingsManager itself through package resolution, so each SettingsManager owns one entry until it is collected; a later lookup with an unchanged command reuses the root where Pi would run it again. The mutex also holds concurrent lookups while the first runs the command, as Pi's synchronous spawn does.
+// GlobalNpmRoot is Pi's DefaultPackageManager globalNpmRoot and globalNpmRootCommandKey. Pi keeps that cache on each DefaultPackageManager, and creates fresh managers (with empty caches) around the same SettingsManager, for example for every interactive package-update check (interactive-mode.ts:1202-1206). Ompig threads the SettingsManager itself through package resolution, so each SettingsManager owns one entry until it is collected; a later lookup with an unchanged command reuses the root where Pi would run it again. The mutex also holds concurrent lookups while the first runs the command, as Pi's synchronous spawn does.
 type GlobalNpmRoot struct {
 	mu         sync.Mutex
 	commandKey string
@@ -312,9 +312,9 @@ func InstalledPathForSource(cwd, agentDir string, sm *codingagent.SettingsManage
 	return ""
 }
 
-// PackageSourceIdentity centralizes upstream package identity and Pig contributed scheme identity. Identity matching follows upstream parseSource: an unprefixed value is local.
+// PackageSourceIdentity centralizes upstream package identity and Ompig contributed scheme identity. Identity matching follows upstream parseSource: an unprefixed value is local.
 //
-// pig additive (D18): registered contributed source schemes participate in
+// ompig additive (D18): registered contributed source schemes participate in
 // the same deterministic identity contract as upstream npm/git/local sources.
 func PackageSourceIdentity(baseDir, raw string) string {
 	identity, err := PackageSourceIdentityChecked(baseDir, raw)
@@ -547,7 +547,7 @@ func GitCheckoutPath(cwd, agentDir, source string, local bool) (string, error) {
 // GitCheckoutRelative is a Git source's checkout directory below the install
 // root: its host, then its repository path, as Pi lays it out.
 //
-// pig additive (D18): a file:// source is not a Pi source, and nesting its
+// ompig additive (D18): a file:// source is not a Pi source, and nesting its
 // whole absolute path under the install root can push $GIT_DIR past Git for
 // Windows' own PATH_MAX, which core.longpaths does not lift. Its checkout is
 // <host>/<12 hex of sha256(absolute repo path)>/<basename> instead; the leaf stays the repository name because a direct extension takes its identity from its directory name. An older

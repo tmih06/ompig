@@ -10,12 +10,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func newModelRegistryTestSession(t *testing.T, services *coding.AgentSessionServices) *coding.Session {
@@ -67,7 +67,7 @@ func TestModelOperationsThroughPrintJSONAndRPCEntrypoints(t *testing.T) {
 			}
 			ctx := testbudget.Context(t)
 			command := exec.CommandContext(ctx, binary, args...)
-			command.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_MODEL_OPERATIONS_MARKER="+marker, "PIG_QUIET_STARTUP=1")
+			command.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_MODEL_OPERATIONS_MARKER="+marker, "OMPIG_QUIET_STARTUP=1")
 			if mode == "rpc" {
 				command.Stdin = strings.NewReader("{\"id\":\"prompt\",\"type\":\"prompt\",\"message\":\"What is 20+22?\"}\n")
 			}
@@ -91,8 +91,8 @@ func TestModelOperationsThroughPrintJSONAndRPCEntrypoints(t *testing.T) {
 func TestSharedSubprocessModelOperationsAcrossModes(t *testing.T) {
 	for _, mode := range []extension.ExtensionMode{extension.ModePrint, extension.ModeJSON, extension.ModeRPC} {
 		t.Run(string(mode), func(t *testing.T) {
-			t.Setenv("PIG_TEST_FAUX", "1")
-			t.Setenv("PIG_TEST_FAUX_SCENARIO", "parity-basic")
+			t.Setenv("OMPIG_TEST_FAUX", "1")
+			t.Setenv("OMPIG_TEST_FAUX_SCENARIO", "parity-basic")
 			agentDir := t.TempDir()
 			config := `{"providers":{"test-faux":{"baseUrl":"http://localhost:0","api":"test-faux","authHeader":false,"models":[{"id":"faux-1","name":"Test Faux","api":"test-faux","input":["text"],"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0},"contextWindow":128000,"maxTokens":4096}]}}}`
 			if err := os.WriteFile(filepath.Join(agentDir, "models.json"), []byte(config), 0o644); err != nil {

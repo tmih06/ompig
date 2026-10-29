@@ -24,7 +24,7 @@ func TestRPCStartupModelFromExtensionProvider(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			home := t.TempDir()
-			env := []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_OFFLINE=1"}
+			env := []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_OFFLINE=1"}
 			p := startRPCProcessAt(t, t.TempDir(), env, append([]string{"--no-extensions", "-e", fixture, "--no-session"}, tc.args...)...)
 			p.send(`{"id":"state","type":"get_state"}`)
 			p.await("extension model state", func(record rpcRecord) bool {

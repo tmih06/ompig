@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-// PiG's harness entry, process.argv[1] in a Node extension's process
+// Ompig's harness entry, process.argv[1] in a Node extension's process
 // (process-identity.mjs). Pi extensions re-launch the harness with
-// `process.execPath process.argv[1] ...args`; this runs the PiG binary that
+// `process.execPath process.argv[1] ...args`; this runs the Ompig binary that
 // started the extension with those arguments, the same stdio, and its exit
 // status. package.json names the package the way Pi's CLI entry's does, which
 // is how extensions (pi-subagents) recognize a Pi entry.
 import { spawn } from "node:child_process";
 
-const binary = process.env.PIG_HARNESS_BINARY;
+const binary = process.env.OMPIG_HARNESS_BINARY;
 if (!binary) {
-  console.error("PIG_HARNESS_BINARY is not set: this entry runs the PiG binary that started the extension");
+  console.error("OMPIG_HARNESS_BINARY is not set: this entry runs the Ompig binary that started the extension");
   process.exit(1);
 }
 

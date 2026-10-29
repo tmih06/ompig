@@ -5,8 +5,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi model-runtime.ts:744-750 installs the object before starting availability refresh; a slower older refresh cannot replace a newer registration.

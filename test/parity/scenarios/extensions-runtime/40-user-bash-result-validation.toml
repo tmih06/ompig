@@ -1,6 +1,6 @@
 # Pi 0.87.1 runner.ts:136-159 requires an exitCode property, rejects null fields
 # and rejects operations + result even when operations is null. The Pi program
-# uses the published runner/factory loader. PiG loads the SAME source through
+# uses the published runner/factory loader. Ompig loads the SAME source through
 # its Node subprocess host and dispatches through the production runner. The
 # complete results, rejection messages and error-listener records are compared.
 # The undefined exit-code row compares property presence and its array value;
@@ -13,9 +13,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/user-bash-validation"]
+ompig_args = ["go", "run", "./test/parity/testdata/user-bash-validation"]
 pi_args = ["node", "./test/parity/testdata/user-bash-validation-pi.mjs"]
 
 [cli]

@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/ai/src/utils/transcript.ts
 
 // The replay helpers of transcript.ts (getCurrentSystemMessage, getCurrentSystemPrompt, getCurrentTools, getDeclaredTools, hasToolRedefinitions,
-// hasNonAdditiveToolChanges, getInitialSystemMessage, withoutInitialSystemMessage, collapseSystemMessages) run in the pinned pi-ai and in PiG over
+// hasNonAdditiveToolChanges, getInitialSystemMessage, withoutInitialSystemMessage, collapseSystemMessages) run in the pinned pi-ai and in Ompig over
 // generated histories decoded from the same JSON: system messages with text or block content, sections (null removes one; names include
 // integer-like ones, which a JavaScript object orders first), tool additions and removals, and user messages between them.
 func TestTranscriptReplayMatchesPi(t *testing.T) {
@@ -167,7 +167,7 @@ func TestTranscriptReplayMatchesPi(t *testing.T) {
 		for key, value := range got {
 			if !sameReplay(value, string(want[i][key])) {
 				if failures++; failures <= 8 {
-					t.Errorf("history %d %s:\n history %s\n PiG %s\n Pi  %s", i, key, history, value, want[i][key])
+					t.Errorf("history %d %s:\n history %s\n Ompig %s\n Pi  %s", i, key, history, value, want[i][key])
 				}
 			}
 		}

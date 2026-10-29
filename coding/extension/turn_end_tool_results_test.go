@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // TurnEndEvent.toolResults is a ToolResultMessage[] (the pi-ai message object): each element writes the "toolResult" role first, keeps an explicit `details: null` the tool wrote, and omits an absent one, so a handler in any extension process sees the object the session records.

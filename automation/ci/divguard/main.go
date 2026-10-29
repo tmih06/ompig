@@ -12,7 +12,7 @@
 // finding means deleting its entry in the same change.
 //
 // A hit is allowed at the source by a recorded divergence marker,
-// `// pig divergence (D<N>): ...`, on the flagged line or the line above.
+// `// ompig divergence (D<N>): ...`, on the flagged line or the line above.
 // A literal that matches upstream is allowed by `// upstream: <file>:<symbol>`
 // in the same place; the file must exist in .upstream/current or in a digest-verified dependency snapshot tied to an exact pin in that mirror. The symbol and literal value must appear in that source.
 //
@@ -88,7 +88,7 @@ func run(root, baselinePath, upstream string, list, printBaseline bool) int {
 	}
 	if len(unknown) > 0 {
 		failed = true
-		fmt.Println("FAIL: new divergence-guard hits. Fix them to match upstream, or record a numbered divergence and mark the line `// pig divergence (D<N>): ...`, or, for a literal that upstream really uses, mark it `// upstream: <file>:<symbol>`:")
+		fmt.Println("FAIL: new divergence-guard hits. Fix them to match upstream, or record a numbered divergence and mark the line `// ompig divergence (D<N>): ...`, or, for a literal that upstream really uses, mark it `// upstream: <file>:<symbol>`:")
 		for _, h := range unknown {
 			fmt.Printf("  %s:%d: [%s] %s\n      %s\n", h.File, h.Line, h.Check, h.Message, display(h.Snippet))
 		}

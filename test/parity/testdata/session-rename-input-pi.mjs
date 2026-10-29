@@ -12,8 +12,8 @@ const tuiRoot = fileURLToPath(new URL("./", tuiEntry));
 const { Input } = await import(tuiEntry);
 const moduleURL = code => "data:text/javascript;base64," + Buffer.from(code).toString("base64");
 const tests = [];
-globalThis.__pigInputRenameTests = tests;
-const framework = moduleURL(`export const describe=(_name,run)=>run(),it=(name,run)=>globalThis.__pigInputRenameTests.push({name,run});`);
+globalThis.__ompigInputRenameTests = tests;
+const framework = moduleURL(`export const describe=(_name,run)=>run(),it=(name,run)=>globalThis.__ompigInputRenameTests.push({name,run});`);
 try {
   for (const [file, marker] of [["input", "INPUT_ORIGINAL_TESTS"], ["word-navigation", "WORD_ORIGINAL_TESTS"]]) {
     tests.length = 0;
@@ -25,7 +25,7 @@ try {
     for (const test of tests) await test.run();
     console.log(marker + " ok");
   }
-} finally { delete globalThis.__pigInputRenameTests; }
+} finally { delete globalThis.__ompigInputRenameTests; }
 for (const [name, initial, replacement, key, want] of [
   ["fresh", "", "Old", "X", "XOld"],
   ["retained", "a", "Old", "X", "OXld"],

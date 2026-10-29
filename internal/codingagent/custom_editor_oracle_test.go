@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type ceOracleOp struct {
@@ -218,7 +218,7 @@ func TestCustomEditorMatchesPi(t *testing.T) {
 				e, _ := json.Marshal(expected[i][k])
 				ops, _ := json.Marshal(probe.Ops[:k+1])
 				setup, _ := json.Marshal(map[string]any{"actions": probe.Actions, "onEscape": probe.OnEscape, "onCtrlD": probe.OnCtrlD, "onPasteImage": probe.OnPasteImage, "shortcut": probe.Shortcut, "paddingX": probe.PaddingX, "bindings": probe.Bindings})
-				t.Errorf("probe %d %s\n  ops %.700s\n  Pig %.900s\n  Pi  %.900s", i, setup, ops, g, e)
+				t.Errorf("probe %d %s\n  ops %.700s\n  Ompig %.900s\n  Pi  %.900s", i, setup, ops, g, e)
 				break
 			}
 		}

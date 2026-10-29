@@ -11,13 +11,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
-	jsonlnode "github.com/MichaelKinsy/PiG/durable/storage/jsonl/node"
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
+	jsonlnode "github.com/tmih06/ompig/durable/storage/jsonl/node"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 const clock = 1_700_000_000_000
@@ -30,7 +30,7 @@ const partialIntervalMs float64 = 3_600_000
 var background = context.Background()
 
 // Hooks of the D181 evidence test (unawaited_job_test.go); they are nil/false in every other test, which runs the awaited
-// fixture. unawaitedJob leaves the note tool's job running beside its call (app.mjs under PIG_INTEROP_UNAWAITED_JOB=1).
+// fixture. unawaitedJob leaves the note tool's job running beside its call (app.mjs under OMPIG_INTEROP_UNAWAITED_JOB=1).
 // holdJobTerminal keeps the job's terminal commit back until it is closed. hooks run inside runScenario2: after the
 // Harness opened, once the first scripted turn settled, and before the Harness closes.
 var (

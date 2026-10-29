@@ -12,8 +12,8 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's createSqliteSchema and DEFAULT_SQLITE_SCHEMA (schema.ts, imported as-is under Node, with Chord's own
@@ -96,12 +96,12 @@ func TestSqliteSchemaMatchesPiForEveryPrefix(t *testing.T) {
 		case want.Error != nil:
 			rejected++
 			if gotErr == nil {
-				t.Errorf("%s: Pi rejects with %q, PiG accepts %+v", name, *want.Error, got)
+				t.Errorf("%s: Pi rejects with %q, Ompig accepts %+v", name, *want.Error, got)
 			} else if gotErr.Error() != *want.Error {
-				t.Errorf("%s: PiG error %q, Pi %q", name, gotErr, *want.Error)
+				t.Errorf("%s: Ompig error %q, Pi %q", name, gotErr, *want.Error)
 			}
 		case gotErr != nil:
-			t.Errorf("%s: PiG rejects with %q, Pi accepts", name, gotErr)
+			t.Errorf("%s: Ompig rejects with %q, Pi accepts", name, gotErr)
 		default:
 			accepted++
 			if tables := identifiers(t, got.Tables); !reflect.DeepEqual(tables, want.Tables) {

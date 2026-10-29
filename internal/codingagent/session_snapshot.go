@@ -11,7 +11,7 @@ import (
 // (session-manager.ts setSessionFile, loadEntriesFromFile). It holds the file's lines as the Session loaded them and every line the Session
 // writes after them. The file has no name: it is removed when it is created, or deleted on close, so it is gone when the process ends;
 // os.File closes it when the snapshot is no longer reachable, from the Session or a lazy entry it handed out.
-// pig additive (D112): Pi holds every session entry in memory; the snapshot keeps their records on disk instead.
+// ompig additive (D112): Pi holds every session entry in memory; the snapshot keeps their records on disk instead.
 type sessionSnapshot struct {
 	file *os.File
 	mu   sync.Mutex
@@ -94,7 +94,7 @@ type snapshotCopier struct {
 }
 
 // snapshotCopyBuffers bounds the chunks queued for the copier: the load waits for a free buffer rather than queue more.
-// pig additive (D112): the copy of a session file into its snapshot holds at most this many read chunks.
+// ompig additive (D112): the copy of a session file into its snapshot holds at most this many read chunks.
 const snapshotCopyBuffers = 4
 
 func startSnapshotCopy(snapshot *sessionSnapshot) *snapshotCopier {

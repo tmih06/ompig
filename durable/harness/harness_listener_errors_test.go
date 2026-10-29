@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // Ports the "listener and report errors" group of packages/durable/test/harness-storage-failure.test.ts (Pi 1.2.0). The
@@ -102,7 +102,7 @@ func TestListenerAndReportErrors(t *testing.T) {
 			"by the cases above")
 	})
 
-	// PiG coverage beyond the Pi file: the task graph's observers, contained as view.ts is.
+	// Ompig coverage beyond the Pi file: the task graph's observers, contained as view.ts is.
 	t.Run("keeps feeding the other observers of the task graph when one throws, and closes them all", func(t *testing.T) {
 		// Pi task-graph.ts advance (:203) and the close subscription (:77) contain each observer's call. The graph's own
 		// observers do not throw, so a throwing one is mounted directly in front of a watch.

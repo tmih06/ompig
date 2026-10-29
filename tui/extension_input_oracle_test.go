@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type extensionInputProbe struct {
@@ -24,7 +24,7 @@ type extensionInputProbe struct {
 
 // extension-input.ts (ExtensionInputComponent) against pinned Pi: every frame and the submit and cancel callbacks after each key, with default
 // and rebound select keys, an initial value, a description and a focused or unfocused input. Not compared: the countdown (needs a TUI), and an
-// input the host never focuses (Pig's wrapper draws its cursor as the editor slot's occupant, Pi's draws none until focused).
+// input the host never focuses (Ompig's wrapper draws its cursor as the editor slot's occupant, Pi's draws none until focused).
 func TestExtensionInputMatchesPi(t *testing.T) {
 	scripts := [][]string{
 		nil,
@@ -118,7 +118,7 @@ func TestExtensionInputMatchesPi(t *testing.T) {
 			ExtensionInputOptions{Description: probe.Description, InitialValue: probe.Initial})
 		component.SetFocused(probe.Focused)
 		got := showImagesResult{Steps: [][]string{}, Frames: [][]string{component.Render(probe.Width)}}
-		// The host removes the component as soon as a callback runs, so Pi's never sees a key after one; Pig's host polls Done and ignores later keys.
+		// The host removes the component as soon as a callback runs, so Pi's never sees a key after one; Ompig's host polls Done and ignores later keys.
 		keys := probe.Keys
 		if completed := firstCompletedStep(expected[i].Steps); completed >= 0 {
 			keys = keys[:completed+1]
@@ -131,7 +131,7 @@ func TestExtensionInputMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got.Steps, expected[i].Steps) || !reflect.DeepEqual(got.Frames, expected[i].Frames) {
 			if failures++; failures <= 3 {
-				t.Errorf("probe %d %+v:\n steps Pig %q Pi %q\n frames Pig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
+				t.Errorf("probe %d %+v:\n steps Ompig %q Pi %q\n frames Ompig %q\n Pi  %q", i, probe, got.Steps, expected[i].Steps, got.Frames, expected[i].Frames)
 			}
 		}
 	}

@@ -6,763 +6,763 @@ path = "packages/agent/src/harness/agent-harness.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/compaction/branch-summarization.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/compaction/compaction.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/compaction/utils.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/config.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/context.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/env/nodejs.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/events.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/execution/assistant.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/execution/effect-gate.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/execution/tools.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/hooks.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/messages.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/bash.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/bounded.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/chord.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/context.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/harness.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/hooks.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/jsonl.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/collapse.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/entries.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/frames.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/generation.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/job.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/plugin.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/post-tools.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/task-api.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/kinds/tool.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/legacy-tracker.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/membrane.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/memory.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/scheduler.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/session.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/system.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/types.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/pico3/view.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/prompt-templates.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/result.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/boundary.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/checkpoint.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/deferred.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/generation.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/reconcile.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/recovery.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/response.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/retry.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/structural.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/terminal.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/tool-placement.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/drive/tools.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/harness.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/lane.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/progress.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/reducer.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/restore.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/transcript.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/runtime/types.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/commit.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/context.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/fork-policy.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/fork.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/in-memory-storage-state.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/codec.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/fork.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/io.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/legacy-v3.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/repo.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/storage.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/types.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/memory.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/mutation-line.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/session.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/benchmark/datasets.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/benchmark/session-repo.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/benchmark/storage.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/conformance/session-repo.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/conformance/storage.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/gating-storage.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/instrumented-storage.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/storage-decorator.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/types.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/types.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/session/values.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/skills.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/system-prompt.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/telemetry.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/bash.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/edit-diff.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/edit.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/file-mutation-queue.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/image.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/path-utils.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/read.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/tool-context.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/tools/write.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/types.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/utils/adaptive-publisher.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/utils/output-capture.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/utils/shell-output.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/utils/truncate.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/harness/utils/usage.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). PiG deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness; the Pi coding agent now runs on pi-durable (packages/durable). Ompig deleted its port, agent/harness/**, with this change. Its consumers moved: the experimental services run on durable/harness, UUIDv7 is ai/uuid.go, file operations are internal/codingagent/compaction/utils.go, the skill listing is internal/codingagent/prompts/coding.go, and combineUsage is internal/usagetotals."
 
 [[files]]
 path = "packages/agent/src/index.ts"
@@ -783,7 +783,7 @@ path = "packages/agent/src/search/index.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the agent harness search contracts. PiG deleted agent/search, which had no production caller."
+rationale = "Removed upstream at 1.0.0 with the agent harness search contracts. Ompig deleted agent/search, which had no production caller."
 
 [[files]]
 path = "packages/ai/src/api/openai-responses-shared.ts"
@@ -923,14 +923,14 @@ path = "packages/coding-agent/src/experimental/durable/main.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/experimental/durableagent/args_test.go#TestParseArgs", "test:internal/experimental/durableagent/main/main_test.go#TestRunRejectsAnUnknownArgument"]
-rationale = "The program parses --continue and -c, rejects any other argument by name, opens the session, runs the TUI and closes the session, joining a close failure to the TUI's. It is a Go main package run with go run ./internal/experimental/durableagent/main; it is not in the pig binary, as the upstream source is excluded from the published package (tsconfig.build.json)."
+rationale = "The program parses --continue and -c, rejects any other argument by name, opens the session, runs the TUI and closes the session, joining a close failure to the TUI's. It is a Go main package run with go run ./internal/experimental/durableagent/main; it is not in the ompig binary, as the upstream source is excluded from the published package (tsconfig.build.json)."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/prompt.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/experimental/durableagent/prompt_test.go#TestCreatePiPromptSections", "test:internal/experimental/durableagent/prompt_test.go#TestCreatePiPromptDirectoryPrecedence", "test:internal/experimental/durableagent/prompt_test.go#TestCreatePiPromptLoadsResourcesOncePerDirectory", "test:internal/experimental/durableagent/prompt_test.go#TestCodingRegistrySystemPromptReachesTheProvider"]
-rationale = "The pi-prompt extension has the seven untagged sections in pi's order, built from BuildSystemPromptSections with the snippets and guidelines of the four coding tools only, the conversation directory (environment, then agent, then fallback) and context files and skills loaded once per directory. The preamble is PiG's (operating inside pig). Upstream builds the sections once per request through a WeakMap on the input; the Go section callback has no input identity, so each key builds from the cached resources, which gives the same text."
+rationale = "The pi-prompt extension has the seven untagged sections in pi's order, built from BuildSystemPromptSections with the snippets and guidelines of the four coding tools only, the conversation directory (environment, then agent, then fallback) and context files and skills loaded once per directory. The preamble is Ompig's (operating inside ompig). Upstream builds the sections once per request through a WeakMap on the input; the Go section callback has no input identity, so each key builds from the cached resources, which gives the same text."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/durable/runtime.ts"
@@ -965,140 +965,140 @@ path = "packages/coding-agent/src/experimental/micro/api.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/micro/main.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/micro/models.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/micro/runtime.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/micro/sessions.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/micro/tools.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/micro/tui.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. PiG never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
+rationale = "Removed upstream at 1.0.0 with the 0.99.2 agent harness it presented. Ompig never ported the micro presentation (PORT_MAP kept it pending), so no Go code or test goes with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/main.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/server/entry.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/server/run.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/shared/protocol.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/shared/rpc.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/shared/transport.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/tui/run.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/tui/session.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/tui/view.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/worker/entry.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/worker/lane-service.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/worker/models-service.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/mini/worker/run.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). PiG's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
+rationale = "Removed upstream at 1.0.0 together with the 0.99.2 agent harness it presented (mini router, worker supervision and its RPC over the pico3 harness). Ompig's Go counterpart, internal/experimental/mini, is deleted in this lane; the rpc, transport and protocol oracle tests read these removed files and go with it."
 
 [[files]]
 path = "packages/coding-agent/src/experimental/plugin.ts"
@@ -1300,15 +1300,15 @@ rationale = ""
 path = "packages/coding-agent/src/modes/interactive/components/pi-logo-animation.lazy.ts"
 change = "added"
 disposition = "ported"
-evidence = ["test:internal/codingagent/pig_logo_animation_test.go#TestClickingTheHeaderPigPlaysTheAnimation", "test:internal/codingagent/pig_logo_animation_test.go#TestHeaderPigClickNeedsTheBuiltInSprite", "scenario:test/parity/scenarios/fullscreen/11-logo-click-animation.toml"]
-rationale = "New in 1.0.0: a click on the header logo plays the animation in fullscreen mode. PiG's built-in header plays it from the pig of the PiG mark (D87); the tests click the header through the fullscreen renderer and the scenario compares the resulting screen with Pi."
+evidence = ["test:internal/codingagent/ompig_logo_animation_test.go#TestClickingTheHeaderPigPlaysTheAnimation", "test:internal/codingagent/ompig_logo_animation_test.go#TestHeaderPigClickNeedsTheBuiltInSprite", "scenario:test/parity/scenarios/fullscreen/11-logo-click-animation.toml"]
+rationale = "New in 1.0.0: a click on the header logo plays the animation in fullscreen mode. Ompig's built-in header plays it from the ompig of the Ompig mark (D87); the tests click the header through the fullscreen renderer and the scenario compares the resulting screen with Pi."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/pi-logo-animation.ts"
 change = "added"
 disposition = "ported"
-evidence = ["test:internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi", "test:internal/codingagent/pig_logo_animation_test.go#TestPigLogoRunCycle", "test:internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationTimer", "scenario:test/parity/scenarios/fullscreen/11-logo-click-animation.toml"]
-rationale = "New in 1.0.0: the fullscreen logo animation. TestPigLogoAnimationMatchesPinnedPi runs the pinned source with the pig's blocks and compares every frame; the object and its run cycle are D87."
+evidence = ["test:internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi", "test:internal/codingagent/ompig_logo_animation_test.go#TestPigLogoRunCycle", "test:internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationTimer", "scenario:test/parity/scenarios/fullscreen/11-logo-click-animation.toml"]
+rationale = "New in 1.0.0: the fullscreen logo animation. TestPigLogoAnimationMatchesPinnedPi runs the pinned source with the ompig's blocks and compares every frame; the object and its run cycle are D87."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/pi-logo.ts"

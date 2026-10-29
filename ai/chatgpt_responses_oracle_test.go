@@ -17,7 +17,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type chatgptResponseProbe struct {
@@ -158,7 +158,7 @@ func TestChatGPTResponsesMatchPi(t *testing.T) {
 		if !same {
 			differing++
 			if differing <= 8 {
-				t.Errorf("%s status %d body %.160q\n  Pi  %v %v\n  Pig %v %v", probe.Flow, probe.Status, probe.Raw, want.OK, ptrText(want.Err), credentials, err)
+				t.Errorf("%s status %d body %.160q\n  Pi  %v %v\n  Ompig %v %v", probe.Flow, probe.Status, probe.Raw, want.OK, ptrText(want.Err), credentials, err)
 			}
 		}
 	}

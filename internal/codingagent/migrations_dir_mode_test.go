@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// pig divergence (D132): the directory the agent-root session migration creates for a moved session is owner-only, like every session directory.
+// ompig divergence (D132): the directory the agent-root session migration creates for a moved session is owner-only, like every session directory.
 func TestMigrateSessionsFromAgentRootCreatesOwnerOnlyDirectories(t *testing.T) {
 	agentDir := t.TempDir()
 	content := `{"type":"session","cwd":"/tmp/demo/project"}` + "\n"

@@ -5,8 +5,6 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/ssocreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go-v2/credentials/endpointcreds"
@@ -15,6 +13,8 @@ import (
 	smithybearer "github.com/aws/smithy-go/auth/bearer"
 	"github.com/aws/smithy-go/logging"
 	"github.com/aws/smithy-go/middleware"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/ssocreds"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/stscreds"
 )
 
 // sharedConfigProfileProvider provides access to the shared config profile

@@ -24,9 +24,9 @@ RUN apk update \
   && rm /tmp/packages.lock /tmp/installed.lock \
   && mkdir -p /workspace
 
-ENV GOCACHE=/tmp/pig-go-build
-ENV GOMODCACHE=/tmp/pig-go-mod
-ENV GOPATH=/tmp/pig-go
+ENV GOCACHE=/tmp/ompig-go-build
+ENV GOMODCACHE=/tmp/ompig-go-mod
+ENV GOPATH=/tmp/ompig-go
 
 WORKDIR /workspace
 ENTRYPOINT []

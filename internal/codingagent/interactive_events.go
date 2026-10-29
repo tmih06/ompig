@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/interactive-mode.ts:3985-4025.
@@ -293,7 +293,7 @@ func (m *InteractiveMode) handleAgentEvent(ev agent.AgentEvent) {
 				comp.SetResultValue(agent.AgentToolResult{Content: []ai.ToolResultMessageContent{ai.TextContent{Text: errMsg}}, IsError: true})
 				comp.SetResult(errMsg, true, 0)
 				if e.Message.Assistant.StopReason == "aborted" {
-					comp.MarkAborted() // pig additive (D91): a frontend shows it cancelled
+					comp.MarkAborted() // ompig additive (D91): a frontend shows it cancelled
 				}
 			}
 			clear(m.toolByID)

@@ -5,14 +5,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: model-runtime.ts CreateModelRuntimeOptions.modelsStorePath is the file the model catalogs persist to; the first refresh restores
 // cached catalogs from it without network access. A stored remote catalog applies only when its Last-Modified is later than the bundled
 // catalogs' generation time (model-runtime.ts:225, remote-catalog-provider.ts:52-57), so the fixture entry is newer than it.
 func TestCreateModelRuntimeRestoresCachedCatalogsFromModelsStorePath(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv("PI_OFFLINE", "")
 	storePath := filepath.Join(t.TempDir(), "custom-store.json")
 	record := json.RawMessage(`{"id":"cached-model","name":"Cached","api":"openai-completions","provider":"openrouter","baseUrl":"https://openrouter.ai/api/v1","reasoning":false,"input":["text"],"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0},"contextWindow":1000,"maxTokens":100}`)

@@ -6,8 +6,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/ownerfile"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/ownerfile"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // Ports packages/coding-agent/test/auth-storage.test.ts: "creates new auth files with owner-only permissions".

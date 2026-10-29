@@ -16,7 +16,7 @@ import (
 
 func TestHashesMatchPublishedTrackedFilesAndOverlay(t *testing.T) {
 	root := t.TempDir()
-	for _, key := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+	for _, key := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 		t.Setenv(key, t.TempDir())
 	}
 	dir := filepath.Join(root, "sdk")

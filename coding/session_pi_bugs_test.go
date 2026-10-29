@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // holdReply blocks the provider call until release closes, so the Session stays streaming while the test mutates its queues.
@@ -35,7 +35,7 @@ func waitForProviderCalls(t *testing.T, h *recoveryHarness, n int) {
 
 // Pi #9886: AgentSession.clearQueue() clears agent.followUp/steer queues wholesale, destroying
 // custom messages queued by extensions (sendMessage deliverAs followUp/steer) that it does not return.
-// PiG (D135) clears and returns only user messages and leaves custom messages queued.
+// Ompig (D135) clears and returns only user messages and leaves custom messages queued.
 func TestClearQueueKeepsExtensionCustomMessages(t *testing.T) {
 	for _, deliverAs := range []extension.DeliverAs{extension.DeliverAsFollowUp, extension.DeliverAsSteer} {
 		t.Run(string(deliverAs), func(t *testing.T) {
@@ -78,7 +78,7 @@ func TestClearQueueKeepsExtensionCustomMessages(t *testing.T) {
 
 // Pi #9410: Escape in a session whose context is over the compaction threshold froze the TUI for a blocking summarisation.
 // Pi main (agent-session.ts _handlePostAgentRun / _checkCompaction skipAbortedCheck) already skips compaction for an aborted run
-// and compacts before the next request, as the maintainers ask; PiG matches, so the report does not reproduce; this test pins that behavior (no fix, no divergence).
+// and compacts before the next request, as the maintainers ask; Ompig matches, so the report does not reproduce; this test pins that behavior (no fix, no divergence).
 // The prior usage (9000) is under the 9900 threshold, so the pre-prompt check does not compact; the long prompt puts the run over it,
 // so the post-run check compacts a completed run (the control) and must skip the aborted one. The aborted case fails when the post-run
 // loop's abort checks (runPostAgentRunsWith's loop condition and handlePostAgentRun's early returns) are removed.

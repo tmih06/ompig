@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const nestedEventExtension = `export default function (pi) {
@@ -23,10 +23,10 @@ const nestedEventExtension = `export default function (pi) {
 }
 `
 
-// Pi 1.1.0 emits session_info_changed and thinking_level_select with void runner.emit inside setSessionName and setThinkingLevel (agent-session.ts:2629, 3946), so a subscribed handler's synchronous prefix runs before the setter returns and a later synchronous API call proceeds: Pi prints "event ..." then "tools 4". The Node runtime held the event while a synchronous host call waited, and the host's call lane waited for the event's handler to start, so PiG hung.
+// Pi 1.1.0 emits session_info_changed and thinking_level_select with void runner.emit inside setSessionName and setThinkingLevel (agent-session.ts:2629, 3946), so a subscribed handler's synchronous prefix runs before the setter returns and a later synchronous API call proceeds: Pi prints "event ..." then "tools 4". The Node runtime held the event while a synchronous host call waited, and the host's call lane waited for the event's handler to start, so Ompig hung.
 func TestExtensionSetterEventRunsBeforeALaterSynchronousCall(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	extPath := filepath.Join(t.TempDir(), "probe.mjs")
@@ -42,15 +42,15 @@ func TestExtensionSetterEventRunsBeforeALaterSynchronousCall(t *testing.T) {
 			ctx := testbudget.Context(t)
 			cmd := exec.CommandContext(ctx, bin, "-p", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", tc.model, "/probe "+tc.arg)
 			cmd.Dir = agentDir
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1", "OPENAI_API_KEY=test")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1", "OPENAI_API_KEY=test")
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			err := cmd.Run()
 			if ctx.Err() != nil {
-				t.Fatalf("pig did not finish: the setter's event and the later synchronous call deadlocked\nstderr: %s", stderr.String())
+				t.Fatalf("ompig did not finish: the setter's event and the later synchronous call deadlocked\nstderr: %s", stderr.String())
 			}
 			if err != nil {
-				t.Fatalf("pig: %v\nstderr: %s", err, stderr.String())
+				t.Fatalf("ompig: %v\nstderr: %s", err, stderr.String())
 			}
 			if got := stderr.String(); got != tc.want {
 				t.Fatalf("stderr = %q, want %q", got, tc.want)

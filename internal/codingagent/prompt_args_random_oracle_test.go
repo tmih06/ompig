@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
-// TestPromptArgumentHandlingMatchesPiOnRandomInputs compares parseCommandArgs, substituteArgs and expandPromptTemplate of Pi with Pig over argument strings, templates and command lines built from random token sequences: quotes, backslashes, JavaScript and Unicode whitespace, `$` forms with digits, `@`, `ARGUMENTS`, `${…:-…}` defaults and `${@:n:m}` slices, newlines and non-BMP text.
+// TestPromptArgumentHandlingMatchesPiOnRandomInputs compares parseCommandArgs, substituteArgs and expandPromptTemplate of Pi with Ompig over argument strings, templates and command lines built from random token sequences: quotes, backslashes, JavaScript and Unicode whitespace, `$` forms with digits, `@`, `ARGUMENTS`, `${…:-…}` defaults and `${@:n:m}` slices, newlines and non-BMP text.
 func TestPromptArgumentHandlingMatchesPiOnRandomInputs(t *testing.T) {
 	rng := rand.New(rand.NewSource(20261010))
 	build := func(tokens []string, count int) string {
@@ -25,7 +25,7 @@ func TestPromptArgumentHandlingMatchesPiOnRandomInputs(t *testing.T) {
 	lineTokens := []string{"/known", "/other", "/unknown", "/", " ", "\t", "\n", "\u00a0", "\u2003", "\u0085", "\ufeff", "a", `"b c"`, `'d'`, "😀", "$1", "$@"}
 	var argStrings, templates, lines []string
 	var argLists [][]string
-	// The pinned Pi (1.2.0+3daa2028) drops an empty quoted argument; PiG carries Pi 9fe3f371, which keeps it
+	// The pinned Pi (1.2.0+3daa2028) drops an empty quoted argument; Ompig carries Pi 9fe3f371, which keeps it
 	// (TestUpstreamPromptTemplatesArguments). Inputs where the two parsers differ are left out of this comparison.
 	withoutEmptyQuotes := func(s string) string {
 		if !slices.Equal(pinnedParsePromptArgs(s), ParsePromptArgs(s)) {

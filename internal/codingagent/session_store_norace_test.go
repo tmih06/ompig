@@ -12,8 +12,8 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/tui"
 )
 
 // A resumed session holds the entries its active context needs and an index of the rest: the memory a resumed session retains does not grow

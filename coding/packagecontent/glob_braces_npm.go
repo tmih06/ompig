@@ -5,8 +5,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Limits of npm brace-expansion 5.0.12, the copy Pi's npm minimatch 10.2.6 calls: EXPANSION_MAX_LENGTH bounds the total UTF-16 units of one combine's results, of one sequence, or of one comma set's values, EXPANSION_MAX_DEPTH how deep nesting is followed, and EXPANSION_MAX_REWRITES how often the "{a},b}" rewrite restarts the scan.

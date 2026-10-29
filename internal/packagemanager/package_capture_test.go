@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestPackageCaptureTimeoutWaitsForChild(t *testing.T) {
@@ -17,7 +17,7 @@ func TestPackageCaptureTimeoutWaitsForChild(t *testing.T) {
 		t.Fatal(err)
 	}
 	cmd := exec.CommandContext(t.Context(), executable, "-test.run=^TestPackageCaptureChild$")
-	cmd.Env = append(os.Environ(), "PIG_PACKAGE_CAPTURE_CHILD=wait")
+	cmd.Env = append(os.Environ(), "OMPIG_PACKAGE_CAPTURE_CHILD=wait")
 	output, err := RunWithTimeout(cmd, 0)
 	if err == nil || !strings.Contains(err.Error(), "timed out after 0ms") {
 		t.Fatalf("output=%q error=%v, want timeout error", output, err)
@@ -35,7 +35,7 @@ func TestPackageCaptureOutputAndFailure(t *testing.T) {
 	for _, mode := range []string{"success", "failure", "stdout-failure"} {
 		t.Run(mode, func(t *testing.T) {
 			cmd := exec.CommandContext(t.Context(), executable, "-test.run=^TestPackageCaptureChild$")
-			cmd.Env = append(os.Environ(), "PIG_PACKAGE_CAPTURE_CHILD="+mode)
+			cmd.Env = append(os.Environ(), "OMPIG_PACKAGE_CAPTURE_CHILD="+mode)
 			output, err := RunWithTimeout(cmd, testbudget.Wait(t))
 			if mode == "success" {
 				if err != nil || output != "captured output" {
@@ -75,7 +75,7 @@ func BenchmarkPackageCapture(b *testing.B) {
 	b.ReportAllocs()
 	for b.Loop() {
 		cmd := exec.CommandContext(b.Context(), executable, "-test.run=^TestPackageCaptureChild$")
-		cmd.Env = append(os.Environ(), "PIG_PACKAGE_CAPTURE_CHILD=success")
+		cmd.Env = append(os.Environ(), "OMPIG_PACKAGE_CAPTURE_CHILD=success")
 		if output, err := RunWithTimeout(cmd, time.Minute); err != nil || output != "captured output" {
 			b.Fatalf("output=%q error=%v", output, err)
 		}
@@ -83,7 +83,7 @@ func BenchmarkPackageCapture(b *testing.B) {
 }
 
 func TestPackageCaptureChild(t *testing.T) {
-	switch os.Getenv("PIG_PACKAGE_CAPTURE_CHILD") {
+	switch os.Getenv("OMPIG_PACKAGE_CAPTURE_CHILD") {
 	case "wait":
 		// Keep the subprocess alive so the tested zero-duration timeout owns its termination.
 		time.Sleep(time.Hour)

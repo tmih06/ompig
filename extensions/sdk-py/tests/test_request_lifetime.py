@@ -5,7 +5,7 @@ import struct
 import tempfile
 import threading
 
-import pig_sdk
+import ompig_sdk
 import pytest
 
 
@@ -53,7 +53,7 @@ def connected_extension(ext, ready=None):
 
 def test_retained_context_uses_same_live_runtime_after_normal_response():
     # Pi runner.ts:809-886 permits retained Context calls until runtime invalidation.
-    ext = pig_sdk.Extension("retained-context")
+    ext = ompig_sdk.Extension("retained-context")
     contexts = []
     ext.command("capture", "Capture original context", lambda ctx, _: contexts.append(ctx))
     with connected_extension(ext) as (send, receive):
@@ -79,7 +79,7 @@ def test_retained_context_uses_same_live_runtime_after_normal_response():
 
 
 def test_cancelled_context_is_not_promoted_after_response():
-    ext = pig_sdk.Extension("cancelled-context")
+    ext = ompig_sdk.Extension("cancelled-context")
     contexts = []
     entered, release = threading.Event(), threading.Event()
 
@@ -107,7 +107,7 @@ def test_cancelled_context_is_not_promoted_after_response():
 
 
 def test_failed_worker_start_releases_armed_parent(monkeypatch):
-    ext = pig_sdk.Extension("failed-worker")
+    ext = ompig_sdk.Extension("failed-worker")
     ext.command("capture", "Must not enter", lambda *_: pytest.fail("failed worker ran"))
     with connected_extension(ext) as (send, receive):
         def fail_start(_thread):
@@ -123,7 +123,7 @@ def test_failed_worker_start_releases_armed_parent(monkeypatch):
 
 
 def test_parent_selection_races_response_publication():
-    ext = pig_sdk.Extension("racing-parent")
+    ext = ompig_sdk.Extension("racing-parent")
     entered, release = threading.Event(), threading.Event()
     contexts = []
 
@@ -180,7 +180,7 @@ def test_parent_selection_races_response_publication():
 
 def test_run_with_socket_closes_its_connection_when_the_host_shuts_it_down():
     # A runner that keeps its process for later factory generations ends only this generation's connection; the host's Retire waits for that close. Go's RunWithConn closes its connection on return (sdk/extension.go:704).
-    ext = pig_sdk.Extension("closing")
+    ext = ompig_sdk.Extension("closing")
     with tempfile.TemporaryDirectory() as directory:
         listener = socket.socket(socket.AF_UNIX)
         listener.bind(directory + "/sdk.sock")
@@ -226,7 +226,7 @@ def _invalidate(send, receive, message=STALE):
 
 def test_local_context_members_raise_the_stale_message_after_invalidate():
     # runner.ts:571-600 throws the stale message from cwd, mode, hasUI and model once the runtime is invalidated.
-    ext = pig_sdk.Extension("stale-context")
+    ext = ompig_sdk.Extension("stale-context")
     contexts = []
     ext.command("capture", "Capture", lambda ctx, _: contexts.append(ctx))
     ready = {"cwd": "/work", "mode": "tui", "state": {"hasUI": True, "model": {"id": "m", "provider": "p"}}}
@@ -249,7 +249,7 @@ def test_local_context_members_raise_the_stale_message_after_invalidate():
 
 def test_first_invalidate_message_wins():
     # runner.ts:725-727 keeps the first staleMessage.
-    ext = pig_sdk.Extension("stale-first")
+    ext = ompig_sdk.Extension("stale-first")
     contexts = []
     ext.command("capture", "Capture", lambda ctx, _: contexts.append(ctx))
     with connected_extension(ext) as (send, receive):
@@ -265,7 +265,7 @@ def test_loop_turned_notify_changes_nothing():
     # protocol.go NotifyLoopTurned is the host step a Node runtime waits for after a print prompt's last call. A Python
     # extension has no such wait, so the notify, which has no arguments, changes nothing: the next request runs with the
     # state the extension held before it.
-    ext = pig_sdk.Extension("loop-turned")
+    ext = ompig_sdk.Extension("loop-turned")
     seen = []
     ext.command("read", "Read", lambda ctx, _: seen.append((ctx.cwd, ctx.has_ui())))
     with connected_extension(ext, {"cwd": "/work", "mode": "print", "state": {"hasUI": True}}) as (send, receive):
@@ -278,7 +278,7 @@ def test_loop_turned_notify_changes_nothing():
 
 def test_call_after_the_handler_returned_carries_the_timer_mark():
     # D189: deferred work is the work Pi runs once its event loop turns, so the call says so and the host holds it.
-    ext = pig_sdk.Extension("timer-mark")
+    ext = ompig_sdk.Extension("timer-mark")
     contexts = []
     ext.command("capture", "Capture original context", lambda ctx, _: contexts.append(ctx))
     with connected_extension(ext) as (send, receive):

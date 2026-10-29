@@ -8,7 +8,7 @@ READY.
 
 ## Cause
 
-`TestNodeFacetObserverRunsPrefixWithoutAwaitingPromise` read the Node observer's log right after `Spawn("first")` and sometimes saw `[]`. The test does not read too early: PiG differed from Pi.
+`TestNodeFacetObserverRunsPrefixWithoutAwaitingPromise` read the Node observer's log right after `Spawn("first")` and sometimes saw `[]`. The test does not read too early: Ompig differed from Pi.
 
 An isolated (Node) facet observes a remotely exposable in-host keyed service through `chord.ObserveFacetService`, which uses the host's internal loopback binding. `keyedBinding.observe` launches the subscription start (`transport.Subscribe`, snapshot spawn, `Activate`, `markReady`) on a goroutine, and facet activation did not wait for it. `CreateFacetHost` could therefore return before the subscription existed or was ready. A later `Spawn` then landed in the start's snapshot or in its pre-activation buffer, and the observer ran on the start goroutine after `Spawn` returned.
 

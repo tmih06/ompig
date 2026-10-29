@@ -3,8 +3,8 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // messages.ts:105-136 (createCompactionSummaryMessage, createBranchSummaryMessage, createCustomMessage) read an entry's timestamp with `new Date(timestamp).getTime()`:

@@ -14,8 +14,8 @@ import (
 	"slices"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/env/daemon"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/env/daemon"
 )
 
 // runOldDaemon is old-daemon.ts: a stand-in for a daemon released before `hello.features`. It answers `hello` without

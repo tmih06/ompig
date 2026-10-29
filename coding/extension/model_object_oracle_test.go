@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// The model objects an extension receives are Pi's: for every built-in model, the bytes PiG sends equal JSON.stringify of the
+// The model objects an extension receives are Pi's: for every built-in model, the bytes Ompig sends equal JSON.stringify of the
 // model object Pi 1.2.0's ModelRuntime holds (testdata/model-object-oracle.mjs), member order included.
 func TestModelObjectsMatchPisModelObjects(t *testing.T) {
 	root, err := filepath.EvalSymlinks("../../extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent")
@@ -52,7 +52,7 @@ func TestModelObjectsMatchPisModelObjects(t *testing.T) {
 		models[i] = ai.GeneratedModels[i].ToModel()
 	}
 	if len(want) != len(models) {
-		t.Fatalf("Pi holds %d models, PiG's catalog %d", len(want), len(models))
+		t.Fatalf("Pi holds %d models, Ompig's catalog %d", len(want), len(models))
 	}
 	encoded, err := MarshalModelObjects(models)
 	if err != nil {

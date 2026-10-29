@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// The image's references are Pi's packages at PiG's pinned Pi version: pi-durable for the Durable profiles and the
+// The image's references are Pi's packages at Ompig's pinned Pi version: pi-durable for the Durable profiles and the
 // coding agent for the agent profiles. An upstream leap must move them too.
 func TestImageReferenceIsThePinnedPiVersion(t *testing.T) {
 	for dir, names := range map[string][]string{

@@ -13,7 +13,7 @@ Reference: Pi 0.87.1, commit `f07218c4d4bbc12bef056a7058c3dd49dfe41abe`.
 | Logout deletes the stored credential. | `packages/ai/src/models.ts:628-637` |
 | Each Radius gateway owns its OAuth handler. | `packages/ai/src/providers/radius.ts:23-38` |
 
-PiG retains the existing `coding/model.go:acceptsRequestAPIKey` boundary: API kinds without a per-request key callback resolve once during construction. This change does not add callbacks to those providers.
+Ompig retains the existing `coding/model.go:acceptsRequestAPIKey` boundary: API kinds without a per-request key callback resolve once during construction. This change does not add callbacks to those providers.
 
 ## Red and green evidence
 
@@ -40,11 +40,11 @@ make parity-family FAMILY=model-resolver-selector
 make parity-family FAMILY=oauth
 make parity-family FAMILY=model-runtime-store-catalog
 go test ./...
-go test -race ./cmd/pig -run 'TestBuildModel(_OAuthRefresh|_StoredOAuthRefresh|ContextCancels|Logout|Radius|ResolvesStatic)' -count=5
+go test -race ./cmd/ompig -run 'TestBuildModel(_OAuthRefresh|_StoredOAuthRefresh|ContextCancels|Logout|Radius|ResolvesStatic)' -count=5
 go vet ./...
-GOOS=windows go vet ./cmd/pig
+GOOS=windows go vet ./cmd/ompig
 go tool golangci-lint config verify
-go tool golangci-lint run ./cmd/pig/...
+go tool golangci-lint run ./cmd/ompig/...
 make lint-changed LINT_BASE=public/main
 make lint
 make ci-contracts ci-drift
@@ -53,7 +53,7 @@ make ci-contracts ci-drift
 All commands pass. `public/main` is the lane base; this worktree has no local `main` ref. The generated Go interface inventory removes the deleted helper, and coverage generation adds this scenario without importing unrelated transient run results:
 
 ```sh
-go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/pig-go.json
+go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/ompig-go.json
 make coverage RESULTS=
 ```
 

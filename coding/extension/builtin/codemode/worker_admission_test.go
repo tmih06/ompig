@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/test/codemode-worker-admission.test.ts.
@@ -512,7 +512,7 @@ func TestWorkerReservationReleasesExactlyOnce(t *testing.T) {
 // Ports codemode-worker-admission.test.ts "starts no worker for a launch that resumes after its result timed out" (#10748) through Execute. Pi holds
 // the module load by replacing loadQuickJSWasm; the built-in tool must not choose another module (TestCodemodeEmbedsItsOnlyModuleSource), so the load
 // is slow instead: a cache directory no sandbox has used makes the first script compile the module (seconds), and the others wait on it. Three
-// scripts are aborted during it instead of timed out (PiG's deadline starts once the module is loaded, so only an abort settles a script during the
+// scripts are aborted during it instead of timed out (Ompig's deadline starts once the module is loaded, so only an abort settles a script during the
 // load). The two admitted scripts and the queued third fail, none starts a VM, and the next script starts exactly one.
 func TestExecuteStartsNoWorkerForALaunchThatResumesAfterItsResultSettled(t *testing.T) {
 	waitForActiveWorkers(t, 0)

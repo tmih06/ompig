@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_python
+//go:build !ompig_strip_extension_sdk_python
 
 package pigsdk
 
@@ -6,16 +6,16 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 
-	pysdk "github.com/MichaelKinsy/PiG/extensions/sdk-py"
+	pysdk "github.com/tmih06/ompig/extensions/sdk-py"
 )
 
-// pig additive (D92): only a build that embeds the Python SDK registers its staged directory.
+// ompig additive (D92): only a build that embeds the Python SDK registers its staged directory.
 func init() { registerBundle("python", pythonBundle) }
 
-// pythonBundle is the embedded Python SDK, absent when the active Piglet strips it.
-// pig additive (D92): a Piglet Binary built with pig_strip_extension_sdk_python links sdk_python_off.go instead and embeds no Python SDK.
+// pythonBundle is the embedded Python SDK, absent when the active Ompiglet strips it.
+// ompig additive (D92): a Ompiglet Binary built with ompig_strip_extension_sdk_python links sdk_python_off.go instead and embeds no Python SDK.
 func pythonBundle() (sdkBundle, bool) {
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.ExtensionSDKPython) {
 		return sdkBundle{}, false

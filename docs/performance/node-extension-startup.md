@@ -2,7 +2,7 @@
 
 ## Scope and result
 
-This report measures PiG's Node loader changes in `679f5bdcc` against Pi 0.87.1 and the frozen performance baselines. It does not include the separate Go catalog, serialization, compression, or materialization changes.
+This report measures Ompig's Node loader changes in `679f5bdcc` against Pi 0.87.1 and the frozen performance baselines. It does not include the separate Go catalog, serialization, compression, or materialization changes.
 
 The loader no longer imports unused presentation and schema graphs during a lightweight extension's startup. It retains Pi's complete virtual namespaces and exported identities when an extension imports them. Jiti's source-validated filesystem cache persists across temporary-directory changes and separates compiler/runtime identities. These changes do **not** meet the complete release startup targets by themselves. No-extension startup remains a Go-owned cost. Cold TS and package startup remain above the requested 760 ms and 980 ms targets. The combined Go/Node candidate requires its own measurement and qualification.
 
@@ -18,11 +18,11 @@ The loader no longer imports unused presentation and schema graphs during a ligh
 
 The first two optimization comparisons use `606c92e44`. The final private-UI-import comparison uses matched before/after binaries on `ca0e27955`. The main table spans these experiments; use the paired optimization table for attribution rather than treating the moving integration baseline as a Node-only change.
 
-All PiG binaries use Go 1.27.1 and `go build -p 6 -trimpath -ldflags='-s -w'`. Node is 24.19.0. Timing runs rotate build order serially on CPUs 8–15 of the shared Intel Xeon 6746E host. The Go lane does not run its timing matrix on those CPUs concurrently. Other diagnostic and verification jobs use different CPUs; the host is not exclusively reserved.
+All Ompig binaries use Go 1.27.1 and `go build -p 6 -trimpath -ldflags='-s -w'`. Node is 24.19.0. Timing runs rotate build order serially on CPUs 8–15 of the shared Intel Xeon 6746E host. The Go lane does not run its timing matrix on those CPUs concurrently. Other diagnostic and verification jobs use different CPUs; the host is not exclusively reserved.
 
 The original `perf-stack-check-evidence/measure.py` and copied fixtures remain unchanged. A separate driver calls its `run` function and adds the Pi CLI command adapter. Each workload/cache/build cell contains 25 measurements after three unmeasured warm launches. The three matrices contain 1,350 measured invocations: three workloads × two cache states × 25 runs × (five initial columns + two cache columns + two final columns). Every measured invocation passes the harness's unchanged output/error checks. There are no timing retries or discarded measurements.
 
-Cold means a fresh HOME, agent/config/cache directories, and TMPDIR. It does not mean a dropped OS page cache. Warm means a fresh process with that workload's populated application caches. Environments are allowlisted and contain no worker auth or settings. Pi uses the original faux-provider extension to avoid real credentials and network requests; PiG uses its built-in faux provider. Pi therefore loads an additional provider extension. The Pi no-extension diagnostic is retained in the raw data but is not a like-for-like no-extension comparison.
+Cold means a fresh HOME, agent/config/cache directories, and TMPDIR. It does not mean a dropped OS page cache. Warm means a fresh process with that workload's populated application caches. Environments are allowlisted and contain no worker auth or settings. Pi uses the original faux-provider extension to avoid real credentials and network requests; Ompig uses its built-in faux provider. Pi therefore loads an additional provider extension. The Pi no-extension diagnostic is retained in the raw data but is not a like-for-like no-extension comparison.
 
 Latency ends at the first JSON assistant `message_start`, not at an internal request-dispatch timestamp. This follows `packages/agent/src/agent-loop.ts:402-418` and `packages/coding-agent/src/modes/print-mode.ts:109-119`. Independent RPC profile captures confirm that the TS fixture's `alpha-entry` or package fixture's `widget-factory-probe` command actually registers.
 
@@ -90,7 +90,7 @@ Pi 0.87.1 `packages/coding-agent/src/core/extensions/loader.ts:490-501` selects 
 
 ## Qualification limits
 
-Linux/Windows vet and full repository lint pass. The broader qualification is not green. On `ca0e27955`, the extension family completes 77 scenarios: 76 pass and `29-export-tool-renderers` fails. Unchanged before controls reproduce its tool/event ordering differences. Earlier runs also expose nondeterministic PiG-only tmux warnings in renderer scenarios; a later pass does not close them.
+Linux/Windows vet and full repository lint pass. The broader qualification is not green. On `ca0e27955`, the extension family completes 77 scenarios: 76 pass and `29-export-tool-renderers` fails. Unchanged before controls reproduce its tool/event ordering differences. Earlier runs also expose nondeterministic Ompig-only tmux warnings in renderer scenarios; a later pass does not close them.
 
 A clean `git archive ca0e27955` reproduces `TestUpstreamRunnerRejectsToolWithoutParameterSchema` expecting stderr where the loader uses `FactoryLoadError`. Full conformance reaches the unchanged deadline in `TestPackedToolSchemaRejectionAcrossSDKs/go/startup`; its Python provider-producer cases also fail with `name 'cancel' is not defined`. The initial full-repository run also fails self-update, managed-tool, and Radius tests because the test harness globally forces offline mode. Removing that harness override makes all three affected packages pass against their local fake servers; those failures are not product blockers. `make ci-contracts` rejects pending/partial hot-path mappings; `make ci-drift` rejects D78 scrutiny. The integrator owns these recorded blockers. No tests, timeout, comparator, or divergence approval is weakened in this lane. The stable post-public-sync merge remains separate from these frozen measurements.
 

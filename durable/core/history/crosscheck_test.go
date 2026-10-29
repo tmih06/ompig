@@ -5,8 +5,8 @@ package history_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/contracttest"
+	"github.com/tmih06/ompig/durable/core/history"
 )
 
 func canon(in []byte) ([]byte, error) { return history.Canonical(nil, in) }

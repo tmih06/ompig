@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's TreeList (modes/interactive/components/tree-selector.js) runs against the vendored Pi module over random branching session trees (several roots, folded branches, a current leaf anywhere) driven by random key sequences: movement and paging, fold and unfold, every filter mode, label timestamps and typed search. The rendered rows, gutters, connectors, fold markers and status line must agree byte for byte.

@@ -18,5 +18,5 @@ FIND_OPS root ["home/user/project/\nhome/user/project/file.txt",null]
     --- PASS: TestFindRootRelativizationWindowsPort/does_not_relativize_a_sibling_directory_that_shares_a_name_prefix (0.00s)
     --- PASS: TestFindRootRelativizationWindowsPort/normalizes_relative_custom-glob_results_without_corrupting_them (0.00s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.093s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	0.093s
 ===== exit 0 (1s)

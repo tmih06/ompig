@@ -6,7 +6,7 @@ import "context"
 // callback on RegisteredCommand. Returns a list of completion items, or nil
 // to fall through to the default provider.
 //
-// pig translation rule (Promise<T[] | null> → ([]T, error)): upstream returns `AutocompleteItem[] | null |
+// ompig translation rule (Promise<T[] | null> → ([]T, error)): upstream returns `AutocompleteItem[] | null |
 // Promise<AutocompleteItem[] | null>`. The Go signature returns the slice
 // + error directly; if the host needs cancellation it wraps the call in a
 // goroutine + ctx.Done() select: same shape upstream takes (the function

@@ -97,7 +97,7 @@ class TaskTests(unittest.TestCase):
 
 class RunCommandTests(unittest.TestCase):
     def test_a_step_never_reads_the_callers_stdin(self):
-        """A Porter task's pig read the driver's task list through the inherited stdin and ended the loop after one task."""
+        """A Porter task's ompig read the driver's task list through the inherited stdin and ended the loop after one task."""
         import os
 
         read_end, write_end = os.pipe()
@@ -345,7 +345,7 @@ class PipelineTests(unittest.TestCase):
             seen = {}
 
             def runner(command, env, timeout, cwd):
-                seen[" ".join(command)] = env.get("PIG_INTERFACE_EXTRACT_INCREMENTAL")
+                seen[" ".join(command)] = env.get("OMPIG_INTERFACE_EXTRACT_INCREMENTAL")
                 return 0
             self.pipeline(root, runner).run()
             self.assertEqual(seen["make interface-proposals"], "1")
@@ -394,26 +394,26 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(result.failed, "freeze")
 
     def test_the_default_ready_log_is_the_run_state_directory_or_the_named_file(self):
-        # The repository does not know an operator's coordination paths: without --ready-log or PIG_PIN_FOLLOW_READY_LOG
+        # The repository does not know an operator's coordination paths: without --ready-log or OMPIG_PIN_FOLLOW_READY_LOG
         # the READY and FINDING lines stay with the run's state.
         with tempfile.TemporaryDirectory() as directory:
             root = self.setup_root(directory)
-            saved = os.environ.pop("PIG_PIN_FOLLOW_READY_LOG", None)
+            saved = os.environ.pop("OMPIG_PIN_FOLLOW_READY_LOG", None)
             try:
                 follow.Pipeline(root=root, ref="4ac0bd8c", commit=COMMIT, version="1.1.0+4ac0bd8c", upstream_time=UPSTREAM_TIME,
                                 runner=FakeRunner(), clock=Clock(UPSTREAM_TIME)).run()
                 self.assertIn("READY", (root / "tmp/pin-follow/1.1.0+4ac0bd8c/ready.log").read_text())
-                os.environ["PIG_PIN_FOLLOW_READY_LOG"] = str(root / "named.log")
+                os.environ["OMPIG_PIN_FOLLOW_READY_LOG"] = str(root / "named.log")
                 follow.Pipeline(root=root, ref="4ac0bd8c", commit=COMMIT, version="1.1.0+4ac0bd8c", upstream_time=UPSTREAM_TIME,
                                 runner=FakeRunner(), clock=Clock(UPSTREAM_TIME)).run()
                 self.assertIn("READY", (root / "named.log").read_text())
             finally:
-                os.environ.pop("PIG_PIN_FOLLOW_READY_LOG", None)
+                os.environ.pop("OMPIG_PIN_FOLLOW_READY_LOG", None)
                 if saved is not None:
-                    os.environ["PIG_PIN_FOLLOW_READY_LOG"] = saved
-        self.assertNotIn("pig-lanes", Path(follow.__file__).read_text())
+                    os.environ["OMPIG_PIN_FOLLOW_READY_LOG"] = saved
+        self.assertNotIn("ompig-lanes", Path(follow.__file__).read_text())
         doc = (Path(follow.__file__).resolve().parents[2] / "docs/parity/upstream-pin.md").read_text()
-        self.assertIn("PIG_PIN_FOLLOW_READY_LOG", doc, "the pin-follow documentation names where READY and FINDING lines go")
+        self.assertIn("OMPIG_PIN_FOLLOW_READY_LOG", doc, "the pin-follow documentation names where READY and FINDING lines go")
 
     def test_a_finished_pipeline_writes_the_pin_record_beside_the_frozen_artifacts(self):
         with tempfile.TemporaryDirectory() as directory:

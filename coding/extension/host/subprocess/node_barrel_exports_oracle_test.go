@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // TestNodeBarrelExportsEveryValuePiExports compares the runtime value exports of the Node barrel (shims/pi-coding-agent.mjs, which ports packages/coding-agent/src/index.ts) with those of the published Pi 1.0.4 package entry point: a name Pi exports and the barrel lacks fails an extension that imports it, and the barrel adds only `__runtime`.

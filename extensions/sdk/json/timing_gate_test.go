@@ -11,14 +11,14 @@ import (
 	"testing"
 )
 
-// timingGate is internal/testenv.TimingGate for this module, which cannot import the main module's internal packages: a test that fails on a measured timing calls it, and with PIG_PERF_TIMING_REPORT_ONLY=1 (pull-request CI) the failure is a GitHub Actions warning instead. testenv's TestTimingGatesAreListed keeps this copy's contract equal to the original.
+// timingGate is internal/testenv.TimingGate for this module, which cannot import the main module's internal packages: a test that fails on a measured timing calls it, and with OMPIG_PERF_TIMING_REPORT_ONLY=1 (pull-request CI) the failure is a GitHub Actions warning instead. testenv's TestTimingGatesAreListed keeps this copy's contract equal to the original.
 func timingGate(t testing.TB, failed bool, format string, args ...any) {
 	t.Helper()
 	if !failed {
 		return
 	}
 	message := fmt.Sprintf(format, args...)
-	if os.Getenv("PIG_PERF_TIMING_REPORT_ONLY") != "1" {
+	if os.Getenv("OMPIG_PERF_TIMING_REPORT_ONLY") != "1" {
 		t.Error(message)
 		return
 	}

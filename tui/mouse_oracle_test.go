@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type mouseOracleItem struct {
@@ -361,18 +361,18 @@ func TestMouseHandlersMatchPi(t *testing.T) {
 		children, _ := json.Marshal(scenario.Children)
 		report := fmt.Sprintf("scenario %d (%s, width %d, padding %d,%d, render first %v, children %s)", i, scenario.Kind, scenario.Width, scenario.PaddingX, scenario.PaddingY, scenario.RenderFirst, children)
 		if !reflect.DeepEqual(normalizeMouseFrame(got.Frames[0]), normalizeMouseFrame(expected[i].Frames[0])) {
-			report += fmt.Sprintf("\n  first frame\n  Pig %q\n  Pi  %q", got.Frames[0], expected[i].Frames[0])
+			report += fmt.Sprintf("\n  first frame\n  Ompig %q\n  Pi  %q", got.Frames[0], expected[i].Frames[0])
 		}
 		for k := range got.Outs {
 			g, _ := json.Marshal(got.Outs[k])
 			e, _ := json.Marshal(expected[i].Outs[k])
 			if !bytes.Equal(g, e) {
 				ev, _ := json.Marshal(scenario.Events[k])
-				report += fmt.Sprintf("\n  event %d %s\n  Pig %s\n  Pi  %s", k, ev, g, e)
+				report += fmt.Sprintf("\n  event %d %s\n  Ompig %s\n  Pi  %s", k, ev, g, e)
 				break
 			}
 			if !reflect.DeepEqual(normalizeMouseFrame(got.Frames[k+1]), normalizeMouseFrame(expected[i].Frames[k+1])) {
-				report += fmt.Sprintf("\n  frame after event %d\n  Pig %q\n  Pi  %q", k, got.Frames[k+1], expected[i].Frames[k+1])
+				report += fmt.Sprintf("\n  frame after event %d\n  Ompig %q\n  Pi  %q", k, got.Frames[k+1], expected[i].Frames[k+1])
 				break
 			}
 		}

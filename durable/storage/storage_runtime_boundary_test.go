@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-const modulePath = "github.com/MichaelKinsy/PiG/"
+const modulePath = "github.com/tmih06/ompig/"
 
 // hostImports are the Go counterparts of Node built-ins: packages that reach the host process, file system, network,
 // or a native database driver. A portable package may not import one directly.

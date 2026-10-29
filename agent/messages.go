@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ConvertToLLM converts AgentMessages to the wire format expected by the AI provider (convertToLlm, messages.ts:148).

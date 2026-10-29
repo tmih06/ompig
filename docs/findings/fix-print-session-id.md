@@ -40,7 +40,7 @@ UUIDs use canonical lower-case `8-4-4-4-12` spelling, version nibble `7`, and RF
 The npm compatibility corpus now includes `pi-warden@0.73.0`, its complete dependency lock, and npm integrity. The ordinary corpus runner checks package loading and the read-only `/warden loops` command. This row declares its command and empty expected stdout because warden's consent notice is outside the faux provider's scripted model inputs; no comparator is weakened. The dedicated replay calls the package's unchanged `warden_loops` tool definition from a print command, with a real extension context and no live model. It compares complete tool results and stdout/stderr without normalization:
 
 ```sh
-python3 test/parity/corpus/session-id/replay.py --pig "$PIG_BIN" --output "$EVIDENCE/warden"
+python3 test/parity/corpus/session-id/replay.py --ompig "$OMPIG_BIN" --output "$EVIDENCE/warden"
 ```
 
 Use the actual Node executable directory on PATH when changing HOME; a user-configured tool-manager shim cannot resolve its installation from a fresh HOME.
@@ -51,7 +51,7 @@ On the issue's revision, both persisted and in-memory calls return `not availabl
 
 - `TestSessionReadBindingsKeepIdentityWithoutPersistence` checks fresh UUIDv7/header identity, both native host-call spellings, the Node snapshot, and live Session replacement through the shared binding.
 - `TestHeadlessExtensionSessionIdentity` drives the actual print, JSON, and RPC CLI with a Node tool, two runs per persistence choice, stable event-time IDs, saved header IDs, and no files for `--no-session`.
-- `print/05-print-extension-session-id` compares three real Pi/PiG pairs. It uses exact stdout and artifact equality. The fixture validates raw UUID spelling, equality with the header, and stability before projecting random identity into booleans. The artifact retains event order and persistence/file-presence values. Returning an empty string from the shared `getSessionID` callback compiles, fails both Go guards, and fails the scenario.
+- `print/05-print-extension-session-id` compares three real Pi/Ompig pairs. It uses exact stdout and artifact equality. The fixture validates raw UUID spelling, equality with the header, and stability before projecting random identity into booleans. The artifact retains event order and persistence/file-presence values. Returning an empty string from the shared `getSessionID` callback compiles, fails both Go guards, and fails the scenario.
 - `TestContextSessionIdentityAcrossSDKs` is red before the SDK fix: seven native-SDK realizations return empty IDs/leaves; Rust also returns empty file paths, while Go/Python retain a stale path after an in-memory replacement. It passes after the fix for the native reference, Go/Node/Rust/Python isolated, Go/Node/Rust/Python packed, and fused Go.
 - `TestRegistrySessionFacadesAcrossSDKs` and `TestConformance_TransportsMatch` pass alongside the new row. This distinguishes the existing working facade from the broken convenience accessors.
 
@@ -65,7 +65,7 @@ Passing checks:
 
 - `make generate` and `make normalization-inventory`.
 - `make set-version VERSION=0.3.0` to refresh the three local SDK checksums without changing the release version.
-- `go test ./cmd/pig ./test/extension-conformance -count=1`, plus race-enabled runs of the three new regression tests.
+- `go test ./cmd/ompig ./test/extension-conformance -count=1`, plus race-enabled runs of the three new regression tests.
 - `go test ./...` in `extensions/sdk`, and `cargo test --quiet` in `extensions/sdk-rs`.
 - `make parity-family FAMILY=print` with the corrected installed tmux on PATH.
 - Three-pair cross-family probes: `03-json-extension-no-ui`, `16-resumed-session-identity`, `18-rpc-session-replacement-cancel`, `28-rpc-extension-has-ui`, and `36-model-registry-session-manager`.
@@ -82,4 +82,4 @@ Whole-repository gates remain blocked by baseline obligations, not accepted skip
 - `go fix -diff ./...` reports existing modernization suggestions in `telemetry` and `agent/harness/runtime`; it proposes no change to this slice's files.
 - The standalone Python test suite requires pytest >=9.1.1, which is not installed in the selected Python environment. No tool was installed without approval. Python's real isolated and packed host/SDK conformance passes; that does not claim the standalone pytest suite passed.
 
-The unprompted RPC probe also observes the existing EOF shutdown-event difference: Pi records `session_shutdown`, while PiG does not deliver it to the subprocess extension. The identity remains correct. This observation is handed to the lead separately; this slice does not claim RPC EOF lifecycle closure.
+The unprompted RPC probe also observes the existing EOF shutdown-event difference: Pi records `session_shutdown`, while Ompig does not deliver it to the subprocess extension. The identity remains correct. This observation is handed to the lead separately; this slice does not claim RPC EOF lifecycle closure.

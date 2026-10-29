@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 const inventoryPath = "../../interfaces/upstream-v" + coding.UpstreamVersion + ".json"
@@ -48,7 +48,7 @@ func TestGenerateIsDeterministicAndClassifiesEverySelectedMember(t *testing.T) {
 		if len(entry.Shape) == 0 || entry.ShapeHash == "" {
 			t.Errorf("member %s lacks exact generated shape", entry.ID)
 		}
-		if len(entry.Realizations) == 0 || len(entry.PigTargets) == 0 {
+		if len(entry.Realizations) == 0 || len(entry.OmpigTargets) == 0 {
 			t.Errorf("member %s has no target or realization disposition", entry.ID)
 		}
 		for _, realization := range entry.Realizations {

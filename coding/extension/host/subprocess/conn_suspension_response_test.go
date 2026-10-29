@@ -11,7 +11,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // A runtime sends a command's suspension, then its response. The host applies the suspension after the calls received before it, while a response is routed directly. The request must not return before the suspension it followed was applied, or a command that Pi's exit would have cut off answers after stdin ended.

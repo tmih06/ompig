@@ -18,7 +18,7 @@ import (
 // no external program. Each case checks the deadline Pi requests, but only the timeout case fires it, so the host's speed at starting the
 // helper decides nothing.
 func TestClipboardCommandHelper(t *testing.T) {
-	switch os.Getenv("PIG_CLIPBOARD_HELPER") {
+	switch os.Getenv("OMPIG_CLIPBOARD_HELPER") {
 	case "":
 		t.Skip("helper process only")
 	case "binary":
@@ -41,7 +41,7 @@ func TestClipboardCommandHelper(t *testing.T) {
 
 func clipboardHelper(t *testing.T, mode string, options clipboardCommandOptions) ([]byte, bool) {
 	t.Helper()
-	t.Setenv("PIG_CLIPBOARD_HELPER", mode)
+	t.Setenv("OMPIG_CLIPBOARD_HELPER", mode)
 	return runClipboardCommand(os.Args[0], []string{"-test.run=^TestClipboardCommandHelper$"}, options)
 }
 
@@ -57,7 +57,7 @@ func TestRunClipboardCommandMatchesPi(t *testing.T) {
 		if _, ok := clipboardHelper(t, "fail", clipboardCommandOptions{}); ok {
 			t.Fatal("exit status 1 reported success")
 		}
-		if _, ok := runClipboardCommand("pig-clipboard-command-does-not-exist", nil, clipboardCommandOptions{}); ok {
+		if _, ok := runClipboardCommand("ompig-clipboard-command-does-not-exist", nil, clipboardCommandOptions{}); ok {
 			t.Fatal("missing command reported success")
 		}
 	})
@@ -70,7 +70,7 @@ func TestRunClipboardCommandMatchesPi(t *testing.T) {
 	})
 	t.Run("times out", func(t *testing.T) {
 		fire := controlClipboardCommandDeadline(t, 200*time.Millisecond)
-		t.Setenv("PIG_CLIPBOARD_HELPER", "hang")
+		t.Setenv("OMPIG_CLIPBOARD_HELPER", "hang")
 		done := make(chan bool, 1)
 		go func() {
 			_, ok := runClipboardCommand(os.Args[0], []string{"-test.run=^TestClipboardCommandHelper$"}, clipboardCommandOptions{timeout: 200 * time.Millisecond})

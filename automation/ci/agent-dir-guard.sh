@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Prove a test run leaves the agent directories its environment names untouched.
-#   agent-dir-guard.sh seed <root>    create <root>/{agent,pi-agent,pig-home,pi-home} holding sentinel credentials, settings and trust files, record their manifest, and print `export` lines for the four selecting variables
+#   agent-dir-guard.sh seed <root>    create <root>/{agent,pi-agent,ompig-home,pi-home} holding sentinel credentials, settings and trust files, record their manifest, and print `export` lines for the four selecting variables
 #   agent-dir-guard.sh check <root>   fail when any file or directory under <root> was added, removed, changed or modified since seed, including a lock directory a test created and removed again
-# A lane exports PIG_CODING_AGENT_DIR for its own pig process and every child inherits it, so a test that does not replace it writes the lane's real credentials. `make test` runs under seeded directories, which turns that leak into a named failure.
+# A lane exports OMPIG_CODING_AGENT_DIR for its own ompig process and every child inherits it, so a test that does not replace it writes the lane's real credentials. `make test` runs under seeded directories, which turns that leak into a named failure.
 set -euo pipefail
 
 usage() { echo "usage: agent-dir-guard.sh seed|check <root>" >&2; exit 2; }
@@ -37,7 +37,7 @@ case "$mode" in
   seed)
     # Create everything private to the user with the umask, not a chmod afterwards: Git Bash on Windows refuses chmod on a directory in the temporary directory ("Permission denied").
     umask 077
-    for dir in agent pi-agent pig-home pi-home; do
+    for dir in agent pi-agent ompig-home pi-home; do
       mkdir -p "$root/$dir"
       printf '%s\n' "$sentinel_auth" >"$root/$dir/auth.json"
       printf '{"theme":"dark"}\n' >"$root/$dir/settings.json"
@@ -48,8 +48,8 @@ case "$mode" in
     # Backdate the tree, then the manifest, so check can list every entry modified after seed with find -newer whatever the timestamp granularity.
     find "$root" -exec touch -t 200001010000 {} +
     touch -t 200001010001 "$manifest"
-    printf 'export PIG_CODING_AGENT_DIR=%q PI_CODING_AGENT_DIR=%q PIG_HOME=%q PI_HOME=%q\n' "$root/agent" "$root/pi-agent" "$root/pig-home" "$root/pi-home"
-    printf 'unset PIG_CODING_AGENT_SESSION_DIR PI_CODING_AGENT_SESSION_DIR\n'
+    printf 'export OMPIG_CODING_AGENT_DIR=%q PI_CODING_AGENT_DIR=%q OMPIG_HOME=%q PI_HOME=%q\n' "$root/agent" "$root/pi-agent" "$root/ompig-home" "$root/pi-home"
+    printf 'unset OMPIG_CODING_AGENT_SESSION_DIR PI_CODING_AGENT_SESSION_DIR\n'
     ;;
   check)
     [[ -f $manifest ]] || { echo "[agent-dir-guard] no manifest for $root; run seed first" >&2; exit 2; }
@@ -59,12 +59,12 @@ case "$mode" in
     # A directory whose entries were created and removed again, or a file rewritten with the same bytes, keeps its digest but not its modification time.
     touched=$(find "$root" -newer "$manifest" -print)
     if [[ -n $drift || -n $touched ]]; then
-      echo "[agent-dir-guard] a test run modified the agent directories named by PIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, PIG_HOME or PI_HOME (paths relative to $root):" >&2
+      echo "[agent-dir-guard] a test run modified the agent directories named by OMPIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, OMPIG_HOME or PI_HOME (paths relative to $root):" >&2
       {
         [[ -z $drift ]] || printf '%s\n' "$drift" | awk '/^[<>]/ {print "  " ($1 == "<" ? "removed or changed:" : "added or changed:") " " $3}'
         [[ -z $touched ]] || printf '%s\n' "$touched" | while IFS= read -r path; do printf '  modified: .%s\n' "${path#"$root"}"; done
       } | LC_ALL=C sort -u >&2
-      echo "[agent-dir-guard] every test that reaches the agent directory must set PIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, PIG_HOME and PI_HOME to t.TempDir(); a package's TestMain gets this from testenv.ScopeTempDir." >&2
+      echo "[agent-dir-guard] every test that reaches the agent directory must set OMPIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, OMPIG_HOME and PI_HOME to t.TempDir(); a package's TestMain gets this from testenv.ScopeTempDir." >&2
       exit 1
     fi
     ;;

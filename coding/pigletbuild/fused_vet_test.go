@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
 )
 
 func TestBuildNativeArtifactRejectsFusedProcessHazards(t *testing.T) {
@@ -26,9 +26,9 @@ func TestBuildNativeArtifactRejectsFusedProcessHazards(t *testing.T) {
 		{name: "chdir", source: "package hazard\nimport \"os\"\nfunc Extension() { _ = os.Chdir(\"/\") }\n", symbol: "os.Chdir"},
 		{name: "fatal", source: "package hazard\nimport \"log\"\nfunc Extension() { log.Fatal(\"stop\") }\n", symbol: "log.Fatal"},
 		{name: "print", source: "package hazard\nimport \"fmt\"\nfunc Extension() { fmt.Println(\"noise\") }\n", symbol: "fmt.Println"},
-		{name: "factory type", source: "package hazard\nimport \"github.com/MichaelKinsy/PiG/coding/extension\"\nvar _ extension.ExtensionFactory\nfunc Extension() {}\n", symbol: "coding/extension.ExtensionFactory"},
-		{name: "factory loader", source: "package hazard\nimport \"github.com/MichaelKinsy/PiG/coding/extension/factoryload\"\nfunc Extension() { _, _ = factoryload.LoadExtensionFromFactory(nil, \"\", nil, nil, \"\") }\n", symbol: "factoryload.LoadExtensionFromFactory"},
-		{name: "built-in table", source: "package hazard\nimport \"github.com/MichaelKinsy/PiG/coding/extension/builtin\"\nfunc Extension() { _ = builtin.All(builtin.Options{}) }\n", symbol: "builtin.All"},
+		{name: "factory type", source: "package hazard\nimport \"github.com/tmih06/ompig/coding/extension\"\nvar _ extension.ExtensionFactory\nfunc Extension() {}\n", symbol: "coding/extension.ExtensionFactory"},
+		{name: "factory loader", source: "package hazard\nimport \"github.com/tmih06/ompig/coding/extension/factoryload\"\nfunc Extension() { _, _ = factoryload.LoadExtensionFromFactory(nil, \"\", nil, nil, \"\") }\n", symbol: "factoryload.LoadExtensionFromFactory"},
+		{name: "built-in table", source: "package hazard\nimport \"github.com/tmih06/ompig/coding/extension/builtin\"\nfunc Extension() { _ = builtin.All(builtin.Options{}) }\n", symbol: "builtin.All"},
 		{name: "stdout", source: "package hazard\nimport (\"fmt\"; \"os\")\nfunc Extension() { _, _ = fmt.Fprintln(os.Stdout, \"noise\") }\n", symbol: "os.Stdout"},
 	}
 	for _, test := range tests {
@@ -39,7 +39,7 @@ func TestBuildNativeArtifactRejectsFusedProcessHazards(t *testing.T) {
 				Kind: pigletartifact.ComponentKindExtension, Name: "hazard",
 				Realization: pigletartifact.RealizationFused, Materialization: pigletartifact.MaterializationBinary,
 			}}}
-			_, err := buildNativeArtifact(context.Background(), pigSource{Root: t.TempDir()}, &piglet.Piglet{Name: "hazard"}, []subprocess.CellSpec{cell}, plan, nil, Options{}, filepath.Join(t.TempDir(), "pig-hazard"), &bytes.Buffer{}, &bytes.Buffer{})
+			_, err := buildNativeArtifact(context.Background(), ompigSource{Root: t.TempDir()}, &ompiglet.Ompiglet{Name: "hazard"}, []subprocess.CellSpec{cell}, plan, nil, Options{}, filepath.Join(t.TempDir(), "ompig-hazard"), &bytes.Buffer{}, &bytes.Buffer{})
 			if err == nil || !strings.Contains(err.Error(), fusedProcessHazardDiagnostic) || !strings.Contains(err.Error(), test.symbol) {
 				t.Fatalf("build error = %v, want %s naming %s", err, fusedProcessHazardDiagnostic, test.symbol)
 			}

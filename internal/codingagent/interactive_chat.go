@@ -8,15 +8,15 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/markdowntransform"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 func (m *InteractiveMode) appendToChat(comp tui.Component) {
@@ -290,7 +290,7 @@ func (m *InteractiveMode) showNewVersionNotification(release LatestPiRelease) {
 	if release.Note != nil {
 		note = jsstring.Trim(*release.Note)
 	}
-	// pig divergence (D39): Pi links its fixed pi.dev changelog; a release note that is a bare URL is pig's changelog link.
+	// ompig divergence (D39): Pi links its fixed pi.dev changelog; a release note that is a bare URL is ompig's changelog link.
 	changelogURL, note := splitBinaryUpdateNotes(note)
 	blocks := []tui.Component{tui.NewThemedText(func() string { return binaryUpdateNoticeBody(tui.ActiveTheme(), release.Version, AppName+" update") }, 1, 0)}
 	if note != "" {
@@ -315,7 +315,7 @@ func (m *InteractiveMode) showNewVersionNotification(release LatestPiRelease) {
 }
 
 // splitBinaryUpdateNotes separates a manifest note into a changelog URL and a
-// release note. PiG's release manifest carries the release page URL as its
+// release note. Ompig's release manifest carries the release page URL as its
 // note; that URL is the changelog link, so it is not repeated as a note block.
 // Any other text is a release note and names no changelog.
 func splitBinaryUpdateNotes(notes string) (changelogURL, note string) {
@@ -349,7 +349,7 @@ func (m *InteractiveMode) ShowPackageUpdateNotification(packages []string) {
 }
 
 // finishPackageUpdateCheck shows the startup package update notice. On Windows
-// it then restores pig's title, because npm can overwrite the shared console
+// it then restores ompig's title, because npm can overwrite the shared console
 // title while it checks package versions. Mirrors upstream run(), which
 // restores the title in the check's finally on win32.
 func (m *InteractiveMode) finishPackageUpdateCheck(goos string, updates []string) {
@@ -437,7 +437,7 @@ func (m *InteractiveMode) suggestBugReport() {
 		return
 	}
 	m.bugReportHintShown = true
-	m.chatContainer.Add(themedNotice("muted", "If this looks like a pig bug, /bug sends a report to the developers.", m.outputPad))
+	m.chatContainer.Add(themedNotice("muted", "If this looks like a ompig bug, /bug sends a report to the developers.", m.outputPad))
 	m.tuiInst.RequestRender()
 }
 
@@ -451,7 +451,7 @@ func (m *InteractiveMode) showError(msg string) {
 	if m.tuiInst != nil {
 		m.tuiInst.RequestRender()
 	}
-	// pig additive (D95): a failure may be a cell or runtime file another pig pruned, so check where errors are shown.
+	// ompig additive (D95): a failure may be a cell or runtime file another ompig pruned, so check where errors are shown.
 	m.maybeShowInstallChangeWarning()
 }
 

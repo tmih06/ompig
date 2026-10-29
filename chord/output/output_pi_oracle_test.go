@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type outputSkipped struct {
@@ -220,7 +220,7 @@ func TestOutputBufferMatchesPi(t *testing.T) {
 			if !same {
 				differing++
 				if differing <= 6 {
-					t.Errorf("program %d op %d (%s) limits %+v\n  ops %s\n  Pi  %s %v stored %d\n  Pig %v %v stored %d", i, j, op.Op, program.Limits, describeOutputOps(program.Ops[:j+1]), want.OK, ptrOutputText(want.Err), want.Stored, got, gotErr, buffer.StoredBytes())
+					t.Errorf("program %d op %d (%s) limits %+v\n  ops %s\n  Pi  %s %v stored %d\n  Ompig %v %v stored %d", i, j, op.Op, program.Limits, describeOutputOps(program.Ops[:j+1]), want.OK, ptrOutputText(want.Err), want.Stored, got, gotErr, buffer.StoredBytes())
 				}
 			}
 		}

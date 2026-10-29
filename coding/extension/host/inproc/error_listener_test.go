@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // fireErrorForTest is a thin wrapper around the test-only seam in
@@ -21,7 +21,7 @@ func fireErrorForTest(r *inproc.Runner, err *extension.ExtensionError) {
 func unmarshalJSON(data []byte, v any) error { return json.Unmarshal(data, v) }
 
 // TestAddErrorListener_NilIsNoOp: nil listener registration is safe and
-// returns a no-op unsubscriber. Defensive: pig extension authors may
+// returns a no-op unsubscriber. Defensive: ompig extension authors may
 // pass an unset variable.
 func TestAddErrorListener_NilIsNoOp(t *testing.T) {
 	r := inproc.NewRunner(nil, ".")

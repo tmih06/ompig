@@ -3,7 +3,7 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // compaction.ts:331 trims the summary with String.prototype.trim: U+FEFF and Unicode spaces go, U+0085 stays, and a summary left empty is no summary.

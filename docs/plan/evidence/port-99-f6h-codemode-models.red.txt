@@ -3,7 +3,7 @@
 --- FAIL: TestExtensionServesModelsUnlessDisabled (0.00s)
     models_global_test.go:134: the extension does not declare `models` by default
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode	0.458s
+FAIL	github.com/tmih06/ompig/coding/extension/builtin/codemode	0.458s
 FAIL
 --- FAIL: TestUpstreamCodemodeModels (0.67s)
     --- FAIL: TestUpstreamCodemodeModels/declares_models_only_for_the_session's_own_codemode_tool (0.01s)

@@ -17,16 +17,16 @@ import (
 	"sync"
 	"sync/atomic"
 
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/internal/detach"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/internal/jsclock"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/internal/detach"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/internal/jsclock"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 type anyTaskRecord = durable.TaskRecord[durable.JsonValue, durable.JsonValue, durable.JsonValue]
@@ -2130,7 +2130,7 @@ func (s *TaskScheduler) start(reserved reservation) {
 	if beforeInvocation != nil {
 		beforeInvocation(s, invocation)
 	}
-	// pig divergence (D181): an invocation runs on its own goroutine, so the commits of a job nothing awaits (a conversation-owned
+	// ompig divergence (D181): an invocation runs on its own goroutine, so the commits of a job nothing awaits (a conversation-owned
 	// task its creator does not wait for) reach the Session line in an order set by goroutine scheduling; Pi's microtask hops
 	// fix that order against the generation chain. The final state is the same; commit sequence numbers can differ.
 	go func() {

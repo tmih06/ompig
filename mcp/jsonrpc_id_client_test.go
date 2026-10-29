@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // client.ts handleCancelled aborts `this.incoming.get(params.requestId)`: a Map lookup, so a server request with id -0 is cancelled by requestId 0

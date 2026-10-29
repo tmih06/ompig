@@ -12,7 +12,7 @@ import (
 
 // probeExecve is the errno of the execve of path by a child whose working
 // directory is cwd, and whether the kernel could be asked, for a file whose
-// fate only the kernel knows: one that PiG has no permission to read (the kernel
+// fate only the kernel knows: one that Ompig has no permission to read (the kernel
 // reads the head of the file it executes whatever its mode), or an ELF file
 // whose program header table is larger than a page (Linux 6.17 removed that
 // limit). The probe executes path in a child that is traced from its start,

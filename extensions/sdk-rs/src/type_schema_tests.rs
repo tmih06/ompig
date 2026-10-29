@@ -302,12 +302,12 @@ fn type_matches_pi() {
     assert!(engine_cases > 0 && engine_cases < cases.len());
 }
 
-/// Every case the host's type engine answers, one by one through a host: the socket PIG_EXT_SOCKET names, which `go test ./test/extension-conformance -run
+/// Every case the host's type engine answers, one by one through a host: the socket OMPIG_EXT_SOCKET names, which `go test ./test/extension-conformance -run
 /// TestTypeEngineVectorsThroughTheHost` serves with the host's own handler of the type.engine call. Without a host the test passes without running a case.
 #[test]
 fn engine_cases_through_the_host() {
-    if std::env::var_os("PIG_EXT_SOCKET").is_none() {
-        eprintln!("PIG_EXT_SOCKET is not set: no host to run the engine cases through");
+    if std::env::var_os("OMPIG_EXT_SOCKET").is_none() {
+        eprintln!("OMPIG_EXT_SOCKET is not set: no host to run the engine cases through");
         return;
     }
     let cases: Vec<Value> = vector_cases().into_iter().filter(needs_host).collect();
@@ -384,7 +384,7 @@ fn a_schema_holds_a_bigint_and_only_writing_it_as_json_fails() {
     assert_eq!(crate::type_engine::decode_wire(&wire, &[]).unwrap(), TValue::Schema(literal));
 }
 
-/// Time of `Type::pick` through a host (the socket PIG_EXT_SOCKET names); run by TestTypePickRoundTripReport: `cargo test --lib engine_pick_round_trip -- --ignored --nocapture`.
+/// Time of `Type::pick` through a host (the socket OMPIG_EXT_SOCKET names); run by TestTypePickRoundTripReport: `cargo test --lib engine_pick_round_trip -- --ignored --nocapture`.
 #[test]
 #[ignore]
 fn engine_pick_round_trip() {

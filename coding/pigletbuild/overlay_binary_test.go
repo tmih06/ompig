@@ -6,14 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 // overlayHelloExtension is the Binary's fused extension; its flag shows in --help when the extension loads.
 const overlayHelloExtension = `package hello
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	ext := sdk.New("hello")
@@ -31,7 +31,7 @@ const overlayFlagExtension = `export default function (pi) {
 func writeOverlayFixture(t *testing.T, root string) {
 	t.Helper()
 	files := map[string]string{
-		filepath.Join(root, "hello", "go.mod"):       "module example.com/overlay/hello\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n",
+		filepath.Join(root, "hello", "go.mod"):       "module example.com/overlay/hello\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n",
 		filepath.Join(root, "hello", "extension.go"): overlayHelloExtension,
 		filepath.Join(root, "accepting.yaml"):        "name: accepting\nmodel:\n  provider: test-faux\n  name: faux-1\nstrip:\n  tools: [ls]\nbuild:\n  allowOverlays: true\nextensions:\n  - name: hello\n    origins: [local:./hello]\n",
 		filepath.Join(root, "closed.yaml"):           "name: closed\nmodel:\n  provider: test-faux\n  name: faux-1\nstrip:\n  tools: [ls]\nextensions:\n  - name: hello\n    origins: [local:./hello]\n",
@@ -48,9 +48,9 @@ func writeOverlayFixture(t *testing.T, root string) {
 	}
 }
 
-// A Piglet Binary built from a Piglet with build.allowOverlays accepts --piglet and PIG_PIGLET_PATH as an overlay on its
-// baked Piglet, and one built without it refuses them and names the setting. Every forbidden override is refused with the
-// field and the Binary named, and a refused overlay never starts the Binary's own Piglet.
+// A Ompiglet Binary built from a Ompiglet with build.allowOverlays accepts --ompiglet and OMPIG_OMPIGLET_PATH as an overlay on its
+// baked Ompiglet, and one built without it refuses them and names the setting. Every forbidden override is refused with the
+// field and the Binary named, and a refused overlay never starts the Binary's own Ompiglet.
 func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 	root := t.TempDir()
 	writeOverlayFixture(t, root)
@@ -59,11 +59,11 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	accepting := buildNativeBinary(t, root, filepath.Join(root, "accepting.yaml"), "pig-accepting", "--sign-key", keyPath)
-	closed := buildNativeBinary(t, root, filepath.Join(root, "closed.yaml"), "pig-closed")
+	accepting := buildNativeBinary(t, root, filepath.Join(root, "accepting.yaml"), "ompig-accepting", "--sign-key", keyPath)
+	closed := buildNativeBinary(t, root, filepath.Join(root, "closed.yaml"), "ompig-closed")
 	add := filepath.Join(root, "overlays", "add.yaml")
 
-	// The baked Piglet is the embedded piglet.yaml; the same words also appear in the Binary's messages and docs, so match its
+	// The baked Ompiglet is the embedded ompiglet.yaml; the same words also appear in the Binary's messages and docs, so match its
 	// YAML shape.
 	const bakedSetting = "build:\n    allowOverlays: true\n"
 	baked, err := os.ReadFile(accepting)
@@ -71,7 +71,7 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !strings.Contains(string(baked), bakedSetting) {
-		t.Fatal("the accepting Binary does not carry build.allowOverlays in its baked Piglet")
+		t.Fatal("the accepting Binary does not carry build.allowOverlays in its baked Ompiglet")
 	}
 	closedBytes, err := os.ReadFile(closed)
 	if err != nil {
@@ -81,8 +81,8 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 		t.Fatal("a Binary built without the setting carries it")
 	}
 	var stdout, stderr strings.Builder
-	if code := piglet.RunCommand([]string{"piglet", "verify", accepting}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Signature: signed by "+keyID) {
-		t.Fatalf("pig piglet verify: exit %d\n%s%s", code, stdout.String(), stderr.String())
+	if code := ompiglet.RunCommand([]string{"ompiglet", "verify", accepting}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Signature: signed by "+keyID) {
+		t.Fatalf("ompig ompiglet verify: exit %d\n%s%s", code, stdout.String(), stderr.String())
 	}
 
 	assertHelp := func(t *testing.T, output string, wantOverlay bool) {
@@ -108,15 +108,15 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 		}
 		assertHelp(t, output, false)
 	})
-	t.Run("--piglet lays the overlay over the baked Piglet", func(t *testing.T) {
-		code, output := startPigletBinary(t, accepting, "--piglet", add, "--help")
+	t.Run("--ompiglet lays the overlay over the baked Ompiglet", func(t *testing.T) {
+		code, output := startPigletBinary(t, accepting, "--ompiglet", add, "--help")
 		if code != 0 {
 			t.Fatalf("exit %d\n%s", code, output)
 		}
 		assertHelp(t, output, true)
 	})
-	t.Run("PIG_PIGLET_PATH lays the overlay over the baked Piglet", func(t *testing.T) {
-		t.Setenv("PIG_PIGLET_PATH", add)
+	t.Run("OMPIG_OMPIGLET_PATH lays the overlay over the baked Ompiglet", func(t *testing.T) {
+		t.Setenv("OMPIG_OMPIGLET_PATH", add)
 		code, output := startPigletBinary(t, accepting, "--help")
 		if code != 0 {
 			t.Fatalf("exit %d\n%s", code, output)
@@ -124,9 +124,9 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 		assertHelp(t, output, true)
 	})
 	t.Run("the baked default model still answers with an overlay", func(t *testing.T) {
-		t.Setenv("PIG_TEST_FAUX", "1")
-		t.Setenv("PIG_OFFLINE", "1")
-		code, output := startPigletBinary(t, accepting, "--piglet", add, "--no-session", "-p", "What is 20+22?")
+		t.Setenv("OMPIG_TEST_FAUX", "1")
+		t.Setenv("OMPIG_OFFLINE", "1")
+		code, output := startPigletBinary(t, accepting, "--ompiglet", add, "--no-session", "-p", "What is 20+22?")
 		if code != 0 || !strings.Contains(output, "42") {
 			t.Fatalf("exit %d\n%s", code, output)
 		}
@@ -137,9 +137,9 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 		env  string
 		args []string
 	}{
-		{"--piglet", "", []string{"--piglet", add, "--help"}},
-		{"PIG_PIGLET_PATH", "PIG_PIGLET_PATH", []string{"--help"}},
-		{"PIG_PIGLET_NAME", "PIG_PIGLET_NAME", []string{"--help"}},
+		{"--ompiglet", "", []string{"--ompiglet", add, "--help"}},
+		{"OMPIG_OMPIGLET_PATH", "OMPIG_OMPIGLET_PATH", []string{"--help"}},
+		{"OMPIG_OMPIGLET_NAME", "OMPIG_OMPIGLET_NAME", []string{"--help"}},
 	} {
 		t.Run("closed Binary refuses "+selector.name, func(t *testing.T) {
 			if selector.env != "" {
@@ -149,7 +149,7 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 			if code != 1 {
 				t.Fatalf("exit %d, want 1\n%s", code, output)
 			}
-			for _, want := range []string{"this Piglet Binary (closed)", "does not accept --piglet overlays", "build.allowOverlays: true"} {
+			for _, want := range []string{"this Ompiglet Binary (closed)", "does not accept --ompiglet overlays", "build.allowOverlays: true"} {
 				if !strings.Contains(output, want) {
 					t.Fatalf("refusal lacks %q:\n%s", want, output)
 				}
@@ -170,34 +170,34 @@ func TestPigletBinaryAcceptsOverlaysOnlyWhenItsPigletSaysSo(t *testing.T) {
 		want []string
 	}{
 		{"replacing the Binary's extension", "name: x\nextensions:\n  - name: hello\n    origins: [local:./flag.mjs]\n",
-			[]string{`extensions[hello]`, `Piglet Binary "accepting"`, "cannot replace it"}},
+			[]string{`extensions[hello]`, `Ompiglet Binary "accepting"`, "cannot replace it"}},
 		{"removing the Binary's extension", "name: x\nextends:\n  source: local:./mid.yaml\n  remove:\n    extensions: [hello]\n",
-			[]string{`extensions[hello]`, `Piglet Binary "accepting"`, "cannot remove it"}},
+			[]string{`extensions[hello]`, `Ompiglet Binary "accepting"`, "cannot remove it"}},
 		{"setting the frontend slot", "name: x\nslots:\n  frontend:\n    member: ./tern\n",
-			[]string{"slots.frontend", `Piglet Binary "accepting"`}},
+			[]string{"slots.frontend", `Ompiglet Binary "accepting"`}},
 		{"setting the system prompt", "name: x\nsystemPrompt:\n  text: other\n",
-			[]string{"systemPrompt", `Piglet Binary "accepting"`, "--append-system-prompt"}},
+			[]string{"systemPrompt", `Ompiglet Binary "accepting"`, "--append-system-prompt"}},
 		{"widening ambient discovery", "name: x\ndiscovery:\n  extensions: [workspace]\n",
-			[]string{"discovery", `Piglet Binary "accepting"`, "cannot add ambient Resource scopes"}},
+			[]string{"discovery", `Ompiglet Binary "accepting"`, "cannot add ambient Resource scopes"}},
 		{"re-enabling a stripped built-in", "name: x\nextends:\n  source: local:./mid.yaml\n  allowWiden: true\n  remove:\n    strip:\n      tools: [ls]\n",
-			[]string{`strip.tools: "ls" is stripped by`, `Piglet Binary "accepting"`, "cannot re-enable it"}},
+			[]string{`strip.tools: "ls" is stripped by`, `Ompiglet Binary "accepting"`, "cannot re-enable it"}},
 	} {
 		t.Run("refuses "+tc.name, func(t *testing.T) {
 			overlay := filepath.Join(root, "overlays", "refused.yaml")
 			if err := os.WriteFile(overlay, []byte(tc.body), 0o644); err != nil {
 				t.Fatal(err)
 			}
-			code, output := startPigletBinary(t, accepting, "--piglet", overlay, "--help")
+			code, output := startPigletBinary(t, accepting, "--ompiglet", overlay, "--help")
 			if code != 1 {
 				t.Fatalf("exit %d, want 1\n%s", code, output)
 			}
-			for _, want := range append(tc.want, "the requested Piglet could not be loaded") {
+			for _, want := range append(tc.want, "the requested Ompiglet could not be loaded") {
 				if !strings.Contains(output, want) {
 					t.Fatalf("output lacks %q:\n%s", want, output)
 				}
 			}
 			if strings.Contains(output, "Usage:") {
-				t.Fatalf("a refused overlay fell back to the Binary's own Piglet:\n%s", output)
+				t.Fatalf("a refused overlay fell back to the Binary's own Ompiglet:\n%s", output)
 			}
 		})
 	}

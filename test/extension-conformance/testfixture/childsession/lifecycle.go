@@ -10,7 +10,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // hangTool is the custom tool of the lifecycle rows: it announces that it started and then waits for the cancellation of its context, which is what aborting the session or closing the connection does to a running tool. marker, when set, names a file it writes once cancelled.

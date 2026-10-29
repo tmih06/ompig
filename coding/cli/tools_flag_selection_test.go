@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // `--tools bash,read` lists bash before read in the system prompt and the provider's tools, and hands the Session the initial names in that order: the explicit list keeps the caller's order, the tools its patterns match follow in registry order, `--exclude-tools` removes names from both lists, and `--no-tools` starts with none.

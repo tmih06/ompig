@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 func firstTimeSetupText(c *FirstTimeSetupComponent) string {
@@ -23,7 +23,7 @@ func firstTimeSetupText(c *FirstTimeSetupComponent) string {
 func firstTimeSetupExtensionSprite(t *testing.T) {
 	t.Helper()
 	definition, err := extension.ValidateSpriteDefinition(extension.SpriteDefinition{
-		ID: "blue-pig", Name: "Blue PiG", Tagline: "Registered by an extension.",
+		ID: "blue-ompig", Name: "Blue Ompig", Tagline: "Registered by an extension.",
 		Mascot: []string{
 			"................", "...OOOO..OOOO...", "...OeeO..OeeO...", "..OeePPPPPPeeO..",
 			".OPPPpPPPPpPPPO.", ".OPPWWPPPPWWPPO.", ".OPPWKPPPPKWPPO.", ".OPbbPssssPbbPO.",
@@ -59,9 +59,9 @@ const (
 	setupEsc   = "\x1b"
 )
 
-// The dialog's logo is the pig head, never Pi's SETUP_LOGO_LINES; the sprite step previews the highlighted sprite's head.
+// The dialog's logo is the ompig head, never Pi's SETUP_LOGO_LINES; the sprite step previews the highlighted sprite's head.
 func TestFirstTimeSetupLogoIsThePigHeadAndPreviewsTheSprite(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 	c := NewFirstTimeSetupComponent(FirstTimeSetupOptions{})
 	mode := tui.ActiveTheme().GetColorMode()
@@ -82,7 +82,7 @@ func TestFirstTimeSetupLogoIsThePigHeadAndPreviewsTheSprite(t *testing.T) {
 
 // Theme step previews live and Esc skips setup without submitting.
 func TestFirstTimeSetupThemePreviewAndEscSkip(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 	var previews []string
 	cancelled, submitted := false, false
@@ -109,7 +109,7 @@ func TestFirstTimeSetupThemePreviewAndEscSkip(t *testing.T) {
 
 // The sprite step follows the theme step, lists the built-in sprites then extension sprites, and submits the choice.
 func TestFirstTimeSetupSpriteStepListsExtensionSpritesAndSubmits(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 	firstTimeSetupExtensionSprite(t)
 	var result *FirstTimeSetupResult
@@ -122,7 +122,7 @@ func TestFirstTimeSetupSpriteStepListsExtensionSpritesAndSubmits(t *testing.T) {
 	}
 	// The list scrolls: each sprite shows when highlighted, the built-in ones first, then the extension's.
 	all := piglogin.All()
-	if all[len(all)-1].ID != "blue-pig" {
+	if all[len(all)-1].ID != "blue-ompig" {
 		t.Fatalf("extension sprite is not after the built-in sprites: %v", all)
 	}
 	for i := range len(all) {
@@ -150,7 +150,7 @@ func TestFirstTimeSetupSpriteStepListsExtensionSpritesAndSubmits(t *testing.T) {
 	}
 	c.HandleInput(setupDown)
 	c.HandleInput(setupEnter)
-	want := FirstTimeSetupResult{Theme: "dark", Sprite: "blue-pig", ShareAnalytics: false}
+	want := FirstTimeSetupResult{Theme: "dark", Sprite: "blue-ompig", ShareAnalytics: false}
 	if result == nil || *result != want {
 		t.Fatalf("result = %+v, want %+v", result, want)
 	}
@@ -171,11 +171,11 @@ func (keysStartupTerminal) Write(string) {}
 // saves the theme, the analytics opt-in and the highlighted sprite.
 // Pi: packages/coding-agent/src/core/settings-manager.ts:1151 (SettingsManager.getEnableAnalytics).
 func TestShowFirstTimeSetupSavesTheChoiceBeforeTheTUI(t *testing.T) {
-	pigHome, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome, cwd := t.TempDir(), t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	piglogin.Refresh()
 	t.Cleanup(func() { tui.SetTheme("dark"); piglogin.Refresh() })
-	agentDir := filepath.Join(pigHome, "agent")
+	agentDir := filepath.Join(ompigHome, "agent")
 	settings := NewSettingsManager(cwd, agentDir)
 	sprites := piglogin.All()
 	kratos := slices.IndexFunc(sprites, func(v piglogin.Variant) bool { return v.ID == "kratos" })
@@ -197,7 +197,7 @@ func TestShowFirstTimeSetupSavesTheChoiceBeforeTheTUI(t *testing.T) {
 	if !settings.GetEnableAnalytics() {
 		t.Fatal("analytics opt-in was not saved")
 	}
-	if got := piglogin.LoadVariant(pigHome).ID; got != "kratos" {
+	if got := piglogin.LoadVariant(ompigHome).ID; got != "kratos" {
 		t.Fatalf("saved sprite = %q, want kratos", got)
 	}
 	if got := piglogin.Active().ID; got != "kratos" {
@@ -207,11 +207,11 @@ func TestShowFirstTimeSetupSavesTheChoiceBeforeTheTUI(t *testing.T) {
 
 // Esc skips setup: nothing is saved.
 func TestShowFirstTimeSetupSkipSavesNothing(t *testing.T) {
-	pigHome, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome, cwd := t.TempDir(), t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	piglogin.Refresh()
 	t.Cleanup(func() { tui.SetTheme("dark"); piglogin.Refresh() })
-	agentDir := filepath.Join(pigHome, "agent")
+	agentDir := filepath.Join(ompigHome, "agent")
 	result, err := showFirstTimeSetupWith(NewSettingsManager(cwd, agentDir), StartupUIOptions{AgentDir: agentDir}, tui.NewWithOutput(io.Discard, 100, 30), keysStartupTerminal{[]string{setupEnter, setupDown, setupEsc}})
 	if err != nil || result != nil {
 		t.Fatalf("result = %+v, err = %v", result, err)
@@ -219,15 +219,15 @@ func TestShowFirstTimeSetupSkipSavesNothing(t *testing.T) {
 	if SettingsFileExists(agentDir) {
 		t.Fatal("skipped setup wrote settings.json")
 	}
-	if _, err := os.Stat(piglogin.StatePath(pigHome)); err == nil {
+	if _, err := os.Stat(piglogin.StatePath(ompigHome)); err == nil {
 		t.Fatal("skipped setup saved a sprite")
 	}
 }
 
-// The pig in the dialog is the highlighted sprite on the sprite step and the chosen one after it, and the submitted ID is
+// The ompig in the dialog is the highlighted sprite on the sprite step and the chosen one after it, and the submitted ID is
 // the highlighted sprite's: choosing Kratos never saves another sprite or shows the default on the analytics step.
 func TestFirstTimeSetupKeepsTheHighlightedSpriteThroughAnalyticsAndSubmit(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 	var got *FirstTimeSetupResult
 	c := NewFirstTimeSetupComponent(FirstTimeSetupOptions{OnSubmit: func(r FirstTimeSetupResult) { got = &r }})
@@ -267,11 +267,11 @@ func TestFirstTimeSetupHintUsesLowercaseKeyText(t *testing.T) {
 // "Create your own..." in the sprite step shows how to create a sprite, keeps the active sprite and continues setup: it
 // starts no model turn and saves no sprite.
 func TestFirstTimeSetupCreateYourOwnShowsTheHintAndKeepsTheSprite(t *testing.T) {
-	pigHome, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome, cwd := t.TempDir(), t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	piglogin.Refresh()
 	t.Cleanup(func() { tui.SetTheme("dark"); piglogin.Refresh() })
-	agentDir := filepath.Join(pigHome, "agent")
+	agentDir := filepath.Join(ompigHome, "agent")
 	settings := NewSettingsManager(cwd, agentDir)
 	c := NewFirstTimeSetupComponent(FirstTimeSetupOptions{})
 	c.HandleInput(setupEnter)
@@ -294,7 +294,7 @@ func TestFirstTimeSetupCreateYourOwnShowsTheHintAndKeepsTheSprite(t *testing.T) 
 	if result == nil || result.Sprite != "" || !result.ShareAnalytics {
 		t.Fatalf("result = %+v, want no sprite and a finished setup", result)
 	}
-	if _, err := os.Stat(piglogin.StatePath(pigHome)); err == nil {
+	if _, err := os.Stat(piglogin.StatePath(ompigHome)); err == nil {
 		t.Fatal("Create your own... saved a sprite")
 	}
 	if got := piglogin.Active().ID; got != piglogin.DefaultID {
@@ -302,12 +302,12 @@ func TestFirstTimeSetupCreateYourOwnShowsTheHintAndKeepsTheSprite(t *testing.T) 
 	}
 }
 
-// firstTimeSetupBody is the dialog from its welcome line down, right-trimmed: everything Pi's first-time-setup.ts draws below SETUP_LOGO_LINES, which D88 replaces with the pig head.
+// firstTimeSetupBody is the dialog from its welcome line down, right-trimmed: everything Pi's first-time-setup.ts draws below SETUP_LOGO_LINES, which D88 replaces with the ompig head.
 func firstTimeSetupBody(t *testing.T, c *FirstTimeSetupComponent) []string {
 	t.Helper()
 	lines := strings.Split(firstTimeSetupText(c), "\n")
 	for i, line := range lines {
-		if strings.HasPrefix(line, " Welcome to PiG") {
+		if strings.HasPrefix(line, " Welcome to Ompig") {
 			body := lines[i:]
 			for j := range body {
 				body[j] = strings.TrimRight(body[j], " ")
@@ -321,7 +321,7 @@ func firstTimeSetupBody(t *testing.T, c *FirstTimeSetupComponent) []string {
 
 // first-time-setup.ts:56-130: the theme list, the analytics opt-in text and options, the key hints with "continue"/"finish", the → marker and the clamped j/k/newline navigation.
 func TestFirstTimeSetupRendersPisStepsAndNavigates(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 	var previews []string
 	var submitted []FirstTimeSetupResult
@@ -334,7 +334,7 @@ func TestFirstTimeSetupRendersPisStepsAndNavigates(t *testing.T) {
 		return " ↑↓ navigate  enter " + confirm + "  escape/ctrl+c skip setup"
 	}
 	theme := func(system, dark, light string) []string {
-		return []string{" Welcome to PiG, the minimal coding agent.", "", " Pick a theme.", "", system, dark, light, "", hint("continue"), "", rule}
+		return []string{" Welcome to Ompig, the minimal coding agent.", "", " Pick a theme.", "", system, dark, light, "", hint("continue"), "", rule}
 	}
 	equal := func(label string, got, want []string) {
 		t.Helper()
@@ -357,11 +357,11 @@ func TestFirstTimeSetupRendersPisStepsAndNavigates(t *testing.T) {
 	c.HandleInput("\n") // sprite -> analytics
 	analytics := func(share, dont string) []string {
 		return []string{
-			" Welcome to PiG, the minimal coding agent.", "",
+			" Welcome to Ompig, the minimal coding agent.", "",
 			" Opt-in to anonymous usage data sharing?",
 			" Opting in stores a tracking identifier in settings.json and enables anonymous",
 			" usage analytics. This helps us to better debug, reproduce, and resolve issues",
-			" and bugs within PiG. You can observe what is shared using /privacy and make",
+			" and bugs within Ompig. You can observe what is shared using /privacy and make",
 			" changes anytime in settings.json.", "",
 			share, dont, "", hint("finish"), "", rule,
 		}
@@ -379,11 +379,11 @@ func TestFirstTimeSetupRendersPisStepsAndNavigates(t *testing.T) {
 // startup-ui.ts showFirstTimeSetup: setTheme and setEnableAnalytics queue their writes, and a failure is recorded on the startup settings
 // manager after main.ts:670 collected its diagnostics, so a settings file that cannot be written fails nothing and prints nothing.
 func TestShowFirstTimeSetupReportsNoSettingsWriteFailure(t *testing.T) {
-	pigHome, cwd := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome, cwd := t.TempDir(), t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	piglogin.Refresh()
 	t.Cleanup(func() { tui.SetTheme("dark"); piglogin.Refresh() })
-	agentDir := filepath.Join(pigHome, "agent")
+	agentDir := filepath.Join(ompigHome, "agent")
 	if err := os.MkdirAll(agentDir, 0o700); err != nil {
 		t.Fatal(err)
 	}

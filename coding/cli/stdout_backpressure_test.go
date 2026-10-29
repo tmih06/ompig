@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 const rpcUsageProbeDir = "testdata/d82-w7"
@@ -176,7 +176,7 @@ func readRPCUsageGolden(t *testing.T) []map[string]any {
 	return golden
 }
 
-// The goldens are real Pi 0.99.1 output: --mode rpc without an extension, and --mode rpc with coding/testdata/d82-w7/message-start-wait-extension.mjs, whose message_start handler awaits a timer (the extension golden's first frame shows the content streamed during that await; TestSessionNodeExtensionAwaitLetsProviderAdvance asserts it through PiG's Session). This proves they are not stale.
+// The goldens are real Pi 0.99.1 output: --mode rpc without an extension, and --mode rpc with coding/testdata/d82-w7/message-start-wait-extension.mjs, whose message_start handler awaits a timer (the extension golden's first frame shows the content streamed during that await; TestSessionNodeExtensionAwaitLetsProviderAdvance asserts it through Ompig's Session). This proves they are not stale.
 func TestRPCUsageGoldenMatchesPi(t *testing.T) {
 	t.Parallel()
 	node, err := exec.LookPath("node")

@@ -11,9 +11,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // ToolExecutionState is the lifecycle stage of a tool call display.
@@ -481,7 +481,7 @@ func (c *ToolExecutionComponent) SetResult(output string, isError bool, elapsed 
 		c.State = ToolStateError
 	} else {
 		c.State = ToolStateDone
-		// pig additive (D91): a successful result supersedes an earlier abort.
+		// ompig additive (D91): a successful result supersedes an earlier abort.
 		c.aborted = false
 	}
 	c.Output = output
@@ -572,10 +572,10 @@ func (c *ToolExecutionComponent) FinalizeAborted(elapsed time.Duration) {
 		out = "Operation aborted"
 	}
 	c.SetResult(out, true, elapsed)
-	c.aborted = true // pig additive (D91): reported as cancelled
+	c.aborted = true // ompig additive (D91): reported as cancelled
 }
 
-// pig additive (D91): MarkAborted records that the call ended because the
+// ompig additive (D91): MarkAborted records that the call ended because the
 // user aborted its turn, so a frontend session reports it as cancelled. It
 // changes nothing the card draws. A later error result keeps the mark, since
 // a tool reports the abort as its error; a successful result clears it.

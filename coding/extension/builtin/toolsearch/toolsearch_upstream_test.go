@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/toolsearch"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/toolsearch"
 )
 
 // Ports packages/coding-agent/test/tool-search.test.ts (v1.0.0): the tokenize, Bm25Ranker and tool_search description

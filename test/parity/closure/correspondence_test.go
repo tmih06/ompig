@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
-	"github.com/MichaelKinsy/PiG/test/parity/knowngaps"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/knowngaps"
 )
 
 func TestAddCorrespondenceDenominatorGeneratesExactOpenGraph(t *testing.T) {
@@ -161,8 +161,8 @@ func correspondenceSnapshotWithExtraMergeCall(t *testing.T, root string) string 
 	t.Helper()
 	base := repositorySnapshotCommit(t, root)
 	env := append(os.Environ(), "GIT_INDEX_FILE="+filepath.Join(t.TempDir(), "index"),
-		"GIT_AUTHOR_NAME=PiG test", "GIT_AUTHOR_EMAIL=pig-test@example.invalid",
-		"GIT_COMMITTER_NAME=PiG test", "GIT_COMMITTER_EMAIL=pig-test@example.invalid",
+		"GIT_AUTHOR_NAME=Ompig test", "GIT_AUTHOR_EMAIL=ompig-test@example.invalid",
+		"GIT_COMMITTER_NAME=Ompig test", "GIT_COMMITTER_EMAIL=ompig-test@example.invalid",
 		"GIT_AUTHOR_DATE=2000-01-01T00:00:00Z", "GIT_COMMITTER_DATE=2000-01-01T00:00:00Z")
 	run := func(input string, args ...string) string {
 		t.Helper()

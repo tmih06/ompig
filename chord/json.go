@@ -1,8 +1,8 @@
 package chord
 
 import (
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Ports packages/chord/src/json.ts (JsonValue, copyJson, isJsonValue). JsonRepresentation<T> is a compile-time mapped

@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -11,7 +11,7 @@ import (
 	"net/http/httptrace"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
 )
 
 // bedrockBodyTap is the HTTP client one ConverseStream call uses. When the SDK receives a 200 response on an HTTP/1 connection whose reads the transport can observe, the tap keeps the real body for the provider and hands the SDK an empty one. The SDK's own event-stream reader is a free goroutine, so its progress would decide what a consumer observes; the provider reads the body itself as an executor turn (bedrock_stream_pipeline.go).

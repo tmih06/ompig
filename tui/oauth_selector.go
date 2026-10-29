@@ -13,8 +13,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // AuthMethod is an auth method of a provider option: an ai.APIKeyAuth or ai.OAuthAuth.
@@ -284,7 +284,7 @@ func (s *OAuthSelectorComponent) HandleInput(data string) {
 
 // NativeNode reports the picker as a selector whose item ids are the
 // providers' ids, followed by ":" and the auth type in a list that mixes
-// auth types, where one provider can appear once per auth type. pig additive
+// auth types, where one provider can appear once per auth type. ompig additive
 // (D91): each row's auth type label, in a mixed list, and its status
 // indicator are its detail, and an empty list reports the empty message as
 // the status.

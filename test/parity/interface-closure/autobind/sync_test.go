@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // TestMappingRoundTripIsByteIdentical keeps sync from churning the ledger: reading and writing the committed mapping changes nothing.
@@ -122,7 +122,7 @@ func TestHandRowIsKeptOnlyWhileItsReferencesResolve(t *testing.T) {
 	}
 	l := &ledger{root: root}
 	row := func(targets, production string) orderedRow {
-		return orderedRow{{"pigTargets", json.RawMessage(targets)}, {"production", json.RawMessage(production)}}
+		return orderedRow{{"ompigTargets", json.RawMessage(targets)}, {"production", json.RawMessage(production)}}
 	}
 	for _, ok := range []orderedRow{
 		row(`["lib/lib.go#Box","lib/lib.go#Box.Open","lib/lib.go#Box.Name","lib/lib.go#Make","lib/lib.go#Limit"]`, `["call:lib/lib.go#Make","tested:lib/lib.go#Box.Open"]`),
@@ -130,7 +130,7 @@ func TestHandRowIsKeptOnlyWhileItsReferencesResolve(t *testing.T) {
 		append(row(`["lib/lib.go#Make"]`, `[]`), kv{"evidence", json.RawMessage(`["test:lib/lib_test.go#TestMakeRuns","reach:lib/lib.go#Gone"]`)}),
 	} {
 		if !l.referencesResolve(ok) {
-			t.Errorf("references that resolve must keep the hand row: %s", ok.get("pigTargets"))
+			t.Errorf("references that resolve must keep the hand row: %s", ok.get("ompigTargets"))
 		}
 	}
 	for _, bad := range []orderedRow{
@@ -142,7 +142,7 @@ func TestHandRowIsKeptOnlyWhileItsReferencesResolve(t *testing.T) {
 		append(row(`["lib/lib.go#Make"]`, `[]`), kv{"evidence", json.RawMessage(`["test:lib/lib_test.go#TestMakeWasRenamed"]`)}),
 	} {
 		if l.referencesResolve(bad) {
-			t.Errorf("a reference to a removed declaration must not keep the hand row: %v %v %v", bad.list("pigTargets"), bad.list("production"), bad.list("evidence"))
+			t.Errorf("a reference to a removed declaration must not keep the hand row: %v %v %v", bad.list("ompigTargets"), bad.list("production"), bad.list("evidence"))
 		}
 	}
 }
@@ -225,7 +225,7 @@ func TestBehaviorContractMustBePortedToCloseHandleInput(t *testing.T) {
 	}
 }
 
-// A function in parity_harness.go is not a production caller: its probes run only under PIG_PARITY_HARNESS=1, and the validator
+// A function in parity_harness.go is not a production caller: its probes run only under OMPIG_PARITY_HARNESS=1, and the validator
 // rejects them as production references.
 func TestReachSetDropsParityHarnessProbes(t *testing.T) {
 	got := withoutHarnessProbes(map[string]bool{"internal/codingagent/parity_harness.go#InteractiveMode.probeX": true, "internal/codingagent/mode.go#InteractiveMode.Run": true})

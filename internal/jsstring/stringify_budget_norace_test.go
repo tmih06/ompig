@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/jsparity"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // budgetPayload mirrors Pi-Bolt bench/fake_model_stress.py write:N: TypeScript lines with one `=>` and one newline each, the text a large
@@ -28,7 +28,7 @@ func budgetPayload(size int) string {
 	return b.String()[:size]
 }
 
-// The chain models the session line of a message: each level is a PiG type whose MarshalJSON is jsstring.MarshalJSON of a struct holding the
+// The chain models the session line of a message: each level is a Ompig type whose MarshalJSON is jsstring.MarshalJSON of a struct holding the
 // next level (MessageEntry -> AgentMessage -> AssistantMessage -> content block), and which also appends its own JSON.stringify text.
 type chainLeaf struct {
 	Content string `json:"content"`
@@ -102,8 +102,8 @@ func TestStringifyChain200KBudget(t *testing.T) {
 	}
 	// A wall-clock budget: it runs in the serial startup-proxies job (automation/perf/startup-proxies.json requires it there), not beside
 	// the parallel test packages, where memory-bandwidth contention on a 4-CPU runner took it from 0.2 ms to 0.6-0.7 ms.
-	if os.Getenv("PIG_SERIAL_TIMING") == "" {
-		t.Skip("wall-clock budget: run by make startup-proxies (PIG_SERIAL_TIMING=1)")
+	if os.Getenv("OMPIG_SERIAL_TIMING") == "" {
+		t.Skip("wall-clock budget: run by make startup-proxies (OMPIG_SERIAL_TIMING=1)")
 	}
 	payload := budgetPayload(200 << 10)
 	value := chain4{chain3{chain2{chain1{chainLeaf{payload}}}}}
@@ -128,8 +128,8 @@ func TestMarshalJSONString200KBudget(t *testing.T) {
 	}
 	// A wall-clock budget: it runs in the serial startup-proxies job (automation/perf/startup-proxies.json requires it there), not beside
 	// the parallel test packages, where memory-bandwidth contention on a 4-CPU runner took it from 0.2 ms to 0.6-0.7 ms.
-	if os.Getenv("PIG_SERIAL_TIMING") == "" {
-		t.Skip("wall-clock budget: run by make startup-proxies (PIG_SERIAL_TIMING=1)")
+	if os.Getenv("OMPIG_SERIAL_TIMING") == "" {
+		t.Skip("wall-clock budget: run by make startup-proxies (OMPIG_SERIAL_TIMING=1)")
 	}
 	payload := budgetPayload(200 << 10)
 	ns, allocated := fastestRun(func() { _, _ = MarshalJSON(payload) })

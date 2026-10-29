@@ -8,7 +8,7 @@ import (
 // iterateAnthropicEvents admits a record by its SSE event name, but the record's parsed type decides what it is: the message_start and
 // message_stop flags (anthropic-messages.ts:552-556) and every branch of the provider loop (anthropic-messages.ts:665-815) compare
 // event.type. Reading .type of a null record throws inside the parse try, so it is a parse error. Probed with Pi 1.1.0
-// (scratch probe sse.sh with sse/ax-*.txt): PiG dispatched on the SSE name.
+// (scratch probe sse.sh with sse/ax-*.txt): Ompig dispatched on the SSE name.
 func TestAnthropicEventsDispatchOnTheRecordsTypeLikePi(t *testing.T) {
 	record := func(name, data string) string { return "event: " + name + "\ndata: " + data + "\n\n" }
 	start := record("message_start", `{"type":"message_start","message":{"id":"msg_type","usage":{"input_tokens":3,"output_tokens":0}}}`) +

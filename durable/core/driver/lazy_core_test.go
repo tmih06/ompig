@@ -11,14 +11,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // A reopened native Harness opens with the live tasks only and reads a terminal task or an entry when a call needs it (ABI section
-// 4.2, pig.read; durable/core/mirror_lazy.go): getTask, waitForTask and a task's outcome after reopen answer what they
+// 4.2, ompig.read; durable/core/mirror_lazy.go): getTask, waitForTask and a task's outcome after reopen answer what they
 // answered before the close, as Pi's Storage reads the settled row then.
 func TestCoreReopenReadsSettledRecordsOnDemand(t *testing.T) {
 	done := defineSteps("test.done", nil, map[string]func(context.Context, stepRecord, stepRuntime) error{

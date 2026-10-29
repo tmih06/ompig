@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi: packages/coding-agent/test/default-tools-setting.test.ts "keeps tools removed by -name tool options removed on reload"

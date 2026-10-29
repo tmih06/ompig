@@ -10,10 +10,10 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-# The probe defaults to PIG_PARITY_PIG_BIN so it uses the verified harness build.
-pig_args = ["python3", "test/parity/testdata/session-wire.py", "--case", "print", "--case", "json"]
+# The probe defaults to OMPIG_PARITY_OMPIG_BIN so it uses the verified harness build.
+ompig_args = ["python3", "test/parity/testdata/session-wire.py", "--case", "print", "--case", "json"]
 pi_args = ["python3", "test/parity/testdata/session-wire.py", "--bin", "extensions/sdk-ts/node_modules/.bin/pi", "--case", "print", "--case", "json"]
 
 [cli]

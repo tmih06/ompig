@@ -6,10 +6,10 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
-// Pi ui.stop releases terminal input before returning to the shell. PiG's current stdin owner must be paused and joined, not left reading a cooked/background terminal while the renderer is stopped.
+// Pi ui.stop releases terminal input before returning to the shell. Ompig's current stdin owner must be paused and joined, not left reading a cooked/background terminal while the renderer is stopped.
 func TestSuspendPausesInputBeforeRestoringTerminal(t *testing.T) {
 	joined := make(chan struct{})
 	paused := false

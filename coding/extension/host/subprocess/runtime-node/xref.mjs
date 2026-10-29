@@ -1,4 +1,4 @@
-// pig additive (D19): cross-process references (xref). One Node process is one realm. The realm exports its own objects by reference and imports foreign references as proxies whose every operation runs in the owning realm through the synchronous host call path. Wire shape: plans/0.3.x/gap-xproc.md section 3.
+// ompig additive (D19): cross-process references (xref). One Node process is one realm. The realm exports its own objects by reference and imports foreign references as proxies whose every operation runs in the owning realm through the synchronous host call path. Wire shape: plans/0.3.x/gap-xproc.md section 3.
 import { randomUUID } from "node:crypto";
 import { inspect } from "node:util";
 import { runInNewContext } from "node:vm";
@@ -158,7 +158,7 @@ function v8RejectionMessage(error, operation) {
 
 // util.inspect prints a foreign object as Node prints the shadow's inspection result. The owner describes its object so the reader can hand Node a local view of the same kind, properties and prototype; Node then formats the view with its own indentation, seen list and depth, as it formats the object in Pi's one heap.
 const isIndexKey = key => typeof key === "string" && /^(?:0|[1-9]\d*)$/.test(key) && Number(key) < 4294967295;
-// pig divergence (D83): Node reads a Promise's state, an iterator's position, a module namespace and the like from V8 internals with no public accessor, so the owner formats those and they do not count as a nesting level of the enclosing layout.
+// ompig divergence (D83): Node reads a Promise's state, an iterator's position, a module namespace and the like from V8 internals with no public accessor, so the owner formats those and they do not count as a nesting level of the enclosing layout.
 const OPAQUE_TYPES = ["isPromise", "isSharedArrayBuffer", "isArgumentsObject", "isGeneratorObject", "isMapIterator", "isSetIterator", "isModuleNamespaceObject", "isExternal"];
 // A view copies at most this many bytes of a typed array's buffer; a larger buffer is formatted by the owner.
 const VIEW_BUFFER_LIMIT = 64 * 1024 * 1024;
@@ -357,7 +357,7 @@ export class Realm {
   }
 
   // Each transmission the Host delivered is released exactly once, by the proxy entry that accounted for it.
-  // pig divergence (D83): a proxy kept alive by a foreign object that it keeps alive in turn is released only when one realm exits.
+  // ompig divergence (D83): a proxy kept alive by a foreign object that it keeps alive in turn is released only when one realm exits.
   finalized(entry) {
     if (this.imports.get(entry.key) === entry) this.imports.delete(entry.key);
     this.releases.push({ realm: entry.ref.realm, id: entry.ref.id, count: entry.delivered });
@@ -615,7 +615,7 @@ export class Realm {
     return this.encode(result);
   }
 
-  // pig divergence (D83): a foreign object is a proxy, so internal-slot brand checks fail in the reader.
+  // ompig divergence (D83): a foreign object is a proxy, so internal-slot brand checks fail in the reader.
   createProxy(ref) {
     const realm = this;
     const shadow = ref.kind === "array" ? [] : ref.kind === "function" ? function () {}.bind(null) : {};
@@ -972,7 +972,7 @@ const namedLike = (wrapper, native) => {
   return wrapper;
 };
 
-// pig divergence (D83): a foreign object is a proxy, which structuredClone, v8.serialize and postMessage reject. When a value reaches a foreign object, these wrappers clone the foreign objects in their owners, rebuild only the local objects that hold them and run the native function on the result, so the caller gets what Pi's caller gets from the object in one heap. Every other value goes to the native function unchanged.
+// ompig divergence (D83): a foreign object is a proxy, which structuredClone, v8.serialize and postMessage reject. When a value reaches a foreign object, these wrappers clone the foreign objects in their owners, rebuild only the local objects that hold them and run the native function on the result, so the caller gets what Pi's caller gets from the object in one heap. Every other value goes to the native function unchanged.
 // installHook replaces a built-in method and reports whether the runtime accepted it. A runtime started with frozen intrinsics rejects the assignment; the method then keeps its native behaviour.
 const installHook = (target, key, hook) => {
   try {
@@ -1083,14 +1083,14 @@ export function installCloneHooks(realm) {
   syncBuiltinESMExports();
 }
 
-// Test switch, off in production: only when the harness sets PIG_TEST_XREF_COLLECT=1 does the process expose --expose-gc and a hook an extension calls as globalThis[Symbol.for("pig.test.xrefCollect")](), which runs a full collection and releases the references it freed (Realm.collect). A ledger check then does not depend on when V8 chooses to collect. Without the variable neither the flag nor the hook exists.
+// Test switch, off in production: only when the harness sets OMPIG_TEST_XREF_COLLECT=1 does the process expose --expose-gc and a hook an extension calls as globalThis[Symbol.for("ompig.test.xrefCollect")](), which runs a full collection and releases the references it freed (Realm.collect). A ledger check then does not depend on when V8 chooses to collect. Without the variable neither the flag nor the hook exists.
 export function installTestCollect(realm) {
-  if (process.env.PIG_TEST_XREF_COLLECT !== "1") return;
+  if (process.env.OMPIG_TEST_XREF_COLLECT !== "1") return;
   let gc;
   if (typeof globalThis.Bun !== "undefined") gc = () => globalThis.Bun.gc(true);
   else {
     v8.setFlagsFromString("--expose-gc");
     gc = runInNewContext("gc");
   }
-  globalThis[Symbol.for("pig.test.xrefCollect")] = () => realm.collect(gc);
+  globalThis[Symbol.for("ompig.test.xrefCollect")] = () => realm.collect(gc);
 }

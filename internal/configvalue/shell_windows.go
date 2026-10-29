@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/crossspawn"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/crossspawn"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // runShellCommand mirrors executeCommandUncached on win32: use the configured bash before falling back to the default shell if bash could not start.

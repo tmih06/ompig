@@ -1,4 +1,4 @@
-//go:build !pig_strip_google_vertex
+//go:build !ompig_strip_google_vertex
 
 package ai
 
@@ -16,7 +16,7 @@ import (
 // The @google/genai SDK writes the body Pi's buildParams hands it through its converters, which build each object member by member
 // (generateContentParametersToMldev, generateContentConfigToMldev, contentToMldev, partToMldev, functionCallToMldev, blobToMldev) and pass
 // a functionResponse and the function declarations through as Pi built them. Pi's own stream posts the oracle body to a local server;
-// PiG's provider posts to another.
+// Ompig's provider posts to another.
 func TestGoogleRequestBodyMatchesPi(t *testing.T) {
 	type bodyCase struct {
 		Name   string          `json:"name"`

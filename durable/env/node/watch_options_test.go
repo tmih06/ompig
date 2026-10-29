@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // NodeWatchOptions.Mode forces the watcher's mode, and PollIntervalMs sets the snapshot interval of polling mode (the default is 2000 ms).

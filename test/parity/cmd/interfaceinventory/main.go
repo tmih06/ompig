@@ -18,8 +18,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/upstreampackages"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/upstreampackages"
 )
 
 type inventory struct {
@@ -88,7 +88,7 @@ type mappingEntry struct {
 	ID                string            `json:"id"`
 	Disposition       string            `json:"disposition"`
 	UpstreamShapeHash string            `json:"upstreamShapeHash"`
-	PigTargets        []string          `json:"pigTargets"`
+	OmpigTargets      []string          `json:"ompigTargets"`
 	Layers            map[string]string `json:"layers"`
 	Production        []string          `json:"production"`
 	Evidence          []string          `json:"evidence"`
@@ -110,10 +110,10 @@ var dispositions = map[string]struct{}{
 }
 
 // publicAPITested is the production-layer status of a public library API whose Pi counterpart is a public export and
-// that no PiG binary calls. Test callers prove it, so the ledger never reports it as production-reachable.
+// that no Ompig binary calls. Test callers prove it, so the ledger never reports it as production-reachable.
 const publicAPITested = "public-api-tested"
 
-// testExercised is the production-layer status of an internal Go symbol that no cmd/pig path reaches but an asserting Go test
+// testExercised is the production-layer status of an internal Go symbol that no cmd/ompig path reaches but an asserting Go test
 // exercises; the interface gap detector derives it.
 const testExercised = "test-exercised"
 
@@ -131,9 +131,9 @@ func main() {
 	inventoryPath := flag.String("inventory", "test/parity/interfaces/upstream-v"+coding.UpstreamVersion+".json", "generated upstream interface inventory")
 	observablePath := flag.String("observable", "", "generated observable interface inventory")
 	upstreamRoot := flag.String("upstream-root", ".upstream/current", "pinned upstream source root for observable locations")
-	mappingPath := flag.String("mapping", "", "reviewed Pig interface mapping")
+	mappingPath := flag.String("mapping", "", "reviewed Ompig interface mapping")
 	recommendationsPath := flag.String("recommendations", "", "non-authoritative porting recommendations")
-	goInventoryPath := flag.String("go-inventory", "test/parity/interfaces/pig-go.json", "generated Pig Go candidate inventory")
+	goInventoryPath := flag.String("go-inventory", "test/parity/interfaces/ompig-go.json", "generated Ompig Go candidate inventory")
 	behaviorContractsPath := flag.String("behavior-contracts", "test/parity/behavior-contracts.toml", "reviewed behavioral contract ledger")
 	generatePending := flag.Bool("generate-pending", false, "write a pending mapping ledger to stdout")
 	previousMappingPath := flag.String("previous-mapping", "", "with -generate-pending, keep every row of this earlier ledger whose interface shape is unchanged")
@@ -181,11 +181,11 @@ func main() {
 		if err := decodeJSONFile(*recommendationsPath, &recommendations); err != nil {
 			exitf("interface-inventory: %v", err)
 		}
-		var pig goInventory
-		if err := decodeJSONFile(*goInventoryPath, &pig); err != nil {
+		var ompig goInventory
+		if err := decodeJSONFile(*goInventoryPath, &ompig); err != nil {
 			exitf("interface-inventory: %v", err)
 		}
-		problems = append(problems, validateRecommendations(upstream, recommendations, pig)...)
+		problems = append(problems, validateRecommendations(upstream, recommendations, ompig)...)
 	}
 	if *mappingPath != "" {
 		var mappings mappingLedger
@@ -509,8 +509,8 @@ func validateMappingClosure(entry mappingEntry, upstream inventoryEntry, strict 
 	var problems []string
 	switch entry.Disposition {
 	case "ported":
-		if len(entry.PigTargets) == 0 {
-			problems = append(problems, fmt.Sprintf("%s is ported without Pig targets", entry.ID))
+		if len(entry.OmpigTargets) == 0 {
+			problems = append(problems, fmt.Sprintf("%s is ported without Ompig targets", entry.ID))
 		}
 		if len(entry.Production) == 0 {
 			problems = append(problems, fmt.Sprintf("%s is ported without production reachability", entry.ID))
@@ -547,7 +547,7 @@ func validateMappingClosure(entry mappingEntry, upstream inventoryEntry, strict 
 		if strings.TrimSpace(entry.Rationale) == "" || !strings.HasPrefix(entry.Divergence, "D") {
 			problems = append(problems, fmt.Sprintf("%s divergence mapping requires rationale and D<N> ID", entry.ID))
 		}
-		if len(entry.PigTargets) == 0 || len(entry.Production) == 0 || len(entry.Evidence) == 0 {
+		if len(entry.OmpigTargets) == 0 || len(entry.Production) == 0 || len(entry.Evidence) == 0 {
 			problems = append(problems, fmt.Sprintf("%s divergence mapping requires targets, production reachability, and evidence", entry.ID))
 		}
 	}
@@ -600,11 +600,11 @@ func requiredMappingLayers(upstream inventoryEntry) []string {
 
 func validateMappingReferences(entry mappingEntry, repoRoot string) []string {
 	var problems []string
-	problems = append(problems, validateMappingList(entry.ID, "Pig targets", entry.PigTargets)...)
+	problems = append(problems, validateMappingList(entry.ID, "Ompig targets", entry.OmpigTargets)...)
 	problems = append(problems, validateMappingList(entry.ID, "production", entry.Production)...)
 	problems = append(problems, validateMappingList(entry.ID, "evidence", entry.Evidence)...)
-	for _, target := range entry.PigTargets {
-		problems = append(problems, validatePathReference(entry.ID, "Pig target", target, repoRoot, nil)...)
+	for _, target := range entry.OmpigTargets {
+		problems = append(problems, validatePathReference(entry.ID, "Ompig target", target, repoRoot, nil)...)
 	}
 	for _, production := range entry.Production {
 		problems = append(problems, validatePathReference(entry.ID, "production", production, repoRoot,
@@ -653,15 +653,15 @@ func validateDivergenceReference(entry mappingEntry, repoRoot string) []string {
 	if !bytes.Contains(block, []byte("SCRUTINIZED:approved")) {
 		return []string{fmt.Sprintf("%s divergence %s is not SCRUTINIZED:approved", entry.ID, entry.Divergence)}
 	}
-	marker := []byte("pig divergence (" + entry.Divergence + ")")
-	for _, target := range entry.PigTargets {
+	marker := []byte("ompig divergence (" + entry.Divergence + ")")
+	for _, target := range entry.OmpigTargets {
 		pathRef, _, _ := strings.Cut(target, "#")
 		data, readErr := os.ReadFile(filepath.Join(repoRoot, filepath.FromSlash(pathRef)))
 		if readErr == nil && bytes.Contains(data, marker) {
 			return nil
 		}
 	}
-	return []string{fmt.Sprintf("%s divergence %s has no call-site marker in mapped Pig targets", entry.ID, entry.Divergence)}
+	return []string{fmt.Sprintf("%s divergence %s has no call-site marker in mapped Ompig targets", entry.ID, entry.Divergence)}
 }
 
 func validatePathReference(id, label, reference, repoRoot string, kinds map[string]struct{}) []string {
@@ -710,7 +710,7 @@ func validatePathReference(id, label, reference, repoRoot string, kinds map[stri
 		}
 	}
 	if label == "production" && filepath.Base(pathRef) == "parity_harness.go" {
-		return []string{fmt.Sprintf("%s production reference %q is a parity-harness probe, which runs only under PIG_PARITY_HARNESS=1 and is not a production caller", id, reference)}
+		return []string{fmt.Sprintf("%s production reference %q is a parity-harness probe, which runs only under OMPIG_PARITY_HARNESS=1 and is not a production caller", id, reference)}
 	}
 	return nil
 }

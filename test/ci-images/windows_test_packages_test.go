@@ -15,10 +15,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-const modulePath = "github.com/MichaelKinsy/PiG"
+const modulePath = "github.com/tmih06/ompig"
 
 // windowsOnlyTestPackages walks the root module for test files that only a
 // Windows build selects: a _windows_test.go name or a "//go:build windows" or
@@ -125,10 +125,10 @@ func TestWindowsTestPackagesFailWhenGoListFails(t *testing.T) {
 	}
 }
 
-// The native shard drops the extension host packages and cmd/pig from the
+// The native shard drops the extension host packages and cmd/ompig from the
 // script's list. The extension-host shard must test each dropped extension host
 // package, the extension-conformance shard must test the conformance package,
-// and the cli jobs must together test every cmd/pig shard that make
+// and the cli jobs must together test every cmd/ompig shard that make
 // test-cli runs on Linux, each shard once, in its own test process.
 func TestWindowsShardsTestEverySelectedPackage(t *testing.T) {
 	job, ok := verificationJobs(t)["windows"]
@@ -137,7 +137,7 @@ func TestWindowsShardsTestEverySelectedPackage(t *testing.T) {
 	}
 	shards, cliPkg := cliShards(t)
 	cliPkg = strings.TrimPrefix(cliPkg, "./")
-	// Every unit runs in exactly one job: the native and extension units each on their own job, the cmd/pig shards paired so a job builds the test binary once.
+	// Every unit runs in exactly one job: the native and extension units each on their own job, the cmd/ompig shards paired so a job builds the test binary once.
 	wantUnits := []string{"native-1", "native-2", "native-3", "native-4"}
 	for shard := 1; shard <= shards; shard++ {
 		wantUnits = append(wantUnits, "cli-"+strconv.Itoa(shard))
@@ -148,7 +148,7 @@ func TestWindowsShardsTestEverySelectedPackage(t *testing.T) {
 		units := strings.Fields(entry)
 		for _, unit := range units {
 			if len(units) > 1 && !strings.HasPrefix(unit, "cli-") {
-				t.Errorf("windows job %q groups %s; only cmd/pig shards share a job", entry, unit)
+				t.Errorf("windows job %q groups %s; only cmd/ompig shards share a job", entry, unit)
 			}
 		}
 		gotUnits = append(gotUnits, units...)
@@ -176,7 +176,7 @@ func TestWindowsShardsTestEverySelectedPackage(t *testing.T) {
 	for _, step := range job.Steps {
 		if strings.TrimSpace(step.Run) == "automation/ci/windows-cli-units.sh" {
 			if step.If != "startsWith(matrix.shard, 'cli-')" || step.Env["UNITS"] != "${{ matrix.shard }}" {
-				t.Errorf("cmd/pig shard step runs when %q with UNITS %q, want the cli jobs' own matrix value", step.If, step.Env["UNITS"])
+				t.Errorf("cmd/ompig shard step runs when %q with UNITS %q, want the cli jobs' own matrix value", step.If, step.Env["UNITS"])
 			}
 			cliShardSteps++
 		}
@@ -220,7 +220,7 @@ func TestWindowsShardsTestEverySelectedPackage(t *testing.T) {
 	}
 	// Exactly one step serves every cli job, and it runs the shards its matrix value names, so each shard 1..shards runs once.
 	if cliShardSteps != 1 {
-		t.Errorf("windows job has %d cmd/pig shard steps, want one step run by each cli-N job", cliShardSteps)
+		t.Errorf("windows job has %d cmd/ompig shard steps, want one step run by each cli-N job", cliShardSteps)
 	}
 	droppedCLI := false
 	for _, match := range excluded {

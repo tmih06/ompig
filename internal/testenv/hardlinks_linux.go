@@ -16,7 +16,7 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-const refuseHardLinksEnv = "PIG_TESTENV_REFUSE_HARD_LINKS"
+const refuseHardLinksEnv = "OMPIG_TESTENV_REFUSE_HARD_LINKS"
 
 // seccompArch is the audit architecture whose linkat the filter refuses; other architectures skip.
 var seccompArch = map[string]uint32{"amd64": unix.AUDIT_ARCH_X86_64, "arm64": unix.AUDIT_ARCH_AARCH64}

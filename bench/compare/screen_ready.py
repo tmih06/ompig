@@ -10,7 +10,7 @@ e2e_screen.py polls the tmux pane every 0.2 s and types its prompt once "fake-mo
 (see startup_ready.py). Here the poll reports the model name only once the pane's title changed from the one tmux gave it: the title the TUI
 sets when startup has bound the session. A pane whose title never changes falls back after startup_ready.MARKER_WAIT_S to the first poll that
 shows the model name. BOLT_CHECKOUT must be a whole Pi-Bolt checkout: the scenario streams its scripts/lib/training.md. tmux passes the
-build only PI_* variables, so PiG runs through bench/compare/adapters/pig (arms.py specs)."""
+build only PI_* variables, so Ompig runs through bench/compare/adapters/ompig (arms.py specs)."""
 import importlib.util
 import sys
 import time

@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // A Package's conventional entry ./src/index.ts names its extension "src", so
@@ -62,8 +62,8 @@ func TestAuthLoginRoutesToTheExtensionThatDeclaredTheProviderWhenNamesCollide(t 
 				}
 			}
 			t.Setenv("HOME", home)
-			t.Setenv("PIG_HOME", filepath.Join(home, "pig"))
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_HOME", filepath.Join(home, "ompig"))
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 			t.Cleanup(ai.ResetOAuthProviders)
 			t.Chdir(cwd)

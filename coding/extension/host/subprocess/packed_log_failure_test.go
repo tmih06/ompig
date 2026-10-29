@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -16,8 +16,8 @@ func TestPackedStderrLogOwnership(t *testing.T) {
 	for _, retainFirst := range []bool{false, true} {
 		t.Run(map[bool]string{false: "cleanup-before-late-report", true: "reported-before-cleanup"}[retainFirst], func(t *testing.T) {
 			dir := t.TempDir()
-			path := filepath.Join(dir, "pig-packed-owned.log")
-			foreign := filepath.Join(dir, "pig-packed-other-session.log")
+			path := filepath.Join(dir, "ompig-packed-owned.log")
+			foreign := filepath.Join(dir, "ompig-packed-other-session.log")
 			for _, name := range []string{path, foreign} {
 				if err := os.WriteFile(name, []byte("stderr evidence"), 0o600); err != nil {
 					t.Fatal(err)

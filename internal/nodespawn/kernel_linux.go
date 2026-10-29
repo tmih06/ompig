@@ -10,7 +10,7 @@ import (
 )
 
 // kernelArch is the GOARCH whose ELF handlers the running kernel has, from
-// the machine that uname reports: a 32-bit PiG may run on a 64-bit kernel,
+// the machine that uname reports: a 32-bit Ompig may run on a 64-bit kernel,
 // whose handlers accept its native programs. It is runtime.GOARCH when uname
 // fails or names a machine without an entry in elfHandlers.
 var kernelArch = sync.OnceValue(func() string {

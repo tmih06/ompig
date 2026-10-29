@@ -2,7 +2,7 @@
 
 Pi binds its extensions with mode "tui" (interactive-mode.ts), "rpc" (rpc-mode.ts), and "json" or "print" (print-mode.ts), so the extension
 reads that mode in each run. A host that never sends the mode leaves every extension on its "print" default. The output is the recorded mode
-per run mode, identical for Pi and PiG.
+per run mode, identical for Pi and Ompig.
 """
 import errno
 import json
@@ -21,8 +21,8 @@ import termios
 
 SIDE = sys.argv[1]
 ROOT = Path(__file__).resolve().parents[3]
-BINARY = ([os.environ.get("PIG_PARITY_PIG_BIN", str(ROOT / "bin/pig"))]
-          if SIDE == "pig" else [os.environ.get("PIG_PARITY_PI_BIN", str(ROOT / "extensions/sdk-ts/node_modules/.bin/pi"))])
+BINARY = ([os.environ.get("OMPIG_PARITY_OMPIG_BIN", str(ROOT / "bin/ompig"))]
+          if SIDE == "ompig" else [os.environ.get("OMPIG_PARITY_PI_BIN", str(ROOT / "extensions/sdk-ts/node_modules/.bin/pi"))])
 EXTENSION = str(Path(__file__).resolve().parent / "extension-run-mode.mjs")
 
 
@@ -40,7 +40,7 @@ def run(root, name, args, interactive):
     work.mkdir()
     report = root / name / "report"
     (agent / "settings.json").write_text(json.dumps({"quietStartup": True, "enableInstallTelemetry": False}))
-    env = {**os.environ, "HOME": str(root / name), "PIG_CODING_AGENT_DIR": str(agent), "PI_CODING_AGENT_DIR": str(agent),
+    env = {**os.environ, "HOME": str(root / name), "OMPIG_CODING_AGENT_DIR": str(agent), "PI_CODING_AGENT_DIR": str(agent),
            "PI_SKIP_VERSION_CHECK": "1", "TERM": "xterm-256color", "RUN_MODE_REPORT": str(report)}
     command = [*BINARY, "--offline", "--no-extensions", "--no-skills", "--no-prompt-templates", "-e", EXTENSION, *args]
     if not interactive:

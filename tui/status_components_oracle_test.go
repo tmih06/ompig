@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type statusOracleOp struct {
@@ -54,7 +54,7 @@ func statusOracleProbes() []statusOracleProbe {
 	return probes
 }
 
-// renderStatusProbe runs probe through Pig's components and returns the value Pi's oracle returns for it.
+// renderStatusProbe runs probe through Ompig's components and returns the value Pi's oracle returns for it.
 func renderStatusProbe(probe statusOracleProbe) any {
 	tag := func(name string) func(string) string {
 		return func(text string) string { return "<" + name + ">" + text + "</" + name + ">" }
@@ -123,7 +123,7 @@ func TestStatusProbeDump(t *testing.T) {
 	fmt.Printf("status-probes:%s\n", line)
 }
 
-// TestStatusComponentsParity prints Pig's results for the corpus, one JSON line per probe, for the status-components parity scenario.
+// TestStatusComponentsParity prints Ompig's results for the corpus, one JSON line per probe, for the status-components parity scenario.
 func TestStatusComponentsParity(t *testing.T) {
 	for _, probe := range statusOracleProbes() {
 		var line bytes.Buffer
@@ -169,7 +169,7 @@ func TestStatusComponentsMatchPi(t *testing.T) {
 		if !reflect.DeepEqual(have, want) {
 			if failures++; failures <= 5 {
 				spec, _ := json.Marshal(probe)
-				t.Errorf("%s\n  Pig %s\n  Pi  %s", spec, got, expected[i])
+				t.Errorf("%s\n  Ompig %s\n  Pi  %s", spec, got, expected[i])
 			}
 		}
 	}

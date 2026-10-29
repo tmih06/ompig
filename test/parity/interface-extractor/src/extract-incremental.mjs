@@ -43,7 +43,7 @@ try {
   const upstreamVersion = args["upstream-version"];
   const jobs = Number(args.jobs ?? Math.min(8, os.availableParallelism()));
   const fingerprint = crypto.createHash("sha256").update(`${hashTree(here)}\n${hashTree(path.resolve(here, "../../upstreampackages"), { all: true })}\n${ts.version}\n${process.version}\nincremental-format=1`).digest("hex");
-  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "pig-extract-"));
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "ompig-extract-"));
   const result = await extractIncremental({
     sourceRoot,
     publishedRoot,
@@ -56,7 +56,7 @@ try {
       const started = Date.now();
       const out = path.join(scratch, key);
       fs.mkdirSync(out, { recursive: true });
-      await run(process.execPath, { PIG_INTERFACE_FOOTPRINT: path.join(out, "footprint.json") }, [
+      await run(process.execPath, { OMPIG_INTERFACE_FOOTPRINT: path.join(out, "footprint.json") }, [
         "--max-old-space-size=3072", path.join(here, "extract.mjs"),
         "--source-root", sourceRoot, "--published-root", publishedRoot, "--upstream-version", upstreamVersion,
         "--package", key, "--source-out", path.join(out, "source.json"), "--published-out", path.join(out, "published.json"),

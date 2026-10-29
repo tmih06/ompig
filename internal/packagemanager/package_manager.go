@@ -9,10 +9,10 @@ import (
 	"strings"
 	"sync"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // PackageManager is upstream's PackageManager interface and DefaultPackageManager class (package-manager.ts): it installs, removes and lists the packages named in the user and project settings. CWD is the project directory the sources resolve against.
@@ -239,7 +239,7 @@ func (m *PackageManager) VerifyContributesResources(source string, local bool) e
 	if DetectSourceKind(source) == "local" {
 		return nil
 	}
-	// pig divergence (D57): the npm and Git refusal has no upstream counterpart.
+	// ompig divergence (D57): the npm and Git refusal has no upstream counterpart.
 	root := m.InstalledSourceRoot(source, local)
 	if root == "" {
 		// The source resolved to no local root (a remote form this build cannot inspect). Nothing to assert against, so stay out of the way.
@@ -261,7 +261,7 @@ func (m *PackageManager) VerifyContributesResources(source string, local bool) e
 		return nil
 	}
 	return fmt.Errorf("%s is an extension, not a package, so installing it as one loads nothing.\n"+
-		"Load it directly with `pig -e %s`, put it in ~/.pig/agent/extensions/, or publish it inside a "+
+		"Load it directly with `ompig -e %s`, put it in ~/.ompig/agent/extensions/, or publish it inside a "+
 		"package's extensions/ directory", source, source)
 }
 

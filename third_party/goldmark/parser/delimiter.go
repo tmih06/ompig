@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/ast"
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/text"
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/util"
+	"github.com/tmih06/ompig/third_party/goldmark/ast"
+	"github.com/tmih06/ompig/third_party/goldmark/text"
+	"github.com/tmih06/ompig/third_party/goldmark/util"
 )
 
 // A DelimiterProcessor interface provides a set of functions about

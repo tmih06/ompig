@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports of packages/coding-agent/test/session-context-edit.test.ts cases that
@@ -237,7 +237,7 @@ func TestSessionContextEditNormalizesStringReplacementsForArrayOnlyAssistantAndT
 }
 
 func TestSessionContextEditNormalizesImportedStringReplacementsWhileProjectingArrayOnlyRoles(t *testing.T) {
-	// The upstream case mutates an in-memory edit; Pig models the same input
+	// The upstream case mutates an in-memory edit; Ompig models the same input
 	// as a Pi-written session file whose edit carries a string replacement.
 	dir := t.TempDir()
 	path := filepath.Join(dir, "imported.jsonl")

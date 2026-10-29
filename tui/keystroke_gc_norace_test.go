@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // editorKeystrokeBytesCeiling is the heap bytes one scripted keystroke (editor input, frame render, restoring backspace) allocates, measured over 10,000 keystrokes (about 2,300 when measured; 15,000 before the keystroke allocation work). Bytes allocated on the render goroutine set how often the collector runs and how much mark-assist work the goroutine does while it runs, which is what a frame feels; the count only goes down.

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type readOnlyAuthOp struct {
@@ -25,7 +25,7 @@ type readOnlyAuthCase struct {
 	Ops     []readOnlyAuthOp `json:"ops"`
 }
 
-// TestReadOnlyAuthStorageMatchesPi runs core/auth-storage.ts ReadOnlyAuthStorage and PiG's NewReadOnlyAuthStorage over the same auth.json files: absent,
+// TestReadOnlyAuthStorageMatchesPi runs core/auth-storage.ts ReadOnlyAuthStorage and Ompig's NewReadOnlyAuthStorage over the same auth.json files: absent,
 // empty, corrupt, byte-order-marked, non-object and valid files whose entries are valid or invalid credentials (an API key that is not a string, an env map
 // with a non-string value, an OAuth credential missing a field or with a non-finite expiry, an entry that is null, an array or a scalar). Operations are read
 // (a `!command` key is not resolved, other keys resolve against the credential's env), list, modify and delete (always refused), and a rewrite of the file between

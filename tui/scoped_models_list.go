@@ -11,7 +11,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 // ModelItem describes one model in the scoped-models list.
@@ -438,7 +438,7 @@ func (s *ScopedModelsList) enabledCountText() string {
 }
 
 // NativeNode reports the list as a selector whose item ids are the models'
-// full ids and whose checks are the enabled models. pig additive (D91): the
+// full ids and whose checks are the enabled models. ompig additive (D91): the
 // status carries the refresh message, then the footer's enabled count and
 // unsaved marker without its key hints.
 func (s *ScopedModelsList) NativeNode() (frontend.Node, bool) {

@@ -10,14 +10,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func (m *InteractiveMode) dispatchSlash(ctx context.Context, line string) {
@@ -61,7 +61,7 @@ func (m *InteractiveMode) handleDebugCommand() {
 // writeDebugLog dumps the current frame and message history to a debug log
 // file under the agent dir and returns its path. Mirrors upstream
 // handleDebugCommand (interactive-mode.ts:5580) and getDebugLogPath
-// (config.ts:452). The rendered-lines section reflects pig's line renderer
+// (config.ts:452). The rendered-lines section reflects ompig's line renderer
 // (D1), so its content differs from pi's full-screen TUI by construction.
 func (m *InteractiveMode) writeDebugLog() (string, error) {
 	width, height := m.tuiInst.Width(), m.tuiInst.Height()
@@ -100,7 +100,7 @@ func (m *InteractiveMode) writeDebugLog() (string, error) {
 // buildAutocompleteProvider constructs slash-command and @-file autocomplete in Pi's builtin, template, extension, then skill order. Equal fuzzy scores preserve that order.
 // Mirrors createBaseAutocompleteProvider (interactive-mode.ts:747-776).
 func (m *InteractiveMode) buildAutocompleteProvider() tui.AutocompleteProvider {
-	// pig additive (D92): a Piglet's stripped built-in commands are absent from autocomplete.
+	// ompig additive (D92): a Ompiglet's stripped built-in commands are absent from autocomplete.
 	builtins := BuiltinSlashCommands()
 	cmds := make([]tui.SlashCommand, 0, len(builtins)+len(m.promptTemplates))
 	for _, b := range builtins {
@@ -249,9 +249,15 @@ func (m *InteractiveMode) buildSlashContext(ctx context.Context) *SlashContext {
 		// Snapshot prompt templates so /help can list them.
 		PromptTemplates: m.promptTemplates,
 		ShowStatus:      m.showStatus,
-		ShowError:       m.showError,
-		ShowWarning:     m.showWarning,
-		Quit:            m.requestShutdown,
+		OpenAgentHub: func() {
+			if m.AgentHubOpen() {
+				return
+			}
+			m.openAgentHub(ctx)
+		},
+		ShowError:   m.showError,
+		ShowWarning: m.showWarning,
+		Quit:        m.requestShutdown,
 		Reset: func() {
 			m.invalidatePostLoginSelection()
 			// Emit session_before_switch for extensions. Mirrors upstream
@@ -821,11 +827,11 @@ func (m *InteractiveMode) buildSlashContext(ctx context.Context) *SlashContext {
 			m.rebuildSystemPromptFromResources()
 
 			// 6a. Reload subprocess extensions.
-			// pig-specific: upstream has no subprocess extensions.
+			// ompig-specific: upstream has no subprocess extensions.
 			//
 			// Stage the embedded SDKs first. A reload recompiles out-of-tree
 			// extensions, and it is the command reached for after rebuilding
-			// pig itself, which is exactly when the staged SDK is older than
+			// ompig itself, which is exactly when the staged SDK is older than
 			// the running binary. Rebuilding against that stale copy reproduces
 			// the bug the startup stage exists to prevent: an extension
 			// carrying a defect the SDK already fixed, with nothing in the

@@ -15,12 +15,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // graphStep is one Session commit of a seeded program: "make" creates conversations and tasks, "advance" replaces one task's state.
@@ -295,7 +295,7 @@ func TestTaskGraphViewMatchesPiOnSeededPrograms(t *testing.T) {
 			if got[k].Err != want.Err || !reflect.DeepEqual(canonical(got[k].OK), canonical(want.OK)) || !reflect.DeepEqual(canonical(got[k].Live), canonical(want.Live)) || !reflect.DeepEqual(canonical(got[k].Fresh), canonical(want.Fresh)) || !sameDeliveries(got[k].Deliveries, want.Deliveries) {
 				differing++
 				if differing <= 3 {
-					t.Errorf("program %d step %d (%s)\n  Pi  deliveries=%v err=%q ok=%s\n  Pig deliveries=%v err=%q ok=%s\n  %s", i, k, program[k].Op, want.Deliveries, want.Err, want.OK, got[k].Deliveries, got[k].Err, got[k].OK, graphDiff(canonical(want.Live), canonical(got[k].Live), "live")+graphDiff(canonical(want.Fresh), canonical(got[k].Fresh), "fresh"))
+					t.Errorf("program %d step %d (%s)\n  Pi  deliveries=%v err=%q ok=%s\n  Ompig deliveries=%v err=%q ok=%s\n  %s", i, k, program[k].Op, want.Deliveries, want.Err, want.OK, got[k].Deliveries, got[k].Err, got[k].OK, graphDiff(canonical(want.Live), canonical(got[k].Live), "live")+graphDiff(canonical(want.Fresh), canonical(got[k].Fresh), "fresh"))
 				}
 			}
 			if want.Err != "" {
@@ -330,20 +330,20 @@ func TestTaskGraphViewMatchesPiOnSeededPrograms(t *testing.T) {
 }
 
 // graphDiff names the tasks whose nodes differ between two graph values.
-func graphDiff(pi, pig any, label string) string {
+func graphDiff(pi, ompig any, label string) string {
 	piTasks, _ := pi.(map[string]any)["tasks"].(map[string]any)
-	pigTasks, _ := pig.(map[string]any)["tasks"].(map[string]any)
+	ompigTasks, _ := ompig.(map[string]any)["tasks"].(map[string]any)
 	out := ""
 	for key, node := range piTasks {
-		if !reflect.DeepEqual(node, pigTasks[key]) {
+		if !reflect.DeepEqual(node, ompigTasks[key]) {
 			a, _ := json.Marshal(node)
-			b, _ := json.Marshal(pigTasks[key])
-			out += fmt.Sprintf("%s task %s: Pi %.200s | Pig %.200s; ", label, key, a, b)
+			b, _ := json.Marshal(ompigTasks[key])
+			out += fmt.Sprintf("%s task %s: Pi %.200s | Ompig %.200s; ", label, key, a, b)
 		}
 	}
-	for key := range pigTasks {
+	for key := range ompigTasks {
 		if _, ok := piTasks[key]; !ok {
-			out += fmt.Sprintf("%s task %s only in Pig; ", label, key)
+			out += fmt.Sprintf("%s task %s only in Ompig; ", label, key)
 		}
 	}
 	return out

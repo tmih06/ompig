@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // ackHold orders a handler's invocation acknowledgment after the host call its first suspension report announces.

@@ -3,7 +3,7 @@ package session_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi types.ts:744-802 Tx: latestHeadMarker returns the newest visible entry that carries a head; submissionByRequest finds

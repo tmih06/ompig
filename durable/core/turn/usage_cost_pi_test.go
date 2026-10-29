@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // generation.ts appendAssistant: every assistant entry's usage, cost included, is added to the conversation's `pi.usage` totals in the commit that appends it; two messages sum their cost fields.

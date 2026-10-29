@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 func newTestSlashContext() (*SlashContext, *strings.Builder, *bool, *bool) {
@@ -124,7 +124,8 @@ func TestSlashRemovedCommandsAreUnknown(t *testing.T) {
 	// F/B pass: these commands were removed because they don't exist
 	// in upstream pi. Verify they now return "unknown command".
 	r := NewSlashRegistry()
-	for _, cmd := range []string{"/clear", "/agent", "/agents", "/tools", "/cost", "/save", "/help", "/models"} {
+	// /agents is a real ompig command again (D206): the subagent roster.
+	for _, cmd := range []string{"/clear", "/agent", "/tools", "/cost", "/save", "/help", "/models"} {
 		sc, _, _, _ := newTestSlashContext()
 		err := r.Dispatch(sc, cmd, nil)
 		if err == nil {
@@ -199,22 +200,22 @@ func TestReplaceDynamic_StripsLeadingSlash(t *testing.T) {
 	r := NewSlashRegistry()
 	called := false
 	r.ReplaceDynamic([]SlashCommand{{
-		Name: "/piglets",
+		Name: "/ompiglets",
 		Handler: func(_ *ExtensionContext, _ string) error {
 			called = true
 			return nil
 		},
 	}})
 	sc, _, _, _ := newTestSlashContext()
-	if err := r.Dispatch(sc, "/piglets", &ExtensionContext{}); err != nil {
+	if err := r.Dispatch(sc, "/ompiglets", &ExtensionContext{}); err != nil {
 		t.Fatal(err)
 	}
 	if !called {
-		t.Fatal("handler not invoked for /piglets")
+		t.Fatal("handler not invoked for /ompiglets")
 	}
 	all := r.All()
 	for _, cmd := range all {
-		if cmd.Name == "/piglets" {
+		if cmd.Name == "/ompiglets" {
 			t.Fatalf("dynamic command kept leading slash: %#v", cmd)
 		}
 	}
@@ -394,7 +395,8 @@ func TestBuiltinSlashCommands_MatchesRegistry(t *testing.T) {
 		}
 	}
 	// Verify removed commands are NOT present.
-	for _, removed := range []string{"clear", "agent", "agents", "tools", "cost", "save", "help", "models"} {
+	// /agents is a real ompig command (D206), so it is not in this list.
+	for _, removed := range []string{"clear", "agent", "tools", "cost", "save", "help", "models"} {
 		if names[removed] {
 			t.Errorf("BuiltinSlashCommands should NOT contain removed command %q", removed)
 		}
@@ -750,9 +752,11 @@ func TestFormatNumber(t *testing.T) {
 // after model): 24 entries. /llama is not one of them; the built-in llama.cpp
 // extension registers it (extensions/llama/index.ts), so it is an extension
 // command that exists only while that extension is loaded.
+//
+// ompig divergence (D206): /agents follows /tree, so the order has 25 entries.
 func TestBuiltinSlashCommandsFollowUpstreamOrder(t *testing.T) {
 	want := []string{
-		"settings", "model", "tree", "thinking", "scoped-models", "export", "import", "share", "bug",
+		"settings", "model", "tree", "agents", "thinking", "scoped-models", "export", "import", "share", "bug",
 		"copy", "name", "session", "changelog", "hotkeys", "fork", "clone", "trust", "login", "logout",
 		"new", "compact", "resume", "reload", "quit",
 	}

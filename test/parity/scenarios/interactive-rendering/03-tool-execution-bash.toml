@@ -37,16 +37,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "$ expr 20 + 22"
@@ -61,7 +61,7 @@ wait_timeout_seconds = 15
 [assert]
 both_reach_ready = true
 both_not_contain = ["unknown command", "panic:", "goroutine "]
-# lint-known-gap: bg-paint SGR encoding differs between pig (paintBgWith with
+# lint-known-gap: bg-paint SGR encoding differs between ompig (paintBgWith with
 # reset re-application) and upstream (Box delegation with theme.bg). The visible
 # content, spacing, and structure are identical.
 output_normalized_equal = true
@@ -70,7 +70,7 @@ runtime_ratio_max = 2.0
 # Repeating + normalize_replace nail the durability.
 runs = 3
 
-# Mask sub-second timing in "Took Xs" footer: pi and pig can finish a
+# Mask sub-second timing in "Took Xs" footer: pi and ompig can finish a
 # trivial bash tool call in 0.0s vs 0.1s due to scheduling jitter.
 # normalize_replace applies after ANSI strip, before equality compare.
 # normalize-rationale: only the sub-second tool duration varies with scheduling.

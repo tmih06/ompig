@@ -9,7 +9,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 func mustJSON(t *testing.T, v any) []byte {
@@ -25,7 +25,7 @@ func mustJSON(t *testing.T, v any) []byte {
 // resolver built from the same manifest must then hit it. This exercises the
 // whole embed→extract→resolve pipeline without a real build.
 func TestExtractThenResolve(t *testing.T) {
-	m := Manifest{PigCoreVersion: "test", Cells: []CellEntry{{
+	m := Manifest{OmpigCoreVersion: "test", Cells: []CellEntry{{
 		Language: "go", Key: "go-core", OS: runtime.GOOS, Arch: runtime.GOARCH,
 		Binary:     "go/aaaa/runner",
 		Extensions: []ExtEntry{{Name: "context-info", Hash: "h1"}, {Name: "subagent", Hash: "h2"}},
@@ -76,24 +76,24 @@ func TestEmbeddedDefaultManifestIsEmpty(t *testing.T) {
 
 func TestLoadManifestRejectsRetiredStaticAuthenticationMetadata(t *testing.T) {
 	retiredField := "auth" + "Targets"
-	data := []byte(`{"pigCoreVersion":"","cells":[],"` + retiredField + `":[]}`)
+	data := []byte(`{"ompigCoreVersion":"","cells":[],"` + retiredField + `":[]}`)
 	_, err := loadManifest(fstest.MapFS{"cells/manifest.json": {Data: data}})
 	if err == nil || !strings.Contains(err.Error(), "unknown field") {
 		t.Fatalf("loadManifest error = %v, want unknown retired field", err)
 	}
 }
 
-// Regression: the extraction directory followed <home>/.pig whatever PIG_HOME said, so a Termux or relocated PiG home held the cells outside its own root.
+// Regression: the extraction directory followed <home>/.ompig whatever OMPIG_HOME said, so a Termux or relocated Ompig home held the cells outside its own root.
 func TestExtractDirFollowsPigHome(t *testing.T) {
 	home := filepath.Join(t.TempDir(), "relocated")
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	t.Setenv("HOME", filepath.Join(t.TempDir(), "elsewhere"))
 	t.Setenv("USERPROFILE", os.Getenv("HOME"))
 	dir, err := extractDir()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := filepath.Join(home, "piglet-binary-cells"); dir != want {
+	if want := filepath.Join(home, "ompiglet-binary-cells"); dir != want {
 		t.Fatalf("extractDir() = %q, want %q", dir, want)
 	}
 	if info, err := os.Stat(dir); err != nil || !info.IsDir() {
@@ -101,16 +101,16 @@ func TestExtractDirFollowsPigHome(t *testing.T) {
 	}
 }
 
-// The host starts a cell with cmd.Dir set to the session directory, so a relative PIG_HOME must not leave a cell path that resolves against it.
+// The host starts a cell with cmd.Dir set to the session directory, so a relative OMPIG_HOME must not leave a cell path that resolves against it.
 func TestExtractDirIsAbsoluteForARelativePigHome(t *testing.T) {
 	cwd := t.TempDir()
 	t.Chdir(cwd)
-	t.Setenv("PIG_HOME", "relative-home")
+	t.Setenv("OMPIG_HOME", "relative-home")
 	dir, err := extractDir()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := filepath.Join(cwd, "relative-home", "piglet-binary-cells"); dir != want {
+	if want := filepath.Join(cwd, "relative-home", "ompiglet-binary-cells"); dir != want {
 		t.Fatalf("extractDir() = %q, want %q", dir, want)
 	}
 }

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 func liveOracleCorpus(t *testing.T) []string {
@@ -131,14 +131,14 @@ func TestRenderLatexMatchesPiLive(t *testing.T) {
 				supported++
 			}
 			// Pi splits an astral character that is an unbraced script argument into two UTF-16 units, so its output holds a lone surrogate (U+FFFD once decoded)
-			// and the following row holds the other half; Go strings cannot hold one, and Pig keeps the character whole. Counted, not hidden.
+			// and the following row holds the other half; Go strings cannot hold one, and Ompig keeps the character whole. Counted, not hidden.
 			if want, isText := expected[i][mode].(string); isText && strings.ContainsRune(want, '\uFFFD') && strings.ContainsFunc(source, func(r rune) bool { return r > 0xFFFF }) {
 				splitSurrogate++
 				continue
 			}
 			if !reflect.DeepEqual(gotValue, expected[i][mode]) {
 				if failures++; failures <= 8 {
-					t.Errorf("display=%t %q\n  Pig %#v\n  Pi  %#v", display, source, gotValue, expected[i][mode])
+					t.Errorf("display=%t %q\n  Ompig %#v\n  Pi  %#v", display, source, gotValue, expected[i][mode])
 				}
 			}
 		}

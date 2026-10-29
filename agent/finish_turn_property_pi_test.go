@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent.ts:209 and 482: finishTurn is a public mutable property of Agent that every run reads when it builds the loop config. Assigning it after

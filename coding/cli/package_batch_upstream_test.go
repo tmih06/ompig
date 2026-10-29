@@ -12,8 +12,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/package-manager.test.ts:2366
@@ -23,7 +23,7 @@ func TestPackageBatchedConcurrentUpdatesOriginal(t *testing.T) {
  if(command==='npm'&&args[0]==='view'){if(args[1]==='user-unknown')throw new Error('registry unavailable');if(!['user-old','project-old','user-current','project-current'].includes(args[1]))throw new Error('unexpected package lookup');console.log(JSON.stringify(args[1].endsWith('-old')?'2.0.0':'1.0.0'));return;}
  let kind;
  if(command==='npm'&&args[0]==='install')kind='npm';else if(command==='git'&&args[0]==='clone'){kind='git';fs.mkdirSync(args[2],{recursive:true});}else if(command==='git'&&args[0]==='checkout')return;else throw new Error('unexpected command');
- const response=await fetch(process.env.PIG_TEST_PACKAGE_BARRIER+'/'+kind,{method:'POST',signal:AbortSignal.timeout(10000)});if(!response.ok)throw new Error('barrier failed');
+ const response=await fetch(process.env.OMPIG_TEST_PACKAGE_BARRIER+'/'+kind,{method:'POST',signal:AbortSignal.timeout(10000)});if(!response.ok)throw new Error('barrier failed');
  })().catch(e=>{console.error(e);process.exitCode=1});`)
 	userSources := []string{"npm:user-old", "npm:user-current", "npm:user-unknown", "npm:user-pinned@1.0.0", "git:github.com/example/user-repo-a", "git:github.com/example/user-repo-b", "git:github.com/example/user-repo-pinned@v1"}
 	projectSources := []string{"npm:project-old", "npm:project-current", "npm:project-missing", "git:github.com/example/project-repo-a"}
@@ -78,7 +78,7 @@ func TestPackageBatchedConcurrentUpdatesOriginal(t *testing.T) {
 		mu.Unlock()
 	}))
 	defer server.Close()
-	t.Setenv("PIG_TEST_PACKAGE_BARRIER", server.URL)
+	t.Setenv("OMPIG_TEST_PACKAGE_BARRIER", server.URL)
 	var progress []packagemanager.ProgressEvent
 	if err := packageManagerFor(f.cwd, f.settings, func(event packagemanager.ProgressEvent) {
 		progress = append(progress, event)

@@ -50,8 +50,8 @@ class K8sAdapterTests(unittest.TestCase):
         rpc = {"open_rpc_ms": 400.0, "open_rpc_cpu_ms": 500.0, "append_turn_walls_ms": [130.0, 140.0, 120.0], "append_turn_cpus_ms": [160.0, 150.0, 155.0],
                "open_rpc_peak_rss_mib": 70.5, "open_rpc_steady_rss_mib": 70.0, "resume_rpc_ms": 540.0, "append_turn_wall_ms": 130.0}
         tui = {"first_output_ms": 430.0, "resize_w100_ms": 350.0, "resize_h30_ms": None, "open_bytes": True, "alt_screen": True, "resize_w100_clears_scrollback": False}
-        line = k8s.sample_line("pig", 1_000_000, 2, "a3d78d643f9b7ebd", {"rpc": rpc, "tui": tui})
-        self.assertEqual((line["t"], line["target"], line["turns"], line["sample"], line["fingerprint"]), ("sample", "pig", 1_000_000, 2, "a3d78d643f9b7ebd"))
+        line = k8s.sample_line("ompig", 1_000_000, 2, "a3d78d643f9b7ebd", {"rpc": rpc, "tui": tui})
+        self.assertEqual((line["t"], line["target"], line["turns"], line["sample"], line["fingerprint"]), ("sample", "ompig", 1_000_000, 2, "a3d78d643f9b7ebd"))
         self.assertEqual(line["open"], 400.0)
         self.assertEqual(line["turn"], [130.0, 140.0, 120.0])
         self.assertEqual(line["turnCpu"], [160.0, 150.0, 155.0])
@@ -147,7 +147,7 @@ class K8sSampleTests(unittest.TestCase):
         return {"resume_tui_ms": 8.0}
 
     def sample(self, phases=("rpc", "tui", "resume-tui")):
-        return k8s.sample("pig", "pig", "/bin/true", self.TOKENS, 3, self.dir, 2, list(phases), "default", 30)
+        return k8s.sample("ompig", "ompig", "/bin/true", self.TOKENS, 3, self.dir, 2, list(phases), "default", 30)
 
     def test_every_phase_measures_an_unchanged_copy(self):
         line = self.sample()
@@ -189,7 +189,7 @@ class K8sSampleTests(unittest.TestCase):
 
     def test_stdout_carries_only_the_result_line(self):
         self.loud = True
-        args = mock.Mock(k8s_cmd="sample", target="pig", family="pig", binary="/bin/true", tokens=self.TOKENS, seed=3, dir=self.dir, sample=1,
+        args = mock.Mock(k8s_cmd="sample", target="ompig", family="ompig", binary="/bin/true", tokens=self.TOKENS, seed=3, dir=self.dir, sample=1,
                                     phases=["rpc", "tui"], mode="default", timeout=30)
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
@@ -245,8 +245,8 @@ class K8sOverheadTests(unittest.TestCase):
                  "_series": {"gap_ms": [7.0, 8.0, 6.0], "cpu_turn_ms": [5.0, 6.0, 4.0]}}
         results = {"version": {"wall_ms": 20.0, "cpu_ms": 15.0, "peak_rss_mib": 6.0, "meter": "cgroup"}, "print-tools": tools,
                    "rpc": {"ready_ms": 140.0, "turn_wall_ms": 100.0, "teardown_ms": None}, "pty": {"first_frame_ms": 150.0, "input_to_request_ms": True}}
-        line = k8s.overhead_line("pig", 3, 4, "13a870eb85bf000f", results)
-        self.assertEqual((line["t"], line["target"], line["turns"], line["sample"], line["fingerprint"]), ("sample", "pig", 3, 4, "13a870eb85bf000f"))
+        line = k8s.overhead_line("ompig", 3, 4, "13a870eb85bf000f", results)
+        self.assertEqual((line["t"], line["target"], line["turns"], line["sample"], line["fingerprint"]), ("sample", "ompig", 3, 4, "13a870eb85bf000f"))
         self.assertEqual((line["open"], line["turn"], line["openCpu"], line["turnCpu"], line["peakRss"]), (60.0, [7.0, 8.0, 6.0], 90.0, [5.0, 6.0, 4.0], 52.5))
         self.assertEqual((line["versionMs"], line["versionCpuMs"], line["toolsMs"], line["toolsGapMs"], line["rpcReadyMs"], line["rpcTurnMs"], line["ptyFirstFrameMs"]),
                          (20.0, 15.0, 500.0, 7.0, 140.0, 100.0, 150.0))
@@ -255,10 +255,10 @@ class K8sOverheadTests(unittest.TestCase):
         self.assertFalse(any(isinstance(v, (bool, str)) for k, v in line.items() if k not in ("t", "target", "fingerprint")))
         # A turn more or less than the rounds, or no CPU reading at the first request, is a broken measurement.
         with self.assertRaises(SystemExit):
-            k8s.overhead_line("pig", 4, 0, "x", results)
+            k8s.overhead_line("ompig", 4, 0, "x", results)
         del tools["first_request_cpu_ms"]
         with self.assertRaises(SystemExit):
-            k8s.overhead_line("pig", 3, 0, "x", results)
+            k8s.overhead_line("ompig", 3, 0, "x", results)
 
     def test_every_mapped_field_is_one_the_overhead_bench_measures(self):
         import inspect
@@ -325,13 +325,13 @@ class K8sOverheadSampleTests(unittest.TestCase):
             return {"failure": "boom"}
         return {"first_request_ms": 1.0, "first_request_cpu_ms": 2.0, "_series": {"gap_ms": [3.0] * tools, "cpu_turn_ms": [4.0] * tools}}
 
-    def run_sample(self, family="pig", scenarios=("version", "print", "print-tools", "rpc", "pty"), seed=None):
+    def run_sample(self, family="ompig", scenarios=("version", "print", "print-tools", "rpc", "pty"), seed=None):
         k8s.overhead_seed(2, list(seed or scenarios), self.dir)
         return k8s.overhead_sample("t", family, "/bin/true", 2, list(scenarios), self.dir, 1, 30)
 
     def test_scenarios_run_in_order_with_the_rounds(self):
         line = self.run_sample()
-        self.assertEqual(self.calls, [("version", "pig", 2), ("print", "pig", 0), ("print-tools", "pig", 2), ("rpc", "pig", 2), ("pty", "pig", 2)])
+        self.assertEqual(self.calls, [("version", "ompig", 2), ("print", "ompig", 0), ("print-tools", "ompig", 2), ("rpc", "ompig", 2), ("pty", "ompig", 2)])
         self.assertEqual((line["open"], line["turn"], line["versionMs"]), (1.0, [3.0, 3.0], 1.0))
 
     def test_another_workload_than_the_seed_is_refused(self):
@@ -377,7 +377,7 @@ class K8sOverheadSampleTests(unittest.TestCase):
         seed = json.loads(out.getvalue())
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            self.assertEqual(cli.main(["k8s", "overhead-sample", "--target", "t", "--family", "pig", "--binary", "/bin/true", "--rounds", "2",
+            self.assertEqual(cli.main(["k8s", "overhead-sample", "--target", "t", "--family", "ompig", "--binary", "/bin/true", "--rounds", "2",
                                        "--scenarios", "version,print-tools", "--dir", self.dir, "--sample", "3"]), 0)
         lines = out.getvalue().splitlines()
         self.assertEqual(len(lines), 1, lines)
@@ -395,15 +395,15 @@ class K8sOverheadSampleTests(unittest.TestCase):
             cli.main(["k8s", "overhead-seed", "--rounds", "2", "--scenarios", "version,print-tools", "--dir", self.dir])
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as e:
-                cli.main(["k8s", "overhead-sample", "--target", "t", "--family", "pig", "--arm", arm_id, "--binary", "/bin/true", "--rounds", "2",
+                cli.main(["k8s", "overhead-sample", "--target", "t", "--family", "ompig", "--arm", arm_id, "--binary", "/bin/true", "--rounds", "2",
                           "--scenarios", "version,print-tools", "--dir", self.dir])
-        self.assertIn(f"arm {arm_id} is of family codex, not pig", str(e.exception))
+        self.assertIn(f"arm {arm_id} is of family codex, not ompig", str(e.exception))
         self.assertEqual(self.calls, [])
 
 class K8sOverheadArmTests(unittest.TestCase):
     def test_a_plain_agent_has_no_harness_settings(self):
-        arm = k8s.overhead_arm("pig", "pig", "/bin/true", None)
-        self.assertEqual((arm.id, arm.family, arm.binary, arm.spec), ("pig", "pig", "/bin/true", {}))
+        arm = k8s.overhead_arm("ompig", "ompig", "/bin/true", None)
+        self.assertEqual((arm.id, arm.family, arm.binary, arm.spec), ("ompig", "ompig", "/bin/true", {}))
         with self.assertRaises(SystemExit):
             k8s.overhead_arm("x", "claude", "/bin/true", None)
 

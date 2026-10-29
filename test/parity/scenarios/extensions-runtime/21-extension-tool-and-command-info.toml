@@ -19,7 +19,7 @@
 #     --model test-faux/faux-1 --no-session --mode rpc
 #   stdin: {"id":"info","type":"prompt","message":"/api-info <file>"}
 #
-# RPC mode already ran extension commands, so this isolates the lists: pig's
+# RPC mode already ran extension commands, so this isolates the lists: ompig's
 # Node runtime returned tool and command names, and only the active tools.
 # Pi's RPC setup writes no host tool inventory. The complete protocol output is compared as well as the artifact; generated host debugging lines must not replace extension-authored console output.
 
@@ -56,8 +56,8 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/api-info.json"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["../testdata/extension-api-info.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["../testdata/extension-api-info.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "../testdata/extension-api-info.mjs",
@@ -67,7 +67,7 @@ pi_extensions = [
 exit_code = 0
 runs = 3
 output_equal = true
-both_not_contain = ["pig --rpc:"]
+both_not_contain = ["ompig --rpc:"]
 both_contain = ['"id":"info","type":"response","command":"prompt","success":true']
 artifact_normalized_equal = true
 artifact_both_contain = [

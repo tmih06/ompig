@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	"github.com/tmih06/ompig/durable/durabletest"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // discardingWrites loses every written file, so the first conformance case cannot read its fixture back.

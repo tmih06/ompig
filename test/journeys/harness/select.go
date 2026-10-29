@@ -8,7 +8,7 @@ import (
 )
 
 // AlwaysRun lists path prefixes whose change selects every journey: the program entry point, the journey infrastructure and the lock-order checker they depend on, the module definition, and the packages every journey's comparison passes through. Every journey compares provider requests (ai/, agent/), session files (internal/sessionentry/ and the encoders under internal/) and frames, so a change there selects all of them even when no journey names the package.
-var AlwaysRun = []string{"cmd/pig/", "test/journeys/", "internal/", "ai/", "agent/", "go.mod", "go.sum"}
+var AlwaysRun = []string{"cmd/ompig/", "test/journeys/", "internal/", "ai/", "agent/", "go.mod", "go.sum"}
 
 // ignorable reports files no journey can observe: documentation and changelog fragments.
 func ignorable(path string) bool {

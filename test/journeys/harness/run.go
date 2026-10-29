@@ -17,13 +17,13 @@ import (
 
 // Config is shared by every run of one test process.
 type Config struct {
-	PigBin string
-	PiBin  string
-	// Instrumented marks the PiG binary as built with the race detector, the lock-order wrappers and the request-validity tag; its memory bound is scaled.
+	OmpigBin string
+	PiBin    string
+	// Instrumented marks the Ompig binary as built with the race detector, the lock-order wrappers and the request-validity tag; its memory bound is scaled.
 	Instrumented bool
 	// ArtifactDir receives the evidence of failing runs.
 	ArtifactDir string
-	// CoverDir, when set, is GOCOVERDIR for PiG runs (the binary must be built with -cover).
+	// CoverDir, when set, is GOCOVERDIR for Ompig runs (the binary must be built with -cover).
 	CoverDir string
 	// Scale multiplies every wait deadline (JOURNEY_TIMEOUT_SCALE) for loaded hosts.
 	Scale float64
@@ -116,13 +116,13 @@ func NewRun(cfg *Config, j *Journey, kind Kind, plan Plan, root string) (*Run, e
 		}
 		return nil
 	}
-	extra := append([]string{"PIG_JOURNEY_ID=" + c.id}, c.Env.ExtraEnv...)
-	if kind == PiG {
+	extra := append([]string{"OMPIG_JOURNEY_ID=" + c.id}, c.Env.ExtraEnv...)
+	if kind == Ompig {
 		if cfg.Instrumented {
 			extra = append(extra,
 				"GORACE=log_path="+filepath.Join(root, "race")+" exitcode=66 halt_on_error=0",
-				"PIG_LOCKORDER_REPORT="+filepath.Join(root, "lockorder.txt"),
-				"PIG_REQUEST_VALIDITY_REPORT="+filepath.Join(root, "requestvalidity.txt"))
+				"OMPIG_LOCKORDER_REPORT="+filepath.Join(root, "lockorder.txt"),
+				"OMPIG_REQUEST_VALIDITY_REPORT="+filepath.Join(root, "requestvalidity.txt"))
 		}
 		if cfg.CoverDir != "" {
 			extra = append(extra, "GOCOVERDIR="+cfg.CoverDir)
@@ -152,8 +152,8 @@ func (c *Run) Intn(n int) int { return c.rng.IntN(n) }
 func Pick[T any](c *Run, options ...T) T { return options[c.rng.IntN(len(options))] }
 
 func (c *Run) bin() string {
-	if c.Kind == PiG {
-		return c.Cfg.PigBin
+	if c.Kind == Ompig {
+		return c.Cfg.OmpigBin
 	}
 	return c.Cfg.PiBin
 }
@@ -303,7 +303,7 @@ func (c *Run) hang(desc, why string, waited time.Duration) {
 	for _, e := range c.P.Events() {
 		fmt.Fprintf(&b, "%s %s #%d %s\n", e.At.Format("15:04:05.000"), e.Kind, e.N, e.Name)
 	}
-	if pid := c.T.PID(); pid > 0 && c.Kind == PiG {
+	if pid := c.T.PID(); pid > 0 && c.Kind == Ompig {
 		// SIGQUIT makes the Go runtime write every goroutine's stack to stderr and exit.
 		_ = signalPID(pid, 3)
 		select {
@@ -458,7 +458,7 @@ func (c *Run) Snap(name string) {
 }
 
 func (c *Run) sampleMem(at string) {
-	if c.T == nil || c.Kind != PiG {
+	if c.T == nil || c.Kind != Ompig {
 		return
 	}
 	pid := c.T.PID()
@@ -570,7 +570,7 @@ func (c *Run) finish(aborted bool) {
 	for _, f := range c.P.Failures() {
 		c.note("request", "%s", f)
 	}
-	if c.Kind == PiG {
+	if c.Kind == Ompig {
 		c.checkStderr()
 		c.checkMemory()
 	}
@@ -578,7 +578,7 @@ func (c *Run) finish(aborted bool) {
 
 // sweepLeaks fails the run if a process of this run outlives its terminal: it scans for the run's unique environment marker and kills any survivor.
 func (c *Run) sweepLeaks() {
-	for _, pid := range findMarked("PIG_JOURNEY_ID=" + c.id) {
+	for _, pid := range findMarked("OMPIG_JOURNEY_ID=" + c.id) {
 		if c.T != nil && pid == c.T.PID() {
 			select {
 			case <-c.T.Exited():

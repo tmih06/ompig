@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi rebinds after /resume and rebuilds the autocomplete provider on this.sessionManager.getCwd()

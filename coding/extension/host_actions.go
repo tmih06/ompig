@@ -3,7 +3,7 @@ package extension
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ExtensionActions is the host-side injection of agent-loop callbacks

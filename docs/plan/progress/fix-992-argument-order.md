@@ -4,7 +4,7 @@ Base: `staging/porter/pi-0.99.1` at `299ad70c3`. Oracle: upstream 0.99.2 (`.upst
 
 ## Cause
 
-Pi stores `toolCall.arguments` as the JavaScript object `JSON.parse` built, so every consumer sees insertion order (integer-like keys first). `validateToolArguments` returns `structuredClone` of it (`packages/ai/src/utils/validation.ts:317-339`). PiG sorted the members in two layers: `ai.ToolCall.Arguments` is a `map[string]any` and `agent/validate.go` re-marshals a map.
+Pi stores `toolCall.arguments` as the JavaScript object `JSON.parse` built, so every consumer sees insertion order (integer-like keys first). `validateToolArguments` returns `structuredClone` of it (`packages/ai/src/utils/validation.ts:317-339`). Ompig sorted the members in two layers: `ai.ToolCall.Arguments` is a `map[string]any` and `agent/validate.go` re-marshals a map.
 
 ## Red run (before any fix)
 
@@ -19,7 +19,7 @@ Stubs: `ai/tool_call_arguments.go` (`ToolCall.ArgumentsJSON`, `ToolCall.SetStrea
 | `ai` `TestProviderRequestsReplayToolCallArgumentsInModelOrder` (openai completions, openai responses, mistral, anthropic, google) | all 5 fail |
 | `agent` `TestValidateToolArgsKeepsMemberOrder`, `TestPendingToolCallKeepsArgumentOrder`, `TestAgentMessageToolCallArgumentsKeepWrittenMemberOrder`, `TestAgentLoopDeliversToolArgumentsInModelOrder` | all fail |
 | `coding` `TestNestedToolCallKeepsTheScriptsArgumentOrder` | fail (start event, host call, nestedCalls record) |
-| `cmd/pig` `TestAuditNodeExtensionToolCallsReachTheToolLikePi/arguments_keep_the_models_member_order` (cherry-picked from `audit-992-codemode-mcp` e6a5e8ed2) | fail: `{"alpha":"a","zeta":"1"}`, want `{"zeta":"1","alpha":"a"}` |
+| `cmd/ompig` `TestAuditNodeExtensionToolCallsReachTheToolLikePi/arguments_keep_the_models_member_order` (cherry-picked from `audit-992-codemode-mcp` e6a5e8ed2) | fail: `{"alpha":"a","zeta":"1"}`, want `{"zeta":"1","alpha":"a"}` |
 
 The cherry-picked file also holds `prepareArguments_runs_before_validation` and `parallel_batch_starts_in_source_order` (audit findings CM1, CM2). They belong to `fix-992-ext-tool-dispatch`; the file is kept byte-identical to the audit branch so the two lanes merge without a conflict, and they stay red here.
 
@@ -41,7 +41,7 @@ Option B (approved by the lead in `questions/fix-992-argument-order.md`): `ai.To
 
 The agent loop, hooks, `tool_execution_*` events and every SDK tool already moved arguments as `json.RawMessage`, so they needed no change once `pendingToolCall.args` and validation kept the order. MCP `tools/call` forwards that raw text (`coding/mcpext/tools.go`, `mcp/client.go:CallTool`); `TestClientCallToolSendsRawArgumentsInTheirMemberOrder` pins it on the wire.
 
-New tests in the green commit (added after the red commit, so not red-run in that commit): `TestClientCallToolSendsRawArgumentsInTheirMemberOrder` (guard, green before and after), `TestNestedToolCallRecordKeepsArgumentMemberOrderThroughJSONAndClone` (red on the base: it needs `SetArgumentsJSON`), and `cmd/pig` `TestPersistedSessionKeepsTheModelsToolArgumentOrder` (real binary, session JSONL; red on the base worktree: `{"alpha":"a","zeta":"1"}`).
+New tests in the green commit (added after the red commit, so not red-run in that commit): `TestClientCallToolSendsRawArgumentsInTheirMemberOrder` (guard, green before and after), `TestNestedToolCallRecordKeepsArgumentMemberOrderThroughJSONAndClone` (red on the base: it needs `SetArgumentsJSON`), and `cmd/ompig` `TestPersistedSessionKeepsTheModelsToolArgumentOrder` (real binary, session JSONL; red on the base worktree: `{"alpha":"a","zeta":"1"}`).
 
 ## Evidence
 
@@ -51,8 +51,8 @@ New tests in the green commit (added after the red commit, so not red-run in tha
 - Performance (`go test -bench`, same machine, base `299ad70c3` vs this tip):
   - a 1.3 KB `edit` argument text parsed at five prefixes plus the full text: 140 µs, 1226 allocs → 190 µs, 1660 allocs. A first version cost 2625 allocs; `strconv.ParseUint` allocated an error for every non-index key, so `javascriptObjectKeyOrder` now tests for digits first, and `unsortedKeyOrder` skips the clone and sort when no key can be an index.
   - `BenchmarkToolArgumentValidation` (`agent`): read 167 µs → 173 µs, edits-1 223 µs → 223 µs, edits-1000 8.1 ms → 10.2 ms (the token walk that reads the order). The cost is linear in the text, like the validation it follows.
-- `go build ./...`, `go vet ./...`, `GOOS=windows go vet` and `go fix -diff` on the touched packages, gofmt, and `golangci-lint` (`ai`, `agent`, `coding`, `mcp`, `cmd/pig`, `internal/codingagent`) are clean.
-- Test comparison with the base worktree: every failure in `ai`, `agent`, `coding`, `internal/...`, `extensions/...`, `mcp`, `codemode`, `tui` and `cmd/pig` also fails on the base (a upstream 0.99.2 oracle test needs `extensions/sdk-ts/node_modules`, absent while the npm package is in cooldown, or a Node lockfile oracle), except `TestNodeRetainedRequestContextNormalAndCancelled`, which fails only inside the 437 s `subprocess` package run and passes alone (`-count=3`).
+- `go build ./...`, `go vet ./...`, `GOOS=windows go vet` and `go fix -diff` on the touched packages, gofmt, and `golangci-lint` (`ai`, `agent`, `coding`, `mcp`, `cmd/ompig`, `internal/codingagent`) are clean.
+- Test comparison with the base worktree: every failure in `ai`, `agent`, `coding`, `internal/...`, `extensions/...`, `mcp`, `codemode`, `tui` and `cmd/ompig` also fails on the base (a upstream 0.99.2 oracle test needs `extensions/sdk-ts/node_modules`, absent while the npm package is in cooldown, or a Node lockfile oracle), except `TestNodeRetainedRequestContextNormalAndCancelled`, which fails only inside the 437 s `subprocess` package run and passes alone (`-count=3`).
 
 ## Not covered (deferred, by owner family)
 
@@ -62,4 +62,4 @@ New tests in the green commit (added after the red commit, so not red-run in tha
 - A lone UTF-16 surrogate in a tool argument of a call whose order is not sorted is written as U+FFFD by `marshalSchemaWithOrder` (`json.Marshal` leaves, shared with `ToolSchema`). A sorted call still goes through the unchanged path. Changing the shared helper's leaf encoder collides with `fix-992-ai-js-semantics`, which edits the same lines (`marshalJSONUnescaped`).
 - A member added to the `Arguments` map after decoding, when the model's order was already sorted, sorts into place instead of following the others (no sidecar exists then). Nothing in the production path adds members.
 - `make parity-family`: needs `extensions/sdk-ts/node_modules/.bin/pi` (npm cooldown), as the other 0.99.2 lanes report.
-- `prepareArguments_runs_before_validation` and `parallel_batch_starts_in_source_order` in the cherry-picked `cmd/pig` test stay red: CM1 and CM2 belong to `fix-992-ext-tool-dispatch`.
+- `prepareArguments_runs_before_validation` and `parallel_batch_starts_in_source_order` in the cherry-picked `cmd/ompig` test stay red: CM1 and CM2 belong to `fix-992-ext-tool-dispatch`.

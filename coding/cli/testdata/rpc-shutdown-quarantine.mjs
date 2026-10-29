@@ -14,7 +14,7 @@ export default function (pi) {
       }
     },
   });
-  // qping records the mode of this extension's runtime, which pig reports and Pi does not: a restarted Node process serves commands before the host activates it, and until then its mode is not "rpc" and it runs a command without the RPC invocation acknowledgment.
+  // qping records the mode of this extension's runtime, which ompig reports and Pi does not: a restarted Node process serves commands before the host activates it, and until then its mode is not "rpc" and it runs a command without the RPC invocation acknowledgment.
   pi.registerCommand("qping", {
     description: "Record the runtime mode",
     handler: async (_args, ctx) => record("qping:" + ctx.mode),

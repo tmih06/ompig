@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl/node"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
+	"github.com/tmih06/ompig/durable/storage/jsonl/node"
 )
 
 // failingFileSystem is the node file system with chosen operations replaced.

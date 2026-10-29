@@ -4,9 +4,9 @@ import (
 	"os"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // Ports packages/coding-agent/src/core/prompt-templates.ts

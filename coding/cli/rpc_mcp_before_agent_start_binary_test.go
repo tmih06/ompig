@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // builtin:mcp's before_agent_start handler awaits once (extensions/mcp/index.ts:1175-1181), and Pi 1.2.0's _startRun resumes one microtask after the async _prepareRun returns (agent-session.ts:1832-1837), so with the extension loaded Pi answers a prompt after a steer from the same input batch, whichever was read first. Without the extension (--no-extensions) the prompt answers before the steer. Probed on Pi 1.2.0 (`pi --mode rpc --no-session --offline -e test-faux-provider.ts`, with and without --no-extensions, both input orders): s,p; s,p; p,s; p,s.
 func TestRPCPromptAnswersAfterTheBuiltinMCPBeforeAgentStartHandler(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	steerFirst := `{"type":"steer","id":"s","message":"hi"}` + "\n" + `{"type":"prompt","id":"p","message":"hello"}` + "\n"
@@ -47,12 +47,12 @@ func TestRPCPromptAnswersAfterTheBuiltinMCPBeforeAgentStartHandler(t *testing.T)
 			agentDir := t.TempDir()
 			cmd := exec.Command(bin, append([]string{"--mode", "rpc", "--no-session", "--offline", "--model", "test-faux/faux-1"}, tc.extra...)...)
 			cmd.Dir = agentDir
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 			cmd.Stdin = stdin
 			var stdoutBuf, stderrBuf bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdoutBuf, &stderrBuf
 			if err := testenv.Run(t, cmd); err != nil {
-				t.Fatalf("pig --mode rpc: %v\nstderr: %s", err, stderrBuf.String())
+				t.Fatalf("ompig --mode rpc: %v\nstderr: %s", err, stderrBuf.String())
 			}
 			stdout := stdoutBuf.String()
 			var order []string

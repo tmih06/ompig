@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/coding-agent/test/system-prompt-updates.test.ts:84-110; system-prompt.ts:141-186 validates names before skipping empty values and preserves base/custom insertion order.

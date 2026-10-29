@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -15,7 +15,7 @@ import (
 //
 //	Error: Failed to load extension "<path>": Failed to load extension: Command registered by extension "<path>" must have a non-empty string name. Use pi.registerCommand("name", { description, handler }).
 //
-// PiG's Node runtime (runtime-node/runtime.mjs registerCommand) accepts the object form and runs the command.
+// Ompig's Node runtime (runtime-node/runtime.mjs registerCommand) accepts the object form and runs the command.
 func TestAuditNodeRunnerRejectsObjectFormCommandRegistration(t *testing.T) {
 	root := t.TempDir()
 	path := filepath.Join(root, "object-command.js")

@@ -1,4 +1,4 @@
-// Command prodreach lists the functions that the PiG binary can reach, by rapid type analysis from the main function and
+// Command prodreach lists the functions that the Ompig binary can reach, by rapid type analysis from the main function and
 // the package initializers of the given main packages, and from the exported API of the given library packages.
 //
 // Usage: go run ./test/parity/cmd/prodreach [-out reach.json] [-tags a,b]... [-library pkg]... <main package pattern>...
@@ -15,7 +15,7 @@
 // Each entry is written as "<repo-relative file>#<Recv.Name or Name>", the form of a production reference in the interface
 // mapping. Test files are not loaded, so a function that only tests call is absent. Rapid type analysis keeps a method only
 // when its receiver type is instantiated in reachable code, so a type that only tests construct does not make its methods
-// reachable. The walk does not enter the parity-harness probes in parity_harness.go, which run only under PIG_PARITY_HARNESS=1. The
+// reachable. The walk does not enter the parity-harness probes in parity_harness.go, which run only under OMPIG_PARITY_HARNESS=1. The
 // result is otherwise an over-approximation of what runs, never an under-approximation of what can run.
 package main
 
@@ -33,7 +33,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/test/parity/internal/ledgertarget"
+	"github.com/tmih06/ompig/test/parity/internal/ledgertarget"
 
 	"golang.org/x/tools/go/callgraph"
 	"golang.org/x/tools/go/callgraph/rta"
@@ -326,7 +326,7 @@ func walk(seeds []*callgraph.Node, skip func(*callgraph.Node) bool) map[*callgra
 	return visited
 }
 
-// isHarness reports a parity-harness probe. The probes run only under PIG_PARITY_HARNESS=1, so a function that only they call is test
+// isHarness reports a parity-harness probe. The probes run only under OMPIG_PARITY_HARNESS=1, so a function that only they call is test
 // scaffolding: the walk does not enter them.
 func isHarness(fset *token.FileSet, fn *ssa.Function) bool {
 	if origin := fn.Origin(); origin != nil {

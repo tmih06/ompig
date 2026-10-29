@@ -1,6 +1,6 @@
 package agent
 
-import "github.com/MichaelKinsy/PiG/ai"
+import "github.com/tmih06/ompig/ai"
 
 // convertToLLM is the request a real provider converts when the agent loop sends msgs: the loop's ConvertToLLM, the D48 repair its RepairToolFlow option asks for, and the provider's transformMessages.
 func convertToLLM(msgs []AgentMessage, model *ai.Model) []ai.Message {

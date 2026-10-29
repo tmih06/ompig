@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // theme binds the shared theme-controller state machine to this mode's settings, renderer and output. The binding is built
@@ -45,7 +45,7 @@ func (m *InteractiveMode) themeOutput() io.Writer {
 	if m.themeState.output != nil {
 		return m.themeState.output
 	}
-	// pig additive (D91): while a frontend session draws, PiG writes to the
+	// ompig additive (D91): while a frontend session draws, Ompig writes to the
 	// terminal in turn with it.
 	if m.surface != nil {
 		return m.surface.TerminalOut()

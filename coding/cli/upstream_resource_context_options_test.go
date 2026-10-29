@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func writeResourceTestFiles(t *testing.T, root string, files map[string]string) {
@@ -33,12 +33,12 @@ func TestUpstreamResourceLoaderContextOptions(t *testing.T) {
 	}{
 		{name: "discover AGENTS.md", files: map[string]string{"project/AGENTS.md": "# Project Guidelines\n\nBe helpful."}, wantContext: true},
 		{name: "noContextFiles", noContext: true, files: map[string]string{"project/AGENTS.override.md": "# Override Guidelines\n\nBe helpful.", "project/AGENTS.md": "# Project Guidelines\n\nBe helpful.", "project/CLAUDE.md": "# Claude Guidelines\n\nBe helpful."}},
-		{name: "discover SYSTEM.md", system: "You are a helpful assistant.", files: map[string]string{"project/.pig/SYSTEM.md": "You are a helpful assistant."}},
-		{name: "discover APPEND_SYSTEM.md", appendix: "Additional instructions.", files: map[string]string{"project/.pig/APPEND_SYSTEM.md": "Additional instructions."}},
+		{name: "discover SYSTEM.md", system: "You are a helpful assistant.", files: map[string]string{"project/.ompig/SYSTEM.md": "You are a helpful assistant."}},
+		{name: "discover APPEND_SYSTEM.md", appendix: "Additional instructions.", files: map[string]string{"project/.ompig/APPEND_SYSTEM.md": "Additional instructions."}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			root := t.TempDir()
-			t.Setenv("PIG_HOME", filepath.Join(root, "config"))
+			t.Setenv("OMPIG_HOME", filepath.Join(root, "config"))
 			writeResourceTestFiles(t, root, tc.files)
 			cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 			files := loadContextFiles(cwd, agentDir, tc.noContext)
@@ -64,21 +64,21 @@ func TestUpstreamResourceLoaderContextOptions(t *testing.T) {
 // Ports packages/coding-agent/test/resource-loader.test.ts:440-484. Project context remains visible without trust, but executable/configuration resources do not load.
 func TestUpstreamResourceLoaderUntrustedProject(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "config"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "config"))
 	writeResourceTestFiles(t, root, map[string]string{
-		"project/.pig/SYSTEM.md":                     "Project system prompt.",
-		"agent/SYSTEM.md":                            "Global system prompt.",
-		"agent/AGENTS.md":                            "Global instructions",
-		"project/AGENTS.md":                          "Project instructions",
-		"project/.pig/extensions/project.ts":         `throw new Error("should not load");`,
-		"project/.pig/skills/project-skill/SKILL.md": "---\nname: project-skill\ndescription: Project skill\n---\nProject skill content",
-		"project/.pig/prompts/project.md":            "Project prompt",
+		"project/.ompig/SYSTEM.md":                     "Project system prompt.",
+		"agent/SYSTEM.md":                              "Global system prompt.",
+		"agent/AGENTS.md":                              "Global instructions",
+		"project/AGENTS.md":                            "Project instructions",
+		"project/.ompig/extensions/project.ts":         `throw new Error("should not load");`,
+		"project/.ompig/skills/project-skill/SKILL.md": "---\nname: project-skill\ndescription: Project skill\n---\nProject skill content",
+		"project/.ompig/prompts/project.md":            "Project prompt",
 	})
 	theme, err := os.ReadFile("../../.upstream/current/packages/coding-agent/src/modes/interactive/theme/dark.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	writeResourceTestFiles(t, root, map[string]string{"project/.pig/themes/project.json": strings.Replace(string(theme), `"name": "dark"`, `"name": "project-theme"`, 1)})
+	writeResourceTestFiles(t, root, map[string]string{"project/.ompig/themes/project.json": strings.Replace(string(theme), `"name": "dark"`, `"name": "project-theme"`, 1)})
 	cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 	sm := codingagent.NewSettingsManagerWithProjectTrust(cwd, agentDir, false)
 	scopes := trustedAmbientScopes(nil)

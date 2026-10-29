@@ -11,9 +11,9 @@ import (
 	"strings"
 	"sync"
 
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 type KeyID = string
@@ -65,6 +65,7 @@ func appKeybindingDefinitionsFor(platform tui.KeybindingPlatform) map[string]Key
 		"app.clipboard.pasteImage":      {DefaultKeys: tui.PlatformKeys{Other: []KeyID{"ctrl+v"}, Windows: []KeyID{"alt+v"}}.For(platform), Description: "Paste files on macOS, images, or text from clipboard"},
 		"app.session.new":               {DefaultKeys: nil, Description: "Start a new session"},
 		"app.session.tree":              {DefaultKeys: nil, Description: "Open session tree"},
+		"app.agents.hub":                {DefaultKeys: []KeyID{"alt+a"}, Description: "Open Agent Hub"},
 		"app.session.fork":              {DefaultKeys: nil, Description: "Fork current session"},
 		"app.session.resume":            {DefaultKeys: nil, Description: "Resume a session"},
 		"app.tree.foldOrUp":             {DefaultKeys: tui.PlatformKeys{Other: []KeyID{"ctrl+left", "alt+left"}, Darwin: []KeyID{"alt+left", "ctrl+left"}}.For(platform), Description: "Fold tree branch or move up"},
@@ -317,7 +318,7 @@ func (km *KeybindingsManager) rebuild() {
 	for action, keys := range km.userBindings {
 		userBindings[action] = slices.Clone(keys)
 	}
-	// pig additive (D92): an action whose built-in the process strips resolves to no key, as if the user unbound it.
+	// ompig additive (D92): an action whose built-in the process strips resolves to no key, as if the user unbound it.
 	for action := range appActionOwners {
 		if appActionStripped(action) {
 			km.resolved[action] = nil

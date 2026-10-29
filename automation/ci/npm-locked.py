@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Install a locked npm tree only when its manifest content changes.
 
-With PIG_NODE_MODULES_STORE set to a directory, the tree is installed once per
+With OMPIG_NODE_MODULES_STORE set to a directory, the tree is installed once per
 manifest content under that directory and the checkout's node_modules becomes a
 symbolic link to it, so every checkout on a host with the same package.json and
 package-lock.json shares one tree instead of installing its own copy.
@@ -36,7 +36,7 @@ def ensure_shared(directory: Path, store: Path, expected: str) -> None:
     store.mkdir(parents=True, exist_ok=True)
     entry = store / f"{directory.name}-{expected.strip()[:24]}"
     shared = entry / "node_modules"
-    stamp = shared / ".pig-deps-ready"
+    stamp = shared / ".ompig-deps-ready"
     if not (stamp.is_file() and stamp.read_text() == expected):
         import fcntl  # POSIX only; the store is a host cache for lane machines
 
@@ -50,7 +50,7 @@ def ensure_shared(directory: Path, store: Path, expected: str) -> None:
                     npm_ci(staging)
                     if manifest_digest(directory) != expected or manifest_digest(staging) != expected:
                         raise ValueError("npm manifests changed during install; no dependency stamp written")
-                    (staging / "node_modules" / ".pig-deps-ready").write_text(expected)
+                    (staging / "node_modules" / ".ompig-deps-ready").write_text(expected)
                     if entry.exists():
                         shutil.rmtree(entry)
                     staging.rename(entry)
@@ -68,10 +68,10 @@ def ensure_shared(directory: Path, store: Path, expected: str) -> None:
 def ensure(directory: Path) -> None:
     expected = manifest_digest(directory)
     modules = directory / "node_modules"
-    stamp = modules / ".pig-deps-ready"
+    stamp = modules / ".ompig-deps-ready"
     if stamp.is_file() and stamp.read_text() == expected:
         return
-    store = os.environ.get("PIG_NODE_MODULES_STORE")
+    store = os.environ.get("OMPIG_NODE_MODULES_STORE")
     if store:
         ensure_shared(directory, Path(store), expected)
         return

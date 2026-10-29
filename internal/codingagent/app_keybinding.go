@@ -34,19 +34,22 @@ const (
 	AppSessionRename            AppKeybinding = "app.session.rename"
 	AppSessionDelete            AppKeybinding = "app.session.delete"
 	AppSessionDeleteNoninvasive AppKeybinding = "app.session.deleteNoninvasive"
-	AppModelsSave               AppKeybinding = "app.models.save"
-	AppModelsEnableAll          AppKeybinding = "app.models.enableAll"
-	AppModelsClearAll           AppKeybinding = "app.models.clearAll"
-	AppModelsToggleProvider     AppKeybinding = "app.models.toggleProvider"
-	AppModelsReorderUp          AppKeybinding = "app.models.reorderUp"
-	AppModelsReorderDown        AppKeybinding = "app.models.reorderDown"
-	AppTreeFilterDefault        AppKeybinding = "app.tree.filter.default"
-	AppTreeFilterNoTools        AppKeybinding = "app.tree.filter.noTools"
-	AppTreeFilterUserOnly       AppKeybinding = "app.tree.filter.userOnly"
-	AppTreeFilterLabeledOnly    AppKeybinding = "app.tree.filter.labeledOnly"
-	AppTreeFilterAll            AppKeybinding = "app.tree.filter.all"
-	AppTreeFilterCycleForward   AppKeybinding = "app.tree.filter.cycleForward"
-	AppTreeFilterCycleBackward  AppKeybinding = "app.tree.filter.cycleBackward"
+	// AppAgentsHub opens the Agent Hub roster (ompig addition, mirrors omp
+	// app.agents.hub).
+	AppAgentsHub               AppKeybinding = "app.agents.hub"
+	AppModelsSave              AppKeybinding = "app.models.save"
+	AppModelsEnableAll         AppKeybinding = "app.models.enableAll"
+	AppModelsClearAll          AppKeybinding = "app.models.clearAll"
+	AppModelsToggleProvider    AppKeybinding = "app.models.toggleProvider"
+	AppModelsReorderUp         AppKeybinding = "app.models.reorderUp"
+	AppModelsReorderDown       AppKeybinding = "app.models.reorderDown"
+	AppTreeFilterDefault       AppKeybinding = "app.tree.filter.default"
+	AppTreeFilterNoTools       AppKeybinding = "app.tree.filter.noTools"
+	AppTreeFilterUserOnly      AppKeybinding = "app.tree.filter.userOnly"
+	AppTreeFilterLabeledOnly   AppKeybinding = "app.tree.filter.labeledOnly"
+	AppTreeFilterAll           AppKeybinding = "app.tree.filter.all"
+	AppTreeFilterCycleForward  AppKeybinding = "app.tree.filter.cycleForward"
+	AppTreeFilterCycleBackward AppKeybinding = "app.tree.filter.cycleBackward"
 )
 
 // appKeybindingIDs lists every AppKeybinding in the order of upstream's AppKeybindings interface.
@@ -81,6 +84,7 @@ var appKeybindingIDs = []AppKeybinding{
 	AppSessionRename,
 	AppSessionDelete,
 	AppSessionDeleteNoninvasive,
+	AppAgentsHub,
 	AppModelsSave,
 	AppModelsEnableAll,
 	AppModelsClearAll,

@@ -8,11 +8,11 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	chordctx "github.com/MichaelKinsy/PiG/chord/context"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/chord"
+	chordctx "github.com/tmih06/ompig/chord/context"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Ports packages/durable/src/session/transaction.ts

@@ -12,13 +12,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // parallelToolWidthEnv makes TestParallelToolBatchRunsAtTheDefaultWidthUnderTheCap's child apply the GOMAXPROCS policy as Main does, run
 // a parallel batch of four tools and then a batch of one, and print the default, the cap, the calls the batch ran, the least GOMAXPROCS
 // a call of the batch saw, the GOMAXPROCS the lone call saw and the GOMAXPROCS after.
-const parallelToolWidthEnv = "PIG_TEST_PARALLEL_TOOL_WIDTH"
+const parallelToolWidthEnv = "OMPIG_TEST_PARALLEL_TOOL_WIDTH"
 
 // widthTool records the GOMAXPROCS its Execute runs at.
 type widthTool struct {

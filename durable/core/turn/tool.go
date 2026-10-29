@@ -6,8 +6,8 @@ package turn
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // ToolDef is the pi.tool task definition (tool.ts ToolTask, version 2): input {kind: "model", assistant, callId}, first

@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 
-// Package profiling writes Go runtime profiles when PIG_PROFILE names them.
+// Package profiling writes Go runtime profiles when OMPIG_PROFILE names them.
 //
-// With PIG_PROFILE unset, Start performs one environment lookup and returns a
-// no-op, so release binaries pay nothing for the capability. With it set, pig
+// With OMPIG_PROFILE unset, Start performs one environment lookup and returns a
+// no-op, so release binaries pay nothing for the capability. With it set, ompig
 // profiles the whole process and writes the files on exit:
 //
-//	PIG_PROFILE=cpu,heap pig -p "hello"
-//	PIG_PROFILE=trace PIG_PROFILE_DIR=/tmp/pig-profile pig
+//	OMPIG_PROFILE=cpu,heap ompig -p "hello"
+//	OMPIG_PROFILE=trace OMPIG_PROFILE_DIR=/tmp/ompig-profile ompig
 //
 // Kinds are cpu, heap, allocs, block, mutex, goroutine, trace, metrics, and flight.
-// Files go to PIG_PROFILE_DIR (default: the current directory) as
-// pig-<pid>-<kind>.pprof, pig-<pid>.trace for the execution trace, or
-// pig-<pid>-metrics.json for the whole-process resource counts of
+// Files go to OMPIG_PROFILE_DIR (default: the current directory) as
+// ompig-<pid>-<kind>.pprof, ompig-<pid>.trace for the execution trace, or
+// ompig-<pid>-metrics.json for the whole-process resource counts of
 // [ProcessMetrics]. Read the profiles with `go tool pprof` and `go tool trace`,
 // or run `make profile` from a source checkout.
 //
@@ -36,22 +36,22 @@ import (
 	"time"
 )
 
-// Kinds lists the accepted PIG_PROFILE values in the order they are written.
+// Kinds lists the accepted OMPIG_PROFILE values in the order they are written.
 var Kinds = []string{"cpu", "heap", "allocs", "block", "mutex", "goroutine", "trace", "metrics", "flight"}
 
-// Start begins the profiles named by PIG_PROFILE and returns the function that
+// Start begins the profiles named by OMPIG_PROFILE and returns the function that
 // stops them and writes every file. The returned function is safe to call more
 // than once; only the first call writes.
 func Start() (stop func()) {
-	spec := os.Getenv("PIG_PROFILE")
+	spec := os.Getenv("OMPIG_PROFILE")
 	if spec == "" {
 		return func() {}
 	}
-	return StartWith(spec, os.Getenv("PIG_PROFILE_DIR"), os.Stderr)
+	return StartWith(spec, os.Getenv("OMPIG_PROFILE_DIR"), os.Stderr)
 }
 
 // StartWith is Start with explicit inputs. Problems are reported to diag and
-// never stop pig: a profile that cannot be written is skipped.
+// never stop ompig: a profile that cannot be written is skipped.
 func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 	if dir == "" {
 		dir = "."
@@ -63,7 +63,7 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 			continue
 		}
 		if !slices.Contains(Kinds, kind) {
-			warnf(diag, "pig: ignoring unknown PIG_PROFILE kind %q (valid: %s)\n", kind, strings.Join(Kinds, ", "))
+			warnf(diag, "ompig: ignoring unknown OMPIG_PROFILE kind %q (valid: %s)\n", kind, strings.Join(Kinds, ", "))
 			continue
 		}
 		kinds[kind] = true
@@ -72,16 +72,16 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 		return func() {}
 	}
 	if err := os.MkdirAll(dir, 0o755); err != nil {
-		warnf(diag, "pig: PIG_PROFILE_DIR: %v\n", err)
+		warnf(diag, "ompig: OMPIG_PROFILE_DIR: %v\n", err)
 		return func() {}
 	}
-	prefix := filepath.Join(dir, fmt.Sprintf("pig-%d", os.Getpid()))
+	prefix := filepath.Join(dir, fmt.Sprintf("ompig-%d", os.Getpid()))
 	var cpuFile, traceFile *os.File
 	if kinds["cpu"] {
 		cpuFile = create(prefix+"-cpu.pprof", diag)
 		if cpuFile != nil {
 			if err := pprof.StartCPUProfile(cpuFile); err != nil {
-				warnf(diag, "pig: cpu profile: %v\n", err)
+				warnf(diag, "ompig: cpu profile: %v\n", err)
 				_ = cpuFile.Close() // The profile never started; the empty file carries nothing.
 				cpuFile = nil
 			}
@@ -91,7 +91,7 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 		traceFile = create(prefix+".trace", diag)
 		if traceFile != nil {
 			if err := trace.Start(traceFile); err != nil {
-				warnf(diag, "pig: trace: %v\n", err)
+				warnf(diag, "ompig: trace: %v\n", err)
 				_ = traceFile.Close() // The trace never started; the empty file carries nothing.
 				traceFile = nil
 			}
@@ -118,7 +118,7 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 			if cpuFile != nil {
 				pprof.StopCPUProfile()
 				if err := cpuFile.Close(); err != nil {
-					warnf(diag, "pig: cpu profile: %v\n", err)
+					warnf(diag, "ompig: cpu profile: %v\n", err)
 				} else {
 					written = append(written, cpuFile.Name())
 				}
@@ -126,7 +126,7 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 			if traceFile != nil {
 				trace.Stop()
 				if err := traceFile.Close(); err != nil {
-					warnf(diag, "pig: trace: %v\n", err)
+					warnf(diag, "ompig: trace: %v\n", err)
 				} else {
 					written = append(written, traceFile.Name())
 				}
@@ -145,7 +145,7 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 						err = closeErr
 					}
 					if err != nil {
-						warnf(diag, "pig: %s profile: %v\n", kind, err)
+						warnf(diag, "ompig: %s profile: %v\n", kind, err)
 					} else {
 						written = append(written, path)
 					}
@@ -162,14 +162,14 @@ func StartWith(spec, dir string, diag io.Writer) (stop func()) {
 						err = closeErr
 					}
 					if err != nil {
-						warnf(diag, "pig: metrics: %v\n", err)
+						warnf(diag, "ompig: metrics: %v\n", err)
 					} else {
 						written = append(written, path)
 					}
 				}
 			}
 			for _, path := range written {
-				warnf(diag, "pig: wrote %s\n", path)
+				warnf(diag, "ompig: wrote %s\n", path)
 			}
 		})
 	}
@@ -194,7 +194,7 @@ func startFlight(diag io.Writer) {
 	}
 	recorder := trace.NewFlightRecorder(trace.FlightRecorderConfig{MinAge: flightWindow, MaxBytes: flightBytes})
 	if err := recorder.Start(); err != nil {
-		warnf(diag, "pig: flight recorder: %v\n", err)
+		warnf(diag, "ompig: flight recorder: %v\n", err)
 		return
 	}
 	flightRecorder = recorder
@@ -209,7 +209,7 @@ func stopFlight() {
 	}
 }
 
-// FlightActive reports whether PIG_PROFILE started the flight recorder.
+// FlightActive reports whether OMPIG_PROFILE started the flight recorder.
 func FlightActive() bool {
 	flightMu.Lock()
 	defer flightMu.Unlock()
@@ -239,7 +239,7 @@ func DumpFlight(path string) error {
 func create(path string, diag io.Writer) *os.File {
 	f, err := os.Create(path)
 	if err != nil {
-		warnf(diag, "pig: %v\n", err)
+		warnf(diag, "ompig: %v\n", err)
 		return nil
 	}
 	return f

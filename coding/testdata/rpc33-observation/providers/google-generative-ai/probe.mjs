@@ -15,8 +15,8 @@
 // generation (`round` counts its steps). A second pass over every case measures it. The chain starves process.nextTick callbacks until it stops (ROUND_CAP),
 // so a round is valid only while no nextTick-dependent step (end-of-body notification) has run; it is recorded for every event, and the pass asserts that
 // its records equal the job pass record for record (same states, same order). Go replays rounds for events before the end of the body.
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { fork, spawn } from 'node:child_process';
 import net from 'node:net';
@@ -282,7 +282,7 @@ if (process.env.PROBE_SKIP_RPC !== '1') {
   }
 }
 if (process.argv[3]) {
-  await writeFile(process.argv[3], JSON.stringify({piVersion: PIG_UPSTREAM_VERSION, genaiVersion: '2.21.0', axes, bodies, laterBody}, null, 2) + '\n');
+  await writeFile(process.argv[3], JSON.stringify({piVersion: OMPIG_UPSTREAM_VERSION, genaiVersion: '2.21.0', axes, bodies, laterBody}, null, 2) + '\n');
 }
 // Generated tool-call ids are `read_<ms>_<counter>` (google-generative-ai.ts:199). The clock and the process-wide counter are not part of the contract, so the oracle
 // stores `read_T_N`; assistant timestamps stay raw (the Go comparator canonicalizes them as the OpenAI oracle's does).
@@ -290,5 +290,5 @@ const canonicalId = value => JSON.stringify(value).replace(/_\d{13}_\d+"/g, '_T_
 // One case per line keeps diffs reviewable.
 const lines = outputs.map(o => '  ' + canonicalId(o));
 const rpcLines = rpc.map(o => '  ' + canonicalId(o));
-await writeFile(process.argv[2], `{"piVersion":${JSON.stringify(PIG_UPSTREAM_VERSION)},"genaiVersion":"2.21.0","cases":[\n${lines.join(',\n')}\n],"rpc":[\n${rpcLines.join(',\n')}\n]}\n`);
+await writeFile(process.argv[2], `{"piVersion":${JSON.stringify(OMPIG_UPSTREAM_VERSION)},"genaiVersion":"2.21.0","cases":[\n${lines.join(',\n')}\n],"rpc":[\n${rpcLines.join(',\n')}\n]}\n`);
 process.exit(0);

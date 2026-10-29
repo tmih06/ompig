@@ -9,13 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // Runs the vendored coding-agent modules that make Pi-owned requests (version
 // check, remote catalog, bug-report upload) with fetch replaced by a recorder,
 // and reports what each would have sent. Pi 0.87.1 sends these to pi.dev with
-// its own "pi/<version>" or "pi (...)" user agent; PiG must not (D26, D62, D64).
+// its own "pi/<version>" or "pi (...)" user agent; Ompig must not (D26, D62, D64).
 const identityBehaviorScript = `
 import { pathToFileURL } from "node:url";
 import { join } from "node:path";
@@ -55,7 +55,7 @@ func TestVendoredRuntimeRequestsAreNeverMadeAsPi(t *testing.T) {
 		t.Fatal(err)
 	}
 	cmd := exec.CommandContext(t.Context(), "node", "--input-type=module", "--eval", identityBehaviorScript, root)
-	cmd.Env = append(os.Environ(), "PIG_PRODUCT_VERSION=9.8.7+0.87.1", "PI_OFFLINE=")
+	cmd.Env = append(os.Environ(), "OMPIG_PRODUCT_VERSION=9.8.7+0.87.1", "PI_OFFLINE=")
 	output, err := cmd.Output()
 	if err != nil {
 		t.Fatalf("node: %v\n%s", err, output)
@@ -82,14 +82,14 @@ func TestVendoredRuntimeRequestsAreNeverMadeAsPi(t *testing.T) {
 	}
 	for name, ua := range map[string]string{"coding-agent": got.CodingAgentUserAgent, "pi-ai": got.AIUserAgent} {
 		if want := pigidentity.UserAgentProduct + "/9.8.7+0.87.1 (" + platform + " "; !strings.HasPrefix(ua, want) {
-			t.Errorf("%s user agent = %q, want %q prefix (D65 shape: pig/<version> (<platform> <release>; <arch>))", name, ua, want)
+			t.Errorf("%s user agent = %q, want %q prefix (D65 shape: ompig/<version> (<platform> <release>; <arch>))", name, ua, want)
 		}
 	}
 	if got.AIShortUserAgent != pigidentity.UserAgentProduct {
 		t.Errorf("short user agent = %q, want %q", got.AIShortUserAgent, pigidentity.UserAgentProduct)
 	}
 	if got.Attribution.Name != pigidentity.AttributionName || got.Attribution.URL != pigidentity.AttributionURL || len(got.Attribution.Categories) != 1 || got.Attribution.Categories[0] != pigidentity.AttributionCategory {
-		t.Errorf("PI_ATTRIBUTION = %+v, want PiG's (D26)", got.Attribution)
+		t.Errorf("PI_ATTRIBUTION = %+v, want Ompig's (D26)", got.Attribution)
 	}
 	for name, calls := range map[string][]struct{ URL, UserAgent string }{"version check": got.VersionCheck, "remote catalog": got.Catalog} {
 		if len(calls) != 1 {
@@ -97,7 +97,7 @@ func TestVendoredRuntimeRequestsAreNeverMadeAsPi(t *testing.T) {
 			continue
 		}
 		if !strings.HasPrefix(calls[0].URL, pigidentity.HostedOrigin+"/") {
-			t.Errorf("%s requested %q, want PiG's hosted origin %s (D64)", name, calls[0].URL, pigidentity.HostedOrigin)
+			t.Errorf("%s requested %q, want Ompig's hosted origin %s (D64)", name, calls[0].URL, pigidentity.HostedOrigin)
 		}
 		if !strings.HasPrefix(calls[0].UserAgent, pigidentity.UserAgentProduct+"/") {
 			t.Errorf("%s user agent = %q, want %s/<version>", name, calls[0].UserAgent, pigidentity.UserAgentProduct)

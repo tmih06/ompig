@@ -1,4 +1,4 @@
-//go:build !pig_strip_llama_cpp && !pig_strip_mcp && !pig_strip_codemode && !pig_strip_tool_search && !pig_strip_pig_login
+//go:build !ompig_strip_llama_cpp && !ompig_strip_mcp && !ompig_strip_codemode && !ompig_strip_tool_search && !ompig_strip_ompig_login
 
 package cli
 
@@ -11,8 +11,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // builtinSelectionTools loads the production built-in rows (nativeBuiltInExtensions, plus the given third-party inline extensions) through the
@@ -57,7 +57,7 @@ func toolFactory(name, description string) extension.ExtensionFactory {
 // `tool_search` to the runner's registry but leave both out of the default active set until `defaultTools` or setActiveTools selects them.
 func TestProductionBuiltInRowsRegisterTheirToolsInactive(t *testing.T) {
 	paths, tools := builtinSelectionTools(t, nil, "")
-	if want := []string{"builtin:llama.cpp", "builtin:codemode", "builtin:tool-search", "builtin:mcp", "builtin:pig-login"}; !slices.Equal(paths, want) {
+	if want := []string{"builtin:llama.cpp", "builtin:codemode", "builtin:tool-search", "builtin:mcp", "builtin:ompig-login"}; !slices.Equal(paths, want) {
 		t.Fatalf("paths = %q, want %q", paths, want)
 	}
 	for _, name := range []string{"codemode", "tool_search"} {

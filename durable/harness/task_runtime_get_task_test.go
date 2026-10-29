@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/harness/scheduler.ts:1196-1199 getTask: the runtime read is refused once the invocation ended (#read) and otherwise reads the task record on the Session line, behind a job that already holds it.

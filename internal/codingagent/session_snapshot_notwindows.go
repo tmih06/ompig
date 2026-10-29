@@ -9,7 +9,7 @@ import (
 
 // unlinkedTemp creates a file in dir and removes its name, so it lives only while open.
 func unlinkedTemp(dir string) (*os.File, error) {
-	file, err := os.CreateTemp(dir, ".pig-snapshot-*")
+	file, err := os.CreateTemp(dir, ".ompig-snapshot-*")
 	if err != nil {
 		return nil, err
 	}

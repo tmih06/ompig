@@ -64,7 +64,7 @@ type elfHandler struct {
 
 // elfHandlers are the ELF handlers of each GOARCH's kernel, chosen by
 // kernelArch. A kernel without an entry accepts every header that passes the
-// other checks in the layout of PiG's word size.
+// other checks in the layout of Ompig's word size.
 var elfHandlers = map[string][]elfHandler{
 	// EM_X86_64 natively; EM_386 and EM_486 with IA32 emulation. The x32 ABI
 	// (EM_X86_64 in the 32-bit layout) needs CONFIG_X86_X32_ABI, which

@@ -20,15 +20,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/pilock"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Ports packages/coding-agent/src/extensions/mcp/oauth.ts.
@@ -555,7 +555,7 @@ type McpAuthProviderOptions struct {
 	// OnChallenge receives the server's WWW-Authenticate challenge so sign-in
 	// can use its resource metadata URL and scope.
 	OnChallenge func(oauth.OAuthChallenge)
-	// AppName is the OAuth client name. Default: "pig".
+	// AppName is the OAuth client name. Default: "ompig".
 	AppName string
 }
 
@@ -583,7 +583,7 @@ type authProvider struct {
 // refreshed them, or the user signed in) are used without refreshing.
 func NewMcpAuthProvider(options McpAuthProviderOptions) McpAuthProvider {
 	if options.AppName == "" {
-		options.AppName = "pig"
+		options.AppName = "ompig"
 	}
 	return &authProvider{options: options}
 }
@@ -927,7 +927,7 @@ type SignInOptions struct {
 	Settings  McpOAuthSettings
 	Challenge *oauth.OAuthChallenge
 	Prompt    McpSignInPrompt
-	// AppName is the OAuth client name. Default: "pig".
+	// AppName is the OAuth client name. Default: "ompig".
 	AppName string
 }
 
@@ -940,7 +940,7 @@ func SignInMcpServer(ctx context.Context, options SignInOptions) (err error) {
 		return &McpSignInCancelledError{}
 	}
 	if options.AppName == "" {
-		options.AppName = "pig"
+		options.AppName = "ompig"
 	}
 	stored, err := options.Store.Load(ctx)
 	if err != nil {

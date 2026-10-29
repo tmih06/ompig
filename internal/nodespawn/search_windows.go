@@ -13,8 +13,8 @@ import (
 	"syscall"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // notFoundError is libuv's ENOENT for a program search_path does not find,

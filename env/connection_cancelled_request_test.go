@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Pi's Connection.request (packages/env/src/connection.ts:190-200) awaits #connect, which takes no signal, and #send (:230-251) then registers the request, calls onStart, writes it and only afterwards sends `cancel` for an aborted signal. A request whose signal is already aborted therefore always reaches the daemon. PiG chose at random between the started connection and the done context, and failed half of such requests with a synthesized `aborted` error without sending them.
+// Pi's Connection.request (packages/env/src/connection.ts:190-200) awaits #connect, which takes no signal, and #send (:230-251) then registers the request, calls onStart, writes it and only afterwards sends `cancel` for an aborted signal. A request whose signal is already aborted therefore always reaches the daemon. Ompig chose at random between the started connection and the done context, and failed half of such requests with a synthesized `aborted` error without sending them.
 // mutation-checked: restoring the `case <-ctx.Done()` branch of Connection.connect fails it.
 func TestRequestWithACancelledContextIsStillSentOnAStartedConnection(t *testing.T) {
 	t.Parallel()

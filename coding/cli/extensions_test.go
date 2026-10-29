@@ -1,4 +1,4 @@
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 
 package cli
 
@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func TestLoadSubprocessExtensions_NoConfigsReturnsNil(t *testing.T) {

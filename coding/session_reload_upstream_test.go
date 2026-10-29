@@ -7,9 +7,9 @@ import (
 
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Ports packages/coding-agent/src/core/agent-session.ts:3640-3685 reload(): the old extensions get session_shutdown with reason reload and go

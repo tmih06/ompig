@@ -1,14 +1,14 @@
-// pig-specific: the compiled-in extension factories an extension passes to a DefaultResourceLoader it constructs (resource-loader.ts extensionFactories). Pi's createCodemodeExtension, createToolSearchExtension and createMcpExtension return functions, which cannot cross the process boundary; the SDKs return a named reference instead and the host instantiates its own factory of that name with the options.
+// ompig-specific: the compiled-in extension factories an extension passes to a DefaultResourceLoader it constructs (resource-loader.ts extensionFactories). Pi's createCodemodeExtension, createToolSearchExtension and createMcpExtension return functions, which cannot cross the process boundary; the SDKs return a named reference instead and the host instantiates its own factory of that name with the options.
 
 package coding
 
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/compiledin"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/compiledin"
 )
 
 // graphExtensionFactory is one entry of the loader's extensionFactories option as it crosses the wire: the built-in's name and its JSON options.

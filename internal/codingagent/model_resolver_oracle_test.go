@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type resolverModel struct {
@@ -92,7 +92,7 @@ func TestModelResolverMatchesPi(t *testing.T) {
 		}
 		pool = append(pool, "", "nope", "/", "a/", "/a", "claude", "sonnet", "4.5", "gpt", "glm", "zai/glm-5", "openai/gpt-4o:extended", "i̇stanbul", "istanbul", "STRASSE", "strasse", "ǆ-model", "ǈ")
 		// A pattern with a POSIX class and an escaped literal ("gpt-[[:digit:]]*") makes Pi throw a SyntaxError (the class sets the unicode flag, which
-		// rejects the escaped hyphen); Pig reports no match there instead, so such patterns are not probed.
+		// rejects the escaped hyphen); Ompig reports no match there instead, so such patterns are not probed.
 		globs := []string{"*", "*sonnet*", "anthropic/*", "*/gpt-*", "gpt-?.?", "[a-c]*", "*:high", "anthropic/*:high", "*GPT*", "openai/gpt-5.5", "?", "[", "a*b*", "{a,b}", "!a", "*\u00a0", "{claude,gpt}-*", "claude-{sonnet,opus}-4*", "!claude*", "**", "**/gpt*", "openai/**", "claude-[so]*", "claude-[!s]*", "claude-[^s]*", "claude-+(sonnet|opus)*", "@(zai|openai)/*", "?(anthropic/)claude-opus*", "*(claude-)opus*", "!(claude)*", "gpt-5.5", "*5.5", "*\\.5", "claude-sonnet-4-?", "{1..3}", "glm-{5,6}*", "*/glm-5", "openai/gpt-4o:*", "\\*", "#*", "claude-*-[0-9]-5", "[[:alpha:]]*", "gpt-4o*.", "./*"}
 		for range 450 {
 			pattern := paddings[r.IntN(len(paddings))] + mutate(pool[r.IntN(len(pool))]) + suffixes[r.IntN(len(suffixes))] + paddings[r.IntN(len(paddings))]
@@ -173,7 +173,7 @@ func TestModelResolverMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(normalize(got), normalize(want[i])) {
 			if failures++; failures <= 10 {
-				t.Errorf("probe %q:\n  Pig %v\n  Pi  %v", probe, normalize(got), want[i])
+				t.Errorf("probe %q:\n  Ompig %v\n  Pi  %v", probe, normalize(got), want[i])
 			}
 		}
 	}

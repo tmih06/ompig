@@ -1,4 +1,4 @@
-//go:build !pig_strip_llama_cpp && !pig_strip_mcp
+//go:build !ompig_strip_llama_cpp && !ompig_strip_mcp
 
 // pi: packages/coding-agent/src/extensions/index.ts
 
@@ -9,8 +9,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 func commandNames(runner *inproc.Runner) []string {
@@ -135,7 +135,7 @@ func TestBuiltinLlamaIsNotReplaceableByAnotherLlamaCommand(t *testing.T) {
 // Pi: packages/coding-agent/src/cli/args.ts:38 (Args.noMcp).
 func TestNoMcpSkipsTheBuiltinMcpExtensionEvenWhenSettingsOrDashEEnableIt(t *testing.T) {
 	root, cwd, agentDir := resourceExtensionFixture(t)
-	writeResourceTestFiles(t, root, map[string]string{"project/.pig/settings.json": `{"extensions":["+builtin:mcp"]}`})
+	writeResourceTestFiles(t, root, map[string]string{"project/.ompig/settings.json": `{"extensions":["+builtin:mcp"]}`})
 	// Without --no-mcp the -e path and the project setting load the built-in mcp (first, as an explicit built-in); with it the path is dropped.
 	requirePaths(t, loadProductionExtensionSetIn(t, cwd, agentDir, []string{"--approve", "-e", "builtin:mcp"}).paths(), append([]string{"builtin:mcp"}, builtinPaths("mcp")...))
 	// A later built-in of one name wins (resource-loader.ts:378), so this mcp entry counts whether the dropped built-in's factory runs.

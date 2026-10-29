@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 func TestTimeoutMessageNamesTheDeadlineInMilliseconds(t *testing.T) {

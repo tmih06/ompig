@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // altScreenFlashDefaultDurationMS mirrors upstream DEFAULT_DURATION_MS. Go has no

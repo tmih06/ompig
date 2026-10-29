@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // terminalInputSink takes what an interactiveTerminalReader reads, on the reading goroutine: the input router in a run.

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -24,8 +24,8 @@ func TestShutdownReleasesReplacedPackedProcessLeases(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	pigHome := t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	h := NewHost(t.TempDir())
 	h.SetConfigLoader(func() ([]ExtConfig, error) {
 		return []ExtConfig{{Name: "ctx-mode", Source: fixture, Enabled: true}}, nil
@@ -36,7 +36,7 @@ func TestShutdownReleasesReplacedPackedProcessLeases(t *testing.T) {
 		}
 	}
 	h.Shutdown("test done")
-	assertUsageLeasesReleased(t, pigHome, "after Shutdown")
+	assertUsageLeasesReleased(t, ompigHome, "after Shutdown")
 }
 
 // A packed process that ends on its own releases its cache usage lease even

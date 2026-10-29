@@ -9,7 +9,7 @@ import json
 import re
 import time
 
-import pig_sdk as sdk
+import ompig_sdk as sdk
 
 def substitute(value, variables):
     """A "${name}" in a string is the answer of the prompt kept as name."""

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // renderedFrame returns the bytes a main-screen frame wrote, with the hardware cursor setting applied and the frame the setting
@@ -62,7 +62,7 @@ func TestResolveFakeCursorsTable(t *testing.T) {
 	}
 }
 
-// Pi's resolveFakeCursors maps every line to a new array; Pig returns the frame itself when no line holds a marker and a copy otherwise, and
+// Pi's resolveFakeCursors maps every line to a new array; Ompig returns the frame itself when no line holds a marker and a copy otherwise, and
 // never modifies a borrowed frame.
 func TestResolveFakeCursorsDoesNotModifyOrCopyNeedlessly(t *testing.T) {
 	plain := []string{"a", "b"}

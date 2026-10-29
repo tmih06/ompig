@@ -22,10 +22,10 @@ import (
 
 	xtrace "golang.org/x/exp/trace"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // The delta pipeline of a large write: a provider streams one write tool call whose arguments arrive in 16-byte deltas, the Session runs it, and a second response ends the run with a short text. The mode drives the Session as -p text mode does (coding/cli/print_mode.go): no Session listener, and a consumer that drains Events and acknowledges delivery barriers. coding/cli's BenchmarkPrintPipelineDeltas runs JSON and RPC mode on the faux script.
@@ -109,7 +109,7 @@ func (s *pipelineSSEServer) script(deltas int) {
 // newPipelineSession builds a Session on the provider's model with the built-in tools in a fresh working directory. extensionListeners adds an in-process extension with that many message_update handlers.
 func newPipelineSession(tb testing.TB, provider pipelineProvider, extensionListeners int) *pipelineHarness {
 	tb.Helper()
-	tb.Setenv("PIG_HOME", tb.TempDir())
+	tb.Setenv("OMPIG_HOME", tb.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: tb.TempDir()})
 	if err != nil {
 		tb.Fatal(err)

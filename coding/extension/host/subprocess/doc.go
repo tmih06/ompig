@@ -1,17 +1,17 @@
-// Package subprocess implements pig's out-of-process extension transport:
+// Package subprocess implements ompig's out-of-process extension transport:
 // extensions communicate over a local stream socket with length-prefixed JSON
 // framing. The socket is AF_UNIX, except that a Node extension on Windows gets
 // a named pipe, because Node's net module cannot reach AF_UNIX there. The
-// extension finds its address in PIG_EXT_SOCKET; framing and handshake are
+// extension finds its address in OMPIG_EXT_SOCKET; framing and handshake are
 // the same on both.
 //
 // # Process environment
 //
 // The host starts every extension process with its own environment plus the entries below and runtime-specific ones (harness, Node runtime, Python path).
-// An isolated process gets PIG_EXT_SOCKET, the address above, and PIG_EXT_NAME, the extension's name; a packed cell process gets one
-// PIG_EXT_SOCKET_<NAME> per member instead (runtimecell.SocketEnvName). PIG_EXT_HOST_INFO (set by [Host.SetHostInfo]; absent when the host has none) is a JSON object {"agentDir", "configDirName", "version", "packageDir", "shell"}: Pi's
+// An isolated process gets OMPIG_EXT_SOCKET, the address above, and OMPIG_EXT_NAME, the extension's name; a packed cell process gets one
+// OMPIG_EXT_SOCKET_<NAME> per member instead (runtimecell.SocketEnvName). OMPIG_EXT_HOST_INFO (set by [Host.SetHostInfo]; absent when the host has none) is a JSON object {"agentDir", "configDirName", "version", "packageDir", "shell"}: Pi's
 // getAgentDir(), CONFIG_DIR_NAME, VERSION, getPackageDir() and the default getShellConfig() as the host resolved them, which an SDK returns from before its factory runs because the ready message comes
-// later. A Node extension answers getAgentDir() and CONFIG_DIR_NAME from its environment (shims/pig-config.mjs) and VERSION from the bundled Pi package
+// later. A Node extension answers getAgentDir() and CONFIG_DIR_NAME from its environment (shims/ompig-config.mjs) and VERSION from the bundled Pi package
 // (shims/pi-dist/pi-coding-agent/config.js).
 //
 // # Architecture
@@ -48,9 +48,9 @@
 //   - call_result (host→ext): reply to a call
 //   - shutdown (host→ext): graceful shutdown signal
 //
-// # pig-specific: no upstream equivalent
+// # ompig-specific: no upstream equivalent
 //
-// This entire package is pig-specific. Upstream pi uses TypeScript extensions
+// This entire package is ompig-specific. Upstream pi uses TypeScript extensions
 // loaded via jiti in-process. The subprocess protocol exists to support compiled
 // extensions in Go, Rust, or any language that can speak Unix socket + JSON.
 package subprocess

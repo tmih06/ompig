@@ -10,14 +10,14 @@ import (
 	"runtime/debug"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/boundarywire"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // fusedDispatchHistory is the session history of the fused dispatch gate, in entries (each one user message).
@@ -85,7 +85,7 @@ func (r *fusedDispatchRig) turn(t testing.TB) {
 	}
 }
 
-// A fused Piglet's extensions run in the pig process (D31). The allocations of one RPC turn's extension dispatches (before_agent_start and turn_end over a history of fusedDispatchHistory entries) at K = 1, 3 and 10 fused extensions, and what each extension adds: the cost a fused member pays to receive its events. Pi hands its in-process handlers the event objects themselves.
+// A fused Ompiglet's extensions run in the ompig process (D31). The allocations of one RPC turn's extension dispatches (before_agent_start and turn_end over a history of fusedDispatchHistory entries) at K = 1, 3 and 10 fused extensions, and what each extension adds: the cost a fused member pays to receive its events. Pi hands its in-process handlers the event objects themselves.
 func TestFusedDispatchAllocations(t *testing.T) {
 	allocs, bytes := map[int]float64{}, map[int]float64{}
 	for _, k := range []int{1, 3, 10} {

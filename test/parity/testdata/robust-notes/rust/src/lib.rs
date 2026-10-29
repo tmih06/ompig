@@ -1,6 +1,6 @@
 //! The Rust SDK version of the robust-notes fixture (../node/index.mjs).
 
-use pig_sdk::{CommandResult, Context, Extension, FlagOptions, JsString, RemoteComponent, RemoteComponentResult, ToolResult};
+use ompig_sdk::{CommandResult, Context, Extension, FlagOptions, JsString, RemoteComponent, RemoteComponentResult, ToolResult};
 use serde_json::{Value, json};
 use std::sync::atomic::{AtomicUsize, Ordering};
 

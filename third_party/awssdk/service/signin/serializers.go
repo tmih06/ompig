@@ -6,13 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/signin/types"
 	smithy "github.com/aws/smithy-go"
 	"github.com/aws/smithy-go/encoding/httpbinding"
 	smithyjson "github.com/aws/smithy-go/encoding/json"
 	"github.com/aws/smithy-go/middleware"
 	"github.com/aws/smithy-go/tracing"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/service/signin/types"
 )
 
 type awsRestjson1_serializeOpCreateOAuth2Token struct {

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // CompactReadClassification is upstream read.ts CompactReadClassification:

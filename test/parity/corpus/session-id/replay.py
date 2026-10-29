@@ -21,7 +21,7 @@ SPEC.loader.exec_module(corpus)
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pig", type=Path, required=True)
+    parser.add_argument("--ompig", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     output = args.output.resolve()
@@ -35,7 +35,7 @@ def main():
     results = []
     for no_session in (False, True):
         pair = []
-        for name, binary in (("pi", pi), ("pig", args.pig.resolve())):
+        for name, binary in (("pi", pi), ("ompig", args.ompig.resolve())):
             target = output / f"{name}-{'memory' if no_session else 'persisted'}"
             target.mkdir()
             home, cwd = target / "home", target / "cwd"
@@ -63,9 +63,9 @@ def main():
                    and "not available" not in json.dumps(pair[0]["loops"])
                    and pair[0]["stderr"] == pair[1]["stderr"] == ""
                    and pair[0]["stdout"] == pair[1]["stdout"] == "")
-        results.append({"noSession": no_session, "matches": matches, "pi": pair[0], "pig": pair[1]})
+        results.append({"noSession": no_session, "matches": matches, "pi": pair[0], "ompig": pair[1]})
         print("--no-session" if no_session else "persisted", "PASS" if matches else "FAIL", flush=True)
-    (output / "report.json").write_text(json.dumps({"package": entry, "pigSha256": corpus.digest(args.pig), "results": results}, indent=2) + "\n")
+    (output / "report.json").write_text(json.dumps({"package": entry, "ompigSha256": corpus.digest(args.ompig), "results": results}, indent=2) + "\n")
     return 0 if all(row["matches"] for row in results) else 1
 
 

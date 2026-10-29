@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // StdinBuffer drops the raw character that a terminal repeats after a Kitty CSI-u press (parseUnmodifiedKittyPrintableCodepoint, stdin-buffer.ts).

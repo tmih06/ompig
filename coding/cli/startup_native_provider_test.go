@@ -20,7 +20,7 @@ func TestStartupRefreshMakesExtensionNativeProviderAvailable(t *testing.T) {
 		t.Fatal(err)
 	}
 	home := t.TempDir()
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_OFFLINE=1", "FORCE_COLOR=0"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "FORCE_COLOR=0"}
 
 	cmd := exec.CommandContext(t.Context(), binary, "--no-extensions", "-e", fixture, "--list-models", "native-startup")
 	cmd.Dir = home
@@ -52,14 +52,14 @@ func TestStartupRefreshMakesExtensionNativeProviderAvailable(t *testing.T) {
 	p.closeAndWait("after native startup model state")
 }
 
-// Pi's registerProvider starts an unawaited refresh (model-runtime.ts:744-750) that lands on a later event-loop turn with no further model-runtime call, so RPC get_available_models, a synchronous snapshot read (rpc-mode.ts:473), lists a native Provider that an extension registered after startup. The registering host call ends the caller's turn; PiG starts the queued refresh there instead of waiting for an unrelated awaited call. The wait is bounded only to fail a refresh that never lands.
+// Pi's registerProvider starts an unawaited refresh (model-runtime.ts:744-750) that lands on a later event-loop turn with no further model-runtime call, so RPC get_available_models, a synchronous snapshot read (rpc-mode.ts:473), lists a native Provider that an extension registered after startup. The registering host call ends the caller's turn; Ompig starts the queued refresh there instead of waiting for an unrelated awaited call. The wait is bounded only to fail a refresh that never lands.
 func TestPostStartupNativeProviderRegistrationBecomesAvailableWithoutAnotherCall(t *testing.T) {
 	fixture, err := filepath.Abs(filepath.Join("testdata", "post-startup-native-provider.mjs"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	home := t.TempDir()
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_OFFLINE=1", "FORCE_COLOR=0"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "FORCE_COLOR=0"}
 	p := startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "-e", fixture, "--no-session")
 	listed := func(id string) bool {
 		p.send(`{"id":"` + id + `","type":"get_available_models"}`)
@@ -112,7 +112,7 @@ func TestStartupNativeProviderCallbacksWaitForEveryExtensionFactory(t *testing.T
 	orderLog := filepath.Join(home, "order.log")
 	cmd := exec.CommandContext(t.Context(), binary, append(append([]string{"--no-extensions"}, fixtures...), "--list-models", "order-prov")...)
 	cmd.Dir = home
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_OFFLINE=1", "FORCE_COLOR=0", "ORDER_LOG="+orderLog)
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "FORCE_COLOR=0", "ORDER_LOG="+orderLog)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := cmd.Run(); err != nil {
@@ -136,7 +136,7 @@ func TestStartupNativeProviderCallbacksWaitForEveryExtensionFactory(t *testing.T
 // Pi's get_available_models answers the model runtime's availability snapshot and nothing else (rpc-mode.ts:490-493). With no credential, no configured provider and no extension provider the snapshot is empty, so Pi answers []: the no-model placeholder is not a model.
 func TestRPCGetAvailableModelsIsTheSnapshotAloneWhenNothingIsAvailable(t *testing.T) {
 	home := t.TempDir()
-	env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_OFFLINE=1", "FORCE_COLOR=0"}
+	env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "FORCE_COLOR=0"}
 	for _, entry := range os.Environ() {
 		name, _, _ := strings.Cut(entry, "=")
 		if strings.HasSuffix(name, "_API_KEY") || strings.HasSuffix(name, "_TOKEN") || strings.HasSuffix(name, "_KEY") || name == "ANTHROPIC_FEDERATION_RULE_ID" {

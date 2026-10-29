@@ -9,7 +9,7 @@
     --- FAIL: TestProviderModelConfigRoundTripsEachVariantWithItsOwnFields/image_with_image_output_only (0.00s)
 --- PASS: TestProviderModelConfigDecodesTypeAndVariantFields (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension	0.024s
+FAIL	github.com/tmih06/ompig/coding/extension	0.024s
 FAIL
 --- FAIL: TestRuntimeRegisterMcpServerValidatesChecksOwnershipAndReplacesOwnRegistration (0.00s)
 --- FAIL: TestRunnerEmitsMcpServersChangeForRegistrationsAfterBind (0.00s)
@@ -38,7 +38,7 @@ FAIL
 --- FAIL: TestRunnerBindFlushesVirtualModelsAndAppliesLaterCallsImmediately (0.00s)
 --- FAIL: TestRuntimeCreateContextFailsUntilTheRunnerBinds (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension/host/inproc	0.060s
+FAIL	github.com/tmih06/ompig/coding/extension/host/inproc	0.060s
 FAIL
 --- FAIL: TestRegisterPayloadCarriesToolExposureFields (0.00s)
 --- FAIL: TestPrepareLoadoutRunsInTheExtension (0.00s)
@@ -53,7 +53,7 @@ FAIL
 --- FAIL: TestSnapshotCarriesSettingsMcpServersAndCallableTools (0.00s)
 --- FAIL: TestSubprocessToolResultCarriesStructuredContent (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension/host/subprocess	0.091s
+FAIL	github.com/tmih06/ompig/coding/extension/host/subprocess	0.091s
 FAIL
 --- PASS: TestSDKProviderAttributionUpstream (0.08s)
 --- PASS: TestSDKManagerOverrideUsesOneLiveLog (0.01s)
@@ -68,7 +68,7 @@ FAIL
 --- PASS: TestSDKStreamOptionsRunsHeadersHookOnAssembledHeaders (0.00s)
 --- FAIL: TestSDKForwardsProviderStreamEventsToExtensions (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.180s
+FAIL	github.com/tmih06/ompig/coding	0.180s
 FAIL
 
 # Notes

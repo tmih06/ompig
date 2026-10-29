@@ -5,13 +5,13 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/*.ts createClient / buildHeaders
 
 // The URL path, method and headers each API module sends (authorization forms, API-specific headers, session-affinity headers, caller header
-// overrides) for a stream, read through the pinned pi-ai's options.fetch and PiG's HTTP client. Headers naming the client library or the
+// overrides) for a stream, read through the pinned pi-ai's options.fetch and Ompig's HTTP client. Headers naming the client library or the
 // transport are not compared (see comparableRequest).
 func TestProviderRequestHeadersMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(149))

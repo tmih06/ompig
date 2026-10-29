@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi runs an event's handlers inside the extension API call that emits it: pi.sendMessage with triggerTurn calls
@@ -34,12 +34,12 @@ import (
 // Session idle and answers before agent_start, whatever the SDK; a command that starts a new Session is the only record of
 // its output, because the message its session_start handler sends is emitted before Pi's writer subscribes.
 //
-// The row drives the pig command line in RPC mode with each SDK's extension: Node in the shared Node cell, Go, Python and
+// The row drives the ompig command line in RPC mode with each SDK's extension: Node in the shared Node cell, Go, Python and
 // Rust as factories packed into a runtime cell beside a peer of the same language and as standalone executables in their own
-// process, and Go fused into the binary as a Piglet Binary links it.
+// process, and Go fused into the binary as a Ompiglet Binary links it.
 func TestRPCNestedEventsCompleteInEverySDK(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds pig and every SDK's extension")
+		t.Skip("builds ompig and every SDK's extension")
 	}
 	for _, tc := range []struct{ sdk, placement string }{
 		{"node", "packed"},
@@ -49,8 +49,8 @@ func TestRPCNestedEventsCompleteInEverySDK(t *testing.T) {
 	} {
 		t.Run(tc.sdk+"/"+tc.placement, func(t *testing.T) {
 			t.Parallel()
-			pig, err := nestedEventsPig.Do(t, func(ctx context.Context) (string, error) {
-				return buildNestedEventsCommand(ctx, "nested-events-pig", "pig")
+			ompig, err := nestedEventsPig.Do(t, func(ctx context.Context) (string, error) {
+				return buildNestedEventsCommand(ctx, "nested-events-ompig", "ompig")
 			})
 			if err != nil {
 				t.Fatal(err)
@@ -61,7 +61,7 @@ func TestRPCNestedEventsCompleteInEverySDK(t *testing.T) {
 				args = append(args, "-e", path)
 			}
 			home := t.TempDir()
-			p := startNestedEventsRPC(t, label, pig, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, args)
+			p := startNestedEventsRPC(t, label, ompig, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, args)
 
 			// A cold load builds the Go and Rust extensions, so only the command listing waits for a build.
 			p.send(`{"id":"commands","type":"get_commands"}`)
@@ -197,8 +197,8 @@ func nestedEventsTag(record map[string]any) string {
 	return fmt.Sprint(record["type"])
 }
 
-// nestedEventsPig is pig with the row's Go extension fused in under the name nested-go-fused; every other extension loads as
-// it does in stock pig.
+// nestedEventsPig is ompig with the row's Go extension fused in under the name nested-go-fused; every other extension loads as
+// it does in stock ompig.
 var nestedEventsPig testbudget.Once[string]
 
 // nestedEventsGoStandalone is the row's Go extension as a standalone executable.
@@ -217,7 +217,7 @@ func buildNestedEventsCommand(ctx context.Context, name, dir string) (string, er
 	return bin, nil
 }
 
-// nestedEventsExtensions writes the SDK's extension for the placement and returns the paths pig loads with -e. A packed
+// nestedEventsExtensions writes the SDK's extension for the placement and returns the paths ompig loads with -e. A packed
 // placement adds a peer factory of the same language, so the extension shares its runtime cell.
 func nestedEventsExtensions(t *testing.T, sdk, placement string) []string {
 	t.Helper()
@@ -255,20 +255,20 @@ func nestedEventsExtensions(t *testing.T, sdk, placement string) []string {
 		return []string{bin}
 	case "python/packed":
 		return []string{
-			filepath.Dir(write(filepath.Join(dir, "nested-python-packed", "nested_python.py"), "import pig_sdk\n\ndef new_extension() -> pig_sdk.Extension:\n"+nestedEventsPythonBody("nested-python-packed")+"    return ext\n", 0o600)),
-			filepath.Dir(write(filepath.Join(dir, "nested-python-peer", "nested_peer.py"), "import pig_sdk\n\ndef new_extension() -> pig_sdk.Extension:\n    return pig_sdk.Extension(\"nested-python-peer\")\n", 0o600)),
+			filepath.Dir(write(filepath.Join(dir, "nested-python-packed", "nested_python.py"), "import ompig_sdk\n\ndef new_extension() -> ompig_sdk.Extension:\n"+nestedEventsPythonBody("nested-python-packed")+"    return ext\n", 0o600)),
+			filepath.Dir(write(filepath.Join(dir, "nested-python-peer", "nested_peer.py"), "import ompig_sdk\n\ndef new_extension() -> ompig_sdk.Extension:\n    return ompig_sdk.Extension(\"nested-python-peer\")\n", 0o600)),
 		}
 	case "python/isolated":
 		sdkRoot := filepath.Join(fixtureSourceRoot, "extensions", "sdk-py")
-		source := fmt.Sprintf("#!/usr/bin/env python3\nimport sys\nsys.path.insert(0, %q)\nimport pig_sdk\n\ndef build():\n%s    return ext\n\nif __name__ == \"__main__\":\n    build().run()\n", sdkRoot, nestedEventsPythonBody("nested-python-isolated"))
+		source := fmt.Sprintf("#!/usr/bin/env python3\nimport sys\nsys.path.insert(0, %q)\nimport ompig_sdk\n\ndef build():\n%s    return ext\n\nif __name__ == \"__main__\":\n    build().run()\n", sdkRoot, nestedEventsPythonBody("nested-python-isolated"))
 		return []string{filepath.Dir(write(filepath.Join(dir, "nested-python-isolated", "main.py"), source, 0o755))}
 	case "rust/packed":
 		return []string{
-			nestedEventsRustCrate(t, write, filepath.Join(dir, "nested-rust-packed"), "nested-rust-packed", `pig-sdk = "0.1.0"`, "lib.rs", "pub fn new_extension() -> Extension {\n"+nestedEventsRustBody("nested-rust-packed")+"    ext\n}\n"),
-			nestedEventsRustCrate(t, write, filepath.Join(dir, "nested-rust-peer"), "nested-rust-peer", `pig-sdk = "0.1.0"`, "lib.rs", "pub fn new_extension() -> Extension {\n    Extension::new(\"nested-rust-peer\")\n}\n"),
+			nestedEventsRustCrate(t, write, filepath.Join(dir, "nested-rust-packed"), "nested-rust-packed", `ompig-sdk = "0.1.0"`, "lib.rs", "pub fn new_extension() -> Extension {\n"+nestedEventsRustBody("nested-rust-packed")+"    ext\n}\n"),
+			nestedEventsRustCrate(t, write, filepath.Join(dir, "nested-rust-peer"), "nested-rust-peer", `ompig-sdk = "0.1.0"`, "lib.rs", "pub fn new_extension() -> Extension {\n    Extension::new(\"nested-rust-peer\")\n}\n"),
 		}
 	case "rust/isolated":
-		dependency := fmt.Sprintf("pig-sdk = { path = %q }", filepath.ToSlash(filepath.Join(fixtureSourceRoot, "extensions", "sdk-rs")))
+		dependency := fmt.Sprintf("ompig-sdk = { path = %q }", filepath.ToSlash(filepath.Join(fixtureSourceRoot, "extensions", "sdk-rs")))
 		return []string{nestedEventsRustCrate(t, write, filepath.Join(dir, "nested-rust-isolated"), "nested-rust-isolated", dependency, "main.rs", "fn build() -> Extension {\n"+nestedEventsRustBody("nested-rust-isolated")+"    ext\n}\n\nfn main() {\n    build().run().expect(\"nested-rust-isolated\");\n}\n")}
 	}
 	t.Fatalf("no %s extension for placement %s", sdk, placement)
@@ -304,7 +304,7 @@ const nestedEventsNode = `export default function (pi) {
 `
 
 // nestedEventsGoBody is testfixture/nestedevents.Extension's registrations, for the factory module the packed and fused
-// placements load (a factory module cannot import the PiG module's test fixtures).
+// placements load (a factory module cannot import the Ompig module's test fixtures).
 const nestedEventsGoBody = `	ext.OnEvent("before_agent_start", func(ctx sdk.Context, _ map[string]any) (any, error) {
 		ctx.SetStatus("nested", "busy")
 		return nil, nil
@@ -356,13 +356,13 @@ const nestedEventsGoBody = `	ext.OnEvent("before_agent_start", func(ctx sdk.Cont
 func nestedEventsGoFactory(t *testing.T, write func(string, string, os.FileMode) string, dir, name, body string) string {
 	t.Helper()
 	module := "example.com/" + strings.ReplaceAll(name, "-", "")
-	write(filepath.Join(dir, "go.mod"), "module "+module+"\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.4.1\n", 0o600)
-	write(filepath.Join(dir, "extension.go"), fmt.Sprintf("package %s\n\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n\nfunc Extension() *sdk.Extension {\n\text := sdk.New(%q)\n%s\treturn ext\n}\n", strings.ReplaceAll(name, "-", ""), name, body), 0o600)
+	write(filepath.Join(dir, "go.mod"), "module "+module+"\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.4.1\n", 0o600)
+	write(filepath.Join(dir, "extension.go"), fmt.Sprintf("package %s\n\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\n\nfunc Extension() *sdk.Extension {\n\text := sdk.New(%q)\n%s\treturn ext\n}\n", strings.ReplaceAll(name, "-", ""), name, body), 0o600)
 	return dir
 }
 
 func nestedEventsPythonBody(name string) string {
-	return fmt.Sprintf(`    ext = pig_sdk.Extension(%q)
+	return fmt.Sprintf(`    ext = ompig_sdk.Extension(%q)
 
     def before_agent_start(ctx, _data):
         ctx.set_status("nested", "busy")
@@ -462,11 +462,11 @@ func nestedEventsRustBody(name string) string {
 func nestedEventsRustCrate(t *testing.T, write func(string, string, os.FileMode) string, dir, name, dependency, file, body string) string {
 	t.Helper()
 	write(filepath.Join(dir, "Cargo.toml"), fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2024\"\npublish = false\n\n[dependencies]\n%s\nserde_json = \"1\"\n", name, dependency), 0o600)
-	write(filepath.Join(dir, "src", file), "#![allow(unused_imports)]\nuse pig_sdk::{CommandResult, Extension};\n\n"+body, 0o600)
+	write(filepath.Join(dir, "src", file), "#![allow(unused_imports)]\nuse ompig_sdk::{CommandResult, Extension};\n\n"+body, 0o600)
 	return dir
 }
 
-// nestedEventsStderr collects pig's stderr for failure reports while the process writes it.
+// nestedEventsStderr collects ompig's stderr for failure reports while the process writes it.
 type nestedEventsStderr struct {
 	mu  sync.Mutex
 	buf strings.Builder
@@ -484,7 +484,7 @@ func (b *nestedEventsStderr) String() string {
 	return b.buf.String()
 }
 
-// nestedEventsRPC is one pig RPC process; label names the SDK and placement in every failure.
+// nestedEventsRPC is one ompig RPC process; label names the SDK and placement in every failure.
 type nestedEventsRPC struct {
 	t       *testing.T
 	label   string
@@ -496,9 +496,9 @@ type nestedEventsRPC struct {
 	progress []string
 }
 
-func startNestedEventsRPC(t *testing.T, label, pig string, env, args []string) *nestedEventsRPC {
+func startNestedEventsRPC(t *testing.T, label, ompig string, env, args []string) *nestedEventsRPC {
 	t.Helper()
-	cmd := exec.Command(pig, args...)
+	cmd := exec.Command(ompig, args...)
 	cmd.Dir = t.TempDir()
 	cmd.Env = append(os.Environ(), env...)
 	p := &nestedEventsRPC{t: t, label: label, cmd: cmd, stderr: &nestedEventsStderr{}, records: make(chan map[string]any, 64)}
@@ -560,7 +560,7 @@ func (p *nestedEventsRPC) await(what string, budget time.Duration, done func(map
 		select {
 		case record, ok := <-p.records:
 			if !ok {
-				p.t.Fatalf("%s: pig's output ended while waiting for %s; records %q\nstderr:\n%s", p.label, what, p.progress, p.stderr.String())
+				p.t.Fatalf("%s: ompig's output ended while waiting for %s; records %q\nstderr:\n%s", p.label, what, p.progress, p.stderr.String())
 			}
 			if done(record) {
 				return
@@ -571,7 +571,7 @@ func (p *nestedEventsRPC) await(what string, budget time.Duration, done func(map
 	}
 }
 
-// closeAndWait ends pig's input and requires a clean exit.
+// closeAndWait ends ompig's input and requires a clean exit.
 func (p *nestedEventsRPC) closeAndWait() {
 	p.t.Helper()
 	_ = p.stdin.Close()
@@ -580,11 +580,11 @@ func (p *nestedEventsRPC) closeAndWait() {
 	select {
 	case err := <-waited:
 		if err != nil {
-			p.t.Fatalf("%s: pig exited: %v\nstderr:\n%s", p.label, err, p.stderr.String())
+			p.t.Fatalf("%s: ompig exited: %v\nstderr:\n%s", p.label, err, p.stderr.String())
 		}
 	case <-time.After(testbudget.Wait(p.t)):
 		_ = p.cmd.Process.Kill()
 		<-waited
-		p.t.Fatalf("%s hung: pig did not exit after its input ended\nstderr:\n%s", p.label, p.stderr.String())
+		p.t.Fatalf("%s hung: ompig did not exit after its input ended\nstderr:\n%s", p.label, p.stderr.String())
 	}
 }

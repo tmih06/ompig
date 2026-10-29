@@ -11,11 +11,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type eventsStep struct {
@@ -166,7 +166,7 @@ func (g *eventsGen) action() []delta.Op {
 		}
 		return g.random.Intn(n)
 	}
-	// of picks a content index holding a block of the given type, so field edits keep the block well typed (Pi sends the block as raw JSON; Pig's typed blocks drop a foreign field).
+	// of picks a content index holding a block of the given type, so field edits keep the block well typed (Pi sends the block as raw JSON; Ompig's typed blocks drop a foreign field).
 	of := func(kind string) int {
 		var matches []int
 		blocks, _ := g.get(append(liveMessage[:3:3], "content")...).([]any)

@@ -137,7 +137,7 @@ wait:
 		t.Fatalf("Pi did not write before its release failed: %+v", pi)
 	}
 
-	// PiG's run on the same files, reset, once Pi's lock directories are gone: the same lock directories are marked while held.
+	// Ompig's run on the same files, reset, once Pi's lock directories are gone: the same lock directories are marked while held.
 	for _, finish := range removals {
 		finish()
 	}

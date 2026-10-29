@@ -23,7 +23,7 @@ import (
 // OwnerOnly requires: an elevated administrator's token otherwise makes
 // BUILTIN\Administrators the owner of the files it creates.
 func CreateNew(path string) (*os.File, error) {
-	// pig divergence (D68): Windows owner-only files use a DACL, not mode bits.
+	// ompig divergence (D68): Windows owner-only files use a DACL, not mode bits.
 	user, err := windows.GetCurrentProcessToken().GetTokenUser()
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func CreateTemp(dir, pattern string) (*os.File, error) {
 // OwnerOnly reports whether the DACL of the file at path grants access to no
 // one but the file's owner, SYSTEM, and Administrators.
 func OwnerOnly(path string, _ os.FileInfo) (bool, error) {
-	// pig divergence (D68): Windows has no mode bits; the file's DACL decides.
+	// ompig divergence (D68): Windows has no mode bits; the file's DACL decides.
 	descriptor, err := windows.GetNamedSecurityInfo(path, windows.SE_FILE_OBJECT, windows.OWNER_SECURITY_INFORMATION|windows.DACL_SECURITY_INFORMATION)
 	if err != nil {
 		return false, err

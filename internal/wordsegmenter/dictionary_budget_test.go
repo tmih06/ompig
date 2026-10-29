@@ -1,4 +1,4 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 package wordsegmenter
 
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// The five embedded dictionaries are borrowed in place on the input loop (README: no decompression there), so their bytes are binary size every Pig carries. The reviewed budget is the size measured when it was set; a dictionary that grows needs new binary-size evidence, and a smaller index lowers the budget.
+// The five embedded dictionaries are borrowed in place on the input loop (README: no decompression there), so their bytes are binary size every Ompig carries. The reviewed budget is the size measured when it was set; a dictionary that grows needs new binary-size evidence, and a smaller index lowers the budget.
 func TestEmbeddedDictionariesStayWithinTheReviewedSize(t *testing.T) {
 	data, err := os.ReadFile("../../automation/perf/startup-budgets.json")
 	if err != nil {

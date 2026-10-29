@@ -6,7 +6,7 @@ path = "packages/agent/src/agent.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/agent/src/harness/agent-harness.ts"
@@ -55,28 +55,28 @@ path = "packages/agent/src/harness/reducer.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/result.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/context.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/index.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl-repo.ts"
@@ -97,42 +97,42 @@ path = "packages/agent/src/harness/session/jsonl.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/codec.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/errors.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/repo.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/storage.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/jsonl/types.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/memory-repo.ts"
@@ -153,7 +153,7 @@ path = "packages/agent/src/harness/session/memory.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/repo-utils.ts"
@@ -167,7 +167,7 @@ path = "packages/agent/src/harness/session/search.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/session.ts"
@@ -181,35 +181,35 @@ path = "packages/agent/src/harness/session/state.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/conformance.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/index.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/testing/types.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/session/types.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/agent/src/harness/skills.ts"
@@ -370,7 +370,7 @@ path = "packages/ai/src/auth/oauth/kimi-coding.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/ai/src/auth/oauth/openai-codex.ts"
@@ -384,7 +384,7 @@ path = "packages/ai/src/auth/oauth/openrouter.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/ai/src/auth/oauth/radius.ts"
@@ -447,7 +447,7 @@ path = "packages/ai/src/models-store.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/ai/src/models.generated.ts"
@@ -552,7 +552,7 @@ path = "packages/ai/src/providers/radius.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/ai/src/providers/xai.ts"
@@ -573,7 +573,7 @@ path = "packages/ai/src/utils/abort.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/ai/src/utils/error-body.ts"
@@ -622,7 +622,7 @@ path = "packages/coding-agent/src/cli/credential-print.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/cli/experimental/auth.ts"
@@ -776,14 +776,14 @@ path = "packages/coding-agent/src/core/model-config.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/core/model-registry.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/core/model-resolver.ts"
@@ -804,7 +804,7 @@ path = "packages/coding-agent/src/core/models-store.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/core/package-manager.ts"
@@ -825,7 +825,7 @@ path = "packages/coding-agent/src/core/provider-composer.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/core/remote-catalog-provider.ts"
@@ -846,7 +846,7 @@ path = "packages/coding-agent/src/core/runtime-credentials.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/core/session-manager.ts"
@@ -881,7 +881,7 @@ path = "packages/coding-agent/src/extensions/llama/index.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/llama/provider.ts"
@@ -895,7 +895,7 @@ path = "packages/coding-agent/src/index.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/main.ts"
@@ -923,7 +923,7 @@ path = "packages/coding-agent/src/modes/interactive/components/custom-editor.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/footer.ts"
@@ -937,14 +937,14 @@ path = "packages/coding-agent/src/modes/interactive/components/markdown-transfor
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/mermaid.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/model-selector.ts"
@@ -986,7 +986,7 @@ path = "packages/coding-agent/src/modes/interactive/theme/theme-controller.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/theme/theme.ts"
@@ -1000,14 +1000,14 @@ path = "packages/coding-agent/src/modes/json-event.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/modes/print-mode.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
+rationale = "ompig ports and maps this surface (PORT_MAP checkmark, coverage.md behavioral); the specific 0.83 to 0.84 delta is not independently diff-proven yet -- accepted tracked risk under the ratified loosened bar (foundation-acceptance-redefinition.md); scheduled for the coverage/risk-core campaign."
 
 [[files]]
 path = "packages/coding-agent/src/modes/rpc/rpc-client.ts"
@@ -1042,7 +1042,7 @@ path = "packages/coding-agent/src/utils/abort.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/utils/clipboard.ts"
@@ -1070,7 +1070,7 @@ path = "packages/coding-agent/src/utils/tool-result-images.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/coding-agent/src/utils/tools-manager.ts"
@@ -1091,7 +1091,7 @@ path = "packages/tui/src/components/alt-screen-flash.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/components/editor.ts"
@@ -1105,7 +1105,7 @@ path = "packages/tui/src/components/h-stack.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/components/markdown.ts"
@@ -1119,7 +1119,7 @@ path = "packages/tui/src/components/scroll-view.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/components/settings-list.ts"
@@ -1133,14 +1133,14 @@ path = "packages/tui/src/components/stack.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/components/v-stack.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/index.ts"
@@ -1161,21 +1161,21 @@ path = "packages/tui/src/latex.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/layout-node.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/layout.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/native-modifiers.ts"
@@ -1189,7 +1189,7 @@ path = "packages/tui/src/terminal-colors.ts"
 change = "modified"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/terminal-image.ts"
@@ -1210,14 +1210,14 @@ path = "packages/tui/src/tui-alt-screen.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/tui-main-screen.ts"
 change = "added"
 disposition = "deferred"
 evidence = []
-rationale = "pig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
+rationale = "ompig target for this surface is pending or partial in PORT_MAP; the 0.83 to 0.84 delta is not yet ported -- accepted tracked risk under the ratified loosened bar; scheduled for the porting campaign."
 
 [[files]]
 path = "packages/tui/src/tui.ts"

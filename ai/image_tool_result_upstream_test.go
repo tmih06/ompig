@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // The two helpers at .upstream/v0.99.1/packages/ai/test/image-tool-result.test.ts:30-203 are exercised for every inventoried model. Real request converters must retain the image/text before the faux generation side will describe the known fixture. Stochastic visual recognition is live-only, including upstream's four skipped Xiaomi mixed-content cases.

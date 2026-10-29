@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // Pi 0.87.1 auth-storage.ts:76,128 takes proper-lockfile's directory lock,

@@ -6,11 +6,11 @@ Reviewer lane: `rev-port-f1-red`. Upstream mirrors: `.upstream/v0.87.1` and `.up
 
 | commit subject | finding |
 |---|---|
-| `fix(red): compile remaining CreateProvider callers against []AnyModel` | `go vet ./...` failed in `agent/harness/runtime` (test package could not build). The pig sides of `model-runtime-store-catalog/19-models-runtime` and `providers-faux-streaming/23-models-provider-lifecycle` did not build. These were harness failures, not missing behavior. |
+| `fix(red): compile remaining CreateProvider callers against []AnyModel` | `go vet ./...` failed in `agent/harness/runtime` (test package could not build). The ompig sides of `model-runtime-store-catalog/19-models-runtime` and `providers-faux-streaming/23-models-provider-lifecycle` did not build. These were harness failures, not missing behavior. |
 | `chore(red): regenerate Go interface inventory for the red API change` | `interface-go-drift`, `interface-recommendations-drift` and `interface-mapping-quality` failed because the exported API changed without `make interface-go` / `make interface-recommendations-generate`. |
 | `fix(red): restore Pi's inputs and assertions in TestModelTypesUpstream` | Dropped assertion `getAuth(model)` is undefined (images-models.test.ts:274). Exact-equality where Pi uses `toContain` (:268). Changed fixture: chat api added to an images-only provider and an in-place header transform (:223-251). Bare `ImageModel` where Pi spreads the image model (:138). Id-only comparison where Pi uses `toEqual(faux.models)` (model-types.test.ts:74-75). Undocumented representation of the `type: "video"` image model (model-types.test.ts:133). Wrong citation lines. |
 | `fix(red): drop the images.test.ts case upstream 0.99.1 removed` | `ai/images_upstream_test.go` kept "should handle text plus image output", which 0.99.1 removed, and cited 0.87.1. |
-| `fix(red): point the 18-images-runtime-auth pig side at the renamed test` | `images-runtime.mjs` ran `-run ^TestImagesModelsAuthThroughOpenRouter$`, which matched nothing after the rename, so the scenario failed on a harness bug. |
+| `fix(red): point the 18-images-runtime-auth ompig side at the renamed test` | `images-runtime.mjs` ran `-run ^TestImagesModelsAuthThroughOpenRouter$`, which matched nothing after the rename, so the scenario failed on a harness bug. |
 
 ## Coverage: ai tests changed or added 0.87.1 → 0.99.1 in this family
 
@@ -45,7 +45,7 @@ Tests that pass on the stubs:
 - `keeps chat reads independent from the all-model catalog`: vacuous in red. The stub `GetAllModels` returns nil, which equals the expected `[]`. It discriminates in green: an implementation that falls back to `GetModels` when `GetAllModels` errors fails it (models.ts:446-454 returns `[]` from the catch). Mutation-check it in green.
 - `is exposed alongside API-key auth`, `TestOpenRouterImagesUpstream` (including the new `modalities` assertion) and `TestImagesUpstream`: behavior unchanged in 0.99.1 (`api/openrouter-images.ts` diff is type renames only).
 
-Other packages: `go vet ./...` is clean. `go test ./...` shows only the pre-existing environment failures (`internal/nativeplatform` X11, `subprocess` native-clipboard-linux), which also fail at 5f7365546. `cmd/pig` exceeds the default 10-minute test timeout under a full parallel run and passes alone with `-timeout 45m` (612 s).
+Other packages: `go vet ./...` is clean. `go test ./...` shows only the pre-existing environment failures (`internal/nativeplatform` X11, `subprocess` native-clipboard-linux), which also fail at 5f7365546. `cmd/ompig` exceeds the default 10-minute test timeout under a full parallel run and passes alone with `-timeout 45m` (612 s).
 
 ## Stubs
 

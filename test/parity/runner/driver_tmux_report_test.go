@@ -44,7 +44,7 @@ func useTmuxSocket(t *testing.T, name string) {
 
 // A capture that fails because the isolated server never existed, or was removed, says so rather than only "exit status 1".
 func TestTmuxServerReportNamesAnUnreachableServer(t *testing.T) {
-	useTmuxSocket(t, "pig-parity-report-"+uniqueID())
+	useTmuxSocket(t, "ompig-parity-report-"+uniqueID())
 	report := tmuxServerReport(context.Background(), "parity-session")
 	for _, want := range []string{"server unreachable", "socket missing", "session parity-session"} {
 		if !strings.Contains(report, want) {
@@ -55,7 +55,7 @@ func TestTmuxServerReportNamesAnUnreachableServer(t *testing.T) {
 
 // A server that was killed after it was recorded is reported as gone, with its pid; a server that is alive reports its sessions.
 func TestTmuxServerReportDistinguishesALostServerFromALostSession(t *testing.T) {
-	useTmuxSocket(t, "pig-parity-report-"+uniqueID())
+	useTmuxSocket(t, "ompig-parity-report-"+uniqueID())
 	if out, err := exec.Command("tmux", tmuxArgs("-f", "/dev/null", "new-session", "-d", "-s", "keeper", "sleep 300", ";", "new-session", "-d", "-s", "work", "sleep 300")...).CombinedOutput(); err != nil {
 		t.Skipf("tmux unavailable: %v: %s", err, out)
 	}
@@ -94,7 +94,7 @@ func TestTmuxServerReportDistinguishesALostServerFromALostSession(t *testing.T) 
 
 // An isolated server that is killed mid-run is replaced by the next session's server, which starts with tmux's defaults. ensureTmuxServer must notice the loss and configure the replacement again, or every later scenario runs without the keyboard protocol the first server was given.
 func TestEnsureTmuxServerConfiguresAReplacementForALostServer(t *testing.T) {
-	useTmuxSocket(t, "pig-parity-report-"+uniqueID())
+	useTmuxSocket(t, "ompig-parity-report-"+uniqueID())
 	tmuxServerMu.Lock()
 	defer tmuxServerMu.Unlock()
 	tmuxKeeperErr, tmuxKeeperStarted = nil, false
@@ -136,7 +136,7 @@ func TestEnsureTmuxServerConfiguresAReplacementForALostServer(t *testing.T) {
 
 // A configuration failure on a server whose keeper is still there fails every later scenario, as it did when the server was set up once; it must not pass silently on the next call.
 func TestEnsureTmuxServerKeepsAConfigurationError(t *testing.T) {
-	useTmuxSocket(t, "pig-parity-report-"+uniqueID())
+	useTmuxSocket(t, "ompig-parity-report-"+uniqueID())
 	tmuxServerMu.Lock()
 	defer tmuxServerMu.Unlock()
 	tmuxKeeperErr, tmuxKeeperStarted = nil, false
@@ -154,7 +154,7 @@ func TestEnsureTmuxServerKeepsAConfigurationError(t *testing.T) {
 
 // A keeper session that ends while the server survives is restarted on the same server; the report must not claim the server was lost.
 func TestEnsureTmuxServerRestartsALostKeeperOnTheSameServer(t *testing.T) {
-	useTmuxSocket(t, "pig-parity-report-"+uniqueID())
+	useTmuxSocket(t, "ompig-parity-report-"+uniqueID())
 	tmuxServerMu.Lock()
 	defer tmuxServerMu.Unlock()
 	tmuxKeeperErr, tmuxKeeperStarted = nil, false

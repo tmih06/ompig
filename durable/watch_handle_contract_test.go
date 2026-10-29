@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session/sessiontest"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session/sessiontest"
 )
 
 // Pi types.ts:868-881 WatchHandle and chord/src/watch.ts Watch: value is the acquisition revision before start and the

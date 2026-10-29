@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
 #
-# Build and check PiG's Android (Termux) binary.
+# Build and check Ompig's Android (Termux) binary.
 #
 #   android-binary.sh build [go build arguments...]   build with the Android NDK
 #   android-binary.sh check BINARY                    check the result's ELF headers
@@ -13,10 +13,10 @@
 #
 # Environment:
 #   ANDROID_NDK_LATEST_HOME, ANDROID_NDK_HOME   NDK root (GitHub's ubuntu runners set both)
-#   PIG_ANDROID_API                             minimum Android API level (default 24, Termux's)
+#   OMPIG_ANDROID_API                             minimum Android API level (default 24, Termux's)
 set -euo pipefail
 
-api=${PIG_ANDROID_API:-24}
+api=${OMPIG_ANDROID_API:-24}
 host_tag=linux-x86_64
 
 ndk_root() {

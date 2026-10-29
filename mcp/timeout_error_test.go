@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // upstream: packages/mcp/src/protocol/jsonrpc.ts:64-72 McpTimeoutError carries timeoutMs and the message "MCP request timed out after <n>ms".

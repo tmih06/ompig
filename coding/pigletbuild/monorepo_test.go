@@ -15,8 +15,8 @@ import (
 	"sync"
 	"testing"
 
-	pigletrelease "github.com/MichaelKinsy/PiG/coding/piglet/release"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	pigletrelease "github.com/tmih06/ompig/coding/ompiglet/release"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 func TestPublishGitHubNamedNamespace(t *testing.T) {
@@ -24,12 +24,12 @@ func TestPublishGitHubNamedNamespace(t *testing.T) {
 	source := writePublishPiglet(t, releasedPorter)
 	keyPath, _, _ := writePublishKey(t)
 	builder := newSigningFakeBuilder(t)
-	args := []string{source, "--to", "github", "--repo", "acme/piglets", "--sign-key", keyPath, "--tag-prefix", "porter/"}
+	args := []string{source, "--to", "github", "--repo", "acme/ompiglets", "--sign-key", keyPath, "--tag-prefix", "porter/"}
 	code, out, stderr := runPublishForTest(t, builder.builders, args...)
 	if code != 0 {
 		t.Fatalf("code=%d stderr=%s", code, stderr)
 	}
-	for _, want := range []string{"tag porter/v1.2.3", "Source: git:github.com/acme/piglets@porter/v1.2.3", "pull github:acme/piglets/porter@1.2.3"} {
+	for _, want := range []string{"tag porter/v1.2.3", "Source: git:github.com/acme/ompiglets@porter/v1.2.3", "pull github:acme/ompiglets/porter@1.2.3"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("missing %q in %s", want, out)
 		}
@@ -54,7 +54,7 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		mu.Lock()
 		defer mu.Unlock()
-		if r.URL.Path == "/repos/acme/piglets/releases" {
+		if r.URL.Path == "/repos/acme/ompiglets/releases" {
 			if r.URL.Query().Get("page") != "1" {
 				t.Errorf("unexpected API page %s", r.URL)
 			}
@@ -65,7 +65,7 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 			_ = json.NewEncoder(w).Encode(rows)
 			return
 		}
-		const prefix = "/acme/piglets/releases/download/"
+		const prefix = "/acme/ompiglets/releases/download/"
 		path, ok := strings.CutPrefix(r.URL.EscapedPath(), prefix)
 		tag, asset, found := strings.Cut(path, "/")
 		if !ok || !found || !strings.Contains(tag, "%2F") || strings.Contains(asset, "/") {
@@ -93,15 +93,15 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 		t.Helper()
 		source := writePublishPiglet(t, fmt.Sprintf("name: %s\nrelease: {version: %s}\n", name, version))
 		builder := newSigningFakeBuilder(t)
-		code, out, stderr := runPublishForTest(t, builder.builders, source, "--to", "github", "--repo", "acme/piglets", "--sign-key", keyPath, "--tag-prefix", name+"/", "--targets", target, "--yes")
+		code, out, stderr := runPublishForTest(t, builder.builders, source, "--to", "github", "--repo", "acme/ompiglets", "--sign-key", keyPath, "--tag-prefix", name+"/", "--targets", target, "--yes")
 		if code != 0 {
 			t.Fatalf("publish %s %s: %d %s %s", name, version, code, out, stderr)
 		}
 		if !strings.Contains(out, "/releases/tag/"+name+"%2Fv"+version) {
 			t.Fatalf("unescaped published URL: %s", out)
 		}
-		verified, err := pigletrelease.Verify(gh.assets()["piglet-release.json"])
-		if err != nil || verified.Index.GitHub == nil || verified.Index.GitHub.TagPrefix != name+"/" || verified.Index.GitHub.Repository != "acme/piglets" {
+		verified, err := pigletrelease.Verify(gh.assets()["ompiglet-release.json"])
+		if err != nil || verified.Index.GitHub == nil || verified.Index.GitHub.TagPrefix != name+"/" || verified.Index.GitHub.Repository != "acme/ompiglets" {
 			t.Fatalf("signed identity=%+v err=%v", verified.Index, err)
 		}
 		mu.Lock()
@@ -116,17 +116,17 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 	}
 	duplicateSource := writePublishPiglet(t, "name: alpha\nrelease: {version: 1.0.0}\n")
 	duplicateBuilder := newSigningFakeBuilder(t)
-	if code, _, stderr := runPublishForTest(t, duplicateBuilder.builders, duplicateSource, "--to", "github", "--repo", "acme/piglets", "--sign-key", keys["alpha"], "--tag-prefix", "alpha/", "--targets", target, "--yes"); code != 1 || duplicateBuilder.buildCalls != 0 || !strings.Contains(stderr, "alpha/v1.0.0 already exists") {
+	if code, _, stderr := runPublishForTest(t, duplicateBuilder.builders, duplicateSource, "--to", "github", "--repo", "acme/ompiglets", "--sign-key", keys["alpha"], "--tag-prefix", "alpha/", "--targets", target, "--yes"); code != 1 || duplicateBuilder.buildCalls != 0 || !strings.Contains(stderr, "alpha/v1.0.0 already exists") {
 		t.Fatalf("duplicate publication=%d %s", code, stderr)
 	}
-	// A prerelease and another Piglet's much higher version cannot update alpha.
+	// A prerelease and another Ompiglet's much higher version cannot update alpha.
 	publish("beta", "99.0.0-rc.1", keys["beta"])
 	publish("unrelated", "99.0.0", keys["alpha"])
 	options := pigletrelease.Options{Client: client, Target: target}
 	initial := map[string]pigletrelease.Result{}
 	for _, name := range []string{"alpha", "beta"} {
-		result, err := pigletrelease.Pull(t.Context(), "github:acme/piglets/"+name+"@1.0.0", options)
-		if err != nil || result.Piglet != name || result.SignerKeyID != ids[name] {
+		result, err := pigletrelease.Pull(t.Context(), "github:acme/ompiglets/"+name+"@1.0.0", options)
+		if err != nil || result.Ompiglet != name || result.SignerKeyID != ids[name] {
 			t.Fatalf("pull=%+v err=%v", result, err)
 		}
 		initial[name] = result
@@ -147,12 +147,12 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 			t.Fatalf("receipt lost signed namespace: %+v %v", verified.Index, err)
 		}
 	}
-	alphaIndex := filepath.Join(gh.state, "releases", "alpha%2Fv2.0.0", "piglet-release.json")
+	alphaIndex := filepath.Join(gh.state, "releases", "alpha%2Fv2.0.0", "ompiglet-release.json")
 	original, err := os.ReadFile(alphaIndex)
 	if err != nil {
 		t.Fatal(err)
 	}
-	betaIndex, err := os.ReadFile(filepath.Join(gh.state, "releases", "beta%2Fv2.0.0", "piglet-release.json"))
+	betaIndex, err := os.ReadFile(filepath.Join(gh.state, "releases", "beta%2Fv2.0.0", "ompiglet-release.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -178,8 +178,8 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 		data []byte
 		want string
 	}{
-		{"other Piglet", betaIndex, "names beta, requested alpha"},
-		{"other repository", mutateIndex(func(i *pigletrelease.Index) { i.GitHub.Repository = "other/piglets" }), "repository or tag namespace"},
+		{"other Ompiglet", betaIndex, "names beta, requested alpha"},
+		{"other repository", mutateIndex(func(i *pigletrelease.Index) { i.GitHub.Repository = "other/ompiglets" }), "repository or tag namespace"},
 		{"other version", mutateIndex(func(i *pigletrelease.Index) { i.Version = "3.0.0" }), "version 3.0.0, requested 2.0.0"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -203,7 +203,7 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assetPath := filepath.Join(gh.state, "releases", "alpha%2Fv2.0.0", "pig-alpha-linux-amd64")
+	assetPath := filepath.Join(gh.state, "releases", "alpha%2Fv2.0.0", "ompig-alpha-linux-amd64")
 	asset, err := os.ReadFile(assetPath)
 	if err != nil {
 		t.Fatal(err)
@@ -227,7 +227,7 @@ func TestMonorepoPublishPullUpdateIsolation(t *testing.T) {
 	}
 	for _, name := range []string{"alpha", "beta"} {
 		result, err := pigletrelease.Update(t.Context(), name, options)
-		if err != nil || result.Piglet != name || result.Version != "2.0.0" || result.SignerKeyID != ids[name] {
+		if err != nil || result.Ompiglet != name || result.Version != "2.0.0" || result.SignerKeyID != ids[name] {
 			t.Fatalf("update=%+v err=%v", result, err)
 		}
 		same, err := pigletrelease.Update(t.Context(), name, options)

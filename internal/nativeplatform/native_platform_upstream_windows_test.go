@@ -5,7 +5,7 @@ package nativeplatform
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // .upstream/v0.87.1/packages/tui/test/native-platform.test.ts:37 (writes Windows clipboard text through the native helper without command fallbacks). Opt in on a Windows test desktop: this replaces the system clipboard contents.

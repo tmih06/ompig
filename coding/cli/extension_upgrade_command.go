@@ -10,14 +10,14 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// pig additive (D109): `pig extension upgrade` rewrites Go extensions written for an older SDK. Pi loads extension source in process and has no counterpart.
+// ompig additive (D109): `ompig extension upgrade` rewrites Go extensions written for an older SDK. Pi loads extension source in process and has no counterpart.
 
 const extensionUpgradeUsage = `Usage:
-  pig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]
+  ompig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]
 
 Rewrite Go extensions written for an older SDK so they build against this one.
 Every file it changes is copied to the configuration root first, the diff is
@@ -34,7 +34,7 @@ Options:
   --summary    Print one line per extension instead of the diff
 `
 
-// runExtensionUpgrade is `pig extension upgrade`.
+// runExtensionUpgrade is `ompig extension upgrade`.
 func runExtensionUpgrade(args []string) int {
 	var targets []string
 	all, dryRun, summary := false, false, false

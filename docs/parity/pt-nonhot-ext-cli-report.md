@@ -21,7 +21,7 @@ All paths in the first column are under `packages/coding-agent/test/`.
 | `plan-mode-utils.test.ts` | 33 / 33 | ported | `examples/extensions/plan-mode/utils_test.go` |
 | `experimental-client-tui.test.ts` | 3 / 3 | ported | `internal/experimental/client_tui_upstream_test.go`, `TestExperimentalClientTuiUpstream` |
 | `experimental-agent-controller.test.ts` | 8 / 8 | ported | `internal/experimental/services/agent_controller_upstream_cases_test.go`, `TestUpstreamAgentController` |
-| `experimental-cli-entry.test.ts` | 3 / 3 | ported | `coding/cli/experimental_entry_test.go`, `TestStableEntryDoesNotDispatchExperimentalCommands`; `cmd/pig-experimental/entry_upstream_test.go`, `TestDevelopmentCLIEntryUpstream` |
+| `experimental-cli-entry.test.ts` | 3 / 3 | ported | `coding/cli/experimental_entry_test.go`, `TestStableEntryDoesNotDispatchExperimentalCommands`; `cmd/ompig-experimental/entry_upstream_test.go`, `TestDevelopmentCLIEntryUpstream` |
 | `experimental-internal-process.test.ts` | 2 / 2 | ported | `internal/experimental/process_upstream_unix_test.go`, `TestUpstreamInternalProcess` |
 | `experimental-plugin-reload.test.ts` | 1 / 1 | ported | `internal/experimental/port_wave_07_experimental_plugin_reload_test.go`, `TestPortWave07ExperimentalPluginReload` |
 | `experimental-presentation-facets.test.ts` | 0 / 4 | pending | B4 |
@@ -38,7 +38,7 @@ The utility tests now retain every upstream case name, command row, input, expec
 The extension tests now assert exact host-call options and both `setActiveTools` calls.
 Pi's cases are at `plan-mode-utils.test.ts:13–260` and `plan-mode-extension.test.ts:106–166`.
 
-The input and merge tests execute the unchanged upstream TypeScript factories through PiG's production Node subprocess, Go Runner, and UIBridge.
+The input and merge tests execute the unchanged upstream TypeScript factories through Ompig's production Node subprocess, Go Runner, and UIBridge.
 The assertions and fake exec boundary are in Go.
 These tests prove event transmission, actual file reads, exec gating, result transformation, and host-call delivery rather than registration alone.
 Pi's cases are at `input-transform-streaming-example.test.ts:42–83` and `git-merge-and-resolve-extension.test.ts:63–205`.
@@ -175,7 +175,7 @@ No assertion, comparator, timeout, or release-policy baseline is weakened.
 - `go vet ./...` and Windows vet for every touched root-module package pass.
 - `go tool golangci-lint config verify`, full `make lint`, explicit touched-package lint with `--allow-parallel-runners`, and separate plan-mode-module lint pass.
 - `make ci-contracts ci-drift` stops at `test-porting-release`. The keep-going run confirms `ci-drift` and all other contract gates pass. The test inventory validates all 598 mapping entries and records seven more ported files than the committed lane base. The unchanged release policy still emits the same 359 hot-path blockers; policy-derived comparison against the base mapping proves zero newly blocked paths. These assigned batches are reviewed non-hot and do not appear in that hot-path list.
-- Full `go test ./...` fails: the subprocess package reaches its default ten-minute total budget during an existing Rust fixture build; `test/ci-images/TestLinuxShardsRetainEveryCheck` finds the existing `test-porting-release` shard mismatch; `test/upstream-parity/TestRunner_NoUnclassifiedPiGMethods` finds unclassified `BindAbort`.
+- Full `go test ./...` fails: the subprocess package reaches its default ten-minute total budget during an existing Rust fixture build; `test/ci-images/TestLinuxShardsRetainEveryCheck` finds the existing `test-porting-release` shard mismatch; `test/upstream-parity/TestRunner_NoUnclassifiedOmpigMethods` finds unclassified `BindAbort`.
 - `make parity-family FAMILY=extensions-runtime` compares against real Pi 0.87.1 and fails four existing scenarios: `24-tool-renderers-collapsed` and `25-tool-renderers-expanded` differ in assistant-text left padding; `27-command-argument-completions` differs in footer model/auto display; `21-extension-tool-and-command-info` differs in its captured API artifact.
 - `git fetch public main` succeeds. Default `make lint-changed` cannot find a merge base with the local `main`; the fetched `public/main` does have a merge base. `make lint-changed LINT_BASE=public/main` then fails because it passes the standalone plan-mode module to the root workspace. Explicit root-package lint and independent `GOWORK=off` plan-mode lint both pass; the lint-changed driver remains a tooling blocker.
 

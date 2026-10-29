@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/src/core/model-resolver.ts:175-190,574-590. Custom IDs copy the complete selected base model; reasoning promotion changes that copy, not the catalog object.

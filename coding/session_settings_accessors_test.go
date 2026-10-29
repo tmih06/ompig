@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // agent-session.ts:1623-1630,3235-3243,3802-3804: steeringMode and followUpMode read the agent; autoCompactionEnabled and

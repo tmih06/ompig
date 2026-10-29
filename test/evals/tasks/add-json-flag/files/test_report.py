@@ -16,7 +16,7 @@ class ReportTest(unittest.TestCase):
     def setUp(self):
         fd, self.path = tempfile.mkstemp(suffix=".txt")
         with os.fdopen(fd, "w") as f:
-            f.write("pig pi pig\n")
+            f.write("ompig pi ompig\n")
 
     def tearDown(self):
         os.remove(self.path)
@@ -25,7 +25,7 @@ class ReportTest(unittest.TestCase):
         self.assertEqual(run(self.path), "pi: 1\npig: 2\n")
 
     def test_json_flag(self):
-        self.assertEqual(json.loads(run("--json", self.path)), {"pi": 1, "pig": 2})
+        self.assertEqual(json.loads(run("--json", self.path)), {"pi": 1, "ompig": 2})
 
     def test_json_flag_after_paths(self):
-        self.assertEqual(json.loads(run(self.path, "--json")), {"pi": 1, "pig": 2})
+        self.assertEqual(json.loads(run(self.path, "--json")), {"pi": 1, "ompig": 2})

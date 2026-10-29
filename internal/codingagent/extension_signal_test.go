@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Pi binds ctx.signal to `this.agent.signal` (agent-session.ts:3368): the signal of the run in progress, undefined when no run is active (agent.ts:336-338).

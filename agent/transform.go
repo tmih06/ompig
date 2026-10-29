@@ -19,7 +19,7 @@ package agent
 //     ^[a-zA-Z0-9_-]+ IDs (e.g. Anthropic). OpenAI accepts arbitrary IDs.
 //  5. (future) Downgrade image blocks for non-vision models.
 //
-// pig routes several models through one provider (GitHub Copilot), so the
+// ompig routes several models through one provider (GitHub Copilot), so the
 // thinking normalization is live whenever a session switches models (e.g.
 // gpt-* to claude-*).
 //
@@ -32,8 +32,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // NormalizeMessages filters and normalizes msgs before they are converted to
@@ -209,7 +209,7 @@ func NormalizeMessages(msgs []AgentMessage, model *ai.Model) []AgentMessage {
 			// Upstream converts to LLM messages before transformMessages, so a
 			// custom message that becomes a user message (branch summary,
 			// compaction summary, bash execution, custom) ends the tool flow
-			// like any user turn. Pig normalizes first, so it must decide the
+			// like any user turn. Ompig normalizes first, so it must decide the
 			// same here: a synthetic result left behind the summary is an
 			// orphan tool_result on the wire. A custom message that sends
 			// nothing does not interrupt.
@@ -233,7 +233,7 @@ func NormalizeMessages(msgs []AgentMessage, model *ai.Model) []AgentMessage {
 	// never existed (truncated/hand-built session, model switch) while the
 	// tool_result survived.
 	//
-	// pig divergence (D48): drop results without an open tool call. Upstream
+	// ompig divergence (D48): drop results without an open tool call. Upstream
 	// sends them, and providers reject the request.
 	//
 	// Matched in order against open calls rather than against the set of ids in
@@ -366,7 +366,7 @@ func imageOmittedPlaceholder(limit int) string {
 
 // limitImagesPerRequest keeps the newest model.InputLimits.Images.MaxPerRequest images of a request and replaces each older image
 // with a text placeholder, so a long run that reads many images does not hit the provider's image cap.
-// pig divergence (D137): upstream carries the limit as metadata only and sends every image (Pi #10162).
+// ompig divergence (D137): upstream carries the limit as metadata only and sends every image (Pi #10162).
 func limitImagesPerRequest(msgs []ai.Message, model *ai.Model) []ai.Message {
 	if model == nil || model.InputLimits == nil || model.InputLimits.Images == nil || model.InputLimits.Images.MaxPerRequest <= 0 {
 		return msgs

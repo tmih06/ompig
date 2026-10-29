@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // oracleCommitMismatch accepts only the Pi build of the pinned commit: a
@@ -18,7 +18,7 @@ func TestOracleCommitMismatch(t *testing.T) {
 	stamped := func(t *testing.T, commit string) string {
 		t.Helper()
 		dir := t.TempDir()
-		if err := os.WriteFile(filepath.Join(dir, ".pig-pi-oracle.json"), []byte(`{"commit":"`+commit+`"}`), 0o600); err != nil {
+		if err := os.WriteFile(filepath.Join(dir, ".ompig-pi-oracle.json"), []byte(`{"commit":"`+commit+`"}`), 0o600); err != nil {
 			t.Fatal(err)
 		}
 		bin := filepath.Join(dir, "node_modules", ".bin", "pi")
@@ -46,11 +46,11 @@ func TestOracleCommitMismatch(t *testing.T) {
 		if err := os.WriteFile(bin, []byte("#!/bin/sh\n"), 0o755); err != nil {
 			t.Fatal(err)
 		}
-		t.Setenv("PIG_PARITY_PI_PUBLISHED", "")
+		t.Setenv("OMPIG_PARITY_PI_PUBLISHED", "")
 		if got := oracleCommitMismatch(bin); !strings.Contains(got, "published package") {
 			t.Fatalf("an unstamped oracle passed without the opt-in: %q", got)
 		}
-		t.Setenv("PIG_PARITY_PI_PUBLISHED", "1")
+		t.Setenv("OMPIG_PARITY_PI_PUBLISHED", "1")
 		tagPin := coding.UpstreamVersion == coding.UpstreamPackageVersion
 		if got := oracleCommitMismatch(bin); tagPin != (got == "") {
 			t.Fatalf("tag pin %v, opted-in unstamped oracle verdict %q", tagPin, got)
@@ -58,7 +58,7 @@ func TestOracleCommitMismatch(t *testing.T) {
 	})
 }
 
-// Without PIG_PARITY_PI_BIN a run takes only the source-built oracle linked into extensions/sdk-ts, however many mise
+// Without OMPIG_PARITY_PI_BIN a run takes only the source-built oracle linked into extensions/sdk-ts, however many mise
 // installs of that version exist; the exact published mise versions are candidates only when the caller says so.
 func TestUpstreamPiCandidates(t *testing.T) {
 	root := t.TempDir()
@@ -79,7 +79,7 @@ func TestUpstreamPiCandidates(t *testing.T) {
 			t.Fatalf("published candidate %q is not an exact mise install", candidate)
 		}
 	}
-	t.Setenv("PIG_PARITY_PI_PUBLISHED", "")
+	t.Setenv("OMPIG_PARITY_PI_PUBLISHED", "")
 	if publishedOracleAllowed() {
 		t.Fatal("the published oracle is allowed without the opt-in")
 	}

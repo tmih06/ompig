@@ -26,8 +26,8 @@ func TestDependabotCoversMaintainedManifests(t *testing.T) {
 		"/extensions/sdk-rs",
 		"/extensions/sdk-ts",
 		"/test/parity/interface-extractor",
-		"/piglets/porter/extensions/pig-porter",
-		"/piglets/standard",
+		"/ompiglets/porter/extensions/ompig-porter",
+		"/ompiglets/standard",
 		"/test/extension-conformance/testdata/rust-sdk-fixture",
 	} {
 		// A directory is listed either alone or in a grouped entry's list.

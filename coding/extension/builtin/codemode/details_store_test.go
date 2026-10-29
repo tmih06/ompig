@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: execute.ts store() appends one `codemode-store` custom entry whose data is { set, delete } (CodemodeStoreEntryData), and a result over

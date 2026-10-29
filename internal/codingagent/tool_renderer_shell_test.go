@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // types.ts:658 ToolRenderers picks renderShell with renderCall and renderResult, and tool-execution.ts:117 reads it to choose the card's shell: edit declares renderShell "self"

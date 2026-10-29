@@ -8,13 +8,13 @@ import (
 func TestPublishGitHubSourceRefDoesNotEchoCredentials(t *testing.T) {
 	const secret = "publish-credential-must-not-appear"
 	for name, tc := range map[string]struct{ ref, reason string }{
-		"password":                          {"git:https://user:" + secret + "@github.com/acme/porter@v1.2.3", "Git Piglet source URLs must not include credentials; configure a Git credential helper or use SSH"},
-		"username token":                    {"git:https://" + secret + "@github.com/acme/porter@v1.2.3", "Git Piglet source URLs must not include credentials; configure a Git credential helper or use SSH"},
-		"query token":                       {"git:https://github.com/acme/porter?token=" + secret, "Git Piglet source URLs must not include query parameters"},
-		"password missing repository":       {"git:https://user:" + secret + "@github.com/acme", "invalid remote Piglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
-		"username token missing repository": {"git:https://" + secret + "@github.com/acme", "invalid remote Piglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
-		"query token missing repository":    {"git:https://github.com/acme?token=" + secret, "invalid remote Piglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
-		"npm registry password":             {"npm:@acme/porter?registry=https%3A%2F%2Fuser%3A" + secret + "%40registry.example", "invalid remote Piglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
+		"password":                          {"git:https://user:" + secret + "@github.com/acme/porter@v1.2.3", "Git Ompiglet source URLs must not include credentials; configure a Git credential helper or use SSH"},
+		"username token":                    {"git:https://" + secret + "@github.com/acme/porter@v1.2.3", "Git Ompiglet source URLs must not include credentials; configure a Git credential helper or use SSH"},
+		"query token":                       {"git:https://github.com/acme/porter?token=" + secret, "Git Ompiglet source URLs must not include query parameters"},
+		"password missing repository":       {"git:https://user:" + secret + "@github.com/acme", "invalid remote Ompiglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
+		"username token missing repository": {"git:https://" + secret + "@github.com/acme", "invalid remote Ompiglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
+		"query token missing repository":    {"git:https://github.com/acme?token=" + secret, "invalid remote Ompiglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
+		"npm registry password":             {"npm:@acme/porter?registry=https%3A%2F%2Fuser%3A" + secret + "%40registry.example", "invalid remote Ompiglet source: use an explicit scheme (npm: or git:); malformed references and unsupported source schemes are refused"},
 	} {
 		t.Run(name, func(t *testing.T) {
 			gh, tmp := publishTestEnv(t)

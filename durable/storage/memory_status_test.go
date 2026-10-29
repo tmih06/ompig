@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // pi: packages/durable/src/storage/memory.ts (apply indexes taskIdsByStatus and submissionIdsByStatus, which hold exactly the closed status sets)

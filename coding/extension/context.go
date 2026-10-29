@@ -294,7 +294,7 @@ func (c *Context) Mode() (ExtensionMode, error) {
 	return c.actions.GetMode().normalize(), nil
 }
 
-// pig additive (D23): these methods support Piglet tool scoping.
+// ompig additive (D23): these methods support Ompiglet tool scoping.
 // GetAllTools returns metadata about all registered tools.
 // Returns nil if no tool-scoping actions are wired.
 func (c *Context) GetAllTools() []ToolInfo {

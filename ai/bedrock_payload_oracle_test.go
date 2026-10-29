@@ -12,12 +12,12 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/bedrock-converse-stream.ts
 
-// bedrockPayloadJSON renders the ConverseStreamInput PiG hands to OnPayload as the JSON the JS SDK command input would stringify to: member names in lowerCamel
+// bedrockPayloadJSON renders the ConverseStreamInput Ompig hands to OnPayload as the JSON the JS SDK command input would stringify to: member names in lowerCamel
 // case, unions as their one member, bytes as base64 and documents as their JSON, with unset members omitted.
 func bedrockPayloadJSON(t *testing.T, value reflect.Value) any {
 	t.Helper()
@@ -103,7 +103,7 @@ func lowerFirst(s string) string {
 
 // The ConverseStream command input bedrock-converse-stream builds over random transcripts (text and image user content, thinking with and without signatures,
 // same-model and foreign tool calls, error and aborted turns, tool results with images), tools, model ids (Claude, Nova, inference profile ARNs), cache
-// retention, reasoning, tool choice, request metadata and stream options. Pi's onPayload value and PiG's, rendered as JSON, must be equal.
+// retention, reasoning, tool choice, request metadata and stream options. Pi's onPayload value and Ompig's, rendered as JSON, must be equal.
 func TestBedrockConversePayloadMatchesPi(t *testing.T) {
 	t.Setenv("AWS_EC2_METADATA_DISABLED", "true")
 	rng := rand.New(rand.NewSource(131))
@@ -249,7 +249,7 @@ func TestBedrockConversePayloadMatchesPi(t *testing.T) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d id=%s reasoning=%v simple=%v options=%v", i, p.ID, p.Reasoning, p.Simple, p.Options), got, piBedrockPayloadWithD116(want[i]), &failures, classes)
 	}

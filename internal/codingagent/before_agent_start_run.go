@@ -4,9 +4,9 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 // BeforeAgentStartRun holds one prompt's per-run inputs after before_agent_start. The Session and interactive mode both derive their run from it.

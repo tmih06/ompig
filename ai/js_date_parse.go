@@ -6,14 +6,14 @@ import (
 	"math"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const (
 	dateNone = math.MinInt32
 	// dateSignificantDigits is the number of digits V8's DateParser reads from a number token (DateParser::kMaxSignificantDigits); later digits are skipped.
 	dateSignificantDigits = 9
-	// timeClipMs is ECMAScript's TimeClip range (ECMA-262 21.4.1.31, 100,000,000 days in milliseconds) that V8's MakeDate applies. Both constants belong to the JavaScript Date.parse that Node runs, not to PiG or Pi.
+	// timeClipMs is ECMAScript's TimeClip range (ECMA-262 21.4.1.31, 100,000,000 days in milliseconds) that V8's MakeDate applies. Both constants belong to the JavaScript Date.parse that Node runs, not to Ompig or Pi.
 	timeClipMs          = 8.64e15
 	timeClipBeforeUTCMs = timeClipMs + 864e5
 )

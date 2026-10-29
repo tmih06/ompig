@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi guards ExtensionContext.cwd, mode, hasUI and model with runner.assertActive(), so each throws the runner's stale message once the runtime is invalidated (runner.ts:571-600, 721-735).

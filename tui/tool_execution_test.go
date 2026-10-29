@@ -954,7 +954,7 @@ func TestToolExecutionUpdateResult(t *testing.T) {
 
 // tool-execution.ts formatToolExecution (a tool with no definition, such as a name the model made up): the tool title, a blank row,
 // JSON.stringify(args, null, 2), and the result text right below it with its ANSI sequences and carriage returns removed. Found by running the same
-// scripted reply through the real Pi and PiG (Pi: `nosuchtool`, blank, `{`, `  "x": 1`, `}`, `Tool nosuchtool not found`).
+// scripted reply through the real Pi and Ompig (Pi: `nosuchtool`, blank, `{`, `  "x": 1`, `}`, `Tool nosuchtool not found`).
 func TestUnregisteredToolCardIsUpstreamFormatToolExecution(t *testing.T) {
 	c := NewToolExecutionComponent("nosuchtool", "call_1", json.RawMessage(`{"x":1,"nested":{"a":[1,2],"b":{}},"s":"t"}`), ToolExecutionOptions{}, nil, nil, "")
 	c.SetResult("Tool nosuchtool not found\x1b[31m!\x1b[0m\r\nsec\x07ond", true, 0)
@@ -970,8 +970,8 @@ func TestUnregisteredToolCardIsUpstreamFormatToolExecution(t *testing.T) {
 }
 
 // tool-execution.ts updateResult never expands a card: an error result collapses like any other (the bash renderer shows its last five lines
-// and the expand hint, expanded only by the global toggle or a click). PiG expanded every error result, so a failing command's whole output
-// filled the screen. Found by running `seq 1 40; false` through the real Pi and PiG (Pi: 38 earlier lines hidden).
+// and the expand hint, expanded only by the global toggle or a click). Ompig expanded every error result, so a failing command's whole output
+// filled the screen. Found by running `seq 1 40; false` through the real Pi and Ompig (Pi: 38 earlier lines hidden).
 func TestErrorResultStaysCollapsedUntilExpanded(t *testing.T) {
 	for _, isError := range []bool{false, true} {
 		c := newToolCardForTest("bash", "")

@@ -1,7 +1,7 @@
 --- /dev/null
 +++ b/bench/probe.ts
 @@ -0,0 +1,88 @@
-+// Where-it-runs probe: per request inside the Durable Object, for pi-head and the PiG targets. Run with BENCH_PROBE=count
++// Where-it-runs probe: per request inside the Durable Object, for pi-head and the Ompig targets. Run with BENCH_PROBE=count
 +// (crossing counts, SQLite rows, CPU, memory) or BENCH_PROBE=time (adds the time spent inside the core's exports; wall
 +// time per crossing is a Miniflare measurement, because Cloudflare freezes timers during a request). Appends one line per
 +// sample to results/probe.jsonl; results/results.jsonl (the latency runs) is untouched.
@@ -13,7 +13,7 @@
 +
 +if (!PROBE) throw new Error("set BENCH_PROBE=count or BENCH_PROBE=time")
 +const name = target(process.argv[2])
-+if (name !== "pi-head" && !TARGETS[name].core) throw new Error("probe: pi-head or a PiG target")
++if (name !== "pi-head" && !TARGETS[name].core) throw new Error("probe: pi-head or a Ompig target")
 +const sizes = process.argv.length > 3 ? process.argv.slice(3).map(Number) : SIZES
 +const samples = Number(process.env.SAMPLES ?? 3)
 +
@@ -105,7 +105,7 @@
 +for (const arg of process.argv.slice(2)) {
 +  const name = target(arg)
 +  const path = await bundleFor(name)
-+  const files = [path, ...(TARGETS[name].core ? [join(path, "../pig-core.wasm")] : [])].map(file => readFileSync(file))
++  const files = [path, ...(TARGETS[name].core ? [join(path, "../ompig-core.wasm")] : [])].map(file => readFileSync(file))
 +  const bytes = files.reduce((sum, f) => sum + f.length, 0), gzip = files.reduce((sum, f) => sum + gzipSync(f).length, 0)
 +  const wasm = TARGETS[name].core ? files[1]!.length : 0
 +  appendFileSync("results/size.jsonl", JSON.stringify({ kind: "size", target: name, version: TARGETS[name].version, bytes, gzip, wasm, at: new Date().toISOString() }) + "\n")
@@ -116,14 +116,14 @@
 @@ -93,9 +93,16 @@
  const bundles = new Map<Target, Promise<string>>()
  
-+// BENCH_PROBE (count | time) builds the where-it-runs probe into pi-head and the PiG targets (src/probe.ts) in its own
++// BENCH_PROBE (count | time) builds the where-it-runs probe into pi-head and the Ompig targets (src/probe.ts) in its own
 +// dist directory; the latency runs bundle without it.
 +export const PROBE = process.env.BENCH_PROBE ?? ""
 +if (PROBE && PROBE !== "count" && PROBE !== "time") throw new Error("BENCH_PROBE: count | time")
 +
  const bundle = (name: Target) => bundles.get(name) ?? bundles.set(name, (async () => {
    const core = TARGETS[name]!.core
-   // A PiG target's bundle sits beside its own copy of the core, which it imports as ./pig-core.wasm.
+   // A Ompig target's bundle sits beside its own copy of the core, which it imports as ./ompig-core.wasm.
 -  const outfile = core ? `dist/${name}/bench.mjs` : `dist/${name}.mjs`
 +  const dist = PROBE ? `dist/probe-${PROBE}` : "dist"
 +  const outfile = core ? `${dist}/${name}/bench.mjs` : `${dist}/${name}.mjs`
@@ -134,8 +134,8 @@
 @@ -103,15 +110,19 @@
      plugins: name === "pi-head" ? [fromSource] : TARGETS[name]!.core ? [fromPig] : [],
    })
--  if (core) cpSync(join(pigHost(), "dist", core), `dist/${name}/pig-core.wasm`)
-+  if (core) cpSync(join(pigHost(), "dist", core), `${dist}/${name}/pig-core.wasm`)
+-  if (core) cpSync(join(ompigHost(), "dist", core), `dist/${name}/ompig-core.wasm`)
++  if (core) cpSync(join(ompigHost(), "dist", core), `${dist}/${name}/ompig-core.wasm`)
    return outfile
  })()).get(name)!
  
@@ -149,16 +149,16 @@
 +export async function start(name: Target, persist: string, options: { inspector?: boolean } = {}) {
 +  const path = await bundle(name)
    const mf = new Miniflare({
--    modules: [{ type: "ESModule", path: await bundle(name) }, ...(TARGETS[name]!.core ? [{ type: "CompiledWasm" as const, path: `dist/${name}/pig-core.wasm` }] : [])],
+-    modules: [{ type: "ESModule", path: await bundle(name) }, ...(TARGETS[name]!.core ? [{ type: "CompiledWasm" as const, path: `dist/${name}/ompig-core.wasm` }] : [])],
 +    ...(options.inspector ? { inspectorPort: 0 } : {}),
-+    modules: [{ type: "ESModule", path }, ...(TARGETS[name]!.core ? [{ type: "CompiledWasm" as const, path: join(path, "../pig-core.wasm") }] : [])],
++    modules: [{ type: "ESModule", path }, ...(TARGETS[name]!.core ? [{ type: "CompiledWasm" as const, path: join(path, "../ompig-core.wasm") }] : [])],
      compatibilityDate: "2026-07-30",
      compatibilityFlags: ["nodejs_compat"],
---- a/src/pig.ts
-+++ b/src/pig.ts
+--- a/src/ompig.ts
++++ b/src/ompig.ts
 @@ -5,5 +5,8 @@
  // @ts-expect-error the bundle supplies the compiled core module
- import core from "./pig-core.wasm"
+ import core from "./ompig-core.wasm"
 +import { probeWasm } from "./probe.ts"
  
 +declare const BENCH_PROBE: boolean

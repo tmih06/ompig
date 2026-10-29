@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 24382bed agent-session-mcp.test.ts "tells scripts what directly exposed MCP tools resolve to": the declared result of

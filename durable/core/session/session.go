@@ -4,10 +4,10 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/session/hopcost"
+	"github.com/tmih06/ompig/durable/core/session/hopcost"
 
-	"github.com/MichaelKinsy/PiG/durable/core/internal/delta"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/internal/delta"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // Publication is what one applied commit changed.

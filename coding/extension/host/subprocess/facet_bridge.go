@@ -47,7 +47,7 @@ func OpenFacetBridge(ctx context.Context, options FacetBridgeOptions) (_ *FacetB
 			return nil, err
 		}
 	}
-	directory, err := os.MkdirTemp(options.TemporaryDirectory, "pig-facet-")
+	directory, err := os.MkdirTemp(options.TemporaryDirectory, "ompig-facet-")
 	if err != nil {
 		return nil, err
 	}

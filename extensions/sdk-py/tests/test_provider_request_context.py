@@ -1,11 +1,11 @@
 import pytest
 
-import pig_sdk
+import ompig_sdk
 
 
 @pytest.mark.parametrize("phase", ["normal", "before", "during", "after"])
 def test_provider_dispatch_uses_armed_context_cancellation(phase):
-    ext = pig_sdk.Extension("provider-context")
+    ext = ompig_sdk.Extension("provider-context")
     responses, notifications, seen, ended = [], [], [], []
     request = {
         "id": "provider-request",
@@ -17,7 +17,7 @@ def test_provider_dispatch_uses_armed_context_cancellation(phase):
     signal = ctx._cancelled
     result = {"sentinel": "provider-result"}
 
-    class Stream(pig_sdk.ModelEventStream):
+    class Stream(ompig_sdk.ModelEventStream):
         def events(self):
             if phase == "during":
                 signal.set()

@@ -23,7 +23,7 @@
 #
 # Bugs caught by this scenario:
 #
-#   1. (FIXED, root) pig's edit tool schema-rejected the legacy flat
+#   1. (FIXED, root) ompig's edit tool schema-rejected the legacy flat
 #      input shape `{path, oldText, newText}` that the faux provider
 #      (and Opus 4.6 / GLM-5.1 in production) emit. Validation ran
 #      BEFORE upstream-equivalent prepareArguments would have rewritten
@@ -36,14 +36,14 @@
 #        - EditTool implements PrepareArguments via existing
 #          prepareEditArguments helper.
 #
-#   2. (FIXED, root) pig rendered the edit diff body in a different
-#      shape than upstream. pig previously emitted:
+#   2. (FIXED, root) ompig rendered the edit diff body in a different
+#      shape than upstream. ompig previously emitted:
 #
 #        @@ parity-edit-target.txt hunk 1/1 @@
 #        - REPLACE_ME
 #        + REPLACED
 #
-#      upstream (and now pig):
+#      upstream (and now ompig):
 #
 #         1 before line
 #        -2 REPLACE_ME
@@ -52,7 +52,7 @@
 #
 #      Fixed by porting generateDiffString from upstream edit-diff.ts:266
 #      to tools.GenerateDiffString (byte-exact vs jsdiff, oracle-tested)
-#      and routing renderEditDiff through it. pig's `tui.RenderDiff`
+#      and routing renderEditDiff through it. ompig's `tui.RenderDiff`
 #      already consumed the line-numbered format; the missing piece was
 #      the diff-string generator, now landed. Its divergence entry was
 #      removed from docs/parity/DIVERGENCES.md.
@@ -78,19 +78,19 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
-# Per-binary CWD snapshot: both pi and pig get an independent ephemeral
+# Per-binary CWD snapshot: both pi and ompig get an independent ephemeral
 # copy of testdata/edit-cwd/ so concurrent mutation of parity-edit-target.txt
 # cannot race. Required for any scenario that mutates fixture files.
 cwd = "testdata/edit-cwd"

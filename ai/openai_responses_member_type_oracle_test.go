@@ -10,7 +10,7 @@ import (
 // comb-audit row 100 follow-up: an OpenAI Responses stream event or output item that is valid JSON but holds a member of an unexpected type. Pi reads each
 // member with its own expression (openai-responses-shared.ts:463-800): `+=` appends a delta's String() form, an output_item.done joins its parts' String()
 // forms or throws `item.content?.map is not a function`, `${item.call_id}|${item.id}` interpolates, finalizeResponse reads counts with `|| 0` and maps a status
-// through an === switch. The rows run Pi's own stream over each body and compare the final message with PiG's.
+// through an === switch. The rows run Pi's own stream over each body and compare the final message with Ompig's.
 func TestOpenAIResponsesMistypedMembersMatchPi(t *testing.T) {
 	event := func(data string) string { return "data: " + data + "\n\n" }
 	added := event(`{"type":"response.output_item.added","output_index":0,"item":{"type":"message","id":"m","role":"assistant","content":[]}}`)
@@ -156,7 +156,7 @@ func TestOpenAIResponsesMistypedMembersMatchPi(t *testing.T) {
 		Blocks   int    `json:"blocks"`
 		// Sigs is each text block's textSignature and each thinking block's thinkingSignature, in block order.
 		Sigs string `json:"sigs"`
-		// Transport is the cause of a failed request in Pi's run, empty when every request reached the server; PiG's run never has one, so a transport failure fails the row naming it.
+		// Transport is the cause of a failed request in Pi's run, empty when every request reached the server; Ompig's run never has one, so a transport failure fails the row naming it.
 		Transport string `json:"transport"`
 	}
 	var want []result
@@ -234,7 +234,7 @@ process.stdout.write(JSON.stringify(out) + "\n", () => process.exit(0));
 				want[i].Tools = "null"
 			}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}
@@ -248,7 +248,7 @@ func optionalSignature(signature string) any {
 	return signature
 }
 
-// An output item whose mistyped member Pi stores raw (a reasoning id, a function_call name, a custom tool call's members) cannot be reproduced in PiG's typed
+// An output item whose mistyped member Pi stores raw (a reasoning id, a function_call name, a custom tool call's members) cannot be reproduced in Ompig's typed
 // item, so it ends the turn with the decode error. It used to be skipped, and the stream then finished as a success without the item's block.
 func TestOpenAIResponsesItemPiStoresRawEndsTheTurnWithTheDecodeError(t *testing.T) {
 	event := func(data string) string { return "data: " + data + "\n\n" }

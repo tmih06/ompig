@@ -15,7 +15,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core"
+	"github.com/tmih06/ompig/durable/core"
 )
 
 // sink keeps the garbage allocation on the heap until the test drops it.

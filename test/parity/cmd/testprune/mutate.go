@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-const modulePrefix = "github.com/MichaelKinsy/PiG/"
+const modulePrefix = "github.com/tmih06/ompig/"
 
 // mutant is one source edit: bytes [Start,End) of File become Repl.
 type mutant struct {

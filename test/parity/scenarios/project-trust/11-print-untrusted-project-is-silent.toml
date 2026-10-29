@@ -11,7 +11,7 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/warning-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/warning-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/warning-agent"]
 override_base_args = true
 
 [cli]

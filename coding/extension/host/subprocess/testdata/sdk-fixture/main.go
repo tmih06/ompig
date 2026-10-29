@@ -20,7 +20,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 type focusedList struct {
@@ -757,7 +757,7 @@ func conformanceLoginDefinition() sdk.LoginDefinition {
 		Hero:        repeatRow("A", 32, 14),
 		Mascot:      repeatRow("A", 16, 14),
 		Palette:     map[string]string{"A": "#123ABC"},
-		Name:        "Conformance Pig",
+		Name:        "Conformance Ompig",
 		Description: "Cross-language login fixture",
 		Tagline:     "One canonical definition across every SDK",
 	}

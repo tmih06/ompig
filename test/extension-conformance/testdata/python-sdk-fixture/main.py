@@ -17,8 +17,8 @@ KIT_KINDS_PNG = "89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c
 ROOT = pathlib.Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT / "extensions" / "sdk-py"))
 
-import pig_sdk  # noqa: E402
-from pig_sdk import kit  # noqa: E402
+import ompig_sdk  # noqa: E402
+from ompig_sdk import kit  # noqa: E402
 
 
 def kit_probe_view() -> kit.View:
@@ -52,15 +52,15 @@ class KitProbe:
     def view(self, _width: int) -> kit.View:
         return kit_probe_view()
 
-    def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
+    def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
         self.log.append("input:" + data)
-        return pig_sdk.RemoteComponentResult()
+        return ompig_sdk.RemoteComponentResult()
 
-    def handle_view_event(self, event: kit.Event) -> pig_sdk.RemoteComponentResult:
+    def handle_view_event(self, event: kit.Event) -> ompig_sdk.RemoteComponentResult:
         self.log.append(f"{event.type}:{event.index}:{event.item.value if event.item else ''}")
         if event.type == kit.SELECT:
-            return pig_sdk.RemoteComponentResult(done=True, value=",".join(self.log))
-        return pig_sdk.RemoteComponentResult()
+            return ompig_sdk.RemoteComponentResult(done=True, value=",".join(self.log))
+        return ompig_sdk.RemoteComponentResult()
 
 
 class MouseProbe:
@@ -74,18 +74,18 @@ class MouseProbe:
     def render(self, _width: int) -> list[str]:
         return ["mouse probe", "row 1", "row 2", "row 3"]
 
-    def handle_input(self, _data: str) -> pig_sdk.RemoteComponentResult:
-        return pig_sdk.RemoteComponentResult()
+    def handle_input(self, _data: str) -> ompig_sdk.RemoteComponentResult:
+        return ompig_sdk.RemoteComponentResult()
 
-    def handle_mouse(self, event: pig_sdk.MouseEvent) -> pig_sdk.RemoteComponentResult:
+    def handle_mouse(self, event: ompig_sdk.MouseEvent) -> ompig_sdk.RemoteComponentResult:
         mods = "".join(name for on, name in ((event.shift, "S"), (event.alt, "A"), (event.ctrl, "C")) if on)
         self.log.append(
             f"{event.type}/{event.button}/{event.x},{event.y}/{event.screen_x},{event.screen_y}/"
             f"{event.width}x{event.height}/w{event.wheel_delta}/c{event.click_count}/{mods}"
         )
         if event.type == "click":
-            return pig_sdk.RemoteComponentResult(done=True, value=",".join(self.log))
-        return pig_sdk.RemoteComponentResult()
+            return ompig_sdk.RemoteComponentResult(done=True, value=",".join(self.log))
+        return ompig_sdk.RemoteComponentResult()
 
 
 KIT_WIDGET_CASES: dict[str, Any] = {}
@@ -338,26 +338,26 @@ class KitWidgetProbe:
     callbacks, and a probe that closed after the callbacks Pi fired would drop
     the steps still to come."""
 
-    def __init__(self, ctx: pig_sdk.Context, view: kit.View) -> None:
+    def __init__(self, ctx: ompig_sdk.Context, view: kit.View) -> None:
         self.ctx = ctx
         self.view_ = view
 
     def view(self, _width: int) -> kit.View:
         return self.view_
 
-    def handle_input(self, _data: str) -> pig_sdk.RemoteComponentResult:
-        return pig_sdk.RemoteComponentResult()
+    def handle_input(self, _data: str) -> ompig_sdk.RemoteComponentResult:
+        return ompig_sdk.RemoteComponentResult()
 
-    def handle_mouse(self, _event: pig_sdk.MouseEvent) -> pig_sdk.RemoteComponentResult:
-        return pig_sdk.RemoteComponentResult()
+    def handle_mouse(self, _event: ompig_sdk.MouseEvent) -> ompig_sdk.RemoteComponentResult:
+        return ompig_sdk.RemoteComponentResult()
 
-    def handle_view_event(self, event: kit.Event) -> pig_sdk.RemoteComponentResult:
+    def handle_view_event(self, event: kit.Event) -> ompig_sdk.RemoteComponentResult:
         if event.type == kit.MOUSE and event.mouse is not None:
             m = event.mouse
             self.ctx.notify(f"kit-widget-event=mouse:{m['type']}/{m['button']}/{m['x']}/{m['y']}", "info")
         elif event.type != kit.CHANGE:
             self.ctx.notify(f"kit-widget-event={event.type}:{event.value}", "info")
-        return pig_sdk.RemoteComponentResult()
+        return ompig_sdk.RemoteComponentResult()
 
 
 def kit_image_png(n: int) -> bytes:
@@ -383,7 +383,7 @@ class FocusedList:
         lines.extend(("> " if index == self.selected else "  ") + item for index, item in enumerate(self.items))
         return lines
 
-    def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
+    def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
         if data == "\x1b[A":
             self.selected = (self.selected - 1) % len(self.items)
         elif data == "\x1b[B":
@@ -391,10 +391,10 @@ class FocusedList:
         elif data == "\x1b[6~":
             self.selected = min(self.selected + 2, len(self.items) - 1)
         elif data in {"\r", "\n"}:
-            return pig_sdk.RemoteComponentResult(done=True, value=self.items[self.selected])
+            return ompig_sdk.RemoteComponentResult(done=True, value=self.items[self.selected])
         elif data == "\x1b":
-            return pig_sdk.RemoteComponentResult(done=True)
-        return pig_sdk.RemoteComponentResult()
+            return ompig_sdk.RemoteComponentResult(done=True)
+        return ompig_sdk.RemoteComponentResult()
 
     def dispose(self) -> None:
         self.disposed = True
@@ -423,11 +423,11 @@ class TimerFocused:
         with self._lock:
             return [f"timer frame={self.frame} width={width}"]
 
-    def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
+    def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
         with self._lock:
             if data == "\r":
-                return pig_sdk.RemoteComponentResult(done=True, value=self.frame)
-        return pig_sdk.RemoteComponentResult()
+                return ompig_sdk.RemoteComponentResult(done=True, value=self.frame)
+        return ompig_sdk.RemoteComponentResult()
 
     def set_invalidate(self, invalidate) -> None:
         with self._lock:
@@ -443,7 +443,7 @@ class TimerFocused:
 class ConformanceBashOperations:
     """The BashOperations every SDK fixture returns for the user_bash command "operations" (TestConformance_UserBashOperationsRunInTheExtension)."""
 
-    def exec(self, command: str, cwd: str, options: pig_sdk.BashExecOptions) -> int | None:
+    def exec(self, command: str, cwd: str, options: ompig_sdk.BashExecOptions) -> int | None:
         if command == "echo":
             options.on_data(f"cmd:{command}\n".encode())
             options.on_data(f"cwd:{cwd}\n".encode())
@@ -469,22 +469,22 @@ class ConformanceBashOperations:
         raise RuntimeError(f"exec failed: {command}")
 
 
-def conformance_login_definition() -> pig_sdk.LoginDefinition:
-    return pig_sdk.LoginDefinition(
+def conformance_login_definition() -> ompig_sdk.LoginDefinition:
+    return ompig_sdk.LoginDefinition(
         brand=["A" * 41 for _ in range(5)],
         hero=["A" * 32 for _ in range(14)],
         mascot=["A" * 16 for _ in range(14)],
         palette={"A": "#123ABC"},
-        name="Conformance Pig",
+        name="Conformance Ompig",
         description="Cross-language login fixture",
         tagline="One canonical definition across every SDK",
     )
 
 
-def conformance_sprite_definition() -> pig_sdk.SpriteDefinition:
-    return pig_sdk.SpriteDefinition(
-        id="conformance-pig",
-        name="Conformance Pig",
+def conformance_sprite_definition() -> ompig_sdk.SpriteDefinition:
+    return ompig_sdk.SpriteDefinition(
+        id="conformance-ompig",
+        name="Conformance Ompig",
         tagline="One canonical sprite across every SDK",
         mascot=["A" * 16 for _ in range(14)],
         palette={"A": "#123ABC"},
@@ -496,11 +496,11 @@ def dialog_text(value) -> str:
     return value if isinstance(value, str) else ""
 
 
-def new_extension() -> pig_sdk.Extension:
+def new_extension() -> ompig_sdk.Extension:
     # factory_agent_dir is get_agent_dir() while the factory runs, where Pi's extensions call it (TestConformance_HostConfigurationAgreesAcrossSDKs).
     try:
-        factory_agent_dir = pig_sdk.get_agent_dir()
-    except pig_sdk.HostInfoUnavailable as error:
+        factory_agent_dir = ompig_sdk.get_agent_dir()
+    except ompig_sdk.HostInfoUnavailable as error:
         factory_agent_dir = "error: %s" % error
     prompt_lock = threading.Lock()
     prompt_sequence = 0
@@ -516,13 +516,13 @@ def new_extension() -> pig_sdk.Extension:
             return
         ctx.notify("ui_prompt:%s:%s:%s:%s" % (data.get("type"), data.get("reason"), data.get("kind"), title), "info")
 
-    ext = pig_sdk.Extension("python-sdk-fixture")
+    ext = ompig_sdk.Extension("python-sdk-fixture")
     schema_rejected = False
     try:
         ext.tool("schema-invalid", "Must not register", None, lambda ctx, args: {"content": "bad"})
     except ValueError as error:
         schema_rejected = str(error) == 'Tool "schema-invalid" registered by extension "python-sdk-fixture" must define an object parameter schema.'
-    Type = pig_sdk.Type
+    Type = ompig_sdk.Type
     ext.tool("type-schema-tool", "Parameters built with Type", Type.object({
         "query": Type.string({"description": "What to look up"}),
         "limit": Type.optional(Type.integer({"minimum": 1, "maximum": 50})),
@@ -616,7 +616,7 @@ def new_extension() -> pig_sdk.Extension:
         ctx.notify("refine_log:" + json.dumps(calls) + ":end", "info")
 
     ext.command("refine_log", "Report and clear the refinement call log", refine_log_probe)
-    class ConformanceEditor(pig_sdk.EditorComponent):
+    class ConformanceEditor(ompig_sdk.EditorComponent):
         """Swallows "q", rewrites "a" to "A", upper-cases the host's setText, and frames super.render."""
 
         def handle_input(self, data):
@@ -697,7 +697,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("editor-install-hooks", "Install a custom editor that sets CustomEditor's handlers", lambda ctx, _args: ctx.set_editor_component(HooksEditor))
 
     def eager_editor(ctx, _args):
-        def factory(base: pig_sdk.EditorBase):
+        def factory(base: ompig_sdk.EditorBase):
             try:
                 base.set_text("eager")
                 ctx.notify("eager:" + base.get_text(), "info")
@@ -737,7 +737,7 @@ def new_extension() -> pig_sdk.Extension:
 
             def handle_input(self, _data):
                 mark("python:custom")
-                return pig_sdk.RemoteComponentResult(done=True, value="closed")
+                return ompig_sdk.RemoteComponentResult(done=True, value="closed")
 
         ctx.set_footer_renderer(footer)
         ctx.set_header_renderer(header)
@@ -762,18 +762,18 @@ def new_extension() -> pig_sdk.Extension:
         case = json.loads(args)
         fn = case["fn"]
         if fn in ("head", "tail"):
-            run = pig_sdk.truncate_head if fn == "head" else pig_sdk.truncate_tail
+            run = ompig_sdk.truncate_head if fn == "head" else ompig_sdk.truncate_tail
             r = run(case["content"], max_lines=case.get("maxLines"), max_bytes=case.get("maxBytes"))
             result = {"content": r.content, "truncated": r.truncated, "truncatedBy": r.truncated_by, "totalLines": r.total_lines, "totalBytes": r.total_bytes,
                       "outputLines": r.output_lines, "outputBytes": r.output_bytes, "lastLinePartial": r.last_line_partial,
                       "firstLineExceedsLimit": r.first_line_exceeds_limit, "maxLines": r.max_lines, "maxBytes": r.max_bytes}
         elif fn == "line":
-            text, was = pig_sdk.truncate_line(case["content"], case.get("maxChars", pig_sdk.GREP_MAX_LINE_LENGTH))
+            text, was = ompig_sdk.truncate_line(case["content"], case.get("maxChars", ompig_sdk.GREP_MAX_LINE_LENGTH))
             result = {"text": text, "wasTruncated": was}
         elif fn == "limits":
-            result = {"maxLines": pig_sdk.DEFAULT_MAX_LINES, "maxBytes": pig_sdk.DEFAULT_MAX_BYTES}
+            result = {"maxLines": ompig_sdk.DEFAULT_MAX_LINES, "maxBytes": ompig_sdk.DEFAULT_MAX_BYTES}
         else:
-            result = {"text": pig_sdk.format_size(case["bytes"])}
+            result = {"text": ompig_sdk.format_size(case["bytes"])}
         ctx.notify("truncate:" + json.dumps(result) + ":end", "info")
 
     ext.command("truncate_probe", "Run a truncation helper on a JSON case and report the result", truncate_probe)
@@ -802,21 +802,21 @@ def new_extension() -> pig_sdk.Extension:
 
                 def access(path):
                     log.append("access:" + path)
-                ops = pig_sdk.ReadOperations(read_file=read_file, access=access)
-            return pig_sdk.ReadToolOptions(auto_resize_images=case.get("autoResizeImages"), operations=ops)
+                ops = ompig_sdk.ReadOperations(read_file=read_file, access=access)
+            return ompig_sdk.ReadToolOptions(auto_resize_images=case.get("autoResizeImages"), operations=ops)
         if tool == "write":
             ops = None
             if custom:
-                ops = pig_sdk.WriteOperations(write_file=lambda path, content: log.append("writeFile:%s:%s" % (path, content)), mkdir=lambda d: log.append("mkdir:" + d))
-            return pig_sdk.WriteToolOptions(operations=ops)
+                ops = ompig_sdk.WriteOperations(write_file=lambda path, content: log.append("writeFile:%s:%s" % (path, content)), mkdir=lambda d: log.append("mkdir:" + d))
+            return ompig_sdk.WriteToolOptions(operations=ops)
         if tool == "edit":
             ops = None
             if custom:
                 def edit_read(path):
                     log.append("readFile:" + path)
                     return b"hello world\n"
-                ops = pig_sdk.EditOperations(read_file=edit_read, write_file=lambda path, content: log.append("writeFile:%s:%s" % (path, content)), access=lambda path: log.append("access:" + path))
-            return pig_sdk.EditToolOptions(operations=ops)
+                ops = ompig_sdk.EditOperations(read_file=edit_read, write_file=lambda path, content: log.append("writeFile:%s:%s" % (path, content)), access=lambda path: log.append("access:" + path))
+            return ompig_sdk.EditToolOptions(operations=ops)
         if tool == "ls":
             ops = None
             if custom:
@@ -826,21 +826,21 @@ def new_extension() -> pig_sdk.Extension:
 
                 def stat(path):
                     log.append("stat:" + path)
-                    return pig_sdk.LsStat(is_directory="." not in path)
+                    return ompig_sdk.LsStat(is_directory="." not in path)
 
                 def readdir(path):
                     log.append("readdir:" + path)
                     return ["b.txt", "a.txt", "sub"]
-                ops = pig_sdk.LsOperations(exists=exists, stat=stat, readdir=readdir)
-            return pig_sdk.LsToolOptions(operations=ops)
+                ops = ompig_sdk.LsOperations(exists=exists, stat=stat, readdir=readdir)
+            return ompig_sdk.LsToolOptions(operations=ops)
         if tool == "grep":
             ops = None
             if custom:
                 def is_directory(path):
                     log.append("isDirectory:" + path)
                     raise RuntimeError("no such path for the probe")
-                ops = pig_sdk.GrepOperations(is_directory=is_directory)
-            return pig_sdk.GrepToolOptions(operations=ops)
+                ops = ompig_sdk.GrepOperations(is_directory=is_directory)
+            return ompig_sdk.GrepToolOptions(operations=ops)
         if tool == "find":
             ops = None
             if custom:
@@ -851,10 +851,10 @@ def new_extension() -> pig_sdk.Extension:
                 def glob(pattern, cwd, options):
                     log.append("glob:" + pattern)
                     return []
-                ops = pig_sdk.FindOperations(exists=find_exists, glob=glob)
-            return pig_sdk.FindToolOptions(operations=ops)
+                ops = ompig_sdk.FindOperations(exists=find_exists, glob=glob)
+            return ompig_sdk.FindToolOptions(operations=ops)
         if tool == "powershell":
-            return pig_sdk.PowerShellToolOptions(expose_session_environment=case.get("exposeSessionEnvironment"))
+            return ompig_sdk.PowerShellToolOptions(expose_session_environment=case.get("exposeSessionEnvironment"))
         hook = None
         if case.get("hook"):
             def hook(spawn):
@@ -866,18 +866,18 @@ def new_extension() -> pig_sdk.Extension:
                 log.append("exec:%s|cwd=%s" % (command, cwd))
                 options.on_data(("custom:" + command).encode())
                 return {"exitCode": 0}
-            ops = pig_sdk.BashOperations(exec=exec_)
-        return pig_sdk.BashToolOptions(command_prefix=case.get("commandPrefix") or None, expose_session_environment=case.get("exposeSessionEnvironment"), spawn_hook=hook, operations=ops)
+            ops = ompig_sdk.BashOperations(exec=exec_)
+        return ompig_sdk.BashToolOptions(command_prefix=case.get("commandPrefix") or None, expose_session_environment=case.get("exposeSessionEnvironment"), spawn_hook=hook, operations=ops)
 
     factories = {
-        "read": (pig_sdk.create_read_tool_definition, pig_sdk.create_read_tool), "write": (pig_sdk.create_write_tool_definition, pig_sdk.create_write_tool),
-        "edit": (pig_sdk.create_edit_tool_definition, pig_sdk.create_edit_tool), "bash": (pig_sdk.create_bash_tool_definition, pig_sdk.create_bash_tool),
-        "grep": (pig_sdk.create_grep_tool_definition, pig_sdk.create_grep_tool), "find": (pig_sdk.create_find_tool_definition, pig_sdk.create_find_tool),
-        "ls": (pig_sdk.create_ls_tool_definition, pig_sdk.create_ls_tool), "powershell": (pig_sdk.create_powershell_tool_definition, pig_sdk.create_powershell_tool),
+        "read": (ompig_sdk.create_read_tool_definition, ompig_sdk.create_read_tool), "write": (ompig_sdk.create_write_tool_definition, ompig_sdk.create_write_tool),
+        "edit": (ompig_sdk.create_edit_tool_definition, ompig_sdk.create_edit_tool), "bash": (ompig_sdk.create_bash_tool_definition, ompig_sdk.create_bash_tool),
+        "grep": (ompig_sdk.create_grep_tool_definition, ompig_sdk.create_grep_tool), "find": (ompig_sdk.create_find_tool_definition, ompig_sdk.create_find_tool),
+        "ls": (ompig_sdk.create_ls_tool_definition, ompig_sdk.create_ls_tool), "powershell": (ompig_sdk.create_powershell_tool_definition, ompig_sdk.create_powershell_tool),
     }
 
     def register_overrides(ctx, factory_cwd):
-        read = pig_sdk.create_read_tool_definition(factory_cwd)
+        read = ompig_sdk.create_read_tool_definition(factory_cwd)
         run_read = read.execute
 
         def read_execute(ctx, params):
@@ -886,7 +886,7 @@ def new_extension() -> pig_sdk.Extension:
             return {**result, "content": blocks, "details": {"delegated": True}}
 
         ctx.register_tool(dataclasses.replace(read, execute=read_execute))
-        bash = pig_sdk.create_bash_tool_definition(factory_cwd)
+        bash = ompig_sdk.create_bash_tool_definition(factory_cwd)
         run_bash = bash.execute
 
         def bash_execute(ctx, params):
@@ -898,7 +898,7 @@ def new_extension() -> pig_sdk.Extension:
         return [read.name, bash.name]
 
     def register_edit_override(ctx, factory_cwd):
-        edit = pig_sdk.create_edit_tool_definition(factory_cwd)
+        edit = ompig_sdk.create_edit_tool_definition(factory_cwd)
         run_edit = edit.execute
 
         def edit_execute(ctx, params):
@@ -910,8 +910,8 @@ def new_extension() -> pig_sdk.Extension:
         return [edit.name]
 
     def local_probe(case):
-        operations = pig_sdk.create_local_powershell_operations() if case.get("shell") == "powershell" else pig_sdk.create_local_bash_operations()
-        signal = pig_sdk.ProviderSignal()
+        operations = ompig_sdk.create_local_powershell_operations() if case.get("shell") == "powershell" else ompig_sdk.create_local_bash_operations()
+        signal = ompig_sdk.ProviderSignal()
         chunks = []
 
         def on_data(data):
@@ -919,7 +919,7 @@ def new_extension() -> pig_sdk.Extension:
             if case.get("abortOnOutput"):
                 signal.set()
 
-        options = pig_sdk.BashExecOptions(on_data=on_data, signal=signal, timeout=case.get("timeout"), env=case.get("env"))
+        options = ompig_sdk.BashExecOptions(on_data=on_data, signal=signal, timeout=case.get("timeout"), env=case.get("env"))
         report = {}
         try:
             result = operations.exec(case["command"], case["factoryCwd"], options)
@@ -949,7 +949,7 @@ def new_extension() -> pig_sdk.Extension:
         elif kind == "local":
             report = local_probe(case)
         elif kind == "sets":
-            report = {"coding": [t.name for t in pig_sdk.create_coding_tools(case["factoryCwd"])], "readOnly": [t.name for t in pig_sdk.create_read_only_tools(case["factoryCwd"])]}
+            report = {"coding": [t.name for t in ompig_sdk.create_coding_tools(case["factoryCwd"])], "readOnly": [t.name for t in ompig_sdk.create_read_only_tools(case["factoryCwd"])]}
         else:
             log = []
             create_definition, create_tool = factories[case["tool"]]
@@ -960,7 +960,7 @@ def new_extension() -> pig_sdk.Extension:
                                          "parameters": d.parameters, "outputSchema": d.output_schema, "constrainedSampling": d.constrained_sampling, "executionMode": d.execution_mode or "",
                                          "renderShell": "self" if d.render_shell == "self" else ""}}
             else:
-                signal = pig_sdk.ProviderSignal()
+                signal = ompig_sdk.ProviderSignal()
                 if case.get("preAborted"):
                     signal.set()
                 updates = []
@@ -990,7 +990,7 @@ def new_extension() -> pig_sdk.Extension:
     # message_probe reads the event payload in its JSON argument with the SDK's message_role and message_text helpers (TestConformance_MessageHelpersAgreeAcrossSDKs).
     def message_probe(ctx, args):
         data = json.loads(args)
-        ctx.notify("message:" + json.dumps({"role": pig_sdk.message_role(data), "text": pig_sdk.message_text(data)}) + ":end", "info")
+        ctx.notify("message:" + json.dumps({"role": ompig_sdk.message_role(data), "text": ompig_sdk.message_text(data)}) + ":end", "info")
 
     ext.command("message_probe", "Report message_role and message_text of a JSON event payload", message_probe)
     # file_queue_probe runs the tasks in its JSON argument concurrently through the SDK's file mutation queue and reports the start/end log and the tasks that failed (TestConformance_FileMutationQueueAgreesAcrossSDKs).
@@ -1046,7 +1046,7 @@ def new_extension() -> pig_sdk.Extension:
                     raise RuntimeError("task failed")
 
             try:
-                pig_sdk.with_file_mutation_queue(task["path"], body)
+                ompig_sdk.with_file_mutation_queue(task["path"], body)
             except Exception:
                 mark("ended", tid)
                 with lock:
@@ -1067,7 +1067,7 @@ def new_extension() -> pig_sdk.Extension:
 
         def shell(*custom):
             try:
-                config = pig_sdk.get_shell_config(*custom)
+                config = ompig_sdk.get_shell_config(*custom)
             except OSError as error:
                 return {"error": str(error)}
             report = {"shell": config.shell, "args": list(config.args)}
@@ -1075,7 +1075,7 @@ def new_extension() -> pig_sdk.Extension:
                 report["commandTransport"] = config.command_transport
             return report
 
-        ctx.notify("host_paths:" + json.dumps({"packageDir": pig_sdk.get_package_dir(), "default": shell(), "custom": shell(existing), "missing": shell(missing)}) + ":end", "info")
+        ctx.notify("host_paths:" + json.dumps({"packageDir": ompig_sdk.get_package_dir(), "default": shell(), "custom": shell(existing), "missing": shell(missing)}) + ":end", "info")
 
     ext.command("host_paths_probe", "Report getPackageDir and getShellConfig", host_paths_probe)
     # host_helpers_probe runs the host-served pi helpers over the golden file's inputs (TestConformance_HostHelpersAgreeAcrossSDKs). args is
@@ -1093,14 +1093,14 @@ def new_extension() -> pig_sdk.Extension:
                 diff = ctx.generate_diff_string(case["oldContent"], case["newContent"], lines)
                 report["diff"], report["firstChangedLine"] = diff.diff, diff.first_changed_line
             diffs.append(report)
-        entries = [pig_sdk.session_entry_to_context_messages(case["entry"]) for case in golden["entries"]]
+        entries = [ompig_sdk.session_entry_to_context_messages(case["entry"]) for case in golden["entries"]]
         contexts = []
         for case in golden["contexts"]:
             entries_arg, *rest = case["args"]
-            leaf = rest[0] if rest else pig_sdk.SESSION_LEAF_LAST
+            leaf = rest[0] if rest else ompig_sdk.SESSION_LEAF_LAST
             by_id = dict(rest[1]) if len(rest) > 1 else None
             try:
-                contexts.append({"result": pig_sdk.build_session_context(entries_arg, leaf, by_id)})
+                contexts.append({"result": ompig_sdk.build_session_context(entries_arg, leaf, by_id)})
             except TypeError as error:
                 contexts.append({"throws": str(error)})
         images = []
@@ -1110,13 +1110,13 @@ def new_extension() -> pig_sdk.Extension:
                 images.append(None if converted is None else {"mimeType": converted.mime_type, "decodes": converted.data != ""})
                 continue
             options = case.get("options")
-            options = None if options is None else pig_sdk.ImageResizeOptions(options.get("maxWidth"), options.get("maxHeight"), options.get("maxBytes"), options.get("jpegQuality"))
+            options = None if options is None else ompig_sdk.ImageResizeOptions(options.get("maxWidth"), options.get("maxHeight"), options.get("maxBytes"), options.get("jpegQuality"))
             resized = ctx.resize_image(base64.b64decode(case["data"]), case["mimeType"], options)
             images.append(None if resized is None else {"mimeType": resized.mime_type, "originalWidth": resized.original_width, "originalHeight": resized.original_height, "width": resized.width, "height": resized.height, "wasResized": resized.was_resized, "decodes": resized.data != ""})
         creds = {
-            "explicit": pig_sdk.read_stored_credential("anthropic", auth_path), "default": pig_sdk.read_stored_credential("anthropic"),
-            "absentProvider": pig_sdk.read_stored_credential("nobody", auth_path), "missingFile": pig_sdk.read_stored_credential("anthropic", auth_path + ".missing"),
-            "notJSON": pig_sdk.read_stored_credential("anthropic", auth_path + ".bad"),
+            "explicit": ompig_sdk.read_stored_credential("anthropic", auth_path), "default": ompig_sdk.read_stored_credential("anthropic"),
+            "absentProvider": ompig_sdk.read_stored_credential("nobody", auth_path), "missingFile": ompig_sdk.read_stored_credential("anthropic", auth_path + ".missing"),
+            "notJSON": ompig_sdk.read_stored_credential("anthropic", auth_path + ".bad"),
         }
         ctx.copy_to_clipboard(text)
         ctx.notify("host_helpers:" + json.dumps({"diffs": diffs, "entries": entries, "contexts": contexts, "images": images, "creds": creds}) + ":end", "info")
@@ -1127,22 +1127,22 @@ def new_extension() -> pig_sdk.Extension:
     def pi_ai_helpers_probe(ctx, args):
         golden = json.loads(pathlib.Path(args).read_text(encoding="utf-8"))
         calls = {
-            "StringEnum": pig_sdk.string_enum, "getSupportedThinkingLevels": pig_sdk.get_supported_thinking_levels, "clampThinkingLevel": pig_sdk.clamp_thinking_level,
-            "calculateCost": pig_sdk.calculate_cost, "contentText": pig_sdk.content_text, "getCurrentTools": pig_sdk.get_current_tools,
-            "getCurrentSystemMessage": pig_sdk.get_current_system_message, "getCurrentSystemPrompt": pig_sdk.get_current_system_prompt,
-            "getInitialSystemMessage": pig_sdk.get_initial_system_message, "getDeclaredTools": pig_sdk.get_declared_tools,
-            "hasNonAdditiveToolChanges": pig_sdk.has_non_additive_tool_changes, "resolveTranscriptTools": pig_sdk.resolve_transcript_tools,
-            "collapseSystemMessages": pig_sdk.collapse_system_messages, "resolveTranscript": pig_sdk.resolve_transcript,
-            "withoutInitialSystemMessage": pig_sdk.without_initial_system_message, "normalizeContext": pig_sdk.normalize_context,
-            "createInitialSystemMessage": pig_sdk.create_initial_system_message, "getSystemMessageText": pig_sdk.get_system_message_text,
-            "renderSystemMessageUpdate": pig_sdk.render_system_message_update, "isRetryableAssistantError": pig_sdk.is_retryable_assistant_error,
-            "isContextOverflow": pig_sdk.is_context_overflow, "isRecoverableLength": pig_sdk.is_recoverable_length, "retryDelayMs": pig_sdk.retry_delay_ms,
-            "getModelType": pig_sdk.get_model_type, "isModelType": pig_sdk.is_model_type, "hasApi": pig_sdk.has_api, "modelsAreEqual": pig_sdk.models_are_equal,
+            "StringEnum": ompig_sdk.string_enum, "getSupportedThinkingLevels": ompig_sdk.get_supported_thinking_levels, "clampThinkingLevel": ompig_sdk.clamp_thinking_level,
+            "calculateCost": ompig_sdk.calculate_cost, "contentText": ompig_sdk.content_text, "getCurrentTools": ompig_sdk.get_current_tools,
+            "getCurrentSystemMessage": ompig_sdk.get_current_system_message, "getCurrentSystemPrompt": ompig_sdk.get_current_system_prompt,
+            "getInitialSystemMessage": ompig_sdk.get_initial_system_message, "getDeclaredTools": ompig_sdk.get_declared_tools,
+            "hasNonAdditiveToolChanges": ompig_sdk.has_non_additive_tool_changes, "resolveTranscriptTools": ompig_sdk.resolve_transcript_tools,
+            "collapseSystemMessages": ompig_sdk.collapse_system_messages, "resolveTranscript": ompig_sdk.resolve_transcript,
+            "withoutInitialSystemMessage": ompig_sdk.without_initial_system_message, "normalizeContext": ompig_sdk.normalize_context,
+            "createInitialSystemMessage": ompig_sdk.create_initial_system_message, "getSystemMessageText": ompig_sdk.get_system_message_text,
+            "renderSystemMessageUpdate": ompig_sdk.render_system_message_update, "isRetryableAssistantError": ompig_sdk.is_retryable_assistant_error,
+            "isContextOverflow": ompig_sdk.is_context_overflow, "isRecoverableLength": ompig_sdk.is_recoverable_length, "retryDelayMs": ompig_sdk.retry_delay_ms,
+            "getModelType": ompig_sdk.get_model_type, "isModelType": ompig_sdk.is_model_type, "hasApi": ompig_sdk.has_api, "modelsAreEqual": ompig_sdk.models_are_equal,
         }
         cases = []
         for case in golden["cases"]:
             if case["fn"] == "DEFAULT_MAX_AGENT_RETRY_DELAY_MS":
-                cases.append([pig_sdk.DEFAULT_MAX_AGENT_RETRY_DELAY_MS])
+                cases.append([ompig_sdk.DEFAULT_MAX_AGENT_RETRY_DELAY_MS])
                 continue
             value = calls[case["fn"]](*case["args"])
             cases.append([] if value is None else [value])
@@ -1154,17 +1154,17 @@ def new_extension() -> pig_sdk.Extension:
                 seen.append(name)
                 return case["env"].get(name)
 
-            result = pig_sdk.env_api_key_auth(case["name"], case["envVars"]).resolve(
-                pig_sdk.APIKeyAuthInput(pig_sdk.AuthContext(env, lambda path: False), case.get("credential"), pig_sdk.ProviderSignal())
+            result = ompig_sdk.env_api_key_auth(case["name"], case["envVars"]).resolve(
+                ompig_sdk.APIKeyAuthInput(ompig_sdk.AuthContext(env, lambda path: False), case.get("credential"), ompig_sdk.ProviderSignal())
             )
             auth.append({"result": None if result is None else {key: value for key, value in dataclasses.asdict(result).items() if value is not None}, "seen": seen})
         prompts = []
-        credential = pig_sdk.env_api_key_auth("Name", ["FIRST", "SECOND"]).login(
-            pig_sdk.AuthInteraction(lambda request: prompts.append(request) or "typed-key", lambda request: None, pig_sdk.ProviderSignal())
+        credential = ompig_sdk.env_api_key_auth("Name", ["FIRST", "SECOND"]).login(
+            ompig_sdk.AuthInteraction(lambda request: prompts.append(request) or "typed-key", lambda request: None, ompig_sdk.ProviderSignal())
         )
         timing = []
         for case in golden["timing"]:
-            stream = pig_sdk.create_assistant_message_event_stream()
+            stream = ompig_sdk.create_assistant_message_event_stream()
 
             def message(now, case=case):
                 result = {"role": "assistant", "content": [], "stopReason": "error" if case["kind"] == "error" else "stop"}
@@ -1196,7 +1196,7 @@ def new_extension() -> pig_sdk.Extension:
         "host_info_probe",
         "Report getAgentDir, CONFIG_DIR_NAME and VERSION",
         lambda ctx, _args: ctx.notify(
-            "host_info:" + json.dumps({"agentDir": pig_sdk.get_agent_dir(), "configDirName": pig_sdk.get_config_dir_name(), "version": pig_sdk.get_version(), "factoryAgentDir": factory_agent_dir}) + ":end", "info"
+            "host_info:" + json.dumps({"agentDir": ompig_sdk.get_agent_dir(), "configDirName": ompig_sdk.get_config_dir_name(), "version": ompig_sdk.get_version(), "factoryAgentDir": factory_agent_dir}) + ":end", "info"
         ),
     )
     # ui_dialog_values_probe reports the value each dialog resolves with (TestConformance_UIDialogValuesAgreeAcrossSDKs): `<undefined>` for Pi's undefined, else the JSON of the value.
@@ -1287,7 +1287,7 @@ def new_extension() -> pig_sdk.Extension:
     # tool_call_guard_probe reports which tool names isToolCallEventType accepts for each tool_call event it receives (TestConformance_ToolCallGuardAgreesAcrossSDKs).
     def tool_call_guard_probe(ctx, args):
         names = ["bash", "read", "probe", "other"]
-        ext.on_event("tool_call", lambda hctx, data: hctx.notify("tool_call_guard:%s:end" % ",".join(n for n in names if pig_sdk.is_tool_call_event_type(n, data)), "info"))
+        ext.on_event("tool_call", lambda hctx, data: hctx.notify("tool_call_guard:%s:end" % ",".join(n for n in names if ompig_sdk.is_tool_call_event_type(n, data)), "info"))
 
     ext.command("tool_call_guard_probe", "Report the tool names the tool_call guard accepts", tool_call_guard_probe)
     ext.command("editor-clear", "Restore the host's editor", lambda ctx, _args: ctx.set_editor_component(None))
@@ -1337,7 +1337,7 @@ def new_extension() -> pig_sdk.Extension:
 
     def exec_abort_probe(ctx, args):
         probe = json.loads(args)
-        signal = pig_sdk.ProviderSignal()
+        signal = ompig_sdk.ProviderSignal()
         if probe.get("pre"):
             signal.set()
         else:
@@ -1357,7 +1357,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("exec-abort-probe", "Abort a running exec through its signal", exec_abort_probe)
 
     def language_probe(ctx, args):
-        ctx.notify("language:%s:end" % json.dumps({"lang": pig_sdk.get_language_from_path(json.loads(args)["path"])}, separators=(",", ":")), "info")
+        ctx.notify("language:%s:end" % json.dumps({"lang": ompig_sdk.get_language_from_path(json.loads(args)["path"])}, separators=(",", ":")), "info")
 
     ext.command("language_probe", "Report the highlight language of a path", language_probe)
     def key_lists(value, out=None):
@@ -1374,11 +1374,11 @@ def new_extension() -> pig_sdk.Extension:
     def helper_report(fn, text, call=None):
         try:
             if fn == "date":
-                ms = (call or pig_sdk.parse_date)(text)
+                ms = (call or ompig_sdk.parse_date)(text)
                 return {"ms": ms}
             if fn == "strip":
-                return {"body": (call or pig_sdk.strip_frontmatter)(text)}
-            parsed = (call or pig_sdk.parse_frontmatter)(text)
+                return {"body": (call or ompig_sdk.strip_frontmatter)(text)}
+            parsed = (call or ompig_sdk.parse_frontmatter)(text)
             return {"frontmatter": parsed.frontmatter, "body": parsed.body, "keys": key_lists(parsed.frontmatter)}
         except Exception:
             return {"error": True}
@@ -1400,17 +1400,17 @@ def new_extension() -> pig_sdk.Extension:
     def convert_probe(ctx, args):
         c = json.loads(args)
         if c["fn"] == "convert":
-            result = pig_sdk.convert_to_llm(c["messages"])
+            result = ompig_sdk.convert_to_llm(c["messages"])
         else:
             i = c["image"]
-            result = pig_sdk.format_dimension_note(pig_sdk.ResizedImage(i["originalWidth"], i["originalHeight"], i["width"], i["height"], i["wasResized"]))
+            result = ompig_sdk.format_dimension_note(ompig_sdk.ResizedImage(i["originalWidth"], i["originalHeight"], i["width"], i["height"], i["wasResized"]))
         ctx.notify("convert:%s:end" % json.dumps({"result": result}, separators=(",", ":")), "info")
 
     ext.command("convert_probe", "Run convertToLlm or formatDimensionNote on a JSON case and report the result", convert_probe)
     def serialize_probe(ctx, args):
         c = json.loads(args)
         try:
-            out = {"result": pig_sdk.serialize_conversation(c["messages"])}
+            out = {"result": ompig_sdk.serialize_conversation(c["messages"])}
         except TypeError:
             out = {"error": True}
         ctx.notify("serialize:%s:end" % json.dumps(out, separators=(",", ":")), "info")
@@ -1443,10 +1443,10 @@ def new_extension() -> pig_sdk.Extension:
         c = json.loads(args)
         try:
             if c["fn"] == "prepare":
-                r = pig_sdk.prepare_branch_entries(c["entries"], c["budget"])
+                r = ompig_sdk.prepare_branch_entries(c["entries"], c["budget"])
                 out = {"messages": r.messages, "fileOps": {"read": r.file_ops.read, "written": r.file_ops.written, "edited": r.file_ops.edited}, "totalTokens": r.total_tokens}
             else:
-                r = pig_sdk.collect_entries_for_branch_summary(_EntrySession(c["entries"]), c["old"], c["target"])
+                r = ompig_sdk.collect_entries_for_branch_summary(_EntrySession(c["entries"]), c["old"], c["target"])
                 out = {"entries": r.entries, "commonAncestorId": r.common_ancestor_id}
         except TypeError:
             out = {"error": True}
@@ -1457,22 +1457,22 @@ def new_extension() -> pig_sdk.Extension:
         c = json.loads(args)
         fn = c["fn"]
         if fn == "calc":
-            result = {"tokens": pig_sdk.calculate_context_tokens(c["usage"])}
+            result = {"tokens": ompig_sdk.calculate_context_tokens(c["usage"])}
         elif fn == "should":
             s = c["settings"]
-            result = {"result": pig_sdk.should_compact(c["tokens"], c["window"], pig_sdk.CompactionSettings(s["enabled"], s["reserveTokens"], s["keepRecentTokens"]))}
+            result = {"result": ompig_sdk.should_compact(c["tokens"], c["window"], ompig_sdk.CompactionSettings(s["enabled"], s["reserveTokens"], s["keepRecentTokens"]))}
         elif fn == "last":
-            usage = pig_sdk.get_last_assistant_usage(c["entries"])
+            usage = ompig_sdk.get_last_assistant_usage(c["entries"])
             result = {"usage": None if usage is None else {key: 0 if usage.get(key) is None else usage[key] for key in ("input", "output", "cacheRead", "cacheWrite", "totalTokens")}}
         elif fn == "cut":
-            cut = pig_sdk.find_cut_point(c["entries"], c["start"], c["end"], c["keep"])
+            cut = ompig_sdk.find_cut_point(c["entries"], c["start"], c["end"], c["keep"])
             result = {"firstKeptEntryIndex": cut.first_kept_entry_index, "turnStartIndex": cut.turn_start_index, "isSplitTurn": cut.is_split_turn}
         elif fn == "turn":
-            result = {"index": pig_sdk.find_turn_start_index(c["entries"], c["index"], c["start"])}
+            result = {"index": ompig_sdk.find_turn_start_index(c["entries"], c["index"], c["start"])}
         elif fn == "estimate":
-            result = {"tokens": pig_sdk.estimate_tokens(c["message"])}
+            result = {"tokens": ompig_sdk.estimate_tokens(c["message"])}
         else:
-            d = pig_sdk.DEFAULT_COMPACTION_SETTINGS
+            d = ompig_sdk.DEFAULT_COMPACTION_SETTINGS
             result = {"enabled": d.enabled, "reserveTokens": d.reserve_tokens, "keepRecentTokens": d.keep_recent_tokens}
         ctx.notify("compact:%s:end" % json.dumps(result, separators=(",", ":")), "info")
 
@@ -1481,15 +1481,15 @@ def new_extension() -> pig_sdk.Extension:
         c = json.loads(args)
         fn = c["fn"]
         if fn == "latest":
-            result = {"entry": pig_sdk.get_latest_compaction_entry(c["entries"])}
+            result = {"entry": ompig_sdk.get_latest_compaction_entry(c["entries"])}
         elif fn == "parse":
-            block = pig_sdk.parse_skill_block(c["text"])
+            block = ompig_sdk.parse_skill_block(c["text"])
             result = {"block": None if block is None else {"name": block.name, "location": block.location, "content": block.content, "userMessage": block.user_message}}
         elif fn == "format":
             tool = c.get("tool")
-            result = {"text": pig_sdk.format_skills_for_prompt(c["skills"]) if tool is None else pig_sdk.format_skills_for_prompt(c["skills"], tool)}
+            result = {"text": ompig_sdk.format_skills_for_prompt(c["skills"]) if tool is None else ompig_sdk.format_skills_for_prompt(c["skills"], tool)}
         else:
-            result = {"version": pig_sdk.CURRENT_SESSION_VERSION, "virtual": pig_sdk.VIRTUAL_MODEL_STATE_ENTRY}
+            result = {"version": ompig_sdk.CURRENT_SESSION_VERSION, "virtual": ompig_sdk.VIRTUAL_MODEL_STATE_ENTRY}
         ctx.notify("skills:%s:end" % json.dumps(result, separators=(",", ":"), ensure_ascii=False), "info")
 
     ext.command("skills_probe", "Run a session or skill helper on a JSON case and report the result", skills_probe)
@@ -1580,26 +1580,26 @@ def new_extension() -> pig_sdk.Extension:
 
     def tool_renderer(tool: str, next_renderers):
         if tool == "conformance_tool_renderer":
-            return pig_sdk.ToolRenderers(render_call=resolved_line("resolved", tool))
+            return ompig_sdk.ToolRenderers(render_call=resolved_line("resolved", tool))
         if tool == "kit_resolved_tool":
             # The resolver draws a call and its result as the kit probe (D107).
-            renderers = pig_sdk.ToolRenderers()
+            renderers = ompig_sdk.ToolRenderers()
             renderers.call_view = lambda _ctx, _args, _render, _width: kit_probe_view()
             renderers.result_view = lambda _ctx, _result, _options, _render, _width: kit_probe_view()
             return renderers
         if tool == "conformance_no_renderer":
             return None
         if tool == "conformance_fill":
-            return next_renderers() or pig_sdk.ToolRenderers(render_call=resolved_line("filled", tool))
+            return next_renderers() or ompig_sdk.ToolRenderers(render_call=resolved_line("filled", tool))
         if tool == "conformance_wrap":
             return dataclasses.replace(next_renderers(), render_call=resolved_line("wrapped", tool))
         return next_renderers()
 
     ext.tool_renderer(tool_renderer)
 
-    def late_tool_renderer(_ctx: pig_sdk.Context, _args: str) -> None:
+    def late_tool_renderer(_ctx: ompig_sdk.Context, _args: str) -> None:
         ext.tool_renderer(
-            lambda tool, next_renderers: pig_sdk.ToolRenderers(render_call=resolved_line("late", tool))
+            lambda tool, next_renderers: ompig_sdk.ToolRenderers(render_call=resolved_line("late", tool))
             if tool == "conformance_late"
             else next_renderers()
         )
@@ -1613,10 +1613,10 @@ def new_extension() -> pig_sdk.Extension:
         ],
     )
 
-    def echo(ctx: pig_sdk.Context, params: dict) -> dict:
+    def echo(ctx: ompig_sdk.Context, params: dict) -> dict:
         return {"content": "echo: " + str(params.get("text", ""))}
 
-    def throw_probe(ctx: pig_sdk.Context, params: dict) -> dict:
+    def throw_probe(ctx: ompig_sdk.Context, params: dict) -> dict:
         kind = params.get("kind")
         if kind == "unicode":
             raise RuntimeError("é😀 \n x")
@@ -1628,10 +1628,10 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.tool("throw_probe", "Throw a value of the requested kind", {"type": "object", "properties": {"kind": {"type": "string"}}}, throw_probe)
 
-    def tool_error(ctx: pig_sdk.Context, params: dict) -> dict:
+    def tool_error(ctx: ompig_sdk.Context, params: dict) -> dict:
         raise RuntimeError("tool exploded")
 
-    def tool_is_error(ctx: pig_sdk.Context, params: dict) -> dict:
+    def tool_is_error(ctx: ompig_sdk.Context, params: dict) -> dict:
         return {"content": "soft tool error", "is_error": True}
 
     ext.tool("echo", "Echo input text", {"type": "object", "required": ["text"], "properties": {"text": {"type": "string", "description": "Text to echo"}, "offset": {"type": "number"}}}, echo)
@@ -1766,7 +1766,7 @@ def new_extension() -> pig_sdk.Extension:
             before = path.read_bytes() if path.exists() else b""
             path.write_bytes(before + (params["tag"] + "\n").encode())
 
-        pig_sdk.with_file_mutation_queue(params["file"], body)
+        ompig_sdk.with_file_mutation_queue(params["file"], body)
         return {"content": "mutated " + params["tag"]}
 
     ext.tool("mutation_order_probe", "Take the file mutation queue and append a tag to the file", {"type": "object", "properties": {"file": {"type": "string"}, "tag": {"type": "string"}}}, mutation_order_probe)
@@ -1811,7 +1811,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("complete_probe", "Complete its arguments", lambda ctx, args: None, get_argument_completions=complete_probe)
     ext.command("ping", "Respond with pong", lambda ctx, args: ctx.notify("pong", "info"))
 
-    def model_stream_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def model_stream_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         current = ctx.model_registry.find("conformance", "current")
         if current is None or current.get("id") != "current":
             raise RuntimeError(f"find current = {current}")
@@ -1889,7 +1889,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("model-stream-probe", "Exercise model streaming", model_stream_probe)
 
-    def model_stream_callback_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def model_stream_callback_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         model = {"provider": "conformance", "id": "declared", "modelId": "declared", "api": "openai-responses"}
         request = {"systemPrompt": "callbacks", "messages": [{"role": "user", "content": "hello", "timestamp": 1}]}
         seen: dict[str, Any] = {}
@@ -1921,17 +1921,17 @@ def new_extension() -> pig_sdk.Extension:
         def render(self, width: int) -> list[str]:
             return ["overlay"]
 
-        def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
-            return pig_sdk.RemoteComponentResult(done=data == "q", value="closed" if data == "q" else None)
+        def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
+            return ompig_sdk.RemoteComponentResult(done=data == "q", value="closed" if data == "q" else None)
 
-    def overlay_handle_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def overlay_handle_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         failures: list[str] = []
 
         def expect(label: str, actual: Any, expected: Any) -> None:
             if actual != expected:
                 failures.append(f"{label}: {actual!r} != {expected!r}")
 
-        def on_handle(handle: pig_sdk.OverlayHandle) -> None:
+        def on_handle(handle: ompig_sdk.OverlayHandle) -> None:
             expect("initial focused", handle.is_focused(), True)
             expect("initial hidden", handle.is_hidden(), False)
             expect("initial bounds", handle.get_bounds(), {"row": 3, "col": 4, "width": 20, "height": 5})
@@ -1956,18 +1956,18 @@ def new_extension() -> pig_sdk.Extension:
 
     class FocusProbeComponent:
         def __init__(self) -> None:
-            self.handle: pig_sdk.OverlayHandle | None = None
+            self.handle: ompig_sdk.OverlayHandle | None = None
 
         def render(self, width: int) -> list[str]:
             return [f"focused={'pending' if self.handle is None else str(self.handle.is_focused()).lower()}"]
 
-        def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
-            return pig_sdk.RemoteComponentResult(done=data == "q", value="closed" if data == "q" else None)
+        def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
+            return ompig_sdk.RemoteComponentResult(done=data == "q", value="closed" if data == "q" else None)
 
-    def overlay_focus_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def overlay_focus_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         component = FocusProbeComponent()
 
-        def on_handle(handle: pig_sdk.OverlayHandle) -> None:
+        def on_handle(handle: ompig_sdk.OverlayHandle) -> None:
             component.handle = handle
 
         ctx.custom(component, {"overlay": True, "onHandle": on_handle})
@@ -1975,7 +1975,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("overlay-focus-probe", "Render the focus the host publishes to a mounted overlay", overlay_focus_probe)
 
-    def model_stream_fetch_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def model_stream_fetch_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         model = {"provider": "conformance", "id": "declared", "modelId": "declared", "api": "openai-responses"}
         request = {"systemPrompt": "fetch", "messages": [{"role": "user", "content": "hello", "timestamp": 1}]}
         seen: dict[str, Any] = {}
@@ -2000,7 +2000,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("model-stream-callback-probe", "Exercise the provider request callbacks of model_registry.stream", model_stream_callback_probe)
 
-    def command_error(ctx: pig_sdk.Context, args: str) -> None:
+    def command_error(ctx: ompig_sdk.Context, args: str) -> None:
         raise RuntimeError("command exploded")
 
     ext.command("liveness_host_call", "Exercise an awaited host call", lambda ctx, args: ctx.wait_for_idle())
@@ -2009,7 +2009,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("command_error", "Return a command error", command_error)
 
-    def command_awaited_error(ctx: pig_sdk.Context, args: str) -> None:
+    def command_awaited_error(ctx: ompig_sdk.Context, args: str) -> None:
         time.sleep(0.15)
         raise RuntimeError("awaited command exploded")
 
@@ -2061,22 +2061,22 @@ def new_extension() -> pig_sdk.Extension:
 
     term_unsub: list = []
 
-    def term_verdict(ctx: pig_sdk.Context, data: str) -> pig_sdk.TerminalInputResult:
+    def term_verdict(ctx: ompig_sdk.Context, data: str) -> ompig_sdk.TerminalInputResult:
         if data in ("\ud83d", "\ude00", "😀"):
-            return pig_sdk.TerminalInputResult(data="seen:" + data)
+            return ompig_sdk.TerminalInputResult(data="seen:" + data)
         if data == "\x1b[96~":
-            return pig_sdk.TerminalInputResult(data=json.dumps([ctx.get_editor_text(), ctx.get_tools_expanded()], separators=(",", ":")))
+            return ompig_sdk.TerminalInputResult(data=json.dumps([ctx.get_editor_text(), ctx.get_tools_expanded()], separators=(",", ":")))
         if data == "\x1b[98~":
-            return pig_sdk.TerminalInputResult(data="rewritten")
+            return ompig_sdk.TerminalInputResult(data="rewritten")
         if data == "\x1b[97~":
             time.sleep(0.2)
-            return pig_sdk.TerminalInputResult(consume=True)
-        return pig_sdk.TerminalInputResult(consume=data == "\x1b[99~")
+            return ompig_sdk.TerminalInputResult(consume=True)
+        return ompig_sdk.TerminalInputResult(consume=data == "\x1b[99~")
 
-    def term_subscribe(ctx: pig_sdk.Context, args: str) -> None:
+    def term_subscribe(ctx: ompig_sdk.Context, args: str) -> None:
         term_unsub.append(ctx.on_terminal_input(lambda data: term_verdict(ctx, data)))
 
-    def term_unsubscribe(ctx: pig_sdk.Context, args: str) -> None:
+    def term_unsubscribe(ctx: ompig_sdk.Context, args: str) -> None:
         while term_unsub:
             term_unsub.pop()()
 
@@ -2097,15 +2097,15 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("thinking_get", "Report the thinking level", lambda ctx, args: ctx.notify("thinking_get:%s" % ctx.get_thinking_level(), "info"))
     ext.command("set_session_name", "Set the session name", lambda ctx, args: ctx.set_session_name("conformance-session"))
 
-    def host_state_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def host_state_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         commands = ["|".join([c["name"], c.get("description", ""), c["source"], c["sourceInfo"]["path"], c["sourceInfo"]["scope"]]) for c in ctx.get_commands()]
         ctx.notify(f"getThinkingLevel={ctx.get_thinking_level()};getCommands={','.join(commands)}", "info")
 
     ext.command("host_state_probe", "Report the thinking level and the session commands", host_state_probe)
 
-    def rw_prompt_state(ctx: pig_sdk.Context, _args: str) -> None:
-        def tool(name: str) -> pig_sdk.ToolDefinition:
-            return pig_sdk.ToolDefinition(name=name, label=name, description=name, prompt_snippet=name + "-snippet", parameters={"type": "object"}, execute=lambda c, a: "ok")
+    def rw_prompt_state(ctx: ompig_sdk.Context, _args: str) -> None:
+        def tool(name: str) -> ompig_sdk.ToolDefinition:
+            return ompig_sdk.ToolDefinition(name=name, label=name, description=name, prompt_snippet=name + "-snippet", parameters={"type": "object"}, execute=lambda c, a: "ok")
 
         ctx.register_tool(tool("rw-alpha"))
         ctx.register_tool(tool("rw-beta"))
@@ -2117,14 +2117,14 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("rw_prompt_state", "Read the system prompt state after registering and activating tools", rw_prompt_state)
 
-    def rw_idle_after_trigger(ctx: pig_sdk.Context, _args: str) -> None:
+    def rw_idle_after_trigger(ctx: ompig_sdk.Context, _args: str) -> None:
         ctx.send_message("rw-trigger", "rw-trigger", True, True)
         ctx.notify("rw_idle_after_trigger=%s" % str(ctx.is_idle()).lower(), "info")
 
     ext.command("rw_idle_after_trigger", "Read isIdle after a message that starts a run", rw_idle_after_trigger)
     rw_settled_once = []
 
-    def rw_idle_in_settled(ctx: pig_sdk.Context, _args: str) -> None:
+    def rw_idle_in_settled(ctx: ompig_sdk.Context, _args: str) -> None:
         def settled(hctx, _data):
             if rw_settled_once:
                 return
@@ -2136,7 +2136,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("rw_idle_in_settled", "Read isIdle after a message that starts a run, sent from an agent_settled handler", rw_idle_in_settled)
 
-    def set_model(ctx: pig_sdk.Context, args: str) -> None:
+    def set_model(ctx: ompig_sdk.Context, args: str) -> None:
         ok, error = ctx.set_model(args)
         if error:
             raise RuntimeError(error)
@@ -2145,12 +2145,12 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("set_model", "Switch to the model in the arguments", set_model)
     ext.command("append_entry", "Append a custom entry", lambda ctx, args: ctx.append_entry("conformance-entry", "hello-entry"))
 
-    def append_entries_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def append_entries_probe(ctx: ompig_sdk.Context, args: str) -> None:
         # Pi's appendEntry returns nothing and never fails, so a refusal the SDK reports is dropped here; the row reads the session afterwards.
         for custom_type in args.split(","):
             try:
                 ctx.append_entry(custom_type, f"data-of-{custom_type}")
-            except pig_sdk.HostCallError:
+            except ompig_sdk.HostCallError:
                 pass
 
     ext.command("append-entries-probe", "Append a custom entry for each comma-separated type", append_entries_probe)
@@ -2226,7 +2226,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("event_isolation_probe", "Subscribe two handlers that report the nested marker they received and then write sentinels into it", event_isolation_probe)
 
     def tool_result_guards_probe(ctx, args):
-        guards = {"bash": pig_sdk.is_bash_tool_result, "powershell": pig_sdk.is_powershell_tool_result, "read": pig_sdk.is_read_tool_result, "edit": pig_sdk.is_edit_tool_result, "write": pig_sdk.is_write_tool_result, "grep": pig_sdk.is_grep_tool_result, "find": pig_sdk.is_find_tool_result, "ls": pig_sdk.is_ls_tool_result}
+        guards = {"bash": ompig_sdk.is_bash_tool_result, "powershell": ompig_sdk.is_powershell_tool_result, "read": ompig_sdk.is_read_tool_result, "edit": ompig_sdk.is_edit_tool_result, "write": ompig_sdk.is_write_tool_result, "grep": ompig_sdk.is_grep_tool_result, "find": ompig_sdk.is_find_tool_result, "ls": ompig_sdk.is_ls_tool_result}
         ext.on_event("tool_result", lambda hctx, data: hctx.notify("tool_result_guards:%s:end" % ",".join(sorted(name for name, guard in guards.items() if guard(data))), "info"))
 
     ext.command("tool_result_guards_probe", "Report the tool_result guards that accept each tool_result event", tool_result_guards_probe)
@@ -2239,7 +2239,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("label_probe", "Label the entry named first", label_probe)
     ext.shortcut("ctrl+alt+y", "Conformance shortcut", lambda ctx: None)
 
-    def ui_availability(ctx: pig_sdk.Context, args: str) -> None:
+    def ui_availability(ctx: ompig_sdk.Context, args: str) -> None:
         selected, _ = ctx.select("Pick", ["first", "second"])
         selected = dialog_text(selected)
         ctx.notify("availability-notify", "info")
@@ -2306,11 +2306,11 @@ def new_extension() -> pig_sdk.Extension:
             ctx.notify("registered:" + tag, "info")
 
     ext.command("autocomplete-register", "Register retained provider wrappers", autocomplete_register)
-    def signal_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def signal_probe(ctx: ompig_sdk.Context, args: str) -> None:
         signal = ctx.signal
         ctx.notify("signal:" + ("none" if signal is None else "aborted" if signal.is_set() else "live"), "info")
 
-    def signal_wait(ctx: pig_sdk.Context, args: str) -> None:
+    def signal_wait(ctx: ompig_sdk.Context, args: str) -> None:
         signal = ctx.signal
         if signal is None:
             ctx.notify("wait:none", "info")
@@ -2318,7 +2318,7 @@ def new_extension() -> pig_sdk.Extension:
         ctx.notify("wait:start", "info")
         ctx.notify("wait:" + ("aborted" if signal.wait(10) else "timeout"), "info")
 
-    def signal_poll(ctx: pig_sdk.Context, args: str) -> None:
+    def signal_poll(ctx: ompig_sdk.Context, args: str) -> None:
         ctx.notify("poll:start", "info")
         deadline = time.monotonic() + 10
         while time.monotonic() < deadline:
@@ -2332,7 +2332,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("signal-probe", "Report ctx.signal", signal_probe)
     # Upstream ctx.cwd, ctx.mode, ctx.hasUI and ctx.model throw the stale message after invalidation (runner.ts:571-600).
     # The members are read before the report, and a failed report is ignored, so only the local members can fail the command: the Host also rejects the stale ui.notify call with the same message.
-    def stale_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def stale_probe(ctx: ompig_sdk.Context, args: str) -> None:
         report = "stale:%s|%s|%s|%s" % (ctx.cwd, ctx.mode, str(ctx.has_ui()).lower(), ctx.model)
         try:
             ctx.notify(report, "info")
@@ -2343,7 +2343,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("signal-wait", "Wait for ctx.signal to abort", signal_wait)
     ext.command("usage-probe", "Report context usage", lambda ctx, args: ctx.notify(json.dumps(ctx.get_context_usage()), "info"))
 
-    def context_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def context_probe(ctx: ompig_sdk.Context, args: str) -> None:
         opts = ctx.get_system_prompt_options()
 
         def shape(value: object) -> str:
@@ -2376,26 +2376,26 @@ def new_extension() -> pig_sdk.Extension:
             "info",
         )
 
-    def login_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def login_probe(ctx: ompig_sdk.Context, args: str) -> None:
         definition = conformance_login_definition()
         ctx.set_login(definition)
         definition.brand[0] = definition.brand[0][:-1]
         try:
             ctx.set_login(definition)
-        except pig_sdk.HostCallError as err:
+        except ompig_sdk.HostCallError as err:
             ctx.notify(str(err), "error")
             return
         raise RuntimeError("invalid login definition was accepted")
 
     ext.command("login-probe", "Exercise semantic login submission and host errors", login_probe)
 
-    def sprite_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def sprite_probe(ctx: ompig_sdk.Context, args: str) -> None:
         definition = conformance_sprite_definition()
         ctx.register_sprite(definition)
         definition.mascot[0] = definition.mascot[0][:-1]
         try:
             ctx.register_sprite(definition)
-        except pig_sdk.HostCallError as err:
+        except ompig_sdk.HostCallError as err:
             ctx.notify(str(err), "error")
             return
         raise RuntimeError("invalid sprite definition was accepted")
@@ -2404,7 +2404,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("scoped-models-probe", "Report the model scope", lambda ctx, _args: ctx.notify(json.dumps(ctx.scoped_models()), "info"))
     ext.command("context-probe", "Report ctx.mode + ctx.getSystemPromptOptions()", context_probe)
 
-    def dialog_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def dialog_probe(ctx: ompig_sdk.Context, args: str) -> None:
         selected = dialog_text(ctx.select("Pick", ["first", "second"])[0])
         input_value = dialog_text(ctx.input("Input", "placeholder")[0])
         edited = dialog_text(ctx.editor("Editor", "prefill")[0])
@@ -2424,7 +2424,7 @@ def new_extension() -> pig_sdk.Extension:
         ),
     )
 
-    def session_branch_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def session_branch_probe(ctx: ompig_sdk.Context, args: str) -> None:
         manager = ctx.session_manager
         leaf, entry, label = manager.get_leaf_entry(), manager.get_entry(args), manager.get_label(args)
         ids = ">".join(item["id"] for item in ctx.get_branch())
@@ -2436,7 +2436,7 @@ def new_extension() -> pig_sdk.Extension:
     ext.command("session-branch-probe", "Read the branch, an entry and its label", session_branch_probe)
     ext.command("dialog-probe", "Exercise interactive dialog responses", dialog_probe)
 
-    def focused_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def focused_probe(ctx: ompig_sdk.Context, args: str) -> None:
         component = FocusedList()
         selected = ctx.custom(
             component,
@@ -2446,13 +2446,13 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("focused-probe", "Exercise focused subprocess UI", focused_probe)
 
-    def kit_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def kit_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         result = ctx.custom(KitProbe(), {"title": "Kit"})
         ctx.notify(f"kit={'' if result is None else result}", "info")
 
     ext.command("kit-probe", "Exercise the component kit (D107)", kit_probe)
 
-    def kit_widget(ctx: pig_sdk.Context, key: str) -> None:
+    def kit_widget(ctx: ompig_sdk.Context, key: str) -> None:
         build = KIT_WIDGET_CASES.get(key)
         if build is None:
             raise RuntimeError(f"kit-widget: unknown case {key!r}")
@@ -2462,7 +2462,7 @@ def new_extension() -> pig_sdk.Extension:
 
     # mouse-probe opens the mouse row's component: the host hands it
     # fullscreen mouse events, and it closes on a click with what it got.
-    def mouse_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def mouse_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         result = ctx.custom(MouseProbe(), {"overlay": True})
         ctx.notify(f"mouse={'' if result is None else result}", "info")
 
@@ -2471,11 +2471,11 @@ def new_extension() -> pig_sdk.Extension:
     # kit-surfaces shows the kit probe's tree on every other view surface
     # (D107, spec §10): a pushed widget, the header, the footer and a tool
     # result. The message renderer "kit-message" draws it too.
-    def kit_surfaces(ctx: pig_sdk.Context, _args: str) -> None:
+    def kit_surfaces(ctx: ompig_sdk.Context, _args: str) -> None:
         ctx.set_widget("kit-probe", kit_probe_view())
         ctx.set_header_view(kit_probe_view())
         ctx.set_footer_view(kit_probe_view())
-        ctx.register_tool(pig_sdk.ToolDefinition(
+        ctx.register_tool(ompig_sdk.ToolDefinition(
             name="kit_view_tool",
             label="kit_view_tool",
             description="Render its result as the kit probe",
@@ -2489,7 +2489,7 @@ def new_extension() -> pig_sdk.Extension:
     # kit-images drives the image transport (D107, spec §7): step "a<k>"
     # shows image 0 and step "b<n>" image n (1 ≤ n ≤ 64), each with its step
     # as the text, as one ui.setWidget call on the "kit-img" widget.
-    def kit_images(ctx: pig_sdk.Context, args: str) -> None:
+    def kit_images(ctx: ompig_sdk.Context, args: str) -> None:
         n = int(args[1:]) if args[1:].isdecimal() else 0
         if args[:1] == "a" and n >= 1:
             image = 0
@@ -2505,7 +2505,7 @@ def new_extension() -> pig_sdk.Extension:
     # kit-kinds sets the "kit-kinds" widget to the kinds kit-probe does not
     # draw (D107, spec §10): a box, a settings list, a loader, an image and a
     # lines node whose list annotation goes out only while a frontend draws.
-    def kit_kinds(ctx: pig_sdk.Context, _args: str) -> None:
+    def kit_kinds(ctx: ompig_sdk.Context, _args: str) -> None:
         settings = kit.SettingsList("kit-settings", [
             kit.SettingItem("theme", "Theme", "dark", description="Color theme", values=["dark", "light"]),
             kit.SettingItem("wrap", "Wrap", "on", description="Wrap lines", values=["on", "off"]),
@@ -2529,7 +2529,7 @@ def new_extension() -> pig_sdk.Extension:
     # kit-conversation sets the "kit-conversation" widget to every
     # conversation kind (D107, spec §2.1, §10); "next" updates the nodes
     # with an id as a Pi author updates kept components.
-    def kit_conversation(ctx: pig_sdk.Context, args: str) -> None:
+    def kit_conversation(ctx: ompig_sdk.Context, args: str) -> None:
         nxt = args == "next"
         user = kit.UserMessage("Fix **the** kit build\n\n- one\n- two")
         streaming = kit.AssistantMessage(id="kit-a1")
@@ -2578,7 +2578,7 @@ def new_extension() -> pig_sdk.Extension:
     # a bash command with Pi 1.1.0's outputPad 3 and a final result's
     # durationMs 1234 (F7); "next" calls setOutputPad(2) on both and gives
     # the result durationMs 61500.
-    def kit_output_pad(ctx: pig_sdk.Context, args: str) -> None:
+    def kit_output_pad(ctx: ompig_sdk.Context, args: str) -> None:
         nxt = args == "next"
         tool = kit.ToolExecution("bash", "call-p1", {"command": "echo kit"}, "/work/kit", output_pad=3, id="kit-p1")
         tool.set_args_complete()
@@ -2594,7 +2594,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.command("kit-output-pad", "Show Pi's outputPad and durationMs (D107)", kit_output_pad)
 
-    def timer_focused_probe(ctx: pig_sdk.Context, args: str) -> None:
+    def timer_focused_probe(ctx: ompig_sdk.Context, args: str) -> None:
         component = TimerFocused()
         frame = ctx.custom(component, {"title": "Timer"})
         ctx.notify(
@@ -2613,19 +2613,19 @@ def new_extension() -> pig_sdk.Extension:
             self.width = width
             return [f"overlay width={width}"]
 
-        def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
+        def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
             if data == "\r":
-                return pig_sdk.RemoteComponentResult(done=True, value=self.width)
-            return pig_sdk.RemoteComponentResult()
+                return ompig_sdk.RemoteComponentResult(done=True, value=self.width)
+            return ompig_sdk.RemoteComponentResult()
 
-    def overlay_width_probe(ctx: pig_sdk.Context, _args: str) -> None:
+    def overlay_width_probe(ctx: ompig_sdk.Context, _args: str) -> None:
         default_width = ctx.custom(OverlayWidthProbe(), {"overlay": True})
         percent_width = ctx.custom(OverlayWidthProbe(), {"overlay": True, "overlayOptions": {"width": "50%"}})
         ctx.notify(f"overlay-width default={default_width} percent={percent_width}", "info")
 
     ext.command("overlay-width-probe", "Report the width overlay components render at", overlay_width_probe)
 
-    def project_trust_error(_ctx: pig_sdk.Context, _data: dict[str, object]) -> dict[str, object]:
+    def project_trust_error(_ctx: ompig_sdk.Context, _data: dict[str, object]) -> dict[str, object]:
         raise RuntimeError("trust-boom")
 
     def provider_response(ctx, data):
@@ -2647,7 +2647,7 @@ def new_extension() -> pig_sdk.Extension:
             "info",
         ),
     )
-    def tool_execution_update(ctx: pig_sdk.Context, data: dict[str, Any]) -> None:
+    def tool_execution_update(ctx: ompig_sdk.Context, data: dict[str, Any]) -> None:
         if data.get("toolName") == "production_tool":
             args = data.get("args", {})
             partial = data.get("partialResult", {})
@@ -2663,7 +2663,7 @@ def new_extension() -> pig_sdk.Extension:
             "info",
         )
 
-    def tool_execution_end(ctx: pig_sdk.Context, data: dict[str, Any]) -> None:
+    def tool_execution_end(ctx: ompig_sdk.Context, data: dict[str, Any]) -> None:
         result = data.get("result", {})
         content = result.get("content", [])
         if data.get("toolName") == "production_tool":
@@ -2682,7 +2682,7 @@ def new_extension() -> pig_sdk.Extension:
     # Typed tool events (upstream PowerShellToolCallEvent/BashToolCallEvent and
     # their result variants): record the input and details, block the
     # conformance sentinel command, and replace a result's content.
-    def user_bash(_ctx: pig_sdk.Context, data: dict[str, Any]) -> dict[str, Any] | None:
+    def user_bash(_ctx: ompig_sdk.Context, data: dict[str, Any]) -> dict[str, Any] | None:
         result: dict[str, Any] = {"output": "handled", "exitCode": 7, "cancelled": False, "truncated": False}
         value: dict[str, Any] = {"result": result}
         command = data.get("command")
@@ -2704,7 +2704,7 @@ def new_extension() -> pig_sdk.Extension:
 
     ext.on_event("user_bash", user_bash)
 
-    def tool_call(ctx: pig_sdk.Context, data: dict[str, Any]) -> dict[str, Any] | None:
+    def tool_call(ctx: ompig_sdk.Context, data: dict[str, Any]) -> dict[str, Any] | None:
         name = data.get("toolName")
         # Pi's handler mutates event.input in place and the runner reads it back (runner.ts emitToolCall), so the rewrite is the handler's own edit to the event.
         # Assigning a new dict to the event's input leaves the object the tool runs with (agent-loop.ts prepareToolCall).
@@ -2738,19 +2738,19 @@ def new_extension() -> pig_sdk.Extension:
             return {"block": True, "reason": "blocked %s" % name}
         return None
 
-    def tool_result(ctx: pig_sdk.Context, data: dict[str, Any]) -> dict[str, Any] | None:
+    def tool_result(ctx: ompig_sdk.Context, data: dict[str, Any]) -> dict[str, Any] | None:
         if data.get("toolName") == "order_probe":
             ctx.notify("order-result=%s" % data.get("toolCallId"), "info")
             return None
         guards = (
-            ("bash", pig_sdk.is_bash_tool_result),
-            ("powershell", pig_sdk.is_powershell_tool_result),
-            ("read", pig_sdk.is_read_tool_result),
-            ("edit", pig_sdk.is_edit_tool_result),
-            ("write", pig_sdk.is_write_tool_result),
-            ("grep", pig_sdk.is_grep_tool_result),
-            ("find", pig_sdk.is_find_tool_result),
-            ("ls", pig_sdk.is_ls_tool_result),
+            ("bash", ompig_sdk.is_bash_tool_result),
+            ("powershell", ompig_sdk.is_powershell_tool_result),
+            ("read", ompig_sdk.is_read_tool_result),
+            ("edit", ompig_sdk.is_edit_tool_result),
+            ("write", ompig_sdk.is_write_tool_result),
+            ("grep", ompig_sdk.is_grep_tool_result),
+            ("find", ompig_sdk.is_find_tool_result),
+            ("ls", ompig_sdk.is_ls_tool_result),
         )
         ctx.notify("tool-result-guards=" + ",".join(name for name, is_result in guards if is_result(data)), "info")
         name = data.get("toolName")
@@ -2772,13 +2772,13 @@ def new_extension() -> pig_sdk.Extension:
     ext.on_project_trust(project_trust_error)
     ext.on_project_trust(lambda _ctx, _data: {"trusted": "undecided"})
     ext.on_project_trust(lambda _ctx, data: {"trusted": "undecided"} if data.get("cwd") == "/probe" else {"trusted": "yes", "remember": True})
-    def cache_warming_decision(_ctx: pig_sdk.Context, data: dict[str, Any]) -> dict[str, Any]:
+    def cache_warming_decision(_ctx: ompig_sdk.Context, data: dict[str, Any]) -> dict[str, Any]:
         if data.get("warmCost") != 0.05 or data.get("missCost") != 0.5 or data.get("continuationProbability") != 0.15 or data.get("action") != "warm":
             raise ValueError("unexpected cache decision")
         return {"action": "stop"}
 
     ext.on_event("cache_warming_decision", cache_warming_decision)
-    def agent_before_settle(ctx: pig_sdk.Context, data: dict[str, Any]) -> None:
+    def agent_before_settle(ctx: ompig_sdk.Context, data: dict[str, Any]) -> None:
         entries = data.get("entries") or []
         preview = data.get("context") or {}
         context_entries = preview.get("contextEntries") or []
@@ -2795,11 +2795,11 @@ def new_extension() -> pig_sdk.Extension:
         )
         data["entries"].append({"type": "custom", "customType": "kept"})
 
-    def boundary_error(_ctx: pig_sdk.Context, data: dict[str, Any]) -> None:
+    def boundary_error(_ctx: ompig_sdk.Context, data: dict[str, Any]) -> None:
         data["entries"].append({"type": "custom", "customType": "before-error"})
         raise RuntimeError("boundary failed")
 
-    def boundary_result(_ctx: pig_sdk.Context, data: dict[str, Any]) -> dict[str, Any]:
+    def boundary_result(_ctx: ompig_sdk.Context, data: dict[str, Any]) -> dict[str, Any]:
         assert [entry["customType"] for entry in data["entries"]] == ["kept", "before-error"]
         assert len(data["context"]["contextEntries"]) == 2
         return {"entries": [{"type": "custom", "customType": "conformance-boundary"}], "continue": True}
@@ -2887,10 +2887,10 @@ class _ConformanceStore:
     """Owns credentials for the conformance OAuth provider; values must match the
     Go and Rust fixtures so the recordings compare equal."""
 
-    def credential_status(self) -> pig_sdk.OAuthCredentialStatus:
-        return pig_sdk.OAuthCredentialStatus(present=True, auth_type="oauth", source="conformance")
+    def credential_status(self) -> ompig_sdk.OAuthCredentialStatus:
+        return ompig_sdk.OAuthCredentialStatus(present=True, auth_type="oauth", source="conformance")
 
-    def store_credentials(self, creds: pig_sdk.OAuthCredentials) -> str:
+    def store_credentials(self, creds: ompig_sdk.OAuthCredentials) -> str:
         if creds.account_id != "account-store" or creds.scope != "scope-store":
             raise RuntimeError("credential metadata lost")
         return "/conf/creds.json"
@@ -2899,26 +2899,26 @@ class _ConformanceStore:
         return True
 
 
-def _conformance_api_key(creds: pig_sdk.OAuthCredentials) -> str:
+def _conformance_api_key(creds: ompig_sdk.OAuthCredentials) -> str:
     if creds.access == "boom":
         raise RuntimeError("getApiKey exploded")
     return "key:" + creds.access
 
 
-def _register_conformance_oauth_object(ext: pig_sdk.Extension) -> None:
+def _register_conformance_oauth_object(ext: ompig_sdk.Extension) -> None:
     """Contribute a provider whose callbacks treat credentials as Pi's complete token object: login
     returns a fractional expiry and provider-owned keys, and refresh spreads its input as
     ``{ ...creds, access, expires }`` does. Behavior must match the Go, Rust and Node fixtures."""
 
-    def login(cb: pig_sdk.OAuthLoginCallbacks) -> pig_sdk.OAuthCredentials:
-        return pig_sdk.OAuthCredentials(
+    def login(cb: ompig_sdk.OAuthLoginCallbacks) -> ompig_sdk.OAuthCredentials:
+        return ompig_sdk.OAuthCredentials(
             access="object-access", refresh="object-refresh", expires=1700000000000.25, extra={"meta": {"k": [1, None, ""]}, "projectId": ""}
         )
 
-    def refresh(creds: pig_sdk.OAuthCredentials) -> pig_sdk.OAuthCredentials:
+    def refresh(creds: ompig_sdk.OAuthCredentials) -> ompig_sdk.OAuthCredentials:
         return dataclasses.replace(creds, access="refreshed-" + creds.refresh, expires=creds.expires + 0.5, extra=dict(creds.extra))
 
-    def api_key(creds: pig_sdk.OAuthCredentials) -> str:
+    def api_key(creds: ompig_sdk.OAuthCredentials) -> str:
         typed = "typed" if creds.extra.get("type") == "oauth" else "untyped"
         meta = "meta" if "meta" in creds.extra else "nometa"
         return f"key:{typed}:{meta}"
@@ -2926,43 +2926,43 @@ def _register_conformance_oauth_object(ext: pig_sdk.Extension) -> None:
     ext.register_oauth_provider(
         "conformance-oauth-object",
         {"name": "Conformance OAuth Object"},
-        pig_sdk.OAuthProvider(name="Conformance OAuth Object", login=login, refresh_token=refresh, get_api_key=api_key),
+        ompig_sdk.OAuthProvider(name="Conformance OAuth Object", login=login, refresh_token=refresh, get_api_key=api_key),
     )
 
 
-def _register_conformance_oauth_large(ext: pig_sdk.Extension) -> None:
+def _register_conformance_oauth_large(ext: ompig_sdk.Extension) -> None:
     """Contribute a provider whose expiry is the double 2**60: JSON.parse reads the wire digits 1152921504606847000 as that double, so getApiKey reports a distance of 0 from 2**60. Behavior must match the Go, Rust and Node fixtures."""
 
-    def login(cb: pig_sdk.OAuthLoginCallbacks) -> pig_sdk.OAuthCredentials:
-        return pig_sdk.OAuthCredentials(access="large-access", refresh="large-refresh", expires=2**60)
+    def login(cb: ompig_sdk.OAuthLoginCallbacks) -> ompig_sdk.OAuthCredentials:
+        return ompig_sdk.OAuthCredentials(access="large-access", refresh="large-refresh", expires=2**60)
 
     ext.register_oauth_provider(
         "conformance-oauth-large",
         {"name": "Conformance OAuth Large"},
-        pig_sdk.OAuthProvider(name="Conformance OAuth Large", login=login, get_api_key=lambda creds: f"key:{int(creds.expires - 2**60)}:{int(creds.expires) - 2**60}"),
+        ompig_sdk.OAuthProvider(name="Conformance OAuth Large", login=login, get_api_key=lambda creds: f"key:{int(creds.expires - 2**60)}:{int(creds.expires) - 2**60}"),
     )
 
 
-def _register_conformance_oauth(ext: pig_sdk.Extension) -> None:
+def _register_conformance_oauth(ext: ompig_sdk.Extension) -> None:
     """Contribute the canonical OAuth provider the cross-transport conformance
     suite drives. Behavior must match the Go and Rust fixtures byte-for-byte."""
 
-    def login(cb: pig_sdk.OAuthLoginCallbacks) -> pig_sdk.OAuthCredentials:
+    def login(cb: ompig_sdk.OAuthLoginCallbacks) -> ompig_sdk.OAuthCredentials:
         cb.on_device_code(
-            pig_sdk.OAuthDeviceCodeInfo(user_code="CONF-USER-CODE", verification_uri="https://conf.example/verify")
+            ompig_sdk.OAuthDeviceCodeInfo(user_code="CONF-USER-CODE", verification_uri="https://conf.example/verify")
         )
         cb.on_progress("waiting")
-        value = cb.on_prompt(pig_sdk.OAuthPrompt(message="paste the code"))
-        return pig_sdk.OAuthCredentials(access="access-" + value, refresh="refresh-tok", expires=4242, account_id="account-login", scope="scope-login")
+        value = cb.on_prompt(ompig_sdk.OAuthPrompt(message="paste the code"))
+        return ompig_sdk.OAuthCredentials(access="access-" + value, refresh="refresh-tok", expires=4242, account_id="account-login", scope="scope-login")
 
     ext.register_oauth_provider(
         "conformance-oauth",
         {"name": "Conformance OAuth"},
-        pig_sdk.OAuthProvider(
+        ompig_sdk.OAuthProvider(
             name="Conformance OAuth",
             is_subscription=True,
             login=login,
-            refresh_token=lambda creds: pig_sdk.OAuthCredentials(
+            refresh_token=lambda creds: ompig_sdk.OAuthCredentials(
                 access="refreshed-" + creds.refresh, refresh=creds.refresh, expires=9999, account_id=creds.account_id, scope=creds.scope
             ),
             get_api_key=_conformance_api_key,
@@ -3000,7 +3000,7 @@ def _state_push_reader(ctx, kind):
     return guarded
 
 
-def _register_state_push_probe(ext: pig_sdk.Extension) -> None:
+def _register_state_push_probe(ext: ompig_sdk.Extension) -> None:
     """Register the state-push-probe command (TestHostStateChangeReachesABackgroundReaderAcrossSDKs). The command arms a thread that reads one replicated accessor from outside every request, as an extension's timer does, and returns: the host then changes its own state with no call and no event to this extension, and the thread reports the first value that differs from the one it armed on, or the value it still holds after STATE_PUSH_WINDOW, to a file in the directory the arguments name. The arguments are {"kind": "model" | "session-name" | "theme" | "settings:<key>" | "mcp", "dir": <directory>}; the report is "<armed>=><read>"."""
 
     def probe(ctx, args):
@@ -3025,7 +3025,7 @@ def _register_state_push_probe(ext: pig_sdk.Extension) -> None:
     ext.command("state-push-probe", "Read one replicated accessor from a thread between requests", probe)
 
 
-def _register_signal_abort(ext: pig_sdk.Extension) -> None:
+def _register_signal_abort(ext: ompig_sdk.Extension) -> None:
     """Contribute the signal-abort row every SDK fixture carries. Pi's ctx.abort() aborts the
     run's signal before it returns (agent.ts:340-342), so a handler that holds the signal and
     reads it again right after the abort sees it aborted, in the same turn."""
@@ -3033,7 +3033,7 @@ def _register_signal_abort(ext: pig_sdk.Extension) -> None:
     def state(signal: object) -> str:
         return "none" if signal is None else "aborted" if signal.is_set() else "live"
 
-    def signal_abort(ctx: pig_sdk.Context, args: str) -> None:
+    def signal_abort(ctx: ompig_sdk.Context, args: str) -> None:
         held = ctx.signal
         ctx.abort()
         ctx.notify("abort:" + state(held) + ":" + state(ctx.signal), "info")

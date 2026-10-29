@@ -10,7 +10,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui"
+	"github.com/tmih06/ompig/extensions/sdk/tui"
 )
 
 // UITheme is the host's active theme as extensions see it (upstream

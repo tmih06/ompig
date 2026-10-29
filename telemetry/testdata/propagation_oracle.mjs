@@ -1,4 +1,4 @@
-// Pi's InMemoryTelemetryContext as the other end of a carrier exchange with PiG: it prints the carrier of one of its spans and continues each carrier PiG injected.
+// Pi's InMemoryTelemetryContext as the other end of a carrier exchange with Ompig: it prints the carrier of one of its spans and continues each carrier Ompig injected.
 import { readFileSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
@@ -12,5 +12,5 @@ for await (const chunk of process.stdin) input += chunk;
 const telemetry = new InMemoryTelemetryContext();
 let piCarrier;
 await telemetry.startSpan({ name: "pi-sender" }, (span) => { piCarrier = telemetry.inject(span); });
-for (const [index, carrier] of JSON.parse(input).entries()) await telemetry.extract(carrier).startSpan({ name: `from-pig-${index}` }, () => {});
+for (const [index, carrier] of JSON.parse(input).entries()) await telemetry.extract(carrier).startSpan({ name: `from-ompig-${index}` }, () => {});
 process.stdout.write(JSON.stringify({ piCarrier, spans: telemetry.getSpans() }));

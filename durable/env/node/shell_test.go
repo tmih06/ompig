@@ -21,7 +21,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 func execErr(t *testing.T, err error, code durableenv.ExecutionErrorCode) *durableenv.ExecutionError {

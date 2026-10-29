@@ -4,8 +4,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/coding-agent/src/core/agent-session.ts:240,1369-1378: subscribe(listener: AgentSessionEventListener) returns an unsubscribe that removes only that listener, so a later turn reaches the remaining listener and not the removed one.

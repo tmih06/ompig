@@ -1,24 +1,24 @@
-# PiG concepts
+# Ompig concepts
 
-PiG separates execution, capability distribution, and agent composition. This separation keeps Stock PiG small and prevents each agent application from becoming a new harness fork.
+Ompig separates execution, capability distribution, and agent composition. This separation keeps Stock Ompig small and prevents each agent application from becoming a new harness fork.
 
 The short model is:
 
-> Packages distribute Resources. Piglets select and scope Resources. Piglet Binaries deliver a fixed Piglet as a native executable.
+> Packages distribute Resources. Ompiglets select and scope Resources. Ompiglet Binaries deliver a fixed Ompiglet as a native executable.
 
-## Stock PiG
+## Stock Ompig
 
-Stock PiG is the product-neutral coding agent. It provides:
+Stock Ompig is the product-neutral coding agent. It provides:
 
 - Pi-compatible agent behavior;
 - built-in coding tools;
 - the extension host;
 - Package installation;
-- Piglet loading and validation;
-- Piglet Binary construction and verification;
+- Ompiglet loading and validation;
+- Ompiglet Binary construction and verification;
 - embedded offline documentation.
 
-Stock PiG does not activate PiG Standard or another product composition. It has no marketplace and no derivative-harness behavior. Two PiG-only features ship in the Stock binary: the first-time setup dialog (D88) and the built-in `pig-login` extension, which holds the fifteen built-in sprites and registers `/sprite` (D2).
+Stock Ompig does not activate Ompig Standard or another product composition. It has no marketplace and no derivative-harness behavior. Two Ompig-only features ship in the Stock binary: the first-time setup dialog (D88) and the built-in `ompig-login` extension, which holds the fifteen built-in sprites and registers `/sprite` (D2).
 
 ## Resources
 
@@ -41,17 +41,17 @@ A Resource does not activate itself.
 A Package is an optional distribution envelope. It can contain one or more Resources. Install a Package when you want to make its Resources available:
 
 ```bash
-pig install ./my-package
-pig install git:https://github.com/example/my-package.git
+ompig install ./my-package
+ompig install git:https://github.com/example/my-package.git
 ```
 
-Package installation does not select a Piglet. A Package never owns or activates a Piglet.
+Package installation does not select a Ompiglet. A Package never owns or activates a Ompiglet.
 
 See [Packages](/docs/latest/packages).
 
-## Piglets define agent applications
+## Ompiglets define agent applications
 
-A Piglet is one named whole-agent declaration. It can select:
+A Ompiglet is one named whole-agent declaration. It can select:
 
 - extensions and skills;
 - built-in and extension tool scopes;
@@ -61,29 +61,29 @@ A Piglet is one named whole-agent declaration. It can select:
 - secrets and environment requirements;
 - Binary build requirements;
 - built-in tools, commands, extensions, model APIs and features to strip (D92);
-- a Go frontend member that draws the interactive mode in a Piglet Binary (D91).
+- a Go frontend member that draws the interactive mode in a Ompiglet Binary (D91).
 
-Run a Piglet from source:
+Run a Ompiglet from source:
 
 ```bash
-pig --piglet ./agents/reviewer.yaml
+ompig --ompiglet ./agents/reviewer.yaml
 ```
 
-A Piglet is the normal unit for an agent application. It keeps the application configuration explicit without creating a separate PiG fork or wrapper harness.
+A Ompiglet is the normal unit for an agent application. It keeps the application configuration explicit without creating a separate Ompig fork or wrapper harness.
 
-Publish a Piglet's source to npm with `pig piglet publish <name> --to npm`, and its signed Binaries to GitHub Releases with `--to github`. See [Piglets](/docs/latest/piglets) and [Publish a Package or Piglet](/docs/latest/publishing).
+Publish a Ompiglet's source to npm with `ompig ompiglet publish <name> --to npm`, and its signed Binaries to GitHub Releases with `--to github`. See [Ompiglets](/docs/latest/ompiglets) and [Publish a Package or Ompiglet](/docs/latest/publishing).
 
-## Piglet Binaries deliver fixed applications
+## Ompiglet Binaries deliver fixed applications
 
-A Piglet Binary is a target-native PiG executable for one fixed Piglet composition:
+A Ompiglet Binary is a target-native Ompig executable for one fixed Ompiglet composition:
 
 ```bash
-pig piglet build ./agents/reviewer.yaml \
+ompig ompiglet build ./agents/reviewer.yaml \
   --format binary \
-  --out ./pig-reviewer
+  --out ./ompig-reviewer
 ```
 
-A Binary is a delivery form of the same Piglet. It is not another configuration model.
+A Binary is a delivery form of the same Ompiglet. It is not another configuration model.
 
 Each executable component records two independent facts:
 
@@ -92,19 +92,19 @@ Each executable component records two independent facts:
 | Realization | fused, subprocess, external | How the component runs. |
 | Materialization | binary, release, `agentEnv`, external | Where its bytes or runtime come from. |
 
-See [Piglet Binaries](/docs/latest/piglet-binaries).
+See [Ompiglet Binaries](/docs/latest/ompiglet-binaries).
 
-## PiG Standard
+## Ompig Standard
 
-PiG Standard is an explicitly selected Piglet. It demonstrates how a derivative PiG experience can use public extension and Piglet contracts without adding product behavior to Stock PiG.
+Ompig Standard is an explicitly selected Ompiglet. It demonstrates how a derivative Ompig experience can use public extension and Ompiglet contracts without adding product behavior to Stock Ompig.
 
 The Standard source is:
 
 ```text
-piglets/standard/pig-standard.yaml
+ompiglets/standard/ompig-standard.yaml
 ```
 
-Its Binary requires every selected extension to be a fuse-compatible Go factory. The build fails if an extension would use a subprocess fallback. The current composition selects `piglogin` for identity, `pigrunner` for the PiG Runner game, `angrypigs` for the Angry Pigs game and `bunruntime` to install the Bun TypeScript runtime (see [TypeScript runtimes](/docs/latest/typescript-runtimes)).
+Its Binary requires every selected extension to be a fuse-compatible Go factory. The build fails if an extension would use a subprocess fallback. The current composition selects `piglogin` for identity, `pigrunner` for the Ompig Runner game, `angrypigs` for the Angry Pigs game and `bunruntime` to install the Bun TypeScript runtime (see [TypeScript runtimes](/docs/latest/typescript-runtimes)).
 
 ## Choose the correct unit
 
@@ -112,26 +112,26 @@ Its Binary requires every selected extension to be a fuse-compatible Go factory.
 |---|---|
 | Add one executable capability | Extension |
 | Share several Resources | Package |
-| Define one complete agent application | Piglet |
-| Hand off one native executable | Piglet Binary |
-| Change PiG core behavior | Stock PiG change, only when the behavior is generic or required for Pi parity |
+| Define one complete agent application | Ompiglet |
+| Hand off one native executable | Ompiglet Binary |
+| Change Ompig core behavior | Stock Ompig change, only when the behavior is generic or required for Pi parity |
 
 ## Why this prevents harness sprawl
 
 A conventional derivative harness often combines configuration, extension loading, branding, deployment, and application behavior in a new executable. Each new executable then owns a separate update path and can drift from its base agent.
 
-PiG keeps these responsibilities separate:
+Ompig keeps these responsibilities separate:
 
 ```text
-Stock PiG
+Stock Ompig
    |
    +-- Packages make Resources available
    |
-   +-- Piglet selects one agent application
+   +-- Ompiglet selects one agent application
           |
           +-- run from source
           |
-          +-- build as a Piglet Binary
+          +-- build as a Ompiglet Binary
 ```
 
 This model gives each application a clear identity while keeping one compatible execution engine.

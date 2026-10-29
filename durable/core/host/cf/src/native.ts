@@ -80,7 +80,7 @@ export class NativeCore {
     if (payload.length) this.writeAll(payload)
   }
 
-  /** One request; answers the core's uuidv7 and read requests (type 2, ABI section 4.2 pig.read: `reader` answers it) until the op's own response arrives. */
+  /** One request; answers the core's uuidv7 and read requests (type 2, ABI section 4.2 ompig.read: `reader` answers it) until the op's own response arrives. */
   call(op: number, handle: number, kind: number, now: number, payload: Uint8Array = new Uint8Array(0), reader?: (sql: number, params: Param[]) => Uint8Array, origin = 0): Uint8Array {
     this.send(op, handle, kind, now, payload, origin)
     for (;;) {
@@ -139,7 +139,7 @@ export class NativeSession {
   private freed = false
   private readonly core: NativeCore
   readonly handle: number
-  /** Answers the core's pig.read calls (ABI section 4.2) with the encoded answer; the host loop sets it. */
+  /** Answers the core's ompig.read calls (ABI section 4.2) with the encoded answer; the host loop sets it. */
   reader?: (sql: number, params: Param[]) => Uint8Array
   constructor(core: NativeCore, handle: number) { this.core = core; this.handle = handle }
 

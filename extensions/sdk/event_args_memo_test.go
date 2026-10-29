@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The memo's value is exactly what the old per-handler decode gave, for every payload shape, on the first and on a repeated call.

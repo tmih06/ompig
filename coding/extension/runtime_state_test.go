@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: loader.ts:163-200 assertActive throws the stale message after invalidate; only the first invalidate sets it and an omitted message selects the default.

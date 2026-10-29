@@ -58,7 +58,7 @@ func TestMaxFrameSize_SDKsInSync(t *testing.T) {
 	}{
 		{"go-sdk", "extensions/sdk/protocol.go", regexp.MustCompile(`(?m)^const MaxFrameSize\s*=\s*(.+)$`)},
 		{"rust-sdk", "extensions/sdk-rs/src/protocol.rs", regexp.MustCompile(`MAX_FRAME_SIZE\s*:\s*u32\s*=\s*([^;]+);`)},
-		{"py-sdk", "extensions/sdk-py/pig_sdk/__init__.py", regexp.MustCompile(`(?m)^MAX_FRAME_SIZE\s*=\s*(.+)$`)},
+		{"py-sdk", "extensions/sdk-py/ompig_sdk/__init__.py", regexp.MustCompile(`(?m)^MAX_FRAME_SIZE\s*=\s*(.+)$`)},
 	}
 	for _, c := range cases {
 		got := readFrameConst(t, c.rel, c.re)
@@ -73,7 +73,7 @@ func TestLivenessWireSDKsInSync(t *testing.T) {
 	files := map[string][]string{
 		"go":     {"extensions/sdk/protocol.go", "extensions/sdk/extension.go", "extensions/sdk/context.go"},
 		"rust":   {"extensions/sdk-rs/src/protocol.rs", "extensions/sdk-rs/src/extension.rs", "extensions/sdk-rs/src/context.rs"},
-		"python": {"extensions/sdk-py/pig_sdk/__init__.py"},
+		"python": {"extensions/sdk-py/ompig_sdk/__init__.py"},
 		"node":   {"coding/extension/host/subprocess/runtime-node/runtime.mjs"},
 	}
 	for sdk, paths := range files {

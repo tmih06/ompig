@@ -9,15 +9,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 // TestConformance_HostPathsAgreeAcrossSDKs: Pi exports getPackageDir() and getShellConfig(customShellPath) (coding-agent config.ts, utils/shell.ts). Every SDK answers
 // getShellConfig the same: a custom path that exists is that shell with `-c`, one that does not is the "Custom shell path not found" error, and with none it is the shell
-// the host resolved (the Go, Rust and Python SDKs get it from PIG_EXT_HOST_INFO, Node runs Pi's own resolution on the same machine). The Go, Rust and Python SDKs return the
-// host's getPackageDir(); a Node extension returns the directory of the Pi package its runtime ships, which is where PiG's host has no value to hand over (see the host
+// the host resolved (the Go, Rust and Python SDKs get it from OMPIG_EXT_HOST_INFO, Node runs Pi's own resolution on the same machine). The Go, Rust and Python SDKs return the
+// host's getPackageDir(); a Node extension returns the directory of the Pi package its runtime ships, which is where Ompig's host has no value to hand over (see the host
 // info's PackageDir). The host's package directory here is a value no SDK could produce as a fallback.
 func TestConformance_HostPathsAgreeAcrossSDKs(t *testing.T) {
 	if testing.Short() {
@@ -25,8 +25,8 @@ func TestConformance_HostPathsAgreeAcrossSDKs(t *testing.T) {
 	}
 	// Not parallel: it owns conformanceHostInfo and the process environment while it runs.
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_USE_PI_DIRS", "")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_USE_PI_DIRS", "")
 	packageDir := filepath.Join(t.TempDir(), "host-package-dir")
 	shell := func() *subprocess.ShellInfo {
 		config, err := shellconfig.Default()
@@ -35,7 +35,7 @@ func TestConformance_HostPathsAgreeAcrossSDKs(t *testing.T) {
 		}
 		return &subprocess.ShellInfo{Shell: config.Path, Args: config.Args, CommandTransport: config.CommandTransport}
 	}
-	conformanceHostInfo = subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".pig", Version: coding.UpstreamPackageVersion, PackageDir: packageDir, Shell: shell}
+	conformanceHostInfo = subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".ompig", Version: coding.UpstreamPackageVersion, PackageDir: packageDir, Shell: shell}
 	t.Cleanup(func() { conformanceHostInfo = subprocess.HostInfo{} })
 
 	existing := filepath.Join(t.TempDir(), "custom-shell")
@@ -61,7 +61,7 @@ func TestConformance_HostPathsAgreeAcrossSDKs(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			if tc.name == "fused-go" {
 				// The fused extension runs in this process, so the host must put the entry in this process's environment before the factory runs.
-				t.Setenv("PIG_EXT_HOST_INFO", "")
+				t.Setenv("OMPIG_EXT_HOST_INFO", "")
 			}
 			h := tc.make(t)
 			t.Cleanup(func() {

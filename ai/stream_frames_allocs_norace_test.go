@@ -1,4 +1,4 @@
-//go:build !race && !pig_strip_mistral_conversations
+//go:build !race && !ompig_strip_mistral_conversations
 
 package ai
 

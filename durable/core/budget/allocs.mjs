@@ -23,7 +23,7 @@ export function measure() {
   const out = mkdtempSync(join(tmpdir(), "allocs-"))
   try {
     const r = spawnSync("sh", ["budget/build-wasm.sh", "tinygo", "cmd/corewasm", join(out, "core.wasm")], {
-      cwd: core, encoding: "utf8", maxBuffer: 1 << 28, env: { ...process.env, CORE_PRINT_ALLOCS: "PiG/durable/core" },
+      cwd: core, encoding: "utf8", maxBuffer: 1 << 28, env: { ...process.env, CORE_PRINT_ALLOCS: "Ompig/durable/core" },
     })
     if (r.status !== 0) throw new Error(`the TinyGo build failed (${r.status}):\n${(r.stdout + r.stderr).slice(-2000)}`)
     return sitesOf(`${r.stdout}\n${r.stderr}`)

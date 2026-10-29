@@ -6,7 +6,7 @@
 # Compile every package's test binary with the default flags, running none, so the Go build
 # cache holds what the test jobs build. Each binary gets a name derived from its import path,
 # because go test -c -o <dir>/ ./... refuses when two packages share a basename. Any compile
-# error fails the script. PIG_TEST_COMPILE_JOBS bounds concurrency (default 4).
+# error fails the script. OMPIG_TEST_COMPILE_JOBS bounds concurrency (default 4).
 set -euo pipefail
 if [[ $# -lt 1 ]]; then
   echo "usage: $0 <output-dir> [package-pattern...]" >&2
@@ -16,7 +16,7 @@ out=$1
 shift
 patterns=("$@")
 [[ ${#patterns[@]} -gt 0 ]] || patterns=(./...)
-jobs=${PIG_TEST_COMPILE_JOBS:-4}
+jobs=${OMPIG_TEST_COMPILE_JOBS:-4}
 mkdir -p "$out"
 
 listing=$(go list -f '{{if or .TestGoFiles .XTestGoFiles}}{{.ImportPath}}{{end}}' "${patterns[@]}")

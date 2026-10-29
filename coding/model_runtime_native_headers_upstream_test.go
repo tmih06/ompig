@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Extension model headers reach a request only through ModelRuntime.getAuth(model):
@@ -78,8 +78,8 @@ func TestNativeExtensionModelHeadersReachRequestAndNotProjectionUpstream(t *test
 
 func TestNativeExtensionModelHeaderValuesResolveFromRequestEnvUpstream(t *testing.T) {
 	services := newRuntimeTestServices(t)
-	model, captured := registerCapturingHeaderProvider(t, services, map[string]string{"x-model": "$PIG_NATIVE_MODEL_HEADER"})
-	services.ModelRuntime().CompleteSimple(t.Context(), model, ai.Context{}, ai.StreamOptions{Env: ai.ProviderEnv{"PIG_NATIVE_MODEL_HEADER": "resolved"}})
+	model, captured := registerCapturingHeaderProvider(t, services, map[string]string{"x-model": "$OMPIG_NATIVE_MODEL_HEADER"})
+	services.ModelRuntime().CompleteSimple(t.Context(), model, ai.Context{}, ai.StreamOptions{Env: ai.ProviderEnv{"OMPIG_NATIVE_MODEL_HEADER": "resolved"}})
 	options, _ := captured()
 	if got := options.Headers["x-model"]; got == nil || *got != "resolved" {
 		t.Fatalf("x-model = %s, want resolved", headerText(got))

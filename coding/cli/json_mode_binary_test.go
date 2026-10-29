@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// jsonModeLines decodes pig --mode json output, one object per line.
+// jsonModeLines decodes ompig --mode json output, one object per line.
 func jsonModeLines(t *testing.T, stdout string) []map[string]any {
 	t.Helper()
 	var lines []map[string]any
@@ -65,12 +65,12 @@ func finalAssistantText(lines []map[string]any) string {
 
 // TestJSONModeUsesPrintModeSessionOptions pins upstream print-mode.ts, where
 // text and json output are one function over one session: --mode json must
-// honor the same tool selection, attachments, and session name as -p. Pig's
+// honor the same tool selection, attachments, and session name as -p. Ompig's
 // separate JSON runner dropped @image attachments, --exclude-tools, the
 // default builtin tool set, and --name.
 func TestJSONModeUsesPrintModeSessionOptions(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	devNull, err := os.Open(os.DevNull)

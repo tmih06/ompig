@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// pig additive (D92): highlight.js with no language registered, for a Piglet that strips syntax-highlight.
+// ompig additive (D92): highlight.js with no language registered, for a Ompiglet that strips syntax-highlight.
 
 // highlightPlain is highlightWith on a highlight.js instance with no language registered: hljs.highlight throws for every language, and hljs.highlightAuto returns its plaintext result, the escaped code.
 func highlightPlain(code string, options HighlightOptions) (string, error) {

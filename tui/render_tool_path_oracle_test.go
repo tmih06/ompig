@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type toolPathProbe struct {
@@ -25,7 +25,7 @@ type toolPathResult struct {
 	Error string  `json:"error,omitempty"`
 }
 
-// renderToolPathProbe renders one probe with Pig in the probe's home directory, capabilities and theme.
+// renderToolPathProbe renders one probe with Ompig in the probe's home directory, capabilities and theme.
 func renderToolPathProbe(t testing.TB, probe toolPathProbe) string {
 	t.Setenv("HOME", probe.Home)
 	SetCapabilities(TerminalCapabilities{TrueColor: true, Hyperlinks: probe.Hyperlinks})
@@ -95,7 +95,7 @@ func TestRenderToolPathMatchesPi(t *testing.T) {
 				g, _ := json.Marshal(got)
 				e, _ := json.Marshal(expected[i])
 				p, _ := json.Marshal(probe)
-				t.Errorf("%s:\n  Pig %s\n  Pi  %s", p, g, e)
+				t.Errorf("%s:\n  Ompig %s\n  Pi  %s", p, g, e)
 			}
 		}
 	}
@@ -113,7 +113,7 @@ func TestRenderToolPathProbeDump(t *testing.T) {
 	fmt.Printf("toolpath-probes:%s\n", line)
 }
 
-// TestRenderToolPathParity prints Pig's rendering of the corpus, one JSON line per probe, for the render-tool-path parity scenario.
+// TestRenderToolPathParity prints Ompig's rendering of the corpus, one JSON line per probe, for the render-tool-path parity scenario.
 func TestRenderToolPathParity(t *testing.T) {
 	previousCaps, previousTheme := GetCapabilities(), ActiveTheme()
 	t.Cleanup(func() {

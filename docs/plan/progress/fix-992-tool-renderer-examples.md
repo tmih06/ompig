@@ -10,7 +10,7 @@ Port of `packages/coding-agent/test/tool-renderer-examples.test.ts` (upstream 0.
 - the edit definition from `minimal-mode.ts` has `renderShell: "default"`, and its 40-column card equals the card without `renderShell`: `["", <bg>"<blank>", <bg>" edit notes.txt …", <bg>"<blank>"]` (a boxed card);
 - a `"self"` shell draws `["", "edit notes.txt …"]`, so the comparison discriminates.
 
-`audit-992-codemode-mcp` had already measured the renderShell case byte-identical on real Pi and PiG (tmux). This lane additionally covers the in-process definition and card path.
+`audit-992-codemode-mcp` had already measured the renderShell case byte-identical on real Pi and Ompig (tmux). This lane additionally covers the in-process definition and card path.
 
 ## Port
 

@@ -10,7 +10,7 @@
 //   warm.liveGrowthPerTurn   bytes the live set grows per warm turn after a full collection: zero when a turn with no live work
 //                   retains nothing. It is the slope between the lowest readings of the two halves of the warm turns
 //                   (counts.liveGrowth), so a conservative collector's one falsely retained object is not growth
-// The workload is the bench run of a fixture on the native stack, recorded as everything the core was given (events, pig.read
+// The workload is the bench run of a fixture on the native stack, recorded as everything the core was given (events, ompig.read
 // answers, uuids). The core is a pure function of that stream, so each build replays it with no storage and no clock, and every
 // step is compared with the step the recorded run produced before any count is kept.
 import { execFile as execFileCb } from "node:child_process"
@@ -119,7 +119,7 @@ export async function replayCells({ sizes, impls, fixtures, turns, tools, varian
 			const db = join(dir, "store.sqlite"), rec = join(dir, "run.rec")
 			copyStore(fixtures[size], db)
 			// A run never touches a lane's or a user's agent directory or credentials.
-			const env = { PATH: process.env.PATH, HOME: join(dir, "home"), PIG_CODING_AGENT_DIR: join(dir, "agent"), PI_CODING_AGENT_DIR: join(dir, "agent"), PIG_HOME: join(dir, "pig"), PI_HOME: join(dir, "pig"), TZ: "UTC", DETENV_EPOCH: "1800000000000", GOMAXPROCS: "1" }
+			const env = { PATH: process.env.PATH, HOME: join(dir, "home"), OMPIG_CODING_AGENT_DIR: join(dir, "agent"), PI_CODING_AGENT_DIR: join(dir, "agent"), OMPIG_HOME: join(dir, "ompig"), PI_HOME: join(dir, "ompig"), TZ: "UTC", DETENV_EPOCH: "1800000000000", GOMAXPROCS: "1" }
 			await execFile(join(bin, "bench"), ["--db", db, "--trace", join(dir, "run.trace"), "--record", rec, "--turns", String(turns), "--tools", String(tools), "--variant", variant], { env, maxBuffer: 1 << 26 })
 			const measured = JSON.parse((await execFile(join(bin, "countgate"), ["measure", "--rec", rec, "--size", String(size), "--settle", String(settle), ...Object.entries(wasm).flat()], { env, maxBuffer: 1 << 26 })).stdout)
 			const add = found => { for (const [k, v] of Object.entries(found)) cells[k] = { ...cells[k], ...v } }

@@ -13,8 +13,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The behavior tests of sandbox.test.ts on the Cloudflare Worker host: a RemoteSandbox whose remote is the real Worker module

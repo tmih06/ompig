@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// getPackageDir and getAgentDir (config.ts) against pinned Pi for a set PI_PACKAGE_DIR and agent-directory variable (Pig reads PIG_CODING_AGENT_DIR, D2): absolute, relative, ~, ~/x, ~x, file:// URLs with escapes, surrounding spaces and an @ prefix. An invalid file URL makes Pi throw; Pig's string-only API returns the raw value, so those are not compared.
+// getPackageDir and getAgentDir (config.ts) against pinned Pi for a set PI_PACKAGE_DIR and agent-directory variable (Ompig reads OMPIG_CODING_AGENT_DIR, D2): absolute, relative, ~, ~/x, ~x, file:// URLs with escapes, surrounding spaces and an @ prefix. An invalid file URL makes Pi throw; Ompig's string-only API returns the raw value, so those are not compared.
 func TestGetPackageDirMatchesPi(t *testing.T) {
 	script, err := filepath.Abs("testdata/package_dir.mjs")
 	if err != nil {
@@ -20,7 +20,7 @@ func TestGetPackageDirMatchesPi(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_PACKAGE_DIR", "")
+	t.Setenv("OMPIG_PACKAGE_DIR", "")
 	values := []string{"/opt/pi", "/opt/pi/", "/opt//pi/../pi", "relative/dir", "./rel", "~", "~/pkg", "~/", "~x", "~/a b", "file:///opt/pi", "file:///opt/p%20q", "file:///opt/p%2Fq", "file:///", "file://localhost/opt/pi", " /opt/pi ", "@/opt/pi", "/opt/ü/日本", "C:\\x", "~\\x", "/opt/pi\n", "/", "//", "pkg\\dir"}
 	input, err := json.Marshal(values)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestGetPackageDirMatchesPi(t *testing.T) {
 	}
 	for i, value := range values {
 		t.Setenv("PI_PACKAGE_DIR", value)
-		t.Setenv("PIG_CODING_AGENT_DIR", value)
+		t.Setenv("OMPIG_CODING_AGENT_DIR", value)
 		t.Setenv("PI_CODING_AGENT_DIR", value)
 		got := GetPackageDir()
 		if want[i].Threw {

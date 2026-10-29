@@ -9,7 +9,7 @@ import (
 
 // Ports packages/coding-agent/test/codemode-worker-admission.test.ts "starts no worker for a launch that resumes after its result timed
 // out" (#10748, #11184) to the launcher. Pi's host settles a script on its deadline while the module still loads and later takes no worker
-// for the launch. PiG's deadline starts once the module is loaded, so the abort of the caller's context is what settles an execution
+// for the launch. Ompig's deadline starts once the module is loaded, so the abort of the caller's context is what settles an execution
 // during the load; the launch that resumes afterwards must not ask for a worker.
 func TestLaunchResumingAfterTheResultSettledTakesNoWorker(t *testing.T) {
 	loading := make(chan struct{})

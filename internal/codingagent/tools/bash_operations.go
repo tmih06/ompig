@@ -17,9 +17,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/childwait"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/childwait"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // BashOperationsExecOptions, BashOperationsResult and BashOperations are the

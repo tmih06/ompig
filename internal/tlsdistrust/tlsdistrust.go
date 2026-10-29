@@ -10,7 +10,7 @@
 // ships an update. Matching the SubjectPublicKeyInfo digest catches the eMudhra-issued certificate and the
 // Sectigo cross-signed certificate of the same key, whichever path the verifier built.
 //
-// pig additive (D191): every outbound TLS client of PiG applies [Verify] through [Harden] or
+// ompig additive (D191): every outbound TLS client of Ompig applies [Verify] through [Harden] or
 // [HardenTransport]; importing this package hardens [http.DefaultTransport] for every client that leaves
 // its Transport nil.
 package tlsdistrust

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func requireGoPackedHash(t *testing.T, key string, extensions []GoExtension, sdkRoot string) string {
@@ -266,7 +266,7 @@ func TestHashTreeDoesNotTraverseNestedDirectorySymlink(t *testing.T) {
 }
 
 func TestCommandVersionProbeHelper(t *testing.T) {
-	logPath := os.Getenv("PIG_TEST_TOOLCHAIN_PROBE_LOG")
+	logPath := os.Getenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG")
 	if logPath == "" {
 		return
 	}
@@ -281,10 +281,10 @@ func TestCommandVersionProbeHelper(t *testing.T) {
 	if err := logFile.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if sleep, err := time.ParseDuration(os.Getenv("PIG_TEST_TOOLCHAIN_SLEEP")); err == nil {
+	if sleep, err := time.ParseDuration(os.Getenv("OMPIG_TEST_TOOLCHAIN_SLEEP")); err == nil {
 		time.Sleep(sleep)
 	}
-	if _, err := fmt.Fprintln(os.Stdout, os.Getenv("PIG_TEST_TOOLCHAIN_VERSION")); err != nil {
+	if _, err := fmt.Fprintln(os.Stdout, os.Getenv("OMPIG_TEST_TOOLCHAIN_VERSION")); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -297,7 +297,7 @@ func TestCommandVersionCachesWarmProbeAndDetectsReplacement(t *testing.T) {
 	binDir := t.TempDir()
 
 	logPath := filepath.Join(t.TempDir(), "probes.log")
-	t.Setenv("PIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
 	args := []string{"-test.run=^TestCommandVersionProbeHelper$"}
 	tools := []string{"go", "rustc", "cargo", "python3"}
 	paths := make(map[string]string, len(tools))
@@ -306,7 +306,7 @@ func TestCommandVersionCachesWarmProbeAndDetectsReplacement(t *testing.T) {
 		toolPath := filepath.Join(binDir, exeNameForRuntime(name))
 		copyTestExecutable(t, toolPath)
 		paths[name] = toolPath
-		t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", name+"-v1")
+		t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", name+"-v1")
 		first := commandVersion(cacheRoot, toolPath, args...)
 		second := commandVersion(cacheRoot, toolPath, args...)
 		if !strings.Contains(first, name+"-v1") || second != first {
@@ -320,7 +320,7 @@ func TestCommandVersionCachesWarmProbeAndDetectsReplacement(t *testing.T) {
 
 	goPath := paths["go"]
 	copyTestExecutable(t, goPath)
-	t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", "go-v2")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", "go-v2")
 	replaced := commandVersion(cacheRoot, goPath, args...)
 	if !strings.Contains(replaced, "go-v2") || replaced == outputs["go"] {
 		t.Fatalf("replacement output = %q, first = %q", replaced, outputs["go"])

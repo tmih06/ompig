@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 // toolTurnProvider answers the first request with a read tool call and every later one with text, recording each request's system prompt.
@@ -52,7 +52,7 @@ func (p *toolTurnProvider) requests() []string {
 // agent-session.ts:864-883 (_installAgentNextTurnRefresh) rebuilds every later turn of a run from the run options with the base snippets and guidelines merged under the run's, and interactive mode prompts through the same AgentSession. A snippet a handler deleted is absent from the first request and listed again in the next turn's request; an edited guideline stays for every turn.
 func TestInteractiveRunPromptRefreshesBaseSnippetsBeforeLaterTurns(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

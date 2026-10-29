@@ -11,10 +11,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // sessionOp is one operation on a session positioned at an entry of a tree.
@@ -148,7 +148,7 @@ func (p *recordingProvider) Stream(ctx context.Context, transcript ai.Transcript
 	return p.FauxProviderHandle.Stream(ctx, transcript, options)
 }
 
-// handoffToolFlowError is "" when the tool results directly after an assistant message answer each of its tool calls exactly once and no tool result appears anywhere else. Anthropic Messages enforces it ("unexpected tool_use_id found in tool_result blocks ... Each tool_result block must have a corresponding tool_use block in the previous message"); Pi gets it from transformMessages, which closes pending calls at the next user turn (packages/ai/src/api/transform-messages.ts closePendingToolCalls); PiG's agent layer must hand providers that shape.
+// handoffToolFlowError is "" when the tool results directly after an assistant message answer each of its tool calls exactly once and no tool result appears anywhere else. Anthropic Messages enforces it ("unexpected tool_use_id found in tool_result blocks ... Each tool_result block must have a corresponding tool_use block in the previous message"); Pi gets it from transformMessages, which closes pending calls at the next user turn (packages/ai/src/api/transform-messages.ts closePendingToolCalls); Ompig's agent layer must hand providers that shape.
 //
 // The agent loop hands the stream function Pi's messages; a real provider repairs the tool flow (D48) and runs transformMessages, so the check reads the request after both.
 func handoffToolFlowError(request []ai.Message) string {
@@ -204,14 +204,14 @@ func newOpsSession(t *testing.T, services *coding.AgentSessionServices) (*coding
 
 // TestSessionOperationsSendValidRequests builds seeded session trees, runs each operation (navigate with and without a branch summary, fork, compact, resume) at every entry of the tree, sends a prompt, and requires that
 //   - the request every provider receives meets the message contract (the checker of internal/requestvalidity, at the faux provider's send seam), and
-//   - the history the session sent through PiG's pipeline produces the request Pi's pipeline produces for it (TestPipelineMatchesPi's rules).
+//   - the history the session sent through Ompig's pipeline produces the request Pi's pipeline produces for it (TestPipelineMatchesPi's rules).
 //
-// PIG_SESSION_SEEDS sets the trees (2 by default, 20 in CI).
+// OMPIG_SESSION_SEEDS sets the trees (2 by default, 20 in CI).
 func TestSessionOperationsSendValidRequests(t *testing.T) {
-	trees := envInt("PIG_SESSION_SEEDS", map[bool]int{true: 20, false: 2}[os.Getenv("CI") != ""])
-	first := uint64(envInt("PIG_PIPELINE_SEED", 1))
+	trees := envInt("OMPIG_SESSION_SEEDS", map[bool]int{true: 20, false: 2}[os.Getenv("CI") != ""])
+	first := uint64(envInt("OMPIG_PIPELINE_SEED", 1))
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -244,7 +244,7 @@ func TestSessionOperationsSendValidRequests(t *testing.T) {
 				history := sessionHistoryCase(t, s, seed, "continue from here")
 				if o := h.judge(history); judgedBad(history, o, history.Mode) {
 					encoded, _ := json.Marshal(history.Messages)
-					t.Errorf("seed %d point %d %s: PiG's pipeline and Pi's differ on the session's history (%s): %s\npig violations: %v\npi violations: %v\nhistory: %s", seed, point, op.name, signature(o), truncate(o.Detail, 600), o.PigViolations, o.PiViolations, truncate(string(encoded), 3000))
+					t.Errorf("seed %d point %d %s: Ompig's pipeline and Pi's differ on the session's history (%s): %s\npig violations: %v\npi violations: %v\nhistory: %s", seed, point, op.name, signature(o), truncate(o.Detail, 600), o.OmpigViolations, o.PiViolations, truncate(string(encoded), 3000))
 				}
 				compared++
 				seen := len(collector.Violations())
@@ -278,7 +278,7 @@ func TestSessionOperationsSendValidRequests(t *testing.T) {
 	}
 }
 
-// sessionHistoryCase is the history the session's next Send hands its pipeline, the agent's messages plus the new prompt, as a differential case for the Anthropic target. Pi's pipeline receives the same messages, so the comparison holds PiG's convertToLlm, NormalizeMessages and converter to Pi's for every history a session operation produces.
+// sessionHistoryCase is the history the session's next Send hands its pipeline, the agent's messages plus the new prompt, as a differential case for the Anthropic target. Pi's pipeline receives the same messages, so the comparison holds Ompig's convertToLlm, NormalizeMessages and converter to Pi's for every history a session operation produces.
 func sessionHistoryCase(t *testing.T, s *coding.Session, seed uint64, prompt string) testCase {
 	t.Helper()
 	encoded, err := json.Marshal(s.Messages())

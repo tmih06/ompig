@@ -1,14 +1,14 @@
 # SPDX-License-Identifier: MIT
 
 [project]
-name = "pig-sdk"
+name = "ompig-sdk"
 version = "0.5.3"
-description = "Python SDK for building pig subprocess extensions"
+description = "Python SDK for building ompig subprocess extensions"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Michael Kinsy", email = "mrkinsy5@gmail.com" }]
-keywords = ["pig", "extensions", "sdk", "subprocess"]
+keywords = ["ompig", "extensions", "sdk", "subprocess"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -19,15 +19,15 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/MichaelKinsy/PiG"
-Repository = "https://github.com/MichaelKinsy/PiG"
+Homepage = "https://github.com/tmih06/ompig"
+Repository = "https://github.com/tmih06/ompig"
 
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = "pig_sdk"
+module-name = "ompig_sdk"
 module-root = ""
 
 [dependency-groups]

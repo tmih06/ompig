@@ -5,7 +5,7 @@ import (
 	"maps"
 	"strings"
 
-	textm "github.com/MichaelKinsy/PiG/third_party/goldmark/text"
+	textm "github.com/tmih06/ompig/third_party/goldmark/text"
 )
 
 // A BaseBlock struct implements the Node interface partialliy.

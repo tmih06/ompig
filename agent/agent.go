@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // ─── Message Types ────────────────────────────────────────────────────────────
@@ -279,13 +279,13 @@ type AgentToolResult struct {
 	// batch. Early termination happens only when every finalized result in
 	// the batch sets it. upstream: terminate?: boolean
 	Terminate bool
-	// pig additive (D160): the collapsed-view preview of a subprocess extension's tool result.
+	// ompig additive (D160): the collapsed-view preview of a subprocess extension's tool result.
 	// Preview is an optional short summary shown when the tool result is
 	// collapsed in the TUI. When non-empty, overrides the default
 	// tail-preview behavior. Extensions can set this to provide a
 	// custom collapsed view (e.g. a table header, a line count, or a
 	// brief summary) without implementing a full BodyRenderer.
-	// pig extension: no upstream equivalent (Pi extensions use in-process
+	// ompig extension: no upstream equivalent (Pi extensions use in-process
 	// renderResult callbacks; subprocess extensions need a serializable
 	// alternative).
 	Preview string
@@ -622,7 +622,7 @@ func (ToolExecutionStartEvent) agentEvent()   {}
 func (ToolExecutionUpdateEvent) agentEvent()  {}
 func (ToolExecutionEndEvent) agentEvent()     {}
 
-// AutoRetryStartEvent fires when pig is about to retry a failed request
+// AutoRetryStartEvent fires when ompig is about to retry a failed request
 // due to a transient error (overload, rate limit, server error).
 // Mirrors upstream auto_retry_start (agent-session.ts:130).
 type AutoRetryStartEvent struct {
@@ -854,7 +854,7 @@ type AgentOptions struct {
 	OnResponse func(context.Context, ai.ProviderResponse, *ai.Model) error
 	// MaxRetryDelayMs caps the delay a provider waits before one retry; nil keeps the provider default. Mirrors upstream AgentOptions.maxRetryDelayMs.
 	MaxRetryDelayMs *int
-	// Identity is how requests identify the app to providers, merged field by field over DefaultAgentIdentity (attribution to PiG). Pass an identity with AttributionNull to send no attribution headers. Mirrors upstream AgentOptions.identity.
+	// Identity is how requests identify the app to providers, merged field by field over DefaultAgentIdentity (attribution to Ompig). Pass an identity with AttributionNull to send no attribution headers. Mirrors upstream AgentOptions.identity.
 	Identity *ai.ClientIdentity
 	// OnProviderStreamEvent is forwarded to every provider request. Mirrors upstream AgentOptions.onProviderStreamEvent (packages/agent/src/agent.ts:122).
 	OnProviderStreamEvent func(ctx context.Context, data any, model *ai.Model) error
@@ -1053,7 +1053,7 @@ func (a *Agent) systemPromptOverride() *string {
 
 // ErrNoModelSelected is returned when a turn is requested with no usable model.
 // Upstream agent-session.prompt() throws formatNoModelSelectedMessage() before
-// streaming; pig surfaces the same condition as an error rather than panicking
+// streaming; ompig surfaces the same condition as an error rather than panicking
 // on a nil model in runLoop.
 var ErrNoModelSelected = errors.New("no model selected")
 
@@ -1684,7 +1684,7 @@ func (a *Agent) ClearAllQueues() {
 }
 
 // ClearQueuedUserMessages removes the queued user messages from both queues and leaves queued custom messages in place.
-// pig divergence (D135): upstream clearAllQueues also destroys custom messages that nothing reports back to the caller.
+// ompig divergence (D135): upstream clearAllQueues also destroys custom messages that nothing reports back to the caller.
 func (a *Agent) ClearQueuedUserMessages() {
 	a.steeringQueue.ClearUserMessages()
 	a.followUpQueue.ClearUserMessages()

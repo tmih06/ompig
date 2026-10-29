@@ -1,4 +1,4 @@
-// pig additive (D19): one IO worker owns every extension socket of the process while synchronous Provider methods wait off the host UI loop. Each socket keeps its own port, shared state and frame buffer, so the members of a packed Node cell (D20) do not each pay for a V8 isolate.
+// ompig additive (D19): one IO worker owns every extension socket of the process while synchronous Provider methods wait off the host UI loop. Each socket keeps its own port, shared state and frame buffer, so the members of a packed Node cell (D20) do not each pay for a V8 isolate.
 import { EventEmitter } from "node:events";
 import { FrameBuffer } from "./frame-buffer.mjs";
 import { runtimeWorker } from "./runtime-modules.mjs";

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/harness/events.ts:28-33 (MessageChange) and messageChanges(), events.ts:352-385: the view operations on pi.live.generation.message become relative

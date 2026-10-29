@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -9,9 +9,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui"
 )
 
 type surrogateInputUI struct {
@@ -30,8 +30,8 @@ func TestTerminalInputNodeSurrogateQualification(t *testing.T) {
 	shortSockDir(t)
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, "pig"))
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "pig", "agent"))
+	t.Setenv("OMPIG_HOME", filepath.Join(home, "ompig"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "ompig", "agent"))
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "pi", "agent"))
 	source := filepath.Join(t.TempDir(), "surrogate-probe.mjs")
 	const factory = `export default function(pi) {

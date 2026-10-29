@@ -3,7 +3,7 @@ package sqlite
 // Ports packages/durable/src/storage/sqlite/schema.ts
 
 import (
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // SqliteTables are the table names of the durable schema. The values never change or disappear; a rename adds a new

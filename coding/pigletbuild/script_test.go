@@ -10,11 +10,11 @@ import (
 )
 
 // The script launcher is a POSIX shell script, and on Windows a cmd.exe
-// batch file with CRLF line endings (D69). The Piglet path is quoted for each
+// batch file with CRLF line endings (D69). The Ompiglet path is quoted for each
 // shell, including characters a batch file would otherwise expand or split on.
 func TestAC2AC7SourceScriptFileAndStdoutCreateNoPigState(t *testing.T) {
 	root := t.TempDir()
-	pigletDir := filepath.Join(root, "team's 100% & piglets")
+	pigletDir := filepath.Join(root, "team's 100% & ompiglets")
 	if err := os.MkdirAll(pigletDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -26,19 +26,19 @@ func TestAC2AC7SourceScriptFileAndStdoutCreateNoPigState(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	pigHome := filepath.Join(root, "pig-home")
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := filepath.Join(root, "ompig-home")
+	t.Setenv("OMPIG_HOME", ompigHome)
 	output := filepath.Join(root, "bin", "review")
-	want := "#!/bin/sh\nexec pig --piglet " + quotePOSIX(canonicalPiglet) + " \"$@\"\n"
-	fakePig := filepath.Join(root, "fake-bin", "pig")
+	want := "#!/bin/sh\nexec ompig --ompiglet " + quotePOSIX(canonicalPiglet) + " \"$@\"\n"
+	fakePig := filepath.Join(root, "fake-bin", "ompig")
 	if runtime.GOOS == "windows" {
 		output += ".cmd"
-		want = "@setlocal DisableDelayedExpansion\r\n@pig --piglet \"" + strings.ReplaceAll(canonicalPiglet, "%", "%%") + "\" %*\r\n"
+		want = "@setlocal DisableDelayedExpansion\r\n@ompig --ompiglet \"" + strings.ReplaceAll(canonicalPiglet, "%", "%%") + "\" %*\r\n"
 		fakePig += ".exe"
 	}
 	var stdout, stderr strings.Builder
 	code := runBuild([]string{pigletPath, "--format", "script", "--out", output}, &stdout, &stderr)
-	if code != 0 || stderr.Len() != 0 || !strings.Contains(stdout.String(), "Piglet script written:") {
+	if code != 0 || stderr.Len() != 0 || !strings.Contains(stdout.String(), "Ompiglet script written:") {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 	data, err := os.ReadFile(output)
@@ -52,8 +52,8 @@ func TestAC2AC7SourceScriptFileAndStdoutCreateNoPigState(t *testing.T) {
 	if err != nil || runtime.GOOS != "windows" && info.Mode().Perm() != 0o755 {
 		t.Fatalf("script mode = %v, %v", info, err)
 	}
-	if _, err := os.Stat(pigHome); !os.IsNotExist(err) {
-		t.Fatalf("script build created Pig state: %v", err)
+	if _, err := os.Stat(ompigHome); !os.IsNotExist(err) {
+		t.Fatalf("script build created Ompig state: %v", err)
 	}
 
 	copyTestBinary(t, fakePig)
@@ -73,7 +73,7 @@ func TestAC2AC7SourceScriptFileAndStdoutCreateNoPigState(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantArgs := []string{canonicalCwd, "--piglet", canonicalPiglet, "--model", "provider/model with space"}
+	wantArgs := []string{canonicalCwd, "--ompiglet", canonicalPiglet, "--model", "provider/model with space"}
 	if len(lines) != len(wantArgs) {
 		t.Fatalf("executed lines = %#v", lines)
 	}
@@ -97,8 +97,8 @@ func TestAC2AC7SourceScriptFileAndStdoutCreateNoPigState(t *testing.T) {
 	if code != 0 || stderr.Len() != 0 || stdout.String() != want {
 		t.Fatalf("stdout script: code=%d stdout=%q stderr=%s", code, stdout.String(), stderr.String())
 	}
-	if _, err := os.Stat(pigHome); !os.IsNotExist(err) {
-		t.Fatalf("stdout script build created Pig state: %v", err)
+	if _, err := os.Stat(ompigHome); !os.IsNotExist(err) {
+		t.Fatalf("stdout script build created Ompig state: %v", err)
 	}
 
 	jsonOutput := filepath.Join(root, "bin", "review-json")
@@ -114,8 +114,8 @@ func TestAC2AC7SourceScriptFileAndStdoutCreateNoPigState(t *testing.T) {
 	if code := runBuild([]string{pigletPath, "--format", "script", "--out", output}, &stdout, &stderr); code == 0 {
 		t.Fatal("script build overwrote an existing output")
 	}
-	if _, err := os.Stat(pigHome); !os.IsNotExist(err) {
-		t.Fatalf("file/stdout/JSON script builds created Pig state: %v", err)
+	if _, err := os.Stat(ompigHome); !os.IsNotExist(err) {
+		t.Fatalf("file/stdout/JSON script builds created Ompig state: %v", err)
 	}
 	unchanged, err := os.ReadFile(output)
 	if err != nil || string(unchanged) != want {
@@ -128,9 +128,9 @@ func TestSourceScriptPerPlatform(t *testing.T) {
 	for _, tc := range []struct {
 		goos, source, want string
 	}{
-		{"linux", "/home/me/team's piglets/review.yaml", "#!/bin/sh\nexec pig --piglet '/home/me/team'\"'\"'s piglets/review.yaml' \"$@\"\n"},
-		{"darwin", "/Users/me/100% & piglets/review.yaml", "#!/bin/sh\nexec pig --piglet '/Users/me/100% & piglets/review.yaml' \"$@\"\n"},
-		{"windows", `C:\Users\me\team's 100% & piglets\review.yaml`, "@setlocal DisableDelayedExpansion\r\n@pig --piglet \"C:\\Users\\me\\team's 100%% & piglets\\review.yaml\" %*\r\n"},
+		{"linux", "/home/me/team's ompiglets/review.yaml", "#!/bin/sh\nexec ompig --ompiglet '/home/me/team'\"'\"'s ompiglets/review.yaml' \"$@\"\n"},
+		{"darwin", "/Users/me/100% & ompiglets/review.yaml", "#!/bin/sh\nexec ompig --ompiglet '/Users/me/100% & ompiglets/review.yaml' \"$@\"\n"},
+		{"windows", `C:\Users\me\team's 100% & ompiglets\review.yaml`, "@setlocal DisableDelayedExpansion\r\n@ompig --ompiglet \"C:\\Users\\me\\team's 100%% & ompiglets\\review.yaml\" %*\r\n"},
 	} {
 		if got := string(sourceScript(tc.goos, tc.source)); got != tc.want {
 			t.Errorf("sourceScript(%s, %q) = %q, want %q", tc.goos, tc.source, got, tc.want)
@@ -159,8 +159,8 @@ func TestAC3ScriptBoundaries(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			pigHome := filepath.Join(root, strings.ReplaceAll(test.name, " ", "-"), "pig-home")
-			t.Setenv("PIG_HOME", pigHome)
+			ompigHome := filepath.Join(root, strings.ReplaceAll(test.name, " ", "-"), "ompig-home")
+			t.Setenv("OMPIG_HOME", ompigHome)
 			output := filepath.Join(root, strings.ReplaceAll(test.name, " ", "-")+".sh")
 			args := []string{pigletPath, "--format", "script"}
 			args = append(args, test.args...)
@@ -182,8 +182,8 @@ func TestAC3ScriptBoundaries(t *testing.T) {
 			if _, err := os.Stat(output); !os.IsNotExist(err) {
 				t.Fatalf("boundary created output: %v", err)
 			}
-			if _, err := os.Stat(pigHome); !os.IsNotExist(err) {
-				t.Fatalf("boundary created Pig state: %v", err)
+			if _, err := os.Stat(ompigHome); !os.IsNotExist(err) {
+				t.Fatalf("boundary created Ompig state: %v", err)
 			}
 		})
 	}
@@ -195,7 +195,7 @@ func TestBuildHelpDescribesReservedArtifactOptions(t *testing.T) {
 	if code != 0 || stderr.Len() != 0 {
 		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
 	}
-	for _, want := range []string{"Usage:", "pig piglet build", "image is reserved and currently fails", "--locked", "currently fails", "--record <path>"} {
+	for _, want := range []string{"Usage:", "ompig ompiglet build", "image is reserved and currently fails", "--locked", "currently fails", "--record <path>"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Errorf("help missing %q:\n%s", want, stdout.String())
 		}

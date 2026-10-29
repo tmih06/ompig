@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // The contracts below state what each provider documents and answers with HTTP 400. Pi 1.1.0 packages/ai/src/api/transform-messages.ts closes unanswered calls and holds system messages, so a request built from a transformed transcript meets the tool-flow rules; a rule here that Pi's own converter does not meet is a finding against Pi.
@@ -49,7 +49,7 @@ var (
 	}
 )
 
-// ForAPI returns the contract of a PiG API.
+// ForAPI returns the contract of a Ompig API.
 func ForAPI(api string) (Contract, bool) {
 	switch api {
 	case "anthropic-messages":

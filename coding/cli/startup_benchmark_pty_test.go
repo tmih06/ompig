@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // upstream: packages/coding-agent/src/main.ts:964-978. PI_STARTUP_BENCHMARK runs interactiveMode.init(), waits 150 ms and
@@ -40,20 +40,20 @@ func TestStartupBenchmarkInitsAndStopsInteractiveMode(t *testing.T) {
 			defer func() { _ = master.Close() }()
 			cmd := exec.CommandContext(t.Context(), binary, "--model", "test-faux/faux-1", "--session", session, "--tui-mode", tc.tuiMode)
 			cmd.Dir = t.TempDir()
-			pigHome := t.TempDir()
+			ompigHome := t.TempDir()
 			// An existing settings.json skips the first-time setup dialog (D88).
-			if err := os.MkdirAll(filepath.Join(pigHome, "agent"), 0o700); err != nil {
+			if err := os.MkdirAll(filepath.Join(ompigHome, "agent"), 0o700); err != nil {
 				t.Fatal(err)
 			}
-			if err := os.WriteFile(filepath.Join(pigHome, "agent", "settings.json"), []byte(tc.settings), 0o600); err != nil {
+			if err := os.WriteFile(filepath.Join(ompigHome, "agent", "settings.json"), []byte(tc.settings), 0o600); err != nil {
 				t.Fatal(err)
 			}
-			cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_CODING_AGENT_DIR="+filepath.Join(pigHome, "agent"),
-				"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color", "PI_STARTUP_BENCHMARK=1")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_CODING_AGENT_DIR="+filepath.Join(ompigHome, "agent"),
+				"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color", "PI_STARTUP_BENCHMARK=1")
 			cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			_ = slave.Close()
 			output := &ptyOutput{}
@@ -103,11 +103,11 @@ func TestStartupBenchmarkRejectsNonInteractiveModes(t *testing.T) {
 	for _, args := range [][]string{{"-p", "hello"}, {"--mode", "json", "hello"}, {"--mode", "rpc"}} {
 		t.Run(strings.Join(args, " "), func(t *testing.T) {
 			t.Parallel()
-			pigHome := t.TempDir()
+			ompigHome := t.TempDir()
 			cmd := exec.CommandContext(t.Context(), binary, append([]string{"--model", "test-faux/faux-1", "--no-session"}, args...)...)
 			cmd.Dir = t.TempDir()
-			cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_CODING_AGENT_DIR="+filepath.Join(pigHome, "agent"),
-				"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PI_STARTUP_BENCHMARK=yes")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_CODING_AGENT_DIR="+filepath.Join(ompigHome, "agent"),
+				"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "PI_STARTUP_BENCHMARK=yes")
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			err := cmd.Run()

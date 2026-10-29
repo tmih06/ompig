@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // NormalizeExtensionPaths resolves extension-discovered file URLs and local paths against the session cwd, without changing the extension attribution. Invalid URLs fail before callers update resource state, with Node's own error as Pi's bindExtensions throws it.

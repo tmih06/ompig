@@ -16,7 +16,7 @@ import (
 	"unicode/utf16"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Link is an ordered (FIFO), bidirectional frame channel between two hosts.

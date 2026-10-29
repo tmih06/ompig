@@ -12,19 +12,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Equivalence port of packages/coding-agent/test/suite/regressions/8237-node-sea-extension-loading.test.ts:51 and
 // 9540-extension-loader-lazy.test.ts:38 (Pi 1.0.0). Pi asserts that its startup does not load jiti, the Node SEA
 // loader or the bundled virtual modules until an extension is imported, because loading them costs every start.
-// PiG's equivalent cost is its extension runtime: the Node runtime cell, the Node process and the extension
+// Ompig's equivalent cost is its extension runtime: the Node runtime cell, the Node process and the extension
 // toolchains (go, npm, bun, cargo, python). The invariant is the same: a start with no configured extension runs
 // none of them, and a start with one TypeScript extension starts Node only for it. TestUpstreamExtensionLoaderDefers
 // RuntimeUntilSelection keeps the host-level half (no module or factory effect before selection).
 
-// runtimeTools are the programs PiG's extension runtime may start; each is shimmed to log its invocations.
+// runtimeTools are the programs Ompig's extension runtime may start; each is shimmed to log its invocations.
 var runtimeTools = []string{"node", "npm", "npx", "bun", "deno", "tsc", "esbuild", "go", "cargo", "rustc", "python3", "python", "uv"}
 
 // runtimeShimScript is the logging shim for one tool. It records the invocation and starts the real tool with the shim
@@ -33,7 +33,7 @@ var runtimeTools = []string{"node", "npm", "npx", "bun", "deno", "tsc", "esbuild
 // with status 126 instead of spinning a core for hours.
 func runtimeShimScript(tool, logPath, real, originalPath string) string {
 	quote := func(value string) string { return "'" + strings.ReplaceAll(value, "'", `'\''`) + "'" }
-	guard := "PIG_TEST_SHIM_PID_" + strings.ToUpper(strings.NewReplacer("-", "_", ".", "_").Replace(tool))
+	guard := "OMPIG_TEST_SHIM_PID_" + strings.ToUpper(strings.NewReplacer("-", "_", ".", "_").Replace(tool))
 	forward := "exit 127"
 	if real != "" {
 		forward = "PATH=" + quote(originalPath) + " exec " + quote(real) + ` "$@"`
@@ -60,7 +60,7 @@ func writeRuntimeShims(t *testing.T, logPath string) string {
 }
 
 // runShimmedPig runs one print-mode turn with the default extension discovery and returns the runtime tools it ran
-// and whether a runtime cell was built under PIG_HOME/cache/cells.
+// and whether a runtime cell was built under OMPIG_HOME/cache/cells.
 func runShimmedPig(t *testing.T, bin string, extra ...string) ([]string, bool) {
 	t.Helper()
 	logPath := filepath.Join(t.TempDir(), "runtime-tools.log")
@@ -80,17 +80,17 @@ func runShimmedPig(t *testing.T, bin string, extra ...string) ([]string, bool) {
 		"PATH="+shims+string(os.PathListSeparator)+os.Getenv("PATH"),
 		"HOME="+home,
 		"XDG_CACHE_HOME="+filepath.Join(home, "cache"),
-		"PIG_HOME="+filepath.Join(home, "pig"),
-		"PIG_CODING_AGENT_DIR="+agentDir,
-		"PIG_TEST_FAUX=1",
-		"PIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_HOME="+filepath.Join(home, "ompig"),
+		"OMPIG_CODING_AGENT_DIR="+agentDir,
+		"OMPIG_TEST_FAUX=1",
+		"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 	)
-	// The child leads its own process group: a descendant that outlives pig fails the test and is stopped.
+	// The child leads its own process group: a descendant that outlives ompig fails the test and is stopped.
 	output, err := testenv.CombinedOutput(t, cmd)
 	if err != nil {
-		t.Fatalf("pig %v: %v\n%s", extra, err, output)
+		t.Fatalf("ompig %v: %v\n%s", extra, err, output)
 	}
-	_, cellErr := os.Stat(filepath.Join(home, "pig", "cache", "cells"))
+	_, cellErr := os.Stat(filepath.Join(home, "ompig", "cache", "cells"))
 	cells := cellErr == nil
 	data, err := os.ReadFile(logPath)
 	if os.IsNotExist(err) {
@@ -104,7 +104,7 @@ func runShimmedPig(t *testing.T, bin string, extra ...string) ([]string, bool) {
 
 func TestUpstreamStartupDefersExtensionRuntimeUntilAnExtensionIsConfigured(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	if _, err := exec.LookPath("node"); err != nil {
 		t.Fatalf("the TypeScript extension half needs node on PATH: %v", err)

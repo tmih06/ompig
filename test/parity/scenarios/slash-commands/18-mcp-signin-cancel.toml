@@ -20,7 +20,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "[Context]"
+ready_pattern_ompig = "[Context]"
 ready_pattern_pi = "[Context]"
 ready_timeout_seconds = 25
 capture_start = "Sign-in cancelled."
@@ -57,11 +57,11 @@ settle_seconds = 1
 
 [env]
 override_base_args = true
-pig = ["PIG_CODING_AGENT_DIR=testdata/mcp-empty-pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/mcp-empty-ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/mcp-empty-pi-agent"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../../testdata/mcp-stalled-oauth.ts"]
+ompig_extensions = ["../../testdata/mcp-stalled-oauth.ts"]
 pi_extensions = ["../../testdata/mcp-stalled-oauth.ts"]
 
 [assert]

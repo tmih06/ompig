@@ -1,7 +1,7 @@
 package ai
 
 // Ports packages/coding-agent/src/core/auth-storage.ts
-// Credentials use Pi's JSON shape and proper-lockfile directory lock, including across Pi and PiG processes.
+// Credentials use Pi's JSON shape and proper-lockfile directory lock, including across Pi and Ompig processes.
 
 import (
 	"bytes"
@@ -13,16 +13,16 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/ownerfile"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/ownerfile"
+	"github.com/tmih06/ompig/internal/pilock"
+	"github.com/tmih06/ompig/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // AuthSource reports where auth would be sourced from.
@@ -38,7 +38,7 @@ const (
 	AuthSourceModelsJSONCommand AuthSource = "models_json_command"
 )
 
-// AuthStatus reports whether auth is configured and where pig would source
+// AuthStatus reports whether auth is configured and where ompig would source
 // it from, without exposing secret values.
 type AuthStatus struct {
 	Configured bool
@@ -52,8 +52,8 @@ type AuthStatus struct {
 //   - "api_key" for raw API keys (field: "key")
 //   - "oauth"   for OAuth refresh/access tokens
 //
-// Files written by pig must round-trip through upstream pi and vice versa.
-// Earlier PiG builds wrote "type":"api" / "apiKey", which broke parity. The
+// Files written by ompig must round-trip through upstream pi and vice versa.
+// Earlier Ompig builds wrote "type":"api" / "apiKey", which broke parity. The
 // Load() path migrates the old shape forward in place on first read.
 type CredentialType string
 
@@ -78,7 +78,7 @@ type Credential struct {
 
 	// API-key variant. Field is "key" (matches upstream); we keep an
 	// alias "apiKey" on read for backwards compatibility with auth.json
-	// files written by older pig builds.
+	// files written by older ompig builds.
 	Key string `json:"key,omitempty"`
 
 	// Env holds provider-scoped environment overrides for an API-key
@@ -172,7 +172,7 @@ func decodeStoredCredential(entry json.RawMessage) Credential {
 	}
 	credential := r.normalize()
 	if r.LegacyAPIKey != "" || r.Type == legacyCredentialAPIKey {
-		// An entry an older PiG wrote is migrated by the next write, as the migration documents.
+		// An entry an older Ompig wrote is migrated by the next write, as the migration documents.
 		return credential
 	}
 	written, err := credential.marshalTyped()

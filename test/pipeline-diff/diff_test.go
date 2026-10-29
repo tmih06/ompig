@@ -10,20 +10,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // outcome is the verdict of one case.
 type outcome struct {
-	Kind   string // "equal", "differs", "pi-error", "pig-error", "no-request"
+	Kind   string // "equal", "differs", "pi-error", "ompig-error", "no-request"
 	Detail string
-	// PiViolations and PigViolations are the contract violations of each side's request.
-	PiViolations  []string
-	PigViolations []string
+	// PiViolations and OmpigViolations are the contract violations of each side's request.
+	PiViolations    []string
+	OmpigViolations []string
 }
 
 type harness struct {
-	// direct skips agent.NormalizeMessages on PiG's side.
+	// direct skips agent.NormalizeMessages on Ompig's side.
 	direct  bool
 	t       testing.TB
 	capture *capture
@@ -38,24 +38,24 @@ func (h *harness) judge(c testCase) outcome {
 	piURL, piKey := h.capture.slot("pi")
 	piStreamErr, piErr := h.pi.runWithStatus(c, piURL)
 	piBody, piOK := h.capture.take(piKey)
-	pigURL, pigKey := h.capture.slot("pig")
-	pigViolations, pigStreamErr, pigErr := pigRun(c, pigURL, !h.direct)
-	pigBody, pigOK := h.capture.take(pigKey)
+	ompigURL, ompigKey := h.capture.slot("ompig")
+	ompigViolations, ompigStreamErr, ompigErr := ompigRun(c, ompigURL, !h.direct)
+	ompigBody, ompigOK := h.capture.take(ompigKey)
 	if piErr == nil && !piOK && piStreamErr != "" {
 		piErr = errors.New(piStreamErr)
 	}
-	if pigErr == nil && !pigOK && pigStreamErr != "" {
-		pigErr = errors.New(pigStreamErr)
+	if ompigErr == nil && !ompigOK && ompigStreamErr != "" {
+		ompigErr = errors.New(ompigStreamErr)
 	}
 	switch {
-	case !piOK && !pigOK && piErr != nil && pigErr != nil:
+	case !piOK && !ompigOK && piErr != nil && ompigErr != nil:
 		return outcome{Kind: "equal", Detail: "both fail before sending"}
 	case !piOK && piErr != nil:
 		return outcome{Kind: "pi-error", Detail: piErr.Error()}
-	case !pigOK && pigErr != nil:
-		return outcome{Kind: "pig-error", Detail: pigErr.Error()}
-	case piOK != pigOK:
-		return outcome{Kind: "no-request", Detail: fmt.Sprintf("pi sent a request: %v, pig sent a request: %v", piOK, pigOK)}
+	case !ompigOK && ompigErr != nil:
+		return outcome{Kind: "ompig-error", Detail: ompigErr.Error()}
+	case piOK != ompigOK:
+		return outcome{Kind: "no-request", Detail: fmt.Sprintf("pi sent a request: %v, ompig sent a request: %v", piOK, ompigOK)}
 	case !piOK:
 		return outcome{Kind: "equal", Detail: "neither sent"}
 	}
@@ -66,16 +66,16 @@ func (h *harness) judge(c testCase) outcome {
 	if contents, ok := piProj["contents"].([]any); ok {
 		piProj["contents"] = withD115(contents)
 	}
-	pigProj, err := projection(c.Target.API, pigBody)
+	ompigProj, err := projection(c.Target.API, ompigBody)
 	if err != nil {
-		return outcome{Kind: "pig-error", Detail: err.Error()}
+		return outcome{Kind: "ompig-error", Detail: err.Error()}
 	}
-	out := outcome{Kind: "equal", PigViolations: pigViolations}
+	out := outcome{Kind: "equal", OmpigViolations: ompigViolations}
 	for _, v := range requestvalidity.CheckBody(c.Target.API, piBody) {
 		out.PiViolations = append(out.PiViolations, v.String())
 	}
-	// Where Pi's own request breaks the provider's contract on a Chaos history, PiG's repair of the history is the intended difference (D48 and the late-result recovery); only PiG's validity is required there. A Realistic history holds nothing D48 repairs, so its requests are compared even when Pi's breaks a rule (the Google image split).
-	if d := difference(piProj, pigProj); d != "" && (len(out.PiViolations) == 0 || h.direct || c.Mode == Realistic) {
+	// Where Pi's own request breaks the provider's contract on a Chaos history, Ompig's repair of the history is the intended difference (D48 and the late-result recovery); only Ompig's validity is required there. A Realistic history holds nothing D48 repairs, so its requests are compared even when Pi's breaks a rule (the Google image split).
+	if d := difference(piProj, ompigProj); d != "" && (len(out.PiViolations) == 0 || h.direct || c.Mode == Realistic) {
 		out.Kind, out.Detail = "differs", d
 	}
 	return out
@@ -96,13 +96,13 @@ func envInt(name string, fallback int) int {
 	return fallback
 }
 
-// sharedWithPi reports whether every rule PiG's request breaks is also broken by Pi's request, or is the Google image split below: PiG then matches a flaw of Pi's pipeline instead of adding one.
+// sharedWithPi reports whether every rule Ompig's request breaks is also broken by Pi's request, or is the Google image split below: Ompig then matches a flaw of Pi's pipeline instead of adding one.
 func sharedWithPi(c testCase, o outcome) bool {
 	allowed := map[string]bool{}
 	for _, v := range o.PiViolations {
 		allowed[violationRule(v)] = true
 	}
-	// An orphan result is never PiG's to send: D48 drops it. Only the Google image split can leave one.
+	// An orphan result is never Ompig's to send: D48 drops it. Only the Google image split can leave one.
 	delete(allowed, "result-has-call")
 	if slices.ContainsFunc(o.PiViolations, func(v string) bool { return violationRule(v) == "result-has-call" }) {
 		// Pi's request holds an orphan result, which D48 drops. Dropping it can leave two turns of one role side by side or end the request with an assistant message; Pi's request is rejected for the orphan either way.
@@ -110,7 +110,7 @@ func sharedWithPi(c testCase, o outcome) bool {
 			allowed[rule] = true
 		}
 	}
-	for _, v := range o.PigViolations {
+	for _, v := range o.OmpigViolations {
 		if !allowed[violationRule(v)] {
 			return false
 		}
@@ -118,7 +118,7 @@ func sharedWithPi(c testCase, o outcome) bool {
 	return true
 }
 
-// withD115 rewrites Pi's Google contents into the shape D115 specifies. Pi 1.1.0 (google-shared.ts convertMessages) pushes the image turn of a Gemini 2.x tool result ("Tool result image:") before the next result, which splits the function-response turn of parallel calls; PiG keeps every function response of a run of results in the run's first turn and puts the image turns after it, in result order.
+// withD115 rewrites Pi's Google contents into the shape D115 specifies. Pi 1.1.0 (google-shared.ts convertMessages) pushes the image turn of a Gemini 2.x tool result ("Tool result image:") before the next result, which splits the function-response turn of parallel calls; Ompig keeps every function response of a run of results in the run's first turn and puts the image turns after it, in result order.
 func withD115(contents []any) []any {
 	kind := func(turn any) string {
 		m, _ := turn.(map[string]any)
@@ -165,15 +165,15 @@ func withD115(contents []any) []any {
 	return out
 }
 
-// TestPipelineMatchesPi sends seeded random histories through Pi 1.1.0's pipeline (coding-agent convertToLlm, transformMessages, the API's converter) and through PiG's, and compares the requests each puts on the wire.
+// TestPipelineMatchesPi sends seeded random histories through Pi 1.1.0's pipeline (coding-agent convertToLlm, transformMessages, the API's converter) and through Ompig's, and compares the requests each puts on the wire.
 //
-// Realistic histories are what Pi's agent and session produce. For them PiG's request must equal Pi's, even where Pi's breaks the provider's contract, and must meet the contract except for a violation Pi's request has too (a flaw PiG matches, logged as such).
-// Chaos histories also hold shapes only a damaged session has. PiG deliberately repairs those where Pi sends a request the provider rejects (D48 and the late-result recovery), so the requests are compared only where Pi's own request meets the contract; PiG's request must meet it always.
-// PIG_PIPELINE_CASES sets the cases per target and mode (the default is the cheap-gate budget), PIG_PIPELINE_SEED the first seed.
+// Realistic histories are what Pi's agent and session produce. For them Ompig's request must equal Pi's, even where Pi's breaks the provider's contract, and must meet the contract except for a violation Pi's request has too (a flaw Ompig matches, logged as such).
+// Chaos histories also hold shapes only a damaged session has. Ompig deliberately repairs those where Pi sends a request the provider rejects (D48 and the late-result recovery), so the requests are compared only where Pi's own request meets the contract; Ompig's request must meet it always.
+// OMPIG_PIPELINE_CASES sets the cases per target and mode (the default is the cheap-gate budget), OMPIG_PIPELINE_SEED the first seed.
 func TestPipelineMatchesPi(t *testing.T) {
 	h := newHarness(t)
-	cases := envInt("PIG_PIPELINE_CASES", defaultCases())
-	first := uint64(envInt("PIG_PIPELINE_SEED", 1))
+	cases := envInt("OMPIG_PIPELINE_CASES", defaultCases())
+	first := uint64(envInt("OMPIG_PIPELINE_SEED", 1))
 	for _, mode := range []Mode{Realistic, Chaos} {
 		for _, tgt := range targets {
 			shared := 0
@@ -181,12 +181,12 @@ func TestPipelineMatchesPi(t *testing.T) {
 			for i := range cases {
 				c := generate(first+uint64(i), tgt, mode)
 				o := h.judge(c)
-				if o.Kind == "equal" && len(o.PigViolations) == 0 {
+				if o.Kind == "equal" && len(o.OmpigViolations) == 0 {
 					continue
 				}
 				if o.Kind == "equal" && sharedWithPi(c, o) {
 					shared++
-					for _, v := range o.PigViolations {
+					for _, v := range o.OmpigViolations {
 						rules[violationRule(v)]++
 					}
 					continue
@@ -200,11 +200,11 @@ func TestPipelineMatchesPi(t *testing.T) {
 				})
 				final := h.judge(small)
 				encoded, _ := json.MarshalIndent(small, "", " ")
-				t.Errorf("%s %s seed=%d (%s): %s\npig violations: %v\npi violations: %v\nsmallest case (save as JSON and set PIG_PIPELINE_CASE_FILE to run TestShow):\n%s", tgt.Name, modeName(mode), c.Seed, sig, truncate(final.Detail, 600), final.PigViolations, final.PiViolations, encoded)
+				t.Errorf("%s %s seed=%d (%s): %s\npig violations: %v\npi violations: %v\nsmallest case (save as JSON and set OMPIG_PIPELINE_CASE_FILE to run TestShow):\n%s", tgt.Name, modeName(mode), c.Seed, sig, truncate(final.Detail, 600), final.OmpigViolations, final.PiViolations, encoded)
 				break
 			}
 			if shared > 0 {
-				t.Logf("%s %s: %d of %d cases have a request that breaks the provider contract in Pi's pipeline too (PiG violations by rule: %v)", tgt.Name, modeName(mode), shared, cases, rules)
+				t.Logf("%s %s: %d of %d cases have a request that breaks the provider contract in Pi's pipeline too (Ompig violations by rule: %v)", tgt.Name, modeName(mode), shared, cases, rules)
 			}
 		}
 	}
@@ -220,12 +220,12 @@ func modeName(m Mode) string {
 // judgedBad is the failure predicate of TestPipelineMatchesPi.
 func judgedBad(c testCase, o outcome, mode Mode) bool {
 	switch o.Kind {
-	case "differs", "no-request", "pig-error":
+	case "differs", "no-request", "ompig-error":
 		return true
 	case "pi-error":
 		return false
 	}
-	if len(o.PigViolations) == 0 || sharedWithPi(c, o) {
+	if len(o.OmpigViolations) == 0 || sharedWithPi(c, o) {
 		return false
 	}
 	return true
@@ -235,8 +235,8 @@ func judgedBad(c testCase, o outcome, mode Mode) bool {
 func TestAIPipelineMatchesPi(t *testing.T) {
 	h := newHarness(t)
 	h.direct = true
-	cases := envInt("PIG_PIPELINE_CASES", defaultCases())
-	first := uint64(envInt("PIG_PIPELINE_SEED", 1))
+	cases := envInt("OMPIG_PIPELINE_CASES", defaultCases())
+	first := uint64(envInt("OMPIG_PIPELINE_SEED", 1))
 	for _, mode := range []Mode{Realistic, Chaos} {
 		for _, tgt := range targets {
 			for i := range cases {
@@ -254,22 +254,22 @@ func TestAIPipelineMatchesPi(t *testing.T) {
 				})
 				final := h.judge(small)
 				encoded, _ := json.MarshalIndent(small, "", " ")
-				t.Errorf("%s %s seed=%d (%s): %s\nsmallest case (save as JSON and set PIG_PIPELINE_CASE_FILE to run TestShow):\n%s", tgt.Name, modeName(mode), c.Seed, signature(final), truncate(final.Detail, 600), encoded)
+				t.Errorf("%s %s seed=%d (%s): %s\nsmallest case (save as JSON and set OMPIG_PIPELINE_CASE_FILE to run TestShow):\n%s", tgt.Name, modeName(mode), c.Seed, signature(final), truncate(final.Detail, 600), encoded)
 				break
 			}
 		}
 	}
 }
 
-// TestExplore (PIG_PIPELINE_EXPLORE=1) reports the distinct kinds of difference over PIG_PIPELINE_CASES seeded cases per target, each with its smallest case.
+// TestExplore (OMPIG_PIPELINE_EXPLORE=1) reports the distinct kinds of difference over OMPIG_PIPELINE_CASES seeded cases per target, each with its smallest case.
 func TestExplore(t *testing.T) {
-	if os.Getenv("PIG_PIPELINE_EXPLORE") == "" {
-		t.Skip("set PIG_PIPELINE_EXPLORE=1 to explore")
+	if os.Getenv("OMPIG_PIPELINE_EXPLORE") == "" {
+		t.Skip("set OMPIG_PIPELINE_EXPLORE=1 to explore")
 	}
 	h := newHarness(t)
-	cases := envInt("PIG_PIPELINE_CASES", 20)
-	first := uint64(envInt("PIG_PIPELINE_SEED", 1))
-	mode := Mode(envInt("PIG_PIPELINE_MODE", 0))
+	cases := envInt("OMPIG_PIPELINE_CASES", 20)
+	first := uint64(envInt("OMPIG_PIPELINE_SEED", 1))
+	mode := Mode(envInt("OMPIG_PIPELINE_MODE", 0))
 	seen := map[string]bool{}
 	counts := map[string]int{}
 	for _, tgt := range targets {
@@ -277,8 +277,8 @@ func TestExplore(t *testing.T) {
 			c := generate(first+uint64(i), tgt, mode)
 			o := h.judge(c)
 			sigs := []string{signature(o)}
-			for _, v := range o.PigViolations {
-				sigs = append(sigs, "PIG-INVALID "+violationRule(v))
+			for _, v := range o.OmpigViolations {
+				sigs = append(sigs, "OMPIG-INVALID "+violationRule(v))
 			}
 			for _, v := range o.PiViolations {
 				sigs = append(sigs, "PI-INVALID "+violationRule(v))
@@ -310,8 +310,8 @@ func TestExplore(t *testing.T) {
 
 func sigsOf(o outcome) []string {
 	sigs := []string{signature(o)}
-	for _, v := range o.PigViolations {
-		sigs = append(sigs, "PIG-INVALID "+violationRule(v))
+	for _, v := range o.OmpigViolations {
+		sigs = append(sigs, "OMPIG-INVALID "+violationRule(v))
 	}
 	for _, v := range o.PiViolations {
 		sigs = append(sigs, "PI-INVALID "+violationRule(v))
@@ -337,12 +337,12 @@ func truncate(s string, n int) string {
 	return s
 }
 
-// TestShow prints both requests for the case in PIG_PIPELINE_CASE_FILE (a JSON testCase) or for PIG_PIPELINE_SEED on PIG_PIPELINE_TARGET.
+// TestShow prints both requests for the case in OMPIG_PIPELINE_CASE_FILE (a JSON testCase) or for OMPIG_PIPELINE_SEED on OMPIG_PIPELINE_TARGET.
 func TestShow(t *testing.T) {
-	file := os.Getenv("PIG_PIPELINE_CASE_FILE")
-	name := os.Getenv("PIG_PIPELINE_TARGET")
+	file := os.Getenv("OMPIG_PIPELINE_CASE_FILE")
+	name := os.Getenv("OMPIG_PIPELINE_TARGET")
 	if file == "" && name == "" {
-		t.Skip("set PIG_PIPELINE_CASE_FILE or PIG_PIPELINE_TARGET to show a case")
+		t.Skip("set OMPIG_PIPELINE_CASE_FILE or OMPIG_PIPELINE_TARGET to show a case")
 	}
 	var c testCase
 	if file != "" {
@@ -356,7 +356,7 @@ func TestShow(t *testing.T) {
 	} else {
 		for _, tgt := range targets {
 			if tgt.Name == name {
-				c = generate(uint64(envInt("PIG_PIPELINE_SEED", 1)), tgt, Mode(envInt("PIG_PIPELINE_MODE", 0)))
+				c = generate(uint64(envInt("OMPIG_PIPELINE_SEED", 1)), tgt, Mode(envInt("OMPIG_PIPELINE_MODE", 0)))
 			}
 		}
 	}
@@ -367,10 +367,10 @@ func TestShow(t *testing.T) {
 	} else {
 		t.Logf("pi stream error: %s", streamErr)
 	}
-	pigURL, pigKey := h.capture.slot("pig")
-	violations, streamErr, err := pigRun(c, pigURL, !h.direct)
-	t.Logf("pig error: %v stream error: %s violations: %v", err, streamErr, violations)
-	for _, side := range []struct{ name, key string }{{"PI", piKey}, {"PIG", pigKey}} {
+	ompigURL, ompigKey := h.capture.slot("ompig")
+	violations, streamErr, err := ompigRun(c, ompigURL, !h.direct)
+	t.Logf("ompig error: %v stream error: %s violations: %v", err, streamErr, violations)
+	for _, side := range []struct{ name, key string }{{"PI", piKey}, {"OMPIG", ompigKey}} {
 		body, _ := h.capture.take(side.key)
 		t.Logf("%s contract violations: %v", side.name, requestvalidity.CheckBody(c.Target.API, body))
 		proj, _ := projection(c.Target.API, body)

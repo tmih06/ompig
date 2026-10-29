@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi package-manager.ts:1271-1294 skips a source whenever offline installation would be required, including a stale or malformed cache, while retaining compatible cached Packages.
@@ -29,7 +29,7 @@ func TestTemporaryNpmOfflineCacheResolution(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Setenv("PI_OFFLINE", "1")
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			cwd, agentDir := t.TempDir(), t.TempDir()
 			sm := codingagent.NewSettingsManager(cwd, agentDir)
 			// Any attempted npm execution fails rather than reaching an external registry.
@@ -85,9 +85,9 @@ func TestRPCOfflineMissingTemporaryNpmExtensionIsSkipped(t *testing.T) {
 	root := t.TempDir()
 	agentDir := filepath.Join(root, "agent")
 	p := startRPCProcessAt(t, root, []string{
-		"HOME=" + root, "PIG_HOME=" + filepath.Join(root, "pig"),
-		"PIG_CODING_AGENT_DIR=" + agentDir, "PI_CODING_AGENT_DIR=" + agentDir,
-		"PI_OFFLINE=1", "PIG_OFFLINE=1",
+		"HOME=" + root, "OMPIG_HOME=" + filepath.Join(root, "ompig"),
+		"OMPIG_CODING_AGENT_DIR=" + agentDir, "PI_CODING_AGENT_DIR=" + agentDir,
+		"PI_OFFLINE=1", "OMPIG_OFFLINE=1",
 	}, "--offline", "--no-session", "--no-extensions", "-e", "npm:review-missing", "--model", "anthropic/claude-sonnet-4-5")
 	p.send(`{"id":"state","type":"get_state"}`)
 	p.await("state after optional offline npm cache miss", func(record rpcRecord) bool {
@@ -108,7 +108,7 @@ func TestRPCOfflineMissingTemporaryNpmExtensionIsSkipped(t *testing.T) {
 
 func BenchmarkTemporaryNpmOfflineCacheMiss(b *testing.B) {
 	b.Setenv("PI_OFFLINE", "1")
-	b.Setenv("PIG_OFFLINE", "")
+	b.Setenv("OMPIG_OFFLINE", "")
 	cwd, agentDir := b.TempDir(), b.TempDir()
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
 	if err := sm.SetNpmCommand([]string{filepath.Join(b.TempDir(), "must-not-run")}); err != nil {

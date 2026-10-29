@@ -8,15 +8,15 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/startup-input/bare-prefix.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/startup-input/bare-prefix.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/startup-input/bare-prefix.mjs"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "BARE PREFIX PROBE READY"
+ready_pattern_ompig = "BARE PREFIX PROBE READY"
 ready_pattern_pi = "BARE PREFIX PROBE READY"
 ready_timeout_seconds = 30
 capture_start = 'BARE PREFIXES: ["!","!!"]'

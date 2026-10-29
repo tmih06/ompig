@@ -3,7 +3,7 @@
 package journeys
 
 import (
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 const reviewPrompt = "---\ndescription: Review a file\nargument-hint: \"<file> <focus>\"\n---\nPlease review $1 and focus on $2. All arguments: $@\n"
@@ -37,7 +37,7 @@ func init() {
 				c.WaitFor("Greets people")
 				c.Quiet(c.Settle())
 				c.Snap("skill-listed")
-				// Escape closes the list; Ctrl+U alone leaves it open in both products and a following full command plus Enter in one burst is swallowed by PiG (open finding e2e-3 in the handoff).
+				// Escape closes the list; Ctrl+U alone leaves it open in both products and a following full command plus Enter in one burst is swallowed by Ompig (open finding e2e-3 in the handoff).
 				c.Esc()
 				c.Key("C-u")
 				c.Quiet(c.Settle())

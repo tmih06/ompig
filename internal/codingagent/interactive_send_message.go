@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // sendExtensionMessage is an extension's pi.sendMessage in interactive mode. It routes the message as upstream

@@ -24,7 +24,7 @@ func leakBlockedSender() {
 	time.Sleep(10 * time.Millisecond)
 }
 
-const leakHelperEnv = "PIG_TEST_GOROUTINELEAK_HELPER"
+const leakHelperEnv = "OMPIG_TEST_GOROUTINELEAK_HELPER"
 
 // TestGoroutineLeakHelperProcess is the child of TestRunWithoutGoroutineLeaksFailsALeakingRun: the leak it creates must not stay in this test binary.
 func TestGoroutineLeakHelperProcess(t *testing.T) {

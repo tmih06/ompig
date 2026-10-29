@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // writePackedFactoryModuleWithProvider scaffolds a factory-style Go module
@@ -17,12 +17,12 @@ import (
 func writePackedFactoryModuleWithProvider(t *testing.T, modulePath, extName, toolName, providerName string) string {
 	t.Helper()
 	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	src := fmt.Sprintf(`package ext
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk"
+import "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	e := sdk.New(%q)
@@ -43,7 +43,7 @@ func Extension() *sdk.Extension {
 // register providers, that reload preserves them when packed artifacts are
 // reused, and that quarantine unregisters every packed-member provider.
 //
-// pig-specific. Production-grade reload safety: globally-visible provider
+// ompig-specific. Production-grade reload safety: globally-visible provider
 // registrations from packed members must not leak after quarantine.
 func TestPackedCell_ProviderLifecycle(t *testing.T) {
 	rootA := writePackedFactoryModuleWithProvider(t, "example.com/provpack/a", "provpack-a", "tool_a", "prov-a")

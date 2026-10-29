@@ -2,7 +2,7 @@
 """Merge a closure lane branch into this branch without taking its mapping edits.
 
 Usage: python3 test/parity/interface-closure/merge_lane.py <lane ref> [<lane ref>...]
-For each lane: check out every file the lane changed except the generated ledgers (mapping, pig-go, recommendations, gap
+For each lane: check out every file the lane changed except the generated ledgers (mapping, ompig-go, recommendations, gap
 baseline), refusing when this branch also changed one of those files since the merge base, then apply every `specs/ledger-*.json` with close.py (idempotent). Afterwards run, by hand: read the lane's doc for
 withdrawn rows and revert them with revert.py; `make interface-go interface-recommendations-generate interface-gaps-update`; prodreach;
 reproduce.py --apply --public; audit.py; `make interface-mapping-quality`; runevidence.py on each new spec.
@@ -18,7 +18,7 @@ def run(*args, check=True):
     return subprocess.run(args, cwd=root, capture_output=True, text=True, check=check).stdout
 
 
-skip = ("interfaces/mapping-v", "interfaces/pig-go.json", "interfaces/recommendations", "interface-closure/gaps/")
+skip = ("interfaces/mapping-v", "interfaces/ompig-go.json", "interfaces/recommendations", "interface-closure/gaps/")
 for lane in sys.argv[1:]:
     base = run("git", "merge-base", "HEAD", lane).strip()
     files = [f for f in run("git", "diff", "--name-only", base, lane).splitlines() if not any(s in f for s in skip)]

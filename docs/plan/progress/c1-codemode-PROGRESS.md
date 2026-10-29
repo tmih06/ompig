@@ -6,11 +6,11 @@ Upstream: v0.99.2..v1.0.0 (tag `v1.0.0`, `a13d35a74`). Based on the 0.99.1 porte
 
 ## Upstream changes ported
 
-| upstream source | PiG |
+| upstream source | Ompig |
 |---|---|
 | `packages/codemode/src/runtime/prelude-source.ts` (guard Proxy over `tools` and namespace globals; `store()` size explanations) | `codemode/assets/prelude.js` regenerated from the 1.0.0 `PRELUDE_SOURCE` byte for byte, hash re-pinned in `PROVENANCE.md` and `TestEmbeddedSourcesMatchTheirRecordedHashes` |
 | `packages/codemode/src/declarations.ts`, `index.ts` (`renderToolOutputType` exported) | `codemode.RenderToolOutputType` |
-| `packages/coding-agent/src/extensions/codemode/tool.ts` (`DESCRIPTION_INTRO`, `describeGlobals`, `describeOutput`, `describeScriptCall`, `CODEMODE_DOCS_PATH`, shorter snippet, guideline and `code` description; `MODEL_TYPES` and `MODEL_GLOBAL_DECLARATIONS` removed) | `coding/extension/builtin/codemode/{description_text,description,tool}.go`; `DocsPath()` is the codemode page of PiG's docs bundle under its config root |
+| `packages/coding-agent/src/extensions/codemode/tool.ts` (`DESCRIPTION_INTRO`, `describeGlobals`, `describeOutput`, `describeScriptCall`, `CODEMODE_DOCS_PATH`, shorter snippet, guideline and `code` description; `MODEL_TYPES` and `MODEL_GLOBAL_DECLARATIONS` removed) | `coding/extension/builtin/codemode/{description_text,description,tool}.go`; `DocsPath()` is the codemode page of Ompig's docs bundle under its config root |
 | `packages/coding-agent/src/extensions/codemode/execute.ts` (`models.generateImages`, `runModelCall`, `checkClassifierContext`, `checkImagesContext`, `describeValue`, `getModelOfType` shape error, unshown-image note) | `coding/extension/builtin/codemode/{models,models_args,execute,run}.go` |
 | `packages/coding-agent/src/core/model-registry.ts` (`generateImages`) | `coding.ModelRegistry.GenerateImages`; `ctx.modelRegistry.generateImages` in the Node runtime and the Go, Rust and Python SDKs through the new `generateImages` host call |
 | `packages/coding-agent/src/extensions/mcp/index.ts` (`serversSectionIntro`) | `coding/mcpext/extension.go`. The rest of this file's delta (OAuth per-server credentials, sign-in link) belongs to `c1-mcp-oauth`, so its upstream-sync entry stays pending |
@@ -19,7 +19,7 @@ Upstream: v0.99.2..v1.0.0 (tag `v1.0.0`, `a13d35a74`). Based on the 0.99.1 porte
 
 Differential evidence against Pi 1.0.0 (npm `@earendil-works/pi-coding-agent@1.0.0`):
 
-- `createCodemodeToolDefinition().prepareLoadout` over bash, read, MCP `CallToolResult`, integer-key and union output schemas, in modes `on` and `only`, with budgets unset, 3000 and 60, with and without `models`: every description matches PiG's except the docs path.
+- `createCodemodeToolDefinition().prepareLoadout` over bash, read, MCP `CallToolResult`, integer-key and union output schemas, in modes `on` and `only`, with budgets unset, 3000 and 60, with and without `models`: every description matches Ompig's except the docs path.
 - `executeCodemode` over 38 malformed `models.*` calls and guarded member reads: every error name and message matches. `TestModelsGlobalArgumentErrorsMatchPi` pins the Pi output (`coding/extension/builtin/codemode/testdata/models-argument-errors.pi-1.1.0.json`).
 
 ## Red to green (sibling tests)
@@ -60,11 +60,11 @@ Test changes in this lane, none of which loosens a sibling assertion:
 
 - `test/parity/upstream-sync/v1.0.0.toml`: ported with evidence for `codemode/src/{declarations,index,runtime/prelude-source}.ts`, `coding-agent/src/extensions/codemode/{execute,tool}.ts`, `core/model-registry.ts`, and `core/system-prompt.ts`.
 - `test/parity/interfaces/test-mapping-v1.0.0.json`: `packages/codemode/test/sandbox.test.ts`, `coding-agent/test/suite/agent-session-codemode.test.ts` and `coding-agent/test/tool-search.test.ts` are `ported` with the tests above as evidence (`17d457793`). The two sandbox worker-path cases keep the owner's 0.99.2 designed-out approval in `test-porting-policy-v1.0.0.json`, because both cases are unchanged in 1.0.0. The owner should confirm this carry-forward.
-- Generated files `pig-go.json` and `recommendations-v1.0.0.json` were regenerated locally to pass `interface-go-drift` and `interface-recommendations-drift`, then restored for the integrator. `docs/extension-sdk-surface.md` and `runtime-node.zip` are committed, because `sdk-surface-drift` and the Node runtime depend on them.
+- Generated files `ompig-go.json` and `recommendations-v1.0.0.json` were regenerated locally to pass `interface-go-drift` and `interface-recommendations-drift`, then restored for the integrator. `docs/extension-sdk-surface.md` and `runtime-node.zip` are committed, because `sdk-surface-drift` and the Node runtime depend on them.
 
 ## Gates
 
 - `go vet` (also `GOOS=windows`) and `golangci-lint` on every touched package: clean.
-- `go test` for `codemode`, `coding/...`, `internal/codingagent/...`, `cmd/pig`, `extensions/sdk`, the Rust SDK (`cargo test`), the Python SDK (`pytest`), and `test/extension-conformance -run ModelTypes|NodeModelRegistry`: green, except failures that also occur without this lane. These are the 0.99.2 RPC/faux oracle pins, `TestOAuthPageMatchesThePinnedPackage` (the OAuth logo belongs to the login lane), and `TestNodeVendoredTuiUpstreamTests` (no Xvfb on this host).
+- `go test` for `codemode`, `coding/...`, `internal/codingagent/...`, `cmd/ompig`, `extensions/sdk`, the Rust SDK (`cargo test`), the Python SDK (`pytest`), and `test/extension-conformance -run ModelTypes|NodeModelRegistry`: green, except failures that also occur without this lane. These are the 0.99.2 RPC/faux oracle pins, `TestOAuthPageMatchesThePinnedPackage` (the OAuth logo belongs to the login lane), and `TestNodeVendoredTuiUpstreamTests` (no Xvfb on this host).
 - `sdk-surface-drift`, `port-map-drift`, `coverage-drift`, `source-hygiene`, `lint-scenarios`, `divergence-consistency`, `divergence-quality`, `behavior-contracts`, `interface-inventory`, `interface-delta`, `test-inventory`, `format-version-inventory` and `custom-factory-ledger-drift`: clean.
 - The following gates still fail for reasons outside this lane: `correspondence-check` (`quietStartup`/`tuiMode` table gaps), `test-porting-release` and `known-gaps-drift` (pending TUI hot paths), `divergence-guard` (removed `agent/harness` allow markers), `docs-drift` (an earlier-release mention in an sdk-surface exception), and `test-sdk-ts` (the sdk-ts README pin). The sdk-ts `tsc` typecheck passes with the new `generateImages` row.

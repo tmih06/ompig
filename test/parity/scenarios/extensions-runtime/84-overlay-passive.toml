@@ -5,7 +5,7 @@
 # testdata/ext/overlay-qa-tests.ts is Pi 1.2.0's examples/extensions/overlay-qa-tests.ts, byte for byte (see 84-overlay-focus).
 # /overlay-passive's factory shows a timer panel (nonCapturing, top-right) and ticks it every second with tui.requestRender();
 # typed keys reach the controller. The wait for "00:03" proves the timer panel redrew three times on both binaries; the compared
-# crop replaces only the timer's value. Before the showOverlay slice PiG threw "this.tui.showOverlay is not a function".
+# crop replaces only the timer's value. Before the showOverlay slice Ompig threw "this.tui.showOverlay is not a function".
 #
 # Upstream evidence (Pi 1.2.0, parity harness, 2026-10-13, 120x40 tmux, one run kept with an impossible both_contain entry):
 #   keys: "/overlay-passive" Enter, "h", "i"; wait: "> hi", "inputs=2", "00:03"
@@ -18,7 +18,7 @@
 #                                         │ last: len=1 c0=105                           │
 #                                         │ > hi                                         │
 #                                         │ Press Esc to close both.
-#   PiG's crop matched after the timer rule (output_normalized_equal).
+#   Ompig's crop matched after the timer rule (output_normalized_equal).
 
 name = "84-overlay-passive"
 description = "Pi's /overlay-passive: a non-capturing timer panel shown from the factory's tui redraws while the controller keeps the keys"
@@ -31,16 +31,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/quiet-pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/quiet-ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/quiet-pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/overlay-qa-tests.ts"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/overlay-qa-tests.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/overlay-qa-tests.ts"]
 
 [tmux]
 width = 120
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Timer"

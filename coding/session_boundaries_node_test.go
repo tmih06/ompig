@@ -10,16 +10,16 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 type boundaryNotifyUI struct{ extension.UIContext }
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:2075-2084 records abort during before-settle without cancelling the awaited hook. Its result is still committed.
 func TestUpstreamSessionBoundariesNodeAbort(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	source, err := filepath.Abs(filepath.Join("..", "test", "parity", "testdata", "session-boundary-abort-extension.mjs"))
 	if err != nil {
 		t.Fatal(err)
@@ -65,14 +65,14 @@ func TestUpstreamSessionBoundariesNodeAbort(t *testing.T) {
 	if entry["content"] != "runnable draft after abort" || entry["display"] != false || h.provider.callCount() != 1 || len(diagnostics) != 0 {
 		t.Fatalf("calls=%d entry=%v diagnostics=%v", h.provider.callCount(), entry, diagnostics)
 	}
-	if os.Getenv("PIG_BOUNDARY_PROBE") == "1" {
+	if os.Getenv("OMPIG_BOUNDARY_PROBE") == "1" {
 		fmt.Println("SESSION_BOUNDARY_BRIDGE " + boundaryJSON(t, []any{h.provider.callCount(), diagnostics, entry["content"], entry["display"]}))
 	}
 }
 
 // The same factory runs inside published Pi and the production Node subprocess. A failed first handler's mutated draft must reach the second preview, persistence and the next Provider request.
 func TestUpstreamSessionBoundariesNode(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	source, err := filepath.Abs(filepath.Join("..", "test", "parity", "testdata", "session-boundary-extension.mjs"))
 	if err != nil {
 		t.Fatal(err)
@@ -98,7 +98,7 @@ func TestUpstreamSessionBoundariesNode(t *testing.T) {
 	if entry["content"] != "context from real extension" || entry["display"] != false || !reflect.DeepEqual(entry["details"], map[string]any{"source": "boundary-probe"}) {
 		t.Fatalf("entry=%v", entry)
 	}
-	if os.Getenv("PIG_BOUNDARY_PROBE") == "1" {
+	if os.Getenv("OMPIG_BOUNDARY_PROBE") == "1" {
 		raw, err := json.Marshal([]any{h.provider.callCount(), diagnostics, entry["content"], entry["display"], entry["details"]})
 		if err != nil {
 			t.Fatal(err)

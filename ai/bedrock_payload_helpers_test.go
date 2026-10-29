@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -6,12 +6,12 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
 )
 
 func captureBedrockCommand(t *testing.T, model *Model, request Context, opts StreamOptions) *bedrockruntime.ConverseStreamInput {
 	t.Helper()
-	for _, name := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME"} {
+	for _, name := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME"} {
 		t.Setenv(name, t.TempDir())
 	}
 	for _, name := range []string{"AWS_PROFILE", "AWS_DEFAULT_PROFILE", "AWS_CONFIG_FILE", "AWS_SHARED_CREDENTIALS_FILE", "AWS_BEARER_TOKEN_BEDROCK", "PI_CACHE_RETENTION"} {

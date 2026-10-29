@@ -3,7 +3,7 @@
 //
 // Ports packages/env/daemon/src/main.rs
 //
-// pig divergence (D96): the daemon is this Go program, with Pi's command line and wire protocol, not Pi's Rust binary.
+// ompig divergence (D96): the daemon is this Go program, with Pi's command line and wire protocol, not Pi's Rust binary.
 package main
 
 import (
@@ -11,8 +11,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/env/daemon"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/env/daemon"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 const usage = "usage: pi-env serve --token <hex>"

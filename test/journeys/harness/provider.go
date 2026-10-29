@@ -141,7 +141,7 @@ func (r Reply) Then(next Reply) Reply {
 	return r
 }
 
-// Script maps a request to its reply. It must be a pure function of the request so that PiG and Pi receive the same answers.
+// Script maps a request to its reply. It must be a pure function of the request so that Ompig and Pi receive the same answers.
 type Script func(r *Request) Reply
 
 // EventKind labels a provider log entry.

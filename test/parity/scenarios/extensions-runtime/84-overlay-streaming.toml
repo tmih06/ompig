@@ -6,7 +6,7 @@
 # /overlay-streaming shows three non-capturing input panels and streams a line every 500 ms. Tab on the controller focuses Panel A;
 # Tab in a panel unfocuses it and focuses the next. The focused panel draws on top, so it covers the start of the controller's
 # "Current focus" row. The compared crop replaces only each stream line's wall-clock time and counter. Before the showOverlay
-# slice PiG threw "this.tui.showOverlay is not a function".
+# slice Ompig threw "this.tui.showOverlay is not a function".
 #
 # Upstream evidence (Pi 1.2.0, parity harness, 2026-10-13, 120x40 tmux, one run kept with an impossible both_contain entry):
 #   keys: "/overlay-streaming" Enter (wait "Streaming line 9..."), Tab, "q", Tab, "w"
@@ -24,7 +24,7 @@
 #       │ ○ unfocused               │ [4:33:10 AM] Streaming line 2...                         │
 #       │ > (type here)             │ [4:33:11 AM] Streaming line 4...                         │
 #                                   │ Tab = cycle focus | Esc = close all
-#   PiG's crop matched after the stream-line rule (output_normalized_equal).
+#   Ompig's crop matched after the stream-line rule (output_normalized_equal).
 
 name = "84-overlay-streaming"
 description = "Pi's /overlay-streaming: panels shown from the factory's tui take focus and keys in turn while streaming redraws the controller"
@@ -37,16 +37,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/quiet-pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/quiet-ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/quiet-pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/overlay-qa-tests.ts"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/overlay-qa-tests.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/overlay-qa-tests.ts"]
 
 [tmux]
 width = 120
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Panel A"

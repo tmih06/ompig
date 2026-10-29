@@ -11,12 +11,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 func registryTool(name, label, description, snippet string, guidelines ...string) extension.ToolDefinition {
@@ -146,7 +146,8 @@ func TestDefaultToolsInitialSelectionPort(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			session := newRegistryPortSession(t, tc.defaults, SessionOptions{}, nil, nil)
-			assertRegistryNames(t, session, []string{"bash", "edit", "find", "grep", "ls", "powershell", "read", "write"}, tc.defaults)
+			// ompig divergence (D-SUBAGENT-4): the built-in registry carries the subagent tools.
+			assertRegistryNames(t, session, []string{"agents", "bash", "edit", "find", "grep", "ls", "powershell", "read", "task", "wait", "write"}, tc.defaults)
 			assertRegistryPrompt(t, session, tc.present, tc.absent)
 			printRegistryPort(t, tc.defaults[0], session)
 		})
@@ -200,7 +201,8 @@ func TestDefaultToolsInitialSelectionPort(t *testing.T) {
 	// .upstream/v0.99.1/packages/coding-agent/test/default-tools-setting.test.ts:159
 	t.Run("applies through service-based session creation", func(t *testing.T) {
 		session := newRegistryPortSession(t, []string{"ls"}, SessionOptions{}, nil, nil)
-		assertRegistryNames(t, session, []string{"bash", "edit", "find", "grep", "ls", "powershell", "read", "write"}, []string{"ls"})
+		// ompig divergence (D-SUBAGENT-4).
+		assertRegistryNames(t, session, []string{"agents", "bash", "edit", "find", "grep", "ls", "powershell", "read", "task", "wait", "write"}, []string{"ls"})
 	})
 }
 
@@ -243,7 +245,8 @@ func TestDefaultToolsReloadPort(t *testing.T) {
 	t.Run("activates only tools newly added to defaultTools", func(t *testing.T) {
 		session := newRegistryPortSession(t, nil, SessionOptions{}, []extension.ToolDefinition{inactiveRegistryTool()}, nil)
 		bindRegistryPort(t, session)
-		if got := session.ActiveToolNames(); !slices.Equal(got, []string{"read", "bash", "edit", "write"}) {
+		// ompig divergence (D-SUBAGENT-4): the subagent tools join the default set.
+		if got := session.ActiveToolNames(); !slices.Equal(got, []string{"read", "bash", "edit", "write", "task", "wait", "agents"}) {
 			t.Fatalf("initial active = %q", got)
 		}
 		session.SetActiveToolsByName([]string{"read", "edit", "write"})
@@ -301,7 +304,7 @@ func TestDefaultToolsReloadPort(t *testing.T) {
 		bindRegistryPort(t, excluded)
 		writeRegistryPortSettings(t, excluded, map[string]any{"defaultTools": []string{"+grep", "+inactive_tool"}})
 		reloadRegistryPort(t, excluded)
-		if got, want := sortedActiveNames(excluded), []string{"bash", "edit", "inactive_tool", "read", "write"}; !slices.Equal(got, want) {
+		if got, want := sortedActiveNames(excluded), []string{"agents", "bash", "edit", "inactive_tool", "read", "task", "wait", "write"}; !slices.Equal(got, want) {
 			t.Fatalf("excluded active = %q, want %q", got, want)
 		}
 	})
@@ -392,7 +395,8 @@ func TestNoBuiltinToolsExtensionPort(t *testing.T) {
 			registerPortTool(registered, dynamicRegistryTool())
 		})
 		bindRegistryPort(t, session)
-		assertRegistryNames(t, session, []string{"bash", "dynamic_tool", "edit", "find", "grep", "ls", "powershell", "read", "write"}, []string{"dynamic_tool"})
+		// ompig divergence (D-SUBAGENT-4).
+		assertRegistryNames(t, session, []string{"agents", "bash", "dynamic_tool", "edit", "find", "grep", "ls", "powershell", "read", "task", "wait", "write"}, []string{"dynamic_tool"})
 		assertRegistryPrompt(t, session, []string{"- dynamic_tool: Run dynamic test behavior"}, []string{"- read:", "- bash:"})
 		printRegistryPort(t, "no-builtin", session)
 	})
@@ -422,7 +426,8 @@ func TestExcludeToolsExtensionPort(t *testing.T) {
 		want    []string
 	}{
 		// .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/5109-exclude-tools.test.ts:40
-		{"filters built-in and extension tools from available and active tools", nil, []string{"bash", "dynamic_tool", "edit", "write"}},
+		// ompig divergence (D-SUBAGENT-4): the subagent tools are active by default too.
+		{"filters built-in and extension tools from available and active tools", nil, []string{"agents", "bash", "dynamic_tool", "edit", "task", "wait", "write"}},
 		// .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/5109-exclude-tools.test.ts:62
 		{"lets excluded tools override the allowlist", map[string]struct{}{"read": {}, "bash": {}, "ask_question": {}}, []string{"bash"}},
 	} {

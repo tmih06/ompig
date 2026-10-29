@@ -13,11 +13,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type contextEditStep struct {
@@ -100,7 +100,7 @@ func contextPrograms() [][]contextStep {
 	return programs
 }
 
-// dropEmptyToolLists removes the empty toolsAdded and toolsRemoved arrays Pi keeps on a system message: ai.SystemMessage cannot tell a present empty list from an absent one, so Pig writes neither.
+// dropEmptyToolLists removes the empty toolsAdded and toolsRemoved arrays Pi keeps on a system message: ai.SystemMessage cannot tell a present empty list from an absent one, so Ompig writes neither.
 func dropEmptyToolLists(value any) any {
 	switch v := value.(type) {
 	case map[string]any:
@@ -279,7 +279,7 @@ func TestContextDerivationMatchesPi(t *testing.T) {
 				if differing <= 5 {
 					gotJSON, _ := json.Marshal(got)
 					progJSON, _ := json.Marshal(program[:j+1])
-					t.Errorf("program %d step %d (%s %s)\n  program %.1500s\n  Pi  %.800s err %v\n  Pig %.800s err %v", i, j, step.Op, step.Mode, progJSON, want.View, ptrOutputText(want.Err), gotJSON, gotErr)
+					t.Errorf("program %d step %d (%s %s)\n  program %.1500s\n  Pi  %.800s err %v\n  Ompig %.800s err %v", i, j, step.Op, step.Mode, progJSON, want.View, ptrOutputText(want.Err), gotJSON, gotErr)
 				}
 			}
 		}

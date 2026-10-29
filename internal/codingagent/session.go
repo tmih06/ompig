@@ -15,12 +15,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // CurrentSessionVersion mirrors upstream `CURRENT_SESSION_VERSION = 3`.
@@ -545,7 +545,7 @@ func writeSessionFile(path string, lines [][]byte, mode int) error {
 }
 
 // sessionWriteBuffer is the largest buffer a whole session file is written through.
-// pig additive (D112): Pi writes the whole file with one writeFileSync; the buffer size changes how many writes carry the same bytes, never the bytes.
+// ompig additive (D112): Pi writes the whole file with one writeFileSync; the buffer size changes how many writes carry the same bytes, never the bytes.
 const sessionWriteBuffer = 64 << 10
 
 // sessionWriteBufferFor is the buffer size for writing lines: their bytes and newlines, at most sessionWriteBuffer, so a file that fits

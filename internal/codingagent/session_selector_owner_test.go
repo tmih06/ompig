@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Both real owner loops must process input, progress, and completion independently. Inspection is itself marshalled to that loop; no worker reads or mutates UI state.

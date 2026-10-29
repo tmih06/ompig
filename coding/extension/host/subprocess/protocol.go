@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
-// pig additive (D19): autocomplete callback handles stay on their owner connection. ui.addAutocompleteProvider names a factoryId; autocomplete.sync wraps it around current or invokes apply/trigger, while autocomplete.suggest awaits getSuggestions. Captured references use ui.autocomplete.invoke and one-way release notifications. Columns are UTF-16. Parent cancellation owns handler calls; queryId also cancels editor-owned calls without a parent.
+// ompig additive (D19): autocomplete callback handles stay on their owner connection. ui.addAutocompleteProvider names a factoryId; autocomplete.sync wraps it around current or invokes apply/trigger, while autocomplete.suggest awaits getSuggestions. Captured references use ui.autocomplete.invoke and one-way release notifications. Columns are UTF-16. Parent cancellation owns handler calls; queryId also cancels editor-owned calls without a parent.
 type autocompleteDescriptor struct {
 	ID                string   `json:"id"`
 	LocalID           string   `json:"localId,omitempty"`
@@ -43,7 +43,7 @@ type autocompleteInvocation struct {
 const MaxFrameSize = 128 * 1024 * 1024
 
 // legacyFrameSize is the historical extension IPC frame cap, in force before
-// MaxFrameSize was raised to 128 MB. A subprocess binary built against a pig
+// MaxFrameSize was raised to 128 MB. A subprocess binary built against a ompig
 // SDK from before that change rejects any frame larger than this, so a host
 // that has advanced its cap can silently kill such a binary by sending a
 // bigger frame (notably a large getBranch call_result). The host uses this
@@ -74,7 +74,7 @@ const (
 // Envelope is the top-level wire message. Every message on the socket is an
 // Envelope serialized as length-prefixed JSON. The Type field determines which
 // payload fields are populated.
-// pig additive (D19): Pig's language SDKs use this one current subprocess
+// ompig additive (D19): Ompig's language SDKs use this one current subprocess
 // wire because upstream Pi loads only in-process TypeScript extensions.
 type Envelope struct {
 	Type string `json:"type"`
@@ -216,9 +216,9 @@ type ToolDecl struct {
 	PreparesArguments bool `json:"prepares_arguments,omitempty"`
 	// Refinements lists the schema nodes of Parameters that carry TypeBox refinements (Type.Refine), which the extension runs: the host asks with RequestRefineArguments while it
 	// validates the arguments, in the order TypeBox calls them.
-	//portlint:allow emptydrop PiG wire field read by the host as a list: an empty list and an absent one both mean the tool has no refinement
+	//portlint:allow emptydrop Ompig wire field read by the host as a list: an empty list and an absent one both mean the tool has no refinement
 	Refinements []RefinementDecl `json:"refinements,omitempty"`
-	Source      string           `json:"source,omitempty"` // pig additive (D23): per-tool source override; default: extension name
+	Source      string           `json:"source,omitempty"` // ompig additive (D23): per-tool source override; default: extension name
 	// RenderShell is upstream ToolDefinition.renderShell: "self" when the
 	// tool's renderers draw their own framing, else empty for "default".
 	RenderShell string `json:"render_shell,omitempty"`
@@ -496,7 +496,7 @@ type ReadyPayload struct {
 	Mode   string            `json:"mode,omitempty"`   // Run mode: tui|rpc|json|print (ctx.mode)
 	Width  int               `json:"width"`            // Terminal width
 	Height int               `json:"height,omitempty"` // Terminal height (0 if unavailable)
-	Models []json.RawMessage `json:"models,omitempty"` //portlint:allow emptydrop PiG-only ready member (the complete registry snapshot for a runtime that declared WantsModelRegistry); absent and [] both give the Node runtime an empty catalog (runtime.mjs replaceModels → catalogOf)
+	Models []json.RawMessage `json:"models,omitempty"` //portlint:allow emptydrop Ompig-only ready member (the complete registry snapshot for a runtime that declared WantsModelRegistry); absent and [] both give the Node runtime an empty catalog (runtime.mjs replaceModels → catalogOf)
 	Theme  json.RawMessage   `json:"theme,omitempty"`  // Current theme data
 	State  *StatePayload     `json:"state,omitempty"`  // Initial extension-host state snapshot
 	// SourceInfo is the provenance the loader stamped on this extension (path, source, scope, origin, baseDir): upstream's extension.sourceInfo, which ExtensionRunner.getExtensionPaths reads. Absent when the host holds none.
@@ -651,7 +651,7 @@ type EventStream struct {
 	Base  uint64          `json:"base,omitempty"`
 	Ops   json.RawMessage `json:"ops,omitempty"`
 	Key   string          `json:"key,omitempty"`
-	Evict []string        `json:"evict,omitempty"` //portlint:allow emptydrop a PiG-only frame field (D112 bounded cache); Pi has no such frame
+	Evict []string        `json:"evict,omitempty"` //portlint:allow emptydrop a Ompig-only frame field (D112 bounded cache); Pi has no such frame
 }
 
 // RequestWithSession (host→ext) runs the withSession callback that a newSession, fork or switchSession call registered under WithSessionArgs.Handle. The call's args name that handle in their withSession field. The host sends it after the replacement Session is bound and before the call returns, as Pi's finishSessionReplacement awaits withSession (agent-session-runtime.ts:187-194). Host calls whose parent is this request act on the replacement Session; the response settles the callback, and its error rejects the call.
@@ -740,16 +740,16 @@ type BoundaryEventResultPayload struct {
 
 // BeforeAgentStartResponsePayload carries per-run mutations even when a handler fails. SelectedTools retains the untyped value until the handler chain ends: non-string entries cannot name registered tools, and null rejects prompt admission. Options is the handler's whole options object; the host applies every field except sections and selectedTools from it. Result carries the handler's ordinary message/systemPrompt result.
 type BeforeAgentStartResponsePayload struct {
-	Sections      ai.OrderedSections `json:"_pigPromptSections"`
-	SelectedTools json.RawMessage    `json:"_pigPromptSelectedTools"`
-	Options       json.RawMessage    `json:"_pigPromptOptions"`
-	Result        json.RawMessage    `json:"_pigPromptResult"`
+	Sections      ai.OrderedSections `json:"_ompigPromptSections"`
+	SelectedTools json.RawMessage    `json:"_ompigPromptSelectedTools"`
+	Options       json.RawMessage    `json:"_ompigPromptOptions"`
+	Result        json.RawMessage    `json:"_ompigPromptResult"`
 }
 
 // ToolCallResponsePayload is the result of a tool_call handler. Input is the event's input when the handler left it different from the one it received; an omitted Input means the handler made no edit. Result is the handler's ordinary block result. Any other member is an error: a reply in another shape would otherwise decode as no result and lose a block.
 type ToolCallResponsePayload struct {
-	Input  json.RawMessage `json:"_pigToolCallInput"`
-	Result json.RawMessage `json:"_pigToolCallResult"`
+	Input  json.RawMessage `json:"_ompigToolCallInput"`
+	Result json.RawMessage `json:"_ompigToolCallResult"`
 }
 
 func (p *ToolCallResponsePayload) UnmarshalJSON(data []byte) error {
@@ -765,7 +765,7 @@ func (p *ToolCallResponsePayload) UnmarshalJSON(data []byte) error {
 }
 
 // ResponsePayload is the extension's reply to a request. For tool_call, Result carries a [ToolCallResponsePayload]. For agent_before_settle and turn_end,
-// Result carries {_pigBoundaryEntries, _pigBoundaryResult}: the mutated input
+// Result carries {_ompigBoundaryEntries, _ompigBoundaryResult}: the mutated input
 // draft list and the explicit handler result. Mutations also accompany Error;
 // the host applies them before surfacing the error and ignores the explicit result.
 type ResponsePayload struct {
@@ -861,11 +861,11 @@ type ToolUpdatePayload struct {
 // close/error are exactly-once barriers that delimit one key generation.
 const (
 	CallUICustom = "ui.custom"
-	// pig additive (D60): typed native login crosses the subprocess boundary.
+	// ompig additive (D60): typed native login crosses the subprocess boundary.
 	CallUISetLogin = "ui.setLogin"
 	// CallUIBell rings the terminal bell of the interactive terminal; it does nothing without one.
 	CallUIBell = "ui.bell"
-	// pig divergence (D2): an extension's sprite joins /sprite.
+	// ompig divergence (D2): an extension's sprite joins /sprite.
 	CallUIRegisterSprite = "ui.registerSprite"
 	NotifyUICustomInput  = "ui.custom.input"
 	NotifyUICustomRender = "ui.custom.render"
@@ -965,7 +965,7 @@ type RemoteOverlayRenderPayload struct {
 	Mouse bool `json:"mouse,omitempty"`
 }
 
-// pig additive (D107): the extension component kit. A view describes an
+// ompig additive (D107): the extension component kit. A view describes an
 // extension surface as Pi's tui components. With lines absent it is
 // authoritative: the host renders it with its tui ports. With lines present
 // (Node) it annotates them and survives only when rendering it reproduces
@@ -1038,14 +1038,14 @@ type ViewPayload struct {
 	Focus string `json:"focus,omitempty"`
 	// Theme overrides theme tokens for this surface only: token name to
 	// "#rrggbb".
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty theme mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty theme mean the same: none
 	Theme map[string]string `json:"theme,omitempty"`
 	// Width is the cells the sender laid the frame's lines out at; required
 	// when the frame also carries lines.
 	Width int `json:"width,omitempty"`
 	// Images carries image bytes the first time a frame on the connection
 	// references them.
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty image list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty image list mean the same: none
 	Images []ViewImageData `json:"images,omitempty"`
 }
 
@@ -1056,7 +1056,7 @@ type ViewNode struct {
 	// ID names the node; required and unique for select-list and
 	// settings-list.
 	ID string `json:"id,omitempty"`
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty child list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty child list mean the same: none
 	Children []ViewNode `json:"children,omitempty"`
 	// Stack holds the StackEntry options of a child of hstack or vstack.
 	Stack *ViewStackEntry `json:"stack,omitempty"`
@@ -1073,7 +1073,7 @@ type ViewNode struct {
 	RenderLatex      *bool          `json:"renderLatex,omitempty"`
 	// Lines is a spacer's line count.
 	Lines *int `json:"lines,omitempty"`
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty item list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty item list mean the same: none
 	Items         []ViewItem        `json:"items,omitempty"`
 	MaxVisible    *int              `json:"maxVisible,omitempty"`
 	Layout        *ViewSelectLayout `json:"layout,omitempty"`
@@ -1103,7 +1103,7 @@ type ViewNode struct {
 	Gap   *int   `json:"gap,omitempty"`
 	Align string `json:"align,omitempty"`
 	// Content is a lines node's rows, drawn verbatim.
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty row list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty row list mean the same: none
 	Content []string `json:"content,omitempty"`
 	// Image, Progress and List are frontend-only annotations of a lines
 	// node: the rows depict that image, show a position in a range, or are
@@ -1281,7 +1281,7 @@ type ViewItem struct {
 	Label        string `json:"label,omitempty"`
 	Description  string `json:"description,omitempty"`
 	CurrentValue string `json:"currentValue,omitempty"`
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty value list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty value list mean the same: none
 	Values  []string  `json:"values,omitempty"`
 	Submenu *ViewNode `json:"submenu,omitempty"`
 }
@@ -1332,7 +1332,7 @@ type ViewList struct {
 type ViewListItem struct {
 	Label  string `json:"label"`
 	Detail string `json:"detail,omitempty"`
-	//portlint:allow emptydrop the D107 view wire is PiG-owned with no Pi counterpart, and an absent and an empty column list mean the same: none
+	//portlint:allow emptydrop the D107 view wire is Ompig-owned with no Pi counterpart, and an absent and an empty column list mean the same: none
 	Columns []string `json:"columns,omitempty"`
 }
 
@@ -1446,7 +1446,7 @@ type ToolResult struct {
 	// Terminate mirrors upstream AgentToolResult.terminate: the agent stops
 	// after the current tool batch when every result in it sets terminate.
 	Terminate bool `json:"terminate,omitempty"`
-	// pig additive (D160): the collapsed-view preview of a subprocess extension's tool result.
+	// ompig additive (D160): the collapsed-view preview of a subprocess extension's tool result.
 	// Preview is an optional short summary shown when the tool result
 	// is collapsed in the TUI. Extensions set this to provide a custom
 	// collapsed view instead of the default tail-of-output preview.
@@ -1669,7 +1669,7 @@ type RenderToolContext struct {
 	DurationMs *int64 `json:"durationMs,omitempty"`
 }
 
-// pig additive (D19): a user_bash handler's `{ operations }` result carries functions that cannot cross the socket. The extension keeps the BashOperations object and the reply names it: `{"operations": {"handle": "<id>"}}`. The host wraps the handle in an extension.BashOperations whose Exec sends RequestUserBashExec to the owner connection, as Pi's runner holds the extension's own object (runner.ts isUserBashEventResult, types.ts UserBashEventResult).
+// ompig additive (D19): a user_bash handler's `{ operations }` result carries functions that cannot cross the socket. The extension keeps the BashOperations object and the reply names it: `{"operations": {"handle": "<id>"}}`. The host wraps the handle in an extension.BashOperations whose Exec sends RequestUserBashExec to the owner connection, as Pi's runner holds the extension's own object (runner.ts isUserBashEventResult, types.ts UserBashEventResult).
 
 // RequestUserBashExec (host→ext) runs `operations.exec(command, cwd, { onData, signal, timeout, env })` of the object RequestPayload.Tool names. The extension streams each onData chunk as a NotifyToolUpdate whose result is a UserBashExecData, in order and before the response, and answers with a UserBashExecResult. The request's cancellation is the exec's signal. An error response is the exec's rejection.
 const RequestUserBashExec = "user_bash_exec"

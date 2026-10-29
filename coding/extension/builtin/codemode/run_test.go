@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	sandbox "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	sandbox "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream execute.ts searchTools(): a limit is any positive integer and the ranker slices with it

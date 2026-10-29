@@ -7,8 +7,8 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/tui"
 )
 
 // exitOnRenderOverflow reports a main-screen differential-render overflow
@@ -38,7 +38,7 @@ func reportRenderOverflow(value any, stack []byte, stderr io.Writer) bool {
 }
 
 // exitOnConfigRootFailure reports a config root that cannot be resolved (configroot.Dir panics when no home directory exists and no override is
-// set) as `pig: <error>` with exit status 1. Any other panic continues.
+// set) as `ompig: <error>` with exit status 1. Any other panic continues.
 func exitOnConfigRootFailure() {
 	value := recover()
 	if value == nil {
@@ -46,7 +46,7 @@ func exitOnConfigRootFailure() {
 	}
 	var unresolved *configroot.UnresolvedError
 	if err, ok := value.(error); ok && errors.As(err, &unresolved) {
-		_, _ = fmt.Fprintf(os.Stderr, "pig: %v\n", unresolved)
+		_, _ = fmt.Fprintf(os.Stderr, "ompig: %v\n", unresolved)
 		exitProcess(1)
 		return
 	}

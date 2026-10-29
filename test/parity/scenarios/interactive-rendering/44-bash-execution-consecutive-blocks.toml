@@ -18,7 +18,7 @@
 #
 # bash-execution.ts constructor adds a spacer, the top border, the content
 # and the bottom border; the block draws nothing after its bottom border.
-# PiG added a trailing Spacer(1), so two blank rows separated consecutive
+# Ompig added a trailing Spacer(1), so two blank rows separated consecutive
 # blocks; this scenario failed on that row before the fix.
 name = "44-bash-execution-consecutive-blocks"
 description = "Two consecutive `!cmd` blocks are separated by exactly the second block's leading spacer row."
@@ -30,16 +30,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/bash-wrap-cwd"

@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/test/suite/regressions/copilot-request-size-overflow.test.ts (Pi 73f8de80): a real HTTP 413 from the

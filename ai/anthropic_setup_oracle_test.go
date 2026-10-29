@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type anthropicSetupProbe struct {
@@ -28,7 +28,7 @@ type anthropicSetupProbe struct {
 // anthropicMessagesApi (anthropic-messages.lazy.ts, lazy.ts lazyApi): the returned stream exists at once and a request that fails while it is
 // set up ends it with the setup error message (anthropic-messages.ts:316-326, 611-613, 933-935: "No API key for provider: <provider>" unless the
 // options carry an API key or a non-blank authorization, x-api-key or cf-aig-authorization header, matched case-insensitively). The pinned pi-ai
-// and PiG give each request the same events, stop reason, error text, identity fields, content and usage, for stream and streamSimple.
+// and Ompig give each request the same events, stop reason, error text, identity fields, content and usage, for stream and streamSimple.
 func TestAnthropicMessagesAPISetupMatchesPi(t *testing.T) {
 	headerSets := []map[string]*string{
 		nil, {}, {"authorization": new("Bearer x")}, {"Authorization": new("  ")}, {"AUTHORIZATION": new("Bearer x")}, {"x-api-key": new("k")}, {"X-Api-Key": new("")},
@@ -111,7 +111,7 @@ func TestAnthropicMessagesAPISetupMatchesPi(t *testing.T) {
 			len(got.Content) != len(want[i].Content) || !reflect.DeepEqual(events, want[i].Events) {
 			if failures++; failures <= 10 {
 				label, _ := json.Marshal(probe)
-				t.Errorf("probe %s:\n PiG %v stop=%q error=%q %s/%s/%s content=%d\n Pi  %v stop=%q error=%q %s/%s/%s content=%d", label, events, got.StopReason, got.ErrorMessage, got.API, got.Provider, got.Model, len(got.Content),
+				t.Errorf("probe %s:\n Ompig %v stop=%q error=%q %s/%s/%s content=%d\n Pi  %v stop=%q error=%q %s/%s/%s content=%d", label, events, got.StopReason, got.ErrorMessage, got.API, got.Provider, got.Model, len(got.Content),
 					want[i].Events, want[i].StopReason, wantMessage, want[i].API, want[i].Provider, want[i].Model, len(want[i].Content))
 			}
 		}

@@ -3,9 +3,9 @@
 package endpoints
 
 import (
-	endpoints "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/endpoints/v2"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/smithy-go/logging"
+	endpoints "github.com/tmih06/ompig/third_party/awssdk/internal/endpoints/v2"
 )
 
 // Options is the endpoint resolver configuration options

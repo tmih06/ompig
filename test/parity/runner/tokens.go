@@ -9,13 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Hermetic per-run substitution tokens.
 //
 // Background. The original scenario isolation strategy used literal
-// `/tmp/pig-parity-<NN>-sessions` paths in CLI args and `pre_clear_paths`.
+// `/tmp/ompig-parity-<NN>-sessions` paths in CLI args and `pre_clear_paths`.
 // That had four failure modes observed in production runs:
 //
 //  1. Two concurrent runs of the same scenario (durability 3x, two
@@ -25,16 +25,16 @@ import (
 //     second run starts during the first run's tail, the second wipes
 //     the first's live session-dir.
 //  3. Scenarios that used a *relative* `--session-dir sessions` inside
-//     a snapshotted CWD shared that subdir between the pig and pi
+//     a snapshotted CWD shared that subdir between the ompig and pi
 //     invocations within a single run, leaking state cross-side.
 //  4. Snapshot machinery (snapshotEnvDirs) only covered env vars, not
-//     CLI args. Hard-coded paths in `pig_args` / `pi_args` bypassed
+//     CLI args. Hard-coded paths in `ompig_args` / `pi_args` bypassed
 //     all isolation.
 //
 // Fix. Scenarios declare their writable paths using these substitution
 // tokens. The runner expands every token to a fresh per-binary, per-run
 // `t.TempDir()` path before launching the binary, in CLI args, env
-// values, and CWD. Tokens are NEVER shared between pig and pi. The
+// values, and CWD. Tokens are NEVER shared between ompig and pi. The
 // tempdirs auto-clean via t.Cleanup.
 //
 // Token reference:

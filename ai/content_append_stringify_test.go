@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // appendStringifyTexts are strings whose JSON.stringify form differs from encoding/json's: HTML characters, the line and paragraph

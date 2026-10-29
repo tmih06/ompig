@@ -4,7 +4,7 @@
 # Pi's _buildBoundaryContext (agent-session.ts:999-1022) returns projection.entries, whose sourceEntry is the
 # session's own entry object (session-manager.ts:543-571 buildSessionProjection), so a handler sees the members
 # in the order the session wrote them: type, id, parentId, timestamp, then the entry's own members.
-# PiG decoded each record into a Go map for the preview, and a subprocess handler received the members sorted
+# Ompig decoded each record into a Go map for the preview, and a subprocess handler received the members sorted
 # (id, message, parentId, timestamp, type; message content, role, timestamp).
 #
 # Upstream evidence (2026-10-11, Pi 1.1.0):
@@ -14,7 +14,7 @@
 #   output: "42", exit 0
 #   /tmp/order.log, first turn_end: "type,id,parentId,timestamp,provider,modelId | ",
 #     "type,id,parentId,timestamp,thinkingLevel | ", "type,id,parentId,timestamp,message | role,content,sections,timestamp,toolsAdded", ...
-# PiG at 9d4f88bc2a logged "id,modelId,parentId,provider,timestamp,type | ", "id,parentId,thinkingLevel,timestamp,type | ", ...
+# Ompig at 9d4f88bc2a logged "id,modelId,parentId,provider,timestamp,type | ", "id,parentId,thinkingLevel,timestamp,type | ", ...
 # The extension leaves out members whose value is undefined (Pi's tool result message has details and usage
 # members set to undefined), which no JSON event can carry.
 
@@ -27,9 +27,9 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "BOUNDARY_ORDER_LOG={{TEMP}}/boundary-order.log"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "BOUNDARY_ORDER_LOG={{TEMP}}/boundary-order.log"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "BOUNDARY_ORDER_LOG={{TEMP}}/boundary-order.log"]
-pig_extensions = ["testdata/ext/boundary-source-order.mjs"]
+ompig_extensions = ["testdata/ext/boundary-source-order.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/boundary-source-order.mjs",

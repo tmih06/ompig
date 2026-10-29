@@ -6,8 +6,8 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // pi: packages/durable/src/storage/scan.ts scanStart, storage/memory.ts, storage/sqlite/storage.ts (42a3497d and later): a read the caller's request got

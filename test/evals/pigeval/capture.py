@@ -55,7 +55,7 @@ def run(args):
     work = tempfile.mkdtemp(prefix="pigeval-requests-")
     with MockServer() as server:
         for h in harnesses:
-            binary = registry.resolve(h, args.pig)
+            binary = registry.resolve(h, args.ompig)
             if binary is None or not h.mock:
                 print(f"requests: {h.id:9} skipped ({'not installed' if binary is None else 'no custom endpoint'})")
                 continue

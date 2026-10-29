@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // SessionManager.open starts an empty session file in `cwdOverride ?? header cwd ?? process.cwd()` (session-manager.ts:1782), and

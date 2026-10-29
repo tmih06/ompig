@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // hostActionCommands maps each fixture command to the host action every SDK must produce for it. Every SDK fixture registers these

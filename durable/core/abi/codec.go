@@ -681,13 +681,13 @@ func F64Payload(v float64) []byte {
 	return binary.LittleEndian.AppendUint64(nil, math.Float64bits(v))
 }
 
-// AppendReadRequest appends the request of the pig.read import (ABI section 4.2): u16 sqlId, u8 nParams, value*.
+// AppendReadRequest appends the request of the ompig.read import (ABI section 4.2): u16 sqlId, u8 nParams, value*.
 func AppendReadRequest(dst []byte, sql uint16, params []Value) []byte {
 	dst = binary.LittleEndian.AppendUint16(dst, sql)
 	return appendParams(dst, params)
 }
 
-// DecodeReadRequest parses a pig.read request.
+// DecodeReadRequest parses a ompig.read request.
 func DecodeReadRequest(b []byte) (uint16, []Value, error) {
 	r := &reader{b: b}
 	sql := r.u16()
@@ -701,7 +701,7 @@ func DecodeReadRequest(b []byte) (uint16, []Value, error) {
 	return sql, params, nil
 }
 
-// AppendAnswer appends the answer of the pig.read import: u32 nRows, u8 nCols, value{nRows*nCols}.
+// AppendAnswer appends the answer of the ompig.read import: u32 nRows, u8 nCols, value{nRows*nCols}.
 func AppendAnswer(dst []byte, cols uint8, rows [][]Value) []byte {
 	dst = binary.LittleEndian.AppendUint32(dst, uint32(len(rows)))
 	dst = append(dst, cols)
@@ -713,7 +713,7 @@ func AppendAnswer(dst []byte, cols uint8, rows [][]Value) []byte {
 	return dst
 }
 
-// DecodeAnswer parses a pig.read answer. Text and blob values are copies, as DecodeRows makes them: the binding reuses b.
+// DecodeAnswer parses a ompig.read answer. Text and blob values are copies, as DecodeRows makes them: the binding reuses b.
 func DecodeAnswer(b []byte) ([][]Value, error) {
 	var chunk []byte
 	r := &reader{b: b}

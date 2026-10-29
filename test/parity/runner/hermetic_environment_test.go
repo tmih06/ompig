@@ -13,10 +13,10 @@ import (
 )
 
 func TestTmuxEnvPrefixDropsAmbientAgentHomes(t *testing.T) {
-	for _, key := range []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME"} {
+	for _, key := range []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME"} {
 		t.Setenv(key, "operator-state")
 	}
-	command := exec.Command("sh", "-c", tmuxEnvPrefix("")+`printf '%s|%s|%s|%s' "${PIG_CODING_AGENT_DIR-unset}" "${PI_CODING_AGENT_DIR-unset}" "${PIG_HOME-unset}" "${PI_HOME-unset}"`)
+	command := exec.Command("sh", "-c", tmuxEnvPrefix("")+`printf '%s|%s|%s|%s' "${OMPIG_CODING_AGENT_DIR-unset}" "${PI_CODING_AGENT_DIR-unset}" "${OMPIG_HOME-unset}" "${PI_HOME-unset}"`)
 	out, err := command.CombinedOutput()
 	if err != nil || string(out) != "unset|unset|unset|unset" {
 		t.Fatalf("terminal base environment = %q, error = %v", out, err)
@@ -24,10 +24,10 @@ func TestTmuxEnvPrefixDropsAmbientAgentHomes(t *testing.T) {
 }
 
 func TestHeadlessHomeOverridesKeepExplicitFixtureHomes(t *testing.T) {
-	t.Setenv("PIG_CODING_AGENT_DIR", "operator-state")
-	command := exec.Command("sh", "-c", `printf '%s|%s|%s' "${PIG_CODING_AGENT_DIR:-unset}" "$PIG_HOME" "$PI_CODING_AGENT_DIR"`)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", "operator-state")
+	command := exec.Command("sh", "-c", `printf '%s|%s|%s' "${OMPIG_CODING_AGENT_DIR:-unset}" "$OMPIG_HOME" "$PI_CODING_AGENT_DIR"`)
 	command.Env = append(os.Environ(), clearedAgentHomeEnv()...)
-	command.Env = append(command.Env, "PIG_HOME=fixture-home", "PI_CODING_AGENT_DIR=fixture-agent")
+	command.Env = append(command.Env, "OMPIG_HOME=fixture-home", "PI_CODING_AGENT_DIR=fixture-agent")
 	out, err := command.CombinedOutput()
 	if err != nil || string(out) != "unset|fixture-home|fixture-agent" {
 		t.Fatalf("headless environment = %q, error = %v", out, err)
@@ -37,7 +37,7 @@ func TestHeadlessHomeOverridesKeepExplicitFixtureHomes(t *testing.T) {
 // Worker-level config overrides must not outrank a scenario's snapshotted home.
 // Scenario overrides are appended explicitly by every driver after this base.
 func TestHermeticEnvironDropsAmbientAgentHomes(t *testing.T) {
-	keys := []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME"}
+	keys := []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME"}
 	for _, key := range keys {
 		t.Setenv(key, "operator-state-must-not-be-read")
 	}
@@ -67,7 +67,7 @@ var literalHostSignalKeys = strings.Fields("WT_SESSION WSL_DISTRO_NAME WSL_INTER
 	"KITTY_WINDOW_ID GHOSTTY_RESOURCES_DIR ITERM_SESSION_ID WEZTERM_PANE WARP_SESSION_ID WARP_TERMINAL_SESSION_UUID TERMINAL_EMULATOR TERMUX_VERSION MOSH_CONNECTION COLORFGBG " +
 	"HERDR_ENV HERDR_KITTY_GRAPHICS HERDR_PANE_ID HERDR_SOCKET_PATH HERDR_TAB_ID HERDR_WORKSPACE_ID ZELLIJ STY FORCE_COLOR TF_BUILD AGENT_NAME CI TEAMCITY_VERSION")
 
-// literalPresenceKeys are presence-tested by Pi and PiG and must never be assigned empty.
+// literalPresenceKeys are presence-tested by Pi and Ompig and must never be assigned empty.
 var literalPresenceKeys = strings.Fields("ZELLIJ STY FORCE_COLOR TF_BUILD AGENT_NAME CI TEAMCITY_VERSION")
 
 func TestHermeticEnvironDropsAmbientHostTerminalSignals(t *testing.T) {
@@ -89,7 +89,7 @@ func TestHermeticEnvironFromFoldsWindowsKeyCase(t *testing.T) {
 	for _, key := range literalHostSignalKeys {
 		environ = append(environ, strings.ToUpper(key[:1])+strings.ToLower(key[1:])+"=host-value")
 	}
-	environ = append(environ, "Https_Proxy=proxy", "Pig_Home=operator-state", "Colorterm=24bit", "Harness_Unrelated=kept")
+	environ = append(environ, "Https_Proxy=proxy", "Ompig_Home=operator-state", "Colorterm=24bit", "Harness_Unrelated=kept")
 
 	got := hermeticEnvironFrom(environ, true)
 	want := []string{"Colorterm=truecolor", "Harness_Unrelated=kept"}
@@ -238,10 +238,10 @@ func TestHTDriverRunLaunchesThroughResolvedEnv(t *testing.T) {
 	cwd := t.TempDir()
 	scenario := &Scenario{
 		Name: "ht-launch-wiring", SourcePath: filepath.Join(cwd, "scenario.toml"),
-		Env:  EnvOverrides{Pig: []string{"FORCE_COLOR=3", "WT_SESSION=scenario-value"}},
+		Env:  EnvOverrides{Ompig: []string{"FORCE_COLOR=3", "WT_SESSION=scenario-value"}},
 		Tmux: TmuxDriverConfig{CWD: cwd},
 	}
-	bin := BinaryRef{Label: "pig", Path: "/abs/pig", Args: []string{"--flag"}}
+	bin := BinaryRef{Label: "ompig", Path: "/abs/ompig", Args: []string{"--flag"}}
 	// The fake ht echoes its arguments, which are not the session JSON, so Run reports them.
 	result := (htDriver{}).Run(t.Context(), t, bin, scenario)
 	const prefix = "ht run: unexpected output: "
@@ -260,7 +260,7 @@ func TestHTDriverRunLaunchesThroughResolvedEnv(t *testing.T) {
 		}
 	}
 	// FORCE_COLOR is assigned by the scenario, so env keeps it; every other presence key goes.
-	const want = "-u TMUX -u TMUX_PANE -u ZELLIJ -u STY -u TF_BUILD -u AGENT_NAME -u CI -u TEAMCITY_VERSION /abs/pig --flag"
+	const want = "-u TMUX -u TMUX_PANE -u ZELLIJ -u STY -u TF_BUILD -u AGENT_NAME -u CI -u TEAMCITY_VERSION /abs/ompig --flag"
 	if child != want || !strings.Contains(htFlags, " --cwd ") {
 		t.Errorf("child command after %s = %q, want %q after ht's --cwd", envPath, child, want)
 	}

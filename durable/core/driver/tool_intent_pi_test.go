@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // tool.ts:84-90: before executing, the tool task records the intent `{phase: "execute", arguments: final, replay: tool.replay ?? "unsafe"}`,

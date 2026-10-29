@@ -16,14 +16,14 @@
 #     <extractor-dir> <out-source> <out-published> <out-cli>
 #
 # Env:
-#   PIG_INTERFACE_EXTRACT_CACHE=0   force a fresh extraction, bypassing the
+#   OMPIG_INTERFACE_EXTRACT_CACHE=0   force a fresh extraction, bypassing the
 #                                    cache entirely (still writes the outputs
 #                                    the caller asked for).
-#   PIG_CACHE_HOME                  cache root (default: $HOME/.cache); the
+#   OMPIG_CACHE_HOME                  cache root (default: $HOME/.cache); the
 #                                    extracted inventories are stored under
-#                                    $PIG_CACHE_HOME/pig-interface-extract/<key>/.
-#   PIG_TMP                         scratch dir for temp files (default: /tmp).
-#   PIG_INTERFACE_EXTRACT_INCREMENTAL=1
+#                                    $OMPIG_CACHE_HOME/ompig-interface-extract/<key>/.
+#   OMPIG_TMP                         scratch dir for temp files (default: /tmp).
+#   OMPIG_INTERFACE_EXTRACT_INCREMENTAL=1
 #                                    extract per package in parallel (src/extract-incremental.mjs)
 #                                    and reuse every package whose own sources, reachable workspace
 #                                    packages, published trees, third-party closure and extractor
@@ -48,9 +48,9 @@ OUT_SOURCE=$5
 OUT_PUBLISHED=$6
 OUT_CLI=$7
 
-PIG_TMP=${PIG_TMP:-/tmp}
-PIG_CACHE_HOME=${PIG_CACHE_HOME:-$HOME/.cache}
-CACHE_ROOT="$PIG_CACHE_HOME/pig-interface-extract"
+OMPIG_TMP=${OMPIG_TMP:-/tmp}
+OMPIG_CACHE_HOME=${OMPIG_CACHE_HOME:-$HOME/.cache}
+CACHE_ROOT="$OMPIG_CACHE_HOME/ompig-interface-extract"
 mkdir -p "$CACHE_ROOT"
 
 # The extraction command itself: pinning these strings in the key means a
@@ -75,9 +75,9 @@ hash_file() {
   shasum -a 256 < "$1" | awk '{print $1}'
 }
 
-if [ "${PIG_INTERFACE_EXTRACT_INCREMENTAL:-0}" = "1" ]; then
+if [ "${OMPIG_INTERFACE_EXTRACT_INCREMENTAL:-0}" = "1" ]; then
   cache_args=()
-  if [ "${PIG_INTERFACE_EXTRACT_CACHE:-1}" != "0" ]; then
+  if [ "${OMPIG_INTERFACE_EXTRACT_CACHE:-1}" != "0" ]; then
     cache_args=(--cache-dir "$CACHE_ROOT/packages")
   fi
   ( cd "$EXTRACTOR_DIR" && \
@@ -86,7 +86,7 @@ if [ "${PIG_INTERFACE_EXTRACT_INCREMENTAL:-0}" = "1" ]; then
       --published-root "$PUBLISHED_ROOT" \
       --upstream-version "$UPSTREAM_VERSION" \
       "${cache_args[@]}" \
-      --jobs "${PIG_INTERFACE_EXTRACT_JOBS:-8}" \
+      --jobs "${OMPIG_INTERFACE_EXTRACT_JOBS:-8}" \
       --source-out "$OUT_SOURCE" \
       --published-out "$OUT_PUBLISHED" && \
     node src/extract-cli.mjs \
@@ -128,14 +128,14 @@ run_extraction() {
       --out "$dest/cli.json" )
 }
 
-if [ "${PIG_INTERFACE_EXTRACT_CACHE:-1}" = "0" ]; then
-  tmp=$(mktemp -d "$PIG_TMP/pig-interface-extract.XXXXXXXX")
+if [ "${OMPIG_INTERFACE_EXTRACT_CACHE:-1}" = "0" ]; then
+  tmp=$(mktemp -d "$OMPIG_TMP/ompig-interface-extract.XXXXXXXX")
   trap 'rm -rf "$tmp"' EXIT
   run_extraction "$tmp"
   cp "$tmp/source.json" "$OUT_SOURCE"
   cp "$tmp/published.json" "$OUT_PUBLISHED"
   cp "$tmp/cli.json" "$OUT_CLI"
-  echo "interface-extract-cache: PIG_INTERFACE_EXTRACT_CACHE=0, extracted fresh (key $KEY not consulted)" >&2
+  echo "interface-extract-cache: OMPIG_INTERFACE_EXTRACT_CACHE=0, extracted fresh (key $KEY not consulted)" >&2
   exit 0
 fi
 
@@ -148,7 +148,7 @@ if [ -d "$CACHE_ENTRY" ] && [ -f "$CACHE_ENTRY/source.json" ] && [ -f "$CACHE_EN
 fi
 
 echo "interface-extract-cache: miss $KEY, extracting" >&2
-tmp=$(mktemp -d "$PIG_TMP/pig-interface-extract.XXXXXXXX")
+tmp=$(mktemp -d "$OMPIG_TMP/ompig-interface-extract.XXXXXXXX")
 trap 'rm -rf "$tmp"' EXIT
 run_extraction "$tmp"
 

@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 var generatedSessionID = regexp.MustCompile(`"[0-9a-f]{8}"`)
@@ -24,7 +24,7 @@ func renumberIDs(text string) string {
 	})
 }
 
-// TestMigrateSessionEntriesMatchesPi runs migrateSessionEntries of Pi 1.0.4 and Pig over version 1 and 2 session files: the id and parent chain, compaction index conversion and the hookMessage role rename, with member order compared.
+// TestMigrateSessionEntriesMatchesPi runs migrateSessionEntries of Pi 1.0.4 and Ompig over version 1 and 2 session files: the id and parent chain, compaction index conversion and the hookMessage role rename, with member order compared.
 func TestMigrateSessionEntriesMatchesPi(t *testing.T) {
 	h := func(version string) string {
 		return `{"type":"session",` + version + `"id":"s","timestamp":"2026-01-01T00:00:00.000Z","cwd":"/w"}`
@@ -67,7 +67,7 @@ emit(input.map((file) => { const entries = file.map((l) => JSON.parse(l)); mod.m
 			}
 			wantEntry, _ := want[i][j].(string)
 			if got, w := renumberIDs(compact.String()), renumberIDs(wantEntry); got != w {
-				t.Errorf("file %d entry %d:\n  Pig %s\n  Pi  %s", i, j, got, w)
+				t.Errorf("file %d entry %d:\n  Ompig %s\n  Pi  %s", i, j, got, w)
 			}
 		}
 	}

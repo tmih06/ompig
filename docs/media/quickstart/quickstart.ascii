@@ -574,7 +574,7 @@
 
 ────────────────────────────────────────────────────────────────────────────────
 
-  PiG quickstart
+  Ompig quickstart
 
   Local rehearsal / unpublished release
   Source build + credential-free faux provider
@@ -600,7 +600,7 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 
-  PiG quickstart
+  Ompig quickstart
 
   Local rehearsal / unpublished release
   Source build + credential-free faux provider
@@ -704,7 +704,7 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
 
 
 
@@ -730,7 +730,7 @@ $ go build -o "$HOME/.local/bin/pig" ./cmd/pig
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
 
 
 
@@ -756,7 +756,7 @@ $ go build -o "$HOME/.local/bin/pig" ./cmd/pig
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
 $
 
 
@@ -782,8 +782,8 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
-$ pig --version
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
+$ ompig --version
 
 
 
@@ -808,8 +808,8 @@ $ pig --version
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
-$ pig --version
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
+$ ompig --version
 
 
 
@@ -834,8 +834,8 @@ $ pig --version
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
-$ pig --version
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
+$ ompig --version
 0.2.0+0.87.1
 $
 
@@ -860,8 +860,8 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 1. Build from a source checkout
-$ go build -o "$HOME/.local/bin/pig" ./cmd/pig
-$ pig --version
+$ go build -o "$HOME/.local/bin/ompig" ./cmd/ompig
+$ ompig --version
 0.2.0+0.87.1
 $
 
@@ -964,7 +964,7 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
 
 
 
@@ -990,7 +990,7 @@ $ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
 $
 
 
@@ -1016,8 +1016,8 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
 
 
@@ -1042,8 +1042,8 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
 
 
@@ -1068,11 +1068,11 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
 
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
 
@@ -1094,11 +1094,11 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
 0.0%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
 
@@ -1120,11 +1120,11 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
 0.0%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
 
@@ -1146,11 +1146,11 @@ What is 20+22?
 0.0%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1172,11 +1172,11 @@ What is 20+22?
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1198,11 +1198,11 @@ What is 20+22?
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1224,11 +1224,11 @@ What is 20+22?
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1432,11 +1432,11 @@ Session name set: Quickstart
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 ✓ New session started
 
@@ -1458,11 +1458,11 @@ Session name set: Quickstart
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 ✓ New session started
 
@@ -1484,11 +1484,11 @@ Session name set: Quickstart
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 ✓ New session started
 
@@ -1510,11 +1510,11 @@ Session name set: Quickstart
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 ✓ New session started
 
@@ -1536,11 +1536,11 @@ ctrl+s sort · ctrl+n named · ctrl+d delete · ctrl+p path (off) · ctrl+r rena
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 ✓ New session started
 
@@ -1562,11 +1562,11 @@ ctrl+s sort · ctrl+n named · ctrl+d delete · ctrl+p path (off) · ctrl+r rena
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 ✓ New session started
 
@@ -1604,7 +1604,7 @@ ctrl+s sort · ctrl+n named · ctrl+d delete · ctrl+p path (off) · ctrl+r rena
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -1630,7 +1630,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -1656,7 +1656,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -1682,7 +1682,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -1708,7 +1708,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -1728,7 +1728,7 @@ reply with exactly: Resumed.
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 
@@ -1754,7 +1754,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 
@@ -1780,7 +1780,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 
@@ -1806,7 +1806,7 @@ Resumed session from
 
  42
 Resumed session from
-/tmp/pig-quickstart.l4PZjN/home/.pig/agent/sessions/--tmp-pig-quickstart.l4PZjN-home-demo--/2
+/tmp/ompig-quickstart.l4PZjN/home/.ompig/agent/sessions/--tmp-ompig-quickstart.l4PZjN-home-demo--/2
 026-09-25T13-26-34-213Z_01a0d8bf-0be5-745f-ae5e-1058d30c711b.jsonl
 
 
@@ -1822,14 +1822,14 @@ Resumed session from
 1.1%/128k (auto)                                                                       faux-1
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1848,14 +1848,14 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1874,14 +1874,14 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1900,14 +1900,14 @@ $ # 3. Print mode: one answer, then exit
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1926,14 +1926,14 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1945,21 +1945,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 3. Print mode: one answer, then exit
-$ pig --model test-faux/faux-1 -p "What is 20+22?"
+$ ompig --model test-faux/faux-1 -p "What is 20+22?"
 
 
 
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1971,21 +1971,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 3. Print mode: one answer, then exit
-$ pig --model test-faux/faux-1 -p "What is 20+22?"
+$ ompig --model test-faux/faux-1 -p "What is 20+22?"
 
 
 
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -1997,21 +1997,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 3. Print mode: one answer, then exit
-$ pig --model test-faux/faux-1 -p "What is 20+22?"
+$ ompig --model test-faux/faux-1 -p "What is 20+22?"
 42
 $
 
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2023,21 +2023,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 3. Print mode: one answer, then exit
-$ pig --model test-faux/faux-1 -p "What is 20+22?"
+$ ompig --model test-faux/faux-1 -p "What is 20+22?"
 42
 $
 
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2056,14 +2056,14 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2082,14 +2082,14 @@ $ # 4. Scaffold and explicitly load a Go extension
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2108,14 +2108,14 @@ $
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2127,21 +2127,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
+$ ompig extension init ./hello --lang go
 
 
 
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2153,21 +2153,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
+$ ompig extension init ./hello --lang go
 
 
 
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2179,21 +2179,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2205,21 +2205,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2231,21 +2231,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2257,18 +2257,18 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2290,11 +2290,11 @@ Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2316,11 +2316,11 @@ hello loaded
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2342,11 +2342,11 @@ hello loaded
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2368,11 +2368,11 @@ hello loaded
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2394,11 +2394,11 @@ hello loaded
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2420,11 +2420,11 @@ hello loaded
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 [Extensions]  hello
 
@@ -2446,14 +2446,14 @@ hello loaded
 hello loaded
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2465,21 +2465,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2491,21 +2491,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2517,21 +2517,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2543,21 +2543,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2569,21 +2569,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2595,21 +2595,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2621,21 +2621,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2647,21 +2647,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2673,21 +2673,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2699,21 +2699,21 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 
 ────────────────────────────────────────────────────────────────────────────────
 $ # 2. Select the local test model (not a live AI service)
-$ export PIG_TEST_FAUX=1 PIG_OFFLINE=1
-$ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
+$ export OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1
+$ cd ~/demo && ompig --tui-mode fullscreen --model test-faux/faux-1
 
- pig v0.2.0+0.87.1
+ ompig v0.2.0+0.87.1
  escape interrupt · ctrl+c/ctrl+d clear/exit · / commands · ! bash · ctrl+o more
  Press ctrl+o to show full startup help and loaded resources.
 
- PiG can explain its own features and look up its docs. Ask it how to use or extend PiG.
+ Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig.
 
 
  What is 20+22?
@@ -2725,8 +2725,8 @@ $ cd ~/demo && pig --tui-mode fullscreen --model test-faux/faux-1
  Run: expr 20 + 22
 
 $ # 4. Scaffold and explicitly load a Go extension
-$ pig extension init ./hello --lang go
-Created go extension "hello" in /tmp/pig-quickstart.l4PZjN/home/demo/hello
+$ ompig extension init ./hello --lang go
+Created go extension "hello" in /tmp/ompig-quickstart.l4PZjN/home/demo/hello
   go.mod
   extension.go
 

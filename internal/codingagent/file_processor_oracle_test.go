@@ -12,15 +12,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // cli/file-processor.ts processFileArguments against pinned Pi, one @file argument at a time: how the argument resolves (cwd-relative,
 // absolute, `~`, the macOS screenshot variants of resolveReadPath), what an empty, BOM-prefixed, invalid UTF-8, binary-looking or missing file yields.
 func TestProcessCLIFileArgumentsMatchesPi(t *testing.T) {
 	// The oracle chdirs into work and resolves against process.cwd(), the physical directory (/private/var/… for macOS's /var/… temp
-	// dir); production passes Pig the same physical cwd, so the comparison starts from it.
+	// dir); production passes Ompig the same physical cwd, so the comparison starts from it.
 	dir, err := filepath.EvalSymlinks(t.TempDir())
 	if err != nil {
 		t.Fatal(err)
@@ -94,13 +94,13 @@ func TestProcessCLIFileArgumentsMatchesPi(t *testing.T) {
 			got.Error = strings.SplitN(got.Error, ":", 3)[0] + ": " + strings.SplitN(strings.ToLower(strings.TrimPrefix(got.Error, "Error: ")), ":", 2)[0]
 			want.Error = strings.SplitN(want.Error, ":", 3)[0] + ": " + strings.SplitN(want.Error, ": ", 2)[1]
 		}
-		// Pi's detectSupportedImageMimeTypeFromFile throws EISDIR on a directory and the process crashes; Pig reports a read error. Both fail.
+		// Pi's detectSupportedImageMimeTypeFromFile throws EISDIR on a directory and the process crashes; Ompig reports a read error. Both fail.
 		if strings.HasPrefix(want.Error, "Error: EISDIR") && strings.HasPrefix(got.Error, "Error: could not read file") {
 			continue
 		}
 		if got != want {
 			if failures++; failures <= 8 {
-				t.Errorf("@%q:\n  Pig %+v\n  Pi  %+v", arg, got, want)
+				t.Errorf("@%q:\n  Ompig %+v\n  Pi  %+v", arg, got, want)
 			}
 		}
 	}

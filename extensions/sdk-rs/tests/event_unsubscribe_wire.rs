@@ -1,7 +1,7 @@
 //! Event subscription handles of the Rust SDK against a fake host (`pi.on` returns `() => void`, types.ts:1558).
 #![cfg(unix)]
 
-use pig_sdk::Extension;
+use ompig_sdk::Extension;
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -36,7 +36,7 @@ struct Host {
 impl Host {
     fn start(ext: Extension, state: Value) -> Host {
         let root = std::env::temp_dir().join(format!(
-            "pig-extapi-{}-{}",
+            "ompig-extapi-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));

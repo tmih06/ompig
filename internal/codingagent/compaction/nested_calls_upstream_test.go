@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream compaction-nested-calls.test.ts:5-26: files touched by nested calls recorded on tool results are included (utils.ts:31-35).

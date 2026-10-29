@@ -16,17 +16,17 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-session"]
+ompig_args = ["--no-session"]
 pi_args = ["--no-session"]
-pig_extensions = ["testdata/ext/session-replacement.mjs"]
+ompig_extensions = ["testdata/ext/session-replacement.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/session-replacement.mjs"]
 
 [tmux]
 width = 160
 height = 60
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 steps = [{keys = ["/replace-probe invalid trace.jsonl", "Enter"]}]

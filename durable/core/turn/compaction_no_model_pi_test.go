@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // compaction.ts:458-464: a compaction whose agent has no model fails with "No model is configured", and one whose model the host does not know fails with "Model <provider>/<id> is not available"; both carry `detail: {reason: "no_model"}`, take the status off the live slot, record the failure as pi.live.compactionFailure (live.ts:169-173 failCompactionStatus) and leave no summary entry.

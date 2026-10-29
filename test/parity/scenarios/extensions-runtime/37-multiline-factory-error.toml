@@ -2,7 +2,7 @@
 # first line. A Node TypeScript parser stack may start with a location and
 # source excerpt. Use that real layout with a portable factory Error so parser
 # implementation wording does not enter the comparison. D19 adds subprocess
-# transport context around PiG's cause, as in scenario31; retain the full cause
+# transport context around Ompig's cause, as in scenario31; retain the full cause
 # sentinel rather than accepting the location alone.
 name = "37-multiline-factory-error"
 description = "A multiline factory stack retains its owned error message"
@@ -11,8 +11,8 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["testdata/ext/multiline-failure.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["testdata/ext/multiline-failure.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/multiline-failure.ts"]
 
 [cli]

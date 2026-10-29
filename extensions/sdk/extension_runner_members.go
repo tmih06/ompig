@@ -3,7 +3,7 @@ package sdk
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // RegisteredToolDefinition is the data members of the ToolDefinition an extension registered (Pi's `RegisteredTool["definition"]`); its functions (execute, the renderers) live in the extension that registered it.

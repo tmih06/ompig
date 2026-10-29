@@ -30,7 +30,7 @@ func synthesizeOnlyStore(t *testing.T, value int) (root, storePath, obligationID
 		t.Fatal(err)
 	}
 	snapshot := &Snapshot{Kind: KindSnapshot, ID: "snapshot:synthesize", UpstreamCommit: strings.Repeat("a", 40), TargetCommit: commit, ToolchainHash: toolchainHash, EnvironmentHash: environmentHash}
-	pin := &Pin{Kind: KindPin, ID: "pin:synthesize", SnapshotID: snapshot.ID, Repository: "pig", Commit: commit, Path: "target.go", SemanticID: "target.Value", StartLine: 1, EndLine: 3, QuoteHash: hash("target"), APIHash: hash("api"), BodyHash: hash("body")}
+	pin := &Pin{Kind: KindPin, ID: "pin:synthesize", SnapshotID: snapshot.ID, Repository: "ompig", Commit: commit, Path: "target.go", SemanticID: "target.Value", StartLine: 1, EndLine: 3, QuoteHash: hash("target"), APIHash: hash("api"), BodyHash: hash("body")}
 	target := &Target{Kind: KindTarget, ID: "target:synthesize", SnapshotID: snapshot.ID, PinIDs: []string{pin.ID}, Language: "go", Symbol: "target.Value"}
 	behavior := &Behavior{Kind: KindBehavior, ID: "behavior:synthesize", Name: "synthesize", OriginPinIDs: []string{pin.ID}, Profile: "application"}
 	facet := &Facet{Kind: KindFacet, ID: "facet:result", Name: "result"}
@@ -63,7 +63,7 @@ func initializeSynthesizeRepository(t *testing.T, value int) string {
 	t.Helper()
 	root := t.TempDir()
 	files := map[string]string{
-		"go.mod":                             "module github.com/MichaelKinsy/PiG\n\ngo 1.26\n",
+		"go.mod":                             "module github.com/tmih06/ompig\n\ngo 1.26\n",
 		"target.go":                          "package target\n\nfunc Value() int { return " + strconv.Itoa(value) + " }\n",
 		"target_test.go":                     "package target\n\nimport \"testing\"\n\nfunc TestValue(t *testing.T) {\n\tif got := Value(); got != 1 {\n\t\tt.Fatalf(\"Value() = %d, want 1\", got)\n\t}\n}\n",
 		"test/parity/closure/attestation.go": "package closure\n",

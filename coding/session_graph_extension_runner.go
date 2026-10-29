@@ -1,4 +1,4 @@
-// pig-specific: serves Pi's ExtensionRunner (packages/coding-agent/src/core/extensions/runner.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object adapts the runtime's own *inproc.Runner, which is held to Pi's runner tests, over the extensions a DefaultResourceLoader of the same connection loaded: they stay in their subprocesses, and the runner dispatches to them as the Session's runner does. The functions Pi's bindCore, bindCommandContext and setUIContext take stay in the extension that built the runner and are named to the host as session graph callbacks. The Node runtime serves Pi's own class.
+// ompig-specific: serves Pi's ExtensionRunner (packages/coding-agent/src/core/extensions/runner.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object adapts the runtime's own *inproc.Runner, which is held to Pi's runner tests, over the extensions a DefaultResourceLoader of the same connection loaded: they stay in their subprocesses, and the runner dispatches to them as the Session's runner does. The functions Pi's bindCore, bindCommandContext and setUIContext take stay in the extension that built the runner and are named to the host as session graph callbacks. The Node runtime serves Pi's own class.
 
 package coding
 
@@ -11,12 +11,12 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // GraphExtensionRunner is an ExtensionRunner an extension constructed.

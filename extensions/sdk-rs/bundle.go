@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package rssdk carries the Rust extension SDK sources so an installed pig can
+// Package rssdk carries the Rust extension SDK sources so an installed ompig can
 // stage a buildable copy to disk. See extensions/sdk/bundle.go for the rationale;
 // this is the Rust analogue. The Rust SDK is a cargo crate, not a Go package, so
 // this small Go file colocated with it provides the embed. Staging writes these

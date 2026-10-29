@@ -6966,7 +6966,7 @@
       "source": "dist/auth/oauth/openai-chatgpt.js",
       "sourceSha256": "4cf9fc758a07ffe4ee022326404b5dcc86767ee4154945c0417c7f95eaecdcc2",
       "sha256": "28f2729cedae7b11b57e8300287330f6df16830e6c508d8cff36cd6f50494ba3",
-      "rewrite": "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-ai/auth/oauth/openai-codex.js",
@@ -6978,7 +6978,7 @@
       "source": "dist/auth/oauth/openai-codex.js",
       "sourceSha256": "0b94a219ddb5982f0ee543ef03138ed0254ce6ee0a57c9d89d39c242e2eaf6f6",
       "sha256": "7a15b393fa4a0303281e25cbf07d53363d6958893a49f53625e2aef1f105dc80",
-      "rewrite": "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-ai/auth/oauth/openrouter.js",
@@ -7034,7 +7034,7 @@
       "source": "dist/auth/oauth/xai.js",
       "sourceSha256": "d34783560dc2ac75d6e717b248136eb75a902fbd53b3e56fb9f2ec50c6c793d7",
       "sha256": "14ffd968623a052c6befd04178e27be06f1599e75614c4fe03165ddc92129454",
-      "rewrite": "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-ai/auth/resolve.js",
@@ -9146,7 +9146,7 @@
       "source": "dist/utils/identity.js",
       "sourceSha256": "32b45824054a8a6125a7f3caedd9ff1c594f1a109fd2af4fa1b5729f4578ab62",
       "sha256": "43c421e27a56974c8aa63017d558a6458e8284a0a5515fde8f84e08207f6922e",
-      "rewrite": "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-ai/utils/json-parse.js",
@@ -9734,7 +9734,7 @@
       "source": "dist/core/bug-report-upload.js",
       "sourceSha256": "418fe5448f98c8f1effdf8c4de6772dcdf26a0290ad86b4732b2785903a3e518",
       "sha256": "06c2144b0f21c965607e910b864e7d7fe5610f6d1263b0a84314d0a99c214a15",
-      "rewrite": "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/bug-report.js",
@@ -9781,7 +9781,7 @@
       "source": "dist/core/client-identity.js",
       "sourceSha256": "6bd86440b910e96e512215d02a883677bd8562dba5e80951289b50e599dcb2d6",
       "sha256": "2dcacaca18b55ab82d8807b623084aaf1755bc64ebce12799c0c53bcb31b757f",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/compaction/branch-summarization.js",
@@ -10271,7 +10271,7 @@
       "source": "dist/core/remote-catalog-provider.js",
       "sourceSha256": "17e8f3482422aed20ba638b99a8862405f7d3be51c4ffc9eb7ffff1b030a421b",
       "sha256": "b6be36dac9547c6cb900fd9b2b5f4d547ec918986e268ad684fded989eaeb5d3",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/core/resolve-config-value.js",
@@ -13700,7 +13700,7 @@
       "source": "dist/modes/interactive/interactive-mode.js",
       "sourceSha256": "ea248f9b038eea64866c7a71c1daea912668f30ab5a20dd5434e976b49b29112",
       "sha256": "4981866572b5602988f210d8d933fd35af14e73a11052143285015e34384fbe8",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/modes/interactive/model-catalog-refresh.js",
@@ -13745,7 +13745,7 @@
       "source": "dist/modes/interactive/session-share.js",
       "sourceSha256": "025a451021f6f97e9494e7952b02e1ede8d643fa2b6b3ce4410d448238b4e3cc",
       "sha256": "e2a23335321de90ec3ac478ae1cf0ddb1bf9079228aa82af00a9ea424219884a",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/modes/interactive/theme/dark.json",
@@ -13904,7 +13904,7 @@
       "source": "dist/package-manager-cli.js",
       "sourceSha256": "087a206f79d6025324d19b024a746e1c6fc86d802586750eab5f0bf219b70db5",
       "sha256": "66ff1f928b536290d8901fdbed7301d4d3848b426d70dca037ea7e4fb3b1dc1c",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/package.json",
@@ -14449,7 +14449,7 @@
       "source": "dist/utils/pi-user-agent.js",
       "sourceSha256": "75f80240d4a3c63d4ac37e4a6cdef16d4d384667fcfb769897ad4359003f404f",
       "sha256": "20ef8740cd24f7a16d962c65f2a22211b99758565c49ac4acfafb5987e669d99",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/shell.js",
@@ -14528,7 +14528,7 @@
       "source": "dist/utils/version-check.js",
       "sourceSha256": "0c1e8df5aea8f10869d2a1bd11b696498d35757e13427650754124d039422eb8",
       "sha256": "2b0b744cfec88b82b6e2c455e1409276b7513ebb3e7cca68d29c90d2af274fa7",
-      "rewrite": "module specifiers; D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+      "rewrite": "module specifiers; D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
     },
     {
       "path": "pi-dist/pi-coding-agent/utils/windows-self-update.js",

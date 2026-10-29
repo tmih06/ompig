@@ -10,10 +10,10 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
-// writeLegacySDKFactory writes a factory module shaped like a Pig 0.84
+// writeLegacySDKFactory writes a factory module shaped like a Ompig 0.84
 // extension: it imports the legacy SDK module path and replaces it with a
 // sibling SDK directory, which here is an old SDK whose API cannot build the
 // factory. Only aliasing the legacy path to the current SDK can compile it.
@@ -28,7 +28,7 @@ func writeLegacySDKFactory(t *testing.T) string {
 		filepath.Join(extensionRoot, "go.mod"): "module example.com/legacy-ask\n\ngo 1.26\n\nrequire " + extsource.LegacyGoSDKModulePath + " v0.0.0\n\nreplace " + extsource.LegacyGoSDKModulePath + " => ../.sdk\n",
 		filepath.Join(extensionRoot, "main.go"): `package ask
 
-import "github.com/mainstai/pig/extensions/sdk"
+import "github.com/mainstai/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	ext := sdk.New("legacy-ask")
@@ -148,8 +148,8 @@ func TestBuildGoPackedCellBuildsLegacySDKFactoryAgainstCurrentSDK(t *testing.T) 
 	}
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
-	t.Setenv("PIG_SDK_GO_ROOT", currentSDK)
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", currentSDK)
 	extensionRoot := writeLegacySDKFactory(t)
 	cell, err := BuildGoPackedCell(context.Background(), t.TempDir(), "legacy-ask", []GoExtension{{
 		Name: "legacy-ask", Root: extensionRoot, ModulePath: "example.com/legacy-ask", Package: "example.com/legacy-ask", Factory: "Extension", Hash: "legacy",

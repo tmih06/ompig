@@ -1,4 +1,4 @@
-// Command testprune inventories and classifies PiG's tests, measures the
+// Command testprune inventories and classifies Ompig's tests, measures the
 // coverage a deletion batch would lose, and enforces the provenance ratchet
 // for golden files and for expectations edited together with the code they test.
 //

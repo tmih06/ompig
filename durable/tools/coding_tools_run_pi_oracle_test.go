@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Runs the write, edit, bash and read tools of Pi's createCodingTools (packages/durable/src/tools/index.ts, Node, types stripped)
-// and of PiG's CreateCodingTools over the same files and arguments, and compares what each answers (output, structured output,
+// and of Ompig's CreateCodingTools over the same files and arguments, and compares what each answers (output, structured output,
 // details, isError, diagnostics, the text the tool streamed, or the error it throws) and the files each leaves behind.
 type piRunCase struct {
 	name  string
@@ -104,43 +104,43 @@ func TestCodingToolsRunLikePi(t *testing.T) {
 			return nil
 		})
 		if !reflect.DeepEqual(files, orEmpty(pi.Files)) {
-			t.Errorf("%s: PiG left files %v, Pi %v", c.name, files, pi.Files)
+			t.Errorf("%s: Ompig left files %v, Pi %v", c.name, files, pi.Files)
 		}
 		if pi.Error != "" || err != nil {
 			if err == nil || pi.Error == "" || scrubDir(err.Error(), executionEnv.Cwd()) != pi.Error {
-				t.Errorf("%s: PiG error %v, Pi %q", c.name, err, pi.Error)
+				t.Errorf("%s: Ompig error %v, Pi %q", c.name, err, pi.Error)
 			}
 			continue
 		}
 		if gotError := got.IsError != nil && *got.IsError; gotError != pi.IsError {
-			t.Errorf("%s: PiG isError %v, Pi %v", c.name, gotError, pi.IsError)
+			t.Errorf("%s: Ompig isError %v, Pi %v", c.name, gotError, pi.IsError)
 		}
 		if gotOut, want := scrubbed(t, normalized(t, got.Output), executionEnv.Cwd()), pi.Output; !reflect.DeepEqual(gotOut, want) && (len(got.Output) != 0 || !isEmptyList(want)) {
-			t.Errorf("%s: PiG output %v, Pi %v", c.name, gotOut, want)
+			t.Errorf("%s: Ompig output %v, Pi %v", c.name, gotOut, want)
 		}
 		var structured any
 		if got.HasStructuredOutput {
 			structured = scrubbed(t, normalized(t, got.StructuredOutput), executionEnv.Cwd())
 		}
 		if !reflect.DeepEqual(structured, pi.StructuredOutput) {
-			t.Errorf("%s: PiG structuredOutput %v, Pi %v", c.name, structured, pi.StructuredOutput)
+			t.Errorf("%s: Ompig structuredOutput %v, Pi %v", c.name, structured, pi.StructuredOutput)
 		}
 		var details any
 		if got.HasDetails {
 			details = scrubbed(t, normalized(t, got.Details), executionEnv.Cwd())
 		}
 		if !reflect.DeepEqual(details, pi.Details) {
-			t.Errorf("%s: PiG details %v, Pi %v", c.name, details, pi.Details)
+			t.Errorf("%s: Ompig details %v, Pi %v", c.name, details, pi.Details)
 		}
 		var diagnostics []map[string]any
 		for _, d := range append(append([]any{}, diagnosticsOf(api)...), diagnosticsOfResult(got)...) {
 			diagnostics = append(diagnostics, d.(map[string]any))
 		}
 		if !reflect.DeepEqual(orEmptyDiagnostics(diagnostics), orEmptyDiagnostics(pi.Diagnostics)) {
-			t.Errorf("%s: PiG diagnostics %v, Pi %v", c.name, diagnostics, pi.Diagnostics)
+			t.Errorf("%s: Ompig diagnostics %v, Pi %v", c.name, diagnostics, pi.Diagnostics)
 		}
 		if streamed := scrubDir(strings.Join(api.output, ""), executionEnv.Cwd()); streamed != pi.Streamed {
-			t.Errorf("%s: PiG streamed %q, Pi %q", c.name, streamed, pi.Streamed)
+			t.Errorf("%s: Ompig streamed %q, Pi %q", c.name, streamed, pi.Streamed)
 		}
 	}
 }

@@ -5,7 +5,7 @@
 # the first name. A trusted ancestor therefore wins a collision with --skill.
 # Probe: RPC /ancestor-info through the Node extension, --approve, a session
 # selecting workspace/ below .agents/skills, and --skill explicit. Pi returns
-# shared (ancestor), only-ancestor, only-explicit. Before the fix PiG returns
+# shared (ancestor), only-ancestor, only-explicit. Before the fix Ompig returns
 # only-explicit, shared (explicit), only-ancestor. No model call is made.
 name = "09-trusted-ancestor-skill-precedence"
 description = "Trusted ancestor skills precede --skill additions in pi.getCommands and win same-name collisions."
@@ -18,9 +18,9 @@ tags = ["hermetic", "fast", "security"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent", "PIG_TEST_FAUX=1", "PIG_OFFLINE=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent", "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1"]
-pig_extensions = ["testdata/ancestor-skill-info.mjs"]
+ompig_extensions = ["testdata/ancestor-skill-info.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ancestor-skill-info.mjs"]
 override_base_args = true
 

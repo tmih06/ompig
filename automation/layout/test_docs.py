@@ -30,7 +30,7 @@ class DocsTests(unittest.TestCase):
             "PORT_MAP.md": "| `packages/ai/src/types.ts` | `ai/types.go` | 🟡 |\n",
             "DIVERGENCES.md": "Call-site markers: `tui/editor.go`: D27. `agent/src/harness/runtime` is Pi.\n",
             "CHANGELOG.md": "## [Unreleased]\n\n### Fixed\n\n- Current fix.\n\n## [0.2.1] - date\n\n### Fixed\n\n- Existing fix.\n\n## [0.2.0]\n",
-            "go.mod": "module github.com/MichaelKinsy/PiG\n",
+            "go.mod": "module github.com/tmih06/ompig\n",
             "CODE_OF_CONDUCT.md": "# Conduct\n",
             "CONTRIBUTING.md": "[Rules](AGENTS.md) [Quality](docs/project/quality.md) [Conduct](CODE_OF_CONDUCT.md)\n",
             "SECURITY.md": "# Security\n",
@@ -46,12 +46,12 @@ class DocsTests(unittest.TestCase):
             "coding/extension/host/subprocess/protocol.go": "package subprocess\n",
             "tui/editor.go": "package tui\n",
             "agent/agent.go": "package agent\n",
-            "internal/pigdocs/content/links.md": "[Main](https://github.com/MichaelKinsy/PiG/blob/main/ai/types.go#L1)\n[Historical](https://github.com/MichaelKinsy/PiG/blob/abc123/ai/types.go)\n[Pi](https://github.com/earendil-works/pi/blob/main/packages/ai/src/types.ts)\n",
+            "internal/pigdocs/content/links.md": "[Main](https://github.com/tmih06/ompig/blob/main/ai/types.go#L1)\n[Historical](https://github.com/tmih06/ompig/blob/abc123/ai/types.go)\n[Pi](https://github.com/earendil-works/pi/blob/main/packages/ai/src/types.ts)\n",
             "parity/scenarios/family/case.toml": 'covers = ["packages/ai/src/types.ts"]\n# go test ./ai -run TestWire\n[assert]\noutput_equal = true\nruns = 3\n',
             "parity/unit-evidence/family.json": '{"package":"./ai","source":"packages/ai/test/types.test.ts","test":"ai/types_test.go#TestWire"}\n',
             "parity/interface-extractor/test/inventory.test.mjs": 'const pin = new URL("../../../coding/pigversion/pigversion.go", import.meta.url);\n',
             "parity/interface-extractor/test/correspondence-inventory.test.mjs": 'const pin = new URL("../../../coding/pigversion/pigversion.go", import.meta.url);\n',
-            "parity/interfaces/pig-go.json": '{"file":"ai/types.go"}\n',
+            "parity/interfaces/ompig-go.json": '{"file":"ai/types.go"}\n',
             "parity/interfaces/recommendations-v0.87.1.json": '{"file":"ai/types.go"}\n',
             "automation/ci/example.py": 'PATH = "ai/types.go"\n',
         }
@@ -145,14 +145,14 @@ class DocsTests(unittest.TestCase):
     def test_graph_source_regenerates_site_and_embedded_mirrors(self):
         repo = Path(__file__).resolve().parents[2]
         self.put(docs.GRAPH_GENERATOR, (repo / docs.GRAPH_GENERATOR).read_text())
-        self.put(docs.GRAPH_SOURCE, '{"entities":[{"id":"host","label":"Host","kind":"runtime","summary":"Host runtime","where":"coding/","inspect":"pig","doc":"README.md"}],"relations":[]}\n')
+        self.put(docs.GRAPH_SOURCE, '{"entities":[{"id":"host","label":"Host","kind":"runtime","summary":"Host runtime","where":"coding/","inspect":"ompig","doc":"README.md"}],"relations":[]}\n')
         self.put("docs/site/docs/install-troubleshooting.md", "# Troubleshooting\n")
         for name in docs.GRAPH_OUTPUTS:
             self.put(name, "old output\n")
         self.git("add", "--", docs.GRAPH_GENERATOR, docs.GRAPH_SOURCE, "docs/site/docs/install-troubleshooting.md", *docs.GRAPH_OUTPUTS)
         report = docs.apply(self.root)
         self.assertIn(docs.GRAPH_SOURCE, report["rewritten"])
-        for name in ("docs/site/docs/knowledge-graph.md", "internal/pigdocs/content/knowledge-graph.md", "docs/knowledge-graph/pig-knowledge-graph.jsonld"):
+        for name in ("docs/site/docs/knowledge-graph.md", "internal/pigdocs/content/knowledge-graph.md", "docs/knowledge-graph/ompig-knowledge-graph.jsonld"):
             self.assertIn("internal/coding/", self.read(name))
         before = self.snapshot()
         self.assertEqual(docs.apply(self.root)["rewritten"], [])
@@ -165,13 +165,13 @@ class DocsTests(unittest.TestCase):
         report = docs.apply(self.root)
         self.assertNotIn(".github/SECURITY.md", report["moved"])
         self.assertEqual(self.read("docs/private.md"), "`ai/types.go`")
-        for name in ("automation/ci/example.py", "parity/interfaces/pig-go.json", "parity/interfaces/recommendations-v0.87.1.json"):
+        for name in ("automation/ci/example.py", "parity/interfaces/ompig-go.json", "parity/interfaces/recommendations-v0.87.1.json"):
             self.assertEqual(self.read(name), self.files[name])
 
     def test_references_are_boundary_aware(self):
         rewriter = docs.Rewriter(self.root, self.files)
-        before = '`ai/types.go` ./tui/... ./ai:TestWire packages/ai/src/types.ts agent/src/harness/runtime internal/ai/types.go aicoding/file.go @earendil-works/pi-ai/compat github.com/MichaelKinsy/PiG/coding\n'
-        after = '`internal/ai/types.go` ./internal/tui/... ./internal/ai:TestWire packages/ai/src/types.ts agent/src/harness/runtime internal/ai/types.go aicoding/file.go @earendil-works/pi-ai/compat github.com/MichaelKinsy/PiG/internal/coding\n'
+        before = '`ai/types.go` ./tui/... ./ai:TestWire packages/ai/src/types.ts agent/src/harness/runtime internal/ai/types.go aicoding/file.go @earendil-works/pi-ai/compat github.com/tmih06/ompig/coding\n'
+        after = '`internal/ai/types.go` ./internal/tui/... ./internal/ai:TestWire packages/ai/src/types.ts agent/src/harness/runtime internal/ai/types.go aicoding/file.go @earendil-works/pi-ai/compat github.com/tmih06/ompig/internal/coding\n'
         self.assertEqual(rewriter.text(before, "README.md"), after)
         self.assertEqual(rewriter.text(after, "README.md"), after)
 
@@ -240,8 +240,8 @@ class ProseTests(unittest.TestCase):
                 self.assertEqual(docs_prose.rewrite_prose(result, name), result)
                 if name.endswith("/sdk.md"):
                     self.assertIn("not a public embedding SDK", result)
-                    self.assertNotIn("https://pkg.go.dev/github.com/MichaelKinsy/PiG/coding", result)
-                    self.assertIn('"github.com/MichaelKinsy/PiG/internal/coding"', result)
+                    self.assertNotIn("https://pkg.go.dev/github.com/tmih06/ompig/coding", result)
+                    self.assertIn('"github.com/tmih06/ompig/internal/coding"', result)
 
     def test_unknown_prose_is_a_review_error(self):
         with self.assertRaisesRegex(ValueError, "prose contract changed"):

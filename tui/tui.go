@@ -19,7 +19,7 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ─── Component Interface ──────────────────────────────────────────────────────
@@ -61,7 +61,7 @@ type Disposable interface {
 // pointer-only components, so it is never copied after construction.
 type invalidatable struct {
 	dirty atomic.Bool
-	// pig additive (D91): sink is the TuiSurface that draws the component,
+	// ompig additive (D91): sink is the TuiSurface that draws the component,
 	// which Invalidate tells, and queued the sink that holds an
 	// invalidation it has not drawn yet.
 	sink   atomic.Pointer[surfaceSink]
@@ -137,7 +137,7 @@ type Container struct {
 	spareAgree int
 	kept       [windowHistory]int
 
-	// pig additive (D91): since a TuiSurface last took them, the children
+	// ompig additive (D91): since a TuiSurface last took them, the children
 	// changed (childrenChanged) only after the first keepHead and before the
 	// last keepTail, so the surface walks only the children between.
 	childrenChanged    bool
@@ -343,7 +343,7 @@ func (c *Container) IsEmpty() bool {
 // last n lines of all children's output are returned. When n==0 (default),
 // all lines are returned. Used by the /tree selector to keep the chat
 // scrolled to a minimum context window.
-// pig-specific: upstream controls the full viewport; this cap is not needed there.
+// ompig-specific: upstream controls the full viewport; this cap is not needed there.
 func (c *Container) SetMaxLines(n int) {
 	c.maxLines.Store(int64(n))
 	c.mu.Lock()
@@ -449,7 +449,7 @@ func (c *Container) renderBorrowedLocked(width int, recycle bool) []string {
 	}
 
 	ml := c.maxLines.Load()
-	// pig-specific: when capped (e.g. the /tree context window), render only
+	// ompig-specific: when capped (e.g. the /tree context window), render only
 	// the trailing children needed to fill maxLines instead of the whole
 	// history. Rendering every child and discarding all but the last few
 	// lines is O(total entries) per frame, which froze the UI on long
@@ -831,7 +831,7 @@ type OverlayOptions struct {
 	nonCapturing bool
 
 	// Fullscreen marks an overlay that covers the whole screen, such as an
-	// animation of fullscreen mode. pig additive (D91): a TuiSurface reports
+	// animation of fullscreen mode. ompig additive (D91): a TuiSurface reports
 	// it as a fullscreen frontend.Overlay at the session's screen size; the
 	// terminal renderers lay it out by its other options.
 	Fullscreen bool
@@ -1110,7 +1110,7 @@ func (t *tuiBase) openOverlayWithOptionsFactory(component Component, factory fun
 	return t.ShowOverlay(component, factory())
 }
 
-// openModalOverlay preserves Pig's built-in selector shell while generic
+// openModalOverlay preserves Ompig's built-in selector shell while generic
 // overlays remain component-framed.
 func (t *tuiBase) openModalOverlay(component Component, title string, widthFraction, heightFraction float64) *OverlayHandle {
 	if widthFraction <= 0 {
@@ -1925,7 +1925,7 @@ func (t *tuiBase) cancelPendingRenderLocked() {
 // `\r\n`, which scrolls the viewport up and pushes older lines into
 // the terminal's native scrollback. The terminal's normal scrolling
 // makes our chat history reachable via the user's mouse wheel / Cmd-↑
-// after pig exits, just like a regular shell.
+// after ompig exits, just like a regular shell.
 //
 // Algorithm sketch:
 //  1. Detect width/height change → fullRender(clear).
@@ -2121,7 +2121,7 @@ func (t *TuiMainScreen) doRender() {
 	// line gets the SEGMENT_RESET barrier appended so SGR and OSC 8
 	// hyperlink state cannot bleed between adjacent rows. Run AFTER
 	// cursor extraction so the marker is gone before the suffix is added.
-	// pig-specific: applyLineResetsCached reuses the previous frame's result
+	// ompig-specific: applyLineResetsCached reuses the previous frame's result
 	// for unchanged lines (byte-identical output) so the expensive
 	// normalization does not re-run on every scrolled-off history line.
 	newLines, resetFrom := t.applyLineResetsCachedWithCursor(newLines, cursorRow, cursorFreeLine, kept, intact, unresolved)
@@ -2323,7 +2323,7 @@ func (t *TuiMainScreen) doRender() {
 		return
 	}
 
-	// pig divergence (D53): fully clear when a formerly wrapped row now fits.
+	// ompig divergence (D53): fully clear when a formerly wrapped row now fits.
 	// A logical-row clear cannot remove the old physical continuation rows.
 	// D53 never replaces a differential write that Pi would end with an
 	// overflow: when the upstream loop would reach an over-wide row first,

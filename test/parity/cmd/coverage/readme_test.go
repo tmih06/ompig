@@ -14,8 +14,8 @@ func readmeEntries() []portMapEntry {
 		{UpstreamPath: "packages/ai/src/stream.ts", Status: "🟡"},
 		{UpstreamPath: "packages/ai/src/index.ts", Status: "n/a"},
 		{UpstreamPath: "packages/coding-agent/src/main.ts", Status: "⏸"},
-		{UpstreamPath: "packages/agent/src/harness/new.ts", PigPath: "(new upstream by 9.9.9; not mapped)", Status: "⬜"},
-		{UpstreamPath: "packages/agent/src/harness/old.ts", PigPath: "(new upstream by 9.9.8; not mapped)", Status: "⬜"},
+		{UpstreamPath: "packages/agent/src/harness/new.ts", OmpigPath: "(new upstream by 9.9.9; not mapped)", Status: "⬜"},
+		{UpstreamPath: "packages/agent/src/harness/old.ts", OmpigPath: "(new upstream by 9.9.8; not mapped)", Status: "⬜"},
 	}
 }
 
@@ -40,7 +40,7 @@ func TestPortingBlockExplainsTheDenominator(t *testing.T) {
 func TestPortingBlockNamesAllNewRowsWhenEveryNotStartedRowIsNew(t *testing.T) {
 	entries := readmeEntries()[:6]
 	block := portingBlock(entries, computeStatusStats(entries, nil, nil), "9.9.9")
-	if !strings.Contains(block, "The not-started rows are files new in Pi 9.9.9 that PiG has not ported yet.") {
+	if !strings.Contains(block, "The not-started rows are files new in Pi 9.9.9 that Ompig has not ported yet.") {
 		t.Fatalf("porting block does not attribute the not-started rows to the pin:\n%s", block)
 	}
 }

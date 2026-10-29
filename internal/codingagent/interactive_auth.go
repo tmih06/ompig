@@ -10,10 +10,10 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/nodespawn"
+	"github.com/tmih06/ompig/tui"
 )
 
 // catalogProviderName is the name of a catalog provider (providers/<id>.ts), or "" for a provider outside the catalog, whose name its registration or OAuth flow declares.
@@ -66,7 +66,7 @@ func (m *InteractiveMode) oauthProviderList(mode string, includeStatus ...bool) 
 	}
 	var all []tui.OAuthProvider
 	for _, provider := range m.oauthProviders() {
-		// pig additive (D92): a provider whose catalog models are all on stripped APIs offers no model to log in for.
+		// ompig additive (D92): a provider whose catalog models are all on stripped APIs offers no model to log in for.
 		if ai.ProviderStripped(provider.ID()) {
 			continue
 		}
@@ -408,7 +408,7 @@ func (m *InteractiveMode) runLoginRegisteredOAuth(loginCtx context.Context, prov
 			case ai.AuthTextPrompt:
 				return prompt(ctx, ai.OAuthPrompt{Message: p.Message, Placeholder: p.Placeholder})
 			case ai.AuthSecretPrompt:
-				// pig divergence (D80): a prompt the flow marked secret follows maskSecretInput, as in the API-key login dialog; Pi shows it with showPrompt.
+				// ompig divergence (D80): a prompt the flow marked secret follows maskSecretInput, as in the API-key login dialog; Pi shows it with showPrompt.
 				return awaitPrompt(ctx, dlg.ShowSecretInput(p.Message, p.Placeholder))
 			default:
 				return "", fmt.Errorf("unknown login prompt type %q", value.Type())
@@ -442,7 +442,7 @@ func (m *InteractiveMode) runLoginRegisteredOAuth(loginCtx context.Context, prov
 		}
 
 		if store, ok := provider.(ai.OAuthCredentialStore); ok {
-			// pig additive (D40): a contributed credential store reports its own saved location.
+			// ompig additive (D40): a contributed credential store reports its own saved location.
 			authPath, err = store.StoreOAuthCredentials(cred)
 		} else {
 			var credential ai.Credential
@@ -918,8 +918,8 @@ func browserCommand(target string) *exec.Cmd {
 	return command
 }
 
-// openBrowser starts the launcher and leaves it running on its own: it is detached from PiG's session or process
-// group, so a terminal interrupt aimed at PiG does not reach it, and it is reaped when it exits (upstream's `unref`).
+// openBrowser starts the launcher and leaves it running on its own: it is detached from Ompig's session or process
+// group, so a terminal interrupt aimed at Ompig does not reach it, and it is reaped when it exits (upstream's `unref`).
 // A launcher that cannot start returns its error, which callers drop because they still present the target.
 var openBrowser = func(target string) error {
 	command := browserCommand(target)

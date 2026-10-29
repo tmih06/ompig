@@ -10,7 +10,7 @@ import (
 const keyboardProtocolResponseFragmentTimeout = 150 * time.Millisecond
 
 // owedReplyTailTimeout is how long after a forwarded bare `ESC[` fragment the rest of an owed reply is still absorbed.
-// pig divergence (D143): Pi forwards the rest of a reply split across slow reads as printable key input (Pi #10657).
+// ompig divergence (D143): Pi forwards the rest of a reply split across slow reads as printable key input (Pi #10657).
 const owedReplyTailTimeout = time.Second
 
 // TerminalInput owns framing and protocol-response deadlines for one input loop. The caller serializes Process, Flush, FlushPending, and Close, and selects C alongside raw input or waits until NextDeadline. Callbacks run synchronously in sequence order; the dispatch owner applies native modifier normalization once before focus routing.
@@ -163,7 +163,7 @@ func (p *TerminalInput) forward(sequence string) {
 
 func (p *TerminalInput) setNegotiationBuffer(sequence string) {
 	p.negotiationBuffer = sequence
-	// pig divergence (D143): a private CSI reply (`ESC[?`) cannot be keyboard input, so it waits for its final byte however long the
+	// ompig divergence (D143): a private CSI reply (`ESC[?`) cannot be keyboard input, so it waits for its final byte however long the
 	// transport pauses (Pi #10657 reference fix). Only a bare `ESC[` is replayed as input after the fragment timeout.
 	if strings.HasPrefix(sequence, "\x1b[?") {
 		p.fragmentDeadline = time.Time{}

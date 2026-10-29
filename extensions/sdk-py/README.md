@@ -1,6 +1,6 @@
-# pig-sdk (Python)
+# ompig-sdk (Python)
 
-Python SDK for building pig subprocess extensions.
+Python SDK for building ompig subprocess extensions.
 
 This SDK is a **language bridge** into the same extension API that upstream
 pi exposes to TypeScript extensions: the wire protocol, register payload,
@@ -19,7 +19,7 @@ Host-backed `Context` getters raise `HostCallError` on a host failure or a reply
 ```text
 maturity: production bridge
 runtime:  subprocess (no in-process, no WASM)
-wire:      current Pig subprocess contract (no independent version)
+wire:      current Ompig subprocess contract (no independent version)
 host APIs implemented:
   full host-call bridge matching the Go SDK method set
 declaration kinds implemented:
@@ -45,37 +45,37 @@ The helpers Pi exports to extensions keep their names in snake case and behave l
 import os
 import pathlib
 
-import pig_sdk
+import ompig_sdk
 
 
 def summarize(text: str) -> str:
     # Pi's truncateTail keeps the end of command output; the limits default to Pi's 2000 lines and 50KB.
-    output = pig_sdk.truncate_tail(text)
+    output = ompig_sdk.truncate_tail(text)
     if not output.truncated:
         return output.content
-    return f"{output.content}\n[showing {pig_sdk.format_size(output.output_bytes)} of {pig_sdk.format_size(output.total_bytes)}]"
+    return f"{output.content}\n[showing {ompig_sdk.format_size(output.output_bytes)} of {ompig_sdk.format_size(output.total_bytes)}]"
 
 
 def save_note(text: str) -> None:
     # Pi's withFileMutationQueue: parallel tool calls on one file run one at a time, in call order.
-    notes = os.path.join(pig_sdk.get_agent_dir(), "notes.txt")
-    pig_sdk.with_file_mutation_queue(notes, lambda: pathlib.Path(notes).write_text(text))
+    notes = os.path.join(ompig_sdk.get_agent_dir(), "notes.txt")
+    ompig_sdk.with_file_mutation_queue(notes, lambda: pathlib.Path(notes).write_text(text))
 ```
 
-`is_tool_call_event_type(name, event)` is Pi's `isToolCallEventType` (the tool name must match exactly). `get_package_dir()` and `get_shell_config(custom_shell_path=None)` are Pi's `getPackageDir()` and `getShellConfig()`. Pi's pure pi-ai helpers are in `pig_sdk` too (`string_enum`, `clamp_thinking_level`, `get_supported_thinking_levels`, `calculate_cost`, `content_text`, `normalize_context`, `get_current_system_prompt`, `is_context_overflow`, `is_retryable_assistant_error`, `env_api_key_auth`, `create_assistant_message_event_stream` and the rest of `pi_ai_helpers.py`), over the dicts the wire carries. `ctx.set_working_message("")` shows an empty working label and `ctx.set_working_message(None)` restores the default one, as in Pi; `set_hidden_thinking_label` follows the same rule. `truncate_head`, `truncate_tail`, `truncate_line` and `format_size` are Pi's `truncateHead`, `truncateTail`, `truncateLine` and `formatSize`; byte limits count UTF-8 bytes and `truncate_line` counts UTF-16 units like a JavaScript string. `get_agent_dir`, `get_config_dir_name` and `get_version` are Pi's `getAgentDir()`, `CONFIG_DIR_NAME` and `VERSION`; they raise `HostInfoUnavailable`, never return a made-up path, when the process was not started by a PiG host. `ctx.get_editor_component()` returns the factory this extension installed with `ctx.set_editor_component`, or `None`. Pi's `getEditorComponent` returns the factory installed by any extension, so one extension can wrap another's editor; PiG returns only the calling extension's own factory.
+`is_tool_call_event_type(name, event)` is Pi's `isToolCallEventType` (the tool name must match exactly). `get_package_dir()` and `get_shell_config(custom_shell_path=None)` are Pi's `getPackageDir()` and `getShellConfig()`. Pi's pure pi-ai helpers are in `ompig_sdk` too (`string_enum`, `clamp_thinking_level`, `get_supported_thinking_levels`, `calculate_cost`, `content_text`, `normalize_context`, `get_current_system_prompt`, `is_context_overflow`, `is_retryable_assistant_error`, `env_api_key_auth`, `create_assistant_message_event_stream` and the rest of `pi_ai_helpers.py`), over the dicts the wire carries. `ctx.set_working_message("")` shows an empty working label and `ctx.set_working_message(None)` restores the default one, as in Pi; `set_hidden_thinking_label` follows the same rule. `truncate_head`, `truncate_tail`, `truncate_line` and `format_size` are Pi's `truncateHead`, `truncateTail`, `truncateLine` and `formatSize`; byte limits count UTF-8 bytes and `truncate_line` counts UTF-16 units like a JavaScript string. `get_agent_dir`, `get_config_dir_name` and `get_version` are Pi's `getAgentDir()`, `CONFIG_DIR_NAME` and `VERSION`; they raise `HostInfoUnavailable`, never return a made-up path, when the process was not started by a Ompig host. `ctx.get_editor_component()` returns the factory this extension installed with `ctx.set_editor_component`, or `None`. Pi's `getEditorComponent` returns the factory installed by any extension, so one extension can wrap another's editor; Ompig returns only the calling extension's own factory.
 
 `ctx.set_status(key, "")` sets an empty status text, as Pi's `setStatus(key, "")` does (RPC mode writes it); `ctx.clear_status(key)` is Pi's `setStatus(key, undefined)`. `ctx.input(title, placeholder=None)` and `ctx.editor(title, prefill=None)` leave the placeholder or prefill unset (RPC mode writes no such member); an empty string is written as `""`.
 
 ## Authoring a factory extension
 
 ```python
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("my-py-ext")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("my-py-ext")
 
-    def hello(ctx: pig_sdk.Context, args: dict) -> dict:
+    def hello(ctx: ompig_sdk.Context, args: dict) -> dict:
         ctx.notify(f"hello, {args.get('name', 'world')}")
         return {"content": "ok"}
 
@@ -164,7 +164,7 @@ def on_turn_start(event, ctx):
 
 ```bash
 cd extensions/sdk-py
-uv run python -m ast pig_sdk/__init__.py >/dev/null
+uv run python -m ast ompig_sdk/__init__.py >/dev/null
 uv run pytest
 ```
 

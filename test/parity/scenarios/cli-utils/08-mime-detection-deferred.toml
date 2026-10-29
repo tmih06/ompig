@@ -22,8 +22,8 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=../tools/testdata/pig-home"]
-pig_args = ["@testdata/sample.png"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=../tools/testdata/ompig-home"]
+ompig_args = ["@testdata/sample.png"]
 pi_args = ["@testdata/sample.png"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 

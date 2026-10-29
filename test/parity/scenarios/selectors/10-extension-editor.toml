@@ -29,7 +29,7 @@
 # hint line (indented 1) + Spacer + DynamicBorder.
 #
 # Bugs fixed in this loop:
-#   (a) pig's ShowExtensionEditor used runTextInput (single-line
+#   (a) ompig's ShowExtensionEditor used runTextInput (single-line
 #       TextInput in a floating overlay). Replaced with
 #       ExtensionEditorComponent (multi-line Editor in editor slot),
 #       matching upstream's layout exactly.
@@ -57,7 +57,7 @@ model = "test-faux/faux-1"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Custom summarization instructions"
@@ -104,9 +104,9 @@ wait_timeout_seconds = 5
 settle_seconds = 1
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

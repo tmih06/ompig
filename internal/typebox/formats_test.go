@@ -3,7 +3,7 @@ package typebox
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // The format expressions are created on first use, so coding/cli's TestLazyRegexpPatternsAllCompile, which compiles the patterns created

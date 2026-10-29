@@ -4,7 +4,7 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // DiffCandidate returns the operations that turn base into candidate, a complete revision the caller built (typed state edits a decoded copy instead of a draft), and the candidate restored to base's container identity wherever it is deeply equal, so array alignment matches moved elements by identity. The candidate is validated as strict JSON and normalized; an invalid candidate returns an error. The result takes ownership of candidate. When nothing changed, the operations are empty and the result is base.

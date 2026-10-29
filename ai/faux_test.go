@@ -38,9 +38,9 @@ func TestFauxProvider_TextResponse(t *testing.T) {
 }
 
 func TestTestFauxPorterActivationProbe(t *testing.T) {
-	messages := []Message{UserMessage{Content: UserText("/skill:pig-porter verify model-resolver-selector PORTER_HEADLESS_VERIFY")}}
+	messages := []Message{UserMessage{Content: UserText("/skill:ompig-porter verify model-resolver-selector PORTER_HEADLESS_VERIFY")}}
 	kind, text, _ := classifyTestFauxRequest(messages)
-	if kind != "text" || text != "pig-porter-headless-ok" {
+	if kind != "text" || text != "ompig-porter-headless-ok" {
 		t.Fatalf("probe = %q/%q", kind, text)
 	}
 }

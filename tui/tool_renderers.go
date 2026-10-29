@@ -7,7 +7,7 @@ import "slices"
 // Ports upstream packages/coding-agent/src/core/tools/renderers/index.ts.
 // Upstream keys renderCall/renderResult pairs by built-in tool name
 // (createAllToolRenderers) and merges them into any registered definition that
-// does not supply its own (withBuiltInRenderers). Pig dispatches the same way
+// does not supply its own (withBuiltInRenderers). Ompig dispatches the same way
 // by name: FormatBuiltinToolHeader is the renderCall half and
 // internal/codingagent toolBodyRenderer the renderResult half.
 

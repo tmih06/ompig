@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 // overlayPeer is the extension end of a real subprocess.Conn. It answers

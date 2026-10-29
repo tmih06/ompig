@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // packages/coding-agent/src/core/extensions/types.ts:1558 `on(event, handler): () => void`: the returned function removes that

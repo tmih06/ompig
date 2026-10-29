@@ -20,16 +20,16 @@ import (
 func TestSnapshotEnvDirsInjectsAuthWithoutMutatingFixture(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	pigAuthDir := filepath.Join(home, ".pig", "agent")
-	if err := os.MkdirAll(pigAuthDir, 0o700); err != nil {
+	ompigAuthDir := filepath.Join(home, ".ompig", "agent")
+	if err := os.MkdirAll(ompigAuthDir, 0o700); err != nil {
 		t.Fatal(err)
 	}
 	auth := []byte(`{"github-copilot":{"type":"oauth","access":"test"}}`)
-	authPath := filepath.Join(pigAuthDir, "auth.json")
+	authPath := filepath.Join(ompigAuthDir, "auth.json")
 	if err := os.WriteFile(authPath, auth, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_PARITY_REAL_AUTH", authPath)
+	t.Setenv("OMPIG_PARITY_REAL_AUTH", authPath)
 	fixtureRoot := t.TempDir()
 	fixture := filepath.Join(fixtureRoot, "pi-agent")
 	if err := os.MkdirAll(fixture, 0o755); err != nil {
@@ -54,20 +54,20 @@ func TestSnapshotEnvDirsInjectsAuthWithoutMutatingFixture(t *testing.T) {
 
 // TestSnapshotEnvDirsNeverInjectsAmbientRealAuthWithoutOptIn is the regression
 // guard for the privacy bug: a requires-auth scenario (inject=true) must not
-// receive the operator's real ~/.pig/agent/auth.json unless PIG_PARITY_REAL_AUTH
-// explicitly names it. Before the fix, EnsureTestdataAuth scanned $HOME/.pig
+// receive the operator's real ~/.ompig/agent/auth.json unless OMPIG_PARITY_REAL_AUTH
+// explicitly names it. Before the fix, EnsureTestdataAuth scanned $HOME/.ompig
 // and $HOME/.pi automatically, so this test failed (real creds present in the
 // snapshot) on the old code.
 func TestSnapshotEnvDirsNeverInjectsAmbientRealAuthWithoutOptIn(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_PARITY_REAL_AUTH", "")
-	pigAuthDir := filepath.Join(home, ".pig", "agent")
-	if err := os.MkdirAll(pigAuthDir, 0o700); err != nil {
+	t.Setenv("OMPIG_PARITY_REAL_AUTH", "")
+	ompigAuthDir := filepath.Join(home, ".ompig", "agent")
+	if err := os.MkdirAll(ompigAuthDir, 0o700); err != nil {
 		t.Fatal(err)
 	}
 	realCreds := []byte(`{"github-copilot":{"type":"oauth","access":"do-not-leak-me"}}`)
-	if err := os.WriteFile(filepath.Join(pigAuthDir, "auth.json"), realCreds, 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(ompigAuthDir, "auth.json"), realCreds, 0o600); err != nil {
 		t.Fatal(err)
 	}
 	fixtureRoot := t.TempDir()
@@ -240,7 +240,7 @@ func TestSnapshotExtensionPathIsWritableAndDoesNotMutateFixture(t *testing.T) {
 	}
 }
 
-// trustSeedCheckout builds a minimal PiG checkout with one scenario and
+// trustSeedCheckout builds a minimal Ompig checkout with one scenario and
 // returns the scenario path and the canonical checkout root.
 func trustSeedCheckout(t *testing.T) (scenario, root string) {
 	t.Helper()
@@ -248,7 +248,7 @@ func trustSeedCheckout(t *testing.T) (scenario, root string) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module github.com/MichaelKinsy/PiG\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module github.com/tmih06/ompig\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	family := filepath.Join(root, "test/parity", "scenarios", "family")
@@ -298,12 +298,12 @@ func TestSnapshotEnvDirsSeedsCheckoutUntrusted(t *testing.T) {
 	scenario, root := trustSeedCheckout(t)
 	family := filepath.Dir(scenario)
 	writeTrustFixture(t, filepath.Join(family, "testdata", "pi-agent"), "")
-	writeTrustFixture(t, filepath.Join(family, "testdata", "pig-home"), "")
+	writeTrustFixture(t, filepath.Join(family, "testdata", "ompig-home"), "")
 	writeTrustFixture(t, filepath.Join(family, "testdata", "pi-home"), "")
 
 	out := snapshotEnvDirs(t, scenario, []string{
 		"PI_CODING_AGENT_DIR=testdata/pi-agent",
-		"PIG_HOME=testdata/pig-home",
+		"OMPIG_HOME=testdata/ompig-home",
 		"PI_HOME=testdata/pi-home",
 	}, false, false)
 
@@ -318,7 +318,7 @@ func TestSnapshotEnvDirsSeedsCheckoutUntrusted(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(piHome, "trust.json")); !os.IsNotExist(err) {
 		t.Errorf("PI_HOME is not an agent dir but got a trust store: %v", err)
 	}
-	for _, fixture := range []string{"pi-agent", filepath.Join("pig-home", "agent")} {
+	for _, fixture := range []string{"pi-agent", filepath.Join("ompig-home", "agent")} {
 		if _, err := os.Stat(filepath.Join(family, "testdata", fixture, "trust.json")); !os.IsNotExist(err) {
 			t.Errorf("fixture %s was mutated: %v", fixture, err)
 		}
@@ -354,7 +354,7 @@ func TestSnapshotEnvDirsKeepsFixtureTrustDecisions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			rel := filepath.Join("testdata", "agent-"+string(rune('a'+i)))
 			writeTrustFixture(t, filepath.Join(family, rel), tc.fixture)
-			out := snapshotEnvDirs(t, scenario, []string{"PIG_CODING_AGENT_DIR=" + rel}, false, false)
+			out := snapshotEnvDirs(t, scenario, []string{"OMPIG_CODING_AGENT_DIR=" + rel}, false, false)
 			_, snapshot, _ := strings.Cut(out[0], "=")
 			store := readTrustStore(t, filepath.Join(snapshot, "trust.json"))
 			got := map[string]string{}
@@ -371,7 +371,7 @@ func TestSnapshotEnvDirsKeepsFixtureTrustDecisions(t *testing.T) {
 	}
 }
 
-// physicalPWD is a pig stand-in that prints its working directory with
+// physicalPWD is a ompig stand-in that prints its working directory with
 // symlinks resolved, as pwd -P does. Node runs on every parity host; Windows
 // has no /bin/pwd.
 func physicalPWD(t *testing.T) BinaryRef {
@@ -380,7 +380,7 @@ func physicalPWD(t *testing.T) BinaryRef {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return BinaryRef{Label: "pig", Path: node, Args: []string{"-e", "process.stdout.write(require('fs').realpathSync.native(process.cwd()))"}}
+	return BinaryRef{Label: "ompig", Path: node, Args: []string{"-e", "process.stdout.write(require('fs').realpathSync.native(process.cwd()))"}}
 }
 
 func TestCLIDriverSnapshotCWDRunsOutsideTheFixture(t *testing.T) {
@@ -415,7 +415,7 @@ func TestCLIDriverSnapshotCWDRunsOutsideTheFixture(t *testing.T) {
 }
 
 // TestCLIFixtureProjectsRunOutsideCheckout guards the checkout trust seed. A
-// cli-mode cwd that holds its own .pi or .pig resources is a project-trust
+// cli-mode cwd that holds its own .pi or .ompig resources is a project-trust
 // fixture; inside the checkout, the seeded checkout decision would answer its
 // trust question instead of the behavior the scenario asserts.
 func TestCLIFixtureProjectsRunOutsideCheckout(t *testing.T) {
@@ -429,7 +429,7 @@ func TestCLIFixtureProjectsRunOutsideCheckout(t *testing.T) {
 			continue
 		}
 		cwd := resolveScenarioCWD(sc.SourcePath, sc.CLI.CWD)
-		for _, config := range []string{".pi", ".pig"} {
+		for _, config := range []string{".pi", ".ompig"} {
 			if _, err := os.Stat(filepath.Join(cwd, config)); err != nil {
 				continue
 			}

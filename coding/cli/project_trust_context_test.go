@@ -12,9 +12,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // scriptedTrustUI is a UIContext that records the dialog calls the project trust context forwards.
@@ -179,7 +179,7 @@ func TestProjectTrustContextDismissedStartupDialogAnswersUndefined(t *testing.T)
 	}
 }
 
-// cli/project-trust.ts notify styles with chalk, whose applyStyle closes and re-opens the color around each line break and leaves an empty message empty. PiG wrapped the whole message once.
+// cli/project-trust.ts notify styles with chalk, whose applyStyle closes and re-opens the color around each line break and leaves an empty message empty. Ompig wrapped the whole message once.
 func TestProjectTrustContextNotifyStylesLikeChalk(t *testing.T) {
 	var stderr bytes.Buffer
 	trust := buildProjectTrustContext("/project", appModePrint, false, nil, false, &stderr, true)

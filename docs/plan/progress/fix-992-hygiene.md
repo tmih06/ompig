@@ -12,7 +12,7 @@ Base: `staging/porter/pi-0.99.1` @ cf873f0ab (upstream pin 0.99.2). Scope: tests
 | I test data race | already fixed on the base by `78dddf3dd` (`causeMu` guards `cause`) | verified: removing the mutex gives `WARNING: DATA RACE` at `go test -race -count=10`; with it `-race -count=24 GOMAXPROCS=4` is clean |
 | J `TestGoVersionPolicy` | red: `docs/plan/evidence/port-99-f8-engine-spike/go.mod declares "go 1.27.1"; want Go 1.26 language floor` | module declares `go 1.26`; `go vet` of the spike with stub embeds passes under the 1.27.1 toolchain |
 | J `TestWindowsTestsCreateSymlinksThroughSymlink` | red: `coding/extension/host/subprocess/socket_runtime_dir_test.go` calls `os.Symlink` | uses `testenv.Symlink`; `GOOS=windows go vet` clean |
-| J two lint findings | `tui/theme_loader.go:267 resolveTheme` unused; `coding/mcpext/tools_render_test.go:62` SA1019 | `resolveTheme` deleted (no caller anywhere); this makes the generated `test/parity/interfaces/pig-go.json` stale (its `tui#resolveTheme` entry), so `make interface-go-drift` fails until the integrator runs `make generate`; the test uses `tui.TerminalColorModeTrueColor`; `golangci-lint` on `./tui/... ./coding/mcpext/...`: 0 issues |
+| J two lint findings | `tui/theme_loader.go:267 resolveTheme` unused; `coding/mcpext/tools_render_test.go:62` SA1019 | `resolveTheme` deleted (no caller anywhere); this makes the generated `test/parity/interfaces/ompig-go.json` stale (its `tui#resolveTheme` entry), so `make interface-go-drift` fails until the integrator runs `make generate`; the test uses `tui.TerminalColorModeTrueColor`; `golangci-lint` on `./tui/... ./coding/mcpext/...`: 0 issues |
 
 ## D: rows marked ported
 
@@ -31,7 +31,7 @@ Each row cites tests that pass on this base, and the case count equals the inven
 
 The evidence audit found one mis-port: the `+name` case of `default-tools-setting.test.ts:82` registered its tool without `defaultActive: false` (a note said the Go field did not exist yet). The field exists (`coding/extension/tool.go:152`), so the test now sets it, as `.upstream/v0.99.2/packages/coding-agent/test/default-tools-setting.test.ts:82-98` does. Mutation: changing `+inactive_tool` to `inactive_tool` fails the case (`[inactive_tool]` instead of the four-tool list).
 
-`packages/coding-agent/test/tool-renderer-examples.test.ts` stays `pending` (2 cases: `keeps the system prompt unchanged for the $name example` (`it.each`) and `keeps minimal mode's edit tool in the default shell`). It loads the 0.99.2 examples `built-in-tool-renderer.ts` and `minimal-mode.ts`, which PiG carries only as vendored copies until the 0.99.2 re-vendor, and it needs a Go edit-tool shell renderer oracle. It needs the re-vendor lane first.
+`packages/coding-agent/test/tool-renderer-examples.test.ts` stays `pending` (2 cases: `keeps the system prompt unchanged for the $name example` (`it.each`) and `keeps minimal mode's edit tool in the default shell`). It loads the 0.99.2 examples `built-in-tool-renderer.ts` and `minimal-mode.ts`, which Ompig carries only as vendored copies until the 0.99.2 re-vendor, and it needs a Go edit-tool shell renderer oracle. It needs the re-vendor lane first.
 
 ## E: SDK surface (a real gap, not staleness)
 

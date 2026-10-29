@@ -8,11 +8,11 @@ import (
 	"slices"
 	"strings"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/tui"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/tui"
 )
 
 func CollectPackageResourceItems(root string, pkg ConfiguredPackage, inspect bool, resolvers ...extsource.ResolveFunc) ([]tui.ResourceItem, error) {

@@ -9,7 +9,7 @@
 # reapplied. Pi 1.0.0 probe (2026-10-02) with the local two-model fixture:
 #   /model Enter, "model", Down -> "Model Name: Model One"
 #   PageDown                    -> still "Model Name: Model One"
-# Pig's selector loops delivered PageDown to the picker, which refiltered and
+# Ompig's selector loops delivered PageDown to the picker, which refiltered and
 # moved the selection back to model-two.
 # The first step waits for the background refresh, the settled state that
 # re-anchors the selection on both sides (see 11-model-picker-arrow-wrap).
@@ -26,7 +26,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 15
 capture_start = "Only showing models"
@@ -54,9 +54,9 @@ wait_timeout_seconds = 5
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/pig-agent-local"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/ompig-agent-local"]
 pi = ["PI_CODING_AGENT_DIR=../model-resolver-selector/testdata/pi-agent-local"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

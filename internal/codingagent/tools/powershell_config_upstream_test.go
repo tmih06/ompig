@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // powerShellConfigForPath is powerShellConfigFor with no environment and no installation directory present, so only the PATH

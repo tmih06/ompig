@@ -1,5 +1,5 @@
 # Behavior family: rpc
-# Surface: the Go SDK twin of 74-rpc-command-send-wait-idle (testdata/command-send-wait-idle/go), whose pig side runs the same command through the Go runtime.
+# Surface: the Go SDK twin of 74-rpc-command-send-wait-idle (testdata/command-send-wait-idle/go), whose ompig side runs the same command through the Go runtime.
 #
 # Pi: agent-session.ts waitForIdle returns at once while the run has not begun (`if (this.isIdle) return`), and the run begins after the awaits of its preparation (prompt, checkAuth, before_agent_start), so the handler returns, the prompt's response is written, and agent_start follows (rpc-mode.ts prompt case, agent-session.ts:2064-2072). 60-rpc-command-send-user-message-order asserts the same order for a command that does not wait; 75-rpc-command-send-wait-idle-go asserts it for the Go SDK.
 
@@ -18,9 +18,9 @@ wait_event = '{"type":"agent_settled","aborted":false}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["../../testdata/command-send-wait-idle/go"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session", "--no-extensions", "--system-prompt", "P.", "--no-context-files", "--no-skills"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["../../testdata/command-send-wait-idle/go"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session", "--no-extensions", "--system-prompt", "P.", "--no-context-files", "--no-skills"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/command-send-wait-idle.mjs"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session", "--no-extensions", "--system-prompt", "P.", "--no-context-files", "--no-skills"]
 

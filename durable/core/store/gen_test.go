@@ -6,7 +6,7 @@ package store_test
 import (
 	"math/rand/v2"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 func convW(id int64, parentConv, parentAt int64, ownerConv, ownerTask int64) any {

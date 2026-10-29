@@ -1,6 +1,6 @@
 # Behavior family: rpc
 # Surface: agent-session.ts:2477-2480 and rpc-mode.ts:470-478: set_model's `await modelRuntime.checkAuth` resumes in the microtasks of its input batch, while a replacement starts after the batch (agent-session-runtime.ts).
-# Probed on Pi 1.1.0 (3 of 3, test-faux): `new_session` and `set_model` in one write answer the set_model first and with success, in either order of the two lines. PiG failed the set_model with "context canceled" when the replacement's teardown cancelled the old Session's auth check.
+# Probed on Pi 1.1.0 (3 of 3, test-faux): `new_session` and `set_model` in one write answer the set_model first and with success, in either order of the two lines. Ompig failed the set_model with "context canceled" when the replacement's teardown cancelled the old Session's auth check.
 # The first step sends the replacement first, the second step the set_model first; each answer is compared with its data.
 
 name = "58-rpc-set-model-with-new-session"
@@ -28,8 +28,8 @@ wait_contains = ['"id":"model-2","type":"response","command":"set_model"', '"id"
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--session", "sessions/source.jsonl", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--session", "sessions/source.jsonl", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session", "sessions/source.jsonl", "--session-dir", "{{TEMP}}/sessions"]
 

@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // This file is the funnel through which code reads what a session entry is: every assertion of MessageEntry, RawEntry or LazyEntry on a
@@ -216,7 +216,7 @@ func MaterializeAll(entries []SessionEntry) ([]SessionEntry, error) {
 	}
 	workers := lazy / parallelDecodeMin
 	if workers > 1 {
-		// pig additive (D174): the workers count and run at the runtime default width.
+		// ompig additive (D174): the workers count and run at the runtime default width.
 		defer procpolicy.Widen()()
 		workers = min(workers, runtime.GOMAXPROCS(0))
 	}
@@ -238,7 +238,7 @@ func MaterializeAll(entries []SessionEntry) ([]SessionEntry, error) {
 }
 
 // parallelDecodeMin is the number of lazy entries each goroutine of MaterializeAll decodes at least.
-// pig additive (D112): see parallelReadMinLines in internal/codingagent/session_store.go.
+// ompig additive (D112): see parallelReadMinLines in internal/codingagent/session_store.go.
 const parallelDecodeMin = 256
 
 // AsMessage is entry as a MessageEntry: ok is false for any other entry and for a message entry whose record does not decode. A LazyEntry

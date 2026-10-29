@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/nodehome"
+	"github.com/tmih06/ompig/internal/nodehome"
 )
 
 // noHomeDirectory is a host where Node's os.homedir() throws: no HOME, and no entry for the process's user in the system's user database.

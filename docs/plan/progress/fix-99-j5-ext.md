@@ -37,7 +37,7 @@ Reproduced under 13 CPU burners pinned to one core (`taskset -c 2`): five of the
 ## Failures that remain, none introduced here (same at `a2f85ae1c` unless noted)
 
 - `coding`: `TestUpstreamAgentSessionCodemodeTool` (two rows: `structuredContent`, 6G), `TestUpstreamCodemodeOptionsAndStore/resolves_bash_calls…` (`structuredContent`), `TestUpstreamCodemodeModels` (classifier family).
-- `cmd/pig`: the family 7 RPC `InputEnd…` rows, `TestRPCPlanModeEmptyToolsSurviveProcessResume`, `TestRPCFreshPromptDeclaresStructuredSystemOnce`.
+- `cmd/ompig`: the family 7 RPC `InputEnd…` rows, `TestRPCPlanModeEmptyToolsSurviveProcessResume`, `TestRPCFreshPromptDeclaresStructuredSystemOnce`.
 - `internal/codingagent`: `TestInteractiveThemeSelectionPresenceMatchesPi` (9a).
 - `test/parity/cmd/sdksurface`, `test/parity/cmd/correspondence` settings-table findings: other lanes.
 

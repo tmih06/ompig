@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // AgentSession._rebuildSystemPrompt passes an explicit selectedTools array, even when every tool is deactivated.
@@ -27,7 +27,7 @@ func TestDeactivatingAllToolsDoesNotRestoreDefaultPromptTools(t *testing.T) {
 }
 
 // Extension scoping reads a session narrowed to no tools as a non-nil empty list: a nil one means no selection exists,
-// so a Piglet scope would widen what a deny-all extension chose.
+// so a Ompiglet scope would widen what a deny-all extension chose.
 func TestActiveToolNamesAfterDeactivatingAllToolsIsNonNilEmpty(t *testing.T) {
 	h := newRecoveryHarness(t, harnessOptions{tools: []agent.AgentTool{&fakeTool{name: "echo"}}}, fauxReply("done", ai.StopReasonStop, 0))
 	h.session.SetActiveToolsByName([]string{})

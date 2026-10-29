@@ -6,7 +6,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // A SIGKILLed extension process is a zombie until its parent reaps it, and a new parent reaps it only once it runs, so a kill(pid, 0) probe cannot tell it from a live process. waitProcessExit must end on the exit, not on the reaping.

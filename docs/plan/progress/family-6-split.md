@@ -18,9 +18,9 @@ Each lane follows the family workflow already used for families 1 and 2: red com
 
 | lane | scope | owned Go areas | depends on | wave |
 |---|---|---|---|---|
-| 6A | settings, session persistence, session lifecycle messages | `internal/codingagent/settings*.go`, `session_manager*.go`, `coding/settings.go`, `coding/session_manager.go`, `coding/runtime*.go`, `cmd/pig/startup_*.go` | none (family 1-5 not required) | 1 |
-| 6B | model runtime, registry, catalog protocol, resolver, llama classifier | `coding/model_*.go`, `coding/native_provider.go`, `internal/codingagent/model_*.go`, `internal/codingagent/llama/`, `cmd/pig/model.go`, `cmd/pig/startup_model.go` | family 1 (done), family 3 (`Classify`), family 2 (`thinkingLevel`) | 1 |
-| 6C | resource loader, package manager, source info, `builtin:` naming | `coding/resource_loader.go`, `coding/packagecontent/`, `internal/codingagent/resource*.go`, `cmd/pig/package_*.go`, `cmd/pig/extensions.go` | family 5/9 (theme resource shape, one test) | 1 |
+| 6A | settings, session persistence, session lifecycle messages | `internal/codingagent/settings*.go`, `session_manager*.go`, `coding/settings.go`, `coding/session_manager.go`, `coding/runtime*.go`, `cmd/ompig/startup_*.go` | none (family 1-5 not required) | 1 |
+| 6B | model runtime, registry, catalog protocol, resolver, llama classifier | `coding/model_*.go`, `coding/native_provider.go`, `internal/codingagent/model_*.go`, `internal/codingagent/llama/`, `cmd/ompig/model.go`, `cmd/ompig/startup_model.go` | family 1 (done), family 3 (`Classify`), family 2 (`thinkingLevel`) | 1 |
+| 6C | resource loader, package manager, source info, `builtin:` naming | `coding/resource_loader.go`, `coding/packagecontent/`, `internal/codingagent/resource*.go`, `cmd/ompig/package_*.go`, `cmd/ompig/extensions.go` | family 5/9 (theme resource shape, one test) | 1 |
 | 6D | extension API host side: types, runner, wrapper, loader API, `sdk.ts` and the wire contract | `coding/extension/*.go` (not `eventbus.go`), `coding/extension/host/**` (not `event_bus.go`), `coding/extension_bridge.go`, `coding/sdk*.go`, `coding/services.go` | family 4 (`ToolResult` fields), contract commit gates 6E and 6F | 1 (contract commit first) |
 | 6E | AgentSession: nested tool calls, tool loadout/orchestration, virtual models, prompt dispositions, compaction over nested calls | `coding/session*.go` (new `coding/nested_tool_calls.go`, `coding/virtual_models.go`), `internal/codingagent/compaction/` | 6D contract, 6B (routing through the model runtime), family 4 (`runToolCall`, `parentToolCallId`) | 2 |
 | 6F | the four SDKs (D-C) and the `pi.events` bridge | `extensions/sdk/`, `extensions/sdk-rs/`, `extensions/sdk-py/`, `extensions/sdk-ts/`, `test/extension-conformance/`, `coding/extension/host/subprocess/event_bus.go` | 6D contract; the bridge (6F-events) has no dependency and can start now | 2 (6F-events: 1) |
@@ -61,11 +61,11 @@ Wave 1 lanes need no other lane's production code. Wave 2 lanes write their red 
 
 **Behavior.** `generateImages`, `classify`, typed accessors and the `types=chat,image,classifier` catalog request, extension model lists with chat/image/classifier entries, `models.json` providers keep built-in image generation, the classifier model per chat model for llama.cpp plus the autoload preset context-window fix (`#10077`), default-model resolution for a provider with no default chat model. Shared-path proof uses the four provider shapes of plan section 6 rule 5.
 
-**Go targets.** `coding/model_runtime_create.go`, `coding/model_registry_facade.go`, `coding/model_catalog_backend.go`, `coding/model_availability.go`, `internal/codingagent/model_registry.go`, `internal/codingagent/model_catalog_*.go`, `internal/codingagent/llama/`, `cmd/pig/model.go`, `cmd/pig/startup_model.go`.
+**Go targets.** `coding/model_runtime_create.go`, `coding/model_registry_facade.go`, `coding/model_catalog_backend.go`, `coding/model_availability.go`, `internal/codingagent/model_registry.go`, `internal/codingagent/model_catalog_*.go`, `internal/codingagent/llama/`, `cmd/ompig/model.go`, `cmd/ompig/startup_model.go`.
 
 **Dependencies.** Family 1 is done (typed models). `classify` waits for family 3's `Models.Classify`; write the red tests now against a stub. `thinkingLevel` comes from family 2 (done).
 
-**Hot spots.** `coding/extension/provider.go` and `coding/extension/model_info.go` carry the discriminated model config on the wire: 6D owns the declaration in its contract commit, 6B consumes it. `internal/codingagent/model_registry.go` is 6B-only. `cmd/pig/startup_model.go` is shared with family 7 (CLI flags); 6B lands first.
+**Hot spots.** `coding/extension/provider.go` and `coding/extension/model_info.go` carry the discriminated model config on the wire: 6D owns the declaration in its contract commit, 6B consumes it. `internal/codingagent/model_registry.go` is 6B-only. `cmd/ompig/startup_model.go` is shared with family 7 (CLI flags); 6B lands first.
 
 ### 6C. Resource loader, package manager and `builtin:` naming
 
@@ -77,11 +77,11 @@ Wave 1 lanes need no other lane's production code. Wave 2 lanes write their red 
 
 **Behavior.** `builtin:<name>` in errors, diagnostics and RPC source info (replaces `<inline:name>`/`<builtin:name>`), `--extension builtin:<name>`, `--no-extensions` also disables built-ins including the llama.cpp provider, warning when an extension replaces a built-in tool/command/flag, managed git packages stop auto-installing peer dependencies plus the host-provided modules warning, pinned git `-e` refresh after the ref changes, theme resource loading by color mode.
 
-**Go targets.** `coding/resource_loader.go`, `coding/packagecontent/`, `internal/codingagent/resource_source_info.go`, `internal/codingagent/resources.go`, `cmd/pig/package_*.go`, `cmd/pig/extensions.go`.
+**Go targets.** `coding/resource_loader.go`, `coding/packagecontent/`, `internal/codingagent/resource_source_info.go`, `internal/codingagent/resources.go`, `cmd/ompig/package_*.go`, `cmd/ompig/extensions.go`.
 
 **Dependencies.** Loader naming and 6D share `core/extensions/loader.ts`: 6C owns discovery, path naming and source info; 6D owns extension registration and API binding. Family 8 registers the built-in extension code (`builtin:mcp`, `builtin:codemode`, `builtin:tool-search`) through the registry this lane defines: define it in the red commit as `builtin:<name>` to factory lookup, empty at first.
 
-**Hot spots.** `cmd/pig/extensions.go` (family 8 adds built-ins to it) and `cmd/pig/args.go` (family 7 adds `--extension builtin:`). 6C edits `extensions.go`; families 7 and 8 rebase on it. `docs/parity/PORT_MAP.md` rows for `resource-loader.ts` are integrator-owned.
+**Hot spots.** `cmd/ompig/extensions.go` (family 8 adds built-ins to it) and `cmd/ompig/args.go` (family 7 adds `--extension builtin:`). 6C edits `extensions.go`; families 7 and 8 rebase on it. `docs/parity/PORT_MAP.md` rows for `resource-loader.ts` are integrator-owned.
 
 ### 6D. Extension API host side and the wire contract
 
@@ -133,7 +133,7 @@ Wave 1 lanes need no other lane's production code. Wave 2 lanes write their red 
 
 **Sub-lanes.** `6F-go`, `6F-rs`, `6F-py` are file-disjoint and run in parallel after the 6D contract commit; `6F-ts` is small. `6F-events` starts immediately (it touches only `event_bus.go`, the new protocol file and the SDK event files).
 
-**Hot spots.** `extensions/sdk-py/pig_sdk/__init__.py` (2,810 lines, single file) belongs to `6F-py` alone. `extensions/sdk-rs/src/context.rs` (3,171 lines) and `extension.rs` (2,948 lines) belong to `6F-rs` alone. `test/extension-conformance/conformance_test.go` and its fixtures are shared: add rows in new `*_test.go` files per capability, never in the existing file.
+**Hot spots.** `extensions/sdk-py/ompig_sdk/__init__.py` (2,810 lines, single file) belongs to `6F-py` alone. `extensions/sdk-rs/src/context.rs` (3,171 lines) and `extension.rs` (2,948 lines) belong to `6F-rs` alone. `test/extension-conformance/conformance_test.go` and its fixtures are shared: add rows in new `*_test.go` files per capability, never in the existing file.
 
 ## 4. `pi.events` bridge for the native SDKs
 
@@ -183,10 +183,10 @@ Wave 1 lanes need no other lane's production code. Wave 2 lanes write their red 
 | `coding/extension/host/subprocess/event_bus.go` | 6F-events | none |
 | `internal/codingagent/settings.go` | 6A (all new fields in its red commit) | 6B, 6C, family 9 read |
 | `internal/codingagent/model_registry.go` | 6B | none |
-| `cmd/pig/extensions.go` | 6C | families 7, 8 rebase |
-| `cmd/pig/args.go`, `startup_model.go` | 6B for model flags first, then family 7 | |
+| `cmd/ompig/extensions.go` | 6C | families 7, 8 rebase |
+| `cmd/ompig/args.go`, `startup_model.go` | 6B for model flags first, then family 7 | |
 | `coding/extension/provider.go`, `model_info.go` | 6D declares, 6B consumes | |
-| `extensions/sdk-py/pig_sdk/__init__.py` | 6F-py | none |
+| `extensions/sdk-py/ompig_sdk/__init__.py` | 6F-py | none |
 | `test/extension-conformance/*` | new files per capability | existing `conformance_test.go` untouched |
 | `docs/parity/PORT_MAP.md`, `test/parity/interfaces/*`, `coverage.md`, known-gap and batch files | integrator | none |
 | `docs/extension-api-parity.md`, `extension-sdk-surface.md`, `DIVERGENCES.md` | integrator | lanes record row text in their evidence file |

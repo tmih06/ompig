@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -20,12 +20,12 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/tlsdistrust"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
@@ -35,12 +35,12 @@ import (
 	smithymiddleware "github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 
-	awsconfig "github.com/MichaelKinsy/PiG/third_party/awssdk/config"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/stscreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/sts"
+	awsconfig "github.com/tmih06/ompig/third_party/awssdk/config"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/stscreds"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
+	"github.com/tmih06/ompig/third_party/awssdk/service/sts"
 )
 
 // BedrockProvider implements the Provider interface backed by AWS
@@ -90,7 +90,7 @@ func (p *BedrockProvider) Close() error { return nil }
 
 // Stream runs ConverseStream and translates its events into one terminal assistant result. Request failures preserve available HTTP status, AWS error code, and request identity as diagnostics. An explicit CacheRetention overrides the legacy environment preference. Nil contexts are rejected before stream construction.
 func (p *BedrockProvider) Stream(ctx context.Context, transcript TranscriptContext, opts StreamOptions) (*AssistantMessageEventStream, error) {
-	// pig divergence (D48): the agent loop asks for the tool-flow repair.
+	// ompig divergence (D48): the agent loop asks for the tool-flow repair.
 	if opts.RepairToolFlow {
 		transcript = transcript.withRepairedToolFlow()
 	}
@@ -220,7 +220,7 @@ func (p *BedrockProvider) streamResponse(ctx, requestContext context.Context, co
 	resp, err := converse(requestContext, input, tap.option, func(options *bedrockruntime.Options) {
 		if opts.OnResponse != nil {
 			options.APIOptions = append(options.APIOptions, func(stack *smithymiddleware.Stack) error {
-				return stack.Deserialize.Add(smithymiddleware.DeserializeMiddlewareFunc("PiGProviderResponse", func(ctx context.Context, input smithymiddleware.DeserializeInput, next smithymiddleware.DeserializeHandler) (smithymiddleware.DeserializeOutput, smithymiddleware.Metadata, error) {
+				return stack.Deserialize.Add(smithymiddleware.DeserializeMiddlewareFunc("OmpigProviderResponse", func(ctx context.Context, input smithymiddleware.DeserializeInput, next smithymiddleware.DeserializeHandler) (smithymiddleware.DeserializeOutput, smithymiddleware.Metadata, error) {
 					output, metadata, err := next.HandleDeserialize(ctx, input)
 					if err == nil {
 						if response, ok := output.RawResponse.(*smithyhttp.Response); ok {
@@ -276,7 +276,7 @@ func bedrockClientOptions(cfg aws.Config, httpClient bedrockruntime.HTTPClient) 
 			options.HTTPClient = httpClient
 		}
 		options.Retryer = newBedrockRetryer(options.RetryMode)
-		// pig divergence (D196): the HTTP-tolerant signer is installed only when loadBedrockConfig set a token, never under skip-auth.
+		// ompig divergence (D196): the HTTP-tolerant signer is installed only when loadBedrockConfig set a token, never under skip-auth.
 		if cfg.BearerAuthTokenProvider != nil {
 			options.BearerAuthSigner = bedrockBearerSigner{}
 		}
@@ -346,9 +346,9 @@ func loadBedrockConfig(ctx context.Context, baseURL, modelID string, options Str
 	if trimmed := strings.TrimSpace(baseURL); useEndpoint && trimmed != "" {
 		cfg.BaseEndpoint = aws.String(strings.TrimRight(trimmed, "/"))
 	}
-	// pig divergence (D195): an empty AWS_BEARER_TOKEN_BEDROCK is no token, as in Pi's own provider-env lookup (getProviderEnvValue), so the request is signed with the
+	// ompig divergence (D195): an empty AWS_BEARER_TOKEN_BEDROCK is no token, as in Pi's own provider-env lookup (getProviderEnvValue), so the request is signed with the
 	// credentials found. Pi's AWS SDK selects bearer auth for any variable that is present, empty or not, and the request fails signing before it is sent.
-	// pig divergence (D196): under skip-auth no bearer signer is installed here, so a token in the process environment, which the Go SDK picks up itself, keeps the SDK's
+	// ompig divergence (D196): under skip-auth no bearer signer is installed here, so a token in the process environment, which the Go SDK picks up itself, keeps the SDK's
 	// HTTPS-only signer; Pi's SDK sends the Authorization header over http://.
 	if token := firstNonEmptyString(options.BearerToken, options.APIKey, getProviderEnvValue("AWS_BEARER_TOKEN_BEDROCK", env)); token != "" && !skipAuth {
 		cfg.BearerAuthTokenProvider = staticBearerTokenProvider(token)
@@ -360,7 +360,7 @@ func loadBedrockConfig(ctx context.Context, baseURL, modelID string, options Str
 // newBedrockHTTPClient builds the SDK's client with the given proxy function; a nil function means no proxy, as Node's handlers without an agent.
 func newBedrockHTTPClient(proxy func(*http.Request) (*url.URL, error)) *awshttp.BuildableClient {
 	return awshttp.NewBuildableClient().WithTransportOptions(func(transport *http.Transport) {
-		// pig additive (D191): Bedrock, STS, SSO and the other credential clients share this builder.
+		// ompig additive (D191): Bedrock, STS, SSO and the other credential clients share this builder.
 		tlsdistrust.HardenTransport(transport)
 		transport.Proxy = proxy
 		if transport.DialContext != nil {
@@ -633,7 +633,7 @@ func bedrockCacheTTL(retention bedrockCacheRetention) btypes.CacheTTL {
 // coalescing into a single user message that Bedrock requires. User, assistant and tool-result text uses ECMAScript emptiness checks without trimming nonblank payloads. System messages are skipped: the caller has already folded them into the leading prompt.
 func convertBedrockMessages(msgs []Message, modelID, modelName string, cacheRetention bedrockCacheRetention, env ProviderEnv) ([]btypes.Message, error) {
 	out := make([]btypes.Message, 0, len(msgs))
-	// pig divergence (D116): Pi pushes every user message and run of tool results as its own message, so two user messages can sit side by side (a prompt after tool results, a dropped assistant turn); Converse requires alternating roles, so adjacent messages of one role share a message.
+	// ompig divergence (D116): Pi pushes every user message and run of tool results as its own message, so two user messages can sit side by side (a prompt after tool results, a dropped assistant turn); Converse requires alternating roles, so adjacent messages of one role share a message.
 	push := func(role btypes.ConversationRole, blocks []btypes.ContentBlock) {
 		if last := len(out) - 1; last >= 0 && out[last].Role == role {
 			out[last].Content = append(out[last].Content, blocks...)
@@ -1584,7 +1584,7 @@ func awsResponseErrorStatus(err error) (int, bool) {
 
 // NewBedrockAPIProvider builds the bedrock-converse-stream provider for model, the provider every model-to-provider factory uses.
 func NewBedrockAPIProvider(model Model) (Provider, error) {
-	// pig additive (D92): a Piglet's strip.apis disables Bedrock at runtime the way a pig_strip_bedrock_converse_stream build compiles it out.
+	// ompig additive (D92): a Ompiglet's strip.apis disables Bedrock at runtime the way a ompig_strip_bedrock_converse_stream build compiles it out.
 	if pigstrip.Has(pigstrip.ListAPIs, string(APIBedrockConverseStream)) {
 		return nil, strippedBedrockError(&model)
 	}
@@ -1599,7 +1599,7 @@ func init() {
 
 // bedrockUserAgent is the client identity as AWS SDK user agent pairs (bedrock-converse-stream.ts bedrockUserAgent): the SDK appends them to its own User-Agent, so the detailed form is reduced to name and version.
 //
-// pig divergence (D65): the name is PiG's product name, and the AWS SDK for Go writes the pairs into its own User-Agent. A custom string is appended after the SDK's own value with the JavaScript SDK's escaping (each slash-separated part keeps its slashes and replaces characters outside the token set with "-"), because the Go SDK's own key helper would also replace the slash.
+// ompig divergence (D65): the name is Ompig's product name, and the AWS SDK for Go writes the pairs into its own User-Agent. A custom string is appended after the SDK's own value with the JavaScript SDK's escaping (each slash-separated part keeps its slashes and replaces characters outside the token set with "-"), because the Go SDK's own key helper would also replace the slash.
 func bedrockUserAgent(identity *ClientIdentity) func(*smithymiddleware.Stack) error {
 	mode := UserAgentDetailed
 	if identity != nil && identity.UserAgent != nil {
@@ -1633,7 +1633,7 @@ func escapeBedrockUserAgent(value string) string {
 // appendBedrockUserAgent adds value to the User-Agent the SDK's own middleware builds, so it must run after that middleware.
 func appendBedrockUserAgent(value string) func(*smithymiddleware.Stack) error {
 	return func(stack *smithymiddleware.Stack) error {
-		return stack.Build.Insert(smithymiddleware.BuildMiddlewareFunc("pig-client-identity-user-agent", func(ctx context.Context, in smithymiddleware.BuildInput, next smithymiddleware.BuildHandler) (smithymiddleware.BuildOutput, smithymiddleware.Metadata, error) {
+		return stack.Build.Insert(smithymiddleware.BuildMiddlewareFunc("ompig-client-identity-user-agent", func(ctx context.Context, in smithymiddleware.BuildInput, next smithymiddleware.BuildHandler) (smithymiddleware.BuildOutput, smithymiddleware.Metadata, error) {
 			if request, ok := in.Request.(*smithyhttp.Request); ok {
 				request.Header.Set("User-Agent", strings.TrimSpace(request.Header.Get("User-Agent")+" "+value))
 			}

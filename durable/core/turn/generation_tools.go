@@ -4,8 +4,8 @@
 package turn
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // tools is the tools phase: wait on the round's tool tasks, starting the next call of a sequential round, or finish the round.

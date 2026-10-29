@@ -16,11 +16,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Ports packages/coding-agent/src/extensions/mcp/cli.ts.
@@ -35,7 +35,7 @@ import (
 type McpCommandOptions struct {
 	Cwd      string
 	AgentDir string
-	// AppName and ConfigDirName are the CLI name and the per-project configuration directory, `pi` and `.pi` upstream. Defaults: "pig" and ".pig".
+	// AppName and ConfigDirName are the CLI name and the per-project configuration directory, `pi` and `.pi` upstream. Defaults: "ompig" and ".ompig".
 	AppName       string
 	ConfigDirName string
 	// Credentials defaults to `mcp-auth.json` in AgentDir.
@@ -244,10 +244,10 @@ func (c *mcpCLI) parseOptions(args []string, known map[string]optionKind, maxPos
 func RunMcpCommand(ctx context.Context, args []string, options McpCommandOptions) int {
 	c := &mcpCLI{options: options, app: options.AppName, dir: options.ConfigDirName, log: options.Log, error: options.Error}
 	if c.app == "" {
-		c.app = "pig"
+		c.app = "ompig"
 	}
 	if c.dir == "" {
-		c.dir = ".pig"
+		c.dir = ".ompig"
 	}
 	if c.log == nil {
 		c.log = func(line string) { _, _ = fmt.Fprintln(os.Stdout, line) }
@@ -798,7 +798,7 @@ func (c *mcpCLI) login(ctx context.Context, entry McpServerEntry, connection *Co
 		Settings:  settings,
 		Challenge: connection.Challenge(),
 		Prompt:    &redirectPrompt{cli: c, name: name},
-		AppName:   "pig",
+		AppName:   "ompig",
 	})
 	cancelSignIn()
 	if err != nil {

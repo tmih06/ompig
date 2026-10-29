@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type configOracleResource struct {
@@ -79,7 +79,7 @@ func configOracleResource1(path string, enabled bool, source, scope, origin, bas
 
 // config-selector.ts ConfigSelectorComponent/ResourceList against pinned Pi: group/subgroup layout and labels, item display names,
 // up/down/page navigation over item rows only, search filtering, space/enter toggling, Escape/Ctrl+C callbacks and Tab switching
-// of the write scope; the callbacks after each key and every frame's rows must agree byte for byte (colours included; only Pi's .pi/ directory is read as .pig/).
+// of the write scope; the callbacks after each key and every frame's rows must agree byte for byte (colours included; only Pi's .pi/ directory is read as .ompig/).
 func TestConfigSelectorMatchesPi(t *testing.T) {
 	user := func(path string, enabled bool) configOracleResource {
 		return configOracleResource1(path, enabled, "local", "user", "top-level", "")
@@ -97,7 +97,7 @@ func TestConfigSelectorMatchesPi(t *testing.T) {
 		Themes:     []configOracleResource{user("/agent/themes/solar.json", false)},
 	}
 	projectSmall := configOracleResolved{
-		Extensions: []configOracleResource{configOracleResource1("/proj/.pig/extensions/zeta.ts", true, "local", "project", "top-level", ""), pkg("/work/pack/extensions/tool.ts", false, "project")},
+		Extensions: []configOracleResource{configOracleResource1("/proj/.ompig/extensions/zeta.ts", true, "local", "project", "top-level", ""), pkg("/work/pack/extensions/tool.ts", false, "project")},
 		Skills:     []configOracleResource{auto("/work/proj/skills/deep/SKILL.md", true, "project")},
 	}
 	var large configOracleResolved
@@ -116,7 +116,7 @@ func TestConfigSelectorMatchesPi(t *testing.T) {
 		{"global": large, "project": small},
 	}
 	base := []string{"\x1b[A", "\x1b[A", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[5~", "\x1b[6~", "\x1b", "\x03", "\x7f", "e", "x", "s", "k", "p", "t", "a", "/", ".", "\x15", "\x17", "z", "l", "\x1b[200~ex \x1b[201~", "\x1b[200~\u0130\x1b[201~", "\x1b[200~ Ex\x1b[201~", "\u0130"}
-	// Pi derives a project override from the SettingsManager's project settings and Pig carries it on the item (OnOverride persists it),
+	// Pi derives a project override from the SettingsManager's project settings and Ompig carries it on the item (OnOverride persists it),
 	// so project-scope toggles are not comparable here: toggle keys only run in global scope, Tab only where no toggle can follow in project scope.
 	toggling := append(append([]string{}, base...), " ", " ", "\r")
 	switching := append(append([]string{}, base...), "\t", "\t")
@@ -267,8 +267,8 @@ func TestConfigSelectorMatchesPi(t *testing.T) {
 		for k, f := range want.Frames {
 			wantFrames[k] = make([]string, len(f))
 			for l, line := range f {
-				// pig divergence (D80-family brand): Pig's config directory is .pig, Pi's is .pi (D1 brand rename).
-				wantFrames[k][l] = strings.ReplaceAll(line, ".pi/", ".pig/")
+				// ompig divergence (D80-family brand): Ompig's config directory is .ompig, Pi's is .pi (D1 brand rename).
+				wantFrames[k][l] = strings.ReplaceAll(line, ".pi/", ".ompig/")
 			}
 		}
 		if !reflect.DeepEqual(got.Steps, want.Steps) || !reflect.DeepEqual(got.Frames, wantFrames) {

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
 // The cache key of a build is the hash of the source as it was read before the build started. The compiler reads the files later,

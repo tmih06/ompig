@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // handleDeclarationRegistration applies the commands, shortcuts, flags, message renderers and entry renderers of a RegisterPayload to the live extension. Pi's loader writes each into the extension's own Map, which every runner getter reads live, so a registration made after load (inside a handler, a command or a timer) takes effect and replaces an earlier one with the same key.

@@ -1,7 +1,7 @@
 # Behavior family: rpc
 # Surface: --continue when the session directory holds no session.
 #
-# Pi 1.1.0 main.ts passes the flag to SessionManager.continueRecent (session-manager.ts:1793), which creates a session when none exists, without a message. Pig
+# Pi 1.1.0 main.ts passes the flag to SessionManager.continueRecent (session-manager.ts:1793), which creates a session when none exists, without a message. Ompig
 # printed "warning: no prior session in <dir>; starting fresh" on stderr (coding/cli/main.go, unrecorded); stderr_equal pins the silence.
 
 name = "51-rpc-continue-without-prior-session"
@@ -22,8 +22,8 @@ wait_contains = ['"id":"s1","type":"response"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions", "--continue"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions", "--continue"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions", "--continue"]
 

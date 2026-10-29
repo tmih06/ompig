@@ -15,7 +15,7 @@ type configHomeCase struct {
 }
 
 // Context.ConfigHome answers the shared env matrix (test/extension-conformance/testdata/configroot-matrix.json) as the host's internal/configroot and
-// the Python, Rust and Node SDKs do: PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig; empty falls through; ~ and ~/ expand; other values stay
+// the Python, Rust and Node SDKs do: OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig; empty falls through; ~ and ~/ expand; other values stay
 // literal; an unavailable home directory is an error, never a relative path.
 func TestConfigHomeMatchesTheSharedMatrix(t *testing.T) {
 	raw, err := os.ReadFile(filepath.Join("..", "..", "test", "extension-conformance", "testdata", "configroot-matrix.json"))
@@ -34,7 +34,7 @@ func TestConfigHomeMatchesTheSharedMatrix(t *testing.T) {
 	for _, tc := range matrix.Cases {
 		t.Run(tc.Name, func(t *testing.T) {
 			home := t.TempDir()
-			for _, name := range []string{"PIG_HOME", "XDG_CONFIG_HOME"} {
+			for _, name := range []string{"OMPIG_HOME", "XDG_CONFIG_HOME"} {
 				t.Setenv(name, "")
 				_ = os.Unsetenv(name)
 			}

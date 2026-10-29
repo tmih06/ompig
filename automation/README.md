@@ -1,6 +1,6 @@
 # Automation
 
-Every script PiG runs outside of Go code lives here. The root `Makefile` is the
+Every script Ompig runs outside of Go code lives here. The root `Makefile` is the
 command interface: run `make help` for the everyday targets and
 `make help-parity` for the parity machinery. Call a script directly only when
 no target covers what you need, and add a target when you find yourself doing
@@ -14,7 +14,7 @@ that twice.
 | `pin/` | the upstream Pi pin: derivation, override, bump, oracle build | `make pin-show`, `make pin-bump`, `make pin-check` |
 | `gen/` | generators, vendoring, and the upstream mirror | `make upstream-mirror`, `make model-catalogs`, `make knowledge-graph` |
 | `release/` | release manifest and SBOM checks | release workflow |
-| `porter/` | Pig Porter runners | `make porter*` |
+| `porter/` | Ompig Porter runners | `make porter*` |
 | `images/` | CI container images | `ci-images` workflow |
 | `make/` | make fragments the root `Makefile` includes | `make help-parity` |
 
@@ -27,9 +27,9 @@ Run `make generate` from the repository root after changing exported Go API, CLI
 
 | Specific target | Outputs |
 |---|---|
-| `interface-proposals` | Pinned package, CLI, behavior-input, Pig Go, and recommendation inventories under `test/parity/interfaces/` |
-| `interface-go` | `test/parity/interfaces/pig-go.json` only |
-| `interface-recommendations-generate` | Pig Go inventory and recommendations |
+| `interface-proposals` | Pinned package, CLI, behavior-input, Ompig Go, and recommendation inventories under `test/parity/interfaces/` |
+| `interface-go` | `test/parity/interfaces/ompig-go.json` only |
+| `interface-recommendations-generate` | Ompig Go inventory and recommendations |
 | `behavior-input-inventory` | Pinned behavior-input inventory only |
 | `test-inventory-generate` | Pinned upstream test inventory |
 | `custom-factory-ledger` | Generated custom-factory call-surface ledger |
@@ -49,8 +49,8 @@ The automation writes only where the environment allows. Set these when the defa
 | Variable | Default | Used for |
 |---|---|---|
 | `TMPDIR` | `/tmp` | every temporary file and directory, and the default `RESULTS` path. Scripts pass an explicit `mktemp` template because macOS ignores `TMPDIR` without one. |
-| `XDG_CACHE_HOME` | `~/.cache` | `PIG_DEV_HOME` (the pinned toolchain and `env.mk`) and the upstream tarball cache |
-| `PIG_DEV_HOME` | `$XDG_CACHE_HOME/pig-dev` | toolchains and machine settings from `make setup` |
+| `XDG_CACHE_HOME` | `~/.cache` | `OMPIG_DEV_HOME` (the pinned toolchain and `env.mk`) and the upstream tarball cache |
+| `OMPIG_DEV_HOME` | `$XDG_CACHE_HOME/ompig-dev` | toolchains and machine settings from `make setup` |
 | `SSL_CERT_FILE` | system trust | Go TLS behind an intercepting proxy or in a macOS sandbox; `make doctor` prints this fix when Go cannot verify the module proxy |
 | `GOVULNDB` | `https://vuln.go.dev` | a local copy of `vulndb.zip` for `make compliance` offline |
 
@@ -60,11 +60,11 @@ The automation writes only where the environment allows. Set these when the defa
 
 | Script | Purpose |
 |---|---|
-| `setup.sh` | Installs the Go toolchain pinned by `.go-version`, starts the module-proxy fallback when proxy.golang.org is unreachable, and builds `bin/pig`. `--check` reports without changing anything, including a leaked `GOROOT`/`GOBIN` and Go TLS failures. Behind `make setup` and `make doctor`. |
+| `setup.sh` | Installs the Go toolchain pinned by `.go-version`, starts the module-proxy fallback when proxy.golang.org is unreachable, and builds `bin/ompig`. `--check` reports without changing anything, including a leaked `GOROOT`/`GOBIN` and Go TLS failures. Behind `make setup` and `make doctor`. |
 | `goproxy-github.py` | Serves the Go module proxy protocol from GitHub source archives and verifies every module against `go.sum`. Used only where proxy.golang.org is blocked. |
 | `toolchains.lock` | Pinned toolchain archives and SHA-256 digests: Go for `setup.sh`, TinyGo for `durable/core/budget/build-wasm.sh`. |
-| `login-copilot.sh` | Interactive helper for signing pig in to GitHub Copilot. |
-| `parity-probe` | Launches upstream Pi or pig in tmux for side-by-side behavior checks. |
+| `login-copilot.sh` | Interactive helper for signing ompig in to GitHub Copilot. |
+| `parity-probe` | Launches upstream Pi or ompig in tmux for side-by-side behavior checks. |
 | `stage-clipboard-png.sh` | Puts a PNG on the clipboard for manual paste tests. |
 
 ## portlens
@@ -75,19 +75,19 @@ The automation writes only where the environment allows. Set these when the defa
 
 | Script | Purpose |
 |---|---|
-| `test-grouped.sh` | The `make test` scheduler: runs Go packages in groups sized for the machine, and `cmd/pig` in shards. `changed` mode (`make test-changed`) runs only the packages `changed-packages.py` selects. |
+| `test-grouped.sh` | The `make test` scheduler: runs Go packages in groups sized for the machine, and `cmd/ompig` in shards. `changed` mode (`make test-changed`) runs only the packages `changed-packages.py` selects. |
 | `changed-packages.py` | Maps the files changed since the merge base with `TEST_BASE` (default `@{upstream}`, then `main`) to the packages that hold, embed or name them, and adds every package whose tests import one (`go list -test -deps` reverse closure). |
 | `test-json-report.py` | Summarizes `go test -json` as it streams: package results, failed-test output, the slowest tests and packages; keeps the raw events. |
 | `reap-test-processes.sh` | Kills and reports processes still running under a test group's scratch `TMPDIR` after `go test` returned; the group fails. Hosts without `/proc` (macOS) read each environment from `ps -E`. |
-| `cached-gate.sh` | Replays a whole-repository gate's passing run while no tracked, modified or untracked file changed (`port-lint`, `interface-gaps`); failures, `CI` and `PIG_GATE_CACHE=0` always run it. |
-| `test-shard-pattern.sh` | Prints the `go test -run` pattern for one shard of a package's tests. `make test-cli` and the Windows `cli-1` to `cli-8` jobs run `cmd/pig` in these shards, each shard in its own parallel job, `go test` process and timeout. |
+| `cached-gate.sh` | Replays a whole-repository gate's passing run while no tracked, modified or untracked file changed (`port-lint`, `interface-gaps`); failures, `CI` and `OMPIG_GATE_CACHE=0` always run it. |
+| `test-shard-pattern.sh` | Prints the `go test -run` pattern for one shard of a package's tests. `make test-cli` and the Windows `cli-1` to `cli-8` jobs run `cmd/ompig` in these shards, each shard in its own parallel job, `go test` process and timeout. |
 | `test-fixtures.sh` | Builds the Go and Rust extension fixtures tests load. |
 | `test-race.sh` | Race and goroutine-leak gate for the TUI concurrency model. |
-| `test-race-nightly.sh` | Whole-package `-race` on every package `race-packages.txt` lists (the agent loop, provider streams, TUI, the extension hosts and SDK module, the session core, the RPC/print/JSON modes, the concurrency libraries), one nightly matrix job per group (`PIG_RACE_GROUP`: `ai`, `rest`, `host`, `coding`, `cli`, `libs`; `PIG_RACE_SHARD=k/n` runs one shard of the single-package `cli` group). Behind `make test-race-nightly` and the nightly workflow. |
+| `test-race-nightly.sh` | Whole-package `-race` on every package `race-packages.txt` lists (the agent loop, provider streams, TUI, the extension hosts and SDK module, the session core, the RPC/print/JSON modes, the concurrency libraries), one nightly matrix job per group (`OMPIG_RACE_GROUP`: `ai`, `rest`, `host`, `coding`, `cli`, `libs`; `OMPIG_RACE_SHARD=k/n` runs one shard of the single-package `cli` group). Behind `make test-race-nightly` and the nightly workflow. |
 | `race-packages.txt`, `race-coverage.sh` | The list of concurrency packages with the nightly group of each (or `exempt` and a reason), and the gate (`make race-coverage`, part of `check-core` and `ci-drift`) that fails when a package that starts goroutines or timers and has tests is in none. |
-| `fuzz-nightly.sh` | Runs every `Fuzz` target for `PIG_FUZZ_TIME` (default 30s) with `PIG_FUZZ_PARALLEL` workers (default 4); a package whose targets cannot be listed fails the run. Behind `make fuzz-nightly` and the nightly workflow. |
+| `fuzz-nightly.sh` | Runs every `Fuzz` target for `OMPIG_FUZZ_TIME` (default 30s) with `OMPIG_FUZZ_PARALLEL` workers (default 4); a package whose targets cannot be listed fails the run. Behind `make fuzz-nightly` and the nightly workflow. |
 | `integration-tests.sh` | The tmux integration tier, split by category. |
-| `qc-smoke.sh` | Smoke checks against a freshly built pig. Behind `make qc`. |
+| `qc-smoke.sh` | Smoke checks against a freshly built ompig. Behind `make qc`. |
 | `parity-resource-limits.sh` | Chooses parity concurrency from CPU and memory. Probed only by targets that schedule parity. |
 | `report-schedule.sh` | Prints the Go-test and parity scheduler buckets. |
 | `check-divergence-consistency.sh` | Every ledger entry has a source marker and every marker has an entry. |
@@ -101,7 +101,7 @@ The automation writes only where the environment allows. Set these when the defa
 | `check-port-map-drift.py` | `docs/parity/PORT_MAP.md` accounts for every upstream source file. |
 | `check-dco.sh` | Every commit in a pull request carries a DCO sign-off. |
 | `check-npm-lock-integrity.py` | npm lockfiles pin integrity hashes. |
-| `npm-locked.py` | Installs locked npm dependencies when manifest content changes; refuses replacement through a shared symlink. With `PIG_NODE_MODULES_STORE` set, installs each manifest once per host under that directory and links `node_modules` to it. |
+| `npm-locked.py` | Installs locked npm dependencies when manifest content changes; refuses replacement through a shared symlink. With `OMPIG_NODE_MODULES_STORE` set, installs each manifest once per host under that directory and links `node_modules` to it. |
 | `build-ci-image.sh`, `seed-ci-image-bases.sh` | Build and seed the CI container images in `images/`. |
 
 ## pin
@@ -118,8 +118,8 @@ The automation writes only where the environment allows. Set these when the defa
 |---|---|
 | `mirror-upstream.sh` | Materializes the pinned Pi source under `.upstream/v<version>` and points `.upstream/current` at it (read-only reference). |
 | `generate-model-catalogs.sh` | Regenerates model catalogs from the pinned published Pi package. |
-| `gen-help.sh` | Renders Pi's own `--help` with PiG's identity. |
-| `gen-knowledge-graph.py` | Renders `docs/knowledge-graph/pig.graph.json` into its published forms. |
+| `gen-help.sh` | Renders Pi's own `--help` with Ompig's identity. |
+| `gen-knowledge-graph.py` | Renders `docs/knowledge-graph/ompig.graph.json` into its published forms. |
 | `vendor-pi-dist.sh`, `vendor-typebox.sh` | Vendor the pinned Pi release's pure modules, the third-party packages they import, and TypeBox for the Node extension runtime. |
 
 ## release
@@ -133,9 +133,9 @@ The automation writes only where the environment allows. Set these when the defa
 
 | Script | Purpose |
 |---|---|
-| `run-pig-porter.sh` | Runs one bounded Pig Porter task. |
-| `run-pig-porter-campaign.sh` | Runs read-only Porter workers across parity families. |
-| `verify-pig-porter-local.sh` | Verifies the Porter Piglet in TUI and headless modes. |
+| `run-ompig-porter.sh` | Runs one bounded Ompig Porter task. |
+| `run-ompig-porter-campaign.sh` | Runs read-only Porter workers across parity families. |
+| `verify-ompig-porter-local.sh` | Verifies the Porter Ompiglet in TUI and headless modes. |
 
 ## Evals and profiling
 

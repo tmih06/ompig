@@ -52,7 +52,7 @@ for (const [name, pkg] of piPackages) {
     if (hash(source) !== hash(output)) {
       rewrite = name === "pi-coding-agent" && rel === "config.js" ? "D2 configuration and private asset paths; published bundled loader" : name === "pi-ai" && rel.startsWith("api/") ? "D74 host API leaf" : "module specifiers";
       // A file can carry both seams: keep the other rewrite's label unless the identity patches alone produce the output.
-      const identity = "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)";
+      const identity = "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)";
       if (identityPatches[`${name}/${rel}`]) rewrite = patchIdentity(`${name}/${rel}`, readFileSync(source, "utf8")) === readFileSync(output, "utf8") ? identity : `${rewrite}; ${identity}`;
     }
     record(output, source, pkg, rewrite);

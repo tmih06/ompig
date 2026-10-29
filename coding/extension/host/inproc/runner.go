@@ -16,13 +16,13 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/eventwire"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/internal/boundarywire"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/eventwire"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // defaultStaleMessage matches the upstream default verbatim. This string
@@ -113,7 +113,7 @@ func (e *StaleError) Is(target error) bool { return target == extension.ErrStale
 // upstream: runner.ts:219 (export class ExtensionRunner)
 type Runner struct {
 	// Field names mirror upstream private fields verbatim for sync
-	// compatibility; see pig/AGENTS.md "Sync compatibility: the
+	// compatibility; see ompig/AGENTS.md "Sync compatibility: the
 	// prime directive".
 
 	// extensions is the pre-populated state container slice, produced
@@ -128,7 +128,7 @@ type Runner struct {
 
 	// staleMessage holds the invalidation reason as a *string; nil = active.
 	//
-	// pig translation rule (NOT a divergence: see docs/parity/DIVERGENCES.md
+	// ompig translation rule (NOT a divergence: see docs/parity/DIVERGENCES.md
 	// "TS→Go translation rituals"): atomic.Pointer for thread-safe
 	// reads from any goroutine. Upstream runs single-threaded JS where
 	// a plain mutable property suffices.
@@ -165,7 +165,7 @@ type Runner struct {
 	// emit-side iteration takes the read lock so listeners can be
 	// fired concurrently with subscription mutations.
 	//
-	// pig translation rule (NOT a divergence): upstream uses a
+	// ompig translation rule (NOT a divergence): upstream uses a
 	// `Set<ErrorListener>` mutated single-threaded; Go needs an
 	// explicit lock because handler dispatch and AddErrorListener can
 	// race when called from different goroutines.
@@ -513,7 +513,7 @@ func (r *Runner) BindCore(
 		return r.flagValue(name)
 	}
 	// Upstream's sendUserMessage lives on ExtensionAPI, which every handler
-	// receives. Pig delivers it through the per-extension Context, so the
+	// receives. Ompig delivers it through the per-extension Context, so the
 	// handler-facing bundle carries the same action the command path uses.
 	if actions.SendUserMessage != nil {
 		r.contextActions.SendUserMessage = func(content any, options *extension.SendUserMessageOptions) error {
@@ -522,7 +522,7 @@ func (r *Runner) BindCore(
 	} else {
 		r.contextActions.SendUserMessage = nil
 	}
-	// The shared runtime may already hold actions its host bound (cmd/pig's callbacks start the registration refresh after each registration). The runner composes with them instead of replacing them: the model registry's own methods fill only what no host bound, and an explicit providerActions entry wins, as upstream's providerActions do (runner.ts:481-490).
+	// The shared runtime may already hold actions its host bound (cmd/ompig's callbacks start the registration refresh after each registration). The runner composes with them instead of replacing them: the model registry's own methods fill only what no host bound, and an explicit providerActions entry wins, as upstream's providerActions do (runner.ts:481-490).
 	host := r.runtime.BoundProviderActions()
 	providers := host
 	providers.RegisterVirtualModel, providers.UnregisterVirtualModel = nil, nil
@@ -566,7 +566,7 @@ func (r *Runner) BindCore(
 		return extension.NewContext(r.cwd, nil, r.assertActive, r.actions()), nil
 	})
 	r.runtime.SetMcpServersChangeListener(r.onMcpServersChange)
-	// pig additive (D107): host diagnostics outside a handler reach this
+	// ompig additive (D107): host diagnostics outside a handler reach this
 	// runner's error listeners.
 	r.runtime.SetErrorReporter(r.emitError)
 	r.runtime.BindProviderActions(providers, r.emitError)
@@ -807,7 +807,7 @@ func (r *Runner) Tools() []extension.RegisteredTool {
 // [Runner.Tools] reports under toolName. Upstream registerTool stamps the
 // registering extension's sourceInfo onto the tool (loader.ts), and
 // getAllTools reports it. [extension.RegisteredTool.SourceInfo] carries
-// PiG's per-tool source attribution for Piglet scoping instead (D23).
+// Ompig's per-tool source attribution for Ompiglet scoping instead (D23).
 //
 // upstream: runner.ts getAllRegisteredTools (RegisteredTool.sourceInfo)
 func (r *Runner) ToolSourceInfo(toolName string) (extension.SourceInfo, bool) {
@@ -1315,7 +1315,7 @@ func snapshotJSONEventHandlers(extensions []extension.Extension, event string) [
 // snapshotEventHandlers captures every extension before the first callback runs. Registration changes affect only a subsequent or nested dispatch.
 // upstream: packages/coding-agent/src/core/extensions/runner.ts:snapshotEventHandlers
 //
-//pig:hotpath
+//ompig:hotpath
 func snapshotEventHandlers(extensions []extension.Extension, event string) []eventHandlerSnapshot {
 	snapshots := make([]eventHandlerSnapshot, 0, len(extensions))
 	for i := range extensions {
@@ -1401,7 +1401,7 @@ func (r *Runner) recordHandlerError(ctx context.Context, extPath, eventType stri
 	if err == nil || errors.Is(err, extension.ErrHandlerStopped) || (ctx.Err() != nil && errors.Is(err, ctx.Err())) {
 		return
 	}
-	// pig divergence (D56): a failed subprocess connection has one lifecycle diagnostic, not another notification for every interrupted handler.
+	// ompig divergence (D56): a failed subprocess connection has one lifecycle diagnostic, not another notification for every interrupted handler.
 	if _, owned := errors.AsType[*invocation.LifecycleError](err); owned {
 		return
 	}
@@ -1576,7 +1576,7 @@ func (r *Runner) EmitToolCall(ctx context.Context, event extension.ToolCallEvent
 }
 
 // AwaitEventLoopTurns gives each extension that handles event and runs on an event loop of its own (Extension.EventLoopTurn) one turn of that loop, concurrently, and returns when every one took it. Pi runs its tools on the extensions' event loop, so the callbacks an event handler queued run before the tool's result; this keeps that order when the tool ran elsewhere.
-// pig additive (D19): a turn that fails is not waited for; the extension's next dispatch reports its connection.
+// ompig additive (D19): a turn that fails is not waited for; the extension's next dispatch reports its connection.
 func (r *Runner) AwaitEventLoopTurns(ctx context.Context, event string) {
 	var turns sync.WaitGroup
 	for _, snapshot := range snapshotEventHandlers(r.extensions, event) {
@@ -1598,7 +1598,7 @@ func (r *Runner) AwaitEventLoopTurns(ctx context.Context, event string) {
 //
 // upstream: runner.ts:707-755 (emitToolResult)
 //
-// pig-specific: handler errors route via emitError (matches upstream's
+// ompig-specific: handler errors route via emitError (matches upstream's
 // explicit try/catch in this method, runner.ts:733-740).
 func (r *Runner) EmitToolResult(ctx context.Context, event extension.ToolResultEvent) (*extension.ToolResultEventResult, error) {
 	if err := r.assertActive(); err != nil {
@@ -1726,7 +1726,7 @@ func (r *Runner) EmitInput(ctx context.Context, text string, images []extension.
 	dispatchCtx := r.dispatchContext(ctx)
 	currentText := text
 	currentImages := images
-	imagesChanged := false // pig: explicit flag instead of upstream's reference-equality.
+	imagesChanged := false // ompig: explicit flag instead of upstream's reference-equality.
 
 	for _, snapshot := range snapshotEventHandlers(r.extensions, "input") {
 		ext, handlers := snapshot.ext, snapshot.handlers
@@ -1788,7 +1788,7 @@ func (r *Runner) EmitInput(ctx context.Context, text string, images []extension.
 // output. The runner returns the final chained slice.
 //
 // Upstream uses `structuredClone(messages)` to defensively deep-copy the
-// input. Pig preserves the concrete Go values while recursively copying their
+// input. Ompig preserves the concrete Go values while recursively copying their
 // pointers, interfaces, structs, slices, and maps.
 //
 // Returns (nil, *StaleError) if the runner has been invalidated.
@@ -1965,7 +1965,7 @@ func (r *Runner) emitContext(ctx context.Context, messages []extension.AgentMess
 // contextListUnchanged reports whether a context handler's returned list is
 // the list it was given, as upstream sameMessages decides by identity. A
 // subprocess SDK decides identity on its side of the wire and reports it as
-// _pigContextUnchanged; a missing report counts as a replacement.
+// _ompigContextUnchanged; a missing report counts as a replacement.
 func contextListUnchanged(handlerResult any, returned, given []extension.AgentMessage) bool {
 	if len(returned) != len(given) {
 		return false
@@ -1981,7 +1981,7 @@ func contextListUnchanged(handlerResult any, returned, given []extension.AgentMe
 	}
 	if raw != nil {
 		var report struct {
-			Unchanged *bool `json:"_pigContextUnchanged"`
+			Unchanged *bool `json:"_ompigContextUnchanged"`
 		}
 		return json.Unmarshal(raw, &report) == nil && report.Unchanged != nil && *report.Unchanged
 	}
@@ -2114,7 +2114,7 @@ var errLeadingSystemRemoved = errors.New("Handler removed the leading system mes
 //
 // upstream: runner.ts:841-873 (emitBeforeProviderRequest)
 //
-// pig note: the payload type is `any` because upstream types it as
+// ompig note: the payload type is `any` because upstream types it as
 // `unknown` (provider-specific). Callers cast back to the concrete
 // provider request type after this returns.
 func (r *Runner) EmitBeforeProviderRequest(ctx context.Context, payload any) (any, error) {
@@ -2326,7 +2326,7 @@ func coerceUserBashEventResult(value any) (*extension.UserBashEventResult, bool)
 			}
 			exitCode, present := result["exitCode"]
 			var undefined bool
-			if marker, ok := fields["_pigUserBashExitCodeUndefined"]; ok {
+			if marker, ok := fields["_ompigUserBashExitCodeUndefined"]; ok {
 				if err := json.Unmarshal(marker, &undefined); err != nil {
 					return nil, false
 				}
@@ -2803,7 +2803,7 @@ func typedDetails[T any](details any) (*T, bool) {
 //
 // upstream: runner.ts:988-1017 (emit<TEvent>)
 //
-// pig note: upstream uses TS conditional types (`RunnerEmitResult<TEvent>`)
+// ompig note: upstream uses TS conditional types (`RunnerEmitResult<TEvent>`)
 // for type-narrowing the result based on the input event type. Go's type
 // system can't express this, so the result is `any` and callers
 // type-assert. The 4 SessionBefore* event types are documented as the
@@ -2858,7 +2858,7 @@ func (r *Runner) Emit(ctx context.Context, event extension.ExtensionEvent) (any,
 // recordHandlerError, so a panicking handler is isolated and surfaced the
 // same way a returned error is.
 //
-//pig:hotpath
+//ompig:hotpath
 func callHandler(handler extension.HandlerFn, args ...any) (result any, err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -2920,8 +2920,8 @@ func isJSONNull(raw json.RawMessage) bool {
 // (mirrors upstream's discriminator). Returns an error if the value
 // has no `Type` field of kind string.
 //
-// pig-internal: this is the one reflection use in the runner's hot
-// path. Piglet if it ever shows up in flame graphs; the alternative
+// ompig-internal: this is the one reflection use in the runner's hot
+// path. Ompiglet if it ever shows up in flame graphs; the alternative
 // is adding an `EventType() string` method to ~20 event structs which
 // is invasive and clutters the wire-format types.
 func readEventType(event any) (string, error) {

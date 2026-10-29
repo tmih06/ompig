@@ -8,15 +8,15 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/startup-input/observe.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/startup-input/observe.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/startup-input/observe.mjs"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "STARTUP INPUT HOLD"
+ready_pattern_ompig = "STARTUP INPUT HOLD"
 ready_pattern_pi = "STARTUP INPUT HOLD"
 ready_timeout_seconds = 30
 capture_start = "STARTUP INPUT READY: early prompt; draft=draft"

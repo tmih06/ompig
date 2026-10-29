@@ -1,5 +1,5 @@
 # Pi 0.87.1 extensions-discovery.test.ts:399 requires the factory's own error.
-# Pi catches the thrown value directly. PiG has D19 subprocess transport context
+# Pi catches the thrown value directly. Ompig has D19 subprocess transport context
 # around the error, so complete output equality is not a valid comparator here.
 # The required sentinel must come from the failed factory, not from a trailing
 # Node stripTypeScriptTypes warning or a generic socket-close message.
@@ -10,8 +10,8 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["testdata/ext/factory-failure.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["testdata/ext/factory-failure.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/factory-failure.ts"]
 
 [cli]

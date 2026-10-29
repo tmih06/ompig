@@ -12,13 +12,13 @@ Two prompt builders. The Session (print, JSON, RPC) rebuilt the tool and rule se
 - Session (`coding/session_transcript.go`, `session_preflight.go`): keeps the resolved run (`runPrompt`), builds the effective sections from its options and the live tools, refreshes the run's options before each later turn, exposes `HiddenDeclarations()`.
 - Interactive (`interactive_run_prompt.go`, `interactive.go`): `renderRunPrompt` and the base prompt use the same builder and the Session's hidden set.
 - In-process runner (`runner.go`): returns the shared options whenever any field was edited (runner.ts:1462), not only sections/selectedTools.
-- Subprocess wire: the response carries the handler's whole options object as `_pigPromptOptions`; the host applies every field except sections and selectedTools (`prompt_options.go`). All four SDKs (Node `runtime.mjs`, Go, Python, Rust) send it and present every option collection (`toolSnippets`, `toolGuidelines`, `promptGuidelines`, `contextFiles`, `skills`) as present, as Pi's normalized options do.
+- Subprocess wire: the response carries the handler's whole options object as `_ompigPromptOptions`; the host applies every field except sections and selectedTools (`prompt_options.go`). All four SDKs (Node `runtime.mjs`, Go, Python, Rust) send it and present every option collection (`toolSnippets`, `toolGuidelines`, `promptGuidelines`, `contextFiles`, `skills`) as present, as Pi's normalized options do.
 - `docs/extension-api-parity.md` row `before_agent_start` and the async-contract paragraph: the "other structured option mutations ... remain unresolved" clause is gone.
 
 ## Red run (commit 982f352c3)
 
 - `go test ./coding -run TestAuditBeforeAgentStartToolSnippetEditReachesTheRunPrompt`: FAIL, prompt lists `- read: Read file contents`.
-- `go test ./cmd/pig -run TestAuditCodemodeOnlyPromptOmitsHiddenToolsInEveryMode`: `interactive_tools_flag` FAIL (prompt lists hidden `read`, `bash`); `print_defaultTools` FAIL (declares `[read bash edit write]`, F6, see below); `print_tools_flag` passes (control).
+- `go test ./cmd/ompig -run TestAuditCodemodeOnlyPromptOmitsHiddenToolsInEveryMode`: `interactive_tools_flag` FAIL (prompt lists hidden `read`, `bash`); `print_defaultTools` FAIL (declares `[read bash edit write]`, F6, see below); `print_tools_flag` passes (control).
 
 ## Green
 
@@ -37,6 +37,6 @@ Not clean here, identical on the red base commit (checked by running the failing
 
 - F6 `print_defaultTools`: `fix-992-default-tools-reload`.
 - Interactive mode keeps its own base-options object (`baseSystemPromptOptions` in `InteractiveMode`) and prompt text on the agent; only the run-prompt build and the hidden filter converge. Moving interactive onto `Session.PreparePrompt` is a larger change to its turn flow and is not needed for the contract above.
-- Non-default structured Session prompts (caller-supplied sections) take only the `tools` and `rules` sections from the run's options; `appendSystemPrompt`, `customPrompt` edits do not apply to a caller-owned prompt (PiG-only concept, no Pi counterpart).
+- Non-default structured Session prompts (caller-supplied sections) take only the `tools` and `rules` sections from the run's options; `appendSystemPrompt`, `customPrompt` edits do not apply to a caller-owned prompt (Ompig-only concept, no Pi counterpart).
 - Rust whole-options reassignment and live getters during a handler stay as the parity row records them (not re-probed).
 - No stubs for other families.

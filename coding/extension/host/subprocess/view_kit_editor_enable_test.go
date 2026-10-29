@@ -4,10 +4,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
-// The package's tests draw editors, as the pig command does, so they enable editor views once. A program that does not
+// The package's tests draw editors, as the ompig command does, so they enable editor views once. A program that does not
 // leaves the editor builder, tui.Editor and the dictionaries behind it out of its binary (TestHeadlessEmbedBinarySizeGate).
 func init() { EnableEditorViews() }
 

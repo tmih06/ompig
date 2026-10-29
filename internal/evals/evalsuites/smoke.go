@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/evals"
+	"github.com/tmih06/ompig/internal/evals"
 )
 
 // Smoke asks a basic question with no tools and checks the answer and the usage record.

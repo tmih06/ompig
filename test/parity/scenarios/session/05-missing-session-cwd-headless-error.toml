@@ -23,7 +23,7 @@ cwd = "testdata/missing-session-cwd"
 timeout_seconds = 20
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 
 # normalize-rationale: independent cwd snapshots differ only in their random numeric suffix.

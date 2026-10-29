@@ -13,7 +13,7 @@
 #   the user message shows "What is twenty plus twenty-two?" and the reply
 #   "forty-two from the transformer" in bold.
 #
-# PiG lacked registerMarkdownTransformer, so pi-cc-extensions failed to load.
+# Ompig lacked registerMarkdownTransformer, so pi-cc-extensions failed to load.
 # The host awaits the entire chain off-loop before publishing new content; TestMarkdownTransformFirstPaintWaitsForWholeChain additionally checks the first paint through the chat container, not only this settled crop.
 
 name = "33-markdown-transformer"
@@ -29,10 +29,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--no-session"]
-pig_extensions = ["testdata/ext/markdown-transformer.mjs"]
+ompig_args = ["--no-extensions", "--no-session"]
+ompig_extensions = ["testdata/ext/markdown-transformer.mjs"]
 pi_args = ["--no-session"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
@@ -42,7 +42,7 @@ pi_extensions = [
 [tmux]
 width = 80
 height = 30
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 capture_start = "What is"

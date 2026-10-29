@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/package-manager.ts
@@ -12,8 +12,8 @@ import (
 // getPackageIdentity (the key packages are de-duplicated by) and packageSourcesMatch over npm, git and local sources: user-scope identities resolve a relative
 // local path against the agent directory, project-scope against the project config directory, and no scope against the working directory. The corpus spells
 // local paths with ~, dot segments, trailing slashes, surrounding JS whitespace, file: URLs (with hosts, escapes and bad escapes) and foreign Windows paths.
-// Left out because PiG's source model answers them differently on purpose: the registry query and subdirectory selectors and contributed schemes (D18), a blank
-// source or "npm:" without a name (PiG: unsupported), an upper-case "FILE:" scheme, and a Windows drive path on a POSIX host (PiG keeps the spelling).
+// Left out because Ompig's source model answers them differently on purpose: the registry query and subdirectory selectors and contributed schemes (D18), a blank
+// source or "npm:" without a name (Ompig: unsupported), an upper-case "FILE:" scheme, and a Windows drive path on a POSIX host (Ompig keeps the spelling).
 func TestPackageIdentityMatchesPi(t *testing.T) {
 	t.Setenv("HOME", "/home/oracle")
 	rng := rand.New(rand.NewSource(239))
@@ -105,12 +105,12 @@ emit({ projectDir: manager.getBaseDirForScope("project"), identities, matches })
 		if wantID.Error != "" || errText != "" {
 			errored++
 			if wantID.Error != errText {
-				fail("identity of %q: PiG error %q, Pi error %q", source, errText, wantID.Error)
+				fail("identity of %q: Ompig error %q, Pi error %q", source, errText, wantID.Error)
 			}
 			continue
 		}
 		if parts != [3]string{wantID.User, wantID.Project, wantID.None} {
-			fail("identity of %q: PiG %q, Pi %q", source, parts, [3]string{wantID.User, wantID.Project, wantID.None})
+			fail("identity of %q: Ompig %q, Pi %q", source, parts, [3]string{wantID.User, wantID.Project, wantID.None})
 		}
 	}
 	for i, pair := range pairs {
@@ -127,12 +127,12 @@ emit({ projectDir: manager.getBaseDirForScope("project"), identities, matches })
 		}
 		if wantMatch.Error != "" || errText != "" {
 			if wantMatch.Error != errText {
-				fail("match %q vs %q: PiG error %q, Pi error %q", pair.A, pair.B, errText, wantMatch.Error)
+				fail("match %q vs %q: Ompig error %q, Pi error %q", pair.A, pair.B, errText, wantMatch.Error)
 			}
 			continue
 		}
 		if got != [2]bool{wantMatch.User == "true", wantMatch.Project == "true"} {
-			fail("match %q vs %q: PiG %v, Pi %v/%v", pair.A, pair.B, got, wantMatch.User, wantMatch.Project)
+			fail("match %q vs %q: Ompig %v, Pi %v/%v", pair.A, pair.B, got, wantMatch.User, wantMatch.Project)
 		}
 	}
 	if failures > 0 {

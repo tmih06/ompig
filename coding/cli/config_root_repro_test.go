@@ -9,16 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// Issue #200: with XDG_CONFIG_HOME set, no PIG_HOME and Pi-sharing mode (PIG_USE_PI_DIRS=1), a fresh CLI writes its documentation bundle (before
-// its first tool call) and stages the extension SDKs (`pig reload`, or before its first extension) under $XDG_CONFIG_HOME/pig, never under ~/.pig. Pi-sharing mode moves only the agent directory (PI_CODING_AGENT_DIR) and the
-// project directory (D2). The staged Python SDK then names the same root through Context.config_home, where it used to answer ~/.pig.
+// Issue #200: with XDG_CONFIG_HOME set, no OMPIG_HOME and Pi-sharing mode (OMPIG_USE_PI_DIRS=1), a fresh CLI writes its documentation bundle (before
+// its first tool call) and stages the extension SDKs (`ompig reload`, or before its first extension) under $XDG_CONFIG_HOME/ompig, never under ~/.ompig. Pi-sharing mode moves only the agent directory (PI_CODING_AGENT_DIR) and the
+// project directory (D2). The staged Python SDK then names the same root through Context.config_home, where it used to answer ~/.ompig.
 func TestFreshCLIInPiSharingModeUsesTheXDGConfigRoot(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	root, err := filepath.EvalSymlinks(t.TempDir())
@@ -33,11 +33,11 @@ func TestFreshCLIInPiSharingModeUsesTheXDGConfigRoot(t *testing.T) {
 	}
 	env := []string{
 		"PATH=" + os.Getenv("PATH"), "HOME=" + home, "USERPROFILE=" + home, "XDG_CONFIG_HOME=" + xdg,
-		"PIG_USE_PI_DIRS=1", "PI_CODING_AGENT_DIR=" + piAgent,
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_OFFLINE=1", "PI_OFFLINE=1",
+		"OMPIG_USE_PI_DIRS=1", "PI_CODING_AGENT_DIR=" + piAgent,
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_OFFLINE=1", "PI_OFFLINE=1",
 	}
 	ctx := testbudget.Context(t)
-	// A run writes the documentation bundle before its first tool call, and `pig reload` stages the SDKs an extension load would stage.
+	// A run writes the documentation bundle before its first tool call, and `ompig reload` stages the SDKs an extension load would stage.
 	for _, args := range [][]string{
 		{"--model", "test-faux/faux-1", "--no-extensions", "--tools", "ls", "--print", "Run: ls here"},
 		{"reload"},
@@ -45,16 +45,16 @@ func TestFreshCLIInPiSharingModeUsesTheXDGConfigRoot(t *testing.T) {
 		cmd := exec.CommandContext(ctx, bin, args...)
 		cmd.Dir, cmd.Env = cwd, env
 		if out, err := cmd.CombinedOutput(); err != nil {
-			t.Fatalf("pig %q: %v\n%s", args, err, out)
+			t.Fatalf("ompig %q: %v\n%s", args, err, out)
 		}
 	}
 
-	pigRoot := filepath.Join(xdg, "pig")
+	ompigRoot := filepath.Join(xdg, "ompig")
 	for _, want := range []string{
-		filepath.Join(pigdocs.DocsDir(pigRoot), "README.md"),
-		filepath.Join(stagedSDKDir(t, pigRoot, "go"), "go.mod"),
-		filepath.Join(stagedSDKDir(t, pigRoot, "python"), "pig_sdk", "__init__.py"),
-		filepath.Join(stagedSDKDir(t, pigRoot, "rust"), "Cargo.toml"),
+		filepath.Join(pigdocs.DocsDir(ompigRoot), "README.md"),
+		filepath.Join(stagedSDKDir(t, ompigRoot, "go"), "go.mod"),
+		filepath.Join(stagedSDKDir(t, ompigRoot, "python"), "ompig_sdk", "__init__.py"),
+		filepath.Join(stagedSDKDir(t, ompigRoot, "rust"), "Cargo.toml"),
 		filepath.Join(piAgent, "auth.json"),
 	} {
 		if _, err := os.Stat(want); err != nil {
@@ -67,28 +67,28 @@ func TestFreshCLIInPiSharingModeUsesTheXDGConfigRoot(t *testing.T) {
 
 	// sys.stdout.write, not print: on Windows Python's text-mode stdout turns print's "\n" into "\r\n", which is the console's line ending and
 	// not part of config_home.
-	py := exec.CommandContext(ctx, "python3", "-c", "import sys, pig_sdk; sys.stdout.write(pig_sdk.Context(extension=None).config_home)")
-	py.Env = append(slices.Clone(env), "PYTHONPATH="+stagedSDKDir(t, pigRoot, "python"), "PYTHONDONTWRITEBYTECODE=1")
+	py := exec.CommandContext(ctx, "python3", "-c", "import sys, ompig_sdk; sys.stdout.write(ompig_sdk.Context(extension=None).config_home)")
+	py.Env = append(slices.Clone(env), "PYTHONPATH="+stagedSDKDir(t, ompigRoot, "python"), "PYTHONDONTWRITEBYTECODE=1")
 	out, err := py.Output()
 	if err != nil {
 		t.Fatalf("python SDK: %v", err)
 	}
-	if got := string(out); got != pigRoot {
-		t.Errorf("the staged Python SDK's config_home = %q, want %q", got, pigRoot)
+	if got := string(out); got != ompigRoot {
+		t.Errorf("the staged Python SDK's config_home = %q, want %q", got, ompigRoot)
 	}
 }
 
-// With no PIG_HOME, no XDG_CONFIG_HOME and no home directory, the CLI reports an error and writes nothing: it never falls back to a path relative to the
+// With no OMPIG_HOME, no XDG_CONFIG_HOME and no home directory, the CLI reports an error and writes nothing: it never falls back to a path relative to the
 // working directory. A command that needs no config root still runs.
 func TestCLIWithoutAHomeDirectoryReportsAnErrorInsteadOfWritingARelativePath(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	cwd := t.TempDir()
 	run := func(args ...string) (string, int) {
 		cmd := exec.CommandContext(t.Context(), bin, args...)
-		cmd.Dir, cmd.Env = cwd, []string{"PATH=" + os.Getenv("PATH"), "PIG_OFFLINE=1", "PI_OFFLINE=1"}
+		cmd.Dir, cmd.Env = cwd, []string{"PATH=" + os.Getenv("PATH"), "OMPIG_OFFLINE=1", "PI_OFFLINE=1"}
 		out, err := cmd.CombinedOutput()
 		if exitErr, ok := errors.AsType[*exec.ExitError](err); ok {
 			return string(out), exitErr.ExitCode()
@@ -99,14 +99,14 @@ func TestCLIWithoutAHomeDirectoryReportsAnErrorInsteadOfWritingARelativePath(t *
 	}
 	out, code := run("docs", "path")
 	if code != 1 || !strings.Contains(out, "locate home directory") || strings.Contains(out, "panic") {
-		t.Fatalf("pig docs path without a home directory: exit %d, output %q; want exit 1 and the error", code, out)
+		t.Fatalf("ompig docs path without a home directory: exit %d, output %q; want exit 1 and the error", code, out)
 	}
 	out, code = run("--print", "hi")
-	if code != 1 || !strings.Contains(out, "cannot resolve PiG's config directories") || strings.Contains(out, "panic") {
-		t.Fatalf("pig --print without a home directory: exit %d, output %q; want exit 1 and the error", code, out)
+	if code != 1 || !strings.Contains(out, "cannot resolve Ompig's config directories") || strings.Contains(out, "panic") {
+		t.Fatalf("ompig --print without a home directory: exit %d, output %q; want exit 1 and the error", code, out)
 	}
 	if out, code := run("--version"); code != 0 || !strings.Contains(out, "+") {
-		t.Fatalf("pig --version without a home directory: exit %d, output %q", code, out)
+		t.Fatalf("ompig --version without a home directory: exit %d, output %q", code, out)
 	}
 	if entries, err := os.ReadDir(cwd); err != nil || len(entries) != 0 {
 		t.Fatalf("the CLI wrote into the working directory: %v, %v", entries, err)

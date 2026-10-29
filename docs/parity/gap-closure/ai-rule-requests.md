@@ -1408,7 +1408,7 @@ pkg:ai/api/system-one-shared#isRecord::call:0
 
 ## RR11: `cloudflare-ai-binding` is designed out (6 rows)
 
-`PORT_MAP.md` row `packages/ai/src/api/cloudflare-ai-binding.ts` is `n/a` (a fetch adapter over a Workers `env.AI` binding; PiG runs as a native process). Request: designed-out for `AiBinding`, `createAiBindingFetch` and `CLOUDFLARE_GATEWAY_BINDING_AUTH_SENTINEL`.
+`PORT_MAP.md` row `packages/ai/src/api/cloudflare-ai-binding.ts` is `n/a` (a fetch adapter over a Workers `env.AI` binding; Ompig runs as a native process). Request: designed-out for `AiBinding`, `createAiBindingFetch` and `CLOUDFLARE_GATEWAY_BINDING_AUTH_SENTINEL`.
 
 ```
 pkg:ai/api/cloudflare-ai-binding#AiBinding

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type planProbe struct {
@@ -139,7 +139,7 @@ func TestPlanMatchesPiOnSeededProbes(t *testing.T) {
 		if !reflect.DeepEqual(got, expected[i]) {
 			if differing++; differing <= 5 {
 				raw, _ := json.Marshal(probe)
-				t.Errorf("probe %d %s differs from Pi:\n  Pig %+v\n  Pi  %+v", i, raw, got, expected[i])
+				t.Errorf("probe %d %s differs from Pi:\n  Ompig %+v\n  Pi  %+v", i, raw, got, expected[i])
 			}
 		}
 	}

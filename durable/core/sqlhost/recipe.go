@@ -4,8 +4,8 @@
 package sqlhost
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/history"
 )
 
 // MessageRange is the committed context a model_context effect names, as the host derived it: the model messages as JSON, in

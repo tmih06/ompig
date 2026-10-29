@@ -8,7 +8,7 @@ import (
 )
 
 // comb-audit row 100: an openai-completions chunk that is valid JSON but holds a member of an unexpected type. Pi's JavaScript ignores it, coerces it with `+=` or throws
-// depending on the expression that reads it (openai-completions.ts:558-700). The rows run Pi's own stream over each body and compare the final message with PiG's.
+// depending on the expression that reads it (openai-completions.ts:558-700). The rows run Pi's own stream over each body and compare the final message with Ompig's.
 func TestOpenAICompletionsMistypedMembersMatchPi(t *testing.T) {
 	const head = `{"id":"c","object":"chat.completion.chunk","model":"gpt-4o","choices":[{"index":0,"delta":{"role":"assistant","content":"Hel"},"finish_reason":null}]}`
 	const stop = `{"id":"c","choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}`
@@ -174,7 +174,7 @@ process.exit(0);
 				want[i].Tools = "null"
 			}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}

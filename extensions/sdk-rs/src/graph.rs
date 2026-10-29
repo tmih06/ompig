@@ -80,7 +80,7 @@ impl Drop for GraphObject {
         // Pi frees an object when it is unreachable. The release never blocks the thread that dropped the value, which may be a handler.
         let context = self.context.clone();
         let handle = std::mem::take(&mut self.handle);
-        let _ = std::thread::Builder::new().name("pig-graph-release".into()).spawn(move || {
+        let _ = std::thread::Builder::new().name("ompig-graph-release".into()).spawn(move || {
             let _ = context.call_host("sessionGraph.release", Some(json!({"handle": handle})));
         });
     }

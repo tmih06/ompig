@@ -13,10 +13,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // Clone copies the message envelope and mutable top-level slices/maps. A streaming assistant becomes an independently owned current observation.
@@ -367,7 +367,7 @@ func contentTextBytes[T any](content []T) int {
 }
 
 // textBytesBudget bounds the values valueTextBytes visits for one message: the walk is a size hint, so a large or cyclic value is cut short.
-// pig additive (D112): Pi sizes no buffer before JSON.stringify; the count only sizes the buffer a writer encodes into, so a cut walk changes how often it grows, not the bytes written.
+// ompig additive (D112): Pi sizes no buffer before JSON.stringify; the count only sizes the buffer a writer encodes into, so a cut walk changes how often it grows, not the bytes written.
 const textBytesBudget = 4096
 
 // valueTextBytes is the length of the strings and keys in a decoded JSON value, counting at most *budget values.
@@ -522,7 +522,7 @@ func withEmptyContent(source *messageSource, empty string) *messageSource {
 	return &messageSource{text: canonical}
 }
 
-// UnmarshalJSON decodes the upstream flat role-discriminated AgentMessage union and retains lone UTF-16 units in user content as WTF-8. When the decoded fields would encode to other text than JSON.stringify writes for data (member order, members PiG does not model, or a spelling the fields cannot keep), the message keeps that text: Pi holds the parsed object and writes it unchanged.
+// UnmarshalJSON decodes the upstream flat role-discriminated AgentMessage union and retains lone UTF-16 units in user content as WTF-8. When the decoded fields would encode to other text than JSON.stringify writes for data (member order, members Ompig does not model, or a spelling the fields cannot keep), the message keeps that text: Pi holds the parsed object and writes it unchanged.
 //
 // The fields decode JSON.stringify's text of data, so a number keeps the message in any spelling, as JSON.parse keeps it: an integral value spelled with a fraction or exponent decodes as the integer in every nested record too, and a fraction or a value beyond the range of a nested record's integer field leaves that field zero. A member of another JSON type than its field holds reads as absent (decodeLax).
 func (m *AgentMessage) UnmarshalJSON(data []byte) error {
@@ -929,7 +929,7 @@ func unmarshalAgentContent(data []byte) ([]ai.ContentBlock, error) {
 			}
 			block = value
 		case "tool_use":
-			// Persisted PiG sessions before the closed transcript contract used
+			// Persisted Ompig sessions before the closed transcript contract used
 			// Anthropic's provider spelling. Decode it at the persistence boundary.
 			var value struct {
 				ID               string        `json:"id"`

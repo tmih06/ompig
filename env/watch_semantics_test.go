@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // scriptedWatchFrames is scriptedWatchDaemon with the frames given as they are, each a frame of request 2.

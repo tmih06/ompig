@@ -16,23 +16,23 @@ spec.loader.exec_module(layout)
 class LayoutGoTest(unittest.TestCase):
     def fixture(self, root):
         files = {
-            "go.mod": "module github.com/MichaelKinsy/PiG\n\ngo 1.26\n",
+            "go.mod": "module github.com/tmih06/ompig\n\ngo 1.26\n",
             "go.work": "go 1.26\nuse (\n.\n./extensions/sdk\n)\n",
-            "extensions/sdk/go.mod": "module github.com/MichaelKinsy/PiG/extensions/sdk\n\ngo 1.26\n",
+            "extensions/sdk/go.mod": "module github.com/tmih06/ompig/extensions/sdk\n\ngo 1.26\n",
             "extensions/sdk/sdk.go": "// Staged by coding/extension/host/subprocess (host).\npackage sdk\n",
-            "embed.go": '// This is the only file at module root; runtime code lives in cmd/, internal/,\n// coding/. Its sole purpose is to host `//go:embed` directives that need\n// root resources.\npackage pig\nimport _ "embed"\n//go:embed CHANGELOG.md\nvar Changelog string\n',
+            "embed.go": '// This is the only file at module root; runtime code lives in cmd/, internal/,\n// coding/. Its sole purpose is to host `//go:embed` directives that need\n// root resources.\npackage ompig\nimport _ "embed"\n//go:embed CHANGELOG.md\nvar Changelog string\n',
             "CHANGELOG.md": "release\n",
-            "agent/agent.go": '// Package agent uses github.com/MichaelKinsy/PiG/ai.\npackage agent\nimport _ "github.com/MichaelKinsy/PiG/ai"\n',
+            "agent/agent.go": '// Package agent uses github.com/tmih06/ompig/ai.\npackage agent\nimport _ "github.com/tmih06/ompig/ai"\n',
             "ai/ai.go": 'package ai\nimport _ "embed"\n//go:embed data.json\nvar data string\n',
             "ai/data.json": "{}\n",
             "coding/coding.go": "package coding\n",
             "tui/tui.go": "package tui\n",
             "tui/path_test.go": 'package tui\nimport "path/filepath"\nvar root, err = filepath.Abs("..")\n',
-            "coding/extension/host/subprocess/testdata/sdk-fixture/go.mod": "module example.com/fixture\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => ../../../../../../extensions/sdk\n",
+            "coding/extension/host/subprocess/testdata/sdk-fixture/go.mod": "module example.com/fixture\n\nreplace github.com/tmih06/ompig/extensions/sdk => ../../../../../../extensions/sdk\n",
             "coding/extension/host/subprocess/path_test.go": 'package subprocess\nimport "path/filepath"\nvar root = filepath.Join("..", "..", "..", "..", "extensions", "sdk")\nvar build = "./coding/extension/host/subprocess/testdata/fixture-ext/"\n',
             "tests/upstream-parity/port_map_drift_test.go": 'package parity\nimport "path/filepath"\nvar impl = filepath.Join(root, "ai", "live.go")\n',
             "tests/docs-drift/public_claims_test.go": 'package docsdrift\nvar documents = []string{"SECURITY.md", "AGENTS.md"}\n',
-            "coding/cli/windows.go": '//go:build windows\n\npackage main\nimport a "github.com/MichaelKinsy/PiG/ai"\nvar _ a.Model\n',
+            "coding/cli/windows.go": '//go:build windows\n\npackage main\nimport a "github.com/tmih06/ompig/ai"\nvar _ a.Model\n',
             "parity/cmd/gointerfaces/main.go": 'package main\nvar paths = []string{"./ai/...", "./tui"}\n',
         }
         subprocess.run(["git", "init", "-q", str(root)], check=True)
@@ -50,9 +50,9 @@ class LayoutGoTest(unittest.TestCase):
             layout.apply(root)
             for package in layout.MOVES:
                 self.assertFalse((root / package).exists())
-            self.assertIn('// Package agent uses github.com/MichaelKinsy/PiG/internal/ai.', (root / "internal/agent/agent.go").read_text())
+            self.assertIn('// Package agent uses github.com/tmih06/ompig/internal/ai.', (root / "internal/agent/agent.go").read_text())
             self.assertEqual((root / "internal/ai/data.json").read_text(), "{}\n")
-            self.assertIn('a "github.com/MichaelKinsy/PiG/internal/ai"', (root / "coding/cli/windows.go").read_text())
+            self.assertIn('a "github.com/tmih06/ompig/internal/ai"', (root / "coding/cli/windows.go").read_text())
             self.assertTrue((root / "coding/cli/windows.go").read_text().startswith("//go:build windows\n"))
             self.assertIn('"./internal/ai/..."', (root / "parity/cmd/gointerfaces/main.go").read_text())
             self.assertIn('filepath.Abs("../..")', (root / "internal/tui/path_test.go").read_text())
@@ -171,8 +171,8 @@ class LayoutGoTest(unittest.TestCase):
             self.assertFalse((root / "internal").exists())
 
     def test_runtime_names_upstream_paths_and_sdk_are_not_package_paths(self):
-        source = b'package p\nvar names = []string{"agent", "tui.input.submit", "packages/ai/src/a.ts", "ai/src/compat.ts", "pkg:ai/.#Message", "pkg:agent/node#nodeOnly", "github.com/MichaelKinsy/PiG/extensions/sdk"}\n'
-        values = ["agent", "tui.input.submit", "packages/ai/src/a.ts", "ai/src/compat.ts", "pkg:ai/.#Message", "pkg:agent/node#nodeOnly", "github.com/MichaelKinsy/PiG/extensions/sdk"]
+        source = b'package p\nvar names = []string{"agent", "tui.input.submit", "packages/ai/src/a.ts", "ai/src/compat.ts", "pkg:ai/.#Message", "pkg:agent/node#nodeOnly", "github.com/tmih06/ompig/extensions/sdk"}\n'
+        values = ["agent", "tui.input.submit", "packages/ai/src/a.ts", "ai/src/compat.ts", "pkg:ai/.#Message", "pkg:agent/node#nodeOnly", "github.com/tmih06/ompig/extensions/sdk"]
         literals = []
         for value in values:
             start = source.index(('"' + value + '"').encode())

@@ -6,7 +6,7 @@
 # the tool result content contains `echo-bridge: hello`.
 #
 # This directly exercises upstream tool-definition-wrapper.ts
-# (wrapToolDefinition → AgentTool.execute) and pig's corresponding extension
+# (wrapToolDefinition → AgentTool.execute) and ompig's corresponding extension
 # bridge path by proving a registered extension tool is visible to the agent
 # loop, executable, and its result round-trips back into the next model turn.
 #
@@ -14,14 +14,14 @@
 #   cd test/parity/scenarios/tools/testdata
 #   pi --no-extensions \
 #     -e ../../../testdata/test-faux-provider.ts \
-#     -e .pig/extensions/parity-echo.mjs \
+#     -e .ompig/extensions/parity-echo.mjs \
 #     --model test-faux/faux-1 \
 #     --print "Run: extension echo hello"
 #   output: "echo-bridge: hello"
 #   exit: 0
 #
-#   PIG_TEST_FAUX=1 PIG_HOME=test/parity/scenarios/tools/testdata/pig-home \
-#     pig --model test-faux/faux-1 --print "Run: extension echo hello"
+#   OMPIG_TEST_FAUX=1 OMPIG_HOME=test/parity/scenarios/tools/testdata/ompig-home \
+#     ompig --model test-faux/faux-1 --print "Run: extension echo hello"
 #   output: "echo-bridge: hello"
 #   exit: 0
 
@@ -35,12 +35,12 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/.pig/extensions/parity-echo.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/.ompig/extensions/parity-echo.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
-  "testdata/.pig/extensions/parity-echo.mjs",
+  "testdata/.ompig/extensions/parity-echo.mjs",
 ]
 
 [print]

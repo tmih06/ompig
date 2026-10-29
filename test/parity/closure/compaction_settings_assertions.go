@@ -22,7 +22,7 @@ func AddCompactionSettingsAssertions(root string, snapshot *Snapshot, records []
 	pins := make(map[string]*Pin)
 	for _, binding := range foundationStateTestBindings() {
 		pin, err := makeSourceRangePin(root, snapshot, sourceRange{
-			repository: "pig", path: binding.path, semanticID: binding.symbol, start: binding.start, end: binding.end,
+			repository: "ompig", path: binding.path, semanticID: binding.symbol, start: binding.start, end: binding.end,
 		})
 		if err != nil {
 			return nil, fmt.Errorf("add foundation-state test %s: %w", binding.id, err)

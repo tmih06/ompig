@@ -10,10 +10,10 @@ driver = "print-mode"
 model = "event-prompt-probe/probe"
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/provider-prompt.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/provider-prompt.mjs"]
 pi_extensions = ["testdata/ext/provider-prompt.mjs"]
 
 [print]

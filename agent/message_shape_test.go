@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // shapeCandidate is one member a generated message may hold: its name and the JSON texts its value may take.

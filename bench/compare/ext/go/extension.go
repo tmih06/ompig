@@ -9,7 +9,7 @@ import (
 	"crypto/sha256"
 	"os"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func Extension() *sdk.Extension {

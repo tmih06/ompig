@@ -12,7 +12,7 @@ import (
 func newBashTestSession(t *testing.T, settingsJSON string) *Session {
 	t.Helper()
 	tmp := t.TempDir()
-	t.Setenv("PIG_HOME", tmp)
+	t.Setenv("OMPIG_HOME", tmp)
 	agentDir := filepath.Join(tmp, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

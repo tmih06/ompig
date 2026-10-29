@@ -26,7 +26,7 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // RemotePlatform is a remote system the package ships a daemon for.
@@ -665,7 +665,7 @@ func windowsProbeResult(ctx context.Context, target SshTarget) (probe, error) {
 	return parseProbe(target, output)
 }
 
-// pig additive (D97): the daemons are found next to the running executable, not inside an npm package.
+// ompig additive (D97): the daemons are found next to the running executable, not inside an npm package.
 // packagedDaemonDirectory is where the daemons built for each remote system live: `pi-env-<platform>-<arch>/pi-env`
 // below it. PI_ENV_DAEMON_DIR overrides it; by default it is the `pi-env` directory next to the running executable.
 func packagedDaemonDirectory() string {

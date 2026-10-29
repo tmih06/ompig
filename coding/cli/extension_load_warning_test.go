@@ -1,4 +1,4 @@
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 package cli
 
 import (
@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func captureStderr(t *testing.T, fn func()) string {
@@ -87,7 +87,7 @@ func TestPathToExtConfigConventionalFactoryLoadsSilently(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("module example.com/goodext\n\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	source := "package goodext\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"goodext\") }\n"
+	source := "package goodext\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"goodext\") }\n"
 	if err := os.WriteFile(filepath.Join(dir, "extension.go"), []byte(source), 0o644); err != nil {
 		t.Fatal(err)
 	}

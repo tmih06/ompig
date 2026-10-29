@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // Review GF03-REVIEW-002: Pi package-manager.ts:1446-1457,1473-1478 retains installed 1.0.0 for a matching comparator set. Offline mode proves source parsing cannot misclassify an installed package as missing and cannot invoke an installer.
@@ -15,8 +15,8 @@ func TestEnsureConfiguredNPMComparatorSetFindsInstalledPackage(t *testing.T) {
 		for _, local := range []bool{false, true} {
 			t.Run(name+map[bool]string{false: "/user", true: "/project"}[local], func(t *testing.T) {
 				cwd, agentDir := t.TempDir(), t.TempDir()
-				t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-				t.Setenv("PIG_OFFLINE", "1")
+				t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+				t.Setenv("OMPIG_OFFLINE", "1")
 				t.Setenv("PI_OFFLINE", "1")
 				sm := codingagent.NewSettingsManager(cwd, agentDir)
 				root := filepath.Join(agentDir, "npm")

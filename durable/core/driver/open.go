@@ -6,13 +6,13 @@ package driver
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/internal/schemabackup"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/store"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/internal/schemabackup"
 )
 
 // OpenHarness opens the Durable core as a native Harness over the SQLite store at path (":memory:" or a file; a file written
@@ -25,7 +25,7 @@ func OpenHarness(ctx context.Context, path string, options harness.HarnessOption
 }
 
 func openHarness(ctx context.Context, path string, options harness.HarnessOptions, onCommit func(abi.Commit, []string)) (harness.Harness, error) {
-	// pig divergence (D188): a store an older Pi release wrote is copied before the core upgrades its schema.
+	// ompig divergence (D188): a store an older Pi release wrote is copied before the core upgrades its schema.
 	if _, err := schemabackup.BeforeUpgrade(ctx, path, "durable_schema", store.SupportedSchemaVersion); err != nil {
 		return nil, err
 	}

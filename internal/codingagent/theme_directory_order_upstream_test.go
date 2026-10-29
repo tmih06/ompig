@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi lists a theme directory with fs.readdirSync (resource-loader.ts:1093 for configured theme paths, theme.ts:507 getCustomThemeInfos for

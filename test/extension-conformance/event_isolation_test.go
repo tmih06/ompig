@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_EventHandlersDoNotShareTheirPayload is the isolation row of lever A (handoffs/fused-direct-design.md section 5 item 2, review FD-8b). Pi gives each

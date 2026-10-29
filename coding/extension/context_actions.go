@@ -62,7 +62,7 @@ type CompactOptions struct {
 // closures) because upstream stores them as Runner fields, not
 // callbacks; nil values are honored.
 //
-// pig additive (D23): ContextActions supplies Piglet tool-scoping operations.
+// ompig additive (D23): ContextActions supplies Ompiglet tool-scoping operations.
 type ContextActions struct {
 	// SessionManager backs Context.SessionManager().
 	// upstream: types.ts:301 (read-only)
@@ -148,7 +148,7 @@ type ContextActions struct {
 	GetUIContext func() UIContext
 
 	// GetAllTools returns metadata about all registered tools.
-	// Used by piglet scoping to enumerate available tools.
+	// Used by ompiglet scoping to enumerate available tools.
 	GetAllTools func() []ToolInfo
 
 	// GetActiveTools returns the names of currently active tools.

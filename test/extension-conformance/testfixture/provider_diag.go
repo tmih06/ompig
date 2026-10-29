@@ -1,6 +1,6 @@
 package testfixture
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 // ProviderDiag registers, while it loads, one provider the model runtime accepts and one it rejects (a model with no "api"), and a tool that shows the extension loaded. Pi queues both registrations; the services that apply them report the rejected one as a diagnostic and the extension stays loaded (TestProviderRegistrationFailureIsADiagnosticAcrossSDKs).
 func ProviderDiag() *sdk.Extension {

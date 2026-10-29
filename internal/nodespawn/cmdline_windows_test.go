@@ -12,10 +12,10 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-const commandLineHelper = "PIG_NODESPAWN_COMMAND_LINE_HELPER"
+const commandLineHelper = "OMPIG_NODESPAWN_COMMAND_LINE_HELPER"
 
 // TestMain lets the test binary report the command line CreateProcessW gave
 // it, before any C runtime or MSYS2 parsing, how it was started, the image

@@ -1,9 +1,9 @@
-// Package fusepack holds Go extensions fused into a Piglet Binary. The build
+// Package fusepack holds Go extensions fused into a Ompiglet Binary. The build
 // copies compatible extension source under exts/ and generates
 // registry_generated.go with lazy factory serve functions. Register installs a
 // FusedResolver so the host loads those extensions in-process (D31).
 //
-// Stock Pig compiles this package with an empty registry, so Register is a no-op.
+// Stock Ompig compiles this package with an empty registry, so Register is a no-op.
 package fusepack
 
 import (
@@ -14,16 +14,16 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/typebox/engine"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/typebox/engine"
 )
 
 // fusedServes maps an extension name to its in-process serve func. Populated by
-// generated code in registry_generated.go via registerFactory; empty in stock Pig.
+// generated code in registry_generated.go via registerFactory; empty in stock Ompig.
 var fusedServes = map[string]func(net.Conn) error{}
 
 // registerFactory records one fused extension factory without constructing the
@@ -59,8 +59,8 @@ func (resolver) FusedServe(cfg subprocess.ExtConfig) (func(net.Conn) error, bool
 	return serve, ok
 }
 
-// Register installs the fused-extension resolver if this Piglet Binary compiled any in.
-// No-op in stock pig (empty map), so the subprocess cell path is unaffected.
+// Register installs the fused-extension resolver if this Ompiglet Binary compiled any in.
+// No-op in stock ompig (empty map), so the subprocess cell path is unaffected.
 func Register() {
 	if len(fusedServes) == 0 {
 		return
@@ -146,8 +146,8 @@ func managedToolsDir() string {
 
 // FusedConfigs returns a name-only ExtConfig for each fused extension so the
 // startup loader includes them even though their source is not on this machine.
-// LoadAll routes these to LoadInProcess (no source needed). A richer piglet or
-// CLI config for the same name still wins the config merge. Empty in stock pig.
+// LoadAll routes these to LoadInProcess (no source needed). A richer ompiglet or
+// CLI config for the same name still wins the config merge. Empty in stock ompig.
 func FusedConfigs() []subprocess.ExtConfig {
 	names := make([]string, 0, len(fusedServes))
 	for name := range fusedServes {

@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
-// pig additive (D19): Pi has one process-wide withFileMutationQueue (core/tools/file-mutation-queue.ts) that the built-in edit and write tools and every
+// ompig additive (D19): Pi has one process-wide withFileMutationQueue (core/tools/file-mutation-queue.ts) that the built-in edit and write tools and every
 // extension share. An extension process of another SDK, or a Node process of its own, has no access to the host's map, so each SDK asks the host's queue for its
 // turn instead (CallFileMutationEnter, CallFileMutationExit) and keeps no queue of its own.
 

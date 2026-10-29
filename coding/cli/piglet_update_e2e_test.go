@@ -19,9 +19,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletrelease "github.com/MichaelKinsy/PiG/coding/piglet/release"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	pigletrelease "github.com/tmih06/ompig/coding/ompiglet/release"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 // pigletReleaseServer serves a GitHub-shaped release tree for acme/porter: the
@@ -61,13 +61,13 @@ func (s *pigletReleaseServer) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 // signedPigletRelease returns a signed Binary and its signed index for version.
 func signedPigletRelease(t *testing.T, key ed25519.PrivateKey, version, target string) (index, binary []byte) {
 	t.Helper()
-	path := filepath.Join(t.TempDir(), "pig-porter")
+	path := filepath.Join(t.TempDir(), "ompig-porter")
 	if err := os.WriteFile(path, []byte("porter executable "+version+"\n"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	digest := "sha256:" + strings.Repeat("a", 64)
 	if _, err := signature.Sign(path, signature.Manifest{
-		Piglet: "porter", ReleaseVersion: version, Target: target, PigVersion: "pig-test",
+		Ompiglet: "porter", ReleaseVersion: version, Target: target, OmpigVersion: "ompig-test",
 		PigletDigest: digest, SourceDigest: digest, ResolutionDigest: digest, ComponentPlanDigest: digest,
 	}, key); err != nil {
 		t.Fatal(err)
@@ -78,9 +78,9 @@ func signedPigletRelease(t *testing.T, key ed25519.PrivateKey, version, target s
 	}
 	sum := sha256.Sum256(binary)
 	index, err = pigletrelease.Sign(pigletrelease.Index{
-		Piglet: "porter", Version: version, PigVersion: "pig-test", SourceRef: "npm:porter@" + version,
+		Ompiglet: "porter", Version: version, OmpigVersion: "ompig-test", SourceRef: "npm:porter@" + version,
 		GitHub:   &pigletrelease.GitHubRelease{Repository: "acme/porter"},
-		Binaries: map[string]pigletrelease.Binary{target: {URL: "pig-porter", SHA256: hex.EncodeToString(sum[:]), Size: int64(len(binary))}},
+		Binaries: map[string]pigletrelease.Binary{target: {URL: "ompig-porter", SHA256: hex.EncodeToString(sum[:]), Size: int64(len(binary))}},
 	}, key)
 	if err != nil {
 		t.Fatal(err)
@@ -99,7 +99,7 @@ func alterSignedPayload(t *testing.T, envelope []byte) []byte {
 	if err != nil {
 		t.Fatal(err)
 	}
-	altered := strings.Replace(string(payload), `"pigVersion":"pig-test"`, `"pigVersion":"pig-evil"`, 1)
+	altered := strings.Replace(string(payload), `"ompigVersion":"ompig-test"`, `"ompigVersion":"ompig-evil"`, 1)
 	if altered == string(payload) {
 		t.Fatal("payload unchanged")
 	}
@@ -162,7 +162,7 @@ func (l loopbackOnlyTransport) RoundTrip(request *http.Request) (*http.Response,
 
 func runPiglet(args ...string) (int, string, string) {
 	var stdout, stderr strings.Builder
-	code := piglet.RunCommand(append([]string{"piglet"}, args...), &stdout, &stderr)
+	code := ompiglet.RunCommand(append([]string{"ompiglet"}, args...), &stdout, &stderr)
 	return code, stdout.String(), stderr.String()
 }
 
@@ -170,10 +170,10 @@ func runPiglet(args ...string) (int, string, string) {
 // commands against a loopback GitHub release server.
 func TestPigletUpdateEndToEndThroughLoopbackGitHub(t *testing.T) {
 	home := shortTempDir(t)
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_PIGLET_PULL_ALLOW_LOOPBACK_HTTP", "1")
+	t.Setenv("OMPIG_OMPIGLET_PULL_ALLOW_LOOPBACK_HTTP", "1")
 	t.Chdir(t.TempDir())
 	const target = "testos/testarch"
 	_, key, err := ed25519.GenerateKey(rand.Reader)
@@ -187,8 +187,8 @@ func TestPigletUpdateEndToEndThroughLoopbackGitHub(t *testing.T) {
 	index100, binary100 := signedPigletRelease(t, key, "1.0.0", target)
 	index110, binary110 := signedPigletRelease(t, key, "1.1.0", target)
 	releases := &pigletReleaseServer{tags: []string{"v1.0.0", "v1.1.0", "other/v9.0.0"}, assets: map[string][]byte{
-		"v1.0.0/piglet-release.json": index100, "v1.0.0/pig-porter": binary100,
-		"v1.1.0/piglet-release.json": index110, "v1.1.0/pig-porter": binary110,
+		"v1.0.0/ompiglet-release.json": index100, "v1.0.0/ompig-porter": binary100,
+		"v1.1.0/ompiglet-release.json": index110, "v1.1.0/ompig-porter": binary110,
 	}}
 	server := httptest.NewServer(releases)
 	defer server.Close()
@@ -232,14 +232,14 @@ func TestPigletUpdateEndToEndThroughLoopbackGitHub(t *testing.T) {
 		index      []byte
 		binary     []byte
 	}{
-		{name: "offline", want: "cannot update Piglet while offline", env: map[string]string{"PIG_OFFLINE": "1"}},
+		{name: "offline", want: "cannot update Ompiglet while offline", env: map[string]string{"OMPIG_OFFLINE": "1"}},
 		{name: "rollback", want: "refuses rollback from 1.0.0 to 0.9.0", args: []string{"--version", "0.9.0"}},
-		{name: "wrong checksum", want: "downloaded Piglet Binary SHA256", binary: append([]byte{binary110[0] ^ 1}, binary110[1:]...)},
+		{name: "wrong checksum", want: "downloaded Ompiglet Binary SHA256", binary: append([]byte{binary110[0] ^ 1}, binary110[1:]...)},
 		{name: "oversized asset", want: fmt.Sprintf("size is %d, release index says %d", len(binary110)+1, len(binary110)), binary: append(append([]byte{}, binary110...), make([]byte, 4096)...)},
 		{name: "altered index", want: "does not verify", index: alterSignedPayload(t, index110)},
 		{name: "different signer", want: "--accept-signer", index: func() []byte { index, _ := signedPigletRelease(t, otherKey, "1.1.0", target); return index }()},
 		{name: "non-loopback override", want: "must name a loopback host", env: map[string]string{pigletrelease.GitHubURLEnv: "http://example.com"}},
-		{name: "override without opt-in", want: "requires PIG_PIGLET_PULL_ALLOW_LOOPBACK_HTTP=1", env: map[string]string{"PIG_PIGLET_PULL_ALLOW_LOOPBACK_HTTP": ""}},
+		{name: "override without opt-in", want: "requires OMPIG_OMPIGLET_PULL_ALLOW_LOOPBACK_HTTP=1", env: map[string]string{"OMPIG_OMPIGLET_PULL_ALLOW_LOOPBACK_HTTP": ""}},
 	}
 	for _, tc := range refused {
 		t.Run(tc.name, func(t *testing.T) {
@@ -247,12 +247,12 @@ func TestPigletUpdateEndToEndThroughLoopbackGitHub(t *testing.T) {
 				t.Setenv(k, v)
 			}
 			if tc.index != nil {
-				releases.set("v1.1.0/piglet-release.json", tc.index)
-				defer releases.set("v1.1.0/piglet-release.json", index110)
+				releases.set("v1.1.0/ompiglet-release.json", tc.index)
+				defer releases.set("v1.1.0/ompiglet-release.json", index110)
 			}
 			if tc.binary != nil {
-				releases.set("v1.1.0/pig-porter", tc.binary)
-				defer releases.set("v1.1.0/pig-porter", binary110)
+				releases.set("v1.1.0/ompig-porter", tc.binary)
+				defer releases.set("v1.1.0/ompig-porter", binary110)
 			}
 			code, stdout, stderr := runPiglet(append([]string{"update", "porter", "--no-input"}, tc.args...)...)
 			if code != 1 || !strings.Contains(stderr, tc.want) {

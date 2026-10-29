@@ -8,7 +8,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // DefaultWorkingSetBytes is the default bound on the decoded entries a SqliteStorage retains.
@@ -23,7 +23,7 @@ const noEntries = math.MaxInt64
 // anyEntry is the lower bound of a query without MinEntryId.
 const anyEntry = math.MinInt64
 
-// pig additive (D104): Pi re-reads and re-decodes the stored transcript for every context read; PiG retains decoded entries.
+// ompig additive (D104): Pi re-reads and re-decodes the stored transcript for every context read; Ompig retains decoded entries.
 // retainedWindow holds the newest entries of one conversation: every stored entry of the conversation with an ID at or
 // above floor is in records, oldest first. Entries are immutable once committed, so a window only grows at its new end,
 // grows or loses entries at its old end, or is replaced; a slice handed to a reader is never written again.

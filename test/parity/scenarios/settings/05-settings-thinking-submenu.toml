@@ -19,7 +19,7 @@ model = "fixture/thinking-model"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 capture_start = "Thinking Level for"
@@ -45,9 +45,9 @@ wait_timeout_seconds = 5
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/model-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/model-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/model-agent"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // const, enum and uniqueItems compare JSON values: a number never equals a string, whichever comes first. The JSON Schema library's equality parsed the right-hand side of a numeric left-hand side with big.Rat, which accepts "1.5", "0x10" and "1/2",
@@ -53,7 +53,7 @@ func TestValidateToolArgumentsComparesNumbersAndStringsLikePi(t *testing.T) {
 			want = "ERR " + *expected[i].Err
 		}
 		if have != want {
-			t.Errorf("probe %d: schema %s arguments %s\n  Pig %s\n  Pi  %s", i, probe.Schema, probe.Args, have, want)
+			t.Errorf("probe %d: schema %s arguments %s\n  Ompig %s\n  Pi  %s", i, probe.Schema, probe.Args, have, want)
 		}
 	}
 	if rejected < 8 || rejected > len(probes)-8 {

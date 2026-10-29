@@ -1,6 +1,6 @@
 # test-faux oracle (Pi 1.1.0)
 
-`probe.mjs` drives Pi's real pipeline for the paired fixture `test/parity/testdata/test-faux-provider.ts` (the Pi-side counterpart of PiG's `ai/test_faux.go`). `recorder.mjs` is loaded into the real `pi --mode rpc` process and registers that fixture unchanged. `pi.json` is the retained raw output (Node 24.19.0; Node 26.7.0 produced identical records). Do not replace it with Go output.
+`probe.mjs` drives Pi's real pipeline for the paired fixture `test/parity/testdata/test-faux-provider.ts` (the Pi-side counterpart of Ompig's `ai/test_faux.go`). `recorder.mjs` is loaded into the real `pi --mode rpc` process and registers that fixture unchanged. `pi.json` is the retained raw output (Node 24.19.0; Node 26.7.0 produced identical records). Do not replace it with Go output.
 
 Scenarios: `text`, `tool`, `parallel` (two tool calls), `error` (an unhandled request) and `live-stream` (`TUI_LIVE_STREAM`: 24 deltas, each followed by a 40 ms timer). The plan scenarios emit every event from one `queueMicrotask(emitPlan)`; `live-stream` pushes `start` with the shared `output` object and awaits a timer between deltas.
 
@@ -11,4 +11,4 @@ export PI_PACKAGE_ROOT="$(realpath extensions/sdk-ts/node_modules/@earendil-work
 node coding/testdata/rpc33-observation/providers/test-faux/probe.mjs "$EVIDENCE/test-faux-pi.json" 3
 ```
 
-Go replays: `TestTestFauxObservationOracle` (`ai`, includes push counts), `TestTestFauxAgentObservationOracle` (`coding`) and `TestTestFauxRPCObservation` (`cmd/pig`, the real `pig --mode rpc` binary; `PIG_TEST_FAUX_RPC_RUNS=200` repeats each scenario).
+Go replays: `TestTestFauxObservationOracle` (`ai`, includes push counts), `TestTestFauxAgentObservationOracle` (`coding`) and `TestTestFauxRPCObservation` (`cmd/ompig`, the real `ompig --mode rpc` binary; `OMPIG_TEST_FAUX_RPC_RUNS=200` repeats each scenario).

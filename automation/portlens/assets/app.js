@@ -63,7 +63,7 @@
       if (a.dataset.view === route.view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     var titles = { overview: 'Overview', portmap: 'Port map', divergences: 'Divergences', bugs: 'Bug ledger', evals: 'Evals and benchmarks' };
-    document.title = titles[route.view] + ' · PiG port lens';
+    document.title = titles[route.view] + ' · Ompig port lens';
     current = route.view;
     if (route.view === 'portmap') initPortmap(route.query || '');
     if (route.view === 'divergences') initFrag('divergences', route.anchor);
@@ -372,7 +372,7 @@
     var file = L.files[r[3]];
     h.push('<div><h4>Upstream (Pi ' + esc(L.version) + ')</h4><p class="mono small">' + esc(file[1]) + (r[4] ? ':' + r[4] : '') + (r[20] >= 0 ? '<br><span class="muted">declared in ' + esc(L.str[r[20]]) + '</span>' : '') + '</p>' +
       '<div class="code" id="pi-' + i + '"><div class="cap"><span>' + (r[19] >= 0 ? esc(L.str[r[19]]) : 'declaration') + ' (from the published declaration inventory)</span></div>' + (r[16] ? '<div class="un">Loading…</div>' : '<div class="un">No declaration text in the inventory.</div>') + '</div></div>');
-    h.push('<div><h4>Go (PiG)</h4>' + (t.length ? '<ul class="reflist">' + groups3(t, L).map(function (x) { return '<li>' + refLink(L, x[0], x[1], x[2]) + '</li>'; }).join('') + '</ul>' : '<p>No Go target is recorded for this row.</p>') +
+    h.push('<div><h4>Go (Ompig)</h4>' + (t.length ? '<ul class="reflist">' + groups3(t, L).map(function (x) { return '<li>' + refLink(L, x[0], x[1], x[2]) + '</li>'; }).join('') + '</ul>' : '<p>No Go target is recorded for this row.</p>') +
       (t.length && t[1] ? '<div class="code" id="go-' + i + '"><div class="cap"><span>' + esc(L.str[t[0]]) + '</span></div><div class="un">Loading…</div></div>' : '') + '</div>');
     var meta = [];
     meta.push('<h4>Mapping</h4><p>' + esc(expandRationale(L, r)) + '</p>');

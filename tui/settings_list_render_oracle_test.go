@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type settingsListOracleItem struct {
@@ -49,7 +49,7 @@ func TestSettingsListRenderMatchesPi(t *testing.T) {
 	}
 	many[3].Description = "The fourth setting has a description that wraps across more than one row at narrow widths."
 	sets["many"] = many
-	// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+	// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 	scripts := [][]string{{}, {"\x1b[B"}, {"\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B"}, {"\x1b[A"}, {"\x1b[A", "\x1b[A"}, {"s", "e", "t"}, {"z", "z", "z"}, {"t", "\x7f", "\x7f"}, {"n", "\x1b[B", "\x1b[B", "\x1b[A"}, {"日", "x"}, {"\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B"}}
 	var probes []settingsListOracleProbe
 	for _, name := range []string{"empty", "small", "wide", "long", "styled", "many"} {
@@ -123,14 +123,14 @@ func TestSettingsListRenderMatchesPi(t *testing.T) {
 				got := list.Render(width)
 				want := slices.Clone(expected[i][frame][w])
 				for r, row := range want {
-					if widthx.VisibleWidth(row) > width { // D66: Pig clips a row Pi emits wider than the width
+					if widthx.VisibleWidth(row) > width { // D66: Ompig clips a row Pi emits wider than the width
 						want[r] = widthx.TruncateToWidth(row, width, "", false)
 					}
 				}
 				if !reflect.DeepEqual(nonNil(got), nonNil(want)) {
 					if failures++; failures <= 5 {
 						spec, _ := json.Marshal(probe)
-						t.Errorf("frame %d width %d %s\n  Pig %q\n  Pi  %q", frame, width, spec, got, want)
+						t.Errorf("frame %d width %d %s\n  Ompig %q\n  Pi  %q", frame, width, spec, got, want)
 					}
 				}
 			}
@@ -190,12 +190,12 @@ func TestSettingsListThemeMatchesPi(t *testing.T) {
 		SetTheme(p.Theme)
 		theme := GetSettingsListTheme()
 		if theme.Cursor != expected[i].Cursor {
-			t.Errorf("%s cursor: Pig %q, Pi %q", p.Theme, theme.Cursor, expected[i].Cursor)
+			t.Errorf("%s cursor: Ompig %q, Pi %q", p.Theme, theme.Cursor, expected[i].Cursor)
 		}
 		for j, text := range p.Texts {
 			got := row{Label: [2]string{theme.Label(text, false), theme.Label(text, true)}, Value: [2]string{theme.Value(text, false), theme.Value(text, true)}, Description: theme.Description(text), Hint: theme.Hint(text)}
 			if got != expected[i].Rows[j] {
-				t.Errorf("%s %q:\n  Pig %q\n  Pi  %q", p.Theme, text, got, expected[i].Rows[j])
+				t.Errorf("%s %q:\n  Ompig %q\n  Pi  %q", p.Theme, text, got, expected[i].Rows[j])
 			}
 		}
 	}

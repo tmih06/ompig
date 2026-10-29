@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 func pngChunk(kind string, length uint32, body int) []byte {
@@ -60,7 +60,7 @@ emit(input.map((h) => mod.detectSupportedImageMimeType(Buffer.from(h, "hex")) ??
 	}
 }
 
-// detectSupportedImageMimeTypeFromFile (utils/mime.ts) reads the first 4100 bytes of a file: the same buffers, each written to a file and padded past the sniff window, an empty file, a missing path and a directory (Pi rejects, Pig returns an error).
+// detectSupportedImageMimeTypeFromFile (utils/mime.ts) reads the first 4100 bytes of a file: the same buffers, each written to a file and padded past the sniff window, an empty file, a missing path and a directory (Pi rejects, Ompig returns an error).
 func TestDetectSupportedImageMimeTypeFromFileMatchesPiOracle(t *testing.T) {
 	dir := t.TempDir()
 	var paths []string

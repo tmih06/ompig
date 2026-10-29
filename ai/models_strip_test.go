@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // strippedAPICatalogCases are the strippable APIs with one catalog model each: bedrock-converse-stream (amazon-bedrock),
@@ -101,7 +101,7 @@ func TestStrippedModelErrorNamesTheStrip(t *testing.T) {
 				}
 			}
 			t.Cleanup(pigstrip.Strip(pigstrip.ListAPIs, string(tc.api)))
-			want := "Provider " + tc.provider + ": API " + string(tc.api) + " is stripped from this Piglet (strip.apis: " + string(tc.api) + ")"
+			want := "Provider " + tc.provider + ": API " + string(tc.api) + " is stripped from this Ompiglet (strip.apis: " + string(tc.api) + ")"
 			for _, query := range [][2]string{{tc.provider, tc.model}, {tc.provider, "not-in-the-catalog"}, {"", tc.model}} {
 				if err := StrippedModelError(query[0], query[1]); err == nil || err.Error() != want {
 					t.Fatalf("StrippedModelError(%q, %q) = %v, want %q", query[0], query[1], err, want)

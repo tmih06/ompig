@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi writes these variants as object literals, so JSON.stringify lists their members in literal order: events.ts:372-385 builds each

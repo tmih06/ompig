@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type oauthProbe struct {
@@ -39,7 +39,7 @@ type oauthProbeState struct {
 func randomOAuthProbes() []oauthProbe {
 	rng := rand.New(rand.NewSource(20261026))
 	names := []string{"Anthropic", "OpenAI", "GitHub Copilot", "google vertex", "Mistral AI", "日本語 Provider", "e\u0301cole", "xAI", "Azure OpenAI", "openrouter", "A very long provider display name that needs truncating at narrow widths", "ollama-local", "😀 fun", "Z.AI", "Amazon Bedrock"}
-	// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), so PageUp and PageDown stay out of the script.
+	// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), so PageUp and PageDown stay out of the script.
 	keys := []string{"\x1b[A", "\x1b[B", "\r", "\n", "\x1b", "\x03", "\x7f", "\x1b[3~", "\x1b[D", "\x1b[C", "\x01", "\x05", "\x17", "\x15", "\x0b", "a", "o", "p", "e", "n", " ", "-", "é", "日", "\x1b[200~gith\x1b[201~", "\x1b[1;5D", "\x1b[1;5C"}
 	var probes []oauthProbe
 	for range 400 {
@@ -150,7 +150,7 @@ func TestOAuthSelectorHandleInputMatchesPi(t *testing.T) {
 			}
 		}
 		if !reflect.DeepEqual(got, expected[i].States) {
-			t.Errorf("probe %d %+v:\n  Pig %+v\n  Pi  %+v", i, probe, got, expected[i].States)
+			t.Errorf("probe %d %+v:\n  Ompig %+v\n  Pi  %+v", i, probe, got, expected[i].States)
 		}
 	}
 }

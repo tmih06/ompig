@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // A document definition's typed CheckpointWhen receives the whole prepared value decoded as T, and fails the commit

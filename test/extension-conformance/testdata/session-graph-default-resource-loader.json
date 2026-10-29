@@ -68,7 +68,7 @@
 			}
 		],
 		"appendSources": [
-			"\u003croot\u003e/project/.pig/APPEND_SYSTEM.md"
+			"\u003croot\u003e/project/.ompig/APPEND_SYSTEM.md"
 		],
 		"appendSystemPrompt": [
 			"project append\n"
@@ -104,7 +104,7 @@
 			]
 		},
 		"systemPrompt": "project system\n",
-		"systemPromptSource": "\u003croot\u003e/project/.pig/SYSTEM.md",
+		"systemPromptSource": "\u003croot\u003e/project/.ompig/SYSTEM.md",
 		"themes": 0
 	},
 	"projectTrust": {

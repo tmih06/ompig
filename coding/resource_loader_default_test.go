@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // resourceLoaderFixture is a project nested in a git checkout, a separate agent directory and a separate home directory.
@@ -34,7 +34,7 @@ func newResourceLoaderFixture(t *testing.T) resourceLoaderFixture {
 	}
 	t.Setenv("HOME", f.home)
 	t.Setenv("USERPROFILE", f.home)
-	t.Setenv("PIG_HOME", filepath.Join(root, "ambient"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ambient"))
 	return f
 }
 

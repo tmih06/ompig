@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Each packed member owns its OAuth metadata even when the process is shared.
@@ -90,10 +90,10 @@ func writeSubscriptionFactory(t *testing.T, root, language, name string, subscri
 	switch language {
 	case "go":
 		module := "example.com/" + name
-		manifest := strings.Replace(sdkManifest("sdk", "go.mod"), "module github.com/MichaelKinsy/PiG/extensions/sdk", "module "+module, 1)
-		write("go.mod", manifest+"\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n")
+		manifest := strings.Replace(sdkManifest("sdk", "go.mod"), "module github.com/tmih06/ompig/extensions/sdk", "module "+module, 1)
+		write("go.mod", manifest+"\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n")
 		write("extension.go", fmt.Sprintf(`package fixture
-import "github.com/MichaelKinsy/PiG/extensions/sdk"
+import "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension {
  e := sdk.New(%q)
  e.RegisterProvider(%q, sdk.ProviderConfig{"oauth": &sdk.OAuthProvider{IsSubscription: %t, Login: func(*sdk.OAuthLoginCallbacks) (sdk.OAuthCredentials, error) { return sdk.OAuthCredentials{AccountID:%q, Scope:%q}, nil }, RefreshToken: func(c sdk.OAuthCredentials) (sdk.OAuthCredentials,error) { return c,nil }}})
@@ -106,17 +106,17 @@ func Extension() *sdk.Extension {
 		if subscription {
 			value = "True"
 		}
-		write(name+".py", fmt.Sprintf(`import pig_sdk
+		write(name+".py", fmt.Sprintf(`import ompig_sdk
 def new_extension():
-    ext = pig_sdk.Extension(%q)
-    ext.register_oauth_provider(%q, {}, pig_sdk.OAuthProvider(is_subscription=%s, login=lambda cb: pig_sdk.OAuthCredentials(account_id=%q,scope=%q), refresh_token=lambda c: c))
+    ext = ompig_sdk.Extension(%q)
+    ext.register_oauth_provider(%q, {}, ompig_sdk.OAuthProvider(is_subscription=%s, login=lambda cb: ompig_sdk.OAuthCredentials(account_id=%q,scope=%q), refresh_token=lambda c: c))
     return ext
 `, name, name, value, name, "scope-"+name))
 		return packedPythonFactoryConfig(name, dir, name, name)
 	case "rust":
-		manifest := strings.Replace(sdkManifest("sdk-rs", "Cargo.toml"), `name = "pig-sdk"`, fmt.Sprintf("name = %q", name), 1)
-		write("Cargo.toml", manifest+fmt.Sprintf("pig-sdk = { path = %q }\n", filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
-		write("src/lib.rs", fmt.Sprintf(`use pig_sdk::{Extension, OAuthProvider, OAuthCredentials};
+		manifest := strings.Replace(sdkManifest("sdk-rs", "Cargo.toml"), `name = "ompig-sdk"`, fmt.Sprintf("name = %q", name), 1)
+		write("Cargo.toml", manifest+fmt.Sprintf("ompig-sdk = { path = %q }\n", filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
+		write("src/lib.rs", fmt.Sprintf(`use ompig_sdk::{Extension, OAuthProvider, OAuthCredentials};
 pub fn new_extension() -> Extension {
  let mut ext = Extension::new(%q);
  ext.register_oauth_provider(%q, serde_json::json!({}), OAuthProvider {

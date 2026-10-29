@@ -499,7 +499,7 @@ export function extractInventory({ origin, root, sourceRoot, upstreamVersion, pa
   const seen = new Set();
   for (const pkg of packages) {
     for (const entrypoint of pkg.entrypoints) {
-      if (process.env.PIG_INTERFACE_DEBUG === "1") process.stderr.write(`extract ${pkg.key} ${entrypoint.subpath}\n`);
+      if (process.env.OMPIG_INTERFACE_DEBUG === "1") process.stderr.write(`extract ${pkg.key} ${entrypoint.subpath}\n`);
       const program = loadProgram([entrypoint], { origin: pkg.origin, root: pkg.base, dependencyRoot });
       const checker = program.getTypeChecker();
       const source = program.getSourceFile(entrypoint.file);

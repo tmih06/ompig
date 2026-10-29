@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // Ports packages/chord/test/delta-benchmark/benchmark.worker.ts tracker scenarios (import, committed-read, draft-read, sparse, queue, sort, dense, unshift) and packages/chord/test/delta-traversal.bench.ts (cold traversal through a draft). Upstream drives each scenario in a Node worker and reports wall time and V8 heap; Go reports ns/op and allocations per scenario through testing.B. The retained-heap sampling, the watch-* replication scenarios (they need the durable watch fan-out) and the conversation-view and memory workers have no counterpart here.

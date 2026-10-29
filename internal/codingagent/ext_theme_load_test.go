@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // initTheme(name) installs the theme of that name in the terminal's color mode, and the system theme for an absent or unknown name. The palettes of dark and light are the

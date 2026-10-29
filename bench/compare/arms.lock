@@ -6,7 +6,7 @@
 # fresh root; a mismatch is fatal. No curl|sh installers. Source arms record the commit they build.
 # PROVISIONAL: lock entries change only with a new measured session.
 # Resolve with: python3 bench/compare/arms.py install --root DIR
-# repo = "self": a PiG commit built from this checkout's own repository, which must already hold the commit (fetch it first).
+# repo = "self": a Ompig commit built from this checkout's own repository, which must already hold the commit (fetch it first).
 
 [suite]
 # Pi-Bolt's published benchmark suite (MIT), run unmodified from this commit; not vendored.
@@ -22,83 +22,83 @@ sha256 = "36368faef7527875d5ffa52e53cd48021741f2a83eb6208a8dd64068d422a913" # ==
 checksums = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.2/SHASUMS256.txt"
 exe = "bun-linux-x64/bun"
 
-[arm."pig-0.4.1"]
-label = "PiG 0.4.1 (release)"
+[arm."ompig-0.4.1"]
+label = "Ompig 0.4.1 (release)"
 kind = "tar"
-adapter = "pig"
-url = "https://github.com/MichaelKinsy/PiG/releases/download/v0.4.1/pig-0.4.1-linux-amd64.tar.gz"
+adapter = "ompig"
+url = "https://github.com/tmih06/ompig/releases/download/v0.4.1/ompig-0.4.1-linux-amd64.tar.gz"
 sha256 = "3b4de3587cbfb617def483ec62dddcf35827acc3436b1454cc5694c22dcdaf3f" # == release SHA256SUMS
-checksums = "https://github.com/MichaelKinsy/PiG/releases/download/v0.4.1/SHA256SUMS"
-exe = "pig-0.4.1-linux-amd64/pig"
+checksums = "https://github.com/tmih06/ompig/releases/download/v0.4.1/SHA256SUMS"
+exe = "ompig-0.4.1-linux-amd64/ompig"
 version = "0.4.1+1.0.3"
 
-[arm.pig-tip]
-label = "PiG integrate-042 tip"
+[arm.ompig-tip]
+label = "Ompig integrate-042 tip"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "274e05019f830fe3bfcd6f1a867b6fe24ba53fdd"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "0.5.0+1.1.0"
 
-[arm.pig-perfmax]
-label = "PiG perf-max b98300bfd7 (FINDING-1 fix, in review)"
+[arm.ompig-perfmax]
+label = "Ompig perf-max b98300bfd7 (FINDING-1 fix, in review)"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "b98300bfd7bff42fbb920fe3bd95e4e538e3b0ac"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "perf-max"
 
-[arm.pig-audit]
-label = "PiG audit-followups-tui 5f40adae96 (FINDING-2 round 1)"
+[arm.ompig-audit]
+label = "Ompig audit-followups-tui 5f40adae96 (FINDING-2 round 1)"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "5f40adae9600e546fe4aa9505c177bb1f7cca91f"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "audit-followups-tui"
 
-[arm.pig-stream]
-label = "PiG integrate-042 91396b1599 (Markdown streaming fix, FINDING-4)"
+[arm.ompig-stream]
+label = "Ompig integrate-042 91396b1599 (Markdown streaming fix, FINDING-4)"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "91396b159973b5c4f4d86c41716558fbd779c40d"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "integrate-042"
 
-[arm.pig-t0753]
-label = "PiG integrate-042 tip at 075303264e (L1 baseline tip; 0.5.0 column of the 0.4.1 -> 0.5.0 rows)"
+[arm.ompig-t0753]
+label = "Ompig integrate-042 tip at 075303264e (L1 baseline tip; 0.5.0 column of the 0.4.1 -> 0.5.0 rows)"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "075303264e6919feec143a5713556e8877587a09"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "integrate-042"
 
-[arm.pig-ac18]
-label = "PiG integrate-042 tip at ac1821d616 (integrity-rule streaming run, lead ruling 15:34Z)"
+[arm.ompig-ac18]
+label = "Ompig integrate-042 tip at ac1821d616 (integrity-rule streaming run, lead ruling 15:34Z)"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "ac1821d61692e810eedaadc44f26b7be67dcdb4b"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "integrate-042"
 
-[arm.pig-i042]
-label = "PiG integrate-042 tip at cd8f1cf524 (streaming-shapes arm)"
+[arm.ompig-i042]
+label = "Ompig integrate-042 tip at cd8f1cf524 (streaming-shapes arm)"
 kind = "go-source"
-adapter = "pig"
+adapter = "ompig"
 repo = "self"
 commit = "cd8f1cf5244a0242e95a9fffd521ecedf6711307"
-package = "./cmd/pig"
+package = "./cmd/ompig"
 ldflags = "-s -w"
 version = "integrate-042"
 

@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func writeCopy(t *testing.T, dir string, files map[string]string, modified time.Time) {
@@ -33,7 +33,7 @@ func conflictBetween(owner, path string) codingagent.ToolConflict {
 // both directories and the one that is older.
 func TestStaleCopyDiagnosticNamesBothPathsAndTheOlderCopy(t *testing.T) {
 	root := t.TempDir()
-	current, stale := filepath.Join(root, "kinsy-utils", "ask"), filepath.Join(root, "kinsy-utils-spec-pig-revision", "ask")
+	current, stale := filepath.Join(root, "kinsy-utils", "ask"), filepath.Join(root, "kinsy-utils-spec-ompig-revision", "ask")
 	files := map[string]string{"extension.go": "package ask\n", "go.mod": "module example.com/ask\n", "README.md": "ask\n"}
 	writeCopy(t, current, files, time.Date(2026, 10, 8, 0, 0, 0, 0, time.UTC))
 	writeCopy(t, stale, files, time.Date(2026, 9, 1, 0, 0, 0, 0, time.UTC))
@@ -115,7 +115,7 @@ func TestStartupNamesTheStaleCopyOfADuplicatedExtension(t *testing.T) {
 			older = root
 		}
 	}
-	for _, want := range []string{"are copies of one extension", "Remove the stale copy, " + older + ", and keep " + newer + ".", `Tool "ask_user" conflicts with`, `Hint: Start without extensions using "pig -ne".`} {
+	for _, want := range []string{"are copies of one extension", "Remove the stale copy, " + older + ", and keep " + newer + ".", `Tool "ask_user" conflicts with`, `Hint: Start without extensions using "ompig -ne".`} {
 		if !strings.Contains(run.stderr, want) {
 			t.Errorf("stderr lacks %q:\n%s", want, run.stderr)
 		}

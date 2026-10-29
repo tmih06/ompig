@@ -10,30 +10,30 @@ Measured 2026-09-23T11:11:39Z on Linux-6.18.44-fc-v37-x86_64-with-glibc2.39 (x86
 
 | Harness | Version | Version command output | Status |
 |---|---|---|---|
-| PiG | not recorded | `pig --version`: `0.87.1` | measured |
+| Ompig | not recorded | `ompig --version`: `0.87.1` | measured |
 | Pi | `0.87.1` | `pi --version`: `0.87.1` | measured |
 
-Version is each harness's own version. Version command output records the startup command separately. The PiG binary measured in this run predates the composite version string and printed only the pinned Pi release. Current PiG's `--version` prints its composite version, `<PiG release>+<Pi release>` (D63).
+Version is each harness's own version. Version command output records the startup command separately. The Ompig binary measured in this run predates the composite version string and printed only the pinned Pi release. Current Ompig's `--version` prints its composite version, `<Ompig release>+<Pi release>` (D63).
 
 ## Startup (--version)
 
 | Harness | Median | p90 | CPU | Peak RSS |
 |---|---:|---:|---:|---:|
-| PiG | 21.5 ms | 22.4 ms | 21.0 ms | 24.6 MiB |
+| Ompig | 21.5 ms | 22.4 ms | 21.0 ms | 24.6 MiB |
 | Pi | 300.3 ms | 309.6 ms | 299.0 ms | 101.5 MiB |
 
 ## One prompt, streamed reply
 
 | Harness | Median | p90 | CPU | Peak RSS | Requests | First request | System prompt | Tools |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| PiG | 29.1 ms | 30.7 ms | 27.9 ms | 29.8 MiB | 1 | 5,655 B | 2,466 B | 4 |
+| Ompig | 29.1 ms | 30.7 ms | 27.9 ms | 29.8 MiB | 1 | 5,655 B | 2,466 B | 4 |
 | Pi | 439.8 ms | 453.7 ms | 436.6 ms | 110.5 MiB | 1 | 5,766 B | 2,656 B | 4 |
 
 ## One prompt after resuming a large Session (2,000 exchanges)
 
 | Harness | Median | p90 | CPU | Peak RSS | Requests | First request | System prompt | Tools |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| PiG | 128.7 ms | 135.1 ms | 124.6 ms | 49.4 MiB | 1 | 425,203 B | 2,454 B | 4 |
+| Ompig | 128.7 ms | 135.1 ms | 124.6 ms | 49.4 MiB | 1 | 425,203 B | 2,454 B | 4 |
 | Pi | 614.6 ms | 626.8 ms | 608.4 ms | 126.4 MiB | 1 | 425,315 B | 2,645 B | 4 |
 
 Peak RSS is the largest single process in the harness's process tree. Request sizes are the bytes of the HTTP request body.
@@ -49,13 +49,13 @@ Results depend on the machine. Compare numbers from one run only. The harness re
 
 ## Documentation evals
 
-`go run ./cmd/pig-evals docs` measures whether the PiG documentation helps an agent finish a task. It is the Go port of Pi's `packages/evals` documentation comparison. For each case it builds two images from the repository (`internal/evals/docker/Dockerfile`), `without_docs` and `with_docs`, runs the case in a fresh container for each, and writes a paired comparison under `internal/evals/.eval/<timestamp>_<id>/` (`protocol.json`, `expected-runs.json`, `observations.jsonl`, `report.json`, `report.txt`).
+`go run ./cmd/ompig-evals docs` measures whether the Ompig documentation helps an agent finish a task. It is the Go port of Pi's `packages/evals` documentation comparison. For each case it builds two images from the repository (`internal/evals/docker/Dockerfile`), `without_docs` and `with_docs`, runs the case in a fresh container for each, and writes a paired comparison under `internal/evals/.eval/<timestamp>_<id>/` (`protocol.json`, `expected-runs.json`, `observations.jsonl`, `report.json`, `report.txt`).
 
 ```bash
-PI_PROVIDER=openai-codex PI_MODEL=gpt-5.6-sol go run ./cmd/pig-evals docs
-go run ./cmd/pig-evals docs --provider openai-codex --model gpt-5.6-sol --runs-per-variant 5 -t "adds the model"
+PI_PROVIDER=openai-codex PI_MODEL=gpt-5.6-sol go run ./cmd/ompig-evals docs
+go run ./cmd/ompig-evals docs --provider openai-codex --model gpt-5.6-sol --runs-per-variant 5 -t "adds the model"
 ```
 
-Both values of provider and model are required, from the flags or from `PI_PROVIDER` and `PI_MODEL`. The credential comes from `auth.json` in the agent directory. An API key stays in the harness; an OAuth credential is written to the run's isolated `auth.json`, where the agent's file tools can read it (D98). The `without_docs` run removes the documentation section from the system prompt and the documentation PiG writes into the run's home. The agent runs as an unprivileged user and receives only the `read`, `write`, `edit`, `grep`, `find` and `ls` tools. Artifacts can contain prompts, responses, generated code and tool output.
+Both values of provider and model are required, from the flags or from `PI_PROVIDER` and `PI_MODEL`. The credential comes from `auth.json` in the agent directory. An API key stays in the harness; an OAuth credential is written to the run's isolated `auth.json`, where the agent's file tools can read it (D98). The `without_docs` run removes the documentation section from the system prompt and the documentation Ompig writes into the run's home. The agent runs as an unprivileged user and receives only the `read`, `write`, `edit`, `grep`, `find` and `ls` tools. Artifacts can contain prompts, responses, generated code and tool output.
 
-Host evals (a smoke test and a per-page audit of the documentation PiG ships, `internal/pigdocs/content`) run on this machine with `go run ./cmd/pig-evals host`. Documentation eval files end in `.docs.eval.go`.
+Host evals (a smoke test and a per-page audit of the documentation Ompig ships, `internal/pigdocs/content`) run on this machine with `go run ./cmd/ompig-evals host`. Documentation eval files end in `.docs.eval.go`.

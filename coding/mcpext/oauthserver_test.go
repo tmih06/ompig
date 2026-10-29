@@ -14,7 +14,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // oauthMcpServer is startOAuthMcpServer of test/suite/mcp-oauth-server.ts: an

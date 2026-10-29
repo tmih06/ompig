@@ -12,7 +12,7 @@ import (
 // (Pi's Google adapters, google-generative-ai.ts:195-200) and replay omits a call with no id or no name in prepareProviderToolFlow.
 // pi-mono #10299 names both halves of the replay rule: a call with no id or no name is skipped with its results.
 // A session stored before the fix holds a named call with id "" whose result also has tool_call_id "";
-// pig divergence (D120): replay omits that call as well, so no tool call or tool message carries an empty id.
+// ompig divergence (D120): replay omits that call as well, so no tool call or tool message carries an empty id.
 // With requiresAssistantAfterToolResult, a tool-result group whose results were all omitted adds no bridge message.
 func TestOpenAICompletionsReplayOmitsStoredToolCallsWithoutIDOrNameReviewed(t *testing.T) {
 	yes := new(true)
@@ -60,7 +60,7 @@ func TestOpenAICompletionsReplayOmitsStoredToolCallsWithoutIDOrNameReviewed(t *t
 	}
 }
 
-// pig divergence (D120): the id given to a call streamed without one is unique, so equal calls in two turns of one
+// ompig divergence (D120): the id given to a call streamed without one is unique, so equal calls in two turns of one
 // session do not share an id (a provider such as Anthropic rejects a transcript whose tool_use ids repeat).
 func TestOpenAICompletionsGeneratedToolCallIDsAreUnique(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

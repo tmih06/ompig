@@ -2,7 +2,7 @@
 //
 // Mirrors upstream openExternalEditor() in
 // .upstream/current/packages/coding-agent/src/modes/interactive/interactive-mode.ts:3358.
-// User presses Ctrl+G; pig:
+// User presses Ctrl+G; ompig:
 //   1. Writes the current editor buffer to prompt.md inside a private
 //      pi-editor-* directory under the system temp directory
 //      (external-editor.ts mkdtempSync(join(tmpdir(), "pi-editor-"))).
@@ -32,9 +32,9 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // OpenExternalEditor resolves the command with SettingsManager's precedence, writes initial to prompt.md in a private pi-editor-*

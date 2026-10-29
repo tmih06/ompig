@@ -41,10 +41,10 @@ func copyProgram(t *testing.T, dir, name string, mode os.FileMode) string {
 
 // Node's spawn(file, [], { cwd, env }) is the oracle for a file without a
 // slash. libuv (src/unix/process.c, libuv 1.52.1) execvp's it after replacing
-// environ with env, so the PATH of env, not PiG's, chooses the program: the
+// environ with env, so the PATH of env, not Ompig's, chooses the program: the
 // first executable file in each entry in turn, an empty entry being the
 // working directory, and a default path when env has no PATH.
-// exec.Command looked the name up in PiG's PATH instead.
+// exec.Command looked the name up in Ompig's PATH instead.
 func TestSetProgramSearchesThePathOfTheChildEnvironment(t *testing.T) {
 	nodeBinary, err := exec.LookPath("node")
 	if err != nil {
@@ -52,18 +52,18 @@ func TestSetProgramSearchesThePathOfTheChildEnvironment(t *testing.T) {
 	}
 	root := t.TempDir()
 	only := filepath.Join(root, "only-in-child")
-	copyProgram(t, only, "pig-child-path-command", 0o755)
+	copyProgram(t, only, "ompig-child-path-command", 0o755)
 	other := filepath.Join(root, "other")
 	if err := os.Mkdir(other, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	notExecutable := filepath.Join(root, "not-executable")
-	copyProgram(t, notExecutable, "pig-skipped-command", 0o644)
-	copyProgram(t, only, "pig-skipped-command", 0o755)
+	copyProgram(t, notExecutable, "ompig-skipped-command", 0o644)
+	copyProgram(t, only, "ompig-skipped-command", 0o755)
 	cwd := filepath.Join(root, "cwd")
-	copyProgram(t, cwd, "pig-cwd-command", 0o755)
+	copyProgram(t, cwd, "ompig-cwd-command", 0o755)
 	inParent := filepath.Join(root, "only-in-parent")
-	copyProgram(t, inParent, "pig-parent-path-command", 0o755)
+	copyProgram(t, inParent, "ompig-parent-path-command", 0o755)
 	// The oracle process keeps the PATH the test started with: a node launcher script (a version-manager shim) finds the real node through it.
 	oracleEnv := os.Environ()
 	t.Setenv("PATH", inParent)
@@ -75,7 +75,7 @@ func TestSetProgramSearchesThePathOfTheChildEnvironment(t *testing.T) {
 	if err := os.Symlink(filepath.Join(root, "nest", "deep"), filepath.Join(root, "hop")); err != nil {
 		t.Fatal(err)
 	}
-	copyProgram(t, filepath.Join(root, "nest", "bin"), "pig-symlink-command", 0o755)
+	copyProgram(t, filepath.Join(root, "nest", "bin"), "ompig-symlink-command", 0o755)
 
 	cases := []struct {
 		name string
@@ -83,17 +83,17 @@ func TestSetProgramSearchesThePathOfTheChildEnvironment(t *testing.T) {
 		cwd  string
 		env  []string
 	}{
-		{"the child's PATH finds what PiG's does not", "pig-child-path-command", "", []string{"PATH=" + only}},
-		{"PiG's PATH is not searched", "pig-parent-path-command", "", []string{"PATH=" + other}},
-		{"an empty PATH is the working directory", "pig-cwd-command", cwd, []string{"PATH="}},
-		{"an empty entry is the working directory", "pig-cwd-command", cwd, []string{"PATH=" + other + ":"}},
-		{"a relative entry is relative to the working directory", "pig-child-path-command", root, []string{"PATH=other:only-in-child"}},
-		{"a file without execute permission is skipped", "pig-skipped-command", "", []string{"PATH=" + notExecutable + ":" + only}},
+		{"the child's PATH finds what Ompig's does not", "ompig-child-path-command", "", []string{"PATH=" + only}},
+		{"Ompig's PATH is not searched", "ompig-parent-path-command", "", []string{"PATH=" + other}},
+		{"an empty PATH is the working directory", "ompig-cwd-command", cwd, []string{"PATH="}},
+		{"an empty entry is the working directory", "ompig-cwd-command", cwd, []string{"PATH=" + other + ":"}},
+		{"a relative entry is relative to the working directory", "ompig-child-path-command", root, []string{"PATH=other:only-in-child"}},
+		{"a file without execute permission is skipped", "ompig-skipped-command", "", []string{"PATH=" + notExecutable + ":" + only}},
 		{"a directory is skipped", "other", "", []string{"PATH=" + root + ":" + only}},
 		{"the child without PATH searches the default path", "sh", "", []string{"A=1"}},
-		{"an entry's .. after a symlink is resolved by the kernel", "pig-symlink-command", "", []string{"PATH=" + filepath.Join(root, "hop") + "/../bin"}},
-		{"a relative entry's .. after a symlink is resolved by the kernel", "pig-symlink-command", root, []string{"PATH=hop/../bin"}},
-		{"the last PATH entry is the child's", "pig-child-path-command", "", []string{"PATH=" + other, "PATH=" + only}},
+		{"an entry's .. after a symlink is resolved by the kernel", "ompig-symlink-command", "", []string{"PATH=" + filepath.Join(root, "hop") + "/../bin"}},
+		{"a relative entry's .. after a symlink is resolved by the kernel", "ompig-symlink-command", root, []string{"PATH=hop/../bin"}},
+		{"the last PATH entry is the child's", "ompig-child-path-command", "", []string{"PATH=" + other, "PATH=" + only}},
 		{"an environment with no entries", "sh", "", []string{}},
 	}
 	type input struct {
@@ -178,25 +178,25 @@ func realPath(t *testing.T, path string) string {
 }
 
 // LookPath answers as SetProgram does for a nil-or-explicit environment: a nil
-// env is PiG's PATH, and an explicit env is its own.
+// env is Ompig's PATH, and an explicit env is its own.
 func TestLookPathSearchesThePathOfTheEnvironmentItIsGiven(t *testing.T) {
 	root := t.TempDir()
 	inChild := filepath.Join(root, "child")
-	want := copyProgram(t, inChild, "pig-lookpath-command", 0o755)
+	want := copyProgram(t, inChild, "ompig-lookpath-command", 0o755)
 	inParent := filepath.Join(root, "parent")
-	copyProgram(t, inParent, "pig-lookpath-other", 0o755)
+	copyProgram(t, inParent, "ompig-lookpath-other", 0o755)
 	t.Setenv("PATH", inParent)
 
-	if got, err := LookPath("pig-lookpath-command", "", []string{"PATH=" + inChild}); err != nil || got != want {
+	if got, err := LookPath("ompig-lookpath-command", "", []string{"PATH=" + inChild}); err != nil || got != want {
 		t.Errorf("LookPath in the child's PATH = %q, %v; want %q", got, err, want)
 	}
-	if _, err := LookPath("pig-lookpath-other", "", []string{"PATH=" + inChild}); !errors.Is(err, exec.ErrNotFound) {
-		t.Errorf("LookPath of a program only PiG's PATH has = %v; want exec.ErrNotFound", err)
+	if _, err := LookPath("ompig-lookpath-other", "", []string{"PATH=" + inChild}); !errors.Is(err, exec.ErrNotFound) {
+		t.Errorf("LookPath of a program only Ompig's PATH has = %v; want exec.ErrNotFound", err)
 	}
-	if got, err := LookPath("pig-lookpath-other", "", nil); err != nil || got != filepath.Join(inParent, "pig-lookpath-other") {
-		t.Errorf("LookPath with a nil env = %q, %v; want PiG's PATH to find it", got, err)
+	if got, err := LookPath("ompig-lookpath-other", "", nil); err != nil || got != filepath.Join(inParent, "ompig-lookpath-other") {
+		t.Errorf("LookPath with a nil env = %q, %v; want Ompig's PATH to find it", got, err)
 	}
-	if got, err := LookPath("pig-lookpath-command", root, []string{"PATH=child"}); err != nil || got != filepath.Join("child", "pig-lookpath-command") {
+	if got, err := LookPath("ompig-lookpath-command", root, []string{"PATH=child"}); err != nil || got != filepath.Join("child", "ompig-lookpath-command") {
 		t.Errorf("LookPath with a relative entry = %q, %v", got, err)
 	}
 }
@@ -208,18 +208,18 @@ func TestSetProgramSearchesTheFirstPathOfADuplicatedEnvironment(t *testing.T) {
 	root := t.TempDir()
 	first := filepath.Join(root, "first")
 	last := filepath.Join(root, "last")
-	copyProgram(t, first, "pig-first-command", 0o755)
-	copyProgram(t, last, "pig-last-command", 0o755)
+	copyProgram(t, first, "ompig-first-command", 0o755)
+	copyProgram(t, last, "ompig-last-command", 0o755)
 	t.Setenv("PATH", "")
 
 	env := []string{imageHelper + "=1", "PATH=" + first, "PATH=" + last}
-	found := exec.Command("pig-first-command")
+	found := exec.Command("ompig-first-command")
 	found.Env = env
 	SetProgram(found)
 	if output, err := found.Output(); err != nil {
 		t.Errorf("first PATH: %v; output %q", err, output)
 	}
-	missing := exec.Command("pig-last-command")
+	missing := exec.Command("ompig-last-command")
 	missing.Env = env
 	SetProgram(missing)
 	if output, err := missing.Output(); !errors.Is(err, exec.ErrNotFound) {

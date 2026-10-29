@@ -3,7 +3,7 @@ package agent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ThinkingLevel is the agent's reasoning level: "off" or an ai.ThinkingLevel (types.ts ThinkingLevel). It is ai.ModelThinkingLevel.

@@ -83,7 +83,7 @@ func TestReleaseKnownGapNeverBypassesStrictMapping(t *testing.T) {
 }
 
 func TestReleaseKnownGapOutput(t *testing.T) {
-	if os.Getenv("PIG_TEST_RELEASE_GAP_OUTPUT") == "1" {
+	if os.Getenv("OMPIG_TEST_RELEASE_GAP_OUTPUT") == "1" {
 		inv, m, policy := knownGapReleasePolicy()
 		if err := validateReleasePolicy(inv, m, policy); err != nil {
 			t.Fatal(err)
@@ -91,7 +91,7 @@ func TestReleaseKnownGapOutput(t *testing.T) {
 		return
 	}
 	cmd := exec.CommandContext(t.Context(), os.Args[0], "-test.run=^TestReleaseKnownGapOutput$")
-	cmd.Env = append(os.Environ(), "PIG_TEST_RELEASE_GAP_OUTPUT=1")
+	cmd.Env = append(os.Environ(), "OMPIG_TEST_RELEASE_GAP_OUTPUT=1")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("gate output: %v\n%s", err, output)

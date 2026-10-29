@@ -31,7 +31,7 @@ for (const scenario of JSON.parse(input)) {
     if (scenario.models !== null) writeFileSync(modelsPath, scenario.models);
     const runtime = await ModelRuntime.create({ authPath, modelsPath });
     const registry = new ModelRegistry(runtime);
-    // registerProvider, registerNativeProvider and unregisterProvider start `void this.refresh({ allowNetwork: false })` (model-runtime.ts). That pass and a following awaited refresh race to reach queueAvailabilityRefresh, so Pi's published snapshot depends on Node's I/O completion order. Pig orders them deterministically: a refresh over every provider first waits for the queued registration refresh (D84). The "refresh" op settles Pi's pending unawaited refreshes first, which is that order.
+    // registerProvider, registerNativeProvider and unregisterProvider start `void this.refresh({ allowNetwork: false })` (model-runtime.ts). That pass and a following awaited refresh race to reach queueAvailabilityRefresh, so Pi's published snapshot depends on Node's I/O completion order. Ompig orders them deterministically: a refresh over every provider first waits for the queued registration refresh (D84). The "refresh" op settles Pi's pending unawaited refreshes first, which is that order.
     const pendingRefreshes = new Set();
     const runtimeRefresh = runtime.refresh.bind(runtime);
     runtime.refresh = (options) => {

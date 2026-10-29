@@ -55,7 +55,7 @@ func TestHeadlessExtensionsReadContextUsageAndShutdown(t *testing.T) {
 		t.Run(mode, func(t *testing.T) {
 			home, cwd, dir := t.TempDir(), t.TempDir(), t.TempDir()
 			report := filepath.Join(t.TempDir(), "report.jsonl")
-			env := []string{"HOME=" + home, "PIG_HOME=" + filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "pig"), "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "STATE_REPORT=" + report}
+			env := []string{"HOME=" + home, "OMPIG_HOME=" + filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "ompig"), "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "STATE_REPORT=" + report}
 			args := []string{"--no-extensions", "--no-skills", "--no-prompt-templates", "--model", "test-faux/faux-1", "--session-dir", dir, "-e", fixture}
 			if mode == "rpc" {
 				process := startRPCProcessAt(t, cwd, env, args...)

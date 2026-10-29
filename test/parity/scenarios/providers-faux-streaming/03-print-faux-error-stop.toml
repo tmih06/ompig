@@ -3,7 +3,7 @@
 # emit the error message on stderr and exit 1: without any "error:" prefix.
 #
 # This tests the streaming error event (EventError) and the print-mode
-# error path. Upstream prints the raw errorMessage; pig must match.
+# error path. Upstream prints the raw errorMessage; ompig must match.
 #
 # Upstream evidence (2026-05-17):
 #   cd /tmp/parity-probe-faux
@@ -12,8 +12,8 @@
 #   combined output: 'test-faux: unhandled request "this is unrecognized by faux"'
 #   exit: 1
 #
-#   PIG_TEST_FAUX=1 PIG_HOME=testdata/pig-home PIG_QUIET_STARTUP=1 \
-#     pig --no-extensions --model test-faux/faux-1 --print "this is unrecognized by faux"
+#   OMPIG_TEST_FAUX=1 OMPIG_HOME=testdata/ompig-home OMPIG_QUIET_STARTUP=1 \
+#     ompig --no-extensions --model test-faux/faux-1 --print "this is unrecognized by faux"
 #   combined output: 'test-faux: unhandled request "this is unrecognized by faux"'
 #   exit: 1
 
@@ -28,7 +28,7 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
 [print]

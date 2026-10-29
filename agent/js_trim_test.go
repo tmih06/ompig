@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // String.prototype.trim (transform-messages.ts:111, proxy.ts:181) treats U+FEFF as whitespace and U+0085 as an ordinary character; strings.TrimSpace does the opposite.

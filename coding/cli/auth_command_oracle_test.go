@@ -10,8 +10,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // cli/auth-command.ts parseAuthCommand, validateAuthCommandArgs (over parseArgs of the command's arguments) and getAuthCredential against
@@ -69,8 +69,8 @@ func TestAuthCommandMatchesPi(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Pi oracle: %v\n%s", err, &stderr)
 	}
-	// Pi's messages name the program `pi` (APP_NAME); this program is `pig`.
-	output = bytes.ReplaceAll(output, []byte(`\"pi auth`), []byte(`\"pig auth`))
+	// Pi's messages name the program `pi` (APP_NAME); this program is `ompig`.
+	output = bytes.ReplaceAll(output, []byte(`\"pi auth`), []byte(`\"ompig auth`))
 	var expected []map[string]any
 	if err := json.Unmarshal(output, &expected); err != nil {
 		t.Fatal(err)
@@ -78,7 +78,7 @@ func TestAuthCommandMatchesPi(t *testing.T) {
 	failures := 0
 	report := func(what any, got, want map[string]any) {
 		if failures++; failures <= 6 {
-			t.Errorf("%v:\n  Pig %v\n  Pi  %v", what, got, want)
+			t.Errorf("%v:\n  Ompig %v\n  Pi  %v", what, got, want)
 		}
 	}
 	for i, vector := range vectors {

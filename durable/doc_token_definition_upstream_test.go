@@ -1,7 +1,7 @@
 package durable
 
 import (
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 	"strings"
 	"testing"
 )

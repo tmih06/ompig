@@ -118,14 +118,14 @@ class Report(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             for name, rows in files.items():
                 Path(d, name).write_text("".join(json.dumps(r) + "\n" for r in rows) if isinstance(rows, list) else rows)
-            subprocess.run([sys.executable, str(HERE / "report.py"), "--out", d, "--arms", "pig-tip,gi,omp"], check=True, capture_output=True, timeout=60)
+            subprocess.run([sys.executable, str(HERE / "report.py"), "--out", d, "--arms", "ompig-tip,gi,omp"], check=True, capture_output=True, timeout=60)
             return Path(d, "report.md").read_text()
 
     def row(self, md, prefix):
         return next(line for line in md.splitlines() if line.startswith(f"| {prefix}"))
 
     def test_long_session_cannot_run_comes_from_the_runner(self):
-        long_rows = [{"build": "pig-tip", "prompt": p, "ms_per_prompt": 100 + p, "cpu_ms_per_prompt": 90, "own_mb": 50, "rss_mb": 80, "tokens_m": 1} for p in (25, 50, 75)]
+        long_rows = [{"build": "ompig-tip", "prompt": p, "ms_per_prompt": 100 + p, "cpu_ms_per_prompt": 90, "own_mb": 50, "rss_mb": 80, "tokens_m": 1} for p in (25, 50, 75)]
         md = self.render({"long.jsonl": long_rows})
         cells = [c.strip() for c in self.row(md, "Time per prompt, long session").split("|")[2:-1]]
         self.assertEqual(cells, ["175 (n=1)", "cannot run", "cannot run"])
@@ -139,7 +139,7 @@ class Report(unittest.TestCase):
 
     def test_negative_idle_cpu_is_not_pooled(self):
         idle = "\n".join([
-            "{'build': 'pig-tip', 'cpu_ms_per_s': 0.5, 'own_mb': [30, 31], 'threads': {}}",
+            "{'build': 'ompig-tip', 'cpu_ms_per_s': 0.5, 'own_mb': [30, 31], 'threads': {}}",
             "{'build': 'omp', 'cpu_ms_per_s': -31.5, 'own_mb': [400, None], 'threads': {}}",
         ]) + "\n"
         md = self.render({"idle-r0.txt": idle})
@@ -183,7 +183,7 @@ class SelfArms(unittest.TestCase):
         self.assertEqual(arms.self_arm_problems(arms.LOCK), [])
 
     def test_private_remote_ref_and_short_sha_are_reported(self):
-        lock = {"arm": {"pig-x": {"kind": "go-source", "adapter": "pig", "repo": "git@host:o/private.git", "ref": "team/x", "commit": "cd8f1cf524"},
+        lock = {"arm": {"ompig-x": {"kind": "go-source", "adapter": "ompig", "repo": "git@host:o/private.git", "ref": "team/x", "commit": "cd8f1cf524"},
                          "gi": {"kind": "go-source", "adapter": "gi", "repo": "https://github.com/rcarmo/gi", "commit": "7078df0d59"}}}
         self.assertEqual(len(arms.self_arm_problems(lock)), 3)
 

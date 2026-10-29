@@ -4,7 +4,7 @@ import type { Storage } from "@earendil-works/pi-durable"
 import type { Store } from "@@HOST@@/store.ts"
 
 type Contract = { openStore(path: string): Promise<Store & { close(): void }> }
-const contract = () => (globalThis as { [k: symbol]: unknown })[Symbol.for("pig.contract")] as Contract
+const contract = () => (globalThis as { [k: symbol]: unknown })[Symbol.for("ompig.contract")] as Contract
 
 let count = 0
 class CandidateMemoryStorage {

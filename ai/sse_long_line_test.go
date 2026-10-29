@@ -26,7 +26,7 @@ func TestSSEDecoderAcceptsALineLargerThan32MiB(t *testing.T) {
 	}
 }
 
-// pig divergence (D134): sseLineLimit is the longest JavaScript string Node can hold, which is where every Pi SSE reader fails.
+// ompig divergence (D134): sseLineLimit is the longest JavaScript string Node can hold, which is where every Pi SSE reader fails.
 func TestSSELineLimitIsNodesMaxStringLength(t *testing.T) {
 	output, err := exec.CommandContext(t.Context(), "node", "-e", "process.stdout.write(String(require('node:buffer').constants.MAX_STRING_LENGTH))").Output()
 	if err != nil {
@@ -37,7 +37,7 @@ func TestSSELineLimitIsNodesMaxStringLength(t *testing.T) {
 	}
 }
 
-// pig divergence (D134): a line that does not end within the bound stops the stream there instead of growing without limit. The test line is 1 MiB, finite, so that a regression fails instead of exhausting memory.
+// ompig divergence (D134): a line that does not end within the bound stops the stream there instead of growing without limit. The test line is 1 MiB, finite, so that a regression fails instead of exhausting memory.
 func TestSSEDecoderBoundsALine(t *testing.T) {
 	previous := sseLineLimit
 	sseLineLimit = 1 << 10

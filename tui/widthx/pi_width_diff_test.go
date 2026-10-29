@@ -4,7 +4,7 @@ package widthx
 // verbatim in testdata/pi) under Node and compares visibleWidth, grapheme
 // segmentation, truncateToWidth and wrapTextWithAnsi against this package
 // over an exhaustive single-code-point sweep, a fixed-seed adversarial
-// corpus, a curated list and the text lines in tui/testdata. PiG adopts Pi's
+// corpus, a curated list and the text lines in tui/testdata. Ompig adopts Pi's
 // crash-on-overflow render check, which is only as safe as this parity.
 //
 // Skips when node is absent. When node's Unicode version differs from the
@@ -23,7 +23,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type piCorpus struct {
@@ -63,7 +63,7 @@ var curatedWidthStrings = []string{
 	"\x1b]8;;https://example.com\x1b\\link\x1b]8;;\x1b\\", "\x1b]8;;http://a\x07x\x1b]8;;\x07", "\x1b_pi:c\x07", "\x1b[3Aabc", "\x1b[2K", "\x1b[?25lhi\x1b[0m",
 	"\x1b[?2026h", "\x1b[?2026l", "\x1b", "\x1b[", "x\x1b]133;A\x07y", "𝕳𝖊𝖑𝖑𝖔", "𠀀𠀁", "\ue000", "\U0010fffd", "\uffff", "\u0378",
 	"\u1734", "\u302e", "\u065f", "\u0f7f", "\u102b\u102c", "a\u0903", "\u0903", "\u0e31", "a\u20e3", "\U000e0067",
-	"╭──────╮ │ ok │ ╰──────╯", "⠋ Working...", "↑12k ↓3.4k R1.2M $0.123 (sub) 45.2%/200k (auto)", "~/src/pig (main) • claude-opus",
+	"╭──────╮ │ ok │ ╰──────╯", "⠋ Working...", "↑12k ↓3.4k R1.2M $0.123 (sub) 45.2%/200k (auto)", "~/src/ompig (main) • claude-opus",
 	"| 名前 | 説明 |\n|---|---|", "→ ← ⏎ ⇧ ⌥ ⌘ ⌃", "• item", "▶ ▼ ◆ ● ○ ◉", "━━━ ─── ═══",
 }
 
@@ -134,7 +134,7 @@ func randString(r *rand.Rand, maxTokens int) string {
 }
 
 // testdataLines collects text lines from tui/testdata goldens and fixtures:
-// the strings PiG's tools, markdown, footers and extensions actually render.
+// the strings Ompig's tools, markdown, footers and extensions actually render.
 func testdataLines(t *testing.T) []string {
 	var lines []string
 	root := filepath.Join("..", "testdata")

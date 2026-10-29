@@ -13,7 +13,7 @@ This lane checked every host-side capability that a subprocess extension (Node, 
 - Host-runtime registries: virtual models and MCP servers.
 - The event payloads sent to extensions.
 
-For each capability, the audit read the production binding site in each mode and confirmed the result with the real `pig` binary. Upstream reference: Pi binds every Session action in every mode through `AgentSession._bindExtensionCore` (`.upstream/v0.99.1/packages/coding-agent/src/core/agent-session.ts:3275-3408`), called from `bindExtensions` (`agent-session.ts:3173-3197`). The mode-specific parts are `print-mode.ts:74-104`, `rpc-mode.ts:317-351` and `interactive-mode.ts` `bindExtensions`.
+For each capability, the audit read the production binding site in each mode and confirmed the result with the real `ompig` binary. Upstream reference: Pi binds every Session action in every mode through `AgentSession._bindExtensionCore` (`.upstream/v0.99.1/packages/coding-agent/src/core/agent-session.ts:3275-3408`), called from `bindExtensions` (`agent-session.ts:3173-3197`). The mode-specific parts are `print-mode.ts:74-104`, `rpc-mode.ts:317-351` and `interactive-mode.ts` `bindExtensions`.
 
 SDK/embedded mode does not apply. The `coding` package does not host subprocess extensions, so no `HostCallbacks` exist there. The in-process runner bindings in `coding/session_bind.go` are listed under "Deferred" below.
 
@@ -21,7 +21,7 @@ SDK/embedded mode does not apply. The `coding` package does not host subprocess 
 
 Status legend: **wired** means production binds it. **fixed** means this lane added the production binding. **faithful-unbound** means Pi binds nothing in that mode either. **f6f-node** means lane port-99-f6f-node owns it. **deleted** means the capability had no production caller and no SDK caller, so this lane removed it. **deferred** means the gap is documented below with its owner.
 
-Abbreviations: `sea` = `cmd/pig/session_extension_actions.go` (`bindSessionExtensionActions`, `bindSessionReadActions`, `bindSessionAppendEntry`); `ie` = `internal/codingagent/interactive_extensions.go`; `rpc` = `cmd/pig/rpc_mode_runtime.go` `rpcHost.bindExtensionActions`; `pm` = `cmd/pig/print_mode.go` bind closure; `wmo` = `codingagent.WireModelOperations`, called by `cmd/pig/extensions.go` `wireSubprocessModelRegistry` in headless modes and by `ie` in interactive mode.
+Abbreviations: `sea` = `cmd/ompig/session_extension_actions.go` (`bindSessionExtensionActions`, `bindSessionReadActions`, `bindSessionAppendEntry`); `ie` = `internal/codingagent/interactive_extensions.go`; `rpc` = `cmd/ompig/rpc_mode_runtime.go` `rpcHost.bindExtensionActions`; `pm` = `cmd/ompig/print_mode.go` bind closure; `wmo` = `codingagent.WireModelOperations`, called by `cmd/ompig/extensions.go` `wireSubprocessModelRegistry` in headless modes and by `ie` in interactive mode.
 
 | Feature (HostCallbacks field / key) | Interactive | Print / JSON | RPC | Test sites before this lane | Status |
 |---|---|---|---|---|---|
@@ -39,7 +39,7 @@ Abbreviations: `sea` = `cmd/pig/session_extension_actions.go` (`bindSessionExten
 | **IsProjectTrusted** | ie:437 | **missing → fixed** sea:230 | **missing → fixed** | SetActions only | fixed |
 | **Compact** | ie:474 | **missing → fixed** sea:237 | **missing → fixed** | SetActions only | fixed |
 | Shutdown | ie:466 | faithful-unbound (print-mode.ts binds no shutdownHandler) | rpc:495 | SetActions | wired / faithful |
-| Reload | ie:473 | **missing → fixed** (`Runtime.ExtensionCommandActions`, `cmd/pig/headless_reload.go`) | **missing → fixed** | SetActions | wired (fix-99-j13) |
+| Reload | ie:473 | **missing → fixed** (`Runtime.ExtensionCommandActions`, `cmd/ompig/headless_reload.go`) | **missing → fixed** | SetActions | wired (fix-99-j13) |
 | GetGitBranch, GetExtensionStatuses, GetAvailableProviderCount | ie:439-441 | faithful-unbound (footer data exists only in the TUI) | faithful-unbound | SetActions | wired / faithful |
 | WaitForIdle, NewSession, Fork, NavigateTree, SwitchSession | ie:283-296 (BindCommandActions) | sea:261 + pm:330 | sea + rpc:269 | SetActions | wired |
 | GetModelInfo, GetModel, GetModels, GetModelAuth, Complete, StreamModel, GetModelRegistryState, GetProviderAuth, RefreshModelRegistry | wmo (ie:1486-1609) | wmo | wmo | SetActions | wired |
@@ -55,7 +55,7 @@ Abbreviations: `sea` = `cmd/pig/session_extension_actions.go` (`bindSessionExten
 
 ## Bugs found and fixed
 
-1. **Headless modes lacked four Session actions.** Before the fix, print, JSON and RPC had no binding for `setModel`, `setThinkingLevel`, `isProjectTrusted` or `compact`. Pi binds them in every mode (`agent-session.ts:3343-3347`, `2527-2550`, `3369-3379`; `print-mode.ts:74-104`; `rpc-mode.ts:317-351`). Before the fix, Pig returned these answers:
+1. **Headless modes lacked four Session actions.** Before the fix, print, JSON and RPC had no binding for `setModel`, `setThinkingLevel`, `isProjectTrusted` or `compact`. Pi binds them in every mode (`agent-session.ts:3343-3347`, `2527-2550`, `3369-3379`; `print-mode.ts:74-104`; `rpc-mode.ts:317-351`). Before the fix, Ompig returned these answers:
    - `pi.setModel()` failed with "not ready".
    - `ctx.isProjectTrusted()` returned `true` under `--no-approve`.
    - `pi.setThinkingLevel()` did nothing.
@@ -66,7 +66,7 @@ Abbreviations: `sea` = `cmd/pig/session_extension_actions.go` (`bindSessionExten
    - `bindSessionExtensionActions` binds all four actions for print, JSON and RPC.
    - A thinking-level persistence failure goes to the error listeners, following Pi's unawaited-action pattern (`agent-session.ts:3303-3310`).
 2. **SDK virtual models never reached the Session.** A virtual model registered by an SDK extension never reached any Session's `ModelRuntime`. The host runtime binds only provider callbacks, and the Session uses a separate `ExtensionRuntime`, so the registration stayed queued and `ctx.modelRegistry.find(provider, id)` returned null.
-   - Fix: `cmd/pig/extensions.go` `flushExtensionHostVirtualModels`, called by `cliRuntimeBuilder.buildResources` right after the extensions load, binds the host runtime's virtual-model actions to the Services' model registry. As in Pi's `createAgentSessionServices` (`agent-session-services.ts:182-193`), the queued registrations apply before the local refresh, model resolution and Session construction; a failed one is the startup error diagnostic `Extension "<path>" error: <message>` (fatal, no `-ne` hint, `main.ts:907-916`); later registrations and removals apply at once.
+   - Fix: `cmd/ompig/extensions.go` `flushExtensionHostVirtualModels`, called by `cliRuntimeBuilder.buildResources` right after the extensions load, binds the host runtime's virtual-model actions to the Services' model registry. As in Pi's `createAgentSessionServices` (`agent-session-services.ts:182-193`), the queued registrations apply before the local refresh, model resolution and Session construction; a failed one is the startup error diagnostic `Extension "<path>" error: <message>` (fatal, no `-ne` hint, `main.ts:907-916`); later registrations and removals apply at once.
    - Review (rev-audit-host-wiring) moved this from a factory-time binding (`bindExtensionHostVirtualModels` after `low.New`), which bound too late for Session restore and reported a failed flush to no listener.
    - Print and interactive modes also pass their extension host to the Session factory (`print_mode.go`, `print_mode_build.go`, `interactive_build.go`).
 3. **`model_select` reached SDK extensions in the wrong shape.** The event serialized `*ai.Model` with Go field names, so `event.model.provider` and `event.model.id` were `undefined` in every SDK and every mode. Pi passes its Model object (`agent-session.ts:2372-2384`).
@@ -83,7 +83,7 @@ Abbreviations: `sea` = `cmd/pig/session_extension_actions.go` (`bindSessionExten
 
 The guard tests are table-driven over the production wiring constructors (reflection over `HostCallbacks`, not a grep):
 
-- `cmd/pig/extension_host_wiring_guard_test.go`:
+- `cmd/ompig/extension_host_wiring_guard_test.go`:
   - `TestPrintModesBindEveryHostCallback` runs `runPrintMode` (text and JSON) with a real bridge.
   - `TestRPCModeBindsEveryHostCallback` runs `rpcHost.bindExtensionActions`.
   - `TestBuildFlushesTheExtensionHostVirtualModels` covers queued, conflicting, late and unregistered virtual models.
@@ -99,8 +99,8 @@ Each allowance set is checked in both directions. A mode that leaves a field unb
 
 ## Real-binary tests
 
-- `TestHeadlessExtensionSessionActionsMatchPi` (print, JSON, RPC) with fixture `cmd/pig/testdata/host-wiring-session-actions.mjs`.
-- `TestSubprocessVirtualModelReachesTheModelRuntime` (print, JSON, RPC) with fixture `cmd/pig/testdata/host-wiring-virtual-model.py`.
+- `TestHeadlessExtensionSessionActionsMatchPi` (print, JSON, RPC) with fixture `cmd/ompig/testdata/host-wiring-session-actions.mjs`.
+- `TestSubprocessVirtualModelReachesTheModelRuntime` (print, JSON, RPC) with fixture `cmd/ompig/testdata/host-wiring-virtual-model.py`.
 - `TestInteractiveExtensionHostWiringMatchesHeadlessModes` (Linux PTY) with both fixtures.
 - Unit test `TestModelSelectEventCarriesPiModelShape`.
 
@@ -121,24 +121,24 @@ These tests were derived from upstream behavior; no upstream test covers this wi
 
 - Red `939806f51`: the tests and a panicking `rpcHost.bindExtensionActions` stub.
   - All guards failed, and the RPC guard panicked on the stub.
-  - Headless session actions and the virtual model test failed in print, JSON and RPC. Pig answered `isProjectTrusted` true, `setModel` "not ready", no `thinking_level_select`, compact "not available", and virtual model null.
+  - Headless session actions and the virtual model test failed in print, JSON and RPC. Ompig answered `isProjectTrusted` true, `setModel` "not ready", no `thinking_level_select`, compact "not available", and virtual model null.
   - The interactive guard failed because interactive mode left `HostCallbacks.FindModel` unbound. Green deletes that callback.
 - Green `253221cac`: every test above passes.
 - Tests added in green, and the mutations that make them fail:
   - Disabling `wireEventPayload`'s projection makes `TestModelSelectEventCarriesPiModelShape` fail.
   - Restoring the interactive explicit `model_select` emit makes the PTY test fail with a duplicate, malformed `model_select`.
-- Fixture change in green: the red fixture called `setThinkingLevel` before awaiting `ctx.compact` callbacks. Pig then delivered `thinking_level_select` after the compact error because of the Node runtime bug below.
+- Fixture change in green: the red fixture called `setThinkingLevel` before awaiting `ctx.compact` callbacks. Ompig then delivered `thinking_level_select` after the compact error because of the Node runtime bug below.
   - The green fixture compacts first and switches to a second model, so it also proves `model_select`.
   - Its expectations are Pi's output for that fixture.
 - More mutations:
   - Disabling the build-time `flushExtensionHostVirtualModels` call fails the virtual model test and the flush-failure test in all three headless modes.
   - Dropping the headless `setModel` binding fails the print, JSON and RPC guards with "leaves HostCallbacks.SetModel unbound".
-- Load test: `GOMAXPROCS=4 taskset -c 0-3` with 4 CPU burners, `-race -count=24`, on the new cmd/pig guards and binary tests, the interactive guard and the event-payload test. All passed (cmd/pig in 514s).
-- Broad run (`./coding/... ./internal/codingagent/... ./cmd/pig/... ./test/extension-conformance/...`): every failure also fails on the base commit `113a10ba9`, with identical failing test sets. The causes are the missing pinned npm Pi package and other lanes' red stubs. This includes `TestPythonSDKVirtualModelRegistrationAndRouting` and `TestRustSDKVirtualModelRoute`, which expect the host route itself to reject an unknown physical model and fail the same way on base.
+- Load test: `GOMAXPROCS=4 taskset -c 0-3` with 4 CPU burners, `-race -count=24`, on the new cmd/ompig guards and binary tests, the interactive guard and the event-payload test. All passed (cmd/ompig in 514s).
+- Broad run (`./coding/... ./internal/codingagent/... ./cmd/ompig/... ./test/extension-conformance/...`): every failure also fails on the base commit `113a10ba9`, with identical failing test sets. The causes are the missing pinned npm Pi package and other lanes' red stubs. This includes `TestPythonSDKVirtualModelRegistrationAndRouting` and `TestRustSDKVirtualModelRoute`, which expect the host route itself to reject an unknown physical model and fail the same way on base.
 
 ## Deferred, with owners
 
-- **MCP servers registered by SDK extensions**: they are stored in the host runtime. The Session runner and the `mcp` builtin read the Session's runtime, so no `mcp_servers_change` event fires and no unhandled-server report is made. The builtin `mcp` extension (`extensions/index.ts`) is not registered in production; only `pig mcp` exists. The fix needs runtime unification plus the builtin registration seam. Owner: the MCP family (family 8).
+- **MCP servers registered by SDK extensions**: they are stored in the host runtime. The Session runner and the `mcp` builtin read the Session's runtime, so no `mcp_servers_change` event fires and no unhandled-server report is made. The builtin `mcp` extension (`extensions/index.ts`) is not registered in production; only `ompig mcp` exists. The fix needs runtime unification plus the builtin registration seam. Owner: the MCP family (family 8).
 - **Node `ctx.compact()` ordering**:
   - Cause: `runtime.mjs` `compact()` sends its host call without the parent request, so an awaiting handler never reports `blocked`. Later events to the same extension (`thinking_level_select`, `session_before_compact`) then queue behind the handler.
   - Repro: in the red fixture, adding one awaited host call between the two calls restores Pi's order.
@@ -150,13 +150,13 @@ These tests were derived from upstream behavior; no upstream test covers this wi
 
 ## Stubs for other families
 
-None. The red stub `rpcHost.bindExtensionActions` is implemented in this lane. port-99-f6f-node adds its three `SetHostAction` bindings to `bindSessionExtensionActions`/`rpcHost.bindExtensionActions` and to `ie`, then deletes their entries from `nestedToolAllowances` (`cmd/pig/extension_host_wiring_guard_test.go`) and from `allowed` (`internal/codingagent/extension_host_wiring_guard_test.go`).
+None. The red stub `rpcHost.bindExtensionActions` is implemented in this lane. port-99-f6f-node adds its three `SetHostAction` bindings to `bindSessionExtensionActions`/`rpcHost.bindExtensionActions` and to `ie`, then deletes their entries from `nestedToolAllowances` (`cmd/ompig/extension_host_wiring_guard_test.go`) and from `allowed` (`internal/codingagent/extension_host_wiring_guard_test.go`).
 
 ## Gates
 
 - `go build ./...`, `go vet` and `GOOS=windows go vet` on the touched packages: clean.
-- gofmt, `go fix -diff`, and `go tool golangci-lint run --allow-parallel-runners --build-tags=integration,live,parity` on `cmd/pig`, `coding`, `coding/extension/host/subprocess`, `internal/codingagent` and `test/extension-conformance`: clean (0 issues).
-- `go test -race` on `coding`, `coding/extension/host/subprocess`, `internal/codingagent` and `cmd/pig`:
+- gofmt, `go fix -diff`, and `go tool golangci-lint run --allow-parallel-runners --build-tags=integration,live,parity` on `cmd/ompig`, `coding`, `coding/extension/host/subprocess`, `internal/codingagent` and `test/extension-conformance`: clean (0 issues).
+- `go test -race` on `coding`, `coding/extension/host/subprocess`, `internal/codingagent` and `cmd/ompig`:
   - No data races.
   - Every failing test also fails on base `113a10ba9`.
   - `TestNodeRuntimeShimsExportEveryPinnedPiValue` passed in the non-race run but failed in the race run. It also fails when run alone on base.
@@ -165,5 +165,5 @@ None. The red stub `rpcHost.bindExtensionActions` is implemented in this lane. p
   - It stops at `interface-proposals` because `test/parity/interface-extractor` `npm test` throws `ReferenceError: os is not defined` (`behavior-input-inventory.test.mjs:247`). This is a base bug, not caused by this lane.
   - `known-gaps` and `custom-factory-ledger` fail on base on upstream-test hash and theme-member drift.
   - `test-inventory-generate` rewrites `upstream-tests-v0.99.1.json` in ways unrelated to this lane. Those changes were left for the lead's central regeneration.
-  - The only generated file this lane affects is `test/parity/interfaces/pig-go.json` (regenerated; `interface-go-drift` is clean).
+  - The only generated file this lane affects is `test/parity/interfaces/ompig-go.json` (regenerated; `interface-go-drift` is clean).
 - `python3 automation/ci/check-public-claims.py`: no contradicted claims.

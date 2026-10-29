@@ -13,8 +13,8 @@ from typing import Any
 import pytest
 from test_sdk import _read_frame, _start_fake_host, _write_frame
 
-import pig_sdk
-from pig_sdk import kit
+import ompig_sdk
+from ompig_sdk import kit
 
 
 def _sha(data: bytes) -> str:
@@ -301,7 +301,7 @@ def test_rendered_results_carry_lines_or_a_view_never_both() -> None:
 
 
 class _Host:
-    def __init__(self, name: str, ext: pig_sdk.Extension, state: dict[str, Any]) -> None:
+    def __init__(self, name: str, ext: ompig_sdk.Extension, state: dict[str, Any]) -> None:
         tmp = tempfile.mkdtemp()
         self.sock_path = os.path.join(tmp, f"{name}.sock")
         self.listener = _start_fake_host(self.sock_path)
@@ -353,25 +353,25 @@ class _Picker:
             theme={"accent": "#d75f00"},
         )
 
-    def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
+    def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
         if data != "noop":
             self.log.append(f"input:{data}")
-        return pig_sdk.RemoteComponentResult()
+        return ompig_sdk.RemoteComponentResult()
 
-    def handle_view_event(self, event: kit.Event) -> pig_sdk.RemoteComponentResult:
+    def handle_view_event(self, event: kit.Event) -> ompig_sdk.RemoteComponentResult:
         value = event.item.value if event.item else ""
         if event.type == kit.SELECTION_CHANGE:
             self.log.append(f"selectionChange:{event.index}:{value}")
         elif event.type == kit.SELECT:
             self.log.append(f"select:{event.index}:{value}")
-            return pig_sdk.RemoteComponentResult(done=True, value=",".join(self.log))
+            return ompig_sdk.RemoteComponentResult(done=True, value=",".join(self.log))
         elif event.type == kit.CANCEL:
             raise RuntimeError("cancelled")
-        return pig_sdk.RemoteComponentResult()
+        return ompig_sdk.RemoteComponentResult()
 
 
-def _custom_ext(name: str, component_factory: Any) -> pig_sdk.Extension:
-    ext = pig_sdk.Extension(name)
+def _custom_ext(name: str, component_factory: Any) -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension(name)
     ext.tool("pick", "Pick", {"type": "object"}, lambda ctx, args: {"content": str(ctx.custom(component_factory()))})
     return ext
 
@@ -443,8 +443,8 @@ class _Cover:
     def view(self, width: int) -> kit.View:
         return kit.View(kit.Image(b"cover", "image/png"))
 
-    def handle_input(self, data: str) -> pig_sdk.RemoteComponentResult:
-        return pig_sdk.RemoteComponentResult(done=True)
+    def handle_input(self, data: str) -> ompig_sdk.RemoteComponentResult:
+        return ompig_sdk.RemoteComponentResult(done=True)
 
 
 def test_custom_view_sends_an_evicted_image_again_in_an_unchanged_frame() -> None:
@@ -480,9 +480,9 @@ def _cover_view() -> kit.View:
 
 
 def test_widget_header_and_footer_views_send_images_once_and_again_after_eviction() -> None:
-    ext = pig_sdk.Extension("kit-surfaces")
+    ext = ompig_sdk.Extension("kit-surfaces")
 
-    def show(ctx: pig_sdk.Context, args: dict[str, Any]) -> dict[str, Any]:
+    def show(ctx: ompig_sdk.Context, args: dict[str, Any]) -> dict[str, Any]:
         ctx.set_widget("w", _cover_view())
         ctx.set_widget("w", _cover_view())
         ctx.set_header_view(_cover_view())
@@ -490,7 +490,7 @@ def test_widget_header_and_footer_views_send_images_once_and_again_after_evictio
         ctx.set_widget("w2", kit.View(kit.Spacer(2)), {"placement": "belowEditor"})
         return {"content": "ok"}
 
-    def plain(ctx: pig_sdk.Context, args: dict[str, Any]) -> dict[str, Any]:
+    def plain(ctx: ompig_sdk.Context, args: dict[str, Any]) -> dict[str, Any]:
         ctx.set_widget("w", _cover_view())
         return {"content": "ok"}
 
@@ -551,19 +551,19 @@ def test_widget_header_and_footer_views_send_images_once_and_again_after_evictio
 
 
 def test_view_renderers_answer_with_a_view_and_win_over_lines() -> None:
-    ext = pig_sdk.Extension("kit-renderers")
+    ext = ompig_sdk.Extension("kit-renderers")
 
-    def result_view(ctx: Any, result: dict[str, Any], options: dict[str, Any], render: pig_sdk.ToolRenderContext, width: int) -> kit.View:
+    def result_view(ctx: Any, result: dict[str, Any], options: dict[str, Any], render: ompig_sdk.ToolRenderContext, width: int) -> kit.View:
         render.state["seen"] = width
         return kit.View(kit.Text(f"{len(result['content'])} blocks at {width}", 0, 0))
 
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="t", label="T", description="tool", parameters={"type": "object"}, execute=lambda ctx, args: {"content": "ok"},
         render_result=lambda *_: ["lines"], result_view=result_view,
     ))
     ext.tool("u", "U", {"type": "object"}, lambda ctx, args: {"content": "ok"})
     ext.tool_renderers("u", call_view=lambda ctx, args, render, width: kit.View(kit.Text(str(args["q"]), 0, 0)))
-    ext.tool_renderer(lambda tool, next_: pig_sdk.ToolRenderers(call_view=lambda ctx, args, render, width: kit.View(kit.Spacer(width // 10))) if tool == "r" else None)
+    ext.tool_renderer(lambda tool, next_: ompig_sdk.ToolRenderers(call_view=lambda ctx, args, render, width: kit.View(kit.Spacer(width // 10))) if tool == "r" else None)
     ext.message_view_renderer("note", lambda ctx, message, options, width: kit.View(kit.Text(message["content"], 1, 1)))
     ext.entry_view_renderer("mark", lambda ctx, entry, options, width: kit.View(kit.Text(entry["data"], 1, 0)))
     host = _Host("renderers", ext, {"hasUI": True})
@@ -597,7 +597,7 @@ def test_view_renderers_answer_with_a_view_and_win_over_lines() -> None:
 def test_a_view_renderer_that_cannot_be_encoded_answers_an_error() -> None:
     loop = kit.Container()
     loop.add_child(loop)
-    ext = pig_sdk.Extension("kit-deep")
+    ext = ompig_sdk.Extension("kit-deep")
     ext.message_view_renderer("deep", lambda ctx, message, options, width: kit.View(loop))
     host = _Host("deep", ext, {"hasUI": True})
     try:
@@ -609,5 +609,5 @@ def test_a_view_renderer_that_cannot_be_encoded_answers_an_error() -> None:
 
 
 def test_kit_is_reachable_from_the_package() -> None:
-    assert pig_sdk.kit is kit
-    assert pig_sdk.ViewComponent is kit.ViewComponent
+    assert ompig_sdk.kit is kit
+    assert ompig_sdk.ViewComponent is kit.ViewComponent

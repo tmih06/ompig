@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // A call that ends its goroutine, as t.Fatal does in runBedrockRPCOnce, must not stop the pool from running the calls after it. The

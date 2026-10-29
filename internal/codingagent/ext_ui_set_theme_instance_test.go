@@ -3,8 +3,8 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // theme-controller.ts setThemeInstance and interactive-mode.ts:2670-2673: setTheme given a Theme object applies it as it is, stops automatic selection, does not persist a name, and leaves it in place when the terminal's appearance changes.

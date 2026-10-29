@@ -12,17 +12,17 @@ import (
 	"github.com/gofrs/flock"
 )
 
-const lockBusyMessage = "another standalone pig update is already running"
+const lockBusyMessage = "another standalone ompig update is already running"
 
 // upstream: packages/coding-agent/src/package-manager-cli.ts:171-222 takes
 // proper-lockfile's lock around the update and releases it in `finally`;
 // proper-lockfile's release removes its lock (lib/lockfile.js unlock → rmdir).
-// PiG keeps an OS lock instead (D39) and, like Pi, leaves nothing behind.
+// Ompig keeps an OS lock instead (D39) and, like Pi, leaves nothing behind.
 func TestStandaloneUpdateLockRemovesItsSidecarOnRelease(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("standalone in-place update is unsupported on Windows")
 	}
-	path := filepath.Join(t.TempDir(), "pig.update.lock")
+	path := filepath.Join(t.TempDir(), "ompig.update.lock")
 	release, err := acquireStandaloneUpdateLock(path)
 	if err != nil {
 		t.Fatal(err)
@@ -58,7 +58,7 @@ func TestStandaloneUpdateLockStaysExclusiveWhileItsSidecarIsRemoved(t *testing.T
 	if runtime.GOOS == "windows" {
 		t.Skip("standalone in-place update is unsupported on Windows")
 	}
-	path := filepath.Join(t.TempDir(), "pig.update.lock")
+	path := filepath.Join(t.TempDir(), "ompig.update.lock")
 	var holders, maxHolders, acquired atomic.Int32
 	var wg sync.WaitGroup
 	for range 8 {
@@ -130,7 +130,7 @@ func TestStandaloneUpdateLockReopensWhenItsLockedFileIsNoLongerTheSidecar(t *tes
 		}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			path := filepath.Join(t.TempDir(), "pig.update.lock")
+			path := filepath.Join(t.TempDir(), "ompig.update.lock")
 			tryLock := tryLockStandaloneUpdateSidecar
 			t.Cleanup(func() { tryLockStandaloneUpdateSidecar = tryLock })
 			attempts := 0

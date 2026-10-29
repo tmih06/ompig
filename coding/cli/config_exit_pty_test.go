@@ -14,7 +14,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi's ConfigSelectorComponent maps tui.select.cancel (Escape) to onCancel and
@@ -22,7 +22,7 @@ import (
 // the process with status 0 after ui.stop() restores the terminal
 // (cli/config-selector.ts:41-49). A terminal that has enabled the Kitty
 // keyboard protocol reports Ctrl+C as CSI-u, never as byte 0x03.
-// Regression for issue #89: Ctrl+C left `pig config` running.
+// Regression for issue #89: Ctrl+C left `ompig config` running.
 func TestConfigSelectorExitKeysRestoreTerminal(t *testing.T) {
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -59,7 +59,7 @@ func runConfigExitKey(t *testing.T, binary string, kitty bool, key string) {
 	defer func() { _ = slave.Close() }()
 	cmd := exec.CommandContext(t.Context(), binary, "config")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "TERM=xterm-256color", "HOME="+home, "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir)
+	cmd.Env = append(os.Environ(), "TERM=xterm-256color", "HOME="+home, "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir)
 	var stderr bytes.Buffer
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, &stderr
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
@@ -105,7 +105,7 @@ func runConfigExitKey(t *testing.T, binary string, kitty bool, key string) {
 	select {
 	case <-exited:
 	case <-time.After(testbudget.Wait(t)):
-		t.Fatalf("%q did not exit pig config", key)
+		t.Fatalf("%q did not exit ompig config", key)
 	}
 	<-copied
 	if waitErr != nil {

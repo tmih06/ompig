@@ -672,7 +672,7 @@ func MappingCoverageScopes(ctx context.Context, path string) ([]CoverageScope, e
 		target := graph.Records[targetID].(*Target)
 		for _, pinID := range target.PinIDs {
 			pin := graph.Records[pinID].(*Pin)
-			if pin.Repository != "pig" {
+			if pin.Repository != "ompig" {
 				continue
 			}
 			key := fmt.Sprintf("%s:%d-%d", pin.Path, pin.StartLine, pin.EndLine)

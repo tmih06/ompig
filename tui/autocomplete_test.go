@@ -9,14 +9,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 func sampleCommands() []SlashCommand {
 	return []SlashCommand{
 		{Name: "help", Description: "Show available slash commands"},
 		{Name: "clear", Description: "Clear the chat transcript"},
-		{Name: "quit", Description: "Quit pig"},
+		{Name: "quit", Description: "Quit ompig"},
 		{Name: "model", Description: "Show or switch the active model"},
 		{Name: "models", Description: "List available models matching a pattern"},
 		{Name: "agent", Description: "Show or switch the active agent persona"},

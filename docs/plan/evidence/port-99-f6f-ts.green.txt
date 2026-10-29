@@ -2,7 +2,7 @@
 # internal/coding/pigversion/pigversion.go temporarily set to 0.99.1 for the pin check, then restored (the pin move is the integrator's)
 
 ## npm ls
-@michaelkinsy/pig-extension-types@0.0.0 ./extensions/sdk-ts
+@michaelkinsy/ompig-extension-types@0.0.0 ./extensions/sdk-ts
 ├── @earendil-works/pi-coding-agent@0.99.1
 └── typescript@5.9.3
 

@@ -8,7 +8,7 @@ import (
 	"unicode"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // jsRegExp is a RegExp that minimatch builds for a glob segment, parsed as V8 parses its source with the given i and u flags. Without the u flag it reads and matches UTF-16 code units; with it, code points.

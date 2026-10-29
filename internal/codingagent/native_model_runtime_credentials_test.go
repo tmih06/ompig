@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Every native credential read goes through registryCredentials.current. It took the registry's exclusive lock on every Read and List, so the availability pass's provider goroutines queued on it and blocked every RLock user (registryAuthConfig, modelProviderIDs, NativeProvider) while they did.

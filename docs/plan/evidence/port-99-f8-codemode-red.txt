@@ -56,5 +56,5 @@
 --- FAIL: TestParseCodemodeSourceOnlyTreatsTheFirstLineAsAnOptionsLine (0.00s)
 --- FAIL: TestParseCodemodeSourceRejectsEmptyInputAndInvalidOptions (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/codemode	10.022s
+FAIL	github.com/tmih06/ompig/codemode	10.022s
 FAIL

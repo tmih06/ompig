@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-const installLatest = "https://github.com/MichaelKinsy/PiG/releases/latest"
+const installLatest = "https://github.com/tmih06/ompig/releases/latest"
 
 // GNU wget reports the Location header but exits nonzero when --max-redirect=0 stops a redirect.
 const fakeWget = `#!/bin/sh
@@ -89,9 +89,9 @@ func TestInstallShFallsBackToLatestRedirect(t *testing.T) {
 				f := newInstallFixture(t)
 				f.removeAPI(t)
 				if api != "404" {
-					writeFile(t, filepath.Join(f.root, "fixtures", "pi-in-go.dev", "api", "latest-version"), []byte(api), 0o644)
+					writeFile(t, filepath.Join(f.root, "fixtures", "ompig.dev", "api", "latest-version"), []byte(api), 0o644)
 				}
-				f.writeRedirect(t, installLatest, "https://github.com/MichaelKinsy/PiG/releases/tag/v"+installVersion)
+				f.writeRedirect(t, installLatest, "https://github.com/tmih06/ompig/releases/tag/v"+installVersion)
 				got := f.run(t, f.downloaderEnv(t, downloader)...)
 				if got.status != 0 || !strings.Contains(got.stdout, "Verified SHA-256 "+f.archiveSHA) || !strings.Contains(got.stdout, "Installed "+installVersion+"+") {
 					t.Fatalf("fallback install = %+v", got)
@@ -99,10 +99,10 @@ func TestInstallShFallsBackToLatestRedirect(t *testing.T) {
 				if !strings.Contains(got.stderr, "using the latest on GitHub (v"+installVersion+")") {
 					t.Fatalf("missing fallback diagnostic: %s", got.stderr)
 				}
-				if _, err := os.Stat(filepath.Join(f.home, ".pig", "install-receipt")); err != nil {
+				if _, err := os.Stat(filepath.Join(f.home, ".ompig", "install-receipt")); err != nil {
 					t.Fatal(err)
 				}
-				f.assertRequests(t, "https://pi-in-go.dev/api/latest-version", installLatest,
+				f.assertRequests(t, "https://ompig.dev/api/latest-version", installLatest,
 					installDownload+"/v"+installVersion+"/SHA256SUMS", installDownload+"/v"+installVersion+"/"+f.archive)
 			})
 		}
@@ -115,7 +115,7 @@ func TestInstallShRedirectStillRequiresVerifiedArchive(t *testing.T) {
 			t.Run(downloader+"/"+checksum, func(t *testing.T) {
 				f := newInstallFixture(t)
 				f.removeAPI(t)
-				f.writeRedirect(t, installLatest, "https://github.com/MichaelKinsy/PiG/releases/tag/v"+installVersion)
+				f.writeRedirect(t, installLatest, "https://github.com/tmih06/ompig/releases/tag/v"+installVersion)
 				var want string
 				switch checksum {
 				case "missing":
@@ -148,9 +148,9 @@ func TestInstallShReleaseLookupRouting(t *testing.T) {
 					f.removeAPI(t)
 				}
 				if source == "explicit" {
-					env = append(env, "PIG_VERSION=v"+installVersion)
+					env = append(env, "OMPIG_VERSION=v"+installVersion)
 				} else {
-					requests = append(requests, "https://pi-in-go.dev/api/latest-version")
+					requests = append(requests, "https://ompig.dev/api/latest-version")
 				}
 				switch source {
 				case "neither", "invalid-redirect":
@@ -160,8 +160,8 @@ func TestInstallShReleaseLookupRouting(t *testing.T) {
 					}
 				case "override":
 					url := "https://releases.example/latest"
-					env = append(env, "PIG_LATEST_RELEASE_URL="+url)
-					f.writeRedirect(t, url, "https://github.com/MichaelKinsy/PiG/releases/tag/v"+installVersion)
+					env = append(env, "OMPIG_LATEST_RELEASE_URL="+url)
+					f.writeRedirect(t, url, "https://github.com/tmih06/ompig/releases/tag/v"+installVersion)
 					requests = append(requests, url)
 				}
 				got := f.run(t, env...)

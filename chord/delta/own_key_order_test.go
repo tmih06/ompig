@@ -13,7 +13,7 @@ import (
 //	diffRevisions({x:0}, {x:0, z:1, b:2, "7":3, a:4})     = [["s",["7"],3],["s",["z"],1],["s",["b"],2],["s",["a"],4]]
 //	diffRevisions({z:1, b:2, a:3}, {})                    = [["d",["z"]],["d",["b"]],["d",["a"]]]
 //
-// PiG emitted "10" before "2" (byte order) and, once objects were Go maps, the other keys in ascending order instead of
+// Ompig emitted "10" before "2" (byte order) and, once objects were Go maps, the other keys in ascending order instead of
 // insertion order.
 func TestDiffRevisionsVisitsArrayIndexKeysFirstInNumericOrder(t *testing.T) {
 	for _, tc := range []struct{ before, after, want string }{

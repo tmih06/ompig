@@ -6,7 +6,7 @@ package coding
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // apiStreamProvider retains the API module's lazy forwarding boundary independently of provider composition. lazyApi's setup awaits load() before it calls the API (lazy.ts:76-79), so setup runs in the first reaction.

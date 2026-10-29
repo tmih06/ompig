@@ -13,7 +13,7 @@ import (
 // An onPayload replacement is sent as `{ ...nextParams, stream: true }` (anthropic-messages.ts:640-642): the replacement's members keep
 // their order, an existing stream member keeps its place, and a missing one is appended. The SDK's create() then takes betas out of the
 // body (`const { betas, ...body } = params`, @anthropic-ai/sdk beta/messages.js:27) and JSON.stringify writes the rest in order. Pi's
-// stream posts the oracle body to a local server; PiG's provider posts to another. A subprocess extension's replacement reaches the
+// stream posts the oracle body to a local server; Ompig's provider posts to another. A subprocess extension's replacement reaches the
 // provider as raw JSON.
 func TestAnthropicReplacedPayloadKeepsPiMemberOrder(t *testing.T) {
 	type replacedCase struct {

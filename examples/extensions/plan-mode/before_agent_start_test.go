@@ -3,7 +3,7 @@ package planmode
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi PR #10739 (examples/extensions/plan-mode/index.ts): the plan context is injected before a user prompt, not before a run that a custom message starts.

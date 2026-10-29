@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi package-manager.ts:1034-1055 emits progress before removal and persists [] (settings-manager.ts:1105-1115).
@@ -18,7 +18,7 @@ func TestPackageRemovalProgressAndEmptySettings(t *testing.T) {
 			root := physicalTempDir(t)
 			t.Chdir(root)
 			agentDir := filepath.Join(root, "agent")
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			sm := codingagent.NewSettingsManager(root, agentDir)
 			const source = "./fixture"
 			if _, err := packageManagerFor(root, sm, nil).AddSourceToSettings(source, local); err != nil {
@@ -28,7 +28,7 @@ func TestPackageRemovalProgressAndEmptySettings(t *testing.T) {
 			settingsPath := sm.GlobalSettingsPath()
 			if local {
 				args = append(args, "-l")
-				settingsPath = filepath.Join(root, ".pig", "settings.json")
+				settingsPath = filepath.Join(root, ".ompig", "settings.json")
 			}
 			stdout, stderr, code := captureStdoutStderr(t, func() int { return runPackageCommand(args) })
 			if code != 0 || stdout != "Removing ./fixture...\nRemoved ./fixture\n" || stderr != "" {
@@ -52,7 +52,7 @@ func TestPackageChildOutputAndFailure(t *testing.T) {
 			root := t.TempDir()
 			t.Chdir(root)
 			agentDir := filepath.Join(root, "agent")
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 			stub := writeStubScript(t, filepath.Join(root, "npm"), fmt.Sprintf("#!/bin/sh\nif [ \"$1\" = --version ]; then echo 12.1.0; exit; fi\nprintf 'child stdout\\n'\nprintf 'child stderr\\n' >&2\nexit %d\n", exit))
 			sm := codingagent.NewSettingsManager(root, agentDir)
 			if err := sm.SetNpmCommand([]string{stub}); err != nil {
@@ -75,7 +75,7 @@ func TestPackageChildOutputAndFailure(t *testing.T) {
 
 func TestPackageUpdateErrorPrefix(t *testing.T) {
 	t.Chdir(t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	stdout, stderr, code := captureStdoutStderr(t, func() int { return runPackageCommand([]string{"update", "npm:missing", "--no-approve"}) })
 	if code != 1 || stdout != "" || stderr != "Error: No matching package found for npm:missing\n" {
 		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout, stderr)

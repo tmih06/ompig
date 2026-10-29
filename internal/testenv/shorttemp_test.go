@@ -14,8 +14,8 @@ func TestShortTempBase(t *testing.T) {
 		{"unix uses /tmp whatever TMPDIR is", "darwin", "/var/folders/zz/" + strings.Repeat("d", 80), localAppData, "/tmp"},
 		{"windows keeps a short temp directory", "windows", `C:\T`, localAppData, `C:\T`},
 		{"windows keeps a temp directory that just fits", "windows", `D:\` + strings.Repeat("d", maxShortTempDirBytes-len(`D:\`)-len(`\pe`)-10), localAppData, `D:\` + strings.Repeat("d", maxShortTempDirBytes-len(`D:\`)-len(`\pe`)-10)},
-		{"windows falls back when the temp directory is one byte too long", "windows", `D:\` + strings.Repeat("d", maxShortTempDirBytes-len(`D:\`)-len(`\pe`)-10+1), localAppData, localAppData + `\pig\s`},
-		{"windows falls back from a long temp directory", "windows", longTemp, localAppData, localAppData + `\pig\s`},
+		{"windows falls back when the temp directory is one byte too long", "windows", `D:\` + strings.Repeat("d", maxShortTempDirBytes-len(`D:\`)-len(`\pe`)-10+1), localAppData, localAppData + `\ompig\s`},
+		{"windows falls back from a long temp directory", "windows", longTemp, localAppData, localAppData + `\ompig\s`},
 		{"windows without local app data keeps the long temp directory", "windows", longTemp, "", longTemp},
 	} {
 		if got := shortTempBase(test.goos, test.temp, test.localAppData, "pe"); strings.ReplaceAll(got, "/", `\`) != strings.ReplaceAll(test.want, "/", `\`) {

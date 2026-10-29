@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/test/proxy.test.ts "shows growing partial arguments without keeping the raw text on the block, in linear time" (#9265).

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/packagecontent"
 )
 
 func TestUpstreamExtensionsDiscovery(t *testing.T) {
@@ -35,10 +35,10 @@ func TestUpstreamExtensionsDiscovery(t *testing.T) {
 		{name: "loads the coding-agent entrypoint without rewriting pi-ai provider subpaths", files: map[string]string{"extensions/coding-agent-import.ts": `import { getAgentDir } from "@earendil-works/pi-coding-agent"; void getAgentDir; ` + command}, paths: []string{"extensions/coding-agent-import.ts"}},
 		// .upstream/v0.99.1/packages/coding-agent/test/extensions-discovery.test.ts:72-105 (regression for #9863). Two per-case differences:
 		// (1) Pi's loader returns `warnings: []` for every load and only the resource loader adds package warnings (loader.ts:665,693;
-		// resource-loader.ts:53-93), so the no-warning half is cmd/pig TestUpstreamResourceLoaderProjectManifestDoesNotOwnProjectExtension
+		// resource-loader.ts:53-93), so the no-warning half is cmd/ompig TestUpstreamResourceLoaderProjectManifestDoesNotOwnProjectExtension
 		// and TestExtensionPackageWarningManifestShapes; this Host returns no warnings list.
 		// (2) The test expects the physical node_modules copy to win, which only happens in Pi's unbundled Node branch (jiti loads a
-		// compiled .js natively, loader.ts:553-557). PiG loads every extension through Pi's embedded-module branch
+		// compiled .js natively, loader.ts:553-557). Ompig loads every extension through Pi's embedded-module branch
 		// (loader.ts:551-552: virtualModules, tryNative:false; runtime-node/jiti-loader.mjs importExtension), where the host's own
 		// module answers the import and the physical copy is never read. So the case asserts what both branches share: the ancestor
 		// package.json that lists a host package under `dependencies` neither fails nor changes the load, and the extension loads.
@@ -50,7 +50,7 @@ func TestUpstreamExtensionsDiscovery(t *testing.T) {
 export default function(pi) {
 	pi.registerCommand(physicalDependency ? "physical-dependency" : "host-dependency", { handler: async () => {} });
 }`}, paths: []string{"extensions/compiled-esm-extension.js"}, commands: []string{"host-dependency"}, absentCommands: []string{"physical-dependency"}},
-		// PiG: the module served in place of the installed copy is the runtime's own, with its exports, on every TypeScript runtime.
+		// Ompig: the module served in place of the installed copy is the runtime's own, with its exports, on every TypeScript runtime.
 		{name: "serves the runtime's module in place of an installed copy", files: map[string]string{
 			"package.json": `{"name":"application","type":"module","dependencies":{"@earendil-works/pi-coding-agent":"1.0.0"}}`,
 			"node_modules/@earendil-works/pi-coding-agent/package.json": `{"name":"@earendil-works/pi-coding-agent","type":"module","exports":"./index.js"}`,

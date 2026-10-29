@@ -1,6 +1,6 @@
 # lw-observe: one observation per published partial, equivalence proof
 
-Slice lw-observe (LW roadmap S17), commits `afa1e060e9`, `0afbd39cac` and `663228d07d`. These changes affect how often PiG reads and copies a streaming assistant message. The terminal frames, the message_update frames each extension receives, their order, and the handler contexts are unchanged.
+Slice lw-observe (LW roadmap S17), commits `afa1e060e9`, `0afbd39cac` and `663228d07d`. These changes affect how often Ompig reads and copies a streaming assistant message. The terminal frames, the message_update frames each extension receives, their order, and the handler contexts are unchanged.
 
 ## What stays the same, and why
 

@@ -11,7 +11,7 @@
 #     No entries found
 #     (0/0)
 #
-# ANSI styling differs between pig and pi on this surface, so this case uses
+# ANSI styling differs between ompig and pi on this surface, so this case uses
 # output_normalized_equal on the cropped block rather than escaped_output_equal.
 
 name = "02-tree-empty-overlay"
@@ -30,7 +30,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 15
 keys = ["/tree", "Enter"]

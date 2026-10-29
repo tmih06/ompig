@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi interactive-mode.ts:1741-1765 builds diagnostic provenance from surviving resources, not rejected duplicates.

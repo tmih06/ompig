@@ -12,7 +12,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi model-runtime.ts:286-299,323-329 rejects Promise.all and publishes the first error while unrelated branches remain pending.

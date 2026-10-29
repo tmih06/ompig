@@ -11,7 +11,7 @@ import (
 
 func TestRPCSignalTeardownKeepsStdinOpen(t *testing.T) {
 	sc := &Scenario{Name: "signal-open", RPC: RPCDriverConfig{Terminate: true, TimeoutSeconds: 5, Steps: []RPCInputStep{{Line: "request", WaitEvent: `{"type":"ready"}`, WaitTimeoutSeconds: 1}}}}
-	bin := BinaryRef{Label: "pig", Path: "sh", Args: []string{"-c", `trap 'printf "signal\n" >&2; exit 143' TERM; read -r line; printf '{"type":"ready"}\n'; while read -r line; do :; done; printf 'EOF\n' >&2; exit 7`}}
+	bin := BinaryRef{Label: "ompig", Path: "sh", Args: []string{"-c", `trap 'printf "signal\n" >&2; exit 143' TERM; read -r line; printf '{"type":"ready"}\n'; while read -r line; do :; done; printf 'EOF\n' >&2; exit 7`}}
 	result := (rpcModeDriver{}).Run(t.Context(), t, bin, sc)
 	if result.Err != nil || result.ExitCode != 143 || result.Stderr != "signal\n" || !result.StderrCaptured {
 		t.Fatalf("signal teardown lost open stdin or stderr: %+v", result)

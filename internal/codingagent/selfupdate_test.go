@@ -28,12 +28,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func allowLoopbackUpdateHTTP(t *testing.T) {
 	t.Helper()
-	t.Setenv("PIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
+	t.Setenv("OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
 }
 
 func newSignedManifestServer(t *testing.T, handler http.Handler) *httptest.Server {
@@ -51,7 +51,7 @@ func newSignedManifestServer(t *testing.T, handler http.Handler) *httptest.Serve
 	if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: encoded}), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", trustPath)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", trustPath)
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		recorder := httptest.NewRecorder()
 		handler.ServeHTTP(recorder, r)
@@ -145,8 +145,8 @@ func TestIsNewerPackageVersion(t *testing.T) {
 }
 
 func TestUpdateSourceURLPrefersEnvThenDefault(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	orig := DefaultUpdateURL
 	t.Cleanup(func() { DefaultUpdateURL = orig })
 
@@ -154,7 +154,7 @@ func TestUpdateSourceURLPrefersEnvThenDefault(t *testing.T) {
 	if got := UpdateSourceURL(); got != DefaultUpdateURL {
 		t.Fatalf("UpdateSourceURL() = %q, want embedded default", got)
 	}
-	t.Setenv("PIG_UPDATE_URL", "https://env.example/manifest.json")
+	t.Setenv("OMPIG_UPDATE_URL", "https://env.example/manifest.json")
 	if got := UpdateSourceURL(); got != "https://env.example/manifest.json" {
 		t.Fatalf("UpdateSourceURL() = %q, want env override", got)
 	}
@@ -165,12 +165,12 @@ func TestUpdateSourceURLPrefersEnvThenDefault(t *testing.T) {
 // sidecar without a Go toolchain or shell-rc edit. Env wins over the sidecar;
 // the sidecar wins over the baked default.
 func TestUpdateSourceURLSidecarSeedsBetweenEnvAndDefault(t *testing.T) {
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	orig := DefaultUpdateURL
 	t.Cleanup(func() { DefaultUpdateURL = orig })
 	DefaultUpdateURL = ""
 
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	home := ConfigRoot()
 	sidecar := filepath.Join(home, updateURLSidecarName)
 	if err := os.WriteFile(sidecar, []byte("https://installed.example/manifest.json\n"), 0o600); err != nil {
@@ -182,12 +182,12 @@ func TestUpdateSourceURLSidecarSeedsBetweenEnvAndDefault(t *testing.T) {
 		t.Fatalf("sidecar: UpdateSourceURL() = %q, want sidecar URL", got)
 	}
 	// Env overrides the sidecar.
-	t.Setenv("PIG_UPDATE_URL", "https://env.example/manifest.json")
+	t.Setenv("OMPIG_UPDATE_URL", "https://env.example/manifest.json")
 	if got := UpdateSourceURL(); got != "https://env.example/manifest.json" {
 		t.Fatalf("env override: UpdateSourceURL() = %q", got)
 	}
 	// A blank sidecar falls through to the baked default.
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	_ = os.WriteFile(sidecar, []byte("  \n"), 0o600)
 	DefaultUpdateURL = "https://embedded.example/manifest.json"
 	if got := UpdateSourceURL(); got != DefaultUpdateURL {
@@ -196,7 +196,7 @@ func TestUpdateSourceURLSidecarSeedsBetweenEnvAndDefault(t *testing.T) {
 }
 
 func TestUpdateTransportCASidecarAllowsPrivateHTTPS(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	payload := []byte("private update")
 	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write(payload)
@@ -219,7 +219,7 @@ func TestUpdateTransportCASidecarAllowsPrivateHTTPS(t *testing.T) {
 }
 
 func TestUpdateTransportCASidecarPreservesClientRoots(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	sidecarServer := httptest.NewTLSServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
 	defer sidecarServer.Close()
 	certificate := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: sidecarServer.Certificate().Raw})
@@ -239,7 +239,7 @@ func TestUpdateTransportCASidecarPreservesClientRoots(t *testing.T) {
 }
 
 func TestUpdateTransportCASidecarRejectsUnsafeMaterial(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte("update"))
 	}))
@@ -266,7 +266,7 @@ func TestFetchUpdateManifest(t *testing.T) {
 	srv := newSignedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/ok":
-			_, _ = w.Write([]byte(`{"version":"0.2.0","packageName":"@pi-in-go/pig","notes":"n","binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`))
+			_, _ = w.Write([]byte(`{"version":"0.2.0","packageName":"@ompig/ompig","notes":"n","binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`))
 		case "/noversion":
 			_, _ = w.Write([]byte(`{"binaries":{}}`))
 		case "/badversion":
@@ -276,9 +276,9 @@ func TestFetchUpdateManifest(t *testing.T) {
 		case "/badjson":
 			_, _ = w.Write([]byte(`not json`))
 		case "/unknown":
-			_, _ = w.Write([]byte(`{"version":"0.2.0","packageName":"@pi-in-go/pig","unknown":true,"binaries":{}}`))
+			_, _ = w.Write([]byte(`{"version":"0.2.0","packageName":"@ompig/ompig","unknown":true,"binaries":{}}`))
 		case "/trailing":
-			_, _ = w.Write([]byte(`{"version":"0.2.0","packageName":"@pi-in-go/pig","binaries":{}} {}`))
+			_, _ = w.Write([]byte(`{"version":"0.2.0","packageName":"@ompig/ompig","binaries":{}} {}`))
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -314,15 +314,15 @@ func TestUpdateManifestScriptEmitsCurrentStrictShape(t *testing.T) {
 		t.Skip("python3 is unavailable")
 	}
 	dir := t.TempDir()
-	name := "pig-" + runtime.GOOS + "-" + runtime.GOARCH
+	name := "ompig-" + runtime.GOOS + "-" + runtime.GOARCH
 	if runtime.GOOS == "windows" {
 		name += ".exe"
 	}
-	if err := os.WriteFile(filepath.Join(dir, name), []byte("pig-binary"), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, name), []byte("ompig-binary"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	script := filepath.Join("..", "..", "automation", "release", "gen-update-manifest.py")
-	cmd := exec.Command(python, script, "--version", "1.2.3-rc.1", "--package-name", "pig-next", "--base-url", "https://updates.example", "--dir", dir)
+	cmd := exec.Command(python, script, "--version", "1.2.3-rc.1", "--package-name", "ompig-next", "--base-url", "https://updates.example", "--dir", dir)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("generate manifest: %v\n%s", err, out)
@@ -331,7 +331,7 @@ func TestUpdateManifestScriptEmitsCurrentStrictShape(t *testing.T) {
 	if err := json.Unmarshal(out, &manifest); err != nil {
 		t.Fatal(err)
 	}
-	if manifest.Version != "1.2.3-rc.1" || manifest.PackageName != "pig-next" {
+	if manifest.Version != "1.2.3-rc.1" || manifest.PackageName != "ompig-next" {
 		t.Fatalf("manifest identity = %#v", manifest)
 	}
 	if _, ok := manifest.Binaries[platformKey()]; !ok {
@@ -348,7 +348,7 @@ func TestUpdateManifestScriptEmitsCurrentStrictShape(t *testing.T) {
 	}
 }
 
-// A Termux install records kind=standalone, and pig update then looks up android/arm64 (PlatformKey) in the manifest, so the release manifest must name the android archive.
+// A Termux install records kind=standalone, and ompig update then looks up android/arm64 (PlatformKey) in the manifest, so the release manifest must name the android archive.
 func TestUpdateManifestScriptNamesTheAndroidArchive(t *testing.T) {
 	python, err := exec.LookPath("python3")
 	if err != nil {
@@ -359,7 +359,7 @@ func TestUpdateManifestScriptNamesTheAndroidArchive(t *testing.T) {
 	sumsFor := func(targets ...string) string {
 		var lines []string
 		for _, target := range targets {
-			lines = append(lines, digest(target)+"  pig-0.4.1-"+target+".tar.gz")
+			lines = append(lines, digest(target)+"  ompig-0.4.1-"+target+".tar.gz")
 		}
 		path := filepath.Join(t.TempDir(), "SHA256SUMS")
 		if err := os.WriteFile(path, []byte(strings.Join(lines, "\n")+"\n"), 0o644); err != nil {
@@ -379,7 +379,7 @@ func TestUpdateManifestScriptNamesTheAndroidArchive(t *testing.T) {
 	if err := json.Unmarshal(out, &manifest); err != nil {
 		t.Fatal(err)
 	}
-	want := UpdateBinary{URL: "https://updates.example/v0.4.1/pig-0.4.1-android-arm64.tar.gz", SHA256: digest("android-arm64")}
+	want := UpdateBinary{URL: "https://updates.example/v0.4.1/ompig-0.4.1-android-arm64.tar.gz", SHA256: digest("android-arm64")}
 	if got := manifest.Binaries["android/arm64"]; got != want {
 		t.Fatalf("android/arm64 = %#v, want %#v", got, want)
 	}
@@ -389,13 +389,13 @@ func TestUpdateManifestScriptNamesTheAndroidArchive(t *testing.T) {
 	}
 
 	// A release without the android archive must not publish a manifest that leaves Termux installs with "no binary for android/arm64".
-	if out, err := run(sumsFor("linux-amd64", "linux-arm64", "darwin-amd64", "darwin-arm64")); err == nil || !strings.Contains(string(out), "pig-0.4.1-android-arm64.tar.gz") {
+	if out, err := run(sumsFor("linux-amd64", "linux-arm64", "darwin-amd64", "darwin-arm64")); err == nil || !strings.Contains(string(out), "ompig-0.4.1-android-arm64.tar.gz") {
 		t.Fatalf("manifest without the android archive: err=%v\n%s", err, out)
 	}
 }
 
 func TestAC8AuthenticatedReleaseMetadata(t *testing.T) {
-	body := []byte(`{"version":"1.2.3","packageName":"@pi-in-go/pig","binaries":{}}`)
+	body := []byte(`{"version":"1.2.3","packageName":"@ompig/ompig","binaries":{}}`)
 
 	t.Run("signed_loopback_development_source", func(t *testing.T) {
 		srv := newSignedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -413,7 +413,7 @@ func TestAC8AuthenticatedReleaseMetadata(t *testing.T) {
 
 	t.Run("unsigned_metadata_rejected", func(t *testing.T) {
 		allowLoopbackUpdateHTTP(t)
-		t.Setenv("PIG_UPDATE_TRUST_ROOT", filepath.Join(t.TempDir(), "missing.pem"))
+		t.Setenv("OMPIG_UPDATE_TRUST_ROOT", filepath.Join(t.TempDir(), "missing.pem"))
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			_, _ = w.Write(body)
 		}))
@@ -437,11 +437,11 @@ func TestAC8AuthenticatedReleaseMetadata(t *testing.T) {
 		if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: encoded}), 0o600); err != nil {
 			t.Fatal(err)
 		}
-		t.Setenv("PIG_UPDATE_TRUST_ROOT", trustPath)
+		t.Setenv("OMPIG_UPDATE_TRUST_ROOT", trustPath)
 		signature := base64.StdEncoding.EncodeToString(ed25519.Sign(privateKey, body))
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set(UpdateSignatureHeader, signature)
-			_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{}}`))
+			_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{}}`))
 		}))
 		defer srv.Close()
 		if _, err := FetchUpdateManifest(context.Background(), srv.Client(), srv.URL); err == nil || !strings.Contains(err.Error(), "signature") {
@@ -450,7 +450,7 @@ func TestAC8AuthenticatedReleaseMetadata(t *testing.T) {
 	})
 
 	t.Run("remote_http_rejected", func(t *testing.T) {
-		t.Setenv("PIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
+		t.Setenv("OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1")
 		if _, err := FetchUpdateManifest(context.Background(), http.DefaultClient, "http://updates.example/manifest"); err == nil {
 			t.Fatal("remote HTTP source accepted")
 		}
@@ -485,10 +485,10 @@ func TestFetchUpdateManifestRejectsOversizedResponse(t *testing.T) {
 
 func TestCheckForBinaryUpdate(t *testing.T) {
 	srv := newSignedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`))
+		_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`))
 	}))
 	defer srv.Close()
-	t.Setenv("PIG_UPDATE_URL", srv.URL)
+	t.Setenv("OMPIG_UPDATE_URL", srv.URL)
 	t.Setenv("PI_SKIP_VERSION_CHECK", "")
 
 	if u := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.1"); u == nil || u.Version != "9.9.9" {
@@ -497,7 +497,7 @@ func TestCheckForBinaryUpdate(t *testing.T) {
 	if u := CheckForBinaryUpdate(context.Background(), srv.Client(), "9.9.9"); u != nil {
 		t.Fatalf("CheckForBinaryUpdate(up-to-date) = %#v, want nil", u)
 	}
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	if u := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.1"); u != nil {
 		t.Fatalf("CheckForBinaryUpdate(no source) = %#v, want nil", u)
 	}
@@ -513,7 +513,7 @@ func TestSelfReplaceAtVerifiesChecksumAndReplaces(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -559,7 +559,7 @@ func TestSelfReplaceAtWithCommitRestoresPreviousExecutable(t *testing.T) {
 	defer srv.Close()
 
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "pig")
+	exe := filepath.Join(dir, "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -577,7 +577,7 @@ func TestSelfReplaceAtWithCommitRestoresPreviousExecutable(t *testing.T) {
 	if readErr != nil || string(got) != "old" {
 		t.Fatalf("previous executable was not restored: %q (err=%v)", got, readErr)
 	}
-	matches, globErr := filepath.Glob(filepath.Join(dir, ".pig-update-backup-*"))
+	matches, globErr := filepath.Glob(filepath.Join(dir, ".ompig-update-backup-*"))
 	if globErr != nil || len(matches) != 0 {
 		t.Fatalf("rollback backups remain: %v (err=%v)", matches, globErr)
 	}
@@ -599,7 +599,7 @@ func TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable(t *testing.T) {
 	defer srv.Close()
 
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "pig")
+	exe := filepath.Join(dir, "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -625,8 +625,8 @@ func TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable(t *testing.T) {
 	for _, entry := range entries {
 		names = append(names, entry.Name())
 	}
-	if !slices.Equal(names, []string{"pig"}) {
-		t.Fatalf("install directory after update = %v, want only pig", names)
+	if !slices.Equal(names, []string{"ompig"}) {
+		t.Fatalf("install directory after update = %v, want only ompig", names)
 	}
 }
 
@@ -643,16 +643,16 @@ func TestDownloadBinaryRejectsOversizedResponse(t *testing.T) {
 }
 
 func TestSelfUpdateFallbackReflectsConfiguredSource(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	orig := DefaultUpdateURL
 	t.Cleanup(func() { DefaultUpdateURL = orig })
 	DefaultUpdateURL = ""
-	t.Setenv("PIG_UPDATE_URL", "")
-	if got := SelfUpdateFallback(); got == "" || !strings.Contains(got, "PIG_UPDATE_URL") {
+	t.Setenv("OMPIG_UPDATE_URL", "")
+	if got := SelfUpdateFallback(); got == "" || !strings.Contains(got, "OMPIG_UPDATE_URL") {
 		t.Fatalf("fallback (no source) = %q", got)
 	}
-	t.Setenv("PIG_UPDATE_URL", "https://example/m.json")
-	if got := SelfUpdateFallback(); strings.Contains(got, "pig update") || !strings.Contains(strings.ToLower(got), "download") || !strings.Contains(got, "container image") {
+	t.Setenv("OMPIG_UPDATE_URL", "https://example/m.json")
+	if got := SelfUpdateFallback(); strings.Contains(got, "ompig update") || !strings.Contains(strings.ToLower(got), "download") || !strings.Contains(got, "container image") {
 		t.Fatalf("fallback (source set) repeats failed update or lacks next-tier remediation = %q", got)
 	}
 }
@@ -670,7 +670,7 @@ func TestAC3StandaloneUpdateVerificationAndAtomicity(t *testing.T) {
 
 	newTarget := func(t *testing.T) string {
 		t.Helper()
-		target := filepath.Join(t.TempDir(), "pig")
+		target := filepath.Join(t.TempDir(), "ompig")
 		if err := os.WriteFile(target, []byte("old"), 0o755); err != nil {
 			t.Fatal(err)
 		}
@@ -781,7 +781,7 @@ func TestAC3StandaloneUpdateVerificationAndAtomicity(t *testing.T) {
 	t.Run("wrong_platform_does_not_mutate", func(t *testing.T) {
 		target := newTarget(t)
 		srv := newSignedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-			_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{"plan9/sparc":{"url":"https://unused.example/pig","sha256":"` + goodChecksum + `"}}}`))
+			_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{"plan9/sparc":{"url":"https://unused.example/ompig","sha256":"` + goodChecksum + `"}}}`))
 		}))
 		defer srv.Close()
 		manifest, err := FetchUpdateManifest(context.Background(), srv.Client(), srv.URL)
@@ -808,7 +808,7 @@ func TestAC3StandaloneUpdateVerificationAndAtomicity(t *testing.T) {
 }
 
 func BenchmarkDownloadBinaryToFile(b *testing.B) {
-	b.Setenv("PIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1") // the benchmark server is loopback HTTP
+	b.Setenv("OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP", "1") // the benchmark server is loopback HTTP
 	payload := make([]byte, 1<<20)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write(payload)
@@ -836,15 +836,15 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	var requests atomic.Int32
 	srv := newSignedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		requests.Add(1)
-		_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`))
+		_, _ = w.Write([]byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{"` + platformKey() + `":{"url":"u","sha256":"` + strings.Repeat("0", sha256.Size*2) + `"}}}`))
 	}))
 	defer srv.Close()
-	t.Setenv("PIG_UPDATE_URL", srv.URL)
+	t.Setenv("OMPIG_UPDATE_URL", srv.URL)
 	t.Setenv("PI_SKIP_VERSION_CHECK", "")
 
-	for _, key := range []string{"PIG_OFFLINE", "PI_OFFLINE"} {
+	for _, key := range []string{"OMPIG_OFFLINE", "PI_OFFLINE"} {
 		t.Run("offline_"+key, func(t *testing.T) {
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			t.Setenv(key, "1")
 			if got := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.0"); got != nil {
@@ -860,7 +860,7 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	// whitespace included.
 	for _, value := range []string{"0", " ", "\t"} {
 		t.Run("pi_offline_any_nonempty_value_"+strconv.Quote(value), func(t *testing.T) {
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", value)
 			if got := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.0"); got != nil {
 				t.Fatalf("PI_OFFLINE=%q startup check = %#v, want nil", value, got)
@@ -876,7 +876,7 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	// (any non-empty string, so "0" also skips).
 	for _, value := range []string{"1", "0"} {
 		t.Run("skip_version_check_"+value, func(t *testing.T) {
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			t.Setenv("PI_SKIP_VERSION_CHECK", value)
 			if got := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.0"); got != nil {
@@ -889,9 +889,9 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	}
 
 	t.Run("unreachable_is_best_effort", func(t *testing.T) {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", "")
-		t.Setenv("PIG_UPDATE_URL", "http://127.0.0.1:1/no-source")
+		t.Setenv("OMPIG_UPDATE_URL", "http://127.0.0.1:1/no-source")
 		client := &http.Client{Timeout: 50 * time.Millisecond}
 		if got := CheckForBinaryUpdate(context.Background(), client, "0.1.0"); got != nil {
 			t.Fatalf("unreachable startup check = %#v, want nil", got)
@@ -899,20 +899,20 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	})
 
 	t.Run("malformed_is_best_effort", func(t *testing.T) {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", "")
 		bad := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			_, _ = w.Write([]byte("not-json"))
 		}))
 		defer bad.Close()
-		t.Setenv("PIG_UPDATE_URL", bad.URL)
+		t.Setenv("OMPIG_UPDATE_URL", bad.URL)
 		if got := CheckForBinaryUpdate(context.Background(), bad.Client(), "0.1.0"); got != nil {
 			t.Fatalf("malformed startup check = %#v, want nil", got)
 		}
 	})
 
 	t.Run("newer_reports_update", func(t *testing.T) {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", "")
 		if got := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.0"); got == nil || got.Version != "9.9.9" {
 			t.Fatalf("newer startup check = %#v, want 9.9.9", got)
@@ -920,7 +920,7 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	})
 
 	t.Run("up_to_date_reports_nothing", func(t *testing.T) {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", "")
 		if got := CheckForBinaryUpdate(context.Background(), srv.Client(), "9.9.9"); got != nil {
 			t.Fatalf("up-to-date startup check = %#v, want nil", got)
@@ -928,11 +928,11 @@ func TestAC6CheckAndFallbackBehavior(t *testing.T) {
 	})
 
 	t.Run("explicit_fallback_is_actionable_and_non_looping", func(t *testing.T) {
-		message := UnsupportedRemediation("/readonly/bin/pig")
-		if !strings.Contains(message, "/readonly/bin/pig") {
+		message := UnsupportedRemediation("/readonly/bin/ompig")
+		if !strings.Contains(message, "/readonly/bin/ompig") {
 			t.Fatalf("fallback omits executable path: %s", message)
 		}
-		if strings.Contains(message, "pig update") {
+		if strings.Contains(message, "ompig update") {
 			t.Fatalf("fallback loops to failed command: %s", message)
 		}
 		if !strings.Contains(strings.ToLower(message), "reinstall") || !strings.Contains(strings.ToLower(message), "download") {
@@ -950,7 +950,7 @@ func TestAC7SelfUpdateSafetyMutationMatrix(t *testing.T) {
 	t.Run("checksum_guard", func(t *testing.T) {
 		requireStandaloneSelfUpdateTier(t)
 		payload := []byte("new")
-		target := filepath.Join(t.TempDir(), "pig")
+		target := filepath.Join(t.TempDir(), "ompig")
 		if err := os.WriteFile(target, []byte("old"), 0o755); err != nil {
 			t.Fatal(err)
 		}
@@ -982,7 +982,7 @@ func TestAC7SelfUpdateSafetyMutationMatrix(t *testing.T) {
 	t.Run("ownership_guard", func(t *testing.T) {
 		root := t.TempDir()
 		shared := filepath.Join(root, "node_modules")
-		binDir := filepath.Join(shared, "pig", "bin")
+		binDir := filepath.Join(shared, "ompig", "bin")
 		if err := os.MkdirAll(binDir, 0o755); err != nil {
 			t.Fatal(err)
 		}
@@ -998,7 +998,7 @@ func TestAC7SelfUpdateSafetyMutationMatrix(t *testing.T) {
 
 	t.Run("no_fallthrough_guard", func(t *testing.T) {
 		standaloneCalled := false
-		prov := &SelfUpdateProvenance{Tier: tierStandalone, ExePath: "/tmp/pig"}
+		prov := &SelfUpdateProvenance{Tier: tierStandalone, ExePath: "/tmp/ompig"}
 		failure := errors.New("standalone failed")
 		result := applyProvenance(prov, func(string) error {
 			standaloneCalled = true
@@ -1039,7 +1039,7 @@ func TestUpdateTrustRootsReadsEveryKeyInTheBundle(t *testing.T) {
 	if err := os.WriteFile(path, bundle, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", path)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", path)
 
 	keys, err := updateTrustRoots()
 	if err != nil {
@@ -1055,7 +1055,7 @@ func TestUpdateTrustRootsRejectsNonKeyMaterial(t *testing.T) {
 	if err := os.WriteFile(path, []byte("not a pem file"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", path)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", path)
 	if _, err := updateTrustRoots(); err == nil {
 		t.Fatal("garbage trust root was accepted")
 	}

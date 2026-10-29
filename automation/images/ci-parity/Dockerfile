@@ -47,55 +47,55 @@ FROM toolchain-base AS pi-oracle
 # (empty for a release tag); `make pin-sync` writes both and make compliance checks them.
 ARG PI_VERSION=1.4.0
 ARG PI_COMMIT=6c384aa30f619d7b28963f2bab24d8dacbe73cb6
-COPY automation/images/ci-parity/package.json automation/images/ci-parity/package-lock.json /opt/pig/pi/
+COPY automation/images/ci-parity/package.json automation/images/ci-parity/package-lock.json /opt/ompig/pi/
 RUN test -z "${PI_COMMIT}" || { echo "this image installs the published Pi ${PI_VERSION}; it cannot be the build of Pi commit ${PI_COMMIT} yet (a commit pin needs the oracle built from source, automation/pin/oracle.py)" >&2; exit 1; } \
-  && npm ci --prefix /opt/pig/pi --omit=dev --ignore-scripts --no-audit --no-fund \
-  && mkdir -p /opt/pig/pi/bin \
-  && ln -s ../node_modules/.bin/pi /opt/pig/pi/bin/pi \
-  && test "$(/opt/pig/pi/bin/pi --version)" = "${PI_VERSION}" \
-  && node -e 'const [want, ...packages] = process.argv.slice(1); for (const p of packages) { if (require(`/opt/pig/pi/node_modules/@earendil-works/${p}/package.json`).version !== want) process.exit(1) }' "${PI_VERSION}" pi-agent-core pi-ai pi-coding-agent pi-tui \
-  && coding_root=/opt/pig/pi/node_modules/@earendil-works/pi-coding-agent \
-  && rm -rf /opt/pig/pi/node_modules/@earendil-works/pi-ai/node_modules/@types/node \
+  && npm ci --prefix /opt/ompig/pi --omit=dev --ignore-scripts --no-audit --no-fund \
+  && mkdir -p /opt/ompig/pi/bin \
+  && ln -s ../node_modules/.bin/pi /opt/ompig/pi/bin/pi \
+  && test "$(/opt/ompig/pi/bin/pi --version)" = "${PI_VERSION}" \
+  && node -e 'const [want, ...packages] = process.argv.slice(1); for (const p of packages) { if (require(`/opt/ompig/pi/node_modules/@earendil-works/${p}/package.json`).version !== want) process.exit(1) }' "${PI_VERSION}" pi-agent-core pi-ai pi-coding-agent pi-tui \
+  && coding_root=/opt/ompig/pi/node_modules/@earendil-works/pi-coding-agent \
+  && rm -rf /opt/ompig/pi/node_modules/@earendil-works/pi-ai/node_modules/@types/node \
   && mkdir -p "${coding_root}/node_modules/@earendil-works" "${coding_root}/node_modules/@types" \
-  && ln -s /opt/pig/pi/node_modules/@types/node "${coding_root}/node_modules/@types/node" \
+  && ln -s /opt/ompig/pi/node_modules/@types/node "${coding_root}/node_modules/@types/node" \
   && for package in pi-agent-core pi-ai pi-tui; do \
-       ln -s "/opt/pig/pi/node_modules/@earendil-works/${package}" "${coding_root}/node_modules/@earendil-works/${package}"; \
+       ln -s "/opt/ompig/pi/node_modules/@earendil-works/${package}" "${coding_root}/node_modules/@earendil-works/${package}"; \
      done
 
 FROM toolchain-base AS npm-runtime
-COPY automation/images/npm-runtime/package.json automation/images/npm-runtime/package-lock.json /opt/pig/npm/
-RUN npm ci --prefix /opt/pig/npm --omit=dev --ignore-scripts --no-audit --no-fund \
+COPY automation/images/npm-runtime/package.json automation/images/npm-runtime/package-lock.json /opt/ompig/npm/
+RUN npm ci --prefix /opt/ompig/npm --omit=dev --ignore-scripts --no-audit --no-fund \
   && rm -rf \
-    /opt/pig/npm/node_modules/npm/node_modules/brace-expansion \
-    /opt/pig/npm/node_modules/npm/node_modules/http-cache-semantics \
-    /opt/pig/npm/node_modules/npm/node_modules/ip-address \
-    /opt/pig/npm/node_modules/npm/node_modules/postcss-selector-parser \
-    /opt/pig/npm/node_modules/npm/node_modules/tar \
-    /opt/pig/npm/node_modules/npm/node_modules/undici \
-  && test "$(node /opt/pig/npm/node_modules/npm/bin/npm-cli.js --version)" = "12.1.0"
+    /opt/ompig/npm/node_modules/npm/node_modules/brace-expansion \
+    /opt/ompig/npm/node_modules/npm/node_modules/http-cache-semantics \
+    /opt/ompig/npm/node_modules/npm/node_modules/ip-address \
+    /opt/ompig/npm/node_modules/npm/node_modules/postcss-selector-parser \
+    /opt/ompig/npm/node_modules/npm/node_modules/tar \
+    /opt/ompig/npm/node_modules/npm/node_modules/undici \
+  && test "$(node /opt/ompig/npm/node_modules/npm/bin/npm-cli.js --version)" = "12.1.0"
 
 FROM toolchain-base
 ARG GO_VERSION
 USER root
-RUN mkdir -p /usr/lib /opt/pig /workspace \
+RUN mkdir -p /usr/lib /opt/ompig /workspace \
   && ln -sf /usr/bin/fd /usr/local/bin/fdfind \
-  && chown -R nonroot:nonroot /opt/pig /workspace
+  && chown -R nonroot:nonroot /opt/ompig /workspace
 COPY --from=go-toolchain /out/go /usr/lib/go
-COPY --from=pi-oracle /opt/pig/pi /opt/pig/pi
-COPY --from=npm-runtime /opt/pig/npm /opt/pig/npm
-RUN ln -s /opt/pig/npm/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-  && ln -s /opt/pig/npm/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+COPY --from=pi-oracle /opt/ompig/pi /opt/ompig/pi
+COPY --from=npm-runtime /opt/ompig/npm /opt/ompig/npm
+RUN ln -s /opt/ompig/npm/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+  && ln -s /opt/ompig/npm/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
   && test "$(/usr/lib/go/bin/go env GOVERSION)" = "go${GO_VERSION}"
 
-ENV GOCACHE=/tmp/pig-go-build
-ENV GOMODCACHE=/tmp/pig-go-mod
-ENV GOPATH=/tmp/pig-go
-ENV CARGO_HOME=/tmp/pig-cargo
-ENV PATH="/usr/lib/go/bin:/opt/pig/pi/bin:${PATH}"
-ENV PIG_PARITY_PI_BIN=/opt/pig/pi/bin/pi
+ENV GOCACHE=/tmp/ompig-go-build
+ENV GOMODCACHE=/tmp/ompig-go-mod
+ENV GOPATH=/tmp/ompig-go
+ENV CARGO_HOME=/tmp/ompig-cargo
+ENV PATH="/usr/lib/go/bin:/opt/ompig/pi/bin:${PATH}"
+ENV OMPIG_PARITY_PI_BIN=/opt/ompig/pi/bin/pi
 # This image installs the PUBLISHED Pi, not a build of the pinned source, so it opts into the published oracle explicitly (a release-tag pin only; the runner refuses it for a commit pin). Building Pi from source in the image is the follow-up that removes this line.
-ENV PIG_PARITY_PI_PUBLISHED=1
-ENV PI_PACKAGE_ROOT=/opt/pig/pi/node_modules/@earendil-works/pi-coding-agent
+ENV OMPIG_PARITY_PI_PUBLISHED=1
+ENV PI_PACKAGE_ROOT=/opt/ompig/pi/node_modules/@earendil-works/pi-coding-agent
 
 USER nonroot
 WORKDIR /workspace

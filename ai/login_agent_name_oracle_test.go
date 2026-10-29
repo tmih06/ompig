@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type loginAgentNameProbe struct {
@@ -25,7 +25,7 @@ type loginAgentNameResult struct {
 // LoginOptions.agentName (auth/types.ts:206-213) is the name an app introduces itself with: it is OpenAI ChatGPT's agent_name_hint
 // (openai-chatgpt.ts:253, `options?.agentName ?? "Pi"`) and the Codex originator (openai-codex.ts:276,363). The pinned pi-ai runs both
 // logins up to the authorization URL; an empty name is kept, not replaced by the default.
-// pig divergence (D26): the Codex default originator is PiG's, so a probe without a name compares only the ChatGPT hint with Pi.
+// ompig divergence (D26): the Codex default originator is Ompig's, so a probe without a name compares only the ChatGPT hint with Pi.
 func TestLoginAgentNameMatchesPi(t *testing.T) {
 	name := func(value string) *string { return &value }
 	var probes []loginAgentNameProbe
@@ -86,7 +86,7 @@ func TestLoginAgentNameMatchesPi(t *testing.T) {
 		}
 		values := query.Query()
 		if probe.Provider == "chatgpt" {
-			// An omitted agentName takes PiG's identity instead of Pi's "Pi" (D26); a given name, empty included, is sent unchanged.
+			// An omitted agentName takes Ompig's identity instead of Pi's "Pi" (D26); a given name, empty included, is sent unchanged.
 			expected := want[i].Hint
 			if probe.AgentName == nil {
 				def := pigidentity.ChatGPTAgentName

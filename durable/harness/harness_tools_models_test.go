@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // TestToolsAndHooksSeeTheHarnessModels mirrors packages/durable/test/harness-tools.test.ts:115 ("gives tools and hooks the

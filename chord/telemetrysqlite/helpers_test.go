@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/chord/sqlite/node"
-	"github.com/MichaelKinsy/PiG/internal/jsclock"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/chord/sqlite/node"
+	"github.com/tmih06/ompig/internal/jsclock"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // spyDatabase is `vi.spyOn(db, "transaction")`: it counts Transaction calls and, when hook is set, runs it instead of

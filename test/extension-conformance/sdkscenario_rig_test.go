@@ -10,10 +10,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // scenarioRig is the real production host a scenario's driver loads into: the
@@ -75,18 +75,18 @@ func scenarioDriverConfig(t *testing.T, root string, sdk sdkscenarios.SDK, name 
 	case sdkscenarios.Go:
 		config.Source = filepath.Join(base, "scenario-driver-go")
 		config.Factory = "Extension"
-		config.SDKName = "github.com/MichaelKinsy/PiG/extensions/sdk"
+		config.SDKName = "github.com/tmih06/ompig/extensions/sdk"
 		config.ModulePath = "example.com/scenario-driver-go"
 		config.Package = config.ModulePath
 	case sdkscenarios.Python:
 		config.Source = filepath.Join(base, "scenario-driver-python")
 		config.Factory = "new_extension"
-		config.SDKName = "pig-sdk-py"
+		config.SDKName = "ompig-sdk-py"
 		config.Package = "scenario_driver"
 	case sdkscenarios.Rust:
 		config.Source = filepath.Join(base, "scenario-driver-rust")
 		config.Factory = "new_extension"
-		config.SDKName = "pig-sdk"
+		config.SDKName = "ompig-sdk"
 		config.Package = "scenario-driver-rust"
 	default:
 		t.Fatalf("unknown SDK %q", sdk)

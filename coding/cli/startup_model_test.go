@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Upstream model-resolver.test.ts mock models.
@@ -360,10 +360,10 @@ func TestSelectStartupModelCollectsDiagnostics(t *testing.T) {
 }
 
 // TestSelectStartupModelKeepsTestFaux keeps the uncatalogued test-only
-// provider selectable by --model when PIG_TEST_FAUX=1.
+// provider selectable by --model when OMPIG_TEST_FAUX=1.
 func TestSelectStartupModelKeepsTestFaux(t *testing.T) {
 	dir := isolateProviderAuthEnv(t)
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	for _, options := range []startupModelOptions{{CLIModel: "test-faux/faux-1:high"}, {CLIProvider: "test-faux", CLIModel: "faux-1:high"}} {
 		selected, err := selectStartupModel(context.Background(), options, codingagent.Settings{}, testServices(t, dir))
 		if err != nil {
@@ -376,11 +376,11 @@ func TestSelectStartupModelKeepsTestFaux(t *testing.T) {
 }
 
 // TestSelectStartupModelHidesTestFauxWithoutOptIn keeps the test-only
-// provider out of normal runs (CH-021): without PIG_TEST_FAUX=1, --model
+// provider out of normal runs (CH-021): without OMPIG_TEST_FAUX=1, --model
 // test-faux/... resolves like any unknown model.
 func TestSelectStartupModelHidesTestFauxWithoutOptIn(t *testing.T) {
 	dir := isolateProviderAuthEnv(t)
-	t.Setenv("PIG_TEST_FAUX", "")
+	t.Setenv("OMPIG_TEST_FAUX", "")
 	_, err := selectStartupModel(context.Background(), startupModelOptions{CLIModel: "test-faux/faux-1"}, codingagent.Settings{}, testServices(t, dir))
 	if err == nil || !strings.Contains(err.Error(), `Model "test-faux/faux-1" not found`) {
 		t.Fatalf("err = %v, want upstream's not-found error", err)

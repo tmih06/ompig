@@ -16,7 +16,7 @@ import (
 
 // Pi sends each WebSocket request as JSON.stringify({ type: "response.create", ...requestBody }) (openai-codex-responses.ts:1542): type
 // first, then the request body's members in buildRequestBody order. A cached continuation is { ...body, previous_response_id, input }
-// (:1473-1476): previous_response_id is appended and input keeps its place. Pi and PiG run the same two turns against one WebSocket
+// (:1473-1476): previous_response_id is appended and input keeps its place. Pi and Ompig run the same two turns against one WebSocket
 // server, which records the frames each sends.
 func TestCodexWebSocketFramesMatchPi(t *testing.T) {
 	var mu sync.Mutex
@@ -122,7 +122,7 @@ func TestCodexWebSocketFramesMatchPi(t *testing.T) {
 	got := frames
 	mu.Unlock()
 	if len(got) != len(want) {
-		t.Fatalf("PiG sent %d frames, want %d", len(got), len(want))
+		t.Fatalf("Ompig sent %d frames, want %d", len(got), len(want))
 	}
 	for i := range want {
 		if got[i] != want[i] {

@@ -1,4 +1,4 @@
-//go:build !pig_strip_export_html
+//go:build !ompig_strip_export_html
 
 package codingagent
 
@@ -69,12 +69,12 @@ func TestExportHandlerHTMLOutputPathMatchesUpstream(t *testing.T) {
 	for _, tc := range []struct {
 		args, want string
 	}{
-		{"", "pig-session-2026-05-14T12-00-00-000Z_html-export.html"},
+		{"", "ompig-session-2026-05-14T12-00-00-000Z_html-export.html"},
 		{"report", "report"},
 		{`"my report.html" trailing words`, "my report.html"},
 		{`'quoted.html'`, "quoted.html"},
 		{"out.html extra", "out.html"},
-		{`"unclosed.html`, "pig-session-2026-05-14T12-00-00-000Z_html-export.html"},
+		{`"unclosed.html`, "ompig-session-2026-05-14T12-00-00-000Z_html-export.html"},
 	} {
 		t.Run(tc.args, func(t *testing.T) {
 			dir := chdirTemp(t)

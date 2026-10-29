@@ -1,18 +1,18 @@
-//go:build !pig_strip_llama_cpp
+//go:build !ompig_strip_llama_cpp
 
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/llama"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/llama"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // llamaInlineExtensions is the built-in llama.cpp extension's entry of nativeBuiltInExtensions.
 //
-// This file and the internal/codingagent/llama import are the boundary a Piglet Binary strips with the pig_strip_llama_cpp
+// This file and the internal/codingagent/llama import are the boundary a Ompiglet Binary strips with the ompig_strip_llama_cpp
 // build tag (llama_stripped.go).
-// pig additive (D92): a stripped llama.cpp has no entry, as in a Binary that compiled it out.
+// ompig additive (D92): a stripped llama.cpp has no entry, as in a Binary that compiled it out.
 func llamaInlineExtensions() []extension.InlineExtension {
 	if pigstrip.Has(pigstrip.ListExtensions, llamaBuiltinName) {
 		return nil

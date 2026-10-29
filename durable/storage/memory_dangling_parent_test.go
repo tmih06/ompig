@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // pi: packages/durable/src/storage/memory.ts (findLatestHeadMarker, visibleEntries and visibleEntriesAscending read `.parent` of a conversation that is not stored and throw that TypeError; the walks stop earlier when they find their answer first)

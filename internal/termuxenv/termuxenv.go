@@ -1,6 +1,6 @@
-// Package termuxenv prepares a PiG process for Termux on Android.
+// Package termuxenv prepares a Ompig process for Termux on Android.
 //
-// Termux has no /etc and no /tmp. PiG's Android build links the C library
+// Termux has no /etc and no /tmp. Ompig's Android build links the C library
 // (cgo), so Go resolves names through bionic and trusts Android's system
 // certificates. This package sets the defaults Termux's own tools use, and
 // gives a build without cgo the resolver configuration Go cannot find: without

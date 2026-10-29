@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 1.2.0 agent-session.ts:1104-1106 aborts a run at agent_start when an abort was requested while it started; agent.ts runWithLifecycle

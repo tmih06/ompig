@@ -21,9 +21,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // RuntimeModel carries the model identity, reasoning flag, and intrinsic headers used by request-auth and CLI resolution.

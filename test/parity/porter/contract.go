@@ -1,5 +1,5 @@
 // Package porter exposes the single deterministic process contract used by the
-// direct Porter adapter and the Pig Porter extension.
+// direct Porter adapter and the Ompig Porter extension.
 package porter
 
 import (
@@ -14,9 +14,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/closure"
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/closure"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 const (

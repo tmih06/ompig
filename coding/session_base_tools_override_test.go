@@ -6,9 +6,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func baseOverrideTool(t *testing.T, name string) agent.AgentTool {
@@ -51,10 +51,13 @@ func registeredAndActiveNames(session *Session) []string {
 	return append(allRegistryNames(session), session.ActiveToolNames()...)
 }
 
-// Without the override the same session registers the built-in tools and activates the default four, so the override test above fails for the right reason.
+// Without the override the same session registers the built-in tools and activates the default set, so the override test above fails for the right reason.
+//
+// ompig divergence (D-SUBAGENT-4): the default set also carries the subagent
+// tools task, wait and agents, which omp exposes and Pi does not.
 func TestSessionWithoutBaseToolsOverrideKeepsTheBuiltinTools(t *testing.T) {
 	session := newRegistryPortSession(t, nil, SessionOptions{}, nil, nil)
-	if got := sortedActiveNames(session); !slices.Equal(got, []string{"bash", "edit", "read", "write"}) {
+	if got := sortedActiveNames(session); !slices.Equal(got, []string{"agents", "bash", "edit", "read", "task", "wait", "write"}) {
 		t.Fatalf("default active tools = %q", got)
 	}
 }

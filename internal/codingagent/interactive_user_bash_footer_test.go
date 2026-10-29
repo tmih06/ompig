@@ -5,15 +5,15 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's footer asks session.getContextUsage() on every render (footer.ts:143), so a ! command's recorded output counts toward the context percentage as
-// soon as it is recorded (compaction.ts estimateTokens "bashExecution"). PiG's footer holds a stored estimate that agent events and transcript rebuilds
-// refresh; the bash path did not, so the percentage stayed at its old value until the next model turn. Found by the bash journey (2.1% in Pi, 0.2% in PiG).
+// soon as it is recorded (compaction.ts estimateTokens "bashExecution"). Ompig's footer holds a stored estimate that agent events and transcript rebuilds
+// refresh; the bash path did not, so the percentage stayed at its old value until the next model turn. Found by the bash journey (2.1% in Pi, 0.2% in Ompig).
 func TestInteractiveBashRefreshesTheFooterContextUsage(t *testing.T) {
 	dir := t.TempDir()
 	model := &ai.Model{ID: "m", DisplayName: "m", Capabilities: ai.ModelCapabilities{ContextWindow: 8000}}

@@ -12,7 +12,7 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 //go:linkname syscall_syscall6 syscall.syscall6

@@ -13,9 +13,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const (
@@ -40,7 +40,7 @@ func isControlString(data string) bool {
 
 // StdinBuffer accumulates partial escape sequences across reads and emits JavaScript UTF-16 units for ordinary text. Lone surrogate events use WTF-8. Bracketed pastes remain one framed payload. The zero value uses upstream's default timeouts.
 //
-// pig divergence (D114): its listener surface (stdin_buffer_events.go) has no per-event listener limit, so it has no GetMaxListeners, SetMaxListeners or MaxListenersExceededWarning.
+// ompig divergence (D114): its listener surface (stdin_buffer_events.go) has no per-event listener limit, so it has no GetMaxListeners, SetMaxListeners or MaxListenersExceededWarning.
 type StdinBuffer struct {
 	buffer    string
 	pasteMode bool

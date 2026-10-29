@@ -15,8 +15,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
 	"github.com/gorilla/websocket"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
 )
 
 type upstreamStreamCase struct {

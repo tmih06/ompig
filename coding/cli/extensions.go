@@ -1,4 +1,4 @@
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 //
 // Subprocess loading consumes the canonical extension set resolved by startup
 // and reuses that same resolver for reload.
@@ -14,23 +14,23 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/fusepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/fusepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/shellconfig"
+	"github.com/tmih06/ompig/tui"
 
 	"golang.org/x/term"
 )
 
 // loadSubprocessExtensions starts the already-resolved canonical extension set.
-// Discovery, trust, Package, Piglet, settings, and CLI precedence are owned by
+// Discovery, trust, Package, Ompiglet, settings, and CLI precedence are owned by
 // collectExtensionConfigs. Reload receives the same normalized resolver.
 //
-// pig-specific: the subprocess host itself has no upstream equivalent.
+// ompig-specific: the subprocess host itself has no upstream equivalent.
 // appMode is the run mode selected at startup. Mirrors upstream main.ts
 // AppMode.
 type appMode string
@@ -45,7 +45,7 @@ const (
 // resolveAppMode mirrors upstream main.ts resolveAppMode: --mode rpc and
 // --mode json select those modes; --print, a stdin that is not a terminal, or
 // a stdout that is not a terminal select print mode; anything else is
-// interactive. `pig "q" > file` therefore prints the answer instead of drawing
+// interactive. `ompig "q" > file` therefore prints the answer instead of drawing
 // the TUI into the file.
 func resolveAppMode(mode string, print, stdinIsTTY, stdoutIsTTY bool) appMode {
 	switch {
@@ -68,10 +68,10 @@ func isPlainRuntimeMetadataCommand(flags Args) bool {
 
 // processAppMode resolves the app mode for this process's flags and standard
 // streams.
-// shouldRunFirstTimeSetup is PiG's first-time setup gate: an interactive start in the default agent directory (no
-// PIG_CODING_AGENT_DIR) that holds no settings.json, as Pi's shouldRunFirstTimeSetup requires (cli/startup-ui.ts:144-146).
+// shouldRunFirstTimeSetup is Ompig's first-time setup gate: an interactive start in the default agent directory (no
+// OMPIG_CODING_AGENT_DIR) that holds no settings.json, as Pi's shouldRunFirstTimeSetup requires (cli/startup-ui.ts:144-146).
 // Print, JSON and RPC modes never show it.
-// pig divergence (D88): Pi's gate also requires the official distribution and PI_EXPERIMENTAL.
+// ompig divergence (D88): Pi's gate also requires the official distribution and PI_EXPERIMENTAL.
 func shouldRunFirstTimeSetup(mode appMode, agentDirConfigured bool, agentDir string) bool {
 	return mode == appModeInteractive && !agentDirConfigured && !codingagent.SettingsFileExists(agentDir)
 }
@@ -117,7 +117,7 @@ func newSubprocessExtensionHost(cwd string, mode extension.ExtensionMode, regist
 		return subprocess.TerminalCapabilitiesPayload{Images: string(caps.Images), TrueColor: caps.TrueColor, Hyperlinks: caps.Hyperlinks}
 	})
 	bridge.SetThemeFunc(codingagent.ActiveExtensionThemeWire)
-	// The pig command draws the editors an extension's view holds in every mode; an embedder that does not leaves the call out and does not link the terminal editor.
+	// The ompig command draws the editors an extension's view holds in every mode; an embedder that does not leaves the call out and does not link the terminal editor.
 	subprocess.EnableEditorViews()
 	subprocess.SetThemeLoader(codingagent.LoadExtensionTheme)
 	host.SetUIBridge(bridge)
@@ -129,7 +129,7 @@ func newSubprocessExtensionHost(cwd string, mode extension.ExtensionMode, regist
 	subprocess.SetClipboardCopier(codingagent.CopyToClipboard)
 	// Refuse to compile an extension against a staged SDK that does not match
 	// this binary. Without it a stale stage silently reintroduces bugs the
-	// running pig already fixed.
+	// running ompig already fixed.
 	host.Builder().SetStagedSDKVerifier(pigsdk.VerifyStaged(codingagent.ConfigRoot()))
 	if registry != nil {
 		bindProviderRegistry(host, registry)
@@ -189,7 +189,7 @@ func setExtensionConfigLoader(host *subprocess.Host, configs []subprocess.ExtCon
 // ensureReloadableExtensionHost returns host and bridge, creating an empty
 // interactive host when startup loaded no extensions and extensions are
 // enabled. Upstream /reload rediscovers extensions whether or not any loaded
-// at startup; without a host, PiG's /reload could never load one.
+// at startup; without a host, Ompig's /reload could never load one.
 func ensureReloadableExtensionHost(host *subprocess.Host, bridge *subprocess.UIBridge, noExtensions bool, cwd string, registry *codingagent.ModelRegistry, reloadConfigs func() []subprocess.ExtConfig) (*subprocess.Host, *subprocess.UIBridge) {
 	if host != nil || noExtensions {
 		return host, bridge

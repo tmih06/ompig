@@ -15,10 +15,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // sessionView is what a caller of a SessionManager observes after opening one file; the Pi oracle reports the same members.
@@ -54,7 +54,7 @@ type sessionScenario struct {
 	Cwd      string `json:"cwd"`
 }
 
-// stringify is JSON.stringify of the value PiG marshals, spelled as PiG writes session lines (jsonstringify.Canonicalize).
+// stringify is JSON.stringify of the value Ompig marshals, spelled as Ompig writes session lines (jsonstringify.Canonicalize).
 func stringify(t *testing.T, value any) string {
 	t.Helper()
 	data, err := json.Marshal(value)
@@ -111,7 +111,7 @@ func entryIDs(entries []codingagent.SessionEntry) []string {
 	return ids
 }
 
-func pigView(t *testing.T, session *codingagent.Session) sessionView {
+func ompigView(t *testing.T, session *codingagent.Session) sessionView {
 	t.Helper()
 	entries := session.GetEntries()
 	view := sessionView{Header: stringify(t, session.GetHeader()), Entries: []string{}, Labels: []*string{}, LeafBranches: [][]string{}}
@@ -201,7 +201,7 @@ func readFile(t *testing.T, path string) string {
 	return string(data)
 }
 
-func pigReport(t *testing.T, scenario sessionScenario) sessionReport {
+func ompigReport(t *testing.T, scenario sessionScenario) sessionReport {
 	t.Helper()
 	var report sessionReport
 	fresh := func(name string) string { return copyFile(t, scenario.Source, filepath.Join(scenario.Dir, name)) }
@@ -213,7 +213,7 @@ func pigReport(t *testing.T, scenario sessionScenario) sessionReport {
 		return session
 	}
 	opened := fresh("open.jsonl")
-	report.Open = pigView(t, open(opened, scenario.Dir))
+	report.Open = ompigView(t, open(opened, scenario.Dir))
 	report.OpenedFile = readFile(t, opened)
 
 	branchedDir := filepath.Join(scenario.Dir, "branched")
@@ -231,7 +231,7 @@ func pigReport(t *testing.T, scenario sessionScenario) sessionReport {
 	if err != nil {
 		t.Fatal(err)
 	}
-	report.ForkView = pigView(t, forked)
+	report.ForkView = ompigView(t, forked)
 	report.ForkFile = readFile(t, *forked.GetSessionFile())
 
 	appended := fresh("append.jsonl")
@@ -256,7 +256,7 @@ func pigReport(t *testing.T, scenario sessionScenario) sessionReport {
 	if _, err := session.AppendSessionInfo(`renamed "session"`); err != nil {
 		t.Fatal(err)
 	}
-	report.AppendView = pigView(t, session)
+	report.AppendView = ompigView(t, session)
 	report.AppendFile = readFile(t, appended)
 	return report
 }
@@ -298,7 +298,7 @@ func normalize(report string, scenario sessionScenario, source string) string {
 	})
 }
 
-// TestSessionManagerMatchesPi opens linear and branching sessions in Pi 1.1.0's SessionManager and in PiG's, and compares every read accessor, the file the open leaves, and the files that createBranchedSession, forkFrom and appending a label, a branch, a message and a name write.
+// TestSessionManagerMatchesPi opens linear and branching sessions in Pi 1.1.0's SessionManager and in Ompig's, and compares every read accessor, the file the open leaves, and the files that createBranchedSession, forkFrom and appending a label, a branch, a message and a name write.
 func TestSessionManagerMatchesPi(t *testing.T) {
 	root := t.TempDir()
 	var scenarios []sessionScenario
@@ -328,14 +328,14 @@ func TestSessionManagerMatchesPi(t *testing.T) {
 			t.Fatal(err)
 		}
 		sources[name] = data
-		for _, side := range []string{"pi", "pig"} {
+		for _, side := range []string{"pi", "ompig"} {
 			if err := os.MkdirAll(filepath.Join(root, name, side), 0o755); err != nil {
 				t.Fatal(err)
 			}
 		}
 		scenarios = append(scenarios, sessionScenario{Dir: filepath.Join(root, name, "pi"), Source: source, MiddleID: middle.ID, Cwd: cwd})
 	}
-	// Lines Pi's loader reads without failing (session-manager.ts parseSessionEntryLine, loadEntriesFromFile): blank lines and syntax errors are skipped, null is skipped as falsy. The scenario lists what each kind of line leaves in a session that Pi and PiG both open.
+	// Lines Pi's loader reads without failing (session-manager.ts parseSessionEntryLine, loadEntriesFromFile): blank lines and syntax errors are skipped, null is skipped as falsy. The scenario lists what each kind of line leaves in a session that Pi and Ompig both open.
 	add("tree-garbage", func(file *os.File) error {
 		var tree bytes.Buffer
 		if err := GenerateTree(&tree, TreeOptions{Entries: 120, Seed: 7, Cwd: filepath.Join(root, "tree-garbage", "work")}); err != nil {
@@ -357,8 +357,8 @@ func TestSessionManagerMatchesPi(t *testing.T) {
 		return err
 	})
 
-	// A 46,000-entry session with a few branches: the size of the owner's file, with the leaves of a long conversation so the comparison is not dominated by one branch read per leaf. Pi's own getChildren scans the log per call, so this scenario takes about six minutes and runs only when PIG_LONGSESSION_46K is set.
-	if os.Getenv("PIG_LONGSESSION_46K") != "" {
+	// A 46,000-entry session with a few branches: the size of the owner's file, with the leaves of a long conversation so the comparison is not dominated by one branch read per leaf. Pi's own getChildren scans the log per call, so this scenario takes about six minutes and runs only when OMPIG_LONGSESSION_46K is set.
+	if os.Getenv("OMPIG_LONGSESSION_46K") != "" {
 		add("tree-46k", func(file *os.File) error {
 			return GenerateTree(file, TreeOptions{Entries: 46_000, Seed: 46, ForkOneIn: 3_000, Cwd: filepath.Join(root, "tree-46k", "work")})
 		})
@@ -432,9 +432,9 @@ func TestSessionManagerMatchesPi(t *testing.T) {
 		name := filepath.Base(filepath.Dir(scenario.Dir))
 		t.Run(name, func(t *testing.T) {
 			piScenario := scenario
-			pigScenario := scenario
-			pigScenario.Dir = filepath.Join(filepath.Dir(scenario.Dir), "pig")
-			got := normalize(stringify(t, pigReport(t, pigScenario)), pigScenario, sources[name])
+			ompigScenario := scenario
+			ompigScenario.Dir = filepath.Join(filepath.Dir(scenario.Dir), "ompig")
+			got := normalize(stringify(t, ompigReport(t, ompigScenario)), ompigScenario, sources[name])
 			expected := normalize(stringify(t, want[i]), piScenario, sources[name])
 			if got == expected {
 				return
@@ -471,5 +471,5 @@ func firstDifference(got, want string) string {
 		from, to := max(0, at-160), min(len(s), at+160)
 		return s[from:to]
 	}
-	return fmt.Sprintf("  at byte %d\n  pig: %s\n  pi:  %s", at, window(got), window(want))
+	return fmt.Sprintf("  at byte %d\n  ompig: %s\n  pi:  %s", at, window(got), window(want))
 }

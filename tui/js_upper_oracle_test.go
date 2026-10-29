@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // jsUpperFirstUnit is s.charAt(0).toUpperCase() + s.slice(1) (keybinding hints, alt-screen search labels). Every code point, as a one-character string

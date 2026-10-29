@@ -6,7 +6,7 @@ The reply names the object by handle; the host's ``user_bash_exec`` runs its ``e
 
 import base64
 
-import pig_sdk
+import ompig_sdk
 from test_request_lifetime import connected_extension
 
 
@@ -39,7 +39,7 @@ def run_exec(send, receive, request_id, command):
 
 
 def test_operations_stay_in_the_extension_until_the_host_releases_them():
-    ext = pig_sdk.Extension("user-bash")
+    ext = ompig_sdk.Extension("user-bash")
     operations = Operations()
     ext.on_event("user_bash", lambda ctx, data: {"operations": operations})
     with connected_extension(ext) as (send, receive):
@@ -65,12 +65,12 @@ def test_operations_stay_in_the_extension_until_the_host_releases_them():
 
 def test_replies_without_an_exec_function_name_no_handle():
     # runner.ts isUserBashEventResult: operations needs a function exec, and exactly one of operations and result is valid.
-    ext = pig_sdk.Extension("user-bash")
+    ext = ompig_sdk.Extension("user-bash")
     for value in ({"operations": None}, {"operations": {}}, {"operations": {"exec": 1}}, {"result": {"output": "x"}}):
-        assert pig_sdk.user_bash._user_bash_operations_reply(ext._bash_operations, value) is None
+        assert ompig_sdk.user_bash._user_bash_operations_reply(ext._bash_operations, value) is None
     assert ext._bash_operations._objects == {}
     both = {"operations": Operations(), "result": {"output": "x"}}
-    assert pig_sdk.user_bash._user_bash_operations_reply(ext._bash_operations, both) is None
+    assert ompig_sdk.user_bash._user_bash_operations_reply(ext._bash_operations, both) is None
     assert ext._bash_operations._objects == {}
     mapping = {"operations": {"exec": lambda command, cwd, options: 0}}
-    assert pig_sdk.user_bash._user_bash_operations_reply(ext._bash_operations, mapping) == {"operations": {"handle": "bash-1"}}
+    assert ompig_sdk.user_bash._user_bash_operations_reply(ext._bash_operations, mapping) == {"operations": {"handle": "bash-1"}}

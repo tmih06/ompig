@@ -12,7 +12,7 @@ export default function (pi: ExtensionAPI) {
     }),
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
       const execResult = await pi.exec(process.execPath, ["-e", "process.stdout.write('exec-ts')"]);
-      const missingExec = await pi.exec("pig-test-missing-program", []);
+      const missingExec = await pi.exec("ompig-test-missing-program", []);
       const found = ctx.modelRegistry.find("anthropic", "claude-3-5-haiku");
       const auth = found ? await ctx.modelRegistry.getApiKeyAndHeaders(found) : { ok: false };
       const completion = found

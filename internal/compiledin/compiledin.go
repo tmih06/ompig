@@ -10,8 +10,8 @@ package compiledin
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Factory builds one compiled-in extension from the JSON options the extension passed (empty or null when it passed none). It decodes them into a struct of its own.

@@ -9,16 +9,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
+ompig = ["OMPIG_TEST_FAUX=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--session", "sessions/branch.jsonl"]
+ompig_args = ["--session", "sessions/branch.jsonl"]
 pi_args = ["--session", "sessions/branch.jsonl"]
 
 [tmux]
 width = 120
 height = 35
 cwd = "testdata/w3-branch"
-ready_pattern_pig = "active 12345"
+ready_pattern_ompig = "active 12345"
 ready_pattern_pi = "active 12345"
 capture_start = "Type to search:"
 capture_end = "(3/5)"

@@ -9,8 +9,8 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
 // Ports packages/coding-agent/test/mcp-extension.test.ts ("MCP servers section", 0.99.2).

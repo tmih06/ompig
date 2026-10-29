@@ -7,13 +7,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 // rule answers a request or declines it.
 type rule func(r *harness.Request) (harness.Reply, bool)
 
-// script returns a harness.Script that uses the first rule that answers, then falls back to echoing the newest turn. Rules must be pure functions of the request so PiG and Pi receive the same answers.
+// script returns a harness.Script that uses the first rule that answers, then falls back to echoing the newest turn. Rules must be pure functions of the request so Ompig and Pi receive the same answers.
 func script(rules ...rule) harness.Script {
 	return func(r *harness.Request) harness.Reply {
 		for _, rl := range rules {

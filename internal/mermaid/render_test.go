@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// TestRenderMatchesUpstream diffs pig's full render() pipeline against pi's
+// TestRenderMatchesUpstream diffs ompig's full render() pipeline against pi's
 // bundled grok-mermaid@0.2.2 render() over every diagram type, fallback (null),
 // and streaming case: the end-to-end gate for parse + layout + canvas + index.
 

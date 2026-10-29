@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi reuses connections through one process-wide undici dispatcher; 20 sequential requests through ModelRuntime must use one TCP connection (comb-audit row 6).

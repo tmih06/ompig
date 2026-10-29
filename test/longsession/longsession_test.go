@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
-// The fixture's token count is what PiG's port of Pi's estimateTokens (compaction.ts:298) counts over the context the session file loads to, so a "1M-token" fixture holds a 1M-token context and not a 1M-token file.
+// The fixture's token count is what Ompig's port of Pi's estimateTokens (compaction.ts:298) counts over the context the session file loads to, so a "1M-token" fixture holds a 1M-token context and not a 1M-token file.
 func TestFixtureContextHoldsItsTokenCount(t *testing.T) {
 	for _, tokens := range []int{1, 50_000, 300_000} {
 		dir := t.TempDir()
@@ -36,7 +36,7 @@ func TestFixtureContextHoldsItsTokenCount(t *testing.T) {
 			estimated += compaction.EstimateTokens(message)
 		}
 		if estimated != meta.Tokens {
-			t.Fatalf("tokens %d: PiG estimates %d, the fixture reports %d", tokens, estimated, meta.Tokens)
+			t.Fatalf("tokens %d: Ompig estimates %d, the fixture reports %d", tokens, estimated, meta.Tokens)
 		}
 		perTurn := meta.Tokens / meta.Turns
 		if meta.Tokens-tokens >= perTurn+1 {

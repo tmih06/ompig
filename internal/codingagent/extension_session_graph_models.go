@@ -1,4 +1,4 @@
-// pig-specific: conversions the host-owned ModelRuntime of the session graph (coding/session_graph_model_runtime.go) needs from this package's extension wire code.
+// ompig-specific: conversions the host-owned ModelRuntime of the session graph (coding/session_graph_model_runtime.go) needs from this package's extension wire code.
 package codingagent
 
 import (
@@ -6,9 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // GraphModelStreamRequest turns an extension's model request (the wire map of a modelStream call) into the provider call's context, transcript and options, as the Session's stream does.

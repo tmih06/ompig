@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/env/daemon"
+	"github.com/tmih06/ompig/env/daemon"
 )
 
 // TestWatchWindowHoldsTheSetOfPathsOfAChange: how a change's paths are split into events depends on where a poll falls among its
@@ -121,7 +121,7 @@ func TestInJavaScriptOrderIsUTF16CodeUnitOrder(t *testing.T) {
 func TestDaemonWatchReportsAHalfWrittenFileTwiceLikePisDaemon(t *testing.T) {
 	request := object("op", "watch", "targets", []any{object("path", "{ROOT}/watched")}, "mode", "polling", "pollIntervalMs", 40)
 	const want = "reported again after the write: true\nwindow: [\"{ROOT}/watched/half\"]\n"
-	pi, pig := runOnBoth(t, watchTree, func(d *wireDaemon, root string) string {
+	pi, ompig := runOnBoth(t, watchTree, func(d *wireDaemon, root string) string {
 		id := d.start(withRoot(request, root).(daemon.Object), nil)
 		if ready := d.next(); ready.Kind != daemon.FrameEvent || ready.JSON.(daemon.Object)["kind"] != "ready" {
 			t.Fatalf("the watch did not start: %+v", ready)
@@ -160,8 +160,8 @@ func TestDaemonWatchReportsAHalfWrittenFileTwiceLikePisDaemon(t *testing.T) {
 		}
 		return fmt.Sprintf("reported again after the write: %v\nwindow: %q\n", named >= 2, window.paths(root))
 	})
-	compareWire(t, "half written file", pi, pig)
-	if pig != want {
-		t.Fatalf("both daemons reported %q, want %q", pig, want)
+	compareWire(t, "half written file", pi, ompig)
+	if ompig != want {
+		t.Fatalf("both daemons reported %q, want %q", ompig, want)
 	}
 }

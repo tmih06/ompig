@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // upstream: main.ts:728 resolves the --prompt-template paths once against the launch directory, without trimming them, and
@@ -33,7 +33,7 @@ func TestAdditionalPromptTemplatePathsAreTheLaunchResolvedLocalOnes(t *testing.T
 // interactive startup listing shows it, and so does the listing after /new builds the replacement Session.
 func TestInteractiveListingsReportAMissingPromptTemplatePath(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and starts the pig binary")
+		t.Skip("builds and starts the ompig binary")
 	}
 	t.Parallel()
 	home, dir := t.TempDir(), t.TempDir()
@@ -41,8 +41,8 @@ func TestInteractiveListingsReportAMissingPromptTemplatePath(t *testing.T) {
 	writeStartupFixtureFile(t, filepath.Join(home, "agent", "settings.json"), "{}")
 	cmd := exec.Command(buildPigBinaryForSignalTest(t), "--model", "test-faux/faux-1", "--no-session", "--offline", "--no-context-files", "--prompt-template", "nosuch.md")
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "TERM=xterm-256color")
 	terminal, stop := startPigOnTerminal(t, cmd)
 	defer stop()
 	screen := make(chan string, 64)
@@ -67,7 +67,7 @@ func TestInteractiveListingsReportAMissingPromptTemplatePath(t *testing.T) {
 			select {
 			case chunk, ok := <-screen:
 				if !ok {
-					t.Fatalf("pig exited while waiting for %s", what)
+					t.Fatalf("ompig exited while waiting for %s", what)
 				}
 				seen.WriteString(chunk)
 			case <-time.After(100 * time.Millisecond):
@@ -90,7 +90,7 @@ func TestInteractiveListingsReportAMissingPromptTemplatePath(t *testing.T) {
 // another directory, "found.md" in the launch directory exists and "nosuch.md" is the only missing path in [Prompt conflicts].
 func TestMissingPromptTemplateCheckUsesTheLaunchDirectory(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and starts the pig binary")
+		t.Skip("builds and starts the ompig binary")
 	}
 	t.Parallel()
 	home, launch, other := t.TempDir(), t.TempDir(), t.TempDir()
@@ -106,8 +106,8 @@ func TestMissingPromptTemplateCheckUsesTheLaunchDirectory(t *testing.T) {
 	cmd := exec.Command(buildPigBinaryForSignalTest(t), "--model", "test-faux/faux-1", "--offline", "--no-context-files", "--session", session,
 		"--prompt-template", "found.md", "--prompt-template", "nosuch.md")
 	cmd.Dir = launch
-	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "TERM=xterm-256color")
 	terminal, stop := startPigOnTerminal(t, cmd)
 	defer stop()
 	screen := make(chan string, 64)
@@ -135,7 +135,7 @@ func TestMissingPromptTemplateCheckUsesTheLaunchDirectory(t *testing.T) {
 			select {
 			case chunk, ok := <-screen:
 				if !ok {
-					t.Fatalf("pig exited before %s", what)
+					t.Fatalf("ompig exited before %s", what)
 				}
 				seen.WriteString(chunk)
 			case <-time.After(100 * time.Millisecond):

@@ -7,12 +7,12 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig_go_programs = ["./test/parity/testdata/registry-metadata-go"]
+ompig_go_programs = ["./test/parity/testdata/registry-metadata-go"]
 pi_go_programs = ["./test/parity/testdata/registry-metadata-go"]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/registry-metadata.mjs", "pig"]
+ompig_args = ["node", "./test/parity/testdata/registry-metadata.mjs", "ompig"]
 pi_args = ["node", "./test/parity/testdata/registry-metadata.mjs", "pi"]
 
 [cli]

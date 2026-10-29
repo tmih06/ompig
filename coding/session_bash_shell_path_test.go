@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi agent-session.ts:3851-3858 executeBash reads settingsManager.getShellPath() before the command runs and hands it to createLocalBashOperations({ shellPath }) (bash.ts:174):

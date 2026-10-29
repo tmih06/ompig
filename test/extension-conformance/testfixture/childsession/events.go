@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // sentinelScope is the scopedModels of the child_events scenario: two models with thinking levels no default produces.

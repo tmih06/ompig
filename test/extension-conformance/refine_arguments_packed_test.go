@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestConformance_PackedRefinedToolArgumentsAcrossSDKs: two extensions of one language share one packed cell, each registering the tool "refine-packed" with a refined property. The
@@ -127,7 +127,7 @@ func packedRefineFactory(t *testing.T, root, language, name string) subprocess.E
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		code = fmt.Sprintf(`package flags
-import ("encoding/json"; "strings"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("encoding/json"; "strings"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension() *sdk.Extension {
  e:=sdk.New(%q)
  var log []string
@@ -139,9 +139,9 @@ func Extension() *sdk.Extension {
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
 		code = fmt.Sprintf(`import json
-import pig_sdk
+import ompig_sdk
 def new_extension():
- e = pig_sdk.Extension(%q)
+ e = ompig_sdk.Extension(%q)
  log = []
  def check(v):
   log.append("check:p")
@@ -149,7 +149,7 @@ def new_extension():
  def worded(v):
   log.append("error:pm")
   return "a is too short"
- Type = pig_sdk.Type
+ Type = ompig_sdk.Type
  e.tool("refine-packed", "", Type.object({"a": Type.refine(Type.string(), check, worded)}), lambda ctx,args: "ok")
  def report(ctx, args):
   calls = list(log)
@@ -160,7 +160,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		code = fmt.Sprintf(`use pig_sdk::{Extension,Schema,ToolResult,CommandResult,Type};
+		code = fmt.Sprintf(`use ompig_sdk::{Extension,Schema,ToolResult,CommandResult,Type};
 use std::sync::{Arc,Mutex};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);

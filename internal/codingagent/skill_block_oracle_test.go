@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // TestParseSkillBlockMatchesPi runs parseSkillBlock of Pi 1.0.4 and ParseSkillBlock over texts that differ in the block's delimiters, trailing user message and JavaScript whitespace.
@@ -40,7 +40,7 @@ emit(input.map((t) => mod.parseSkillBlock(t) ?? null));`, texts, &want)
 				wantMessage = *w.UserMessage
 			}
 			if got.Name != w.Name || got.Location != w.Location || got.Content != w.Content || got.UserMessage != wantMessage {
-				t.Errorf("%q:\n  Pig %+v\n  Pi  %+v (message %q)", text, *got, *w, wantMessage)
+				t.Errorf("%q:\n  Ompig %+v\n  Pi  %+v (message %q)", text, *got, *w, wantMessage)
 			}
 		}
 	}

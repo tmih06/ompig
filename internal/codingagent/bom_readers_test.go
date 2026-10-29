@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/frontmatter"
+	"github.com/tmih06/ompig/internal/codingagent/frontmatter"
 )
 
 // utf8BOM is the byte order mark upstream readers strip with utils/text.ts

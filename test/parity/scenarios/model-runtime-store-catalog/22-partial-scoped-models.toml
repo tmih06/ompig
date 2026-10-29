@@ -10,7 +10,7 @@ model = "fixture/one"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 20
 capture_start = "Model Configuration"
@@ -26,9 +26,9 @@ keys = ["hex:1b 5b 31 3b 33 42"]
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/partial-scoped-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/partial-scoped-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/partial-scoped-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

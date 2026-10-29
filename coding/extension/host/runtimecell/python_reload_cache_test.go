@@ -11,14 +11,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // pythonReloadCacheHarness loads the rendered runner without starting it and runs one case of its module cache. load is one admission's factory call and reload one reload pass: its first admission decides, then every member's factory runs again. Every case starts with ext, inner and twin loaded and a module of each root imported after the factories, as a handler imports one. The factories run in the order ext, inner, twin, or twin, inner, ext for a case whose name ends in _twin_first, because the runner starts them on concurrent threads.
 const pythonReloadCacheHarness = `import importlib.util, io, os, sys, threading, time, types
 
 runner_path, case = sys.argv[1], sys.argv[2]
-runner = {'__name__': 'pig_runner', '__file__': runner_path}
+runner = {'__name__': 'ompig_runner', '__file__': runner_path}
 exec(compile(open(runner_path, encoding='utf-8').read(), runner_path, 'exec'), runner)
 ITEM = {item[0]: item for item in runner['ITEMS']}
 NAMES = ('ext', 'inner', 'twin')
@@ -331,7 +331,7 @@ def case_failed_decision():
     edited, runner['_edited'] = runner['_edited'], check_fails
     stderr, sys.stderr = sys.stderr, io.StringIO()
     # The runner starts inner's first generation, which serves while the control thread parks the process and admits a second one with a reload pass.
-    os.environ['PIG_EXT_ACTIVE_MEMBERS'] = 'inner'
+    os.environ['OMPIG_EXT_ACTIVE_MEMBERS'] = 'inner'
     os.environ[ITEM['inner'][1]] = 'socket'
     sys.stdin = io.StringIO('park\t\t\nadmit\tinner\tsocket\t\t\t1\n')
     probe.runs.clear()
@@ -540,7 +540,7 @@ else:
     print('ok')
 `
 
-// pythonReloadCacheFixture is one extension directory that holds two extensions, ext and twin, a nested extension directory inner, the SDK, an installed package and the runner's own directory, as a home directory does. ext's factory imports inner.ext_owned, a module under inner's directory. The factories of ext and twin both import common, which imports common_dep. A fourth member, idle, shares the directory and never starts, as a member outside PIG_EXT_ACTIVE_MEMBERS does.
+// pythonReloadCacheFixture is one extension directory that holds two extensions, ext and twin, a nested extension directory inner, the SDK, an installed package and the runner's own directory, as a home directory does. ext's factory imports inner.ext_owned, a module under inner's directory. The factories of ext and twin both import common, which imports common_dep. A fourth member, idle, shares the directory and never starts, as a member outside OMPIG_EXT_ACTIVE_MEMBERS does.
 var pythonReloadCacheFixture = map[string]string{
 	"ext_main.py":                    "import sys\nimport harness_probe\nimport ext_helper\nimport inner.ext_owned\nimport common\nstate = []\n\ndef new_extension():\n    return harness_probe.Ext(sys.modules[__name__])\n",
 	"ext_helper.py":                  "state = []\n",

@@ -1,6 +1,6 @@
-// Command probe drives PiG and Pi through a short script in a real terminal and prints each product's screen, to learn what an interaction looks like before writing a journey step.
+// Command probe drives Ompig and Pi through a short script in a real terminal and prints each product's screen, to learn what an interaction looks like before writing a journey step.
 //
-//	go run ./test/journeys/cmd/probe -pig /path/to/pig -pi /path/to/pi script.txt
+//	go run ./test/journeys/cmd/probe -ompig /path/to/ompig -pi /path/to/pi script.txt
 //
 // Script lines: `type TEXT`, `key NAME...` (Enter, Escape, C-c, Up, ...), `say TEXT` (type and Enter), `wait SUBSTR` (visible), `idle N` (N provider requests answered), `quiet` (terminal silent), `snap LABEL`, `resize W H`, `click TEXT` (left click on the first cell of TEXT), `wheel up|down`, `paste TEXT` (bracketed paste), `sleep` is deliberately absent. The provider echoes the newest prompt; a prompt starting with `BASH:` calls the bash tool with the rest as the command, and `SAY:` replies with the rest verbatim.
 package main
@@ -14,16 +14,16 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 func main() {
-	pig := flag.String("pig", "", "PiG binary")
+	ompig := flag.String("ompig", "", "Ompig binary")
 	pi := flag.String("pi", "", "Pi binary")
-	only := flag.String("only", "", "run only pig or pi")
+	only := flag.String("only", "", "run only ompig or pi")
 	flag.Parse()
-	if flag.NArg() != 1 || *pig == "" || *pi == "" {
-		fmt.Fprintln(os.Stderr, "usage: probe -pig BIN -pi BIN script.txt")
+	if flag.NArg() != 1 || *ompig == "" || *pi == "" {
+		fmt.Fprintln(os.Stderr, "usage: probe -ompig BIN -pi BIN script.txt")
 		os.Exit(2)
 	}
 	steps, err := readScript(flag.Arg(0))
@@ -31,7 +31,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	cfg := &harness.Config{PigBin: *pig, PiBin: *pi, Scale: 1, ArtifactDir: os.TempDir()}
+	cfg := &harness.Config{OmpigBin: *ompig, PiBin: *pi, Scale: 1, ArtifactDir: os.TempDir()}
 	j := &harness.Journey{Name: "probe", Script: func(r *harness.Request) harness.Reply {
 		last := r.Last()
 		if last.Role == "user" {
@@ -52,8 +52,8 @@ func main() {
 		}
 	}}, {Name: "end", Run: func(c *harness.Ctx) { c.Key("C-c"); c.Key("C-c") }}}
 	var wg sync.WaitGroup
-	out := map[harness.Kind]*strings.Builder{harness.PiG: {}, harness.Pi: {}}
-	for _, k := range []harness.Kind{harness.PiG, harness.Pi} {
+	out := map[harness.Kind]*strings.Builder{harness.Ompig: {}, harness.Pi: {}}
+	for _, k := range []harness.Kind{harness.Ompig, harness.Pi} {
 		if *only != "" && *only != string(k) {
 			continue
 		}
@@ -78,7 +78,7 @@ func main() {
 		})
 	}
 	wg.Wait()
-	for _, k := range []harness.Kind{harness.PiG, harness.Pi} {
+	for _, k := range []harness.Kind{harness.Ompig, harness.Pi} {
 		if out[k].Len() > 0 {
 			fmt.Printf("############ %s\n%s", k, out[k])
 		}

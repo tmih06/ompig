@@ -6,7 +6,7 @@ import (
 )
 
 // JSON.stringify(message.usage) writes the stored totalTokens (utils/event-stream.ts and the providers set it; a provider that reports no total
-// leaves 0, as in Pi's google and openai-responses). A zero total stays 0 on the wire: PiG did not write the counter sum in its place.
+// leaves 0, as in Pi's google and openai-responses). A zero total stays 0 on the wire: Ompig did not write the counter sum in its place.
 func TestUsageMarshalJSONKeepsTheStoredTotal(t *testing.T) {
 	for _, test := range []struct {
 		usage Usage

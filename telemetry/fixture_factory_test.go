@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 type factoryContextKey struct{}

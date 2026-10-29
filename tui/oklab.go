@@ -19,7 +19,7 @@ package tui
 import (
 	"math"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 type vector3 [3]float64

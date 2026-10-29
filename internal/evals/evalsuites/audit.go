@@ -11,10 +11,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/evals"
-	"github.com/MichaelKinsy/PiG/internal/evals/bridge"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/evals"
+	"github.com/tmih06/ompig/internal/evals/bridge"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const auditToolName = "submit_documentation_audit"
@@ -78,7 +78,7 @@ func DocumentationAudit() evals.Suite {
 		suite.Cases = []evals.Case{{Name: "locates the repository", Run: func(context.Context, evals.RunFunc) error { return err }}}
 		return suite
 	}
-	// Pi audits the coding-agent docs it ships to the agent (packages/coding-agent/docs); PiG ships the embedded docs.
+	// Pi audits the coding-agent docs it ships to the agent (packages/coding-agent/docs); Ompig ships the embedded docs.
 	docsRoot := filepath.Join(root, "internal", "pigdocs", "content")
 	pages, err := documentationPages(docsRoot)
 	if err != nil && !os.IsNotExist(err) {
@@ -88,7 +88,7 @@ func DocumentationAudit() evals.Suite {
 	for _, page := range pages {
 		documentationPath := filepath.Join(docsRoot, filepath.FromSlash(page))
 		suite.Cases = append(suite.Cases, evals.Case{Name: page + " matches the implementation", Run: func(ctx context.Context, run evals.RunFunc) error {
-			result, err := run(ctx, evals.PromptInput(fmt.Sprintf(`Audit this PiG documentation page against the repository implementation.
+			result, err := run(ctx, evals.PromptInput(fmt.Sprintf(`Audit this Ompig documentation page against the repository implementation.
 
 Documentation page: %s
 Repository root: %s

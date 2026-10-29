@@ -1,8 +1,8 @@
 package mcpext
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Pi's stdio transport kills the process group of every running server from a process.once("exit") hook; Go's os.Exit runs no

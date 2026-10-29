@@ -437,7 +437,7 @@
    "TestOpenTerminalReportsTheJobInTheForegroundNotTheShellAtItsPrompt",
    "TestTerminalForegroundOfANameCutInsideACharacterHasNoName"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty_unix.go: replace `Setsid: true, Setctty: true, Ctty: 0` with `Setsid: true`; TestOpenTerminalKillsEverythingInTheSessionOnCloseAndOnALostConnection, TestOpenTerminalReportsTheJobInTheForegroundNotTheShellAtItsPrompt, TestTerminalForegroundOfANameCutInsideACharacterHasNoName fail."
  },
  {
@@ -458,7 +458,7 @@
    "TestTerminalProgramGetsDefaultSignalsWhenTheDaemonStartedIgnoringThem",
    "TestTerminalThatCannotStartFailsWithTheSystemsWords"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty.go: replace `return Object{\"exitCode\": exitCode}, nil` with `return Object{\"exitCode\": exitCode + 1}, nil`; TestNewRemoteTerminalKeepsWhatItIsGivenAndWriteTakesBytesOrText, TestOpenTerminalDeliversRawBytesNotDecodedText, TestOpenTerminalEndsWhenTheProgramExitsThoughABackgroundJobHoldsTheTerminal, TestOpenTerminalKeepsInputInOrder, TestOpenTerminalOverTheLocalDaemonOfThePackagedLayout, TestOpenTerminalRunsAProgramInATerminalWithInputResizingAndItsExitCode, TestOpenTerminalRunsTheUsersShellAsALoginShellByDefault, TestOpenTerminalWriteOfMoreThanAFrameArrivesWholeAndInOrder, TestTerminalEnvironmentIsOrderedByName, TestTerminalEnvironmentIsTheDaemonsOwnWhenTheRequestChangesNothing, TestTerminalProgramGetsAnEmptySignalMaskWhenTheDaemonStartedWithSignalsBlocked, TestTerminalProgramGetsDefaultSignalsWhenTheDaemonStartedIgnoringThem, TestTerminalThatCannotStartFailsWithTheSystemsWords fail."
  },
  {
@@ -467,7 +467,7 @@
   "tests": [
    "TestOpenTerminalEndsWhenTheProgramExitsThoughABackgroundJobHoldsTheTerminal"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty.go: replace `exited, exitCode = true, message.exit idleUntil = time.Now().Add(ptyExitGrace)` with `exited, exitCode = true, message.exit idleUntil = time.Now().Add(time.Hour)`; TestOpenTerminalEndsWhenTheProgramExitsThoughABackgroundJobHoldsTheTerminal fail."
  },
  {
@@ -476,7 +476,7 @@
   "tests": [
    "TestTerminalEnvironmentIsTheDaemonsOwnWhenTheRequestChangesNothing"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty_unix.go: replace `if request.inheritEnv && len(request.env) == 0 {` with `if false && request.inheritEnv && len(request.env) == 0 {`; TestTerminalEnvironmentIsTheDaemonsOwnWhenTheRequestChangesNothing fail."
  },
  {
@@ -485,7 +485,7 @@
   "tests": [
    "TestOpenTerminalRunsTheUsersShellAsALoginShellByDefault"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty_unix.go: replace `Args: []string{\"-\" + name}` with `Args: []string{name}`; TestOpenTerminalRunsTheUsersShellAsALoginShellByDefault fail."
  },
  {
@@ -494,7 +494,7 @@
   "tests": [
    "TestOpenTerminalReportsTheJobInTheForegroundNotTheShellAtItsPrompt"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty.go: replace `JSON: Object{\"kind\": \"started\", \"pid\": proc.pid}` with `JSON: Object{\"kind\": \"started\", \"pid\": proc.pid + 1}`; TestOpenTerminalReportsTheJobInTheForegroundNotTheShellAtItsPrompt fail."
  },
  {
@@ -503,7 +503,7 @@
   "tests": [
    "TestTerminalThatCannotStartFailsWithTheSystemsWords"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty_unix.go: replace `if text, ok := rustIOError(err); ok { return newFailure(\"spawn_error\", text)` with `if text, ok := rustIOError(err); ok { return newFailure(\"spawn_error\", text+\".\")`; TestTerminalThatCannotStartFailsWithTheSystemsWords fail."
  },
  {
@@ -512,7 +512,7 @@
   "tests": [
    "TestOpenTerminalRunsAProgramInATerminalWithInputResizingAndItsExitCode"
   ],
-  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against PiG's daemon and Pi's own daemon (eachDaemon)",
+  "upstream_reference": "packages/env/daemon/src/pty.rs and packages/env/test/terminal.test.ts:51-161 (7 cases); each env/terminal*_test.go test runs against Ompig's daemon and Pi's own daemon (eachDaemon)",
   "mutation": "env/daemon/pty_unix.go: replace `&unix.Winsize{Row: rows, Col: cols}` with `&unix.Winsize{Row: cols, Col: rows}`; TestOpenTerminalRunsAProgramInATerminalWithInputResizingAndItsExitCode fail."
  },
  {

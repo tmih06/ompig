@@ -1,4 +1,4 @@
-// ctx.ui.setEditorComponent for extensions running in PiG.
+// ctx.ui.setEditorComponent for extensions running in Ompig.
 //
 // Pi's setCustomEditorComponent (modes/interactive/interactive-mode.ts) calls
 // the factory with its TUI, getEditorTheme() and its keybindings manager, puts
@@ -125,7 +125,7 @@ export class EditorComponentHost {
       return;
     }
     session.component = component;
-    // pig divergence (D94): Pi re-checks isWorkingStatusEditor each time a status is shown; PiG reads the opt-in once here and the Go host places status from it.
+    // ompig divergence (D94): Pi re-checks isWorkingStatusEditor each time a status is shown; Ompig reads the opt-in once here and the Go host places status from it.
     session.embedWorkingStatus = component.embedWorkingStatus === true && typeof component.setWorkingStatusIndicator === "function";
     component.onSubmit = (text) => this.submit(session, text);
     component.onChange = (text) => this.changed(session, text);
@@ -355,7 +355,7 @@ export class EditorComponentHost {
             let indicator;
             if (status) {
               const { StatusIndicator } = runtimeRequire("./shims/pi-dist/pi-coding-agent/modes/interactive/components/status-indicator.js");
-              // pig divergence (D94): the host advances the animation and sends snapshots, so empty initial frames prevent a second animation timer.
+              // ompig divergence (D94): the host advances the animation and sends snapshots, so empty initial frames prevent a second animation timer.
               // upstream: interactive-mode.ts showWorkingStatusIndicator and, since Pi 1.2.0 (#10810), the compaction_start
               // colorFn: an embedded working or compaction status takes the editor's border color, or the thinking level's when
               // the editor has none. Branch summary and retry keep the host's colors.

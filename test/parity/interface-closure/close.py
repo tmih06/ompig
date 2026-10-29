@@ -103,7 +103,7 @@ for spec_path in args:
                 if row["upstreamShapeHash"] != upstream[gid]["shapeHash"]:
                     sys.exit(f"{gid}: shape hash is stale")
                 new = {"id": gid, "disposition": "ported", "upstreamShapeHash": row["upstreamShapeHash"],
-                       "rationale": own["rationale"] if "rationale" in own else spec["rationale"], "pigTargets": own.get("targets", spec["targets"]),
+                       "rationale": own["rationale"] if "rationale" in own else spec["rationale"], "ompigTargets": own.get("targets", spec["targets"]),
                        "layers": {"shape": "complete", "production": "complete", "behavior": "complete"},
                        "production": own.get("production", spec["production"]), "evidence": own.get("evidence", spec["evidence"])}
                 if gid.startswith("cli:"):
@@ -113,7 +113,7 @@ for spec_path in args:
                     # the wire, the host dispatch, the three SDKs, and isolated and packed conformance.
                     new["layers"] = {layer: "complete" for layer in ("shape", "api", "wire", "host-dispatch", "sdk-go", "sdk-rust", "sdk-python", "isolated-conformance", "packed-conformance", "production", "behavior")}
                 if new["production"] and all(ref.startswith("public-api:") for ref in new["production"]):
-                    # public-api-tested: a public library API with test callers and no PiG call site (see interfaceinventory).
+                    # public-api-tested: a public library API with test callers and no Ompig call site (see interfaceinventory).
                     new["layers"]["production"] = "public-api-tested"
                 if "Promise<" in shape or "AbortSignal" in shape:
                     if not spec.get("async"):

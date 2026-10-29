@@ -7,8 +7,8 @@
 //   buffered  headers and the complete body in a single write (the RPC33 fixture shape).
 //   pending   headers flushed; the body is written when the driver reads the first assistant message_start.
 // Every run must be identical after numeric message-timestamp canonicalization (and without durationMs); the probe fails otherwise.
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -110,4 +110,4 @@ for (const shape of ['tool', 'text']) for (const fixture of ['buffered', 'pendin
   console.log(JSON.stringify({shape, fixture, runs, start: {content: start.content, stopReason: start.stopReason, responseId: start.responseId, total: start.usage.totalTokens}, updates: first.length - 2}));
   out.push({api:'azure-openai-responses', shape, fixture, runs, records: first});
 }
-await writeFile(process.argv[2], JSON.stringify({piVersion: PIG_UPSTREAM_VERSION, openaiVersion:'7.19.0', bodies, cases: out}, null, 2) + '\n');
+await writeFile(process.argv[2], JSON.stringify({piVersion: OMPIG_UPSTREAM_VERSION, openaiVersion:'7.19.0', bodies, cases: out}, null, 2) + '\n');

@@ -32,7 +32,7 @@ import (
 // binaries detect Kitty image capability:
 //
 //	[env]
-//	pig = ["TERM_PROGRAM=ghostty", "TERM=xterm-ghostty", "COLORTERM=truecolor"]
+//	ompig = ["TERM_PROGRAM=ghostty", "TERM=xterm-ghostty", "COLORTERM=truecolor"]
 //	pi   = ["TERM_PROGRAM=ghostty", "TERM=xterm-ghostty", "COLORTERM=truecolor"]
 //
 // The driver automatically strips TMUX/TMUX_PANE from the child environment
@@ -94,12 +94,12 @@ func (htDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scenar
 
 	// Snapshot agent dirs (same as tmux driver).
 	preserveAuth, injectAuth := scenarioAuthModes(sc)
-	pigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Pig, sc.Env.Pi, preserveAuth, injectAuth)
+	ompigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Ompig, sc.Env.Pi, preserveAuth, injectAuth)
 
 	// Build env pairs for this binary.
 	scenarioEnv := piEnv
-	if bin.Label == "pig" {
-		scenarioEnv = pigEnv
+	if bin.Label == "ompig" {
+		scenarioEnv = ompigEnv
 	}
 	binaryEnv := snapshotBinaryEnv(t, sc.SourcePath, bin.Env, preserveAuth, injectAuth)
 	resolvedScenarioEnv := tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, scenarioEnv))
@@ -110,8 +110,8 @@ func (htDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scenar
 	if !sc.Env.OverrideBaseArgs {
 		binArgs = append(binArgs, bin.Args...)
 	}
-	if bin.Label == "pig" {
-		binArgs = append(binArgs, tc.expandSlice(sc.Env.PigArgs)...)
+	if bin.Label == "ompig" {
+		binArgs = append(binArgs, tc.expandSlice(sc.Env.OmpigArgs)...)
 	} else {
 		binArgs = append(binArgs, tc.expandSlice(sc.Env.PiArgs)...)
 		for _, ext := range sc.Env.PiExtensions {
@@ -122,8 +122,8 @@ func (htDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scenar
 			binArgs = append(binArgs, "-e", resolved)
 		}
 	}
-	if bin.Label == "pig" {
-		for _, ext := range sc.Env.PigExtensions {
+	if bin.Label == "ompig" {
+		for _, ext := range sc.Env.OmpigExtensions {
 			resolved := ext
 			if !filepath.IsAbs(ext) {
 				resolved = filepath.Join(filepath.Dir(sc.SourcePath), ext)

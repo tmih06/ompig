@@ -1,6 +1,6 @@
 package tui
 
-// Component width sweep: renders PiG components with adversarial width
+// Component width sweep: renders Ompig components with adversarial width
 // content (emoji ZWJ/flags/keycaps/VS16, CJK, combining marks, Indic
 // conjuncts, zero-width and control chars, tabs, SGR and OSC 8) at every
 // width 20..200 and asserts no row's widthx.VisibleWidth (Pi's visibleWidth
@@ -18,7 +18,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 var sweepContent = []string{
@@ -111,7 +111,7 @@ func TestComponentWidthSweep(t *testing.T) {
 // TestComponentRowsMatchUpstream renders the upstream Text, TruncatedText
 // and Markdown components (vendored verbatim in widthx/testdata/pi) under
 // Node over the sweep content at every width 20..200. Text and
-// TruncatedText rows must equal PiG's byte for byte; for Markdown (whose
+// TruncatedText rows must equal Ompig's byte for byte; for Markdown (whose
 // themed styling differs) both sides must emit zero over-wide rows.
 func TestComponentRowsMatchUpstream(t *testing.T) {
 	if testing.Short() {

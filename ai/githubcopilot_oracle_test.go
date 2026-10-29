@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type copilotHelperProbe struct {
@@ -88,7 +88,7 @@ func TestGitHubCopilotHelpersMatchPi(t *testing.T) {
 		}
 		if got.Domain != expected[i].Domain || got.BaseURL != expected[i].BaseURL {
 			if differing++; differing <= 15 {
-				t.Errorf("probe %+v differs from Pi:\n  Pig %+v\n  Pi  %+v", probe, got, expected[i])
+				t.Errorf("probe %+v differs from Pi:\n  Ompig %+v\n  Pi  %+v", probe, got, expected[i])
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 // Command sdksurface generates docs/extension-sdk-surface.md: every
 // extension-facing surface of Pi's extension API, read from the pinned
 // upstream types.ts and the declarations it re-exports or exposes, with one
-// column per PiG extension runtime (the Node runtime and the Go, Rust and
+// column per Ompig extension runtime (the Node runtime and the Go, Rust and
 // Python SDKs).
 //
 // A cell's status comes from symbol detection in that runtime's source: the

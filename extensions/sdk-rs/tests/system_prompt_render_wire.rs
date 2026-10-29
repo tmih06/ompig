@@ -3,7 +3,7 @@
 //! so the handler sees its own edit.
 #![cfg(unix)]
 
-use pig_sdk::{BeforeAgentStartEvent, Extension};
+use ompig_sdk::{BeforeAgentStartEvent, Extension};
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -36,7 +36,7 @@ struct Host {
 impl Host {
     fn start(ext: Extension, state: Value) -> Host {
         let root = std::env::temp_dir().join(format!(
-            "pig-render-prompt-{}-{}",
+            "ompig-render-prompt-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
@@ -129,7 +129,7 @@ fn before_agent_start_reads_the_prompt_its_current_options_render() {
     host.reply(&call, json!({"prompt":"RENDERED"}));
     let reply = response(&mut host);
     assert!(reply["response"]["error"].is_null(), "reply: {reply}");
-    assert_eq!(reply["response"]["result"]["_pigPromptOptions"]["appendSystemPrompt"], "EDITED");
+    assert_eq!(reply["response"]["result"]["_ompigPromptOptions"]["appendSystemPrompt"], "EDITED");
     // The unedited options read the prompt the host sent without a call; the edit renders once and is then reused.
     assert_eq!(seen.try_iter().collect::<Vec<_>>(), vec!["RECEIVED RECEIVED", "RENDERED RENDERED", "RENDERED RENDERED"]);
     host.finish();

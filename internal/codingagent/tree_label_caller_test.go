@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi interactive-mode.ts:5527 persists the label supplied by the shared LabelInput; tree-selector.ts:1406 updates the displayed node first.

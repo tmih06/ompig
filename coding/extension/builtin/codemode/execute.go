@@ -16,26 +16,26 @@ import (
 	"sync/atomic"
 	"time"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/internal/nodebase64"
+	"github.com/tmih06/ompig/internal/nodebase64"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	sandbox "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/ecmascript"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/outputfiles"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	sandbox "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/ecmascript"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/outputfiles"
 )
 
 const (
 	argsPreviewChars  = 200
 	errorPreviewChars = 500
-	// memoryLimitBytes is the heap limit for the QuickJS VM. The VM shares PiG's process, so without a limit a runaway
+	// memoryLimitBytes is the heap limit for the QuickJS VM. The VM shares Ompig's process, so without a limit a runaway
 	// script could grow to wasm32's 4 GiB and take the session down. Overruns throw `InternalError: out of memory`
 	// inside the script.
 	memoryLimitBytes = 256 * 1024 * 1024

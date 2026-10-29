@@ -5,7 +5,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 type focusedInputProbe struct {

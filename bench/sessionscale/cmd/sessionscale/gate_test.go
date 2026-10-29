@@ -14,8 +14,8 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/bench/sessionscale"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/bench/sessionscale"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The session-scale gates, on the release binary (opt-in: SESSIONSCALE_GATE=1, about three minutes and 300 MB of disk):
@@ -29,11 +29,11 @@ func TestResumeMemoryAndPromptCostFollowTheContext(t *testing.T) {
 	}
 	root := testenv.ModuleRoot(t)
 	dir := t.TempDir()
-	pig := filepath.Join(dir, "pig")
-	build := exec.Command("go", "build", "-o", pig, "./cmd/pig")
+	ompig := filepath.Join(dir, "ompig")
+	build := exec.Command("go", "build", "-o", ompig, "./cmd/ompig")
 	build.Dir = root
 	if out, err := build.CombinedOutput(); err != nil {
-		t.Fatalf("build pig: %v\n%s", err, out)
+		t.Fatalf("build ompig: %v\n%s", err, out)
 	}
 	var searchBytes int64
 	measure := func(name string, bytes int64) (sessionscale.Meta, map[string]point) {
@@ -44,7 +44,7 @@ func TestResumeMemoryAndPromptCostFollowTheContext(t *testing.T) {
 		}
 		searchBytes = fixtureSearchTextBytes(t, fixture)
 		out := filepath.Join(dir, name+".jsonl")
-		if err := run([]string{"-arm", "pig", "-cmd", pig + " -ne", "-fixture", fixture, "-prompts", "10", "-out", out, "-timeout", "20m"}); err != nil {
+		if err := run([]string{"-arm", "ompig", "-cmd", ompig + " -ne", "-fixture", fixture, "-prompts", "10", "-out", out, "-timeout", "20m"}); err != nil {
 			t.Fatalf("%s: %v", name, err)
 		}
 		f, err := os.Open(out)

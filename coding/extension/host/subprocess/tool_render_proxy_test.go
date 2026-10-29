@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 const toolRendererExtension = `export default function (pi) {
@@ -197,12 +197,12 @@ func toolRendererFactory(t *testing.T, language, name string) ExtConfig {
 			t.Fatal("SDK go.mod has no language floor")
 		}
 		floor, _, _ := strings.Cut(directive, "\n")
-		write("go.mod", "module "+module+"\n\ngo "+floor+"\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n")
+		write("go.mod", "module "+module+"\n\ngo "+floor+"\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n")
 		write("ext.go", fmt.Sprintf(`package ext
 import (
     "errors"
     "fmt"
-    "github.com/MichaelKinsy/PiG/extensions/sdk"
+    "github.com/tmih06/ompig/extensions/sdk"
 )
 func Extension() *sdk.Extension {
     ext := sdk.New(%q)
@@ -235,10 +235,10 @@ func Extension() *sdk.Extension {
 `, name))
 		return packedFactoryConfig(name, dir, module, name)
 	case "python":
-		write(name+".py", fmt.Sprintf(`import pig_sdk
+		write(name+".py", fmt.Sprintf(`import ompig_sdk
 
 def new_extension():
-    ext = pig_sdk.Extension(%q)
+    ext = ompig_sdk.Extension(%q)
     ext.tool("card_tool", "renders its own card", {"type": "object"}, lambda _ctx, _params: "ok")
 
     def render_call(_ctx, args, render, width):
@@ -268,7 +268,7 @@ def new_extension():
 		if err := os.Mkdir(filepath.Join(dir, "src"), 0o700); err != nil {
 			t.Fatal(err)
 		}
-		write("src/lib.rs", fmt.Sprintf(`use pig_sdk::{Extension, ToolRenderShell, ToolResult};
+		write("src/lib.rs", fmt.Sprintf(`use ompig_sdk::{Extension, ToolRenderShell, ToolResult};
 use serde_json::json;
 pub fn new_extension() -> Extension {
     let mut ext = Extension::new(%q);

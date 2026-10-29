@@ -7,10 +7,10 @@ import (
 	"sync/atomic"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent-session.ts:917-921 delivers public listeners before persistence, and
@@ -67,7 +67,7 @@ func TestSessionPublicListenersPrecedePersistenceAndTools(t *testing.T) {
 }
 
 func BenchmarkSessionSendWithSubscriber(b *testing.B) {
-	b.Setenv("PIG_HOME", b.TempDir())
+	b.Setenv("OMPIG_HOME", b.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: b.TempDir()})
 	if err != nil {
 		b.Fatal(err)

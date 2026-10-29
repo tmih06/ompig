@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent-loop.ts:421-438 ignores a content event when no start has established partialMessage; terminal fallback then emits start/end.

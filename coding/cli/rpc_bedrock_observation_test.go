@@ -20,7 +20,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 var bedrockRPCRuns = flag.Int("rpc33-bedrock-runs", 200, "runs per Bedrock ConverseStream RPC observation case")
@@ -46,13 +46,13 @@ type bedrockRPCInputs struct {
 	Deliveries []string
 }
 
-// TestRPCBedrockConverseStreamObservation runs the real pig binary in --mode rpc against one loopback Bedrock ConverseStream server and compares the first assistant message_start (the start state) with Pi 0.87.1's for every shape and delivery of the oracle, run after run. With -rpc33-bedrock-full it compares every record of that message.
-// The oracle's HTTP/1 rows apply: PiG's loopback connection is HTTP/1.1, and Pi's h1 and h2 rows are identical.
+// TestRPCBedrockConverseStreamObservation runs the real ompig binary in --mode rpc against one loopback Bedrock ConverseStream server and compares the first assistant message_start (the start state) with Pi 0.87.1's for every shape and delivery of the oracle, run after run. With -rpc33-bedrock-full it compares every record of that message.
+// The oracle's HTTP/1 rows apply: Ompig's loopback connection is HTTP/1.1, and Pi's h1 and h2 rows are identical.
 // upstream: packages/coding-agent/src/modes/rpc/rpc-mode.ts:354-363; packages/ai/src/api/bedrock-converse-stream.ts;
 // oracle: coding/testdata/rpc33-observation/providers/bedrock-converse-stream/probe.mjs.
 func TestRPCBedrockConverseStreamObservation(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and runs the pig binary")
+		t.Skip("builds and runs the ompig binary")
 	}
 	t.Parallel()
 	var oracle bedrockRPCOracleFile
@@ -201,7 +201,7 @@ func runBedrockRPCOnce(t *testing.T, bin string, inputs *bedrockRPCInputs, shape
 	var requests atomic.Int32
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.Copy(io.Discard, r.Body)
-		// Only the model's ConverseStream request takes a response slot. A foreign client that reaches this reused loopback port must not consume the first body, or PiG's first request would receive the follow-up body and its buffered start state.
+		// Only the model's ConverseStream request takes a response slot. A foreign client that reaches this reused loopback port must not consume the first body, or Ompig's first request would receive the follow-up body and its buffered start state.
 		if r.Method != http.MethodPost || r.URL.Path != "/model/strict/converse-stream" {
 			http.NotFound(w, r)
 			return
@@ -240,7 +240,7 @@ func runBedrockRPCOnce(t *testing.T, bin string, inputs *bedrockRPCInputs, shape
 	}
 	cmd := exec.Command(bin, "--mode", "rpc", "--offline", "--no-extensions", "--model", "p/strict", "--no-context-files", "--no-skills", "--session-dir", filepath.Join(dir, "s"))
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "HOME="+dir, "PIG_CODING_AGENT_DIR="+agentDir, "PIG_HOME="+filepath.Join(dir, "pighome"), "AWS_BEDROCK_SKIP_AUTH=1")
+	cmd.Env = append(os.Environ(), "HOME="+dir, "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_HOME="+filepath.Join(dir, "pighome"), "AWS_BEDROCK_SKIP_AUTH=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)

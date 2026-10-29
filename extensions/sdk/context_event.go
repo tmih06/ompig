@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Context transforms carry message-list identity across JSON without exposing
@@ -67,10 +67,10 @@ func contextEventResult(data map[string]any, snapshot []any, result any, pristin
 	})
 	if unchanged && pristine != nil {
 		if sent := pristine(); sent != nil && reflect.DeepEqual(messages, sent) {
-			return map[string]any{"_pigContextUnchanged": true}
+			return map[string]any{"_ompigContextUnchanged": true}
 		}
 	}
-	return map[string]any{"messages": messages, "_pigContextUnchanged": unchanged}
+	return map[string]any{"messages": messages, "_ompigContextUnchanged": unchanged}
 }
 
 // typedContextEventResult reports a result whose messages value is not a list
@@ -91,7 +91,7 @@ func typedContextEventResult(result any) (any, bool) {
 		return result, true
 	}
 	if returned.Messages != nil {
-		return map[string]any{"messages": returned.Messages, "_pigContextUnchanged": false}, true
+		return map[string]any{"messages": returned.Messages, "_ompigContextUnchanged": false}, true
 	}
 	return nil, false
 }

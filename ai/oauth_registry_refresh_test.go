@@ -59,7 +59,7 @@ func useOAuthProvider(t *testing.T, provider OAuthProviderInterface) {
 // TestResolveOAuthAPIKeyFromStorage_RefreshFailurePreservesStoredCredential
 // closes the failure half of the auth-refresh risk-core surface. Upstream throws
 // when a token refresh fails; it never returns a silent key and never persists a
-// broken credential. pig must surface the error and leave the stored credential
+// broken credential. ompig must surface the error and leave the stored credential
 // untouched so a transient refresh outage does not corrupt auth.json.
 func TestResolveOAuthAPIKeyFromStorage_RefreshFailurePreservesStoredCredential(t *testing.T) {
 	calls := 0

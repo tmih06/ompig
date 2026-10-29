@@ -32,7 +32,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Wire names of the built-in tool calls (coding/extension/host/subprocess/protocol_builtin_tool.go).

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Ports packages/durable/src/harness/agent.ts DEFAULT_RETRY_POLICY and DEFAULT_COMPACTION_POLICY: the values, and that settings

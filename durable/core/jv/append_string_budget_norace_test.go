@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // fastestNs is the lowest ns/op of each run over rounds that alternate between them, so one descheduled run or a slow
@@ -50,8 +50,8 @@ func TestAppendString200KBudget(t *testing.T) {
 	}
 	// A wall-clock ratio: it runs in the serial startup-proxies job (automation/perf/startup-proxies.json requires it there),
 	// not beside the parallel test packages, whose memory-bandwidth contention halves the ratio on a 4-CPU runner.
-	if os.Getenv("PIG_SERIAL_TIMING") == "" {
-		t.Skip("wall-clock ratio: run by make startup-proxies (PIG_SERIAL_TIMING=1)")
+	if os.Getenv("OMPIG_SERIAL_TIMING") == "" {
+		t.Skip("wall-clock ratio: run by make startup-proxies (OMPIG_SERIAL_TIMING=1)")
 	}
 	payload := writeText()
 	buf := make([]byte, 0, 2*len(payload))

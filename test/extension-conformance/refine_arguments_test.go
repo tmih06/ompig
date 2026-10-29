@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The "probe" cases of test/parity/sdk-vectors/pi-ai/validateToolArguments.json: Pi's own validateToolArguments for a tool whose parameters carry TypeBox refinements, with the answer

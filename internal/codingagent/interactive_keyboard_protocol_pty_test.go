@@ -15,18 +15,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
-const keyboardProtocolChildEnv = "PIG_TEST_KEYBOARD_PROTOCOL_CHILD"
+const keyboardProtocolChildEnv = "OMPIG_TEST_KEYBOARD_PROTOCOL_CHILD"
 
 // vtKeyboardModel is the part of a terminal that the Kitty keyboard protocol
 // depends on: the main and alternate screens each keep their own flag stack
 // (https://sw.kovidgoyal.net/kitty/keyboard-protocol/#progressive-enhancement).
 // A pop on an empty stack is recorded because a terminal ignores it silently
-// while PiG would be disturbing whatever the user's shell had pushed.
+// while Ompig would be disturbing whatever the user's shell had pushed.
 type vtKeyboardModel struct {
 	alt       bool
 	main, top []int

@@ -8,7 +8,7 @@ package ai
 // GeneratedModel is a static catalog entry for one model. Lives in
 // generated code so the registry init is just a slice copy. Field
 // shape mirrors upstream pi-ai's `Model<api>` discriminated union
-// reduced to the fields the pig runtime actually consumes.
+// reduced to the fields the ompig runtime actually consumes.
 type GeneratedModel struct {
 	ID                   string
 	Provider             string

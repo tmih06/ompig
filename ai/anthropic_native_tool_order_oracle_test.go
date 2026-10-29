@@ -13,7 +13,7 @@ import (
 // With native tool changes, buildParams sends the initial tools followed by DEFERRED_TOOL_PLACEHOLDER (anthropic-messages.ts:1205-1218),
 // whose literal writes name, description, input_schema { type, properties, required } and then defer_loading (:204-209). A later tool
 // is defined by value in a tool_addition block through the same convertTools (:1149-1152), so its definition keeps convertTools' member
-// order. Pi's own buildParams writes the oracle through onPayload; PiG's are the tools and messages members of the HTTP request body.
+// order. Pi's own buildParams writes the oracle through onPayload; Ompig's are the tools and messages members of the HTTP request body.
 func TestAnthropicNativeToolChangesPlaceholderAndDefinitionsFollowPiMemberOrder(t *testing.T) {
 	const initialTool = `{"name":"read","description":"Read a file","parameters":{"type":"object","properties":{"path":{"type":"string"},"offset":{"type":"number"}},"required":["path"]}}`
 	const laterTool = `{"name":"lookup","description":"Look up","parameters":{"required":["query"],"properties":{"query":{"type":"string"},"limit":{"type":"number"}},"type":"object"}}`

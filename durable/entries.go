@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/durable/src/entries.ts

@@ -3,12 +3,12 @@ package agent
 import (
 	"testing"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
-// A member Pi wrote with a value PiG's field omits (an empty optional string, redacted: false, an empty text signature) is part of the object
-// JSON.stringify writes back, so a message holding one writes its decoded text; the member scan must not accept it as PiG's own encoding.
+// A member Pi wrote with a value Ompig's field omits (an empty optional string, redacted: false, an empty text signature) is part of the object
+// JSON.stringify writes back, so a message holding one writes its decoded text; the member scan must not accept it as Ompig's own encoding.
 func TestDecodedMessageKeepsMembersTheFieldsOmit(t *testing.T) {
 	usage := `"usage":{"input":1,"output":1,"cacheRead":0,"cacheWrite":0,"totalTokens":2,"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0,"total":0}}`
 	for _, text := range []string{

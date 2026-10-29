@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // A tool an extension registers after load makes the Session rebuild its registry, as Pi does, and the rebuild must not do again what it already did for the tools that did not change: a tool is wrapped, which decodes its schema, once per registration, not once per refresh. The allocations a refresh makes for each registered tool therefore stay a few, at any registry size, where wrapping every tool again made hundreds.

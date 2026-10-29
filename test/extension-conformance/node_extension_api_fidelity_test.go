@@ -9,10 +9,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Where the Node runtime departs from Pi 0.99.1 in how the extension API behaves while the factory runs and while a handler runs (review of port-99-f6f-node, items B-G). Each row binds its assertion to a value only the Host can produce or that Pi's own ordering produces, so a runtime that defers the work, or answers from state it replicated earlier, cannot match.

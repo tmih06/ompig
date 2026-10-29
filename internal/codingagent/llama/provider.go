@@ -12,10 +12,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // Ports packages/coding-agent/src/extensions/llama/provider.ts.
@@ -381,7 +381,7 @@ func toPiModel(model LlamaModelInfo, serverURL string, props *LlamaServerProps, 
 		Compat:        ModelCompat{SupportsUsageInStreaming: true, MaxTokensField: "max_tokens"},
 	}
 	if reasoning {
-		// pig divergence (D90): Pi maps only off and medium and sends no budget. Every budgeted level is offered and sends its thinking_budget_tokens; xhigh would send high's budget, so it stays unsupported.
+		// ompig divergence (D90): Pi maps only off and medium and sends no budget. Every budgeted level is offered and sends its thinking_budget_tokens; xhigh would send high's budget, so it stays unsupported.
 		off, minimal, low, medium, high := "off", "minimal", "low", "medium", "high"
 		result.ThinkingLevelMap = &ThinkingLevelMap{Off: &off, Minimal: &minimal, Low: &low, Medium: &medium, High: &high}
 		result.Compat.ThinkingFormat = "qwen-chat-template"

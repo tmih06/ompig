@@ -49,7 +49,7 @@ func TestParseEvalCliMatchesUpstream(t *testing.T) {
 		t.Fatalf("oracle holds %d cases", len(cases))
 	}
 	for _, c := range cases {
-		// The oracle names TypeScript files; PiG's documentation evals are Go files.
+		// The oracle names TypeScript files; Ompig's documentation evals are Go files.
 		args := make([]string, len(c.Args))
 		for i, arg := range c.Args {
 			args[i] = strings.Replace(arg, ".docs.eval.ts", DocsEvalSuffix, 1)

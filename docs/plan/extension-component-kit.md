@@ -11,16 +11,16 @@ boundary) and the "Custom TUI components" high-risk gap in
 
 Pi passes in-process `Component` objects to every extension UI surface
 (`ctx.ui.custom`, `setWidget`, `setHeader`/`setFooter`, tool `renderCall`/
-`renderResult`, message and entry renderers). PiG's subprocess wire carries
+`renderResult`, message and entry renderers). Ompig's subprocess wire carries
 only ANSI `lines`. Node authors still get Pi's component library, because they
 import the real pi-tui inside the Node runtime. Go, Rust and Python authors can
 only draw lines. A D91 frontend sees every extension surface as an opaque
 `Lines` blob.
 
-Decision: a **shared component kit rendered by PiG**.
+Decision: a **shared component kit rendered by Ompig**.
 
 - Go, Rust and Python extensions describe Pi's standard components as a
-  declarative tree, the **view**. PiG's host renders the view with its Go `tui`
+  declarative tree, the **view**. Ompig's host renders the view with its Go `tui`
   ports, so the terminal shows what Pi's components draw.
 - The Node runtime reads its real pi-tui components into the same view after
   the render it already performs. The lines Node rendered stay authoritative.
@@ -30,7 +30,7 @@ Decision: a **shared component kit rendered by PiG**.
   and falls back to the lines for anything it does not draw natively.
 - A custom `render(width)` component stays an opaque `lines` range in every
   SDK, as in Pi.
-- Stock PiG has no frontend. Without one, the terminal output and the cost of
+- Stock Ompig has no frontend. Without one, the terminal output and the cost of
   every existing extension are unchanged: Node sends no view, and the host
   builds no frontend structure.
 
@@ -59,7 +59,7 @@ constructor argument), the omitted value is the zero value given below.
 Upstream citations are relative to `.upstream/current/packages/tui/src/`,
 unless prefixed `ca:` for `.upstream/current/packages/coding-agent/src/`.
 
-| kind | fields (wire default) | upstream | PiG Go port the host renders with |
+| kind | fields (wire default) | upstream | Ompig Go port the host renders with |
 |---|---|---|---|
 | `container` | `children` | `tui.ts:347-406` `Container` | `tui/tui.go` `NewContainer` |
 | `box` | `paddingX` (1), `paddingY` (1), `bg` (none), `children` | `components/box.ts:14-37` `Box(paddingX=1, paddingY=1, bgFn?)` | `tui/box.go` `Box` |
@@ -68,7 +68,7 @@ unless prefixed `ca:` for `.upstream/current/packages/coding-agent/src/`.
 | `markdown` | `text`, `paddingX` (0), `paddingY` (0), `defaultTextStyle` {`color` fg token, `bgColor` bg token, `bold`, `italic`, `strikethrough`, `underline`}, `renderLatex` (true) | `components/markdown.ts:181-194, 236-268`; theme `ca:modes/interactive/theme/theme.ts:1095-1132` `getMarkdownTheme()` | `tui/markdown.go`, `tui/markdown_style.go` |
 | `spacer` | `lines` (1) | `components/spacer.ts:6-13` | `tui/spacer.go` |
 | `dynamic-border` | `color` fg token ("border") | `ca:modes/interactive/components/dynamic-border.ts:11-25` | `tui/dynamic_border.go` |
-| `select-list` | `id` (required), `items` [{`value`, `label`, `description`?}], `maxVisible` (5), `layout` {`minPrimaryColumnWidth`, `maxPrimaryColumnWidth`}, `selectedIndex`?, `filter`? | `components/select-list.ts:12-60` (state `items`, `filteredItems`, `selectedIndex`; `setFilter`, `setSelectedIndex`); theme `ca:theme.ts:1134-1142` `getSelectListTheme()` | new faithful port `tui/select_list.go` `SelectList` (PiG had only `FilterableList`, which adds a search row and differs in wrap and defaults) |
+| `select-list` | `id` (required), `items` [{`value`, `label`, `description`?}], `maxVisible` (5), `layout` {`minPrimaryColumnWidth`, `maxPrimaryColumnWidth`}, `selectedIndex`?, `filter`? | `components/select-list.ts:12-60` (state `items`, `filteredItems`, `selectedIndex`; `setFilter`, `setSelectedIndex`); theme `ca:theme.ts:1134-1142` `getSelectListTheme()` | new faithful port `tui/select_list.go` `SelectList` (Ompig had only `FilterableList`, which adds a search row and differs in wrap and defaults) |
 | `settings-list` | `id` (required), `items` [{`id`, `label`, `description`?, `currentValue`, `values`?, `submenu`?: Node}], `maxVisible` (required, 0 → 1), `enableSearch` (false), `selectedIndex`? (state `selectedIndex`, an index into the shown items), `filter`? (the search input's value) | `components/settings-list.ts:7-75`; theme `ca:theme.ts:1151-1159` `getSettingsListTheme()` | `tui/settings_list.go` `NewSettingsListWithOptions`, given Pi's theme (§6) |
 | `image` | `ref` (required), `mimeType` (required), `maxWidthCells`?, `maxHeightCells`?, `filename`?, `imageId`? (Kitty id; absent: the host allocates one as upstream does), `fallbackColor` fg token (none) | `components/image.ts:44-90` `Image(base64, mimeType, theme, options)` | `tui/image.go` `NewImage` |
 | `loader` | `message` ("Loading..."), `spinnerColor` fg token (none), `messageColor` fg token (none), `indicator`? {`frames`?, `intervalMs`?}, `frame`? (state `currentFrame`, 0) | `components/loader.ts:17-101` | `tui/loader.go` `Loader`, animated by the host from `frame` (§4.4) |
@@ -97,8 +97,8 @@ Rules that keep the schema closed and faithful:
   passes them through exactly as Pi would. A frontend shows them as styled
   spans where it can. Pi's theme tokens apply to what the components
   themselves style.
-- **`lines` annotations** are PiG-only and frontend-only: `image` says the
-  rows depict that image, as pig-music's half-block cover does, `progress`
+- **`lines` annotations** are Ompig-only and frontend-only: `image` says the
+  rows depict that image, as ompig-music's half-block cover does, `progress`
   says the rows show a position in a range, as a play bar does, and `list`
   says the rows are a list with one item per row, as a track table is
   (`label` the primary text, `detail` a secondary text, `columns` the further
@@ -129,7 +129,7 @@ Go port the main transcript uses, so the terminal shows the bytes Pi's
 component draws, and a frontend gets the nodes the main transcript reports
 (§8).
 
-| kind | fields (wire default) | upstream | PiG Go port |
+| kind | fields (wire default) | upstream | Ompig Go port |
 |---|---|---|---|
 | `user-message` | `text` (""), `outputPad` (1) | `ca:modes/interactive/components/user-message.ts:19-31` `UserMessageComponent(text, getMarkdownTheme(), outputPad=1, [])` | `tui/user_message_block.go` `NewUserMessageComponent`, `SetOutputPad` |
 | `assistant-message` | `message`? {`content` [{`type`: `text` with `text`, `thinking` with `thinking`, or `toolCall`}], `stopReason` ("stop"), `errorMessage` ("")}, `hideThinkingBlock` (false), `hiddenThinkingLabel` ("Thinking..."), `outputPad` (1), `isStreaming` (false) | `ca:modes/interactive/components/assistant-message.ts:26-201` constructor and `updateContent(message, isStreaming)` | `tui/assistant_message_block.go` `AssistantMessageComponent` (`SetContent`, `SetHasToolCalls`, `SetTerminalError`, `SetHideThinkingBlock`, `SetHiddenThinkingLabel`, `SetOutputPad`) |
@@ -273,7 +273,7 @@ For authoritative views, **the host owns interactive state**: the selection,
 filter, scroll window, search input, the open submenu, and each setting's
 current value after a change. It holds one `tui.SelectList` or
 `tui.SettingsList` per `(surface, id)`, and runs the user's keybindings
-(`tui.select.*`) on PiG's loop with Pi's own key handling. An SDK has no
+(`tui.select.*`) on Ompig's loop with Pi's own key handling. An SDK has no
 keybinding table and no port of these components, so moving the state into
 the SDK would mean three re-ports that drift. In Node, state stays in the
 real pi-tui component inside the Node runtime, exactly as in Pi; its view
@@ -317,7 +317,7 @@ behaves the same way, since SelectList ignores keys it does not bind.
 **Mouse (Pi parity).** In fullscreen `tuiMode` Pi routes a normalized
 `TuiMouseEvent` to the component under the pointer, with `x`/`y` local to
 it; regular mode routes none (`tui-alt-screen.ts`, `tui.ts` `handleMouse`).
-PiG does the same for `ui.custom` components (overlay and editor slot). A
+Ompig does the same for `ui.custom` components (overlay and editor slot). A
 component that takes the mouse sets `mouse: true` on its `ui.custom.render`
 frame, and the host sends it notify `ui.custom.mouse` with `{key, event}`,
 the event in `TuiMouseEvent`'s JSON names (`type, button, x, y, screenX,
@@ -343,7 +343,7 @@ loop, and the author then calls `tui.requestRender()` or `done(value)`:
 (`select-list.ts:49-51, 145-170, 262-267`); `onChange(id, newValue)` and
 `onCancel()` for SettingsList (`settings-list.ts:45-46, 222-300`).
 
-PiG keeps the ordering and moves the callback across the process:
+Ompig keeps the ordering and moves the callback across the process:
 
 1. The host runs the component's `handleInput` on its UI loop. The state
    change is drawn in the same frame, so there is no round trip before the
@@ -426,7 +426,7 @@ and compares the bytes. The parity families `startup`,
   equivalent is an author passing a style function of their own.
 - An unknown token or a malformed color makes the view invalid (§5.2).
 - A frontend applies its own theme for every token the view does not
-  override, and the override for the ones it does. pig-music sets
+  override, and the override for the ones it does. ompig-music sets
   `accent` to the track color.
 
 ## 7. Image transport
@@ -469,7 +469,7 @@ A dock `Lines` blob gets a view only when one of its components has one. The
 view is then a `container` of each component's view, or a `lines` range for a
 component without one.
 
-The conversation kinds (§2.1) carry the nodes PiG's main transcript reports
+The conversation kinds (§2.1) carry the nodes Ompig's main transcript reports
 for the same component, so a frontend draws them with its transcript
 renderers. `ViewNode.Transcript` holds them: a `user-message` has a
 `MarkdownText` with `RoleUser`; an `assistant-message` has one
@@ -492,10 +492,10 @@ setting's `id`. The keys are computed from the view's selection and filter, as
 for `Selector`/`Settings`, and travel through terminal input to the focused
 node (§4.3). An action on a node that is not the view's `focus` does nothing.
 
-`Env.Click` reaches view elements too (`pig additive (D91)`):
+`Env.Click` reaches view elements too (`ompig additive (D91)`):
 `Click.ViewPath` names a view node by the index of each child on its path,
 so `Row` and `Column` count from that node's first cell, and
-`Click.Item` names a select-list item's `value` or a setting's `id`. PiG turns
+`Click.Item` names a select-list item's `value` or a setting's `id`. Ompig turns
 the click into the gesture a terminal sends at the cell that element occupies
 in the fullscreen layout (`press`, then `release` and `click` to the component
 that took the press; when none took it, `release` to the component under the
@@ -504,7 +504,7 @@ the same local `x`/`y`. Clicks count as Pi counts a terminal's: one on the
 cell and component of the click before it, within Pi's 500 ms double-click
 interval, has `clickCount` 2, then 3. `Click.Count` is the session's own
 count, such as Tern's `activate` after a double click's second click on a
-list item (`Count` 2), which PiG delivers with `clickCount` 2 only when it
+list item (`Count` 2), which Ompig delivers with `clickCount` 2 only when it
 had not counted that click 2 already. A list item scrolled out of the window
 is wheeled into view first. It works on overlay (`overlay.N`) and dock views
 only while the run's `tuiMode` is fullscreen, and does nothing otherwise.
@@ -516,7 +516,7 @@ transcript views.
 
 **Frontend flag.** `StatePayload.frontend` is true while a frontend session
 draws: set in `openFrontend` and cleared in `leaveFrontend`, and pushed with
-`state_update`. Stock PiG never sets it. With it false:
+`state_update`. Stock Ompig never sets it. With it false:
 
 - Node walks nothing and sends no view;
 - Go, Rust and Python omit frontend-only `lines` annotations and their image
@@ -531,12 +531,12 @@ every mode, because they are the content.
 Interface and behavior are identical across SDKs. Only naming follows each
 language.
 
-| capability | Go (`extensions/sdk`, `extensions/sdk/kit`) | Rust (`pig_sdk::kit`) | Python (`pig_sdk.kit`) |
+| capability | Go (`extensions/sdk`, `extensions/sdk/kit`) | Rust (`ompig_sdk::kit`) | Python (`ompig_sdk.kit`) |
 |---|---|---|---|
 | node constructors (upstream positional order and defaults) | `kit.NewContainer(...)`, `kit.NewBox(px, py)`, `kit.NewText(text, px, py)`, `kit.NewTruncatedText`, `kit.NewMarkdown(text, px, py)`, `kit.NewSpacer(n)`, `kit.NewDynamicBorder(token)`, `kit.NewSelectList(id, items, maxVisible)`, `kit.NewSettingsList(id, items, maxVisible)`, `kit.NewImage(data, mimeType)`, `kit.NewLoader(message)`, `kit.NewHStack`/`NewVStack`, `kit.NewLines(lines)` | `kit::Container::new()`, `kit::Text::new(text, px, py)`, … | `kit.Container(...)`, `kit.Text(text, padding_x=1, padding_y=1)`, … |
 | a view | `kit.View{Root, Focus, Theme}` | `kit::View` | `kit.View` |
 | ui.custom with a view | a component implementing `ViewComponent` (`View(width int) kit.View` + `HandleInput`), optionally `ViewEventHandler` (`HandleViewEvent(kit.Event) (RemoteComponentResult, error)`) | trait `ViewComponent` (`view`, `handle_input`, `handle_view_event`) | protocol `ViewComponent` (`view(width)`, `handle_input`), optionally protocol `ViewEventHandler` (`handle_view_event(event)`) |
-| mouse (ui.custom, fullscreen) | optional `sdk.MouseHandler` (`HandleMouse(sdk.MouseEvent) (RemoteComponentResult, error)`) on a `RemoteComponent` or `ViewComponent` | `handles_mouse` + `handle_mouse(&MouseEvent)` on `RemoteComponent`/`ViewComponent` | protocol `pig_sdk.MouseHandler` (`handle_mouse(MouseEvent)`) |
+| mouse (ui.custom, fullscreen) | optional `sdk.MouseHandler` (`HandleMouse(sdk.MouseEvent) (RemoteComponentResult, error)`) on a `RemoteComponent` or `ViewComponent` | `handles_mouse` + `handle_mouse(&MouseEvent)` on `RemoteComponent`/`ViewComponent` | protocol `ompig_sdk.MouseHandler` (`handle_mouse(MouseEvent)`) |
 | widget | `ctx.SetWidget(key, kit.View, opts...)` | `ctx.set_widget_view(key, view, opts)` | `ctx.set_widget(key, kit.View, options)` |
 | header/footer | `ctx.SetHeaderView(view)`, `ctx.SetFooterView(view)` | `set_header_view`/`set_footer_view` | `set_header_view`/`set_footer_view` |
 | tool renderers | `ToolRenderers.CallView`, `ToolRenderers.ResultView` (returning `kit.View`, same `ToolRenderContext` and width as the line forms), on `SetToolRenderers`, resolver results and tool definitions alike; a view form declares the phase rendered and wins over a line form set for the same phase | `ToolRendererSet { call_view, result_view }`, tool `render_call_view`/`render_result_view`, `ext.render_tool_call_view`/`render_tool_result_view` | `ToolRenderers(call_view=, result_view=)`, `ToolDefinition(call_view=, result_view=)`, `ext.tool_renderers(..., call_view=, result_view=)` |
@@ -590,7 +590,7 @@ signature is unchanged. A line-returning author keeps today's wire exactly.
 
 **Node author-supplied annotations and overrides.** Pi's components cannot
 say what a frontend-only annotation would, so Node authors declare them on
-the component, as PiG-only properties typed in `extensions/sdk-ts`: a
+the component, as Ompig-only properties typed in `extensions/sdk-ts`: a
 component whose rows become a `lines` range may set `viewLines` (`{image?,
 progress?, list?}`, the §2 shapes, with `image` as `{data, mimeType}`), and a
 surface's root component may set `viewTheme` (§13.3). The runtime sends them
@@ -704,9 +704,9 @@ Row `TestConformance_ComponentKitRendersPiComponents`
 ## 12. Risks
 
 - **Port fidelity.** For authoritative views, terminal parity depends on
-  PiG's ports. `SelectList` is a new port and gets an upstream-derived test.
+  Ompig's ports. `SelectList` is a new port and gets an upstream-derived test.
   `SettingsList` gains Pi's theme argument. A port bug shows in both the
-  kit and the native PiG UI, and is fixed at the port.
+  kit and the native Ompig UI, and is fixed at the port.
 - **Host-owned state.** An author cannot read the selection synchronously,
   because it arrives as events. Pi authors usually read it in `onSelect` and
   `onSelectionChange` anyway; `getSelectedItem()` has no remote equivalent.
@@ -726,12 +726,12 @@ Row `TestConformance_ComponentKitRendersPiComponents`
 
 Decided by the coordinator on 2026-10-06:
 
-1. `accent2`: no PiG-only token. pig-music has no second accent, so nothing
+1. `accent2`: no Ompig-only token. ompig-music has no second accent, so nothing
    maps to one. Revisit only when a real extension needs one.
 2. Track tables: the frontend-only `list` annotation on `lines` (§2), with
    `columns` for the table cells. The rows stay the extension's own.
 3. Node per-surface overrides: yes, all four SDKs have them. A surface's
-   root component may set the PiG-only `viewTheme` ({token: "#rrggbb"}, the
+   root component may set the Ompig-only `viewTheme` ({token: "#rrggbb"}, the
    §6 set), typed in `extensions/sdk-ts` by augmenting pi-tui `Component`.
    The runtime renders that surface with those tokens overridden in every
    mode (`tui.WithTokenColors` semantics: the palette's color mode, faint

@@ -1,6 +1,6 @@
 # Pi 1.0.0 agent-loop.ts createToolResultMessage sets `details: finalized.result.details`; rpc-mode.ts writes events and get_messages/get_entries results with JSON.stringify, which writes null and omits undefined.
 # An extension tool that returns details: null therefore shows "details":null in tool_execution_end, in every toolResult message event, in get_messages and in the session entry that get_entries returns.
-# PiG's ToolResultMessage dropped the null (an omitempty any), so the message events, get_messages and get_entries had no details member.
+# Ompig's ToolResultMessage dropped the null (an omitempty any), so the message events, get_messages and get_entries had no details member.
 # Full JSON records are compared: canonical_json only sorts keys; it keeps extra/missing fields, nulls and event order.
 name = "43-rpc-extension-tool-null-details"
 description = "RPC events, get_messages and get_entries keep an extension tool's details: null"
@@ -26,10 +26,10 @@ wait_contains = ['"command":"get_entries","success":true']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PARITY_DETAILS_REPORT={{TEMP}}/null-details.jsonl"]
+ompig = ["OMPIG_TEST_FAUX=1", "PARITY_DETAILS_REPORT={{TEMP}}/null-details.jsonl"]
 pi = ["PARITY_DETAILS_REPORT={{TEMP}}/null-details.jsonl"]
-pig_extensions = ["../json/testdata/ext/parity-null-details.mjs"]
-pig_args = ["--offline", "--model", "test-faux/faux-1", "--system-prompt", "RPC wire probe.", "--no-context-files", "--no-skills", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["../json/testdata/ext/parity-null-details.mjs"]
+ompig_args = ["--offline", "--model", "test-faux/faux-1", "--system-prompt", "RPC wire probe.", "--no-context-files", "--no-skills", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../json/testdata/ext/parity-null-details.mjs"]
 pi_args = ["--offline", "--model", "test-faux/faux-1", "--system-prompt", "RPC wire probe.", "--no-context-files", "--no-skills", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 

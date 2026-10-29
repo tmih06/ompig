@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Pi input.ts:60-63 preserves the UTF-16 cursor even inside a surrogate pair.

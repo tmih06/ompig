@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A provider builds its output as role, content, api, provider, model, usage, stopReason, timestamp and assigns responseId, responseModel and errorMessage afterwards (packages/ai/src/api/openai-completions.ts output literal and :564-566; the catch block's errorMessage), and the session file and get_entries keep that order.

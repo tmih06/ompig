@@ -8,7 +8,7 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig = ["PIG_CODING_AGENT_DIR=testdata/package-npm-name/agent", "PIG_HOME=testdata/empty-home"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/package-npm-name/agent", "OMPIG_HOME=testdata/empty-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/package-npm-name/agent"]
 
 [cli]
@@ -26,6 +26,6 @@ runs = 3
 
 # normalize-rationale: npm receives independent agent-directory snapshots. Preserve every argument and its order, replacing only that directory prefix.
 [[assert.normalize_replace]]
-pattern = '"[^"\r\n]*/parity-snap-(PI|PIG)_CODING_AGENT_DIR-[^/"\r\n]+/npm"'
+pattern = '"[^"\r\n]*/parity-snap-(PI|OMPIG)_CODING_AGENT_DIR-[^/"\r\n]+/npm"'
 with = '"AGENT/npm"'
 reason = "The binaries receive separate temporary agent directories."

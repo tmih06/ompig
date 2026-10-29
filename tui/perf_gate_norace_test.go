@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // keystrokeScreen is a main screen with history messages of markdown above a focused editor, rendered once.

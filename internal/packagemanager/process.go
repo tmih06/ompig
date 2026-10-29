@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/crossspawn"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/crossspawn"
 )
 
 // Ports packages/coding-agent/src/core/package-manager.ts (spawnCommand, runCommand).
@@ -77,7 +77,7 @@ func packageCommand(ctx context.Context, dir, name string, args ...string) *exec
 // the command line stays Pi's and no config file is written; it is appended
 // after any entries the environment already carries, and elsewhere env is
 // returned unchanged.
-// pig additive (D18): upstream rejects file:// sources.
+// ompig additive (D18): upstream rejects file:// sources.
 func GitLongPathsEnv(goos string, env []string) []string {
 	if goos != "windows" {
 		return env

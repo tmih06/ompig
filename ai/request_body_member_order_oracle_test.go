@@ -15,8 +15,8 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // wireCapture records, per URL path prefix, the raw requests a test server received: HTTP bodies with their anthropic-beta header, and WebSocket text frames in order.
@@ -38,7 +38,7 @@ func (c *wireCapture) get(prefix string) []string {
 }
 
 // requestBodyOrderServer answers Anthropic Messages POSTs with one streamed text reply and Codex WebSocket requests with one completed message per request frame.
-// The first two path segments ("/pi/3", "/pig/codex") name the sender and the probe.
+// The first two path segments ("/pi/3", "/ompig/codex") name the sender and the probe.
 func requestBodyOrderServer(t *testing.T, capture *wireCapture) *httptest.Server {
 	t.Helper()
 	upgrader := websocket.Upgrader{CheckOrigin: func(*http.Request) bool { return true }}
@@ -93,7 +93,7 @@ func requestBodyOrderServer(t *testing.T, capture *wireCapture) *httptest.Server
 
 // anthropic-messages.ts:640-642 sends `{ ...nextParams, stream: true }` for any value a payload hook returns, and the SDK (beta/messages.js create) moves betas into the
 // anthropic-beta header as `betas?.toString()` and JSON.stringifies the rest. openai-codex-responses.ts:1542 sends JSON.stringify({ type: "response.create", ...requestBody }),
-// where a cached continuation is `{ ...body, previous_response_id, input: delta }` (:1472-1476). Pi's own streams send to the same server as PiG's; the recorded bytes and
+// where a cached continuation is `{ ...body, previous_response_id, input: delta }` (:1472-1476). Pi's own streams send to the same server as Ompig's; the recorded bytes and
 // headers must be identical.
 func TestReplacementAndWebSocketBodiesMatchPiOnTheWire(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
@@ -148,7 +148,7 @@ func TestReplacementAndWebSocketBodiesMatchPiOnTheWire(t *testing.T) {
 	}
 
 	for i, replacement := range replacements {
-		provider := NewAnthropicProvider(AnthropicConfig{APIKey: "test-key", Model: "claude-fable-5-1", ProviderID: "anthropic", BaseURL: fmt.Sprintf("%s/pig/%d", server.URL, i)})
+		provider := NewAnthropicProvider(AnthropicConfig{APIKey: "test-key", Model: "claude-fable-5-1", ProviderID: "anthropic", BaseURL: fmt.Sprintf("%s/ompig/%d", server.URL, i)})
 		// The non-object replacements are not Messages requests; the test-binary request check would stop them before the wire.
 		stream, err := provider.Stream(requestvalidity.Allow(t.Context()), NormalizeContext(Context{Messages: []Message{UserMessage{Content: UserText("Hello"), Timestamp: 1}}}), StreamOptions{OnPayload: func(any, *Model) (any, error) {
 			return json.RawMessage(replacement), nil
@@ -160,9 +160,9 @@ func TestReplacementAndWebSocketBodiesMatchPiOnTheWire(t *testing.T) {
 		if err := provider.Close(); err != nil {
 			t.Error(err)
 		}
-		pi, pig := capture.get(fmt.Sprintf("pi/%d", i)), capture.get(fmt.Sprintf("pig/%d", i))
-		if len(pi) != 1 || len(pig) != 1 || pi[0] != pig[0] {
-			t.Errorf("replacement %s: Pi (%s) sent\n%q\nPiG (%s) sent\n%q", replacement, piOutcomes.Anthropic[i], pi, result.StopReason, pig)
+		pi, ompig := capture.get(fmt.Sprintf("pi/%d", i)), capture.get(fmt.Sprintf("ompig/%d", i))
+		if len(pi) != 1 || len(ompig) != 1 || pi[0] != ompig[0] {
+			t.Errorf("replacement %s: Pi (%s) sent\n%q\nOmpig (%s) sent\n%q", replacement, piOutcomes.Anthropic[i], pi, result.StopReason, ompig)
 		}
 	}
 
@@ -174,7 +174,7 @@ func TestReplacementAndWebSocketBodiesMatchPiOnTheWire(t *testing.T) {
 		return json.RawMessage(`{"type":"hooked","zeta":{"y":1,"x":2},` + string(encoded[1:len(encoded)-1]) + `,"7":"seven"}`), nil
 	}
 	defer CloseOpenAICodexWebSocketSessions()
-	provider := NewOpenAICodexResponsesProvider(OpenAICodexResponsesConfig{APIKey: apiKey, Model: "gpt-5.2", ProviderID: "openai-codex", BaseURL: server.URL + "/pig/codex"})
+	provider := NewOpenAICodexResponsesProvider(OpenAICodexResponsesConfig{APIKey: apiKey, Model: "gpt-5.2", ProviderID: "openai-codex", BaseURL: server.URL + "/ompig/codex"})
 	options := StreamOptions{Transport: TransportWebSocketCached, SessionID: sessionID, OnPayload: hook, WebSocketConnectTimeoutMs: new(5000), TimeoutMs: new(5000)}
 	stream, err := provider.Stream(context.Background(), NormalizeContext(Context{Messages: []Message{UserMessage{Content: UserText("one"), Timestamp: 1}}}), options)
 	if err != nil {
@@ -186,17 +186,17 @@ func TestReplacementAndWebSocketBodiesMatchPiOnTheWire(t *testing.T) {
 		t.Fatal(err)
 	}
 	second := stream.Result()
-	pi, pig := capture.get("pi/codex"), capture.get("pig/codex")
-	if len(pi) != 2 || len(pig) != 2 {
-		t.Fatalf("Codex WebSocket frames: Pi %v sent %d, PiG [%s %s] sent %d\nPi:  %q\nPiG: %q", piOutcomes.Codex, len(pi), first.StopReason, second.StopReason, len(pig), pi, pig)
+	pi, ompig := capture.get("pi/codex"), capture.get("ompig/codex")
+	if len(pi) != 2 || len(ompig) != 2 {
+		t.Fatalf("Codex WebSocket frames: Pi %v sent %d, Ompig [%s %s] sent %d\nPi:  %q\nOmpig: %q", piOutcomes.Codex, len(pi), first.StopReason, second.StopReason, len(ompig), pi, ompig)
 	}
 	for i := range pi {
-		if pi[i] != pig[i] {
-			t.Errorf("Codex WebSocket frame %d:\nPi  %s\nPiG %s", i+1, pi[i], pig[i])
+		if pi[i] != ompig[i] {
+			t.Errorf("Codex WebSocket frame %d:\nPi  %s\nOmpig %s", i+1, pi[i], ompig[i])
 		}
 	}
 
-	provider = NewOpenAICodexResponsesProvider(OpenAICodexResponsesConfig{APIKey: apiKey, Model: "gpt-5.2", ProviderID: "openai-codex", BaseURL: server.URL + "/pig/codexnull"})
+	provider = NewOpenAICodexResponsesProvider(OpenAICodexResponsesConfig{APIKey: apiKey, Model: "gpt-5.2", ProviderID: "openai-codex", BaseURL: server.URL + "/ompig/codexnull"})
 	stream, err = provider.Stream(requestvalidity.Allow(context.Background()), NormalizeContext(Context{Messages: []Message{UserMessage{Content: UserText("one"), Timestamp: 1}}}), StreamOptions{Transport: TransportWebSocket, WebSocketConnectTimeoutMs: new(5000), TimeoutMs: new(5000), OnPayload: func(any, *Model) (any, error) {
 		return json.RawMessage("null"), nil
 	}})
@@ -204,8 +204,8 @@ func TestReplacementAndWebSocketBodiesMatchPiOnTheWire(t *testing.T) {
 		t.Fatal(err)
 	}
 	result := stream.Result()
-	pi, pig = capture.get("pi/codexnull"), capture.get("pig/codexnull")
-	if len(pi) != 1 || len(pig) != 1 || pi[0] != pig[0] {
-		t.Errorf("null Codex body: Pi (%v) sent %q, PiG (%s) sent %q", piOutcomes.Codex, pi, result.StopReason, pig)
+	pi, ompig = capture.get("pi/codexnull"), capture.get("ompig/codexnull")
+	if len(pi) != 1 || len(ompig) != 1 || pi[0] != ompig[0] {
+		t.Errorf("null Codex body: Pi (%v) sent %q, Ompig (%s) sent %q", piOutcomes.Codex, pi, result.StopReason, ompig)
 	}
 }

@@ -4,7 +4,7 @@
 # agent-session.ts:1648-1651 expands the prompt before the provider sees it.
 # Probe: --approve --print '/shared-check <artifact>' /shared-template.
 # The command records selected paths/settings/resources; the second prompt
-# returns SHARED-PROJECT, not the conflicting .pig template's PIG-PROJECT.
+# returns SHARED-PROJECT, not the conflicting .ompig template's OMPIG-PROJECT.
 # D2's explicit opt-in removes the config identity difference, not the command identity.
 name = "10-pi-directories-opt-in"
 description = "Explicit Pi directories select project settings, resources, and the same extension-visible paths as Pi"
@@ -19,7 +19,7 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig = ["PIG_USE_PI_DIRS=1", "PI_CODING_AGENT_DIR=testdata/shared-agent", "PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "PI_OFFLINE=1"]
+ompig = ["OMPIG_USE_PI_DIRS=1", "PI_CODING_AGENT_DIR=testdata/shared-agent", "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "PI_OFFLINE=1"]
 pi = ["PI_CODING_AGENT_DIR=testdata/shared-agent", "PI_OFFLINE=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
@@ -35,7 +35,7 @@ exit_code = 0
 runs = 3
 output_equal = true
 both_contain = ["SHARED-PROJECT"]
-both_not_contain = ["PIG-PROJECT", "unhandled request"]
+both_not_contain = ["OMPIG-PROJECT", "unhandled request"]
 # The fixture writes the same ordered JSON fields on both sides; retain every byte.
 artifact_equal = true
 artifact_both_contain = ['"configDir":".pi"', '"theme":"light"', '"system":true', '"shared-template"', '"skill:shared-skill"']

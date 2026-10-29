@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // prompt()'s compaction check resumes without I/O unless it compacts (agent-session.ts _checkCompaction). BeginPromptCompactionCheck decides on the

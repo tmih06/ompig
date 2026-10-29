@@ -25,7 +25,7 @@ func TestDuplicateCopiesWhenTheFileSystemRefusesLinks(t *testing.T) {
 			refuseLinks(t, errno)
 			strictUmask(t)
 			dir := t.TempDir()
-			src, dst := filepath.Join(dir, "pig"), filepath.Join(dir, ".backup")
+			src, dst := filepath.Join(dir, "ompig"), filepath.Join(dir, ".backup")
 			writeFile(t, src, "old")
 			if err := os.Chmod(src, 0o755); err != nil {
 				t.Fatal(err)
@@ -50,7 +50,7 @@ func TestDuplicateCopiesWhenTheFileSystemRefusesLinks(t *testing.T) {
 func TestDuplicateCopyNeverReplacesAnExistingFile(t *testing.T) {
 	refuseLinks(t, refusedLinkErrnos[0])
 	dir := t.TempDir()
-	src, dst := filepath.Join(dir, "pig"), filepath.Join(dir, ".backup")
+	src, dst := filepath.Join(dir, "ompig"), filepath.Join(dir, ".backup")
 	writeFile(t, src, "old")
 	writeFile(t, dst, "other")
 	if err := Duplicate(src, dst); !errors.Is(err, fs.ErrExist) {
@@ -104,7 +104,7 @@ func TestLinkOrCopyCopiesWhateverFailsTheLink(t *testing.T) {
 func TestDuplicateDoesNotCopyWhenTheLinkFailsForAnotherReason(t *testing.T) {
 	refuseLinks(t, unix.EXDEV)
 	dir := t.TempDir()
-	src, dst := filepath.Join(dir, "pig"), filepath.Join(dir, ".backup")
+	src, dst := filepath.Join(dir, "ompig"), filepath.Join(dir, ".backup")
 	writeFile(t, src, "old")
 	if err := Duplicate(src, dst); !errors.Is(err, unix.EXDEV) {
 		t.Fatalf("Duplicate after EXDEV = %v, want EXDEV", err)

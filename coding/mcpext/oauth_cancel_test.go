@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Sign-in cancellation (1.1.0, #10565; packages/coding-agent/src/extensions/mcp/oauth.ts signInMcpServer): ending the

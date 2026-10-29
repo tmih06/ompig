@@ -15,26 +15,26 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/installchange"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/installchange"
+	"github.com/tmih06/ompig/tui"
 )
 
 // SubprocessUIBridge is the interface satisfied by *subprocess.UIBridge
 // for wiring subprocess extension UI after TUI creation.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type SubprocessUIBridge interface {
 	SetInvalidate(fn func())
 	SetNotifyFunc(fn func(message, level string))
@@ -67,7 +67,7 @@ type SubprocessUIBridge interface {
 // SubprocessHost is the interface for managing subprocess extension lifecycle
 // during reload. Satisfied by *subprocess.Host.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type SubprocessHost interface {
 	Reload(ctx context.Context) ([]extension.Extension, error)
 	ExtensionCount() int
@@ -130,6 +130,8 @@ type InteractiveMode struct {
 	// runtimeHost is the constructor's runtime host; nil when the mode replaces its Session in place.
 	runtimeHost InteractiveRuntime
 	tuiInst     tui.TUI
+	// agentHub is the open Agent Hub controller, nil when the roster is closed.
+	agentHub *agentHubController
 	// programStatus reports working, blocked, done and error states to terminals that support OSC 7501 (interactive-mode.ts:551).
 	programStatus *ProgramStatusReporter
 	newRunner     *inproc.Runner
@@ -319,7 +321,7 @@ type InteractiveMode struct {
 	// across switch calls so a fullscreen round trip restores scrollback position.
 	// Mirrors upstream InteractiveMode.mainScreenRenderState.
 	mainScreenRenderState *tui.TuiMainScreenRenderState
-	// surface is the frontend renderer while a Piglet frontend draws this run;
+	// surface is the frontend renderer while a Ompiglet frontend draws this run;
 	// m.tuiInst is the same object then. nil otherwise.
 	surface *tui.TuiSurface
 	// frontendTookInput reports that the session took the last sequence the
@@ -436,7 +438,7 @@ type InteractiveMode struct {
 	// logoAnimationPlaying is Pi's module-level `playing` flag of the logo easter egg; logoAnimation is the one shown.
 	// Owner loop only.
 	logoAnimationPlaying bool
-	logoAnimation        *pigLogoAnimation
+	logoAnimation        *ompigLogoAnimation
 
 	// pendingArgs accumulates ToolCallDelta fragments keyed by index.
 	// Used to build progressive args preview during streaming.
@@ -574,7 +576,7 @@ type InteractiveMode struct {
 	externalEditorInput  func()
 
 	// File-based prompt templates loaded from
-	// <agentDir>/prompts/ (user) and <cwd>/.pig/prompts/ (project).
+	// <agentDir>/prompts/ (user) and <cwd>/.ompig/prompts/ (project).
 	// Populated in Run() before the input loop starts. Slash dispatch
 	// falls through to template expansion when no builtin matches.
 	promptTemplates   []PromptTemplate
@@ -676,7 +678,7 @@ func (m *InteractiveMode) loadRemainingHighlightLanguages() {
 //
 // upstream: packages/coding-agent/src/modes/interactive/interactive-mode.ts:1158-1163 (checkForNewPiVersion(...).then)
 func (m *InteractiveMode) startVersionCheck() {
-	// pig divergence (D39): the check reads the standalone binary's update manifest; Pi asks the package manager's version API.
+	// ompig divergence (D39): the check reads the standalone binary's update manifest; Pi asks the package manager's version API.
 	if m.opts.BinaryUpdateChecker == nil {
 		return
 	}
@@ -916,7 +918,7 @@ func (m *InteractiveMode) routeInputChunk(ctx context.Context, chunk []byte, rea
 // chunk the main loop takes carries a ticket that settles into settled, or into a channel of its own when settled is nil.
 func (m *InteractiveMode) routeInputSequence(ctx context.Context, chunk []byte, more bool, settled chan struct{}, readCh chan<- inputChunk) *inputTicket {
 	var ticket *inputTicket
-	// pig additive (D172): every input event restarts a pending idle collection's wait, whichever route takes it, as
+	// ompig additive (D172): every input event restarts a pending idle collection's wait, whichever route takes it, as
 	// Pi-Bolt's ui.addInputListener restarts idle-gc's timer (interactive-mode.ts IdleCollector watchActivity).
 	if len(chunk) > 0 && m.idleCollectPending.Load() {
 		m.wakeSpinner()
@@ -981,9 +983,9 @@ type InteractiveModeOptions struct {
 	InitialThemeSetting *string
 	// TuiMode selects "regular" or "fullscreen" for this run without changing the SettingsManager. Empty captures Settings.TuiMode at construction; only a live mode switch changes it afterwards.
 	TuiMode string
-	// Frontend is the Piglet frontend member that may draw this run in place
-	// of the ANSI renderer; nil in Stock PiG.
-	// pig additive (D91): Pi has no frontend member.
+	// Frontend is the Ompiglet frontend member that may draw this run in place
+	// of the ANSI renderer; nil in Stock Ompig.
+	// ompig additive (D91): Pi has no frontend member.
 	Frontend frontend.Frontend
 	// Terminal is the terminal the renderer drives (interactive-mode.ts:447 `terminal?: Terminal`, passed to createInteractiveTui at :626). Nil selects the process terminal.
 	Terminal tui.Terminal
@@ -1030,7 +1032,7 @@ type InteractiveModeOptions struct {
 	// PromptPaths lists additional prompt-template directories.
 	// Mirrors upstream `additionalPromptTemplatePaths`.
 	// Directories are searched after the default <agentDir>/prompts/ and
-	// <cwd>/.pig/prompts/ (last-wins by name, same as project scope).
+	// <cwd>/.ompig/prompts/ (last-wins by name, same as project scope).
 	PromptPaths []string
 	// CLIPromptTemplatePaths are the local --prompt-template paths, resolved once against the launch directory as main.ts
 	// resolves them. Startup, /reload and a runtime rebind report each one that does not exist (resource-loader.ts:615-626).
@@ -1125,7 +1127,7 @@ type InteractiveModeOptions struct {
 	// `initialMessage` plumbing at
 	// `.upstream/current/packages/coding-agent/src/cli/initial-message.ts`.
 	// Sourced by main.go from positional args + piped stdin so users
-	// can `pig "hello"`, `pig < file.txt`, or pipe + run.
+	// can `ompig "hello"`, `ompig < file.txt`, or pipe + run.
 	InitialMessage string
 	InitialImages  []ai.ImageContent
 	// InitialMessages are the positional messages after the first. Each is
@@ -1148,9 +1150,9 @@ type InteractiveModeOptions struct {
 	PackageUpdateChecker func() []string
 
 	// BinaryUpdateChecker, if set, is invoked asynchronously at startup and
-	// returns a newer-release notice for the pig binary itself, or nil. pig
+	// returns a newer-release notice for the ompig binary itself, or nil. ompig
 	// divergence (D39): standalone-binary self-update. The notice names the
-	// command that applies it (e.g. `pig update self`).
+	// command that applies it (e.g. `ompig update self`).
 	BinaryUpdateChecker func() *BinaryUpdate
 
 	// OfflineMode skips startup network catalog refreshes, like PI_OFFLINE.
@@ -1207,13 +1209,13 @@ type InteractiveModeOptions struct {
 	// extensions. Run() wires it to the TUI after creation via
 	// SetUIContext and SetInvalidate.
 	//
-	// pig-specific: no upstream equivalent.
+	// ompig-specific: no upstream equivalent.
 	SubprocessUIBridge SubprocessUIBridge
 
 	// SubprocessHost, when non-nil, manages subprocess extension lifecycle.
 	// Used by /reload to rebuild and re-spawn changed extensions.
 	//
-	// pig-specific: no upstream equivalent.
+	// ompig-specific: no upstream equivalent.
 	SubprocessHost SubprocessHost
 
 	// TerminateExtensionProcesses, when set, kills every extension process without running extension callbacks. It runs before an emergency exit on a dead terminal, which skips orderly shutdown.
@@ -1226,12 +1228,12 @@ type InteractiveModeOptions struct {
 	// Injected so this package does not depend on the SDK bundle implementation
 	// and so a test can observe that reload stages before it rebuilds.
 	//
-	// pig-specific: no upstream equivalent, because upstream extensions are
+	// ompig-specific: no upstream equivalent, because upstream extensions are
 	// in-process TypeScript and there is no SDK to stage.
 	StageExtensionSDKs func() error
 
 	// BuiltinExtensions contains generic in-process runtime extensions, such as
-	// Piglet capability scoping, in configured load order after subprocess
+	// Ompiglet capability scoping, in configured load order after subprocess
 	// extensions.
 	BuiltinExtensions []extension.Extension
 
@@ -1471,7 +1473,7 @@ func (m *InteractiveMode) printResumeHint() {
 func (m *InteractiveMode) Run(ctx context.Context) (err error) {
 	// After Run returns nothing services owner tasks, so a runtime closed later resets the UI in place.
 	defer m.runEnded.Store(true)
-	// pig additive (D102): Pi leaves no trace when input ends or fails. Registered before the crash handler below so it
+	// ompig additive (D102): Pi leaves no trace when input ends or fails. Registered before the crash handler below so it
 	// sees the error that handler returns; a crash has its own record.
 	defer func() {
 		if err != nil && !errors.Is(err, ErrInteractiveCrashed) {
@@ -1572,7 +1574,7 @@ func (m *InteractiveMode) Init(ctx context.Context) (err error) {
 	// Clear screen
 	// Inline-flow rendering: do NOT clear the screen. The first call to
 	// tui.Render() will emit our chat using `\r\n` so the user's pre-
-	// pig shell history (motd, last command output) stays put above us
+	// ompig shell history (motd, last command output) stays put above us
 	// and our content scrolls into the same scrollback as a normal
 	// shell session.
 
@@ -1658,7 +1660,7 @@ func (m *InteractiveMode) Init(ctx context.Context) (err error) {
 	m.slashRegistry = NewSlashRegistry()
 
 	// Load file-based prompt templates from <agentDir>/prompts and
-	// <cwd>/.pig/prompts. They remain fixed for this Session.
+	// <cwd>/.ompig/prompts. They remain fixed for this Session.
 	m.loadPromptTemplates()
 	m.reportMissingPromptTemplatePaths()
 	if m.opts.ResourceSourceInfoProvider != nil {
@@ -1666,7 +1668,7 @@ func (m *InteractiveMode) Init(ctx context.Context) (err error) {
 	}
 	m.publishSlashCommandCatalog()
 
-	// pig-specific: wire subprocess extension UIBridge to the live TUI, and the
+	// ompig-specific: wire subprocess extension UIBridge to the live TUI, and the
 	// terminal width to the host, so extensions receive the real width in their
 	// ready payload and get width_change notifications on resize. Mirrors
 	// upstream where setWidget factory components receive width at render time.
@@ -1728,7 +1730,7 @@ func (m *InteractiveMode) Init(ctx context.Context) (err error) {
 
 	m.reconfigureRemoteEditor()
 
-	// pig divergence (D55): ignore Kitty key releases for the debug hotkey.
+	// ompig divergence (D55): ignore Kitty key releases for the debug hotkey.
 	m.addKeyPressListener(func(data string) bool {
 		return m.tuiInst != nil && m.tuiInst.ConsumeDebugKey(data)
 	})
@@ -1810,7 +1812,7 @@ func (m *InteractiveMode) Init(ctx context.Context) (err error) {
 
 // startupChangelog records the changelog version and returns the What's New entries of a fresh session (recordChangelogVersionAndMaybeReportInstall).
 // Only a recorded version other than appVersion reads the entries, so the bundled changelog is parsed only then; the first start and a start of the recorded version parse nothing.
-// pig additive (D92): a Piglet that strips the changelog parses an empty bundle; see changelog_bundle.go.
+// ompig additive (D92): a Ompiglet that strips the changelog parses an empty bundle; see changelog_bundle.go.
 func startupChangelog(sm *SettingsManager, appVersion string) []ChangelogEntry {
 	var allEntries []ChangelogEntry
 	if lastSeen := sm.GetLastChangelogVersion(); lastSeen != "" && lastSeen != appVersion {
@@ -1874,7 +1876,7 @@ func (m *InteractiveMode) run(ctx context.Context) error {
 	// win32, and takes SIGINT only to ignore it while suspended). Terminate
 	// too, but hand the terminal back first: Node's default handler does not,
 	// so `kill -INT` leaves pi's user with ISIG off and a dead Ctrl+C at the
-	// shell. Ctrl+C itself never arrives here, because pig holds the terminal
+	// shell. Ctrl+C itself never arrives here, because ompig holds the terminal
 	// in raw mode and the keymap consumes \x03.
 	intCh := make(chan os.Signal, 1)
 	signal.Notify(intCh, syscall.SIGINT)
@@ -1892,7 +1894,7 @@ func (m *InteractiveMode) run(ctx context.Context) error {
 
 	// Terminal resize re-render. The TUI re-queries term.GetSize on every
 	// Render() but renders only fire on input/stream/flash events, so a resize
-	// while pig is idle leaves stale-width rules until the next keystroke. Unix
+	// while ompig is idle leaves stale-width rules until the next keystroke. Unix
 	// drives this from SIGWINCH; Windows (no SIGWINCH) polls the console size.
 	// Mirrors upstream `process.stdout.on("resize", ...)`.
 	stopResize := m.installResizeHandler(ctx)

@@ -21,8 +21,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // benchExtensionCount is the extension count of Buffon's rpc-ext10 workload: each extension registers a tool, a command and handlers for session_start, before_agent_start, tool_call and turn_end.
@@ -147,7 +147,7 @@ func allocSnapshot(t *testing.T, pid int, dir string, n int) allocCounts {
 //   - Collections: a collection empties every sync.Pool, which then refills, and the number and timing of collections follow the load.
 //     The measured processes run with GOGC=off.
 //   - The background catalog refresh RPC mode starts (Pi's main.ts unless offline) publishes the model catalog to the extensions, once or
-//     not at all depending on whether it finishes before they connect. The measured processes run with PIG_OFFLINE=1; the turns use the
+//     not at all depending on whether it finishes before they connect. The measured processes run with OMPIG_OFFLINE=1; the turns use the
 //     faux provider and no network.
 //   - The model catalog publications of startup still race the extensions' connections: with the machine loaded, about one process in
 //     twenty encodes the catalog fewer times (36,000 fewer allocations in the arm64 container with eight busy processes beside it), and
@@ -158,7 +158,7 @@ func allocSnapshot(t *testing.T, pid int, dir string, n int) allocCounts {
 // Each point is still the median of three processes. Wave 15 failed allocs_growth at 1.22 where the code measures 1.06; the counts no longer move with load.
 func rpcBenchTurnGate(t *testing.T, metric string, extensions []string, late int) {
 	home := newPigHome(t)
-	home.env = append(home.env, "GOGC=off", "PIG_OFFLINE=1")
+	home.env = append(home.env, "GOGC=off", "OMPIG_OFFLINE=1")
 	args := []string{"--no-session", "--mode", "rpc", "--model", "test-faux/faux-1"}
 	for _, path := range extensions {
 		args = append(args, "-e", path)
@@ -171,7 +171,7 @@ func rpcBenchTurnGate(t *testing.T, metric string, extensions []string, late int
 	measure := func(n int) allocCounts {
 		snapshots := t.TempDir()
 		var before allocCounts
-		record := home.runBinary(probe, []string{"PIG_PERFGATE_SNAPSHOT_DIR=" + snapshots}, args, func(pid int, stdin io.Writer, stdout *bufio.Reader) {
+		record := home.runBinary(probe, []string{"OMPIG_PERFGATE_SNAPSHOT_DIR=" + snapshots}, args, func(pid int, stdin io.Writer, stdout *bufio.Reader) {
 			awaitBenchCommands(t, len(extensions), stdin, stdout)
 			before = allocSnapshot(t, pid, snapshots, 1)
 			rpcTurns(t, n)(pid, stdin, stdout)

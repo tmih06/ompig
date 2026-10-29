@@ -1,4 +1,4 @@
-// PiG's product identity for the Pi JavaScript the Node extension runtime vendors (D26).
+// Ompig's product identity for the Pi JavaScript the Node extension runtime vendors (D26).
 //
 // A Node extension that calls the Pi SDK or pi-ai runs Pi's own code, which names Pi to
 // services (attribution headers, user agents, OAuth originator) and reaches Pi's hosted
@@ -13,18 +13,18 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const identity = JSON.parse(readFileSync(new URL("../../internal/coding/pigidentity/identity.json", import.meta.url), "utf8"));
-const note = "// pig divergence (D26, D65): PiG's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n";
+const note = "// ompig divergence (D26, D65): Ompig's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n";
 
 export const identityPatches = {
   "pi-ai/utils/identity.js": [
     ['export const PI_ATTRIBUTION = { name: "pi", url: "https://pi.dev", categories: ["cli-agent"] };',
       `export const PI_ATTRIBUTION = { name: "${identity.attributionName}", url: "${identity.attributionUrl}", categories: ["${identity.attributionCategory}"] };`],
     ['    if (mode === "short")\n        return "pi";\n    const product = `pi/${getClientVersion(identity)}`;\n    const runtime = runtimeDescription();\n    return runtime ? `${product} (${process.platform}; ${runtime}; ${process.arch})` : `${product} (browser)`;',
-      `${note}    if (mode === "short")\n        return "${identity.userAgentProduct}";\n    return pigUserAgent("${identity.userAgentProduct}", identity?.version);`],
-    ['import { PI_AI_VERSION } from "./version.js";', 'import { PI_AI_VERSION } from "./version.js";\nimport { pigUserAgent } from "../../../pig-identity.mjs";'],
+      `${note}    if (mode === "short")\n        return "${identity.userAgentProduct}";\n    return ompigUserAgent("${identity.userAgentProduct}", identity?.version);`],
+    ['import { PI_AI_VERSION } from "./version.js";', 'import { PI_AI_VERSION } from "./version.js";\nimport { ompigUserAgent } from "../../../ompig-identity.mjs";'],
   ],
   "pi-coding-agent/core/client-identity.js": [
-    ["        version: VERSION,", `${note}        version: process.env.PIG_PRODUCT_VERSION ?? VERSION,`],
+    ["        version: VERSION,", `${note}        version: process.env.OMPIG_PRODUCT_VERSION ?? VERSION,`],
   ],
   "pi-coding-agent/utils/pi-user-agent.js": [
     ['    return formatUserAgent({ userAgent: "detailed", version });', `${note}    return formatUserAgent({ userAgent: "detailed" });`],
@@ -38,7 +38,7 @@ export const identityPatches = {
   "pi-ai/auth/oauth/xai.js": [
     ['referrer: "pi",', `referrer: "${identity.xaiReferrer}",`],
   ],
-  // D64: PiG's hosted endpoints live on its own origin, with Pi's response shapes.
+  // D64: Ompig's hosted endpoints live on its own origin, with Pi's response shapes.
   "pi-coding-agent/core/remote-catalog-provider.js": [
     ['const DEFAULT_CATALOG_BASE_URL = "https://pi.dev";', `const DEFAULT_CATALOG_BASE_URL = "${identity.hostedOrigin}";`],
   ],
@@ -51,12 +51,12 @@ export const identityPatches = {
   "pi-coding-agent/modes/interactive/interactive-mode.js": [
     ["void fetch(`https://pi.dev/api/report-install?version=", `void fetch(\`${identity.hostedOrigin}/api/report-install?version=`],
   ],
-  // D62: PiG never uploads bug reports. D64: PiG never sends a Radius token to Radius's share gateway.
+  // D62: Ompig never uploads bug reports. D64: Ompig never sends a Radius token to Radius's share gateway.
   "pi-coding-agent/core/bug-report-upload.js": [
-    ["export async function uploadBugReport(bundle, options = {}) {\n", 'export async function uploadBugReport(bundle, options = {}) {\n    throw new Error("PiG does not upload bug reports (D62): export the report and attach it to a PiG issue instead."); // pig divergence (D26, D62)\n'],
+    ["export async function uploadBugReport(bundle, options = {}) {\n", 'export async function uploadBugReport(bundle, options = {}) {\n    throw new Error("Ompig does not upload bug reports (D62): export the report and attach it to a Ompig issue instead."); // ompig divergence (D26, D62)\n'],
   ],
   "pi-coding-agent/modes/interactive/session-share.js": [
-    ["async function tryShareViaRadius(tmpFile, context) {\n", "async function tryShareViaRadius(tmpFile, context) {\n    return false; // pig divergence (D26, D64): PiG never sends a Radius token to Radius's share gateway.\n"],
+    ["async function tryShareViaRadius(tmpFile, context) {\n", "async function tryShareViaRadius(tmpFile, context) {\n    return false; // ompig divergence (D26, D64): Ompig never sends a Radius token to Radius's share gateway.\n"],
   ],
 };
 

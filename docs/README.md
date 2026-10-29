@@ -1,6 +1,6 @@
-# Pig maintainer documentation
+# Ompig maintainer documentation
 
-This directory contains PiG's maintainer references and the public user documentation. Public user documentation is authored under `site/docs/`. The website at https://pi-in-go.dev renders it from a separate hosting repository (see [Provenance](project/PROVENANCE.md#public-documentation-website)). The concise agent and offline reference is authored separately under `internal/pigdocs/content/`, embedded in the binary, and synced to `~/.pig/docs`.
+This directory contains Ompig's maintainer references and the public user documentation. Public user documentation is authored under `site/docs/`. The website at https://ompig.dev renders it from a separate hosting repository (see [Provenance](project/PROVENANCE.md#public-documentation-website)). The concise agent and offline reference is authored separately under `internal/pigdocs/content/`, embedded in the binary, and synced to `~/.ompig/docs`.
 
 Start here, choose one row, and read that focused document completely. Do not load every document for an unrelated task.
 
@@ -9,13 +9,13 @@ Start here, choose one row, and read that focused document completely. Do not lo
 | If you are changing or deciding... | Read first | Then read |
 |---|---|---|
 | repository writing, comment, automation, and initial-publication quality | [Repository quality standard](project/repository-quality.md) | `AGENTS.md`, then the owning package or document |
-| stock versus PiG Standard composition boundary | [Architecture](pig-architecture.md) | [`piglets/standard/README.md`](../piglets/standard/README.md), then [Piglet design](pig-piglet-spec.md) |
-| ecosystem entities, carriers, component realization/materialization, or compatibility vocabulary | [Ecosystem ontology](piglet-resource-ontology.md) | [Architecture](pig-architecture.md), then [Piglet design](pig-piglet-spec.md) |
-| overall process/runtime boundaries | [Ecosystem ontology](piglet-resource-ontology.md) | [Architecture](pig-architecture.md), then [Runtime-cell overview](extension-runtime-cells.md) |
-| packages versus piglets | [Ecosystem ontology](piglet-resource-ontology.md) | [Packages versus piglets](pig-packages-vs-piglets.md), then [Package structure](pig-package-spec.md) |
-| piglet schema, CLI, artifacts, records, or component closure | [Ecosystem ontology](piglet-resource-ontology.md) | [Piglet design](pig-piglet-spec.md), then [Extension runtime cells](extension-runtime-cells.md) |
-| package structure, manifests, discovery, or member identity | [Package structure](pig-package-spec.md) | [Marketplace boundary](pig-plugin-marketplace-spec.md) |
-| package/install/marketplace vocabulary | [Marketplace boundary](pig-plugin-marketplace-spec.md) | [Package structure](pig-package-spec.md) |
+| stock versus Ompig Standard composition boundary | [Architecture](ompig-architecture.md) | [`ompiglets/standard/README.md`](../ompiglets/standard/README.md), then [Ompiglet design](ompig-ompiglet-spec.md) |
+| ecosystem entities, carriers, component realization/materialization, or compatibility vocabulary | [Ecosystem ontology](ompiglet-resource-ontology.md) | [Architecture](ompig-architecture.md), then [Ompiglet design](ompig-ompiglet-spec.md) |
+| overall process/runtime boundaries | [Ecosystem ontology](ompiglet-resource-ontology.md) | [Architecture](ompig-architecture.md), then [Runtime-cell overview](extension-runtime-cells.md) |
+| packages versus ompiglets | [Ecosystem ontology](ompiglet-resource-ontology.md) | [Packages versus ompiglets](ompig-packages-vs-ompiglets.md), then [Package structure](ompig-package-spec.md) |
+| ompiglet schema, CLI, artifacts, records, or component closure | [Ecosystem ontology](ompiglet-resource-ontology.md) | [Ompiglet design](ompig-ompiglet-spec.md), then [Extension runtime cells](extension-runtime-cells.md) |
+| package structure, manifests, discovery, or member identity | [Package structure](ompig-package-spec.md) | [Marketplace boundary](ompig-plugin-marketplace-spec.md) |
+| package/install/marketplace vocabulary | [Marketplace boundary](ompig-plugin-marketplace-spec.md) | [Package structure](ompig-package-spec.md) |
 | exact Pi behavior, TypeScript/JavaScript semantics, Go representation, interfaces, or performance proof | [TypeScript-to-Go porting](typescript-to-go-porting.md) | `AGENTS.md`, then the owning parity family and upstream source |
 | Go toolchain pins, build flags, allocation gates, or TinyGo costs in Durable | [Go practices for performance work](performance/go-practices.md) | [TypeScript-to-Go porting](typescript-to-go-porting.md) |
 | extension source forms and discovery | [Extensions](extensions.md) | [Extension authoring](extension-authoring.md) |
@@ -32,11 +32,11 @@ Start here, choose one row, and read that focused document completely. Do not lo
 |---|---|---|
 | Resource | extension, skill, prompt, theme, hook, MCP definition, or agent environment | its focused resource guide |
 | Plugin | cross-harness capability product | Agent Plugins package plus vendor catalog/manifest overlays |
-| Package | Pig/Pi distribution envelope for resources | package docs and `pig package` |
-| Piglet | independent named agent definition, selection/scoping, environment requirement, and portable build defaults | Piglet docs and `pig piglet` |
-| Piglet release | exact source/component closure plus optional binary/image artifacts | Piglet release inventory/Marketplace |
-| Piglet Binary | target-native Pig executable for one immutable Piglet; components may be fused, subprocess, or external | Piglet artifact facet |
-| Piglet Image | OCI materialization of the Piglet, component plan, and environment closure; reserved and not built yet | Piglet artifact facet |
+| Package | Ompig/Pi distribution envelope for resources | package docs and `ompig package` |
+| Ompiglet | independent named agent definition, selection/scoping, environment requirement, and portable build defaults | Ompiglet docs and `ompig ompiglet` |
+| Ompiglet release | exact source/component closure plus optional binary/image artifacts | Ompiglet release inventory/Marketplace |
+| Ompiglet Binary | target-native Ompig executable for one immutable Ompiglet; components may be fused, subprocess, or external | Ompiglet artifact facet |
+| Ompiglet Image | OCI materialization of the Ompiglet, component plan, and environment closure; reserved and not built yet | Ompiglet artifact facet |
 
 The maintainer and user information architectures preserve these entities while keeping carrier, component realization, materialization, environment, and status as independent axes. Do not introduce peer executable entities or use process topology as an artifact kind.
 
@@ -49,7 +49,7 @@ The maintainer and user information architectures preserve these entities while 
 5. User docs describe shipped behavior only and change atomically with commands.
 6. Link to direct neighbors and this router instead of repeating their content.
 7. Each build writes its whole docs bundle to its own directory, so a removed embedded page cannot survive in it.
-8. Define ontology before commands: Package distributes, Piglet selects, release materializes, carrier executes, component realization explains process.
+8. Define ontology before commands: Package distributes, Ompiglet selects, release materializes, carrier executes, component realization explains process.
 9. Keep code/JSON/records/API/UI/prose vocabulary identical and gate stale terms.
 
 ## Source of truth
@@ -58,7 +58,7 @@ The maintainer and user information architectures preserve these entities while 
 - Embedded binary and agent reference: `../internal/pigdocs/content/`.
 - Upstream Pi behavior: `.upstream/pin` (the pinned Pi release, see [upstream pin](parity/upstream-pin.md)), `.upstream/current/`, and `docs/parity/PORT_MAP.md`.
 - Intentional behavioral differences: `docs/parity/DIVERGENCES.md`.
-- Pig-only additions: `docs/additive-features.md`.
+- Ompig-only additions: `docs/additive-features.md`.
 - Extension protocol: `coding/extension/host/subprocess/protocol.go` and the conformance suite.
-- Piglet/Package/artifact ontology: `piglet-resource-ontology.md`.
-- Piglet runtime and artifact contract: `pig-piglet-spec.md`.
+- Ompiglet/Package/artifact ontology: `ompiglet-resource-ontology.md`.
+- Ompiglet runtime and artifact contract: `ompig-ompiglet-spec.md`.

@@ -8,15 +8,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Pi bdd9f039 (38847563, #11166, #9909) interactive-mode.ts pushExtensionDialog/removeExtensionDialog/showTopExtensionDialog:
 // select, confirm, input, editor and an editor-slot custom component form a stack in the editor slot. A new dialog hides the
 // visible one without settling it, closing a dialog shows the previous one again, and an abort removes only its own dialog.
-// The first four cases port packages/coding-agent/test/interactive-mode-extension-dialogs.test.ts; the rest cover the PiG parts
+// The first four cases port packages/coding-agent/test/interactive-mode-extension-dialogs.test.ts; the rest cover the Ompig parts
 // the stack also owns: the transcript cap, terminal focus of a subprocess component, the countdown timeout and the replacement
 // reset.
 

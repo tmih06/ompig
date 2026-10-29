@@ -3,7 +3,7 @@ package typebox
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // BenchmarkErrors is the failing-validation path (Errors runs only after Check failed): a wrong type, an object of

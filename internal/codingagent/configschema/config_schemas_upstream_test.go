@@ -13,13 +13,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/configschema"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/configschema"
 )
 
 // Ports packages/coding-agent/test/config-schemas.test.ts, "generated configuration schemas". The cases that Pi runs through TypeBox's
-// Compile(schema).Check run here through the pinned Pi's typebox over the schemas Pig renders, so the artifact is judged by Pi's validator.
+// Compile(schema).Check run here through the pinned Pi's typebox over the schemas Ompig renders, so the artifact is judged by Pi's validator.
 
 func repoRoot(t *testing.T) string {
 	t.Helper()

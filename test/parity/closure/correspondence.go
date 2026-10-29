@@ -9,11 +9,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
-// AddCorrespondenceDenominator compiles the normalized Pi/Pig correspondence
+// AddCorrespondenceDenominator compiles the normalized Pi/Ompig correspondence
 // inventories into deterministic facts and open closure obligations. Direct
 // setting identities may derive mappings; function candidates remain hypotheses.
 func AddCorrespondenceDenominator(ctx context.Context, root string, snapshot *Snapshot, records []Record) ([]Record, error) {
@@ -323,7 +323,7 @@ func correspondenceDataPin(snapshot *Snapshot, side string, item correspondence.
 	repository := "upstream"
 	if side == "target" {
 		commit = snapshot.TargetCommit
-		repository = "pig"
+		repository = "ompig"
 	}
 	return correspondencePin(snapshot, side, repository, commit, "table:settings-selector#"+item.ID, item.Path, item.StartLine, item.EndLine, item.SourceHash)
 }
@@ -333,7 +333,7 @@ func correspondenceFunctionPin(snapshot *Snapshot, side string, function corresp
 	repository := "upstream"
 	if side == "target" {
 		commit = snapshot.TargetCommit
-		repository = "pig"
+		repository = "ompig"
 	}
 	return correspondencePin(snapshot, side, repository, commit, function.ID, function.Path, function.StartLine, function.EndLine, function.SourceHash)
 }
@@ -343,7 +343,7 @@ func correspondenceSegmentPin(snapshot *Snapshot, side, handler string, index in
 	repository := "upstream"
 	if side == "target" {
 		commit = snapshot.TargetCommit
-		repository = "pig"
+		repository = "ompig"
 	}
 	semanticID := fmt.Sprintf("runtime:%s:%s:%d", handler, segment.Role, index)
 	return correspondencePin(snapshot, side, repository, commit, semanticID, segment.Path, segment.StartLine, segment.EndLine, segment.SourceHash)
@@ -354,7 +354,7 @@ func correspondenceCallerPin(snapshot *Snapshot, side, function string, index in
 	repository := "upstream"
 	if side == "target" {
 		commit = snapshot.TargetCommit
-		repository = "pig"
+		repository = "ompig"
 	}
 	semanticID := fmt.Sprintf("caller:%s:%s:%d", function, caller.Symbol, index)
 	return correspondencePin(snapshot, side, repository, commit, semanticID, caller.Path, caller.StartLine, caller.StartLine, caller.SourceHash)

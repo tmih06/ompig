@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // The golden file holds Pi's packages/codemode pure functions (declarations, identifier, source) run on a

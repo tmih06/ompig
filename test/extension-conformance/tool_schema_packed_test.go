@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func TestPackedToolSchemaRejectionAcrossSDKs(t *testing.T) {
@@ -78,7 +78,7 @@ func packedSchemaFactory(t *testing.T, root, language, name string) subprocess.E
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		code = fmt.Sprintf(`package flags
-import ("fmt"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("fmt"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension() *sdk.Extension {
  e:=sdk.New(%q)
  rejected:=false
@@ -89,9 +89,9 @@ func Extension() *sdk.Extension {
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		code = fmt.Sprintf(`import pig_sdk
+		code = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e = pig_sdk.Extension(%q)
+ e = ompig_sdk.Extension(%q)
  rejected = False
  try:
   e.tool("schema-invalid", "", None, lambda ctx,args: {"content":"bad"})
@@ -103,7 +103,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		code = fmt.Sprintf(`use pig_sdk::{Extension,Schema,ToolResult,CommandResult};
+		code = fmt.Sprintf(`use ompig_sdk::{Extension,Schema,ToolResult,CommandResult};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  let rejected=std::panic::catch_unwind(std::panic::AssertUnwindSafe(||e.tool("schema-invalid","",Schema::Null,|_,_|ToolResult::text("bad")))).is_err();

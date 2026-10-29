@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // TestExamplesRunThroughTheHost loads every example extension in
@@ -30,14 +30,14 @@ func TestExamplesRunThroughTheHost(t *testing.T) {
 		want   string
 	}{
 		{sdkscenarios.Go, "go-factory", subprocess.ExtConfig{
-			Source: examples + "go-factory", Factory: "Extension", SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk",
+			Source: examples + "go-factory", Factory: "Extension", SDKName: "github.com/tmih06/ompig/extensions/sdk",
 			ModulePath: "example.com/exgo", Package: "example.com/exgo",
 		}, "hello from go"},
 		{sdkscenarios.Rust, "rust-factory", subprocess.ExtConfig{
-			Source: examples + "rust-factory", Factory: "new_extension", SDKName: "pig-sdk", Package: "rust-factory",
+			Source: examples + "rust-factory", Factory: "new_extension", SDKName: "ompig-sdk", Package: "rust-factory",
 		}, "hello from rust"},
 		{sdkscenarios.Python, "python-factory", subprocess.ExtConfig{
-			Source: examples + "python-factory", Factory: "new_extension", SDKName: "pig-sdk-py", Package: "python_factory",
+			Source: examples + "python-factory", Factory: "new_extension", SDKName: "ompig-sdk-py", Package: "python_factory",
 		}, "hello from python"},
 		{sdkscenarios.Node, "node-factory", subprocess.ExtConfig{Source: examples + "node-factory/index.mjs"}, "hello from node"},
 	}

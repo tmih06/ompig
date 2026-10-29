@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/chord/sqlite/node"
+	"github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/chord/sqlite/node"
 )
 
 func openMemory(t *testing.T) *node.NodeSqliteDatabase {

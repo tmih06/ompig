@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi package-manager.ts:installAndPersist awaits npm installation and records the source without requiring Pi resources or importing the package's JavaScript.
@@ -122,7 +122,7 @@ func writeBareGoExtensionAt(t *testing.T, dir string) {
 	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("module demoext\n\ngo 1.26\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	source := "package demoext\n\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n\n" +
+	source := "package demoext\n\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\n\n" +
 		"func Extension() *sdk.Extension { return sdk.New(\"demoext\") }\n"
 	if err := os.WriteFile(filepath.Join(dir, "main.go"), []byte(source), 0o644); err != nil {
 		t.Fatal(err)
@@ -147,7 +147,7 @@ func TestInstallRejectsAnExtensionDirectoryAsAPackage(t *testing.T) {
 				t.Fatalf("installing %s, a bare extension root, as a package reported success; it contributes no resources and would never load", source)
 			}
 			// The message has to name the working path, or the user is left knowing only that it failed.
-			for _, want := range []string{"is an extension, not a package", "pig -e " + source} {
+			for _, want := range []string{"is an extension, not a package", "ompig -e " + source} {
 				if !strings.Contains(err.Error(), want) {
 					t.Errorf("error %q does not contain %q", err, want)
 				}
@@ -157,7 +157,7 @@ func TestInstallRejectsAnExtensionDirectoryAsAPackage(t *testing.T) {
 }
 
 // Pi's resolveLocalExtensionSource loads a local directory that declares no Package resources as one extension
-// (package-manager.ts:1377-1384), so `pig install ./ext` records the source as typed, relative to the working directory,
+// (package-manager.ts:1377-1384), so `ompig install ./ext` records the source as typed, relative to the working directory,
 // and the recorded package resolves back to that directory as its one extension.
 func TestInstallRecordsALocalExtensionDirectoryGivenRelativeToTheWorkingDirectory(t *testing.T) {
 	for _, local := range []bool{false, true} {
@@ -173,7 +173,7 @@ func TestInstallRecordsALocalExtensionDirectoryGivenRelativeToTheWorkingDirector
 			t.Fatalf("local=%v: verify %s from its parent = %v, want no refusal", local, source, err)
 		}
 		if err := packageManagerFor(cwd, sm, nil).InstallAndPersist(source, local); err != nil {
-			t.Fatalf("local=%v: pig install %s from its parent: %v", local, source, err)
+			t.Fatalf("local=%v: ompig install %s from its parent: %v", local, source, err)
 		}
 		packages := slices.Concat(sm.GetGlobalSettings().Packages, sm.GetProjectSettings().Packages)
 		if len(packages) != 1 {

@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type findOutcome struct {
@@ -154,7 +154,7 @@ func TestFindToolMatchesPi(t *testing.T) {
 		gotRaw, _ := json.Marshal(got)
 		var normalized findOutcome
 		_ = json.Unmarshal(gotRaw, &normalized)
-		// fd walks in parallel, so the subset a result limit keeps is not specified (the same binary gives Pi and Pig different ones); a request that reaches its limit is compared by its notice, the number of results and the metadata, and every other request by its exact text.
+		// fd walks in parallel, so the subset a result limit keeps is not specified (the same binary gives Pi and Ompig different ones); a request that reaches its limit is compared by its notice, the number of results and the metadata, and every other request by its exact text.
 		want := expected[i]
 		if want.ResultLimitReached != nil && normalized.ResultLimitReached != nil {
 			keep := func(outcome findOutcome) findOutcome {
@@ -190,7 +190,7 @@ func TestFindToolMatchesPi(t *testing.T) {
 			continue
 		}
 		e, _ := json.Marshal(expected[i])
-		t.Errorf("scenario %d %s\n  Pig %.700s\n  Pi  %.700s", i, raw, gotRaw, e)
+		t.Errorf("scenario %d %s\n  Ompig %.700s\n  Pi  %.700s", i, raw, gotRaw, e)
 	}
 	if failures > 6 {
 		t.Errorf("%d of %d scenarios differ from Pi", failures, len(scenarios))

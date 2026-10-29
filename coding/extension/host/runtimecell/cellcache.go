@@ -16,8 +16,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/execfile"
-	"github.com/MichaelKinsy/PiG/internal/filelock"
+	"github.com/tmih06/ompig/internal/execfile"
+	"github.com/tmih06/ompig/internal/filelock"
 )
 
 // cellReadyFile is the readiness marker written last into a published cache
@@ -32,7 +32,7 @@ const (
 // cellEntryMeta records the identity and integrity of a published cell artifact.
 // InputDigest is the content-addressed key (also the directory name); it proves
 // the inputs. ArtifactDigest + Size prove the published bytes, so truncated or
-// partially written entries are rejected. This is a Pig-owned, unversioned
+// partially written entries are rejected. This is a Ompig-owned, unversioned
 // current-shape format.
 type cellEntryMeta struct {
 	InputDigest    string `json:"inputDigest"`
@@ -51,7 +51,7 @@ type cellFailureMeta struct {
 	Cause       string `json:"cause"`
 	Log         string `json:"log,omitempty"`
 	// Drift is the SDK drift of the failure: a recorded failure keeps the changes the build named.
-	Drift   []Drift `json:"drift,omitempty"` //portlint:allow emptydrop PiG-only cache record of a build failure; Pi has no such record and no reader tells absent from empty
+	Drift   []Drift `json:"drift,omitempty"` //portlint:allow emptydrop Ompig-only cache record of a build failure; Pi has no such record and no reader tells absent from empty
 	Created int64   `json:"created"`
 }
 
@@ -79,18 +79,18 @@ type PublishedEntry struct {
 // cellBuildTimeout bounds how long a caller with no deadline waits for a peer's
 // build before giving up rather than blocking a session start forever. The
 // expiry is a visible load error.
-// pig additive (D20): the shared build cache and its lock have no upstream
+// ompig additive (D20): the shared build cache and its lock have no upstream
 // equivalent.
 func cellBuildTimeout() time.Duration {
 	return BuildTimeout()
 }
 
-// BuildTimeout is the time an extension build may take: PIG_CELL_BUILD_TIMEOUT
+// BuildTimeout is the time an extension build may take: OMPIG_CELL_BUILD_TIMEOUT
 // as a Go duration, else ten minutes.
-// pig additive (D20): the shared build cache and its build budget have no
+// ompig additive (D20): the shared build cache and its build budget have no
 // upstream equivalent.
 func BuildTimeout() time.Duration {
-	if v := os.Getenv("PIG_CELL_BUILD_TIMEOUT"); v != "" {
+	if v := os.Getenv("OMPIG_CELL_BUILD_TIMEOUT"); v != "" {
 		if d, err := time.ParseDuration(v); err == nil && d > 0 {
 			return d
 		}
@@ -238,7 +238,7 @@ func ReusePublishedArtifact(finalDir string, want EntryIdentity) (PublishedEntry
 // lock (released automatically on process death, so a crash never wedges the
 // cache), re-check the cache under the lock, then build into private scratch and
 // publish with a single atomic rename. Readers therefore never observe a
-// half-written entry, distinct Pig instances share one built artifact instead of
+// half-written entry, distinct Ompig instances share one built artifact instead of
 // each rebuilding it, and only {canonicalName, ready.json} is retained -
 // compiler intermediates (generated source, Rust target/) are discarded.
 func PublishArtifact(ctx context.Context, finalDir, canonicalName, inputDigest, language string, build func(scratch string) (artifactPath string, err error), keepAlso ...string) (PublishedEntry, error) {
@@ -279,7 +279,7 @@ func publishArtifact(ctx context.Context, finalDir, canonicalName, inputDigest, 
 		lockCtx, cancel = context.WithTimeout(ctx, cellBuildTimeout())
 		defer cancel()
 	}
-	// pig additive (D20): packed cells poll a process-shared build lock.
+	// ompig additive (D20): packed cells poll a process-shared build lock.
 	locked, err := lock.TryLockContext(lockCtx, 50*time.Millisecond)
 	if err != nil || !locked {
 		// Timed out or cancelled waiting for the builder. Re-check once: a peer

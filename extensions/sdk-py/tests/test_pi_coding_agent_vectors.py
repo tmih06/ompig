@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-import pig_sdk
-from pig_sdk import _tui_state, tui
+import ompig_sdk
+from ompig_sdk import _tui_state, tui
 
 VECTORS = Path(__file__).resolve().parents[3] / "test" / "parity" / "sdk-vectors" / "pi-coding-agent"
 
@@ -52,7 +52,7 @@ def test_get_markdown_theme_matches_pi():
     for case in _cases("getMarkdownTheme"):
         result = case["result"]
         _install_palette(result["palette"])
-        theme = pig_sdk.get_markdown_theme()
+        theme = ompig_sdk.get_markdown_theme()
         styles = {
             "heading": theme.heading, "link": theme.link, "linkUrl": theme.link_url, "code": theme.code, "codeBlock": theme.code_block,
             "codeBlockBorder": theme.code_block_border, "quote": theme.quote, "quoteBorder": theme.quote_border, "hr": theme.hr,
@@ -72,12 +72,12 @@ def test_get_select_list_theme_matches_pi():
     for case in _cases("getSelectListTheme"):
         result = case["result"]
         _install_palette(result["palette"])
-        theme = pig_sdk.get_select_list_theme()
+        theme = ompig_sdk.get_select_list_theme()
         styles = {"selectedPrefix": theme.selected_prefix, "selectedText": theme.selected_text, "description": theme.description, "scrollInfo": theme.scroll_info, "noMatch": theme.no_match}
         assert set(result["styles"]) == set(styles), case["name"]
         for key, style in styles.items():
             assert [style(text) for text in SAMPLES] == result["styles"][key], (case["name"], key)
-        editor = pig_sdk.get_editor_theme()
+        editor = ompig_sdk.get_editor_theme()
         assert editor.border_color("x") == _tui_state.current_host_theme().fg("borderMuted", "x")
         assert editor.select_list.selected_text("x") == theme.selected_text("x")
 
@@ -86,7 +86,7 @@ def test_get_settings_list_theme_matches_pi():
     for case in _cases("getSettingsListTheme"):
         result = case["result"]
         _install_palette(result["palette"])
-        theme = pig_sdk.get_settings_list_theme()
+        theme = ompig_sdk.get_settings_list_theme()
         assert len(result["keys"]) == 5
         assert theme.cursor == result["styles"]["cursor"], case["name"]
         for key, style in {"description": theme.description, "hint": theme.hint}.items():
@@ -100,14 +100,14 @@ def test_key_text_matches_pi(monkeypatch):
         result = case["result"]
         _install_keybindings(result)
         _on(monkeypatch, result["platform"])
-        assert pig_sdk.key_text(case["args"][2]) == result["text"], case["name"]
+        assert ompig_sdk.key_text(case["args"][2]) == result["text"], case["name"]
 
 
 def test_key_display_text_follows_key_text(monkeypatch):
     # keyDisplayText is not exported from pi-coding-agent's index; it is keyText with each part capitalized, which formatKeyText's capitalize option is.
     _install_keybindings(_cases("keyText")[0]["result"])
     _on(monkeypatch, "linux")
-    assert pig_sdk.key_display_text("app.test.multi") == pig_sdk.format_key_text(pig_sdk.key_text("app.test.multi"), True)
+    assert ompig_sdk.key_display_text("app.test.multi") == ompig_sdk.format_key_text(ompig_sdk.key_text("app.test.multi"), True)
 
 
 def test_key_hint_matches_pi(monkeypatch):
@@ -116,7 +116,7 @@ def test_key_hint_matches_pi(monkeypatch):
         _install_palette(result["palette"])
         _install_keybindings(result)
         _on(monkeypatch, result["platform"])
-        assert pig_sdk.key_hint(case["args"][4], case["args"][5]) == result["text"], case["name"]
+        assert ompig_sdk.key_hint(case["args"][4], case["args"][5]) == result["text"], case["name"]
 
 
 def test_raw_key_hint_matches_pi(monkeypatch):
@@ -124,7 +124,7 @@ def test_raw_key_hint_matches_pi(monkeypatch):
         result = case["result"]
         _install_palette(result["palette"])
         _on(monkeypatch, result["platform"])
-        assert pig_sdk.raw_key_hint(case["args"][3], case["args"][4]) == result["text"], case["name"]
+        assert ompig_sdk.raw_key_hint(case["args"][3], case["args"][4]) == result["text"], case["name"]
 
 
 def test_truncate_to_visual_lines_matches_pi():
@@ -136,6 +136,6 @@ def test_truncate_to_visual_lines_matches_pi():
 
         padding = defined(3)
         keep = defined(4)
-        got = pig_sdk.truncate_to_visual_lines(args[0], args[1], args[2], 0 if padding is None else padding, "end" if keep is None else keep)
+        got = ompig_sdk.truncate_to_visual_lines(args[0], args[1], args[2], 0 if padding is None else padding, "end" if keep is None else keep)
         assert got.visual_lines == case["result"]["visualLines"], case["name"]
         assert got.skipped_count == case["result"]["skippedCount"], case["name"]

@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // A mode drains its own work after the before hooks approved a replacement and before the outgoing Session aborts and shuts down (rpc-mode.ts awaits session.abort() there). A cancelled replacement never drains. session_start belongs to the mode's rebind, which this test does not install.

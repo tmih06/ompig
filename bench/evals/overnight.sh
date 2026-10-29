@@ -25,8 +25,8 @@ run() { # name args...
   echo "$(date -u +%FT%TZ) end $name exit $rc"  # rc, not $?: the date substitution would reset $? to 0
   [ "$rc" -eq 0 ] || failed=1
 }
-run startup startup --arms pig-0.5 pig-0.4.1 pi-1.1.0 rpi pibolt codex --rounds 8 --runs 5
-run overhead overhead --arms pig-0.5 pig-0.4.1 pi-1.1.0 rpi pibolt codex --runs 20 --warmup 2 --aa pig-0.5 pi-1.1.0
+run startup startup --arms ompig-0.5 ompig-0.4.1 pi-1.1.0 rpi pibolt codex --rounds 8 --runs 5
+run overhead overhead --arms ompig-0.5 ompig-0.4.1 pi-1.1.0 rpi pibolt codex --runs 20 --warmup 2 --aa ompig-0.5 pi-1.1.0
 run longhistory longhistory --runs 5
 run reliability reliability --reps 5
 exit "$failed"

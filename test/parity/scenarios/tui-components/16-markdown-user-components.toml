@@ -13,14 +13,14 @@ tags = ["fast", "hermetic", "tui"]
 driver = "cli-mode"
 
 [env]
-pig_go_tests = ["./internal/codingagent"]
-pig_go_programs = ["./test/parity/testdata/markdown-components-pig"]
+ompig_go_tests = ["./internal/codingagent"]
+ompig_go_programs = ["./test/parity/testdata/markdown-components-ompig"]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig = ["FORCE_COLOR=3"]
+ompig = ["FORCE_COLOR=3"]
 pi = ["FORCE_COLOR=3"]
-pig_args = ["node", "./test/parity/testdata/markdown-components-pig.mjs"]
+ompig_args = ["node", "./test/parity/testdata/markdown-components-ompig.mjs"]
 pi_args = ["node", "./test/parity/testdata/markdown-components-pi.mjs"]
 
 [cli]

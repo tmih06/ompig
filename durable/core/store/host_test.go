@@ -12,8 +12,8 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 // testHost is the synchronous SQLite host of ABI section 3 over one database file: it applies commits (each in its own

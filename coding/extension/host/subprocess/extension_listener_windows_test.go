@@ -23,7 +23,7 @@ import (
 	"github.com/Microsoft/go-winio"
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // nodePipeClient connects to a named pipe the way Node extensions do and
@@ -56,16 +56,16 @@ socket.on("error", (err) => {
 // instance was waiting, libuv's connect took the ERROR_PIPE_BUSY path and
 // waited for one for up to 30 seconds, which hid the race or became a hang.
 //
-// PIG_PIPE_CONNECT_RUNS sets the number of connects (default 20).
+// OMPIG_PIPE_CONNECT_RUNS sets the number of connects (default 20).
 func TestNodeConnectsToExtensionPipeWithoutWaiting(t *testing.T) {
 	node, err := exec.LookPath("node")
 	if err != nil {
 		t.Fatalf("node is required for the pipe client: %v", err)
 	}
 	runs := 20
-	if value := os.Getenv("PIG_PIPE_CONNECT_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_PIPE_CONNECT_RUNS"); value != "" {
 		if runs, err = strconv.Atoi(value); err != nil || runs < 1 {
-			t.Fatalf("PIG_PIPE_CONNECT_RUNS = %q", value)
+			t.Fatalf("OMPIG_PIPE_CONNECT_RUNS = %q", value)
 		}
 	}
 	dir := t.TempDir()
@@ -106,7 +106,7 @@ func TestPipeListenerReportsAClientThatClosedBeforeConnect(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	path := `\\.\pipe\pig-ext-test-` + rand.Text()
+	path := `\\.\pipe\ompig-ext-test-` + rand.Text()
 	h, err := createPipeHandle(path, attrs, true)
 	if err != nil {
 		t.Fatal(err)
@@ -191,7 +191,7 @@ func TestPipeConnectQueuesNoCompletionPacket(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	path := `\\.\pipe\pig-ext-test-` + rand.Text()
+	path := `\\.\pipe\ompig-ext-test-` + rand.Text()
 	instance, err := newPipeInstance(path, attrs, true)
 	if err != nil {
 		t.Fatal(err)

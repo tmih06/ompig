@@ -6,8 +6,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Ports packages/coding-agent/test/suite/regressions/5996-session-name-newlines.test.ts:14,24.

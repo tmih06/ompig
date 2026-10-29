@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsparity"
 )
 
 // foreignMarshaler returns text another encoder wrote: HTML-escaped by encoding/json's rules, with whitespace, negative zero spelled several
@@ -18,7 +18,7 @@ type foreignMarshaler struct{ text string }
 
 func (m foreignMarshaler) MarshalJSON() ([]byte, error) { return []byte(m.text), nil }
 
-// htmlMarshaler is a PiG type whose MarshalJSON uses the HTML-escaping json.Marshal, as ai.AssistantMessage does.
+// htmlMarshaler is a Ompig type whose MarshalJSON uses the HTML-escaping json.Marshal, as ai.AssistantMessage does.
 type htmlMarshaler struct{ value any }
 
 func (m htmlMarshaler) MarshalJSON() ([]byte, error) { return json.Marshal(m.value) }
@@ -32,7 +32,7 @@ func (a appender) MarshalJSON() ([]byte, error) {
 	}{a.Text})
 }
 
-// AppendStringify writes the string with jsparity, the primitives PiG's append encoders use; the package's verify mode checks it against
+// AppendStringify writes the string with jsparity, the primitives Ompig's append encoders use; the package's verify mode checks it against
 // MarshalJSON.
 func (a appender) AppendStringify(dst []byte) ([]byte, error) {
 	dst = append(dst, `{"text":`...)

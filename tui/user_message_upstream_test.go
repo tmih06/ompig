@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
+	"github.com/tmih06/ompig/coding/extension/markdowntransform"
 )
 
 // packages/coding-agent/test/user-message.test.ts:12

@@ -41,7 +41,7 @@ const nodeVersion = "24.19.0"
 // taskset, sha256sum and tar.
 const defaultBaseImage = "node:" + nodeVersion + "-bookworm-slim@sha256:a9f5f7c91a432850b2a8a7797adf5eadb6c733ceed61167806cee7ea7fbc29df"
 
-// bundleDir is where the pod receives the bundle; the session's install root is its pig/ subdirectory.
+// bundleDir is where the pod receives the bundle; the session's install root is its ompig/ subdirectory.
 const bundleDir = "/bundle"
 
 // requiredArtifacts are the files every bundle carries and lists in ARTIFACTS.sha256: the bench harness (k8sbench,
@@ -343,7 +343,7 @@ const (
 var pigbenchArmFiles = []string{"evals/arms.toml", "evals/arms.lock"}
 
 // agentArtifacts are the files an agent bundle lists in ARTIFACTS.sha256; a bundle that lists one lists all.
-var agentArtifacts = []string{"bin/pig", "pi-agent/package-lock.json", piAgentCLI, cpythonPython, pigbenchLauncher, pigbenchDir + "/__main__.py"}
+var agentArtifacts = []string{"bin/ompig", "pi-agent/package-lock.json", piAgentCLI, cpythonPython, pigbenchLauncher, pigbenchDir + "/__main__.py"}
 
 // podBundleScript runs in the base image: it checks that the node has the bundle's architecture, waits for the runner's copy, checks the bundle's sha256 against the one
 // in the Job, unpacks it, checks every artifact against ARTIFACTS.sha256, and starts the session. A failure prints the
@@ -360,11 +360,11 @@ while [ ! -f "$b/READY" ]; do
 	sleep 1
 done
 echo "$K8SBENCH_BUNDLE_SHA256  $b/bundle.tar.gz" | sha256sum -c --status - || fail "bundle.tar.gz does not have the sha256 $K8SBENCH_BUNDLE_SHA256 the runner sent"
-mkdir -p "$b/pig"
-tar -xzf "$b/bundle.tar.gz" -C "$b/pig" --no-same-owner || fail "bundle.tar.gz does not unpack"
+mkdir -p "$b/ompig"
+tar -xzf "$b/bundle.tar.gz" -C "$b/ompig" --no-same-owner || fail "bundle.tar.gz does not unpack"
 rm -f "$b/bundle.tar.gz"
-(cd "$b/pig" && sha256sum -c --status --strict ARTIFACTS.sha256) || fail "an artifact does not match ARTIFACTS.sha256"
-exec "$b/pig/bin/k8sbench" pod
+(cd "$b/ompig" && sha256sum -c --status --strict ARTIFACTS.sha256) || fail "an artifact does not match ARTIFACTS.sha256"
+exec "$b/ompig/bin/k8sbench" pod
 `
 
 // bundleInfo is a checked bundle directory.
@@ -429,7 +429,7 @@ func inspectBundle(dir string) (*bundleInfo, error) {
 	if _, err := os.Stat(filepath.Join(dir, "pi-durable", "node_modules", "@earendil-works", "pi-durable", "package.json")); err != nil {
 		return nil, fmt.Errorf("bundle %s: the pi-durable reference packages are not installed: %w", dir, err)
 	}
-	// An agent bundle carries both agents (PiG and Pi's coding agent from its lockfile) and the interpreter.
+	// An agent bundle carries both agents (Ompig and Pi's coding agent from its lockfile) and the interpreter.
 	if slices.ContainsFunc(agentArtifacts, func(p string) bool { return listed[p] }) {
 		for _, path := range agentArtifacts {
 			if !listed[path] {
@@ -561,14 +561,14 @@ func cmdBundle(ctx context.Context, args []string, stderr io.Writer, getenv func
 	out := fsFlags.String("out", "", "bundle directory to create (must not exist or be empty)")
 	arch := fsFlags.String("arch", "amd64", "node architecture: amd64 or arm64")
 	allowDirty := fsFlags.Bool("allow-dirty", false, "build a tree with uncommitted or untracked files (the commit gets -dirty)")
-	agents := fsFlags.Bool("agents", false, "also carry what agent profiles run: PiG built from the commit (bin/pig), Pi's coding agent at the pinned version (pi-agent/) and the pinned standalone CPython (python/)")
+	agents := fsFlags.Bool("agents", false, "also carry what agent profiles run: Ompig built from the commit (bin/ompig), Pi's coding agent at the pinned version (pi-agent/) and the pinned standalone CPython (python/)")
 	pythonArchive := fsFlags.String("python-archive", "", "with -agents, an offline copy of the pinned CPython archive for -arch (default: download it)")
 	armsFlag := fsFlags.String("arms", "", "with -agents, comma-separated ids of "+armsLock+" to install under arms/<id> as well (such as codex), each pinned there")
 	tasksSrc := fsFlags.String("tasks", "", "with -agents, the dataset checkout's tasks directory: carry each task of "+tasksLockFile+" (instruction.md, tests/) and the pinned Node.js (node/) for GPU trials")
 	nodeArchive := fsFlags.String("node-archive", "", "with -tasks, an offline copy of the pinned Node.js archive for -arch (default: download it)")
 	tinygoFlag := fsFlags.String("tinygo", "", "TinyGo binary (default $TINYGO, else tinygo on PATH)")
 	piFlag := fsFlags.String("pi-source", "", "Pi checkout at durable/contract/PIN main, for the durable-core programs (default $CONTRACT_PI_SOURCE)")
-	piBuilds := fsFlags.String("pi-builds", "", "when the Pi pin is a commit, the build store where `python3 automation/pin/pin.py install-oracle` left its packs (default: $PIG_PI_BUILD_STORE, else $PIG_DEV_HOME/pi-builds, else ~/.cache/pig-dev/pi-builds)")
+	piBuilds := fsFlags.String("pi-builds", "", "when the Pi pin is a commit, the build store where `python3 automation/pin/pin.py install-oracle` left its packs (default: $OMPIG_PI_BUILD_STORE, else $OMPIG_DEV_HOME/pi-builds, else ~/.cache/ompig-dev/pi-builds)")
 	if err := fsFlags.Parse(args); err != nil {
 		return err
 	}
@@ -896,11 +896,11 @@ func buildWasmCore(ctx context.Context, root, toolchain, out, tinygo string, bui
 	return err
 }
 
-// goBuildSteps are the go build commands of a bundle's Go programs; an agent bundle adds PiG and sessionscale.
+// goBuildSteps are the go build commands of a bundle's Go programs; an agent bundle adds Ompig and sessionscale.
 func goBuildSteps(outDir string, agents bool) [][]string {
 	programs := [][2]string{{"k8sbench", "./bench/k8s/cmd/k8sbench"}, {"durableperf", "./bench/durableperf"}}
 	if agents {
-		programs = append(programs, [2]string{"pig", "./cmd/pig"}, [2]string{"sessionscale", "./bench/sessionscale/cmd/sessionscale"})
+		programs = append(programs, [2]string{"ompig", "./cmd/ompig"}, [2]string{"sessionscale", "./bench/sessionscale/cmd/sessionscale"})
 	}
 	steps := make([][]string, 0, len(programs))
 	for _, p := range programs {

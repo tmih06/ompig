@@ -6,9 +6,9 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // Pi casts whatever JSON.parse returns for a line to an entry and checks no member (session-manager.ts parseSessionEntryLine), so an entry's

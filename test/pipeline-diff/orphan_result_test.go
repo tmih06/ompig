@@ -4,7 +4,7 @@ import "testing"
 
 // Pi's transformMessages (packages/ai/src/api/transform-messages.ts) maps every assistant message's tool call ids through normalizeToolCallId in its first
 // pass, including a message the second pass then drops (stopReason error or aborted), and rewrites the id of each tool result from that map. A tool result
-// whose assistant message was dropped therefore reaches the OpenAI Responses converter with its normalized id. PiG's Responses converters run the same
+// whose assistant message was dropped therefore reaches the OpenAI Responses converter with its normalized id. Ompig's Responses converters run the same
 // TransformMessages with the same normalizer (ai/openai_responses.go prepareResponsesTranscript), so the request is the same bytes: this pins finding 7a891011,
 // which the pipeline's former responsesOrphanID filter had excused as a difference (the filter is removed; 400 generated cases per target and mode pass without it). The ids carry a '|' and characters outside the Responses id alphabet and come
 // from a foreign provider, so normalization changes them.
@@ -37,7 +37,7 @@ func TestAIPipelineOrphanResultOfADroppedAssistantMatchesPi(t *testing.T) {
 					t.Skipf("Pi rejects the history itself: %s", o.Detail)
 				}
 				if o.Kind != "equal" {
-					t.Fatalf("%s: PiG's request differs from Pi's:\n%s", signature(o), truncate(o.Detail, 1500))
+					t.Fatalf("%s: Ompig's request differs from Pi's:\n%s", signature(o), truncate(o.Detail, 1500))
 				}
 			})
 		}

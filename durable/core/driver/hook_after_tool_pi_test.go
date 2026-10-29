@@ -5,10 +5,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Pi source: packages/durable/src/harness/types.ts ToolHooks.afterTool (:652-658): `HookResult<ToolExecutionResult>`: a hook that returns nothing keeps the result (the host receives

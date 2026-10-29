@@ -17,12 +17,12 @@
 #     Assistant: 0
 #     Tools: 0 calls, 0 results
 #
-# Pig and pinned pi 0.84 produce this crop with EXACT plain-cell equality, so the
+# Ompig and pinned pi 0.84 produce this crop with EXACT plain-cell equality, so the
 # scenario asserts output_equal (byte parity of the captured cells). This is the
 # behavioral evidence supporting the retirement of the former "line renderer
 # instead of full-screen TUI" divergence: upstream's default tuiMode is "regular"
 # and its regular renderer (TuiMainScreen) writes into the main screen + scrollback
-#: the same inline model pig's TUI ports: so there is no rendering divergence to
+#: the same inline model ompig's TUI ports: so there is no rendering divergence to
 # bless here.
 
 name = "01-session-info-empty"
@@ -38,8 +38,8 @@ driver = "interactive-tmux"
 width = 100
 height = 35
 # Both sides start typing after their startup rebind, which sets the autocomplete provider and then prints this
-# warning; "(auto)" paints before PiG's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
-ready_pattern_pig = "Warning: No models available."
+# warning; "(auto)" paints before Ompig's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
+ready_pattern_ompig = "Warning: No models available."
 ready_pattern_pi = "Warning: No models available."
 ready_timeout_seconds = 25
 capture_start = "Messages"
@@ -53,9 +53,9 @@ wait_timeout_seconds = 5
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -9,12 +9,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // Pi main.ts:251-281 returns one not_found result for an unmatched ID/prefix; both session and fork print the same diagnostic at lines 385 and 409.
 func TestMissingSessionArgumentDiagnostic(t *testing.T) {
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	for _, flags := range []Args{{Session: "nosuch-id"}, {Fork: "nosuch-id"}, {Session: "no'such"}, {Fork: "no'such"}} {
 		arg := flags.Session
 		if arg == "" {
@@ -57,7 +57,7 @@ func TestMissingSessionCLIComparedWithPi(t *testing.T) {
 					home := t.TempDir()
 					cwd := t.TempDir()
 					t.Setenv("HOME", home)
-					t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "pig"))
+					t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "ompig"))
 					t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "pi"))
 					// Both sides get one controlled colour environment: FORCE_COLOR set, and no NO_COLOR or NODE_DISABLE_COLORS at all.
 					// Node warns "The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set" when FORCE_COLOR is set with NO_COLOR or NODE_DISABLE_COLORS non-empty; Node 22 warns even when one is defined but empty.
@@ -105,9 +105,9 @@ func TestMissingSessionCLIComparedWithPi(t *testing.T) {
 					if piOut != "" || piErr != want || piCode != 1 {
 						t.Fatalf("Pi stdout=%q stderr=%q exit=%d", piOut, piErr, piCode)
 					}
-					pigOut, pigErr, pigCode := run(binary, args)
-					if pigOut != piOut || pigErr != piErr || pigCode != piCode {
-						t.Errorf("pig stdout=%q stderr=%q exit=%d; Pi stdout=%q stderr=%q exit=%d", pigOut, pigErr, pigCode, piOut, piErr, piCode)
+					ompigOut, ompigErr, ompigCode := run(binary, args)
+					if ompigOut != piOut || ompigErr != piErr || ompigCode != piCode {
+						t.Errorf("ompig stdout=%q stderr=%q exit=%d; Pi stdout=%q stderr=%q exit=%d", ompigOut, ompigErr, ompigCode, piOut, piErr, piCode)
 					}
 				})
 			}

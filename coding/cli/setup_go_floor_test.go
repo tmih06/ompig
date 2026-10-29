@@ -26,14 +26,14 @@ func TestSetupStatusFlagsAPathGoBelowTheSDKFloor(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Setenv("PATH", filepath.Join(root, "bin"))
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	t.Setenv("GOROOT", "")
 	var stdout, stderr bytes.Buffer
 	if code := runSetupCommand([]string{"setup"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("exit %d: %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{"go1.22.2", "Go 1.26", "pig setup go"} {
+	for _, want := range []string{"go1.22.2", "Go 1.26", "ompig setup go"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("status output lacks %q:\n%s", want, out)
 		}

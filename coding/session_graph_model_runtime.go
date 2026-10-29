@@ -1,4 +1,4 @@
-// pig-specific: serves Pi's ModelRuntime (packages/coding-agent/src/core/model-runtime.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is this package's ModelRuntime, the one the Session uses, built over its own credential and model files. Every method answers Pi's result in the JSON shape Pi's types have. A Provider object (getProviders, getProvider, getRegisteredNativeProvider, registerNativeProvider) and a provider configuration with functions are not served: they hold code the host cannot run on the extension's behalf (the Provider surface D78 records).
+// ompig-specific: serves Pi's ModelRuntime (packages/coding-agent/src/core/model-runtime.ts) to the Go, Python and Rust extension SDKs as a host-owned object an extension names by handle. The object is this package's ModelRuntime, the one the Session uses, built over its own credential and model files. Every method answers Pi's result in the JSON shape Pi's types have. A Provider object (getProviders, getProvider, getRegisteredNativeProvider, registerNativeProvider) and a provider configuration with functions are not served: they hold code the host cannot run on the extension's behalf (the Provider surface D78 records).
 
 package coding
 
@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // GraphModelRuntime is a ModelRuntime an extension constructed.

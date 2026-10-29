@@ -16,8 +16,8 @@ import { PI_PACKAGE_VERSION as PI_VERSION } from "../testdata/pi-version.mjs";
 
 const root = process.argv[2];
 if (!root) throw new Error("usage: credential-expiry.mjs <pi-coding-agent package root>");
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, stamped into the fixture
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)"');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, stamped into the fixture
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)"');
 const installed = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).version;
 if (installed !== PI_VERSION) throw new Error(`expected Pi ${PI_VERSION}, got ${installed}`);
 const ai = await import(pathToFileURL(join(root, "node_modules/@earendil-works/pi-ai/dist/index.js")).href);
@@ -158,4 +158,4 @@ for (const raw of values) {
     minValidityError: await minValidityError(raw),
   });
 }
-process.stdout.write(JSON.stringify({ pi: PIG_UPSTREAM_VERSION, now: NOW, rows }, null, 2) + "\n");
+process.stdout.write(JSON.stringify({ pi: OMPIG_UPSTREAM_VERSION, now: NOW, rows }, null, 2) + "\n");

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -11,8 +11,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 type subagentTrustUI struct {
@@ -39,10 +39,10 @@ func TestSubagentProjectTrustUpstream(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			shortSockDir(t)
-			t.Setenv("PIG_HOME", t.TempDir())
-			t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 			cwd := t.TempDir()
-			agentsDir := filepath.Join(cwd, ".pig", "agents")
+			agentsDir := filepath.Join(cwd, ".ompig", "agents")
 			if err := os.MkdirAll(agentsDir, 0o755); err != nil {
 				t.Fatal(err)
 			}

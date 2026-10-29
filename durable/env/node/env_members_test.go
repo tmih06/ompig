@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // Pi durable/src/env/node.ts NodeExecutionEnv.id is the stable environment identity.

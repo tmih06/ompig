@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // Ports packages/durable/src/env/node.ts NodeTextLineReader (:388-448, openTextLineReader at :896): the pinned upstream NodeExecutionEnv reads the same files under Node, and the Go TextLineReader returns the same lines

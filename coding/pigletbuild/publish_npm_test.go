@@ -12,22 +12,22 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletrelease "github.com/MichaelKinsy/PiG/coding/piglet/release"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletrelease "github.com/tmih06/ompig/coding/ompiglet/release"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
 const reviewPackageJSON = `{"name":"@acme/review","version":"1.2.0","pi":{"extensions":["extensions/*"]}}`
 
-// npmPublishEnv isolates PIG_HOME and the temporary directory, installs the
+// npmPublishEnv isolates OMPIG_HOME and the temporary directory, installs the
 // fake npm, and lets local Packages materialize at their own path.
 func npmPublishEnv(t *testing.T) (*npmtest.Fake, string) {
 	t.Helper()
 	fake := npmtest.Install(t)
 	fake.Seed("@acme/review", "1.2.0")
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_BUILDERS_FILE", filepath.Join(t.TempDir(), "builders.json"))
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_BUILDERS_FILE", filepath.Join(t.TempDir(), "builders.json"))
 	tmp := t.TempDir()
 	for _, name := range []string{"TMPDIR", "TMP", "TEMP"} {
 		t.Setenv(name, tmp)
@@ -39,7 +39,7 @@ func npmPublishEnv(t *testing.T) (*npmtest.Fake, string) {
 	return fake, tmp
 }
 
-// writeNPMPiglet writes the porter Piglet with one local Package that has the given package.json.
+// writeNPMPiglet writes the porter Ompiglet with one local Package that has the given package.json.
 func writeNPMPiglet(t *testing.T, packageJSON string) string {
 	t.Helper()
 	root := t.TempDir()
@@ -86,7 +86,7 @@ func TestPublishNPMDryRunShowsThePlanAndPublishesNothing(t *testing.T) {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout, stderr)
 	}
 	for _, want := range []string{
-		"Piglet npm publish dry run\nPiglet: porter@1.2.3 (not on npm yet)\n",
+		"Ompiglet npm publish dry run\nPiglet: porter@1.2.3 (not on npm yet)\n",
 		"Package review: npm:@acme/review@^1.2.0\n",
 		"Signed Binary: none recorded\n",
 		"Would run: npm publish ",
@@ -96,7 +96,7 @@ func TestPublishNPMDryRunShowsThePlanAndPublishesNothing(t *testing.T) {
 			t.Errorf("stdout lacks %q:\n%s", want, stdout)
 		}
 	}
-	for _, listed := range []string{"piglet.yaml", "package.json", "README.md", "LICENSE"} {
+	for _, listed := range []string{"ompiglet.yaml", "package.json", "README.md", "LICENSE"} {
 		if !strings.Contains(stdout+stderr, "npm notice "+listed) {
 			t.Errorf("the tarball listing lacks %s:\nstdout=%s\nstderr=%s", listed, stdout, stderr)
 		}
@@ -104,7 +104,7 @@ func TestPublishNPMDryRunShowsThePlanAndPublishesNothing(t *testing.T) {
 	if len(fake.Publishes()) != 0 || fake.Published("porter", "1.2.3") {
 		t.Fatalf("dry run published: %v", fake.Publishes())
 	}
-	if files := treeFiles(t, os.Getenv("PIG_HOME")); len(files) != 0 {
+	if files := treeFiles(t, os.Getenv("OMPIG_HOME")); len(files) != 0 {
 		t.Fatalf("dry run wrote managed state: %v", files)
 	}
 	assertNoStaging(t, tmp)
@@ -123,7 +123,7 @@ func TestPublishNPMYesPublishesTheGeneratedSource(t *testing.T) {
 	if len(publishes) != 1 || !reflect.DeepEqual(publishes[0][2:], []string{"--tag", "next", "--access", "public", "--ignore-scripts"}) {
 		t.Fatalf("publish calls = %v", publishes)
 	}
-	for _, want := range []string{"Published @acme/porter@1.2.3 to npm.", "Add it with: pig piglet add npm:@acme/porter", "pig-piglet"} {
+	for _, want := range []string{"Published @acme/porter@1.2.3 to npm.", "Add it with: ompig ompiglet add npm:@acme/porter", "ompig-ompiglet"} {
 		if !strings.Contains(stdout, want) {
 			t.Errorf("stdout lacks %q:\n%s", want, stdout)
 		}
@@ -132,15 +132,15 @@ func TestPublishNPMYesPublishesTheGeneratedSource(t *testing.T) {
 	if manifest["name"] != "@acme/porter" || manifest["version"] != "1.2.3" || manifest["description"] != "Hauls things" {
 		t.Fatalf("manifest = %v", manifest)
 	}
-	if !reflect.DeepEqual(manifest["keywords"], []any{"pig-piglet"}) {
+	if !reflect.DeepEqual(manifest["keywords"], []any{"ompig-ompiglet"}) {
 		t.Fatalf("keywords = %v", manifest["keywords"])
 	}
-	published := filepath.Join(fake.PackageDir("@acme/porter", "1.2.3"), "piglet.yaml")
+	published := filepath.Join(fake.PackageDir("@acme/porter", "1.2.3"), "ompiglet.yaml")
 	data, err := os.ReadFile(published)
 	if err != nil || !strings.Contains(string(data), "review: npm:@acme/review@^1.2.0") {
-		t.Fatalf("published piglet.yaml = %q, %v", data, err)
+		t.Fatalf("published ompiglet.yaml = %q, %v", data, err)
 	}
-	if err := piglet.CheckRemoteAddable(published); err != nil {
+	if err := ompiglet.CheckRemoteAddable(published); err != nil {
 		t.Fatalf("published source is not addable: %v", err)
 	}
 	for _, name := range []string{"README.md", "LICENSE"} {
@@ -177,13 +177,13 @@ func TestPublishNPMRefusesAPigletWhoseNPMPackageIsNotPublished(t *testing.T) {
 		t.Fatalf("code=%d stderr=%s", code, stderr)
 	}
 	if len(fake.Publishes()) != 0 {
-		t.Fatalf("published a Piglet that cannot be added: %v", fake.Publishes())
+		t.Fatalf("published a Ompiglet that cannot be added: %v", fake.Publishes())
 	}
 	assertNoStaging(t, tmp)
 
 	// A dry run still shows the plan, with the problem as a warning.
 	code, stdout, stderr := runNPMPublish(t, npmPublishDeps{}, source, "--to", "npm")
-	if code != 0 || !strings.Contains(stdout, `Warning: Package "review" (npm:@acme/unpublished@^2.0.0) is not on npm; publish it before the Piglet`) {
+	if code != 0 || !strings.Contains(stdout, `Warning: Package "review" (npm:@acme/unpublished@^2.0.0) is not on npm; publish it before the Ompiglet`) {
 		t.Fatalf("dry run: code=%d stdout=%s stderr=%s", code, stdout, stderr)
 	}
 
@@ -209,7 +209,7 @@ func TestPublishNPMExplainsALocalPackageWithoutNPMIdentity(t *testing.T) {
 		}
 	}
 	if len(fake.Calls()) != 0 {
-		t.Fatalf("npm ran for an unpublishable Piglet: %v", fake.Calls())
+		t.Fatalf("npm ran for an unpublishable Ompiglet: %v", fake.Calls())
 	}
 	assertNoStaging(t, tmp)
 
@@ -246,10 +246,10 @@ func (f roundTripFunc) RoundTrip(request *http.Request) (*http.Response, error) 
 func signedIndex(t *testing.T, key ed25519.PrivateKey, release pigletrelease.GitHubRelease, name, version string) []byte {
 	t.Helper()
 	data, err := pigletrelease.Sign(pigletrelease.Index{
-		Piglet: name, Version: version, PigVersion: publishTestPigVersion, SourceRef: "git:github.com/" + release.Repository + "@v" + version,
+		Ompiglet: name, Version: version, OmpigVersion: publishTestPigVersion, SourceRef: "git:github.com/" + release.Repository + "@v" + version,
 		GitHub: &release,
 		Binaries: map[string]pigletrelease.Binary{
-			"linux/amd64": {URL: "pig-" + name + "-linux-amd64", SHA256: strings.Repeat("a", 64), Size: 10},
+			"linux/amd64": {URL: "ompig-" + name + "-linux-amd64", SHA256: strings.Repeat("a", 64), Size: 10},
 		},
 	}, key)
 	if err != nil {
@@ -264,7 +264,7 @@ func TestPublishNPMRecordsTheSignedBinaryReadFromTheReleaseIndex(t *testing.T) {
 	_, key, keyID := writePublishKey(t)
 	namespaced := pigletrelease.GitHubRelease{Repository: "acme/porter", TagPrefix: "porter/"}
 	client := githubTransport(t, map[string][]byte{
-		"/acme/porter/releases/download/porter%2Fv1.2.3/piglet-release.json": signedIndex(t, key, namespaced, "porter", "1.2.3"),
+		"/acme/porter/releases/download/porter%2Fv1.2.3/ompiglet-release.json": signedIndex(t, key, namespaced, "porter", "1.2.3"),
 	})
 
 	code, stdout, stderr := runNPMPublish(t, npmPublishDeps{client: client}, source, "--to", "npm", "--yes", "--binaries", "github:acme/porter")
@@ -272,10 +272,10 @@ func TestPublishNPMRecordsTheSignedBinaryReadFromTheReleaseIndex(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout, stderr)
 	}
-	pig, _ := fake.Manifest("porter", "1.2.3")["pig"].(map[string]any)
+	ompig, _ := fake.Manifest("porter", "1.2.3")["ompig"].(map[string]any)
 	want := map[string]any{"ref": "github:acme/porter/porter@1.2.3", "signer": keyID}
-	if !reflect.DeepEqual(pig["binaries"], want) || pig["piglet"] != "piglet.yaml" {
-		t.Fatalf("pig = %v, want binaries %v", pig, want)
+	if !reflect.DeepEqual(ompig["binaries"], want) || ompig["ompiglet"] != "ompiglet.yaml" {
+		t.Fatalf("ompig = %v, want binaries %v", ompig, want)
 	}
 	if !strings.Contains(stdout, "Signed Binary: github:acme/porter/porter@1.2.3 (signer "+keyID+"; read from the signed release index)") {
 		t.Fatalf("stdout:\n%s", stdout)
@@ -287,13 +287,13 @@ func TestPublishNPMFindsAnUnprefixedBinaryRelease(t *testing.T) {
 	source := writeNPMPiglet(t, reviewPackageJSON)
 	_, key, _ := writePublishKey(t)
 	client := githubTransport(t, map[string][]byte{
-		"/acme/porter/releases/download/v1.2.3/piglet-release.json": signedIndex(t, key, pigletrelease.GitHubRelease{Repository: "acme/porter"}, "porter", "1.2.3"),
+		"/acme/porter/releases/download/v1.2.3/ompiglet-release.json": signedIndex(t, key, pigletrelease.GitHubRelease{Repository: "acme/porter"}, "porter", "1.2.3"),
 	})
 	if code, stdout, stderr := runNPMPublish(t, npmPublishDeps{client: client}, source, "--to", "npm", "--yes", "--binaries", "github:acme/porter"); code != 0 {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout, stderr)
 	}
-	pig, _ := fake.Manifest("porter", "1.2.3")["pig"].(map[string]any)
-	binaries, _ := pig["binaries"].(map[string]any)
+	ompig, _ := fake.Manifest("porter", "1.2.3")["ompig"].(map[string]any)
+	binaries, _ := ompig["binaries"].(map[string]any)
 	if binaries["ref"] != "github:acme/porter@1.2.3" {
 		t.Fatalf("binaries = %v", binaries)
 	}
@@ -306,10 +306,10 @@ func TestPublishNPMRefusesAMissingOrMismatchedBinaryRelease(t *testing.T) {
 		assets map[string][]byte
 		want   string
 	}{
-		"no release":    {map[string][]byte{}, "no signed release of porter 1.2.3 was found; publish it first with `pig piglet publish porter --to github`"},
-		"other Piglet":  {map[string][]byte{"/acme/porter/releases/download/v1.2.3/piglet-release.json": other}, "the release is for Piglet other"},
-		"damaged index": {map[string][]byte{"/acme/porter/releases/download/v1.2.3/piglet-release.json": []byte("{}")}, "Piglet release index"},
-		"other version": {map[string][]byte{"/acme/porter/releases/download/v1.2.3/piglet-release.json": signedIndex(t, key, pigletrelease.GitHubRelease{Repository: "acme/porter"}, "porter", "9.9.9")}, "version 9.9.9, requested 1.2.3"},
+		"no release":     {map[string][]byte{}, "no signed release of porter 1.2.3 was found; publish it first with `ompig ompiglet publish porter --to github`"},
+		"other Ompiglet": {map[string][]byte{"/acme/porter/releases/download/v1.2.3/ompiglet-release.json": other}, "the release is for Ompiglet other"},
+		"damaged index":  {map[string][]byte{"/acme/porter/releases/download/v1.2.3/ompiglet-release.json": []byte("{}")}, "Ompiglet release index"},
+		"other version":  {map[string][]byte{"/acme/porter/releases/download/v1.2.3/ompiglet-release.json": signedIndex(t, key, pigletrelease.GitHubRelease{Repository: "acme/porter"}, "porter", "9.9.9")}, "version 9.9.9, requested 1.2.3"},
 	} {
 		t.Run(name, func(t *testing.T) {
 			fake, tmp := npmPublishEnv(t)
@@ -355,10 +355,10 @@ func TestPublishNPMUsesTheGitHubReleaseThisMachinePublished(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout, stderr)
 	}
-	pig, _ := fake.Manifest("porter", "1.2.3")["pig"].(map[string]any)
+	ompig, _ := fake.Manifest("porter", "1.2.3")["ompig"].(map[string]any)
 	want := map[string]any{"ref": "github:acme/porter/porter@1.2.3", "signer": keyID}
-	if !reflect.DeepEqual(pig["binaries"], want) {
-		t.Fatalf("binaries = %v, want %v", pig["binaries"], want)
+	if !reflect.DeepEqual(ompig["binaries"], want) {
+		t.Fatalf("binaries = %v, want %v", ompig["binaries"], want)
 	}
 	if !strings.Contains(stdout, "from the GitHub release you published") {
 		t.Fatalf("stdout:\n%s", stdout)
@@ -370,7 +370,7 @@ func TestPublishNPMUsesTheGitHubReleaseThisMachinePublished(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("no-binaries publish failed: %s", stdout)
 	}
-	if plain, _ := fake.Manifest("porter-plain", "1.2.3")["pig"].(map[string]any); plain["binaries"] != nil {
+	if plain, _ := fake.Manifest("porter-plain", "1.2.3")["ompig"].(map[string]any); plain["binaries"] != nil {
 		t.Fatalf("--no-binaries recorded %v", plain["binaries"])
 	}
 }
@@ -396,7 +396,7 @@ func TestPublishNPMDamagedPublicationRecordIsReported(t *testing.T) {
 
 func TestPublishNPMOfflineFailsBeforeAnyNPMCall(t *testing.T) {
 	fake, _ := npmPublishEnv(t)
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	source := writeNPMPiglet(t, reviewPackageJSON)
 	code, _, stderr := runNPMPublish(t, npmPublishDeps{}, source, "--to", "npm")
 	if code != 1 || !strings.Contains(stderr, "while offline") || len(fake.Calls()) != 0 {
@@ -410,7 +410,7 @@ func TestPublishNPMArgumentErrors(t *testing.T) {
 		args []string
 		want string
 	}{
-		"no piglet":       {[]string{"--to", "npm"}, "Piglet name or path is required"},
+		"no ompiglet":     {[]string{"--to", "npm"}, "Ompiglet name or path is required"},
 		"github only":     {[]string{source, "--to", "npm", "--repo", "acme/x"}, "--repo applies to --to github"},
 		"yes and dry run": {[]string{source, "--to", "npm", "--yes", "--dry-run"}, "--yes and --dry-run cannot be combined"},
 		"bad access":      {[]string{source, "--to", "npm", "--access", "private"}, "--access must be public or restricted"},
@@ -426,7 +426,7 @@ func TestPublishNPMArgumentErrors(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			var stdout, stderr strings.Builder
 			code := runPublish(context.Background(), tc.args, &stdout, &stderr, nil)
-			if code != 2 || !strings.Contains(stderr.String(), tc.want) || !strings.Contains(stderr.String(), "pig piglet publish <name|path> --to npm") {
+			if code != 2 || !strings.Contains(stderr.String(), tc.want) || !strings.Contains(stderr.String(), "ompig ompiglet publish <name|path> --to npm") {
 				t.Fatalf("code=%d stderr=%s\nwant %q", code, stderr.String(), tc.want)
 			}
 		})

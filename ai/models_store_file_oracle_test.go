@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type modelsFileOp struct {
@@ -25,7 +25,7 @@ type modelsFileCase struct {
 	Ops     []modelsFileOp `json:"ops"`
 }
 
-// TestFileModelsStoreNonObjectRootsAndIndexKeysMatchPi extends TestFileModelsStoreMatchesPi to roots and keys that test leaves out. It runs core/models-store.ts FileModelsStore and PiG's NewFileModelsStore over the same models-store.json files and operation sequences
+// TestFileModelsStoreNonObjectRootsAndIndexKeysMatchPi extends TestFileModelsStoreMatchesPi to roots and keys that test leaves out. It runs core/models-store.ts FileModelsStore and Ompig's NewFileModelsStore over the same models-store.json files and operation sequences
 // (read, write, delete): absent, empty, corrupt, byte-order-marked, null, array and scalar files, valid files whose entries are catalogs, null or not objects, and
 // integer-index provider ids, which JSON.parse and JSON.stringify order first. Results (the entry read), whether an operation threw, and the file bytes after each
 // operation match, with the text of each thrown error, including V8's JSON.parse SyntaxError for a corrupt file. Not compared: file modes and cross-process locking.
@@ -38,7 +38,7 @@ func TestFileModelsStoreNonObjectRootsAndIndexKeysMatchPi(t *testing.T) {
 		`{"models":[{"id":"m","name":"M","api":"openai-completions","provider":"p","baseUrl":"https://x.test/v1","reasoning":false,"input":["text"],"cost":{"input":1,"output":2,"cacheRead":0,"cacheWrite":0},"contextWindow":1000,"maxTokens":100}]}`,
 		`{"models":[{"id":"future","api":"future-api","extra":"x"}],"etag":"e"}`,
 	}
-	// A stored value that is not a catalog (a number, string, array or an object with no models) reads back as itself in Pi, which PiG's typed entry cannot hold,
+	// A stored value that is not a catalog (a number, string, array or an object with no models) reads back as itself in Pi, which Ompig's typed entry cannot hold,
 	// so a file holding one is only written and deleted, never read.
 	stored := entries
 	weird := false

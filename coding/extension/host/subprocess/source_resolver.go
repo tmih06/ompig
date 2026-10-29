@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
 // ResolveExtConfig resolves one authorized path into one conventional factory
@@ -15,7 +15,7 @@ func ResolveExtConfig(path string) (ExtConfig, *extsource.Definition, error) {
 }
 
 // ResolveExtConfigWithIdentity binds runtime registration to an identity owned
-// by the selecting Package or Piglet. Empty expectedName derives from the exact
+// by the selecting Package or Ompiglet. Empty expectedName derives from the exact
 // selected path.
 func ResolveExtConfigWithIdentity(path, expectedName string) (ExtConfig, *extsource.Definition, error) {
 	return ResolveExtConfigWithResolver(path, expectedName, extsource.Resolve)
@@ -53,7 +53,7 @@ func ResolveExtConfigWithResolver(path, expectedName string, resolve extsource.R
 	// A conventional Node factory (a default export) packs into the one Node
 	// cell for the session, the way upstream pi hosts every extension in one
 	// process (N8). definition.Packable stays false for node because that
-	// field also drives Piglet Binary fusibility, which Node components never
+	// field also drives Ompiglet Binary fusibility, which Node components never
 	// support (they stay external, D19); packing and fusibility are separate
 	// questions here.
 	if definition.Form == extsource.Factory && (definition.Packable || definition.Language == "node") {
@@ -94,7 +94,7 @@ func extensionDefinitionName(definition extsource.Definition, input string) stri
 
 // derivedSDKName names the SDK a definition runs against. A Go factory keeps
 // the SDK module path it imports, so the cell planner never packs a legacy-SDK
-// factory with current-SDK ones and the Piglet planner never fuses it.
+// factory with current-SDK ones and the Ompiglet planner never fuses it.
 func derivedSDKName(definition extsource.Definition) string {
 	switch definition.Language {
 	case "go":
@@ -103,9 +103,9 @@ func derivedSDKName(definition extsource.Definition) string {
 		}
 		return extsource.GoSDKModulePath
 	case "rust":
-		return "pig-sdk-rs"
+		return "ompig-sdk-rs"
 	case "python":
-		return "pig-sdk-py"
+		return "ompig-sdk-py"
 	case "node":
 		return "pi-node"
 	default:

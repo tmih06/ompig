@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 // stagedSDKDir returns the per-build directory this binary stages the lang SDK into under root.
@@ -22,7 +22,7 @@ func stagedSDKDir(t *testing.T, root, lang string) string {
 
 func TestRunExtensionInitScaffoldsAndStagesSDK(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 
 	dir := filepath.Join(t.TempDir(), "my-planner")
 	code := runExtensionInit([]string{dir, "--json"})
@@ -45,10 +45,10 @@ func TestRunExtensionInitScaffoldsAndStagesSDK(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read go.mod: %v", err)
 	}
-	if !strings.Contains(string(goMod), "require github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0") {
+	if !strings.Contains(string(goMod), "require github.com/tmih06/ompig/extensions/sdk v0.0.0") {
 		t.Fatalf("go.mod missing SDK requirement:\n%s", goMod)
 	}
-	if strings.Contains(string(goMod), "replace github.com/MichaelKinsy/PiG/extensions/sdk") || strings.Contains(string(goMod), filepath.ToSlash(stagedSDK)) {
+	if strings.Contains(string(goMod), "replace github.com/tmih06/ompig/extensions/sdk") || strings.Contains(string(goMod), filepath.ToSlash(stagedSDK)) {
 		t.Fatalf("go.mod committed a machine-specific SDK path:\n%s", goMod)
 	}
 
@@ -64,8 +64,8 @@ func TestRunExtensionInitScaffoldsAndStagesSDK(t *testing.T) {
 
 func TestRunExtensionInitScaffoldsLoginExtension(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	dir := filepath.Join(t.TempDir(), "science-pig")
+	t.Setenv("OMPIG_HOME", home)
+	dir := filepath.Join(t.TempDir(), "science-ompig")
 
 	if code := runExtensionInit([]string{dir, "--login", "--json"}); code != 0 {
 		t.Fatalf("login init exit code = %d, want 0", code)
@@ -95,8 +95,8 @@ func TestRunExtensionInitRejectsLoginForUnsupportedForm(t *testing.T) {
 		{"--login", "--isolated", "--json"},
 	} {
 		t.Run(strings.Join(args, "_"), func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
-			dir := filepath.Join(t.TempDir(), "science-pig")
+			t.Setenv("OMPIG_HOME", t.TempDir())
+			dir := filepath.Join(t.TempDir(), "science-ompig")
 			if code := runExtensionInit(append([]string{dir}, args...)); code == 0 {
 				t.Fatalf("login init accepted unsupported arguments %v", args)
 			}
@@ -109,14 +109,14 @@ func TestRunExtensionInitRejectsLoginForUnsupportedForm(t *testing.T) {
 
 func TestRunExtensionInitPython(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 
 	dir := filepath.Join(t.TempDir(), "planner")
 	if code := runExtensionInit([]string{dir, "--lang", "python", "--json"}); code != 0 {
 		t.Fatalf("python init exit code = %d, want 0", code)
 	}
 
-	if _, err := os.Stat(filepath.Join(stagedSDKDir(t, home, "python"), "pig_sdk", "__init__.py")); err != nil {
+	if _, err := os.Stat(filepath.Join(stagedSDKDir(t, home, "python"), "ompig_sdk", "__init__.py")); err != nil {
 		t.Fatalf("python init did not stage the Python SDK: %v", err)
 	}
 	mod := filepath.Join(dir, "planner.py")
@@ -136,7 +136,7 @@ func TestRunExtensionInitPython(t *testing.T) {
 
 func TestRunExtensionInitRust(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 
 	dir := filepath.Join(t.TempDir(), "planner")
 	if code := runExtensionInit([]string{dir, "--name", "planner", "--lang", "rust", "--json"}); code != 0 {
@@ -156,8 +156,8 @@ func TestRunExtensionInitRust(t *testing.T) {
 	if !strings.Contains(string(cargo), `name = "planner"`) {
 		t.Fatalf("Cargo.toml package name should match factory identity:\n%s", cargo)
 	}
-	if !strings.Contains(string(cargo), `pig-sdk = "0.1.0"`) {
-		t.Fatalf("Cargo.toml missing versioned pig-sdk dependency:\n%s", cargo)
+	if !strings.Contains(string(cargo), `ompig-sdk = "0.1.0"`) {
+		t.Fatalf("Cargo.toml missing versioned ompig-sdk dependency:\n%s", cargo)
 	}
 	stagedRs := stagedSDKDir(t, home, "rust")
 	if strings.Contains(string(cargo), "path =") || strings.Contains(string(cargo), filepath.ToSlash(stagedRs)) {
@@ -167,7 +167,7 @@ func TestRunExtensionInitRust(t *testing.T) {
 }
 
 func TestRunExtensionInitRefusesOverwriteWithoutForce(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	dir := filepath.Join(t.TempDir(), "x")
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatal(err)
@@ -184,7 +184,7 @@ func TestRunExtensionInitRefusesOverwriteWithoutForce(t *testing.T) {
 }
 
 func TestRunExtensionInitRejectsUnknownLang(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	dir := filepath.Join(t.TempDir(), "e")
 	if code := runExtensionInit([]string{dir, "--lang", "cobol", "--json"}); code == 0 {
 		t.Fatal("init accepted an unsupported --lang")
@@ -197,7 +197,7 @@ func TestRunExtensionInitRejectsUnknownLang(t *testing.T) {
 func TestRunExtensionInitIsolatedScaffoldsStandalone(t *testing.T) {
 	for _, language := range []string{"go", "python", "rust"} {
 		t.Run(language, func(t *testing.T) {
-			t.Setenv("PIG_HOME", t.TempDir())
+			t.Setenv("OMPIG_HOME", t.TempDir())
 			dir := filepath.Join(t.TempDir(), language+"-isolated")
 			if code := runExtensionInit([]string{dir, "--lang", language, "--isolated", "--json"}); code != 0 {
 				t.Fatalf("isolated init code = %d", code)
@@ -257,7 +257,7 @@ func TestExtensionInitScaffoldsBuildAndRegister(t *testing.T) {
 				name += "-isolated"
 			}
 			t.Run(name, func(t *testing.T) {
-				t.Setenv("PIG_HOME", t.TempDir())
+				t.Setenv("OMPIG_HOME", t.TempDir())
 				root := filepath.Join(t.TempDir(), name)
 				args := []string{root, "--lang", language, "--json"}
 				if isolated {

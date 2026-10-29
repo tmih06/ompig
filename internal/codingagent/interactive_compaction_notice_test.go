@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 func compactedSession(t *testing.T, compactions int) func(sess *Session) {
@@ -29,7 +29,7 @@ func compactedSession(t *testing.T, compactions int) func(sess *Session) {
 }
 
 // Pi shows "Session compacted N time(s)" only at the end of renderInitialMessages (interactive-mode.ts:4178-4182): after a Session is loaded, replaced or
-// navigated to, counting every compaction entry of the file. Found by the compaction journey: PiG also flashed it whenever the transcript was rebuilt after a
+// navigated to, counting every compaction entry of the file. Found by the compaction journey: Ompig also flashed it whenever the transcript was rebuilt after a
 // compaction, where Pi's rebuildChatFromMessages (interactive-mode.ts:3346) shows nothing.
 func TestSessionCompactedStatusIsShownByInitialRenderOnly(t *testing.T) {
 	for _, tc := range []struct {

@@ -17,11 +17,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	envnode "github.com/tmih06/ompig/durable/env/node"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 var echoParameters = map[string]any{"type": "object", "properties": map[string]any{"text": map[string]any{"type": "string"}}}
@@ -444,7 +444,7 @@ func TestToolRound(t *testing.T) {
 			mustClose(t, run.harness)
 			return events.all(), results
 		}
-		// pig divergence (D177): the calls of a parallel round start concurrently, so the order of their starts is
+		// ompig divergence (D177): the calls of a parallel round start concurrently, so the order of their starts is
 		// unspecified; both start before either ends, and the next request carries the round's results in call order.
 		defaultRound, results := trace(chatSetup(t), true)
 		if got := defaultRound[:2]; !slices.Equal(got, []string{"start a", "start b"}) && !slices.Equal(got, []string{"start b", "start a"}) {

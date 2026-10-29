@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const rpcPromptEventOrderExtension = `export default function (pi) {
@@ -29,10 +29,10 @@ const rpcPromptEventOrderExtension = `export default function (pi) {
 }
 `
 
-// Pi 1.1.0's runner queues ui_prompt_start and ui_prompt_end in microtasks before the prompt's promise settles (runner.ts withUIPrompt, emitUIPromptEvent), so an extension's prompt handlers run before the prompting extension continues: start, end, then the value. PiG answered the dialog call while the events were still on their way, so the value came first and each event one host call later.
+// Pi 1.1.0's runner queues ui_prompt_start and ui_prompt_end in microtasks before the prompt's promise settles (runner.ts withUIPrompt, emitUIPromptEvent), so an extension's prompt handlers run before the prompting extension continues: start, end, then the value. Ompig answered the dialog call while the events were still on their way, so the value came first and each event one host call later.
 func TestRPCPromptEventsReachHandlersBeforeThePromptSettlesAsPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	dir := t.TempDir()
@@ -43,7 +43,7 @@ func TestRPCPromptEventsReachHandlersBeforeThePromptSettlesAsPi(t *testing.T) {
 	agentDir := t.TempDir()
 	cmd := exec.Command(bin, "--mode", "rpc", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -97,7 +97,7 @@ func TestRPCPromptEventsReachHandlersBeforeThePromptSettlesAsPi(t *testing.T) {
 		select {
 		case record, ok := <-records:
 			if !ok {
-				fail("pig exited early")
+				fail("ompig exited early")
 			}
 			return record
 		case <-deadline:
@@ -129,7 +129,7 @@ func TestRPCPromptEventsReachHandlersBeforeThePromptSettlesAsPi(t *testing.T) {
 	_ = stdin.Close()
 	<-readDone
 	if err := cmd.Wait(); err != nil {
-		t.Fatalf("pig --mode rpc: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig --mode rpc: %v\nstderr: %s", err, stderr.String())
 	}
 	want := []string{"start custom", "end custom", "custom=undefined", "start select", "end select", "picked=a1"}
 	if strings.Join(notifies, "\n") != strings.Join(want, "\n") {

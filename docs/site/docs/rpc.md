@@ -1,13 +1,13 @@
 # RPC mode
 
-RPC mode runs PiG as a headless JSON Lines process. A client writes commands to standard input and reads responses and events from standard output. The protocol is the RPC protocol of Pi 1.4.0 ([Pi's RPC protocol reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/rpc.md)), apart from the differences named on this page.
+RPC mode runs Ompig as a headless JSON Lines process. A client writes commands to standard input and reads responses and events from standard output. The protocol is the RPC protocol of Pi 1.4.0 ([Pi's RPC protocol reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/rpc.md)), apart from the differences named on this page.
 
-Use the [PiG Go SDK](/docs/latest/sdk) when your Go application does not need a process boundary. Use RPC mode for another language, an IDE, or a separate process.
+Use the [Ompig Go SDK](/docs/latest/sdk) when your Go application does not need a process boundary. Use RPC mode for another language, an IDE, or a separate process.
 
 ## Start RPC mode
 
 ```bash
-pig --mode rpc [--model <provider/model>] [options]
+ompig --mode rpc [--model <provider/model>] [options]
 ```
 
 Common options:
@@ -17,9 +17,9 @@ Common options:
 - `--name <name>` or `-n <name>` sets the initial Session name.
 - `--no-session` disables Session persistence.
 - `--session-dir <path>` selects a Session directory.
-- `--piglet <name-or-path>` selects one agent application.
+- `--ompiglet <name-or-path>` selects one agent application.
 
-PiG writes operational diagnostics to standard error. Treat standard output as protocol data only.
+Ompig writes operational diagnostics to standard error. Treat standard output as protocol data only.
 
 If you omit `--model` and no default model exists, RPC mode starts with Pi's `unknown` model record. Use `get_state`, `get_available_models`, and `set_model` to select a model. A prompt fails preflight until the selected provider has configured authentication. A Session resumed without credentials for its saved model also starts on the `unknown` model, as in Pi.
 
@@ -52,19 +52,19 @@ A `compact` request aborts and joins the active turn before summarizing. It wait
 
 ## Pi compatibility boundary
 
-PiG implements the command union in the pinned Pi `rpc-types.ts`. The generated test inventory fails when a pinned Pi command has no PiG dispatch branch. PiG adds one command, `get_extensions` (D101). See [RPC commands](/docs/latest/rpc-commands#loaded-extensions).
+Ompig implements the command union in the pinned Pi `rpc-types.ts`. The generated test inventory fails when a pinned Pi command has no Ompig dispatch branch. Ompig adds one command, `get_extensions` (D101). See [RPC commands](/docs/latest/rpc-commands#loaded-extensions).
 
-Close standard input to shut down RPC mode. PiG cancels active prompts, Bash commands, Session transitions, model-selection handlers, retries, and extension UI requests before it closes the process. When standard input ends while `new_session`, `fork`, `clone` or `switch_session` is still replacing the Session, PiG finishes the replacement and writes its response before it exits. Pi 1.4.0 exits without answering that command (D146). A suspended extension command's continuation can run before its runtime stops (D85), and a settle-tail handler of a runtime that cannot report its wait holds standard input open until it finishes (D86).
+Close standard input to shut down RPC mode. Ompig cancels active prompts, Bash commands, Session transitions, model-selection handlers, retries, and extension UI requests before it closes the process. When standard input ends while `new_session`, `fork`, `clone` or `switch_session` is still replacing the Session, Ompig finishes the replacement and writes its response before it exits. Pi 1.4.0 exits without answering that command (D146). A suspended extension command's continuation can run before its runtime stops (D85), and a settle-tail handler of a runtime that cannot report its wait holds standard input open until it finishes (D86).
 
-Go programs can use `github.com/MichaelKinsy/PiG/coding/rpcclient`, the port of Pi's TypeScript `RpcClient`. It starts `pig --mode rpc`, correlates responses, exposes typed command methods, and delivers events to listeners. Other languages use the JSONL protocol directly.
+Go programs can use `github.com/tmih06/ompig/coding/rpcclient`, the port of Pi's TypeScript `RpcClient`. It starts `ompig --mode rpc`, correlates responses, exposes typed command methods, and delivers events to listeners. Other languages use the JSONL protocol directly.
 
 `new_session`, `switch_session`, `fork` and `clone` replace the Session through the same runtime factory that creates the first Session, as Pi's rpc-mode does with its runtime host. The replacement gets a new extension runner, new extension processes and services for the destination Session's working directory. The old runner is invalidated. As in Pi 1.4.0, the replacement's extensions receive `session_start` twice after these four commands, because rpc-mode rebinds once more after the command returns. An extension process does not inherit process-wide state such as environment variables from the replaced one. This is D70, which also covers `/reload`.
 
 ## Events
 
-Partial-message observation across the process boundary is a known gap (D82, owner decision 2026-09-28). PiG sends snapshots rather than live producer references. An initial assistant message can therefore contain less content or an earlier stop state than Pi's shallow/live observation. Neither host puts parser state on a block: since Pi 1.4.0+f715a15c, each provider keeps the argument text of an open tool call in its own stream state (`ToolCallArgumentsStream`), so no message carries `partialArgs`, `partialJson`, `customInput`, `streamIndex` or `index`. Event order, deltas, terminal results and persisted messages are not part of this allowance. The strict RPC33 comparison retains the complete raw difference; it is not passing parity.
+Partial-message observation across the process boundary is a known gap (D82, owner decision 2026-09-28). Ompig sends snapshots rather than live producer references. An initial assistant message can therefore contain less content or an earlier stop state than Pi's shallow/live observation. Neither host puts parser state on a block: since Pi 1.4.0+f715a15c, each provider keeps the argument text of an open tool call in its own stream state (`ToolCallArgumentsStream`), so no message carries `partialArgs`, `partialJson`, `customInput`, `streamIndex` or `index`. Event order, deltas, terminal results and persisted messages are not part of this allowance. The strict RPC33 comparison retains the complete raw difference; it is not passing parity.
 
-PiG emits these events:
+Ompig emits these events:
 
 - `agent_start`;
 - `agent_end` with `messages` and `willRetry`;
@@ -108,7 +108,7 @@ Read message and Session entry shapes in [Session file format](/docs/latest/sess
 
 ## Worked example
 
-This example drives `pig --mode rpc` from a shell with no client library. It sends two commands, waits for the run to finish, then sends three more, one of them invalid, and ends with a line that is not JSON. The provider is a scripted test server that always answers `Hello from the test model.`, so the reply wording is illustrative. The records, their order and the error text are what PiG printed. Pi 1.4.0 printed the same record types, the same order and the same parse error for the same input.
+This example drives `ompig --mode rpc` from a shell with no client library. It sends two commands, waits for the run to finish, then sends three more, one of them invalid, and ends with a line that is not JSON. The provider is a scripted test server that always answers `Hello from the test model.`, so the reply wording is illustrative. The records, their order and the error text are what Ompig printed. Pi 1.4.0 printed the same record types, the same order and the same parse error for the same input.
 
 ```bash
 (
@@ -120,7 +120,7 @@ This example drives `pig --mode rpc` from a shell with no client library. It sen
                 '{"id":"5","type":"bogus"}' \
                 'not json'
   sleep 1
-) | pig --mode rpc --no-session --model mock/mock-1 2>rpc.stderr > rpc.jsonl
+) | ompig --mode rpc --no-session --model mock/mock-1 2>rpc.stderr > rpc.jsonl
 echo "exit status: $?"
 ```
 
@@ -128,7 +128,7 @@ echo "exit status: $?"
 exit status: 0
 ```
 
-When standard input closes, PiG ends the process with status 0. `rpc.stderr` is empty. The `sleep 3` is only for this shell script. A real client waits for the `agent_settled` event instead.
+When standard input closes, Ompig ends the process with status 0. `rpc.stderr` is empty. The `sleep 3` is only for this shell script. A real client waits for the `agent_settled` event instead.
 
 **The order of records.** This filter prints the type, `id`, command and outcome of each line:
 
@@ -161,7 +161,7 @@ jq -c '[.type, .id, .command, .success]' rpc.jsonl
 
 Three things to notice:
 
-- The response to `prompt` arrives **before** the model has answered. `"data":{"disposition":"started"}` means PiG accepted the prompt. The answer arrives as events, and `agent_settled` is the last one. A failure of the model call is an event, not a failed response (see [Framing](#framing)).
+- The response to `prompt` arrives **before** the model has answered. `"data":{"disposition":"started"}` means Ompig accepted the prompt. The answer arrives as events, and `agent_settled` is the last one. A failure of the model call is an event, not a failed response (see [Framing](#framing)).
 - Events carry no `id`. Match responses to commands by `id`, and treat every record without `"type":"response"` as an event.
 - The response to the line that was not JSON (`"command":"parse"`, no `id`, because there was none to repeat) arrived **before** the responses to commands 3 to 5, which were sent earlier in the same burst. Do not rely on responses arriving in send order when you send several commands at once. Match them by `id`.
 
@@ -196,7 +196,7 @@ import json
 import subprocess
 
 process = subprocess.Popen(
-    ["pig", "--mode", "rpc", "--model", "openai/gpt-5", "--no-session"],
+    ["ompig", "--mode", "rpc", "--model", "openai/gpt-5", "--no-session"],
     stdin=subprocess.PIPE,
     stdout=subprocess.PIPE,
     stderr=subprocess.PIPE,
@@ -226,12 +226,12 @@ Keep reading standard error separately. A full error pipe can block a child proc
 
 - [RPC commands](/docs/latest/rpc-commands) lists every command and its response.
 - [RPC extension UI](/docs/latest/rpc-extension-ui) describes extension dialog requests and the responses a client returns.
-- [JSON event stream](/docs/latest/json) describes the event records PiG also writes in JSON mode.
+- [JSON event stream](/docs/latest/json) describes the event records Ompig also writes in JSON mode.
 - [Session file format](/docs/latest/session-format) describes the entries that Session commands return.
 
 ## Source references
 
-PiG implementation:
+Ompig implementation:
 
 - `coding/cli/rpc_mode.go` defines the command loop.
 - `coding/cli/rpc_types.go` defines command and response types.

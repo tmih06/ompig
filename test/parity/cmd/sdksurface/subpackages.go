@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// An SDK's public subpackages (Go extensions/sdk/tui, Rust sdk-rs/src/tui, Python pig_sdk/tui) hold API a
+// An SDK's public subpackages (Go extensions/sdk/tui, Rust sdk-rs/src/tui, Python ompig_sdk/tui) hold API a
 // package-level SDK scan does not see. Their symbols are added to the SDK's set qualified by the package name,
 // the way kit views are: tui.VisibleWidth in Go and Python, tui::visible_width in Rust. A ledger cell names
 // them with that qualifier (native:tui.VisibleWidth).
@@ -18,7 +18,7 @@ import (
 // (or declares `pub` itself in mod.rs), and only items with plain `pub`: a pub(crate) item is not API.
 
 // sdkModulePath is the module whose internal packages a subpackage alias may point into.
-const sdkModulePath = "github.com/MichaelKinsy/PiG"
+const sdkModulePath = "github.com/tmih06/ompig"
 
 // goSubpackageSkip are directories of extensions/sdk that are not importable SDK API.
 var goSubpackageSkip = map[string]bool{"internal": true, "testdata": true, "upgrade": true, "kit": true}
@@ -100,7 +100,7 @@ func addSubpackageSymbols(root string, goSyms, rs, py symbolSet) error {
 		qualify(rs, syms, name+"::")
 	}
 
-	pyRoot := filepath.Join(root, "extensions/sdk-py/pig_sdk")
+	pyRoot := filepath.Join(root, "extensions/sdk-py/ompig_sdk")
 	if dirs, err = subdirs(pyRoot); err != nil {
 		return err
 	}

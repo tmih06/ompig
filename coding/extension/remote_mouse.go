@@ -32,7 +32,7 @@ type ViewMouseResult struct {
 // the mouse in fullscreen mode, as an upstream component with handleMouse
 // does.
 //
-// pig-specific: no upstream equivalent; Pi calls handleMouse in-process.
+// ompig-specific: no upstream equivalent; Pi calls handleMouse in-process.
 type RemoteOverlayMouseHost interface {
 	// OnMouse hands an event, local to the component's first cell, to the
 	// components of the overlay's view, as Pi's would take it, and then,

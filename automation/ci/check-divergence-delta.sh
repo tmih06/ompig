@@ -12,7 +12,7 @@ if [[ ! -f docs/parity/DIVERGENCES.md ]]; then
 fi
 
 git_prefix=$(git rev-parse --show-prefix 2>/dev/null || true)
-previous=$(mktemp "${TMPDIR:-/tmp}/pig.XXXXXXXX")
+previous=$(mktemp "${TMPDIR:-/tmp}/ompig.XXXXXXXX")
 trap 'rm -f "$previous"' EXIT
 git show "HEAD:${git_prefix}docs/parity/DIVERGENCES.md" >"$previous" 2>/dev/null || :
 

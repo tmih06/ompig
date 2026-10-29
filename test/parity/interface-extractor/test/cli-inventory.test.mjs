@@ -11,7 +11,7 @@ function write(file, content) {
 }
 
 function fixture() {
-  const root = scratchDir("pig-cli-inventory-");
+  const root = scratchDir("ompig-cli-inventory-");
   const args = path.join(root, "packages/coding-agent/src/cli/args.ts");
   const packages = path.join(root, "packages/coding-agent/src/package-manager-cli.ts");
   write(args, `

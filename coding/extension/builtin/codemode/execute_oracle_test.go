@@ -11,11 +11,11 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // executeCodemode without a session lays the script's output out for the model: header, `==> text N/M <==` markers, the console block, joined adjacent text,
@@ -134,7 +134,7 @@ emit(JSON.parse(child.stdout));
 				for at < len(g) && at < len(w) && g[at] == w[at] {
 					at++
 				}
-				t.Errorf("%q differ at byte %d (PiG %d bytes, Pi %d)\n  PiG ...%.120q\n  Pi  ...%.120q", script, at, len(g), len(w), g[max(0, at-30):], w[max(0, at-30):])
+				t.Errorf("%q differ at byte %d (Ompig %d bytes, Pi %d)\n  Ompig ...%.120q\n  Pi  ...%.120q", script, at, len(g), len(w), g[max(0, at-30):], w[max(0, at-30):])
 			}
 		}
 	}

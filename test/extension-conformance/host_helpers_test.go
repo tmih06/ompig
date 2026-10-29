@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestConformance_HostHelpersAgreeAcrossSDKs: Pi exports generateDiffString, generateUnifiedPatch, sessionEntryToContextMessages, convertToPng, resizeImage,
@@ -25,9 +25,9 @@ func TestConformance_HostHelpersAgreeAcrossSDKs(t *testing.T) {
 	}
 	// Not parallel: it owns conformanceHostInfo, the process environment and the host's copy function while it runs.
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_USE_PI_DIRS", "")
-	conformanceHostInfo = subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".pig", Version: coding.UpstreamPackageVersion}
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_USE_PI_DIRS", "")
+	conformanceHostInfo = subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".ompig", Version: coding.UpstreamPackageVersion}
 	t.Cleanup(func() { conformanceHostInfo = subprocess.HostInfo{} })
 	var copyMu sync.Mutex
 	var copied []string
@@ -94,7 +94,7 @@ func TestConformance_HostHelpersAgreeAcrossSDKs(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			if tc.name == "fused-go" {
 				// The fused extension runs in this process, so the host must put the entry in this process's environment before the factory runs.
-				t.Setenv("PIG_EXT_HOST_INFO", "")
+				t.Setenv("OMPIG_EXT_HOST_INFO", "")
 			}
 			copyMu.Lock()
 			copied = nil

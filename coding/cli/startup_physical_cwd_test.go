@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// runPigThroughLink runs pig in a new directory entered through a symbolic link, with $PWD naming the link as a shell's cd leaves it,
-// and returns the directory's physical path and pig's stdout. setup prepares the physical directory first. Pi takes every
+// runPigThroughLink runs ompig in a new directory entered through a symbolic link, with $PWD naming the link as a shell's cd leaves it,
+// and returns the directory's physical path and ompig's stdout. setup prepares the physical directory first. Pi takes every
 // working-directory default from process.cwd(), which is the physical path (libuv uv_cwd calls getcwd(3)) whatever $PWD says.
 func runPigThroughLink(t *testing.T, setup func(real string), args ...string) (string, string) {
 	t.Helper()
@@ -33,11 +33,11 @@ func runPigThroughLink(t *testing.T, setup func(real string), args ...string) (s
 	home := t.TempDir()
 	cmd := exec.CommandContext(t.Context(), buildPigBinaryForSignalTest(t), args...)
 	cmd.Dir = link
-	cmd.Env = append(os.Environ(), "PWD="+link, "HOME="+home, "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+home, "PI_CODING_AGENT_DIR="+home, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "PWD="+link, "HOME="+home, "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+home, "PI_CODING_AGENT_DIR="+home, "OMPIG_TEST_FAUX=1")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("pig: %v\nstdout:\n%s\nstderr:\n%s", err, stdout.String(), stderr.String())
+		t.Fatalf("ompig: %v\nstdout:\n%s\nstderr:\n%s", err, stdout.String(), stderr.String())
 	}
 	return real, stdout.String()
 }
@@ -106,7 +106,7 @@ func TestEmptySessionFileStartsInThePhysicalWorkingDirectory(t *testing.T) {
 // path through the physical directory.
 func TestPackageListNamesProjectPackagesThroughThePhysicalWorkingDirectory(t *testing.T) {
 	real, stdout := runPigThroughLink(t, func(real string) {
-		writeTestFile(t, filepath.Join(real, ".pig", "settings.json"), `{"packages":["../ext"]}`)
+		writeTestFile(t, filepath.Join(real, ".ompig", "settings.json"), `{"packages":["../ext"]}`)
 		writeTestFile(t, filepath.Join(real, "ext", "extensions", "a.ts"), "export default function () {}\n")
 	}, "list", "--approve")
 	if want := "    " + filepath.Join(real, "ext") + "\n"; !strings.Contains(stdout, want) {

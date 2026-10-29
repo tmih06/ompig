@@ -90,32 +90,32 @@ func AddCompactionSettingsBehaviors(root string, snapshot *Snapshot, records []R
 }
 
 func compactionSettingsDefinitions() []closureVerticalBehavior {
-	compactionRoot := sourceRange{repository: "pig", path: "coding/session.go", semanticID: "coding.Session.compaction-call", start: "prep := compaction.PrepareCompaction(entries, settings)", end: "if err == nil && compactCtx.Err() != nil {"}
-	settingsRoot := sourceRange{repository: "pig", path: "internal/codingagent/slash_session_handlers.go", semanticID: "codingagent.settings.selector", start: "func settingsHandler(sc *SlashContext) error {", end: "return settingsHandlerTUI(sc, config)"}
+	compactionRoot := sourceRange{repository: "ompig", path: "coding/session.go", semanticID: "coding.Session.compaction-call", start: "prep := compaction.PrepareCompaction(entries, settings)", end: "if err == nil && compactCtx.Err() != nil {"}
+	settingsRoot := sourceRange{repository: "ompig", path: "internal/codingagent/slash_session_handlers.go", semanticID: "codingagent.settings.selector", start: "func settingsHandler(sc *SlashContext) error {", end: "return settingsHandlerTUI(sc, config)"}
 	compactTarget := providerWireTarget{
-		id: "compaction-compact", symbol: "compaction.Compact", goFact: "go:github.com/MichaelKinsy/PiG/internal/codingagent/compaction#Compact",
-		rangeRef: sourceRange{repository: "pig", path: "internal/codingagent/compaction/compaction.go", semanticID: "compaction.Compact", start: "func Compact(", end: ""}, rootRef: compactionRoot,
+		id: "compaction-compact", symbol: "compaction.Compact", goFact: "go:github.com/tmih06/ompig/internal/codingagent/compaction#Compact",
+		rangeRef: sourceRange{repository: "ompig", path: "internal/codingagent/compaction/compaction.go", semanticID: "compaction.Compact", start: "func Compact(", end: ""}, rootRef: compactionRoot,
 	}
 	cancellationTarget := providerWireTarget{
-		id: "compaction-turn-prefix-cancellation", symbol: "compaction.generateTurnPrefixSummary", goFact: "go:github.com/MichaelKinsy/PiG/internal/codingagent/compaction#generateTurnPrefixSummary",
-		rangeRef: sourceRange{repository: "pig", path: "internal/codingagent/compaction/compaction.go", semanticID: "compaction.generateTurnPrefixSummary", start: "func generateTurnPrefixSummary(", end: "func summarizationFailure("}, rootRef: compactionRoot,
+		id: "compaction-turn-prefix-cancellation", symbol: "compaction.generateTurnPrefixSummary", goFact: "go:github.com/tmih06/ompig/internal/codingagent/compaction#generateTurnPrefixSummary",
+		rangeRef: sourceRange{repository: "ompig", path: "internal/codingagent/compaction/compaction.go", semanticID: "compaction.generateTurnPrefixSummary", start: "func generateTurnPrefixSummary(", end: "func summarizationFailure("}, rootRef: compactionRoot,
 	}
 	prepareTarget := providerWireTarget{
-		id: "compaction-prepare", symbol: "compaction.PrepareCompaction", goFact: "go:github.com/MichaelKinsy/PiG/internal/codingagent/compaction#PrepareCompaction",
-		rangeRef: sourceRange{repository: "pig", path: "internal/codingagent/compaction/compaction.go", semanticID: "compaction.PrepareCompaction", start: "func PrepareCompaction(", end: "// ─── LLM Summarization"}, rootRef: compactionRoot,
+		id: "compaction-prepare", symbol: "compaction.PrepareCompaction", goFact: "go:github.com/tmih06/ompig/internal/codingagent/compaction#PrepareCompaction",
+		rangeRef: sourceRange{repository: "ompig", path: "internal/codingagent/compaction/compaction.go", semanticID: "compaction.PrepareCompaction", start: "func PrepareCompaction(", end: "// ─── LLM Summarization"}, rootRef: compactionRoot,
 	}
 	settingsStateTarget := providerWireTarget{
-		id: "settings-display-state", symbol: "codingagent.SettingsManager display settings", goFact: "go:github.com/MichaelKinsy/PiG/internal/codingagent#SettingsManager.GetCompactionSettings",
-		rangeRef: sourceRange{repository: "pig", path: "internal/codingagent/settings.go", semanticID: "codingagent.SettingsManager.display-settings", start: "func (sm *SettingsManager) GetCompactionSettings(", end: "// RetryConfig holds resolved retry settings"}, rootRef: settingsRoot,
+		id: "settings-display-state", symbol: "codingagent.SettingsManager display settings", goFact: "go:github.com/tmih06/ompig/internal/codingagent#SettingsManager.GetCompactionSettings",
+		rangeRef: sourceRange{repository: "ompig", path: "internal/codingagent/settings.go", semanticID: "codingagent.SettingsManager.display-settings", start: "func (sm *SettingsManager) GetCompactionSettings(", end: "// RetryConfig holds resolved retry settings"}, rootRef: settingsRoot,
 	}
 	settingsPersistenceTarget := providerWireTarget{
-		id: "settings-global-persistence", symbol: "codingagent.SettingsManager.UpdateGlobal", goFact: "go:github.com/MichaelKinsy/PiG/internal/codingagent#SettingsManager.UpdateGlobal",
-		rangeRef: sourceRange{repository: "pig", path: "internal/codingagent/settings.go", semanticID: "codingagent.SettingsManager.UpdateGlobal", start: "func (sm *SettingsManager) UpdateGlobal(", end: "func (sm *SettingsManager) UpdateProject("},
-		rootRef:  sourceRange{repository: "pig", path: "internal/codingagent/slash_session_handlers.go", semanticID: "codingagent.settings.autocompact-change", start: "OnAutoCompactChange: func(enabled bool) {", end: "OnShowImagesChange:"},
+		id: "settings-global-persistence", symbol: "codingagent.SettingsManager.UpdateGlobal", goFact: "go:github.com/tmih06/ompig/internal/codingagent#SettingsManager.UpdateGlobal",
+		rangeRef: sourceRange{repository: "ompig", path: "internal/codingagent/settings.go", semanticID: "codingagent.SettingsManager.UpdateGlobal", start: "func (sm *SettingsManager) UpdateGlobal(", end: "func (sm *SettingsManager) UpdateProject("},
+		rootRef:  sourceRange{repository: "ompig", path: "internal/codingagent/slash_session_handlers.go", semanticID: "codingagent.settings.autocompact-change", start: "OnAutoCompactChange: func(enabled bool) {", end: "OnShowImagesChange:"},
 	}
 	settingsListTarget := providerWireTarget{
-		id: "settings-list-input-render", symbol: "tui.SettingsList", goFact: "go:github.com/MichaelKinsy/PiG/tui#SettingsList",
-		rangeRef: sourceRange{repository: "pig", path: "tui/settings_list.go", semanticID: "tui.SettingsList.input-render", start: "func (s *SettingsList) Render(", end: "func (s *SettingsList) hintLines("}, rootRef: settingsRoot,
+		id: "settings-list-input-render", symbol: "tui.SettingsList", goFact: "go:github.com/tmih06/ompig/tui#SettingsList",
+		rangeRef: sourceRange{repository: "ompig", path: "tui/settings_list.go", semanticID: "tui.SettingsList.input-render", start: "func (s *SettingsList) Render(", end: "func (s *SettingsList) hintLines("}, rootRef: settingsRoot,
 	}
 	return []closureVerticalBehavior{
 		{

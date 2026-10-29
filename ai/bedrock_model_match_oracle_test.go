@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -13,7 +13,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type bedrockMatchProbe struct {
@@ -53,7 +53,7 @@ func bedrockMatchProbes() []bedrockMatchProbe {
 }
 
 // The Bedrock model-matching helpers, cut from Pi's source, run in Node on the same ids and names: the lowercased candidate list with its separator-run rewrite, the adaptive-thinking, native-xhigh and block-binding
-// families, the Claude check (which tests the id for the anthropic prefixes only and the name for claude) and the prompt-caching decision with AWS_BEDROCK_FORCE_CACHE must match Pig's helpers.
+// families, the Claude check (which tests the id for the anthropic prefixes only and the name for claude) and the prompt-caching decision with AWS_BEDROCK_FORCE_CACHE must match Ompig's helpers.
 func TestBedrockModelMatchingMatchesPi(t *testing.T) {
 	probes := bedrockMatchProbes()
 	payload, err := json.Marshal(probes)
@@ -106,7 +106,7 @@ func TestBedrockModelMatchingMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got, want) {
 			if differing++; differing <= 12 {
-				t.Errorf("%+v name=%q\n  Pig %+v\n  Pi  %+v", probe, name, got, want)
+				t.Errorf("%+v name=%q\n  Ompig %+v\n  Pi  %+v", probe, name, got, want)
 			}
 		}
 	}

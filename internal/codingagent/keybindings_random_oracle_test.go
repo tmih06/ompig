@@ -90,6 +90,11 @@ for (const [name, path] of Object.entries(files)) {
 		maps.Copy(user, kb.GetUserBindings())
 		effective := map[string][]string{}
 		for action, keys := range kb.GetEffectiveConfig() {
+			// ompig divergence (D-SUBAGENT-5): the effective table also carries
+			// app.agents.hub, which Pi does not define.
+			if action == "app.agents.hub" {
+				continue
+			}
 			if keys.Keys != nil {
 				effective[action] = keys.Keys
 			} else {
@@ -107,7 +112,7 @@ for (const [name, path] of Object.entries(files)) {
 		if !reflect.DeepEqual(user, expected.User) || !reflect.DeepEqual(effective, expected.Effective) || !reflect.DeepEqual(gotKeys, expected.Keys) {
 			if failures++; failures <= 6 {
 				content, _ := os.ReadFile(path)
-				t.Errorf("%s %q:\n  user    Pig %v Pi %v\n  keys    Pig %v Pi %v\n  effective differs: %v", name, content, user, expected.User, gotKeys, expected.Keys, !reflect.DeepEqual(effective, expected.Effective))
+				t.Errorf("%s %q:\n  user    Ompig %v Pi %v\n  keys    Ompig %v Pi %v\n  effective differs: %v", name, content, user, expected.User, gotKeys, expected.Keys, !reflect.DeepEqual(effective, expected.Effective))
 			}
 		}
 	}

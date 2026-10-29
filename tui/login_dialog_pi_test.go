@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // The oracle exercises the pinned Pi (extensions/sdk-ts) showAuthPrompt with type:secret, then renders
@@ -61,7 +61,7 @@ func TestLoginDialogMaskDisabledMatchesPi(t *testing.T) {
 	}
 	for i := range got {
 		if !slices.Equal(got[i], want[i]) {
-			t.Errorf("frame %d differs\nPiG: %q\nPi:  %q", i, got[i], want[i])
+			t.Errorf("frame %d differs\nOmpig: %q\nPi:  %q", i, got[i], want[i])
 		}
 	}
 }

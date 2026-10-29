@@ -7,7 +7,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func (p *nativeProviderProxy) objectCall(ctx context.Context, method string, params any, callback nativeProviderCallback) (json.RawMessage, error) {

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// A rebuild of the tools (/reload, and the /new and /resume runtime replacement through InteractiveReplacement) keeps the `--tools` list's order: `pig --tools bash,read` still lists bash before read. Pi rebuilds from the same options.tools (initialActiveToolNames).
+// A rebuild of the tools (/reload, and the /new and /resume runtime replacement through InteractiveReplacement) keeps the `--tools` list's order: `ompig --tools bash,read` still lists bash before read. Pi rebuilds from the same options.tools (initialActiveToolNames).
 //
 // mutation-checked: dropping the orderToolsByInitialNames call in buildAgentTools gave the registry order [read bash] for `--tools bash,read`.
 // upstream: packages/coding-agent/src/core/sdk.ts:272-276 (initialActiveToolNames = options.tools), agent-session.ts:3552-3554

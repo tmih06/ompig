@@ -12,14 +12,14 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Codex is the one Pi provider that creates endTurn, and it creates it before rawStopReason: mapCodexEvents sets output.endTurn on the
 // terminal event (openai-codex-responses.ts:774-778) before it yields that event to processResponsesStream, whose finalizeResponse then
-// creates rawStopReason (openai-responses-shared.ts:589). The same SSE drives Pi's Codex stream and PiG's provider; the session-line and RPC
-// encodings of PiG's message must equal JSON.stringify of Pi's.
+// creates rawStopReason (openai-responses-shared.ts:589). The same SSE drives Pi's Codex stream and Ompig's provider; the session-line and RPC
+// encodings of Ompig's message must equal JSON.stringify of Pi's.
 func TestCodexAssistantEndTurnPrecedesRawStopReason(t *testing.T) {
 	events := []string{
 		`{"type":"response.created","response":{"id":"resp_1"}}`,

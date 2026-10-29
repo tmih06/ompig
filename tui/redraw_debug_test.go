@@ -45,7 +45,7 @@ func TestRedrawReasonIsSilentByDefault(t *testing.T) {
 }
 
 func TestStaleRedrawDebugAliasesDoNotEnableLogging(t *testing.T) {
-	for _, name := range []string{"PI_DEBUG_REDRAW", "PIG_DEBUG_REDRAW"} {
+	for _, name := range []string{"PI_DEBUG_REDRAW", "OMPIG_DEBUG_REDRAW"} {
 		t.Run(name, func(t *testing.T) {
 			dir := t.TempDir()
 			t.Setenv("PI_TUI_DEBUG_REDRAW", "")

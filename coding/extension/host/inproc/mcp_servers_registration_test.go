@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 func mcpConfig(url string) json.RawMessage { return json.RawMessage(`{"url":"` + url + `"}`) }
@@ -191,7 +191,7 @@ func TestRunnerReportsRegisteredMcpServersWhenNoExtensionHandlesThem(t *testing.
 	}
 }
 
-// pig additive (D92): with mcp stripped (a Binary's OFF shim or a Piglet's runtime strip records it in pigstrip), nothing
+// ompig additive (D92): with mcp stripped (a Binary's OFF shim or a Ompiglet's runtime strip records it in pigstrip), nothing
 // replaced the built-in MCP support, so the report names the strip instead of Pi's "another extension may have replaced".
 func TestRunnerNamesTheMcpStripForUnhandledMcpServers(t *testing.T) {
 	t.Cleanup(pigstrip.Strip(pigstrip.ListExtensions, "mcp"))
@@ -207,7 +207,7 @@ func TestRunnerNamesTheMcpStripForUnhandledMcpServers(t *testing.T) {
 	want := extension.ExtensionError{
 		ExtensionPath: "/ext/orphan.ts",
 		Event:         "register_mcp_server",
-		Error:         `MCP server "orphan" is registered, but no loaded extension connects MCP servers; built-in MCP support is stripped from this Piglet (strip.extensions: mcp)`,
+		Error:         `MCP server "orphan" is registered, but no loaded extension connects MCP servers; built-in MCP support is stripped from this Ompiglet (strip.extensions: mcp)`,
 	}
 	if !reflect.DeepEqual(reported, []extension.ExtensionError{want}) {
 		t.Fatalf("reported = %+v, want [%+v]", reported, want)

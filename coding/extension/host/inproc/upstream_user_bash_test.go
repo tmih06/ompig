@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 func upstreamUserBashRunner(t *testing.T, handler extension.HandlerFn) (*inproc.Runner, extension.UserBashEvent, *[]*extension.ExtensionError) {
@@ -89,7 +89,7 @@ func (upstreamBashOperations) Exec(context.Context, string, string, extension.Ba
 func TestUserBashPresentUndefinedExitCode(t *testing.T) {
 	for _, value := range []any{
 		&extension.UserBashEventResult{Result: map[string]any{"output": "handled", "exitCode": nil, "cancelled": false, "truncated": false}},
-		json.RawMessage(`{"result":{"output":"handled","cancelled":false,"truncated":false},"_pigUserBashExitCodeUndefined":true}`),
+		json.RawMessage(`{"result":{"output":"handled","cancelled":false,"truncated":false},"_ompigUserBashExitCodeUndefined":true}`),
 	} {
 		r, event, _ := upstreamUserBashRunner(t, func(...any) (any, error) { return value, nil })
 		result, err := r.EmitUserBash(t.Context(), event)

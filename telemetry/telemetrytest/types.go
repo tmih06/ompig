@@ -7,7 +7,7 @@ package telemetrytest
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // TelemetryAdapterFixture is a fresh adapter instance and normalized snapshot reader owned by one conformance case.

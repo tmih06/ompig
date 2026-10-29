@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.87.1 interactive-mode.ts:4073-4091 gates on trust and resources, not quietStartup or loaded extensions.
@@ -46,7 +46,7 @@ func TestProjectTrustWarningRendering(t *testing.T) {
 					if tc.history {
 						want.Add(tui.NewSpacer(1))
 					}
-					want.Add(tui.NewPaddedText(tui.ActiveTheme().Fg("warning", "This project is not trusted. Project .pig resources and packages are ignored. Use /trust to save a trust decision, then restart pig."), 1, 0, nil))
+					want.Add(tui.NewPaddedText(tui.ActiveTheme().Fg("warning", "This project is not trusted. Project .ompig resources and packages are ignored. Use /trust to save a trust decision, then restart ompig."), 1, 0, nil))
 				}
 				if got, expected := m.chatContainer.Render(width), want.Render(width); !slices.Equal(got, expected) {
 					t.Errorf("width %d: rows = %q, want %q", width, got, expected)

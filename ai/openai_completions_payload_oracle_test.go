@@ -8,16 +8,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // pi: packages/ai/src/api/openai-completions.ts
 
 // The request payload openai-completions builds (buildParams, convertMessages, convertTools), over random transcripts (text and image user content,
 // assistant thinking and tool calls of the same and of another model, error and aborted turns, tool results with images), tool sets, model compat
-// settings, base URLs that select detected compat, and stream options. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal
-// as parsed JSON (member order is not compared: PiG writes the payload from structs and maps).
+// settings, base URLs that select detected compat, and stream options. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal
+// as parsed JSON (member order is not compared: Ompig writes the payload from structs and maps).
 func TestOpenAICompletionsPayloadMatchesPi(t *testing.T) { checkOpenAICompletionsPayload(t, false) }
 
 // TestOpenAICompletionsDetectedCompatPayloadMatchesPi is the same comparison for provider names and base URLs that select detected compat (detectCompat).
@@ -139,7 +139,7 @@ func checkOpenAICompletionsPayload(t *testing.T, detected bool) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d provider=%s baseUrl=%s reasoning=%v simple=%v compat=%s options=%v", i, p.Provider, p.BaseURL, p.Reasoning, p.Simple, p.Compat, p.Options), got, want[i], &failures, classes)
 	}

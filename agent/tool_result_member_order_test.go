@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/agent-loop.ts:778-786, 877-889, 912-919. Every expectation was checked with the real Pi 0.99.1 CLI (an extension tool returning {isError, content}, a tool_result handler returning {details}, printing tool_execution_end's result: {"isError":true,"content":[...],"details":{...}}).

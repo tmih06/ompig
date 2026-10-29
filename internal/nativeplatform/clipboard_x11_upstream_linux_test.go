@@ -77,7 +77,7 @@ func readNativeTestClipboard(t *testing.T, method string, env []string) nativeRe
 func invokeNativeTestClipboard(ctx context.Context, method string, env []string) (nativeReaderResult, error) {
 	command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestNativeX11ReaderFixture$")
 	// Race instrumentation's process-exit grace sleep is not clipboard transfer time and must not consume Pi's 3500ms assertion budget.
-	command.Env = append(append([]string{}, env...), "PIG_NATIVE_X11_READER="+method, "GORACE="+os.Getenv("GORACE")+" atexit_sleep_ms=0")
+	command.Env = append(append([]string{}, env...), "OMPIG_NATIVE_X11_READER="+method, "GORACE="+os.Getenv("GORACE")+" atexit_sleep_ms=0")
 	output, err := command.CombinedOutput()
 	if err != nil {
 		return nativeReaderResult{}, fmt.Errorf("native reader: %w\n%s", err, output)
@@ -218,7 +218,7 @@ func TestUpstreamNativeX11Transfers(t *testing.T) {
 			ctx, cancel := context.WithTimeout(t.Context(), 6*time.Second)
 			defer cancel()
 			command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestNativeX11CleanupFixture$")
-			command.Env = append(env, "PIG_NATIVE_X11_CLEANUP="+content)
+			command.Env = append(env, "OMPIG_NATIVE_X11_CLEANUP="+content)
 			output, err := command.CombinedOutput()
 			if err != nil || string(output) != "clean\nPASS\n" {
 				t.Fatalf("cleanup: %v\n%s", err, output)
@@ -273,7 +273,7 @@ func nativeClipboardAllocations() nativeAllocationProfile {
 }
 
 func TestNativeX11CleanupFixture(t *testing.T) {
-	content := os.Getenv("PIG_NATIVE_X11_CLEANUP")
+	content := os.Getenv("OMPIG_NATIVE_X11_CLEANUP")
 	if content == "" {
 		return
 	}

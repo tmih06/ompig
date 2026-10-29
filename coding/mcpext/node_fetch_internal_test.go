@@ -3,7 +3,7 @@ package mcpext
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Requests Pi sends through the global fetch (the OAuth flow's discovery and token calls included) use Node's fetch semantics when no client is given.

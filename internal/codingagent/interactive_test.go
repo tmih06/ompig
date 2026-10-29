@@ -16,11 +16,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ─── classifyKey (extended: base cases in input_split_test.go) ───────────────
@@ -1765,7 +1765,7 @@ func (h *recordingCompactHandle) Compact(_ context.Context, _ string) (*Compacti
 // TestDynamicProviderInModelSurfaces: models from a registered dynamic provider
 // (e.g. example-provider, radius) are resolvable and completable in the interactive
 // model surfaces, matching upstream's getAvailable()-backed picker. Regression
-// for the gap where pig's surfaces used only the static ai.ListModels catalog.
+// for the gap where ompig's surfaces used only the static ai.ListModels catalog.
 func TestDynamicProviderInModelSurfaces(t *testing.T) {
 	dir := t.TempDir()
 	reg := NewModelRegistry(dir)
@@ -2004,7 +2004,7 @@ func TestSwitchTuiModeRefusedWhileOverlayActive(t *testing.T) {
 
 // TestSwitchTuiModeDynamicUIContextFollowsSwap proves the extension UI context -
 // a renderer reference captured at construction: resolves the CURRENT renderer
-// after a swap, not the stopped one (pig's race-safe Proxy-equivalent). This is
+// after a swap, not the stopped one (ompig's race-safe Proxy-equivalent). This is
 // the silent-breakage the disposition sweep surfaced. It observes the renderer
 // withRenderer actually targets, so a static implementation (using u.tui) fails.
 func TestSwitchTuiModeDynamicUIContextFollowsSwap(t *testing.T) {
@@ -2238,7 +2238,7 @@ func TestSwitchTuiModeMountDoesNotReenterRendererLock(t *testing.T) {
 // TestSwitchTuiModeAltScreenEnterLeaveOrdering ports the portable contract of
 // upstream interactive-tui.test.ts "selects the alternate-screen renderer only
 // when requested" and "replaces the renderer while preserving components",
-// adapted to pig's live switch. Upstream asserts createInteractiveTui enters the
+// adapted to ompig's live switch. Upstream asserts createInteractiveTui enters the
 // alternate screen (\x1b[?1049h) only for fullscreen; here the same gating is
 // proven across a LIVE switchTuiMode round trip: regular start emits no alt-enter,
 // regular->fullscreen emits alt-enter, and fullscreen->regular emits alt-leave
@@ -2246,13 +2246,13 @@ func TestSwitchTuiModeMountDoesNotReenterRendererLock(t *testing.T) {
 // tmux) for the runtime renderer swap.
 //
 // N/A vs upstream: the upstream test also asserts getFocusedComponent()/
-// component.focused are preserved across the swap. pig has no renderer-level focus
+// component.focused are preserved across the swap. ompig has no renderer-level focus
 // model: input is routed structurally (overlay stack, then the editor in the
 // interactive loop), so there is no focus pointer to capture/restore. Component
 // preservation across the swap is covered by
 // TestSwitchTuiModePreservesBannerAndTranscript; input routing survives because
 // the same editor tree is remounted. The focus assertions are therefore an
-// upstream TS-mechanism with no Go equivalent, not a pig defect.
+// upstream TS-mechanism with no Go equivalent, not a ompig defect.
 func TestSwitchTuiModeAltScreenEnterLeaveOrdering(t *testing.T) {
 	const enterAlt = "\x1b[?1049h"
 	const leaveAlt = "\x1b[?1049l"

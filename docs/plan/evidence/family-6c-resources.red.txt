@@ -1,17 +1,17 @@
 # port-99-f6c red run 15904a765 + working tree (stubs only), 2026-09-30T01:03:21Z
-# go test with isolated HOME/PIG_HOME/PIG_CODING_AGENT_DIR
+# go test with isolated HOME/OMPIG_HOME/OMPIG_CODING_AGENT_DIR
 --- FAIL: TestSubprocessGetAllTools_ExtensionOverrideReplacesBuiltinInPlace (0.00s)
 --- FAIL: TestSyntheticPathSource (0.00s)
 --- FAIL: TestIsLocalPathExcludesBuiltinExtensions (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent	0.078s
+FAIL	github.com/tmih06/ompig/internal/codingagent	0.078s
 FAIL
 --- FAIL: TestUpstreamSystemPromptSecondHalfExactSections (0.00s)
     --- FAIL: TestUpstreamSystemPromptSecondHalfExactSections/111_docs_absolute_bases (0.00s)
 --- FAIL: TestUpstreamSystemPrompt (0.00s)
     --- FAIL: TestUpstreamSystemPrompt/instructs_models_to_resolve_pi_docs_and_examples_under_absolute_base_paths (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent/prompts	0.031s
+FAIL	github.com/tmih06/ompig/internal/codingagent/prompts	0.031s
 FAIL
 --- FAIL: TestResolveBuiltinExtensionsWithUserExclusionsAndProjectOverrides (0.00s)
 --- FAIL: TestResolveBuiltinExtensionsProjectOverrideBranches (0.01s)
@@ -23,7 +23,7 @@ FAIL
     --- FAIL: TestResolveBuiltinExtensionsProjectOverrideBranches/global_force_include_after_exclude (0.00s)
     --- FAIL: TestResolveBuiltinExtensionsProjectOverrideBranches/untrusted_project_is_ignored (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/packagemanager	0.049s
+FAIL	github.com/tmih06/ompig/internal/packagemanager	0.049s
 FAIL
 --- FAIL: TestAgentSessionDynamicToolsPort (0.03s)
     --- PASS: TestAgentSessionDynamicToolsPort/exposes_session_state_before_custom_bash_spawn_hooks_and_supports_opting_out (0.01s)
@@ -31,7 +31,7 @@ FAIL
     --- PASS: TestAgentSessionDynamicToolsPort/returns_source_metadata_for_SDK_custom_tools (0.01s)
     --- PASS: TestAgentSessionDynamicToolsPort/keeps_custom_tools_active_but_omits_them_from_available_tools_when_promptSnippet_is_not_provided (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	0.072s
+FAIL	github.com/tmih06/ompig/coding	0.072s
 FAIL
 === RUN   TestUpstreamExtensionsDiscovery/does_not_infer_package_ownership_from_ancestor_manifests
 === PAUSE TestUpstreamExtensionsDiscovery/does_not_infer_package_ownership_from_ancestor_manifests
@@ -39,7 +39,7 @@ FAIL
 --- PASS: TestUpstreamExtensionsDiscovery (0.00s)
     --- PASS: TestUpstreamExtensionsDiscovery/does_not_infer_package_ownership_from_ancestor_manifests (1.48s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/coding/extension/host/subprocess	2.521s
+ok  	github.com/tmih06/ompig/coding/extension/host/subprocess	2.521s
 --- FAIL: TestUpstreamConfigTogglesBuiltinExtensionsInGlobalMode (0.00s)
 --- FAIL: TestUpstreamConfigCyclesProjectBuiltinExtensionOverridesInLocalMode (0.00s)
 --- FAIL: TestResourcePrecedenceRankPlacesBuiltinExtensionsLast (0.00s)
@@ -137,5 +137,5 @@ ok  	github.com/MichaelKinsy/PiG/coding/extension/host/subprocess	2.521s
     --- PASS: TestTemporaryGitSourceLoadsOnlyPackageResources/npm_conventional_directory (0.00s)
 --- FAIL: TestPinnedTemporaryGitSourceChangingRefLoadsNewCheckout (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/cmd/pig	5.228s
+FAIL	github.com/tmih06/ompig/cmd/ompig	5.228s
 FAIL

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The session graph: the classes Pi extensions construct around a session (SessionManager, SettingsManager, ModelRuntime, DefaultResourceLoader, DefaultPackageManager, ProjectTrustStore). The host owns each object for the extension's connection; the value an extension holds names it. Every method is Pi's method under its Go name, with Pi's positional parameters (an optional parameter is a pointer or a variadic option and nil is Pi's undefined) and Pi's result in the JSON shape Pi's types have.

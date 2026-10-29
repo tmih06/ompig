@@ -14,10 +14,10 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
-const consoleEditorResultEnv = "PIG_CODINGAGENT_CONSOLE_EDITOR_RESULT"
+const consoleEditorResultEnv = "OMPIG_CODINGAGENT_CONSOLE_EDITOR_RESULT"
 
 // Pi ProcessTerminal.stop removes its input listener before editInExternalEditor inherits stdin. Windows interactive mode requires a console (resolveAppMode), so a child process attached to a pseudo console runs the reader on its console input. Pause must end the reader's console wait without a keystroke, the editor must read the next input directly from the console, and resume must deliver input again.
 func TestInteractiveTerminalReaderHandsConsoleInputToExternalEditor(t *testing.T) {

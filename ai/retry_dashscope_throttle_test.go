@@ -7,7 +7,7 @@ import (
 
 // pi-mono #10656: Alibaba Model Studio (DashScope) answers token-rate throttling with HTTP 429 code insufficient_quota and "Allocated quota exceeded, please
 // increase your quota limit." Pi's utils/retry.ts matches "quota exceeded", "insufficient_quota" and "billing" as non-retryable provider limits before it looks
-// for a transient 429, so every one of these wordings ends the run after one call. PiG follows Pi (owner ruling 2026-10-10: byte parity over the retry).
+// for a transient 429, so every one of these wordings ends the run after one call. Ompig follows Pi (owner ruling 2026-10-10: byte parity over the retry).
 func TestDashScopeQuotaWordingsAreNotRetriedAsPiDoesNot(t *testing.T) {
 	for _, text := range []string{
 		"429 Allocated quota exceeded, please increase your quota limit.",

@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
-// jsonOutcome is the on-disk shape for --pig-parity.results.
+// jsonOutcome is the on-disk shape for --ompig-parity.results.
 // Kept separate from ScenarioOutcome so the test-facing type stays clean
 // and the file shape can evolve independently.
 type jsonOutcome struct {
@@ -24,7 +24,7 @@ type jsonOutcome struct {
 	Tags        []string `json:"tags"`
 	Covers      []string `json:"covers"`
 	Source      string   `json:"source"`
-	PigMedian   int64    `json:"pig_median_ms"`
+	OmpigMedian int64    `json:"ompig_median_ms"`
 	PiMedian    int64    `json:"pi_median_ms"`
 	Passed      bool     `json:"passed"`
 	Failures    []string `json:"failures,omitempty"`
@@ -46,7 +46,7 @@ func writeResultsJSON(path string, results []*ScenarioOutcome) error {
 			Tags:        o.Scenario.Tags,
 			Covers:      o.Scenario.Covers,
 			Source:      o.Scenario.SourcePath,
-			PigMedian:   o.Pig.MedianMs,
+			OmpigMedian: o.Ompig.MedianMs,
 			PiMedian:    o.Pi.MedianMs,
 			Passed:      o.Passed(),
 			Failures:    o.Failures,

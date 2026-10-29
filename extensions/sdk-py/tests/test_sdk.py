@@ -1,8 +1,8 @@
-"""Unit tests for the Python pig-sdk.
+"""Unit tests for the Python ompig-sdk.
 
 These tests exercise the SDK in-process against a fake host socket so we can
 verify register/ready/request/response/call/cancel/shutdown framing without
-spawning a real pig host.
+spawning a real ompig host.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import struct
 import tempfile
 import threading
 
-import pig_sdk
+import ompig_sdk
 
 
 def _read_frame(s: socket.socket) -> dict:
@@ -58,8 +58,8 @@ def test_register_and_tool_call_roundtrip() -> None:
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
 
-    def factory() -> pig_sdk.Extension:
-        ext = pig_sdk.Extension("py-unit")
+    def factory() -> ompig_sdk.Extension:
+        ext = ompig_sdk.Extension("py-unit")
         ext.tool("echo", "echo", {"type": "object"}, lambda ctx, args: {"content": args.get("msg", "")})
         return ext
 
@@ -107,7 +107,7 @@ def test_cancel_sets_context_cancelled() -> None:
     observed_cancel = threading.Event()
     observed_reason: list[str | None] = []
 
-    def slow_tool(ctx: pig_sdk.Context, args: dict) -> dict:
+    def slow_tool(ctx: ompig_sdk.Context, args: dict) -> dict:
         started.set()
         # Wait for cancellation up to 2s.
         for _ in range(200):
@@ -118,7 +118,7 @@ def test_cancel_sets_context_cancelled() -> None:
             threading.Event().wait(0.01)
         return {"content": "no cancel"}
 
-    ext = pig_sdk.Extension("py-cancel")
+    ext = ompig_sdk.Extension("py-cancel")
     ext.tool("slow", "slow", {"type": "object"}, slow_tool)
     t = threading.Thread(target=ext.run_with_socket, args=(sock_path,), daemon=True)
     t.start()
@@ -150,7 +150,7 @@ def test_shortcut_renderer_widget_and_declarations() -> None:
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
 
-    ext = pig_sdk.Extension("py-full")
+    ext = ompig_sdk.Extension("py-full")
     ext.shortcut("ctrl+x", "shortcut", lambda ctx: None)
     ext.flag("dry-run", "dry run", "boolean", False)
     ext.register_provider("fake", {"kind": "test"})
@@ -193,7 +193,7 @@ def test_set_widget_string_list_is_a_host_call_in_rpc_mode() -> None:
     tmp = tempfile.mkdtemp()
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
-    ext = pig_sdk.Extension("py-rpc-widget")
+    ext = ompig_sdk.Extension("py-rpc-widget")
     ext.command("widget", "set a widget", lambda ctx, _args: ctx.set_widget("status", ["w-one"]))
     thread = threading.Thread(target=ext.run_with_socket, args=(sock_path,), daemon=True)
     thread.start()
@@ -224,11 +224,11 @@ def test_host_call_roundtrip() -> None:
 
     notified: list[dict] = []
 
-    def notify_tool(ctx: pig_sdk.Context, args: dict) -> dict:
+    def notify_tool(ctx: ompig_sdk.Context, args: dict) -> dict:
         ctx.notify("hi", level="info")
         return {"content": "done"}
 
-    ext = pig_sdk.Extension("py-callback")
+    ext = ompig_sdk.Extension("py-callback")
     ext.tool("notify", "notify", {"type": "object"}, notify_tool)
     t = threading.Thread(target=ext.run_with_socket, args=(sock_path,), daemon=True)
     t.start()
@@ -263,10 +263,10 @@ class _FakeStore:
     def __init__(self) -> None:
         self._stored = None
 
-    def credential_status(self) -> pig_sdk.OAuthCredentialStatus:
-        return pig_sdk.OAuthCredentialStatus(present=self._stored is not None, auth_type="oauth", source="fake")
+    def credential_status(self) -> ompig_sdk.OAuthCredentialStatus:
+        return ompig_sdk.OAuthCredentialStatus(present=self._stored is not None, auth_type="oauth", source="fake")
 
-    def store_credentials(self, creds: pig_sdk.OAuthCredentials) -> str:
+    def store_credentials(self, creds: ompig_sdk.OAuthCredentials) -> str:
         self._stored = creds
         return "/fake/path"
 
@@ -283,20 +283,20 @@ def test_oauth_provider_bridge() -> None:
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
 
-    def login(cb: pig_sdk.OAuthLoginCallbacks) -> pig_sdk.OAuthCredentials:
-        cb.on_device_code(pig_sdk.OAuthDeviceCodeInfo(user_code="WXYZ", verification_uri="https://verify"))
-        value = cb.on_prompt(pig_sdk.OAuthPrompt(message="URL"))
-        return pig_sdk.OAuthCredentials(access=f"tok:{value}", expires=999)
+    def login(cb: ompig_sdk.OAuthLoginCallbacks) -> ompig_sdk.OAuthCredentials:
+        cb.on_device_code(ompig_sdk.OAuthDeviceCodeInfo(user_code="WXYZ", verification_uri="https://verify"))
+        value = cb.on_prompt(ompig_sdk.OAuthPrompt(message="URL"))
+        return ompig_sdk.OAuthCredentials(access=f"tok:{value}", expires=999)
 
-    ext = pig_sdk.Extension("py-oauth")
+    ext = ompig_sdk.Extension("py-oauth")
     ext.register_oauth_provider(
         "example-provider",
         {"name": "Example Provider"},
-        pig_sdk.OAuthProvider(
+        ompig_sdk.OAuthProvider(
             name="Example Provider",
             is_subscription=True,
             login=login,
-            refresh_token=lambda creds: pig_sdk.OAuthCredentials(access="fresh", refresh="r2", expires=42),
+            refresh_token=lambda creds: ompig_sdk.OAuthCredentials(access="fresh", refresh="r2", expires=42),
             get_api_key=lambda creds: f"key-for-{creds.access}",
             credential_store=_FakeStore(),
         ),
@@ -388,7 +388,7 @@ def _drain_width_handlers(ext):
     """Wait for the width deliveries queued so far: handlers run on a worker thread, in order, off the reader."""
     while True:
         with ext._request_threads_lock:
-            workers = [t for t in ext._request_threads if t.name == "pig-width-change"]
+            workers = [t for t in ext._request_threads if t.name == "ompig-width-change"]
         if not workers:
             return
         for worker in workers:
@@ -397,8 +397,8 @@ def _drain_width_handlers(ext):
 
 
 def test_on_width_change_delivers_new_width():
-    ext = pig_sdk.Extension("py-width")
-    ctx = pig_sdk.Context(ext, None, None)
+    ext = ompig_sdk.Extension("py-width")
+    ctx = ompig_sdk.Context(ext, None, None)
 
     seen = []
     width_during_call = []
@@ -416,8 +416,8 @@ def test_on_width_change_delivers_new_width():
 
 
 def test_on_width_change_unsubscribe_is_idempotent():
-    ext = pig_sdk.Extension("py-width-unsub")
-    ctx = pig_sdk.Context(ext, None, None)
+    ext = ompig_sdk.Extension("py-width-unsub")
+    ctx = ompig_sdk.Context(ext, None, None)
 
     calls = []
     unsubscribe = ctx.on_width_change(calls.append)
@@ -433,8 +433,8 @@ def test_on_width_change_unsubscribe_is_idempotent():
 
 
 def test_on_width_change_ignores_non_positive_width():
-    ext = pig_sdk.Extension("py-width-zero")
-    ctx = pig_sdk.Context(ext, None, None)
+    ext = ompig_sdk.Extension("py-width-zero")
+    ctx = ompig_sdk.Context(ext, None, None)
 
     calls = []
     ctx.on_width_change(calls.append)
@@ -445,8 +445,8 @@ def test_on_width_change_ignores_non_positive_width():
 
 
 def test_on_width_change_rejects_non_callable():
-    ext = pig_sdk.Extension("py-width-bad")
-    ctx = pig_sdk.Context(ext, None, None)
+    ext = ompig_sdk.Extension("py-width-bad")
+    ctx = ompig_sdk.Context(ext, None, None)
     try:
         ctx.on_width_change("not callable")
     except TypeError:
@@ -458,7 +458,7 @@ def test_heartbeat_and_request_state_bypass_handlers() -> None:
     tmp = tempfile.mkdtemp()
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
-    ext = pig_sdk.Extension("py-liveness")
+    ext = ompig_sdk.Extension("py-liveness")
     ext.command("done", "complete immediately", lambda _ctx, _args: None)
     thread = threading.Thread(target=ext.run_with_socket, args=(sock_path,), daemon=True)
     thread.start()
@@ -492,7 +492,7 @@ def test_user_wait_reports_blocked_and_parents_host_call() -> None:
     tmp = tempfile.mkdtemp()
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
-    ext = pig_sdk.Extension("py-blocked")
+    ext = ompig_sdk.Extension("py-blocked")
     ext.command("ask", "wait for input", lambda ctx, _args: ctx.input("Question", "Answer"))
     thread = threading.Thread(target=ext.run_with_socket, args=(sock_path,), daemon=True)
     thread.start()
@@ -522,12 +522,12 @@ def test_user_wait_reports_blocked_and_parents_host_call() -> None:
 
 
 def test_set_login_sends_canonical_definition_as_call_args() -> None:
-    ext = pig_sdk.Extension("py-login")
-    ctx = pig_sdk.Context(ext)
+    ext = ompig_sdk.Extension("py-login")
+    ctx = ompig_sdk.Context(ext)
     calls: list[tuple[str, object]] = []
     ext._call = lambda method, args=None, request_id="": calls.append((method, args)) or {}  # type: ignore[method-assign]
 
-    definition = pig_sdk.LoginDefinition(
+    definition = ompig_sdk.LoginDefinition(
         brand=["A" * 41] * 5,
         hero=["A" * 32] * 14,
         mascot=["A" * 16] * 14,
@@ -554,15 +554,15 @@ def test_set_login_sends_canonical_definition_as_call_args() -> None:
 
 
 def test_register_sprite_sends_the_definition_as_call_args() -> None:
-    ext = pig_sdk.Extension("py-sprite")
-    ctx = pig_sdk.Context(ext)
+    ext = ompig_sdk.Extension("py-sprite")
+    ctx = ompig_sdk.Context(ext)
     calls: list[tuple[str, object]] = []
     ext._call = lambda method, args=None, request_id="": calls.append((method, args)) or {}  # type: ignore[method-assign]
 
     ctx.register_sprite(
-        pig_sdk.SpriteDefinition(
-            id="blue-pig",
-            name="Blue PiG",
+        ompig_sdk.SpriteDefinition(
+            id="blue-ompig",
+            name="Blue Ompig",
             tagline="From an extension.",
             mascot=["mascot"],
             palette={"P": "#5B8DEF"},
@@ -572,8 +572,8 @@ def test_register_sprite_sends_the_definition_as_call_args() -> None:
     assert calls == [(
         "ui.registerSprite",
         {
-            "id": "blue-pig",
-            "name": "Blue PiG",
+            "id": "blue-ompig",
+            "name": "Blue Ompig",
             "tagline": "From an extension.",
             "mascot": ["mascot"],
             "palette": {"P": "#5B8DEF"},
@@ -582,16 +582,16 @@ def test_register_sprite_sends_the_definition_as_call_args() -> None:
 
 
 def test_set_login_does_not_wrap_definition_or_replace_clear_header() -> None:
-    ext = pig_sdk.Extension("py-login-clear")
-    ctx = pig_sdk.Context(ext)
+    ext = ompig_sdk.Extension("py-login-clear")
+    ctx = ompig_sdk.Context(ext)
     calls: list[tuple[str, object]] = []
     ext._call = lambda method, args=None, request_id="": calls.append((method, args)) or {}  # type: ignore[method-assign]
-    definition = pig_sdk.LoginDefinition(
+    definition = ompig_sdk.LoginDefinition(
         brand=["A" * 41] * 5,
         hero=["A" * 32] * 14,
         mascot=["A" * 16] * 14,
         palette={"A": "#112233"},
-        name="Pig",
+        name="Ompig",
         description="Coding agent",
         tagline="Ready.",
     )
@@ -610,10 +610,10 @@ def test_set_label_raises_host_error() -> None:
     sock_path = os.path.join(tmp, "ext.sock")
     listener = _start_fake_host(sock_path)
 
-    def label(ctx: pig_sdk.Context, _args: str) -> None:
+    def label(ctx: ompig_sdk.Context, _args: str) -> None:
         ctx.set_label("missing-entry", "tag")
 
-    ext = pig_sdk.Extension("py-label")
+    ext = ompig_sdk.Extension("py-label")
     ext.command("label", "label an entry", label)
     t = threading.Thread(target=ext.run_with_socket, args=(sock_path,), daemon=True)
     t.start()
@@ -646,9 +646,9 @@ def test_get_all_tools_reports_exposure_namespace_and_annotations() -> None:
         {"name": "search", "description": "d", "parameters": {"type": "object"}, "exposure": "codemode", "namespace": {"name": "mcp__docs", "description": "Docs server"}, "annotations": {"readOnlyHint": True}, "sourceInfo": {"path": "/x/search.py", "source": "cli", "scope": "temporary", "origin": "top-level"}},
         {"name": "grep", "description": "d", "parameters": {"type": "object"}, "exposure": "direct", "sourceInfo": {"path": "<builtin:grep>", "source": "builtin", "scope": "temporary", "origin": "top-level"}},
     ]
-    ext = pig_sdk.Extension("py-exposure")
+    ext = ompig_sdk.Extension("py-exposure")
     ext._call = lambda method, args=None, request_id="": {"result": {"tools": tools}}  # type: ignore[method-assign]
-    got = pig_sdk.Context(extension=ext).get_all_tools()
+    got = ompig_sdk.Context(extension=ext).get_all_tools()
     assert got == tools
     assert [t["exposure"] for t in got] == ["codemode", "direct"]
     assert got[0]["namespace"] == {"name": "mcp__docs", "description": "Docs server"}
@@ -670,11 +670,11 @@ def test_get_all_tools_and_commands_return_upstream_info() -> None:
         "source": "extension",
         "sourceInfo": {"path": "/x/probe.py", "source": "cli", "scope": "temporary", "origin": "top-level"},
     }
-    ext = pig_sdk.Extension("py-info")
+    ext = ompig_sdk.Extension("py-info")
     calls = []
     results = {"getAllTools": {"tools": [tool]}, "getCommands": {"commands": [command]}}
     ext._call = lambda method, args=None, request_id="": calls.append(method) or {"result": results[method]}  # type: ignore[method-assign]
-    ctx = pig_sdk.Context(extension=ext)
+    ctx = ompig_sdk.Context(extension=ext)
     assert ctx.get_all_tools() == [tool]
     assert ctx.get_commands() == [command]
     assert calls == ["getAllTools", "getCommands"]

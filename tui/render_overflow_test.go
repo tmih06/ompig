@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Upstream (pinned 0.87.1) checks row width in exactly one place: the
@@ -269,7 +269,7 @@ func TestOverflowAltScreenDoesNotTerminate(t *testing.T) {
 }
 
 func TestRenderOverflowErrorFields(t *testing.T) {
-	err := &RenderOverflowError{Line: 7, LineWidth: 90, TerminalWidth: 80, LogPath: "/x/pig-tui-crash.log"}
+	err := &RenderOverflowError{Line: 7, LineWidth: 90, TerminalWidth: 80, LogPath: "/x/ompig-tui-crash.log"}
 	if !strings.HasPrefix(err.Error(), fmt.Sprintf("Rendered line %d exceeds terminal width (%d > %d).", 7, 90, 80)) {
 		t.Fatal(err.Error())
 	}

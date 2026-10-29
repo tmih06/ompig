@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func BenchmarkSkillResourceMetadata(b *testing.B) {
@@ -16,8 +16,8 @@ func BenchmarkSkillResourceMetadata(b *testing.B) {
 			cwd, agent := filepath.Join(root, "project"), filepath.Join(root, "agent")
 			b.Setenv("HOME", root)
 			b.Setenv("USERPROFILE", root)
-			b.Setenv("PIG_HOME", filepath.Join(root, "home"))
-			b.Setenv("PIG_CODING_AGENT_DIR", agent)
+			b.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
+			b.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 			b.Setenv("PI_CODING_AGENT_DIR", agent)
 			b.Setenv("PI_OFFLINE", "1")
 			if err := os.MkdirAll(cwd, 0o755); err != nil {

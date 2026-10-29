@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent.ts runWithLifecycle/handleRunFailure turns a rejected preparation into one failed assistant lifecycle and never starts another request.

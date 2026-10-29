@@ -19,8 +19,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type radiusResponseProbe struct {
@@ -35,7 +35,7 @@ type radiusResponseAnswer struct {
 	Syntax bool            `json:"syntax"`
 }
 
-// radiusResponseProbes serve every flow every shape of body and status. A scope is a non-empty string: Pi keeps a null or empty one on the credential, which Pig's optional Scope cannot tell from none. Members hold the values Go's typed results can represent, or a falsy, null or absent one: Pi also accepts any other truthy value (a number as a token, a string as expires_in), which Pig reports as missing.
+// radiusResponseProbes serve every flow every shape of body and status. A scope is a non-empty string: Pi keeps a null or empty one on the credential, which Ompig's optional Scope cannot tell from none. Members hold the values Go's typed results can represent, or a falsy, null or absent one: Pi also accepts any other truthy value (a number as a token, a string as expires_in), which Ompig reports as missing.
 func radiusResponseProbes() []radiusResponseProbe {
 	random := rand.New(rand.NewSource(20261016))
 	pick := func(options ...string) string { return options[random.Intn(len(options))] }
@@ -193,7 +193,7 @@ func TestRadiusResponsesMatchPi(t *testing.T) {
 		}
 		return value
 	}
-	// Pi builds credentials from whatever members the body has. Pig's string tokens hold an absent or null token as "", which the answer Pi gave is mapped to; a token of another JSON type cannot be represented, and Pig reports the body as an error instead.
+	// Pi builds credentials from whatever members the body has. Ompig's string tokens hold an absent or null token as "", which the answer Pi gave is mapped to; a token of another JSON type cannot be represented, and Ompig reports the body as an error instead.
 	credentialsOf := func(probe radiusResponseProbe, answer any) map[string]any {
 		if probe.Flow != "token" && probe.Flow != "poll" {
 			return nil
@@ -261,7 +261,7 @@ func TestRadiusResponsesMatchPi(t *testing.T) {
 					}
 					return string(a.OK)
 				}
-				t.Errorf("%s status %d body %.140q\n  Pi  %.300s\n  Pig %.300s", probe.Flow, probe.Status, probe.Raw, render(want), render(got))
+				t.Errorf("%s status %d body %.140q\n  Pi  %.300s\n  Ompig %.300s", probe.Flow, probe.Status, probe.Raw, render(want), render(got))
 			}
 		}
 	}

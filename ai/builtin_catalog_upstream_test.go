@@ -109,7 +109,7 @@ func sameJSON(t *testing.T, got any, want any) bool {
 
 func checkChatCatalog(t *testing.T, provider string, want map[string]map[string]any) {
 	t.Helper()
-	// OpenRouter's :nitro and :floor variants are PiG's addition (D199); the upstream data has none.
+	// OpenRouter's :nitro and :floor variants are Ompig's addition (D199); the upstream data has none.
 	got := piListedModels(ListModels(provider))
 	if len(got) != len(want) {
 		t.Errorf("%s chat models: %d, upstream %d", provider, len(got), len(want))

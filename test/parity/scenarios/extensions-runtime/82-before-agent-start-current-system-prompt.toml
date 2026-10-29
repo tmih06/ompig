@@ -20,10 +20,10 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--system-prompt", "BASE PROMPT", "--no-context-files", "--no-skills"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--system-prompt", "BASE PROMPT", "--no-context-files", "--no-skills"]
 pi_args = ["--system-prompt", "BASE PROMPT", "--no-context-files", "--no-skills"]
-pig_extensions = ["testdata/ext/current-system-prompt.mjs"]
+ompig_extensions = ["testdata/ext/current-system-prompt.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/current-system-prompt.mjs"]
 
 [print]

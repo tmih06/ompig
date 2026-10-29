@@ -1,6 +1,6 @@
 # Behavior family: rpc
 # Surface: rpc-mode.ts:808-810 dispatches every stdin line at once (`void handleInputLine(line)`), so a command that awaits a Session replacement or an export does not delay the next command of its batch.
-# Probed on Pi 1.1.0 (comb-audit row 58: a probe that sends each command and a get_state in one write): with stdin held open, `new_session`, `fork`, `clone`, `switch_session` and `export_html` followed by `get_state` answer `get_state` first, and it still reports the OLD sessionFile; the replacement answers afterwards. Before the fix pig answered the replacement first and get_state reported the new file.
+# Probed on Pi 1.1.0 (comb-audit row 58: a probe that sends each command and a get_state in one write): with stdin held open, `new_session`, `fork`, `clone`, `switch_session` and `export_html` followed by `get_state` answer `get_state` first, and it still reports the OLD sessionFile; the replacement answers afterwards. Before the fix ompig answered the replacement first and get_state reported the new file.
 # The export step runs first so the active Session is still the fixture when new_session replaces it; the steps wait for both responses of a batch.
 
 name = "55-rpc-replacement-concurrent-get-state"
@@ -28,8 +28,8 @@ wait_contains = ['"id":"new","type":"response","command":"new_session"', '"id":"
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--session", "sessions/source.jsonl", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--session", "sessions/source.jsonl", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session", "sessions/source.jsonl", "--session-dir", "{{TEMP}}/sessions"]
 

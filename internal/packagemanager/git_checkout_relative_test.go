@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
+	sourceref "github.com/tmih06/ompig/coding/source"
 )
 
 func checkoutRelative(t *testing.T, goos, source string) string {
@@ -23,9 +23,9 @@ func checkoutRelative(t *testing.T, goos, source string) string {
 
 func TestGitCheckoutRelativeFileSourceIsShort(t *testing.T) {
 	for _, tc := range []struct{ goos, source, want string }{
-		{"linux", "git:file://localhost/tmp/x/piglet", filepath.Join("localhost", "fdb4f8773215", "piglet")},
-		{"windows", "git:file://localhost/C:/Users/me/owner/piglet.git", filepath.Join("localhost", "a91ac64502db", "piglet")},
-		{"windows", "git:file://localhost/c:/Users/me/owner/piglet.git", filepath.Join("localhost", "a91ac64502db", "piglet")},
+		{"linux", "git:file://localhost/tmp/x/ompiglet", filepath.Join("localhost", "fdb4f8773215", "ompiglet")},
+		{"windows", "git:file://localhost/C:/Users/me/owner/ompiglet.git", filepath.Join("localhost", "a91ac64502db", "ompiglet")},
+		{"windows", "git:file://localhost/c:/Users/me/owner/ompiglet.git", filepath.Join("localhost", "a91ac64502db", "ompiglet")},
 	} {
 		if got := checkoutRelative(t, tc.goos, tc.source); got != tc.want {
 			t.Errorf("%s %s = %q; want %q", tc.goos, tc.source, got, tc.want)
@@ -34,8 +34,8 @@ func TestGitCheckoutRelativeFileSourceIsShort(t *testing.T) {
 }
 
 func TestGitCheckoutRelativeSameBasenameDiffers(t *testing.T) {
-	a := checkoutRelative(t, "linux", "git:file://localhost/tmp/a/piglet")
-	b := checkoutRelative(t, "linux", "git:file://localhost/tmp/b/piglet")
+	a := checkoutRelative(t, "linux", "git:file://localhost/tmp/a/ompiglet")
+	b := checkoutRelative(t, "linux", "git:file://localhost/tmp/b/ompiglet")
 	if a == b {
 		t.Fatalf("different repositories share checkout %q", a)
 	}
@@ -65,7 +65,7 @@ func TestGitCheckoutRelativeFileSourceLengthBound(t *testing.T) {
 	}
 }
 
-// A validate-only scratch root (<temp>\pig-validate-*\git) and the install roots
+// A validate-only scratch root (<temp>\ompig-validate-*\git) and the install roots
 // all map a source through GitCheckoutRelative, so a long Windows file:// source
 // adds only a short fixed-size segment to the root.
 func TestGitCheckoutRelativeWindowsFileSourceUnderScratchRootIsShort(t *testing.T) {
@@ -74,7 +74,7 @@ func TestGitCheckoutRelativeWindowsFileSourceUnderScratchRootIsShort(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	root := filepath.Join("scratch", "pig-validate-123", "git")
+	root := filepath.Join("scratch", "ompig-validate-123", "git")
 	got, err := GitCheckoutRelative("windows", root, ref)
 	if err != nil {
 		t.Fatal(err)

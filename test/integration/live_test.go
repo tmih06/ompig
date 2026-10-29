@@ -6,7 +6,7 @@
 //
 //	go test -tags="integration live" ./test/integration/... -run TestLive -v
 //
-// Each test writes the supplied token only into a temporary PIG_HOME. It never reads the user's auth files.
+// Each test writes the supplied token only into a temporary OMPIG_HOME. It never reads the user's auth files.
 // All tests use github-copilot/gpt-5-mini for speed and cost.
 
 package integration
@@ -22,9 +22,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // liveModel is the canonical cheap model used across the integration suite.
@@ -33,28 +33,28 @@ import (
 // "Test models" section is the doc anchor.
 const liveModel = "github-copilot/gpt-5-mini"
 
-// isolatedHome returns a temporary PIG_HOME containing the explicit live credential.
+// isolatedHome returns a temporary OMPIG_HOME containing the explicit live credential.
 func isolatedHome(t *testing.T) string {
 	t.Helper()
 	t.Log("live provider: github-copilot")
 	return extIsolatedHome(t)
 }
 
-// runPrint runs `pig --print <prompt>` with isolated PIG_HOME +
+// runPrint runs `ompig --print <prompt>` with isolated OMPIG_HOME +
 // fresh cwd. Returns stdout (the model reply) and the cwd used.
-func runPrint(t *testing.T, pigHome, model, prompt string, extraArgs ...string) (string, string) {
+func runPrint(t *testing.T, ompigHome, model, prompt string, extraArgs ...string) (string, string) {
 	t.Helper()
 	bin := buildBinary(t)
 	cwd := t.TempDir()
 	args := append([]string{"--cwd", cwd, "--model", model, "--print", prompt}, extraArgs...)
 	cmd := exec.Command(bin, args...)
 	cmd.Env = append(os.Environ(),
-		"PIG_HOME="+pigHome,
-		"PIG_QUIET_STARTUP=1",
+		"OMPIG_HOME="+ompigHome,
+		"OMPIG_QUIET_STARTUP=1",
 	)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("pig --print failed: %v\noutput:\n%s", err, out)
+		t.Fatalf("ompig --print failed: %v\noutput:\n%s", err, out)
 	}
 	return strings.TrimSpace(string(out)), cwd
 }
@@ -86,17 +86,17 @@ func TestLive_PrintModeUsesBashTool(t *testing.T) {
 		"--cwd", cwd,
 		"--model", liveModel,
 		"--print", "Use the bash tool to cat secret.txt in the current directory and report its contents. Just print the contents in your reply.")
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_QUIET_STARTUP=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_QUIET_STARTUP=1")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("pig failed: %v\n%s", err, out)
+		t.Fatalf("ompig failed: %v\n%s", err, out)
 	}
 	if !strings.Contains(string(out), sentinel) {
 		t.Fatalf("expected sentinel %q in output (proves bash tool ran); got:\n%s", sentinel, out)
 	}
 }
 
-// TestLive_InteractiveTwoTurnsPersistThenResume: launches pig
+// TestLive_InteractiveTwoTurnsPersistThenResume: launches ompig
 // interactively in tmux, sends two prompts, exits cleanly, then
 // inspects the session JSONL on disk and resumes via --continue.
 //
@@ -109,15 +109,15 @@ func TestLive_InteractiveTwoTurnsPersistThenResume(t *testing.T) {
 	if _, err := exec.LookPath("tmux"); err != nil {
 		t.Skip("tmux not on PATH")
 	}
-	session := "pig-live-" + randID()
+	session := "ompig-live-" + randID()
 	defer func() { _ = tmuxCommand("kill-session", "-t", session).Run() }()
 
 	if out, err := tmuxCommand("new-session", "-d", "-s", session, "-x", "130", "-y", "36").CombinedOutput(); err != nil {
 		t.Fatalf("tmux new-session: %v\n%s", err, out)
 	}
 
-	// Launch pig in the tmux session.
-	launch := fmt.Sprintf("cd %s && PIG_HOME=%s PIG_QUIET_STARTUP=1 %s --model %s\n",
+	// Launch ompig in the tmux session.
+	launch := fmt.Sprintf("cd %s && OMPIG_HOME=%s OMPIG_QUIET_STARTUP=1 %s --model %s\n",
 		cwd, home, bin, liveModel)
 	if out, err := tmuxCommand("send-keys", "-t", session, "-l", launch).CombinedOutput(); err != nil {
 		t.Fatalf("send launch: %v\n%s", err, out)
@@ -216,15 +216,15 @@ func TestLive_InteractiveTwoTurnsPersistThenResume(t *testing.T) {
 		t.Errorf("token %q not found in any message entry in %s", token, jsonl)
 	}
 
-	// Now resume: launch pig with --continue, verify banner shows
+	// Now resume: launch ompig with --continue, verify banner shows
 	// resumed-N-messages and that asking for the token works again
 	// without restating it.
-	resumeSession := "pig-live-resume-" + randID()
+	resumeSession := "ompig-live-resume-" + randID()
 	defer func() { _ = tmuxCommand("kill-session", "-t", resumeSession).Run() }()
 	if out, err := tmuxCommand("new-session", "-d", "-s", resumeSession, "-x", "130", "-y", "36").CombinedOutput(); err != nil {
 		t.Fatalf("tmux: %v\n%s", err, out)
 	}
-	resumeCmd := fmt.Sprintf("cd %s && PIG_HOME=%s PIG_QUIET_STARTUP=1 %s --model %s --continue\n",
+	resumeCmd := fmt.Sprintf("cd %s && OMPIG_HOME=%s OMPIG_QUIET_STARTUP=1 %s --model %s --continue\n",
 		cwd, home, bin, liveModel)
 	if err := tmuxCommand("send-keys", "-t", resumeSession, "-l", resumeCmd).Run(); err != nil {
 		t.Fatal(err)
@@ -315,20 +315,20 @@ func linesContainAny(lines []string, needle string) bool {
 // coding.CreateAgentSessionServices → coding.NewRuntime → rt.New → sess.Send.
 //
 // PR F5: proves the SDK is usable end-to-end against a
-// real LLM with the same auth path the pig binary uses.
+// real LLM with the same auth path the ompig binary uses.
 
 // TestLive_SDKEmbeddedSessionSendReceives: minimum viable embed test.
 // Constructs Services + Runtime + Session via the public API, sends
 // a single prompt, asserts the reply is non-empty and includes a
 // number that resembles "2".
 func TestLive_SDKEmbeddedSessionSendReceives(t *testing.T) {
-	pigHome := isolatedHome(t)
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := isolatedHome(t)
+	t.Setenv("OMPIG_HOME", ompigHome)
 	cwd := t.TempDir()
 
 	svcs, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{
 		CWD:      cwd,
-		AgentDir: filepath.Join(pigHome, "agent"),
+		AgentDir: filepath.Join(ompigHome, "agent"),
 	})
 	if err != nil {
 		t.Fatalf("CreateAgentSessionServices: %v", err)
@@ -390,13 +390,13 @@ func TestLive_SDKEmbeddedSessionSendReceives(t *testing.T) {
 // Runtime, each independent. Proves Runtime is reusable and sessions
 // don't leak state into each other.
 func TestLive_SDKMultiSessionSharingRuntime(t *testing.T) {
-	pigHome := isolatedHome(t)
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := isolatedHome(t)
+	t.Setenv("OMPIG_HOME", ompigHome)
 	cwd := t.TempDir()
 
 	svcs, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{
 		CWD:      cwd,
-		AgentDir: filepath.Join(pigHome, "agent"),
+		AgentDir: filepath.Join(ompigHome, "agent"),
 	})
 	if err != nil {
 		t.Fatal(err)

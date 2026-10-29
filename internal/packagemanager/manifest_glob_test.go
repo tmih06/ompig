@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // writeThrowingGlobPackage writes a Package whose prompts entry "prompts/[[:alpha:]]*,md" makes Node's globSync throw: the POSIX class gives minimatch's RegExp the u flag, which rejects the escaped ",". Skills come before prompts in Pi's RESOURCE_TYPES and themes after.
@@ -33,7 +33,7 @@ func throwingGlobMessage() string {
 // A manifest glob that Node's globSync throws for stops Pi's collectPackageResources. For a local Package, resolveLocalExtensionSource catches the throw (package-manager.ts:1372-1389), so the kinds collected before it stay and that kind and the later ones are lost; an npm Package's resources are collected outside any catch (:1315-1327), so resolve() rejects with the SyntaxError. Probed with Pi 1.1.0 (get_commands over RPC and print mode): the local Package keeps its skill and loses its prompts and theme, and the npm Package stops startup with that message.
 func TestManifestGlobThrowFollowsPiCallers(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	t.Run("local", func(t *testing.T) {
 		cwd, agentDir, sm, pm := resolveFixture(t)
 		writeThrowingGlobPackage(t, filepath.Join(agentDir, "localpkg"))
@@ -90,10 +90,10 @@ func TestManifestGlobThrowFollowsPiCallers(t *testing.T) {
 	})
 }
 
-// Pi resolves Project Packages before user ones (resolve, package-manager.ts:925-936), so a Project npm Package's throw is the one resolve() rejects with, and a throw in an npm Package's "pig" block, which Pi never reads, rejects nothing.
+// Pi resolves Project Packages before user ones (resolve, package-manager.ts:925-936), so a Project npm Package's throw is the one resolve() rejects with, and a throw in an npm Package's "ompig" block, which Pi never reads, rejects nothing.
 func TestManifestGlobThrowOrderAndKinds(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	t.Run("project first", func(t *testing.T) {
 		cwd, agentDir, sm, _ := resolveFixture(t)
 		for _, pkg := range []struct {
@@ -114,10 +114,10 @@ func TestManifestGlobThrowOrderAndKinds(t *testing.T) {
 			t.Fatalf("ValidateConfiguredPackagePatterns = %v, want the Project Package's SyntaxError", err)
 		}
 	})
-	t.Run("pig block", func(t *testing.T) {
+	t.Run("ompig block", func(t *testing.T) {
 		cwd, agentDir, sm, pm := resolveFixture(t)
 		root := filepath.Join(codingagent.NPMInstallRoot(cwd, agentDir, false), "node_modules", "pigprobe")
-		writeResolveFile(t, filepath.Join(root, "package.json"), `{"name":"pigprobe","version":"1.0.0","pi":{"prompts":["prompts/*.md"]},"pig":{"hooks":["hooks/[[:alpha:]]*,json"]}}`)
+		writeResolveFile(t, filepath.Join(root, "package.json"), `{"name":"pigprobe","version":"1.0.0","pi":{"prompts":["prompts/*.md"]},"ompig":{"hooks":["hooks/[[:alpha:]]*,json"]}}`)
 		writeResolveFile(t, filepath.Join(root, "prompts", "good.md"), "Good\n")
 		if err := sm.SetPackages([]codingagent.PackageSource{{Source: "npm:pigprobe"}}); err != nil {
 			t.Fatal(err)

@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
 )
 
 // extensionInputsFromCells must derive fusibility solely from the cell strategy,
@@ -46,7 +46,7 @@ func TestExtensionInputsFromCells(t *testing.T) {
 	}
 }
 
-// A Pig 0.84 factory imports the legacy SDK module path, a distinct Go type from
+// A Ompig 0.84 factory imports the legacy SDK module path, a distinct Go type from
 // the fused registry's sdk.Factory. It must stay a subprocess cell (AK-001).
 func TestLegacySDKPackedGoCellIsNotFusible(t *testing.T) {
 	legacy := subprocess.CellSpec{

@@ -43,8 +43,8 @@ func TestAppendString200KBudget(t *testing.T) {
 	}
 	// A wall-clock ratio: it runs in the serial startup-proxies job (automation/perf/startup-proxies.json requires it there), not
 	// beside the parallel SDK tests, whose memory-bandwidth contention lowers the ratio on a 4-CPU runner (CI measured 1.87x).
-	if os.Getenv("PIG_SERIAL_TIMING") == "" {
-		t.Skip("wall-clock ratio: run by make startup-proxies (PIG_SERIAL_TIMING=1)")
+	if os.Getenv("OMPIG_SERIAL_TIMING") == "" {
+		t.Skip("wall-clock ratio: run by make startup-proxies (OMPIG_SERIAL_TIMING=1)")
 	}
 	payload := budgetPayload(200 << 10)
 	buf := make([]byte, 0, 2*len(payload))

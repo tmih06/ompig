@@ -7,8 +7,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // Admitted is the number of calls admitted before Close that have not returned (tests wait for admission instead of sleeping).
@@ -44,7 +44,7 @@ func (s *Session) IdleLive(ctx context.Context, root *durable.ConversationId) (b
 // Client is the Session's request client, through which tests drive the transaction channel directly.
 func (s *Session) Client() *Client { return s.client }
 
-// HostCounters are the measurements of the Session's host: the reads the core ran through pig.read and the rows they returned.
+// HostCounters are the measurements of the Session's host: the reads the core ran through ompig.read and the rows they returned.
 func (s *Session) HostCounters() sqlhost.Counters { return s.host.Counters() }
 
 // Session names the core-backed session for the external tests, which reach its counters and Closed through it.

@@ -90,7 +90,7 @@ fn a_late_request_thread_does_not_let_a_later_handler_start_first() {
         // Both later threads run while the first is held. A thread that parks in begin() has taken its place behind the first; a handler that started
         // instead overtook it.
         let deadline = Instant::now() + WAIT;
-        while !later.iter().all(|id| crate::request_start_order::parked::contains(&format!("pig-request-{id}"))) {
+        while !later.iter().all(|id| crate::request_start_order::parked::contains(&format!("ompig-request-{id}"))) {
             let overtaken = locked(&started).clone();
             assert!(overtaken.is_empty(), "round {round}: {overtaken:?} started before the first request's handler, whose thread had not begun");
             assert!(Instant::now() < deadline, "round {round}: the later requests' threads never parked behind the first");

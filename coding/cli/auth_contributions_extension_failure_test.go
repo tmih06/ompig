@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's package commands load extensions only to resolve project trust and turn
@@ -22,8 +22,8 @@ func TestAuthContributionsReportUnresolvedExtensionsOnce(t *testing.T) {
 		}
 	}
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, "pig"))
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", filepath.Join(home, "ompig"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	f := writeStartupPackages(t, filepath.Join(home, "packages"), false)
 	if err := codingagent.NewSettingsManager(cwd, agentDir).SetPackages([]codingagent.PackageSource{{Source: f.mixed}, {Source: f.healthy}}); err != nil {

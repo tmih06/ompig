@@ -1,6 +1,6 @@
 package extension
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // CustomFactory builds the component [UIContext.Custom] shows, for an extension that runs in the host process
 // (upstream `ctx.ui.custom(factory)`). theme is the active theme and keybindings the merged keybinding table of the

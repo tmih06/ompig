@@ -6,8 +6,8 @@
 # session_shutdown runs, then the runner is invalidated, with no event-loop turn between.
 # print-prompt-end.mjs queues a follow-up turn from an immediate in agent_settled, as pi-goal-x
 # schedules its next goal turn, and cancels it in session_shutdown. pi-goal-x failed 2 of 11
-# PiG print runs with "Extension error (<runtime>): This extension ctx is stale ..." because
-# the PiG Node runtime ran the callback before session_shutdown reached it.
+# Ompig print runs with "Extension error (<runtime>): This extension ctx is stale ..." because
+# the Ompig Node runtime ran the callback before session_shutdown reached it.
 #
 # Upstream evidence (2026-10-07, Pi 1.0.4; re-probed 2026-10-08 with Pi 1.1.0, same log):
 #   PI_CODING_AGENT_DIR=testdata/pi-agent PROMPT_END_LOG=/tmp/prompt-end.log pi --no-extensions \
@@ -26,9 +26,9 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "PROMPT_END_LOG={{TEMP}}/prompt-end.log"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "PROMPT_END_LOG={{TEMP}}/prompt-end.log"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PROMPT_END_LOG={{TEMP}}/prompt-end.log"]
-pig_extensions = ["testdata/ext/print-prompt-end.mjs"]
+ompig_extensions = ["testdata/ext/print-prompt-end.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/print-prompt-end.mjs",

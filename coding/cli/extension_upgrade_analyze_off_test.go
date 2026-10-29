@@ -1,4 +1,4 @@
-//go:build pig_strip_extension_sdk_go
+//go:build ompig_strip_extension_sdk_go
 
 package cli
 
@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // D92: in a Binary without the Go SDK, upgrading a Go source extension fails with a report that names the strip, and writes nothing.

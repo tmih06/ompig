@@ -1,6 +1,6 @@
 // Package lockorder is a lock-acquisition-order checker for instrumented test builds.
 //
-// The end-to-end journey harness (test/journeys) rewrites every sync.Mutex and sync.RWMutex of the PiG module into this package's types with a build overlay, so a binary built for a journey records which locks a goroutine holds when it takes another. A cycle in that order graph (lock A taken while holding B on one path, B while holding A on another) is a potential deadlock even when no run hit it. Go's race detector does not report lock-order cycles.
+// The end-to-end journey harness (test/journeys) rewrites every sync.Mutex and sync.RWMutex of the Ompig module into this package's types with a build overlay, so a binary built for a journey records which locks a goroutine holds when it takes another. A cycle in that order graph (lock A taken while holding B on one path, B while holding A on another) is a potential deadlock even when no run hit it. Go's race detector does not report lock-order cycles.
 //
 // Production binaries never import this package: the overlay exists only in the journey build.
 //
@@ -17,7 +17,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 type class uint32
@@ -244,7 +244,7 @@ func report(key, text string, potential bool) {
 	}
 	reports[key] = true
 	if potential {
-		if path := os.Getenv("PIG_LOCKORDER_REPORT"); path != "" {
+		if path := os.Getenv("OMPIG_LOCKORDER_REPORT"); path != "" {
 			if f, err := os.OpenFile(path+".potential", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600); err == nil {
 				_, _ = f.WriteString(text + "\n")
 				_ = f.Close()
@@ -253,7 +253,7 @@ func report(key, text string, potential bool) {
 		return
 	}
 	fmt.Fprintf(os.Stderr, "LOCKORDER %s", text)
-	if path := os.Getenv("PIG_LOCKORDER_REPORT"); path != "" {
+	if path := os.Getenv("OMPIG_LOCKORDER_REPORT"); path != "" {
 		if f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600); err == nil {
 			_, _ = f.WriteString(text + "\n")
 			_ = f.Close()

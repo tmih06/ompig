@@ -14,17 +14,17 @@ import (
 const deterministicScenario = "parity-basic"
 const deterministicModel = "test-faux/faux-1"
 
-// deterministicGopiConfig launches pig against the test-only built-in
+// deterministicGopiConfig launches ompig against the test-only built-in
 // provider hook. This is a deterministic parity harness, not a live-model test.
 func deterministicGopiConfig(t *testing.T) systemConfig {
 	t.Helper()
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	// cli/args.ts --approve selects trust for this run without touching user state.
 	return systemConfig{
-		name:   "pig",
+		name:   "ompig",
 		bin:    buildBinary(t),
 		args:   []string{"--model", deterministicModel, "--no-extensions", "--approve", "--offline"},
-		env:    []string{"PIG_HOME=" + pigHome, "PIG_QUIET_STARTUP=1", "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=" + deterministicScenario},
+		env:    []string{"OMPIG_HOME=" + ompigHome, "OMPIG_QUIET_STARTUP=1", "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=" + deterministicScenario},
 		prompt: interactiveReadyMarker,
 	}
 }
@@ -32,7 +32,7 @@ func deterministicGopiConfig(t *testing.T) systemConfig {
 // deterministicUpstreamConfig launches upstream pi with a temp extension that
 // registers a deterministic custom provider named test-faux. Upstream remains
 // the source of truth: parity tests run against this provider first and only
-// then assert pig behavior.
+// then assert ompig behavior.
 func deterministicUpstreamConfig(t *testing.T) systemConfig {
 	t.Helper()
 	piBin := upstreamPiBin(t)
@@ -192,14 +192,14 @@ type deterministicPrintSystem struct {
 
 func deterministicPrintGopi(t *testing.T) deterministicPrintSystem {
 	t.Helper()
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	return deterministicPrintSystem{
-		name:         "pig",
+		name:         "ompig",
 		bin:          buildBinary(t),
 		args:         []string{"--model", deterministicModel, "--no-extensions"},
-		env:          []string{"PIG_HOME=" + pigHome, "PIG_CODING_AGENT_DIR=" + filepath.Join(pigHome, "agent"), "PIG_CODING_AGENT_SESSION_DIR=", "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=" + deterministicScenario},
+		env:          []string{"OMPIG_HOME=" + ompigHome, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(ompigHome, "agent"), "OMPIG_CODING_AGENT_SESSION_DIR=", "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=" + deterministicScenario},
 		cwd:          t.TempDir(),
-		sessionsRoot: filepath.Join(pigHome, "agent", "sessions"),
+		sessionsRoot: filepath.Join(ompigHome, "agent", "sessions"),
 	}
 }
 

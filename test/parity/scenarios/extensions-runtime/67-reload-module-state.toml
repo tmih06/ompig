@@ -2,7 +2,7 @@
 # Surface: /reload re-invokes each extension factory inside the running extension process, so module-level state follows Pi's loader rules.
 #
 # Upstream evidence (Pi 0.87.1, probed 2026-09-29): resource-loader.ts reload() calls clearExtensionCache() and loads every extension again in the same Node process. jiti (moduleCache: false) re-evaluates a .ts module, so its module-level counter starts over: the ts extension reports 1 after every reload. A .mjs module stays in Node's native ESM cache: its module-level counter keeps counting, and the mjs extension reports 2 after one reload and 3 after two. Each extension shows its counter as a keyed status, and the capture compares both statuses after each reload.
-# PiG once restarted every extension process on /reload, so its .mjs counter always read 1 here.
+# Ompig once restarted every extension process on /reload, so its .mjs counter always read 1 here.
 
 name = "67-reload-module-state"
 description = "/reload keeps an .mjs module's state and re-evaluates a .ts module, as Pi's loaders do"
@@ -15,9 +15,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/reload-module-state.mjs", "testdata/ext/reload-module-state.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/reload-module-state.mjs", "testdata/ext/reload-module-state.ts"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/reload-module-state.mjs",
@@ -27,7 +27,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 32
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "mjs-module-calls"

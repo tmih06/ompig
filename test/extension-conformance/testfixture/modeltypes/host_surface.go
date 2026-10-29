@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // registerHostSurface registers the tools of the host-surface rows (host_surface_test.go): OnThemeChange, OnToolsExpandedChange, SetWidgetRenderer, Bell, ToolCallIndex, ToolInput and ToolParams, ExtensionSourceInfo, OnLoaded and a factory-time events.emit. testdata/modeltypes-rust, the inline Python fixture and testdata/model-types.mjs carry the same tools, so one table of rows proves every SDK.

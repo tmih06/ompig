@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/source"
+	"github.com/tmih06/ompig/coding/source"
 )
 
 // theme.ts Theme constructor: the options name, sourcePath, sourceInfo, appearance and dim become the theme's name, source, appearance and faint tokens.

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/agent/src/agent.ts:155-191 declares convertToLlm, onResponse, onProviderStreamEvent, sessionId, thinkingBudgets, transport,

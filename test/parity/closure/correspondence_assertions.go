@@ -27,7 +27,7 @@ func AddCorrespondenceAssertions(root string, snapshot *Snapshot, records []Reco
 	testIDs := make(map[string]struct{})
 	for _, binding := range correspondenceAssertionBindings() {
 		pin, err := makeSourceRangePin(root, snapshot, sourceRange{
-			repository: "pig", path: binding.path, semanticID: binding.symbol, start: binding.start, end: binding.end,
+			repository: "ompig", path: binding.path, semanticID: binding.symbol, start: binding.start, end: binding.end,
 		})
 		if err != nil {
 			return nil, fmt.Errorf("add correspondence test %s: %w", binding.id, err)

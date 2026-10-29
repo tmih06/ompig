@@ -43,17 +43,17 @@ Coverage claims are narrowed rather than inflated. CLI scenario 02 does not invo
 
 ```bash
 export PATH="/absolute/toolchain/bin:$PATH"
-go build -o bin/pig ./cmd/pig
-export PIG_PARITY_PIG_BIN="$PWD/bin/pig"
-export PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
+go build -o bin/ompig ./cmd/ompig
+export OMPIG_PARITY_OMPIG_BIN="$PWD/bin/ompig"
+export OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
 export PI_PACKAGE_ROOT="$PWD/extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent"
 go test ./internal/codingagent/... ./coding/rpcclient
 go test -race ./internal/codingagent/export
-go test -tags parity ./test/parity/runner -v -run '^TestParity$' -count=1 -timeout 10m -args -pig-parity.dir="$PWD/test/parity/scenarios/export-html"
+go test -tags parity ./test/parity/runner -v -run '^TestParity$' -count=1 -timeout 10m -args -ompig-parity.dir="$PWD/test/parity/scenarios/export-html"
 go test -tags parity ./test/parity/runner -v -run '^TestParity/(12-rpc-export-html|29-export-tool-renderers)$' -count=1
 ```
 
-Raw failure artifacts, mutation logs, final HTML, gate logs and profiles remain under `/tmp/fix-export-html-evidence`. The final Pi and PiG files compare equal with `cmp`. Their SHA-256 hashes are:
+Raw failure artifacts, mutation logs, final HTML, gate logs and profiles remain under `/tmp/fix-export-html-evidence`. The final Pi and Ompig files compare equal with `cmp`. Their SHA-256 hashes are:
 
 | Fixture | Complete HTML SHA-256 |
 |---|---|
@@ -69,17 +69,17 @@ Raw failure artifacts, mutation logs, final HTML, gate logs and profiles remain 
 |---|---|
 | Export family, including strict 01 through 04 | Pass; all six scenarios complete three pairs. |
 | RPC 12 export command | Pass; three pairs. |
-| Extension runtime 29 | Still red before export comparison: Pi emits `toolcall_end` for index 0 before the next `toolcall_start`; PiG starts index 1 instead. The first strict mismatch is `/10/assistantMessageEvent/contentIndex`. This is the provider/event-stream lane's surface, not an HTML fix. Pi's event forwarding is `packages/coding-agent/src/modes/json-event.ts:49-60`; the fixture emits toolcall-end events in `test/parity/testdata/test-faux-provider.ts`. The scenario remains enabled and unchanged. |
+| Extension runtime 29 | Still red before export comparison: Pi emits `toolcall_end` for index 0 before the next `toolcall_start`; Ompig starts index 1 instead. The first strict mismatch is `/10/assistantMessageEvent/contentIndex`. This is the provider/event-stream lane's surface, not an HTML fix. Pi's event forwarding is `packages/coding-agent/src/modes/json-event.ts:49-60`; the fixture emits toolcall-end events in `test/parity/testdata/test-faux-provider.ts`. The scenario remains enabled and unchanged. |
 | `go test ./internal/codingagent/... ./coding/rpcclient` and export race tests | Pass. |
 | `go vet ./...` and Windows vet for `./internal/codingagent/export/...` | Pass. |
 | `go tool golangci-lint config verify`, touched-package lint and `make lint` | Pass; no suppressions added. |
 | `make lint-changed` | Cannot find a merge base with `main` in this lane checkout. Full lint passes instead. |
-| `make ci-contracts ci-drift` | Go inventory drift is regenerated with `go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/pig-go.json`. Contracts then stop at existing pending/partial hot-path tests in `test-porting-release`. The three export files are no longer pending/partial. |
+| `make ci-contracts ci-drift` | Go inventory drift is regenerated with `go run ./test/parity/cmd/gointerfaces -out test/parity/interfaces/ompig-go.json`. Contracts then stop at existing pending/partial hot-path tests in `test-porting-release`. The three export files are no longer pending/partial. |
 | Separate `make ci-drift` | Scenario lint, port-map drift, coverage drift and divergence consistency pass. Divergence quality stops at existing unapproved D78. |
 | Separate divergence guard, changed-source hygiene and docs drift | Pass. |
 | `go fix -diff ./internal/codingagent/export/...` | Empty. |
 | `go test ./test/parity/...` | Three existing closure tests fail because D78 is open rather than approved/provisional. Other parity packages pass. No count or approval is changed to hide this. |
-| `go test ./...` | Does not complete within the command's 600-second wall-clock budget; no full-suite pass is claimed. Completed packages, including `cmd/pig`, pass before termination. |
+| `go test ./...` | Does not complete within the command's 600-second wall-clock budget; no full-suite pass is claimed. Completed packages, including `cmd/ompig`, pass before termination. |
 
 Coverage is regenerated with `make coverage RESULTS=` so unrelated historical run results do not become claims for this revision. Normalization inventory is regenerated with `make normalization-inventory`.
 

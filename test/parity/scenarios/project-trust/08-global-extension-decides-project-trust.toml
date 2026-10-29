@@ -1,5 +1,5 @@
 # Behavior family: project-trust
-# group-rationale: serial: project-trust fixtures compile into shared Pig cache entries.
+# group-rationale: serial: project-trust fixtures compile into shared Ompig cache entries.
 # Surface: a user/global extension may decide project trust before project Resources load.
 #
 # Upstream probe (exact Pi 0.83.0, 2026-08-04): a global extension registered
@@ -22,7 +22,7 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-handler", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent-handler"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent-handler"]
 override_base_args = true
 
 [cli]

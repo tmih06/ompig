@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // Ports packages/durable/src/env/node.ts (NodeExecutionEnv.exec).

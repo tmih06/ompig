@@ -3,7 +3,7 @@ package chord
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // Ports packages/chord/src/watch.ts (WatchEnd, WatchChange, NativeWatchChange, WatchHandle, Watchable, NativeWatchable).

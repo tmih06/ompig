@@ -7,8 +7,8 @@ import { join, resolve } from "node:path";
 
 const side = process.argv[2];
 const root = await mkdtemp(join(tmpdir(), "custom-thinking-"));
-const binary = side === "pig" ? (process.env.PIG_PARITY_PIG_BIN || resolve("bin/pig")) : process.execPath;
-const prefix = side === "pig" ? [] : [join(process.env.PI_PACKAGE_ROOT, "dist/cli.js")];
+const binary = side === "ompig" ? (process.env.OMPIG_PARITY_OMPIG_BIN || resolve("bin/ompig")) : process.execPath;
+const prefix = side === "ompig" ? [] : [join(process.env.PI_PACKAGE_ROOT, "dist/cli.js")];
 const observations = [];
 try {
   for (const api of ["openai-completions", "openai-responses"]) {
@@ -41,7 +41,7 @@ try {
       await mkdir(agentDir);
       await writeFile(join(agentDir, "models.json"), JSON.stringify({ providers: { neuralwatt: { api, baseUrl: `http://127.0.0.1:${server.address().port}/v1`, apiKey: "test-key", compat: { supportsReasoningEffort: true }, models: [{ id: "some-base-model", reasoning: false }] } } }));
       const output = await new Promise((resolve, reject) => {
-        const child = spawn(binary, [...prefix, "--no-extensions", "--offline", "--no-session", "--no-tools", "--mode", "json", "--model", "neuralwatt/zai-org/GLM-5.1-FP8:high", "hello"], { cwd: root, env: { ...process.env, PIG_CODING_AGENT_DIR: agentDir, PI_CODING_AGENT_DIR: agentDir, PI_SKIP_VERSION_CHECK: "1" } });
+        const child = spawn(binary, [...prefix, "--no-extensions", "--offline", "--no-session", "--no-tools", "--mode", "json", "--model", "neuralwatt/zai-org/GLM-5.1-FP8:high", "hello"], { cwd: root, env: { ...process.env, OMPIG_CODING_AGENT_DIR: agentDir, PI_CODING_AGENT_DIR: agentDir, PI_SKIP_VERSION_CHECK: "1" } });
         let stdout = "", stderr = "";
         child.stdout.on("data", (data) => { stdout += data; });
         child.stderr.on("data", (data) => { stderr += data; });

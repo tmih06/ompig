@@ -1,6 +1,6 @@
 package sdk
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+import "github.com/tmih06/ompig/extensions/sdk/json"
 
 // MarshalJSON preserves a present empty customPrompt (Pi system-prompt.ts:54-57).
 func (o SystemPromptOptions) MarshalJSON() ([]byte, error) {

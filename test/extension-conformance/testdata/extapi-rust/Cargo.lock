@@ -12,7 +12,7 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 name = "extapi-fixture"
 version = "0.1.0"
 dependencies = [
- "pig-sdk",
+ "ompig-sdk",
  "serde_json",
 ]
 
@@ -45,7 +45,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 
 [[package]]
-name = "pig-sdk"
+name = "ompig-sdk"
 version = "0.1.0"
 dependencies = [
  "serde",

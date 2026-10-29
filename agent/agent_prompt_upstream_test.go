@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/agent.ts:371-382 prompt(input: string, images?: ImageContent[]), with normalizePromptInput (agent.ts): the user message is one text block followed by the images, the run settles before the call returns, and prompt resolves to nothing: the messages are in the transcript.

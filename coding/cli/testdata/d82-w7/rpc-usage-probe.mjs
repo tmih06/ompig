@@ -23,7 +23,7 @@ const agent = join(dir, 'agent');
 mkdirSync(agent);
 writeFileSync(join(agent, 'models.json'), JSON.stringify({ providers: { p: { api: 'openai-completions', baseUrl: `http://127.0.0.1:${server.address().port}/v1`, apiKey: 'k', models: [{ id: 'strict', name: 'strict', reasoning: false, input: ['text'], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 128000, maxTokens: 1000 }] } } }));
 const isScript = cli.endsWith('.js');
-const child = spawn(isScript ? nodeBin : cli, [...(isScript ? [cli] : []), '--mode', mode, ...(mode === 'json' ? ['-p', 'hi'] : []), '--offline', '--no-extensions', ...(process.env.PROBE_EXTENSION ? ['--extension', process.env.PROBE_EXTENSION] : []), '--model', 'p/strict', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], { cwd: dir, env: { ...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, PIG_CODING_AGENT_DIR: agent, PIG_HOME: join(dir, 'pighome') }, stdio: ['pipe', 'pipe', 'inherit'] });
+const child = spawn(isScript ? nodeBin : cli, [...(isScript ? [cli] : []), '--mode', mode, ...(mode === 'json' ? ['-p', 'hi'] : []), '--offline', '--no-extensions', ...(process.env.PROBE_EXTENSION ? ['--extension', process.env.PROBE_EXTENSION] : []), '--model', 'p/strict', '--no-context-files', '--no-skills', '--session-dir', join(dir, 's')], { cwd: dir, env: { ...process.env, HOME: dir, PI_CODING_AGENT_DIR: agent, OMPIG_CODING_AGENT_DIR: agent, OMPIG_HOME: join(dir, 'pighome') }, stdio: ['pipe', 'pipe', 'inherit'] });
 const frames = [];
 await new Promise((resolve) => {
 	const lines = createInterface({ input: child.stdout });

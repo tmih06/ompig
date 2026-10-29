@@ -11,10 +11,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // TaskGraphState is a live task's durable status without its checkpoint and outcome payloads (spec §9.5): pending or running with Phase, waiting with Phase, On, and Policy, sleeping with Phase and Until, or completing with the held Outcome status.

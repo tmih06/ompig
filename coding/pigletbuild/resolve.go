@@ -3,9 +3,9 @@ package pigletbuild
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
 )
 
 // reasonForStrategy explains, in the runtime cell planner's vocabulary, why an
@@ -29,9 +29,9 @@ func reasonForStrategy(strategy subprocess.CellStrategy, language string) string
 	}
 }
 
-// extensionInputsFromCells maps runtime cell-planner output to Piglet Binary planner
+// extensionInputsFromCells maps runtime cell-planner output to Ompiglet Binary planner
 // inputs. Fusibility is exactly "landed in a packed-go cell", so PlanCells stays
-// the single classifier of record instead of the Piglet Binary planner re-deciding it.
+// the single classifier of record instead of the Ompiglet Binary planner re-deciding it.
 func extensionInputsFromCells(cells []subprocess.CellSpec) []ExtensionInput {
 	var out []ExtensionInput
 	for _, cell := range cells {
@@ -54,11 +54,11 @@ func extensionInputsFromCells(cells []subprocess.CellSpec) []ExtensionInput {
 	return out
 }
 
-// resolvePigletCells resolves a piglet's extensions to runtime cells via the
+// resolvePigletCells resolves a ompiglet's extensions to runtime cells via the
 // manifest parser (ResolveExtConfig) and cell planner (PlanCells). Returns the
 // cells and any per-extension resolution warnings.
-func resolvePigletCells(p *piglet.Piglet) ([]subprocess.CellSpec, []string) {
-	resolved, errs := piglet.ResolveExtensions(p)
+func resolvePigletCells(p *ompiglet.Ompiglet) ([]subprocess.CellSpec, []string) {
+	resolved, errs := ompiglet.ResolveExtensions(p)
 
 	var warns []string
 	for _, e := range errs {

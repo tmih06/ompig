@@ -3,7 +3,7 @@
 // prefixes every table and index name Pi's migrations create (default `pi_`) in each SQL text, outside '...' string literals.
 // Pi detects its schema by identifiers only (storage/sqlite/migrations.ts applySqliteMigrations: CREATE TABLE IF NOT EXISTS
 // durable_schema, INSERT OR IGNORE, SELECT version), so Pi reopens such a store. The workload commits, closes, reopens,
-// commits again and reopens again, once on Pi and once on PiG, over the same rewriting adapter.
+// commits again and reopens again, once on Pi and once on Ompig, over the same rewriting adapter.
 import assert from "node:assert/strict"
 import { existsSync, readFileSync, rmSync } from "node:fs"
 import { join } from "node:path"
@@ -13,8 +13,8 @@ import { createModels } from "@earendil-works/pi-ai/models"
 import * as pi from "@earendil-works/pi-durable"
 import { SQLITE_MIGRATIONS, SqliteStorage, type SqliteDatabase, type SqliteExecutor } from "@earendil-works/pi-durable/storage/sqlite"
 import { openNodeSqliteDatabase } from "@earendil-works/pi-durable/storage/sqlite/node"
-import * as pig from "../src/facade/index.ts"
-import { Harness as PigHarness } from "../src/facade/harness.ts"
+import * as ompig from "../src/facade/index.ts"
+import { Harness as OmpigHarness } from "../src/facade/harness.ts"
 import type { Storage } from "../src/facade/storage.ts"
 import type { Store } from "../src/store.ts"
 import { nodeStore } from "../src/store-node.ts"
@@ -52,7 +52,7 @@ function prefixedDatabase(db: SqliteDatabase, rewrite: (sql: string) => string):
   return { ...executor(db), transaction: callback => db.transaction(tx => callback(executor(tx))), close: () => db.close() }
 }
 
-/** PiG's synchronous Store with every SQL text renamed. */
+/** Ompig's synchronous Store with every SQL text renamed. */
 function prefixedStore(store: Store & { close(): void }, rewrite: (sql: string) => string): Store & { close(): void } {
   return {
     counters: store.counters,
@@ -84,7 +84,7 @@ async function reopenTwice(api: Api, open: () => Promise<unknown>, options: Reco
   return seen
 }
 
-test("Pi reopens a store whose tables the adapter renames (the reference for the PiG case)", async () => {
+test("Pi reopens a store whose tables the adapter renames (the reference for the Ompig case)", async () => {
   const dir = tempDir("prefixed-pi")
   try {
     const p = prefixer("pi_")
@@ -97,17 +97,17 @@ test("Pi reopens a store whose tables the adapter renames (the reference for the
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })
 
-test("PiG reopens a store whose tables the adapter renames", { skip: !existsSync(wasm) }, async () => {
+test("Ompig reopens a store whose tables the adapter renames", { skip: !existsSync(wasm) }, async () => {
   const module = new (WebAssembly.Module as any)(readFileSync(wasm)) as WebAssembly.Module
-  const dir = tempDir("prefixed-pig")
+  const dir = tempDir("prefixed-ompig")
   try {
     const p = prefixer("pi_")
-    const path = join(dir, "pig.sqlite")
+    const path = join(dir, "ompig.sqlite")
     const open = async (): Promise<Storage> => {
       const store = prefixedStore(nodeStore(path), p.rewrite)
       return { open: () => store, close: () => store.close(), profile: "node-sqlite" }
     }
-    const seen = await reopenTwice({ ...pig, Harness: PigHarness } as never, open, { mode: "session", core: new WasmCore(module) })
+    const seen = await reopenTwice({ ...ompig, Harness: OmpigHarness } as never, open, { mode: "session", core: new WasmCore(module) })
     assert.deepEqual(seen, [[0], [0, 1]])
     assertOnlyPrefixedTables(path, p.names)
   } finally { rmSync(dir, { recursive: true, force: true }) }

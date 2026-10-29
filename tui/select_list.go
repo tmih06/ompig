@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // SelectListTheme styles a [SelectList]. A nil function leaves the text unstyled.
@@ -113,7 +113,7 @@ func (l *SelectList) SelectedItem() (SelectItem, bool) {
 	return l.filteredItems[l.selectedIndex], true
 }
 
-// pig additive (D107): a component kit host keeps one list across a theme switch and reads the
+// ompig additive (D107): a component kit host keeps one list across a theme switch and reads the
 // list's state to report it; upstream constructs a new list and has no accessors.
 
 // SetTheme restyles the list.
@@ -242,7 +242,7 @@ func (l *SelectList) HandleInput(data string) {
 		}
 		l.notifySelectionChange()
 		l.Invalidate()
-	// pig divergence (D155): a select page key moves the selection by a page (Pi PR #7680).
+	// ompig divergence (D155): a select page key moves the selection by a page (Pi PR #7680).
 	case pageSelectionKey(kb, data):
 		if len(l.filteredItems) == 0 {
 			return

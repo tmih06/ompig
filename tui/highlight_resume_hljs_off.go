@@ -1,8 +1,8 @@
-//go:build pig_strip_syntax_highlight
+//go:build ompig_strip_syntax_highlight
 
 package tui
 
-// pig additive (D92): a Piglet Binary built with pig_strip_syntax_highlight links no highlight.js, so no code resumes.
+// ompig additive (D92): a Ompiglet Binary built with ompig_strip_syntax_highlight links no highlight.js, so no code resumes.
 
 func resetHighlightResumesLocked() {}
 

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func radiusTestConfigJSON(baseURL string) string {
@@ -251,7 +251,7 @@ func TestRadiusAPIKeyRefreshesExpiredOAuthToken(t *testing.T) {
 }
 
 func TestModelNetworkEnabledHonorsOfflineVariables(t *testing.T) {
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	if ModelNetworkEnabled() {
 		t.Fatal("PI_OFFLINE set (even empty) must disable model network access, as in Pi")
@@ -262,8 +262,8 @@ func TestModelNetworkEnabledHonorsOfflineVariables(t *testing.T) {
 	if !ModelNetworkEnabled() {
 		t.Fatal("network disabled without offline variables")
 	}
-	t.Setenv("PIG_OFFLINE", "true")
+	t.Setenv("OMPIG_OFFLINE", "true")
 	if ModelNetworkEnabled() {
-		t.Fatal("PIG_OFFLINE=true must disable model network access")
+		t.Fatal("OMPIG_OFFLINE=true must disable model network access")
 	}
 }

@@ -31,7 +31,7 @@ func TestNormalPathSpanIsTheBuiltResult(t *testing.T) {
 
 // A working directory and its ancestors are absolute and normal: resolving one allocates nothing.
 func TestResolveOfANormalAbsolutePathAllocatesNothing(t *testing.T) {
-	path := "/tmp/pig/" + strings.Repeat("level/", 16) + "w"
+	path := "/tmp/ompig/" + strings.Repeat("level/", 16) + "w"
 	if got, err := PosixResolve(Env{}, path); err != nil || got != path {
 		t.Fatalf("PosixResolve(%q) = %q, %v", path, got, err)
 	}

@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/agent.ts:211-213,245,484-492. Agent.prepareNextTurn is a public property that holds a context-free hook; the run builds

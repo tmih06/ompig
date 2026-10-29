@@ -8,13 +8,13 @@ from __future__ import annotations
 
 import unittest
 
-import pig_sdk
+import ompig_sdk
 
 
 class ReplicatedIdentity(unittest.TestCase):
     def test_state_snapshots_replicate_the_model_identity_and_the_session_name(self) -> None:
-        ext = pig_sdk.Extension("replicated")
-        ctx = pig_sdk.Context(ext)
+        ext = ompig_sdk.Extension("replicated")
+        ctx = ompig_sdk.Context(ext)
 
         def apply(state: dict) -> None:
             with ext._state_lock:

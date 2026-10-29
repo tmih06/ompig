@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestStandaloneProcessExitFailsTheLoad(t *testing.T) {
@@ -59,9 +59,9 @@ func TestFrameSkewHint(t *testing.T) {
 	if !strings.Contains(hs, "20.0 MiB") || !strings.Contains(hs, "Rebuild this prebuilt") {
 		t.Fatalf("standalone skew hint missing size/remedy: %q", hs)
 	}
-	// Source-mode, recent -> reassures pig will rebuild.
+	// Source-mode, recent -> reassures ompig will rebuild.
 	hsrc := frameSkewHint(ExtConfig{Name: "ws", Source: "/src/ws"}, size, true)
-	if !strings.Contains(hsrc, "pig will rebuild it on next load") {
+	if !strings.Contains(hsrc, "ompig will rebuild it on next load") {
 		t.Fatalf("source skew hint should promise auto-rebuild: %q", hsrc)
 	}
 }

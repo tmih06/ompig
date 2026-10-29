@@ -1,4 +1,4 @@
-// pig additive (D107): the view derivation of the widget kinds
+// ompig additive (D107): the view derivation of the widget kinds
 // (docs/plan/extension-component-kit.md §2.2, §9). Each walker reads one real
 // Pi component into its kit node, or returns undefined when the component
 // holds something the wire cannot carry (a closure, a value out of range): the

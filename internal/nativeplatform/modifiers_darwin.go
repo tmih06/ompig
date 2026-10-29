@@ -8,7 +8,7 @@ import (
 	"unsafe"
 )
 
-// Pig builds with CGO_ENABLED=0, so it reaches CoreGraphics the way
+// Ompig builds with CGO_ENABLED=0, so it reaches CoreGraphics the way
 // golang.org/x/sys/unix reaches libSystem: dlopen and dlsym are imported from
 // libSystem through assembly trampolines and called with syscall.syscall.
 // CoreGraphics itself is loaded lazily, on the first modifier query, as Pi

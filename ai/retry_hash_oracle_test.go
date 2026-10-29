@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type retryHashProbe struct {
@@ -125,7 +125,7 @@ func TestRetryAndHashMatchPiOnSeededProbes(t *testing.T) {
 		}
 		if got != expected[i] {
 			if differing++; differing <= 10 {
-				t.Errorf("%+v differs from Pi: Pig %v, Pi %v", probe, got, expected[i])
+				t.Errorf("%+v differs from Pi: Ompig %v, Pi %v", probe, got, expected[i])
 			}
 		}
 	}

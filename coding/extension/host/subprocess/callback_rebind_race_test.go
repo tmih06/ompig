@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // The wiring layer binds the host's crash and geometry callbacks again on every reload while the host's connection, recovery and handshake goroutines read them. A rebind must not race a read, and a read sees a whole binding: some handler, or the one registered before it.

@@ -13,8 +13,8 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/outputfiles"
-	"github.com/MichaelKinsy/PiG/internal/truncate"
+	"github.com/tmih06/ompig/internal/outputfiles"
+	"github.com/tmih06/ompig/internal/truncate"
 )
 
 // OutputSnapshot mirrors upstream OutputSnapshot.
@@ -175,7 +175,7 @@ func (a *OutputAccumulator) CloseTempFile() error {
 
 // LastLineBytes mirrors upstream getLastLineBytes.
 //
-// pig divergence (D153): the size is that of the last line the output counts: the open line, or, when the output
+// ompig divergence (D153): the size is that of the last line the output counts: the open line, or, when the output
 // ends with a newline, the line that newline ended. Upstream returns the bytes after the final newline, so the
 // notice for a long last line that ends in a newline reads "line is 0B" (Pi #10015).
 func (a *OutputAccumulator) LastLineBytes() int {

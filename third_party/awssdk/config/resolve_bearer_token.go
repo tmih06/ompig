@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/ssocreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/ssooidc"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	smithybearer "github.com/aws/smithy-go/auth/bearer"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/ssocreds"
+	"github.com/tmih06/ompig/third_party/awssdk/service/ssooidc"
 )
 
 // resolveBearerAuthToken extracts a token provider from the config sources.

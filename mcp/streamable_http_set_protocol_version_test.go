@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // streamable-http.ts:221-223 setProtocolVersion stores the version and :313 sends it as the MCP-Protocol-Version header of every later request:

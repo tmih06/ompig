@@ -1,5 +1,5 @@
 // Loaded into the real `pi --mode rpc` process next to test/parity/testdata/test-faux-provider.ts (the Pi-side fixture that
-// PiG's ai/test_faux.go pairs with). It registers that fixture's provider unchanged and records the single-thread
+// Ompig's ai/test_faux.go pairs with). It registers that fixture's provider unchanged and records the single-thread
 // interleaving of its `stream.push` calls with RPC serialization of assistant records. The recorder is synchronous
 // (appendFileSync), so it adds no microtask or timer.
 import { appendFileSync } from 'node:fs';

@@ -10,8 +10,8 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's TUI owns input dispatch; the Go InteractiveMode owns that production boundary. Each send traverses the real pre-listener and focused-component path. .upstream/v0.99.2/packages/tui/test/terminal-colors.test.ts:136.

@@ -28,8 +28,8 @@ import { Runtime, requestSignal } from %q;
 
 // register: promptSnippet travels as prompt_snippet.
 const sock = process.platform === "win32"
-  ? "\\\\.\\pipe\\pig-sdk-surface-" + process.pid
-  : join(tmpdir(), "pig-sdk-surface-" + process.pid + ".sock");
+  ? "\\\\.\\pipe\\ompig-sdk-surface-" + process.pid
+  : join(tmpdir(), "ompig-sdk-surface-" + process.pid + ".sock");
 const frame = new Promise((resolve, reject) => {
   const server = net.createServer((socket) => {
     let buffer = Buffer.alloc(0);
@@ -46,7 +46,7 @@ const frame = new Promise((resolve, reject) => {
   server.on("error", reject);
   server.listen(sock);
 });
-process.env.PIG_EXT_SOCKET = sock;
+process.env.OMPIG_EXT_SOCKET = sock;
 const registering = new Runtime("/ext/surface.mjs");
 registering.api.registerTool({
   name: "snippet_tool", label: "Snippet", description: "d", promptSnippet: "Look things up",

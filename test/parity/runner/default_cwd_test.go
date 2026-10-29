@@ -23,27 +23,27 @@ func TestMkdirTempFixedWidth(t *testing.T) {
 }
 
 func TestMaskSnapshotIDsKeepsWidth(t *testing.T) {
-	pig := "/tmp/parity-snap-cwd-0123456789 (main)\n~/x/parity-snap-cwd-98..."
+	ompig := "/tmp/parity-snap-cwd-0123456789 (main)\n~/x/parity-snap-cwd-98..."
 	pi := "/tmp/parity-snap-cwd-9876543210 (main)\n~/x/parity-snap-cwd-12..."
-	gotPig, gotPi := maskSnapshotIDs(pig), maskSnapshotIDs(pi)
+	gotPig, gotPi := maskSnapshotIDs(ompig), maskSnapshotIDs(pi)
 	if gotPig != gotPi {
 		t.Fatalf("masked outputs differ:\n%q\n%q", gotPig, gotPi)
 	}
-	if len(gotPig) != len(pig) {
-		t.Fatalf("masking changed width: %d -> %d", len(pig), len(gotPig))
+	if len(gotPig) != len(ompig) {
+		t.Fatalf("masking changed width: %d -> %d", len(ompig), len(gotPig))
 	}
 	if want := "/tmp/parity-snap-cwd-0000000000 (main)\n~/x/parity-snap-cwd-00..."; gotPig != want {
 		t.Fatalf("masked = %q, want %q", gotPig, want)
 	}
-	if other := "parity-snap-PIG_HOME-0123456789"; maskSnapshotIDs(other) != other {
+	if other := "parity-snap-OMPIG_HOME-0123456789"; maskSnapshotIDs(other) != other {
 		t.Fatalf("masked a non-cwd snapshot name")
 	}
 }
 
 func TestMaskSnapshotIDsCoversExtensionSnapshots(t *testing.T) {
-	pig := ` Extension "/tmp/parity-snap-extension-0123456789/error-stack.mjs" error: stack` + "\n" + ` parity-snap-extension-98...`
+	ompig := ` Extension "/tmp/parity-snap-extension-0123456789/error-stack.mjs" error: stack` + "\n" + ` parity-snap-extension-98...`
 	pi := ` Extension "/tmp/parity-snap-extension-9876543210/error-stack.mjs" error: stack` + "\n" + ` parity-snap-extension-12...`
-	gotPig, gotPi := maskSnapshotIDs(pig), maskSnapshotIDs(pi)
+	gotPig, gotPi := maskSnapshotIDs(ompig), maskSnapshotIDs(pi)
 	if gotPig != gotPi {
 		t.Fatalf("masked outputs differ:\n%q\n%q", gotPig, gotPi)
 	}
@@ -161,20 +161,20 @@ func TestPiPackageRootFollowsNpmCmdShim(t *testing.T) {
 }
 
 func TestPromptPathLengthsBalance(t *testing.T) {
-	// Pi prints PI_PACKAGE_DIR resolved to an absolute path and pig prints
-	// PIG_HOME as given, so only an absolute root prints the same on both.
+	// Pi prints PI_PACKAGE_DIR resolved to an absolute path and ompig prints
+	// OMPIG_HOME as given, so only an absolute root prints the same on both.
 	if !filepath.IsAbs(promptPathRoot) {
-		t.Fatalf("promptPathRoot %q is not absolute; Pi would print a longer root than pig", promptPathRoot)
+		t.Fatalf("promptPathRoot %q is not absolute; Pi would print a longer root than ompig", promptPathRoot)
 	}
 	digits := strings.Repeat("0", snapshotIDDigits)
-	pigHome := filepath.Join(promptPathRoot, pigHomePrefix+digits)
+	ompigHome := filepath.Join(promptPathRoot, ompigHomePrefix+digits)
 	piPackage := filepath.Join(promptPathRoot, piPackagePrefix+digits, piPackageLink)
-	pig := 2*(len(pigHome)+len("/docs")+pigBundleDirLen) + d22ConstantGap
+	ompig := 2*(len(ompigHome)+len("/docs")+ompigBundleDirLen) + d22ConstantGap
 	pi := 3 * len(piPackage)
-	if pig != pi {
-		t.Fatalf("docs path characters: pig %d, pi %d; the system prompts would differ in length", pig, pi)
+	if ompig != pi {
+		t.Fatalf("docs path characters: ompig %d, pi %d; the system prompts would differ in length", ompig, pi)
 	}
-	if pigHomePrefix != "parity-snap-PIG_HOME-" {
-		t.Fatalf("pigHomePrefix %q must match snapshotEnvDirs naming", pigHomePrefix)
+	if ompigHomePrefix != "parity-snap-OMPIG_HOME-" {
+		t.Fatalf("ompigHomePrefix %q must match snapshotEnvDirs naming", ompigHomePrefix)
 	}
 }

@@ -16,7 +16,7 @@
 #        "source":"extension:discover","scope":"temporary","origin":"top-level","baseDir":".../discover"}}
 #   ... {"name":"skill:discovered-skill", ..., "source":"extension:discover", ...}
 #
-# PiG used to run resources_discover only in interactive mode, so print, JSON
+# Ompig used to run resources_discover only in interactive mode, so print, JSON
 # and RPC mode listed neither.
 
 name = "27-rpc-extension-discovered-resources"
@@ -34,9 +34,9 @@ timeout_seconds = 20
 settle_seconds = 1
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session"]
-pig_extensions = ["testdata/discover/discover.ts"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session"]
+ompig_extensions = ["testdata/discover/discover.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/discover/discover.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session"]
 

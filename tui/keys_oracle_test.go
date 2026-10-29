@@ -15,7 +15,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type keysCase struct {
@@ -204,7 +204,7 @@ func TestParseAndMatchKeyMatchPiOnSeededInput(t *testing.T) {
 					}
 					return out
 				}
-				t.Errorf("%q (kitty %v) differs from Pi:\n  Pig parse %s, matches %v\n  Pi  parse %s, matches %v", c.Data, c.Kitty, gotParse, name(got.Matches), wantParse, name(want.Matches))
+				t.Errorf("%q (kitty %v) differs from Pi:\n  Ompig parse %s, matches %v\n  Pi  parse %s, matches %v", c.Data, c.Kitty, gotParse, name(got.Matches), wantParse, name(want.Matches))
 			}
 		}
 	}

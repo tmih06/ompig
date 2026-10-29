@@ -23,7 +23,7 @@ The utility corpus invokes Node against `.upstream/current` directly. It compare
 Run the production RPC resume regressions from the repository root:
 
 ```bash
-go test -race ./cmd/pig -run '^TestRPCPlanMode' -count=3
+go test -race ./cmd/ompig -run '^TestRPCPlanMode' -count=3
 ```
 
 These tests launch the actual Go factory through the RPC Extension Host. They verify disk persistence, process restart, tool restoration on the next model turn, and completion reconstruction from multi-block assistant history. The example's other lifecycle tests use a framed SDK responder; they do not prove terminal rendering or real execution follow-ups.
@@ -33,8 +33,8 @@ These tests launch the actual Go factory through the RPC Extension Host. They ve
 Validate or activate the exact source directory:
 
 ```bash
-pig install --validate-only --json examples/extensions/plan-mode
-pig -e examples/extensions/plan-mode
+ompig install --validate-only --json examples/extensions/plan-mode
+ompig -e examples/extensions/plan-mode
 ```
 
-The extension changes no Stock PiG defaults. Activate it explicitly with `-e`, extension policy, or a Piglet Resource.
+The extension changes no Stock Ompig defaults. Activate it explicitly with `-e`, extension policy, or a Ompiglet Resource.

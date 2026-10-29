@@ -11,7 +11,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/automation/ci/portlint/checks"
+	"github.com/tmih06/ompig/automation/ci/portlint/checks"
 )
 
 // baselineEntry is one known finding, keyed by check, file, enclosing

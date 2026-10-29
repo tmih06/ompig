@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-if (process.argv[2] === 'pig') {
+if (process.argv[2] === 'ompig') {
   const result = spawnSync('./test/parity/testdata/prebuilt-go-test.sh', ['./internal/codingagent','-run','^TestModelSelectorListsEveryFailedCatalogUpstream$','-count=1','-v'], {encoding:'utf8'});
   if (result.status !== 0) throw new Error(result.stdout);
   const rows = result.stdout.split('\n').filter(line => line.startsWith('CATALOG-ERROR:'));

@@ -19,10 +19,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ShareTool is one tool schema recorded in the pi.share entry.
@@ -120,16 +120,16 @@ func ExportSessionForShare(filePath string, session *Session, state ShareState) 
 	return ExportSessionToJsonl(session, filePath, shareTrailingEntries(state))
 }
 
-// pig divergence (D64): PiG uploads explicitly shared sessions to its own
-// pi-in-go.dev gateway instead of Earendil's Radius gateway.
-const defaultShareGatewayURL = "https://pi-in-go.dev/v1/artifacts?visibility=unlisted&title=PiG+session"
+// ompig divergence (D64): Ompig uploads explicitly shared sessions to its own
+// ompig.dev gateway instead of Earendil's Radius gateway.
+const defaultShareGatewayURL = "https://ompig.dev/v1/artifacts?visibility=unlisted&title=Ompig+session"
 
 const (
-	// pig divergence (D64): bound PiG gateway upload time.
+	// ompig divergence (D64): bound Ompig gateway upload time.
 	shareUploadTimeout = 30 * time.Second
-	// pig divergence (D64): bound PiG gateway response memory.
+	// ompig divergence (D64): bound Ompig gateway response memory.
 	shareResponseLimit = 1 << 20
-	sharePrivacyNotice = "Privacy: /share uploads the current session to pi-in-go.dev, including prompts, model responses, tool calls, and tool output. Anyone with the link can read it. The service deletes it after 30 days."
+	sharePrivacyNotice = "Privacy: /share uploads the current session to ompig.dev, including prompts, model responses, tool calls, and tool output. Anyone with the link can read it. The service deletes it after 30 days."
 )
 
 func shareGatewayURL() string {
@@ -204,9 +204,9 @@ func uploadShareArtifact(ctx context.Context, client *http.Client, gatewayURL, f
 // owns its temporary directory, so concurrent shares cannot overwrite one
 // another.
 func shareSession(ctx context.Context, session *Session, state ShareState, gatewayURL string, client *http.Client, showStatus func(string)) (string, error) {
-	// pig divergence (D64): disclose PiG-platform retention and link access before upload.
+	// ompig divergence (D64): disclose Ompig-platform retention and link access before upload.
 	showStatus(sharePrivacyNotice)
-	shareDir, err := os.MkdirTemp("", "pig-share-")
+	shareDir, err := os.MkdirTemp("", "ompig-share-")
 	if err != nil {
 		return "", fmt.Errorf("Failed to export session: %w", err)
 	}

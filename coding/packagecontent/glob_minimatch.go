@@ -10,8 +10,8 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // globIgnoresCase is the nocase option of Node's globSync: createMatcher (lib/internal/fs/glob.js) passes minimatch nocase on Windows and macOS, with nocaseMagicOnly, so only a segment with magic ignores case.

@@ -3,7 +3,7 @@ package cli
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // toolRegistryFilters returns the allowlist and denylist that bound the tool

@@ -8,9 +8,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/test/theme-controller.test.ts (upstream 0.99.1), adapted to the driver-owned controller. The upstream `ui` mock maps to colorQueryRenderer: `queryTerminalColors` is the renderer's QueryTerminalColors, `setTerminalColorSchemeNotifications` is the CSI ? 2031 h/l write to the mode's output, and `emitTerminalColorScheme` is a scheme report (CSI ? 997 ; n) delivered to consumeTerminalThemeInput, the input boundary the renderer owns.

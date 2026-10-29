@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/images"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/durable/images"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 // defaultIdle is how long the worker stays after its last image (node.ts: idleMs ?? 30_000).

@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/configvalue"
+	"github.com/tmih06/ompig/internal/testenv"
 
 	// A binary that embeds the documentation bundle registers its name; the system prompt names the docs only then (D22).
-	_ "github.com/MichaelKinsy/PiG/internal/pigdocs"
+	_ "github.com/tmih06/ompig/internal/pigdocs"
 )
 
 // shellWithoutTimeout runs a `!command` credential as the default executor does (/bin/sh -c, trimmed stdout; a failed exit or no output is no value) and waits for
@@ -34,7 +34,7 @@ func TestMain(m *testing.M) {
 	if runtime.GOOS != "windows" {
 		configvalue.SetExecutorForTest(shellWithoutTimeout)
 	}
-	testRoot, err := os.MkdirTemp("", "pig-coding-")
+	testRoot, err := os.MkdirTemp("", "ompig-coding-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "create isolated test config root:", err)
 		os.Exit(2)
@@ -44,15 +44,15 @@ func TestMain(m *testing.M) {
 		_ = os.RemoveAll(testRoot)
 		os.Exit(2)
 	}
-	for _, key := range []string{"PIG_CODING_AGENT_DIR", "PIG_CODING_AGENT_SESSION_DIR"} {
+	for _, key := range []string{"OMPIG_CODING_AGENT_DIR", "OMPIG_CODING_AGENT_SESSION_DIR"} {
 		if err := os.Unsetenv(key); err != nil {
 			fmt.Fprintf(os.Stderr, "clear inherited %s: %v\n", key, err)
 			_ = os.RemoveAll(testRoot)
 			os.Exit(2)
 		}
 	}
-	if err := os.Setenv("PIG_HOME", filepath.Join(testRoot, "pig")); err != nil {
-		fmt.Fprintln(os.Stderr, "set isolated PIG_HOME:", err)
+	if err := os.Setenv("OMPIG_HOME", filepath.Join(testRoot, "ompig")); err != nil {
+		fmt.Fprintln(os.Stderr, "set isolated OMPIG_HOME:", err)
 		_ = os.RemoveAll(testRoot)
 		os.Exit(2)
 	}

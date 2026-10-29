@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // memberShape judges one Go member against an upstream property: the type verdict of a data property or accessor, and the signature

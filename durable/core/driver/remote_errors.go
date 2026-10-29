@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // As lets errors.As find the typed Pi error a remote error names: Pi's Session throws ReadAfterWrite, StorageRequestError, SessionFailed and

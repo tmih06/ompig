@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/turn"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/turn"
 )
 
 // generation.ts:337-345: a generation whose agent has no model, or a model the host does not know, ends its run's inputs `unanswered` with reason `no_model` and fails with "No model is configured" or

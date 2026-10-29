@@ -1,6 +1,6 @@
 // Deterministic faux provider extension for upstream pi.
 // Used by the parity runner to drive tree/session scenarios without live LLM
-// calls. Must match the behavior of ai/test_faux.go in pig.
+// calls. Must match the behavior of ai/test_faux.go in ompig.
 //
 // Install: pi --no-extensions -e <this file> --model test-faux/faux-1
 
@@ -169,7 +169,7 @@ function messageImages(message: any): any[] {
 
 // isTurnPrefixRequest matches the pinned Pi's split-turn prefix summarization
 // request (compaction.ts TURN_PREFIX_SUMMARIZATION_PROMPT). Only Pi loads this
-// provider; PiG's side is ai/test_faux.go.
+// provider; Ompig's side is ai/test_faux.go.
 function isTurnPrefixRequest(lastText: string): boolean {
   return lastText.includes("Create a concise checkpoint of the user's request and the progress shown above");
 }
@@ -227,8 +227,8 @@ function classify(messages: any[]) {
   }
   // Deterministic Porter Profile activation probe. This response is used only
   // by the local headless smoke and does not stand in for closure evidence.
-  if (lastText.includes('PORTER_HEADLESS_VERIFY') && lastText.includes('/skill:pig-porter')) {
-    return { kind: "text", text: "pig-porter-headless-ok" };
+  if (lastText.includes('PORTER_HEADLESS_VERIFY') && lastText.includes('/skill:ompig-porter')) {
+    return { kind: "text", text: "ompig-porter-headless-ok" };
   }
   if (lastText.includes("What is 20+22?")) {
     return { kind: "text", text: "42" };
@@ -360,8 +360,8 @@ function classify(messages: any[]) {
     return {
       kind: "tool",
       toolCalls: [
-        { toolName: "read", toolArgs: { path: ".pig-live-parallel-a" } },
-        { toolName: "read", toolArgs: { path: ".pig-live-parallel-b" } },
+        { toolName: "read", toolArgs: { path: ".ompig-live-parallel-a" } },
+        { toolName: "read", toolArgs: { path: ".ompig-live-parallel-b" } },
       ],
     };
   }
@@ -532,7 +532,7 @@ function classify(messages: any[]) {
   // Mermaid rendering parity: return a multi-line ```mermaid block so the
   // assistant markdown pipeline runs the Mermaid transformer (mermaid.ts +
   // grok-mermaid render). The rendered box-drawing diagram is theme-independent
-  // after ANSI normalization, so pig and pi must produce the same plain art.
+  // after ANSI normalization, so ompig and pi must produce the same plain art.
   if (lastText.includes("show mermaid flowchart")) {
     return { kind: "text", text: "```mermaid\ngraph TD\n  A[Start] --> B[End]\n```" };
   }
@@ -666,7 +666,7 @@ function streamTestFaux(model: any, context: any, options: any) {
       messages.map(messageText).join("\n").includes("Trigger: overflow error with queued message"));
   // TEST_FAUX_HOLD_COMPACTION holds a /compact summary until the run is
   // aborted, so a probe of the in-progress screen captures a steady state
-  // instead of racing a fixed delay. PiG's ai/test_faux.go does the same.
+  // instead of racing a fixed delay. Ompig's ai/test_faux.go does the same.
   if (process.env.TEST_FAUX_HOLD_COMPACTION === "1" &&
       lastText.includes("Create a structured context checkpoint summary")) {
     stream.push({ type: "start", partial: output });

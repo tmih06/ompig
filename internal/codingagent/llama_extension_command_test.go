@@ -1,4 +1,4 @@
-//go:build !pig_strip_llama_cpp
+//go:build !ompig_strip_llama_cpp
 
 package codingagent
 
@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/llama"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent/llama"
+	"github.com/tmih06/ompig/tui"
 )
 
 // llamaExtension is the built-in llama.cpp extension as the loader hands it to the runner: path `builtin:llama.cpp`, hidden, with
@@ -42,12 +42,14 @@ func popupNames(t *testing.T, m *InteractiveMode) []string {
 // Pi 0.99.2 `pi --no-extensions` opens the slash popup as `(1/24)`: BUILTIN_SLASH_COMMANDS has 24 entries
 // (core/slash-commands.ts:19-44) and createBaseAutocompleteProvider adds only prompt templates, extension commands and skills
 // (interactive-mode.ts:691-775). /llama is an extension command, so it is absent while the llama.cpp extension is not loaded.
+//
+// ompig divergence (D206): /agents opens the subagent roster, so the popup has 25 built-ins.
 func TestSlashPopupWithoutExtensionsListsPisTwentyFourBuiltins(t *testing.T) {
 	m, _ := newCustomEditorDispatchMode(t)
 	m.opts.AgentDir = t.TempDir()
 	names := popupNames(t, m)
-	if len(names) != 24 {
-		t.Fatalf("popup entries = %d %q, want Pi's 24 built-in commands", len(names), names)
+	if len(names) != 25 {
+		t.Fatalf("popup entries = %d %q, want Pi's 24 built-in commands plus /agents", len(names), names)
 	}
 	if names[0] != "settings" || names[len(names)-1] != "quit" {
 		t.Fatalf("popup = %q, want settings first and quit last", names)
@@ -63,10 +65,11 @@ func TestSlashPopupListsLlamaAmongExtensionCommandsInLoadOrder(t *testing.T) {
 	m.newRunner = inproc.NewRunner([]extension.Extension{llamaExtension(), mcp}, m.opts.AgentDir)
 	t.Cleanup(func() { m.newRunner.Invalidate("") })
 	names := popupNames(t, m)
-	if len(names) != 26 {
-		t.Fatalf("popup entries = %d %q, want 24 built-ins plus /llama and /mcp", len(names), names)
+	// ompig divergence (D206): 25 built-ins, then the extension commands.
+	if len(names) != 27 {
+		t.Fatalf("popup entries = %d %q, want 25 built-ins plus /llama and /mcp", len(names), names)
 	}
-	if got := names[24:]; got[0] != "llama" || got[1] != "mcp" {
+	if got := names[25:]; got[0] != "llama" || got[1] != "mcp" {
 		t.Fatalf("extension commands = %q, want llama then mcp", got)
 	}
 }

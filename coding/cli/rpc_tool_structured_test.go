@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // Pi 0.99.1 packages/agent/src/agent-loop.ts:912-919 emits tool_execution_end with the finalized AgentToolResult as `result`, and AgentToolResult.structuredContent (agent/src/types.ts:433) is part of it, so the RPC and JSON wire carry it beside content and details.

@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // OAuthCallbackServerOptions configures the loopback redirect handler shared by the browser sign-in flows.

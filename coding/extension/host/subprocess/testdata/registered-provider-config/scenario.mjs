@@ -1,4 +1,4 @@
-// Pi 0.87.1 model-runtime.ts:438-443,753-797: validation of the incoming registration precedes any state change, the effective root is a fresh shallow merge, and children, functions and descriptors are the author's originals. The same scenario runs against Pi's ModelRegistry and PiG's Node ModelRegistry.
+// Pi 0.87.1 model-runtime.ts:438-443,753-797: validation of the incoming registration precedes any state change, the effective root is a fresh shallow merge, and children, functions and descriptors are the author's originals. The same scenario runs against Pi's ModelRegistry and Ompig's Node ModelRegistry.
 export async function run(reg, register, unregister) {
   const out = {};
   let getterReads = 0;

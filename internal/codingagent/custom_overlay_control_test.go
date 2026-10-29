@@ -4,8 +4,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi tui.ts:715-769 keeps a noncapturing overlay mounted while focus and

@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // A message entry whose record does not decode into a MessageEntry is decided once, when the record is read: it is a RawEntry, so every

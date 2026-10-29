@@ -10,7 +10,7 @@
 # `owner-credentials` because only the owner holds the github-copilot
 # credentials it needs: `make parity-live` names it as not run there, and
 # the owner runs it on the Mac with
-# `PIG_PARITY_REAL_AUTH=<auth.json> make parity-live-owner`.
+# `OMPIG_PARITY_REAL_AUTH=<auth.json> make parity-live-owner`.
 
 name = "01-print-mode-arithmetic"
 description = "Headless --print returns the correct answer from both systems"
@@ -33,5 +33,5 @@ timeout_seconds = 60
 runs = 1
 exit_code = 0
 both_contain = ["4"]
-# Print mode is dominated by API latency; pig overhead should be small.
+# Print mode is dominated by API latency; ompig overhead should be small.
 runtime_ratio_max = 1.20

@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func TestUpstreamSessionBoundariesAccounting(t *testing.T) {
@@ -59,8 +59,11 @@ func TestUpstreamSessionBoundariesAccounting(t *testing.T) {
 				t.Errorf("compaction_start=%v", events)
 			}
 			usage := h.session.ContextUsage()
-			if usage == nil || usage.Tokens == nil || *usage.Tokens >= 2000 {
-				t.Errorf("usage=%+v, want tokens <2000", usage)
+			// ompig divergence (D-SUBAGENT-4): the default tool set carries the subagent
+			// tools, so the prompt baseline is larger than Pi's; the bound still fails
+			// if the boundary-omitted usage (9800 or 5100 tokens) leaked through.
+			if usage == nil || usage.Tokens == nil || *usage.Tokens >= 4000 {
+				t.Errorf("usage=%+v, want tokens far below the stale input, got %d", usage, derefInt(usage.Tokens))
 			}
 		})
 	}
@@ -205,4 +208,12 @@ func TestUpstreamSessionBoundariesAccounting(t *testing.T) {
 			t.Errorf("agent_settled=%+v", got)
 		}
 	})
+}
+
+// derefInt is a debug helper.
+func derefInt(value *int) int {
+	if value == nil {
+		return -1
+	}
+	return *value
 }

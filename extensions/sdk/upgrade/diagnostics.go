@@ -79,7 +79,7 @@ type Drift struct {
 	Old    string `json:"old"`
 	New    string `json:"new"`
 	Since  string `json:"since"`
-	// Rewrites reports whether pig upgrades this use mechanically.
+	// Rewrites reports whether ompig upgrades this use mechanically.
 	Rewrites bool `json:"rewrites"`
 	// File and Line are the first use. Count is the number of uses seen.
 	File  string `json:"file"`

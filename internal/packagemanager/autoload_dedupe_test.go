@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func resolveExtensionsForSettings(t *testing.T, userSettings, projectSettings string, files ...string) (string, []string) {

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // session-manager.ts entryToMessages maps every compaction entry to createCompactionSummaryMessage(entry.summary, ...) and addMessageToChat

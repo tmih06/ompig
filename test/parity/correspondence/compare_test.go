@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/knowngaps"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/knowngaps"
 )
 
 func TestCompactionSettingsCorrespondenceCurrentPin(t *testing.T) {
@@ -49,7 +49,7 @@ func TestCompactionSettingsCorrespondenceCurrentPin(t *testing.T) {
 		t.Fatal(err)
 	}
 	known := ledger.Scope("correspondence")
-	// A Pi table item the Pig table lacks yields a missing-table-item finding
+	// A Pi table item the Ompig table lacks yields a missing-table-item finding
 	// and no mapping, so each listed one leaves the mapping denominator.
 	for key := range known {
 		if strings.HasPrefix(key, "finding:table-item:missing:") {

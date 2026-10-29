@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func packageSources(sm *codingagent.SettingsManager, local bool) []string {
@@ -397,7 +397,7 @@ func TestPackageManagerNpmInstallAndUninstallPassTheRealPathWhenTheAgentDirIsASy
 	}
 }
 
-// pig divergence (D110): Git sources select a repository subdirectory with #subdirectory=, so two configured sources can share one checkout. PackageManager.Remove of one keeps the
+// ompig divergence (D110): Git sources select a repository subdirectory with #subdirectory=, so two configured sources can share one checkout. PackageManager.Remove of one keeps the
 // checkout while the other is configured in the same scope, and removes it (and its marker) once none is. Pi's removeGit (package-manager.ts:2033) always deletes it, which cannot
 // strand another source because Pi has no subdirectory form.
 func TestPackageManagerRemoveKeepsAGitCheckoutAnotherConfiguredSourceShares(t *testing.T) {

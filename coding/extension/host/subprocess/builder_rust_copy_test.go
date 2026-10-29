@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The binary cargo built is copied to the cache path and executed as soon as the build is published. A fork while the copy is open leaves a child that holds the copy's write descriptor until it calls exec, and the host's exec then fails with "text file busy".

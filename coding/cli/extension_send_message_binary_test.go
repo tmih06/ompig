@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const sendMessageExtension = `export default function (pi) {
@@ -22,7 +22,7 @@ const sendMessageExtension = `export default function (pi) {
 // Pi 1.1.0's sendCustomMessage appends an idle, non-triggering message to the in-process log before pi.sendMessage returns (agent-session.ts sendCustomMessage, _appendCustomMessage), so the same handler reads it: Pi prints the line below. The Node runtime sent the message fire-and-forget and read the old log.
 func TestExtensionSendMessageIsVisibleInTheSameHandlerAsPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	extPath := filepath.Join(t.TempDir(), "probe.mjs")
@@ -33,15 +33,15 @@ func TestExtensionSendMessageIsVisibleInTheSameHandlerAsPi(t *testing.T) {
 	ctx := testbudget.Context(t)
 	cmd := exec.CommandContext(ctx, bin, "-p", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1", "/probe")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err := cmd.Run()
 	if ctx.Err() != nil {
-		t.Fatalf("pig did not finish\nstderr: %s", stderr.String())
+		t.Fatalf("ompig did not finish\nstderr: %s", stderr.String())
 	}
 	if err != nil {
-		t.Fatalf("pig: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig: %v\nstderr: %s", err, stderr.String())
 	}
 	want := `entries=["model_change","thinking_level_change","custom_message:note"] leaf=custom_message` + "\n"
 	if got := stderr.String(); got != want {
@@ -60,7 +60,7 @@ const sendTriggerExtension = `export default function (pi) {
 // Pi 1.1.0's sendCustomMessage with triggerTurn starts the run inside pi.sendMessage (it awaits _runAgentPrompt), so ctx.isIdle() right after is false; print mode then prints state.messages' last message (not yet an assistant one) and disposes the runtime without reporting the cancelled run. Pi's stderr is exactly "idle=false\n". The Node runtime sent the message fire-and-forget (idle=true) and print mode reported "Extension error (<runtime>): context canceled".
 func TestExtensionSendMessageTriggerTurnStartsTheRunAsPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	extPath := filepath.Join(t.TempDir(), "probe.mjs")
@@ -71,15 +71,15 @@ func TestExtensionSendMessageTriggerTurnStartsTheRunAsPi(t *testing.T) {
 	ctx := testbudget.Context(t)
 	cmd := exec.CommandContext(ctx, bin, "-p", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1", "/probe")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err := cmd.Run()
 	if ctx.Err() != nil {
-		t.Fatalf("pig did not finish\nstderr: %s", stderr.String())
+		t.Fatalf("ompig did not finish\nstderr: %s", stderr.String())
 	}
 	if err != nil {
-		t.Fatalf("pig: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig: %v\nstderr: %s", err, stderr.String())
 	}
 	if got := stderr.String(); got != "idle=false\n" {
 		t.Fatalf("stderr = %q, want Pi 1.1.0's %q", got, "idle=false\n")

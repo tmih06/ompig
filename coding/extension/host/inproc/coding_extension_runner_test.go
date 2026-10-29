@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // runner.ts:233-242 constructor(extensions, runtime, cwd, sessionManager, modelRegistry): the runner shares the runtime it is given, creates one when none is, and

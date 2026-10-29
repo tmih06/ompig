@@ -8,13 +8,13 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Pi starts the TUI before it awaits waitForTerminalColors (interactive-mode.ts init(): ui.start(), applyFromSettings(), await
 // waitForTerminalColors()), so a key typed while a silent terminal holds startup for up to 100 ms reaches the editor and is painted at
-// once: the editor's change requests a render, which runs while init() awaits. PiG starts the renderer before that wait too, so its wait
+// once: the editor's change requests a render, which runs while init() awaits. Ompig starts the renderer before that wait too, so its wait
 // loop must paint early input as well, not keep it off screen until the colors arrive.
 func TestEarlyInputIsPaintedWhileStartupWaitsForTheTerminalColors(t *testing.T) {
 	model := &ai.Model{ID: "m", DisplayName: "m", Capabilities: ai.ModelCapabilities{ContextWindow: 8000}}
@@ -84,7 +84,7 @@ func TestRenderRequestedWhileStartupWaitsForTheTerminalColorsPaints(t *testing.T
 }
 
 // TUI.start requests the first frame, and Pi's event loop runs it while init() awaits the terminal colors (tui.js start(), requestRender()).
-// A terminal that answers at once can end PiG's wait before the owner loop ran that frame. The wait must still paint it before it returns:
+// A terminal that answers at once can end Ompig's wait before the owner loop ran that frame. The wait must still paint it before it returns:
 // Init does not serve the owner loop again until it returns, so the first frame would otherwise wait for the rest of startup.
 func TestStartupColorWaitPaintsTheRequestedFirstFrameBeforeItReturns(t *testing.T) {
 	model := &ai.Model{ID: "m", DisplayName: "m", Capabilities: ai.ModelCapabilities{ContextWindow: 8000}}

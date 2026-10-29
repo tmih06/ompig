@@ -8,7 +8,7 @@
 #
 #   pi --offline --no-extensions --no-session --model amazon-bedrock/us.anthropic.claude-sonnet-5-5 -p hello
 #
-# prints "No API key found for amazon-bedrock." with the login guidance and exits 1. PiG exempted amazon-bedrock from
+# prints "No API key found for amazon-bedrock." with the login guidance and exits 1. Ompig exempted amazon-bedrock from
 # the prompt and setModel auth checks, so it sent the request (stderr "fetch failed" or an AWS SDK config error, exit 1
 # after a network attempt).
 #
@@ -30,7 +30,7 @@ args = ["--offline", "--no-extensions", "--no-context-files", "--no-skills", "--
 timeout_seconds = 20
 
 [env]
-pig = ["PIG_HOME=../rpc/testdata/pig-home", "AWS_PROFILE=", "AWS_ACCESS_KEY_ID=", "AWS_SECRET_ACCESS_KEY=", "AWS_BEARER_TOKEN_BEDROCK=", "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=", "AWS_CONTAINER_CREDENTIALS_FULL_URI=", "AWS_WEB_IDENTITY_TOKEN_FILE="]
+ompig = ["OMPIG_HOME=../rpc/testdata/ompig-home", "AWS_PROFILE=", "AWS_ACCESS_KEY_ID=", "AWS_SECRET_ACCESS_KEY=", "AWS_BEARER_TOKEN_BEDROCK=", "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=", "AWS_CONTAINER_CREDENTIALS_FULL_URI=", "AWS_WEB_IDENTITY_TOKEN_FILE="]
 pi = ["PI_CODING_AGENT_DIR=../rpc/testdata/pi-home/agent", "PI_SKIP_VERSION_CHECK=1", "AWS_PROFILE=", "AWS_ACCESS_KEY_ID=", "AWS_SECRET_ACCESS_KEY=", "AWS_BEARER_TOKEN_BEDROCK=", "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=", "AWS_CONTAINER_CREDENTIALS_FULL_URI=", "AWS_WEB_IDENTITY_TOKEN_FILE="]
 
 [assert]

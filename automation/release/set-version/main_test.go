@@ -17,9 +17,9 @@ import (
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/module"
 
-	"github.com/MichaelKinsy/PiG/automation/release/modulehash"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/automation/release/modulehash"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 const fixtureModule = "example.com/product"
@@ -47,12 +47,12 @@ func get(t *testing.T, root, path string) string {
 func fixture(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
-	for _, key := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+	for _, key := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 		t.Setenv(key, t.TempDir())
 	}
 	for path, text := range map[string]string{
-		"internal/coding/pigversion/pigversion.go": "package pigversion\n\nconst PigVersion = \"0.2.1\"\nconst UpstreamVersion = \"0.87.1\"\n",
-		"piglets/standard/pig-standard.yaml":       "name: standard\nrelease:\n  version: 0.2.1-dev\n",
+		"internal/coding/pigversion/pigversion.go": "package pigversion\n\nconst OmpigVersion = \"0.2.1\"\nconst UpstreamVersion = \"0.87.1\"\n",
+		"ompiglets/standard/ompig-standard.yaml":   "name: standard\nrelease:\n  version: 0.2.1-dev\n",
 		"CHANGELOG.md":                             "# Changelog\n\n## [Unreleased]\n\n### Fixed\n\n- Pending fix.\n\n## [0.2.1] - 2026-09-26\n\n- Candidate fix.\n\n## [0.2.0] - 2026-09-25\n\n- Published fix.\n",
 		"go.mod":                                   "module " + fixtureModule + "\n\ngo 1.26.0\n\nrequire (\n " + fixtureModule + "/sdk v0.2.1\n " + fixtureModule + "/app v0.2.1\n example.com/external v0.2.1\n)\n",
 		"go.sum":                                   fixtureModule + "/sdk v0.2.1 h1:stale\n" + fixtureModule + "/sdk v0.2.1/go.mod h1:stale\nexample.com/external v0.2.1 h1:external\n",
@@ -64,7 +64,7 @@ func fixture(t *testing.T) string {
 	} {
 		put(t, root, path, text)
 	}
-	for _, args := range [][]string{{"init", "-q"}, {"add", "--", "internal", "piglets", "CHANGELOG.md", "go.mod", "go.sum", "sdk", "app", "testdata"}} {
+	for _, args := range [][]string{{"init", "-q"}, {"add", "--", "internal", "ompiglets", "CHANGELOG.md", "go.mod", "go.sum", "sdk", "app", "testdata"}} {
 		cmd := exec.Command("git", args...)
 		cmd.Dir = root
 		if out, err := cmd.CombinedOutput(); err != nil {
@@ -157,7 +157,7 @@ func TestSetVersionPreservesDependencyPinsAndChecksums(t *testing.T) {
 			}
 		}
 	}
-	if !strings.Contains(get(t, root, "internal/coding/pigversion/pigversion.go"), `const PigVersion = "0.3.0"`) {
+	if !strings.Contains(get(t, root, "internal/coding/pigversion/pigversion.go"), `const OmpigVersion = "0.3.0"`) {
 		t.Fatal("release version was not updated")
 	}
 }
@@ -177,7 +177,7 @@ func TestSetVersionBumpDryRunHashesAndIdempotence(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertSnapshot(t, root, before)
-	if checks != 0 || !strings.Contains(output.String(), "+const PigVersion = \"0.3.0\"") || !strings.Contains(output.String(), "+## [0.3.0] - 2026-09-27") {
+	if checks != 0 || !strings.Contains(output.String(), "+const OmpigVersion = \"0.3.0\"") || !strings.Contains(output.String(), "+## [0.3.0] - 2026-09-27") {
 		t.Fatalf("dry-run did not show the planned changes without checks: checks=%d\n%s", checks, &output)
 	}
 	opt.dryRun = false
@@ -192,7 +192,7 @@ func TestSetVersionBumpDryRunHashesAndIdempotence(t *testing.T) {
 	if !strings.Contains(changelog, "- Pending fix.\n\n## [0.3.0] - 2026-09-27\n\n## [0.2.1]") {
 		t.Fatalf("default bump moved Unreleased entries or removed prior release:\n%s", changelog)
 	}
-	if got := get(t, root, "piglets/standard/pig-standard.yaml"); !strings.Contains(got, "version: 0.3.0-dev") {
+	if got := get(t, root, "ompiglets/standard/ompig-standard.yaml"); !strings.Contains(got, "version: 0.3.0-dev") {
 		t.Fatal(got)
 	}
 	after := snapshot(t, root)
@@ -288,20 +288,20 @@ func TestSetVersionMalformedChangelogDoesNotPartiallyWrite(t *testing.T) {
 	assertSnapshot(t, root, before)
 }
 
-// The Python and TypeScript SDK packages publish at the release version. The Rust crate, its locks and any pig-sdk requirement stay put: the builder
+// The Python and TypeScript SDK packages publish at the release version. The Rust crate, its locks and any ompig-sdk requirement stay put: the builder
 // resolves an un-pathed requirement through a crates-io patch, which Cargo applies only within semver, so advancing the crate would break every
-// scaffolded extension's `pig-sdk = "0.1.0"`.
+// scaffolded extension's `ompig-sdk = "0.1.0"`.
 func TestSetVersionWritesTheSDKManifestVersions(t *testing.T) {
 	root := fixture(t)
 	untouched := map[string]string{
-		"extensions/sdk-rs/Cargo.toml":      "[package]\nname = \"pig-sdk\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
-		"extensions/sdk-rs/Cargo.lock":      "[[package]]\nname = \"pig-sdk\"\nversion = \"0.1.0\"\n",
+		"extensions/sdk-rs/Cargo.toml":      "[package]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
+		"extensions/sdk-rs/Cargo.lock":      "[[package]]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\n",
 		"fixtures/consumer/Cargo.toml":      "[package]\nname = \"consumer\"\nversion = \"0.1.0\"\n\n[dependencies]\npig-sdk = \"0.1.0\"\n",
-		"fixtures/consumer/Cargo.lock":      "[[package]]\nname = \"pig-sdk\"\nversion = \"0.1.0\"\n",
+		"fixtures/consumer/Cargo.lock":      "[[package]]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\n",
 		"fixtures/other-version/Cargo.toml": "[package]\nname = \"other\"\nversion = \"0.1.0\"\n",
 	}
 	files := map[string]string{
-		"extensions/sdk-py/pyproject.toml":    "[project]\nname = \"pig-sdk\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11\"\n",
+		"extensions/sdk-py/pyproject.toml":    "[project]\nname = \"ompig-sdk\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11\"\n",
 		"extensions/sdk-ts/package.json":      "{\n  \"name\": \"types\",\n  \"version\": \"0.0.0\",\n  \"private\": true\n}\n",
 		"extensions/sdk-ts/package-lock.json": "{\n  \"name\": \"types\",\n  \"version\": \"0.0.0\",\n  \"packages\": {\n    \"\": {\n      \"name\": \"types\",\n      \"version\": \"0.0.0\"\n    },\n    \"node_modules/dep\": {\n      \"version\": \"0.0.0\"\n    }\n  }\n}\n",
 	}
@@ -318,7 +318,7 @@ func TestSetVersionWritesTheSDKManifestVersions(t *testing.T) {
 		t.Fatal(err)
 	}
 	for path, want := range map[string]string{
-		"extensions/sdk-py/pyproject.toml": "name = \"pig-sdk\"\nversion = \"0.3.0\"",
+		"extensions/sdk-py/pyproject.toml": "name = \"ompig-sdk\"\nversion = \"0.3.0\"",
 		"extensions/sdk-ts/package.json":   "\"version\": \"0.3.0\"",
 	} {
 		if !strings.Contains(get(t, root, path), want) {
@@ -340,7 +340,7 @@ func TestSetVersionWritesTheSDKManifestVersions(t *testing.T) {
 // drift check rejects.
 func TestSetVersionRejectsAnSDKManifestWithoutAVersion(t *testing.T) {
 	root := fixture(t)
-	put(t, root, "extensions/sdk-py/pyproject.toml", "[project]\nname = \"pig-sdk\"\nrequires-python = \">=3.11\"\n")
+	put(t, root, "extensions/sdk-py/pyproject.toml", "[project]\nname = \"ompig-sdk\"\nrequires-python = \">=3.11\"\n")
 	cmd := exec.Command("git", "add", "--", "extensions")
 	cmd.Dir = root
 	if out, err := cmd.CombinedOutput(); err != nil {
@@ -359,7 +359,7 @@ func TestSetVersionRejectsAnSDKManifestWithoutAVersion(t *testing.T) {
 // included, so two tracked modules with one path stop the release preparation ("duplicate local module").
 func TestReleaseModulesDryRunOnTheRepository(t *testing.T) {
 	root := testenv.ModuleRoot(t)
-	if err := run(root, options{version: pigversion.PigVersion, dryRun: true, releaseModules: true}, io.Discard, func(string, io.Writer) error { return nil }); err != nil {
+	if err := run(root, options{version: pigversion.OmpigVersion, dryRun: true, releaseModules: true}, io.Discard, func(string, io.Writer) error { return nil }); err != nil {
 		t.Fatalf("set-version --release-modules --dry-run on the repository: %v", err)
 	}
 }

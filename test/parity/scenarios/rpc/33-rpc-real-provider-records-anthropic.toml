@@ -1,5 +1,5 @@
 # Upstream evidence: Pi 0.87.1 rpc-mode.ts:354-363 forwards toJsonEvent and agent-loop.ts:110-149,319 emits only the current run's messages at agent_end. anthropic-messages.ts:587-601 pushes start after response headers and before the body pipeline (411-500) runs; measured Pi 0.87.1 start is a tool call with arguments {}, partialJson "" and index 0 while stopReason is pending (plan gap-d82 section 1). Read result shape is read.ts:157-188.
-# Both real binaries use one local anthropic-messages HTTP/SSE fixture (headers and the whole body in one write, as the D82 probe server does), not PIG_TEST_FAUX or a result summarizer. Full records and stderr remain compared.
+# Both real binaries use one local anthropic-messages HTTP/SSE fixture (headers and the whole body in one write, as the D82 probe server does), not OMPIG_TEST_FAUX or a result summarizer. Full records and stderr remain compared.
 # D82 covers only extension-process listeners and providers (docs/parity/DIVERGENCES.md). This scenario loads no extension, so every declared pair must be strictly equal; D82 grants no allowance here and does not excuse a native observation/admission difference.
 name = "33-rpc-real-provider-records-anthropic"
 description = "Two real anthropic-messages provider turns compare complete RPC events, tool results and persisted entries"
@@ -25,9 +25,9 @@ wait_event = '{"type":"response","id":"entries","command":"get_entries"}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-home/agent"]
-pig_args = ["--offline", "--no-extensions", "--model", "strict-wire/strict", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--offline", "--no-extensions", "--model", "strict-wire/strict", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--offline", "--no-extensions", "--model", "strict-wire/strict", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

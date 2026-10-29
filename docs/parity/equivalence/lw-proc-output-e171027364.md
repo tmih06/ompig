@@ -8,7 +8,7 @@ Before: `OnChunk` posted `block.AppendOutput(chunk); tui.Render()` to the owner 
 
 After: `OnChunk` posts `block.AppendOutput(chunk); tui.RequestRender()` and returns. `RequestRender` is the renderer's coalesced request, throttled to the 16 ms frame (upstream `requestRender`).
 
-Pi (`interactive-mode.ts` handleBashCommand, v1.0.3 line 7014-7020) does exactly this: `this.bashComponent.appendOutput(chunk); this.ui.requestRender();`. pig's old per-chunk render was a divergence from Pi's frame points, not a mirror of them.
+Pi (`interactive-mode.ts` handleBashCommand, v1.0.3 line 7014-7020) does exactly this: `this.bashComponent.appendOutput(chunk); this.ui.requestRender();`. ompig's old per-chunk render was a divergence from Pi's frame points, not a mirror of them.
 
 ## Why a frame shows the same thing
 
@@ -30,4 +30,4 @@ internal/codingagent: `TestUserBashChunksCoalesceIntoFrames` (new; base 302 sync
 - `4cbe86cc58` (text): `TestScanFirstStripAndSanitizeMatchTheCopyingForms` (20000 random mixes) and `FuzzScanFirstStripAndSanitize` (30 s) compare with the copying forms; `TestSanitizeBinaryOutputMatchesPi`, `TestAnsiMatchesPi` green.
 - `baf05fe514` (pipe reads, accumulator, user-bash executor): `TestUTF8StreamDecoderChunkingMatchesWholeDecode` (5000 random byte streams in random chunks, including invalid, truncated and BOM-split input), `TestUTF8StreamDecoderMatchesNodeTextDecoder`, `TestOutputAccumulatorMatchesPi`, `TestOutputAccumulatorTailMatchesTheStringTail`, `TestExecuteBashWithOperationsMatchesPi`, `TestSplitIncompleteAnsiSuffixMatchesPi`, `TestTruncatedResultDetailsShareTheReturnedText`. A pipe chunk is now lent for the `OnData` call; every in-tree consumer copies what it keeps.
 
-`TestBashToolMatchesPi` passed on the final tree (200 of 200 probes, load 97). Three earlier runs at load 85-112 each differed on one to three timeout probes (`echo start; sleep 5; echo never` with a 1 s timeout, once a 10 s probe), a different probe each run: Pi, starved, had not printed `start` before its timeout, or pig's kill landed after `sleep` died. The base worktree passed in the same window.
+`TestBashToolMatchesPi` passed on the final tree (200 of 200 probes, load 97). Three earlier runs at load 85-112 each differed on one to three timeout probes (`echo start; sleep 5; echo never` with a 1 s timeout, once a 10 s probe), a different probe each run: Pi, starved, had not printed `start` before its timeout, or ompig's kill landed after `sleep` died. The base worktree passed in the same window.

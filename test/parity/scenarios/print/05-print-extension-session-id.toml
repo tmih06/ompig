@@ -23,9 +23,9 @@ artifact_path = "{{TEMP}}/session-id.jsonl"
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "SESSION_ID_REPORT={{TEMP}}/session-id.jsonl"]
+ompig = ["OMPIG_TEST_FAUX=1", "SESSION_ID_REPORT={{TEMP}}/session-id.jsonl"]
 pi = ["SESSION_ID_REPORT={{TEMP}}/session-id.jsonl"]
-pig_extensions = ["../testdata/extension-session-id.mjs"]
+ompig_extensions = ["../testdata/extension-session-id.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../testdata/extension-session-id.mjs"]
 
 [assert]

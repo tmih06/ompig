@@ -28,7 +28,7 @@ Pi keeps a tool result's `details: null` apart from absent details: `agent-loop.
 | `durable/harness` TestToolProgressAndLifetime "uses explicit null details" | yes; also by mutation of `tool.go` and of the decoder |
 | `durable` TestDecodeMessageKeepsToolResultDetailsAsPi | yes |
 | `agent` TestAgentMessageToolResultDetailsRoundTripAsPi, TestCreateToolResultMessageKeepsExplicitNullDetails | yes |
-| `cmd/pig` TestRPCToolResultMessageKeepsDetailsAsPi | yes |
+| `cmd/ompig` TestRPCToolResultMessageKeepsDetailsAsPi | yes |
 | `internal/codingagent` TestSessionToolResultDetailsRoundTripAsPi | yes, by mutation of the decoder |
 | `internal/codingagent` TestSubprocessRequestMessagesKeepToolResultDetailsAsPi | yes, by mutation |
 | `coding/extension/host/subprocess` TestToolResponseKeepsExplicitNullDetails | yes, by mutation of the render payload |
@@ -39,7 +39,7 @@ Parity scenarios against Pi 1.0.0, red with the base binary and green 3/3 with t
 - `json/10-json-extension-tool-null-details` (`output_equal`, `artifact_normalized_equal`): events, the `tool_result` handler's view, and the session file.
 - `rpc/43-rpc-extension-tool-null-details` (`json_output_equal`): events, `get_messages`, `get_entries`.
 
-Commands: `go test` over ai, agent, durable, cmd/pig, coding, internal; `-race` on the harness tool tests; `make lint-changed` (0 issues), `lint-scenarios`, `test-inventory`, `interface-go-drift`, `divergence-guard`, `source-hygiene`; Windows vet.
+Commands: `go test` over ai, agent, durable, cmd/ompig, coding, internal; `-race` on the harness tool tests; `make lint-changed` (0 issues), `lint-scenarios`, `test-inventory`, `interface-go-drift`, `divergence-guard`, `source-hygiene`; Windows vet.
 
 ## Not caused by this lane
 

@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // mockUIContext records calls for verification.
@@ -239,7 +239,7 @@ func TestUIBridge_HandleCall_SetStatus_BroadcastsStateChange(t *testing.T) {
 	}
 }
 
-// pig additive (D107): SetFrontend reaches every snapshot as
+// ompig additive (D107): SetFrontend reaches every snapshot as
 // StatePayload.frontend and pushes one state_update per change, never one for
 // a repeated value.
 func TestUIBridge_SetFrontendPushesTheFlagOncePerChange(t *testing.T) {
@@ -2061,7 +2061,7 @@ func TestUIBridgeLoginRetiresHeaderOnlyWhenAccepted(t *testing.T) {
 	}
 }
 
-// pig additive (D107): SetFrontend's state_update runs on the bridge's owned
+// ompig additive (D107): SetFrontend's state_update runs on the bridge's owned
 // worker. StopFrontendPushes, which Host.Shutdown calls, waits for a push in
 // flight, and a change after it updates the flag without pushing.
 func TestUIBridge_StopFrontendPushesJoinsTheWorker(t *testing.T) {

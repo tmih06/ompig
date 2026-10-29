@@ -7,8 +7,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/src/cli/project-trust.ts createProjectTrustContext.

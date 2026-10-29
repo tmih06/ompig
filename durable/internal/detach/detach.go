@@ -5,10 +5,10 @@ package detach
 import (
 	"reflect"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // JSON deep-copies a JSON value. JSON containers and scalars take the fast path; any other Go value is copied

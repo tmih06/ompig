@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess_test
 
@@ -9,11 +9,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestNativeProviderSessionRequestHooks drives a session turn through a Provider object. Pi's session passes onPayload, onResponse and onProviderStreamEvent to modelRuntime.streamSimple (sdk.ts:385-433), whose prepareRequest hands them to Provider.stream (model-runtime.ts:671-689), so a Provider that reports its response and stream events emits after_provider_response and provider_stream_event, and before_provider_request replaces its payload.

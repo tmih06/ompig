@@ -13,14 +13,14 @@ import (
 // rpc-mode's bash command awaits emitUserBash first. A throwing handler or an
 // invalid result fails the request with an extension_error and never runs the
 // command; undefined runs it locally; a result override is returned without
-// running it. Pig's RPC bash never dispatched user_bash at all.
+// running it. Ompig's RPC bash never dispatched user_bash at all.
 func TestRPCBashDispatchesUserBash(t *testing.T) {
 	fixture, err := filepath.Abs(filepath.Join("testdata", "user-bash.mjs"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	cwd := t.TempDir()
-	p := startRPCProcessAt(t, cwd, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
+	p := startRPCProcessAt(t, cwd, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
 
 	cases := []struct {
 		id, marker, wantError string

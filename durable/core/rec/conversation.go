@@ -3,7 +3,7 @@
 
 package rec
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // Conversation is a conversation record (spec §2 ConversationRecord): `{id, parent?: {conversationId, at}, owner?:
 // {conversationId, taskId}}`. It is immutable once written.

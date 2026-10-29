@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // apiKeyLogin runs the provider object's own auth.apiKey.login. Its prompt and notify reverse calls are the login's

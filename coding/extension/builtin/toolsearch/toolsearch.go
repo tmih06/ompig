@@ -15,10 +15,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsmath"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsmath"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // ToolName is the name of the tool.
@@ -72,7 +72,7 @@ func stem(term string) string {
 }
 
 // Tokenize lowercases text into terms, splitting at camelCase boundaries and non-alphanumerics, without stop words.
-// pig divergence (D173): Pi's tokenizer splits on /[^a-z0-9]+/ and so drops every Chinese, Japanese and Korean character (Pi #10816); PiG makes each of those characters a term of its own, so a query in those scripts matches a tool whose metadata holds the same characters. Text without such characters tokenizes as in Pi.
+// ompig divergence (D173): Pi's tokenizer splits on /[^a-z0-9]+/ and so drops every Chinese, Japanese and Korean character (Pi #10816); Ompig makes each of those characters a term of its own, so a query in those scripts matches a tool whose metadata holds the same characters. Text without such characters tokenizes as in Pi.
 func Tokenize(text string) []string {
 	text = lowerUpper.ReplaceAllString(text, "$1 $2")
 	text = upperRunUpper.ReplaceAllString(text, "$1 $2")

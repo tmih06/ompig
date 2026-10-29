@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 // The extension host classifies a failed Go build as SDK drift through the rules of extensions/sdk/upgrade, which it does not import itself: that package also holds the upgrade rewrites and go/types, and a program that embeds the host without this command links neither.

@@ -111,7 +111,7 @@ func sdkSources(t *testing.T) []*textSDK {
 		},
 		{
 			name:       "py",
-			files:      readSourceTree(t, "extensions/sdk-py/pig_sdk", ".py"),
+			files:      readSourceTree(t, "extensions/sdk-py/ompig_sdk", ".py"),
 			def:        regexp.MustCompile(`(?m)^[ \t]*def[ \t]+(\w+)\(([^)]*)\)`),
 			sink:       []*regexp.Regexp{regexp.MustCompile(`"type":\s*"call"`), regexp.MustCompile(`\{"method":\s*method\b`)},
 			notifySink: []*regexp.Regexp{regexp.MustCompile(`"type":\s*"notify",\s*"notify":\s*\{"method":\s*method\b`)},

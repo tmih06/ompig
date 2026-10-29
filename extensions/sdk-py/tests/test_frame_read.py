@@ -5,7 +5,7 @@ import struct
 import threading
 import unittest
 
-import pig_sdk
+import ompig_sdk
 
 
 def _frame(body: bytes) -> bytes:
@@ -17,7 +17,7 @@ class FrameReadTests(unittest.TestCase):
         self.near, self.far = socket.socketpair()
         self.addCleanup(self.near.close)
         self.addCleanup(self.far.close)
-        self.ext = pig_sdk.Extension("frame-read")
+        self.ext = ompig_sdk.Extension("frame-read")
         self.ext._sock = self.near
 
     def test_a_frame_split_across_many_writes_arrives_whole(self):
@@ -69,7 +69,7 @@ class FrameReadTests(unittest.TestCase):
 
     def test_a_header_above_the_frame_limit_is_refused(self):
         # The peer closes after the header, so a reader that skipped the limit fails with EOFError instead of waiting for 128 MiB that never come.
-        self.far.sendall(struct.pack(">I", pig_sdk.MAX_FRAME_SIZE + 1))
+        self.far.sendall(struct.pack(">I", ompig_sdk.MAX_FRAME_SIZE + 1))
         self.far.close()
         with self.assertRaises(RuntimeError):
             self.ext._read()

@@ -1,11 +1,11 @@
 // The conformance gate's store hook (durable/contract hooks/register.mjs): storage handles open their stores through
-// globalThis[Symbol.for("pig.contract")].openStore so the gate captures every statement.
+// globalThis[Symbol.for("ompig.contract")].openStore so the gate captures every statement.
 import assert from "node:assert/strict"
 import { afterEach, test } from "node:test"
 import { MemoryStorage, openNodeSqliteStorage } from "../src/facade/storage.ts"
 import { openNodeJsonlStorage } from "../src/facade/storage/jsonl/node.ts"
 
-const key = Symbol.for("pig.contract")
+const key = Symbol.for("ompig.contract")
 const g = globalThis as Record<symbol, unknown>
 afterEach(() => { delete g[key] })
 

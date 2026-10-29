@@ -16,12 +16,12 @@ import sys
 PRIVATE = re.compile(
     r"(?:/Users/|/home/|/(?:var/)?tmp/)" + "kin" + r"sy(?:/|\b)|"
     + "imla" + r"dris|hpe" + r"corp\.net|labs\.hpe" + r"corp|"
-    + "pig" + r"-staging|(?:~/|\$HOME/)pig" + r"-lanes|"
-    + r"\.dev" + r"cache/scratch|(?:/Users|/home)/[^/\s]+/PiG-launch"
+    + "ompig" + r"-staging|(?:~/|\$HOME/)ompig" + r"-lanes|"
+    + r"\.dev" + r"cache/scratch|(?:/Users|/home)/[^/\s]+/Ompig-launch"
 )
 LANE = re.compile(r"(^|/)(REVIEW[^/]*|QUESTIONS|REPORT|NATIVE-PROOF-REQUEST[^/]*|[^/]*-REPORT|TASK|[^/]*\.TASK)\.md$")
 ENV = re.compile(r"(^|/)(\.env(\.[^/]*)?|[^/]+\.env)$")
-PRIVATE_DIR = re.compile(r"(^|/)(\.dev" + r"cache|pig-handoff)/")
+PRIVATE_DIR = re.compile(r"(^|/)(\.dev" + r"cache|ompig-handoff)/")
 # Launch-video production files are not part of the public tree.
 UNCLEARED = re.compile(r"^docs/media/demo/")
 

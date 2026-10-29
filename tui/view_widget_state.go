@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/internal/jsstring"
+import "github.com/tmih06/ompig/internal/jsstring"
 
 // view_widget_state.go: read access to the state the extension component
 // kit reports to a frontend and compares against the state its sender sent

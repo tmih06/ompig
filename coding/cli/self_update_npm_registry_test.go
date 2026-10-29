@@ -25,7 +25,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // npmReleaseTargets are the release archives pack_npm.py reads: GOOS/GOARCH
@@ -182,10 +182,10 @@ func packNpmRelease(t *testing.T, python string, registry *localNpmRegistry, ver
 	}
 	var sums strings.Builder
 	for _, target := range npmReleaseTargets {
-		prefix := "pig-" + version + "-" + target.goos + "-" + target.goarch
-		binary, content := "pig", []byte("placeholder "+prefix)
+		prefix := "ompig-" + version + "-" + target.goos + "-" + target.goarch
+		binary, content := "ompig", []byte("placeholder "+prefix)
 		if target.goos == "windows" {
-			binary = "pig.exe"
+			binary = "ompig.exe"
 		}
 		if target.goos == runtime.GOOS && target.goarch == runtime.GOARCH {
 			content = hostBinary
@@ -323,11 +323,11 @@ func shellQuote(value string) string { return "'" + strings.ReplaceAll(value, "'
 
 // The complete npm channel with real npm and no network: the release packer's
 // seven packages are served by a local registry, real npm installs
-// @pi-in-go/pig into a temporary global prefix (npm nests the platform package
-// that holds the native binary inside the launcher), and `pig update --self`
+// @ompig/ompig into a temporary global prefix (npm nests the platform package
+// that holds the native binary inside the launcher), and `ompig update --self`
 // run through the npm launcher reads a signed manifest from the release
-// generator. PiG must identify the launcher as the installed package and have
-// npm install the launcher's new release, never the unrelated unscoped `pig`
+// generator. Ompig must identify the launcher as the installed package and have
+// npm install the launcher's new release, never the unrelated unscoped `ompig`
 // package (upstream config.ts getSelfUpdateCommandForMethod "npm" with
 // package-manager-cli.ts getSelfUpdatePlan: no uninstall step when the release
 // names the installed package).
@@ -350,20 +350,20 @@ func TestNpmInstalledPigUpdatesThroughRealNpm(t *testing.T) {
 	}
 	work := t.TempDir()
 	nodeBin := isolatedNpmBin(t, strings.TrimSpace(string(execPath)), work)
-	pig := buildPigBinaryForSignalTest(t)
-	pigBytes, err := os.ReadFile(pig)
+	ompig := buildPigBinaryForSignalTest(t)
+	ompigBytes, err := os.ReadFile(ompig)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	registry := newLocalNpmRegistry(t)
-	packNpmRelease(t, python, registry, "0.0.1", pigBytes)
+	packNpmRelease(t, python, registry, "0.0.1", ompigBytes)
 	newBinary := []byte("#!/bin/sh\necho released 9.9.9\n")
 	packNpmRelease(t, python, registry, "9.9.9", newBinary)
-	// The unscoped npm package "pig" is not PiG. If the update ever asks for
+	// The unscoped npm package "ompig" is not Ompig. If the update ever asks for
 	// it, this registry answers, as the public registry would.
 	decoy := t.TempDir()
-	if err := os.WriteFile(filepath.Join(decoy, "package.json"), []byte(`{"name":"pig","version":"9.9.9","bin":{"pig-decoy":"decoy.js"}}`), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(decoy, "package.json"), []byte(`{"name":"ompig","version":"9.9.9","bin":{"ompig-decoy":"decoy.js"}}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(decoy, "decoy.js"), []byte("#!/usr/bin/env node\n"), 0o755); err != nil {
@@ -384,28 +384,28 @@ func TestNpmInstalledPigUpdatesThroughRealNpm(t *testing.T) {
 		"npm_config_fund=false",
 		"npm_config_update_notifier=false",
 	}
-	npmInstall := exec.Command(filepath.Join(nodeBin, "npm"), "install", "-g", "@pi-in-go/pig@0.0.1")
+	npmInstall := exec.Command(filepath.Join(nodeBin, "npm"), "install", "-g", "@ompig/ompig@0.0.1")
 	npmInstall.Env = env
 	if data, err := npmInstall.CombinedOutput(); err != nil {
-		t.Fatalf("npm install -g @pi-in-go/pig@0.0.1: %v\n%s", err, data)
+		t.Fatalf("npm install -g @ompig/ompig@0.0.1: %v\n%s", err, data)
 	}
 	host := ""
 	for _, target := range npmReleaseTargets {
 		if target.goos == runtime.GOOS && target.goarch == runtime.GOARCH {
-			host = "pig-" + target.npmOS + "-" + target.npmCPU
+			host = "ompig-" + target.npmOS + "-" + target.npmCPU
 		}
 	}
 	if host == "" {
-		t.Skipf("PiG ships no npm package for %s/%s", runtime.GOOS, runtime.GOARCH)
+		t.Skipf("Ompig ships no npm package for %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
-	launcher := filepath.Join(prefix, "lib", "node_modules", "@pi-in-go", "pig")
-	native := filepath.Join(launcher, "node_modules", "@pi-in-go", host, "pig")
-	if data, err := os.ReadFile(native); err != nil || !bytes.Equal(data, pigBytes) {
+	launcher := filepath.Join(prefix, "lib", "node_modules", "@ompig", "ompig")
+	native := filepath.Join(launcher, "node_modules", "@ompig", host, "ompig")
+	if data, err := os.ReadFile(native); err != nil || !bytes.Equal(data, ompigBytes) {
 		t.Fatalf("npm did not nest the platform package's binary at %s: %v", native, err)
 	}
 
 	generated := t.TempDir()
-	if err := os.WriteFile(filepath.Join(generated, "pig-"+runtime.GOOS+"-"+runtime.GOARCH), newBinary, 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(generated, "ompig-"+runtime.GOOS+"-"+runtime.GOARCH), newBinary, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	manifest, err := exec.Command(python, filepath.Join(fixtureSourceRoot, "automation", "release", "gen-update-manifest.py"),
@@ -416,22 +416,22 @@ func TestNpmInstalledPigUpdatesThroughRealNpm(t *testing.T) {
 	source := signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { _, _ = w.Write(manifest) }))
 	defer source.Close()
 
-	update := exec.Command(filepath.Join(prefix, "bin", "pig"), "update", "--self")
+	update := exec.Command(filepath.Join(prefix, "bin", "ompig"), "update", "--self")
 	update.Dir = work
 	update.Env = slices.Concat(env, []string{
-		"PIG_HOME=" + filepath.Join(work, "pig-home"),
-		"PIG_CODING_AGENT_DIR=" + filepath.Join(work, "agent"),
+		"OMPIG_HOME=" + filepath.Join(work, "ompig-home"),
+		"OMPIG_CODING_AGENT_DIR=" + filepath.Join(work, "agent"),
 		"PI_CODING_AGENT_DIR=" + filepath.Join(work, "pi-agent"),
-		"PIG_UPDATE_URL=" + source.URL,
-		"PIG_UPDATE_TRUST_ROOT=" + os.Getenv("PIG_UPDATE_TRUST_ROOT"),
-		"PIG_UPDATE_ALLOW_LOOPBACK_HTTP=1",
+		"OMPIG_UPDATE_URL=" + source.URL,
+		"OMPIG_UPDATE_TRUST_ROOT=" + os.Getenv("OMPIG_UPDATE_TRUST_ROOT"),
+		"OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP=1",
 	})
 	output, err := update.CombinedOutput()
 	if err != nil {
-		t.Fatalf("pig update --self: %v\n%s", err, output)
+		t.Fatalf("ompig update --self: %v\n%s", err, output)
 	}
-	if !strings.Contains(string(output), "Updated to pig 9.9.9.") {
-		t.Fatalf("pig update --self output:\n%s", output)
+	if !strings.Contains(string(output), "Updated to ompig 9.9.9.") {
+		t.Fatalf("ompig update --self output:\n%s", output)
 	}
 	if data, err := os.ReadFile(native); err != nil || !bytes.Equal(data, newBinary) {
 		t.Fatalf("npm did not install the 9.9.9 platform binary at %s: %v\n%s", native, err, output)
@@ -442,17 +442,17 @@ func TestNpmInstalledPigUpdatesThroughRealNpm(t *testing.T) {
 	}
 	// npm logs each invocation's arguments; the update ran exactly these.
 	if got, want := npmInvocations(t, filepath.Join(work, "npm-cache")), []string{
-		`"install" "--global" "@pi-in-go/pig@0.0.1"`,
+		`"install" "--global" "@ompig/ompig@0.0.1"`,
 		`"root" "--global"`,
-		`"--prefix" "` + prefix + `" "install" "--global" "--ignore-scripts" "--min-release-age" "0" "@pi-in-go/pig@9.9.9"`,
+		`"--prefix" "` + prefix + `" "install" "--global" "--ignore-scripts" "--min-release-age" "0" "@ompig/ompig@9.9.9"`,
 	}; !slices.Equal(got, want) {
 		t.Fatalf("npm invocations:\n got: %q\nwant: %q\n%s", got, want, output)
 	}
-	if slices.Contains(registry.requested(), "pig") {
-		t.Fatalf("the update asked the registry for the unscoped package pig: %q\n%s", registry.requested(), output)
+	if slices.Contains(registry.requested(), "ompig") {
+		t.Fatalf("the update asked the registry for the unscoped package ompig: %q\n%s", registry.requested(), output)
 	}
-	if _, err := os.Stat(filepath.Join(prefix, "lib", "node_modules", "pig")); !os.IsNotExist(err) {
-		t.Fatalf("the update installed the unscoped package pig: %v\n%s", err, output)
+	if _, err := os.Stat(filepath.Join(prefix, "lib", "node_modules", "ompig")); !os.IsNotExist(err) {
+		t.Fatalf("the update installed the unscoped package ompig: %v\n%s", err, output)
 	}
 }
 

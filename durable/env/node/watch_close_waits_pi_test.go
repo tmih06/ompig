@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // node-watch.ts close (:203-207): `if (this.#closed) return; this.#stop(); await this.#running;`. Close through the FileWatcher interface returns only after the rescan in progress has ended, so no rescan work outlives it.

@@ -9,7 +9,7 @@
 #
 # 0.79.x changed the unknown-command branch from error(undefined, ...) to
 # error(id, ...): the request id is now echoed first when the command
-# carried one, and omitted (omitempty) when it did not. pig matched the
+# carried one, and omitted (omitempty) when it did not. ompig matched the
 # old undefined behavior and went red here at the 0.79.10 pin; the fix in
 # coding/cli/rpc_mode.go threads env.ID into rpcError.
 #
@@ -41,8 +41,8 @@ timeout_seconds = 15
 settle_seconds = 1
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 

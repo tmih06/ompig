@@ -24,7 +24,7 @@ func reset(t *testing.T) string {
 	classFirst = map[class]uintptr{}
 	mu.Unlock()
 	path := filepath.Join(t.TempDir(), "report")
-	t.Setenv("PIG_LOCKORDER_REPORT", path)
+	t.Setenv("OMPIG_LOCKORDER_REPORT", path)
 	return path
 }
 

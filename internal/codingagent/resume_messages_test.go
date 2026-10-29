@@ -23,7 +23,7 @@ func TestResumeHandlerMessagesMatchUpstream(t *testing.T) {
 				Append:     func(s string) { appended = append(appended, s) },
 				ShowStatus: func(s string) { status = append(status, s) },
 				PickSession: func() (string, bool) {
-					return `C:\Users\someone\.pig\agent\sessions\s.jsonl`, tc.picked
+					return `C:\Users\someone\.ompig\agent\sessions\s.jsonl`, tc.picked
 				},
 				LoadSessionPath: func(path string) error { loaded = path; return nil },
 			}

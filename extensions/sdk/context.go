@@ -15,9 +15,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/internal/jsloop"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // ErrUnsupportedSubprocessUI is returned for UI methods whose upstream API
@@ -810,7 +810,7 @@ type ToolInfo struct {
 	// with its error, as the hook's throw.
 	// upstream: types.ts:2122-2130 (ToolInfo picks reachesTools), agent-session.ts:1507 (getAllTools)
 	ReachesTools ToolReachesToolsFunc `json:"-"`
-	// Source is PiG's per-tool source attribution: "builtin", the
+	// Source is Ompig's per-tool source attribution: "builtin", the
 	// registering extension's name, or the source a tool declares with
 	// ToolWithSource.
 	//
@@ -2086,7 +2086,7 @@ func (c Context) SetToolsExpanded(expanded bool) {
 
 // ── Local state (cached from ready message) ──────────────────────────────────
 
-// ConfigHome returns the pig config root directory: PIG_HOME, else XDG_CONFIG_HOME/pig, else ~/.pig. An empty variable falls through to the next choice, a leading ~ or ~/ expands to the home directory, and any other value stays literal. It returns an error, never a relative path, when the home directory is needed and cannot be found. It is the same policy as the host's internal/configroot and the Python, Rust and Node SDKs; test/extension-conformance runs one env matrix through all of them.
+// ConfigHome returns the ompig config root directory: OMPIG_HOME, else XDG_CONFIG_HOME/ompig, else ~/.ompig. An empty variable falls through to the next choice, a leading ~ or ~/ expands to the home directory, and any other value stays literal. It returns an error, never a relative path, when the home directory is needed and cannot be found. It is the same policy as the host's internal/configroot and the Python, Rust and Node SDKs; test/extension-conformance runs one env matrix through all of them.
 func (c Context) ConfigHome() (string, error) {
 	home := func() (string, error) {
 		dir, err := os.UserHomeDir()
@@ -2109,7 +2109,7 @@ func (c Context) ConfigHome() (string, error) {
 		}
 		return filepath.Join(dir, rest), nil
 	}
-	if v := os.Getenv("PIG_HOME"); v != "" {
+	if v := os.Getenv("OMPIG_HOME"); v != "" {
 		return expand(v)
 	}
 	if v := os.Getenv("XDG_CONFIG_HOME"); v != "" {
@@ -2117,13 +2117,13 @@ func (c Context) ConfigHome() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return filepath.Join(base, "pig"), nil
+		return filepath.Join(base, "ompig"), nil
 	}
 	dir, err := home()
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(dir, ".pig"), nil
+	return filepath.Join(dir, ".ompig"), nil
 }
 
 // assertActive panics with the Host's stale message once the session was replaced or reloaded, as Pi's ExtensionContext getters throw it (runner.ts:571-600, assertActive). A replacement context belongs to the new session and is not stale. The handler dispatcher reports the panic as the handler's error.

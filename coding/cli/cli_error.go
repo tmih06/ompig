@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // writeCLIError mirrors Pi main.ts and package-manager-cli.ts: caught failures use a red Error label on stderr, after the failing operation finishes.

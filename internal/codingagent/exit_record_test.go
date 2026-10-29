@@ -19,19 +19,19 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Issue #165: an interactive session "exited on its own while idle, a few minutes after a successful prompt round trip",
-// with no crash log. Pi leaves a trace only for an uncaught exception. These tests pin that every exit pig makes
+// with no crash log. Pi leaves a trace only for an uncaught exception. These tests pin that every exit ompig makes
 // without a user request leaves a line in exit.log or a record in crashes.json.
 
-const exitRecordChildEnv = "PIG_EXIT_RECORD_CHILD"
+const exitRecordChildEnv = "OMPIG_EXIT_RECORD_CHILD"
 
 // TestExitRecordChild runs one scenario in a child process, because each scenario ends the process.
 func TestExitRecordChild(t *testing.T) {
@@ -39,7 +39,7 @@ func TestExitRecordChild(t *testing.T) {
 	if scenario == "" {
 		t.Skip("child process only")
 	}
-	agentDir := os.Getenv("PIG_EXIT_RECORD_AGENT_DIR")
+	agentDir := os.Getenv("OMPIG_EXIT_RECORD_AGENT_DIR")
 	BeginSessionMarker(agentDir, "9.9.9", "/work")
 	switch scenario {
 	case "goroutine-panic":
@@ -133,7 +133,7 @@ func startRunningShellCommand(agentDir string) {
 func runExitRecordChild(t *testing.T, scenario, agentDir string) (string, int) {
 	t.Helper()
 	cmd := exec.Command(os.Args[0], "-test.run=^TestExitRecordChild$")
-	cmd.Env = append(os.Environ(), exitRecordChildEnv+"="+scenario, "PIG_EXIT_RECORD_AGENT_DIR="+agentDir, "PIG_HOME="+t.TempDir())
+	cmd.Env = append(os.Environ(), exitRecordChildEnv+"="+scenario, "OMPIG_EXIT_RECORD_AGENT_DIR="+agentDir, "OMPIG_HOME="+t.TempDir())
 	output, err := cmd.CombinedOutput()
 	if exit, ok := errors.AsType[*exec.ExitError](err); ok {
 		return string(output), exit.ExitCode()
@@ -258,7 +258,7 @@ func TestCleanEndLeavesNoMarker(t *testing.T) {
 func TestKilledSessionIsReportedAtTheNextStart(t *testing.T) {
 	agentDir := t.TempDir()
 	cmd := exec.Command(os.Args[0], "-test.run=^TestExitRecordChild$")
-	cmd.Env = append(os.Environ(), exitRecordChildEnv+"=wait", "PIG_EXIT_RECORD_AGENT_DIR="+agentDir, "PIG_HOME="+t.TempDir())
+	cmd.Env = append(os.Environ(), exitRecordChildEnv+"=wait", "OMPIG_EXIT_RECORD_AGENT_DIR="+agentDir, "OMPIG_HOME="+t.TempDir())
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -575,7 +575,7 @@ func TestReadExitLogTailReadsPastAVeryLongLine(t *testing.T) {
 	}
 }
 
-// An exit nobody asked for leaves the flight recorder's window beside the crash output file when PIG_PROFILE=flight
+// An exit nobody asked for leaves the flight recorder's window beside the crash output file when OMPIG_PROFILE=flight
 // started it, and leaves nothing when the recorder is off.
 func TestRecordExitDumpsTheFlightRecorderBesideTheCrashOutput(t *testing.T) {
 	agentDir := t.TempDir()
@@ -600,7 +600,7 @@ func TestRecordExitDumpsTheFlightRecorderBesideTheCrashOutput(t *testing.T) {
 
 // A crash recovered by uncaughtCrash also leaves the flight recorder's window: RecordExit does not run for it, and the off-loop path exits before the deferred profile stop.
 func TestUncaughtCrashDumpsTheFlightRecorder(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	agentDir := t.TempDir()
 	stop := profiling.StartWith("flight", t.TempDir(), io.Discard)
 	defer stop()

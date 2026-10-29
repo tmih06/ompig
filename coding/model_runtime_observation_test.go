@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's ModelRuntime and lazy forwarding preserve start while a successful response is held before its first body chunk (model-runtime.ts:617-624,638-643; lazy.ts:31-38).

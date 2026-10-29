@@ -44,7 +44,7 @@ The following temporary mutations compile and fail behaviorally. All are removed
 | Run synchronous extension host calls concurrently | `TestExtensionCallsApplyInSendOrder` records an inversion |
 | Reinsert an RPC startup inventory diagnostic | `TestRPCInitialThinkingEntryMatchesState` rejects nonempty stderr |
 
-The saved mutation binary has SHA-256 `daa35ddcb9286b32bff53e3172c740b50e79c39bf932a44f82e4ecdb483b7592` and is deliberately older than the final source. Its scenario run uses `-pig-parity.allow-stale=true` only to execute that known compiling mutation. Initial attempts without the explicit Pi package path and without this mutation-only freshness override fail setup and do not count as mutation proof.
+The saved mutation binary has SHA-256 `daa35ddcb9286b32bff53e3172c740b50e79c39bf932a44f82e4ecdb483b7592` and is deliberately older than the final source. Its scenario run uses `-ompig-parity.allow-stale=true` only to execute that known compiling mutation. Initial attempts without the explicit Pi package path and without this mutation-only freshness override fail setup and do not count as mutation proof.
 
 ## Paired comparator
 
@@ -58,14 +58,14 @@ Run the probes independently and retain raw records with:
 
 ```bash
 export PATH="/absolute/toolchain/bin:$PATH"
-go build -o bin/pig ./cmd/pig
+go build -o bin/ompig ./cmd/ompig
 EVIDENCE=$(mktemp -d)
 python3 test/parity/testdata/rpc-wire-drift.py pi "$EVIDENCE/pi" > "$EVIDENCE/pi.jsonl"
-python3 test/parity/testdata/rpc-wire-drift.py pig "$EVIDENCE/pig" > "$EVIDENCE/pig.jsonl"
-diff -u "$EVIDENCE/pi.jsonl" "$EVIDENCE/pig.jsonl"
+python3 test/parity/testdata/rpc-wire-drift.py ompig "$EVIDENCE/ompig" > "$EVIDENCE/ompig.jsonl"
+diff -u "$EVIDENCE/pi.jsonl" "$EVIDENCE/ompig.jsonl"
 python3 test/parity/testdata/rpc-wire-drift.py pi --initial > "$EVIDENCE/pi-initial.jsonl"
-python3 test/parity/testdata/rpc-wire-drift.py pig --initial > "$EVIDENCE/pig-initial.jsonl"
-diff -u "$EVIDENCE/pi-initial.jsonl" "$EVIDENCE/pig-initial.jsonl"
+python3 test/parity/testdata/rpc-wire-drift.py ompig --initial > "$EVIDENCE/ompig-initial.jsonl"
+diff -u "$EVIDENCE/pi-initial.jsonl" "$EVIDENCE/ompig-initial.jsonl"
 make parity-family FAMILY=rpc
 ```
 
@@ -77,17 +77,17 @@ On Linux amd64, Go 1.27.1, Node 24.19.0 and an Intel Xeon 6746E, `BenchmarkRPCJS
 
 ## Shared files for integration
 
-Production shared edits are `cmd/pig/rpc_mode.go`, `coding/runtime.go`, `coding/session.go`, `coding/session_recovery.go`, `internal/codingagent/session_manager.go` and `internal/codingagent/session_selectors.go`. The new diagnostic scanner is `cmd/pig/rpc_json_diagnostic.go`.
+Production shared edits are `cmd/ompig/rpc_mode.go`, `coding/runtime.go`, `coding/session.go`, `coding/session_recovery.go`, `internal/codingagent/session_manager.go` and `internal/codingagent/session_selectors.go`. The new diagnostic scanner is `cmd/ompig/rpc_json_diagnostic.go`.
 
-Existing test/helper edits are `cmd/pig/rpc_upstream_test.go` (optional startup arguments), `internal/codingagent/session_manager_test.go` (replace the incorrect missing-file failure expectation with Pi's open contract), and `internal/codingagent/status_lifecycle_test.go` (use a directory to retain its status-cleanup-on-load-failure assertion now that missing files succeed). `test/parity/interfaces/test-mapping-v0.87.1.json` adds evidence without promoting pending/partial test files. It corrects the claim that strict Go reader failures prove upstream's empty-array reader contract.
+Existing test/helper edits are `cmd/ompig/rpc_upstream_test.go` (optional startup arguments), `internal/codingagent/session_manager_test.go` (replace the incorrect missing-file failure expectation with Pi's open contract), and `internal/codingagent/status_lifecycle_test.go` (use a directory to retain its status-cleanup-on-load-failure assertion now that missing files succeed). `test/parity/interfaces/test-mapping-v0.87.1.json` adds evidence without promoting pending/partial test files. It corrects the claim that strict Go reader failures prove upstream's empty-array reader contract.
 
-Shared evidence edits are `CHANGELOG.md` under 0.3.0 Fixed, `docs/parity/PORT_MAP.md`, the two tightened RPC scenarios, generated `AGENTS.md` coverage, `test/parity/coverage.md`, `test/parity/interfaces/pig-go.json` and `test/parity/interfaces/recommendations-v0.87.1.json`. Regenerate inventories and coverage when integrating with other lanes. No PORT_MAP entry is newly promoted.
+Shared evidence edits are `CHANGELOG.md` under 0.3.0 Fixed, `docs/parity/PORT_MAP.md`, the two tightened RPC scenarios, generated `AGENTS.md` coverage, `test/parity/coverage.md`, `test/parity/interfaces/ompig-go.json` and `test/parity/interfaces/recommendations-v0.87.1.json`. Regenerate inventories and coverage when integrating with other lanes. No PORT_MAP entry is newly promoted.
 
 ## Gate status
 
 Focused regression tests, race-enabled regressions, Linux `go vet ./...`, Windows vet for the touched packages, touched-package golangci-lint, full-repository `make lint` and `make lint-changed LINT_BASE=96284e76b` pass. The default `make lint-changed` cannot find a merge base with main in this lane, so the assigned integration base is explicit. `go fix -diff` for touched packages is empty.
 
-The complete RPC, tools, Session, compaction, print, JSON and model-resolver-selector parity families pass at their declared durability. The full `cmd/pig` package passes. The full `coding`, `internal/codingagent` and tools packages pass after correcting the status-test input. The initial broad touched-package run fails only that outdated status-test expectation; it is not recorded as a flake. An earlier shell invocation stops at its 240-second tool timeout before the long CLI package finishes and supplies no passing evidence.
+The complete RPC, tools, Session, compaction, print, JSON and model-resolver-selector parity families pass at their declared durability. The full `cmd/ompig` package passes. The full `coding`, `internal/codingagent` and tools packages pass after correcting the status-test input. The initial broad touched-package run fails only that outdated status-test expectation; it is not recorded as a flake. An earlier shell invocation stops at its 240-second tool timeout before the long CLI package finishes and supplies no passing evidence.
 
 `go test ./test/parity/...` fails three existing closure dashboard/import tests because D78 is open rather than provisionally approved. The actual divergence denominator is preserved. The remaining parity packages pass. The first `go test ./...` also hits the stale status-test expectation, the subprocess package's aggregate ten-minute timeout during packed Rust fixture startup, and `TestColorDetectionMatchesPi` failing with Node stdin `EAGAIN`. The status test is corrected; the unrelated full-suite failures are not called passes or hidden with longer timeouts. The final `go test ./...` passes all touched production packages and still fails the subprocess package's aggregate ten-minute timeout during packed fixture startup, the three closure tests, and the TUI Node-stdin `EAGAIN` oracle test. These remain explicit integration blockers. The direct changed-source hygiene scan passes; the aggregate hygiene target remains blocked only by the two pre-existing private-path reports.
 

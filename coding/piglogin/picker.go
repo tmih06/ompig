@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // spritePickerTitle is the picker's title, shown by /sprite with and without a preview column.
-const spritePickerTitle = "Choose a PiG sprite"
+const spritePickerTitle = "Choose a Ompig sprite"
 
 // spriteOptions are the picker's rows: every sprite as "Name: Tagline", then the row that explains how to create one.
 func spriteOptions(variants []Variant) []string {
@@ -21,8 +21,8 @@ func spriteOptions(variants []Variant) []string {
 }
 
 // chooseSprite shows the sprite picker and returns the chosen row, or "" when the user dismissed it. The rows carry the
-// pig of the sprite they highlight, drawn right after the longest of them.
-// pig divergence (D2): the picker draws a pig beside its rows; Pi has no /sprite and no sprite to draw.
+// ompig of the sprite they highlight, drawn right after the longest of them.
+// ompig divergence (D2): the picker draws a ompig beside its rows; Pi has no /sprite and no sprite to draw.
 //
 // A UI context that cannot mount a custom component answers the custom call with no result (the RPC and no-op
 // contexts) or fails it (a subprocess extension's bridge), and those answer select instead, so the plain extension
@@ -44,7 +44,7 @@ func chooseSprite(ctx context.Context, ui extension.UIContext, variants []Varian
 }
 
 // spritePickerFactory builds the picker for the interactive host: the extension selector's list, keys and hints, with
-// the pig of the highlighted sprite drawn beside the list. Selecting a row ends the ui.Custom call with the row's text;
+// the ompig of the highlighted sprite drawn beside the list. Selecting a row ends the ui.Custom call with the row's text;
 // cancelling ends it with "".
 func spritePickerFactory(variants []Variant, options []string) extension.CustomFactory {
 	return func(_ extension.TUI, theme *tui.Theme, _ extension.KeybindingsManager, done func(any)) (extension.DisposableComponent, error) {

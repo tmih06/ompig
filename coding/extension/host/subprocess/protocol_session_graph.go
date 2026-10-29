@@ -1,7 +1,7 @@
 package subprocess
 
 import (
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The session graph: the objects an extension builds around a Pi session, held by the host for the extension's connection and named on the wire by an opaque handle. Pi's SessionManager, SettingsManager, ModelRuntime, DefaultResourceLoader, DefaultPackageManager and ProjectTrustStore (core/session-manager.ts, settings-manager.ts, model-runtime.ts, resource-loader.ts, package-manager.ts, project-trust.ts) are classes an extension constructs and passes to createAgentSession. The Node runtime serves Pi's own classes in the extension process; the Go, Python and Rust SDKs hold a handle and ask the host, which owns the object and releases it with the connection.

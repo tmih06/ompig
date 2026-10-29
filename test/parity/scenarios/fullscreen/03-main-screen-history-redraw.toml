@@ -16,17 +16,17 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=../compaction/testdata/pig-agent", "TUI_LIVE_PROBE=1"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=../compaction/testdata/ompig-agent", "TUI_LIVE_PROBE=1"]
 pi = ["PI_CODING_AGENT_DIR=../compaction/testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1", "TUI_LIVE_PROBE=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 # Fullscreen is the default TUI mode since Pi 1.0.0; this scenario covers the main-screen renderer.
-pig_args = ["--no-extensions", "--session-dir", "sessions", "-c", "--tui-mode", "regular"]
+ompig_args = ["--no-extensions", "--session-dir", "sessions", "-c", "--tui-mode", "regular"]
 pi_args = ["--session-dir", "sessions", "-c", "--tui-mode", "regular"]
 
 [tmux]
 width = 80
 height = 12
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "../compaction/testdata/compact-session"

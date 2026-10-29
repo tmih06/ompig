@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type footerProbe struct {
@@ -199,14 +199,14 @@ func TestFooterComponentMatchesPi(t *testing.T) {
 			if viaComponent := component.Render(probe.Width); strings.Join(viaComponent, "\n") != strings.Join(expected[i], "\n") {
 				failures++
 				if failures <= 6 {
-					t.Errorf("%s through the component's setters:\n  Pig %q\n  Pi  %q", names[i], viaComponent, expected[i])
+					t.Errorf("%s through the component's setters:\n  Ompig %q\n  Pi  %q", names[i], viaComponent, expected[i])
 				}
 			}
 		}
 		if strings.Join(got, "\n") != strings.Join(expected[i], "\n") {
 			failures++
 			if failures <= 6 {
-				t.Errorf("%s:\n  Pig %q\n  Pi  %q", names[i], got, expected[i])
+				t.Errorf("%s:\n  Ompig %q\n  Pi  %q", names[i], got, expected[i])
 			}
 		}
 	}

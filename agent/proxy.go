@@ -15,10 +15,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	_ "github.com/MichaelKinsy/PiG/internal/tlsdistrust" // hardens http.DefaultClient (pig additive (D191))
+	"github.com/tmih06/ompig/internal/jsstring"
+	_ "github.com/tmih06/ompig/internal/tlsdistrust" // hardens http.DefaultClient (ompig additive (D191))
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ProxyAssistantMessageEventType is the closed `type` union of a proxy event (proxy.ts ProxyAssistantMessageEvent).
@@ -407,7 +407,7 @@ func readProxyEvents(ctx context.Context, body io.Reader, converter *proxyEventC
 				return err
 			}
 			if terminal {
-				// pig divergence (D183): the terminal event hands partial to the consumer, so nothing may change it afterwards. Pi keeps reading and
+				// ompig divergence (D183): the terminal event hands partial to the consumer, so nothing may change it afterwards. Pi keeps reading and
 				// applies later events, parse failures and aborts to the delivered message; in Go that would be a data race.
 				// The rest of the body is drained without effect so the connection lives as long as Pi's.
 				_, _ = io.Copy(io.Discard, reader)
@@ -457,7 +457,7 @@ func processProxyLine(line string, converter *proxyEventConverter, stream *ai.As
 func (converter *proxyEventConverter) process(proxyEvent ProxyAssistantMessageEvent) (ai.AssistantMessageEvent, error) {
 	partial := converter.partial
 	if proxyEvent.notArrayIndex && proxyEventStoresContent(proxyEvent.Type) {
-		// pig divergence (D182): Pi stores the block as a non-index property of the content array, which JSON never shows; an ai.AssistantMessage has no such slot, so the event fails.
+		// ompig divergence (D182): Pi stores the block as a non-index property of the content array, which JSON never shows; an ai.AssistantMessage has no such slot, so the event fails.
 		return nil, fmt.Errorf("proxy %s event has no usable contentIndex", proxyEvent.Type)
 	}
 	switch proxyEvent.Type {
@@ -569,7 +569,7 @@ func mergeProxyToolCall(streamed, wire ai.ToolCall, fields map[string]json.RawMe
 }
 
 // proxyEventStoresContent reports the events that write `partial.content[index]`. The others only read it, and a read at a
-// non-index key finds nothing in Pig, as in Pi: a store at such a key has already ended the stream.
+// non-index key finds nothing in Ompig, as in Pi: a store at such a key has already ended the stream.
 func proxyEventStoresContent(eventType ProxyAssistantMessageEventType) bool {
 	switch eventType {
 	case ProxyEventTextStart, ProxyEventThinkingStart, ProxyEventToolcallStart:
@@ -578,7 +578,7 @@ func proxyEventStoresContent(eventType ProxyAssistantMessageEventType) bool {
 	return false
 }
 
-// pig divergence (D182): setProxyContent stores a block at an index as `partial.content[index] = block` does, except that an index past the end is an error: Pi leaves holes in the array, and a nil block cannot live in an ai.AssistantMessage (its copy, marshalling and estimation take only the three block kinds).
+// ompig divergence (D182): setProxyContent stores a block at an index as `partial.content[index] = block` does, except that an index past the end is an error: Pi leaves holes in the array, and a nil block cannot live in an ai.AssistantMessage (its copy, marshalling and estimation take only the three block kinds).
 func setProxyContent(partial *ai.AssistantMessage, index int, content ai.AssistantContentBlock) error {
 	if index > len(partial.Content) {
 		return fmt.Errorf("proxy content index %d is past the end of the content array", index)

@@ -7,15 +7,15 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/experimental.ts
 
-// Ports test/experimental.test.ts: PI_EXPERIMENTAL enables experimental features only when it is exactly "1". The PiG-only PIG_EXPERIMENTAL
+// Ports test/experimental.test.ts: PI_EXPERIMENTAL enables experimental features only when it is exactly "1". The Ompig-only OMPIG_EXPERIMENTAL
 // spelling is cleared so the cases isolate Pi's variable.
 func TestAreExperimentalFeaturesEnabledMatchesPi(t *testing.T) {
-	t.Setenv("PIG_EXPERIMENTAL", "")
+	t.Setenv("OMPIG_EXPERIMENTAL", "")
 	cases := []struct {
 		name  string
 		value string
@@ -46,7 +46,7 @@ func TestAreExperimentalFeaturesEnabledMatchesPi(t *testing.T) {
 
 // areExperimentalFeaturesEnabled against pinned Pi over every PI_EXPERIMENTAL shape (unset, empty, 1, 0, true, padded, case, other numbers).
 func TestAreExperimentalFeaturesEnabledMatchesPiOracle(t *testing.T) {
-	t.Setenv("PIG_EXPERIMENTAL", "")
+	t.Setenv("OMPIG_EXPERIMENTAL", "")
 	values := []*string{nil}
 	for _, v := range []string{"", "1", "0", "true", "TRUE", " 1 ", "1 ", "01", "2", "yes", "on", "-1", "1.0", "\t1"} {
 		values = append(values, &v)
@@ -78,7 +78,7 @@ func TestAreExperimentalFeaturesEnabledMatchesPiOracle(t *testing.T) {
 			if v != nil {
 				shown = *v
 			}
-			t.Errorf("PI_EXPERIMENTAL=%q: PiG %v, Pi %v", shown, got, expected[i])
+			t.Errorf("PI_EXPERIMENTAL=%q: Ompig %v, Pi %v", shown, got, expected[i])
 		}
 	}
 }

@@ -3,8 +3,8 @@ package codingagent
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ThinkingSelectorComponent renders the /thinking selector: a search input over

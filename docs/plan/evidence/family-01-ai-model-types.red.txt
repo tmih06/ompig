@@ -64,5 +64,5 @@
     --- PASS: TestOpenRouterImagesUpstream/passes_through_abort_signal_and_returns_aborted_result (0.00s)
     --- PASS: TestOpenRouterImagesUpstream/generateImages_resolves_the_final_assistant_images_result (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/ai	1.251s
+FAIL	github.com/tmih06/ompig/ai	1.251s
 FAIL

@@ -25,16 +25,16 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/sessionentry"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	codingcompaction "github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	codingcompaction "github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
 func TestRPCTaskGroupClosesAgainstConcurrentStarts(t *testing.T) {
@@ -1107,7 +1107,7 @@ func TestRPCPromptRoutingPriorityAndInvocationConsistency(t *testing.T) {
 func TestRPCResourceHandoffFlagsTrustExplicitAndPiglet(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
 	userPrompt := filepath.Join(agentDir, "prompts", "user.md")
-	projectPrompt := filepath.Join(cwd, ".pig", "prompts", "project.md")
+	projectPrompt := filepath.Join(cwd, ".ompig", "prompts", "project.md")
 	explicitPrompt := filepath.Join(t.TempDir(), "explicit.md")
 	for _, path := range []string{userPrompt, projectPrompt, explicitPrompt} {
 		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
@@ -1149,12 +1149,12 @@ func TestRPCResourceHandoffFlagsTrustExplicitAndPiglet(t *testing.T) {
 	if !slices.Contains(trustedPaths, userPrompt) || slices.Contains(trustedPaths, projectPrompt) {
 		t.Fatalf("project trust paths=%v", trustedPaths)
 	}
-	inline := rpcResolvedSkills([]*codingagent.SkillDef{{Name: "inline", Description: "piglet", Body: "body"}}, &piglet.Piglet{Name: "demo"})
-	if len(inline) != 1 || inline[0].FilePath != "builtin:piglet" || inline[0].BaseDir != "." {
-		t.Fatalf("Piglet inline source=%#v", inline)
+	inline := rpcResolvedSkills([]*codingagent.SkillDef{{Name: "inline", Description: "ompiglet", Body: "body"}}, &ompiglet.Ompiglet{Name: "demo"})
+	if len(inline) != 1 || inline[0].FilePath != "builtin:ompiglet" || inline[0].BaseDir != "." {
+		t.Fatalf("Ompiglet inline source=%#v", inline)
 	}
 	got, expanded, failure := codingagent.ExpandSkillCommand("/skill:inline", inline)
-	if !expanded || failure != nil || got != "<skill name=\"inline\" location=\"builtin:piglet\">\nReferences are relative to ..\n\nbody\n</skill>" {
+	if !expanded || failure != nil || got != "<skill name=\"inline\" location=\"builtin:ompiglet\">\nReferences are relative to ..\n\nbody\n</skill>" {
 		t.Fatalf("inline invocation=%q expanded=%v failure=%v", got, expanded, failure)
 	}
 }

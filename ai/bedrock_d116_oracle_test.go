@@ -2,7 +2,7 @@ package ai_test
 
 import "encoding/json"
 
-// piBedrockPayloadWithD116 rewrites Pi's Bedrock Converse payload into the shape D116 specifies: adjacent messages of one role become one message whose content is the concatenation in order. Pi's order is bedrock-converse-stream.ts convertMessages; the payload oracle compares PiG with this rewrite.
+// piBedrockPayloadWithD116 rewrites Pi's Bedrock Converse payload into the shape D116 specifies: adjacent messages of one role become one message whose content is the concatenation in order. Pi's order is bedrock-converse-stream.ts convertMessages; the payload oracle compares Ompig with this rewrite.
 func piBedrockPayloadWithD116(payload string) string {
 	var body map[string]any
 	if json.Unmarshal([]byte(payload), &body) != nil {

@@ -6,10 +6,10 @@ This report records the public-main PR #74 qualification, not the current candid
 
 The reference is Pi 0.87.1 (`f07218c4d4bbc12bef056a7058c3dd49dfe41abe`). Paths below are relative to its source root.
 
-| Behavior | Pi source | PiG implementation |
+| Behavior | Pi source | Ompig implementation |
 |---|---|---|
 | Provider defaults and declaration order | `packages/coding-agent/src/core/model-resolver.ts:20-64` | `internal/codingagent/default_models.go`; startup and login share one table |
-| Unknown-model condition | `packages/coding-agent/src/modes/interactive/interactive-mode.ts:298-300` | `isUnknownModel`; nil represents PiG's initial unknown sentinel |
+| Unknown-model condition | `packages/coding-agent/src/modes/interactive/interactive-mode.ts:298-300` | `isUnknownModel`; nil represents Ompig's initial unknown sentinel |
 | Selection, discovery, guidance and messages | `packages/coding-agent/src/modes/interactive/interactive-mode.ts:5879-5975` | `completeProviderAuthentication`, `finishProviderAuthentication`, `postLoginModel` |
 | Model/default/thinking mutation before awaited notifications | `packages/coding-agent/src/core/agent-session.ts:2110-2137` | `Session.SetModelOnMain` separates owner-loop state mutation from worker-side notifications |
 | Submitted text and prompt layout | `packages/coding-agent/src/modes/interactive/components/login-dialog.ts:56-64,77-81,156-182` | `tui.LoginDialogComponent`, with the selectable privacy feature disabled |
@@ -23,7 +23,7 @@ Model construction runs off the input loop. `Session.SetModelOnMain` dispatches 
 
 Generation and Session/handle/model checks reject stale work before mutation and before UI/scope changes. Model and Session commands invalidate the generation even when the model pointer stays the same. A late notification callback never re-applies or re-persists an old choice. Refreshes remain bounded to 15 seconds and owned by the interactive lifetime. No selection scans Session history.
 
-External credential stores belong to PiG's existing capability D40. Pi always reports `getAuthPath()` at `interactive-mode.ts:5933,5937,5947`; it does not return a provider-owned store path. PiG preserves the actual `StoreOAuthCredentials` result through immediate and deferred completion, and uses `auth.Path()` for core storage.
+External credential stores belong to Ompig's existing capability D40. Pi always reports `getAuthPath()` at `interactive-mode.ts:5933,5937,5947`; it does not return a provider-owned store path. Ompig preserves the actual `StoreOAuthCredentials` result through immediate and deferred completion, and uses `auth.Path()` for core storage.
 
 Regression guards:
 
@@ -42,7 +42,7 @@ Owner-approved divergence D80 defines `maskSecretInput`. It defaults to true and
 
 When enabled, the dialog shows up to eight dots, a grapheme count and the last four graphemes. Inputs shorter than five graphemes show no suffix. Submission retains the preview, not the full input. Authentication progress and error text redact submitted masked values and their trimmed forms before display. Login input is not appended to Session messages. The authentication flow still receives the submitted value, and the authorized credential store still stores credentials: this is display privacy, not credential encryption.
 
-When disabled, PiG displays the full text while editing and after submission. Pi 0.87.1 does this even for `type: "secret"`. No comparison substitutes dots for Pi's plaintext output. The exact comparison exposed dialog spacing, prompt/placeholder/hint styling, API-key prompt-label and dynamic-border reset differences; these are fixed at their owning components.
+When disabled, Ompig displays the full text while editing and after submission. Pi 0.87.1 does this even for `type: "secret"`. No comparison substitutes dots for Pi's plaintext output. The exact comparison exposed dialog spacing, prompt/placeholder/hint styling, API-key prompt-label and dynamic-border reset differences; these are fixed at their owning components.
 
 Guards:
 
@@ -51,7 +51,7 @@ Guards:
 - `TestLoginDialogMaskDisabledMatchesPi`: compare complete ANSI frames from the installed Pi dialog before typing, during typing, after submission and after progress, without ANSI or whitespace normalization.
 - `TestMaskSecretInputSettingsRoundTrip`, `TestMaskSecretInputSettingsMenuAppliesToNextDialog` and `TestLoginMaskSettingReachesStandardDialog`: default, explicit values, persistence, menu and production-dialog wiring.
 - `TestAPIKeyLoginPromptMasksInput`, `TestLlamaLoginNeverRendersSubmittedSecret` and `TestMaskedLoginErrorDoesNotEnterFramesOrSession`: standard and typed prompt boundaries, diagnostics and persisted Session privacy.
-- `TestPiIgnoresMaskSecretInputInSharedSettings`: Pi reads the Go-serialized boolean, ignores it for its behavior and preserves it when changing another setting; PiG then reads the result. This tests JSON content, not interoperability of the two settings-lock protocols. No candidate lock implementation is included.
+- `TestPiIgnoresMaskSecretInputInSharedSettings`: Pi reads the Go-serialized boolean, ignores it for its behavior and preserves it when changing another setting; Ompig then reads the result. This tests JSON content, not interoperability of the two settings-lock protocols. No candidate lock implementation is included.
 - `oauth/14-login-secret-mask-disabled`: escaped-output equality against real Pi, with three runs.
 
 The settings correspondence rules account for exactly one D80 row and still reject undeclared additions or reordered Pi rows. The settings scenario asserts each raw row count before accounting for this approved difference. The process and tmux launchers discard ambient agent-directory overrides before applying their snapshotted configuration; unit tests guard both boundaries.
@@ -60,7 +60,7 @@ The settings correspondence rules account for exactly one D80 row and still reje
 
 The clean public branch starts at `10111db80`: original #74 plus public main `c1550a84a`. It contains no candidate merge. Only login/privacy code, its tests, documentation and feature-derived inventories are added. Release notes are in `CHANGELOG.md` under `[0.3.0]`.
 
-Use Go 1.27.1 and real Pi 0.87.1. Resolve tool-manager shims to installed Go, Node, Rust and uv executables before changing HOME. Every test and probe isolates HOME, PIG_HOME and both agent directories. Compiler/package caches are separate from credentials. The `make ci-parity` comparison runs that target on this branch and an unmodified archive of public main `c1550a84a`, with the same installed oracle and toolchains.
+Use Go 1.27.1 and real Pi 0.87.1. Resolve tool-manager shims to installed Go, Node, Rust and uv executables before changing HOME. Every test and probe isolates HOME, OMPIG_HOME and both agent directories. Compiler/package caches are separate from credentials. The `make ci-parity` comparison runs that target on this branch and an unmodified archive of public main `c1550a84a`, with the same installed oracle and toolchains.
 
 The earlier review identified a full-suite claim that contradicted a reported `TestParseChangelog_RealFile` failure. That historical claim is not acceptance evidence. The clean branch passes `TestParseChangelog_RealFile`; no full `go test ./...` pass is inferred from focused testing.
 

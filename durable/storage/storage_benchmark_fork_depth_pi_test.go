@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/durabletest"
 )
 
 // readRecorder records the conversation each fork-depth read targets.

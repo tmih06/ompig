@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// pig divergence (D130): Pi #10759. An explicit anthropic-beta header replaces the computed betas (anthropic-auth-token.test.ts), but Pi's buildParams (anthropic-messages.ts:1154-1164, :1235-1241) still sends thinking.block_binding and the mid-conversation output_config markers of a managed-effort model, whose betas the override removed, so the API rejects the request with 400 ("messages.1.output_config: Extra inputs are not permitted", or "thinking.adaptive.block_binding: Extra inputs are not permitted" without the markers). PiG sends each managed field only with its beta: block_binding with thinking-binding-controls-2026-08-01, and the markers with mid-conversation-output-config-2026-07-01; without the markers the active effort is the top-level output_config effort.
+// ompig divergence (D130): Pi #10759. An explicit anthropic-beta header replaces the computed betas (anthropic-auth-token.test.ts), but Pi's buildParams (anthropic-messages.ts:1154-1164, :1235-1241) still sends thinking.block_binding and the mid-conversation output_config markers of a managed-effort model, whose betas the override removed, so the API rejects the request with 400 ("messages.1.output_config: Extra inputs are not permitted", or "thinking.adaptive.block_binding: Extra inputs are not permitted" without the markers). Ompig sends each managed field only with its beta: block_binding with thinking-binding-controls-2026-08-01, and the markers with mid-conversation-output-config-2026-07-01; without the markers the active effort is the top-level output_config effort.
 func TestAnthropicManagedEffortBodyFollowsTheBetasSent(t *testing.T) {
 	const (
 		binding  = "thinking-binding-controls-2026-08-01"

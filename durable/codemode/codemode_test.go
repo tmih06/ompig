@@ -16,10 +16,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 func expectText(t *testing.T, got string, isError bool, want string, wantError bool) {
@@ -80,7 +80,7 @@ func TestDurableCodeMode(t *testing.T) {
 			await tools.hold({});
 			return order;`
 		// 2 finishes first, then 1. Pi's "finished" is also "arrived": the result's callback runs in the next microtask, before
-		// the test can release 1. PiG's results arrive through the call's event loop, so 1 is released once 2's result is in
+		// the test can release 1. Ompig's results arrive through the call's event loop, so 1 is released once 2's result is in
 		// the journal (with one processor, 2's tool can return and 1's result still post first).
 		arrived := newGate()
 		f.onFirstOpen = func(opened harness.Harness) {
@@ -959,7 +959,7 @@ func TestDurableCodeMode(t *testing.T) {
 		mustClose(t, opened)
 	})
 
-	// PiG addition (no Pi case). Pi passes the arguments as the script gave them and the nested call's validation turns a value that is not an object
+	// Ompig addition (no Pi case). Pi passes the arguments as the script gave them and the nested call's validation turns a value that is not an object
 	// into an error result. ExecuteTool takes a map, so the call is answered with the same validation message and no nested
 	// call is made: a TypeScript dynamic-typing mechanic (a Go map cannot hold another value), agreed with the owner of
 	// ExecuteTool.

@@ -9,7 +9,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's Anthropic stream keeps the provider's event index per open block in a Map beside the message, "kept off the content blocks so it never reaches partials" (packages/ai/src/api/anthropic-messages.ts:697-756), and RPC serializes the partial as it is. The wire object that RPC builds for text and thinking blocks must carry no index, however the provider numbered them.

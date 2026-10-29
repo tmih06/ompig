@@ -1,6 +1,6 @@
 # Azure OpenAI Responses observation oracle
 
-Pi 1.1.0 drives `packages/ai/src/api/azure-openai-responses.ts` through the OpenAI SDK 7.19.0 `AzureOpenAI` client and the shared `processResponsesStream`. Nothing here is Go output. Do not regenerate a file from PiG.
+Pi 1.1.0 drives `packages/ai/src/api/azure-openai-responses.ts` through the OpenAI SDK 7.19.0 `AzureOpenAI` client and the shared `processResponsesStream`. Nothing here is Go output. Do not regenerate a file from Ompig.
 
 | File | Producer | Contents |
 |---|---|---|
@@ -10,7 +10,7 @@ Pi 1.1.0 drives `packages/ai/src/api/azure-openai-responses.ts` through the Open
 
 The probe results are identical on Node 24.19.0 and 26.7.0 in every run.
 
-`../pi-start.json` and `../server.mjs` also carry this API's start state for the shared `../check.mjs` (`node check.mjs <pig> 200 azure-openai-responses`). Go replays: `TestRPC33ObservationMatrixAzure` (`coding`), `TestRPC33AzureTickOrder` (`coding`, direct and Model Runtime), `TestAzureResponsesTickOrder` (`ai`, direct, including the start gap from the `onResponse` hook) and `TestRPCAzureOpenAIResponsesObservation` (`cmd/pig`, 200 runs of the real binary; `-rpc33-azure-full` compares every record of `rpc.json`).
+`../pi-start.json` and `../server.mjs` also carry this API's start state for the shared `../check.mjs` (`node check.mjs <ompig> 200 azure-openai-responses`). Go replays: `TestRPC33ObservationMatrixAzure` (`coding`), `TestRPC33AzureTickOrder` (`coding`, direct and Model Runtime), `TestAzureResponsesTickOrder` (`ai`, direct, including the start gap from the `onResponse` hook) and `TestRPCAzureOpenAIResponsesObservation` (`cmd/ompig`, 200 runs of the real binary; `-rpc33-azure-full` compares every record of `rpc.json`).
 
 ## Tick measurement
 
@@ -32,8 +32,8 @@ Run from the repository root with Node 24.19.0 and the installed Pi dependency.
 ```bash
 export PI_PACKAGE_ROOT="$(realpath extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent)"
 P=coding/testdata/rpc33-observation/providers/azure-openai-responses
-private=$(mktemp -d); mkdir -p "$private/home" "$private/pig" "$private/pi"
-env HOME="$private/home" PIG_CODING_AGENT_DIR="$private/pig" PI_CODING_AGENT_DIR="$private/pi" node $P/probe.mjs out/pi.json out/inputs.json
-env HOME="$private/home" PIG_CODING_AGENT_DIR="$private/pig" PI_CODING_AGENT_DIR="$private/pi" node $P/ticks.mjs out/ticks.json
+private=$(mktemp -d); mkdir -p "$private/home" "$private/ompig" "$private/pi"
+env HOME="$private/home" OMPIG_CODING_AGENT_DIR="$private/ompig" PI_CODING_AGENT_DIR="$private/pi" node $P/probe.mjs out/pi.json out/inputs.json
+env HOME="$private/home" OMPIG_CODING_AGENT_DIR="$private/ompig" PI_CODING_AGENT_DIR="$private/pi" node $P/ticks.mjs out/ticks.json
 node $P/rpc.mjs out/rpc.json 8
 ```

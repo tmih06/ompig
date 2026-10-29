@@ -18,9 +18,9 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // pi: packages/ai/src/api/llama-cpp-classify.ts
@@ -234,7 +234,7 @@ func serveLlamaOracle(probe llamaOracleProbe, listener net.Listener, record func
 	return server
 }
 
-// forgetLlamaLabelTokens drops what ClassifyLlamaCpp learned about the server at root. PiG keeps label tokens for the whole process, per server root, model and label, as Pi's module-level labelTokenCache does, and
+// forgetLlamaLabelTokens drops what ClassifyLlamaCpp learned about the server at root. Ompig keeps label tokens for the whole process, per server root, model and label, as Pi's module-level labelTokenCache does, and
 // the oracle's Pi side runs in a fresh process with an empty cache. A probe's server that has gone away must leave no entry behind: the kernel hands a loopback port out again, so a later server (the next -count
 // iteration of the same probe, which reuses its model id) at the same address would find its labels already resolved and send fewer requests than Pi.
 func forgetLlamaLabelTokens(root string) {
@@ -306,7 +306,7 @@ func runLlamaOracleProbeOn(t *testing.T, server *probeServer, i int, probe llama
 }
 
 // runLlamaOracleProbe is one probe through ClassifyLlamaCpp against a scripted llama-server of its own on listener (a fresh loopback port when nil), the result and every request the server saw. When it returns the server is
-// closed, the client holds no connection to it, and PiG knows nothing else about it.
+// closed, the client holds no connection to it, and Ompig knows nothing else about it.
 func runLlamaOracleProbe(t *testing.T, i int, probe llamaOracleProbe, listener net.Listener) (ClassifierResult, []llamaOracleExchange) {
 	t.Helper()
 	var mu sync.Mutex
@@ -322,7 +322,7 @@ func runLlamaOracleProbe(t *testing.T, i int, probe llamaOracleProbe, listener n
 	return result, seen
 }
 
-// TestLlamaCppClassifyMatchesPi runs the pinned pi-ai llama-cpp-classify and PiG's ClassifyLlamaCpp against the same scripted llama-server for random
+// TestLlamaCppClassifyMatchesPi runs the pinned pi-ai llama-cpp-classify and Ompig's ClassifyLlamaCpp against the same scripted llama-server for random
 // states, questions, tokenizers, templates and log-probabilities (including labels missing from the first readouts, underflow, and malformed answers).
 // The stop reason, the error message, the answers and the requests the server saw must agree.
 func TestLlamaCppClassifyMatchesPi(t *testing.T) {
@@ -427,30 +427,30 @@ func TestLlamaCppClassifyMatchesPi(t *testing.T) {
 		wantSorted, wantCompletions := canonicalAll(want[i].Requests)
 		var problems []string
 		if string(result.StopReason) != want[i].StopReason {
-			problems = append(problems, fmt.Sprintf("stopReason PiG %q Pi %q", result.StopReason, want[i].StopReason))
+			problems = append(problems, fmt.Sprintf("stopReason Ompig %q Pi %q", result.StopReason, want[i].StopReason))
 		}
 		if gotMessage != wantMessage {
-			problems = append(problems, fmt.Sprintf("errorMessage\n   PiG %q\n   Pi  %q", gotMessage, wantMessage))
+			problems = append(problems, fmt.Sprintf("errorMessage\n   Ompig %q\n   Pi  %q", gotMessage, wantMessage))
 		}
 		if string(answers) != want[i].AnswersJSON {
-			problems = append(problems, fmt.Sprintf("answers\n   PiG %s\n   Pi  %s", answers, want[i].AnswersJSON))
+			problems = append(problems, fmt.Sprintf("answers\n   Ompig %s\n   Pi  %s", answers, want[i].AnswersJSON))
 		}
 		if !slices.Equal(gotSorted, wantSorted) {
-			onlyPiG, onlyPi := slices.Clone(gotSorted), slices.Clone(wantSorted)
+			onlyOmpig, onlyPi := slices.Clone(gotSorted), slices.Clone(wantSorted)
 			for _, item := range gotSorted {
 				if at := slices.Index(onlyPi, item); at >= 0 {
 					onlyPi = slices.Delete(onlyPi, at, at+1)
 				}
 			}
 			for _, item := range wantSorted {
-				if at := slices.Index(onlyPiG, item); at >= 0 {
-					onlyPiG = slices.Delete(onlyPiG, at, at+1)
+				if at := slices.Index(onlyOmpig, item); at >= 0 {
+					onlyOmpig = slices.Delete(onlyOmpig, at, at+1)
 				}
 			}
-			problems = append(problems, fmt.Sprintf("requests (%d PiG, %d Pi)\n   only PiG %.600q\n   only Pi  %.600q", len(gotSorted), len(wantSorted), onlyPiG, onlyPi))
+			problems = append(problems, fmt.Sprintf("requests (%d Ompig, %d Pi)\n   only Ompig %.600q\n   only Pi  %.600q", len(gotSorted), len(wantSorted), onlyOmpig, onlyPi))
 		}
 		if !slices.Equal(gotCompletions, wantCompletions) {
-			problems = append(problems, fmt.Sprintf("completion order\n   PiG %q\n   Pi  %q", gotCompletions, wantCompletions))
+			problems = append(problems, fmt.Sprintf("completion order\n   Ompig %q\n   Pi  %q", gotCompletions, wantCompletions))
 		}
 		if len(problems) == 0 {
 			sentBodies := func(exchanges []llamaOracleExchange) []string {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // checkRequestBody validates the JSON body a provider is about to send against the API's message contract. It does nothing outside a test binary or a requestvalidity-tagged build.

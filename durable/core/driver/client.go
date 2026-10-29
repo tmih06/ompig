@@ -11,10 +11,10 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	coresession "github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/abi"
+	coresession "github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // CoreError is an error the core answered with: Pi's `{name, message}` (ABI section 8).

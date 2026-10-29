@@ -10,10 +10,10 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -49,14 +49,14 @@ func shortenPath(p string) string {
 	return p
 }
 
-// debugLog writes to pig-debug.log in the temporary directory when PIG_DEBUG is set. Used for
+// debugLog writes to ompig-debug.log in the temporary directory when OMPIG_DEBUG is set. Used for
 // diagnosing TUI event flow without polluting the alt-screen. The file is private to the user and is never reached
 // through a symlink (openDebugLog); the shared temporary directory is writable by every local user.
 func debugLog(format string, args ...any) {
-	if os.Getenv("PIG_DEBUG") == "" {
+	if os.Getenv("OMPIG_DEBUG") == "" {
 		return
 	}
-	f, err := openDebugLog(filepath.Join(os.TempDir(), "pig-debug.log"))
+	f, err := openDebugLog(filepath.Join(os.TempDir(), "ompig-debug.log"))
 	if err != nil {
 		return
 	}
@@ -135,7 +135,7 @@ func (m *InteractiveMode) setupExtensionShortcutListener(ctx context.Context) {
 			if tui.MatchesKeyID(data, entry.Key) {
 				go func() {
 					if err := entry.Shortcut.Handler(ctx); err != nil {
-						// pig divergence (D56): the lifecycle handler reports a failed subprocess connection once, including interrupted shortcuts.
+						// ompig divergence (D56): the lifecycle handler reports a failed subprocess connection once, including interrupted shortcuts.
 						if _, owned := errors.AsType[*invocation.LifecycleError](err); owned {
 							return
 						}
@@ -163,7 +163,7 @@ func (m *InteractiveMode) projectTrusted() bool {
 	return m.opts.SettingsManager.IsProjectTrusted()
 }
 
-// redactKeyChunk is the chunk PIG_DEBUG_KEYS may log. Escape and control sequences are what a keybinding diagnosis needs,
+// redactKeyChunk is the chunk OMPIG_DEBUG_KEYS may log. Escape and control sequences are what a keybinding diagnosis needs,
 // so they stay; typed or pasted text can be a secret entered at a masked login prompt, so it is replaced by its length.
 func redactKeyChunk(chunk string) string {
 	if strings.HasPrefix(chunk, "\x1b[200~") {

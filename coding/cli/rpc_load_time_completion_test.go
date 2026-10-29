@@ -39,7 +39,7 @@ export default async function (pi) {
 `), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1"}, "--no-session", "-e", fixture)
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1"}, "--no-session", "-e", fixture)
 	p.send(`{"id":"load","type":"prompt","message":"/load-time"}`)
 	p.await("load-time notification", func(record rpcRecord) bool {
 		if record["type"] != "extension_ui_request" || record["method"] != "notify" {

@@ -8,15 +8,15 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // pi: packages/tui/src/autocomplete.ts
 
 // Direct path completion over a directory whose names are not valid UTF-8. Node's readdirSync decodes each name as UTF-8 (U+FFFD per ill-formed subpart) and keeps the entry; a
-// symlink's stat on the decoded name then fails, so the entry stays a file. PiG must offer the same values and labels, not the raw bytes.
+// symlink's stat on the decoded name then fails, so the entry stays a file. Ompig must offer the same values and labels, not the raw bytes.
 func TestCombinedAutocompleteNamesThatAreNotValidUTF8MatchPi(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skip("file names are arbitrary bytes only on Linux")
@@ -66,7 +66,7 @@ emit(out);`, map[string]any{"base": base, "cases": befores}, &want)
 			}
 		}
 		if !reflect.DeepEqual(got, want[i]) {
-			t.Errorf("%q:\n  PiG %+v\n  Pi  %+v", before, got, want[i])
+			t.Errorf("%q:\n  Ompig %+v\n  Pi  %+v", before, got, want[i])
 		}
 	}
 }

@@ -23,12 +23,12 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
-// DocsEvalSuffix ends the name of a documentation eval file. Pi's is ".docs.eval.ts"; PiG's suites are Go files.
+// DocsEvalSuffix ends the name of a documentation eval file. Pi's is ".docs.eval.ts"; Ompig's suites are Go files.
 const DocsEvalSuffix = ".docs.eval.go"
 
 // EvalCliOptions are the parsed command-line options of the documentation comparison.

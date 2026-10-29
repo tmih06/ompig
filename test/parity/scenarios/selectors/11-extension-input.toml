@@ -3,7 +3,7 @@
 # without starting a model request. Compare every content row with its ANSI
 # palette and reset scopes; outer DynamicBorder rows are not claimed here.
 # Both binaries receive the same light theme. The former Pi fixture selected
-# light while the PiG env pointed above its settings file; plain text hid that
+# light while the Ompig env pointed above its settings file; plain text hid that
 # input mismatch.
 name = "11-extension-input"
 description = "Extension input dialogs preserve Pi's content layout, palette and resolved hints."
@@ -17,8 +17,8 @@ driver = "interactive-tmux"
 width = 100
 height = 35
 # Both sides start typing after their startup rebind, which sets the autocomplete provider and then prints this
-# warning; "(auto)" paints before PiG's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
-ready_pattern_pig = "Warning: No models available."
+# warning; "(auto)" paints before Ompig's rebind, and a key sent then is cancelled by it (interactive-mode.ts:1085-1099).
+ready_pattern_ompig = "Warning: No models available."
 ready_pattern_pi = "Warning: No models available."
 ready_timeout_seconds = 25
 capture_start = "Probe Title"
@@ -31,11 +31,11 @@ wait_timeout_seconds = 10
 settle_seconds = 2
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/dialogs-default"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/dialogs-default"]
 pi = ["PI_CODING_AGENT_DIR=testdata/dialogs-default"]
 pi_extensions = ["../../testdata/test-ui-extension.ts"]
-pig_extensions = ["../../testdata/test-ui-extension.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["../../testdata/test-ui-extension.ts"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type settingsGettersCase struct {
@@ -22,7 +22,7 @@ type settingsGettersCase struct {
 // getHideThinkingBlock, getCompactionEnabled, getImageAutoResize, getBlockImages, getShowImages, getEditorPaddingX, getAutocompleteMaxVisible,
 // getCodeBlockIndent and getEnableSkillCommands against pinned Pi: over global and project settings files that set, omit or conflict on each key
 // (project over global, nested terminal/images/compaction/markdown/skills objects merged one level down), every getter returns what Pi's returns, defaults
-// included. Not compared: getters that read the environment (hardware cursor, clear on shrink), wrong-typed values and fractional numbers (PiG's Settings is typed:
+// included. Not compared: getters that read the environment (hardware cursor, clear on shrink), wrong-typed values and fractional numbers (Ompig's Settings is typed:
 // integers and strings).
 func TestSettingsManagerGettersMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(20261114))

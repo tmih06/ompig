@@ -9,7 +9,7 @@ import (
 
 func TestDuplicateKeepsTheSourceAndAddsTheCopy(t *testing.T) {
 	dir := t.TempDir()
-	src, dst := filepath.Join(dir, "pig"), filepath.Join(dir, ".backup")
+	src, dst := filepath.Join(dir, "ompig"), filepath.Join(dir, ".backup")
 	writeFile(t, src, "old")
 	if err := Duplicate(src, dst); err != nil {
 		t.Fatal(err)
@@ -24,7 +24,7 @@ func TestDuplicateKeepsTheSourceAndAddsTheCopy(t *testing.T) {
 
 func TestDuplicateNeverReplacesAnExistingFile(t *testing.T) {
 	dir := t.TempDir()
-	src, dst := filepath.Join(dir, "pig"), filepath.Join(dir, ".backup")
+	src, dst := filepath.Join(dir, "ompig"), filepath.Join(dir, ".backup")
 	writeFile(t, src, "old")
 	writeFile(t, dst, "other")
 	if err := Duplicate(src, dst); !errors.Is(err, fs.ErrExist) {

@@ -21,7 +21,7 @@ func TestListReturnsEmbeddedDocs(t *testing.T) {
 		"commands.md":    false,
 		"providers.md":   false,
 		"models.md":      false,
-		"piglets.md":     false,
+		"ompiglets.md":   false,
 		"config.md":      false,
 		"divergences.md": false,
 	}
@@ -112,7 +112,7 @@ func TestEnsureSyncedReplacesOlderProfileDocs(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(dir, markerFile), []byte("stale\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(dir, "install.md"), []byte("pig --profile old\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "install.md"), []byte("ompig --profile old\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -123,8 +123,8 @@ func TestEnsureSyncedReplacesOlderProfileDocs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(install, []byte("pig --profile")) || !bytes.Contains(install, []byte("pig --piglet")) {
-		t.Fatalf("install docs were not upgraded to Piglet commands:\n%s", install)
+	if bytes.Contains(install, []byte("ompig --profile")) || !bytes.Contains(install, []byte("ompig --ompiglet")) {
+		t.Fatalf("install docs were not upgraded to Ompiglet commands:\n%s", install)
 	}
 	version, err := os.ReadFile(filepath.Join(dir, markerFile))
 	if err != nil {
@@ -163,7 +163,7 @@ func TestEnsureSyncedIsIdempotent(t *testing.T) {
 }
 
 func TestRunCommand_PathAndList(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 
 	var stdout, stderr bytes.Buffer
 	if code := RunCommand([]string{"docs", "path"}, &stdout, &stderr); code != 0 {
@@ -185,7 +185,7 @@ func TestRunCommand_PathAndList(t *testing.T) {
 
 func TestRunCommand_DefaultSyncs(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", root)
+	t.Setenv("OMPIG_HOME", root)
 	var stdout, stderr bytes.Buffer
 	if code := RunCommand([]string{"docs"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("docs: code=%d stderr=%s", code, stderr.String())

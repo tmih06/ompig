@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // execute.ts appends `{ set, delete }` with set a plain object the host filled key by key (host.ts parseStoreWrites), so JSON.stringify lists the array-index keys
@@ -80,7 +80,7 @@ emit(JSON.parse(child.stdout));
 		}
 		if fmt.Sprint(got) != fmt.Sprint(want[i]) {
 			if bad++; bad <= 6 {
-				t.Errorf("%s\n  PiG %v\n  Pi  %v", script, got, want[i])
+				t.Errorf("%s\n  Ompig %v\n  Pi  %v", script, got, want[i])
 			}
 		}
 	}

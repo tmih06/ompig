@@ -29,7 +29,7 @@ The Python suite contains 38 tests. The new file-reference rule is also mutation
 
 ## Verification environment
 
-The qualified runs use physical Go 1.27.1 and Node 24.19.0 executables, Python 3.12.3, Rust/Cargo 1.97.1, tmux 3.7b, and installed Pi 0.87.1. npm is 11.17.0 on this host; no toolchain is installed or upgraded by this rehearsal. Each run uses fresh, short temporary HOME, Pi, and PiG agent directories. The upstream mirror and installed Node dependencies are read-only inputs exposed through untracked links. Compiler/module caches remain shared; worker agent settings and credentials are not inputs.
+The qualified runs use physical Go 1.27.1 and Node 24.19.0 executables, Python 3.12.3, Rust/Cargo 1.97.1, tmux 3.7b, and installed Pi 0.87.1. npm is 11.17.0 on this host; no toolchain is installed or upgraded by this rehearsal. Each run uses fresh, short temporary HOME, Pi, and Ompig agent directories. The upstream mirror and installed Node dependencies are read-only inputs exposed through untracked links. Compiler/module caches remain shared; worker agent settings and credentials are not inputs.
 
 Two pilot environment mistakes are excluded from acceptance evidence. The mise shim selects an unavailable Go 1.26 toolchain in temporary fixture modules. A TMPDIR inside the checkout exposes ancestor instructions and exceeds Unix socket path limits. The qualified runs select the physical Go executable and use the system temporary directory. Abandoned pilot Go build directories are removed before the lane's final `go vet ./...`; they are not source files.
 
@@ -58,7 +58,7 @@ Both full suites fail these three `parity/closure` tests:
 
 They reject provisional/open divergence accounting around the unapproved record. The unmoved final suite additionally fails `TestProviderObjectsAcrossSDKs/go-reader-packed` with `Provider stream ended without a terminal event`. The moved suite does not reproduce it. The layout is not credited with fixing this baseline-only failure; it remains an owner blocker. No retry, timeout increase, skip, or suppression hides it.
 
-JSON scenario `04-json-real-provider-error` fails in both trees at `/7/message/api`: PiG emits an empty string and Pi emits `openai-completions`. Pi initializes the assistant's API and content in `packages/ai/src/api/openai-completions.ts:308-325` and formats the provider error at `:701-713`. This inherited runtime mismatch is not repaired by a layout change. The outcome-manifest comparison removes only checkout prefixes and measured runtimes; it does not modify product output or scenario comparators.
+JSON scenario `04-json-real-provider-error` fails in both trees at `/7/message/api`: Ompig emits an empty string and Pi emits `openai-completions`. Pi initializes the assistant's API and content in `packages/ai/src/api/openai-completions.ts:308-325` and formats the provider error at `:701-713`. This inherited runtime mismatch is not repaired by a layout change. The outcome-manifest comparison removes only checkout prefixes and measured runtimes; it does not modify product output or scenario comparators.
 
 The six binary comparisons cover version, help, empty model-list diagnostics, a faux-provider print turn, RPC command enumeration, and an invalid flag. Their raw process outputs are identical. These checks do not turn the unrelated failed gates into passing release evidence.
 
@@ -78,11 +78,11 @@ Run from the final integration checkout after incorporating this codemod. Use th
 export GOPATH="$(go env GOPATH)"
 export GOCACHE="$(go env GOCACHE)"
 isolation=$(mktemp -d)
-mkdir -p "$isolation/home" "$isolation/pig" "$isolation/pi"
+mkdir -p "$isolation/home" "$isolation/ompig" "$isolation/pi"
 export HOME="$isolation/home"
-export PIG_CODING_AGENT_DIR="$isolation/pig"
+export OMPIG_CODING_AGENT_DIR="$isolation/ompig"
 export PI_CODING_AGENT_DIR="$isolation/pi"
-unset TMPDIR PIG_HOME PIG_SDK_GO_ROOT
+unset TMPDIR OMPIG_HOME OMPIG_SDK_GO_ROOT
 
 python3 -B -m unittest discover -s automation/layout -p 'test_*.py' -v
 go test ./automation/layout/scan
@@ -104,12 +104,12 @@ make ci-drift
 make -k format-version-inventory custom-factory-ledger-drift sdk-surface-drift divergence-guard source-hygiene docs-drift
 go test -json -count=1 ./... > "$isolation/go-tests.jsonl"
 make parity-bin
-PIG_PARITY_PIG_BIN="$PWD/bin/pig-parity" \
-PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi" \
+OMPIG_PARITY_OMPIG_BIN="$PWD/bin/ompig-parity" \
+OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi" \
 go test -tags=parity -count=1 -timeout 20m ./parity/runner -args \
-  -pig-parity.dir="$PWD/parity/scenarios/json" \
-  -pig-parity.tags=hermetic \
-  -pig-parity.results="$isolation/json-parity.json"
+  -ompig-parity.dir="$PWD/parity/scenarios/json" \
+  -ompig-parity.tags=hermetic \
+  -ompig-parity.results="$isolation/json-parity.json"
 ```
 
 Apply the entry point once to the final integration tree. A second run is useful only in the disposable rehearsal to prove idempotence. Do not commit a scratch tree or replace failed gate results with a rerun. Stage only the reviewed migration after the integrator resolves or explicitly owns the baseline release blockers.

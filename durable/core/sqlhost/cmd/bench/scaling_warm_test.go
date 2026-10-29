@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/driver"
 )
 
 // TestWarmTurnScaling measures the bench workload's warm turn at history sizes 10x apart: allocations, bytes and wall time per
@@ -39,10 +39,10 @@ func TestWarmTurnScaling(t *testing.T) {
 	}
 	ctx := context.Background()
 	for _, size := range sizes {
-		fixture := filepath.Join(dir, fmt.Sprintf("pig-native-%d.sqlite", size))
+		fixture := filepath.Join(dir, fmt.Sprintf("ompig-native-%d.sqlite", size))
 		if _, err := os.Stat(fixture); err != nil {
 			start := time.Now()
-			if err := seedFixture(ctx, dir, size, "pig-native"); err != nil {
+			if err := seedFixture(ctx, dir, size, "ompig-native"); err != nil {
 				t.Fatal(err)
 			}
 			t.Logf("seeded %d in %s", size, time.Since(start))

@@ -9,7 +9,7 @@ import (
 )
 
 // image-resize-core.ts:105-125, :156: an image whose scaled side rounds to zero (8000x1 under the 2000 limit scales its height to round(0.25) = 0) reaches Photon's resize with a zero
-// side, which throws, and resizeImageInProcess returns null. PiG reports no image instead of clamping the side to one pixel.
+// side, which throws, and resizeImageInProcess returns null. Ompig reports no image instead of clamping the side to one pixel.
 func TestResizeImageReturnsNoImageWhenAScaledSideRoundsToZero(t *testing.T) {
 	for _, size := range [][2]int{{8000, 1}, {1, 8000}, {4001, 1}} {
 		var encoded bytes.Buffer

@@ -13,14 +13,14 @@ import threading
 kind = sys.argv[1]
 root = Path(__file__).resolve().parents[3]
 with tempfile.TemporaryDirectory(prefix="parity-suspend-order-") as temporary:
-    if kind == "pig":
-        # The runner builds the package's test binary before the timed run (the scenario's pig_go_tests); the probe starts it itself to signal its process group.
+    if kind == "ompig":
+        # The runner builds the package's test binary before the timed run (the scenario's ompig_go_tests); the probe starts it itself to signal its process group.
         executable = subprocess.run(["./test/parity/testdata/prebuilt-go-test.sh", "--binary", "./internal/codingagent"], cwd=root, check=True, capture_output=True, text=True).stdout.strip()
         command = [executable, "-test.run=^TestSuspendSignalOrderChild$"]
     else:
         command = ["node", str(root / "test/parity/testdata/suspend-signal-order-pi.mjs")]
     for order in ["interrupt-before-continue", "continue-before-interrupt"]:
-        env = dict(os.environ, PIG_SUSPEND_SIGNAL_CHILD="1")
+        env = dict(os.environ, OMPIG_SUSPEND_SIGNAL_CHILD="1")
         process = subprocess.Popen(command, cwd=root, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, start_new_session=True)
         lines = queue.Queue()
         trace = []
@@ -56,7 +56,7 @@ with tempfile.TemporaryDirectory(prefix="parity-suspend-order-") as temporary:
                 line = lines.get_nowait()
                 if line is not None:
                     trace.append(line)
-            # A Unix signal termination and exit(128+signal) have the same shell-visible status. D51 owns Pig's terminal restoration before exit130.
+            # A Unix signal termination and exit(128+signal) have the same shell-visible status. D51 owns Ompig's terminal restoration before exit130.
             exit_code = code if code >= 0 else 128-code
             expected = ["stopped", "armed"]
             if order == "interrupt-before-continue":

@@ -3,8 +3,8 @@
 package types
 
 import (
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
 	smithydocument "github.com/aws/smithy-go/document"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
 	"time"
 )
 

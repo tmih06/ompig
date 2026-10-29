@@ -39,7 +39,7 @@ function serveShimsOnBun() {
   const filter = new RegExp(`[\\\\/]node_modules[\\\\/](?:${[...byPackage.keys()].map(escape).join("|")})[\\\\/]`);
   const loaders = { ".cjs": "js", ".mjs": "js", ".js": "js", ".json": "json", ".ts": "ts", ".mts": "ts", ".cts": "ts" };
   globalThis.Bun.plugin({
-    name: "pig-runtime-shims",
+    name: "ompig-runtime-shims",
     setup(build) {
       build.onLoad({ filter }, (args) => {
         const path = args.path.replaceAll("\\", "/");
@@ -124,14 +124,14 @@ function filePath(specifier) {
   }
 }
 
-// pig divergence (D93): Bun runs no module hook, so this plugin records what loader.mjs's Node hooks record: the extension modules each evaluation imports, and each local extension module's source stamp and module format when Bun is about to load it. Bun resolves a module before it reads it, so the stamp is taken at the first resolution of each evaluation, before Bun reads the source, as load() takes it on Node. The plugin only observes: Bun resolves and loads every module itself.
+// ompig divergence (D93): Bun runs no module hook, so this plugin records what loader.mjs's Node hooks record: the extension modules each evaluation imports, and each local extension module's source stamp and module format when Bun is about to load it. Bun resolves a module before it reads it, so the stamp is taken at the first resolution of each evaluation, before Bun reads the source, as load() takes it on Node. The plugin only observes: Bun resolves and loads every module itself.
 function trackExtensionModulesOnBun() {
   const registry = moduleRegistry();
   const treeDir = dirname(fileURLToPath(import.meta.url)) + "/";
   // Bun.resolveSync runs this plugin's resolver again; the inner call only resolves.
   let resolving = false;
   globalThis.Bun.plugin({
-    name: "pig-extension-modules",
+    name: "ompig-extension-modules",
     setup(build) {
       build.onResolve({ filter: /.*/ }, (args) => {
         if (resolving) return undefined;

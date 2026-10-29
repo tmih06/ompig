@@ -11,13 +11,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ─── Slash Command Registry ───────────────────────────────────────────────────
@@ -89,7 +89,7 @@ type ReloadDiag struct {
 	Diagnostics []string
 	// Cells is the placement summary produced by the subprocess host. Empty
 	// when no subprocess host is active (e.g. headless commands).
-	// pig-specific. Used by /reload --explain.
+	// ompig-specific. Used by /reload --explain.
 	Cells []ReloadCellDiag
 	// ReloadDuration is the wall time spent in subprocess Reload(). Zero when
 	// the host is not active.
@@ -145,6 +145,9 @@ type SlashContext struct {
 	// ShowStatus appends or updates the status line.
 	ShowStatus  func(msg string)
 	ShowWarning func(msg string)
+	// OpenAgentHub opens the subagent roster. Nil when the session cannot spawn
+	// subagents, in which case /agents reports that instead.
+	OpenAgentHub func()
 
 	// Accessors. Any of these may be nil; handlers must guard. Keeps
 	// the registry decoupled from the full InteractiveMode struct so
@@ -208,7 +211,7 @@ type SlashContext struct {
 	RenderTree    func() string
 
 	// File-based prompt templates loaded from
-	// <agentDir>/prompts and <cwd>/.pig/prompts. Read-only snapshot;
+	// <agentDir>/prompts and <cwd>/.ompig/prompts. Read-only snapshot;
 	// host populates this each Dispatch.
 	PromptTemplates []PromptTemplate
 
@@ -335,7 +338,7 @@ type SlashContext struct {
 	// Mirrors upstream settings-selector.ts callbacks (onHideThinkingChange etc.).
 	OnSettingApplied func(id, value string)
 
-	// AgentDir is the pig config dir (typically ~/.pig/agent).
+	// AgentDir is the ompig config dir (typically ~/.ompig/agent).
 	// Used by /login and /logout for auth.json access.
 	AgentDir string
 
@@ -627,7 +630,7 @@ func parseSlashLine(line string) (name, args string) {
 // `/help`, the dispatcher, and the autocomplete popup -
 // mirrors upstream's `BUILTIN_SLASH_COMMANDS` re-export from
 // `core/slash-commands.ts`.
-// pig additive (D92): a command the process strips (pigstrip commands), or whose feature it strips (featureCommands), is
+// ompig additive (D92): a command the process strips (pigstrip commands), or whose feature it strips (featureCommands), is
 // not in the list, so no registry, dispatcher or completion derived from it offers the command, and typing it sends it to
 // the model like any unknown slash command.
 func BuiltinSlashCommands() []BuiltinSlashCommand {
@@ -658,14 +661,16 @@ func defaultBuiltins() []BuiltinSlashCommand {
 		{Name: "settings", Description: "Open settings menu", Handler: settingsHandler},
 		{Name: "model", Description: "Select model (opens selector UI)", ArgumentHint: "<provider/model>", TakesArguments: true, Handler: modelHandler},
 		{Name: "tree", Description: "Navigate session tree (switch branches)", Handler: treeHandler},
+		// ompig divergence (D206): the subagent roster, which Pi has no equivalent of.
+		{Name: "agents", Description: "Open the Agent Hub roster of subagents", Handler: agentsHandler},
 		{Name: "thinking", Description: "Set thinking level", ArgumentHint: "<level>", TakesArguments: true, Handler: thinkingHandler},
 		{Name: "scoped-models", Description: "Enable/disable models for Ctrl+P cycling", Handler: scopedModelsHandler},
 		{Name: "export", Description: "Export session (HTML default, or specify path: .html/.jsonl)", TakesArguments: true, Handler: exportHandler},
 		{Name: "import", Description: "Import and resume a session from a JSONL file", TakesArguments: true, Handler: importHandler},
-		// pig divergence (D64): PiG shares through its own expiring gateway, not a GitHub gist.
+		// ompig divergence (D64): Ompig shares through its own expiring gateway, not a GitHub gist.
 		{Name: "share", Description: "Share session with an unlisted 30-day link", Handler: shareHandler},
-		// pig divergence (D62): /bug exports a local archive for a PiG issue; it never uploads.
-		{Name: "bug", Description: "Export a bug report to attach to a PiG issue", ArgumentHint: "<description>", TakesArguments: true, Handler: bugHandler},
+		// ompig divergence (D62): /bug exports a local archive for a Ompig issue; it never uploads.
+		{Name: "bug", Description: "Export a bug report to attach to a Ompig issue", ArgumentHint: "<description>", TakesArguments: true, Handler: bugHandler},
 		{Name: "copy", Description: "Copy last agent message to clipboard", Handler: copyHandler},
 		{Name: "name", Description: "Set session display name", TakesArguments: true, Handler: nameHandler},
 		{Name: "session", Description: "Show session info and stats", Handler: sessionHandler},
@@ -687,7 +692,7 @@ func defaultBuiltins() []BuiltinSlashCommand {
 		// also bound to the ctrl+shift+d global hotkey.
 		{Name: "debug", Description: "Write a debug log", Handler: debugHandler, Hidden: true},
 	}
-	if parityHarnessEnabled() || os.Getenv("PIG_PARITY_HARNESS") == "1" {
+	if parityHarnessEnabled() || os.Getenv("OMPIG_PARITY_HARNESS") == "1" {
 		cmds = append(cmds,
 			BuiltinSlashCommand{Name: "probe-clipboard-read", Description: "Parity harness clipboard probe", Handler: probeClipboardReadHandler},
 			BuiltinSlashCommand{Name: "probe-image-fallback", Description: "Parity harness image fallback probe", Handler: probeImageFallbackHandler},

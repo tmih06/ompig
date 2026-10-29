@@ -6,13 +6,13 @@ import subprocess
 import sys
 import tempfile
 
-binary = os.environ["PIG_PARITY_PIG_BIN" if sys.argv[1] == "pig" else "PIG_PARITY_PI_BIN"]
+binary = os.environ["OMPIG_PARITY_OMPIG_BIN" if sys.argv[1] == "ompig" else "OMPIG_PARITY_PI_BIN"]
 with tempfile.TemporaryDirectory(prefix="startup-auth-") as root:
     home = Path(root)
     agent = home / "agent"
     auth = agent / "auth.json"
-    env = dict(os.environ, HOME=root, PIG_HOME=str(home / ".pig"),
-               PIG_CODING_AGENT_DIR=str(agent), PI_CODING_AGENT_DIR=str(agent))
+    env = dict(os.environ, HOME=root, OMPIG_HOME=str(home / ".ompig"),
+               OMPIG_CODING_AGENT_DIR=str(agent), PI_CODING_AGENT_DIR=str(agent))
     args = [binary, "--offline", "--print", "--model", "openai/gpt-4o-mini",
             "--api-key", "startup-fixture-key", "--no-session", "--no-extensions",
             "--no-skills", "--no-prompt-templates", "--no-themes"]

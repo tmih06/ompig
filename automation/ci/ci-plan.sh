@@ -27,7 +27,7 @@ table=${4:-$(dirname "$0")/ci-tiers.txt}
 case "$mode" in
   "" | queue | label) ;;
   *)
-    echo "PIG_PR_CI_LIGHT is \"$mode\", want empty, queue or label" >&2
+    echo "OMPIG_PR_CI_LIGHT is \"$mode\", want empty, queue or label" >&2
     exit 1
     ;;
 esac

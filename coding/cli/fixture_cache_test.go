@@ -8,11 +8,11 @@ import (
 
 func TestPigBinaryDoesNotReplaceConfigRoot(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
-	if binary == filepath.Clean(os.Getenv("PIG_HOME")) {
+	if binary == filepath.Clean(os.Getenv("OMPIG_HOME")) {
 		t.Fatal("the shared executable occupies the config root")
 	}
-	if err := os.MkdirAll(os.Getenv("PIG_HOME"), 0o700); err != nil {
-		t.Fatalf("building Pig made its config root unusable: %v", err)
+	if err := os.MkdirAll(os.Getenv("OMPIG_HOME"), 0o700); err != nil {
+		t.Fatalf("building Ompig made its config root unusable: %v", err)
 	}
 }
 

@@ -2,7 +2,7 @@ import { getModelType, isModelType, } from "../../pi-ai/sdk-bundle/index.js";
 import { VERSION } from "../config.js";
 import { fetchWithRetry } from "../utils/management-http.js";
 import { getPiUserAgent } from "../utils/pi-user-agent.js";
-const DEFAULT_CATALOG_BASE_URL = "https://pi-in-go.dev";
+const DEFAULT_CATALOG_BASE_URL = "https://ompig.dev";
 const REMOTE_CATALOG_ATTEMPT_TIMEOUT_MS = 4_000;
 export const REMOTE_CATALOG_REFRESH_INTERVAL_MS = 4 * 60 * 60 * 1000;
 /**

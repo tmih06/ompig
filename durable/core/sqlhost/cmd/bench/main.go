@@ -35,16 +35,16 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/counts"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/guard"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/contracttest"
+	"github.com/tmih06/ompig/durable/core/contracttest/counts"
+	"github.com/tmih06/ompig/durable/core/contracttest/guard"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // lookupSchema is bench.mjs's lookup tool, Type.Object({ n: Type.Number() }), in the key order TypeBox gives it and Pi
@@ -109,7 +109,7 @@ func main() {
 	flag.BoolVar(&o.recoverRun, "recover", false, "let the interrupted turn finish and stop")
 	flag.StringVar(&o.record, "record", "", "also record the core's events, reads and uuids to this file (the count gate's replay input)")
 	flag.StringVar(&o.timing, "timing", "", "measure: append one durable-bench result line to this file (no trace, real clock)")
-	flag.StringVar(&o.target, "target", "pig-native", "timing: the result line's target")
+	flag.StringVar(&o.target, "target", "ompig-native", "timing: the result line's target")
 	flag.StringVar(&o.version, "version", "", "timing: the result line's version (the core commit)")
 	flag.IntVar(&o.size, "size", 0, "timing: the fixture's history size in turns")
 	flag.IntVar(&o.sample, "sample", 0, "timing: the sample number")

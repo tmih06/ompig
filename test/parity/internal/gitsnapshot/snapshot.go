@@ -14,11 +14,11 @@ import (
 func Create(ctx context.Context, root, indexPath string) (string, error) {
 	env := append(os.Environ(),
 		"GIT_INDEX_FILE="+indexPath,
-		"GIT_AUTHOR_NAME=PiG test",
-		"GIT_AUTHOR_EMAIL=pig-test@example.invalid",
+		"GIT_AUTHOR_NAME=Ompig test",
+		"GIT_AUTHOR_EMAIL=ompig-test@example.invalid",
 		"GIT_AUTHOR_DATE=2000-01-01T00:00:00Z",
-		"GIT_COMMITTER_NAME=PiG test",
-		"GIT_COMMITTER_EMAIL=pig-test@example.invalid",
+		"GIT_COMMITTER_NAME=Ompig test",
+		"GIT_COMMITTER_EMAIL=ompig-test@example.invalid",
 		"GIT_COMMITTER_DATE=2000-01-01T00:00:00Z",
 	)
 	run := func(input string, args ...string) (string, error) {
@@ -47,5 +47,5 @@ func Create(ctx context.Context, root, indexPath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return run("PiG public-root test snapshot\n", "commit-tree", tree)
+	return run("Ompig public-root test snapshot\n", "commit-tree", tree)
 }

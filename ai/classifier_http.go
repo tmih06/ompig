@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsonparse"
 )
 
 // upstream: packages/ai/src/api/classifier-shared.ts:postClassifierRequest (maxRetries)

@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Node twins of the upstream session-level tests for the 0.99.1 extension API. Upstream registers its extensions as in-process factories (`extensionFactories: [(pi) => ...]`); here the same factories run as Node extensions in the real Host and the assertions read the real Session, so the whole path (Node runtime, wire, Host, Session, ModelRuntime) is the proof. The Go ports of the same cases with in-process extensions are coding/session_tool_orchestration_upstream_test.go and coding/virtual_models_suite_upstream_test.go.
@@ -33,7 +33,7 @@ func newNodeSessionRig(t *testing.T, isolation, settings string, models []ai.Fau
 		t.Skip("skipping conformance suite in short mode (starts Node subprocesses)")
 	}
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

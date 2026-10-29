@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
 func TestParseEntrypointArgsReadsWhatTheHostPasses(t *testing.T) {
@@ -46,13 +46,13 @@ func TestParseEntrypointArgsReadsWhatTheHostPasses(t *testing.T) {
 
 func TestRunEntrypointRefusesAnUnsafeImage(t *testing.T) {
 	directory := t.TempDir()
-	runner := filepath.Join(directory, "pig-evals")
-	for _, name := range []string{"pig-evals", "pig", "pig-eval-extension"} {
+	runner := filepath.Join(directory, "ompig-evals")
+	for _, name := range []string{"ompig-evals", "ompig", "ompig-eval-extension"} {
 		if err := os.WriteFile(filepath.Join(directory, name), []byte("#!/bin/sh\n"), 0o755); err != nil {
 			t.Fatal(err)
 		}
 	}
-	config := EntrypointConfig{Runner: runner, Binaries: []string{filepath.Join(directory, "pig"), filepath.Join(directory, "pig-eval-extension")},
+	config := EntrypointConfig{Runner: runner, Binaries: []string{filepath.Join(directory, "ompig"), filepath.Join(directory, "ompig-eval-extension")},
 		HostAgentDir: filepath.Join(directory, "agent"), ArtifactDir: directory}
 	cases := []struct {
 		name     string
@@ -64,8 +64,8 @@ func TestRunEntrypointRefusesAnUnsafeImage(t *testing.T) {
 		{"bad uid", "0", "65532", "with_docs", nil, "PI_EVAL_SANDBOX_UID must be a positive integer."},
 		{"bad gid", "65532", "abc", "with_docs", nil, "PI_EVAL_SANDBOX_GID must be a positive integer."},
 		{"unknown variant", "65532", "65532", "other", nil, "Eval image has no valid PI_EVAL_VARIANT."},
-		{"missing binary", "65532", "65532", "with_docs", func() { _ = os.Remove(filepath.Join(directory, "pig")) }, "Installed binary is missing or not executable: " + filepath.Join(directory, "pig")},
-		{"evaluator readable beyond root", "65532", "65532", "with_docs", func() { _ = os.WriteFile(filepath.Join(directory, "pig"), []byte("#!/bin/sh\n"), 0o755) }, "Evaluator source must be readable only by root: " + runner},
+		{"missing binary", "65532", "65532", "with_docs", func() { _ = os.Remove(filepath.Join(directory, "ompig")) }, "Installed binary is missing or not executable: " + filepath.Join(directory, "ompig")},
+		{"evaluator readable beyond root", "65532", "65532", "with_docs", func() { _ = os.WriteFile(filepath.Join(directory, "ompig"), []byte("#!/bin/sh\n"), 0o755) }, "Evaluator source must be readable only by root: " + runner},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
@@ -148,7 +148,7 @@ func TestAssertDocumentationFollowsTheVariant(t *testing.T) {
 }
 
 // TestRemovePigDocumentationRemovesEveryNameEntrypointChecks pins the removal against the names the without_docs
-// check requires absent, including the ones pig itself never materializes.
+// check requires absent, including the ones ompig itself never materializes.
 func TestRemovePigDocumentationRemovesEveryNameEntrypointChecks(t *testing.T) {
 	root := t.TempDir()
 	if _, err := pigdocs.Sync(root); err != nil {

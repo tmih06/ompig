@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func makePackedScopeHarness(t *testing.T, language string) *harness {
@@ -49,7 +49,7 @@ func packedScopeFactory(t *testing.T, root, language, name, command string) subp
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		code = fmt.Sprintf(`package flags
-import ("encoding/json"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("encoding/json"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension {
  e:=sdk.New(%q)
  e.Command(%q,"",func(ctx sdk.Context,_ string)error{models,err:=ctx.ScopedModels();if err!=nil{return err};data,err:=json.Marshal(models);if err!=nil{return err};ctx.Notify(string(data),"info");return nil})
@@ -57,15 +57,15 @@ func Extension()*sdk.Extension {
 }`, name, command)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		code = fmt.Sprintf(`import json, pig_sdk
+		code = fmt.Sprintf(`import json, ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  e.command(%q,"",lambda ctx,args:ctx.notify(json.dumps(ctx.scoped_models()),"info"))
  return e
 `, name, command)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		code = fmt.Sprintf(`use pig_sdk::{Extension,CommandResult,Schema};
+		code = fmt.Sprintf(`use ompig_sdk::{Extension,CommandResult,Schema};
 pub fn new_extension()->Extension {
  let mut e=Extension::new(%q);
  e.command(%q,"",|ctx,_|{match ctx.scoped_models(){Ok(models)=>{ctx.notify(&Schema::Array(models).to_string(),"info");CommandResult::Ok},Err(error)=>CommandResult::Error(error.to_string())}});

@@ -9,7 +9,7 @@ This investigation fixes two startup defects on the assigned stable base `1beced
 
 The credential-lock repair is landed as `f7a88e55d`, and the ignore optimization is landed as `e4182a09a`. The complete ignore control has 396 valid invocations, including 360 measured trials and 36 cache-seeding processes. The [corner matrix](startup-corner-matrix.md) records 2,250 measured process starts across the requested workloads, including explicit error and unqualified outcomes. The investigation is complete, but release qualification is not: the RPC refresh-order discrepancy, cold Rust cost, unsupported low-memory configuration, historical-baseline failures, and broad gate failures remain explicit obligations. No failed trial is treated as a fast startup.
 
-PiG is a Go implementation of [Pi](https://github.com/earendil-works/pi). Pi 0.87.1 is the reference implementation. Michael Kinsy created PiG, which was originally developed at Hewlett Packard Enterprise.
+Ompig is a Go implementation of [Pi](https://github.com/earendil-works/pi). Pi 0.87.1 is the reference implementation. Michael Kinsy created Ompig, which was originally developed at Hewlett Packard Enterprise.
 
 ## Identities and method
 
@@ -19,7 +19,7 @@ The historical 0.2.0 executable comes from `ecdd029f1cf8af7f4cca89aa1266abaf0062
 
 The advisory driver rotates builds within each five-trial cell. Session/native controls use CPUs 64–71. The complete ignore-control and remaining corner batches use CPUs 80–87 while native compilation runs on 64–71. Comparisons within a batch use identical affinity. The deliberate CPU/IO-load experiment waits for the ordinary native timings to finish. Each cold trial has a fresh HOME, agent directory, application cache, and TMPDIR. Warm trials retain only that cell's application state after one unmeasured seeding process. OS page caches and shared compiler dependency caches are not flushed. The host is shared. No timing threshold blocks a test.
 
-Print readiness means exact `42\n` output from the hermetic faux provider. RPC readiness means the successful `get_state` response; the process then completes `get_commands` before EOF. RPC checks verify extension command registration and all 256 prompt and 256 skill commands in the resource fixture. Interactive first-frame timing ends at the rendered model footer, not completion of `session_start`. The internal `interactive-ready` trace remains a separate checkpoint. A first frame can precede a startup deadlock, so successful exit is also required. Pi uses the repository's faux-provider extension; PiG uses its native faux provider. Pi's extra import is included, not subtracted. No worker credentials or settings enter a trial.
+Print readiness means exact `42\n` output from the hermetic faux provider. RPC readiness means the successful `get_state` response; the process then completes `get_commands` before EOF. RPC checks verify extension command registration and all 256 prompt and 256 skill commands in the resource fixture. Interactive first-frame timing ends at the rendered model footer, not completion of `session_start`. The internal `interactive-ready` trace remains a separate checkpoint. A first frame can precede a startup deadlock, so successful exit is also required. Pi uses the repository's faux-provider extension; Ompig uses its native faux provider. Pi's extra import is included, not subtracted. No worker credentials or settings enter a trial.
 
 The 20-package inventory and npm lock come from the exit lane's `packages20.json` and `packages/package-lock.json`. The inventory combines the recovered WSL package names and issue #71 set. These versions were resolved on this host. The original WSL lock is unavailable, so these runs are not a reproduction of the original 18.5 s / 13.2 s versions.
 
@@ -101,7 +101,7 @@ The exit lane's before-lock executable has SHA-256 `9ee8deedeff184c590c8c9bc3112
 | Bounded, joined session-list workers | `internal/codingagent/session_listing.go:132-150` | Caps simultaneous file work and drains workers on cancellation |
 | Streaming session summaries | `internal/codingagent/session_resume.go:244` | Avoids retaining parsed history objects while building picker metadata |
 | Bounded header-only continue discovery | `internal/codingagent/session_resume.go:506-525` | Does not read every transcript body to choose the recent session |
-| Explicit startup lock-wait trace | `cmd/pig/startup_trace.go:70` | Makes cross-process SDK contention diagnosable |
+| Explicit startup lock-wait trace | `cmd/ompig/startup_trace.go:70` | Makes cross-process SDK contention diagnosable |
 
 ## Anti-patterns and ownership
 
@@ -112,7 +112,7 @@ The exit lane's before-lock executable has SHA-256 `9ee8deedeff184c590c8c9bc3112
 | Repeated catalog projection and encoding | `internal/codingagent/extension_model_registry.go`; `coding/extension/host/subprocess/ui_bridge.go` | Go startup lane owns the existing fixes; unchanged here |
 | Repeated resume projection and loading | `coding/session.go`; `coding/runtime.go` | Earlier Go startup lane owns Session reuse/settings/price-binding fixes; unchanged here |
 | Full pinned Node graph materialization and import | `coding/extension/host/subprocess/builder_node.go`; runtime-node sources | Earlier Node/Go startup lanes own the fixes; unchanged here |
-| RPC starts catalog refresh before extension loading | `cmd/pig/rpc_mode.go:278` versus Pi `main.ts:920-928` | Open, reported to the lead; ten unavailable/slow-catalog RPC trials per case observe two requests versus one in Pi |
+| RPC starts catalog refresh before extension loading | `cmd/ompig/rpc_mode.go:278` versus Pi `main.ts:920-928` | Open, reported to the lead; ten unavailable/slow-catalog RPC trials per case observe two requests versus one in Pi |
 | Fresh packed Rust compilation | `coding/extension/host/runtimecell/rust_packed.go:111` | Measured approximately 39 seconds inside build-check; retained as an optimization opportunity, not changed without a separate build-correctness investigation |
 | Unbounded goroutines or quadratic session scans | No additional finding established by this investigation | Session-list workers are bounded; the RPC refresh task above has a separate lifetime obligation |
 
@@ -120,4 +120,4 @@ The exit lane's before-lock executable has SHA-256 `9ee8deedeff184c590c8c9bc3112
 
 Raw outputs, identities, advisory drivers, profiles, red/green logs, phase tables, and frozen binaries are retained in the external `perf-startup-corners` evidence bundle. `manifest.sha256` identifies the final evidence files. The immutable controls are under `binaries/`; accepted final outputs and reproducible fixture builders are under `final/`. The earlier ignore checkpoint and invalid calibration evidence remain separate. See [the complete matrix](startup-corner-matrix.md) for all modes/cache states, phase limitations, failure semantics, and harness corrections.
 
-Known integration gates are not weakened. `make ci-contracts` reports 166 pending/partial hot-path test-mapping blockers. `make ci-drift` reports D78 without `SCRUTINIZED:approved`. Full `go test ./...` fails the existing closure-ledger assertions and reaches the ten-minute extension-conformance package deadline while `TestPackedOrderedToolResults/rust` has run for 21 seconds. That invocation is a failure, not a passing retry. The touched cmd/pig, codingagent, subprocess, resource-discovery, source-discovery, and harness packages pass. Full lint, full vet, Windows touched-package vet, and the startup and model-runtime-store-catalog parity families pass. No timeout, comparator, mapping, or approval is weakened.
+Known integration gates are not weakened. `make ci-contracts` reports 166 pending/partial hot-path test-mapping blockers. `make ci-drift` reports D78 without `SCRUTINIZED:approved`. Full `go test ./...` fails the existing closure-ledger assertions and reaches the ten-minute extension-conformance package deadline while `TestPackedOrderedToolResults/rust` has run for 21 seconds. That invocation is a failure, not a passing retry. The touched cmd/ompig, codingagent, subprocess, resource-discovery, source-discovery, and harness packages pass. Full lint, full vet, Windows touched-package vet, and the startup and model-runtime-store-catalog parity families pass. No timeout, comparator, mapping, or approval is weakened.

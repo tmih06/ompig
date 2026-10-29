@@ -125,7 +125,7 @@ func TestBugLedgerPageListsEveryEntry(t *testing.T) {
 	}
 }
 
-// Fixed-ahead entries are the commitment that PiG's difference from Pi ends when Pi fixes the bug, so each divergence they name must still be recorded.
+// Fixed-ahead entries are the commitment that Ompig's difference from Pi ends when Pi fixes the bug, so each divergence they name must still be recorded.
 func TestBugLedgerDivergencesAreRecorded(t *testing.T) {
 	l, _ := readBugLedger(t)
 	ledger, err := os.ReadFile("../../docs/parity/DIVERGENCES.md")

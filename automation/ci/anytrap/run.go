@@ -46,7 +46,7 @@ func destinationArgument(pkgPath, name string) (int, bool) {
 }
 
 // sdkJSONPath is the extension SDK's copy of encoding/json.
-const sdkJSONPath = "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+const sdkJSONPath = "github.com/tmih06/ompig/extensions/sdk/json"
 
 // callName is the package and function of a decoding call, with the SDK's copy named apart from encoding/json.
 func callName(used types.Object) string {

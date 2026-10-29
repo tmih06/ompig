@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // payloadGen draws random transcripts for the payload oracles: text and image user content, assistant thinking and tool calls of the target model
@@ -289,13 +289,13 @@ func payloadDiff(got, want string) string {
 					r = norm(bm[i])
 				}
 				if l != r {
-					fmt.Fprintf(&out, "\n  %s[%d]:\n   PiG %.500s\n   Pi  %.500s", k, i, l, r)
+					fmt.Fprintf(&out, "\n  %s[%d]:\n   Ompig %.500s\n   Pi  %.500s", k, i, l, r)
 					break
 				}
 			}
 			continue
 		}
-		fmt.Fprintf(&out, "\n  %s:\n   PiG %.300s (present=%v)\n   Pi  %.300s (present=%v)", k, norm(a), aok, norm(b), bok)
+		fmt.Fprintf(&out, "\n  %s:\n   Ompig %.300s (present=%v)\n   Pi  %.300s (present=%v)", k, norm(a), aok, norm(b), bok)
 	}
 	return out.String()
 }

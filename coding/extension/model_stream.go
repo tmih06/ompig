@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ModelStreamRequest carries a resolved API-leaf request and connection-owned

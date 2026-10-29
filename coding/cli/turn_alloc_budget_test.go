@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/profiling"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/profiling"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // runRPCTurns starts the built binary in RPC mode against the faux provider, sends turns prompts one at a time (each waits for agent_settled), closes stdin and returns the process's runtime/metrics at exit.
@@ -23,8 +23,8 @@ func runRPCTurns(ctx context.Context, t *testing.T, binary, home, agentDir strin
 	profileDir := t.TempDir()
 	command := exec.CommandContext(ctx, binary, "--mode", "rpc", "--model", "test-faux/faux-1", "--no-extensions")
 	command.Dir = t.TempDir()
-	command.Env = append(measuredEnvironment(os.Environ()), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir, "PIG_PROFILE=metrics", "PIG_PROFILE_DIR="+profileDir, "GOMAXPROCS=1",
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	command.Env = append(measuredEnvironment(os.Environ()), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_PROFILE=metrics", "OMPIG_PROFILE_DIR="+profileDir, "GOMAXPROCS=1",
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	stdin, err := command.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -58,9 +58,9 @@ func runRPCTurns(ctx context.Context, t *testing.T, binary, home, agentDir strin
 	_ = stdin.Close()
 	_, _ = io.Copy(io.Discard, reader)
 	if err := command.Wait(); err != nil {
-		t.Fatalf("pig rpc: %v", err)
+		t.Fatalf("ompig rpc: %v", err)
 	}
-	files, _ := filepath.Glob(filepath.Join(profileDir, "pig-*-metrics.json"))
+	files, _ := filepath.Glob(filepath.Join(profileDir, "ompig-*-metrics.json"))
 	if len(files) != 1 {
 		t.Fatalf("want one metrics file, got %v", files)
 	}
@@ -83,7 +83,7 @@ const (
 
 func TestExtraTurnAllocationBudget(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	binary := buildPigBinaryForSignalTest(t)
 	ctx := testbudget.Context(t)

@@ -6,8 +6,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The listener runs on the Session executor. Its publications must not wait for that same executor, even when the burst exceeds the bounded raw-event mailbox.

@@ -3,8 +3,8 @@ package ai_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/ai"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The transcript hot path: a tool result and an assistant message encoded as JSON.stringify (a session entry, an RPC event)

@@ -5,7 +5,7 @@ import (
 	"math"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // hashValue is a structural hash of a JSON value: equal values hash equal whatever their object key order or number type.

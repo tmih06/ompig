@@ -7,7 +7,7 @@
 # interactive-mode.ts:1642-1680,1855-1863 renders that warning, including the
 # winner's package provenance and the loser's absolute path (only winners
 # contribute skill SourceInfo). Probe: launch with this fixture as agentDir,
-# no CLI resources, then Ctrl+O at 220x60. Before the fix PiG rejects the
+# no CLI resources, then Ctrl+O at 220x60. Before the fix Ompig rejects the
 # Package as ambiguous; independently the prompts glob omits root/deep files.
 name = "09-startup-package-glob-collisions"
 description = "Package globstars include root and deeply nested prompts, apply overrides, and warn about first-wins skill name collisions."
@@ -20,14 +20,14 @@ tags = ["fast", "hermetic", "tui"]
 driver = "interactive-tmux"
 
 [env]
-pig = ["PIG_OFFLINE=1", "PIG_CODING_AGENT_DIR=testdata/glob-collisions/pig-agent"]
+ompig = ["OMPIG_OFFLINE=1", "OMPIG_CODING_AGENT_DIR=testdata/glob-collisions/ompig-agent"]
 pi = ["PI_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/glob-collisions/pi-agent"]
 override_base_args = true
 
 [tmux]
 width = 220
 height = 60
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "[Skills]"
@@ -39,7 +39,7 @@ wait_contains = ["drop files to attach"]
 
 [assert]
 both_reach_ready = true
-both_contain = ["suite/listed.md", "second/SKILL.md", "/root", "/nested", "/skip-keep", "[Skill conflicts]", '"same" collision:', "✓ git:github.com/pig-parity/glob-collisions (user) second/SKILL.md", "first/SKILL.md (skipped)"]
+both_contain = ["suite/listed.md", "second/SKILL.md", "/root", "/nested", "/skip-keep", "[Skill conflicts]", '"same" collision:', "✓ git:github.com/ompig-parity/glob-collisions (user) second/SKILL.md", "first/SKILL.md (skipped)"]
 both_not_contain = ["excluded", "/skip,", "/.hidden", "ambiguous"]
 escaped_output_equal = true
 runs = 3
@@ -48,6 +48,6 @@ runs = 3
 # Replace only the runner's independently allocated agent-root directory;
 # retain the complete package-relative path, glyphs, whitespace and ANSI.
 [[assert.normalize_replace]]
-pattern = '/[^\s\x1b]*/parity-snap-(?:PIG|PI)_CODING_AGENT_DIR-[0-9]+'
+pattern = '/[^\s\x1b]*/parity-snap-(?:OMPIG|PI)_CODING_AGENT_DIR-[0-9]+'
 with = '<agent>'
 reason = "D2: only the independently allocated agent-root prefix differs. Keep the complete skipped skill path and warning."

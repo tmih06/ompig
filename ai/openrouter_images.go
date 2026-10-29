@@ -133,7 +133,7 @@ func generateOpenRouterImages(ctx context.Context, model ImageModel, imagesCtx I
 		return out
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		// pig divergence (D128): Pi stops at the chat/completions 404 for an image generation model that OpenRouter serves only through /images (pi-mono #10652).
+		// ompig divergence (D128): Pi stops at the chat/completions 404 for an image generation model that OpenRouter serves only through /images (pi-mono #10652).
 		if !dedicated && isOpenRouterImagesAPIOnlyError(resp.StatusCode, data) {
 			return generateOpenRouterImages(ctx, model, imagesCtx, options, out, apiKey, true)
 		}

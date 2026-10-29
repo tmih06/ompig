@@ -3,7 +3,7 @@
 
 package store
 
-import "github.com/MichaelKinsy/PiG/durable/core/history"
+import "github.com/tmih06/ompig/durable/core/history"
 
 // Statement IDs: positions in sqlTable. The texts of Pi's writes are copied from pi-durable main's
 // src/storage/sqlite/storage.ts (applyTableWrite, applyDocumentActions) and migrations.ts; sqlTable_test.go keeps this
@@ -52,7 +52,7 @@ const (
 	stmtDumpSubmissions
 	stmtDumpDocuments
 	stmtDumpRevisions
-	// Live-state load and the reads a core with a synchronous host read (ABI section 4.2, pig.read) issues on demand (lazy.go).
+	// Live-state load and the reads a core with a synchronous host read (ABI section 4.2, ompig.read) issues on demand (lazy.go).
 	stmtDumpLiveTasks
 	stmtDumpLiveSubmissions
 	stmtSubmissionByRequest
@@ -251,7 +251,7 @@ func buildTable() []string {
 		"SELECT count(*) FROM entries WHERE conversation_id = ? AND id >= ? AND id <= ?",
 		"SELECT id, commit_seq, CAST(record AS BLOB) FROM entries WHERE conversation_id = ? AND id >= ? AND id <= ? ORDER BY id DESC LIMIT ?",
 		"SELECT id, conversation_id, kind, status, abort_requested, background, CAST(record AS BLOB) FROM tasks WHERE id < ? ORDER BY id DESC LIMIT "+dumpPageText,
-		// The host's context reads (ABI section 4.2). They look like reads so every host answers them through pig.read, and name
+		// The host's context reads (ABI section 4.2). They look like reads so every host answers them through ompig.read, and name
 		// functions SQLite does not have, so a host that ran one as SQL would fail loudly.
 		TextContextSummary,
 		TextContextMessages,

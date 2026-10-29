@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // RemoteOverlayOptions controls how a remote (subprocess-backed) overlay
@@ -150,7 +150,7 @@ type RemoteOverlayBounds struct {
 // [UIContext.RunRemoteOverlay] so it can push rendered lines into the
 // overlay and close it when the remote producer signals completion.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type RemoteOverlayHandle interface {
 	// UpdateLines replaces the overlay's cached lines and triggers
 	// a TUI render. Safe to call from any goroutine.
@@ -164,7 +164,7 @@ type RemoteOverlayHandle interface {
 // RemoteOverlayHost is the callback surface the bridge provides so the
 // overlay can forward user input back to the remote producer.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type RemoteOverlayHost interface {
 	// OnInput is invoked for every input chunk (a single key event
 	// after [tui.ReadInput] segmentation) while the overlay is
@@ -176,7 +176,7 @@ type RemoteOverlayHost interface {
 // TUI.setFocus sets the focused flag of the component that gains focus and clears it on the one that loses it (tui.ts:602-665), so
 // a custom component that another opens over learns it lost focus, and learns it has it again when that one closes.
 //
-// pig-specific: Pi's component is in-process; a remote component learns its focus through this callback.
+// ompig-specific: Pi's component is in-process; a remote component learns its focus through this callback.
 type RemoteOverlayFocusHost interface {
 	// OnFocus reports a change of the component's focus after it was mounted. Called from the goroutine that delivers its input,
 	// in order with it.
@@ -187,7 +187,7 @@ type RemoteOverlayFocusHost interface {
 // factory the TUI itself (interactive-mode.ts:3008), and the factory or its components may call its showOverlay, hideOverlay and
 // setFocus (tui.ts:598-842); a subprocess factory makes those calls across the process boundary.
 //
-// pig-specific: Pi's factory holds the TUI in process.
+// ompig-specific: Pi's factory holds the TUI in process.
 type RemoteTUI interface {
 	// ShowRemoteOverlay is TUI.showOverlay for a remote component: it mounts a raw overlay with no ui.custom call behind it and
 	// returns once the overlay is on the stack. The handle takes the component's frames and applies OverlayHandle controls

@@ -7,7 +7,7 @@
 # image API dispatch, OpenRouter image generation payload/response handling,
 # OpenAI prompt-cache key clamping, Cloudflare URL placeholder substitution,
 # session resource cleanup registration, diagnostic extraction, and proxy URL
-# resolution. test/parity/testdata/ai-sdk-pig/main.go exercises the matching Go
+# resolution. test/parity/testdata/ai-sdk-ompig/main.go exercises the matching Go
 # API and prints the same normalized JSON object.
 # Re-probed 2026-09-25 against the pinned installed Pi: cloudflare-stream.ts
 # resolveCloudflareModel substitutes only explicit env. With ambient acct/gate
@@ -119,9 +119,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/ai-sdk-pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/ai-sdk-ompig"]
 pi_args = ["node", "./test/parity/testdata/ai-sdk-pi.mjs"]
 
 [cli]

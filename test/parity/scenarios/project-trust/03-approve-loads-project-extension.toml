@@ -1,6 +1,6 @@
 # Behavior family: project-trust
 # group-rationale: serial: the three scenarios compile identical auto-discovered
-# extension sources; concurrent Pig builds contend on the same content cache key.
+# extension sources; concurrent Ompig builds contend on the same content cache key.
 # Surface: --approve/-a explicitly trusts project inputs for this run.
 #
 # Upstream probe (exact Pi 0.83.0, 2026-08-03):
@@ -26,7 +26,7 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 override_base_args = true
 
 [cli]

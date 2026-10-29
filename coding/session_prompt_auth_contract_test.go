@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:1680-1697 — a registered provider's actual auth contract, not a builtin name policy, decides prompt admission.

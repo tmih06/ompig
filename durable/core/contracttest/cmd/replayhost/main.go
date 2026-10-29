@@ -15,7 +15,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest"
+	"github.com/tmih06/ompig/durable/core/contracttest"
 )
 
 func main() {

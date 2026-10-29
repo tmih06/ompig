@@ -26,7 +26,7 @@ import (
 	"golang.org/x/mod/module"
 	"golang.org/x/mod/semver"
 
-	"github.com/MichaelKinsy/PiG/automation/release/modulehash"
+	"github.com/tmih06/ompig/automation/release/modulehash"
 )
 
 type options struct {
@@ -134,16 +134,16 @@ func prepare(root string, opt options) (*plan, error) {
 	if err != nil {
 		return nil, err
 	}
-	re := regexp.MustCompile(`(?m)^const PigVersion = "([^"]+)"$`)
+	re := regexp.MustCompile(`(?m)^const OmpigVersion = "([^"]+)"$`)
 	match := re.FindSubmatch(data)
 	if len(match) != 2 || !semver.IsValid("v"+string(match[1])) {
-		return nil, errors.New("cannot read PigVersion")
+		return nil, errors.New("cannot read OmpigVersion")
 	}
 	current := string(match[1])
 	if semver.Compare(p.version, "v"+current) < 0 {
 		return nil, fmt.Errorf("refusing lower version %s (current %s)", opt.version, current)
 	}
-	p.after[pin] = re.ReplaceAll(data, []byte(`const PigVersion = "`+opt.version+`"`))
+	p.after[pin] = re.ReplaceAll(data, []byte(`const OmpigVersion = "`+opt.version+`"`))
 	if opt.releaseModules {
 		if err := p.updateModules(); err != nil {
 			return nil, err
@@ -152,7 +152,7 @@ func prepare(root string, opt options) (*plan, error) {
 	if err := p.updateSDKVersions(opt.version); err != nil {
 		return nil, err
 	}
-	const standard = "piglets/standard/pig-standard.yaml"
+	const standard = "ompiglets/standard/ompig-standard.yaml"
 	data, err = p.read(standard)
 	if err != nil {
 		return nil, err
@@ -335,7 +335,7 @@ func updateChangelog(data []byte, current string, opt options) ([]byte, error) {
 		return nil, errors.New("selected version already occurs below the newest release")
 	}
 	if opt.renameCurrent && !isTarget && !strings.HasPrefix(heading, "## ["+current+"] - ") {
-		return nil, errors.New("newest CHANGELOG heading does not match current PigVersion")
+		return nil, errors.New("newest CHANGELOG heading does not match current OmpigVersion")
 	}
 	body := text[start:next]
 	tail := text[next:]

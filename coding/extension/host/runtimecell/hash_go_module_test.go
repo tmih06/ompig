@@ -306,7 +306,7 @@ func TestGoPackedCellHashTracksWorkspaceModuleSourceSetOnly(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	write(sdkRoot, "go.mod", "module github.com/MichaelKinsy/PiG/extensions/sdk\n\ngo 1.26\n")
+	write(sdkRoot, "go.mod", "module github.com/tmih06/ompig/extensions/sdk\n\ngo 1.26\n")
 	write(sdkRoot, "sdk.go", "package sdk\n")
 	write(workspace, "go.mod", "module example.com/workspace\n\ngo 1.26\n")
 	write(workspace, "workspace.go", "package workspace\n")

@@ -20,7 +20,7 @@ model = "test-faux/faux-1"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "[Context]"
+ready_pattern_ompig = "[Context]"
 ready_pattern_pi = "[Context]"
 ready_timeout_seconds = 25
 capture_start = "mcp-text-begin"
@@ -41,11 +41,11 @@ settle_seconds = 1
 
 [env]
 override_base_args = true
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/mcp-slow-pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/mcp-slow-ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/mcp-slow-pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../../testdata/mcp-prompt-section.ts"]
+ompig_extensions = ["../../testdata/mcp-prompt-section.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../../testdata/mcp-prompt-section.ts"]
 
 [assert]

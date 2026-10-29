@@ -16,7 +16,7 @@ type openCodeModelCase struct {
 	ID       string `json:"id"`
 }
 
-// The case denominator is the reviewed snapshot of Pi's MODELS, not PiG's catalog. Regenerate from the pinned package with: node test/parity/testdata/generate-zen-models.mjs > ai/testdata/zen-models.json
+// The case denominator is the reviewed snapshot of Pi's MODELS, not Ompig's catalog. Regenerate from the pinned package with: node test/parity/testdata/generate-zen-models.mjs > ai/testdata/zen-models.json
 func upstreamOpenCodeCases(t *testing.T) []openCodeModelCase {
 	t.Helper()
 	data, err := os.ReadFile("testdata/zen-models.json")

@@ -7,7 +7,7 @@ package wordsegmenter
 
 import "sort"
 
-// pig additive (D92): the dictionary engines' character sets stay linked when a Piglet Binary compiles the dictionaries out (cjk.go and sea.go), so engine selection is unchanged.
+// ompig additive (D92): the dictionary engines' character sets stay linked when a Ompiglet Binary compiles the dictionaries out (cjk.go and sea.go), so engine selection is unchanged.
 
 func dictionaryCharacter(r rune) bool {
 	return wordRuleClass(r)&ruleDictionaryCJK != 0

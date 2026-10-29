@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // countingConn counts the Write calls the connection makes, each of which is a

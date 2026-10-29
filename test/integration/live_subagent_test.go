@@ -1,10 +1,10 @@
 //go:build integration && live
 
 // Live subagent functional tests: dispatch real sub-agents via the
-// pig subagent extension and verify they produce actual results.
+// ompig subagent extension and verify they produce actual results.
 //
 // These tests require valid auth and use real LLM calls. They exercise
-// the full pipeline: pig binary → subprocess extension → tool dispatch
+// the full pipeline: ompig binary → subprocess extension → tool dispatch
 // → sub-agent spawn → LLM inference → result collection.
 //
 // Run with:
@@ -22,20 +22,20 @@ import (
 	"time"
 )
 
-// pigInteractiveSession starts pig in tmux with the subagent extension
+// ompigInteractiveSession starts ompig in tmux with the subagent extension
 // and returns a harness-like set of functions.
-type pigSession struct {
+type ompigSession struct {
 	t       *testing.T
 	session string
 	workDir string
 	cleanup func()
 }
 
-func newGopiSession(t *testing.T) *pigSession {
+func newGopiSession(t *testing.T) *ompigSession {
 	t.Helper()
-	pigHome := extIsolatedHome(t)
+	ompigHome := extIsolatedHome(t)
 	subSrc := subagentSourceDir(t)
-	writeTestExtensionSettings(t, pigHome, subSrc)
+	writeTestExtensionSettings(t, ompigHome, subSrc)
 
 	bin := buildBinary(t)
 	session := "live-" + randID()
@@ -50,7 +50,7 @@ func newGopiSession(t *testing.T) *pigSession {
 		t.Fatal(err)
 	}
 
-	cmd := "export PIG_HOME=" + pigHome + " PIG_QUIET_STARTUP=1; cd " + cwd + " && " + bin + " --model github-copilot/gpt-5-mini"
+	cmd := "export OMPIG_HOME=" + ompigHome + " OMPIG_QUIET_STARTUP=1; cd " + cwd + " && " + bin + " --model github-copilot/gpt-5-mini"
 	if err := tmuxCommand("send-keys", "-t", session, "-l", cmd+"\n").Run(); err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func newGopiSession(t *testing.T) *pigSession {
 	for time.Now().Before(deadline) {
 		out, _ := tmuxCommand("capture-pane", "-t", session, "-p").Output()
 		if strings.Contains(string(out), interactiveReadyMarker) && strings.Contains(string(out), "[Extensions]") {
-			return &pigSession{
+			return &ompigSession{
 				t:       t,
 				session: session,
 				workDir: cwd,
@@ -71,11 +71,11 @@ func newGopiSession(t *testing.T) *pigSession {
 	}
 	out, _ := tmuxCommand("capture-pane", "-t", session, "-p").Output()
 	_ = tmuxCommand("kill-session", "-t", session).Run()
-	t.Fatalf("pig failed to start within 20s:\n%s", string(out))
+	t.Fatalf("ompig failed to start within 20s:\n%s", string(out))
 	return nil
 }
 
-func (g *pigSession) send(input string) {
+func (g *ompigSession) send(input string) {
 	g.t.Helper()
 	if err := tmuxCommand("send-keys", "-t", g.session, "-l", input).Run(); err != nil {
 		g.t.Fatal(err)
@@ -86,20 +86,20 @@ func (g *pigSession) send(input string) {
 	}
 }
 
-func (g *pigSession) sendSlash(cmd string) {
+func (g *ompigSession) sendSlash(cmd string) {
 	g.t.Helper()
 	if err := tmuxCommand("send-keys", "-t", g.session, "-l", cmd+"\r").Run(); err != nil {
 		g.t.Fatal(err)
 	}
 }
 
-func (g *pigSession) capture() string {
+func (g *ompigSession) capture() string {
 	g.t.Helper()
 	out, _ := tmuxCommand("capture-pane", "-t", g.session, "-p").Output()
 	return string(out)
 }
 
-func (g *pigSession) waitFor(needle string, timeout time.Duration) (string, bool) {
+func (g *ompigSession) waitFor(needle string, timeout time.Duration) (string, bool) {
 	g.t.Helper()
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
@@ -112,7 +112,7 @@ func (g *pigSession) waitFor(needle string, timeout time.Duration) (string, bool
 	return g.capture(), false
 }
 
-func (g *pigSession) close() {
+func (g *ompigSession) close() {
 	_ = tmuxCommand("send-keys", "-t", g.session, "C-d").Run()
 	time.Sleep(300 * time.Millisecond)
 	g.cleanup()

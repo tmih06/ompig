@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func resolveFixtureWithHome(t *testing.T) (cwd, agentDir string, sm *codingagent.SettingsManager, pm *PackageManager) {
@@ -18,7 +18,7 @@ func resolveFixtureWithHome(t *testing.T) (cwd, agentDir string, sm *codingagent
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	return resolveFixture(t)
 }
 
@@ -215,7 +215,7 @@ func TestResolveInstallsAMissingGitPackageIntoItsConfiguredScope(t *testing.T) {
 		t.Skip("git is not installed")
 	}
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("GIT_CONFIG_NOSYSTEM", "1")
 	remote := t.TempDir()
 	gitConfig := filepath.Join(t.TempDir(), "gitconfig")

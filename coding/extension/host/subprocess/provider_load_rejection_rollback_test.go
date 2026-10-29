@@ -9,9 +9,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pi's model runtime refuses a registration before it stores anything of it (model-runtime.ts registerProvider), so a registration the registry rejects when the queue drains leaves the

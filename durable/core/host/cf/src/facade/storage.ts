@@ -23,7 +23,7 @@ export const openDurableObjectSqliteStorage = (storage: DurableObjectStorage): S
  * through its capsql capture, so the gate sees each statement and commit the host issues.
  */
 const contractStore = async (path: string): Promise<(Store & { close(): void }) | undefined> => {
-  const hook = (globalThis as Record<symbol, { openStore?: (path: string) => Promise<Omit<Store, "counters"> & { close(): void }> } | undefined>)[Symbol.for("pig.contract")]
+  const hook = (globalThis as Record<symbol, { openStore?: (path: string) => Promise<Omit<Store, "counters"> & { close(): void }> } | undefined>)[Symbol.for("ompig.contract")]
   if (!hook?.openStore) return undefined
   return { ...(await hook.openStore(path)), counters: zeroCounters() }
 }

@@ -7,19 +7,19 @@ import (
 	"testing"
 )
 
-// The owner-approved PiG values (docs/parity/DIVERGENCES.md D26, D64, D65).
+// The owner-approved Ompig values (docs/parity/DIVERGENCES.md D26, D64, D65).
 // They are spelled out here so a change to identity.json cannot pass by
 // rewriting both sides.
-func TestIdentityValuesAreThePiGBrand(t *testing.T) {
+func TestIdentityValuesAreTheOmpigBrand(t *testing.T) {
 	want := map[string]string{
-		"AttributionName":     "PiG",
-		"AttributionURL":      "https://github.com/MichaelKinsy/PiG",
+		"AttributionName":     "Ompig",
+		"AttributionURL":      "https://github.com/tmih06/ompig",
 		"AttributionCategory": "cli-agent",
-		"CodexOriginator":     "pig",
-		"XAIReferrer":         "pig",
-		"AgentMarker":         "pig",
-		"UserAgentProduct":    "pig",
-		"HostedOrigin":        "https://pi-in-go.dev",
+		"CodexOriginator":     "ompig",
+		"XAIReferrer":         "ompig",
+		"AgentMarker":         "ompig",
+		"UserAgentProduct":    "ompig",
+		"HostedOrigin":        "https://ompig.dev",
 	}
 	got := map[string]string{
 		"AttributionName":     AttributionName,

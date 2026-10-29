@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ArgumentSchema retains the TypeBox metadata and property order used by Pi's

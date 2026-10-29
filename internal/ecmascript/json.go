@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // CanonicalJSON validates input before applying JSON.parse/stringify semantics, preserving source key order and UTF-16 code units.

@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // resumableSession writes a Session log recorded in cwd with one exchange, so it can be resumed, and returns its path.
@@ -63,7 +63,7 @@ func (p *interactivePig) resume() {
 // Pi interactive-mode.ts:5590-5626 (handleResumeSession) passes createProjectTrustContext(cwd) to runtimeHost.switchSession, so entering a project that has trust-requiring resources and no recorded decision prompts to trust it (agent-session-runtime.ts:219, main.ts:751). A replacement that never prompts resolves the project as untrusted without asking.
 func TestInteractiveResumeIntoAnUntrustedProjectPromptsForTrust(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	p := startInteractivePig(t)
@@ -82,7 +82,7 @@ func TestInteractiveResumeIntoAnUntrustedProjectPromptsForTrust(t *testing.T) {
 // Pi handleResumeSession offers the current directory when the stored one is gone. Declining shows "Resume cancelled" and keeps the Session; accepting resumes and shows "Resumed session in current cwd".
 func TestInteractiveResumeWithAMissingCWDShowsPisStatuses(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	for _, tc := range []struct {
@@ -119,7 +119,7 @@ func TestInteractiveResumeWithAMissingCWDShowsPisStatuses(t *testing.T) {
 // Pi interactive-mode.ts:1962 binds ctx.switchSession to handleResumeSession, so an extension's switch prompts for a missing cwd and shows the same statuses as /resume.
 func TestInteractiveExtensionSwitchSessionWithAMissingCWDPrompts(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	fixture, err := filepath.Abs(filepath.Join("testdata", "session-switch.mjs"))
@@ -167,7 +167,7 @@ func printableTail(data []byte, n int) string {
 // ctx.switchSession into a project with trust-requiring resources prompts for trust too, because Pi binds it to handleResumeSession and its projectTrustContextFactory.
 func TestInteractiveExtensionSwitchSessionIntoAnUntrustedProjectPromptsForTrust(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and extension processes")
+		t.Skip("starts the ompig binary and extension processes")
 	}
 	t.Parallel()
 	fixture, err := filepath.Abs(filepath.Join("testdata", "session-switch.mjs"))

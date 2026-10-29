@@ -4,14 +4,14 @@ Status: spec, agreed between lanes durable-report (renders) and durable-repro (r
 
 ## 0. Preconditions (owner rule)
 
-1. The production PiG Durable core (lanes dcore-*, integrated on the dcore-integrate branch) has passed the CONTRACT gate: `store` and `commit` identity with pi-durable main `da866ada` on the full corpus plus the crash matrix (`docs/plan/durable-core/CONTRACT.md` sections 5.5 and 6), for each build that appears in the deck (TinyGo, Go, native).
+1. The production Ompig Durable core (lanes dcore-*, integrated on the dcore-integrate branch) has passed the CONTRACT gate: `store` and `commit` identity with pi-durable main `da866ada` on the full corpus plus the crash matrix (`docs/plan/durable-core/CONTRACT.md` sections 5.5 and 6), for each build that appears in the deck (TinyGo, Go, native).
 2. The CONTRACT report is committed and has an https link. The gate is `make durable-contract` (`durable/contract/`, pinned to Pi main `da866ada` in `durable/contract/PIN`), run with `--strict` over the reference and every deck build. `meta.contract` is not typed by hand: it comes from that run's `report.json`:
    ```sh
    node contract-record.mjs --corpus durable/contract/corpus.toml --report <out>/report.json --core <C> --url <https link> \
      --build TinyGo=wasm-tinygo:<tinygo module> --build Go=wasm-go:<go module>
    ```
    It refuses unless `pi` and every listed build passed every `ready` row (the crash-matrix rows `H-*` and `X1-live` included), and records the sha256 of each module. Section 2 requires the measured modules to have those sha256 values.
-3. Do not run PiG targets for the deck before 1 and 2 hold. No number from a benchmark-slice prototype is used, in any slide, in any status. `lib/results.mjs` enforces this: it rejects PiG lines without a green contract record, PiG versions other than the gated core, builds the gate did not run, modules whose sha256 differs from the gated one, and the prototype cores `872c81bf5` (wasm-spike, the step 2 `pigwasm-*` targets) and `407c624b7` (durable-perf).
+3. Do not run Ompig targets for the deck before 1 and 2 hold. No number from a benchmark-slice prototype is used, in any slide, in any status. `lib/results.mjs` enforces this: it rejects Ompig lines without a green contract record, Ompig versions other than the gated core, builds the gate did not run, modules whose sha256 differs from the gated one, and the prototype cores `872c81bf5` (wasm-spike, the step 2 `pigwasm-*` targets) and `407c624b7` (durable-perf).
 4. pi-durable main and Tardigrade may be run before then, but the deck uses only the numbers from the one final session.
 
 ## 1. Pins
@@ -20,11 +20,11 @@ Status: spec, agreed between lanes durable-report (renders) and durable-repro (r
 |---|---|
 | host | the bench host, Intel Xeon Platinum 8462Y+, `taskset -c 23` on bun and its workerd children; record `ENV.txt` as in step 1 |
 | CPU gate | durable-bench's gate restricted to CPU 23 and its sibling 87 (`runner/gate-cpus.patch`), `CPU_MAX=0.08`, 1 s window, reading recorded per sample |
-| runner | badlogic/durable-bench `e9abffa` + `runner/gate-cpus.patch` + `runner/pig-targets.patch` (section 2), applied in that order with `patch -p1`; nothing else changed. Commit both patches next to the results with their sha256 |
+| runner | badlogic/durable-bench `e9abffa` + `runner/gate-cpus.patch` + `runner/ompig-targets.patch` (section 2), applied in that order with `patch -p1`; nothing else changed. Commit both patches next to the results with their sha256 |
 | toolchain | node 26.7.0, bun 1.4.0, miniflare 4.20260730.0, compatibility date 2026-07-30, `nodejs_compat`; Go 1.27.1; the TinyGo version the CONTRACT gate used |
 | pi-durable main | pi checkout at `da866ada`, `PI_SOURCE=../pi PI_HEAD_VERSION=da866ada`, built from source by durable-bench's `pi-head` target |
 | Tardigrade | `tardie` 0.44.0 from durable-bench's lockfile |
-| PiG | the gated core commit `C`; modules built from `C` whose sha256 equals that of the modules the CONTRACT gate ran |
+| Ompig | the gated core commit `C`; modules built from `C` whose sha256 equals that of the modules the CONTRACT gate ran |
 
 ## 2. Targets
 
@@ -32,9 +32,9 @@ Status: spec, agreed between lanes durable-report (renders) and durable-repro (r
 |---|---|---|---|
 | `pi-head` | `pi-head` | reference | pi-durable main with its own DO SQLite adapter |
 | `tardie` | `tardie` | contender | as published in durable-bench |
-| `pig-tinygo` | `pig-tinygo` | headline | production core, TinyGo build |
-| `pig-go` | `pig-go` | detail | production core, Go build |
-| `pig-native` | `pig-native` | detail | production core, native build (native process with its own SQLite, not a Durable Object; its lines get host `native`) |
+| `ompig-tinygo` | `ompig-tinygo` | headline | production core, TinyGo build |
+| `ompig-go` | `ompig-go` | detail | production core, Go build |
+| `ompig-native` | `ompig-native` | detail | production core, native build (native process with its own SQLite, not a Durable Object; its lines get host `native`) |
 | `ts-control` | `ts-control` | control | the gate's vendored TypeScript core (`impls/ts-core`), labelled "design control" on the builds slide only; optional |
 | `empty` | `empty` | floor | `runner/floor.patch`: the same Worker, request and Durable Object path with no agent (`src/empty.ts`), measured in every round at every size, never seeded |
 
@@ -48,15 +48,15 @@ Status: spec, agreed between lanes durable-report (renders) and durable-repro (r
 
 `runner/floor.patch` (sha256 `48ec978c93c93a2c7d8e57f842029f743b645f2d438843018b9f03781cfa68d2`) applies after `cloudflare.patch` with `patch -p1`. It adds `src/empty.ts` and the `empty` target, which stages an empty directory instead of a fixture.
 
-`runner/pig-targets.patch` adds the targets `pig-tinygo` and `pig-go`. Their entry, `src/pig.ts`, installs the compiled core with the facade's `useCore` and re-exports durable-bench's `src/pi-head.ts` unchanged: the same Durable Object, scripted model, lookup tool and settings. The build resolves `@earendil-works/pi-durable` (and `/storage/sqlite/cloudflare`) to the core's pi-durable-compatible facade, `durable/core/host/cf/src/facade/index.ts`, and pi-ai and chord, for durable-bench's code and the facade alike, to the same Pi sources (`PI_SOURCE`) that pi-head is built from. One chord context and one faux provider are in the bundle, and they are pi-head's: the npm pi-ai 1.0.4 that the facade's package installs has a different faux provider (its `serializeContext` joins the whole transcript on every model call, about 3 MB at 3,500 turns), so resolving to it would charge the PiG rows for model work that pi-head does not do. The build refuses any module loaded from an npm copy of a Pi package (`node_modules/@earendil-works/`) for these targets. Each target's bundle sits in `dist/<target>/` beside its own copy of the core, loaded by Miniflare as a `CompiledWasm` module. Set `PIG_SOURCE` to a PiG checkout at the gated core commit `C` (with `make -C durable/core build-tinygo build-go` run and `npm ci` done in `durable/core/host/cf`) and `PIG_VERSION=C`. The modules in `$PIG_SOURCE/durable/core/host/cf/dist/` must have the sha256 values of `meta.contract.artifacts`.
+`runner/ompig-targets.patch` adds the targets `ompig-tinygo` and `ompig-go`. Their entry, `src/ompig.ts`, installs the compiled core with the facade's `useCore` and re-exports durable-bench's `src/pi-head.ts` unchanged: the same Durable Object, scripted model, lookup tool and settings. The build resolves `@earendil-works/pi-durable` (and `/storage/sqlite/cloudflare`) to the core's pi-durable-compatible facade, `durable/core/host/cf/src/facade/index.ts`, and pi-ai and chord, for durable-bench's code and the facade alike, to the same Pi sources (`PI_SOURCE`) that pi-head is built from. One chord context and one faux provider are in the bundle, and they are pi-head's: the npm pi-ai 1.0.4 that the facade's package installs has a different faux provider (its `serializeContext` joins the whole transcript on every model call, about 3 MB at 3,500 turns), so resolving to it would charge the Ompig rows for model work that pi-head does not do. The build refuses any module loaded from an npm copy of a Pi package (`node_modules/@earendil-works/`) for these targets. Each target's bundle sits in `dist/<target>/` beside its own copy of the core, loaded by Miniflare as a `CompiledWasm` module. Set `OMPIG_SOURCE` to a Ompig checkout at the gated core commit `C` (with `make -C durable/core build-tinygo build-go` run and `npm ci` done in `durable/core/host/cf`) and `OMPIG_VERSION=C`. The modules in `$OMPIG_SOURCE/durable/core/host/cf/dist/` must have the sha256 values of `meta.contract.artifacts`.
 
-`runner/pig-tool-output.patch` (sha256 `0ad8134797158c6208bfe7838b467d3a46d974cbec5c9a133fb18ed9a7d45f1d`) applies after `floor.patch` with `patch -p1`. Pi 42a renamed the text of a tool's execution result from `content` to `output`. A PiG core at or after that rename reads `output`; pi-durable main `da866ada` and earlier cores read `content`. The patch defines `BENCH_TOOL_FIELD` per bundle: `bench/targets.ts` reads it for a PiG target from the core's `durable/core/turn/tool.go` (the field its tool-result decoder reads) and fails when it finds neither; `pi-head` gets `content`. The lookup tool of `src/pi-head.ts` returns its text in that one field, so every target encodes and stores the same tool result and none pays for a second copy (the facade passes the whole result to the core). The seed fingerprints check it. On `7b3e22127b` (reads `output`) the unpatched tool seeds fingerprint `f351105b892f4ff6` at 3,500 turns and the patched tool seeds `0a8c8e4b0d9a0794`. On a core that reads `content`, the tool returns `{ content }` as it does unpatched.
+`runner/ompig-tool-output.patch` (sha256 `0ad8134797158c6208bfe7838b467d3a46d974cbec5c9a133fb18ed9a7d45f1d`) applies after `floor.patch` with `patch -p1`. Pi 42a renamed the text of a tool's execution result from `content` to `output`. A Ompig core at or after that rename reads `output`; pi-durable main `da866ada` and earlier cores read `content`. The patch defines `BENCH_TOOL_FIELD` per bundle: `bench/targets.ts` reads it for a Ompig target from the core's `durable/core/turn/tool.go` (the field its tool-result decoder reads) and fails when it finds neither; `pi-head` gets `content`. The lookup tool of `src/pi-head.ts` returns its text in that one field, so every target encodes and stores the same tool result and none pays for a second copy (the facade passes the whole result to the core). The seed fingerprints check it. On `7b3e22127b` (reads `output`) the unpatched tool seeds fingerprint `f351105b892f4ff6` at 3,500 turns and the patched tool seeds `0a8c8e4b0d9a0794`. On a core that reads `content`, the tool returns `{ content }` as it does unpatched.
 
-Rules for the PiG targets:
+Rules for the Ompig targets:
 
 - `version` in durable-bench's `TARGETS` is the core commit `C` for all three builds. The design control keeps its own version.
 - The model is durable-bench's own scripted model in JS, running in the host on the context the core returns (step 2's `-js` variant), with pi-ai's faux provider and the same lookup tool. This is the headline variant and the only one in the deck. The core's internal stub is the bake-off's W2c, which is never compared with baselines.
-- The sidecar mode is the production default. Each PiG target seeds its own fixtures (section 3), so the sidecar is written while seeding: its time counts in "building the history" and its bytes count in the database size.
+- The sidecar mode is the production default. Each Ompig target seeds its own fixtures (section 3), so the sidecar is written while seeding: its time counts in "building the history" and its bytes count in the database size.
 - Record each module's raw bytes, gzip bytes and sha256 in `meta.targets[k].artifact`.
 
 ## 3. Session
@@ -68,7 +68,7 @@ One session, all targets interleaved. Run it in one `tmux` session on the bench 
 1. Quiet check and `ENV.txt` (step 1 procedure). Record the start time.
 2. **Seed, timed, from zero.** durable-bench's `bench/seed.ts` reports, for each size, the time since the previous size of the same invocation. A `50 250 1000 3500` ladder therefore reports the 1,000 → 3,500 increment as "3,500". This includes step 1's `seedMs` values (pi-head 39.8 s, tardie 299.6 s at 3,500), which are increments, not full builds; do not quote them as building time. The final session seeds each size in its own invocation:
    ```sh
-   i=0; for n in 50 250 1000 3500; do i=$((i+1)); for t in $(rotate-by $i pi-head tardie pig-tinygo pig-go); do
+   i=0; for n in 50 250 1000 3500; do i=$((i+1)); for t in $(rotate-by $i pi-head tardie ompig-tinygo ompig-go); do
      taskset -c 23 bun bench/seed.ts $t $n          # fixtures/$t-$n/ and fixtures/$t-$n.json (seedMs, fingerprint, bytes)
      cp fixtures/$t-$n.json seeds/$t-$n-run1.json
    done; done
@@ -99,28 +99,28 @@ durable-bench runs targets in workerd, so it cannot run the native build. The ga
 
 The native build has no "building the history" number: the deck shows it on the builds slide only.
 
-Set `meta.targets["pig-native"].model` to the model it ran (for example "Go port of durable-bench's full-walk scripted model, in process"). A non-placeholder file refuses a native target without it, and the builds slide prints it: the native numbers then show the cost of WebAssembly and of the JS model together, not WebAssembly alone.
+Set `meta.targets["ompig-native"].model` to the model it ran (for example "Go port of durable-bench's full-walk scripted model, in process"). A non-placeholder file refuses a native target without it, and the builds slide prints it: the native numbers then show the cost of WebAssembly and of the JS model together, not WebAssembly alone.
 
 ## 4. Realistic workloads (durable-repro step 4)
 
-Use the variant agents of `bench/durable/fixtures/pi-head-x.ts` (durable-bench-pig `b3af4572e`) and the same variant for the PiG targets:
+Use the variant agents of `bench/durable/fixtures/pi-head-x.ts` (durable-bench-ompig `b3af4572e`) and the same variant for the Ompig targets:
 
 | workload | bench targets | sizes | what it adds |
 |---|---|---|---|
-| `compact-big` | `pi-head-compact-big`, `pig-tinygo-compact-big` | 50, 250, 1,000, 3,500 | compaction on (131,072-token window) and 4-64 KiB tool results: the headline realistic slide |
-| `big` | `pi-head-big`, `pig-tinygo-big` | same | multi-KB tool results, no compaction |
-| `compact` | `pi-head-compact`, `pig-tinygo-compact` | same | compaction on, standard tool results |
+| `compact-big` | `pi-head-compact-big`, `ompig-tinygo-compact-big` | 50, 250, 1,000, 3,500 | compaction on (131,072-token window) and 4-64 KiB tool results: the headline realistic slide |
+| `big` | `pi-head-big`, `ompig-tinygo-big` | same | multi-KB tool results, no compaction |
+| `compact` | `pi-head-compact`, `ompig-tinygo-compact` | same | compaction on, standard tool results |
 
 - Keep the fixture metadata on pi-head's run-session lines (`fixture.meta`: entries, entry bytes, compactions, active entries). `assemble.mjs` copies it into `meta.workloads.<w>.fixtures`, and the slides print entries, transcript bytes and compactions under every size.
 - Each target seeds its own variant histories from zero, as in section 3, step 2. The fingerprints must equal the fixture table in `bench/durable/fixtures/README.md` (also in `lib/results.mjs`). If the variant agent changes, update both together.
 - Compaction stays on in the measured turns, as seeded, so a measured turn can compact. Both systems write the same rows (CONTRACT gate), so they do the same compaction work.
 - Tardigrade has no equivalent stores. It is left out of these slides, and each slide says so.
 - **Summaries: realistic case and stress case** (lead ruling 2026-10-11 04:15Z). In these workloads the scripted model answers pi-durable's summarization request with text (durable-repro's deterministic `SUMMARY`; `durable/contract/lib/workload.mjs` and the native bench's `isSummarization` do the same). Each compaction therefore succeeds once, and this is the realistic-summary case. A driver whose model answers the summarization request with a tool call makes every compaction fail with "Summarization attempted to call a tool". Pi then retries, and so does the core, faithfully, which re-summarizes the whole history about 7 times per turn at 3,500 turns (research R5, on the O2 driver's store). Numbers from such a driver are labelled **stress (failed-summary retry loop)** wherever they appear, and never stand in for the realistic case.
-- `pig-go-*` and `pig-native-*` variants are optional. Each adds 48 runs to the session.
+- `ompig-go-*` and `ompig-native-*` variants are optional. Each adds 48 runs to the session.
 
 ## 4a. Where TinyGo runs (owner question: are we at any disadvantage to pi-durable on a Durable Object?)
 
-`runner/where-it-runs.patch` (sha256 `b356996802c99815d103356a504ad2f8430f663e77eaed09f487682b7d90bc55`) applies after the two section 2 patches with `patch -p1`. It adds a probe that is compiled in only when `BENCH_PROBE` is set, into a separate `dist/probe-<mode>/` bundle, so the latency runs of section 3 are unchanged. pi-head and the PiG targets run the same Durable Object class; the probe measures both the same way:
+`runner/where-it-runs.patch` (sha256 `b356996802c99815d103356a504ad2f8430f663e77eaed09f487682b7d90bc55`) applies after the two section 2 patches with `patch -p1`. It adds a probe that is compiled in only when `BENCH_PROBE` is set, into a separate `dist/probe-<mode>/` bundle, so the latency runs of section 3 are unchanged. pi-head and the Ompig targets run the same Durable Object class; the probe measures both the same way:
 
 | metric | how | limit or billing rule (Cloudflare docs, read 2026-10-08) |
 |---|---|---|
@@ -139,18 +139,18 @@ Report order (lead ruling 2026-10-11 04:15Z): a Durable Object is billed by wall
 `runner/run-session.sh` runs these after its latency rounds (`PROBE_ROUNDS`, default 3; `PROBE_SIZES`, default "50 3500"), in the same session and with the same pins, rotating targets per round:
 
 ```sh
-for t in pi-head pig-tinygo pig-go; do bun bench/size.ts $t; done                       # results/size.jsonl
-for r in 0 1 2; do for n in 50 3500; do for t in $(rotate-by $r pi-head pig-tinygo pig-go); do
+for t in pi-head ompig-tinygo ompig-go; do bun bench/size.ts $t; done                       # results/size.jsonl
+for r in 0 1 2; do for n in 50 3500; do for t in $(rotate-by $r pi-head ompig-tinygo ompig-go); do
   BENCH_PROBE=count SAMPLES=1 taskset -c 23 bun bench/probe.ts $t $n                     # results/probe.jsonl
   BENCH_PROBE=time  SAMPLES=1 taskset -c 23 bun bench/probe.ts $t $n
 done; done; done
 ```
 
-On Cloudflare (section 5) the same probe bundle reports counts, rows and Wasm memory through `/probe`; CPU time comes from Cloudflare's invocation records (`wrangler tail`), and wall time from the client. The slide flags every metric where PiG Durable is worse than pi-durable.
+On Cloudflare (section 5) the same probe bundle reports counts, rows and Wasm memory through `/probe`; CPU time comes from Cloudflare's invocation records (`wrangler tail`), and wall time from the client. The slide flags every metric where Ompig Durable is worse than pi-durable.
 
 ## 4b. Tracking one row between sessions
 
-`runner/track-row.sh <core commit>` re-measures PiG Durable (TinyGo) at 3,500 turns on one core commit. It builds the TinyGo module and seeds both PiG TinyGo and pi-durable main from zero, with the fingerprints checked. It runs 12 rotated rounds of PiG TinyGo, pi-durable main and the empty-target floor, then one count probe each of PiG TinyGo and pi-durable main with retained memory. It reports as the deck does (section 2a, Rule A). Every PiG metric has its pi-durable value from the same run: warm and cold p50 and p95, CPU per warm turn, cold-start CPU, retained memory, seed time, rows read and written. pi-durable's own numbers drift on a shared host (warm p50 267-390 ms across runs on 2026-10-08), so each PiG metric is also judged against the rolling median of the pi values of the last 5 runs, this one included (`HISTORY`). `disagree` lists the metrics where the two verdicts differ on win or lose, and the one-line `summary` says so. Verdicts use the deck's rule: a loss when PiG is more than 3% worse, a win from 1.3×. It builds each commit with the TinyGo release that commit's `automation/dev/toolchains.lock` pins (`durable/core/budget/tinygo-install.sh`), records that release in `ENV.txt` and as `tinygo` in the JSON line, and labels the deltas when `BASELINE` names another release (`crossToolchain`). These numbers are a private tracker between dcore milestones, not deck numbers.
+`runner/track-row.sh <core commit>` re-measures Ompig Durable (TinyGo) at 3,500 turns on one core commit. It builds the TinyGo module and seeds both Ompig TinyGo and pi-durable main from zero, with the fingerprints checked. It runs 12 rotated rounds of Ompig TinyGo, pi-durable main and the empty-target floor, then one count probe each of Ompig TinyGo and pi-durable main with retained memory. It reports as the deck does (section 2a, Rule A). Every Ompig metric has its pi-durable value from the same run: warm and cold p50 and p95, CPU per warm turn, cold-start CPU, retained memory, seed time, rows read and written. pi-durable's own numbers drift on a shared host (warm p50 267-390 ms across runs on 2026-10-08), so each Ompig metric is also judged against the rolling median of the pi values of the last 5 runs, this one included (`HISTORY`). `disagree` lists the metrics where the two verdicts differ on win or lose, and the one-line `summary` says so. Verdicts use the deck's rule: a loss when Ompig is more than 3% worse, a win from 1.3×. It builds each commit with the TinyGo release that commit's `automation/dev/toolchains.lock` pins (`durable/core/budget/tinygo-install.sh`), records that release in `ENV.txt` and as `tinygo` in the JSON line, and labels the deltas when `BASELINE` names another release (`crossToolchain`). These numbers are a private tracker between dcore milestones, not deck numbers.
 
 ## 5. Cloudflare (only if the owner's account is ready)
 
@@ -160,13 +160,13 @@ This depends on RISKS-AND-QUESTIONS Q1. Without it, the deck states "Local worke
 
 ```sh
 # Upload the bundles Miniflare runs, byte for byte (no_bundle; wrangler 4.116.0 ships the pinned workerd).
-for t in pi-head pig-tinygo; do
+for t in pi-head ompig-tinygo; do
   bun bench/cloud.ts deploy $t                         # Worker durable-bench-<t>; URL + sha256 -> results/cloudflare-deploy.jsonl
   BENCH_PROBE=count bun bench/cloud.ts deploy $t       # Worker durable-bench-<t>-probe-count
 done
 # Latency: one object per size and sample, seeded through /seed (fingerprint checked against the local fixture),
 # then measured after the eviction window (IDLE_MS, default 150 s).
-for r in 0 1 2; do for t in $(rotate-by $r pi-head pig-tinygo); do
+for r in 0 1 2; do for t in $(rotate-by $r pi-head ompig-tinygo); do
   SAMPLES=1 bun bench/cloud.ts run $t <url of durable-bench-$t> 50 3500                                    # results/cloudflare.jsonl
   BENCH_PROBE=count SAMPLES=1 bun bench/cloud.ts run $t <url of durable-bench-$t-probe-count> 50 3500      # results/cloudflare-probe.jsonl
 done; done
@@ -181,9 +181,9 @@ done; done
 
 ## 5a. PiHarness bake-off (performance only)
 
-`runner/piharness-targets.patch` (sha256 `b29321563a17ea9b4dd3935156b611af73e8863d8d6e8b0016ce433291045eb3`) applies after `floor.patch` with `patch -p1`. It adds the targets `piharness-pi` and `piharness-pig`, which run pi-head's agent, scripted model, tool and settings inside the Cloudflare Agents SDK's `PiHarness` (`agents` 0.28.0, `agents/harness/pi`, beta) and its `Lifecycle`. Both targets use the SDK's Durable Object SQLite adapter's table names (every Pi table and index renamed with the `pi_` prefix) and its wake (one Lifecycle job per session, rescheduled every 30 s while tasks run). Their `/stats` refuses a store with a table outside the `pi_` prefix (other than the SDK's `cf_` tables), so a seed or sample that ran outside the adapter's names fails. A turn is `harness.submit` and `harness.wait` with the turn id as the operation id, then the root conversation's `waitForIdle`, as in pi-head. `piharness-pi` resolves pi-durable, pi-ai and chord to the Pi sources (`PI_SOURCE`), as pi-head does. `piharness-pig` resolves them as `pig-tinygo` does, and resolves `@earendil-works/pi-durable/storage/sqlite`, which `PiHarness` opens its store with, to `src/pig-sqlite.ts`: the PiG store over the same adapter.
+`runner/piharness-targets.patch` (sha256 `b29321563a17ea9b4dd3935156b611af73e8863d8d6e8b0016ce433291045eb3`) applies after `floor.patch` with `patch -p1`. It adds the targets `piharness-pi` and `piharness-ompig`, which run pi-head's agent, scripted model, tool and settings inside the Cloudflare Agents SDK's `PiHarness` (`agents` 0.28.0, `agents/harness/pi`, beta) and its `Lifecycle`. Both targets use the SDK's Durable Object SQLite adapter's table names (every Pi table and index renamed with the `pi_` prefix) and its wake (one Lifecycle job per session, rescheduled every 30 s while tasks run). Their `/stats` refuses a store with a table outside the `pi_` prefix (other than the SDK's `cf_` tables), so a seed or sample that ran outside the adapter's names fails. A turn is `harness.submit` and `harness.wait` with the turn id as the operation id, then the root conversation's `waitForIdle`, as in pi-head. `piharness-pi` resolves pi-durable, pi-ai and chord to the Pi sources (`PI_SOURCE`), as pi-head does. `piharness-ompig` resolves them as `ompig-tinygo` does, and resolves `@earendil-works/pi-durable/storage/sqlite`, which `PiHarness` opens its store with, to `src/ompig-sqlite.ts`: the Ompig store over the same adapter.
 
-The PiG core runs synchronous SQL, and the SDK's adapter is asynchronous. The bench therefore forks the adapter at build time (esbuild `onLoad`, refused unless `agents/dist/harness/pi/index.js` has agents 0.28.0's sha256 `5f2b329b2c5b4da97ad0e61e68267a02a5a5683b12895eabfbdfbbee705e9d73`): `DurableObjectSqliteDatabase` gains `syncStorage()`, a `ctx.storage`-shaped handle whose statements pass through the adapter's own `Prefixer`. Pi's statements take the unchanged path. The adapter runs a statement at once when no transaction is open, so it has fewer microtask hops than Pi's own `SerialQueue` adapter. PiG's statements skip the adapter's `OperationQueue` and its bind and row conversions, as `pig-tinygo` skips Pi's `SerialQueue` adapter. These rows compare performance only; ordering parity is judged on Pi's own adapter (section 2), not here.
+The Ompig core runs synchronous SQL, and the SDK's adapter is asynchronous. The bench therefore forks the adapter at build time (esbuild `onLoad`, refused unless `agents/dist/harness/pi/index.js` has agents 0.28.0's sha256 `5f2b329b2c5b4da97ad0e61e68267a02a5a5683b12895eabfbdfbbee705e9d73`): `DurableObjectSqliteDatabase` gains `syncStorage()`, a `ctx.storage`-shaped handle whose statements pass through the adapter's own `Prefixer`. Pi's statements take the unchanged path. The adapter runs a statement at once when no transaction is open, so it has fewer microtask hops than Pi's own `SerialQueue` adapter. Ompig's statements skip the adapter's `OperationQueue` and its bind and row conversions, as `ompig-tinygo` skips Pi's `SerialQueue` adapter. These rows compare performance only; ordering parity is judged on Pi's own adapter (section 2), not here.
 
 durable-bench's `bun.lock` does not list `agents`. Install it and the one dependency the bundle takes from it, `nanoid`, from their npm tarballs, whose sha1 values are npm's `dist.shasum`:
 
@@ -194,7 +194,7 @@ for p in agents-0.28.0 nanoid-5.1.16; do d=node_modules/${p%-*}; mkdir -p $d && 
 
 The bundle imports nothing else from agents' dependencies. Without `agents` installed, the other targets still build and run.
 
-Before PiG can be measured here, its core must reopen a store under the `pi_` prefix. PiG detects its schema with a probe that names `durable_schema` and `pig_sidecar` inside string literals, which the `Prefixer` does not rewrite. The first open succeeds; every reopen re-runs the schema and fails (`table pi_durable_metadata already exists`). Every latency sample is a reopen, so `piharness-pig` has no row until the core detects its schema by identifiers, as Pi does.
+Before Ompig can be measured here, its core must reopen a store under the `pi_` prefix. Ompig detects its schema with a probe that names `durable_schema` and `ompig_sidecar` inside string literals, which the `Prefixer` does not rewrite. The first open succeeds; every reopen re-runs the schema and fails (`table pi_durable_metadata already exists`). Every latency sample is a reopen, so `piharness-ompig` has no row until the core detects its schema by identifiers, as Pi does.
 
 ## 6. Assemble and render
 
@@ -207,7 +207,7 @@ node assemble.mjs --meta /tmp/session-meta.json --out data/results.jsonl \
 ./render.sh                                                    # data/results.jsonl -> final/png, final/tables.md
 ```
 
-A final file with PiG lines must hold probe samples (count mode for PiG TinyGo and pi-head at every size, time mode for PiG TinyGo at 50 and 3,500 turns) and both upload sizes; the "Where TinyGo runs" slide flags every metric where PiG loses. `--samples` takes durable-bench `bench/run.ts` lines or durable-repro `run-session.ts` lines; `--seeds` takes durable-bench fixture JSON files or durable-repro `seed-time.ts` lines. `assemble.mjs` writes nothing if a gate fails. It records the sha256 of every input in `meta.sources`. The committed `data/results.jsonl` is the one source of every slide. `final/tables.md` gives the rule, the floor, n, p50, p95, max and a bootstrap 95% interval of the p50 for every cell.
+A final file with Ompig lines must hold probe samples (count mode for Ompig TinyGo and pi-head at every size, time mode for Ompig TinyGo at 50 and 3,500 turns) and both upload sizes; the "Where TinyGo runs" slide flags every metric where Ompig loses. `--samples` takes durable-bench `bench/run.ts` lines or durable-repro `run-session.ts` lines; `--seeds` takes durable-bench fixture JSON files or durable-repro `seed-time.ts` lines. `assemble.mjs` writes nothing if a gate fails. It records the sha256 of every input in `meta.sources`. The committed `data/results.jsonl` is the one source of every slide. `final/tables.md` gives the rule, the floor, n, p50, p95, max and a bootstrap 95% interval of the p50 for every cell.
 
 Before review, check `final/tables.md` by hand:
 

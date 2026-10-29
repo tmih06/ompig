@@ -8,7 +8,7 @@ The lane imports `0728db573`, `4d6d6f980`, and `ff88e7b79` individually from `st
 
 | Requested item | Disposition and evidence |
 |---|---|
-| `_pigPromptSelectedTools` in all four SDKs | Imported. `TestPromptSelectedToolsMutationsAcrossSDKs` exercises native Go, fused Go, and isolated/packed Go, Node, Python, and Rust. It checks replacement, append, empty lists, ordered chaining, awaited completion, handler-error retention, mixed arrays, and null rejection. |
+| `_ompigPromptSelectedTools` in all four SDKs | Imported. `TestPromptSelectedToolsMutationsAcrossSDKs` exercises native Go, fused Go, and isolated/packed Go, Node, Python, and Rust. It checks replacement, append, empty lists, ordered chaining, awaited completion, handler-error retention, mixed arrays, and null rejection. |
 | Non-breaking native Go shape | Fixed. `BeforeAgentStartEvent.SystemPromptOptions` remains a value. `extension.BeforeAgentStartOptions(ctx)` returns the shared per-run pointer. Existing collection edits still work; collection replacements use the accessor. `TestBeforeAgentStartSelectionCanBeRepaired` includes value-typed event construction. |
 | Edited tools in the idle prompt/getters | Fixed for the tested Session and interactive paths. Selecting the run loadout no longer rebuilds the base prompt. Session getters distinguish an explicit Agent override from replayed transcript state. The live loadout remains active, but the idle prompt returns to the base options. |
 | Duplicate tools | Fixed at admission, not at `setActiveTools`. Pi's direct setter preserves duplicates; `_preparePromptAndToolLoadout` removes them in first-seen order. Session and interactive regression inputs include a duplicate and an unknown name. |
@@ -33,7 +33,7 @@ The reference is Pi 0.87.1.
 - `packages/coding-agent/src/core/agent-session.ts:1673-1691,1747-1760` validates model/auth and rejects invalid prompt construction before `_runAgentPrompt` and its settlement event.
 - `packages/coding-agent/src/core/agent-session.ts:1934-1960` seeds custom-message runs directly through `_runAgentPrompt`.
 
-`TestSelectedToolsPiContract` executes the installed pinned Pi Runner and `AgentSession.prompt` methods. It replaces only the Provider-run sink. The exact observations include first-seen dedupe, mixed-array filtering, null rejection without a run, later-handler repair, retained-object reassignment semantics, and both live getters. The latter two observations expose the unresolved Pig cases rather than proving Pig parity.
+`TestSelectedToolsPiContract` executes the installed pinned Pi Runner and `AgentSession.prompt` methods. It replaces only the Provider-run sink. The exact observations include first-seen dedupe, mixed-array filtering, null rejection without a run, later-handler repair, retained-object reassignment semantics, and both live getters. The latter two observations expose the unresolved Ompig cases rather than proving Ompig parity.
 
 ## Red and green evidence
 
@@ -85,10 +85,10 @@ go tool pprof -top -alloc_space /tmp/selected.mem
 
 The full diff is re-read against the cited upstream source. Keep these review obligations open:
 
-1. Do not approve PR-4-1 closure while Rust reassignment differs. The Pi oracle proves the required result; Pig does not yet meet it.
-2. Untyped values beyond null and mixed arrays are not closed. Pi treats a deleted property as `undefined`, while the current transport turns a missing selected-tools field into null. A string can reach JavaScript iterable semantics; Pig currently rejects non-arrays with a generic array error. These are follow-up requirements, not approved divergences.
+1. Do not approve PR-4-1 closure while Rust reassignment differs. The Pi oracle proves the required result; Ompig does not yet meet it.
+2. Untyped values beyond null and mixed arrays are not closed. Pi treats a deleted property as `undefined`, while the current transport turns a missing selected-tools field into null. A string can reach JavaScript iterable semantics; Ompig currently rejects non-arrays with a generic array error. These are follow-up requirements, not approved divergences.
 3. The inherited `ValidatePromptModelAuth` guard exempts an injected Provider not known to the registry or `modelRuntimeRequiresAuth`. Pi checks configured/checkAuth for every selected model. The imported commit preserves that existing Go embedding path; the registered-provider tests do not close the exemption.
 4. Interactive still projects the rendered per-run prompt rather than recording its custom section deltas. This is the pre-existing partial matrix item, not a completed persistence port.
 5. The generation gate and the Xvfb-dependent test require coordinator-owned dependency work. Do not report those commands green.
 
-No `native-proof/` file, SDK checksum line, coverage roll-up, or generated interface inventory is included. No tmux server is started. No command writes to `~/.pig`.
+No `native-proof/` file, SDK checksum line, coverage roll-up, or generated interface inventory is included. No tmux server is started. No command writes to `~/.ompig`.

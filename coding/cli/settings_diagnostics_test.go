@@ -24,15 +24,15 @@ func TestPrintModeReportsInvalidSettingsOnce(t *testing.T) {
 	cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-extensions", "--no-session", "--print", "TUI_LIVE_STREAM")
 	cmd.Dir = t.TempDir()
 	cmd.Env = append(os.Environ(),
-		"PIG_HOME="+t.TempDir(),
-		"PIG_CODING_AGENT_DIR="+agentDir,
-		"PIG_TEST_FAUX=1",
-		"PIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_HOME="+t.TempDir(),
+		"OMPIG_CODING_AGENT_DIR="+agentDir,
+		"OMPIG_TEST_FAUX=1",
+		"OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 	)
 	var stderr strings.Builder
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("pig --print: %v\nstderr:\n%s", err, stderr.String())
+		t.Fatalf("ompig --print: %v\nstderr:\n%s", err, stderr.String())
 	}
 	want := "Warning: Invalid settings file " + settingsPath + ": "
 	if got := strings.Count(stderr.String(), want); got != 1 {

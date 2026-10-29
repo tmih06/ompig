@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // settings.defaultTools with only +name/-name entries changes the built-in default selection: upstream getDefaultTools
@@ -21,7 +21,7 @@ func TestRPCDefaultToolsModifiersSelectInitialTools(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(`{"defaultTools":["+grep","-edit"]}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
 	p.send(`{"id":"prompt","type":"prompt","message":"hello"}`)
 	p.await("settled prompt", func(record rpcRecord) bool { return record["type"] == "agent_settled" })
 	p.send(`{"id":"sent","type":"get_messages"}`)
@@ -54,9 +54,9 @@ func TestCLIDefaultToolsModifiersSelectInitialTools(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(`{"defaultTools":["+grep","-edit"]}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	flags := parseArgs([]string{"--model", "test-faux/faux-1", "--print"})
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
 	builder := &cliRuntimeBuilder{

@@ -49,11 +49,11 @@ var versionWireNames = map[string]struct{}{
 }
 
 func main() {
-	root := flag.String("root", ".", "Pig repository root")
+	root := flag.String("root", ".", "Ompig repository root")
 	manifestPath := flag.String("manifest", "test/parity/format-versions.toml", "reviewed version-field manifest")
-	markerRoots := flag.String("marker-roots", ".", "comma-separated roots scanned for removed Pig format markers")
+	markerRoots := flag.String("marker-roots", ".", "comma-separated roots scanned for removed Ompig format markers")
 	generate := flag.Bool("generate", false, "print a pending manifest for current candidates")
-	strict := flag.Bool("strict", false, "reject tracked Pig-owned format discriminators")
+	strict := flag.Bool("strict", false, "reject tracked Ompig-owned format discriminators")
 	flag.Parse()
 
 	candidates, err := scanCandidates(*root)
@@ -85,18 +85,18 @@ func main() {
 	for _, field := range reviewed.Fields {
 		counts[field.Classification]++
 	}
-	fmt.Printf("format-version inventory: clean (%d fields: %d Pig-owned format, %d release/content, %d upstream, %d external)\n",
-		len(reviewed.Fields), counts["pig-format"], counts["release-content"], counts["upstream"], counts["external"])
+	fmt.Printf("format-version inventory: clean (%d fields: %d Ompig-owned format, %d release/content, %d upstream, %d external)\n",
+		len(reviewed.Fields), counts["ompig-format"], counts["release-content"], counts["upstream"], counts["external"])
 }
 
 func scanRemovedMarkers(root string, roots []string) ([]string, error) {
 	markers := []string{
-		"pig.dev/" + "v1",
-		"piglet-" + "v1.json",
+		"ompig.dev/" + "v1",
+		"ompiglet-" + "v1.json",
 		`"schema` + `Version": 1`,
 		`"schema_` + `version": 1`,
 		"schema_" + "version = 1",
-		"dev.pig.builder.protocol=" + "1",
+		"dev.ompig.builder.protocol=" + "1",
 		"protocol-" + "v1",
 		"record-" + "v1",
 		"schema-" + "v1",
@@ -136,13 +136,13 @@ func scanRemovedMarkers(root string, roots []string) ([]string, error) {
 			}
 			for _, marker := range markers {
 				if strings.Contains(text, marker) {
-					problems = append(problems, filepath.ToSlash(relative)+": contains removed Pig format marker "+strconv.Quote(marker))
+					problems = append(problems, filepath.ToSlash(relative)+": contains removed Ompig format marker "+strconv.Quote(marker))
 				}
 			}
 			if strings.HasSuffix(entry.Name(), ".yaml") || strings.HasSuffix(entry.Name(), ".yml") || strings.HasSuffix(entry.Name(), ".md") {
 				for line := range strings.SplitSeq(text, "\n") {
 					if strings.TrimSpace(line) == "version: 1" {
-						problems = append(problems, filepath.ToSlash(relative)+`: contains removed Piglet format marker "version: 1"`)
+						problems = append(problems, filepath.ToSlash(relative)+`: contains removed Ompiglet format marker "version: 1"`)
 						break
 					}
 				}
@@ -330,7 +330,7 @@ func validate(candidates []candidate, reviewed manifest, strict bool) []string {
 	seen := make(map[string]struct{}, len(reviewed.Fields))
 	var problems []string
 	previous := ""
-	allowed := map[string]struct{}{"pig-format": {}, "release-content": {}, "upstream": {}, "external": {}}
+	allowed := map[string]struct{}{"ompig-format": {}, "release-content": {}, "upstream": {}, "external": {}}
 	for _, field := range reviewed.Fields {
 		if _, duplicate := seen[field.ID]; duplicate {
 			problems = append(problems, "duplicate disposition "+field.ID)
@@ -355,8 +355,8 @@ func validate(candidates []candidate, reviewed manifest, strict bool) []string {
 		if strings.TrimSpace(field.Rationale) == "" {
 			problems = append(problems, field.ID+" has no rationale")
 		}
-		if strict && field.Classification == "pig-format" {
-			problems = append(problems, field.ID+" remains a Pig-owned format discriminator")
+		if strict && field.Classification == "ompig-format" {
+			problems = append(problems, field.ID+" remains a Ompig-owned format discriminator")
 		}
 	}
 	for _, candidate := range candidates {

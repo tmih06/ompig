@@ -10,12 +10,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	sandbox "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/toolsearch"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	sandbox "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/toolsearch"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 func utf16Units(s string) []uint16 { return jsstring.ToUTF16(s) }

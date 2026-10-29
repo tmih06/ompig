@@ -11,8 +11,8 @@ args = ["--model", "test-faux/faux-1", "--no-session", "-p", "/native-probe {{TE
 timeout_seconds = 30
 artifact_path = "{{TEMP}}/native.json"
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["../testdata/extension-native-provider.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["../testdata/extension-native-provider.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../testdata/extension-native-provider.mjs"]
 [assert]
 exit_code = 0

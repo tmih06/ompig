@@ -113,7 +113,7 @@
 		return value === undefined ? undefined : stringify(value);
 	}
 
-	// pig divergence (D145): an Error's name and message are not enumerable, so JSON.stringify writes {}. Output and
+	// ompig divergence (D145): an Error's name and message are not enumerable, so JSON.stringify writes {}. Output and
 	// returned values keep them, followed by the Error's own enumerable fields that JSON.stringify writes (Pi #10650).
 	// A value whose prototype, name or message cannot be read is left to JSON.stringify, which writes what Pi writes.
 	function errorReplacer(key, value) {

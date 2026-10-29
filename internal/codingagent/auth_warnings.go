@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 const anthropicSubscriptionAuthWarning = "Anthropic subscription auth is active. " +

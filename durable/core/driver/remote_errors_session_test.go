@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // pi: packages/durable/src/errors.ts (42a3497d): a caller matches StorageRequestError and SessionFailed with instanceof; a caller of the driver matches the same Go types the in-process Session returns.

@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_python
+//go:build !ompig_strip_extension_sdk_python
 
 package pigsdk
 
@@ -391,7 +391,7 @@ func TestStagingLeavesAnotherBuildsStagingTrees(t *testing.T) {
 	}
 }
 
-// The prune that follows a startup stage reads no byte counts, so it must not stat every file of every cached extension build: a cache of large builds made the first start after an upgrade take seconds. pig reload prints the bytes it dropped, so Sync still sizes the entries.
+// The prune that follows a startup stage reads no byte counts, so it must not stat every file of every cached extension build: a cache of large builds made the first start after an upgrade take seconds. ompig reload prints the bytes it dropped, so Sync still sizes the entries.
 func TestPruneAfterAStartupStageDoesNotSizeCachedBuilds(t *testing.T) {
 	root := t.TempDir()
 	if _, _, err := Sync(root, false); err != nil {
@@ -435,7 +435,7 @@ func TestPruneAfterAStartupStageDoesNotSizeCachedBuilds(t *testing.T) {
 	if report.TotalBytes < 8*added {
 		t.Errorf("Sync report = %d bytes, want the cached build's %d bytes counted", report.TotalBytes, 8*added)
 	}
-	// pig reload --dry-run prints the megabytes Prune would drop, so Prune sizes the entries too.
+	// ompig reload --dry-run prints the megabytes Prune would drop, so Prune sizes the entries too.
 	report, err = Prune(root, false, true)
 	if err != nil {
 		t.Fatal(err)

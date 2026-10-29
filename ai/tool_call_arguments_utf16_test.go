@@ -3,7 +3,7 @@ package ai
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Pi's parseToolCallArguments (packages/ai/src/utils/json-parse.ts:106-119) embeds V8's JSON.parse message, which names the

@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/test/sdk-skills.test.ts through the production subprocess loader. The child session owns its resources; the enclosing host must neither substitute its catalog nor rediscover a supplied empty loader.
@@ -19,7 +19,7 @@ func TestUpstreamSDKSkillsSubprocess(t *testing.T) {
 			t.Run(isolation+"/"+scenario, func(t *testing.T) {
 				root := t.TempDir()
 				t.Setenv("HOME", filepath.Join(root, "home"))
-				t.Setenv("PIG_HOME", filepath.Join(root, "home", ".pig"))
+				t.Setenv("OMPIG_HOME", filepath.Join(root, "home", ".ompig"))
 				childDir := filepath.Join(root, "child")
 				writeResourceLoaderFixture(t, filepath.Join(childDir, "skills", "test-skill", "SKILL.md"), "---\nname: test-skill\ndescription: A test skill for SDK tests.\n---\n\n# Test Skill\n\nThis is a test skill.\n")
 				cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")

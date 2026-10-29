@@ -10,13 +10,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
-// DispositionPlan is the deterministic, grouped worklist the Pig Porter emits
+// DispositionPlan is the deterministic, grouped worklist the Ompig Porter emits
 // for the state-mapping acceptance ledger. It projects the upstream semantic
 // delta down to the changes that are material (a real structural change) and
-// land on a file Pig ports (PORT_MAP ✅/🟡), then clusters them by shape-change
+// land on a file Ompig ports (PORT_MAP ✅/🟡), then clusters them by shape-change
 // theme so a reviewer dispositions dozens of groups instead of thousands of raw
 // interface IDs.
 //

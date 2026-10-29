@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// PiG's own tests for RpcClient members that upstream's rpc.test.ts and rpc-client tests never call directly. Each
-// drives the real `pig --mode rpc` subprocess on the hermetic test-faux provider and observes the effect through a
+// Ompig's own tests for RpcClient members that upstream's rpc.test.ts and rpc-client tests never call directly. Each
+// drives the real `ompig --mode rpc` subprocess on the hermetic test-faux provider and observes the effect through a
 // second command, as upstream's rpc.test.ts does for the commands it covers.
 
 func TestRpcClientSetModesAndAutoRetryAreVisibleInState(t *testing.T) {

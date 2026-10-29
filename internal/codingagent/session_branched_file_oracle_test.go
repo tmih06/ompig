@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // SessionManager.createBranchedSession (session-manager.ts:1632-1730) against Session.CreateBranchedSession on seeded random session trees with labels, label removals, compactions whose firstKeptEntryId names a label, model changes and custom entries: the branched file holds the root-to-leaf path without labels (re-chained parentIds, compaction firstKeptEntryId rewritten to the entry a label stood for), then one fresh label entry per labeled target on the path in label-map order. The ids of the new label entries are random, so they are renamed L1, L2, ... in file order before comparing.

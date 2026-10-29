@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pathRow is three strings built from separators, drive letters, UNC and device roots, Windows reserved device names ("CON:", "COM1:",

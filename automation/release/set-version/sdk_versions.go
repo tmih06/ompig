@@ -9,12 +9,12 @@ import (
 	"regexp"
 )
 
-// The Python package and the TypeScript declarations publish at the PiG release version. The Rust crate does not: Pig resolves an un-pathed `pig-sdk`
+// The Python package and the TypeScript declarations publish at the Ompig release version. The Rust crate does not: Ompig resolves an un-pathed `ompig-sdk`
 // requirement to the staged SDK through a crates-io patch, Cargo applies a patch only when the patched version satisfies the requirement, and every
 // scaffolded extension requires "0.1.0" (coding/cli/extension_init_command.go rustCargoTemplate). Advancing the crate past 0.1.x would stop those
 // extensions from building. The Go SDK is a nested module versioned by its tag; --release-modules pins its requirers.
 var (
-	pyprojectVer    = regexp.MustCompile(`(?m)^(\[project\]\r?\nname = "pig-sdk"\r?\nversion = )"[^"]+"`)
+	pyprojectVer    = regexp.MustCompile(`(?m)^(\[project\]\r?\nname = "ompig-sdk"\r?\nversion = )"[^"]+"`)
 	packageJSONVer  = regexp.MustCompile(`(?m)^(  "version": )"[^"]+"`)
 	packageLockVers = regexp.MustCompile(`(?m)^((?:  | {6})"version": )"[^"]+"`)
 )

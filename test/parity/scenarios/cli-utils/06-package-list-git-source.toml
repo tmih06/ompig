@@ -9,7 +9,7 @@
 #       git:github.com/test/example (filtered)
 #   exit: 0
 #
-#   PIG_HOME=testdata/git-list-home PIG_CODING_AGENT_DIR=testdata/git-list-home/agent pig package list
+#   OMPIG_HOME=testdata/git-list-home OMPIG_CODING_AGENT_DIR=testdata/git-list-home/agent ompig package list
 #   output:
 #     User packages:
 #       git:github.com/test/example (filtered)
@@ -17,7 +17,7 @@
 #
 # This exercises git.ts (git URL parsing via parseGitPackageSource) and
 # package-manager.ts (list command with Filtered() display). A faithfulness
-# bug found in this loop: pig's Filtered() was field-based (Extensions!=nil)
+# bug found in this loop: ompig's Filtered() was field-based (Extensions!=nil)
 # while upstream is type-based (typeof pkg === "object"). Fixed by adding
 # WasObject tracking in UnmarshalJSON.
 
@@ -33,11 +33,11 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_HOME=testdata/git-list-home", "PI_CODING_AGENT_DIR=testdata/git-list-home/agent", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_HOME=testdata/git-list-home", "PIG_CODING_AGENT_DIR=testdata/git-list-home/agent"]
+ompig = ["OMPIG_HOME=testdata/git-list-home", "OMPIG_CODING_AGENT_DIR=testdata/git-list-home/agent"]
 override_base_args = true
 
 [cli]
-pig_args = ["package", "list"]
+ompig_args = ["package", "list"]
 pi_args = ["list"]
 timeout_seconds = 10
 # Outside the checkout: its tracked .agents/skills would make `pi list` run the

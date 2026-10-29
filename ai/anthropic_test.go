@@ -1431,7 +1431,7 @@ func TestAnthropicStreamProviderScopedCacheRetention(t *testing.T) {
 // TestAnthropicStream_D37_RetriesOnStaleThinkingSignature is the regression
 // guard for the D37 thinking-signature recovery. When the provider rejects a
 // replayed thinking-block signature (a stale signature the backend no longer
-// accepts: observed live on github-copilot claude after rewinds/aging), pig
+// accepts: observed live on github-copilot claude after rewinds/aging), ompig
 // must retry once with thinking signatures stripped rather than surfacing a
 // hard error that wedges the session. The retry must preserve the reasoning
 // text as a plain text block and drop only the signature.
@@ -1541,7 +1541,7 @@ func TestIsThinkingSignatureError(t *testing.T) {
 // TestAnthConvertMessages_ToolResultIsErrorAlwaysEmitted pins that a tool_result
 // block always serializes is_error (upstream anthropic-messages.ts:1105 emits
 // `is_error: msg.isError` unconditionally), while other block types never carry
-// it. pig previously dropped is_error:false via omitempty on a shared struct.
+// it. ompig previously dropped is_error:false via omitempty on a shared struct.
 func TestAnthConvertMessages_ToolResultIsErrorAlwaysEmitted(t *testing.T) {
 	messages := []Message{ToolResultMessage{
 		ToolCallID: "call_1", IsError: false,

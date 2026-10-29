@@ -11,11 +11,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 // narrowNoBreakSpace is the character macOS uses before AM/PM in

@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:436-455 runPromptMessages and runContinuation pass `this.streamFunction` to runAgentLoop once, when the run starts. A streamFunction assigned while that run is in flight (here from inside a tool) is not seen by the run's later requests; the next run uses it.

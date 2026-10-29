@@ -9,9 +9,9 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // resumeThinkingMode persists messages to a session file, reloads the file
@@ -123,7 +123,7 @@ func TestInteractiveModeThinkingTogglePreservesPartialBashOutputUpstream(t *test
 
 // Upstream renderInitialMessages/rebuildChatFromMessages render each assistant
 // message through AssistantMessageComponent, which reads thinking from the
-// persisted content blocks. Pig's runtime-only AssistantMessage.Thinking is
+// persisted content blocks. Ompig's runtime-only AssistantMessage.Thinking is
 // not serialized, so a rebuild must not depend on it.
 func TestInteractiveMode_ResumeRendersPersistedThinking(t *testing.T) {
 	m := resumeThinkingMode(t, false,

@@ -34,7 +34,7 @@ TypeBox's native conversion is not the plain-schema fallback. For example, nativ
 
 The stock Session path is `coding/session.go` → `agent/tool_execution.go` → `ai/validate.go`. The old implementation passed the model's raw JSON to jsonschema and returned only an error, so it could not deliver converted values to execution.
 
-The pre-fix `tools/13-print-read-argument-coercion` pair sent `{path:"parity-read-target.txt", offset:"2", limit:null, extra:true}`. Pi printed `line two` and `line three`. PiG exited 1 with `jsonschema validation failed`, reporting that `/limit` was null and `/offset` was a string. The initial unit oracle also rejected these inputs on the old implementation.
+The pre-fix `tools/13-print-read-argument-coercion` pair sent `{path:"parity-read-target.txt", offset:"2", limit:null, extra:true}`. Pi printed `line two` and `line three`. Ompig exited 1 with `jsonschema validation failed`, reporting that `/limit` was null and `/offset` was a string. The initial unit oracle also rejected these inputs on the old implementation.
 
 Disabling the three pre-validation steps in the compiling Go implementation fails the upstream primitive, optional-null, and nullable-union tests, `TestToolArgumentCoercionAcrossSDKs`, and both new paired scenarios. Restoring the steps passes them. A separate red probe found that treating all maps as identical loses a coerced root union candidate; the regression now checks JavaScript object identity rather than map type. Another red probe protects literal backslashes in the original-arguments error text; JSON stringification no longer rewrites a literal `\\u003c` into an invalid escape.
 
@@ -46,7 +46,7 @@ The previous `providers-faux-streaming/05-print-faux-validation-reject` scenario
 
 `TestProvidersPreserveNoncanonicalToolArguments` exercises the production decoders with a numeric string split across streamed JSON fragments, a null optional field, and an extra boolean field. It also tests a Responses final argument snapshot that completes a partial delta.
 
-| Provider path | Pi source | PiG path and observation |
+| Provider path | Pi source | Ompig path and observation |
 |---|---|---|
 | OpenAI Chat, OpenRouter, Ollama/OpenAI-compatible local endpoints, Copilot Chat | `packages/ai/src/api/openai-completions.ts:650` | `ai/openai.go` → `ai/stream_builder.go`: parse the argument string; preserve inner string/null values |
 | OpenAI Responses, Copilot Responses | `packages/ai/src/api/openai-responses-shared.ts:657-714` | `ai/openai_responses.go` → `ai/stream_builder.go`: parse deltas and final snapshots; preserve inner string/null values |

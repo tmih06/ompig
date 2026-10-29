@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func captureMarkdownRender(t *testing.T, rows, cols int, src string, caps tui.TerminalCapabilities) (*bytes.Buffer, func()) {

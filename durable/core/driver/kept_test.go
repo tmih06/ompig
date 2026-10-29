@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/payload"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable/core/abi/payload"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // The delta form keeps each request's message list (a whole decoded conversation). A run of model calls on a long history

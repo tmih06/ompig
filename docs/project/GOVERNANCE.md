@@ -4,22 +4,22 @@ SPDX-License-Identifier: MIT
 
 # Governance
 
-PiG is an independent open-source project. This document defines project decisions and maintainer responsibilities.
+Ompig is an independent open-source project. This document defines project decisions and maintainer responsibilities.
 
 ## Project philosophy
 
-PiG exists to extend the Pi ecosystem, not to fragment it. Pi is the reference implementation.
+Ompig exists to extend the Pi ecosystem, not to fragment it. Pi is the reference implementation.
 
-PiG aims to:
+Ompig aims to:
 
 - preserve observable compatibility with the pinned Pi release;
 - minimize unnecessary divergence;
 - follow Pi's design principles where they apply to Go;
 - document every intentional user-visible or interoperability difference;
-- keep Stock PiG product-neutral; and
+- keep Stock Ompig product-neutral; and
 - share generally useful findings with the broader ecosystem when the contribution route permits it.
 
-A Go implementation detail is not a reason to change observable behavior. A product integration belongs in an extension or explicitly selected Piglet unless it establishes a generic public contract.
+A Go implementation detail is not a reason to change observable behavior. A product integration belongs in an extension or explicitly selected Ompiglet unless it establishes a generic public contract.
 
 ## Roles
 
@@ -39,13 +39,13 @@ Maintainers:
 
 ## Core committee
 
-The core committee is PiG's creator and its maintainers, as listed in [`docs/project/MAINTAINERS.md`](MAINTAINERS.md). The committee sets project direction and scope. Each committee member has the maintainer responsibilities in this document. [`docs/project/MAINTAINERS.md`](MAINTAINERS.md) names the release authority and the security-response owner.
+The core committee is Ompig's creator and its maintainers, as listed in [`docs/project/MAINTAINERS.md`](MAINTAINERS.md). The committee sets project direction and scope. Each committee member has the maintainer responsibilities in this document. [`docs/project/MAINTAINERS.md`](MAINTAINERS.md) names the release authority and the security-response owner.
 
 ## Decisions
 
 Use a pull request for a source, policy, governance, or release-process change. Record the decision and rationale in the pull request. A maintainer must approve the change before merge.
 
-PiG follows observable Pi behavior by default. Record an intentional user-visible or interoperability difference in [`docs/parity/DIVERGENCES.md`](../parity/DIVERGENCES.md). Apply the evidence requirements in [`AGENTS.md`](../../AGENTS.md).
+Ompig follows observable Pi behavior by default. Record an intentional user-visible or interoperability difference in [`docs/parity/DIVERGENCES.md`](../parity/DIVERGENCES.md). Apply the evidence requirements in [`AGENTS.md`](../../AGENTS.md).
 
 A governance change requires explicit approval from an active maintainer.
 

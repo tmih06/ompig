@@ -1,4 +1,4 @@
-// Command durableperf runs the durable-bench workload (github.com/clavia-labs/durable-bench) on PiG's Go Durable over
+// Command durableperf runs the durable-bench workload (github.com/clavia-labs/durable-bench) on Ompig's Go Durable over
 // SQLite. A scripted faux model calls a lookup tool; historical turns repeat a one-tool, one-tool, zero-tool pattern;
 // the measured turns are ten eight-tool-call turns on a copy of a seeded store.
 //
@@ -31,11 +31,11 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 const (
@@ -747,7 +747,7 @@ func sample(args []string) error {
 		return err
 	}
 	line := result{
-		Target: "go", Variant: modelVariant, Provider: providerKind, Version: "pig", Turns: *turns, Sample: *index, OpenMs: millis(openedIn), Open: opening, SQL: sqlCount, Turn: out, OpenCPU: openCPU, TurnCPU: turnCPU,
+		Target: "go", Variant: modelVariant, Provider: providerKind, Version: "ompig", Turns: *turns, Sample: *index, OpenMs: millis(openedIn), Open: opening, SQL: sqlCount, Turn: out, OpenCPU: openCPU, TurnCPU: turnCPU,
 		RSS: current, PeakRSS: peak, CPU: cpu, Bytes: fileSize(work), Tables: counts, Finger: finger,
 		Goroutns: goroutines, AllocMB: float64(memAfter.TotalAlloc-memBefore.TotalAlloc) / 1e6,
 		Mallocs: memAfter.Mallocs - memBefore.Mallocs, GCs: memAfter.NumGC - memBefore.NumGC, Procs: runtime.GOMAXPROCS(0),

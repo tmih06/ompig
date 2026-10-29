@@ -69,7 +69,7 @@ gates = [
   { ratchet = "tui.hljs_language_first_use.bytes" },
   { ratchet = "tui.hljs_autodetect_load.allocs" },
   { ratchet = "tui.hljs_autodetect_load.bytes" },
-  { missing = "start-to-first-frame time on the cluster with the exact-CV gate (no k8sbench profile for regular PiG)", route = "k8s-bench" },
+  { missing = "start-to-first-frame time on the cluster with the exact-CV gate (no k8sbench profile for regular Ompig)", route = "k8s-bench" },
 ]
 
 [[metric]]
@@ -136,18 +136,18 @@ gates = [
 ]
 
 [[metric]]
-id = "binary.pig"
+id = "binary.ompig"
 area = "startup"
-title = "Stock pig binary size, stripped, per release platform"
+title = "Stock ompig binary size, stripped, per release platform"
 impact = 2
 owner = "go-native-perf"
 target = "under 40 MB"
 basis = "The embedded Node runtime archive is about 9.3 MB (automation/perf/README.md); a Rust build of the remaining code with static tables and no reflection metadata would be a fraction of the Go text and rodata."
 gates = [
-  { ratchet = "binary.pig.linux_amd64.bytes" },
-  { ratchet = "binary.pig.linux_arm64.bytes" },
-  { ratchet = "binary.pig.darwin_arm64.bytes" },
-  { ratchet = "binary.pig.windows_amd64.bytes" },
+  { ratchet = "binary.ompig.linux_amd64.bytes" },
+  { ratchet = "binary.ompig.linux_arm64.bytes" },
+  { ratchet = "binary.ompig.darwin_arm64.bytes" },
+  { ratchet = "binary.ompig.windows_amd64.bytes" },
   { test = "coding/extension/host/subprocess:TestNodeRuntimeArchiveSizeBudget" },
 ]
 
@@ -172,17 +172,17 @@ gates = [
 ]
 
 [[metric]]
-id = "piglet.binary"
+id = "ompiglet.binary"
 area = "startup"
-title = "Piglet Binary size and start (stripped and Standard Piglets)"
+title = "Ompiglet Binary size and start (stripped and Standard Ompiglets)"
 impact = 3
-owner = "piglets-pigpen"
-target = "a stripped Piglet Binary under the stock binary's size; start allocations under the stock start's"
+owner = "ompiglets-pigpen"
+target = "a stripped Ompiglet Binary under the stock binary's size; start allocations under the stock start's"
 basis = "A strip list removes code, so its binary and start should be strictly smaller than stock."
 gates = [
   { test = "coding/cli:TestStripLeakGate" },
-  { missing = "size and start-allocation ceilings per Piglet Binary (stock, stripped, full)", route = "piglets-pigpen" },
-  { missing = "Piglet Binary build time and cache reuse counts", route = "piglets-pigpen" },
+  { missing = "size and start-allocation ceilings per Ompiglet Binary (stock, stripped, full)", route = "ompiglets-pigpen" },
+  { missing = "Ompiglet Binary build time and cache reuse counts", route = "ompiglets-pigpen" },
 ]
 
 # ---------------------------------------------------------------- streaming and input
@@ -259,7 +259,7 @@ gates = [
 [[metric]]
 id = "row.lw_vs_bolt"
 area = "streaming"
-title = "The LW rows against Pi-Bolt 0.8.5: large write, long answer, interactive, long session (CPU, pig over Pi-Bolt), and the peak RSS of the headless and interactive rows"
+title = "The LW rows against Pi-Bolt 0.8.5: large write, long answer, interactive, long session (CPU, ompig over Pi-Bolt), and the peak RSS of the headless and interactive rows"
 impact = 5
 owner = "lw-guards"
 target = "large write at most 2x Pi-Bolt's CPU after wave 3 (0.2 s against 0.1 s at 200 KB); interactive at most 1.5x; long session at most 0.8x"
@@ -280,7 +280,7 @@ gates = [
 [[metric]]
 id = "process.print_tools"
 area = "streaming"
-title = "pig -p with four read tool calls on 47-239 KB files (Pi-Bolt's headless scenario): allocations, GC cycles, goroutines started and auth.json stats per run"
+title = "ompig -p with four read tool calls on 47-239 KB files (Pi-Bolt's headless scenario): allocations, GC cycles, goroutines started and auth.json stats per run"
 impact = 5
 owner = "lw-pfgates"
 target = "at most Pi-Bolt's CPU on the headless row; no auth.json stat per tool turn beyond Pi's"
@@ -403,7 +403,7 @@ title = "One RPC turn's extension dispatches (before_agent_start and turn_end ov
 impact = 4
 owner = "perf-max"
 target = "at most 1,330 / 3,010 / 8,560 allocations at K = 1/3/10 and 805 allocations per extension (the ratchet ceilings)"
-basis = "A fused Piglet's extensions run in the pig process (D31). Pi hands its in-process handlers the event objects themselves, so what a fused member pays to receive its events is the host's projection and the SDK's decode of each event."
+basis = "A fused Ompiglet's extensions run in the ompig process (D31). Pi hands its in-process handlers the event objects themselves, so what a fused member pays to receive its events is the host's projection and the SDK's decode of each event."
 gates = [
   { test = "coding/extension/host/subprocess:TestFusedDispatchAllocations" },
   { ratchet = "fused.dispatch_k1.allocs" },
@@ -555,7 +555,7 @@ title = "Memory at ready (RSS and PSS, rpi's metric) beside peak RSS: interactiv
 impact = 4
 owner = "go-native-perf"
 target = "RSS at ready under 15 MB interactive and under 12 MB RPC; peak at most a fifth above ready"
-basis = "rpi, a Rust port of Pi, self-reports 12.0 MiB RSS at ready (Windows 11, its author's benchmark): a different machine and OS, so the target stands until the same-machine run of the comparison protocol replaces it. The ratchet gates anonymous memory at ready (the heap, stacks and written data pig itself holds), by the owner's decision: RSS and PSS also count every page of the pig binary the kernel has in its page cache, which varied from 38 to 42 MB of an RPC start's 42-48 MB RSS on one idle machine while the anonymous 3.8-3.9 MB did not, so a ceiling on them failed with no change to pig. RSS, PSS and the peak RSS are recorded beside it, not gated."
+basis = "rpi, a Rust port of Pi, self-reports 12.0 MiB RSS at ready (Windows 11, its author's benchmark): a different machine and OS, so the target stands until the same-machine run of the comparison protocol replaces it. The ratchet gates anonymous memory at ready (the heap, stacks and written data ompig itself holds), by the owner's decision: RSS and PSS also count every page of the ompig binary the kernel has in its page cache, which varied from 38 to 42 MB of an RPC start's 42-48 MB RSS on one idle machine while the anonymous 3.8-3.9 MB did not, so a ceiling on them failed with no change to ompig. RSS, PSS and the peak RSS are recorded beside it, not gated."
 gates = [
   { ratchet = "process.interactive_first_frame.anon_bytes_at_ready" },
   { measured = "process.interactive_first_frame.rss_bytes_at_ready" },
@@ -578,7 +578,7 @@ title = "Retained memory on Pi-Bolt's memory rows: live heap after the long row'
 impact = 4
 owner = "go-native-perf"
 target = "live heap bounded by the context: the long row's heap less its last request body near Pi-Bolt's, which keeps only the messages; the tmux row at idle under Pi-Bolt's 22-26 MB"
-basis = "research/memory-vs-bolt/REPORT.md section 0: on Linux PiG's live heap is 59-63 MB against Pi-Bolt's 25-30 MB on the 75-prompt row, the difference being the session records kept with --no-session (29.6 MB), the request splice cache's quoted copies (16-17 MB with distinct contents) and TUI caches (8.5 MB); the context itself (tool text) is what both runtimes must hold."
+basis = "research/memory-vs-bolt/REPORT.md section 0: on Linux Ompig's live heap is 59-63 MB against Pi-Bolt's 25-30 MB on the 75-prompt row, the difference being the session records kept with --no-session (29.6 MB), the request splice cache's quoted copies (16-17 MB with distinct contents) and TUI caches (8.5 MB); the context itself (tool text) is what both runtimes must hold."
 gates = [
   { ratchet = "process.mem_long25.heap_live_bytes" },
   { ratchet = "process.mem_long.heap_live_minus_context_bytes" },
@@ -595,11 +595,11 @@ title = "Startup endpoints, split: --version exec to exit, spawn to first answer
 impact = 5
 owner = "xlang-bench (requested)"
 target = "under 10 ms on every startup endpoint, measured on the same machine as every compared harness"
-basis = "pi_agent_rust publishes only --version p95 of 5 to 7 ms and --help of 12 to 15 ms; rpi self-reports 17.7 ms cold start. A Go runtime starts in a few milliseconds, so 10 ms leaves the rest for PiG's own work. The published figures come from other machines, so only a same-machine run compares them."
+basis = "pi_agent_rust publishes only --version p95 of 5 to 7 ms and --help of 12 to 15 ms; rpi self-reports 17.7 ms cold start. A Go runtime starts in a few milliseconds, so 10 ms leaves the rest for Ompig's own work. The published figures come from other machines, so only a same-machine run compares them."
 gates = [
   { ratchet = "process.rpc_startup.allocs" },
   { ratchet = "process.interactive_first_frame.allocs" },
-  { missing = "the four startup endpoints, same machine, PiG against pi_agent_rust, rpi, Pi 1.3.0 and Codex CLI, under the comparison protocol", route = "xlang-bench (requested)" },
+  { missing = "the four startup endpoints, same machine, Ompig against pi_agent_rust, rpi, Pi 1.3.0 and Codex CLI, under the comparison protocol", route = "xlang-bench (requested)" },
 ]
 
 [[metric]]
@@ -645,7 +645,7 @@ gates = [
 [[metric]]
 id = "resource.exit_state"
 area = "resources"
-title = "Goroutines, descriptors and child processes a finished pig still holds at exit, and temporary entries it leaves"
+title = "Goroutines, descriptors and child processes a finished ompig still holds at exit, and temporary entries it leaves"
 impact = 3
 owner = "perf-max"
 target = "children 0; goroutines and descriptors only the process's fixed set"
@@ -767,7 +767,7 @@ where = "coding/extension/host/subprocess:TestExtensionEventRoundTripAllocationG
 [[practice]]
 name = "Whole-turn and startup /gc/heap/allocs under GOMAXPROCS=1"
 status = "present"
-where = "test/perfgate (PIG_PROFILE=metrics)"
+where = "test/perfgate (OMPIG_PROFILE=metrics)"
 [[practice]]
 name = "Startup inittrace totals"
 status = "present"
@@ -793,9 +793,9 @@ name = "-race on ./ai ./tui ./internal/codingagent and the Durable harness in CI
 status = "partial"
 where = "automation/ci/test-race.sh runs four tests; route go-native-perf"
 [[practice]]
-name = "PGO profile committed at cmd/pig/default.pgo"
+name = "PGO profile committed at cmd/ompig/default.pgo"
 status = "missing"
-where = "no cmd/pig/default.pgo; route go-native-perf"
+where = "no cmd/ompig/default.pgo; route go-native-perf"
 [[practice]]
 name = "Nightly fuzz and differential fuzz vs Node for the encoder and width functions"
 status = "missing"
@@ -817,7 +817,7 @@ where = "test/perfgate TestRPCReadyMemoryGate, test/integration TestInteractiveF
 # ---------------------------------------------------------------- cross-language comparison method
 
 [protocol]
-competitors = ["pi_agent_rust v0.6.1 (a Rust port of Pi; run first)", "PiG (stock, default and PGO builds)", "rpi (Rust port of Pi; default and tuned release builds)", "Pi 1.3.0 (Node)", "Codex CLI"]
+competitors = ["pi_agent_rust v0.6.1 (a Rust port of Pi; run first)", "Ompig (stock, default and PGO builds)", "rpi (Rust port of Pi; default and tuned release builds)", "Pi 1.3.0 (Node)", "Codex CLI"]
 platforms = ["Linux, bare metal", "Windows 11"]
 endpoints = [
   "--version: exec to exit",
@@ -849,7 +849,7 @@ rules = [
   "On Kubernetes: CPU Manager static policy, Guaranteed QoS, full-pcpus-only, one benchmark pod per node.",
   "Reporting (Heiser's benchmarking crimes): every sub-benchmark including losses, geometric means over sub-benchmarks, absolute numbers beside every ratio.",
   "cgroup accounting for each run: memory.peak, memory.current split, pids.current, cpu.stat.",
-  "Publish the raw samples; submit PiG to harness-perf-benchmark.",
+  "Publish the raw samples; submit Ompig to harness-perf-benchmark.",
   "Counts never rank across languages: instruction and allocation counts gate each implementation against itself only; cross-language claims use wall time, CPU time and memory with intervals. Count runs may disable ASLR; timing runs use fresh processes with ASLR on.",
   "On the shared lane hosts only counts are measured; time comes from this protocol or the cluster's exact-CV gate.",
 ]
@@ -887,7 +887,7 @@ name = "Leak gates on Go 1.27: goroutineleak empty after tests and soak, synctes
 placement = "plan 7"
 [[technique]]
 id = "T8"
-name = "PGO from a scripted session at cmd/pig/default.pgo, paired A/B"
+name = "PGO from a scripted session at cmd/ompig/default.pgo, paired A/B"
 placement = "plan 3 (start and turn CPU); measured only on the cluster"
 [[technique]]
 id = "T9"

@@ -1,7 +1,7 @@
 # Behavior family: json
 # Surface: an extension tool that returns details: null keeps the null in the tool_result event its handlers receive, in the turn_end event's toolResults, in tool_execution_end, in the toolResult message of message_end and turn_end, and in the session file.
 #
-# Upstream rule (Pi 1.0.0): agent-loop.ts createToolResultMessage sets `details: finalized.result.details`, agent-session.ts _afterToolCall emits `details: result.details` and _dispatchTurnEndBoundary hands turn_end handlers the ToolResultMessage objects, and JSON.stringify writes null where it omits undefined. session-manager.ts writes each entry with JSON.stringify. PiG's ToolResultMessage held details as an omitempty any and dropped the null from every message and from the stored entry; the tool_result event dropped it too.
+# Upstream rule (Pi 1.0.0): agent-loop.ts createToolResultMessage sets `details: finalized.result.details`, agent-session.ts _afterToolCall emits `details: result.details` and _dispatchTurnEndBoundary hands turn_end handlers the ToolResultMessage objects, and JSON.stringify writes null where it omits undefined. session-manager.ts writes each entry with JSON.stringify. Ompig's ToolResultMessage held details as an omitempty any and dropped the null from every message and from the stored entry; the tool_result event dropped it too.
 name = "10-json-extension-tool-null-details"
 description = "--mode json and the session file keep an extension tool's details: null"
 
@@ -20,10 +20,10 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/null-details.jsonl"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PARITY_DETAILS_REPORT={{TEMP}}/null-details.jsonl"]
+ompig = ["OMPIG_TEST_FAUX=1", "PARITY_DETAILS_REPORT={{TEMP}}/null-details.jsonl"]
 pi = ["PARITY_DETAILS_REPORT={{TEMP}}/null-details.jsonl"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["../../scenarios/json/testdata/ext/parity-null-details.mjs"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["../../scenarios/json/testdata/ext/parity-null-details.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../../scenarios/json/testdata/ext/parity-null-details.mjs"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 

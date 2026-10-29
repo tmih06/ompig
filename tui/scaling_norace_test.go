@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // treeSizes are the node counts N, 10N and 100N of the /tree scaling gates.

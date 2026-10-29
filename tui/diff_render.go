@@ -14,10 +14,10 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/internal/jsdiff"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsdiff"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // diffLineRe is upstream components/diff.ts parseDiffLine's /^([+-\s])(\s*\d*)\s(.*)$/: group 1 is the prefix, group 2 the padded line number, then one separator space and the content. The classes are JavaScript's: `\s` includes the Unicode spaces, and `.` excludes CR, LS and PS, so a line holding U+2028 or U+2029 does not parse.

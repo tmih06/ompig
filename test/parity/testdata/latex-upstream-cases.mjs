@@ -1,7 +1,7 @@
 // Regenerate the Go port of every assertion in the pinned latex.test.ts:
 // node test/parity/testdata/latex-upstream-cases.mjs | gofmt > internal/latex/upstream_test.go
 // node test/parity/testdata/latex-upstream-cases.mjs --corpus > internal/latex/testdata/upstream-corpus.txt
-// Expected values come from the upstream tests, never from Pig. The generator also checks them against the installed pinned Pi renderer.
+// Expected values come from the upstream tests, never from Ompig. The generator also checks them against the installed pinned Pi renderer.
 import { PI_PACKAGE_VERSION } from "./pi-version.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, realpathSync } from "node:fs";

@@ -29,12 +29,12 @@ Lane: make PR #114 green on public CI. CI mirrors only `.upstream/v0.99.2` (`cur
 6. Build parity image: pin drift as in 2.
 7. Startup latency: advisory job (`continue-on-error: true`); exit 2 only because `none` warm/cold = 1.064/1.068 against 1.05. Pi columns were fine at 0.99.2 (ts 0.862, package 1.011/1.003 vs 1.15), so no missing package or pin. Not reproduced on quiet CPUs (4-CPU taskset, 25 runs, v0.2.0 vs this tip): warm 0.996/0.995, cold 1.031/1.014. Package init is equal (inittrace 25.6-27.8 ms vs 27.6-27.9 ms, 6.7 MB vs 7.2 MB). No code change. Not proven to be pure noise: cold is consistently +1-3%.
 8. CodeQL XSS (callback.go:200): the production hook (`ai.renderOAuthPage`) already escapes title, heading, message and details with `html.EscapeString`, as Pi's `escapeHtml` does; `RenderPage` is Pi's own caller hook, so the alert is the analyzer following request data through a function value (test hook echoes `page.Message`). Added `TestOAuthCallbackPageEscapesRequestValues` (real server, `<script>` in error_description and in error); mutation (drop the details escape) fails it. No library change: escaping at the boundary would double-escape the production page or diverge from Pi (see Questions).
-9. llama: `positiveSafeInt(value, math.MaxInt)` bounds the int conversion; `TestPositiveSafeIntStaysWithinTheIntRange` (fails without the bound; PiG does not build for 32-bit, so the helper takes the limit).
+9. llama: `positiveSafeInt(value, math.MaxInt)` bounds the int conversion; `TestPositiveSafeIntStaysWithinTheIntRange` (fails without the bound; Ompig does not build for 32-bit, so the helper takes the limit).
 10. `maxSeenKeyHint` (schema_object_order.go) and `codemodeLinesHintLimit` (tool_codemode_renderer.go) cap the capacity hints; tests drive 65,636 keys / calls past the cap. These two tests pass on the old code too (behaviour is unchanged); they pin order and count at the cap.
 Extra CI-only failures found in the logs and fixed: four theme tests assumed truecolor (CI has no COLORTERM/HERDR) — they now pin the capability (reproduced locally with a clean terminal environment); `ai/openai.go` gofmt (staging merge).
 
 ## Evidence
-- CI-like layout: worktree `.upstream` holds only `v0.99.2` and `current`. Failing tests rerun there with terminal hints unset: ai, cmd/pig, tui, internal/codingagent(+compaction), subprocess targeted tests pass.
+- CI-like layout: worktree `.upstream` holds only `v0.99.2` and `current`. Failing tests rerun there with terminal hints unset: ai, cmd/ompig, tui, internal/codingagent(+compaction), subprocess targeted tests pass.
 - `go test -race -count=1`: ai, tui, coding/mcpext, llama, compaction, upstreamreads. `-race -count=24 GOMAXPROCS=4 taskset 4 cores + 4 burners`: new tests (burner PIDs recorded in /tmp/fix-114-public-ci/burners.pid, all gone).
 - `make parity-family FAMILY=extensions-runtime`: 95 scenarios ran, incl. 66-session-replacement-lifecycle. `make compliance`: pass. `go vet`/`GOOS=windows go vet`/golangci-lint/`go fix -diff`: clean for touched packages.
 - Mutation checks: details-escape removed (mcpext test red), `float64(limit)` bound removed (llama test red).
@@ -48,6 +48,6 @@ Extra CI-only failures found in the logs and fixed: four theme tests assumed tru
 None.
 
 ## Review fixes (rev-fix-114-public-ci)
-- Item 8: PiG's page was not Pi's: `html.EscapeString` spells `"` as `&#34;` where Pi's `escapeHtml` writes `&quot;`, and the template had drifted (condensed CSS, missing emoji fonts, `main` justify-content, `h1` color, the empty details slot). `ai/oauth_page.go` now emits Pi's template and entities; `TestOAuthPageMatchesThePinnedPackage` compares every page with the pinned `pi-ai` `dist/utils/oauth-page.js` byte for byte.
+- Item 8: Ompig's page was not Pi's: `html.EscapeString` spells `"` as `&#34;` where Pi's `escapeHtml` writes `&quot;`, and the template had drifted (condensed CSS, missing emoji fonts, `main` justify-content, `h1` color, the empty details slot). `ai/oauth_page.go` now emits Pi's template and entities; `TestOAuthPageMatchesThePinnedPackage` compares every page with the pinned `pi-ai` `dist/utils/oauth-page.js` byte for byte.
 - Item 10: the `1 << 16` caps were new `divergence-guard` magic-literal hits. The hints now use the length alone (no arithmetic, so no overflow); the tests keep their assertions at 5,000 keys and calls.
 - The guard also scans `.mts`, `.cts`, `.tsx` and `.jsx`.

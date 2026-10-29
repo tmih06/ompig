@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // testAuthCheck is a provider's configured auth for the selector tests.
@@ -63,7 +63,7 @@ func TestFormatAuthSelectorProviderStatusMatchesPi(t *testing.T) {
 	if len(expected) != len(probes) {
 		t.Fatalf("Pi returned %d results for %d probes", len(expected), len(probes))
 	}
-	// The Pi script sets trueColor capabilities before it loads the theme; without them Pig's theme follows the host
+	// The Pi script sets trueColor capabilities before it loads the theme; without them Ompig's theme follows the host
 	// terminal's COLORTERM and TERM, so a 256-colour host such as TERM=screen printed other colour codes.
 	withTrueColor(t, true)
 	SetTheme("dark")
@@ -73,7 +73,7 @@ func TestFormatAuthSelectorProviderStatusMatchesPi(t *testing.T) {
 			provider.Status = testAuthCheck{typ: probe.Status.Type, source: probe.Status.Source}
 		}
 		if got, want := FormatAuthSelectorProviderStatus(provider), expected[i]; got != want {
-			t.Errorf("probe %d %+v status %+v: Pig %q, Pi %q", i, probe, probe.Status, got, want)
+			t.Errorf("probe %d %+v status %+v: Ompig %q, Pi %q", i, probe, probe.Status, got, want)
 		}
 	}
 }

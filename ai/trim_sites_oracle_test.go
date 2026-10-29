@@ -1,4 +1,4 @@
-//go:build !pig_strip_google_vertex
+//go:build !ompig_strip_google_vertex
 
 package ai
 
@@ -14,7 +14,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type trimSiteProbe struct {
@@ -86,7 +86,7 @@ func TestJSTrimSitesMatchPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got, want) {
 			if differing++; differing <= 12 {
-				t.Errorf("%+v\n  Pig %#v\n  Pi  %#v", probe, got, want)
+				t.Errorf("%+v\n  Ompig %#v\n  Pi  %#v", probe, got, want)
 			}
 		}
 	}

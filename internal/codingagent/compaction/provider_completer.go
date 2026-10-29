@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ProviderCompleter collects one summarization response from the caller's stream override or the model's provider. It preserves provider errors, usage and invalid-summary diagnostics.

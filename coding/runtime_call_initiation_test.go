@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's newSession, fork and switchSession return a Promise, so a call an extension makes releases its call lane after the synchronous start. The host marks that start through extension.CallInitiated (subprocess/host_calls.go startsAsync). A Runtime replacement must mark it before it emits the first before hook, as the bare-Session path does (session_extension_replacement.go beforeExtensionReplacement), or the extension's call lane stays blocked until teardown, rebuild, rebind and session_start finish.

@@ -7,12 +7,12 @@
 # awaits its 50 ms timer, the loop runs the immediate and the zero-delay timer that
 # shutdown-loop-turn-a.mjs queued, with a live ctx.
 #
-# Pig's CLI packs Node factories into one runtime process (75-print-shutdown-loop-turn). Separate
+# Ompig's CLI packs Node factories into one runtime process (75-print-shutdown-loop-turn). Separate
 # Node processes come from crash recovery, which quarantines a culprit in its own process
-# (node_recovery.go), and no CLI option places a factory alone. So the pig side runs
+# (node_recovery.go), and no CLI option places a factory alone. So the ompig side runs
 # print-loop-turn-helper, which drives the same Host path with each fixture isolated: the Host
 # declares print mode, runs each session_shutdown handler in configured order and awaits it, then
-# invalidates and stops the processes, as Pig's print disposal does. b's runtime reports that its
+# invalidates and stops the processes, as Ompig's print disposal does. b's runtime reports that its
 # handler yielded to its event loop (loop_turned), and the host forwards that to a's process as its
 # next step, so a's callbacks run before b answers. Before loop_turned (integrate-042 e0d305ad1b),
 # a's process waited for invalidate and was stopped first: the log held only "a session_shutdown",
@@ -40,8 +40,8 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
-pig = ["PIG_HOME=testdata/pig-home", "LOOP_TURN_LOG={{TEMP}}/loop-turn.log"]
+ompig_bin = "/usr/bin/env"
+ompig = ["OMPIG_HOME=testdata/ompig-home", "LOOP_TURN_LOG={{TEMP}}/loop-turn.log"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "LOOP_TURN_LOG={{TEMP}}/loop-turn.log"]
 pi_args = ["--no-extensions"]
 pi_extensions = [
@@ -53,7 +53,7 @@ pi_extensions = [
 [cli]
 cwd = "../../../.."
 args = ["--model", "test-faux/faux-1", "--no-session", "--print", "What is 20+22?"]
-pig_args = [
+ompig_args = [
   "go", "run", "./test/parity/testdata/print-loop-turn-helper",
   "test/parity/scenarios/extensions-runtime/testdata/ext/shutdown-loop-turn-a.mjs",
   "test/parity/scenarios/extensions-runtime/testdata/ext/shutdown-loop-turn-b.mjs",

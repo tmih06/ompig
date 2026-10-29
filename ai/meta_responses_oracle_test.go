@@ -16,8 +16,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type metaResponseProbe struct {
@@ -208,7 +208,7 @@ func TestMetaResponsesMatchPi(t *testing.T) {
 					}
 					return string(a.OK)
 				}
-				t.Errorf("%s status %d body %.140q\n  Pi  %.300s\n  Pig %.300s", probe.Flow, probe.Status, probe.Raw, render(want), render(got))
+				t.Errorf("%s status %d body %.140q\n  Pi  %.300s\n  Ompig %.300s", probe.Flow, probe.Status, probe.Raw, render(want), render(got))
 			}
 		}
 	}

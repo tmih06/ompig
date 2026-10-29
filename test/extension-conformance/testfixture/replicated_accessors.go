@@ -3,7 +3,7 @@ package testfixture
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // replicatedAccessorsProbe reads every replicated accessor, writes through the matching API and reads it again at once, the order Pi's synchronous

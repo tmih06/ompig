@@ -13,15 +13,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // PythonExtension describes one factory-style Python SDK extension that can be
 // packed into a generated subprocess runner. The module must expose a factory
-// returning pig_sdk.Extension, typically:
+// returning ompig_sdk.Extension, typically:
 //
-//	def new_extension() -> pig_sdk.Extension
+//	def new_extension() -> ompig_sdk.Extension
 //
 // The generated runner is a Python subprocess and uses one socket per contained
 // extension.
@@ -52,7 +52,7 @@ func BuildPythonPackedCell(ctx context.Context, cacheRoot, key string, extension
 	if err != nil {
 		return nil, err
 	}
-	lockCandidates := append([]string{os.Getenv("PIG_SDK_PY_ROOT")}, stagedSDKRoots("python")...)
+	lockCandidates := append([]string{os.Getenv("OMPIG_SDK_PY_ROOT")}, stagedSDKRoots("python")...)
 	return pigsdklock.WithBuildCandidates(ctx, lockCandidates, func() (*PythonPackedCell, error) {
 		sdkRoot, err := findPythonSDKRoot()
 		if err != nil {
@@ -125,7 +125,7 @@ func pythonPackedCellHash(cacheRoot, key string, extensions []PythonExtension, s
 		return sdkHash
 	}
 	h := sha256.New()
-	_, _ = h.Write([]byte("pig-python-packed-cell\x00"))
+	_, _ = h.Write([]byte("ompig-python-packed-cell\x00"))
 	_, _ = h.Write([]byte(key))
 	_, _ = h.Write([]byte("\x00"))
 	hashBuildInput(h, "sdk", sdkHash)
@@ -141,17 +141,17 @@ func pythonPackedCellHash(cacheRoot, key string, extensions []PythonExtension, s
 }
 
 func findPythonSDKRoot() (string, error) {
-	if root := strings.TrimSpace(os.Getenv("PIG_SDK_PY_ROOT")); root != "" {
-		if abs, err := filepath.Abs(root); err == nil && statHasFile(abs, filepath.Join("pig_sdk", "__init__.py")) {
+	if root := strings.TrimSpace(os.Getenv("OMPIG_SDK_PY_ROOT")); root != "" {
+		if abs, err := filepath.Abs(root); err == nil && statHasFile(abs, filepath.Join("ompig_sdk", "__init__.py")) {
 			return abs, nil
 		}
 	}
-	// pig additive (D92): only PIG_SDK_PY_ROOT serves a Python SDK the active Piglet strips; this binary staged none.
+	// ompig additive (D92): only OMPIG_SDK_PY_ROOT serves a Python SDK the active Ompiglet strips; this binary staged none.
 	if err := StrippedSDKError("python"); err != nil {
 		return "", err
 	}
 	for _, root := range stagedSDKRoots("python") {
-		if _, err := os.Stat(filepath.Join(root, "pig_sdk", "__init__.py")); err == nil {
+		if _, err := os.Stat(filepath.Join(root, "ompig_sdk", "__init__.py")); err == nil {
 			return root, nil
 		}
 	}
@@ -161,8 +161,8 @@ func findPythonSDKRoot() (string, error) {
 	}
 	for dir := wd; ; dir = filepath.Dir(dir) {
 		data, err := os.ReadFile(filepath.Join(dir, "go.mod"))
-		if err == nil && strings.Contains(string(data), "module github.com/MichaelKinsy/PiG") {
-			if cand := filepath.Join(dir, "extensions", "sdk-py"); statHasFile(cand, filepath.Join("pig_sdk", "__init__.py")) {
+		if err == nil && strings.Contains(string(data), "module github.com/tmih06/ompig") {
+			if cand := filepath.Join(dir, "extensions", "sdk-py"); statHasFile(cand, filepath.Join("ompig_sdk", "__init__.py")) {
 				return cand, nil
 			}
 		}
@@ -171,17 +171,17 @@ func findPythonSDKRoot() (string, error) {
 			break
 		}
 	}
-	// Staged copy under the config-root data dir (~/.pig/source) or
-	// PIG_SOURCE_ROOT, written by Stock Pig's SDK staging step. This is what
-	// lets an installed pig resolve the Python SDK on a clean host with no
+	// Staged copy under the config-root data dir (~/.ompig/source) or
+	// OMPIG_SOURCE_ROOT, written by Stock Ompig's SDK staging step. This is what
+	// lets an installed ompig resolve the Python SDK on a clean host with no
 	// checkout and no env config.
 	for _, root := range installedPigSourceRoots() {
 		cand := filepath.Join(root, "extensions", "sdk-py")
-		if _, err := os.Stat(filepath.Join(cand, "pig_sdk", "__init__.py")); err == nil {
+		if _, err := os.Stat(filepath.Join(cand, "ompig_sdk", "__init__.py")); err == nil {
 			return cand, nil
 		}
 	}
-	return "", fmt.Errorf("cannot locate github.com/MichaelKinsy/PiG checkout for Python SDK; set PIG_SDK_PY_ROOT")
+	return "", fmt.Errorf("cannot locate github.com/tmih06/ompig checkout for Python SDK; set OMPIG_SDK_PY_ROOT")
 }
 
 func renderPythonRunner(extensions []PythonExtension, sdkRoot string) string {
@@ -210,22 +210,22 @@ func renderPythonRunner(extensions []PythonExtension, sdkRoot string) string {
 	return b.String()
 }
 
-// pythonRunnerFactoryScope builds one member at a time with PIG_EXT_SOCKET set to that member's socket, which is what an isolated extension's factory sees: a
-// helper the factory calls before run (pig_sdk.parse_frontmatter, parse_date) dials that socket. The members' factories run one at a time, as Pi loads
+// pythonRunnerFactoryScope builds one member at a time with OMPIG_EXT_SOCKET set to that member's socket, which is what an isolated extension's factory sees: a
+// helper the factory calls before run (ompig_sdk.parse_frontmatter, parse_date) dials that socket. The members' factories run one at a time, as Pi loads
 // extensions one at a time.
 const pythonRunnerFactoryScope = `_FACTORY_TURN = threading.Lock()
 
 def _build(item, sock):
     with _FACTORY_TURN:
-        previous = os.environ.get('PIG_EXT_SOCKET')
-        os.environ['PIG_EXT_SOCKET'] = sock
+        previous = os.environ.get('OMPIG_EXT_SOCKET')
+        os.environ['OMPIG_EXT_SOCKET'] = sock
         try:
             return _factory(item)
         finally:
             if previous is None:
-                os.environ.pop('PIG_EXT_SOCKET', None)
+                os.environ.pop('OMPIG_EXT_SOCKET', None)
             else:
-                os.environ['PIG_EXT_SOCKET'] = previous
+                os.environ['OMPIG_EXT_SOCKET'] = previous
 
 `
 
@@ -238,7 +238,7 @@ def main():
     errors = []
     cond = threading.Condition()
     state = {'live': 0, 'parked': False, 'closed': False}
-    active_value = os.environ.get('PIG_EXT_ACTIVE_MEMBERS')
+    active_value = os.environ.get('OMPIG_EXT_ACTIVE_MEMBERS')
     active = set(active_value.split(',')) if active_value else None
 
     def target(item, sock, built):
@@ -269,7 +269,7 @@ def main():
         # The host accepts the members in order and serves a connection only after the members before it. A factory that calls the host before it returns (a
         # subscription on the event bus) waits for that service, so a later member must not take the factory turn before an earlier one: it would hold the turn
         # while the host waits for the earlier member's connection.
-        start(item, os.environ.get(item[1]) or (os.environ.get('PIG_EXT_SOCKET') if len(ITEMS) == 1 else None)).wait()
+        start(item, os.environ.get(item[1]) or (os.environ.get('OMPIG_EXT_SOCKET') if len(ITEMS) == 1 else None)).wait()
 
     def control():
         for line in sys.stdin:
@@ -279,7 +279,7 @@ def main():
                     state['parked'] = True
                     cond.notify_all()
                 if len(fields) > 2 and fields[2]:
-                    from pig_sdk import _connect_unix
+                    from ompig_sdk import _connect_unix
                     try:
                         _connect_unix(fields[2]).close()
                     except OSError:
@@ -389,7 +389,7 @@ importlib.import_module = _import_module
 
 def _module(module_name, root):
     # An imported module stays until _reload_edited drops it, so module state survives each factory call that reuses it.
-    key = '_pig_cell_' + hashlib.sha256((root + ':' + module_name).encode()).hexdigest()
+    key = '_ompig_cell_' + hashlib.sha256((root + ':' + module_name).encode()).hexdigest()
     mod = _MODULES.get(key)
     if mod is not None:
         return mod
@@ -536,7 +536,7 @@ const pythonRunnerFailureReport = `def _report_member_failure(item, exc, sock):
     print(f'{item[0]}: {exc}', file=sys.stderr, flush=True)
     if not sock:
         return
-    from pig_sdk import _connect_unix
+    from ompig_sdk import _connect_unix
     try:
         _connect_unix(sock).close()
     except OSError:
@@ -551,7 +551,7 @@ func CurrentPythonPackedCellEntry(cacheRoot, key string, extensions []PythonExte
 	if err != nil {
 		return "", false, err
 	}
-	lockCandidates := append([]string{os.Getenv("PIG_SDK_PY_ROOT")}, stagedSDKRoots("python")...)
+	lockCandidates := append([]string{os.Getenv("OMPIG_SDK_PY_ROOT")}, stagedSDKRoots("python")...)
 	return pigsdklock.WithBuildEntryCandidates(context.Background(), lockCandidates, func() (string, bool, error) {
 		sdkRoot, err := findPythonSDKRoot()
 		if err != nil {

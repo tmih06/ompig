@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 const loginDescription = "Command-line coding agent"
@@ -16,8 +16,8 @@ const (
 	brandHeight = extension.LoginBrandHeight
 )
 
-// LoginDefinitionFor expresses a sprite through the native login contract (ctx.ui.setLogin): the hero "PiG." wordmark,
-// the mascot pig and the palette that colors them. The built-in startup header draws its art from this definition, and
+// LoginDefinitionFor expresses a sprite through the native login contract (ctx.ui.setLogin): the hero "Ompig." wordmark,
+// the mascot ompig and the palette that colors them. The built-in startup header draws its art from this definition, and
 // an extension that sets the same definition draws the same pixels.
 func LoginDefinitionFor(variant Variant) extension.LoginDefinition {
 	// The brand band stays transparent: the large hero wordmark is the only
@@ -107,7 +107,7 @@ const (
 	heroPeriodKey = '@'
 )
 
-// heroFor draws the "PiG." wordmark with a one-pixel drop shadow.
+// heroFor draws the "Ompig." wordmark with a one-pixel drop shadow.
 func heroFor(logo Logo) ([]string, map[string]string) {
 	pixels := make([][]byte, heroHeight)
 	for y := range pixels {

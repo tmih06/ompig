@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func TestPackedMessageOutputPadAcrossSDKs(t *testing.T) {
@@ -71,11 +71,11 @@ func paddingFactory(t *testing.T, language, name string) ExtConfig {
 			t.Fatal("SDK go.mod has no language floor")
 		}
 		floor, _, _ := strings.Cut(directive, "\n")
-		write("go.mod", "module "+module+"\n\ngo "+floor+"\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n")
+		write("go.mod", "module "+module+"\n\ngo "+floor+"\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n")
 		write("ext.go", fmt.Sprintf(`package ext
 import (
     "encoding/json"
-    "github.com/MichaelKinsy/PiG/extensions/sdk"
+    "github.com/tmih06/ompig/extensions/sdk"
 )
 func Extension() *sdk.Extension {
     ext := sdk.New(%q)
@@ -89,10 +89,10 @@ func Extension() *sdk.Extension {
 		return packedFactoryConfig(name, dir, module, name)
 	case "python":
 		write(name+".py", fmt.Sprintf(`import json
-import pig_sdk
+import ompig_sdk
 
 def new_extension():
-    ext = pig_sdk.Extension(%q)
+    ext = ompig_sdk.Extension(%q)
     ext.message_renderer("padding", lambda _ctx, _message, options, _width: [json.dumps(options)])
     return ext
 `, name))
@@ -102,7 +102,7 @@ def new_extension():
 		if err := os.Mkdir(filepath.Join(dir, "src"), 0o700); err != nil {
 			t.Fatal(err)
 		}
-		write("src/lib.rs", fmt.Sprintf(`use pig_sdk::Extension;
+		write("src/lib.rs", fmt.Sprintf(`use ompig_sdk::Extension;
 pub fn new_extension() -> Extension {
     let mut ext = Extension::new(%q);
     ext.message_renderer("padding", |_ctx, _message, options, _width| {

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func registrySessionProbe(ctx sdk.Context, _ string) error {

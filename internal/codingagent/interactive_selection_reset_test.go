@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi renderSessionEntries drops the fullscreen text selection before it replaces the transcript, because the selection coordinates point into the old one (interactive-mode.ts:4095-4096, #9311).

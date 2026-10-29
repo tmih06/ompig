@@ -576,7 +576,7 @@ func (builder *assistantStreamBuilder) endToolCallWith(index int, finalize func(
 		block.SetStreamingArguments(state.args.Text())
 	}
 	if block.ID == "" {
-		// pig divergence (D120): a call streamed without an id gets a unique one, so its tool result can name it.
+		// ompig divergence (D120): a call streamed without an id gets a unique one, so its tool result can name it.
 		block.ID = generatedToolCallID(block.Name)
 	}
 	builder.partial.Content[state.contentIndex] = block

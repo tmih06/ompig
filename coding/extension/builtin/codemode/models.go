@@ -9,12 +9,12 @@ import (
 	"sync"
 	"time"
 
-	sandbox "github.com/MichaelKinsy/PiG/codemode"
+	sandbox "github.com/tmih06/ompig/codemode"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/usagetotals"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/usagetotals"
 )
 
 // maxConcurrentModelCalls is how many `models.classify()` and `models.generateImages()` calls one script may have in

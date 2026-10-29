@@ -127,7 +127,7 @@ func startProcess(cmd *exec.Cmd) error {
 // (src/win/process.c) starts the child with STARTF_USESHOWWINDOW and SW_HIDE.
 // When no stdio entry inherits a parent handle it also passes
 // CREATE_NO_WINDOW, so a console program gets a console without a window
-// instead of sharing PiG's console or opening a new window. Call it after the
+// instead of sharing Ompig's console or opening a new window. Call it after the
 // last assignment to cmd.SysProcAttr.
 func HideWindow(cmd *exec.Cmd, stdio ...Stdio) {
 	if cmd.SysProcAttr == nil {
@@ -182,18 +182,18 @@ func SetDirectory(cmd *exec.Cmd) {
 
 // LookPath returns the program that Node's child_process.spawn(file, args)
 // starts on Windows without a shell, or the *Error spawn reports. cwd is the
-// spawn's cwd option, where "" is PiG's working directory, and env is its env
-// option, where nil is PiG's environment.
+// spawn's cwd option, where "" is Ompig's working directory, and env is its env
+// option, where nil is Ompig's environment.
 //
 // Node first rejects an empty file and a NUL in file, cwd, or env: spawn
 // throws ERR_INVALID_ARG_VALUE. It rejects a batch file name next: spawn
 // throws EINVAL. libuv then takes the working directory spawnDirectory
 // describes and looks the name up as searchPath describes, in the PATH of env
-// or, when env has none, PiG's PATH, and the child emits ENOENT when nothing
+// or, when env has none, Ompig's PATH, and the child emits ENOENT when nothing
 // matches. The name never resolves through PATHEXT, so "npm" does not find
 // npm.cmd. A bare name is looked up in the working directory first unless the
 // NoDefaultCurrentDirectoryInExePath environment variable is set. The result
-// is absolute: CreateProcessW resolves a relative candidate against PiG's
+// is absolute: CreateProcessW resolves a relative candidate against Ompig's
 // working directory.
 func LookPath(file, cwd string, env []string) (string, error) {
 	if err := checkArguments(file, nil, cwd, env); err != nil {
@@ -244,7 +244,7 @@ const maxPath = 260
 // (src/res/node.exe.extra.manifest, Node 24.19.0), so in Pi's process the call fails for
 // such a path unless it has the \\?\ prefix, and spawn emits ENOENT. A
 // prefixed path becomes its short form, still prefixed, or stays as it is when
-// the short form is no shorter. An empty cwd is PiG's working directory, which
+// the short form is no shorter. An empty cwd is Ompig's working directory, which
 // libuv shortens the same way, but a Node process cannot have a working
 // directory of MAX_PATH units, so Pi never does.
 func spawnDirectory(file, cwd string) (string, error) {
@@ -274,7 +274,7 @@ func spawnDirectory(file, cwd string) (string, error) {
 // SetEnvProperties builds: libuv's find_path takes the value of the first
 // entry that starts with "PATH=" regardless of case, which is also the
 // child's PATH, and the entry of a name such as "PATH=Z" starts so. When env
-// has no such entry, libuv reads PiG's PATH.
+// has no such entry, libuv reads Ompig's PATH.
 func pathOf(env []string) string {
 	for _, e := range env {
 		if name, value, ok := strings.Cut(e, "="); ok && strings.EqualFold(name, "PATH") {

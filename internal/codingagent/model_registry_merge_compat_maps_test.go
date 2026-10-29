@@ -4,7 +4,7 @@ import (
 	"maps"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/coding-agent/src/core/provider-composer.ts:131-141 mergeCompat: for openRouterRouting and chatTemplateArgs (chatTemplateKwargs and vercelGatewayRouting merge the same way)

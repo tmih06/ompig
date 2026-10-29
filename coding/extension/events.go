@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // Event payload and result structs.
@@ -997,7 +997,7 @@ type ToolResultEventBase struct {
 
 // ToolDetailsConverter is implemented by a built-in tool's internal result
 // details to produce the upstream SDK wire shape for the `details` field of
-// a tool_result event. pig keeps richer internal detail structs for the TUI
+// a tool_result event. ompig keeps richer internal detail structs for the TUI
 // renderer; this contract lets the extension emission boundary convert them
 // to the lean upstream shapes without the generic runtime depending on the
 // concrete tool package.

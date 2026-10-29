@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 func mustObj(t *testing.T, v any) *jv.Object {

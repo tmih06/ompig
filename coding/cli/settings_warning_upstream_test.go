@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/suite/regressions/7829-invalid-settings-warning.test.ts:15
@@ -30,7 +30,7 @@ func TestInteractiveStartupSettingsWarningReachesTranscript(t *testing.T) {
 	defer cancel()
 	cmd := exec.CommandContext(ctx, binary, "--offline", "--no-extensions", "--model", "test-faux/faux-1")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color")
 	cmd.Stdin, cmd.Stdout = slave, slave
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr

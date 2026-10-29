@@ -1,11 +1,11 @@
-# How PiG fits together
+# How Ompig fits together
 
-PiG is a small coding agent that you shape for the work in front of you. The
+Ompig is a small coding agent that you shape for the work in front of you. The
 shortest accurate model is:
 
-> Packages distribute available Resources. Piglets select and scope them.
-> Piglet releases pin exact Resource closure and executable component plans.
-> Carriers execute the same Piglet.
+> Packages distribute available Resources. Ompiglets select and scope them.
+> Ompiglet releases pin exact Resource closure and executable component plans.
+> Carriers execute the same Ompiglet.
 
 Return to the [docs router](README.md) at any time.
 
@@ -16,54 +16,54 @@ Return to the [docs router](README.md) at any time.
 | Resource | contributes one extension, skill, prompt, hook, MCP definition, theme, compatible agent declaration, context input, or agent environment |
 | Package | optionally distributes a versioned collection of Resources |
 | Plugin | packages cross-harness capabilities using Agent Plugins/vendor formats |
-| Piglet | defines one named agent by selecting/scoping Resources and declaring defaults/environment requirements |
+| Ompiglet | defines one named agent by selecting/scoping Resources and declaring defaults/environment requirements |
 
-Packages and Piglets are the two main management concepts. Packages never own
-new Piglets.
+Packages and Ompiglets are the two main management concepts. Packages never own
+new Ompiglets.
 
 ## Package: distribute Resources
 
-`pig install` adds a Package to settings, so normal upstream-compatible discovery
+`ompig install` adds a Package to settings, so normal upstream-compatible discovery
 loads its enabled members:
 
 ```bash
-pig install ./my-package
-pig install git:https://github.com/example/my-package.git
+ompig install ./my-package
+ompig install git:https://github.com/example/my-package.git
 ```
 
-A Piglet can also reference a Package without changing settings and activate
+A Ompiglet can also reference a Package without changing settings and activate
 only explicitly selected members. See [Packages](packages.md).
 
-## Piglet: shape and run an agent
+## Ompiglet: shape and run an agent
 
-A Piglet selects extensions and skills, scopes tools/commands, sets model and
+A Ompiglet selects extensions and skills, scopes tools/commands, sets model and
 prompt defaults, connects MCP servers, controls discovery, and may require an
 agent environment:
 
 ```bash
-pig --piglet research
+ompig --ompiglet research
 ```
 
-The Piglet remains editable source and points at exact Resource origins instead
-of copying them. See [Piglets](piglets.md).
+The Ompiglet remains editable source and points at exact Resource origins instead
+of copying them. See [Ompiglets](ompiglets.md).
 
-## Piglet carriers and releases
+## Ompiglet carriers and releases
 
-A Piglet may have these execution carriers:
+A Ompiglet may have these execution carriers:
 
 | Carrier | Meaning |
 |---|---|
-| Host Piglet | PiG resolves and runs Piglet source on the host or inside its required environment |
-| Piglet Binary | target-native PiG executable built for one immutable Piglet composition |
-| Piglet Image | OCI artifact materializing the Piglet and required runtime environment |
+| Host Ompiglet | Ompig resolves and runs Ompiglet source on the host or inside its required environment |
+| Ompiglet Binary | target-native Ompig executable built for one immutable Ompiglet composition |
+| Ompiglet Image | OCI artifact materializing the Ompiglet and required runtime environment |
 
 Binary and image are build outputs, not files you author or peer management
-namespaces. Piglet source and several target artifacts may coexist in one
-Piglet release.
+namespaces. Ompiglet source and several target artifacts may coexist in one
+Ompiglet release.
 
 ## Component execution is not an artifact kind
 
-Raw PiG normally hosts extensions as subprocesses. A Piglet Binary is still PiG
+Raw Ompig normally hosts extensions as subprocesses. A Ompiglet Binary is still Ompig
 and can use the same subprocess host while additionally fusing compatible Go
 factories.
 
@@ -72,13 +72,13 @@ Each component has two independent facts:
 | Axis | Values | Meaning |
 |---|---|---|
 | realization | fused, subprocess, external | how it executes |
-| materialization | binary, Piglet release, `agentEnv`, external | where its bytes/runtime come from |
+| materialization | binary, Ompiglet release, `agentEnv`, external | where its bytes/runtime come from |
 
-A subprocess component does not make a different kind of Piglet Binary.
-Package/Resource origin tracking and the Piglet release bind the exact component
+A subprocess component does not make a different kind of Ompiglet Binary.
+Package/Resource origin tracking and the Ompiglet release bind the exact component
 version, digest, target/runtime, and location.
 
-For example, one Piglet Binary may fuse a Go review extension, start a locked
+For example, one Ompiglet Binary may fuse a Go review extension, start a locked
 Python analysis extension from its release/environment closure, and connect to an
 external MCP service. Direct binary execution verifies that closure before model,
 session, or tools start. It does not accept an arbitrary same-named extension
@@ -90,7 +90,7 @@ from `PATH` or ambient Package discovery.
 realization:
 
 - no `agentEnv`: run on the current compatible host;
-- required `agentEnv`: Host Piglet, Piglet Binary, Piglet Image, and managed deployments
+- required `agentEnv`: Host Ompiglet, Ompiglet Binary, Ompiglet Image, and managed deployments
   enter or verify it before startup;
 - only explicit local one-run `--unsafe-host` may bypass it.
 
@@ -102,43 +102,43 @@ The code-execution sandbox is separate from the whole-agent environment.
 install/reference Resources
           |
           v
-create/run Piglet
+create/run Ompiglet
           |
-          +---- keep using Host Piglet
+          +---- keep using Host Ompiglet
           |
           v
 build optional Binary/Image
           |
           v
-publish one Piglet release with exact Resource closure and executable plan
+publish one Ompiglet release with exact Resource closure and executable plan
 ```
 
-Every stage after Resource acquisition is optional. You can use bare PiG, run a
-Piglet indefinitely without building, or publish selected target artifacts.
+Every stage after Resource acquisition is optional. You can use bare Ompig, run a
+Ompiglet indefinitely without building, or publish selected target artifacts.
 
-## Packages versus Piglets
+## Packages versus Ompiglets
 
-| Question | Package | Piglet |
+| Question | Package | Ompiglet |
 |---|---|---|
 | Job | distribute Resources | compose, launch, build, and ship an agent |
-| Activation | settings/discovery for direct install | only selected/scoped Piglet members |
+| Activation | settings/discovery for direct install | only selected/scoped Ompiglet members |
 | Contains/references | owned Resources | direct/Plugin/Package origins plus model/prompt/MCP/environment/build defaults |
 | Runs by itself | no | yes through Host, Binary, or Image carrier |
-| Marketplace kind | Package | independent Piglet release |
+| Marketplace kind | Package | independent Ompiglet release |
 
 ## Version and compatibility
 
-- Piglet schema uses top-level `version: 1`.
-- Piglet release SemVer uses `release.version`.
-- The first production Piglet record schema is version 1.
+- Ompiglet schema uses top-level `version: 1`.
+- Ompiglet release SemVer uses `release.version`.
+- The first production Ompiglet record schema is version 1.
 - The extension subprocess wire has one current unversioned shape. It changes
-  atomically with PiG and the staged SDKs.
+  atomically with Ompig and the staged SDKs.
 - Undeployed interfaces may change directly. Deployed external contracts need an
   explicit compatibility decision.
 
 ## Where to go next
 
 - [Packages](packages.md) for installation and Package provenance.
-- [Piglets](piglets.md) for composition, carriers, and environments.
+- [Ompiglets](ompiglets.md) for composition, carriers, and environments.
 - [Extensions](extensions.md) for capability authoring.
 - [Skills](skills.md) for reusable instructions.

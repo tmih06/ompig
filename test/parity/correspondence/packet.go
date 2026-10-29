@@ -109,7 +109,7 @@ func BuildSettingsAlignmentPacket(source, target *Inventory, report *Report) (*A
 	}
 	questions := make([]AlignmentQuestion, 0, len(sourceTable.Items))
 	for _, sourceItem := range sourceTable.Items {
-		// A Pi item a divergence designs out has no Pig behavior to align.
+		// A Pi item a divergence designs out has no Ompig behavior to align.
 		if _, omitted := designedOut[sourceTable.ID+"#"+sourceItem.ID]; omitted {
 			continue
 		}

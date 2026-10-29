@@ -5,7 +5,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A host dispatcher (coding.Session.forwardAgentEvent) refreshes every listener-delivered message_update so a listener

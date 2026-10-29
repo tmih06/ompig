@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // requestTargetProbes build the request targets a callback server can receive: origin-form paths with dot segments, encoded dots and slashes, backslashes, repeated slashes and queries of every shape;
@@ -68,9 +68,9 @@ func TestResolveURLRequestTargetsMatchNode(t *testing.T) {
 		}
 		switch {
 		case want == nil && err == nil:
-			report("Pig resolves to %q %q, Node throws", got.Origin(), got.Pathname)
+			report("Ompig resolves to %q %q, Node throws", got.Origin(), got.Pathname)
 		case want != nil && err != nil:
-			report("Pig fails with %v, Node gives %s %s", err, want.Origin, want.Pathname)
+			report("Ompig fails with %v, Node gives %s %s", err, want.Origin, want.Pathname)
 		case want != nil:
 			resolved++
 			values := SearchParams(got.Query)
@@ -83,7 +83,7 @@ func TestResolveURLRequestTargetsMatchNode(t *testing.T) {
 				wantValues[key] = vals
 			}
 			if got.Origin() != want.Origin || got.Pathname != want.Pathname || !reflect.DeepEqual(map[string][]string(values), wantValues) {
-				report("Pig %q %q %v, Node %q %q %v", got.Origin(), got.Pathname, values, want.Origin, want.Pathname, wantValues)
+				report("Ompig %q %q %v, Node %q %q %v", got.Origin(), got.Pathname, values, want.Origin, want.Pathname, wantValues)
 			}
 		}
 	}

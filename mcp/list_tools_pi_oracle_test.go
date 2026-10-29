@@ -8,12 +8,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/mcp"
 )
 
-// Runs Pi's McpClient.listTools (packages/mcp/src/client.ts) and PiG's Client.ListTools against the same scripted tools/list
-// pages (client.ts:294-296 listTools over listAll :355-374). Pi and PiG must return the same tools in the same order, send the same
+// Runs Pi's McpClient.listTools (packages/mcp/src/client.ts) and Ompig's Client.ListTools against the same scripted tools/list
+// pages (client.ts:294-296 listTools over listAll :355-374). Pi and Ompig must return the same tools in the same order, send the same
 // request params (none for the first page, then each cursor), and fail with the same message when a page or a tool is invalid
 // (every page is fetched before any tool is decoded).
 func TestClientListToolsMatchesPiOnScriptedPages(t *testing.T) {
@@ -83,19 +83,19 @@ func TestClientListToolsMatchesPiOnScriptedPages(t *testing.T) {
 		want := pi[i]
 		if want.Error != "" {
 			if err == nil || err.Error() != want.Error {
-				t.Errorf("%s: PiG error %v, Pi %q", c.name, err, want.Error)
+				t.Errorf("%s: Ompig error %v, Pi %q", c.name, err, want.Error)
 			}
 			continue
 		}
 		if err != nil {
-			t.Errorf("%s: PiG error %v, Pi returned %d tools", c.name, err, len(want.Tools))
+			t.Errorf("%s: Ompig error %v, Pi returned %d tools", c.name, err, len(want.Tools))
 			continue
 		}
 		if tools == nil {
-			t.Errorf("%s: PiG returned nil, Pi returns an array", c.name)
+			t.Errorf("%s: Ompig returned nil, Pi returns an array", c.name)
 		}
 		if len(tools) != len(want.Tools) {
-			t.Errorf("%s: PiG %d tools, Pi %d", c.name, len(tools), len(want.Tools))
+			t.Errorf("%s: Ompig %d tools, Pi %d", c.name, len(tools), len(want.Tools))
 			continue
 		}
 		for j, tool := range tools {
@@ -104,11 +104,11 @@ func TestClientListToolsMatchesPiOnScriptedPages(t *testing.T) {
 			_ = json.Unmarshal(encoded, &got)
 			_ = json.Unmarshal(want.Tools[j], &wantTool)
 			if !reflect.DeepEqual(got, wantTool) {
-				t.Errorf("%s: tool %d: PiG %s, Pi %s", c.name, j, encoded, want.Tools[j])
+				t.Errorf("%s: tool %d: Ompig %s, Pi %s", c.name, j, encoded, want.Tools[j])
 			}
 		}
 		if !reflect.DeepEqual(requests, want.Requests) {
-			t.Errorf("%s: PiG requests %v, Pi %v", c.name, requests, want.Requests)
+			t.Errorf("%s: Ompig requests %v, Pi %v", c.name, requests, want.Requests)
 		}
 		_ = client.Close()
 	}

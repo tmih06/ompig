@@ -6,13 +6,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's package-manager.ts:1171-1181 updates every Git source as its own task (GIT_UPDATE_CONCURRENCY 4) and getGitInstallPath (:2160)
 // names the checkout by host and path only, so Pi races two sources of one repository: both fetch into one FETCH_HEAD and both run
-// `git reset --hard`, which fails on .git/index.lock. PiG runs the packages of one checkout one at a time in settings order, as
+// `git reset --hard`, which fails on .git/index.lock. Ompig runs the packages of one checkout one at a time in settings order, as
 // Pi's non-failing runs do (the last package decides the checked-out commit), and keeps the other checkouts concurrent.
 //
 // The test needs no sleep: the first git process in the shared checkout waits until an independent repository's clone, which is

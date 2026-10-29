@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tui/termsim"
+	"github.com/tmih06/ompig/internal/tui/termsim"
 )
 
 type ncUpstreamComponent struct {

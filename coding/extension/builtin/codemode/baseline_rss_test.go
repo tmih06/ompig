@@ -13,9 +13,9 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Issue #211: peak RSS of a fresh process running a Codemode script through Execute, the entry the codemode tool calls,
@@ -23,7 +23,7 @@ import (
 // ru_maxrss belongs to that scenario alone. The worker limit allows two VMs per process, so two is the concurrent case.
 
 // The bounds are for the shipped binary: a -race build raises the no-op scenario's peak to 143 MiB against the 128 MiB bound, so the nightly -race run excludes this file.
-const rssChildEnv = "PIG_CODEMODE_RSS_SCENARIO"
+const rssChildEnv = "OMPIG_CODEMODE_RSS_SCENARIO"
 
 func rssTools(n int) []extension.AgentTool {
 	schema := `{"type":"object","properties":{"state":{"type":"object","description":"the decision state"},"note":{"type":"string"}},"required":["state"]}`

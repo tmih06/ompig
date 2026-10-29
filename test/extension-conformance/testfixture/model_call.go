@@ -3,12 +3,12 @@ package testfixture
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // ModelCall registers /model-call, which makes one model call through the host
 // for the provider named in its arguments. Every SDK's model calls are host
-// calls, so the request the provider receives is PiG's own.
+// calls, so the request the provider receives is Ompig's own.
 func ModelCall() *sdk.Extension {
 	ext := sdk.New("model-call")
 	ext.Command("model-call", "Make one model call", func(ctx sdk.Context, args string) error {

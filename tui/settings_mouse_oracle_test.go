@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type settingsMouseItem struct {
@@ -40,7 +40,7 @@ type settingsMouseScenario struct {
 	Steps      []settingsMouseStep `json:"steps"`
 }
 
-// The widths start at 30: below that the empty-state text and wrapped descriptions are rows wider than the pane, which Pig clips and Pi emits (D66).
+// The widths start at 30: below that the empty-state text and wrapped descriptions are rows wider than the pane, which Ompig clips and Pi emits (D66).
 func settingsMouseScenarios() []settingsMouseScenario {
 	rng := rand.New(rand.NewPCG(31, 4))
 	pick := func(items []string) string { return items[rng.IntN(len(items))] }
@@ -196,18 +196,18 @@ func TestSettingsListMouseMatchesPi(t *testing.T) {
 		}
 		report := fmt.Sprintf("scenario %d (width %d, max visible %d, search %v)", i, scenario.Width, scenario.MaxVisible, scenario.Search)
 		if !reflect.DeepEqual(got.Frames[0], expected[i].Frames[0]) {
-			report += fmt.Sprintf("\n  first frame\n  Pig %q\n  Pi  %q", got.Frames[0], expected[i].Frames[0])
+			report += fmt.Sprintf("\n  first frame\n  Ompig %q\n  Pi  %q", got.Frames[0], expected[i].Frames[0])
 		}
 		for k := range got.Outs {
 			g, _ := json.Marshal(got.Outs[k])
 			e, _ := json.Marshal(expected[i].Outs[k])
 			if !bytes.Equal(g, e) {
 				step, _ := json.Marshal(scenario.Steps[k])
-				report += fmt.Sprintf("\n  step %d %s\n  Pig %s\n  Pi  %s", k, step, g, e)
+				report += fmt.Sprintf("\n  step %d %s\n  Ompig %s\n  Pi  %s", k, step, g, e)
 				break
 			}
 			if !reflect.DeepEqual(got.Frames[k+1], expected[i].Frames[k+1]) {
-				report += fmt.Sprintf("\n  frame after step %d\n  Pig %q\n  Pi  %q", k, got.Frames[k+1], expected[i].Frames[k+1])
+				report += fmt.Sprintf("\n  frame after step %d\n  Ompig %q\n  Pi  %q", k, got.Frames[k+1], expected[i].Frames[k+1])
 				break
 			}
 		}

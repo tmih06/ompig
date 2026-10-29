@@ -4,8 +4,8 @@
 # remains unchanged. This scenario drives the setting through /settings, then
 # expands the existing message. The exact crop asserts the extension's options
 # and rendered inset, not unrelated transcript spacing or startup output.
-# Re-probed 2026-09-25: both pinned Pi and PiG reach the (auto) footer without
-# the removed PiG-only "Ready. Type a message" banner. The readiness anchor
+# Re-probed 2026-09-25: both pinned Pi and Ompig reach the (auto) footer without
+# the removed Ompig-only "Ready. Type a message" banner. The readiness anchor
 # synchronizes input only; the exact plain and escaped renderer crops stay intact.
 name = "20-message-output-padding"
 description = "Custom renderer options follow live output padding and expansion changes"
@@ -17,16 +17,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-home/agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-home/agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/message-padding.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/message-padding.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/message-padding.mjs"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "padding-render:pad=0:expanded=true:width=100"

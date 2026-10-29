@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // installResizeHandler drives onTerminalResize from SIGWINCH. Returns a stop
@@ -64,8 +64,8 @@ func (m *InteractiveMode) suspendOperations() suspendOperations {
 		ignoreInterrupt: m.ignoreSuspendInterrupt,
 		continued:       m.onSuspendContinue,
 		stop: func() {
-			// pig additive (D91): a frontend session learns of the stop
-			// while PiG still reads its input, and keeps its frames.
+			// ompig additive (D91): a frontend session learns of the stop
+			// while Ompig still reads its input, and keeps its frames.
 			if m.surface != nil {
 				m.surface.Suspend()
 			}
@@ -100,7 +100,7 @@ func (m *InteractiveMode) suspendOperations() suspendOperations {
 			return nil
 		},
 		requestRender: func() {
-			// pig additive (D91): Resume already drew what changed.
+			// ompig additive (D91): Resume already drew what changed.
 			if m.surface == nil {
 				m.tuiInst.ForceFullRender()
 				m.tuiInst.Render()

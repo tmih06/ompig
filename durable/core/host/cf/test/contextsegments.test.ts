@@ -34,7 +34,7 @@ class Rig {
     stmt.setReturnArrays(true)
     const rows = stmt.all(...(params as never[])) as unknown as unknown[][]
     if (sql.includes("group_concat") && rows[0]![1] !== null) this.entryRows += Number(rows[0]![1])
-    if (sql.includes("FROM pig_context_checkpoints") && rows.length > 0) this.checkpointReads++
+    if (sql.includes("FROM ompig_context_checkpoints") && rows.length > 0) this.checkpointReads++
     return rows
   }
   run = (sql: string, params: (number | string | Uint8Array | null)[]): number => {
@@ -84,7 +84,7 @@ function checkpointed() {
   for (let i = 0; i < 60; i++) rig.turn(2, i)
   const writer = rig.reader()
   writer.messages(2, 0, rig.tail())
-  assert.equal(rig.count("pig_context_checkpoints"), 1)
+  assert.equal(rig.count("ompig_context_checkpoints"), 1)
   const read = (at = rig.tail(), reader = rig.reader()) => {
     rig.entryRows = 0
     return { messages: reader.messages(2, 0, at), rows: rig.entryRows }
@@ -106,22 +106,22 @@ test("a cold reader resumes from the checkpoint, reads only the entries after it
 
 test("a checkpoint that is wrong in any way is ignored and the entries are derived", async (t) => {
   const mutations: [string, (rig: Rig) => void][] = [
-    ["a corrupt segment", (rig) => rig.db.exec("UPDATE pig_context_segments SET messages = CAST('[{\"role\":' AS BLOB)")],
-    ["a segment of other messages", (rig) => rig.db.exec("UPDATE pig_context_segments SET messages = CAST('[]' AS BLOB)")],
-    ["a segment that does not hold the messages it counts", (rig) => rig.db.exec("UPDATE pig_context_segments SET count = count + 1")],
-    ["segments numbered from another index", (rig) => rig.db.exec("UPDATE pig_context_segments SET idx = idx + 1")],
-    ["a missing segment", (rig) => rig.db.exec("DELETE FROM pig_context_segments")],
-    ["a header that counts other segments", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET segments = segments + 1")],
-    ["a header that counts other messages", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET settled = settled + 1")],
-    ["a header with a corrupt open list", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET open = CAST('{' AS BLOB)")],
-    ["a header with an open object", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET open = CAST('{}' AS BLOB)")],
-    ["another head marker", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET head = 3")],
+    ["a corrupt segment", (rig) => rig.db.exec("UPDATE ompig_context_segments SET messages = CAST('[{\"role\":' AS BLOB)")],
+    ["a segment of other messages", (rig) => rig.db.exec("UPDATE ompig_context_segments SET messages = CAST('[]' AS BLOB)")],
+    ["a segment that does not hold the messages it counts", (rig) => rig.db.exec("UPDATE ompig_context_segments SET count = count + 1")],
+    ["segments numbered from another index", (rig) => rig.db.exec("UPDATE ompig_context_segments SET idx = idx + 1")],
+    ["a missing segment", (rig) => rig.db.exec("DELETE FROM ompig_context_segments")],
+    ["a header that counts other segments", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET segments = segments + 1")],
+    ["a header that counts other messages", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET settled = settled + 1")],
+    ["a header with a corrupt open list", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET open = CAST('{' AS BLOB)")],
+    ["a header with an open object", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET open = CAST('{}' AS BLOB)")],
+    ["another head marker", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET head = 3")],
     ["another schema version", (rig) => rig.db.exec("UPDATE durable_schema SET version = 8")],
-    ["another derivation", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET derivation = 'other'")],
-    ["another digest", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET digest = '0000000000000000'")],
+    ["another derivation", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET derivation = 'other'")],
+    ["another digest", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET digest = '0000000000000000'")],
     ["a tail entry that is not the one it was written for (a restored or foreign store)", (rig) => rig.db.exec(`UPDATE entries SET record = replace(record, '{"kind"', '{ "kind"') WHERE id = ${rig.tail()}`)],
-    ["a tail entry the store does not have", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET tail = 99999")],
-    ["no checkpoint tables", (rig) => { rig.db.exec("DROP TABLE pig_context_segments"); rig.db.exec("DROP TABLE pig_context_checkpoints") }],
+    ["a tail entry the store does not have", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET tail = 99999")],
+    ["no checkpoint tables", (rig) => { rig.db.exec("DROP TABLE ompig_context_segments"); rig.db.exec("DROP TABLE ompig_context_checkpoints") }],
   ]
   for (const [name, mutate] of mutations) {
     await t.test(name, () => {
@@ -193,7 +193,7 @@ test("a context under a head marker is not checkpointed, and a checkpoint stored
   rig.turn(2, 100)
   writer.messages(2, marker, rig.tail())
   writer.drop(2)
-  assert.equal(rig.count("pig_context_checkpoints"), 0)
+  assert.equal(rig.count("ompig_context_checkpoints"), 0)
   const whole = rig.reader(false).read(2, marker, rig.tail())
   rig.segments().save(2, marker, rig.tail(), whole.settled, whole.open, whole.baseline)
   for (let i = 101; i < 104; i++) rig.turn(2, i)
@@ -217,17 +217,17 @@ test("a checkpoint is written in segments of at most 512 KB and appended to, nev
   const reader = rig.reader()
   for (let i = 0; i < 60; i++) rig.turn(2, i, 100_000)
   reader.messages(2, 0, rig.tail())
-  const sizes = () => (rig.db.prepare("SELECT length(messages) AS n FROM pig_context_segments ORDER BY idx").all() as { n: number }[]).map((r) => Number(r.n))
+  const sizes = () => (rig.db.prepare("SELECT length(messages) AS n FROM ompig_context_segments ORDER BY idx").all() as { n: number }[]).map((r) => Number(r.n))
   const first = sizes()
   assert.ok(first.length >= 11, `${first.length} segments for 6 MB of messages`)
   for (const n of first) assert.ok(n <= SEGMENT_BYTES, `a segment of ${n} bytes`)
-  const head = rig.db.prepare("SELECT messages FROM pig_context_segments WHERE idx = 0").get() as { messages: Uint8Array }
+  const head = rig.db.prepare("SELECT messages FROM ompig_context_segments WHERE idx = 0").get() as { messages: Uint8Array }
   for (let i = 60; i < 70; i++) rig.turn(2, i, 100_000)
   reader.messages(2, 0, rig.tail())
   const second = sizes()
   assert.deepEqual(second.slice(0, first.length - 1), first.slice(0, first.length - 1))
   assert.ok(second.length > first.length)
-  assert.deepEqual((rig.db.prepare("SELECT messages FROM pig_context_segments WHERE idx = 0").get() as { messages: Uint8Array }).messages, head.messages)
+  assert.deepEqual((rig.db.prepare("SELECT messages FROM ompig_context_segments WHERE idx = 0").get() as { messages: Uint8Array }).messages, head.messages)
   assert.deepEqual(rig.reader().messages(2, 0, rig.tail()), expected(rig, 2))
 })
 
@@ -236,15 +236,15 @@ test("a checkpoint write that fails leaves nothing behind and the read answers",
   rig.conversation(2)
   for (let i = 0; i < 40; i++) rig.turn(2, i)
   // A crash between the segments and the header the commit point: the store sees none of the write.
-  rig.failOn = /INSERT OR REPLACE INTO pig_context_checkpoints/
+  rig.failOn = /INSERT OR REPLACE INTO ompig_context_checkpoints/
   const reader = rig.reader()
   assert.deepEqual(reader.messages(2, 0, rig.tail()), expected(rig, 2))
-  assert.equal(rig.count("pig_context_segments"), 0)
-  assert.equal(rig.count("pig_context_checkpoints"), 0)
+  assert.equal(rig.count("ompig_context_segments"), 0)
+  assert.equal(rig.count("ompig_context_checkpoints"), 0)
   rig.failOn = undefined
   rig.turn(2, 40)
   assert.deepEqual(reader.messages(2, 0, rig.tail()), expected(rig, 2))
-  assert.equal(rig.count("pig_context_checkpoints"), 1)
+  assert.equal(rig.count("ompig_context_checkpoints"), 1)
   assert.deepEqual(rig.reader().messages(2, 0, rig.tail()), expected(rig, 2))
 })
 
@@ -338,7 +338,7 @@ test("an edit stored before a checkpoint applies to its target appended after it
   rig.entry(2, "pi.edit", undefined, { edits: [{ target, action: "replace", messages: [{ role: "user", content: "edited", timestamp: 1 }] }] })
   rig.turn(2, 20)
   assert.deepEqual(rig.reader().messages(2, 0, rig.tail()), expected(rig, 2))
-  const checkpointTail = () => (rig.db.prepare("SELECT tail FROM pig_context_checkpoints").get() as { tail: number }).tail
+  const checkpointTail = () => (rig.db.prepare("SELECT tail FROM ompig_context_checkpoints").get() as { tail: number }).tail
   assert.equal(checkpointTail(), stored, "no checkpoint between the edit and its target")
   rig.entry(2, "pi.user", [{ role: "user", content: "an entry before", timestamp: 2 }])
   assert.equal(rig.entry(2, "pi.user", [{ role: "user", content: "unedited target", timestamp: 3 }]), target)
@@ -352,10 +352,10 @@ test("an edit stored before a checkpoint applies to its target appended after it
 // fail the read (a failed context read is fatal to the handle).
 test("a checkpoint whose segments or open list hold something other than messages is ignored", async (t) => {
   const cases: [string, (rig: Rig) => void][] = [
-    ["a null settled message", (rig) => rig.db.exec("UPDATE pig_context_segments SET messages = CAST('[' || substr(CAST(messages AS TEXT), 2, length(messages) - 2) || ',null]' AS BLOB), count = count + 1 WHERE idx = 0; UPDATE pig_context_checkpoints SET settled = settled + 1")],
-    ["an open assistant message whose content is not a list", (rig) => rig.db.exec(`UPDATE pig_context_checkpoints SET open = CAST('[{"role":"assistant","content":"text","stopReason":"stop"},{"role":"user","content":"u"}]' AS BLOB)`)],
-    ["an open object that is not a message", (rig) => rig.db.exec(`UPDATE pig_context_checkpoints SET open = CAST('[{"content":"no role"}]' AS BLOB)`)],
-    ["a null open message", (rig) => rig.db.exec("UPDATE pig_context_checkpoints SET open = CAST('[null]' AS BLOB)")],
+    ["a null settled message", (rig) => rig.db.exec("UPDATE ompig_context_segments SET messages = CAST('[' || substr(CAST(messages AS TEXT), 2, length(messages) - 2) || ',null]' AS BLOB), count = count + 1 WHERE idx = 0; UPDATE ompig_context_checkpoints SET settled = settled + 1")],
+    ["an open assistant message whose content is not a list", (rig) => rig.db.exec(`UPDATE ompig_context_checkpoints SET open = CAST('[{"role":"assistant","content":"text","stopReason":"stop"},{"role":"user","content":"u"}]' AS BLOB)`)],
+    ["an open object that is not a message", (rig) => rig.db.exec(`UPDATE ompig_context_checkpoints SET open = CAST('[{"content":"no role"}]' AS BLOB)`)],
+    ["a null open message", (rig) => rig.db.exec("UPDATE ompig_context_checkpoints SET open = CAST('[null]' AS BLOB)")],
   ]
   for (const [name, mutate] of cases) {
     await t.test(name, () => {
@@ -368,25 +368,25 @@ test("a checkpoint whose segments or open list hold something other than message
 })
 
 // With the production cadence (a checkpoint once 256 messages settled), the cold read that derives a long context writes nothing:
-// the checkpoint is written when the core releases the range (pig_context_release), or when the reader evicts it.
+// the checkpoint is written when the core releases the range (ompig_context_release), or when the reader evicts it.
 test("a due checkpoint is written when the range is dropped or evicted, not by the read that derived it", () => {
   const rig = new Rig()
   rig.conversation(2)
   for (let i = 0; i < 100; i++) rig.turn(2, i)
   const reader = new ContextReader(rig.all, rig.segments())
   reader.messages(2, 0, rig.tail())
-  assert.equal(rig.count("pig_context_checkpoints"), 0)
+  assert.equal(rig.count("ompig_context_checkpoints"), 0)
   reader.drop(2)
-  assert.equal(rig.count("pig_context_checkpoints"), 1)
+  assert.equal(rig.count("ompig_context_checkpoints"), 1)
   rig.conversation(3)
   for (let i = 0; i < 100; i++) rig.turn(3, i)
   reader.messages(3, 0, rig.tail())
   for (let conv = 100; conv < 100 + 63; conv++) { rig.conversation(conv); rig.turn(conv, 0); reader.messages(conv, 0, rig.tail()) }
-  assert.equal(rig.count("pig_context_checkpoints"), 1)
+  assert.equal(rig.count("ompig_context_checkpoints"), 1)
   rig.conversation(200)
   rig.turn(200, 0)
   reader.messages(200, 0, rig.tail())
-  assert.equal(rig.count("pig_context_checkpoints"), 2, "conversation 3 evicted")
+  assert.equal(rig.count("ompig_context_checkpoints"), 2, "conversation 3 evicted")
   rig.entryRows = 0
   assert.deepEqual(rig.reader().messages(3, 0, rig.memory.newest(3)!), expected(rig, 3))
   assert.equal(rig.entryRows, 0)
@@ -426,7 +426,7 @@ test("an edit before the checkpoint that targets an entry after it is applied wh
   rig.entry(2, "pi.edit", undefined, { edits: [{ target: future, action: "replace", messages: [{ role: "user", content: "edited", timestamp: 1 }] }] })
   rig.turn(2, 20)
   rig.reader().messages(2, 0, future - 1)
-  assert.equal(rig.count("pig_context_checkpoints"), 0, "a range with an edit of an entry after its tail is not checkpointed")
+  assert.equal(rig.count("ompig_context_checkpoints"), 0, "a range with an edit of an entry after its tail is not checkpointed")
   rig.turn(2, 21)
   const got = rig.reader().messages(2, 0, rig.tail())
   assert.deepEqual(got, expected(rig, 2))
@@ -460,7 +460,7 @@ test("a summary under a head marker lists every active entry with a checkpoint",
   // A reader writes no checkpoint under a marker; a store can hold one (another writer's) and the summary must still list the entries.
   const through = readContextFrom(rig.memory, 2, rig.tail(), undefined).range!
   rig.segments().save(2, marker, rig.tail(), through.settled, through.open, through.baseline)
-  assert.equal(rig.count("pig_context_checkpoints"), 1)
+  assert.equal(rig.count("ompig_context_checkpoints"), 1)
   rig.turn(2, 60)
   const summary = (reader: ContextReader) => {
     const rows = answerContextRead(reader, CONTEXT_SUMMARY, [2, rig.tail(), marker, keep, 0])!
@@ -471,7 +471,7 @@ test("a summary under a head marker lists every active entry with a checkpoint",
 
 test("a checkpoint whose open messages cannot be ordered is not used", () => {
   const { rig, read } = checkpointed()
-  rig.db.exec(`UPDATE pig_context_checkpoints SET open = CAST('[{"role":"assistant","content":5}]' AS BLOB)`)
+  rig.db.exec(`UPDATE ompig_context_checkpoints SET open = CAST('[{"role":"assistant","content":5}]' AS BLOB)`)
   assert.deepEqual(read().messages, expected(rig, 2))
 })
 
@@ -486,8 +486,8 @@ test("a reader does not append to a checkpoint another writer replaced", () => {
   for (let i = 30; i < 32; i++) rig.turn(2, i)
   a.messages(2, 0, rig.tail())
   // The other writer's checkpoint stands whole: its segments are the ones its header counts.
-  const segments = rig.db.prepare("SELECT count(*) AS n, sum(count) AS m FROM pig_context_segments").get() as { n: number; m: number }
-  const header = rig.db.prepare("SELECT segments, settled FROM pig_context_checkpoints").get() as { segments: number; settled: number }
+  const segments = rig.db.prepare("SELECT count(*) AS n, sum(count) AS m FROM ompig_context_segments").get() as { n: number; m: number }
+  const header = rig.db.prepare("SELECT segments, settled FROM ompig_context_checkpoints").get() as { segments: number; settled: number }
   assert.deepEqual([Number(segments.n), Number(segments.m)], [Number(header.segments), Number(header.settled)])
   for (let i = 32; i < 34; i++) rig.turn(2, i)
   assert.deepEqual(rig.reader().messages(2, 0, rig.tail()), expected(rig, 2))

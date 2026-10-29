@@ -6,9 +6,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // decodeRunnerEvent is the typed event of a RunnerEmitEvent in Pi's JSON shape (runner.ts:176-190): the events the generic emit() takes.

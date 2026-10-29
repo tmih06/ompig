@@ -13,9 +13,9 @@ import (
 	"slices"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ErrInteractiveCrashed reports that Run recovered a crash it already
@@ -154,7 +154,7 @@ func (m *InteractiveMode) requestedExitError() error {
 // terminal has been restored. A dead-terminal error exits 129 without a report or crash record. Mirrors upstream
 // InteractiveMode.uncaughtCrash.
 func (m *InteractiveMode) uncaughtCrash(value any, stack []byte, stderr io.Writer) {
-	// A dead terminal is not a pig crash. Do not report or record it.
+	// A dead terminal is not a ompig crash. Do not report or record it.
 	if failure, ok := value.(error); ok && isDeadTerminalError(failure) {
 		m.emergencyTerminalExit("terminal gone: " + failure.Error())
 	}
@@ -172,14 +172,14 @@ func (m *InteractiveMode) uncaughtCrash(value any, stack []byte, stderr io.Write
 	if m.recordCrash("uncaught_exception", value, string(stack)) {
 		_, _ = fmt.Fprintf(stderr, "\n%s\n", crashReportInstructions(m.crashSessionFile()))
 	}
-	// A crash is the exit the flight recorder (PIG_PROFILE=flight) exists for; uncaughtOffLoop exits before any deferred profile stop runs.
+	// A crash is the exit the flight recorder (OMPIG_PROFILE=flight) exists for; uncaughtOffLoop exits before any deferred profile stop runs.
 	dumpFlightRecord(m.opts.AgentDir)
 }
 
 // uncaughtOffLoop ends the process for a panic in a goroutine the owner loop does not run, as upstream's uncaughtException
 // handler does for an unawaited rejection: it stops the extension processes, restores the terminal, reports and records
 // the crash, and exits 1. It runs on the panicking goroutine because the owner loop may be the thing that is stuck.
-// pig additive (D102): Go would otherwise end the process with a stderr dump and no crash record.
+// ompig additive (D102): Go would otherwise end the process with a stderr dump and no crash record.
 func (m *InteractiveMode) uncaughtOffLoop(value any, stack []byte) {
 	if failure, ok := value.(error); !ok || !isDeadTerminalError(failure) {
 		if m.opts.TerminateExtensionProcesses != nil {

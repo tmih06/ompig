@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/jsonschema"
+	"github.com/tmih06/ompig/third_party/jsonschema"
 )
 
 func testOutputDir(t *testing.T, suite, dir string, draft *jsonschema.Draft) {

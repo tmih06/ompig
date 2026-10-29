@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:198,473 onPayload is a public property copied into createLoopConfig once; agent-loop.ts passes it to every request of that run. A hook assigned while a run is in flight is first used by the next run.

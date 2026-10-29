@@ -20,8 +20,8 @@ import { openNodeSqliteStorage } from "@earendil-works/pi-durable/storage/sqlite
 
 // The pi-durable version that resolved here, for the result lines: durable/interop's lockfile, or another locked install
 // the script is copied next to (bench/k8s/image/pi-durable).
-// BENCH_DURABLE_VERSION and BENCH_TARGET name another implementation of the same API that runs this program (the PiG
-// core through durable/core/host/cf/bench/pig-durable.mjs).
+// BENCH_DURABLE_VERSION and BENCH_TARGET name another implementation of the same API that runs this program (the Ompig
+// core through durable/core/host/cf/bench/ompig-durable.mjs).
 const piDurableVersion = process.env.BENCH_DURABLE_VERSION ?? JSON.parse(readFileSync(new URL("../package.json", import.meta.resolve("@earendil-works/pi-durable")), "utf8")).version;
 const benchTarget = process.env.BENCH_TARGET ?? "pi";
 

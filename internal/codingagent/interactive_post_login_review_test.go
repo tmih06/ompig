@@ -8,9 +8,9 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 type externalPathLoginProvider struct {
@@ -65,7 +65,7 @@ func TestAPIKeyLoginPromptMasksInput(t *testing.T) {
 	}
 }
 
-// External stores are PiG's contributed-auth capability (D40), not Pi's auth.json store.
+// External stores are Ompig's contributed-auth capability (D40), not Pi's auth.json store.
 func TestRegisteredOAuthLoginReportsReturnedCredentialPath(t *testing.T) {
 	for _, providerID := range []string{"custom-store", "anthropic"} {
 		t.Run(providerID, func(t *testing.T) {

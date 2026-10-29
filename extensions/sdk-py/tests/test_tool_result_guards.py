@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
-import pig_sdk
+import ompig_sdk
 
 GUARDS = {
-    "bash": pig_sdk.is_bash_tool_result,
-    "powershell": pig_sdk.is_powershell_tool_result,
-    "read": pig_sdk.is_read_tool_result,
-    "edit": pig_sdk.is_edit_tool_result,
-    "write": pig_sdk.is_write_tool_result,
-    "grep": pig_sdk.is_grep_tool_result,
-    "find": pig_sdk.is_find_tool_result,
-    "ls": pig_sdk.is_ls_tool_result,
+    "bash": ompig_sdk.is_bash_tool_result,
+    "powershell": ompig_sdk.is_powershell_tool_result,
+    "read": ompig_sdk.is_read_tool_result,
+    "edit": ompig_sdk.is_edit_tool_result,
+    "write": ompig_sdk.is_write_tool_result,
+    "grep": ompig_sdk.is_grep_tool_result,
+    "find": ompig_sdk.is_find_tool_result,
+    "ls": ompig_sdk.is_ls_tool_result,
 }
 
 

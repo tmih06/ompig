@@ -20,12 +20,12 @@ import (
 )
 
 // clipboardDescendantEnv names the test's loopback address. This test binary, run with it set, connects and reports "child", starts a grandchild that inherits its stdin and stdout, reports the grandchild's PID, waits for the test's acknowledgement of that report, and exits without closing the connection, so the test reads the connection's end as the child's exit. The acknowledgement matters on Windows, where a process that exits with an open socket resets the connection and the reset discards report bytes the test has not read yet.
-const clipboardDescendantEnv = "PIG_TEST_CLIPBOARD_DESCENDANT"
+const clipboardDescendantEnv = "OMPIG_TEST_CLIPBOARD_DESCENDANT"
 
 // clipboardDescendantHoldEnv names the test's loopback address. This test binary, run with it set, connects, reports "grandchild" and holds its inherited stdin and stdout until the connection ends. It neither reads stdin nor writes stdout unless the test sends "write", which writes clipboardDescendantPayload bytes to stdout and reports "wrote".
-const clipboardDescendantHoldEnv = "PIG_TEST_CLIPBOARD_DESCENDANT_HOLD"
+const clipboardDescendantHoldEnv = "OMPIG_TEST_CLIPBOARD_DESCENDANT_HOLD"
 
-const clipboardDescendantFailureEnv = "PIG_TEST_CLIPBOARD_DESCENDANT_FAILURE"
+const clipboardDescendantFailureEnv = "OMPIG_TEST_CLIPBOARD_DESCENDANT_FAILURE"
 
 // clipboardDescendantPayload is larger than any pipe buffer, so the grandchild's write completes only while the reader drains stdout.
 const clipboardDescendantPayload = 1 << 20

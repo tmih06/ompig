@@ -5,7 +5,7 @@ package journeys
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 const markdownReply = "# Release notes\n\nThis reply streams **bold**, _italic_ and `inline code` through the markdown renderer.\n\n" +
@@ -19,7 +19,7 @@ func init() {
 	register(&harness.Journey{
 		Name:    "startup-markdown-quit",
 		Doc:     "Cold start, a plain prompt, a streamed markdown reply (headings, lists, quote, code, table, wrapping), two follow-up turns and a clean quit.",
-		Touches: []string{"tui/", "coding/", "internal/codingagent/", "cmd/pig/"},
+		Touches: []string{"tui/", "coding/", "internal/codingagent/", "cmd/ompig/"},
 		Env:     func(harness.Kind) harness.Env { return harness.Env{KeepHeader: true} },
 		Script: script(
 			onPrompt("MD", fixed(harness.Say(markdownReply))),

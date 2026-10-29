@@ -9,7 +9,7 @@ import (
 // The Kitty keyboard-protocol stack is per screen. Pi keeps one push on the
 // active screen: tui.ts start() enters the alternate screen before
 // terminal.start() pushes, and stop() pops in terminal.stop() before
-// afterTerminalStop() leaves it. PiG's driver pushes on the main screen first,
+// afterTerminalStop() leaves it. Ompig's driver pushes on the main screen first,
 // so TuiAltScreen moves an outstanding push across each screen switch and
 // writes nothing when no push is outstanding (including for renderers that
 // write to a non-terminal output).

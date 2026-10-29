@@ -11,8 +11,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // sentinel colors make the exact ANSI structure assertable without depending on
@@ -25,9 +25,9 @@ func noticeTestTheme() *tui.Theme {
 // SGR 39 and theme.bold (chalk.bold) closes bold with SGR 22; neither resets
 // every attribute.
 func TestBinaryUpdateNoticeBodyMatchesUpstreamLayout(t *testing.T) {
-	got := binaryUpdateNoticeBody(noticeTestTheme(), "1.2.3", "pig update")
+	got := binaryUpdateNoticeBody(noticeTestTheme(), "1.2.3", "ompig update")
 	want := "\x1b[1m<W>Update Available\x1b[39m\x1b[22m" +
-		"\n<M>New version 1.2.3 is available. Run \x1b[39m<A>pig update\x1b[39m"
+		"\n<M>New version 1.2.3 is available. Run \x1b[39m<A>ompig update\x1b[39m"
 	if got != want {
 		t.Fatalf("binary notice body mismatch:\n got: %q\nwant: %q", got, want)
 	}
@@ -38,7 +38,7 @@ func TestBinaryUpdateNoticeBodyMatchesUpstreamLayout(t *testing.T) {
 func TestPackageUpdateNoticeBodyMatchesUpstreamLayout(t *testing.T) {
 	got := packageUpdateNoticeBody(noticeTestTheme(), []string{"alpha", "beta"})
 	want := "\x1b[1m<W>Package Updates Available\x1b[39m\x1b[22m" +
-		"\n<M>Package updates are available. Run \x1b[39m<A>pig update --extensions\x1b[39m" +
+		"\n<M>Package updates are available. Run \x1b[39m<A>ompig update --extensions\x1b[39m" +
 		"\n<M>Packages:\x1b[39m" +
 		"\n- alpha\n- beta"
 	if got != want {
@@ -75,7 +75,7 @@ func TestNewVersionNotificationMatchesPiLayout(t *testing.T) {
 		"",
 		rule,
 		" Update Available",
-		" New version 1.2.3 is available. Run pig update",
+		" New version 1.2.3 is available. Run ompig update",
 		"",
 		" First bold note line",
 		"",
@@ -91,29 +91,28 @@ func TestNewVersionNotificationMatchesPiLayout(t *testing.T) {
 // upstream: interactive-mode.ts:4475-4502. Pi always pads the heading block;
 // with no release note it renders no note block or spacers.
 func TestNewVersionNotificationWithoutNote(t *testing.T) {
-	const rule = "────────────────────────────────────────────────"
 	got := noticeLayout(t, func(m *InteractiveMode) {
 		m.showNewVersionNotification(LatestPiRelease{Version: "1.2.3", Note: new("https://example.test/c")})
-	}, 48)
+	}, 50)
 	want := []string{
 		"",
-		rule,
+		strings.Repeat("─", 50),
 		" Update Available",
-		" New version 1.2.3 is available. Run pig update",
+		" New version 1.2.3 is available. Run ompig update",
 		" Changelog: https://example.test/c",
-		rule,
+		strings.Repeat("─", 50),
 	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("notice rows:\n got: %q\nwant: %q", got, want)
 	}
 }
 
-// PiG's release manifest carries the release page URL as its note. That URL is
+// Ompig's release manifest carries the release page URL as its note. That URL is
 // the changelog link: it is shown once, on the Changelog line, not again as a
 // note block.
 func TestBinaryUpdateChangelogURLComesFromTheManifestNote(t *testing.T) {
 	for _, tc := range []struct{ notes, url, note string }{
-		{"https://github.com/MichaelKinsy/PiG/releases/tag/v1.2.3", "https://github.com/MichaelKinsy/PiG/releases/tag/v1.2.3", ""},
+		{"https://github.com/tmih06/ompig/releases/tag/v1.2.3", "https://github.com/tmih06/ompig/releases/tag/v1.2.3", ""},
 		{"  https://updates.example/notes  ", "https://updates.example/notes", ""},
 		{"Fixes the npm update path.", "", "Fixes the npm update path."},
 		{"See https://example.test/x for details", "", "See https://example.test/x for details"},
@@ -130,18 +129,20 @@ func TestBinaryUpdateChangelogURLComesFromTheManifestNote(t *testing.T) {
 // Text(..., 1, 0), so its lines carry the same one-column padding.
 func TestPackageUpdateNotificationPadsLikePi(t *testing.T) {
 	const rule = "────────────────────────────────────────────────────────────"
+	// Ompig's name is two cells wider than Pi's, so the notice is laid out two
+	// cells wider to keep the command on one line.
 	got := noticeLayout(t, func(m *InteractiveMode) {
 		m.finishPackageUpdateCheck("linux", []string{"alpha", "beta"})
-	}, 60)
+	}, 62)
 	want := []string{
 		"",
-		rule,
+		strings.Repeat("─", 62),
 		" Package Updates Available",
-		" Package updates are available. Run pig update --extensions",
+		" Package updates are available. Run ompig update --extensions",
 		" Packages:",
 		" - alpha",
 		" - beta",
-		rule,
+		strings.Repeat("─", 62),
 	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("notice rows:\n got: %q\nwant: %q", got, want)
@@ -151,9 +152,10 @@ func TestPackageUpdateNotificationPadsLikePi(t *testing.T) {
 // ShowPackageUpdateNotification is the public member the startup check calls: the same bordered notice, with no windows title restore.
 // Pi: packages/coding-agent/src/modes/interactive/interactive-mode.ts:1161 (InteractiveMode.showPackageUpdateNotification).
 func TestShowPackageUpdateNotificationAddsTheNotice(t *testing.T) {
-	const rule = "────────────────────────────────────────────────────────────"
-	got := noticeLayout(t, func(m *InteractiveMode) { m.ShowPackageUpdateNotification([]string{"gamma"}) }, 60)
-	want := []string{"", rule, " Package Updates Available", " Package updates are available. Run pig update --extensions", " Packages:", " - gamma", rule}
+	const width = 62
+	rule := strings.Repeat("─", width)
+	got := noticeLayout(t, func(m *InteractiveMode) { m.ShowPackageUpdateNotification([]string{"gamma"}) }, width)
+	want := []string{"", rule, " Package Updates Available", " Package updates are available. Run ompig update --extensions", " Packages:", " - gamma", rule}
 	if !slices.Equal(got, want) {
 		t.Fatalf("notice rows:\n got: %q\nwant: %q", got, want)
 	}
@@ -166,7 +168,7 @@ func TestCheckForBinaryUpdateCarriesTheManifestNote(t *testing.T) {
 		notes string
 		want  *string
 	}{
-		{" https://github.com/MichaelKinsy/PiG/releases/tag/v9.9.9 ", new("https://github.com/MichaelKinsy/PiG/releases/tag/v9.9.9")},
+		{" https://github.com/tmih06/ompig/releases/tag/v9.9.9 ", new("https://github.com/tmih06/ompig/releases/tag/v9.9.9")},
 		{"Plain release note.", new("Plain release note.")},
 		{"  ", nil},
 	} {
@@ -177,7 +179,7 @@ func TestCheckForBinaryUpdateCarriesTheManifestNote(t *testing.T) {
 			})
 			_, _ = w.Write(body)
 		}))
-		t.Setenv("PIG_UPDATE_URL", srv.URL)
+		t.Setenv("OMPIG_UPDATE_URL", srv.URL)
 		t.Setenv("PI_SKIP_VERSION_CHECK", "")
 		u := CheckForBinaryUpdate(context.Background(), srv.Client(), "0.1.1")
 		srv.Close()
@@ -233,16 +235,24 @@ func renderNoticeBytes(t *testing.T, show func(*InteractiveMode), width int) []s
 // terminal without hyperlinks, APP_NAME "pig", version 1.2.3, no note and the
 // changelog URL https://example.test/c.
 func TestNewVersionNotificationBytesMatchPi(t *testing.T) {
+	// Ompig divergence (D2): the notice names Ompig, two cells wider than Pi's
+	// three-letter name, so the rows are laid out at that width. The structure
+	// is upstream's: Spacer, rule, title, message, changelog, rule.
+	const width = 50
 	got := renderNoticeBytes(t, func(m *InteractiveMode) {
 		m.showNewVersionNotification(LatestPiRelease{Version: "1.2.3", Note: new("https://example.test/c")})
-	}, 48)
+	}, width)
+	rule := "\x1b[38;2;205;154;34m" + strings.Repeat("─", width) + "\x1b[39m"
+	padRow := func(text string) string {
+		return text + strings.Repeat(" ", width-widthx.VisibleWidth(stripANSITest(text)))
+	}
 	want := []string{
 		"",
-		"\x1b[38;2;205;154;34m────────────────────────────────────────────────\x1b[39m",
-		" \x1b[1m\x1b[38;2;205;154;34mUpdate Available\x1b[39m\x1b[22m                               ",
-		" \x1b[38;2;157;165;169mNew version 1.2.3 is available. Run \x1b[39m\x1b[38;2;167;152;215mpig update\x1b[39m ",
-		" \x1b[38;2;157;165;169mChangelog: \x1b[39m\x1b[38;2;167;152;215mhttps://example.test/c\x1b[39m              ",
-		"\x1b[38;2;205;154;34m────────────────────────────────────────────────\x1b[39m",
+		rule,
+		padRow(" \x1b[1m\x1b[38;2;205;154;34mUpdate Available\x1b[39m\x1b[22m"),
+		padRow(" \x1b[38;2;157;165;169mNew version 1.2.3 is available. Run \x1b[39m\x1b[38;2;167;152;215mompig update\x1b[39m"),
+		padRow(" \x1b[38;2;157;165;169mChangelog: \x1b[39m\x1b[38;2;167;152;215mhttps://example.test/c\x1b[39m"),
+		rule,
 	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("notice rows:\n got: %q\nwant: %q", got, want)
@@ -253,18 +263,25 @@ func TestNewVersionNotificationBytesMatchPi(t *testing.T) {
 // showPackageUpdateNotification(["alpha", "beta"]) at width 60, rendered as
 // above.
 func TestPackageUpdateNotificationBytesMatchPi(t *testing.T) {
+	// Ompig divergence (D2): the command line carries the wider Ompig name, so
+	// the rows are laid out at a width that keeps it on one line.
+	const width = 62
 	got := renderNoticeBytes(t, func(m *InteractiveMode) {
 		m.finishPackageUpdateCheck("linux", []string{"alpha", "beta"})
-	}, 60)
+	}, width)
+	rule := "\x1b[38;2;205;154;34m" + strings.Repeat("─", width) + "\x1b[39m"
+	padRow := func(text string) string {
+		return text + strings.Repeat(" ", width-widthx.VisibleWidth(stripANSITest(text)))
+	}
 	want := []string{
 		"",
-		"\x1b[38;2;205;154;34m────────────────────────────────────────────────────────────\x1b[39m",
-		" \x1b[1m\x1b[38;2;205;154;34mPackage Updates Available\x1b[39m\x1b[22m                                  ",
-		" \x1b[38;2;157;165;169mPackage updates are available. Run \x1b[39m\x1b[38;2;167;152;215mpig update --extensions\x1b[39m ",
-		" \x1b[38;2;157;165;169mPackages:\x1b[39m                                                  ",
-		" - alpha                                                    ",
-		" - beta                                                     ",
-		"\x1b[38;2;205;154;34m────────────────────────────────────────────────────────────\x1b[39m",
+		rule,
+		padRow(" \x1b[1m\x1b[38;2;205;154;34mPackage Updates Available\x1b[39m\x1b[22m"),
+		padRow(" \x1b[38;2;157;165;169mPackage updates are available. Run \x1b[39m\x1b[38;2;167;152;215mompig update --extensions\x1b[39m"),
+		padRow(" \x1b[38;2;157;165;169mPackages:\x1b[39m"),
+		padRow(" - alpha"),
+		padRow(" - beta"),
+		rule,
 	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("notice rows:\n got: %q\nwant: %q", got, want)

@@ -12,21 +12,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // embeddedMainEnv makes the test binary a program that embeds the command line through Main.
-const embeddedMainEnv = "PIG_TEST_EMBEDDED_MAIN"
+const embeddedMainEnv = "OMPIG_TEST_EMBEDDED_MAIN"
 
 // embeddedTrustEnv makes the test binary a program whose own extension decides project trust.
-const embeddedTrustEnv = "PIG_TEST_EMBEDDED_TRUST"
+const embeddedTrustEnv = "OMPIG_TEST_EMBEDDED_TRUST"
 
 // embeddedPackageTrustEnv makes the test binary a program whose own extension decides project trust for a package command.
-const embeddedPackageTrustEnv = "PIG_TEST_EMBEDDED_PACKAGE_TRUST"
+const embeddedPackageTrustEnv = "OMPIG_TEST_EMBEDDED_PACKAGE_TRUST"
 
 // embeddedFailingLogEnv makes the test binary a program whose own extension appends a line to the named file and fails.
-const embeddedFailingLogEnv = "PIG_TEST_EMBEDDED_FAILING_LOG"
+const embeddedFailingLogEnv = "OMPIG_TEST_EMBEDDED_FAILING_LOG"
 
 // trustingFactory is an extension that answers "yes" to project_trust.
 func trustingFactory(api extension.API) error {
@@ -44,7 +44,7 @@ func embeddedCommand(name string) extension.ExtensionFactory {
 }
 
 // embeddedNoBuiltinsEnv makes the embedding program one whose build strips every built-in extension (D92).
-const embeddedNoBuiltinsEnv = "PIG_TEST_EMBEDDED_NO_BUILTINS"
+const embeddedNoBuiltinsEnv = "OMPIG_TEST_EMBEDDED_NO_BUILTINS"
 
 // Pi's main(args, { extensionFactories }) loads the program's extensions after the built-in ones (main.ts:569-575, resource-loader.ts:376-377,1138-1141). A program that runs the command line through Main(args, &MainOptions{ExtensionFactories}) gets its named and bare factories loaded as `<inline:name>` and `<inline:N>`, numbered among the non-built-in entries, and their commands reach RPC get_commands after the built-in extensions' commands. A build that strips every built-in extension still loads the program's own.
 // mutation-checked: Main dropping options.ExtensionFactories, buildResources not loading the inline extensions, or keeping the in-process extensions only when a built-in exists, fails.
@@ -67,7 +67,7 @@ func TestMainLoadsTheProgramsExtensionFactories(t *testing.T) {
 		t.Run("no-builtins="+noBuiltins, func(t *testing.T) {
 			home := t.TempDir()
 			p := startRPCCommandAt(t, t.TempDir(), []string{
-				embeddedMainEnv + "=1", embeddedNoBuiltinsEnv + "=" + noBuiltins, "HOME=" + home, "USERPROFILE=" + home, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1",
+				embeddedMainEnv + "=1", embeddedNoBuiltinsEnv + "=" + noBuiltins, "HOME=" + home, "USERPROFILE=" + home, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1",
 			}, os.Args[0], "-test.run=^TestMainLoadsTheProgramsExtensionFactories$", "--", "--mode", "rpc", "--no-session")
 			p.send(`{"id":"commands","type":"get_commands"}`)
 			p.await("the command catalog", func(record rpcRecord) bool {
@@ -130,7 +130,7 @@ func TestMainRunsTheProgramsExtensionFactoriesInTheProjectTrustPass(t *testing.T
 	}
 	home := t.TempDir()
 	p := startRPCCommandAt(t, project, []string{
-		embeddedTrustEnv + "=1", "HOME=" + home, "USERPROFILE=" + home, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1",
+		embeddedTrustEnv + "=1", "HOME=" + home, "USERPROFILE=" + home, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1",
 	}, os.Args[0], "-test.run=^TestMainRunsTheProgramsExtensionFactoriesInTheProjectTrustPass$", "--", "--mode", "rpc", "--no-session")
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	p.await("the command catalog", func(record rpcRecord) bool {
@@ -176,7 +176,7 @@ func TestMainPassesTheProgramsExtensionFactoriesToPackageCommands(t *testing.T) 
 	home := t.TempDir()
 	cmd := exec.CommandContext(t.Context(), os.Args[0], "-test.run=^TestMainPassesTheProgramsExtensionFactoriesToPackageCommands$", "--", "list")
 	cmd.Dir = project
-	cmd.Env = append(os.Environ(), embeddedPackageTrustEnv+"=1", "HOME="+home, "USERPROFILE="+home, "PIG_OFFLINE=1")
+	cmd.Env = append(os.Environ(), embeddedPackageTrustEnv+"=1", "HOME="+home, "USERPROFILE="+home, "OMPIG_OFFLINE=1")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("list: %v\n%s", err, output)
@@ -214,7 +214,7 @@ func TestMainRunsAFailingProgramFactoryOnceWithAProjectTrustPass(t *testing.T) {
 	home := t.TempDir()
 	cmd := exec.CommandContext(t.Context(), os.Args[0], "-test.run=^TestMainRunsAFailingProgramFactoryOnceWithAProjectTrustPass$", "--", "--mode", "rpc", "--no-session")
 	cmd.Dir = project
-	cmd.Env = append(os.Environ(), embeddedFailingLogEnv+"="+log, "HOME="+home, "USERPROFILE="+home, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1")
+	cmd.Env = append(os.Environ(), embeddedFailingLogEnv+"="+log, "HOME="+home, "USERPROFILE="+home, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1")
 	cmd.Stdin = strings.NewReader("")
 	output, err := cmd.CombinedOutput()
 	if exitErr, ok := errors.AsType[*exec.ExitError](err); !ok || exitErr.ExitCode() != 1 {
@@ -233,7 +233,7 @@ func TestMainRunsAFailingProgramFactoryOnceWithAProjectTrustPass(t *testing.T) {
 }
 
 // embeddedCommandsLogEnv makes the test binary a program whose own extension writes the command names pi.getCommands() lists at session_start to the named file.
-const embeddedCommandsLogEnv = "PIG_TEST_EMBEDDED_COMMANDS_LOG"
+const embeddedCommandsLogEnv = "OMPIG_TEST_EMBEDDED_COMMANDS_LOG"
 
 // Print mode binds the Session to its extensions, so pi.getCommands() lists the extension commands, the Session's prompt templates and its skills (agent-session.ts:3361-3390 over session.promptTemplates and resourceLoader.getSkills()), the same catalog RPC's get_commands reports. A program's in-process extension reading it at session_start sees the --prompt-template and --skill resources.
 // mutation-checked: print mode starting its Session with coding.NoResources (the CLI keeping templates and skills in a mode-side catalog) lists only noop.
@@ -276,7 +276,7 @@ func TestPrintModeExtensionCommandsIncludeTheSessionsTemplatesAndSkills(t *testi
 	log := filepath.Join(t.TempDir(), "commands.log")
 	cmd := exec.CommandContext(t.Context(), os.Args[0], "-test.run=^TestPrintModeExtensionCommandsIncludeTheSessionsTemplatesAndSkills$", "--", "--no-session", "--prompt-template", prompt, "--skill", filepath.Dir(skill), "-p", "/noop")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), embeddedCommandsLogEnv+"="+log, "HOME="+home, "USERPROFILE="+home, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1")
+	cmd.Env = append(os.Environ(), embeddedCommandsLogEnv+"="+log, "HOME="+home, "USERPROFILE="+home, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1")
 	if output, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("print mode: %v\n%s", err, output)
 	}

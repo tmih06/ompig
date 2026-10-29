@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// TypeBox's Convert wraps a value that is not an array in one when the schema asks for an array: {"edits": {...}} becomes {"edits": [{...}]}. The wrapped object keeps the member order of the arguments' text in Pi (JSON.parse's enumeration order); the arguments Pig returns and the order of the
-// errors it lists must follow it, not the byte-sorted order of an object whose position Pig no longer knows. The oracle comparison of TestValidateToolArgumentsMatchesPiOnSeededSchemas decodes both results, so it cannot see member order: this test compares text.
+// TypeBox's Convert wraps a value that is not an array in one when the schema asks for an array: {"edits": {...}} becomes {"edits": [{...}]}. The wrapped object keeps the member order of the arguments' text in Pi (JSON.parse's enumeration order); the arguments Ompig returns and the order of the
+// errors it lists must follow it, not the byte-sorted order of an object whose position Ompig no longer knows. The oracle comparison of TestValidateToolArgumentsMatchesPiOnSeededSchemas decodes both results, so it cannot see member order: this test compares text.
 func TestValidateToolArgumentsKeepsTheSourceOrderOfWrappedObjectsLikePi(t *testing.T) {
 	num := `{"~kind":"Integer","type":"integer"}`
 	str := `{"~kind":"String","type":"string"}`
@@ -62,7 +62,7 @@ func TestValidateToolArgumentsKeepsTheSourceOrderOfWrappedObjectsLikePi(t *testi
 			want = "ERR " + *expected[i].Err
 		}
 		if have != want {
-			t.Errorf("probe %d: arguments %s\n  Pig %s\n  Pi  %s", i, probe.Args, have, want)
+			t.Errorf("probe %d: arguments %s\n  Ompig %s\n  Pi  %s", i, probe.Args, have, want)
 		}
 	}
 }

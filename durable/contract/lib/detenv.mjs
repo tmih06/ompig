@@ -96,7 +96,7 @@ globalThis.clearInterval = clear
 
 /** The virtual clock, for `HarnessOptions.now` and the tape. */
 export const clock = { now: () => now, epoch: EPOCH, pending: () => timers.size }
-globalThis[Symbol.for("pig.contract.clock")] = clock
+globalThis[Symbol.for("ompig.contract.clock")] = clock
 
 // mkdtemp draws its random suffix from the operating system. The suffix becomes a deterministic hash of the seed, the prefix
 // and the number of earlier calls with that prefix, so it does not depend on how many other random numbers were drawn.

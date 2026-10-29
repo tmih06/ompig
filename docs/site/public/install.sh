@@ -1,31 +1,31 @@
 #!/bin/sh
 # SPDX-License-Identifier: MIT
 #
-# PiG installer for macOS, Linux and Android (Termux).
+# Ompig installer for macOS, Linux and Android (Termux).
 #
-#   curl -fsSL https://pi-in-go.dev/install.sh | sh
+#   curl -fsSL https://ompig.dev/install.sh | sh
 #
-# Downloads the PiG release archive for this machine from GitHub Releases,
-# verifies it against the release's SHA256SUMS, and installs the pig binary.
+# Downloads the Ompig release archive for this machine from GitHub Releases,
+# verifies it against the release's SHA256SUMS, and installs the ompig binary.
 # It fails closed: no published release, a missing checksum, or a checksum
 # mismatch stops the install before anything is written to the install
 # directory.
 #
 # Environment:
-#   PIG_VERSION        install this version (for example 0.2.0) instead of the latest
-#   PIG_INSTALL_DIR    install directory (default: $HOME/.local/bin, or $PREFIX/bin in Termux)
-#   PIG_API_BASE       API that names the latest release (default: https://pi-in-go.dev/api)
-#   PIG_LATEST_RELEASE_URL  page that redirects to the latest release, used when the API does not answer (default: https://github.com/MichaelKinsy/PiG/releases/latest)
-#   PIG_DOWNLOAD_BASE  release download root (default: https://github.com/MichaelKinsy/PiG/releases/download)
-#   PIG_UPDATE_URL     update manifest `pig update` should use (default: the latest release's update.json)
-#   PIG_HOME           PiG's settings directory, where the install receipt goes (default: ~/.pig)
+#   OMPIG_VERSION        install this version (for example 0.2.0) instead of the latest
+#   OMPIG_INSTALL_DIR    install directory (default: $HOME/.local/bin, or $PREFIX/bin in Termux)
+#   OMPIG_API_BASE       API that names the latest release (default: https://ompig.dev/api)
+#   OMPIG_LATEST_RELEASE_URL  page that redirects to the latest release, used when the API does not answer (default: https://github.com/tmih06/ompig/releases/latest)
+#   OMPIG_DOWNLOAD_BASE  release download root (default: https://github.com/tmih06/ompig/releases/download)
+#   OMPIG_UPDATE_URL     update manifest `ompig update` should use (default: the latest release's update.json)
+#   OMPIG_HOME           Ompig's settings directory, where the install receipt goes (default: ~/.ompig)
 #
 # On Android (Termux) it installs the android-arm64 release, never linux-arm64,
 # into $PREFIX/bin. Other Android CPUs have no release.
 #
 # After installing, it records an owner-only receipt (<settings>/install-receipt)
 # naming the installed executable, its release, its SHA-256, and its update
-# source, so `pig update` can later replace the binary in place.
+# source, so `ompig update` can later replace the binary in place.
 #
 # The whole script is one function called on its last line, so a truncated
 # download runs nothing.
@@ -33,36 +33,36 @@
 set -eu
 
 main() {
-  api_base=${PIG_API_BASE:-https://pi-in-go.dev/api}
-  latest_release_url=${PIG_LATEST_RELEASE_URL:-https://github.com/MichaelKinsy/PiG/releases/latest}
-  download_base=${PIG_DOWNLOAD_BASE:-https://github.com/MichaelKinsy/PiG/releases/download}
+  api_base=${OMPIG_API_BASE:-https://ompig.dev/api}
+  latest_release_url=${OMPIG_LATEST_RELEASE_URL:-https://github.com/tmih06/ompig/releases/latest}
+  download_base=${OMPIG_DOWNLOAD_BASE:-https://github.com/tmih06/ompig/releases/download}
 
   need uname
   need tar
   need mktemp
   downloader=$(pick_downloader)
   platform=$(detect_platform)
-  install_dir=${PIG_INSTALL_DIR:-$(default_install_dir)}
+  install_dir=${OMPIG_INSTALL_DIR:-$(default_install_dir)}
 
-  version=${PIG_VERSION:-}
+  version=${OMPIG_VERSION:-}
   if [ -z "$version" ]; then
     version=$(latest_version "$downloader" "$api_base" "$latest_release_url")
   fi
   version=${version#v}
   valid_version "$version" || fail "not a release version: $version"
 
-  name="pig-${version}-${platform}"
+  name="ompig-${version}-${platform}"
   archive="${name}.tar.gz"
   release_url="${download_base%/}/v${version}"
 
-  work=$(mktemp -d 2>/dev/null || mktemp -d -t pig-install)
+  work=$(mktemp -d 2>/dev/null || mktemp -d -t ompig-install)
   trap 'rm -rf "$work"' EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
 
-  say "Downloading PiG ${version} for ${platform}"
+  say "Downloading Ompig ${version} for ${platform}"
   fetch "$downloader" "${release_url}/SHA256SUMS" "$work/SHA256SUMS" ||
-    fail "PiG ${version} has no SHA256SUMS at ${release_url}; refusing to install an unverified archive"
+    fail "Ompig ${version} has no SHA256SUMS at ${release_url}; refusing to install an unverified archive"
   fetch "$downloader" "${release_url}/${archive}" "$work/$archive" ||
     fail "could not download ${release_url}/${archive}"
 
@@ -74,46 +74,46 @@ main() {
 
   mkdir "$work/extract"
   tar -xzf "$work/$archive" -C "$work/extract"
-  binary="$work/extract/${name}/pig"
+  binary="$work/extract/${name}/ompig"
   if [ ! -f "$binary" ] || [ -L "$binary" ]; then
-    fail "${archive} does not contain ${name}/pig"
+    fail "${archive} does not contain ${name}/ompig"
   fi
 
   # Stage beside the destination (a noexec /tmp cannot run the smoke test),
-  # then replace any existing pig in one rename.
+  # then replace any existing ompig in one rename.
   mkdir -p "$install_dir"
-  staged="${install_dir}/.pig.install.$$"
+  staged="${install_dir}/.ompig.install.$$"
   trap 'rm -rf "$work" "$staged"' EXIT
   cp "$binary" "$staged"
   chmod 0755 "$staged"
-  "$staged" --version >/dev/null 2>&1 || fail "the downloaded pig binary does not run on this machine"
-  mv -f "$staged" "${install_dir}/pig"
+  "$staged" --version >/dev/null 2>&1 || fail "the downloaded ompig binary does not run on this machine"
+  mv -f "$staged" "${install_dir}/ompig"
 
-  say "Installed $("${install_dir}/pig" --version 2>/dev/null || printf 'pig %s' "$version") to ${install_dir}/pig"
+  say "Installed $("${install_dir}/ompig" --version 2>/dev/null || printf 'ompig %s' "$version") to ${install_dir}/ompig"
   write_receipt "$install_dir" "$version" ||
     say "Could not record the install receipt; to update later, run this installer again"
   case ":${PATH:-}:" in
     *":${install_dir}:"*) ;;
-    *) say "Add ${install_dir} to PATH to run pig, for example: export PATH=\"${install_dir}:\$PATH\"" ;;
+    *) say "Add ${install_dir} to PATH to run ompig, for example: export PATH=\"${install_dir}:\$PATH\"" ;;
   esac
 }
 
-# write_receipt DIR VERSION records the standalone install for `pig update`,
+# write_receipt DIR VERSION records the standalone install for `ompig update`,
 # in the format internal/codingagent/selfupdate_receipt.go reads: owner-only,
 # one key=value per line.
 write_receipt() {
-  exe="$(cd "$1" && pwd -P)/pig"
-  source_url=${PIG_UPDATE_URL:-https://github.com/MichaelKinsy/PiG/releases/latest/download/update.json}
-  if [ -n "${PIG_HOME:-}" ]; then
-    case "$PIG_HOME" in
+  exe="$(cd "$1" && pwd -P)/ompig"
+  source_url=${OMPIG_UPDATE_URL:-https://github.com/tmih06/ompig/releases/latest/download/update.json}
+  if [ -n "${OMPIG_HOME:-}" ]; then
+    case "$OMPIG_HOME" in
       \~) root=$HOME ;;
-      \~/*) root="$HOME/${PIG_HOME#\~/}" ;;
-      *) root=$PIG_HOME ;;
+      \~/*) root="$HOME/${OMPIG_HOME#\~/}" ;;
+      *) root=$OMPIG_HOME ;;
     esac
   elif [ -n "${XDG_CONFIG_HOME:-}" ]; then
-    root="${XDG_CONFIG_HOME}/pig"
+    root="${XDG_CONFIG_HOME}/ompig"
   else
-    root="$HOME/.pig"
+    root="$HOME/.ompig"
   fi
   case "${exe}${source_url}" in
     *"
@@ -133,11 +133,11 @@ write_receipt() {
 }
 
 say() {
-  printf 'pig-install: %s\n' "$*"
+  printf 'ompig-install: %s\n' "$*"
 }
 
 fail() {
-  printf 'pig-install: error: %s\n' "$*" >&2
+  printf 'ompig-install: error: %s\n' "$*" >&2
   exit 1
 }
 
@@ -163,7 +163,7 @@ fetch() {
   esac
 }
 
-# default_install_dir prints where pig goes without PIG_INSTALL_DIR: Termux's
+# default_install_dir prints where ompig goes without OMPIG_INSTALL_DIR: Termux's
 # bin directory, which is on PATH and has no /usr/local, on Android, and
 # ~/.local/bin elsewhere.
 default_install_dir() {
@@ -198,7 +198,7 @@ detect_platform() {
     *) fail "unsupported CPU architecture $(uname -m)" ;;
   esac
   if is_android && [ "$arch" != arm64 ]; then
-    fail "PiG publishes Android binaries for arm64 only, not $(uname -m)"
+    fail "Ompig publishes Android binaries for arm64 only, not $(uname -m)"
   fi
   # A Rosetta 2 shell on Apple silicon reports x86_64; install the native binary.
   if [ "$os" = darwin ] && [ "$arch" = amd64 ] &&
@@ -217,7 +217,7 @@ latest_version() {
   if [ -z "$latest" ]; then
     latest=$(redirect_tag "$1" "$3")
     [ -n "$latest" ] ||
-      fail "no PiG release is published yet (${2%/}/latest-version did not answer and $3 named no release); build from source or set PIG_VERSION"
+      fail "no Ompig release is published yet (${2%/}/latest-version did not answer and $3 named no release); build from source or set OMPIG_VERSION"
     say "${2%/}/latest-version did not name a release; using the latest on GitHub (${latest})" >&2
   fi
   echo "$latest"

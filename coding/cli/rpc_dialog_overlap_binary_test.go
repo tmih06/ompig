@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const rpcDialogOverlapExtension = `export default function (pi) {
@@ -29,10 +29,10 @@ const rpcDialogOverlapExtension = `export default function (pi) {
 }
 `
 
-// Pi 1.1.0's RPC mode writes each dialog request when the extension calls it (rpc-mode.ts createDialogPromise), so overlapping dialogs are all pending at once and custom UI resolves while a dialog waits. PiG queued RPC dialogs behind the TUI focus: the confirm request appeared only after the select was answered, and custom waited for the pending select. The client here answers only what Pi has already sent, so the old order never completes.
+// Pi 1.1.0's RPC mode writes each dialog request when the extension calls it (rpc-mode.ts createDialogPromise), so overlapping dialogs are all pending at once and custom UI resolves while a dialog waits. Ompig queued RPC dialogs behind the TUI focus: the confirm request appeared only after the select was answered, and custom waited for the pending select. The client here answers only what Pi has already sent, so the old order never completes.
 func TestRPCOverlappingDialogsAreAllPendingAtOnceAsPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	dir := t.TempDir()
@@ -43,7 +43,7 @@ func TestRPCOverlappingDialogsAreAllPendingAtOnceAsPi(t *testing.T) {
 	agentDir := t.TempDir()
 	cmd := exec.Command(bin, "--mode", "rpc", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -97,7 +97,7 @@ func TestRPCOverlappingDialogsAreAllPendingAtOnceAsPi(t *testing.T) {
 		select {
 		case record, ok := <-records:
 			if !ok {
-				fail("pig exited early")
+				fail("ompig exited early")
 			}
 			return record
 		case <-deadline:
@@ -137,7 +137,7 @@ func TestRPCOverlappingDialogsAreAllPendingAtOnceAsPi(t *testing.T) {
 	_ = stdin.Close()
 	<-readDone
 	if err := cmd.Wait(); err != nil {
-		t.Fatalf("pig --mode rpc: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig --mode rpc: %v\nstderr: %s", err, stderr.String())
 	}
 	want := []string{`both=["a1",true]`, "custom=undefined", "later=b1"}
 	if strings.Join(notifies, "\n") != strings.Join(want, "\n") {

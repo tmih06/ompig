@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // The limits are upstream's literal NESTED_CALL_LIMITS values (nested-tool-calls.ts:26-31); the upstream test reads them back from the constant.

@@ -15,7 +15,7 @@ model = "test-faux/faux-1"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 capture_start = "Select authentication method"
@@ -27,9 +27,9 @@ keys = ["/login", "Enter"]
 wait_contains = ["Select authentication method:", "Sign in with an account", "Sign in with an API key", "Sign in with Radius • not configured"]
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pi = ["PI_CODING_AGENT_DIR=testdata/pig-home/agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+pi = ["PI_CODING_AGENT_DIR=testdata/ompig-home/agent", "PI_SKIP_VERSION_CHECK=1"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 

@@ -5,7 +5,7 @@ import (
 	"maps"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ReplacedSessionContext is Pi's ReplacedSessionContext (types.ts:442-452): the command context of the replacement Session that NewSession, Fork and SwitchSession pass to their withSession callback. Its host calls act on the replacement Session, and its SendMessage and SendUserMessage return after the Session operation, including the turn they trigger. Cwd, Mode, HasUI, the model getters, GetBranch and GetEntries answer for the replacement Session.

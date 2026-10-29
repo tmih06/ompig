@@ -1,8 +1,8 @@
 package subprocess
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
-// pig additive (D19): only the subprocess boundary projects native model pointers into JSON metadata; the Session and native Context retain the original scope identities.
+// ompig additive (D19): only the subprocess boundary projects native model pointers into JSON metadata; the Session and native Context retain the original scope identities.
 type scopedModelSnapshot struct {
 	Model         extension.ModelValue `json:"model"`
 	ThinkingLevel string               `json:"thinkingLevel,omitempty"`

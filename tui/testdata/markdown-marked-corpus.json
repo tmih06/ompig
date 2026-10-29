@@ -880,347 +880,347 @@
   "width": 80
  },
  {
-  "name": "pig-underscore-em",
+  "name": "ompig-underscore-em",
   "source": "_x_",
   "width": 80
  },
  {
-  "name": "pig-underscore-strong",
+  "name": "ompig-underscore-strong",
   "source": "__x__",
   "width": 80
  },
  {
-  "name": "pig-underscore-triple",
+  "name": "ompig-underscore-triple",
   "source": "___x___",
   "width": 80
  },
  {
-  "name": "pig-underscore-intraword-snake",
+  "name": "ompig-underscore-intraword-snake",
   "source": "use snake_case_name here",
   "width": 80
  },
  {
-  "name": "pig-underscore-dunder-file",
+  "name": "ompig-underscore-dunder-file",
   "source": "edit __init__.py now",
   "width": 80
  },
  {
-  "name": "pig-underscore-trailing",
+  "name": "ompig-underscore-trailing",
   "source": "foo_bar_",
   "width": 80
  },
  {
-  "name": "pig-underscore-multi-intraword",
+  "name": "ompig-underscore-multi-intraword",
   "source": "_foo_bar_baz_",
   "width": 80
  },
  {
-  "name": "pig-underscore-sentence",
+  "name": "ompig-underscore-sentence",
   "source": "This is _really_ important and __very__ bold.",
   "width": 80
  },
  {
-  "name": "pig-underscore-nested-strong",
+  "name": "ompig-underscore-nested-strong",
   "source": "_x __y__ z_",
   "width": 80
  },
  {
-  "name": "pig-underscore-in-star-strong",
+  "name": "ompig-underscore-in-star-strong",
   "source": "**_x_**",
   "width": 80
  },
  {
-  "name": "pig-star-strong-in-underscore",
+  "name": "ompig-star-strong-in-underscore",
   "source": "_**x**_",
   "width": 80
  },
  {
-  "name": "pig-underscore-punct-left",
+  "name": "ompig-underscore-punct-left",
   "source": "(_x_)",
   "width": 80
  },
  {
-  "name": "pig-underscore-unicode-punct",
+  "name": "ompig-underscore-unicode-punct",
   "source": "«_x_»",
   "width": 80
  },
  {
-  "name": "pig-underscore-unclosed",
+  "name": "ompig-underscore-unclosed",
   "source": "_x",
   "width": 80
  },
  {
-  "name": "pig-underscore-space-open",
+  "name": "ompig-underscore-space-open",
   "source": "_ x_",
   "width": 80
  },
  {
-  "name": "pig-underscore-mixed-close",
+  "name": "ompig-underscore-mixed-close",
   "source": "_x*",
   "width": 80
  },
  {
-  "name": "pig-star-triple",
+  "name": "ompig-star-triple",
   "source": "***x***",
   "width": 80
  },
  {
-  "name": "pig-star-triple-strong-first",
+  "name": "ompig-star-triple-strong-first",
   "source": "***x** y*",
   "width": 80
  },
  {
-  "name": "pig-star-triple-em-first",
+  "name": "ompig-star-triple-em-first",
   "source": "***x* y**",
   "width": 80
  },
  {
-  "name": "pig-star-em-containing-strong",
+  "name": "ompig-star-em-containing-strong",
   "source": "*x **y** z*",
   "width": 80
  },
  {
-  "name": "pig-star-strong-containing-em",
+  "name": "ompig-star-strong-containing-em",
   "source": "**x *y* z**",
   "width": 80
  },
  {
-  "name": "pig-star-intraword-strong-in-em",
+  "name": "ompig-star-intraword-strong-in-em",
   "source": "*a**b**c*",
   "width": 80
  },
  {
-  "name": "pig-star-intraword-em-in-strong",
+  "name": "ompig-star-intraword-em-in-strong",
   "source": "**a*b*c**",
   "width": 80
  },
  {
-  "name": "pig-star-quad",
+  "name": "ompig-star-quad",
   "source": "****x****",
   "width": 80
  },
  {
-  "name": "pig-star-em-chain",
+  "name": "ompig-star-em-chain",
   "source": "*x*y*z*",
   "width": 80
  },
  {
-  "name": "pig-star-rule-of-three",
+  "name": "ompig-star-rule-of-three",
   "source": "*foo**bar*",
   "width": 80
  },
  {
-  "name": "pig-star-overlap",
+  "name": "ompig-star-overlap",
   "source": "*a **b* c**",
   "width": 80
  },
  {
-  "name": "pig-star-overlap-reverse",
+  "name": "ompig-star-overlap-reverse",
   "source": "**a *b** c*",
   "width": 80
  },
  {
-  "name": "pig-star-adjacent",
+  "name": "ompig-star-adjacent",
   "source": "**x**y",
   "width": 80
  },
  {
-  "name": "pig-star-intraword-strong",
+  "name": "ompig-star-intraword-strong",
   "source": "x**y**z",
   "width": 80
  },
  {
-  "name": "pig-star-paren-strong-in-em",
+  "name": "ompig-star-paren-strong-in-em",
   "source": "*(**foo**)*",
   "width": 80
  },
  {
-  "name": "pig-star-five",
+  "name": "ompig-star-five",
   "source": "*****x*****",
   "width": 80
  },
  {
-  "name": "pig-star-unbalanced-left",
+  "name": "ompig-star-unbalanced-left",
   "source": "***x*",
   "width": 80
  },
  {
-  "name": "pig-star-unbalanced-right",
+  "name": "ompig-star-unbalanced-right",
   "source": "*x***",
   "width": 80
  },
  {
-  "name": "pig-star-strong-unbalanced",
+  "name": "ompig-star-strong-unbalanced",
   "source": "**x***",
   "width": 80
  },
  {
-  "name": "pig-star-space-close",
+  "name": "ompig-star-space-close",
   "source": "*x *",
   "width": 80
  },
  {
-  "name": "pig-star-escaped",
+  "name": "ompig-star-escaped",
   "source": "\\*x\\* and \\_y\\_",
   "width": 80
  },
  {
-  "name": "pig-em-across-softbreak",
+  "name": "ompig-em-across-softbreak",
   "source": "*a\nb*",
   "width": 80
  },
  {
-  "name": "pig-underscore-across-softbreak",
+  "name": "ompig-underscore-across-softbreak",
   "source": "_a\nb_",
   "width": 80
  },
  {
-  "name": "pig-em-with-code",
+  "name": "ompig-em-with-code",
   "source": "*a `*` b*",
   "width": 80
  },
  {
-  "name": "pig-underscore-with-code",
+  "name": "ompig-underscore-with-code",
   "source": "_a `_` b_",
   "width": 80
  },
  {
-  "name": "pig-em-with-link",
+  "name": "ompig-em-with-link",
   "source": "*see [the _docs_](https://example.com) now*",
   "width": 80
  },
  {
-  "name": "pig-underscore-in-link-url",
+  "name": "ompig-underscore-in-link-url",
   "source": "[x](https://example.com/a_b_c)",
   "width": 80
  },
  {
-  "name": "pig-underscore-in-autolink",
+  "name": "ompig-underscore-in-autolink",
   "source": "see https://example.com/a_b_c_d and _x_",
   "width": 80
  },
  {
-  "name": "pig-em-with-strike",
+  "name": "ompig-em-with-strike",
   "source": "*a ~~b~~ c*",
   "width": 80
  },
  {
-  "name": "pig-strike-with-em",
+  "name": "ompig-strike-with-em",
   "source": "~~a _b_ c~~",
   "width": 80
  },
  {
-  "name": "pig-strike-single-tilde",
+  "name": "ompig-strike-single-tilde",
   "source": "~x~",
   "width": 80
  },
  {
-  "name": "pig-strike-space",
+  "name": "ompig-strike-space",
   "source": "~~ x~~",
   "width": 80
  },
  {
-  "name": "pig-heading-underscore",
+  "name": "ompig-heading-underscore",
   "source": "# Title with _emphasis_ and __strong__",
   "width": 80
  },
  {
-  "name": "pig-heading-level3-underscore",
+  "name": "ompig-heading-level3-underscore",
   "source": "### _Note_: __important__",
   "width": 80
  },
  {
-  "name": "pig-list-underscore",
+  "name": "ompig-list-underscore",
   "source": "- _first_ item\n- __second__ item\n- third_with_underscores",
   "width": 80
  },
  {
-  "name": "pig-ordered-underscore",
+  "name": "ompig-ordered-underscore",
   "source": "1. _a_\n2. __b__",
   "width": 80
  },
  {
-  "name": "pig-quote-underscore",
+  "name": "ompig-quote-underscore",
   "source": "> _quoted_ and __strong__ text",
   "width": 80
  },
  {
-  "name": "pig-table-underscore",
+  "name": "ompig-table-underscore",
   "source": "| a | b |\n|---|---|\n| _x_ | __y__ |",
   "width": 80
  },
  {
-  "name": "pig-html-block-div",
+  "name": "ompig-html-block-div",
   "source": "<div>\nhello *world*\n</div>",
   "width": 80
  },
  {
-  "name": "pig-html-block-comment",
+  "name": "ompig-html-block-comment",
   "source": "<!-- comment -->\ntext after",
   "width": 80
  },
  {
-  "name": "pig-html-block-details",
+  "name": "ompig-html-block-details",
   "source": "<details>\n<summary>Click</summary>\n\nBody _text_\n</details>",
   "width": 80
  },
  {
-  "name": "pig-html-block-then-paragraph",
+  "name": "ompig-html-block-then-paragraph",
   "source": "<div>\n</div>\n\nparagraph _x_",
   "width": 80
  },
  {
-  "name": "pig-html-block-br",
+  "name": "ompig-html-block-br",
   "source": "<br>",
   "width": 80
  },
  {
-  "name": "pig-html-block-after-paragraph",
+  "name": "ompig-html-block-after-paragraph",
   "source": "para\n<div>x</div>",
   "width": 80
  },
  {
-  "name": "pig-html-inline-tags",
+  "name": "ompig-html-inline-tags",
   "source": "a <b>bold</b> and <kbd>Ctrl</kbd>+<kbd>C</kbd> c",
   "width": 80
  },
  {
-  "name": "pig-html-inline-emphasis-mask",
+  "name": "ompig-html-inline-emphasis-mask",
   "source": "*a <span title=\"*\">b</span> c*",
   "width": 80
  },
  {
-  "name": "pig-html-inline-comment",
+  "name": "ompig-html-inline-comment",
   "source": "x <!-- y --> z",
   "width": 80
  },
  {
-  "name": "pig-table-header-from-paragraph",
+  "name": "ompig-table-header-from-paragraph",
   "source": "Intro line\n| a | b |\n|---|---|\n| 1 | 2 |",
   "width": 80
  },
  {
-  "name": "pig-table-header-from-paragraph-two-lines",
+  "name": "ompig-table-header-from-paragraph-two-lines",
   "source": "First line\nSecond line\n| a | b |\n| - | - |\n| 1 | 2 |",
   "width": 80
  },
  {
-  "name": "pig-table-no-leading-pipe-after-paragraph",
+  "name": "ompig-table-no-leading-pipe-after-paragraph",
   "source": "Intro\na | b\n--|--\n1 | 2",
   "width": 80
  },
  {
-  "name": "pig-table-plain-after-paragraph",
+  "name": "ompig-table-plain-after-paragraph",
   "source": "Intro\n\n| a | b |\n|---|---|\n| 1 | 2 |",
   "width": 80
  },
  {
-  "name": "pig-assistant-message-mixed",
+  "name": "ompig-assistant-message-mixed",
   "source": "## Summary\n\nI updated `config_loader.go` so that _every_ call to __load__ checks the cache.\n\n- The `MAX_RETRIES` value is now _configurable_.\n- See **bold _and italic_** notes.\n\n> _Note_: snake_case names like my_var_name stay literal.\n\nDone — ***really*** done.",
   "width": 80
  },
  {
-  "name": "pig-assistant-message-python",
+  "name": "ompig-assistant-message-python",
   "source": "Rename `__init__` usage: __init__ should stay, but _private_ helpers like _helper_fn use a leading underscore.",
   "width": 80
  },
@@ -1765,117 +1765,117 @@
   "width": 80
  },
  {
-  "name": "pig-emoji-before-star",
+  "name": "ompig-emoji-before-star",
   "source": "😀*x* and 😀_y_",
   "width": 80
  },
  {
-  "name": "pig-cjk-underscore",
+  "name": "ompig-cjk-underscore",
   "source": "日本_語_です and 日本*語*です",
   "width": 80
  },
  {
-  "name": "pig-a-tag-suppresses-url-across-paragraphs",
+  "name": "ompig-a-tag-suppresses-url-across-paragraphs",
   "source": "<a href=\"x\">open\n\nhttps://example.com stays text\n\n</a> then https://example.com links",
   "width": 80
  },
  {
-  "name": "pig-nested-brackets-emphasis",
+  "name": "ompig-nested-brackets-emphasis",
   "source": "*[a [b] c](u)* and _[x](y_z)_",
   "width": 80
  },
  {
-  "name": "pig-run-of-stars",
+  "name": "ompig-run-of-stars",
   "source": "********************************************************************************************************************************************************************************************************x********************************************************************************************************************************************************************************************************",
   "width": 80
  },
  {
-  "name": "pig-run-of-underscores",
+  "name": "ompig-run-of-underscores",
   "source": "________________________________________________________________________________________________________________________________________________________________________________________________________x________________________________________________________________________________________________________________________________________________________________________________________________________",
   "width": 80
  },
  {
-  "name": "pig-alternating-delimiters",
+  "name": "ompig-alternating-delimiters",
   "source": "*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_x_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*",
   "width": 80
  },
  {
-  "name": "pig-nested-brackets-deep",
+  "name": "ompig-nested-brackets-deep",
   "source": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]](u)",
   "width": 80
  },
  {
-  "name": "pig-paragraph-then-ordered-2",
+  "name": "ompig-paragraph-then-ordered-2",
   "source": "para\n2. not a list",
   "width": 80
  },
  {
-  "name": "pig-paragraph-then-ordered-1",
+  "name": "ompig-paragraph-then-ordered-1",
   "source": "para\n1. a list",
   "width": 80
  },
  {
-  "name": "pig-paragraph-then-empty-bullet",
+  "name": "ompig-paragraph-then-empty-bullet",
   "source": "para\n-\nnext",
   "width": 80
  },
  {
-  "name": "pig-paragraph-hashtag",
+  "name": "ompig-paragraph-hashtag",
   "source": "para\n#hashtag line",
   "width": 80
  },
  {
-  "name": "pig-indented-code-after-blank",
+  "name": "ompig-indented-code-after-blank",
   "source": "text\n\n    code _x_\n    more\n\nafter",
   "width": 80
  },
  {
-  "name": "pig-indented-code-in-paragraph",
+  "name": "ompig-indented-code-in-paragraph",
   "source": "text\n    not code",
   "width": 80
  },
  {
-  "name": "pig-table-rows-without-pipes",
+  "name": "ompig-table-rows-without-pipes",
   "source": "a | b\n--|--\nplain row\n1 | 2",
   "width": 80
  },
  {
-  "name": "pig-table-escaped-pipe",
+  "name": "ompig-table-escaped-pipe",
   "source": "| a | b |\n|---|---|\n| x \\| y | z |",
   "width": 80
  },
  {
-  "name": "pig-table-column-mismatch",
+  "name": "ompig-table-column-mismatch",
   "source": "| a | b |\n|---|\n| 1 | 2 |",
   "width": 80
  },
  {
-  "name": "pig-html-block-in-list",
+  "name": "ompig-html-block-in-list",
   "source": "- item\n\n  <div>\n  *raw*\n  </div>",
   "width": 80
  },
  {
-  "name": "pig-html-block-script",
+  "name": "ompig-html-block-script",
   "source": "<script>\nlet a = *b*;\n</script>\nafter *x*",
   "width": 80
  },
  {
-  "name": "pig-inline-html-in-heading",
+  "name": "ompig-inline-html-in-heading",
   "source": "## Title <kbd>K</kbd> _x_",
   "width": 80
  },
  {
-  "name": "pig-emoji-before-punctuated-run",
+  "name": "ompig-emoji-before-punctuated-run",
   "source": "😀*(x)* and 😀**(y)** and ♥*(z)*",
   "width": 80
  },
  {
-  "name": "pig-mid-run-opener",
+  "name": "ompig-mid-run-opener",
   "source": "**a*b*c and __a_b_c and ***a**b*",
   "width": 80
  },
  {
-  "name": "pig-mid-run-ambiguous-closer",
+  "name": "ompig-mid-run-ambiguous-closer",
   "source": "**foo*bar*baz and *a**b*",
   "width": 80
  },
@@ -2315,92 +2315,92 @@
   "width": 80
  },
  {
-  "name": "pig-def-after-reference",
+  "name": "ompig-def-after-reference",
   "source": "See [the docs] and [API][api] for details.\n\n[the docs]: https://example.com/docs\n[api]: <https://example.com/api> \"API\"",
   "width": 80
  },
  {
-  "name": "pig-def-before-reference",
+  "name": "ompig-def-before-reference",
   "source": "[1]: https://example.com/one\n\nAs shown in [1], it works.",
   "width": 80
  },
  {
-  "name": "pig-def-first-wins",
+  "name": "ompig-def-first-wins",
   "source": "[foo]: /first\n[FOO]: /second\n\n[Foo]",
   "width": 80
  },
  {
-  "name": "pig-def-label-whitespace",
+  "name": "ompig-def-label-whitespace",
   "source": "[Foo\n  Bar]: /url\n\n[foo bar] and [FOO   BAR][]",
   "width": 80
  },
  {
-  "name": "pig-def-in-blockquote",
+  "name": "ompig-def-in-blockquote",
   "source": "> [q]: /quoted\n>\n> text\n\n[q]",
   "width": 80
  },
  {
-  "name": "pig-def-in-list",
+  "name": "ompig-def-in-list",
   "source": "- item [x]\n\n  [x]: /listed\n- next",
   "width": 80
  },
  {
-  "name": "pig-def-undefined-reference",
+  "name": "ompig-def-undefined-reference",
   "source": "[nope] and [also][nope] stay text\n\n[yes]: /y",
   "width": 80
  },
  {
-  "name": "pig-def-only",
+  "name": "ompig-def-only",
   "source": "[a]: /a\n\n[b]: /b",
   "width": 80
  },
  {
-  "name": "pig-def-blank-lines",
+  "name": "ompig-def-blank-lines",
   "source": "a\n\n[x]: /u\n\n\nb",
   "width": 80
  },
  {
-  "name": "pig-def-after-table-interrupt",
+  "name": "ompig-def-after-table-interrupt",
   "source": "para\n[x]: /u\n|-|",
   "width": 80
  },
  {
-  "name": "pig-reflink-emphasis-mask",
+  "name": "ompig-reflink-emphasis-mask",
   "source": "*[foo*] and **[bar**][foo]\n\n[foo]: /f",
   "width": 80
  },
  {
-  "name": "pig-reflink-holds-link",
+  "name": "ompig-reflink-holds-link",
   "source": "[a [b] c][ref] and [x [y](/inner) z][ref]\n\n[b]: /b\n[ref]: /r",
   "width": 80
  },
  {
-  "name": "pig-reflink-image",
+  "name": "ompig-reflink-image",
   "source": "![alt][img] and ![img]\n\n[img]: /i.png",
   "width": 80
  },
  {
-  "name": "pig-reflink-numbered-assistant",
+  "name": "ompig-reflink-numbered-assistant",
   "source": "The cache is invalidated on write [1] and refreshed lazily [2]; see _snake_case_ notes[3].\n\n- step one [1]\n- step **two** [2]\n\n[1]: https://example.com/a_1\n[2]: https://example.com/b\n[3]: https://example.com/c \"C\"",
   "width": 80
  },
  {
-  "name": "pig-list-five-spaces",
+  "name": "ompig-list-five-spaces",
   "source": "-     indented code\n-    four spaces\n1.      code",
   "width": 80
  },
  {
-  "name": "pig-list-indented-code-before-sibling",
+  "name": "ompig-list-indented-code-before-sibling",
   "source": "-      foo\n\n- bar",
   "width": 80
  },
  {
-  "name": "pig-list-item-code-before-sibling",
+  "name": "ompig-list-item-code-before-sibling",
   "source": "- a\n\n      code\n\n- b",
   "width": 80
  },
  {
-  "name": "pig-def-quote-trailing",
+  "name": "ompig-def-quote-trailing",
   "source": "> a\n>\n> [q]: /q\n\n[q]",
   "width": 80
  },
@@ -2410,32 +2410,32 @@
   "width": 80
  },
  {
-  "name": "pig-latex-bracket-after-first-character",
+  "name": "ompig-latex-bracket-after-first-character",
   "source": "a \\[foo]\n\nbar",
   "width": 80
  },
  {
-  "name": "pig-latex-dollar-after-first-character-merges",
+  "name": "ompig-latex-dollar-after-first-character-merges",
   "source": "a $$ b\nc\n\na $$x$$ b",
   "width": 80
  },
  {
-  "name": "pig-latex-bracket-after-astral-character",
+  "name": "ompig-latex-bracket-after-astral-character",
   "source": "😀\\[x] and é\\[y]",
   "width": 80
  },
  {
-  "name": "pig-latex-bracket-in-list-item-text",
+  "name": "ompig-latex-bracket-in-list-item-text",
   "source": "- a \\[x]\n\n> a \\[x]\n> b",
   "width": 80
  },
  {
-  "name": "pig-table-double-backslash-pipe",
+  "name": "ompig-table-double-backslash-pipe",
   "source": "| a | b |\n|---|---|\n| x \\\\| y |",
   "width": 40
  },
  {
-  "name": "pig-table-triple-backslash-pipe",
+  "name": "ompig-table-triple-backslash-pipe",
   "source": "| a \\\\\\| b | c |\n|---|---|\n| 1 | 2 |",
   "width": 40
  }

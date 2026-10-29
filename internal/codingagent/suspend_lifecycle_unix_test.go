@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestSuspendInputHandlerPropagatesError(t *testing.T) {

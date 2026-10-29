@@ -4,9 +4,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/tui"
 )
 
 // headerMemoState is every input of the built-in header that a test can change.
@@ -42,7 +42,7 @@ func freshBuiltInHeader(state headerMemoState, width int) ([]string, builtInHead
 func registerHeaderMemoSprite(t *testing.T, body string) {
 	t.Helper()
 	definition, err := extension.ValidateSpriteDefinition(extension.SpriteDefinition{
-		ID: "memo-pig", Name: "Memo PiG", Tagline: "Registered by a header memo test.",
+		ID: "memo-ompig", Name: "Memo Ompig", Tagline: "Registered by a header memo test.",
 		Mascot: []string{
 			"................", "...OOOO..OOOO...", "...OeeO..OeeO...", "..OeePPPPPPeeO..",
 			".OPPPpPPPPpPPPO.", ".OPPWWPPPPWWPPO.", ".OPPWKPPPPKWPPO.", ".OPbbPssssPbbPO.",
@@ -114,12 +114,12 @@ func TestBuiltInHeaderRedrawsWhenAnInputChanges(t *testing.T) {
 		}},
 		{"registered sprite", func() {
 			registerHeaderMemoSprite(t, "#5B8DEF")
-			if err := piglogin.Activate("memo-pig"); err != nil {
+			if err := piglogin.Activate("memo-ompig"); err != nil {
 				t.Fatal(err)
 			}
 		}},
 		{"registered sprite replaced", func() { registerHeaderMemoSprite(t, "#D94F70") }},
-		// No frame between the two calls, so the sprite ID drawn stays memo-pig: only the revision tells the new sprite.
+		// No frame between the two calls, so the sprite ID drawn stays memo-ompig: only the revision tells the new sprite.
 		{"registered sprite unregistered and registered again", func() {
 			piglogin.Unregister("header-memo-test")
 			registerHeaderMemoSprite(t, "#3FA34D")

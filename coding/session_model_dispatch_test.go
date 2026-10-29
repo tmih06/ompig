@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi agent-session.ts:_cycleAvailableModel applies model/thinking/transcript state before awaiting _emitModelSelect. The Go blocking API must still wait for that notification.

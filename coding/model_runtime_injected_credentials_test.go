@@ -9,7 +9,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/ai/src/models.ts:414-417,489-498 passes the refresh signal to CredentialStore.read, including the offline restoration phase.
@@ -125,7 +125,7 @@ func (store *gatedCredentialStore) Read(ctx context.Context, providerID string) 
 }
 
 // Pi packages/ai/src/models.ts:653-684 checks every provider's auth with Promise.all, so a caller-supplied CredentialStore sees each provider's
-// read start before any of them settles; only PiG's own stores, whose reads wait on nothing but auth.json, may be read one provider at a time.
+// read start before any of them settles; only Ompig's own stores, whose reads wait on nothing but auth.json, may be read one provider at a time.
 func TestInjectedCredentialStoreAvailabilityReadsProvidersConcurrently(t *testing.T) {
 	synctest.Test(t, func(t *testing.T) {
 		store := &gatedCredentialStore{CredentialStore: ai.NewInMemoryAuthStorage(nil), started: map[string]bool{}, both: make(chan struct{})}

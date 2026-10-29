@@ -1,5 +1,5 @@
 // Child process for manager_upstream_test.go's real-process cases (Pi packages/chord/test/manager.test.ts). The child
-// host is PiG's Go host, so this Node entry only relays: forkDriver forks it with Node's IPC channel, and it runs the
+// host is Ompig's Go host, so this Node entry only relays: forkDriver forks it with Node's IPC channel, and it runs the
 // Go test binary (argv) as the worker with a JSON-lines pipe on fd 3, relaying messages both ways unchanged. It shares
 // the worker's fate: the worker's exit code or signal is its own.
 import { spawn } from "node:child_process";

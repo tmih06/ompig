@@ -23,9 +23,9 @@ func TestGrepContextDoesNotLoadTheMatchedFile(t *testing.T) {
 	}
 	// The heap is process-wide: goroutines other tests in the package leave behind can allocate during the sample. The
 	// measurement runs alone in a fresh test process.
-	if os.Getenv("PIG_GREP_HEAP_CHILD") == "" {
+	if os.Getenv("OMPIG_GREP_HEAP_CHILD") == "" {
 		cmd := exec.Command(os.Args[0], "-test.run=^TestGrepContextDoesNotLoadTheMatchedFile$", "-test.v")
-		cmd.Env = append(os.Environ(), "PIG_GREP_HEAP_CHILD=1")
+		cmd.Env = append(os.Environ(), "OMPIG_GREP_HEAP_CHILD=1")
 		if out, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("%v\n%s", err, out)
 		}

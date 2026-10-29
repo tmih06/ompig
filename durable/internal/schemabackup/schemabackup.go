@@ -1,4 +1,4 @@
-// Package schemabackup copies a file-backed durable SQLite store before PiG upgrades its schema (D188).
+// Package schemabackup copies a file-backed durable SQLite store before Ompig upgrades its schema (D188).
 package schemabackup
 
 import (
@@ -20,7 +20,7 @@ import (
 // least 1 and below current: a store an older Pi release wrote, which the upgrade makes unreadable to that release. It
 // returns the copy's path, or "" when nothing needed copying: path is empty, ":memory:" or a URI, the file is missing or
 // empty, or the store has no version row or is already at current or newer. schemaTable must be a validated SQLite
-// identifier. An error means the store must not be upgraded: PiG fails the open rather than lose the way back.
+// identifier. An error means the store must not be upgraded: Ompig fails the open rather than lose the way back.
 func BeforeUpgrade(ctx context.Context, path, schemaTable string, current int) (string, error) {
 	if path == "" || path == ":memory:" || strings.HasPrefix(path, "file:") {
 		return "", nil

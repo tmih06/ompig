@@ -26,7 +26,7 @@ import (
 )
 
 // Env overrides [Default] with a positive whole number of seconds.
-const Env = "PIG_TEST_WAIT_TIMEOUT_SEC"
+const Env = "OMPIG_TEST_WAIT_TIMEOUT_SEC"
 
 // Default matches the extension-conformance connect budget, chosen for -p 12
 // runs on shared CI runners where builds and Node startup stall for tens of

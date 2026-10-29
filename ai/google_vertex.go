@@ -1,4 +1,4 @@
-//go:build !pig_strip_google_vertex
+//go:build !ompig_strip_google_vertex
 
 package ai
 
@@ -16,9 +16,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/pigstrip"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -40,7 +40,7 @@ func NewGoogleVertexProvider(cfg GoogleVertexConfig) Provider {
 
 // NewGoogleVertexAPIProvider builds the google-vertex provider for cfg, the provider every model-to-provider factory uses.
 func NewGoogleVertexAPIProvider(cfg GoogleVertexConfig) (Provider, error) {
-	// pig additive (D92): a Piglet's strip.apis disables Vertex at runtime the way a pig_strip_google_vertex build compiles it out.
+	// ompig additive (D92): a Ompiglet's strip.apis disables Vertex at runtime the way a ompig_strip_google_vertex build compiles it out.
 	if pigstrip.Has(pigstrip.ListAPIs, string(APIGoogleVertex)) {
 		return nil, strippedGoogleVertexError(&cfg)
 	}

@@ -8,20 +8,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 const pyDetachedCallFixture = `import os
 import threading
 import time
 
-import pig_sdk
+import ompig_sdk
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-detached")
+    e = ompig_sdk.Extension("pyapi-detached")
 
     def detached(ctx, args):
         directory = args["dir"]

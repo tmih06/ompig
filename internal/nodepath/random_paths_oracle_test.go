@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Random paths built from the pieces that make Node's path code branch (separators of both kinds, dots, drive letters, UNC prefixes, device paths, trailing separators), against path.posix and path.win32.

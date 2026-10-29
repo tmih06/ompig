@@ -13,7 +13,7 @@ import (
 // JSON.stringify writes each Anthropic tool in the order convertTools creates its members: name, description, eager_input_streaming,
 // strict, input_schema, cache_control (anthropic-messages.ts:1602-1609). The legacy input_schema is the literal { type, properties, required }
 // with the tool's own properties object inside it; a strict input_schema spreads the strict parameters and then that literal, so the
-// literal's members overwrite in place or append (:1589-1600). Pi's own buildParams writes the oracle tools through onPayload; PiG's are the
+// literal's members overwrite in place or append (:1589-1600). Pi's own buildParams writes the oracle tools through onPayload; Ompig's are the
 // tools member of the HTTP request body.
 func TestAnthropicToolsFollowPiMemberOrder(t *testing.T) {
 	type toolOrderCase struct {

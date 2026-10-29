@@ -5,7 +5,7 @@ package sqlite_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 // Ports the SqliteExecutor contract of packages/durable/src/storage/sqlite/database.ts:11-16 against the Node adapter, on the

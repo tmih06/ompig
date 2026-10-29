@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.99.1 agent-loop.ts:409 wraps the stream result, `const result = async () => Object.assign(await response.result(), { thinkingLevel })`, and the done/error branch awaits it (:445). The wrapper settles one reaction after its inner await, so message_end reaches listeners one reaction later than 0.87.1's `await response.result()`.

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package coding
 
@@ -11,18 +11,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/coding-agent/test/suite/agent-session-mcp.test.ts (Pi 1.0.0), "AgentSession MCP servers registered by
 // extensions" (four of its five cases: "rejects names another extension registered" expects the error to be thrown inside
-// the factory, where PiG queues a registration made while the factory runs and validates it when the extension registers
+// the factory, where Ompig queues a registration made while the factory runs and validates it when the extension registers
 // (docs/extension-api-parity.md, registerMcpServer row), so the clash fails the extension's load; the runtime's checks are
 // ported in coding/extension/host/inproc/mcp_servers_registration_test.go). The extensions that register servers are Node fixtures (testdata/mcp) loaded by the extension host, whose
 // runtime the Session's runner shares, as the CLI wires it; the built-in extensions are the ones the CLI loads.
@@ -58,7 +58,7 @@ func setupMCPRegistered(t *testing.T, opts mcpRegisteredOptions) (*mcpSession, *
 	for name, value := range opts.env {
 		t.Setenv(name, value)
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	host := subprocess.NewHost(t.TempDir())
 	t.Cleanup(func() { host.Shutdown("MCP Session complete") })
 	var configs []subprocess.ExtConfig

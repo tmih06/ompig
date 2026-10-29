@@ -5,8 +5,8 @@ package codingagent
 // (ai/overflow.go, ai/assistant_retry.go), as upstream agent-session.ts does.
 
 import (
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // IsContextOverflow reports whether an assistant message represents a context

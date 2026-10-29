@@ -9,10 +9,10 @@ import (
 	"testing"
 )
 
-// Prose that states the pinned Pi release or commit, or shows a composite `pig --version` value, must agree with internal/coding/pigversion/pigversion.go. The public-claims gate checks "Pi <version>" wording; this checks the other phrasings a README or page uses for the pin.
+// Prose that states the pinned Pi release or commit, or shows a composite `ompig --version` value, must agree with internal/coding/pigversion/pigversion.go. The public-claims gate checks "Pi <version>" wording; this checks the other phrasings a README or page uses for the pin.
 
 var (
-	pinConst       = regexp.MustCompile(`(?m)^const (UpstreamVersion|UpstreamCommit|PigVersion) = "([^"]+)"`)
+	pinConst       = regexp.MustCompile(`(?m)^const (UpstreamVersion|UpstreamCommit|OmpigVersion) = "([^"]+)"`)
 	pinnedRelease  = regexp.MustCompile("(?i)pinned Pi (?:release|version|build) (?:is )?`?(\\d+\\.\\d+\\.\\d+(?:\\+[0-9a-f]{8})?)`?")
 	pinnedCommit   = regexp.MustCompile("(?i)pinned(?:[^.\\n]|\\.\\d)*commit `([0-9a-f]{40})`")
 	compositeValue = regexp.MustCompile("`(\\d+\\.\\d+\\.\\d+)\\+(\\d+\\.\\d+\\.\\d+(?:\\+[0-9a-f]{8})?)`")
@@ -28,7 +28,7 @@ func readPin(t *testing.T) map[string]string {
 	for _, m := range pinConst.FindAllStringSubmatch(string(data), -1) {
 		out[m[1]] = m[2]
 	}
-	if out["UpstreamVersion"] == "" || out["UpstreamCommit"] == "" || out["PigVersion"] == "" {
+	if out["UpstreamVersion"] == "" || out["UpstreamCommit"] == "" || out["OmpigVersion"] == "" {
 		t.Fatalf("pigversion.go no longer declares the pin constants: %v", out)
 	}
 	return out
@@ -56,12 +56,12 @@ func TestProseNamesTheCurrentPin(t *testing.T) {
 				}
 			}
 			for _, m := range compositeValue.FindAllStringSubmatch(line, -1) {
-				if !strings.Contains(line, "--version") && !strings.Contains(line, "pig version") {
+				if !strings.Contains(line, "--version") && !strings.Contains(line, "ompig version") {
 					continue
 				}
 				checked++
-				if m[1] != pin["PigVersion"] || m[2] != pin["UpstreamVersion"] {
-					at("shows the version %s+%s, but this release is %s+%s", m[1], m[2], pin["PigVersion"], pin["UpstreamVersion"])
+				if m[1] != pin["OmpigVersion"] || m[2] != pin["UpstreamVersion"] {
+					at("shows the version %s+%s, but this release is %s+%s", m[1], m[2], pin["OmpigVersion"], pin["UpstreamVersion"])
 				}
 			}
 		}
@@ -117,7 +117,7 @@ func TestBuildRequirementsNameTheCIToolchains(t *testing.T) {
 		{"Node.js", `(?m)^[-*] Node\.js (\d+\.\d+\.\d+)\b`, nodeVersion},
 		{"npm", `(?m)^[-*] Node\.js \d+\.\d+\.\d+ and npm (\d+\.\d+\.\d+)\b`, npm.Dependencies["npm"]},
 		{"Rust", `(?m)^[-*] Rust (\d+\.\d+\.\d+)\b`, rust[1]},
-		{"Go", "(?m)^Build the `pig` executable with Go (\\d+\\.\\d+\\.\\d+)\\b", goVersion},
+		{"Go", "(?m)^Build the `ompig` executable with Go (\\d+\\.\\d+\\.\\d+)\\b", goVersion},
 		{"Go", `(?m)^Install Git and Go (\d+\.\d+\.\d+)\.`, goVersion},
 	}
 	found := map[string]bool{}

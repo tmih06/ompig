@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // sseIdleScanStream is a megabyte of what the idle tracker reads during a large write: Chat Completions tool-argument deltas whose text carries escapes, with reasoning deltas and keepalives between them, in 4 KB reads.

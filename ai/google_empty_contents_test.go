@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// Pi's Google clients run the request through @google/genai, whose tContents throws "contents are required" for an undefined, null or empty `contents` before anything is sent (a conversation of system messages only has none: the leading prompt goes to systemInstruction). PiG fails the same way instead of sending a request the API rejects with HTTP 400.
+// Pi's Google clients run the request through @google/genai, whose tContents throws "contents are required" for an undefined, null or empty `contents` before anything is sent (a conversation of system messages only has none: the leading prompt goes to systemInstruction). Ompig fails the same way instead of sending a request the API rejects with HTTP 400.
 func TestGoogleEmptyContentsFailsBeforeSending(t *testing.T) {
 	model, ok := LookupModelExact("google/gemini-2.5-flash")
 	if !ok {

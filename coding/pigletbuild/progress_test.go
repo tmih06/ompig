@@ -37,15 +37,15 @@ func assertBuildPhaseOrder(t *testing.T, output string, phases []string) {
 
 func TestBuildVerboseStreamsCompilerFailure(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	path := writeSmallPiglet(t, root)
 	source := filepath.Join(root, "hello", "broken.go")
 	if err := os.WriteFile(source, []byte("package hello\nfunc broken() { missingBuildSymbol() }\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	// A Windows Piglet Binary must be named with .exe, as realbuild_test.go's
+	// A Windows Ompiglet Binary must be named with .exe, as realbuild_test.go's
 	// outputs are; the build refuses any other name there.
-	out := filepath.Join(root, "pig-small")
+	out := filepath.Join(root, "ompig-small")
 	if runtime.GOOS == "windows" {
 		out += ".exe"
 	}

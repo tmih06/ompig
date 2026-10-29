@@ -13,7 +13,7 @@
 #   \e[38;2;94;178;134m<border>
 #
 # Upstream rule: updateDisplay keeps truncateTail(output, DEFAULT_MAX_LINES = 2000, DEFAULT_MAX_BYTES = 50 KB), so 2000 lines remain and 1980 hide behind the 20-row preview; a truncated result with a full-output path adds theme.fg("warning", "Output truncated. Full output: <path>").
-# Red: PiG at main 50e81255d drew the hint as "\e[2m... 1980 more lines\e[0m (ctrl+o to expand)" and the notice in fixed \e[33m. Green with the block port.
+# Red: Ompig at main 50e81255d drew the hint as "\e[2m... 1980 more lines\e[0m (ctrl+o to expand)" and the notice in fixed \e[33m. Green with the block port.
 # The width keeps the temporary path on one row.
 
 name = "50-bash-execution-line-limit"
@@ -27,16 +27,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 200
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/bash-wrap-cwd"

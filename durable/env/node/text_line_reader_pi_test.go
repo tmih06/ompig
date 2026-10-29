@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // Ports the abort gate at the top of NodeTextLineReader.readLine (packages/durable/src/env/node.ts:403-404): `abortResult(context.abortSignal, path)`

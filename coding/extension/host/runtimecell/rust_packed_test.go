@@ -15,10 +15,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestBuildRustPackedCellBuildsCachedRunner(t *testing.T) {
@@ -113,7 +113,7 @@ func writeRustFactoryCrate(t *testing.T, packageName, extName, toolName string) 
 	if err := os.Mkdir(filepath.Join(dir, "src"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	src := fmt.Sprintf(`use pig_sdk::{empty_schema, Extension, ToolResult};
+	src := fmt.Sprintf(`use ompig_sdk::{empty_schema, Extension, ToolResult};
 
 pub fn new_extension() -> Extension {
     let mut ext = Extension::new(%q);
@@ -132,7 +132,7 @@ func unixListenerRust(t *testing.T) (net.Listener, func()) {
 	// A private directory per listener: time-derived names can repeat on
 	// hosts with a coarse clock (Windows), and two listeners then collide.
 	// ShortTempDir keeps the socket path within sun_path at any TEMP length.
-	dir := testenv.ShortTempDir(t, "pig-rust-packed-")
+	dir := testenv.ShortTempDir(t, "ompig-rust-packed-")
 	path := filepath.Join(dir, "cell.sock")
 	ln, err := net.Listen("unix", path)
 	if err != nil {

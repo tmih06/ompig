@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/session/transaction.ts:452-456 placeSubmission: it is a table write (a read after it throws ReadAfterWrite naming the read) and it is refused once the

@@ -21,7 +21,7 @@ import (
 )
 
 // Export is the name of the exported mutable i64 global holding the count.
-const Export = "pig_fuel"
+const Export = "ompig_fuel"
 
 // Read returns the instruction count of an instance of an instrumented module.
 func Read(mod api.Module) (uint64, error) {

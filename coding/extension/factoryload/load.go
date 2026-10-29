@@ -11,7 +11,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // DefaultExtensionPath is the path of an extension whose factory was given without one.

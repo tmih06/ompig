@@ -9,8 +9,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 type identityCaptureCase struct {
@@ -65,14 +65,14 @@ func unsetTelemetryEnv(t *testing.T) {
 	}
 }
 
-func TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent(t *testing.T) {
+func TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent(t *testing.T) {
 	unsetTelemetryEnv(t)
 	options := captureIdentityOptions(t, identityCaptureCase{provider: "openrouter", baseURL: "https://openrouter.ai/api/v1"})
 	want := &ai.ClientIdentity{UserAgent: new(ai.UserAgentDetailed), Version: new(Version), Attribution: &ai.PiAttribution}
 	if !reflect.DeepEqual(options.Identity, want) {
 		t.Fatalf("identity = %#v, want %#v", options.Identity, want)
 	}
-	wantHeaders := map[string]string{"HTTP-Referer": "https://github.com/MichaelKinsy/PiG", "X-OpenRouter-Title": "PiG", "X-OpenRouter-Categories": "cli-agent"}
+	wantHeaders := map[string]string{"HTTP-Referer": "https://github.com/tmih06/ompig", "X-OpenRouter-Title": "Ompig", "X-OpenRouter-Categories": "cli-agent"}
 	if got := ai.GetAttributionHeaders(ai.ClientIdentityTarget{Provider: "openrouter", BaseURL: "https://openrouter.ai/api/v1"}, options.Identity); !reflect.DeepEqual(got, wantHeaders) {
 		t.Fatalf("attribution headers = %v, want %v", got, wantHeaders)
 	}

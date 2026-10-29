@@ -8,7 +8,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Ports packages/chord/test/context.test.ts. The context is a Go context; its toString is its String method, and Background and TODO are Pi's roots.

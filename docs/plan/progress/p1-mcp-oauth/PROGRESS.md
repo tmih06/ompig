@@ -37,12 +37,12 @@ All new and changed upstream test cases in this area are ported. The table has 2
 Harness notes:
 
 - `harnessOptions.sessionManager` (`coding/session_recovery_test.go`) is the suite harness's `options.sessionManager`. A second harness opens the first harness's in-memory session to resume it.
-- `(*mcpResumeSession).reload` runs `AgentSession.reload` (agent-session.ts:3612-3650) at the `coding` boundary. It emits `session_shutdown(reload)`, calls `ReloadSettings`, calls `ReloadExtensions` over freshly loaded built-ins, binds the UI context, emits `session_start(reload)` and calls `ReportUnhandledMcpServers`. It follows the steps of `cmd/pig/headless_reload.go` `reloadHeadless`. Go's reload lives in `cmd/pig`, so the `coding` package has no `Session.Reload`.
+- `(*mcpResumeSession).reload` runs `AgentSession.reload` (agent-session.ts:3612-3650) at the `coding` boundary. It emits `session_shutdown(reload)`, calls `ReloadSettings`, calls `ReloadExtensions` over freshly loaded built-ins, binds the UI context, emits `session_start(reload)` and calls `ReportUnhandledMcpServers`. It follows the steps of `cmd/ompig/headless_reload.go` `reloadHeadless`. Go's reload lives in `cmd/ompig`, so the `coding` package has no `Session.Reload`.
 - The extension that sets the loadout calls `extension.FromContext(ctx).SetActiveTools` from `session_start`. It is the Go form of `pi.setActiveTools` in that handler.
 
 Not ported (out of this area or not a vitest file):
 
-- `coding-agent/test/mcp-conformance/` (new: `run.ts`, `client.ts`, `baseline.json`). This harness runs the official `@modelcontextprotocol/conformance@0.2.0-alpha.11` suite through `npx` and needs network access. It is not a vitest file and is not in `upstream-tests-v1.0.0.json`. A Go port needs a decision on driving `pig`'s MCP client from the conformance runner. Follow-up for the lead.
+- `coding-agent/test/mcp-conformance/` (new: `run.ts`, `client.ts`, `baseline.json`). This harness runs the official `@modelcontextprotocol/conformance@0.2.0-alpha.11` suite through `npx` and needs network access. It is not a vitest file and is not in `upstream-tests-v1.0.0.json`. A Go port needs a decision on driving `ompig`'s MCP client from the conformance runner. Follow-up for the lead.
 - `coding-agent/test/oauth-selector.test.ts`, `ai/test/{anthropic-oauth,oauth-callback-server}.test.ts`: `/login` and Anthropic OAuth (p1-login-fixes).
 
 ## Upstream changes without an upstream test
@@ -61,7 +61,7 @@ Not ported (out of this area or not a vitest file):
 - `mcp/oauth/flow.go` `OAuthFlowOptions`: adds `Iss *string` and `AuthorizationServerMetadataURL *url.URL`. `AuthorizeMcp` ignores both.
 - `mcp/oauth/types.go` `AuthorizationServerMetadata`: adds `AuthorizationResponseIssParameterSupported *bool` (`authorization_response_iss_parameter_supported`). `encoding/json` fills it, and the flow never reads it.
 - `coding/mcpext/oauth.go` `McpOAuthSettings`: adds `AuthServerMetadataURL *url.URL`. Nothing sets or reads it.
-- `coding/mcpext/oauth.go` `McpOAuthCredentialStore.ForServer(name, serverURL)`, `Tokens(name, serverURL)` and `Remove(name, serverURL)` take the server name and ignore it. Every production call site passes the server name: `cli.go` logout and login, `runtime.go` `NewConnection`, and `extension.go` `storedTokens`, `storedTokensLocked`, `SignIn` and `SignOut`. Existing PiG tests pass `"test"`.
+- `coding/mcpext/oauth.go` `McpOAuthCredentialStore.ForServer(name, serverURL)`, `Tokens(name, serverURL)` and `Remove(name, serverURL)` take the server name and ignore it. Every production call site passes the server name: `cli.go` logout and login, `runtime.go` `NewConnection`, and `extension.go` `storedTokens`, `storedTokensLocked`, `SignIn` and `SignOut`. Existing Ompig tests pass `"test"`.
 
 ## Failure list by suspected root cause
 
@@ -81,7 +81,7 @@ Not ported (out of this area or not a vitest file):
 5. **Credentials are keyed by URL only (#10252).** Pi 1.0.0 keys the state `mcp__<namespace>|<url>` (`oauth.ts:117-123`). The first server that loads a URL-only legacy entry takes it over. `tokens()` reads the legacy entry without taking it over, and `remove()` removes the legacy entry (`oauth.ts:141-205`). Go `serverKey` uses the URL only (`coding/mcpext/oauth.go:198`).
    - `TestMCPOAuthCredentialStoreKeepsSeparateCredentialsForServersSharingAServerURL`: `work` loads `personal-token`.
    - `TestMCPOAuthCredentialStoreMovesCredentialsStoredByServerURLToTheFirstServerThatLoadsThem`: `personal` loads `legacy-token`.
-   - With the fix, the PiG test `coding/mcpext/review_regression_test.go#TestMcpOAuthCredentialStoreKeepsServerOrderAndJSONStringifyEscapes` must expect the new keys. It asserts `"https://z.example/mcp"` as a top-level key.
+   - With the fix, the Ompig test `coding/mcpext/review_regression_test.go#TestMcpOAuthCredentialStoreKeepsServerOrderAndJSONStringifyEscapes` must expect the new keys. It asserts `"https://z.example/mcp"` as a top-level key.
 6. **An empty `nextCursor` is treated as a cursor.** Pi 1.0.0 reads `nextCursor: ""` and `null` as the end of pagination (`client.ts:103-106`). Go stores `""` and reports `MCP tools/list returned duplicate cursor:` (`mcp/client.go:258-262`).
    - `TestClientPaginatesToolsAndPreservesProtocolToolDefinitions`
 7. **Restored tools that register later are dropped (pending tools).** Pi 1.0.0 keeps `_pendingToolNames`. They are set from the transcript on restore and from the active tools on `reload()`. `_buildRuntime` activates them when they register. They are cleared when a loadout deactivates a tool or the next agent run starts (agent-session.ts:431, 1489-1501, 1762-1782, 3541-3544, 3631-3632). The Go `Session` has no pending set. A second suspected cause is that `NewSession` does not call `restoreToolsFromTranscript` at construction (agent-session.ts:497). The only Go call site is `NavigateTree` (`coding/session.go:2674`). This is not yet confirmed separately, because both causes give the same failure.
@@ -92,7 +92,7 @@ Not ported (out of this area or not a vitest file):
 ## Ledgers and gates
 
 - `test/parity/interfaces/test-mapping-v1.0.0.json` keeps `mcp/test/{oauth,client}.test.ts`, `coding-agent/test/{mcp-extension,mcp-oauth-refresh,mcp-oauth-store}.test.ts` and `suite/agent-session-mcp.test.ts` as `pending`. The ports are red, so the files are not closed.
-- `test/parity/interfaces/pig-go.json` changes for the three `McpOAuthCredentialStore` signatures. It was regenerated locally (`interface-go-drift: clean`) and restored before the commit, per the lane rules; the integrator regenerates it.
+- `test/parity/interfaces/ompig-go.json` changes for the three `McpOAuthCredentialStore` signatures. It was regenerated locally (`interface-go-drift: clean`) and restored before the commit, per the lane rules; the integrator regenerates it.
 - `go vet ./...`, `GOOS=windows go vet ./mcp/... ./coding/mcpext/ ./coding/` and `go tool golangci-lint run ./mcp/... ./coding/mcpext/ ./coding/` are clean.
-- `make -k ci-contracts` fails only on pin-move fallout outside this area. These failures are the correspondence-check `quietStartup` and `tuiMode` findings, the `test-porting-release` and `known-gaps-drift` pending hot-path files from every Pi 1.0.0 lane, the `sdk-surface-drift` `ctx.modelRegistry.generateImages`, and the `interface-go-drift` that the restored `pig-go.json` causes.
-- `go test ./coding/ ./cmd/pig/ ./internal/codingagent/` reports failures outside this area: oracles still recorded from upstream 0.99.2 (`rpc33_*`, whose oracle-pin check asks for a fresh 1.0.0 oracle), and the `...ComparedWithPi` tests in `cmd/pig`, which need `extensions/sdk-ts/node_modules`. This worktree has no `node_modules`.
+- `make -k ci-contracts` fails only on pin-move fallout outside this area. These failures are the correspondence-check `quietStartup` and `tuiMode` findings, the `test-porting-release` and `known-gaps-drift` pending hot-path files from every Pi 1.0.0 lane, the `sdk-surface-drift` `ctx.modelRegistry.generateImages`, and the `interface-go-drift` that the restored `ompig-go.json` causes.
+- `go test ./coding/ ./cmd/ompig/ ./internal/codingagent/` reports failures outside this area: oracles still recorded from upstream 0.99.2 (`rpc33_*`, whose oracle-pin check asks for a fresh 1.0.0 oracle), and the `...ComparedWithPi` tests in `cmd/ompig`, which need `extensions/sdk-ts/node_modules`. This worktree has no `node_modules`.

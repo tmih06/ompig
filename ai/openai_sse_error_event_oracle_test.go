@@ -112,7 +112,7 @@ process.exit(0);
 			}
 			got := result{Stop: string(message.StopReason), Error: message.ErrorMessage, Text: text.String(), ID: message.ResponseID, Observed: observed}
 			if got != want[i] {
-				t.Fatalf("PiG %+v\n Pi %+v", got, want[i])
+				t.Fatalf("Ompig %+v\n Pi %+v", got, want[i])
 			}
 		})
 	}

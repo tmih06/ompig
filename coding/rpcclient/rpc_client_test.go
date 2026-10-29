@@ -15,19 +15,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // childModeEnv makes the test binary act as a scripted RPC child process.
-const childModeEnv = "PIG_RPCCLIENT_TEST_CHILD"
+const childModeEnv = "OMPIG_RPCCLIENT_TEST_CHILD"
 
-var pigBinary string
+var ompigBinary string
 
 func TestMain(m *testing.M) {
 	if mode := os.Getenv(childModeEnv); mode != "" {
 		os.Exit(runChild(mode))
 	}
-	dir, err := os.MkdirTemp("", "pig-rpcclient-")
+	dir, err := os.MkdirTemp("", "ompig-rpcclient-")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -43,7 +43,7 @@ func TestMain(m *testing.M) {
 		_ = os.RemoveAll(dir)
 		os.Exit(1)
 	}
-	for _, key := range []string{"PIG_CODING_AGENT_DIR", "PIG_CODING_AGENT_SESSION_DIR"} {
+	for _, key := range []string{"OMPIG_CODING_AGENT_DIR", "OMPIG_CODING_AGENT_SESSION_DIR"} {
 		if err := os.Unsetenv(key); err != nil {
 			fmt.Fprintf(os.Stderr, "clear inherited %s: %v\n", key, err)
 			_ = os.RemoveAll(dir)
@@ -52,15 +52,15 @@ func TestMain(m *testing.M) {
 	}
 	configRoot := filepath.Join(dir, "home")
 	if err := os.Mkdir(configRoot, 0o700); err != nil {
-		fmt.Fprintln(os.Stderr, "create isolated PIG_HOME:", err)
+		fmt.Fprintln(os.Stderr, "create isolated OMPIG_HOME:", err)
 		_ = os.RemoveAll(dir)
 		os.Exit(1)
 	}
 	for key, value := range map[string]string{
-		"PIG_HOME":        configRoot,
-		"PIG_SDK_GO_ROOT": filepath.Join(sourceRoot, "extensions", "sdk"),
-		"PIG_SDK_PY_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-py"),
-		"PIG_SDK_RS_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-rs"),
+		"OMPIG_HOME":        configRoot,
+		"OMPIG_SDK_GO_ROOT": filepath.Join(sourceRoot, "extensions", "sdk"),
+		"OMPIG_SDK_PY_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-py"),
+		"OMPIG_SDK_RS_ROOT": filepath.Join(sourceRoot, "extensions", "sdk-rs"),
 	} {
 		if err := os.Setenv(key, value); err != nil {
 			fmt.Fprintf(os.Stderr, "set isolated %s: %v\n", key, err)
@@ -69,13 +69,13 @@ func TestMain(m *testing.M) {
 		}
 	}
 	// Windows starts only files with an executable extension.
-	pigBinary = filepath.Join(dir, "pig")
+	ompigBinary = filepath.Join(dir, "ompig")
 	if runtime.GOOS == "windows" {
-		pigBinary += ".exe"
+		ompigBinary += ".exe"
 	}
-	build := exec.Command("go", "build", "-o", pigBinary, "github.com/MichaelKinsy/PiG/cmd/pig")
+	build := exec.Command("go", "build", "-o", ompigBinary, "github.com/tmih06/ompig/cmd/ompig")
 	if out, err := build.CombinedOutput(); err != nil {
-		fmt.Fprintf(os.Stderr, "build pig: %v\n%s", err, out)
+		fmt.Fprintf(os.Stderr, "build ompig: %v\n%s", err, out)
 		_ = os.RemoveAll(dir)
 		os.Exit(1)
 	}
@@ -84,19 +84,19 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-// The test binary and PIG_HOME must be different filesystem objects. Sharing
-// dir/pig made SDK staging try to create directories below the executable.
+// The test binary and OMPIG_HOME must be different filesystem objects. Sharing
+// dir/ompig made SDK staging try to create directories below the executable.
 func TestPigBinaryIsOutsidePIGHome(t *testing.T) {
-	home := os.Getenv("PIG_HOME")
-	if filepath.Clean(home) == filepath.Clean(pigBinary) {
-		t.Fatalf("PIG_HOME and pig binary both use %q", home)
+	home := os.Getenv("OMPIG_HOME")
+	if filepath.Clean(home) == filepath.Clean(ompigBinary) {
+		t.Fatalf("OMPIG_HOME and ompig binary both use %q", home)
 	}
 	info, err := os.Stat(home)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !info.IsDir() {
-		t.Fatalf("PIG_HOME %q is not a directory", home)
+		t.Fatalf("OMPIG_HOME %q is not a directory", home)
 	}
 }
 
@@ -138,8 +138,8 @@ func runReportLaunchChild() int {
 	if err != nil {
 		return 3
 	}
-	report, _ := json.Marshal(map[string]any{"args": os.Args[1:], "cwd": cwd, "env": os.Getenv("PIG_RPCCLIENT_TEST_MARK"), "inherited": os.Getenv(childModeEnv)})
-	if err := os.WriteFile(os.Getenv("PIG_RPCCLIENT_TEST_LOG"), report, 0o600); err != nil {
+	report, _ := json.Marshal(map[string]any{"args": os.Args[1:], "cwd": cwd, "env": os.Getenv("OMPIG_RPCCLIENT_TEST_MARK"), "inherited": os.Getenv(childModeEnv)})
+	if err := os.WriteFile(os.Getenv("OMPIG_RPCCLIENT_TEST_LOG"), report, 0o600); err != nil {
 		return 3
 	}
 	_, _ = io.Copy(io.Discard, os.Stdin)
@@ -147,7 +147,7 @@ func runReportLaunchChild() int {
 }
 
 func runCannedChild() int {
-	logFile, err := os.OpenFile(os.Getenv("PIG_RPCCLIENT_TEST_LOG"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
+	logFile, err := os.OpenFile(os.Getenv("OMPIG_RPCCLIENT_TEST_LOG"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
 		return 3
 	}
@@ -196,7 +196,7 @@ func childClient(t *testing.T, mode string) (*RpcClient, string) {
 	logPath := filepath.Join(t.TempDir(), "commands.log")
 	client := NewRpcClient(RpcClientOptions{
 		CliPath: os.Args[0],
-		Env:     map[string]string{childModeEnv: mode, "PIG_RPCCLIENT_TEST_LOG": logPath},
+		Env:     map[string]string{childModeEnv: mode, "OMPIG_RPCCLIENT_TEST_LOG": logPath},
 	})
 	t.Cleanup(client.Stop)
 	return client, logPath
@@ -527,7 +527,7 @@ func TestRpcClientStartReportsEarlyExit(t *testing.T) {
 
 // packages/coding-agent/src/modes/rpc/rpc-client.ts:74 (RpcClient.start).
 func TestRpcClientStartReportsSpawnFailure(t *testing.T) {
-	client := NewRpcClient(RpcClientOptions{CliPath: filepath.Join(t.TempDir(), "missing-pig")})
+	client := NewRpcClient(RpcClientOptions{CliPath: filepath.Join(t.TempDir(), "missing-ompig")})
 	err := client.Start()
 	if err == nil || !strings.HasPrefix(err.Error(), "Agent process error: ") {
 		t.Fatalf("Start = %v", err)

@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+# Stripped Ompiglet "ompig-core" for the pigbench footprint comparison: stock Ompig's parts minus the optional
+# extensions, three provider APIs and the features a scripted coding session does not use.
+# Deny mode: a later Ompig's new built-ins stay in.
+name: ompig-core
+strip:
+  extensions: [mcp, codemode, tool-search, llama.cpp, ompig-login]
+  apis: [bedrock-converse-stream, google-vertex, mistral-conversations]
+  features: [mermaid, export-html, self-update, docs, changelog, ompiglet-builder, word-dictionaries, syntax-highlight]

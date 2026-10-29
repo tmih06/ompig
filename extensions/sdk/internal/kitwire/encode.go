@@ -13,8 +13,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // maxDepth is the host's depth bound. Encoding stops there, so a tree that

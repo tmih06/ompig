@@ -16,10 +16,10 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-const initAfterTuiChildEnv = "PIG_TEST_INIT_AFTER_TUI_CHILD"
+const initAfterTuiChildEnv = "OMPIG_TEST_INIT_AFTER_TUI_CHILD"
 
 // upstream: packages/coding-agent/src/modes/interactive/interactive-mode.ts:998-999. init() sets isInitialized as soon as
 // the TUI started, so an init() that throws after that point still counts as done: a second init() returns at once, and
@@ -61,7 +61,7 @@ func runInitPTYChild(t *testing.T, child, envKey string) []byte {
 	}
 	cmd := exec.CommandContext(ctx, executable, "-test.run=^"+child+"$", "-test.count=1", "-test.v")
 	report := t.TempDir() + "/report"
-	cmd.Env = append(os.Environ(), envKey+"="+report, "TERM=xterm-256color", "PIG_HOME="+t.TempDir())
+	cmd.Env = append(os.Environ(), envKey+"="+report, "TERM=xterm-256color", "OMPIG_HOME="+t.TempDir())
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {

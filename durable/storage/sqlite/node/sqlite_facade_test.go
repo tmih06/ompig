@@ -14,12 +14,12 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	chordcloudflare "github.com/MichaelKinsy/PiG/chord/sqlite/cloudflare"
-	chordnode "github.com/MichaelKinsy/PiG/chord/sqlite/node"
-	"github.com/MichaelKinsy/PiG/durable"
-	durablesqlite "github.com/MichaelKinsy/PiG/durable/storage/sqlite"
-	durablecloudflare "github.com/MichaelKinsy/PiG/durable/storage/sqlite/cloudflare"
+	"github.com/tmih06/ompig/chord/delta"
+	chordcloudflare "github.com/tmih06/ompig/chord/sqlite/cloudflare"
+	chordnode "github.com/tmih06/ompig/chord/sqlite/node"
+	"github.com/tmih06/ompig/durable"
+	durablesqlite "github.com/tmih06/ompig/durable/storage/sqlite"
+	durablecloudflare "github.com/tmih06/ompig/durable/storage/sqlite/cloudflare"
 )
 
 var background = context.Background()

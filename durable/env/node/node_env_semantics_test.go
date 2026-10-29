@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // abortAfter is a context whose Err reports cancellation from its n-th call on, so a test can abort an operation at each of its abort checks in turn.

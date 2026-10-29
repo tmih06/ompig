@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-// Package benchext07 is bench-ext-07: the conventional factory form (packed subprocess cell, or fused into a Piglet Binary).
+// Package benchext07 is bench-ext-07: the conventional factory form (packed subprocess cell, or fused into a Ompiglet Binary).
 package benchext07
 
 import (
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 
 	"example.com/benchext10/benchext"
 )

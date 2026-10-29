@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
-// pig additive (D19): Pi runs every extension on one event loop, so when a handler yields to it, the immediates and the due timers another extension queued run before that handler resumes, however the OS schedules the process (runner.ts:1096-1123). Node runtimes in separate processes keep that order only if the yielding process waits until every other one ran them: a stalled recipient otherwise reads the forwarded turn after the yielding handler answered, and runs its callbacks after the runner was invalidated. loopTurns holds each forwarded turn until every recipient took it, and then answers the sender, whose handler resumes only then.
+// ompig additive (D19): Pi runs every extension on one event loop, so when a handler yields to it, the immediates and the due timers another extension queued run before that handler resumes, however the OS schedules the process (runner.ts:1096-1123). Node runtimes in separate processes keep that order only if the yielding process waits until every other one ran them: a stalled recipient otherwise reads the forwarded turn after the yielding handler answered, and runs its callbacks after the runner was invalidated. loopTurns holds each forwarded turn until every recipient took it, and then answers the sender, whose handler resumes only then.
 type loopTurns struct {
 	mu    sync.Mutex
 	last  uint64

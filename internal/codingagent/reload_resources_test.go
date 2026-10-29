@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 type namedTool struct{ name string }
@@ -51,8 +51,8 @@ func TestReplaceExtensionRunner_PreservesBuiltinAndUI(t *testing.T) {
 		opts: InteractiveModeOptions{
 			CWD: t.TempDir(),
 			BuiltinExtensions: []extension.Extension{{
-				Name:     "piglet",
-				Commands: map[string]extension.RegisteredCommand{"piglets": {Name: "piglets", Description: "Show piglets"}},
+				Name:     "ompiglet",
+				Commands: map[string]extension.RegisteredCommand{"ompiglets": {Name: "ompiglets", Description: "Show ompiglets"}},
 			}},
 		},
 	}
@@ -71,7 +71,7 @@ func TestReplaceExtensionRunner_PreservesBuiltinAndUI(t *testing.T) {
 	for _, cmd := range commands {
 		seen[cmd.InvocationName] = true
 	}
-	for _, want := range []string{"piglets", "context"} {
+	for _, want := range []string{"ompiglets", "context"} {
 		if !seen[want] {
 			t.Fatalf("reloaded commands missing %q: %#v", want, commands)
 		}
@@ -208,8 +208,8 @@ func TestReloadRefreshesRealSubprocessShortcuts(t *testing.T) {
 	}
 	root := t.TempDir()
 	output := filepath.Join(root, "calls.txt")
-	t.Setenv("PIG_SHORTCUT_TEST_OUTPUT", output)
-	t.Setenv("PIG_HOME", filepath.Join(root, "pig-home"))
+	t.Setenv("OMPIG_SHORTCUT_TEST_OUTPUT", output)
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ompig-home"))
 	source := filepath.Join(root, "extension")
 	if err := os.MkdirAll(source, 0o755); err != nil {
 		t.Fatal(err)
@@ -304,7 +304,7 @@ func writeNodeShortcutExtension(t *testing.T, source, marker string) {
 export default function register(pi) {
   pi.registerShortcut("ctrl+shift+right", {
     description: "reload probe",
-    handler: () => fs.appendFileSync(process.env.PIG_SHORTCUT_TEST_OUTPUT, ` + fmt.Sprintf("%q", marker+"\n") + `),
+    handler: () => fs.appendFileSync(process.env.OMPIG_SHORTCUT_TEST_OUTPUT, ` + fmt.Sprintf("%q", marker+"\n") + `),
   });
 }
 `

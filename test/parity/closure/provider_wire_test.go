@@ -200,7 +200,7 @@ func TestSourceRangePinRejectsMarkerDrift(t *testing.T) {
 	}
 	snapshot := &Snapshot{ID: "snapshot:test", TargetCommit: strings.Repeat("b", 40)}
 	_, err := makeSourceRangePin(root, snapshot, sourceRange{
-		repository: "pig", path: "target.go", semanticID: "target.missing", start: "func missing()", end: "",
+		repository: "ompig", path: "target.go", semanticID: "target.missing", start: "func missing()", end: "",
 	})
 	if err == nil || !strings.Contains(err.Error(), "start marker not found") {
 		t.Fatalf("makeSourceRangePin() error = %v, want marker drift", err)

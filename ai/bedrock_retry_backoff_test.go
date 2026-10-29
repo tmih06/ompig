@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -14,7 +14,7 @@ import (
 	"github.com/aws/smithy-go"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
 )
 
 // Pi's Bedrock client retries with @smithy/core's StandardRetryStrategy (bundle chunk bedrock-converse-stream.js): delay =

@@ -11,8 +11,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
 // nonFiniteProvider streams one tool call whose arguments hold the infinities and NaN that Pi keeps in memory for `1e999`, then a text reply. Pi's JSON.stringify

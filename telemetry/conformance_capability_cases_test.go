@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 // faultyPropagation forwards to the in-memory adapter and replaces one observable rule.

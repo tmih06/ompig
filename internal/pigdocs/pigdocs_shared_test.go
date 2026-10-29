@@ -12,7 +12,7 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
+	"github.com/tmih06/ompig/internal/contentdirs"
 )
 
 // writeBundle creates parent/name with one README and a marker, used age ago.
@@ -34,14 +34,14 @@ func writeBundle(t *testing.T, parent, name, readme, digest string, age time.Dur
 	return dir
 }
 
-// Two PiG builds that share a config root each keep their own docs. A start of this build writes its own bundle and leaves another build's bundle and the flat pages an older PiG keeps directly in <config root>/docs byte-identical, so neither build rewrites the other's docs on every switch and a running session's docs never change under it.
+// Two Ompig builds that share a config root each keep their own docs. A start of this build writes its own bundle and leaves another build's bundle and the flat pages an older Ompig keeps directly in <config root>/docs byte-identical, so neither build rewrites the other's docs on every switch and a running session's docs never change under it.
 func TestEnsureSyncedLeavesAnotherBuildsDocsUntouched(t *testing.T) {
 	root := t.TempDir()
 	parent := filepath.Join(root, SubDir)
 	if err := os.MkdirAll(parent, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	for file, body := range map[string]string{"README.md": "older pig README\n", markerFile: "older-digest\n"} {
+	for file, body := range map[string]string{"README.md": "older ompig README\n", markerFile: "older-digest\n"} {
 		if err := os.WriteFile(filepath.Join(parent, file), []byte(body), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -72,7 +72,7 @@ func TestEnsureSyncedLeavesAnotherBuildsDocsUntouched(t *testing.T) {
 	}
 }
 
-// A sync that writes this build's bundle keeps the most recently used bundles of other builds, up to contentdirs.Keep with its own, and removes the rest. The flat pages of an older PiG are not a bundle and stay.
+// A sync that writes this build's bundle keeps the most recently used bundles of other builds, up to contentdirs.Keep with its own, and removes the rest. The flat pages of an older Ompig are not a bundle and stay.
 func TestSyncEvictsTheLeastRecentlyUsedBundlesOfOtherBuilds(t *testing.T) {
 	root := t.TempDir()
 	parent := filepath.Join(root, SubDir)
@@ -80,7 +80,7 @@ func TestSyncEvictsTheLeastRecentlyUsedBundlesOfOtherBuilds(t *testing.T) {
 		t.Fatal(err)
 	}
 	legacy := filepath.Join(parent, "README.md")
-	if err := os.WriteFile(legacy, []byte("older pig README\n"), 0o644); err != nil {
+	if err := os.WriteFile(legacy, []byte("older ompig README\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	var others []string
@@ -130,7 +130,7 @@ func TestConcurrentSyncsOfOneBuildAllSucceed(t *testing.T) {
 	}
 }
 
-// A forced sync replaces a bundle directory already there, as `pig docs sync` does to repair edited or removed pages.
+// A forced sync replaces a bundle directory already there, as `ompig docs sync` does to repair edited or removed pages.
 func TestSyncReplacesAnExistingBundle(t *testing.T) {
 	root := t.TempDir()
 	if err := EnsureSynced(root); err != nil {

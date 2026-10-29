@@ -19,7 +19,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // openPTY allocates a Linux pseudo-terminal pair with the given size.
@@ -163,7 +163,7 @@ func startupResumeCancel(t *testing.T, binary string, env []string, want string)
 	defer func() { _ = slave.Close() }()
 	cmd := exec.CommandContext(t.Context(), binary, "--no-extensions", "--session-dir", t.TempDir(), "--resume")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(slices.Clone(env), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir)
+	cmd.Env = append(slices.Clone(env), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir)
 	var stderr bytes.Buffer
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, &stderr
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
@@ -231,19 +231,19 @@ func TestInteractiveSameSizeResizeKeepsScrollback(t *testing.T) {
 	// The case observes the main-screen renderer, so it selects the regular mode; fullscreen is the default since Pi 1.0.0 (settings-manager.ts:1348-1350).
 	cmd := exec.Command(binary, "--model", "test-faux/faux-1", "--session", session, "--tui-mode", "regular")
 	cmd.Dir = t.TempDir()
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	// An existing settings.json skips the first-time setup dialog (D88).
-	if err := os.MkdirAll(filepath.Join(pigHome, "agent"), 0o700); err != nil {
+	if err := os.MkdirAll(filepath.Join(ompigHome, "agent"), 0o700); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(pigHome, "agent", "settings.json"), []byte("{}"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(ompigHome, "agent", "settings.json"), []byte("{}"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	cmd.Env = append(os.Environ(), "PIG_HOME="+pigHome, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+ompigHome, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "TERM=xterm-256color")
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {
-		t.Fatalf("start pig: %v", err)
+		t.Fatalf("start ompig: %v", err)
 	}
 	_ = slave.Close()
 	t.Cleanup(func() {

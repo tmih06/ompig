@@ -19,11 +19,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/mcptest"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/mcptest"
 )
 
 // Ports packages/coding-agent/test/mcp-extension.test.ts ("MCP connections").
@@ -585,10 +585,10 @@ func TestMCPConnectionsExpandTheServerURLReferences(t *testing.T) {
 		w.WriteHeader(http.StatusUnauthorized)
 	}))
 	defer server.Close()
-	t.Setenv("PIG_MCP_CONNECT_URL", server.URL+"/expanded")
+	t.Setenv("OMPIG_MCP_CONNECT_URL", server.URL+"/expanded")
 	entry := mcpext.McpServerEntry{
 		Name: "radius", Source: "test",
-		Config: extension.McpServerConfig{URL: "${PIG_MCP_CONNECT_URL}", Auth: &extension.McpAuthConfig{Provider: "radius"}},
+		Config: extension.McpServerConfig{URL: "${OMPIG_MCP_CONNECT_URL}", Auth: &extension.McpAuthConfig{Provider: "radius"}},
 	}
 	connection, err := mcpext.NewConnection(mcpext.ConnectionOptions{
 		Entry:           entry,
@@ -611,7 +611,7 @@ func TestMCPConnectionsExpandTheServerURLReferences(t *testing.T) {
 	mu.Unlock()
 
 	oauth := entry
-	oauth.Config = extension.McpServerConfig{URL: "${PIG_MCP_CONNECT_URL}"}
+	oauth.Config = extension.McpServerConfig{URL: "${OMPIG_MCP_CONNECT_URL}"}
 	oauthConnection, err := mcpext.NewConnection(mcpext.ConnectionOptions{
 		Entry:           oauth,
 		Cwd:             ".",

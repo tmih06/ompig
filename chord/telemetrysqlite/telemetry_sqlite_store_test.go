@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/chord/sqlite/cloudflare"
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/chord/sqlite/cloudflare"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 // countingExecutor counts the All calls of a transaction handle: upstream's `counted` executor.

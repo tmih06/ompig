@@ -17,10 +17,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	"github.com/MichaelKinsy/PiG/internal/installchange"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/internal/installchange"
 )
 
 type packedProcessState struct {
@@ -312,7 +312,7 @@ func (h *Host) LoadGoPackedCell(ctx context.Context, cell *runtimecell.GoPackedC
 
 func (h *Host) startGoPackedCell(ctx context.Context, cell *runtimecell.GoPackedCell) ([]stagedManagedExt, []extension.Extension, error) {
 	staged, registered, err := h.startGoPackedCellOnce(ctx, cell)
-	// pig additive (D19): a Node cell whose first member failed to start on a slot runtime, before any member's result was
+	// ompig additive (D19): a Node cell whose first member failed to start on a slot runtime, before any member's result was
 	// published, starts again, whole, on the next runtime, ending on Node (startGoPackedCellOnce decides under per-member
 	// admission). A later member's failure stays this launch's load error, because a retry would run the earlier factories twice.
 	for {
@@ -426,7 +426,7 @@ func (h *Host) startGoPackedCellOnce(ctx context.Context, cell *runtimecell.GoPa
 	var retained *packedProcessState
 	if share := h.claimRetainedProcess(ctx, cell.BinaryPath, nodeRuntime); share != nil {
 		if share.tier != "" && share.tier != tsSelection.Executable {
-			// pig additive (D19): the compiled host the retained process runs no longer matches the cell's runtime: /reload starts the cell on the runtime its set resolves to now.
+			// ompig additive (D19): the compiled host the retained process runs no longer matches the cell's runtime: /reload starts the cell on the runtime its set resolves to now.
 			share.release()
 		} else {
 			retained, _ = share.origin.(*packedProcessState)
@@ -442,13 +442,13 @@ func (h *Host) startGoPackedCellOnce(ctx context.Context, cell *runtimecell.GoPa
 			return nil, nil, newLoadError(cell.Key, "spawn", "cache_lease_failed", fmt.Errorf("lease packed cell artifact %s: %w", cell.BinaryPath, err))
 		}
 		if lease != nil {
-			// pig additive (D95): remember the cache cell this process runs, so an error can report that another pig pruned it.
+			// ompig additive (D95): remember the cache cell this process runs, so an error can report that another ompig pruned it.
 			installchange.TrackFile(cell.BinaryPath)
 		}
 	}
 	processState := &packedProcessState{key: cell.Key, parent: runtimeParent(ctx), cancel: cancel, lease: lease, generation: cell.Generation, node: nodeRuntime, originalOwner: runtimeParent(ctx), configs: recoveryConfigs}
 	if retained != nil {
-		// pig additive (D20): the process that already holds this cell's modules re-invokes the factories, as Pi's loader does inside one runtime.
+		// ompig additive (D20): the process that already holds this cell's modules re-invokes the factories, as Pi's loader does inside one runtime.
 		processState.adopt(retained)
 		cancel()
 	}
@@ -492,9 +492,9 @@ func (h *Host) startGoPackedCellOnce(ctx context.Context, cell *runtimecell.GoPa
 		h.noteNodeRealm(pendingExts[0].me, busRouted)
 	}
 	env = append(env,
-		fmt.Sprintf("PIG_EXT_PACKED_CELL=%s", cell.Key),
-		fmt.Sprintf("PIG_EXT_PACKED_CELL_HASH=%s", cell.Hash),
-		"PIG_EXT_ACTIVE_MEMBERS="+strings.Join(cellExtensionNames(cell.Extensions), ","),
+		fmt.Sprintf("OMPIG_EXT_PACKED_CELL=%s", cell.Key),
+		fmt.Sprintf("OMPIG_EXT_PACKED_CELL_HASH=%s", cell.Hash),
+		"OMPIG_EXT_ACTIVE_MEMBERS="+strings.Join(cellExtensionNames(cell.Extensions), ","),
 	)
 	if retained == nil {
 		if loadErr := h.spawnPackedProcess(ctx, extCtx, cancel, cell, processState, pendingExts, env, nodeRuntime, tsSelection); loadErr != nil {
@@ -588,7 +588,7 @@ func (h *Host) startGoPackedCellOnce(ctx context.Context, cell *runtimecell.GoPa
 				acceptErr = &packedAcceptError{perMember: make(map[string]error, len(pendingExts))}
 			}
 			acceptErr.perMember[me.config.Name] = err
-			// pig additive (D19): the cell cannot start again on the next runtime without running its admitted members' factories twice, so a member that failed to start on a slot runtime keeps the whole set on Node from its next launch.
+			// ompig additive (D19): the cell cannot start again on the next runtime without running its admitted members' factories twice, so a member that failed to start on a slot runtime keeps the whole set on Node from its next launch.
 			h.rememberMemberStartFailure(cell.Key, me.config.Name, err)
 			h.stopFailedPackedMember(me)
 			continue
@@ -635,8 +635,8 @@ func (h *Host) spawnPackedProcess(ctx, extCtx context.Context, cancel context.Ca
 	}
 	cmd.Env = env
 	cmd.Dir = h.cwd
-	// pig additive (D20): packed-process diagnostics live only until teardown unless a reported failure retains them.
-	stderrFile, _ := os.CreateTemp("", fmt.Sprintf("pig-packed-%s-*.log", sanitizeLogName(cell.Key)))
+	// ompig additive (D20): packed-process diagnostics live only until teardown unless a reported failure retains them.
+	stderrFile, _ := os.CreateTemp("", fmt.Sprintf("ompig-packed-%s-*.log", sanitizeLogName(cell.Key)))
 	if stderrFile != nil {
 		processState.stderrLog = &processStderrLog{path: stderrFile.Name(), writer: stderrFile}
 		// A Go, Rust or Python runner writes a failed member's cause to stderr and then closes the member's socket while the process serves its siblings. The process writes the log file itself, so the cause is in the file when the host reads it on that close; a host-side copy would race the read.
@@ -649,7 +649,7 @@ func (h *Host) spawnPackedProcess(ctx, extCtx context.Context, cancel context.Ca
 		}
 		cmd.Stdout, cmd.Stderr = h.nodeExtensionOutput(stderrLog)
 	}
-	// pig divergence (D56): after the host stops the process, its output pipe gets this long to drain before it is closed; it never bounds extension work.
+	// ompig divergence (D56): after the host stops the process, its output pipe gets this long to drain before it is closed; it never bounds extension work.
 	cmd.WaitDelay = 5 * time.Second
 	for _, pending := range pendingExts {
 		h.markExtension(pending.me.config.Name, "spawn-start")

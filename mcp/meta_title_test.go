@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // A server's `title` on its implementation and the `_meta` of its read and call results reach the host unchanged; list pages drop `_meta`, as Pi's page helpers do (client.ts:306,332).

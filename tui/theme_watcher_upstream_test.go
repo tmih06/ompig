@@ -44,8 +44,8 @@ func writeWatchedTheme(t *testing.T, directory, name, accent string) {
 
 // upstream: packages/coding-agent/test/suite/regressions/2791-fswatch-error-crash.test.ts:41
 func TestThemeWatcherProcessSurvivesErrorUpstream(t *testing.T) {
-	if os.Getenv("PIG_THEME_WATCHER_CHILD") == "1" {
-		dir := os.Getenv("PIG_THEME_WATCHER_DIR")
+	if os.Getenv("OMPIG_THEME_WATCHER_CHILD") == "1" {
+		dir := os.Getenv("OMPIG_THEME_WATCHER_DIR")
 		registry := NewThemeRegistry()
 		if err := registry.LoadDir(dir); err != nil {
 			t.Fatal(err)
@@ -75,7 +75,7 @@ func TestThemeWatcherProcessSurvivesErrorUpstream(t *testing.T) {
 	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
 	defer cancel()
 	child := exec.CommandContext(ctx, binary, "-test.run=^TestThemeWatcherProcessSurvivesErrorUpstream$")
-	child.Env = append(os.Environ(), "PIG_THEME_WATCHER_CHILD=1", "PIG_THEME_WATCHER_DIR="+dir)
+	child.Env = append(os.Environ(), "OMPIG_THEME_WATCHER_CHILD=1", "OMPIG_THEME_WATCHER_DIR="+dir)
 	output, err := child.CombinedOutput()
 	if err != nil {
 		t.Fatalf("child crashed: %v\n%s", err, output)

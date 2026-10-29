@@ -5,8 +5,8 @@ package codingagent
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // CustomEntryComponent renders a custom session entry through an extension's entry renderer. The host owns transcript
@@ -44,7 +44,7 @@ func (c *CustomEntryComponent) IsDirty() bool {
 	return ok && dirty.IsDirty()
 }
 
-// pig additive (D91): SurfaceLive reports a renderer component that changes on its own, which
+// ompig additive (D91): SurfaceLive reports a renderer component that changes on its own, which
 // IsDirty reads, so a TuiSurface rebuilds the entry every frame.
 func (c *CustomEntryComponent) SurfaceLive() bool {
 	_, ok := c.customComponent.(interface{ IsDirty() bool })

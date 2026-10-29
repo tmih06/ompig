@@ -25,10 +25,10 @@ func TestK8sSeedAndSampleMatchBenchMjs(t *testing.T) {
 	dir := t.TempDir()
 	const size = 120
 	all, seedCall := seededContext(size)
-	if err := seedFixture(ctx, dir, size, "pig-native", workloadStandard); err != nil {
+	if err := seedFixture(ctx, dir, size, "ompig-native", workloadStandard); err != nil {
 		t.Fatal(err)
 	}
-	fixture := filepath.Join(dir, "pig-native-120.sqlite")
+	fixture := filepath.Join(dir, "ompig-native-120.sqlite")
 	var rec seedRecord
 	data, err := os.ReadFile(fixture + ".json")
 	if err != nil || json.Unmarshal(data, &rec) != nil {
@@ -41,7 +41,7 @@ func TestK8sSeedAndSampleMatchBenchMjs(t *testing.T) {
 	if rec.Fingerprint != fingerprint(seedCall) || rec.Turns != size || rec.Bytes != info.Size() || rec.Tables["submissions"] != size || rec.SeedMs <= 0 {
 		t.Fatalf("seed record %+v (file %d bytes)", rec, info.Size())
 	}
-	if _, err := os.Stat(filepath.Join(dir, "pig-native-work.sqlite")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(dir, "ompig-native-work.sqlite")); !os.IsNotExist(err) {
 		t.Fatalf("the seed's work store is left behind: %v", err)
 	}
 
@@ -60,7 +60,7 @@ func TestK8sSeedAndSampleMatchBenchMjs(t *testing.T) {
 		}
 	}
 	var out bytes.Buffer
-	if err := sampleFixture(ctx, &out, fixture, size, 3, measuredRuns, "pig-native", "v", workloadStandard); err != nil {
+	if err := sampleFixture(ctx, &out, fixture, size, 3, measuredRuns, "ompig-native", "v", workloadStandard); err != nil {
 		t.Fatal(err)
 	}
 	var line sampleLine
@@ -78,7 +78,7 @@ func TestK8sSeedAndSampleMatchBenchMjs(t *testing.T) {
 	if after, err := os.Stat(fixture); err != nil || after.Size() != info.Size() || !after.ModTime().Equal(info.ModTime()) {
 		t.Fatalf("the fixture changed: %v", err)
 	}
-	if err := sampleFixture(ctx, &out, filepath.Join(dir, "missing.sqlite"), size, 0, measuredRuns, "pig-native", "", workloadStandard); err == nil {
+	if err := sampleFixture(ctx, &out, filepath.Join(dir, "missing.sqlite"), size, 0, measuredRuns, "ompig-native", "", workloadStandard); err == nil {
 		t.Fatal("a missing fixture was sampled")
 	}
 	// BENCH_MEASURED_TURNS (the steady-state window's longer sample) continues the same transcript: two more turns.
@@ -95,7 +95,7 @@ func TestK8sSeedAndSampleMatchBenchMjs(t *testing.T) {
 		}
 	}
 	out.Reset()
-	if err := sampleFixture(ctx, &out, fixture, size, 0, measuredRuns+2, "pig-native", "", workloadStandard); err != nil {
+	if err := sampleFixture(ctx, &out, fixture, size, 0, measuredRuns+2, "ompig-native", "", workloadStandard); err != nil {
 		t.Fatal(err)
 	}
 	line = sampleLine{}
@@ -108,7 +108,7 @@ func TestK8sSeedAndSampleMatchBenchMjs(t *testing.T) {
 	// At a published size the fixture must carry the published seed fingerprint: the 120-turn history sampled as 50 turns
 	// is refused, so a wrong or stale fixture cannot pass as the benchmark's history.
 	out.Reset()
-	if err := sampleFixture(ctx, &out, fixture, 50, 0, measuredRuns, "pig-native", "", workloadStandard); err == nil || out.Len() != 0 {
+	if err := sampleFixture(ctx, &out, fixture, 50, 0, measuredRuns, "ompig-native", "", workloadStandard); err == nil || out.Len() != 0 {
 		t.Fatalf("a fixture without the published 50-turn fingerprint was sampled as 50 turns: %v %s", err, out.String())
 	}
 }
@@ -195,10 +195,10 @@ func TestMeasuredTurnsOf(t *testing.T) {
 func TestK8sSummaryWorkloadMatchesBenchMjs(t *testing.T) {
 	ctx := context.Background()
 	dir := t.TempDir()
-	if err := seedFixture(ctx, dir, 50, "pig-native", workloadSummary); err != nil {
+	if err := seedFixture(ctx, dir, 50, "ompig-native", workloadSummary); err != nil {
 		t.Fatal(err)
 	}
-	fixture := filepath.Join(dir, "pig-native-50.sqlite")
+	fixture := filepath.Join(dir, "ompig-native-50.sqlite")
 	var rec seedRecord
 	data, err := os.ReadFile(fixture + ".json")
 	if err != nil || json.Unmarshal(data, &rec) != nil {
@@ -208,7 +208,7 @@ func TestK8sSummaryWorkloadMatchesBenchMjs(t *testing.T) {
 		t.Fatalf("seed record %+v", rec)
 	}
 	var out bytes.Buffer
-	if err := sampleFixture(ctx, &out, fixture, 50, 0, measuredRuns, "pig-native", "", workloadSummary); err != nil {
+	if err := sampleFixture(ctx, &out, fixture, 50, 0, measuredRuns, "ompig-native", "", workloadSummary); err != nil {
 		t.Fatal(err)
 	}
 	var line sampleLine
@@ -220,7 +220,7 @@ func TestK8sSummaryWorkloadMatchesBenchMjs(t *testing.T) {
 	}
 	// The standard workload refuses the summary fixture: its first measured context is not the published 50-turn one.
 	out.Reset()
-	if err := sampleFixture(ctx, &out, fixture, 50, 0, measuredRuns, "pig-native", "", workloadStandard); err == nil {
+	if err := sampleFixture(ctx, &out, fixture, 50, 0, measuredRuns, "ompig-native", "", workloadStandard); err == nil {
 		t.Fatalf("the standard workload sampled a summary fixture: %s", out.String())
 	}
 }
@@ -231,10 +231,10 @@ func TestK8sSummaryWorkloadMatchesBenchMjs(t *testing.T) {
 func TestK8sSummaryBlockingWorkloadIsBenchMjsTranscript(t *testing.T) {
 	ctx := context.Background()
 	dir := t.TempDir()
-	if err := seedFixture(ctx, dir, 50, "pig-native", workloadSummaryBlocking); err != nil {
+	if err := seedFixture(ctx, dir, 50, "ompig-native", workloadSummaryBlocking); err != nil {
 		t.Fatal(err)
 	}
-	fixture := filepath.Join(dir, "pig-native-50.sqlite")
+	fixture := filepath.Join(dir, "ompig-native-50.sqlite")
 	var rec seedRecord
 	data, err := os.ReadFile(fixture + ".json")
 	if err != nil || json.Unmarshal(data, &rec) != nil {
@@ -245,7 +245,7 @@ func TestK8sSummaryBlockingWorkloadIsBenchMjsTranscript(t *testing.T) {
 	}
 	for i := range 3 {
 		var out bytes.Buffer
-		if err := sampleFixture(ctx, &out, fixture, 50, i, measuredRuns, "pig-native", "", workloadSummaryBlocking); err != nil {
+		if err := sampleFixture(ctx, &out, fixture, 50, i, measuredRuns, "ompig-native", "", workloadSummaryBlocking); err != nil {
 			t.Fatal(err)
 		}
 		var line sampleLine

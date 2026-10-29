@@ -9,7 +9,7 @@ import (
 
 // A hot path formats, copies and arms a timer per call.
 //
-//pig:hotpath
+//ompig:hotpath
 func hot(id int, items []string, set map[string]int, done chan struct{}) string {
 	label := fmt.Sprintf("item-%d", id) // want `fmt.Sprintf on a hot path`
 	_ = slices.Clone(items)             // want `slices.Clone on a hot path`
@@ -30,14 +30,14 @@ func cold(id int, items []string) string {
 
 // Appending to a non-nil slice is not a copy of the argument into new storage.
 //
-//pig:hotpath
+//ompig:hotpath
 func hotGood(dst, items []string) []string {
 	return append(dst, items...)
 }
 
 // A longer directive that only starts with the hot-path one does not mark the function.
 //
-//pig:hotpathless
+//ompig:hotpathless
 func notHot(id int) string {
 	return fmt.Sprintf("item-%d", id)
 }

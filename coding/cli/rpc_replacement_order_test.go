@@ -34,7 +34,7 @@ func TestRPCSessionReplacementAnswersAfterALaterCommandOfItsBatch(t *testing.T) 
 					t.Fatal(err)
 				}
 			}
-			p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+			p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 			command := tc.command
 			switch tc.name {
 			case "switch_session":
@@ -102,7 +102,7 @@ func TestRPCSessionReplacementsOfOneBatchSettleInDispatchOrder(t *testing.T) {
 				t.Fatal(err)
 			}
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		if _, err := io.WriteString(p.stdin, `{"id":"1","type":"switch_session","sessionPath":`+jsonString(other)+`}`+"\n"+`{"id":"2","type":"new_session"}`+"\n"); err != nil {
 			t.Fatal(err)
 		}
@@ -151,7 +151,7 @@ func TestRPCReplacementsOfOneBatchRunInRequestOrder(t *testing.T) {
 				t.Fatal(err)
 			}
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		batch := `{"id":"1","type":"switch_session","sessionPath":` + jsonString(other) + `}` + "\n" +
 			`{"id":"2","type":"new_session"}` + "\n" +
 			`{"id":"3","type":"new_session"}` + "\n" +
@@ -190,7 +190,7 @@ func TestRPCCloneAfterNewSessionOfOneBatchUsesTheRequestingSession(t *testing.T)
 	if err := os.WriteFile(current, source, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 	batch := `{"id":"1","type":"new_session"}` + "\n" + `{"id":"2","type":"get_state"}` + "\n" + `{"id":"3","type":"clone"}` + "\n"
 	if _, err := io.WriteString(p.stdin, batch); err != nil {
 		t.Fatal(err)
@@ -227,10 +227,10 @@ func TestRPCCloneAfterNewSessionOfOneBatchUsesTheRequestingSession(t *testing.T)
 }
 
 // The same batch on an in-memory Session (--no-session): Pi 1.1.0 branches the Session that requested the clone, so the clone succeeds and
-// carries its messages. PiG branched the in-memory Session that new_session had just installed and failed with "Entry ... not found".
+// carries its messages. Ompig branched the in-memory Session that new_session had just installed and failed with "Entry ... not found".
 func TestRPCCloneAfterNewSessionOfOneBatchBranchesTheRequestingInMemorySession(t *testing.T) {
 	dir := t.TempDir()
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
 	p.sendJSON(map[string]any{"id": "prompt", "type": "prompt", "message": "hi"})
 	var before float64
 	p.await("the prompt's run to settle", func(record rpcRecord) bool { return record["type"] == "agent_end" })
@@ -295,7 +295,7 @@ func TestRPCReplacementStartsAfterItsBatchWasDispatched(t *testing.T) {
 	if err := os.WriteFile(current, []byte(session.String()), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 	batch := `{"id":"new","type":"new_session"}` + "\n" +
 		`{"id":"export","type":"export_html","outputPath":` + jsonString(filepath.Join(dir, "export.html")) + `}` + "\n" +
 		`{"id":"state","type":"get_state"}` + "\n"
@@ -322,7 +322,7 @@ func TestRPCReplacementStartsAfterItsBatchWasDispatched(t *testing.T) {
 }
 
 // Pi's compact() awaits abort() before it creates its abort controller, so a compact line of the same batch aborts nothing of an earlier one:
-// two pipelined compacts of a Session that is too small both answer "Nothing to compact" (Pi 1.1.0, 3 of 3). Pig ran each compact on its
+// two pipelined compacts of a Session that is too small both answer "Nothing to compact" (Pi 1.1.0, 3 of 3). Ompig ran each compact on its
 // own goroutine, and the second claimed the Session while the first was starting, cancelling it (Compaction cancelled in 2 of 3 runs).
 func TestRPCCompactsOfOneBatchDoNotCancelEachOther(t *testing.T) {
 	source, err := os.ReadFile("../../test/parity/scenarios/rpc/testdata/session/sessions/source.jsonl")
@@ -335,7 +335,7 @@ func TestRPCCompactsOfOneBatchDoNotCancelEachOther(t *testing.T) {
 		if err := os.WriteFile(current, source, 0o600); err != nil {
 			t.Fatal(err)
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		if _, err := io.WriteString(p.stdin, `{"id":"1","type":"compact"}`+"\n"+`{"id":"2","type":"compact"}`+"\n"); err != nil {
 			t.Fatal(err)
 		}
@@ -378,7 +378,7 @@ func largeRPCSession() string {
 // A Session replacement disposes the outgoing Session, which aborts its compaction (agent-session.ts:1393-1399) and does not wait for it. Pi's compaction yields
 // before its summary request (getAuth rejects with the signal's reason, agent-session.ts:572-608), so a replacement of the same batch tears down first.
 // Pi 1.1.0 (test-faux, a 1 MB Session; ordinary and TEST_FAUX_SLOW_COMPACTION summaries) answers each compact of these batches with an error and writes
-// no compaction entry; a lone compact answers "This operation was aborted". PiG completed a compaction that was fast enough, or that a clone or fork
+// no compaction entry; a lone compact answers "This operation was aborted". Ompig completed a compaction that was fast enough, or that a clone or fork
 // followed, and wrote an entry.
 func TestRPCReplacementAbortsTheCompactionOfItsBatch(t *testing.T) {
 	session := largeRPCSession()
@@ -402,7 +402,7 @@ func TestRPCReplacementAbortsTheCompactionOfItsBatch(t *testing.T) {
 				if err := os.WriteFile(current, []byte(session), 0o600); err != nil {
 					t.Fatal(err)
 				}
-				p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", speed.env, "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+				p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", speed.env, "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 				if _, err := io.WriteString(p.stdin, strings.Join(batch.commands, "\n")+"\n"); err != nil {
 					t.Fatal(err)
 				}
@@ -452,7 +452,7 @@ func TestRPCRefusedReplacementLeavesTheCompactionOfItsBatchAlone(t *testing.T) {
 			if err := os.WriteFile(current, []byte(session), 0o600); err != nil {
 				t.Fatal(err)
 			}
-			p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+			p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 			commands := `{"id":"1","type":"compact"}` + "\n" + strings.ReplaceAll(batch.replacement, `"DIRECTORY"`, jsonString(dir)) + "\n"
 			if _, err := io.WriteString(p.stdin, commands); err != nil {
 				t.Fatal(err)
@@ -505,7 +505,7 @@ func TestRPCReplacementKeepsTheNothingToCompactAnswer(t *testing.T) {
 	if err := os.WriteFile(current, source, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 	if _, err := io.WriteString(p.stdin, `{"id":"1","type":"compact"}`+"\n"+`{"id":"2","type":"new_session"}`+"\n"); err != nil {
 		t.Fatal(err)
 	}
@@ -523,7 +523,7 @@ func TestRPCReplacementKeepsTheNothingToCompactAnswer(t *testing.T) {
 }
 
 // A switch_session whose file cannot be read fails before it waits for the replacement ahead of it, as a fork of an unknown entry does: Pi
-// 1.1.0 answers `new_session, switch_session(<directory>), get_state` as 3, 2, 1 (EISDIR), where PiG answered 3, 1, 2.
+// 1.1.0 answers `new_session, switch_session(<directory>), get_state` as 3, 2, 1 (EISDIR), where Ompig answered 3, 1, 2.
 func TestRPCFailedSwitchSessionAnswersBeforeTheReplacementAheadOfIt(t *testing.T) {
 	source, err := os.ReadFile("../../test/parity/scenarios/rpc/testdata/session/sessions/source.jsonl")
 	if err != nil {
@@ -535,7 +535,7 @@ func TestRPCFailedSwitchSessionAnswersBeforeTheReplacementAheadOfIt(t *testing.T
 		if err := os.WriteFile(current, source, 0o600); err != nil {
 			t.Fatal(err)
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		commands := `{"id":"1","type":"new_session"}` + "\n" + `{"id":"2","type":"switch_session","sessionPath":` + jsonString(dir) + `}` + "\n" + `{"id":"3","type":"get_state"}` + "\n"
 		if _, err := io.WriteString(p.stdin, commands); err != nil {
 			t.Fatal(err)
@@ -572,7 +572,7 @@ func TestRPCEarlyReplacementErrorFollowsTheCompactionStart(t *testing.T) {
 		if err := os.WriteFile(current, []byte(session), 0o600); err != nil {
 			t.Fatal(err)
 		}
-		p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
+		p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session", current, "--session-dir", filepath.Join(dir, "sessions"))
 		commands := `{"id":"1","type":"compact"}` + "\n" + `{"id":"2","type":"new_session"}` + "\n" + `{"id":"3","type":"switch_session","sessionPath":` + jsonString(dir) + `}` + "\n"
 		if _, err := io.WriteString(p.stdin, commands); err != nil {
 			t.Fatal(err)
@@ -610,7 +610,7 @@ func TestRPCSwitchSessionFailsWithTheSystemReplayTypeError(t *testing.T) {
 			if err := os.WriteFile(target, source, 0o600); err != nil {
 				t.Fatal(err)
 			}
-			p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session-dir", filepath.Join(dir, "sessions"))
+			p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + dir}, "--offline", "--no-extensions", "--model", "test-faux/faux-1", "--session-dir", filepath.Join(dir, "sessions"))
 			p.sendJSON(map[string]any{"id": "switch", "type": "switch_session", "sessionPath": target})
 			p.await("switch_session response", func(record rpcRecord) bool {
 				if record["id"] != "switch" {
@@ -636,7 +636,7 @@ func TestRPCSwitchSessionFailsWithTheSystemReplayTypeError(t *testing.T) {
 	}
 }
 
-// responseID is a response's id. A response to a line PiG could not parse has none; the test fails with the record instead of
+// responseID is a response's id. A response to a line Ompig could not parse has none; the test fails with the record instead of
 // panicking, which would stop every later test of the package.
 func responseID(t *testing.T, record rpcRecord) string {
 	t.Helper()

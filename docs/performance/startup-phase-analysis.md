@@ -20,13 +20,13 @@ A separate cold probe places a recording, failing `node` executable first on PAT
 
 ## Phase instrumentation
 
-The combined baseline contains Go `20181ffe7` and Node `679f5bdcc`. Pi is the real pinned 0.87.1 CLI. The original TS/package fixtures, measurement functions, and cache definitions remain unchanged. Cold means a fresh HOME, agent/config/cache roots, and TMPDIR, not a dropped OS page cache. Pi needs the original faux-provider extension in addition to the measured fixture; PiG has a native faux provider. The table explicitly includes that Pi extension cost.
+The combined baseline contains Go `20181ffe7` and Node `679f5bdcc`. Pi is the real pinned 0.87.1 CLI. The original TS/package fixtures, measurement functions, and cache definitions remain unchanged. Cold means a fresh HOME, agent/config/cache roots, and TMPDIR, not a dropped OS page cache. Pi needs the original faux-provider extension in addition to the measured fixture; Ompig has a native faux provider. The table explicitly includes that Pi extension cost.
 
-PiG uses `PIG_STARTUP_TRACE`. A diagnostic-only Node load hook records module readiness, factory import/execution, socket-worker startup, and ready-state application against the parent's monotonic clock. Pi uses its own `PI_TIMING` groups from `packages/coding-agent/src/core/timings.ts:1-55` and the call sites in `main.ts:567-967` and `core/extensions/loader.ts:553-568`. Parent pipe timestamps account for bootstrap work before those internal clocks start. Neither hook ships in the runtime.
+Ompig uses `OMPIG_STARTUP_TRACE`. A diagnostic-only Node load hook records module readiness, factory import/execution, socket-worker startup, and ready-state application against the parent's monotonic clock. Pi uses its own `PI_TIMING` groups from `packages/coding-agent/src/core/timings.ts:1-55` and the call sites in `main.ts:567-967` and `core/extensions/loader.ts:553-568`. Parent pipe timestamps account for bootstrap work before those internal clocks start. Neither hook ships in the runtime.
 
-The table gives median cold spans from five diagnostic starts per workload/runtime on CPUs 8–15. The stages are operational comparisons, not matching function boundaries. Pi performs its SDK/TUI import graph during CLI bootstrap; PiG starts a separate Node runtime. Pi's runtime interval nests its extension timings. Median spans do not add exactly, and socket connection/handshake overlap by a small amount.
+The table gives median cold spans from five diagnostic starts per workload/runtime on CPUs 8–15. The stages are operational comparisons, not matching function boundaries. Pi performs its SDK/TUI import graph during CLI bootstrap; Ompig starts a separate Node runtime. Pi's runtime interval nests its extension timings. Median spans do not add exactly, and socket connection/handshake overlap by a small amount.
 
-| Phase | PiG TS, ms | Pi TS, ms | PiG package, ms | Pi package, ms |
+| Phase | Ompig TS, ms | Pi TS, ms | Ompig package, ms | Pi package, ms |
 |---|---:|---:|---:|---:|
 | Process bootstrap before internal startup clock | 42.95 | 500.27 | 34.81 | 491.20 |
 | Services / SDK staging (Pi: other main setup) | 22 | 12 | 18 | 32 |
@@ -45,9 +45,9 @@ The table gives median cold spans from five diagnostic starts per workload/runti
 
 The OS spawn call itself takes less than one millisecond in these traces. The larger Node startup costs are interpreter/module initialization and the IO worker, not the `Start` call.
 
-Pi's target extension imports take 8 ms for TS and 22 ms for the package in the cold trace; its faux-provider import pays the first Jiti/Babel initialization, approximately 433–441 ms. Comparing those target-only import spans with PiG's first import would omit a material part of Pi's measured path.
+Pi's target extension imports take 8 ms for TS and 22 ms for the package in the cold trace; its faux-provider import pays the first Jiti/Babel initialization, approximately 433–441 ms. Comparing those target-only import spans with Ompig's first import would omit a material part of Pi's measured path.
 
-The largest remaining PiG-only regions are materialization/verification and post-registration catalog publication. Node receives an initial 104-byte registry update, then two complete registry updates of approximately 1.16 MB each. Applying each received model snapshot in Node takes roughly 1–2 ms on the diagnostic CPUs; waiting for it accounts for much more time. The Go lane's additional trace labels identify three preserved publications: binding `getModels`, binding `getModelRegistryState`, and final `PublishModelCatalog`. Its reference cold trace spends approximately 148 ms across those publications on CPUs 16–23. That trace is not numerically mixed into the CPUs 8–15 table.
+The largest remaining Ompig-only regions are materialization/verification and post-registration catalog publication. Node receives an initial 104-byte registry update, then two complete registry updates of approximately 1.16 MB each. Applying each received model snapshot in Node takes roughly 1–2 ms on the diagnostic CPUs; waiting for it accounts for much more time. The Go lane's additional trace labels identify three preserved publications: binding `getModels`, binding `getModelRegistryState`, and final `PublishModelCatalog`. Its reference cold trace spends approximately 148 ms across those publications on CPUs 16–23. That trace is not numerically mixed into the CPUs 8–15 table.
 
 ## Node receiver copy amplification
 
@@ -81,7 +81,7 @@ A and C retain the original `ecdd029f1` and `e04490990` binaries. The matched 50
 
 The final artifact is 46,600,455 bytes (44.442 MiB), SHA-256 `67b4e35a54a2ec1c4801fc3550294f76a726d5cab4254fc531d0ee2cbd5abd07`. The compressed Node archive is 9,253,377 bytes, approximately 19.9% of the executable. Its runtime content digest is `28969dce309436fc24a987c561308a99601e895ec82082e002336c2b33359eb7`.
 
-### Largest PiG-only phase: catalog publication
+### Largest Ompig-only phase: catalog publication
 
 The Go lane removes repeated JSON wrapping and key serialization, shares the scalar compatibility clone with `ModelInfo`, and compares an owned typed snapshot before reusing encoded metadata. The encoder keeps the existing queue, byte-size checks, closed-connection/error priority, and backpressure. It publishes all three snapshots in the same order. Exact-byte and opaque-callback guards cover this boundary. Review rejects naive float equality with a signed-zero regression and catches cyclic metadata before it can recurse indefinitely; cycles reach the standard JSON error, while acyclic shared subgraphs retain their previous independent-copy semantics. See the accompanying `perf-go-startup-evidence/` report and source tests.
 

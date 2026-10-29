@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // runner.ts:1471 returns the shared options object after every handler, so an edit to a field other than sections and selectedTools (here appendSystemPrompt) still reaches the request.

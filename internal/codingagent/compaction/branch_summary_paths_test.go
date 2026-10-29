@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Upstream: packages/agent/test/harness/branch-summarization.test.ts. The target is on a sibling branch, not itself the common ancestor.

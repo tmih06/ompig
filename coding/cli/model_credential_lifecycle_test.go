@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.87.1 packages/ai/src/models.ts:628 deletes the credential on logout; auth/resolve.ts:87-109 then uses ambient auth on the next request. The already-built startup provider must not retain the deleted key as its fallback.

@@ -44,7 +44,7 @@ const (
 	ScrollbarAlways ScrollViewScrollbar = "always"
 )
 
-// ScrollView ports pi-tui's ScrollView. It embeds pig's Container (holding the
+// ScrollView ports pi-tui's ScrollView. It embeds ompig's Container (holding the
 // single child) and owns the transient-scrollbar timer.
 type ScrollView struct {
 	*Container

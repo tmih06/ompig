@@ -16,12 +16,12 @@ const family = process.argv[2] ?? "runtime";
 assert.ok(Object.hasOwn(files, family), `unknown suite: ${family}`);
 const selectedSite = process.argv[3] === undefined ? undefined : Number(process.argv[3]);
 const state = {cases: [], after: [], observations: []};
-globalThis.__pigRuntimeOriginalTests = state;
+globalThis.__ompigRuntimeOriginalTests = state;
 const moduleURL = code => "data:text/javascript;base64," + Buffer.from(code).toString("base64");
 // The resource-order record also observes whether indexOf found the heading; -1 must not pass only because it is less than the chat index.
 const framework = moduleURL(`
 import assert from "node:assert/strict";
-const state=globalThis.__pigRuntimeOriginalTests;
+const state=globalThis.__ompigRuntimeOriginalTests;
 export function describe(_name, run) { run(); }
 export function it(name, run) { state.cases.push({name, run}); }
 export function afterEach(run) { state.after.push(run); }
@@ -76,5 +76,5 @@ try {
     }
   }
 } finally {
-  delete globalThis.__pigRuntimeOriginalTests;
+  delete globalThis.__ompigRuntimeOriginalTests;
 }

@@ -17,10 +17,10 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-const sessionentryPath = "github.com/MichaelKinsy/PiG/internal/sessionentry"
+const sessionentryPath = "github.com/tmih06/ompig/internal/sessionentry"
 
 // funnelMembers are the members whose assertion tells what a session entry is; only the funnel may name them on a SessionEntry, because a
 // LazyEntry is a message entry that has not been read.
@@ -130,7 +130,7 @@ func modulePackages(t *testing.T) []*packages.Package {
 	return modulePkgs
 }
 
-const codingagentPath = "github.com/MichaelKinsy/PiG/internal/codingagent"
+const codingagentPath = "github.com/tmih06/ompig/internal/codingagent"
 
 // lazyRoutes are the names by which a LazyEntry leaves a Session, and lazyRouteFiles the files allowed to use them: each passes the entries
 // it gets only to the error-returning funnel (ReadRaws, MaterializeAll) or to Base, so no LazyEntry reaches asMessage or Raw, which panic on a
@@ -179,7 +179,7 @@ func TestLazyEntriesLeaveOnlyByTheReviewedRoutes(t *testing.T) {
 func TestTheFunnelCheckFindsAssertions(t *testing.T) {
 	const source = `package probe
 
-import "github.com/MichaelKinsy/PiG/internal/sessionentry"
+import "github.com/tmih06/ompig/internal/sessionentry"
 
 type Entry = sessionentry.SessionEntry
 

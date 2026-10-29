@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi's RPC signal handler kills tracked children and awaits runtimeHost.dispose on its one event loop
@@ -44,11 +44,11 @@ func TestRPCSignalDisposalHoldsTheRunLikePisEventLoop(t *testing.T) {
 	if err := os.MkdirAll(waitsForIdle, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(waitsForIdle, "waits_for_idle.py"), []byte(`import pig_sdk
+	if err := os.WriteFile(filepath.Join(waitsForIdle, "waits_for_idle.py"), []byte(`import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    e = pig_sdk.Extension("waits_for_idle")
+def new_extension() -> ompig_sdk.Extension:
+    e = ompig_sdk.Extension("waits_for_idle")
     e.on_event("session_shutdown", lambda ctx, data: ctx.wait_for_idle())
     return e
 `), 0o600); err != nil {
@@ -66,7 +66,7 @@ def new_extension() -> pig_sdk.Extension:
 			workDir, agentDir, sessionDir := t.TempDir(), t.TempDir(), t.TempDir()
 			cmd := exec.Command(bin, "--model", "test-faux/faux-1", "--no-extensions", "-e", tc.extension, "--mode", "rpc", "--session-dir", sessionDir)
 			cmd.Dir = workDir
-			cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+			cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 			stdin, err := cmd.StdinPipe()
 			if err != nil {
@@ -76,7 +76,7 @@ def new_extension() -> pig_sdk.Extension:
 			var stdout, stderr strings.Builder
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			if err := cmd.Start(); err != nil {
-				t.Fatalf("start pig: %v", err)
+				t.Fatalf("start ompig: %v", err)
 			}
 			t.Cleanup(func() { _ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL) })
 			if _, err := stdin.Write([]byte(`{"id":"1","type":"prompt","message":"Run: sleep for a while"}` + "\n")); err != nil {
@@ -103,7 +103,7 @@ def new_extension() -> pig_sdk.Extension:
 			case <-time.After(testbudget.Wait(t)):
 				_ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
 				<-waited
-				t.Fatalf("pig did not exit after SIGTERM; stderr:\n%s", stderr.String())
+				t.Fatalf("ompig did not exit after SIGTERM; stderr:\n%s", stderr.String())
 			}
 			var exitErr *exec.ExitError
 			if !errors.As(err, &exitErr) || exitErr.ExitCode() != 143 {

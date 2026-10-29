@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // packages/mcp/src/protocol/content.ts:30 ResourceLinkContent: a resource_link block built in Go writes uri, name, title,

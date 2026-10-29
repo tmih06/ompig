@@ -48,7 +48,7 @@ func TestCLIErrorColorFollowsChalkStdoutLevel(t *testing.T) {
 // to modify local resource config.") without an Error label. Both probed on Pi 1.1.0 with FORCE_COLOR=1.
 func TestRPCFileArgsAndUntrustedConfigMatchPi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	run := func(args ...string) (string, int) {
@@ -57,7 +57,7 @@ func TestRPCFileArgsAndUntrustedConfigMatchPi(t *testing.T) {
 		work := t.TempDir()
 		cmd := exec.Command(bin, args...)
 		cmd.Dir = work
-		cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "HOME="+home, "FORCE_COLOR=1")
+		cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "HOME="+home, "FORCE_COLOR=1")
 		var out bytes.Buffer
 		cmd.Stdout, cmd.Stderr = &out, &out
 		err := cmd.Run()

@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The CLI resolves the `defaultTools` setting itself and hands the list to the Session as InitialActiveToolNames, as sdk.ts:274-276 passes
@@ -73,7 +73,9 @@ func TestNewSessionAllowedToolsActivateInCallerOrder(t *testing.T) {
 	}{
 		{"built-ins out of registry order", []string{"bash", "read"}, []string{"bash", "read"}},
 		{"an extension tool before a built-in", []string{"inactive_tool", "ls", "read"}, []string{"inactive_tool", "ls", "read"}},
-		{"a pattern's matches follow the named tools", []string{"write", "*", "bash"}, []string{"write", "bash", "read", "powershell", "edit", "grep", "find", "ls", "inactive_tool"}},
+		// ompig divergence (D-SUBAGENT-4): the "*" pattern also matches the
+		// subagent tools, which are part of the built-in registry.
+		{"a pattern's matches follow the named tools", []string{"write", "*", "bash"}, []string{"write", "bash", "read", "powershell", "edit", "grep", "find", "ls", "task", "wait", "agents", "inactive_tool"}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			allowed := make(map[string]struct{}, len(tc.tools))

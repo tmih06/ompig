@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 const APIImagesOpenRouter ImageAPI = "openrouter-images"

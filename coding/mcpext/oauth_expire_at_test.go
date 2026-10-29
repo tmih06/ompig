@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // provider.ts:106 Date.now() + expires_in * 1000 is Infinity for an expires_in near Number.MAX_VALUE, and oauth.ts writes the state with

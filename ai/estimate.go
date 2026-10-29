@@ -4,7 +4,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Context-size estimation for provider transcripts. Mirrors upstream

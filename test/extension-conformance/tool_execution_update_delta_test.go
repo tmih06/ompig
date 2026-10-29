@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // toolUpdateStream is the partial results of parallel tool calls that interleave their updates: texts that grow past the length from which the host sends only the appended text, a result whose details change, a block that is replaced, and more calls than the host keeps a payload for, so the runtimes evict and receive keyframes again.

@@ -6,9 +6,9 @@ package core
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
-	"github.com/MichaelKinsy/PiG/durable/core/session/hopcost"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session/hopcost"
 )
 
 // Line-job duration (dcore-trace A1, ABI section 5.3). Pi's Session line is a FIFO of jobs, and a job holds the line for

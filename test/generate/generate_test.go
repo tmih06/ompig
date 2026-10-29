@@ -39,11 +39,11 @@ func TestGoDriftGateNamesRepairCommand(t *testing.T) {
 	for _, state := range []string{"stale", "fresh", "missing"} {
 		t.Run(state, func(t *testing.T) {
 			if state == "missing" {
-				if err := os.Remove(filepath.Join(fixture, "test/parity/interfaces/pig-go.json")); err != nil {
+				if err := os.Remove(filepath.Join(fixture, "test/parity/interfaces/ompig-go.json")); err != nil {
 					t.Fatal(err)
 				}
 			} else {
-				put("test/parity/interfaces/pig-go.json", state+"\n", 0o600)
+				put("test/parity/interfaces/ompig-go.json", state+"\n", 0o600)
 			}
 			cmd := exec.CommandContext(t.Context(), "make", "--no-print-directory", "-f", filepath.Join(root, "automation/make/parity.mk"), "interface-go-drift", "MKTEMP=mktemp "+filepath.Join(fixture, "generated.XXXXXXXX"))
 			cmd.Dir = fixture
@@ -58,7 +58,7 @@ func TestGoDriftGateNamesRepairCommand(t *testing.T) {
 			if err == nil {
 				t.Fatal("stale inventory passed")
 			}
-			for _, want := range []string{"run: make generate", "make interface-go", "test/parity/interfaces/pig-go.json"} {
+			for _, want := range []string{"run: make generate", "make interface-go", "test/parity/interfaces/ompig-go.json"} {
 				if !strings.Contains(string(output), want) {
 					t.Errorf("missing %q in failure:\n%s", want, output)
 				}

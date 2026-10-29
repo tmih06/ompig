@@ -26,7 +26,7 @@ A pin bump is a contract change: re-capture the corpus (section 6) at the new co
 
 | level | definition | required |
 |---|---|---|
-| `store` | After the scenario, every Pi table (`durable_schema`, `durable_metadata`, `record_ids`, `conversations`, `entries`, `tasks`, `submissions`, `documents`, `document_revisions`) holds the same rows, column by column, byte for byte. Tables named `pig_*`, Cloudflare's internal `_cf_*` tables (workerd creates `_cf_KV`, `_cf_METADATA` and `_cf_EXTERNALS`; the DO docs call the KV table `__cf_kv`) and SQLite's `sqlite_*` tables are excluded. | yes |
+| `store` | After the scenario, every Pi table (`durable_schema`, `durable_metadata`, `record_ids`, `conversations`, `entries`, `tasks`, `submissions`, `documents`, `document_revisions`) holds the same rows, column by column, byte for byte. Tables named `ompig_*`, Cloudflare's internal `_cf_*` tables (workerd creates `_cf_KV`, `_cf_METADATA` and `_cf_EXTERNALS`; the DO docs call the KV table `__cf_kv`) and SQLite's `sqlite_*` tables are excluded. | yes |
 | `commit` | For every `next_seq` value `s`, the row changes made by commit `s` (inserts, updates with before/after images, deletes) are equal. It catches intermediate task states, superseded deltas, and commit grouping that `store` cannot see. | yes |
 | `statement` | Same SQL statements in the same order. | no |
 | `context` | Every model call receives the same pi-ai `Context` (system prompt, messages, tools) and the same stream options, in the same call order. | yes |
@@ -43,7 +43,7 @@ Capture runs remove nondeterminism at its source, so the default normaliser set 
 |---|---|---|
 | Harness clock | `HarnessOptions.now` (`src/harness/types.ts:458`) | bound to the virtual clock |
 | progress throttles | tool output `Progress` reads `Date.now()` directly, not the Harness clock (`src/harness/output.ts:310,323`); generation partials wait on `setTimeout(flush, partialIntervalMs)` (`src/harness/generation.ts:372-414`) | virtual `Date.now`/`performance.now`/`setTimeout` |
-| provider session id | `ProviderDoc.initial()` calls pi-ai `uuidv7()` (`src/harness/provider.ts:18`), which reads `Date.now()`, draws 16 bytes from `crypto.getRandomValues` per call and keeps process-global `lastOrdinaryTimestamp` and `sequence` state (`packages/ai/src/utils/uuid.ts`) | virtual clock; every `uuidv7()` value is recorded on the effect tape (section 5.3) and returned by the candidate host's `pig.uuidv7` import (ABI section 4.2). A seeded `getRandomValues` alone does not align the values, because other code in each process draws from it too and the sequence state outlives a Harness reopen in the same process |
+| provider session id | `ProviderDoc.initial()` calls pi-ai `uuidv7()` (`src/harness/provider.ts:18`), which reads `Date.now()`, draws 16 bytes from `crypto.getRandomValues` per call and keeps process-global `lastOrdinaryTimestamp` and `sequence` state (`packages/ai/src/utils/uuid.ts`) | virtual clock; every `uuidv7()` value is recorded on the effect tape (section 5.3) and returned by the candidate host's `ompig.uuidv7` import (ABI section 4.2). A seeded `getRandomValues` alone does not align the values, because other code in each process draws from it too and the sequence state outlives a Harness reopen in the same process |
 | faux provider | `randomId()` uses `Date.now()` and `Math.random()` (`packages/ai/src/providers/faux.ts:163`); `tokenSize` draws from `Math.random()` (`faux.ts:274`); message timestamps use `Date.now()` (`faux.ts:99,289,304,318,327`) | seeded `Math.random`, `tokenSize.min == max`, virtual clock |
 | faux usage | the faux provider caches the previous prompt per `sessionId` in process memory and derives `cacheRead`/`cacheWrite` from it (`faux.ts:240-254`) | restart points are part of the scenario (section 2.4) |
 | commit interleaving | parallel tools, sub-agents and background tasks settle in effect-completion order | effect completions are scripted (section 5.3) |
@@ -123,7 +123,7 @@ The host serves Harness reads that do not need core state (old history pages, ta
 
 ## 4. What the core may differ in
 
-Only non-observable behaviour: statements issued, reads, memory layout, time spent, the `pig_*` sidecar tables (ADR D6, recorded as an additive feature when they land), and log output. Anything a Pi Harness client, a pi-durable process opening the same store, or a provider can observe is in scope of sections 2-3. A difference that must stay gets a numbered entry in `docs/parity/DIVERGENCES.md` before it lands.
+Only non-observable behaviour: statements issued, reads, memory layout, time spent, the `ompig_*` sidecar tables (ADR D6, recorded as an additive feature when they land), and log output. Anything a Pi Harness client, a pi-durable process opening the same store, or a provider can observe is in scope of sections 2-3. A difference that must stay gets a numbered entry in `docs/parity/DIVERGENCES.md` before it lands.
 
 ## 5. How it is checked
 
@@ -146,7 +146,7 @@ Pi itself must be deterministic under the tape: every scenario is captured five 
 Two fingerprints per model call:
 
 - `ctx`: sha256 of the canonical JSON of the pi-ai `Context` and stream options passed to `models.streamSimple` (Pi: wrap `models`; candidate: the `model_context` effect payload, ABI section 6). In the pinned reference that `Context` is `{ messages }` only (`src/harness/generation.ts:402`); the system prompt and tools travel inside it as positional `pi.system` messages (§7.4). The options' `signal` is not hashed. This is the `context` check.
-- `bench`: durable-bench's own `fingerprint()` (8 bytes of sha256 over `[role, text, calls]`, `src/plan.ts`). Known seed fingerprints: 50 `b017b487524e44a4`, 250 `dcea9f30b0917245`, 1,000 `ac520308146f2a8f`, 3,500 `0a8c8e4b0d9a0794` (bench-pig handoff). Required for both scripted-model variants.
+- `bench`: durable-bench's own `fingerprint()` (8 bytes of sha256 over `[role, text, calls]`, `src/plan.ts`). Known seed fingerprints: 50 `b017b487524e44a4`, 250 `dcea9f30b0917245`, 1,000 `ac520308146f2a8f`, 3,500 `0a8c8e4b0d9a0794` (bench-ompig handoff). Required for both scripted-model variants.
 
 For the wire plane (core-built provider bodies, ADR D11) a third fingerprint hashes the HTTP request body and must equal the body pi-ai at the pin builds for the same context and model.
 
@@ -249,4 +249,4 @@ JSON Lines, one object per event, in order:
 
 ### 7.8 Existing seeds
 
-Reuse rather than rewrite: the spike's `pix.ts` counters and `capture.ts` (bundle `pig-do-spike.tar.gz`), the wasm-spike lane's `bench/{verify,handoff,dump,verify-scan,recovery-trace}.ts` and `src/engine.ts`, the bench-pig lane's fixtures and fingerprints, and `durable/interop/{scenario,resume,rawdump}.mjs`.
+Reuse rather than rewrite: the spike's `pix.ts` counters and `capture.ts` (bundle `ompig-do-spike.tar.gz`), the wasm-spike lane's `bench/{verify,handoff,dump,verify-scan,recovery-trace}.ts` and `src/engine.ts`, the bench-ompig lane's fixtures and fingerprints, and `durable/interop/{scenario,resume,rawdump}.mjs`.

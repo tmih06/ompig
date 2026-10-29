@@ -14,7 +14,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 const outputName = "custom-factory-call-surface-draft-v" + coding.UpstreamVersion + ".json"
@@ -114,9 +114,9 @@ type member struct {
 	Identity               string                   `json:"identity"`
 	ErrorBehavior          string                   `json:"errorBehavior"`
 	Safety                 string                   `json:"safety"`
-	Disposition            string                   `json:"pigDisposition"`
+	Disposition            string                   `json:"ompigDisposition"`
 	IntendedDisposition    string                   `json:"intendedDisposition"`
-	PigTargets             []string                 `json:"pigTargets"`
+	OmpigTargets           []string                 `json:"ompigTargets"`
 	Realizations           []realizationDisposition `json:"productionRealizations"`
 	Compatibility          compatibility            `json:"compatibility"`
 }
@@ -125,7 +125,7 @@ type runtimeOnlyMember struct {
 	Name         string `json:"name"`
 	Signature    string `json:"signature"`
 	Reachability string `json:"reachability"`
-	Disposition  string `json:"pigDisposition"`
+	Disposition  string `json:"ompigDisposition"`
 	Citation     string `json:"citation"`
 }
 
@@ -380,7 +380,7 @@ func classify(root, id string, item inventoryItem) member {
 		Safety:                 safety,
 		Disposition:            currentPigDisposition(root, memberProperty(id)),
 		IntendedDisposition:    semantic.disposition,
-		PigTargets:             pigTargets(root),
+		OmpigTargets:           ompigTargets(root),
 		Realizations:           realizations,
 		Compatibility: compatibility{
 			FullNodeSource: "required-before-public-claim",

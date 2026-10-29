@@ -16,9 +16,9 @@ func TestColdBuildNoticesRespectMode(t *testing.T) {
 	if _, err := exec.LookPath("script"); err != nil {
 		t.Fatal(err)
 	}
-	if os.Getenv("PIG_TEST_BUILD_NOTICE_CHILD") == "1" {
+	if os.Getenv("OMPIG_TEST_BUILD_NOTICE_CHILD") == "1" {
 		h := NewHostWithConfigRoot(t.TempDir(), t.TempDir())
-		h.SetMode(os.Getenv("PIG_TEST_BUILD_NOTICE_MODE"))
+		h.SetMode(os.Getenv("OMPIG_TEST_BUILD_NOTICE_MODE"))
 		root := t.TempDir()
 		writeOwnerFixture(t, root, "go.mod", "module example.com/notice\n\ngo 1.26\n")
 		writeOwnerFixture(t, root, "main.go", "package main\nfunc main() {}\n")
@@ -34,7 +34,7 @@ func TestColdBuildNoticesRespectMode(t *testing.T) {
 				t.Fatal(err)
 			}
 			cmd := exec.CommandContext(t.Context(), "script", "-q", "-e", "-c", exe+" -test.run '^TestColdBuildNoticesRespectMode$'", filepath.Join(t.TempDir(), "typescript"))
-			cmd.Env = append(os.Environ(), "PIG_TEST_BUILD_NOTICE_CHILD=1", "PIG_TEST_BUILD_NOTICE_MODE="+mode)
+			cmd.Env = append(os.Environ(), "OMPIG_TEST_BUILD_NOTICE_CHILD=1", "OMPIG_TEST_BUILD_NOTICE_MODE="+mode)
 			output, err := cmd.CombinedOutput()
 			if err != nil {
 				t.Fatalf("child: %v\n%s", err, output)
@@ -53,7 +53,7 @@ func TestColdBuildOfManyCellsIsOneStatusLine(t *testing.T) {
 	if _, err := exec.LookPath("script"); err != nil {
 		t.Fatal(err)
 	}
-	if os.Getenv("PIG_TEST_BUILD_LINE_CHILD") == "1" {
+	if os.Getenv("OMPIG_TEST_BUILD_LINE_CHILD") == "1" {
 		h := NewHostWithConfigRoot(t.TempDir(), t.TempDir())
 		h.SetMode("tui")
 		var cells []CellSpec
@@ -73,7 +73,7 @@ func TestColdBuildOfManyCellsIsOneStatusLine(t *testing.T) {
 		t.Fatal(err)
 	}
 	cmd := exec.CommandContext(t.Context(), "script", "-q", "-e", "-c", exe+" -test.run '^TestColdBuildOfManyCellsIsOneStatusLine$'", filepath.Join(t.TempDir(), "typescript"))
-	cmd.Env = append(os.Environ(), "PIG_TEST_BUILD_LINE_CHILD=1")
+	cmd.Env = append(os.Environ(), "OMPIG_TEST_BUILD_LINE_CHILD=1")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("child: %v\n%s", err, output)

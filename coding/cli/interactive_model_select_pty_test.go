@@ -14,13 +14,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// Pi's AgentSession emits model_select once per changed selection: setModel with source "set" (agent-session.ts:2411) and cycleModel with source "cycle" (agent-session.ts:2480, 2512), each with the full model and previousModel (agent-session.ts:2372-2384). Interactive /model and the cycle key only call them. Pig's interactive mode emitted a second event of its own for each, with a model that had no provider (`undefined/undefined` to a Node extension), and the cycle's Session event said source "set". The lane review found the /model duplicate with this fixture; the cycle followed the same code.
+// Pi's AgentSession emits model_select once per changed selection: setModel with source "set" (agent-session.ts:2411) and cycleModel with source "cycle" (agent-session.ts:2480, 2512), each with the full model and previousModel (agent-session.ts:2372-2384). Interactive /model and the cycle key only call them. Ompig's interactive mode emitted a second event of its own for each, with a model that had no provider (`undefined/undefined` to a Node extension), and the cycle's Session event said source "set". The lane review found the /model duplicate with this fixture; the cycle followed the same code.
 func TestInteractiveModelSelectionEmitsOneModelSelectEach(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary and an extension process")
+		t.Skip("starts the ompig binary and an extension process")
 	}
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -36,11 +36,11 @@ func TestInteractiveModelSelectionEmitsOneModelSelectEach(t *testing.T) {
 	t.Cleanup(func() { _ = master.Close() })
 	cmd := exec.Command(binary, args...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "WIRING_REPORT="+report, "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "WIRING_REPORT="+report, "TERM=xterm-256color")
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {
-		t.Fatalf("start pig: %v", err)
+		t.Fatalf("start ompig: %v", err)
 	}
 	_ = slave.Close()
 	exited := make(chan struct{})

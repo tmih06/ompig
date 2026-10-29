@@ -16,9 +16,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tui/termsim"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/tui/termsim"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // staticLines is a Component that returns a fixed []string per render.
@@ -68,8 +68,8 @@ func upstreamFirstRender(lines []string) []byte {
 }
 
 // TestParityTUI_FirstRender_VisibleState asserts the visible state of a
-// first render matches between pig's TUI and upstream's algorithm.
-// We accept pig emitting extra ANSI (e.g. \x1b[2K erase-line per row) as
+// first render matches between ompig's TUI and upstream's algorithm.
+// We accept ompig emitting extra ANSI (e.g. \x1b[2K erase-line per row) as
 // long as the resulting visible state in the simulated terminal is
 // identical: that is the byte-parity floor.
 func TestParityTUI_FirstRender_VisibleState(t *testing.T) {
@@ -90,7 +90,7 @@ func TestParityTUI_FirstRender_VisibleState(t *testing.T) {
 			wantGrid := termsim.New(5, 30)
 			wantGrid.Write(upstreamFirstRender(tc.lines))
 			if gotGrid.String() != wantGrid.String() {
-				t.Errorf("visible state mismatch.\n--- pig ---\n%s\n--- upstream ---\n%s",
+				t.Errorf("visible state mismatch.\n--- ompig ---\n%s\n--- upstream ---\n%s",
 					withRowMarkers(gotGrid.String()), withRowMarkers(wantGrid.String()))
 			}
 		})

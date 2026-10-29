@@ -6,7 +6,7 @@ import (
 )
 
 // xrefCollectEnv is the runtime's test switch (xref.mjs installTestCollect): with it set, a Node fixture's collect command runs a full collection and releases the cross-process references the collection freed. A Node process started without it has no such hook.
-const xrefCollectEnv = "PIG_TEST_XREF_COLLECT"
+const xrefCollectEnv = "OMPIG_TEST_XREF_COLLECT"
 
 // A payload one Node realm emits reaches a listener in another Node realm as a proxy, and the listener's realm holds the Host lease until its collector frees the proxy, as Pi's collector frees the plain object whenever it runs. A collection releases the payload no listener kept, and only that one: the payload a listener kept stays leased and readable through its proxy until the listener drops it.
 func TestNodeEventBusCollectReleasesOnlyUnreachablePayloads(t *testing.T) {

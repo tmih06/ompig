@@ -10,7 +10,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func TestScopedModelsRefreshUpstream7153(t *testing.T) {

@@ -1,4 +1,4 @@
-// pig additive (D107): the Node runtime's view derivation. After a surface
+// ompig additive (D107): the Node runtime's view derivation. After a surface
 // render, the walk reads the real pi-tui component tree into the component
 // kit's view (docs/plan/extension-component-kit.md §2, §9), so a D91 frontend
 // can draw it natively. The rendered lines stay authoritative; the host keeps
@@ -30,7 +30,7 @@ export const VIEW_THEME_TOKENS = Object.freeze({
 });
 const VIEW_THEME_COLOR = /^#[0-9a-fA-F]{6}$/;
 
-// surfaceTheme reads the PiG-only viewTheme a surface's root component may
+// surfaceTheme reads the Ompig-only viewTheme a surface's root component may
 // set (§13.3). theme is the map the view sends while a frontend draws, as the
 // author set it; colors are its [token, "#rrggbb"] entries when every entry
 // is valid, and undefined otherwise: an invalid map is applied nowhere, and

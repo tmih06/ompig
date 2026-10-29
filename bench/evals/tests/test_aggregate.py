@@ -7,9 +7,9 @@ import unittest
 from pigbench import aggregate
 
 
-def run_file(tmp, name, os_name, machine, pig, pi, lock="L1", commit="c1", kind="overhead"):
-    """A raw.json with 5 samples per arm whose medians are pig and pi, so every ratio is known by construction."""
-    samples = {"print": {"pig-0.5": [{"wall_ms": pig + d, "peak_rss_mib": 10.0} for d in (-2, -1, 0, 1, 2)], "pi-1.1.0": [{"wall_ms": pi + d, "peak_rss_mib": 100.0} for d in (-2, -1, 0, 1, 2)]}}
+def run_file(tmp, name, os_name, machine, ompig, pi, lock="L1", commit="c1", kind="overhead"):
+    """A raw.json with 5 samples per arm whose medians are ompig and pi, so every ratio is known by construction."""
+    samples = {"print": {"ompig-0.5": [{"wall_ms": ompig + d, "peak_rss_mib": 10.0} for d in (-2, -1, 0, 1, 2)], "pi-1.1.0": [{"wall_ms": pi + d, "peak_rss_mib": 100.0} for d in (-2, -1, 0, 1, 2)]}}
     raw = {"kind": kind, "env": {"os": os_name, "machine": machine, "cpu": name, "logical_cpus": 8, "memory_gib": 16, "commit": commit, "arms_lock_sha256": lock, "meter": "test", "arms": {}, "seed": 1},
            "options": {"scenarios": ["print"]}, "samples": samples if kind == "overhead" else samples["print"], "egress": {"mode": "x", "violations": []}}
     path = os.path.join(tmp, name)
@@ -41,7 +41,7 @@ class AggregateTest(unittest.TestCase):
         self.assertIn("0.50 [", summary)   # 20 / 40 on darwin-arm64
         self.assertIn("1.00 [", summary)   # 90 / 90 on windows-x64: a tie is listed too
         self.assertIn("0.10 [", summary)   # peak RSS 10 / 100 on every machine
-        self.assertIn("aggregate,print/windows-x64,pig-0.5,wall_ms_ratio_vs_pi-1.1.0", csv_text)
+        self.assertIn("aggregate,print/windows-x64,ompig-0.5,wall_ms_ratio_vs_pi-1.1.0", csv_text)
 
     def test_mixed_locks_or_commits_are_refused_unless_allowed(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -65,7 +65,7 @@ class AggregateTest(unittest.TestCase):
             paths = [run_file(tmp, "a", "Linux 6", "x86_64", 50, 100), run_file(tmp, "b", "Darwin 25", "arm64", 20, 40)]
             text = open(aggregate.aggregate(paths, os.path.join(tmp, "o"))).read()
         absolute = text.split("## Absolute medians")[1].split("\n## ")[0]
-        self.assertIn("| print | wall_ms | pig-0.5 | 20 | 50 |", absolute)  # columns sorted by architecture: darwin-arm64, linux-x64
+        self.assertIn("| print | wall_ms | ompig-0.5 | 20 | 50 |", absolute)  # columns sorted by architecture: darwin-arm64, linux-x64
         self.assertIn("never compared across architectures", text)
 
     def test_differing_commits_alone_are_refused(self):
@@ -76,11 +76,11 @@ class AggregateTest(unittest.TestCase):
         self.assertIn("commits differ", str(caught.exception))
 
     def test_two_machines_of_one_architecture_are_never_paired(self):
-        # PiG measured on one linux-x64 machine and Pi on another: no ratio may be formed, and both machines are listed.
+        # Ompig measured on one linux-x64 machine and Pi on another: no ratio may be formed, and both machines are listed.
         with tempfile.TemporaryDirectory() as tmp:
             a = run_file(tmp, "fast", "Linux 6", "x86_64", 50, 100)
             b = run_file(tmp, "slow", "Linux 6", "x86_64", 80, 160)
-            for path, drop in ((a, "pi-1.1.0"), (b, "pig-0.5")):
+            for path, drop in ((a, "pi-1.1.0"), (b, "ompig-0.5")):
                 with open(os.path.join(path, "raw.json")) as f:
                     raw = json.load(f)
                 del raw["samples"]["print"][drop]
@@ -106,7 +106,7 @@ class AggregateTest(unittest.TestCase):
                     json.dump(raw, f)
             merged, _ = aggregate.merge(aggregate.load([over, start]))
         self.assertEqual(sorted(merged["linux-x64"]), ["version", "version (hyperfine)"])
-        self.assertEqual(len(merged["linux-x64"]["version"]["pig-0.5"]), 5)
+        self.assertEqual(len(merged["linux-x64"]["version"]["ompig-0.5"]), 5)
 
     def test_other_run_kinds_are_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -117,7 +117,7 @@ class AggregateTest(unittest.TestCase):
 
     def test_ratio_rows_leave_the_percentile_columns_empty(self):
         rows = []
-        merged = {"linux-x64": {"print": {"pig-0.5": [{"wall_ms": 50.0 + d} for d in range(5)], "pi-1.1.0": [{"wall_ms": 100.0 + d} for d in range(5)]}}}
+        merged = {"linux-x64": {"print": {"ompig-0.5": [{"wall_ms": 50.0 + d} for d in range(5)], "pi-1.1.0": [{"wall_ms": 100.0 + d} for d in range(5)]}}}
         aggregate.cross_table(merged, {"linux-x64": {}}, 1, rows)
         self.assertEqual(rows[0][6:9], [None, None, None])  # p90, min, max
         self.assertLess(rows[0][9], rows[0][5])
@@ -129,13 +129,13 @@ class AggregateTest(unittest.TestCase):
             return [{"turn_cpu_ms": cpu, "turn_cpu_mean_ms": mean + d, "ready_pss_mib": 60.0} for d in (-0.2, -0.1, 0, 0.1, 0.2)]
         with tempfile.TemporaryDirectory() as tmp:
             paths = []
-            for name, os_name, extra, pig, pi in (("w", "Windows 10", {"meter": "windows-job", "cpu_tick_ms": 15.625}, rpc(0.0, 4.0), rpc(15.625, 8.0)),
+            for name, os_name, extra, ompig, pi in (("w", "Windows 10", {"meter": "windows-job", "cpu_tick_ms": 15.625}, rpc(0.0, 4.0), rpc(15.625, 8.0)),
                                                   ("l", "Linux 6", {}, rpc(3.0, 3.0), rpc(6.0, 6.0))):
                 path = run_file(tmp, name, os_name, "x86_64", 50, 100)
                 with open(os.path.join(path, "raw.json")) as f:
                     raw = json.load(f)
                 raw["env"].update(extra)
-                raw["samples"]["rpc"] = {"pig-0.5": pig, "pi-1.1.0": pi}
+                raw["samples"]["rpc"] = {"ompig-0.5": ompig, "pi-1.1.0": pi}
                 with open(os.path.join(path, "raw.json"), "w") as f:
                     json.dump(raw, f)
                 paths.append(path)

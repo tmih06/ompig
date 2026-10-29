@@ -47,7 +47,7 @@ type MouseEvent struct {
 // MouseHandler is implemented by a [RemoteComponent] or [ViewComponent] that
 // takes the mouse, as an upstream component with handleMouse does. Pi routes
 // the mouse to components only in fullscreen mode; regular mode leaves it to
-// the terminal, and so does PiG.
+// the terminal, and so does Ompig.
 //
 // While the component's overlay shows, the host hands it every event inside
 // its bounds: press, release, move, drag, click and wheel, in order. A left

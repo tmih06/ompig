@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 func TestWords(t *testing.T) {
@@ -204,9 +204,9 @@ func TestSpellingCoversHandClosedSpellingPairs(t *testing.T) {
 	}
 	var doc struct {
 		Mappings []struct {
-			ID          string   `json:"id"`
-			Disposition string   `json:"disposition"`
-			PigTargets  []string `json:"pigTargets"`
+			ID           string   `json:"id"`
+			Disposition  string   `json:"disposition"`
+			OmpigTargets []string `json:"ompigTargets"`
 		} `json:"mappings"`
 	}
 	if err := json.Unmarshal(data, &doc); err != nil {
@@ -220,7 +220,7 @@ func TestSpellingCoversHandClosedSpellingPairs(t *testing.T) {
 	var spelled, rejected int
 	var bad []string
 	for _, r := range doc.Mappings {
-		if r.Disposition != "ported" || len(r.PigTargets) == 0 {
+		if r.Disposition != "ported" || len(r.OmpigTargets) == 0 {
 			continue
 		}
 		up := r.ID[strings.LastIndex(r.ID, "#")+1:]
@@ -229,7 +229,7 @@ func TestSpellingCoversHandClosedSpellingPairs(t *testing.T) {
 		} else if i := strings.Index(up, "::"); i >= 0 {
 			up = up[:i]
 		}
-		tgt := r.PigTargets[0]
+		tgt := r.OmpigTargets[0]
 		goName := tgt[strings.LastIndex(tgt, "#")+1:]
 		if i := strings.LastIndex(goName, "."); i >= 0 {
 			goName = goName[i+1:]

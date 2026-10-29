@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // reloadBuildResources is DefaultResourceLoader.reload for a build: it resolves the configured resource entries again and reads the skills, prompt templates, context files and system prompt files they select (resource-loader.ts reload). A resolution error leaves the previous resources in place.

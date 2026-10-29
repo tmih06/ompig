@@ -99,8 +99,8 @@ class InterfaceExtractCacheTest(unittest.TestCase):
         self.env = dict(
             os.environ,
             PATH=str(self.bin) + os.pathsep + os.environ["PATH"],
-            PIG_CACHE_HOME=str(self.cache_home),
-            PIG_TMP=str(base),
+            OMPIG_CACHE_HOME=str(self.cache_home),
+            OMPIG_TMP=str(base),
             EXTRACT_CALL_LOG=str(self.call_log),
         )
         self.out_dir = base / "out"
@@ -202,7 +202,7 @@ class InterfaceExtractCacheTest(unittest.TestCase):
     def test_opt_out_env_var_forces_fresh_extraction(self):
         self.run_cache()
         self.assertEqual(self.call_count(), 2)
-        bypass_env = dict(self.env, PIG_INTERFACE_EXTRACT_CACHE="0")
+        bypass_env = dict(self.env, OMPIG_INTERFACE_EXTRACT_CACHE="0")
         self.run_cache(env=bypass_env)
         self.assertEqual(self.call_count(), 4)
 
@@ -218,8 +218,8 @@ class InterfaceExtractCacheTest(unittest.TestCase):
         fixture_a = self._make_fixture_tree(base_a)
         fixture_b = self._make_fixture_tree(base_b)
 
-        env_a = dict(self.env, PIG_CACHE_HOME=str(base_a / "cache"))
-        env_b = dict(self.env, PIG_CACHE_HOME=str(base_b / "cache"))
+        env_a = dict(self.env, OMPIG_CACHE_HOME=str(base_a / "cache"))
+        env_b = dict(self.env, OMPIG_CACHE_HOME=str(base_b / "cache"))
         result_a, *_ = self.run_cache_for(
             fixture_a["source_root"], fixture_a["published_root"], fixture_a["extractor_dir"], base_a / "out", env_a
         )
@@ -237,7 +237,7 @@ class InterfaceExtractCacheTest(unittest.TestCase):
     def test_warm_hit_from_a_second_worktree_with_identical_content(self):
         # Populate the cache from one absolute location, then hit it from a
         # second, differently-rooted checkout of the same content sharing the
-        # same PIG_CACHE_HOME -- this is the actual integrator scenario: one
+        # same OMPIG_CACHE_HOME -- this is the actual integrator scenario: one
         # candidate warms the cache, a later candidate at a different
         # worktree path must reuse it.
         base_a = Path(self.tmp.name) / "first-worktree"
@@ -245,7 +245,7 @@ class InterfaceExtractCacheTest(unittest.TestCase):
         fixture_a = self._make_fixture_tree(base_a)
         fixture_b = self._make_fixture_tree(base_b)
         shared_cache = Path(self.tmp.name) / "shared-cache"
-        env = dict(self.env, PIG_CACHE_HOME=str(shared_cache))
+        env = dict(self.env, OMPIG_CACHE_HOME=str(shared_cache))
 
         result_a, source_a, published_a, cli_a = self.run_cache_for(
             fixture_a["source_root"], fixture_a["published_root"], fixture_a["extractor_dir"], base_a / "out", env
@@ -328,7 +328,7 @@ class InterfaceExtractCacheTest(unittest.TestCase):
         # Exactly one published cache entry exists for this key, and it holds
         # three well-formed files (not a nested stray directory from a
         # mishandled `mv` onto an existing directory).
-        entries = list((self.cache_home / "pig-interface-extract").glob("*"))
+        entries = list((self.cache_home / "ompig-interface-extract").glob("*"))
         entries = [e for e in entries if not e.name.startswith(".")]
         self.assertEqual(len(entries), 1, entries)
         entry = entries[0]
@@ -339,7 +339,7 @@ class InterfaceExtractCacheTest(unittest.TestCase):
             json.loads((entry / name).read_text())  # parses cleanly, not truncated
 
     def test_incremental_mode_runs_the_per_package_extractor_with_its_own_cache(self):
-        env = dict(self.env, PIG_INTERFACE_EXTRACT_INCREMENTAL="1")
+        env = dict(self.env, OMPIG_INTERFACE_EXTRACT_INCREMENTAL="1")
         source, published, cli = self.run_cache(env=env)
         self.assertEqual(source, {"source": "incremental"})
         self.assertEqual(published, {"published": "incremental"})
@@ -347,11 +347,11 @@ class InterfaceExtractCacheTest(unittest.TestCase):
         log = self.call_log.read_text()
         self.assertIn("call:", log)
         self.assertNotIn("/extract.mjs", log.replace("extract-incremental.mjs", ""))
-        self.assertIn(f"--cache-dir {self.cache_home}/pig-interface-extract/packages", log)
+        self.assertIn(f"--cache-dir {self.cache_home}/ompig-interface-extract/packages", log)
         self.assertIn("--upstream-version 9.9.9", log)
 
     def test_incremental_mode_with_the_cache_opt_out_passes_no_cache_dir(self):
-        env = dict(self.env, PIG_INTERFACE_EXTRACT_INCREMENTAL="1", PIG_INTERFACE_EXTRACT_CACHE="0")
+        env = dict(self.env, OMPIG_INTERFACE_EXTRACT_INCREMENTAL="1", OMPIG_INTERFACE_EXTRACT_CACHE="0")
         self.run_cache(env=env)
         self.assertNotIn("--cache-dir", self.call_log.read_text())
 

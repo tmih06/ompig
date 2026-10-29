@@ -83,7 +83,7 @@ for (let i = 0; i < 500; i++) {
 		if (random() < 0.3 && s > 0) { const kind = random(); if (kind < 0.6) step.scrollBy = pick([-20, -5, -3, -1, 1, 2, 3, 7, 30]); else if (kind < 0.8) step.scrollTop = true; else step.scrollBottom = true; }
 		if (random() < 0.1) step.flash = { message: pick(["saved", "日本語 done", "x".repeat(50), "", "a\nb"]), durationMs: 600000 };
 		if (random() < 0.08) step.raw = true; // components return their lines unclipped: the screen cuts them at the terminal width
-		if (random() < 0.08 && s > 0) { step.hardwareCursor = random() < 0.5; step.cursorFirst = random() < 0.5; } // before the first frame Pi paints one on request, PiG waits for Start
+		if (random() < 0.08 && s > 0) { step.hardwareCursor = random() < 0.5; step.cursorFirst = random() < 0.5; } // before the first frame Pi paints one on request, Ompig waits for Start
 		if (random() < 0.25 && s > 0) {
 			const sizeValue = () => pick([5, 10, 20, 40, "30%", "50%", "100%", undefined, undefined]);
 			const spec = {

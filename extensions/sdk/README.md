@@ -1,10 +1,10 @@
 # Go extension SDK
 
-The Go SDK bridges Pi's extension API through PiG's subprocess host (D19). Each factory returns `*sdk.Extension`. Use `pig extension init ./my-extension --lang go` to create a module. Run `pig reload --sdk-path` to stage and locate the SDK from the installed binary.
+The Go SDK bridges Pi's extension API through Ompig's subprocess host (D19). Each factory returns `*sdk.Extension`. Use `ompig extension init ./my-extension --lang go` to create a module. Run `ompig reload --sdk-path` to stage and locate the SDK from the installed binary.
 
 ## Pi helper exports
 
-The helpers Pi exports to extensions keep their names in Go case and behave like Pi's, which the conformance suite checks against Pi's own code: `TruncateHead`, `TruncateTail`, `TruncateLine`, `FormatSize` and `DefaultMaxLines`/`DefaultMaxBytes` (Pi's truncate.ts), `WithFileMutationQueue`, `IsToolCallEventType` (Pi's `isToolCallEventType`, matching the tool name exactly), and `AgentDir`, `ConfigDirName`, `Version`, `PackageDir`, `GetShellConfig` (Pi's `getAgentDir()`, `CONFIG_DIR_NAME`, `VERSION`, `getPackageDir()`, `getShellConfig()`). Pi's pure pi-ai helpers are here too (`StringEnum`, `ClampThinkingLevel`, `GetSupportedThinkingLevels`, `CalculateCost`, `ContentText`, `NormalizeContext`, `GetCurrentSystemPrompt`, `IsContextOverflow`, `IsRetryableAssistantError`, `EnvAPIKeyAuth` and the rest of `pi_ai_text.go` and `pi_ai_models.go`); the transcript helpers take and return raw JSON because a system message's `sections` are read in key order. Byte limits count UTF-8 bytes and `TruncateLine` counts UTF-16 units like a JavaScript string. A nil `TruncationOptions` limit takes Pi's default; 0 is used as given. The host-config functions return `ErrHostInfoUnavailable`, never a made-up path, when the process was not started by a PiG host. `Context.GetEditorComponent` returns the factory this extension installed with `SetEditorComponent`, or nil. Pi's `getEditorComponent` returns the factory installed by any extension, so one extension can wrap another's editor; PiG returns only the calling extension's own factory.
+The helpers Pi exports to extensions keep their names in Go case and behave like Pi's, which the conformance suite checks against Pi's own code: `TruncateHead`, `TruncateTail`, `TruncateLine`, `FormatSize` and `DefaultMaxLines`/`DefaultMaxBytes` (Pi's truncate.ts), `WithFileMutationQueue`, `IsToolCallEventType` (Pi's `isToolCallEventType`, matching the tool name exactly), and `AgentDir`, `ConfigDirName`, `Version`, `PackageDir`, `GetShellConfig` (Pi's `getAgentDir()`, `CONFIG_DIR_NAME`, `VERSION`, `getPackageDir()`, `getShellConfig()`). Pi's pure pi-ai helpers are here too (`StringEnum`, `ClampThinkingLevel`, `GetSupportedThinkingLevels`, `CalculateCost`, `ContentText`, `NormalizeContext`, `GetCurrentSystemPrompt`, `IsContextOverflow`, `IsRetryableAssistantError`, `EnvAPIKeyAuth` and the rest of `pi_ai_text.go` and `pi_ai_models.go`); the transcript helpers take and return raw JSON because a system message's `sections` are read in key order. Byte limits count UTF-8 bytes and `TruncateLine` counts UTF-16 units like a JavaScript string. A nil `TruncationOptions` limit takes Pi's default; 0 is used as given. The host-config functions return `ErrHostInfoUnavailable`, never a made-up path, when the process was not started by a Ompig host. `Context.GetEditorComponent` returns the factory this extension installed with `SetEditorComponent`, or nil. Pi's `getEditorComponent` returns the factory installed by any extension, so one extension can wrap another's editor; Ompig returns only the calling extension's own factory.
 
 `Context.SetWorkingMessage("")` shows an empty working label, as Pi does; `Context.ClearWorkingMessage()` restores the default label (Pi's `setWorkingMessage()` with no argument).  `Context.ClearHiddenThinkingLabel()` does the same for `SetHiddenThinkingLabel`.
 
@@ -12,7 +12,7 @@ The helpers Pi exports to extensions keep their names in Go case and behave like
 
 ## Upgrading an older extension
 
-`pig extension upgrade` applies the rewrite rules in the `upgrade` package of this module to an extension written for an earlier SDK. Add a rule there, with an old-extension fixture under `upgrade/testdata/fixtures`, for every breaking change; `make sdk-apidiff` fails a break without a rule and a release note. See the upgrade section of the extensions guide.
+`ompig extension upgrade` applies the rewrite rules in the `upgrade` package of this module to an extension written for an earlier SDK. Add a rule there, with an old-extension fixture under `upgrade/testdata/fixtures`, for every breaking change; `make sdk-apidiff` fails a break without a rule and a release note. See the upgrade section of the extensions guide.
 
 ## Breaking changes / migration to 0.3.0
 
@@ -72,7 +72,7 @@ Do not replace omitted options with `sdk.Bool(false)`. While a turn streams, an 
 
 ### Legacy Go module path
 
-Source imports of `github.com/mainstai/pig/extensions/sdk` remain supported for factories and exact standalones. PiG builds a private copy of its current SDK under that module path, including all subpackages and self-imports. It does not modify the extension's `go.mod` or source. Use `github.com/MichaelKinsy/PiG/extensions/sdk` for new extensions and for Go factories intended to fuse into a Piglet Binary.
+Source imports of `github.com/mainstai/ompig/extensions/sdk` remain supported for factories and exact standalones. Ompig builds a private copy of its current SDK under that module path, including all subpackages and self-imports. It does not modify the extension's `go.mod` or source. Use `github.com/tmih06/ompig/extensions/sdk` for new extensions and for Go factories intended to fuse into a Ompiglet Binary.
 
 ## Upstream 0.99.1 extension API
 

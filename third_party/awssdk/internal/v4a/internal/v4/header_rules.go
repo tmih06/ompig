@@ -1,7 +1,7 @@
 package v4
 
 import (
-	sdkstrings "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/strings"
+	sdkstrings "github.com/tmih06/ompig/third_party/awssdk/internal/strings"
 )
 
 // Rules houses a set of Rule needed for validation of a

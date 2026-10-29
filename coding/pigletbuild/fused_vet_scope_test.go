@@ -10,9 +10,9 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
 )
 
 const (
@@ -28,7 +28,7 @@ const (
 func writeVetScopeModule(t *testing.T, source string, requires ...string) string {
 	t.Helper()
 	root := writeFusedVetModule(t, source)
-	mod := "module example.com/hazard\n\ngo 1.26.0\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	mod := "module example.com/hazard\n\ngo 1.26.0\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	for _, requirement := range requires {
 		mod += "\nrequire " + requirement + "\n"
 	}
@@ -37,7 +37,7 @@ func writeVetScopeModule(t *testing.T, source string, requires ...string) string
 }
 
 // buildVetScopeArtifact runs the native build for one fused member against a
-// fake Pig source that has only a go.mod. With GOPROXY=off the final go build
+// fake Ompig source that has only a go.mod. With GOPROXY=off the final go build
 // fails offline, after the overlay, so the test sees the complete build log.
 func buildVetScopeArtifact(t *testing.T, member string) (string, error) {
 	t.Helper()
@@ -45,15 +45,15 @@ func buildVetScopeArtifact(t *testing.T, member string) (string, error) {
 	t.Setenv("GOFLAGS", "-mod=readonly")
 	t.Setenv("GOTOOLCHAIN", "local")
 	t.Setenv("GOWORK", "off")
-	pigRoot := t.TempDir()
-	writeFixtureFile(t, filepath.Join(pigRoot, "go.mod"), "module example.com/pig\n\ngo 1.26\n")
+	ompigRoot := t.TempDir()
+	writeFixtureFile(t, filepath.Join(ompigRoot, "go.mod"), "module example.com/ompig\n\ngo 1.26\n")
 	plan := pigletartifact.Plan{Components: []pigletartifact.Component{{
 		Kind: pigletartifact.ComponentKindExtension, Name: "hazard",
 		Realization: pigletartifact.RealizationFused, Materialization: pigletartifact.MaterializationBinary,
 	}}}
 	var stderr bytes.Buffer
-	_, err := buildNativeArtifact(context.Background(), pigSource{Root: pigRoot}, &piglet.Piglet{Name: "hazard"}, []subprocess.CellSpec{fusedVetCell(member)}, plan, nil, Options{}, filepath.Join(t.TempDir(), "pig-hazard"), &bytes.Buffer{}, &stderr)
-	if err == nil || !strings.Contains(err.Error(), "build Piglet Binary") {
+	_, err := buildNativeArtifact(context.Background(), ompigSource{Root: ompigRoot}, &ompiglet.Ompiglet{Name: "hazard"}, []subprocess.CellSpec{fusedVetCell(member)}, plan, nil, Options{}, filepath.Join(t.TempDir(), "ompig-hazard"), &bytes.Buffer{}, &stderr)
+	if err == nil || !strings.Contains(err.Error(), "build Ompiglet Binary") {
 		t.Fatalf("build error = %v, want the offline go build to fail after the vet and the overlay", err)
 	}
 	return stderr.String(), err
@@ -79,15 +79,15 @@ func TestBuildNativeArtifactPrintsNoVetScopeNoteWithoutExternalModules(t *testin
 }
 
 // The note names each external module once, at the version the merged go.mod
-// selects: the highest any member or Pig requires, whichever member is read
+// selects: the highest any member or Ompig requires, whichever member is read
 // first. A replacement's target is named, since its source is what the Binary
-// links. Local member and workspace modules, Pig itself, and the SDK are
+// links. Local member and workspace modules, Ompig itself, and the SDK are
 // vetted or host source and are not listed.
 func TestMergeFusedModulesNamesUnvettedModulesAtTheSelectedVersion(t *testing.T) {
 	parent := t.TempDir()
 	alpha, beta, ws := filepath.Join(parent, "a-member"), filepath.Join(parent, "b-member"), filepath.Join(parent, "ws")
 	// alpha sorts first and requires the higher example.com/dep.
-	writeFixtureFile(t, filepath.Join(alpha, "go.mod"), "module example.com/alpha\n\ngo 1.26\n\nrequire (\n\tgithub.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\texample.com/pig v0.9.0\n\texample.com/dep v1.1.0\n\texample.com/forked v1.0.0\n\texample.com/pigdep v1.2.0\n\t"+vetScopeShlex+" // indirect\n)\n\nreplace example.com/forked => example.com/fork v1.0.1\n")
+	writeFixtureFile(t, filepath.Join(alpha, "go.mod"), "module example.com/alpha\n\ngo 1.26\n\nrequire (\n\tgithub.com/tmih06/ompig/extensions/sdk v0.0.0\n\texample.com/ompig v0.9.0\n\texample.com/dep v1.1.0\n\texample.com/forked v1.0.0\n\texample.com/pigdep v1.2.0\n\t"+vetScopeShlex+" // indirect\n)\n\nreplace example.com/forked => example.com/fork v1.0.1\n")
 	writeFixtureFile(t, filepath.Join(beta, "go.mod"), "module example.com/beta\n\ngo 1.26\n\nrequire (\n\texample.com/alpha v0.0.0\n\texample.com/dep v1.0.0\n\texample.com/vendored v0.1.0\n)\n\nreplace example.com/vendored => ./third_party/vendored\n")
 	writeFixtureFile(t, filepath.Join(ws, "go.mod"), "module example.com/ws\n\ngo 1.26\n\nrequire (\n\texample.com/alpha v0.0.0\n\texample.com/ws/dep v0.1.0\n)\n")
 	entries := []fusedEntry{
@@ -103,11 +103,11 @@ func TestMergeFusedModulesNamesUnvettedModulesAtTheSelectedVersion(t *testing.T)
 		vetScopeShlexNote,
 	}
 	for range 2 {
-		pig, err := modfile.Parse("go.mod", []byte("module example.com/pig\n\ngo 1.26\n\nrequire example.com/pigdep v1.5.0\n"), nil)
+		ompig, err := modfile.Parse("go.mod", []byte("module example.com/ompig\n\ngo 1.26\n\nrequire example.com/pigdep v1.5.0\n"), nil)
 		if err != nil {
 			t.Fatal(err)
 		}
-		graph, err := mergeFusedModules(pig, slices.Clone(entries))
+		graph, err := mergeFusedModules(ompig, slices.Clone(entries))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -120,15 +120,15 @@ func TestMergeFusedModulesNamesUnvettedModulesAtTheSelectedVersion(t *testing.T)
 // The frontend member is fused and vetted like an extension member, so its
 // external modules are named too.
 func TestOverlayFuseNamesTheFrontendMembersUnvettedModules(t *testing.T) {
-	pigRoot := t.TempDir()
-	writeFixtureFile(t, filepath.Join(pigRoot, "go.mod"), "module example.com/pig\n\ngo 1.26\n")
+	ompigRoot := t.TempDir()
+	writeFixtureFile(t, filepath.Join(ompigRoot, "go.mod"), "module example.com/ompig\n\ngo 1.26\n")
 	member := t.TempDir()
 	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/frontend\n\ngo 1.26\n\nrequire "+vetScopeShlex+"\n")
 	overlay, err := newBuildOverlay(t.TempDir())
 	if err != nil {
 		t.Fatal(err)
 	}
-	graph, err := overlayFuse(overlay, pigRoot, nil, &fusedEntry{Name: "frontend", Pkg: "frontendmember", Factory: "Frontend", Root: member, ModulePath: "example.com/frontend", Package: "example.com/frontend"})
+	graph, err := overlayFuse(overlay, ompigRoot, nil, &fusedEntry{Name: "frontend", Pkg: "frontendmember", Factory: "Frontend", Root: member, ModulePath: "example.com/frontend", Package: "example.com/frontend"})
 	if err != nil {
 		t.Fatal(err)
 	}

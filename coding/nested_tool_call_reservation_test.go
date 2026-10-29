@@ -1,4 +1,4 @@
-//go:build !pig_strip_codemode
+//go:build !ompig_strip_codemode
 
 package coding
 
@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // A nested call to a tool that keeps a call order (edit and write through the file mutation queue, MCP tools through

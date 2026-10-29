@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // Pi 1.2.0 packages/durable/test/session-documents.test.ts:622 "publishes close synchronously and supports unsubscription" (Session.subscribeClose, packages/durable/src/types.ts:907):

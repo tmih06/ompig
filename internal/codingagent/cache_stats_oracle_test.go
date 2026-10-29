@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/cache-stats.ts
@@ -156,13 +156,13 @@ func TestCollectCacheMissesMatchesPi(t *testing.T) {
 			case want == nil && miss == nil:
 			case want == nil || miss == nil:
 				differences++
-				t.Errorf("session %d entry %d: PiG miss %+v, Pi %+v", si, i, miss, want)
+				t.Errorf("session %d entry %d: Ompig miss %+v, Pi %+v", si, i, miss, want)
 			default:
 				counted++
 				if miss.missedTokens != want.MissedTokens || miss.idleMillis != want.IdleMs || miss.modelChanged != want.ModelChanged ||
 					math.Abs(miss.missedCost-want.MissedCost) > 1e-9*math.Max(1, math.Abs(want.MissedCost)) {
 					differences++
-					t.Errorf("session %d entry %d: PiG %+v, Pi %+v", si, i, *miss, *want)
+					t.Errorf("session %d entry %d: Ompig %+v, Pi %+v", si, i, *miss, *want)
 				}
 			}
 			if want != nil {

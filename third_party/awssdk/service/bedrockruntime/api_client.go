@@ -7,9 +7,6 @@ import (
 	cryptorand "crypto/rand"
 	"errors"
 	"fmt"
-	internalauth "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/auth"
-	internalauthsmithy "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/auth/smithy"
-	internalConfig "github.com/MichaelKinsy/PiG/third_party/awssdk/internal/configsources"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/defaults"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
@@ -25,6 +22,9 @@ import (
 	smithyrand "github.com/aws/smithy-go/rand"
 	"github.com/aws/smithy-go/tracing"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	internalauth "github.com/tmih06/ompig/third_party/awssdk/internal/auth"
+	internalauthsmithy "github.com/tmih06/ompig/third_party/awssdk/internal/auth/smithy"
+	internalConfig "github.com/tmih06/ompig/third_party/awssdk/internal/configsources"
 	"io"
 	"net"
 	"net/http"
@@ -125,7 +125,7 @@ func withOperationMetrics(parent context.Context, mp metrics.MeterProvider) (con
 		return parent, nil
 	}
 
-	meter := mp.Meter("github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime")
+	meter := mp.Meter("github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime")
 	om := &operationMetrics{}
 
 	var err error
@@ -179,7 +179,7 @@ func getOperationMetrics(ctx context.Context) *operationMetrics {
 }
 
 func operationTracer(p tracing.TracerProvider) tracing.Tracer {
-	return p.Tracer("github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime")
+	return p.Tracer("github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime")
 }
 
 // Client provides the API client to make operations call for Amazon Bedrock
@@ -306,7 +306,7 @@ func (c *Client) invokeOperation(
 	defer span.End()
 
 	handler := smithyhttp.NewClientHandlerWithOptions(options.HTTPClient, func(o *smithyhttp.ClientHandler) {
-		o.Meter = options.MeterProvider.Meter("github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime")
+		o.Meter = options.MeterProvider.Meter("github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime")
 	})
 	decorated := middleware.DecorateHandler(handler, stack)
 	result, metadata, err = decorated.Handle(ctx, params)
@@ -393,7 +393,7 @@ func (c *Client) invokeEventStreamOperation(
 	defer span.End()
 
 	handler := smithyhttp.NewClientHandlerWithOptions(options.HTTPClient, func(o *smithyhttp.ClientHandler) {
-		o.Meter = options.MeterProvider.Meter("github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime")
+		o.Meter = options.MeterProvider.Meter("github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime")
 	})
 	decorated := middleware.DecorateHandler(handler, stack)
 	// create a channel that returns immediately as soon as the request to the server is made
@@ -875,7 +875,7 @@ func resolveIdempotencyTokenProvider(o *Options) {
 func addRetry(stack *middleware.Stack, o Options, c *Client) error {
 	attempt := retry.NewAttemptMiddleware(o.Retryer, smithyhttp.RequestCloner, func(m *retry.Attempt) {
 		m.LogAttempts = o.ClientLogMode.IsRetries()
-		m.OperationMeter = o.MeterProvider.Meter("github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime")
+		m.OperationMeter = o.MeterProvider.Meter("github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime")
 		m.ClientSkew = c.timeOffset
 	})
 	if err := stack.Finalize.Insert(attempt, "ResolveAuthScheme", middleware.Before); err != nil {

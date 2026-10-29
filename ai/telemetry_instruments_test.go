@@ -6,7 +6,7 @@ import (
 	"time"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // releasableMetrics is an adapter whose instruments do not reference it, so its cache entry can be released with it.

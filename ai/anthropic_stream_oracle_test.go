@@ -79,7 +79,7 @@ func anthropicStreamBodies() [][][]byte {
 				size = 1 + random.Intn(6)
 			}
 			size = min(size, len(raw))
-			// D121: Pig holds a chunk-final CR until the next chunk arrives, Pi reads it as a line break at once; the differential never splits a CRLF.
+			// D121: Ompig holds a chunk-final CR until the next chunk arrives, Pi reads it as a line break at once; the differential never splits a CRLF.
 			if raw[size-1] == '\r' && size < len(raw) {
 				size++
 			}
@@ -91,7 +91,7 @@ func anthropicStreamBodies() [][][]byte {
 	return bodies
 }
 
-// TestAnthropicProviderStreamMatchesPi compares Pi's anthropic-messages provider with Pig's over seeded Anthropic event streams.
+// TestAnthropicProviderStreamMatchesPi compares Pi's anthropic-messages provider with Ompig's over seeded Anthropic event streams.
 func TestAnthropicProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"anthropic-messages", "anthropicMessagesApi", "anthropic-messages", "anthropic"}, true, anthropicStreamBodies(), func(baseURL string) Provider {
 		return NewAnthropicProvider(AnthropicConfig{APIKey: "k", Model: "m", BaseURL: baseURL})

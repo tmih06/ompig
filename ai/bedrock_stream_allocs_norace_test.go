@@ -1,4 +1,4 @@
-//go:build !race && !pig_strip_bedrock_converse_stream
+//go:build !race && !ompig_strip_bedrock_converse_stream
 
 package ai
 

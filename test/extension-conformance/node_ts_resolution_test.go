@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestNodeTypeScriptSourceResolutionAndShims pins two node-runtime contracts an
@@ -28,7 +28,7 @@ func TestNodeTypeScriptSourceResolutionAndShims(t *testing.T) {
 		t.Skip("skipping node TypeScript resolution bridge test in short mode")
 	}
 	// The fixture asserts an agent-directory basename; make that input explicit instead of depending on the caller's configured path.
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(t.TempDir(), "agent"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(t.TempDir(), "agent"))
 
 	fixture := filepath.Join(findModuleRoot(t), "test", "extension-conformance", "testdata", "node-ts-resolution-fixture", "main.ts")
 
@@ -77,8 +77,8 @@ func TestNodeTypeScriptSourceResolutionAndShims(t *testing.T) {
 		// The untyped type-only import was elided instead of failing to link.
 		// Reaching the handler at all proves it; the value proves the module ran.
 		"requireWorks=true",
-		// getAgentDir/CONFIG_DIR_NAME report pig's config root, never ".pi".
-		"configDir=.pig",
+		// getAgentDir/CONFIG_DIR_NAME report ompig's config root, never ".pi".
+		"configDir=.ompig",
 		"agentDirUnderConfigRoot=true",
 		// HStack fills the full 30 columns across a fixed and a growing child
 		// (visible width: Pi's HStack composites with segment resets).

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func resolveFixture(t *testing.T) (cwd, agentDir string, sm *codingagent.SettingsManager, pm *PackageManager) {
@@ -53,7 +53,7 @@ func TestResolveReportsSettingsEntriesAutoDiscoveryAndPatterns(t *testing.T) {
 			writeResolveFile(t, filepath.Join(agentDir, "extensions", "my-extension.ts"), "export default function() {}")
 			_ = sm.SetExtensionPaths([]string{"extensions/my-extension.ts"})
 		}, func(r ResolvedPaths) []codingagent.ResolvedResource { return r.Extensions }, "extensions/my-extension.ts", true, "local", "user"},
-		{"project extension entry resolves against .pig (:182-192)", func(t *testing.T, cwd, _ string, sm *codingagent.SettingsManager) {
+		{"project extension entry resolves against .ompig (:182-192)", func(t *testing.T, cwd, _ string, sm *codingagent.SettingsManager) {
 			writeResolveFile(t, filepath.Join(codingagent.ProjectConfigDir(cwd), "extensions", "project-ext.ts"), "export default function() {}")
 			_ = sm.SetProjectExtensionPaths([]string{"extensions/project-ext.ts"})
 		}, func(r ResolvedPaths) []codingagent.ResolvedResource { return r.Extensions }, "extensions/project-ext.ts", true, "local", "project"},
@@ -134,7 +134,7 @@ func TestResolveWithoutSourcesListsNothingPackageSourced(t *testing.T) {
 // package-manager.ts:1282-1340 resolvePackageSources: a Package that is not installed asks onMissing; "skip" leaves it out and "error" throws `Missing source: <source>`.
 func TestResolveAsksOnMissingForAnUninstalledPackage(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	for _, tc := range []struct {
 		action  MissingSourceAction
 		wantErr string
@@ -278,7 +278,7 @@ func TestResolveExtensionSourcesInstallsGitSourcesPerScope(t *testing.T) {
 		t.Skip("git is not installed")
 	}
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("GIT_CONFIG_NOSYSTEM", "1")
 	remote := t.TempDir()
 	gitConfig := filepath.Join(t.TempDir(), "gitconfig")

@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi ModelRuntime.registerProvider validates before replacing a native registration (model-runtime.ts:753-766). Decoder and registry errors must both leave its callable owner intact.

@@ -22,7 +22,7 @@ The complete stand-in inventory is [node-shim-audit.md](node-shim-audit.md). Cod
 
 Raw logs and captures are retained under `tmp/fix-node-createagentsession/` in this worktree.
 
-- `red-unit.log`: the Pi control passes; PiG fails because `ModelRuntime.create` is not a function.
+- `red-unit.log`: the Pi control passes; Ompig fails because `ModelRuntime.create` is not a function.
 - `red-model.log`: a private model fails with `not in parent catalog` before API-leaf routing.
 - `red-abort-unit.log`: both OpenAI API paths return `error` instead of `aborted` during response-callback cancellation.
 - `red-store-lock.log`: both stores leave regular `.lock` files, and a contended Node-style directory lock produces `is a directory` instead of waiting with cancellation.
@@ -41,7 +41,7 @@ Replay command:
 python3 test/parity/unit-evidence/replay-node-btw.py \
   --npm <corpus>/homes/pi-btw/pi/.pi/agent/npm \
   --pi extensions/sdk-ts/node_modules/.bin/pi \
-  --pig bin/pig \
+  --ompig bin/ompig \
   --output tmp/fix-node-createagentsession/corpus-final
 ```
 
@@ -51,7 +51,7 @@ The copied lock is unchanged in every run:
 - Lock SHA-256: `43faa182eff083cffa2650270f60906ef81872ae1a405b85fa0caace376eb566`.
 - npm integrity: `sha512-DFRoz+DyA6Wbyj3lQ5bAyPe80l6EGU8/zc9KcY7v1j6oXJd7D9hcWyFWImUoXKQKzGfxuX3dBW4Ef8uEj5NVlw==`.
 
-Three Pi-first/PiG-second pairs produce `SIDE ANSWER`, cancel the follow-up, close the overlay, and produce `MAIN ANSWER`. The provider recordings prove that the main request does not contain the side question. No published package file is changed. A separate last-loaded fixture supplies the session-start readiness marker. Raw escaped panes and requests remain visible; the underlying D2 identity text and the existing 33k/32k footer label difference are not normalized away. After the stdout fix, the overlay's height and content agree.
+Three Pi-first/Ompig-second pairs produce `SIDE ANSWER`, cancel the follow-up, close the overlay, and produce `MAIN ANSWER`. The provider recordings prove that the main request does not contain the side question. No published package file is changed. A separate last-loaded fixture supplies the session-start readiness marker. Raw escaped panes and requests remain visible; the underlying D2 identity text and the existing 33k/32k footer label difference are not normalized away. After the stdout fix, the overlay's height and content agree.
 
 Earlier probes are retained as failures: the initial dismissal sequence was not a valid Pi interaction; the next run exposed the store lock; the next exposed missing `onHandle`. Those are not counted as successful replays.
 
@@ -71,7 +71,7 @@ The full SDK still raises cold startup cost. The unchanged EventBus limit is 2.0
 
 The `bbe9095d8` merge retains the worker-owned Connection and all Provider carriers, the SDK Session `apiRequest` and stream-callback fields, child disposal, process-theme initialization, and measured terminal geometry. The only Runtime conflict is its constructor: retain both `nativeProviderObjects` and theme initialization. Merge release/API notes by union and regenerate coverage and inventories.
 
-`corpus-union/` records another three Pi/PiG pairs with exact locked pi-btw inputs, matching complete panel content/geometry, side cancellation and independent main turns. `parity-union.log` records three passing pairs each for scenarios 53 and 54 using acknowledged overlay controls. D78's separate builtin/composed-object and final-qualification obligations remain with its owner.
+`corpus-union/` records another three Pi/Ompig pairs with exact locked pi-btw inputs, matching complete panel content/geometry, side cancellation and independent main turns. `parity-union.log` records three passing pairs each for scenarios 53 and 54 using acknowledged overlay controls. D78's separate builtin/composed-object and final-qualification obligations remain with its owner.
 
 ## Post-union integration guards
 

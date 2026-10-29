@@ -5,13 +5,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // getContextUsage (agent-session.ts getContextUsage) is a function of the context window and the current branch. The Session reuses its estimate while neither changes, because the state pushed to a subprocess extension before each event carries it, and recomputes it after every change of the log, the leaf or the window.
 func TestContextUsageReusesTheEstimateUntilTheLogOrWindowChanges(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

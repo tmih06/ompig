@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // model-runtime.ts streamDeferred, fetchDeferred and cancelDeferred send a model of a provider an extension registered to that provider object's fetchDeferred/cancelDeferred after the

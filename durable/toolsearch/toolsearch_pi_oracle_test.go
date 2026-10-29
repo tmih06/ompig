@@ -13,9 +13,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's tool_search tool (tool-search.ts, imported as-is under Node) runs for seeded random deferred tools and queries; the
@@ -225,12 +225,12 @@ func TestToolSearchMatchesPiOnSeededDeferredTools(t *testing.T) {
 		case want.Error != nil:
 			failed++
 			if err == nil {
-				t.Errorf("%s: Pi fails with %q, PiG returns %+v", label(), *want.Error, got)
+				t.Errorf("%s: Pi fails with %q, Ompig returns %+v", label(), *want.Error, got)
 			} else if err.Error() != *want.Error {
-				t.Errorf("%s: PiG error %q, Pi %q", label(), err, *want.Error)
+				t.Errorf("%s: Ompig error %q, Pi %q", label(), err, *want.Error)
 			}
 		case err != nil:
-			t.Errorf("%s: PiG fails with %q, Pi returns %+v", label(), err, want.Result)
+			t.Errorf("%s: Ompig fails with %q, Pi returns %+v", label(), err, want.Result)
 		default:
 			if len(got.Output) != len(want.Result.Output) || len(got.Output) != 1 {
 				t.Errorf("%s: %d output items, Pi %d", label(), len(got.Output), len(want.Result.Output))

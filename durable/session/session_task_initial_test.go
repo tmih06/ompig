@@ -4,8 +4,8 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Upstream transaction.ts createTask calls definition.initial(input) inside the Tx operation, so a throwing initial

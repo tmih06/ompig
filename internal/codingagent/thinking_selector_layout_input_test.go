@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // thinking-selector.ts:18-21 THINKING_SELECT_LIST_LAYOUT {minPrimaryColumnWidth: 12, maxPrimaryColumnWidth: 32}: the label column is at least 12 wide, so the

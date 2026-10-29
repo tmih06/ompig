@@ -16,11 +16,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/pilock"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/pilock"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func piDirectoryNode(t *testing.T, script string, args ...string) *exec.Cmd {
@@ -50,15 +50,15 @@ const {FileModelsStore} = await load('core/models-store');
 	return exec.CommandContext(t.Context(), node, append([]string{"--input-type=module", "--eval", prelude + script, root}, args...)...)
 }
 
-// Real Pi 0.87.1 reads PiG's writes and writes back into the same files.
+// Real Pi 0.87.1 reads Ompig's writes and writes back into the same files.
 // SettingsManager preserves unknown keys (settings-manager.ts:547-593),
 // AuthStorage uses flat credentials (auth-storage.ts:472-498), and sessions
 // preserve the same append-only tree (session-manager.ts:1202-1207).
 func TestPiSharedFilesRoundTrip(t *testing.T) {
-	t.Setenv("PIG_USE_PI_DIRS", "1")
+	t.Setenv("OMPIG_USE_PI_DIRS", "1")
 	agentDir, cwd := t.TempDir(), t.TempDir()
 	t.Setenv("PI_CODING_AGENT_DIR", agentDir)
-	writeSettingsFixture(t, filepath.Join(agentDir, "settings.json"), `{"theme":"dark","pigOnly":{"retained":true}}`)
+	writeSettingsFixture(t, filepath.Join(agentDir, "settings.json"), `{"theme":"dark","ompigOnly":{"retained":true}}`)
 	writeSettingsFixture(t, filepath.Join(cwd, ".pi", "settings.json"), `{}`)
 	settings := NewSettingsManager(cwd, AgentDir())
 	if err := settings.SetTheme("light"); err != nil {
@@ -71,7 +71,7 @@ func TestPiSharedFilesRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := auth.Set("pig", ai.Credential{Type: ai.CredentialAPIKey, Key: "$KEY", Env: map[string]string{"KEY": "scoped"}, Extra: map[string]json.RawMessage{"pigOnly": json.RawMessage(`true`)}}); err != nil {
+	if err := auth.Set("ompig", ai.Credential{Type: ai.CredentialAPIKey, Key: "$KEY", Env: map[string]string{"KEY": "scoped"}, Extra: map[string]json.RawMessage{"ompigOnly": json.RawMessage(`true`)}}); err != nil {
 		t.Fatal(err)
 	}
 	if err := auth.Set("expired", ai.Credential{Type: ai.CredentialOAuth}); err != nil {
@@ -84,10 +84,10 @@ func TestPiSharedFilesRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := session.AppendMessage(agent.AgentMessage{User: &agent.UserMessage{Role: "user", Content: ai.UserContentBlocks{ai.TextContent{Text: "from Pig"}}, Timestamp: 1}}); err != nil {
+	if _, err := session.AppendMessage(agent.AgentMessage{User: &agent.UserMessage{Role: "user", Content: ai.UserContentBlocks{ai.TextContent{Text: "from Ompig"}}, Timestamp: 1}}); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := session.AppendMessage(agent.AgentMessage{Assistant: &agent.AssistantMessage{Role: "assistant", Content: []ai.AssistantContentBlock{ai.TextContent{Text: "Pig answer"}}, API: "openai-completions", Provider: "shared", ModelID: "shared-model", StopReason: ai.StopReasonStop, Timestamp: 2}}); err != nil {
+	if _, err := session.AppendMessage(agent.AgentMessage{Assistant: &agent.AssistantMessage{Role: "assistant", Content: []ai.AssistantContentBlock{ai.TextContent{Text: "Ompig answer"}}, API: "openai-completions", Provider: "shared", ModelID: "shared-model", StopReason: ai.StopReasonStop, Timestamp: 2}}); err != nil {
 		t.Fatal(err)
 	}
 	cmd := piDirectoryNode(t, `
@@ -95,18 +95,18 @@ const [agent, cwd, sessionFile] = process.argv.slice(2);
 const settings = SettingsManager.create(cwd, agent);
 assert.equal(settings.getTheme(), 'light');
 assert.deepEqual(settings.getProjectSettings().packages, ['./shared']);
-assert.deepEqual(settings.getGlobalSettings().pigOnly, {retained:true});
+assert.deepEqual(settings.getGlobalSettings().ompigOnly, {retained:true});
 settings.setTheme('dark'); settings.setProjectPackages(['./pi-package']);
 await settings.flush(); assert.deepEqual(settings.drainErrors(), []);
 const auth = AuthStorage.create(join(agent,'auth.json'));
-assert.deepEqual(await auth.read('pig'), {type:'api_key',key:'scoped',env:{KEY:'scoped'},pigOnly:true});
+assert.deepEqual(await auth.read('ompig'), {type:'api_key',key:'scoped',env:{KEY:'scoped'},ompigOnly:true});
 assert.deepEqual(await new ReadOnlyAuthStorage(join(agent,'auth.json')).read('expired'), {type:'oauth',access:'',refresh:'',expires:0});
 await auth.modify('pi', async () => ({type:'oauth',access:'pi-access',refresh:'pi-refresh',expires:42,extensionField:{keep:true}}));
 const model = await ModelConfig.load(join(agent,'models.json'));
 assert.equal(model.getError(), undefined);
 assert.equal(model.getProvider('shared').models[0].contextWindow,12345);
 const session = SessionManager.open(sessionFile);
-assert.deepEqual(session.buildSessionContext().messages.map(m => m.content[0]?.text ?? m.content), ['from Pig','Pig answer']);
+assert.deepEqual(session.buildSessionContext().messages.map(m => m.content[0]?.text ?? m.content), ['from Ompig','Ompig answer']);
 session.appendMessage({role:'user',content:[{type:'text',text:'from Pi'}],timestamp:3});
 session.appendSessionInfo('Shared by Pi');
 assert((await SessionManager.list(cwd)).some(s => s.path === sessionFile));
@@ -164,22 +164,22 @@ assert.equal((await store.read('other')).key,'other');
 //
 // Pi's synchronous settings and trust locks give up with ELOCKED after 10
 // attempts 20 ms apart (settings-manager.ts:327-349, trust-manager.ts:138-165), so
-// a scheduling stall of about 200 ms while PiG holds the lock (a saturated host,
+// a scheduling stall of about 200 ms while Ompig holds the lock (a saturated host,
 // the race detector) makes Pi's own write fail; two Pi processes fail the same
-// way. Measured under -race at load 200 on 196 cores: PiG's trust critical
+// way. Measured under -race at load 200 on 196 cores: Ompig's trust critical
 // section (read, write, release) took 20-760 ms, and one run spent Pi's budget 24
 // times. The Pi script repeats an exhausted budget (up to 50 times per write) and
 // reports how often it happened, so the test measures lost keys rather than host
-// latency. PiG's writes repeat an exhausted budget the same way.
+// latency. Ompig's writes repeat an exhausted budget the same way.
 func TestPiSharedFilesConcurrentWriters(t *testing.T) {
 	if runtime.GOOS == "windows" {
-		// Pi's proper-lockfile retries only EEXIST. On Windows, a lock directory PiG is releasing is delete-pending, and
-		// Node's mkdir on it fails EPERM, so Pi's writer aborts mid-run. That is Node's behavior; PiG's lock retries the
+		// Pi's proper-lockfile retries only EEXIST. On Windows, a lock directory Ompig is releasing is delete-pending, and
+		// Node's mkdir on it fails EPERM, so Pi's writer aborts mid-run. That is Node's behavior; Ompig's lock retries the
 		// delete-pending state (internal/pilock delete_pending_windows_test.go), and the single-writer tests cover Windows.
 		t.Skip("Pi's lock does not retry a delete-pending lock directory on Windows")
 	}
 	agentDir, cwd := t.TempDir(), t.TempDir()
-	writeSettingsFixture(t, filepath.Join(agentDir, "settings.json"), `{"pigOnly":{"retained":true}}`)
+	writeSettingsFixture(t, filepath.Join(agentDir, "settings.json"), `{"ompigOnly":{"retained":true}}`)
 	auth, err := ai.NewAuthStorage(filepath.Join(agentDir, "auth.json"))
 	if err != nil {
 		t.Fatal(err)
@@ -189,9 +189,9 @@ func TestPiSharedFilesConcurrentWriters(t *testing.T) {
 	models := ai.NewFileModelsStore(filepath.Join(agentDir, "models-store.json"))
 	writeSettingsFixture(t, models.Path(), `{}`)
 	const operations = 32
-	// The retries below absorb host stalls, so they cannot show that PiG releases its settings and trust locks promptly. That is measured
+	// The retries below absorb host stalls, so they cannot show that Ompig releases its settings and trust locks promptly. That is measured
 	// directly: every hold, from acquisition to the end of release, is recorded, and the median must stay far inside Pi's 10 x 20 ms budget.
-	// A host stall lengthens a few holds (20-760 ms measured under -race at load 200); a PiG that holds the lock longer lengthens all of them.
+	// A host stall lengthens a few holds (20-760 ms measured under -race at load 200); a Ompig that holds the lock longer lengthens all of them.
 	var holdMu sync.Mutex
 	var holds []time.Duration
 	acquire := acquireSyncLockWithRetry
@@ -210,15 +210,15 @@ func TestPiSharedFilesConcurrentWriters(t *testing.T) {
 		}, nil
 	}
 	t.Cleanup(func() { acquireSyncLockWithRetry = acquire })
-	// PiG's synchronous locks keep Pi's 10 x 20 ms budget (pilock.AcquireSync), so a stalled Pi holder spends it the same way.
-	pigExhausted := 0
+	// Ompig's synchronous locks keep Pi's 10 x 20 ms budget (pilock.AcquireSync), so a stalled Pi holder spends it the same way.
+	ompigExhausted := 0
 	retryLocked := func(write func() error) error {
 		for attempt := 1; ; attempt++ {
 			err := write()
 			if !errors.Is(err, pilock.ErrLocked) || attempt == 50 {
 				return err
 			}
-			pigExhausted++
+			ompigExhausted++
 		}
 	}
 	cmd := piDirectoryNode(t, `
@@ -285,19 +285,19 @@ console.log('done');
 		t.Fatal(err)
 	}
 	for i := range operations {
-		_, err := auth.Modify(t.Context(), fmt.Sprintf("pig-%d", i), func(*ai.Credential) (*ai.Credential, error) {
-			return &ai.Credential{Type: ai.CredentialAPIKey, Key: fmt.Sprintf("pig-key-%d", i)}, nil
+		_, err := auth.Modify(t.Context(), fmt.Sprintf("ompig-%d", i), func(*ai.Credential) (*ai.Credential, error) {
+			return &ai.Credential{Type: ai.CredentialAPIKey, Key: fmt.Sprintf("ompig-key-%d", i)}, nil
 		})
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := retryLocked(func() error { return settings.SetTheme(fmt.Sprintf("pig-theme-%d", i)) }); err != nil {
+		if err := retryLocked(func() error { return settings.SetTheme(fmt.Sprintf("ompig-theme-%d", i)) }); err != nil {
 			t.Fatal(err)
 		}
-		if err := retryLocked(func() error { return trust.Set(filepath.Join(cwd, fmt.Sprintf("pig-%d", i)), new(true)) }); err != nil {
+		if err := retryLocked(func() error { return trust.Set(filepath.Join(cwd, fmt.Sprintf("ompig-%d", i)), new(true)) }); err != nil {
 			t.Fatal(err)
 		}
-		if err := models.Write(t.Context(), fmt.Sprintf("pig-%d", i), ai.ModelsStoreEntry{Models: mustStoredModels([]json.RawMessage{json.RawMessage(fmt.Sprintf(`{"id":"pig-model-%d"}`, i))}), ETag: fmt.Sprintf("pig-etag-%d", i)}); err != nil {
+		if err := models.Write(t.Context(), fmt.Sprintf("ompig-%d", i), ai.ModelsStoreEntry{Models: mustStoredModels([]json.RawMessage{json.RawMessage(fmt.Sprintf(`{"id":"ompig-model-%d"}`, i))}), ETag: fmt.Sprintf("ompig-etag-%d", i)}); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -308,21 +308,21 @@ console.log('done');
 		t.Fatalf("Pi writes: %v\n%s", err, stderr.String())
 	}
 	t.Log(strings.TrimSpace(stderr.String()))
-	t.Logf("PiG lock budget exhausted %d times", pigExhausted)
+	t.Logf("Ompig lock budget exhausted %d times", ompigExhausted)
 	holdMu.Lock()
 	sorted := slices.Sorted(slices.Values(holds))
 	holdMu.Unlock()
 	if len(sorted) < 2*operations {
-		t.Fatalf("recorded %d PiG settings/trust lock holds, want at least %d", len(sorted), 2*operations)
+		t.Fatalf("recorded %d Ompig settings/trust lock holds, want at least %d", len(sorted), 2*operations)
 	}
 	median, slowest := sorted[len(sorted)/2], sorted[len(sorted)-1]
-	t.Logf("PiG settings/trust lock holds: %d, median %v, max %v", len(sorted), median, slowest)
-	testenv.TimingGate(t, median > 50*time.Millisecond, "PiG's median settings/trust lock hold is %v; Pi gives up after 10 x 20 ms, so a hold this long makes Pi's own writes fail beside PiG", median)
+	t.Logf("Ompig settings/trust lock holds: %d, median %v, max %v", len(sorted), median, slowest)
+	testenv.TimingGate(t, median > 50*time.Millisecond, "Ompig's median settings/trust lock hold is %v; Pi gives up after 10 x 20 ms, so a hold this long makes Pi's own writes fail beside Ompig", median)
 	creds, err := auth.Load()
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, side := range []string{"pi", "pig"} {
+	for _, side := range []string{"pi", "ompig"} {
 		for i := range operations {
 			key := fmt.Sprintf("%s-%d", side, i)
 			if creds[key].Key != fmt.Sprintf("%s-key-%d", side, i) {
@@ -341,7 +341,7 @@ console.log('done');
 	var persisted struct {
 		Theme          string          `json:"theme"`
 		EditorPaddingX int             `json:"editorPaddingX"`
-		PigOnly        map[string]bool `json:"pigOnly"`
+		OmpigOnly      map[string]bool `json:"ompigOnly"`
 	}
 	data, err := os.ReadFile(settings.GlobalPath())
 	if err != nil {
@@ -350,17 +350,17 @@ console.log('done');
 	if err := json.Unmarshal(data, &persisted); err != nil {
 		t.Fatal(err)
 	}
-	if persisted.Theme != fmt.Sprintf("pig-theme-%d", operations-1) || persisted.EditorPaddingX != (operations-1)%3 || !persisted.PigOnly["retained"] {
+	if persisted.Theme != fmt.Sprintf("ompig-theme-%d", operations-1) || persisted.EditorPaddingX != (operations-1)%3 || !persisted.OmpigOnly["retained"] {
 		t.Fatalf("lost settings update: %s", data)
 	}
 	verifyModels := piDirectoryNode(t, `
 const store = new FileModelsStore(process.argv[2]);
 for(let i=0;i<Number(process.argv[3]);i++) {
-  assert.deepEqual(await store.read('pig-'+i), {models:[{id:'pig-model-'+i}],etag:'pig-etag-'+i});
+  assert.deepEqual(await store.read('ompig-'+i), {models:[{id:'ompig-model-'+i}],etag:'ompig-etag-'+i});
 }
 `, models.Path(), fmt.Sprint(operations))
 	if output, err := verifyModels.CombinedOutput(); err != nil {
-		t.Fatalf("Pi reads PiG's dynamic catalogs: %v\n%s", err, output)
+		t.Fatalf("Pi reads Ompig's dynamic catalogs: %v\n%s", err, output)
 	}
 	for _, file := range []string{"auth.json", "settings.json", "trust.json", "models-store.json"} {
 		if _, err := os.Stat(filepath.Join(agentDir, file) + ".lock"); !os.IsNotExist(err) {

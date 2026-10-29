@@ -1,5 +1,5 @@
 # Behavior family: rpc
-# Surface: the codemode tool appends a script's returned value like text(): execute.ts:509 keeps every value except undefined, and valueText (execute.ts:251-254) prints JSON.stringify(value). Pi 1.1.0 prints "null" for `return null`, also ahead of a console block, and nothing for `return undefined`. PiG printed nothing for null before coding/extension/builtin/codemode/execute.go valueText checked for a JSON string.
+# Surface: the codemode tool appends a script's returned value like text(): execute.ts:509 keeps every value except undefined, and valueText (execute.ts:251-254) prints JSON.stringify(value). Pi 1.1.0 prints "null" for `return null`, also ahead of a console block, and nothing for `return undefined`. Ompig printed nothing for null before coding/extension/builtin/codemode/execute.go valueText checked for a JSON string.
 # Each prompt waits for its own agent_settled, so the four tool results arrive in order.
 
 name = "56-rpc-codemode-returned-values"
@@ -39,8 +39,8 @@ wait_timeout_seconds = 60
 [env]
 # The codemode tool is a built-in extension; the default --no-extensions base arg would remove it from both binaries.
 override_base_args = true
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC codemode probe.", "--no-context-files", "--no-skills", "--tools", "codemode", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC codemode probe.", "--no-context-files", "--no-skills", "--tools", "codemode", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC codemode probe.", "--no-context-files", "--no-skills", "--tools", "codemode", "--session-dir", "{{TEMP}}/sessions"]
 
@@ -73,6 +73,6 @@ pattern = 'Wall time [0-9]+\.[0-9] seconds'
 with = 'Wall time 0.0 seconds'
 reason = "The codemode header's wall time (execute.ts) is measured per run; retain the header text and its one-decimal format."
 [[assert.normalize_replace]]
-pattern = 'Read /[^ "]*/parity-(?:snap-PIG_HOME-[0-9]+|pi-pkg-[0-9]+/pi-coding-pkg(?:-with-bundle-pad)?)/docs/(?:bundle-[0-9a-f]+/)?codemode\.md'
+pattern = 'Read /[^ "]*/parity-(?:snap-OMPIG_HOME-[0-9]+|pi-pkg-[0-9]+/pi-coding-pkg(?:-with-bundle-pad)?)/docs/(?:bundle-[0-9a-f]+/)?codemode\.md'
 with = 'Read <docs>/codemode.md'
 reason = "D2: each binary points the codemode description at its own installed docs root; retain the docs file name and every other description byte."

@@ -9,12 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // sessionAPI is the Go reference for the tool members of extension.API: the production Session behind getActiveTools, getAllTools
@@ -266,7 +266,7 @@ pi.registerCommand("burst",{handler:async()=>{const names=["stable","late","shou
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		code = fmt.Sprintf(`package flags
-import("fmt";"slices";sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import("fmt";"slices";sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension{
 e:=sdk.New(%q)
 e.Tool("stable","stable",sdk.Schema{},func(sdk.Context,map[string]any)(any,error){return "stable",nil})
@@ -295,12 +295,12 @@ return e
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		code = fmt.Sprintf(`import pig_sdk
+		code = fmt.Sprintf(`import ompig_sdk
 schema={"type":"object","properties":{"message":{"type":"string"}},"required":["message"]}
 def definition(name,value):
- return pig_sdk.ToolDefinition(name=name,label="Label "+name+" "+value,description=value,prompt_snippet="summary "+value,prompt_guidelines=["Use "+name+" "+value],parameters=schema,execute=lambda ctx,args:value+":"+args["message"])
+ return ompig_sdk.ToolDefinition(name=name,label="Label "+name+" "+value,description=value,prompt_snippet="summary "+value,prompt_guidelines=["Use "+name+" "+value],parameters=schema,execute=lambda ctx,args:value+":"+args["message"])
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  e.tool("stable","stable",{},lambda ctx,args:"stable")
  e.on_event("session_start",lambda ctx,data:e.register_tool(definition("late","v1")))
  def change(ctx,args):
@@ -329,7 +329,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		code = fmt.Sprintf(`use pig_sdk::{Extension,ToolDefinition,ToolResult,CommandResult,Schema};
+		code = fmt.Sprintf(`use ompig_sdk::{Extension,ToolDefinition,ToolResult,CommandResult,Schema};
 fn definition(name:&str,value:&str)->ToolDefinition{
  let value=value.to_owned();let result=value.clone();
  let mut d=ToolDefinition::new(name,format!("Label {} {}",name,value),&value,r#"{"type":"object","properties":{"message":{"type":"string"}},"required":["message"]}"#.parse::<Schema>().unwrap(),move|_,args|ToolResult::text(format!("{}:{}",result,args["message"].as_str().unwrap())));

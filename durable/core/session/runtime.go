@@ -3,8 +3,8 @@ package session
 import (
 	"sort"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session/hopcost"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session/hopcost"
 )
 
 // Runtime is the facade a task phase handler uses, bound to one invocation

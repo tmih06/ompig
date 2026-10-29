@@ -5,14 +5,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// pig additive (D91): a frontend session that draws an extension's view
-// natively reports a click on it, and PiG hands it to the extension's
+// ompig additive (D91): a frontend session that draws an extension's view
+// natively reports a click on it, and Ompig hands it to the extension's
 // component as the terminal's click at the cell the clicked element
-// occupies in Pi's fullscreen layout, which PiG knows because its terminal
+// occupies in Pi's fullscreen layout, which Ompig knows because its terminal
 // lines are Pi's. The component cannot tell the session from a terminal.
 // Pi has no frontend; with none, nothing here runs.
 
@@ -33,7 +33,7 @@ type mouseTarget struct {
 
 // clickExtension hands a click on an extension's overlay or on a dock blob
 // with a view to the component under it, and reports whether the click named
-// one. A fullscreen overlay, PiG's own, is left to Click.
+// one. A fullscreen overlay, Ompig's own, is left to Click.
 func (t *TuiSurface) clickExtension(click frontend.Click) bool {
 	row := click.Row
 	if click.ViewPath != nil {

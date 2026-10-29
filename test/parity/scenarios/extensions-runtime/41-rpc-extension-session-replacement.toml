@@ -3,12 +3,12 @@
 # then runs against the replacement. The final notification records all
 # lifecycle events and resulting histories without volatile IDs or paths.
 #
-# pig divergence (D70): the fixture's replace-probe command sets
+# ompig divergence (D70): the fixture's replace-probe command sets
 # process.env.FIN_REPLACEMENT_LOG so the replacement's session_start handler can
 # find the log. Pi re-runs the extension factory inside the same Node process, so
-# the assignment survives into the replacement Session. Pig starts a fresh
+# the assignment survives into the replacement Session. Ompig starts a fresh
 # extension process for each replacement Session, and a process environment
-# change does not cross that boundary. Pig's side receives the log path at
+# change does not cross that boundary. Ompig's side receives the log path at
 # startup; Pi keeps the fixture's own assignment.
 name = "41-rpc-extension-session-replacement"
 description = "RPC extension commands await new, fork and resume with ordered lifecycle"
@@ -29,10 +29,10 @@ steps = [
 ]
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "FIN_REPLACEMENT_LOG={{TEMP}}/trace.jsonl"]
-pig_args = ["--model", "test-faux/faux-1", "--no-session"]
+ompig = ["OMPIG_TEST_FAUX=1", "FIN_REPLACEMENT_LOG={{TEMP}}/trace.jsonl"]
+ompig_args = ["--model", "test-faux/faux-1", "--no-session"]
 pi_args = ["--model", "test-faux/faux-1", "--no-session"]
-pig_extensions = ["testdata/ext/session-replacement.mjs"]
+ompig_extensions = ["testdata/ext/session-replacement.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/session-replacement.mjs"]
 
 [assert]

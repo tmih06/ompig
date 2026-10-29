@@ -14,13 +14,13 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // completeWorkspaceSums adds the checksums a workspace build needs and
 // `go mod tidy` never records to the overlay's go.work.sum.
 //
-// A fused member's go.sum is written in module mode. The build of a Pig
+// A fused member's go.sum is written in module mode. The build of a Ompig
 // checkout runs in workspace mode, where the Go command also needs lines such as
 // the zip hash that decides whether a package path is provided by two modules,
 // or the go.mod hash of a module only another workspace module's graph reaches.
@@ -30,8 +30,8 @@ import (
 // workspace file, and only the lines it adds join the overlay's go.work.sum.
 // Existing lines are never removed.
 //
-// pig additive (D31): a member needs no checksum its own go.sum cannot derive.
-func completeWorkspaceSums(ctx context.Context, source pigSource, goToolchain toolchain.GoToolchain, overlayPath, scratch string, tags []string) error {
+// ompig additive (D31): a member needs no checksum its own go.sum cannot derive.
+func completeWorkspaceSums(ctx context.Context, source ompigSource, goToolchain toolchain.GoToolchain, overlayPath, scratch string, tags []string) error {
 	if source.ModuleVersion != "" {
 		return nil // a module-cache source builds with GOWORK=off
 	}
@@ -75,7 +75,7 @@ func completeWorkspaceSums(ctx context.Context, source pigSource, goToolchain to
 	if len(tags) > 0 {
 		args = append(args, "-tags", strings.Join(tags, ","))
 	}
-	cmd := source.goCommand(ctx, goToolchain, append(args, "./cmd/pig")...)
+	cmd := source.goCommand(ctx, goToolchain, append(args, "./cmd/ompig")...)
 	cmd.Env = append(cmd.Env, "GOWORK="+scratchWorkPath)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr

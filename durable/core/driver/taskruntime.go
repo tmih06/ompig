@@ -14,10 +14,10 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // taskRuntimes runs the phase and abort handlers of the custom tasks a registry holds, in answer to the core's phase effects

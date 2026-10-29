@@ -9,7 +9,7 @@ import { runWithRuntime } from "./state.mjs";
 
 // Ports packages/coding-agent/src/core/extensions/loader.ts: extensionCache, useExtensionCacheCwd, loadExtensionModule.
 // Pi re-invokes an extension's factory inside the process that already holds its module: /reload clears the factory cache (resource-loader.ts reload) and re-imports each module through jiti, while a session replacement keeps the cache for an unchanged cwd and calls the cached factory again. Module-level state therefore survives exactly as far as Pi's loader keeps the module.
-// pig additive (D20): the host admits each generation over the process's stdin, one tab-separated line: admit, name, socket, entry, cwd, reload pass (0 outside a reload); name, socket, entry and cwd are percent-encoded so a name or path with a tab or line break survives; the generation registers on its own socket, so an older generation keeps serving until the host swaps and closes it.
+// ompig additive (D20): the host admits each generation over the process's stdin, one tab-separated line: admit, name, socket, entry, cwd, reload pass (0 outside a reload); name, socket, entry and cwd are percent-encoded so a name or path with a tab or line break survives; the generation registers on its own socket, so an older generation keeps serving until the host swaps and closes it.
 // decodePath reverses the host's percent-encoding of the four characters that delimit a control line (packed_go.go encodeAdmissionField).
 const pathEscapes = { "%25": "%", "%09": "\t", "%0A": "\n", "%0D": "\r" };
 function decodePath(value) {
@@ -77,7 +77,7 @@ export class Generations {
 
   async load({ name, entry, socket, reload = "0", cwd }) {
     this.parked = false;
-    process.env.PIG_EXT_NAME = name;
+    process.env.OMPIG_EXT_NAME = name;
     this.prepareCache({ reload, cwd });
     const runtime = new Runtime(entry, this.nativeProviderObjects, this.providerConfigObjects, { name, socket });
     let phase = "import";
@@ -93,10 +93,10 @@ export class Generations {
       else await reportLoadFailure(socket, loadFailure(error, phase));
       return false;
     }
-    // pig additive (D20): the host owns process teardown, so the bytecode this load compiled is flushed here rather than relying on normal Node exit. The flush serializes every module compiled so far on this thread, which takes seconds on a starved machine, so it ends before the member registers: once registered the host sends requests under the renderer inactivity lease (D56), and a flush after the host's ready message held the first request past it. Loading already holds this thread; a registered member never waits on it.
+    // ompig additive (D20): the host owns process teardown, so the bytecode this load compiled is flushed here rather than relying on normal Node exit. The flush serializes every module compiled so far on this thread, which takes seconds on a starved machine, so it ends before the member registers: once registered the host sends requests under the renderer inactivity lease (D56), and a flush after the host's ready message held the first request past it. Loading already holds this thread; a registered member never waits on it.
     flushCompileCache();
     runtime.commitLoad();
-    process.env.PIG_EXT_SOCKET = socket;
+    process.env.OMPIG_EXT_SOCKET = socket;
     this.live++;
     this.loaded++;
     const run = runWithRuntime(runtime, () => runtime.run()).catch((error) => {

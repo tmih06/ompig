@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // rpc-mode.ts get_state and get_available_models send the model object as it is: a composed model whose cost has tiers: []

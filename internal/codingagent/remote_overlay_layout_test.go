@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestRemoteOverlayLayoutMatchesUpstreamShowOverlay pins the geometry of a
@@ -38,7 +38,7 @@ func TestRemoteOverlayLayoutMatchesUpstreamShowOverlay(t *testing.T) {
 			}
 			o := remoteOverlayTUIOptions(opts)
 			if o.Title != "" || o.WidthFraction != 0 || o.HeightFraction != 0 {
-				t.Fatalf("upstream overlay got pig modal framing: %+v", o)
+				t.Fatalf("upstream overlay got ompig modal framing: %+v", o)
 			}
 			if got := tui.ResolveOverlayGeometry(o, tc.height, tc.termW, tc.termH); got != tc.want {
 				t.Fatalf("geometry = %+v, want %+v", got, tc.want)
@@ -47,7 +47,7 @@ func TestRemoteOverlayLayoutMatchesUpstreamShowOverlay(t *testing.T) {
 	}
 }
 
-// Pig's own SDK fixtures still use the legacy title/fraction modal.
+// Ompig's own SDK fixtures still use the legacy title/fraction modal.
 func TestRemoteOverlayLegacyModalFieldsKeepModal(t *testing.T) {
 	o := remoteOverlayTUIOptions(extension.RemoteOverlayOptions{Overlay: true, Title: "Focused", WidthFraction: 0.5})
 	if o.Title != "Focused" || o.WidthFraction != 0.5 || o.HeightFraction != 0.7 {

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/package-manager.ts
@@ -59,7 +59,7 @@ emit({ extensions: r.extensions.map((e) => e.path), prompts: r.prompts.map((e) =
 		}
 		expected := slices.Clone(want[string(kind)])
 		if kind == Skills {
-			// Pi lists a skill by its SKILL.md; PiG lists the skill directory.
+			// Pi lists a skill by its SKILL.md; Ompig lists the skill directory.
 			for i, path := range expected {
 				expected[i] = strings.TrimSuffix(path, string(filepath.Separator)+"SKILL.md")
 			}
@@ -67,7 +67,7 @@ emit({ extensions: r.extensions.map((e) => e.path), prompts: r.prompts.map((e) =
 		slices.Sort(got)
 		slices.Sort(expected)
 		if !slices.Equal(got, expected) {
-			t.Errorf("%s:\n  PiG %q\n  Pi  %q", kind, got, expected)
+			t.Errorf("%s:\n  Ompig %q\n  Pi  %q", kind, got, expected)
 		}
 	}
 }

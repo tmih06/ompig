@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/history"
 )
 
 // ErrClosed is returned for an event sent after Close.
@@ -100,7 +100,7 @@ type Counters struct {
 	Reads      int
 	RowsRead   int
 	// ContextReads and ContextRows are the reads the host ran to derive the contexts it holds (range requests and the
-	// core's context reads) and the rows they returned: they do not cross the core's pig.read, so Reads and RowsRead exclude them.
+	// core's context reads) and the rows they returned: they do not cross the core's ompig.read, so Reads and RowsRead exclude them.
 	ContextReads int
 	ContextRows  int
 	Notices      int
@@ -235,7 +235,7 @@ func New(opts Options) *Host {
 		waiters: map[*waiter]struct{}{}, byKey: map[noticeKey]map[*waiter]struct{}{}, lastEffect: -1, running: map[uint32]context.CancelFunc{}, timers: map[uint32]func(){},
 	}
 	h.counters.Effects = map[abi.EffectKind]int{}
-	// A core that reads settled records on demand (ABI section 4.2, pig.read) reads them here, on the owner goroutine that
+	// A core that reads settled records on demand (ABI section 4.2, ompig.read) reads them here, on the owner goroutine that
 	// is running its step.
 	if r, ok := opts.Core.(interface {
 		SetReader(func(sql uint16, params []abi.Value) ([][]abi.Value, error))
@@ -247,7 +247,7 @@ func New(opts Options) *Host {
 	return h
 }
 
-// readSync answers one pig.read call of the core's running step.
+// readSync answers one ompig.read call of the core's running step.
 func (h *Host) readSync(sql uint16, params []abi.Value) ([][]abi.Value, error) {
 	answers, err := h.read([]abi.Read{{SQL: sql, Params: params}})
 	if err != nil {

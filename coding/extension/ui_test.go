@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestUIContext_AllUpstreamMethodsPresent locks the 26-method
@@ -55,22 +55,22 @@ func TestUIContext_AllUpstreamMethodsPresent(t *testing.T) {
 		"SetToolsExpanded",        // types.ts:268
 	}
 
-	// pig-specific extensions to UIContext. Each entry must reference
-	// a documented divergence or a clearly pig-only feature with no
+	// ompig-specific extensions to UIContext. Each entry must reference
+	// a documented divergence or a clearly ompig-only feature with no
 	// upstream counterpart. Adding new entries here without a comment
 	// makes silent drift visible to reviewers.
-	pigOnlyMethods := map[string]string{
+	ompigOnlyMethods := map[string]string{
 		// RunRemoteOverlay backs ctx.ui.custom() for the TS
 		// subprocess shim. Upstream's Custom() is single-method and
 		// expects an in-process factory closure; the subprocess bridge
 		// cannot serialise closures, so the shim adapter goes through
 		// this protocol-shaped method instead. No upstream entry.
-		"RunRemoteOverlay": "pig-specific: TS subprocess shim for ctx.ui.custom",
-		"SetLogin":         "pig-specific: typed native login template",
+		"RunRemoteOverlay": "ompig-specific: TS subprocess shim for ctx.ui.custom",
+		"SetLogin":         "ompig-specific: typed native login template",
 		// OnRemoteTerminalInput registers a subprocess extension's
 		// terminal-input listener, whose verdict crosses a socket and
 		// therefore cannot be asked on the host's input loop.
-		"OnRemoteTerminalInput": "pig-specific (D19): subprocess terminal-input listener",
+		"OnRemoteTerminalInput": "ompig-specific (D19): subprocess terminal-input listener",
 	}
 
 	uiType := reflect.TypeFor[extension.UIContext]()
@@ -85,7 +85,7 @@ func TestUIContext_AllUpstreamMethodsPresent(t *testing.T) {
 		}
 	}
 
-	// Inverse: catch pig-only methods accreting on the interface.
+	// Inverse: catch ompig-only methods accreting on the interface.
 	want := map[string]bool{}
 	for _, m := range wantMethods {
 		want[m] = true
@@ -94,7 +94,7 @@ func TestUIContext_AllUpstreamMethodsPresent(t *testing.T) {
 		if want[m] {
 			continue
 		}
-		if _, ok := pigOnlyMethods[m]; ok {
+		if _, ok := ompigOnlyMethods[m]; ok {
 			continue
 		}
 		t.Errorf("UIContext.%s has no upstream counterpart: either remove "+

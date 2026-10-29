@@ -1,4 +1,4 @@
-//go:build !pig_strip_self_update
+//go:build !ompig_strip_self_update
 
 package cli
 
@@ -21,18 +21,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Upstream checks the latest version before anything else: an installation it
 // cannot update still exits 0 when it is already up to date, and is refused
 // only when a newer release exists.
 func TestSelfUpdateChecksTheVersionBeforeRefusingAnInstallation(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_INSTALL_TIER", "container")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_INSTALL_TIER", "container")
 	current := upToDateManifest(t)
 	defer current.Close()
-	t.Setenv("PIG_UPDATE_URL", current.URL)
+	t.Setenv("OMPIG_UPDATE_URL", current.URL)
 	stdout, stderr, code := captureStdoutStderr(t, func() int { return runSelfUpdate(false) })
 	if code != 0 || !strings.Contains(stderr, "up to date") {
 		t.Fatalf("up-to-date container install: code = %d, want 0 and up to date; stdout=%q stderr=%q", code, stdout, stderr)
@@ -41,7 +41,7 @@ func TestSelfUpdateChecksTheVersionBeforeRefusingAnInstallation(t *testing.T) {
 	manSrv, binSrv := newerManifest(t, []byte("new"))
 	defer manSrv.Close()
 	defer binSrv.Close()
-	t.Setenv("PIG_UPDATE_URL", manSrv.URL)
+	t.Setenv("OMPIG_UPDATE_URL", manSrv.URL)
 	stdout, stderr, code = captureStdoutStderr(t, func() int { return runSelfUpdate(false) })
 	if code != 1 || strings.Contains(stderr, "up to date") {
 		t.Fatalf("outdated container install: code = %d, want 1 and a refusal; stdout=%q stderr=%q", code, stdout, stderr)
@@ -49,7 +49,7 @@ func TestSelfUpdateChecksTheVersionBeforeRefusingAnInstallation(t *testing.T) {
 }
 
 // TestAC6CheckAndFallbackBehavior_UpToDateReturnsZero proves an explicit
-// `pig update` against a manifest reporting the current version exits 0 without
+// `ompig update` against a manifest reporting the current version exits 0 without
 // mutating the binary.
 func TestAC6CheckAndFallbackBehavior_UpToDateReturnsZero(t *testing.T) {
 	srv := upToDateManifest(t)
@@ -68,8 +68,8 @@ func TestAC6CheckAndFallbackBehavior_UpToDateReturnsZero(t *testing.T) {
 // executable refuses mutation and reports its path instead of treating
 // writability as standalone ownership.
 func TestAC6CheckAndFallbackBehavior_NoSourceIsActionable(t *testing.T) {
-	t.Setenv("PIG_UPDATE_URL", "")
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	stdout, stderr, code := captureStdoutStderr(t, func() int { return runSelfUpdate(false) })
 	if code != 1 {
 		t.Fatalf("code = %d, want 1", code)
@@ -82,7 +82,7 @@ func TestAC6CheckAndFallbackBehavior_NoSourceIsActionable(t *testing.T) {
 	}
 }
 
-// TestAC5ImmutableBinaryPathRefusesMutation proves a baked Piglet/Piglet
+// TestAC5ImmutableBinaryPathRefusesMutation proves a baked Ompiglet/Ompiglet
 // Binary refuses in-place mutation and emits the immutable remediation, never
 // starting a download.
 func TestAC5ImmutableBinaryPathRefusesMutation(t *testing.T) {
@@ -96,12 +96,12 @@ func TestAC5ImmutableBinaryPathRefusesMutation(t *testing.T) {
 		t.Error("the immutable binary started a download")
 	}))
 	defer downloads.Close()
-	manifest := `{"version":"99.0.0","packageName":"@pi-in-go/pig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + downloads.URL + `","sha256":"` + strings.Repeat("0", 64) + `"}}}`
+	manifest := `{"version":"99.0.0","packageName":"@ompig/ompig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + downloads.URL + `","sha256":"` + strings.Repeat("0", 64) + `"}}}`
 	srv := signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(manifest))
 	}))
 	defer srv.Close()
-	t.Setenv("PIG_UPDATE_URL", srv.URL)
+	t.Setenv("OMPIG_UPDATE_URL", srv.URL)
 	stdout, stderr, code := captureStdoutStderr(t, func() int { return runSelfUpdate(false) })
 	if code != 1 {
 		t.Fatalf("code = %d, want 1 for immutable binary", code)
@@ -118,8 +118,8 @@ func TestAC5ImmutableBinaryPathRefusesMutation(t *testing.T) {
 // the authenticated pull/redeploy remediation and never rewrites the running
 // image.
 func TestAC5ContainerPathRefusesMutation(t *testing.T) {
-	t.Setenv("PIG_INSTALL_TIER", "container")
-	t.Setenv("PIG_IMAGE_REF", "registry.example/pig:1.0.0")
+	t.Setenv("OMPIG_INSTALL_TIER", "container")
+	t.Setenv("OMPIG_IMAGE_REF", "registry.example/ompig:1.0.0")
 	stdout, stderr, code := captureStdoutStderr(t, func() int { return runSelfUpdate(false) })
 	if code != 1 {
 		t.Fatalf("code = %d, want 1 for container", code)
@@ -127,7 +127,7 @@ func TestAC5ContainerPathRefusesMutation(t *testing.T) {
 	if stdout != "" {
 		t.Fatalf("stdout = %q, want empty", stdout)
 	}
-	if !strings.Contains(stderr, "registry.example/pig:1.0.0") || !strings.Contains(stderr, "re-deploy") {
+	if !strings.Contains(stderr, "registry.example/ompig:1.0.0") || !strings.Contains(stderr, "re-deploy") {
 		t.Fatalf("stderr missing container remediation:\n%s", stderr)
 	}
 }
@@ -137,7 +137,7 @@ func TestAC5ContainerPathRefusesMutation(t *testing.T) {
 // temporary target rather than overwriting the test runner executable.
 func TestAC3StandaloneUpdateVerificationAndAtomicity(t *testing.T) {
 	requireStandaloneSelfUpdateTier(t)
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -159,7 +159,7 @@ func TestAC3StandaloneUpdateVerificationAndAtomicity(t *testing.T) {
 func TestAC3PrivateCATransportUpdatesWithoutTLSOverride(t *testing.T) {
 	requireStandaloneSelfUpdateTier(t)
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
 		t.Fatal(err)
@@ -176,11 +176,11 @@ func TestAC3PrivateCATransportUpdatesWithoutTLSOverride(t *testing.T) {
 	sum := sha256.Sum256(payload)
 	var serverURL string
 	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/pig" {
+		if r.URL.Path == "/ompig" {
 			_, _ = w.Write(payload)
 			return
 		}
-		manifest := []byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + serverURL + `/pig","sha256":"` + hex.EncodeToString(sum[:]) + `"}}}`)
+		manifest := []byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + serverURL + `/ompig","sha256":"` + hex.EncodeToString(sum[:]) + `"}}}`)
 		w.Header().Set(codingagent.UpdateSignatureHeader, base64.StdEncoding.EncodeToString(ed25519.Sign(privateKey, manifest)))
 		_, _ = w.Write(manifest)
 	}))
@@ -190,15 +190,15 @@ func TestAC3PrivateCATransportUpdatesWithoutTLSOverride(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_URL", srv.URL+"/manifest")
+	t.Setenv("OMPIG_UPDATE_URL", srv.URL+"/manifest")
 	originalVersion := codingagent.InstalledPigVersion
 	t.Cleanup(func() { codingagent.InstalledPigVersion = originalVersion })
-	codingagent.InstalledPigVersion = PigVersion
-	if err := codingagent.WriteStandaloneReceipt(exe, PigVersion, srv.URL+"/manifest"); err != nil {
+	codingagent.InstalledPigVersion = OmpigVersion
+	if err := codingagent.WriteStandaloneReceipt(exe, OmpigVersion, srv.URL+"/manifest"); err != nil {
 		t.Fatal(err)
 	}
 	if err := applyStandaloneUpdate(exe, false); err != nil {
@@ -211,7 +211,7 @@ func TestAC3PrivateCATransportUpdatesWithoutTLSOverride(t *testing.T) {
 
 func TestAC3StandaloneReceiptFailureRestoresPreviousExecutable(t *testing.T) {
 	requireStandaloneSelfUpdateTier(t)
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -223,8 +223,8 @@ func TestAC3StandaloneReceiptFailureRestoresPreviousExecutable(t *testing.T) {
 	if err := os.WriteFile(blockedHome, []byte("blocked"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", blockedHome)
-	t.Setenv("PIG_UPDATE_URL", manifestSrv.URL)
+	t.Setenv("OMPIG_HOME", blockedHome)
+	t.Setenv("OMPIG_UPDATE_URL", manifestSrv.URL)
 	err := applyStandaloneUpdate(exe, false)
 	if err == nil || !strings.Contains(err.Error(), "previous executable restored") {
 		t.Fatalf("receipt failure error = %v", err)
@@ -243,17 +243,17 @@ func TestAC11ExactReleasePlanUsesSignedReplacementPackage(t *testing.T) {
 	}
 	copyTestBinary(t, manager)
 	t.Setenv(managerLogEnv, logPath)
-	manifest := `{"version":"9.9.9","packageName":"pig-next","binaries":{}}`
+	manifest := `{"version":"9.9.9","packageName":"ompig-next","binaries":{}}`
 	srv := signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(manifest))
 	}))
 	defer srv.Close()
-	t.Setenv("PIG_UPDATE_URL", srv.URL)
+	t.Setenv("OMPIG_UPDATE_URL", srv.URL)
 	prov := &codingagent.SelfUpdateProvenance{
 		Tier:         codingagent.TierPackageManager,
-		ExePath:      filepath.Join(t.TempDir(), "pig"),
+		ExePath:      filepath.Join(t.TempDir(), "ompig"),
 		PackageOwner: codingagent.PackageManagerOwner("npm"),
-		PackageName:  "pig",
+		PackageName:  "ompig",
 	}
 	if err := applyPackageManagerUpdate(prov, []string{manager}, false); err != nil {
 		t.Fatal(err)
@@ -262,14 +262,14 @@ func TestAC11ExactReleasePlanUsesSignedReplacementPackage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(args), "pig-next@9.9.9") || !strings.Contains(string(args), "uninstall -g pig") {
+	if !strings.Contains(string(args), "ompig-next@9.9.9") || !strings.Contains(string(args), "uninstall -g ompig") {
 		t.Fatalf("package-manager plan did not preserve signed rename:\n%s", args)
 	}
 }
 
 func TestAC11ForceReinstallsCurrentStandaloneRelease(t *testing.T) {
 	requireStandaloneSelfUpdateTier(t)
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -279,13 +279,13 @@ func TestAC11ForceReinstallsCurrentStandaloneRelease(t *testing.T) {
 		_, _ = w.Write(payload)
 	}))
 	defer binSrv.Close()
-	manifest := `{"version":"` + PigVersion + `","packageName":"@pi-in-go/pig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + binSrv.URL + `","sha256":"` + hex.EncodeToString(sum[:]) + `"}}}`
+	manifest := `{"version":"` + OmpigVersion + `","packageName":"@ompig/ompig","binaries":{"` + codingagent.PlatformKey() + `":{"url":"` + binSrv.URL + `","sha256":"` + hex.EncodeToString(sum[:]) + `"}}}`
 	manifestSrv := signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(manifest))
 	}))
 	defer manifestSrv.Close()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", manifestSrv.URL)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", manifestSrv.URL)
 	if err := applyStandaloneUpdate(exe, false); !errors.Is(err, errUpdateNotNeeded) {
 		t.Fatalf("non-forced current release error = %v", err)
 	}
@@ -310,7 +310,7 @@ func TestAC7NoFallbackAfterStandaloneStarts(t *testing.T) {
 	// A source is configured but unreachable: the standalone tier starts (it
 	// resolves a writable exe and a configured source) then fails on fetch.
 	seedRunningStandaloneReceipt(t, "http://127.0.0.1:1/no-such-server")
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	_, stderr, code := captureStdoutStderr(t, func() int { return runSelfUpdate(false) })
 	if code != 1 {
 		t.Fatalf("code = %d, want 1: standalone failure must not succeed via another tier; stderr=%q", code, stderr)
@@ -332,7 +332,7 @@ func TestAC7NoFallbackAfterStandaloneStarts(t *testing.T) {
 func TestAC71SelfUpdateSelectsOneProvenTier(t *testing.T) {
 	t.Run("standalone", func(t *testing.T) {
 		requireStandaloneSelfUpdateTier(t)
-		t.Setenv("PIG_INSTALL_TIER", "")
+		t.Setenv("OMPIG_INSTALL_TIER", "")
 		seedRunningStandaloneReceipt(t, "https://updates.example/manifest")
 		prov, err := codingagent.ResolveSelfUpdateTier()
 		if err != nil {
@@ -355,7 +355,7 @@ func TestAC71SelfUpdateSelectsOneProvenTier(t *testing.T) {
 		}
 	})
 	t.Run("container", func(t *testing.T) {
-		t.Setenv("PIG_INSTALL_TIER", "container")
+		t.Setenv("OMPIG_INSTALL_TIER", "container")
 		prov, err := codingagent.ResolveSelfUpdateTier()
 		if err != nil {
 			t.Fatalf("resolve: %v", err)
@@ -365,7 +365,7 @@ func TestAC71SelfUpdateSelectsOneProvenTier(t *testing.T) {
 		}
 	})
 	t.Run("ambiguous_is_rejected", func(t *testing.T) {
-		t.Setenv("PIG_INSTALL_TIER", "bogus")
+		t.Setenv("OMPIG_INSTALL_TIER", "bogus")
 		if _, err := codingagent.ResolveSelfUpdateTier(); err == nil {
 			t.Fatal("ambiguous/unknown ownership resolved without error")
 		}
@@ -376,7 +376,7 @@ func TestAC71SelfUpdateSelectsOneProvenTier(t *testing.T) {
 // package, whatever its version (packageName !== PACKAGE_NAME), so a release
 // that renames the package at the current version still installs it. Both
 // version checks honor that: the one before the installation tier and the
-// one in the package-manager tier, which then replaces pig with the new
+// one in the package-manager tier, which then replaces ompig with the new
 // package.
 func TestSelfUpdatePlansASameVersionPackageRename(t *testing.T) {
 	ver := selfUpdateVersion()
@@ -388,7 +388,7 @@ func TestSelfUpdatePlansASameVersionPackageRename(t *testing.T) {
 	}
 	same := manifest(codingagent.PackageName)
 	defer same.Close()
-	t.Setenv("PIG_UPDATE_URL", same.URL)
+	t.Setenv("OMPIG_UPDATE_URL", same.URL)
 	if _, stderr, code := captureStdoutStderr(t, func() int {
 		code, done := checkSelfUpdateVersion(false)
 		if !done {
@@ -399,15 +399,15 @@ func TestSelfUpdatePlansASameVersionPackageRename(t *testing.T) {
 		t.Fatalf("same package and version: code = %d, want 0 and up to date; stderr=%q", code, stderr)
 	}
 
-	renamed := manifest("pig-next")
+	renamed := manifest("ompig-next")
 	defer renamed.Close()
-	t.Setenv("PIG_UPDATE_URL", renamed.URL)
+	t.Setenv("OMPIG_UPDATE_URL", renamed.URL)
 	if code, done := checkSelfUpdateVersion(false); done {
 		t.Fatalf("same-version package rename short-circuited: code=%d done=%t; upstream plans the rename", code, done)
 	}
 	log := filepath.Join(t.TempDir(), "manager.log")
 	t.Setenv(managerLogEnv, log)
-	prov := &codingagent.SelfUpdateProvenance{Tier: codingagent.TierPackageManager, PackageOwner: "npm", PackageName: codingagent.PackageName, ExePath: filepath.Join(t.TempDir(), "pig")}
+	prov := &codingagent.SelfUpdateProvenance{Tier: codingagent.TierPackageManager, PackageOwner: "npm", PackageName: codingagent.PackageName, ExePath: filepath.Join(t.TempDir(), "ompig")}
 	var err error
 	captureStdoutStderr(t, func() int {
 		err = applyPackageManagerUpdate(prov, []string{os.Args[0]}, false)
@@ -420,25 +420,25 @@ func TestSelfUpdatePlansASameVersionPackageRename(t *testing.T) {
 	if readErr != nil {
 		t.Fatal(readErr)
 	}
-	if want := "uninstall -g @pi-in-go/pig\ninstall -g --ignore-scripts --min-release-age=0 pig-next@" + ver + "\n"; string(data) != want {
+	if want := "uninstall -g @ompig/ompig\ninstall -g --ignore-scripts --min-release-age=0 ompig-next@" + ver + "\n"; string(data) != want {
 		t.Fatalf("package manager ran %q, want %q", data, want)
 	}
 }
 
 // A release manifest built by the release generator without overrides names
-// PiG's npm package, so the npm update installs @pi-in-go/pig (the package the
-// global install owns) and never the unrelated unscoped "pig" package.
+// Ompig's npm package, so the npm update installs @ompig/ompig (the package the
+// global install owns) and never the unrelated unscoped "ompig" package.
 func TestNpmSelfUpdateInstallsTheScopedPackageFromTheGeneratedManifest(t *testing.T) {
 	python, err := exec.LookPath("python3")
 	if err != nil {
 		t.Skip("python3 is unavailable")
 	}
 	dir := t.TempDir()
-	name := "pig-" + runtime.GOOS + "-" + runtime.GOARCH
+	name := "ompig-" + runtime.GOOS + "-" + runtime.GOARCH
 	if runtime.GOOS == "windows" {
 		name += ".exe"
 	}
-	if err := os.WriteFile(filepath.Join(dir, name), []byte("pig-binary"), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, name), []byte("ompig-binary"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	script := filepath.Join("..", "..", "automation", "release", "gen-update-manifest.py")
@@ -448,7 +448,7 @@ func TestNpmSelfUpdateInstallsTheScopedPackageFromTheGeneratedManifest(t *testin
 	}
 	srv := signedManifestServer(t, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { _, _ = w.Write(manifest) }))
 	defer srv.Close()
-	t.Setenv("PIG_UPDATE_URL", srv.URL)
+	t.Setenv("OMPIG_UPDATE_URL", srv.URL)
 	log := filepath.Join(t.TempDir(), "manager.log")
 	t.Setenv(managerLogEnv, log)
 	manager := filepath.Join(t.TempDir(), "npm")
@@ -456,7 +456,7 @@ func TestNpmSelfUpdateInstallsTheScopedPackageFromTheGeneratedManifest(t *testin
 		manager += ".exe"
 	}
 	copyTestBinary(t, manager)
-	prov := &codingagent.SelfUpdateProvenance{Tier: codingagent.TierPackageManager, PackageOwner: "npm", PackageName: "@pi-in-go/pig", ExePath: filepath.Join(t.TempDir(), "pig")}
+	prov := &codingagent.SelfUpdateProvenance{Tier: codingagent.TierPackageManager, PackageOwner: "npm", PackageName: "@ompig/ompig", ExePath: filepath.Join(t.TempDir(), "ompig")}
 	if err := applyPackageManagerUpdate(prov, []string{manager}, false); err != nil {
 		t.Fatal(err)
 	}
@@ -464,7 +464,7 @@ func TestNpmSelfUpdateInstallsTheScopedPackageFromTheGeneratedManifest(t *testin
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := "install -g --ignore-scripts --min-release-age=0 @pi-in-go/pig@9.9.9\n"; string(data) != want {
+	if want := "install -g --ignore-scripts --min-release-age=0 @ompig/ompig@9.9.9\n"; string(data) != want {
 		t.Fatalf("npm ran %q, want %q", data, want)
 	}
 }

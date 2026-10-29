@@ -13,14 +13,14 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodespawn"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // FooterComponent is the rich footer rendered at the bottom of the
@@ -612,7 +612,7 @@ func footerExtensionStatuses(statuses map[string]string) []string {
 }
 
 // footerCwd is the footer's working directory with home abbreviated.
-// Upstream's session cwd is always absolute. Without one, pig shows ".",
+// Upstream's session cwd is always absolute. Without one, ompig shows ".",
 // which is not a path to abbreviate.
 func footerCwd(cwd string) string {
 	if cwd == "" {

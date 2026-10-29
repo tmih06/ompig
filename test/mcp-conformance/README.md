@@ -1,6 +1,6 @@
 # MCP client conformance
 
-Runs the official [MCP conformance suite](https://github.com/modelcontextprotocol/conformance) against PiG's MCP client and compares the result with a committed baseline. Ports `packages/coding-agent/test/mcp-conformance` of Pi.
+Runs the official [MCP conformance suite](https://github.com/modelcontextprotocol/conformance) against Ompig's MCP client and compares the result with a committed baseline. Ports `packages/coding-agent/test/mcp-conformance` of Pi.
 
 ```bash
 make test-mcp-conformance
@@ -10,9 +10,9 @@ It needs network access the first time, to fetch the pinned suite (`@modelcontex
 
 ## How it works
 
-For every protocol version PiG negotiates (`2025-03-26`, `2025-06-18`, `2025-11-25`), `run` lists the suite's client scenarios and runs them one at a time. The suite starts a scenario server and runs `client` against it.
+For every protocol version Ompig negotiates (`2025-03-26`, `2025-06-18`, `2025-11-25`), `run` lists the suite's client scenarios and runs them one at a time. The suite starts a scenario server and runs `client` against it.
 
-`client` uses the code PiG runs for an HTTP server in `mcp.json`: `mcpext.Connection` connects and calls tools, and `mcpext.SignInMcpServer` runs the OAuth sign-in that `/mcp` starts. A simulated browser fetches the authorization URL and delivers the redirect to PiG's loopback callback server. When the server asks for sign-in again (for example for more scope), the simulated user signs in again, up to three times.
+`client` uses the code Ompig runs for an HTTP server in `mcp.json`: `mcpext.Connection` connects and calls tools, and `mcpext.SignInMcpServer` runs the OAuth sign-in that `/mcp` starts. A simulated browser fetches the authorization URL and delivers the redirect to Ompig's loopback callback server. When the server asks for sign-in again (for example for more scope), the simulated user signs in again, up to three times.
 
 Every check the suite reports is compared with `baseline.json`. The extra `pi-client` check records whether `client` completed the scenario. The id is Pi's, so the two baselines compare line by line. Some scenarios expect the client to give up (`auth/scope-retry-limit`), so it is baselined like the others.
 
@@ -26,11 +26,11 @@ Checks that started passing are reported. Update the baseline to lock them in.
 
 `baseline.json` is identical to Pi 1.0.4's. The known failures are the same:
 
-- `elicitation-sep1034-client-defaults`: PiG does not support elicitation.
-- `auth/basic-cimd`: PiG registers clients dynamically instead of using a Client ID Metadata Document.
+- `elicitation-sep1034-client-defaults`: Ompig does not support elicitation.
+- `auth/basic-cimd`: Ompig registers clients dynamically instead of using a Client ID Metadata Document.
 - `auth/scope-retry-limit`: `pi-client` fails by design; the server never accepts the granted scope.
 
-2026-07-28 is not covered: it is a stateless protocol PiG does not implement.
+2026-07-28 is not covered: it is a stateless protocol Ompig does not implement.
 
 ## Options
 

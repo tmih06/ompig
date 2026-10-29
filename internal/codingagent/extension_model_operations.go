@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // extensionAvailableOfType lists the models of one type whose provider has working credentials, as extension model objects. It is the wire form of ModelRuntime.GetAvailableOfType: chat models follow the provider's chat availability and every other type is kept. A type no model has lists nothing, as Models.getAvailableOfType filters getAllAvailable by type without validating it (packages/ai/src/models.ts:708-716).

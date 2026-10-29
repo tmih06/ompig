@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 func TestSessionEntryWritersPreserveSurrogateEscapes(t *testing.T) {
-	// Pi session-manager.ts:1160-1185 persists JSON.stringify(entry), which spells a lone UTF-16 unit as a lowercase \udXXX escape; JSON.parse reads the same unit back. Expectations are JSON.stringify spellings, not a decode of PiG's own output.
+	// Pi session-manager.ts:1160-1185 persists JSON.stringify(entry), which spells a lone UTF-16 unit as a lowercase \udXXX escape; JSON.parse reads the same unit back. Expectations are JSON.stringify spellings, not a decode of Ompig's own output.
 	high, low := jsstring.FromUTF16([]uint16{0xd800}), jsstring.FromUTF16([]uint16{0xdfff})
 	dir := t.TempDir()
 	session, err := NewSessionManagerWithDir(dir, dir).Create("", "")
@@ -78,7 +78,7 @@ func TestSessionEntryWritersPreserveSurrogateEscapes(t *testing.T) {
 		t.Errorf("reloaded label units=%x, want %x", jsstring.ToUTF16(got), jsstring.ToUTF16(label))
 	}
 
-	// Pinned Pi 0.87.1 opens PiG's file and re-serializes every entry with JSON.stringify; each must equal PiG's line byte for byte.
+	// Pinned Pi 0.87.1 opens Ompig's file and re-serializes every entry with JSON.stringify; each must equal Ompig's line byte for byte.
 	out, err := piDirectoryNode(t, `
 const sm = SessionManager.open(process.argv[2], process.argv[3]);
 console.log(JSON.stringify(sm.getSessionName()));
@@ -89,16 +89,16 @@ for (const entry of sm.getEntries()) console.log(JSON.stringify(entry));
 		t.Fatalf("Pi: %v\n%s", err, out)
 	}
 	piLines := strings.Split(strings.TrimSuffix(strings.ReplaceAll(string(out), "\r\n", "\n"), "\n"), "\n")
-	pigLines := strings.Split(strings.TrimSuffix(string(data), "\n"), "\n")[1:]
-	if len(piLines) != len(pigLines)+2 {
-		t.Fatalf("Pi output has %d lines, want %d:\n%s", len(piLines), len(pigLines)+2, out)
+	ompigLines := strings.Split(strings.TrimSuffix(string(data), "\n"), "\n")[1:]
+	if len(piLines) != len(ompigLines)+2 {
+		t.Fatalf("Pi output has %d lines, want %d:\n%s", len(piLines), len(ompigLines)+2, out)
 	}
 	if piLines[0] != `"n\ud800"` || piLines[1] != `"l\udfff"` {
 		t.Errorf("Pi name=%s label=%s, want \"n\\ud800\" and \"l\\udfff\"", piLines[0], piLines[1])
 	}
-	for i, line := range pigLines {
+	for i, line := range ompigLines {
 		if piLines[i+2] != line {
-			t.Errorf("entry %d:\nPi  %s\nPiG %s", i, piLines[i+2], line)
+			t.Errorf("entry %d:\nPi  %s\nOmpig %s", i, piLines[i+2], line)
 		}
 	}
 }

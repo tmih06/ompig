@@ -72,7 +72,7 @@ func parseDivergences(text string) map[string]divergence {
 	return out
 }
 
-// fixesPiDefect reports whether the record says Pi has a defect that PiG fixes: it has a "Pi bug:" paragraph or cites a Pi issue.
+// fixesPiDefect reports whether the record says Pi has a defect that Ompig fixes: it has a "Pi bug:" paragraph or cites a Pi issue.
 func (d divergence) fixesPiDefect() bool { return d.PiBug != "" || d.PiIssue != "" }
 
 // symptom is what a user sees in Pi because of the defect.

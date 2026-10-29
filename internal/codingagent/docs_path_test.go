@@ -5,20 +5,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
-// The docs section of every system prompt (session, extension and durable prompts leave PigDocsPath empty and take the default) names the directory GetDocsPath returns. A leading ~ in PIG_HOME or XDG_CONFIG_HOME is expanded in both, so a prompt never names a literal ~/x/docs.
+// The docs section of every system prompt (session, extension and durable prompts leave OmpigDocsPath empty and take the default) names the directory GetDocsPath returns. A leading ~ in OMPIG_HOME or XDG_CONFIG_HOME is expanded in both, so a prompt never names a literal ~/x/docs.
 func TestPromptDocsSectionNamesGetDocsPathWithATildeConfigRoot(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	for _, tc := range []struct{ name, pigHome, xdg, want string }{
-		{"PIG_HOME", "~/x", "", pigdocs.DocsDir(filepath.Join(home, "x"))},
-		{"XDG_CONFIG_HOME", "", "~/cfg", pigdocs.DocsDir(filepath.Join(home, "cfg", "pig"))},
+	for _, tc := range []struct{ name, ompigHome, xdg, want string }{
+		{"OMPIG_HOME", "~/x", "", pigdocs.DocsDir(filepath.Join(home, "x"))},
+		{"XDG_CONFIG_HOME", "", "~/cfg", pigdocs.DocsDir(filepath.Join(home, "cfg", "ompig"))},
 	} {
-		t.Setenv("PIG_HOME", tc.pigHome)
+		t.Setenv("OMPIG_HOME", tc.ompigHome)
 		t.Setenv("XDG_CONFIG_HOME", tc.xdg)
 		if got := GetDocsPath(); got != tc.want {
 			t.Fatalf("%s: GetDocsPath = %q, want %q", tc.name, got, tc.want)
@@ -33,9 +33,9 @@ func TestPromptDocsSectionNamesGetDocsPathWithATildeConfigRoot(t *testing.T) {
 	}
 }
 
-// config.ts:449 getDocsPath is resolve(join(<package dir>, "docs")): absolute whatever the config root looks like. A relative PIG_HOME resolves against the working directory, and the system prompt's default docs path is the same directory.
+// config.ts:449 getDocsPath is resolve(join(<package dir>, "docs")): absolute whatever the config root looks like. A relative OMPIG_HOME resolves against the working directory, and the system prompt's default docs path is the same directory.
 func TestGetDocsPathIsAbsoluteForARelativeConfigRoot(t *testing.T) {
-	t.Setenv("PIG_HOME", "relative-home")
+	t.Setenv("OMPIG_HOME", "relative-home")
 	got := GetDocsPath()
 	if !filepath.IsAbs(got) || filepath.Base(filepath.Dir(got)) != "docs" || !strings.Contains(got, "relative-home") {
 		t.Fatalf("GetDocsPath = %q, want an absolute path to a bundle in relative-home/docs", got)

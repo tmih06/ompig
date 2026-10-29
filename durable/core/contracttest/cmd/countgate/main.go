@@ -28,7 +28,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/counts"
+	"github.com/tmih06/ompig/durable/core/contracttest/counts"
 )
 
 func main() {

@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/buildprogress"
 )
 
-// copySDKTree copies the repository's Go SDK, a stand-in for a checkout an author points PIG_SDK_GO_ROOT at and keeps editing.
+// copySDKTree copies the repository's Go SDK, a stand-in for a checkout an author points OMPIG_SDK_GO_ROOT at and keeps editing.
 func copySDKTree(t *testing.T) string {
 	t.Helper()
 	source, err := filepath.Abs(filepath.Join("..", "..", "..", "..", "extensions", "sdk"))
@@ -50,7 +50,7 @@ func TestBuildGoPackedCellPublishesNothingWhenTheSDKChangesDuringTheBuild(t *tes
 	}
 	extension := goExtensionFixture(t, "racing", `sdk.New("racing")`)
 	sdkRoot := copySDKTree(t)
-	t.Setenv("PIG_SDK_GO_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", sdkRoot)
 	cacheRoot := filepath.Join(t.TempDir(), "cache")
 
 	edited := false

@@ -5,11 +5,11 @@ package bedrockruntime
 import (
 	"context"
 	"fmt"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	"github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // Sends messages to the specified Amazon Bedrock model. Converse provides a

@@ -12,13 +12,13 @@ import (
 	"time"
 )
 
-// trackLine computes one tracker line from one pod's log for the profile's first pig target, as analyze does for each
-// pig target of a single-node run.
+// trackLine computes one tracker line from one pod's log for the profile's first ompig target, as analyze does for each
+// ompig target of a single-node run.
 func trackLine(log *podLog, in trackInput) (*object, error) {
-	if in.pig.Name == "" {
-		in.pig = in.prof.pigs()[0]
+	if in.ompig.Name == "" {
+		in.ompig = in.prof.pigs()[0]
 	}
-	tv, err := computeTrack(in.prof, in.pig, log, in.turns)
+	tv, err := computeTrack(in.prof, in.ompig, log, in.turns)
 	if err != nil {
 		return nil, err
 	}
@@ -76,11 +76,11 @@ func TestStatisticsMatchTrackRow(t *testing.T) {
 		t.Error("a missing baseline value is n/a")
 	}
 	for _, c := range []struct {
-		pig, pi float64
-		want    string
+		ompig, pi float64
+		want      string
 	}{{104, 100, "lose"}, {103, 100, "tie"}, {96, 100, "slightly better"}, {76.9, 100, "win"}, {77, 100, "slightly better"}} {
-		if got := verdict(c.pig, c.pi); got != c.want {
-			t.Errorf("verdict(%v, %v) = %q, want %q", c.pig, c.pi, got, c.want)
+		if got := verdict(c.ompig, c.pi); got != c.want {
+			t.Errorf("verdict(%v, %v) = %q, want %q", c.ompig, c.pi, got, c.want)
 		}
 	}
 	for v, want := range map[float64]string{1234.56: "1,235", 99.94: "99.9", 1234567: "1,234,567", 0.25: "0.3", -1500: "-1,500"} {
@@ -97,7 +97,7 @@ func TestTrackLineMatchesTrackRow(t *testing.T) {
 	if !log.facts.get("profileSpec", &prof) {
 		t.Fatal("no profileSpec")
 	}
-	if err := likeForLike(&prof, log, []string{"pig", "pi"}, 50); err != nil {
+	if err := likeForLike(&prof, log, []string{"ompig", "pi"}, 50); err != nil {
 		t.Fatal(err)
 	}
 	baseline := objectFrom(t, `{"core":"base","warm":80,"cold":100,"piWarm":90}`)
@@ -123,10 +123,10 @@ func TestTrackLineMatchesTrackRow(t *testing.T) {
 		t.Errorf("delta\n got %s\nwant %s", delta, want)
 	}
 	var compare map[string]struct {
-		Pig, PiRun, PiRolling float64
-		NRolling              int
-		Run, Rolling          string
-		Disagree              bool
+		Ompig, PiRun, PiRolling float64
+		NRolling                int
+		Run, Rolling            string
+		Disagree                bool
 	}
 	line.get("compare", &compare)
 	// The rolling control is the median of the last four history values (75, 200, 210, 220) and this run's 78.7.
@@ -151,13 +151,13 @@ func TestTrackLineMatchesTrackRow(t *testing.T) {
 
 func TestTrackLineNetsTheFloor(t *testing.T) {
 	prof := &profile{Name: "p", Rule: "A", Targets: []target{
-		{Name: "pig", Role: rolePig, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"x"}},
+		{Name: "ompig", Role: rolePig, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"x"}},
 		{Name: "pi", Role: roleReference, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"x"}},
 		{Name: "empty", Role: roleFloor, Sample: []string{"x"}},
 	}}
 	var b strings.Builder
 	for _, l := range []string{
-		`{"t":"sample","target":"pig","turns":10,"open":10,"turn":[20,30,40]}`,
+		`{"t":"sample","target":"ompig","turns":10,"open":10,"turn":[20,30,40]}`,
 		`{"t":"sample","target":"pi","turns":10,"open":10,"turn":[30,50,60]}`,
 		`{"t":"sample","target":"empty","turns":10,"open":2,"turn":[3,5,7]}`,
 	} {
@@ -205,7 +205,7 @@ func TestLikeForLikeRefusesDifferentHistories(t *testing.T) {
 		"sample count": func(s string) string {
 			lines := strings.Split(s, "\n")
 			for i, line := range slices.Backward(lines) {
-				if strings.Contains(line, `"t":"sample","target":"pig"`) {
+				if strings.Contains(line, `"t":"sample","target":"ompig"`) {
 					return strings.Join(append(lines[:i:i], lines[i+1:]...), "\n")
 				}
 			}
@@ -218,7 +218,7 @@ func TestLikeForLikeRefusesDifferentHistories(t *testing.T) {
 		}
 		var prof profile
 		log.facts.get("profileSpec", &prof)
-		if err := likeForLike(&prof, log, []string{"pig", "pi"}, 50); err == nil {
+		if err := likeForLike(&prof, log, []string{"ompig", "pi"}, 50); err == nil {
 			t.Errorf("%s: a mismatch was accepted", name)
 		}
 	}
@@ -531,7 +531,7 @@ func TestTrackRetainedMemory(t *testing.T) {
 		summary = l.str("summary")
 		return v, compare
 	}
-	v, compare := line(map[string]float64{"pig": 20, "pi": 30})
+	v, compare := line(map[string]float64{"ompig": 20, "pi": 30})
 	// The medians, 21 and 31 MiB, in track-row's MB.
 	if v["retainedMB"] != 22 || v["piRetainedMB"] != 32.5 {
 		t.Errorf("retainedMB %v, piRetainedMB %v; want 22 and 32.5", v["retainedMB"], v["piRetainedMB"])
@@ -545,7 +545,7 @@ func TestTrackRetainedMemory(t *testing.T) {
 	if !strings.Contains(summary, "retained MB 22 vs 32.5") {
 		t.Errorf("summary lacks the retained MB pair in decimal MB: %s", summary)
 	}
-	v, _ = line(map[string]float64{"pig": 20})
+	v, _ = line(map[string]float64{"ompig": 20})
 	if _, ok := v["retainedMB"]; ok {
 		t.Errorf("a reference without retained memory must leave both out: %v", v)
 	}

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/coding-agent/src/modes/interactive/interactive-mode.ts:6085-6093 routes manual_code to showManualInput, not showPrompt.

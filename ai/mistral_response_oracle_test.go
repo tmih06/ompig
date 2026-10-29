@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/mistral-conversations.ts
 
 // Scripted Mistral chat-completion streams (string and typed-chunk content, thinking chunks, fragmented tool calls, finish reasons, usage with cached
-// tokens, truncated streams) read by the pinned pi-ai and by PiG; the stream events and the final message must be equal.
+// tokens, truncated streams) read by the pinned pi-ai and by Ompig; the stream events and the final message must be equal.
 func TestMistralResponseMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(137))
 	quote := func(s string) string { b, _ := json.Marshal(s); return string(b) }

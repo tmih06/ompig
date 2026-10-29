@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports .upstream/v0.99.1/packages/coding-agent/test/jev-router-example.test.ts (2 cases) with the same inputs and expectations. Upstream loads the example as an in-process factory next to a faux OpenAI Codex provider and a scripted TypeSafe classifier; here the unchanged example file runs as a Node extension in the real Host, the providers are registered in the Go model runtime, and the Session is the real one.
@@ -87,7 +87,7 @@ func newJevRouterRig(t *testing.T, complexity float64, tools []jevTool) *jevRout
 		t.Skip("skipping conformance suite in short mode (starts Node subprocesses)")
 	}
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

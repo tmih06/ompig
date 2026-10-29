@@ -15,7 +15,7 @@ make port-lens PORT_LENS_TOTALS_LOG=<file>       # add a ledger totals log to th
 |---|---|
 | Overview | `.upstream/pin`; `test/parity/interfaces/mapping-v*.json`; the gap baselines under `test/parity/interface-closure/gaps/`; the ratchet baselines; git history of the gap baseline files (or a totals log); `test/parity/upstream-sync`, the test mapping and the behavior-input mapping of the follow target |
 | Port map | `mapping-v<pin>.json` for the committed pin and each newer ledger (the main-follow target), joined to the upstream inventory (`upstream-v*.json`, `cli-v*.json`) and `test/parity/families.toml`; Go line numbers come from parsing the Go files each row cites |
-| Divergences | `docs/parity/DIVERGENCES.md`, `docs/additive-features.md`, `docs/bug-ledger.json`; `pig divergence (D<N>)` and `pig additive (D<N>)` source markers; Pi source from `.upstream/v<pin>` |
+| Divergences | `docs/parity/DIVERGENCES.md`, `docs/additive-features.md`, `docs/bug-ledger.json`; `ompig divergence (D<N>)` and `ompig additive (D<N>)` source markers; Pi source from `.upstream/v<pin>` |
 | Bug ledger | `docs/bug-ledger.json` |
 | Evals | `bench/durableperf/results/*.jsonl`, `durable/contract/baseline.toml`, `bench/durable/report/gate/*/report.json`, `automation/perf/scoreboard.toml`, `ratchet.toml` and `scoreboard-measured.json`, `bench/compare/results/*.json` |
 
@@ -35,10 +35,10 @@ The class is derived and each record states its basis: `additive` for a record i
 
 ## The Durable bar
 
-The four conditions are judged from committed data. An item with no committed evidence is **not met**, and a measure PiG loses is shown at the same weight as one it wins:
+The four conditions are judged from committed data. An item with no committed evidence is **not met**, and a measure Ompig loses is shown at the same weight as one it wins:
 
 1. `durable/contract/baseline.toml` has no entry.
-2. At every size the headline arm (`pig-walk-faux-default-procs`) is below `pi-durable-1.0.4-node` on warm wall, cold wall, whole-sample CPU and peak RSS.
+2. At every size the headline arm (`ompig-walk-faux-default-procs`) is below `pi-durable-1.0.4-node` on warm wall, cold wall, whole-sample CPU and peak RSS.
 3. Peak RSS grows less than 1 KiB per turn between 1,000 and 3,500 turns.
 4. A cluster compare result is committed under `bench/k8s/results/*.jsonl`. The report does not judge such a file, so the item reads not met either way, and the verdict says which case holds.
 

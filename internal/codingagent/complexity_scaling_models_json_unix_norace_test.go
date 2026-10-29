@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // processCPUOf is the CPU time the process uses while op runs, from the least of runs fresh operations. Other processes on a loaded host

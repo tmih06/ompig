@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
 )
 
 // loadoutProvider records the tools and system prompt of every request.
@@ -71,7 +71,7 @@ func TestInteractiveBeforeAgentStartControlsRunPromptAndLoadout(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			home := t.TempDir()
-			t.Setenv("PIG_HOME", home)
+			t.Setenv("OMPIG_HOME", home)
 			agentDir := filepath.Join(home, "agent")
 			if err := os.MkdirAll(agentDir, 0o755); err != nil {
 				t.Fatal(err)
@@ -168,7 +168,7 @@ func TestInteractiveBeforeAgentStartControlsRunPromptAndLoadout(t *testing.T) {
 // agent-session.ts:1409-1419 applies the deduplicated selection before buildSystemPromptSections validates the section names, so an interactive prompt rejected for an invalid section still changes the loadout and sends no request.
 func TestInteractiveInvalidSectionRejectionKeepsAdmittedLoadout(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)

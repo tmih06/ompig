@@ -18,38 +18,38 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/linkerexec"
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/fspublish"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/fspublish"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 var artifactNamePattern = lazyregexp.New(`^[A-Za-z0-9][A-Za-z0-9._+\-]*$`)
 
 type buildLock struct {
-	Piglet            string
-	ReleaseVersion    string
-	ComponentPlan     pigletartifact.Plan
-	ResolutionRecord  pigletartifact.Record
-	PigVersion        string
-	PigSourceRevision string
-	PigSourceDigest   string
-	Builder           string
-	BuilderIdentity   string
-	Target            string
-	Toolchains        map[string]string
+	Ompiglet            string
+	ReleaseVersion      string
+	ComponentPlan       pigletartifact.Plan
+	ResolutionRecord    pigletartifact.Record
+	OmpigVersion        string
+	OmpigSourceRevision string
+	OmpigSourceDigest   string
+	Builder             string
+	BuilderIdentity     string
+	Target              string
+	Toolchains          map[string]string
 }
 
 type buildInput struct {
@@ -75,13 +75,13 @@ func validateNativeTargets(targets []Target) error {
 }
 
 // nativeArtifactPath returns the absolute path a native build writes. The
-// default name is pig-<name>, with .exe for a Windows target as go build names
+// default name is ompig-<name>, with .exe for a Windows target as go build names
 // its default output. Windows runs only files with an executable extension,
 // so an explicit Windows output without one fails before the build instead
 // of producing a binary that cannot start.
 func nativeArtifactPath(outPath, name string, target Target) (string, error) {
 	if outPath == "" {
-		outPath = "pig-" + name
+		outPath = "ompig-" + name
 		if target.OS == "windows" {
 			outPath += ".exe"
 		}
@@ -91,12 +91,12 @@ func nativeArtifactPath(outPath, name string, target Target) (string, error) {
 		return "", err
 	}
 	if target.OS == "windows" && filepath.Ext(artifactPath) == "" {
-		return "", fmt.Errorf("a Windows Piglet Binary needs an executable extension so Windows can start it; name the output %s.exe", filepath.Base(artifactPath))
+		return "", fmt.Errorf("a Windows Ompiglet Binary needs an executable extension so Windows can start it; name the output %s.exe", filepath.Base(artifactPath))
 	}
 	return artifactPath, nil
 }
 
-func buildNativeWithRecords(ctx context.Context, resolveSource func(context.Context) (pigSource, error), p *piglet.Piglet, cells []subprocess.CellSpec, opts Options, outPath string, stdout, stderr io.Writer) (string, string, error) {
+func buildNativeWithRecords(ctx context.Context, resolveSource func(context.Context) (ompigSource, error), p *ompiglet.Ompiglet, cells []subprocess.CellSpec, opts Options, outPath string, stdout, stderr io.Writer) (string, string, error) {
 	if err := validateNativeTargets(opts.Targets); err != nil {
 		return "", "", err
 	}
@@ -136,14 +136,14 @@ func buildNativeWithRecords(ctx context.Context, resolveSource func(context.Cont
 	}()
 	if opts.SignKey != nil {
 		buildprogress.Phase(ctx, "Signing binary", artifactPath)
-		// pig additive (D18): sign before the record so its artifact digest
+		// ompig additive (D18): sign before the record so its artifact digest
 		// covers the signature block.
 		signed, err := signature.Sign(artifactPath, signingManifest(lock, embedded), opts.SignKey)
 		if err != nil {
-			return "", "", fmt.Errorf("sign Piglet Binary: %w", err)
+			return "", "", fmt.Errorf("sign Ompiglet Binary: %w", err)
 		}
 		if !buildprogress.Enabled(ctx) {
-			_, _ = fmt.Fprintf(stdout, "Piglet Binary signed by %s\n", signed.Signer.KeyID)
+			_, _ = fmt.Fprintf(stdout, "Ompiglet Binary signed by %s\n", signed.Signer.KeyID)
 		}
 	}
 	buildprogress.Phase(ctx, "Checksumming and verifying binary", artifactPath)
@@ -158,12 +158,12 @@ func buildNativeWithRecords(ctx context.Context, resolveSource func(context.Cont
 	}
 	cleanup = false
 	if !buildprogress.Enabled(ctx) {
-		_, _ = fmt.Fprintf(stdout, "Piglet Binary record: %s\n", recordPath)
+		_, _ = fmt.Fprintf(stdout, "Ompiglet Binary record: %s\n", recordPath)
 	}
 	return artifactPath, recordPath, nil
 }
 
-// signingManifest states what a Piglet Binary signature vouches for.
+// signingManifest states what a Ompiglet Binary signature vouches for.
 func signingManifest(lock buildLock, embedded []signature.EmbeddedFile) signature.Manifest {
 	resolution := lock.ResolutionRecord.Resolution
 	components := make([]signature.Component, 0, len(lock.ComponentPlan.Components))
@@ -174,14 +174,14 @@ func signingManifest(lock buildLock, embedded []signature.EmbeddedFile) signatur
 		})
 	}
 	return signature.Manifest{
-		Piglet: lock.Piglet, ReleaseVersion: lock.ReleaseVersion, Target: lock.Target, PigVersion: lock.PigVersion,
+		Ompiglet: lock.Ompiglet, ReleaseVersion: lock.ReleaseVersion, Target: lock.Target, OmpigVersion: lock.OmpigVersion,
 		PigletDigest: resolution.EffectiveDigest, SourceDigest: resolution.SourceDigest,
 		ResolutionDigest: lock.ResolutionRecord.Digest, ComponentPlanDigest: lock.ComponentPlan.Digest,
 		Components: components, Embedded: embedded,
 	}
 }
 
-func buildBinaryRecords(lock buildLock, p *piglet.Piglet, artifactPath string) (binaryBuildRecords, error) {
+func buildBinaryRecords(lock buildLock, p *ompiglet.Ompiglet, artifactPath string) (binaryBuildRecords, error) {
 	artifactDigest, size, err := hashFile(artifactPath)
 	if err != nil {
 		return binaryBuildRecords{}, fmt.Errorf("hash artifact: %w", err)
@@ -191,32 +191,32 @@ func buildBinaryRecords(lock buildLock, p *piglet.Piglet, artifactPath string) (
 	}
 	// The managed copy is stored and later started under this name, so a
 	// Windows artifact keeps the .exe its default output has.
-	fileName := "pig-" + p.Name
+	fileName := "ompig-" + p.Name
 	if p.Build != nil && p.Build.OutputName != "" {
 		fileName = p.Build.OutputName
 	} else if strings.HasPrefix(lock.Target, "windows/") {
 		fileName += ".exe"
 	}
-	binaryRecord, err := pigletartifact.NewBinaryRecord(lock.Piglet, lock.ReleaseVersion, time.Now(), lock.ResolutionRecord, pigletartifact.BinaryInput{
-		Target: lock.Target, PigVersion: lock.PigVersion,
-		PigSourceRevision: lock.PigSourceRevision, PigSourceDigest: lock.PigSourceDigest,
+	binaryRecord, err := pigletartifact.NewBinaryRecord(lock.Ompiglet, lock.ReleaseVersion, time.Now(), lock.ResolutionRecord, pigletartifact.BinaryInput{
+		Target: lock.Target, OmpigVersion: lock.OmpigVersion,
+		OmpigSourceRevision: lock.OmpigSourceRevision, OmpigSourceDigest: lock.OmpigSourceDigest,
 		Builder: lock.Builder, BuilderIdentity: lock.BuilderIdentity, Toolchains: lock.Toolchains,
 		Artifact: pigletartifact.Artifact{Digest: artifactDigest, Size: size, FileName: fileName},
 		Verification: pigletartifact.Verification{
 			Policy: "basic", Passed: true,
-			Checks: []string{"artifact-sha256", "artifact-version-smoke", "extension-plan", "piglet-and-origins"},
+			Checks: []string{"artifact-sha256", "artifact-version-smoke", "extension-plan", "ompiglet-and-origins"},
 		},
-		Strip: binaryStripEntries(p), StripKeep: binaryStripIDs(p.Strip.KeepLists()), StripTable: binaryStripIDs(piglet.StripTable()),
+		Strip: binaryStripEntries(p), StripKeep: binaryStripIDs(p.Strip.KeepLists()), StripTable: binaryStripIDs(ompiglet.StripTable()),
 	})
 	if err != nil {
-		return binaryBuildRecords{}, fmt.Errorf("build Piglet Binary record: %w", err)
+		return binaryBuildRecords{}, fmt.Errorf("build Ompiglet Binary record: %w", err)
 	}
 	return binaryBuildRecords{Resolution: lock.ResolutionRecord, Binary: binaryRecord}, nil
 }
 
-// binaryStripEntries lists the Piglet's stripped built-ins for the Binary record.
-// pig additive (D92): the strip list is part of the Binary identity and digest.
-func binaryStripEntries(p *piglet.Piglet) []pigletartifact.StripEntry {
+// binaryStripEntries lists the Ompiglet's stripped built-ins for the Binary record.
+// ompig additive (D92): the strip list is part of the Binary identity and digest.
+func binaryStripEntries(p *ompiglet.Ompiglet) []pigletartifact.StripEntry {
 	ids := p.Strip.StrippedIDs()
 	if len(ids) == 0 {
 		return nil
@@ -230,9 +230,9 @@ func binaryStripEntries(p *piglet.Piglet) []pigletartifact.StripEntry {
 
 // binaryStripIDs converts strip ID lists for the Binary record: the keep-mode
 // lists (stripKeep) or the building core's strip table (stripTable).
-// pig additive (D92): keep mode states its intent in the record, and the
+// ompig additive (D92): keep mode states its intent in the record, and the
 // table lets a later core report the built-ins it adds.
-func binaryStripIDs(lists []piglet.StripIDList) []pigletartifact.StripIDs {
+func binaryStripIDs(lists []ompiglet.StripIDList) []pigletartifact.StripIDs {
 	if len(lists) == 0 {
 		return nil
 	}
@@ -243,7 +243,7 @@ func binaryStripIDs(lists []piglet.StripIDList) []pigletartifact.StripIDs {
 	return out
 }
 
-func buildNativeLock(p *piglet.Piglet, cells []subprocess.CellSpec, opts Options, source pigSource) (buildLock, error) {
+func buildNativeLock(p *ompiglet.Ompiglet, cells []subprocess.CellSpec, opts Options, source ompigSource) (buildLock, error) {
 	lock, err := buildPortableLock(p, cells, opts)
 	if err != nil {
 		return buildLock{}, err
@@ -252,13 +252,13 @@ func buildNativeLock(p *piglet.Piglet, cells []subprocess.CellSpec, opts Options
 	if err != nil {
 		return buildLock{}, err
 	}
-	revision, sourceDigest, err := pigSourceIdentity(source)
+	revision, sourceDigest, err := ompigSourceIdentity(source)
 	if err != nil {
 		return buildLock{}, err
 	}
-	lock.PigVersion = coding.PigVersion
-	lock.PigSourceRevision = revision
-	lock.PigSourceDigest = sourceDigest
+	lock.OmpigVersion = coding.OmpigVersion
+	lock.OmpigSourceRevision = revision
+	lock.OmpigSourceDigest = sourceDigest
 	lock.Builder = "native"
 	lock.BuilderIdentity = "native:" + revision
 	lock.Target = runtime.GOOS + "/" + runtime.GOARCH
@@ -266,17 +266,17 @@ func buildNativeLock(p *piglet.Piglet, cells []subprocess.CellSpec, opts Options
 	return lock, nil
 }
 
-func buildPortableLock(p *piglet.Piglet, cells []subprocess.CellSpec, opts Options) (buildLock, error) {
+func buildPortableLock(p *ompiglet.Ompiglet, cells []subprocess.CellSpec, opts Options) (buildLock, error) {
 	pigletPath := p.SourcePath()
 	if pigletPath == "" {
-		return buildLock{}, fmt.Errorf("Piglet source path is unavailable; build from a parsed Piglet file")
+		return buildLock{}, fmt.Errorf("Ompiglet source path is unavailable; build from a parsed Ompiglet file")
 	}
 	pigletDigest, _, err := hashFile(pigletPath)
 	if err != nil {
-		return buildLock{}, fmt.Errorf("hash Piglet source: %w", err)
+		return buildLock{}, fmt.Errorf("hash Ompiglet source: %w", err)
 	}
 	if len(opts.BakedSettings) == 0 {
-		return buildLock{}, fmt.Errorf("baked runtime Piglet is empty")
+		return buildLock{}, fmt.Errorf("baked runtime Ompiglet is empty")
 	}
 	runtimeDigest := digestBytes(opts.BakedSettings)
 	inputs, err := buildInputs(p, cells)
@@ -286,31 +286,31 @@ func buildPortableLock(p *piglet.Piglet, cells []subprocess.CellSpec, opts Optio
 	deliveryPlan := BuildPlan(extensionInputsFromCells(cells), opts)
 	componentPlan, err := buildPigletComponentPlan(cells, deliveryPlan, inputs)
 	if err != nil {
-		return buildLock{}, fmt.Errorf("build Piglet component plan: %w", err)
+		return buildLock{}, fmt.Errorf("build Ompiglet component plan: %w", err)
 	}
 	resolutionRecord, err := pigletartifact.NewResolutionRecord(p.Name, opts.Version, time.Now(), pigletartifact.ResolutionInput{
 		SourceDigest: pigletDigest, EffectiveDigest: runtimeDigest,
 		Inputs: resolutionInputs(inputs), ComponentPlan: componentPlan,
 	})
 	if err != nil {
-		return buildLock{}, fmt.Errorf("build Piglet resolution record: %w", err)
+		return buildLock{}, fmt.Errorf("build Ompiglet resolution record: %w", err)
 	}
 	return buildLock{
-		Piglet: p.Name, ReleaseVersion: opts.Version,
+		Ompiglet: p.Name, ReleaseVersion: opts.Version,
 		ComponentPlan: componentPlan, ResolutionRecord: resolutionRecord,
 	}, nil
 }
 
-func buildInputs(p *piglet.Piglet, cells []subprocess.CellSpec) ([]buildInput, error) {
+func buildInputs(p *ompiglet.Ompiglet, cells []subprocess.CellSpec) ([]buildInput, error) {
 	lineage, _, _ := p.ResolutionIdentity()
 	inputs := make([]buildInput, 0, max(0, len(lineage)-1))
 	for i, entry := range lineage[:max(0, len(lineage)-1)] {
 		inputs = append(inputs, buildInput{
-			Kind: "piglet-base", Name: fmt.Sprintf("%02d-%s", i, filepath.Base(entry.Source)),
+			Kind: "ompiglet-base", Name: fmt.Sprintf("%02d-%s", i, filepath.Base(entry.Source)),
 			Source: entry.Source, Version: entry.Version, Digest: entry.Digest,
 		})
 	}
-	packages, err := piglet.ResolvePackages(p)
+	packages, err := ompiglet.ResolvePackages(p)
 	if err != nil {
 		return nil, err
 	}
@@ -325,7 +325,7 @@ func buildInputs(p *piglet.Piglet, cells []subprocess.CellSpec) ([]buildInput, e
 		}
 		inputs = append(inputs, buildInput{Kind: "package", Name: resolved.Alias, Source: source, Version: version, Digest: digest})
 	}
-	resolvedExtensions, extensionErrors := piglet.ResolveExtensions(p)
+	resolvedExtensions, extensionErrors := ompiglet.ResolveExtensions(p)
 	if len(extensionErrors) > 0 {
 		return nil, extensionErrors[0]
 	}
@@ -369,7 +369,7 @@ func buildInputs(p *piglet.Piglet, cells []subprocess.CellSpec) ([]buildInput, e
 			}
 		}
 	}
-	resolvedSkills, skillErrors := piglet.ResolveSkills(p)
+	resolvedSkills, skillErrors := ompiglet.ResolveSkills(p)
 	if len(skillErrors) > 0 {
 		return nil, skillErrors[0]
 	}
@@ -386,7 +386,7 @@ func buildInputs(p *piglet.Piglet, cells []subprocess.CellSpec) ([]buildInput, e
 		}
 		inputs = append(inputs, buildInput{Kind: "skill", Name: skill.Entry.Name, Source: source, Package: packageAlias, Digest: digest})
 	}
-	// pig additive (D91): the frontend member's source is part of the
+	// ompig additive (D91): the frontend member's source is part of the
 	// Binary's identity.
 	frontendDir, err := p.FrontendDir()
 	if err != nil {
@@ -466,7 +466,7 @@ func recordSource(raw string, bare sourceref.BarePolicy, baseDir string) (string
 }
 
 func packageManifestDigest(root string) (string, error) {
-	paths := []string{"package.json", "plugin.json", ".plugin/plugin.json", ".claude-plugin/plugin.json", ".cursor-plugin/plugin.json", ".pig-plugin/plugin.json"}
+	paths := []string{"package.json", "plugin.json", ".plugin/plugin.json", ".claude-plugin/plugin.json", ".cursor-plugin/plugin.json", ".ompig-plugin/plugin.json"}
 	hash := sha256.New()
 	found := false
 	for _, relative := range paths {
@@ -603,7 +603,7 @@ func hashTree(root string) (string, error) {
 }
 
 // hashFile returns the sha256 digest and size of the file at path, streaming it
-// so a Piglet Binary is never held in memory.
+// so a Ompiglet Binary is never held in memory.
 func hashFile(path string) (string, int64, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -645,7 +645,7 @@ func sha256Sum(data []byte) []byte {
 // smokeArtifactTimeout bounds the artifact's `--version` run. A freshly linked, unsigned binary's first start can wait on
 // the operating system's on-access malware scan (Windows Defender scans a new executable before it runs), which on a busy
 // machine takes well over ten seconds; a hung artifact still fails.
-var smokeArtifactTimeout = 60 * time.Second // pig additive (D18): Piglet binary builds are PiG's own; Pi has no artifact check.
+var smokeArtifactTimeout = 60 * time.Second // ompig additive (D18): Ompiglet binary builds are Ompig's own; Pi has no artifact check.
 
 func smokeArtifact(path string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), smokeArtifactTimeout)
@@ -664,7 +664,7 @@ func smokeArtifact(path string) error {
 	return nil
 }
 
-func pigSourceIdentity(source pigSource) (string, string, error) {
+func ompigSourceIdentity(source ompigSource) (string, string, error) {
 	root := source.Root
 	revision, err := source.revision()
 	if err != nil {
@@ -687,7 +687,7 @@ func pigSourceIdentity(source pigSource) (string, string, error) {
 			continue
 		}
 		if err != nil {
-			return "", "", fmt.Errorf("lock Pig source %s: %w", relative, err)
+			return "", "", fmt.Errorf("lock Ompig source %s: %w", relative, err)
 		}
 		if info.IsDir() {
 			continue
@@ -699,11 +699,11 @@ func pigSourceIdentity(source pigSource) (string, string, error) {
 		if info.Mode()&os.ModeSymlink != 0 {
 			target, err := os.Readlink(path)
 			if err != nil {
-				return "", "", fmt.Errorf("read Pig source symlink %s: %w", relative, err)
+				return "", "", fmt.Errorf("read Ompig source symlink %s: %w", relative, err)
 			}
 			_, _ = hash.Write([]byte(target))
 		} else if err := copyFileInto(hash, path, buffer); err != nil {
-			return "", "", fmt.Errorf("read Pig source %s: %w", relative, err)
+			return "", "", fmt.Errorf("read Ompig source %s: %w", relative, err)
 		}
 		_, _ = hash.Write([]byte{0})
 	}
@@ -749,21 +749,21 @@ func writeBinaryRecords(records binaryBuildRecords, artifactPath string) (string
 	resolution := records.Resolution.Resolution
 	binary := records.Binary.Binary
 	if resolution == nil || binary == nil {
-		return "", fmt.Errorf("Piglet Binary records have invalid kinds")
+		return "", fmt.Errorf("Ompiglet Binary records have invalid kinds")
 	}
 	artifactDigest, artifactSize, err := hashFile(artifactPath)
 	if err != nil {
 		return "", err
 	}
 	if artifactDigest != binary.Artifact.Digest || artifactSize != binary.Artifact.Size {
-		return "", fmt.Errorf("Piglet Binary artifact does not match its record")
+		return "", fmt.Errorf("Ompiglet Binary artifact does not match its record")
 	}
 	version := records.Binary.ReleaseVersion
 	if version == "" {
 		version = "unversioned"
 	}
 	root := filepath.Join(
-		codingagent.PigletRecordsDir(), records.Binary.Piglet,
+		codingagent.PigletRecordsDir(), records.Binary.Ompiglet,
 		strings.TrimPrefix(resolution.SourceDigest, "sha256:"), version,
 	)
 	resolutionPath := filepath.Join(root, string(pigletartifact.RecordKindResolution), strings.TrimPrefix(records.Resolution.Digest, "sha256:")+".json")
@@ -772,7 +772,7 @@ func writeBinaryRecords(records binaryBuildRecords, artifactPath string) (string
 		strings.TrimPrefix(records.Binary.Digest, "sha256:")+".json",
 	)
 	managedArtifact := filepath.Join(
-		codingagent.PigletArtifactsDir(), records.Binary.Piglet,
+		codingagent.PigletArtifactsDir(), records.Binary.Ompiglet,
 		strings.TrimPrefix(resolution.SourceDigest, "sha256:"), version,
 		strings.ReplaceAll(binary.Target, "/", "-"),
 		strings.TrimPrefix(binary.Artifact.Digest, "sha256:"), binary.Artifact.FileName,
@@ -810,7 +810,7 @@ func writeRecordFile(path string, record pigletartifact.Record) (bool, error) {
 		if slices.Equal(existing, data) {
 			return false, nil
 		}
-		return false, fmt.Errorf("Piglet record %s already exists with different content", path)
+		return false, fmt.Errorf("Ompiglet record %s already exists with different content", path)
 	} else if !os.IsNotExist(err) {
 		return false, err
 	}
@@ -835,7 +835,7 @@ func writeRecordFile(path string, record pigletartifact.Record) (bool, error) {
 		return false, err
 	}
 	if err := fspublish.Publish(stagePath, path); err != nil {
-		return false, fmt.Errorf("commit Piglet record %s: %w", path, err)
+		return false, fmt.Errorf("commit Ompiglet record %s: %w", path, err)
 	}
 	return true, nil
 }

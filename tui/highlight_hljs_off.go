@@ -1,10 +1,10 @@
-//go:build pig_strip_syntax_highlight
+//go:build ompig_strip_syntax_highlight
 
 package tui
 
-import "github.com/MichaelKinsy/PiG/internal/pigstrip"
+import "github.com/tmih06/ompig/internal/pigstrip"
 
-// pig additive (D92): a Piglet Binary built with pig_strip_syntax_highlight does not link highlight.js. Code renders as Pi renders a language highlight.js does not support.
+// ompig additive (D92): a Ompiglet Binary built with ompig_strip_syntax_highlight does not link highlight.js. Code renders as Pi renders a language highlight.js does not support.
 
 func init() { pigstrip.Strip(pigstrip.ListFeatures, pigstrip.SyntaxHighlight) }
 

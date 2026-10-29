@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// The keybinding reference names every keybinding ID by the string PiG's default tables declare. A new ID that no page names is a shortcut users cannot find, and an ID the page names that no table declares is one they cannot bind.
+// The keybinding reference names every keybinding ID by the string Ompig's default tables declare. A new ID that no page names is a shortcut users cannot find, and an ID the page names that no table declares is one they cannot bind.
 
 var (
 	keybindingLiteral = regexp.MustCompile(`"((?:app|tui)\.[A-Za-z]+(?:\.[A-Za-z]+)*)"`)

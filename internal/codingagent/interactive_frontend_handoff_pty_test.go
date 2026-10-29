@@ -17,20 +17,20 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 const (
-	frontendHandoffChildEnv  = "PIG_TEST_FRONTEND_HANDOFF_CHILD"
-	frontendHandoffMarkerEnv = "PIG_TEST_FRONTEND_HANDOFF_MARKER"
+	frontendHandoffChildEnv  = "OMPIG_TEST_FRONTEND_HANDOFF_CHILD"
+	frontendHandoffMarkerEnv = "OMPIG_TEST_FRONTEND_HANDOFF_MARKER"
 )
 
 // TestFrontendSessionLendsTheTerminal drives the real owner path in a child
 // process whose stdin and stdout are a pty: the external editor (Ctrl+G) and
 // the job-control stop and continue (Ctrl+Z) with a frontend session drawing.
-// The session hears Suspend while the terminal is raw and PiG still reads
+// The session hears Suspend while the terminal is raw and Ompig still reads
 // it, before the editor runs, and Resume once raw mode is back, after the
 // editor ran; the one frame after Resume updates only the editor node with
 // the text the handoff left, with no full resend. The child is required

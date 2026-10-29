@@ -20,7 +20,7 @@ The section owns these path consumers:
 
 Go source belongs to the Go section. Non-automation Markdown, parity evidence, and parity source fixtures belong to the docs section. The automation directory stays at the root: it already separates build tooling from implementation packages. The installer, npm launcher, image locks, and lint configuration currently need no content changes; their paths and formats are unchanged.
 
-Replacements distinguish repository paths from upstream paths and user state. They preserve `packages/ai`, `agent/src`, vendored `pi-ai` names, `$PIG_HOME/agent`, `$home/agent`, and `$agent/dist`. Only the listed checkout-root variables qualify a shell path for rewriting. Python scanner inventories use explicit structural replacements instead of treating every bare `"agent"` or `"ai"` string as a directory. The public-claims scanner retains its previous source coverage without adding the moved agent/ai/tui trees or losing the moved community policies. The port-map scanner visits each implementation file once.
+Replacements distinguish repository paths from upstream paths and user state. They preserve `packages/ai`, `agent/src`, vendored `pi-ai` names, `$OMPIG_HOME/agent`, `$home/agent`, and `$agent/dist`. Only the listed checkout-root variables qualify a shell path for rewriting. Python scanner inventories use explicit structural replacements instead of treating every bare `"agent"` or `"ai"` string as a directory. The public-claims scanner retains its previous source coverage without adding the moved agent/ai/tui trees or losing the moved community policies. The port-map scanner visits each implementation file once.
 
 ### Tests
 

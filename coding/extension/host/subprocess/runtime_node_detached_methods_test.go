@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream builds ExtensionContext (runner.ts createContext) and
@@ -178,7 +178,7 @@ const frame = socket.sent[0];
 const id = JSON.parse(frame.subarray(4).toString()).id;
 runtime.conn.resolveCall({ type: "call_result", id, call_result: { error: { message: "refused" } } });
 await settle();
-assert.deepEqual(written, ["pig: host call ui.notify failed: refused\n"]);
+assert.deepEqual(written, ["ompig: host call ui.notify failed: refused\n"]);
 `, (&url.URL{Scheme: "file", Path: filepath.ToSlash(path)}).String())
 	if output, err := exec.CommandContext(t.Context(), "node", "--input-type=module", "--eval", script).CombinedOutput(); err != nil {
 		t.Fatalf("fire-and-forget host call failure reporting: %v\n%s", err, output)

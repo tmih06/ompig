@@ -10,7 +10,7 @@
 #   $0.000 (sub) 0.0%/1.1M (auto) • xp          ...          gpt-6.1-sol • medium
 #
 # The gate is areExperimentalFeaturesEnabled() = (process.env.PI_EXPERIMENTAL
-# === "1"). pig mirrors this in internal/codingagent/experimental.go, reading
+# === "1"). ompig mirrors this in internal/codingagent/experimental.go, reading
 # the same PI_EXPERIMENTAL variable (kept, like PI_HARDWARE_CURSOR /
 # PI_CLEAR_ON_SHRINK / PI_OFFLINE, because it gates an observable pi behavior on
 # the exact variable pi uses). The badge bytes are
@@ -22,7 +22,7 @@
 # so the whole footer is byte-stable; the only difference from
 # 01-footer-default is PI_EXPERIMENTAL=1 on both sides, which adds the "• xp"
 # badge to both binaries identically. escaped_output_equal asserts the badge -
-# including its bold/warning ANSI: is byte-identical between pig and pi.
+# including its bold/warning ANSI: is byte-identical between ompig and pi.
 #
 # Unit coverage: TestRenderFooterExperimentalIndicator (status_line_test.go)
 # proves the gate and the exact badge bytes, mutation-proven.
@@ -43,7 +43,7 @@
 #   core/model-resolver.ts:32 makes gpt-6.1-sol the github-copilot default, and
 #   the pinned catalog (ai/src/providers/data/github-copilot.json, chat:gpt-6.1-sol)
 #   gives it contextWindow 1050000, which the footer's formatTokens prints as
-#   1.1M. PiG renders the identical rows (escaped output byte-equal).
+#   1.1M. Ompig renders the identical rows (escaped output byte-equal).
 #
 #   ANSI (tmux -e) shows the badge bold + warning-yellow:
 #     \x1b[1m\x1b[38;2;255;255;0mxp...  (bold on, fg #ffff00)
@@ -67,7 +67,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 20
 capture_start = "parity-snap-cwd-"
@@ -75,9 +75,9 @@ capture_start_last = true
 settle_seconds = 2
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../footer/testdata/pig-agent", "PI_EXPERIMENTAL=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../footer/testdata/ompig-agent", "PI_EXPERIMENTAL=1"]
 pi = ["PI_CODING_AGENT_DIR=../footer/testdata/pi-agent", "PI_EXPERIMENTAL=1"]
-pig_args = ["--no-extensions"]
+ompig_args = ["--no-extensions"]
 pi_args = ["--no-extensions"]
 
 [assert]

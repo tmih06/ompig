@@ -16,11 +16,11 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // upstream: coding-agent/src/core/crash-log.ts:MAX_AGE
@@ -288,7 +288,7 @@ func stackContainsPath(stack, targetPath string, includeDescendants bool) bool {
 	}
 }
 
-// pig additive (D100): a Go goroutine trace is read for crashes of the PiG process itself.
+// ompig additive (D100): a Go goroutine trace is read for crashes of the Ompig process itself.
 // isStackFrame is `/^\s+at\s/u.test(line)` (JavaScript's \s) and, in a Go goroutine trace (goStack), which puts the source location on a tab-indented line below the function name, also a line of the form `\t<file>:<line>[ +0x<offset>]`.
 // A Go trace has no `at` frames, so without the second form a stack recorded for a Go crash would never attribute an extension. A JavaScript stack is matched exactly as Pi matches it.
 func isStackFrame(line string, goStack bool) bool {

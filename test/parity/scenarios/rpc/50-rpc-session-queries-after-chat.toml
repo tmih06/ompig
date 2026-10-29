@@ -162,8 +162,8 @@ wait_contains = ['"id":"d09","type":"response"']
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 
@@ -204,7 +204,7 @@ with = '00000000-0000-0000-0000-000000000000'
 reason = "Each process draws its own random UUID session id; the session file name carries it too."
 
 [[assert.normalize_replace]]
-pattern = 'parity-rpc-[0-9a-z-]+-(pi|pig)-[0-9]+'
+pattern = 'parity-rpc-[0-9a-z-]+-(pi|ompig)-[0-9]+'
 with = 'parity-rpc-run'
 reason = "Each run's isolated temp directory is named for its binary and a random suffix; keep the path suffix and every other byte."
 

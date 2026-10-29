@@ -1,11 +1,11 @@
-// Package installchange tells a running pig that the files it runs from changed on disk.
+// Package installchange tells a running ompig that the files it runs from changed on disk.
 //
 // Pi (packages/coding-agent/src/config.ts detectInstallChange, #10439) warns when an update or removal replaced the
-// package its process loads code from. PiG is one native executable that embeds its code, so the same hazard comes
-// from other files: an update replaces or removes the executable, and another pig's cache prune removes an extension
+// package its process loads code from. Ompig is one native executable that embeds its code, so the same hazard comes
+// from other files: an update replaces or removes the executable, and another ompig's cache prune removes an extension
 // cell or runtime file this process still starts on demand.
 //
-// pig additive (D95): there is no upstream equivalent of tracking an executable and cache files.
+// ompig additive (D95): there is no upstream equivalent of tracking an executable and cache files.
 package installchange
 
 import (
@@ -19,7 +19,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // FileID is a file's device and inode on Unix, or its volume serial number and file index on Windows.

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type directImageProbe struct {
@@ -125,7 +125,7 @@ func TestRenderImageMatchesPi(t *testing.T) {
 				g, _ := json.Marshal(got)
 				e, _ := json.Marshal(expected[i])
 				p, _ := json.Marshal(probe)
-				t.Errorf("%s:\n  Pig %s\n  Pi  %s", p, g, e)
+				t.Errorf("%s:\n  Ompig %s\n  Pi  %s", p, g, e)
 			}
 		}
 	}
@@ -143,7 +143,7 @@ func TestRenderImageProbeDump(t *testing.T) {
 	fmt.Printf("renderimage-probes:%s\n", line)
 }
 
-// TestRenderImageParity prints Pig's results of the corpus, one JSON line per probe, for the render-image parity scenario.
+// TestRenderImageParity prints Ompig's results of the corpus, one JSON line per probe, for the render-image parity scenario.
 func TestRenderImageParity(t *testing.T) {
 	previousCaps, previousCells := GetCapabilities(), GetCellDimensions()
 	t.Cleanup(func() {

@@ -14,7 +14,7 @@ import (
 	"sync"
 )
 
-// sharedNormalizers are rewrites every journey applies to rendered frames. Each states the Pi source or numbered divergence that makes PiG and Pi differ on purpose.
+// sharedNormalizers are rewrites every journey applies to rendered frames. Each states the Pi source or numbered divergence that makes Ompig and Pi differ on purpose.
 var sharedNormalizers = []Normalizer{
 	{Pattern: `\b(\d+(?:\.\d+)?)s\b`, With: "<N>s", Reason: "elapsed seconds of a running or finished tool and turn depend on host load (Pi interactive-mode.ts, bash-execution.ts)"},
 	{Pattern: `\b\d+ms\b`, With: "<N>ms", Reason: "elapsed milliseconds depend on host load"},
@@ -53,7 +53,7 @@ var (
 	borderRow = regexp.MustCompile(`^─{2,}(?: .* ─+)?$`)
 )
 
-// applyJourneyNormalizers applies the journey's own rewrites, which state a known PiG/Pi difference (a numbered divergence or an open finding) and count their hits so a stale entry can be found.
+// applyJourneyNormalizers applies the journey's own rewrites, which state a known Ompig/Pi difference (a numbered divergence or an open finding) and count their hits so a stale entry can be found.
 func (c *Run) applyJourneyNormalizers(s string) string {
 	for _, n := range c.J.Normalizers {
 		if len(n.Kinds) > 0 && !slices.Contains(n.Kinds, c.Kind) {
@@ -70,7 +70,7 @@ func (c *Run) applyJourneyNormalizers(s string) string {
 
 var headerRow = regexp.MustCompile(`escape interrupt ·|Press ctrl\+o to show full startup help|can explain its own features|^\s*[▀▄█ ]+\s*(v\d[\w.+-]*)?\s*$|^\s*[▀▄█ ]*\s+v\d[\w.+-]*\s*$`)
 
-// stripHeader removes the startup header (PiG's logo and Pi's, D2) from the top of the screen, whole or partly scrolled off, and the blank filler rows between the conversation and the editor. The headers differ in height (D2), so the filler count differs and so does the number of conversation rows that fit; the caller aligns the bottoms.
+// stripHeader removes the startup header (Ompig's logo and Pi's, D2) from the top of the screen, whole or partly scrolled off, and the blank filler rows between the conversation and the editor. The headers differ in height (D2), so the filler count differs and so does the number of conversation rows that fit; the caller aligns the bottoms.
 func stripHeader(s string) (string, bool) {
 	lines := strings.Split(s, "\n")
 	header := false
@@ -102,28 +102,28 @@ func stripHeader(s string) (string, bool) {
 }
 
 // compareFrames compares the recorded frames of the two products.
-func compareFrames(j *Journey, pig, pi *Run) []Failure {
+func compareFrames(j *Journey, ompig, pi *Run) []Failure {
 	var out []Failure
-	if len(pig.Snaps) != len(pi.Snaps) {
-		out = append(out, Failure{Kind: "frame", Msg: fmt.Sprintf("PiG recorded %d frames, Pi %d", len(pig.Snaps), len(pi.Snaps))})
+	if len(ompig.Snaps) != len(pi.Snaps) {
+		out = append(out, Failure{Kind: "frame", Msg: fmt.Sprintf("Ompig recorded %d frames, Pi %d", len(ompig.Snaps), len(pi.Snaps))})
 	}
-	for i := 0; i < len(pig.Snaps) && i < len(pi.Snaps); i++ {
-		a, b := pig.Snaps[i], pi.Snaps[i]
+	for i := 0; i < len(ompig.Snaps) && i < len(pi.Snaps); i++ {
+		a, b := ompig.Snaps[i], pi.Snaps[i]
 		if a.Name != b.Name {
-			out = append(out, Failure{Kind: "frame", Msg: fmt.Sprintf("frame %d: PiG %q, Pi %q", i, a.Name, b.Name)})
+			out = append(out, Failure{Kind: "frame", Msg: fmt.Sprintf("frame %d: Ompig %q, Pi %q", i, a.Name, b.Name)})
 			continue
 		}
 		if skipped(j.SkipFrames, a.Name) {
 			continue
 		}
-		na, ha := pig.normalizeFrameInfo(a.Plain)
+		na, ha := ompig.normalizeFrameInfo(a.Plain)
 		nb, hb := pi.normalizeFrameInfo(b.Plain)
 		if ha || hb {
 			na, nb = collapseFiller(na), collapseFiller(nb)
 			na, nb = alignBottoms(na, nb)
 		}
 		if d := lineDiff(na, nb); d != "" {
-			out = append(out, Failure{Kind: "frame", Msg: fmt.Sprintf("frame %d %q differs (- PiG, + Pi):\n%s", i, a.Name, d)})
+			out = append(out, Failure{Kind: "frame", Msg: fmt.Sprintf("frame %d %q differs (- Ompig, + Pi):\n%s", i, a.Name, d)})
 		}
 	}
 	return out
@@ -172,7 +172,7 @@ func skipped(list []string, name string) bool {
 	return false
 }
 
-// normalizeRequest renders one provider request in a form that is equal when PiG and Pi send the same conversation: tool-call ids by order, sandbox paths masked, the system prompt (which names the product and its docs, D2/D22) reduced to a marker.
+// normalizeRequest renders one provider request in a form that is equal when Ompig and Pi send the same conversation: tool-call ids by order, sandbox paths masked, the system prompt (which names the product and its docs, D2/D22) reduced to a marker.
 func (c *Run) normalizeRequest(r *Request) []string {
 	var body map[string]any
 	_ = json.Unmarshal(r.Raw, &body)
@@ -251,17 +251,17 @@ func (c *Run) normalizeRequest(r *Request) []string {
 }
 
 // compareRequests compares the provider requests of the two products one by one.
-func compareRequests(pig, pi *Run) []Failure {
+func compareRequests(ompig, pi *Run) []Failure {
 	var out []Failure
-	a, b := pig.P.Requests(), pi.P.Requests()
+	a, b := ompig.P.Requests(), pi.P.Requests()
 	if len(a) != len(b) {
-		out = append(out, Failure{Kind: "request", Msg: fmt.Sprintf("PiG sent %d provider requests, Pi %d", len(a), len(b))})
+		out = append(out, Failure{Kind: "request", Msg: fmt.Sprintf("Ompig sent %d provider requests, Pi %d", len(a), len(b))})
 	}
 	for i := 0; i < len(a) && i < len(b); i++ {
-		na := strings.Join(pig.normalizeRequest(a[i]), "\n")
+		na := strings.Join(ompig.normalizeRequest(a[i]), "\n")
 		nb := strings.Join(pi.normalizeRequest(b[i]), "\n")
 		if d := lineDiff(na, nb); d != "" {
-			out = append(out, Failure{Kind: "request", Msg: fmt.Sprintf("provider request %d differs (- PiG, + Pi):\n%s", i+1, d)})
+			out = append(out, Failure{Kind: "request", Msg: fmt.Sprintf("provider request %d differs (- Ompig, + Pi):\n%s", i+1, d)})
 		}
 	}
 	return out
@@ -384,17 +384,17 @@ func (c *Run) maskSessionIdentity(s string) string {
 }
 
 // compareSessions compares the persisted session files.
-func compareSessions(pig, pi *Run) []Failure {
-	a, err := pig.sessionLines()
+func compareSessions(ompig, pi *Run) []Failure {
+	a, err := ompig.sessionLines()
 	if err != nil {
-		return []Failure{{Kind: "session", Msg: "PiG session: " + err.Error()}}
+		return []Failure{{Kind: "session", Msg: "Ompig session: " + err.Error()}}
 	}
 	b, err := pi.sessionLines()
 	if err != nil {
 		return []Failure{{Kind: "session", Msg: "Pi session: " + err.Error()}}
 	}
 	if d := lineDiff(strings.Join(a, "\n"), strings.Join(b, "\n")); d != "" {
-		return []Failure{{Kind: "session", Msg: "session files differ (- PiG, + Pi):\n" + d}}
+		return []Failure{{Kind: "session", Msg: "session files differ (- Ompig, + Pi):\n" + d}}
 	}
 	return nil
 }
@@ -428,7 +428,7 @@ func StaleNormalizers(js []*Journey) []string {
 }
 
 // compareAgentFiles compares the final JSON content of the named agent-directory files.
-func compareAgentFiles(j *Journey, pig, pi *Run) []Failure {
+func compareAgentFiles(j *Journey, ompig, pi *Run) []Failure {
 	var out []Failure
 	for _, rel := range j.AgentFiles {
 		read := func(r *Run) string {
@@ -438,14 +438,14 @@ func compareAgentFiles(j *Journey, pig, pi *Run) []Failure {
 			}
 			var v any
 			if json.Unmarshal(b, &v) != nil {
-				return pig.maskPaths(string(b))
+				return ompig.maskPaths(string(b))
 			}
 			r.normalizeValue(v)
 			enc, _ := json.MarshalIndent(v, "", " ")
 			return r.applyJourneyNormalizers(string(enc))
 		}
-		if d := lineDiff(read(pig), read(pi)); d != "" {
-			out = append(out, Failure{Kind: "file", Msg: fmt.Sprintf("agent file %s differs (- PiG, + Pi):\n%s", rel, d)})
+		if d := lineDiff(read(ompig), read(pi)); d != "" {
+			out = append(out, Failure{Kind: "file", Msg: fmt.Sprintf("agent file %s differs (- Ompig, + Pi):\n%s", rel, d)})
 		}
 	}
 	return out

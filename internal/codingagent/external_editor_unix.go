@@ -6,7 +6,7 @@ import (
 	"context"
 	"os/exec"
 
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
 // editorCommand runs the editor directly, as upstream spawns it without a

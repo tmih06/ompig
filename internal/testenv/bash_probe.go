@@ -8,9 +8,9 @@ import (
 )
 
 // BashExecutionStringProbe writes a BASH_ENV script for a test that compares
-// the -c command bash receives from Pi and from PiG. The script sends bash's
+// the -c command bash receives from Pi and from Ompig. The script sends bash's
 // stderr to the returned file, then prints BASH_EXECUTION_STRING, the -c
-// argument as bash received it, as "<%s>\n". Pi and PiG merge a child's
+// argument as bash received it, as "<%s>\n". Pi and Ompig merge a child's
 // stdout and stderr pipes into one stream whose interleaving differs from run
 // to run; with stderr in the file, that stream holds stdout in the order bash
 // wrote it, and BashStderr reads stderr after each command.

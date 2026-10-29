@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // codemode.ts:233 `DEFAULT_SEARCH_LIMIT = 8` and :936 `options?.limit ?? DEFAULT_SEARCH_LIMIT`: searchTools() without a

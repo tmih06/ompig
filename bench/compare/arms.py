@@ -6,7 +6,7 @@
   arms.py install --root DIR [--arm NAME ...] [--cache DIR]   download (sha256-verified), unpack into DIR, build source arms
   arms.py specs   --root DIR [--arm NAME ...]                 print `name=command` build specs for the Pi-Bolt harness
   arms.py record  --root DIR                                  print the run record (version, artifact sha256, source URL, commit)
-  arms.py check                                               fail when a PiG source arm is not a full commit of this repository, or an
+  arms.py check                                               fail when a Ompig source arm is not a full commit of this repository, or an
                                                               artifact pinned here is pinned with another sha256 in bench/evals/arms.lock
 
 Rules: no curl|sh installers; every artifact is verified against arms.lock (and the project's SHA256SUMS when it has one);
@@ -45,11 +45,11 @@ def evals_mismatches(lock: dict, evals: dict) -> list[str]:
 
 
 def self_arm_problems(lock: dict) -> list[str]:
-    """A PiG source arm builds a commit of this repository (repo = "self"): a full 40-hex sha, since `git fetch` of an abbreviated sha
+    """A Ompig source arm builds a commit of this repository (repo = "self"): a full 40-hex sha, since `git fetch` of an abbreviated sha
     fails, and no ref (a branch name moves and may be private)."""
     bad = []
     for name, a in lock.get("arm", {}).items():
-        if a.get("kind") != "go-source" or a.get("adapter") != "pig":
+        if a.get("kind") != "go-source" or a.get("adapter") != "ompig":
             continue
         if a.get("repo") != "self":
             bad.append(f"{name}: repo must be \"self\", is {a.get('repo')!r}")
@@ -178,7 +178,7 @@ def install_arm(name: str, root: Path, cache: Path):
                 cwd=src, env={**os.environ, "PATH": f"{bun_exe(root).parent}:{os.environ['PATH']}"}, timeout=3600)
         else:
             ld = f'{a.get("ldflags", "")} -X main.Build={a["commit"][:10]}'.strip()
-            run(["go", "build", "-buildvcs=false", "-trimpath", "-ldflags", ld, "-o", str(d / "pig"), a["package"]], cwd=src,
+            run(["go", "build", "-buildvcs=false", "-trimpath", "-ldflags", ld, "-o", str(d / "ompig"), a["package"]], cwd=src,
                 env={**os.environ, "CGO_ENABLED": "0"}, timeout=3600)
     else:
         sys.exit(f"{name}: unknown kind {kind}")
@@ -189,7 +189,7 @@ def exe_path(name: str, root: Path) -> Path:
     a = LOCK["arm"][name]
     d = root / "arms" / name
     if a["kind"] == "go-source":
-        return d / ("gi" if name == "gi" else "pig")
+        return d / ("gi" if name == "gi" else "ompig")
     if a["kind"] == "bun-compile":
         return d / "pi"
     return d / a.get("exe", "")

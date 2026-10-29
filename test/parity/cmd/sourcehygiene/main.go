@@ -28,7 +28,7 @@ var rules = []rule{
 	{"SH003", regexp.MustCompile(`(?i)\b(?:TODO|FIXME|HACK|XXX)\b|\b(?:currently|still|temporary|only) (?:a )?placeholder\b|\bplaceholder (?:until|for future)\b|\bscaffold(?:ed)?(?: only|,? not| until)\b|\bstub\b|\btemporary no-op\b`), "production placeholders must be implemented, removed, or tracked outside source", false},
 	{"SH004", regexp.MustCompile(`(?i)\bnot yet (?:wired|implemented|supported)\b|\bTODO:`), "user-visible output must not promise unfinished behavior", true},
 	{"SH005", regexp.MustCompile(`(?i)\bpig (?:divergence|additive)(?::| [^(])`), "use a typed D<N> marker or neutral translation language", false},
-	{"SH006", regexp.MustCompile(`\bGopi\b`), "use the current PiG name", false},
+	{"SH006", regexp.MustCompile(`\bGopi\b`), "use the current Ompig name", false},
 }
 
 type finding struct {

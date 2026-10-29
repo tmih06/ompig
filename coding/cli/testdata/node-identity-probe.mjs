@@ -1,5 +1,5 @@
 // Makes the model calls a Node extension can make on its own, so a test can
-// record what PiG's runtime sends. `/probe <mode> <provider> <baseUrl>`:
+// record what Ompig's runtime sends. `/probe <mode> <provider> <baseUrl>`:
 //   session: the vendored SDK's createAgentSession + session.prompt (Pi's
 //            core/sdk.ts wiring, including getClientIdentity);
 //   stream:  pi-ai's completeSimple on the compat entry point.
@@ -20,7 +20,7 @@ export default function (pi) {
         if (result.stopReason !== "stop") throw new Error(`stream result = ${JSON.stringify(result)}`);
         return;
       }
-      const dir = mkdtempSync(join(tmpdir(), "pig-identity-"));
+      const dir = mkdtempSync(join(tmpdir(), "ompig-identity-"));
       const runtime = await ModelRuntime.create({ authPath: join(dir, "auth.json"), modelsPath: join(dir, "models.json"), allowModelNetwork: false });
       let sessionModel = model;
       if (runtime.getProvider(provider)) {

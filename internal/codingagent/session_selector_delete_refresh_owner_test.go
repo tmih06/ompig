@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestSessionSelectorDeleteRefreshOwnerDoesNotResumeDeletedPath(t *testing.T) {

@@ -21,7 +21,7 @@ type APIKeyProviderInfo struct {
 // opencode-go appears in /login → "Sign in with an API key". Deriving the
 // list here keeps a newly added upstream provider from being silently
 // omitted.
-// pig additive (D92): a provider whose catalog models are all on stripped APIs (ProviderStripped) is left out.
+// ompig additive (D92): a provider whose catalog models are all on stripped APIs (ProviderStripped) is left out.
 func APIKeyProviders() []APIKeyProviderInfo {
 	providerIDs := ListRuntimeProviders()
 	out := make([]APIKeyProviderInfo, 0, len(providerIDs))

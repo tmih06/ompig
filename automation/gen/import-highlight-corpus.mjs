@@ -1,5 +1,5 @@
 // Build tui/internal/hljs/testdata/corpus.json: the highlight.js 10.7.3 test inputs (test/markup and test/detect) plus
-// PiG cases, the inputs of the highlight.js oracle that generate-highlight-oracle.mjs records from Pi.
+// Ompig cases, the inputs of the highlight.js oracle that generate-highlight-oracle.mjs records from Pi.
 //
 // Usage: node import-highlight-corpus.mjs <highlight.js-10.7.3-checkout> <out-file>
 // The checkout is https://github.com/highlightjs/highlight.js at tag 10.7.3; the npm package does not ship its tests.
@@ -29,9 +29,9 @@ for (const kind of ["markup", "detect"]) {
 	}
 }
 
-// PiG cases: the e2e-100 fenced blocks and codemode card, scopes that reach unusual theme formatters, auto-detected
+// Ompig cases: the e2e-100 fenced blocks and codemode card, scopes that reach unusual theme formatters, auto-detected
 // sublanguages, unsupported and empty languages, aliases, and text outside the Basic Multilingual Plane.
-const pig = [
+const ompig = [
 	["javascript", 'const [a] = await models.get("x", { key: 1, ok: true });\nfunction f(n) { return n * 2; } // twice'],
 	["python", 'def f(n: int) -> int:\n    return {"key": n * 2, "ok": True}  # twice'],
 	["go", 'func f(n int) map[string]any {\n\treturn map[string]any{"key": n * 2, "ok": true} // twice\n}'],
@@ -55,6 +55,6 @@ const pig = [
 	["mathematica", "Plot[Sin[x], {x, 0, Pi}] + myFunc[1]"],
 	["sql", "SELECT \u212Aey FROM t WHERE ſ = 1"],
 ];
-for (const [lang, code] of pig) cases.push({ id: `pig/${cases.length}`, lang, code });
+for (const [lang, code] of ompig) cases.push({ id: `ompig/${cases.length}`, lang, code });
 fs.writeFileSync(outFile, `${JSON.stringify(cases, null, "\t")}\n`);
 console.log(`${cases.length} cases`);

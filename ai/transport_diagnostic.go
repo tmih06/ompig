@@ -7,7 +7,7 @@ import (
 	"io"
 	"net"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // transportCause is a Go transport failure described the way Node reports error.cause: a name, the Go message and a Node-style code.
@@ -76,7 +76,7 @@ func classifyTransportCause(transport *nodeTransportError) *transportCause {
 	return out
 }
 
-// transportFailureDiagnostic is the provider_transport_failure diagnostic for err, or false when err is not a transport failure with a Go cause or is a caller abort. pig divergence (D180): Pi records this diagnostic only for the Codex WebSocket path; PiG records it for every transport failure so the cause is not lost.
+// transportFailureDiagnostic is the provider_transport_failure diagnostic for err, or false when err is not a transport failure with a Go cause or is a caller abort. ompig divergence (D180): Pi records this diagnostic only for the Codex WebSocket path; Ompig records it for every transport failure so the cause is not lost.
 func transportFailureDiagnostic(err error, eventsEmitted bool) (AssistantMessageDiagnostic, bool) {
 	transport, ok := errors.AsType[*nodeTransportError](err)
 	if !ok || transport.cause == nil || errors.Is(transport.cause, context.Canceled) {

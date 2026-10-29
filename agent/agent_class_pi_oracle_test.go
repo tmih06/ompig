@@ -14,8 +14,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type classAction struct {
@@ -225,8 +225,8 @@ func classEventType(event AgentEvent) string {
 	return ""
 }
 
-// TestAgentClassMatchesPi runs Pi's Agent class (packages/agent/src/agent.ts) and Pig's Agent over seeded programs of operations, listeners that unsubscribe, act and fail, and scripted turns, and compares each operation's error and state and every listener event with its state.
-// A stream function that returns an error is not generated: Pig answers it with an error assistant message for its retry loop where Pi's loop rejects (agent_loop.go requestStream).
+// TestAgentClassMatchesPi runs Pi's Agent class (packages/agent/src/agent.ts) and Ompig's Agent over seeded programs of operations, listeners that unsubscribe, act and fail, and scripted turns, and compares each operation's error and state and every listener event with its state.
+// A stream function that returns an error is not generated: Ompig answers it with an error assistant message for its retry loop where Pi's loop rejects (agent_loop.go requestStream).
 func TestAgentClassMatchesPi(t *testing.T) {
 	programs := classPrograms()
 	payload, err := json.Marshal(programs)

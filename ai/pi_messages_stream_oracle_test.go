@@ -51,7 +51,7 @@ func piMessagesStreamBodies() [][][]byte {
 				end := map[string]any{"type": "thinking_end", "contentIndex": index, "content": text}
 				if random.Intn(2) == 0 {
 					end["contentSignature"] = "sig"
-					// Pi keeps a backend's redacted:false on the block; Pig's ThinkingContent.Redacted is a plain bool and omits it (not mirrored), so only true is sent.
+					// Pi keeps a backend's redacted:false on the block; Ompig's ThinkingContent.Redacted is a plain bool and omits it (not mirrored), so only true is sent.
 					if random.Intn(2) == 0 {
 						end["redacted"] = true
 					}
@@ -84,7 +84,7 @@ func piMessagesStreamBodies() [][][]byte {
 	return bodies
 }
 
-// TestPiMessagesProviderStreamMatchesPi compares Pi's pi-messages provider with Pig's over seeded backend event streams.
+// TestPiMessagesProviderStreamMatchesPi compares Pi's pi-messages provider with Ompig's over seeded backend event streams.
 func TestPiMessagesProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"pi-messages", "piMessagesApi", "pi-messages", "pi"}, false, piMessagesStreamBodies(), func(baseURL string) Provider {
 		return NewPiMessagesProvider(PiMessagesConfig{APIKey: "k", Model: "m", ProviderID: "pi", BaseURL: baseURL})

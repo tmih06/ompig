@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 #
-# Parity machinery: the gates, inventories, and scenario runners that keep PiG
+# Parity machinery: the gates, inventories, and scenario runners that keep Ompig
 # faithful to the pinned Pi release. The root Makefile includes this file, so
 # every target runs as `make <target>` from the repository root, and
 # `make help-parity` lists them. test/parity/README.md explains the workflow.
@@ -9,7 +9,7 @@ SOURCE_HYGIENE_BASE ?= $(shell git rev-parse --verify HEAD^ >/dev/null 2>&1 && e
 
 # Generate a subprocess coverage profile from a successful parity run. The
 # target fails when parity fails; a partial profile is never reported as proof.
-PARITY_FLOW_COVERAGE ?= $(PIG_TMP)/pig-parity-cover.out
+PARITY_FLOW_COVERAGE ?= $(OMPIG_TMP)/ompig-parity-cover.out
 
 PARITY_FLOW_RUN ?= .
 
@@ -21,7 +21,7 @@ interface-proposals interface-inventory-drift behavior-input-inventory behavior-
 typescript-extension-corpus: parity-bin ## Validate every pinned upstream TypeScript extension example
 	@go run ./test/parity/cmd/extensioncorpus \
 		-root "$(CURDIR)" \
-		-pig-bin "$(PARITY_PIG_BIN)" \
+		-ompig-bin "$(PARITY_OMPIG_BIN)" \
 		-out "$(EXTENSION_CORPUS_RESULTS)"
 
 schedule-report: ## Print Go-test and parity scheduler buckets
@@ -127,10 +127,10 @@ check-scratch-paths:
 
 # Default gate. If this is green, the change is safe to commit.
 format-version-inventory: ## Validate reviewed ownership of every production version-like field
-	@go run ./test/parity/cmd/formatversions -marker-roots ".,piglets"
+	@go run ./test/parity/cmd/formatversions -marker-roots ".,ompiglets"
 
-format-version-policy: ## Reject remaining Pig-owned format discriminators (strict)
-	@go run ./test/parity/cmd/formatversions -strict -marker-roots ".,piglets"
+format-version-policy: ## Reject remaining Ompig-owned format discriminators (strict)
+	@go run ./test/parity/cmd/formatversions -strict -marker-roots ".,ompiglets"
 
 closure-check: interface-deps ## Validate deterministic closure schema/store/derivation/query contracts
 	go test ./test/parity/closure ./test/parity/cmd/closure
@@ -143,30 +143,30 @@ correspondence-check: interface-deps
 		-target-worktree >/dev/null
 	@echo "correspondence-check: direct facts agree except listed known gaps; packet paths run in go test"
 
-porter: ## Start the interactive Pig Porter workbench
+porter: ## Start the interactive Ompig Porter workbench
 	@$(MAKE) -s parity-bin
-	@./automation/porter/run-pig-porter.sh $(PORTER_ARGS)
+	@./automation/porter/run-ompig-porter.sh $(PORTER_ARGS)
 
 porter-task: ## Run one bounded headless Porter task
 	@test -n "$(TASK)" || { echo "TASK is required (for example: make porter-task TASK='verify rpc')" >&2; exit 2; }
 	@$(MAKE) -s parity-bin
-	@./automation/porter/run-pig-porter.sh --no-session $(PORTER_ARGS) -p "/skill:pig-porter $(TASK)"
+	@./automation/porter/run-ompig-porter.sh --no-session $(PORTER_ARGS) -p "/skill:ompig-porter $(TASK)"
 
 porter-campaign: ## Run read-only workers
 	@test "$(MODE)" = "inventory" -o "$(MODE)" = "verify" || { echo "MODE must be inventory or verify" >&2; exit 2; }
 	@test -n "$(FAMILIES)" || { echo "FAMILIES is required" >&2; exit 2; }
 	@$(MAKE) -s parity-bin
-	@PIG_BIN="$(PARITY_PIG_BIN)" ./automation/porter/run-pig-porter-campaign.sh "$(MODE)" $(FAMILIES)
+	@OMPIG_BIN="$(PARITY_OMPIG_BIN)" ./automation/porter/run-ompig-porter-campaign.sh "$(MODE)" $(FAMILIES)
 
-porter-check: ## Verify the direct Porter contract and Piglet extension adapter
+porter-check: ## Verify the direct Porter contract and Ompiglet extension adapter
 	go test ./test/parity/porter ./test/parity/cmd/porter
 	@python3 -B -m unittest discover -s automation/porter -p 'test_*.py'
-	@go build -buildvcs=false -o $(CHECK_PIG_BIN) ./cmd/pig
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" install --validate-only --json piglets/porter/extensions/pig-porter >/dev/null
-	@GOWORK=off ./automation/ci/with-isolated-pig-home.sh "$(CHECK_PIG_BIN)" piglet validate piglets/porter/pig-porter.yaml >/dev/null
+	@go build -buildvcs=false -o $(CHECK_OMPIG_BIN) ./cmd/ompig
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" install --validate-only --json ompiglets/porter/extensions/ompig-porter >/dev/null
+	@GOWORK=off ./automation/ci/with-isolated-ompig-home.sh "$(CHECK_OMPIG_BIN)" ompiglet validate ompiglets/porter/ompig-porter.yaml >/dev/null
 
-porter-smoke: ## Verify the Porter Piglet in TUI and headless modes
-	@./automation/porter/verify-pig-porter-local.sh
+porter-smoke: ## Verify the Porter Ompiglet in TUI and headless modes
+	@./automation/porter/verify-ompig-porter-local.sh
 
 custom-factory-ledger: ## Regenerate the internal pinned custom-factory draft
 	@go run ./test/parity/cmd/customfactoryledger
@@ -186,11 +186,11 @@ custom-factory-ledger-drift: ## Validate the checked-in internal draft
 	@go test $(GO_TEST_CI_COUNT) ./test/parity/cmd/customfactoryledger
 	@go run ./test/parity/cmd/customfactoryledger -check
 
-check-contracts-fast: closure-check correspondence-check porter-check interface-inventory interface-inventory-test interface-go-drift interface-recommendations-drift interface-mapping-quality interface-delta interface-gaps portmap-check behavior-contracts test-inventory-drift test-inventory test-porting-release known-gaps-drift format-version-inventory custom-factory-ledger-drift sdk-surface-drift sdk-apidiff piglet-strip-ids-drift piglet-strip-build ## Local generated contract validation and drift gates
+check-contracts-fast: closure-check correspondence-check porter-check interface-inventory interface-inventory-test interface-go-drift interface-recommendations-drift interface-mapping-quality interface-delta interface-gaps portmap-check behavior-contracts test-inventory-drift test-inventory test-porting-release known-gaps-drift format-version-inventory custom-factory-ledger-drift sdk-surface-drift sdk-apidiff ompiglet-strip-ids-drift ompiglet-strip-build ## Local generated contract validation and drift gates
 
 check-contracts: check-contracts-fast interface-inventory-drift ## Fast contracts + exact published-package inventory regeneration
 
-# Foundation gate used before advanced Piglet work or a completed upstream
+# Foundation gate used before advanced Ompiglet work or a completed upstream
 # leap. Unlike the normal development gate, it rejects every partial, broken,
 # not-started, weak-only, untested, or family-unassigned intended port.
 foundation-check: check-core check-contracts parity source-hygiene-full divergence-quality interface-recommendations interface-mapping-strict interface-delta-strict upstream-delta async-contracts behavior-contracts-strict format-version-policy coverage-strict ## Check + strict semantic interface and behavioral completeness gates
@@ -198,36 +198,36 @@ foundation-check: check-core check-contracts parity source-hygiene-full divergen
 	@echo "make foundation-check: complete intended-portable behavior is assigned and verified."
 
 parity-bin: parity-deps node-runtime
-	@mkdir -p $(dir $(PARITY_PIG_BIN))
+	@mkdir -p $(dir $(PARITY_OMPIG_BIN))
 	@# Scenario scripts run `go test` for packages whose test-only modules `go build` never fetches. Fetch them now so a cold module cache cannot print "go: downloading" into a compared stream.
 	@go list -deps -test ./... >/dev/null
-	CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/MichaelKinsy/PiG/coding/cli.Build=$$(git rev-parse --short HEAD 2>/dev/null || echo dev)" -o $(PARITY_PIG_BIN) ./cmd/pig
-	@[ "$$(uname -s)" = "Darwin" ] && command -v codesign >/dev/null 2>&1 && codesign --force --sign - $(PARITY_PIG_BIN) >/dev/null 2>&1 || true
-	@echo "parity pig: $$($(PARITY_PIG_BIN) --version) → $(PARITY_PIG_BIN)"
+	CGO_ENABLED=0 go build -buildvcs=false -trimpath -ldflags "-s -w -X github.com/tmih06/ompig/coding/cli.Build=$$(git rev-parse --short HEAD 2>/dev/null || echo dev)" -o $(PARITY_OMPIG_BIN) ./cmd/ompig
+	@[ "$$(uname -s)" = "Darwin" ] && command -v codesign >/dev/null 2>&1 && codesign --force --sign - $(PARITY_OMPIG_BIN) >/dev/null 2>&1 || true
+	@echo "parity ompig: $$($(PARITY_OMPIG_BIN) --version) → $(PARITY_OMPIG_BIN)"
 
 # require-parity-ran is the loud-fail counterpart to TestParity's quiet
 # skips. ResolvePigBin/ResolveUpstreamPiBin (test/parity/runner/binaries.go) call
-# t.Skip with an explicit reason when PIG_PARITY_PIG_BIN/PIG_BIN is unset, or
+# t.Skip with an explicit reason when OMPIG_PARITY_OMPIG_BIN/OMPIG_BIN is unset, or
 # when tmux or the pinned Pi 0.87.1 binary is missing - and that skip happens
 # before TestParity runs a single scenario or writes RESULTS, so `go test`
 # still exits 0. A results file with zero outcomes (or no results file at
 # all - the two are equivalent here) means nothing was actually compared
 # against real Pi, which must never look the same as "everything passed".
 #
-# Set PIG_PARITY_ALLOW_ZERO=1 to accept a zero-scenario run on purpose (for
+# Set OMPIG_PARITY_ALLOW_ZERO=1 to accept a zero-scenario run on purpose (for
 # example, a sandbox that intentionally has no Pi install).
 require-parity-ran:
-	@if [ -n "$$PIG_PARITY_ALLOW_ZERO" ]; then \
-	    echo "require-parity-ran: PIG_PARITY_ALLOW_ZERO set, not checking $(RESULTS)"; \
+	@if [ -n "$$OMPIG_PARITY_ALLOW_ZERO" ]; then \
+	    echo "require-parity-ran: OMPIG_PARITY_ALLOW_ZERO set, not checking $(RESULTS)"; \
 	    exit 0; \
 	  fi; \
 	  n=$$(go run ./test/parity/cmd/checkparityran -results "$(RESULTS)") || exit 1; \
 	  if [ "$$n" -eq 0 ]; then \
 	    echo "require-parity-ran: 0 parity scenarios ran (results file: $(RESULTS))." >&2; \
 	    echo "This means the parity suite skipped before comparing anything against real Pi -" >&2; \
-	    echo "check PIG_PARITY_PIG_BIN/PIG_BIN, tmux, and the pinned Pi install." >&2; \
+	    echo "check OMPIG_PARITY_OMPIG_BIN/OMPIG_BIN, tmux, and the pinned Pi install." >&2; \
 	    echo "A green 'go test' exit code here is a skip, not a pass." >&2; \
-	    echo "Set PIG_PARITY_ALLOW_ZERO=1 to accept this on purpose." >&2; \
+	    echo "Set OMPIG_PARITY_ALLOW_ZERO=1 to accept this on purpose." >&2; \
 	    exit 1; \
 	  fi; \
 	  echo "require-parity-ran: $$n parity scenario(s) actually ran"
@@ -235,7 +235,7 @@ require-parity-ran:
 # Hermetic scenarios (no real LLM, no real network).
 # Runs in parallel by default; scenarios with runtime_ratio_max or the
 # "serial" tag automatically opt out. To force serial execution (e.g. when
-# diagnosing flakes), pass -pig-parity.serial=true.
+# diagnosing flakes), pass -ompig-parity.serial=true.
 #
 # Cleanup is layered so each mechanism catches what the prior misses:
 #   1. defer killSession(session) : happy path in each test goroutine
@@ -246,24 +246,24 @@ require-parity-ran:
 parity: parity-bin ## Scenario-driven comparison with resource-sensitive concurrency groups
 	@rm -f "$(RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.tags=hermetic -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.tags=hermetic -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(RESULTS)
 	@$(MAKE) -s coverage
 
 # Fast pre-commit gate: identical scenarios, assertions, isolation, and
-# fail-fast behavior as `make parity`, but one Pig/Pi pair per scenario.
+# fail-fast behavior as `make parity`, but one Ompig/Pi pair per scenario.
 # CI and explicit full verification keep each scenario's declared durability.
-parity-fast: parity-bin ## One strict Pig/Pi pair per hermetic scenario for the pre-commit loop (PARITY_SHARD=N/M runs one hash shard)
+parity-fast: parity-bin ## One strict Ompig/Pi pair per hermetic scenario for the pre-commit loop (PARITY_SHARD=N/M runs one hash shard)
 	@rm -f "$(RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.tags=hermetic -pig-parity.runs=1 -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(RESULTS) \
-	    $(if $(PARITY_SHARD),-pig-parity.shard=$(PARITY_SHARD))
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.tags=hermetic -ompig-parity.runs=1 -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(RESULTS) \
+	    $(if $(PARITY_SHARD),-ompig-parity.shard=$(PARITY_SHARD))
 	@$(MAKE) -s require-parity-ran RESULTS=$(RESULTS)
 
 # A scoped run writes its results file under this worktree, named for its selection, so a concurrent run in another worktree cannot supply the scenarios this run counts.
@@ -275,20 +275,20 @@ parity-family: parity-bin ## Run one hermetic family and stop on the first faile
 	@test -d "test/parity/scenarios/$(FAMILY)" || (echo "unknown parity family: $(FAMILY)" >&2; exit 2)
 	@mkdir -p "$(dir $(SCOPED_RESULTS))" && rm -f "$(SCOPED_RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.dir="$(CURDIR)/test/parity/scenarios/$(FAMILY)" -pig-parity.tags=hermetic -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(SCOPED_RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.dir="$(CURDIR)/test/parity/scenarios/$(FAMILY)" -ompig-parity.tags=hermetic -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(SCOPED_RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(SCOPED_RESULTS)
 
 parity-driver: parity-bin ## Run one pair for selected execution modes
 	@test -n "$(DRIVER)" || (echo "DRIVER is required (for example: make parity-driver DRIVER=rpc-mode)" >&2; exit 2)
 	@mkdir -p "$(dir $(SCOPED_RESULTS))" && rm -f "$(SCOPED_RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.tags=hermetic -pig-parity.drivers="$(DRIVER)" -pig-parity.runs=1 -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(SCOPED_RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.tags=hermetic -ompig-parity.drivers="$(DRIVER)" -ompig-parity.runs=1 -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(SCOPED_RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(SCOPED_RESULTS)
 
 # Scheduler stress repeats the complete suite twice with one pair per scenario.
@@ -296,10 +296,10 @@ parity-driver: parity-bin ## Run one pair for selected execution modes
 parity-stress: parity-bin ## Repeat parity under the default group scheduler
 	@rm -f "$(RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=2 -timeout $(PARITY_STRESS_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.tags=hermetic -pig-parity.runs=1 -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=2 -timeout $(PARITY_STRESS_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.tags=hermetic -ompig-parity.runs=1 -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(RESULTS)
 	@$(MAKE) -s coverage
 
@@ -309,10 +309,10 @@ parity-stress: parity-bin ## Repeat parity under the default group scheduler
 parity-durable: parity-bin ## Run every scenario 3x in one go test invocation (durability gate)
 	@rm -f "$(RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_DURABLE_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.tags=hermetic -pig-parity.runs=3 -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -timeout $(PARITY_DURABLE_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.tags=hermetic -ompig-parity.runs=3 -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(RESULTS)
 	@$(MAKE) -s coverage
 
@@ -323,23 +323,23 @@ parity-durable: parity-bin ## Run every scenario 3x in one go test invocation (d
 parity-live: parity-bin ## Run every scenario but the owner-credentials ones under the default groups (release-check)
 	@rm -f "$(RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -v -timeout $(PARITY_LIVE_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
-	    -args -pig-parity.exclude-tags=owner-credentials -pig-parity.group-limits=$(PARITY_GROUP_LIMITS) -pig-parity.results=$(RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -v -timeout $(PARITY_LIVE_TIMEOUT) -parallel $(PARITY_PARALLEL) ./test/parity/runner \
+	    -args -ompig-parity.exclude-tags=owner-credentials -ompig-parity.group-limits=$(PARITY_GROUP_LIMITS) -ompig-parity.results=$(RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(RESULTS)
 	@$(MAKE) -s coverage
-	@echo "parity-live: the owner-credentials scenarios run on the owner's machine: PIG_PARITY_REAL_AUTH=<auth.json> make parity-live-owner"
+	@echo "parity-live: the owner-credentials scenarios run on the owner's machine: OMPIG_PARITY_REAL_AUTH=<auth.json> make parity-live-owner"
 
 # The scenarios that need the owner's real provider credentials, one at a time (billing concurrency is fragile). The owner
-# runs it on the machine that holds those credentials; PIG_PARITY_REAL_AUTH names the auth.json the runner stages.
-parity-live-owner: parity-bin ## Run the owner-credentials scenarios with PIG_PARITY_REAL_AUTH=<auth.json> (owner's machine)
-	@test -f "$(PIG_PARITY_REAL_AUTH)" || { echo "parity-live-owner: set PIG_PARITY_REAL_AUTH to the auth.json that holds the owner's credentials" >&2; exit 2; }
+# runs it on the machine that holds those credentials; OMPIG_PARITY_REAL_AUTH names the auth.json the runner stages.
+parity-live-owner: parity-bin ## Run the owner-credentials scenarios with OMPIG_PARITY_REAL_AUTH=<auth.json> (owner's machine)
+	@test -f "$(OMPIG_PARITY_REAL_AUTH)" || { echo "parity-live-owner: set OMPIG_PARITY_REAL_AUTH to the auth.json that holds the owner's credentials" >&2; exit 2; }
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -v -timeout 10m -parallel 1 ./test/parity/runner \
-	    -args -pig-parity.tags=owner-credentials -pig-parity.serial=true
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -v -timeout 10m -parallel 1 ./test/parity/runner \
+	    -args -ompig-parity.tags=owner-credentials -ompig-parity.serial=true
 
 # Authoritative performance gate: runs only scenarios that enforce
 # runtime_ratio_max, with one uncontended pair per scenario. parity-durable
@@ -348,27 +348,27 @@ parity-live-owner: parity-bin ## Run the owner-credentials scenarios with PIG_PA
 parity-perf: parity-bin ## Authoritative performance gate: runs only scenarios that enforce
 	@rm -f "$(RESULTS)"
 	@run_id=$$$$; \
-	  cleanup_tmux() { tmux -L "pig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "pig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
+	  cleanup_tmux() { tmux -L "ompig-parity-$$run_id" list-sessions -F '#{session_name}' 2>/dev/null | xargs -I{} tmux -L "ompig-parity-$$run_id" kill-session -t {} 2>/dev/null || true; }; \
 	  trap cleanup_tmux EXIT; \
-	  PIG_PARITY_RUN_ID="$$run_id" PIG_PARITY_PIG_BIN="$(PARITY_PIG_BIN)" go test -tags=parity -count=1 -v -timeout 30m -parallel 1 ./test/parity/runner \
-	    -args -pig-parity.tags=fast,hermetic -pig-parity.serial=true -pig-parity.runtime-ratio-only=true -pig-parity.runs=1 \
-	    -pig-parity.results=$(RESULTS)
+	  OMPIG_PARITY_RUN_ID="$$run_id" OMPIG_PARITY_OMPIG_BIN="$(PARITY_OMPIG_BIN)" go test -tags=parity -count=1 -v -timeout 30m -parallel 1 ./test/parity/runner \
+	    -args -ompig-parity.tags=fast,hermetic -ompig-parity.serial=true -ompig-parity.runtime-ratio-only=true -ompig-parity.runs=1 \
+	    -ompig-parity.results=$(RESULTS)
 	@$(MAKE) -s require-parity-ran RESULTS=$(RESULTS)
 	@$(MAKE) -s coverage
 
 # Blocking timing gates: every test that fails on a measured duration, ns/op, CPU time or timing ratio
 # (internal/testenv.TimingGate, listed in automation/perf/timing-gates.json). Pull-request CI sets
-# PIG_PERF_TIMING_REPORT_ONLY=1 and only warns; this target removes it and runs the gates serially, so run it
+# OMPIG_PERF_TIMING_REPORT_ONLY=1 and only warns; this target removes it and runs the gates serially, so run it
 # on quiet pinned hardware for the release perf run, not in the dev loop.
 test-timing: ## Blocking wall-clock and speed-ratio gates, serial (release perf run on quiet hardware)
-	@automation/ci/with-isolated-pig-home.sh python3 automation/perf/timing_gates.py
+	@automation/ci/with-isolated-ompig-home.sh python3 automation/perf/timing_gates.py
 
 parity-flow-coverage: parity-deps
 	@set -eu; covdir=$$($(MKTEMP_DIR)); trap 'rm -rf "$$covdir"' EXIT; \
-		go build -cover -o "$$covdir/pig" ./cmd/pig; \
+		go build -cover -o "$$covdir/ompig" ./cmd/ompig; \
 		GOCOVERDIR="$$covdir" \
-		PIG_PARITY_PIG_BIN="$$covdir/pig" \
-		PIG_PARITY_PI_BIN="$(PIG_PARITY_PI_BIN)" \
+		OMPIG_PARITY_OMPIG_BIN="$$covdir/ompig" \
+		OMPIG_PARITY_PI_BIN="$(OMPIG_PARITY_PI_BIN)" \
 		go test -tags=parity ./test/parity/runner -run '$(PARITY_FLOW_RUN)' -count=1 -timeout 30m; \
 		go tool covdata textfmt -i="$$covdir" -o="$(PARITY_FLOW_COVERAGE)"; \
 		echo "$(PARITY_FLOW_COVERAGE)"
@@ -410,20 +410,20 @@ interface-proposals: parity-deps interface-deps ## Regenerate unreviewed interfa
 			--upstream-version "$(UPSTREAM_VERSION)" \
 			--out "$$tmp/behavior-inputs.json"; \
 		cd "$(CURDIR)"; \
-		go run ./test/parity/cmd/gointerfaces -out "$$tmp/pig-go.json"; \
+		go run ./test/parity/cmd/gointerfaces -out "$$tmp/ompig-go.json"; \
 		go run ./test/parity/cmd/interfacerecommend \
 			-inventory "$$tmp/upstream.json" \
 			-observable "$$tmp/cli.json" \
-			-go-inventory "$$tmp/pig-go.json" \
+			-go-inventory "$$tmp/ompig-go.json" \
 			-out "$$tmp/recommendations.json"; \
 		go run ./test/parity/cmd/interfaceinventory \
 			-inventory "$$tmp/upstream.json" \
 			-observable "$$tmp/cli.json" \
-			-go-inventory "$$tmp/pig-go.json" \
+			-go-inventory "$$tmp/ompig-go.json" \
 			-recommendations "$$tmp/recommendations.json"; \
 		install -m 0644 "$$tmp/upstream.json" "test/parity/interfaces/upstream-v$(UPSTREAM_VERSION).json"; \
 		install -m 0644 "$$tmp/cli.json" "test/parity/interfaces/cli-v$(UPSTREAM_VERSION).json"; \
-		install -m 0644 "$$tmp/pig-go.json" test/parity/interfaces/pig-go.json; \
+		install -m 0644 "$$tmp/ompig-go.json" test/parity/interfaces/ompig-go.json; \
 		install -m 0644 "$$tmp/behavior-inputs.json" "test/parity/interfaces/behavior-inputs-v$(UPSTREAM_VERSION).json"; \
 		install -m 0644 "$$tmp/recommendations.json" "test/parity/interfaces/recommendations-v$(UPSTREAM_VERSION).json"
 	@echo "interface proposals: generated $(UPSTREAM_VERSION) inventories and recommendations; reviewed mapping unchanged"
@@ -440,28 +440,28 @@ interface-inventory: ## Validate the generated public package interface inventor
 		-inventory test/parity/interfaces/upstream-v$(UPSTREAM_VERSION).json \
 		-observable test/parity/interfaces/cli-v$(UPSTREAM_VERSION).json
 
-interface-go: ## Regenerate the committed Pig Go interface inventory
+interface-go: ## Regenerate the committed Ompig Go interface inventory
 	@go run ./test/parity/cmd/gointerfaces
 
 interface-recommendations-generate: interface-go ## Regenerate recommendations from the current inventories
 	@go run ./test/parity/cmd/interfacerecommend \
 		-inventory test/parity/interfaces/upstream-v$(UPSTREAM_VERSION).json \
 		-observable test/parity/interfaces/cli-v$(UPSTREAM_VERSION).json \
-		-go-inventory test/parity/interfaces/pig-go.json \
+		-go-inventory test/parity/interfaces/ompig-go.json \
 		-out test/parity/interfaces/recommendations-v$(UPSTREAM_VERSION).json
 
 interface-go-drift:
 	@tmp=$$($(MKTEMP)); trap 'rm -f "$$tmp"' EXIT; \
 		go run ./test/parity/cmd/gointerfaces -out "$$tmp" && \
-		./automation/ci/check-generated.sh "$$tmp" test/parity/interfaces/pig-go.json interface-go
+		./automation/ci/check-generated.sh "$$tmp" test/parity/interfaces/ompig-go.json interface-go
 	@echo "interface-go-drift: clean"
 
-interface-recommendations-drift: interface-go-drift ## Regenerate Pig Go candidates and proposals
+interface-recommendations-drift: interface-go-drift ## Regenerate Ompig Go candidates and proposals
 	@tmp=$$($(MKTEMP)); trap 'rm -f "$$tmp"' EXIT; \
 		go run ./test/parity/cmd/interfacerecommend \
 			-inventory test/parity/interfaces/upstream-v$(UPSTREAM_VERSION).json \
 			-observable test/parity/interfaces/cli-v$(UPSTREAM_VERSION).json \
-			-go-inventory test/parity/interfaces/pig-go.json \
+			-go-inventory test/parity/interfaces/ompig-go.json \
 			-out "$$tmp" && \
 		./automation/ci/check-generated.sh "$$tmp" test/parity/interfaces/recommendations-v$(UPSTREAM_VERSION).json interface-recommendations-generate
 	@echo "interface-recommendations-drift: clean"
@@ -478,7 +478,7 @@ interface-mapping-quality: ## Validate mapping shapes, hierarchy, layers, refere
 		-observable test/parity/interfaces/cli-v$(UPSTREAM_VERSION).json \
 		-mapping test/parity/interfaces/mapping-v$(UPSTREAM_VERSION).json \
 		-recommendations test/parity/interfaces/recommendations-v$(UPSTREAM_VERSION).json \
-		-go-inventory test/parity/interfaces/pig-go.json
+		-go-inventory test/parity/interfaces/ompig-go.json
 
 interface-gaps: ## Decide NOT-A-GAP or GAP(reason) for every interface ID with fixed rules; write the sorted gap list and fail when it grows past the baseline
 	@./automation/ci/cached-gate.sh interface-gaps --out build/interface-gaps -- go run ./test/parity/interface-closure/autobind -check -out build/interface-gaps
@@ -497,7 +497,7 @@ portmap-report: ## List every PORT_MAP tick the interface ledger does not prove
 interface-gaps-update: ## Rewrite the committed interface gap baseline after a reviewed change
 	@go run ./test/parity/interface-closure/autobind -update -out build/interface-gaps
 
-# The lane loop. ledger-check and ledger-update derive exactly what interface-gaps and interface-gaps-update derive, but read the reach graph and the decisions from the shared content-addressed cache (PIG_LEDGER_CACHE, else build/ledger-cache) when a tree with the same inputs was derived before, and publish what they compute. They also write build/interface-gaps/ledger-frontier.tsv, the root gaps of this tree ranked by the rows they unblock. CI keeps the uncached interface-gaps gate.
+# The lane loop. ledger-check and ledger-update derive exactly what interface-gaps and interface-gaps-update derive, but read the reach graph and the decisions from the shared content-addressed cache (OMPIG_LEDGER_CACHE, else build/ledger-cache) when a tree with the same inputs was derived before, and publish what they compute. They also write build/interface-gaps/ledger-frontier.tsv, the root gaps of this tree ranked by the rows they unblock. CI keeps the uncached interface-gaps gate.
 ledger-check: ## Cached, exact interface gap check for lanes (same verdict as interface-gaps); writes build/interface-gaps/ledger-frontier.tsv
 	@go run ./test/parity/interface-closure/autobind -check -cache auto -out build/interface-gaps -frontier build/interface-gaps/ledger-frontier.tsv
 	@python3 test/parity/interface-closure/breakdown/proofclass.py build/ledger-proof-classes
@@ -569,10 +569,10 @@ interface-inventory-test:
 # the exact published Pi package) is expensive and its inputs almost never
 # change between candidates, so it is content-keyed cached by
 # automation/ci/interface-extract-cache.sh under
-# $(PIG_CACHE_HOME)/pig-interface-extract/<key>/. The cache only ever supplies
+# $(OMPIG_CACHE_HOME)/ompig-interface-extract/<key>/. The cache only ever supplies
 # the extractor's output bytes; the comparison against the committed
 # inventories below always runs, cache hit or miss, so a stale committed file
-# still fails this target. Set PIG_INTERFACE_EXTRACT_CACHE=0 to force a fresh
+# still fails this target. Set OMPIG_INTERFACE_EXTRACT_CACHE=0 to force a fresh
 # extraction.
 interface-inventory-drift: parity-deps interface-deps ## Regenerate from exact source/published package and compare
 	@test -d "$(PI_PACKAGE_ROOT)" || { echo "exact published Pi package not found: $(PI_PACKAGE_ROOT)" >&2; exit 1; }

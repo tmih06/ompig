@@ -23,7 +23,7 @@ func Hop(ctx context.Context, ch chan int) {
 	}
 }
 
-//pig:hotpath
+//ompig:hotpath
 func Open(name string) {
 	f, _ := os.Open(name)
 	_ = f.Close()
@@ -44,7 +44,7 @@ func Cold(ch chan int, name string) {
 	_ = time.NewTimer(time.Second)
 }
 
-//pig:hotpathless
+//ompig:hotpathless
 func NotHot(ch chan int) { ch <- 1 }
 
 //perf:hot

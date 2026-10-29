@@ -10,32 +10,32 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	pigletrelease "github.com/MichaelKinsy/PiG/coding/piglet/release"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	pigletrelease "github.com/tmih06/ompig/coding/ompiglet/release"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
-// TestPublishNPMBinariesReferencePullsTheSignedRelease is the Binary half of the npm round trip: a Piglet is published
-// to GitHub Releases and then to npm, and the `pig.binaries` reference that the published package.json carries pulls
+// TestPublishNPMBinariesReferencePullsTheSignedRelease is the Binary half of the npm round trip: a Ompiglet is published
+// to GitHub Releases and then to npm, and the `ompig.binaries` reference that the published package.json carries pulls
 // and verifies the signed Binary the author uploaded. Two owners, npm scopes, Package names, tag layouts, and ways of
 // naming the release (this machine's record, and --binaries) prove that nothing in the path names an owner or scope.
 func TestPublishNPMBinariesReferencePullsTheSignedRelease(t *testing.T) {
 	const target = "linux/amd64"
 	for _, tc := range []struct {
-		name, piglet, version          string
+		name, ompiglet, version        string
 		packageName, packageVersion    string
 		npmName, repository, tagPrefix string
 		explicitBinaries               bool
 		wantRef, wantPackage           string
 	}{
 		{
-			name: "recorded namespaced release", piglet: "porter", version: "1.2.3",
+			name: "recorded namespaced release", ompiglet: "porter", version: "1.2.3",
 			packageName: "@acme/review", packageVersion: "1.2.0",
 			npmName: "@acme/porter", repository: "acme/porter", tagPrefix: "porter/",
 			wantRef: "github:acme/porter/porter@1.2.3", wantPackage: "npm:@acme/review@^1.2.0",
 		},
 		{
-			name: "explicit unprefixed release", piglet: "hauler", version: "2.0.0",
+			name: "explicit unprefixed release", ompiglet: "hauler", version: "2.0.0",
 			packageName: "zeta-tools", packageVersion: "3.1.0",
 			npmName: "@zeta-labs/hauler", repository: "zeta-labs/agents", explicitBinaries: true,
 			wantRef: "github:zeta-labs/agents@2.0.0", wantPackage: "npm:zeta-tools@^3.1.0",
@@ -50,7 +50,7 @@ func TestPublishNPMBinariesReferencePullsTheSignedRelease(t *testing.T) {
 			})
 			t.Cleanup(func() { installresolver.SetMaterializer(nil) })
 			client := githubReleaseClient(t, gh, tc.repository)
-			source := writeNamedNPMPiglet(t, tc.piglet, tc.version, `{"name":"`+tc.packageName+`","version":"`+tc.packageVersion+`","pi":{"extensions":["extensions/*"]}}`)
+			source := writeNamedNPMPiglet(t, tc.ompiglet, tc.version, `{"name":"`+tc.packageName+`","version":"`+tc.packageVersion+`","pi":{"extensions":["extensions/*"]}}`)
 			keyPath, _, keyID := writePublishKey(t)
 
 			github := []string{source, "--to", "github", "--repo", tc.repository, "--sign-key", keyPath, "--targets", target, "--yes"}
@@ -62,7 +62,7 @@ func TestPublishNPMBinariesReferencePullsTheSignedRelease(t *testing.T) {
 			}
 			if tc.explicitBinaries {
 				// Without this machine's record the release must be read from GitHub.
-				path, err := githubPublicationPath(tc.piglet, tc.version)
+				path, err := githubPublicationPath(tc.ompiglet, tc.version)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -78,27 +78,27 @@ func TestPublishNPMBinariesReferencePullsTheSignedRelease(t *testing.T) {
 				t.Fatalf("publish --to npm: code=%d stdout=%s stderr=%s", code, stdout, stderr)
 			}
 
-			pig, _ := fake.Manifest(tc.npmName, tc.version)["pig"].(map[string]any)
-			binaries, _ := pig["binaries"].(map[string]any)
+			ompig, _ := fake.Manifest(tc.npmName, tc.version)["ompig"].(map[string]any)
+			binaries, _ := ompig["binaries"].(map[string]any)
 			ref, _ := binaries["ref"].(string)
 			signer, _ := binaries["signer"].(string)
-			if pig["piglet"] != "piglet.yaml" || ref != tc.wantRef || signer != keyID {
-				t.Fatalf("pig = %v; want piglet.yaml, ref %s, signer %s", pig, tc.wantRef, keyID)
+			if ompig["ompiglet"] != "ompiglet.yaml" || ref != tc.wantRef || signer != keyID {
+				t.Fatalf("ompig = %v; want ompiglet.yaml, ref %s, signer %s", ompig, tc.wantRef, keyID)
 			}
-			published, err := os.ReadFile(filepath.Join(fake.PackageDir(tc.npmName, tc.version), "piglet.yaml"))
+			published, err := os.ReadFile(filepath.Join(fake.PackageDir(tc.npmName, tc.version), "ompiglet.yaml"))
 			if err != nil || !strings.Contains(string(published), tc.wantPackage) || strings.Contains(string(published), "local:./pkgs") {
-				t.Fatalf("published piglet.yaml = %s, %v; want %s", published, err, tc.wantPackage)
+				t.Fatalf("published ompiglet.yaml = %s, %v; want %s", published, err, tc.wantPackage)
 			}
 
 			result, err := pigletrelease.Pull(t.Context(), ref, pigletrelease.Options{Client: client, Target: target})
 			if err != nil {
 				t.Fatalf("pull %s: %v", ref, err)
 			}
-			if result.Piglet != tc.piglet || result.Version != tc.version || result.Target != target || result.SignerKeyID != signer {
-				t.Fatalf("pull = %+v; want %s %s %s signed by %s", result, tc.piglet, tc.version, target, signer)
+			if result.Ompiglet != tc.ompiglet || result.Version != tc.version || result.Target != target || result.SignerKeyID != signer {
+				t.Fatalf("pull = %+v; want %s %s %s signed by %s", result, tc.ompiglet, tc.version, target, signer)
 			}
 			pulled, err := os.ReadFile(result.Artifact)
-			if err != nil || !strings.HasPrefix(string(pulled), "fake Piglet Binary for "+target+"\n") {
+			if err != nil || !strings.HasPrefix(string(pulled), "fake Ompiglet Binary for "+target+"\n") {
 				t.Fatalf("pulled artifact = %q, %v", pulled, err)
 			}
 		})
@@ -133,7 +133,7 @@ func githubReleaseClient(t *testing.T, gh fakeGH, repository string) *http.Clien
 	return client
 }
 
-// writeNamedNPMPiglet writes a released Piglet with one local Package that has the given package.json.
+// writeNamedNPMPiglet writes a released Ompiglet with one local Package that has the given package.json.
 func writeNamedNPMPiglet(t *testing.T, name, version, packageJSON string) string {
 	t.Helper()
 	root := t.TempDir()
@@ -155,7 +155,7 @@ func writeNamedNPMPiglet(t *testing.T, name, version, packageJSON string) string
 	return filepath.Join(root, name+".yaml")
 }
 
-// A Piglet whose Packages are not on npm names every missing Package, not only the first, and publishes nothing.
+// A Ompiglet whose Packages are not on npm names every missing Package, not only the first, and publishes nothing.
 func TestPublishNPMNamesEveryUnpublishedPackage(t *testing.T) {
 	fake, tmp := npmPublishEnv(t)
 	source := writeNPMPiglet(t, `{"name":"@north-co/review","version":"2.0.0","pi":{"extensions":["extensions/*"]}}`)
@@ -181,7 +181,7 @@ func TestPublishNPMNamesEveryUnpublishedPackage(t *testing.T) {
 	assertNoStaging(t, tmp)
 }
 
-// A local Package that publishes to its own registry keeps that registry in the published Piglet. The precheck asks npm's
+// A local Package that publishes to its own registry keeps that registry in the published Ompiglet. The precheck asks npm's
 // configured registry, which does not have that Package, so it skips a registry-qualified reference instead of refusing.
 func TestPublishNPMKeepsAPackagesOwnRegistryAndSkipsItsPrecheck(t *testing.T) {
 	fake, _ := npmPublishEnv(t)
@@ -198,8 +198,8 @@ func TestPublishNPMKeepsAPackagesOwnRegistryAndSkipsItsPrecheck(t *testing.T) {
 			t.Fatalf("the precheck asked the default registry for a registry-qualified Package: %v", call.Args)
 		}
 	}
-	published, err := os.ReadFile(filepath.Join(fake.PackageDir("porter", "1.2.3"), "piglet.yaml"))
+	published, err := os.ReadFile(filepath.Join(fake.PackageDir("porter", "1.2.3"), "ompiglet.yaml"))
 	if err != nil || !strings.Contains(string(published), "review: "+want) {
-		t.Fatalf("published piglet.yaml = %s, %v", published, err)
+		t.Fatalf("published ompiglet.yaml = %s, %v", published, err)
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 func TestSelectPicksJourneysByTouchedPrefix(t *testing.T) {
@@ -26,7 +26,7 @@ func TestSelectPicksJourneysByTouchedPrefix(t *testing.T) {
 		{"provider requests are compared by every journey", []string{"ai/openai.go"}, []string{"a", "b", "c"}},
 		{"session files are compared by every journey", []string{"internal/sessionentry/entry.go"}, []string{"a", "b", "c"}},
 		{"documentation selects nothing", []string{"docs/a.md", "README.md", "changelog.d/x.md", "tui/README.md"}, nil},
-		{"program entry selects all", []string{"cmd/pig/main.go"}, []string{"a", "b", "c"}},
+		{"program entry selects all", []string{"cmd/ompig/main.go"}, []string{"a", "b", "c"}},
 		{"journey infrastructure selects all", []string{"test/journeys/harness/run.go"}, []string{"a", "b", "c"}},
 		{"outside every prefix", []string{"extensions/sdk/x.go"}, nil},
 	} {

@@ -5,8 +5,8 @@ package inproc
 import (
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // eventMcpServersChange is the event type fired when an extension registers or unregisters an MCP server after the runner bound.
@@ -81,7 +81,7 @@ func (r *Runner) ReportUnhandledMcpServers() {
 
 // unhandledMcpServersReason says why no extension connects the registered MCP servers. Pi's reason is that another extension
 // replaced the built-in MCP support (runner.ts:760).
-// pig additive (D92): with mcp stripped nothing replaced it, so the reason names the strip.
+// ompig additive (D92): with mcp stripped nothing replaced it, so the reason names the strip.
 func unhandledMcpServersReason() string {
 	if pigstrip.Has(pigstrip.ListExtensions, "mcp") {
 		return pigstrip.Error("built-in MCP support", pigstrip.ListExtensions, "mcp").Error()

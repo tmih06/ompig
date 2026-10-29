@@ -187,12 +187,12 @@ func modulePath(root string) string {
 	return ""
 }
 
-// agentDirVariables name the directories a Pig or Pi process reads credentials and settings from; HOME is their fallback.
-var agentDirVariables = []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME", "HOME"}
+// agentDirVariables name the directories a Ompig or Pi process reads credentials and settings from; HOME is their fallback.
+var agentDirVariables = []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME", "HOME"}
 
 // toolchainHomes name the per-user directories language toolchains resolve from HOME (Cargo, Rustup, mise, npm, uv, pip, XDG), with
 // their default location below HOME. Pointing HOME at a scratch tree would hide the installed toolchains from the extension conformance
-// tests, which build Rust and Python SDK fixtures, so each keeps its real location. None holds Pig or Pi credentials: those live in the
+// tests, which build Rust and Python SDK fixtures, so each keeps its real location. None holds Ompig or Pi credentials: those live in the
 // agent directories, which stay scratch.
 var toolchainHomes = []struct{ name, rel string }{
 	{"CARGO_HOME", ".cargo"}, {"RUSTUP_HOME", ".rustup"}, {"npm_config_cache", ".npm"}, {"XDG_CONFIG_HOME", ".config"},

@@ -260,7 +260,7 @@
    "test:mcp/streamable_http_test.go#TestStreamableHTTPTransportFailsOnlyTheRequestWhoseSSEStreamBreaks"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error; AbortSignal is the context.Context argument; no detached goroutine.",
-  "rationale": "McpClient.onError is the Go method mcp.Client.OnError; signature reviewed against the upstream declaration (undefined is the empty value or nil; the returned func is the dispose function). Closed as public-api-tested: exported from the public mcp package and no PiG binary calls it; test callers (go/types) are the proof."
+  "rationale": "McpClient.onError is the Go method mcp.Client.OnError; signature reviewed against the upstream declaration (undefined is the empty value or nil; the returned func is the dispose function). Closed as public-api-tested: exported from the public mcp package and no Ompig binary calls it; test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -294,7 +294,7 @@
    "test:mcp/client_test.go#TestClientInitializesTheConnectionBeforeExposingServerInformation"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error; AbortSignal is the context.Context argument; no detached goroutine.",
-  "rationale": "McpClient.protocolVersion is the Go method mcp.Client.ProtocolVersion; signature reviewed against the upstream declaration (undefined is the empty value or nil; the returned func is the dispose function). Closed as public-api-tested: exported from the public mcp package and no PiG binary calls it; test callers (go/types) are the proof."
+  "rationale": "McpClient.protocolVersion is the Go method mcp.Client.ProtocolVersion; signature reviewed against the upstream declaration (undefined is the empty value or nil; the returned func is the dispose function). Closed as public-api-tested: exported from the public mcp package and no Ompig binary calls it; test callers (go/types) are the proof."
  },
  {
   "ids": [
@@ -342,7 +342,7 @@
    "test:mcp/client_test.go#TestClientInitializesTheConnectionBeforeExposingServerInformation"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error; AbortSignal is the context.Context argument; no detached goroutine.",
-  "rationale": "McpClient.serverInfo is the Go method mcp.Client.ServerInfo; signature reviewed against the upstream declaration (undefined is the empty value or nil; the returned func is the dispose function). Closed as public-api-tested: exported from the public mcp package and no PiG binary calls it; test callers (go/types) are the proof."
+  "rationale": "McpClient.serverInfo is the Go method mcp.Client.ServerInfo; signature reviewed against the upstream declaration (undefined is the empty value or nil; the returned func is the dispose function). Closed as public-api-tested: exported from the public mcp package and no Ompig binary calls it; test callers (go/types) are the proof."
  },
  {
   "ids": [

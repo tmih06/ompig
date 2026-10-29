@@ -1,7 +1,7 @@
 //! The reply of the Rust SDK to a `context` event against a fake host.
 #![cfg(unix)]
 
-use pig_sdk::Extension;
+use ompig_sdk::Extension;
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -36,7 +36,7 @@ struct Host {
 impl Host {
     fn start(ext: Extension, state: Value) -> Host {
         let root = std::env::temp_dir().join(format!(
-            "pig-extapi-{}-{}",
+            "ompig-extapi-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
@@ -104,10 +104,10 @@ fn messages() -> Value {
 fn a_conversation_left_as_received_is_reported_unchanged_without_the_list() {
     let mut ext = Extension::new("rs-context-same");
     ext.on_event("context", |_, _| None);
-    ext.on_event("context", |_, _| pig_sdk::context_unchanged());
+    ext.on_event("context", |_, _| ompig_sdk::context_unchanged());
     ext.on_event("context", |_, data| {
         let list = data["messages"].clone();
-        Some(json!({"messages": list, "_pigContextUnchanged": true}))
+        Some(json!({"messages": list, "_ompigContextUnchanged": true}))
     });
     ext.on_event("context_with_system", |_, _| None);
     let mut host = Host::start(ext, json!({}));
@@ -115,7 +115,7 @@ fn a_conversation_left_as_received_is_reported_unchanged_without_the_list() {
     let id = |n: usize| handlers[n]["handler_id"].as_u64().unwrap();
     for (n, event) in [(0, "context"), (1, "context"), (2, "context"), (3, "context_with_system")] {
         let reply = host.event(&format!("same-{n}"), event, id(n), json!({"type":event,"messages":messages()}));
-        assert_eq!(reply, json!({"_pigContextUnchanged": true}), "handler {n}");
+        assert_eq!(reply, json!({"_ompigContextUnchanged": true}), "handler {n}");
     }
     host.finish();
 }
@@ -131,9 +131,9 @@ fn a_returned_list_is_a_replacement_even_when_equal() {
     let mut host = Host::start(ext, json!({}));
     let handlers = host.register["register"]["handlers"].as_array().unwrap().clone();
     let equal = host.event("equal", "context", handlers[0]["handler_id"].as_u64().unwrap(), json!({"type":"context","messages":messages()}));
-    assert_eq!(equal, json!({"messages": messages(), "_pigContextUnchanged": false}));
+    assert_eq!(equal, json!({"messages": messages(), "_ompigContextUnchanged": false}));
     let shorter = host.event("shorter", "context", handlers[1]["handler_id"].as_u64().unwrap(), json!({"type":"context","messages":messages()}));
-    assert_eq!(shorter, json!({"messages":[{"role":"user","content":"two","timestamp":0}], "_pigContextUnchanged": false}));
+    assert_eq!(shorter, json!({"messages":[{"role":"user","content":"two","timestamp":0}], "_ompigContextUnchanged": false}));
     host.finish();
 }
 
@@ -146,19 +146,19 @@ fn an_edit_in_place_is_a_replacement_unless_the_handler_says_the_messages_are_it
     });
     ext.on_event("context", |_, data| {
         data["messages"][0]["content"] = json!("edited");
-        pig_sdk::context_unchanged()
+        ompig_sdk::context_unchanged()
     });
     ext.on_event("context", |_, data| {
         data["messages"].as_array_mut().unwrap().reverse();
-        pig_sdk::context_unchanged()
+        ompig_sdk::context_unchanged()
     });
     let mut host = Host::start(ext, json!({}));
     let handlers = host.register["register"]["handlers"].as_array().unwrap().clone();
     let edited = json!([{"role":"user","content":"edited","timestamp":0},{"role":"user","content":"two","timestamp":0}]);
     let plain = host.event("plain", "context", handlers[0]["handler_id"].as_u64().unwrap(), json!({"type":"context","messages":messages()}));
-    assert_eq!(plain, json!({"messages": edited, "_pigContextUnchanged": false}));
+    assert_eq!(plain, json!({"messages": edited, "_ompigContextUnchanged": false}));
     let own = host.event("own", "context", handlers[1]["handler_id"].as_u64().unwrap(), json!({"type":"context","messages":messages()}));
-    assert_eq!(own, json!({"messages": edited, "_pigContextUnchanged": true}));
+    assert_eq!(own, json!({"messages": edited, "_ompigContextUnchanged": true}));
     let reversed = host.event("reversed", "context", handlers[2]["handler_id"].as_u64().unwrap(), json!({"type":"context","messages":messages()}));
     assert_eq!(reversed["messages"][0]["content"], "two");
     host.finish();

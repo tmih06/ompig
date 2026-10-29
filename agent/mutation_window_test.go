@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // windowedTool is an extension tool that may take the file mutation queue: it logs its start, waits for the test, closes its start window (its synchronous

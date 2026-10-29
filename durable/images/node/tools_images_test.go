@@ -32,12 +32,12 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	envnode "github.com/MichaelKinsy/PiG/durable/env/node"
-	"github.com/MichaelKinsy/PiG/durable/images"
-	"github.com/MichaelKinsy/PiG/durable/tools"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	envnode "github.com/tmih06/ompig/durable/env/node"
+	"github.com/tmih06/ompig/durable/images"
+	"github.com/tmih06/ompig/durable/tools"
 )
 
 type rgbColor [3]uint8

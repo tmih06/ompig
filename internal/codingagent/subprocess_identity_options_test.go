@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // piUserAgent matches the Pi user agents: a bare "pi" or pi/<version> (...).
@@ -38,11 +38,11 @@ func TestSubprocessStreamOptionsCarryTheRequestIdentity(t *testing.T) {
 		got := ai.GetAttributionHeaders(ai.ClientIdentityTarget{Provider: "openrouter"}, options.Identity)
 		for name, want := range headers {
 			if got[name] != want {
-				t.Errorf("%s = %q, want %q (PiG's attribution, not Pi's or empty)", name, got[name], want)
+				t.Errorf("%s = %q, want %q (Ompig's attribution, not Pi's or empty)", name, got[name], want)
 			}
 		}
 		if ua := ai.FormatUserAgent(options.Identity); ua == "" || piUserAgent.MatchString(ua) {
-			t.Errorf("User-Agent = %q, want PiG's with the request's version", ua)
+			t.Errorf("User-Agent = %q, want Ompig's with the request's version", ua)
 		}
 	})
 

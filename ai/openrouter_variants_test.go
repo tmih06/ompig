@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// piListedModels is the part of models that Pi's catalog lists: it leaves out the OpenRouter routing variants PiG derives (D199).
+// piListedModels is the part of models that Pi's catalog lists: it leaves out the OpenRouter routing variants Ompig derives (D199).
 func piListedModels(models []GeneratedModel) []GeneratedModel {
 	listed := make([]GeneratedModel, 0, len(models))
 	for i := range models {

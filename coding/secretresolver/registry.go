@@ -1,8 +1,8 @@
 // Package secretresolver provides the product-neutral resolver seam for typed
-// Piglet secret refs. Raw Pig registers no resolver; products contribute
+// Ompiglet secret refs. Raw Ompig registers no resolver; products contribute
 // namespaced schemes and enforce their own authorization.
 //
-// pig additive (D18): product-neutral Piglet secret resolver seam.
+// ompig additive (D18): product-neutral Ompiglet secret resolver seam.
 package secretresolver
 
 import (
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Resolver resolves one opaque identifier to secret bytes. Implementations must

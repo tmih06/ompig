@@ -9,13 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// The hosting platform for https://pi-in-go.dev (the site build, the
+// The hosting platform for https://ompig.dev (the site build, the
 // Cloudflare Worker, its wrangler configuration, and the deploy and R2
 // mirror workflows) lives in a private repository, as pi.dev's does for Pi.
-// This repository keeps the pig client, the user docs the site renders from
+// This repository keeps the ompig client, the user docs the site renders from
 // docs/site/docs, and the installer at docs/site/public/install.sh.
 
 // platformPaths must not exist here; the owner's release script refuses the

@@ -1,9 +1,9 @@
-"""Time Type.pick through a host: the socket PIG_EXT_SOCKET names. Prints ``US_PER_CALL=<microseconds>``; run by TestTypePickRoundTripReport."""
+"""Time Type.pick through a host: the socket OMPIG_EXT_SOCKET names. Prints ``US_PER_CALL=<microseconds>``; run by TestTypePickRoundTripReport."""
 
 import sys
 import time
 
-from pig_sdk import Type
+from ompig_sdk import Type
 
 
 def main() -> int:

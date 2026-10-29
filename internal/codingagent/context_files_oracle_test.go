@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type contextTree struct {
@@ -96,15 +96,15 @@ func TestLoadProjectContextFilesCaseVariantNamesMatchPi(t *testing.T) {
 	})
 }
 
-// compareContextTrees builds each tree twice (one for Pig, one for Pi), loads the project context files from both, and reports any difference. Both builds write the entries in path order and leave out an entry the filesystem resolves to an earlier one stored under another case (foldsOntoWrittenEntry), so on any filesystem the two trees are the same.
+// compareContextTrees builds each tree twice (one for Ompig, one for Pi), loads the project context files from both, and reports any difference. Both builds write the entries in path order and leave out an entry the filesystem resolves to an earlier one stored under another case (foldsOntoWrittenEntry), so on any filesystem the two trees are the same.
 func compareContextTrees(t *testing.T, cases []contextTree) {
 	t.Helper()
-	type tree struct{ pig, pi string }
+	type tree struct{ ompig, pi string }
 	trees := make([]tree, len(cases))
 	for i, c := range cases {
 		rels := slices.Sorted(maps.Keys(c.Files))
-		for k, rootp := range []*string{&trees[i].pig, &trees[i].pi} {
-			root := filepath.Join(t.TempDir(), []string{"pig", "pi"}[k])
+		for k, rootp := range []*string{&trees[i].ompig, &trees[i].pi} {
+			root := filepath.Join(t.TempDir(), []string{"ompig", "pi"}[k])
 			*rootp = root
 			written := map[string]bool{}
 			for _, rel := range rels {
@@ -154,10 +154,10 @@ emit(input.map((q) => mod.loadProjectContextFiles({ cwd: q.cwd, agentDir: q.agen
 		if c.Agent != "" {
 			agent = c.Agent
 		}
-		files := LoadProjectContextFiles(filepath.Join(trees[i].pig, c.Cwd), filepath.Join(trees[i].pig, agent))
+		files := LoadProjectContextFiles(filepath.Join(trees[i].ompig, c.Cwd), filepath.Join(trees[i].ompig, agent))
 		got := make([][2]string, len(files))
 		for j, f := range files {
-			got[j] = [2]string{strings.Replace(f.Path, trees[i].pig, "{root}", 1), f.Content}
+			got[j] = [2]string{strings.Replace(f.Path, trees[i].ompig, "{root}", 1), f.Content}
 		}
 		wantRel := make([][2]string, len(want[i]))
 		for j, f := range want[i] {
@@ -167,7 +167,7 @@ emit(input.map((q) => mod.loadProjectContextFiles({ cwd: q.cwd, agentDir: q.agen
 			continue
 		}
 		if !reflect.DeepEqual(got, wantRel) {
-			t.Errorf("case %d (cwd %s):\n  Pig %q\n  Pi  %q", i, c.Cwd, got, wantRel)
+			t.Errorf("case %d (cwd %s):\n  Ompig %q\n  Pi  %q", i, c.Cwd, got, wantRel)
 		}
 	}
 }

@@ -10,13 +10,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's runClipboardCommand (utils/clipboard-command.ts) spawns the clipboard
 // helper with windowsHide: true and stdio that inherits nothing, so libuv
 // starts it with SW_HIDE and CREATE_NO_WINDOW. The test binary stands in for
-// a clipboard reader and reports how Pi's runner and PiG's started it.
+// a clipboard reader and reports how Pi's runner and Ompig's started it.
 func TestClipboardCommandHidesTheWindowAsPiDoes(t *testing.T) {
 	exe, err := os.Executable()
 	if err != nil {

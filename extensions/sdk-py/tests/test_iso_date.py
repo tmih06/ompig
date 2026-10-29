@@ -1,7 +1,7 @@
 import pytest
 
-from pig_sdk import host_helpers
-from pig_sdk.host_helpers import parse_date, set_host_helpers
+from ompig_sdk import host_helpers
+from ompig_sdk.host_helpers import parse_date, set_host_helpers
 
 # The values are what Node 24.22.1 (V8) answers for Date.parse of each text.
 CANONICAL = {

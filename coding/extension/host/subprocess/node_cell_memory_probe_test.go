@@ -17,13 +17,13 @@ import (
 // report (blog-pack/EXTENSION-ARCH.md item N8, C1) can quote a real
 // before/after number instead of an estimate.
 //
-// Gated behind PIG_NODE_CELL_MEMORY_PROBE=1 because it is a measurement, not
+// Gated behind OMPIG_NODE_CELL_MEMORY_PROBE=1 because it is a measurement, not
 // a pass/fail gate:
 //
-//	PIG_NODE_CELL_MEMORY_PROBE=1 go test ./coding/extension/host/subprocess/... -run TestNodeCellMemoryProbe -v
+//	OMPIG_NODE_CELL_MEMORY_PROBE=1 go test ./coding/extension/host/subprocess/... -run TestNodeCellMemoryProbe -v
 func TestNodeCellMemoryProbe(t *testing.T) {
-	if os.Getenv("PIG_NODE_CELL_MEMORY_PROBE") != "1" {
-		t.Skip("set PIG_NODE_CELL_MEMORY_PROBE=1 to run the Node-cell memory probe")
+	if os.Getenv("OMPIG_NODE_CELL_MEMORY_PROBE") != "1" {
+		t.Skip("set OMPIG_NODE_CELL_MEMORY_PROBE=1 to run the Node-cell memory probe")
 	}
 	nodeCellRequireNode(t)
 	root := t.TempDir()

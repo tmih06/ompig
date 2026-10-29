@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // hostFollowUpInput is the legacy terminal input for the host platform's first
 // default app.message.followUp key: alt+enter (ESC CR) except with Windows

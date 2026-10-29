@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // These cases retain gate-close-00's TestPackageAvailableUpdatesOriginal inputs and expectations from Pi package-manager.test.ts:2560-2616.
@@ -93,15 +93,15 @@ func packageUpdateResultFixture(t *testing.T, reply string) (string, *codingagen
 	t.Helper()
 	cwd, agent := t.TempDir(), t.TempDir()
 	t.Setenv("HOME", cwd)
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	log := filepath.Join(cwd, "commands")
 	bin := t.TempDir()
-	t.Setenv("PIG_PM_COMMANDS", log)
+	t.Setenv("OMPIG_PM_COMMANDS", log)
 	for _, name := range []string{"npm", "git"} {
-		writeStubScript(t, filepath.Join(bin, name), fmt.Sprintf("#!/bin/sh\nprintf '%%s|%%s\\n' \"$PWD\" \"$*\" >> \"$PIG_PM_COMMANDS\"\nprintf '%%s\\n' '%s'\n", reply))
+		writeStubScript(t, filepath.Join(bin, name), fmt.Sprintf("#!/bin/sh\nprintf '%%s|%%s\\n' \"$PWD\" \"$*\" >> \"$OMPIG_PM_COMMANDS\"\nprintf '%%s\\n' '%s'\n", reply))
 	}
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
 	return cwd, codingagent.NewSettingsManager(cwd, agent), log

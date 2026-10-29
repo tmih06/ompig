@@ -7,7 +7,7 @@
 # With a tool_result handler (testdata/ext/parity-result-details.mjs) afterToolCall returns a result: agent-loop.ts:877-889 spreads the old result over a new object,
 # so every key keeps its position and assigning the existing structuredContent does not move it. Probed:
 #   "result":{"content":[...],"details":{"note":"kept"},"structuredContent":{...},"isError":true},"isError":true
-# A thrown error would give createErrorToolResult (agent-loop.ts:906-910), which has no isError. Pig omitted result.isError for every failing bash call.
+# A thrown error would give createErrorToolResult (agent-loop.ts:906-910), which has no isError. Ompig omitted result.isError for every failing bash call.
 
 name = "06-json-failing-bash-result-iserror-hook"
 description = "--mode json keeps bash's returned isError inside tool_execution_end.result after a tool_result handler rebuilt the result"
@@ -27,9 +27,9 @@ args = ["--mode", "json", "--model", "test-faux/faux-1", "--system-prompt", "JSO
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/parity-result-details.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_extensions = ["testdata/ext/parity-result-details.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/parity-result-details.mjs"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 

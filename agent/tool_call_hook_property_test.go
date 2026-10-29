@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:201-207 beforeToolCall and afterToolCall are public properties; :480-481 createLoopConfig copies their values into the run's config once. A function assigned during a run is seen by the next run, not by the later tool calls of the one in flight; the hooks receive the validated call context (types.ts BeforeToolCallContext/AfterToolCallContext).

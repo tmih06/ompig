@@ -12,10 +12,10 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
-// loginTestRuntime builds a ModelRuntime on an in-memory credential store and an optional models.json inside a temp agent dir. It never reads ~/.pig or a real auth.json.
+// loginTestRuntime builds a ModelRuntime on an in-memory credential store and an optional models.json inside a temp agent dir. It never reads ~/.ompig or a real auth.json.
 func loginTestRuntime(t *testing.T, modelsJSON string) (*ModelRuntime, ai.CredentialStore) {
 	t.Helper()
 	// The ambient environment must not configure the providers under test.
@@ -32,7 +32,7 @@ func loginTestRuntime(t *testing.T, modelsJSON string) (*ModelRuntime, ai.Creden
 	t.Setenv("ANTHROPIC_API_KEY", "")
 	t.Setenv("ANTHROPIC_OAUTH_TOKEN", "")
 	t.Setenv("LOGIN_TEST_API_KEY", "")
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	runtime, err := CreateModelRuntime(t.Context(), CreateModelRuntimeOptions{Credentials: credentials, ModelsPath: modelsPath})
 	if err != nil {
 		t.Fatal(err)
@@ -232,7 +232,7 @@ func testModelRuntimeLoginSerializes(t *testing.T, id, modelsJSON string) {
 	})
 }
 
-// storeOwningOAuthProvider is an extension OAuth provider that keeps its credentials in its own store (pig additive (D40)).
+// storeOwningOAuthProvider is an extension OAuth provider that keeps its credentials in its own store (ompig additive (D40)).
 type storeOwningOAuthProvider struct {
 	mu     sync.Mutex
 	stored []ai.OAuthCredentials
@@ -267,7 +267,7 @@ func (p *storeOwningOAuthProvider) DeleteOAuthCredentials() (bool, error) {
 	return deleted, nil
 }
 
-// pig additive (D40): an extension OAuth provider that shadows a built-in ID and owns a credential store saves its login there, as /login (runLoginRegisteredOAuth) and pig login do; the core store stays untouched.
+// ompig additive (D40): an extension OAuth provider that shadows a built-in ID and owns a credential store saves its login there, as /login (runLoginRegisteredOAuth) and ompig login do; the core store stays untouched.
 func TestModelRuntimeLoginSavesExtensionOAuthToItsCredentialStore(t *testing.T) {
 	provider := &storeOwningOAuthProvider{}
 	ai.RegisterOAuthProvider("anthropic", provider)

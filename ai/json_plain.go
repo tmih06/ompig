@@ -11,7 +11,7 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // plainWalk is the containers on the path from the root to the value being visited. A container met again below itself

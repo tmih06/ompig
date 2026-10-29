@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// pig additive (D109): Pi has no SDK to drift from; see docs/additive-features.md.
+// ompig additive (D109): Pi has no SDK to drift from; see docs/additive-features.md.
 
 // Package upgrade rewrites Go extensions written for an older SDK so they build
 // against this one. Each rule is one breaking SDK change: the rules sit beside
@@ -18,8 +18,8 @@ import "strings"
 // SDKModulePath is the import path of the SDK, and LegacySDKModulePath the
 // path it carried in earlier releases. An extension may import either.
 const (
-	SDKModulePath       = "github.com/MichaelKinsy/PiG/extensions/sdk"
-	LegacySDKModulePath = "github.com/mainstai/pig/extensions/sdk"
+	SDKModulePath       = "github.com/tmih06/ompig/extensions/sdk"
+	LegacySDKModulePath = "github.com/mainstai/ompig/extensions/sdk"
 )
 
 // IsSDKPath reports whether path is an SDK import path.

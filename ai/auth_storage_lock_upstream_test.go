@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // writeAuthBackendFixture protects the Go store's read cache as its production mutation caller does. The callback runs outside this mutex, so it cannot hide premature admission through the filesystem lock.

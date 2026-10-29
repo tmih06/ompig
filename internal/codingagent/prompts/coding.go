@@ -15,8 +15,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Skill is the subset of a discovered skill that the prompt lists.
@@ -55,15 +55,15 @@ type Options struct {
 	AppendSystemPrompt string
 	// ContextFiles are the loaded AGENTS.md and CLAUDE.md files.
 	ContextFiles []struct{ Path, Content string }
-	// PigDocsPath is the local documentation bundle synced by pigdocs. Empty
+	// OmpigDocsPath is the local documentation bundle synced by pigdocs. Empty
 	// uses the standard config-root location.
-	PigDocsPath string
-	// PigReadmePath is the README of that bundle; empty is README.md inside PigDocsPath.
+	OmpigDocsPath string
+	// OmpigReadmePath is the README of that bundle; empty is README.md inside OmpigDocsPath.
 	// upstream: system-prompt.ts:163 getReadmePath()
-	PigReadmePath string
-	// PigExamplesPath is where the examples live; empty is [PigExamplesLocation].
+	OmpigReadmePath string
+	// OmpigExamplesPath is where the examples live; empty is [OmpigExamplesLocation].
 	// upstream: system-prompt.ts:165 getExamplesPath()
-	PigExamplesPath string
+	OmpigExamplesPath string
 	// AppendMode is "append" (default: CustomPrompt becomes the addendum
 	// section) or "replace" (CustomPrompt replaces the preamble, and the tools,
 	// rules, and docs sections are omitted, as upstream does for a custom
@@ -71,7 +71,7 @@ type Options struct {
 	AppendMode string
 }
 
-const preamble = "You are an expert coding assistant operating inside pig, a coding agent harness. You help users by reading files, executing commands, editing code, and writing new files."
+const preamble = "You are an expert coding assistant operating inside ompig, a coding agent harness. You help users by reading files, executing commands, editing code, and writing new files."
 
 type section struct{ name, content string }
 
@@ -118,8 +118,8 @@ func BuildSystemPromptSections(o Options) ai.OrderedSections {
 			section{"tools", list + "\n\nIn addition to the tools above, you may have access to other custom tools depending on the project."},
 			section{"rules", renderRules(declared, o.ToolGuidelines, o.PromptGuidelines)},
 		)
-		// pig additive (D92): the docs section is absent when docs are stripped; see docs_section.go.
-		sections = append(sections, docsSections(o.PigDocsPath, o.PigReadmePath, o.PigExamplesPath)...)
+		// ompig additive (D92): the docs section is absent when docs are stripped; see docs_section.go.
+		sections = append(sections, docsSections(o.OmpigDocsPath, o.OmpigReadmePath, o.OmpigExamplesPath)...)
 		if addendum := strings.TrimSpace(o.CustomPrompt); addendum != "" {
 			sections = append(sections, section{"addendum", addendum})
 		}
@@ -156,8 +156,8 @@ func BuildSystemPromptSections(o Options) ai.OrderedSections {
 	return out
 }
 
-// PigExamplesLocation is PiG's examples directory. pig additive (D22): PiG's examples are published in its repository, not materialized beside the documentation bundle.
-const PigExamplesLocation = "https://github.com/MichaelKinsy/PiG/tree/main/examples"
+// OmpigExamplesLocation is Ompig's examples directory. ompig additive (D22): Ompig's examples are published in its repository, not materialized beside the documentation bundle.
+const OmpigExamplesLocation = "https://github.com/tmih06/ompig/tree/main/examples"
 
 // renderRules mirrors upstream buildRules.
 func renderRules(tools []string, toolGuidelines map[string][]string, promptGuidelines []string) string {

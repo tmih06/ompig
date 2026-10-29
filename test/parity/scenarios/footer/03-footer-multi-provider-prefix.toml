@@ -5,7 +5,7 @@
 # "(provider) " to the model name on line 2.
 #
 # Hermeticity:
-#   - testdata/multi-{pig,pi}-agent/auth.json stage TWO fake OAuth
+#   - testdata/multi-{ompig,pi}-agent/auth.json stage TWO fake OAuth
 #     credentials (github-copilot + openai-codex) with refresh tokens
 #     and far-future expiry. Both binaries see two authenticated
 #     providers without any network probe: model registry reads
@@ -39,7 +39,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(github-copilot) claude-haiku-4.5"
+ready_pattern_ompig = "(github-copilot) claude-haiku-4.5"
 ready_pattern_pi = "(github-copilot) claude-haiku-4.5"
 ready_timeout_seconds = 25
 capture_start = "(github-copilot)"
@@ -47,15 +47,15 @@ capture_end = "claude-haiku-4.5"
 settle_seconds = 2
 
 [env]
-pig = [
-  "PIG_CODING_AGENT_DIR=testdata/multi-pig-agent",
+ompig = [
+  "OMPIG_CODING_AGENT_DIR=testdata/multi-ompig-agent",
   "PATH={{FAKE_BIN}}:{{PATH}}",
 ]
 pi = [
   "PI_CODING_AGENT_DIR=testdata/multi-pi-agent",
   "PATH={{FAKE_BIN}}:{{PATH}}",
 ]
-pig_args = ["--no-extensions", "--model", "github-copilot/claude-haiku-4.5", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--model", "github-copilot/claude-haiku-4.5", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--model", "github-copilot/claude-haiku-4.5", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

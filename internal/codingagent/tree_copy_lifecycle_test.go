@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Upstream tree-selector.ts:getEntryCopyText preserves full content, uses the assistant error only for empty content, and treats whitespace-only text as absent.

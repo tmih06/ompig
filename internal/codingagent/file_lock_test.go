@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // isProperLockfileContention reports err as Pi's stores rethrow proper-lockfile's ELOCKED error: unwrapped, with its own message.
@@ -99,7 +99,7 @@ func TestSettingsLockTakesOverStaleLocks(t *testing.T) {
 	}
 }
 
-// Pi's settings and trust stores rethrow proper-lockfile's ELOCKED error unchanged once their ten synchronous attempts are spent (settings-manager.ts:241-265, trust-manager.ts:137-164). A settings write failure becomes the warning "Invalid settings file <path>: <message>" (settings-manager.ts:600-626, settings-diagnostics.ts:4-9). This runs Pi's own SettingsManager and ProjectTrustStore with the same lock directories held, then PiG's, and compares the messages.
+// Pi's settings and trust stores rethrow proper-lockfile's ELOCKED error unchanged once their ten synchronous attempts are spent (settings-manager.ts:241-265, trust-manager.ts:137-164). A settings write failure becomes the warning "Invalid settings file <path>: <message>" (settings-manager.ts:600-626, settings-diagnostics.ts:4-9). This runs Pi's own SettingsManager and ProjectTrustStore with the same lock directories held, then Ompig's, and compares the messages.
 func TestSettingsAndTrustLockErrorsAreProperLockfileErrorsUpstream(t *testing.T) {
 	agentDir, cwd := t.TempDir(), t.TempDir()
 	settingsPath := filepath.Join(agentDir, "settings.json")
@@ -171,7 +171,7 @@ func TestSettingsAndTrustLockErrorsAreProperLockfileErrorsUpstream(t *testing.T)
 	}
 }
 
-// Pi's trust store creates its directory with mkdirSync(dir, {recursive: true}) before it locks (trust-manager.ts:137-140), and Pi's settings write parses the current file with JSON.parse inside its lock (settings-manager.ts:643-647). Both rethrow the error unchanged: Node's EEXIST for an agent directory that is a file, and V8's JSON.parse message, which a settings write records as "Invalid settings file <path>: <message>". PiG reports the same, without its "create trust store directory" and "parse current settings" prefixes. Pi's own stores run on the same state first.
+// Pi's trust store creates its directory with mkdirSync(dir, {recursive: true}) before it locks (trust-manager.ts:137-140), and Pi's settings write parses the current file with JSON.parse inside its lock (settings-manager.ts:643-647). Both rethrow the error unchanged: Node's EEXIST for an agent directory that is a file, and V8's JSON.parse message, which a settings write records as "Invalid settings file <path>: <message>". Ompig reports the same, without its "create trust store directory" and "parse current settings" prefixes. Pi's own stores run on the same state first.
 func TestSettingsAndTrustFSErrorsAreNodeErrorsUpstream(t *testing.T) {
 	root, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk-ts", "node_modules", "@earendil-works", "pi-coding-agent"))
 	if err != nil {
@@ -237,7 +237,7 @@ func TestSettingsAndTrustFSErrorsAreNodeErrorsUpstream(t *testing.T) {
 	})
 }
 
-// Pi's setters change the in-memory settings before the write is queued (settings-manager.ts:668-682), so a write that fails, here on a held lock, still leaves the new value in effect for the session while the failure is recorded. PiG's UpdateGlobal applies the change to its merged view first as well. Pi's own SettingsManager runs on the same state first.
+// Pi's setters change the in-memory settings before the write is queued (settings-manager.ts:668-682), so a write that fails, here on a held lock, still leaves the new value in effect for the session while the failure is recorded. Ompig's UpdateGlobal applies the change to its merged view first as well. Pi's own SettingsManager runs on the same state first.
 func TestSettingsUpdateKeepsMemoryWhenTheWriteFailsUpstream(t *testing.T) {
 	root, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk-ts", "node_modules", "@earendil-works", "pi-coding-agent"))
 	if err != nil {
@@ -285,7 +285,7 @@ func TestSettingsUpdateKeepsMemoryWhenTheWriteFailsUpstream(t *testing.T) {
 	}
 }
 
-// A pig killed with SIGKILL leaves agent/settings.json.lock behind. proper-lockfile treats a lock directory younger than its 10 s stale threshold as held, so the next start retries ten times, 20 ms apart, and records "Lock file is already being held" (settings-manager.ts acquireLockSyncWithRetry). That wait is Pi's behavior, not a PiG defect: Pi 1.1.0's own SettingsManager.create makes ten mkdir attempts against the same leftover, and its whole CLI makes four loads (40 attempts) where PiG makes two. A lock older than the threshold is taken over at once. This runs Pi's SettingsManager on a fresh and on a stale leftover lock, then PiG's, and compares attempts, waiting and diagnostics.
+// A ompig killed with SIGKILL leaves agent/settings.json.lock behind. proper-lockfile treats a lock directory younger than its 10 s stale threshold as held, so the next start retries ten times, 20 ms apart, and records "Lock file is already being held" (settings-manager.ts acquireLockSyncWithRetry). That wait is Pi's behavior, not a Ompig defect: Pi 1.1.0's own SettingsManager.create makes ten mkdir attempts against the same leftover, and its whole CLI makes four loads (40 attempts) where Ompig makes two. A lock older than the threshold is taken over at once. This runs Pi's SettingsManager on a fresh and on a stale leftover lock, then Ompig's, and compares attempts, waiting and diagnostics.
 func TestLeftoverSettingsLockWaitsLikePi(t *testing.T) {
 	root, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk-ts", "node_modules", "@earendil-works", "pi-coding-agent"))
 	if err != nil {
@@ -382,19 +382,19 @@ func TestLeftoverSettingsLockWaitsLikePi(t *testing.T) {
 				t.Fatalf("Pi waited %v, want a wait of at least %v: %v (Pi: %s)", got, window, tc.wantWait, out)
 			}
 
-			pigAgent, pigCwd := leave()
+			ompigAgent, ompigCwd := leave()
 			start := time.Now()
-			sm := NewSettingsManagerWithProjectTrust(pigCwd, pigAgent, false)
+			sm := NewSettingsManagerWithProjectTrust(ompigCwd, ompigAgent, false)
 			waited := time.Since(start)
-			var pig []string
+			var ompig []string
 			for _, drained := range sm.DrainErrors() {
-				pig = append(pig, drained.Error.Error())
+				ompig = append(ompig, drained.Error.Error())
 			}
 			if tc.wantWait != (waited >= window) {
-				t.Errorf("PiG waited %v, want a wait of at least %v: %v", waited, window, tc.wantWait)
+				t.Errorf("Ompig waited %v, want a wait of at least %v: %v", waited, window, tc.wantWait)
 			}
-			if !slices.Equal(pig, pi.Errors) {
-				t.Errorf("PiG load errors = %q, want Pi's %q", pig, pi.Errors)
+			if !slices.Equal(ompig, pi.Errors) {
+				t.Errorf("Ompig load errors = %q, want Pi's %q", ompig, pi.Errors)
 			}
 		})
 	}

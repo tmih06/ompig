@@ -74,10 +74,10 @@ func TestCLIModeDriverRunsShebangInterpreterFromScenarioPath(t *testing.T) {
 	}
 	scenario := &Scenario{
 		Name: "shebang-scenario-path", SourcePath: filepath.Join(cwd, "scenario.toml"),
-		Env: EnvOverrides{OverrideBaseArgs: true, PigBin: script, Pig: []string{"PATH=" + fakeDir}},
+		Env: EnvOverrides{OverrideBaseArgs: true, OmpigBin: script, Ompig: []string{"PATH=" + fakeDir}},
 		CLI: CLIDriverConfig{CWD: cwd, TimeoutSeconds: 10},
 	}
-	result := (cliModeDriver{}).Run(t.Context(), t, BinaryRef{Label: "pig", Path: "unused"}, scenario)
+	result := (cliModeDriver{}).Run(t.Context(), t, BinaryRef{Label: "ompig", Path: "unused"}, scenario)
 	if result.Err != nil || strings.TrimSpace(result.Output) != "scenario node" {
 		t.Fatalf("output=%q exit code=%d err=%v, want the scenario PATH's node", result.Output, result.ExitCode, result.Err)
 	}

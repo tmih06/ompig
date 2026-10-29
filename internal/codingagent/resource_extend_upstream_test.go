@@ -9,10 +9,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 func extensionResourceMode(t *testing.T, cwd, extensionPath string, result extension.ResourcesDiscoverResult) *InteractiveMode {
@@ -129,7 +129,7 @@ func TestUpstreamExtendResourcesLoadsFileURLs(t *testing.T) {
 // extension discovery used to drop package scope/source), the extension half:
 // resources an extension adds keep the extension metadata while package
 // resources already recorded keep npm source, user scope and package origin.
-// The package half runs in cmd/pig (TestUpstreamResourceLoaderPackageMetadata).
+// The package half runs in cmd/ompig (TestUpstreamResourceLoaderPackageMetadata).
 func TestUpstreamExtendResourcesKeepPackageMetadata(t *testing.T) {
 	root := t.TempDir()
 	packageRoot := filepath.Join(root, "npm", "node_modules", "metadata-pkg")
@@ -179,7 +179,7 @@ func TestUpstreamExtendResourcesKeepPackageMetadata(t *testing.T) {
 
 // Ports the theme half of packages/coding-agent/test/resource-loader.test.ts:123
 // ("should prefer project resources over user on name collisions"): theme paths
-// arrive project first, and the first path's theme of a name owns it. The cmd/pig
+// arrive project first, and the first path's theme of a name owns it. The cmd/ompig
 // test TestUpstreamResourceLoaderProjectOverUserCollisions checks that order.
 func TestThemePathsFirstPathWinsCollisions(t *testing.T) {
 	root := t.TempDir()

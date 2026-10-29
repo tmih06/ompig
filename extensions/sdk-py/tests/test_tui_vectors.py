@@ -12,8 +12,8 @@ from pathlib import Path
 
 import pytest
 
-from pig_sdk import tui
-from pig_sdk.tui import _terminal
+from ompig_sdk import tui
+from ompig_sdk.tui import _terminal
 
 VECTORS = Path(__file__).resolve().parents[3] / "test" / "parity" / "sdk-bulk"
 
@@ -102,7 +102,7 @@ def test_fuzzy_vectors_match_pi():
 
 
 def test_js_lower_matches_every_code_point():
-    from pig_sdk.tui._fuzzy import js_lower
+    from ompig_sdk.tui._fuzzy import js_lower
 
     changed = {cp: "".join(map(chr, to)) for cp, to in load("tui-lower.json")["pairs"]}
     for cp in range(0x110000):

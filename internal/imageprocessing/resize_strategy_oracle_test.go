@@ -12,8 +12,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type resizeStrategyCase struct {
@@ -45,7 +45,7 @@ func decodeBase64(t *testing.T, s string) []byte {
 	return raw
 }
 
-// TestResizeImageDimensionStrategyMatchesPi runs image-resize-core.ts resizeImageInProcess (Photon) and PiG's ResizeImage over 200 seeded PNGs and option sets. Dimensions from 1 to
+// TestResizeImageDimensionStrategyMatchesPi runs image-resize-core.ts resizeImageInProcess (Photon) and Ompig's ResizeImage over 200 seeded PNGs and option sets. Dimensions from 1 to
 // 2,600 (narrow strips, squares, images just over or under each limit), maxWidth and maxHeight from 1 to 3,000, the default and a very large maxBytes, a one-byte maxBytes that nothing
 // satisfies, and an unset or explicit mime type. The original and resulting size, whether the image was resized, whether Pi returns null, and the mime type must match, and the
 // returned image must decode to the size it reports. Not compared: the encoded bytes (Photon's PNG/JPEG encoders differ from Go's) and which candidate wins a tight maxBytes, and the 0.75 shrink steps (reached only when every candidate misses maxBytes), which depend on those encoders.
@@ -81,7 +81,7 @@ func TestResizeImageDimensionStrategyMatchesPi(t *testing.T) {
 			c.Quality = pickInt(1, 40, 85, 100)
 		}
 		if c.MaxBytes == 1 {
-			// Nothing encodes to under one byte, so Pi and PiG both walk the whole shrink ladder and return null whatever the
+			// Nothing encodes to under one byte, so Pi and Ompig both walk the whole shrink ladder and return null whatever the
 			// image: only the size of the image changes how long that takes (Photon and x/image scale the full image on every rung).
 			width, height = min(width, 100), min(height, 100)
 		}
@@ -139,7 +139,7 @@ emit(out);`, cases, &want)
 		if err == nil {
 			gotResult = resizeStrategyResult{MimeType: got.MimeType, OriginalWidth: got.OriginalWidth, OriginalHeight: got.OriginalHeight, Width: got.Width, Height: got.Height, WasResized: got.WasResized}
 			if config, _, decodeErr := image.DecodeConfig(bytes.NewReader(got.Bytes())); decodeErr != nil || config.Width != got.Width || config.Height != got.Height {
-				t.Errorf("case %d: PiG's image decodes to %+v (%v), not the %dx%d it reports", i, config, decodeErr, got.Width, got.Height)
+				t.Errorf("case %d: Ompig's image decodes to %+v (%v), not the %dx%d it reports", i, config, decodeErr, got.Width, got.Height)
 			}
 		}
 		expected := want[i]

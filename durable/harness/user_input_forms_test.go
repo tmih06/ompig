@@ -3,8 +3,8 @@ package harness
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi packages/durable/src/harness/types.ts:52 `UserInput = UserMessage["content"]` (a string, or text and image blocks) and its use as the `content` of an input

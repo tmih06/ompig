@@ -8,7 +8,7 @@ Fixtures: `tool` (the RPC33 tool call), `mixed` (thinking, text, and a tool call
 
 `ticks.mjs` writes `ticks.json`: Pi's real `stream()` over a scripted Web Stream with `options.fetch`, so every read, await and yield is a microtask and a self-rescheduling microtask counts them from the first body read. Each mark (`read:N`, `push:TYPE`, `deliver:TYPE`) is the tick of one synchronous observation, and `result` is the terminal message. It covers chunk splits, CRLF, multi-byte splits, BOM, invalid UTF-8, malformed JSON, rejected reads and bodies that end without a terminal event.
 
-The Go replays are `TestPiMessagesDirectMatchesPiTickOrder`, `TestPiMessagesCancelMatchesPi` and `TestPiMessagesBodyPathTicksMatchPi` in `ai`, and `TestRPCPiMessagesMatchesPi` in `cmd/pig` (the real binary; `PIG_D82_RUNS=200` for the D82 evidence). `pi.json` and `ticks.json` are identical across repeated runs and across Node 24.19.0 (`.node-version`) and 26.7.0.
+The Go replays are `TestPiMessagesDirectMatchesPiTickOrder`, `TestPiMessagesCancelMatchesPi` and `TestPiMessagesBodyPathTicksMatchPi` in `ai`, and `TestRPCPiMessagesMatchesPi` in `cmd/ompig` (the real binary; `OMPIG_D82_RUNS=200` for the D82 evidence). `pi.json` and `ticks.json` are identical across repeated runs and across Node 24.19.0 (`.node-version`) and 26.7.0.
 
 ## Reproduce
 

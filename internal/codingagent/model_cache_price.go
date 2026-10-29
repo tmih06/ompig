@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/ai"
+import "github.com/tmih06/ompig/ai"
 
 // CacheReadPrice reads composed model pricing without resolving credentials, executing configuration commands, or performing network work.
 func (r *ModelRegistry) CacheReadPrice(providerID, modelID string) float64 {

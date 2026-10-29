@@ -3,7 +3,7 @@
 
 package rec
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // Submission is a submission record (spec §2 SubmissionRecord): `{id, conversationId, requestId?, type, status, entry?,
 // answer?, reason?, detail?}` with the admission code's key order. Mutators return a modified shallow copy.

@@ -3,8 +3,8 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi #9886 (D135): the dequeue action moves the queued user messages to the editor and leaves the custom messages an extension queued with sendMessage({ deliverAs }) in their queues.

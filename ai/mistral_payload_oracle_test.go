@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type mistralPayloadOptions struct {
@@ -30,8 +30,8 @@ type mistralPayloadProbe struct {
 // pi: packages/ai/src/api/mistral-conversations.ts
 
 // MistralOptions.promptMode and reasoningEffort (mistral-conversations.ts:82-83, 202-215, 530-531): streamSimple derives them from the reasoning level
-// and the model's thinking level map; stream passes the raw options through. The pinned pi-ai and PiG hand the SDK payload to onPayload for a grid of
-// model shapes, reasoning levels and raw options (including out-of-union promptMode and reasoningEffort values, which Pi forwards verbatim at :530-531), and the payloads must carry the same fields with the same values (the member order of PiG's request struct is not compared).
+// and the model's thinking level map; stream passes the raw options through. The pinned pi-ai and Ompig hand the SDK payload to onPayload for a grid of
+// model shapes, reasoning levels and raw options (including out-of-union promptMode and reasoningEffort values, which Pi forwards verbatim at :530-531), and the payloads must carry the same fields with the same values (the member order of Ompig's request struct is not compared).
 func TestMistralPayloadModeAndEffortMatchPi(t *testing.T) {
 	str := func(s string) *string { return &s }
 	levelMaps := map[string]map[string]*string{
@@ -122,7 +122,7 @@ func TestMistralPayloadModeAndEffortMatchPi(t *testing.T) {
 		if !sameMistralPayload(got, want[i]) {
 			if failures++; failures <= 10 {
 				label, _ := json.Marshal(probe)
-				t.Errorf("probe %s:\n PiG %s\n Pi  %s", label, got, want[i])
+				t.Errorf("probe %s:\n Ompig %s\n Pi  %s", label, got, want[i])
 			}
 		}
 	}

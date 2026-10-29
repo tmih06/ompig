@@ -1,10 +1,10 @@
-# golangci-lint is a `make check` gate for pig. Keep this file aligned
+# golangci-lint is a `make check` gate for ompig. Keep this file aligned
 # with AGENTS.md "Lint policy": fix valid findings at source; suppress only
 # audited false-positive classes; use the narrowest rule/path/text selector;
 # prefer inline `//nolint:<linter> // rationale` for site-specific cases.
 #
 # Do not add broad exclusions merely to make CI green. If a linter conflicts
-# with upstream-faithful behavior, document the upstream contract or pig
+# with upstream-faithful behavior, document the upstream contract or ompig
 # divergence in the suppression rationale.
 version: "2"
 
@@ -150,7 +150,7 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/MichaelKinsy/PiG
+        - github.com/tmih06/ompig
 
 output:
   sort-order:

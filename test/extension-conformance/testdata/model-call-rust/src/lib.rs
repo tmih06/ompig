@@ -1,4 +1,4 @@
-use pig_sdk::{CommandResult, Extension};
+use ompig_sdk::{CommandResult, Extension};
 use serde_json::json;
 
 pub fn new_extension() -> Extension {

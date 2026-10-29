@@ -7,13 +7,13 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
-// EmbeddedCell is a source-free packed cell extracted from a Piglet Binary binary.
+// EmbeddedCell is a source-free packed cell extracted from a Ompiglet Binary binary.
 // It is intentionally independent of the coding/extension/host/cellpack package so the
-// generic subprocess host does not depend on Piglet Binary build orchestration.
+// generic subprocess host does not depend on Ompiglet Binary build orchestration.
 // A Node cell is the exception to source-free: its BinaryPath is the directory
 // holding its members' extracted sources.
 type EmbeddedCell struct {
@@ -32,10 +32,10 @@ type EmbeddedExtension struct {
 	Source string
 }
 
-// LoadEmbeddedCells starts cells already embedded in a Piglet Binary binary. It does
+// LoadEmbeddedCells starts cells already embedded in a Ompiglet Binary binary. It does
 // not touch source directories or invoke language toolchains, except that a
 // Node cell's members start from their extracted sources with the user's
-// installed Node, exactly as Stock PiG starts the same extensions.
+// installed Node, exactly as Stock Ompig starts the same extensions.
 func (h *Host) LoadEmbeddedCells(ctx context.Context, cells []EmbeddedCell) ([]extension.Extension, []error) {
 	h.mu.Lock()
 	h.embeddedCells = cloneEmbeddedCells(cells)
@@ -51,7 +51,7 @@ func (h *Host) LoadEmbeddedCells(ctx context.Context, cells []EmbeddedCell) ([]e
 			errs = append(errs, err)
 			continue
 		}
-		h.commitStaged(staged, nil, "embedded Piglet Binary cell")
+		h.commitStaged(staged, nil, "embedded Ompiglet Binary cell")
 		loaded = append(loaded, registered...)
 	}
 	if len(nodeConfigs) > 0 {
@@ -66,11 +66,11 @@ func (h *Host) LoadEmbeddedCells(ctx context.Context, cells []EmbeddedCell) ([]e
 }
 
 // embeddedNodeConfigs resolves the members of the Node cells among cells from
-// their extracted sources, as Stock PiG resolves the same extensions, so the
+// their extracted sources, as Stock Ompig resolves the same extensions, so the
 // host plans, starts, and reloads them through its ordinary Node cell path. It
 // returns those configs and a copy of the other cells. A member whose source
 // does not resolve is an unresolved config that reports the failure.
-// pig additive (D18): a Piglet Binary runs its Node extensions as Stock PiG does.
+// ompig additive (D18): a Ompiglet Binary runs its Node extensions as Stock Ompig does.
 func embeddedNodeConfigs(cells []EmbeddedCell) ([]ExtConfig, []EmbeddedCell) {
 	var configs []ExtConfig
 	rest := make([]EmbeddedCell, 0, len(cells))
@@ -94,7 +94,7 @@ func embeddedNodeConfigs(cells []EmbeddedCell) ([]ExtConfig, []EmbeddedCell) {
 // embeddedLoadOrder lists the embedded cells' members in manifest order, as
 // LoadEmbeddedCells ranks them, taking each Node member's config from
 // nodeConfigs, which holds them in the order embeddedNodeConfigs returned them.
-// pig additive (D18): a reload keeps a Piglet Binary's extension order.
+// ompig additive (D18): a reload keeps a Ompiglet Binary's extension order.
 func embeddedLoadOrder(cells []EmbeddedCell, nodeConfigs []ExtConfig) []ExtConfig {
 	order := make([]ExtConfig, 0, len(cells)+len(nodeConfigs))
 	for _, cell := range cells {

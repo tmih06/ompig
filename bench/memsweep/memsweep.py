@@ -7,12 +7,12 @@ resumed session at 0/200/2000 turns of history behind a fixed 8-turn context) se
   superlinear   retained bytes grow faster from 1x to 10x than from 0 to 1x (per unit of history), beyond noise;
   history       retained bytes follow the history, not the context: the resumed row costs more than RESUME_SLOPE per history byte (M7's bound);
   regression    (compare) a point or a per-unit slope rose against the previous TEST-TIP beyond noise.
-"retained" is heap live less the context pig last sent (long, resume), or the idle process's live heap and Go memory not returned (tmux).
+"retained" is heap live less the context ompig last sent (long, resume), or the idle process's live heap and Go memory not returned (tmux).
 
   bench/memsweep/memsweep.py run --out tip.json [--repo .] [--runs 3] [--cpus 192-195] [--gomaxprocs default|N]
   bench/memsweep/memsweep.py compare prev.json cur.json
-Exit status: 0 no flags, 1 flags, 2 usage or run failure. Linux only (the test is //go:build linux). The test builds pig under $TMPDIR:
-keep it on disk, not tmpfs. For --gomaxprocs default, pin more CPUs than pig's cap (e.g. 14): on a host whose cgroup cpusets change, a
+Exit status: 0 no flags, 1 flags, 2 usage or run failure. Linux only (the test is //go:build linux). The test builds ompig under $TMPDIR:
+keep it on disk, not tmpfs. For --gomaxprocs default, pin more CPUs than ompig's cap (e.g. 14): on a host whose cgroup cpusets change, a
 mask of 2 or fewer lets the runtime follow a reset mask, and the points that did are dropped.
 """
 import argparse, json, os, statistics, subprocess, sys
@@ -21,7 +21,7 @@ from pathlib import Path
 SUPERLINEAR = 1.25   # 10x step may cost at most 1.25x the 1x step's per-unit growth
 RESUME_SLOPE = 0.02  # retained bytes per history byte (M7 red test's bound)
 REL_NOISE = 0.01     # a regression must also exceed 1% of the previous value
-PIG_CAP = 2         # internal/procpolicy.Cap
+OMPIG_CAP = 2         # internal/procpolicy.Cap
 
 
 def metrics(p):
@@ -80,14 +80,14 @@ def run(a):
     out = Path(a.out).resolve()
     raw = out.with_suffix(".points.jsonl")
     raw.unlink(missing_ok=True)
-    env = dict(os.environ, PIG_MEMSWEEP_OUT=str(raw), CGO_ENABLED="0")
+    env = dict(os.environ, OMPIG_MEMSWEEP_OUT=str(raw), CGO_ENABLED="0")
     env.setdefault("GOFLAGS", "-p=4")
     if a.gomaxprocs:
-        env["PIG_MEMSWEEP_GOMAXPROCS"] = a.gomaxprocs
+        env["OMPIG_MEMSWEEP_GOMAXPROCS"] = a.gomaxprocs
     cmd = ["go", "test", "-count=1", "-timeout=60m", "-v", "-run", "^TestMemoryScalingSweep", "./test/perfgate"]
     if a.cpus:
         cmd = ["taskset", "-c", a.cpus, "nice", *cmd]
-        env["PIG_MEMSWEEP_CPUS"] = a.cpus
+        env["OMPIG_MEMSWEEP_CPUS"] = a.cpus
     for i in range(a.runs):
         r = subprocess.run(cmd, cwd=repo, env=env, capture_output=True, text=True)
         if r.returncode != 0:
@@ -96,16 +96,16 @@ def run(a):
             return 2
     points = [json.loads(l) for l in raw.read_text().splitlines() if l.strip()]
     notes = []
-    if a.cpus and a.gomaxprocs == "default" and cpu_count(a.cpus) <= PIG_CAP:
-        # With GOMAXPROCS unset and a mask of at most pig's cap, pig does not set GOMAXPROCS, so the runtime follows the CPU mask; a cgroup
+    if a.cpus and a.gomaxprocs == "default" and cpu_count(a.cpus) <= OMPIG_CAP:
+        # With GOMAXPROCS unset and a mask of at most ompig's cap, ompig does not set GOMAXPROCS, so the runtime follows the CPU mask; a cgroup
         # cpuset update resets the masks of running processes (taskset undone; on the Linux lab host every process alive for ~30 s), the runtime
         # grows to the host's width, and its P set stays live (+3 MB live, +24 MB not returned at 164 CPUs). Such points measure the host.
-        # With an explicit GOMAXPROCS, or a mask wider than the cap (pig sets GOMAXPROCS itself), the mask no longer moves the width.
+        # With an explicit GOMAXPROCS, or a mask wider than the cap (ompig sets GOMAXPROCS itself), the mask no longer moves the width.
         want = cpu_count(a.cpus)
         kept = [p for p in points if p.get("cpus_allowed", want) == want]
         if len(kept) != len(points):
             bad = sorted({p["cpus_allowed"] for p in points if p.get("cpus_allowed", want) != want})
-            notes.append(f"dropped {len(points) - len(kept)} of {len(points)} points whose pig ran on {bad} CPUs, not the {want} pinned")
+            notes.append(f"dropped {len(points) - len(kept)} of {len(points)} points whose ompig ran on {bad} CPUs, not the {want} pinned")
         missing = {(p["scenario"], p["n"]) for p in points} - {(p["scenario"], p["n"]) for p in kept}
         if missing:
             print(f"memsweep: every run of {sorted(missing)} lost its CPU pinning; rerun", file=sys.stderr)
@@ -181,7 +181,7 @@ def main():
     r.add_argument("--out", required=True)
     r.add_argument("--runs", type=int, default=3)
     r.add_argument("--cpus", default="")
-    r.add_argument("--gomaxprocs", default="", help='"default" (pig\'s own policy), a number, or empty for the perfgate homes\' 1')
+    r.add_argument("--gomaxprocs", default="", help='"default" (ompig\'s own policy), a number, or empty for the perfgate homes\' 1')
     c = sub.add_parser("compare")
     c.add_argument("prev")
     c.add_argument("cur")

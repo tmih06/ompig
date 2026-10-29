@@ -12,8 +12,8 @@ import (
 // indented by two spaces. The messages wrap it exactly as auth-guidance.ts:14-26 does.
 func TestAuthGuidanceMessagesMatchPi(t *testing.T) {
 	help := ProviderLoginHelp()
-	providers, _ := PigDocsFile("providers.md")
-	models, _ := PigDocsFile("models.md")
+	providers, _ := OmpigDocsFile("providers.md")
+	models, _ := OmpigDocsFile("models.md")
 	wantHelp := "Use /login to log into a provider via OAuth or API key. See:\n  " + providers + "\n  " + models
 	if help != wantHelp {
 		t.Fatalf("ProviderLoginHelp() = %q, want %q", help, wantHelp)

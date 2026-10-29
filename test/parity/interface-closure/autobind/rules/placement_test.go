@@ -323,7 +323,7 @@ func TestPortMapPlacementCoversPackagesWithoutSeeds(t *testing.T) {
 }
 
 // P2 shape directories: a directory that PORT_MAP also lists for another upstream package is searched by name only. Without this,
-// the engine's unique-shape rule (N5) accepted cmd/pig rpcTemplateString for ai inferCopilotInitiator and internal/codingagent
+// the engine's unique-shape rule (N5) accepted cmd/ompig rpcTemplateString for ai inferCopilotInitiator and internal/codingagent
 // readClipboardFilePaths for ai getBuiltinProviders.
 func TestPortMapExclusiveDirs(t *testing.T) {
 	sample := portMapSample +

@@ -13,8 +13,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/env/node"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/env/node"
 )
 
 const (
@@ -355,7 +355,7 @@ func (s *server) dispatch(id uint32, request any, payload []byte, ctl *control) 
 	return nil, nil, newFailure("EINVAL", fmt.Sprintf("unknown operation %s", op))
 }
 
-// pig divergence (D96): the Go daemon spells its system as Rust's std::env::consts do, so the client sees what Pi's daemon reports.
+// ompig divergence (D96): the Go daemon spells its system as Rust's std::env::consts do, so the client sees what Pi's daemon reports.
 func (s *server) hello() Object {
 	cwd, _ := os.Getwd()
 	return Object{
@@ -796,7 +796,7 @@ func (s seen) Read(buffer []byte) (int, error) {
 // Serve runs one connection: it writes the sync line `PI-ENV <token>`, then answers frames from input on output until
 // input ends. Everything the client started is killed when it returns.
 //
-// pig divergence (D197): the Go runtime raised this process's soft limit of open files (RLIMIT_NOFILE) to the hard limit
+// ompig divergence (D197): the Go runtime raised this process's soft limit of open files (RLIMIT_NOFILE) to the hard limit
 // (one below it on Linux) before main, where Pi's daemon keeps the soft limit it inherited, so an open that Pi's daemon
 // refuses with EMFILE at about 1020 handles on a default shell succeeds here up to the hard limit or maxHandles.
 func Serve(input io.Reader, output io.Writer, token string, options Options) error {

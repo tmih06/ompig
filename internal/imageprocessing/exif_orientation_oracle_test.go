@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/utils/exif-orientation.ts
@@ -240,7 +240,7 @@ func TestExifOrientationMatchesPi(t *testing.T) {
 		}
 		orientations[got]++
 		if float64(got) != want[i] {
-			t.Errorf("%s: PiG %d, Pi %v", in, got, want[i])
+			t.Errorf("%s: Ompig %d, Pi %v", in, got, want[i])
 		}
 	}
 	// An oracle whose inputs never reach a real orientation would pass vacuously.

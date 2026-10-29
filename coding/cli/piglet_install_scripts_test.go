@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // scriptsFixture is a real-npm registry that serves a Package, and a dependency of that Package, whose postinstall
-// script writes a sentinel file. A sentinel that exists after a Piglet command proves the command ran publisher code.
+// script writes a sentinel file. A sentinel that exists after a Ompiglet command proves the command ran publisher code.
 type scriptsFixture struct {
 	sentinels string
-	piglet    string
+	ompiglet  string
 }
 
 func (f scriptsFixture) ran(name string) bool {
@@ -31,24 +31,24 @@ func newScriptsFixture(t *testing.T) scriptsFixture {
 	return newScriptsFixtureAt(t, t.TempDir())
 }
 
-// newScriptsFixtureAt keeps PiG's home, and so npm's install root, below home. A home behind a symbolic link is how
+// newScriptsFixtureAt keeps Ompig's home, and so npm's install root, below home. A home behind a symbolic link is how
 // macOS names every temporary directory (/var is /private/var).
 func newScriptsFixtureAt(t *testing.T, home string) scriptsFixture {
 	t.Helper()
 	if _, err := exec.LookPath("npm"); err != nil {
 		t.Fatalf("npm is required: %v", err)
 	}
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "agent"))
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	registry := newTarballRegistry(t)
 	t.Setenv("npm_config_registry", registry.server.URL+"/")
 	t.Setenv("npm_config_cache", t.TempDir())
 	t.Setenv("npm_config_userconfig", filepath.Join(t.TempDir(), "npmrc"))
 	t.Setenv("npm_config_update_notifier", "false")
-	// The test proves what PiG asks npm to do, not what the machine's npm decides. Clear every npm switch that changes
+	// The test proves what Ompig asks npm to do, not what the machine's npm decides. Clear every npm switch that changes
 	// lifecycle scripts, then state both policies: npm 12 blocks the scripts of a Package that allowScripts does not
 	// cover, and any npm can ignore scripts by configuration.
 	for _, name := range []string{"NPM_CONFIG_IGNORE_SCRIPTS", "NPM_CONFIG_ALLOW_SCRIPTS", "NPM_CONFIG_DANGEROUSLY_ALLOW_ALL_SCRIPTS", "NPM_CONFIG_STRICT_ALLOW_SCRIPTS"} {
@@ -62,8 +62,8 @@ func newScriptsFixtureAt(t *testing.T, home string) scriptsFixture {
 	t.Chdir(t.TempDir())
 
 	sentinels := t.TempDir()
-	t.Setenv("PIG_TEST_SENTINEL_DIR", sentinels)
-	postinstall := "const fs = require('node:fs');\nfs.writeFileSync(require('node:path').join(process.env.PIG_TEST_SENTINEL_DIR, process.argv[2]), 'ran');\nfs.writeFileSync(require('node:path').join(__dirname, 'built.txt'), 'built');\n"
+	t.Setenv("OMPIG_TEST_SENTINEL_DIR", sentinels)
+	postinstall := "const fs = require('node:fs');\nfs.writeFileSync(require('node:path').join(process.env.OMPIG_TEST_SENTINEL_DIR, process.argv[2]), 'ran');\nfs.writeFileSync(require('node:path').join(__dirname, 'built.txt'), 'built');\n"
 	author := t.TempDir()
 	for name, body := range map[string]string{
 		"dep/package.json":               `{"name":"scripts-dep","version":"1.0.0","scripts":{"postinstall":"node postinstall.js dep"}}`,
@@ -71,9 +71,9 @@ func newScriptsFixtureAt(t *testing.T, home string) scriptsFixture {
 		"pkg/package.json":               `{"name":"scripts-pkg","version":"1.0.0","license":"MIT","dependencies":{"scripts-dep":"1.0.0"},"scripts":{"postinstall":"node postinstall.js pkg"},"pi":{"extensions":["extensions/runner"]}}`,
 		"pkg/postinstall.js":             postinstall,
 		"pkg/extensions/runner/index.js": "export default function extension(pi) {}\n",
-		"source/package.json":            `{"name":"scripts-piglet","version":"1.0.0","license":"MIT","scripts":{"postinstall":"node postinstall.js source"},"pig":{"piglet":"piglet.yaml"}}`,
+		"source/package.json":            `{"name":"scripts-ompiglet","version":"1.0.0","license":"MIT","scripts":{"postinstall":"node postinstall.js source"},"ompig":{"ompiglet":"ompiglet.yaml"}}`,
 		"source/postinstall.js":          postinstall,
-		"source/piglet.yaml":             "name: scripted\npackages:\n  s: npm:scripts-pkg@1.0.0\nextensions:\n  - name: runner\n    origins: [package:s]\n",
+		"source/ompiglet.yaml":           "name: scripted\npackages:\n  s: npm:scripts-pkg@1.0.0\nextensions:\n  - name: runner\n    origins: [package:s]\n",
 		"scripted.yaml":                  "name: scripted\npackages:\n  s: npm:scripts-pkg@1.0.0\nextensions:\n  - name: runner\n    origins: [package:s]\n",
 		"source/LICENSE":                 "MIT\n",
 		"pkg/LICENSE":                    "MIT\n",
@@ -90,41 +90,41 @@ func newScriptsFixtureAt(t *testing.T, home string) scriptsFixture {
 	for _, dir := range []string{"dep", "pkg", "source"} {
 		registry.pack(filepath.Join(author, dir))
 	}
-	return scriptsFixture{sentinels: sentinels, piglet: filepath.Join(author, "scripted.yaml")}
+	return scriptsFixture{sentinels: sentinels, ompiglet: filepath.Join(author, "scripted.yaml")}
 }
 
 func runPigletForTest(t *testing.T, args ...string) (int, string) {
 	t.Helper()
 	var stdout, stderr strings.Builder
-	code := piglet.RunCommand(append([]string{"piglet"}, args...), &stdout, &stderr)
+	code := ompiglet.RunCommand(append([]string{"ompiglet"}, args...), &stdout, &stderr)
 	return code, stdout.String() + stderr.String()
 }
 
-// Piglet resolution installs npm Packages with lifecycle scripts disabled, so `pig piglet validate` and `pig piglet add`
-// do not run a publisher's postinstall before the user has looked at the Piglet. --allow-install-scripts opts in.
+// Ompiglet resolution installs npm Packages with lifecycle scripts disabled, so `ompig ompiglet validate` and `ompig ompiglet add`
+// do not run a publisher's postinstall before the user has looked at the Ompiglet. --allow-install-scripts opts in.
 func TestPigletCommandsInstallNPMPackagesWithoutRunningScripts(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
 		args    func(f scriptsFixture) []string
 		wantRan []string
 	}{
-		{name: "validate", args: func(f scriptsFixture) []string { return []string{"validate", f.piglet} }},
+		{name: "validate", args: func(f scriptsFixture) []string { return []string{"validate", f.ompiglet} }},
 		{name: "validate opted in", wantRan: []string{"pkg", "dep"}, args: func(f scriptsFixture) []string {
-			return []string{"validate", f.piglet, "--allow-install-scripts"}
+			return []string{"validate", f.ompiglet, "--allow-install-scripts"}
 		}},
-		{name: "add local source", args: func(f scriptsFixture) []string { return []string{"add", f.piglet, "--no-input"} }},
+		{name: "add local source", args: func(f scriptsFixture) []string { return []string{"add", f.ompiglet, "--no-input"} }},
 		{name: "add local source opted in", wantRan: []string{"pkg", "dep"}, args: func(f scriptsFixture) []string {
-			return []string{"add", f.piglet, "--no-input", "--allow-install-scripts"}
+			return []string{"add", f.ompiglet, "--no-input", "--allow-install-scripts"}
 		}},
-		{name: "add npm source", args: func(scriptsFixture) []string { return []string{"add", "npm:scripts-piglet", "--no-input"} }},
+		{name: "add npm source", args: func(scriptsFixture) []string { return []string{"add", "npm:scripts-ompiglet", "--no-input"} }},
 		{name: "add npm source opted in", wantRan: []string{"source", "pkg", "dep"}, args: func(scriptsFixture) []string {
-			return []string{"add", "npm:scripts-piglet", "--no-input", "--allow-install-scripts"}
+			return []string{"add", "npm:scripts-ompiglet", "--no-input", "--allow-install-scripts"}
 		}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			f := newScriptsFixture(t)
 			if code, out := runPigletForTest(t, tc.args(f)...); code != 0 {
-				t.Fatalf("pig piglet %v: code=%d\n%s", tc.args(f), code, out)
+				t.Fatalf("ompig ompiglet %v: code=%d\n%s", tc.args(f), code, out)
 			}
 			for _, name := range []string{"source", "pkg", "dep"} {
 				if want, got := slices.Contains(tc.wantRan, name), f.ran(name); got != want {
@@ -136,7 +136,7 @@ func TestPigletCommandsInstallNPMPackagesWithoutRunningScripts(t *testing.T) {
 }
 
 // A Git Package installs its dependencies with `npm install` inside the checkout, which runs the root package's own
-// lifecycle scripts as well. Piglet resolution disables them for Git Packages too.
+// lifecycle scripts as well. Ompiglet resolution disables them for Git Packages too.
 func TestPigletValidateInstallsGitPackagesWithoutRunningScripts(t *testing.T) {
 	if _, err := exec.LookPath("git"); err != nil {
 		t.Fatalf("git is required: %v", err)
@@ -151,7 +151,7 @@ func TestPigletValidateInstallsGitPackagesWithoutRunningScripts(t *testing.T) {
 			repo := t.TempDir()
 			for file, body := range map[string]string{
 				"package.json":               `{"name":"scripts-git","version":"1.0.0","dependencies":{"scripts-dep":"1.0.0"},"scripts":{"postinstall":"node postinstall.js git"},"pi":{"extensions":["extensions/runner"]}}`,
-				"postinstall.js":             "require('node:fs').writeFileSync(require('node:path').join(process.env.PIG_TEST_SENTINEL_DIR, process.argv[2]), 'ran');\n",
+				"postinstall.js":             "require('node:fs').writeFileSync(require('node:path').join(process.env.OMPIG_TEST_SENTINEL_DIR, process.argv[2]), 'ran');\n",
 				"extensions/runner/index.js": "export default function extension(pi) {}\n",
 			} {
 				path := filepath.Join(repo, filepath.FromSlash(file))
@@ -177,7 +177,7 @@ func TestPigletValidateInstallsGitPackagesWithoutRunningScripts(t *testing.T) {
 				args = append(args, "--allow-install-scripts")
 			}
 			if code, out := runPigletForTest(t, args...); code != 0 {
-				t.Fatalf("pig piglet %v: code=%d\n%s", args, code, out)
+				t.Fatalf("ompig ompiglet %v: code=%d\n%s", args, code, out)
 			}
 			for _, sentinel := range []string{"git", "dep"} {
 				if got := f.ran(sentinel); got != allow {
@@ -188,7 +188,7 @@ func TestPigletValidateInstallsGitPackagesWithoutRunningScripts(t *testing.T) {
 	}
 }
 
-// `pig install npm:` and the other package-manager paths that mirror Pi do not pass --ignore-scripts, as Pi does not
+// `ompig install npm:` and the other package-manager paths that mirror Pi do not pass --ignore-scripts, as Pi does not
 // (package-manager.ts installNpm), so the same Package runs its lifecycle scripts there.
 func TestPackageInstallKeepsPisLifecycleScripts(t *testing.T) {
 	f := newScriptsFixture(t)
@@ -205,7 +205,7 @@ func TestPackageInstallKeepsPisLifecycleScripts(t *testing.T) {
 	}
 }
 
-// What an opted-in install built stays in place: resolving the Piglet again with scripts disabled does not reinstall
+// What an opted-in install built stays in place: resolving the Ompiglet again with scripts disabled does not reinstall
 // the Package without the files its postinstall wrote. npm reinstalls a Package whose --prefix runs through a symbolic
 // link, so the install root must be the real path: macOS reaches its temporary directories through one.
 func TestPigletResolutionKeepsFilesBuiltByAnOptedInInstall(t *testing.T) {
@@ -223,7 +223,7 @@ func TestPigletResolutionKeepsFilesBuiltByAnOptedInInstall(t *testing.T) {
 func keepsFilesBuiltByAnOptedInInstall(t *testing.T, home string) {
 	t.Helper()
 	f := newScriptsFixtureAt(t, home)
-	if code, out := runPigletForTest(t, "add", f.piglet, "--no-input", "--allow-install-scripts"); code != 0 {
+	if code, out := runPigletForTest(t, "add", f.ompiglet, "--no-input", "--allow-install-scripts"); code != 0 {
 		t.Fatalf("add: code=%d\n%s", code, out)
 	}
 	built := filepath.Join(codingagent.AgentDir(), "npm", "node_modules", "scripts-pkg", "built.txt")

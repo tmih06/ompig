@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// Pi keeps every member of settings.json and of a models.json compat object, modeled or not. These tests drive the members PiG does not
+// Pi keeps every member of settings.json and of a models.json compat object, modeled or not. These tests drive the members Ompig does not
 // model through the callers that read them after a load: the settings layers merged by deepMergeSettings (settings-manager.ts:63-80,141-145),
 // a save that patches only modified fields (settings-manager.ts:700-732), migrateSettings (settings-manager.ts:395-454), and a models.json
 // provider composed by mergeCompat (provider-composer.ts:122-143,247).

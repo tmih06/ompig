@@ -23,7 +23,7 @@ Status: PLAN, owner-decided. Base: `release/0.3.0-base2` (`606595120`). Upstream
 - `packages/tui/src/tui.ts:253-257,280`: `OverlayHandle.unfocus({ target: Component | null })`. `tui.ts:745-775`: `unfocus` with options resumes to or focuses exactly `unfocusOptions.target`, which may be `null`, the extension's own component, or any main-process component the extension holds.
 - Extensions hold live objects of the Pi process: the `tui` passed to `ctx.ui.custom` factories, editor components, theme instances, and the components they reach from those. Prototype patches on imported classes affect the main process because it is one heap.
 
-## 2. Current PiG state and reusable checkpoints
+## 2. Current Ompig state and reusable checkpoints
 
 - Base bus: `coding/extension/host/subprocess/runtime-node/runtime.mjs:24-29` creates one process-local `createEventBus()` (Pi's own module). `runtime.mjs:1234-1245` wires `pi.events` with `assertActive`, tracking and loading rollback. Same-process members share Pi's bus exactly (D77).
 - Foreign delivery on the base does not exist: every Node process has its own bus. This applies to explicit isolation and standalones (D77, approved), and also to ordinary factories that `planCells` splits by `nodeRecoveryGroup` or `quarantine:` (`node_recovery.go:60-78`, `cell_plan.go:84-94`). The second case silently breaks D77's own claim that ordinary factories share Pi's bus. It is in scope here.
@@ -49,11 +49,11 @@ Properties:
 
 ### 3.1 Realms and routing
 
-- Realm IDs are Host-assigned and opaque: one per OS process (`n<k>` for Node processes, including every member socket of a packed cell), `h` for the Go Host. Native SDK processes get one when gap-d78 implements them. The Host passes the ID at spawn (`PIG_XREF_REALM`); a packed cell's members share it because they share a heap.
+- Realm IDs are Host-assigned and opaque: one per OS process (`n<k>` for Node processes, including every member socket of a packed cell), `h` for the Go Host. Native SDK processes get one when gap-d78 implements them. The Host passes the ID at spawn (`OMPIG_XREF_REALM`); a packed cell's members share it because they share a heap.
 - The Host maps each connection to its realm and stamps the source realm on every forwarded operation; it never trusts a realm named by the payload as the caller's identity.
 - An operation on reference `(realm R, id)` is sent as a restricted synchronous request to any live connection of R (preferring the exporting connection). If R has exited, the operation fails with `Error("cross-process reference owner exited")` in the caller.
 
-### 3.2 Value encoding (Pig-owned wire, one current unversioned shape)
+### 3.2 Value encoding (Ompig-owned wire, one current unversioned shape)
 
 A transferred value (`XValue`) is exactly one of:
 - JSON `null`, boolean, string, or finite number other than `-0`;

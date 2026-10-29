@@ -1,13 +1,13 @@
 // Turn-tail bench case: where the durable-core profile's warm p95 comes from. It runs the two programs build.mjs makes
-// (bench-pig.mjs on the Durable core, bench-pi.mjs on Pi Durable) on one seeded size, round after round on a fresh copy
+// (bench-ompig.mjs on the Durable core, bench-pi.mjs on Pi Durable) on one seeded size, round after round on a fresh copy
 // of each seeded store, and prints per turn index the median CPU and wall time of each program, the warm (turns 1..9)
 // p50/p95 of both, and the rounds whose wall time exceeds their CPU time by more than half (time the process spent off
 // the CPU, which a pinned-CPU benchmark must not count against either program).
 //
-//   node durable/core/host/cf/bench/turn-tail.mjs --bench <dir with bench-pig.mjs and bench-pi.mjs> --turns 1000 \
+//   node durable/core/host/cf/bench/turn-tail.mjs --bench <dir with bench-ompig.mjs and bench-pi.mjs> --turns 1000 \
 //        [--rounds 6] [--cpu 11] [--out <dir>]
 //
-// bench-pig.mjs runs DCORE_WASM when set (else the dist/ beside --bench). Both programs print one JSON line per sample
+// bench-ompig.mjs runs DCORE_WASM when set (else the dist/ beside --bench). Both programs print one JSON line per sample
 // with turn (wall ms) and turnCpu (CPU ms) per measured turn, turn 0 being the first turn after open.
 import { execFileSync } from "node:child_process"
 import { copyFileSync, mkdirSync, readFileSync, existsSync } from "node:fs"
@@ -19,11 +19,11 @@ const { values } = parseArgs({ options: { bench: { type: "string" }, turns: { ty
 if (!values.bench) throw new Error("usage: turn-tail.mjs --bench <dir> --turns N [--rounds R] [--cpu C] [--out dir]")
 const bench = resolve(values.bench), turns = Number(values.turns), rounds = Number(values.rounds)
 const out = resolve(values.out ?? join(tmpdir(), `turn-tail-${turns}`))
-const programs = { pig: join(bench, "bench-pig.mjs"), pi: join(bench, "bench-pi.mjs") }
+const programs = { ompig: join(bench, "bench-ompig.mjs"), pi: join(bench, "bench-pi.mjs") }
 const run = args => execFileSync(values.cpu ? "taskset" : args[0], values.cpu ? ["-c", values.cpu, ...args] : args.slice(1), { encoding: "utf8", maxBuffer: 1 << 26 })
 const node = (program, ...rest) => ["node", "--no-warnings", "--expose-gc", program, ...rest]
 
-const samples = { pig: [], pi: [] }
+const samples = { ompig: [], pi: [] }
 for (const [name, program] of Object.entries(programs)) {
 	const dir = join(out, name)
 	mkdirSync(dir, { recursive: true })
@@ -44,7 +44,7 @@ for (let round = 1; round <= rounds; round++) {
 const quantile = (values, q) => { const s = [...values].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.ceil(q * s.length) - 1)] }
 const ms = x => Math.round(x).toString().padStart(5)
 console.log(`turn-tail: ${turns} turns, ${rounds} rounds${values.cpu ? `, CPU ${values.cpu}` : ""}; median per turn index (turn 0 is the first turn after open)`)
-console.log(`turn        ${Array.from({ length: samples.pig[0].turn.length }, (_, i) => String(i).padStart(5)).join("")}`)
+console.log(`turn        ${Array.from({ length: samples.ompig[0].turn.length }, (_, i) => String(i).padStart(5)).join("")}`)
 for (const name of Object.keys(programs)) {
 	for (const field of ["turnCpu", "turn"]) {
 		const n = samples[name][0][field].length

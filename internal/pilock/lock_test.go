@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-// proper-lockfile 4.1.2 reports a held lock as Error("Lock file is already being held") with code ELOCKED (lib/lockfile.js:53,68), and Pi's stores rethrow it unchanged (auth-storage.ts:82,141; settings-manager.ts:254; trust-manager.ts:152). PiG's contention error carries the same message, and errors.Is still matches ErrLocked. The oracle runs Pi's pinned proper-lockfile on the same held directory.
+// proper-lockfile 4.1.2 reports a held lock as Error("Lock file is already being held") with code ELOCKED (lib/lockfile.js:53,68), and Pi's stores rethrow it unchanged (auth-storage.ts:82,141; settings-manager.ts:254; trust-manager.ts:152). Ompig's contention error carries the same message, and errors.Is still matches ErrLocked. The oracle runs Pi's pinned proper-lockfile on the same held directory.
 func TestErrLockedCarriesProperLockfileMessageUpstream(t *testing.T) {
 	for _, row := range []struct {
 		api string
@@ -326,7 +326,7 @@ func runPiAcquireThenAbort(t *testing.T, file string, whileHeld func(lock string
 	return strings.TrimSpace(out.String())
 }
 
-// Pi's acquireLockAsync, finding the signal aborted once it holds the lock, releases the lock and throws the abort (auth-storage.ts:149-152): one error, and the lock directory is gone. PiG's Acquire returns the cancellation alone; it joined it with a second copy that Release added. AcquireWithOptions keeps the same contract.
+// Pi's acquireLockAsync, finding the signal aborted once it holds the lock, releases the lock and throws the abort (auth-storage.ts:149-152): one error, and the lock directory is gone. Ompig's Acquire returns the cancellation alone; it joined it with a second copy that Release added. AcquireWithOptions keeps the same contract.
 func TestAcquireAbortedAfterAcquisitionReturnsTheAbortUpstream(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "auth.json")
 	if err := os.WriteFile(path, []byte("{}"), 0o600); err != nil {
@@ -555,7 +555,7 @@ func TestProbeMtimeReadsTheFileSystemPrecision(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// Every file system PiG tests on (ext4, tmpfs, APFS, NTFS) keeps milliseconds.
+	// Every file system Ompig tests on (ext4, tmpfs, APFS, NTFS) keeps milliseconds.
 	if ms := nodeDateMs(observed); precision != precisionMillisecond || ms%1000 != 5 || ms < before+5 || ms > (time.Now().UnixMilli()+999)/1000*1000+5 {
 		t.Fatalf("probe = %v (%d ms), %v; want ms precision and a whole second after %d plus 5 ms", observed, ms, precision, before)
 	}

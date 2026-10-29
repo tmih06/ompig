@@ -31,7 +31,7 @@ All source references below are under `.upstream/current/` at Pi 0.87.1.
 | Agent | `packages/agent/src/agent-loop.ts:408-453` awaits iteration and the event sink, but copies messages only shallowly. A copied top-level stop reason can remain unchanged while the shared content array advances. |
 | Session and RPC | `packages/coding-agent/src/core/agent-session.ts:894-919` awaits extension-event handling before notifying subscribers. `packages/coding-agent/src/modes/rpc/rpc-mode.ts:354-363` serializes the mode event. The observation point is not the provider's push call. |
 
-The strict candidate pair again fails at `/7/message/content`: PiG has no content at assistant start; Pi has a parsed tool call, `partialArgs`, `streamIndex: 0`, and `toolUse`. No scenario or comparison field changes during this investigation.
+The strict candidate pair again fails at `/7/message/content`: Ompig has no content at assistant start; Pi has a parsed tool call, `partialArgs`, `streamIndex: 0`, and `toolUse`. No scenario or comparison field changes during this investigation.
 
 ## New probes
 
@@ -79,7 +79,7 @@ No source repair is authored by this proposal-only change. The coordinated B int
 
 ## Evidence and reproduction
 
-Evidence root: the retained `integrate-030-r2/` evidence directory, whose location is recorded in the maintainer handoff. Tests and probes use private HOME, Pi and PiG agent directories. The toolchain is Go 1.27.1, Node 24.19.0, Python 3.12.3 and Pi 0.87.1. No credentials or worker settings are read. No experimental overlay is installed in the worktree.
+Evidence root: the retained `integrate-030-r2/` evidence directory, whose location is recorded in the maintainer handoff. Tests and probes use private HOME, Pi and Ompig agent directories. The toolchain is Go 1.27.1, Node 24.19.0, Python 3.12.3 and Pi 0.87.1. No credentials or worker settings are read. No experimental overlay is installed in the worktree.
 
 | Artifact | Purpose |
 |---|---|

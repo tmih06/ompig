@@ -1,4 +1,4 @@
-//! pig-sdk: Rust SDK for building pig subprocess extensions.
+//! ompig-sdk: Rust SDK for building ompig subprocess extensions.
 //!
 //! Mirrors the Go SDK (`extensions/sdk/`): same wire protocol, same message
 //! types, same lifecycle. Extensions connect to the host over a Unix socket,
@@ -6,7 +6,7 @@
 //!
 //! # Example
 //! ```no_run
-//! use pig_sdk::{empty_schema, Extension, ToolResult};
+//! use ompig_sdk::{empty_schema, Extension, ToolResult};
 //!
 //! fn main() {
 //!     let mut ext = Extension::new("my-ext");
@@ -22,7 +22,7 @@
 //! Extension authors port Pi helpers with the same names in snake case. The truncation helpers run as Pi's truncate.ts does:
 //!
 //! ```
-//! use pig_sdk::{format_size, truncate_head, truncate_tail, TruncatedBy, TruncationOptions};
+//! use ompig_sdk::{format_size, truncate_head, truncate_tail, TruncatedBy, TruncationOptions};
 //!
 //! // Pi's truncateTail keeps the end of command output; an omitted limit takes Pi's default (2000 lines, 50KB).
 //! let output = truncate_tail("line 1\nline 2\nline 3\n", TruncationOptions { max_lines: Some(2), ..Default::default() });
@@ -35,10 +35,10 @@
 //! assert_eq!(format_size(1280), "1.3KB");
 //! ```
 //!
-//! The file mutation queue and the host configuration need a PiG host, so this example is compile-checked only:
+//! The file mutation queue and the host configuration need a Ompig host, so this example is compile-checked only:
 //!
 //! ```no_run
-//! use pig_sdk::{get_agent_dir, with_file_mutation_queue};
+//! use ompig_sdk::{get_agent_dir, with_file_mutation_queue};
 //!
 //! fn main() -> std::io::Result<()> {
 //!     // Pi's withFileMutationQueue: parallel tool calls on one file run one at a time, in call order.
@@ -49,8 +49,8 @@
 //! ```
 //!
 //! `get_agent_dir`, `get_config_dir_name` and `get_version` are Pi's `getAgentDir()`, `CONFIG_DIR_NAME` and `VERSION`. They fail, instead of returning
-//! a made-up path, when the process was not started by a PiG host.
-// pig divergence (D204): this SDK does not yet export TuiAltScreen, Pi's alternate-screen TUI host (the Node SDK does); the 0.6.1 export ends this.
+//! a made-up path, when the process was not started by a Ompig host.
+// ompig divergence (D204): this SDK does not yet export TuiAltScreen, Pi's alternate-screen TUI host (the Node SDK does); the 0.6.1 export ends this.
 
 mod event_stream;
 mod autocomplete;

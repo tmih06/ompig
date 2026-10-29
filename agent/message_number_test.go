@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // Pi holds a session message as JSON.parse returns it, so a number member keeps the message whatever its spelling: an integral value spelled with a fraction or an exponent (Python writes 1767225603000.0), a fractional value, or one beyond int64. The message is written as JSON.stringify writes the parsed object. Expectations: node -e 'console.log(JSON.stringify(JSON.parse(text)))' with Node 24.
@@ -97,7 +97,7 @@ func TestDecodedMessageKeepsNumbersInAnySpelling(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			var m AgentMessage
 			if err := json.Unmarshal([]byte(tc.text), &m); err != nil {
-				t.Fatalf("Pi keeps the message; PiG: %v", err)
+				t.Fatalf("Pi keeps the message; Ompig: %v", err)
 			}
 			encoded, err := json.Marshal(m)
 			if err != nil {

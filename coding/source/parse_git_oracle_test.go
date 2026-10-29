@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/utils/git.ts
@@ -16,7 +16,7 @@ import (
 // Parse of git sources against pinned Pi's parseGitUrl: the git: shorthand family (hosted-git-info forms for github, gitlab, bitbucket, gist,
 // sourcehut), scp-like and protocol URLs, refs after '#' or '@', .git suffixes, and unsafe or malformed locators that Pi rejects with null.
 //
-// Inputs in knownGitDifferences are the two where PiG differs from Pi on purpose (D110): Pi turns "git://host/..." into the repository
+// Inputs in knownGitDifferences are the two where Ompig differs from Pi on purpose (D110): Pi turns "git://host/..." into the repository
 // "https:////host/..." and an upper-case scheme into "https://HTTPS://host/...", neither of which can be cloned. They are asserted to STILL differ,
 // so changing them fails this test; every other input must match Pi exactly.
 var knownGitDifferences = map[string]string{

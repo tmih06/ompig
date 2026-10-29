@@ -21,7 +21,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func sumOf(s string) string {
@@ -91,7 +91,7 @@ func TestParseArmIDs(t *testing.T) {
 	for text, want := range map[string]string{
 		"codex,codex": "appears twice",
 		"pi-1.1.0":    "already carries",
-		"pig-0.4.1":   "already carries",
+		"ompig-0.4.1": "already carries",
 		"../x":        "use the ids",
 		"Codex":       "use the ids",
 	} {
@@ -241,7 +241,7 @@ func TestArmArtifacts(t *testing.T) {
 	if want := []string{"arms/agent/package-lock.json", "arms/agent/node_modules/@acme/agent/bin/agent.js"}; !slices.Equal(paths[len(paths)-2:], want) {
 		t.Errorf("artifacts end %v, want %v", paths[len(paths)-2:], want)
 	}
-	if err := os.WriteFile(filepath.Join(arm, "BIN"), []byte("../../bin/pig\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(arm, "BIN"), []byte("../../bin/ompig\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := writeArtifactList(dir); err == nil || !strings.Contains(err.Error(), "not a path inside the arm") {
@@ -295,7 +295,7 @@ func TestImageInstallsTheArms(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"ARG ARMS=", "/opt/pig/bin/k8sbench arms -root /src -out /opt/pig", "cat /tmp/arm-versions"} {
+	for _, want := range []string{"ARG ARMS=", "/opt/ompig/bin/k8sbench arms -root /src -out /opt/ompig", "cat /tmp/arm-versions"} {
 		if !strings.Contains(string(dockerfile), want) {
 			t.Errorf("bench/k8s/image/Dockerfile does not have %s", want)
 		}
@@ -326,9 +326,9 @@ func TestImageListsTheArmsAsTheBundleDoes(t *testing.T) {
 	for path, content := range map[string]string{
 		"arms/codex/package-lock.json":                       "{}",
 		"arms/codex/node_modules/@openai/codex/bin/codex.js": "js",
-		"arms/codex/BIN": "node_modules/@openai/codex/bin/codex.js\n",
-		"arms/rpi/rpi":   "elf",
-		"arms/rpi/BIN":   "rpi\n",
+		"arms/codex/BIN":                                     "node_modules/@openai/codex/bin/codex.js\n",
+		"arms/rpi/rpi":                                       "elf",
+		"arms/rpi/BIN":                                       "rpi\n",
 	} {
 		if err := os.MkdirAll(filepath.Join(dir, filepath.Dir(path)), 0o755); err != nil {
 			t.Fatal(err)
@@ -363,7 +363,7 @@ func TestOverheadProfilesNeedTheirArms(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := checkBundlePrograms(pi, []string{"pig", "pi"}, plain); err != nil {
+	if err := checkBundlePrograms(pi, []string{"ompig", "pi"}, plain); err != nil {
 		t.Errorf("an agent bundle runs overhead-pi: %v", err)
 	}
 	codex, err := loadProfile("overhead-codex")
@@ -371,7 +371,7 @@ func TestOverheadProfilesNeedTheirArms(t *testing.T) {
 		t.Fatal(err)
 	}
 	const exe = "arms/codex/node_modules/@openai/codex/bin/codex.js"
-	if err := checkBundlePrograms(codex, []string{"pig", "codex"}, plain); err == nil || !strings.Contains(err.Error(), "codex needs "+exe) || !strings.HasSuffix(err.Error(), "with -agents -arms codex") {
+	if err := checkBundlePrograms(codex, []string{"ompig", "codex"}, plain); err == nil || !strings.Contains(err.Error(), "codex needs "+exe) || !strings.HasSuffix(err.Error(), "with -agents -arms codex") {
 		t.Errorf("an agent bundle without the arm runs overhead-codex: %v", err)
 	}
 	dir := fakeAgentBundle(t)
@@ -391,7 +391,7 @@ func TestOverheadProfilesNeedTheirArms(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := checkBundlePrograms(codex, []string{"pig", "codex"}, withArm); err != nil {
+	if err := checkBundlePrograms(codex, []string{"ompig", "codex"}, withArm); err != nil {
 		t.Errorf("a bundle with the codex arm runs overhead-codex: %v", err)
 	}
 }
@@ -556,7 +556,7 @@ func TestProfileBaseImage(t *testing.T) {
 	if err := applyBaseImage(p, &v); err == nil || !strings.Contains(err.Error(), "not "+defaultBaseImage) {
 		t.Errorf("another base image: %v", err)
 	}
-	v = values{Image: "registry.example/pig@sha256:" + strings.Repeat("0", 64)}
+	v = values{Image: "registry.example/ompig@sha256:" + strings.Repeat("0", 64)}
 	if err := applyBaseImage(p, &v); err == nil || !strings.Contains(err.Error(), "runs from a bundle") {
 		t.Errorf("image delivery: %v", err)
 	}
@@ -565,7 +565,7 @@ func TestProfileBaseImage(t *testing.T) {
 		t.Errorf("no profile base image: %v %q", err, v.podImage())
 	}
 	bad := profile{Name: "x", Rule: "x", BaseImage: "node:24.19.0-trixie-slim", Targets: []target{
-		{Name: "pig", Role: rolePig, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"s"}},
+		{Name: "ompig", Role: rolePig, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"s"}},
 		{Name: "pi", Role: roleReference, Seed: []string{"s"}, SeedMeta: "m", Sample: []string{"s"}}}}
 	if err := bad.validate(); err == nil || !strings.Contains(err.Error(), "not pinned by digest") {
 		t.Errorf("unpinned base image: %v", err)

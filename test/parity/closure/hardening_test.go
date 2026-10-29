@@ -4,14 +4,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/correspondence"
+	"github.com/tmih06/ompig/test/parity/correspondence"
 )
 
 // footprintGraph hosts one production pin at sharedPath belonging to a target
 // mapped to behavior:other, whose origin boundary is "other:boundary".
 func footprintGraph(sharedPath string) *Graph {
 	records := map[string]Record{
-		"pin:prod":       &Pin{Kind: KindPin, ID: "pin:prod", Repository: "pig", Path: sharedPath, SemanticID: "sym.shared"},
+		"pin:prod":       &Pin{Kind: KindPin, ID: "pin:prod", Repository: "ompig", Path: sharedPath, SemanticID: "sym.shared"},
 		"pin:origin":     &Pin{Kind: KindPin, ID: "pin:origin", Repository: "upstream", Path: "packages/other.ts", SemanticID: "other:boundary"},
 		"target:shared":  &Target{Kind: KindTarget, ID: "target:shared", PinIDs: []string{"pin:prod"}, Language: "go"},
 		"behavior:other": &Behavior{Kind: KindBehavior, ID: "behavior:other", OriginPinIDs: []string{"pin:origin"}},
@@ -58,19 +58,19 @@ func TestDedupTranslationEditsCollapsesIdenticalAndFailsCollisions(t *testing.T)
 }
 
 func TestWorkerScratchPathClassification(t *testing.T) {
-	scratch := []string{"tmp", "tmp/x.go", "pig/tmp", "pig/tmp/deep/y.go"}
+	scratch := []string{"tmp", "tmp/x.go", "ompig/tmp", "ompig/tmp/deep/y.go"}
 	for _, path := range scratch {
 		if !isWorkerScratchPath(path) {
 			t.Fatalf("isWorkerScratchPath(%q) = false, want true", path)
 		}
 	}
-	production := []string{"ai/openai.go", "example.go", "tmpfile.go", "atmp/x.go", "pig/tmpx.go"}
+	production := []string{"ai/openai.go", "example.go", "tmpfile.go", "atmp/x.go", "ompig/tmpx.go"}
 	for _, path := range production {
 		if isWorkerScratchPath(path) {
 			t.Fatalf("isWorkerScratchPath(%q) = true, want false", path)
 		}
 	}
-	if !allCoveredRangesScratch([]EvidenceCoveredRange{{Path: "tmp/a.go"}, {Path: "pig/tmp/b.go"}}) {
+	if !allCoveredRangesScratch([]EvidenceCoveredRange{{Path: "tmp/a.go"}, {Path: "ompig/tmp/b.go"}}) {
 		t.Fatal("all-scratch ranges classified as production")
 	}
 	if allCoveredRangesScratch([]EvidenceCoveredRange{{Path: "tmp/a.go"}, {Path: "ai/openai.go"}}) {

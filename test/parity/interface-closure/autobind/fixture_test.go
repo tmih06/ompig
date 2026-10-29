@@ -61,7 +61,7 @@ const LimitName = "limit"
 func Use() int { return Add(1, 2) }
 `
 
-// fxUse is the production code that reads, sets and calls the fixture's members; the baseline reach set names Members as reachable from cmd/pig.
+// fxUse is the production code that reads, sets and calls the fixture's members; the baseline reach set names Members as reachable from cmd/ompig.
 const fxUse = `package lib
 
 import "context"
@@ -77,7 +77,7 @@ func Members() int {
 }
 `
 
-// fxReach is the reach set of the baseline fixture: Members is reachable from cmd/pig.
+// fxReach is the reach set of the baseline fixture: Members is reachable from cmd/ompig.
 var fxReach = map[string]bool{"lib/use.go#Members": true}
 
 const fxTest = `package lib
@@ -462,7 +462,7 @@ func TestReachableCallerExercisesWithoutATest(t *testing.T) {
 	}
 	ds = fixtureRun(t, noTests, func(inv []m) []m { return inv[:2] }, map[string]bool{"lib/lib.go#Use": true}, nil)
 	if d := ds["pkg:fx/.#add"]; d.Gap || !strings.HasPrefix(d.Evidence, "call:lib/lib.go#Use") {
-		t.Fatalf("a caller reachable from cmd/pig exercises Add, got %+v", d)
+		t.Fatalf("a caller reachable from cmd/ompig exercises Add, got %+v", d)
 	}
 }
 
@@ -487,7 +487,7 @@ func TestDocumentedRenameClosesTheGap(t *testing.T) {
 func TestReviewedCLIRowClosure(t *testing.T) {
 	files := map[string]string{"lib/lib.go": fxLib, "lib/lib_test.go": fxTest}
 	closure := func(target string) m {
-		return m{"pigTargets": []string{target}, "production": []string{"call:" + target}, "evidence": []string{"test:lib/lib_test.go#TestAdd"}}
+		return m{"ompigTargets": []string{target}, "production": []string{"call:" + target}, "evidence": []string{"test:lib/lib_test.go#TestAdd"}}
 	}
 	ds := fixtureRun(t, files, func(inv []m) []m {
 		row := func(id, disp string, extra m) m {
@@ -496,11 +496,11 @@ func TestReviewedCLIRowClosure(t *testing.T) {
 		return append(inv[:2:2],
 			row("cli:pi/--pending", "pending", closure("lib/lib.go#Add")),
 			row("cli:pi/--ported", "ported", closure("lib/lib.go#Add")),
-			row("cli:pi/--no-evidence", "ported", m{"pigTargets": []string{"lib/lib.go#Add"}, "production": []string{"call:lib/lib.go#Add"}}),
+			row("cli:pi/--no-evidence", "ported", m{"ompigTargets": []string{"lib/lib.go#Add"}, "production": []string{"call:lib/lib.go#Add"}}),
 			row("cli:pi/--removed", "ported", closure("lib/lib.go#Removed")),
 			// No production reachability, and a production reference whose declaration was removed while the target stays.
-			row("cli:pi/--no-production", "ported", m{"pigTargets": []string{"lib/lib.go#Add"}, "evidence": []string{"test:lib/lib_test.go#TestAdd"}}),
-			row("cli:pi/--removed-production", "ported", m{"pigTargets": []string{"lib/lib.go#Add"}, "production": []string{"call:lib/lib.go#Removed"}, "evidence": []string{"test:lib/lib_test.go#TestAdd"}}),
+			row("cli:pi/--no-production", "ported", m{"ompigTargets": []string{"lib/lib.go#Add"}, "evidence": []string{"test:lib/lib_test.go#TestAdd"}}),
+			row("cli:pi/--removed-production", "ported", m{"ompigTargets": []string{"lib/lib.go#Add"}, "production": []string{"call:lib/lib.go#Removed"}, "evidence": []string{"test:lib/lib_test.go#TestAdd"}}),
 		)
 	}, nil, nil)
 	if d := ds["cli:pi/--ported"]; d.Gap || d.Evidence != ruleCLIReviewed || d.Disp != "ported" || d.Pkg != "cli" {
@@ -564,7 +564,7 @@ func TestFewestGapsCandidateWins(t *testing.T) {
 	}
 }
 
-// TestTypeNamedInASignatureIsUsed: a type named only in the parameter list of a function reachable from cmd/pig is exercised by
+// TestTypeNamedInASignatureIsUsed: a type named only in the parameter list of a function reachable from cmd/ompig is exercised by
 // that function (E2), although no function body names it.
 func TestTypeNamedInASignatureIsUsed(t *testing.T) {
 	files := map[string]string{
@@ -978,10 +978,10 @@ func TestHello(t *testing.T) {
 	}
 }
 
-// TestMemberNeedsProductionUse: P1 closes a field or method only when production code reachable from cmd/pig reads, sets or calls it; a
+// TestMemberNeedsProductionUse: P1 closes a field or method only when production code reachable from cmd/ompig reads, sets or calls it; a
 // test that asserts it is not enough, so a caller-free stub stays a gap. Types and functions keep the test route.
 func TestMemberNeedsProductionUse(t *testing.T) {
-	none := map[string]bool{} // non-nil and empty: nothing is reachable from cmd/pig
+	none := map[string]bool{} // non-nil and empty: nothing is reachable from cmd/ompig
 	ds := fixtureRun(t, nil, nil, none, nil)
 	for _, id := range []string{"pkg:fx/.#Config::property:name", "pkg:fx/.#Config::property:retries", "pkg:fx/.#Widget::property:name"} {
 		d := ds[id]
@@ -2067,7 +2067,7 @@ func TestFunctionAliasIsAGoFuncOrOneMethodInterface(t *testing.T) {
 }
 
 // TestParityHarnessProbeIsNotProductionUse: a member whose only reachable user is a parity-harness probe (it runs only under
-// PIG_PARITY_HARNESS=1) has no production use, so P1 keeps it a gap even when the caller's reach set lists the probe.
+// OMPIG_PARITY_HARNESS=1) has no production use, so P1 keeps it a gap even when the caller's reach set lists the probe.
 func TestParityHarnessProbeIsNotProductionUse(t *testing.T) {
 	probe := map[string]bool{"lib/parity_harness.go#Members": true}
 	ds := fixtureRun(t, map[string]string{"lib/use.go": "package lib\n", "lib/parity_harness.go": fxUse}, nil, probe, nil)

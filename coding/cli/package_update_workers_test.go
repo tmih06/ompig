@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestPackageUpdateChecksBoundWorkers(t *testing.T) {
@@ -22,9 +22,9 @@ func TestPackageUpdateChecksBoundWorkers(t *testing.T) {
 	const workerLimit = 5
 	const taskCount = 2*workerLimit + 2
 	cwd, agent := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	started := make(chan struct{}, taskCount)
 	release := make(chan struct{})
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -33,7 +33,7 @@ func TestPackageUpdateChecksBoundWorkers(t *testing.T) {
 		_, _ = io.WriteString(w, `"2.0.0"`)
 	}))
 	defer server.Close()
-	t.Setenv("PIG_PACKAGE_UPDATE_WORKER_URL", server.URL)
+	t.Setenv("OMPIG_PACKAGE_UPDATE_WORKER_URL", server.URL)
 	executable, err := os.Executable()
 	if err != nil {
 		t.Fatal(err)
@@ -107,7 +107,7 @@ func packageUpdateOwnedGoroutines() int {
 }
 
 func TestPackageUpdateWorkerCommand(t *testing.T) {
-	endpoint := os.Getenv("PIG_PACKAGE_UPDATE_WORKER_URL")
+	endpoint := os.Getenv("OMPIG_PACKAGE_UPDATE_WORKER_URL")
 	if endpoint == "" {
 		return
 	}

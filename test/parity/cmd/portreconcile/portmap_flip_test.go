@@ -24,7 +24,7 @@ func TestFlipPortMap(t *testing.T) {
 		}
 	}
 	pm := filepath.Join(root, "docs/parity/PORT_MAP.md")
-	body := "| upstream | pig | status |\n" +
+	body := "| upstream | ompig | status |\n" +
 		"|---|---|---|\n" +
 		"| `a/hit.ts` | `covered.go` | ⬜ |\n" +
 		"| `a/cold.ts` | `uncovered.go` | ⬜ |\n" +

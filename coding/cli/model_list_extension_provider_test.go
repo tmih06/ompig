@@ -4,15 +4,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // TestPrintModelList_ShowsRegisteredExtensionProvider guards the --list-models
 // production path: printModelList must enumerate providers registered in the
 // supplied registry (e.g. by an extension), not just built-ins. Combined with
 // the load-before-list ordering in main(), this is what makes an extension's
-// model provider appear in `pig --list-models`. If printModelList stopped
+// model provider appear in `ompig --list-models`. If printModelList stopped
 // reading the registry, this fails.
 func TestPrintModelList_ShowsRegisteredExtensionProvider(t *testing.T) {
 	dir := t.TempDir()

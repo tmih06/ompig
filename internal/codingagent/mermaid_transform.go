@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -9,18 +9,18 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	gmparser "github.com/MichaelKinsy/PiG/third_party/goldmark/parser"
-	gmtext "github.com/MichaelKinsy/PiG/third_party/goldmark/text"
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/util"
+	gmparser "github.com/tmih06/ompig/third_party/goldmark/parser"
+	gmtext "github.com/tmih06/ompig/third_party/goldmark/text"
+	"github.com/tmih06/ompig/third_party/goldmark/util"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/mermaid"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/mermaid"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/components/mermaid.ts.
@@ -68,7 +68,7 @@ func topLevelMermaidFences(markdown string) []*markedCodeBlock {
 // Mermaid code blocks with terminal diagrams. theme may be nil (plain art).
 // While a message streams, the transformer keeps the last text it found plain (mermaidPlainText), so the frames of one streamed message read only what each delta added.
 func createMermaidMarkdownTransformer(getMode func() string, theme *tui.Theme) extension.MarkdownTransformer {
-	// pig additive (D92): a Piglet that strips mermaid leaves every block raw, as mermaid_off.go does.
+	// ompig additive (D92): a Ompiglet that strips mermaid leaves every block raw, as mermaid_off.go does.
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.Mermaid) {
 		return rawMermaidMarkdown
 	}

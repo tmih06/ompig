@@ -11,8 +11,8 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type modelRefreshOracleProbe struct {
@@ -34,7 +34,7 @@ type modelRefreshOracleProbe struct {
 // several failed catalogs in failure order, an aborted result without the timeout), or the 15 second timer aborts it, whether the refresh then
 // settles or never does. Each probe compares the frame before the refresh, after keys typed while it runs, after it ends, and after keys typed
 // afterwards, byte for byte. The timeout rejects refreshModelCatalogs (raceWithAbortSignal), so the picker shows the timeout and keeps the list
-// it had: models the aborted refresh added stay hidden. PiG's timer runs on a fake clock, so no probe depends on how fast the runner is.
+// it had: models the aborted refresh added stay hidden. Ompig's timer runs on a fake clock, so no probe depends on how fast the runner is.
 func TestModelSelectorRefreshModelsMatchesPi(t *testing.T) {
 	before := []modelOracleItem{{"anthropic", "claude-a", "Claude A"}, {"openai", "gpt-4o", "GPT 4o"}, {"groq", "llama-3", "Llama 3"}}
 	after := append(append([]modelOracleItem{}, before...), modelOracleItem{"openai", "gpt-added", "GPT Added"}, modelOracleItem{"xai", "grok", "Grok"})

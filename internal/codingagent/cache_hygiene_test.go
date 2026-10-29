@@ -14,12 +14,12 @@ import (
 
 // TestNoTestConstructsSubprocessHostWithoutPinningPIGHome is a static guard
 // against the class of bug where a test builds/loads a subprocess extension
-// via subprocess.NewHost or subprocess.NewBuilder without pinning PIG_HOME
+// via subprocess.NewHost or subprocess.NewBuilder without pinning OMPIG_HOME
 // first. Both fall back to resolveConfigRoot()
-// (coding/extension/host/subprocess/builder.go), which reads $PIG_HOME, then
+// (coding/extension/host/subprocess/builder.go), which reads $OMPIG_HOME, then
 // $XDG_CONFIG_HOME, then the process's real $HOME - so an unguarded test
 // writes the extension build cache and the pigsdklock SDK transaction lock
-// under the operator's real ~/.pig/cache instead of an ephemeral test dir.
+// under the operator's real ~/.ompig/cache instead of an ephemeral test dir.
 //
 // This does not run the tests with $HOME redirected: overriding $HOME for a
 // real `go test` invocation makes the Go toolchain treat that directory as
@@ -28,16 +28,16 @@ import (
 // investigating this bug). A static scan is the robust, cheap alternative:
 // it looks at every *_test.go source file in the module for a call to
 // subprocess.NewHost/NewBuilder and requires either that test's own function
-// body, or a TestMain in the same package, to reference PIG_HOME.
+// body, or a TestMain in the same package, to reference OMPIG_HOME.
 //
 // Before the fix, this test failed on
 // internal/codingagent/reload_sdk_stage_test.go's
 // TestReloadListsAFailingExtensionOnce and TestReloadListsExtensionToolConflicts,
-// which is exactly how the leak into the real ~/.pig/cache was found.
+// which is exactly how the leak into the real ~/.ompig/cache was found.
 func TestNoTestConstructsSubprocessHostWithoutPinningPIGHome(t *testing.T) {
 	root := moduleRoot(t)
 
-	packagePinsHome := map[string]bool{} // package dir -> a TestMain in it sets PIG_HOME
+	packagePinsHome := map[string]bool{} // package dir -> a TestMain in it sets OMPIG_HOME
 	type unsafeCall struct {
 		file string
 		line int
@@ -85,7 +85,7 @@ func TestNoTestConstructsSubprocessHostWithoutPinningPIGHome(t *testing.T) {
 			if !ok || fn.Body == nil {
 				continue
 			}
-			if fn.Name.Name == "TestMain" && strings.Contains(string(src), "PIG_HOME") {
+			if fn.Name.Name == "TestMain" && strings.Contains(string(src), "OMPIG_HOME") {
 				packagePinsHome[pkgDir] = true
 			}
 			var bodyBuf strings.Builder
@@ -117,16 +117,16 @@ func TestNoTestConstructsSubprocessHostWithoutPinningPIGHome(t *testing.T) {
 			if len(calls) == 0 {
 				continue
 			}
-			// A body-local reference to PIG_HOME (t.Setenv("PIG_HOME", ...) or
+			// A body-local reference to OMPIG_HOME (t.Setenv("OMPIG_HOME", ...) or
 			// similar) is enough: this is a lint-style heuristic, not an
 			// ordering proof.
 			ast.Inspect(fn.Body, func(n ast.Node) bool {
-				if lit, ok := n.(*ast.BasicLit); ok && strings.Contains(lit.Value, "PIG_HOME") {
-					bodyBuf.WriteString("PIG_HOME")
+				if lit, ok := n.(*ast.BasicLit); ok && strings.Contains(lit.Value, "OMPIG_HOME") {
+					bodyBuf.WriteString("OMPIG_HOME")
 				}
 				return true
 			})
-			if strings.Contains(bodyBuf.String(), "PIG_HOME") {
+			if strings.Contains(bodyBuf.String(), "OMPIG_HOME") {
 				continue
 			}
 			byPackage[pkgDir] = append(byPackage[pkgDir], calls...)
@@ -140,23 +140,23 @@ func TestNoTestConstructsSubprocessHostWithoutPinningPIGHome(t *testing.T) {
 	var violations []string
 	for pkgDir, calls := range byPackage {
 		if packagePinsHome[pkgDir] {
-			continue // a TestMain in this package isolates PIG_HOME for every test
+			continue // a TestMain in this package isolates OMPIG_HOME for every test
 		}
 		for _, c := range calls {
 			rel, relErr := filepath.Rel(root, c.file)
 			if relErr != nil {
 				rel = c.file
 			}
-			violations = append(violations, fmt.Sprintf("%s:%d: %s without pinning PIG_HOME "+
+			violations = append(violations, fmt.Sprintf("%s:%d: %s without pinning OMPIG_HOME "+
 				"(neither this test nor a package TestMain sets it) - it will fall back to the "+
-				"operator's real $HOME/.pig/cache", rel, c.line, c.expr))
+				"operator's real $HOME/.ompig/cache", rel, c.line, c.expr))
 		}
 	}
 	sort.Strings(violations)
 	if len(violations) > 0 {
-		t.Fatalf("tests that construct a subprocess.Host/Builder must pin PIG_HOME to a t.TempDir() "+
+		t.Fatalf("tests that construct a subprocess.Host/Builder must pin OMPIG_HOME to a t.TempDir() "+
 			"(either in the test itself or via a package TestMain), or they write extension build "+
-			"caches and the pigsdklock SDK transaction lock under the real ~/.pig/cache:\n%s",
+			"caches and the pigsdklock SDK transaction lock under the real ~/.ompig/cache:\n%s",
 			strings.Join(violations, "\n"))
 	}
 }
@@ -171,14 +171,14 @@ func moduleRoot(t *testing.T) string {
 	}
 	for {
 		if data, err := os.ReadFile(filepath.Join(dir, "go.mod")); err == nil {
-			if strings.Contains(string(data), "module github.com/MichaelKinsy/PiG\n") ||
-				strings.HasPrefix(string(data), "module github.com/MichaelKinsy/PiG\n") {
+			if strings.Contains(string(data), "module github.com/tmih06/ompig\n") ||
+				strings.HasPrefix(string(data), "module github.com/tmih06/ompig\n") {
 				return dir
 			}
 		}
 		parent := filepath.Dir(dir)
 		if parent == dir {
-			t.Fatal("could not find repo root (go.mod for github.com/MichaelKinsy/PiG)")
+			t.Fatal("could not find repo root (go.mod for github.com/tmih06/ompig)")
 		}
 		dir = parent
 	}

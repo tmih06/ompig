@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi sdk.ts:231-255 gives an explicit thinking level precedence over model/global preferences and clamps before persistence.

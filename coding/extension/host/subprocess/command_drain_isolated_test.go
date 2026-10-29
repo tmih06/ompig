@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // unansweredSelectUI answers no dialog: stdin has ended, so nothing can.
@@ -128,7 +128,7 @@ func (f *drainIsolatedFixture) endInputAndQuit() {
 	}
 }
 
-// Pi runs every extension in one event loop, so a quit handler that never settles ends the process only when the loop drains, after every command's output. PiG runs each isolated Node extension in a process of its own, so the host counts a command of another process able to answer until that process reports that nothing keeps its own loop alive. A command that awaits a session change keeps the loop alive; one that awaits a Promise nothing settles, or a dialog that stdin can no longer answer, does not.
+// Pi runs every extension in one event loop, so a quit handler that never settles ends the process only when the loop drains, after every command's output. Ompig runs each isolated Node extension in a process of its own, so the host counts a command of another process able to answer until that process reports that nothing keeps its own loop alive. A command that awaits a session change keeps the loop alive; one that awaits a Promise nothing settles, or a dialog that stdin can no longer answer, does not.
 func TestDrainSpansIsolatedNodeProcesses(t *testing.T) {
 	t.Parallel()
 	t.Run("session change keeps the loop alive", func(t *testing.T) {

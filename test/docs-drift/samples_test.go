@@ -20,7 +20,7 @@ import (
 	"go.yaml.in/yaml/v3"
 )
 
-// Every fenced code sample in the user documentation is extracted and checked by the strongest means that is safe to run in a test: JSON, YAML and TOML parse, Go parses and its imports resolve, JavaScript and Python are syntax-checked by their own interpreters, and a `pig` command line is checked against the real binary (see commands_test.go). A sample that cannot be checked says why with a `<!-- sample: skip: <reason> -->` line before its fence. A fence language this table does not know fails, so a new kind of sample is a decision rather than an omission.
+// Every fenced code sample in the user documentation is extracted and checked by the strongest means that is safe to run in a test: JSON, YAML and TOML parse, Go parses and its imports resolve, JavaScript and Python are syntax-checked by their own interpreters, and a `ompig` command line is checked against the real binary (see commands_test.go). A sample that cannot be checked says why with a `<!-- sample: skip: <reason> -->` line before its fence. A fence language this table does not know fails, so a new kind of sample is a decision rather than an omission.
 
 type sampleCheck func(t *testing.T, s sample)
 
@@ -35,7 +35,7 @@ var sampleChecks = map[string]sampleCheck{
 	"javascript": checkNode,
 	"python":     checkPython,
 	"py":         checkPython,
-	// Shell samples hold placeholders such as <path>, so bash cannot parse them; their `pig` lines are checked against the binary by TestDocumentedPigCommandsAreValid.
+	// Shell samples hold placeholders such as <path>, so bash cannot parse them; their `ompig` lines are checked against the binary by TestDocumentedPigCommandsAreValid.
 	"bash":    nil,
 	"sh":      nil,
 	"shell":   nil,
@@ -82,7 +82,7 @@ func itoa(n int) string {
 	return string(b)
 }
 
-// stripJSONC removes comments and trailing commas, which the docs use in examples that Pig reads as JSONC-style, and leaves string contents alone.
+// stripJSONC removes comments and trailing commas, which the docs use in examples that Ompig reads as JSONC-style, and leaves string contents alone.
 func stripJSONC(src string) string {
 	var out strings.Builder
 	inString, escaped := false, false
@@ -270,7 +270,7 @@ func goRoot(t *testing.T) string {
 	return goRootPath
 }
 
-const modulePath = "github.com/MichaelKinsy/PiG"
+const modulePath = "github.com/tmih06/ompig"
 
 var trailingComma = regexp.MustCompile(`,(\s*[}\]])`)
 

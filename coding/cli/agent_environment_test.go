@@ -9,7 +9,7 @@ import (
 func TestRunPigletAgentEnvironmentRejectsRuntimeFlagsWithoutEnvironment(t *testing.T) {
 	for _, flags := range []map[string]any{{"unsafe-host": true}, {"container-engine": "docker"}} {
 		_, _, err := runPigletAgentEnvironment(context.Background(), nil, Args{UnknownFlags: flags}, t.TempDir())
-		if err == nil || !strings.Contains(err.Error(), "requires a Piglet with agentEnv") {
+		if err == nil || !strings.Contains(err.Error(), "requires a Ompiglet with agentEnv") {
 			t.Fatalf("flags=%v error=%v", flags, err)
 		}
 	}

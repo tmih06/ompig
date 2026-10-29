@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-// ProcessMetrics is the PIG_PROFILE=metrics record: whole-process resource counts taken when pig exits, after it has stopped its extensions and model services.
+// ProcessMetrics is the OMPIG_PROFILE=metrics record: whole-process resource counts taken when ompig exits, after it has stopped its extensions and model services.
 //
 // The allocation and GC-cycle counters cover the whole process lifetime. Allocation counts do not depend on machine speed, so count gates compare them with ceilings; RSS, the pause total and the counts of goroutines, descriptors and children describe the exit state. A field that the platform cannot report is -1.
 type ProcessMetrics struct {
@@ -130,14 +130,14 @@ func histogramTotal(sample metrics.Sample) (count uint64, sum float64) {
 			bound = histogram.Buckets[i+1]
 		}
 		if bound > 0 && !math.IsInf(bound, 0) {
-			sum += float64(n) * bound //portlint:allow fusedmuladd PiG's runtime-metrics profile summary: no Pi counterpart
+			sum += float64(n) * bound //portlint:allow fusedmuladd Ompig's runtime-metrics profile summary: no Pi counterpart
 		}
 	}
 	return count, sum
 }
 
 func writeMetrics(w io.Writer, record ProcessMetrics) error {
-	//portlint:allow jsonescape PIG_PROFILE=metrics output is Go-only, read by the perf ratchet; no Pi counterpart writes it
+	//portlint:allow jsonescape OMPIG_PROFILE=metrics output is Go-only, read by the perf ratchet; no Pi counterpart writes it
 	encoder := json.NewEncoder(w)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(record)

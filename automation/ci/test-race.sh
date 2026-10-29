@@ -11,8 +11,8 @@
 #   1. -race regressions: the runOnMain delivery/shutdown proofs (testing/synctest)
 #      and the StatusLine + SIGWINCH no-race regressions. TestConcurrent_SIGWINCHVsTyping
 #      is intentionally excluded: it is the red oracle that documents the raw
-#      off-loop pattern still races, gated behind PIG_PROBE_RENDER_RACE=1.
-#      The pig config selector drives its own loop, so its tests run here too:
+#      off-loop pattern still races, gated behind OMPIG_PROBE_RENDER_RACE=1.
+#      The ompig config selector drives its own loop, so its tests run here too:
 #      a frame on a timer goroutine races its input handling.
 #   2. goroutineleak: Go 1.27's profile asserts runOnMain leaves zero
 #      goroutines blocked on uiTaskCh after its workload.

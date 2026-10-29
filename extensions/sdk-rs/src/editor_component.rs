@@ -600,7 +600,7 @@ pub(crate) fn install_editor(
     };
     let embed = component.embed_working_status();
     let worker = EditorWorker { conn: conn.clone(), key: key.clone(), width: width.clone(), component, seq: 0, last: None, status: None, status_sent: false };
-    thread::Builder::new().name(format!("pig-{key}")).spawn(move || worker.run(receiver))?;
+    thread::Builder::new().name(format!("ompig-{key}")).spawn(move || worker.run(receiver))?;
     if embed {
         conn.notify("ui.editor.options", Some(json!({"key": key, "embedWorkingStatus": true})))?;
     }

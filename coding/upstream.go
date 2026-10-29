@@ -1,21 +1,21 @@
 // UpstreamVersion, UpstreamPackageVersion and UpstreamCommit are the exact upstream Pi pin.
-// The CLI, parity runner, source mirror, generated inventories, and Pig Porter consume
+// The CLI, parity runner, source mirror, generated inventories, and Ompig Porter consume
 // them. The pin lives in .upstream/pin; `make pin-bump PI_UPSTREAM_REF=<tag|commit>`
 // regenerates internal/coding/pigversion/pigversion.go and every other derived file,
-// then the upgrade workflow in piglets/porter/skills/pig-porter/SKILL.md applies.
+// then the upgrade workflow in ompiglets/porter/skills/ompig-porter/SKILL.md applies.
 package coding
 
-import "github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+import "github.com/tmih06/ompig/internal/coding/pigversion"
 
-// PigVersion is PiG's release line. It advances independently of the upstream
+// OmpigVersion is Ompig's release line. It advances independently of the upstream
 // Pi target.
-const PigVersion = pigversion.PigVersion
+const OmpigVersion = pigversion.OmpigVersion
 
-// Version is PiG's one displayed version: its own release line with the Pi
+// Version is Ompig's one displayed version: its own release line with the Pi
 // release it ports as semver build metadata (for example 0.2.0+0.87.1). Semver
-// precedence ignores build metadata, so Version sorts exactly as PigVersion.
-// Self-update comparisons, release tags, and the Piglet compatibility check
-// still use PigVersion itself.
+// precedence ignores build metadata, so Version sorts exactly as OmpigVersion.
+// Self-update comparisons, release tags, and the Ompiglet compatibility check
+// still use OmpigVersion itself.
 const Version = pigversion.Version
 
 // UpstreamCommit is the exact Pi commit of the pin.

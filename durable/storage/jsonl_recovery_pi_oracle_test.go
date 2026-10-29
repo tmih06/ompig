@@ -97,7 +97,7 @@ func damage(t *testing.T, random *rand.Rand, dir string) string {
 	case 4:
 		at := random.Intn(len(raw))
 		if depth, ok := memberNameDepth(raw, at); ok && depth >= recordMemberDepth(name) {
-			// Pi casts a stored record as parsed, so an unknown member survives into the answers; Pig decodes into the typed record and drops it. Record members are not probed here; the commit marker, operation and sidecar envelope members are.
+			// Pi casts a stored record as parsed, so an unknown member survives into the answers; Ompig decodes into the typed record and drops it. Record members are not probed here; the commit marker, operation and sidecar envelope members are.
 			return damage(t, random, dir)
 		}
 		replacement := "0\"x{}[,:9 \\\xff"[random.Intn(12)]
@@ -351,7 +351,7 @@ func TestJsonlRecoveryMatchesPiOnDamagedDirectories(t *testing.T) {
 	var aDirs, bDirs, notes []string
 	for i, program := range programs {
 		for k := range damagesPerProgram {
-			a, b := filepath.Join(base, fmt.Sprintf("pi-%d-%d", i, k)), filepath.Join(base, fmt.Sprintf("pig-%d-%d", i, k))
+			a, b := filepath.Join(base, fmt.Sprintf("pi-%d-%d", i, k)), filepath.Join(base, fmt.Sprintf("ompig-%d-%d", i, k))
 			copyDirectory(t, piDirs[i], a)
 			note := damage(t, random, a)
 			copyDirectory(t, a, b)
@@ -359,7 +359,7 @@ func TestJsonlRecoveryMatchesPiOnDamagedDirectories(t *testing.T) {
 		}
 	}
 	piAnswers := runPiJSONL(t, "jsonl-read", cases, aDirs)
-	pigAnswers := runPigJSONL(t, cases, bDirs, true)
+	ompigAnswers := runPigJSONL(t, cases, bDirs, true)
 
 	differing, opened, typeErrors, rejected := 0, 0, 0, map[string]int{}
 	for i := range cases {
@@ -375,7 +375,7 @@ func TestJsonlRecoveryMatchesPiOnDamagedDirectories(t *testing.T) {
 				typeErrors++
 			}
 		}
-		differing += compareOracleResults(t, label, cases[i], pigAnswers[i], piAnswers[i], differing, map[string]int{}, new(int))
+		differing += compareOracleResults(t, label, cases[i], ompigAnswers[i], piAnswers[i], differing, map[string]int{}, new(int))
 		if !sameFileSet(t, aDirs[i], bDirs[i]) {
 			if differing++; differing <= 8 {
 				t.Errorf("%s: files after recovery differ (%s, %s)", label, aDirs[i], bDirs[i])

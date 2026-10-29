@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // .upstream/v0.99.2/packages/coding-agent/src/core/agent-session.ts:1747-1748,697-709 builds every request of a run from the options the before_agent_start handlers shared: toolGuidelines and appendSystemPrompt edits, not only toolSnippets, change the run's prompt, and later turns of the run keep them.

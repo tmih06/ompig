@@ -7,7 +7,7 @@ package host
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // Principal is the app-defined, JSON-serializable identity of a caller, mapped to an object key by

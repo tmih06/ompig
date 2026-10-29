@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // MayTakeFileMutationQueue is implemented by a tool whose code can register in the file mutation queue itself, after the dispatcher started it: an

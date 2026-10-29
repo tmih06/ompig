@@ -6,7 +6,7 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 
 - Started from the Pi 1.0.4 port with the pi-env port and its review fixes (D96, D97).
 - Merged main at the 0.4.1 pin-back (#159) without conflicts.
-- Version: `internal/coding/pigversion` reports `PigVersion = 0.4.1` after the merge. Main keeps the last released version as the version of unreleased content (0.3.1 while 0.4.0 content was unreleased, 0.4.0 while 0.4.1 content was unreleased), so builds report `0.4.1+1.0.4`. `make set-version VERSION=0.4.1` changes nothing. The release target became 0.5.0 (owner decision, 2026-10-08), and lane rel-050 ran the equivalent of `make set-version VERSION=0.5.0 SET_VERSION_ARGS=-move-unreleased` on this branch, so builds from it report `0.5.0+1.1.0` before the release and `CHANGELOG.md` heads its content with `## [0.5.0] - 2026-10-09`. The release step on `release/v0.5.0` runs `make set-version VERSION=0.5.0 SET_VERSION_ARGS=--release-modules`; set-version keeps the date of an existing target heading, so correct the date by hand when the release cuts on another day, and fold any `changelog.d` fragment under `[0.5.0]`, not `[Unreleased]`.
+- Version: `internal/coding/pigversion` reports `OmpigVersion = 0.4.1` after the merge. Main keeps the last released version as the version of unreleased content (0.3.1 while 0.4.0 content was unreleased, 0.4.0 while 0.4.1 content was unreleased), so builds report `0.4.1+1.0.4`. `make set-version VERSION=0.4.1` changes nothing. The release target became 0.5.0 (owner decision, 2026-10-08), and lane rel-050 ran the equivalent of `make set-version VERSION=0.5.0 SET_VERSION_ARGS=-move-unreleased` on this branch, so builds from it report `0.5.0+1.1.0` before the release and `CHANGELOG.md` heads its content with `## [0.5.0] - 2026-10-09`. The release step on `release/v0.5.0` runs `make set-version VERSION=0.5.0 SET_VERSION_ARGS=--release-modules`; set-version keeps the date of an existing target heading, so correct the date by hand when the release cuts on another day, and fold any `changelog.d` fragment under `[0.5.0]`, not `[Unreleased]`.
 - Gates after the merge: `go build ./...`, `ci-contracts`, `coverage-drift`, `docs-drift`, `port-map-drift`, `source-hygiene`, `divergence-consistency` and the public-claims check pass.
 
 ## gap-mcp-codemode-libs (with the review fixes)
@@ -20,7 +20,7 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 
 ## rev-port-104 (review fixes for the Pi 1.0.4 port)
 
-- Merged without conflicts. The branch changes no `PORT_MAP.md` row: it fixes the symbolic-link watch on kqueue platforms, the empty `powershell` programs error, the order of `hiddenTools`, and the CLI-boundary `application_type` test, and it regenerates `pig-go.json`.
+- Merged without conflicts. The branch changes no `PORT_MAP.md` row: it fixes the symbolic-link watch on kqueue platforms, the empty `powershell` programs error, the order of `hiddenTools`, and the CLI-boundary `application_type` test, and it regenerates `ompig-go.json`.
 - `make generate` and `make coverage` reproduce the committed files, so nothing else changed. The normalization inventory has no drift.
 - Gates: `go vet` native, Windows amd64 and darwin on the touched trees; lint-changed 0 issues; `go test -race` on `durable/...`, `coding`, `coding/mcpext` and `internal/codingagent/...`; `ci-contracts`, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency and docs-drift pass.
 - One run of `TestLoginProviderCancellationKeepsOldCredential` (`internal/codingagent`) timed out at 20 s while other packages were running. It passed in isolation (5 runs) and in a second full-package run. It belongs to the login dialog tests, which this branch does not touch.
@@ -44,7 +44,7 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 
 - Merged without conflicts. No divergence ID clashed (D96 and D97 are ours; main used none).
 - `make generate` reproduces the committed files.
-- Gates: `go build ./...`, `go vet` native and Windows on `cmd`, `coding/piglet` and `internal/npmpublish`; `go test` on the npm publishing, Piglet, Piglet build and source packages; `ci-contracts`, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift pass.
+- Gates: `go build ./...`, `go vet` native and Windows on `cmd`, `coding/ompiglet` and `internal/npmpublish`; `go test` on the npm publishing, Ompiglet, Ompiglet build and source packages; `ci-contracts`, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift pass.
 
 ## gap-ai (with the review fixes)
 
@@ -55,7 +55,7 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 ## gap-mcp (with the review fixes)
 
 - Merged with one conflict, in the `.PHONY` line of the `Makefile`: kept `build-env-daemons`, the chord facet targets and `test-mcp-conformance`.
-- `PORT_MAP.md`: the 11 `extensions/mcp` and `extensions/tool-search` rows are ported. The two new paired scenarios (`slash-commands/14`, `15`) pass against Pi, and the normalization inventory and `pig-go.json` are regenerated.
+- `PORT_MAP.md`: the 11 `extensions/mcp` and `extensions/tool-search` rows are ported. The two new paired scenarios (`slash-commands/14`, `15`) pass against Pi, and the normalization inventory and `ompig-go.json` are regenerated.
 - The network job that would run `make test-mcp-conformance` in CI is not added.
 - `automation/ci/version-records.toml` records that `gap-mcp.md` names the earlier release that added the `mcp list` override.
 - Gates for both: `go vet` native, Windows and darwin on `mcp`, `coding` and `test`; lint-changed 0 issues; `lint-scenarios`; `ci-contracts`; `go test -race` on `coding/mcpext`, the tool search, `mcp`, `ai`, `cmd/check-model-data` and `internal/nodeurl`; the slash-commands parity family; divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims.
@@ -66,7 +66,7 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 - `PORT_MAP.md`: the 15 rows of `packages/coding-agent/src/experimental/` (excluding `services/`) are ported, and the stale "pending" notes are gone. `coordinator.ts`, `coordinator-entry.ts`, `process.ts`, `radius-auth.ts` and `radius-relay.ts` were ⬜ rows; their Go files (`coordinator.go`, `coordinator_entry.go`, `process.go`, `radius_auth.go`, `radius_relay.go`) now carry `// Ports` markers. The `plugin.ts` row stays designed out. The lane notes that `node-facets/plugin.mjs` implements it; that is the owner's call.
 - The test-mapping rationale for `experimental-remote-runtime.test.ts` says 26 cases, as the review asked.
 - Open, low priority (from the review): a coordinator `isEmpty` mutant survives, and the Session profile digest does not normalize invalid UTF-8 as the package digest does.
-- Gates: `go vet` native, Windows and darwin on `internal/experimental` and `cmd`; lint-changed 0 issues; `go test -race` on `internal/experimental/...` and `cmd/pig-experimental`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
+- Gates: `go vet` native, Windows and darwin on `internal/experimental` and `cmd`; lint-changed 0 issues; `go test -race` on `internal/experimental/...` and `cmd/ompig-experimental`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-chord follow-up (rev-gap-chord-2) and gap-remote-stack (with the review fixes)
 
@@ -79,17 +79,17 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 
 ## gap-codemode-utils (with the review fixes)
 
-- Merged without conflicts. `pig-go.json` merged cleanly and the generators report it current.
+- Merged without conflicts. `ompig-go.json` merged cleanly and the generators report it current.
 - `PORT_MAP.md`: seven of the nine rows are ported (tools-manager, version-check, open-browser, and the codemode execute, index, renderer and tool rows). `utils/shell.ts` and `utils/clipboard-image.ts` stay partial because native Windows and desktop clipboard execution is unproven. The review rejected the proposed 0600 clipboard divergence (Go matches Pi with the umask) and folded `formatVersionCheckError` into D39 instead of a new number; the `version-check.test.ts` test-mapping rationale says so.
 - Open from the review (not applied here): Node reads TMPDIR, TMP, then TEMP for the temp directory, while Go reads TMPDIR only; the owning interactive and TUI slices decide.
-- Gates: `go vet` native, Windows and darwin on `internal/codingagent`, `coding` and `cmd`; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/codingagent/...`, `internal/shellconfig`, `coding/extension/builtin/...` and `cmd/pig/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
+- Gates: `go vet` native, Windows and darwin on `internal/codingagent`, `coding` and `cmd`; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/codingagent/...`, `internal/shellconfig`, `coding/extension/builtin/...` and `cmd/ompig/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-interactive (second review)
 
-- Merged without conflicts; it supersedes the first interactive review. `pig-go.json` was regenerated for the new credential synchronization method.
+- Merged without conflicts; it supersedes the first interactive review. `ompig-go.json` was regenerated for the new credential synchronization method.
 - `PORT_MAP.md`: twelve of the thirteen `modes/interactive` rows are ported, including `interactive-mode.ts`. `components/markdown-transform.ts` stays partial: abandoned callback bodies after an extension process disconnects belong to the extension host lane. The `utils/ansi.ts` row already names `internal/codingagent/tools/sanitize.go` (`StripANSI`). The stale show-images and Radius login notes are rewritten.
 - The review fixed a data race in credential synchronization (it rebuilt shared provider maps while the off-loop Anthropic check read them) and a full-refresh failure caused by an unrelated provider's unreadable credential. The messages match Pi byte for byte in tmux.
-- Gates: `go vet` native, Windows and darwin on `internal/codingagent`, `cmd`, `coding` and `tui`; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/codingagent/...`, `cmd/pig/...`, `tui/...` and `coding`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
+- Gates: `go vet` native, Windows and darwin on `internal/codingagent`, `cmd`, `coding` and `tui`; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/codingagent/...`, `cmd/ompig/...`, `tui/...` and `coding`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-remote-stack (second review) and gap-core (with the review fixes)
 
@@ -97,8 +97,8 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 - The core lane merged cleanly, including its later `model_change` fix (`getBranchSelection` stops at every `model_change`, as Pi does).
 - `PORT_MAP.md`: `nested-tool-calls`, `mcp-servers`, `remote-catalog-provider`, `crash-log`, `virtual-models` and `index.ts` are ported. `prompt-templates`, `skills` and `utils/frontmatter.ts` are partial: a mapping with non-string keys now keeps its frontmatter, but YAML 1.2 scalars, top-level non-mappings and the error wording still differ from Pi's yaml engine, which the review judged portable in Go. `session-manager`, `agent-session`, `sdk` and `agent-session-runtime` stay partial (open in the lane).
 - D100 (additive, in `docs/additive-features.md`, `DIVERGENCE-IDS.txt` and a source marker in `crash_log.go`) records that crash attribution also reads Go goroutine traces; a JavaScript stack matches exactly as in Pi, so the lane's proposed divergence is withdrawn. The record is marked "owner confirmation pending" like D96 and D97.
-- Open from the review (not applied): a parent cycle in a session file hangs Pig exactly as it hangs Pi, so it is an upstream report, not a divergence.
-- Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/codingagent/...`, `internal/pioracle`, `coding`, `coding/extension`, `cmd/gen-models` and `cmd/pig/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
+- Open from the review (not applied): a parent cycle in a session file hangs Ompig exactly as it hangs Pi, so it is an upstream report, not a divergence.
+- Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/codingagent/...`, `internal/pioracle`, `coding`, `coding/extension`, `cmd/gen-models` and `cmd/ompig/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-durable (second review)
 
@@ -116,26 +116,26 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 ## gap-untested (with the review fixes)
 
 - Merged with one conflict, in `internal/codingagent/tools/powershell.go`: the codemode-utils lane resolves PowerShell through the shared Pi-style path search, and this lane added a lookup seam for its tests. Kept the seam and made production pass the shared search (`findExecutableOnPath` in the shape of `exec.LookPath`). `go fix` also reformatted one PowerShell test.
-- `PORT_MAP.md`: every row of the lane was already ported; `utils/ansi.ts` names `internal/codingagent/tools/sanitize.go` (`StripANSI`). The regenerated coverage and `pig-go.json` are committed.
+- `PORT_MAP.md`: every row of the lane was already ported; `utils/ansi.ts` names `internal/codingagent/tools/sanitize.go` (`StripANSI`). The regenerated coverage and `ompig-go.json` are committed.
 - Open, owner decision (from the review): Windows `where` searches the current directory while `exec.LookPath` does not, and Go's `(?i)` Unicode folding differs from JavaScript's `/i`.
 - Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `ai/...`, `coding`, `internal/outputfiles`, `internal/codingagent/tools/...`, `internal/childwait`, `internal/crossspawn`, `tui/...` and `internal/experimental/services/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-telemetry-evals (second review)
 
 - Merged with conflicts in the divergence ledgers (`DIVERGENCES.md`, `DIVERGENCE-IDS.txt`, the `divergences.md` docs mirror and `additive-features.md`) and no code conflicts. D98 (the eval harness OAuth credential file) lands in its reserved place. The lane numbered its additive `get_extensions` RPC command D99, which main already uses, so it is D101 here (ledgers, the `rpc_mode.go` marker, the RPC command docs and the closure ledger). D100 stays the crash attribution record. The active-divergence count is 41, and the next free ID is D102.
-- The eval harness checks the loaded extensions once, when the first pig process starts, as Pi does, and the image documentation checks match Pi. `pig-go.json` was regenerated.
-- Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `cmd/pig/...`, `cmd/pig-eval-extension`, `cmd/pig-evals`, `coding/rpcclient`, `internal/evals/...`, `telemetry/...` and `internal/codingagent`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
+- The eval harness checks the loaded extensions once, when the first ompig process starts, as Pi does, and the image documentation checks match Pi. `ompig-go.json` was regenerated.
+- Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `cmd/ompig/...`, `cmd/ompig-eval-extension`, `cmd/ompig-evals`, `coding/rpcclient`, `internal/evals/...`, `telemetry/...` and `internal/codingagent`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-core (second review)
 
 - Merged with conflicts in `coding/session.go`, `coding/virtual_models.go` and its oracle test. Two fixes of the same `model_change` bug met: the first review's fix and this lane's. Took this lane's version whole: `GetBranchSelection` stops at every `model_change`, `ModelSelection.Unresolvable` marks a non-string member, and the startup resume path restores through it. The merged tree builds and the virtual-model tests pass. `go fix` reformatted one file of the new `internal/yaml12` package.
 - The lane ports the eemeli/yaml 2.9.0 engine to `internal/yaml12`, and the frontmatter parser reads through it, so the proposed YAML divergence is withdrawn: none of the five proposals is numbered.
 - `PORT_MAP.md`: `core/sdk.ts`, `core/agent-session-runtime.ts` and `core/session-manager.ts` are ported. `core/agent-session.ts` stays partial: two cases of `system-prompt-updates.test.ts` (forced-prompt `before_agent_start`, JSON round trip) are not matched one for one and wait for a reviewer. `core/prompt-templates.ts`, `core/skills.ts` and `utils/frontmatter.ts` stay partial until known tags (`!!binary`, `!!timestamp`, `!!set`, `!!omap`, `!!pairs`, `!!merge`) and collection keys with non-plain members behave as in Pi. Both change whether a skill or prompt loads.
-- Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/yaml12`, `internal/codingagent/...`, `coding` and `cmd/pig/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
+- Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/yaml12`, `internal/codingagent/...`, `coding` and `cmd/ompig/...`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
 ## gap-untested (second review)
 
-- Merged without conflicts. `lazyregexp.NewJSIgnoreCase` now folds as JavaScript's `/i` does (ASCII-only fold from non-ASCII, no panic on a one-letter class next to a literal, JavaScript line terminators for `.`). The provider retry patterns and the Codex retry patterns use it. `pig-go.json` and the coverage report were regenerated.
+- Merged without conflicts. `lazyregexp.NewJSIgnoreCase` now folds as JavaScript's `/i` does (ASCII-only fold from non-ASCII, no panic on a one-letter class next to a literal, JavaScript line terminators for `.`). The provider retry patterns and the Codex retry patterns use it. `ompig-go.json` and the coverage report were regenerated.
 - No PORT_MAP changes: the rows were already ported.
 - Gates: `go vet` native, Windows and darwin; lint-changed 0 issues; `go fix -diff` empty; `go test -race` on `internal/lazyregexp`, `ai/...`, `internal/crossspawn` and `internal/codingagent`; `ci-contracts`, lint-scenarios, divergence-guard, source-hygiene, port-map-drift, coverage-drift, divergence-consistency, docs-drift and public-claims pass.
 
@@ -178,7 +178,7 @@ Each entry names the merged work, what was applied to `PORT_MAP.md`, and the gat
 - `make coverage` reports a per-package table, the four core packages, the shipped surface (the dependency closure of the coding-agent manifest, less the source paths its npm `files` list excludes, both read from the mirror) and the whole monorepo, plus the interface closure from the mapping ledger. The generated report holds the current figures. The behavioural evidence of the ten non-core packages is thin: a large part of their ported rows have no scenario or unit-evidence record.
 - The interface inventory covers all fourteen packages: 12234 IDs, 2284 of them new. Packages not installed beside the published Pi package (`client`, `durable`, `env`, `protocol`, `server`) are read from the pinned source, and each inventory package records its origin. `evals` is private and has no public interface. The mapping and delta ledgers carry the new IDs as pending. Interface closure is 2 of 12234 IDs (the two designed-out rows); a file-level port does not close an ID.
 - `test/parity/upstream-sync/v1.0.4.toml` gains the thirteen changed `durable` and `env` files with test evidence. `test/parity/async-contracts.toml` gains 85 `deferred` entries for the added packages; each rationale names the lane that owns the contract, and none is marked reviewed.
-- Test and CI fixes found by `make check`: fixture mirrors in the PORT_MAP drift tests, the coverage recipe test, the Windows-only test package selection (`!unix` files), the `node-facets-chord-check` shard, the eval harness (it now clears `PIG_HOME` and `PI_HOME`) and a test main for the eval suites.
+- Test and CI fixes found by `make check`: fixture mirrors in the PORT_MAP drift tests, the coverage recipe test, the Windows-only test package selection (`!unix` files), the `node-facets-chord-check` shard, the eval harness (it now clears `OMPIG_HOME` and `PI_HOME`) and a test main for the eval suites.
 
 ## gap-agent-tui (fourth review), gap-core (round 7) and the preview CI fixes
 

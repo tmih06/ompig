@@ -13,35 +13,35 @@ import (
 	"testing"
 	"time"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// strippedTestBinary is cmd/pig built with every Piglet strip build tag, the
-// most a Piglet Binary can compile out (D92).
+// strippedTestBinary is cmd/ompig built with every Ompiglet strip build tag, the
+// most a Ompiglet Binary can compile out (D92).
 var strippedTestBinary = sync.OnceValues(func() (string, error) {
 	binDir := filepath.Join(fixtureRoot, "bin")
 	if err := os.MkdirAll(binDir, 0o700); err != nil {
 		return "", err
 	}
-	out := testExecutable(filepath.Join(binDir, "pig-stripped"))
+	out := testExecutable(filepath.Join(binDir, "ompig-stripped"))
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, "go", "build", "-tags", strings.Join(piglet.StripBuildTags(), ","), "-o", out, ".")
-	cmd.Dir = filepath.Join(fixtureSourceRoot, "cmd", "pig")
+	cmd := exec.CommandContext(ctx, "go", "build", "-tags", strings.Join(ompiglet.StripBuildTags(), ","), "-o", out, ".")
+	cmd.Dir = filepath.Join(fixtureSourceRoot, "cmd", "ompig")
 	cmd.Env = append(os.Environ(), "CGO_ENABLED=0")
 	if data, err := cmd.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("build pig-stripped: %w\n%s", err, data)
+		return "", fmt.Errorf("build ompig-stripped: %w\n%s", err, data)
 	}
 	return out, nil
 })
 
-// runStrippedPig runs the fully stripped pig with an isolated home and the
+// runStrippedPig runs the fully stripped ompig with an isolated home and the
 // faux provider, and returns its stdout, stderr and exit code.
 func runStrippedPig(t *testing.T, cwd string, args ...string) (string, string, int) {
 	t.Helper()
 	if testing.Short() {
-		t.Skip("builds a stripped cmd/pig")
+		t.Skip("builds a stripped cmd/ompig")
 	}
 	binary, err := strippedTestBinary()
 	if err != nil {
@@ -60,7 +60,7 @@ func runStrippedPig(t *testing.T, cwd string, args ...string) (string, string, i
 	}
 	cmd := exec.CommandContext(testbudget.Context(t), binary, args...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir, "HOME="+home, "PIG_TEST_FAUX=1", "PIG_OFFLINE=1", "NO_COLOR=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir, "HOME="+home, "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1", "NO_COLOR=1")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err = cmd.Run()
@@ -73,10 +73,10 @@ func runStrippedPig(t *testing.T, cwd string, args ...string) (string, string, i
 	return stdout.String(), stderr.String(), code
 }
 
-// goListCmdPig runs `go list [-tags tag] <format args> cmd/pig` and returns its output fields.
+// goListCmdPig runs `go list [-tags tag] <format args> cmd/ompig` and returns its output fields.
 func goListCmdPig(t *testing.T, tag string, format ...string) []string {
 	t.Helper()
-	return goListPackage(t, "github.com/MichaelKinsy/PiG/cmd/pig", tag, format...)
+	return goListPackage(t, "github.com/tmih06/ompig/cmd/ompig", tag, format...)
 }
 
 // goListPackage is `go list` of one package, with tag as its build tags when tag is not empty.

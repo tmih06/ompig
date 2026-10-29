@@ -6,21 +6,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestPiDirectoriesSessionOverridePrecedence(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
-	t.Setenv("PIG_CODING_AGENT_SESSION_DIR", "~/pig-sessions")
+	t.Setenv("OMPIG_CODING_AGENT_SESSION_DIR", "~/ompig-sessions")
 	t.Setenv("PI_CODING_AGENT_SESSION_DIR", "~/pi-sessions")
 	for _, shared := range []bool{false, true} {
-		t.Setenv("PIG_USE_PI_DIRS", map[bool]string{false: "", true: "1"}[shared])
-		want := filepath.Join(home, map[bool]string{false: "pig-sessions", true: "pi-sessions"}[shared])
+		t.Setenv("OMPIG_USE_PI_DIRS", map[bool]string{false: "", true: "1"}[shared])
+		want := filepath.Join(home, map[bool]string{false: "ompig-sessions", true: "pi-sessions"}[shared])
 		got, err := resolveSessionDir("", nil)
 		if err != nil || got != want {
 			t.Fatalf("shared=%v: %q %v, want %q", shared, got, err, want)
@@ -30,12 +30,12 @@ func TestPiDirectoriesSessionOverridePrecedence(t *testing.T) {
 			t.Fatalf("flag lost precedence: %q %v", got, err)
 		}
 	}
-	t.Setenv("PIG_USE_PI_DIRS", "1")
+	t.Setenv("OMPIG_USE_PI_DIRS", "1")
 	t.Setenv("PI_CODING_AGENT_SESSION_DIR", "")
 	settings := codingagent.NewSettingsManagerWithProjectTrust(t.TempDir(), t.TempDir(), false)
 	got, err := resolveSessionDir("", settings)
 	if err != nil || got != "" {
-		t.Fatalf("PiG session override leaked into shared default: %q %v", got, err)
+		t.Fatalf("Ompig session override leaked into shared default: %q %v", got, err)
 	}
 }
 

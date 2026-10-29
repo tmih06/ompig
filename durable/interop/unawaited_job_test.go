@@ -3,7 +3,7 @@ package interop
 // Evidence for D181: the commit order of an unawaited job.
 //
 // A job that runs beside the tool call that created it commits against the generation chain in an order Pi settles by
-// microtask hops and PiG's reference harness settles by goroutine scheduling (it has no hop model). Run after run PiG's
+// microtask hops and Ompig's reference harness settles by goroutine scheduling (it has no hop model). Run after run Ompig's
 // order is Pi's, and now and then the job's commits land earlier or later than Pi's (shapes: the job's first phase before
 // the tool call's settle; the job's terminal after the generation's next turn, after the answer). The test forces the
 // order that has an observable consequence: the job's terminal commit lands after the answer, which a channel holds back
@@ -31,8 +31,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // stripSeq drops every commit sequence number of a decoded dump: what is left is the content the session wrote.
@@ -191,7 +191,7 @@ func settledReads(t *testing.T, opened harness.Harness) map[string]any {
 func TestUnawaitedJobCommittedAfterTheAnswerChangesOnlyOrder(t *testing.T) {
 	dir := t.TempDir()
 	piStore := filepath.Join(dir, "pi.sqlite")
-	nodeWith(t, []string{"PIG_INTEROP_UNAWAITED_JOB=1"}, "scenario2.mjs", piStore)
+	nodeWith(t, []string{"OMPIG_INTEROP_UNAWAITED_JOB=1"}, "scenario2.mjs", piStore)
 	piRaw, piAPI := decode(t, node(t, "rawdump.mjs", piStore)), decode(t, node(t, "apidump.mjs", piStore))
 
 	// The forced order: the job's terminal commit follows the answer.

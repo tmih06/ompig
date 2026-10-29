@@ -12,7 +12,7 @@ import (
 
 // StartupHelper is the environment variable that makes a test binary whose
 // TestMain calls ReportStartupIfRequested report how it was started.
-const StartupHelper = "PIG_TEST_STARTUP_HELPER"
+const StartupHelper = "OMPIG_TEST_STARTUP_HELPER"
 
 // Startup is how a Windows process observes the way it was started.
 type Startup struct {

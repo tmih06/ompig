@@ -12,7 +12,7 @@ import tempfile
 import threading
 
 kind=sys.argv[1]
-binary=(os.environ.get('PIG_PARITY_PIG_BIN') or os.environ.get('PIG_BIN') or shutil.which('pig')) if kind=='pig' else (os.environ.get('PIG_PARITY_PI_BIN') or os.environ.get('PI_BIN') or shutil.which('pi'))
+binary=(os.environ.get('OMPIG_PARITY_OMPIG_BIN') or os.environ.get('OMPIG_BIN') or shutil.which('ompig')) if kind=='ompig' else (os.environ.get('OMPIG_PARITY_PI_BIN') or os.environ.get('PI_BIN') or shutil.which('pi'))
 if not binary: raise RuntimeError('Pinned CLI binary is not configured')
 results=[]
 for api in ['openai-completions','openai-responses']:
@@ -57,7 +57,7 @@ for api in ['openai-completions','openai-responses']:
             (directory/'settings.json').write_text(json.dumps({'httpProxy':'http://127.0.0.1:'+str(proxy.server_address[1])}))
             (directory/'models.json').write_text(json.dumps({'providers':{'fixture':{'api':api,'baseUrl':'http://'+target+'/v1','apiKey':'fixture','models':[{'id':'test','name':'Test','reasoning':False,'input':['text'],'cost':{'input':0,'output':0,'cacheRead':0,'cacheWrite':0},'contextWindow':10000,'maxTokens':1000}]}}}))
             env={key:value for key,value in os.environ.items() if key not in ['HTTP_PROXY','HTTPS_PROXY','http_proxy','https_proxy','NO_PROXY','no_proxy']}
-            env.update({'PIG_CODING_AGENT_DIR':folder,'PI_CODING_AGENT_DIR':folder,'PI_OFFLINE':'1','PI_SKIP_VERSION_CHECK':'1'})
+            env.update({'OMPIG_CODING_AGENT_DIR':folder,'PI_CODING_AGENT_DIR':folder,'PI_OFFLINE':'1','PI_SKIP_VERSION_CHECK':'1'})
             run=subprocess.run([binary,'-p','--no-extensions','--model','fixture/test','hi'],cwd=folder,env=env,text=True,capture_output=True,timeout=30)
             if run.returncode: raise RuntimeError(api+': '+run.stderr+run.stdout)
             if not observations: raise RuntimeError('origin bypassed configured proxy')

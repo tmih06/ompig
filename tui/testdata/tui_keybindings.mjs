@@ -17,7 +17,7 @@ const snapshot = (manager) => {
     keys: Object.fromEntries(ids.map((id) => [id, manager.getKeys(id)])),
     matches: Object.fromEntries(ids.map((id) => [id, inputs.map((data) => manager.matches(data, id))])),
     conflicts: manager.getConflicts().map((c) => ({ key: c.key, keybindings: [...c.keybindings] })),
-    // Pig holds every user binding as a key list, so a lone key and a one-element array are the same value.
+    // Ompig holds every user binding as a key list, so a lone key and a one-element array are the same value.
     user: Object.fromEntries(Object.entries(manager.getUserBindings()).map(([id, value]) => [id, Array.isArray(value) ? value : [value]])),
   };
 };

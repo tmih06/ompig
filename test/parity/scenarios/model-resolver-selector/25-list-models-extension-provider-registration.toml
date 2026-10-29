@@ -30,11 +30,11 @@ args = ["--list-models"]
 timeout_seconds = 20
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/pig-agent-local"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../model-resolver-selector/testdata/ompig-agent-local"]
 pi = ["PI_CODING_AGENT_DIR=../model-resolver-selector/testdata/pi-agent-local"]
-pig_args = ["--offline"]
+ompig_args = ["--offline"]
 pi_args = ["--offline"]
-pig_extensions = ["../testdata/extension-provider-registration-over-models-json.mjs"]
+ompig_extensions = ["../testdata/extension-provider-registration-over-models-json.mjs"]
 pi_extensions = ["../testdata/extension-provider-registration-over-models-json.mjs"]
 
 [assert]

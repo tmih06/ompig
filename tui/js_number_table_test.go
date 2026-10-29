@@ -72,7 +72,7 @@ func TestTrueColorAnsiByteChannels(t *testing.T) {
 	}
 }
 
-// BenchmarkTrueColorAnsi formats the foreground and background of one half-block cell of the pig head.
+// BenchmarkTrueColorAnsi formats the foreground and background of one half-block cell of the ompig head.
 func BenchmarkTrueColorAnsi(b *testing.B) {
 	top, bottom := RgbColorValue{R: 24, G: 134, B: 111}, RgbColorValue{R: 232, G: 244, B: 240}
 	b.ReportAllocs()

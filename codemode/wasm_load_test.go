@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// upstream: packages/codemode/src/wasm.ts:21 loadQuickJSWasm(path?): the default is the installed module. PiG has one module source, the embedded asset, so the path must name it.
+// upstream: packages/codemode/src/wasm.ts:21 loadQuickJSWasm(path?): the default is the installed module. Ompig has one module source, the embedded asset, so the path must name it.
 func TestLoadQuickJSWasmReturnsOnlyTheEmbeddedModule(t *testing.T) {
 	for _, path := range []string{"", EmbeddedQuickJSWasmPath} {
 		got, err := LoadQuickJSWasm(path)

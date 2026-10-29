@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -22,7 +22,7 @@ import (
 	"testing"
 )
 
-// The Node oracle (coding/testdata/rpc33-observation/providers/bedrock-converse-stream/probe.mjs) drives Pi's real bedrock-converse-stream pipeline against a loopback server and records, per delivery epoch, the microtask job at which every consumer record was made. TestBedrockObservationMatchesPi replays the direct and result-only consumers through PiG's provider over HTTP/1 and requires the same records at the same (epoch, tick).
+// The Node oracle (coding/testdata/rpc33-observation/providers/bedrock-converse-stream/probe.mjs) drives Pi's real bedrock-converse-stream pipeline against a loopback server and records, per delivery epoch, the microtask job at which every consumer record was made. TestBedrockObservationMatchesPi replays the direct and result-only consumers through Ompig's provider over HTTP/1 and requires the same records at the same (epoch, tick).
 
 const bedrockOracleDir = "../coding/testdata/rpc33-observation/providers/bedrock-converse-stream"
 
@@ -381,7 +381,7 @@ func TestBedrockObservationMatchesPi(t *testing.T) {
 	}
 }
 
-// Pi's abort runs the SDK's abort listeners synchronously inside `controller.abort()`, so their reactions join the queue at the call and a pending read fails within the same epoch (`aborted` at epoch 1, tick 52 after `start` at tick 42). PiG delivers a context cancellation to the executor as an external completion. The oracle's cancel consumer therefore fixes the event sequence, the terminal message and the stop reason, not the microtask jobs.
+// Pi's abort runs the SDK's abort listeners synchronously inside `controller.abort()`, so their reactions join the queue at the call and a pending read fails within the same epoch (`aborted` at epoch 1, tick 52 after `start` at tick 42). Ompig delivers a context cancellation to the executor as an external completion. The oracle's cancel consumer therefore fixes the event sequence, the terminal message and the stop reason, not the microtask jobs.
 func TestBedrockCancellationMatchesPiOutcome(t *testing.T) {
 	oracle, inputs := loadBedrockOracle(t)
 	ran := 0

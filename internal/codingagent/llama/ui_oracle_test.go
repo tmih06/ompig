@@ -11,8 +11,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type llamaOracleModel struct {
@@ -64,7 +64,7 @@ func llamaOracleScenarios() []llamaOracleScenario {
 	statuses := []string{"loaded", "unloaded", "loading", "downloading", "sleeping"}
 	argLists := [][]string{nil, {"--ctx-size", "8192"}, {"-c", "32000"}, {"-ctx", "0"}, {"--ctx-size", "abc"}, {"-c", "1500"}, {"-c", "999"}, {"--ctx-size"}, {"-c", "-5"}, {"-c", "1e4"}, {"--x", "-c", "2048"}, {"-c", "", "-c", "4096"}, {"-ctx", "4096", "-c", "8192"}, {"-c", "1499.5"}, {"-c", "Infinity"}, {"-c", " 4096 "}}
 	numbers := []float64{0, 1, 999, 1000, 1499, 1500, 1501, 2048, 4096, 32768, 128000, 262144, 2500}
-	// Pi 1.1.0 ignores PageUp and PageDown in these views; Pig moves the selection by a page (D155, Pi PR #7680), which
+	// Pi 1.1.0 ignores PageUp and PageDown in these views; Ompig moves the selection by a page (D155, Pi PR #7680), which
 	// TestHuggingFaceSearchPageKeysMoveTenResults covers, so the generator leaves those keys out.
 	keys := []string{"\r", "\r", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[A", "\x1b", "\x1b[H", "\x1b[F", "a", "/", "\t", "\x03", "j", "k", "\n", " "}
 	pickKeys := func(max int) []string {
@@ -154,7 +154,7 @@ func useOracleTheme(t testing.TB, name string) {
 	tui.SetTheme(name)
 }
 
-// runLlamaOracleWithPig drives one scenario against Pig's view in a synctest bubble. A step has settled when the flow goroutine has returned; after a key,
+// runLlamaOracleWithPig drives one scenario against Ompig's view in a synctest bubble. A step has settled when the flow goroutine has returned; after a key,
 // synctest.Wait returns when that goroutine has either returned or blocked on its list again, so what settled is read exactly, with no wait whose length a
 // loaded host could outrun. What settled and what the frames show are compared, not assumed.
 func runLlamaOracleWithPig(t *testing.T, scenario llamaOracleScenario) llamaOracleResult {
@@ -337,13 +337,13 @@ func TestLlamaViewMatchesPi(t *testing.T) {
 		report := fmt.Sprintf("scenario %d: %d frames, Pi %d", i, len(got.Frames), len(expected[i].Frames))
 		for s := 0; s < min(len(got.Frames), len(expected[i].Frames)); s++ {
 			if !reflect.DeepEqual(got.Settled[s], expected[i].Settled[s]) {
-				report += fmt.Sprintf("\n  step %d settled Pig %v Pi %v", s, got.Settled[s], expected[i].Settled[s])
+				report += fmt.Sprintf("\n  step %d settled Ompig %v Pi %v", s, got.Settled[s], expected[i].Settled[s])
 				break
 			}
 			if !reflect.DeepEqual(got.Frames[s], expected[i].Frames[s]) {
 				for w := range scenario.Widths {
 					if !reflect.DeepEqual(got.Frames[s][w], expected[i].Frames[s][w]) {
-						report += fmt.Sprintf("\n  step %d width %d\n  Pig %q\n  Pi  %q", s, scenario.Widths[w], got.Frames[s][w], expected[i].Frames[s][w])
+						report += fmt.Sprintf("\n  step %d width %d\n  Ompig %q\n  Pi  %q", s, scenario.Widths[w], got.Frames[s][w], expected[i].Frames[s][w])
 						break
 					}
 				}
@@ -379,7 +379,7 @@ func TestLlamaViewProbeDump(t *testing.T) {
 	fmt.Printf("llamaview-probes:%s\n", line)
 }
 
-// TestLlamaViewParity prints Pig's frames and settlements, one JSON line per scenario, for the llama-view parity scenario.
+// TestLlamaViewParity prints Ompig's frames and settlements, one JSON line per scenario, for the llama-view parity scenario.
 func TestLlamaViewParity(t *testing.T) {
 	for _, scenario := range llamaOracleScenarios() {
 		result := runLlamaOracleWithPig(t, scenario)

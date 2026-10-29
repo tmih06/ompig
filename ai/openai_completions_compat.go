@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // detectOpenAICompletionsCompat is openai-completions.ts detectCompat: the compat flags a provider name, base URL and model id imply.

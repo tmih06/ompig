@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// The regular expressions PiG used to translate upstream's patterns (colors.ts HEX, OKLCH_PATTERN, OKHSL_PATTERN), kept as the oracle for the scanners that replaced them. The keywords are spelled out because RE2's (?i) also folds U+212A into "k", which a JavaScript /i pattern does not.
+// The regular expressions Ompig used to translate upstream's patterns (colors.ts HEX, OKLCH_PATTERN, OKHSL_PATTERN), kept as the oracle for the scanners that replaced them. The keywords are spelled out because RE2's (?i) also folds U+212A into "k", which a JavaScript /i pattern does not.
 const (
 	oracleColorNumber  = `[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?`
 	oracleColorSpace   = `[\t\n\v\f\r \x{a0}\x{1680}\x{2000}-\x{200a}\x{2028}\x{2029}\x{202f}\x{205f}\x{3000}\x{feff}]`

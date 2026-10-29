@@ -47,7 +47,7 @@ func TestRPCBashCompletesWhileProviderIsPending(t *testing.T) {
 // Rejections from the awaited queue APIs yield too; they cannot escape inside the admitting input callback.
 func TestRPCQueueErrorsYieldToInputBatch(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--offline", "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent")}, "--offline", "--no-session", "--model", "test-faux/faux-1")
 	p.send("{\"id\":\"steer\",\"type\":\"steer\",\"message\":\"/block-model-select\"}\n{\"id\":\"follow\",\"type\":\"follow_up\",\"message\":\"/block-model-select\"}\n{\"id\":\"sync\",\"type\":\"abort_retry\"}")
 	var records []rpcRecord
 	p.await("queue rejections", func(r rpcRecord) bool { records = append(records, r); return len(records) == 3 })
@@ -66,7 +66,7 @@ func TestRPCQueueErrorsYieldToInputBatch(t *testing.T) {
 // Pi rpc-mode.ts:417-425 awaits both Session queue APIs and answers with their dispositions (agent-session.ts:2093,2130). Their nested fulfilled Promises do not publish a response inside jsonl.ts:onData's input batch.
 func TestRPCQueueRepliesYieldToInputBatch(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--offline", "--no-session", "--no-extensions", "--model", "test-faux/faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--offline", "--no-session", "--no-extensions", "--model", "test-faux/faux-1")
 	p.send("{\"id\":\"steer\",\"type\":\"steer\",\"message\":\"\"}\n{\"id\":\"follow\",\"type\":\"follow_up\",\"message\":\"\"}\n{\"id\":\"sync\",\"type\":\"abort_retry\"}")
 	var records []rpcRecord
 	responses := 0

@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestRequiredSDKToolsFailWhenMissing(t *testing.T) {
-	const helperEnv = "PIG_TEST_MISSING_CONFORMANCE_TOOL"
+	const helperEnv = "OMPIG_TEST_MISSING_CONFORMANCE_TOOL"
 	if helper := os.Getenv(helperEnv); helper != "" {
 		switch helper {
 		case "node-isolated":
@@ -21,7 +21,7 @@ func TestRequiredSDKToolsFailWhenMissing(t *testing.T) {
 		case "python":
 			buildPythonSDKFixture(t)
 		case "rust":
-			t.Setenv("PIG_TEST_RUST_SDK_FIXTURE_BIN", "")
+			t.Setenv("OMPIG_TEST_RUST_SDK_FIXTURE_BIN", "")
 			buildRustSDKFixture(t)
 		default:
 			t.Fatalf("unknown missing-tool helper: %q", helper)
@@ -43,7 +43,7 @@ func TestRequiredSDKToolsFailWhenMissing(t *testing.T) {
 			t.Setenv(helperEnv, tc.name)
 			if tc.name == "rust" {
 				// The grouped verifier supplies an existing prebuilt fixture. The missing-Cargo probe must still exercise source-build preflight.
-				t.Setenv("PIG_TEST_RUST_SDK_FIXTURE_BIN", executable)
+				t.Setenv("OMPIG_TEST_RUST_SDK_FIXTURE_BIN", executable)
 			}
 			cmd := exec.CommandContext(testbudget.Context(t), executable, "-test.run=^TestRequiredSDKToolsFailWhenMissing$", "-test.v")
 			output, err := cmd.CombinedOutput()

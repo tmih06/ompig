@@ -4,8 +4,8 @@
 package core
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // apiTasks serves the api ops of ABI section 8.1 that belong to the task scheduler: the memos of a running task, waits

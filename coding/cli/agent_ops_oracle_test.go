@@ -8,16 +8,16 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/agent/src/agent.ts Agent
 
 // The Agent class against pinned Pi over random operation sequences: prompt and continue from every transcript state (empty, after a user message,
 // after an assistant message, after an error or an abort), steer and follow-up queues in "all" and "one-at-a-time" mode, clears and reset. A stream function that throws is not
-// compared: PiG reports its error as a stream function that failed during setup does in Pi (an error message in the loop's agent_end), while a throw
+// compared: Ompig reports its error as a stream function that failed during setup does in Pi (an error message in the loop's agent_end), while a throw
 // reaches Pi's Agent.handleRunFailure, whose agent_end carries only the failure message. After each operation the events, the error, the transcript and whether messages are queued must be equal.
 func TestAgentOperationsMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(197))
@@ -171,7 +171,7 @@ func TestAgentOperationsMatchPi(t *testing.T) {
 						first++
 					}
 					from := max(first-150, 0)
-					t.Errorf("probe %d step %d (%v):\n turns %v ops %v\n PiG …%s\n Pi  …%s", i, step, o, p.Turns, p.Ops[:step+1], got[from:min(first+300, len(got))], exp[from:min(first+300, len(exp))])
+					t.Errorf("probe %d step %d (%v):\n turns %v ops %v\n Ompig …%s\n Pi  …%s", i, step, o, p.Turns, p.Ops[:step+1], got[from:min(first+300, len(got))], exp[from:min(first+300, len(exp))])
 				}
 				break
 			}

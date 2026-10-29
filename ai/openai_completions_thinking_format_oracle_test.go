@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/openai-completions.ts buildParams thinking formats (885-925) and buildChatTemplateValues / resolveChatTemplateKwargValue (1034-1075).
 
 // The existing openai-completions payload oracle draws only six thinkingFormat values and no chat-template values or thinking level maps. This one covers the rest: every thinkingFormat,
 // compat.chatTemplateKwargs and compat.chatTemplateArgs holding scalars, null, `{ "$var": ... }` placeholders and omitWhenOff entries, and a model thinkingLevelMap that remaps, nulls or leaves
-// each level, over both stream and streamSimple options. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal as parsed JSON.
+// each level, over both stream and streamSimple options. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal as parsed JSON.
 func TestOpenAICompletionsThinkingFormatsPayloadMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(97))
 	g := &payloadGen{rng: rng, api: "openai-completions", provider: "p", model: "m", thinkingSignatures: []string{""}}
@@ -145,7 +145,7 @@ func TestOpenAICompletionsThinkingFormatsPayloadMatchesPi(t *testing.T) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d provider=%s reasoning=%v simple=%v compat=%s levels=%s options=%v", i, p.Provider, p.Reasoning, p.Simple, p.Compat, p.Levels, p.Options), got, want[i], &failures, classes)
 	}

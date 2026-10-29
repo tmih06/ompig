@@ -13,10 +13,10 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // CreateAgentSessionRuntimeOptions selects the destination log and cwd-bound factory inputs.
@@ -53,7 +53,7 @@ type runtimeInstance struct {
 
 func (instance *runtimeInstance) retireResources(reason string) {
 	instance.retireOnce.Do(func() {
-		// pig additive (D19): the factory owns subprocess resources; logical Session disposal does not wait for a callback's leased transport to retire physically.
+		// ompig additive (D19): the factory owns subprocess resources; logical Session disposal does not wait for a callback's leased transport to retire physically.
 		if instance.Dispose != nil {
 			instance.Dispose(reason)
 		}

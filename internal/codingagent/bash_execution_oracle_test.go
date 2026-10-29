@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type bashComplete struct {
@@ -187,7 +187,7 @@ func firstBashFrameDifference(got, want [][]string) string {
 				w = want[frame][row]
 			}
 			if g != w {
-				return fmt.Sprintf("frame %d row %d: Pig %q, Pi %q (%d vs %d rows)", frame, row, g, w, len(got[frame]), len(want[frame]))
+				return fmt.Sprintf("frame %d row %d: Ompig %q, Pi %q (%d vs %d rows)", frame, row, g, w, len(got[frame]), len(want[frame]))
 			}
 		}
 	}

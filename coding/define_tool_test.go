@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // upstream: packages/coding-agent/src/core/extensions/types.ts:676 defineTool is `(tool) => tool`: the definition comes back unchanged, so one passed through customTools keeps every member.

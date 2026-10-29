@@ -56,7 +56,7 @@ func shellProfile(dir string) *profile {
 		return []string{"sh", "-c", fmt.Sprintf(`echo "sample %s {turns} {sample}" >> %s; echo "not a result"; echo '{"target":"%s-bench","version":"v9","turns":{turns},"sample":{sample},"open":%d,"turn":[10,20,30],"fingerprint":"after"}'`, name, calls, name, open)}
 	}
 	return &profile{Name: "shell", Rule: "test", Fingerprints: map[string]string{"5": "fp5"}, Targets: []target{
-		{Name: "pig", Role: rolePig, Seed: seed("pig"), SeedMeta: "{dir}/meta.json", Sample: sample("pig", 1)},
+		{Name: "ompig", Role: rolePig, Seed: seed("ompig"), SeedMeta: "{dir}/meta.json", Sample: sample("ompig", 1)},
 		{Name: "pi", Role: roleReference, Seed: seed("pi"), SeedMeta: "{dir}/meta.json", Sample: sample("pi", 2)},
 	}}
 }
@@ -83,7 +83,7 @@ func TestPodSessionInterleavesAndRetags(t *testing.T) {
 	env := testEnv(t, root)
 	env.results = t.TempDir()
 	scratch := t.TempDir()
-	pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: shellProfile(scratch), Targets: []string{"pig", "pi"}, Turns: []int{5, 9},
+	pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: shellProfile(scratch), Targets: []string{"ompig", "pi"}, Turns: []int{5, 9},
 		Rounds: 3, CPUs: 2, Pin: "none", Commit: "0123456789", StepTimeoutSeconds: 30}
 	var out bytes.Buffer
 	if err := runPod(context.Background(), pl, env, &out); err != nil {
@@ -92,10 +92,10 @@ func TestPodSessionInterleavesAndRetags(t *testing.T) {
 	calls, _ := os.ReadFile(filepath.Join(scratch, "calls.log"))
 	// Seeds rotate per size; rounds are outermost, sizes inside, and each round rotates the target order.
 	want := strings.Join([]string{
-		"seed pig 5", "seed pi 5", "seed pi 9", "seed pig 9",
-		"sample pig 5 0", "sample pi 5 0", "sample pig 9 0", "sample pi 9 0",
-		"sample pi 5 1", "sample pig 5 1", "sample pi 9 1", "sample pig 9 1",
-		"sample pig 5 2", "sample pi 5 2", "sample pig 9 2", "sample pi 9 2",
+		"seed ompig 5", "seed pi 5", "seed pi 9", "seed ompig 9",
+		"sample ompig 5 0", "sample pi 5 0", "sample ompig 9 0", "sample pi 9 0",
+		"sample pi 5 1", "sample ompig 5 1", "sample pi 9 1", "sample ompig 9 1",
+		"sample ompig 5 2", "sample pi 5 2", "sample ompig 9 2", "sample pi 9 2",
 	}, "\n") + "\n"
 	if string(calls) != want {
 		t.Errorf("order:\n%s\nwant:\n%s", calls, want)
@@ -115,14 +115,14 @@ func TestPodSessionInterleavesAndRetags(t *testing.T) {
 	if want := []string{"t", "target", "bench_target", "version", "turns", "sample", "open", "turn", "fingerprint", "gomaxprocs", "cpuModel", "cpuFeatures"}; !slices.Equal(first.keys, want) {
 		t.Errorf("sample line fields %v, want %v", first.keys, want)
 	}
-	if first.str("target") != "pig" || first.str("bench_target") != "pig-bench" || first.str("version") != "0123456789abcdef0123" {
-		t.Errorf("pig sample retag: %s", first.values)
+	if first.str("target") != "ompig" || first.str("bench_target") != "ompig-bench" || first.str("version") != "0123456789abcdef0123" {
+		t.Errorf("ompig sample retag: %s", first.values)
 	}
 	if log.samples[1].raw.str("version") != "v9" {
 		t.Error("the reference keeps its own version")
 	}
 	seed := log.seeds[0]
-	if seed.str("from") != "empty" || seed.str("fingerprint") != "fp5" || seed.str("target") != "pig" {
+	if seed.str("from") != "empty" || seed.str("fingerprint") != "fp5" || seed.str("target") != "ompig" {
 		t.Errorf("seed line %s", seed.values)
 	}
 	f := log.facts
@@ -150,7 +150,7 @@ func TestPodSessionReportsAFailingStep(t *testing.T) {
 	env := testEnv(t, fakeRoot(t, nil))
 	prof := shellProfile(t.TempDir())
 	prof.Targets[1].Sample = []string{"sh", "-c", "echo boom-from-stderr >&2; exit 3"}
-	pl := &plan{Run: "r", Mode: modeCompare, Profile: prof, Targets: []string{"pig", "pi"}, Turns: []int{5}, Rounds: 1, CPUs: 2, Pin: "none", StepTimeoutSeconds: 30}
+	pl := &plan{Run: "r", Mode: modeCompare, Profile: prof, Targets: []string{"ompig", "pi"}, Turns: []int{5}, Rounds: 1, CPUs: 2, Pin: "none", StepTimeoutSeconds: 30}
 	var out bytes.Buffer
 	err := runPod(context.Background(), pl, env, &out)
 	if err == nil || !strings.Contains(err.Error(), "boom-from-stderr") || !strings.Contains(err.Error(), "sample pi at 5 turns") {
@@ -165,7 +165,7 @@ func TestPodSessionReportsAFailingStep(t *testing.T) {
 
 func TestPodSessionRefusesAnotherCommit(t *testing.T) {
 	env := testEnv(t, fakeRoot(t, nil))
-	pl := &plan{Run: "r", Mode: modeCompare, Profile: shellProfile(t.TempDir()), Targets: []string{"pig", "pi"}, Turns: []int{5}, Rounds: 1, CPUs: 2, Pin: "none", Commit: "fedcba9876", StepTimeoutSeconds: 30}
+	pl := &plan{Run: "r", Mode: modeCompare, Profile: shellProfile(t.TempDir()), Targets: []string{"ompig", "pi"}, Turns: []int{5}, Rounds: 1, CPUs: 2, Pin: "none", Commit: "fedcba9876", StepTimeoutSeconds: 30}
 	if err := runPod(context.Background(), pl, env, &bytes.Buffer{}); err == nil || !strings.Contains(err.Error(), "not the requested commit") {
 		t.Fatalf("got %v", err)
 	}
@@ -281,7 +281,7 @@ func TestInheritedGOMAXPROCSDoesNotReachTheSteps(t *testing.T) {
 	for i := range prof.Targets {
 		prof.Targets[i].Sample = []string{"sh", "-c", `echo '{"turns":5,"open":1,"turn":[10,20],"fingerprint":"after","env":"'"$GOMAXPROCS"'"}'`}
 	}
-	pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: prof, Targets: []string{"pig", "pi"}, Turns: []int{5},
+	pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: prof, Targets: []string{"ompig", "pi"}, Turns: []int{5},
 		Rounds: 1, CPUs: 2, Pin: strconv.Itoa(mine[0]), Commit: "0123456789", StepTimeoutSeconds: 30}
 	var out bytes.Buffer
 	if err := runPod(context.Background(), pl, env, &out); err != nil {
@@ -311,7 +311,7 @@ func TestPodCPULineOmitsAnUnreadUsage(t *testing.T) {
 		t.Fatal(err)
 	}
 	env := testEnv(t, root)
-	pl := &plan{Run: "r", Mode: modeCompare, Profile: shellProfile(t.TempDir()), Targets: []string{"pig", "pi"}, Turns: []int{5}, Rounds: 1, CPUs: 2, Pin: "none", StepTimeoutSeconds: 30}
+	pl := &plan{Run: "r", Mode: modeCompare, Profile: shellProfile(t.TempDir()), Targets: []string{"ompig", "pi"}, Turns: []int{5}, Rounds: 1, CPUs: 2, Pin: "none", StepTimeoutSeconds: 30}
 	var out bytes.Buffer
 	if err := runPod(context.Background(), pl, env, &out); err != nil {
 		t.Fatalf("%v\n%s", err, out.String())
@@ -353,7 +353,7 @@ func TestPodRefusesAnotherNodeRelease(t *testing.T) {
 		}
 		env.nodeRuntime = func(context.Context) string { return c.runtime }
 		scratch := t.TempDir()
-		pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: shellProfile(scratch), Targets: []string{"pig", "pi"}, Turns: []int{5},
+		pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: shellProfile(scratch), Targets: []string{"ompig", "pi"}, Turns: []int{5},
 			Rounds: 1, CPUs: 2, Pin: "none", Commit: "0123456789", StepTimeoutSeconds: 30}
 		err := runPod(context.Background(), pl, env, &bytes.Buffer{})
 		calls, _ := os.ReadFile(filepath.Join(scratch, "calls.log"))
@@ -382,7 +382,7 @@ func TestStepsRunWithAnExplicitGOMAXPROCS(t *testing.T) {
 		for i := range prof.Targets {
 			prof.Targets[i].Sample = []string{"sh", "-c", `echo '{"turns":5,"open":1,"turn":[10,20],"fingerprint":"after","env":"'"$GOMAXPROCS"'","gomaxprocs":99}'`}
 		}
-		pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: prof, Targets: []string{"pig", "pi"}, Turns: []int{5},
+		pl := &plan{Run: "k8sbench-cmp-test", Mode: modeCompare, Profile: prof, Targets: []string{"ompig", "pi"}, Turns: []int{5},
 			Rounds: 1, CPUs: c.cpus, Pin: "none", Commit: "0123456789", StepTimeoutSeconds: 30}
 		var out bytes.Buffer
 		if err := runPod(context.Background(), pl, env, &out); err != nil {
@@ -428,12 +428,12 @@ func TestPodSetsTheSizeAndRound(t *testing.T) {
 	env := testEnv(t, root)
 	env.results = t.TempDir()
 	prof := &profile{Name: "own", Rule: "test", Targets: []target{
-		{Name: "pig", Role: rolePig, Seed: []string{"sh", "-c", `printf '{"fingerprint":"fp","seedMs":1,"bytes":10}' > {dir}/meta.json`}, SeedMeta: "{dir}/meta.json",
+		{Name: "ompig", Role: rolePig, Seed: []string{"sh", "-c", `printf '{"fingerprint":"fp","seedMs":1,"bytes":10}' > {dir}/meta.json`}, SeedMeta: "{dir}/meta.json",
 			Sample: []string{"sh", "-c", `echo '{"sample":7,"open":1,"turn":[10,20,30]}'`}},
 		{Name: "pi", Role: roleReference, Seed: []string{"sh", "-c", `printf '{"fingerprint":"fp","seedMs":1,"bytes":10,"turns":1}' > {dir}/meta.json`}, SeedMeta: "{dir}/meta.json",
 			Sample: []string{"sh", "-c", `echo '{"turns":5,"open":2,"turn":[10,20,30]}'`}},
 	}}
-	pl := &plan{Run: "k8sbench-cmp-own", Mode: modeCompare, Profile: prof, Targets: []string{"pig", "pi"}, Turns: []int{5}, Rounds: 2, CPUs: 2, Pin: "none", Commit: "0123456789", StepTimeoutSeconds: 30}
+	pl := &plan{Run: "k8sbench-cmp-own", Mode: modeCompare, Profile: prof, Targets: []string{"ompig", "pi"}, Turns: []int{5}, Rounds: 2, CPUs: 2, Pin: "none", Commit: "0123456789", StepTimeoutSeconds: 30}
 	var out bytes.Buffer
 	if err := runPod(context.Background(), pl, env, &out); err != nil {
 		t.Fatalf("%v\n%s", err, out.String())
@@ -442,7 +442,7 @@ func TestPodSetsTheSizeAndRound(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{"pig", "pi"} {
+	for _, name := range []string{"ompig", "pi"} {
 		if seeds := log.seedOf(name, 5); len(seeds) != 1 {
 			t.Errorf("%s: %d seed lines at 5 turns", name, len(seeds))
 		}
@@ -457,8 +457,8 @@ func TestPodSetsTheSizeAndRound(t *testing.T) {
 		}
 	}
 	var own float64
-	if pigSample := log.of("pig", 5)[0].raw; !pigSample.get("bench_sample", &own) || own != 7 {
-		t.Errorf("the workload's own sample number stays as bench_sample: %v", pigSample.keys)
+	if ompigSample := log.of("ompig", 5)[0].raw; !ompigSample.get("bench_sample", &own) || own != 7 {
+		t.Errorf("the workload's own sample number stays as bench_sample: %v", ompigSample.keys)
 	}
 	if piSeed := log.seedOf("pi", 5)[0]; !piSeed.has("bench_turns") {
 		t.Errorf("the workload's own turns stay as bench_turns: %v", piSeed.keys)

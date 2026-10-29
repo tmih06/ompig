@@ -11,7 +11,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type themeLoadResult struct {
@@ -170,13 +170,13 @@ func TestLoadThemeFromPathOnRandomColorsMatchesPi(t *testing.T) {
 			}
 			if got.Error != want.Error || got.Name != want.Name || got.Appearance != want.Appearance || !mapsEqualJSON(got.Fg, want.Fg) || !mapsEqualJSON(got.Bg, want.Bg) {
 				if failures++; failures <= 6 {
-					t.Errorf("doc %d %s:\n Pig %s\n Pi  %s", i, mode, summarizeThemeLoad(got), summarizeThemeLoad(want))
+					t.Errorf("doc %d %s:\n Ompig %s\n Pi  %s", i, mode, summarizeThemeLoad(got), summarizeThemeLoad(want))
 				}
 			}
 		}
 	}
 	if loaded < documents/2 {
-		t.Fatalf("only %d of %d loads succeeded in Pig; the corpus no longer exercises resolved colours", loaded, 2*documents)
+		t.Fatalf("only %d of %d loads succeeded in Ompig; the corpus no longer exercises resolved colours", loaded, 2*documents)
 	}
 	if failures > 0 {
 		t.Fatalf("%d of %d loads differ from Pi", failures, 2*documents)

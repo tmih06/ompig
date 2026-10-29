@@ -80,9 +80,9 @@ if os.path.exists(results_path):
             grp = row.get('group') or group_for(row.get('driver') or '', row.get('tags') or [], '')
             by_group[grp].append(row)
         for grp in sorted(by_group):
-            rows = sorted(by_group[grp], key=lambda r: max(r.get('pig_median_ms', 0), r.get('pi_median_ms', 0)), reverse=True)[:3]
+            rows = sorted(by_group[grp], key=lambda r: max(r.get('ompig_median_ms', 0), r.get('pi_median_ms', 0)), reverse=True)[:3]
             print(f'  slowest {grp}:')
             for r in rows:
-                mx = max(r.get('pig_median_ms', 0), r.get('pi_median_ms', 0))
+                mx = max(r.get('ompig_median_ms', 0), r.get('pi_median_ms', 0))
                 print(f'    - {r.get("name")}: {mx}ms (driver={r.get("driver")})')
 PY

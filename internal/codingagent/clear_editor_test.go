@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // upstream: interactive-mode.ts:4578 (clearEditor): the editor text is emptied and the screen re-rendered; Ctrl+C reaches it through the clear outcome (handleCtrlC).

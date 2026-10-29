@@ -11,9 +11,9 @@ import (
 	"slices"
 	"strings"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // PiCodingAgentModelSelection names the provider and model an eval runs.
@@ -22,9 +22,9 @@ type PiCodingAgentModelSelection struct {
 	ID       string `json:"id"`
 }
 
-// PiCodingAgentHarnessOptions configures an eval harness. A nil Tools keeps the Session default. PigPath and
-// ExtensionPath name the pig binary and the cmd/pig-eval-extension binary; empty values read PI_EVAL_PIG and
-// PI_EVAL_EXTENSION, and the pig binary falls back to PATH.
+// PiCodingAgentHarnessOptions configures an eval harness. A nil Tools keeps the Session default. OmpigPath and
+// ExtensionPath name the ompig binary and the cmd/ompig-eval-extension binary; empty values read PI_EVAL_OMPIG and
+// PI_EVAL_EXTENSION, and the ompig binary falls back to PATH.
 type PiCodingAgentHarnessOptions struct {
 	Name                    string
 	Model                   *PiCodingAgentModelSelection
@@ -35,7 +35,7 @@ type PiCodingAgentHarnessOptions struct {
 	TransformSystemPrompt   func(defaultPrompt string) (string, error)
 	ExpectedPiDocumentation *bool
 	Output                  PiCodingAgentOutput
-	PigPath                 string
+	OmpigPath               string
 	ExtensionPath           string
 
 	// agentFiles are written into the isolated agent directory before the model is resolved; in-package tests use them
@@ -73,7 +73,7 @@ func ResolveModelSelection(explicitModel *PiCodingAgentModelSelection, environme
 
 // agentDirEnvironment is the variable that selects the agent directory.
 func agentDirEnvironment() string {
-	// pig divergence (D2): PiG reads PIG_CODING_AGENT_DIR unless PIG_USE_PI_DIRS selects Pi's PI_CODING_AGENT_DIR.
+	// ompig divergence (D2): Ompig reads OMPIG_CODING_AGENT_DIR unless OMPIG_USE_PI_DIRS selects Pi's PI_CODING_AGENT_DIR.
 	if icodingagent.UsePiDirs() {
 		return "PI_CODING_AGENT_DIR"
 	}
@@ -107,9 +107,9 @@ func ApplyIsolatedEnvironment(home, agentDir string) func() {
 		previous = append(previous, saved{name, value, true})
 		_ = os.Unsetenv(name)
 	}
-	// PiG's state root variables would send the agent's docs, cache and SDK state outside the isolated home (PIG_HOME, and
+	// Ompig's state root variables would send the agent's docs, cache and SDK state outside the isolated home (OMPIG_HOME, and
 	// XDG_CONFIG_HOME through codingagent.ConfigRoot, which CI sets); Pi has no such variables.
-	for _, name := range [...]string{"PIG_HOME", "PI_HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "XDG_STATE_HOME"} {
+	for _, name := range [...]string{"OMPIG_HOME", "PI_HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "XDG_STATE_HOME"} {
 		if !seen[name] {
 			seen[name] = true
 			value, present := os.LookupEnv(name)
@@ -173,8 +173,8 @@ func resolveSandboxIdentity() (*sandboxIdentity, error) {
 }
 
 // documentationSectionStart opens the docs section of the default system prompt.
-// pig additive (D22): PiG's docs section introduces the materialized PiG documentation bundle.
-const documentationSectionStart = "\n<docs>\nPiG documentation (read only"
+// ompig additive (D22): Ompig's docs section introduces the materialized Ompig documentation bundle.
+const documentationSectionStart = "\n<docs>\nOmpig documentation (read only"
 
 // VerifySystemPrompt checks that systemPrompt kept its rules and has the documentation section the variant expects.
 // It returns systemPrompt unchanged when the options expect nothing.

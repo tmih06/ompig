@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // vendoredIdentityPatches lists, per vendored file (relative to shims/pi-dist),
-// the PiG product identity that automation/gen/pi-identity-patches.mjs applies
+// the Ompig product identity that automation/gen/pi-identity-patches.mjs applies
 // to Pi's outbound identity and endpoint literals (D26). Each entry replaces one
 // exact Pi line; the values are pigidentity's, the same ones the Go host sends.
 // The table is spelled out here independently of the patch script, so a wrong
@@ -22,14 +22,14 @@ var vendoredIdentityPatches = map[string][][2]string{
 		{`export const PI_ATTRIBUTION = { name: "pi", url: "https://pi.dev", categories: ["cli-agent"] };`,
 			`export const PI_ATTRIBUTION = { name: "` + pigidentity.AttributionName + `", url: "` + pigidentity.AttributionURL + `", categories: ["` + pigidentity.AttributionCategory + `"] };`},
 		{"    if (mode === \"short\")\n        return \"pi\";\n    const product = `pi/${getClientVersion(identity)}`;\n    const runtime = runtimeDescription();\n    return runtime ? `${product} (${process.platform}; ${runtime}; ${process.arch})` : `${product} (browser)`;",
-			"// pig divergence (D26, D65): PiG's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n    if (mode === \"short\")\n        return \"" + pigidentity.UserAgentProduct + "\";\n    return pigUserAgent(\"" + pigidentity.UserAgentProduct + "\", identity?.version);"},
-		{`import { PI_AI_VERSION } from "./version.js";`, "import { PI_AI_VERSION } from \"./version.js\";\nimport { pigUserAgent } from \"../../../pig-identity.mjs\";"},
+			"// ompig divergence (D26, D65): Ompig's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n    if (mode === \"short\")\n        return \"" + pigidentity.UserAgentProduct + "\";\n    return ompigUserAgent(\"" + pigidentity.UserAgentProduct + "\", identity?.version);"},
+		{`import { PI_AI_VERSION } from "./version.js";`, "import { PI_AI_VERSION } from \"./version.js\";\nimport { ompigUserAgent } from \"../../../ompig-identity.mjs\";"},
 	},
 	"pi-coding-agent/core/client-identity.js": {
-		{"        version: VERSION,", "// pig divergence (D26, D65): PiG's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n        version: process.env.PIG_PRODUCT_VERSION ?? VERSION,"},
+		{"        version: VERSION,", "// ompig divergence (D26, D65): Ompig's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n        version: process.env.OMPIG_PRODUCT_VERSION ?? VERSION,"},
 	},
 	"pi-coding-agent/utils/pi-user-agent.js": {
-		{`    return formatUserAgent({ userAgent: "detailed", version });`, "// pig divergence (D26, D65): PiG's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n    return formatUserAgent({ userAgent: \"detailed\" });"},
+		{`    return formatUserAgent({ userAgent: "detailed", version });`, "// ompig divergence (D26, D65): Ompig's product identity replaces Pi's; see automation/gen/pi-identity-patches.mjs.\n    return formatUserAgent({ userAgent: \"detailed\" });"},
 	},
 	"pi-ai/auth/oauth/openai-codex.js": {
 		{`async function createAuthorizationFlow(originator = "pi") {`, `async function createAuthorizationFlow(originator = "` + pigidentity.CodexOriginator + `") {`},
@@ -52,12 +52,12 @@ var vendoredIdentityPatches = map[string][][2]string{
 	"pi-coding-agent/modes/interactive/interactive-mode.js": {
 		{"void fetch(`https://pi.dev/api/report-install?version=", "void fetch(`" + pigidentity.HostedOrigin + "/api/report-install?version="},
 	},
-	// D62: PiG never uploads bug reports; D64: PiG's /share never sends a Radius token to a gateway.
+	// D62: Ompig never uploads bug reports; D64: Ompig's /share never sends a Radius token to a gateway.
 	"pi-coding-agent/core/bug-report-upload.js": {
-		{"export async function uploadBugReport(bundle, options = {}) {\n", "export async function uploadBugReport(bundle, options = {}) {\n    throw new Error(\"PiG does not upload bug reports (D62): export the report and attach it to a PiG issue instead.\"); // pig divergence (D26, D62)\n"},
+		{"export async function uploadBugReport(bundle, options = {}) {\n", "export async function uploadBugReport(bundle, options = {}) {\n    throw new Error(\"Ompig does not upload bug reports (D62): export the report and attach it to a Ompig issue instead.\"); // ompig divergence (D26, D62)\n"},
 	},
 	"pi-coding-agent/modes/interactive/session-share.js": {
-		{"async function tryShareViaRadius(tmpFile, context) {\n", "async function tryShareViaRadius(tmpFile, context) {\n    return false; // pig divergence (D26, D64): PiG never sends a Radius token to Radius's share gateway.\n"},
+		{"async function tryShareViaRadius(tmpFile, context) {\n", "async function tryShareViaRadius(tmpFile, context) {\n    return false; // ompig divergence (D26, D64): Ompig never sends a Radius token to Radius's share gateway.\n"},
 	},
 }
 
@@ -93,7 +93,7 @@ func TestVendorManifestLabelsEveryIdentityPatchedSeam(t *testing.T) {
 	if err := json.Unmarshal(data, &manifest); err != nil {
 		t.Fatal(err)
 	}
-	const identity = "D26 PiG product identity (automation/gen/pi-identity-patches.mjs)"
+	const identity = "D26 Ompig product identity (automation/gen/pi-identity-patches.mjs)"
 	labels := map[string]string{}
 	for _, record := range manifest.Files {
 		labels[record.Path] = record.Rewrite

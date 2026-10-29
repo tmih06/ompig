@@ -11,10 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func persistReadonlyIDSession(t *testing.T, session *codingagent.Session, content string) {
@@ -93,7 +93,7 @@ func TestUpstreamSessionIDReadonly(t *testing.T) {
 		agentDir := filepath.Join(t.TempDir(), "agent")
 		cmd := exec.CommandContext(t.Context(), buildPigBinaryForSignalTest(t), "--session-id", "read-only-help", "--help")
 		cmd.Dir = cwd
-		cmd.Env = append(os.Environ(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1")
+		cmd.Env = append(os.Environ(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1")
 		if output, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("help exit != 0: %v: %s", err, output)
 		}
@@ -267,7 +267,7 @@ func TestUpstreamSessionIDReadonly(t *testing.T) {
 		}
 		cmd := exec.CommandContext(t.Context(), buildPigBinaryForSignalTest(t), "--session-dir", dir, "--fork", "source-id", "--session-id", "existing-id", "-p", "test")
 		cmd.Dir = cwd
-		cmd.Env = append(os.Environ(), "PIG_CODING_AGENT_DIR="+filepath.Join(t.TempDir(), "agent"), "PIG_OFFLINE=1", "FORCE_COLOR=0", "NO_COLOR=1")
+		cmd.Env = append(os.Environ(), "OMPIG_CODING_AGENT_DIR="+filepath.Join(t.TempDir(), "agent"), "OMPIG_OFFLINE=1", "FORCE_COLOR=0", "NO_COLOR=1")
 		output, err := cmd.CombinedOutput()
 		var exit *exec.ExitError
 		if !errors.As(err, &exit) || exit.ExitCode() != 1 || string(output) != "Session already exists with id 'existing-id'\n" {

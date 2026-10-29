@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 // stageOutcome is the result of staging one planner cell. ReloadCellReport is

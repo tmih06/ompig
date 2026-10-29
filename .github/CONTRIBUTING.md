@@ -2,7 +2,7 @@
 SPDX-License-Identifier: MIT
 -->
 
-# Contributing to PiG
+# Contributing to Ompig
 
 Read [`AGENTS.md`](AGENTS.md), [`docs/project/CONTEXT.md`](../docs/project/CONTEXT.md), and the
 [repository quality standard](../docs/project/repository-quality.md) before
@@ -11,8 +11,8 @@ changing source.
 ## Contribution principles
 
 - Preserve observable Pi behavior unless an approved numbered divergence applies.
-- Keep Stock PiG product-neutral.
-- Put product behavior in an extension or explicitly selected Piglet.
+- Keep Stock Ompig product-neutral.
+- Put product behavior in an extension or explicitly selected Ompiglet.
 - Add the smallest change that satisfies the stated contract.
 - Derive tests from upstream behavior or another documented requirement.
 - Do not weaken parity checks, comparators, test counts, or security gates.
@@ -30,7 +30,7 @@ git commit --signoff
 
 The sign-off certifies that you have the right to submit the contribution under the project license. It is not a copyright assignment or a cryptographic signature.
 
-PiG does not require a Contributor License Agreement.
+Ompig does not require a Contributor License Agreement.
 
 ## Signed commits
 
@@ -78,7 +78,7 @@ Before submitting agent-assisted work:
 - confirm that the tests can detect the behavior they claim;
 - check agent output against [Faithful, general implementations](AGENTS.md#faithful-general-implementations);
 - remove generated speculation, unrelated changes, and private data; and
-- be prepared to explain the design and its interaction with the rest of PiG.
+- be prepared to explain the design and its interaction with the rest of Ompig.
 
 Do not submit unattended, high-volume, or unreviewed generated issues or pull
 requests. Maintainers review technical evidence, not the apparent fluency of the
@@ -89,7 +89,7 @@ submission.
 If you need help preparing a development host, load the repository setup Skill:
 
 ```bash
-pig --skill ./.agents/skills/setup-pig
+ompig --skill ./.agents/skills/setup-ompig
 ```
 
 The Skill checks only the tools required for the selected task and asks before
@@ -130,7 +130,7 @@ Do not edit generated files by hand. Use the repository generator named by the f
 
 ## Upstream collaboration
 
-Pi is the reference implementation. Keep PiG-specific discussion respectful and factual. Do not imply endorsement by Pi or its maintainers. A contribution to Pi follows Pi's own contribution policy and uses a separately approved contribution route.
+Pi is the reference implementation. Keep Ompig-specific discussion respectful and factual. Do not imply endorsement by Pi or its maintainers. A contribution to Pi follows Pi's own contribution policy and uses a separately approved contribution route.
 
 ## Conduct and security
 

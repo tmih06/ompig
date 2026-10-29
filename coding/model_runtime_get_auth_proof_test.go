@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // model-runtime.ts getAuth(model, overrides): the overrides reach the provider's resolution for a chat model and for an image model, and a

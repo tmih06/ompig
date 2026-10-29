@@ -12,10 +12,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Port of upstream core/cache-warmer.ts.
@@ -466,7 +466,7 @@ func (w *CacheWarmer) scheduleLocked(run *cacheWarmingRun) {
 	w.tasks.Add(1)
 	run.timer = time.AfterFunc(time.Duration(max(0, run.nextWarmAt-now))*time.Millisecond, func() {
 		defer w.tasks.Done()
-		// pig additive (D102): a panic outside the request upstream catches reaches the interactive uncaught handler, as
+		// ompig additive (D102): a panic outside the request upstream catches reaches the interactive uncaught handler, as
 		// upstream's floating refresh promise reaches uncaughtException.
 		defer RecoverUncaught()
 		w.refresh(run)

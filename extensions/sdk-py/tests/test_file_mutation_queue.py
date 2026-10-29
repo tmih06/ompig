@@ -11,7 +11,7 @@ import unittest
 from typing import Any
 from unittest import mock
 
-from pig_sdk import HostCallError, file_mutation_queue as fmq, host_helpers
+from ompig_sdk import HostCallError, file_mutation_queue as fmq, host_helpers
 
 
 class ScriptedHost:

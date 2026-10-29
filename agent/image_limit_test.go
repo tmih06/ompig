@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func imageCount(msgs []ai.Message) (images int, text []string) {
@@ -37,7 +37,7 @@ func imageCount(msgs []ai.Message) (images int, text []string) {
 
 // Pi #10162: a long run that reads many images sends every image on each request until the provider answers
 // "Too many images in request: 31 > 30". The catalog and models.json carry inputLimits.images.maxPerRequest but nothing enforced it.
-// PiG (D137) keeps the newest images and replaces the older ones with a text placeholder.
+// Ompig (D137) keeps the newest images and replaces the older ones with a text placeholder.
 func TestLimitImagesPerRequestKeepsTheNewestImages(t *testing.T) {
 	img := func(n int) ai.ImageContent { return ai.ImageContent{Data: fmt.Sprint("img", n), MimeType: "image/png"} }
 	history := []ai.Message{

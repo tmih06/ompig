@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Refinement is one entry of a schema's hidden `~refine` list (TypeBox's `{check, error}`): Check decides whether a value passes and Error words the failure. Pi runs them while

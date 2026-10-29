@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.99.1 AgentSession._handleAgentEvent awaits _emitExtensionEvent (agent-session.ts:1098), which awaits runner.emit (:1265 for message_start), so public listeners see

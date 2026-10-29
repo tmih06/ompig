@@ -5,10 +5,10 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // BlockedStatus is what a dialog waits for: the kind of dialog and the line the terminal shows.
@@ -158,7 +158,7 @@ func (r *ProgramStatusReporter) Report() {
 	terminal.SetProgramStatus(status)
 }
 
-// pig additive (D91): PiG can replace the terminal mid-run, when a frontend session stops drawing; Pi's renderer keeps one terminal.
+// ompig additive (D91): Ompig can replace the terminal mid-run, when a frontend session stops drawing; Pi's renderer keeps one terminal.
 
 // Resend sends the current status to the terminal even if it is the one last sent, for a terminal that replaced the one it was sent to.
 func (r *ProgramStatusReporter) Resend() {

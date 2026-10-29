@@ -154,9 +154,9 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 |---|---:|---|---|---|
 | `packages/coding-agent/test/suite/regressions/6596-taskkill-enoent.test.ts` | 1 | pending | ported | `./coding`, `./internal/codingagent/tools` |
 | `packages/coding-agent/test/suite/regressions/8935-parallel-preflight-abort.test.ts` | 1 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./internal/codingagent/tools` |
-| `packages/coding-agent/test/suite/regressions/9068-user-bash-fail-closed.test.ts` | 2 | pending | ported | `./cmd/pig`, `./coding`, `./internal/codingagent`, `./internal/codingagent/tools` |
+| `packages/coding-agent/test/suite/regressions/9068-user-bash-fail-closed.test.ts` | 2 | pending | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent`, `./internal/codingagent/tools` |
 | `packages/coding-agent/test/tool-system-prompt-contributions.test.ts` | 2 | pending | ported | `./coding`, `./internal/codingagent/tools` |
-| `packages/coding-agent/test/tools.test.ts` | 84 | partial | ported | `./cmd/pig`, `./coding`, `./internal/codingagent/tools` |
+| `packages/coding-agent/test/tools.test.ts` | 84 | partial | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent/tools` |
 
 ## PT-005-tools-harness
 
@@ -244,7 +244,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | `packages/ai/test/openrouter-cache-control-models.test.ts` | 1 | pending | ported | `./ai` |
 | `packages/ai/test/together-models.test.ts` | 3 | partial | ported | `./ai` |
 | `packages/ai/test/xiaomi-models.test.ts` | 2 | pending | ported | `./ai` |
-| `packages/coding-agent/test/max-thinking.test.ts` | 2 | pending | ported | `./ai`, `./cmd/pig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/max-thinking.test.ts` | 2 | pending | ported | `./ai`, `./cmd/ompig`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/model-catalog-refresh.test.ts` | 3 | pending | ported | `./ai`, `./coding`, `./internal/codingagent` |
 
 ## PT-014-providers-catalog-options
@@ -257,7 +257,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/model-resolver.test.ts` | 51 | partial | ported | `./ai`, `./cmd/pig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/model-resolver.test.ts` | 51 | partial | ported | `./ai`, `./cmd/ompig`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/model-runtime-modify-models-compat.test.ts` | 5 | partial | ported | `./ai`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/model-selector.test.ts` | 3 | partial | ported | `./ai`, `./coding`, `./internal/codingagent`, `./tui` |
 | `packages/coding-agent/test/models-store.test.ts` | 5 | partial | ported | `./ai`, `./coding`, `./internal/codingagent` |
@@ -460,7 +460,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | `packages/coding-agent/test/cache-stats.test.ts` | 11 | partial | ported | `./ai`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/cache-warmer.test.ts` | 9 | pending | ported | `./ai`, `./coding`, `./coding/extension/host/inproc`, `./internal/codingagent` |
 | `packages/coding-agent/test/footer-data-provider.test.ts` | 8 | partial | ported | `./ai`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/http-dispatcher.test.ts` | 5 | pending | ported | `./ai`, `./cmd/pig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/http-dispatcher.test.ts` | 5 | pending | ported | `./ai`, `./cmd/ompig`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/sdk-stream-options.test.ts` | 9 | pending | ported | `./agent`, `./ai`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/suite/regressions/3317-network-connection-lost-retry.test.ts` | 1 | pending | ported | `./ai`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/suite/regressions/3982-message-end-cost-override.test.ts` | 1 | pending | ported | `./ai`, `./coding`, `./internal/codingagent` |
@@ -520,7 +520,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
 | `packages/coding-agent/test/session-cwd.test.ts` | 3 | pending | ported | `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/session-file-invalid.test.ts` | 1 | pending | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/session-file-invalid.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/session-info-modified-timestamp.test.ts` | 1 | pending | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/session-manager/build-context.test.ts` | 16 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/session-manager/custom-session-id.test.ts` | 12 | partial | ported | `./coding`, `./internal/codingagent` |
@@ -545,7 +545,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | `packages/coding-agent/test/agent-session-retry.test.ts` | 6 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/agent-session-stats.test.ts` | 9 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/sdk-session-manager.test.ts` | 4 | pending | ported | `./coding`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
-| `packages/coding-agent/test/session-id-readonly.test.ts` | 6 | partial | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/session-id-readonly.test.ts` | 6 | partial | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/session-selector-path-delete.test.ts` | 8 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/session-selector-rename.test.ts` | 3 | partial | ported | `./coding`, `./internal/codingagent`, `./tui` |
 
@@ -555,8 +555,8 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 |---|---:|---|---|---|
 | `packages/coding-agent/test/session-selector-search.test.ts` | 9 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/session-share.test.ts` | 1 | partial | ported | `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/startup-session-name.test.ts` | 1 | partial | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/agent-session-bash-persistence.test.ts` | 11 | partial | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/startup-session-name.test.ts` | 1 | partial | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/agent-session-bash-persistence.test.ts` | 11 | partial | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/suite/agent-session-boundaries.test.ts` | 27 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/suite/agent-session-prompt.test.ts` | 17 | partial | ported | `./coding`, `./internal/codingagent` |
 | `packages/coding-agent/test/suite/agent-session-queue.test.ts` | 15 | partial | ported | `./agent`, `./coding`, `./internal/codingagent` |
@@ -589,8 +589,8 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
 | `packages/coding-agent/test/extensions-input-event.test.ts` | 9 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
-| `packages/coding-agent/test/extensions-runner.test.ts` | 50 | partial | ported | `./cmd/pig`, `./coding`, `./coding/extension`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/5080-signal-shutdown-extension-cleanup.test.ts` | 5 | pending | ported | `./cmd/pig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
+| `packages/coding-agent/test/extensions-runner.test.ts` | 50 | partial | ported | `./cmd/ompig`, `./coding`, `./coding/extension`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/5080-signal-shutdown-extension-cleanup.test.ts` | 5 | pending | ported | `./cmd/ompig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
 | `packages/coding-agent/test/suite/regressions/6260-inline-extension-naming.test.ts` | 4 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 | `packages/coding-agent/test/suite/regressions/7193-event-bus-lifecycle.test.ts` | 1 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 | `packages/coding-agent/test/suite/regressions/8237-node-sea-extension-loading.test.ts` | 1 | pending | designed-out | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
@@ -619,11 +619,11 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/resource-loader.test.ts` | 42 | partial | ported | `./cmd/pig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
-| `packages/coding-agent/test/sdk-skills.test.ts` | 3 | pending | partial | `./cmd/pig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
-| `packages/coding-agent/test/resource-loader.test.ts` | 42 | partial | partial | `./cmd/pig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
+| `packages/coding-agent/test/resource-loader.test.ts` | 42 | partial | ported | `./cmd/ompig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
+| `packages/coding-agent/test/sdk-skills.test.ts` | 3 | pending | partial | `./cmd/ompig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
+| `packages/coding-agent/test/resource-loader.test.ts` | 42 | partial | partial | `./cmd/ompig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
 | `packages/coding-agent/test/sdk-skills.test.ts` | 3 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
-| `packages/coding-agent/test/skills.test.ts` | 28 | partial | ported | `./cmd/pig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent`, `./internal/codingagent/prompts` |
+| `packages/coding-agent/test/skills.test.ts` | 28 | partial | ported | `./cmd/ompig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess`, `./internal/codingagent`, `./internal/codingagent/prompts` |
 | `packages/coding-agent/test/suite/regressions/8423-extension-factory-failure.test.ts` | 2 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 | `packages/coding-agent/test/suite/regressions/9540-extension-loader-lazy.test.ts` | 1 | pending | designed-out | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 | `packages/coding-agent/test/suite/regressions/extension-factory-cache.test.ts` | 4 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
@@ -668,7 +668,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | `packages/coding-agent/test/custom-message.test.ts` | 1 | partial | ported | `./internal/codingagent`, `./tui` |
 | `packages/coding-agent/test/edit-tool-no-full-redraw.test.ts` | 3 | pending | ported | `./internal/codingagent`, `./tui` |
 | `packages/coding-agent/test/footer-width.test.ts` | 9 | partial | ported | `./internal/codingagent`, `./tui` |
-| `packages/coding-agent/test/initial-message.test.ts` | 3 | partial | ported | `./cmd/pig`, `./internal/codingagent`, `./tui` |
+| `packages/coding-agent/test/initial-message.test.ts` | 3 | partial | ported | `./cmd/ompig`, `./internal/codingagent`, `./tui` |
 | `packages/coding-agent/test/interactive-mode-anthropic-warning.test.ts` | 4 | pending | ported | `./internal/codingagent`, `./tui` |
 
 ## PT-058-tui-rendering
@@ -760,7 +760,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | `packages/coding-agent/test/clipboard-image.test.ts` | 8 | pending | ported | `./internal/codingagent`, `./tui` |
 | `packages/coding-agent/test/clipboard.test.ts` | 21 | partial | ported | `./internal/codingagent`, `./tui` |
 | `packages/coding-agent/test/image-processing.test.ts` | 11 | partial | ported | `./internal/codingagent`, `./internal/imageprocessing`, `./tui` |
-| `packages/coding-agent/test/image-resize-callers.test.ts` | 4 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/codingagent/tools`, `./tui` |
+| `packages/coding-agent/test/image-resize-callers.test.ts` | 4 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/codingagent/tools`, `./tui` |
 
 ## PT-066-tui-terminal
 
@@ -785,76 +785,76 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/git-update.test.ts` | 5 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/package-manager-ssh.test.ts` | 8 | partial | ported | `./cmd/pig`, `./coding/source`, `./internal/codingagent` |
+| `packages/coding-agent/test/git-update.test.ts` | 5 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/package-manager-ssh.test.ts` | 8 | partial | ported | `./cmd/ompig`, `./coding/source`, `./internal/codingagent` |
 
 ## PT-069-cli-packages
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/package-manager.test.ts` | 123 | partial | ported | `./cmd/pig`, `./coding/packagecontent`, `./internal/codingagent` |
+| `packages/coding-agent/test/package-manager.test.ts` | 123 | partial | ported | `./cmd/ompig`, `./coding/packagecontent`, `./internal/codingagent` |
 
 ## PT-070-cli-packages
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/suite/regressions/7187-malformed-package-manifest.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/7187-malformed-package-manifest.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
 
 ## PT-071-cli-rpc
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/rpc-jsonl.test.ts` | 4 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/rpc-prompt-response-semantics.test.ts` | 4 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/rpc.test.ts` | 18 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/5868-rpc-unknown-command-id.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/rpc-jsonl.test.ts` | 4 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/rpc-prompt-response-semantics.test.ts` | 4 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/rpc.test.ts` | 18 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/5868-rpc-unknown-command-id.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
 
 ## PT-072-cli-settings
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/config.test.ts` | 16 | partial | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/configvalue` |
-| `packages/coding-agent/test/settings-manager-bug.test.ts` | 4 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/settings-manager.test.ts` | 46 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/3616-settings-inmemory-reload.test.ts` | 3 | pending | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/7829-invalid-settings-warning.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/config.test.ts` | 16 | partial | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/configvalue` |
+| `packages/coding-agent/test/settings-manager-bug.test.ts` | 4 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/settings-manager.test.ts` | 46 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/3616-settings-inmemory-reload.test.ts` | 3 | pending | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/7829-invalid-settings-warning.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
 
 ## PT-073-cli-startup-modes
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/args.test.ts` | 83 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/export-html-skill-block.test.ts` | 4 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/codingagent/export` |
-| `packages/coding-agent/test/export-html-whitespace.test.ts` | 3 | partial | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/codingagent/export` |
-| `packages/coding-agent/test/export-html-xss.test.ts` | 9 | partial | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/codingagent/export` |
-| `packages/coding-agent/test/first-time-setup-fork.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/first-time-setup.test.ts` | 8 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/print-mode.test.ts` | 3 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/args.test.ts` | 83 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/export-html-skill-block.test.ts` | 4 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/codingagent/export` |
+| `packages/coding-agent/test/export-html-whitespace.test.ts` | 3 | partial | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/codingagent/export` |
+| `packages/coding-agent/test/export-html-xss.test.ts` | 9 | partial | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/codingagent/export` |
+| `packages/coding-agent/test/first-time-setup-fork.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/first-time-setup.test.ts` | 8 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/print-mode.test.ts` | 3 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
 
 ## PT-074-cli-startup-modes
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/sdk-openrouter-attribution.test.ts` | 13 | partial | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/stdout-cleanliness.test.ts` | 2 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/2023-queued-slash-command-followup.test.ts` | 1 | pending | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/2781-skill-collision-precedence.test.ts` | 4 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/2791-fswatch-error-crash.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./tui` |
-| `packages/coding-agent/test/suite/regressions/5724-sigterm-signal-exit.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/6363-agent-settled-event.test.ts` | 3 | partial | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/7269-cli-end-of-options.test.ts` | 2 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/sdk-openrouter-attribution.test.ts` | 13 | partial | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/stdout-cleanliness.test.ts` | 2 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/2023-queued-slash-command-followup.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/2781-skill-collision-precedence.test.ts` | 4 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/2791-fswatch-error-crash.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./tui` |
+| `packages/coding-agent/test/suite/regressions/5724-sigterm-signal-exit.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/6363-agent-settled-event.test.ts` | 3 | partial | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/7269-cli-end-of-options.test.ts` | 2 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
 
 ## PT-075-cli-startup-modes
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/suite/regressions/7290-json-stream-linear.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/7301-stalled-availability-refresh.test.ts` | 3 | pending | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/7911-json-stream-usage.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/7925-toolcall-start-metadata.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/8261-subagent-project-trust.test.ts` | 2 | partial | ported | `./cmd/pig`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
-| `packages/coding-agent/test/suite/regressions/8724-in-memory-fork-active-tool.test.ts` | 1 | pending | ported | `./cmd/pig`, `./coding`, `./internal/codingagent` |
-| `packages/coding-agent/test/tools-manager.test.ts` | 8 | partial | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/codingagent/tools` |
+| `packages/coding-agent/test/suite/regressions/7290-json-stream-linear.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/7301-stalled-availability-refresh.test.ts` | 3 | pending | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/7911-json-stream-usage.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/7925-toolcall-start-metadata.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/8261-subagent-project-trust.test.ts` | 2 | partial | ported | `./cmd/ompig`, `./coding/extension/host/subprocess`, `./internal/codingagent` |
+| `packages/coding-agent/test/suite/regressions/8724-in-memory-fork-active-tool.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./coding`, `./internal/codingagent` |
+| `packages/coding-agent/test/tools-manager.test.ts` | 8 | partial | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/codingagent/tools` |
 
 ## PT-076-tools-harness-execution
 
@@ -950,7 +950,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 |---|---:|---|---|---|
 | `packages/coding-agent/test/git-merge-and-resolve-extension.test.ts` | 9 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 | `packages/coding-agent/test/input-transform-streaming-example.test.ts` | 6 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
-| `packages/coding-agent/test/plan-mode-extension.test.ts` | 4 | pending | ported | `./cmd/pig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
+| `packages/coding-agent/test/plan-mode-extension.test.ts` | 4 | pending | ported | `./cmd/ompig`, `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 | `packages/coding-agent/test/plan-mode-utils.test.ts` | 33 | pending | ported | `./coding`, `./coding/extension/host/inproc`, `./coding/extension/host/subprocess` |
 
 ## PT-089-tui-rendering
@@ -963,21 +963,21 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/experimental-agent-controller.test.ts` | 4 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/experimental/services` |
-| `packages/coding-agent/test/experimental-cli-entry.test.ts` | 3 | partial | ported | `./cmd/pig`, `./cmd/pig-experimental`, `./internal/codingagent` |
-| `packages/coding-agent/test/experimental-internal-process.test.ts` | 2 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/experimental` |
-| `packages/coding-agent/test/experimental-plugin-reload.test.ts` | 1 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/experimental` |
-| `packages/coding-agent/test/experimental-presentation-facets.test.ts` | 4 | pending | pending | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/experimental-radius-relay.test.ts` | 7 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/experimental` |
-| `packages/coding-agent/test/experimental-remote-runtime.test.ts` | 26 | pending | pending | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/experimental-server-lifecycle.test.ts` | 3 | pending | pending | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/experimental-agent-controller.test.ts` | 4 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/experimental/services` |
+| `packages/coding-agent/test/experimental-cli-entry.test.ts` | 3 | partial | ported | `./cmd/ompig`, `./cmd/ompig-experimental`, `./internal/codingagent` |
+| `packages/coding-agent/test/experimental-internal-process.test.ts` | 2 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/experimental` |
+| `packages/coding-agent/test/experimental-plugin-reload.test.ts` | 1 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/experimental` |
+| `packages/coding-agent/test/experimental-presentation-facets.test.ts` | 4 | pending | pending | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/experimental-radius-relay.test.ts` | 7 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/experimental` |
+| `packages/coding-agent/test/experimental-remote-runtime.test.ts` | 26 | pending | pending | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/experimental-server-lifecycle.test.ts` | 3 | pending | pending | `./cmd/ompig`, `./internal/codingagent` |
 
 ## PT-091-cli-startup-modes
 
 | Upstream test file | Case sites | Baseline | Current | Target Go packages |
 |---|---:|---|---|---|
-| `packages/coding-agent/test/experimental-server-profile.test.ts` | 5 | pending | pending | `./cmd/pig`, `./internal/codingagent` |
-| `packages/coding-agent/test/experimental-slash-commands.test.ts` | 3 | pending | ported | `./cmd/pig`, `./internal/codingagent`, `./internal/experimental/services` |
+| `packages/coding-agent/test/experimental-server-profile.test.ts` | 5 | pending | pending | `./cmd/ompig`, `./internal/codingagent` |
+| `packages/coding-agent/test/experimental-slash-commands.test.ts` | 3 | pending | ported | `./cmd/ompig`, `./internal/codingagent`, `./internal/experimental/services` |
 
 ## PT-092-utilities-support
 
@@ -988,7 +988,7 @@ python3 automation/gen/pending-test-batches.py --baseline-commit 67621208de1e3fa
 | `packages/coding-agent/test/config-value-migration.test.ts` | 3 | pending | ported | `./internal/codingagent` |
 | `packages/coding-agent/test/format-resume-command.test.ts` | 8 | pending | ported | `./internal/codingagent` |
 | `packages/coding-agent/test/git-ssh-url.test.ts` | 10 | pending | ported | `./coding/source`, `./internal/codingagent` |
-| `packages/coding-agent/test/package-command-paths.test.ts` | 31 | partial | ported | `./cmd/pig`, `./internal/codingagent` |
+| `packages/coding-agent/test/package-command-paths.test.ts` | 31 | partial | ported | `./cmd/ompig`, `./internal/codingagent` |
 | `packages/coding-agent/test/path-utils.test.ts` | 13 | partial | ported | `./internal/codingagent`, `./internal/codingagent/tools` |
 | `packages/coding-agent/test/paths.test.ts` | 22 | pending | ported | `./internal/codingagent` |
 

@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // pi: packages/telemetry/src/memory.ts
@@ -84,7 +84,7 @@ type metricsProgram struct {
 
 // The measurements Pi's InMemoryTelemetryContext records for seeded random instrument programs (counters, up-down counters and histograms with absent, empty and unusual
 // metadata, boundaries that are unsorted, repeated or non-finite, non-finite and negative values, attributes with undefined and array values, and exemplar contexts that are kept spans,
-// the open span, the no-op context, the recorder root or omitted) against PiG's, as the JSON of getMetrics().
+// the open span, the no-op context, the recorder root or omitted) against Ompig's, as the JSON of getMetrics().
 func TestInMemoryMetricsMatchPiOnRandomPrograms(t *testing.T) {
 	rng := rand.New(rand.NewSource(1402))
 	pick := func(items ...string) string { return items[rng.Intn(len(items))] }
@@ -288,7 +288,7 @@ func TestInMemoryMetricsMatchPiOnRandomPrograms(t *testing.T) {
 		if !bytes.Equal(gotCanonical, wantCanonical) {
 			if failures++; failures <= 3 {
 				programJSON, _ := json.Marshal(program)
-				t.Errorf("program %d %s:\n PiG %s\n Pi  %s", i, programJSON, gotCanonical, wantCanonical)
+				t.Errorf("program %d %s:\n Ompig %s\n Pi  %s", i, programJSON, gotCanonical, wantCanonical)
 			}
 		}
 	}

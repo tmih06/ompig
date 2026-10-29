@@ -5,7 +5,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/changeobservers"
+	"github.com/tmih06/ompig/internal/changeobservers"
 )
 
 // FooterDataProvider is the data a footer reads about its surroundings (footer-data-provider.ts FooterDataProvider): the working directory and

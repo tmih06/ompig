@@ -8,8 +8,8 @@ streamed through the mock's `mdfile:` scenario, over either wire API (`--model f
 shape, api) run one per core in --cpus, each pinned to its core; builds are interleaved and their order is rotated every
 round. Rows go to --out as JSON lines (one per sample), so a partial run is usable. A sample that did not run is a row with "error".
 
-  stream_shapes.py --root ROOT --arms pig-tip,pibolt-0.7.4,pi-node,rpi,omp --aa --cpus 129,130,131 --out shapes.jsonl
-  shapes_report.py shapes.jsonl --base pig-tip
+  stream_shapes.py --root ROOT --arms ompig-tip,pibolt-0.7.4,pi-node,rpi,omp --aa --cpus 129,130,131 --out shapes.jsonl
+  shapes_report.py shapes.jsonl --base ompig-tip
 
 --aa adds an A/A copy `<name>-aa` of every build: the same command, run as its own build, so the report can state the run-to-run
 floor of each arm. The harness comes from ROOT/src/Pi-Bolt/bench (arms.py install puts it there)."""
@@ -127,7 +127,7 @@ def main():
     ap.add_argument("--root", required=True, type=Path, help="arms root (arms.py install --root)")
     ap.add_argument("--arms", default="", help="comma list of arms.lock arms")
     ap.add_argument("--build", action="append", default=[], help="extra name=command (repeatable)")
-    ap.add_argument("--env", action="append", default=[], help="KEY=VALUE added to every build's environment after the clean-up (repeatable; e.g. PIG_PROFILE=cpu,allocs)")
+    ap.add_argument("--env", action="append", default=[], help="KEY=VALUE added to every build's environment after the clean-up (repeatable; e.g. OMPIG_PROFILE=cpu,allocs)")
     ap.add_argument("--aa", action="store_true", help="add an A/A copy <name>-aa of every build")
     ap.add_argument("--shapes", default=",".join(SHAPES))
     ap.add_argument("--apis", default=",".join(APIS))

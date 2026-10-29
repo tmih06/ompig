@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Pi editor.ts:73-94 retains each original segment index even when a grapheme straddles the marker's end.

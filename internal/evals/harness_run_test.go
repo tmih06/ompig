@@ -4,13 +4,13 @@ package evals
 
 // pi: packages/evals/src/harness.ts
 
-// Tests for harness.ts runPiCodingAgent over a real pig process. Upstream has no test for the Session runner, so the
+// Tests for harness.ts runPiCodingAgent over a real ompig process. Upstream has no test for the Session runner, so the
 // cases derive from reading harness.ts:272-469 and run the complete path against a scripted OpenAI-compatible server:
 // the model request, the bridge extension, the sandbox-free isolation, the session snapshot and the cleanup.
 //
-// The file is unix-only: the runner drives a pig process through a Unix-socket bridge and the sandbox cases need POSIX
+// The file is unix-only: the runner drives a ompig process through a Unix-socket bridge and the sandbox cases need POSIX
 // user APIs (sandbox_other.go), and the documentation evals run in Linux containers. A !unix-only helper here would make
-// internal/evals a Windows-native test package whose test pig binary has no .exe.
+// internal/evals a Windows-native test package whose test ompig binary has no .exe.
 
 import (
 	"context"
@@ -31,21 +31,21 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/evals/bridge"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/evals/bridge"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
 var (
-	buildOnce             sync.Once
-	pigBinary, evalBinary string
-	buildErr              error
+	buildOnce               sync.Once
+	ompigBinary, evalBinary string
+	buildErr                error
 )
 
-// builtBinaries builds pig and the bridge extension once per test binary.
+// builtBinaries builds ompig and the bridge extension once per test binary.
 func builtBinaries(t *testing.T) (string, string) {
 	t.Helper()
 	buildOnce.Do(func() {
-		directory, err := os.MkdirTemp("", "pig-evals-binaries-")
+		directory, err := os.MkdirTemp("", "ompig-evals-binaries-")
 		if err != nil {
 			buildErr = err
 			return
@@ -54,8 +54,8 @@ func builtBinaries(t *testing.T) (string, string) {
 			buildErr = err
 			return
 		}
-		pigBinary, evalBinary = filepath.Join(directory, "pig"), filepath.Join(directory, "pig-eval-extension")
-		for target, output := range map[string]string{"../../cmd/pig": pigBinary, "../../cmd/pig-eval-extension": evalBinary} {
+		ompigBinary, evalBinary = filepath.Join(directory, "ompig"), filepath.Join(directory, "ompig-eval-extension")
+		for target, output := range map[string]string{"../../cmd/ompig": ompigBinary, "../../cmd/ompig-eval-extension": evalBinary} {
 			if out, err := exec.Command("go", "build", "-o", output, target).CombinedOutput(); err != nil {
 				buildErr = fmt.Errorf("build %s: %w\n%s", target, err, out)
 				return
@@ -65,7 +65,7 @@ func builtBinaries(t *testing.T) (string, string) {
 	if buildErr != nil {
 		t.Fatal(buildErr)
 	}
-	return pigBinary, evalBinary
+	return ompigBinary, evalBinary
 }
 
 // scriptedReply is one model response: text, or a tool call when tool is set.
@@ -151,7 +151,7 @@ func (model *scriptedModel) systemPrompt(t *testing.T, request int) string {
 // harnessFixture isolates the host agent directory and returns options that reach model.
 func harnessFixture(t *testing.T, model *scriptedModel) PiCodingAgentHarnessOptions {
 	t.Helper()
-	pig, extension := builtBinaries(t)
+	ompig, extension := builtBinaries(t)
 	t.Setenv(agentDirEnvironment(), t.TempDir())
 	t.Setenv("PI_PROVIDER", "")
 	t.Setenv("PI_MODEL", "")
@@ -163,7 +163,7 @@ func harnessFixture(t *testing.T, model *scriptedModel) PiCodingAgentHarnessOpti
 		t.Fatal(err)
 	}
 	return PiCodingAgentHarnessOptions{
-		Name: "fixture", Model: &PiCodingAgentModelSelection{Provider: "fixture", ID: "fixture-chat"}, PigPath: pig, ExtensionPath: extension,
+		Name: "fixture", Model: &PiCodingAgentModelSelection{Provider: "fixture", ID: "fixture-chat"}, OmpigPath: ompig, ExtensionPath: extension,
 		agentFiles: map[string]string{"models.json": string(modelsJSON)},
 	}
 }
@@ -335,7 +335,7 @@ func TestRunPiCodingAgentRejectsUnexpectedExtensions(t *testing.T) {
 	options := harnessFixture(t, model)
 	options.NoTools = "all"
 	options.TransformSystemPrompt = func(prompt string) (string, error) { return prompt, nil }
-	other := filepath.Join(t.TempDir(), "pig-eval-extension")
+	other := filepath.Join(t.TempDir(), "ompig-eval-extension")
 	data, err := os.ReadFile(options.ExtensionPath)
 	if err != nil {
 		t.Fatal(err)

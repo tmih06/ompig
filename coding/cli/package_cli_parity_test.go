@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // The same hermetic npm child runs under both complete CLIs. It exercises inherited stdout/stderr, failures, update progress, alias routing, and persisted package arrays without network access.
@@ -25,12 +25,12 @@ func TestPackageCLIComparedWithPi(t *testing.T) {
 	}
 	pi := filepath.Join(repo, "extensions", "sdk-ts", "node_modules", ".bin", "pi")
 	version := exec.CommandContext(t.Context(), pi, "--version")
-	version.Env = append(os.Environ(), "HOME="+t.TempDir(), "PI_CODING_AGENT_DIR="+t.TempDir(), "PIG_CODING_AGENT_DIR="+t.TempDir())
+	version.Env = append(os.Environ(), "HOME="+t.TempDir(), "PI_CODING_AGENT_DIR="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+t.TempDir())
 	out, err := version.Output()
 	if err != nil || strings.TrimSpace(string(out)) != coding.UpstreamPackageVersion {
 		t.Fatalf("Pi pin: %q, %v", out, err)
 	}
-	pig := buildPigBinaryForSignalTest(t)
+	ompig := buildPigBinaryForSignalTest(t)
 	root := t.TempDir()
 	shim := filepath.Join(root, "npm.cjs")
 	if err := os.WriteFile(shim, []byte(`const fs = require('node:fs');
@@ -82,7 +82,7 @@ if (args[0] === 'install' && args.includes('--prefix')) {
 					args = append(args, "--approve")
 					cmd := exec.CommandContext(context.Background(), binary, args...)
 					cmd.Dir = cwd
-					cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PI_OFFLINE=", "PIG_OFFLINE=", "NO_COLOR=1", "FORCE_COLOR=0")
+					cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PI_OFFLINE=", "OMPIG_OFFLINE=", "NO_COLOR=1", "FORCE_COLOR=0")
 					var stdout, stderr bytes.Buffer
 					cmd.Stdout = &stdout
 					cmd.Stderr = &stderr
@@ -96,7 +96,7 @@ if (args[0] === 'install' && args.includes('--prefix')) {
 						}
 					}
 					normalize := func(s string) string {
-						return strings.NewReplacer(home, "<HOME>", ".pig/", ".pi/", "pig ", "pi ").Replace(s)
+						return strings.NewReplacer(home, "<HOME>", ".ompig/", ".pi/", "ompig ", "pi ").Replace(s)
 					}
 					settingsPath := filepath.Join(agentDir, "settings.json")
 					if local {
@@ -118,7 +118,7 @@ if (args[0] === 'install' && args.includes('--prefix')) {
 				return results
 			}
 			want := run(pi, "pi")
-			got := run(pig, "pig")
+			got := run(ompig, "ompig")
 			for i := range want {
 				if got[i] != want[i] {
 					t.Errorf("step %d:\npig=%+v\n pi=%+v", i, got[i], want[i])

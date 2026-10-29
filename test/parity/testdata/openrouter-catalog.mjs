@@ -9,8 +9,8 @@ function canonical(value) {
   return value;
 }
 
-if (process.argv[2] === "pig") {
-  const output = execFileSync("./test/parity/testdata/prebuilt-go-test.sh", ["./cmd/gen-models", "-run", "^TestOpenRouterCatalogParity$", "-count=1", "-v"], { encoding: "utf8", env: { ...process.env, PIG_PARITY_PROBE: "1" } });
+if (process.argv[2] === "ompig") {
+  const output = execFileSync("./test/parity/testdata/prebuilt-go-test.sh", ["./cmd/gen-models", "-run", "^TestOpenRouterCatalogParity$", "-count=1", "-v"], { encoding: "utf8", env: { ...process.env, OMPIG_PARITY_PROBE: "1" } });
   process.stdout.write(output.split("\n").filter((line) => line.startsWith("OPENROUTER_CATALOG ")).join("\n") + "\n");
 } else for (const { listed, imageListed, decisionListed } of JSON.parse(readFileSync(new URL("./openrouter-catalog.json", import.meta.url), "utf8"))) {
   console.log("OPENROUTER_CATALOG " + JSON.stringify(canonical(buildOpenRouterCatalog(listed, imageListed, decisionListed))));

@@ -12,11 +12,11 @@ from typing import Any
 
 from test_extension_api_099 import _host
 
-import pig_sdk
+import ompig_sdk
 
 
 def test_unsubscribe_before_connect_removes_the_declaration() -> None:
-    ext = pig_sdk.Extension("py-unsub-pre")
+    ext = ompig_sdk.Extension("py-unsub-pre")
     keep = ext.on_event("turn_start", lambda ctx, event: None)
     drop = ext.on_event("turn_end", lambda ctx, event: None)
     drop()
@@ -43,7 +43,7 @@ def test_unsubscribe_before_connect_removes_the_declaration() -> None:
 
 
 def test_subscribe_and_unsubscribe_after_connect_are_host_calls() -> None:
-    ext = pig_sdk.Extension("py-unsub-live")
+    ext = ompig_sdk.Extension("py-unsub-live")
     host = _host(ext)
     try:
         box: dict[str, Any] = {}
@@ -76,7 +76,7 @@ def test_subscribe_and_unsubscribe_after_connect_are_host_calls() -> None:
 
 
 def test_project_trust_registration_returns_its_unsubscribe() -> None:
-    ext = pig_sdk.Extension("py-unsub-trust")
+    ext = ompig_sdk.Extension("py-unsub-trust")
     unsubscribe = ext.on_project_trust(lambda ctx, event: None)
     unsubscribe()
     host = _host(ext)

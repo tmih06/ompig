@@ -222,7 +222,7 @@ Go test Output events follow verbatim; top-level completion events retain elapse
 --- PASS: TestHarnessImageBMPPlanesAndBitDepth/dib124/bpp64/planes2 (0.00s)
 --- FAIL: TestHarnessImageBMPPlanesAndBitDepth (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.032s
+FAIL	github.com/tmih06/ompig/internal/codingagent/tools	0.032s
 
 Top-level completion events:
-{"Time": "2026-09-24T22:00:37.458074817-07:00", "Action": "fail", "Package": "github.com/MichaelKinsy/PiG/internal/codingagent/tools", "Test": "TestHarnessImageBMPPlanesAndBitDepth", "Elapsed": 0}
+{"Time": "2026-09-24T22:00:37.458074817-07:00", "Action": "fail", "Package": "github.com/tmih06/ompig/internal/codingagent/tools", "Test": "TestHarnessImageBMPPlanesAndBitDepth", "Elapsed": 0}

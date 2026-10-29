@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's findGitPaths and FooterDataProvider branch resolution (core/footer-data-provider.js) on one directory tree of repository layouts: .git as a directory or a worktree file, relative and absolute gitdir, commondir, missing HEAD, a .git file without a gitdir line (the walk continues upward), and HEAD or gitdir text with the whitespace spellings JavaScript trim() strips (BOM, NBSP) and does not (U+0085).

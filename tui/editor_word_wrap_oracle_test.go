@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // TestEditorWordWrapLineMatchesPi compares wordWrapLine (components/editor.ts) with pinned Pi over seeded lines of letters, spaces, tabs, wide, emoji and combining
-// graphemes at widths 1 to 7: every chunk's text, startIndex and endIndex must agree. Where Pi throws RangeError (a single grapheme wider than the width), PiG keeps
+// graphemes at widths 1 to 7: every chunk's text, startIndex and endIndex must agree. Where Pi throws RangeError (a single grapheme wider than the width), Ompig keeps
 // the grapheme as one chunk (D159): the chunks must rejoin to the line, and a chunk wider than the width must be that one grapheme.
 func TestEditorWordWrapLineMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(159))
@@ -84,7 +84,7 @@ func TestEditorWordWrapLineMatchesPi(t *testing.T) {
 		var compact bytes.Buffer
 		if json.Compact(&compact, want[i]) != nil || !bytes.Equal(gotJSON, compact.Bytes()) {
 			if failures++; failures <= 5 {
-				t.Errorf("%q at width %d:\n PiG %s\n Pi  %s", c.line, c.width, gotJSON, want[i])
+				t.Errorf("%q at width %d:\n Ompig %s\n Pi  %s", c.line, c.width, gotJSON, want[i])
 			}
 		}
 	}

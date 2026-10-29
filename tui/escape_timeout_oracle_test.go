@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // terminal.ts resolveEscapeTimeoutMs reads PI_TUI_ESC_TIMEOUT with Number(): JS whitespace (U+FEFF, NBSP, the line separators, not U+0085) is trimmed, and the
@@ -39,7 +39,7 @@ emit(input.map((p) => m.resolveEscapeTimeoutMs(Object.assign({ PI_TUI_ESC_TIMEOU
 		})
 		if got != want[i] {
 			if bad++; bad <= 10 {
-				t.Errorf("PI_TUI_ESC_TIMEOUT=%q ssh=%v: PiG %v, Pi %v", p.Value, p.SSH, got, want[i])
+				t.Errorf("PI_TUI_ESC_TIMEOUT=%q ssh=%v: Ompig %v, Pi %v", p.Value, p.SSH, got, want[i])
 			}
 		}
 	}

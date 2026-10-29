@@ -35,7 +35,7 @@ func ListenExtension(sockPath string, node bool) (net.Listener, string, error) {
 	if err != nil {
 		return nil, "", fmt.Errorf("read current user: %w", err)
 	}
-	pipe := `\\.\pipe\pig-ext-` + rand.Text()
+	pipe := `\\.\pipe\ompig-ext-` + rand.Text()
 	ln, err := listenPipe(pipe, "D:P(A;;GA;;;"+user.User.Sid.String()+")")
 	if err != nil {
 		return nil, "", err

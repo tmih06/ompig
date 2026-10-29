@@ -23,7 +23,7 @@ func rememberSignalRestore(fd int, state *term.State) {
 	cookedTerminalState.CompareAndSwap(nil, &cookedTerminal{fd: fd, state: state})
 }
 
-// RestoreTerminalFromSignal returns the terminal to the mode it had before pig
+// RestoreTerminalFromSignal returns the terminal to the mode it had before ompig
 // took it over, and reports whether there was anything to restore.
 //
 // This is the subset of raw-mode teardown that is safe to run from a signal
@@ -34,11 +34,11 @@ func rememberSignalRestore(fd int, state *term.State) {
 //
 // Without the tcsetattr, exiting on a signal leaves the terminal raw: ISIG
 // stays off, so the user's shell has no working Ctrl+C until they run `reset`.
-// Without the protocol disable, the Kitty flags pig pushed stay on the
-// terminal's stack after pig is gone, so the shell that inherits the terminal
+// Without the protocol disable, the Kitty flags ompig pushed stay on the
+// terminal's stack after ompig is gone, so the shell that inherits the terminal
 // receives CSI-u encoded keys it does not understand.
 func RestoreTerminalFromSignal() bool {
-	// pig divergence (D51): upstream leaves the terminal raw when a signal
+	// ompig divergence (D51): upstream leaves the terminal raw when a signal
 	// terminates the session.
 	restore := cookedTerminalState.Load()
 	if restore == nil {

@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // core/slash-commands.ts BUILTIN_SLASH_COMMANDS against pinned Pi: the same commands in the same order with the same descriptions and
@@ -26,9 +26,12 @@ func TestBuiltinSlashCommandsMatchPi(t *testing.T) {
 	divergent := map[string]bool{"share": true, "bug": true}
 	var got []BuiltinSlashCommand
 	for _, command := range BuiltinSlashCommands() {
-		if !command.Hidden {
-			got = append(got, command)
+		// ompig divergence (D206): /agents opens the subagent roster, which Pi
+		// has no equivalent of.
+		if command.Hidden || command.Name == "agents" {
+			continue
 		}
+		got = append(got, command)
 	}
 	for len(got) > 0 && len(got[len(got)-1].Name) > 6 && got[len(got)-1].Name[:6] == "probe-" {
 		got = got[:len(got)-1]
@@ -49,11 +52,11 @@ func TestBuiltinSlashCommandsMatchPi(t *testing.T) {
 			continue
 		}
 		if want.Name == "quit" {
-			// Pi's description is `Quit ${APP_NAME}`; PiG's application name is AppName.
+			// Pi's description is `Quit ${APP_NAME}`; Ompig's application name is AppName.
 			want.Description = "Quit " + AppName
 		}
 		if command.Description != want.Description || command.ArgumentHint != want.ArgumentHint {
-			t.Errorf("/%s: PiG %q hint %q, Pi %q hint %q", want.Name, command.Description, command.ArgumentHint, want.Description, want.ArgumentHint)
+			t.Errorf("/%s: Ompig %q hint %q, Pi %q hint %q", want.Name, command.Description, command.ArgumentHint, want.Description, want.ArgumentHint)
 		}
 	}
 }

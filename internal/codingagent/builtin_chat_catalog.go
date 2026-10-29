@@ -5,8 +5,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // builtinChatCatalogs holds the offered bundled chat models of each provider read so far, for the stripped APIs they were listed under. The bundled catalog never changes, so callers share one list per provider until the stripped APIs change, as Pi's getBuiltinModels shares its catalog objects (providers/all.ts:104).
@@ -80,7 +80,7 @@ func builtinChatCatalog(id string) []ai.GeneratedModel {
 // model's routing variants, derived once from the bundled models (ai.WithOpenRouterRoutingVariants) the first time the list is read, so a caller that
 // only resolves a model or counts the catalog (builtinChatCatalog) builds none. The list is shared, and read-only like builtinChatCatalog's.
 //
-// pig divergence (D199): Pi lists no OpenRouter routing variant; PiG derives them from the bundled models instead of storing them.
+// ompig divergence (D199): Pi lists no OpenRouter routing variant; Ompig derives them from the bundled models instead of storing them.
 func builtinChatCatalogListed(id string) []ai.GeneratedModel {
 	catalog := builtinChatCatalog(id)
 	if id != "openrouter" || len(catalog) == 0 { //portlint:allow providerliteral the variants are OpenRouter's own routing suffixes

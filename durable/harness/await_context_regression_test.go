@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // awaitWithContext (chord context/index.ts:98-116) rejects a caller whose signal is already aborted before it looks at

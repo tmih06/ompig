@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The Pi 0.99.1 extension API additions through the Node runtime and the real Host (.upstream/v0.99.1/packages/coding-agent/src/core/extensions/{types,loader,runner}.ts). These are the Node twins of the Python rows in python_extension_api_test.go: each binds its assertion to a value only the Host or the Node runtime's answer can produce (a host-assigned extension path, a router's computed state, a description built from the loadout the Host sent, the id the Host gave a nested call), so a runtime that never makes the call, or answers with a default, cannot match.
@@ -586,7 +586,7 @@ func TestNodeGetSettings(t *testing.T) {
 	})
 }
 
-// types.ts:2063 and agent-session.ts:1452-1461: getAllTools carries each tool's exposure, namespace and annotations, and none of the PiG-only legacy source.
+// types.ts:2063 and agent-session.ts:1452-1461: getAllTools carries each tool's exposure, namespace and annotations, and none of the Ompig-only legacy source.
 func TestNodeGetAllToolsCarriesExposureNamespaceAndAnnotations(t *testing.T) {
 	eachNodeAPIIsolation(t, func(t *testing.T, isolation string) {
 		readOnly := true

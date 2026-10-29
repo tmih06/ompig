@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.87.1 main.ts:943 passes tuiMode: parsed.tuiMode to InteractiveMode, and its constructor (interactive-mode.ts:567-568) selects options.tuiMode ?? settingsManager.getTuiMode() without saving it. The run mode therefore survives any later settings reload, such as the one after project trust is resolved.

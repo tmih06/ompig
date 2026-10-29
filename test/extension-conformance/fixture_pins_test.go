@@ -10,10 +10,10 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-// TestInTreeGoModulesPinTheRepositorySDKVersion keeps every in-tree Go module that replaces the PiG or SDK module with local source on the version the root module requires. A stale fixture pin makes the generated packed-cell go.mod select an older SDK than the replaced root module needs, and `go build` stops with "updates to go.mod needed".
+// TestInTreeGoModulesPinTheRepositorySDKVersion keeps every in-tree Go module that replaces the Ompig or SDK module with local source on the version the root module requires. A stale fixture pin makes the generated packed-cell go.mod select an older SDK than the replaced root module needs, and `go build` stops with "updates to go.mod needed".
 func TestInTreeGoModulesPinTheRepositorySDKVersion(t *testing.T) {
-	const sdkPath = "github.com/MichaelKinsy/PiG/extensions/sdk"
-	const rootPath = "github.com/MichaelKinsy/PiG"
+	const sdkPath = "github.com/tmih06/ompig/extensions/sdk"
+	const rootPath = "github.com/tmih06/ompig"
 	root := fixtureSourceRoot
 	pinned := func(file *modfile.File, path string) string {
 		for _, requirement := range file.Require {

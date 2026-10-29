@@ -4,7 +4,7 @@
 # Regression intent: the API-key provider picker must list every built-in
 # provider that exposes an API-key auth method, with upstream provider.name
 # labels. Upstream getLoginProviderOptions() filters
-# modelRuntime.getProviders() by provider.auth.apiKey and sorts by name; pig
+# modelRuntime.getProviders() by provider.auth.apiKey and sorts by name; ompig
 # previously used a hand-maintained 18-provider subset that omitted opencode-go,
 # deepseek, xai, anthropic, github-copilot, and others.
 #
@@ -35,7 +35,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 capture_start = "Select provider to configure"
@@ -55,9 +55,9 @@ wait_timeout_seconds = 10
 settle_seconds = 1
 
 [env]
-pig = ["OPENAI_API_KEY=x", "PIG_HOME=testdata/pig-home"]
+ompig = ["OPENAI_API_KEY=x", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["OPENAI_API_KEY=x", "PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

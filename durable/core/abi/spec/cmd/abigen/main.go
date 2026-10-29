@@ -12,7 +12,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi/spec"
+	"github.com/tmih06/ompig/durable/core/abi/spec"
 )
 
 func main() {

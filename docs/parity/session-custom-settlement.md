@@ -2,7 +2,7 @@
 
 Pi0.87.1 `agent-session.ts:_emitAgentSettled` awaits extension handlers before emitting the public `agent_settled` event. A custom message appended by such a handler therefore reaches every subscriber before settlement.
 
-PiG previously dispatched the extension handler inside its mode-output funnel. Direct Session listeners observed `custom:start, custom:end, settled`, but the mode channel observed `settled, custom:start, custom:end`. `TestSettledCustomMessagePrecedesSettlementPublication` reproduces that exact failure on a real Session.
+Ompig previously dispatched the extension handler inside its mode-output funnel. Direct Session listeners observed `custom:start, custom:end, settled`, but the mode channel observed `settled, custom:start, custom:end`. `TestSettledCustomMessagePrecedesSettlementPublication` reproduces that exact failure on a real Session.
 
 The Session now owns the extension dispatch before queueing the public settlement event. The funnel still serializes public listener and mode delivery, but no longer repeats extension dispatch. This also lets a handler append a batch larger than the channel capacity without blocking the consumer that must drain it.
 

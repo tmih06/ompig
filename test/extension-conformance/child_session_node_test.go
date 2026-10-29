@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The Node row: a Node extension calls Pi's own createAgentSession (served by the runtime's independent-session shim) with the sentinel scenarios of the other SDKs' fixtures, and must produce the golden those rows assert. The Node child builds its model runtime itself, as a Node extension does in Pi; the host's does not matter to it.
@@ -50,7 +50,7 @@ function sentinel(model, context) {
 }
 
 async function world(body, withSentinel = true) {
-  const dir = mkdtempSync(join(tmpdir(), "pig-child-node-row-"));
+  const dir = mkdtempSync(join(tmpdir(), "ompig-child-node-row-"));
   try {
     const runtime = await ModelRuntime.create({ authPath: join(dir, "auth.json"), modelsPath: join(dir, "models.json"), allowModelNetwork: false });
     if (withSentinel) runtime.registerProvider("sentinel", { api: "openai-completions", baseUrl: "https://sentinel.invalid", apiKey: "sentinel-key", models: [{ id: "echo", name: "Echo", ...modelConfig }], streamSimple: sentinel });

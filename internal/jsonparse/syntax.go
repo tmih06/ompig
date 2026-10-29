@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Validate returns the error JSON.parse throws for input, with V8's message, or nil when input parses.

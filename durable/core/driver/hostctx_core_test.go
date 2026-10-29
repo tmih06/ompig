@@ -8,15 +8,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // A model request is built from the context the host derives from its stored entries (ABI section 4.2, context reads): the core
 // names the context by its newest entry and head marker and reads none of the transcript. A core that opens a long history and
-// runs one turn therefore reads a few rows through pig.read, not every entry the request covers. The history here is 120 turns,
+// runs one turn therefore reads a few rows through ompig.read, not every entry the request covers. The history here is 120 turns,
 // 3 entries each at least; the core read all of them for the first request before the host built the context.
 func TestCoreARequestOnALongHistoryReadsNoTranscriptThroughTheCore(t *testing.T) {
 	const turns = 120

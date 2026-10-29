@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 func renderSpan(id string, mutate func(*telemetry.StoredSpan)) telemetry.StoredSpan {

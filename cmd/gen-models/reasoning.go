@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/modelgen"
+	"github.com/tmih06/ompig/internal/modelgen"
 )
 
 // Ports packages/ai/scripts/generate-models.ts

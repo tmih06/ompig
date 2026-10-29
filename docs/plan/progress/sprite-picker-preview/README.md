@@ -1,12 +1,12 @@
-# sprite-picker-preview: the pig beside the /sprite picker's rows (D2)
+# sprite-picker-preview: the ompig beside the /sprite picker's rows (D2)
 
-`sprite-picker.png` is the `/sprite` picker in a wide truecolor terminal. The arrow is on `Green PiG: Ready to build.`, and the green pig of that sprite is drawn in the preview column right after the list: four cells past the longest option row, top-aligned with the first option. On a wide terminal it stays next to the list instead of floating at the dialog's right edge. The pig follows the arrow: `Create your own...`, the last row, is not a sprite and draws none, so its list is the plain selector's full-width list. Below a 40-cell list body the preview is dropped, as before.
+`sprite-picker.png` is the `/sprite` picker in a wide truecolor terminal. The arrow is on `Green Ompig: Ready to build.`, and the green ompig of that sprite is drawn in the preview column right after the list: four cells past the longest option row, top-aligned with the first option. On a wide terminal it stays next to the list instead of floating at the dialog's right edge. The ompig follows the arrow: `Create your own...`, the last row, is not a sprite and draws none, so its list is the plain selector's full-width list. Below a 40-cell list body the preview is dropped, as before.
 
 Reproduce it with:
 
 ```bash
-go build -o /tmp/pig ./cmd/pig
-/tmp/pig
+go build -o /tmp/ompig ./cmd/ompig
+/tmp/ompig
 ```
 
 Then type `/sprite` and move with the arrow keys.

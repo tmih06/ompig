@@ -76,8 +76,8 @@ func TestJSONIdentityAliasesPreserveReferencesAndPresence(t *testing.T) {
 
 func TestJSONPathAliasesRetainSuffixAndText(t *testing.T) {
 	rules := []JSONAliasRule{{Paths: []string{"/*/path"}, Kind: "path", Reason: "D2: only the exact isolated temporary root differs."}}
-	left := Result{Output: `{"path":"/owned/a/session.html","text":"PiG two  spaces"}`, IdentityRoots: map[string]string{"temp": "/owned/a"}}
-	right := Result{Output: `{"path":"/owned/b/session.html","text":"PiG two  spaces"}`, IdentityRoots: map[string]string{"temp": "/owned/b"}}
+	left := Result{Output: `{"path":"/owned/a/session.html","text":"Ompig two  spaces"}`, IdentityRoots: map[string]string{"temp": "/owned/a"}}
+	right := Result{Output: `{"path":"/owned/b/session.html","text":"Ompig two  spaces"}`, IdentityRoots: map[string]string{"temp": "/owned/b"}}
 	if err := compareJSONResults(left, right, rules); err != nil {
 		t.Fatal(err)
 	}
@@ -85,11 +85,11 @@ func TestJSONPathAliasesRetainSuffixAndText(t *testing.T) {
 	if compareJSONResults(left, right, rules) == nil {
 		t.Fatal("wrong destination hidden")
 	}
-	right.Output = `{"path":"<temp>/session.html","text":"PiG two  spaces"}`
+	right.Output = `{"path":"<temp>/session.html","text":"Ompig two  spaces"}`
 	if compareJSONResults(left, right, rules) == nil {
 		t.Fatal("literal alias token impersonated a real path")
 	}
-	right.Output = `{"path":"/owned/bad/session.html","text":"PiG two  spaces"}`
+	right.Output = `{"path":"/owned/bad/session.html","text":"Ompig two  spaces"}`
 	if compareJSONResults(left, right, rules) == nil {
 		t.Fatal("prefix boundary hidden")
 	}
@@ -97,7 +97,7 @@ func TestJSONPathAliasesRetainSuffixAndText(t *testing.T) {
 
 func TestStderrComparisonDoesNotAcceptMissingCapture(t *testing.T) {
 	for _, pi := range []Result{{}, {StderrCaptured: true}} {
-		o := &ScenarioOutcome{Scenario: &Scenario{Assert: AssertSpec{StderrEqual: true}}, Pig: SystemResults{Runs: []Result{{Stderr: "diagnostic\n", StderrCaptured: true}}}, Pi: SystemResults{Runs: []Result{pi}}}
+		o := &ScenarioOutcome{Scenario: &Scenario{Assert: AssertSpec{StderrEqual: true}}, Ompig: SystemResults{Runs: []Result{{Stderr: "diagnostic\n", StderrCaptured: true}}}, Pi: SystemResults{Runs: []Result{pi}}}
 		EvaluateOutcome(o)
 		if o.Passed() {
 			t.Fatal("stderr was excluded")

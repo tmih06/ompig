@@ -17,7 +17,7 @@ import (
 	"github.com/tetratelabs/wazero/experimental"
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
 
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest/fuel"
+	"github.com/tmih06/ompig/durable/core/contracttest/fuel"
 )
 
 // WasmOptions choose what one pass over a Wasm core measures. The passes are separate because each perturbs the run: a listener
@@ -141,20 +141,20 @@ func (w *wasmCore) stepBytes(ptr uint32) ([]byte, error) {
 	return out, nil
 }
 
-// pigRead is the pig.read import (ABI section 4.2): the recorded answer to the core's next read, after a check that the core
+// ompigRead is the ompig.read import (ABI section 4.2): the recorded answer to the core's next read, after a check that the core
 // asked what the recorded run asked.
-func (w *wasmCore) pigRead(_ context.Context, m api.Module, req, reqLen, dst, capacity uint32) uint32 {
+func (w *wasmCore) ompigRead(_ context.Context, m api.Module, req, reqLen, dst, capacity uint32) uint32 {
 	w.imports++
 	answer := w.spill
 	w.spill = nil
 	if answer == nil {
 		if w.reads >= len(w.cur.Reads) {
-			w.failure = "the core made a pig.read call the recorded run did not make"
+			w.failure = "the core made a ompig.read call the recorded run did not make"
 			panic(w.failure)
 		}
 		got, ok := m.Memory().Read(req, reqLen)
 		if !ok || !bytes.Equal(got, w.cur.Reads[w.reads].Request) {
-			w.failure = "the core asked a different pig.read than the recorded run"
+			w.failure = "the core asked a different ompig.read than the recorded run"
 			panic(w.failure)
 		}
 		answer = w.cur.Reads[w.reads].Answer
@@ -168,7 +168,7 @@ func (w *wasmCore) pigRead(_ context.Context, m api.Module, req, reqLen, dst, ca
 	return uint32(len(answer))
 }
 
-func (w *wasmCore) pigUUID(_ context.Context, m api.Module, dst uint32) {
+func (w *wasmCore) ompigUUID(_ context.Context, m api.Module, dst uint32) {
 	w.imports++
 	if w.uuids >= len(w.cur.UUIDs) {
 		w.failure = "the core took a uuid the recorded run did not take"
@@ -196,9 +196,9 @@ func ReplayWasm(ctx context.Context, rec *Recording, wasm []byte, o WasmOptions)
 	defer func() { _ = rt.Close(ctx) }()
 	wasi_snapshot_preview1.MustInstantiate(ctx, rt)
 	w := &wasmCore{ctx: ctx}
-	if _, err := rt.NewHostModuleBuilder("pig").
-		NewFunctionBuilder().WithFunc(w.pigUUID).Export("uuidv7").
-		NewFunctionBuilder().WithFunc(w.pigRead).Export("read").
+	if _, err := rt.NewHostModuleBuilder("ompig").
+		NewFunctionBuilder().WithFunc(w.ompigUUID).Export("uuidv7").
+		NewFunctionBuilder().WithFunc(w.ompigRead).Export("read").
 		Instantiate(ctx); err != nil {
 		return nil, err
 	}

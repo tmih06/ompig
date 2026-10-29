@@ -14,10 +14,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // fixtureTool is a minimal extension.RegisteredTool for bridge tests.
@@ -150,7 +150,7 @@ func TestBridgeToolPrepareArguments(t *testing.T) {
 
 // TestBridgeTool_Execute_RoundTripResult locks the type-assertion
 // contract: Execute must accept tools that return
-// `agent.AgentToolResult` (the pig-native shape).
+// `agent.AgentToolResult` (the ompig-native shape).
 func TestBridgeTool_Execute_RoundTripResult(t *testing.T) {
 	want := agent.AgentToolResult{Content: []ai.ToolResultMessageContent{ai.TextContent{Text: "ok"}}, IsError: false}
 	rt := fixtureTool("t", "x", `{}`, func(_ context.Context, _ string, _ json.RawMessage, _ extension.AgentToolUpdateCallback) (extension.AgentToolResult, error) {

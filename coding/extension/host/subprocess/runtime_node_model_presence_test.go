@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess_test
 
@@ -14,10 +14,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func TestConnectedNodeProviderPreservesModelListPresence(t *testing.T) {
@@ -25,7 +25,7 @@ func TestConnectedNodeProviderPreservesModelListPresence(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	sockDir, err := os.MkdirTemp(parent, "pig-model-presence-*")
+	sockDir, err := os.MkdirTemp(parent, "ompig-model-presence-*")
 	if err != nil {
 		t.Fatal(err)
 	}

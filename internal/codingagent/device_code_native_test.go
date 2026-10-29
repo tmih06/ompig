@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's common auth notification path (interactive-mode.ts:6302-6313 notifyAuthDialog) renders a waiting line after a device code only, shows an info event with its links, and opens only auth URLs (login-dialog.ts:97-111 showAuth).

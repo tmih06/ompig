@@ -1,8 +1,8 @@
 package evals
 
-// The PiG Session under test runs as a pig process in RPC mode. Pi's harness drives an in-process AgentSession
-// (harness.ts createAgentSessionFromServices); the extension host, resource reload and tool sandbox of a PiG Session
-// belong to the pig binary, so the harness drives that binary through its RPC protocol (coding/cli/rpc_mode.go).
+// The Ompig Session under test runs as a ompig process in RPC mode. Pi's harness drives an in-process AgentSession
+// (harness.ts createAgentSessionFromServices); the extension host, resource reload and tool sandbox of a Ompig Session
+// belong to the ompig binary, so the harness drives that binary through its RPC protocol (coding/cli/rpc_mode.go).
 
 import (
 	"bufio"
@@ -126,7 +126,7 @@ func (process *agentProcess) exited() error {
 		_ = process.command.Process.Kill()
 		<-process.done
 	}
-	return fmt.Errorf("pig exited before answering: %w: %s", process.exitErr, process.stderr.String())
+	return fmt.Errorf("ompig exited before answering: %w: %s", process.exitErr, process.stderr.String())
 }
 
 func (process *agentProcess) send(command map[string]any) (string, error) {

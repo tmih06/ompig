@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // killKeepsAutocompleteCases drive each kill and word-delete command (Ctrl+U, Ctrl+K, Ctrl+W, Alt+Backspace, Alt+D) to a buffer for which a re-query
@@ -25,7 +25,7 @@ var killKeepsAutocompleteCases = []struct {
 
 // Upstream's kill and word-delete commands (deleteToStartOfLine, deleteToEndOfLine, deleteWordBackwards, deleteWordForward in editor.ts) change
 // the text and call onChange only: an open autocomplete list stays until the next character, backspace, Delete or cursor move updates it
-// (updateAutocomplete is called from insertCharacter, handleBackspace, handleForwardDelete and moveCursor). PiG refreshed the list after each
+// (updateAutocomplete is called from insertCharacter, handleBackspace, handleForwardDelete and moveCursor). Ompig refreshed the list after each
 // of them, so Ctrl+U on a completed slash command closed the popup that Pi leaves open. Found by the skills journey (final frame diff).
 func TestKillCommandsLeaveTheOpenAutocompleteList(t *testing.T) {
 	for _, tc := range killKeepsAutocompleteCases {
@@ -89,7 +89,7 @@ func TestKillCommandsKeepAutocompleteMatchesPi(t *testing.T) {
 			t.Fatalf("%s: the Pi oracle shows no popup after the last key, so the probe does not exercise the open list: %q", killKeepsAutocompleteCases[i].name, expected[i][last].Rows)
 		}
 		if !reflect.DeepEqual(got, expected[i]) {
-			t.Errorf("%s:\n  Pig %q\n  Pi  %q", killKeepsAutocompleteCases[i].name, got, expected[i])
+			t.Errorf("%s:\n  Ompig %q\n  Pi  %q", killKeepsAutocompleteCases[i].name, got, expected[i])
 		}
 	}
 }

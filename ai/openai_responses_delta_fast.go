@@ -105,7 +105,7 @@ func foldsToResponsesEventField(key string) bool {
 }
 
 // responsesSkipDepth bounds the nesting skipValue walks; deeper values take the reflective decode.
-// pig additive (D112): Pi's OpenAI SDK parses every event's JSON whole; an event the fast path declines is decoded by json.Unmarshal, which gives the same event.
+// ompig additive (D112): Pi's OpenAI SDK parses every event's JSON whole; an event the fast path declines is decoded by json.Unmarshal, which gives the same event.
 const responsesSkipDepth = 32
 
 // skipValue skips one JSON value, checking it as strictly as the scanner's other readers.

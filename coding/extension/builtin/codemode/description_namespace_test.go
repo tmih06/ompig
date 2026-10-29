@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
 )
 
 // tool.ts DESCRIPTION_INTRO and describeGlobals of 1.1.0, which the catalog cases of tool-search.test.ts only match in

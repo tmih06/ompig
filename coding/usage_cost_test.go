@@ -13,7 +13,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pricedModel builds a models.json model priced at 3/15/0.3/3.75 per million
@@ -21,7 +21,7 @@ import (
 // output tokens, and returns the usage cost Pi computes for that answer.
 func pricedModel(t *testing.T) (*AgentSessionServices, *ai.Model, ai.UsageCost) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		_, _ = io.Copy(io.Discard, request.Body)
 		writer.Header().Set("Content-Type", "text/event-stream")

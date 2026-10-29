@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Upstream bounds every clipboard command: DEFAULT_LIST_TIMEOUT_MS (1 s) for type listings and wslpath,

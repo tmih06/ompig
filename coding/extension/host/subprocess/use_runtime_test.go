@@ -3,7 +3,7 @@ package subprocess
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // resource-loader.ts loadExtensionPaths takes the runtime of the load: UseRuntime makes the Host register in the given runtime, and nil keeps its own.

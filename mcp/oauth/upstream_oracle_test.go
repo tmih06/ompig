@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // The golden file holds Pi's packages/mcp OAuth functions (challenge parsing, discovery URLs, resource selection,

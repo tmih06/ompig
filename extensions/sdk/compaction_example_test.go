@@ -3,7 +3,7 @@ package sdk_test
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Pricing what compaction would drop from the branch GetBranch returns: find where Pi's findCutPoint cuts, then add up estimateTokens over the context

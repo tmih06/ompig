@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -147,7 +147,7 @@ export default function (pi: any) {
 	}
 }
 
-// Cancelling a command rejects the host calls it awaits so it can unwind (pig
+// Cancelling a command rejects the host calls it awaits so it can unwind (ompig
 // additive D19). A call the extension dropped is no one's to observe: Pi
 // never rejects it (interactive-mode.ts showExtensionCustom 2858-2940), so
 // the rejection the host raises must not surface as an unhandled rejection

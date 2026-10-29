@@ -13,7 +13,7 @@ import (
 
 // anthSpliceStrings are texts around requestSpliceMinBytes that the encoder must carry through unchanged: markup and line separators JSON.stringify leaves alone, bytes that are not UTF-8, a lone surrogate, and text that looks like a token.
 func anthSpliceStrings(random *rand.Rand) []string {
-	atoms := []string{"func main() {\n\tfmt.Println(\"<hi> & bye\")\n}\n", "\u2028\u2029", "\x00\x01\x1f", "😀 café 漢字", "\\\"", "pig-splice-0-", `"pig-splice-deadbeef-0"`}
+	atoms := []string{"func main() {\n\tfmt.Println(\"<hi> & bye\")\n}\n", "\u2028\u2029", "\x00\x01\x1f", "😀 café 漢字", "\\\"", "ompig-splice-0-", `"ompig-splice-deadbeef-0"`}
 	pool := []string{"", "x", "short text"}
 	for _, size := range []int{requestSpliceMinBytes - 1, requestSpliceMinBytes, requestSpliceMinBytes + 1, 3 * requestSpliceMinBytes} {
 		var builder strings.Builder

@@ -6,5 +6,5 @@ TASKKILL ["C:\\CustomWindows\\System32\\taskkill.exe",["/F","/T","/PID","1234"],
 === RUN   TestWindowsTaskkillSpawnOptions
 --- PASS: TestWindowsTaskkillSpawnOptions (0.00s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.093s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	0.093s
 ===== exit 0 (1s)

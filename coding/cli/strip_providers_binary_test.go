@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// apiStripTag is the build tag that compiles api out of a Piglet Binary.
+// apiStripTag is the build tag that compiles api out of a Ompiglet Binary.
 func apiStripTag(t *testing.T, api ai.API) string {
 	t.Helper()
 	if !slices.Contains(ai.StrippableAPIs(), api) {
@@ -33,39 +33,39 @@ func countLinkedWithPrefix(deps []string, prefixes ...string) int {
 	return n
 }
 
-// A pig_strip_bedrock_converse_stream build compiles ai/bedrock*.go out, so cmd/pig links neither the AWS SDK nor smithy.
+// A ompig_strip_bedrock_converse_stream build compiles ai/bedrock*.go out, so cmd/ompig links neither the AWS SDK nor smithy.
 func TestStripBedrockConverseStreamBuildOmitsAWSSDK(t *testing.T) {
 	tag := apiStripTag(t, ai.APIBedrockConverseStream)
-	if tag != "pig_strip_bedrock_converse_stream" {
+	if tag != "ompig_strip_bedrock_converse_stream" {
 		t.Fatalf("tag = %q", tag)
 	}
 	stock := goListCmdPig(t, "", "-deps")
-	for _, pkg := range []string{"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime", "github.com/aws/smithy-go/transport/http"} {
+	for _, pkg := range []string{"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime", "github.com/aws/smithy-go/transport/http"} {
 		if !slices.Contains(stock, pkg) {
-			t.Errorf("the stock cmd/pig does not link %s", pkg)
+			t.Errorf("the stock cmd/ompig does not link %s", pkg)
 		}
 	}
 	if n := countLinkedWithPrefix(goListCmdPig(t, tag, "-deps"), "github.com/aws/"); n != 0 {
-		t.Errorf("a %s build of cmd/pig links %d github.com/aws/ packages", tag, n)
+		t.Errorf("a %s build of cmd/ompig links %d github.com/aws/ packages", tag, n)
 	}
 }
 
-// A pig_strip_google_vertex build compiles ai/google_vertex.go out, so cmd/pig links neither golang.org/x/oauth2 (Application
+// A ompig_strip_google_vertex build compiles ai/google_vertex.go out, so cmd/ompig links neither golang.org/x/oauth2 (Application
 // Default Credentials) nor the GCE metadata client.
 func TestStripGoogleVertexBuildOmitsOAuth2(t *testing.T) {
 	tag := apiStripTag(t, ai.APIGoogleVertex)
 	stock := goListCmdPig(t, "", "-deps")
 	for _, pkg := range []string{"golang.org/x/oauth2/google", "cloud.google.com/go/compute/metadata"} {
 		if !slices.Contains(stock, pkg) {
-			t.Errorf("the stock cmd/pig does not link %s", pkg)
+			t.Errorf("the stock cmd/ompig does not link %s", pkg)
 		}
 	}
 	if n := countLinkedWithPrefix(goListCmdPig(t, tag, "-deps"), "golang.org/x/oauth2", "cloud.google.com/go/compute/metadata"); n != 0 {
-		t.Errorf("a %s build of cmd/pig links %d oauth2/metadata packages", tag, n)
+		t.Errorf("a %s build of cmd/ompig links %d oauth2/metadata packages", tag, n)
 	}
 }
 
-// Mistral uses no package of its own, so a pig_strip_mistral_conversations build drops files: the ai package compiles
+// Mistral uses no package of its own, so a ompig_strip_mistral_conversations build drops files: the ai package compiles
 // mistral_stripped.go instead of the provider's mistral.go, mistral_reader.go and mistral_response_body.go.
 func TestStripMistralConversationsBuildOmitsMistralFiles(t *testing.T) {
 	if testing.Short() {
@@ -73,7 +73,7 @@ func TestStripMistralConversationsBuildOmitsMistralFiles(t *testing.T) {
 	}
 	tag := apiStripTag(t, ai.APIMistralConversations)
 	goFiles := func(tags ...string) []string {
-		args := append(append([]string{"list"}, tags...), "-f", `{{join .GoFiles "\n"}}`, "github.com/MichaelKinsy/PiG/ai")
+		args := append(append([]string{"list"}, tags...), "-f", `{{join .GoFiles "\n"}}`, "github.com/tmih06/ompig/ai")
 		out, err := exec.Command("go", args...).Output()
 		if err != nil {
 			t.Fatalf("go %s: %v", strings.Join(args, " "), err)
@@ -112,7 +112,7 @@ func TestStrippedBinaryReportsStrippedAPIs(t *testing.T) {
 				t.Setenv(name, value)
 			}
 			stdout, stderr, code := runStrippedPig(t, "", "-p", "--model", tc.model, "hi")
-			want := "Provider " + tc.provider + ": API " + string(tc.api) + " is stripped from this Piglet (strip.apis: " + string(tc.api) + ")"
+			want := "Provider " + tc.provider + ": API " + string(tc.api) + " is stripped from this Ompiglet (strip.apis: " + string(tc.api) + ")"
 			if code == 0 || !strings.Contains(stdout+stderr, want) {
 				t.Fatalf("exit %d, stdout %q, stderr %q; want non-zero exit reporting %q", code, stdout, stderr, want)
 			}

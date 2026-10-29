@@ -3,7 +3,7 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports pi-tui's stack.ts, h-stack.ts, and v-stack.ts: flexbox-style horizontal
@@ -65,7 +65,7 @@ func derefOr(p *int, d int) int {
 	return *p
 }
 
-// Stack is the abstract base shared by HStack and VStack. It embeds pig's
+// Stack is the abstract base shared by HStack and VStack. It embeds ompig's
 // Container and maintains the parallel entries slice with flexbox metadata.
 type Stack struct {
 	*Container

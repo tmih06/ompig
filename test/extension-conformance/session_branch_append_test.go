@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // upstream: packages/coding-agent/src/core/session-manager.ts getBranch (a walk of parentId links from the leaf to the root), getEntry (byId), getLabel (labelsById over every entry, a label entry with no label removing it) and getLeafEntry.

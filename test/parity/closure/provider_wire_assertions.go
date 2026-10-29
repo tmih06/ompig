@@ -78,8 +78,8 @@ func providerWireTestBindings() []providerWireTestBinding {
 		{
 			id: "differential", factType: "scenario", subject: "test/parity/scenarios/providers-registry/04-provider-wire-payloads.toml",
 			fixtures: []sourceRange{
-				{repository: "pig", path: "test/parity/testdata/provider-wire-pi.mjs", semanticID: "provider-wire.pi-fixture", start: "#!/usr/bin/env node", end: ""},
-				{repository: "pig", path: "test/parity/testdata/provider-wire-pig/main.go", semanticID: "provider-wire.pig-fixture", start: "package main", end: ""},
+				{repository: "ompig", path: "test/parity/testdata/provider-wire-pi.mjs", semanticID: "provider-wire.pi-fixture", start: "#!/usr/bin/env node", end: ""},
+				{repository: "ompig", path: "test/parity/testdata/provider-wire-ompig/main.go", semanticID: "provider-wire.ompig-fixture", start: "package main", end: ""},
 			},
 			asserts: []providerWireAssertionBinding{
 				{behavior: "sampling-precedence", facet: "order", class: "A3", oracle: a3},
@@ -96,7 +96,7 @@ func providerWireTestBindings() []providerWireTestBinding {
 		},
 		{
 			id:  "sampling-completions",
-			pin: &sourceRange{repository: "pig", path: "ai/openai_test.go", semanticID: "ai.TestOpenAICompletionsModelSamplingDefaultsMergeBeforeRequestOverrides", start: "func TestOpenAICompletionsModelSamplingDefaultsMergeBeforeRequestOverrides(", end: "func TestOpenAICompletionsBasetenAndVLLMThinkingPayload("},
+			pin: &sourceRange{repository: "ompig", path: "ai/openai_test.go", semanticID: "ai.TestOpenAICompletionsModelSamplingDefaultsMergeBeforeRequestOverrides", start: "func TestOpenAICompletionsModelSamplingDefaultsMergeBeforeRequestOverrides(", end: "func TestOpenAICompletionsBasetenAndVLLMThinkingPayload("},
 			asserts: []providerWireAssertionBinding{
 				{behavior: "sampling-precedence", facet: "order", class: "A2", oracle: a2},
 				{behavior: "sampling-precedence", facet: "result", class: "A2", oracle: a2},
@@ -104,12 +104,12 @@ func providerWireTestBindings() []providerWireTestBinding {
 		},
 		{
 			id:      "sampling-responses",
-			pin:     &sourceRange{repository: "pig", path: "ai/openai_responses_test.go", semanticID: "ai.TestOpenAIResponsesSamplingParamsOverrideNamedFields", start: "func TestOpenAIResponsesSamplingParamsOverrideNamedFields(", end: "func TestOpenAIResponsesCanSuppressMaxOutputTokens("},
+			pin:     &sourceRange{repository: "ompig", path: "ai/openai_responses_test.go", semanticID: "ai.TestOpenAIResponsesSamplingParamsOverrideNamedFields", start: "func TestOpenAIResponsesSamplingParamsOverrideNamedFields(", end: "func TestOpenAIResponsesCanSuppressMaxOutputTokens("},
 			asserts: []providerWireAssertionBinding{{behavior: "sampling-precedence", facet: "result", class: "A2", oracle: a2}},
 		},
 		{
 			id:  "thinking-payload",
-			pin: &sourceRange{repository: "pig", path: "ai/openai_test.go", semanticID: "ai.TestOpenAICompletionsBasetenAndVLLMThinkingPayload", start: "func TestOpenAICompletionsBasetenAndVLLMThinkingPayload(", end: "// reasoning is on and compat.supportsReasoningEffort"},
+			pin: &sourceRange{repository: "ompig", path: "ai/openai_test.go", semanticID: "ai.TestOpenAICompletionsBasetenAndVLLMThinkingPayload", start: "func TestOpenAICompletionsBasetenAndVLLMThinkingPayload(", end: "// reasoning is on and compat.supportsReasoningEffort"},
 			asserts: []providerWireAssertionBinding{
 				{behavior: "baseten-chat-template", facet: "result", class: "A2", oracle: a2},
 				{behavior: "vllm-thinking-budget", facet: "result", class: "A2", oracle: a2},
@@ -117,7 +117,7 @@ func providerWireTestBindings() []providerWireTestBinding {
 		},
 		{
 			id:  "finish-reason",
-			pin: &sourceRange{repository: "pig", path: "ai/openai_test.go", semanticID: "ai.TestMapOAIFinishReasonCompatibility", start: "func TestMapOAIFinishReasonCompatibility(", end: "func captureOpenAIRequestMap("},
+			pin: &sourceRange{repository: "ompig", path: "ai/openai_test.go", semanticID: "ai.TestMapOAIFinishReasonCompatibility", start: "func TestMapOAIFinishReasonCompatibility(", end: "func captureOpenAIRequestMap("},
 			asserts: []providerWireAssertionBinding{
 				{behavior: "finish-reason-errors", facet: "compat", class: "A2", oracle: a2},
 				{behavior: "finish-reason-errors", facet: "error", class: "A2", oracle: a2},
@@ -126,8 +126,8 @@ func providerWireTestBindings() []providerWireTestBinding {
 		},
 		{
 			id:       "nullable-headers-differential",
-			pin:      &sourceRange{repository: "pig", path: "internal/codingagent/model_registry_parity_test.go", semanticID: "codingagent.TestMergeHeadersMatchesPinnedPiSource", start: "func TestMergeHeadersMatchesPinnedPiSource(", end: ""},
-			fixtures: []sourceRange{{repository: "pig", path: "test/parity/testdata/provider-headers-pi.mjs", semanticID: "provider-headers.pi-fixture", start: "#!/usr/bin/env node", end: ""}},
+			pin:      &sourceRange{repository: "ompig", path: "internal/codingagent/model_registry_parity_test.go", semanticID: "codingagent.TestMergeHeadersMatchesPinnedPiSource", start: "func TestMergeHeadersMatchesPinnedPiSource(", end: ""},
+			fixtures: []sourceRange{{repository: "ompig", path: "test/parity/testdata/provider-headers-pi.mjs", semanticID: "provider-headers.pi-fixture", start: "#!/usr/bin/env node", end: ""}},
 			asserts: []providerWireAssertionBinding{
 				{behavior: "nullable-header-deletion", facet: "compat", class: "A3", oracle: a3},
 				{behavior: "nullable-header-deletion", facet: "wire", class: "A3", oracle: a3},
@@ -135,7 +135,7 @@ func providerWireTestBindings() []providerWireTestBinding {
 		},
 		{
 			id:  "nullable-headers",
-			pin: &sourceRange{repository: "pig", path: "internal/codingagent/model_registry_test.go", semanticID: "codingagent.TestMergeHeadersSupportsCaseInsensitiveDeletionMarkers", start: "func TestMergeHeadersSupportsCaseInsensitiveDeletionMarkers(", end: "func TestModelRegistrySamplingParamsMergePerKey("},
+			pin: &sourceRange{repository: "ompig", path: "internal/codingagent/model_registry_test.go", semanticID: "codingagent.TestMergeHeadersSupportsCaseInsensitiveDeletionMarkers", start: "func TestMergeHeadersSupportsCaseInsensitiveDeletionMarkers(", end: "func TestModelRegistrySamplingParamsMergePerKey("},
 			asserts: []providerWireAssertionBinding{
 				{behavior: "nullable-header-deletion", facet: "compat", class: "A2", oracle: a2},
 				{behavior: "nullable-header-deletion", facet: "result", class: "A2", oracle: a2},

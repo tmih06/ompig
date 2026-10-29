@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 0.87.1 grep.ts:291 and ls.ts:148 expose numeric effectiveLimit unchanged to tool_result subscribers.

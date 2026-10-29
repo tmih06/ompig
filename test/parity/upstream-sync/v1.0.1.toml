@@ -216,28 +216,28 @@ path = "packages/coding-agent/src/modes/interactive/components/daxnuts.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.1; PiG never ported this easter egg (D87)."
+rationale = "Removed upstream at 1.0.1; Ompig never ported this easter egg (D87)."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/easter-egg-3d.lazy.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "D87: PiG plays its own pig version of the logo easter egg (internal/codingagent/pig_logo_animation_play.go) and keeps the inline pig head for /arminsayshi instead of the fullscreen 3D Armin."
+rationale = "D87: Ompig plays its own ompig version of the logo easter egg (internal/codingagent/ompig_logo_animation_play.go) and keeps the inline ompig head for /arminsayshi instead of the fullscreen 3D Armin."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "D87: PiG's logo animation ports the Pi-logo kind as Pi 1.0.0 pi-logo-animation.ts drew it (oracle internal/codingagent/testdata/pi-v1.0.0/); the generalized 3D Armin kind is not played."
+rationale = "D87: Ompig's logo animation ports the Pi-logo kind as Pi 1.0.0 pi-logo-animation.ts drew it (oracle internal/codingagent/testdata/pi-v1.0.0/); the generalized 3D Armin kind is not played."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/index.ts"
 change = "modified"
 disposition = "unchanged-observable"
 evidence = ["test:internal/codingagent/easter_eggs_test.go"]
-rationale = "Drops the DaxnutsComponent export, which PiG never had."
+rationale = "Drops the DaxnutsComponent export, which Ompig never had."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/login-dialog.ts"
@@ -251,21 +251,21 @@ path = "packages/coding-agent/src/modes/interactive/components/pi-logo-animation
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.1 (replaced by easter-egg-3d.lazy.ts); PiG keeps its D87 logo animation, whose oracle runs the vendored 1.0.0 file."
+rationale = "Removed upstream at 1.0.1 (replaced by easter-egg-3d.lazy.ts); Ompig keeps its D87 logo animation, whose oracle runs the vendored 1.0.0 file."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/pi-logo-animation.ts"
 change = "removed"
 disposition = "designed-out"
 evidence = []
-rationale = "Removed upstream at 1.0.1 (replaced by easter-egg-3d.ts); PiG keeps its D87 port, verified against internal/codingagent/testdata/pi-v1.0.0/pi-logo-animation.ts."
+rationale = "Removed upstream at 1.0.1 (replaced by easter-egg-3d.ts); Ompig keeps its D87 port, verified against internal/codingagent/testdata/pi-v1.0.0/pi-logo-animation.ts."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/tool-execution.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:tui/tool_execution_kitty_convert_test.go#TestKittyRendersNonPNGOnlyAfterConversion"]
-rationale = "On Kitty a non-PNG tool image shows its text fallback until PNG data exists; PiG converts off the UI loop and applies the result on it."
+rationale = "On Kitty a non-PNG tool image shows its text fallback until PNG data exists; Ompig converts off the UI loop and applies the result on it."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/interactive-mode.ts"
@@ -279,7 +279,7 @@ path = "packages/coding-agent/src/package-manager-cli.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "The npm-migration hint after `pi update` advertises pi.dev's managed installer for npm installs. PiG's package-manager tier updates a single Go binary with no npm dependency tree to pin, and pi.dev's installer installs Pi, so the hint has no PiG counterpart."
+rationale = "The npm-migration hint after `pi update` advertises pi.dev's managed installer for npm installs. Ompig's package-manager tier updates a single Go binary with no npm dependency tree to pin, and pi.dev's installer installs Pi, so the hint has no Ompig counterpart."
 
 [[files]]
 path = "packages/coding-agent/src/utils/image-convert.ts"

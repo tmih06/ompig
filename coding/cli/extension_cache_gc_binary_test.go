@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Every session mode starts the scheduled extension cache collection once it is running. The model answers only after the
@@ -22,11 +22,11 @@ func TestEverySessionModeStartsTheAutomaticExtensionCacheCollection(t *testing.T
 	for _, mode := range []string{"print", "json", "rpc", "interactive"} {
 		t.Run(mode, func(t *testing.T) {
 			home, cwd := t.TempDir(), t.TempDir()
-			pigHome, agentDir := filepath.Join(home, ".pig"), filepath.Join(home, "pig")
+			ompigHome, agentDir := filepath.Join(home, ".ompig"), filepath.Join(home, "ompig")
 			if err := os.MkdirAll(agentDir, 0o700); err != nil {
 				t.Fatal(err)
 			}
-			marker := filepath.Join(pigHome, "cache", ".last-auto-gc")
+			marker := filepath.Join(ompigHome, "cache", ".last-auto-gc")
 			collected := make(chan bool, 1)
 			chat := startScriptedChatServer(t, func(chatRequest) chatReply {
 				deadline := time.Now().Add(testbudget.Wait(t))
@@ -62,7 +62,7 @@ func TestEverySessionModeStartsTheAutomaticExtensionCacheCollection(t *testing.T
 			}
 			cmd := exec.CommandContext(t.Context(), binary, args...)
 			cmd.Dir = cwd
-			cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+pigHome, "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PI_HOME="+pigHome, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
+			cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+ompigHome, "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PI_HOME="+ompigHome, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
 			var output strings.Builder
 			switch mode {
 			case "interactive":
@@ -85,7 +85,7 @@ func TestEverySessionModeStartsTheAutomaticExtensionCacheCollection(t *testing.T
 			case <-time.After(testbudget.Wait(t)):
 				t.Fatalf("%s mode sent no model request\n%s", mode, output.String())
 			}
-			if data, err := os.ReadFile(filepath.Join(pigHome, "cache", ".auto-gc.error")); err == nil {
+			if data, err := os.ReadFile(filepath.Join(ompigHome, "cache", ".auto-gc.error")); err == nil {
 				t.Fatalf("%s mode recorded a collection failure: %s", mode, data)
 			}
 		})

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // pickerPreviewGapCells mirrors the cells tui keeps between the longest option row and the preview column.
@@ -28,7 +28,7 @@ func longestRowCells(options []string) int {
 // spriteTestVariants is the built-in catalogue a fresh test process offers.
 func spriteTestVariants(t *testing.T) []Variant {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	Refresh()
 	variants := All()
 	if len(variants) < 12 {
@@ -63,8 +63,8 @@ func lineCarrying(t *testing.T, lines []string, text string) int {
 	return -1
 }
 
-// The picker draws the pig of the highlighted sprite right after the option rows: the row keeps its label on the
-// left and the head starts a few cells past the longest row, top-aligned with the first option. The title carries no pig.
+// The picker draws the ompig of the highlighted sprite right after the option rows: the row keeps its label on the
+// left and the head starts a few cells past the longest row, top-aligned with the first option. The title carries no ompig.
 func TestSpritePickerDrawsThePigOnTheRightOfTheRows(t *testing.T) {
 	variants := spriteTestVariants(t)
 	options := spriteOptions(variants)
@@ -93,11 +93,11 @@ func TestSpritePickerDrawsThePigOnTheRightOfTheRows(t *testing.T) {
 	}
 	title := lineCarrying(t, lines, spritePickerTitle)
 	if strings.Contains(lines[title], head[0]) {
-		t.Fatalf("line %d draws the pig beside the title", title)
+		t.Fatalf("line %d draws the ompig beside the title", title)
 	}
 }
 
-// Moving down redraws the pig with the sprite under the cursor, Enter returns that sprite's row, and Escape returns no
+// Moving down redraws the ompig with the sprite under the cursor, Enter returns that sprite's row, and Escape returns no
 // choice at all.
 func TestSpritePickerFollowsTheCursorAndReportsTheChoice(t *testing.T) {
 	variants := spriteTestVariants(t)
@@ -109,7 +109,7 @@ func TestSpritePickerFollowsTheCursorAndReportsTheChoice(t *testing.T) {
 
 	picker.HandleInput("j")
 	if !strings.Contains(strings.Join(picker.Render(width), "\n"), HeadLines(variants[1], mode)[0]) {
-		t.Fatal("the pig did not follow the cursor down to the next sprite")
+		t.Fatal("the ompig did not follow the cursor down to the next sprite")
 	}
 	picker.HandleInput("\n")
 	if got != options[1] {
@@ -123,8 +123,8 @@ func TestSpritePickerFollowsTheCursorAndReportsTheChoice(t *testing.T) {
 	}
 }
 
-// The create row is not a sprite: it draws no pig, and its list is byte-identical to the plain extension selector, so
-// the picker keeps upstream's full-width rows whenever there is no pig to draw. Moving back to a sprite brings the pig
+// The create row is not a sprite: it draws no ompig, and its list is byte-identical to the plain extension selector, so
+// the picker keeps upstream's full-width rows whenever there is no ompig to draw. Moving back to a sprite brings the ompig
 // back.
 func TestSpritePickerCreateRowDrawsNoPreview(t *testing.T) {
 	variants := spriteTestVariants(t)
@@ -150,7 +150,7 @@ func TestSpritePickerCreateRowDrawsNoPreview(t *testing.T) {
 
 	picker.HandleInput("k")
 	if got := strings.Join(picker.Render(width), "\n"); !strings.Contains(got, HeadLines(variants[len(variants)-1], mode)[0]) {
-		t.Fatal("the sprite above the create row does not draw its pig again")
+		t.Fatal("the sprite above the create row does not draw its ompig again")
 	}
 }
 
@@ -240,7 +240,7 @@ func TestChooseSpriteFallsBackToThePlainSelector(t *testing.T) {
 	}
 }
 
-// A plain selector the user dismisses reports nothing, exactly as it did before the picker drew a pig.
+// A plain selector the user dismisses reports nothing, exactly as it did before the picker drew a ompig.
 func TestChooseSpriteReportsADismissedPlainSelector(t *testing.T) {
 	variants := spriteTestVariants(t)
 	ui := &pickerUI{dismiss: true}

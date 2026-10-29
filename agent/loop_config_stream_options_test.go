@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/agent/src/types.ts AgentLoopConfig extends SimpleStreamOptions, so each SimpleStreamOptions property is a property of the config and reaches the provider request that the loop builds.
@@ -15,7 +15,7 @@ func TestAgentLoopConfigInheritsEverySimpleStreamOption(t *testing.T) {
 	config := standaloneConfig(provider)
 	config.APIKey = "static-key"
 	config.CacheRetention = ai.CacheRetention("long")
-	config.Env = ai.ProviderEnv{"PIG_TEST_ENV": "env-value"}
+	config.Env = ai.ProviderEnv{"OMPIG_TEST_ENV": "env-value"}
 	header := "header-value"
 	config.Headers = ai.ProviderHeaders{"x-test": &header}
 	config.MaxRetries = &retries
@@ -37,7 +37,7 @@ func TestAgentLoopConfigInheritsEverySimpleStreamOption(t *testing.T) {
 		t.Fatal(err)
 	}
 	got := provider.request(1).opts
-	if got.APIKey != "static-key" || got.CacheRetention != "long" || got.Env["PIG_TEST_ENV"] != "env-value" || got.Headers["x-test"] == nil || *got.Headers["x-test"] != "header-value" {
+	if got.APIKey != "static-key" || got.CacheRetention != "long" || got.Env["OMPIG_TEST_ENV"] != "env-value" || got.Headers["x-test"] == nil || *got.Headers["x-test"] != "header-value" {
 		t.Fatalf("credential, cache, env or header option lost: %+v", got)
 	}
 	if got.MaxRetries != &retries || got.MaxRetryDelayMs != &retryDelay || got.TimeoutMs != &timeout || got.WebSocketConnectTimeoutMs != &connectTimeout {

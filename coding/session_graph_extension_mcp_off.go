@@ -1,10 +1,10 @@
-//go:build pig_strip_mcp
+//go:build ompig_strip_mcp
 
 package coding
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func (f graphExtensionFactory) mcpFactory(subprocess.SessionGraphScope, string) (extension.InlineExtension, error) {

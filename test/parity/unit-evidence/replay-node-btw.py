@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replay the locked pi-btw package against Pi and PiG with a hermetic provider."""
+"""Replay the locked pi-btw package against Pi and Ompig with a hermetic provider."""
 import argparse
 import hashlib
 import http.server
@@ -18,9 +18,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--npm", type=Path, required=True, help="locked corpus npm directory")
     parser.add_argument("--pi", type=Path, required=True)
-    parser.add_argument("--pig", type=Path, required=True)
+    parser.add_argument("--ompig", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--trace", action="store_true", help="record PiG host calls for diagnosis")
+    parser.add_argument("--trace", action="store_true", help="record Ompig host calls for diagnosis")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = json.loads((args.npm / "node_modules/pi-btw/package.json").read_text())
@@ -62,11 +62,11 @@ def main():
     try:
         with tempfile.TemporaryDirectory(prefix="parity-child-corpus-") as root:
             for repetition in range(3):
-                for variant in ("pi", "pig"):
+                for variant in ("pi", "ompig"):
                     home = Path(root) / f"{variant}-{repetition}"
                     cwd = home / "work"
                     cwd.mkdir(parents=True)
-                    agent = home / (".pi" if variant == "pi" else ".pig") / "agent"
+                    agent = home / (".pi" if variant == "pi" else ".ompig") / "agent"
                     agent.mkdir(parents=True)
                     shutil.copytree(args.npm, agent / "npm", symlinks=True)
                     assert hashlib.sha256((agent / "npm/package-lock.json").read_bytes()).hexdigest() == results["lock_sha256"]
@@ -74,10 +74,10 @@ def main():
                     probe.mkdir()
                     (probe / "package.json").write_text(json.dumps({"name": "corpus-ready", "pi": {"extensions": ["ready.mjs"]}}))
                     ready_source = 'export default pi => pi.on("session_start", (_event, ctx) => ctx.ui.setStatus("corpus-ready", "CORPUS READY"));\n'
-                    if args.trace and variant == "pig":
+                    if args.trace and variant == "ompig":
                         ready_source = f'import {{ appendFileSync }} from "node:fs";\nconst traceFile = {json.dumps(str(home / "trace.log"))};\n' + '''import * as sdk from "@earendil-works/pi-coding-agent";
 const trace = (...args) => appendFileSync(traceFile, JSON.stringify(args) + "\\n");
-trace("paths", sdk.getAgentDir(), process.cwd(), process.env.PIG_CODING_AGENT_DIR);
+trace("paths", sdk.getAgentDir(), process.cwd(), process.env.OMPIG_CODING_AGENT_DIR);
 for (const [target, method] of [[sdk.ModelRuntime, "create"], [sdk.ModelRuntime.prototype, "getAuth"], [sdk.ModelRuntime.prototype, "refresh"], [sdk.DefaultResourceLoader.prototype, "reload"]]) {
  const original = target[method];
  target[method] = async function(...args) {
@@ -94,9 +94,9 @@ for (const [target, method] of [[sdk.ModelRuntime, "create"], [sdk.ModelRuntime.
                     out.mkdir()
                     session = "parity-btw-" + variant + str(repetition)
                     env = {k: v for k, v in os.environ.items() if k in ("PATH", "LANG", "LC_ALL", "TZ")}
-                    env.update(HOME=str(home), TERM="xterm-256color", COLORTERM="truecolor", PI_OFFLINE="1", PIG_OFFLINE="1", PI_SKIP_VERSION_CHECK="1", NODE_DISABLE_COMPILE_CACHE="1", TMPDIR=root)
+                    env.update(HOME=str(home), TERM="xterm-256color", COLORTERM="truecolor", PI_OFFLINE="1", OMPIG_OFFLINE="1", PI_SKIP_VERSION_CHECK="1", NODE_DISABLE_COMPILE_CACHE="1", TMPDIR=root)
                     import shlex
-                    binary = args.pi if variant == "pi" else args.pig
+                    binary = args.pi if variant == "pi" else args.ompig
                     command = "exec env -i " + " ".join(shlex.quote(k + "=" + v) for k, v in env.items()) + " " + shlex.join([str(binary.resolve()), "--model", "e2e/e2e-model"]) + " 2>" + shlex.quote(str((out / "stderr").resolve()))
                     start = len(records)
                     cancel_received.clear()
@@ -139,7 +139,7 @@ for (const [target, method] of [[sdk.ModelRuntime, "create"], [sdk.ModelRuntime.
                         assert "side-question" not in json.dumps(own[-1]["messages"]), "child conversation leaked into parent"
                         (out / "requests.json").write_text(json.dumps(own, indent=2) + "\n")
                         results["runs"].append({"variant": variant, "repetition": repetition, "side": "SIDE ANSWER", "abort": True, "main": "MAIN ANSWER", "parentIndependent": True})
-                        if variant == "pig":
+                        if variant == "ompig":
                             def panel(path):
                                 lines = path.read_text().splitlines()
                                 top = next(index for index, line in enumerate(lines) if "┌" in line)

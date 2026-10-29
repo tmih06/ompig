@@ -5,7 +5,7 @@ import (
 	"maps"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // SetupSessionManager is the SessionManager that Pi hands the setup callback of newSession (types.ts:411, agent-session-runtime.ts:254-257): the replacement Session's manager, with the reads of SessionManager and the appends that seed the new Session. Each call acts on the replacement Session and returns the new entry's id.

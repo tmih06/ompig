@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // fixtureLifetime outlasts any wait of these tests (testbudget.Default), so only a stop ends a fixture early, and bounds

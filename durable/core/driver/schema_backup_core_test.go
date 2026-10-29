@@ -4,12 +4,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	chordnode "github.com/MichaelKinsy/PiG/chord/sqlite/node"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	durablesqlite "github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	"github.com/tmih06/ompig/ai"
+	chordnode "github.com/tmih06/ompig/chord/sqlite/node"
+	"github.com/tmih06/ompig/durable/core/driver"
+	"github.com/tmih06/ompig/durable/core/store"
+	"github.com/tmih06/ompig/durable/harness"
+	durablesqlite "github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 // D188: the core keeps a copy of a store an older Pi release wrote (pi-durable 1.3.0, schema version 1), which that

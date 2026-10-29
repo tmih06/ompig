@@ -1,6 +1,6 @@
-// Package requestvalidity checks the requests PiG sends to model providers against each provider's documented message contract.
+// Package requestvalidity checks the requests Ompig sends to model providers against each provider's documented message contract.
 //
-// The checker is inert in a production binary. It runs in every Go test binary and in a binary built with the requestvalidity tag. A violation is a bug in the code that built the request, whatever the provider would answer: it ends the process with a stack trace (a panic on a goroutine nothing can recover), so the test or scenario that sent the request fails even when an agent loop wraps the provider call. PIG_REQUEST_VALIDITY_REPORT=<file> appends one line per violation to the file and continues, to survey a whole suite.
+// The checker is inert in a production binary. It runs in every Go test binary and in a binary built with the requestvalidity tag. A violation is a bug in the code that built the request, whatever the provider would answer: it ends the process with a stack trace (a panic on a goroutine nothing can recover), so the test or scenario that sent the request fails even when an agent loop wraps the provider call. OMPIG_REQUEST_VALIDITY_REPORT=<file> appends one line per violation to the file and continues, to survey a whole suite.
 package requestvalidity
 
 import (
@@ -119,7 +119,7 @@ func Enforce(ctx context.Context, api string, violations []Violation) {
 	for _, v := range violations {
 		fmt.Fprintf(&text, "\n  - %s", v)
 	}
-	if path := os.Getenv("PIG_REQUEST_VALIDITY_REPORT"); path != "" {
+	if path := os.Getenv("OMPIG_REQUEST_VALIDITY_REPORT"); path != "" {
 		report(path, api, violations)
 		return
 	}

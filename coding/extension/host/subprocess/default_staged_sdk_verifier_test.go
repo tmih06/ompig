@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// A library entry point (coding.DiscoverAndLoadExtensions) installs the staged-SDK check the pig command registers, built for the
+// A library entry point (coding.DiscoverAndLoadExtensions) installs the staged-SDK check the ompig command registers, built for the
 // configuration root it uses, and installs none when no program registered one.
 func TestDefaultStagedSDKVerifierIsBuiltForTheConfigRootOrAbsent(t *testing.T) {
 	t.Cleanup(func() { stagedSDKVerifierFactory.Store(nil) })

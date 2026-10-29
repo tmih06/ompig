@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // handleToolRegistration mirrors loader.ts:273-284: validate before replacement and refresh before returning.

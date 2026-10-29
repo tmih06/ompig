@@ -4,7 +4,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { describeNight, judge, quantile, ruleB, timeTravel } from "../lib/nightly.mjs"
 
-const night = (warm, piWarm, extra = {}) => ({ pig: { warm, warmP95: warm * 1.5, cold: warm * 5, ...extra }, pi: { warm: piWarm, warmP95: piWarm * 1.5, cold: piWarm * 3 } })
+const night = (warm, piWarm, extra = {}) => ({ ompig: { warm, warmP95: warm * 1.5, cold: warm * 5, ...extra }, pi: { warm: piWarm, warmP95: piWarm * 1.5, cold: piWarm * 3 } })
 const history = [night(200, 260), night(210, 270), night(205, 265), night(195, 255)]
 
 test("ruleB pools every turn after the first as warm, and open + first turn as cold", () => {
@@ -38,13 +38,13 @@ test("within 10% is not drift, and fewer than three earlier nights judge nothing
 })
 
 test("Rule B is judged against its own nights with pi's warm p50 as the load control", () => {
-	const h = history.map(n => ({ ...n, pig: { ...n.pig, nativeWarm: 100 } }))
+	const h = history.map(n => ({ ...n, ompig: { ...n.ompig, nativeWarm: 100 } }))
 	assert.equal(judge(h, night(200, 262, { nativeWarm: 120 })).find(x => x.key === "nativeWarm").drift, true)
 	assert.equal(judge(h, night(200, 330, { nativeWarm: 120 })).find(x => x.key === "nativeWarm").drift, false)
 })
 
-test("a ratio that grew because pi got faster is not drift while PiG holds its own median", () => {
-	// PiG at its median (203), pi 20% faster than usual: the ratio rises by about 25%, PiG is not slower.
+test("a ratio that grew because pi got faster is not drift while Ompig holds its own median", () => {
+	// Ompig at its median (203), pi 20% faster than usual: the ratio rises by about 25%, Ompig is not slower.
 	const v = judge(history, night(203, 210)).find(x => x.key === "warm")
 	assert.ok(v.ratioUp > 0.1 && v.slower < 0.1, JSON.stringify(v))
 	assert.equal(v.drift, false)
@@ -62,8 +62,8 @@ test("only the last five nights count, and their median, not their mean", () => 
 
 test("Rule B's load control is pi's warm p50, not its cold start", () => {
 	// pi's warm p50 rose as much as native's (a load spike), its cold start did not: no drift.
-	const h = history.map(n => ({ ...n, pig: { ...n.pig, nativeWarm: 100 } }))
-	const spike = { pig: { nativeWarm: 125 }, pi: { warm: 330, warmP95: 400, cold: 780 } }
+	const h = history.map(n => ({ ...n, ompig: { ...n.ompig, nativeWarm: 100 } }))
+	const spike = { ompig: { nativeWarm: 125 }, pi: { warm: 330, warmP95: 400, cold: 780 } }
 	assert.equal(judge(h, spike).find(x => x.key === "nativeWarm").drift, false)
 })
 
@@ -77,20 +77,20 @@ test("time travel: per-operation sums, pi as each operation's control, failed bu
 	}
 	const tt = timeTravel(r)
 	assert.deepEqual(tt.pi, { "tt:fork": 10, "tt:scrub": 5 })
-	assert.deepEqual(tt.pig, { "tt:native:fork": 20, "tt:native:scrub": 8 })
+	assert.deepEqual(tt.ompig, { "tt:native:fork": 20, "tt:native:scrub": 8 })
 	assert.deepEqual(tt.verdicts, { "wasm-tinygo": "exited 1 : FatalError: trap", native: "ok" })
-	const withTT = n => ({ pig: { ...n.pig, ...tt.pig }, pi: { ...n.pi, ...tt.pi } })
+	const withTT = n => ({ ompig: { ...n.ompig, ...tt.ompig }, pi: { ...n.pi, ...tt.pi } })
 	const h = history.map(withTT)
 	// The native fork slows 50% while pi's fork holds: drift. The same slowdown in pi's fork too: none.
-	const slow = withTT(night(200, 262)); slow.pig["tt:native:fork"] = 30
+	const slow = withTT(night(200, 262)); slow.ompig["tt:native:fork"] = 30
 	assert.equal(judge(h, slow).find(v => v.key === "tt:native:fork").drift, true)
-	const load = withTT(night(200, 262)); load.pig["tt:native:fork"] = 30; load.pi["tt:fork"] = 15
+	const load = withTT(night(200, 262)); load.ompig["tt:native:fork"] = 30; load.pi["tt:fork"] = 15
 	assert.equal(judge(h, load).find(v => v.key === "tt:native:fork").drift, false)
 	assert.match(describeNight("abc", judge(h, slow), tt.verdicts), /DRIFT time travel native fork\. .* Time travel: wasm-tinygo FAIL \(exited 1 : FatalError: trap\)\.$/)
 	assert.match(describeNight("abc", judge(h, slow), { native: "ok" }), /Time travel: equal to pi on native\.$/)
 	// A 2 ms operation that doubles is timer noise, not drift.
-	const tiny = withTT(night(200, 262)); tiny.pig["tt:native:scrub"] = 16
-	const ht = h.map(n => ({ ...n, pig: { ...n.pig, "tt:native:scrub": 12 } }))
+	const tiny = withTT(night(200, 262)); tiny.ompig["tt:native:scrub"] = 16
+	const ht = h.map(n => ({ ...n, ompig: { ...n.ompig, "tt:native:scrub": 12 } }))
 	assert.equal(judge(ht, tiny).find(v => v.key === "tt:native:scrub").drift, false)
 })
 
@@ -98,7 +98,7 @@ test("time travel over several runs: medians per operation, a build failing in a
 	const run = (fork, ok = true) => ({ runs: { pi: { ok: true, ops: [{ op: "fork", ms: 10 }] }, native: { ok: true, ops: [{ op: "fork", ms: fork }] }, "wasm-go": { ok, problem: ok ? undefined : "differs from pi", ops: [{ op: "fork", ms: 5 }] } } })
 	// The median (22) is neither the last run (90) nor the mean (44); the failure is in a later run, not the first.
 	const tt = timeTravel([run(20), run(22, false), run(90)])
-	assert.deepEqual(tt.pig, { "tt:native:fork": 22 })
+	assert.deepEqual(tt.ompig, { "tt:native:fork": 22 })
 	assert.deepEqual(tt.pi, { "tt:fork": 10 })
 	assert.deepEqual(tt.verdicts, { native: "ok", "wasm-go": "differs from pi" })
 })

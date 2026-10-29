@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // These tests run the interactive owner loop against a real coding.Session,
@@ -81,7 +81,7 @@ type sessionPair struct {
 func newSessionPair(t *testing.T, settings string, contextWindow int, onEvent func(*icodingagent.TestHarness, agent.AgentEvent), replies ...scriptedReply) *sessionPair {
 	t.Helper()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -275,7 +275,7 @@ func TestInteractiveEscRestoresQueuedMessagesToTheEditor(t *testing.T) {
 	}
 }
 
-// `pig "first" "second" "third"` sends every positional message as its own
+// `ompig "first" "second" "third"` sends every positional message as its own
 // prompt, each after the previous run settles (upstream initialMessages).
 // Interactive mode sent only the first (MODES-05).
 func TestInteractiveSendsEveryInitialMessageInOrder(t *testing.T) {

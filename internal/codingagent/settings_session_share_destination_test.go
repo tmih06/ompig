@@ -18,7 +18,7 @@ func TestSettingsManager_GetSessionShareDestination(t *testing.T) {
 		{"gist", SessionShareDestinationGist},
 		{"radius", SessionShareDestinationRadius},
 		{"GIST", SessionShareDestinationAuto},
-		{"pi-in-go", SessionShareDestinationAuto},
+		{"ompig", SessionShareDestinationAuto},
 	} {
 		sm := &SettingsManager{merged: Settings{SessionShareDestination: c.value}}
 		if got := sm.GetSessionShareDestination(); got != c.want {

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func runFileTool(t *testing.T, tool agent.AgentTool, ctx context.Context, params map[string]any) agent.AgentToolResult {

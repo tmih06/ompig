@@ -1,6 +1,6 @@
 import pytest
 
-from pig_sdk import Extension, _apply_stream_ops, _clone_stream_value
+from ompig_sdk import Extension, _apply_stream_ops, _clone_stream_value
 
 
 def request(seq, base=0, args=None, ops=None):

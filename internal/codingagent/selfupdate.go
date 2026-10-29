@@ -26,26 +26,26 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/fspublish"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/fspublish"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	semver "github.com/MichaelKinsy/PiG/third_party/semver"
+	semver "github.com/tmih06/ompig/third_party/semver"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/managementhttp"
-	"github.com/MichaelKinsy/PiG/internal/ownerfile"
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/managementhttp"
+	"github.com/tmih06/ompig/internal/ownerfile"
+	"github.com/tmih06/ompig/internal/tlsdistrust"
 )
 
 // DefaultUpdateURL is the built-in update-manifest URL. It is empty in stock
-// pig and is set at build time for a product binary via:
+// ompig and is set at build time for a product binary via:
 //
-//	-ldflags "-X github.com/MichaelKinsy/PiG/internal/codingagent.DefaultUpdateURL=<url>"
+//	-ldflags "-X github.com/tmih06/ompig/internal/codingagent.DefaultUpdateURL=<url>"
 //
-// so a product release can configure its update source. PiG's own release
+// so a product release can configure its update source. Ompig's own release
 // builds (release-candidate.yml) point it at the latest release's signed
-// update.json; development, go install, and Piglet builds leave it empty.
+// update.json; development, go install, and Ompiglet builds leave it empty.
 var DefaultUpdateURL string
 
 // DefaultUpdateTrustRoot is an optional build-time Ed25519 public key in PEM
@@ -56,13 +56,13 @@ var DefaultUpdateTrustRoot string
 
 // UpdateSignatureHeader carries the base64 Ed25519 signature over the exact
 // update manifest response bytes.
-const UpdateSignatureHeader = "X-Pig-Release-Signature"
+const UpdateSignatureHeader = "X-Ompig-Release-Signature"
 
-// PigletBinaryRelease is the baked Piglet/Piglet Binary release version. It
-// is empty for stock Pig and set via ldflags for a Piglet Binary. When set it
+// PigletBinaryRelease is the baked Ompiglet/Ompiglet Binary release version. It
+// is empty for stock Ompig and set via ldflags for a Ompiglet Binary. When set it
 // marks the running binary as an immutable baked release whose composition
 // cannot be drifted in place (see ResolveSelfUpdateTier). It is the single
-// source of truth for the baked release identity; cmd/pig copies its ldflags
+// source of truth for the baked release identity; cmd/ompig copies its ldflags
 // value here at startup.
 var PigletBinaryRelease string
 
@@ -103,18 +103,18 @@ type BinaryUpdate struct {
 }
 
 // UpdateSourceURL resolves the update-manifest URL. Resolution order:
-//  1. PIG_UPDATE_URL env (explicit per-invocation override);
+//  1. OMPIG_UPDATE_URL env (explicit per-invocation override);
 //  2. a sidecar file at <config-root>/update-url, written by an installer that
 //     knows its origin at install time (a generic, transport-neutral seam: any
-//     distributor may write it; pig reads only the URL, never product data);
+//     distributor may write it; ompig reads only the URL, never product data);
 //  3. the build-time embedded DefaultUpdateURL, set by a product release build;
 //  4. empty (no update source configured).
 //
 // The sidecar lets an installer seed the update source for a downloaded binary
 // without a Go toolchain (the binary is not rebuilt) and without modifying the
-// user's shell rc. It carries one URL line; pig never writes it.
+// user's shell rc. It carries one URL line; ompig never writes it.
 func UpdateSourceURL() string {
-	if v := strings.TrimSpace(os.Getenv("PIG_UPDATE_URL")); v != "" {
+	if v := strings.TrimSpace(os.Getenv("OMPIG_UPDATE_URL")); v != "" {
 		return v
 	}
 	if v := readUpdateURLSidecar(); v != "" {
@@ -157,7 +157,7 @@ var updatePackageNamePattern = lazyregexp.New(`^(?:@[a-z0-9][a-z0-9._-]*/)?[a-z0
 // the network.
 func updateTrustRoots() ([]ed25519.PublicKey, error) {
 	var data []byte
-	if path := strings.TrimSpace(os.Getenv("PIG_UPDATE_TRUST_ROOT")); path != "" {
+	if path := strings.TrimSpace(os.Getenv("OMPIG_UPDATE_TRUST_ROOT")); path != "" {
 		var err error
 		data, err = os.ReadFile(path)
 		if err != nil {
@@ -228,7 +228,7 @@ func verifyReleaseSignature(data []byte, header string, trustRoots []ed25519.Pub
 }
 
 func updateDevelopmentHTTPAllowed() bool {
-	value := strings.ToLower(strings.TrimSpace(os.Getenv("PIG_UPDATE_ALLOW_LOOPBACK_HTTP")))
+	value := strings.ToLower(strings.TrimSpace(os.Getenv("OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP")))
 	return value == "1" || value == "true" || value == "yes"
 }
 
@@ -247,7 +247,7 @@ func validateUpdateURL(raw string) (*url.URL, error) {
 			return parsed, nil
 		}
 	}
-	return nil, fmt.Errorf("update URL %s must use HTTPS; loopback HTTP requires PIG_UPDATE_ALLOW_LOOPBACK_HTTP=1", raw)
+	return nil, fmt.Errorf("update URL %s must use HTTPS; loopback HTTP requires OMPIG_UPDATE_ALLOW_LOOPBACK_HTTP=1", raw)
 }
 
 func doUpdateRequest(client *http.Client, req *http.Request, retryOptions ...managementhttp.FetchRetryOptions) (*http.Response, error) {
@@ -374,7 +374,7 @@ func clientWithUpdateTransportCA(client *http.Client) (*http.Client, error) {
 			transportClone.TLSClientConfig.MinVersion = tls.VersionTLS12
 		}
 	}
-	// pig additive (D191): a sidecar CA adds a trust anchor; it does not lift the eMudhra distrust.
+	// ompig additive (D191): a sidecar CA adds a trust anchor; it does not lift the eMudhra distrust.
 	transportClone.TLSClientConfig = tlsdistrust.Harden(transportClone.TLSClientConfig)
 	clone := *client
 	clone.Transport = transportClone
@@ -394,22 +394,22 @@ func SelfUpdateFallback() string {
 			src, AppName)
 	}
 	return fmt.Sprintf(
-		"No update source is configured. Set PIG_UPDATE_URL=<manifest-url> and run `%s update`, "+
+		"No update source is configured. Set OMPIG_UPDATE_URL=<manifest-url> and run `%s update`, "+
 			"or download a new %s binary from your provider's releases, "+
 			"or pull the container image (log in to your registry first) and re-deploy.",
 		AppName, AppName)
 }
 
 // updateChecksOffline reports the environment values that suppress bounded
-// startup update probes. Explicit `pig update` does not use this guard: its
+// startup update probes. Explicit `ompig update` does not use this guard: its
 // errors must remain actionable. PI_OFFLINE mirrors Pi: any non-empty value,
 // whitespace included, is offline (version-check.ts getLatestPiRelease).
-// PIG_OFFLINE is Pig's product-neutral alias.
+// OMPIG_OFFLINE is Ompig's product-neutral alias.
 func updateChecksOffline() bool {
 	if os.Getenv("PI_OFFLINE") != "" {
 		return true
 	}
-	value := strings.ToLower(strings.TrimSpace(os.Getenv("PIG_OFFLINE")))
+	value := strings.ToLower(strings.TrimSpace(os.Getenv("OMPIG_OFFLINE")))
 	return value == "1" || value == "true" || value == "yes"
 }
 
@@ -418,7 +418,7 @@ func updateChecksOffline() bool {
 // the source is unreachable. It never surfaces an error: a startup update check
 // is best-effort and must not disrupt the session. Any non-empty
 // PI_SKIP_VERSION_CHECK disables this startup check without a request; explicit
-// `pig update` does not call it.
+// `ompig update` does not call it.
 func CheckForBinaryUpdate(ctx context.Context, client *http.Client, currentVersion string) *BinaryUpdate {
 	// upstream: packages/coding-agent/src/utils/version-check.ts:checkForNewPiVersion
 	if os.Getenv("PI_SKIP_VERSION_CHECK") != "" {
@@ -473,7 +473,7 @@ func FetchUpdateManifest(ctx context.Context, client *http.Client, rawURL string
 		return nil, err
 	}
 	// upstream: packages/coding-agent/src/utils/version-check.ts:getLatestPiRelease sends these two headers.
-	// pig divergence (D65): the User-Agent is PiG's product identity, not Pi's.
+	// ompig divergence (D65): the User-Agent is Ompig's product identity, not Pi's.
 	req.Header.Set("User-Agent", ai.FormatUserAgent(nil))
 	req.Header.Set("Accept", "application/json")
 	maxRetries := 0
@@ -620,7 +620,7 @@ func selfReplaceAt(ctx context.Context, client *http.Client, bin UpdateBinary, e
 	if err != nil {
 		return err
 	}
-	// pig divergence (D39): the native installation uses a per-executable OS-lock sidecar, not Pi's npm managed-release directory lock. Release removes the sidecar, as Pi's lock release does; acquireStandaloneUpdateLock keeps that removal exclusive.
+	// ompig divergence (D39): the native installation uses a per-executable OS-lock sidecar, not Pi's npm managed-release directory lock. Release removes the sidecar, as Pi's lock release does; acquireStandaloneUpdateLock keeps that removal exclusive.
 	releaseLock, err := acquireStandaloneUpdateLock(exePath + ".update.lock")
 	if err != nil {
 		return err
@@ -651,7 +651,7 @@ func selfReplaceAt(ctx context.Context, client *http.Client, bin UpdateBinary, e
 		return nil
 	}
 
-	backupFile, err := os.CreateTemp(dir, ".pig-update-backup-*")
+	backupFile, err := os.CreateTemp(dir, ".ompig-update-backup-*")
 	if err != nil {
 		return fmt.Errorf("stage executable rollback: %w", err)
 	}
@@ -663,7 +663,7 @@ func selfReplaceAt(ctx context.Context, client *http.Client, bin UpdateBinary, e
 	if err := os.Remove(backupPath); err != nil {
 		return fmt.Errorf("stage executable rollback: %w", err)
 	}
-	// pig divergence (D39): the rollback backup is a hard link, or a synced copy where the file system refuses links (EPERM or EACCES, as Android does in Termux's prefix).
+	// ompig divergence (D39): the rollback backup is a hard link, or a synced copy where the file system refuses links (EPERM or EACCES, as Android does in Termux's prefix).
 	if err := fspublish.Duplicate(exePath, backupPath); err != nil {
 		return fmt.Errorf("preserve current executable for rollback: %w", err)
 	}
@@ -699,7 +699,7 @@ func downloadBinaryToFile(ctx context.Context, client *http.Client, rawURL, dir 
 	if err != nil {
 		return "", "", err
 	}
-	tmp, err := os.CreateTemp(dir, ".pig-update-*")
+	tmp, err := os.CreateTemp(dir, ".ompig-update-*")
 	if err != nil {
 		return "", "", fmt.Errorf("stage update (is %s writable?): %w", dir, err)
 	}
@@ -757,7 +757,7 @@ func downloadBinaryToFile(ctx context.Context, client *http.Client, rawURL, dir 
 
 // maxDetachedSignatureBytes bounds a detached manifest signature: a few
 // comma-separated base64 Ed25519 signatures.
-const maxDetachedSignatureBytes = 4 << 10 // pig divergence (D39): PiG-only signed self-update transport.
+const maxDetachedSignatureBytes = 4 << 10 // ompig divergence (D39): Ompig-only signed self-update transport.
 
 // fetchDetachedSignature reads the base64 signature list published at
 // <manifest URL>.sig when the manifest response carries no signature header.
@@ -795,9 +795,9 @@ func isTarGzURL(rawURL string) bool {
 	return err == nil && strings.HasSuffix(parsed.Path, ".tar.gz")
 }
 
-// extractPigFromTarGz writes the archive's single pig executable (at the root
+// extractPigFromTarGz writes the archive's single ompig executable (at the root
 // or one directory down) to a new temporary file in dir. The archive digest
-// was verified before this runs; anything other than exactly one regular pig
+// was verified before this runs; anything other than exactly one regular ompig
 // file is refused.
 func extractPigFromTarGz(archivePath, dir string, limit int64) (string, error) {
 	archive, err := os.Open(archivePath)
@@ -824,17 +824,17 @@ func extractPigFromTarGz(archivePath, dir string, limit int64) (string, error) {
 			return "", fmt.Errorf("read update archive: %w", err)
 		}
 		name := path.Clean(header.Name)
-		if path.Base(name) != "pig" || strings.Count(name, "/") > 1 {
+		if path.Base(name) != "ompig" || strings.Count(name, "/") > 1 {
 			continue
 		}
 		if out != "" {
 			_ = os.Remove(out)
-			return "", fmt.Errorf("update archive contains more than one pig executable")
+			return "", fmt.Errorf("update archive contains more than one ompig executable")
 		}
 		if header.Typeflag != tar.TypeReg || header.Size <= 0 || header.Size > limit {
-			return "", fmt.Errorf("update archive pig entry is not a regular file within the %d-byte limit", limit)
+			return "", fmt.Errorf("update archive ompig entry is not a regular file within the %d-byte limit", limit)
 		}
-		tmp, err := os.CreateTemp(dir, ".pig-update-*")
+		tmp, err := os.CreateTemp(dir, ".ompig-update-*")
 		if err != nil {
 			return "", fmt.Errorf("stage update (is %s writable?): %w", dir, err)
 		}
@@ -846,13 +846,13 @@ func extractPigFromTarGz(archivePath, dir string, limit int64) (string, error) {
 		if err := errors.Join(copyErr, chmodErr, syncErr, closeErr); err != nil || written != header.Size {
 			_ = os.Remove(out)
 			if err == nil {
-				err = fmt.Errorf("truncated pig entry")
+				err = fmt.Errorf("truncated ompig entry")
 			}
 			return "", fmt.Errorf("extract update archive: %w", err)
 		}
 	}
 	if out == "" {
-		return "", fmt.Errorf("update archive contains no pig executable")
+		return "", fmt.Errorf("update archive contains no ompig executable")
 	}
 	return out, nil
 }

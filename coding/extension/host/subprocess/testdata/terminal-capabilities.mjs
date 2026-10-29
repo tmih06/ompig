@@ -3,7 +3,7 @@ import { getCapabilities } from "@earendil-works/pi-tui";
 
 export default function (pi) {
   const atFactory = getCapabilities();
-  const leaked = process.env.PIG_TERMINAL_CAPABILITIES !== undefined;
+  const leaked = process.env.OMPIG_TERMINAL_CAPABILITIES !== undefined;
   pi.registerCommand("report_capabilities", {
     description: "Notify the host with the factory-time terminal capabilities",
     handler: async (_args, ctx) => {

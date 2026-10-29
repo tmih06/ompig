@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-// nodeRuntimeChildren counts the Node runtime processes the pig process at pid runs. Only Linux exposes the process tree without another tool; the children of every thread count, because Go starts a process from any thread.
+// nodeRuntimeChildren counts the Node runtime processes the ompig process at pid runs. Only Linux exposes the process tree without another tool; the children of every thread count, because Go starts a process from any thread.
 func nodeRuntimeChildren(t *testing.T, pid int) int {
 	t.Helper()
 	tasks, err := filepath.Glob(filepath.Join("/proc", strconv.Itoa(pid), "task", "*", "children"))
@@ -37,21 +37,21 @@ func nodeRuntimeChildren(t *testing.T, pid int) int {
 	return count
 }
 
-// runQuarantinedCommand loads rpc-shutdown.mjs, whose quit session_shutdown handler never settles, and rpc-shutdown-quarantine.mjs, sends the commands with the ids c, c1, c2, ... and ends stdin. Under pig the second extension crashed the shared Node process once, so the host runs it in a Node process of its own (node_recovery.go recoverNodeProcess, cell_plan.go PlanCells); Pi runs both in one process.
-func runQuarantinedCommand(t *testing.T, start func(t *testing.T, extraEnv ...string) (*rpcProcess, string), pig bool, commands ...string) ([]rpcRecord, []string) {
+// runQuarantinedCommand loads rpc-shutdown.mjs, whose quit session_shutdown handler never settles, and rpc-shutdown-quarantine.mjs, sends the commands with the ids c, c1, c2, ... and ends stdin. Under ompig the second extension crashed the shared Node process once, so the host runs it in a Node process of its own (node_recovery.go recoverNodeProcess, cell_plan.go PlanCells); Pi runs both in one process.
+func runQuarantinedCommand(t *testing.T, start func(t *testing.T, extraEnv ...string) (*rpcProcess, string), ompig bool, commands ...string) ([]rpcRecord, []string) {
 	t.Helper()
 	p, report := start(t, "RPC_SHUTDOWN_BLOCK_QUIT=1", rpcShutdownQuarantinedExtension)
 	awaitReady(p)
-	if pig {
+	if ompig {
 		// The crash restarts the healthy members and the quarantined extension apart. The host announces neither on stdout.
 		p.sendJSON(map[string]any{"id": "crash", "type": "prompt", "message": "/qcrash"})
 		p.await("crash response", func(r rpcRecord) bool { return r["id"] == "crash" && r["type"] == "response" })
 		waitForRPCShutdownReport(t, p, report, "qloaded", 2)
 		waitForRPCActivated(t, p, report)
 	}
-	if pig && runtime.GOOS == "linux" {
+	if ompig && runtime.GOOS == "linux" {
 		if got := nodeRuntimeChildren(t, p.cmd.Process.Pid); got != 2 {
-			t.Fatalf("pig runs %d Node runtime processes, want the quit handler's and the quarantined extension's\n%s", got, p.stderr.String())
+			t.Fatalf("ompig runs %d Node runtime processes, want the quit handler's and the quarantined extension's\n%s", got, p.stderr.String())
 		}
 	}
 	for i, command := range commands {
@@ -122,7 +122,7 @@ func withoutReady(out []rpcRecord) []rpcRecord {
 	return kept
 }
 
-// The Pi legs and the pig legs below run the same commands: only the process layout differs, and the observable output must not.
+// The Pi legs and the ompig legs below run the same commands: only the process layout differs, and the observable output must not.
 func TestRPCInputEndQuarantinedNodeCommandComparedWithPi(t *testing.T) {
 	response := handledPromptResponse("c")
 	for _, row := range []struct {
@@ -140,15 +140,15 @@ func TestRPCInputEndQuarantinedNodeCommandComparedWithPi(t *testing.T) {
 		{"never settles", []string{"/qhang"}, nil, nil, "no output"},
 		// Pi: a child process keeps the loop alive until the command answers.
 		{"child process", []string{"/qexec"}, []rpcRecord{response}, nil, "the response of a command that awaits a child process"},
-		// Pi runs both commands in one loop, which the session change keeps alive, so the second response is written. Under pig the quarantined process can report its loop drained with only the first command before it reads the second; that report must not cover the second command.
+		// Pi runs both commands in one loop, which the session change keeps alive, so the second response is written. Under ompig the quarantined process can report its loop drained with only the first command before it reads the second; that report must not cover the second command.
 		{"never settles, then newSession", []string{"/qhang", "/qns"}, []rpcRecord{rpcShutdownStartedNotify, handledPromptResponse("c1")}, nil, "the response of the second command, which awaits ctx.newSession()"},
-		// Pi: neither command keeps the loop alive, so it drains and exits 0. Under pig the quarantined process must report its loop drained again for the command it read after its first report.
+		// Pi: neither command keeps the loop alive, so it drains and exits 0. Under ompig the quarantined process must report its loop drained again for the command it read after its first report.
 		{"never settles twice", []string{"/qhang", "/qhang"}, nil, nil, "no output"},
 	} {
 		t.Run(row.name, func(t *testing.T) {
 			for _, impl := range rpcShutdownImplementations {
 				t.Run(impl.name, func(t *testing.T) {
-					out, _ := runQuarantinedCommand(t, impl.start, impl.name == "pig", row.commands...)
+					out, _ := runQuarantinedCommand(t, impl.start, impl.name == "ompig", row.commands...)
 					out = withoutReady(out)
 					if len(out) == 0 && len(row.want) == 0 {
 						return

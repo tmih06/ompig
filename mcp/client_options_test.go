@@ -3,11 +3,11 @@ package mcp_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // packages/mcp/src/protocol/types.ts:15 `Implementation.title` and packages/mcp/src/client.ts:47 `McpClientOptions extends Implementation` carry the title into clientInfo.
-// PiG-only: packages/mcp/test/client.test.ts never sends a title, capabilities, a pinned protocolVersion or roots in
+// Ompig-only: packages/mcp/test/client.test.ts never sends a title, capabilities, a pinned protocolVersion or roots in
 // McpClientOptions, so the initialize request that carries each option has no upstream test.
 // Pi declares packages/mcp/src/protocol/types.ts:12-16 (Implementation): the client implementation carries its title.
 func TestClientInitializeCarriesTheConfiguredClientOptions(t *testing.T) {

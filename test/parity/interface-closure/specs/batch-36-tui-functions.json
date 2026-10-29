@@ -74,7 +74,7 @@
    "tui/colors.go#ColorToRgb"
   ],
   "production": [
-   "call:internal/codingagent/pig_logo_animation.go#logoToRgb"
+   "call:internal/codingagent/ompig_logo_animation.go#logoToRgb"
   ],
   "evidence": [
    "test:tui/colors_upstream_test.go#TestUpstreamColors",
@@ -111,7 +111,7 @@
    "call:coding/piglogin/head.go#halfBlockLines"
   ],
   "evidence": [
-   "test:coding/piglogin/mark_test.go#TestTextMarkIsALegibleOneLinePiG",
+   "test:coding/piglogin/mark_test.go#TestTextMarkIsALegibleOneLineOmpig",
    "test:tui/colors_oracle_test.go#TestColorsMatchUpstreamOracle"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; AbortSignal is the context.Context argument; no detached goroutine.",

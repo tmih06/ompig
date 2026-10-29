@@ -9,10 +9,10 @@ import (
 // an absent member, false for false, true for true. get_messages returns those messages as recorded.
 func TestRPCBashKeepsTheClientsExcludeFromContextMember(t *testing.T) {
 	if testing.Short() {
-		t.Skip("starts the pig binary")
+		t.Skip("starts the ompig binary")
 	}
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + home + "/agent"}, "--model", "test-faux/faux-1", "--no-session", "--no-extensions")
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + home + "/agent"}, "--model", "test-faux/faux-1", "--no-session", "--no-extensions")
 	for _, command := range []string{
 		`{"id":"absent","type":"bash","command":"echo absent"}`,
 		`{"id":"false","type":"bash","command":"echo false","excludeFromContext":false}`,

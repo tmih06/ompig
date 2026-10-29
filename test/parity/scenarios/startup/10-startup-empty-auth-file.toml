@@ -10,9 +10,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["python3", "./test/parity/testdata/startup-empty-auth.py", "pig"]
+ompig_args = ["python3", "./test/parity/testdata/startup-empty-auth.py", "ompig"]
 pi_args = ["python3", "./test/parity/testdata/startup-empty-auth.py", "pi"]
 
 [cli]

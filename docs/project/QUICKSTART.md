@@ -2,15 +2,15 @@
 SPDX-License-Identifier: MIT
 -->
 
-# PiG quickstart
+# Ompig quickstart
 
-**Local rehearsal, not a public-release installation demo.** This guide uses a source build and PiG's deterministic faux provider. Model answers are fixed test responses. The terminal, Bash tool execution, saved sessions, and extension are real. No model credentials are required.
+**Local rehearsal, not a public-release installation demo.** This guide uses a source build and Ompig's deterministic faux provider. Model answers are fixed test responses. The terminal, Bash tool execution, saved sessions, and extension are real. No model credentials are required.
 
-PiG is a faithful Go implementation of [Pi](https://github.com/earendil-works/pi), the reference implementation ([Pi documentation](https://pi.dev/docs/latest)). Michael Kinsy created PiG, which was originally developed at Hewlett Packard Enterprise. PiG is not an official Pi project and does not imply endorsement by Pi's maintainers.
+Ompig is a faithful Go implementation of [Pi](https://github.com/earendil-works/pi), the reference implementation ([Pi documentation](https://pi.dev/docs/latest)). Michael Kinsy created Ompig, which was originally developed at Hewlett Packard Enterprise. Ompig is not an official Pi project and does not imply endorsement by Pi's maintainers.
 
 [Watch the tutorial](../media/quickstart/quickstart.mp4) · [GIF](../media/quickstart/quickstart.gif) · [Recording and verification](../media/quickstart/README.md)
 
-[![PiG local quickstart tutorial](../media/quickstart/quickstart-poster.png)](../media/quickstart/quickstart.mp4)
+[![Ompig local quickstart tutorial](../media/quickstart/quickstart-poster.png)](../media/quickstart/quickstart.mp4)
 
 ## 1. Build from an existing checkout
 
@@ -19,8 +19,8 @@ Use Linux for the verified commands below. Use the Go toolchain declared in [`go
 From the repository root:
 
 ```bash
-go build -o /tmp/qs-bin/pig ./cmd/pig
-/tmp/qs-bin/pig --version
+go build -o /tmp/qs-bin/ompig ./cmd/ompig
+/tmp/qs-bin/ompig --version
 ```
 
 The build exits 0 without output. The version command prints this captured result:
@@ -29,7 +29,7 @@ The build exits 0 without output. The version command prints this captured resul
 0.2.0+0.87.1
 ```
 
-This is an observed build identity, not a version to hard-code into scripts. PiG prints its own release followed by the Pi pin as build metadata ([D63](../parity/DIVERGENCES.md#d63---version-prints-pigs-composite-version)). The pin comes from [`internal/coding/pigversion/pigversion.go`](../../internal/coding/pigversion/pigversion.go).
+This is an observed build identity, not a version to hard-code into scripts. Ompig prints its own release followed by the Pi pin as build metadata ([D63](../parity/DIVERGENCES.md#d63---version-prints-pigs-composite-version)). The pin comes from [`internal/coding/pigversion/pigversion.go`](../../internal/coding/pigversion/pigversion.go).
 
 ### Public installation paths: unavailable in this verification
 
@@ -38,7 +38,7 @@ These are actual failed checks, not commands used by the recording. No curl or G
 The website installer command is:
 
 ```bash
-curl -fsSL https://pi-in-go.dev/install.sh | sh
+curl -fsSL https://ompig.dev/install.sh | sh
 ```
 
 Captured output:
@@ -47,21 +47,21 @@ Captured output:
 curl: (22) The requested URL returned error: 502
 curl: (22) The requested URL returned error: 502
 curl: (22) The requested URL returned error: 404
-pig-install: error: no PiG release is published yet (https://pi-in-go.dev/api/latest-version did not answer); build from source or set PIG_VERSION
+ompig-install: error: no Ompig release is published yet (https://ompig.dev/api/latest-version did not answer); build from source or set OMPIG_VERSION
 ```
 
-The outer curl exits 0. The shell running the installer exits 1. Both pipeline statuses were checked; a successful download of `install.sh` is not a successful installation. PiG's hosted URLs differ from Pi's ([D64](../parity/DIVERGENCES.md#d64-pigs-hosted-endpoints-live-on-pi-in-godev)). The checked-in installer requires release checksums before installing a binary.
+The outer curl exits 0. The shell running the installer exits 1. Both pipeline statuses were checked; a successful download of `install.sh` is not a successful installation. Ompig's hosted URLs differ from Pi's ([D64](../parity/DIVERGENCES.md#d64-pigs-hosted-endpoints-live-on-ompigdev)). The checked-in installer requires release checksums before installing a binary.
 
 The public Go module command is:
 
 ```bash
-go install github.com/MichaelKinsy/PiG/cmd/pig@latest
+go install github.com/tmih06/ompig/cmd/ompig@latest
 ```
 
 It exits 1. Captured output from the isolated HOME:
 
 ```text
-go: github.com/MichaelKinsy/PiG/cmd/pig@latest: module github.com/MichaelKinsy/PiG/cmd/pig: git ls-remote -q --end-of-options https://github.com/MichaelKinsy/PiG in /tmp/qs-home/go/pkg/mod/cache/vcs/9d47e502db7c27b18ec964fbe6606adc03eaa74776941419a7a06fc5d9b5f9a7: exit status 128:
+go: github.com/tmih06/ompig/cmd/ompig@latest: module github.com/tmih06/ompig/cmd/ompig: git ls-remote -q --end-of-options https://github.com/tmih06/ompig in /tmp/qs-home/go/pkg/mod/cache/vcs/9d47e502db7c27b18ec964fbe6606adc03eaa74776941419a7a06fc5d9b5f9a7: exit status 128:
 	fatal: could not read Username for 'https://github.com': terminal prompts disabled
 Confirm the import path was entered correctly.
 If this is a private repository, see https://go.dev/doc/faq#git_https for additional information.
@@ -77,17 +77,17 @@ Run this in a separate terminal after the build. Use an unused disposable HOME i
 mkdir -p /tmp/qs-home/demo
 env -i HOME=/tmp/qs-home \
   PATH="/tmp/qs-bin:$(go env GOROOT)/bin:/usr/bin:/bin" \
-  GOPROXY=off GOTOOLCHAIN=local PIG_TEST_FAUX=1 PIG_OFFLINE=1 \
+  GOPROXY=off GOTOOLCHAIN=local OMPIG_TEST_FAUX=1 OMPIG_OFFLINE=1 \
   bash --noprofile --norc
 ```
 
-This shell inherits no credentials or PiG configuration overrides. It resolves the existing Go executable before changing HOME, so a version-manager shim cannot install another toolchain. PiG stores this rehearsal's state under `/tmp/qs-home/.pig`, not your normal HOME. PiG uses `.pig` rather than Pi's `.pi` ([D2](../parity/DIVERGENCES.md#d2-pig-uses-a-separate-command-and-configuration-identity)). HOME separation is not a security sandbox for tools or extensions.
+This shell inherits no credentials or Ompig configuration overrides. It resolves the existing Go executable before changing HOME, so a version-manager shim cannot install another toolchain. Ompig stores this rehearsal's state under `/tmp/qs-home/.ompig`, not your normal HOME. Ompig uses `.ompig` rather than Pi's `.pi` ([D2](../parity/DIVERGENCES.md#d2-ompig-uses-a-separate-command-and-configuration-identity)). HOME separation is not a security sandbox for tools or extensions.
 
 In that shell:
 
 ```bash
 cd ~/demo
-pig --tui-mode fullscreen --model test-faux/faux-1
+ompig --tui-mode fullscreen --model test-faux/faux-1
 ```
 
 The screen includes:
@@ -103,7 +103,7 @@ For live model selection and authentication, read the [provider guide](../../int
 
 ## 3. Ask a question and run a tool
 
-Type this in PiG and press Enter:
+Type this in Ompig and press Enter:
 
 ```text
 What is 20+22?
@@ -157,14 +157,14 @@ The response is:
 Resumed.
 ```
 
-Press Ctrl+D on an empty editor to leave PiG. The recording verifies the restored tool card before it sends the continuation prompt. Sessions remain in the disposable HOME.
+Press Ctrl+D on an empty editor to leave Ompig. The recording verifies the restored tool card before it sends the continuation prompt. Sessions remain in the disposable HOME.
 
 ## 5. Print one answer and exit
 
 At the shell prompt:
 
 ```bash
-pig --model test-faux/faux-1 -p "What is 20+22?"
+ompig --model test-faux/faux-1 -p "What is 20+22?"
 ```
 
 Output, exit 0:
@@ -175,10 +175,10 @@ Output, exit 0:
 
 ## 6. Load an extension explicitly
 
-Keep using the isolated shell in `~/demo`. Scaffold a Go extension with PiG's bundled SDK; no package installation is involved:
+Keep using the isolated shell in `~/demo`. Scaffold a Go extension with Ompig's bundled SDK; no package installation is involved:
 
 ```bash
-pig extension init ./hello --lang go
+ompig extension init ./hello --lang go
 ```
 
 Captured output:
@@ -188,35 +188,35 @@ Created go extension "hello" in /tmp/qs-home/demo/hello
   go.mod
   extension.go
 
-SDK: /tmp/qs-home/.pig/state/pigsdk/sdk-72e2fd4b0a74d9b5
+SDK: /tmp/qs-home/.ompig/state/pigsdk/sdk-72e2fd4b0a74d9b5
 
 Next steps:
-  pig install /tmp/qs-home/demo/hello --validate-only --json
-  pig -e /tmp/qs-home/demo/hello          # load it into a session, then edit and /reload
+  ompig install /tmp/qs-home/demo/hello --validate-only --json
+  ompig -e /tmp/qs-home/demo/hello          # load it into a session, then edit and /reload
 ```
 
-The `Next steps` lines above are PiG's output, not additional commands run by this guide. Run the extension through an explicit path:
+The `Next steps` lines above are Ompig's output, not additional commands run by this guide. Run the extension through an explicit path:
 
 ```bash
-pig -e ./hello --tui-mode fullscreen --model test-faux/faux-1
+ompig -e ./hello --tui-mode fullscreen --model test-faux/faux-1
 ```
 
-The status line says `hello loaded`. Submit `/hello`. The notification says `hello from hello`. Press Ctrl+D to exit. Only load extension code you trust; it runs with your permissions. PiG's Go subprocess SDK is an additive capability ([D19](../additive-features.md#d19-multi-language-subprocess-sdk-bridges)).
+The status line says `hello loaded`. Submit `/hello`. The notification says `hello from hello`. Press Ctrl+D to exit. Only load extension code you trust; it runs with your permissions. Ompig's Go subprocess SDK is an additive capability ([D19](../additive-features.md#d19-multi-language-subprocess-sdk-bridges)).
 
 ## 7. Check update ownership
 
 Run:
 
 ```bash
-pig update
+ompig update
 ```
 
-For the source-built `/tmp/qs-bin/pig`, output is:
+For the source-built `/tmp/qs-bin/ompig`, output is:
 
 ```text
-pig cannot self-update this installation. Executable: /tmp/qs-bin/pig. Reinstall it with the package manager, wrapper, or source checkout that provided it, or download a new pig binary from your provider's releases.
+ompig cannot self-update this installation. Executable: /tmp/qs-bin/ompig. Reinstall it with the package manager, wrapper, or source checkout that provided it, or download a new ompig binary from your provider's releases.
 ```
 
-Exit status is 1. The verifier confirms the executable's SHA-256 is unchanged. This is an expected ownership refusal, not a successful update. Rebuild source installations with the command in step 1. PiG's native update ownership differs from Pi's package-manager self-update ([D39](../parity/DIVERGENCES.md#d39-standalone-binary-self-update)). Do not fabricate an installation receipt or redirect the updater to a fixture to make this step appear successful.
+Exit status is 1. The verifier confirms the executable's SHA-256 is unchanged. This is an expected ownership refusal, not a successful update. Rebuild source installations with the command in step 1. Ompig's native update ownership differs from Pi's package-manager self-update ([D39](../parity/DIVERGENCES.md#d39-standalone-binary-self-update)). Do not fabricate an installation receipt or redirect the updater to a fixture to make this step appear successful.
 
 See [recording evidence and limitations](../media/quickstart/README.md) for the reproducible local checks and media constraints.

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A user_bash handler's `{ operations }` stays in the extension: the reply names it by handle, the host's user_bash_exec runs its Exec with

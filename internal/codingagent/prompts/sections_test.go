@@ -1,4 +1,4 @@
-//go:build !pig_strip_docs
+//go:build !ompig_strip_docs
 
 package prompts
 
@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ported from system-prompt-updates.test.ts: patches replace only changed

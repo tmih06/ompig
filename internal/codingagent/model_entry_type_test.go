@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's ModelDefinitionSchema (model-config.ts) has no `type`, and provider-composer.ts:210-249 modelFromJson builds every

@@ -1,6 +1,6 @@
-# bench/k8s: PiG benchmarks on Kubernetes
+# bench/k8s: Ompig benchmarks on Kubernetes
 
-`go run ./bench/k8s/cmd/k8sbench` runs one benchmark session per Job: PiG and pi-durable interleaved in one Guaranteed-QoS pod, pinned to the same cores, with the node's facts and CFS throttling recorded. It writes durable-report's tracker format. [docs/site/docs/benchmarking.md](../../docs/site/docs/benchmarking.md) is the user guide.
+`go run ./bench/k8s/cmd/k8sbench` runs one benchmark session per Job: Ompig and pi-durable interleaved in one Guaranteed-QoS pod, pinned to the same cores, with the node's facts and CFS throttling recorded. It writes durable-report's tracker format. [docs/site/docs/benchmarking.md](../../docs/site/docs/benchmarking.md) is the user guide.
 
 | path | content |
 |---|---|

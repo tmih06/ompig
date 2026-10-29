@@ -7,7 +7,7 @@ bindExtensions emits session_start (agent-session.ts:3562, 3194)."""
 import json
 import os
 
-import pig_sdk
+import ompig_sdk
 
 
 def _log(record):
@@ -20,9 +20,9 @@ def _route(ctx, request):
     return {"model": {"provider": "probe", "id": "probe-model"}, "thinkingLevel": "off"}
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("host-wiring-virtual-model")
-    ext.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=_route))
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("host-wiring-virtual-model")
+    ext.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="auto", name="Auto", route=_route))
 
     def on_start(ctx, data):
         found = ctx.model_registry.find("router", "auto")

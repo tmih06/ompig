@@ -1,4 +1,4 @@
-//go:build !pig_strip_syntax_highlight
+//go:build !ompig_strip_syntax_highlight
 
 package tui
 
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/internal/hljs"
+	"github.com/tmih06/ompig/tui/internal/hljs"
 )
 
 // Ports packages/coding-agent/test/syntax-highlight.test.ts:37-98 (the "syntax highlight renderer" cases).

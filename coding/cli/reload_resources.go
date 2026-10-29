@@ -1,10 +1,10 @@
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 func reloadResourceSnapshotProvider(cwd, agentDir string, sm *codingagent.SettingsManager, flags Args, skillScopes *[]string) func() codingagent.ReloadResourceSnapshot {
@@ -51,7 +51,7 @@ func systemPromptRebuilder(cwd, agentDir string, projectTrusted bool, flags Args
 		resolvedPrompts := resolvePromptInputs(cwd, agentDir, flags, projectTrusted)
 		options := prompts.Options{
 			Cwd: cwd, Tools: toolNames, ToolHints: toolHints, ToolGuidelines: toolGuidelines,
-			Skills: promptSkills, PigDocsPath: codingagent.GetDocsPath(), PigReadmePath: codingagent.GetReadmePath(), PigExamplesPath: codingagent.GetExamplesPath(),
+			Skills: promptSkills, OmpigDocsPath: codingagent.GetDocsPath(), OmpigReadmePath: codingagent.GetReadmePath(), OmpigExamplesPath: codingagent.GetExamplesPath(),
 			AppendMode: "append", ContextFiles: promptCtxFiles,
 			CustomPrompt: resolvedPrompts.custom, AppendSystemPrompt: resolvedPrompts.append,
 		}

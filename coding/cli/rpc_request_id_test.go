@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi rpc-mode.ts:64-77,385-387 copies command.id and command.type into each response, and serializeJsonLine emits JSON.stringify(JSON.parse(line)) values: any JSON id is echoed in its JavaScript form, member names match exactly, and an absent member stays absent. A malformed line answers with error(undefined, "parse", ...), and a non-object command has neither member (rpc-mode.ts:716-717). AgentSession.executeBash forwards the same id to bash_execution_update (agent-session.ts:3479). Expected lines are pinned Pi 0.87.1 output for the same input.
@@ -97,7 +97,7 @@ func TestRPCRequestIDsEchoJSONValues(t *testing.T) {
 	process.close()
 }
 
-// The rv-rpc release task explicitly retains PiG's null-command response pending divergence review. Pi 0.87.1 rpc-mode.ts:387,792-796 dereferences command.id again in the error handler and exits 1 instead.
+// The rv-rpc release task explicitly retains Ompig's null-command response pending divergence review. Pi 0.87.1 rpc-mode.ts:387,792-796 dereferences command.id again in the error handler and exits 1 instead.
 func TestRPCNullCommandRetainsUnknownResponse(t *testing.T) {
 	process := startRawRPCProcess(t)
 	process.send("null")
@@ -132,7 +132,7 @@ func startRawRPCProcess(t *testing.T) *rawRPCProcess {
 	home := t.TempDir()
 	cmd := exec.Command(buildPigBinaryForSignalTest(t), "--mode", "rpc", "--no-session", "--no-extensions")
 	cmd.Dir = t.TempDir()
-	cmd.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PIG_OFFLINE=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "OMPIG_OFFLINE=1")
 	p := &rawRPCProcess{t: t, cmd: cmd, lines: make(chan string, 16), budget: testbudget.Wait(t)}
 	cmd.Stderr = &p.stderr
 	var err error

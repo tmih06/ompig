@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The provider objects below are Pi's registerNativeProvider objects (models.ts Provider), written once per SDK so the
@@ -56,7 +56,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func object(id, name string, auth sdk.ProviderAuth) *sdk.Provider {
@@ -171,16 +171,16 @@ func loadNativeLoginFixture(t *testing.T, m *InteractiveMode, language string) {
 }
 
 // goFactoryFixtureConfig writes source as an isolated Go SDK factory extension module in dir. The module builds against
-// this tree's Go SDK, not an SDK an ambient PIG_SDK_GO_ROOT or an installed pig staged.
+// this tree's Go SDK, not an SDK an ambient OMPIG_SDK_GO_ROOT or an installed ompig staged.
 func goFactoryFixtureConfig(t *testing.T, dir, name, module, source string) subprocess.ExtConfig {
 	t.Helper()
 	root := testenv.ModuleRoot(t)
-	t.Setenv("PIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
+	t.Setenv("OMPIG_SDK_GO_ROOT", filepath.Join(root, "extensions", "sdk"))
 	manifest, err := os.ReadFile(filepath.Join(root, "extensions", "sdk", "go.mod"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	goMod := strings.Replace(string(manifest), "module github.com/MichaelKinsy/PiG/extensions/sdk", "module "+module, 1) + "\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	goMod := strings.Replace(string(manifest), "module github.com/tmih06/ompig/extensions/sdk", "module "+module, 1) + "\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte(goMod), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -188,7 +188,7 @@ func goFactoryFixtureConfig(t *testing.T, dir, name, module, source string) subp
 		t.Fatal(err)
 	}
 	return subprocess.ExtConfig{Name: name, Enabled: true, Source: dir, RuntimeKind: "subprocess", RuntimeLanguage: "go",
-		SDKName: "github.com/MichaelKinsy/PiG/extensions/sdk", Isolation: "isolated", EntrypointKind: "factory",
+		SDKName: "github.com/tmih06/ompig/extensions/sdk", Isolation: "isolated", EntrypointKind: "factory",
 		ModulePath: module, Package: module, Factory: "Extension", ContentHash: name}
 }
 

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 var oracleHeaderNames = []string{"X-Foo", "x-foo", "X-FOO", "Set-Cookie", "set-cookie", "SET-COOKIE", "Content-Type", "content-type", "Authorization", "authorization", "Empty", "x-api-key", "X-Api-Key", "Accept", "ACCEPT"}
@@ -23,7 +23,7 @@ type providerHeadersOracleCase struct {
 }
 
 // utils/headers.ts headersToRecord is `for (const [key, value] of headers.entries()) result[key] = value`: Headers.entries lists lowercase names in sorted order, joins repeated values with ", " and
-// lists every set-cookie value separately, so the record keeps the last one. PiG's header map comes from a response, so its names are canonical and its values have no outer whitespace
+// lists every set-cookie value separately, so the record keeps the last one. Ompig's header map comes from a response, so its names are canonical and its values have no outer whitespace
 // (Headers strips it on append), which is the same input domain the oracle draws from.
 func TestHeadersToRecordMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewPCG(11, 29))
@@ -50,13 +50,13 @@ emit(input.map((c) => {
 			header.Add(a[0], a[1])
 		}
 		if got := headersToRecord(header); !maps.Equal(got, want[i]) {
-			t.Fatalf("case %d %q\n  PiG %v\n  Pi  %v", i, c.Appends, got, want[i])
+			t.Fatalf("case %d %q\n  Ompig %v\n  Pi  %v", i, c.Appends, got, want[i])
 		}
 	}
 }
 
 // utils/headers.ts providerHeadersToRecord: later sources replace earlier ones case-insensitively and keep the later spelling, a null value deletes the name, and no header left is undefined.
-// Within one source PiG's map has no insertion order, so a source never holds two spellings of one name here (Pi lets the later key win, PiG cannot say which is later).
+// Within one source Ompig's map has no insertion order, so a source never holds two spellings of one name here (Pi lets the later key win, Ompig cannot say which is later).
 func TestProviderHeadersToRecordMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewPCG(13, 31))
 	cases := make([]providerHeadersOracleCase, 0, 1500)
@@ -98,7 +98,7 @@ emit(input.map((c) => providerHeadersToRecord(...(c.sources ?? []).map((entries)
 		}
 		got := providerHeadersToRecord(sources...)
 		if (got == nil) != (want[i] == nil) || !maps.Equal(got, want[i]) {
-			t.Fatalf("case %d sources %v\n  PiG %v\n  Pi  %v", i, c.Sources, got, want[i])
+			t.Fatalf("case %d sources %v\n  Ompig %v\n  Pi  %v", i, c.Sources, got, want[i])
 		}
 	}
 }

@@ -3,7 +3,7 @@
 package document
 
 import (
-	internaldocument "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/internal/document"
+	internaldocument "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/internal/document"
 )
 
 // Interface defines a document which is a protocol-agnostic type which supports a

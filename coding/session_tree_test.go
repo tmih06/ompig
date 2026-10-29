@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Tests for Session.NavigateTree against upstream agent-session.ts navigateTree
@@ -63,7 +63,7 @@ func appendTreeAssistant(t *testing.T, sess *Session, text string) string {
 func newTreeTestSessionWithSettings(t *testing.T, settings string) *Session {
 	t.Helper()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -358,7 +358,7 @@ func TestNavigateTreeLabelsBranchSummary(t *testing.T) {
 }
 
 // Ports of agent-session-tree-navigation.test.ts (upstream runs them against a
-// live model; these use a fake summarizer). PiG sessions start with bootstrap
+// live model; these use a fake summarizer). Ompig sessions start with bootstrap
 // model/thinking entries, so the first user message is not a root entry unless
 // the leaf is reset before it is appended.
 
@@ -961,7 +961,7 @@ func TestNavigateTreeRejectsSecondNavigationDuringSessionBeforeTree(t *testing.T
 	}
 }
 
-// navigateTree throws `new Error(result.error)` when branch summarization fails (agent-session.ts:4099-4100), so the interactive error line reads "Error: Branch summarization failed: Connection error." Real Pi printed exactly that where PiG prefixed the text with "coding: NavigateTree: branch summary: ".
+// navigateTree throws `new Error(result.error)` when branch summarization fails (agent-session.ts:4099-4100), so the interactive error line reads "Error: Branch summarization failed: Connection error." Real Pi printed exactly that where Ompig prefixed the text with "coding: NavigateTree: branch summary: ".
 func TestNavigateTreeSummaryFailureIsThePlainSummarizationError(t *testing.T) {
 	sess := newTreeTestSession(t)
 	sess.completer = failingSummaryCompleter{}

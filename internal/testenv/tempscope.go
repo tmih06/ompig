@@ -10,11 +10,11 @@ import (
 	"testing"
 )
 
-// ScopeTempDir makes root the process temporary directory for a test binary and every process it starts: TMPDIR on Unix, TMP and TEMP on Windows. A package's TestMain calls it with the directory it removes after m.Run, so a temporary file or directory created through os.TempDir, os.CreateTemp("", ...), or a child's tmpdir() stays inside that root and is removed with it, whichever test or helper created it and whatever it forgot to remove. Extension hosts create their stderr logs this way (pig-ext-*.log and pig-packed-*.log) and keep the log of a crashed extension by design.
+// ScopeTempDir makes root the process temporary directory for a test binary and every process it starts: TMPDIR on Unix, TMP and TEMP on Windows. A package's TestMain calls it with the directory it removes after m.Run, so a temporary file or directory created through os.TempDir, os.CreateTemp("", ...), or a child's tmpdir() stays inside that root and is removed with it, whichever test or helper created it and whatever it forgot to remove. Extension hosts create their stderr logs this way (ompig-ext-*.log and ompig-packed-*.log) and keep the log of a crashed extension by design.
 //
 // It also moves every agent-directory variable under root (IsolateAgentEnv), so a test that reaches the agent directory through the environment cannot write the credentials, settings, trust file or sessions of the user running `go test`.
 //
-// It also pins GOCACHE and GOMODCACHE (KeepGoBuildCaches), so a test that points HOME at a temporary directory and then runs `go build` links from the compiled packages a user's builds share instead of recompiling PiG and its dependencies in an empty cache.
+// It also pins GOCACHE and GOMODCACHE (KeepGoBuildCaches), so a test that points HOME at a temporary directory and then runs `go build` links from the compiled packages a user's builds share instead of recompiling Ompig and its dependencies in an empty cache.
 func ScopeTempDir(root string) error {
 	for _, key := range []string{"TMPDIR", "TMP", "TEMP"} {
 		if err := os.Setenv(key, root); err != nil {
@@ -27,18 +27,18 @@ func ScopeTempDir(root string) error {
 	return KeepGoBuildCaches()
 }
 
-// agentEnvDirs maps each variable that selects an agent or home directory to its subdirectory of the isolation root. PIG_CODING_AGENT_DIR (or PI_CODING_AGENT_DIR in shared-directory mode) wins over PIG_HOME, so a lane that exports it points every child process at the lane's real credentials unless a test replaces it.
+// agentEnvDirs maps each variable that selects an agent or home directory to its subdirectory of the isolation root. OMPIG_CODING_AGENT_DIR (or PI_CODING_AGENT_DIR in shared-directory mode) wins over OMPIG_HOME, so a lane that exports it points every child process at the lane's real credentials unless a test replaces it.
 var agentEnvDirs = []struct{ key, dir string }{
-	{"PIG_CODING_AGENT_DIR", "agent"},
+	{"OMPIG_CODING_AGENT_DIR", "agent"},
 	{"PI_CODING_AGENT_DIR", "pi-agent"},
-	{"PIG_HOME", "pig-home"},
+	{"OMPIG_HOME", "ompig-home"},
 	{"PI_HOME", "pi-home"},
 }
 
 // agentSessionEnv names the variables that move session storage out of the agent directory. They are cleared so sessions follow the isolated agent directory.
-var agentSessionEnv = []string{"PIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_SESSION_DIR"}
+var agentSessionEnv = []string{"OMPIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_SESSION_DIR"}
 
-// IsolateAgentEnv points PIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, PIG_HOME and PI_HOME at fresh directories under root and clears the session-directory overrides. A test binary calls it from TestMain through ScopeTempDir, before any test or child process reads the environment; a test that needs an unset variable clears it itself. Each directory is created empty. HOME stays unchanged: the Go, Node and Rust toolchains resolve their caches and shims from it.
+// IsolateAgentEnv points OMPIG_CODING_AGENT_DIR, PI_CODING_AGENT_DIR, OMPIG_HOME and PI_HOME at fresh directories under root and clears the session-directory overrides. A test binary calls it from TestMain through ScopeTempDir, before any test or child process reads the environment; a test that needs an unset variable clears it itself. Each directory is created empty. HOME stays unchanged: the Go, Node and Rust toolchains resolve their caches and shims from it.
 func IsolateAgentEnv(root string) error {
 	for _, entry := range agentEnvDirs {
 		dir := filepath.Join(root, entry.dir)
@@ -103,14 +103,14 @@ func RunScoped(m *testing.M, prefix string) int {
 	return code
 }
 
-// RequireScopedTempDir fails the test unless the process temporary directory is the one this package's TestMain scoped, named prefix+random. It guards the TestMain wiring: without it, extension hosts and helpers write pig-ext-*.log and pig-packed-*.log files, and other scratch directories, straight into the shared temporary directory, where nothing removes them.
+// RequireScopedTempDir fails the test unless the process temporary directory is the one this package's TestMain scoped, named prefix+random. It guards the TestMain wiring: without it, extension hosts and helpers write ompig-ext-*.log and ompig-packed-*.log files, and other scratch directories, straight into the shared temporary directory, where nothing removes them.
 func RequireScopedTempDir(t testing.TB, prefix string) {
 	t.Helper()
 	dir := os.TempDir()
 	if !strings.HasPrefix(filepath.Base(dir), prefix) {
 		t.Fatalf("os.TempDir() = %q, want a directory named %s* scoped and removed by this package's TestMain", dir, prefix)
 	}
-	scratch, err := os.CreateTemp("", "pig-scope-probe-*")
+	scratch, err := os.CreateTemp("", "ompig-scope-probe-*")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -1,7 +1,7 @@
 package sdk
 
 import (
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ToolCallIndex is the position of the running tool call among the tool calls of the assistant message that issued it, the batch agent-loop.ts executes (the tool_call content blocks of that message, counted from 0). ok is false outside a tool handler and for a call no assistant message issued, such as a nested [Context.ExecuteTool] call.

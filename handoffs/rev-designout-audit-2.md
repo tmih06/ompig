@@ -31,7 +31,7 @@ The lane cites existing tests as proof for some rebind and KEEP rows. Three were
 2. `TestTypedSpanStarterRecordsStartAttributesAndNestsByCallbackSpan`, which the `TypedSpanStarter` rebind row cites: `bindTypedSpanStarter` in `telemetry/schema.go` was changed to bind the child starter to the root context instead of the callback span. The test fails.
 3. `TestBaseToolsOverrideReplacesTheBuiltInToolsAndIsActive`, which the `baseToolsOverride` rebind row cites: `coding/session_tool_registry.go` was changed to drop the override keys from the active names. The test fails with `active tools = [], want the override keys in record order [zeta alpha]`.
 
-All three tests kill their mutant, so the cited evidence holds. The test cited for `BACKGROUND_CONTEXT` and `TODO_CONTEXT` (`chordctx_upstream_test.go:14-26`) asserts only Go standard-library roots and cannot fail on any Pig change. The verdict on those rows is unaffected, but the test does not prove a Pig behaviour (F12).
+All three tests kill their mutant, so the cited evidence holds. The test cited for `BACKGROUND_CONTEXT` and `TODO_CONTEXT` (`chordctx_upstream_test.go:14-26`) asserts only Go standard-library roots and cannot fail on any Ompig change. The verdict on those rows is unaffected, but the test does not prove a Ompig behaviour (F12).
 
 ## Findings
 
@@ -63,6 +63,6 @@ KEEP 190 (a 26, b 47, c 117) · PORT 181 (rebind 150, code 31) · OWNER 12 · to
 Only Markdown changed. All mutation probes were restored, and `git status` was clean before the commit.
 
 - `bin/ledger-preflight.sh` reports 0 FAIL and 0 WARN.
-- `go test` killed the mutant in `./mcp`, `./telemetry` and `./coding` for each of the three named tests. Each run used scratch `PIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`, `PIG_HOME` and `PI_HOME` directories.
+- `go test` killed the mutant in `./mcp`, `./telemetry` and `./coding` for each of the three named tests. Each run used scratch `OMPIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`, `OMPIG_HOME` and `PI_HOME` directories.
 
 REVIEWED designout-audit 9de9f3f6f4 -> ACCEPT-WITH-FIXES (staging team/rev-designout-audit-2; signed, Signed-off-by, based on 9de9f3f6f4)

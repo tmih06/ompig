@@ -21,7 +21,7 @@
 #   surface-a: read [{"type":"text","text":"surface file\n"}]
 #   surface-a: new Agent has function prompt and 0 messages
 #
-# PiG failed to load any extension importing pi-agent-core
+# Ompig failed to load any extension importing pi-agent-core
 # (ERR_MODULE_NOT_FOUND, pi-subagents), returned the emitter from
 # pi.events.on() (pi-goal-x, @henryqw/pi-task-models), lacked
 # registerMarkdownTransformer (pi-cc-extensions), threw from
@@ -46,8 +46,8 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["testdata/ext/runtime-surface-a.mjs", "testdata/ext/runtime-surface-b.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["testdata/ext/runtime-surface-a.mjs", "testdata/ext/runtime-surface-b.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/runtime-surface-a.mjs",

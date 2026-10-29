@@ -2,7 +2,7 @@ package compaction
 
 import "testing"
 
-// The compaction page tells a reader that Pig compacts once the context in use
+// The compaction page tells a reader that Ompig compacts once the context in use
 // passes the window minus the reserve, and that it does nothing when compaction
 // is off. Those are the facts someone tuning reserveTokens acts on, so bind
 // them rather than leaving them as prose. Like upstream shouldCompact, the

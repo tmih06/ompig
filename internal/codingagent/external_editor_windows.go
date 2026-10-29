@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/crossspawn"
+	"github.com/tmih06/ompig/internal/crossspawn"
 )
 
 // editorCommand runs the editor through the command shell, as upstream spawns

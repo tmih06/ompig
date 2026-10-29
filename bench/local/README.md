@@ -2,14 +2,14 @@
 
 What a coding harness costs while a local model answers: the prompt it sends (tokens, tools, system prompt), the time and CPU it adds, its memory, its state on disk, and whether the task gets done. Every number is PROVISIONAL until repeated on a quiet machine. The pack itself posts nothing; a harness that connects outside the loopback on its own is caught by the meter's socket audit (Linux) and listed per arm in the report. omp and OpenCode do (see `bench/evals/README.md`).
 
-Everything runs against a pinned llama.cpp server (`runtimes.lock`: release tag, archive name, sha256, size; macOS arm64 Metal and Linux x64 CPU) and a pinned model (`models.lock`: Hugging Face repo, exact revision, file sha256 and size). Both install into a throwaway root or a model cache (`PIGPACK_CACHE`); nothing is installed globally. The server listens on 127.0.0.1. Harnesses are the pinned arms of `bench/evals/arms.lock` and talk to the server through a recording proxy (`proxy.py`) that stores sizes, counts, times and token usage, never bodies or keys.
+Everything runs against a pinned llama.cpp server (`runtimes.lock`: release tag, archive name, sha256, size; macOS arm64 Metal and Linux x64 CPU) and a pinned model (`models.lock`: Hugging Face repo, exact revision, file sha256 and size). Both install into a throwaway root or a model cache (`OMPIGPACK_CACHE`); nothing is installed globally. The server listens on 127.0.0.1. Harnesses are the pinned arms of `bench/evals/arms.lock` and talk to the server through a recording proxy (`proxy.py`) that stores sizes, counts, times and token usage, never bodies or keys.
 
 ```bash
 make bench-test                                   # bench/evals and bench/local tests
 python3 bench/local/localpack.py                  # install, serve, one completion (the dry run)
-python3 bench/local/localrun.py --arms pig-0.5 pi-1.1.0 --turns 10 --rounds 3 --out tmp/bench/local   # per-turn harness cost, RPC for Pi-family arms
-python3 bench/local/localrun.py --arms pig-0.5 codex copilot --mode print --out ...                    # one-shot prompts for harnesses without RPC
-python3 bench/local/localrun.py --arms pig-0.5 pi-1.1.0 --task rangesum --attempts 3 --out ...       # task completion, the pinned check decides
+python3 bench/local/localrun.py --arms ompig-0.5 pi-1.1.0 --turns 10 --rounds 3 --out tmp/bench/local   # per-turn harness cost, RPC for Pi-family arms
+python3 bench/local/localrun.py --arms ompig-0.5 codex copilot --mode print --out ...                    # one-shot prompts for harnesses without RPC
+python3 bench/local/localrun.py --arms ompig-0.5 pi-1.1.0 --task rangesum --attempts 3 --out ...       # task completion, the pinned check decides
 python3 bench/local/report.py tmp/bench/local/raw.json pi-1.1.0                                       # report.md next to raw.json
 ```
 

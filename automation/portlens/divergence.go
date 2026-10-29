@@ -231,7 +231,7 @@ func enrichDivergence(d *Divergence, known map[string]bool, bugs *BugLedger, sca
 	}
 	sort.Strings(d.Scenarios)
 	d.CallSites = scan.Markers[d.ID]
-	// Snippets: Pi citations on the left, PiG marker sites on the right.
+	// Snippets: Pi citations on the left, Ompig marker sites on the right.
 	if d.Status != DivAdditive {
 		for _, c := range findCites(text) {
 			if len(d.PiSnips) >= 4 {

@@ -12,7 +12,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // Each test here runs itself again as a child test binary without GOMAXPROCS in its environment, so procpolicy.Apply caps GOMAXPROCS as
@@ -22,10 +22,10 @@ import (
 const (
 	// parallelOverWidthEnv makes the child run parallelOver over 64 parts' worth of items and print the default, the cap, the parts run,
 	// the least GOMAXPROCS a part saw and the GOMAXPROCS after.
-	parallelOverWidthEnv = "PIG_TEST_PARALLEL_OVER_WIDTH"
+	parallelOverWidthEnv = "OMPIG_TEST_PARALLEL_OVER_WIDTH"
 	// sessionListingWidthEnv makes the child list a directory of 64 sessions and print the default, the cap, the progress reports, the
 	// least GOMAXPROCS a report saw while the workers ran and the GOMAXPROCS after.
-	sessionListingWidthEnv = "PIG_TEST_SESSION_LISTING_WIDTH"
+	sessionListingWidthEnv = "OMPIG_TEST_SESSION_LISTING_WIDTH"
 )
 
 // cappedChild runs test in a child with env=1 and returns the integers it printed after prefix. It skips when the runtime default is at

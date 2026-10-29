@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/interactive-mode-status.test.ts:1220,1235

@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi resource-loader.ts:502-504 passes additionalThemePaths through mergePaths even when a path is missing; loadThemes then diagnoses it at :886-890.

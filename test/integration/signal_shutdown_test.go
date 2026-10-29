@@ -1,6 +1,6 @@
 //go:build integration && !windows
 
-// These tests deliver POSIX signals (SIGTERM, SIGHUP, SIGINT) to pig in a tmux
+// These tests deliver POSIX signals (SIGTERM, SIGHUP, SIGINT) to ompig in a tmux
 // pane and read the pane's terminal with stty, pgrep and ps. Windows has none
 // of them; its console interrupt is covered by the JSON-mode cancellation test.
 
@@ -25,7 +25,7 @@ import (
 // terminal, precisely so extension teardown cannot be skipped
 // (interactive-mode.ts registerSignalHandlers).
 //
-// pig regressed this for SIGTERM: the process-wide handler cancelled the root
+// ompig regressed this for SIGTERM: the process-wide handler cancelled the root
 // context, and because extension subprocesses are spawned from that context,
 // they were killed before the event could be delivered. Extensions silently
 // never cleaned up, and shutdown also took ~6s instead of ~1s. SIGHUP was
@@ -52,13 +52,13 @@ func TestSignalEmitsSessionShutdownToExtensions(t *testing.T) {
 				t.Fatalf("write probe extension: %v", err)
 			}
 
-			session := "pig-sig-" + randID()
-			// `exec` replaces the pane's shell with pig, so pane_pid is pig
+			session := "ompig-sig-" + randID()
+			// `exec` replaces the pane's shell with ompig, so pane_pid is ompig
 			// itself and the signal cannot land on a wrapper process.
 			command := strings.Join([]string{
 				"cd", dir, "&&", "exec",
-				"env", "PIG_HOME=" + dir, "PIG_OFFLINE=1", "PIG_TEST_FAUX=1", "PIG_QUIET_STARTUP=1",
-				"PIG_SHUTDOWN_MARKER=" + marker,
+				"env", "OMPIG_HOME=" + dir, "OMPIG_OFFLINE=1", "OMPIG_TEST_FAUX=1", "OMPIG_QUIET_STARTUP=1",
+				"OMPIG_SHUTDOWN_MARKER=" + marker,
 				bin, "--model", "test-faux/faux-1", "-e", extPath,
 			}, " ")
 			if out, err := tmuxCommand("new-session", "-d", "-s", session, "-x", "120", "-y", "34", command).CombinedOutput(); err != nil {
@@ -77,7 +77,7 @@ func TestSignalEmitsSessionShutdownToExtensions(t *testing.T) {
 			// Upstream shuts down promptly; a multi-second wait here would hide
 			// the teardown stall the ordering bug also caused.
 			if !waitFor(3*time.Second, func() bool { return processExited(pid) }) {
-				t.Fatalf("pig still running 3s after %s", tc.name)
+				t.Fatalf("ompig still running 3s after %s", tc.name)
 			}
 			if !waitFor(2*time.Second, func() bool {
 				data, err := os.ReadFile(marker)
@@ -97,23 +97,23 @@ export default function (pi) {
   });
   pi.on("session_shutdown", (event) => {
     try {
-      appendFileSync(process.env.PIG_SHUTDOWN_MARKER, "session_shutdown reason=" + (event?.reason ?? "?") + "\n");
+      appendFileSync(process.env.OMPIG_SHUTDOWN_MARKER, "session_shutdown reason=" + (event?.reason ?? "?") + "\n");
     } catch {}
   });
 }
 `
 
-// TestInteractiveSigintTerminatesAndRestoresTerminal pins pig's SIGINT
+// TestInteractiveSigintTerminatesAndRestoresTerminal pins ompig's SIGINT
 // contract: terminate like upstream, but hand the terminal back first.
 //
 // Upstream registers no general SIGINT handler (interactive-mode.ts takes
 // SIGINT only to ignore it while suspended), so an external SIGINT terminates
-// pi. pig matches that. Ctrl+C never reaches this path: pig holds the terminal
+// pi. ompig matches that. Ctrl+C never reaches this path: ompig holds the terminal
 // in raw mode, so \x03 is consumed by the keymap.
 //
 // Node's default handler exits without unwinding pi's terminal restore, which
 // leaves ISIG off; measured against pi 0.84.0, `kill -INT` leaves the shell
-// without a working Ctrl+C. pig restores the captured cooked state before
+// without a working Ctrl+C. ompig restores the captured cooked state before
 // exiting, which is the difference recorded as D51.
 func TestInteractiveSigintTerminatesAndRestoresTerminal(t *testing.T) {
 	if _, err := exec.LookPath("tmux"); err != nil {
@@ -125,17 +125,17 @@ func TestInteractiveSigintTerminatesAndRestoresTerminal(t *testing.T) {
 	bin := buildBinary(t)
 	dir := t.TempDir()
 
-	session := "pig-sigint-" + randID()
+	session := "ompig-sigint-" + randID()
 	// An interactive shell with line editing sets the terminal for its own
 	// prompt when it starts, which re-enables ISIG under a raw fixture applied
 	// before that start (a slow runner hits this). Without line editing the
-	// shell leaves the line discipline alone, so only the fixture and pig set it.
+	// shell leaves the line discipline alone, so only the fixture and ompig set it.
 	if out, err := tmuxCommand("new-session", "-d", "-s", session, "-x", "120", "-y", "34", "bash --noprofile --norc --noediting -i").CombinedOutput(); err != nil {
 		t.Fatalf("tmux new-session: %v\n%s", err, out)
 	}
 	t.Cleanup(func() { _ = tmuxCommand("kill-session", "-t", session).Run() })
 
-	// Keep a shell as the pane owner so the pty outlives pig and its terminal
+	// Keep a shell as the pane owner so the pty outlives ompig and its terminal
 	// state can be read after the signal.
 	shellPID := waitForPanePID(t, session)
 	tty := paneTTY(t, session)
@@ -153,26 +153,26 @@ func TestInteractiveSigintTerminatesAndRestoresTerminal(t *testing.T) {
 	}
 	if !isigEnabled(t, tty) {
 		settings, _ := sttyAll(tty)
-		t.Fatalf("expected a sane terminal before pig starts; %s reports:\n%s", tty, settings)
+		t.Fatalf("expected a sane terminal before ompig starts; %s reports:\n%s", tty, settings)
 	}
 
 	seedIntegrationSettings(t, dir)
 	launch := strings.Join([]string{
 		"cd", dir, "&&",
 		// The shell can change line discipline while reading this command. Set
-		// the captured baseline immediately before Pig enters raw mode.
+		// the captured baseline immediately before Ompig enters raw mode.
 		"stty", "sane", "&&",
-		"PIG_HOME=" + dir, "PIG_OFFLINE=1", "PIG_TEST_FAUX=1", "PIG_QUIET_STARTUP=1",
+		"OMPIG_HOME=" + dir, "OMPIG_OFFLINE=1", "OMPIG_TEST_FAUX=1", "OMPIG_QUIET_STARTUP=1",
 		bin, "--model", "test-faux/faux-1", "--no-extensions",
 	}, " ")
 	if out, err := tmuxCommand("send-keys", "-t", session, launch, "Enter").CombinedOutput(); err != nil {
-		t.Fatalf("launch pig: %v\n%s", err, out)
+		t.Fatalf("launch ompig: %v\n%s", err, out)
 	}
 	waitForPaneText(t, session, interactiveReadyMarker, 30*time.Second)
 
 	pid := childOf(t, shellPID)
 	if isigEnabled(t, tty) {
-		t.Fatal("pig should hold the terminal in raw mode with ISIG disabled")
+		t.Fatal("ompig should hold the terminal in raw mode with ISIG disabled")
 	}
 
 	if err := syscall.Kill(pid, syscall.SIGINT); err != nil {
@@ -180,7 +180,7 @@ func TestInteractiveSigintTerminatesAndRestoresTerminal(t *testing.T) {
 	}
 
 	if !waitFor(5*time.Second, func() bool { return processExited(pid) }) {
-		t.Fatal("pig survived SIGINT; upstream terminates, so pig must too")
+		t.Fatal("ompig survived SIGINT; upstream terminates, so ompig must too")
 	}
 	if out, err := tmuxCommand("send-keys", "-t", session, "sleep 30", "Enter").CombinedOutput(); err != nil {
 		t.Fatalf("launch shell interrupt probe: %v\n%s", err, out)
@@ -190,7 +190,7 @@ func TestInteractiveSigintTerminatesAndRestoresTerminal(t *testing.T) {
 		t.Fatalf("send shell Ctrl+C: %v\n%s", err, out)
 	}
 	if !waitFor(5*time.Second, func() bool { return processExited(sleepPID) }) {
-		t.Fatal("Pig exited on SIGINT without returning a working Ctrl+C to the shell")
+		t.Fatal("Ompig exited on SIGINT without returning a working Ctrl+C to the shell")
 	}
 }
 
@@ -313,7 +313,7 @@ func waitForPaneText(t *testing.T, session, needle string, timeout time.Duration
 
 // processExited reports whether pid has exited. A process that has exited but
 // that its parent has not yet reaped is a zombie: kill(pid, 0) still succeeds
-// on it. pig runs as the tmux pane's process, so tmux does the reaping, and on
+// on it. ompig runs as the tmux pane's process, so tmux does the reaping, and on
 // a loaded runner that can lag the exit by seconds. Count a zombie as exited.
 func processExited(pid int) bool {
 	if syscall.Kill(pid, 0) != nil {

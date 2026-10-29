@@ -3,13 +3,13 @@
 Pi runs every extension handler in one process, and a handler can always await a
 host call (packages/coding-agent/src/core/extensions/types.ts: the ``ctx.ui``
 dialogs ``select``, ``confirm`` and ``input``, ``exec`` and ``executeTool`` return
-promises; ``notify`` and ``setFooter`` are synchronous in-process calls). A pig handler waits on a
+promises; ``notify`` and ``setFooter`` are synchronous in-process calls). A ompig handler waits on a
 socket reply, so no handler may run on the thread that reads those replies.
 """
 
 import threading
 
-import pig_sdk
+import ompig_sdk
 import pytest
 from test_request_lifetime import connected_extension
 
@@ -29,7 +29,7 @@ def answer(send, frame):
 
 
 def test_width_handler_blocking_host_call_completes():
-    ext = pig_sdk.Extension("width-call")
+    ext = ompig_sdk.Extension("width-call")
     done = threading.Event()
 
     def arm(ctx, _):
@@ -51,7 +51,7 @@ def test_width_handler_blocking_host_call_completes():
 
 
 def test_blocked_width_handler_does_not_stop_the_reader():
-    ext = pig_sdk.Extension("width-reader")
+    ext = ompig_sdk.Extension("width-reader")
     ext.command("ping", "", lambda ctx, _: None)
 
     def arm(ctx, _):
@@ -72,7 +72,7 @@ def test_blocked_width_handler_does_not_stop_the_reader():
 
 
 def test_width_handlers_run_in_order_while_one_blocks():
-    ext = pig_sdk.Extension("width-order")
+    ext = ompig_sdk.Extension("width-order")
     seen = []
     finished = threading.Event()
 
@@ -98,7 +98,7 @@ def test_width_handlers_run_in_order_while_one_blocks():
 
 
 def test_raising_width_handler_does_not_stop_the_extension():
-    ext = pig_sdk.Extension("width-raise")
+    ext = ompig_sdk.Extension("width-raise")
     seen = []
     second = threading.Event()
 
@@ -126,7 +126,7 @@ def test_raising_width_handler_does_not_stop_the_extension():
 
 
 def test_shutdown_ends_a_width_handler_blocked_on_a_host_call():
-    ext = pig_sdk.Extension("width-shutdown")
+    ext = ompig_sdk.Extension("width-shutdown")
     ended = threading.Event()
 
     def arm(ctx, _):
@@ -150,7 +150,7 @@ def test_shutdown_ends_a_width_handler_blocked_on_a_host_call():
 
 @pytest.mark.parametrize("kind", ["event", "command", "tool"])
 def test_request_handlers_complete_blocking_host_calls(kind):
-    ext = pig_sdk.Extension(f"call-{kind}")
+    ext = ompig_sdk.Extension(f"call-{kind}")
     done = threading.Event()
 
     def handler(ctx, *_):
@@ -183,7 +183,7 @@ def _width_notify(value):
 def _drain_width_workers(ext):
     while True:
         with ext._request_threads_lock:
-            workers = [t for t in ext._request_threads if t.name == "pig-width-change"]
+            workers = [t for t in ext._request_threads if t.name == "ompig-width-change"]
         if not workers:
             return
         for worker in workers:
@@ -193,13 +193,13 @@ def _drain_width_workers(ext):
 
 def test_width_worker_that_cannot_start_does_not_stop_the_reader(monkeypatch):
     """As the Rust SDK's WidthDeliveries::submit: a worker thread that cannot start drops the queued widths, the reader keeps serving and the next width starts a worker."""
-    ext = pig_sdk.Extension("width-start")
+    ext = ompig_sdk.Extension("width-start")
     seen = []
-    pig_sdk.Context(ext, None, None).on_width_change(seen.append)
+    ompig_sdk.Context(ext, None, None).on_width_change(seen.append)
     real_start = threading.Thread.start
 
     def failing_start(thread):
-        if thread.name == "pig-width-change":
+        if thread.name == "ompig-width-change":
             raise RuntimeError("can't start new thread")
         real_start(thread)
 
@@ -215,7 +215,7 @@ def test_width_worker_that_cannot_start_does_not_stop_the_reader(monkeypatch):
 
 def test_width_handler_system_exit_does_not_stop_later_deliveries(monkeypatch):
     """A handler that raises SystemExit ends its worker thread only; the next width still reaches the handlers."""
-    ext = pig_sdk.Extension("width-exit")
+    ext = ompig_sdk.Extension("width-exit")
     ended = []
     monkeypatch.setattr(threading, "excepthook", lambda args: ended.append(args.exc_type))
     seen = []
@@ -227,7 +227,7 @@ def test_width_handler_system_exit_does_not_stop_later_deliveries(monkeypatch):
             raise SystemExit
         seen.append(w)
 
-    pig_sdk.Context(ext, None, None).on_width_change(handler)
+    ompig_sdk.Context(ext, None, None).on_width_change(handler)
     ext._handle_notify(_width_notify(100))
     _drain_width_workers(ext)
     assert ended == [SystemExit]

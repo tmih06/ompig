@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Stage a PNG into the system clipboard so manual Ctrl+V paste tests can
-# verify the pig 3.3 paste flow end-to-end.
+# verify the ompig 3.3 paste flow end-to-end.
 #
 # Usage:
 #   ./automation/dev/stage-clipboard-png.sh path/to/image.png
@@ -24,7 +24,7 @@ fi
 case "$(uname -s)" in
   Darwin)
     # AppleScript: read raw PNG bytes from disk into the clipboard
-    # under «class PNGf» so osascript on the pig side can read it back.
+    # under «class PNGf» so osascript on the ompig side can read it back.
     osascript <<APPLESCRIPT
 set the clipboard to (read (POSIX file "$img") as «class PNGf»)
 APPLESCRIPT

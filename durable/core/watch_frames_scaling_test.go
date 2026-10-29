@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // allocated is the bytes fn allocates.

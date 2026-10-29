@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // runEnvironFixture starts the environ fixture with the given inheritEnv option and returns the environment the server reported on stderr.
@@ -36,14 +36,14 @@ func runEnvironFixture(t *testing.T, inherit *bool) []string {
 // TestStdioTransportInheritsTheParentEnvironmentUnlessInheritEnvIsFalse ports stdio.ts:94: the server gets {...process.env, ...options.env} unless
 // `inheritEnv === false`, so an unset option (like true) passes the parent's variables and only an explicit false hides them.
 func TestStdioTransportInheritsTheParentEnvironmentUnlessInheritEnvIsFalse(t *testing.T) {
-	t.Setenv("PIG_PARENT_MARK", "from-parent")
+	t.Setenv("OMPIG_PARENT_MARK", "from-parent")
 	on, off := true, false
 	for name, tc := range map[string]struct {
 		inherit *bool
 		want    bool
 	}{"unset": {nil, true}, "true": {&on, true}, "false": {&off, false}} {
 		got := runEnvironFixture(t, tc.inherit)
-		if has := slices.Contains(got, "PIG_PARENT_MARK=from-parent"); has != tc.want {
+		if has := slices.Contains(got, "OMPIG_PARENT_MARK=from-parent"); has != tc.want {
 			t.Errorf("inheritEnv %s: parent variable visible = %v, want %v (env %q)", name, has, tc.want, got)
 		}
 		if !slices.Contains(got, fixtureEnv+"=environ") {

@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ContentBlocks is a slice alias that knows how to decode the

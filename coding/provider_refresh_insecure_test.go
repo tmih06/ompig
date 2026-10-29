@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestRefreshModelsRegistrationKeepsInsecure: a registration with refreshModels is composed in the native collection (provider-composer.ts:613), and its D36 TLS opt-in must still reach the request transport. The endpoint serves a self-signed certificate, so the request succeeds only when the opt-in survives.

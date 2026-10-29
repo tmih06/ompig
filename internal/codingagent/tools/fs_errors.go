@@ -3,7 +3,7 @@ package tools
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // NodeErrorCode returns the Node error code (error.code) for a file system or spawn error, or "" when it has none.

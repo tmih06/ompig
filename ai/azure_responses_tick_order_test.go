@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/bodyreadhook/readbarrier"
+	"github.com/tmih06/ompig/internal/bodyreadhook/readbarrier"
 )
 
 const azureTicksOracle = "../coding/testdata/rpc33-observation/providers/azure-openai-responses/ticks.json"

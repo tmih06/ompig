@@ -1,7 +1,7 @@
 //go:build integration
 
 // json_stream_test.go: integration coverage for `--mode json`, driven through
-// the real pig binary and the deterministic faux provider.
+// the real ompig binary and the deterministic faux provider.
 //
 // These assert the properties a unit test cannot: that events reach a consumer
 // *while the child is alive*, that cancellation terminates promptly, and that
@@ -24,34 +24,34 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // jsonModeCmd builds a `--mode json` invocation against the faux provider.
-// pigHome is passed in rather than allocated per call: sessions live under
-// PIG_HOME, so a resume test must run both turns against the same home.
-func jsonModeCmd(t *testing.T, pigHome string, extra ...string) *exec.Cmd {
+// ompigHome is passed in rather than allocated per call: sessions live under
+// OMPIG_HOME, so a resume test must run both turns against the same home.
+func jsonModeCmd(t *testing.T, ompigHome string, extra ...string) *exec.Cmd {
 	t.Helper()
 	args := append([]string{
 		"--no-extensions", "--mode", "json",
 		"--model", "test-faux/faux-1",
 	}, extra...)
 	cmd := exec.Command(buildBinary(t), args...)
-	cmd.Dir = pigHome
+	cmd.Dir = ompigHome
 	cmd.Env = append(os.Environ(),
-		"PIG_HOME="+pigHome,
-		"PIG_CODING_AGENT_DIR="+filepath.Join(pigHome, "agent"),
-		"PIG_CODING_AGENT_SESSION_DIR=",
-		"PIG_OFFLINE=1",
-		"PIG_QUIET_STARTUP=1",
-		"PIG_TEST_FAUX=1",
-		"PIG_TEST_FAUX_SCENARIO="+deterministicScenario,
+		"OMPIG_HOME="+ompigHome,
+		"OMPIG_CODING_AGENT_DIR="+filepath.Join(ompigHome, "agent"),
+		"OMPIG_CODING_AGENT_SESSION_DIR=",
+		"OMPIG_OFFLINE=1",
+		"OMPIG_QUIET_STARTUP=1",
+		"OMPIG_TEST_FAUX=1",
+		"OMPIG_TEST_FAUX_SCENARIO="+deterministicScenario,
 	)
 	return cmd
 }
 
 func TestJSONModeCmdIsolatesFauxRuntime(t *testing.T) {
-	for _, name := range []string{"PIG_HOME", "PIG_CODING_AGENT_DIR", "PIG_CODING_AGENT_SESSION_DIR", "PIG_OFFLINE", "PIG_TEST_FAUX", "PIG_TEST_FAUX_SCENARIO"} {
+	for _, name := range []string{"OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "OMPIG_CODING_AGENT_SESSION_DIR", "OMPIG_OFFLINE", "OMPIG_TEST_FAUX", "OMPIG_TEST_FAUX_SCENARIO"} {
 		t.Setenv(name, "inherited-value-must-not-reach-child")
 	}
 	home := t.TempDir()
@@ -65,12 +65,12 @@ func TestJSONModeCmdIsolatesFauxRuntime(t *testing.T) {
 		env[key] = value
 	}
 	for key, want := range map[string]string{
-		"PIG_HOME":                     home,
-		"PIG_CODING_AGENT_DIR":         filepath.Join(home, "agent"),
-		"PIG_CODING_AGENT_SESSION_DIR": "",
-		"PIG_OFFLINE":                  "1",
-		"PIG_TEST_FAUX":                "1",
-		"PIG_TEST_FAUX_SCENARIO":       deterministicScenario,
+		"OMPIG_HOME":                     home,
+		"OMPIG_CODING_AGENT_DIR":         filepath.Join(home, "agent"),
+		"OMPIG_CODING_AGENT_SESSION_DIR": "",
+		"OMPIG_OFFLINE":                  "1",
+		"OMPIG_TEST_FAUX":                "1",
+		"OMPIG_TEST_FAUX_SCENARIO":       deterministicScenario,
 	} {
 		if env[key] != want {
 			t.Errorf("%s = %q, want %q", key, env[key], want)
@@ -92,7 +92,7 @@ func decodeType(t *testing.T, line string) string {
 // The whole point of the streaming contract: a consumer must be able to render
 // progress from stdout while the child runs. Reading an event and asserting the
 // process has not exited proves the output is not collected and dumped at exit,
-// which is what pig did before.
+// which is what ompig did before.
 func TestJSONModeEmitsEventsBeforeExit(t *testing.T) {
 	cmd := jsonModeCmd(t, t.TempDir(), "Run: sleep for a while")
 	stdout, err := cmd.StdoutPipe()
@@ -141,17 +141,17 @@ func TestJSONModeCancellationTerminatesPromptly(t *testing.T) {
 			name = "draining-stdout"
 		}
 		t.Run(name, func(t *testing.T) {
-			pigHome := t.TempDir()
+			ompigHome := t.TempDir()
 			args := []string{}
 			if !drain {
-				promptPath := filepath.Join(pigHome, "system.txt")
+				promptPath := filepath.Join(ompigHome, "system.txt")
 				// Exceed pipe capacity so an unread consumer exercises backpressure.
 				if err := os.WriteFile(promptPath, []byte(strings.Repeat("cancellation backpressure fixture\n", 1<<16)), 0o600); err != nil {
 					t.Fatal(err)
 				}
 				args = append(args, "--system-prompt", promptPath)
 			}
-			cmd := jsonModeCmd(t, pigHome, append(args, "Run: sleep for a while")...)
+			cmd := jsonModeCmd(t, ompigHome, append(args, "Run: sleep for a while")...)
 			// Own the pipe separately from exec.Cmd: Wait must not close a pipe
 			// that the consumer is still draining during process shutdown.
 			stdout, writer, err := os.Pipe()
@@ -222,7 +222,7 @@ func TestJSONModeCancellationTerminatesPromptly(t *testing.T) {
 			if drain {
 				// agent_start alone does not prove a tool is in flight. The faux
 				// bash command writes this marker immediately before sleeping.
-				marker := filepath.Join(pigHome, ai.TestFauxToolStartedMarker)
+				marker := filepath.Join(ompigHome, ai.TestFauxToolStartedMarker)
 				if !pollUntil(45*time.Second, func() bool {
 					_, err := os.Stat(marker)
 					return err == nil
@@ -261,16 +261,16 @@ func TestJSONModeCancellationTerminatesPromptly(t *testing.T) {
 // answers the recall prompt when the earlier turn is present in history, so a
 // correct answer is evidence of resume rather than a canned reply.
 func TestJSONModeResumesSessionByID(t *testing.T) {
-	pigHome := t.TempDir()
+	ompigHome := t.TempDir()
 	const id = "json-resume-probe"
 
-	first := jsonModeCmd(t, pigHome, "--session-id", id,
+	first := jsonModeCmd(t, ompigHome, "--session-id", id,
 		"Remember this exact code: the letters A L P H A and the digits 7 7 4 9")
 	if out, err := first.CombinedOutput(); err != nil {
 		t.Fatalf("first turn failed: %v\n%s", err, out)
 	}
 
-	second := jsonModeCmd(t, pigHome, "--session-id", id,
+	second := jsonModeCmd(t, ompigHome, "--session-id", id,
 		"What was the code I told you to remember?")
 	out, err := second.CombinedOutput()
 	if err != nil {

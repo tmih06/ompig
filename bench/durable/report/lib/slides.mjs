@@ -15,7 +15,7 @@ const C = {
 	muted: "#8b98a8",
 	pi: "#38bdf8",
 	tardie: "#fb923c",
-	pig: "#a78bfa",
+	ompig: "#a78bfa",
 	detail: ["#f472b6", "#facc15", "#2dd4bf"],
 	control: "#94a3b8",
 	good: "#4ade80",
@@ -31,15 +31,15 @@ export const fmt = (v, digits = 0) => {
 };
 
 /**
- * Compares a PiG value with pi-durable main's where lower is better. Within `tie` (relative) is a tie; pi-durable at 0
- * and PiG above it is a loss with no finite ratio (JS<->Wasm crossings: pi-durable has none).
+ * Compares a Ompig value with pi-durable main's where lower is better. Within `tie` (relative) is a tie; pi-durable at 0
+ * and Ompig above it is a loss with no finite ratio (JS<->Wasm crossings: pi-durable has none).
  */
-export function verdict(pig, pi, tie = 0.03) {
-	if (pig === undefined || pi === undefined) return { kind: "none" };
+export function verdict(ompig, pi, tie = 0.03) {
+	if (ompig === undefined || pi === undefined) return { kind: "none" };
 	// A latency net of the floor can fall below zero on a noisy run; no ratio of such values is a measurement.
-	if (pig < 0 || pi < 0) return { kind: "none" };
-	if (pi === 0) return pig === 0 ? { kind: "tie" } : { kind: "lose", ratio: Number.POSITIVE_INFINITY };
-	const ratio = pig / pi;
+	if (ompig < 0 || pi < 0) return { kind: "none" };
+	if (pi === 0) return ompig === 0 ? { kind: "tie" } : { kind: "lose", ratio: Number.POSITIVE_INFINITY };
+	const ratio = ompig / pi;
 	if (Math.abs(ratio - 1) <= tie) return { kind: "tie", ratio };
 	if (ratio > 1) return { kind: "lose", ratio };
 	// The deck claims no win below 1.3x (README review rule); a smaller lead is reported as "slightly better".
@@ -58,7 +58,7 @@ export function renderSlides(data, { fonts }) {
 	const ref = T[r.reference];
 	const color = (k) => {
 		const role = T[k].role;
-		if (role === "headline") return C.pig;
+		if (role === "headline") return C.ompig;
 		if (role === "reference") return C.pi;
 		if (role === "contender") return C.tardie;
 		if (role === "control") return C.control;
@@ -128,7 +128,7 @@ a { color: inherit; }
 		const link = contractOk ? `<span class="mono">${esc(contract.report_url)}</span>` : `<span class="bad">pending: the production core has not passed the CONTRACT gate</span>`;
 		return `<div class="honest">
 <div><b>Machine:</b> ${machineLine ?? `${esc(machine.host ?? "?")}, ${esc(machine.cpu ?? "?")}, ${esc(machine.pinning ?? "?")}. ${esc(machine.relative ?? "")}`}</div>
-<div><b>Same rows:</b> PiG Durable ${contractOk ? `writes the same rows as pi-durable main <span class="mono">${esc(ref.version)}</span> (${contract.rows ? `all ${fmt(contract.rows.ready - (contract.rows.skipped_by_reference?.length ?? 0))} runnable corpus rows` : "full corpus"} + crash matrix)` : "row identity"}: ${link}</div>
+<div><b>Same rows:</b> Ompig Durable ${contractOk ? `writes the same rows as pi-durable main <span class="mono">${esc(ref.version)}</span> (${contract.rows ? `all ${fmt(contract.rows.ready - (contract.rows.skipped_by_reference?.length ?? 0))} runnable corpus rows` : "full corpus"} + crash matrix)` : "row identity"}: ${link}</div>
 <div><b>Same model (Rule A):</b> ${esc(meta.model?.label ?? "?")}${modelNote ? ` ${esc(modelNote)}` : ""}${meta.session?.id ? ` · session <span class="mono">${esc(meta.session.id)}</span>` : ""}</div>
 </div>`;
 	};
@@ -235,8 +235,8 @@ a { color: inherit; }
 	};
 	const last = (metricName, k) => (metricName === "seed" ? q.seed(k, 3500) : q.metric(metricName, k, 3500));
 	// The cover follows the same verdict as the where-it-runs slide: within 3% is a tie, and no lead under 1.3x is a win.
-	const relative = (pig, pi, kind) => {
-		const v = verdict(pig, pi);
+	const relative = (ompig, pi, kind) => {
+		const v = verdict(ompig, pi);
 		if (v.kind === "none" || !Number.isFinite(v.ratio)) return `<span class="muted">–</span>`;
 		if (v.kind === "tie") return `<span class="muted">about the same as pi-durable main</span>`;
 		const [better, worse] = kind === "size" ? ["smaller", "larger"] : ["faster", "slower"];
@@ -254,7 +254,7 @@ a { color: inherit; }
 			const [g, p, t] = contenders.map((k) => last(metricName, k));
 			return `<div class="panel col" style="gap:10px">
 		<div style="font-size:20px;font-weight:600" class="muted">${label}</div>
-		<div style="font-size:54px;font-weight:800;letter-spacing:-0.02em;color:${C.pig}">${fmt(g, digits)}<span style="font-size:28px">${unit}</span></div>
+		<div style="font-size:54px;font-weight:800;letter-spacing:-0.02em;color:${C.ompig}">${fmt(g, digits)}<span style="font-size:28px">${unit}</span></div>
 		<div style="font-size:22px;font-weight:600;color:${C.pi}">pi-durable main ${fmt(p, digits)}${unit}</div>
 		<div style="font-size:22px;font-weight:600;color:${C.tardie}">Tardigrade ${fmt(t, digits)}${unit}</div>
 		<div style="font-size:18px">${relative(g, p, kind)}</div></div>`;
@@ -263,8 +263,8 @@ a { color: inherit; }
 			name: "cover",
 			html: page(
 				"cover",
-				`<h1>PiG Durable, pi-durable and Tardigrade<br>on durable-bench, at 3,500 turns${rule(contenders)}</h1>
-		<h2>${esc(meta.text?.cover ?? `PiG Durable is a Go implementation of pi-durable that runs inside a Durable Object as WebAssembly (${T[r.headline].build} build). Same scripted agent, model and tool for everyone, 8 tool calls per turn, SQLite-backed Durable Objects on Miniflare.`)}</h2>
+				`<h1>Ompig Durable, pi-durable and Tardigrade<br>on durable-bench, at 3,500 turns${rule(contenders)}</h1>
+		<h2>${esc(meta.text?.cover ?? `Ompig Durable is a Go implementation of pi-durable that runs inside a Durable Object as WebAssembly (${T[r.headline].build} build). Same scripted agent, model and tool for everyone, 8 tool calls per turn, SQLite-backed Durable Objects on Miniflare.`)}</h2>
 		${legend(contenders)}
 		<div class="row" style="flex:0 0 auto">
 			${card("Warm turn p50 (thread already open)", "warm", " ms", 0, "time")}
@@ -298,7 +298,7 @@ a { color: inherit; }
 		html: page(
 			"storage",
 			`<h1>Database size and building the history${rule(contenders)}</h1>
-	<h2>SQLite bytes after the measured turns (PiG's index tables included), and the time each system took to build its own history by real turns. Lower is better.</h2>
+	<h2>SQLite bytes after the measured turns (Ompig's index tables included), and the time each system took to build its own history by real turns. Lower is better.</h2>
 	${legend(contenders)}
 	<div class="row">
 		${panel("SQLite database, MB", chart("mb", contenders, { digits: 1 }))}
@@ -310,7 +310,7 @@ a { color: inherit; }
 	// 3a. Rows written and the Wasm memory high-water mark at every size (where-it-runs count probes).
 	{
 		const probed = [r.headline, r.reference, ...r.detail].filter((k) => (data.probes ?? []).some((p) => p.target === k && p.host === "miniflare" && p.mode === "count"));
-		const wasm = probed.filter((k) => T[k].kind === "pig");
+		const wasm = probed.filter((k) => T[k].kind === "ompig");
 		if (probed.length > 0)
 			slides.push({
 				name: "growth",
@@ -348,7 +348,7 @@ a { color: inherit; }
 		});
 	}
 
-	// 5. PiG builds (detail).
+	// 5. Ompig builds (detail).
 	if (r.detail.length > 0) {
 		const builds = [r.headline, ...r.detail];
 		const keys = [...builds, ...r.control, r.reference];
@@ -359,12 +359,12 @@ a { color: inherit; }
 		if (art.length) notes.push(`Module size: ${art.map(esc).join(" · ")}.`);
 		for (const k of builds.filter((k) => T[k].build === "native"))
 			notes.push(`Rule B: the native build runs as a native process with its own SQLite, not in a Durable Object${T[k].model ? `, with ${esc(T[k].model)}` : ""}, and has no request path, so no floor: read it as a harness floor, the cost of WebAssembly and the host, not as a deployment.`);
-		for (const k of r.control) notes.push(`${esc(name(k))} <span class="mono">${esc(T[k].version)}</span>: the gate's TypeScript design control, not PiG Durable; shown for scale only.`);
+		for (const k of r.control) notes.push(`${esc(name(k))} <span class="mono">${esc(T[k].version)}</span>: the gate's TypeScript design control, not Ompig Durable; shown for scale only.`);
 		slides.push({
 			name: "builds",
 			html: page(
 				"builds",
-				`<h1>One PiG core, ${builds.length} builds${rule(keys)}</h1>
+				`<h1>One Ompig core, ${builds.length} builds${rule(keys)}</h1>
 		<h2>${esc(meta.text?.builds ?? `The same core (${contract.core ?? T[r.headline].version}) built ${ways} ways; the rows are the same, only the runtime cost differs. pi-durable main for scale.`)}</h2>
 		${legend(keys)}
 		<div class="row">
@@ -407,7 +407,7 @@ a { color: inherit; }
 			{ label: "JS↔Wasm crossings", short: "JS↔Wasm crossings", sub: "per warm turn (of them hop notices)", unit: "", get: (k, n) => (T[k].kind === "pi" ? 0 : q.probe("crossings", k, n, { host })), extra: (k, n) => (T[k].kind === "pi" ? "" : ` (${fmt(q.probe("hopSteps", k, n, { host }))})`) },
 			...(cfh ? [] : [{ label: "Time inside the core", short: "core time", sub: "per warm turn, Miniflare timer", unit: "ms", digits: 1, get: (k, n) => (T[k].kind === "pi" ? undefined : q.probe("coreWarm", k, n)), info: true, none: "no core" }]),
 		];
-		// One value cell; the PiG cell is red where it loses and green where it wins. `span` 2 for size-independent rows.
+		// One value cell; the Ompig cell is red where it loses and green where it wins. `span` 2 for size-independent rows.
 		const cell = (row, k, n, v, cmp, span = 1) => {
 			const attrs = (cls) => `${span > 1 ? ` colspan="${span}"` : ""} class="${cls}${span > 1 ? " c" : ""}"`;
 			if (v === undefined) return `<td${attrs("muted")}>${T[k].kind === "pi" && row.none ? row.none : "–"}</td>`;
@@ -460,7 +460,7 @@ a { color: inherit; }
 .where .grp { text-align: center; color: ${C.text}; font-size: 16px; }
 </style>`;
 		const head = `<thead><tr><th></th><th colspan="2" class="grp">50 turns</th><th colspan="2" class="grp">3,500 turns</th><th></th><th></th></tr>
-<tr><th style="text-align:left">Lower is better</th>${sizes.map(() => `<th style="color:${C.pi}">pi-durable</th><th style="color:${C.pig}">${esc(T[g].build ?? "PiG")}</th>`).join("")}<th>Cloudflare limit</th><th style="text-align:left">Verdict</th></tr></thead>`;
+<tr><th style="text-align:left">Lower is better</th>${sizes.map(() => `<th style="color:${C.pi}">pi-durable</th><th style="color:${C.ompig}">${esc(T[g].build ?? "Ompig")}</th>`).join("")}<th>Cloudflare limit</th><th style="text-align:left">Verdict</th></tr></thead>`;
 		const cf = cfh ? ` Measured on Cloudflare: ${(meta.cloudflare?.label ?? "?").replace(/\.$/, "")}.` : (data.probes ?? []).some((x) => x.host === "cloudflare") ? " Measured on Miniflare (local workerd); Cloudflare on the next slide." : " Measured on Miniflare (local workerd); Cloudflare numbers follow when the account is ready.";
 		const method = cfh
 			? "Latency at the client includes the network; compare the two columns, not other slides. CPU time is Cloudflare's own figure per invocation (wrangler tail): the Worker plus the Durable Object calls it made. Cloudflare does not expose the isolate's JS heap, so memory shows the core's Wasm memory only."
@@ -512,11 +512,11 @@ a { color: inherit; }
 		<li>The benchmark is Mario Zechner's fork of Tardigrade's durable-bench, <span class="mono">${esc(runner.repo ?? "badlogic/durable-bench")}</span> at <span class="mono">${esc(runner.commit ?? "?")}</span>, scenario unchanged: scripted model, one lookup tool, histories built by real turns (tool, tool, no tool), measured turns with 8 tool calls.${runner.changes ? ` Changes: ${esc(runner.changes)}` : ""}</li>
 		<li>Contestants: ${contenders.concat(r.detail, r.control).map((k) => `${esc(name(k))} <span class="mono">${esc(T[k].version)}</span>`).join(", ")}.</li>
 		<li>Same model for everyone: ${esc(meta.model?.label ?? "?")}</li>
-		<li>${contractOk ? `Same rows: PiG Durable's core <span class="mono">${esc(contract.core)}</span> writes the same rows at the same commit boundaries as pi-durable main <span class="mono">${esc(ref.version)}</span> on every runnable row of the contract corpus${contract.rows ? ` (${fmt(contract.rows.ready - (contract.rows.skipped_by_reference?.length ?? 0))} rows; ${fmt(contract.rows.skipped + (contract.rows.skipped_by_reference?.length ?? 0))} rows the gate skips for every implementation, the reference included, with recorded reasons${contract.rows.pending_owner?.length ? `; ${esc(contract.rows.pending_owner.join(", "))} wait for provider recordings made with the owner's API keys` : ""})` : ""}, and the crash matrix passes${contract.identity?.standard ? ` (at each history size of the standard workload: gate rows ${esc(Object.values(contract.identity.standard).join(", "))})` : ""}. Verification: <span class="mono">${esc(contract.report_url)}</span>` : `<span class="bad">Row identity: pending. The production core has not passed the CONTRACT gate, so no PiG number here is a measurement.</span>`}</li>
+		<li>${contractOk ? `Same rows: Ompig Durable's core <span class="mono">${esc(contract.core)}</span> writes the same rows at the same commit boundaries as pi-durable main <span class="mono">${esc(ref.version)}</span> on every runnable row of the contract corpus${contract.rows ? ` (${fmt(contract.rows.ready - (contract.rows.skipped_by_reference?.length ?? 0))} rows; ${fmt(contract.rows.skipped + (contract.rows.skipped_by_reference?.length ?? 0))} rows the gate skips for every implementation, the reference included, with recorded reasons${contract.rows.pending_owner?.length ? `; ${esc(contract.rows.pending_owner.join(", "))} wait for provider recordings made with the owner's API keys` : ""})` : ""}, and the crash matrix passes${contract.identity?.standard ? ` (at each history size of the standard workload: gate rows ${esc(Object.values(contract.identity.standard).join(", "))})` : ""}. Verification: <span class="mono">${esc(contract.report_url)}</span>` : `<span class="bad">Row identity: pending. The production core has not passed the CONTRACT gate, so no Ompig number here is a measurement.</span>`}</li>
 		<li>${esc(machine.host ?? "?")}: ${esc(machine.cpu ?? "?")}, ${esc(machine.pinning ?? "?")}. One interleaved session${meta.session?.id ? ` (<span class="mono">${esc(meta.session.id)}</span>)` : ""}: targets alternate within every round, ${esc(proto.samples ?? "?")} fresh runtimes per target and size. ${esc(machine.relative ?? "")}</li>
 		<li>Cold = open + first turn in a fresh runtime (runtime startup excluded), one per runtime. Warm = every later turn of every runtime, pooled (${esc(fmt((proto.samples ?? 0) * ((proto.turns ?? 10) - 1)))} per target and size). We report p50, p95 and max, net of the floor: the p50 of an empty target (same Worker, request and Durable Object path, no agent) at the same size.${q.contended.length ? ` ${esc(contendedNote(q.contended))}` : ""} Rule A: durable-bench's JS model on pi-durable's model path, in a Durable Object (every headline number). Rule B: the native build's own scripted model in the core's harness, a harness floor. DB = SQLite file after the turns. History = each system seeds its own history${proto.seed === "chain" ? ", timed as the sum of contiguous seeding segments from an empty store, each segment's end checked by its context fingerprint" : " from an empty store"}. ${cf}</li>
 		${meta.text?.method ? `<li>${esc(meta.text.method)}</li>` : ""}
-		<li>PiG is a Go implementation of Pi, created by Michael Kinsy and originally developed at Hewlett Packard Enterprise; it is not an official Pi project. Thanks to Mario Zechner and the Tardigrade team for the benchmark.</li>
+		<li>Ompig is a Go implementation of Pi, created by Michael Kinsy and originally developed at Hewlett Packard Enterprise; it is not an official Pi project. Thanks to Mario Zechner and the Tardigrade team for the benchmark.</li>
 		<li>Raw results: <span class="mono">${esc(meta.publish?.results_path ?? "bench/durable/report/data/results.jsonl")}</span> (sha256 <span class="mono">${data.sha256.slice(0, 16)}</span>); every slide is regenerated from that one file.</li>
 	</ul></div></div>`,
 			),

@@ -6,7 +6,7 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ModelsProvider is the Provider object createLlamaProvider returns to Pi's llama factory, which hands it to registerProvider. It maps this

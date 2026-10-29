@@ -1,6 +1,6 @@
 package ai
 
-import "github.com/MichaelKinsy/PiG/internal/goroutineid"
+import "github.com/tmih06/ompig/internal/goroutineid"
 
 // currentGoroutineID identifies the calling goroutine (goroutineid.Current); tests count its calls. A stream observation
 // records its consumer's identity because Result cannot otherwise tell the goroutine that runs the consumer callback,

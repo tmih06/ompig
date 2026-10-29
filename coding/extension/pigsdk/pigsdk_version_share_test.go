@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/contentdirs"
 )
 
 // writeCacheEntry publishes a complete extension build named digest under cacheRoot, compiled against the SDK with fingerprint.
@@ -35,14 +35,14 @@ func writeCacheEntry(t *testing.T, cacheRoot, digest, fingerprint string) string
 	return entry
 }
 
-// writeForeignGoSDK stands in for a Go SDK another PiG build staged as name under root's state/pigsdk, last used age ago, and returns its directory and fingerprint.
+// writeForeignGoSDK stands in for a Go SDK another Ompig build staged as name under root's state/pigsdk, last used age ago, and returns its directory and fingerprint.
 func writeForeignGoSDK(t *testing.T, root, name string, age time.Duration) (string, string) {
 	t.Helper()
 	dir := filepath.Join(root, "state", "pigsdk", name)
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\n\n// "+name+"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(dir, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\n\n// "+name+"\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(dir, markerFile), []byte(name+"\n"), 0o644); err != nil {
@@ -91,7 +91,7 @@ func requireGone(t *testing.T, path, what string) {
 	}
 }
 
-// Two PiG builds share a config root: staging this build's SDKs leaves the other build's SDK and the extension builds made against it in place, and stages into this build's own directory.
+// Two Ompig builds share a config root: staging this build's SDKs leaves the other build's SDK and the extension builds made against it in place, and stages into this build's own directory.
 func TestStagingKeepsAnotherBuildsSDKAndItsBuilds(t *testing.T) {
 	root := t.TempDir()
 	own := ownGoSDKDir(t, root)
@@ -141,7 +141,7 @@ func TestWarmStartBesideAnotherBuildWritesNothing(t *testing.T) {
 	}
 }
 
-// An older PiG stages into the unhashed state/pigsdk/sdk and may still be running: staging leaves that directory and its extension builds alone.
+// An older Ompig stages into the unhashed state/pigsdk/sdk and may still be running: staging leaves that directory and its extension builds alone.
 func TestStagingKeepsTheLegacyUnhashedSDKAndItsBuilds(t *testing.T) {
 	root := t.TempDir()
 	own := ownGoSDKDir(t, root)
@@ -154,7 +154,7 @@ func TestStagingKeepsTheLegacyUnhashedSDKAndItsBuilds(t *testing.T) {
 	if data, err := os.ReadFile(filepath.Join(legacy, markerFile)); err != nil || string(data) != "sdk\n" {
 		t.Fatalf("legacy SDK marker = %q, %v; want it untouched", data, err)
 	}
-	requireExists(t, legacyBuild, "the older PiG's extension build")
+	requireExists(t, legacyBuild, "the older Ompig's extension build")
 	requireExists(t, filepath.Join(own, markerFile), "this build's staged Go SDK")
 }
 
@@ -213,7 +213,7 @@ func TestWarmStartRecordsTheUseOfThisBuildsSDKDirectories(t *testing.T) {
 			t.Fatalf("a warm start did not record the use of %s: %v", dir, err)
 		}
 	}
-	// The single-language path, used by `pig extension init` and /reload, records the use too.
+	// The single-language path, used by `ompig extension init` and /reload, records the use too.
 	own := ownGoSDKDir(t, root)
 	if err := os.Chtimes(own, staged, staged); err != nil {
 		t.Fatal(err)

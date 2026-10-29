@@ -7,8 +7,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 func inMemoryFixtureFactory(_ context.Context, adapter func(*telemetry.InMemoryTelemetryContext) telemetry.TelemetryContext) (telemetrytest.TelemetryAdapterFixture, error) {

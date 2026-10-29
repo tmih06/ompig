@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/abi/payload"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi/payload"
 )
 
 // SQL statement IDs of the probe's table, in sql_table order.

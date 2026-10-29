@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session/sessiontest"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session/sessiontest"
 )
 
 // WatchDoc is Session.watchDoc with a typed value: the acquisition revision, each later committed revision decoded as

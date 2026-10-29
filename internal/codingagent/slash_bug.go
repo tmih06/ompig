@@ -1,21 +1,21 @@
 package codingagent
 
 // slash_bug.go ports upstream modes/interactive/bug-report.ts: consent, an
-// optional model-written summary, then a local zip archive. PiG is
-// export-only and links to the PiG issue form instead of uploading (D62).
+// optional model-written summary, then a local zip archive. Ompig is
+// export-only and links to the Ompig issue form instead of uploading (D62).
 
 import (
 	"errors"
 	"fmt"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 const (
-	bugReportDisclaimer     = "PiG writes this report as a zip archive in the current directory and never uploads it. It includes your pig version, operating system, the current model and provider configuration (without API keys), loaded extensions, settings, and provider error diagnostics from this session. You decide whether to attach it to a PiG issue on GitHub."
+	bugReportDisclaimer     = "Ompig writes this report as a zip archive in the current directory and never uploads it. It includes your ompig version, operating system, the current model and provider configuration (without API keys), loaded extensions, settings, and provider error diagnostics from this session. You decide whether to attach it to a Ompig issue on GitHub."
 	bugReportTranscriptNote = "The transcript contains your messages, model output, tool calls and their results, including file contents and command output read during this session."
 	bugReportCancelled      = "Bug report cancelled"
 	bugReportExport         = "Export as Zip"
@@ -128,9 +128,9 @@ func promptBugReportChoices(sc *SlashContext) (bugReportChoices, bool) {
 	if choices.includeSummary {
 		summaryState = "written by " + modelName
 	}
-	// pig divergence (D62): export is the only delivery; PiG never uploads.
+	// ompig divergence (D62): export is the only delivery; Ompig never uploads.
 	delivery, ok := sc.ShowBugReportSelector("Bug report", []string{bugReportExport, "Cancel"}, fmt.Sprintf(
-		"Description: %s\nTranscript: %s\nSummary: %s\n\nExport writes a zip archive to the current directory. Nothing is uploaded; you can attach the archive to a PiG issue.",
+		"Description: %s\nTranscript: %s\nSummary: %s\n\nExport writes a zip archive to the current directory. Nothing is uploaded; you can attach the archive to a Ompig issue.",
 		description, transcriptState, summaryState,
 	))
 	if !ok || delivery != bugReportExport {
@@ -186,7 +186,7 @@ func buildBugReportBundle(sc *SlashContext, choices bugReportChoices, summary *s
 }
 
 // exportBugReport writes the archive to the working directory, records the
-// report in the session, and prints the PiG issue link.
+// report in the session, and prints the Ompig issue link.
 func exportBugReport(sc *SlashContext, bundle BugReportBundle) error {
 	dir, err := nodepath.Cwd() // bug-report.ts:202 process.cwd()
 	if err != nil {
@@ -209,8 +209,8 @@ func exportBugReport(sc *SlashContext, bundle BugReportBundle) error {
 	if sc.UpstreamVersion != nil {
 		upstreamVersion = sc.UpstreamVersion()
 	}
-	// pig divergence (D62): link to the PiG issue form; the user attaches the archive.
-	sc.Append(fmt.Sprintf("To report it, open a PiG issue and attach `%s`:\n\n%s", archiveName, BugReportIssueLink(bundle.Metadata, archiveName, upstreamVersion)))
+	// ompig divergence (D62): link to the Ompig issue form; the user attaches the archive.
+	sc.Append(fmt.Sprintf("To report it, open a Ompig issue and attach `%s`:\n\n%s", archiveName, BugReportIssueLink(bundle.Metadata, archiveName, upstreamVersion)))
 	return nil
 }
 

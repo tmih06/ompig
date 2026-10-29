@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 func TestHost_LoadEmbeddedCellsStartsIsolatedBinaryWithoutSource(t *testing.T) {
@@ -116,8 +116,8 @@ func TestEmbeddedPackedOwnerActivationByLanguage(t *testing.T) {
 				// accidentally satisfy this acceptance path.
 				t.Setenv("PATH", t.TempDir())
 			}
-			t.Setenv("PIG_TEST_UNRELATED_SENTINEL", fixture.sentinel)
-			t.Setenv("PIG_TEST_FAIL_UNRELATED", "1")
+			t.Setenv("OMPIG_TEST_UNRELATED_SENTINEL", fixture.sentinel)
+			t.Setenv("OMPIG_TEST_FAIL_UNRELATED", "1")
 
 			ownerCell := fixture.cell
 			ownerCell.Extensions = []EmbeddedExtension{fixture.cell.Extensions[0]}
@@ -164,7 +164,7 @@ func TestEmbeddedPackedOwnerActivationByLanguage(t *testing.T) {
 			}
 			ownerHost.Shutdown("test done")
 
-			t.Setenv("PIG_TEST_FAIL_UNRELATED", "0")
+			t.Setenv("OMPIG_TEST_FAIL_UNRELATED", "0")
 			if err := os.Remove(fixture.sentinel); err != nil && !os.IsNotExist(err) {
 				t.Fatal(err)
 			}
@@ -253,10 +253,10 @@ func addGoUnrelatedSentinel(t *testing.T, path string) {
 	}
 	source := strings.Replace(string(data), "\"fmt\"", "\"fmt\"\n    \"os\"", 1)
 	source = strings.Replace(source, "func Extension() *sdk.Extension {", `func Extension() *sdk.Extension {
-	if path := os.Getenv("PIG_TEST_UNRELATED_SENTINEL"); path != "" {
+	if path := os.Getenv("OMPIG_TEST_UNRELATED_SENTINEL"); path != "" {
 		_ = os.WriteFile(path, []byte("called"), 0o644)
 	}
-	if os.Getenv("PIG_TEST_FAIL_UNRELATED") == "1" { panic("unrelated factory failure") }`, 1)
+	if os.Getenv("OMPIG_TEST_FAIL_UNRELATED") == "1" { panic("unrelated factory failure") }`, 1)
 	if err := os.WriteFile(path, []byte(source), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -269,8 +269,8 @@ func addRustUnrelatedSentinel(t *testing.T, path string) {
 		t.Fatal(err)
 	}
 	source := strings.Replace(string(data), "pub fn new_extension() -> Extension {", `pub fn new_extension() -> Extension {
-    if let Ok(path) = std::env::var("PIG_TEST_UNRELATED_SENTINEL") { let _ = std::fs::write(path, "called"); }
-    if std::env::var("PIG_TEST_FAIL_UNRELATED").as_deref() == Ok("1") { panic!("unrelated factory failure"); }`, 1)
+    if let Ok(path) = std::env::var("OMPIG_TEST_UNRELATED_SENTINEL") { let _ = std::fs::write(path, "called"); }
+    if std::env::var("OMPIG_TEST_FAIL_UNRELATED").as_deref() == Ok("1") { panic!("unrelated factory failure"); }`, 1)
 	if err := os.WriteFile(path, []byte(source), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -282,12 +282,12 @@ func addPythonUnrelatedSentinel(t *testing.T, path string) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	source := strings.Replace(string(data), "import pig_sdk", "import os\nimport pathlib\nimport pig_sdk", 1)
+	source := strings.Replace(string(data), "import ompig_sdk", "import os\nimport pathlib\nimport ompig_sdk", 1)
 	source = strings.Replace(source, "def new_extension():", `def new_extension():
-    sentinel = os.environ.get("PIG_TEST_UNRELATED_SENTINEL")
+    sentinel = os.environ.get("OMPIG_TEST_UNRELATED_SENTINEL")
     if sentinel:
         pathlib.Path(sentinel).write_text("called")
-    if os.environ.get("PIG_TEST_FAIL_UNRELATED") == "1":
+    if os.environ.get("OMPIG_TEST_FAIL_UNRELATED") == "1":
         raise RuntimeError("unrelated factory failure")`, 1)
 	if err := os.WriteFile(path, []byte(source), 0o644); err != nil {
 		t.Fatal(err)
@@ -334,8 +334,8 @@ func TestPackedMemberFactoryFailureEndsTheLoad(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			fixture := tc.build(t)
-			t.Setenv("PIG_TEST_UNRELATED_SENTINEL", fixture.sentinel)
-			t.Setenv("PIG_TEST_FAIL_UNRELATED", "1")
+			t.Setenv("OMPIG_TEST_UNRELATED_SENTINEL", fixture.sentinel)
+			t.Setenv("OMPIG_TEST_FAIL_UNRELATED", "1")
 			host := NewHost(t.TempDir())
 			t.Cleanup(func() { host.Shutdown("test done") })
 			done := make(chan []error, 1)

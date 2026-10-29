@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // childEventsProbe is the extension a child session's resource loader loads in the child_events scenario. It appends one JSON line to __LOG__ for each event it receives, with the context facts Pi's extension context gives a child: hasUI, scopedModels, model, isIdle and the answers of the dialogs of a context that has no UI. It also appends a custom entry from the handler of each event in `appended` with pi.appendEntry, which the session reports to its listeners as an entry_appended event, and one from turn_start with ctx.sessionManager.appendCustomEntry, which it does not.

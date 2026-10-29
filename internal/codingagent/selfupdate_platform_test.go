@@ -6,7 +6,7 @@ import (
 )
 
 // requireStandaloneSelfUpdateTier skips a test of the standalone tier on
-// Windows, where a standalone pig.exe resolves to the unsupported tier and is
+// Windows, where a standalone ompig.exe resolves to the unsupported tier and is
 // never replaced in place (D39).
 func requireStandaloneSelfUpdateTier(t *testing.T) {
 	t.Helper()

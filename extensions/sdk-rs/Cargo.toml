@@ -1,13 +1,13 @@
 [package]
-name = "pig-sdk"
+name = "ompig-sdk"
 version = "0.1.0"
 edition = "2024"
-description = "Rust SDK for building pig subprocess extensions"
+description = "Rust SDK for building ompig subprocess extensions"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/MichaelKinsy/PiG"
-homepage = "https://github.com/MichaelKinsy/PiG"
-keywords = ["pig", "extensions", "sdk", "subprocess"]
+repository = "https://github.com/tmih06/ompig"
+homepage = "https://github.com/tmih06/ompig"
+keywords = ["ompig", "extensions", "sdk", "subprocess"]
 categories = ["development-tools"]
 
 [dependencies]

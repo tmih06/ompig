@@ -30,7 +30,7 @@ func assertAnthropicCatalogDenominator(t *testing.T, cases anthropicAcceptanceCa
 	t.Helper()
 	var expected []string
 	for _, provider := range ListProviders() {
-		// OpenRouter's :nitro and :floor variants are PiG's addition (D199); the Pi fixture has none.
+		// OpenRouter's :nitro and :floor variants are Ompig's addition (D199); the Pi fixture has none.
 		for _, model := range piListedModels(ListModels(provider)) {
 			if model.API == APIAnthropicMessages {
 				expected = append(expected, provider+"/"+model.ID)

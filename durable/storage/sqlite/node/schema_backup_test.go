@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	chordnode "github.com/MichaelKinsy/PiG/chord/sqlite/node"
-	durablesqlite "github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	chordnode "github.com/tmih06/ompig/chord/sqlite/node"
+	durablesqlite "github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 // writeVersionOneStore writes the store a Pi release before schema version 2 leaves (pi-durable 1.3.0), with next_id 42

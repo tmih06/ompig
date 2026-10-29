@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { shims } from "./loader.mjs";
 import { cacheImportedModules } from "./compile-cache.mjs";
 import { compiledFactory, runtimeRequire, runtimeSource } from "./runtime-modules.mjs";
-import { getRuntimeCacheDir } from "./shims/pig-config.mjs";
+import { getRuntimeCacheDir } from "./shims/ompig-config.mjs";
 
 // Ports packages/coding-agent/src/core/extensions/loader.ts: loadExtensionModule.
 // The published Node distribution uses jiti's Babel transform, virtual modules,
@@ -28,7 +28,7 @@ function booleanEnv(name, fallback) {
   try { return name in process.env ? Boolean(JSON.parse(process.env[name])) : fallback; }
   catch { return fallback; }
 }
-// pig additive (D20): keep source-validated transforms in PiG's disposable cache, separate from immutable cell artifacts.
+// ompig additive (D20): keep source-validated transforms in Ompig's disposable cache, separate from immutable cell artifacts.
 function transformCacheDir() {
   if (!booleanEnv("JITI_FS_CACHE", booleanEnv("JITI_CACHE", true))) return false;
   const options = Object.entries(process.env).filter(([key]) => key.startsWith("JITI_")).sort(([a], [b]) => a.localeCompare(b));

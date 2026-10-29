@@ -8,7 +8,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // unsafeView is the string the bytes of buffer hold now, sharing them as a streamed text shares its accumulator's.

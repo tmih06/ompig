@@ -8,7 +8,7 @@ package telemetry_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // TestInMemoryRecorderIsItsOwnMetricsAndPropagationCapability checks memory.ts:285-286: the recorder's metrics and propagation

@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi: packages/coding-agent/src/core/agent-session-runtime.ts:196-207 switchSession. `emitBeforeSwitch("resume", sessionPath)` hands the handlers the reason "resume" and the

@@ -11,7 +11,7 @@ model = "openai/gpt-5.5"
 [tmux]
 width = 160
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Select provider to logout:"
@@ -24,9 +24,9 @@ keys = ["/logout", "Enter"]
 wait_contains = ["Select provider to logout:", "OpenAI [API key] ✓ configured", "Radius ["]
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/logout-radius-account", "PI_CODING_AGENT_DIR=", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
-pi = ["PI_CODING_AGENT_DIR=testdata/logout-radius-account", "PIG_CODING_AGENT_DIR=", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
-pig_args = ["--offline", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/logout-radius-account", "PI_CODING_AGENT_DIR=", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
+pi = ["PI_CODING_AGENT_DIR=testdata/logout-radius-account", "OMPIG_CODING_AGENT_DIR=", "HOME={{TEMP}}/home", "PATH={{FAKE_BIN}}:{{PATH}}"]
+ompig_args = ["--offline", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--offline", "--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // BenchmarkModelRegistryOverRuntime measures the registry facade of an extension's own ModelRuntime against the real host and SDK codec (in process, no socket): "read" is one facade read of a builtin provider's display name (one runtime call), "native" is one registerNativeProvider with the host's registration refresh, the two lookups of the object and the removal. The extension's loop runs b.N times inside one tool call, so the figures are per operation without the tool dispatch.

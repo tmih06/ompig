@@ -13,7 +13,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Node's normalizeSpawnArguments (lib/child_process.js) calls
@@ -31,11 +31,11 @@ func TestSetEnvPropagatesNodeV8CoverageAsNodeDoes(t *testing.T) {
 		env  []string
 	}{
 		{"the env is empty", true, []string{helper}},
-		{"the env holds other variables", true, []string{helper, "PIG_A=1"}},
+		{"the env holds other variables", true, []string{helper, "OMPIG_A=1"}},
 		{"the env sets its own value", true, []string{helper, "NODE_V8_COVERAGE=/own"}},
 		{"the env sets an empty value", true, []string{helper, "NODE_V8_COVERAGE="}},
 		{"the env names it in another case", true, []string{helper, "node_v8_coverage=/own"}},
-		{"PiG's value is empty", false, []string{helper, "PIG_A=1"}},
+		{"Ompig's value is empty", false, []string{helper, "OMPIG_A=1"}},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
@@ -218,14 +218,14 @@ func TestSetEnvPropertiesPassesAPropertyNameWithAnEqualsSign(t *testing.T) {
 		name string
 		env  []EnvProperty
 	}{
-		{"no other name shares its text", []EnvProperty{helper, {"PIG_A=B", "two"}}},
-		{"a name shares the text before its first equals sign", []EnvProperty{helper, {"PIG_A", "one"}, {"PIG_A=B", "two"}}},
-		{"the longer name comes first", []EnvProperty{helper, {"PIG_A=B", "two"}, {"PIG_A", "one"}}},
-		{"three names share the text", []EnvProperty{helper, {"PIG_A", "one"}, {"PIG_A=B", "two"}, {"PIG_A=B=C", "three"}, {"PIG_Z", "z"}}},
-		{"a value holds non-ASCII text", []EnvProperty{helper, {"PIG_A", "\u00e9"}, {"PIG_A=B", "x y"}}},
+		{"no other name shares its text", []EnvProperty{helper, {"OMPIG_A=B", "two"}}},
+		{"a name shares the text before its first equals sign", []EnvProperty{helper, {"OMPIG_A", "one"}, {"OMPIG_A=B", "two"}}},
+		{"the longer name comes first", []EnvProperty{helper, {"OMPIG_A=B", "two"}, {"OMPIG_A", "one"}}},
+		{"three names share the text", []EnvProperty{helper, {"OMPIG_A", "one"}, {"OMPIG_A=B", "two"}, {"OMPIG_A=B=C", "three"}, {"OMPIG_Z", "z"}}},
+		{"a value holds non-ASCII text", []EnvProperty{helper, {"OMPIG_A", "\u00e9"}, {"OMPIG_A=B", "x y"}}},
 		{"many names share the text", []EnvProperty{
-			helper, {"PIG_M", "m"}, {"PIG_A=5", "five"}, {"pig_a=2", "two"}, {"PIG_A", "zero"}, {"PIG_B", "b"},
-			{"PIG_A=3", "three"}, {"Pig_A=1", "one"}, {"PIG_C", "c"}, {"PIG_A=4", "four"}, {"PIG_D", "d"}, {"PIG_E", "e"},
+			helper, {"OMPIG_M", "m"}, {"OMPIG_A=5", "five"}, {"ompig_a=2", "two"}, {"OMPIG_A", "zero"}, {"OMPIG_B", "b"},
+			{"OMPIG_A=3", "three"}, {"Ompig_A=1", "one"}, {"OMPIG_C", "c"}, {"OMPIG_A=4", "four"}, {"OMPIG_D", "d"}, {"OMPIG_E", "e"},
 		}},
 	} {
 		t.Run(c.name, func(t *testing.T) {
@@ -235,27 +235,27 @@ func TestSetEnvPropertiesPassesAPropertyNameWithAnEqualsSign(t *testing.T) {
 }
 
 // Node keeps both of two names whose toUpperCase values differ, such as
-// "PIG_K" and "PIG_\u212a" (KELVIN SIGN, which has no uppercase mapping), and
+// "OMPIG_K" and "OMPIG_\u212a" (KELVIN SIGN, which has no uppercase mapping), and
 // libuv passes both. os/exec on Windows would keep only the last of them,
-// because strings.ToLower maps both to "pig_k".
+// because strings.ToLower maps both to "ompig_k".
 func TestSetEnvPropertiesPassesNamesThatOnlyLowercaseAlike(t *testing.T) {
 	helper := EnvProperty{testenv.EnvironHelper, "1"}
-	requireSameChildEnvironmentFor(t, []EnvProperty{helper, {"PIG_K", "letter"}, {"PIG_\u212a", "kelvin"}})
+	requireSameChildEnvironmentFor(t, []EnvProperty{helper, {"OMPIG_K", "letter"}, {"OMPIG_\u212a", "kelvin"}})
 }
 
-// libuv orders PIG_\u00e9 (U+00E9) before PIG_\u00ca (U+00CA), since
-// CompareStringOrdinal uppercases \u00e9 to U+00C9, and PIG_\U0001F600 before
-// PIG_\uff21 by UTF-16 code unit. os/exec's order compares UTF-8 bytes, with
+// libuv orders OMPIG_\u00e9 (U+00E9) before OMPIG_\u00ca (U+00CA), since
+// CompareStringOrdinal uppercases \u00e9 to U+00C9, and OMPIG_\U0001F600 before
+// OMPIG_\uff21 by UTF-16 code unit. os/exec's order compares UTF-8 bytes, with
 // only ASCII letters uppercased, and puts both pairs the other way round. The
-// entries whose names are ASCII, such as the ones that share the name PIG_A,
+// entries whose names are ASCII, such as the ones that share the name OMPIG_A,
 // must still reach the child in libuv's order, so that the child's getenv of
-// PIG_A reads the value Node's child reads.
+// OMPIG_A reads the value Node's child reads.
 func TestSetEnvPropertiesKeepsLibuvOrderBesideNamesOutsideASCII(t *testing.T) {
 	helper := EnvProperty{testenv.EnvironHelper, "1"}
 	shared := func(n int) []EnvProperty {
-		properties := []EnvProperty{{"PIG_A", "0"}}
+		properties := []EnvProperty{{"OMPIG_A", "0"}}
 		for i := 1; i <= n; i++ {
-			properties = append(properties, EnvProperty{"PIG_A=" + strconv.Itoa(i), strconv.Itoa(i)})
+			properties = append(properties, EnvProperty{"OMPIG_A=" + strconv.Itoa(i), strconv.Itoa(i)})
 		}
 		return properties
 	}
@@ -263,8 +263,8 @@ func TestSetEnvPropertiesKeepsLibuvOrderBesideNamesOutsideASCII(t *testing.T) {
 		name string
 		env  []EnvProperty
 	}{
-		{"a Latin-1 pair", append([]EnvProperty{helper, {"PIG_\u00e9", "e"}, {"PIG_\u00ca", "E"}}, shared(9)...)},
-		{"a surrogate pair and a fullwidth letter", append([]EnvProperty{helper, {"PIG_\U0001F600", "smile"}, {"PIG_\uff21", "fullwidth"}}, shared(9)...)},
+		{"a Latin-1 pair", append([]EnvProperty{helper, {"OMPIG_\u00e9", "e"}, {"OMPIG_\u00ca", "E"}}, shared(9)...)},
+		{"a surrogate pair and a fullwidth letter", append([]EnvProperty{helper, {"OMPIG_\U0001F600", "smile"}, {"OMPIG_\uff21", "fullwidth"}}, shared(9)...)},
 	} {
 		t.Run(c.name, func(t *testing.T) {
 			requireSameChildEnvironmentFor(t, c.env)
@@ -277,5 +277,5 @@ func TestSetEnvPropertiesKeepsLibuvOrderBesideNamesOutsideASCII(t *testing.T) {
 // object property assignment does.
 func TestSetEnvEntryEndsItsNameAtTheFirstEqualsSign(t *testing.T) {
 	helper := testenv.EnvironHelper + "=1"
-	requireSameChildEnvironment(t, []string{helper, "PIG_A=one", "PIG_A=B=two"})
+	requireSameChildEnvironment(t, []string{helper, "OMPIG_A=one", "OMPIG_A=B=two"})
 }

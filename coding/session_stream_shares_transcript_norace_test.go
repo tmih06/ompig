@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // streamTestDetails is a tool result's details as a built-in tool returns them: a struct, which normalization turns into decoded JSON that is not plain, so validating it again marshals it again.

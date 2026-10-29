@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
 )
 
 // newScreenEggMode is newLogoClickMode on a frontend surface of 100x30 whose
@@ -99,7 +99,7 @@ func newScreenSession(screen frontend.Screen) *fakeScreenSession {
 	return &fakeScreenSession{fakeFrontendSession: &fakeFrontendSession{}, screen: screen, ok: true}
 }
 
-// The header reports the pig head as its Click area. A click there plays the
+// The header reports the ompig head as its Click area. A click there plays the
 // logo animation as a fullscreen overlay of the session's screen, starting
 // from the logo's cell on the screen as the session shows it; a click on the
 // overlay plays the exit, and escape skips it and removes the overlay.
@@ -112,11 +112,11 @@ func TestFrontendLogoClickPlaysTheAnimationOnTheScreen(t *testing.T) {
 	}
 	surface.Click(frontend.Click{Node: id, Row: 0, Column: 0})
 	if m.logoAnimationPlaying {
-		t.Fatal("a click left of the pig played the animation")
+		t.Fatal("a click left of the ompig played the animation")
 	}
 	surface.Click(frontend.Click{Node: id, Row: 0, Column: 1})
 	if !m.logoAnimationPlaying {
-		t.Fatal("a click on the pig did not play the animation")
+		t.Fatal("a click on the ompig did not play the animation")
 	}
 	runOwnerTasks(t, m, func() bool { return m.logoAnimation != nil })
 	animation := m.logoAnimation
@@ -147,9 +147,9 @@ func TestFrontendLogoClickPlaysTheAnimationOnTheScreen(t *testing.T) {
 	}
 }
 
-// /arminsayshi and /pigsayhi play the 3D pig on a session's screen, and
-// show the inline pig head for a session without one, or under reduced
-// motion, where a click on the header's pig does nothing.
+// /arminsayshi and /pigsayhi play the 3D ompig on a session's screen, and
+// show the inline ompig head for a session without one, or under reduced
+// motion, where a click on the header's ompig does nothing.
 func TestFrontendSlashEggsPlayOnTheScreenOrInline(t *testing.T) {
 	t.Run("screen", func(t *testing.T) {
 		session := newScreenSession(frontend.Screen{})
@@ -163,7 +163,7 @@ func TestFrontendSlashEggsPlayOnTheScreenOrInline(t *testing.T) {
 			t.Fatalf("overlay = %#v", node)
 		}
 		if m.logoAnimation.model.origin {
-			t.Fatal("the 3D pig starts from the header")
+			t.Fatal("the 3D ompig starts from the header")
 		}
 	})
 	inline := func(t *testing.T, session frontend.Session, fake *fakeFrontendSession) {
@@ -175,7 +175,7 @@ func TestFrontendSlashEggsPlayOnTheScreenOrInline(t *testing.T) {
 		id, _ := headerClick(t, fake)
 		surface.Click(frontend.Click{Node: id, Row: 0, Column: 1})
 		if m.logoAnimationPlaying {
-			t.Fatal("a click on the pig played the animation")
+			t.Fatal("a click on the ompig played the animation")
 		}
 	}
 	t.Run("no screen", func(t *testing.T) {
@@ -247,7 +247,7 @@ func TestFrontendClickAfterCloseDoesNothing(t *testing.T) {
 	fe.env.Click(frontend.Click{Node: id, Row: 0, Column: 1})
 	runPostedTasks(t, m)
 	if !m.logoAnimationPlaying {
-		t.Fatal("a click on the pig did not play the animation")
+		t.Fatal("a click on the ompig did not play the animation")
 	}
 	m.disposeLogoAnimation()
 	m.stopInteractiveTui()

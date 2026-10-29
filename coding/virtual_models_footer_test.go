@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // The interactive footer reads the routed model through the session handle (footer.ts:241-244 reads session.routedModel); *Session must keep satisfying that contract.

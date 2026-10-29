@@ -9,7 +9,7 @@ import (
 	"image/png"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 // testPNG is a small deterministic picture: both products read the same bytes.

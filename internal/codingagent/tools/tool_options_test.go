@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // tools/index.ts:107-116 ToolsOptions and createAllTools: each tool receives its own options, in registry order, and CreateTool builds one named tool.

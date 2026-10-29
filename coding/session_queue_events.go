@@ -4,7 +4,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // A callback running on the event executor, or on a producer that executes it inline while the executor waits for execMu, cannot wait for the executor to consume its publications. Overflow retains a reentrant publication burst beyond the raw-event mailbox, and every event published after it, until the executor drains it once the events sent before it executed.
@@ -16,7 +16,7 @@ type queueEventPublication struct {
 	pending atomic.Bool
 }
 
-//pig:hotpath
+//ompig:hotpath
 func (s *Session) notifyOnEventExecutor(event agent.AgentEvent) {
 	s.queueEvents.mu.Lock()
 	s.queueEvents.notifying = true

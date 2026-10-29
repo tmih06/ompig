@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // anthropicSSEStreams returns seeded response bodies for Pi's iterateAnthropicEvents, split into chunks at arbitrary bytes.
@@ -55,7 +55,7 @@ func anthropicSSEStreams() [][][]byte {
 				size = 1 + random.Intn(4)
 			}
 			size = min(size, len(raw))
-			// pig divergence (D121): a CR at the end of a chunk waits for the next chunk, where Pi ends the line and reads the LF that follows as an empty line. The probe never splits a CRLF.
+			// ompig divergence (D121): a CR at the end of a chunk waits for the next chunk, where Pi ends the line and reads the LF that follows as an empty line. The probe never splits a CRLF.
 			if size < len(raw) && raw[size-1] == '\r' && raw[size] == '\n' {
 				size++
 			}
@@ -67,7 +67,7 @@ func anthropicSSEStreams() [][][]byte {
 	return streams
 }
 
-// TestAnthropicEventReaderMatchesPi runs Pi's iterateAnthropicEvents (the installed pi-ai dist) and Pig's event reader over the same chunked bodies and compares the parsed events and the way the stream ends.
+// TestAnthropicEventReaderMatchesPi runs Pi's iterateAnthropicEvents (the installed pi-ai dist) and Ompig's event reader over the same chunked bodies and compares the parsed events and the way the stream ends.
 func TestAnthropicEventReaderMatchesPi(t *testing.T) {
 	streams := anthropicSSEStreams()
 	cases := make([]sseOracleCase, len(streams))

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // valueUI is a bound UI whose dialogs resolve with the JSON a client sent (Pi's RPC mode), and records the placeholder and prefill it received.

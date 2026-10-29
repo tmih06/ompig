@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // samplingStep is one call on a grammar input buffer: kind "append" adds Text as a delta, "close" closes with Text as the complete input, and "closeNone" closes with none.
@@ -295,7 +295,7 @@ func TestConstrainedSamplingMatchesPi(t *testing.T) {
 				if want.Err != nil {
 					wantErr = *want.Err
 				}
-				t.Errorf("%s\n  tool %s\n  Pi ok=%s undef=%v err=%s steps=%d\n  Pig %s", label, probe.Tool, want.OK, want.Undef, wantErr, len(want.Steps), lastGot)
+				t.Errorf("%s\n  tool %s\n  Pi ok=%s undef=%v err=%s steps=%d\n  Ompig %s", label, probe.Tool, want.OK, want.Undef, wantErr, len(want.Steps), lastGot)
 			}
 		}
 	}

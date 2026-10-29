@@ -4,7 +4,7 @@
 # Upstream evidence (Pi 0.99.1, dist/cli.js, probed 2026-09-30; test-faux twin, prompt "Run: bash failing exit", command `echo out; exit 3`):
 #   {"type":"tool_execution_end","toolCallId":...,"toolName":"bash","result":{"content":[{"type":"text","text":"out\n\n\nCommand exited with code 3"}],"structuredContent":{"output":"out\n","truncated":false,"exit_code":3,"wall_time_seconds":0},"isError":true},"isError":true}
 # bash.ts:403-409 returns {content, details, structuredContent, isError: true}; agent-loop.ts:912-919 emits the finalized result as `result` and the call's flag as `isError`.
-# A thrown error would give createErrorToolResult (agent-loop.ts:906-910), which has no isError. Pig omitted result.isError for every failing bash call.
+# A thrown error would give createErrorToolResult (agent-loop.ts:906-910), which has no isError. Ompig omitted result.isError for every failing bash call.
 
 name = "05-json-failing-bash-result-iserror"
 description = "--mode json keeps bash's returned isError inside tool_execution_end.result, in Pi's key order"
@@ -23,8 +23,8 @@ args = ["--mode", "json", "--model", "test-faux/faux-1", "--system-prompt", "JSO
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 

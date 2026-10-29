@@ -28,7 +28,7 @@ func TestSlashCommandCatalogListsPromptAndSkillSources(t *testing.T) {
 // resource-loader.ts findSourceInfoForPath: a prompt template the loader read carries a synthetic temporary sourceInfo, and get_commands reports the metadata the resolver recorded for its path (project settings entry: local, project, top-level, no baseDir).
 func TestSlashCommandCatalogPromptUsesRecordedSourceInfoOverItsOwn(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	path := filepath.Join(cwd, ".pig", "extra", "a.md")
+	path := filepath.Join(cwd, ".ompig", "extra", "a.md")
 	synthetic := CreateSyntheticSourceInfo(path, SyntheticSourceInfoOptions{Source: "local", BaseDir: filepath.Dir(path)})
 	catalog := SlashCommandCatalog{
 		CWD: cwd, AgentDir: agentDir,

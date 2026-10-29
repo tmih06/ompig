@@ -1,6 +1,6 @@
-# Go practices for PiG performance work
+# Go practices for Ompig performance work
 
-This document states how PiG uses Go and TinyGo for performance work. It covers the toolchain, language and library practice in each area, the cost differences between TinyGo and standard Go in Durable, the gates that hold performance, and the order in which to take performance work. Pi's observable behavior is the limit: a performance change that alters any output Pi produces is a parity defect, not an optimization.
+This document states how Ompig uses Go and TinyGo for performance work. It covers the toolchain, language and library practice in each area, the cost differences between TinyGo and standard Go in Durable, the gates that hold performance, and the order in which to take performance work. Pi's observable behavior is the limit: a performance change that alters any output Pi produces is a parity defect, not an optimization.
 
 Read [TypeScript-to-Go porting](../typescript-to-go-porting.md) first for the semantic rules and for the performance-proof requirement. This document does not repeat them.
 
@@ -15,18 +15,18 @@ Read [TypeScript-to-Go porting](../typescript-to-go-porting.md) first for the se
 | `go.mod` and `go.work` `toolchain` line | Equal to `.go-version`. A Go older than the pin with `GOTOOLCHAIN=auto` requests the pinned toolchain; where Go does not publish one (Termux), build with `GOTOOLCHAIN=local`. |
 | `automation/dev/toolchains.lock` | The archive and digest that `automation/dev/setup.sh` uses when go.dev is unreachable. |
 | `automation/images/*` | CI images, pinned by digest. |
-| `coding/pigletbuild/container_default.go` | The container image that builds Piglet Binaries, the CI Go image base. |
+| `coding/pigletbuild/container_default.go` | The container image that builds Ompiglet Binaries, the CI Go image base. |
 
 Rules:
 
 - Build and test with the `.go-version` release. A local toolchain older than `.go-version` can disagree with CI, because the standard library's JSON engine and its security fixes change in patch releases.
 - Scripts that pin a toolchain with `GOTOOLCHAIN` read `.go-version`, as the Durable scripts (`durable/core/budget/build-wasm.sh`, `durable/core/contracttest/gate.sh`, `durable/core/host/cf/check.sh`, `durable/core/probe/build.sh`) do. `make compliance` rejects any other Go release in a build, CI, image or setup file. A count baseline that depends on the toolchain (for example exact Wasm instruction counts) is regenerated in the same change as the version bump.
-- Nested modules (`extensions/sdk`, `piglets/standard`, the Porter extension, test fixtures) declare the same Go 1.26 floor. `third_party/` holds vendored upstream source as packages of the root module; lint, `go fix` and the JSON ratchet skip it.
+- Nested modules (`extensions/sdk`, `ompiglets/standard`, the Porter extension, test fixtures) declare the same Go 1.26 floor. `third_party/` holds vendored upstream source as packages of the root module; lint, `go fix` and the JSON ratchet skip it.
 
 ### Experiments and build flags
 
-- PiG sets no `GOEXPERIMENT`. The toolchain's default experiments apply: the Green Tea collector, size-specialized allocation and the JSON v2 engine behind the `encoding/json` API.
-- Release binaries build with `CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X …"` from an archive source without VCS metadata. The Android binary uses cgo with the NDK, because Termux requires it. Piglet Binaries build with `-buildvcs=false -trimpath`.
+- Ompig sets no `GOEXPERIMENT`. The toolchain's default experiments apply: the Green Tea collector, size-specialized allocation and the JSON v2 engine behind the `encoding/json` API.
+- Release binaries build with `CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X …"` from an archive source without VCS metadata. The Android binary uses cgo with the NDK, because Termux requires it. Ompiglet Binaries build with `-buildvcs=false -trimpath`.
 - No build uses PGO. `make pgo` writes a merged CPU profile to `tmp/pgo/default.pgo`. Adopt PGO only with a controlled measurement on dedicated hardware.
 - Architecture levels stay at the defaults (`GOAMD64=v1`, the base arm64 level). Do not raise `GOAMD64`: `v3` allows the compiler to fuse multiply-add on amd64.
 
@@ -37,7 +37,7 @@ The Go specification allows a compiler to compute `x*y + z` with one rounding. T
 - Write an explicit conversion around the product when the result is observable: `total += float64(float64(n) * 0.1)`. The specification forbids fusion across an explicit conversion.
 - Products of integers that are exact in float64 cannot change and need no conversion.
 - `make test-fma-arm64` runs the `Fuzzy` oracle tests of the packages in `FMA_ARM64_PACKAGES` (default `./tui`) as a linux/arm64 binary under qemu. Other fusable Pi-derived sites have no oracle run on arm64.
-- To list fused operations without qemu, cross-compile with the compiler's hash debugging: `GOOS=linux GOARCH=arm64 go build -gcflags='github.com/MichaelKinsy/PiG/...=-d=fmahash=y' -o /dev/null ./cmd/pig`. Each `fmahash triggered` line is one fused operation. The count is deterministic and suits a shrink-only gate. Do not ship `-d=fmahash=n`; it is a compiler debugging flag.
+- To list fused operations without qemu, cross-compile with the compiler's hash debugging: `GOOS=linux GOARCH=arm64 go build -gcflags='github.com/tmih06/ompig/...=-d=fmahash=y' -o /dev/null ./cmd/ompig`. Each `fmahash triggered` line is one fused operation. The count is deterministic and suits a shrink-only gate. Do not ship `-d=fmahash=n`; it is a compiler debugging flag.
 
 ## 2. Language and library practice by area
 
@@ -84,14 +84,14 @@ The Go specification allows a compiler to compute `x*y + z` with one rounding. T
 ### Errors and diagnostics
 
 - Use `errors.Is`, `errors.AsType` and `errors.Join`; do not compare errors with `==` or classify them by message text.
-- `PIG_PROFILE` (`internal/profiling`) writes CPU, heap, allocation, block, mutex and goroutine profiles and an execution trace. `internal/codingagent/exit_record.go` sets `debug.SetCrashOutput`. A `runtime/trace.FlightRecorder` dump next to the crash record would add the last seconds before a crash; it must stay opt-in.
-- PiG prints what Pi prints. It does not add structured logging to user output.
+- `OMPIG_PROFILE` (`internal/profiling`) writes CPU, heap, allocation, block, mutex and goroutine profiles and an execution trace. `internal/codingagent/exit_record.go` sets `debug.SetCrashOutput`. A `runtime/trace.FlightRecorder` dump next to the crash record would add the last seconds before a crash; it must stay opt-in.
+- Ompig prints what Pi prints. It does not add structured logging to user output.
 
 ### Processes and HTTP
 
 - Start a child that can have children in its own process group on Unix, and kill the group: the bash tool, extension subprocesses, MCP stdio servers and Durable environment processes do this. On Windows, kill the tree as Pi does (`taskkill /T /F`, `packages/coding-agent/src/utils/shell.ts` `killProcessTree`). The bash tool and extension subprocesses also hold their children in a job object; MCP stdio servers and Durable environment processes use `taskkill` only.
 - `exec.Command` without a context is acceptable only where the caller owns cancellation, as `coding/extension/exec.go` does to match Node's spawn.
-- Provider clients share one transport recipe (`ai/http_transport.go`): HTTP/1.1, Undici's connect budget and idle deadlines. Each provider value owns its transport and connection pool. Pi installs one global Undici dispatcher (`packages/coding-agent/src/core/http-dispatcher.ts` `configureHttpDispatcher`), so PiG does not reuse connections across a provider change, and the idle connections of a replaced provider close only at the idle timeout.
+- Provider clients share one transport recipe (`ai/http_transport.go`): HTTP/1.1, Undici's connect budget and idle deadlines. Each provider value owns its transport and connection pool. Pi installs one global Undici dispatcher (`packages/coding-agent/src/core/http-dispatcher.ts` `configureHttpDispatcher`), so Ompig does not reuse connections across a provider change, and the idle connections of a replaced provider close only at the idle timeout.
 
 ## 3. TinyGo and standard Go in Durable
 

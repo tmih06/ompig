@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // appendEntry data and sendMessage details are `unknown` values the extension wrote (types.ts:1159-1163, 1450). The session stores them and later shows them to other extensions, the wire and the file as JSON.stringify writes them: in the order written.

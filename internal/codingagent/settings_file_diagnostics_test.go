@@ -64,7 +64,7 @@ for (const [name, agentDir] of Object.entries(files)) {
 			sm := NewSettingsManager(agentDir+"-project", agentDir)
 			var got []string
 			for _, diagnostic := range CollectSettingsDiagnostics(sm) {
-				// pig divergence (D158): PiG reports a setting ignored for its wrong type where Pi 1.1.0 throws or says nothing.
+				// ompig divergence (D158): Ompig reports a setting ignored for its wrong type where Pi 1.1.0 throws or says nothing.
 				if strings.Contains(diagnostic.Message, "ignored settings of the wrong type") {
 					continue
 				}

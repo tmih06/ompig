@@ -1,6 +1,6 @@
 """Pi 24382bed types.ts reachesTools: the host asks the extension that defines the hook with tool_reaches_tools; the answer is "all" or the words."""
 
-import pig_sdk
+import ompig_sdk
 from test_request_lifetime import connected_extension
 from test_tool_dispatch import request
 
@@ -20,12 +20,12 @@ def test_reaches_tools_runs_the_hook_for_the_host():
             return 7
         return ("docs", "search")
 
-    ext = pig_sdk.Extension("py-reach")
-    ext.register_tool(pig_sdk.ToolDefinition(
+    ext = ompig_sdk.Extension("py-reach")
+    ext.register_tool(ompig_sdk.ToolDefinition(
         name="finder", label="Finder", description="Finds", parameters={"type": "object"}, execute=lambda ctx, args: "ok",
         namespace={"name": "mcp__docs", "aliases": ["docs"]}, reaches_tools=reaches,
     ))
-    ext.register_tool(pig_sdk.ToolDefinition(name="plain", label="Plain", description="Plain", parameters={"type": "object"}, execute=lambda ctx, args: "ok"))
+    ext.register_tool(ompig_sdk.ToolDefinition(name="plain", label="Plain", description="Plain", parameters={"type": "object"}, execute=lambda ctx, args: "ok"))
     declarations = {tool["name"]: tool for tool in ext._tools}
     assert declarations["finder"]["reaches_tools"] is True
     assert declarations["finder"]["namespace"] == {"name": "mcp__docs", "aliases": ["docs"]}
@@ -60,12 +60,12 @@ def test_get_all_tools_reaches_tools_runs_the_hook_through_the_host():
         if method == "getAllTools":
             return {"result": {"tools": [dict(tool) for tool in tools]}}
         if args["input"].get("fail"):
-            raise pig_sdk.HostCallError("reach exploded", "")
+            raise ompig_sdk.HostCallError("reach exploded", "")
         return {"result": "all" if args["input"].get("all") else ["docs", "search"]}
 
-    ext = pig_sdk.Extension("py-info-reach")
+    ext = ompig_sdk.Extension("py-info-reach")
     ext._call = call  # type: ignore[method-assign]
-    finder, plain = pig_sdk.Context(extension=ext).get_all_tools()
+    finder, plain = ompig_sdk.Context(extension=ext).get_all_tools()
     assert list(finder) == ["name", "description", "parameters", "exposure", "reachesTools", "sourceInfo"]
     assert callable(finder["reachesTools"])
     assert "reachesTools" not in plain
@@ -74,7 +74,7 @@ def test_get_all_tools_reaches_tools_runs_the_hook_through_the_host():
     assert calls[1:] == [("tool.reachesTools", {"tool": "finder", "input": {"q": 1}}), ("tool.reachesTools", {"tool": "finder", "input": {"all": True}})]
     try:
         finder["reachesTools"]({"fail": True})
-    except pig_sdk.HostCallError as error:
+    except ompig_sdk.HostCallError as error:
         assert "reach exploded" in str(error)
     else:
         raise AssertionError("a failed tool.reachesTools call returned")

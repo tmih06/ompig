@@ -44,7 +44,7 @@ func startBusExtension(t *testing.T, ext *Extension) (*mockHost, chan error) {
 	t.Helper()
 	host := newMockHost(t)
 	t.Cleanup(host.close)
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)

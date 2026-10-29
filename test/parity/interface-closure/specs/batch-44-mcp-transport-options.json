@@ -22,7 +22,7 @@
    "test:mcp/stdio_options_test.go#TestStdioTransportInheritsStderrWithoutCapturingIt"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; AbortSignal is the context.Context argument; no detached goroutine.",
-  "rationale": "StdioTransportOptions: every upstream option has a Go field; each option is set by a test that observes its effect (cwd, maxStderrBytes, maxMessageBytes, stderr inherit and headers by PiG's own tests, red under mutation; the rest by the ported upstream tests)."
+  "rationale": "StdioTransportOptions: every upstream option has a Go field; each option is set by a test that observes its effect (cwd, maxStderrBytes, maxMessageBytes, stderr inherit and headers by Ompig's own tests, red under mutation; the rest by the ported upstream tests)."
  },
  {
   "ids": [
@@ -47,6 +47,6 @@
    "test:mcp/streamable_http_test.go#TestStreamableHTTPTransportHandsUnauthorizedAndInsufficientScopeResponsesToTheAuthProviderWithTheRejectedToken"
   ],
   "async": "An awaited Promise is a blocking Go call that returns the value or error; AbortSignal is the context.Context argument; no detached goroutine.",
-  "rationale": "StreamableHTTPTransportOptions: every upstream option has a Go field; each option is set by a test that observes its effect (cwd, maxStderrBytes, maxMessageBytes, stderr inherit and headers by PiG's own tests, red under mutation; the rest by the ported upstream tests)."
+  "rationale": "StreamableHTTPTransportOptions: every upstream option has a Go field; each option is set by a test that observes its effect (cwd, maxStderrBytes, maxMessageBytes, stderr inherit and headers by Ompig's own tests, red under mutation; the rest by the ported upstream tests)."
  }
 ]

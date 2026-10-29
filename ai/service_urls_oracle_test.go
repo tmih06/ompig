@@ -46,7 +46,7 @@ func serviceURLProbes() []serviceURLProbe {
 }
 
 // The URL expressions of Pi's four providers run in Node on the same base URLs: new URL(path, `${base}/`) for System One and decisions, and new URL(`${base}/messages`) with
-// searchParams.set("debug", "1") for pi-messages. Pig's resolveServiceURL and piMessagesEndpoint must give Pi's string and fail exactly when the constructor throws.
+// searchParams.set("debug", "1") for pi-messages. Ompig's resolveServiceURL and piMessagesEndpoint must give Pi's string and fail exactly when the constructor throws.
 func TestProviderServiceURLsMatchPiOnSeededProbes(t *testing.T) {
 	probes := serviceURLProbes()
 	payload, err := json.Marshal(probes)
@@ -96,7 +96,7 @@ func TestProviderServiceURLsMatchPiOnSeededProbes(t *testing.T) {
 				if err != nil {
 					have = "<error>"
 				}
-				t.Errorf("%+v\n  Pig %q\n  Pi  %q", probe, have, want)
+				t.Errorf("%+v\n  Ompig %q\n  Pi  %q", probe, have, want)
 			}
 		}
 	}

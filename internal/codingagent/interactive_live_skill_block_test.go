@@ -5,14 +5,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // A /skill: command submits a <skill> block. Pi's message_start(user) handler goes through addMessageToChat, which parses the block
 // and shows a collapsible "[skill] name" component followed by the trailing user message (interactive-mode.ts:3501-3505, 3933-3952);
-// PiG built the collapsible component only when rebuilding the transcript and printed the raw XML while the turn ran. Found by the
+// Ompig built the collapsible component only when rebuilding the transcript and printed the raw XML while the turn ran. Found by the
 // skills journey (frame diff).
 func TestLiveUserSkillBlockRendersAsSkillInvocation(t *testing.T) {
 	m, _ := newTickRenderProbe(t, "regular")

@@ -13,11 +13,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/pigsdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension/pigsdk"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // fileTreeOf lists every path under root, relative to it, in lexical order.
@@ -38,7 +38,7 @@ func fileTreeOf(t *testing.T, root string) []string {
 	return paths
 }
 
-// lazyBundleHome is a PIG_HOME whose agent directory configures only the test-faux model.
+// lazyBundleHome is a OMPIG_HOME whose agent directory configures only the test-faux model.
 func lazyBundleHome(t *testing.T) string {
 	t.Helper()
 	home := t.TempDir()
@@ -53,16 +53,16 @@ func lazyBundleHome(t *testing.T) string {
 	return home
 }
 
-// runLazyBundlePig runs the pig binary with the test-faux model in cwd under home and returns its stdout.
+// runLazyBundlePig runs the ompig binary with the test-faux model in cwd under home and returns its stdout.
 func runLazyBundlePig(t *testing.T, home, cwd string, args ...string) string {
 	t.Helper()
 	command := exec.CommandContext(testbudget.Context(t), buildPigBinaryForSignalTest(t), append([]string{"--model", "test-faux/faux-1", "--no-session"}, args...)...)
 	command.Dir = cwd
-	command.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR=", "HOME="+home, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+	command.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "agent"), "PI_CODING_AGENT_DIR=", "HOME="+home, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 	var stdout, stderr strings.Builder
 	command.Stdout, command.Stderr = &stdout, &stderr
 	if err := command.Run(); err != nil {
-		t.Fatalf("pig %q: %v\nstderr:\n%s", args, err, stderr.String())
+		t.Fatalf("ompig %q: %v\nstderr:\n%s", args, err, stderr.String())
 	}
 	return stdout.String()
 }
@@ -134,9 +134,9 @@ func tryLazyBundleBuild(t *testing.T, args []string, startup bool, stage func() 
 			t.Fatal(err)
 		}
 	}
-	t.Setenv("PIG_HOME", agentDir)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_HOME", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_TEST_FAUX", "1")
 	flags := parseArgs(append([]string{"--model", "test-faux/faux-1", "--print"}, args...))
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
 	stages := 0
@@ -193,7 +193,7 @@ func TestBuildStagesSDKsOnlyBeforeItStartsAnExtension(t *testing.T) {
 func TestReplacementBuildReportsSDKStageFailureAsADiagnostic(t *testing.T) {
 	failure := errors.New("disk full")
 	build, _ := tryLazyBundleBuild(t, []string{"-e", lazyBundleExtension(t)}, false, func() error { return failure })
-	want := "extension SDK staging failed: disk full; extensions that need the SDK may fail to build; run 'pig diagnose' for detail"
+	want := "extension SDK staging failed: disk full; extensions that need the SDK may fail to build; run 'ompig diagnose' for detail"
 	if !slices.ContainsFunc(build.ExtensionDiagnostics, func(d codingagent.AgentSessionRuntimeDiagnostic) bool {
 		return d.Type == "warning" && d.Message == want
 	}) {
@@ -203,15 +203,15 @@ func TestReplacementBuildReportsSDKStageFailureAsADiagnostic(t *testing.T) {
 		tryLazyBundleBuild(t, []string{"-e", lazyBundleExtension(t)}, true, func() error { return failure })
 		return 0
 	})
-	if !strings.Contains(stderr, "pig: warning: extension SDK staging failed: disk full\n") {
+	if !strings.Contains(stderr, "ompig: warning: extension SDK staging failed: disk full\n") {
 		t.Fatalf("the startup build did not print the stage failure; stderr:\n%s", stderr)
 	}
 }
 
-// `pig diagnose` names when unstaged SDKs are staged.
+// `ompig diagnose` names when unstaged SDKs are staged.
 func TestDiagnoseSaysWhenSDKsStage(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	stages, err := pigsdk.Status(home)
 	if err != nil || len(stages) == 0 || stages[0].Current {
 		t.Fatalf("a fresh config root reports %+v (err %v)", stages, err)
@@ -246,7 +246,7 @@ func TestBuildWritesTheDocsBundleBeforeItStartsAnExtension(t *testing.T) {
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			home := t.TempDir()
-			t.Setenv("PIG_HOME", home)
+			t.Setenv("OMPIG_HOME", home)
 			t.Cleanup(func() { configroot.SetDocsWriter(nil); configroot.SetDocsPresent(true) })
 			t.Cleanup(releaseDocsLeases)
 			prepareDocsBundle()
@@ -254,7 +254,7 @@ func TestBuildWritesTheDocsBundleBeforeItStartsAnExtension(t *testing.T) {
 				t.Fatal("a writable config root names no docs bundle")
 			}
 			tryLazyBundleBuild(t, test.args, true, func() error { return nil })
-			// The deferred write resolves the config root when it runs, under the build's PIG_HOME.
+			// The deferred write resolves the config root when it runs, under the build's OMPIG_HOME.
 			_, err := os.Stat(filepath.Join(pigdocs.DocsDir(codingagent.ConfigRoot()), "README.md"))
 			if wrote := err == nil; wrote != test.wrote {
 				t.Fatalf("docs bundle written = %v, want %v (err %v)", wrote, test.wrote, err)

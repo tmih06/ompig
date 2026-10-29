@@ -1,6 +1,6 @@
 # RPC extension UI
 
-Extensions request user interaction through `ctx.ui`. In RPC mode, PiG turns the supported calls into a request and response subprotocol beside the normal [RPC commands](/docs/latest/rpc-commands) and [session events](/docs/latest/json). The subprotocol is the one of Pi 1.4.0 ([Pi's RPC extension UI reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/rpc-extension-ui.md)).
+Extensions request user interaction through `ctx.ui`. In RPC mode, Ompig turns the supported calls into a request and response subprotocol beside the normal [RPC commands](/docs/latest/rpc-commands) and [session events](/docs/latest/json). The subprotocol is the one of Pi 1.4.0 ([Pi's RPC extension UI reference](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/rpc-extension-ui.md)).
 
 There are two kinds of methods:
 
@@ -24,9 +24,9 @@ Some `ctx.ui` methods need the terminal UI, so RPC mode leaves them out or reduc
 
 `ctx.mode` is `"rpc"` and `ctx.hasUI` is `true` in RPC mode, because the dialog and fire-and-forget methods work through this subprotocol. Check `ctx.mode === "tui"` before you use a terminal-only method such as `custom()`.
 
-A PiG command that opens a custom picker in the terminal, such as `/sprite`, shows a plain `select` list in RPC mode.
+A Ompig command that opens a custom picker in the terminal, such as `/sprite`, shows a plain `select` list in RPC mode.
 
-## Requests from PiG
+## Requests from Ompig
 
 Every request has `"type": "extension_ui_request"`, a unique `id` and a `method`.
 
@@ -89,7 +89,7 @@ A request without `widgetLines` clears the widget. `widgetPlacement` is `aboveEd
 ### setTitle
 
 ```json
-{"type":"extension_ui_request","id":"uuid-8","method":"setTitle","title":"pig - my project"}
+{"type":"extension_ui_request","id":"uuid-8","method":"setTitle","title":"ompig - my project"}
 ```
 
 ### set_editor_text
@@ -98,7 +98,7 @@ A request without `widgetLines` clears the widget. `widgetPlacement` is `aboveEd
 {"type":"extension_ui_request","id":"uuid-9","method":"set_editor_text","text":"prefilled text for the user"}
 ```
 
-## Responses to PiG
+## Responses to Ompig
 
 Send a response for dialog methods only. The `id` must match the request.
 
@@ -120,7 +120,7 @@ Cancellation response (any dialog). The extension receives no value, or `false` 
 {"type":"extension_ui_response","id":"uuid-3","cancelled":true}
 ```
 
-When standard input closes, PiG cancels every open dialog before it exits.
+When standard input closes, Ompig cancels every open dialog before it exits.
 
 ## Source references
 

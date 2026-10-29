@@ -5,14 +5,14 @@ package codingagent
 // Go has no such handler. A panic in a goroutine that does not recover ends the process with the Go runtime's stderr dump
 // and no crash record.
 //
-// pig additive (D102).
+// ompig additive (D102).
 
 import (
 	"runtime/debug"
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/chord"
+	"github.com/tmih06/ompig/chord"
 )
 
 var uncaughtGoroutineHandler atomic.Pointer[func(value any, stack []byte)]

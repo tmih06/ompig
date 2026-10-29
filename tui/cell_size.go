@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // cellSizeQuery asks the terminal for its cell size in pixels (CSI 16 t). The
@@ -79,7 +79,7 @@ func (c *Container) childSnapshot() []Component {
 func (d *altScreenDocument) childSnapshot() []Component { return d.base.childSnapshot() }
 
 // invalidateComponentTree invalidates root and its descendants. Upstream
-// Container.invalidate recurses into every child; pig's Container.Invalidate
+// Container.invalidate recurses into every child; ompig's Container.Invalidate
 // marks only the container, because each child keeps its own dirty flag for
 // the per-child render cache, so a whole-tree invalidation walks the children.
 func invalidateComponentTree(root Component) {

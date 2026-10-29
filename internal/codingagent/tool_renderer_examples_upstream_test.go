@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // examplesDir is the vendored copy of .upstream/v0.99.2/packages/coding-agent/examples/extensions
@@ -31,7 +31,7 @@ func rendererExampleState(t *testing.T, tempDir, extensionPath string, tools []s
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", tempDir)
+	t.Setenv("OMPIG_HOME", tempDir)
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: tempDir, AgentDir: agentDir})
 	if err != nil {
 		t.Fatal(err)

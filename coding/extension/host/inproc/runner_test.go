@@ -7,8 +7,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 const upstreamDefaultStaleMessage = "This extension ctx is stale after session replacement or reload. Do not use a captured pi or command ctx after ctx.newSession(), ctx.fork(), ctx.switchSession(), or ctx.reload(). For newSession, fork, and switchSession, move post-replacement work into withSession and use the ctx passed to withSession. For reload, do not use the old ctx after await ctx.reload()."
@@ -82,8 +82,8 @@ func TestNewRunner_PreservesExtensionPaths(t *testing.T) {
 
 func TestNewRunner_ExtensionNamesUsesManifestNames(t *testing.T) {
 	exts := []extension.Extension{
-		{Name: "subagent", Path: "/tmp/pig-build/subagent-abc123", ResolvedPath: "/tmp/pig-build/subagent-abc123"},
-		{Name: "context-info", Path: "/tmp/pig-build/context-info-def456", ResolvedPath: "/tmp/pig-build/context-info-def456"},
+		{Name: "subagent", Path: "/tmp/ompig-build/subagent-abc123", ResolvedPath: "/tmp/ompig-build/subagent-abc123"},
+		{Name: "context-info", Path: "/tmp/ompig-build/context-info-def456", ResolvedPath: "/tmp/ompig-build/context-info-def456"},
 	}
 	r := inproc.NewRunner(exts, ".")
 

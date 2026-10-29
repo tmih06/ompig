@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/bug-report.ts redactUrl, redactJsonValue
@@ -114,7 +114,7 @@ func TestBugReportRedactionMatchesPi(t *testing.T) {
 		}
 		if got != want.URLs[i] {
 			if failures++; failures <= 8 {
-				t.Errorf("url %q:\n PiG %q\n Pi  %q", u, got, want.URLs[i])
+				t.Errorf("url %q:\n Ompig %q\n Pi  %q", u, got, want.URLs[i])
 			}
 		}
 	}
@@ -133,7 +133,7 @@ func TestBugReportRedactionMatchesPi(t *testing.T) {
 		// Both sides decode with UseNumber, so a number's spelling (1e+21 against 1e21, 0 against -0) is compared, not only its value.
 		if !reflect.DeepEqual(decodeNumbers(t, gotJSON), decodeNumbers(t, want.Values[i])) {
 			if failures++; failures <= 8 {
-				t.Errorf("value %s:\n PiG %s\n Pi  %s", text, gotJSON, want.Values[i])
+				t.Errorf("value %s:\n Ompig %s\n Pi  %s", text, gotJSON, want.Values[i])
 			}
 		}
 	}

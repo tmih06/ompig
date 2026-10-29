@@ -14,7 +14,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The durable-bench workload (durable/contract/lib/workload.mjs, CONTRACT section 6, W1-W4): one conversation, a scripted

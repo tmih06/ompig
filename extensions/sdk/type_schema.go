@@ -12,7 +12,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // TSchema is a TypeBox schema value, what pi-ai's `Type.X(...)` returns. Its enumerable members are a JSON Schema object (what JSON.stringify and the host see, keys in the order
@@ -119,7 +119,7 @@ type typeNamespace struct {
 
 // Type is pi-ai's `Type` (TypeBox's builder namespace). The JSON Schema it returns is byte for byte what Pi's `Type` returns, member order included, which the Pi vectors in
 // test/parity/sdk-vectors/pi-ai/Type.json check. Members that a later release has not ported are absent; the Codec family (Codec, Decode, Encode, DecodeBuilder, EncodeBuilder,
-// IsCodec) is a numbered divergence: pig divergence (D198).
+// IsCodec) is a numbered divergence: ompig divergence (D198).
 var Type typeNamespace
 
 // jsIndexKey reports whether key is a canonical array index, which a JavaScript object orders before every other key, ascending.

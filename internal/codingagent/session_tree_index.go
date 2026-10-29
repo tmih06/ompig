@@ -8,9 +8,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // treeFacts are what the /tree selector reads of an assistant message for every row before it formats any: whether the row hides when it is
@@ -174,7 +174,7 @@ func parallelOver(items []int, work func(part []int)) {
 		work(items)
 		return
 	}
-	// pig additive (D174): the parts run at the runtime default width.
+	// ompig additive (D174): the parts run at the runtime default width.
 	defer procpolicy.Widen()()
 	workers := min(runtime.GOMAXPROCS(0), len(items)/parallelReadMinLines)
 	if workers <= 1 {

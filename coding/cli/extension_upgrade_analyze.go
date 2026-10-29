@@ -1,4 +1,4 @@
-//go:build !pig_strip_extension_sdk_go
+//go:build !ompig_strip_extension_sdk_go
 
 package cli
 
@@ -14,10 +14,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // goCompile is how the build of one extension runs the go command: where, with which flags and environment, and which package it compiles.
@@ -64,7 +64,7 @@ func (u *extensionUpgrader) analyzeExtension(ctx context.Context, config subproc
 func (u *extensionUpgrader) checkRewrite(ctx context.Context, config subprocess.ExtConfig, result *upgrade.Result) (rewriteCheck, error) {
 	var check rewriteCheck
 	err := u.withGoCompile(ctx, config, func(compile goCompile) error {
-		scratch, err := os.MkdirTemp("", "pig-upgrade-check-*")
+		scratch, err := os.MkdirTemp("", "ompig-upgrade-check-*")
 		if err != nil {
 			return err
 		}

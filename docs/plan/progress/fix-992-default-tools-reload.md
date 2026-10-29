@@ -4,7 +4,7 @@ Lane for audit-992-coding F6 (defaultTools cannot activate extension tools at st
 
 ## F4: already closed at the porter tip
 
-fix-99-j13 (merged 94f45865e, `cmd/pig/headless_reload.go`) binds `ctx.reload()` in every mode (print-mode.ts:97-99, rpc-mode.ts:341-343) and activates the tools a reload newly adds to `defaultTools` (agent-session.ts:3587-3609). The audit's red `TestAuditPrintModeExtensionCommandReloadReloadsLikePi` passes on the tip, so it was not cherry-picked. What remained was the extension-tool case: `cmd/pig/default_tools_extension_test.go::TestReloadActivatesExtensionToolsAddedToDefaultTools` (print, JSON, RPC; a reload that adds `+codemode` activates `codemode`, observed from the new instance's `session_start`) passes on the tip as well and stays as a guard. Nothing to implement for F4.
+fix-99-j13 (merged 94f45865e, `cmd/ompig/headless_reload.go`) binds `ctx.reload()` in every mode (print-mode.ts:97-99, rpc-mode.ts:341-343) and activates the tools a reload newly adds to `defaultTools` (agent-session.ts:3587-3609). The audit's red `TestAuditPrintModeExtensionCommandReloadReloadsLikePi` passes on the tip, so it was not cherry-picked. What remained was the extension-tool case: `cmd/ompig/default_tools_extension_test.go::TestReloadActivatesExtensionToolsAddedToDefaultTools` (print, JSON, RPC; a reload that adds `+codemode` activates `codemode`, observed from the new instance's `session_start`) passes on the tip as well and stays as a guard. Nothing to implement for F4.
 
 ## F6: root cause and fix
 
@@ -22,11 +22,11 @@ The audit's `TestAuditCodemodeOnlyPromptOmitsHiddenToolsInEveryMode` was not che
 
 ## Evidence
 
-- Red: `go test ./cmd/pig -run TestDefaultToolsActivatesExtensionToolsAtStartup` on the pre-fix registry: `print mode declares [read bash edit write], want [... codemode]`, `print mode declares [], want [codemode]` (also json, interactive).
-- Green: same test, 12 subtests pass; `go test -race ./coding/ ./coding/extension/ ./internal/codingagent/... ./cmd/pig` pass.
-- Load: `GOMAXPROCS=4 taskset -c 0-3` with 4 burner PIDs I started (stopped with `kill <pid>`): `go test -race -count=24 ./coding -run 'TestNewSessionActiveBuiltinToolsNameExtensionTools|TestDefaultTools'` ok; `-count=3` of both cmd/pig tests ok.
-- Mutation: restoring the pre-fix registry fails the coding and cmd/pig tests (above).
-- Gates: build, vet, `GOOS=windows go vet ./coding ./cmd/pig`, gofmt, `go fix -diff`, golangci-lint (0 issues) pass.
+- Red: `go test ./cmd/ompig -run TestDefaultToolsActivatesExtensionToolsAtStartup` on the pre-fix registry: `print mode declares [read bash edit write], want [... codemode]`, `print mode declares [], want [codemode]` (also json, interactive).
+- Green: same test, 12 subtests pass; `go test -race ./coding/ ./coding/extension/ ./internal/codingagent/... ./cmd/ompig` pass.
+- Load: `GOMAXPROCS=4 taskset -c 0-3` with 4 burner PIDs I started (stopped with `kill <pid>`): `go test -race -count=24 ./coding -run 'TestNewSessionActiveBuiltinToolsNameExtensionTools|TestDefaultTools'` ok; `-count=3` of both cmd/ompig tests ok.
+- Mutation: restoring the pre-fix registry fails the coding and cmd/ompig tests (above).
+- Gates: build, vet, `GOOS=windows go vet ./coding ./cmd/ompig`, gofmt, `go fix -diff`, golangci-lint (0 issues) pass.
 
 ## Environment notes
 

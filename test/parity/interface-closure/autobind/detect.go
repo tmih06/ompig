@@ -16,8 +16,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // Gap reasons. Every ID is either not a gap or a gap with exactly one of these.
@@ -260,10 +260,10 @@ func typeExclude(name string) func(string) bool {
 // exerciseInfo is what exercises a symbol: asserting tests (best first) and the reachable function that uses it.
 type exerciseInfo struct {
 	Tests []string // test:<file>#<Test>, at most three
-	Call  string   // a function reachable from cmd/pig that is, or uses, the symbol
+	Call  string   // a function reachable from cmd/ompig that is, or uses, the symbol
 }
 
-// exercised applies E1 and E2: a Go test that references the symbol and asserts, or a use reachable from cmd/pig.
+// exercised applies E1 and E2: a Go test that references the symbol and asserts, or a use reachable from cmd/ompig.
 func (d *detector) exercised(s *sym, keys []string, exclude func(string) bool) (*exerciseInfo, string) {
 	info := &exerciseInfo{}
 	unreached := ""
@@ -281,7 +281,7 @@ func (d *detector) exercised(s *sym, keys []string, exclude func(string) bool) (
 		unreached = unreachable[0]
 	}
 	if (s.Kind == "field" || s.Kind == "method") && !d.testSupportMember(s) {
-		// P1: a field or method closes a row when production code reachable from cmd/pig reads, sets or calls it (a), or through the
+		// P1: a field or method closes a row when production code reachable from cmd/ompig reads, sets or calls it (a), or through the
 		// library route (b) in library.go; a test alone leaves a caller-free shell looking finished.
 		if info.Call != "" {
 			return info, ""
@@ -291,7 +291,7 @@ func (d *detector) exercised(s *sym, keys []string, exclude func(string) bool) (
 			return lib, ""
 		}
 		if unreached != "" {
-			return nil, "P1: production code uses " + s.Target() + " only in " + unreached + ", which no path from cmd/pig reaches (static reach: dynamic dispatch is not followed); P1(b) " + libWhy
+			return nil, "P1: production code uses " + s.Target() + " only in " + unreached + ", which no path from cmd/ompig reaches (static reach: dynamic dispatch is not followed); P1(b) " + libWhy
 		}
 		return nil, "P1: no production code reads, sets or calls " + s.Target() + " (a test alone does not close a member); P1(b) " + libWhy
 	}
@@ -299,9 +299,9 @@ func (d *detector) exercised(s *sym, keys []string, exclude func(string) bool) (
 		return info, ""
 	}
 	if len(tests) > 0 {
-		return nil, "tests reference " + s.Target() + " but none asserts, and no caller is reachable from cmd/pig"
+		return nil, "tests reference " + s.Target() + " but none asserts, and no caller is reachable from cmd/ompig"
 	}
-	return nil, "no test references " + s.Target() + " and no caller is reachable from cmd/pig"
+	return nil, "no test references " + s.Target() + " and no caller is reachable from cmd/ompig"
 }
 
 // testSupportDir reports whether dir is a test-support package: the Go form of an upstream `testing` subpath (routingtest, durabletest,
@@ -414,7 +414,7 @@ func (d *detector) setCLI(id string) {
 
 func (d *detector) set(id string, r *decision) {
 	if row := d.l.mapping[id]; row != nil && row.Disposition == "designed-out" {
-		r = &decision{Evidence: ruleDesignedOut} // a recorded decision that Pig has no counterpart
+		r = &decision{Evidence: ruleDesignedOut} // a recorded decision that Ompig has no counterpart
 	}
 	r.ID = id
 	r.Pkg = parseID(id).Pkg
@@ -868,7 +868,7 @@ func (d *detector) evalProperty(prop *upstreamEntry, parts idParts, owner *sym, 
 	if m == nil {
 		if keys := d.registryKeys(prop, owner); len(keys) == 1 {
 			// M6: a property of a key registry is the constant of the Go key type whose value is the property name. The row is a member
-			// row, so P1 applies to the constant as to a field: production code reachable from cmd/pig must use it, a test alone does not.
+			// row, so P1 applies to the constant as to a field: production code reachable from cmd/ompig must use it, a test alone does not.
 			key := keys[0]
 			info, why := d.exercised(key, []string{key.Key}, selfExclude(key.Qualified()))
 			if why == "" && info.Call == "" {

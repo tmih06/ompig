@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -192,7 +192,7 @@ func TestLoadErrorCarriesExtensionProcessCause(t *testing.T) {
 	}
 	dir := t.TempDir()
 	cases := map[string]struct{ source, want string }{
-		// jiti, which Pi and PiG load extensions with, reports Babel's
+		// jiti, which Pi and Ompig load extensions with, reports Babel's
 		// parse error.
 		"syntax.ts":  {"export default function (pi) {\n  pi.registerCommand(\"x\", { handler: async () => { foo(, ) } });\n}\n", "Unexpected token"},
 		"throws.mjs": {"export default function () { throw new Error(\"register boom\"); }\n", "register boom"},

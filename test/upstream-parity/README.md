@@ -34,7 +34,7 @@ go test ./test/upstream-parity -count=1
 ## Respond to drift
 
 1. Read the changed declaration and its callers under `.upstream/current`.
-2. Probe observable Pi behavior before changing PiG.
+2. Probe observable Pi behavior before changing Ompig.
 3. Port the behavior and add caller-level evidence.
 4. Add a divergence only when the observable difference is intentional and
    approved under `AGENTS.md`.

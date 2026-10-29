@@ -14,7 +14,7 @@ import (
 // A request re-sends the whole conversation, and a message that is already in it does not change: a session of N turns encoded N(N+1)/2 messages. The encoder takes each small finalized message's encoding from this cache and writes a token where the message goes; the body is spliced from the cached bytes (stringSplice.join) and is the bytes marshalRequestBody gives the request.
 //
 // A message is looked up by what is encoded, not by where it came from: its key is a canonical record of every value of the converted message that its encoding reads (messageKey), so a message the conversion changed for any reason (the model, the API's compat flags, a cache_control position, thinking or redaction rules, a transform, a payload hook) has another key, and a cached encoding is served only to a message with the same key bytes. An entry keeps its key and a hit compares it byte for byte, so a hash collision costs an encoding and never serves another message's bytes.
-// pig additive (D112): Pi serializes the whole request on every send; caching an encoding is a Go CPU choice and the body is unchanged.
+// ompig additive (D112): Pi serializes the whole request on every send; caching an encoding is a Go CPU choice and the body is unchanged.
 const (
 	// requestMessageMaxKeyBytes bounds the message that is cached: one that holds a large string is left to the string cache, which keys the string and not the message, so a tool result of megabytes is held once.
 	requestMessageMaxKeyBytes = requestSpliceMinBytes

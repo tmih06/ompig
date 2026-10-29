@@ -16,19 +16,20 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
-	"github.com/MichaelKinsy/PiG/internal/changeobservers"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/subagent"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/boundarywire"
+	"github.com/tmih06/ompig/internal/changeobservers"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Session is an active agent runtime: one JSONL on disk, one
@@ -69,13 +70,27 @@ type Session struct {
 	//
 	// upstream: agent-session.ts _pendingToolNames
 	pendingToolNames []string
-	modelRuntime     *ModelRuntime
-	modelRegistry    *ModelRegistry
-	sessionDir       string
-	noSession        bool
-	scopedModels     sessionScopedModels
-	runnerMu         sync.RWMutex
-	runner           *inproc.Runner // extension runner for event dispatch
+	// subagent holds the lazily created subagent runtime (registry, jobs,
+	// artifacts, spawner) and the listeners observing its job transitions.
+	subagentOnce    sync.Once
+	subagentErr     error
+	subagentRuntime *SubagentRuntime
+	subagentBinding *subagentToolBinding
+	// subagentParent is the runtime a child session shares with the session that
+	// spawned it, so a nested spawn joins the same roster.
+	subagentParent *SubagentRuntime
+	// subagentID is the agent id this session runs as, empty for the user
+	// session. A spawn from this session nests under it.
+	subagentID          string
+	subagentListenersMu sync.RWMutex
+	subagentListeners   []func(subagent.Job)
+	modelRuntime        *ModelRuntime
+	modelRegistry       *ModelRegistry
+	sessionDir          string
+	noSession           bool
+	scopedModels        sessionScopedModels
+	runnerMu            sync.RWMutex
+	runner              *inproc.Runner // extension runner for event dispatch
 	// sharedRunner is the Runtime- or Clone-source-owned runner this Session borrowed; its owner invalidates it.
 	sharedRunner *inproc.Runner
 	// extensionHost is the extension host of the Runtime that created the Session (Session.ExtensionHost).
@@ -266,7 +281,7 @@ type SessionOptions struct {
 	// The caller owns the rest of the Agent's configuration, as sdk.ts createAgent does for Pi: stream function, TransformContext, OnPayload and header hooks (so no extension context, before_provider_request or before_provider_headers event fires unless the caller's hooks emit it), steering and follow-up modes, thinking budgets, transport and image conversion.
 	// A nil Model and ThinkingLevel take the Agent's, so the Session does not restore them from history. An Agent serves one Session; the Session's Clone and replacements build their own.
 	// Without it the Session builds its Agent with the cache-warming stream function.
-	// pig divergence (D113): Pi's AgentSessionConfig.extensionRunnerRef cell does not exist; a caller reads Session.ExtensionRunner() after construction.
+	// ompig divergence (D113): Pi's AgentSessionConfig.extensionRunnerRef cell does not exist; a caller reads Session.ExtensionRunner() after construction.
 	Agent *agent.Agent
 
 	// CacheWarmer is a cache warmer the caller built, which the Session drives instead of building its own (Pi's AgentSessionConfig.cacheWarmer, agent-session.ts:266,494-497).
@@ -287,6 +302,8 @@ type SessionOptions struct {
 
 	skipExtensionTools bool
 	toolRegistry       *sessionToolRegistry
+	// subagentBinding binds the subagent tools to the Session being built.
+	subagentBinding *subagentToolBinding
 
 	// Services is the dependency container (settings, resources, model runtime, working directory) NewAgentSession builds the Session against;
 	// NewSession takes it as its first argument and ignores this field.
@@ -442,6 +459,10 @@ func NewSession(svcs *AgentSessionServices, opts SessionOptions) (*Session, erro
 		loaded := resourceLoader.loader.GetExtensions()
 		opts.Runner = NewExtensionRunner(loaded.Extensions, loaded.Runtime, svcs.CWD(), nil, svcs.Registry())
 	}
+	// The subagent tools are registered with the built-in set, which is built
+	// before the Session exists: bind them to it once it does.
+	subagentBinding := &subagentToolBinding{}
+	opts.subagentBinding = subagentBinding
 	registry, allTools, err := createSessionToolRegistry(svcs, opts)
 	if err != nil {
 		return nil, err
@@ -732,6 +753,7 @@ func NewSession(svcs *AgentSessionServices, opts SessionOptions) (*Session, erro
 		closeDone:               closeDone,
 		eventsDone:              make(chan struct{}),
 		execMu:                  execLock{handoff: make(chan struct{}, 1)},
+		subagentBinding:         subagentBinding,
 		callerHooks: callerHooks{
 			beforeToolCall:  slices.Clone(opts.BeforeToolCall),
 			afterToolCall:   slices.Clone(opts.AfterToolCall),
@@ -739,6 +761,7 @@ func NewSession(svcs *AgentSessionServices, opts SessionOptions) (*Session, erro
 			transport:       opts.Transport,
 		},
 	}
+	subagentBinding.set(sess)
 	sess.resourceLoader.Store(resourceLoader)
 	sess.SetScopedModels(opts.ScopedModels)
 	var initialToolNames []string
@@ -1410,10 +1433,10 @@ func (s *Session) Agent() *agent.Agent { return s.agent }
 // Inner returns the underlying internal session handle.
 //
 // PROVISIONAL: this method exists during the F3–F5 refactor so the
-// pig binary's TUI layer (internal/codingagent.InteractiveMode) can
+// ompig binary's TUI layer (internal/codingagent.InteractiveMode) can
 // share the same on-disk session a coding.Session owns. The return
 // type is internal/codingagent.Session, which third-party consumers
-// cannot import, so this method is effectively pig-internal even
+// cannot import, so this method is effectively ompig-internal even
 // though it is exported. Likely to be removed once F4–F5 finalise
 // the public API surface; SDK consumers should use the public
 // Session methods (Path, ID, CWD, Messages, Send, etc.) instead.
@@ -1422,7 +1445,7 @@ func (s *Session) Inner() *icodingagent.Session { return s.inner }
 // ReplaceInner aborts work owned by the old Session, then installs the new
 // Session state, including whether its manager persists to a file.
 func (s *Session) ReplaceInner(sess *icodingagent.Session) {
-	// pig divergence (D61): Services, Resources, and built-in tools remain bound
+	// ompig divergence (D61): Services, Resources, and built-in tools remain bound
 	// to the startup project.
 	s.AbortCompaction()
 	s.AbortBranchSummary()
@@ -1550,6 +1573,11 @@ func (s *Session) closeSuperseded(successor *Session) error {
 
 // Close invalidates the extension runner this Session owns and releases the Session's resources without deleting its persisted JSONL. A runner borrowed from its Runtime or Clone source stays active; Runtime.Close invalidates the Runtime runner. Further Send calls fail; repeated Close calls are safe.
 func (s *Session) Close() error {
+	// A subagent runtime owns live child sessions; releasing them here keeps a
+	// closed parent from leaking its children's goroutines.
+	if s.subagentRuntime != nil {
+		s.subagentRuntime.Shutdown()
+	}
 	s.AbortRetry()
 	s.AbortBash()
 	s.AbortCompaction()
@@ -1883,7 +1911,7 @@ func (s *Session) GetFollowUpMessages() []string {
 }
 
 // ClearQueue removes and returns all queued user-message text. Queued extension custom messages stay queued and run with the active run.
-// pig divergence (D135): upstream clearQueue also destroys custom messages queued by sendMessage(deliverAs) without returning them (Pi #9886).
+// ompig divergence (D135): upstream clearQueue also destroys custom messages queued by sendMessage(deliverAs) without returning them (Pi #9886).
 func (s *Session) ClearQueue() (steering, followUp []string) {
 	s.agent.ClearQueuedUserMessages()
 	s.queueMu.Lock()
@@ -2559,7 +2587,7 @@ const agentEventErrorPath = "<agent-event>"
 
 // forwardAgentEvent executes listener delivery and wire publication in FIFO order. Agent events arrive in an awaited listener-only envelope, then in a publishedSessionEvent after persistence. Other Session-owned events use one envelope for both phases. Panics are reported and awaited producers are released.
 //
-//pig:hotpath
+//ompig:hotpath
 func (s *Session) forwardAgentEvent(ev agent.AgentEvent, owner ai.StreamOwner) (open bool) {
 	if dispatched, ok := ev.(*synchronousSessionEvent); ok && dispatched.continuation != nil {
 		open = true
@@ -2688,7 +2716,7 @@ func (s *Session) dispatchAgentEventToExtensions(ev agent.AgentEvent) {
 // notifyAgentEventListeners delivers ev to the session's subscribers; a
 // listener panic is reported and does not skip the event's forwarding.
 //
-//pig:hotpath
+//ompig:hotpath
 func (s *Session) notifyAgentEventListeners(ev agent.AgentEvent) {
 	defer func() {
 		if recovered := recover(); recovered != nil {
@@ -2877,7 +2905,7 @@ func (s *Session) compact(ctx context.Context, customInstructions string) (*Comp
 	}
 	// An abort before the summary request keeps the reason Pi's getAuth rejects with (agent-session.ts:572-608).
 	if compactCtx.Err() != nil && !errors.Is(err, errOperationAborted) {
-		// pig divergence (D148): an abort after the summary request started answers "Compaction cancelled" for every provider.
+		// ompig divergence (D148): an abort after the summary request started answers "Compaction cancelled" for every provider.
 		err = errCompactionCancelled
 	}
 	if err != nil {
@@ -3398,7 +3426,7 @@ func (s *Session) autoCompactAndDecide(ctx context.Context, reason string, willR
 		return false, err
 	}
 	if willRetry {
-		// pig divergence (D138): session_compact handlers may have published passive custom messages with triggerTurn false, which a running turn defers to its end. The overflow retry must send them (Pi #9051; Pi PR #9738).
+		// ompig divergence (D138): session_compact handlers may have published passive custom messages with triggerTurn false, which a running turn defers to its end. The overflow retry must send them (Pi #9051; Pi PR #9738).
 		if err := s.flushPendingCustomMessages(); err != nil {
 			return false, err
 		}

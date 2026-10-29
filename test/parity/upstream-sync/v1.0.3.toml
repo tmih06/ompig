@@ -83,14 +83,14 @@ path = "packages/ai/src/types.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/registry_test.go#TestCatalogPin100"]
-rationale = "KnownProvider lists azure instead of azure-openai-responses; PiG's provider IDs are strings checked against the generated catalog."
+rationale = "KnownProvider lists azure instead of azure-openai-responses; Ompig's provider IDs are strings checked against the generated catalog."
 
 [[files]]
 path = "packages/coding-agent/src/config.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:internal/installchange/installchange_test.go#TestDetectInstallChangeReportsARemovedInstallInsteadOfReadingAFileFurtherUp", "test:internal/installchange/installchange_test.go#TestDetectInstallChangeReportsAReplacedExecutable", "test:internal/installchange/installchange_test.go#TestTrackerFollowsASymlinkedExecutable"]
-rationale = "1.0.3 (#10439) caches the QuickJS wasm path, spawns the codemode worker from an in-memory data: URL and adds detectInstallChange, so an update that removes the install cannot break a running pi. PiG embeds the QuickJS module in one native executable and runs codemode in process, so the wasm path cache and the data: URL worker are designed out. detectInstallChange is ported as the additive D95: PiG records its executable's identity at startup (path, device and inode or Windows file index, size, mtime) and the extension cell files it starts, and reports a replaced or removed executable or a pruned cell when an error is shown."
+rationale = "1.0.3 (#10439) caches the QuickJS wasm path, spawns the codemode worker from an in-memory data: URL and adds detectInstallChange, so an update that removes the install cannot break a running pi. Ompig embeds the QuickJS module in one native executable and runs codemode in process, so the wasm path cache and the data: URL worker are designed out. detectInstallChange is ported as the additive D95: Ompig records its executable's identity at startup (path, device and inode or Windows file index, size, mtime) and the extension cell files it starts, and reports a replaced or removed executable or a pruned cell when an error is shown."
 
 [[files]]
 path = "packages/coding-agent/src/core/bash-executor.ts"
@@ -139,7 +139,7 @@ path = "packages/coding-agent/src/modes/interactive/interactive-mode.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:internal/codingagent/dead_terminal_test.go#TestDeadTerminalExitsQuietlyWithoutRecordingACrash", "test:internal/codingagent/dead_terminal_test.go#TestIsDeadTerminalError", "test:internal/codingagent/dead_terminal_test.go#TestInputHandlersAreRemovedOnUnregister", "test:internal/codingagent/install_change_test.go#TestInstallChangeWarningShownInsteadOfABugReportHint", "test:internal/codingagent/install_change_test.go#TestInstallChangeWarningOnAFailedToolCall"]
-rationale = "ENOTTY joins the dead-terminal codes, a failed raw mode entry on a dead terminal and an uncaught dead-terminal error exit 129 without a crash record. The install-change warning (maybeShowInstallChangeWarning) is ported with config.ts as the additive D95: it shows after an assistant error instead of the bug report hint, on a failed tool call, and where PiG shows an error."
+rationale = "ENOTTY joins the dead-terminal codes, a failed raw mode entry on a dead terminal and an uncaught dead-terminal error exit 129 without a crash record. The install-change warning (maybeShowInstallChangeWarning) is ported with config.ts as the additive D95: it shows after an assistant error instead of the bug report hint, on a failed tool call, and where Ompig shows an error."
 
 [[files]]
 path = "packages/coding-agent/src/utils/output-files.ts"

@@ -3,7 +3,7 @@ package oauth_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // Ports packages/mcp/src/oauth/errors.ts OAuthRegistrationError: message text, `name`, `cause` (never set) and `stack`.

@@ -39,11 +39,11 @@ func evaluateExtensionAssertions(o *ScenarioOutcome, spec ExtensionAssertSpec) {
 	if !hasExtensionAssertions(spec) {
 		return
 	}
-	if len(o.Pig.Runs) == 0 {
-		o.Failures = append(o.Failures, "extension assertions require at least one pig run")
+	if len(o.Ompig.Runs) == 0 {
+		o.Failures = append(o.Failures, "extension assertions require at least one ompig run")
 		return
 	}
-	for run, result := range o.Pig.Runs {
+	for run, result := range o.Ompig.Runs {
 		evaluateExtensionRunAssertions(o, spec, run, result)
 	}
 }
@@ -51,7 +51,7 @@ func evaluateExtensionAssertions(o *ScenarioOutcome, spec ExtensionAssertSpec) {
 func evaluateExtensionRunAssertions(o *ScenarioOutcome, spec ExtensionAssertSpec, run int, result Result) {
 	var report extensionValidationJSON
 	if err := json.Unmarshal([]byte(result.Output), &report); err != nil {
-		o.Failures = append(o.Failures, fmt.Sprintf("extension run %d assertions could not parse pig JSON: %v", run+1, err))
+		o.Failures = append(o.Failures, fmt.Sprintf("extension run %d assertions could not parse ompig JSON: %v", run+1, err))
 		return
 	}
 	if !report.Valid {

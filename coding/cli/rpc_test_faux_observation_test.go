@@ -12,14 +12,14 @@ import (
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 const testFauxRPCOraclePath = "../../coding/testdata/rpc33-observation/providers/test-faux/pi.json"
 
-// TestTestFauxRPCObservation runs the real `pig --mode rpc` binary against ai/test_faux.go and compares its assistant message records with the records of Pi's real `--mode rpc` process running the paired fixture test/parity/testdata/test-faux-provider.ts.
+// TestTestFauxRPCObservation runs the real `ompig --mode rpc` binary against ai/test_faux.go and compares its assistant message records with the records of Pi's real `--mode rpc` process running the paired fixture test/parity/testdata/test-faux-provider.ts.
 // upstream: packages/coding-agent/src/modes/rpc/rpc-mode.ts:354-363; test/parity/testdata/test-faux-provider.ts:streamTestFaux.
-// PIG_TEST_FAUX_RPC_RUNS repeats every scenario; the recorded determinism run used 200.
+// OMPIG_TEST_FAUX_RPC_RUNS repeats every scenario; the recorded determinism run used 200.
 func TestTestFauxRPCObservation(t *testing.T) {
 	data, err := os.ReadFile(testFauxRPCOraclePath)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestTestFauxRPCObservation(t *testing.T) {
 		t.Fatalf("test-faux oracle pins Pi %s; current Pi %s requires a fresh oracle", oracle.Pi, coding.UpstreamVersion)
 	}
 	runs := 3
-	if value := os.Getenv("PIG_TEST_FAUX_RPC_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_TEST_FAUX_RPC_RUNS"); value != "" {
 		if _, err := fmt.Sscan(value, &runs); err != nil {
 			t.Fatal(err)
 		}
@@ -69,7 +69,7 @@ func TestTestFauxRPCObservation(t *testing.T) {
 				if err := os.WriteFile(filepath.Join(cwd, "parity-read-target.txt"), []byte("hello\n"), 0o600); err != nil {
 					t.Fatal(err)
 				}
-				p := startRPCProcessAt(t, cwd, []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session", "--model", "test-faux/faux-1")
+				p := startRPCProcessAt(t, cwd, []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session", "--model", "test-faux/faux-1")
 				p.sendJSON(map[string]any{"id": "p", "type": "prompt", "message": result.Scenario.Prompt})
 				var got []json.RawMessage
 				p.await("agent_settled", func(record rpcRecord) bool {

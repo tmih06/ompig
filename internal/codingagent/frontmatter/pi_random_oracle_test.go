@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/utils/frontmatter.ts parseFrontmatter and stripFrontmatter against pinned Pi over random documents assembled from fences, every newline form, a BOM, JavaScript whitespace, short YAML headers and bodies, so the fence search, header slice and body trim see unusual shapes.
@@ -53,7 +53,7 @@ emit(input.map((d) => { try { const r = fm.parseFrontmatter(d); return { err: ""
 		wantFM, _ := json.Marshal(want[i].Fm)
 		if got != want[i].Err || (got == "" && (!bytes.Equal(fm, wantFM) || doc.Body != want[i].Body)) {
 			if failures++; failures <= 8 {
-				t.Errorf("%q:\n  Pig err=%q fm=%s body=%q\n  Pi  err=%q fm=%s body=%q", content, got, fm, doc.Body, want[i].Err, wantFM, want[i].Body)
+				t.Errorf("%q:\n  Ompig err=%q fm=%s body=%q\n  Pi  err=%q fm=%s body=%q", content, got, fm, doc.Body, want[i].Err, wantFM, want[i].Body)
 			}
 		}
 	}

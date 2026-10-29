@@ -86,7 +86,7 @@ func python3(t testing.TB) string {
 }
 
 // managedEnvSignals name the variables a lane, CI or release host sets. Node-dependent tests must not pass silently there.
-var managedEnvSignals = []string{"CI", "GITHUB_ACTIONS", "PIG_LANE_SLICE"}
+var managedEnvSignals = []string{"CI", "GITHUB_ACTIONS", "OMPIG_LANE_SLICE"}
 
 func node(t testing.TB) string {
 	t.Helper()

@@ -24,7 +24,7 @@ func TestBundleMustCarryTheProfilesPrograms(t *testing.T) {
 		t.Fatalf("durable-native runs from the bundle: %d %s", code, out)
 	}
 	code, out := session("compare", "durable-core")
-	for _, want := range []string{"cannot run profile durable-core", "pig-tinygo needs core/bench-pig.mjs", "pig-native needs bin/sqlhost-bench", "pi needs core/bench-pi.mjs"} {
+	for _, want := range []string{"cannot run profile durable-core", "ompig-tinygo needs core/bench-ompig.mjs", "ompig-native needs bin/sqlhost-bench", "pi needs core/bench-pi.mjs"} {
 		if code != 1 || !strings.Contains(out, want) {
 			t.Errorf("want %q: exit %d: %s", want, code, out)
 		}
@@ -40,7 +40,7 @@ func TestBundleMustCarryTheProfilesPrograms(t *testing.T) {
 		t.Fatal(err)
 	}
 	writeELF(t, filepath.Join(dir, "bin", "sqlhost-bench"), elf.EM_X86_64)
-	for _, f := range []string{"core/bench-pig.mjs", "core/bench-pi.mjs"} {
+	for _, f := range []string{"core/bench-ompig.mjs", "core/bench-pi.mjs"} {
 		if err := os.WriteFile(filepath.Join(dir, f), []byte("// program\n"), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -67,13 +67,13 @@ func TestBundleProgramsInsideArguments(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	pig, _ := prof.byName("pig")
+	ompig, _ := prof.byName("ompig")
 	check := func(sample ...string) error {
 		p := *prof
-		tg := pig
+		tg := ompig
 		tg.Sample = sample
 		p.Targets = []target{tg}
-		return checkBundlePrograms(&p, []string{"pig"}, b)
+		return checkBundlePrograms(&p, []string{"ompig"}, b)
 	}
 	for _, ok := range [][]string{
 		{"durableperf", "sample", "-wasm={root}/dist/core-go.wasm"},
@@ -87,11 +87,11 @@ func TestBundleProgramsInsideArguments(t *testing.T) {
 		}
 	}
 	for want, bad := range map[string][]string{
-		"pig needs dist/missing.wasm": {"durableperf", "sample", "-wasm={root}/dist/missing.wasm"},
-		"pig needs core/b.wasm":       {"durableperf", "sample", "-path", "{root}/dist/core-go.wasm:{root}/core/b.wasm"},
-		"pig needs core":              {"durableperf", "sample", "-dir", "{root}/core"},
-		"pig needs bin/other-bench":   {"{root}/bin/other-bench", "sample"},
-		"pig needs bin/durableperf-x": {"durableperf-x", "sample"},
+		"ompig needs dist/missing.wasm": {"durableperf", "sample", "-wasm={root}/dist/missing.wasm"},
+		"ompig needs core/b.wasm":       {"durableperf", "sample", "-path", "{root}/dist/core-go.wasm:{root}/core/b.wasm"},
+		"ompig needs core":              {"durableperf", "sample", "-dir", "{root}/core"},
+		"ompig needs bin/other-bench":   {"{root}/bin/other-bench", "sample"},
+		"ompig needs bin/durableperf-x": {"durableperf-x", "sample"},
 	} {
 		if err := check(bad...); err == nil || !strings.Contains(err.Error(), want) {
 			t.Errorf("%q: want %q: %v", bad, want, err)

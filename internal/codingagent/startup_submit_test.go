@@ -12,8 +12,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi binds handleStartupSubmit from mounting the UI (interactive-mode.ts:944-947) until setupEditorSubmitHandler (1027-1028): an Enter in that window keeps the typed text in the editor and reports that startup is still in progress (3072-3075). This is the window's first edge, startup theme detection.
@@ -120,7 +120,7 @@ func TestPromptAfterTheColorReplyReachesTheSubmitHandler(t *testing.T) {
 // The window's last edge: Pi's managed-tool setup (ensureTool for fd and rg, interactive-mode.ts:1017-1022) still runs under handleStartupSubmit, so text typed while a download is in flight reaches the editor and its Enter keeps it. Ending the window restores ordinary submission.
 func TestStartupSubmitWindowCoversManagedToolSetup(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	original := http.DefaultTransport
 	t.Cleanup(func() { http.DefaultTransport = original })
@@ -184,11 +184,11 @@ func TestManagedToolSetupWithoutADownloadReadsNoInput(t *testing.T) {
 				}
 			}
 		}},
-		{"offline", func(t *testing.T, _ *tools.ToolsManager) { t.Setenv("PIG_OFFLINE", "1") }},
+		{"offline", func(t *testing.T, _ *tools.ToolsManager) { t.Setenv("OMPIG_OFFLINE", "1") }},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Setenv("PATH", t.TempDir())
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			tm := tools.NewToolsManager(t.TempDir())
 			tc.setup(t, tm)

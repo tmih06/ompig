@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package coding
 
@@ -19,10 +19,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
 // Ports packages/coding-agent/test/suite/agent-session-mcp-oauth.test.ts (Pi 0.99.2): the OAuth sign-in through `/mcp`
@@ -324,8 +324,8 @@ func TestAgentSessionMCPOAuthRegistersWithTheConfiguredClientName(t *testing.T) 
 
 	fallback := setupMCPOAuth(t, "follow", nil)
 	fallback.prompt(t, "/mcp login issues")
-	// The fallback is the app name: `pig`, where Pi sends `pi` (docs/design/builtin-mcp.md).
-	requireEqual(t, "client names", fallback.server.registrationClientNames(), []any{"pig"})
+	// The fallback is the app name: `ompig`, where Pi sends `pi` (docs/design/builtin-mcp.md).
+	requireEqual(t, "client names", fallback.server.registrationClientNames(), []any{"ompig"})
 }
 
 func TestAgentSessionMCPOAuthAddsTheListeningPortToACallbackURLWithoutOne(t *testing.T) {
@@ -349,7 +349,7 @@ func TestAgentSessionMCPOAuthUsesCredentialsFromPigMcpLoginOnTheNextTurn(t *test
 		t.Fatal(err)
 	}
 
-	// The agent runs `pig mcp login issues` through bash; the user approves in the browser.
+	// The agent runs `ompig mcp login issues` through bash; the user approves in the browser.
 	var output []string
 	var mu sync.Mutex
 	record := func(line string) {

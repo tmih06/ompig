@@ -5,7 +5,7 @@ import (
 	"unicode"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Model search text builders shared by the /model selector, /scoped-models,

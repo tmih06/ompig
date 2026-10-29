@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: packages/coding-agent/src/core/session-manager.ts appendCustomEntry and agent-session.ts:3406-3411. Pi's pi.appendEntry runs in the log's own process and always lands, so the session an extension reads is the session Pi holds.

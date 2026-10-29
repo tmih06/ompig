@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // declarations.ts:244 resolveRef: a `$ref` segment with malformed percent-encoding makes decodeURIComponent throw a URIError out of renderToolSample, so execute.ts:388 fails the codemode call instead of rendering the reference as `unknown`.

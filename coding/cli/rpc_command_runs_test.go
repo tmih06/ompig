@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi queues the runs a command's handler sends on its one event loop in send order (agent-session.ts:2293 sendCustomMessage), so

@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // The stand-in programs print the ready line (or not), then become `sleep <mark>`. ignoreTermination makes the program survive the
@@ -40,7 +40,7 @@ func suspendScenarioScript(t *testing.T) string {
 	return filepath.Join(testenv.ModuleRoot(t), "test", "parity", "testdata", "suspend-session-native.sh")
 }
 
-// QUALITY-AUDIT-050 item 16: a SUSPEND_READY pig process outlived its parity scenario by 79 minutes. The scenario script suspends the
+// QUALITY-AUDIT-050 item 16: a SUSPEND_READY ompig process outlived its parity scenario by 79 minutes. The scenario script suspends the
 // program with Ctrl-Z in a tmux pane, resumes it, and waits for the resumed answer; when that wait fails the script exits through
 // its cleanup. Ending the tmux session sends the job SIGHUP (and SIGTERM while it is stopped), which a program that hangs while it
 // shuts down survives, reparented to init. The cleanup must end the job it started itself. The stand-in program ignores both signals
@@ -51,8 +51,8 @@ func TestSuspendSessionNativeKillsTheSuspendedJobWhenTheScenarioFails(t *testing
 	}
 	mark := strconv.Itoa(900000 + os.Getpid()%90000)
 	program := suspendStandIn(t, mark, true, true)
-	cmd := exec.CommandContext(t.Context(), "bash", suspendScenarioScript(t), "pig")
-	cmd.Env = append(os.Environ(), "PIG_PARITY_PIG_BIN="+program, "SUSPEND_PARITY_WAIT_SECONDS=3")
+	cmd := exec.CommandContext(t.Context(), "bash", suspendScenarioScript(t), "ompig")
+	cmd.Env = append(os.Environ(), "OMPIG_PARITY_OMPIG_BIN="+program, "SUSPEND_PARITY_WAIT_SECONDS=3")
 	var output bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &output, &output
 	t.Cleanup(func() { killSleepers(mark); killScenarioSession(cmd) })
@@ -82,8 +82,8 @@ func TestSuspendSessionNativeCleansUpWhenTheScriptIsKilled(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			mark := strconv.Itoa(tc.offset + os.Getpid()%90000)
 			program := suspendStandIn(t, mark, tc.ready, tc.ignoreTermination)
-			cmd := exec.Command("bash", suspendScenarioScript(t), "pig")
-			cmd.Env = append(os.Environ(), "PIG_PARITY_PIG_BIN="+program)
+			cmd := exec.Command("bash", suspendScenarioScript(t), "ompig")
+			cmd.Env = append(os.Environ(), "OMPIG_PARITY_OMPIG_BIN="+program)
 			cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 			t.Cleanup(func() { killSleepers(mark); killScenarioSession(cmd) })
 			if err := cmd.Start(); err != nil {
@@ -91,7 +91,7 @@ func TestSuspendSessionNativeCleansUpWhenTheScriptIsKilled(t *testing.T) {
 			}
 			exited := make(chan struct{})
 			go func() { _ = cmd.Wait(); close(exited) }()
-			session := "parity-suspend-pig-" + strconv.Itoa(cmd.Process.Pid)
+			session := "parity-suspend-ompig-" + strconv.Itoa(cmd.Process.Pid)
 			started := func() bool {
 				if !tc.ready {
 					return len(sleepers(mark)) > 0
@@ -121,7 +121,7 @@ func TestSuspendSessionNativeCleansUpWhenTheScriptIsKilled(t *testing.T) {
 // timeout. The server exits with its last session, and the pane shell is that session's only other process.
 func waitScenarioGone(t *testing.T, mark string, scriptPID int, timeout time.Duration) {
 	t.Helper()
-	session := "parity-suspend-pig-" + strconv.Itoa(scriptPID)
+	session := "parity-suspend-ompig-" + strconv.Itoa(scriptPID)
 	// The server is found by its command line, not its socket: a removed socket hides a running server from tmux -L.
 	serverRunning := func() bool { return len(tmuxServers(session)) > 0 }
 	deadline := time.Now().Add(timeout)
@@ -186,14 +186,14 @@ func processesWhere(match func(cmdline string) bool) []int {
 	return pids
 }
 
-// killScenarioSession ends the tmux session the script started on its private socket (parity-suspend-pig-<script pid>), so a
+// killScenarioSession ends the tmux session the script started on its private socket (parity-suspend-ompig-<script pid>), so a
 // failing run of these tests does not leave the tmux server and its pane shell behind, the leak they guard against. A server whose
 // socket is already gone is killed by its process ID; its pane shell then gets SIGHUP.
 func killScenarioSession(cmd *exec.Cmd) {
 	if cmd.Process == nil {
 		return
 	}
-	name := "parity-suspend-pig-" + strconv.Itoa(cmd.Process.Pid)
+	name := "parity-suspend-ompig-" + strconv.Itoa(cmd.Process.Pid)
 	_ = exec.Command("tmux", "-L", name, "kill-session", "-t", name).Run()
 	for _, pid := range tmuxServers(name) {
 		if process, err := os.FindProcess(pid); err == nil {

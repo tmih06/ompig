@@ -17,19 +17,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/sdkscenarios"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/test/extension-conformance/sdkscenarios"
 )
 
 // The soak test drives random extension traffic through the real host into every
 // SDK's extension process and holds leak and latency budgets. It is the short
-// form of a long run: PIG_EXT_SOAK_SECONDS sets the duration per SDK (default
-// 6, so the default run is a smoke test), PIG_EXT_SOAK_SEED replays a run and
-// PIG_EXT_SOAK_WORKERS sets the concurrent callers (default 4). A failure names
+// form of a long run: OMPIG_EXT_SOAK_SECONDS sets the duration per SDK (default
+// 6, so the default run is a smoke test), OMPIG_EXT_SOAK_SEED replays a run and
+// OMPIG_EXT_SOAK_WORKERS sets the concurrent callers (default 4). A failure names
 // the seed. For an hours-long run:
 //
-//	PIG_EXT_SOAK_SECONDS=7200 go test ./test/extension-conformance -run TestExtensionSoak -timeout 0 -v
+//	OMPIG_EXT_SOAK_SECONDS=7200 go test ./test/extension-conformance -run TestExtensionSoak -timeout 0 -v
 const (
 	soakDefaultSeconds = 6
 	soakDefaultWorkers = 4
@@ -241,10 +241,10 @@ func TestExtensionSoak(t *testing.T) {
 	if testing.Short() {
 		t.Skip("builds subprocess fixtures")
 	}
-	seconds := envInt("PIG_EXT_SOAK_SECONDS", soakDefaultSeconds)
-	workers := envInt("PIG_EXT_SOAK_WORKERS", soakDefaultWorkers)
-	seed := uint64(envInt("PIG_EXT_SOAK_SEED", int(time.Now().UnixNano()&0xffffff)))
-	t.Logf("soak seed %d (replay with PIG_EXT_SOAK_SEED=%d), %d s per SDK, %d workers", seed, seed, seconds, workers)
+	seconds := envInt("OMPIG_EXT_SOAK_SECONDS", soakDefaultSeconds)
+	workers := envInt("OMPIG_EXT_SOAK_WORKERS", soakDefaultWorkers)
+	seed := uint64(envInt("OMPIG_EXT_SOAK_SEED", int(time.Now().UnixNano()&0xffffff)))
+	t.Logf("soak seed %d (replay with OMPIG_EXT_SOAK_SEED=%d), %d s per SDK, %d workers", seed, seed, seconds, workers)
 	ops := soakOps()
 	totalWeight := 0
 	for _, op := range ops {
@@ -320,7 +320,7 @@ func TestExtensionSoak(t *testing.T) {
 			<-sampler
 
 			if len(failures) != 0 {
-				t.Errorf("failed calls (replay with PIG_EXT_SOAK_SEED=%d):\n  %s", seed, strings.Join(failures, "\n  "))
+				t.Errorf("failed calls (replay with OMPIG_EXT_SOAK_SEED=%d):\n  %s", seed, strings.Join(failures, "\n  "))
 			}
 			t.Logf("%d calls, %d workers", calls.Load(), workers)
 			for _, op := range ops {

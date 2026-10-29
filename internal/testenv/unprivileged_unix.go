@@ -18,7 +18,7 @@ import (
 )
 
 // unprivilegedResultEnv names the file where a rerun test records "pass", "fail", or "skip".
-const unprivilegedResultEnv = "PIG_TESTENV_UNPRIVILEGED_RESULT"
+const unprivilegedResultEnv = "OMPIG_TESTENV_UNPRIVILEGED_RESULT"
 
 func runUnprivileged(t *testing.T) bool {
 	t.Helper()

@@ -9,7 +9,7 @@ import (
 
 // ToolResultMessage declares exactly upstream 1.1.0's ToolResultMessage fields
 // (ai/src/types.ts, which adds nestedCalls and durationMs). addedToolNames was a 0.84 field that 0.86 removed in
-// favor of system messages with toolsAdded; PiG must not keep it. A field JSON skips (unexported or tagged "-") is not a member.
+// favor of system messages with toolsAdded; Ompig must not keep it. A field JSON skips (unexported or tagged "-") is not a member.
 func TestToolResultMessageFieldsMatchUpstream(t *testing.T) {
 	var got []string
 	typ := reflect.TypeFor[ToolResultMessage]()

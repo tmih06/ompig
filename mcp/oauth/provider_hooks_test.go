@@ -8,10 +8,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// PiG-only: packages/mcp/test/oauth.test.ts never gives its provider the optional addClientAuthentication or
+// Ompig-only: packages/mcp/test/oauth.test.ts never gives its provider the optional addClientAuthentication or
 // clientMetadataDocument members of OAuthClientProvider, so the flow paths that call them have no upstream test.
 
 type authenticatingProvider struct {

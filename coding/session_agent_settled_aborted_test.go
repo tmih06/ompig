@@ -3,9 +3,9 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi 1.1.0 agent-session.ts:1080-1085 (_emitAgentSettled) reads _agentRunAbortRequested and emits agent_settled { aborted } to the

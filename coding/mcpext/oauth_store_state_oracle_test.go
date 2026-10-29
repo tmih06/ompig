@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
-// A tokensExpireAt of 1e999 or null is left out: JSON.stringify writes null for Infinity, and PiG's typed state reads null as 0 and cannot decode 1e999.
-// McpOAuthCredentialStore (extensions/mcp/oauth.js) reads, promotes, removes and rewrites mcp-auth.json. Each probe runs load, tokens, remove and save over one file text, on Pi's store and PiG's, and compares what the caller sees and the text left behind.
+// A tokensExpireAt of 1e999 or null is left out: JSON.stringify writes null for Infinity, and Ompig's typed state reads null as 0 and cannot decode 1e999.
+// McpOAuthCredentialStore (extensions/mcp/oauth.js) reads, promotes, removes and rewrites mcp-auth.json. Each probe runs load, tokens, remove and save over one file text, on Pi's store and Ompig's, and compares what the caller sees and the text left behind.
 func TestMcpOAuthStoreStatesMatchPiOracle(t *testing.T) {
 	const name, serverURL = "my-server", "https://mcp.example.com/mcp"
 	key := "mcp__my_server|" + serverURL
@@ -138,16 +138,16 @@ emit(await Promise.all(input.map(async ({ file }) => ({
 			got, want outcome
 		}{{"load", got.Load, w.Load}, {"tokens", got.Tokens, w.Tokens}, {"remove", got.Remove, w.Remove}, {"save", got.Save, w.Save}} {
 			if c.op == "tokens" && c.want.Error {
-				// tokens() throws on an unreadable file; PiG's Tokens has no error result and reports no tokens.
+				// tokens() throws on an unreadable file; Ompig's Tokens has no error result and reports no tokens.
 				c.want = outcome{Result: json.RawMessage(`"undefined"`), Content: c.want.Content}
 			}
 			if c.op == "load" && c.got.Error && !c.want.Error && !strings.HasPrefix(string(c.want.Result), "{") {
-				// Pi hands a stored non-object (5, [], "s", 0) to its caller as the state; PiG's typed state cannot hold it and reports an error.
+				// Pi hands a stored non-object (5, [], "s", 0) to its caller as the state; Ompig's typed state cannot hold it and reports an error.
 				continue
 			}
 			if c.got.Error != c.want.Error || c.got.Content != c.want.Content || (!c.got.Error && !equalJSON(c.got.Result, c.want.Result)) {
 				if bad++; bad <= 8 {
-					t.Errorf("%s over %q:\n  PiG %+v\n  Pi  %+v", c.op, file, c.got, c.want)
+					t.Errorf("%s over %q:\n  Ompig %+v\n  Pi  %+v", c.op, file, c.got, c.want)
 				}
 			}
 		}
@@ -157,7 +157,7 @@ emit(await Promise.all(input.map(async ({ file }) => ({
 	}
 }
 
-// equalJSON compares what the callers see. PiG's state is a typed struct: it has no absent serverUrl and no explicit null tokens, and Tokens has no null result.
+// equalJSON compares what the callers see. Ompig's state is a typed struct: it has no absent serverUrl and no explicit null tokens, and Tokens has no null result.
 func equalJSON(a, b json.RawMessage) bool {
 	normalize := func(raw json.RawMessage) string {
 		var value any

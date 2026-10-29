@@ -10,7 +10,7 @@
 # visible to the same handler (session-manager.ts appendCustomEntry); the status reads "robust: tools=1"; the overlay
 # renders "robust pick (80)" because TUI.resolveOverlayLayout gives an overlay without a width min(80, available)
 # (tui.ts:1227-1233), and "j" moves the selection to "> beta". The capture ends with the overlay open.
-# /robust-settings is not driven: Pig's getSettings drops unknown settings keys (handoff F2, routed to the settings owner).
+# /robust-settings is not driven: Ompig's getSettings drops unknown settings keys (handoff F2, routed to the settings owner).
 
 name = "75-robust-notes-rust"
 description = "The rust robust-notes extension draws Pi's screen for its tool, flag, events, appendEntry and overlay"
@@ -22,9 +22,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["../../testdata/robust-notes/rust"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["../../testdata/robust-notes/rust"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "../../testdata/robust-notes/node",
@@ -33,7 +33,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 30
-ready_pattern_pig = "robust: ready"
+ready_pattern_ompig = "robust: ready"
 ready_pattern_pi = "robust: ready"
 ready_timeout_seconds = 240
 capture_start = "Run: ext tool robust_words"

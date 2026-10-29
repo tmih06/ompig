@@ -7,7 +7,7 @@ import (
 )
 
 // trackedDetachedChildren are the shells a bash tool call started in their own process group. They are killed when
-// PiG shuts down on a termination signal or crashes, because a detached shell does not receive the terminal's hangup.
+// Ompig shuts down on a termination signal or crashes, because a detached shell does not receive the terminal's hangup.
 //
 // spawning is read-locked from before a shell starts until it is tracked; KillTrackedDetachedChildren takes it for
 // writing first, so the kill sees every shell that exists. Pi's single thread spawns and tracks in one turn, so its handlers never see that window.
@@ -66,7 +66,7 @@ var (
 )
 
 // RegisterExitCleanup adds cleanup to what [KillTrackedDetachedChildren] runs after it kills the tracked children. A package
-// that owns processes of its own registers its kill here so this package does not link it (a pig_strip_mcp build links no mcp).
+// that owns processes of its own registers its kill here so this package does not link it (a ompig_strip_mcp build links no mcp).
 func RegisterExitCleanup(cleanup func()) {
 	exitCleanupsMu.Lock()
 	exitCleanupFns = append(exitCleanupFns, cleanup)

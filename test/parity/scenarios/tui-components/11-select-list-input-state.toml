@@ -3,7 +3,7 @@
 #
 # Upstream evidence (Pi 0.83.0): the shared harness sets selection to the final
 # item, proves PageDown is ignored, sends Down to wrap to `a`, confirms `a`, and
-# independently cancels another list. Pig drives its SelectList-compatible
+# independently cancels another list. Ompig drives its SelectList-compatible
 # FilterableList mode through the same raw inputs and reports the same result.
 
 name = "11-select-list-input-state"
@@ -18,7 +18,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 25
 capture_start = "select-list:render=true:pageIgnored=true:wrap=a:select=a:cancel=true"
@@ -30,9 +30,9 @@ wait_contains = ["select-list:render=true:pageIgnored=true:wrap=a:select=a:cance
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=../clipboard-images/testdata/pig-agent", "PIG_PARITY_HARNESS=1"]
+ompig = ["OMPIG_CODING_AGENT_DIR=../clipboard-images/testdata/ompig-agent", "OMPIG_PARITY_HARNESS=1"]
 pi = ["PI_CODING_AGENT_DIR=../clipboard-images/testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/batch2-ui-harness.ts"]
 

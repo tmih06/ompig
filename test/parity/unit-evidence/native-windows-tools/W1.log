@@ -7,5 +7,5 @@ go test ./internal/codingagent/tools -run ^TestChildProcessCloseWithInheritedStd
     --- PASS: TestChildProcessCloseWithInheritedStdioPort/executeBash_resolves_after_the_shell_exits_even_if_inherited_stdio_handles_stay_open (0.29s)
     --- PASS: TestChildProcessCloseWithInheritedStdioPort/bash_tool_resolves_after_the_shell_exits_even_if_inherited_stdio_handles_stay_open (0.27s)
 PASS
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	0.663s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	0.663s
 ===== exit 0 (11s)

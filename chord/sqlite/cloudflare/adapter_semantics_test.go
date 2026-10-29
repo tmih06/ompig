@@ -7,8 +7,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/chord/sqlite/cloudflare"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/chord/sqlite/cloudflare"
 )
 
 // Pi packages/durable/src/storage/sqlite/cloudflare.ts:36-43 bindValue: a bigint binding is exact between Number.MIN_SAFE_INTEGER and Number.MAX_SAFE_INTEGER (±(2^53-1)) and a RangeError beyond; the check applies

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,12 +13,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// writeEmbeddedNodeCell lays out what a Piglet Binary extracts for one Node
+// writeEmbeddedNodeCell lays out what a Ompiglet Binary extracts for one Node
 // cell: one directory per member under the cell directory.
 func writeEmbeddedNodeCell(t *testing.T) EmbeddedCell {
 	t.Helper()
@@ -42,8 +42,8 @@ func writeEmbeddedNodeCell(t *testing.T) EmbeddedCell {
 	}
 }
 
-// A Piglet Binary's Node cell starts from its extracted sources through the
-// Node cell path Stock PiG uses: the member's command and tool register, and
+// A Ompiglet Binary's Node cell starts from its extracted sources through the
+// Node cell path Stock Ompig uses: the member's command and tool register, and
 // its relative TypeScript import resolves inside the extracted tree.
 func TestHost_LoadEmbeddedCellsStartsNodeCellFromExtractedSources(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
@@ -83,7 +83,7 @@ func TestHost_LoadEmbeddedCellsStartsNodeCellFromExtractedSources(t *testing.T) 
 	}
 }
 
-// Without Node on PATH an embedded Node cell fails with the error Stock PiG
+// Without Node on PATH an embedded Node cell fails with the error Stock Ompig
 // reports for the same extension, naming the extension and the Node version it
 // needs, and the failure is per extension: the host keeps running.
 func TestHost_LoadEmbeddedNodeCellWithoutNodeReportsStockError(t *testing.T) {

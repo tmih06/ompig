@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
 )
 
 func TestOverlayCellsLeavesSourceTreeUntouched(t *testing.T) {
@@ -66,7 +66,7 @@ func TestOverlayFuseImportsFactoryPackageWithoutWritingGoMod(t *testing.T) {
 	if err := os.MkdirAll(fuseDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	goMod := []byte("module example.com/pig\n\ngo 1.26\n")
+	goMod := []byte("module example.com/ompig\n\ngo 1.26\n")
 	registry := []byte("package fusepack\n")
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), goMod, 0o644); err != nil {
 		t.Fatal(err)
@@ -118,7 +118,7 @@ func TestOverlayFuseCompilesExtensionWithInternalPackages(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	goMod := "module example.com/pig\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => " + filepath.ToSlash(sdkRoot) + "\n"
+	goMod := "module example.com/ompig\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => " + filepath.ToSlash(sdkRoot) + "\n"
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -127,7 +127,7 @@ func TestOverlayFuseCompilesExtensionWithInternalPackages(t *testing.T) {
 		t.Fatal(err)
 	}
 	base := `package fusepack
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 var factories = map[string]func() *sdk.Extension{}
 func registerFactory(name string, factory func() *sdk.Extension) { factories[name] = factory }
 `
@@ -144,7 +144,7 @@ func registerFactory(name string, factory func() *sdk.Extension) { factories[nam
 	if err := os.MkdirAll(filepath.Join(extRoot, "internal", "shared"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	extGoMod := "module example.com/extensions\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	extGoMod := "module example.com/extensions\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(extRoot, "go.mod"), []byte(extGoMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -153,7 +153,7 @@ func registerFactory(name string, factory func() *sdk.Extension) { factories[nam
 	}
 	extensionSource := `package review
 import (
-  sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+  sdk "github.com/tmih06/ompig/extensions/sdk"
   "example.com/extensions/internal/shared"
 )
 func Extension() *sdk.Extension { return sdk.New(shared.Name()) }
@@ -192,7 +192,7 @@ func TestOverlayFuseRegistersFrontendMember(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	goMod := "module example.com/pig\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => " + filepath.ToSlash(sdkRoot) + "\n"
+	goMod := "module example.com/ompig\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => " + filepath.ToSlash(sdkRoot) + "\n"
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -201,7 +201,7 @@ func TestOverlayFuseRegistersFrontendMember(t *testing.T) {
 		t.Fatal(err)
 	}
 	base := `package frontendpack
-import "github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+import "github.com/tmih06/ompig/extensions/sdk/frontend"
 var selected func() frontend.Frontend
 func register(factory func() frontend.Frontend) { selected = factory }
 `
@@ -212,12 +212,12 @@ func register(factory func() frontend.Frontend) { selected = factory }
 		t.Fatal(err)
 	}
 	memberRoot := t.TempDir()
-	memberGoMod := "module example.com/tern\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"
+	memberGoMod := "module example.com/tern\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"
 	if err := os.WriteFile(filepath.Join(memberRoot, "go.mod"), []byte(memberGoMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	memberSource := `package tern
-import "github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+import "github.com/tmih06/ompig/extensions/sdk/frontend"
 type member struct{}
 func (member) Open(frontend.Env) (frontend.Session, error) { return nil, nil }
 func Frontend() frontend.Frontend { return member{} }
@@ -256,37 +256,37 @@ func Frontend() frontend.Frontend { return member{} }
 }
 
 func TestPigletBinaryBuildArgsBakesReleaseVersionOnly(t *testing.T) {
-	bare := pigletBinaryBuildArgs("/tmp/pig-x", "", "", nil)
-	if strings.Contains(strings.Join(bare, " "), "github.com/MichaelKinsy/PiG/coding/cli.PigletBinaryVersion") {
+	bare := pigletBinaryBuildArgs("/tmp/ompig-x", "", "", nil)
+	if strings.Contains(strings.Join(bare, " "), "github.com/tmih06/ompig/coding/cli.PigletBinaryVersion") {
 		t.Fatalf("no release version should bake no version: %v", bare)
 	}
-	if bare[0] != "build" || bare[len(bare)-1] != "./cmd/pig" {
+	if bare[0] != "build" || bare[len(bare)-1] != "./cmd/ompig" {
 		t.Fatalf("unexpected build args: %v", bare)
 	}
-	baked := pigletBinaryBuildArgs("/tmp/pig-x", "1.2.3", "/tmp/overlay.json", nil)
+	baked := pigletBinaryBuildArgs("/tmp/ompig-x", "1.2.3", "/tmp/overlay.json", nil)
 	joined := strings.Join(baked, " ")
 	if strings.Contains(joined, "DefaultUpdateURL") {
 		t.Fatalf("build baked a publication endpoint: %v", baked)
 	}
-	if !strings.Contains(joined, "github.com/MichaelKinsy/PiG/coding/cli.PigletBinaryVersion=1.2.3") {
-		t.Fatalf("Piglet Binary version not baked via ldflags: %v", baked)
+	if !strings.Contains(joined, "github.com/tmih06/ompig/coding/cli.PigletBinaryVersion=1.2.3") {
+		t.Fatalf("Ompiglet Binary version not baked via ldflags: %v", baked)
 	}
 }
 
 func TestPigletBinaryBuildArgsDisablesAutomaticVCSStamping(t *testing.T) {
 	for _, version := range []string{"", "1.2.3"} {
-		args := pigletBinaryBuildArgs("/tmp/pig-x", version, "", nil)
+		args := pigletBinaryBuildArgs("/tmp/ompig-x", version, "", nil)
 		if !slices.Contains(args, "-buildvcs=false") {
 			t.Fatalf("version %q: build did not disable automatic VCS stamping: %v", version, args)
 		}
 	}
 }
 
-// A Piglet Binary is a redistributable artifact, so it must not carry debug
+// A Ompiglet Binary is a redistributable artifact, so it must not carry debug
 // symbols or absolute build paths regardless of whether a release version is set.
 func TestPigletBinaryBuildArgsStripsAndTrims(t *testing.T) {
 	for _, version := range []string{"", "1.2.3"} {
-		joined := strings.Join(pigletBinaryBuildArgs("/tmp/pig-x", version, "", nil), " ")
+		joined := strings.Join(pigletBinaryBuildArgs("/tmp/ompig-x", version, "", nil), " ")
 		if !strings.Contains(joined, "-trimpath") {
 			t.Fatalf("version %q: build did not trim paths: %s", version, joined)
 		}

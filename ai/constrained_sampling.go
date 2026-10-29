@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // This file ports packages/ai/src/api/constrained-sampling.ts: the provider-side

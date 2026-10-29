@@ -11,7 +11,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/upstreampackages"
+	"github.com/tmih06/ompig/test/parity/upstreampackages"
 )
 
 // corePackages are the four packages that PORT_MAP covered before every package of the monorepo was mapped. Their subtotal keeps the earlier headline comparable.

@@ -9,13 +9,13 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/utils/html.ts
 
 // decodeHtmlEntityAt (html.ts:9-60) over generated entity bodies (named, decimal, hex with sign, 0x, whitespace, trailing junk, lone surrogates,
-// 16-unit limit) and prefixes of multi-byte text: the pinned Pi and PiG agree on the decoded text and the length in UTF-16 units.
+// 16-unit limit) and prefixes of multi-byte text: the pinned Pi and Ompig agree on the decoded text and the length in UTF-16 units.
 func TestDecodeHTMLEntityAtMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(9))
 	pieces := []string{"amp", "lt", "gt", "quot", "apos", "AMP", "#", "x", "X", "0x", "0", "1", "9", "65", "a", "F", "g", "z", "+", "-", " ", "\t", "é", "😀", "e", ".", "99999999999999999999", "55296", "D800", "10FFFF", "110000", "nbsp", "&", ";"}
@@ -73,9 +73,9 @@ func TestDecodeHTMLEntityAtMatchesPi(t *testing.T) {
 			continue
 		}
 		decoded++
-		// Pi's length counts UTF-16 units; PiG's counts bytes of the same reference.
+		// Pi's length counts UTF-16 units; Ompig's counts bytes of the same reference.
 		units := len(utf16.Encode([]rune(text[indexes[i] : indexes[i]+length])))
-		// Node writes a lone surrogate as U+FFFD; PiG keeps it as WTF-8.
+		// Node writes a lone surrogate as U+FFFD; Ompig keeps it as WTF-8.
 		got = strings.ToValidUTF8(got, "\ufffd")
 		if !ok || got != want[i].Text || units != want[i].Length {
 			t.Errorf("decodeHTMLEntityAt(%q, %d) = %q, %d units, %v; Pi %q, %d", text, indexes[i], got, units, ok, want[i].Text, want[i].Length)

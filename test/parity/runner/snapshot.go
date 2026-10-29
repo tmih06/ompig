@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // snapshotEnvKeys lists every env key whose value is a directory that
@@ -24,9 +24,9 @@ import (
 // from an env var. The snapshot mechanism is the only thing preventing
 // committed testdata from being mutated by the binary under test.
 var snapshotEnvKeys = []string{
-	"PIG_CODING_AGENT_DIR",
+	"OMPIG_CODING_AGENT_DIR",
 	"PI_CODING_AGENT_DIR",
-	"PIG_HOME",
+	"OMPIG_HOME",
 	"PI_HOME",
 }
 
@@ -42,8 +42,8 @@ func scenarioAuthModes(sc *Scenario) (preserve, inject bool) {
 // for requires-auth scenarios. The copies are registered with t.Cleanup.
 //
 // This prevents the binary from mutating committed testdata (e.g. pi
-// persists defaultModel into settings.json on /model switch, or pig
-// writes session files under PIG_HOME).
+// persists defaultModel into settings.json on /model switch, or ompig
+// writes session files under OMPIG_HOME).
 //
 // FATAL on missing source: if the scenario declares a dir that doesn't
 // exist on disk, the test fails immediately. This catches typo'd paths
@@ -51,11 +51,11 @@ func scenarioAuthModes(sc *Scenario) (preserve, inject bool) {
 // dir, producing non-hermetic, non-reproducible results.
 //
 // Returns updated env var slices with the paths rewritten to temp copies.
-func snapshotAgentDirs(t *testing.T, sourcePath string, pigEnv, piEnv []string, preserveAuth, injectAuth bool) ([]string, []string) {
+func snapshotAgentDirs(t *testing.T, sourcePath string, ompigEnv, piEnv []string, preserveAuth, injectAuth bool) ([]string, []string) {
 	t.Helper()
-	pigOut := snapshotEnvDirs(t, sourcePath, pigEnv, preserveAuth, injectAuth)
+	ompigOut := snapshotEnvDirs(t, sourcePath, ompigEnv, preserveAuth, injectAuth)
 	piOut := snapshotEnvDirs(t, sourcePath, piEnv, preserveAuth, injectAuth)
-	return pigOut, piOut
+	return ompigOut, piOut
 }
 
 // snapshotBinaryEnv isolates the fallback home directories carried by a
@@ -95,10 +95,10 @@ func snapshotEnvDirs(t *testing.T, sourcePath string, envVars []string, preserve
 		}
 
 		// Create ephemeral copy.
-		// PIG_HOME holds pig's documentation bundle, whose path the system
+		// OMPIG_HOME holds ompig's documentation bundle, whose path the system
 		// prompt carries; see "Documentation paths in the system prompt".
 		root := os.TempDir()
-		if k == "PIG_HOME" {
+		if k == "OMPIG_HOME" {
 			if err := checkPromptPathRoot(); err != nil {
 				t.Fatal(err)
 			}
@@ -129,13 +129,13 @@ func snapshotEnvDirs(t *testing.T, sourcePath string, envVars []string, preserve
 			seedPiChangelogVersion(t, tmp)
 		}
 		switch k {
-		case "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR":
+		case "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR":
 			seedCheckoutUntrusted(t, checkoutTrustRoot(sourcePath), tmp)
-		case "PIG_HOME":
+		case "OMPIG_HOME":
 			seedCheckoutUntrusted(t, checkoutTrustRoot(sourcePath), filepath.Join(tmp, "agent"))
 		}
-		if injectAuth && (k == "PIG_CODING_AGENT_DIR" || k == "PI_CODING_AGENT_DIR") {
-			label := "pig"
+		if injectAuth && (k == "OMPIG_CODING_AGENT_DIR" || k == "PI_CODING_AGENT_DIR") {
+			label := "ompig"
 			if k == "PI_CODING_AGENT_DIR" {
 				label = "pi"
 			}
@@ -150,7 +150,7 @@ func snapshotEnvDirs(t *testing.T, sourcePath string, envVars []string, preserve
 	return out
 }
 
-// snapshotCWD copies the scenario's CWD fixture into a fresh directory under a canonical, context-free temporary root so concurrent pi/pig invocations get independent copies.
+// snapshotCWD copies the scenario's CWD fixture into a fresh directory under a canonical, context-free temporary root so concurrent pi/ompig invocations get independent copies.
 // Returns the absolute canonical path of the snapshot. Mirrors snapshotEnvDirs
 // for env-referenced agent/home dirs, but for the binary's working
 // directory (declared via a driver's cwd field in the scenario TOML).
@@ -189,7 +189,7 @@ func snapshotCWD(t *testing.T, src string) (string, error) {
 // other binary.
 //
 // The root is named like a cwd snapshot, with a fixed-width random suffix
-// (mkdirTempFixed), so the extension paths of pig and pi have equal length:
+// (mkdirTempFixed), so the extension paths of ompig and pi have equal length:
 // both print the path (an extension error names it) and wrap it at the same
 // column. os.MkdirTemp's suffix is one to ten digits, which moved a wrap point
 // between the two binaries' screens from run to run.
@@ -229,11 +229,11 @@ func snapshotExtensionPath(t *testing.T, src string) (string, error) {
 // Resume scenarios ship a session fixture with a fixed placeholder cwd
 // (e.g. "/tmp"). Since v0.78.1, `--continue` with a custom `--session-dir`
 // filters candidate sessions to those whose header cwd matches the runtime
-// cwd (upstream continueRecent's filterCwd; pig mirrors it). The runtime
+// cwd (upstream continueRecent's filterCwd; ompig mirrors it). The runtime
 // cwd is this random snapshot dir, so the placeholder never matches and the
 // session is skipped, leaving both binaries on the startup banner. Aligning
 // the header cwd to the snapshot's resolved path makes the session loadable
-// by both pig and pi exactly as if it had been created here. Only the first
+// by both ompig and pi exactly as if it had been created here. Only the first
 // (header) line is rewritten; scenarios without a sessions/ dir are a no-op.
 func rewriteSnapshotSessionCwds(snap string) error {
 	sessionsDir := filepath.Join(snap, "sessions")
@@ -313,8 +313,8 @@ func isSnapshotKey(k string) bool {
 // interactive scenario. Seeding from the pin here fixes the whole class in
 // one place and keeps the suite resilient to the next bump.
 //
-// pig's own bundled changelog tops at its embedded version and its fixtures
-// record that, so the pig side stays inert; only the pi side is reseeded.
+// ompig's own bundled changelog tops at its embedded version and its fixtures
+// record that, so the ompig side stays inert; only the pi side is reseeded.
 //
 // A missing settings.json is a no-op (nothing to suppress). Invalid JSON is
 // fatal so a corrupt fixture surfaces loudly instead of silently failing to
@@ -340,7 +340,7 @@ func seedPiChangelogVersion(t *testing.T, agentDir string) {
 	}
 }
 
-// checkoutTrustRoot returns the canonical path of the PiG checkout that holds
+// checkoutTrustRoot returns the canonical path of the Ompig checkout that holds
 // the scenario, in the form both binaries use as a trust.json key.
 func checkoutTrustRoot(sourcePath string) string {
 	root := mustRepoRootForArtifact(sourcePath)

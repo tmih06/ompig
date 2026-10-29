@@ -14,8 +14,8 @@ import (
 var (
 	mdLink      = regexp.MustCompile(`\]\(([^)\s]+)(?:\s+"[^"]*")?\)`)
 	refLinkDef  = regexp.MustCompile(`(?m)^\[[^\]]+\]:\s*(\S+)`)
-	siteLink    = regexp.MustCompile(`^(?:https://pi-in-go\.dev)?/docs/(?:latest/)?([a-z0-9-]+)(?:/)?(#.*)?$`)
-	githubBlob  = regexp.MustCompile(`^https://github\.com/MichaelKinsy/PiG/(?:blob|tree)/(?:main|HEAD)/([^#?]+)(#.*)?$`)
+	siteLink    = regexp.MustCompile(`^(?:https://ompig\.dev)?/docs/(?:latest/)?([a-z0-9-]+)(?:/)?(#.*)?$`)
+	githubBlob  = regexp.MustCompile(`^https://github\.com/tmih06/ompig/(?:blob|tree)/(?:main|HEAD)/([^#?]+)(#.*)?$`)
 	anchorSlugs = map[string]map[string]bool{}
 	htmlAnchor  = regexp.MustCompile(`<a\s+(?:id|name)="([^"]+)"`)
 	// htmlRef is the target of an HTML element a Markdown page embeds, such as the README banner <img src=...>.

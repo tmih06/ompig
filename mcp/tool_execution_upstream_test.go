@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Tool.execution is `{ taskSupport?: "forbidden" | "optional" | "required" }` (packages/mcp/src/protocol/types.ts:72-74, :83). The client hands

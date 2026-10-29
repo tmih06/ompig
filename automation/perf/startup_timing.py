@@ -22,17 +22,17 @@ CASES = ("none", "ts", "package")
 
 
 def environment(home):
-    for name in ("cwd", "pig/agent", "pi-agent", "cache", "config", "data", "tmp"):
+    for name in ("cwd", "ompig/agent", "pi-agent", "cache", "config", "data", "tmp"):
         (home / name).mkdir(parents=True, exist_ok=True)
     temporary = home.parent / ("t-" + hashlib.sha256(str(home).encode()).hexdigest()[:12])
     temporary.mkdir(parents=True, exist_ok=True)
     return {
         "PATH": os.environ["PATH"], "HOME": str(home), "USERPROFILE": str(home),
-        "PIG_HOME": str(home / "pig"), "PIG_CODING_AGENT_DIR": str(home / "pig/agent"),
+        "OMPIG_HOME": str(home / "ompig"), "OMPIG_CODING_AGENT_DIR": str(home / "ompig/agent"),
         "PI_CODING_AGENT_DIR": str(home / "pi-agent"), "TMPDIR": str(temporary),
         "XDG_CACHE_HOME": str(home / "cache"), "XDG_CONFIG_HOME": str(home / "config"),
-        "XDG_DATA_HOME": str(home / "data"), "PIG_TEST_FAUX": "1", "PIG_TEST_FAUX_SCENARIO": "parity-basic",
-        "PIG_OFFLINE": "1", "PI_OFFLINE": "1", "PI_TELEMETRY": "0", "NO_COLOR": "1", "TERM": "dumb", "LC_ALL": "C",
+        "XDG_DATA_HOME": str(home / "data"), "OMPIG_TEST_FAUX": "1", "OMPIG_TEST_FAUX_SCENARIO": "parity-basic",
+        "OMPIG_OFFLINE": "1", "PI_OFFLINE": "1", "PI_TELEMETRY": "0", "NO_COLOR": "1", "TERM": "dumb", "LC_ALL": "C",
     }
 
 
@@ -42,7 +42,7 @@ def command(binary, label, case, home, fixtures, rpc=False):
         args += ["-e", str(ROOT / "test/parity/testdata/test-faux-provider.ts")]
     if case == "package":
         settings = json.dumps({"packages": [str(fixtures / "package")]})
-        (home / "pig/agent/settings.json").write_text(settings)
+        (home / "ompig/agent/settings.json").write_text(settings)
         (home / "pi-agent/settings.json").write_text(settings)
     else:
         args += ["--no-extensions"]
@@ -154,7 +154,7 @@ def summarize(rows, budgets):
     for (build, kind, cache), values in groups.items():
         entry = {"build": build, "kind": kind, "cache": cache, "runs": len(values),
                  "median_ms": statistics.median(values), "p90_ms": sorted(values)[math.ceil(.9 * (len(values) - 1))]}
-        if build == "pig":
+        if build == "ompig":
             reference = "baseline" if kind == "none" else "pi"
             if (reference, kind, cache) in groups:
                 entry["ratio"] = entry["median_ms"] / statistics.median(groups[reference, kind, cache])
@@ -166,7 +166,7 @@ def summarize(rows, budgets):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pig", required=True)
+    parser.add_argument("--ompig", required=True)
     parser.add_argument("--pi", required=True)
     parser.add_argument("--baseline", required=True)
     parser.add_argument("--runs", type=int, default=25)
@@ -177,7 +177,7 @@ def main():
     output = pathlib.Path(args.out).resolve()
     output.mkdir(parents=True, exist_ok=True)
     builds = {name: str(pathlib.Path(value).resolve()) for name, value in
-              (("baseline", args.baseline), ("pig", args.pig), ("pi", args.pi))}
+              (("baseline", args.baseline), ("ompig", args.ompig), ("pi", args.pi))}
     provenance = {"source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                   "runs": args.runs, "binaries": {name: {"path": path, "sha256": hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()}
                                                 for name, path in builds.items()},
@@ -186,7 +186,7 @@ def main():
     (output / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
     budgets = json.loads((ROOT / "automation/perf/startup-budgets.json").read_text())
     rows = []
-    with tempfile.TemporaryDirectory(prefix="pig-startup-") as directory, (output / "samples.jsonl").open("w") as log:
+    with tempfile.TemporaryDirectory(prefix="ompig-startup-") as directory, (output / "samples.jsonl").open("w") as log:
         root = pathlib.Path(directory)
         version_home = root / "versions"
         version_env = environment(version_home)

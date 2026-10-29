@@ -3,7 +3,7 @@ package mcpext
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's McpOAuthCredentialStore keys a server's state in mcp-auth.json by `${namespace}|${String(new URL(serverUrl))}`. The file is shared with Pi, so the key must be the WHATWG href for every URL spelling.

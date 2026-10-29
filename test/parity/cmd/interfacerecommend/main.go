@@ -9,7 +9,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 type semanticInventory struct {
@@ -51,7 +51,7 @@ type recommendation struct {
 	Confidence             string   `json:"confidence"`
 	Basis                  []string `json:"basis"`
 	Alternatives           []string `json:"alternatives"`
-	PigCandidates          []string `json:"pigCandidates"`
+	OmpigCandidates        []string `json:"ompigCandidates"`
 	MissingClosure         []string `json:"missingClosure"`
 	Provenance             []string `json:"provenance"`
 }
@@ -59,7 +59,7 @@ type recommendation struct {
 func main() {
 	upstreamPath := flag.String("inventory", "test/parity/interfaces/upstream-v"+coding.UpstreamVersion+".json", "upstream package inventory")
 	observablePath := flag.String("observable", "", "observable inventory")
-	goPath := flag.String("go-inventory", "test/parity/interfaces/pig-go.json", "Pig Go inventory")
+	goPath := flag.String("go-inventory", "test/parity/interfaces/ompig-go.json", "Ompig Go inventory")
 	out := flag.String("out", "-", "output path or -")
 	flag.Parse()
 	outSet := false
@@ -75,9 +75,9 @@ func main() {
 		mustDecode(*observablePath, &observable)
 		upstream.Interfaces = append(upstream.Interfaces, observable.Interfaces...)
 	}
-	var pig goInventory
-	mustDecode(*goPath, &pig)
-	ledger := recommend(upstream, pig)
+	var ompig goInventory
+	mustDecode(*goPath, &ompig)
+	ledger := recommend(upstream, ompig)
 	var writer = os.Stdout
 	if *out != "-" {
 		file, err := os.Create(*out)
@@ -104,39 +104,39 @@ func mustDecode(path string, target any) {
 	}
 }
 
-func recommend(upstream semanticInventory, pig goInventory) recommendationLedger {
+func recommend(upstream semanticInventory, ompig goInventory) recommendationLedger {
 	byName := map[string][]goEntry{}
-	for _, entry := range pig.Interfaces {
+	for _, entry := range ompig.Interfaces {
 		key := normalizedName(entry.Name)
 		byName[key] = append(byName[key], entry)
 	}
-	ledger := recommendationLedger{UpstreamVersion: upstream.UpstreamVersion, GeneratedBy: "pig-interface-recommend-v2"}
+	ledger := recommendationLedger{UpstreamVersion: upstream.UpstreamVersion, GeneratedBy: "ompig-interface-recommend-v2"}
 	for _, entry := range upstream.Interfaces {
 		item := recommendation{
 			ID: entry.ID, UpstreamShapeHash: entry.ShapeHash,
 			RecommendedDisposition: "pending", Confidence: "low",
-			Alternatives:   []string{"ported", "partial", "deferred", "designed-out", "divergence"},
-			PigCandidates:  []string{},
-			MissingClosure: []string{"production-reachability", "required-layers", "behavioral-evidence"},
-			Provenance:     []string{"generator:pig-interface-recommend-v2", "upstream:" + upstream.UpstreamVersion},
+			Alternatives:    []string{"ported", "partial", "deferred", "designed-out", "divergence"},
+			OmpigCandidates: []string{},
+			MissingClosure:  []string{"production-reachability", "required-layers", "behavioral-evidence"},
+			Provenance:      []string{"generator:ompig-interface-recommend-v2", "upstream:" + upstream.UpstreamVersion},
 		}
 		switch {
 		case strings.HasPrefix(entry.ID, "cli:"):
-			item.Basis = []string{"Pig CLI semantic candidate extraction is not implemented yet."}
-			item.MissingClosure = append([]string{"pig-cli-shape"}, item.MissingClosure...)
+			item.Basis = []string{"Ompig CLI semantic candidate extraction is not implemented yet."}
+			item.MissingClosure = append([]string{"ompig-cli-shape"}, item.MissingClosure...)
 		case entry.ParentID != "":
 			item.Basis = []string{"Member-level candidates require parent-aware shape translation; leaf-name matching is disabled."}
 			item.MissingClosure = append([]string{"candidate-disambiguation", "shape-translation-review"}, item.MissingClosure...)
 		default:
 			candidates := byName[normalizedName(entry.Name)]
 			for _, candidate := range candidates {
-				item.PigCandidates = append(item.PigCandidates, candidate.ID)
+				item.OmpigCandidates = append(item.OmpigCandidates, candidate.ID)
 			}
-			slices.Sort(item.PigCandidates)
+			slices.Sort(item.OmpigCandidates)
 			switch {
 			case len(candidates) == 0:
-				item.Basis = []string{"No normalized-name candidate exists in the scanned Pig production packages."}
-				item.MissingClosure = append([]string{"pig-go-shape"}, item.MissingClosure...)
+				item.Basis = []string{"No normalized-name candidate exists in the scanned Ompig production packages."}
+				item.MissingClosure = append([]string{"ompig-go-shape"}, item.MissingClosure...)
 			case len(candidates) == 1:
 				item.RecommendedDisposition = "partial"
 				item.Confidence = "low"
@@ -144,7 +144,7 @@ func recommend(upstream semanticInventory, pig goInventory) recommendationLedger
 				item.Basis = []string{"Exactly one normalized declared Go symbol name matches; package context, semantic shape, and production closure remain unverified."}
 				item.MissingClosure = append([]string{"shape-translation-review"}, item.MissingClosure...)
 			default:
-				item.Basis = []string{fmt.Sprintf("%d normalized-name Pig candidates are ambiguous.", len(candidates))}
+				item.Basis = []string{fmt.Sprintf("%d normalized-name Ompig candidates are ambiguous.", len(candidates))}
 				item.MissingClosure = append([]string{"candidate-disambiguation", "shape-translation-review"}, item.MissingClosure...)
 			}
 		}

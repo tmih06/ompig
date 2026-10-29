@@ -3,8 +3,8 @@ package testfixture
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // kitWidgetCases are the views of the widget kinds' Pi vectors

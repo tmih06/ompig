@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
 #
-# Prepare a PiG development environment, or report what is missing.
+# Prepare a Ompig development environment, or report what is missing.
 #
 #   make setup    runs this script
 #   make doctor   runs it with --check, which reports and changes nothing
 #
 # Options:
 #   --check            report every component and exit; install nothing
-#   --background       run detached; progress goes to $PIG_DEV_HOME/setup.log
-#   --no-build         skip the final build of bin/pig
+#   --background       run detached; progress goes to $OMPIG_DEV_HOME/setup.log
+#   --no-build         skip the final build of bin/ompig
 #   --node             npm ci in extensions/sdk-ts (Pi mirror, parity, SDK tests)
 #   --harnesses=LIST   install eval harnesses from test/evals/harnesses.toml
 #                      (comma-separated names, or all)
 #   --all              --node --harnesses=all
 #
-# Everything installed goes under $PIG_DEV_HOME (default ${XDG_CACHE_HOME:-~/.cache}/pig-dev) or
+# Everything installed goes under $OMPIG_DEV_HOME (default ${XDG_CACHE_HOME:-~/.cache}/ompig-dev) or
 # the checkout's ignored directories. The script never uses sudo. Make includes
-# $PIG_DEV_HOME/env.mk, so every make target uses the toolchain and module proxy
-# chosen here. Shells get the same values from `source $PIG_DEV_HOME/env.sh`.
+# $OMPIG_DEV_HOME/env.mk, so every make target uses the toolchain and module proxy
+# chosen here. Shells get the same values from `source $OMPIG_DEV_HOME/env.sh`.
 #
 # When proxy.golang.org is unreachable and github.com is reachable, the script
 # starts automation/dev/goproxy-github.py, a local module proxy that serves only
@@ -26,8 +26,8 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-dev_home="${PIG_DEV_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}/pig-dev}"
-port="${PIG_GOPROXY_PORT:-8765}"
+dev_home="${OMPIG_DEV_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}/ompig-dev}"
+port="${OMPIG_GOPROXY_PORT:-8765}"
 check=0 background=0 build=1 node=0 harnesses=""
 for arg in "$@"; do
 	case "$arg" in
@@ -101,7 +101,7 @@ find_go() {
 }
 install_go() { # Called in a condition, so errexit is off here: every step checks its own status.
 	local tmp url="" sum="" file="$go_want.$os-$arch.tar.gz" index top
-	tmp="$(mktemp -d "${TMPDIR:-/tmp}/pig.XXXXXXXX")"
+	tmp="$(mktemp -d "${TMPDIR:-/tmp}/ompig.XXXXXXXX")"
 	if index="$(curl -fsSL -m 20 'https://go.dev/dl/?mode=json&include=all' 2>/dev/null)"; then
 		sum="$(python3 -c 'import json, sys
 print(next((f["sha256"] for r in json.load(sys.stdin) for f in r["files"] if f["filename"] == sys.argv[1]), ""))' "$file" <<<"$index")"
@@ -144,8 +144,8 @@ proxy_mode=""
 if [[ -n $go_bin ]]; then
 	# Read the user's own setting, not the fallback an earlier run exported
 	# through env.mk (make passes it to this script).
-	if [[ ${PIG_GOPROXY_FALLBACK:-} == 1 ]]; then
-		unset GOPROXY GOSUMDB GOWORK PIG_GOPROXY_FALLBACK
+	if [[ ${OMPIG_GOPROXY_FALLBACK:-} == 1 ]]; then
+		unset GOPROXY GOSUMDB GOWORK OMPIG_GOPROXY_FALLBACK
 	fi
 	configured="$(cd "$root" && { GOTOOLCHAIN=local "$go_bin" env GOPROXY 2>/dev/null || true; })"
 	# go env prints nothing when Go's config directory is unreadable, as in
@@ -183,7 +183,7 @@ fi
 if ((!check)) && [[ -n $go_bin ]]; then
 	vars=()
 	[[ $go_mode == pinned ]] && vars+=("PATH=$pinned/bin:\$PATH" "GOTOOLCHAIN=local")
-	[[ $proxy_mode == github ]] && vars+=("GOPROXY=http://127.0.0.1:$port" "GOSUMDB=off" "PIG_GOPROXY_FALLBACK=1")
+	[[ $proxy_mode == github ]] && vars+=("GOPROXY=http://127.0.0.1:$port" "GOSUMDB=off" "OMPIG_GOPROXY_FALLBACK=1")
 	vars+=("GOFLAGS=-modcacherw")
 	{
 		echo "# Written by automation/dev/setup.sh. Rerun it to change these values."
@@ -200,7 +200,7 @@ if ((!check)) && [[ -n $go_bin ]]; then
 		done
 		if [[ $proxy_mode == github ]]; then
 			echo "# Restart the verified module proxy if it stopped (sandbox restarts end background processes)."
-			echo "PIG_GOPROXY_READY := \$(shell python3 $root/automation/dev/goproxy-github.py --ensure --port $port --root $root >/dev/null 2>&1 && echo yes)"
+			echo "OMPIG_GOPROXY_READY := \$(shell python3 $root/automation/dev/goproxy-github.py --ensure --port $port --root $root >/dev/null 2>&1 && echo yes)"
 		fi
 	} >"$dev_home/env.mk"
 	row env ok "$dev_home/env.mk (make) and env.sh (shells)"
@@ -242,15 +242,15 @@ fi
 if ((build && !check)) && [[ -n $go_bin ]]; then
 	start=$SECONDS
 	# shellcheck source=/dev/null # env.sh is written above for this machine.
-	if (set -a && source "$dev_home/env.sh" && set +a && cd "$root" && "$go_bin" build -buildvcs=false -trimpath -o bin/pig ./cmd/pig); then
-		row build ok "bin/pig in $((SECONDS - start)) s ($("$root/bin/pig" --version 2>/dev/null | head -1))"
+	if (set -a && source "$dev_home/env.sh" && set +a && cd "$root" && "$go_bin" build -buildvcs=false -trimpath -o bin/ompig ./cmd/ompig); then
+		row build ok "bin/ompig in $((SECONDS - start)) s ($("$root/bin/ompig" --version 2>/dev/null | head -1))"
 	else
-		need build "go build ./cmd/pig failed; the error is above"
+		need build "go build ./cmd/ompig failed; the error is above"
 	fi
 fi
 
 echo
-echo "PiG development environment ($dev_home)"
+echo "Ompig development environment ($dev_home)"
 printf '%s\n' "${summary[@]}"
 if ((missing)); then
 	echo "setup: FAILED"

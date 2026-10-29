@@ -20,10 +20,10 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions", "--session-dir", "sessions", "-c"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions", "--session-dir", "sessions", "-c"]
 pi_args = ["--session-dir", "sessions", "-c"]
-pig_extensions = ["testdata/ext/resume-tools.mjs"]
+ompig_extensions = ["testdata/ext/resume-tools.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/resume-tools.mjs",
@@ -33,7 +33,7 @@ pi_extensions = [
 width = 100
 height = 35
 cwd = "testdata/resume-tools-session"
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "active-tools:"

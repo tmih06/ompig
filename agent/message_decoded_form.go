@@ -5,11 +5,11 @@ import (
 	"math"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
-// pig additive (D112): DecodedForm is the message that decoding m's JSON encoding yields, built without encoding or decoding.
+// ompig additive (D112): DecodedForm is the message that decoding m's JSON encoding yields, built without encoding or decoding.
 
 // maxExactInteger is the largest magnitude a JavaScript number holds as an integer; decoding reads an integer member through a float64, so a larger one would not read back as written.
 const maxExactInteger = 1<<53 - 1

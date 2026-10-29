@@ -3,7 +3,7 @@
 
 package session
 
-import "github.com/MichaelKinsy/PiG/durable/core/internal/delta"
+import "github.com/tmih06/ompig/durable/core/internal/delta"
 
 // HostDoc is Doc for a host that keeps its own draft (ABI section 8, `doc`): it acquires the document and returns the
 // value the draft starts from and, for a stored document (loaded), the number of deltas after its base (Pi's

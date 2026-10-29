@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fail when a test run left files or directories in the scratch temporary directory it ran under. Usage: assert-clean-tmp.sh <scratch-dir>
-# Node shares these compile caches across processes on purpose, and they carry no PiG prefix. A go-build* directory is one go command's work directory (GOTMPDIR), which go removes on exit, so a remaining one is a killed build's leak.
+# Node shares these compile caches across processes on purpose, and they carry no Ompig prefix. A go-build* directory is one go command's work directory (GOTMPDIR), which go removes on exit, so a remaining one is a killed build's leak.
 set -euo pipefail
 
 scratch=${1:?usage: assert-clean-tmp.sh <scratch-dir>}

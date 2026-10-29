@@ -6,7 +6,7 @@
 # (print-mode.ts:131-166, agent-session-runtime.ts:404-410, agent-session.ts:1393-1406).
 # shutdown-loop-turn-a.mjs queues an immediate and a zero-delay timer in its handler, and each
 # records whether its ctx is live. shutdown-loop-turn-b.mjs then awaits a 50 ms timer, which turns
-# the loop, so a's callbacks run first, with a live ctx. Pig packs both factories into one Node
+# the loop, so a's callbacks run first, with a live ctx. Ompig packs both factories into one Node
 # runtime process, which shares that loop. 75-print-shutdown-loop-turn-isolated compares the same
 # fixtures with each extension in its own runtime process.
 #
@@ -28,9 +28,9 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "LOOP_TURN_LOG={{TEMP}}/loop-turn.log"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "LOOP_TURN_LOG={{TEMP}}/loop-turn.log"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "LOOP_TURN_LOG={{TEMP}}/loop-turn.log"]
-pig_extensions = ["testdata/ext/shutdown-loop-turn-a.mjs", "testdata/ext/shutdown-loop-turn-b.mjs"]
+ompig_extensions = ["testdata/ext/shutdown-loop-turn-a.mjs", "testdata/ext/shutdown-loop-turn-b.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/shutdown-loop-turn-a.mjs",

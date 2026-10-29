@@ -1,14 +1,14 @@
-//go:build pig_strip_export_html
+//go:build ompig_strip_export_html
 
 package codingagent
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// pig additive (D92): this Piglet Binary compiled out HTML session export (internal/codingagent/export and its template embeds).
+// ompig additive (D92): this Ompiglet Binary compiled out HTML session export (internal/codingagent/export and its template embeds).
 func init() { pigstrip.Strip(pigstrip.ListFeatures, pigstrip.ExportHTML) }
 
 // ExportToolRenderers draws no tool through renderers: this build has no HTML export.

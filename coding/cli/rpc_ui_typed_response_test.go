@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // rpc-mode.ts:137-150 resolves select and input with `"cancelled" in r && r.cancelled ? undefined : "value" in r ? r.value : undefined` and confirm with

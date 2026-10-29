@@ -7,8 +7,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // orderedSet is a JavaScript Set: insertion order, with an O(1) add, delete, and membership test. Deleting and adding a

@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // dialogValuesUI answers each dialog with the JSON its title names, as Pi's RPC mode resolves a dialog with whatever JSON the client sent

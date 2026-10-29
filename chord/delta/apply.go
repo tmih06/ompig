@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Ports packages/chord/src/delta/index.ts (apply, applyImmutable, applyImmutableBatches).

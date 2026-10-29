@@ -1,4 +1,4 @@
-// Package rules is the registry of deterministic mapping rules from Pi's TypeScript shapes to PiG's Go shapes.
+// Package rules is the registry of deterministic mapping rules from Pi's TypeScript shapes to Ompig's Go shapes.
 //
 // A rule belongs to one family (naming, optionality, unions, functions, placement, data shapes). It lives in the family's file,
 // registers itself in init, and is consulted by the detector at one fixed extension point. A rule decides only when the Go shape is

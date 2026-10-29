@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 func settingsFirstHalfEqual(t *testing.T, got, want any) {
@@ -46,7 +46,7 @@ func settingsFirstHalfFileJSON(t *testing.T, path, want string) {
 }
 
 func TestSettingsManagerFirstHalfExternalChanges(t *testing.T) {
-	t.Setenv("PIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
+	t.Setenv("OMPIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
 	for _, tc := range []struct {
 		name, initial, external, want string
 		change                        func(*SettingsManager) error
@@ -69,7 +69,7 @@ func TestSettingsManagerFirstHalfExternalChanges(t *testing.T) {
 }
 
 func TestSettingsManagerFirstHalfStorage(t *testing.T) {
-	t.Setenv("PIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
+	t.Setenv("OMPIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
 	// .upstream/v0.99.1/packages/coding-agent/test/settings-manager.test.ts:132
 	t.Run("should keep local-only extensions in extensions array", func(t *testing.T) {
 		sm := writeSettingsLayers(t, `{"extensions":["/local/ext.ts","./relative/ext.ts"]}`, `{}`)
@@ -180,7 +180,7 @@ func TestSettingsManagerFirstHalfStorage(t *testing.T) {
 }
 
 func TestSettingsManagerFirstHalfValues(t *testing.T) {
-	t.Setenv("PIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
+	t.Setenv("OMPIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
 	// .upstream/v0.99.1/packages/coding-agent/test/settings-manager.test.ts:356
 	t.Run("maps explicit values and omits auto values", func(t *testing.T) {
 		no, yes := false, true
@@ -243,7 +243,7 @@ func TestSettingsManagerFirstHalfValues(t *testing.T) {
 }
 
 func TestSettingsManagerFirstHalfTheme(t *testing.T) {
-	t.Setenv("PIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
+	t.Setenv("OMPIG_USE_PI_DIRS", "1") // D2 shared-directory mode preserves the original .pi fixtures.
 	// .upstream/v0.99.1/packages/coding-agent/test/settings-manager.test.ts:220
 	t.Run("stores slash-separated automatic theme settings separately from fixed theme names", func(t *testing.T) {
 		sm := writeSettingsLayers(t, `{"theme":"light/dark"}`, `{}`)

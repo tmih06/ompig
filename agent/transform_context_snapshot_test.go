@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:494 `transformContext: this.transformContext` copies the public property into createLoopConfig once; the loop applies that function before every request of the run. A transform assigned during a run (from a tool here) first applies to the next run.

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // outcomeLine is [kind, text] as one JSON line: "ok" with the rendered text, or "error" with the failure as Pi names it.
@@ -28,7 +28,7 @@ func printCodemodeLine(t *testing.T, kind string, parts ...any) {
 	fmt.Printf("codemode-observation:%s", out.String())
 }
 
-// TestCodemodeDeclarationsParity prints PiG's rendering of every corpus input of testdata/upstream-golden.json (schemaToType, renderToolSignature, renderToolSample, renderDeclarations
+// TestCodemodeDeclarationsParity prints Ompig's rendering of every corpus input of testdata/upstream-golden.json (schemaToType, renderToolSignature, renderToolSample, renderDeclarations
 // and renderToolOutputType), one JSON line per case, for the extensions-runtime/78 parity scenario; the Pi side regenerates the same corpus with Pi.
 func TestCodemodeDeclarationsParity(t *testing.T) {
 	golden := loadOracle(t)

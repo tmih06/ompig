@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/tui"
 )
 
 type settingsOracleModel struct {
@@ -207,7 +207,7 @@ func settingsOracleBase() settingsOracleConfig {
 // settings-selector.ts against pinned Pi: the whole /settings screen (every row, its cycling values, submenus for theme, warnings
 // and per-model thinking, search typing, cancel) driven by seeded key sequences; every callback with its arguments and every frame
 // must agree. Pi has no "Mask secret input" row (D80), so the oracle driver inserts that one row into its own copy of the module, and
-// PiG has no "Session share destination" row (D64; TestSettingsSelectorOmitsShareDestination), so the copy drops Pi's.
+// Ompig has no "Session share destination" row (D64; TestSettingsSelectorOmitsShareDestination), so the copy drops Pi's.
 func TestSettingsSelectorMatchesPi(t *testing.T) {
 	base := settingsOracleBase()
 	variants := []settingsOracleConfig{base}
@@ -225,7 +225,7 @@ func TestSettingsSelectorMatchesPi(t *testing.T) {
 		v.Warnings = json.RawMessage(`{}`)
 		variants = append(variants, v)
 	}
-	// Pi 1.1.0 has no select page keys; Pig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
+	// Pi 1.1.0 has no select page keys; Ompig pages the selection (D155, Pi PR #7680), covered by the select page key tests, so the oracle input leaves PageUp and PageDown out.
 	alphabet := []string{"\x1b[A", "\x1b[A", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\x1b[B", "\r", "\r", "\r", "\r", "\x1b", " ", "\x1b[C", "\x1b[D", "\x7f", "t", "h", "e", "m", "a", "l", "p", "d", "\n", "\x03", "\t"}
 	rng := rand.New(rand.NewSource(20261008))
 	var probes []settingsOracleProbe
@@ -366,7 +366,7 @@ func TestSettingsSelectorMatchesPi(t *testing.T) {
 				if !eventsEqual {
 					for e := range min(len(got.Events), len(want.Events)) {
 						if !reflect.DeepEqual(got.Events[e], want.Events[e]) {
-							t.Errorf("first differing event %d: Pig %v, Pi %v", e, got.Events[e], want.Events[e])
+							t.Errorf("first differing event %d: Ompig %v, Pi %v", e, got.Events[e], want.Events[e])
 							break
 						}
 					}

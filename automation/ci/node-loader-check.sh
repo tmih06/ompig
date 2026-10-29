@@ -9,7 +9,7 @@ GOCACHE="$(go env GOCACHE)"
 export GOMODCACHE GOCACHE
 home=$(mktemp -d)
 trap 'rm -rf "$home"' EXIT
-export HOME="$home" PIG_HOME="$home/.pig"
-export PIG_CODING_AGENT_DIR="$home/pig-agent" PI_CODING_AGENT_DIR="$home/pi-agent"
+export HOME="$home" OMPIG_HOME="$home/.ompig"
+export OMPIG_CODING_AGENT_DIR="$home/ompig-agent" PI_CODING_AGENT_DIR="$home/pi-agent"
 node --version
 go test ./coding/extension/host/subprocess -count=1 -run '^(TestNodeLoaderUsesSynchronousHooksWhenAvailable|TestNodeIssuePackageForms|TestNodeRuntimePreflight.*)$'

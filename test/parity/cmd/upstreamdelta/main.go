@@ -14,8 +14,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/upstreampackages"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/upstreampackages"
 )
 
 var trackedRoots = upstreampackages.SourceRoots()

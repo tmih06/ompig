@@ -5,22 +5,22 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
-// upstream: packages/coding-agent/src/config.ts:444-456 getReadmePath/getDocsPath/getExamplesPath resolve README.md and docs under the package directory; PiG (D22) keeps each build's documentation bundle in its own directory under the configuration root. The login help (interactive-mode.ts:6208, auth-guidance.ts:9-10) names providers.md and models.md in that directory.
+// upstream: packages/coding-agent/src/config.ts:444-456 getReadmePath/getDocsPath/getExamplesPath resolve README.md and docs under the package directory; Ompig (D22) keeps each build's documentation bundle in its own directory under the configuration root. The login help (interactive-mode.ts:6208, auth-guidance.ts:9-10) names providers.md and models.md in that directory.
 func TestDocsPathsAreTheBundleUnderTheConfigRoot(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	if got, want := GetDocsPath(), pigdocs.DocsDir(home); got != want {
 		t.Fatalf("GetDocsPath() = %q, want %q", got, want)
 	}
 	if got, want := GetReadmePath(), filepath.Join(pigdocs.DocsDir(home), "README.md"); got != want {
 		t.Fatalf("GetReadmePath() = %q, want %q", got, want)
 	}
-	if got := GetExamplesPath(); got != prompts.PigExamplesLocation {
-		t.Fatalf("GetExamplesPath() = %q, want %q", got, prompts.PigExamplesLocation)
+	if got := GetExamplesPath(); got != prompts.OmpigExamplesLocation {
+		t.Fatalf("GetExamplesPath() = %q, want %q", got, prompts.OmpigExamplesLocation)
 	}
 	guidance := ProviderLoginHelp()
 	for _, name := range []string{"providers.md", "models.md"} {

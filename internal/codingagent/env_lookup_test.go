@@ -8,7 +8,7 @@ import (
 
 // envVar reads as os.Getenv does, for an unset, empty, one-unit, two-unit and long value.
 func TestEnvVarMatchesGetenv(t *testing.T) {
-	const name = "PIG_TEST_ENV_LOOKUP"
+	const name = "OMPIG_TEST_ENV_LOOKUP"
 	v := newEnvVar(name)
 	if err := os.Unsetenv(name); err != nil {
 		t.Fatal(err)

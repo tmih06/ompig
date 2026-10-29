@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// PiG-only: the upstream component tests render these components but never call Box.clear/removeChild/invalidate/
+// Ompig-only: the upstream component tests render these components but never call Box.clear/removeChild/invalidate/
 // setBgFn, Text.setCustomBgFn/invalidate or Container.children on their own.
 type countingChild struct {
 	label       string
@@ -97,7 +97,7 @@ func TestContainerChildrenIsAnInsertionOrderedSnapshot(t *testing.T) {
 	}
 }
 
-// PiG-only: markdown tests render but never call Invalidate to force the transform and parser to run again on unchanged
+// Ompig-only: markdown tests render but never call Invalidate to force the transform and parser to run again on unchanged
 // content and width.
 func TestMarkdownInvalidateForcesTheTransformAndParserToRunAgain(t *testing.T) {
 	calls := 0

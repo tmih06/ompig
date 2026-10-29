@@ -5,7 +5,7 @@ package codingagent
 
 // The state and operations behind an extension's ctx.modelRegistry. Upstream
 // hands extensions its ModelRegistry facade (packages/coding-agent/src/core/
-// model-registry.ts) over the session's ModelRuntime (model-runtime.ts). PiG's
+// model-registry.ts) over the session's ModelRuntime (model-runtime.ts). Ompig's
 // extensions run beside the host, so the host sends the registry snapshot
 // the facade's synchronous reads answer from, and answers the asynchronous
 // ones on request.
@@ -15,9 +15,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/configvalue"
 )
 
 // ExtensionModelRegistryState returns the registry snapshot for extension
@@ -266,7 +266,7 @@ func (r *ModelRegistry) ExtensionProviderAuthStatus(providerID string) ai.AuthSt
 	}
 	r.mu.RLock()
 	value, fromExtension := "", false
-	// pig divergence (D203): an empty apiKey is no key (Pi keeps "" as a configured raw key, provider-composer.ts:397,723-736).
+	// ompig divergence (D203): an empty apiKey is no key (Pi keeps "" as a configured raw key, provider-composer.ts:397,723-736).
 	if dynamic, ok := r.dynamic[providerID]; ok && dynamic.APIKey != "" {
 		value, fromExtension = dynamic.APIKey, true
 	} else if r.config != nil {
@@ -323,7 +323,7 @@ func (r *ModelRegistry) ExtensionProviderAuth(ctx context.Context, providerID st
 	r.mu.Lock()
 	credentials := r.runtimeCredentialsLocked()
 	value := ""
-	// pig divergence (D203): an empty apiKey is no key (Pi keeps "" as a configured raw key, provider-composer.ts:397,450-457).
+	// ompig divergence (D203): an empty apiKey is no key (Pi keeps "" as a configured raw key, provider-composer.ts:397,450-457).
 	if dynamic, ok := r.dynamic[providerID]; ok && dynamic.APIKey != "" {
 		value = dynamic.APIKey
 	} else if r.config != nil {

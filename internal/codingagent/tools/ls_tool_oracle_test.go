@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type lsNode struct {
@@ -218,7 +218,7 @@ func TestLsToolMatchesPi(t *testing.T) {
 			at++
 		}
 		lo := max(0, at-120)
-		t.Errorf("scenario %d args %s (%d root entries)\n  first text difference at byte %d\n  Pig ...%q\n  Pi  ...%q\n  Pig meta %.300s\n  Pi  meta %.300s", i, args, len(scenario.Nodes["/vfs"].Entries), at, normalized.Text[lo:min(len(normalized.Text), at+120)], expected[i].Text[lo:min(len(expected[i].Text), at+120)], metaOf(normalized), e[max(0, len(e)-300):])
+		t.Errorf("scenario %d args %s (%d root entries)\n  first text difference at byte %d\n  Ompig ...%q\n  Pi  ...%q\n  Ompig meta %.300s\n  Pi  meta %.300s", i, args, len(scenario.Nodes["/vfs"].Entries), at, normalized.Text[lo:min(len(normalized.Text), at+120)], expected[i].Text[lo:min(len(expected[i].Text), at+120)], metaOf(normalized), e[max(0, len(e)-300):])
 	}
 	if failures > 5 {
 		t.Errorf("%d of %d scenarios differ from Pi", failures, len(scenarios))

@@ -142,7 +142,7 @@
    "test:coding/cli/config_command_test.go#TestProjectConfigCyclesInheritedMissingMemberToUnload"
   ],
   "rationale": "SettingsManager.reload is the Go method SettingsManager.Reload; signature reviewed against the upstream declaration.",
-  "async": "An awaited Promise is a blocking Go call. Upstream's reload awaits the write queue and then records load errors; PiG writes synchronously (Flush is a no-op), so Reload has nothing to await and records load errors the same way (DrainErrors). No detached goroutine."
+  "async": "An awaited Promise is a blocking Go call. Upstream's reload awaits the write queue and then records load errors; Ompig writes synchronously (Flush is a no-op), so Reload has nothing to await and records load errors the same way (DrainErrors). No detached goroutine."
  },
  {
   "ids": [

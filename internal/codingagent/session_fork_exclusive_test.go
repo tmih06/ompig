@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 const forkExclusiveSource = `{"type":"session","version":3,"id":"src-id","timestamp":"2026-01-01T00:00:00.000Z","cwd":"/work/src"}` + "\n"

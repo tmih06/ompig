@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // execCancelFixture runs exec calls through the production UI bridge against an exec action that waits until its context ends or the test releases it.

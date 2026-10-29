@@ -1,4 +1,4 @@
-//go:build !pig_strip_codemode && !pig_strip_tool_search
+//go:build !ompig_strip_codemode && !ompig_strip_tool_search
 
 package builtin_test
 
@@ -6,10 +6,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin"
+	"github.com/tmih06/ompig/coding/extension/builtin"
 )
 
 func names(extensions []builtin.Extension) []string {

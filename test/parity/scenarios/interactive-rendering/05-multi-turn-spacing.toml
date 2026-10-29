@@ -36,20 +36,20 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-# CI tmux servers may not have extended-keys enabled. Upstream and pig both
+# CI tmux servers may not have extended-keys enabled. Upstream and ompig both
 # warn in that environment, but this scenario tests message spacing, not tmux
 # setup diagnostics. Set TMUX= for both binaries so the diagnostic does not
 # enter the captured conversation crop.
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent", "TMUX="]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent", "TMUX="]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1", "TMUX="]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "reply with exactly: Hello world"
@@ -70,7 +70,7 @@ wait_timeout_seconds = 10
 [assert]
 both_reach_ready = true
 both_not_contain = ["unknown command", "panic:", "goroutine "]
-# lint-known-gap: bg-paint SGR encoding differs between pig (paintBgWith) and
+# lint-known-gap: bg-paint SGR encoding differs between ompig (paintBgWith) and
 # upstream (Box delegation). Visible content and spacing are identical.
 output_normalized_equal = true
 runtime_ratio_max = 2.0

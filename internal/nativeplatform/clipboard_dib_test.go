@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/imageprocessing"
 )
 
 func TestClipboardDIBEnvelope(t *testing.T) {

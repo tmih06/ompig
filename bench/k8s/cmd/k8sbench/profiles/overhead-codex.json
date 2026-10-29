@@ -1,14 +1,14 @@
 {
 	"name": "overhead-codex",
 	"rule": "overhead-codex",
-	"about": "bench/evals' overhead bench (pigbench overhead): what the harness itself costs, against pigbench's local mock model that answers at once. A size is N tool rounds; -turns 8 is the local bench's print-tools. One sample runs each scenario as a fresh process: version, print, print-tools. open and turn[] are print-tools': spawn to the first model request, and the N gaps between a reply's end and the next request (the harness's added time per turn, its tool run included); openCpu/turnCpu[] their CPU, peakRss print-tools' peak RSS. PiG built from the commit against Codex CLI at the version bench/evals/arms.lock pins, configured through its own config.toml to the mock (pigbench.harness). Codex has no Pi RPC mode, and its TUI does not reliably send the scripted prompt to the mock, so the profile leaves out rpc and pty. Needs an agent bundle with the arm (k8sbench bundle -agents -arms codex) or an image built with ARMS=codex.",
+	"about": "bench/evals' overhead bench (pigbench overhead): what the harness itself costs, against pigbench's local mock model that answers at once. A size is N tool rounds; -turns 8 is the local bench's print-tools. One sample runs each scenario as a fresh process: version, print, print-tools. open and turn[] are print-tools': spawn to the first model request, and the N gaps between a reply's end and the next request (the harness's added time per turn, its tool run included); openCpu/turnCpu[] their CPU, peakRss print-tools' peak RSS. Ompig built from the commit against Codex CLI at the version bench/evals/arms.lock pins, configured through its own config.toml to the mock (pigbench.harness). Codex has no Pi RPC mode, and its TUI does not reliably send the scripted prompt to the mock, so the profile leaves out rpc and pty. Needs an agent bundle with the arm (k8sbench bundle -agents -arms codex) or an image built with ARMS=codex.",
 	"fingerprints": {
 		"8": "4103640c1f34f797"
 	},
 	"targets": [
 		{
-			"name": "pig",
-			"role": "pig",
+			"name": "ompig",
+			"role": "ompig",
 			"seed": [
 				"{root}/python/bin/python3.12",
 				"{root}/pigbench.py",
@@ -28,11 +28,11 @@
 				"k8s",
 				"overhead-sample",
 				"--target",
-				"pig",
+				"ompig",
 				"--family",
-				"pig",
+				"ompig",
 				"--binary",
-				"{root}/bin/pig",
+				"{root}/bin/ompig",
 				"--rounds",
 				"{turns}",
 				"--scenarios",

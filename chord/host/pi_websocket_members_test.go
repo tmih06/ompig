@@ -1,7 +1,7 @@
 package host
 
 // The WebSocket surfaces Chord drives structurally (Pi packages/chord/src/link.ts:333-339 WebSocketLike and
-// packages/chord/src/websocket.ts:6-15 WebSocketServerLike, WebSocketAcceptOptions): PiG implements neither in Go (a
+// packages/chord/src/websocket.ts:6-15 WebSocketServerLike, WebSocketAcceptOptions): Ompig implements neither in Go (a
 // browser, Node's WebSocket or `ws` does upstream), so these tests call them through WebSocketLike and
 // WebSocketServerLike values and pin what WebSocketLink and AcceptWebSockets do with them, as Pi does.
 

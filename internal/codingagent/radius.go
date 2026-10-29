@@ -5,7 +5,7 @@ package codingagent
 import (
 	"os"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // RadiusProviderID is the built-in Radius provider ID.

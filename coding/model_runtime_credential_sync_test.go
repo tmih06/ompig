@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The public ModelRuntime reports successful persistence separately from failed synchronization, as Pi model-runtime.ts:94-111,734-751 does.

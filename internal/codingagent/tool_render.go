@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // toolBodyRendererForCall derives display-only file metadata from the retained call and result. Upstream write previews and read highlighting use call arguments, not private runtime result details.
@@ -334,7 +334,7 @@ func truncToWidth(s string, width int) string {
 	return widthx.SliceByColumn(s, 0, width-1, true) + "\u2026"
 }
 
-// pig additive (D160): the collapsed view of a tool result is the extension's preview text.
+// ompig additive (D160): the collapsed view of a tool result is the extension's preview text.
 // makePreviewBodyRenderer produces a body renderer that uses an
 // extension-provided preview string for the collapsed view and the full
 // content for the expanded view. This gives subprocess extensions the

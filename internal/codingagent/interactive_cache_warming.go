@@ -3,7 +3,7 @@ package codingagent
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // addCacheWarmingUsage renders one persisted cache-warming refresh when cache
@@ -35,7 +35,7 @@ func (m *InteractiveMode) handleEntryAppended(raw json.RawMessage) {
 	}
 	if json.Unmarshal(raw, &head) == nil && head.Type == "context_edit" {
 		// Pi's footer asks session.getContextUsage() on every render (footer.ts:143), so an edit that drops a message from the projection (a
-		// length-truncated reply, a recovered attempt) changes the percentage at once; PiG's footer holds a stored estimate to refresh.
+		// length-truncated reply, a recovered attempt) changes the percentage at once; Ompig's footer holds a stored estimate to refresh.
 		m.refreshFooterContextUsage()
 		m.tuiInst.RequestRender()
 		return

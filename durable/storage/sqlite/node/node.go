@@ -8,9 +8,9 @@ package node
 import (
 	"context"
 
-	chordnode "github.com/MichaelKinsy/PiG/chord/sqlite/node"
-	"github.com/MichaelKinsy/PiG/durable/internal/schemabackup"
-	durablesqlite "github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	chordnode "github.com/tmih06/ompig/chord/sqlite/node"
+	"github.com/tmih06/ompig/durable/internal/schemabackup"
+	durablesqlite "github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 // The Chord driver's names, re-exported as Pi's durable node entry point re-exports them.
@@ -46,7 +46,7 @@ type NodeSqliteStorageOptions struct {
 	Prefix *string
 	// WorkingSetBytes bounds the decoded entries the storage retains so context reads do not decode the stored history
 	// again. It defaults to sqlite.DefaultWorkingSetBytes; 0 retains nothing.
-	// pig additive (D104): the working set of decoded entries has no Pi counterpart.
+	// ompig additive (D104): the working set of decoded entries has no Pi counterpart.
 	WorkingSetBytes *int64
 }
 
@@ -58,7 +58,7 @@ func OpenNodeSqliteStorage(path string, options NodeSqliteStorageOptions) (*dura
 	if err != nil {
 		return nil, err
 	}
-	// pig divergence (D188): a store an older Pi release wrote is copied before the migrations upgrade it.
+	// ompig divergence (D188): a store an older Pi release wrote is copied before the migrations upgrade it.
 	//portlint:allow ctxbackground Pi's openNodeSqliteStorage takes no abort signal and the open cannot be cancelled by a caller; the copy is a bounded local VACUUM INTO
 	if _, err := schemabackup.BeforeUpgrade(context.Background(), path, schema.Tables.DurableSchema, durablesqlite.CurrentSqliteSchemaVersion); err != nil {
 		return nil, err

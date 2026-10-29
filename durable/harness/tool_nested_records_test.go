@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi 42a3497d harness/tool.ts: what nested calls store, and the results callers get in the cases the scheduler or the
@@ -330,7 +330,7 @@ func TestNestedErrorResultsAndStructuredOutput(t *testing.T) {
 		}
 	})
 
-	// PiG regressions beyond the Pi file (docs/bug-ledger.json), on the same finalResult rules (tool.ts).
+	// Ompig regressions beyond the Pi file (docs/bug-ledger.json), on the same finalResult rules (tool.ts).
 	t.Run("joins the text of several items into one diagnostic, one item per line", func(t *testing.T) {
 		setup := chatSetup(t)
 		addTool(t, setup.Registry, failing(durable.ToolExecutionResult{IsError: &yes, Output: []ai.ToolResultMessageContent{ai.TextContent{Text: "first"}, ai.ImageContent{Data: "x", MimeType: "image/png"}, ai.TextContent{Text: "second"}}}))

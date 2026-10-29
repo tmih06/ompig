@@ -18,14 +18,14 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-const initFullChildEnv = "PIG_TEST_INIT_FULL_CHILD"
+const initFullChildEnv = "OMPIG_TEST_INIT_FULL_CHILD"
 
 // InteractiveMode.init() (interactive-mode.ts:690-1030) against a real Session on a pseudo-terminal: Init completes, leaves the editor, footer
 // and containers configured from the settings and the Session, hides the cursor while it runs, and Stop restores the terminal.
@@ -59,7 +59,7 @@ func TestInitBuildsTheInteractiveModeFromTheSettingsAndTheSession(t *testing.T) 
 	}
 	report := filepath.Join(t.TempDir(), "report.json")
 	cmd := exec.CommandContext(ctx, executable, "-test.run=^TestInitBuildsTheInteractiveModeChild$", "-test.count=1", "-test.v")
-	cmd.Env = append(os.Environ(), initFullChildEnv+"="+report, "TERM=xterm-256color", "PIG_HOME="+t.TempDir())
+	cmd.Env = append(os.Environ(), initFullChildEnv+"="+report, "TERM=xterm-256color", "OMPIG_HOME="+t.TempDir())
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, slave, slave
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: true}
 	if err := cmd.Start(); err != nil {
@@ -168,7 +168,7 @@ func TestInitBuildsTheInteractiveModeChild(t *testing.T) {
 		report.Failure = fmt.Sprintf(format, args...)
 		t.Fatal(report.Failure)
 	}
-	home := os.Getenv("PIG_HOME")
+	home := os.Getenv("OMPIG_HOME")
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		fail("%v", err)

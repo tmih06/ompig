@@ -3,7 +3,7 @@ package compaction
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi main 15e7bdc1 "omit thinking from compaction summaries" (compaction-serialization.test.ts "should omit thinking"): replayed thinking is often not part of the live context, so serializing it can make the summary request larger than the context it summarizes. Visible text, tool calls and tool results are serialized; a message with only thinking adds nothing.

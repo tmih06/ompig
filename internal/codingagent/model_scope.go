@@ -10,8 +10,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/minimatch"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/minimatch"
 )
 
 // ScopedModel pairs a model with an explicitly selected thinking level, if any.

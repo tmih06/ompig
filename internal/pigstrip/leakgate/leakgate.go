@@ -1,8 +1,8 @@
 // Package leakgate holds the tables of the strip leak gates: the user-visible names of every strip ID, which the
-// interactive gate (internal/codingagent TestStripLeakGate) and the CLI gate (cmd/pig TestStripLeakGate) look for on
+// interactive gate (internal/codingagent TestStripLeakGate) and the CLI gate (cmd/ompig TestStripLeakGate) look for on
 // the surfaces a stripped built-in must leave. Only tests import it.
 //
-// pig additive (D92).
+// ompig additive (D92).
 package leakgate
 
 import (
@@ -11,9 +11,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // CommandPhrases are the /hotkeys rows and startup hints of the key actions a command owns. A stripped command's keys
@@ -40,16 +40,16 @@ var FeatureNames = map[string][]string{
 	pigstrip.ExportHTML:         {`--export\b`},
 	pigstrip.SelfUpdate:         {`\bupdate self\b`, `\|self\]`},
 	pigstrip.Changelog:          {`(?i)\bchangelog\b`},
-	pigstrip.Docs:               {`\bpig docs\b`, `\bdocs[/\\]`, `\bits docs\b`, `PiG documentation`},
+	pigstrip.Docs:               {`\bpig docs\b`, `\bdocs[/\\]`, `\bits docs\b`, `Ompig documentation`},
 	pigstrip.Mermaid:            {`(?i)\bmermaid\b`},
-	pigstrip.PigletBuilder:      {`\bpiglet build\b`, `\bpiglet publish\b`, `\bbuild Piglets\b`},
+	pigstrip.PigletBuilder:      {`\bpiglet build\b`, `\bpiglet publish\b`, `\bbuild Ompiglets\b`},
 }
 
 // ExtensionNames are names a built-in extension shows besides its own: its commands and providers.
 var ExtensionNames = map[string][]string{
-	"pig-login": {`/sprite\b`, `(?i)\bpick a sprite\b`},
-	"llama.cpp": {`/llama\b`},
-	"mcp":       {`(?i)\bmcp\b`},
+	"ompig-login": {`/sprite\b`, `(?i)\bpick a sprite\b`},
+	"llama.cpp":   {`/llama\b`},
+	"mcp":         {`(?i)\bmcp\b`},
 }
 
 // Bounded matches name as a whole token: not inside a longer identifier, path segment or hyphenated word.

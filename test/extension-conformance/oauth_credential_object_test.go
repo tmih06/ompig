@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // captureOAuthCredentialObject drives the fixture's conformance-oauth-object provider. Pi passes the complete stored credential, with `type: "oauth"`, to refreshToken and getApiKey, and stores `{ ...result, type: "oauth" }` (provider-composer.ts:276-293, auth/resolve.ts:145-155). A fractional expiry and every provider-owned key survive each step.

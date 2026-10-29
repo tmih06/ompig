@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestConformance_SuspendedCommandFlush checks the RPC stdin-end checkpoint for every SDK runtime that has no microtask continuation. Pi has only JavaScript extensions and its shutdown awaits one stdout write callback (rpc-mode.ts:728-744, output-guard.ts:105-108). A command that is still running at that checkpoint, here one waiting on a host call with no dialog, counts as suspended, so the flush stops joining it and does not hang. The host reports the suspension without an SDK message, and it must not cancel the command.
@@ -20,7 +20,7 @@ func TestConformance_SuspendedCommandFlush(t *testing.T) {
 	}
 	for _, tc := range cases {
 		if tc.name == "subprocess-node" || tc.name == "subprocess-node-packed" {
-			// A Node runtime reports its own suspension after one event-loop turn; the RPC shutdown tests in cmd/pig compare it with Pi.
+			// A Node runtime reports its own suspension after one event-loop turn; the RPC shutdown tests in cmd/ompig compare it with Pi.
 			continue
 		}
 		t.Run(tc.name, func(t *testing.T) {

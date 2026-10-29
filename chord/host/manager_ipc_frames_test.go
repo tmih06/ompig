@@ -10,7 +10,7 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // libuv's IPC framing (src/win/pipe.c) and the buffers of the Windows spawn (src/win/process-stdio.c), which have to

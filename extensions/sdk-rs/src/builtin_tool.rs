@@ -6,7 +6,7 @@
 //! that wraps a built-in is written as in Pi:
 //!
 //! ```ignore
-//! let mut built = pig_sdk::create_read_tool_definition(cwd, None)?;
+//! let mut built = ompig_sdk::create_read_tool_definition(cwd, None)?;
 //! let inner = built.executor();
 //! built.definition.execute = Box::new(move |ctx, params| match inner.execute(ctx, params) {
 //!     Ok(result) => /* post-process */ result.into_tool_result(),

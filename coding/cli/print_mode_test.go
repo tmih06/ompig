@@ -15,12 +15,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // printModeTestHost builds a print-mode runtime whose session talks to
@@ -165,7 +165,7 @@ func TestPrintInputTransformRetainsImages(t *testing.T) {
 
 // TestJSONModeEventConversionFailureFailsTheRun pins upstream print-mode.ts
 // json output: toJsonEvent throwing inside the session subscriber rejects
-// prompt(), and print mode reports the error and exits 1. Pig's JSON forwarder
+// prompt(), and print mode reports the error and exits 1. Ompig's JSON forwarder
 // returned on the first conversion error and stopped reading the event
 // channel, so a run with more events than the buffers hold blocked the agent's
 // emit forever.
@@ -191,7 +191,7 @@ func TestJSONModeEventConversionFailureFailsTheRun(t *testing.T) {
 }
 
 // TestPrintModeReportsRunErrorsVerbatim pins upstream print-mode.ts's catch,
-// console.error(error.message) and exit 1. Pig replaced any failure whose
+// console.error(error.message) and exit 1. Ompig replaced any failure whose
 // text contained "401", "Bad credentials", or "refresh failed" with a
 // made-up "authentication expired: re-authenticate via /login in the TUI",
 // hiding the real error.
@@ -239,7 +239,7 @@ func fauxTextResponse(text string) ai.FauxResponse {
 }
 
 // TestPrintModePrintsOnlyTheFinalMessage pins upstream print-mode.ts text
-// output: only the text of the session's last message. Pig printed the text
+// output: only the text of the session's last message. Ompig printed the text
 // of every assistant message of the run, so tool-use narration reached
 // stdout ahead of the answer.
 func TestPrintModePrintsOnlyTheFinalMessage(t *testing.T) {
@@ -264,7 +264,7 @@ func TestPrintModePrintsOnlyTheFinalMessage(t *testing.T) {
 
 // TestPrintModePrintsAnswerAfterOverflowRecovery pins upstream print-mode.ts
 // reading the last session message after prompt() resolves. A context
-// overflow compacts the session and retries; pig sliced the messages the run
+// overflow compacts the session and retries; ompig sliced the messages the run
 // returned at the pre-run length, which no longer lines up after compaction,
 // so it printed nothing and exited 0.
 func TestPrintModePrintsAnswerAfterOverflowRecovery(t *testing.T) {

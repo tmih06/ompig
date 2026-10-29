@@ -13,11 +13,11 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/installresolver"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/installresolver"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type pipeReadResult struct {
@@ -74,8 +74,8 @@ func captureStdoutStderr(t *testing.T, fn func() int) (stdout, stderr string, co
 func TestInstallPackageDoesNotProjectStaticComponents(t *testing.T) {
 	home := t.TempDir()
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	write := func(relative, content string) {
 		t.Helper()
 		path := filepath.Join(root, relative)
@@ -88,18 +88,18 @@ func TestInstallPackageDoesNotProjectStaticComponents(t *testing.T) {
 	}
 	write("package.json", `{"name":"side-effects"}`)
 	write("plugin.json", `{"$schema":"https://vendor.example/plugin.schema.json","name":"side-effects","agents":"agents/","mcpServers":".mcp.json"}`)
-	write(".pig-plugin/plugin.json", `{"extends":"../../plugin.json","piglets":["legacy.piglet.yaml"]}`)
+	write(".ompig-plugin/plugin.json", `{"extends":"../../plugin.json","ompiglets":["legacy.ompiglet.yaml"]}`)
 	write("agents/review.agent.md", "# review\n")
 	write(".mcp.json", `{"mcpServers":{"demo":{"command":"true"}}}`)
-	write("legacy.piglet.yaml", "name: legacy\n")
+	write("legacy.ompiglet.yaml", "name: legacy\n")
 	if err := packagemanager.InstallPackageArtifacts(t.TempDir(), codingagent.NewSettingsManager(root, codingagent.AgentDir()).AgentDir(), codingagent.NewSettingsManager(root, codingagent.AgentDir()), codingagent.PackageSource{Source: root}, false, nil); err != nil {
 		t.Fatal(err)
 	}
 	for _, path := range []string{
 		filepath.Join(home, "mcp-servers.json"),
 		filepath.Join(home, "agent", "agents", "review.md"),
-		filepath.Join(home, "piglets", "legacy.yaml"),
-		filepath.Join(home, "bin", "pig-legacy"),
+		filepath.Join(home, "ompiglets", "legacy.yaml"),
+		filepath.Join(home, "bin", "ompig-legacy"),
 		filepath.Join(home, "diagnostics", "mcp-pending.json"),
 	} {
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
@@ -112,7 +112,7 @@ func TestRetiredResourceCommandIsRejectedBeforeInteractiveStartup(t *testing.T) 
 	_, stderr, code := captureStdoutStderr(t, func() int {
 		return runRetiredCommand([]string{"resource", "list"})
 	})
-	if code != 2 || !strings.Contains(stderr, "unknown command resource") || !strings.Contains(stderr, "pig config") {
+	if code != 2 || !strings.Contains(stderr, "unknown command resource") || !strings.Contains(stderr, "ompig config") {
 		t.Fatalf("retired resource command code=%d stderr=%q", code, stderr)
 	}
 	if code := runRetiredCommand([]string{"not-a-retired-command"}); code != -1 {
@@ -132,7 +132,7 @@ func TestListConfiguredPackagesPreservesBothSettingsScopesLikePi(t *testing.T) {
 	if err := settings.SetPackages([]codingagent.PackageSource{{Source: packageRoot}}); err != nil {
 		t.Fatal(err)
 	}
-	projectSource, err := filepath.Rel(filepath.Join(cwd, ".pig"), packageRoot)
+	projectSource, err := filepath.Rel(filepath.Join(cwd, ".ompig"), packageRoot)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -166,8 +166,8 @@ func TestListConfiguredPackagesPreservesBothSettingsScopesLikePi(t *testing.T) {
 
 func TestRunPackageCommandBareListMatchesUpstreamPackageList(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	stdout, stderr, code := captureStdoutStderr(t, func() int {
 		return runPackageCommand([]string{"list"})
 	})
@@ -240,9 +240,9 @@ func TestRunPackageCommand_HelpIncludesUpstreamExamples(t *testing.T) {
 	}
 	for _, needle := range []string{
 		"Examples:",
-		"pig install npm:@foo/bar",
-		"pig install ssh://git@github.com/user/repo",
-		"pig install ./local/path",
+		"ompig install npm:@foo/bar",
+		"ompig install ssh://git@github.com/user/repo",
+		"ompig install ./local/path",
 	} {
 		if !strings.Contains(stdout, needle) {
 			t.Fatalf("help missing %q:\n%s", needle, stdout)
@@ -263,30 +263,30 @@ func TestRunPackageCommand_InvalidOptionMatchesUpstreamHint(t *testing.T) {
 	if !strings.Contains(stderr, `Unknown option --local for "list".`) {
 		t.Fatalf("stderr missing unknown-option line:\n%s", stderr)
 	}
-	if !strings.Contains(stderr, `Use "pig --help" or "pig list [--approve|--no-approve]".`) {
+	if !strings.Contains(stderr, `Use "ompig --help" or "ompig list [--approve|--no-approve]".`) {
 		t.Fatalf("stderr missing usage hint:\n%s", stderr)
 	}
 }
 
 func TestSelfUpdateFallback_PointsAtStandaloneFallback(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	got := codingagent.SelfUpdateFallback()
 	if strings.Contains(got, "legacy-update-host") {
 		t.Fatalf("instruction still references the stale legacy-update-host URL:\n%s", got)
 	}
-	if !strings.Contains(got, "PIG_UPDATE_URL") || !strings.Contains(got, "pig update") {
+	if !strings.Contains(got, "OMPIG_UPDATE_URL") || !strings.Contains(got, "ompig update") {
 		t.Fatalf("instruction missing standalone-binary fallback:\n%s", got)
 	}
 }
 
 func TestIsSelfUpdateTarget(t *testing.T) {
-	for _, input := range []string{"self", "SELF", "pig"} {
+	for _, input := range []string{"self", "SELF", "ompig"} {
 		if !isSelfUpdateTarget(input) {
 			t.Fatalf("isSelfUpdateTarget(%q) = false, want true", input)
 		}
 	}
-	// "pi" is upstream's app name, not pig's: not a pig self-update target.
+	// "pi" is upstream's app name, not ompig's: not a ompig self-update target.
 	for _, input := range []string{"", "pi", "npm:example", "example"} {
 		if isSelfUpdateTarget(input) {
 			t.Fatalf("isSelfUpdateTarget(%q) = true, want false", input)
@@ -327,8 +327,8 @@ func TestNPMInstallArgsPassCustomRegistryWithoutCredentials(t *testing.T) {
 func TestCustomNPMRegistryUsesDistinctManagedRoot(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	first, err := packagemanager.ParseNpmInstallRef("npm:@acme/tools@1?registry=https%3A%2F%2Fnpm.one.example")
 	if err != nil {
 		t.Fatal(err)
@@ -347,8 +347,8 @@ func TestCustomNPMRegistryUsesDistinctManagedRoot(t *testing.T) {
 func TestInstallManagedNPMPassesCustomRegistryToPackageManager(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	binDir := t.TempDir()
 	logPath := filepath.Join(t.TempDir(), "npm.log")
 	script := "#!/bin/sh\nprintf '%s\\n' \"$*\" >> \"$NPM_TEST_LOG\"\n"
@@ -484,8 +484,8 @@ func TestInstallManagedGitMaterializesSelectedSubdirectory(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	binDir := t.TempDir()
 	logPath := filepath.Join(t.TempDir(), "git.log")
 	script := `#!/bin/sh
@@ -527,8 +527,8 @@ func TestInstallManagedGitRejectsMissingOrEscapingSubdirectory(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	binDir := t.TempDir()
 	script := `#!/bin/sh
 if [ "$1" = clone ]; then mkdir -p "$3"; fi
@@ -576,8 +576,8 @@ func TestConfiguredGitCheckoutInUseBySiblingSubdirectory(t *testing.T) {
 func TestRemoveGitSubdirectoryPreservesCheckoutUsedBySibling(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	removed := "git:https://github.com/acme/tools#subdirectory=plugins%2Freview"
 	sibling := "git:https://github.com/acme/tools#subdirectory=plugins%2Ftrace"
 	checkout, err := packagemanager.GitCheckoutPath(cwd, filepath.Join(home, "agent"), removed, false)
@@ -629,7 +629,7 @@ func TestAddSourceToSettings_NormalizesLocalPathsRelativeToScopeBase(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	projectWant, err := filepath.Rel(filepath.Join(cwd, ".pig"), projectPkg)
+	projectWant, err := filepath.Rel(filepath.Join(cwd, ".ompig"), projectPkg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -691,7 +691,7 @@ func TestUpdatePackages_SuggestsGitSourcePrefix(t *testing.T) {
 func TestInstalledPathForSource_GlobalRelativeLocalUsesAgentBase(t *testing.T) {
 	cwd := t.TempDir()
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	agentDir := filepath.Join(configRoot, "agent")
 	pkgDir := filepath.Join(cwd, "pkg")
 	if err := os.MkdirAll(pkgDir, 0o755); err != nil {
@@ -709,7 +709,7 @@ func TestInstalledPathForSource_GlobalRelativeLocalUsesAgentBase(t *testing.T) {
 func TestGetPnpmGlobalPackagePath_UsesConfiguredPnpmCommand(t *testing.T) {
 	cwd := t.TempDir()
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	agentDir := filepath.Join(configRoot, "agent")
 	pkgDir := filepath.Join(t.TempDir(), "node_modules", "@scope", "pkg")
 	stub := filepath.Join(t.TempDir(), "pnpm")
@@ -728,8 +728,8 @@ func TestGetPnpmGlobalPackagePath_UsesConfiguredPnpmCommand(t *testing.T) {
 func TestInstallPackageArtifacts_NPMUsesManagedAgentRoot(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := filepath.Join(t.TempDir(), "agent")
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 
 	stub := filepath.Join(t.TempDir(), "npm")
 	script := `#!/bin/sh
@@ -773,8 +773,8 @@ func TestPigletPackageOriginUsesCoreMaterializerWithoutSettings(t *testing.T) {
 	workspace := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	original, err := os.Getwd()
 	if err != nil {
 		t.Fatal(err)
@@ -795,7 +795,7 @@ func TestPigletPackageOriginUsesCoreMaterializerWithoutSettings(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(packageRoot, "package.json"), []byte(`{"name":"base"}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	pigletDir := filepath.Join(workspace, ".pig", "piglets")
+	pigletDir := filepath.Join(workspace, ".ompig", "ompiglets")
 	if err := os.MkdirAll(pigletDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -811,17 +811,17 @@ extensions:
 		t.Fatal(err)
 	}
 
-	parsed, err := piglet.Parse(pigletPath)
+	parsed, err := ompiglet.Parse(pigletPath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	resolved, resolveErrs := piglet.ResolveExtensions(parsed)
+	resolved, resolveErrs := ompiglet.ResolveExtensions(parsed)
 	if len(resolveErrs) != 0 || len(resolved) != 1 || resolved[0].Path != canonicalTestPath(t, filepath.Join(extensionDir, "index.js")) {
 		t.Fatalf("resolved=%+v errors=%v", resolved, resolveErrs)
 	}
 	sm := codingagent.NewSettingsManager(workspace, agentDir)
 	if len(sm.GetGlobalSettings().Packages) != 0 || len(sm.GetProjectSettings().Packages) != 0 {
-		t.Fatalf("Piglet dependency mutated settings: global=%v project=%v", sm.GetGlobalSettings().Packages, sm.GetProjectSettings().Packages)
+		t.Fatalf("Ompiglet dependency mutated settings: global=%v project=%v", sm.GetGlobalSettings().Packages, sm.GetProjectSettings().Packages)
 	}
 }
 
@@ -841,8 +841,8 @@ func TestMaterializePackageSourceDoesNotMutateSettings(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 
 	stub := filepath.Join(t.TempDir(), "npm")
 	script := `#!/bin/sh
@@ -879,9 +879,9 @@ func TestPigletAddNPMUsesCoreMaterializationMetadata(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	t.Chdir(cwd)
 
@@ -893,12 +893,12 @@ for argument in "$@"; do
   if [ "$previous" = "--prefix" ]; then root="$argument"; fi
   previous="$argument"
 done
-package="$root/node_modules/remote-piglet"
+package="$root/node_modules/remote-ompiglet"
 mkdir -p "$package/config/prompts"
-printf '%s\n' '{"name":"remote-piglet","version":"1.4.0","pig":{"piglet":"config/piglet.yaml"}}' > "$package/package.json"
-printf '%s\n' 'name: local-npm' 'systemPrompt:' '  file: prompts/system.md' > "$package/config/piglet.yaml"
+printf '%s\n' '{"name":"remote-ompiglet","version":"1.4.0","ompig":{"ompiglet":"config/ompiglet.yaml"}}' > "$package/package.json"
+printf '%s\n' 'name: local-npm' 'systemPrompt:' '  file: prompts/system.md' > "$package/config/ompiglet.yaml"
 printf '%s\n' 'from npm' > "$package/config/prompts/system.md"
-printf '%s\n' '{"lockfileVersion":3,"packages":{"node_modules/remote-piglet":{"version":"1.4.0","integrity":"sha512-local-fixture"}}}' > "$root/package-lock.json"
+printf '%s\n' '{"lockfileVersion":3,"packages":{"node_modules/remote-ompiglet":{"version":"1.4.0","integrity":"sha512-local-fixture"}}}' > "$root/package-lock.json"
 `
 	stub = writeStubScript(t, stub, script)
 	sm := codingagent.NewSettingsManager(cwd, agentDir)
@@ -906,13 +906,13 @@ printf '%s\n' '{"lockfileVersion":3,"packages":{"node_modules/remote-piglet":{"v
 		t.Fatal(err)
 	}
 
-	const source = "npm:remote-piglet@^1.0.0"
+	const source = "npm:remote-ompiglet@^1.0.0"
 	var stdout, stderr strings.Builder
-	code := piglet.RunCommand([]string{"piglet", "add", source, "--no-input"}, &stdout, &stderr)
+	code := ompiglet.RunCommand([]string{"ompiglet", "add", source, "--no-input"}, &stdout, &stderr)
 	if code != 0 || stderr.Len() != 0 {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
-	originData, err := os.ReadFile(filepath.Join(home, "piglets", "local-npm.origin.json"))
+	originData, err := os.ReadFile(filepath.Join(home, "ompiglets", "local-npm.origin.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -927,7 +927,7 @@ printf '%s\n' '{"lockfileVersion":3,"packages":{"node_modules/remote-piglet":{"v
 	if origin.Source != source || origin.ResolvedVersion != "1.4.0" || origin.Integrity != "sha512-local-fixture" {
 		t.Fatalf("origin = %#v", origin)
 	}
-	if prompt, err := os.ReadFile(filepath.Join(home, "piglets", "prompts", "system.md")); err != nil || string(prompt) != "from npm\n" {
+	if prompt, err := os.ReadFile(filepath.Join(home, "ompiglets", "prompts", "system.md")); err != nil || string(prompt) != "from npm\n" {
 		t.Fatalf("installed prompt = %q, %v", prompt, err)
 	}
 }
@@ -945,7 +945,7 @@ func TestPigletAddFromLocalBareGitWritesCommitOrigin(t *testing.T) {
 	// The checkout nests the bare repository's full path under the agent
 	// directory; short roots keep that under Windows' 260-character path
 	// limit, which git for Windows enforces by default.
-	bare := filepath.Join(shortTempDir(t), "owner", "piglet.git")
+	bare := filepath.Join(shortTempDir(t), "owner", "ompiglet.git")
 	if err := os.MkdirAll(work, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -955,7 +955,7 @@ func TestPigletAddFromLocalBareGitWritesCommitOrigin(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(work, "prompts"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(work, "piglet.yaml"), []byte("name: local-git\nsystemPrompt:\n  file: prompts/system.md\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(work, "ompiglet.yaml"), []byte("name: local-git\nsystemPrompt:\n  file: prompts/system.md\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(work, "prompts", "system.md"), []byte("from git\n"), 0o644); err != nil {
@@ -964,7 +964,7 @@ func TestPigletAddFromLocalBareGitWritesCommitOrigin(t *testing.T) {
 	if _, err := packagemanager.RunCmdInDir(work, "git", "add", "."); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := packagemanager.RunCmdInDir(work, "git", "-c", "user.name=Pig Test", "-c", "user.email=pig@example.test", "commit", "-q", "-m", "fixture"); err != nil {
+	if _, err := packagemanager.RunCmdInDir(work, "git", "-c", "user.name=Ompig Test", "-c", "user.email=ompig@example.test", "commit", "-q", "-m", "fixture"); err != nil {
 		t.Fatal(err)
 	}
 	commit, err := packagemanager.RunCmdInDir(work, "git", "rev-parse", "HEAD")
@@ -982,18 +982,18 @@ func TestPigletAddFromLocalBareGitWritesCommitOrigin(t *testing.T) {
 	}
 
 	home := shortTempDir(t)
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	t.Chdir(t.TempDir())
 	source := "git:file://localhost/" + strings.TrimPrefix(filepath.ToSlash(bare), "/") + "@v1.0.0"
 	var stdout, stderr strings.Builder
-	code := piglet.RunCommand([]string{"piglet", "add", source, "--no-input"}, &stdout, &stderr)
+	code := ompiglet.RunCommand([]string{"ompiglet", "add", source, "--no-input"}, &stdout, &stderr)
 	if code != 0 || stderr.Len() != 0 {
 		t.Fatalf("code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
-	originData, err := os.ReadFile(filepath.Join(home, "piglets", "local-git.origin.json"))
+	originData, err := os.ReadFile(filepath.Join(home, "ompiglets", "local-git.origin.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1008,7 +1008,7 @@ func TestPigletAddFromLocalBareGitWritesCommitOrigin(t *testing.T) {
 	if origin.Source != source || origin.ResolvedVersion != "v1.0.0" || origin.Commit != commit {
 		t.Fatalf("origin = %#v, commit %q", origin, commit)
 	}
-	if prompt, err := os.ReadFile(filepath.Join(home, "piglets", "prompts", "system.md")); err != nil || string(prompt) != "from git\n" {
+	if prompt, err := os.ReadFile(filepath.Join(home, "ompiglets", "prompts", "system.md")); err != nil || string(prompt) != "from git\n" {
 		t.Fatalf("installed prompt = %q, %v", prompt, err)
 	}
 }
@@ -1017,8 +1017,8 @@ func TestInstallAndPersistCustomRegistryNPMKeepsRegistryIdentity(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	stub := filepath.Join(t.TempDir(), "npm")
 	script := `#!/bin/sh
 root=""
@@ -1056,8 +1056,8 @@ func TestInstallAndPersistExplicitNPMRecordsCanonicalSource(t *testing.T) {
 	cwd := t.TempDir()
 	home := t.TempDir()
 	agentDir := filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 
 	stub := filepath.Join(t.TempDir(), "npm")
 	script := `#!/bin/sh
@@ -1092,8 +1092,8 @@ mkdir -p "$root/node_modules/demo"
 func TestInstallPackageArtifacts_GitUsesManagedAgentRoot(t *testing.T) {
 	cwd := t.TempDir()
 	agentDir := filepath.Join(t.TempDir(), "agent")
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 
 	binDir := t.TempDir()
 	script := `#!/bin/sh
@@ -1120,9 +1120,9 @@ exit 0
 func TestInstalledPathForSource_GlobalNpmUsesManagedAgentPath(t *testing.T) {
 	cwd := t.TempDir()
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	agentDir := filepath.Join(configRoot, "agent")
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	pkgDir := filepath.Join(agentDir, "npm", "node_modules", "example")
 	if err := os.MkdirAll(pkgDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -1135,9 +1135,9 @@ func TestInstalledPathForSource_GlobalNpmUsesManagedAgentPath(t *testing.T) {
 func TestInstalledPathForSource_GlobalNpmFallsBackToPnpmResolvedPath(t *testing.T) {
 	cwd := t.TempDir()
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	agentDir := filepath.Join(configRoot, "agent")
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	pkgDir := filepath.Join(t.TempDir(), "pnpm-global", "node_modules", "example")
 	if err := os.MkdirAll(pkgDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -1167,7 +1167,7 @@ func TestNormalizePackageSourceForSettings_UsesScopeBase(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for _, baseDir := range []string{filepath.Join(tmp, "home", ".pig"), filepath.Join(cwd, ".pig")} {
+	for _, baseDir := range []string{filepath.Join(tmp, "home", ".ompig"), filepath.Join(cwd, ".ompig")} {
 		want, err := filepath.Rel(baseDir, pkg)
 		if err != nil {
 			t.Fatal(err)
@@ -1196,20 +1196,20 @@ func TestNormalizePackageSourceForSettings_UsesScopeBase(t *testing.T) {
 }
 
 // TestAC1UpdateRoutingMatchesPi proves the Pi 0.84 update routing contract
-// (R1/R2): bare/self/pig self-update; a positional non-self source updates one
+// (R1/R2): bare/self/ompig self-update; a positional non-self source updates one
 // package; --extensions updates packages only; --all updates packages then
-// self. `pi` is not accepted or advertised as a pig self target. Mirrors
+// self. `pi` is not accepted or advertised as a ompig self target. Mirrors
 // upstream package-manager-cli.ts updateTarget resolution.
 func TestAC1UpdateRoutingMatchesPi(t *testing.T) {
-	// Self targets are "self" and the app name; "pi" is upstream's name, not pig's.
-	for _, target := range []string{"self", "SELF", "Pig", codingagent.AppName} {
+	// Self targets are "self" and the app name; "pi" is upstream's name, not ompig's.
+	for _, target := range []string{"self", "SELF", "Ompig", codingagent.AppName} {
 		if !isSelfUpdateTarget(target) {
 			t.Fatalf("isSelfUpdateTarget(%q) = false, want true", target)
 		}
 	}
 	for _, target := range []string{"", "pi", "PI", "npm:example", "some-package"} {
 		if isSelfUpdateTarget(target) {
-			t.Fatalf("isSelfUpdateTarget(%q) = true, want false (pi is not a pig self target)", target)
+			t.Fatalf("isSelfUpdateTarget(%q) = true, want false (pi is not a ompig self target)", target)
 		}
 	}
 
@@ -1224,7 +1224,7 @@ func TestAC1UpdateRoutingMatchesPi(t *testing.T) {
 	}{
 		{"bare self-update", []string{"update"}, "", false, false},
 		{"explicit self", []string{"update", "self"}, "self", false, false},
-		{"explicit pig", []string{"update", codingagent.AppName}, codingagent.AppName, false, false},
+		{"explicit ompig", []string{"update", codingagent.AppName}, codingagent.AppName, false, false},
 		{"positional package source", []string{"update", "npm:@foo/bar"}, "npm:@foo/bar", false, false},
 		{"extensions only", []string{"update", "--extensions"}, "", false, true},
 		{"all", []string{"update", "--all"}, "", true, false},
@@ -1261,7 +1261,7 @@ func TestAC1UpdateRoutingMatchesPi(t *testing.T) {
 	if strings.Contains(stdout, "legacy-update-host") {
 		t.Fatalf("update help references stale URL:\n%s", stdout)
 	}
-	for _, want := range []string{"pig update", "--self", "--extensions", "--extension", "--all", "--force"} {
+	for _, want := range []string{"ompig update", "--self", "--extensions", "--extension", "--all", "--force"} {
 		if !strings.Contains(stdout, want) {
 			t.Fatalf("update help missing %q:\n%s", want, stdout)
 		}
@@ -1290,7 +1290,7 @@ func TestAC1UpdateRoutingCombinedSelfAndExtensionsMeansAll(t *testing.T) {
 	for _, args := range [][]string{
 		{"update", "--self", "--extensions"},
 		{"update", "self", "--extensions"},
-		{"update", "pig", "--extensions"},
+		{"update", "ompig", "--extensions"},
 	} {
 		opts, ok := parsePackageCommand(args)
 		if !ok || !opts.allPackages || opts.extensionsOnly || opts.source != "" {
@@ -1318,7 +1318,7 @@ func TestAC1UpdateExtensionAndForceFlags(t *testing.T) {
 // not repeat the test name.
 func shortTempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "pig-")
+	dir, err := os.MkdirTemp("", "ompig-")
 	if err != nil {
 		t.Fatal(err)
 	}

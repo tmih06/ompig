@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // Package-level state in a compiled or interpreted factory module persists across /reload for the same reason an .mjs module's does in Pi 0.87.1: the factory is invoked again inside the process that holds the module. The probe tool reports how many times the factory has run in its process.
@@ -100,7 +100,7 @@ func goFactoryRetainedCases(t *testing.T, name string) {
 			retainedNativeCases(t, func() ExtConfig {
 				dir := t.TempDir()
 				modulePath := "example.com/retained" + isolation
-				if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
+				if err := os.WriteFile(filepath.Join(dir, "go.mod"), fmt.Appendf(nil, "module %s\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n", modulePath), 0o644); err != nil {
 					t.Fatal(err)
 				}
 				source := `package ext
@@ -109,7 +109,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 var factoryCalls int
@@ -152,7 +152,7 @@ func pythonFactoryRetainedCases(t *testing.T, name string) {
 				source := `import json
 import os
 
-import pig_sdk
+import ompig_sdk
 
 factory_calls = 0
 # Module state that outlives a generation, as a cache or registry does, keeps its socket reachable: only the SDK closing it ends the connection.
@@ -162,7 +162,7 @@ generations = []
 def new_extension():
     global factory_calls
     factory_calls += 1
-    ext = pig_sdk.Extension(EXTENSION_NAME)
+    ext = ompig_sdk.Extension(EXTENSION_NAME)
     generations.append(ext)
     ext.tool("probe", "probe", {"type": "object"}, lambda ctx, params: {"content": json.dumps({"calls": factory_calls, "pid": os.getpid()})})
     return ext
@@ -205,7 +205,7 @@ func rustFactoryRetainedCases(t *testing.T, name string) {
 				if err := os.Mkdir(filepath.Join(dir, "src"), 0o755); err != nil {
 					t.Fatal(err)
 				}
-				source := `use pig_sdk::{empty_schema, Context, Extension, ToolResult};
+				source := `use ompig_sdk::{empty_schema, Context, Extension, ToolResult};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicUsize, Ordering};
 

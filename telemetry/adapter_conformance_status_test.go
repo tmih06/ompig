@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
-	"github.com/MichaelKinsy/PiG/telemetry/telemetrytest"
+	"github.com/tmih06/ompig/telemetry"
+	"github.com/tmih06/ompig/telemetry/telemetrytest"
 )
 
 // The in-memory adapter passes every conformance case through a typed fixture factory, and records a span's final status: ok on success, an error status carrying the error's message on failure, and the last explicit status when one was set.

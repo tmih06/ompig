@@ -1,4 +1,4 @@
-// Command portreconcile produces the honest gap ledger for the Pig port. It
+// Command portreconcile produces the honest gap ledger for the Ompig port. It
 // joins the compiler-derived upstream interface inventory to the human-ratified
 // PORT_MAP dispositions and to the on-disk Go tree, classifying every top-level
 // upstream declaration as audited-ported, implemented-unaudited (mapped Go code
@@ -26,8 +26,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/test/parity/upstreampackages"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/test/parity/upstreampackages"
 )
 
 type inventory struct {
@@ -84,7 +84,7 @@ func sourceRootsByName() map[string]string {
 
 var (
 	distTypeDecl = regexp.MustCompile(`^dist/(.+)\.d\.ts$`)
-	// The Pig cell (group 2) is everything between the upstream span and the status: code spans, or code spans followed by prose.
+	// The Ompig cell (group 2) is everything between the upstream span and the status: code spans, or code spans followed by prose.
 	portMapRowPat        = regexp.MustCompile("^\\| `([^`]+)` \\| (.*) \\| (✅|🟡|⬜|⏸|🔴|n/a) \\|$")
 	portMapSeparatorPat  = regexp.MustCompile(`^\|[\s:|-]+\|$`)
 	portMapHeaderPat     = regexp.MustCompile(`^\| +[Uu]pstream +\|`)
@@ -134,20 +134,20 @@ func run() error {
 	}
 	if *coversAudit != "" {
 		if *parityCoveragePath == "" {
-			return fmt.Errorf("-covers-audit requires -parity-coverage <single-scenario piglet>")
+			return fmt.Errorf("-covers-audit requires -parity-coverage <single-scenario ompiglet>")
 		}
 		scenarioCov, err := coveredFiles(*parityCoveragePath)
 		if err != nil {
 			return err
 		}
-		// Fail closed: Go integration coverage only flushes on a clean pig exit.
-		// An interactive-tmux scenario whose pig is SIGKILLed at teardown
-		// (driver_tmux.go) writes no counters, yielding an empty piglet. Auditing
-		// covers honesty from an empty piglet would falsely flag every entry as a
+		// Fail closed: Go integration coverage only flushes on a clean ompig exit.
+		// An interactive-tmux scenario whose ompig is SIGKILLed at teardown
+		// (driver_tmux.go) writes no counters, yielding an empty ompiglet. Auditing
+		// covers honesty from an empty ompiglet would falsely flag every entry as a
 		// loose link, so refuse rather than emit false positives.
 		if len(scenarioCov) == 0 {
 			return fmt.Errorf("parity-coverage profile %s captured no executed blocks; "+
-				"the scenario's pig subprocess did not flush coverage (common for "+
+				"the scenario's ompig subprocess did not flush coverage (common for "+
 				"interactive-tmux scenarios killed before exit): cannot audit covers honesty",
 				*parityCoveragePath)
 		}
@@ -227,7 +227,7 @@ func parsePortMap(path string) (map[string]portMapRow, error) {
 			continue
 		}
 		if match == nil {
-			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | pig cell | status |): %s", path, i+1, line)
+			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | ompig cell | status |): %s", path, i+1, line)
 		}
 		rows[match[1]] = portMapRow{target: strings.ReplaceAll(match[2], "`", ""), disposition: match[3]}
 	}
@@ -327,7 +327,7 @@ func coveredFiles(path string) (map[string]bool, error) {
 	return covered, nil
 }
 
-const modulePrefix = "github.com/MichaelKinsy/PiG/"
+const modulePrefix = "github.com/tmih06/ompig/"
 
 func splitTargets(target string) []string {
 	fields := strings.FieldsFunc(target, func(r rune) bool { return r == '+' || r == ',' })
@@ -470,7 +470,7 @@ func auditCovers(w io.Writer, root, scenarioPath string, rows map[string]portMap
 		name = strings.TrimSuffix(filepath.Base(scenarioPath), ".toml")
 	}
 	_, _ = fmt.Fprintf(w, "# covers audit: %s\n\n", name)
-	_, _ = fmt.Fprintf(w, "| covers (upstream) | pig target | status |\n|---|---|---|\n")
+	_, _ = fmt.Fprintf(w, "| covers (upstream) | ompig target | status |\n|---|---|---|\n")
 	for _, up := range doc.Covers {
 		row, ok := rows[up]
 		if !ok {
@@ -525,7 +525,7 @@ func flipPortMap(w io.Writer, portMapPath, root string, unitCov, parityCov map[s
 			continue
 		}
 		if m == nil {
-			return fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | pig cell | status |): %s", portMapPath, i+1, line)
+			return fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | ompig cell | status |): %s", portMapPath, i+1, line)
 		}
 		if m[3] != "⬜" {
 			continue

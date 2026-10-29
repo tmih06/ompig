@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 // signedSelf bakes a valid closure, makes the running "executable" a file
@@ -26,12 +26,12 @@ func signedSelf(t *testing.T, edit func(*signature.Manifest)) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	path := filepath.Join(t.TempDir(), "pig-t")
+	path := filepath.Join(t.TempDir(), "ompig-t")
 	if err := os.WriteFile(path, []byte("executable bytes"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	manifest := signature.Manifest{
-		Piglet: "t", ReleaseVersion: "1.0.0", Target: runtime.GOOS + "/" + runtime.GOARCH, PigVersion: coding.PigVersion,
+		Ompiglet: "t", ReleaseVersion: "1.0.0", Target: runtime.GOOS + "/" + runtime.GOARCH, OmpigVersion: coding.OmpigVersion,
 		PigletDigest: record.Resolution.EffectiveDigest, SourceDigest: record.Resolution.SourceDigest,
 		ResolutionDigest: record.Digest, ComponentPlanDigest: record.Resolution.ComponentPlan.Digest,
 	}
@@ -78,15 +78,15 @@ func TestVerify_SignedBinaryBoundToItsBuildPassesAndIsRemembered(t *testing.T) {
 // and its passing signature check must not be remembered.
 func TestVerify_SignedManifestForAnotherBuildFails(t *testing.T) {
 	for name, edit := range map[string]func(*signature.Manifest){
-		"record":  func(m *signature.Manifest) { m.ResolutionDigest = "sha256:" + strings.Repeat("f", 64) },
-		"piglet":  func(m *signature.Manifest) { m.PigletDigest = "sha256:" + strings.Repeat("f", 64) },
-		"target":  func(m *signature.Manifest) { m.Target = "plan9/mips" },
-		"version": func(m *signature.Manifest) { m.PigVersion = "0.0.0-other" },
+		"record":   func(m *signature.Manifest) { m.ResolutionDigest = "sha256:" + strings.Repeat("f", 64) },
+		"ompiglet": func(m *signature.Manifest) { m.PigletDigest = "sha256:" + strings.Repeat("f", 64) },
+		"target":   func(m *signature.Manifest) { m.Target = "plan9/mips" },
+		"version":  func(m *signature.Manifest) { m.OmpigVersion = "0.0.0-other" },
 	} {
 		t.Run(name, func(t *testing.T) {
 			signedSelf(t, edit)
 			for range 2 {
-				if _, err := Verify(); err == nil || !strings.Contains(err.Error(), "signed Piglet manifest names") {
+				if _, err := Verify(); err == nil || !strings.Contains(err.Error(), "signed Ompiglet manifest names") {
 					t.Fatalf("Verify() = %v, want a manifest binding error", err)
 				}
 			}
@@ -111,7 +111,7 @@ func TestVerify_CacheWriteFailureIsReportedNotFatal(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Verify() = %v, want a passing check", err)
 	}
-	if cacheErr == nil || !strings.Contains(cacheErr.Error(), "Piglet verification cache") {
+	if cacheErr == nil || !strings.Contains(cacheErr.Error(), "Ompiglet verification cache") {
 		t.Fatalf("Verify() cache error = %v, want a verification cache write failure", cacheErr)
 	}
 }

@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-// oracleNameRE names tests that say they compare PiG with Pi or Node, run random inputs, or check ordering, cancellation or
+// oracleNameRE names tests that say they compare Ompig with Pi or Node, run random inputs, or check ordering, cancellation or
 // concurrency. Block coverage cannot show what such a test protects, so it is never a candidate.
 var oracleNameRE = regexp.MustCompile(`(?i)upstream|oracle|matches(?:pi|node|pinned)|pinnedpi|golden|conformance|parity|random|fuzz|property|Pi[A-Z]|[a-z]Pi(?:[A-Z]|$)|race|concurren|serializ|reentran|ordered|queue|parallel|cancel|abort|lock|shutdown|leak`)
 

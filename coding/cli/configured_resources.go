@@ -8,13 +8,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 func collectStartupThemePaths(cwd, agentDir string, sm *codingagent.SettingsManager) []string {
@@ -204,7 +204,7 @@ func uniqueExtensionPaths(configs []subprocess.ExtConfig) []subprocess.ExtConfig
 		if absolute, err := filepath.Abs(path); err == nil {
 			path = absolute
 		}
-		// pig additive (D20): distinct native factories in one source module retain their separate registrations.
+		// ompig additive (D20): distinct native factories in one source module retain their separate registrations.
 		key := sourceKey{codingagent.CanonicalizePath(path), config.ModulePath, config.Package, config.Factory}
 		if _, duplicate := seen[key]; duplicate {
 			continue
@@ -292,7 +292,7 @@ func collectTopLevelExtensionConfigs(autoDir string, entries []string, scope str
 		if name := filepath.Base(path); (name == "index.ts" || name == "index.js") && !extsource.NodeDeclaresExtensions(filepath.Dir(path)) {
 			selected = filepath.Dir(path)
 		}
-		// Upstream loads and names the discovered entry file; PiG loads the
+		// Upstream loads and names the discovered entry file; Ompig loads the
 		// selected directory and names the entry file in load errors.
 		for _, config := range pathToExtConfigs(selected, resolvers...) {
 			config.SourceInfo = codingagent.PiSourceInfo{Path: path, Source: "auto", Scope: scope, Origin: "top-level", BaseDir: baseDir}
@@ -499,7 +499,7 @@ func (e extensionPathMissingError) Error() string {
 func extensionLoadFailureDiagnostic(path string, err error) codingagent.AgentSessionRuntimeDiagnostic {
 	message := "Failed to load extension: " + err.Error()
 	if build, built := errors.AsType[*runtimecell.BuildFailure](err); built {
-		// pig additive (D20): a failed compile is one summary line in Pi's loader-error shape (Pi 0.87.1 loader.ts:578 `Failed to load extension: ${message}`); the compiler output is in the log it names.
+		// ompig additive (D20): a failed compile is one summary line in Pi's loader-error shape (Pi 0.87.1 loader.ts:578 `Failed to load extension: ${message}`); the compiler output is in the log it names.
 		message = "Failed to load extension: " + build.Error()
 	}
 	if _, missing := errors.AsType[extensionPathMissingError](err); missing {
@@ -547,7 +547,7 @@ func extensionConflictDiagnostics(conflicts []codingagent.ExtensionConflict) []c
 func reportExtensionLoadFailures(diagnostics []codingagent.AgentSessionRuntimeDiagnostic) {
 	codingagent.ReportDiagnostics(codingagent.DeduplicateDiagnostics(diagnostics))
 	if !slices.ContainsFunc(diagnostics, func(diagnostic codingagent.AgentSessionRuntimeDiagnostic) bool {
-		// pig additive (D20): a grouped build failure stands for one `Failed to load extension` error per member, so it gets Pi's hint too.
+		// ompig additive (D20): a grouped build failure stands for one `Failed to load extension` error per member, so it gets Pi's hint too.
 		return strings.Contains(diagnostic.Message, "Failed to load extension") || subprocess.IsBuildFailureGroupMessage(diagnostic.Message)
 	}) {
 		return

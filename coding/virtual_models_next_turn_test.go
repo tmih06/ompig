@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A virtual selection is checked in prepareRequest against the routed model, never against the virtual model's declared window in the between-turns check. upstream: agent-session.ts:737-739 (_compactBeforeNextAssistantResponse). Guard for the between-turns branch that the ported suite cases do not reach.

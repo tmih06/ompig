@@ -17,19 +17,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A restart scenario is a script and the steps a host takes around it: start it, wait for what it reaches, close the
 // Harness (a restart), change the stored documents, reopen, resume, and look at what is left. The same JSON runs under
 // Node against Pi's real Harness, CodemodeSandbox and code mode tool (testdata/codemode_restart_oracle.mjs) and against
-// PiG's, and the observations must be equal: the call's result and details, the stored run, journal and store documents,
+// Ompig's, and the observations must be equal: the call's result and details, the stored run, journal and store documents,
 // the entries, how often each tool ran, and the report texts.
 type restartScenario struct {
 	Name    string        `json:"name"`
@@ -293,7 +293,7 @@ func (g *gatedSandbox) releaseAbort() {
 	}
 }
 
-// restartRun is one scenario under PiG.
+// restartRun is one scenario under Ompig.
 type restartRun struct {
 	t       *testing.T
 	f       *codemodeFixture
@@ -786,7 +786,7 @@ func (r *restartRun) step(step restartStep) {
 	}
 }
 
-// runRestartScenarios runs each scenario under Pi and under PiG and compares what they observed.
+// runRestartScenarios runs each scenario under Pi and under Ompig and compares what they observed.
 func runRestartScenarios(t *testing.T, scenarios []restartScenario) {
 	t.Helper()
 	root := testenv.ModuleRoot(t)
@@ -842,7 +842,7 @@ func runRestartScenarios(t *testing.T, scenarios []restartScenario) {
 				t.Fatal(err)
 			}
 			if !reflect.DeepEqual(gotValue, wantValue) {
-				t.Fatalf("PiG observed what Pi did not, first at %s", firstDifference("", gotValue, wantValue))
+				t.Fatalf("Ompig observed what Pi did not, first at %s", firstDifference("", gotValue, wantValue))
 			}
 		})
 	}
@@ -891,7 +891,7 @@ func firstDifference(path string, got, want any) string {
 		if want, ok := want.(map[string]any); ok {
 			for _, key := range sortedKeys(got) {
 				if _, found := want[key]; !found {
-					return fmt.Sprintf("%s.%s: PiG has %s, Pi has none", path, key, compactJSON(got[key]))
+					return fmt.Sprintf("%s.%s: Ompig has %s, Pi has none", path, key, compactJSON(got[key]))
 				}
 				if difference := firstDifference(path+"."+key, got[key], want[key]); difference != "" {
 					return difference
@@ -899,7 +899,7 @@ func firstDifference(path string, got, want any) string {
 			}
 			for _, key := range sortedKeys(want) {
 				if _, found := got[key]; !found {
-					return fmt.Sprintf("%s.%s: PiG has none, Pi has %s", path, key, compactJSON(want[key]))
+					return fmt.Sprintf("%s.%s: Ompig has none, Pi has %s", path, key, compactJSON(want[key]))
 				}
 			}
 			return ""
@@ -912,7 +912,7 @@ func firstDifference(path string, got, want any) string {
 				}
 			}
 			if len(got) != len(want) {
-				return fmt.Sprintf("%s: PiG has %d items %s, Pi has %d items %s", path, len(got), compactJSON(got), len(want), compactJSON(want))
+				return fmt.Sprintf("%s: Ompig has %d items %s, Pi has %d items %s", path, len(got), compactJSON(got), len(want), compactJSON(want))
 			}
 			return ""
 		}
@@ -921,7 +921,7 @@ func firstDifference(path string, got, want any) string {
 			return ""
 		}
 	}
-	return fmt.Sprintf("%s: PiG has %s, Pi has %s", path, compactJSON(got), compactJSON(want))
+	return fmt.Sprintf("%s: Ompig has %s, Pi has %s", path, compactJSON(got), compactJSON(want))
 }
 
 func compactJSON(value any) string {

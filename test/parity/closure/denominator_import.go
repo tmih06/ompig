@@ -11,7 +11,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 type DenominatorImportReport struct {
@@ -84,7 +84,7 @@ func currentDenominatorSources() ([]jsonDenominatorSource, []tomlDenominatorSour
 		{dataset: "semantic-interface", path: "test/parity/interfaces/upstream-v" + version + ".json", lists: []jsonList{{key: "interfaces", subjectField: "id"}}, metadata: []string{"upstreamVersion", "typescriptVersion", "origin", "packages"}, resolution: "resolved"},
 		{dataset: "semantic-mapping", path: "test/parity/interfaces/mapping-v" + version + ".json", lists: []jsonList{{key: "mappings", subjectField: "id", statusField: "disposition"}}, metadata: []string{"upstreamVersion"}, resolution: "observed"},
 		{dataset: "semantic-delta", path: "test/parity/interfaces/delta-v" + coding.UpstreamReviewedVersion + "-v" + version + ".json", lists: []jsonList{{key: "changes", subjectField: "id", statusField: "disposition"}}, metadata: []string{"from", "to"}, resolution: "resolved"},
-		{dataset: "go-interface", path: "test/parity/interfaces/pig-go.json", lists: []jsonList{{key: "interfaces", subjectField: "id"}}, metadata: []string{"goVersion", "packages"}, resolution: "resolved"},
+		{dataset: "go-interface", path: "test/parity/interfaces/ompig-go.json", lists: []jsonList{{key: "interfaces", subjectField: "id"}}, metadata: []string{"goVersion", "packages"}, resolution: "resolved"},
 		{dataset: "interface-recommendation", path: "test/parity/interfaces/recommendations-v" + version + ".json", lists: []jsonList{{key: "recommendations", subjectField: "id", hypothesis: true}}, metadata: []string{"upstreamVersion", "generatedBy"}, resolution: "observed"},
 		{dataset: "cli-interface", path: "test/parity/interfaces/cli-v" + version + ".json", lists: []jsonList{{key: "interfaces", subjectField: "id"}}, metadata: []string{"upstreamVersion", "kind"}, resolution: "resolved"},
 		{dataset: "behavior-input", path: "test/parity/interfaces/behavior-inputs-v" + version + ".json", lists: []jsonList{{key: "keybindings", subjectField: "id"}, {key: "handlers", subjectField: "id"}, {key: "renderers", subjectField: "id"}}, metadata: []string{"upstreamVersion"}, resolution: "resolved"},
@@ -431,7 +431,7 @@ func (i *denominatorImporter) readSource(dataset, path string) ([]byte, string, 
 	if _, exists := i.seenFacts[pinID]; !exists {
 		i.seenFacts[pinID] = struct{}{}
 		i.records = append(i.records, &Pin{
-			Kind: KindPin, ID: pinID, SnapshotID: i.snapshot.ID, Repository: "pig", Commit: i.snapshot.TargetCommit,
+			Kind: KindPin, ID: pinID, SnapshotID: i.snapshot.ID, Repository: "ompig", Commit: i.snapshot.TargetCommit,
 			Path: path, SemanticID: "denominator:" + dataset, StartLine: 1, EndLine: lineCount, QuoteHash: HashBytes(data),
 		})
 		i.report.SourceFiles = append(i.report.SourceFiles, path)

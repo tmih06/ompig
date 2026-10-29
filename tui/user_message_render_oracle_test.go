@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type userMessageRenderProbe struct {
@@ -65,7 +65,7 @@ func TestUserMessageComponentRenderMatchesPi(t *testing.T) {
 				if !reflect.DeepEqual(nonNil(got), nonNil(expected[i][frame][w])) {
 					if failures++; failures <= 4 {
 						spec, _ := json.Marshal(probe)
-						t.Errorf("frame %d width %d %s\n  Pig %q\n  Pi  %q", frame, width, spec, got, expected[i][frame][w])
+						t.Errorf("frame %d width %d %s\n  Ompig %q\n  Pi  %q", frame, width, spec, got, expected[i][frame][w])
 					}
 				}
 			}

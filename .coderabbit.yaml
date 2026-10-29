@@ -18,7 +18,7 @@ reviews:
     auto_incremental_review: false
     drafts: false
   path_instructions:
-    - path: "{ai,coding,cmd/pig,internal/codingagent}/**/*.go"
+    - path: "{ai,coding,cmd/ompig,internal/codingagent}/**/*.go"
       instructions: |
         Flag hard-coded provider/model literals, provider-name branches without Pi citations, and provider-specific copies of Pi's shared functions in shared code.
         Flag single-provider tests of shared paths and timeouts, retries, or skips that hide failures.

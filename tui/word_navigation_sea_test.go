@@ -1,4 +1,4 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 package tui
 
@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // The fixture calls Pi 0.87.1's actual word-navigation functions at every UTF-16 cursor, including inside combining sequences and surrogate pairs.

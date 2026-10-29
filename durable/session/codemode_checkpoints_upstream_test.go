@@ -3,10 +3,10 @@ package session_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/codemode"
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/codemode"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // Ports packages/durable/test/codemode-checkpoints.test.ts (Pi 5c1736f8): the checkpoint policies of the built-in documents.

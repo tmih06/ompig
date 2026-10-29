@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions && !windows
+//go:build !ompig_strip_node_extensions && !windows
 
 package subprocess
 
@@ -15,17 +15,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
 )
 
-// tierProbe records the runtime that ran it and its process. When PIG_TS_PROBE_THROW_ON names the runtime it runs on, the module fails to evaluate, as an
-// extension does that imports a Node API the runtime lacks. PIG_TS_PROBE_THROW_ALL makes the factory throw on every runtime, as an extension's own bug does.
+// tierProbe records the runtime that ran it and its process. When OMPIG_TS_PROBE_THROW_ON names the runtime it runs on, the module fails to evaluate, as an
+// extension does that imports a Node API the runtime lacks. OMPIG_TS_PROBE_THROW_ALL makes the factory throw on every runtime, as an extension's own bug does.
 const tierProbe = `import fs from "node:fs";
-const fake = process.env.PIG_FAKE_RUNTIME ?? "";
-if (fake && (process.env.PIG_TS_PROBE_THROW_ON ?? "").split(",").includes(fake + ":" + process.env.PIG_EXT_NAME)) throw new Error("node:inspector is not implemented on " + fake);
+const fake = process.env.OMPIG_FAKE_RUNTIME ?? "";
+if (fake && (process.env.OMPIG_TS_PROBE_THROW_ON ?? "").split(",").includes(fake + ":" + process.env.OMPIG_EXT_NAME)) throw new Error("node:inspector is not implemented on " + fake);
 export default function () {
-  if (process.env.PIG_TS_PROBE_THROW_ALL) throw new Error("the extension's own bug");
-  fs.appendFileSync(process.env.PIG_TS_PROBE_OUT, JSON.stringify({ name: process.env.PIG_EXT_NAME, fake, pid: process.pid }) + "\n");
+  if (process.env.OMPIG_TS_PROBE_THROW_ALL) throw new Error("the extension's own bug");
+  fs.appendFileSync(process.env.OMPIG_TS_PROBE_OUT, JSON.stringify({ name: process.env.OMPIG_EXT_NAME, fake, pid: process.pid }) + "\n");
 }
 `
 
@@ -35,15 +35,15 @@ type tierRecord struct {
 	Pid  int    `json:"pid"`
 }
 
-// fakeTier installs a slot runtime of kind executable. Its script counts each start in $PIG_FAKE_LOG, then runs the tree's script on Node as runtime id, or
+// fakeTier installs a slot runtime of kind executable. Its script counts each start in $OMPIG_FAKE_LOG, then runs the tree's script on Node as runtime id, or
 // exits at once when fail is set, as a runtime that cannot start the extension host does.
 func fakeTier(t *testing.T, root, id, fallback string, fail bool, inputs []tsruntime.Input) {
 	t.Helper()
-	body := `exec env PIG_FAKE_RUNTIME=` + id + ` node --import "$PIG_TS_RUNTIME_TREE/register-loader.mjs" "$PIG_TS_RUNTIME_TREE/$mode.mjs" "$@"`
+	body := `exec env OMPIG_FAKE_RUNTIME=` + id + ` node --import "$OMPIG_TS_RUNTIME_TREE/register-loader.mjs" "$OMPIG_TS_RUNTIME_TREE/$mode.mjs" "$@"`
 	if fail {
 		body = `echo "` + id + ` cannot run this extension" >&2; exit 3`
 	}
-	script := "#!/bin/sh\nif [ \"$1\" = --version ]; then echo fake-1; exit 0; fi\nmode=$1; shift\necho " + id + " >> \"$PIG_FAKE_LOG\"\n" + body + "\n"
+	script := "#!/bin/sh\nif [ \"$1\" = --version ]; then echo fake-1; exit 0; fi\nmode=$1; shift\necho " + id + " >> \"$OMPIG_FAKE_LOG\"\n" + body + "\n"
 	dir := filepath.Join(root, id)
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatal(err)
@@ -85,8 +85,8 @@ func newTierFixture(t *testing.T, isolation string, names ...string) *tierFixtur
 	f.ctx, cancel = context.WithTimeout(t.Context(), 5*time.Minute)
 	t.Cleanup(cancel)
 	f.out, f.log = filepath.Join(f.dir, "probe.jsonl"), filepath.Join(f.dir, "starts.log")
-	t.Setenv("PIG_TS_PROBE_OUT", f.out)
-	t.Setenv("PIG_FAKE_LOG", f.log)
+	t.Setenv("OMPIG_TS_PROBE_OUT", f.out)
+	t.Setenv("OMPIG_FAKE_LOG", f.log)
 	t.Setenv(tsruntime.EnvRoot, f.root)
 	t.Setenv(tsruntime.EnvRuntime, "tier1")
 	for _, name := range names {
@@ -147,7 +147,7 @@ func TestTypeScriptRuntimeNodeOnlyExtensionFallsBackToNodeAndIsRemembered(t *tes
 	f := newTierFixture(t, "isolated", "solo")
 	fakeTier(t, f.root, "tier1", "tier2", false, nil)
 	fakeTier(t, f.root, "tier2", "", false, nil)
-	t.Setenv("PIG_TS_PROBE_THROW_ON", "tier1:solo,tier2:solo")
+	t.Setenv("OMPIG_TS_PROBE_THROW_ON", "tier1:solo,tier2:solo")
 	h := f.host()
 	f.reload(h)
 	records := f.records()
@@ -189,9 +189,9 @@ func TestTypeScriptRuntimeModuleWithoutAFactoryOnASlotRuntimeStartsOnNode(t *tes
 	f := newTierFixture(t, "isolated", "solo")
 	fakeTier(t, f.root, "tier1", "", false, nil)
 	const probe = `import fs from "node:fs";
-const fake = process.env.PIG_FAKE_RUNTIME ?? "";
+const fake = process.env.OMPIG_FAKE_RUNTIME ?? "";
 function install() {
-  fs.appendFileSync(process.env.PIG_TS_PROBE_OUT, JSON.stringify({ name: process.env.PIG_EXT_NAME, fake, pid: process.pid }) + "\n");
+  fs.appendFileSync(process.env.OMPIG_TS_PROBE_OUT, JSON.stringify({ name: process.env.OMPIG_EXT_NAME, fake, pid: process.pid }) + "\n");
 }
 export default fake ? { install } : install;
 `
@@ -218,7 +218,7 @@ func TestTypeScriptRuntimeExtensionThatFailsOnEveryRuntimeReportsItsOwnError(t *
 	f := newTierFixture(t, "isolated", "solo")
 	fakeTier(t, f.root, "tier1", "tier2", false, nil)
 	fakeTier(t, f.root, "tier2", "", false, nil)
-	t.Setenv("PIG_TS_PROBE_THROW_ALL", "1")
+	t.Setenv("OMPIG_TS_PROBE_THROW_ALL", "1")
 	h := f.host()
 	_, err := h.Reload(f.ctx)
 	if report := h.LastReloadReport(); err == nil && (report == nil || len(report.Issues) == 0) {

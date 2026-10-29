@@ -1,5 +1,5 @@
-from pig_sdk import Context, Extension, ModelEventStream
-from pig_sdk import _model_stream_error_event
+from ompig_sdk import Context, Extension, ModelEventStream
+from ompig_sdk import _model_stream_error_event
 
 
 def test_model_event_stream_preserves_order_and_result():

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // Pi's RPC mode never sets the active tools (rpc-mode.ts): the Session starts with the tools its options select (sdk.ts:258-276 initialActiveToolNames minus excluded tools; agent-session.ts _refreshToolRegistry), and its system prompt lists them (_rebuildSystemPrompt). Covered: the default tools, a --tools order, repeated --tools names, --no-tools, an allowlist that admits only listed extension tools, an allowlist minus excluded tools, and excluded builtin and extension tools.

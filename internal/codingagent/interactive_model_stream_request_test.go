@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 type modelRequestCaptureHandle struct {
@@ -186,7 +186,7 @@ func TestInteractiveModelProjectionPreservesPiModelShape(t *testing.T) {
 			t.Errorf("serialized model is missing %q: %#v", field, got)
 		}
 	}
-	// Pi's model object has none of PiG's former aliases.
+	// Pi's model object has none of Ompig's former aliases.
 	for _, field := range []string{"modelId", "displayName", "maxOutputTokens", "inputCostPer1M", "outputCostPer1M", "cacheReadCostPer1M", "cacheWriteCostPer1M"} {
 		if _, ok := got[field]; ok {
 			t.Errorf("serialized model carries %q: %#v", field, got)

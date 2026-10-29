@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // Ports packages/durable/test/spec-usage.test.ts, the root-package examples: the plan-mode and container documents

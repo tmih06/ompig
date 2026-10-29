@@ -18,7 +18,7 @@ func repoRoot(t *testing.T) string {
 	return root
 }
 
-// Every make target that runs the parity suite must count the scenarios that executed. TestParity skips before running any scenario when it cannot resolve Pi or pig, and `go test` exits 0 for a skip, so a target that does not read the results file reports ok for a run that compared nothing.
+// Every make target that runs the parity suite must count the scenarios that executed. TestParity skips before running any scenario when it cannot resolve Pi or ompig, and `go test` exits 0 for a skip, so a target that does not read the results file reports ok for a run that compared nothing.
 func TestEveryParityTargetRequiresScenariosToRun(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("the parity make targets run on POSIX hosts")
@@ -45,7 +45,7 @@ func TestEveryParityTargetRequiresScenariosToRun(t *testing.T) {
 				t.Fatalf("make -n %s: %v\n%s", target, err, out)
 			}
 			text := string(out)
-			if !strings.Contains(text, "-pig-parity.results=") {
+			if !strings.Contains(text, "-ompig-parity.results=") {
 				t.Errorf("make %s does not ask the runner for a results file, so nothing can count the scenarios that ran", target)
 			}
 			if !strings.Contains(text, "go run ./test/parity/cmd/checkparityran") {
@@ -60,7 +60,7 @@ func TestQCSmokeRequiresScenariosToRun(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{"-pig-parity.results", "checkparityran"} {
+	for _, want := range []string{"-ompig-parity.results", "checkparityran"} {
 		if !strings.Contains(string(script), want) {
 			t.Errorf("qc-smoke.sh does not use %q: its parity subset can skip every scenario and still print ok", want)
 		}

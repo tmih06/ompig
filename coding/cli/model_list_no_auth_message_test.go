@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // clearAuthEnvForNoAuthTest clears every provider credential env var that
@@ -34,7 +34,7 @@ func clearAuthEnvForNoAuthTest(t *testing.T) {
 
 // TestPrintModelList_NoAuth_PrintsLoginGuidance guards the --list-models
 // no-auth message. Upstream list-models.ts prints
-// formatNoModelsAvailableMessage() from auth-guidance.ts; pig must print the
+// formatNoModelsAvailableMessage() from auth-guidance.ts; ompig must print the
 // same guidance rather than an ad-hoc string.
 func TestPrintModelList_NoAuth_PrintsLoginGuidance(t *testing.T) {
 	clearAuthEnvForNoAuthTest(t)

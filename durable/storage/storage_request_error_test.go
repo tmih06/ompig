@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // pi: packages/durable/src/storage/memory.ts:126,498,684,710 and scan.ts:21-32 (42a3497d): a read that names an unknown conversation or carries a cursor this backend did not write throws StorageRequestError, which fails only that read and not the Session.

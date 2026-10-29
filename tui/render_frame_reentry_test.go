@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // frameRenderer is a renderer whose frame holds its tuiBase mutex while it renders components.
@@ -121,7 +121,7 @@ func (c *requestingComponent) Render(int) []string {
 	return []string{"requesting"}
 }
 
-// tui.ts requestRender during a render schedules the next frame (renderRequested, then scheduleRender after the frame). Pig's frame
+// tui.ts requestRender during a render schedules the next frame (renderRequested, then scheduleRender after the frame). Ompig's frame
 // holds the renderer lock, so a request made from a component's Render must neither block nor be lost.
 func TestRenderRequestedDuringAFrameIsIssuedAfterIt(t *testing.T) {
 	for _, force := range []bool{false, true} {

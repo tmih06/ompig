@@ -11,18 +11,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/tui"
 )
 
 // configCommandUsage is upstream CONFIG_COMMAND_USAGE with the app name.
-const configCommandUsage = "pig config [-l] [--approve|--no-approve]"
+const configCommandUsage = "ompig config [-l] [--approve|--no-approve]"
 
 // printConfigCommandHelp is upstream printConfigCommandHelp (package-manager-cli.ts:280-293) with the app and config
 // directory names.
@@ -51,7 +51,7 @@ func runConfigCommand(args []string, runtimeOptions ...packageCommandRuntimeOpti
 			trustOverride = new(false)
 		case strings.HasPrefix(arg, "-"):
 			fmt.Fprintln(os.Stderr, chalkRed(fmt.Sprintf("Unknown option %s for \"config\".", arg)))
-			fmt.Fprintln(os.Stderr, chalkDim(fmt.Sprintf("Use \"pig --help\" or \"%s\".", configCommandUsage)))
+			fmt.Fprintln(os.Stderr, chalkDim(fmt.Sprintf("Use \"ompig --help\" or \"%s\".", configCommandUsage)))
 			return 1
 		default:
 			fmt.Fprintln(os.Stderr, chalkRed(fmt.Sprintf("Unexpected argument %s.", arg)))
@@ -61,7 +61,7 @@ func runConfigCommand(args []string, runtimeOptions ...packageCommandRuntimeOpti
 	}
 	cwd, err := os.Getwd()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "pig config:", err)
+		fmt.Fprintln(os.Stderr, "ompig config:", err)
 		return 1
 	}
 	agentDir := codingagent.AgentDir()
@@ -71,7 +71,7 @@ func runConfigCommand(args []string, runtimeOptions ...packageCommandRuntimeOpti
 		Default: string(globalSettings.GetDefaultProjectTrust()), UI: extension.NoopUIContext,
 	})
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "pig config:", err)
+		fmt.Fprintln(os.Stderr, "ompig config:", err)
 		return 1
 	}
 	if local && !projectTrusted {
@@ -92,17 +92,17 @@ func runConfigCommand(args []string, runtimeOptions ...packageCommandRuntimeOpti
 	}
 	selector, err := newScopedConfigSelector(cwd, agentDir, globalSettings, settings, local, projectTrusted, builtinNames)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "pig config:", err)
+		fmt.Fprintln(os.Stderr, "ompig config:", err)
 		return 1
 	}
 	if err := runConfigSelectorTUI(selector, settings, agentDir); err != nil {
-		fmt.Fprintln(os.Stderr, "pig config:", err)
+		fmt.Fprintln(os.Stderr, "ompig config:", err)
 		return 1
 	}
 	return 0
 }
 
-// newScopedConfigSelector builds the `pig config` selector. builtins are the names of the built-in extensions, which each scope lists
+// newScopedConfigSelector builds the `ompig config` selector. builtins are the names of the built-in extensions, which each scope lists
 // as `builtin:<name>` extension resources after its other resources (package-manager-cli.ts:842-853, the builtinExtensions option
 // of DefaultPackageManager).
 func newScopedConfigSelector(cwd, agentDir string, global, settings *codingagent.SettingsManager, local, projectModeAvailable bool, builtins []string) (*tui.ConfigSelectorComponent, error) {
@@ -374,7 +374,7 @@ func collectConfigResourceItemsIn(scan *codingagent.AgentsSkillScan, cwd, agentD
 	for _, item := range pkgItems {
 		addItem(item)
 	}
-	// pig additive (D92): a stripped skills, prompt-templates or themes feature lists no resource of its type.
+	// ompig additive (D92): a stripped skills, prompt-templates or themes feature lists no resource of its type.
 	items = slices.DeleteFunc(items, configResourceTypeStripped)
 	return canonicalResourceItems(items), nil
 }

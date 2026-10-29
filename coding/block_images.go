@@ -1,6 +1,6 @@
 package coding
 
-import "github.com/MichaelKinsy/PiG/ai"
+import "github.com/tmih06/ompig/ai"
 
 // blockedImageText replaces each image when images.blockImages is on
 // (sdk.ts convertToLlmWithBlockImages).

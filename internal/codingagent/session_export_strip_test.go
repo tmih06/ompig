@@ -5,12 +5,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// A Piglet that strips export-html, at runtime or by compiling it out of its Binary, refuses /export to HTML (and RPC
+// A Ompiglet that strips export-html, at runtime or by compiling it out of its Binary, refuses /export to HTML (and RPC
 // export_html, which calls ExportSessionToHTML) with the stripped message through the command error path, while
-// /export to .jsonl keeps working. Stock PiG writes the HTML.
+// /export to .jsonl keeps working. Stock Ompig writes the HTML.
 func TestStripExportHTMLReportsItAndKeepsJSONL(t *testing.T) {
 	dir := chdirTemp(t)
 	session, _ := branchedExportSession(t)
@@ -36,7 +36,7 @@ func TestStripExportHTMLReportsItAndKeepsJSONL(t *testing.T) {
 	sc.CurrentSession = func() *Session { return session }
 	sc.Args = "out.html"
 	err := exportHandler(sc)
-	want := "Failed to export session: HTML export is stripped from this Piglet (strip.features: export-html)"
+	want := "Failed to export session: HTML export is stripped from this Ompiglet (strip.features: export-html)"
 	if err == nil || err.Error() != want {
 		t.Fatalf("/export out.html: err = %v, want %q", err, want)
 	}

@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // A footer reads the live git branch and provider count (footer-data-provider.ts getGitBranch, getAvailableProviderCount), and an extension's footer factory reads them through the state the host replicates. The provider reports a change of either, and only a change: a repeated value tells nobody.

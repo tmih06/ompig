@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/google-generative-ai.ts
 
 // Scripted Gemini streamGenerateContent streams (text and thought parts with signatures, function calls with and without ids, finish reasons, usage
 // metadata with cached and thought tokens, response ids, truncated streams) answered by a local server to the pinned pi-ai (its adapter rejects a custom
-// fetch) and to PiG; the stream events and the final message must be equal.
+// fetch) and to Ompig; the stream events and the final message must be equal.
 func TestGoogleResponseMatchesPi(t *testing.T) {
 	checkGoogleResponse(t, "google-generative-ai.js", "google-generative-ai", ai.APIGoogleGenerativeAI, ai.StreamGoogle)
 }

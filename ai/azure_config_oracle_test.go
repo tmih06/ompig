@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // azureBaseURLProbes combine schemes, hosts (Azure and other, mixed case, trailing dots, IDN), userinfo, ports, paths that trigger and miss the /openai/v1 rewrite
@@ -33,7 +33,7 @@ func azureBaseURLProbes() []string {
 }
 
 // normalizeAzureBaseUrl (cut from Pi's source) runs in Node on the same base URLs: the WHATWG parse (which inputs throw), the Azure host test on the lowercased hostname, the rewrite
-// of an empty, /openai or /openai/v1/responses path to /openai/v1 with the query cleared, and the serialization without trailing slashes must match Pig's normalizeAzureBaseURL.
+// of an empty, /openai or /openai/v1/responses path to /openai/v1 with the query cleared, and the serialization without trailing slashes must match Ompig's normalizeAzureBaseURL.
 func TestAzureBaseURLNormalizationMatchesPi(t *testing.T) {
 	probes := azureBaseURLProbes()
 	payload, err := json.Marshal(probes)
@@ -75,7 +75,7 @@ func TestAzureBaseURLNormalizationMatchesPi(t *testing.T) {
 				if err != nil {
 					have = "<error>"
 				}
-				t.Errorf("%q\n  Pig %q\n  Pi  %q", probe, have, want)
+				t.Errorf("%q\n  Ompig %q\n  Pi  %q", probe, have, want)
 			}
 		}
 	}

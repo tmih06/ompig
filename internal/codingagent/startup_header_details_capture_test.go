@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // interactive-mode.ts:996-1059 (Pi 1.0.0): init builds the header once and captures showDetails for the compact onboarding line, so changing quietStartup later in /settings (which refreshes the settings snapshot) does not rewrite the line; restoring the built-in header keeps it too.
@@ -32,7 +32,7 @@ func TestBuiltInHeaderOnboardingKeepsStartupDetailsCapture(t *testing.T) {
 			if len(lines) < 3 {
 				t.Fatalf("quietStartup %v then %v: header = %q", tc.startup, tc.later, lines)
 			}
-			// The onboarding line is the header's third, beside the pig head (D2).
+			// The onboarding line is the header's third, beside the ompig head (D2).
 			line := lines[2]
 			if i := strings.Index(line, "Press"); i >= 0 {
 				line = line[i:]

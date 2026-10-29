@@ -1,5 +1,5 @@
 # Upstream evidence: Pi 0.87.1 rpc-mode.ts:354-363 forwards toJsonEvent and agent-loop.ts:110-149,319 emits only the current run's messages at agent_end. google-generative-ai.ts:100-106 pushes start before the @google/genai body generators run; measured Pi 0.87.1 start already holds the complete tool call with stopReason toolUse (plan gap-d82 section 1). Generated tool-call IDs are read_<ms>_<counter> (google-generative-ai.ts:199). Read result shape is read.ts:157-188.
-# Both real binaries use one local google-generative-ai HTTP/SSE fixture (headers and the whole body in one write, as the D82 probe server does), not PIG_TEST_FAUX or a result summarizer. Full records and stderr remain compared.
+# Both real binaries use one local google-generative-ai HTTP/SSE fixture (headers and the whole body in one write, as the D82 probe server does), not OMPIG_TEST_FAUX or a result summarizer. Full records and stderr remain compared.
 # D82 covers only extension-process listeners and providers (docs/parity/DIVERGENCES.md). This scenario loads no extension, so every declared pair must be strictly equal; D82 grants no allowance here and does not excuse a native observation/admission difference.
 name = "33-rpc-real-provider-records-google"
 description = "Two real google-generative-ai provider turns compare complete RPC events, tool results and persisted entries"
@@ -25,9 +25,9 @@ wait_event = '{"type":"response","id":"entries","command":"get_entries"}'
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-home/agent"]
-pig_args = ["--offline", "--no-extensions", "--model", "strict-wire/strict", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--offline", "--no-extensions", "--model", "strict-wire/strict", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--offline", "--no-extensions", "--model", "strict-wire/strict", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]
@@ -61,7 +61,7 @@ paths = ["/**/id", "/**/toolCallId"]
 kind = "id"
 group = "call"
 pattern = '^read_[0-9]+_[0-9]+$'
-reason = "Pi and PiG generate Google tool-call IDs as name_<Date.now()>_<counter> (google-generative-ai.ts:199); the clock differs per process. Preserve one bijection between the toolCall id, the tool execution id and the toolResult reference."
+reason = "Pi and Ompig generate Google tool-call IDs as name_<Date.now()>_<counter> (google-generative-ai.ts:199); the clock differs per process. Preserve one bijection between the toolCall id, the tool execution id and the toolResult reference."
 
 [[assert.json_aliases]]
 paths = ["/**/durationMs"]

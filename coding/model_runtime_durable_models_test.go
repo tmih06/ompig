@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // ModelRuntime implements pi-ai Models (model-runtime.ts:171), and the coding worker passes it as the Harness's models (session-worker.ts:787, experimental/durable/runtime.ts:141).

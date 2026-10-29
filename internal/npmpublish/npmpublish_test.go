@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/npmpublish"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/internal/npmpublish"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
 func writePackage(t *testing.T, version string) string {
@@ -80,7 +80,7 @@ func TestPublishReportsAMissingNPM(t *testing.T) {
 	npmtest.Install(t)
 	var out bytes.Buffer
 	r := request(writePackage(t, "1.0.0"), npmpublish.Flags{}, &out)
-	r.Command = []string{"pig-test-no-such-npm"}
+	r.Command = []string{"ompig-test-no-such-npm"}
 	if err := r.Run(context.Background()); err == nil || !strings.Contains(err.Error(), "npm is not on PATH") {
 		t.Fatalf("publish with a missing npm = %v, want the npm-not-found error\n%s", err, out.String())
 	}
@@ -110,7 +110,7 @@ func TestYesPublishesWithTheRequestedTagAccessAndCode(t *testing.T) {
 	var out bytes.Buffer
 	flags := npmpublish.Flags{Yes: true, Tag: "next", Access: "public", OTP: "123456"}
 	r := request(dir, flags, &out)
-	r.Next = []string{"Add it with: pig package install npm:@acme/tool"}
+	r.Next = []string{"Add it with: ompig package install npm:@acme/tool"}
 
 	if err := r.Run(context.Background()); err != nil {
 		t.Fatalf("publish: %v\n%s", err, out.String())
@@ -126,7 +126,7 @@ func TestYesPublishesWithTheRequestedTagAccessAndCode(t *testing.T) {
 	if strings.Contains(out.String(), "123456") {
 		t.Fatalf("the one-time code was printed:\n%s", out.String())
 	}
-	for _, expect := range []string{"Running: npm publish " + dir + " --tag next --access public --otp <code>", "Published @acme/tool@1.0.0 to npm.", "Add it with: pig package install npm:@acme/tool"} {
+	for _, expect := range []string{"Running: npm publish " + dir + " --tag next --access public --otp <code>", "Published @acme/tool@1.0.0 to npm.", "Add it with: ompig package install npm:@acme/tool"} {
 		if !strings.Contains(out.String(), expect) {
 			t.Fatalf("output lacks %q:\n%s", expect, out.String())
 		}
@@ -297,7 +297,7 @@ func TestFlagsParseAndValidate(t *testing.T) {
 
 func TestCommandRefusesAPackageManagerThatIsNotNPM(t *testing.T) {
 	agent := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	if err := os.WriteFile(filepath.Join(agent, "settings.json"), []byte(`{"npmCommand":["pnpm"]}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -334,7 +334,7 @@ func TestSatisfiableAnswersForRangesAndNeverGuessesOnErrors(t *testing.T) {
 }
 
 // Authors often publish from the Package's own directory, and a Package may ship its own npm there. Go's LookPath on Windows searches the working directory before PATH and then fails with ErrDot, and on every platform a relative PATH entry such as "." names the working directory. npm must come from the absolute PATH entries, so publishing neither fails nor runs the Package's npm.
-func TestPublishFindsNPMOnPathWhenPiGRunsInThePackageDirectory(t *testing.T) {
+func TestPublishFindsNPMOnPathWhenOmpigRunsInThePackageDirectory(t *testing.T) {
 	fake := npmtest.Install(t)
 	t.Setenv("PATH", "."+string(os.PathListSeparator)+os.Getenv("PATH"))
 	t.Setenv("NoDefaultCurrentDirectoryInExePath", "")

@@ -5,14 +5,14 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // GetModel of a plain bundled provider builds the one model it returns: the allocations of a lookup do not grow with the number of models the
 // provider's catalog lists. Building every model of the provider and searching the result cost about eight allocations per catalog model
 // (3,268 for openrouter's 402 models against 48 for groq's 7).
 func TestGetModelAllocationsDoNotGrowWithTheProviderCatalog(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir(), AgentDir: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

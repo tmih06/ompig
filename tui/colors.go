@@ -9,7 +9,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 // Color is a concrete color: IndexedColor, RgbColorValue, or OklchColorValue. Every Color converts to sRGB, so color math never fails. Upstream's `Color` union is closed; the unexported method seals it.

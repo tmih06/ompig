@@ -1,11 +1,11 @@
 package coding
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
-// ExtensionHost is the extension host behind the runner of the Sessions a [Runtime] creates. Pi runs extensions in its own process, so a mode reaches them through AgentSession alone; Pig runs file extensions in subprocesses (D19), and a mode reaches the controls of those processes through the Session that owns them, with [Session.ExtensionHost].
+// ExtensionHost is the extension host behind the runner of the Sessions a [Runtime] creates. Pi runs extensions in its own process, so a mode reaches them through AgentSession alone; Ompig runs file extensions in subprocesses (D19), and a mode reaches the controls of those processes through the Session that owns them, with [Session.ExtensionHost].
 //
 // The process controls (EndInput, HoldRetirements and TerminateProcesses) act on every host of the process that created the Session, including the hosts of replaced Sessions that still finish a command and of Sessions created later (D70). Pi has one Node process, so those controls have no Pi counterpart.
 type ExtensionHost interface {

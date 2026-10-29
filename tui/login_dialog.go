@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // webURL is login-dialog.ts webUrl: the normalized href of the http: or https: URL value names, and false for anything else. The shared launcher also opens
@@ -42,9 +42,9 @@ func webLink(text, url string) string {
 	return Hyperlink(text, target)
 }
 
-const secretInputSuffixCharacters = 4 // pig divergence (D80): reveal only the final four characters of inputs longer than four.
-const secretInputMaxDots = 8          // pig divergence (D80): bound the preview independently of input length; the counter reports the full length.
-const secretInputHint = "Input hidden (PiG default). Show like Pi: /settings → Mask secret input"
+const secretInputSuffixCharacters = 4 // ompig divergence (D80): reveal only the final four characters of inputs longer than four.
+const secretInputMaxDots = 8          // ompig divergence (D80): bound the preview independently of input length; the counter reports the full length.
+const secretInputHint = "Input hidden (Ompig default). Show like Pi: /settings → Mask secret input"
 
 // SecretInputPreview returns a bounded masked preview and the number of user-perceived characters. Inputs shorter than five characters reveal no suffix.
 func SecretInputPreview(value string) (string, int) {
@@ -124,7 +124,7 @@ func (d *LoginDialogComponent) SetCopyToClipboard(copyText func(text string) err
 	}
 }
 
-// NewLoginDialogComponent creates a provider dialog, as Pi's constructor does (login-dialog.ts:32-48), with PiG's configurable
+// NewLoginDialogComponent creates a provider dialog, as Pi's constructor does (login-dialog.ts:32-48), with Ompig's configurable
 // input privacy default enabled. onComplete runs with (false, "Login cancelled") when the user cancels. The title is "Login to
 // <providerNameOverride or providerID>" unless titleOverride (the first value) is given; an empty providerNameOverride stands
 // for Pi's undefined. A non-nil ui receives the dialog's render requests; SetCopyToClipboard may replace that request.
@@ -133,7 +133,7 @@ func NewLoginDialogComponent(ui TUI, providerID string, onComplete func(success 
 	if providerName == "" {
 		providerName = providerID
 	}
-	// pig divergence (D80): callers can select Pi's plain-text behavior before prompting.
+	// ompig divergence (D80): callers can select Pi's plain-text behavior before prompting.
 	dialog := &LoginDialogComponent{title: "Login to " + providerName, onComplete: onComplete, maskSecretInput: true, content: NewContainer()}
 	if ui != nil {
 		dialog.requestRender = func() { ui.RequestRender() }
@@ -426,7 +426,7 @@ func (d *LoginDialogComponent) showInput(prompt, placeholder string, secret, man
 	if placeholder != "" {
 		d.addLine(" " + t.Fg("dim", "e.g., "+d.redactLocked(placeholder)))
 	}
-	// pig divergence (D80): the hint explains both the selected default and its Pi-compatible opt-out.
+	// ompig divergence (D80): the hint explains both the selected default and its Pi-compatible opt-out.
 	if d.inputMasked {
 		d.addLine(" " + t.Fg("dim", secretInputHint))
 	}
@@ -444,7 +444,7 @@ func (d *LoginDialogComponent) showInput(prompt, placeholder string, secret, man
 			return
 		}
 		submitted := value
-		// pig divergence (D80): only the preview is retained in dialog history when masking is enabled.
+		// ompig divergence (D80): only the preview is retained in dialog history when masking is enabled.
 		if d.inputMasked {
 			submitted, _ = SecretInputPreview(value)
 			if value != "" {
@@ -561,7 +561,7 @@ func (i *loginDialogInput) Render(width int) []string {
 		return []string{""}
 	}
 	input := d.input
-	// pig divergence (D80): a bounded preview shows the suffix and count, never the full secret.
+	// ompig divergence (D80): a bounded preview shows the suffix and count, never the full secret.
 	if d.inputMasked {
 		preview, count := SecretInputPreview(d.input.Text())
 		unit := "characters"

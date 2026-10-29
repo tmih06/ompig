@@ -6,8 +6,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent-session.ts:_handleAgentEvent removes queued text and emits queue_update before message_start handlers. _emit calls listeners directly, so a guarded nested queue mutation finishes before delivery resumes.

@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/test/clipboard-image-bmp-conversion.test.ts:59, including both command and native backend rows. The native facade is the production mechanism owned by the native-platform lane, not a test-only implementation.

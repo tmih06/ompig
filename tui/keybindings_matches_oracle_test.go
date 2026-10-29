@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type keybindingsOracleProbe struct {
@@ -139,13 +139,13 @@ func TestKeybindingsManagerMatchesPi(t *testing.T) {
 						}
 						return out
 					}
-					t.Errorf("kitty=%v bindings=%v %s: only Pig %v; only Pi %v", probe.Kitty, probe.Bindings, action, diff(got, want.Matches[action]), diff(want.Matches[action], got))
+					t.Errorf("kitty=%v bindings=%v %s: only Ompig %v; only Pi %v", probe.Kitty, probe.Bindings, action, diff(got, want.Matches[action]), diff(want.Matches[action], got))
 				}
 			}
 			if keys := manager.GetKeys(action); !slices.Equal(keys, want.Keys[action]) && (len(keys) != 0 || len(want.Keys[action]) != 0) {
 				failures++
 				if failures <= 6 {
-					t.Errorf("kitty=%v bindings=%v %s keys: Pig %v, Pi %v", probe.Kitty, probe.Bindings, action, keys, want.Keys[action])
+					t.Errorf("kitty=%v bindings=%v %s keys: Ompig %v, Pi %v", probe.Kitty, probe.Bindings, action, keys, want.Keys[action])
 				}
 			}
 		}
@@ -159,7 +159,7 @@ func TestKeybindingsManagerMatchesPi(t *testing.T) {
 				Keybindings []string `json:"keybindings"`
 			}{c.Key, c.Keybindings})
 		}
-		// Pi lists conflicts in the order of the user's JSON object keys; Pig decodes them into a map, so it reports them sorted by key and
+		// Pi lists conflicts in the order of the user's JSON object keys; Ompig decodes them into a map, so it reports them sorted by key and
 		// action. The set of conflicts must agree.
 		slices.SortFunc(want.Conflicts, func(a, b struct {
 			Key         string   `json:"key"`
@@ -179,7 +179,7 @@ func TestKeybindingsManagerMatchesPi(t *testing.T) {
 		if len(conflicts) != len(want.Conflicts) || (len(conflicts) > 0 && !reflect.DeepEqual(conflicts, want.Conflicts)) {
 			failures++
 			if failures <= 6 {
-				t.Errorf("kitty=%v bindings=%v conflicts: Pig %v, Pi %v", probe.Kitty, probe.Bindings, conflicts, want.Conflicts)
+				t.Errorf("kitty=%v bindings=%v conflicts: Ompig %v, Pi %v", probe.Kitty, probe.Bindings, conflicts, want.Conflicts)
 			}
 		}
 	}

@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/components/earendil-announcement.ts.

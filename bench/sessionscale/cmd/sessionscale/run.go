@@ -24,7 +24,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/bench/sessionscale"
+	"github.com/tmih06/ompig/bench/sessionscale"
 )
 
 // point is one measurement of a running arm.
@@ -331,16 +331,16 @@ func runtimeEnv(home, agentDir, heapDir string, extra []string) []string {
 	for _, kv := range os.Environ() {
 		k, _, _ := strings.Cut(kv, "=")
 		switch {
-		case k == "GOMEMLIMIT", k == "GOGC", k == "GODEBUG", strings.HasPrefix(k, "PIG_"), strings.HasPrefix(k, "PI_"), k == "HOME", k == "XDG_CONFIG_HOME", k == "XDG_DATA_HOME", k == "XDG_CACHE_HOME", k == "XDG_STATE_HOME":
+		case k == "GOMEMLIMIT", k == "GOGC", k == "GODEBUG", strings.HasPrefix(k, "OMPIG_"), strings.HasPrefix(k, "PI_"), k == "HOME", k == "XDG_CONFIG_HOME", k == "XDG_DATA_HOME", k == "XDG_CACHE_HOME", k == "XDG_STATE_HOME":
 			continue
 		}
 		env = append(env, kv)
 	}
 	env = append(env,
 		"HOME="+home, "TERM=xterm-256color", "COLUMNS=120", "LINES=40",
-		"PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
-		"PIG_HOME="+home, "PI_HOME="+home,
-		"PI_OFFLINE=1", "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "PIG_SKIP_VERSION_CHECK=1", "PI_TELEMETRY=0", "PIG_TELEMETRY=0",
+		"OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir,
+		"OMPIG_HOME="+home, "PI_HOME="+home,
+		"PI_OFFLINE=1", "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "OMPIG_SKIP_VERSION_CHECK=1", "PI_TELEMETRY=0", "OMPIG_TELEMETRY=0",
 		"SESSIONSCALE_HEAP_DIR="+heapDir,
 	)
 	return append(env, extra...)
@@ -516,7 +516,7 @@ func (d *ptyDriver) tail() string {
 }
 
 func (d *ptyDriver) quit() error {
-	_, _ = d.master.Write([]byte{4}) // Ctrl+D on an empty editor exits Pi and PiG.
+	_, _ = d.master.Write([]byte{4}) // Ctrl+D on an empty editor exits Pi and Ompig.
 	select {
 	case <-d.exited:
 		return d.waitErr

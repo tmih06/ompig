@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
 )
 
 // Pi's rpc prompt awaits command.handler (agent-session.ts:1766-1780) and writes the prompt response from preflightResult (rpc-mode.ts:394-413). A handler that settles without awaiting I/O has written that response before the next input event, stdin end included (rpc-mode.ts:804-807). The Node runtime therefore reports an RPC command as blocked only while its Promise is still pending after the synchronous prefix; a settled handler reports completion with its response.
@@ -24,7 +24,7 @@ func TestNodeRuntimeRPCCommandReportsBlockedOnlyWhileSuspended(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	root, err := os.MkdirTemp(parent, "pig-rpc-admission-")
+	root, err := os.MkdirTemp(parent, "ompig-rpc-admission-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestNodeRuntimeRPCCommandReportsBlockedOnlyWhileSuspended(t *testing.T) {
 	}
 	defer func() { _ = listener.Close() }()
 	cmd := exec.CommandContext(t.Context(), node, filepath.Join("runtime-node", "cli.mjs"), entry)
-	cmd.Env = append(os.Environ(), "PIG_EXT_SOCKET="+address, "PIG_EXT_NAME=rpc-admission")
+	cmd.Env = append(os.Environ(), "OMPIG_EXT_SOCKET="+address, "OMPIG_EXT_NAME=rpc-admission")
 	peer := startAndAccept(t, cmd, listener)
 	defer func() { _ = peer.Close() }()
 	if register := readLivenessEnvelope(t, peer); register.Type != MsgRegister {

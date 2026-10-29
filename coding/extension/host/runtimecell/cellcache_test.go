@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// helperEnv keys let a re-exec'd copy of the test binary act as a competing Pig
+// helperEnv keys let a re-exec'd copy of the test binary act as a competing Ompig
 // process building the same cell. The cross-process shape matters: the bug is a
 // shared deterministic path across independent processes, which in-process
 // goroutines would not reproduce faithfully.
@@ -25,7 +25,7 @@ const (
 )
 
 // TestCellcacheHelperProcess is not a real test: when CELLCACHE_HELPER is set it
-// runs one PublishArtifact call and exits, standing in for a parallel Pig
+// runs one PublishArtifact call and exits, standing in for a parallel Ompig
 // process. The build func appends one byte to a shared counter file, so counting
 // bytes afterward reveals how many processes actually built (must be exactly 1).
 func TestCellcacheHelperProcess(t *testing.T) {

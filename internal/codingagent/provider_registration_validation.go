@@ -5,9 +5,9 @@ package codingagent
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // validateExtensionRegistration validates incoming model data against the builtin/models.json base before replacing a registration. Callback ownership remains in providerConfigFromRegistration; validation never invokes or serializes a stream callback.

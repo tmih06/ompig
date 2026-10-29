@@ -11,7 +11,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // buildArgsEcho builds a program that prints its arguments as JSON, and a
@@ -70,7 +70,7 @@ func TestRunCmdPassesArgumentsToNpmShimsExactly(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, args := range [][]string{
-		{"install", "demo", "--prefix", `C:\Users\Jane Smith\.pig\agent\npm`},
+		{"install", "demo", "--prefix", `C:\Users\Jane Smith\.ompig\agent\npm`},
 		{`quote"inside`, "amp&pipe|lt<gt>", "caret^excl!", "paren(x)", "semi;comma,star*q?"},
 	} {
 		out, err := packagemanager.RunCmd(shim, args...)
@@ -96,7 +96,7 @@ func TestRunCmdPassesArgumentsToCmdShimsExactly(t *testing.T) {
 	shim := buildArgsEcho(t)
 	for _, args := range [][]string{
 		{"install", "demo@1.0.0"},
-		{"install", "demo", "--prefix", `C:\Users\Jane Smith\.pig\agent\npm`},
+		{"install", "demo", "--prefix", `C:\Users\Jane Smith\.ompig\agent\npm`},
 		{`quote"inside`, `trailing\`, `back\"slash`},
 		{"amp&pipe|lt<gt>", "caret^pct%excl!", "paren(x)", "semi;comma,star*q?"},
 		{""},

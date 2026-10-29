@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A cell runner that the build wrote outside its scratch directory (a Rust build with CARGO_TARGET_DIR set) is copied into the entry, and the host executes the copy as soon as the entry is published. A fork while the copy is open leaves a child that holds the copy's write descriptor until it calls exec, and the host's exec of the runner then fails with "text file busy". The failure was seen as `fork/exec .../runner: text file busy` in TestModelTypesVirtualModelsAcrossSDKs/rust-isolated.

@@ -12,14 +12,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 type rebindFixture struct {
@@ -81,7 +81,7 @@ func newRebindFixture(t testing.TB, handler func(*coding.Session, ...any) (any, 
 
 func rebindOriginalRecord(t *testing.T, family string, site int, title string) {
 	t.Helper()
-	if os.Getenv("PIG_RUNTIME_ORIGINAL_PROBE") == "" {
+	if os.Getenv("OMPIG_RUNTIME_ORIGINAL_PROBE") == "" {
 		return
 	}
 	data, err := json.Marshal([]any{family, site, title})

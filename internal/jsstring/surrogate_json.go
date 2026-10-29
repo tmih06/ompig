@@ -4,7 +4,7 @@ import (
 	"bytes"
 	stdjson "encoding/json"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A Go string holds a lone UTF-16 surrogate, a unit Pi's strings can hold, as three WTF-8 bytes. encoding/json writes those

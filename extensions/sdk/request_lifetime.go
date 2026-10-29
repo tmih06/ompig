@@ -7,7 +7,7 @@ import (
 )
 
 // requestParent separates an active handler's cancellation scope from a retained Context's runtime lifetime. The connection's write mutex orders parent selection with response publication.
-// pig additive (D19): retained SDK contexts keep their original connection generation after normal request completion.
+// ompig additive (D19): retained SDK contexts keep their original connection generation after normal request completion.
 type requestParent struct {
 	conn      *conn
 	id        string

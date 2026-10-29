@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/skills.ts loadSkillsFromDir against pinned Pi over a directory of random skills: names and descriptions at the length limits (counted in UTF-16 code units), with hyphen, case, digit and non-ASCII variations, non-string and absent values, the model-invocation flag in several types, and directory names that match the declared name or not. A YAML syntax error is compared by its path only (its message is the YAML library's).
@@ -120,7 +120,7 @@ func TestLoadSkillsRandomDirectoriesMatchPi(t *testing.T) {
 			}
 			if a != b {
 				if failures++; failures <= 8 {
-					t.Errorf("%s %d:\n  Pig %s\n  Pi  %s", kind, i, a, b)
+					t.Errorf("%s %d:\n  Ompig %s\n  Pi  %s", kind, i, a, b)
 				}
 			}
 		}

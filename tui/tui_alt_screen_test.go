@@ -13,7 +13,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // altRowAddress matches a per-row differential write intro: \x1b[<row>;1H\x1b[2K.
@@ -1294,7 +1294,7 @@ func TestAltScreenClickActivatesOsc8Link(t *testing.T) {
 // TestAltScreenAutoScrollTickIsMarshaledOntoOwnerLoop proves the auto-scroll tick
 // runs on the driver's owner loop through the non-dropping tick seam, not inline
 // on the timer goroutine and not through the lossy render dispatcher. Upstream
-// runs the whole tick synchronously in its single event loop; pig must marshal it
+// runs the whole tick synchronously in its single event loop; ompig must marshal it
 // so the render ScrollBy schedules cannot observe a new-scroll + stale-focus
 // intermediate frame, and it must not drop the tick (a dropped tick leaves the
 // fired one-shot timer's stale pointer in place and wedges auto-scroll).

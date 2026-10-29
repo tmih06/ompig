@@ -17,9 +17,9 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
-	"github.com/MichaelKinsy/PiG/internal/typebox"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/typebox"
 )
 
 // ProtocolVersion is the link protocol version, announced in hello. Peers of different versions do not talk: the side

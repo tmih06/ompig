@@ -4,11 +4,11 @@ This fixture uses Pi 0.87.1 as the oracle for `packages/tui/test/editor.test.ts:
 
 The Go port is `tui/editor_wrapping_upstream_test.go`. It preserves the original 24-row terminal's seven-line editor viewport, both padding rows, the Thai and Lao table entries, and all five explicit oversized-segment arrays with their UTF-16 source indices. The marker's actual length comes from the string, not the inaccurate upstream `21 chars` comment.
 
-Run the original bodies with `node test/parity/testdata/editor-wrap-helper/upstream-tests.mjs`. Run the Go cases with `go test ./tui -run '^TestUpstreamEditor(ScrollIndicators|GraphemeWrapping|WordWrapping)$' -count=1`. Use an isolated temporary HOME and unset `PIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` for every command.
+Run the original bodies with `node test/parity/testdata/editor-wrap-helper/upstream-tests.mjs`. Run the Go cases with `go test ./tui -run '^TestUpstreamEditor(ScrollIndicators|GraphemeWrapping|WordWrapping)$' -count=1`. Use an isolated temporary HOME and unset `OMPIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` for every command.
 
 ## Paired caller contract
 
-`24-editor-wrap-scroll.toml` compares the complete outputs of `pi.mjs` and `pig/main.go`. Both fixtures drive the production Editor through SetText, actual input handling, and Render. They retain every rendered row, including borders, cursor ANSI, and trailing spaces, as hexadecimal bytes. They compare logical text and UTF-16 cursor coordinates at every input transition. Hex encoding is lossless; neither fixture strips ANSI nor trims whitespace.
+`24-editor-wrap-scroll.toml` compares the complete outputs of `pi.mjs` and `ompig/main.go`. Both fixtures drive the production Editor through SetText, actual input handling, and Render. They retain every rendered row, including borders, cursor ANSI, and trailing spaces, as hexadecimal bytes. They compare logical text and UTF-16 cursor coordinates at every input transition. Hex encoding is lossless; neither fixture strips ANSI nor trims whitespace.
 
 The original direct word-wrapper inputs use editor width plus one because the unpadded editor reserves one cursor column. Atomic segment cases use real bracketed-paste input to populate the production paste registry. Widths 2 through 42 exercise narrow ellipses, the fallback label, and both centering thresholds. Width 1 is outside this fixture because D66 owns its end-cursor overflow distinction.
 

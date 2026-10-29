@@ -1,10 +1,10 @@
 # Rust extension SDK strings
 
-The Rust SDK targets Pi's extension API through PiG's subprocess host. See [Extension authoring](../../docs/extension-authoring.md) and [API parity](../../docs/extension-api-parity.md).
+The Rust SDK targets Pi's extension API through Ompig's subprocess host. See [Extension authoring](../../docs/extension-authoring.md) and [API parity](../../docs/extension-api-parity.md).
 
 ## Pi helper exports
 
-The crate documentation (`cargo doc`; `cargo test --doc` runs the truncation example and compile-checks the rest) shows the helpers Pi exports to extensions in snake case: `truncate_head`, `truncate_tail`, `truncate_line`, `format_size` (Pi's truncate.ts), `with_file_mutation_queue`, `is_tool_call_event_type` (Pi's `isToolCallEventType`), and `get_agent_dir`, `get_config_dir_name`, `get_version`, `get_package_dir`, `get_shell_config` (Pi's `getAgentDir()`, `CONFIG_DIR_NAME`, `VERSION`, `getPackageDir()`, `getShellConfig()`). Pi's pure pi-ai helpers are here too in snake case (`string_enum`, `clamp_thinking_level`, `get_supported_thinking_levels`, `calculate_cost`, `content_text`, `normalize_context`, `get_current_system_prompt`, `is_context_overflow`, `is_retryable_assistant_error`, `env_api_key_auth`, `create_assistant_message_event_stream` and the rest of `pi_ai_helpers.rs`), over `serde_json::Value`. The host-config getters return an `io::Error`, never a made-up path, when the process was not started by a PiG host. `Context::get_editor_component` returns the factory this extension installed with `set_editor_component`; the factory is re-callable (`Fn`), as Pi's is. Pi's `getEditorComponent` returns the factory installed by any extension, so one extension can wrap another's editor; PiG returns only the calling extension's own factory.
+The crate documentation (`cargo doc`; `cargo test --doc` runs the truncation example and compile-checks the rest) shows the helpers Pi exports to extensions in snake case: `truncate_head`, `truncate_tail`, `truncate_line`, `format_size` (Pi's truncate.ts), `with_file_mutation_queue`, `is_tool_call_event_type` (Pi's `isToolCallEventType`), and `get_agent_dir`, `get_config_dir_name`, `get_version`, `get_package_dir`, `get_shell_config` (Pi's `getAgentDir()`, `CONFIG_DIR_NAME`, `VERSION`, `getPackageDir()`, `getShellConfig()`). Pi's pure pi-ai helpers are here too in snake case (`string_enum`, `clamp_thinking_level`, `get_supported_thinking_levels`, `calculate_cost`, `content_text`, `normalize_context`, `get_current_system_prompt`, `is_context_overflow`, `is_retryable_assistant_error`, `env_api_key_auth`, `create_assistant_message_event_stream` and the rest of `pi_ai_helpers.rs`), over `serde_json::Value`. The host-config getters return an `io::Error`, never a made-up path, when the process was not started by a Ompig host. `Context::get_editor_component` returns the factory this extension installed with `set_editor_component`; the factory is re-callable (`Fn`), as Pi's is. Pi's `getEditorComponent` returns the factory installed by any extension, so one extension can wrap another's editor; Ompig returns only the calling extension's own factory.
 
 `Context::set_working_message("")` shows an empty working label, as Pi does, and `Context::clear_working_message()` restores the default label (Pi's `setWorkingMessage()` with no argument); `clear_hidden_thinking_label()` does the same for `set_hidden_thinking_label`.
 
@@ -35,7 +35,7 @@ JavaScript strings contain UTF-16 units, not only Unicode scalar values. Pi can 
 `Context::on_terminal_input` takes a callback over `&JsString`. `RemoteComponent::handle_input` receives the same lossless type when a custom overlay owns focus. `TerminalInputResult::data` is `Option<JsString>`. `Context::get_editor_text` also returns `JsString`; `set_editor_text` and `paste_to_editor` accept ordinary strings or `JsString`.
 
 ```rust
-use pig_sdk::{JsString, TerminalInputResult};
+use ompig_sdk::{JsString, TerminalInputResult};
 
 let subscription = ctx.on_terminal_input(|data| {
     if data.as_units() == [0xd83d] {

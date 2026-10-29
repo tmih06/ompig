@@ -1,8 +1,8 @@
 package subprocess
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // remoteEditorOfFactory is the editor in an extension's process that factory builds (extension.RemoteEditorFactory); nil for a nil factory.

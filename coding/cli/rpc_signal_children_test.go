@@ -15,17 +15,17 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // rpcSignalChildrenHelperEnv names the signal the helper process sends to its RPC child.
-const rpcSignalChildrenHelperEnv = "PIG_TEST_RPC_SIGNAL_CHILDREN"
+const rpcSignalChildrenHelperEnv = "OMPIG_TEST_RPC_SIGNAL_CHILDREN"
 
 // Pi's rpc-mode.ts signal handler calls killTrackedDetachedChildren before shutdown(128+signum): a bash call's shell
 // runs in its own process group, and a SIGTERM shutdown neither flushes nor aborts the run, so without the kill the
 // command outlives the RPC process. The faux bash call runs `touch <marker>; sleep 45`. A helper process that is a
-// child subreaper adopts what is left of the call when PiG exits and reports how each adopted process ended: SIGKILL
-// when PiG killed it, a normal exit after 45 seconds when it outlived PiG.
+// child subreaper adopts what is left of the call when Ompig exits and reports how each adopted process ended: SIGKILL
+// when Ompig killed it, a normal exit after 45 seconds when it outlived Ompig.
 func TestRPCSignalKillsTheShellOfARunningBashCall(t *testing.T) {
 	if name := os.Getenv(rpcSignalChildrenHelperEnv); name != "" {
 		rpcSignalChildrenHelper(t, name)
@@ -50,7 +50,7 @@ func TestRPCSignalKillsTheShellOfARunningBashCall(t *testing.T) {
 			if !strings.Contains(string(output), "SIGNALLED") {
 				t.Fatalf("the helper did not signal a running bash call:\n%s", output)
 			}
-			// PiG reaps a shell it killed before it exits, so a killed call can leave nothing to adopt.
+			// Ompig reaps a shell it killed before it exits, so a killed call can leave nothing to adopt.
 			for _, report := range reports {
 				if report != "killed" {
 					t.Fatalf("a process of the bash call outlived the RPC process (%s): %v", sig, reports)
@@ -69,7 +69,7 @@ func rpcSignalChildrenHelper(t *testing.T, name string) {
 		t.Fatal(err)
 	}
 	dir := t.TempDir()
-	p := startRPCProcessAt(t, dir, []string{"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-extensions", "--no-session")
+	p := startRPCProcessAt(t, dir, []string{"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-extensions", "--no-session")
 	p.send(`{"type":"prompt","message":"Run: sleep for a while"}`)
 	marker := filepath.Join(dir, ai.TestFauxToolStartedMarker)
 	deadline := time.Now().Add(p.budget)

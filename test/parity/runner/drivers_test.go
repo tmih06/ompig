@@ -12,23 +12,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Scenarios run a PATH program through /usr/bin/env: pig_bin = "/usr/bin/env"
+// Scenarios run a PATH program through /usr/bin/env: ompig_bin = "/usr/bin/env"
 // with args ["node", script]. Windows has no /usr/bin/env, so the driver runs
 // the program as env does instead of looking for usr\bin\env in the scenario.
 func TestCLIModeDriverRunsEnvLauncherPrograms(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
 		t.Fatal(err)
 	}
-	for _, label := range []string{"pig", "pi"} {
+	for _, label := range []string{"ompig", "pi"} {
 		t.Run(label, func(t *testing.T) {
 			cwd := t.TempDir()
 			args := []string{"node", "-e", `process.stdout.write("launched " + process.argv.length + "\n")`}
 			scenario := &Scenario{
 				Name: "env-launcher", SourcePath: filepath.Join(cwd, "scenario.toml"),
-				Env: EnvOverrides{OverrideBaseArgs: true, PigBin: "/usr/bin/env", PiBin: "/usr/bin/env", PigArgs: args, PiArgs: args},
+				Env: EnvOverrides{OverrideBaseArgs: true, OmpigBin: "/usr/bin/env", PiBin: "/usr/bin/env", OmpigArgs: args, PiArgs: args},
 				CLI: CLIDriverConfig{CWD: cwd, TimeoutSeconds: 10},
 			}
 			result := (cliModeDriver{}).Run(t.Context(), t, BinaryRef{Label: label, Path: "unused"}, scenario)
@@ -39,7 +39,7 @@ func TestCLIModeDriverRunsEnvLauncherPrograms(t *testing.T) {
 	}
 }
 
-// A scenario's pig_bin or pi_bin may be a script run by its #! line, such as
+// A scenario's ompig_bin or pi_bin may be a script run by its #! line, such as
 // test/parity/testdata/pi-ai-copilot-wrapper.mjs. Windows runs a file by its
 // extension, so there the driver runs the interpreter that line names.
 func TestCLIModeDriverRunsShebangScriptBins(t *testing.T) {
@@ -51,11 +51,11 @@ func TestCLIModeDriverRunsShebangScriptBins(t *testing.T) {
 	if err := os.WriteFile(script, []byte("#!/usr/bin/env node\nprocess.stdout.write(`script ${process.argv.length} ${process.argv[2]}\\n`);\n"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	for _, label := range []string{"pig", "pi"} {
+	for _, label := range []string{"ompig", "pi"} {
 		t.Run(label, func(t *testing.T) {
 			scenario := &Scenario{
 				Name: "shebang-bin", SourcePath: filepath.Join(cwd, "scenario.toml"),
-				Env: EnvOverrides{OverrideBaseArgs: true, PigBin: script, PiBin: script, PigArgs: []string{"arg"}, PiArgs: []string{"arg"}},
+				Env: EnvOverrides{OverrideBaseArgs: true, OmpigBin: script, PiBin: script, OmpigArgs: []string{"arg"}, PiArgs: []string{"arg"}},
 				CLI: CLIDriverConfig{CWD: cwd, TimeoutSeconds: 10},
 			}
 			result := (cliModeDriver{}).Run(t.Context(), t, BinaryRef{Label: label, Path: "unused"}, scenario)
@@ -86,7 +86,7 @@ func TestCLIModeDriverCapturesImmediateNodeExit(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, label := range []string{"pig", "pi"} {
+	for _, label := range []string{"ompig", "pi"} {
 		for _, tc := range []struct {
 			name  string
 			rows  int
@@ -141,7 +141,7 @@ func TestCLIModeDriverRemovesCaptureAfterSuccessAndFailure(t *testing.T) {
 				Name: "capture-cleanup", SourcePath: filepath.Join(root, "scenario.toml"),
 				CLI: CLIDriverConfig{CWD: root, Args: []string{"-c", tc.command}},
 			}
-			result := (cliModeDriver{}).Run(t.Context(), t, BinaryRef{Label: "pig", Path: testenv.Sh(t)}, scenario)
+			result := (cliModeDriver{}).Run(t.Context(), t, BinaryRef{Label: "ompig", Path: testenv.Sh(t)}, scenario)
 			if result.Err != nil || result.ExitCode != tc.code || result.Output != tc.output {
 				t.Fatalf("result = %+v, want code %d and output %q", result, tc.code, tc.output)
 			}
@@ -237,8 +237,8 @@ func TestRunScenarioAlternatesSerialPairOrder(t *testing.T) {
 	DriverRegistry[name] = driver
 	defer delete(DriverRegistry, name)
 	scenario := &Scenario{Driver: name, Assert: AssertSpec{Runs: 4, RuntimeRatioMax: 2}}
-	outcome := RunScenario(context.Background(), t, scenario, BinaryRef{Label: "pig"}, BinaryRef{Label: "pi"}, false)
-	if got, want := strings.Join(driver.labels, ","), "pig,pi,pi,pig,pig,pi,pi,pig"; got != want {
+	outcome := RunScenario(context.Background(), t, scenario, BinaryRef{Label: "ompig"}, BinaryRef{Label: "pi"}, false)
+	if got, want := strings.Join(driver.labels, ","), "ompig,pi,pi,ompig,ompig,pi,pi,ompig"; got != want {
 		t.Fatalf("serial launch order = %s, want %s", got, want)
 	}
 	if !outcome.Passed() {
@@ -337,13 +337,13 @@ func TestRunScenarioRunsNonPerfPairConcurrently(t *testing.T) {
 	scenario := &Scenario{Driver: name}
 	done := make(chan *ScenarioOutcome, 1)
 	go func() {
-		done <- RunScenario(context.Background(), t, scenario, BinaryRef{Label: "pig"}, BinaryRef{Label: "pi"}, true)
+		done <- RunScenario(context.Background(), t, scenario, BinaryRef{Label: "ompig"}, BinaryRef{Label: "pi"}, true)
 	}()
 	for range 2 {
 		select {
 		case <-driver.entered:
 		case <-time.After(time.Second):
-			t.Fatal("Pig/Pi pair did not start concurrently")
+			t.Fatal("Ompig/Pi pair did not start concurrently")
 		}
 	}
 	close(driver.release)
@@ -370,9 +370,9 @@ func TestRunScenarioStopsAfterFirstComparatorFailure(t *testing.T) {
 	scenario := &Scenario{Driver: name}
 	scenario.Assert.Runs = 3
 	scenario.Assert.OutputEqual = true
-	outcome := RunScenario(context.Background(), t, scenario, BinaryRef{Label: "pig"}, BinaryRef{Label: "pi"}, false)
-	if driver.calls != 2 || len(outcome.Pig.Runs) != 1 || len(outcome.Pi.Runs) != 1 {
-		t.Fatalf("calls/pig/pi = %d/%d/%d, want one mismatched pair only", driver.calls, len(outcome.Pig.Runs), len(outcome.Pi.Runs))
+	outcome := RunScenario(context.Background(), t, scenario, BinaryRef{Label: "ompig"}, BinaryRef{Label: "pi"}, false)
+	if driver.calls != 2 || len(outcome.Ompig.Runs) != 1 || len(outcome.Pi.Runs) != 1 {
+		t.Fatalf("calls/ompig/pi = %d/%d/%d, want one mismatched pair only", driver.calls, len(outcome.Ompig.Runs), len(outcome.Pi.Runs))
 	}
 	if len(outcome.Failures) == 0 {
 		t.Fatal("comparator mismatch was not retained")
@@ -393,8 +393,8 @@ func TestAC61RunScenarioStopsAfterFirstFailedPair(t *testing.T) {
 	}()
 	scenario := &Scenario{Driver: name}
 	scenario.Assert.Runs = 3
-	outcome := RunScenario(context.Background(), t, scenario, BinaryRef{Label: "pig"}, BinaryRef{Label: "pi"}, false)
-	if driver.calls != 2 || len(outcome.Pig.Runs) != 1 || len(outcome.Pi.Runs) != 1 {
-		t.Fatalf("calls/pig/pi = %d/%d/%d, want one failed pair only", driver.calls, len(outcome.Pig.Runs), len(outcome.Pi.Runs))
+	outcome := RunScenario(context.Background(), t, scenario, BinaryRef{Label: "ompig"}, BinaryRef{Label: "pi"}, false)
+	if driver.calls != 2 || len(outcome.Ompig.Runs) != 1 || len(outcome.Pi.Runs) != 1 {
+		t.Fatalf("calls/ompig/pi = %d/%d/%d, want one failed pair only", driver.calls, len(outcome.Ompig.Runs), len(outcome.Pi.Runs))
 	}
 }

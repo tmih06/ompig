@@ -16,11 +16,11 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 func TestRPCSpawnPipeFailureClosesEarlierDescriptors(t *testing.T) {
-	const mode = "PIG_RPC_PIPE_EXHAUSTION"
+	const mode = "OMPIG_RPC_PIPE_EXHAUSTION"
 	if os.Getenv(mode) != "1" {
 		child := exec.Command(os.Args[0], "-test.run=^TestRPCSpawnPipeFailureClosesEarlierDescriptors$")
 		child.Env = append(os.Environ(), mode+"=1")

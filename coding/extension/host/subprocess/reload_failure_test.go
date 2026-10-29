@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -81,7 +81,7 @@ func TestReloadReturnsConfiguredOrderForMixedPackedAndIsolatedCells(t *testing.T
 	keepGoBuildCaches(t)
 	root := t.TempDir()
 	t.Setenv("HOME", filepath.Join(root, "home"))
-	t.Setenv("PIG_HOME", filepath.Join(root, "pig-home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ompig-home"))
 	rootA := writePackedFactoryModule(t, "example.com/mixorder/a", "mix-order-a", "tool_a")
 	rootB := writePackedFactoryModule(t, "example.com/mixorder/b", "mix-order-b", "tool_b")
 	isolated := startupNodeFixture(t, root, "middle-node", `export default function () {}`)

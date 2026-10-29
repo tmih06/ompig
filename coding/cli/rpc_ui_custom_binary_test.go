@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 const rpcCustomUIExtension = `export default function (pi) {
@@ -27,10 +27,10 @@ const rpcCustomUIExtension = `export default function (pi) {
 }
 `
 
-// Pi 1.1.0's RPC UI context has no custom UI (rpc-mode.ts custom(): return undefined), so ctx.ui.custom resolves undefined without running the factory. PiG ran the factory, resolved its done value or failed the command with "no_ui: ui.custom requires an interactive TUI".
+// Pi 1.1.0's RPC UI context has no custom UI (rpc-mode.ts custom(): return undefined), so ctx.ui.custom resolves undefined without running the factory. Ompig ran the factory, resolved its done value or failed the command with "no_ui: ui.custom requires an interactive TUI".
 func TestRPCCustomUIResolvesUndefinedWithoutRunningTheFactory(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	dir := t.TempDir()
@@ -41,7 +41,7 @@ func TestRPCCustomUIResolvesUndefinedWithoutRunningTheFactory(t *testing.T) {
 	agentDir := t.TempDir()
 	cmd := exec.Command(bin, "--mode", "rpc", "--no-session", "--no-extensions", "--offline", "-e", extPath, "--model", "test-faux/faux-1")
 	cmd.Dir = agentDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -87,7 +87,7 @@ func TestRPCCustomUIResolvesUndefinedWithoutRunningTheFactory(t *testing.T) {
 	_ = stdin.Close()
 	<-readDone
 	if err := cmd.Wait(); err != nil {
-		t.Fatalf("pig --mode rpc: %v\nstderr: %s", err, stderr.String())
+		t.Fatalf("ompig --mode rpc: %v\nstderr: %s", err, stderr.String())
 	}
 	var messages []string
 	for line := range strings.SplitSeq(strings.TrimSpace(stdout.String()), "\n") {

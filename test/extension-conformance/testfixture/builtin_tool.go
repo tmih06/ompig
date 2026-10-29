@@ -9,8 +9,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // builtinProbeCase is one case of builtin_probe (TestConformance_BuiltinToolDelegationAcrossSDKs). Every SDK's fixture implements the same cases, so the

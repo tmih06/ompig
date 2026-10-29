@@ -15,7 +15,7 @@ import (
 	"golang.org/x/tools/go/analysis/checker"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/MichaelKinsy/PiG/automation/ci/portlint/checks"
+	"github.com/tmih06/ompig/automation/ci/portlint/checks"
 )
 
 // Hit is one finding with the identity the baseline keys on.

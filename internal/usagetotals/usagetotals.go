@@ -3,7 +3,7 @@
 // Ports packages/coding-agent/src/core/usage-totals.ts (combineUsage).
 package usagetotals
 
-import "github.com/MichaelKinsy/PiG/ai"
+import "github.com/tmih06/ompig/ai"
 
 // CombineUsage is the sum of two usages, keeping the optional token splits when either side reports them.
 func CombineUsage(first, second ai.Usage) ai.Usage {

@@ -7,7 +7,7 @@
 //	go test -tags=parity ./test/parity/runner -v -timeout 30m
 //
 // Each scenario in test/parity/scenarios/**/*.toml becomes a subtest. Failures
-// are symmetric: both pig and pi go through identical assertions. The
+// are symmetric: both ompig and pi go through identical assertions. The
 // test fails if any assertion fails, including the perf gate
 // (runtime_ratio_max).
 package runner
@@ -25,18 +25,18 @@ import (
 )
 
 var (
-	flagScenarioDir = flag.String("pig-parity.dir", "", "override scenario directory")
-	flagTags        = flag.String("pig-parity.tags", "", "comma-separated tags all required for inclusion (empty = all)")
-	flagDrivers     = flag.String("pig-parity.drivers", "", "comma-separated scenario drivers to include (empty = all)")
-	flagExcludeTags = flag.String("pig-parity.exclude-tags", "", "comma-separated tags; a scenario carrying any of them is not run here, and the run names it")
-	flagResultsOut  = flag.String("pig-parity.results", "", "write JSON results to this path")
-	flagSerial      = flag.Bool("pig-parity.serial", false, "force serial execution (default: parallel where safe)")
-	flagGroupLimits = flag.String("pig-parity.group-limits", defaultParityGroupLimits, "bounded concurrency buckets (name=n,name=n)")
-	flagArtifacts   = flag.String("pig-parity.artifacts", "", "write failure artifacts under this directory (default: test/parity/artifacts)")
-	flagAllowStale  = flag.Bool("pig-parity.allow-stale", false, "allow running parity against a pig binary older than source files")
-	flagRuns        = flag.Int("pig-parity.runs", 0, "override each scenario's declared run count (0 preserves the scenario)")
-	flagRuntimeOnly = flag.Bool("pig-parity.runtime-ratio-only", false, "run only scenarios with runtime_ratio_max")
-	flagShard       = flag.String("pig-parity.shard", "", "N/M: run only the scenarios whose name hashes to shard N of M (empty = all)")
+	flagScenarioDir = flag.String("ompig-parity.dir", "", "override scenario directory")
+	flagTags        = flag.String("ompig-parity.tags", "", "comma-separated tags all required for inclusion (empty = all)")
+	flagDrivers     = flag.String("ompig-parity.drivers", "", "comma-separated scenario drivers to include (empty = all)")
+	flagExcludeTags = flag.String("ompig-parity.exclude-tags", "", "comma-separated tags; a scenario carrying any of them is not run here, and the run names it")
+	flagResultsOut  = flag.String("ompig-parity.results", "", "write JSON results to this path")
+	flagSerial      = flag.Bool("ompig-parity.serial", false, "force serial execution (default: parallel where safe)")
+	flagGroupLimits = flag.String("ompig-parity.group-limits", defaultParityGroupLimits, "bounded concurrency buckets (name=n,name=n)")
+	flagArtifacts   = flag.String("ompig-parity.artifacts", "", "write failure artifacts under this directory (default: test/parity/artifacts)")
+	flagAllowStale  = flag.Bool("ompig-parity.allow-stale", false, "allow running parity against a ompig binary older than source files")
+	flagRuns        = flag.Int("ompig-parity.runs", 0, "override each scenario's declared run count (0 preserves the scenario)")
+	flagRuntimeOnly = flag.Bool("ompig-parity.runtime-ratio-only", false, "run only scenarios with runtime_ratio_max")
+	flagShard       = flag.String("ompig-parity.shard", "", "N/M: run only the scenarios whose name hashes to shard N of M (empty = all)")
 )
 
 // TestParity is the single Go test entry point for the parity suite.
@@ -77,7 +77,7 @@ func TestParity(t *testing.T) {
 	}
 	scenarios, excluded := FilterOutTags(scenarios, excludeTags)
 	for _, sc := range excluded {
-		t.Logf("not run here (tagged %v; a run without -pig-parity.exclude-tags runs it): %s (%s)", excludeTags, sc.Name, sc.SourcePath)
+		t.Logf("not run here (tagged %v; a run without -ompig-parity.exclude-tags runs it): %s (%s)", excludeTags, sc.Name, sc.SourcePath)
 	}
 	var drivers []string
 	if value := strings.TrimSpace(*flagDrivers); value != "" {
@@ -118,13 +118,13 @@ func TestParity(t *testing.T) {
 	if err := upstreamMirrorMissing(repoRoot); err != nil {
 		t.Fatal(err)
 	}
-	pig := ResolvePigBin(t)
+	ompig := ResolvePigBin(t)
 	pi := pinPiPackageDir(t, ResolveUpstreamPiBin(t))
-	freshness := requireFreshPig(t, repoRoot, pig, *flagAllowStale)
+	freshness := requireFreshPig(t, repoRoot, ompig, *flagAllowStale)
 
-	t.Logf("comparing pig (%s) vs pi (%s; upstream %s)",
-		pig.Path, pi.Path, UpstreamVersion(pi))
-	t.Logf("pig freshness: binary=%s newest_source=%s fresh=%t",
+	t.Logf("comparing ompig (%s) vs pi (%s; upstream %s)",
+		ompig.Path, pi.Path, UpstreamVersion(pi))
+	t.Logf("ompig freshness: binary=%s newest_source=%s fresh=%t",
 		freshness.BinaryModTime.Format("2006-01-02T15:04:05Z07:00"), freshness.NewestPath, freshness.Fresh)
 	t.Logf("schedule: %s", formatScheduleSummary(scenarios, groupLimits))
 
@@ -142,7 +142,7 @@ func TestParity(t *testing.T) {
 	// Default posture: every scenario runs in parallel. Scenarios opt OUT
 	// with the "serial" tag (state dependencies the harness can't isolate).
 	// The runtime_ratio_max perf gate is unreliable under contention, so
-	// it's enforced ONLY in serial mode (--pig-parity.serial=true) and
+	// it's enforced ONLY in serial mode (--ompig-parity.serial=true) and
 	// MEASURED + logged in parallel mode. Use `make parity-perf` to gate
 	// performance authoritatively.
 	parallelMode := !*flagSerial
@@ -172,9 +172,9 @@ func TestParity(t *testing.T) {
 				resultsMu.Lock()
 				skipped = append(skipped, sc.Name+" (requires-auth)")
 				resultsMu.Unlock()
-				t.Skipf("scenario tagged requires-auth but PIG_PARITY_REAL_AUTH is not set to a real auth.json; "+
-					"the runner never reads ~/.pi/agent/auth.json or ~/.pig/agent/auth.json implicitly (that would silently "+
-					"expose the operator's real credentials). Set PIG_PARITY_REAL_AUTH=/path/to/auth.json to opt in (path=%s)",
+				t.Skipf("scenario tagged requires-auth but OMPIG_PARITY_REAL_AUTH is not set to a real auth.json; "+
+					"the runner never reads ~/.pi/agent/auth.json or ~/.ompig/agent/auth.json implicitly (that would silently "+
+					"expose the operator's real credentials). Set OMPIG_PARITY_REAL_AUTH=/path/to/auth.json to opt in (path=%s)",
 					sc.SourcePath)
 			}
 			if sc.HasTag("posix-signals") && runtime.GOOS == "windows" {
@@ -194,15 +194,15 @@ func TestParity(t *testing.T) {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
 			runScenario := scenarioWithRuns(sc, *flagRuns)
-			o := RunScenario(ctx, t, runScenario, pig, pi, canParallel)
+			o := RunScenario(ctx, t, runScenario, ompig, pi, canParallel)
 			resultsMu.Lock()
 			results = append(results, o)
 			resultsMu.Unlock()
 
-			t.Logf("driver=%s tags=%v declared_runs=%d completed_pairs=%d pig.median=%dms pi.median=%dms",
-				sc.Driver, sc.Tags, runScenario.Assert.Runs, min(len(o.Pig.Runs), len(o.Pi.Runs)), o.Pig.MedianMs, o.Pi.MedianMs)
+			t.Logf("driver=%s tags=%v declared_runs=%d completed_pairs=%d ompig.median=%dms pi.median=%dms",
+				sc.Driver, sc.Tags, runScenario.Assert.Runs, min(len(o.Ompig.Runs), len(o.Pi.Runs)), o.Ompig.MedianMs, o.Pi.MedianMs)
 			if !o.Passed() {
-				if artifactDir, err := WriteFailureArtifacts(t, artifactsDir, o, pig, pi, freshness); err != nil {
+				if artifactDir, err := WriteFailureArtifacts(t, artifactsDir, o, ompig, pi, freshness); err != nil {
 					t.Logf("write failure artifacts: %v", err)
 				} else if artifactDir != "" {
 					t.Logf("failure artifacts: %s", artifactDir)
@@ -211,23 +211,23 @@ func TestParity(t *testing.T) {
 					t.Errorf("%s: %s", sc.Name, f)
 				}
 				// RunScenario stops at the first failed pair; earlier pairs can match.
-				pigRun, piRun := len(o.Pig.Runs)-1, len(o.Pi.Runs)-1
-				if pigRun >= 0 && piRun >= 0 {
-					if d := LineDiff(o.Pig.Runs[pigRun].Output, o.Pi.Runs[piRun].Output); d != "" {
-						t.Logf("output diff (pig vs pi):\n%s", d)
+				ompigRun, piRun := len(o.Ompig.Runs)-1, len(o.Pi.Runs)-1
+				if ompigRun >= 0 && piRun >= 0 {
+					if d := LineDiff(o.Ompig.Runs[ompigRun].Output, o.Pi.Runs[piRun].Output); d != "" {
+						t.Logf("output diff (ompig vs pi):\n%s", d)
 					}
 				}
-				if pigRun >= 0 {
-					t.Logf("pig run %d output (truncated):\n%s", pigRun+1, trunc(o.Pig.Runs[pigRun].Output, 1200))
+				if ompigRun >= 0 {
+					t.Logf("ompig run %d output (truncated):\n%s", ompigRun+1, trunc(o.Ompig.Runs[ompigRun].Output, 1200))
 				}
 				if piRun >= 0 {
 					t.Logf("pi run %d output (truncated):\n%s", piRun+1, trunc(o.Pi.Runs[piRun].Output, 1200))
 				}
 				// Sibling scenarios sharing covers: these may also be
 				// asserting non-faithful behavior and require re-probing
-				// in the same loop if a pig fix is the right answer here.
+				// in the same loop if a ompig fix is the right answer here.
 				if siblings := SiblingScenarios(sc, scenarios); len(siblings) > 0 {
-					t.Logf("scenarios sharing covers (re-probe these if fixing pig):\n  - %s",
+					t.Logf("scenarios sharing covers (re-probe these if fixing ompig):\n  - %s",
 						strings.Join(siblings, "\n  - "))
 				}
 				t.Logf("%s", FaithfulnessReminder)
@@ -314,14 +314,14 @@ func TestParity(t *testing.T) {
 }
 
 // credentialsAvailable reports whether the operator has explicitly opted into
-// real provider credentials via PIG_PARITY_REAL_AUTH. Scenarios tagged
+// real provider credentials via OMPIG_PARITY_REAL_AUTH. Scenarios tagged
 // `requires-auth` skip when this is false.
 //
-// This never scans ~/.pig or ~/.pi automatically: a scenario tagged
+// This never scans ~/.ompig or ~/.pi automatically: a scenario tagged
 // requires-auth is already a separate class specifically because it needs
 // real credentials, and running it just because the operator happens to be
 // logged in on this machine would silently copy their real credentials into
-// Pi's (or Pig's) parity agent directory. See realAuthSourcePath.
+// Pi's (or Ompig's) parity agent directory. See realAuthSourcePath.
 func credentialsAvailable() bool {
 	return realAuthSourcePath() != ""
 }
@@ -334,9 +334,9 @@ func TestWriteFailureArtifacts(t *testing.T) {
 	}
 	o := &ScenarioOutcome{
 		Scenario: &Scenario{Name: "artifact scenario", Driver: "cli-mode", SourcePath: scenarioFile},
-		Pig: SystemResults{Runs: []Result{
+		Ompig: SystemResults{Runs: []Result{
 			{Output: "first pair matched", Escaped: "first pair matched"},
-			{Output: "pig out", Escaped: "pig esc"},
+			{Output: "ompig out", Escaped: "ompig esc"},
 		}, MedianMs: 12},
 		Pi: SystemResults{Runs: []Result{
 			{Output: "first pair matched", Escaped: "first pair matched"},
@@ -344,17 +344,17 @@ func TestWriteFailureArtifacts(t *testing.T) {
 		}, MedianMs: 10},
 		Failures: []string{"mismatch"},
 	}
-	dir, err := WriteFailureArtifacts(t, filepath.Join(root, "artifacts"), o, BinaryRef{Label: "pig", Path: "/tmp/pig"}, BinaryRef{Label: "pi", Path: "/tmp/pi"}, FreshnessReport{Fresh: true})
+	dir, err := WriteFailureArtifacts(t, filepath.Join(root, "artifacts"), o, BinaryRef{Label: "ompig", Path: "/tmp/ompig"}, BinaryRef{Label: "pi", Path: "/tmp/pi"}, FreshnessReport{Fresh: true})
 	if err != nil {
 		t.Fatalf("WriteFailureArtifacts: %v", err)
 	}
-	for _, name := range []string{"context.json", "scenario.toml", "pig.stdout", "pig.escaped", "pi.stdout", "pi.escaped", "diff.txt", "rerun.sh"} {
+	for _, name := range []string{"context.json", "scenario.toml", "ompig.stdout", "ompig.escaped", "pi.stdout", "pi.escaped", "diff.txt", "rerun.sh"} {
 		if _, err := os.Stat(filepath.Join(dir, name)); err != nil {
 			t.Fatalf("artifact %s missing: %v", name, err)
 		}
 	}
 	for name, want := range map[string]string{
-		"pig.stdout": "pig out", "pig.escaped": "pig esc",
+		"ompig.stdout": "ompig out", "ompig.escaped": "ompig esc",
 		"pi.stdout": "pi out", "pi.escaped": "pi esc",
 	} {
 		data, err := os.ReadFile(filepath.Join(dir, name))
@@ -369,7 +369,7 @@ func TestWriteFailureArtifacts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(diff), "pig out") || !strings.Contains(string(diff), "pi out") {
+	if !strings.Contains(string(diff), "ompig out") || !strings.Contains(string(diff), "pi out") {
 		t.Errorf("failure diff does not show the last completed pair: %s", diff)
 	}
 }

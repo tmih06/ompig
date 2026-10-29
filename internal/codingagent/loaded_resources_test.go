@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Labels observed from Pi 0.87.1's startup listing for the nine npm packages
@@ -27,7 +27,7 @@ func TestCompactExtensionLabelsMatchUpstream(t *testing.T) {
 			info: &PiSourceInfo{Source: "npm:" + name, Scope: "user", Origin: "package", BaseDir: base},
 		}
 	}
-	gitBase := filepath.Join(string(filepath.Separator), "agent", "git", "github.com", "pig-parity", "listing-fixture")
+	gitBase := filepath.Join(string(filepath.Separator), "agent", "git", "github.com", "ompig-parity", "listing-fixture")
 	local := func(path string) loadedResource {
 		return loadedResource{path: filepath.FromSlash(path), info: &PiSourceInfo{Source: "cli", Scope: "temporary", Origin: "top-level"}}
 	}
@@ -38,7 +38,7 @@ func TestCompactExtensionLabelsMatchUpstream(t *testing.T) {
 		pkg("pi-hermes-memory", "src/index.ts"),
 		pkg("pi-lens", "dist/index.js"),
 		pkg("pi-mcp-adapter", "index.ts"),
-		{path: filepath.Join(gitBase, "extensions", "beta", "index.ts"), info: &PiSourceInfo{Source: "git:github.com/pig-parity/listing-fixture", Scope: "user", Origin: "package", BaseDir: gitBase}},
+		{path: filepath.Join(gitBase, "extensions", "beta", "index.ts"), info: &PiSourceInfo{Source: "git:github.com/ompig-parity/listing-fixture", Scope: "user", Origin: "package", BaseDir: gitBase}},
 		local("/work/probe/index.ts"),
 		local("/work/a/tool.ts"),
 		local("/work/b/tool.ts"),
@@ -50,7 +50,7 @@ func TestCompactExtensionLabelsMatchUpstream(t *testing.T) {
 		"pi-hermes-memory:src",
 		"pi-lens:dist",
 		"pi-mcp-adapter",
-		"pig-parity/listing-fixture:beta",
+		"ompig-parity/listing-fixture:beta",
 		"probe",
 		"a/tool.ts",
 		"b/tool.ts",

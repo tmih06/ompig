@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestStatusJSONReportsHealthyEmptyState(t *testing.T) {
@@ -17,8 +17,8 @@ func TestStatusJSONReportsHealthyEmptyState(t *testing.T) {
 	if err := os.MkdirAll(cwd, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", root)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", root)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("HOME", root)
 	t.Chdir(cwd)
 	stdout, stderr, code := captureStdoutStderr(t, func() int {
@@ -32,10 +32,10 @@ func TestStatusJSONReportsHealthyEmptyState(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertNoTopLevelVersionJSON(t, stdout)
-	if !status.Healthy || status.Packages.Total != 0 || status.Resources.Total != 0 || status.Piglets.Total != 0 || len(status.Errors) != 0 {
+	if !status.Healthy || status.Packages.Total != 0 || status.Resources.Total != 0 || status.Ompiglets.Total != 0 || len(status.Errors) != 0 {
 		t.Fatalf("status = %#v", status)
 	}
-	if status.Paths.Home != canonicalStatusPath(root) || status.Paths.Agent != canonicalStatusPath(agentDir) || status.Paths.Project != canonicalStatusPath(filepath.Join(cwd, ".pig")) {
+	if status.Paths.Home != canonicalStatusPath(root) || status.Paths.Agent != canonicalStatusPath(agentDir) || status.Paths.Project != canonicalStatusPath(filepath.Join(cwd, ".ompig")) {
 		t.Fatalf("paths = %#v", status.Paths)
 	}
 }
@@ -47,8 +47,8 @@ func TestStatusFailsOnDuplicateResourceIdentity(t *testing.T) {
 	if err := os.MkdirAll(cwd, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", root)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", root)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	for _, directory := range []string{"one", "two"} {
 		writeResourceFixture(t, filepath.Join(agentDir, "skills", directory, "SKILL.md"), "---\nname: duplicate\n---\n")
@@ -66,8 +66,8 @@ func TestStatusJSONFailsOnUnmaterializedPackage(t *testing.T) {
 	if err := os.MkdirAll(cwd, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_HOME", root)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", root)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
 	if err := settings.SetPackages([]codingagent.PackageSource{{Source: filepath.Join(root, "missing")}}); err != nil {
@@ -101,10 +101,10 @@ func TestStatusHelpAndUnknownOption(t *testing.T) {
 
 func TestStatusAtHomeDoesNotReportGlobalRootAsProject(t *testing.T) {
 	home := t.TempDir()
-	agentDir := filepath.Join(home, ".pig", "agent")
+	agentDir := filepath.Join(home, ".ompig", "agent")
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(home)
 
 	status := collectStatus()
@@ -115,8 +115,8 @@ func TestStatusAtHomeDoesNotReportGlobalRootAsProject(t *testing.T) {
 
 func TestStatusAcceptsDisabledMissingPackageMember(t *testing.T) {
 	cwd, agentDir, packageRoot := t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	writeResourceFixture(t, filepath.Join(packageRoot, "package.json"), `{"name":"pkg","pi":{"extensions":["extensions/removed"]}}`)
 	settings := codingagent.NewSettingsManager(cwd, agentDir)
@@ -149,8 +149,8 @@ func writeStatusSkillPackage(t *testing.T, root string) {
 
 func TestStatusIgnoresFilterDisabledDuplicatePackageResources(t *testing.T) {
 	cwd, agentDir, first, second := t.TempDir(), t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	writeStatusSkillPackage(t, first)
 	writeStatusSkillPackage(t, second)
@@ -166,8 +166,8 @@ func TestStatusIgnoresFilterDisabledDuplicatePackageResources(t *testing.T) {
 
 func TestStatusStillFailsOnEnabledDuplicatePackageResources(t *testing.T) {
 	cwd, agentDir, first, second := t.TempDir(), t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	writeStatusSkillPackage(t, first)
 	writeStatusSkillPackage(t, second)
@@ -200,14 +200,14 @@ func writeStatusExtensionPackage(t *testing.T, root, name string) {
 }
 
 // TestStatusWarnsOnDuplicatePackageExtensionIdentity is the regression for
-// MichaelKinsy/PiG#299. Two Packages that both expose src/index.ts resolve to
+// tmih06/ompig#299. Two Packages that both expose src/index.ts resolve to
 // the same "src" public name. The loader keys an extension by path and
 // DisambiguateIdentities renames the later copies ("src:2"), so both load and
 // status must stay healthy; the shared name is reported as a warning.
 func TestStatusWarnsOnDuplicatePackageExtensionIdentity(t *testing.T) {
 	cwd, agentDir, first, second := t.TempDir(), t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	writeStatusExtensionPackage(t, first, "first")
 	writeStatusExtensionPackage(t, second, "second")
@@ -239,8 +239,8 @@ func TestStatusWarnsOnDuplicatePackageExtensionIdentity(t *testing.T) {
 // so two Packages exposing the same skill name remain a failure.
 func TestStatusStillFailsOnDuplicateNonExtensionResourceIdentity(t *testing.T) {
 	cwd, agentDir, first, second := t.TempDir(), t.TempDir(), t.TempDir(), t.TempDir()
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Chdir(cwd)
 	for _, root := range []string{first, second} {
 		writeResourceFixture(t, filepath.Join(root, "package.json"), `{"name":"pkg","pi":{"skills":["skills"]}}`)

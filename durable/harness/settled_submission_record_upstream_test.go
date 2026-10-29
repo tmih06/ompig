@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // upstream: packages/durable/src/harness/submissions.ts:75-86 wait and :137-139 isSettled (`status === "done" || status === "unanswered"`). A submission whose

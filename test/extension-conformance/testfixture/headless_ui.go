@@ -3,7 +3,7 @@ package testfixture
 import (
 	"os"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // headlessComponent records that its Render ran. Pi never runs a custom component outside the TUI (rpc-mode.ts custom(), runner.ts noOpUIContext).

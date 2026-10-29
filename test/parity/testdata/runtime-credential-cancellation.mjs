@@ -6,7 +6,7 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const operations = ["read", "list", "delete"];
-if (process.argv[2] === "pig") {
+if (process.argv[2] === "ompig") {
   const output = execFileSync("./test/parity/testdata/prebuilt-go-test.sh", ["./ai", "-run", "^TestRuntimeCredentialsPreservesCancellationCause$", "-count=1", "-v"], { encoding: "utf8" });
   const records = output.split("\n").filter(line => line.startsWith("RUNTIME_CREDENTIAL_CANCEL "));
   assert.equal(records.length, operations.length);

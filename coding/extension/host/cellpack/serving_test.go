@@ -12,10 +12,10 @@ import (
 	"testing/fstest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // hideGo gives the consumer phase an empty PATH, so the serving proof cannot silently skip on machines that install Go under /usr/bin.
@@ -35,7 +35,7 @@ func shortSock(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		parent = os.TempDir()
 	}
-	dir, err := os.MkdirTemp(parent, "pig-serve-*")
+	dir, err := os.MkdirTemp(parent, "ompig-serve-*")
 	if err != nil {
 		t.Fatalf("mkdir short socket dir: %v", err)
 	}
@@ -92,7 +92,7 @@ func TestServing_PigletBinaryServesCellToolchainFree(t *testing.T) {
 
 	// 2. Embed + extract via the real cellpack path.
 	rel := "isolated/" + res.Language + "/hello-" + res.Hash[:16]
-	m := Manifest{PigCoreVersion: "test", Cells: []CellEntry{{
+	m := Manifest{OmpigCoreVersion: "test", Cells: []CellEntry{{
 		Language: res.Language, Key: "hello", OS: runtime.GOOS, Arch: runtime.GOARCH,
 		Binary: rel, Extensions: []ExtEntry{{Name: "hello", Hash: res.Hash}},
 	}}}
@@ -131,11 +131,11 @@ func TestServing_PigletBinaryServesCellToolchainFree(t *testing.T) {
 	if !ok {
 		t.Fatalf("served extension registered no 'hello' tool: %#v", ext.Tools)
 	}
-	result, err := tool.Definition.Execute(ctx, "tc-1", json.RawMessage(`{"name":"Piglet Binary"}`), nil)
+	result, err := tool.Definition.Execute(ctx, "tc-1", json.RawMessage(`{"name":"Ompiglet Binary"}`), nil)
 	if err != nil {
 		t.Fatalf("tool execute through served binary: %v", err)
 	}
-	assertServedTextResult(t, result, "Hello, Piglet Binary!")
+	assertServedTextResult(t, result, "Hello, Ompiglet Binary!")
 }
 
 // TestServing_NoResolverNeedsToolchain is the fail-able counterpart: with no
@@ -192,7 +192,7 @@ func TestServing_PackedGoCellServedToolchainFree(t *testing.T) {
 
 	// Embed + extract via the real cellpack path.
 	rel := "go/" + cell.Hash[:16] + "/runner"
-	m := Manifest{PigCoreVersion: "test", Cells: []CellEntry{{
+	m := Manifest{OmpigCoreVersion: "test", Cells: []CellEntry{{
 		Language: "go", Key: key, OS: runtime.GOOS, Arch: runtime.GOARCH,
 		Binary: rel, Extensions: []ExtEntry{{Name: "packserve", Hash: "hp"}},
 	}}}
@@ -250,12 +250,12 @@ func writeGoFactorySource(t *testing.T, modulePath string) string {
 	t.Helper()
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, "go.mod"),
-		[]byte("module "+modulePath+"\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+		[]byte("module "+modulePath+"\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	src := `package ext
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk"
+import "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
 	e := sdk.New("packserve")
@@ -272,7 +272,7 @@ func Extension() *sdk.Extension {
 }
 
 // helloServeSource is a minimal source-mode extension that registers one tool
-// and answers requests over the PIG_EXT_SOCKET framing protocol.
+// and answers requests over the OMPIG_EXT_SOCKET framing protocol.
 const helloServeSource = `package main
 
 import (
@@ -285,9 +285,9 @@ import (
 )
 
 func main() {
-	sockPath := os.Getenv("PIG_EXT_SOCKET")
+	sockPath := os.Getenv("OMPIG_EXT_SOCKET")
 	if sockPath == "" {
-		fmt.Fprintln(os.Stderr, "PIG_EXT_SOCKET not set")
+		fmt.Fprintln(os.Stderr, "OMPIG_EXT_SOCKET not set")
 		os.Exit(1)
 	}
 	conn, err := net.Dial("unix", sockPath)

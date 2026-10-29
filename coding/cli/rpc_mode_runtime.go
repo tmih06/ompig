@@ -8,14 +8,14 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // rpcModeSession is RPC mode's own state for one Session it serves (rpc-mode.ts keeps it in runRpcMode's closure).
@@ -341,7 +341,7 @@ func (h *rpcHost) newAdmission(session *coding.Session, runner *inproc.Runner, c
 	}
 }
 
-// forward writes the Session's events as upstream-compatible AgentSessionEvent JSON objects. Upstream pi RPC mode subscribes to session events and writes each event as a JSONL object after awaited extension handling and before Session persistence (rpc-mode.ts:346-363); rpcAgentEvent adapts pig's internal event structs to that wire shape. The Events consumer only drains and acknowledges delivery barriers. Nothing is written until the returned flag is set, which the caller does once session_start is dispatched (rpc-mode.ts:319-361).
+// forward writes the Session's events as upstream-compatible AgentSessionEvent JSON objects. Upstream pi RPC mode subscribes to session events and writes each event as a JSONL object after awaited extension handling and before Session persistence (rpc-mode.ts:346-363); rpcAgentEvent adapts ompig's internal event structs to that wire shape. The Events consumer only drains and acknowledges delivery barriers. Nothing is written until the returned flag is set, which the caller does once session_start is dispatched (rpc-mode.ts:319-361).
 func (h *rpcHost) forward(session *coding.Session) *atomic.Bool {
 	writing := new(atomic.Bool)
 	// A replaced Session's unsettled tail is over: its run was joined before the replacement.

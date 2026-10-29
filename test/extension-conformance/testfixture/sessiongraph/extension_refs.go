@@ -3,7 +3,7 @@ package sessiongraph
 import (
 	"path/filepath"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // extensionRefsScript passes the references of CreateCodemodeExtension, CreateToolSearchExtension and CreateMcpExtension to a DefaultResourceLoader, as testdata/session-graph.mjs extensionRefsScript does with Pi's factories; the report is Pi's own run's.

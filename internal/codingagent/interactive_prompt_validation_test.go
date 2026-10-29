@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // agent-session.ts:1673-1691 rejects a prompt without a model or usable auth before _checkCompaction and before_agent_start, so no agent_start or agent_settled follows; interactive-mode.ts:1186-1191 shows the rejection through showError (4463-4466). A Session created without a model holds agent.ts:57-68 DEFAULT_MODEL, whose "unknown" provider auth-guidance.ts:22-25 names "the selected model".
@@ -40,7 +40,7 @@ func TestInteractivePromptValidationPrecedesBeforeAgentStart(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			home := t.TempDir()
-			t.Setenv("PIG_HOME", home)
+			t.Setenv("OMPIG_HOME", home)
 			t.Setenv("FAUX_API_KEY", "")
 			agentDir := filepath.Join(home, "agent")
 			if err := os.MkdirAll(agentDir, 0o755); err != nil {

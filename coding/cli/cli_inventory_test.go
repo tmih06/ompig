@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // cliInventoryRow is one entry of test/parity/interfaces/cli-v<pinned version>.json, the compiler-derived list of the pinned Pi's
@@ -231,12 +231,12 @@ func TestCLIInventoryConfigCommandFlagsAsPi(t *testing.T) {
 	}
 	assert.Equal(t, 4, configRows, "pi-config rows: --approve, --help, --local, --no-approve")
 
-	wantHelp := "Usage:\n  pig config [-l] [--approve|--no-approve]\n\n" +
+	wantHelp := "Usage:\n  ompig config [-l] [--approve|--no-approve]\n\n" +
 		"Open the resource configuration TUI to enable or disable package resources.\n" +
-		"Without -l, starts in global settings (~/.pig/agent/settings.json).\n" +
+		"Without -l, starts in global settings (~/.ompig/agent/settings.json).\n" +
 		"Press Tab in the TUI to switch between global and project-local modes.\n\n" +
 		"Options:\n" +
-		"  -l, --local       Edit project overrides (.pig/settings.json)\n" +
+		"  -l, --local       Edit project overrides (.ompig/settings.json)\n" +
 		"  -a, --approve     Trust project-local files for this command with -l\n" +
 		"  -na, --no-approve Ignore project-local files for this command with -l\n\n"
 	for _, args := range [][]string{{"--help"}, {"-h"}, {"-l", "--bogus", "-h"}} {
@@ -245,10 +245,10 @@ func TestCLIInventoryConfigCommandFlagsAsPi(t *testing.T) {
 		assert.Empty(t, stderr)
 		assert.Equal(t, wantHelp, stdout, "%v", args)
 	}
-	usage := "pig config [-l] [--approve|--no-approve]"
+	usage := "ompig config [-l] [--approve|--no-approve]"
 	for _, tc := range []struct{ arg, want string }{
-		{"--bogus", "Unknown option --bogus for \"config\".\nUse \"pig --help\" or \"" + usage + "\".\n"},
-		{"-x", "Unknown option -x for \"config\".\nUse \"pig --help\" or \"" + usage + "\".\n"},
+		{"--bogus", "Unknown option --bogus for \"config\".\nUse \"ompig --help\" or \"" + usage + "\".\n"},
+		{"-x", "Unknown option -x for \"config\".\nUse \"ompig --help\" or \"" + usage + "\".\n"},
 		{"extra", "Unexpected argument extra.\nUsage: " + usage + "\n"},
 	} {
 		stdout, stderr, code := captureStdoutStderr(t, func() int { return runConfigCommand([]string{tc.arg}) })
@@ -262,16 +262,16 @@ func TestCLIInventoryConfigCommandFlagsAsPi(t *testing.T) {
 // directory names; the option columns are each command's own width. (`install` adds the --validate-only options of D28.)
 func TestCLIInventoryListAndRemoveHelpMatchPi(t *testing.T) {
 	want := map[string]string{
-		"list": "Usage:\n  pig list [--approve|--no-approve]\n\nList installed packages from user and project settings.\n\n" +
+		"list": "Usage:\n  ompig list [--approve|--no-approve]\n\nList installed packages from user and project settings.\n\n" +
 			"Options:\n" +
 			"  -a, --approve      Trust project-local files for this command\n" +
 			"  -na, --no-approve  Ignore project-local files for this command\n\n",
-		"remove": "Usage:\n  pig remove <source> [-l] [--approve|--no-approve]\n\nRemove a package and its source from settings.\nAlias: pig uninstall <source> [-l]\n\n" +
+		"remove": "Usage:\n  ompig remove <source> [-l] [--approve|--no-approve]\n\nRemove a package and its source from settings.\nAlias: ompig uninstall <source> [-l]\n\n" +
 			"Options:\n" +
-			"  -l, --local       Remove from project settings (.pig/settings.json)\n" +
+			"  -l, --local       Remove from project settings (.ompig/settings.json)\n" +
 			"  -a, --approve     Trust project-local files for this command\n" +
 			"  -na, --no-approve Ignore project-local files for this command\n\n" +
-			"Examples:\n  pig remove npm:@foo/bar\n  pig uninstall npm:@foo/bar\n\n",
+			"Examples:\n  ompig remove npm:@foo/bar\n  ompig uninstall npm:@foo/bar\n\n",
 	}
 	for command, text := range want {
 		newPackageCommandPathsFixture(t)

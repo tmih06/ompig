@@ -3,7 +3,7 @@ package tui
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/source"
+	"github.com/tmih06/ompig/coding/source"
 )
 
 // Pi: packages/coding-agent/src/modes/interactive/theme/theme.ts:259-277 (Theme constructor options name, sourcePath, sourceInfo): the options land on the theme's name, sourcePath and sourceInfo.

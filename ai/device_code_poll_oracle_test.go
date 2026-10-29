@@ -14,7 +14,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type devicePollStep struct {
@@ -233,7 +233,7 @@ func TestDeviceCodePollMatchesPi(t *testing.T) {
 		if !reflect.DeepEqual(gotAny, wantAny) {
 			differing++
 			if differing <= 6 {
-				t.Errorf("probe %d %+v\n  Pi  %s\n  Pig %s", i, probe, wantJSON, gotJSON)
+				t.Errorf("probe %d %+v\n  Pi  %s\n  Ompig %s", i, probe, wantJSON, gotJSON)
 			}
 		}
 	}
@@ -268,7 +268,7 @@ func TestDeviceCodePollDeadlineRoundsTheProductLikePi(t *testing.T) {
 		_ = json.Unmarshal(gotJSON, &gotAny)
 		_ = json.Unmarshal(wantJSON, &wantAny)
 		if !reflect.DeepEqual(gotAny, wantAny) {
-			t.Errorf("probe %d %+v\n  Pi  %s\n  Pig %s", i, probe, wantJSON, gotJSON)
+			t.Errorf("probe %d %+v\n  Pi  %s\n  Ompig %s", i, probe, wantJSON, gotJSON)
 		}
 	}
 }

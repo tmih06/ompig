@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Compare actual Pi definitions, not a sorted JSON projection. Pi tools/index.ts:89-99 owns the built-in denominator; each tools/<name>.ts owns its declaration order.

@@ -3,7 +3,7 @@ package subagent
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // announce compiles against the current SDK: the two results of ConfigHome

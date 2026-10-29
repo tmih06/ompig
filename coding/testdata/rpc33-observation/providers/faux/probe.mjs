@@ -5,8 +5,8 @@
 //    pi-agent-core's `runAgentLoop` (agent). Every delivered event is copied at its delivery tick together with the
 //    number of `stream.push` calls made so far, which is the exact tick order the consumer chain adds to the producer.
 // usage: node probe.mjs <out.json> [runs]. Requires PI_PACKAGE_ROOT.
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { spawn } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -176,4 +176,4 @@ for (const fixture of fixtures) {
   directRuns.push(await ticks(fixture));
   results.push({ fixture, rpc, direct: directRuns });
 }
-writeFileSync(out, JSON.stringify({ pi: PIG_UPSTREAM_VERSION, node: process.version, results, deferred: await deferredTicks() }, null, 1));
+writeFileSync(out, JSON.stringify({ pi: OMPIG_UPSTREAM_VERSION, node: process.version, results, deferred: await deferredTicks() }, null, 1));

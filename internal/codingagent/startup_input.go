@@ -3,7 +3,7 @@ package codingagent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/interactive-mode.ts
@@ -25,7 +25,7 @@ func (m *InteractiveMode) handleStartupInput(input inputChunk, render bool) {
 	if len(input.data) == 0 {
 		return
 	}
-	// pig additive (D91): a frontend's answers to its Open queries arrive
+	// ompig additive (D91): a frontend's answers to its Open queries arrive
 	// during startup.
 	if m.frontendInput(string(input.data)) || m.consumeTerminalThemeInput(string(input.data)) {
 		return
@@ -40,7 +40,7 @@ func (m *InteractiveMode) handleStartupInput(input inputChunk, render bool) {
 // setupEditorSubmitHandler: /arminsayshi and /dementedelves), or returns "".
 func hiddenSubmitCommand(text string) string {
 	switch text {
-	// pig divergence (D87): /pigsayhi is PiG's name for the same easter egg; Pi sends it to the model.
+	// ompig divergence (D87): /pigsayhi is Ompig's name for the same easter egg; Pi sends it to the model.
 	case "/arminsayshi", "/pigsayhi":
 		return "arminsayshi"
 	case "/dementedelves":

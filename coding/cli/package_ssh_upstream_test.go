@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/package-manager-ssh.test.ts:75
@@ -12,8 +12,8 @@ func TestBareSCPPackageSourceRemainsLocalAtCLIAndIdentityBoundaries(t *testing.T
 	const source = "git@github.com:user/repo"
 	cwd := physicalTempDir(t)
 	t.Chdir(cwd)
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	if kind := packagemanager.DetectSourceKind(source); kind != "local" {
 		t.Fatalf("source kind=%q", kind)
 	}

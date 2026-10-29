@@ -1,7 +1,7 @@
 //go:build parity
 
 // Package runner walks test/parity/scenarios/**/*.toml and runs each scenario
-// against both pig and upstream pi, asserting they behave equivalently.
+// against both ompig and upstream pi, asserting they behave equivalently.
 //
 // This is the canonical parity gate. See test/parity/README.md for the schema.
 package runner
@@ -30,7 +30,7 @@ type Scenario struct {
 	// ProviderFixture selects the same hermetic endpoint for another provider API (anthropic-messages, google-generative-ai, mistral-conversations, or openai-completions). It excludes openai_fixture.
 	ProviderFixture string `toml:"provider_fixture"`
 	Model           string `toml:"model"`
-	// ChangelogFixture replaces only the bundled changelog input in isolated PiG/Pi builds.
+	// ChangelogFixture replaces only the bundled changelog input in isolated Ompig/Pi builds.
 	ChangelogFixture string `toml:"changelog_fixture"`
 
 	// Driver-specific config (top-level tables to avoid key collision
@@ -65,15 +65,15 @@ type PrintDriverConfig struct {
 // CLIDriverConfig configures the cli-mode driver.
 type CLIDriverConfig struct {
 	Args           []string `toml:"args"`
-	PigArgs        []string `toml:"pig_args"` // replaces Args for pig when non-nil
-	PiArgs         []string `toml:"pi_args"`  // replaces Args for pi when non-nil
+	OmpigArgs      []string `toml:"ompig_args"` // replaces Args for ompig when non-nil
+	PiArgs         []string `toml:"pi_args"`    // replaces Args for pi when non-nil
 	InputLines     []string `toml:"input_lines"`
 	SettleSeconds  int      `toml:"settle_seconds"`
 	TimeoutSeconds int      `toml:"timeout_seconds"`
 	CWD            string   `toml:"cwd"` // working directory (relative to scenario file)
 	// SnapshotCWD copies the cwd fixture to a fresh per-binary temp dir and
 	// runs there, outside the checkout, as the other drivers always do. Set it
-	// for a fixture project whose .pi or .pig resources make the run depend on
+	// for a fixture project whose .pi or .ompig resources make the run depend on
 	// project trust, so the checkout's own trust decision cannot answer it.
 	SnapshotCWD bool `toml:"snapshot_cwd"`
 
@@ -117,8 +117,8 @@ type RPCInputStep struct {
 	PollUntil string `toml:"poll_until"`
 }
 
-// ExtensionHostDriverConfig configures the pig-only extension host validation
-// driver. It shells through `pig install <sources...> --validate-only --json`
+// ExtensionHostDriverConfig configures the ompig-only extension host validation
+// driver. It shells through `ompig install <sources...> --validate-only --json`
 // and lets AssertSpec.Extensions inspect the structured registration report.
 type ExtensionHostDriverConfig struct {
 	Sources        []string `toml:"sources"`
@@ -130,7 +130,7 @@ type ExtensionHostDriverConfig struct {
 type TmuxDriverConfig struct {
 	Width               int        `toml:"width"`
 	Height              int        `toml:"height"`
-	ReadyPatternPig     string     `toml:"ready_pattern_pig"`
+	ReadyPatternPig     string     `toml:"ready_pattern_ompig"`
 	ReadyPatternPi      string     `toml:"ready_pattern_pi"`
 	ReadyTimeoutSeconds int        `toml:"ready_timeout_seconds"`
 	Keys                []string   `toml:"keys"`
@@ -175,8 +175,8 @@ type TmuxStep struct {
 	WaitContains        []string `toml:"wait_contains"`
 	WaitVisibleContains []string `toml:"wait_visible_contains"`
 	// WaitVisibleContainsPig and WaitVisibleContainsPi add binary-specific rows to WaitVisibleContains, for a surface that
-	// differs by a numbered divergence (as ready_pattern_pig and ready_pattern_pi do for the ready pattern).
-	WaitVisibleContainsPig []string `toml:"wait_visible_contains_pig"`
+	// differs by a numbered divergence (as ready_pattern_ompig and ready_pattern_pi do for the ready pattern).
+	WaitVisibleContainsPig []string `toml:"wait_visible_contains_ompig"`
 	WaitVisibleContainsPi  []string `toml:"wait_visible_contains_pi"`
 	WaitNotContains        []string `toml:"wait_not_contains"`
 	// WaitStableMilliseconds waits, after the other step waits, until the
@@ -198,40 +198,40 @@ func (step TmuxStep) visibleContains(label string) []string {
 // and extra extension paths. This enables faux-provider parity tests
 // without live LLM calls.
 type EnvOverrides struct {
-	Pig           []string `toml:"pig"`            // extra KEY=VALUE pairs for pig
-	Pi            []string `toml:"pi"`             // extra KEY=VALUE pairs for pi
-	PiExtensions  []string `toml:"pi_extensions"`  // extra -e <path> args for pi
-	PigExtensions []string `toml:"pig_extensions"` // extra -e <path> args for pig
-	PigArgs       []string `toml:"pig_args"`       // extra CLI args for pig
-	PiArgs        []string `toml:"pi_args"`        // extra CLI args for pi
-	PigBin        string   `toml:"pig_bin"`        // override pig binary path for this scenario
-	PiBin         string   `toml:"pi_bin"`         // override upstream binary path for this scenario
+	Ompig           []string `toml:"ompig"`            // extra KEY=VALUE pairs for ompig
+	Pi              []string `toml:"pi"`               // extra KEY=VALUE pairs for pi
+	PiExtensions    []string `toml:"pi_extensions"`    // extra -e <path> args for pi
+	OmpigExtensions []string `toml:"ompig_extensions"` // extra -e <path> args for ompig
+	OmpigArgs       []string `toml:"ompig_args"`       // extra CLI args for ompig
+	PiArgs          []string `toml:"pi_args"`          // extra CLI args for pi
+	OmpigBin        string   `toml:"ompig_bin"`        // override ompig binary path for this scenario
+	PiBin           string   `toml:"pi_bin"`           // override upstream binary path for this scenario
 	// OverrideBaseArgs, when true, suppresses the per-binary baseline
 	// args (BinaryRef.Args, e.g. pi's default `--no-extensions`). Use
 	// this only when the scenario must control the exact argv: e.g.
-	// subcommands like `pi config` / `pig config` that must appear as
+	// subcommands like `pi config` / `ompig config` that must appear as
 	// argv[0] for the dispatcher to recognise them.
 	OverrideBaseArgs bool `toml:"override_base_args"`
-	// PigGoTests lists the packages (./-relative to cli.cwd) whose test binaries a cli-mode pig script runs through
+	// OmpigGoTests lists the packages (./-relative to cli.cwd) whose test binaries a cli-mode ompig script runs through
 	// test/parity/testdata/prebuilt-go-test.sh. The runner builds them before the timed runs (go_prebuild.go).
-	PigGoTests []string `toml:"pig_go_tests"`
-	// PiGoTests is PigGoTests for the Pi side: a Pi script that dumps Go-side probes runs the test binaries through the same helper.
+	OmpigGoTests []string `toml:"ompig_go_tests"`
+	// PiGoTests is OmpigGoTests for the Pi side: a Pi script that dumps Go-side probes runs the test binaries through the same helper.
 	PiGoTests []string `toml:"pi_go_tests"`
-	// PigGoPrograms and PiGoPrograms list the main packages (./-relative to cli.cwd) a script of that side runs through
+	// OmpigGoPrograms and PiGoPrograms list the main packages (./-relative to cli.cwd) a script of that side runs through
 	// test/parity/testdata/prebuilt-go-run.sh instead of `go run`. The runner builds them before the timed runs.
-	PigGoPrograms []string `toml:"pig_go_programs"`
-	PiGoPrograms  []string `toml:"pi_go_programs"`
+	OmpigGoPrograms []string `toml:"ompig_go_programs"`
+	PiGoPrograms    []string `toml:"pi_go_programs"`
 }
 
 // AssertSpec lists the assertions to evaluate against driver results.
 type AssertSpec struct {
 	ExitCode              *int            `toml:"exit_code"`
-	PigExitCode           *int            `toml:"pig_exit_code"`
+	OmpigExitCode         *int            `toml:"ompig_exit_code"`
 	PiExitCode            *int            `toml:"pi_exit_code"`
 	BothContain           []string        `toml:"both_contain"`
 	BothNotContain        []string        `toml:"both_not_contain"`
-	PigContains           []string        `toml:"pig_contains"`
-	PigNotContain         []string        `toml:"pig_not_contain"`
+	OmpigContains         []string        `toml:"ompig_contains"`
+	OmpigNotContain       []string        `toml:"ompig_not_contain"`
 	PiContains            []string        `toml:"pi_contains"`
 	PiNotContain          []string        `toml:"pi_not_contain"`
 	BothMatchRegex        []string        `toml:"both_match_regex"`
@@ -250,7 +250,7 @@ type AssertSpec struct {
 	ChangelogHeadersComplete bool `toml:"changelog_headers_complete"`
 
 	// ArtifactNormalizedEqual compares the file named by the driver's
-	// artifact_path between pig and pi, after the same normalize() the
+	// artifact_path between ompig and pi, after the same normalize() the
 	// output comparators use. Asserts on what the command wrote.
 	ArtifactEqual           bool `toml:"artifact_equal"`
 	ArtifactNormalizedEqual bool `toml:"artifact_normalized_equal"`
@@ -267,7 +267,7 @@ type AssertSpec struct {
 }
 
 // ExtensionAssertSpec defines structured assertions over the JSON emitted by
-// `pig install --validate-only --json`. It is intentionally pig-only: extension
+// `ompig install --validate-only --json`. It is intentionally ompig-only: extension
 // runtime cells and subprocess SDKs are documented downstream divergences from
 // upstream pi, but they still need first-class automated QC.
 type ExtensionAssertSpec struct {
@@ -288,9 +288,9 @@ type NormalizeReplaceRule struct {
 
 // DivergeSpec captures documented intentional differences.
 type DivergeSpec struct {
-	PigContains []string `toml:"pig_contains"`
-	PiContains  []string `toml:"pi_contains"`
-	Reason      string   `toml:"reason"`
+	OmpigContains []string `toml:"ompig_contains"`
+	PiContains    []string `toml:"pi_contains"`
+	Reason        string   `toml:"reason"`
 }
 
 // LoadScenario parses a TOML scenario file and fills in defaults.
@@ -336,11 +336,11 @@ func validate(sc *Scenario) error {
 	if len(sc.Covers) == 0 {
 		return fmt.Errorf("covers must list at least one upstream file")
 	}
-	if sc.Assert.ExitCode != nil && (sc.Assert.PigExitCode != nil || sc.Assert.PiExitCode != nil) {
-		return fmt.Errorf("exit_code cannot be combined with pig_exit_code or pi_exit_code")
+	if sc.Assert.ExitCode != nil && (sc.Assert.OmpigExitCode != nil || sc.Assert.PiExitCode != nil) {
+		return fmt.Errorf("exit_code cannot be combined with ompig_exit_code or pi_exit_code")
 	}
-	if (sc.Assert.PigExitCode == nil) != (sc.Assert.PiExitCode == nil) {
-		return fmt.Errorf("pig_exit_code and pi_exit_code must be declared together")
+	if (sc.Assert.OmpigExitCode == nil) != (sc.Assert.PiExitCode == nil) {
+		return fmt.Errorf("ompig_exit_code and pi_exit_code must be declared together")
 	}
 	if sc.Tmux.CaptureHistory && sc.Driver != "interactive-tmux" {
 		return fmt.Errorf("capture_history requires interactive-tmux")
@@ -359,7 +359,7 @@ func validate(sc *Scenario) error {
 	if sc.CLI.SnapshotCWD && sc.CLI.CWD == "" {
 		return fmt.Errorf("cli.snapshot_cwd requires cli.cwd")
 	}
-	for field, pkgs := range map[string][]string{"pig_go_tests": sc.Env.PigGoTests, "pi_go_tests": sc.Env.PiGoTests, "pig_go_programs": sc.Env.PigGoPrograms, "pi_go_programs": sc.Env.PiGoPrograms} {
+	for field, pkgs := range map[string][]string{"ompig_go_tests": sc.Env.OmpigGoTests, "pi_go_tests": sc.Env.PiGoTests, "ompig_go_programs": sc.Env.OmpigGoPrograms, "pi_go_programs": sc.Env.PiGoPrograms} {
 		if len(pkgs) == 0 {
 			continue
 		}

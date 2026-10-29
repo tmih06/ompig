@@ -7,7 +7,7 @@
 #
 # gate | command (run from the repository root, split on spaces, no shell)
 divergences-drift | make divergences
-piglet-strip-ids-drift | make piglet-strip-ids
+ompiglet-strip-ids-drift | make ompiglet-strip-ids
 docs-drift | make knowledge-graph
 perf-scoreboard-check | make perf-scoreboard
 known-gaps-drift | make known-gaps

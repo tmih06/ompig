@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/tui"
 )
 
 // realPathSync is Node's realpathSync, which Pi's package-manager tests wrap around the install root they expect as --prefix (Pi 5f960a0e2): the directory
@@ -49,10 +49,10 @@ func newPackageProcessFixture(t *testing.T, body string) packageProcessFixture {
 	bin := t.TempDir()
 	script := filepath.Join(bin, "process.cjs")
 	log := filepath.Join(bin, "calls.jsonl")
-	t.Setenv("PIG_TEST_PACKAGE_LOG", log)
-	t.Setenv("PIG_TEST_PACKAGE_AGENT", f.agent)
-	t.Setenv("PIG_TEST_PACKAGE_CWD", f.cwd)
-	prefix := `const fs=require('node:fs'),path=require('node:path');const [command,...args]=process.argv.slice(2);fs.appendFileSync(process.env.PIG_TEST_PACKAGE_LOG,JSON.stringify({command,args,cwd:process.cwd()})+'\n');`
+	t.Setenv("OMPIG_TEST_PACKAGE_LOG", log)
+	t.Setenv("OMPIG_TEST_PACKAGE_AGENT", f.agent)
+	t.Setenv("OMPIG_TEST_PACKAGE_CWD", f.cwd)
+	prefix := `const fs=require('node:fs'),path=require('node:path');const [command,...args]=process.argv.slice(2);fs.appendFileSync(process.env.OMPIG_TEST_PACKAGE_LOG,JSON.stringify({command,args,cwd:process.cwd()})+'\n');`
 	writePackageResource(t, script, prefix+body)
 	for _, name := range []string{"npm", "pnpm", "bun", "mise", "git", "corepack"} {
 		writeStubScript(t, filepath.Join(bin, name), fmt.Sprintf("#!/bin/sh\nexec %q %q %q \"$@\"\n", filepath.ToSlash(node), filepath.ToSlash(script), name))
@@ -144,7 +144,7 @@ func TestPackageNpmCommandOriginal(t *testing.T) {
 
 // .upstream/v0.87.1/packages/coding-agent/test/package-manager.test.ts:1030
 func TestPackageNpmRootCommandChangesOriginal(t *testing.T) {
-	f := newPackageProcessFixture(t, `if(command!=='mise'||args.slice(-2).join(' ')!=='root -g')throw new Error('unexpected command'); console.log(path.join(process.env.PIG_TEST_PACKAGE_CWD,args[1]==='node@20'?'node20':'node22','lib','node_modules'));`)
+	f := newPackageProcessFixture(t, `if(command!=='mise'||args.slice(-2).join(' ')!=='root -g')throw new Error('unexpected command'); console.log(path.join(process.env.OMPIG_TEST_PACKAGE_CWD,args[1]==='node@20'?'node20':'node22','lib','node_modules'));`)
 	root20 := filepath.Join(f.cwd, "node20", "lib", "node_modules")
 	want := filepath.Join(root20, "@scope", "pkg")
 	if err := os.MkdirAll(want, 0o755); err != nil {
@@ -221,7 +221,7 @@ func TestPackagePnpmLegacyResolutionOriginal(t *testing.T) {
 		{"should ignore malformed legacy pnpm global package lists", []string{"pnpm"}, true, false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			f := newPackageProcessFixture(t, `if(args.slice(-5).join(' ')!=='list -g --depth 0 --json')throw new Error('unexpected command');console.log(process.env.PIG_TEST_PACKAGE_LIST);`)
+			f := newPackageProcessFixture(t, `if(args.slice(-5).join(' ')!=='list -g --depth 0 --json')throw new Error('unexpected command');console.log(process.env.OMPIG_TEST_PACKAGE_LIST);`)
 			root := filepath.Join(f.cwd, "pnpm", "global", "v11")
 			pkg := filepath.Join(root, "20-hash", "node_modules", "pnpm-pkg")
 			output := "not json"
@@ -231,7 +231,7 @@ func TestPackagePnpmLegacyResolutionOriginal(t *testing.T) {
 				data, _ := json.Marshal([]any{map[string]any{"path": root, "dependencies": map[string]any{"pnpm-pkg": map[string]string{"version": "1.0.0", "path": pkg}}}})
 				output = string(data)
 			}
-			t.Setenv("PIG_TEST_PACKAGE_LIST", output)
+			t.Setenv("OMPIG_TEST_PACKAGE_LIST", output)
 			if err := f.settings.SetNpmCommand(tc.command); err != nil {
 				t.Fatal(err)
 			}
@@ -264,7 +264,7 @@ func TestPackagePnpmLegacyResolutionOriginal(t *testing.T) {
 
 // .upstream/v0.87.1/packages/coding-agent/test/package-manager.test.ts:2328
 func TestPackageLegacyNpmUpdateMigratesOriginal(t *testing.T) {
-	f := newPackageProcessFixture(t, `if(args.join(' ')==='root -g'){console.log(path.join(process.env.PIG_TEST_PACKAGE_CWD,'legacy-global','node_modules'));}else if(args[0]==='install'){const pkg=path.join(args[args.indexOf('--prefix')+1],'node_modules','legacy-pkg');fs.mkdirSync(pkg,{recursive:true});fs.writeFileSync(path.join(pkg,'package.json'),JSON.stringify({name:'legacy-pkg',version:'1.0.0'}));}else throw new Error('unexpected command');`)
+	f := newPackageProcessFixture(t, `if(args.join(' ')==='root -g'){console.log(path.join(process.env.OMPIG_TEST_PACKAGE_CWD,'legacy-global','node_modules'));}else if(args[0]==='install'){const pkg=path.join(args[args.indexOf('--prefix')+1],'node_modules','legacy-pkg');fs.mkdirSync(pkg,{recursive:true});fs.writeFileSync(path.join(pkg,'package.json'),JSON.stringify({name:'legacy-pkg',version:'1.0.0'}));}else throw new Error('unexpected command');`)
 	legacy := filepath.Join(f.cwd, "legacy-global", "node_modules", "legacy-pkg")
 	managed := filepath.Join(f.agent, "npm", "node_modules", "legacy-pkg")
 	writePackageResource(t, filepath.Join(legacy, "package.json"), `{"name":"legacy-pkg","version":"1.0.0"}`)

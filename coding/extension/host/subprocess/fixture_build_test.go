@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Only immutable executables are shared. Each consumer still owns its Host, processes, sockets, and working directory. Build failures are retained, not retried. Each build ends at the go test deadline (testbudget.Once), not at a fixed bound.
@@ -17,7 +17,7 @@ var wireFixtureBinary testbudget.Once[string]
 
 var sdkFixtureBinary testbudget.Once[string]
 
-// Isolating Pig's HOME must not discard the compiler and module caches. Ask Go before changing HOME so configured go/env paths retain their meaning.
+// Isolating Ompig's HOME must not discard the compiler and module caches. Ask Go before changing HOME so configured go/env paths retain their meaning.
 func keepGoBuildCaches(t *testing.T) {
 	t.Helper()
 	cmd := exec.CommandContext(testbudget.Context(t), "go", "env", "-json", "GOCACHE", "GOMODCACHE")

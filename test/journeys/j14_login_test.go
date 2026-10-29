@@ -3,7 +3,7 @@
 package journeys
 
 import (
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 func init() {
@@ -12,9 +12,9 @@ func init() {
 		Doc:        "The /login method chooser and its cancellation, signing in with an API key for a provider (provider list, key prompt, stored credential in auth.json) and /logout removing it.",
 		Touches:    []string{"internal/codingagent/", "coding/auth", "coding/", "tui/"},
 		AgentFiles: []string{"auth.json"},
-		// D80: PiG hides a typed secret by default; maskSecretInput=false restores Pi's plain-text prompt, which is the behavior compared here.
+		// D80: Ompig hides a typed secret by default; maskSecretInput=false restores Pi's plain-text prompt, which is the behavior compared here.
 		Env: func(k harness.Kind) harness.Env {
-			if k == harness.PiG {
+			if k == harness.Ompig {
 				return harness.Env{Settings: map[string]any{"maskSecretInput": false}}
 			}
 			return harness.Env{}

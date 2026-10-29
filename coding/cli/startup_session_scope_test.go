@@ -9,7 +9,7 @@ import (
 func TestRPCStartupScopeAppliesToSessionWithoutMessages(t *testing.T) {
 	t.Parallel()
 	home := t.TempDir()
-	env := []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_OFFLINE=1", "KIMI_API_KEY=x", "OPENAI_API_KEY=x"}
+	env := []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_OFFLINE=1", "KIMI_API_KEY=x", "OPENAI_API_KEY=x"}
 	p := startRPCProcessAt(t, t.TempDir(), env, "--no-extensions", "--session", filepath.Join(home, "new-session.jsonl"), "--models", "kimi-coding/k3")
 	p.send(`{"id":"state","type":"get_state"}`)
 	p.await("startup model state", func(record rpcRecord) bool {

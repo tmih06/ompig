@@ -1,0 +1,8 @@
+#!/bin/sh
+# Arm adapter: the Pi-Bolt harness configures Pi through PI_CODING_AGENT_DIR; Ompig reads OMPIG_CODING_AGENT_DIR.
+# One exec, no other work, so the process the harness measures is Ompig itself.
+OMPIG_CODING_AGENT_DIR="$PI_CODING_AGENT_DIR"
+OMPIG_OFFLINE=1 OMPIG_TELEMETRY=0 OMPIG_SKIP_VERSION_CHECK=1
+export OMPIG_CODING_AGENT_DIR OMPIG_OFFLINE OMPIG_TELEMETRY OMPIG_SKIP_VERSION_CHECK
+HOME="${BENCH_HOME:-$PI_CODING_AGENT_DIR/home}"; mkdir -p "$HOME"; export HOME
+exec "@EXE@" "$@"

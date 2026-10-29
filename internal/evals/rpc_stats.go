@@ -9,9 +9,9 @@ import (
 // AgentDirEnvironment is the environment variable that selects the agent directory (D2).
 func AgentDirEnvironment() string { return agentDirEnvironment() }
 
-// RPCSessionStats starts pig in RPC mode with args and env in dir and returns the data of get_session_stats.
-func RPCSessionStats(ctx context.Context, pigPath, dir string, args, env []string) ([]byte, error) {
-	command := exec.CommandContext(ctx, pigPath, append([]string{"--mode", "rpc"}, args...)...)
+// RPCSessionStats starts ompig in RPC mode with args and env in dir and returns the data of get_session_stats.
+func RPCSessionStats(ctx context.Context, ompigPath, dir string, args, env []string) ([]byte, error) {
+	command := exec.CommandContext(ctx, ompigPath, append([]string{"--mode", "rpc"}, args...)...)
 	command.Dir, command.Env = dir, env
 	process, err := startAgentProcess(command)
 	if err != nil {

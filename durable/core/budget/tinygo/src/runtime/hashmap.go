@@ -241,7 +241,7 @@ func hashmapBucketSize(m *hashmap) uintptr {
 	return hashmapBucketHeaderSize + hashmapKeySlotSize(m)*8 + hashmapValueSlotSize(m)*8
 }
 
-// PiG Durable core fork: stock TinyGo allocates bucket arrays without a layout, so the precise collector scans every
+// Ompig Durable core fork: stock TinyGo allocates bucket arrays without a layout, so the precise collector scans every
 // word of a bucket as a possible pointer. Two kinds of word in a bucket read as addresses that are not: the tophash
 // bytes at its start (a bucket with three or four entries makes a 32-bit word of hash bytes), and the keys or values of
 // a map whose key or value is smaller than a pointer (map[ID]bool packs four values in a word: 0x01010101 is 16 MiB).
@@ -313,7 +313,7 @@ func hashmapBucketPointer(i, keyWords uintptr, keyPointers, valuePointers bool) 
 // hashmapBucketLayouts holds the bucket layouts longer than an inline layout, by bucket size in words and whether keys
 // and values hold pointers (words<<2 | keys<<1 | values): a bucket is at most hashmapBucketHeaderSize +
 // 8*(hashmapMaxKeySize+hashmapMaxValueSize) bytes.
-var hashmapBucketLayouts [((hashmapBucketHeaderSize+8*(hashmapMaxKeySize+hashmapMaxValueSize))/unsafe.Sizeof(uintptr(0))+1)<<2]unsafe.Pointer
+var hashmapBucketLayouts [((hashmapBucketHeaderSize+8*(hashmapMaxKeySize+hashmapMaxValueSize))/unsafe.Sizeof(uintptr(0)) + 1) << 2]unsafe.Pointer
 
 //go:inline
 func hashmapBucketAddr(m *hashmap, buckets unsafe.Pointer, n uintptr) *hashmapBucket {

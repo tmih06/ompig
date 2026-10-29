@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The Node SDK sends an events.emit payload as JSON.stringify writes it, so NaN and the infinities are null; the Go SDK encodes the payload before the call and must not fail the emit instead.

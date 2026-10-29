@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type cacheWarmerOracleCase struct {
@@ -74,7 +74,7 @@ emit(input.map((c) => {
 			}
 			if gotTTL != wantTTL || IsReplayable(model, options) != want[i].Replayable {
 				if failures++; failures <= 8 {
-					t.Errorf("process env %q case %d %+v\n  Pig ttl %s replayable %t\n  Pi  ttl %s replayable %t", processEnv, i, c, gotTTL, IsReplayable(model, options), wantTTL, want[i].Replayable)
+					t.Errorf("process env %q case %d %+v\n  Ompig ttl %s replayable %t\n  Pi  ttl %s replayable %t", processEnv, i, c, gotTTL, IsReplayable(model, options), wantTTL, want[i].Replayable)
 				}
 			}
 		}
@@ -103,7 +103,7 @@ emit(input.map((ttl) => { const delay = mod.getCacheWarmingDelayMs(ttl); return 
 			wantText = fmt.Sprint(*want[i])
 		}
 		if gotText != wantText {
-			t.Errorf("delay(%v): Pig %s, Pi %s", ttl, gotText, wantText)
+			t.Errorf("delay(%v): Ompig %s, Pi %s", ttl, gotText, wantText)
 		}
 	}
 }

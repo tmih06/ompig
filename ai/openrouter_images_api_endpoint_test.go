@@ -14,7 +14,7 @@ import (
 
 // pi-mono #10652: OpenRouter answers 404 "<model> is an image generation model and cannot be used with the chat/completions endpoint.
 // Use the /api/v1/images endpoint instead." for openai/gpt-image-2.5-flare, so Pi returns stopReason "error" with no images.
-// pig divergence (D128): PiG sends the request to the Images API when OpenRouter says so.
+// ompig divergence (D128): Ompig sends the request to the Images API when OpenRouter says so.
 func TestOpenRouterImagesUsesTheImagesAPIWhenChatCompletionsRefusesTheModel(t *testing.T) {
 	const refusal = `{"error":{"message":"openai/gpt-image-2.5-flare is an image generation model and cannot be used with the chat/completions endpoint. Use the /api/v1/images endpoint instead.","code":404}}`
 	var mu sync.Mutex

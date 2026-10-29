@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:253 `this.toolExecution = runtimeOptions.toolExecution ?? "parallel"` and :479 createLoopConfig reads this.toolExecution once per run.

@@ -9,13 +9,13 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
+ompig = ["OMPIG_TEST_FAUX=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
 [tmux]
 width = 160
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 capture_start = " Error: Compaction failed:"
 capture_end = "completed-error-probe"
@@ -43,6 +43,6 @@ both_not_contain = ["Provider request failed"]
 output_equal = true
 
 [[assert.normalize_replace]]
-pattern = "If this looks like a pig bug"
+pattern = "If this looks like a ompig bug"
 with = "If this looks like a pi bug"
-reason = "The hint uses upstream APP_NAME; pig and pi are the documented executable names."
+reason = "The hint uses upstream APP_NAME; ompig and pi are the documented executable names."

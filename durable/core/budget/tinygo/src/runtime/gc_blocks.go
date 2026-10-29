@@ -265,7 +265,7 @@ func insertFreeRange(ptr unsafe.Pointer, len uintptr) {
 }
 
 // popFreeRange removes a range of len blocks from the freeRanges list.
-// It returns nil if there are no sufficiently long ranges, or (PiG fork), with
+// It returns nil if there are no sufficiently long ranges, or (Ompig fork), with
 // keep, when a request under keepLargeBlocks would split a range of
 // keepLargeBlocks or more while keepLargeRanges holds.
 func popFreeRange(len uintptr, keep bool) unsafe.Pointer {
@@ -437,7 +437,7 @@ func alloc(size uintptr, layout unsafe.Pointer) unsafe.Pointer {
 	var grewHeap bool
 	var pointer unsafe.Pointer
 	for {
-		// PiG fork: near the memory ceiling a small allocation collects
+		// Ompig fork: near the memory ceiling a small allocation collects
 		// before it splits a large free range (keepLargeRanges).
 		pointer = popFreeRange(neededBlocks, !ranGC)
 		if pointer != nil {
@@ -561,7 +561,7 @@ func runGC() (freeBytes uintptr) {
 	if gcDebug {
 		println("running collection cycle...")
 	}
-	allocAtGCNot = ^gcTotalAlloc // PiG fork: keepLargeRanges
+	allocAtGCNot = ^gcTotalAlloc // Ompig fork: keepLargeRanges
 
 	// Mark phase: mark all reachable objects, recursively.
 	gcMarkReachable()
@@ -910,7 +910,7 @@ func SetFinalizer(obj interface{}, finalizer interface{}) {
 	registerFinalizer(uintptr(objPtr), finalizer)
 }
 
-// PiG fork: keeping large free ranges near the memory ceiling.
+// Ompig fork: keeping large free ranges near the memory ceiling.
 //
 // The allocator takes the shortest free range long enough for a request (best
 // fit) and splits it. Late in a long run with the heap at its ceiling, small

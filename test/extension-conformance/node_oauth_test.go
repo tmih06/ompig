@@ -9,11 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
-// TestNodeOAuthBridge proves pig's node runtime bridges an upstream
+// TestNodeOAuthBridge proves ompig's node runtime bridges an upstream
 // config.oauth provider. The .mjs fixture registers login/refreshToken/getApiKey
 // through the upstream callback surface; the node runtime strips the closures,
 // advertises capability flags, and services the oauth_* requests plus the
@@ -36,7 +36,7 @@ func TestNodeOAuthBridge(t *testing.T) {
 	t.Cleanup(func() { h.Shutdown("test done") })
 
 	// The node runtime ships as an embedded launcher; build it into a runnable
-	// script the way pig does before loading a .mjs source extension.
+	// script the way ompig does before loading a .mjs source extension.
 	built, err := subprocess.NewBuilder(t.TempDir()).Build("node-oauth-fixture", fixture)
 	if err != nil {
 		t.Fatalf("build node launcher: %v", err)

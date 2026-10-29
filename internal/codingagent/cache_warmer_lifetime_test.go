@@ -6,7 +6,7 @@ import (
 	"testing/synctest"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func scheduledWarmerLifetime(t *testing.T) (*CacheWarmer, weak.Pointer[Session], weak.Pointer[ai.Model]) {

@@ -13,7 +13,7 @@ TARGETS = ('android-arm64', 'linux-amd64', 'linux-arm64', 'darwin-amd64', 'darwi
 def assemble(candidates, release, version):
     plan = []
     for target in TARGETS:
-        name = f'pig-{version}-{target}'
+        name = f'ompig-{version}-{target}'
         directory = candidates / name
         archive = name + ('.zip' if target.startswith('windows-') else '.tar.gz')
         prefix = 'source' if target == 'source' else 'sbom'

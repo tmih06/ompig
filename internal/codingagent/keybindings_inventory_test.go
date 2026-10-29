@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/knowngaps"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/test/parity/knowngaps"
+	"github.com/tmih06/ompig/tui"
 )
 
 type upstreamAppKeybindingInventory struct {
@@ -75,7 +75,7 @@ func TestAppKeybindingDefinitionsMatchUpstreamInventory(t *testing.T) {
 		}
 		for id := range gotDefinitions {
 			if !upstream[id] {
-				report(id, "PiG defines an app keybinding the pinned Pi does not")
+				report(id, "Ompig defines an app keybinding the pinned Pi does not")
 			}
 		}
 	}

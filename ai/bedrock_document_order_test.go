@@ -10,7 +10,7 @@ import (
 
 // Pi's AWS SDK (JS) writes every Bedrock document with JSON.stringify, which keeps member insertion order and keeps an empty member name
 // (bedrock-converse-stream.ts toolSpec.inputSchema.json is the tool's `parameters` as authored); smithy-go's document encoder would sort the keys and reject
-// an empty one (document/json encoder.go encodeMap). PiG writes the authored JSON through bedrockDocument.MarshalSmithyDocument (bedrock_wire.go).
+// an empty one (document/json encoder.go encodeMap). Ompig writes the authored JSON through bedrockDocument.MarshalSmithyDocument (bedrock_wire.go).
 // The Pi-oracle comparison is TestBedrockRequestBodyMatchesPi (needs Node and Pi's dependencies); this hermetic test pins the same rule with the expected text
 // written by hand from the authored schemas.
 // mutation-checked: marshalling the lazy document (smithy-go: rejects the empty member name) instead of the authored JSON fails the empty-name case.

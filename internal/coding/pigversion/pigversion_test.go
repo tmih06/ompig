@@ -33,7 +33,7 @@ func TestUpstreamConstantsAreConsistent(t *testing.T) {
 // Semver allows one plus sign: a commit pin's version joins the package version and
 // the commit with a dot inside the single build-metadata field.
 func TestVersionHasOneBuildMetadataField(t *testing.T) {
-	want := PigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", ".")
+	want := OmpigVersion + "+" + strings.ReplaceAll(UpstreamVersion, "+", ".")
 	if Version != want {
 		t.Fatalf("Version = %q, want %q", Version, want)
 	}
@@ -44,7 +44,7 @@ func TestVersionHasOneBuildMetadataField(t *testing.T) {
 
 // The committed pin file agrees with the constants unless a run overrides the pin.
 func TestCommittedPinFileMatchesConstants(t *testing.T) {
-	if os.Getenv("PIG_UPSTREAM_OVERRIDE") == "true" || os.Getenv("PI_UPSTREAM_REF") != "" {
+	if os.Getenv("OMPIG_UPSTREAM_OVERRIDE") == "true" || os.Getenv("PI_UPSTREAM_REF") != "" {
 		t.Skip("this run overrides the pin")
 	}
 	root, err := filepath.Abs("../../..")

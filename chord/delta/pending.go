@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // The pending queue: the ops a slow consumer of one state has not taken yet, folded while they wait. Ports packages/chord/src/delta/pending.ts.

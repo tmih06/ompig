@@ -8,8 +8,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 // viewImageStoreFor returns the connection's image store (D107). A nil

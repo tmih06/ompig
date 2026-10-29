@@ -3,7 +3,7 @@ package inproc
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestUnboundCommandContextSessionActionsReportNotCancelled ports runner.ts:383-386 and bindCommandContext

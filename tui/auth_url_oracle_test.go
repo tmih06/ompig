@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type authURLProbe struct {
@@ -77,7 +77,7 @@ func TestAuthURLRendersLikePi(t *testing.T) {
 		got := NewAuthURL(probe.URL, func(string) error { return nil }, func() {}).Render(probe.Width)
 		if !reflect.DeepEqual(got, expected[i]) {
 			if failures++; failures <= 4 {
-				t.Errorf("probe %d %+v:\n  Pig %q\n  Pi  %q", i, probe, got, expected[i])
+				t.Errorf("probe %d %+v:\n  Ompig %q\n  Pi  %q", i, probe, got, expected[i])
 			}
 		}
 	}

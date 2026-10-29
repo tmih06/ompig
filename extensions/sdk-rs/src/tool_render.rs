@@ -132,7 +132,7 @@ pub type SharedToolRenderResultView = Arc<
 /// `call_view` and `result_view` are the view forms (D107): each declares its
 /// phase rendered and wins over the line form set for the same phase.
 ///
-/// pig divergence (D89): `next()` returns renderers the host draws as a marker. Returning it keeps them; its
+/// ompig divergence (D89): `next()` returns renderers the host draws as a marker. Returning it keeps them; its
 /// renderers are `None`, so a resolver cannot wrap them. A marker given a renderer is the resolver's own renderers.
 #[derive(Clone, Default)]
 pub struct ToolRendererSet {

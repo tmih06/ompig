@@ -34,7 +34,7 @@ The JSON checks (`mapkeyorder`, `nilslicenull`, `jsonescape`) cover `encoding/js
 |---|---|---|---|
 | `mapkeyorder` | HIGH | `json.Marshal`/`Encode` of a Go map: Go sorts keys, `JSON.stringify` keeps insertion order | #165 edited tool input sorted keys |
 | `emptydrop` | MED | `omitempty` on a slice or map field of a non-test struct (a test probe input is not a wire shape): drops an explicit `[]` or `{}`. A `json.RawMessage` field is exempt: an encoded `[]` or `{}` is two bytes and survives `omitempty` | MCP empty titles; ClientCapabilities empty objects |
-| `nilslicenull` | HIGH | `json.Marshal` of a slice-typed value that nothing checks for nil: nil becomes `null`, Pi sends `[]` | Piglet empty active-tool list |
+| `nilslicenull` | HIGH | `json.Marshal` of a slice-typed value that nothing checks for nil: nil becomes `null`, Pi sends `[]` | Ompiglet empty active-tool list |
 | `jsonescape` | MED | `string(json.Marshal(...))`, `json.MarshalIndent`, and encoders without `SetEscapeHTML(false)` | `JSON.stringify` never escapes `<`, `>`, `&`; settings.json, trust.json and auth.json were written with `\u0026` |
 | `utf16units` | MED | `len(s)`, `s[i]`, `s[a:b]` against a limit or position in a file with a `// Ports packages/...ts` comment | truncation, cursor and width on non-ASCII text |
 | `regexfold` | LOW | `(?i)` in `regexp` or `lazyregexp` patterns | gap-untested O2 |
@@ -59,9 +59,9 @@ The JSON checks (`mapkeyorder`, `nilslicenull`, `jsonescape`) cover `encoding/js
 | `unixsocketpath` | MED | a unix socket in a function that builds paths under `TempDir` | socket paths over 104 bytes |
 | `providerliteral` | MED | a built-in provider ID compared as a literal outside that provider's own file | Copilot-only special cases in shared paths |
 | `testisolation` | HIGH | `os.UserHomeDir`, `os.Setenv` of a home or agent-directory variable, or a partial `t.Setenv` set before starting a child, in a package whose `TestMain` does not call `testenv.ScopeTempDir` | 2026-10-06 `auth.json` wipe; #163 |
-| `hotpathjson` | MED | `encoding/json`, `extensions/sdk/json` and `orderedjson` Marshal/Unmarshal/NewEncoder/NewDecoder, and a `map[string]any` literal or `make`, inside a function whose doc comment carries `//pig:hotpath` (a function that runs once per event, frame, token or turn; sweep pattern P3) | complexity-audit hotpath-sweep: rpcAgentEvent and makeEventHandler marshal by reflection per event |
-| `hotpathalloc` | LOW | `fmt.Sprint*`, `slices.Clone`/`maps.Clone`/`bytes.Clone`, `append([]T(nil), x...)` and `time.After`/`NewTimer`/`Tick` inside a `//pig:hotpath` function (sweep pattern P5) | complexity-audit hotpath-sweep: three clones of every published message per event, a timer per wait |
+| `hotpathjson` | MED | `encoding/json`, `extensions/sdk/json` and `orderedjson` Marshal/Unmarshal/NewEncoder/NewDecoder, and a `map[string]any` literal or `make`, inside a function whose doc comment carries `//ompig:hotpath` (a function that runs once per event, frame, token or turn; sweep pattern P3) | complexity-audit hotpath-sweep: rpcAgentEvent and makeEventHandler marshal by reflection per event |
+| `hotpathalloc` | LOW | `fmt.Sprint*`, `slices.Clone`/`maps.Clone`/`bytes.Clone`, `append([]T(nil), x...)` and `time.After`/`NewTimer`/`Tick` inside a `//ompig:hotpath` function (sweep pattern P5) | complexity-audit hotpath-sweep: three clones of every published message per event, a timer per wait |
 
-Mark a hot function with `//pig:hotpath` in its doc comment; the two `hotpath*` passes then flag what it allocates per call. A hit is fixed at the source or recorded in `baseline.toml` until it is.
+Mark a hot function with `//ompig:hotpath` in its doc comment; the two `hotpath*` passes then flag what it allocates per call. A hit is fixed at the source or recorded in `baseline.toml` until it is.
 
 Not covered by a pass, because another gate owns it: hand-edited generated files (`make generate` drift gates and `automation/ci/check-generated.sh`), the runtime agent-directory guard (`automation/ci/agent-dir-guard.sh`), and `errorlint` and `bodyclose` (golangci). Unbounded channel growth is not statically decidable and has no pass.

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // The CLI's selected paths feed the same skills/prompt readers on startup and reload.
@@ -44,7 +44,7 @@ func TestUpstreamResourceLoaderDiscovery(t *testing.T) {
 			root := t.TempDir()
 			t.Setenv("HOME", root)
 			t.Setenv("USERPROFILE", root)
-			t.Setenv("PIG_HOME", filepath.Join(root, "config"))
+			t.Setenv("OMPIG_HOME", filepath.Join(root, "config"))
 			cwd, agentDir := filepath.Join(root, "project"), filepath.Join(root, "agent")
 			for _, dir := range []string{cwd, agentDir} {
 				if err := os.MkdirAll(dir, 0o755); err != nil {

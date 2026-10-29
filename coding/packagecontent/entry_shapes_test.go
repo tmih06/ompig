@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Upstream collectFilesFromPaths (core/package-manager.ts) keeps a declared
@@ -128,7 +128,7 @@ func TestPromptAndThemeDirectoriesFollowUpstreamCollection(t *testing.T) {
 }
 
 // Pi 0.87.1 never reads .claude-plugin/plugin.json: a package with a "pi"
-// manifest loads what that manifest declares. PiG's vendor-overlay reading is
+// manifest loads what that manifest declares. Ompig's vendor-overlay reading is
 // additive and so is skipped for such a package, whatever the overlay holds.
 func TestPiManifestIgnoresVendorPluginOverlays(t *testing.T) {
 	root := t.TempDir()
@@ -170,7 +170,7 @@ func TestPiManifestKindsIgnorePluginEntries(t *testing.T) {
 	root := t.TempDir()
 	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg","pi":{"prompts":["prompts"]}}`)
 	writeTestFile(t, filepath.Join(root, "plugin.json"), `{"name":"pkg","skills":["missing-skills"]}`)
-	writeTestFile(t, filepath.Join(root, ".pig-plugin", "plugin.json"), `{"themes":["missing-themes"]}`)
+	writeTestFile(t, filepath.Join(root, ".ompig-plugin", "plugin.json"), `{"themes":["missing-themes"]}`)
 	writeTestFile(t, filepath.Join(root, "prompts", "p.md"), "p\n")
 	writeTestFile(t, filepath.Join(root, "skills", "s", "SKILL.md"), "---\ndescription: s\n---\n")
 	writeTestFile(t, filepath.Join(root, "themes", "t.json"), `{}`)
@@ -189,9 +189,9 @@ func TestPiManifestKindsIgnorePluginEntries(t *testing.T) {
 	}
 }
 
-// Without a "pi" manifest PiG still reads a Claude plugin manifest. Claude's
+// Without a "pi" manifest Ompig still reads a Claude plugin manifest. Claude's
 // inline mcpServers and hooks objects are configuration, not path lists, and
-// declare no PiG members; other fields keep loading.
+// declare no Ompig members; other fields keep loading.
 func TestClaudePluginInlineConfigurationDoesNotFailLoad(t *testing.T) {
 	root := t.TempDir()
 	writeTestFile(t, filepath.Join(root, "package.json"), `{"name":"pkg"}`)

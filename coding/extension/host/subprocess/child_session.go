@@ -11,8 +11,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // ChildSession is a child agent session the host owns for one extension connection. It is the part of Pi's AgentSession an extension reaches over the wire; the process that builds sessions (the coding package's CreateAgentSession) implements it.

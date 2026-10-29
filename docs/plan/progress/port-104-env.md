@@ -1,4 +1,4 @@
-# port-104-env: `@earendil-works/pi-env` in PiG
+# port-104-env: `@earendil-works/pi-env` in Ompig
 
 ## What pi-env is
 
@@ -17,14 +17,14 @@ Consumers: `RemoteExecutionEnv` is passed wherever an `ExecutionEnv` goes (Durab
 
 ## Go mapping
 
-- `env/` (package `env`, import `github.com/MichaelKinsy/PiG/env`): `Connection`, `RemoteExecutionEnv` (implements `durable/env.ExecutionEnv`), `RemoteWatcher`, `ssh.go`. TS Promises that are awaited become blocking calls with `context.Context`; in-flight pipelines use a `Call` started in order (frames go out in call order, which the daemon's write-chunk ordering needs) and awaited afterwards. `AbortSignal` is the call's context (`context.AfterFunc` sends `cancel`).
+- `env/` (package `env`, import `github.com/tmih06/ompig/env`): `Connection`, `RemoteExecutionEnv` (implements `durable/env.ExecutionEnv`), `RemoteWatcher`, `ssh.go`. TS Promises that are awaited become blocking calls with `context.Context`; in-flight pipelines use a `Call` started in order (frames go out in call order, which the daemon's write-chunk ordering needs) and awaited afterwards. `AbortSignal` is the call's context (`context.AfterFunc` sends `cancel`).
 - `env/daemon/` (package `daemon`) is the daemon as a Go library (`Serve(in, out, token)`), `env/cmd/pi-env` its `main`. The wire is Pi's byte for byte.
 - The daemon reuses `durable/env/node` where the Rust daemon re-implements `NodeExecutionEnv` (`exec`, `watch`), and stdlib plus `internal/nodeerrno` for the low-level file calls. No Rust is built.
 - Tests: Pi's suite over a pipe to the daemon. The test binary re-executes itself as the daemon (no build step, no network), or uses the binary named by `PI_ENV_DAEMON` as Pi does. The SSH bootstrap tests run against a disposable `sshd` on 127.0.0.1 when one is installed, as Pi's do; `PI_ENV_SSH_HOST` gates the external-server suite.
 
 ## Terminals (`pty`, `ptyWrite`, `ptyResize`, `ptyForeground`)
 
-Pi main added interactive terminals to the daemon (`daemon/src/pty.rs`, `docs/protocol.md`) and to the client (`src/terminal.ts`, `localDaemon()`). PiG maps them as follows.
+Pi main added interactive terminals to the daemon (`daemon/src/pty.rs`, `docs/protocol.md`) and to the client (`src/terminal.ts`, `localDaemon()`). Ompig maps them as follows.
 
 - `env/terminal.go`: `OpenTerminal(ctx, connection, TerminalOptions)` returns once the daemon sends `started`; a failure before that is the error. `RemoteTerminal` has `Pid`, `Write` (a string or bytes, 1 MiB chunks, started in call order and not awaited, as upstream's `.catch(() => {})`), `Resize`, `Close` (cancels the `pty` request), `Foreground(ctx)` (nil at the prompt) and `Exited()` for upstream's `exited` promise; `NewRemoteTerminal` is upstream's public constructor. `LocalDaemon()` is `localDaemon()`.
 - `env/daemon/pty.go` is the platform-independent request, input queue and run loop; `pty_unix.go` (Linux, macOS, Android) opens the terminal with `/dev/ptmx` through `golang.org/x/sys/unix` (no cgo, so the static daemon build is unchanged), starts the program with `Setsid`/`Setctty`, and kills its process group; `pty_other.go` answers `ENOTSUP` (Windows).
@@ -36,9 +36,9 @@ Pi main added interactive terminals to the daemon (`daemon/src/pty.rs`, `docs/pr
 1. The daemon is a Go program, not Rust: same wire and command line, `exec` and `watch` through `durable/env/node`. A numbered divergence entry waits for the owner's approval.
 2. `hello` reports Rust's `std::env::consts` spellings (`macos`, `x86_64`, `aarch64`) and the pinned Pi version.
 3. Where the packaged daemons live: `<directory of the executable>/pi-env/pi-env-<platform>-<arch>/pi-env[.exe]`, overridable with `PI_ENV_DAEMON_DIR` or `SshConnectOptions.Binary`. `make build-env-daemons` builds them; no release workflow was changed. Android on x86-64 runs the linux/amd64 build, because Go links `GOOS=android` without cgo only on arm64; that build sets the daemon's target system to `android` (`-ldflags -X`), so its `hello.os` and its `tmpdir` fallback (`$PREFIX/tmp`) are Android's, as Pi's Android daemon reports.
-4. `exec`'s spill file uses the NodeExecutionEnv temporary-directory rule of PiG, not Node's `os.tmpdir()`.
-5. PiG's `NodeExecutionEnv` lists a directory entry whose name is not valid UTF-8 under its raw name; Node (and the daemon) decode the name with replacement characters and `lstat` that, so `listDir` fails with `ENOENT`. `env/differential_test.go` states Node's result for the remote environment and does not compare with the local one.
+4. `exec`'s spill file uses the NodeExecutionEnv temporary-directory rule of Ompig, not Node's `os.tmpdir()`.
+5. Ompig's `NodeExecutionEnv` lists a directory entry whose name is not valid UTF-8 under its raw name; Node (and the daemon) decode the name with replacement characters and `lstat` that, so `listDir` fails with `ENOENT`. `env/differential_test.go` states Node's result for the remote environment and does not compare with the local one.
 
 ## Not generated here
 
-`make go-stubs PACKAGE=env OUT=env IMPORTS=@earendil-works/pi-durable=github.com/MichaelKinsy/PiG/durable,@earendil-works/pi-durable/env=github.com/MichaelKinsy/PiG/durable/env,@earendil-works/chord=github.com/MichaelKinsy/PiG/chord TEST_MAPPING=1`, `make interface-go` and `make generate` need the pin that contains `packages/env`; they run when this branch is merged with that pin bump. Against that tree the generator reports no missing declarations and five test rows `ported` (conformance, differential, remote, ssh, ssh-external).
+`make go-stubs PACKAGE=env OUT=env IMPORTS=@earendil-works/pi-durable=github.com/tmih06/ompig/durable,@earendil-works/pi-durable/env=github.com/tmih06/ompig/durable/env,@earendil-works/chord=github.com/tmih06/ompig/chord TEST_MAPPING=1`, `make interface-go` and `make generate` need the pin that contains `packages/env`; they run when this branch is merged with that pin bump. Against that tree the generator reports no missing declarations and five test rows `ported` (conformance, differential, remote, ssh, ssh-external).

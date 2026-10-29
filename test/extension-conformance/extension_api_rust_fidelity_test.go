@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // The Rust SDK twins of node_extension_api_fidelity_test.go (items D-G of the port-99-f6f-node review), in isolated and packed mode. B and C concern the factory-time Pi API, which only the Node runtime has.

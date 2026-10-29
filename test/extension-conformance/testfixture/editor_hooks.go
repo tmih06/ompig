@@ -3,8 +3,8 @@ package testfixture
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // hooksEditor is a CustomEditor subclass that sets the handlers Pi's CustomEditor keeps as public fields (onEscape, onCtrlD, onPasteImage,

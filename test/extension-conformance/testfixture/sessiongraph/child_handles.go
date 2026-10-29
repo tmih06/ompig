@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // childObserved is what the script reads of one session it created over the objects it built.

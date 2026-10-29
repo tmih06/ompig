@@ -6,7 +6,7 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // GetProviderModelData composes metadata without resolving keys, headers, or backend clients. Like the catalog and the native collection it composes from, it omits the models of a stripped API, including models.json and extension definitions on one (ai.OfferedModels).
@@ -118,7 +118,7 @@ func (r *ModelRegistry) GetProviderModelDataByID(id, modelID string) *ai.Model {
 				return generated.ToModel()
 			}
 		}
-		// pig divergence (D199): an OpenRouter routing variant is derived from its base model, not read from the bundled list.
+		// ompig divergence (D199): an OpenRouter routing variant is derived from its base model, not read from the bundled list.
 		if _, _, variant := ai.OpenRouterRoutingVariant(id, modelID); variant {
 			if generated, ok := ai.LookupModelExact(id + "/" + modelID); ok && len(ai.OfferedGeneratedModels([]ai.GeneratedModel{*generated})) == 1 {
 				return generated.ToModel()

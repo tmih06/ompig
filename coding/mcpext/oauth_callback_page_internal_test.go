@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // The OAuth callback page shows the provider's error and error_description, which the browser request supplies. The page is HTML, so the render function must escape every interpolated value (Pi: packages/ai/src/utils/oauth-page.ts escapeHtml on title, heading, message and details).

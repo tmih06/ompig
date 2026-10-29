@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // These are the credential-backed inputs from Pi 0.87.1 agent-session-branching.test.ts:90,110,131. The retained-system-message ruling is shared with TestRuntimeOriginalBranching; the original zero/two counts disagree with the pinned implementation.

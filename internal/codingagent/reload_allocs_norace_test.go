@@ -8,8 +8,8 @@ package codingagent_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // QUALITY-AUDIT-050 item 12: a reload rebuilds the transcript from the session, and each retained assistant message cost 30

@@ -10,17 +10,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's main.ts applies the runtime settings' httpProxy and configureHttpDispatcher(settingsManager.getHttpIdleTimeoutMs()) right after
-// createAgentSessionRuntime, before help, --list-models and every mode. PiG applied them only on the interactive path, so print, JSON and
+// createAgentSessionRuntime, before help, --list-models and every mode. Ompig applied them only on the interactive path, so print, JSON and
 // RPC requests kept the 5-minute default (and the provider retry settings). Probed: with httpIdleTimeoutMs 1500 and a google baseUrl
-// that never answers, Pi 1.1.0 prints "fetch failed" after 1.5 s; PiG waited for the 5-minute default.
+// that never answers, Pi 1.1.0 prints "fetch failed" after 1.5 s; Ompig waited for the 5-minute default.
 func TestPrintModeAppliesTheHTTPIdleTimeoutSettingLikePi(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds the pig binary")
+		t.Skip("builds the ompig binary")
 	}
 	bin := buildPigBinaryForSignalTest(t)
 	release := make(chan struct{})
@@ -42,7 +42,7 @@ func TestPrintModeAppliesTheHTTPIdleTimeoutSettingLikePi(t *testing.T) {
 	ctx := testbudget.Context(t)
 	cmd := exec.CommandContext(ctx, bin, "--offline", "--no-extensions", "--model", "google/gemini-2.5-pro", "-p", "hi")
 	cmd.Dir = workDir
-	cmd.Env = append(os.Environ(), "PIG_HOME="+t.TempDir(), "PIG_CODING_AGENT_DIR="+agentDir, "GEMINI_API_KEY=k", "NO_PROXY=127.0.0.1", "no_proxy=127.0.0.1")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+t.TempDir(), "OMPIG_CODING_AGENT_DIR="+agentDir, "GEMINI_API_KEY=k", "NO_PROXY=127.0.0.1", "no_proxy=127.0.0.1")
 	var stderr strings.Builder
 	cmd.Stderr = &stderr
 	err := testenv.Run(t, cmd)

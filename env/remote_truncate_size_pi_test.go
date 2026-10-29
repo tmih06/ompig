@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // TestRemoteExecutionEnvTruncateFileRejectsUnsafeSizes ports remote-env.ts:636-643 truncateFile: a size that is not a

@@ -7,9 +7,9 @@ import (
 	"net"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 type inputUI struct {
@@ -32,7 +32,7 @@ func main() {
 }
 
 func run() error {
-	dir, err := os.MkdirTemp("", "pig-retained-context-")
+	dir, err := os.MkdirTemp("", "ompig-retained-context-")
 	if err != nil {
 		return err
 	}

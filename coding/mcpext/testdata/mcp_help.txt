@@ -1,13 +1,13 @@
 Usage:
-  pig mcp add <server> [options] -- <command> [args...]
-  pig mcp add <server> [options] --url <url>
-  pig mcp remove <server> [-l]
-  pig mcp list [--json]
-  pig mcp login <server> [--timeout <seconds>]
-  pig mcp logout <server>
+  ompig mcp add <server> [options] -- <command> [args...]
+  ompig mcp add <server> [options] --url <url>
+  ompig mcp remove <server> [-l]
+  ompig mcp list [--json]
+  ompig mcp login <server> [--timeout <seconds>]
+  ompig mcp logout <server>
 
 Configure and check MCP servers and sign in to OAuth servers without starting a session.
-Reads ~/.pig/agent/mcp.json and, in trusted projects, .pig/mcp.json.
+Reads ~/.ompig/agent/mcp.json and, in trusted projects, .ompig/mcp.json.
 
 Commands:
   add <server>            Add or replace a server in mcp.json
@@ -17,7 +17,7 @@ Commands:
   logout <server>         Delete the stored OAuth credentials
 
 Options for add and remove:
-  -l, --local             Use .pig/mcp.json in the current project instead of the global file
+  -l, --local             Use .ompig/mcp.json in the current project instead of the global file
 
 Options for add:
   --url <url>             Streamable HTTP server URL (instead of a command)

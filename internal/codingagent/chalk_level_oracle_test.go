@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: chalk 6 source/vendor/supports-color/index.js createSupportsColor
@@ -95,7 +95,7 @@ func TestChalkColorLevelMatchesChalk(t *testing.T) {
 		levels[want[i]]++
 		if got != want[i] {
 			if failures++; failures <= 10 {
-				t.Errorf("env=%q args=%q tty=%v: PiG %d, chalk %d", c.Env, c.Args, c.TTY, got, want[i])
+				t.Errorf("env=%q args=%q tty=%v: Ompig %d, chalk %d", c.Env, c.Args, c.TTY, got, want[i])
 			}
 		}
 	}

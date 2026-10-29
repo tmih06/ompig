@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // The extension-facing isIdle() latched false permanently when the turn-end
@@ -67,7 +67,7 @@ func TestRunOnMainDropsWorkWhenTheContextIsAlreadyDone(t *testing.T) {
 }
 
 // agent_settled must observe an idle agent. Upstream clears _isAgentRunActive
-// before emitting it (agent-session.ts:597); pig emits after runOnMain has only
+// before emitting it (agent-session.ts:597); ompig emits after runOnMain has only
 // accepted the reset, so a cached read reported busy at the moment the run
 // finished. turnActive clears before both.
 func TestExtensionIsIdleIsTrueByTheTimeAgentSettledCanBeObserved(t *testing.T) {

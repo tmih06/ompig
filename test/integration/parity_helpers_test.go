@@ -14,7 +14,7 @@ import (
 
 func bothSystems(t *testing.T) []systemConfig {
 	t.Helper()
-	return []systemConfig{pigConfig(t), upstreamConfig(t)}
+	return []systemConfig{ompigConfig(t), upstreamConfig(t)}
 }
 
 func normalizeEscapedTmuxBlock(value string) string {
@@ -95,23 +95,23 @@ func TestPigParityLauncherWaitsForSessionStart(t *testing.T) {
 	source := `import { existsSync, writeFileSync } from "node:fs";
 export default function (pi) {
   pi.on("session_start", async () => {
-    writeFileSync(process.env.PIG_STARTUP_STARTED, "started");
-    while (!existsSync(process.env.PIG_STARTUP_RELEASE)) {
+    writeFileSync(process.env.OMPIG_STARTUP_STARTED, "started");
+    while (!existsSync(process.env.OMPIG_STARTUP_RELEASE)) {
       await new Promise(resolve => setTimeout(resolve, 10));
     }
-    writeFileSync(process.env.PIG_STARTUP_COMPLETED, "completed");
+    writeFileSync(process.env.OMPIG_STARTUP_COMPLETED, "completed");
   });
 }
 `
 	if err := os.WriteFile(ext, []byte(source), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	pigHome := t.TempDir()
-	writeTestExtensionSettings(t, pigHome, ext)
-	config := pigConfigWithHome(t, pigHome)
+	ompigHome := t.TempDir()
+	writeTestExtensionSettings(t, ompigHome, ext)
+	config := ompigConfigWithHome(t, ompigHome)
 	config.args = []string{"--model", deterministicModel}
-	config.env = append(config.env, "PIG_OFFLINE=1", "PIG_TEST_FAUX=1",
-		"PIG_STARTUP_STARTED="+started, "PIG_STARTUP_RELEASE="+release, "PIG_STARTUP_COMPLETED="+completed)
+	config.env = append(config.env, "OMPIG_OFFLINE=1", "OMPIG_TEST_FAUX=1",
+		"OMPIG_STARTUP_STARTED="+started, "OMPIG_STARTUP_RELEASE="+release, "OMPIG_STARTUP_COMPLETED="+completed)
 
 	// Hold the handler across multiple launcher polls within its existing 20-second deadline. Cancel and join the releaser even when launch fails.
 	ctx, cancel := context.WithCancel(t.Context())
@@ -165,11 +165,11 @@ export default function (pi) {
 // The parity launch path does not use harness.startArgs; it must establish its
 // own fixture trust so the checked-in .agents resources cannot block readiness.
 func TestPigParityConfigTrustsOnlyItsFixtureHome(t *testing.T) {
-	config := pigConfigWithHome(t, t.TempDir())
+	config := ompigConfigWithHome(t, t.TempDir())
 	// This trust fixture has no extensions; only extension-enabled launches await the resource listing.
 	config.args = append(config.args, "--no-extensions")
 	config.prompt = interactiveReadyMarker
-	config.env = append(config.env, "PIG_OFFLINE=1")
+	config.env = append(config.env, "OMPIG_OFFLINE=1")
 	_, cleanup := launchSystemWithReady(t, config, startupReadyWait, config.prompt)
 	defer cleanup()
 }

@@ -17,14 +17,14 @@ func TestWithStderrLog(t *testing.T) {
 		{
 			name:          "reason and log path",
 			reason:        "extension crashed",
-			stderrLogPath: "/tmp/pig-ext-foo-123.log",
-			want:          "extension crashed (stderr: /tmp/pig-ext-foo-123.log)",
+			stderrLogPath: "/tmp/ompig-ext-foo-123.log",
+			want:          "extension crashed (stderr: /tmp/ompig-ext-foo-123.log)",
 		},
 		{
 			name:          "empty reason with log path",
 			reason:        "",
-			stderrLogPath: "/tmp/pig-ext-foo-123.log",
-			want:          "(stderr: /tmp/pig-ext-foo-123.log)",
+			stderrLogPath: "/tmp/ompig-ext-foo-123.log",
+			want:          "(stderr: /tmp/ompig-ext-foo-123.log)",
 		},
 		{
 			name:          "no log path leaves reason untouched",

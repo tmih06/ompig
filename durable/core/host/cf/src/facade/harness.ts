@@ -92,19 +92,19 @@ export interface FacadeOptions {
   conversationCreated?: (tx: TxProxy, record: any) => unknown | Promise<unknown>
   now?: () => number
   onReport?: (error: unknown) => void
-  /** PiG addition: the timer driver (a Durable Object passes its alarm timers). Default: setTimeout timers, cancelled at close. */
+  /** Ompig addition: the timer driver (a Durable Object passes its alarm timers). Default: setTimeout timers, cancelled at close. */
   timers?: TimerDriver
-  /** PiG addition: the compiled core module (default: `useCore()`). */
+  /** Ompig addition: the compiled core module (default: `useCore()`). */
   core?: CoreSource
-  /** PiG addition: the pool of Wasm instances this Harness's session lives in (default: the module's own, shared by every Harness of the isolate). Its high-water mark decides when an instance is recycled at a quiet point. */
+  /** Ompig addition: the pool of Wasm instances this Harness's session lives in (default: the module's own, shared by every Harness of the isolate). Its high-water mark decides when an instance is recycled at a quiet point. */
   pool?: CorePool
-  /** PiG addition: `session` opens the tables-and-documents Session without the Harness (createSession). */
+  /** Ompig addition: `session` opens the tables-and-documents Session without the Harness (createSession). */
   mode?: "session" | "harness"
-  /** PiG addition: the sidecar mode of ADR D6. Default `index`. */
+  /** Ompig addition: the sidecar mode of ADR D6. Default `index`. */
   sidecar?: "off" | "index" | "snapshot"
   /** The Storage adapter whose await structure the core models for Pi's microtask ordering (ABI.md 5.3 rule 6, dcore-trace S7). Sent in `open` only when set; the core picks its default otherwise. */
   storageProfile?: StorageProfile
-  /** PiG addition: model catalogue entries the core may name; default every model `models` lists. */
+  /** Ompig addition: model catalogue entries the core may name; default every model `models` lists. */
   modelsInUse?: (models: ModelsLike) => unknown[]
 }
 
@@ -197,7 +197,7 @@ export class Harness {
     const self: { harness?: Harness; host?: HostSession; phases?: ReturnType<typeof customTaskRunner> } = {}
     const track = (c: CoreLike) => {
       // The conformance gate bounds each core's linear memory per turn (durable/contract/lib/memory.mjs).
-      ;(globalThis as Record<symbol, { cores?: Set<unknown> } | undefined>)[Symbol.for("pig.contract")]?.cores?.add(c)
+      ;(globalThis as Record<symbol, { cores?: Set<unknown> } | undefined>)[Symbol.for("ompig.contract")]?.cores?.add(c)
     }
     let renewal: Renewal
     let quietChecked = false

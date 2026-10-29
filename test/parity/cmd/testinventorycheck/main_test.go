@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // writeRepo lays down an inventory, mapping, docs/parity/DIVERGENCES.md, and evidence files
@@ -68,7 +68,7 @@ func baseline() (inventory, mapping, map[string]string, string) {
 		UpstreamVersion: coding.UpstreamVersion,
 		Entries: []mappingEntry{
 			{Path: "packages/ai/test/a.test.ts", Disposition: "ported", UpstreamTestHash: hashA, Evidence: []string{"ai/a_test.go#packages/ai/test/a.test.ts"}, Rationale: "ported"},
-			{Path: "packages/server/test/b.test.ts", Disposition: "designed-out", UpstreamTestHash: hashB, Rationale: "server package outside pig scope"},
+			{Path: "packages/server/test/b.test.ts", Disposition: "designed-out", UpstreamTestHash: hashB, Rationale: "server package outside ompig scope"},
 		},
 	}
 	evidence := map[string]string{"ai/a_test.go": "// upstream: packages/ai/test/a.test.ts\nfunc TestA(t *testing.T){}"}
@@ -280,7 +280,7 @@ func TestCheckDivergenceCloses(t *testing.T) {
 	inv, m, evidence, _ := baseline()
 	m.Entries[1].Disposition = "divergence"
 	m.Entries[1].Divergence = "D77"
-	m.Entries[1].Rationale = "pig differs"
+	m.Entries[1].Rationale = "ompig differs"
 	root, invPath, mapPath := writeRepo(t, inv, m, evidence, "## D77 something\n")
 	if err := check(invPath, mapPath, "docs/parity/DIVERGENCES.md", root, false); err != nil {
 		t.Fatalf("divergence with a ledger entry rejected: %v", err)

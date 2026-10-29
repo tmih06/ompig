@@ -10,7 +10,7 @@ import (
 // path, and nothing else.
 func TestClassifyCompactRead(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	cwd := t.TempDir()
 	docs := filepath.Dir(GetReadmePath()) // read.ts getPiDocsClassification: packageRoot = dirname(getReadmePath())
 	cases := []struct {
@@ -35,7 +35,7 @@ func TestClassifyCompactRead(t *testing.T) {
 // the bundle root read.ts classifies against is dirname(getReadmePath()) and the docs path is that same directory; examples are linked, not local.
 func TestReadmeDocsAndExamplesPaths(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	docs := GetDocsPath()
 	if got, want := GetReadmePath(), filepath.Join(docs, "README.md"); got != want {
 		t.Fatalf("GetReadmePath() = %q, want %q", got, want)

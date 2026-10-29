@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/tui"
 )
 
 // execEchoHelperEnv, when set to "1", makes this test binary behave like a
@@ -22,10 +22,10 @@ import (
 // command, so the same test works on every OS the test binary runs on,
 // including native Windows, instead of depending on /bin/echo or a
 // cmd.exe-only builtin. Mirrors coding/cli/testmain_test.go's identical helper.
-const execEchoHelperEnv = "PIG_TEST_EXEC_ECHO_HELPER"
+const execEchoHelperEnv = "OMPIG_TEST_EXEC_ECHO_HELPER"
 
 // argvRecordEnv names a file to which this test binary, run under another program's name, appends that name and its arguments as one JSON line, then exits. A test copies the binary over a launcher such as rundll32.exe to observe exactly what production code would pass to it.
-const argvRecordEnv = "PIG_TEST_ARGV_RECORD"
+const argvRecordEnv = "OMPIG_TEST_ARGV_RECORD"
 
 type recordedArgv struct {
 	Name string
@@ -34,8 +34,8 @@ type recordedArgv struct {
 
 // fakeTrashEnv, when set, makes this test binary, copied onto PATH as `trash`, act as the trash command. "move" removes its last argument and exits 0; "fail" writes fakeTrashStderr and exits 1; "fail-removed" removes its last argument, then fails like "fail"; "fail-long" writes one 300-unit line and exits 1. fakeTrashArgvEnv names a file that receives the arguments as JSON.
 const (
-	fakeTrashEnv     = "PIG_TEST_FAKE_TRASH"
-	fakeTrashArgvEnv = "PIG_TEST_FAKE_TRASH_ARGV"
+	fakeTrashEnv     = "OMPIG_TEST_FAKE_TRASH"
+	fakeTrashArgvEnv = "OMPIG_TEST_FAKE_TRASH_ARGV"
 	fakeTrashStderr  = "  trash: fake refusal\r\nsecond line\r\n"
 )
 
@@ -123,7 +123,7 @@ func TestMain(m *testing.M) {
 	// a test faking another platform's commands would read whatever the user
 	// last copied. Tests that exercise the native reader install a fake.
 	getNativeClipboard = func() *tui.NativeClipboard { return nil }
-	code := testenv.RunScoped(m, "pig-ca-")
+	code := testenv.RunScoped(m, "ompig-ca-")
 	if code == 0 {
 		// A test binary that passed must not end with goroutines blocked forever on primitives nothing can reach.
 		leaked, text, err := testenv.LeakedGoroutines()

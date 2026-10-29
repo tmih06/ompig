@@ -16,10 +16,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestPortWave10PackageCommandPaths(t *testing.T) {
@@ -197,7 +197,7 @@ func TestPortWave10PackageCommandPaths(t *testing.T) {
 
 		assert.Contains(t, stdout, "Usage:")
 		// D2 changes only the application name in the upstream usage assertion.
-		assert.Contains(t, stdout, "pig install <source> [-l]")
+		assert.Contains(t, stdout, "ompig install <source> [-l]")
 		assert.Empty(t, stderr)
 		assert.Equal(t, 0, code)
 	})
@@ -297,7 +297,7 @@ func TestPortWave10PackageCommandPaths(t *testing.T) {
 
 		assert.Contains(t, stderr, `Unknown option --unknown for "install".`)
 		// D2 changes only the application name, not the option/usage contract.
-		assert.Contains(t, stderr, `Use "pig --help" or "pig install <source> [-l] [--approve|--no-approve]".`)
+		assert.Contains(t, stderr, `Use "ompig --help" or "ompig install <source> [-l] [--approve|--no-approve]".`)
 		assert.Equal(t, 1, code)
 	})
 
@@ -309,7 +309,7 @@ func TestPortWave10PackageCommandPaths(t *testing.T) {
 
 		assert.Contains(t, stderr, "Missing install source.")
 		// D2 changes only the application name in the upstream usage assertion.
-		assert.Contains(t, stderr, "Usage: pig install <source> [-l]")
+		assert.Contains(t, stderr, "Usage: ompig install <source> [-l]")
 		assert.NotContains(t, stderr, "at ")
 		assert.Equal(t, 1, code)
 	})
@@ -370,7 +370,7 @@ func TestPortWave10ModelRuntimeCreation(t *testing.T) {
 
 	t.Run("initial cache restoration passes caller cancellation to every provider read", func(t *testing.T) {
 		newPackageCommandPathsFixture(t)
-		// Pi restores the cache of every refreshable provider concurrently (models.ts:562-576, read at :540): radius through its own provider and every other built-in through withRemoteCatalog (model-runtime.ts:228-231). PiG reads radius in radius_models.go and the others through the remote catalog collection, so the test cancels only once both paths are reading. Pi's refresh races the reads against the signal (models.ts:586,605), so the constructor need not join them.
+		// Pi restores the cache of every refreshable provider concurrently (models.ts:562-576, read at :540): radius through its own provider and every other built-in through withRemoteCatalog (model-runtime.ts:228-231). Ompig reads radius in radius_models.go and the others through the remote catalog collection, so the test cancels only once both paths are reading. Pi's refresh races the reads against the signal (models.ts:586,605), so the constructor need not join them.
 		callerCause := errors.New("caller cancelled the initial refresh")
 		announced := make(chan string)
 		var released sync.WaitGroup

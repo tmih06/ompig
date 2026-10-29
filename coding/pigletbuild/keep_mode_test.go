@@ -9,23 +9,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip/leakgate"
+	"github.com/tmih06/ompig/coding"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip/leakgate"
 )
 
 // keepModePiglet keeps four built-in tools and no built-in extension: the
-// pig-core shape of MINIMAL-BASE-DESIGN, which stays minimal as later cores
+// ompig-core shape of MINIMAL-BASE-DESIGN, which stays minimal as later cores
 // add built-ins.
 const keepModePiglet = "name: core\nmodel:\n  provider: test-faux\n  name: faux-1\nstrip:\n  keep:\n    tools: [read, bash, edit, write]\n    extensions: []\n"
 
-// A keep-mode Piglet builds a signed Binary whose record states the keep
+// A keep-mode Ompiglet builds a signed Binary whose record states the keep
 // lists and the table, which answers a print-mode prompt, whose --help lacks
-// every stripped tool and extension, and which `pig piglet show` reports with
+// every stripped tool and extension, and which `ompig ompiglet show` reports with
 // the keep-mode lists above the expanded rows and the strip delta report.
 func TestKeepModePigletBuildsASignedBinary(t *testing.T) {
 	root := t.TempDir()
@@ -38,11 +38,11 @@ func TestKeepModePigletBuildsASignedBinary(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	artifact := buildNativeBinary(t, root, pigletPath, "pig-core", "--sign-key", keyPath)
+	artifact := buildNativeBinary(t, root, pigletPath, "ompig-core", "--sign-key", keyPath)
 
 	var stdout, stderr strings.Builder
-	if code := piglet.RunCommand([]string{"piglet", "verify", artifact}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Signature: signed by "+keyID) {
-		t.Fatalf("pig piglet verify: exit %d\n%s%s", code, stdout.String(), stderr.String())
+	if code := ompiglet.RunCommand([]string{"ompiglet", "verify", artifact}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Signature: signed by "+keyID) {
+		t.Fatalf("ompig ompiglet verify: exit %d\n%s%s", code, stdout.String(), stderr.String())
 	}
 	if output := fauxPrompt(t, artifact); output != "42" {
 		t.Fatalf("keep-mode Binary -p printed %q, want 42", output)
@@ -59,13 +59,13 @@ func TestKeepModePigletBuildsASignedBinary(t *testing.T) {
 	for _, stripped := range []struct{ list, id string }{
 		{pigstrip.ListTools, "grep"}, {pigstrip.ListTools, "find"}, {pigstrip.ListTools, "ls"},
 		{pigstrip.ListExtensions, "codemode"}, {pigstrip.ListExtensions, "mcp"}, {pigstrip.ListExtensions, "tool-search"},
-		{pigstrip.ListExtensions, "llama.cpp"}, {pigstrip.ListExtensions, "pig-login"},
+		{pigstrip.ListExtensions, "llama.cpp"}, {pigstrip.ListExtensions, "ompig-login"},
 	} {
 		patterns, err := leakgate.Names(stripped.list, stripped.id)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if found := leakgate.Find(help, []string{"Edit files with find/replace", "~/.pig/agent/sessions/--path--/session.jsonl"}, patterns); len(found) > 0 {
+		if found := leakgate.Find(help, []string{"Edit files with find/replace", "~/.ompig/agent/sessions/--path--/session.jsonl"}, patterns); len(found) > 0 {
 			t.Errorf("--help still shows stripped %s %s:\n  %s", stripped.list, stripped.id, strings.Join(found, "\n  "))
 		}
 	}
@@ -76,8 +76,8 @@ func TestKeepModePigletBuildsASignedBinary(t *testing.T) {
 	}) {
 		t.Fatalf("record stripKeep = %#v", record.Binary.StripKeep)
 	}
-	if len(record.Binary.StripTable) != len(pigstrip.Lists()) || record.Binary.PigVersion != coding.PigVersion {
-		t.Fatalf("record stripTable = %#v (pigVersion %s)", record.Binary.StripTable, record.Binary.PigVersion)
+	if len(record.Binary.StripTable) != len(pigstrip.Lists()) || record.Binary.OmpigVersion != coding.OmpigVersion {
+		t.Fatalf("record stripTable = %#v (ompigVersion %s)", record.Binary.StripTable, record.Binary.OmpigVersion)
 	}
 	for _, id := range pigstrip.Known(pigstrip.ListExtensions) {
 		if !slices.Contains(record.Binary.Strip, pigletartifact.StripEntry{Kind: "extension", ID: id, Disposition: "binary"}) {
@@ -87,22 +87,22 @@ func TestKeepModePigletBuildsASignedBinary(t *testing.T) {
 
 	stdout.Reset()
 	stderr.Reset()
-	if code := piglet.RunCommand([]string{"piglet", "show", pigletPath}, &stdout, &stderr); code != 0 {
-		t.Fatalf("pig piglet show: exit %d\n%s", code, stderr.String())
+	if code := ompiglet.RunCommand([]string{"ompiglet", "show", pigletPath}, &stdout, &stderr); code != 0 {
+		t.Fatalf("ompig ompiglet show: exit %d\n%s", code, stderr.String())
 	}
 	for _, want := range []string{
 		"\nSlots:\n  tools  keep([read, bash, edit, write])\n  extensions  keep([])\n  tools.find  stripped(runtime)\n",
 		"  extensions.mcp  stripped(binary)\n",
-		"\nStrip table: PiG " + coding.PigVersion + " → " + coding.PigVersion + " adds no built-in IDs\n",
+		"\nStrip table: Ompig " + coding.OmpigVersion + " → " + coding.OmpigVersion + " adds no built-in IDs\n",
 		"    Slots:\n      extensions  keep([])\n      tools  keep([bash, edit, read, write])\n",
 	} {
 		if !strings.Contains(stdout.String(), want) {
-			t.Errorf("pig piglet show lacks %q:\n%s", want, stdout.String())
+			t.Errorf("ompig ompiglet show lacks %q:\n%s", want, stdout.String())
 		}
 	}
 }
 
-// newestRecord reads the Binary record PiG wrote for name.
+// newestRecord reads the Binary record Ompig wrote for name.
 func newestRecord(t *testing.T, name string) pigletartifact.Record {
 	t.Helper()
 	var found []pigletartifact.Record
@@ -128,7 +128,7 @@ func newestRecord(t *testing.T, name string) pigletartifact.Record {
 }
 
 // writePreviousBinaryRecord stores a Binary record for name as an earlier
-// core would have written it: built by PiG 0.4.0 against table, with keep.
+// core would have written it: built by Ompig 0.4.0 against table, with keep.
 func writePreviousBinaryRecord(t *testing.T, name string, keep, table []pigletartifact.StripIDs) {
 	t.Helper()
 	plan, err := pigletartifact.BuildPlan(nil)
@@ -143,9 +143,9 @@ func writePreviousBinaryRecord(t *testing.T, name string, keep, table []pigletar
 		t.Fatal(err)
 	}
 	binary, err := pigletartifact.NewBinaryRecord(name, "", time.Unix(2, 0), resolution, pigletartifact.BinaryInput{
-		Target: "linux/amd64", PigVersion: "0.4.0", PigSourceRevision: "revision", PigSourceDigest: digest("c"),
+		Target: "linux/amd64", OmpigVersion: "0.4.0", OmpigSourceRevision: "revision", OmpigSourceDigest: digest("c"),
 		Builder: "native", BuilderIdentity: "native:revision",
-		Artifact:     pigletartifact.Artifact{Digest: digest("d"), Size: 1, FileName: "pig-" + name},
+		Artifact:     pigletartifact.Artifact{Digest: digest("d"), Size: 1, FileName: "ompig-" + name},
 		Verification: pigletartifact.Verification{Policy: "basic", Passed: true, Checks: []string{"artifact-sha256", "artifact-version-smoke"}},
 		StripKeep:    keep, StripTable: table,
 	})
@@ -165,21 +165,21 @@ func writePreviousBinaryRecord(t *testing.T, name string, keep, table []pigletar
 	}
 }
 
-// Every `pig piglet build` of a Piglet with a previous Binary record prints
+// Every `ompig ompiglet build` of a Ompiglet with a previous Binary record prints
 // the strip delta report before the build runs, even when the build then
 // fails. The previous record's table lacks /trust and codemode, as a table
 // from before a core added them would: codemode is left out by the keep-mode
 // extensions list and /trust is now included by the deny-mode commands list.
 func TestRunBuildPrintsTheStripDeltaReport(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	t.Setenv("HOME", filepath.Join(root, "home"))
 	pigletPath := filepath.Join(root, "core.yaml")
 	if err := os.WriteFile(pigletPath, []byte(keepModePiglet), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	var table []pigletartifact.StripIDs
-	for _, list := range piglet.StripTable() {
+	for _, list := range ompiglet.StripTable() {
 		table = append(table, pigletartifact.StripIDs{Kind: list.Kind, IDs: slices.DeleteFunc(slices.Clone(list.IDs), func(id string) bool {
 			return id == "/trust" || id == "codemode"
 		})})
@@ -187,14 +187,14 @@ func TestRunBuildPrintsTheStripDeltaReport(t *testing.T) {
 	run := func(t *testing.T, args ...string) (int, string, string) {
 		t.Helper()
 		var stdout, stderr strings.Builder
-		code := runBuild(append([]string{pigletPath, "--format", "binary", "--builder", "no-such-builder", "--out", filepath.Join(root, "pig-core")}, args...), &stdout, &stderr)
+		code := runBuild(append([]string{pigletPath, "--format", "binary", "--builder", "no-such-builder", "--out", filepath.Join(root, "ompig-core")}, args...), &stdout, &stderr)
 		return code, stdout.String(), stderr.String()
 	}
 	if code, _, stderr := run(t); code == 0 || strings.Contains(stderr, "Strip table:") {
-		t.Fatalf("a Piglet without a Binary record reports a strip delta: exit %d\n%s", code, stderr)
+		t.Fatalf("a Ompiglet without a Binary record reports a strip delta: exit %d\n%s", code, stderr)
 	}
 	writePreviousBinaryRecord(t, "core", []pigletartifact.StripIDs{{Kind: "extension", IDs: []string{}}, {Kind: "tool", IDs: []string{"bash", "edit", "read", "write"}}}, table)
-	want := "Strip table: PiG 0.4.0 → " + coding.PigVersion + " adds 2 built-in IDs\n" +
+	want := "Strip table: Ompig 0.4.0 → " + coding.OmpigVersion + " adds 2 built-in IDs\n" +
 		"  left out (keep mode):     extensions.codemode\n" +
 		"  now included (deny mode): commands./trust\n"
 	code, _, stderr := run(t)

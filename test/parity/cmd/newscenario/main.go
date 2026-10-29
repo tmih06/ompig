@@ -127,7 +127,7 @@ func renderScenario(cfg config) (string, error) {
 		b.WriteString(`[tmux]
 width = 100
 height = 35
-ready_pattern_pig = "Ready. Type a message"
+ready_pattern_ompig = "Ready. Type a message"
 ready_pattern_pi = "pi v"
 ready_timeout_seconds = 15
 keys = [
@@ -143,13 +143,13 @@ pi = ["PI_SKIP_VERSION_CHECK=1"]
 # Uncomment and adjust if the scenario needs a custom agent/home dir.
 # The snapshot mechanism copies these to t.TempDir(): paths must resolve
 # from this file's directory. See AGENTS.md → Scenario isolation rules.
-# pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+# ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 # pi   = ["PI_SKIP_VERSION_CHECK=1", "PI_CODING_AGENT_DIR=testdata/pi-agent"]
 #
 # Session-dir uses {{TEMP}}: the runner expands this to a fresh
 # per-binary, per-run tempdir. Never hard-code /tmp paths; the lint
 # rejects them. See test/parity/runner/tokens.go for full rationale.
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 # Scheduler note: interactive-tmux defaults to group = "tmux".

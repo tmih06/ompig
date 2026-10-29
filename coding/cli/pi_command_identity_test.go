@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // piCommandInstruction matches text that tells the user to run a `pi` command line, such as "run `pi config`" or
@@ -19,9 +19,9 @@ import (
 // Earendil", "upstream pi install path") does not match.
 var piCommandInstruction = regexp.MustCompile("(?:^|[\"'`(]|\\b(?:[Rr]un|[Uu]se|using|[Tt]ry) )pi (?:config|install|remove|uninstall|update|list|login|logout|mcp|-ne|-e|-c|-r|-p|--[a-z][a-z-]*)\\b")
 
-// D2: PiG's command is `pig`, so a message that tells the user to run a command never names `pi`. Pi's own texts say
+// D2: Ompig's command is `ompig`, so a message that tells the user to run a command never names `pi`. Pi's own texts say
 // `pi config` (resource-loader.ts omitReplacedExtensions) and `pi -ne` (main.ts EXTENSION_LOAD_FAILURE_HINT); a port that
-// copies such a literal tells a PiG user to run another program. The guard reads every string literal of the production
+// copies such a literal tells a Ompig user to run another program. The guard reads every string literal of the production
 // Go sources; comments and tests may name Pi's commands.
 func TestProductionStringsNeverInstructAPiCommand(t *testing.T) {
 	root := testenv.ModuleRoot(t)
@@ -72,7 +72,7 @@ func TestProductionStringsNeverInstructAPiCommand(t *testing.T) {
 		t.Fatalf("scanned %d production Go files under %s, want the whole tree", scanned, root)
 	}
 	if len(found) > 0 {
-		t.Fatalf("production strings tell the user to run `pi` instead of `pig` (D2):\n%s", strings.Join(found, "\n"))
+		t.Fatalf("production strings tell the user to run `pi` instead of `ompig` (D2):\n%s", strings.Join(found, "\n"))
 	}
 }
 
@@ -81,13 +81,13 @@ func TestPiCommandInstructionPattern(t *testing.T) {
 		"run `pi config` and make sure":                  true,
 		`Hint: Start without extensions using "pi -ne".`: true,
 		"not logged in (run `pi login github-copilot`)":  true,
-		"pi --help":                      true,
-		"run `pig config` and make sure": false,
-		`Hint: Start without extensions using "pig -ne".`: false,
-		"pi has joined Earendil":                          false,
-		"running from upstream pi install path":           false,
-		"Run pi update to upgrade":                        true,
-		"the api config is invalid":                       false,
+		"pi --help":                        true,
+		"run `ompig config` and make sure": false,
+		`Hint: Start without extensions using "ompig -ne".`: false,
+		"pi has joined Earendil":                            false,
+		"running from upstream pi install path":             false,
+		"Run pi update to upgrade":                          true,
+		"the api config is invalid":                         false,
 	} {
 		if got := piCommandInstruction.MatchString(text); got != want {
 			t.Errorf("match(%q) = %t, want %t", text, got, want)

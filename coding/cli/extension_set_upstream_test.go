@@ -9,11 +9,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/extensionset"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extensionset"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // commandFactory is the Go counterpart of `(pi) => pi.registerCommand(name, { description, handler })`: the extension it returns
@@ -68,11 +68,11 @@ func requirePaths(t *testing.T, got, want []string) {
 func TestUpstreamResourceLoaderProjectManifestDoesNotOwnProjectExtension(t *testing.T) {
 	root, cwd, agentDir := resourceExtensionFixture(t)
 	writeResourceTestFiles(t, root, map[string]string{
-		"project/package.json":                         `{"dependencies":{"@earendil-works/pi-coding-agent":"1.0.0"}}`,
-		"project/.pig/extensions/project-extension.ts": "export default function() {}",
+		"project/package.json":                           `{"dependencies":{"@earendil-works/pi-coding-agent":"1.0.0"}}`,
+		"project/.ompig/extensions/project-extension.ts": "export default function() {}",
 	})
 	result := loadProductionExtensionSetIn(t, cwd, agentDir, []string{"--approve"})
-	requirePaths(t, result.paths(), append([]string{filepath.Join(cwd, ".pig", "extensions", "project-extension.ts")}, builtinPaths()...))
+	requirePaths(t, result.paths(), append([]string{filepath.Join(cwd, ".ompig", "extensions", "project-extension.ts")}, builtinPaths()...))
 	if len(result.Diagnostics) != 0 {
 		t.Fatalf("a project manifest that depends on a host package produced diagnostics %+v", result.Diagnostics)
 	}
@@ -206,7 +206,7 @@ func TestUpstreamResourceLoaderLeavesOutReplaceableExtensions(t *testing.T) {
 // Ports .upstream/v0.99.1/packages/coding-agent/src/core/resource-loader.ts:131-157 (omitReplacedExtensions). Upstream has no test
 // for the warning of a replaced built-in extension: it names the extension that took the tool, command or flag, the
 // registered name in its user-facing spelling, and the config remedy. Only `builtin:` paths warn, and only replaceable
-// extensions are dropped. The remedy names this binary's own command (D2): `pig config`, never `pi config`.
+// extensions are dropped. The remedy names this binary's own command (D2): `ompig config`, never `pi config`.
 func TestOmitReplacedExtensionsWarnsAboutReplacedBuiltin(t *testing.T) {
 	registers := func(path string, replaceable bool, tool, command, flag string) extension.Extension {
 		ext := extension.Extension{Path: path, Replaceable: replaceable}
@@ -222,7 +222,7 @@ func TestOmitReplacedExtensionsWarnsAboutReplacedBuiltin(t *testing.T) {
 		return ext
 	}
 	remedy := func(kind, name, builtin, owner string) extensionSetWarning {
-		return extensionSetWarning{Path: "builtin:" + builtin, Warning: "Extension " + owner + " registers " + kind + " `" + name + "`, so built-in extension `" + builtin + "` was not loaded. To use `" + builtin + "`, run `pig config` and make sure it is enabled under Built-in extensions, then disable or remove the existing extension. We recommend only having one or the other loaded at a time."}
+		return extensionSetWarning{Path: "builtin:" + builtin, Warning: "Extension " + owner + " registers " + kind + " `" + name + "`, so built-in extension `" + builtin + "` was not loaded. To use `" + builtin + "`, run `ompig config` and make sure it is enabled under Built-in extensions, then disable or remove the existing extension. We recommend only having one or the other loaded at a time."}
 	}
 	for _, tc := range []struct {
 		name         string
@@ -352,11 +352,11 @@ func TestEnabledBuiltinExtensionPaths(t *testing.T) {
 				files["agent/settings.json"] = tc.global
 			}
 			if tc.project != "" {
-				files["project/.pig/settings.json"] = tc.project
+				files["project/.ompig/settings.json"] = tc.project
 			}
 			writeResourceTestFiles(t, root, files)
 			sm := codingagent.NewSettingsManager(cwd, agentDir)
-			// pig additive (D92): a built-in this test binary was built without is filtered out.
+			// ompig additive (D92): a built-in this test binary was built without is filtered out.
 			if got, want := enabledBuiltinExtensionPaths(sm, tc.flags, names), withoutCompiledOutBuiltins(tc.want); !slices.Equal(got, want) {
 				t.Fatalf("paths = %q, want %q", got, want)
 			}

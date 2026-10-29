@@ -16,8 +16,8 @@
 # render the complete image-settings crop identically after normalization.
 # Pi 0.99.1 lists 34 rows with image controls (settings-selector.ts:470-857: 23 base,
 # 2 image at :757-775, 9 always shown, including fullscreen-wheel-scroll-lines at :733).
-# Divergence D80 adds exactly one PiG row (Mask secret input), so the counter reads
-# (1/35) in PiG and (1/34) in Pi. Assert both raw counts, then map only that approved
+# Divergence D80 adds exactly one Ompig row (Mask secret input), so the counter reads
+# (1/35) in Ompig and (1/34) in Pi. Assert both raw counts, then map only that approved
 # difference, as settings/02 and settings/09 do.
 
 name = "05-kitty-settings-visible"
@@ -31,7 +31,7 @@ driver = "headless-terminal"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 keys = ["/settings<CR>"]
@@ -41,19 +41,19 @@ capture_end = "Type to search"
 cwd = "testdata"
 
 [env]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
-pig = ["PIG_TEST_FAUX=1", "TERM_PROGRAM=ghostty", "TERM=xterm-ghostty", "COLORTERM=truecolor"]
+ompig = ["OMPIG_TEST_FAUX=1", "TERM_PROGRAM=ghostty", "TERM=xterm-ghostty", "COLORTERM=truecolor"]
 pi = ["TERM_PROGRAM=ghostty", "TERM=xterm-ghostty", "COLORTERM=truecolor"]
 
 [assert]
 runs = 3
 output_normalized_equal = true
-pig_contains = ["(1/35)"]
+ompig_contains = ["(1/35)"]
 pi_contains = ["(1/34)"]
 
-# normalize-rationale: divergence D80 introduces one visible PiG-only setting; the raw assertions above reject any other count change.
+# normalize-rationale: divergence D80 introduces one visible Ompig-only setting; the raw assertions above reject any other count change.
 [[assert.normalize_replace]]
 pattern = '\(1/35\)'
 with = '(1/34)'
-reason = "D80 adds exactly one visible PiG-only settings row; raw assertions require 35 PiG rows and 34 Pi rows before this replacement."
+reason = "D80 adds exactly one visible Ompig-only settings row; raw assertions require 35 Ompig rows and 34 Pi rows before this replacement."

@@ -1,6 +1,6 @@
 # Durable core design
 
-Design for PiG's synchronous Durable core: one Go core that reproduces Pi Durable's store and behaviour, runs as Wasm inside a Cloudflare Durable Object and natively in PiG and other hosts with a synchronous SQLite. Status: design, 2026-10-06, adversarially reviewed the same day (lane rev-do-core-design: citations checked against the Pi 1.0.4 mirror, Cloudflare facts re-fetched, ABI gaps and bake-off fairness fixed in place); the bake-off lanes start from [BAKEOFF.md](BAKEOFF.md).
+Design for Ompig's synchronous Durable core: one Go core that reproduces Pi Durable's store and behaviour, runs as Wasm inside a Cloudflare Durable Object and natively in Ompig and other hosts with a synchronous SQLite. Status: design, 2026-10-06, adversarially reviewed the same day (lane rev-do-core-design: citations checked against the Pi 1.0.4 mirror, Cloudflare facts re-fetched, ABI gaps and bake-off fairness fixed in place); the bake-off lanes start from [BAKEOFF.md](BAKEOFF.md).
 
 | document | content |
 |---|---|
@@ -11,4 +11,4 @@ Design for PiG's synchronous Durable core: one Go core that reproduces Pi Durabl
 | [LAYOUT.md](LAYOUT.md) | the production core's packages, owners, seams, core rules and gate |
 | [RISKS-AND-QUESTIONS.md](RISKS-AND-QUESTIONS.md) | owner questions, items for the researcher to verify, and risks |
 
-Inputs: the researcher's notes and spike bundle, pi-durable 1.0.4 (`packages/durable`: `docs/spec.md`, `src/testing`, `test/examples`), PiG's `durable/` port, durable-bench, and the durable-bench-pig, durable-perf and durable-wasm-spike lanes' results.
+Inputs: the researcher's notes and spike bundle, pi-durable 1.0.4 (`packages/durable`: `docs/spec.md`, `src/testing`, `test/examples`), Ompig's `durable/` port, durable-bench, and the durable-bench-ompig, durable-perf and durable-wasm-spike lanes' results.

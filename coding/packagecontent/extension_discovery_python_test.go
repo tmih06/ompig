@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-const pythonFactoryModule = "import pig_sdk\n\n\ndef new_extension() -> pig_sdk.Extension:\n    return pig_sdk.Extension(\"hello-python\")\n"
+const pythonFactoryModule = "import ompig_sdk\n\n\ndef new_extension() -> ompig_sdk.Extension:\n    return ompig_sdk.Extension(\"hello-python\")\n"
 
-// PiG's Python SDK has no Pi counterpart (D19). A Python extension directory is an entry wherever a Go or Rust one is (TestNativeBuildDirectoriesRemainExtensionEntries): a pyproject.toml marker, or the new_extension factory module or executable main.py that extsource.Resolve accepts, as `pig install DIR --validate-only` does.
+// Ompig's Python SDK has no Pi counterpart (D19). A Python extension directory is an entry wherever a Go or Rust one is (TestNativeBuildDirectoriesRemainExtensionEntries): a pyproject.toml marker, or the new_extension factory module or executable main.py that extsource.Resolve accepts, as `ompig install DIR --validate-only` does.
 func TestPythonExtensionDirectoryDiscovery(t *testing.T) {
 	t.Run("factory directory in the global extensions directory", func(t *testing.T) {
 		root := t.TempDir()

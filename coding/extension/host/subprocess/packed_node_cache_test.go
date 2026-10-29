@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -16,7 +16,7 @@ import (
 // TestBuildNodePackedCellConcurrentColdBuildsDoNotCorrupt is a deterministic
 // regression for CNCACHE-001: buildNodePackedCell used to check-then-build
 // with no lock and fixed "manifest.json.tmp"/"runner.tmp" names, so
-// concurrent cold builds of the same cell (two Pig instances sharing a cache
+// concurrent cold builds of the same cell (two Ompig instances sharing a cache
 // root, or two goroutines racing a reload) corrupted each other -
 // os.Rename(tmp, path) from one builder could remove the file another
 // builder's copyEmbeddedTree was still writing, or one winner's rename could
@@ -133,7 +133,7 @@ func TestNodePackedCellIdentityIncludesRuntimeVersion(t *testing.T) {
 	}
 }
 
-// A cell cached by a PiG with different runtime contents must not be reused.
+// A cell cached by a Ompig with different runtime contents must not be reused.
 func TestNodePackedCellKeyCoversTheEmbeddedRuntime(t *testing.T) {
 	exts := []nodeExtension{{Name: "probe", Entry: "/x/probe.ts", Hash: "/x/probe.ts"}}
 	current, _ := nodePackedCellHash("cell", exts)

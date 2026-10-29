@@ -9,7 +9,7 @@ import (
 
 func TestTmuxPrefixDoesNotInheritAgentDirectories(t *testing.T) {
 	prefix := tmuxEnvPrefix("")
-	for _, key := range []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME"} {
+	for _, key := range []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME"} {
 		if !strings.Contains(prefix, " "+key+" ") {
 			t.Errorf("tmux server can retain ambient %s", key)
 		}
@@ -17,7 +17,7 @@ func TestTmuxPrefixDoesNotInheritAgentDirectories(t *testing.T) {
 }
 
 func TestHermeticEnvironmentDoesNotInheritAgentDirectories(t *testing.T) {
-	keys := []string{"PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "PIG_HOME", "PI_HOME"}
+	keys := []string{"OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "OMPIG_HOME", "PI_HOME"}
 	for _, key := range keys {
 		t.Setenv(key, t.TempDir())
 	}

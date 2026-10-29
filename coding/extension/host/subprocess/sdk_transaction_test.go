@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 func TestPythonStageCellHoldsSDKLeaseThroughStartup(t *testing.T) {

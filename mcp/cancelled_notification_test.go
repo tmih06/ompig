@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/mcp/src/client.ts cancelRequest: the notification params are { requestId: id, ...(reason ? { reason } : {}) }, so requestId precedes reason on the wire.

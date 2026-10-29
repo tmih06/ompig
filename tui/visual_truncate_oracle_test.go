@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // visual-truncate.ts truncateToVisualLines and VisualLinePreview.render (hint placement and its truncation to the width) against pinned Pi: wrapped, multi-line, empty and styled text, both ends, paddings and
@@ -76,7 +76,7 @@ func TestTruncateToVisualLinesMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(preview, expected[i].Preview) {
 			if failures++; failures <= 5 {
-				t.Errorf("preview %+v:\n  Pig %q\n  Pi  %q", p, preview, expected[i].Preview)
+				t.Errorf("preview %+v:\n  Ompig %q\n  Pi  %q", p, preview, expected[i].Preview)
 			}
 		}
 		got := TruncateToVisualLinesKeeping(p.Text, p.Max, p.Width, p.Pad, VisualKeep(p.Keep))
@@ -86,7 +86,7 @@ func TestTruncateToVisualLinesMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(lines, expected[i].VisualLines) || got.SkippedCount != expected[i].SkippedCount {
 			if failures++; failures <= 5 {
-				t.Errorf("%+v:\n  Pig %q skipped %d\n  Pi  %q skipped %d", p, lines, got.SkippedCount, expected[i].VisualLines, expected[i].SkippedCount)
+				t.Errorf("%+v:\n  Ompig %q skipped %d\n  Pi  %q skipped %d", p, lines, got.SkippedCount, expected[i].VisualLines, expected[i].SkippedCount)
 			}
 		}
 	}

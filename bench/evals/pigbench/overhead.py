@@ -66,7 +66,7 @@ class Ctx:
 
     def main_requests(self, arm):
         """Requests that belong to the scripted turns. Other CLIs send side requests (titles, token counts) without tools."""
-        return [r for r in self.server.requests if r.fault is None and (arm.family in ("pig", "pi") or r.tools)]
+        return [r for r in self.server.requests if r.fault is None and (arm.family in ("ompig", "pi") or r.tools)]
 
 
 def arm_extensions(arm, ext):
@@ -104,7 +104,7 @@ def request_metrics(reqs, t_spawn):
 def check_print(res, srv, expect_requests, arm):
     if res["timed_out"] or res["code"] != 0:
         return f"exit {res['code']}{' (timed out)' if res['timed_out'] else ''}: {res['stderr'][-200:].strip()}"
-    if arm.family in ("pig", "pi") and len(srv.requests) != expect_requests:
+    if arm.family in ("ompig", "pi") and len(srv.requests) != expect_requests:
         return f"expected {expect_requests} requests, saw {len(srv.requests)}"
     if not srv.requests:
         return "no request reached the endpoint"
@@ -132,7 +132,7 @@ def one_version(ctx, arm):
 def one_print(ctx, arm, tools=0, ext=False, scenario="print"):
     if ext and arm.no_extensions:
         raise Skip("the extension runtime is stripped from this build")
-    if ext and arm.family not in ("pig", "pi"):
+    if ext and arm.family not in ("ompig", "pi"):
         raise Skip("it does not load Pi extensions")
     h = ctx.harness(arm, scenario, extensions=arm_extensions(arm, ext))
     srv = ctx.server
@@ -256,9 +256,9 @@ def wait_ready(rpc):
 
 
 # A prompt sent while automatic compaction runs after agent_end: Pi 1.1.0 refuses it with "Agent is already processing" (agent-session.ts:2014-2018),
-# because the run is still active and only manual compaction sets _compactionAbortController (:1986-1990, :2766). PiG's RPC admission answers
+# because the run is still active and only manual compaction sets _compactionAbortController (:1986-1990, :2766). Ompig's RPC admission answers
 # "Cannot submit a prompt while compaction is in progress" instead, because it checks every compaction (coding/cli/rpc_admission.go, promptInput):
-# a PiG divergence, not a second Pi message. Both are accepted so the turn can be measured; each turn row records the message it got.
+# a Ompig divergence, not a second Pi message. Both are accepted so the turn can be measured; each turn row records the message it got.
 # "Agent is currently compacting" is the third-party Rust port's refusal.
 BUSY_MESSAGES = ("Agent is already processing", "Cannot submit a prompt while compaction is in progress", "Agent is currently compacting")
 
@@ -437,7 +437,7 @@ RUNNERS = {
 
 
 def native(arm):
-    return arm.family in ("pig", "pi") and not arm.spec.get("third_party")
+    return arm.family in ("ompig", "pi") and not arm.spec.get("third_party")
 
 
 def prompt_command(rpc, text):

@@ -1,6 +1,6 @@
 # fix-99-j9: Node extension API fidelity leftovers from the port-99-f6f-node review
 
-Base: `rev-port-99-f6f-node` at 751c13b27. upstream 0.99.1 (`.upstream/v0.99.1`). Items B-G are the "Lower-severity findings, not fixed" of that review. Every pig invocation in this lane used a temporary `HOME`, `PIG_HOME` and `PIG_CODING_AGENT_DIR`.
+Base: `rev-port-99-f6f-node` at 751c13b27. upstream 0.99.1 (`.upstream/v0.99.1`). Items B-G are the "Lower-severity findings, not fixed" of that review. Every ompig invocation in this lane used a temporary `HOME`, `OMPIG_HOME` and `OMPIG_CODING_AGENT_DIR`.
 
 ## Design
 
@@ -13,7 +13,7 @@ The Node runtime already opens an early connection while its factory runs (`ensu
 - `mcpServers.check {name, config}`: validates with `ValidateMcpServerConfig` and checks ownership against the runtime registry for the extension's path, with no commit. It returns Pi's message as the call error. The commit still happens from the register frame, as `applyRuntimeChange` does after the factory succeeds, and the Host keeps its own check there.
 - `getMcpServers`: returns the runtime registry. After the factory it is the same live call, so Node no longer keeps a replicated server list.
 
-The Go, Rust and Python SDKs have no factory-time Pi API: `RegisterMcpServer` is an Extension method that queues before `Run`, and `GetMcpServers` exists only on the Context (after ready). They have no connection before `Run` (a fused Piglet Binary receives its pipe in `RunWithConn`). Opening the connection before the factory in three SDKs and the fused path is a startup-order change in every SDK. Question posted to the lead; this lane does B and C for Node only unless told otherwise.
+The Go, Rust and Python SDKs have no factory-time Pi API: `RegisterMcpServer` is an Extension method that queues before `Run`, and `GetMcpServers` exists only on the Context (after ready). They have no connection before `Run` (a fused Ompiglet Binary receives its pipe in `RunWithConn`). Opening the connection before the factory in three SDKs and the fused path is a startup-order change in every SDK. Question posted to the lead; this lane does B and C for Node only unless told otherwise.
 
 ### D: `unregisterVirtualModel` before bind filters the runtime-wide list (all SDKs)
 

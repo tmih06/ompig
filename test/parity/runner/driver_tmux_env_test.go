@@ -15,7 +15,7 @@ func TestTmuxArgsUseProcessIsolatedServer(t *testing.T) {
 	if len(args) != 4 || args[0] != "-L" || args[1] != tmuxSocketName || !slices.Equal(args[2:], []string{"capture-pane", "-p"}) {
 		t.Fatalf("tmux args = %q, want isolated socket %q before command", args, tmuxSocketName)
 	}
-	if want := "pig-parity-" + parityRunID(); tmuxSocketName != want {
+	if want := "ompig-parity-" + parityRunID(); tmuxSocketName != want {
 		t.Fatalf("tmux socket = %q, want %q", tmuxSocketName, want)
 	}
 }
@@ -30,7 +30,7 @@ func TestTmuxServerUsesPiKeyboardProtocol(t *testing.T) {
 	}
 	// A helper test process inherits the run ID but does not own this server. Its TestMain cleanup must leave the parent's keeper alive.
 	child := exec.CommandContext(t.Context(), os.Args[0], "-test.run=^$")
-	child.Env = append(os.Environ(), "PIG_PARITY_RUN_ID="+parityRunID())
+	child.Env = append(os.Environ(), "OMPIG_PARITY_RUN_ID="+parityRunID())
 	if out, err := child.CombinedOutput(); err != nil {
 		t.Fatalf("helper exit: %v: %s", err, out)
 	}

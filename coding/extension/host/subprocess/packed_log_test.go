@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -86,7 +86,7 @@ func privatePackedLogTemp(t *testing.T) string {
 
 func assertPackedLogs(t *testing.T, dir string, want ...string) {
 	t.Helper()
-	got, err := filepath.Glob(filepath.Join(dir, "pig-packed-*.log"))
+	got, err := filepath.Glob(filepath.Join(dir, "ompig-packed-*.log"))
 	if err != nil {
 		t.Fatal(err)
 	}

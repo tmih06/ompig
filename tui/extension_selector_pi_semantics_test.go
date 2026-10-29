@@ -26,7 +26,7 @@ func TestExtensionSelectorComponentRowsAndDescriptionUseThePiColors(t *testing.T
 }
 
 // extension-selector.ts:103-120 handleInput: "\n" confirms like the confirm binding, and the tools-expand binding only calls the callback when there is
-// one. Pi's handleInput does not invalidate anything: the TUI renders again after every input. Pig's line cache redraws only a dirty component, so
+// one. Pi's handleInput does not invalidate anything: the TUI renders again after every input. Ompig's line cache redraws only a dirty component, so
 // HandleInput marks the selector dirty after each key; the last assertion pins that render mechanism, not a Pi rule.
 func TestExtensionSelectorComponentHandleInputNewlineExpandAndInvalidate(t *testing.T) {
 	// Pi's coding-agent installs its merged app/tui manager before opening dialogs.

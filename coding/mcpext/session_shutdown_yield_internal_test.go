@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/handleryield"
+	"github.com/tmih06/ompig/internal/handleryield"
 )
 
 // Pi's session_shutdown handler awaits Promise.all over the background actions and the connections it closes

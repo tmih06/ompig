@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // contextUsageLog is an in-memory Session log of n exchanges whose assistant usage starts at base input tokens.
@@ -32,7 +32,7 @@ func contextUsageLog(t *testing.T, n, base int) *SessionManager {
 
 func contextUsageSession(t *testing.T, manager *SessionManager) *Session {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

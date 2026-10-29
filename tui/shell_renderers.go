@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // FormatShellHeader renders a shell tool call. Mirrors upstream

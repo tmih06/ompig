@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // writeCmdShim writes an npm-style .cmd shim, in a directory whose name holds
@@ -73,10 +73,10 @@ func TestStdioTransportRunsACmdShimServerThroughCmdExe(t *testing.T) {
 // cross-spawn runs a command it cannot find through cmd.exe too; cmd.exe
 // reports it on stderr and exits, and the transport closes. Oracle, pinned
 // pi-mcp 0.99.1: connect rejects with McpConnectionClosedError ("MCP
-// connection closed") after 45 ms, with cmd.exe's own stderr ("'pig-no-such-mcp-server'
+// connection closed") after 45 ms, with cmd.exe's own stderr ("'ompig-no-such-mcp-server'
 // is not recognized as an internal or external command, ..." in English).
 func TestStdioTransportReportsAMissingCommandAsAClosedConnection(t *testing.T) {
-	transport := mcp.NewStdioTransport(mcp.StdioTransportOptions{Command: "pig-no-such-mcp-server"})
+	transport := mcp.NewStdioTransport(mcp.StdioTransportOptions{Command: "ompig-no-such-mcp-server"})
 	client := mcp.NewClient(mcp.ClientOptions{Implementation: mcp.Implementation{Name: "stdio-test", Version: "1.0.0"}, RequestTimeoutMs: 20_000})
 	t.Cleanup(func() { _ = client.Close() })
 	start := time.Now()
@@ -87,7 +87,7 @@ func TestStdioTransportReportsAMissingCommandAsAClosedConnection(t *testing.T) {
 	if elapsed := time.Since(start); elapsed > 10*time.Second {
 		t.Fatalf("connect took %v; the transport should close when cmd.exe exits", elapsed)
 	}
-	if want := cmdExeStderr(t, "pig-no-such-mcp-server"); transport.Stderr() != want {
+	if want := cmdExeStderr(t, "ompig-no-such-mcp-server"); transport.Stderr() != want {
 		t.Fatalf("stderr = %q, want %q", transport.Stderr(), want)
 	}
 }

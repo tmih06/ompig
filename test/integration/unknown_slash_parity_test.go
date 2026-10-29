@@ -5,13 +5,13 @@
 //
 // Why this exists. Upstream pi's interactive-mode dispatcher routes
 // any `/<token>` that is NOT a builtin and NOT a registered extension
-// command through to the LLM as ordinary user input. pig instead
-// returns a pig-specific error "Error: unknown command: /<token> -
+// command through to the LLM as ordinary user input. ompig instead
+// returns a ompig-specific error "Error: unknown command: /<token> -
 // try /help" (even though /help is not a builtin in either system).
 //
 // This is a fidelity divergence surfaced 2026-05-10 while reviewing
 // integration test quality. The test is intentionally written to
-// FAIL on pig until the dispatcher is brought into parity, and is
+// FAIL on ompig until the dispatcher is brought into parity, and is
 // documented as a known-failing parity gate, not a flaky test.
 //
 // This test passes on both binaries after the unknown-command gap closes.
@@ -31,7 +31,7 @@ import (
 // receives "/help" (or "/foobar") and replies: i.e. NO "unknown
 // command" error in the pane.
 //
-// pig today: prints "Error: unknown command: /help: try /help".
+// ompig today: prints "Error: unknown command: /help: try /help".
 // That string in the pane is the failure signal.
 func TestParity_UnknownSlashCommand(t *testing.T) {
 	for _, cfg := range bothSystems(t) {
@@ -46,9 +46,9 @@ func TestParity_UnknownSlashCommand(t *testing.T) {
 			pane := sendSlashAndCapture(t, session, "/help", 12*time.Second)
 			t.Logf("%s after /help:\n%s", cfg.name, lastN(pane, 12))
 
-			// Hard rule: never show a pig-specific dispatcher error.
+			// Hard rule: never show a ompig-specific dispatcher error.
 			// upstream pi never produces this string for a non-builtin
-			// slash; pig must not either.
+			// slash; ompig must not either.
 			if strings.Contains(pane, "unknown command:") {
 				t.Errorf("%s: dispatcher rejected /help with 'unknown command:': upstream forwards to LLM. Pane:\n%s",
 					cfg.name, pane)

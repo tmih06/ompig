@@ -11,7 +11,7 @@ import (
 type SessionsLoader func(ctx context.Context, onProgress SessionListProgress) ([]SessionInfo, error)
 
 // SessionSelectorOptions is the `options` object of session-selector.ts:764-768. RenameSession is the rename operation (a nil one disables
-// renaming); ShowRenameHint defaults to whether renaming is possible; Keybindings defaults to the configured manager. DeleteSession is PiG's
+// renaming); ShowRenameHint defaults to whether renaming is possible; Keybindings defaults to the configured manager. DeleteSession is Ompig's
 // guard on the delete operation and defaults to deleteSessionFile (session-selector.ts:826).
 type SessionSelectorOptions struct {
 	RenameSession  func(sessionPath, name string) error

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// Pi 0.87.1: a command that awaits ctx.newSession() and then returns answers after stdin ended, while a quit session_shutdown handler that never settles keeps the dispose pending. Pi's replacement build is in-process work, so the event loop stays alive until the command resolves and its response is written; then the loop drains and the process exits 0. Pig must not count the command as suspended while the host's newSession call builds the replacement.
+// Pi 0.87.1: a command that awaits ctx.newSession() and then returns answers after stdin ended, while a quit session_shutdown handler that never settles keeps the dispose pending. Pi's replacement build is in-process work, so the event loop stays alive until the command resolves and its response is written; then the loop drains and the process exits 0. Ompig must not count the command as suspended while the host's newSession call builds the replacement.
 func TestRPCInputEndAfterCommandNewSessionAnswersComparedWithPi(t *testing.T) {
 	for _, impl := range rpcShutdownImplementations {
 		t.Run(impl.name, func(t *testing.T) {
@@ -35,7 +35,7 @@ func TestRPCInputEndAfterCommandNewSessionAnswersComparedWithPi(t *testing.T) {
 	}
 }
 
-// Pi 0.87.1 runs every extension in one process, so its loop drains only after every command has written its response. Pig packs two Node extensions into one process with one connection each: ns2 belongs to the second extension, and the never-settling quit handler of the first reports the drain. The drain exit must wait for the response on the second connection too.
+// Pi 0.87.1 runs every extension in one process, so its loop drains only after every command has written its response. Ompig packs two Node extensions into one process with one connection each: ns2 belongs to the second extension, and the never-settling quit handler of the first reports the drain. The drain exit must wait for the response on the second connection too.
 func TestRPCInputEndAfterSecondExtensionCommandNewSessionAnswersComparedWithPi(t *testing.T) {
 	for _, impl := range rpcShutdownImplementations {
 		t.Run(impl.name, func(t *testing.T) {

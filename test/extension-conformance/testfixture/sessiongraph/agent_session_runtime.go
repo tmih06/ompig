@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 func entryMessageText(message map[string]any) string {

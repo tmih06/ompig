@@ -27,7 +27,7 @@ The owner moved the unstarted sections to generator-fed lanes. `telemetry` and `
 | `ai/test/message-types` | `ported`: runtime half over `NormalizeContext`; the compile-time half is Go-impossible |
 | `ai/test/mistral-tool-schema` | `ported`: symbol-key assertions are Go-impossible, strict payload and no validation failure ported |
 | `ai/test/openai-responses-partial-json-cleanup` | `ported`: a Go `ToolCall` does carry scratch `partialJson`; the old reason was wrong |
-| `coding-agent/test/documentation` | `ported` over `docs/site/docs`; PiG's docs pass |
+| `coding-agent/test/documentation` | `ported` over `docs/site/docs`; Ompig's docs pass |
 | `coding-agent/test/test-harness` | `ported` (16 cases) over `recoveryHarness`; `scriptedProvider.wrap` added |
 | `coding-agent/test/version-check` | `ported` over the signed update manifest; bug found and fixed: the manifest request sent no `Accept` header and Go's default `User-Agent` (now the D65 identity; D65 call sites updated); PORT_MAP row `🟡` |
 | `ai/test/lazy-module-load`, `codemode-worker-config`, `package-distribution`, `restore-sandbox-env`, `8237`, `9540` | stay `designed-out`; each rationale now names the Node, Bun or npm mechanism that no Go test can observe |
@@ -39,7 +39,7 @@ Red/green for the fixes: `telemetry` nil attributes (recording case red before),
 Known failures on the base, not caused here:
 
 - Six `coding` oracle tests stamped 0.99.2 (R2 in the agg-100 progress file).
-- `cmd/pig` `TestRPCMessageUpdateStreamingVariantBytesMatchPi`: fails the same way on a clean checkout of `agg-100` (`8f20f112f`). The Pi oracle script exits with `ERR_MODULE_NOT_FOUND` for `extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/dist/modes/json-event.js`, because the worktree has no `extensions/sdk-ts/node_modules`. It is a missing local install (the `make parity-deps` step), not a code failure. The same install is why the generator run needed a symlink to another lane's `node_modules`.
+- `cmd/ompig` `TestRPCMessageUpdateStreamingVariantBytesMatchPi`: fails the same way on a clean checkout of `agg-100` (`8f20f112f`). The Pi oracle script exits with `ERR_MODULE_NOT_FOUND` for `extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/dist/modes/json-event.js`, because the worktree has no `extensions/sdk-ts/node_modules`. It is a missing local install (the `make parity-deps` step), not a code failure. The same install is why the generator run needed a symlink to another lane's `node_modules`.
 
 ## Not run
 

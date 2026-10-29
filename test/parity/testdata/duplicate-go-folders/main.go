@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	codingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	codingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func main() {
@@ -37,9 +37,9 @@ func run() error {
 			return err
 		}
 		files := map[string]string{
-			"go.mod": fmt.Sprintf("module example.com/ask\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", filepath.ToSlash(filepath.Join(cwd, "extensions", "sdk"))),
+			"go.mod": fmt.Sprintf("module example.com/ask\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", filepath.ToSlash(filepath.Join(cwd, "extensions", "sdk"))),
 			"ext.go": fmt.Sprintf(`package ask
-import ("fmt"; sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import ("fmt"; sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension() *sdk.Extension {e:=sdk.New("ask"); calls:=0; e.Command("ask","copy-%d",func(sdk.Context,string)error{calls++;return fmt.Errorf("copy-%d:%%d",calls)}); e.Tool("shared","shared",sdk.Schema{"type":"object"},func(sdk.Context,map[string]any)(any,error){return map[string]any{"content":[]any{}},nil});return e}
 `, i, i),
 		}

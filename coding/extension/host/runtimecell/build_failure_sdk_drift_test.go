@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
-// The pig command installs the classification (coding/cli); the host does not link it.
+// The ompig command installs the classification (coding/cli); the host does not link it.
 func init() {
 	SetDriftClassifier(func(output []byte, source func(path string) ([]byte, error)) ([]Drift, int) {
 		diagnostics := upgrade.ParseDiagnostics(output)
@@ -27,7 +27,7 @@ func init() {
 func goDriftFixture(t *testing.T, name string) GoExtension {
 	t.Helper()
 	extension := goExtensionFixture(t, name, `sdk.New("`+name+`")`)
-	source := "package " + name + "\n\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n\n" +
+	source := "package " + name + "\n\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\n\n" +
 		"func Extension() *sdk.Extension {\n\text := sdk.New(\"" + name + "\")\n" +
 		"\text.Command(\"id\", \"Show the session\", func(ctx sdk.Context, args string) error {\n" +
 		"\t\tid := ctx.GetSessionID()\n" +
@@ -44,7 +44,7 @@ func goDriftFixture(t *testing.T, name string) GoExtension {
 // changes in the recorded failure so the next start names them without compiling.
 func TestBuildGoPackedCellNamesSDKDrift(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	extension := goDriftFixture(t, "olddrift")
 	cacheRoot := filepath.Join(configRoot, "cache")
 
@@ -74,7 +74,7 @@ func TestBuildGoPackedCellNamesSDKDrift(t *testing.T) {
 // A compile error that is not an SDK change keeps the compiler's own message.
 func TestBuildGoPackedCellUnrelatedErrorIsNotDrift(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	extension := goExtensionFixture(t, "plainerror", `sdk.New("plainerror", "extra")`)
 	_, err := BuildGoPackedCell(context.Background(), filepath.Join(configRoot, "cache"), "plain", []GoExtension{extension})
 	failure, ok := errors.AsType[*BuildFailure](err)
@@ -89,7 +89,7 @@ func TestBuildGoPackedCellUnrelatedErrorIsNotDrift(t *testing.T) {
 // as written for an older SDK.
 func TestBuildGoPackedCellMixedErrorsAreNotDrift(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
+	t.Setenv("OMPIG_HOME", configRoot)
 	drifted := goDriftFixture(t, "mixeddrift")
 	broken := goExtensionFixture(t, "mixedplain", `sdk.New("mixedplain", "extra")`)
 	_, err := BuildGoPackedCell(context.Background(), filepath.Join(configRoot, "cache"), "mixed", []GoExtension{drifted, broken})

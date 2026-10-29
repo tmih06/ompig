@@ -6,7 +6,7 @@ package turn
 import (
 	"math"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // The response classifiers of pi-ai utils/retry.ts and utils/overflow.ts, over an assistant message object.

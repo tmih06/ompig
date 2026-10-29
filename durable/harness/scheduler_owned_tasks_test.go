@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Pi 1.2.0 test/harness-scheduler-indexes.test.ts "TaskRuntime.ownedTasks": the live tasks a task owns directly, in ID order,

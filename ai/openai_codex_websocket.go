@@ -18,9 +18,9 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/internal/tlsdistrust"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/tlsdistrust"
 )
 
 const (
@@ -319,7 +319,7 @@ func codexWebSocketHref(endpoint string) (string, error) {
 func codexWebSocketHeaders(target ClientIdentityTarget, identity *ClientIdentity, base map[string]string, options ProviderHeaders, token, accountID, requestID string) http.Header {
 	headers := make(http.Header, len(base)+7)
 	// Defaults first so model and caller headers override them (buildBaseCodexHeaders, #10429).
-	// pig divergence (D26): PiG names itself as the Codex originator.
+	// ompig divergence (D26): Ompig names itself as the Codex originator.
 	headers.Set("originator", pigidentity.CodexOriginator)
 	// Codex expects an originator on every request; it is not attribution (openai-codex-responses.ts identityHeaders).
 	applyIdentityHeaders(headers, target, identity)
@@ -357,7 +357,7 @@ func optionTimeout(value *int) time.Duration {
 }
 
 // codexWebSocketTLSConfig is the WebSocket handshake's TLS configuration.
-// pig additive (D191): its chain is checked like every other TLS peer's.
+// ompig additive (D191): its chain is checked like every other TLS peer's.
 func codexWebSocketTLSConfig() *tls.Config {
 	return tlsdistrust.Harden(&tls.Config{MinVersion: tls.VersionTLS12})
 }

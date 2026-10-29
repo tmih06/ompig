@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // model-registry.ts getAvailable: only models of providers with configured auth are listed, and a Copilot OAuth credential's model picker list further restricts that provider's models; getAll lists every model of every provider in provider order.

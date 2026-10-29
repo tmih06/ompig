@@ -1,4 +1,4 @@
-// Package pioracle runs the compiled Pi modules vendored for the Node extension runtime against Go test inputs, so a test compares Pig with Pi itself rather than with a transcription of Pi's behavior.
+// Package pioracle runs the compiled Pi modules vendored for the Node extension runtime against Go test inputs, so a test compares Ompig with Pi itself rather than with a transcription of Pi's behavior.
 package pioracle
 
 import (
@@ -32,7 +32,7 @@ func Root(t testing.TB) string {
 	}
 }
 
-// Run executes an ES module body in Node with the Pi distribution root in `root`, the decoded `input` in scope, and returns the JSON the body passes to `emit`. The body is the async function body of the check. Environment extra entries (KEY=value) are added to the child environment. A missing Node is a failure: the Pig test suite requires it.
+// Run executes an ES module body in Node with the Pi distribution root in `root`, the decoded `input` in scope, and returns the JSON the body passes to `emit`. The body is the async function body of the check. Environment extra entries (KEY=value) are added to the child environment. A missing Node is a failure: the Ompig test suite requires it.
 func Run(t testing.TB, body string, input, output any, env ...string) {
 	t.Helper()
 	node, err := exec.LookPath("node")

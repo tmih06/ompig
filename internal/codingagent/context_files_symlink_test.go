@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Ports packages/coding-agent/test/resource-loader.test.ts "should load the worktree's context once when it symlinks to the main repo's file" and "should skip the main repo's duplicate when the main repo's file is a symlink" (pi issue 10681, 42a3497d): the shadowed main-repo file is compared by the directory's real path plus the file name, so a symlinked AGENTS.md is not mistaken for the shadowed file.

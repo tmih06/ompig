@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -14,12 +14,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/smithy-go"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // This file translates the pure, synchronous parts of @smithy/core 3.35.1 event streams (their modules are unchanged from 3.33.3) that Pi's Bedrock provider reads through the AWS SDK: getChunkedStream's framing (eventstream-serde-universal/getChunkedStream.js), EventStreamCodec.decode (eventstream-codec/EventStreamCodec.js, splitMessage.js, HeaderMarshaller.js parse) and the message unmarshaller (eventstream-serde-universal/getUnmarshalledStream.js getMessageUnmarshaller, EventStreamSerde.js deserializeEventStream). The awaits between these steps are modeled by bedrock_stream_pipeline.go.

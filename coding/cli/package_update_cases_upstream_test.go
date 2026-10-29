@@ -11,11 +11,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 
-	"github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 func packageQueryFixture(t *testing.T, reply string) (packageResourceFixture, string) {
@@ -23,14 +23,14 @@ func packageQueryFixture(t *testing.T, reply string) (packageResourceFixture, st
 	f := newPackageResourceFixture(t)
 	log := filepath.Join(f.cwd, "commands")
 	bin := t.TempDir()
-	t.Setenv("PIG_PM_COMMANDS", log)
+	t.Setenv("OMPIG_PM_COMMANDS", log)
 	// Git Bash's $PWD is an MSYS path (/tmp/...); pwd -W prints the Windows path.
 	pwd := `"$PWD"`
 	if runtime.GOOS == "windows" {
 		pwd = `"$(pwd -W)"`
 	}
 	for _, name := range []string{"npm", "git", "mise"} {
-		writeStubScript(t, filepath.Join(bin, name), fmt.Sprintf("#!/bin/sh\nprintf '%%s|%%s\\n' %s \"$*\" >> \"$PIG_PM_COMMANDS\"\nprintf '%%s\\n' '%s'\n", pwd, reply))
+		writeStubScript(t, filepath.Join(bin, name), fmt.Sprintf("#!/bin/sh\nprintf '%%s|%%s\\n' %s \"$*\" >> \"$OMPIG_PM_COMMANDS\"\nprintf '%%s\\n' '%s'\n", pwd, reply))
 	}
 	t.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
 	return f, log

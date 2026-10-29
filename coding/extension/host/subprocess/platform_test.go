@@ -74,8 +74,8 @@ func TestWindowsPythonPathIsCaseInsensitiveAndUsesWindowsSeparator(t *testing.T)
 
 func TestWindowsSocketDirectoryDoesNotUseUnixUID(t *testing.T) {
 	dir := resolveSocketDirForGOOS("windows", `/run/user/1000`, `/unix/tmp`, `C:\Users\runner\AppData\Local\Temp`, 1000)
-	if strings.Contains(dir, "1000") || !strings.HasSuffix(filepath.ToSlash(dir), "/pig") {
-		t.Fatalf("Windows socket directory = %q, want per-user temp pig directory without uid", dir)
+	if strings.Contains(dir, "1000") || !strings.HasSuffix(filepath.ToSlash(dir), "/ompig") {
+		t.Fatalf("Windows socket directory = %q, want per-user temp ompig directory without uid", dir)
 	}
 }
 

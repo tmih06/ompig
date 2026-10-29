@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/core/skills.ts
@@ -56,6 +56,6 @@ emit({ result: { skills: r.skills.map((s) => s.name + "|" + s.filePath), diagnos
 		got.Diagnostics = append(got.Diagnostics, d.Type+"|"+d.Message+"|"+d.Path)
 	}
 	if !reflect.DeepEqual(got, want.Result) {
-		t.Errorf("PiG %q\nPi  %q", strings.Join(append(got.Skills, got.Diagnostics...), "\n    "), strings.Join(append(want.Result.Skills, want.Result.Diagnostics...), "\n    "))
+		t.Errorf("Ompig %q\nPi  %q", strings.Join(append(got.Skills, got.Diagnostics...), "\n    "), strings.Join(append(want.Result.Skills, want.Result.Diagnostics...), "\n    "))
 	}
 }

@@ -10,7 +10,7 @@ import (
 )
 
 // TimingReportOnlyEnv names the environment variable that turns every [TimingGate] and [TimingGateFatal] into a report. Pull-request CI sets it to 1 on its shared runners; the dedicated release perf run (make test-timing) leaves it unset.
-const TimingReportOnlyEnv = "PIG_PERF_TIMING_REPORT_ONLY"
+const TimingReportOnlyEnv = "OMPIG_PERF_TIMING_REPORT_ONLY"
 
 // TimingGate is the one mechanism for a test that fails on a measured duration, a CPU time, an ns/op or a ratio of two timings compared to a bar. Pass the comparison's outcome as failed and the failure message as format and args; the call fails the test with t.Errorf semantics when failed is true, and the test goes on.
 //

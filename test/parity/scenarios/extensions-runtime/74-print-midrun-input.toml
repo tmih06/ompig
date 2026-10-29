@@ -15,7 +15,7 @@
 #   output: "42", exit 0
 #   /tmp/midrun-input.log: "tool_call bash", "input What is 20+22?", "input-immediate", "tool_result bash",
 #     "turn_end", "turn_end", "turn_end"
-# PiG at aca35e7ff (the wait without the run check) logged "tool_result bash" before "input-immediate".
+# Ompig at aca35e7ff (the wait without the run check) logged "tool_result bash" before "input-immediate".
 
 name = "74-print-midrun-input"
 description = "Print mode runs the callback of an input sent during the run before the run's next event"
@@ -27,9 +27,9 @@ tags = ["hermetic", "fast"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "MIDRUN_INPUT_LOG={{TEMP}}/midrun-input.log"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "MIDRUN_INPUT_LOG={{TEMP}}/midrun-input.log"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "MIDRUN_INPUT_LOG={{TEMP}}/midrun-input.log"]
-pig_extensions = ["testdata/ext/print-midrun-input.mjs"]
+ompig_extensions = ["testdata/ext/print-midrun-input.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/print-midrun-input.mjs",

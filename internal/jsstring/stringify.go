@@ -7,8 +7,8 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsparity"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsparity"
 )
 
 // MarshalJSON encodes value as JSON.stringify(value) does (numbers too: a non-finite number is null and negative zero is 0), retaining unmatched UTF-16 units as surrogate escapes and writing <, >, & and the line and paragraph separators literally and negative zero as 0 even inside custom marshalers. Escaped backslashes remain escaped. The encoder writes that text in one pass (json.MarshalStringify); a value that implements json.StringifyAppender appends its own text.

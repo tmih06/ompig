@@ -14,7 +14,7 @@ import (
 
 // openai-responses.ts buildParams (:330-381) and openai-codex-responses.ts buildRequestBody (:553-596) create their keys in different orders,
 // and buildParams ends with Object.assign(params, samplingParams) (:383-386), which keeps a key's position and appends a new key. Pi's own
-// builders write the oracle bytes through onPayload; PiG's bytes are the HTTP request body.
+// builders write the oracle bytes through onPayload; Ompig's bytes are the HTTP request body.
 //
 // A tool's parameters are the tool's own object, written in declaration order, and a strict tool's schema is rebuilt member by member in
 // that order (constrained-sampling.ts makeJsonSchemaNodeStrict: required, then additionalProperties, an optional property wrapped in anyOf).

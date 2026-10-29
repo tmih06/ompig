@@ -220,7 +220,7 @@ func memberError(root, property string) string {
 	return "no error return is declared; invalid or unavailable operations follow the cited synchronous implementation"
 }
 
-// absentInPig lists pinned members that Pig does not implement yet: the
+// absentInPig lists pinned members that Ompig does not implement yet: the
 // normalized mouse API, rendered overlay bounds, the added alternate-screen
 // navigation and search actions, and the 0.99.1 theme style, concrete-color and
 // appearance API (family 9a owns the theme system), and the 1.1.0 program status
@@ -248,7 +248,7 @@ func absentInPig(root, property string) bool {
 
 func currentPigDisposition(root, property string) string {
 	if absentInPig(root, property) {
-		return "absent in Pig; the pinned member is not implemented"
+		return "absent in Ompig; the pinned member is not implemented"
 	}
 	switch root {
 	case "pkg:tui/.#Color", "pkg:tui/.#TerminalColorMode", "pkg:tui/.#TerminalColors", "pkg:ai/.#ThinkingLevel", "pkg:tui/.#TuiMode", "pkg:coding-agent/.#SourceInfo", "pkg:tui/.#KeyId", "pkg:tui/.#Keybinding", "pkg:tui/.#KeybindingConflict", "pkg:tui/.#KeybindingDefinition", "pkg:tui/.#Keybindings", "pkg:tui/.#KeybindingsConfig", "pkg:tui/.#RgbColor", "pkg:tui/.#TerminalColorScheme", "pkg:tui/.#TuiStopOptions":
@@ -277,7 +277,7 @@ func currentPigDisposition(root, property string) string {
 	}
 }
 
-func pigTargets(root string) []string {
+func ompigTargets(root string) []string {
 	switch {
 	case root == "pkg:coding-agent/.#SourceInfo":
 		return []string{"tui/theme.go"}
@@ -406,7 +406,7 @@ func realizationDispositions(root string, unsafe bool) []realizationDisposition 
 		absent("go-native-in-process", "internal/codingagent/ext_ui_context.go"),
 		partial("rust-isolated", "extensions/sdk-rs/src/context.rs"),
 		partial("rust-packed", "coding/extension/host/subprocess/cell_plan.go"),
-		partial("python-isolated", "extensions/sdk-py/pig_sdk/__init__.py"),
+		partial("python-isolated", "extensions/sdk-py/ompig_sdk/__init__.py"),
 		partial("python-packed", "coding/extension/host/subprocess/cell_plan.go"),
 		notApplicable("node-packed", "coding/extension/host/subprocess/cell_plan.go packs Go, Rust, and Python only"),
 		notApplicable("rust-fused", "no production launcher"), notApplicable("python-fused", "no production launcher"),

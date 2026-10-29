@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// Pi 0.87.1: a command that replaces the Session, stdin ending at once and a quit session_shutdown handler that never settles while it keeps the event loop alive: Pi answers the command, prints no extension_error, and stays alive until a signal ends it. Pig retires the replaced Session's host when the command returns; it must not shut that host down under the pending quit emission. The held loop makes the ordering deterministic: neither process can exit before the command answers.
+// Pi 0.87.1: a command that replaces the Session, stdin ending at once and a quit session_shutdown handler that never settles while it keeps the event loop alive: Pi answers the command, prints no extension_error, and stays alive until a signal ends it. Ompig retires the replaced Session's host when the command returns; it must not shut that host down under the pending quit emission. The held loop makes the ordering deterministic: neither process can exit before the command answers.
 func TestRPCInputEndAfterCommandReplacementKeepsPendingQuitShutdownQuiet(t *testing.T) {
 	for _, impl := range rpcShutdownImplementations {
 		t.Run(impl.name, func(t *testing.T) {

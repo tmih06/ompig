@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // failingPersistWarmProvider makes the Session file unwritable once the real

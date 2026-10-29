@@ -3,7 +3,7 @@ package subprocess
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 // This package does not link pigsdk, so its tests register fixed SDK bundles to resolve staged SDK directories.

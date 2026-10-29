@@ -8,30 +8,30 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The Python twins of node_extension_api_fidelity_test.go (items D-G of the port-99-f6f-node review). B and C concern the factory-time Pi API, which only the Node runtime has: a Python extension registers on its Extension before the connection exists, so it has no factory-time ownership check or registry read.
 
-const pyVirtualModelOwnerFixture = `import pig_sdk
+const pyVirtualModelOwnerFixture = `import ompig_sdk
 
 def route(ctx, request):
     return {"model": {"provider": "anthropic", "id": "x"}, "thinkingLevel": "off"}
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-vm-owner")
-    e.register_virtual_model(pig_sdk.VirtualModel(provider="pyrouter", id="victim", name="Victim", route=route))
-    e.register_virtual_model(pig_sdk.VirtualModel(provider="pyrouter", id="kept", name="Kept", route=route))
+    e = ompig_sdk.Extension("pyapi-vm-owner")
+    e.register_virtual_model(ompig_sdk.VirtualModel(provider="pyrouter", id="victim", name="Victim", route=route))
+    e.register_virtual_model(ompig_sdk.VirtualModel(provider="pyrouter", id="kept", name="Kept", route=route))
     return e
 `
 
-const pyVirtualModelRemoverFixture = `import pig_sdk
+const pyVirtualModelRemoverFixture = `import ompig_sdk
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-vm-remover")
+    e = ompig_sdk.Extension("pyapi-vm-remover")
     e.unregister_virtual_model("pyrouter", "victim")
     return e
 `
@@ -50,14 +50,14 @@ func TestPythonSDKUnregisterVirtualModelBeforeBindFiltersTheRuntimeWidePendingLi
 	})
 }
 
-const pyVirtualStateIdentityFixture = `import pig_sdk
+const pyVirtualStateIdentityFixture = `import ompig_sdk
 
 def route(ctx, request):
     return {"model": {"provider": "anthropic", "id": "py-picked-user"}, "thinkingLevel": "off", "state": request.get("state")}
 
 def new_extension():
-    e = pig_sdk.Extension("pyapi-identity")
-    e.register_virtual_model(pig_sdk.VirtualModel(provider="pyrouter", id="identity", name="Identity", route=route))
+    e = ompig_sdk.Extension("pyapi-identity")
+    e.register_virtual_model(ompig_sdk.VirtualModel(provider="pyrouter", id="identity", name="Identity", route=route))
     return e
 `
 
@@ -80,7 +80,7 @@ func TestPythonSDKVirtualModelRouterReturningItsRequestStateKeepsTheRequestState
 
 const pyLiveToolsFixture = pyAPIPrelude + `
 def new_extension():
-    e = pig_sdk.Extension("pyapi-live")
+    e = ompig_sdk.Extension("pyapi-live")
 
     def live_tools(ctx, args):
         names = lambda: ",".join(t["name"] for t in ctx.tools)
@@ -127,7 +127,7 @@ func TestPythonSDKCtxToolsIsLiveInsideOneHandler(t *testing.T) {
 
 const pyNestedThrowFixture = pyAPIPrelude + `
 def new_extension():
-    e = pig_sdk.Extension("pyapi-throw")
+    e = ompig_sdk.Extension("pyapi-throw")
 
     def nest_throw(ctx, args):
         seen = []
@@ -138,7 +138,7 @@ def new_extension():
                 raise ValueError("callback boom")
 
         try:
-            ctx.execute_tool("slow", {}, pig_sdk.ExecuteToolOptions(on_update=on_update))
+            ctx.execute_tool("slow", {}, ompig_sdk.ExecuteToolOptions(on_update=on_update))
             return "no rejection after " + ",".join(seen)
         except Exception as exc:
             return "rejected: %s after %s" % (exc, ",".join(seen))

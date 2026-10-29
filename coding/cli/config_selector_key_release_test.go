@@ -5,13 +5,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // TestConfigSelectorDoesNotDoubleJumpOnKeyRelease asserts the cursor position
 // after a complete key event, not that a release is recognizable.
 //
-// `pig config` calls tui.EnterRawMode, which pushes \x1b[>7u, so the terminal
+// `ompig config` calls tui.EnterRawMode, which pushes \x1b[>7u, so the terminal
 // reports a release for every key. The loop dispatched each raw read straight
 // to HandleInput with no filter, and ConfigSelectorComponent matches a release
 // for Down as KBSelectDown, so one arrow press moved the cursor two rows in any

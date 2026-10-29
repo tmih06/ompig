@@ -27,7 +27,7 @@ var requiredEnv = [...]string{"HOMEDRIVE", "HOMEPATH", "LOGONSERVER", "PATH", "S
 // That qsort is not stable, so the order of entries whose names compare equal,
 // such as "A=one" and "A=B=two", is the one the C runtime gives, and the
 // child's getenv sees the first of them. It then inserts, in sort order, each
-// required variable that no entry names and PiG has, with PiG's value. An
+// required variable that no entry names and Ompig has, with Ompig's value. An
 // entry with a NUL leaves pairs as they are: Node's spawn throws for it
 // (checkArguments) before libuv runs.
 func programEnv(pairs []string) []string {
@@ -63,7 +63,7 @@ func programEnv(pairs []string) []string {
 	return block
 }
 
-// appendRequired appends the required variable name with PiG's value when PiG
+// appendRequired appends the required variable name with Ompig's value when Ompig
 // has it. libuv adds it when GetEnvironmentVariableW(name, NULL, 0) is not 0,
 // which counts the terminating NUL, so an empty value is added too.
 func appendRequired(block []string, name string) []string {

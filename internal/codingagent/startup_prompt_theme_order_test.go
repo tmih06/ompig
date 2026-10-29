@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 0.99.2 cli/startup-ui.ts showStartupSelector and showStartupInput `await createStartupTui(settingsManager)`

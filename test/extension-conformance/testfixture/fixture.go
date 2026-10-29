@@ -31,10 +31,10 @@ import (
 	"time"
 	"unicode/utf16"
 
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // kitProbe is the component kit's conformance view (D107,
@@ -3004,7 +3004,7 @@ func conformanceLoginDefinition() sdk.LoginDefinition {
 		Hero:        repeatRow("A", 32, 14),
 		Mascot:      repeatRow("A", 16, 14),
 		Palette:     map[string]string{"A": "#123ABC"},
-		Name:        "Conformance Pig",
+		Name:        "Conformance Ompig",
 		Description: "Cross-language login fixture",
 		Tagline:     "One canonical definition across every SDK",
 	}
@@ -3012,8 +3012,8 @@ func conformanceLoginDefinition() sdk.LoginDefinition {
 
 func conformanceSpriteDefinition() sdk.SpriteDefinition {
 	return sdk.SpriteDefinition{
-		ID:      "conformance-pig",
-		Name:    "Conformance Pig",
+		ID:      "conformance-ompig",
+		Name:    "Conformance Ompig",
 		Tagline: "One canonical sprite across every SDK",
 		Mascot:  repeatRow("A", 16, 14),
 		Palette: map[string]string{"A": "#123ABC"},

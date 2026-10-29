@@ -7,7 +7,7 @@ import (
 
 // Pi's overflow check ignores image rows, and D53's full clear exists for wrapped text rows. An image row whose raw escape
 // sequence is wider than the terminal must not turn a later in-place edit into a clearing redraw (found by the
-// main-screen differential: Pi diff-renders, PiG cleared the screen).
+// main-screen differential: Pi diff-renders, Ompig cleared the screen).
 func TestMainScreenEditBelowImageRowDoesNotClear(t *testing.T) {
 	SetCapabilities(TerminalCapabilities{Images: ImageProtocolITerm2, TrueColor: true, Hyperlinks: true})
 	t.Cleanup(ResetCapabilitiesCache)

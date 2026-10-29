@@ -23,9 +23,9 @@ wait_contains = ['"id":"compact","type":"response","command":"compact"']
 wait_timeout_seconds = 15
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=../compaction/testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=../compaction/testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=../compaction/testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--model", "test-faux/faux-1", "--session-dir", "sessions", "-c"]
+ompig_args = ["--no-extensions", "--model", "test-faux/faux-1", "--session-dir", "sessions", "-c"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--session-dir", "sessions", "-c"]
 

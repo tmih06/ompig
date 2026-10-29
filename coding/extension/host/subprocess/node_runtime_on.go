@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,12 +13,12 @@ import (
 
 	"golang.org/x/mod/semver"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepack"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepack"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// pig additive (D92): the embedded Node runtime and the Node preflight that run TypeScript and JavaScript extensions; a Piglet Binary built with pig_strip_node_extensions links node_runtime_off.go instead.
+// ompig additive (D92): the embedded Node runtime and the Node preflight that run TypeScript and JavaScript extensions; a Ompiglet Binary built with ompig_strip_node_extensions links node_runtime_off.go instead.
 
 //go:generate go run ./internal/noderuntimegen
 //go:embed runtime-node.pack
@@ -35,7 +35,7 @@ func extractNodeRuntime(dst string) error {
 	})
 }
 
-// nodeRuntimeUnavailable reports why this process cannot run a Node extension, or nil when it can. Stock PiG never strips the runtime.
+// nodeRuntimeUnavailable reports why this process cannot run a Node extension, or nil when it can. Stock Ompig never strips the runtime.
 func nodeRuntimeUnavailable() error {
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.NodeExtensions) {
 		return errNodeExtensionsStripped()

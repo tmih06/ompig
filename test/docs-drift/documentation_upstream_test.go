@@ -1,9 +1,9 @@
 package docsdrift
 
-// Ports packages/coding-agent/test/documentation.test.ts over PiG's own documentation, docs/site/docs.
+// Ports packages/coding-agent/test/documentation.test.ts over Ompig's own documentation, docs/site/docs.
 //
 // The upstream case reads the catalog (docs.json) and every Markdown page of the docs directory and requires: a valid catalog, no duplicate or missing navigation paths, no broken local Markdown links among the pages reachable from the navigation, no two pages with one public slug, and no orphaned page.
-// Two catalog fields exist only in PiG's catalog and are accepted where upstream rejects unsupported fields: the top-level provenance map (siteDocsManifest) and a navigation item's pending flag, whose page may be absent until it exists.
+// Two catalog fields exist only in Ompig's catalog and are accepted where upstream rejects unsupported fields: the top-level provenance map (siteDocsManifest) and a navigation item's pending flag, whose page may be absent until it exists.
 // Link extraction walks the goldmark AST where upstream walks marked tokens; both yield inline and reference link destinations outside code, and neither yields images or raw HTML. An autolink always carries a scheme, which the walk skips, so it is not collected.
 
 import (

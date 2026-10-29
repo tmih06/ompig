@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // FindMostRecentForContinue must not resume another project's session when
@@ -220,7 +220,7 @@ func TestSessionCwdMatches_ResolvesSymlinks(t *testing.T) {
 	}
 }
 
-// TestFindMostRecentTiesKeepDirectoryOrder: upstream `findMostRecentSession` sorts the `.jsonl` files by `mtimeMs` descending with a stable sort over `readdirSync` order, so two sessions with the same mtime resolve to the file that sorts first by name, whatever their header timestamps say. (An earlier Pig version broke the tie by header creation time to hide the unstable Go sort; `TestFindMostRecentSessionMatchesPi` pins Pi's rule.)
+// TestFindMostRecentTiesKeepDirectoryOrder: upstream `findMostRecentSession` sorts the `.jsonl` files by `mtimeMs` descending with a stable sort over `readdirSync` order, so two sessions with the same mtime resolve to the file that sorts first by name, whatever their header timestamps say. (An earlier Ompig version broke the tie by header creation time to hide the unstable Go sort; `TestFindMostRecentSessionMatchesPi` pins Pi's rule.)
 func TestFindMostRecentTiesKeepDirectoryOrder(t *testing.T) {
 	dir := t.TempDir()
 	sameMtime := time.Now().Truncate(time.Second)

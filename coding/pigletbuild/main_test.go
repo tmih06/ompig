@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 func TestParseArgsAcceptsBuilderAndRejectsUnregisteredVerification(t *testing.T) {
@@ -36,7 +36,7 @@ func TestParseArgsRejectsRemovedBuildFlags(t *testing.T) {
 		{"release", "--with-settings"},
 		{"release", "--update-url", "https://example.com/update.json"},
 		{"release", "--version", "1.2.0"},
-		{"release", "--piglet-version", "1.2.0"},
+		{"release", "--ompiglet-version", "1.2.0"},
 	} {
 		if _, _, _, _, err := parseArgs(args); err == nil || !strings.Contains(err.Error(), "unknown flag") {
 			t.Fatalf("parseArgs(%v) error = %v", args, err)
@@ -79,7 +79,7 @@ func TestRunBuildRejectsRequiredFusedFallback(t *testing.T) {
 	if err := os.WriteFile(pigletPath, []byte(pigletSource), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	output := filepath.Join(dir, nativeBinaryName("pig-nonfused"))
+	output := filepath.Join(dir, nativeBinaryName("ompig-nonfused"))
 	var stdout, stderr strings.Builder
 	code := runBuild([]string{pigletPath, "--format", "binary", "--builder", "native", "--out", output}, &stdout, &stderr)
 	if code != 1 || !strings.Contains(stderr.String(), `extension "sidecar" resolves to sidecar: language:python; build.extensionRealization requires fused`) {
@@ -90,7 +90,7 @@ func TestRunBuildRejectsRequiredFusedFallback(t *testing.T) {
 	}
 }
 
-// A Piglet that lists an extension that resolves to nothing still fails with
+// A Ompiglet that lists an extension that resolves to nothing still fails with
 // the unresolved extension and the "resolves to no extensions" blocker, and
 // writes no Binary.
 func TestRunBuildRejectsListedExtensionThatResolvesToNothing(t *testing.T) {
@@ -99,10 +99,10 @@ func TestRunBuildRejectsListedExtensionThatResolvesToNothing(t *testing.T) {
 	if err := os.WriteFile(pigletPath, []byte("name: missing\nextensions:\n  - name: gone\n    origins: [local:./gone]\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	output := filepath.Join(dir, nativeBinaryName("pig-missing"))
+	output := filepath.Join(dir, nativeBinaryName("ompig-missing"))
 	var stdout, stderr strings.Builder
 	code := runBuild([]string{pigletPath, "--format", "binary", "--builder", "native", "--out", output}, &stdout, &stderr)
-	if code != 1 || !strings.Contains(stderr.String(), `Piglet will not build: unresolved extension: extension "gone": `) || !strings.Contains(stderr.String(), "; piglet resolves to no extensions") {
+	if code != 1 || !strings.Contains(stderr.String(), `Ompiglet will not build: unresolved extension: extension "gone": `) || !strings.Contains(stderr.String(), "; ompiglet resolves to no extensions") {
 		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
 	}
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
@@ -110,12 +110,12 @@ func TestRunBuildRejectsListedExtensionThatResolvesToNothing(t *testing.T) {
 	}
 }
 
-// A Piglet whose extension cells all stay outside the Binary (here one
-// Python factory) still fails with "nothing to embed or fuse": only a Piglet
-// that lists no extensions builds a Binary of PiG's own parts (D18).
+// A Ompiglet whose extension cells all stay outside the Binary (here one
+// Python factory) still fails with "nothing to embed or fuse": only a Ompiglet
+// that lists no extensions builds a Binary of Ompig's own parts (D18).
 func TestRunBuildRejectsPigletWhoseCellsAllStayOutsideTheBinary(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(dir, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(dir, "home"))
 	t.Setenv("HOME", filepath.Join(dir, "home"))
 	extensionDir := filepath.Join(dir, "sidecar")
 	if err := os.Mkdir(extensionDir, 0o755); err != nil {
@@ -128,10 +128,10 @@ func TestRunBuildRejectsPigletWhoseCellsAllStayOutsideTheBinary(t *testing.T) {
 	if err := os.WriteFile(pigletPath, []byte("name: outside\nextensions:\n  - name: sidecar\n    origins: [local:./sidecar]\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	output := filepath.Join(dir, nativeBinaryName("pig-outside"))
+	output := filepath.Join(dir, nativeBinaryName("ompig-outside"))
 	var stdout, stderr strings.Builder
 	code := runBuild([]string{pigletPath, "--format", "binary", "--builder", "native", "--out", output}, &stdout, &stderr)
-	if code != 1 || !strings.Contains(stderr.String(), `piglet "outside" has nothing to embed or fuse; nothing to build`) {
+	if code != 1 || !strings.Contains(stderr.String(), `ompiglet "outside" has nothing to embed or fuse; nothing to build`) {
 		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
 	}
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
@@ -139,9 +139,9 @@ func TestRunBuildRejectsPigletWhoseCellsAllStayOutsideTheBinary(t *testing.T) {
 	}
 }
 
-// The functional floor refuses a Piglet whose effective strip removes every
+// The functional floor refuses a Ompiglet whose effective strip removes every
 // built-in tool and /quit before the build plans anything; the build loader
-// accepts a Piglet that strips every tool alone or /quit alone.
+// accepts a Ompiglet that strips every tool alone or /quit alone.
 func TestRunBuildRejectsPigletBelowTheStripFloor(t *testing.T) {
 	dir := t.TempDir()
 	tools := strings.Join(pigstrip.Known(pigstrip.ListTools), ", ")
@@ -152,10 +152,10 @@ func TestRunBuildRejectsPigletBelowTheStripFloor(t *testing.T) {
 	if err := os.WriteFile(pigletPath, []byte("name: stuck\nextends:\n  source: local:./chat.yaml\nstrip:\n  commands: [/quit]\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	output := filepath.Join(dir, nativeBinaryName("pig-stuck"))
+	output := filepath.Join(dir, nativeBinaryName("ompig-stuck"))
 	var stdout, stderr strings.Builder
 	code := runBuild([]string{pigletPath, "--format", "binary", "--builder", "native", "--out", output}, &stdout, &stderr)
-	want := "a Piglet can't strip every tool and /quit (strip.tools: " + tools + "; strip.commands: /quit); keep at least one tool or /quit"
+	want := "a Ompiglet can't strip every tool and /quit (strip.tools: " + tools + "; strip.commands: /quit); keep at least one tool or /quit"
 	if code != 1 || !strings.Contains(stderr.String(), want) {
 		t.Fatalf("code=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
 	}
@@ -202,14 +202,14 @@ func TestRenderBuildErrorJSON(t *testing.T) {
 	if err := json.Unmarshal([]byte(stdout.String()), &output); err != nil {
 		t.Fatal(err)
 	}
-	if output.Success || output.Error != "failed clearly" || output.Piglet != "release" {
+	if output.Success || output.Error != "failed clearly" || output.Ompiglet != "release" {
 		t.Fatalf("output = %#v", output)
 	}
 }
 
 func TestWriteBuildJSONUsesRecordVocabulary(t *testing.T) {
 	var stdout strings.Builder
-	writeBuildJSON(pigletBuildOutput{Success: true, Piglet: "release", Record: "/records/binary.json"}, &stdout)
+	writeBuildJSON(pigletBuildOutput{Success: true, Ompiglet: "release", Record: "/records/binary.json"}, &stdout)
 	if !strings.Contains(stdout.String(), `"record":"/records/binary.json"`) || strings.Contains(stdout.String(), `"receipt"`) {
 		t.Fatalf("build JSON = %s", stdout.String())
 	}
@@ -218,7 +218,7 @@ func TestWriteBuildJSONUsesRecordVocabulary(t *testing.T) {
 		t.Fatal(err)
 	}
 	if _, exists := document["version"]; exists {
-		t.Fatalf("build JSON exposed a Pig-owned format version: %s", stdout.String())
+		t.Fatalf("build JSON exposed a Ompig-owned format version: %s", stdout.String())
 	}
 }
 
@@ -229,17 +229,17 @@ func TestApplyPigletBuildDefaults(t *testing.T) {
 		Sandbox: Sandbox{Native: native},
 	}
 	out := ""
-	p := &piglet.Piglet{
-		Release: &piglet.ReleaseSpec{Version: "1.2.0"},
-		Build: &piglet.BuildSpec{
+	p := &ompiglet.Ompiglet{
+		Release: &ompiglet.ReleaseSpec{Version: "1.2.0"},
+		Build: &ompiglet.BuildSpec{
 			Targets:    []string{"linux/amd64"},
-			OutputName: "pig-release",
+			OutputName: "ompig-release",
 		},
 	}
 	if err := applyPigletBuildDefaults(p, nil, &opts, &out); err != nil {
 		t.Fatal(err)
 	}
-	if len(opts.Targets) != 1 || opts.Targets[0].String() != "linux/amd64" || out != "pig-release" || opts.Version != "1.2.0" {
+	if len(opts.Targets) != 1 || opts.Targets[0].String() != "linux/amd64" || out != "ompig-release" || opts.Version != "1.2.0" {
 		t.Fatalf("opts=%+v out=%q", opts, out)
 	}
 }
@@ -250,19 +250,19 @@ func TestApplyPigletBuildDefaultsPreservesCLIOverrides(t *testing.T) {
 		Targets: []Target{native},
 		Sandbox: Sandbox{Native: native},
 	}
-	out := "cli-pig"
-	p := &piglet.Piglet{
-		Release: &piglet.ReleaseSpec{Version: "1.0.0"},
-		Build: &piglet.BuildSpec{
+	out := "cli-ompig"
+	p := &ompiglet.Ompiglet{
+		Release: &ompiglet.ReleaseSpec{Version: "1.0.0"},
+		Build: &ompiglet.BuildSpec{
 			Targets:    []string{"linux/amd64"},
-			OutputName: "piglet-pig",
+			OutputName: "ompiglet-ompig",
 		},
 	}
-	args := []string{"release", "--targets=darwin/arm64", "--out", "cli-pig"}
+	args := []string{"release", "--targets=darwin/arm64", "--out", "cli-ompig"}
 	if err := applyPigletBuildDefaults(p, args, &opts, &out); err != nil {
 		t.Fatal(err)
 	}
-	if len(opts.Targets) != 1 || opts.Targets[0] != native || out != "cli-pig" || opts.Version != "1.0.0" {
+	if len(opts.Targets) != 1 || opts.Targets[0] != native || out != "cli-ompig" || opts.Version != "1.0.0" {
 		t.Fatalf("opts=%+v out=%q", opts, out)
 	}
 }
@@ -273,17 +273,17 @@ func TestLoadPigletResolvesExtends(t *testing.T) {
 	dir := t.TempDir()
 	base := filepath.Join(dir, "base.yaml")
 	child := filepath.Join(dir, "child.yaml")
-	if err := os.WriteFile(base, []byte("name: base\ndescription: inherited\nrelease:\n  version: 9.0.0\nbuild:\n  outputName: base-pig\n"), 0o644); err != nil {
+	if err := os.WriteFile(base, []byte("name: base\ndescription: inherited\nrelease:\n  version: 9.0.0\nbuild:\n  outputName: base-ompig\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(child, []byte("name: child\nextends:\n  source: local:./base.yaml\nrelease:\n  version: 1.2.0\nbuild:\n  outputName: child-pig\n"), 0o644); err != nil {
+	if err := os.WriteFile(child, []byte("name: child\nextends:\n  source: local:./base.yaml\nrelease:\n  version: 1.2.0\nbuild:\n  outputName: child-ompig\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	p, err := loadPiglet(child)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if p.Name != "child" || p.Description != "inherited" || p.Release == nil || p.Release.Version != "1.2.0" || p.Build == nil || p.Build.OutputName != "child-pig" || p.Extends != nil {
-		t.Fatalf("build Piglet = %#v", p)
+	if p.Name != "child" || p.Description != "inherited" || p.Release == nil || p.Release.Version != "1.2.0" || p.Build == nil || p.Build.OutputName != "child-ompig" || p.Extends != nil {
+		t.Fatalf("build Ompiglet = %#v", p)
 	}
 }

@@ -51,7 +51,7 @@ func TestTransientRenameClassifiesWindowsErrors(t *testing.T) {
 // handle closes. Rename waits the hold out and then renames the file.
 func TestRenameWaitsOutAHandleHeldWithoutDeleteSharing(t *testing.T) {
 	dir := t.TempDir()
-	oldpath, newpath := filepath.Join(dir, "pig.exe"), filepath.Join(dir, "quarantine", "pig.exe")
+	oldpath, newpath := filepath.Join(dir, "ompig.exe"), filepath.Join(dir, "quarantine", "ompig.exe")
 	if err := os.WriteFile(oldpath, []byte("image"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -85,7 +85,7 @@ func TestRenameWaitsOutAHandleHeldWithoutDeleteSharing(t *testing.T) {
 // A hold that outlasts the budget fails with the rename error unchanged.
 func TestRenameReportsAHoldThatOutlastsTheBudget(t *testing.T) {
 	dir := t.TempDir()
-	oldpath := filepath.Join(dir, "pig.exe")
+	oldpath := filepath.Join(dir, "ompig.exe")
 	if err := os.WriteFile(oldpath, []byte("image"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -114,7 +114,7 @@ func TestRenameReportsAHoldThatOutlastsTheBudget(t *testing.T) {
 // Cancellation ends the wait and reports both errors.
 func TestRenameStopsWaitingWhenTheContextEnds(t *testing.T) {
 	dir := t.TempDir()
-	oldpath := filepath.Join(dir, "pig.exe")
+	oldpath := filepath.Join(dir, "ompig.exe")
 	if err := os.WriteFile(oldpath, []byte("image"), 0o755); err != nil {
 		t.Fatal(err)
 	}

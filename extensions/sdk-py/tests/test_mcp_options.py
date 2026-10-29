@@ -1,19 +1,19 @@
-"""The function options of create_mcp_extension: the shims that serve a transport and a credential store to the host (pig_sdk/mcp_options.py)."""
+"""The function options of create_mcp_extension: the shims that serve a transport and a credential store to the host (ompig_sdk/mcp_options.py)."""
 import threading
 import time
 from types import SimpleNamespace
 
 import pytest
 
-import pig_sdk
-from pig_sdk.mcp_options import _CredentialsShim, _TransportShim, _register
+import ompig_sdk
+from ompig_sdk.mcp_options import _CredentialsShim, _TransportShim, _register
 
 
 def context():
     return SimpleNamespace(extension=SimpleNamespace(_state_lock=threading.RLock()))
 
 
-class Transport(pig_sdk.McpTransportEvents):
+class Transport(ompig_sdk.McpTransportEvents):
     def __init__(self):
         super().__init__()
         self.sends, self.version, self.aborted = [], None, threading.Event()

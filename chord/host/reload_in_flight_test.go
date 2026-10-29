@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // reload.ts:179-183 and 265-279: after the first prepare pass, a reload sets the gate on changed types and waits,

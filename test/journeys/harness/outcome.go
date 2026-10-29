@@ -11,13 +11,13 @@ import (
 	"time"
 )
 
-// Outcome is the result of running one plan on PiG and Pi.
+// Outcome is the result of running one plan on Ompig and Pi.
 type Outcome struct {
-	Journey  string
-	Plan     Plan
-	Failures []Failure
-	Pig, Pi  *Run
-	Elapsed  time.Duration
+	Journey   string
+	Plan      Plan
+	Failures  []Failure
+	Ompig, Pi *Run
+	Elapsed   time.Duration
 }
 
 // Failed reports whether any checker or comparison failed.
@@ -37,17 +37,17 @@ func (o *Outcome) Kinds() []string {
 	return out
 }
 
-// RunJourney executes plan on PiG and (unless PigOnly) Pi concurrently, then runs the cross-product comparisons.
+// RunJourney executes plan on Ompig and (unless OmpigOnly) Pi concurrently, then runs the cross-product comparisons.
 func RunJourney(cfg *Config, j *Journey, plan Plan, root string) (*Outcome, error) {
 	o := &Outcome{Journey: j.Name, Plan: plan}
 	start := time.Now()
-	kinds := []Kind{PiG, Pi}
-	if j.PigOnly {
+	kinds := []Kind{Ompig, Pi}
+	if j.OmpigOnly {
 		kinds = kinds[:1]
 	}
 	runs := make([]*Run, len(kinds))
 	for i, k := range kinds {
-		r, err := NewRun(cfg, j, k, plan, filepath.Join(root, map[Kind]string{PiG: "k1", Pi: "k2"}[k]))
+		r, err := NewRun(cfg, j, k, plan, filepath.Join(root, map[Kind]string{Ompig: "k1", Pi: "k2"}[k]))
 		if err != nil {
 			return nil, err
 		}
@@ -58,7 +58,7 @@ func RunJourney(cfg *Config, j *Journey, plan Plan, root string) (*Outcome, erro
 		wg.Go(r.Execute)
 	}
 	wg.Wait()
-	o.Pig = runs[0]
+	o.Ompig = runs[0]
 	if len(runs) > 1 {
 		o.Pi = runs[1]
 	}
@@ -69,15 +69,15 @@ func RunJourney(cfg *Config, j *Journey, plan Plan, root string) (*Outcome, erro
 		}
 	}
 	// Comparison is meaningless once either side aborted: the frames stop at different points.
-	if o.Pi != nil && len(o.Pig.Failures) == 0 && len(o.Pi.Failures) == 0 {
-		o.Failures = append(o.Failures, compareFrames(j, o.Pig, o.Pi)...)
+	if o.Pi != nil && len(o.Ompig.Failures) == 0 && len(o.Pi.Failures) == 0 {
+		o.Failures = append(o.Failures, compareFrames(j, o.Ompig, o.Pi)...)
 		if !j.SkipRequests {
-			o.Failures = append(o.Failures, compareRequests(o.Pig, o.Pi)...)
+			o.Failures = append(o.Failures, compareRequests(o.Ompig, o.Pi)...)
 		}
 		if !j.SkipSession {
-			o.Failures = append(o.Failures, compareSessions(o.Pig, o.Pi)...)
+			o.Failures = append(o.Failures, compareSessions(o.Ompig, o.Pi)...)
 		}
-		o.Failures = append(o.Failures, compareAgentFiles(j, o.Pig, o.Pi)...)
+		o.Failures = append(o.Failures, compareAgentFiles(j, o.Ompig, o.Pi)...)
 	}
 	o.Elapsed = time.Since(start)
 	if o.Failed() || os.Getenv("JOURNEY_ALWAYS_ARTIFACTS") != "" {
@@ -88,7 +88,7 @@ func RunJourney(cfg *Config, j *Journey, plan Plan, root string) (*Outcome, erro
 
 // writeArtifacts saves the evidence of a failing run: frames, requests and session files of each product.
 func (o *Outcome) writeArtifacts(cfg *Config) {
-	for _, r := range []*Run{o.Pig, o.Pi} {
+	for _, r := range []*Run{o.Ompig, o.Pi} {
 		if r == nil {
 			continue
 		}

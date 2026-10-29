@@ -7,9 +7,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // suppliedResourceLoader is the Go form of the object literal the upstream cases pass as resourceLoader.
@@ -47,13 +47,13 @@ func (suppliedResourceLoader) GetAppendSystemPromptSources() []ResourceSource {
 // both the temp dir, holding skills/test-skill/SKILL.md, as the upstream
 // beforeEach does. The Session's own ResourceLoader is read back, as
 // session.resourceLoader is upstream. The same cases run through the production
-// subprocess Host in cmd/pig TestUpstreamSDKSkillsSubprocess.
+// subprocess Host in cmd/ompig TestUpstreamSDKSkillsSubprocess.
 func TestUpstreamSDKSkillsNativeSession(t *testing.T) {
 	// upstream: packages/coding-agent/test/sdk-skills.test.ts:16
 	newSession := func(t *testing.T, resourceLoader ResourceLoader) *Session {
 		t.Helper()
 		tempDir := t.TempDir()
-		t.Setenv("PIG_HOME", filepath.Join(tempDir, "ambient"))
+		t.Setenv("OMPIG_HOME", filepath.Join(tempDir, "ambient"))
 		skillsDir := filepath.Join(tempDir, "skills", "test-skill")
 		if err := os.MkdirAll(skillsDir, 0o755); err != nil {
 			t.Fatal(err)
@@ -200,7 +200,7 @@ func (*mutableSkillsLoader) GetAppendSystemPromptSources() []ResourceSource { re
 // initialize with empty results before reload"), the skills the resource owner
 // supplies replace whatever discovery would find ("should apply
 // skillsOverride"), and SessionOptions.SystemPrompt is the explicit system
-// prompt ("should apply systemPromptOverride"). PiG's DefaultResourceLoader
+// prompt ("should apply systemPromptOverride"). Ompig's DefaultResourceLoader
 // carries no extensions or themes, so the extension and theme assertions of :34
 // run through the shipped Node SDK subprocess (docs/parity/resource-loader-test-review.md).
 func TestUpstreamResourceLoaderNativeOverrides(t *testing.T) {
@@ -260,7 +260,7 @@ func TestSetPromptResourcesBindsASnapshot(t *testing.T) {
 // NoResources and a new DefaultResourceLoader report empty collections, not nil, as Pi's loaders return arrays.
 func TestResourceLoadersReportEmptyCollections(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "ambient"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ambient"))
 	reloaded := NewDefaultResourceLoader(DefaultResourceLoaderOptions{CWD: root, AgentDir: filepath.Join(root, "agent")})
 	if err := reloaded.Reload(); err != nil {
 		t.Fatal(err)

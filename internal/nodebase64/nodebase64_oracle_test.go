@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Buffer.from(text, "base64") over random texts mixing both alphabets, padding anywhere, whitespace, ASCII punctuation, NUL and non-ASCII characters, at every length

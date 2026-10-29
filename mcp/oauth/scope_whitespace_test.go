@@ -3,7 +3,7 @@ package oauth_test
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // flow.ts:197 asks for consent when options.scope.split(/\s+/) includes "offline_access". JavaScript's \s includes U+FEFF and excludes U+0085, the opposite of

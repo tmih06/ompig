@@ -1,6 +1,6 @@
 package inproc
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // GetModelRegistry is upstream runner.getModelRegistry (runner.ts:843-845): the registry the runner was given, or the one a mode's BindCore or BindTools replaced it with. It is nil before any binding supplies one.
 func (r *Runner) GetModelRegistry() extension.ModelRegistry {

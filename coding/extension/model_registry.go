@@ -5,7 +5,7 @@ package extension
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ModelRegistry is the synchronous model-registry facade an extension reaches through ctx.modelRegistry (model-registry.ts:48).
@@ -113,6 +113,6 @@ type ProviderConfigInput struct {
 	Classifiers   ai.ProviderClassifierMap
 	RefreshModels func(ai.RefreshModelsContext) ([]ai.AnyModel, error)
 	// Insecure skips TLS certificate verification for this provider's endpoint.
-	// pig additive (D36): carries ProviderConfig.Insecure through a registration composed in the native collection.
+	// ompig additive (D36): carries ProviderConfig.Insecure through a registration composed in the native collection.
 	Insecure bool
 }

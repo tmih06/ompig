@@ -60,8 +60,8 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io/michaelkinsy
-  SYFT_IMAGE: pig-ci-base-syft:1.45.1
-  GRYPE_IMAGE: pig-ci-base-grype:0.114.0
+  SYFT_IMAGE: ompig-ci-base-syft:1.45.1
+  GRYPE_IMAGE: ompig-ci-base-grype:0.114.0
 
 jobs:
   verify:
@@ -146,7 +146,7 @@ jobs:
           fi
           IMAGE_REF=$(sed -n 's/^IMAGE_REF=//p' "$pin")
           PINNED_INPUTS=$(sed -n 's/^INPUTS_SHA256=//p' "$pin")
-          [[ "$IMAGE_REF" =~ ^ghcr\.io/michaelkinsy/pig-ci-[a-z]+@sha256:[0-9a-f]{64}$ ]] || { echo "$pin: IMAGE_REF must be a ghcr.io/michaelkinsy/pig-ci-* reference pinned by digest, got '$IMAGE_REF'" >&2; exit 1; }
+          [[ "$IMAGE_REF" =~ ^ghcr\.io/michaelkinsy/ompig-ci-[a-z]+@sha256:[0-9a-f]{64}$ ]] || { echo "$pin: IMAGE_REF must be a ghcr.io/michaelkinsy/ompig-ci-* reference pinned by digest, got '$IMAGE_REF'" >&2; exit 1; }
           [[ "$PINNED_INPUTS" =~ ^[0-9a-f]{64}$ ]] || { echo "$pin: INPUTS_SHA256 is not a SHA-256" >&2; exit 1; }
           current=$(./automation/ci/ci-image-inputs.sh "$IMAGE")
           {
@@ -184,7 +184,7 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}/ci-image-${{ matrix.image }}
         env:
-          CI_BASE_DIR: ${{ runner.temp }}/pig-ci-bases-sbom-${{ matrix.image }}
+          CI_BASE_DIR: ${{ runner.temp }}/ompig-ci-bases-sbom-${{ matrix.image }}
         run: ./automation/ci/seed-ci-image-bases.sh sbom
       - name: Generate SBOM
         if: steps.published.outputs.present == 'true'
@@ -213,7 +213,7 @@ jobs:
         if: always() && steps.published.outputs.present == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: pig-ci-${{ matrix.image }}-verification
+          name: ompig-ci-${{ matrix.image }}-verification
           path: ${{ github.workspace }}/ci-image-${{ matrix.image }}/out/ci-images/${{ matrix.image }}/
           retention-days: 14
 
@@ -284,7 +284,7 @@ jobs:
         working-directory: ${{ github.workspace }}/ci-image-${{ matrix.image }}
         env:
           IMAGE: ${{ matrix.image }}
-          CI_BASE_DIR: ${{ runner.temp }}/pig-ci-bases-${{ matrix.image }}
+          CI_BASE_DIR: ${{ runner.temp }}/ompig-ci-bases-${{ matrix.image }}
         run: ./automation/ci/seed-ci-image-bases.sh "$IMAGE"
       # The locks name the versions the package index had when they were written; the index drops old versions within weeks.
       # Resolve them again here, then build with the exact lock (the Dockerfile's cmp proves the install matches it).
@@ -293,7 +293,7 @@ jobs:
         working-directory: ${{ github.workspace }}/ci-image-${{ matrix.image }}
         env:
           IMAGE: ${{ matrix.image }}
-          CI_BASE_DIR: ${{ runner.temp }}/pig-ci-bases-${{ matrix.image }}
+          CI_BASE_DIR: ${{ runner.temp }}/ompig-ci-bases-${{ matrix.image }}
           RESOLVE_APK_LOCK: '1'
         run: |
           set -euo pipefail
@@ -311,7 +311,7 @@ jobs:
         working-directory: ${{ github.workspace }}/ci-image-${{ matrix.image }}
         env:
           IMAGE: ${{ matrix.image }}
-          CI_BASE_DIR: ${{ runner.temp }}/pig-ci-bases-${{ matrix.image }}
+          CI_BASE_DIR: ${{ runner.temp }}/ompig-ci-bases-${{ matrix.image }}
         run: |
           set -euo pipefail
           case "$IMAGE" in
@@ -369,7 +369,7 @@ jobs:
         shell: bash
         env:
           IMAGE_REF: ${{ steps.build.outputs.ref }}
-          CANDIDATE: ${{ runner.temp }}/pig-ci-${{ matrix.image }}
+          CANDIDATE: ${{ runner.temp }}/ompig-ci-${{ matrix.image }}
         run: |
           set -euo pipefail
           mkdir -p "$CANDIDATE"
@@ -382,8 +382,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: pig-ci-${{ matrix.image }}-candidate
-          path: ${{ runner.temp }}/pig-ci-${{ matrix.image }}/
+          name: ompig-ci-${{ matrix.image }}-candidate
+          path: ${{ runner.temp }}/ompig-ci-${{ matrix.image }}/
           if-no-files-found: error
           compression-level: 0
           retention-days: 14
@@ -391,7 +391,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: pig-ci-${{ matrix.image }}-evidence
+          name: ompig-ci-${{ matrix.image }}-evidence
           path: ${{ github.workspace }}/ci-image-${{ matrix.image }}/out/ci-images/${{ matrix.image }}/
           retention-days: 14
       - name: Remove job images
@@ -400,13 +400,13 @@ jobs:
         env:
           IMAGE_REF: ${{ steps.build.outputs.ref }}
           IMAGE: ${{ matrix.image }}
-          CI_BASE_DIR: ${{ runner.temp }}/pig-ci-bases-${{ matrix.image }}
+          CI_BASE_DIR: ${{ runner.temp }}/ompig-ci-bases-${{ matrix.image }}
         run: |
           refs=(
             "$IMAGE_REF"
-            pig-ci-base-buildkit:0.32.2
-            pig-ci-base-syft:1.45.1
-            pig-ci-base-grype:0.114.0
+            ompig-ci-base-buildkit:0.32.2
+            ompig-ci-base-syft:1.45.1
+            ompig-ci-base-grype:0.114.0
           )
           for ref in "${refs[@]}"; do
             if [ -n "$ref" ]; then
@@ -436,12 +436,12 @@ jobs:
       - name: Download validated image
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: pig-ci-${{ matrix.image }}-candidate
-          path: ${{ runner.temp }}/pig-ci-${{ matrix.image }}/
+          name: ompig-ci-${{ matrix.image }}-candidate
+          path: ${{ runner.temp }}/ompig-ci-${{ matrix.image }}/
       - name: Verify and load validated image
         id: load
         shell: bash
-        working-directory: ${{ runner.temp }}/pig-ci-${{ matrix.image }}
+        working-directory: ${{ runner.temp }}/ompig-ci-${{ matrix.image }}
         run: |
           set -euo pipefail
           sha256sum -c SHA256SUMS
@@ -458,7 +458,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish immutable image
         shell: bash
-        working-directory: ${{ runner.temp }}/pig-ci-${{ matrix.image }}
+        working-directory: ${{ runner.temp }}/ompig-ci-${{ matrix.image }}
         env:
           IMAGE_REF: ${{ steps.load.outputs.ref }}
         run: |
@@ -483,8 +483,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: pig-ci-${{ matrix.image }}-publication
-          path: ${{ runner.temp }}/pig-ci-${{ matrix.image }}/publication/
+          name: ompig-ci-${{ matrix.image }}-publication
+          path: ${{ runner.temp }}/ompig-ci-${{ matrix.image }}/publication/
           retention-days: 14
       - name: Remove published image
         if: always()
@@ -514,7 +514,7 @@ jobs:
       - name: Download the refresh evidence
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          pattern: pig-ci-*-evidence
+          pattern: ompig-ci-*-evidence
           path: ${{ runner.temp }}/evidence
       - name: Propose the locks that changed
         shell: bash
@@ -541,7 +541,7 @@ jobs:
       - name: Download the publication records
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          pattern: pig-ci-*-publication
+          pattern: ompig-ci-*-publication
           path: ${{ runner.temp }}/publication
       - name: Propose the pins
         shell: bash

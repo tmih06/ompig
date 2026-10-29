@@ -27,4 +27,4 @@ The Main Screen preserves scrollback. The Editor changes only the required visib
 
 ## Evidence
 
-Define the terminal scenario before renderer code. Compare escaped Pi and PiG output and terminal-simulator state. Retain inputs, dimensions, bytes, screen state, and mutation failure. Use isolated tests for width, row, cursor, and viewport calculations. Profile editor shrink, streaming, overlays, and large transcripts. Run `go test -race ./tui` and the owning parity scenarios.
+Define the terminal scenario before renderer code. Compare escaped Pi and Ompig output and terminal-simulator state. Retain inputs, dimensions, bytes, screen state, and mutation failure. Use isolated tests for width, row, cursor, and viewport calculations. Profile editor shrink, streaming, overlays, and large transcripts. Run `go test -race ./tui` and the owning parity scenarios.

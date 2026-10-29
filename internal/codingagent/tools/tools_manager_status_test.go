@@ -18,7 +18,7 @@ import (
 // Ported from upstream test/tools-manager.test.ts "ensureTool": status goes
 // through the callback, never the console.
 func TestEnsureToolReportsStatusThroughCallback(t *testing.T) {
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	t.Setenv("PATH", t.TempDir())
 	tm := NewToolsManager(t.TempDir())
 	var statuses []ToolStatus
@@ -37,7 +37,7 @@ func TestEnsureToolReportsStatusThroughCallback(t *testing.T) {
 }
 
 func TestEnsureToolReportsDownloadFailure(t *testing.T) {
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	t.Setenv("PATH", t.TempDir())
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +116,7 @@ func TestToolFailureMessage(t *testing.T) {
 func TestEnsureToolFailureCauseChain(t *testing.T) {
 	for _, tc := range toolStatusFailureCases() {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			t.Setenv("PATH", t.TempDir())
 			tm := NewToolsManager(t.TempDir())
@@ -144,7 +144,7 @@ func TestEnsureToolFailureCauseChain(t *testing.T) {
 
 func TestEnsureToolSuccessfulStatusAndSilentReuse(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	assetName := toolsTable["fd"].GetAssetName("test", releaseTarget("linux", "arm64"))
 	asset := buildTarGz(t, "fd", []byte("fake binary"))
@@ -176,7 +176,7 @@ func TestEnsureToolSuccessfulStatusAndSilentReuse(t *testing.T) {
 // Pi grep/find call ensureTool without onStatus; missing tools appear only in their tool result.
 func TestSearchToolEnsureRemainsSilent(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	binDir := filepath.Join(t.TempDir(), "bin")
 	for _, tool := range CreateCodingTools(t.TempDir(), &ToolsOptions{BinDir: binDir}) {
 		if tool.Name() != "grep" && tool.Name() != "find" {
@@ -197,7 +197,7 @@ func TestSearchToolEnsureRemainsSilent(t *testing.T) {
 // TestManagedToolCallbacksProbe pairs complete EnsureTool status records with pinned Pi.
 func TestManagedToolCallbacksProbe(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	type status struct {
 		Type    string `json:"type"`

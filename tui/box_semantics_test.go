@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // scriptedChild renders the lines it holds and records the widths it was asked for.
@@ -19,7 +19,7 @@ func (c *scriptedChild) Render(width int) []string {
 }
 func (c *scriptedChild) Invalidate() {}
 
-// components/box.ts: addChild, removeChild and clear drop the render cache (invalidateCache); Pig's Box also marks itself dirty so the surface that draws it
+// components/box.ts: addChild, removeChild and clear drop the render cache (invalidateCache); Ompig's Box also marks itself dirty so the surface that draws it
 // redraws it (D91, invalidatable). Upstream does not invalidate the children there, so only the dirty mark is asserted.
 func TestBoxChangesMarkItDirty(t *testing.T) {
 	child := &scriptedChild{lines: []string{"x"}}

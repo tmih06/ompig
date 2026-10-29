@@ -4,7 +4,7 @@ package runner
 
 // Result captures one run of one binary on one scenario.
 type Result struct {
-	System         string // "pig" or "pi"
+	System         string // "ompig" or "pi"
 	Output         string // captured stdout/stderr or tmux pane
 	Stderr         string // separate stderr when StderrCaptured is true
 	RawOutput      string // untouched process stdout before optional key canonicalization
@@ -40,7 +40,7 @@ type SystemResults struct {
 // ScenarioOutcome is the final verdict for one scenario across both systems.
 type ScenarioOutcome struct {
 	Scenario *Scenario
-	Pig      SystemResults
+	Ompig    SystemResults
 	Pi       SystemResults
 	Failures []string // human-readable assertion failures, empty == pass
 	// SkipPerfGate is set by the test driver when the scenario ran under

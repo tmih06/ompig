@@ -14,7 +14,7 @@
 #   4. records source provenance; and
 #   5. points .upstream/current at the pinned build.
 #
-# It does not change the PiG source pin, commit, or push.
+# It does not change the Ompig source pin, commit, or push.
 #
 # Usage:
 #   ./automation/gen/mirror-upstream.sh
@@ -77,7 +77,7 @@ write_provenance() {
 
 verify_provenance() {
   local directory="$1" version="$2" tag="$3" commit="$4"
-  local marker="$directory/.pig-upstream-source.json"
+  local marker="$directory/.ompig-upstream-source.json"
   [[ -f "$marker" ]] || return 1
   grep -Fq "\"version\": \"${version}\"" "$marker" || return 1
   grep -Fq "\"tag\": \"${tag}\"" "$marker" || return 1
@@ -100,7 +100,7 @@ hydrate_provider_data() {
   local target="$directory/packages/ai/src/providers/data"
   [[ -f "$target/amazon-bedrock.json" ]] && return 0
   for candidate in \
-    "${PIG_PUBLISHED_AI_DATA:-}" \
+    "${OMPIG_PUBLISHED_AI_DATA:-}" \
     "${PI_PACKAGE_ROOT:-}/node_modules/@earendil-works/pi-ai/dist/providers/data" \
     "$REPO_ROOT/extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai/dist/providers/data" \
     "$(dirname "${PI_PACKAGE_ROOT:-/missing/pi-coding-agent}")/pi-ai/dist/providers/data" \
@@ -117,7 +117,7 @@ hydrate_provider_data() {
     return 0
   done
   echo "error: upstream source tag omits generated provider data and no matching published pi-ai package was found" >&2
-  echo "       set PI_PACKAGE_ROOT or PIG_PUBLISHED_AI_DATA for pi-ai $version" >&2
+  echo "       set PI_PACKAGE_ROOT or OMPIG_PUBLISHED_AI_DATA for pi-ai $version" >&2
   return 1
 }
 
@@ -284,7 +284,7 @@ for entry in $TOP_LEVEL; do
   sleep 0.3
 done
 
-# Drop the packages' npm lockfiles before locking the tree down. pig never
+# Drop the packages' npm lockfiles before locking the tree down. ompig never
 # installs them (ensure_upstream_pi uses mise), they are off the parity surface
 # (packages/*/src/**), and they carry transitive CVEs that would otherwise sit
 # in the cached mirror. The root package-lock.json stays: divergence-guard's
@@ -308,7 +308,7 @@ if ! verify_mirror_tree "$TARGET_DIR"; then
   exit 1
 fi
 
-write_provenance "$TARGET_DIR/.pig-upstream-source.json" "$TARGET_VERSION" "$TARGET_TAG" "$RESOLVED_COMMIT"
+write_provenance "$TARGET_DIR/.ompig-upstream-source.json" "$TARGET_VERSION" "$TARGET_TAG" "$RESOLVED_COMMIT"
 
 # Make the tree read-only so we don't accidentally edit upstream sources.
 # `chmod -R u-w` is portable across BSD (macOS) and GNU tar systems. Skip it in
@@ -342,13 +342,13 @@ trees, one per version, for side-by-side reference while porting.
 \`\`\`
 .upstream/
 ├── README.md          this file
-├── current → v<X.Y.Z>/  symlink to the version pig currently tracks
+├── current → v<X.Y.Z>/  symlink to the version ompig currently tracks
 ├── v<X.Y.Z>[+<commit>]/ full pi tree at that release tag or pinned commit
-├── v<X.Y.Z>/.pig-upstream-source.json  resolved tag/commit provenance
+├── v<X.Y.Z>/.ompig-upstream-source.json  resolved tag/commit provenance
 └── v<X.Y.Z>/node_modules → the pinned source build's dependencies (a link `make parity-deps` provides)
 \`\`\`
 
-The mirror also contains \`.pig-upstream-source.json\`, generated only after the
+The mirror also contains \`.ompig-upstream-source.json\`, generated only after the
 full extraction succeeds. It records the release version, tag, and exact peeled
 Git commit resolved from the pin. The default invocation checks that
 commit against \`coding.UpstreamCommit\`; a missing or stale marker fails closed
@@ -370,7 +370,7 @@ make upstream-mirror
 
 ## How it gets here
 
-Run `make upstream-mirror` from the PiG repository root. It reads
+Run `make upstream-mirror` from the Ompig repository root. It reads
 the pin (`.upstream/pin`, or `PI_UPSTREAM_REF`) through `automation/pin/pin.py`, downloads the
 matching public tarball of the release tag or commit into
 `${XDG_CACHE_HOME:-~/.cache}/checkouts/github.com/earendil-works/pi/`, validates its provenance,
@@ -382,7 +382,7 @@ first or just re-extract with \`--force\`.
 
 ## Why gitignored
 
-This is reference material, not pig source. Vendoring it would balloon
+This is reference material, not ompig source. Vendoring it would balloon
 the repo by ~50–100 MB per version and mix licensing concerns. The
 script is the only thing in version control; anyone can re-materialise
 the mirror by running it.

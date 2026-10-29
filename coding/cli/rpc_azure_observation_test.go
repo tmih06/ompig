@@ -26,7 +26,7 @@ import (
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 var azureRPCRuns = flag.Int("rpc33-azure-runs", 200, "runs per Azure OpenAI Responses RPC observation case")
@@ -48,14 +48,14 @@ type azureRPCOracleFile struct {
 	} `json:"cases"`
 }
 
-// TestRPCAzureOpenAIResponsesObservation runs the real pig binary in --mode rpc against one loopback Azure OpenAI Responses server and compares the
+// TestRPCAzureOpenAIResponsesObservation runs the real ompig binary in --mode rpc against one loopback Azure OpenAI Responses server and compares the
 // first assistant message_start (the start state) with Pi 0.87.1's, run after run. With -rpc33-azure-full it compares every record of that message
 // (message_start, each message_update, message_end).
 // upstream: packages/coding-agent/src/modes/rpc/rpc-mode.ts:354-363; packages/ai/src/api/azure-openai-responses.ts;
 // oracle: coding/testdata/rpc33-observation/providers/azure-openai-responses/rpc.mjs.
 func TestRPCAzureOpenAIResponsesObservation(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds and runs the pig binary")
+		t.Skip("builds and runs the ompig binary")
 	}
 	t.Parallel()
 	data, err := os.ReadFile(azureRPCOracle)
@@ -144,7 +144,7 @@ func canonicalizeRPCClocks(value any) any {
 // azureServerTrace records what the loopback server of one runAzureRPCOnce saw and did, with the time since the run began, so
 // a stall's failure message says whether the request arrived, whether the handler wrote a response and how much, and whether
 // the connection was still open. A stalled run without it cannot tell a response the server never wrote from one that left the
-// server and never reached PiG.
+// server and never reached Ompig.
 type azureServerTrace struct {
 	mu     sync.Mutex
 	start  time.Time
@@ -212,7 +212,7 @@ func runAzureRPCOnce(t *testing.T, bin string, bodies map[string]string, shape, 
 		defer trace.add("handler exit")
 		copied, copyErr := io.Copy(io.Discard, r.Body)
 		trace.add("request body %d bytes, err %v", copied, copyErr)
-		// Only the model's Responses request takes a response slot. A foreign client that reaches this reused loopback port must not consume the first body, or PiG's first request would receive the follow-up body.
+		// Only the model's Responses request takes a response slot. A foreign client that reaches this reused loopback port must not consume the first body, or Ompig's first request would receive the follow-up body.
 		if r.Method != http.MethodPost || r.URL.Path != "/openai/v1/responses" {
 			trace.add("not the Responses request: 404")
 			http.NotFound(w, r)
@@ -260,7 +260,7 @@ func runAzureRPCOnce(t *testing.T, bin string, bodies map[string]string, shape, 
 	}
 	cmd := exec.Command(bin, "--mode", "rpc", "--offline", "--no-extensions", "--model", "p/strict", "--no-context-files", "--no-skills", "--session-dir", filepath.Join(dir, "s"))
 	cmd.Dir = dir
-	cmd.Env = append(os.Environ(), "HOME="+dir, "PIG_CODING_AGENT_DIR="+agentDir, "PIG_HOME="+filepath.Join(dir, "pighome"))
+	cmd.Env = append(os.Environ(), "HOME="+dir, "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_HOME="+filepath.Join(dir, "pighome"))
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -328,7 +328,7 @@ func runAzureRPCOnce(t *testing.T, bin string, bodies map[string]string, shape, 
 		// A stalled run names the side that holds the response. The server's trace says whether the handler wrote one; the
 		// kernel's socket table, read while the child is still alive, says whether those bytes were sent and received (the
 		// server's bytes_sent against the client's bytes_received) and what is queued unread on either end; and SIGQUIT makes
-		// the child's Go runtime dump every goroutine to stderr, which says what PiG was waiting on.
+		// the child's Go runtime dump every goroutine to stderr, which says what Ompig was waiting on.
 		sockets, events := azureSocketSnapshot(server.Listener.Addr().(*net.TCPAddr).Port), trace.String()
 		dump := dumpStalledChild(cmd, stderr)
 		t.Errorf("timeout after %d Responses request(s); server %s\nserver trace:\n\t%s\nsockets while the child waited:\n%s\nchild stderr: %s", requests.Load(), server.URL, events, sockets, dump)

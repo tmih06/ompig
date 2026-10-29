@@ -12,7 +12,7 @@ import shutil
 
 from .mock import MODEL
 
-CREDENTIAL_PREFIXES = ("OPENAI_", "ANTHROPIC_", "GEMINI_", "GOOGLE_", "AZURE_", "AWS_", "PI_", "PIG_", "CODEX_", "CLAUDE_", "OPENCODE_", "COPILOT_", "GH_", "GITHUB_", "BENCH_")
+CREDENTIAL_PREFIXES = ("OPENAI_", "ANTHROPIC_", "GEMINI_", "GOOGLE_", "AZURE_", "AWS_", "PI_", "OMPIG_", "CODEX_", "CLAUDE_", "OPENCODE_", "COPILOT_", "GH_", "GITHUB_", "BENCH_")
 DUMMY_KEY = "bench-dummy-key-not-a-credential"
 # With a custom model provider Codex 0.162 still contacts chatgpt.com (cloud config, plugin catalog) and github.com (plugin
 # marketplace) at startup. A no-spend bench turns those features off; with them on, the egress audit fails the run.
@@ -63,11 +63,11 @@ class Harness:
                     "XDG_CACHE_HOME": os.path.join(self.home, ".cache"), "XDG_STATE_HOME": os.path.join(self.home, ".local", "state"),
                     "NO_COLOR": "1", "TERM": "xterm-256color", "NO_PROXY": "127.0.0.1,localhost,::1", "no_proxy": "127.0.0.1,localhost,::1"})
         family = arm.family
-        if family in ("pig", "pi"):
-            env.update({"PI_OFFLINE": "1", "PI_SKIP_VERSION_CHECK": "1", "PI_TELEMETRY": "0", "PIG_OFFLINE": "1"})
-            if family == "pig":
-                env["PIG_HOME"] = os.path.join(self.home, ".pig")
-                env["PIG_CODING_AGENT_DIR"] = self.agent_dir
+        if family in ("ompig", "pi"):
+            env.update({"PI_OFFLINE": "1", "PI_SKIP_VERSION_CHECK": "1", "PI_TELEMETRY": "0", "OMPIG_OFFLINE": "1"})
+            if family == "ompig":
+                env["OMPIG_HOME"] = os.path.join(self.home, ".ompig")
+                env["OMPIG_CODING_AGENT_DIR"] = self.agent_dir
             else:
                 env[arm.spec.get("agent_dir_env", "PI_CODING_AGENT_DIR")] = self.agent_dir
             env.update(arm.spec.get("env", {}))
@@ -141,7 +141,7 @@ class Harness:
 
     @property
     def native_pi(self):
-        return self.arm.family in ("pig", "pi")
+        return self.arm.family in ("ompig", "pi")
 
     def _common(self):
         if not self.native_pi:

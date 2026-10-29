@@ -3,7 +3,7 @@ package ai
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's isRetryableAssistantError (utils/retry.js) run against the vendored Pi module: both case-insensitive, non-unicode JavaScript RegExps over error text with every separator spelling `.?` accepts (JS `.` excludes \n, \r, U+2028 and U+2029), ASCII-only case folding and UTF-16 units. Known gap, not in the corpus: a supplementary character between the words, which a non-unicode `.?` cannot span (two units) and Go's `.` spans (one code point); lazyregexp.NewJSIgnoreCase documents it.

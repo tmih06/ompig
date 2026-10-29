@@ -69,7 +69,7 @@ path = "packages/ai/src/api/openai-codex-responses.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/user_agent_test.go#TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent"]
-rationale = "The 1.1.0 change (#10429) sets the originator and User-Agent defaults first so model and caller headers override them. ai/openai_codex_responses.go builds the defaults then lets cfg.ExtraHeaders replace them case-insensitively. Ignoring the model headers fails TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent. The default originator is PiG under D26."
+rationale = "The 1.1.0 change (#10429) sets the originator and User-Agent defaults first so model and caller headers override them. ai/openai_codex_responses.go builds the defaults then lets cfg.ExtraHeaders replace them case-insensitively. Ignoring the model headers fails TestCodexModelAndCallerHeadersOverrideOriginatorAndUserAgent. The default originator is Ompig under D26."
 
 [[files]]
 path = "packages/ai/src/api/openai-decisions.lazy.ts"
@@ -118,7 +118,7 @@ path = "packages/ai/src/auth/oauth/openai-codex.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:ai/login_agent_name_oracle_test.go#TestLoginAgentNameMatchesPi"]
-rationale = "The 1.1.0 change passes options.agentName to createAuthorizationFlow so it becomes the Codex originator. ai/oauth_openai_codex.go does the same with PiG default originator under D26. Ignoring the option fails TestLoginAgentNameMatchesPi."
+rationale = "The 1.1.0 change passes options.agentName to createAuthorizationFlow so it becomes the Codex originator. ai/oauth_openai_codex.go does the same with Ompig default originator under D26. Ignoring the option fails TestLoginAgentNameMatchesPi."
 
 [[files]]
 path = "packages/ai/src/auth/types.ts"
@@ -139,7 +139,7 @@ path = "packages/ai/src/providers/compat-schema.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/codingagent/model_config_oracle_test.go#TestModelsJSONSchemaErrorsMatchPi"]
-rationale = "ProviderCompatSchema is one merged object (completions, responses, anthropic, bedrock, mistral properties in merge order, additional properties allowed). internal/codingagent/configschema.ProviderCompatSchema is that schema and configschema/validate.go checks models.json against it; TestModelsJSONSchemaErrorsMatchPi replays curated and seeded documents against the 42a build (17 differed before). Residual: Pig decodes compat into typed structs, so an unknown compat key is accepted by the schema but not carried through to a provider."
+rationale = "ProviderCompatSchema is one merged object (completions, responses, anthropic, bedrock, mistral properties in merge order, additional properties allowed). internal/codingagent/configschema.ProviderCompatSchema is that schema and configschema/validate.go checks models.json against it; TestModelsJSONSchemaErrorsMatchPi replays curated and seeded documents against the 42a build (17 differed before). Residual: Ompig decodes compat into typed structs, so an unknown compat key is accepted by the schema but not carried through to a provider."
 
 [[files]]
 path = "packages/ai/src/providers/faux.ts"
@@ -349,7 +349,7 @@ path = "packages/coding-agent/src/core/settings-schema.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "Pi generates schemas/settings.schema.json from this TypeBox schema. PiG does not ship Pi's generated JSON Schema artifacts or their generator (scripts/generate-schemas.ts); the runtime behavior the schema pins (settings accessors, $schema preservation, legacy migrations) is covered by the settings oracles. Revisit if PiG publishes its own schemas."
+rationale = "Pi generates schemas/settings.schema.json from this TypeBox schema. Ompig does not ship Pi's generated JSON Schema artifacts or their generator (scripts/generate-schemas.ts); the runtime behavior the schema pins (settings accessors, $schema preservation, legacy migrations) is covered by the settings oracles. Revisit if Ompig publishes its own schemas."
 
 [[files]]
 path = "packages/coding-agent/src/core/tools/renderers/bash.ts"
@@ -405,14 +405,14 @@ path = "packages/coding-agent/src/extensions/mcp/cli.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthGivesUpOnPigMcpLoginAfterTimeoutAlsoWhileTheAuthorizationServerHangs"]
-rationale = "`pig mcp login --timeout` limits the whole sign-in, including requests to the authorization server (#10565): coding/mcpext/cli.go runs SignInMcpServer under context.WithTimeout of the command context, and the redirect prompt (waitForRedirectUrl) returns when that context ends instead of running its own timer. The timeout does not cover the reconnect after the sign-in."
+rationale = "`ompig mcp login --timeout` limits the whole sign-in, including requests to the authorization server (#10565): coding/mcpext/cli.go runs SignInMcpServer under context.WithTimeout of the command context, and the redirect prompt (waitForRedirectUrl) returns when that context ends instead of running its own timer. The timeout does not cover the reconnect after the sign-in."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/index.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcpext/responsive_test.go#TestMcpCommandOpensTheManagerBeforeTheStartupConnectionsFinish", "test:coding/mcpext/responsive_test.go#TestMcpManagerEnablesAServerInTheBackground", "test:coding/mcpext/responsive_test.go#TestMcpDirectToolCallWaitsForItsServersReconnect", "test:coding/mcpext/responsive_test.go#TestMcpPreparedToolCallResolvesTheConnectionWhenItExecutes", "test:coding/mcpext/manager_test.go#TestMcpManagerReconnectRunsInTheBackgroundWithoutAStatusScreen", "test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthCancelsASignInWaitingOnTheAuthorizationServerWhenTheSessionShutsDown", "test:coding/mcp_oauth_session_upstream_test.go#TestAgentSessionMCPOAuthClosesTheSessionWithoutRefreshingAnExpiringToken"]
-rationale = "The manager stays responsive (#10562): `/mcp` opens before the startup connections finish, reconnect/enable/disable run in the background behind an attempt token, reconnects and replacements are serialized, direct tool calls wait for their own server, and a prepared call resolves the current connection when it executes. One session context replaces the generation counter (#10565): sign-ins stop on the cancel key and on session shutdown and are tracked so shutdown waits for them (coding/mcpext/extension.go, background.go, manager.go, command.go). Upstream added no test for #10562; the Go tests are PiG regression tests for its changelog and commit message."
+rationale = "The manager stays responsive (#10562): `/mcp` opens before the startup connections finish, reconnect/enable/disable run in the background behind an attempt token, reconnects and replacements are serialized, direct tool calls wait for their own server, and a prepared call resolves the current connection when it executes. One session context replaces the generation counter (#10565): sign-ins stop on the cancel key and on session shutdown and are tracked so shutdown waits for them (coding/mcpext/extension.go, background.go, manager.go, command.go). Upstream added no test for #10562; the Go tests are Ompig regression tests for its changelog and commit message."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/oauth.ts"
@@ -433,7 +433,7 @@ path = "packages/coding-agent/src/main.ts"
 change = "modified"
 disposition = "unchanged-observable"
 evidence = ["test:tui/theme_json_validate_oracle_test.go#TestThemeJSONValidationMatchesPi", "test:coding/resource_loader_extend_test.go#TestDefaultResourceLoaderAppliesStrictThemeValidationOnReload"]
-rationale = "setThemeJsonValidator moves before runtime creation so commands and startup selectors validate user themes. PiG validates every user-authored theme in LoadThemeFile on every path, so the guard test passes unchanged (not red-proven)."
+rationale = "setThemeJsonValidator moves before runtime creation so commands and startup selectors validate user themes. Ompig validates every user-authored theme in LoadThemeFile on every path, so the guard test passes unchanged (not red-proven)."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/bash-execution.ts"
@@ -538,7 +538,7 @@ path = "packages/coding-agent/src/package-manager-cli.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = ["test:internal/codingagent/selfupdate_test.go#TestSelfReplaceAtWithCommitKeepsOnlyTheNewExecutable"]
-rationale = "The only 1.1.0 change is pruneManagedReleases (#10392), which deletes old npm managed-release directories after pi update and keeps the new release and the running one. A standalone pig has no release directory (D39): a replacement keeps only the new executable, which the test asserts, so there is nothing to prune."
+rationale = "The only 1.1.0 change is pruneManagedReleases (#10392), which deletes old npm managed-release directories after pi update and keeps the new release and the running one. A standalone ompig has no release directory (D39): a replacement keeps only the new executable, which the test asserts, so there is nothing to prune."
 
 [[files]]
 path = "packages/coding-agent/src/utils/ansi.ts"

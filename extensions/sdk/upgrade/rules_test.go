@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/upgrade"
+	"github.com/tmih06/ompig/extensions/sdk/upgrade"
 )
 
 const header = `package ext
@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"os"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 var _ = errors.New
@@ -143,7 +143,7 @@ func handler(ctx sdk.Context) error {
 	case "":
 		return errors.New("no home")
 	}
-	if ctx.HasUI() && pigUpgradeIsIdle(ctx) {
+	if ctx.HasUI() && ompigUpgradeIsIdle(ctx) {
 		return nil
 	}
 	return nil
@@ -480,7 +480,7 @@ func TestConfigHomeSkipsWhereMovingTheCallChangesBehavior(t *testing.T) {
 	for _, want := range []string{
 		"Context.ConfigHome: the call runs only when an earlier operand allows it",
 		"Context.ConfigHome: the call is not in the if condition",
-		"Context.ConfigHome: the statement is not one pig moves a call out of",
+		"Context.ConfigHome: the statement is not one ompig moves a call out of",
 		"Context.ConfigHome: an earlier call in the statement would run after the getter",
 	} {
 		if !slices.Contains(reasons, want) {

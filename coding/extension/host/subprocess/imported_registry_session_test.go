@@ -6,7 +6,7 @@ import "testing"
 // session-manager.ts:1801 and model-registry.ts:34 construct local instances.
 func TestImportedExtensionRuntimeMatchesPi(t *testing.T) {
 	runPinnedComparison(t, []string{"dist", "core", "extensions", "loader.js"}, "pi-coding-agent.mjs", `
-const [pi,pig]=await Promise.all([import(process.argv[1]),import(process.argv[2])]);
+const [pi,ompig]=await Promise.all([import(process.argv[1]),import(process.argv[2])]);
 const probe=async mod=>{
  const r=mod.createExtensionRuntime(); const out={keys:Object.keys(r)};
  try{r.getSessionName()}catch(error){out.unbound=error.message}
@@ -19,7 +19,7 @@ const probe=async mod=>{
  try{r.assertActive()}catch(error){out.stale=error.message}
  out.calls=calls;return out;
 };
-const want=await probe(pi),got=await probe(pig);
+const want=await probe(pi),got=await probe(ompig);
 if(JSON.stringify(got)!==JSON.stringify(want)) throw new Error(JSON.stringify({got,want}));
 `)
 }
@@ -56,7 +56,7 @@ if(JSON.stringify(actual)!==JSON.stringify(expected)) throw new Error(JSON.strin
 
 func TestImportedRegistryAndSessionClassesMatchPi(t *testing.T) {
 	runPinnedComparison(t, []string{"dist", "core", "session-manager.js"}, "pi-coding-agent.mjs", `
-const [pi, pig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
+const [pi, ompig] = await Promise.all([import(process.argv[1]), import(process.argv[2])]);
 const exercise = (mod) => {
  const s = mod.SessionManager.inMemory("/registry-class-test");
  const id = s.appendCustomEntry("note", {n: 1});
@@ -68,10 +68,10 @@ const exercise = (mod) => {
   label:s.getLabel(message),messages:s.buildSessionContext().messages,
   branch:s.getBranch(id).map(e=>e.type), roots:s.getTree().map(n=>n.entry.type)};
 };
-const want=exercise(pi),got=exercise(pig);
+const want=exercise(pi),got=exercise(ompig);
 if(JSON.stringify(got)!==JSON.stringify(want)) throw new Error(JSON.stringify({want,got}));
 const models=[{id:"a",provider:"test"}];
-const r=new pig.ModelRegistry({getModels:()=>models,getAvailableSnapshot:()=>models,getModel:()=>models[0],getProvider:()=>({name:"Test"})});
+const r=new ompig.ModelRegistry({getModels:()=>models,getAvailableSnapshot:()=>models,getModel:()=>models[0],getProvider:()=>({name:"Test"})});
 const all=r.getAll(); all.pop();
 if(r.getAll().length!==1 || r.find("test","a")!==models[0] || r.getProviderDisplayName("test")!=="Test") throw new Error("ModelRegistry did not delegate or copied incorrectly");
 `)

@@ -6,8 +6,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // carrierModelInput is providerModelInput for the models of a native Provider object registered through a carrier: the provider's base URL stays the provider's (the refresh context's), and the models keep the base URL they declare, or none (Pi composes the Provider object untouched, model-runtime.ts composeProvider).

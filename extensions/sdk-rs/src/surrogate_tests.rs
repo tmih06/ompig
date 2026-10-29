@@ -141,7 +141,7 @@ fn nesting_depth_counts_levels_not_brackets() {
 // for one such line and returned no entries at all.
 #[test]
 fn session_file_with_an_unpaired_surrogate_keeps_every_entry() {
-    let dir = std::env::temp_dir().join(format!("pig-sdk-rs-surrogate-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("ompig-sdk-rs-surrogate-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     let path = dir.join("session.jsonl");
     std::fs::write(

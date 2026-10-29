@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 // Pi: packages/coding-agent/src/core/extensions/types.ts:2152 (ExtensionActions.getSessionName); packages/coding-agent/src/core/extensions/types.ts:2156 (ExtensionActions.getSettings); packages/coding-agent/src/core/extensions/types.ts:2151 (ExtensionActions.setSessionName).
@@ -24,8 +24,8 @@ func TestSessionExtensionActionsActOnTheLiveSession(t *testing.T) {
 		t.Fatalf("GetSettings before the Session exists = %v", settings)
 	}
 
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	t.Setenv("PI_CODING_AGENT_DIR", t.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {

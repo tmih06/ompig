@@ -270,7 +270,7 @@ type runningConn struct {
 }
 
 // helperConnection is the connection a helper called outside a handler uses: the running extension's, the one an earlier helper opened to this socket, or a
-// new one, which Run reuses. A runner that names a socket (PIG_EXT_SOCKET, set to the member's own while its factory runs) means the extension that socket
+// new one, which Run reuses. A runner that names a socket (OMPIG_EXT_SOCKET, set to the member's own while its factory runs) means the extension that socket
 // belongs to, so a helper called by one member's factory never rides another member's connection, which the host serves only after it has accepted this
 // member's: it uses the running extension on that socket, and dials the socket when this member has not connected. With no socket named, the first extension
 // that is still running answers.
@@ -284,7 +284,7 @@ func helperConnection() (*conn, error) {
 		}
 	}
 	if path == "" {
-		return nil, errors.New("not connected to the host: PIG_EXT_SOCKET is not set, so this extension was not launched by pig")
+		return nil, errors.New("not connected to the host: OMPIG_EXT_SOCKET is not set, so this extension was not launched by ompig")
 	}
 	return dialLocked(path)
 }
@@ -324,7 +324,7 @@ func factoryConnection() (*conn, error) {
 // fusedFactoryMu serializes the factories ServeFactory runs: helpers.factory is the connection of the one running.
 var fusedFactoryMu sync.Mutex
 
-// ServeFactory runs factory and serves the extension it returns over nc, as factory().RunWithConn(nc) does, with one difference: nc is the factory's own connection while the factory runs, so its pi.events calls reach the host at once, as a subprocess extension's do over the socket it dials. A fused Piglet Binary serves its extensions with it. The connection is closed when the serve loop ends.
+// ServeFactory runs factory and serves the extension it returns over nc, as factory().RunWithConn(nc) does, with one difference: nc is the factory's own connection while the factory runs, so its pi.events calls reach the host at once, as a subprocess extension's do over the socket it dials. A fused Ompiglet Binary serves its extensions with it. The connection is closed when the serve loop ends.
 func ServeFactory(nc net.Conn, factory Factory) error {
 	started := newConn(nc)
 	started.start()
@@ -368,8 +368,8 @@ func runningConnectionsExcept(c *conn) []*conn {
 	return others
 }
 
-// helperSocketPath is the socket a helper dials: PIG_EXT_SOCKET, which a packed cell's runner sets to the member's socket while the member's factory runs.
-func helperSocketPath() string { return os.Getenv("PIG_EXT_SOCKET") }
+// helperSocketPath is the socket a helper dials: OMPIG_EXT_SOCKET, which a packed cell's runner sets to the member's socket while the member's factory runs.
+func helperSocketPath() string { return os.Getenv("OMPIG_EXT_SOCKET") }
 
 // takeHelperConn hands Run the connection a helper opened to sockPath, once.
 func takeHelperConn(sockPath string) *conn {

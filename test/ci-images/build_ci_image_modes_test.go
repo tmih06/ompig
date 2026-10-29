@@ -64,7 +64,7 @@ func TestBuildScriptResolvesTheLockWithoutBuildingTheImage(t *testing.T) {
 }
 
 func TestBuildScriptChecksAnExistingImageWithoutBuilding(t *testing.T) {
-	ref := "ghcr.io/michaelkinsy/pig-ci-go@sha256:" + strings.Repeat("e", 64)
+	ref := "ghcr.io/michaelkinsy/ompig-ci-go@sha256:" + strings.Repeat("e", 64)
 	_, log, output, err := buildScriptFixture(t, "VERIFY_IMAGE_REF="+ref)
 	if err != nil {
 		t.Fatalf("%v\n%s", err, output)

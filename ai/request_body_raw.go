@@ -3,7 +3,7 @@ package ai
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // rawRequestBody is the body of a replacement a payload hook returned as JSON text. Pi's hook returns a parsed value and the SDK JSON.stringify's it, so

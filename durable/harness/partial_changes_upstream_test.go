@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
 )
 
 // upstream: packages/durable/test/harness-partial-changes.test.ts (#9265): partial commits reassigned the growing strings of a streamed answer, and Chord compared each one whole.

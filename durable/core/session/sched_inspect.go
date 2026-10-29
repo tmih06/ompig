@@ -1,6 +1,6 @@
 package session
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // TaskInspection is one live task with the state the scheduler derives for it (types.ts TaskInspection).
 type TaskInspection struct {

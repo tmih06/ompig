@@ -10,14 +10,14 @@ tags = ["fast", "hermetic", "tui"]
 driver = "cli-mode"
 
 [env]
-pig_go_tests = ["./internal/codingagent"]
-pig_go_programs = ["./test/parity/testdata/main-screen-render-pig"]
+ompig_go_tests = ["./internal/codingagent"]
+ompig_go_programs = ["./test/parity/testdata/main-screen-render-ompig"]
 override_base_args = true
-pig = ["PI_TUI_DEBUG_REDRAW="]
+ompig = ["PI_TUI_DEBUG_REDRAW="]
 pi = ["PI_TUI_DEBUG_REDRAW="]
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/main-screen-render-pig.mjs", "{{TEMP}}"]
+ompig_args = ["node", "./test/parity/testdata/main-screen-render-ompig.mjs", "{{TEMP}}"]
 pi_args = ["node", "./test/parity/testdata/main-screen-render-pi.mjs", "{{TEMP}}"]
 
 [cli]

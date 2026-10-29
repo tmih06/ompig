@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 type packageCommandPathsFixture struct {
@@ -35,19 +35,19 @@ func newPackageCommandPathsFixture(t *testing.T) packageCommandPathsFixture {
 	}
 	for key, value := range map[string]string{
 		"HOME": filepath.Join(root, "home"), "USERPROFILE": filepath.Join(root, "home"),
-		"PIG_HOME":             filepath.Join(root, "pig-home"),
-		"PIG_CODING_AGENT_DIR": f.agentDir, "PI_CODING_AGENT_DIR": f.agentDir,
-		"PIG_CODING_AGENT_SESSION_DIR": filepath.Join(root, "pig-sessions"),
-		"PI_CODING_AGENT_SESSION_DIR":  filepath.Join(root, "pi-sessions"),
-		"XDG_CONFIG_HOME":              filepath.Join(root, "config"), "XDG_DATA_HOME": filepath.Join(root, "data"),
+		"OMPIG_HOME":             filepath.Join(root, "ompig-home"),
+		"OMPIG_CODING_AGENT_DIR": f.agentDir, "PI_CODING_AGENT_DIR": f.agentDir,
+		"OMPIG_CODING_AGENT_SESSION_DIR": filepath.Join(root, "ompig-sessions"),
+		"PI_CODING_AGENT_SESSION_DIR":    filepath.Join(root, "pi-sessions"),
+		"XDG_CONFIG_HOME":                filepath.Join(root, "config"), "XDG_DATA_HOME": filepath.Join(root, "data"),
 		"XDG_STATE_HOME": filepath.Join(root, "state"), "XDG_CACHE_HOME": filepath.Join(root, "cache"),
 	} {
 		require.NoError(t, os.MkdirAll(value, 0o755))
 		t.Setenv(key, value)
 	}
 	// D2 permits Pi's exact .pi fixture paths through explicit shared-directory opt-in.
-	t.Setenv("PIG_USE_PI_DIRS", "1")
-	for _, key := range []string{"PIG_OFFLINE", "PI_OFFLINE", "PI_SESSION_FILE", "PIG_SESSION_FILE", "PI_PACKAGE_DIR", "PIG_PACKAGE_DIR"} {
+	t.Setenv("OMPIG_USE_PI_DIRS", "1")
+	for _, key := range []string{"OMPIG_OFFLINE", "PI_OFFLINE", "PI_SESSION_FILE", "OMPIG_SESSION_FILE", "PI_PACKAGE_DIR", "OMPIG_PACKAGE_DIR"} {
 		t.Setenv(key, "")
 	}
 	t.Chdir(f.projectDir)

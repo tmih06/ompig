@@ -8,19 +8,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // writeStagedGoSDK writes a small Go SDK tree at sdkDir: sources in the root and in a package below it, and a file the hash skips.
 func writeStagedGoSDK(t *testing.T, sdkDir, body string) {
 	t.Helper()
 	files := map[string]string{
-		"go.mod":           "module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n",
+		"go.mod":           "module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n",
 		"sdk.go":           "package sdk\n" + body,
 		"json/encode.go":   "package json\n",
 		"README.md":        "not a source\n",
 		"lib.rs":           "// a Rust source in a Go SDK\n",
-		"crate/Cargo.toml": "[package]\nname = \"pig-sdk\"\n",
+		"crate/Cargo.toml": "[package]\nname = \"ompig-sdk\"\n",
 	}
 	for name, content := range files {
 		path := filepath.Join(sdkDir, name)
@@ -37,10 +37,10 @@ func writeStagedGoSDK(t *testing.T, sdkDir, body string) {
 func writeGoExtension(t *testing.T, name string) string {
 	t.Helper()
 	srcDir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module "+name+"\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "go.mod"), []byte("module "+name+"\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(srcDir, "main.go"), []byte("package main\nimport _ \"github.com/tmih06/ompig/extensions/sdk\"\nfunc main(){}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	return srcDir

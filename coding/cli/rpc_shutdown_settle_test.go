@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi starts shutdown() for stdin's end in an event-loop iteration after the line, so the microtasks of earlier commands and of a published agent_end finish first (rpc-mode.ts:355-360,726-742,802-805). Stdin end therefore settles before it removes the signal handlers, and a settle that reports the mode ended abandons the shutdown.
@@ -31,7 +31,7 @@ func TestRPCShutdownInputEndSettlesBeforeShutdownStarts(t *testing.T) {
 	}
 }
 
-// Node's default action for a termination signal ends the process before any exit can run. Pig stops the extension processes first, which completes a pending dispose and reports a drained event loop, so neither may exit 0 while the signal is on its way: the process ends by the signal (rpc-mode.ts:728-744 removes the handlers, and the default action follows). Before the fix the dispose that the kill completed exited 0 (macOS cli-7 TestRPCInputEndAfterCommandReplacementKeepsPendingQuitShutdownQuiet: wait status 0, want SIGTERM).
+// Node's default action for a termination signal ends the process before any exit can run. Ompig stops the extension processes first, which completes a pending dispose and reports a drained event loop, so neither may exit 0 while the signal is on its way: the process ends by the signal (rpc-mode.ts:728-744 removes the handlers, and the default action follows). Before the fix the dispose that the kill completed exited 0 (macOS cli-7 TestRPCInputEndAfterCommandReplacementKeepsPendingQuitShutdownQuiet: wait status 0, want SIGTERM).
 func TestRPCShutdownEndsByTheSignalNotByExit(t *testing.T) {
 	var mu sync.Mutex
 	var exits []int
@@ -91,7 +91,7 @@ func TestRPCShutdownSignalDuringTheFlushEndsByTheSignal(t *testing.T) {
 	}
 }
 
-// Stdin end while a signal-triggered dispose is still running exits 0 at once (rpc-mode.ts:728-731). Pig's exit stops the extension processes before it ends the process, which completes the pending dispose, and the signal's own exit (128+SIGTERM) then runs beside the first one. The first exit decides the status (macOS cli-2 TestRPCInputEndDuringSignalShutdownExitsZero: wait status 143, want exit 0). The fake exit forces that interleaving: it completes the dispose and waits for the signal's shutdown to finish before it records its own status.
+// Stdin end while a signal-triggered dispose is still running exits 0 at once (rpc-mode.ts:728-731). Ompig's exit stops the extension processes before it ends the process, which completes the pending dispose, and the signal's own exit (128+SIGTERM) then runs beside the first one. The first exit decides the status (macOS cli-2 TestRPCInputEndDuringSignalShutdownExitsZero: wait status 143, want exit 0). The fake exit forces that interleaving: it completes the dispose and waits for the signal's shutdown to finish before it records its own status.
 func TestRPCShutdownInputEndDuringSignalDisposeKeepsItsExitStatus(t *testing.T) {
 	var mu sync.Mutex
 	var exits []int

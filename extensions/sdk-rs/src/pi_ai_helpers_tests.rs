@@ -296,7 +296,7 @@ fn the_default_retry_delay_cap_is_pis() {
 /// `read_stored_credential` reads the credential an auth.json holds, in the key order of the file, as Pi's does (vectors: `pi-coding-agent/readStoredCredential.json`).
 #[test]
 fn read_stored_credential_matches_the_pinned_package() {
-    let dir = std::env::temp_dir().join(format!("pig-sdk-vectors-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("ompig-sdk-vectors-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     for (i, case) in read_vectors("pi-coding-agent", "readStoredCredential").iter().enumerate() {
         let args = case["args"].as_array().unwrap();

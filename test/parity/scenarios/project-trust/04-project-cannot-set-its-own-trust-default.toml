@@ -1,6 +1,6 @@
 # Behavior family: project-trust
 # group-rationale: serial: project-trust extension fixtures compile to the same
-# Pig content-cache identity and must not build concurrently.
+# Ompig content-cache identity and must not build concurrently.
 # Surface: defaultProjectTrust is global-only and cannot bootstrap itself from
 # untrusted project settings.
 #
@@ -10,7 +10,7 @@
 # returns "No models available". SettingsManager.getDefaultProjectTrust reads
 # globalSettings, not the untrusted project or merged layer.
 #
-# Red proof before P1: Pig merges the project setting and executes the project
+# Red proof before P1: Ompig merges the project setting and executes the project
 # extension before any trust resolution.
 
 name = "04-project-cannot-set-its-own-trust-default"
@@ -26,7 +26,7 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 override_base_args = true
 
 [cli]

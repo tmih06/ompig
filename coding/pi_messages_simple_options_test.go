@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi-messages.ts streamSimple (:432-444) passes the caller's options to stream unchanged; unlike every other API module it does not

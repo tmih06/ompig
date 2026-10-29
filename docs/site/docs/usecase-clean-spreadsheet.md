@@ -2,13 +2,13 @@
 
 **Goal:** turn a messy CSV export into a clean copy: one date format, trimmed text, consistent capital letters, no blank or duplicate rows and plain numbers. The original stays as it is, and you get a list of every change.
 
-**You need:** PiG signed in to a model ([Your first ten minutes](/docs/latest/first-run)) and your data saved as a CSV file.
+**You need:** Ompig signed in to a model ([Your first ten minutes](/docs/latest/first-run)) and your data saved as a CSV file.
 
 **Time:** five to ten minutes.
 
 ## Why CSV
 
-PiG reads text files. A spreadsheet saved as `.xlsx` or `.numbers` is not text: it is a packed file that only a spreadsheet program can open. PiG's `read` tool reads text files and images only (Pi `packages/coding-agent/src/core/tools/read.ts:96`: "Supports text files and images"). Export to CSV first:
+Ompig reads text files. A spreadsheet saved as `.xlsx` or `.numbers` is not text: it is a packed file that only a spreadsheet program can open. Ompig's `read` tool reads text files and images only (Pi `packages/coding-agent/src/core/tools/read.ts:96`: "Supports text files and images"). Export to CSV first:
 
 | Program | Menu |
 |---|---|
@@ -21,12 +21,12 @@ A CSV file keeps one sheet, the values and none of the formulas or colours. Keep
 
 ## Before you start
 
-Put a copy of the CSV in a new folder and start PiG there:
+Put a copy of the CSV in a new folder and start Ompig there:
 
 ```bash
 mkdir ~/sheet-clean && cp ~/Documents/sales.csv ~/sheet-clean/
 cd ~/sheet-clean
-pig
+ompig
 ```
 
 The screens below use this small file, `sales.csv`. It has inconsistent dates, stray spaces, mixed capital letters, a blank row, a repeated row and amounts written as `"1,300.00"` and `  780.25`:
@@ -48,7 +48,7 @@ Date,Customer,Region,Amount
 Open sales.csv. Make a cleaned copy called sales-clean.csv: one date format (YYYY-MM-DD), trimmed spaces, consistent capitalisation, no blank or duplicate rows, amounts as plain numbers. Never change sales.csv. List every change in changes.md.
 ```
 
-The prompt names the output files, says what must stay untouched and asks for a log. The model reads the file, writes a small script that does the cleaning and runs it. For a file this size, the script is one the model writes for itself. PiG shows it as a `write` step and folds long text to its first lines:
+The prompt names the output files, says what must stay untouched and asks for a log. The model reads the file, writes a small script that does the cleaning and runs it. For a file this size, the script is one the model writes for itself. Ompig shows it as a `write` step and folds long text to its first lines:
 
 ```text
  write clean.py
@@ -66,7 +66,7 @@ The prompt names the output files, says what must stay untouched and asks for a 
  ... (10 more lines, 20 total, ctrl+o to expand)
 ```
 
-You do not need to read the script. If you want to, press `Ctrl+O` to show all of it. Then PiG runs it. PiG folds long command output to its last lines:
+You do not need to read the script. If you want to, press `Ctrl+O` to show all of it. Then Ompig runs it. Ompig folds long command output to its last lines:
 
 ```text
  $ python3 clean.py && cat sales-clean.csv && cat changes.md
@@ -126,7 +126,7 @@ Open `sales-clean.csv` in your spreadsheet program. Keep `changes.md` with it. I
 
 ## Undo
 
-PiG added `sales-clean.csv` and `changes.md`, and in the run above also the script `clean.py`. Your model may name its script differently or run the cleaning without one. `ls -lt` lists the newest files first. Delete the files PiG added:
+Ompig added `sales-clean.csv` and `changes.md`, and in the run above also the script `clean.py`. Your model may name its script differently or run the cleaning without one. `ls -lt` lists the newest files first. Delete the files Ompig added:
 
 ```bash
 rm sales-clean.csv changes.md clean.py

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 var (
@@ -50,7 +50,7 @@ func TestPackageGitDependenciesOriginal(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			f := newPackageProcessFixture(t, `
- const mode=process.env.PIG_TEST_PACKAGE_GIT_MODE;
+ const mode=process.env.OMPIG_TEST_PACKAGE_GIT_MODE;
  if(command!=='git'){if(mode==='dependency-failure')throw new Error('simulated dependency install failure');if(!args.includes('install'))throw new Error('unexpected npm command');process.exit(0);}
  switch(args[0]){
  case 'clone':fs.mkdirSync(args[2],{recursive:true});if(mode==='clone-failure')throw new Error('simulated git clone failure');fs.writeFileSync(path.join(args[2],'package.json'),JSON.stringify({name:'repo',version:'1.0.0'}));break;
@@ -60,7 +60,7 @@ func TestPackageGitDependenciesOriginal(t *testing.T) {
  case 'fetch':case 'reset':case 'checkout':case 'remote':break;
  default:throw new Error('unexpected git command '+args.join(' '));}
  `)
-			t.Setenv("PIG_TEST_PACKAGE_GIT_MODE", tc.mode)
+			t.Setenv("OMPIG_TEST_PACKAGE_GIT_MODE", tc.mode)
 			if err := f.settings.SetNpmCommand(tc.command); err != nil {
 				t.Fatal(err)
 			}

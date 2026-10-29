@@ -3,7 +3,7 @@ package ai
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's resolveHttpProxyUrlForTarget (utils/node-http-proxy.js) run against the vendored Pi module: which proxy applies to a target URL, the NO_PROXY exclusion rules, and how the proxy URL itself is parsed and serialized (WHATWG).

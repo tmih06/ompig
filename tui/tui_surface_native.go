@@ -6,13 +6,13 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// pig additive (D91): a frontend session draws the selectors and dialogs that
+// ompig additive (D91): a frontend session draws the selectors and dialogs that
 // take the input editor's place natively, and drives them with Env.Act, which
-// PiG performs as the keys the action stands for.
+// Ompig performs as the keys the action stands for.
 
 // NativeComponent is a component that a frontend session draws as a
 // [frontend.Selector] or [frontend.Settings] node when it takes the input
@@ -58,7 +58,7 @@ func NewNativeAction(action frontend.Action) *NativeAction {
 // is no longer shown. Each key is one input sequence.
 func (t *TuiSurface) NativeKeys(a *NativeAction) []string {
 	if a.action.ViewNode != "" {
-		// pig additive (D107): a list of an extension's view, which takes
+		// ompig additive (D107): a list of an extension's view, which takes
 		// the keys through the node that shows it.
 		t.mu.Lock()
 		node := t.viewNativeNode(a.action)

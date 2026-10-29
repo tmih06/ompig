@@ -27,7 +27,7 @@ path = "packages/ai/src/providers/anthropic.ts"
 change = "modified"
 disposition = "deferred"
 evidence = ["test:ai/anthropic_federation_upstream_test.go#TestAnthropicWorkloadIdentityFederation", "test:ai/anthropic_federation_upstream_test.go#TestAnthropicAuthTreatsEmptyContextValuesAsAbsent"]
-rationale = "Deferred, not closed: the ai resolver is ported, but two audit-992-ai findings on this delta remain open on this base. In Pi this resolver is the only change that makes the coding agent treat federation-only env as Anthropic auth (ModelRuntime.hasConfiguredAuth reads configuredProviders, which model-runtime.ts:336-353 fills from models.checkAuth, and checkAuth runs this resolver). F3: PiG's registry and CLI availability (internal/codingagent/model_registry.go HasConfiguredAuth/HasAnyKey/hasEnvAuth, AuthenticatedProviders used by coding/cli/model.go) read the env-key tables instead, so pig --list-models and pig -p report no anthropic auth with only the federation variables set; red test TestAudit992FederationEnvConfiguresAnthropic (coding) on the audit-992-ai lane branch, still failing here. F6: the Node builtin-API bridge (pi-ai-bridge.mjs) rejects a federation-only anthropic request before it reaches the host; red test TestAudit992NodeBridgeForwardsFederationOnlyAnthropicRequest (coding/extension/host/subprocess), still failing here. fix-992-federation-auth owns F3 and F6; flip this row to ported when its audit tests are green. What is ported: the last-in-line federation branch of the Anthropic apiKey auth resolver: keys and ANTHROPIC_AUTH_TOKEN keep winning, the three required variables must all be present, the two optional ones are carried in env, and the source is \"workload identity federation\". Both cited tests exercise that resolver with Pi's inputs, including empty values counting as absent."
+rationale = "Deferred, not closed: the ai resolver is ported, but two audit-992-ai findings on this delta remain open on this base. In Pi this resolver is the only change that makes the coding agent treat federation-only env as Anthropic auth (ModelRuntime.hasConfiguredAuth reads configuredProviders, which model-runtime.ts:336-353 fills from models.checkAuth, and checkAuth runs this resolver). F3: Ompig's registry and CLI availability (internal/codingagent/model_registry.go HasConfiguredAuth/HasAnyKey/hasEnvAuth, AuthenticatedProviders used by coding/cli/model.go) read the env-key tables instead, so ompig --list-models and ompig -p report no anthropic auth with only the federation variables set; red test TestAudit992FederationEnvConfiguresAnthropic (coding) on the audit-992-ai lane branch, still failing here. F6: the Node builtin-API bridge (pi-ai-bridge.mjs) rejects a federation-only anthropic request before it reaches the host; red test TestAudit992NodeBridgeForwardsFederationOnlyAnthropicRequest (coding/extension/host/subprocess), still failing here. fix-992-federation-auth owns F3 and F6; flip this row to ported when its audit tests are green. What is ported: the last-in-line federation branch of the Anthropic apiKey auth resolver: keys and ANTHROPIC_AUTH_TOKEN keep winning, the three required variables must all be present, the two optional ones are carried in env, and the source is \"workload identity federation\". Both cited tests exercise that resolver with Pi's inputs, including empty values counting as absent."
 
 [[files]]
 path = "packages/ai/src/utils/overflow.ts"
@@ -48,35 +48,35 @@ path = "packages/codemode/src/runtime/host.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "The delta only widens CodemodeExecutionOptions/Sandbox workerUrl to string | URL. PiG has no worker: the QuickJS wasm module runs in process on wazero and the module and prelude are go:embed-ed (codemode/assets.go), so there is no worker entry to locate and the Bun-compiled-binary failure of #10204 cannot occur. codemode.SandboxOptions (codemode/types.go) deliberately has no worker field. The remaining host.ts behavior is unchanged and its async contract is recorded in async-contracts.toml."
+rationale = "The delta only widens CodemodeExecutionOptions/Sandbox workerUrl to string | URL. Ompig has no worker: the QuickJS wasm module runs in process on wazero and the module and prelude are go:embed-ed (codemode/assets.go), so there is no worker entry to locate and the Bun-compiled-binary failure of #10204 cannot occur. codemode.SandboxOptions (codemode/types.go) deliberately has no worker field. The remaining host.ts behavior is unchanged and its async contract is recorded in async-contracts.toml."
 
 [[files]]
 path = "packages/codemode/src/runtime/prelude-source.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:codemode/sandbox_test.go#TestEmbeddedSourcesMatchTheirRecordedHashes", "test:codemode/sandbox_test.go#TestRejectsInvalidTextAndImageArguments", "test:codemode/sandbox_test.go#TestAcceptsWrappedAndLargeBase64ImageData", "test:codemode/sandbox_test.go#TestCollectsTextImageAndConsoleOutputInOrder"]
-rationale = "The 0.99.2 delta (#10215) makes image() ignore the declared MIME type: it strips whitespace, validates the base64 alphabet, length and padding, detects PNG, JPEG (not JPEG-LS), GIF and WebP from the IMAGE_SIGNATURES base64 prefixes, rejects unknown signatures, and emits the detected type; a raw MCP image block becomes data:;base64,<data>. PiG embeds the prelude as codemode/assets/prelude.js, byte-identical to PRELUDE_SOURCE regenerated from the 0.99.2 mirror and pinned by the hash test; the invalid-argument test carries all sixteen upstream cases with the same messages and the wrapped/large test covers CRLF unwrapping and 1 MiB data."
+rationale = "The 0.99.2 delta (#10215) makes image() ignore the declared MIME type: it strips whitespace, validates the base64 alphabet, length and padding, detects PNG, JPEG (not JPEG-LS), GIF and WebP from the IMAGE_SIGNATURES base64 prefixes, rejects unknown signatures, and emits the detected type; a raw MCP image block becomes data:;base64,<data>. Ompig embeds the prelude as codemode/assets/prelude.js, byte-identical to PRELUDE_SOURCE regenerated from the 0.99.2 mirror and pinned by the hash test; the invalid-argument test carries all sixteen upstream cases with the same messages and the wrapped/large test covers CRLF unwrapping and 1 MiB data."
 
 [[files]]
 path = "packages/codemode/src/runtime/worker.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "The delta is a comment-only change about the worker entry used by Bun compiled executables; it has no behavior and PiG has no worker (see packages/codemode/src/runtime/host.ts)."
+rationale = "The delta is a comment-only change about the worker entry used by Bun compiled executables; it has no behavior and Ompig has no worker (see packages/codemode/src/runtime/host.ts)."
 
 [[files]]
 path = "packages/codemode/src/types.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "The delta changes the type and documentation of CodemodeSandboxOptions.workerUrl (string | URL, Bun worker entries). PiG has no worker, so SandboxOptions (codemode/types.go) has no counterpart field; the pkg:codemode CodemodeSandboxOptions::property:workerUrl interface row is recorded in the interface mapping, not here."
+rationale = "The delta changes the type and documentation of CodemodeSandboxOptions.workerUrl (string | URL, Bun worker entries). Ompig has no worker, so SandboxOptions (codemode/types.go) has no counterpart field; the pkg:codemode CodemodeSandboxOptions::property:workerUrl interface row is recorded in the interface mapping, not here."
 
 [[files]]
 path = "packages/coding-agent/src/config.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "The delta adds resolveCodemodeWorkerSpecifier (#10204), which picks the worker entry of the codemode sandbox for a Bun compiled executable, a bundled Node release or an unbundled checkout, and reworks the getCodemodeWorkerUrl comment. PiG has no worker: the QuickJS module runs in process on wazero and is go:embed-ed (codemode/assets.go), so there is no worker entry to resolve on any platform. The nearest failure, a module that cannot be loaded, is covered by TestCorruptWasmModuleIsASandboxError. SCRUTINIZED:approved by owner Michael Kinsy on 2026-10-01 (lead session, \"Yes go with recommendations\"). "
+rationale = "The delta adds resolveCodemodeWorkerSpecifier (#10204), which picks the worker entry of the codemode sandbox for a Bun compiled executable, a bundled Node release or an unbundled checkout, and reworks the getCodemodeWorkerUrl comment. Ompig has no worker: the QuickJS module runs in process on wazero and is go:embed-ed (codemode/assets.go), so there is no worker entry to resolve on any platform. The nearest failure, a module that cannot be loaded, is covered by TestCorruptWasmModuleIsASandboxError. SCRUTINIZED:approved by owner Michael Kinsy on 2026-10-01 (lead session, \"Yes go with recommendations\"). "
 
 [[files]]
 path = "packages/coding-agent/src/core/agent-session.ts"
@@ -167,7 +167,7 @@ path = "packages/coding-agent/src/extensions/codemode/worker.ts"
 change = "modified"
 disposition = "designed-out"
 evidence = []
-rationale = "The delta is a one-line comment change in the worker entry of the codemode sandbox: it names getCodemodeWorkerSpecifier instead of getCodemodeWorkerUrl (#10204). It has no behavior, and PiG has no worker entry: the sandbox runs in process on wazero. SCRUTINIZED:approved by owner Michael Kinsy on 2026-10-01 (lead session, \"Yes go with recommendations\"). "
+rationale = "The delta is a one-line comment change in the worker entry of the codemode sandbox: it names getCodemodeWorkerSpecifier instead of getCodemodeWorkerUrl (#10204). It has no behavior, and Ompig has no worker entry: the sandbox runs in process on wazero. SCRUTINIZED:approved by owner Michael Kinsy on 2026-10-01 (lead session, \"Yes go with recommendations\"). "
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/cli.ts"
@@ -195,7 +195,7 @@ path = "packages/coding-agent/src/extensions/mcp/oauth.ts"
 change = "modified"
 disposition = "ported"
 evidence = ["test:coding/mcpext/cli_test.go#TestMcpLoginRegistersWithTheConfiguredClientName"]
-rationale = "The delta sends settings.clientName as the dynamic-registration client_name, defaulting to the application name. TestMcpLoginRegistersWithTheConfiguredClientName registers against a local OAuth server and asserts both the configured name and the pig fallback."
+rationale = "The delta sends settings.clientName as the dynamic-registration client_name, defaulting to the application name. TestMcpLoginRegistersWithTheConfiguredClientName registers against a local OAuth server and asserts both the configured name and the ompig fallback."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/runtime.ts"

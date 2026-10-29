@@ -17,10 +17,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/session"
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/session"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // error503 is ERROR_503: a retryable provider error.
@@ -595,7 +595,7 @@ func TestGeneration(t *testing.T) {
 	})
 
 	// Ports harness-generation.test.ts "attributes model requests to pi by default and merges the Harness identity over it".
-	// pig divergence (D26): the default attribution is PiG's (ai.PiAttribution).
+	// ompig divergence (D26): the default attribution is Ompig's (ai.PiAttribution).
 	t.Run("attributes model requests by default and merges the Harness identity over it", func(t *testing.T) {
 		var seen []*ai.ClientIdentity
 		var mu sync.Mutex

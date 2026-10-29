@@ -14,13 +14,13 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/prompts"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/prompts"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 type sessionBoundTool struct {
@@ -285,6 +285,16 @@ func createSessionToolRegistry(services *AgentSessionServices, opts SessionOptio
 			definition := builtinToolDefinition(tool)
 			registry.base = append(registry.base, sessionToolEntry{tool: tool, registration: extension.RegisteredTool{Definition: definition, SourceInfo: syntheticToolSource(tool.Name(), "builtin")}})
 		}
+		// ompig addition: the subagent tools are part of the default built-in
+		// set when the session's settings enable subagents. They are registered
+		// inactive additions when the caller replaced the built-in set, so an
+		// explicit BaseToolsOverride is not silently widened.
+		if opts.BaseToolsOverride == nil {
+			for _, tool := range subagentToolsFor(opts) {
+				definition := builtinToolDefinition(tool)
+				registry.base = append(registry.base, sessionToolEntry{tool: tool, registration: extension.RegisteredTool{Definition: definition, SourceInfo: syntheticToolSource(tool.Name(), "builtin")}})
+			}
+		}
 		switch {
 		case modifiedSelection != nil && opts.AllowedTools == nil && opts.InitialActiveToolNames == nil:
 			activeNames = slices.Clone(modifiedSelection)
@@ -306,6 +316,14 @@ func createSessionToolRegistry(services *AgentSessionServices, opts SessionOptio
 			activeNames = append(activeNames, overrideKeys...)
 		default:
 			activeNames = icodingagent.ApplyToolModifiers(services.SettingsManager().ResolvedDefaultTools(), opts.DefaultToolModifiers)
+		}
+		// ompig addition: the subagent tools join the default selection. A
+		// settings layer that names its own defaultTools still wins, so an
+		// explicit selection keeps full control.
+		if opts.BaseToolsOverride == nil && opts.AllowedTools == nil && opts.InitialActiveToolNames == nil &&
+			modifiedSelection == nil && opts.NoTools == "" &&
+			services.SettingsManager().GetDefaultTools() == nil {
+			activeNames = append(activeNames, subagentToolNames...)
 		}
 	}
 	for _, tool := range opts.Tools {

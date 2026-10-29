@@ -590,7 +590,7 @@
       "TestAnthropicAuthorizeURLKeepsUpstreamParameterOrder",
       "TestOpenRouterLoginManualFallback",
       "TestOpenRouterAuthorizeURLKeepsUpstreamParameterOrder",
-      "TestLoginOpenAICodexAuthorizeURLNamesPiGAsOriginator",
+      "TestLoginOpenAICodexAuthorizeURLNamesOmpigAsOriginator",
       "TestCopilotLoginReportsTheVerificationURLAndUserCode",
       "TestAnthropicCopyCodeLoginImplementation"
     ],
@@ -831,7 +831,7 @@
       "TestArminAnimationPublishesFramesAndStops",
       "TestNewArminComponentStartsItsAnimationOnTheUI"
     ],
-    "upstream_reference": "packages/coding-agent/src/modes/interactive/components/armin.ts ArminComponent (effect selection, grid, the seven effects, frame timing, render, dispose); the image and label are Pig's (D87)",
+    "upstream_reference": "packages/coding-agent/src/modes/interactive/components/armin.ts ArminComponent (effect selection, grid, the seven effects, frame timing, render, dispose); the image and label are Ompig's (D87)",
     "mutation": "internal/codingagent/armin.go: 41 mutants run with go test -overlay -run Armin ./internal/codingagent. Killed (by the pinned-Pi frame comparison for every effect and render width, and by the animation lifecycle tests): the effect order and selection, the half-block pixel pairing and glyphs, the rain, dissolve and fade initialisation and shuffle, every effect's tick (typewriter rate and end, scanline end, rain settling and drop reset, resolve rate for fade and dissolve, crt midpoint and end, glitch phases, offsets and probabilities), the render cache, the slice-end handling for narrow widths, the accent color and label padding, the frame rate (60 for glitch), queued-frame rejection after dispose, version bump, render request, stopping when an effect finishes, and joining on dispose. Survived and left: the arminPixel row guard (the display grid never reads past the last pixel row)."
   },
   {

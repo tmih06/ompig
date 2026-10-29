@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-// piPayloadWithD115 rewrites Pi's Google payload into the shape D115 specifies: within a run of function-response turns and Gemini 2.x image turns ("Tool result image:"), every function response joins the run's first turn and the image turns follow it in order. Pi's order is google-shared.ts convertMessages; the payload oracles compare PiG with this rewrite.
+// piPayloadWithD115 rewrites Pi's Google payload into the shape D115 specifies: within a run of function-response turns and Gemini 2.x image turns ("Tool result image:"), every function response joins the run's first turn and the image turns follow it in order. Pi's order is google-shared.ts convertMessages; the payload oracles compare Ompig with this rewrite.
 func piPayloadWithD115(payload string) string {
 	var body map[string]any
 	if json.Unmarshal([]byte(payload), &body) != nil {

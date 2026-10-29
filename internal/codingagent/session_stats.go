@@ -5,9 +5,9 @@ import (
 	"math"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // SessionAccounting is the immutable all-entry accounting maintained with a Session.

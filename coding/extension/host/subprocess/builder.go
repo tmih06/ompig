@@ -19,19 +19,19 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/linkerexec"
 
 	"github.com/BurntSushi/toml"
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/execfile"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/execfile"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // BuildResult holds the outcome of an auto-build.
@@ -46,7 +46,7 @@ type BuildResult struct {
 // It detects the build system (Go or Rust) from the source directory and uses
 // content-hash caching so unchanged sources produce instant startup.
 //
-// Cache layout: ~/.pig/cache/ext/<name>-<hash>[.exe]
+// Cache layout: ~/.ompig/cache/ext/<name>-<hash>[.exe]
 type Builder struct {
 	cacheDir   string
 	configRoot string
@@ -89,7 +89,7 @@ func NewBuilder(cacheDir string) *Builder {
 }
 
 // NewBuilderWithConfigRoot creates a builder pinned to the same writable
-// config root as the running Pig process. Product assembly should prefer this
+// config root as the running Ompig process. Product assembly should prefer this
 // form so an overridden HOME/XDG root cannot diverge from extension builds.
 func NewBuilderWithConfigRoot(cacheDir, configRoot string) *Builder {
 	if abs, err := filepath.Abs(cacheDir); err == nil {
@@ -120,7 +120,7 @@ func (b *Builder) Build(name, srcDir string) (*BuildResult, error) {
 
 // BuildContext builds an extension and cancels compiler subprocesses when ctx ends. Independent sources may build concurrently; PublishArtifact deduplicates each content identity and publishes it atomically. Build retains the background-context entry point.
 func (b *Builder) BuildContext(ctx context.Context, name, srcDir string) (*BuildResult, error) {
-	// pig additive (D20): the host bounds independent cell preparations; the content-addressed publisher owns same-artifact exclusion.
+	// ompig additive (D20): the host bounds independent cell preparations; the content-addressed publisher owns same-artifact exclusion.
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func (b *Builder) BuildContext(ctx context.Context, name, srcDir string) (*Build
 		return nil, err
 	}
 	if buildType == "node" {
-		// pig additive (D92): a Piglet that strips node-extensions reports it before any cache work.
+		// ompig additive (D92): a Ompiglet that strips node-extensions reports it before any cache work.
 		if err := nodeRuntimeUnavailable(); err != nil {
 			return nil, err
 		}
@@ -162,9 +162,9 @@ func (b *Builder) BuildContext(ctx context.Context, name, srcDir string) (*Build
 			}
 		}
 
-		// A Piglet Binary may embed a prebuilt binary for this source-mode extension.
+		// A Ompiglet Binary may embed a prebuilt binary for this source-mode extension.
 		// Consulting the resolver here (before any compile) lets a toolchain-less
-		// Piglet Binary serve it without cargo/go. Nil resolver (stock pig) falls through.
+		// Ompiglet Binary serve it without cargo/go. Nil resolver (stock ompig) falls through.
 		if bin, ok := runtimecell.ResolvePrebuilt(runtimecell.PrebuiltRequest{
 			Language: buildType, Key: name, GOOS: runtime.GOOS, GOARCH: runtime.GOARCH,
 			Extensions: []runtimecell.PrebuiltExtension{{Name: name, Hash: hash}},
@@ -174,7 +174,7 @@ func (b *Builder) BuildContext(ctx context.Context, name, srcDir string) (*Build
 
 		// Content-addressed cache entry: <name>-<fullhash>/bin. Sharing the runtime
 		// cell publish primitive gives source-mode extensions the same cross-process
-		// dedup as packed cells: parallel Pig instances building the same extension
+		// dedup as packed cells: parallel Ompig instances building the same extension
 		// take a per-digest lock, so exactly one compiles and the rest reuse the
 		// published binary instead of racing on a shared cache path.
 		finalDir := filepath.Join(b.cacheDir, fileNameComponent(name)+"-"+hash)
@@ -195,7 +195,7 @@ func (b *Builder) BuildContext(ctx context.Context, name, srcDir string) (*Build
 		entry, err := runtimecell.PublishArtifact(ctx, finalDir, artifactName, hash, buildType, func(scratch string) (string, error) {
 			// Preflight the compiler toolchain before announcing a build, so a
 			// toolchain-less host gets actionable guidance instead of an opaque exec
-			// error deep in go build / cargo build. Piglet Binaries and prebuilt
+			// error deep in go build / cargo build. Ompiglet Binaries and prebuilt
 			// packages ship compiled binaries served by the resolver above or reused
 			// from a warm cache, so neither reaches this build closure.
 			if err := ensureBuildToolchain(ctx, buildType); err != nil {
@@ -372,12 +372,12 @@ func hashSourceDirStamped(src, buildType string) (digest, stamp string, err erro
 		return "", "", err
 	}
 
-	// Go extensions resolve the pig SDK (and any other local dependency)
+	// Go extensions resolve the ompig SDK (and any other local dependency)
 	// through `replace` directives that point outside the extension directory.
 	// `go build` embeds that replaced source, so a change there produces a
 	// different binary. Hash the replaced directories too: without this,
 	// editing the SDK leaves the extension's own files untouched, the cache
-	// key is unchanged, and pig keeps serving a binary built against the old
+	// key is unchanged, and ompig keeps serving a binary built against the old
 	// SDK: which silently breaks the host↔extension wire contract
 	// (MaxFrameSize, register fields) the instant the host advances. The
 	// replaced path is mixed in as well so relocating the SDK also
@@ -474,14 +474,14 @@ func walkDirSources(root string, exts []string, visit func(path, rel string) err
 			return nil
 		}
 		// Skip transient per-build artifacts. buildGo writes a uniquely-named
-		// temp go.mod/go.sum (.pig-build-*) into the extension source dir for the
+		// temp go.mod/go.sum (.ompig-build-*) into the extension source dir for the
 		// staged-SDK build. Hashing it let concurrent builds in separate
 		// processes observe each other's transient temp modfiles and mint a
 		// divergent cache key per instance for identical source -- cache
-		// thrashing and redundant rebuilds when many pig instances share an
+		// thrashing and redundant rebuilds when many ompig instances share an
 		// extension. The temp modfile is not real source; the staged SDK it
 		// points at is already hashed separately via hashWithStagedSDK.
-		if strings.HasPrefix(d.Name(), ".pig-build-") {
+		if strings.HasPrefix(d.Name(), ".ompig-build-") {
 			return nil
 		}
 		for _, ext := range exts {
@@ -499,7 +499,7 @@ func walkDirSources(root string, exts []string, visit func(path, rel string) err
 
 // goLocalReplaceDirs returns physical existing directories that srcDir's go.mod
 // replaces with a local filesystem path. These hold dependency source, most
-// importantly the Pig extension SDK, that the build embeds. An explicit local
+// importantly the Ompig extension SDK, that the build embeds. An explicit local
 // replacement participates even when its lexical path is inside srcDir because
 // the general source walk deliberately skips nested symlinks and hidden trees.
 func goLocalReplaceDirs(srcDir string) ([]string, error) {
@@ -566,8 +566,8 @@ func isWithin(base, target string) bool {
 }
 
 const (
-	goSDKModule  = "github.com/MichaelKinsy/PiG/extensions/sdk"
-	rustSDKCrate = "pig-sdk"
+	goSDKModule  = "github.com/tmih06/ompig/extensions/sdk"
+	rustSDKCrate = "ompig-sdk"
 )
 
 // buildSDKFingerprint identifies the SDK a build compiled against, whether it
@@ -607,7 +607,7 @@ func (b *Builder) resolveStagedSDK(srcDir, buildType string) (string, error) {
 	if !b.needsStagedSDK(srcDir, buildType) {
 		return "", nil
 	}
-	// pig additive (D92): this binary staged no SDK for a language the active Piglet strips.
+	// ompig additive (D92): this binary staged no SDK for a language the active Ompiglet strips.
 	if err := runtimecell.StrippedSDKError(buildType); err != nil {
 		return "", err
 	}
@@ -616,7 +616,7 @@ func (b *Builder) resolveStagedSDK(srcDir, buildType string) (string, error) {
 		return "", err
 	}
 	if info, err := os.Stat(stagedDir); err != nil || !info.IsDir() {
-		return "", fmt.Errorf("staged %s SDK is missing at %s; run `pig reload` with the active config root", label, stagedDir)
+		return "", fmt.Errorf("staged %s SDK is missing at %s; run `ompig reload` with the active config root", label, stagedDir)
 	}
 	if b.verifyStagedSDK != nil {
 		if err := b.verifyStagedSDK(stagedDir, buildType); err != nil {
@@ -640,7 +640,7 @@ func goNeedsStagedSDK(srcDir, stagedDir string) bool {
 	}
 	required := false
 	for _, requirement := range file.Require {
-		// pig additive (D19): legacy imports use a build-local alias of the current SDK, not an obsolete authored replacement.
+		// ompig additive (D19): legacy imports use a build-local alias of the current SDK, not an obsolete authored replacement.
 		if requirement.Mod.Path == extsource.LegacyGoSDKModulePath {
 			return true
 		}
@@ -655,7 +655,7 @@ func goNeedsStagedSDK(srcDir, stagedDir string) bool {
 		if replacement.Old.Path == goSDKModule {
 			// A filesystem replace is authoritative only if its target resolves.
 			// In the source tree the scaffold's relative replace points at the
-			// real SDK module; once installed to ~/.pig/extensions that path is
+			// real SDK module; once installed to ~/.ompig/extensions that path is
 			// dead, so the staged SDK must override it (buildGo does this via a
 			// temp -modfile, leaving the installed go.mod untouched). A
 			// module-version replace is a registry redirect and stands.
@@ -697,7 +697,7 @@ func rustNeedsStagedSDK(srcDir, stagedDir string) bool {
 			// A path dependency is authoritative only if it resolves. In the
 			// source tree the scaffold's relative path points at the real SDK
 			// crate, so no staging is needed. Once the extension is installed to
-			// ~/.pig/extensions that relative path is dead, so the staged SDK
+			// ~/.ompig/extensions that relative path is dead, so the staged SDK
 			// must redirect it (buildRust isolates the crate to do so without
 			// mutating the shared manifest).
 			resolved := path
@@ -826,14 +826,14 @@ func sdkStampsMatch(root string, exts []string, files []sdkFileStamp) bool {
 }
 
 // ensureBuildToolchain fails early with actionable guidance when the toolchain a
-// source extension needs is not installed. pig compiles extensions (upstream pi
+// source extension needs is not installed. ompig compiles extensions (upstream pi
 // does not), so on a bare host the build otherwise dies with an opaque
 // "exec: \"go\": executable file not found in $PATH". The remedy is to install
-// the toolchain or run the extension from a Piglet Binary or prebuilt package, which
+// the toolchain or run the extension from a Ompiglet Binary or prebuilt package, which
 // ship a compiled binary and need no toolchain. Unknown build types are a no-op.
 func ensureBuildToolchain(ctx context.Context, buildType string) error {
 	if buildType == "node" {
-		// pig additive (D19): a process that requests another TypeScript runtime checks Node only when a launch falls back to it.
+		// ompig additive (D19): a process that requests another TypeScript runtime checks Node only when a launch falls back to it.
 		if !typeScriptBuildNeedsNode() {
 			return nodeRuntimeUnavailable()
 		}
@@ -845,7 +845,7 @@ func ensureBuildToolchain(ctx context.Context, buildType string) error {
 		return nil
 	}
 	if _, err := exec.LookPath(tool); err != nil {
-		return fmt.Errorf("cannot build %s extension: the %q toolchain is not installed; install it, or run this extension from a Piglet Binary or prebuilt package (which need no toolchain)", buildType, tool)
+		return fmt.Errorf("cannot build %s extension: the %q toolchain is not installed; install it, or run this extension from a Ompiglet Binary or prebuilt package (which need no toolchain)", buildType, tool)
 	}
 	return nil
 }
@@ -944,7 +944,7 @@ func rejectNonExecutableArtifact(path, srcDir string) error {
 		"%s compiled to a library archive, not a program: its package is not `main`.\n"+
 			"An extension built this way cannot be executed. Either give the package "+
 			"`package main` with a `func main()`, or expose "+
-			"`func Extension() *sdk.Extension` so Pig builds it through the factory path",
+			"`func Extension() *sdk.Extension` so Ompig builds it through the factory path",
 		srcDir)
 }
 
@@ -954,16 +954,16 @@ func buildRust(ctx context.Context, cacheRoot, srcDir, outPath, stagedSDK string
 	buildDir := srcDir
 	args := []string{}
 	if stagedSDK != "" {
-		// Redirect the pig-sdk path dependency (the SDK scaffold's canonical
+		// Redirect the ompig-sdk path dependency (the SDK scaffold's canonical
 		// form) to the staged SDK. Cargo has no `--modfile` equivalent to Go's
 		// staged go.mod, and [patch.crates-io] cannot redirect a path dependency
 		// (cargo reads the stale/relative dead path before patch resolution),
 		// which is why an installed crate whose Cargo.toml points at a moved
-		// checkout fails to build. When the crate declares an inline pig-sdk path
+		// checkout fails to build. When the crate declares an inline ompig-sdk path
 		// dep, build an isolated copy with a rewritten manifest in this build's
 		// private scratch dir (the parent of outPath). This never mutates the
-		// shared installed crate, so concurrent Pig builds and manifest readers
-		// stay safe. A registry-form `pig-sdk = "x.y"` dep needs no copy and is
+		// shared installed crate, so concurrent Ompig builds and manifest readers
+		// stay safe. A registry-form `ompig-sdk = "x.y"` dep needs no copy and is
 		// handled by the crates-io patch below.
 		if hasInlinePigSDKPath(srcDir) {
 			buildDir = filepath.Join(filepath.Dir(outPath), "rust-crate")
@@ -1034,17 +1034,17 @@ func cargoBuildTargetDirectory(workingDirectory string) string {
 	return filepath.Join(workingDirectory, target)
 }
 
-// pigSDKInlinePathRe matches an inline `pig-sdk = { ... path = "..." }`
+// ompigSDKInlinePathRe matches an inline `ompig-sdk = { ... path = "..." }`
 // dependency, capturing everything up to (and including) the opening quote of
-// the path value so it can be replaced. Registry-form deps (`pig-sdk = "x.y"`)
-// and section-form `[dependencies.pig-sdk]` tables do not match; the SDK
+// the path value so it can be replaced. Registry-form deps (`ompig-sdk = "x.y"`)
+// and section-form `[dependencies.ompig-sdk]` tables do not match; the SDK
 // scaffolds emit the inline path form.
-var pigSDKInlinePathRe = lazyregexp.New(`(pig-sdk\s*=\s*\{[^}]*?path\s*=\s*)"[^"]*"`)
+var ompigSDKInlinePathRe = lazyregexp.New(`(ompig-sdk\s*=\s*\{[^}]*?path\s*=\s*)"[^"]*"`)
 
-// rewritePigSDKPath redirects an inline pig-sdk path dependency to newPath,
+// rewritePigSDKPath redirects an inline ompig-sdk path dependency to newPath,
 // returning the rewritten manifest and whether a replacement occurred.
 func rewritePigSDKPath(manifest, newPath string) (string, bool) {
-	loc := pigSDKInlinePathRe.FindStringSubmatchIndex(manifest)
+	loc := ompigSDKInlinePathRe.FindStringSubmatchIndex(manifest)
 	if loc == nil {
 		return manifest, false
 	}
@@ -1055,19 +1055,19 @@ func rewritePigSDKPath(manifest, newPath string) (string, bool) {
 }
 
 // hasInlinePigSDKPath reports whether srcDir/Cargo.toml declares an inline
-// pig-sdk path dependency that must be redirected to the staged SDK.
+// ompig-sdk path dependency that must be redirected to the staged SDK.
 func hasInlinePigSDKPath(srcDir string) bool {
 	data, err := os.ReadFile(filepath.Join(srcDir, "Cargo.toml"))
 	if err != nil {
 		return false
 	}
-	return pigSDKInlinePathRe.Match(data)
+	return ompigSDKInlinePathRe.Match(data)
 }
 
 // copyCrateWithStagedSDK copies the Rust crate at srcDir into dstDir (skipping
 // build artifacts and VCS metadata) and rewrites the copied Cargo.toml's inline
-// pig-sdk path dependency to stagedSDK. Building the copy leaves the shared
-// installed crate untouched, keeping concurrent Pig builds and manifest readers
+// ompig-sdk path dependency to stagedSDK. Building the copy leaves the shared
+// installed crate untouched, keeping concurrent Ompig builds and manifest readers
 // safe.
 func copyCrateWithStagedSDK(srcDir, dstDir, stagedSDK string) error {
 	walk := func(path string, d fs.DirEntry, err error) error {
@@ -1133,7 +1133,7 @@ func stagedGoModFile(srcDir, stagedSDK string) (string, func(), error) {
 		if requirement.Mod.Path != extsource.LegacyGoSDKModulePath {
 			continue
 		}
-		aliasDir, err = os.MkdirTemp("", "pig-legacy-sdk-*")
+		aliasDir, err = os.MkdirTemp("", "ompig-legacy-sdk-*")
 		if err != nil {
 			return "", func() {}, err
 		}
@@ -1156,7 +1156,7 @@ func stagedGoModFile(srcDir, stagedSDK string) (string, func(), error) {
 	if err != nil {
 		return "", func() {}, fmt.Errorf("format build-local go.mod: %w", err)
 	}
-	temp, err := os.CreateTemp(srcDir, ".pig-build-*.mod")
+	temp, err := os.CreateTemp(srcDir, ".ompig-build-*.mod")
 	if err != nil {
 		return "", func() {}, err
 	}

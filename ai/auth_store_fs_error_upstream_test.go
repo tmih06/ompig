@@ -17,7 +17,7 @@ func fileWhereDirectory(t *testing.T, dir string) {
 	}
 }
 
-// FileAuthStorageBackend creates the store's directory with mkdirSync(dir, {recursive: true}) and the store with writeFileSync when existsSync finds neither, reads the store with readFileSync, and rethrows their errors as Node reports them (auth-storage.ts:55-68,181). A directory path that is a file therefore fails at the store's open, and a store that is a directory at its read, which Node reports without a path. PiG's auth store returns the same messages, without its "auth: create" and "auth: read" prefixes. Each row runs Pi's own store on the same state first.
+// FileAuthStorageBackend creates the store's directory with mkdirSync(dir, {recursive: true}) and the store with writeFileSync when existsSync finds neither, reads the store with readFileSync, and rethrows their errors as Node reports them (auth-storage.ts:55-68,181). A directory path that is a file therefore fails at the store's open, and a store that is a directory at its read, which Node reports without a path. Ompig's auth store returns the same messages, without its "auth: create" and "auth: read" prefixes. Each row runs Pi's own store on the same state first.
 func TestAuthStorageFSErrorsAreNodeErrorsUpstream(t *testing.T) {
 	t.Run("directory is a file", func(t *testing.T) {
 		dir := filepath.Join(t.TempDir(), "agent")
@@ -57,7 +57,7 @@ func TestAuthStorageFSErrorsAreNodeErrorsUpstream(t *testing.T) {
 	})
 }
 
-// FileModelsStore goes through the same backend, so its directory, create and read errors are Node's too, without PiG's "models store: ensure dir", "models store: create" and "models store: read" prefixes. A recursive mkdir under a file fails with ENOTDIR for the requested path.
+// FileModelsStore goes through the same backend, so its directory, create and read errors are Node's too, without Ompig's "models store: ensure dir", "models store: create" and "models store: read" prefixes. A recursive mkdir under a file fails with ENOTDIR for the requested path.
 func TestFileModelsStoreFSErrorsAreNodeErrorsUpstream(t *testing.T) {
 	t.Run("mkdir under a file", func(t *testing.T) {
 		file := filepath.Join(t.TempDir(), "agent")

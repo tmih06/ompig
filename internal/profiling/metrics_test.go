@@ -107,7 +107,7 @@ func TestCollectMetricsCountsDescriptors(t *testing.T) {
 func TestStartWithMetricsWritesTheRecord(t *testing.T) {
 	dir := t.TempDir()
 	StartWith("metrics", dir, io.Discard)()
-	matches, _ := filepath.Glob(filepath.Join(dir, "pig-*-metrics.json"))
+	matches, _ := filepath.Glob(filepath.Join(dir, "ompig-*-metrics.json"))
 	if len(matches) != 1 {
 		t.Fatalf("want one metrics file, got %v", matches)
 	}

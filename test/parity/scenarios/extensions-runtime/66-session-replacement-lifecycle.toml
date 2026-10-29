@@ -18,17 +18,17 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home", "LIFECYCLE_LOG={{TEMP}}/trace.json"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home", "LIFECYCLE_LOG={{TEMP}}/trace.json"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1", "LIFECYCLE_LOG={{TEMP}}/trace.json"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/ext/session-replacement-lifecycle.mjs", "../../../../.upstream/current/packages/coding-agent/examples/extensions/rpc-demo.ts"]
+ompig_extensions = ["testdata/ext/session-replacement-lifecycle.mjs", "../../../../.upstream/current/packages/coding-agent/examples/extensions/rpc-demo.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/session-replacement-lifecycle.mjs", "../../../../.upstream/current/packages/coding-agent/examples/extensions/rpc-demo.ts"]
 
 [tmux]
 width = 240
 height = 45
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "LIFECYCLE before:at"
@@ -37,7 +37,7 @@ capture_end = "resume:start:ok"
 # /clone checks that the Session file exists (agent-session-runtime.ts fork: "not been saved yet"), and both
 # programs write it on message_end, after awaiting the extensions' message_end handlers (_handleAgentEvent). The
 # answer is visible before that from message_update. Pi's handlers run in process, so its await is microtasks;
-# PiG's extensions are subprocesses, so a /clone typed the moment "42" appears could run before the write. The
+# Ompig's extensions are subprocesses, so a /clone typed the moment "42" appears could run before the write. The
 # step therefore also waits for rpc-demo.ts's turn_end status, which both programs set only after the message is
 # persisted. Only the LIFECYCLE line is compared, so this changes when /clone is typed, not what is compared.
 [[tmux.steps]]

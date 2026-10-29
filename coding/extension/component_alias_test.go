@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // pi-tui Component (render, invalidate) is what a ToolDefinition renderer, an EntryRenderer and a MessageRenderer return; the host mounts it as it is, without an assertion.

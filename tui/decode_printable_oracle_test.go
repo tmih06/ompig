@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // decodePrintableKey (keys.ts decodeKittyPrintable and decodeModifyOtherKeysPrintable) runs against the vendored Pi module over CSI-u and modifyOtherKeys sequences with plain, shifted, locked and oversized numbers.
-// A modifier that does not fit 32 bits wraps through ToInt32 in the bit tests, a codepoint above 2^53 is a rounded double, and Shift with no shifted key leaves the base codepoint alone in Pi; PiG uppercases a base letter a-z there (D185), which pigUppercasesBaseOnlyShiftLetter allows and nothing else.
+// A modifier that does not fit 32 bits wraps through ToInt32 in the bit tests, a codepoint above 2^53 is a rounded double, and Shift with no shifted key leaves the base codepoint alone in Pi; Ompig uppercases a base letter a-z there (D185), which ompigUppercasesBaseOnlyShiftLetter allows and nothing else.
 func TestDecodePrintableKeyMatchesPi(t *testing.T) {
 	var corpus []string
 	add := func(format string, args ...any) { corpus = append(corpus, fmt.Sprintf(format, args...)) }
@@ -45,7 +45,7 @@ emit(input.map((data) => { const r = keys.decodePrintableKey(data); return { S: 
 	for i, data := range corpus {
 		s, ok := DecodePrintableKey(data)
 		got := result{unitEscape(s), ok}
-		if pigUppercasesBaseOnlyShiftLetter(data, got.S, want[i].S) {
+		if ompigUppercasesBaseOnlyShiftLetter(data, got.S, want[i].S) {
 			continue
 		}
 		if got != want[i] {
@@ -59,8 +59,8 @@ emit(input.map((data) => { const r = keys.decodePrintableKey(data); return { S: 
 	}
 }
 
-// pigUppercasesBaseOnlyShiftLetter reports the one sequence class D185 allows to differ from Pi: a Kitty CSI-u sequence with Shift, no Alt or Ctrl and no shifted key, whose base letter a-z Pi types as it is and PiG types as the capital.
-func pigUppercasesBaseOnlyShiftLetter(data, got, want string) bool {
+// ompigUppercasesBaseOnlyShiftLetter reports the one sequence class D185 allows to differ from Pi: a Kitty CSI-u sequence with Shift, no Alt or Ctrl and no shifted key, whose base letter a-z Pi types as it is and Ompig types as the capital.
+func ompigUppercasesBaseOnlyShiftLetter(data, got, want string) bool {
 	m := kittyCSIURegex.FindStringSubmatch(data)
 	if m == nil || m[2] != "" || m[4] == "" || len(want) != 1 || want[0] < 'a' || want[0] > 'z' {
 		return false

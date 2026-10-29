@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 var acmeAttribution = ClientAttribution{Name: "acme", URL: "https://acme.example"}
@@ -28,10 +28,10 @@ func TestClientIdentityVersionDefaultsToTheProductVersion(t *testing.T) {
 	}
 }
 
-// pig divergence (D65): the detailed form is pig/<version> (<platform> <release>; <arch>) where Pi sends pi/<version> (<platform>; <runtime>; <arch>); short is the product name.
+// ompig divergence (D65): the detailed form is ompig/<version> (<platform> <release>; <arch>) where Pi sends pi/<version> (<platform>; <runtime>; <arch>); short is the product name.
 func TestFormatUserAgentForms(t *testing.T) {
 	detailed := FormatUserAgent(nil)
-	if want := "pig/" + ProductVersion + " ("; !strings.HasPrefix(detailed, want) {
+	if want := "ompig/" + ProductVersion + " ("; !strings.HasPrefix(detailed, want) {
 		t.Fatalf("FormatUserAgent(nil) = %q, want prefix %q", detailed, want)
 	}
 	if got, want := FormatUserAgent(&ClientIdentity{Version: new("9.9.9")}), strings.Replace(detailed, ProductVersion, "9.9.9", 1); got != want {
@@ -121,12 +121,12 @@ func TestIdentitySendsNoAttributionUnlessEnabled(t *testing.T) {
 	}
 }
 
-// pig divergence (D26): PiAttribution carries PiG's name, URL and category where Pi's PI_ATTRIBUTION carries `pi`, `https://pi.dev` and `cli-agent`.
+// ompig divergence (D26): PiAttribution carries Ompig's name, URL and category where Pi's PI_ATTRIBUTION carries `pi`, `https://pi.dev` and `cli-agent`.
 func TestIdentityAttributesOpenRouterRequests(t *testing.T) {
 	openRouter := identityTarget("openrouter", "https://openrouter.ai/api/v1")
 	piG := &ClientIdentity{Attribution: &PiAttribution}
 	if got, want := GetAttributionHeaders(openRouter, piG), map[string]string{"HTTP-Referer": pigidentity.AttributionURL, "X-OpenRouter-Title": pigidentity.AttributionName, "X-OpenRouter-Categories": pigidentity.AttributionCategory}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("PiG attribution = %v, want %v", got, want)
+		t.Fatalf("Ompig attribution = %v, want %v", got, want)
 	}
 	acme := &ClientAttribution{Name: "acme", URL: "https://acme.example", Categories: []string{"cli-agent", "cloud-agent"}}
 	if got, want := GetAttributionHeaders(openRouter, &ClientIdentity{Attribution: acme}), map[string]string{"HTTP-Referer": "https://acme.example", "X-OpenRouter-Title": "acme", "X-OpenRouter-Categories": "cli-agent,cloud-agent"}; !reflect.DeepEqual(got, want) {

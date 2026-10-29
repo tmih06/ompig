@@ -2,7 +2,7 @@
 # Surface: a setTimeout(0) scheduled by a model_select listener during new_session, set_model and cycle_model.
 #
 # Pi awaits the listener inside the command, and every await after it is a microtask, so rpc-mode.ts writes the command's response before the timer's macrotask runs: the toast follows the response.
-# PiG ran the extension in a Node subprocess and the timer fired while the listener's result crossed the process boundary, so the toast came first (found with @liyu1981/pi-tweaks' remember-model on Pi 1402973a).
+# Ompig ran the extension in a Node subprocess and the timer fired while the listener's result crossed the process boundary, so the toast came first (found with @liyu1981/pi-tweaks' remember-model on Pi 1402973a).
 
 name = "71-rpc-deferred-ui-after-response"
 description = "A toast an extension defers with setTimeout(0) from model_select reaches the RPC output after the command's response"
@@ -32,11 +32,11 @@ wait_contains = ['"id":"cycle","type":"response","command":"cycle_model"', '"mes
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model"]
+ompig = ["OMPIG_HOME=testdata/multi-model"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model/agent"]
-pig_extensions = ["testdata/deferred-model-toast.ts"]
+ompig_extensions = ["testdata/deferred-model-toast.ts"]
 pi_extensions = ["testdata/deferred-model-toast.ts"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 
 [assert]

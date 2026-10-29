@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 ## Core committee
 
-The core committee is PiG's creator and its maintainers. Every committee member is a maintainer.
+The core committee is Ompig's creator and its maintainers. Every committee member is a maintainer.
 
 | Member | Role |
 |---|---|

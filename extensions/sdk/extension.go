@@ -16,10 +16,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/internal/jsloop"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/internal/kitwire"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/kit"
+	"github.com/tmih06/ompig/extensions/sdk/internal/jsloop"
+	"github.com/tmih06/ompig/extensions/sdk/internal/kitwire"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/kit"
 )
 
 // Schema is a JSON Schema object for tool parameter definitions.
@@ -686,7 +686,7 @@ func (o *remoteOverlay) frameArgs(args map[string]any) map[string]any {
 }
 
 // New creates a new extension with the given name.
-// The name must match the identity of the selected Package, Piglet, or exact path.
+// The name must match the identity of the selected Package, Ompiglet, or exact path.
 func New(name string) *Extension {
 	return &Extension{
 		name:                     name,
@@ -757,11 +757,11 @@ func (e *Extension) ToolWithGuidelines(name, description string, schema Schema, 
 }
 
 // ToolWithSource registers a tool with an explicit source identifier. A nil schema panics before registration.
-// Source overrides the default extension-name attribution Piglet tool
+// Source overrides the default extension-name attribution Ompiglet tool
 // scoping reads, allowing extensions that wrap external tool sources (e.g.
 // MCP servers) to provide per-tool provenance. GetAllTools reports it in the
 // deprecated ToolInfo.Source; ToolInfo.SourceInfo is the extension's.
-// pig additive (D23): ToolWithSource adds per-tool source attribution.
+// ompig additive (D23): ToolWithSource adds per-tool source attribution.
 // Example: ext.ToolWithSource("list_models", desc, schema, "mcp:mctl-platform", guidelines, handler)
 func (e *Extension) ToolWithSource(name, description string, schema Schema, source string, guidelines []string, handler ToolFunc) {
 	e.registerTool(toolDef{Name: name, Description: description, Parameters: schema, PromptGuidelines: guidelines, Source: source}, handler, nil, ToolRenderers{})
@@ -1071,19 +1071,19 @@ func (e *Extension) OnEvent(eventName string, handler EventFunc) func() {
 
 // Run connects to the host, registers, and processes messages until shutdown.
 // This blocks until the host sends a shutdown message or the connection closes.
-// The socket path comes from the PIG_EXT_SOCKET environment variable.
+// The socket path comes from the OMPIG_EXT_SOCKET environment variable.
 func (e *Extension) Run() error {
-	sockPath := os.Getenv("PIG_EXT_SOCKET")
+	sockPath := os.Getenv("OMPIG_EXT_SOCKET")
 	if sockPath == "" {
-		return fmt.Errorf("PIG_EXT_SOCKET not set: extension must be launched by pig")
+		return fmt.Errorf("OMPIG_EXT_SOCKET not set: extension must be launched by ompig")
 	}
 	return e.RunWithSocket(sockPath)
 }
 
 // RunWithSocket connects to the host at the given socket path. Use this for
-// testing extensions without the PIG_EXT_SOCKET environment variable.
+// testing extensions without the OMPIG_EXT_SOCKET environment variable.
 func (e *Extension) RunWithSocket(sockPath string) error {
-	// The extension author or Pig host selects this local Unix socket; no network URL is resolved.
+	// The extension author or Ompig host selects this local Unix socket; no network URL is resolved.
 	if started := takeHelperConn(sockPath); started != nil {
 		return e.runWithConn(started.nc, started, sockPath)
 	}
@@ -1096,7 +1096,7 @@ func (e *Extension) RunWithSocket(sockPath string) error {
 }
 
 // RunWithConn serves the extension over an already-connected net.Conn, with no
-// subprocess or socket. A fused Piglet Binary uses this to run the extension
+// subprocess or socket. A fused Ompiglet Binary uses this to run the extension
 // inside the host process over an in-memory pipe. The connection is closed when the serve
 // loop ends. Mirrors RunWithSocket's handshake and main loop.
 func (e *Extension) RunWithConn(nc net.Conn) error { return e.runWithConn(nc, nil, "") }
@@ -1374,17 +1374,17 @@ func (e *Extension) handleArmedRequest(id string, req *requestMsg, ctx Context) 
 			fmt.Fprintf(os.Stderr, "extension: recovered from panic in %s %q: %v\n%s\n", req.Method, name, r, debug.Stack())
 			var result any
 			if boundaryData != nil {
-				result = map[string]any{"_pigBoundaryEntries": boundaryData["entries"], "_pigBoundaryResult": nil}
+				result = map[string]any{"_ompigBoundaryEntries": boundaryData["entries"], "_ompigBoundaryResult": nil}
 			}
 			if toolCall != nil {
-				reply := map[string]any{"_pigToolCallResult": nil}
+				reply := map[string]any{"_ompigToolCallResult": nil}
 				if edited, ok := toolCall.edit(); ok {
-					reply["_pigToolCallInput"] = edited
+					reply["_ompigToolCallInput"] = edited
 				}
 				result = reply
 			}
 			if promptOptions != nil {
-				result = map[string]any{"_pigPromptSections": promptOptions["sections"], "_pigPromptSelectedTools": promptOptions["selectedTools"], "_pigPromptOptions": promptOptions, "_pigPromptResult": nil}
+				result = map[string]any{"_ompigPromptSections": promptOptions["sections"], "_ompigPromptSelectedTools": promptOptions["selectedTools"], "_ompigPromptOptions": promptOptions, "_ompigPromptResult": nil}
 			}
 			_ = e.conn.respond(id, result, fmt.Errorf("handler panicked: %v", r))
 		}
@@ -1583,22 +1583,22 @@ func (e *Extension) handleArmedRequest(id string, req *requestMsg, ctx Context) 
 			})
 		}
 		if req.Event == "before_agent_start" {
-			result = map[string]any{"_pigPromptSections": promptOptions["sections"], "_pigPromptSelectedTools": promptOptions["selectedTools"], "_pigPromptOptions": promptOptions, "_pigPromptResult": result}
+			result = map[string]any{"_ompigPromptSections": promptOptions["sections"], "_ompigPromptSelectedTools": promptOptions["selectedTools"], "_ompigPromptOptions": promptOptions, "_ompigPromptResult": result}
 		}
 		// Pi's handler edits event.input in place and the runner reads it back (runner.ts emitToolCall). The host cannot share the map, so the reply carries the input the handler left when it differs from the one it received, with the handler result and error.
 		if req.Event == "tool_call" {
-			reply := map[string]any{"_pigToolCallResult": result}
+			reply := map[string]any{"_ompigToolCallResult": result}
 			if edited, ok := toolCall.edit(); ok {
-				reply["_pigToolCallInput"] = edited
+				reply["_ompigToolCallInput"] = edited
 			}
 			result = reply
 		}
-		// pig additive (D19): return boundary mutations separately from the handler result and error.
+		// ompig additive (D19): return boundary mutations separately from the handler result and error.
 		if req.Event == "agent_before_settle" || req.Event == "turn_end" {
 			if err != nil {
 				result = nil
 			}
-			result = map[string]any{"_pigBoundaryEntries": data["entries"], "_pigBoundaryResult": result}
+			result = map[string]any{"_ompigBoundaryEntries": data["entries"], "_ompigBoundaryResult": result}
 		}
 		_ = e.conn.respond(id, result, err)
 
@@ -1726,7 +1726,7 @@ func reportHostCallFailure(method string, err error, result *callResultMsg) {
 	if err == nil && result != nil && result.Error != nil {
 		err = errors.New(result.Error.Message)
 	}
-	fmt.Fprintf(os.Stderr, "pig: host call %s failed: %v\n", method, err)
+	fmt.Fprintf(os.Stderr, "ompig: host call %s failed: %v\n", method, err)
 }
 
 // markNotifyHandled records that the main loop applied one queued notify frame.
@@ -2118,7 +2118,7 @@ func NewToolError(content string) *ToolError {
 type ToolResult struct {
 	Content string
 	Images  []ImageContent
-	// pig additive (D160): the collapsed-view preview of a tool result.
+	// ompig additive (D160): the collapsed-view preview of a tool result.
 	Preview string
 	Details any
 	// StructuredContent is upstream AgentToolResult.structuredContent: the machine-readable result matching the tool's OutputSchema, for programmatic callers. It is not sent to the model. Nil leaves it unset.

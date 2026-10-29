@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // index.ts exports DEFAULT_COMPACTION_SETTINGS, findCutPoint, findTurnStartIndex and getLastAssistantUsage. The public Go names read the same settings defaults the SettingsManager resolves (compaction.ts:126, settings-manager.ts getCompactionSettings) and operate on a real Session's entries.

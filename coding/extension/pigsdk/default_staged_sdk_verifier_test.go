@@ -4,11 +4,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Linking the SDKs registers their staged-SDK check for library entry points: a program that can build Go extensions at all
-// (it links this package) verifies the staged copy, whether or not it is the pig command.
+// (it links this package) verifies the staged copy, whether or not it is the ompig command.
 func TestLinkingTheSDKsRegistersTheirStagedSDKCheck(t *testing.T) {
 	verify := subprocess.DefaultStagedSDKVerifier(t.TempDir())
 	if verify == nil {

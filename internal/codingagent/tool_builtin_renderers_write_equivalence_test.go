@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
-// eagerWriteCache is the write highlight cache as Pig ported it before frames read lines lazily: every line highlighted as
+// eagerWriteCache is the write highlight cache as Ompig ported it before frames read lines lazily: every line highlighted as
 // it arrives and the leading block highlighted again after every update.
 type eagerWriteCache struct {
 	rawPath, lang, rawContent string

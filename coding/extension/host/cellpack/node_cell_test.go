@@ -13,7 +13,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 type archiveEntry struct {
@@ -53,7 +53,7 @@ func nodeArchive(t *testing.T, entries ...archiveEntry) ([]byte, string) {
 }
 
 func nodeManifest(digest string) Manifest {
-	return Manifest{PigCoreVersion: "test", Cells: []CellEntry{{
+	return Manifest{OmpigCoreVersion: "test", Cells: []CellEntry{{
 		Language: "node", Key: "packed-node:k", Strategy: "packed-node", OS: runtime.GOOS, Arch: runtime.GOARCH,
 		Binary: "node/abc.tar", Digest: digest, Extensions: []ExtEntry{{Name: "greeter", Hash: "h", Source: "greeter"}},
 	}}}
@@ -134,10 +134,10 @@ func TestExtractNodeCellRefusesMismatchedOrEscapingArchives(t *testing.T) {
 	}
 }
 
-// A Binary publishes its Node cell under the PiG home, as every other embedded
-// cell (3a50b7960): ConfigRoot()/piglet-binary-cells/node/<digest>, absolute
-// for a relative PIG_HOME, and under $XDG_CONFIG_HOME/pig without PIG_HOME.
-// Nothing is written anywhere else, in particular not under ~/.pig.
+// A Binary publishes its Node cell under the Ompig home, as every other embedded
+// cell (3a50b7960): ConfigRoot()/ompiglet-binary-cells/node/<digest>, absolute
+// for a relative OMPIG_HOME, and under $XDG_CONFIG_HOME/ompig without OMPIG_HOME.
+// Nothing is written anywhere else, in particular not under ~/.ompig.
 func TestRegisterPublishesTheNodeCellOnlyUnderThePigHome(t *testing.T) {
 	data, digest := nodeArchive(t, archiveEntry{name: "greeter/index.ts", body: "export default function () {}\n"})
 	manifest, err := json.Marshal(nodeManifest(digest))
@@ -152,20 +152,20 @@ func TestRegisterPublishesTheNodeCellOnlyUnderThePigHome(t *testing.T) {
 		runtimecell.SetPrebuiltResolver(nil)
 		loadedCells = nil
 	})
-	for name, pigHome := range map[string]func(t *testing.T, sandbox string) string{
-		"relative PIG_HOME": func(t *testing.T, sandbox string) string {
+	for name, ompigHome := range map[string]func(t *testing.T, sandbox string) string{
+		"relative OMPIG_HOME": func(t *testing.T, sandbox string) string {
 			work := filepath.Join(sandbox, "work")
 			if err := os.Mkdir(work, 0o755); err != nil {
 				t.Fatal(err)
 			}
 			t.Chdir(work)
-			t.Setenv("PIG_HOME", "relative-home")
+			t.Setenv("OMPIG_HOME", "relative-home")
 			return filepath.Join(work, "relative-home")
 		},
 		"XDG_CONFIG_HOME": func(t *testing.T, sandbox string) string {
-			t.Setenv("PIG_HOME", "")
+			t.Setenv("OMPIG_HOME", "")
 			t.Setenv("XDG_CONFIG_HOME", filepath.Join(sandbox, "xdg"))
-			return filepath.Join(sandbox, "xdg", "pig")
+			return filepath.Join(sandbox, "xdg", "ompig")
 		},
 	} {
 		t.Run(name, func(t *testing.T) {
@@ -175,11 +175,11 @@ func TestRegisterPublishesTheNodeCellOnlyUnderThePigHome(t *testing.T) {
 			}
 			t.Setenv("HOME", filepath.Join(sandbox, "home"))
 			t.Setenv("USERPROFILE", filepath.Join(sandbox, "home"))
-			root := pigHome(t, sandbox)
+			root := ompigHome(t, sandbox)
 			if err := registerFrom(fsys); err != nil {
 				t.Fatalf("registerFrom: %v", err)
 			}
-			cellsDir := filepath.Join(root, "piglet-binary-cells", "node")
+			cellsDir := filepath.Join(root, "ompiglet-binary-cells", "node")
 			want := filepath.Join(cellsDir, digest)
 			if loaded := LoadedCells(); len(loaded) != 1 || loaded[0].BinaryPath != filepath.Join(want, "sources") {
 				t.Fatalf("loaded cells = %#v, want BinaryPath %s", loaded, filepath.Join(want, "sources"))

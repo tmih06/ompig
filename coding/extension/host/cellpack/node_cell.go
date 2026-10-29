@@ -14,12 +14,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
-// pig additive (D18): a Piglet Binary carries its TypeScript and JavaScript
+// ompig additive (D18): a Ompiglet Binary carries its TypeScript and JavaScript
 // extensions as their sources; the host runs them with the user's installed
-// Node exactly as Stock PiG runs the same extensions.
+// Node exactly as Stock Ompig runs the same extensions.
 
 const nodeLanguage = "node"
 
@@ -38,7 +38,7 @@ func nodeSourcesDir(dest, digest string) string {
 
 // extractNodeCell verifies a Node cell archive against its manifest digest and
 // publishes its sources once per digest. Publication is the content-addressed,
-// atomic cache entry Stock PiG uses for its own Node runtime, so concurrent
+// atomic cache entry Stock Ompig uses for its own Node runtime, so concurrent
 // Binaries share one complete extraction and never observe a partial one.
 func extractNodeCell(data []byte, c CellEntry, dest string) error {
 	sum := sha256.Sum256(data)

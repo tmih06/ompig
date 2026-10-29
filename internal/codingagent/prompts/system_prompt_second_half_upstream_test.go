@@ -1,4 +1,4 @@
-//go:build !pig_strip_docs
+//go:build !ompig_strip_docs
 
 package prompts
 
@@ -8,26 +8,26 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
-// Cases 8-14 of packages/coding-agent/test/system-prompt.test.ts (111-209). Keep their original inputs and strengthen substring/count checks to complete emitted-section equality. D22 owns only the PiG product and documentation-location literals.
+// Cases 8-14 of packages/coding-agent/test/system-prompt.test.ts (111-209). Keep their original inputs and strengthen substring/count checks to complete emitted-section equality. D22 owns only the Ompig product and documentation-location literals.
 func TestUpstreamSystemPromptSecondHalfExactSections(t *testing.T) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		t.Fatal(err)
 	}
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	docsRoot := pigdocs.DocsDir(home)
-	docs := "<docs>\nPiG documentation (read only when the user asks about pig itself, its SDK, extensions, themes, skills, or TUI):\n" +
+	docs := "<docs>\nOmpig documentation (read only when the user asks about ompig itself, its SDK, extensions, themes, skills, or TUI):\n" +
 		"- Main documentation: " + filepath.Join(docsRoot, "README.md") + "\n" +
 		"- Additional docs: " + docsRoot + "\n" +
-		"- Examples: https://github.com/MichaelKinsy/PiG/tree/main/examples (extensions, custom tools, SDK)\n" +
-		"- When reading pig docs or examples, resolve docs/... under Additional docs and examples/... under Examples, not the current working directory\n" +
-		"- When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), pig packages (docs/packages.md), environment variables (docs/environment-variables.md), MCP servers (docs/mcp.md), codemode scripts and non-LLM models such as classifiers and image models (docs/codemode.md)\n" +
-		"- When working on pig topics, read the docs and examples, and follow .md cross-references before implementing\n" +
-		"- Always read pig .md files completely and follow links to related docs (e.g., tui.md for TUI API details)\n</docs>"
+		"- Examples: https://github.com/tmih06/ompig/tree/main/examples (extensions, custom tools, SDK)\n" +
+		"- When reading ompig docs or examples, resolve docs/... under Additional docs and examples/... under Examples, not the current working directory\n" +
+		"- When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), ompig packages (docs/packages.md), environment variables (docs/environment-variables.md), MCP servers (docs/mcp.md), codemode scripts and non-LLM models such as classifiers and image models (docs/codemode.md)\n" +
+		"- When working on ompig topics, read the docs and examples, and follow .md cross-references before implementing\n" +
+		"- Always read ompig .md files completely and follow links to related docs (e.g., tui.md for TUI API details)\n</docs>"
 	const toolsTail = "\n\nIn addition to the tools above, you may have access to other custom tools depending on the project.\n</tools>"
 	const rulesTail = "\n- Be concise in your responses\n- Show file paths clearly when working with files\n</rules>"
 	const skills = `<skills>

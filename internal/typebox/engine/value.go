@@ -17,7 +17,7 @@ import (
 	"math/big"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Undef is JavaScript's undefined.

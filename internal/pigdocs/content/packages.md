@@ -1,9 +1,9 @@
 # Packages
 
-A package is a versioned PiG/Pi distribution envelope for resources: extensions,
+A package is a versioned Ompig/Pi distribution envelope for resources: extensions,
 skills, prompts, themes, hooks, MCP definitions, agent environments, and
-compatible cross-tool agents. Install packages to add capabilities to PiG. Use
-an independent [piglet](piglets.md) to select and scope capabilities into one
+compatible cross-tool agents. Install packages to add capabilities to Ompig. Use
+an independent [ompiglet](ompiglets.md) to select and scope capabilities into one
 named agent.
 
 Return to the [docs router](README.md) or read the short
@@ -22,7 +22,7 @@ Return to the [docs router](README.md) or read the short
 | Agent environment | standard Dev Container definition and portable local closure |
 | Cross-tool agent | compatible plugin roots may expose agent declarations |
 
-A Package does not author Piglet, Piglet Binary, or Piglet Image manifests.
+A Package does not author Ompiglet, Ompiglet Binary, or Ompiglet Image manifests.
 
 ## Package source layout
 
@@ -56,14 +56,14 @@ upstream-compatible `package.json` `pi` block may select explicit members:
 }
 ```
 
-PiG-specific membership uses the additive `pig` block without changing Pi's
+Ompig-specific membership uses the additive `ompig` block without changing Pi's
 fields. As in Pi, a package with a `pi` block loads only what it declares: its
-hooks, MCP servers, and agent environments come from the `pig` block, not from
+hooks, MCP servers, and agent environments come from the `ompig` block, not from
 conventional directories.
 
 ```json
 {
-  "pig": {
+  "ompig": {
     "hooks": ["hooks/*.json"],
     "mcpServers": ["mcp/*.json"],
     "agentEnvironments": [".devcontainer/go/devcontainer.json"]
@@ -74,11 +74,11 @@ conventional directories.
 ## Author and validate
 
 Author Package membership directly in ordinary `package.json`, using the standard
-`pi` block and optional PiG Resource fields above. Validate without installing:
+`pi` block and optional Ompig Resource fields above. Validate without installing:
 
 ```bash
-pig package validate ./base-coding
-pig package validate ./base-coding --json
+ompig package validate ./base-coding
+ompig package validate ./base-coding --json
 ```
 
 Validation rejects malformed manifests and JSON Resources, missing members, duplicate non-skill public names, lexical or symlink escape, missing Compose services, and absolute or escaping bind mounts.
@@ -87,131 +87,131 @@ At startup, duplicate skill names keep the first valid definition and produce a 
 
 Direct Package installation preserves upstream behavior: it records the Package
 in settings and normal discovery exposes enabled members, defaulting to all
-unless Package filters narrow them. Installation does not copy Piglets or
+unless Package filters narrow them. Installation does not copy Ompiglets or
 Agents, merge MCP configuration, create diagnostics, or generate entry points.
-A Piglet Package dependency resolves through the same materializer without
+A Ompiglet Package dependency resolves through the same materializer without
 mutating global/project settings; only explicit member selections activate.
 
 ## Install
 
 ```bash
-pig install ./local-package
-pig install git:https://github.com/example/package.git
-pig install 'git:https://github.com/example/monorepo.git@v2#subdirectory=packages%2Freview'
-pig install npm:@example/package
-pig install 'npm:@example/private@1.2.3?registry=https%3A%2F%2Fnpm.example.com%2Fteam'
+ompig install ./local-package
+ompig install git:https://github.com/example/package.git
+ompig install 'git:https://github.com/example/monorepo.git@v2#subdirectory=packages%2Freview'
+ompig install npm:@example/package
+ompig install 'npm:@example/private@1.2.3?registry=https%3A%2F%2Fnpm.example.com%2Fteam'
 ```
 
 Use `npm:` for registry sources and `git:` for Git shorthand such as `github.com/user/repo` or `git@github.com:user/repo`. Without a prefix, those spellings are local paths, even when the path does not exist. Explicit HTTPS and SSH URLs do not require `git:`.
 
-A Git subdirectory selector is `#subdirectory=<URL-escaped-relative-path>`. PiG
+A Git subdirectory selector is `#subdirectory=<URL-escaped-relative-path>`. Ompig
 clones one repository checkout under the canonical Git root, resolves the
 selected Package root inside it, rejects missing or symlink-escaping selections,
 and keeps the checkout while another configured Package still uses a sibling
 subdirectory.
 
 A custom npm registry selector is
-`?registry=<URL-escaped-absolute-HTTPS-URL>`. PiG gives each registry a distinct
+`?registry=<URL-escaped-absolute-HTTPS-URL>`. Ompig gives each registry a distinct
 managed root and passes the non-secret URL to npm, pnpm, or Bun. Registry URLs
 with embedded credentials, query strings, or fragments are rejected. Configure
 tokens and custom CAs through that package manager's normal `.npmrc`, environment,
-or certificate mechanism; PiG never accepts or writes a registry token.
+or certificate mechanism; Ompig never accepts or writes a registry token.
 
 For user-scoped packages, version metadata lookups run from managed package storage and do not consult the invoking project's `.npmrc` (security divergence D79). Your user configuration and explicit `npmCommand` arguments still apply. Trusted project-scoped packages keep Pi's project `.npmrc` behavior.
 
-PiG chooses npm, pnpm, or Bun flags from the `npmCommand` executable name, or the name after its last `--` separator. It removes only a `.cmd` or `.exe` suffix and preserves case. It does not run a version probe to identify the package manager.
+Ompig chooses npm, pnpm, or Bun flags from the `npmCommand` executable name, or the name after its last `--` separator. It removes only a `.cmd` or `.exe` suffix and preserves case. It does not run a version probe to identify the package manager.
 
-Products may add source schemes through PiG's install-resolver contract. For
-example, a product-enabled PiG may accept a `marketplace:` source. Raw PiG does
+Products may add source schemes through Ompig's install-resolver contract. For
+example, a product-enabled Ompig may accept a `marketplace:` source. Raw Ompig does
 not need to know that product's HTTP or authentication protocol.
 
 ## Validate without installing
 
 ```bash
-pig install ./extension --validate-only --json
-pig install --validate-only --set ./ext-a,./ext-b --json
+ompig install ./extension --validate-only --json
+ompig install --validate-only --set ./ext-a,./ext-b --json
 ```
 
 Validation resolves, builds, starts, and registers the selected extension set
 without changing package settings. Use it before publishing or before claiming
-that a piglet's extensions work together.
+that a ompiglet's extensions work together.
 
 ## Scope
 
 Installs are user-scoped by default. `--local` records a workspace dependency in
-`.pig/settings.json`:
+`.ompig/settings.json`:
 
 ```bash
-pig install ./workspace-extension --local
+ompig install ./workspace-extension --local
 ```
 
-PiG materializes managed sources once:
+Ompig materializes managed sources once:
 
 | Scope/source | Root |
 |---|---|
-| user npm | `$PIG_CODING_AGENT_DIR/npm` (default `~/.pig/agent/npm`) |
-| user Git | `$PIG_CODING_AGENT_DIR/git` |
-| downloaded catalog bundle | `$PIG_CODING_AGENT_DIR/catalog` |
-| project npm | `<workspace>/.pig/npm` |
-| project Git | `<workspace>/.pig/git` |
+| user npm | `$OMPIG_CODING_AGENT_DIR/npm` (default `~/.ompig/agent/npm`) |
+| user Git | `$OMPIG_CODING_AGENT_DIR/git` |
+| downloaded catalog bundle | `$OMPIG_CODING_AGENT_DIR/catalog` |
+| project npm | `<workspace>/.ompig/npm` |
+| project Git | `<workspace>/.ompig/git` |
 | local path | remains at its authored path |
 
-Plugin and Package records may refer to the same materialized source root; PiG
+Plugin and Package records may refer to the same materialized source root; Ompig
 does not duplicate it into separate caches.
 
-## Listing a PiG package
+## Listing a Ompig package
 
 ### Publish to npm
 
-Add the keyword `pig-package` and a description to `package.json`, then run `npm publish`. The pi-in-go.dev catalog finds packages by npm keyword when its site builds each day, labels community listings as unreviewed, and accepts no uploads.
+Add the keyword `ompig-package` and a description to `package.json`, then run `npm publish`. The ompig.dev catalog finds packages by npm keyword when its site builds each day, labels community listings as unreviewed, and accepts no uploads.
 
-`pig package publish [<dir>] --to npm` is optional sugar over `npm publish`. It validates the Package, checks the fields the catalog reads and that `name@version` is free on npm, shows npm's dry run, and publishes only with `--yes`. PiG never edits `package.json` and never handles an npm token. See [Publishing](publishing.md).
+`ompig package publish [<dir>] --to npm` is optional sugar over `npm publish`. It validates the Package, checks the fields the catalog reads and that `name@version` is free on npm, shows npm's dry run, and publishes only with `--yes`. Ompig never edits `package.json` and never handles an npm token. See [Publishing](publishing.md).
 
-## Editors and ACP: pig-acp
+## Editors and ACP: ompig-acp
 
-`pig install npm:@pi-in-go/pigpen-acp` installs the Package, whose `/acp` command prints the editor settings. It does not install the `pig-acp` executable. An editor that speaks the Agent Client Protocol (Zed, JetBrains) starts `pig-acp`, and `pig-acp` starts `pig --mode rpc` for each session. No prebuilt `pig-acp` download exists yet, so one command builds it from the source the Package ships. It has no dependencies and needs Go 1.26 or later (`pig setup go` installs one).
+`ompig install npm:@ompig/pigpen-acp` installs the Package, whose `/acp` command prints the editor settings. It does not install the `ompig-acp` executable. An editor that speaks the Agent Client Protocol (Zed, JetBrains) starts `ompig-acp`, and `ompig-acp` starts `ompig --mode rpc` for each session. No prebuilt `ompig-acp` download exists yet, so one command builds it from the source the Package ships. It has no dependencies and needs Go 1.26 or later (`ompig setup go` installs one).
 
 ```sh
-pig install npm:@pi-in-go/pigpen-acp
-pig acp install
-pig-acp --version        # pig-acp 0.1.0 (ACP protocol version 1)
+ompig install npm:@ompig/pigpen-acp
+ompig acp install
+ompig-acp --version        # ompig-acp 0.1.0 (ACP protocol version 1)
 ```
 
-`pig acp install` works offline from the installed Package's files, builds with the local Go toolchain, and writes `pig-acp` (`pig-acp.exe` on Windows) next to `pig`: in the directory of `$PIG_BIN`, else `~/.local/bin`. It prints the path, and says so when that directory is not on your `PATH`; use the full path as the editor command then.
+`ompig acp install` works offline from the installed Package's files, builds with the local Go toolchain, and writes `ompig-acp` (`ompig-acp.exe` on Windows) next to `ompig`: in the directory of `$OMPIG_BIN`, else `~/.local/bin`. It prints the path, and says so when that directory is not on your `PATH`; use the full path as the editor command then.
 
 Then point the editor at it. In Zed `settings.json`:
 
 ```json
 {
   "agent_servers": {
-    "PiG": {
+    "Ompig": {
       "type": "custom",
-      "command": "pig-acp",
-      "args": ["--pig", "/path/to/pig"],
+      "command": "ompig-acp",
+      "args": ["--ompig", "/path/to/ompig"],
       "env": {}
     }
   }
 }
 ```
 
-`--pig` names the `pig` executable (or a built Piglet Binary) to drive; without it `pig-acp` uses its own override variable (see `pig-acp --help`), then `pig` on `PATH`. If pig has no model or key yet, the editor shows an authentication error with `pig-acp --terminal-login`, which starts pig in the editor's terminal so you can sign in. Installing the Package or building the `acp` Piglet does not turn a Piglet Binary into an ACP server; the editor always runs `pig-acp`.
+`--ompig` names the `ompig` executable (or a built Ompiglet Binary) to drive; without it `ompig-acp` uses its own override variable (see `ompig-acp --help`), then `ompig` on `PATH`. If ompig has no model or key yet, the editor shows an authentication error with `ompig-acp --terminal-login`, which starts ompig in the editor's terminal so you can sign in. Installing the Package or building the `acp` Ompiglet does not turn a Ompiglet Binary into an ACP server; the editor always runs `ompig-acp`.
 
 ## Manage installed Packages
 
-PiG retains upstream Pi's top-level Package verbs:
+Ompig retains upstream Pi's top-level Package verbs:
 
 ```bash
-pig package list
-pig update
-pig update --self
-pig update <source>
-pig update --extension <source>
-pig update --extensions
-pig update --all
-pig update --force
-pig remove <source>
-pig uninstall <source>
-pig uninstall <source> --local --approve
+ompig package list
+ompig update
+ompig update --self
+ompig update <source>
+ompig update --extension <source>
+ompig update --extensions
+ompig update --all
+ompig update --force
+ompig remove <source>
+ompig uninstall <source>
+ompig uninstall <source> --local --approve
 ```
 
 `uninstall` is an alias for `remove`, including `--local` and help. Both commands remove the Package from the selected settings scope. Removing the last Package retains `"packages": []` in that settings file.
@@ -220,30 +220,30 @@ Package commands show `Installing`, `Removing`, or `Updating` before work starts
 
 npm updates batch eligible Packages by scope. Git updates reconcile the configured ref and reinstall dependencies when the checkout changes or dependencies are missing. Installing another ref of an already configured Package replaces its source without discarding resource filters. A failed new Git installation removes its incomplete checkout.
 
-Bare update, `--self`, and the `self`/`pig` positional targets update PiG.
+Bare update, `--self`, and the `self`/`ompig` positional targets update Ompig.
 `--extensions` updates installed Packages only; `--all` updates Packages before
-PiG. `--extension` names one Package and `--force` reinstalls the current PiG
+Ompig. `--extension` names one Package and `--force` reinstalls the current Ompig
 release. Conflicting targets fail before either update path starts.
 
-PiG's owned management surface uses full-word noun/verb commands such as
-`pig package list`, while retaining upstream-compatible install, remove, and
-update behavior. Bare `pig list` retains upstream-compatible Package listing.
-Use `pig --help` as the authority for the binary you are running.
+Ompig's owned management surface uses full-word noun/verb commands such as
+`ompig package list`, while retaining upstream-compatible install, remove, and
+update behavior. Bare `ompig list` retains upstream-compatible Package listing.
+Use `ompig --help` as the authority for the binary you are running.
 
 ### Enable or disable one installed Resource
 
 Use Package filters when you no longer want one Resource without removing the whole Package:
 
 ```bash
-pig config
-pig config --local
+ompig config
+ompig config --local
 ```
 
-Use `pig config --local` to edit project-scoped overrides. The TUI updates
+Use `ompig config --local` to edit project-scoped overrides. The TUI updates
 settings. It does not update the Package's `package.json`. At startup a
 declared extension, skill, prompt, or theme that matches nothing is skipped, as
-Pi skips it, and the rest of the Package loads; `pig config` lists it as
-missing so you can disable it. `pig package validate` remains strict for
+Pi skips it, and the rest of the Package loads; `ompig config` lists it as
+missing so you can disable it. `ompig package validate` remains strict for
 publication.
 
 Startup ignores malformed `package.json` JSON and discovers conventional directories instead. A `pi` object loads only its valid resource arrays. A wrong-typed field declares no resources and does not discard valid sibling fields. These manifest cases produce no diagnostic, as in Pi. Explicit installation and publication validation remain strict.
@@ -266,25 +266,25 @@ first use:
 The cache makes later matching loads fast, but the cache path is not a package
 version or reproducibility identity.
 
-## Published Piglet releases
+## Published Ompiglet releases
 
-A Piglet's source publishes to npm with `pig piglet publish <name> --to npm`, and its signed per-target Binaries publish to GitHub Releases with `--to github`. Neither uses a pi-in-go.dev upload API. See [Publishing](publishing.md). Pull by installed Piglet name is not available in this release; see [Piglets](piglets.md#planned-not-in-this-release-named-pulls-and-image-artifacts).
+A Ompiglet's source publishes to npm with `ompig ompiglet publish <name> --to npm`, and its signed per-target Binaries publish to GitHub Releases with `--to github`. Neither uses a ompig.dev upload API. See [Publishing](publishing.md). Pull by installed Ompiglet name is not available in this release; see [Ompiglets](ompiglets.md#planned-not-in-this-release-named-pulls-and-image-artifacts).
 
-## Packages and piglets
+## Packages and ompiglets
 
-| Package | Piglet |
+| Package | Ompiglet |
 |---|---|
 | distributes source/Resources | selects/scopes one independent named agent and may build a Binary artifact; Image is reserved |
 | installed and updated as a unit | runs through Host or Binary carrier; Image is planned |
-| never owns a Piglet | may reference zero or more Packages plus direct origins |
+| never owns a Ompiglet | may reference zero or more Packages plus direct origins |
 | preserves source provenance | records agent defaults and exact component realization/materialization |
 
-Piglets remain independent from Packages. A Piglet release publishes signed Binary facets to GitHub Releases with `pig piglet publish --to github` and its source to npm with `--to npm`; Piglet Image publication remains reserved until an Image producer exists.
+Ompiglets remain independent from Packages. A Ompiglet release publishes signed Binary facets to GitHub Releases with `ompig ompiglet publish --to github` and its source to npm with `--to npm`; Ompiglet Image publication remains reserved until an Image producer exists.
 
 ## Authoring safety
 
 Do not copy every resource from a running session into a new package implicitly.
 A session may contain third-party resources whose licenses and provenance do not
 permit rebundling. Package authoring should add explicit resources and preserve
-their source/version information. Piglet creation from a session is safer
+their source/version information. Ompiglet creation from a session is safer
 because it writes references rather than copying source.

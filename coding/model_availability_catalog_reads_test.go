@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // registerLoggedNativeProviders registers native providers whose catalog callbacks record their provider ID, and returns the ordered log.

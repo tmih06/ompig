@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports interactive-mode.ts setHiddenThinkingLabel (2373-2383) and its reset on session replacement (2473): the extension's label

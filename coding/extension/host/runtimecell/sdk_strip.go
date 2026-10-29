@@ -1,12 +1,12 @@
 package runtimecell
 
-import "github.com/MichaelKinsy/PiG/internal/pigstrip"
+import "github.com/tmih06/ompig/internal/pigstrip"
 
 // StrippedSDKError reports the error for a language ("go", "rust" or
 // "python") whose embedded extension SDK this process runs without, or nil.
-// pig additive (D92): a Piglet strips an extension SDK, so a build that needs
+// ompig additive (D92): a Ompiglet strips an extension SDK, so a build that needs
 // the SDK this binary would stage reports the strip instead of a missing SDK.
-// Stock PiG strips none.
+// Stock Ompig strips none.
 func StrippedSDKError(lang string) error {
 	var id, what string
 	switch lang {

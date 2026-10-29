@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 // piIdentity matches the values Pi sends to identify itself: pi.dev, "pi",
@@ -22,10 +22,10 @@ var piIdentity = regexp.MustCompile(`(?i)(^pi$|^pi[ /(]|pi\.dev|^pi-coding-agent
 
 // D26 extends to the Services-owned request path: a model call through
 // ModelRuntime with the identity the Session sends (getClientIdentity) reaches the
-// provider's HTTP endpoint carrying PiG's attribution, never Pi's. The recorder
+// provider's HTTP endpoint carrying Ompig's attribution, never Pi's. The recorder
 // stands in for OpenRouter-, NVIDIA- and OpenCode-shaped endpoints selected by
 // provider id, as Pi's getAttributionHeaders selects them.
-func TestModelRuntimeRequestsCarryPiGAttributionNeverPis(t *testing.T) {
+func TestModelRuntimeRequestsCarryOmpigAttributionNeverPis(t *testing.T) {
 	type wire struct {
 		provider string
 		enabled  bool

@@ -5,9 +5,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports pi-tui's layout.ts: the fullscreen layout engine that lays a component
@@ -15,7 +15,7 @@ import (
 // scrollbars. Names/structure mirror upstream. Forced Go mechanics: the
 // number|undefined allocated height is *int (nil == undefined/auto); the
 // Map<Component, Map<number, string[]>> render cache is a nested Go map keyed by
-// component identity (pig components are pointers); the discriminated LayoutNode
+// component identity (ompig components are pointers); the discriminated LayoutNode
 // union is dispatched with a type switch; JS Math.round becomes math.Round
 // (identical for the non-negative values here).
 

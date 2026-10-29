@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // pi: packages/coding-agent/src/core/session-manager.ts parseSessionEntryLine (skips only blank, malformed and null lines), migrateV1ToV2 (a strict-mode property

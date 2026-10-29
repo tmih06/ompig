@@ -12,7 +12,7 @@ import (
 	"slices"
 	"sync"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // maxSafeInteger is JavaScript's Number.MAX_SAFE_INTEGER, the largest integer a Durable Object SQL binding keeps.

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // A restarted extension's declarations are exactly what its new process registered. The supervisor's restart of an isolated binary (adoptConn) and a Node cell's recovery (acceptPackedExt) both keep the Extension the runner holds and adopt the new registration into it: each fixture registers its command, flag, shortcut and tool with the generation that loaded it, crashes once, and the recovered Extension must report the second generation, as a fresh load of the same code would. The first registration's values are stale state no Pi process can observe, since Pi has no supervisor restart.

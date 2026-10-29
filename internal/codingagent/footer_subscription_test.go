@@ -5,15 +5,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The real Node registration and footer caller must preserve Pi's explicit
 // subscription flag. OAuth alone does not imply (sub), nor does API-key auth
 // on a subscription-capable provider (footer.ts, model-runtime.ts).
 func TestExtensionOAuthSubscriptionFooter(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fixture, err := filepath.Abs("../../test/parity/scenarios/footer/testdata/subscription.mjs")
 	if err != nil {
 		t.Fatal(err)

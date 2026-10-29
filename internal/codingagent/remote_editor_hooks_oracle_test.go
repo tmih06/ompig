@@ -7,7 +7,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // ceHookProbes are the keys of Pi's CustomEditor.handleInput that reach a handler the component set (the interrupt, exit, paste-image

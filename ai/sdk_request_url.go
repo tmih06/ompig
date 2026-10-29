@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // fetchCredentialsError is the TypeError WHATWG fetch throws for a URL with a username or password.

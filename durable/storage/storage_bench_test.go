@@ -8,12 +8,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/durabletest"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/durable/storage/jsonl"
-	jsonlnode "github.com/MichaelKinsy/PiG/durable/storage/jsonl/node"
-	sqlitenode "github.com/MichaelKinsy/PiG/durable/storage/sqlite/node"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/durabletest"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/durable/storage/jsonl"
+	jsonlnode "github.com/tmih06/ompig/durable/storage/jsonl/node"
+	sqlitenode "github.com/tmih06/ompig/durable/storage/sqlite/node"
 )
 
 var benchmarkContext = context.Background()

@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	sandbox "github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/ai"
+	sandbox "github.com/tmih06/ompig/codemode"
 )
 
 // execute.ts formatOutput and joinAdjacentText (v1.1.0): the unit-level contract that the session tests in

@@ -15,9 +15,9 @@ extensions/sdk-py/tests/test_extension_api_099.py:156: KeyError: 'exposure'
 E   AssertionError: assert {'result': No...are_loadout'}} == {'result': {'...'error': None}
 extensions/sdk-py/tests/test_extension_api_099.py:186: AssertionError: assert {'result': No...are_loadout'}} == {'result': {'...'error': None}
 E   NotImplementedError: not implemented: Extension.register_mcp_server
-extensions/sdk-py/pig_sdk/__init__.py:1986: NotImplementedError: not implemented: Extension.register_mcp_server
+extensions/sdk-py/ompig_sdk/__init__.py:1986: NotImplementedError: not implemented: Extension.register_mcp_server
 E   NotImplementedError: not implemented: Extension.register_mcp_server
-extensions/sdk-py/pig_sdk/__init__.py:1986: NotImplementedError: not implemented: Extension.register_mcp_server
+extensions/sdk-py/ompig_sdk/__init__.py:1986: NotImplementedError: not implemented: Extension.register_mcp_server
 E   AssertionError: assert {'message': 'not implemented: Context.get_mcp_servers'} is None
 extensions/sdk-py/tests/test_extension_api_099.py:274: AssertionError: assert {'message': 'not implemented: Context.get_mcp_servers'} is None
 E   assert [] == ['Invalid MCP...Path': '/e'}]]
@@ -25,15 +25,15 @@ extensions/sdk-py/tests/test_extension_api_099.py:302: assert [] == ['Invalid MC
 E   AssertionError: assert [] == [[{'name': 'a...Path': '/b'}]]
 extensions/sdk-py/tests/test_extension_api_099.py:320: AssertionError: assert [] == [[{'name': 'a...Path': '/b'}]]
 E   NotImplementedError: not implemented: Extension.register_virtual_model
-extensions/sdk-py/pig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
+extensions/sdk-py/ompig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
 E   NotImplementedError: not implemented: Extension.register_virtual_model
-extensions/sdk-py/pig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
+extensions/sdk-py/ompig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
 E   AssertionError: assert {'message': 'not implemented: Extension.register_virtual_model'} is None
 extensions/sdk-py/tests/test_extension_api_099.py:368: AssertionError: assert {'message': 'not implemented: Extension.register_virtual_model'} is None
 E   NotImplementedError: not implemented: Extension.register_virtual_model
-extensions/sdk-py/pig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
+extensions/sdk-py/ompig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
 E   NotImplementedError: not implemented: Extension.register_virtual_model
-extensions/sdk-py/pig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
+extensions/sdk-py/ompig_sdk/__init__.py:1992: NotImplementedError: not implemented: Extension.register_virtual_model
 E   AssertionError: assert [] == [{'theme': 'd...me': 'light'}]
 extensions/sdk-py/tests/test_extension_api_099.py:444: AssertionError: assert [] == [{'theme': 'd...me': 'light'}]
 E   AssertionError: assert ['not impleme...get_settings'] == ['settings ar...ot sent them']
@@ -55,13 +55,13 @@ extensions/sdk-py/tests/test_sdk.py:30: TimeoutError: timed out
 E   KeyError: 'call'
 extensions/sdk-py/tests/test_extension_api_099.py:681: KeyError: 'call'
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   AssertionError: assert 'handler' in 'unknown method: events.dispatch'
 extensions/sdk-py/tests/test_event_bus.py:135: AssertionError: assert 'handler' in 'unknown method: events.dispatch'
 E   KeyError: 'call'
@@ -71,13 +71,13 @@ extensions/sdk-py/tests/test_sdk.py:30: TimeoutError: timed out
 E   KeyError: 'call'
 extensions/sdk-py/tests/test_event_bus.py:210: KeyError: 'call'
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 E   NotImplementedError: not implemented: Extension.events
-extensions/sdk-py/pig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
+extensions/sdk-py/ompig_sdk/__init__.py:1999: NotImplementedError: not implemented: Extension.events
 =============================== warnings summary ===============================
 tests/test_event_bus.py::test_emit_from_the_extension_has_no_parent_and_rejects_a_payload_without_a_json_form
 =========================== short test summary info ============================
@@ -148,5 +148,5 @@ FAILED tests/test_event_bus.py::test_on_rejects_a_handler_that_is_not_callable
     --- FAIL: TestPythonSDKToolEventsAndNewEvents/strict (6.60s)
     --- FAIL: TestPythonSDKToolEventsAndNewEvents/shared-ok (6.65s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/test/extension-conformance	20.280s
+FAIL	github.com/tmih06/ompig/test/extension-conformance	20.280s
 FAIL

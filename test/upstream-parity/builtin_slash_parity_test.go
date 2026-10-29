@@ -7,24 +7,24 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // builtinNamePattern matches each entry of upstream's BUILTIN_SLASH_COMMANDS
 // array, whose elements start `{ name: "<id>"`.
 var builtinNamePattern = regexp.MustCompile(`(?m)^\s*\{\s*name:\s*"([a-z][a-z0-9-]*)"`)
 
-// TestBuiltinSlashCommands_CoverUpstream pins pig's builtin slash commands
-// against upstream's BUILTIN_SLASH_COMMANDS rather than against pig's own
+// TestBuiltinSlashCommands_CoverUpstream pins ompig's builtin slash commands
+// against upstream's BUILTIN_SLASH_COMMANDS rather than against ompig's own
 // list. The existing registry test compares BuiltinSlashCommands() to
 // defaultBuiltins(), which cannot notice upstream adding a command, and a
 // source comment claimed for a long time that seven upstream builtins were
 // unimplemented stubs when in fact all of them had landed.
 //
 // A missing command is a real user-visible gap: the user types a command that
-// works in pi and pig answers "Unknown command".
+// works in pi and ompig answers "Unknown command".
 func TestBuiltinSlashCommands_CoverUpstream(t *testing.T) {
 	repoRoot := testenv.ModuleRoot(t)
 	src := filepath.Join(repoRoot, ".upstream", "current",
@@ -39,14 +39,14 @@ func TestBuiltinSlashCommands_CoverUpstream(t *testing.T) {
 		t.Fatal("parsed no builtin names from upstream slash-commands.ts; the array shape changed")
 	}
 
-	var pigNames []string
+	var ompigNames []string
 	for _, cmd := range codingagent.BuiltinSlashCommands() {
-		pigNames = append(pigNames, cmd.Name)
+		ompigNames = append(ompigNames, cmd.Name)
 	}
 
 	for _, name := range upstreamNames {
-		if !slices.Contains(pigNames, name) {
-			gap(t, "slash:"+name, "upstream builtin /%s not implemented in pig; "+
+		if !slices.Contains(ompigNames, name) {
+			gap(t, "slash:"+name, "upstream builtin /%s not implemented in ompig; "+
 				"implement it or record a numbered divergence in docs/parity/DIVERGENCES.md", name)
 		}
 	}

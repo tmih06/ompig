@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -12,7 +12,7 @@ import (
 
 // TestEnsureBuildToolchain_MissingToolchainIsActionable guards the toolchain-less
 // host experience: instead of an opaque "exec: \"go\": ... not found", the user
-// gets an error naming the missing toolchain and the Piglet Binary/prebuilt fallback.
+// gets an error naming the missing toolchain and the Ompiglet Binary/prebuilt fallback.
 func TestEnsureBuildToolchain_MissingToolchainIsActionable(t *testing.T) {
 	t.Setenv("PATH", "") // no toolchains discoverable
 	cases := []struct {
@@ -29,7 +29,7 @@ func TestEnsureBuildToolchain_MissingToolchainIsActionable(t *testing.T) {
 				t.Fatalf("expected error when %s toolchain absent", tc.buildType)
 			}
 			msg := err.Error()
-			for _, want := range []string{tc.tool, "Piglet Binary", "prebuilt"} {
+			for _, want := range []string{tc.tool, "Ompiglet Binary", "prebuilt"} {
 				if !strings.Contains(msg, want) {
 					t.Fatalf("error %q missing %q", msg, want)
 				}

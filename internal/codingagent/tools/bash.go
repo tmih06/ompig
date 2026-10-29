@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ─── Bash Tool ────────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ func (t *BashTool) ExecutionMode() agent.ToolExecutionMode { return agent.ToolMo
 
 // Execute runs the command through the shared shell tool execution (upstream
 // createShellToolDefinition with the bash config: getShellConfig-resolved
-// bash, the settings command prefix, and pig-bash temp files).
+// bash, the settings command prefix, and ompig-bash temp files).
 func (t *BashTool) Execute(ctx context.Context, _ string, rawParams json.RawMessage, onUpdate agent.ToolUpdateCallback) (agent.AgentToolResult, error) {
 	operations := t.Operations
 	if operations == nil {

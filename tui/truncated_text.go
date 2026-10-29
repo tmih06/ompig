@@ -7,7 +7,7 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // TruncatedText renders text truncated to fit viewport width.
@@ -31,7 +31,7 @@ func (t *TruncatedText) Render(width int) []string {
 		result = append(result, emptyLine)
 	}
 
-	// pig divergence (D66): Clamp horizontal padding when the fixed padding
+	// ompig divergence (D66): Clamp horizontal padding when the fixed padding
 	// plus one content cell would exceed the requested width. Upstream keeps
 	// the full padding and can emit an over-wide row that stops its TUI.
 	paddingX := min(t.PaddingX, max(0, (width-1)/2))

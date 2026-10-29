@@ -6,8 +6,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonparse"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsonparse"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // CodemodeOptionsPrefix starts the optional first line of a script.

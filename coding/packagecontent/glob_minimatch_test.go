@@ -15,8 +15,8 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // globOracleTree has names that differ from the patterns below only by case, dot entries, a directory that repeats its parent's name in another case, names that minimatch's fast tests and classes treat specially, and a link (name@target) that the walk reaches twice. No two siblings differ only by case, so the tree is the same on a file system that ignores case.
@@ -905,7 +905,7 @@ func TestGlobClassRangeEndsAtACodePoint(t *testing.T) {
 	}
 }
 
-// brace-expansion pushes every item of a sequence, and V8 throws a RangeError for a push past 2^27 elements: in Node 24.19 with a 3 GB heap, an array's push throws "Invalid array length" at length 134,217,728, and braceExpand throws it for a sequence whose step stops advancing. A long sequence of distinct items may exhaust Node's default heap before that; PiG reports the RangeError without building the items. minimatch's assertValidPattern throws for a pattern over 65,536 UTF-16 units.
+// brace-expansion pushes every item of a sequence, and V8 throws a RangeError for a push past 2^27 elements: in Node 24.19 with a 3 GB heap, an array's push throws "Invalid array length" at length 134,217,728, and braceExpand throws it for a sequence whose step stops advancing. A long sequence of distinct items may exhaust Node's default heap before that; Ompig reports the RangeError without building the items. minimatch's assertValidPattern throws for a pattern over 65,536 UTF-16 units.
 func TestGlobPatternErrorsFollowNode(t *testing.T) {
 	for _, pattern := range []string{"x{9007199254740993..9007199254740995}", "x{1..134217729}", "{a,x{-134217728..0}}"} {
 		if _, err := braceExpand(pattern); err == nil || err.Error() != "Invalid array length" {
@@ -976,7 +976,7 @@ func TestInspectConfiguredStopsAtAThrowingGlob(t *testing.T) {
 	}
 }
 
-// Pi collects extensions before skills and reads globs only from a "pi" block (collectPackageResources, package-manager.ts:2214-2246): a throw in extensions leaves no skills, a throw in PiG's own "pig" block or in plugin metadata stops nothing, and a kind that throws declares no missing member, not even one listed before the throw.
+// Pi collects extensions before skills and reads globs only from a "pi" block (collectPackageResources, package-manager.ts:2214-2246): a throw in extensions leaves no skills, a throw in Ompig's own "ompig" block or in plugin metadata stops nothing, and a kind that throws declares no missing member, not even one listed before the throw.
 func TestDiscoveryThrowsFollowPiKindsAndOrder(t *testing.T) {
 	write := func(t *testing.T, manifest string) string {
 		t.Helper()
@@ -994,8 +994,8 @@ func TestDiscoveryThrowsFollowPiKindsAndOrder(t *testing.T) {
 			t.Fatalf("Discover = %+v, %v; want the extensions throw and no skills", resources, err)
 		}
 	})
-	t.Run("a pig block throw stops nothing", func(t *testing.T) {
-		resources, err := Discover(write(t, `{"name":"p","pi":{"skills":["skills"],"prompts":["prompts/*.md"]},"pig":{"hooks":["hooks/[[:alpha:]]*,json"]}}`))
+	t.Run("a ompig block throw stops nothing", func(t *testing.T) {
+		resources, err := Discover(write(t, `{"name":"p","pi":{"skills":["skills"],"prompts":["prompts/*.md"]},"ompig":{"hooks":["hooks/[[:alpha:]]*,json"]}}`))
 		if err != nil || len(resources.SkillDirs) != 1 || len(resources.PromptFiles) != 1 || len(resources.HookFiles) != 0 {
 			t.Fatalf("Discover = %+v, %v; want the skill and the prompt, and no hooks", resources, err)
 		}
@@ -1092,7 +1092,7 @@ func TestManifestGlobsThrowReadsOnlyThePiBlock(t *testing.T) {
 		{"a skills glob that throws", `{"name":"p","pi":{"skills":["skills/[[:alpha:]]*,x"]}}`, true},
 		{"a themes glob that throws", `{"name":"p","pi":{"themes":["themes/[[:alpha:]]*,json"]}}`, true},
 		{"globs that compile", `{"name":"p","pi":{"prompts":["prompts/*.md","+(a|b)/*"],"skills":["skills/**"]}}`, false},
-		{"a throwing glob in the pig block", `{"name":"p","pi":{"prompts":["prompts/*.md"]},"pig":{"hooks":["hooks/[[:alpha:]]*,json"]}}`, false},
+		{"a throwing glob in the ompig block", `{"name":"p","pi":{"prompts":["prompts/*.md"]},"ompig":{"hooks":["hooks/[[:alpha:]]*,json"]}}`, false},
 		{"an override", `{"name":"p","pi":{"prompts":["prompts/*.md","![[:alpha:]]*,md"]}}`, false},
 		{"an entry without * or ?", `{"name":"p","pi":{"prompts":["prompts/[[:alpha:]],md"]}}`, false},
 		{"no pi block", `{"name":"p"}`, false},

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // codemode.ts cut(): a preview of the arguments is cut to 200 UTF-16 units, and a cut inside a surrogate pair leaves a lone

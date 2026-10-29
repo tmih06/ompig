@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type editorStatusProbe struct {
@@ -61,7 +61,7 @@ func TestEditorStatusBorderMatchesPi(t *testing.T) {
 		}
 		if !reflect.DeepEqual(got, expected[i]) {
 			if failures++; failures <= 5 {
-				t.Errorf("%+v:\n  Pig %q\n  Pi  %q", probe, got, expected[i])
+				t.Errorf("%+v:\n  Ompig %q\n  Pi  %q", probe, got, expected[i])
 			}
 		}
 	}
@@ -104,7 +104,7 @@ func editorStatusProbes() []editorStatusProbe {
 	return probes
 }
 
-// renderEditorStatusProbe renders one probe's editor with Pig, in the probe's theme.
+// renderEditorStatusProbe renders one probe's editor with Ompig, in the probe's theme.
 func renderEditorStatusProbe(probe editorStatusProbe) []string {
 	SetCapabilities(TerminalCapabilities{TrueColor: true})
 	SetTheme(probe.Theme)
@@ -145,7 +145,7 @@ func TestEditorStatusBorderProbeDump(t *testing.T) {
 	fmt.Printf("editorstatus-probes:%s\n", line)
 }
 
-// TestEditorStatusBorderParity prints Pig's renders of the corpus, one JSON line per probe, for the editor-status-border parity scenario.
+// TestEditorStatusBorderParity prints Ompig's renders of the corpus, one JSON line per probe, for the editor-status-border parity scenario.
 func TestEditorStatusBorderParity(t *testing.T) {
 	previousCaps, previousTheme := GetCapabilities(), ActiveTheme()
 	t.Cleanup(func() {

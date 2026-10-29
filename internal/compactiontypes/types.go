@@ -9,7 +9,7 @@ import (
 	"slices"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // CompactionSettings controls when and how compaction runs.

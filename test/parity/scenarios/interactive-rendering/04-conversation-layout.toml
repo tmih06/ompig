@@ -25,7 +25,7 @@
 # Re-probe with the pinned Pi and the deterministic provider: send expr, then
 # control-chars. Both completed tool cards must remain, in conversation order.
 # The base test provider reuses its ID across turns; Pi retires completed IDs,
-# but PiG's retained ID lookup then overwrites the expr card with the second call.
+# but Ompig's retained ID lookup then overwrites the expr card with the second call.
 # The provider regression must fail here, not merely produce two final replies.
 #
 # This exercises the full vertical rhythm of a tool-call conversation:
@@ -44,16 +44,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 40
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "Run: expr 20 + 22"
@@ -75,7 +75,7 @@ settle_seconds = 1
 both_reach_ready = true
 both_contain = ["$ expr 20 + 22", "helloworld", "sanitized"]
 both_not_contain = ["unknown command", "panic:", "goroutine "]
-# lint-known-gap: bg-paint SGR codes differ between pig and upstream rendering
+# lint-known-gap: bg-paint SGR codes differ between ompig and upstream rendering
 # paths. The visible text, structure, and spacing are identical. The
 # tool-execution footer duration is timing-dependent, so normalize the
 # numeric suffix rather than weakening the comparator.

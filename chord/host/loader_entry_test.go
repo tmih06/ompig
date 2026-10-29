@@ -1,6 +1,6 @@
 package host
 
-// pig divergence (D178): the loader forks Node on a copy of loader_child.mjs. These tests pin where that copy lives:
+// ompig divergence (D178): the loader forks Node on a copy of loader_child.mjs. These tests pin where that copy lives:
 // a directory of its own per load, so no other process's cleanup, and nothing else in the shared temporary
 // directory, can take it from a load that is starting.
 

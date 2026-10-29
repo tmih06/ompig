@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess/internal/noderuntimepack"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess/internal/noderuntimepack"
 )
 
 // hostPeers are the packages Pi's own package.json lists as dependencies of @earendil-works/pi-coding-agent, with the subpaths an extension (or a helper process it starts) imports

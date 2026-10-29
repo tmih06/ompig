@@ -3,7 +3,7 @@
 //! Pi runs every extension handler in one process, and a handler can always await a host call
 //! (packages/coding-agent/src/core/extensions/types.ts: the `ctx.ui` dialogs `select`, `confirm`
 //! and `input`, `exec` and `executeTool` return promises; `notify` and `setFooter` are synchronous
-//! in-process calls). A pig handler waits on a socket reply, so no handler may run on the
+//! in-process calls). A ompig handler waits on a socket reply, so no handler may run on the
 //! thread that reads those replies.
 
 use super::{CommandResult, Extension};
@@ -27,7 +27,7 @@ pub(super) struct Host {
 fn next_socket() -> std::path::PathBuf {
     static NEXT: AtomicU64 = AtomicU64::new(0);
     std::env::temp_dir().join(format!(
-        "pig-rs-dispatch-{}-{}.sock",
+        "ompig-rs-dispatch-{}-{}.sock",
         std::process::id(),
         NEXT.fetch_add(1, Ordering::Relaxed)
     ))

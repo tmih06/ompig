@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type openRouterProbe struct {
@@ -122,7 +122,7 @@ func TestOpenRouterExchangeMatchesPi(t *testing.T) {
 					}
 					return string(a.OK)
 				}
-				t.Errorf("status %d body %.120q\n  Pi  %s\n  Pig %s", probe.Status, probe.Body, render(want), render(got))
+				t.Errorf("status %d body %.120q\n  Pi  %s\n  Ompig %s", probe.Status, probe.Body, render(want), render(got))
 			}
 		}
 	}

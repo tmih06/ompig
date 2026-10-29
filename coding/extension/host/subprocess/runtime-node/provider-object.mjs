@@ -37,7 +37,7 @@ export function dispatchProviderObjectCallback(runtime, request) {
   return fn(params);
 }
 
-// pig additive (D19): teardown releases transport waits without resolving or ending the caller-owned stream.
+// ompig additive (D19): teardown releases transport waits without resolving or ending the caller-owned stream.
 function transportValue(value, signal) {
   return new Promise((resolve, reject) => {
     let target = {resolve, reject};

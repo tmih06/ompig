@@ -20,7 +20,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "Fork this session into current directory? [y/N]"
+ready_pattern_ompig = "Fork this session into current directory? [y/N]"
 ready_pattern_pi = "Fork this session into current directory? [y/N]"
 ready_timeout_seconds = 25
 capture_start = "remember global-prefix-7702"
@@ -34,9 +34,9 @@ wait_timeout_seconds = 20
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "sessions", "--session", "global-sess"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "sessions", "--session", "global-sess"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "sessions", "--session", "global-sess"]
 
 [assert]

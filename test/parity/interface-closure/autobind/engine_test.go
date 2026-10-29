@@ -4,7 +4,7 @@ import (
 	"go/types"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 type testName struct{}

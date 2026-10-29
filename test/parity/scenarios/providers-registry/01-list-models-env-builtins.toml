@@ -2,7 +2,7 @@
 # Surface: --list-models exposes built-in env-backed providers registered via register-builtins.
 #
 # Upstream evidence: re-probed the pinned Pi on 2026-09-25 with the env below.
-# The complete table includes all seven configured providers and matches PiG.
+# The complete table includes all seven configured providers and matches Ompig.
 # A pipe capture intermittently loses Pi's queued stdout at main.ts process.exit(0)
 # after listModels prints the table. The CLI driver captures both binaries through
 # a regular file so Node's synchronous file writes preserve every row. This is
@@ -44,7 +44,7 @@ pi = [
   "AWS_SECRET_ACCESS_KEY=x",
   "PI_CODING_AGENT_DIR=testdata/env-agent",
 ]
-pig = [
+ompig = [
   "ANTHROPIC_API_KEY=x",
   "GEMINI_API_KEY=x",
   "MISTRAL_API_KEY=x",
@@ -56,7 +56,7 @@ pig = [
   "GOOGLE_CLOUD_LOCATION=us-central1",
   "AWS_ACCESS_KEY_ID=x",
   "AWS_SECRET_ACCESS_KEY=x",
-  "PIG_CODING_AGENT_DIR=testdata/env-agent",
+  "OMPIG_CODING_AGENT_DIR=testdata/env-agent",
 ]
 
 [cli]

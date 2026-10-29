@@ -161,7 +161,7 @@ func quarantineNotice(reason string, stoppedNames []string) string {
 // whose circuit breaker has not tripped, so an explicit Reload gives it
 // another chance to repack (CNC-002; the doc comment on Supervisor.Reset
 // already says "Used by /reload" - this is that call site, extended to the
-// cell-key-scoped supervisor packed cells use). Pig's default is one shared
+// cell-key-scoped supervisor packed cells use). Ompig's default is one shared
 // process per packable language (Go, Rust, Python, and Node cells alike);
 // quarantine from a live crash degrades that to isolated subprocesses, but
 // only until the next explicit reload, not permanently, unless the same

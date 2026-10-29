@@ -3,14 +3,14 @@
 # across repeated atomic reload.
 #
 # Upstream evidence (Pi 0.87.1): a custom footer receives the footer data
-# provider and renders keyed statuses itself. Pig's subprocess bridge replicates
+# provider and renders keyed statuses itself. Ompig's subprocess bridge replicates
 # the current footer-data snapshot into the extension runtime before rendering,
 # so the extension-owned footer is also the only status-rendering surface. The
 # reload path publishes its `Reloaded` status before the replacement footer's
 # deferred render is guaranteed visible. Upstream /reload invokes every
 # extension factory again (a fresh instance even for an unchanged extension),
 # so the fixture's factory advances a generation counter persisted next to its
-# own snapshotted extension file (the runner gives pig and pi, and every
+# own snapshotted extension file (the runner gives ompig and pi, and every
 # declared run, independent per-binary copies of the extension; see
 # test/parity/runner/snapshot.go snapshotExtensionPath) and publishes that
 # generation through the replacement footer. Each reload waits for its unique
@@ -29,9 +29,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/footer-status.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/footer-status.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/footer-status.mjs",
@@ -40,7 +40,7 @@ pi_extensions = [
 [tmux]
 width = 100
 height = 32
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 # Capture through the pane bottom instead of ending at the first status-probe.

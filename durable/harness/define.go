@@ -5,7 +5,7 @@ package harness
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // DefineExtension types an extension. Upstream returns its argument; the Go registry compares extensions by pointer, so it returns a pointer to it.

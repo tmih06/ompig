@@ -11,8 +11,8 @@ import (
 
 	"github.com/dlclark/regexp2"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // Options are the minimatch options that change a match. Every other option has its default.

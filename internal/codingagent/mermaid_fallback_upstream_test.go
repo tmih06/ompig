@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/markdowntransform"
-	"github.com/MichaelKinsy/PiG/internal/mermaid"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/markdowntransform"
+	"github.com/tmih06/ompig/internal/mermaid"
+	"github.com/tmih06/ompig/tui"
 )
 
 const wideMermaidSource = `flowchart LR
@@ -22,9 +22,9 @@ const wideMermaidSource = `flowchart LR
     NBCFG["the config file has many short words in it"]
     NBENV["the env file also has short words in it"]
   end
-  subgraph PG["Pig"]
+  subgraph PG["Ompig"]
     direction TB
-    PGPIG["the piglet file lists the tools it may use"]
+    PGPIG["the ompiglet file lists the tools it may use"]
     PGGW["the model code is about one seven five lines"]
   end
   NBCFG -. "one two three" .-> PGPIG

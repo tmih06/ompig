@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
-// Pi's ctx.modelRegistry.find and getAll return the registry's stored model objects (model-registry.ts): repeated reads give the same object, and what an extension changes on it is what its next read returns. PiG replicates the host's catalog into each Node extension, and the members of a packed cell share one decoded publication (D20). This row proves that each extension still reads its own objects, in packed and isolated modes alike: one extension's change is invisible to the other, its own reads keep the change until the host publishes again, and a publication replaces its objects. The ready payload gives each member its own catalog, so the row also changes the models of a later publication, which a packed cell decodes once for all members, and a non-chat model (getModelsOfType, model-registry.ts:151-153), which only a publication carries.
+// Pi's ctx.modelRegistry.find and getAll return the registry's stored model objects (model-registry.ts): repeated reads give the same object, and what an extension changes on it is what its next read returns. Ompig replicates the host's catalog into each Node extension, and the members of a packed cell share one decoded publication (D20). This row proves that each extension still reads its own objects, in packed and isolated modes alike: one extension's change is invisible to the other, its own reads keep the change until the host publishes again, and a publication replaces its objects. The ready payload gives each member its own catalog, so the row also changes the models of a later publication, which a packed cell decodes once for all members, and a non-chat model (getModelsOfType, model-registry.ts:151-153), which only a publication carries.
 const nodeModelCatalogSource = `let held;
 export default function (pi) {
   pi.registerTool({

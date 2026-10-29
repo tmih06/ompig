@@ -3,7 +3,7 @@ package mcpext
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // extensionOf (extensions/mcp/tools.ts:155-158) is not exported by Pi's module, so the oracle body transcribes it and runs it on Node's own URL: the extension of a saved binary resource is the one its URL pathname ends in, or its raw text when it is not a URL.

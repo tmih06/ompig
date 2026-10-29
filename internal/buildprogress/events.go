@@ -28,7 +28,7 @@ type observer struct {
 }
 
 // Observe selects build diagnostics for this operation only. Callbacks are synchronous.
-// pig additive (D18): only explicit build callers select progress reporting.
+// ompig additive (D18): only explicit build callers select progress reporting.
 func Observe(ctx context.Context, notify func(Event), verbose bool) context.Context {
 	return context.WithValue(ctx, observerKey{}, observer{notify, verbose})
 }

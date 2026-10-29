@@ -1,28 +1,28 @@
-# PiG TypeScript extension declarations
+# Ompig TypeScript extension declarations
 
-This package adds PiG-specific declarations to the exact TypeScript extension
+This package adds Ompig-specific declarations to the exact TypeScript extension
 API from Pi 1.4.0. It contains no runtime implementation.
 
 Install the declarations from this source tree with the pinned Pi package:
 
 ```bash
 npm install --save-dev \
-  /path/to/PiG/extensions/sdk-ts \
+  /path/to/Ompig/extensions/sdk-ts \
   @earendil-works/pi-coding-agent@1.4.0
 ```
 
 Import runtime values and shared types from Pi. Import the extended context and
-PiG-only types from this package:
+Ompig-only types from this package:
 
 ```ts
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import type { PiGLoginDefinition } from "@michaelkinsy/pig-extension-types";
+import type { OmpigLoginDefinition } from "@michaelkinsy/ompig-extension-types";
 
-// Importing the PiG declaration package augments Pi's ExtensionUIContext.
+// Importing the Ompig declaration package augments Pi's ExtensionUIContext.
 
 export default function extension(pi: ExtensionAPI): void {
   pi.on("session_start", async (_event, ctx) => {
-    const login: PiGLoginDefinition = {
+    const login: OmpigLoginDefinition = {
       brand,
       hero,
       mascot,
@@ -37,7 +37,7 @@ export default function extension(pi: ExtensionAPI): void {
 ```
 
 Importing the package also augments pi-tui's `Component` with two optional
-PiG-only properties for the component kit. `viewTheme` on a surface's root
+Ompig-only properties for the component kit. `viewTheme` on a surface's root
 component (the `ctx.ui.custom` component, a widget, header or footer, or a
 renderer's result) overrides theme tokens for that surface, and
 `viewLines` tells a frontend what the rows of a component with its own
@@ -54,6 +54,6 @@ table.viewLines = { list: { items: tracks.map((t) => ({ label: t.title, detail: 
 The terminal draws the override too. `viewLines` reaches only a frontend, and
 its `list` needs one item per row.
 
-PiG's Node host supplies Pi-compatible runtime shims. This package only provides
-editor and compiler types for the PiG additions. The package stays private until
+Ompig's Node host supplies Pi-compatible runtime shims. This package only provides
+editor and compiler types for the Ompig additions. The package stays private until
 the public release process approves publication.

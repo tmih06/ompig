@@ -1,0 +1,308 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "ompig": "https://github.com/tmih06/ompig/terms#",
+    "relations": "ompig:relation"
+  },
+  "@graph": [
+    {
+      "@id": "ompig:pi",
+      "@type": "DefinedTerm",
+      "name": "Pi",
+      "description": "Upstream TypeScript coding agent; the behavior oracle.",
+      "ompig:kind": "project",
+      "ompig:where": "https://github.com/earendil-works/pi",
+      "ompig:inspect": "ompig version"
+    },
+    {
+      "@id": "ompig:ompig",
+      "@type": "DefinedTerm",
+      "name": "Ompig",
+      "description": "The Go implementation; executable ompig.",
+      "ompig:kind": "project",
+      "ompig:where": ".upstream/pin pins Pi",
+      "ompig:inspect": "ompig verify"
+    },
+    {
+      "@id": "ompig:stock",
+      "@type": "DefinedTerm",
+      "name": "Stock Ompig",
+      "description": "Product-neutral ompig binary with no Ompiglet selected.",
+      "ompig:kind": "artifact",
+      "ompig:where": "cmd/ompig",
+      "ompig:inspect": "ompig version"
+    },
+    {
+      "@id": "ompig:session",
+      "@type": "DefinedTerm",
+      "name": "Session",
+      "description": "Append-only JSONL tree of entries for one conversation.",
+      "ompig:kind": "runtime",
+      "ompig:where": "~/.ompig/agent/sessions",
+      "ompig:inspect": "/tree, /session"
+    },
+    {
+      "@id": "ompig:model_runtime",
+      "@type": "DefinedTerm",
+      "name": "Model Runtime",
+      "description": "Session-owned model lookup, auth, completion, and streaming used by every mode.",
+      "ompig:kind": "runtime",
+      "ompig:where": "coding/",
+      "ompig:inspect": "/model, ompig --list-models"
+    },
+    {
+      "@id": "ompig:provider",
+      "@type": "DefinedTerm",
+      "name": "Provider",
+      "description": "Turns a Transcript into one Event Stream for one API.",
+      "ompig:kind": "runtime",
+      "ompig:where": "ai/",
+      "ompig:inspect": "ompig --list-models"
+    },
+    {
+      "@id": "ompig:mode",
+      "@type": "DefinedTerm",
+      "name": "Mode",
+      "description": "Interactive TUI, print, JSON event stream, or RPC over stdin/stdout.",
+      "ompig:kind": "runtime",
+      "ompig:where": "cmd/ompig",
+      "ompig:inspect": "ompig --mode rpc"
+    },
+    {
+      "@id": "ompig:resource",
+      "@type": "DefinedTerm",
+      "name": "Resource",
+      "description": "One capability: extension, skill, prompt, hook, MCP definition, theme, or environment.",
+      "ompig:kind": "concept",
+      "ompig:where": "~/.ompig/agent, .ompig/ in a project",
+      "ompig:inspect": "ompig status --json"
+    },
+    {
+      "@id": "ompig:extension",
+      "@type": "DefinedTerm",
+      "name": "Extension",
+      "description": "Code Resource in Go, Rust, Python, or Node/TypeScript that registers tools, commands, events, and UI.",
+      "ompig:kind": "resource",
+      "ompig:where": "extensions/sdk*, ~/.ompig/agent/extensions",
+      "ompig:inspect": "ompig install --validate-only <dir>"
+    },
+    {
+      "@id": "ompig:sdk",
+      "@type": "DefinedTerm",
+      "name": "Extension SDK",
+      "description": "One extension contract per language: Go, Rust, Python, TypeScript declarations.",
+      "ompig:kind": "library",
+      "ompig:where": "extensions/sdk, sdk-rs, sdk-py, sdk-ts",
+      "ompig:inspect": "ompig extension init"
+    },
+    {
+      "@id": "ompig:realization",
+      "@type": "DefinedTerm",
+      "name": "Extension realization",
+      "description": "How an extension runs: isolated process, packed runtime cell, or fused into a Ompiglet Binary (Go only).",
+      "ompig:kind": "concept",
+      "ompig:where": "coding/extension/host",
+      "ompig:inspect": "ompig status --json"
+    },
+    {
+      "@id": "ompig:extension_host",
+      "@type": "DefinedTerm",
+      "name": "Extension Host",
+      "description": "Loads, isolates, reloads, and shuts down extension realizations over one wire contract.",
+      "ompig:kind": "runtime",
+      "ompig:where": "coding/extension/host/subprocess",
+      "ompig:inspect": "/reload"
+    },
+    {
+      "@id": "ompig:package",
+      "@type": "DefinedTerm",
+      "name": "Package",
+      "description": "Versioned collection of Resources from npm, git, or a local path; never owns a Ompiglet.",
+      "ompig:kind": "distribution",
+      "ompig:where": "~/.ompig/agent/npm, ~/.ompig/agent/git",
+      "ompig:inspect": "ompig list"
+    },
+    {
+      "@id": "ompig:ompiglet",
+      "@type": "DefinedTerm",
+      "name": "Ompiglet",
+      "description": "One named agent: selects and scopes Resources and sets defaults.",
+      "ompig:kind": "composition",
+      "ompig:where": "*.yaml Ompiglet file",
+      "ompig:inspect": "ompig ompiglet validate <file>"
+    },
+    {
+      "@id": "ompig:standard",
+      "@type": "DefinedTerm",
+      "name": "Ompig Standard",
+      "description": "The optional curated Ompiglet: login identity, Ompig Runner, Angry Pigs.",
+      "ompig:kind": "composition",
+      "ompig:where": "ompiglets/standard/ompig-standard.yaml",
+      "ompig:inspect": "ompig ompiglet validate ompiglets/standard/ompig-standard.yaml"
+    },
+    {
+      "@id": "ompig:piglet_release",
+      "@type": "DefinedTerm",
+      "name": "Ompiglet release",
+      "description": "Pins the exact Resource closure and component plan of a Ompiglet.",
+      "ompig:kind": "artifact",
+      "ompig:where": "release.version and managed records",
+      "ompig:inspect": "ompig ompiglet show --record <path>"
+    },
+    {
+      "@id": "ompig:piglet_binary",
+      "@type": "DefinedTerm",
+      "name": "Ompiglet Binary",
+      "description": "Target-native ompig executable for one Ompiglet release; verifies its closure at startup.",
+      "ompig:kind": "artifact",
+      "ompig:where": "ompig ompiglet build --format binary",
+      "ompig:inspect": "ompig verify"
+    },
+    {
+      "@id": "ompig:builder",
+      "@type": "DefinedTerm",
+      "name": "Builder",
+      "description": "Produces Ompiglet Binaries: native (needs Go and Ompig source) or container (needs Docker or Podman).",
+      "ompig:kind": "tool",
+      "ompig:where": "coding/pigletbuild",
+      "ompig:inspect": "ompig setup"
+    },
+    {
+      "@id": "ompig:porter",
+      "@type": "DefinedTerm",
+      "name": "Ompig Porter",
+      "description": "Parity workbench Ompiglet Resource; proposes ports, never accepts its own work.",
+      "ompig:kind": "resource",
+      "ompig:where": "ompiglets/porter",
+      "ompig:inspect": "make porter-check (source checkout)"
+    },
+    {
+      "@id": "ompig:divergence",
+      "@type": "DefinedTerm",
+      "name": "Divergence",
+      "description": "A numbered, approved, user-visible difference from pinned Pi.",
+      "ompig:kind": "record",
+      "ompig:where": "docs/parity/DIVERGENCES.md",
+      "ompig:inspect": "ompig docs show divergences"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:ompig",
+      "ompig:relation": "implements",
+      "ompig:to": "ompig:pi",
+      "description": "exact pinned release"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:stock",
+      "ompig:relation": "builds",
+      "ompig:to": "ompig:ompig",
+      "description": "one binary per target"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:session",
+      "ompig:relation": "owns",
+      "ompig:to": "ompig:model_runtime",
+      "description": "one per Session"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:model_runtime",
+      "ompig:relation": "streams_through",
+      "ompig:to": "ompig:provider",
+      "description": "one Provider per request"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:mode",
+      "ompig:relation": "drives",
+      "ompig:to": "ompig:session",
+      "description": "TUI, print, JSON, RPC share one Session path"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:package",
+      "ompig:relation": "distributes",
+      "ompig:to": "ompig:resource",
+      "description": "one to many"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:extension",
+      "ompig:relation": "is_a",
+      "ompig:to": "ompig:resource",
+      "description": ""
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:extension",
+      "ompig:relation": "written_with",
+      "ompig:to": "ompig:sdk",
+      "description": "one language per extension"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:extension",
+      "ompig:relation": "realized_as",
+      "ompig:to": "ompig:realization",
+      "description": "isolated, packed, or fused"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:extension_host",
+      "ompig:relation": "hosts",
+      "ompig:to": "ompig:realization",
+      "description": "same contract in every realization"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:ompiglet",
+      "ompig:relation": "selects",
+      "ompig:to": "ompig:resource",
+      "description": "and scopes discovery"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:standard",
+      "ompig:relation": "is_a",
+      "ompig:to": "ompig:ompiglet",
+      "description": "explicit, never active in Stock"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:piglet_release",
+      "ompig:relation": "pins",
+      "ompig:to": "ompig:ompiglet",
+      "description": "exact closure"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:piglet_binary",
+      "ompig:relation": "realizes",
+      "ompig:to": "ompig:piglet_release",
+      "description": "per target"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:builder",
+      "ompig:relation": "produces",
+      "ompig:to": "ompig:piglet_binary",
+      "description": "no silent fallback between builders"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:porter",
+      "ompig:relation": "is_a",
+      "ompig:to": "ompig:resource",
+      "description": "selected by the Porter Ompiglet"
+    },
+    {
+      "@type": "ompig:Relation",
+      "ompig:from": "ompig:divergence",
+      "ompig:relation": "documents_difference_from",
+      "ompig:to": "ompig:pi",
+      "description": "numbered D<N>"
+    }
+  ]
+}

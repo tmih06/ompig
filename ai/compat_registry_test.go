@@ -284,7 +284,7 @@ func TestLegacyAPIAliasesSendTheirAPIsRequestWhateverTheModelsApi(t *testing.T) 
 
 // compat.ts registers the built-in implementations when the module loads (registerBuiltInApiProviders() at module scope), before
 // any caller can register an override, so a caller's first registerApiProvider replaces the built-in and getBuiltinProviderForModel
-// then routes even a catalog model to the override. PiG registers the built-ins lazily; a first RegisterAPIProvider must still land
+// then routes even a catalog model to the override. Ompig registers the built-ins lazily; a first RegisterAPIProvider must still land
 // after them.
 func TestFirstRegisterAPIProviderOverridesTheBuiltInForCatalogModels(t *testing.T) {
 	compatRegistry.mu.Lock()

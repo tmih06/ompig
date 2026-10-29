@@ -7,7 +7,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // Tests derived from Pi packages/chord/test/state.test.ts and packages/chord/src/cell.ts, driving Cell and Derived

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""python3 bench/local/localrun.py --arms pig-0.5 pi-1.1.0 --model qwen2.5-0.5b-instruct-q4_k_m --turns 10 --out DIR
+"""python3 bench/local/localrun.py --arms ompig-0.5 pi-1.1.0 --model qwen2.5-0.5b-instruct-q4_k_m --turns 10 --out DIR
 
 Installs the pinned llama.cpp server and model, serves them on 127.0.0.1, installs the pinned arms in a throwaway root and runs each arm through
 the recording proxy for N turns, in `--rounds` interleaved rounds. Writes raw.json. A hosted model instead of the local one: --hosted-base-url URL
@@ -21,14 +21,14 @@ from pigbench import arms as armlib, envinfo  # noqa: E402
 def run_one(arm, ws, upstream, opts, **kwargs):
     if opts.task:
         return pack.run_task(arm, ws, upstream, opts.task, opts.attempts, context_window=opts.context, **kwargs)
-    if opts.mode == "print" or (opts.mode == "auto" and arm.family not in ("pig", "pi")):
+    if opts.mode == "print" or (opts.mode == "auto" and arm.family not in ("ompig", "pi")):
         return pack.run_print_arm(arm, ws, upstream, runs=max(3, opts.turns // 3), context_window=opts.context, **kwargs)
     return pack.run_arm(arm, ws, upstream, opts.turns, context_window=opts.context, **kwargs)
 
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--arms", nargs="+", default=["pig-0.5", "pi-1.1.0"])
+    p.add_argument("--arms", nargs="+", default=["ompig-0.5", "pi-1.1.0"])
     p.add_argument("--model", default="qwen2.5-0.5b-instruct-q4_k_m")
     p.add_argument("--turns", type=int, default=10)
     p.add_argument("--rounds", type=int, default=1)
@@ -54,7 +54,7 @@ def main(argv=None):
                 result["rounds"].append([run_one(a, ws, opts.hosted_base_url, opts, api_key=os.environ["LOCAL_PACK_API_KEY"]) for a in order])
         else:
             binary = localpack.install_runtime(root)
-            model = localpack.fetch_model(os.environ.get("PIGPACK_CACHE") or os.path.join(tempfile.gettempdir(), "pigpack-cache"), opts.model)
+            model = localpack.fetch_model(os.environ.get("OMPIGPACK_CACHE") or os.path.join(tempfile.gettempdir(), "pigpack-cache"), opts.model)
             result["model"] = dict(localpack.read(localpack.MODELS)["models"][opts.model], name=opts.model)
             result["runtime"] = dict(localpack.read(localpack.RUNTIMES)["runtimes"]["llama.cpp"], binary_version=localpack.server_version(binary))
             with localpack.Server(binary, model, context=opts.context, threads=opts.threads) as server:

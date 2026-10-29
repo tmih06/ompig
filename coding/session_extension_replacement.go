@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // SetRebindSession installs the awaited mode rebind for Session-owned replacements. The callback renders and subscribes to the destination before dispatching its session_start event.
@@ -71,7 +71,7 @@ func (s *Session) finishExtensionReplacement(ctx context.Context, next *icodinga
 			return extension.CancelledResult{}, err
 		}
 	}
-	// pig divergence (D30): session replacement retains the host-scoped runner.
+	// ompig divergence (D30): session replacement retains the host-scoped runner.
 	s.ReplaceInner(next)
 	event := extension.SessionStartEvent{Type: "session_start", Reason: reason, PreviousSessionFile: previous}
 	s.mu.Lock()

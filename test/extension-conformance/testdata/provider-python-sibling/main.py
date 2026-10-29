@@ -1,4 +1,4 @@
-import pig_sdk
+import ompig_sdk
 
-def new_extension() -> pig_sdk.Extension:
-    return pig_sdk.Extension("provider-sibling")
+def new_extension() -> ompig_sdk.Extension:
+    return ompig_sdk.Extension("provider-sibling")

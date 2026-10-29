@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // Pi package-manager.ts:1532-1565,1630-1656 resolves only origin branches and never prompts during remote checks.
@@ -35,7 +35,7 @@ func TestGitAvailableUpdateRemoteResolution(t *testing.T) {
 			t.Setenv("GIT_UPDATE_BRANCH_MODE", tc.branchMode)
 			t.Setenv("GIT_TERMINAL_PROMPT", "1")
 			t.Setenv("PI_OFFLINE", "")
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			if tc.offline {
 				t.Setenv("PI_OFFLINE", "1")
 			}

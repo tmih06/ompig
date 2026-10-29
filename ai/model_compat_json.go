@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // openAICompatMembers are the compat members OpenAICompat models.

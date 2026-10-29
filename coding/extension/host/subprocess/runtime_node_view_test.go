@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // The Node runtime's view derivation (D107,
@@ -27,7 +27,7 @@ import (
 // pi-tui components) and derive (render, derive, check reproduction).
 const nodeViewPrelude = `
 import assert from "node:assert/strict";
-const RT = process.env.PIG_VIEW_RUNTIME;
+const RT = process.env.OMPIG_VIEW_RUNTIME;
 const { Runtime } = await import(RT + "/runtime.mjs");
 const { deriveView, surfaceTheme, VIEW_WALK_FIELDS } = await import(RT + "/view-walk.mjs");
 const tui = await import(RT + "/shims/pi-tui.mjs");
@@ -196,7 +196,7 @@ func runNodeViewScript(t *testing.T, name, script string, env ...string) []byte 
 		t.Fatal(err)
 	}
 	cmd := exec.CommandContext(t.Context(), "node", "--input-type=module", "--eval", nodeViewPrelude+script)
-	cmd.Env = append(append(os.Environ(), "PIG_VIEW_RUNTIME="+nodeModuleDirectoryURL(dir)), env...)
+	cmd.Env = append(append(os.Environ(), "OMPIG_VIEW_RUNTIME="+nodeModuleDirectoryURL(dir)), env...)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	output, err := cmd.Output()
@@ -859,7 +859,7 @@ func TestNodeViewThemeAndListOnHost(t *testing.T) {
 	}
 	output := runNodeViewScript(t, "theme and list on host", nodeViewSurfacesPrelude+`
 const runtime = newRuntime({ width: 40 });
-usePalette(runtime, JSON.parse(process.env.PIG_VIEW_PALETTE));
+usePalette(runtime, JSON.parse(process.env.OMPIG_VIEW_PALETTE));
 const frames = [];
 const widget = (name, build) => {
   runtime.setWidgetFactory(name, build);
@@ -874,7 +874,7 @@ widget("bad token", () => themedProbe({ nope: "#000000" }));
 widget("list mismatch", () => new Table(["a", "b"], [{ label: "a" }, { label: "b" }, { label: "c" }]));
 widget("list selection", () => new Table(["a", "b"], [{ label: "a" }, { label: "b" }], 2));
 console.log(JSON.stringify(frames));
-`, "PIG_VIEW_PALETTE="+string(palette))
+`, "OMPIG_VIEW_PALETTE="+string(palette))
 	var frames []struct {
 		Name  string          `json:"name"`
 		Lines []string        `json:"lines"`
@@ -1015,7 +1015,7 @@ func BenchmarkNodeViewWalk(b *testing.B) {
 		b.Fatal(err)
 	}
 	script := nodeViewPrelude + `
-const N = Number(process.env.PIG_VIEW_N);
+const N = Number(process.env.OMPIG_VIEW_N);
 const root = new Container();
 root.addChild(new DynamicBorder((s) => t.fg("accent", s)));
 root.addChild(new Text("Pick a track", 2, 0, (s) => t.bg("customMessageBg", s)));
@@ -1047,7 +1047,7 @@ console.log(JSON.stringify({ nsPerOp: ns / N, bytesPerOp: gcs === 0 ? (after - b
 `
 	n := max(b.N, 1000)
 	cmd := exec.CommandContext(b.Context(), "node", "--expose-gc", "--min-semi-space-size=256", "--max-semi-space-size=256", "--input-type=module", "--eval", script)
-	cmd.Env = append(os.Environ(), "PIG_VIEW_RUNTIME="+nodeModuleDirectoryURL(dir), "PIG_VIEW_N="+strconv.Itoa(n))
+	cmd.Env = append(os.Environ(), "OMPIG_VIEW_RUNTIME="+nodeModuleDirectoryURL(dir), "OMPIG_VIEW_N="+strconv.Itoa(n))
 	b.ResetTimer()
 	output, err := cmd.Output()
 	b.StopTimer()
@@ -1072,7 +1072,7 @@ console.log(JSON.stringify({ nsPerOp: ns / N, bytesPerOp: gcs === 0 ? (after - b
 }
 
 // The views Node derives survive the host's validation (spec §5.2): the
-// host's kit, built from PiG's tui ports with the host's active theme and
+// host's kit, built from Ompig's tui ports with the host's active theme and
 // terminal capabilities, reproduces Node's lines byte for byte, so it keeps
 // the view. The trees are the conformance probe's (§10), the other stock
 // kinds and Pi's conversation components, at the probe's widths, under each
@@ -1101,8 +1101,8 @@ const { KEYBINDINGS } = await import(RT + "/shims/pi-dist/pi-coding-agent/core/k
 const definitions = {};
 for (const [id, definition] of Object.entries(KEYBINDINGS)) definitions[id] = { defaultKeys: [definition.defaultKeys].flat(), description: definition.description };
 newRuntime().applyKeybindings({ definitions });
-t.setPalette(JSON.parse(process.env.PIG_VIEW_PALETTE));
-terminalImage.setCapabilities({ images: process.env.PIG_VIEW_IMAGES || null, trueColor: true, hyperlinks: false });
+t.setPalette(JSON.parse(process.env.OMPIG_VIEW_PALETTE));
+terminalImage.setCapabilities({ images: process.env.OMPIG_VIEW_IMAGES || null, trueColor: true, hyperlinks: false });
 const tracks = Array.from({ length: 5 }, (_, i) => ({ value: "k" + i, label: "Track " + i, description: "Artist " + i }));
 const trees = {
   probe: () => {
@@ -1226,7 +1226,7 @@ for (const [name, build] of Object.entries(trees)) {
   }
 }
 console.log(JSON.stringify(frames));
-`, "PIG_VIEW_PALETTE="+string(palette), "PIG_VIEW_IMAGES="+string(images))
+`, "OMPIG_VIEW_PALETTE="+string(palette), "OMPIG_VIEW_IMAGES="+string(images))
 	var frames []struct {
 		Name  string          `json:"name"`
 		Width int             `json:"width"`

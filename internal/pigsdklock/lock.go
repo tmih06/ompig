@@ -11,7 +11,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/filelock"
+	"github.com/tmih06/ompig/internal/filelock"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 )
 
 func waitTimeout() time.Duration {
-	if value := os.Getenv("PIG_CELL_BUILD_TIMEOUT"); value != "" {
+	if value := os.Getenv("OMPIG_CELL_BUILD_TIMEOUT"); value != "" {
 		if duration, err := time.ParseDuration(value); err == nil && duration > 0 {
 			return duration
 		}
@@ -50,7 +50,7 @@ func AcquireBuild(ctx context.Context, configRoot string) (func() error, error) 
 	return acquire(ctx, configRoot, true)
 }
 
-// AcquireBuildForRoot holds a shared lease when sdkRoot is a staged Pig SDK.
+// AcquireBuildForRoot holds a shared lease when sdkRoot is a staged Ompig SDK.
 func AcquireBuildForRoot(ctx context.Context, sdkRoot string) (func() error, error) {
 	absoluteRoot, err := filepath.Abs(sdkRoot)
 	if err != nil {
@@ -154,7 +154,7 @@ func AcquireStage(ctx context.Context, configRoot string) (func() error, error) 
 func acquire(ctx context.Context, configRoot string, shared bool) (func() error, error) {
 	root, err := filepath.Abs(configRoot)
 	if err != nil {
-		return nil, fmt.Errorf("resolve Pig config root: %w", err)
+		return nil, fmt.Errorf("resolve Ompig config root: %w", err)
 	}
 	lockDir := filepath.Join(root, "state", "pigsdk")
 	if err := os.MkdirAll(lockDir, 0o755); err != nil {

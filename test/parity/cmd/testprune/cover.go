@@ -84,7 +84,7 @@ func testEnv(home string) []string {
 		return os.Environ()
 	}
 	env := os.Environ()
-	drop := map[string]bool{"HOME": true, "PIG_CODING_AGENT_DIR": true, "PI_CODING_AGENT_DIR": true, "PIG_HOME": true, "PI_HOME": true}
+	drop := map[string]bool{"HOME": true, "OMPIG_CODING_AGENT_DIR": true, "PI_CODING_AGENT_DIR": true, "OMPIG_HOME": true, "PI_HOME": true}
 	out := env[:0:0]
 	for _, e := range env {
 		k, _, _ := strings.Cut(e, "=")
@@ -94,9 +94,9 @@ func testEnv(home string) []string {
 	}
 	return append(out,
 		"HOME="+home,
-		"PIG_CODING_AGENT_DIR="+filepath.Join(home, "pig-agent"),
+		"OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "ompig-agent"),
 		"PI_CODING_AGENT_DIR="+filepath.Join(home, "pi-agent"),
-		"PIG_HOME="+filepath.Join(home, "pig-home"),
+		"OMPIG_HOME="+filepath.Join(home, "ompig-home"),
 		"PI_HOME="+filepath.Join(home, "pi-home"),
 		"GOCOVERDIR="+filepath.Join(home, "covdata"),
 	)

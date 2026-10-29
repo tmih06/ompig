@@ -4,7 +4,7 @@ Base: `staging/porter/pi-0.99.1` at `94f45865e` (pins upstream 0.99.2). Source: 
 
 ## Root cause
 
-Pi has one rule: the anthropic auth resolver (`providers/anthropic.ts:47-69`) reports federation (`{auth: {}, env, source: "workload identity federation"}`) after `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_OAUTH_TOKEN` and `ANTHROPIC_API_KEY`, and the model runtime's configured-provider snapshot, auth status and request path all read that resolver. `env-api-keys.ts` is unchanged for federation. PiG had that rule in `ai/auth_providers.go` only; three other gates re-implemented "has auth" without it.
+Pi has one rule: the anthropic auth resolver (`providers/anthropic.ts:47-69`) reports federation (`{auth: {}, env, source: "workload identity federation"}`) after `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_OAUTH_TOKEN` and `ANTHROPIC_API_KEY`, and the model runtime's configured-provider snapshot, auth status and request path all read that resolver. `env-api-keys.ts` is unchanged for federation. Ompig had that rule in `ai/auth_providers.go` only; three other gates re-implemented "has auth" without it.
 
 | finding | gate | fix |
 |---|---|---|
@@ -23,13 +23,13 @@ One shared Go function, `ai.AnthropicFederationEnv(env)` (plus `AnthropicFederat
 
 ## Red run (commit 1)
 
-Failing for the right reason (stub returns nil / old behavior): `ai` TestAudit992DirectAnthropicStreamIgnoresAmbientAuthTokenForFederation (exchanges 0, `Bearer ambient-auth-token`), TestAudit992FederationUnreachableTokenEndpointMessage (`Post "...": fetch failed`), TestAnthropicDirectStreamDoesNotReadAmbientAuthToken, TestAnthropicFederationEnv (3 subtests); `coding` TestAudit992FederationEnvConfiguresAnthropic; `internal/codingagent` TestHasEnvAuthAnthropicFederation, TestAuthenticatedProvidersAnthropicFederation, TestProviderAuthStatusAnthropicFederation; `cmd/pig` TestPrintModelList_AnthropicFederationEnv_ListsAnthropic, TestSelectStartupModel_AnthropicFederationEnv_SelectsAnthropic, TestModelRuntimeStream_AnthropicFederationOrder/federation_only; `subprocess` TestAudit992NodeBridgeForwardsFederationOnlyAnthropicRequest, TestNodeBridgeFederationGate/federation_process_env. Negative gate cases (incomplete env, empty value, other provider, no env) and the AUTH_TOKEN / API-key ordering cases passed in red as guards.
+Failing for the right reason (stub returns nil / old behavior): `ai` TestAudit992DirectAnthropicStreamIgnoresAmbientAuthTokenForFederation (exchanges 0, `Bearer ambient-auth-token`), TestAudit992FederationUnreachableTokenEndpointMessage (`Post "...": fetch failed`), TestAnthropicDirectStreamDoesNotReadAmbientAuthToken, TestAnthropicFederationEnv (3 subtests); `coding` TestAudit992FederationEnvConfiguresAnthropic; `internal/codingagent` TestHasEnvAuthAnthropicFederation, TestAuthenticatedProvidersAnthropicFederation, TestProviderAuthStatusAnthropicFederation; `cmd/ompig` TestPrintModelList_AnthropicFederationEnv_ListsAnthropic, TestSelectStartupModel_AnthropicFederationEnv_SelectsAnthropic, TestModelRuntimeStream_AnthropicFederationOrder/federation_only; `subprocess` TestAudit992NodeBridgeForwardsFederationOnlyAnthropicRequest, TestNodeBridgeFederationGate/federation_process_env. Negative gate cases (incomplete env, empty value, other provider, no env) and the AUTH_TOKEN / API-key ordering cases passed in red as guards.
 
 ## Green
 
 All of the above pass. Existing tests touched in the green commit, with the upstream reason:
 
-- `ai` TestAnthropicRequestAuthShapes (3 cases) and `coding` TestBuildModelAnthropicEnvAuthRequestShapes, `cmd/pig` TestBuildModelAnthropicAuthRequestShapes: they read `ANTHROPIC_AUTH_TOKEN` through a bare provider stream. Upstream's `anthropic-auth-token.test.ts` ("threads authContext ANTHROPIC_AUTH_TOKEN through request headers", "lets explicit request headers override") goes through `createModels().streamSimple`, because only the resolver reads the variable. The cases now go through `Models` / `ModelRuntime.Complete` with the same assertions. No assertion was weakened.
+- `ai` TestAnthropicRequestAuthShapes (3 cases) and `coding` TestBuildModelAnthropicEnvAuthRequestShapes, `cmd/ompig` TestBuildModelAnthropicAuthRequestShapes: they read `ANTHROPIC_AUTH_TOKEN` through a bare provider stream. Upstream's `anthropic-auth-token.test.ts` ("threads authContext ANTHROPIC_AUTH_TOKEN through request headers", "lets explicit request headers override") goes through `createModels().streamSimple`, because only the resolver reads the variable. The cases now go through `Models` / `ModelRuntime.Complete` with the same assertions. No assertion was weakened.
 - `ai/anthropic_federation_auth_test.go`: one `maps.Copy` from `go fix`.
 - `runtime-node.zip` and `runtime_node_digest_generated.go` are regenerated with `go generate` (the bridge shim is embedded); the lead may regenerate centrally.
 
@@ -37,11 +37,11 @@ Mutation checks (each reverted, each failed the named tests): optional variables
 
 ## Gates
 
-- `go build ./...`, `go vet`, `GOOS=windows go vet` (ai, coding, cmd/pig, internal/codingagent, subprocess): clean. `gofmt`: clean for touched files. `go fix -diff`: empty after the test fix. golangci-lint on the five packages: one finding, `ai/openai.go:1084` goimports, present on the base and not touched here.
-- Load: `-race -count=24` with `GOMAXPROCS=4`, `taskset -c 0-3` and 4 CPU burners (PIDs recorded, killed by PID): ai federation/auth tests, internal/codingagent, coding, cmd/pig all ok; subprocess bridge tests `-count=6` ok.
-- `make parity-family`: providers-registry ok. model-resolver-selector fails only `21-post-login-default-model` and startup fails 4 scenarios; both pig and pi output are identical there (installed oracle Pi is 0.99.1: `v0.99.1` banner, `kimi-k3` default), so these are the unhydrated-0.99.2 oracle, not this change.
-- Wider `go test` of ai, coding, internal, cmd, agent, extensions: every failing test is an oracle or environment test (missing Pi `node_modules` entries, `Xvfb`, proper-lockfile oracle); none is an auth, federation or registry test. `cmd/pig` hits the 10 minute package timeout in the oracle-bound tests; the targeted auth/model tests pass.
-- `make generate` stops at `known-gaps` (`packages/ai/test/images-models.test.ts` policy mismatch, not this lane). `pig-go.json` regenerated in the last commit.
+- `go build ./...`, `go vet`, `GOOS=windows go vet` (ai, coding, cmd/ompig, internal/codingagent, subprocess): clean. `gofmt`: clean for touched files. `go fix -diff`: empty after the test fix. golangci-lint on the five packages: one finding, `ai/openai.go:1084` goimports, present on the base and not touched here.
+- Load: `-race -count=24` with `GOMAXPROCS=4`, `taskset -c 0-3` and 4 CPU burners (PIDs recorded, killed by PID): ai federation/auth tests, internal/codingagent, coding, cmd/ompig all ok; subprocess bridge tests `-count=6` ok.
+- `make parity-family`: providers-registry ok. model-resolver-selector fails only `21-post-login-default-model` and startup fails 4 scenarios; both ompig and pi output are identical there (installed oracle Pi is 0.99.1: `v0.99.1` banner, `kimi-k3` default), so these are the unhydrated-0.99.2 oracle, not this change.
+- Wider `go test` of ai, coding, internal, cmd, agent, extensions: every failing test is an oracle or environment test (missing Pi `node_modules` entries, `Xvfb`, proper-lockfile oracle); none is an auth, federation or registry test. `cmd/ompig` hits the 10 minute package timeout in the oracle-bound tests; the targeted auth/model tests pass.
+- `make generate` stops at `known-gaps` (`packages/ai/test/images-models.test.ts` policy mismatch, not this lane). `ompig-go.json` regenerated in the last commit.
 
 ## Deferred / for other lanes
 

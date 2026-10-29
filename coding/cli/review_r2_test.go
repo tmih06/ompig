@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Print-mode twin of the CH-009 RPC test: a Package extension failure and a
@@ -30,7 +30,7 @@ func TestReviewR2PrintReportsPackageAndCLIExtensionFailuresTogether(t *testing.T
 	binary := buildPigBinaryForSignalTest(t)
 	cmd := exec.Command(binary, "--model", "test-faux/faux-1", "--offline", "--no-session", "-e", missing, "--print", "hi")
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	out, err := cmd.CombinedOutput()
 	var exitErr *exec.ExitError
 	if !errors.As(err, &exitErr) || exitErr.ExitCode() != 1 {
@@ -39,7 +39,7 @@ func TestReviewR2PrintReportsPackageAndCLIExtensionFailuresTogether(t *testing.T
 	for _, want := range []string{
 		`Failed to load extension "` + f.badExtension + `"`,
 		`Failed to load extension "` + missing + `": Extension path does not exist: ` + missing,
-		`Hint: Start without extensions using "pig -ne".`,
+		`Hint: Start without extensions using "ompig -ne".`,
 	} {
 		if !strings.Contains(string(out), want) {
 			t.Errorf("output lacks %q\n%s", want, out)
@@ -86,7 +86,7 @@ func TestReviewR2PreTrustAndProjectFailuresTogether(t *testing.T) {
 			cmd := exec.Command(binary, args...)
 			cmd.Dir = cwd
 			cmd.Stdin = strings.NewReader(`{"id":"commands","type":"get_commands"}` + "\n")
-			cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+			cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 			var stderr strings.Builder
 			cmd.Stderr = &stderr
 			err := cmd.Run()

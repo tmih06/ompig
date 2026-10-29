@@ -51,7 +51,7 @@ func DiscoverScenarios(dir string) ([]*Scenario, error) {
 // RunScenario executes one scenario against both binaries and returns
 // the populated ScenarioOutcome. When skipPerfGate is true, EvaluateOutcome
 // records the runtime ratio but does not enforce it.
-func RunScenario(ctx context.Context, t *testing.T, sc *Scenario, pig, pi BinaryRef, skipPerfGate bool) *ScenarioOutcome {
+func RunScenario(ctx context.Context, t *testing.T, sc *Scenario, ompig, pi BinaryRef, skipPerfGate bool) *ScenarioOutcome {
 	t.Helper()
 	d, ok := DriverRegistry[sc.Driver]
 	if !ok {
@@ -61,7 +61,7 @@ func RunScenario(ctx context.Context, t *testing.T, sc *Scenario, pig, pi Binary
 		}
 	}
 
-	pig, pi, err := prepareChangelogFixture(ctx, t, sc, pig, pi)
+	ompig, pi, err := prepareChangelogFixture(ctx, t, sc, ompig, pi)
 	if err != nil {
 		return &ScenarioOutcome{Scenario: sc, Failures: []string{err.Error()}}
 	}
@@ -75,21 +75,21 @@ func RunScenario(ctx context.Context, t *testing.T, sc *Scenario, pig, pi Binary
 	// ephemeral directory snapshots created by drivers. Fixture roots stay
 	// immutable and credential-free.
 	o := &ScenarioOutcome{Scenario: sc, SkipPerfGate: skipPerfGate}
-	o.Pig.System = "pig"
+	o.Ompig.System = "ompig"
 	o.Pi.System = "pi"
 	runs := sc.Assert.Runs
 	if runs <= 0 {
 		runs = 1
 	}
 	for run := range runs {
-		var pigResult, piResult Result
+		var ompigResult, piResult Result
 		switch {
 		case skipPerfGate:
 			var wg sync.WaitGroup
 			wg.Add(2)
 			go func() {
 				defer wg.Done()
-				pigResult = d.Run(ctx, t, pig, runSc)
+				ompigResult = d.Run(ctx, t, ompig, runSc)
 			}()
 			go func() {
 				defer wg.Done()
@@ -97,20 +97,20 @@ func RunScenario(ctx context.Context, t *testing.T, sc *Scenario, pig, pi Binary
 			}()
 			wg.Wait()
 		case sc.Assert.RuntimeRatioMax <= 0 || run%2 == 0:
-			pigResult = d.Run(ctx, t, pig, runSc)
+			ompigResult = d.Run(ctx, t, ompig, runSc)
 			piResult = d.Run(ctx, t, pi, runSc)
 		default:
 			// Serial performance pairs alternate launch order so filesystem and
 			// runtime warming do not always benefit Pi, the second process.
 			piResult = d.Run(ctx, t, pi, runSc)
-			pigResult = d.Run(ctx, t, pig, runSc)
+			ompigResult = d.Run(ctx, t, ompig, runSc)
 		}
 		if sc.Driver == "interactive-tmux" || sc.Driver == "headless-terminal" {
-			pigResult = maskResultSnapshotIDs(pigResult)
+			ompigResult = maskResultSnapshotIDs(ompigResult)
 			piResult = maskResultSnapshotIDs(piResult)
 		}
-		pigResult.System = pig.Label
-		o.Pig.Runs = append(o.Pig.Runs, pigResult)
+		ompigResult.System = ompig.Label
+		o.Ompig.Runs = append(o.Ompig.Runs, ompigResult)
 		piResult.System = pi.Label
 		o.Pi.Runs = append(o.Pi.Runs, piResult)
 
@@ -120,7 +120,7 @@ func RunScenario(ctx context.Context, t *testing.T, sc *Scenario, pig, pi Binary
 		// the complete sample and are evaluated only below.
 		probe := &ScenarioOutcome{
 			Scenario:     sc,
-			Pig:          o.Pig,
+			Ompig:        o.Ompig,
 			Pi:           o.Pi,
 			SkipPerfGate: true,
 		}

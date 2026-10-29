@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi gives an extension `ctx.signal` as `runner.getSignalFn()`, which AgentSession binds to `() => this.agent.signal` (runner.ts:917-920, agent-session.ts:3368, agent.ts:336-338):

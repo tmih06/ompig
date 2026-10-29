@@ -15,12 +15,12 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // pi-ai sends JSON.stringify(params) for the whole conversation (openai-completions.ts streamCompletions via the SDK). The cached splice must produce the bytes marshalRequestBody (JSON.stringify) produces for the same request.
 func spliceTestStrings(random *rand.Rand) []string {
-	atoms := []string{"func main() {\n\tfmt.Println(\"<hi> & bye\")\n}\n", "\u2028\u2029", "\x00\x01\x1f", "\xff\xfe", "😀 café 漢字", "\\\"", "pig-splice-0-", `"pig-splice-deadbeef-0"`}
+	atoms := []string{"func main() {\n\tfmt.Println(\"<hi> & bye\")\n}\n", "\u2028\u2029", "\x00\x01\x1f", "\xff\xfe", "😀 café 漢字", "\\\"", "ompig-splice-0-", `"ompig-splice-deadbeef-0"`}
 	var out []string
 	for _, size := range []int{0, 1, requestSpliceMinBytes - 1, requestSpliceMinBytes, requestSpliceMinBytes + 1, 3 * requestSpliceMinBytes} {
 		var builder strings.Builder

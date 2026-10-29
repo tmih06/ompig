@@ -12,11 +12,11 @@ import (
 	"sync/atomic"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/orderedjson"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // UIBridge translates extension→host call messages into real UI/action method
@@ -28,7 +28,7 @@ import (
 // noop implementation (NoopUIContext returns sane zero values for every
 // method).
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type UIBridge struct {
 	// waitForIdleBlocks reports whether a waitForIdle call waits now (extension.CommandActions.WaitForIdleBlocks); guarded by mu.
 	waitForIdleBlocks   func() bool
@@ -152,7 +152,7 @@ type UIBridge struct {
 	// to its own BroadcastStateUpdate, which pushes a fresh state_update to
 	// every connected extension. Mirrors upstream's setExtensionStatus,
 	// which calls this.ui.requestRender() synchronously in the single
-	// in-process runtime (interactive-mode.ts:2203); pig's footer factory
+	// in-process runtime (interactive-mode.ts:2203); ompig's footer factory
 	// runs in a separate subprocess and only re-renders on a pushed
 	// state_update, so the host must proactively push one.
 	OnStateChanged func()
@@ -203,7 +203,7 @@ type UIBridge struct {
 
 // sessionLogPageBytes sizes one session-log chunk on the wire. Every reader
 // pages until the log is complete, so it never limits what an extension sees.
-// pig additive (D19): the subprocess wire chunks the log that upstream's
+// ompig additive (D19): the subprocess wire chunks the log that upstream's
 // in-process session manager exposes directly.
 const sessionLogPageBytes = 4 * 1024 * 1024
 
@@ -506,7 +506,7 @@ type ToolInfo struct {
 	// SourceInfo is upstream's SourceInfo object: path, source, scope, origin
 	// and an optional baseDir.
 	SourceInfo extension.SourceInfo `json:"sourceInfo"`
-	// Source is PiG's per-tool source attribution (D23): "builtin", the
+	// Source is Ompig's per-tool source attribution (D23): "builtin", the
 	// registering extension's name, or the tool's declared source. It is
 	// not part of upstream's ToolInfo, so the replicated state Node
 	// extensions read omits it; the getAllTools host call keeps sending it
@@ -720,7 +720,7 @@ func (b *UIBridge) SetTerminalCapabilitiesFunc(fn func() TerminalCapabilitiesPay
 // worker, off the caller's goroutine, because the caller is the UI loop and a
 // push waits on every extension's connection.
 //
-// pig additive (D107): stock PiG has no frontend and never sets it.
+// ompig additive (D107): stock Ompig has no frontend and never sets it.
 func (b *UIBridge) SetFrontend(on bool) {
 	b.mu.Lock()
 	changed := b.frontend != on
@@ -799,7 +799,7 @@ func NewUIBridge(invalidateTUI func()) *UIBridge {
 // SetInvalidate replaces the TUI invalidation callback. Thread-safe.
 // Called by InteractiveMode after TUI creation to wire live rendering.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 func (b *UIBridge) SetInvalidate(fn func()) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
@@ -1277,7 +1277,7 @@ func (b *UIBridge) SetHostAction(key string, fn any) {
 		b.actions.SetSessionName = fn.(func(string) error)
 	default:
 		b.mu.Unlock()
-		// Every key is a literal in pig's own startup wiring, so an unknown one
+		// Every key is a literal in ompig's own startup wiring, so an unknown one
 		// is a typo that would otherwise leave the action unbound and the
 		// capability silently missing from every extension.
 		panic(fmt.Sprintf("SetHostAction: unknown action %q", key))
@@ -1392,7 +1392,7 @@ func (b *UIBridge) handleCall(ctx context.Context, extName string, owner *Conn, 
 		return b.handleSetHiddenThinkingLabel(ui, call.Args)
 	case "ui.setWidget":
 		return b.handleSetWidget(extName, owner, call.Args)
-	// pig additive (D19): a Pi extension rings the terminal bell by writing BEL to process.stdout, which a subprocess extension cannot reach.
+	// ompig additive (D19): a Pi extension rings the terminal bell by writing BEL to process.stdout, which a subprocess extension cannot reach.
 	case CallUIBell:
 		if beller, ok := ui.(extension.TerminalBeller); ok {
 			beller.Bell()
@@ -1426,7 +1426,7 @@ func (b *UIBridge) handleCall(ctx context.Context, extName string, owner *Conn, 
 		return b.handleSetHeader(extName, owner, call.Args)
 	case CallUISetLogin:
 		return b.handleSetLogin(extName, owner, call.Args)
-	// pig divergence (D2): an extension adds a sprite to /sprite; Pi has no sprites.
+	// ompig divergence (D2): an extension adds a sprite to /sprite; Pi has no sprites.
 	case CallUIRegisterSprite:
 		return b.handleRegisterSprite(extName, call.Args)
 	case "ui.setTitle":
@@ -1815,7 +1815,7 @@ func (b *UIBridge) clearExtension(extName string, owner *Conn, ownerOnly bool) {
 }
 
 // SetModelCatalog installs equivalent value and JSON projections atomically. Publication uses the encoder without changing the value getter or its notification boundary. Replacing the getter through SetHostAction or SetActions clears the encoder.
-// pig additive (D19): subprocess snapshot encoding reuses the same current model data without changing the extension API.
+// ompig additive (D19): subprocess snapshot encoding reuses the same current model data without changing the extension API.
 func (b *UIBridge) SetModelCatalog(getModels func() []json.RawMessage, encodeModels func() (json.RawMessage, error)) {
 	b.mu.Lock()
 	if b.actions == nil {
@@ -1852,7 +1852,7 @@ func (b *UIBridge) PublishModelCatalog() {
 	b.mu.RLock()
 	connections := make([]*Conn, 0, len(b.extConns))
 	for _, connection := range b.extConns {
-		// pig additive (D19): a runtime that reads getModelRegistryState on use gets no snapshot it would discard.
+		// ompig additive (D19): a runtime that reads getModelRegistryState on use gets no snapshot it would discard.
 		if connection.modelRegistry {
 			connections = append(connections, connection)
 		}
@@ -1874,7 +1874,7 @@ func (b *UIBridge) PublishModelCatalog() {
 // getModelRegistryState make, until the returned function runs; that function then publishes once if any publication was deferred.
 // Binding the model operations together so sends each replica one snapshot of the finished binding instead of one per step: an
 // extension idle until session_start would otherwise decode the whole catalog several times on the startup path.
-// pig additive (D19): Pi's extensions read its ModelRegistry in process, so no snapshot crosses a process boundary there.
+// ompig additive (D19): Pi's extensions read its ModelRegistry in process, so no snapshot crosses a process boundary there.
 func (b *UIBridge) BatchModelCatalogPublication() func() {
 	b.mu.Lock()
 	b.modelCatalogBatches++
@@ -2105,7 +2105,7 @@ func (b *UIBridge) ForgetProviderRegistration(name string) {
 // declared RegisterPayload.WantsModelRegistry receives the current registry
 // snapshot now and every later publication.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 func (b *UIBridge) RegisterExtConn(extName string, conn *Conn, wantsModelRegistry bool) {
 	b.mu.Lock()
 	b.extConns[extName] = conn
@@ -2124,7 +2124,7 @@ func (b *UIBridge) RegisterExtConn(extName string, conn *Conn, wantsModelRegistr
 // but the surface is the natural extension point for future
 // notification-only host APIs.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 func (b *UIBridge) HandleNotify(extName string, n *NotifyPayload) {
 	b.HandleNotifyFrom(extName, nil, n)
 }
@@ -2896,7 +2896,7 @@ func (h *customOverlayHost) OnFocus(focused bool) {
 // calls that arrive before the UI-side overlay constructor binds the
 // real handle, then transparently forwards once a target is set.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type overlayProxy struct {
 	mu       sync.Mutex
 	target   extension.RemoteOverlayHandle
@@ -3281,7 +3281,7 @@ func (b *UIBridge) handleSetHeader(extName string, conn *Conn, args json.RawMess
 	return &CallResultPayload{}, nil
 }
 
-// pig additive (D60): apply the typed native login call while preserving the
+// ompig additive (D60): apply the typed native login call while preserving the
 // shared header slot and the latest pending operation before UI binding.
 func (b *UIBridge) handleSetLogin(extName string, conn *Conn, args json.RawMessage) (*CallResultPayload, error) {
 	if _, err := extension.DecodeLoginDefinitionJSON(args); err != nil {
@@ -3319,7 +3319,7 @@ func (b *UIBridge) handleSetLogin(extName string, conn *Conn, args json.RawMessa
 	return &CallResultPayload{}, nil
 }
 
-// pig divergence (D2): register an extension's sprite with the UI's sprite catalogue. The bridge keeps it, so a UI bound
+// ompig divergence (D2): register an extension's sprite with the UI's sprite catalogue. The bridge keeps it, so a UI bound
 // later receives it, and drops it with its extension.
 func (b *UIBridge) handleRegisterSprite(extName string, args json.RawMessage) (*CallResultPayload, error) {
 	definition, err := extension.DecodeSpriteDefinitionJSON(args)

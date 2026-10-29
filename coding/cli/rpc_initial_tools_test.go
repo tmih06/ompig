@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding"
 )
 
 func TestRPCInitialActiveToolsPreserveFullRegistry(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -60,7 +60,7 @@ func TestRPCInitialActiveToolsPreserveFullRegistry(t *testing.T) {
 
 func TestRPCFreshPromptDeclaresStructuredSystemOnce(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
 	p.send(`{"id":"fresh","type":"get_messages"}`)
 	p.await("fresh empty transcript", func(record rpcRecord) bool {
 		if record["id"] != "fresh" {
@@ -136,7 +136,7 @@ func TestRPCDefaultToolsSettingSelectsInitialTools(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(agentDir, "settings.json"), []byte(`{"defaultTools":["read","grep"]}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + agentDir, "PIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + agentDir, "OMPIG_TEST_FAUX=1"}, "--no-session", "--provider", "test-faux", "--model", "faux-1")
 	p.send(`{"id":"prompt","type":"prompt","message":"hello"}`)
 	p.await("settled prompt", func(record rpcRecord) bool { return record["type"] == "agent_settled" })
 	p.send(`{"id":"sent","type":"get_messages"}`)
@@ -156,7 +156,7 @@ func TestRPCDefaultToolsSettingSelectsInitialTools(t *testing.T) {
 // Pi 0.99.1 (dist/cli.js, --mode rpc, test-faux twin, probed 2026-09-30) declares only the built-in loadout in a fresh prompt, with or without
 // --no-extensions: the codemode and tool_search built-ins register `defaultActive: false` (extensions/codemode/index.ts:41,
 // extensions/tool-search/index.ts:14), so agent-session.ts:3503-3506 does not activate them. Naming one in `--tools` activates it while it
-// is declarable (agent-session.ts:3487-3491). Pi declares `--tools` in the order given; PiG orders them by registry, which the cases avoid.
+// is declarable (agent-session.ts:3487-3491). Pi declares `--tools` in the order given; Ompig orders them by registry, which the cases avoid.
 func TestRPCStartupDeclaresOnlyTheToolsPiActivates(t *testing.T) {
 	for _, tc := range []struct {
 		name string
@@ -171,7 +171,7 @@ func TestRPCStartupDeclaresOnlyTheToolsPiActivates(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			home := t.TempDir()
 			args := append([]string{"--no-session", "--provider", "test-faux", "--model", "faux-1"}, tc.args...)
-			p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, args...)
+			p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, args...)
 			p.send(`{"id":"prompt","type":"prompt","message":"hello"}`)
 			p.await("settled prompt", func(record rpcRecord) bool { return record["type"] == "agent_settled" })
 			p.send(`{"id":"sent","type":"get_messages"}`)

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
+	"github.com/tmih06/ompig/coding/packagecontent"
 )
 
 // Measure the startup validation and collection passes over explicit settings file URLs.

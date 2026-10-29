@@ -6,13 +6,13 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // Review CLIEXT-016: Pi package-manager.ts:2036-2050 keeps one global npm root per package manager, keyed by the npmCommand argv joined with NUL. An unchanged command reuses the root, a changed command runs `root -g` again, and a command change back to an earlier argv runs it once more because only the latest key is kept.
 func TestGlobalNpmRootCachedPerCommand(t *testing.T) {
-	f := newPackageProcessFixture(t, `if(command!=='mise'||args.slice(-2).join(' ')!=='root -g')throw new Error('unexpected command'); console.log(path.join(process.env.PIG_TEST_PACKAGE_CWD,args[1]==='node@20'?'node20':'node22','lib','node_modules'));`)
+	f := newPackageProcessFixture(t, `if(command!=='mise'||args.slice(-2).join(' ')!=='root -g')throw new Error('unexpected command'); console.log(path.join(process.env.OMPIG_TEST_PACKAGE_CWD,args[1]==='node@20'?'node20':'node22','lib','node_modules'));`)
 	root20 := filepath.Join(f.cwd, "node20", "lib", "node_modules")
 	installed := filepath.Join(root20, "@scope", "pkg")
 	if err := os.MkdirAll(installed, 0o755); err != nil {
@@ -56,7 +56,7 @@ func TestGlobalNpmRootCachedPerCommand(t *testing.T) {
 
 // Pi package-manager.ts:2685-2698 reads a synchronous npm command's stdout, falling back to stderr only when stdout is empty, so a warning on stderr does not corrupt the global root.
 func TestGlobalNpmRootIgnoresStderrWarnings(t *testing.T) {
-	f := newPackageProcessFixture(t, `if(args.join(' ')!=='root -g')throw new Error('unexpected command'); console.error('npm warn config deprecated setting'); console.log(path.join(process.env.PIG_TEST_PACKAGE_CWD,'legacy','node_modules'));`)
+	f := newPackageProcessFixture(t, `if(args.join(' ')!=='root -g')throw new Error('unexpected command'); console.error('npm warn config deprecated setting'); console.log(path.join(process.env.OMPIG_TEST_PACKAGE_CWD,'legacy','node_modules'));`)
 	installed := filepath.Join(f.cwd, "legacy", "node_modules", "legacy-pkg")
 	if err := os.MkdirAll(installed, 0o755); err != nil {
 		t.Fatal(err)

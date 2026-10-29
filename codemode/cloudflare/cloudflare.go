@@ -10,7 +10,7 @@ package cloudflare
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // DefaultRemoteMemoryLimitBytes is the default VM memory limit of SandboxDurableObject. Isolates have 128 MB in total.

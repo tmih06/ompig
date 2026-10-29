@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// endInputAfterReplacement writes new_session and a prompt for an extension command in one write, then ends stdin. Pi reads both lines before the replacement runs, and exits before new_session answers; the command and the quit shutdown run on the replaced Session. Pig's queued replacement builds a Session after stdin ended.
+// endInputAfterReplacement writes new_session and a prompt for an extension command in one write, then ends stdin. Pi reads both lines before the replacement runs, and exits before new_session answers; the command and the quit shutdown run on the replaced Session. Ompig's queued replacement builds a Session after stdin ended.
 func endInputAfterReplacement(p *rpcProcess, command string) []rpcRecord {
 	p.t.Helper()
 	p.send(`{"id":"n","type":"new_session"}` + "\n" + `{"id":"c","type":"prompt","message":"/` + command + `"}`)
@@ -15,11 +15,11 @@ func endInputAfterReplacement(p *rpcProcess, command string) []rpcRecord {
 	return drainRPCOutput(p)
 }
 
-// Pi 0.87.1: a command that finishes only after the process is decided to exit answers nothing, also when a new_session is queued before it. Pig runs the command on the Session that the replacement built, so its stdin end must reach that Session's extension host, or the response hold is lost.
+// Pi 0.87.1: a command that finishes only after the process is decided to exit answers nothing, also when a new_session is queued before it. Ompig runs the command on the Session that the replacement built, so its stdin end must reach that Session's extension host, or the response hold is lost.
 func TestRPCInputEndAfterQueuedReplacementHoldsCommandResponse(t *testing.T) {
 	for _, impl := range rpcShutdownImplementations {
 		t.Run(impl.name, func(t *testing.T) {
-			// As for the immediate2 rows of TestRPCInputEndAfterExtensionCommandComparedWithPi (piRacy): on Windows libuv reads pipe stdin on a reader thread, so whether Pi's two nested setImmediate ticks beat the end of input varies, and only pig's side is asserted there.
+			// As for the immediate2 rows of TestRPCInputEndAfterExtensionCommandComparedWithPi (piRacy): on Windows libuv reads pipe stdin on a reader thread, so whether Pi's two nested setImmediate ticks beat the end of input varies, and only ompig's side is asserted there.
 			if impl.name == "pi" && runtime.GOOS == "windows" {
 				t.Skip("Pi's answer to a nested setImmediate at the end of input is not fixed on Windows (piRacy)")
 			}
@@ -32,8 +32,8 @@ func TestRPCInputEndAfterQueuedReplacementHoldsCommandResponse(t *testing.T) {
 				}
 			}
 			events := readRPCShutdownReport(t, report)
-			// Pi records nothing for a command that runs after its exit. Pig's runtime is a separate process that its host stops after the exit decision, so the continuation may record its event first.
-			if impl.name == "pig" {
+			// Pi records nothing for a command that runs after its exit. Ompig's runtime is a separate process that its host stops after the exit decision, so the continuation may record its event first.
+			if impl.name == "ompig" {
 				events = slices.DeleteFunc(events, func(event string) bool { return event == "immediate2" })
 			}
 			if !slices.Equal(events, []string{"session_shutdown", "session_shutdown"}) {
@@ -43,7 +43,7 @@ func TestRPCInputEndAfterQueuedReplacementHoldsCommandResponse(t *testing.T) {
 	}
 }
 
-// Pi 0.87.1: a quit session_shutdown handler that never settles keeps nothing alive, so the process exits 0 when stdin ends, also when a new_session is queued before it. Pi delivers the quit shutdown to the replaced Session's stale instance; pig delivers it to the Session that the replacement built, and its stdin end must reach that host, or the shutdown waits forever.
+// Pi 0.87.1: a quit session_shutdown handler that never settles keeps nothing alive, so the process exits 0 when stdin ends, also when a new_session is queued before it. Pi delivers the quit shutdown to the replaced Session's stale instance; ompig delivers it to the Session that the replacement built, and its stdin end must reach that host, or the shutdown waits forever.
 func TestRPCInputEndAfterQueuedReplacementWithPendingShutdownExitsZero(t *testing.T) {
 	for _, impl := range rpcShutdownImplementations {
 		t.Run(impl.name, func(t *testing.T) {

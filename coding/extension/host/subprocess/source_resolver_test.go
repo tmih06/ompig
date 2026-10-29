@@ -10,14 +10,14 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestResolveExtConfigMapsConventionalFactory(t *testing.T) {
 	root := t.TempDir()
 	writeResolverFile(t, filepath.Join(root, "go.mod"), "module example.com/review\n\ngo 1.26\n")
-	writeResolverFile(t, filepath.Join(root, "extension.go"), "package review\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
+	writeResolverFile(t, filepath.Join(root, "extension.go"), "package review\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return nil }\n")
 	config, definition, err := ResolveExtConfigWithIdentity(root, "review")
 	if err != nil {
 		t.Fatal(err)
@@ -36,9 +36,9 @@ func TestResolveExtConfigBuildsEachExactFactoryPackageInOneModule(t *testing.T) 
 	if err != nil {
 		t.Fatal(err)
 	}
-	writeResolverFile(t, filepath.Join(root, "go.mod"), fmt.Sprintf("module example.com/multi\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", modfile.AutoQuote(sdkRoot)))
+	writeResolverFile(t, filepath.Join(root, "go.mod"), fmt.Sprintf("module example.com/multi\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", modfile.AutoQuote(sdkRoot)))
 	for _, name := range []string{"alpha", "beta"} {
-		writeResolverFile(t, filepath.Join(root, name, "extension.go"), "package "+name+"\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\""+name+"\") }\n")
+		writeResolverFile(t, filepath.Join(root, name, "extension.go"), "package "+name+"\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\""+name+"\") }\n")
 	}
 	if _, _, err := ResolveExtConfig(root); err == nil || !strings.Contains(err.Error(), "example.com/multi/alpha") || !strings.Contains(err.Error(), "example.com/multi/beta") {
 		t.Fatalf("module root ambiguity = %v", err)
@@ -76,8 +76,8 @@ func TestResolveExtConfigNamesLinkedGoFactoryBySelectedPath(t *testing.T) {
 		t.Fatal(err)
 	}
 	target := filepath.Join(parent, "x", "extension")
-	writeResolverFile(t, filepath.Join(target, "go.mod"), fmt.Sprintf("module example.com/x/extension\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", modfile.AutoQuote(sdkRoot)))
-	writeResolverFile(t, filepath.Join(target, "extension.go"), "package extension\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"linked\") }\n")
+	writeResolverFile(t, filepath.Join(target, "go.mod"), fmt.Sprintf("module example.com/x/extension\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", modfile.AutoQuote(sdkRoot)))
+	writeResolverFile(t, filepath.Join(target, "extension.go"), "package extension\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"linked\") }\n")
 	link := filepath.Join(parent, "extensions", "linked")
 	if err := os.MkdirAll(filepath.Dir(link), 0o755); err != nil {
 		t.Fatal(err)
@@ -119,8 +119,8 @@ func TestResolveExtConfigBuildsLinkedGoFactoryInTargetWorkspace(t *testing.T) {
 	writeResolverFile(t, filepath.Join(workspace, "lib", "go.mod"), "module example.com/lib\n\ngo 1.26\n")
 	writeResolverFile(t, filepath.Join(workspace, "lib", "lib.go"), "package lib\n\nconst Name = \"linked\"\n")
 	target := filepath.Join(workspace, "extension")
-	writeResolverFile(t, filepath.Join(target, "go.mod"), fmt.Sprintf("module example.com/x/extension\n\ngo 1.26\n\nrequire (\n\tgithub.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\texample.com/lib v0.0.0\n)\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", modfile.AutoQuote(sdkRoot)))
-	writeResolverFile(t, filepath.Join(target, "extension.go"), "package extension\n\nimport (\n\t\"example.com/lib\"\n\tsdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\n)\n\nfunc Extension() *sdk.Extension { return sdk.New(lib.Name) }\n")
+	writeResolverFile(t, filepath.Join(target, "go.mod"), fmt.Sprintf("module example.com/x/extension\n\ngo 1.26\n\nrequire (\n\tgithub.com/tmih06/ompig/extensions/sdk v0.0.0\n\texample.com/lib v0.0.0\n)\n\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", modfile.AutoQuote(sdkRoot)))
+	writeResolverFile(t, filepath.Join(target, "extension.go"), "package extension\n\nimport (\n\t\"example.com/lib\"\n\tsdk \"github.com/tmih06/ompig/extensions/sdk\"\n)\n\nfunc Extension() *sdk.Extension { return sdk.New(lib.Name) }\n")
 	link := filepath.Join(parent, "extensions", "linked")
 	if err := os.MkdirAll(filepath.Dir(link), 0o755); err != nil {
 		t.Fatal(err)
@@ -146,7 +146,7 @@ func TestResolveExtConfigBuildsLinkedGoFactoryInTargetWorkspace(t *testing.T) {
 // TestResolveExtConfigPacksNodeFactoryByDefault pins N8's intentional
 // default: a conventional Node factory (a default export, whether resolved
 // for a project-discovered extension or a `-e` command-line path -
-// ResolveExtConfig is the exact resolver pig's `-e` handling uses,
+// ResolveExtConfig is the exact resolver ompig's `-e` handling uses,
 // coding/cli/configured_resources.go's pathToExtConfigs) packs into the
 // session's one shared Node cell, matching Go/Rust/Python factories. This
 // mirrors upstream: Pi's cli/args.ts merges a `-e`/`--extension` path into
@@ -155,7 +155,7 @@ func TestResolveExtConfigBuildsLinkedGoFactoryInTargetWorkspace(t *testing.T) {
 // process. Before N8, every Node factory defaulted to Isolation: "isolated"
 // (one process each); this test used to pin that old default under the name
 // TestResolveExtConfigKeepsNodeFactoryIsolated. definition.Packable stays
-// false for node regardless: that field also drives Piglet Binary
+// false for node regardless: that field also drives Ompiglet Binary
 // fusibility, which Node components never support (D19); packing and
 // fusibility are separate questions. The standalone/exact-executable form
 // (a shebang script, not a factory) is unaffected and still isolated - see

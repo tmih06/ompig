@@ -1,6 +1,6 @@
 # Terminal setup
 
-PiG runs in any terminal. Some features need terminal support, and PiG turns each one on only when it detects that support. This page lists what PiG detects, and what to change when a key or an image does not work. The terminal setup is the same as for Pi 1.4.0 ([Pi's terminal guide](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/terminal-setup.md)), apart from the differences named below.
+Ompig runs in any terminal. Some features need terminal support, and Ompig turns each one on only when it detects that support. This page lists what Ompig detects, and what to change when a key or an image does not work. The terminal setup is the same as for Pi 1.4.0 ([Pi's terminal guide](https://github.com/earendil-works/pi/blob/v1.2.0/packages/coding-agent/docs/terminal-setup.md)), apart from the differences named below.
 
 ## Troubleshooting
 
@@ -11,14 +11,14 @@ PiG runs in any terminal. Some features need terminal support, and PiG turns eac
 | Scrolling in fullscreen mode is slow | [iTerm2](#iterm2) |
 | Links show no hover preview in fullscreen mode | [Ghostty](#ghostty) |
 | An input method window appears in the wrong place | [IME candidate window](#ime-candidate-window) |
-| A key works outside PiG but not inside it | [Keys that do not respond](#keys-that-do-not-respond) |
-| herdr does not show PiG's state | [herdr](#herdr) |
+| A key works outside Ompig but not inside it | [Keys that do not respond](#keys-that-do-not-respond) |
+| herdr does not show Ompig's state | [herdr](#herdr) |
 
-Use `/hotkeys` to list the keys PiG has bound. `Ctrl+J` always inserts a new line, so you can use it in any terminal where `Shift+Enter` does not arrive.
+Use `/hotkeys` to list the keys Ompig has bound. `Ctrl+J` always inserts a new line, so you can use it in any terminal where `Shift+Enter` does not arrive.
 
-## What PiG detects
+## What Ompig detects
 
-PiG detects image, true-color, and hyperlink capabilities from environment variables, except for the tmux hyperlink check below. Keyboard negotiation and automatic theme detection also use terminal queries.
+Ompig detects image, true-color, and hyperlink capabilities from environment variables, except for the tmux hyperlink check below. Keyboard negotiation and automatic theme detection also use terminal queries.
 
 | Terminal | Images | True color | Hyperlinks |
 |---|---|---|---|
@@ -36,27 +36,27 @@ PiG detects image, true-color, and hyperlink capabilities from environment varia
 | Apple Terminal | no | with `COLORTERM` | no |
 | herdr | yes | with `COLORTERM` | yes |
 
-Inside `tmux` or `screen`, PiG turns images off. The multiplexer sits between PiG and the terminal, so what the outer terminal accepts is not evidence that the pane accepts it. Hyperlinks stay off in `screen`. In `tmux`, PiG asks tmux whether the attached client forwards hyperlinks and uses them only when it does.
+Inside `tmux` or `screen`, Ompig turns images off. The multiplexer sits between Ompig and the terminal, so what the outer terminal accepts is not evidence that the pane accepts it. Hyperlinks stay off in `screen`. In `tmux`, Ompig asks tmux whether the attached client forwards hyperlinks and uses them only when it does.
 
-PiG reads `TERM_PROGRAM`, `TERM` and `COLORTERM` first. It also accepts `KITTY_WINDOW_ID`, `GHOSTTY_RESOURCES_DIR`, `WEZTERM_PANE`, `ITERM_SESSION_ID`, `WARP_SESSION_ID` and `WT_SESSION` as evidence, because some terminals set only these. A terminal it does not recognize gets true color only with `COLORTERM=truecolor` or `COLORTERM=24bit`, and no images or hyperlinks.
+Ompig reads `TERM_PROGRAM`, `TERM` and `COLORTERM` first. It also accepts `KITTY_WINDOW_ID`, `GHOSTTY_RESOURCES_DIR`, `WEZTERM_PANE`, `ITERM_SESSION_ID`, `WARP_SESSION_ID` and `WT_SESSION` as evidence, because some terminals set only these. A terminal it does not recognize gets true color only with `COLORTERM=truecolor` or `COLORTERM=24bit`, and no images or hyperlinks.
 
 To correct detection, set `PI_HYPERLINKS`, `PI_IMAGE_PROTOCOL` or `PI_TRUE_COLOR` (see [environment variables](/docs/latest/environment-variables)), or the matching `terminal.*` setting (see [settings](/docs/latest/settings)). The setting wins.
 
 ## Automatic theme detection
 
-Without an explicit theme, PiG queries the terminal's default background with OSC 11. An automatic light/dark theme pair also queries the terminal's color-scheme preference. PiG consumes replies to its background queries before editor or extension input. A late OSC 11 reply does not replace a completed fallback or settle a newer query. A color reply that arrives in several pieces waits for its terminator, so its digits are not typed into the editor and its BEL terminator does not open the external editor as `Ctrl+G`. Pi 1.4.0 fixed this; Pi 1.1.0 could type such a reply.
+Without an explicit theme, Ompig queries the terminal's default background with OSC 11. An automatic light/dark theme pair also queries the terminal's color-scheme preference. Ompig consumes replies to its background queries before editor or extension input. A late OSC 11 reply does not replace a completed fallback or settle a newer query. A color reply that arrives in several pieces waits for its terminator, so its digits are not typed into the editor and its BEL terminator does not open the external editor as `Ctrl+G`. Pi 1.4.0 fixed this; Pi 1.1.0 could type such a reply.
 
 ## Keys that do not respond
 
-A terminal sends a key to PiG only if it does not use the key itself. When a binding does nothing, the terminal usually consumed the key.
+A terminal sends a key to Ompig only if it does not use the key itself. When a binding does nothing, the terminal usually consumed the key.
 
-Check first whether the key works outside PiG. If the terminal has a command bound to it, unbind the command or bind the PiG action to a different key. See [keybindings](/docs/latest/keybindings).
+Check first whether the key works outside Ompig. If the terminal has a command bound to it, unbind the command or bind the Ompig action to a different key. See [keybindings](/docs/latest/keybindings).
 
 If `Alt+key` input arrives as `Escape` followed by the key, for example over a slow SSH link, raise `PI_TUI_ESC_TIMEOUT` (milliseconds; default `100` over SSH and `10` otherwise).
 
 ### tmux
 
-`tmux` must send extended keys, or modified keys such as `shift+enter` and `ctrl+enter` arrive as their unmodified form. PiG warns at startup when it finds the wrong setting. See [tmux](/docs/latest/tmux) for the full setup.
+`tmux` must send extended keys, or modified keys such as `shift+enter` and `ctrl+enter` arrive as their unmodified form. Ompig warns at startup when it finds the wrong setting. See [tmux](/docs/latest/tmux) for the full setup.
 
 Add both lines to `~/.tmux.conf` and restart tmux:
 
@@ -65,21 +65,21 @@ set -g extended-keys on
 set -g extended-keys-format csi-u
 ```
 
-`extended-keys-format xterm` also sends modified keys, but in a format that carries less information. PiG warns about it and works better with `csi-u`.
+`extended-keys-format xterm` also sends modified keys, but in a format that carries less information. Ompig warns about it and works better with `csi-u`.
 
-PiG does not warn when it cannot query tmux, because a sandbox that blocks the query is not evidence of a wrong setting.
+Ompig does not warn when it cannot query tmux, because a sandbox that blocks the query is not evidence of a wrong setting.
 
 ### Apple Terminal
 
-PiG enables enhanced key reporting when available. If Terminal.app still sends plain Return for `shift+enter`, PiG asks macOS whether Shift is held and treats the key as `shift+enter`. This works only when PiG runs on the same Mac as Terminal.app. Over SSH, PiG cannot see the local modifier state.
+Ompig enables enhanced key reporting when available. If Terminal.app still sends plain Return for `shift+enter`, Ompig asks macOS whether Shift is held and treats the key as `shift+enter`. This works only when Ompig runs on the same Mac as Terminal.app. Over SSH, Ompig cannot see the local modifier state.
 
 ### Termux
 
-Termux reports its window size differently from a desktop terminal. PiG detects Termux with `TERMUX_VERSION` and does not repaint the whole buffer when the window changes, because the repaint costs more than it corrects there. See [Termux](/docs/latest/termux).
+Termux reports its window size differently from a desktop terminal. Ompig detects Termux with `TERMUX_VERSION` and does not repaint the whole buffer when the window changes, because the repaint costs more than it corrects there. See [Termux](/docs/latest/termux).
 
 ## Terminal-specific setup
 
-PiG asks the terminal for the Kitty keyboard protocol at startup and falls back to xterm `modifyOtherKeys`. Either one lets PiG tell `Shift+Enter` and `Alt+Enter` apart from `Enter`. The entries below cover terminals that need a change to send those keys.
+Ompig asks the terminal for the Kitty keyboard protocol at startup and falls back to xterm `modifyOtherKeys`. Either one lets Ompig tell `Shift+Enter` and `Alt+Enter` apart from `Enter`. The entries below cover terminals that need a change to send those keys.
 
 ### Kitty
 
@@ -89,7 +89,7 @@ Kitty supports the Kitty keyboard protocol. It needs no setup.
 
 The regular layout needs no setup.
 
-In fullscreen mode (the default; `--tui-mode regular` or the `tuiMode` setting selects the regular layout), PiG captures the mouse, so iTerm2 sends wheel events to PiG instead of scrolling its own history. Fast trackpad gestures can then scroll only one line at a time. To change this, open **iTerm2 > Settings > Advanced**, find **Trackpad scrolls fast?** and set it to **No**. The setting applies to all of iTerm2.
+In fullscreen mode (the default; `--tui-mode regular` or the `tuiMode` setting selects the regular layout), Ompig captures the mouse, so iTerm2 sends wheel events to Ompig instead of scrolling its own history. Fast trackpad gestures can then scroll only one line at a time. To change this, open **iTerm2 > Settings > Advanced**, find **Trackpad scrolls fast?** and set it to **No**. The setting applies to all of iTerm2.
 
 ### Ghostty
 
@@ -101,9 +101,9 @@ keybind = alt+backspace=text:\x1b\x7f
 
 The file is `~/Library/Application Support/com.mitchellh.ghostty/config` on macOS and `~/.config/ghostty/config` on Linux.
 
-Remove a `keybind = shift+enter=text:\n` line if another tool added it. That line makes `Shift+Enter` send a raw line feed, which is the same byte as `Ctrl+J`. It appears to work in PiG, but PiG and tmux no longer receive a real `Shift+Enter`.
+Remove a `keybind = shift+enter=text:\n` line if another tool added it. That line makes `Shift+Enter` send a raw line feed, which is the same byte as `Ctrl+J`. It appears to work in Ompig, but Ompig and tmux no longer receive a real `Shift+Enter`.
 
-In fullscreen mode, PiG captures the mouse, so Ghostty does not underline links or preview their URLs on hover. Links are still clickable. Hold the modifier that Ghostty uses to bypass mouse capture to get its own link handling.
+In fullscreen mode, Ompig captures the mouse, so Ghostty does not underline links or preview their URLs on hover. Links are still clickable. Hold the modifier that Ghostty uses to bypass mouse capture to get its own link handling.
 
 ### WezTerm
 
@@ -116,7 +116,7 @@ config.enable_kitty_keyboard = true
 return config
 ```
 
-On macOS, WezTerm uses `Option+Enter` for its own fullscreen toggle. To send it to PiG as `Alt+Enter`, add this entry to `config.keys`:
+On macOS, WezTerm uses `Option+Enter` for its own fullscreen toggle. To send it to Ompig as `Alt+Enter`, add this entry to `config.keys`:
 
 ```lua
 config.keys = {
@@ -156,7 +156,7 @@ The file is in `~/Library/Application Support/Code/User/` on macOS, `~/.config/C
 
 ### Zed
 
-Add these bindings to Zed's `keymap.json`. They send `Shift+Enter` (new line), `Ctrl+-` (undo) and `Ctrl+Alt+]` (jump backward to a character) to PiG:
+Add these bindings to Zed's `keymap.json`. They send `Shift+Enter` (new line), `Ctrl+-` (undo) and `Ctrl+Alt+]` (jump backward to a character) to Ompig:
 
 ```json
 {
@@ -171,7 +171,7 @@ Add these bindings to Zed's `keymap.json`. They send `Shift+Enter` (new line), `
 
 ### Windows Terminal
 
-On Windows and in WSL, PiG uses Windows defaults for some keys. For example, `Ctrl+Q` queues a follow-up, because Windows Terminal uses `Alt+Enter` for fullscreen. See [keybindings](/docs/latest/keybindings).
+On Windows and in WSL, Ompig uses Windows defaults for some keys. For example, `Ctrl+Q` queues a follow-up, because Windows Terminal uses `Alt+Enter` for fullscreen. See [keybindings](/docs/latest/keybindings).
 
 To send `Shift+Enter`, open Windows Terminal's `settings.json` (**Settings > Open JSON file**) and add this object to the `actions` array:
 
@@ -184,7 +184,7 @@ To send `Shift+Enter`, open Windows Terminal's `settings.json` (**Settings > Ope
 
 Close every Windows Terminal window and start it again.
 
-To queue follow-ups with `Alt+Enter` instead, make Windows Terminal send the key the same way with `\u001b[13;3u`, then bind `app.message.followUp` to `alt+enter` in `~/.pig/agent/keybindings.json`.
+To queue follow-ups with `Alt+Enter` instead, make Windows Terminal send the key the same way with `\u001b[13;3u`, then bind `app.message.followUp` to `alt+enter` in `~/.ompig/agent/keybindings.json`.
 
 ### xfce4-terminal and Terminator
 
@@ -192,24 +192,24 @@ These terminals cannot report modified `Enter` keys. `Shift+Enter` and `Ctrl+Ent
 
 ### IntelliJ IDEA
 
-The IntelliJ terminal cannot tell `Shift+Enter` from `Enter`. Use `Ctrl+J` for a new line, or run PiG in another terminal.
+The IntelliJ terminal cannot tell `Shift+Enter` from `Enter`. Use `Ctrl+J` for a new line, or run Ompig in another terminal.
 
 ### herdr
 
-PiG reports its state to [herdr](https://herdr.dev) as its own agent, through herdr's [third-party agent path](https://herdr.dev/docs/add-herdr-support/). Pigpen's herdr extension reports with `pane report-agent` under the source `custom:pig` and the agent `pig`. It includes the session's path and id, so herdr can resume a PiG session, and it releases the pane when PiG quits. Install it from Pigpen, or use the `herdr` or `pig-with-batteries` Piglet.
+Ompig reports its state to [herdr](https://herdr.dev) as its own agent, through herdr's [third-party agent path](https://herdr.dev/docs/add-herdr-support/). Pigpen's herdr extension reports with `pane report-agent` under the source `custom:ompig` and the agent `ompig`. It includes the session's path and id, so herdr can resume a Ompig session, and it releases the pane when Ompig quits. Install it from Pigpen, or use the `herdr` or `ompig-with-batteries` Ompiglet.
 
-herdr's built-in Pi integration (`herdr integration install pi`) is a different thing. It also runs in PiG, and herdr acknowledges every report it sends, but herdr keeps those reports only for a pane whose foreground process is named `pi`. PiG's executable is named `pig`, so herdr discards them and lists no agent.
+herdr's built-in Pi integration (`herdr integration install pi`) is a different thing. It also runs in Ompig, and herdr acknowledges every report it sends, but herdr keeps those reports only for a pane whose foreground process is named `pi`. Ompig's executable is named `ompig`, so herdr discards them and lists no agent.
 
-Until Pigpen's herdr extension is published, either of these makes the Pi integration work with PiG, with the integration file unchanged:
+Until Pigpen's herdr extension is published, either of these makes the Pi integration work with Ompig, with the integration file unchanged:
 
 ```bash
-HERDR_AGENT=pi pig
+HERDR_AGENT=pi ompig
 ```
 
-or run PiG under the name `pi`:
+or run Ompig under the name `pi`:
 
 ```bash
-ln -s "$(command -v pig)" ~/.local/bin/pi
+ln -s "$(command -v ompig)" ~/.local/bin/pi
 pi
 ```
 
@@ -217,21 +217,21 @@ pi
 
 ### IME candidate window
 
-PiG draws its own cursor. Some input methods, for example CJK input in the IntelliJ terminal or in WezTerm under WSL, then place their candidate window in the wrong position. Show the terminal's cursor so the input method can follow it:
+Ompig draws its own cursor. Some input methods, for example CJK input in the IntelliJ terminal or in WezTerm under WSL, then place their candidate window in the wrong position. Show the terminal's cursor so the input method can follow it:
 
 ```bash
-PI_HARDWARE_CURSOR=1 pig
+PI_HARDWARE_CURSOR=1 ompig
 ```
 
-The `showHardwareCursor` setting does the same. With either one, PiG shows only the terminal's cursor and does not also draw its own reverse-video cursor, as in Pi 1.4.0. Pi 1.1.0 drew both.
+The `showHardwareCursor` setting does the same. With either one, Ompig shows only the terminal's cursor and does not also draw its own reverse-video cursor, as in Pi 1.4.0. Pi 1.1.0 drew both.
 
 ## Images
 
-PiG shows images when the terminal accepts the Kitty graphics protocol or the iTerm2 protocol. In every other terminal PiG writes the file path instead, so no information is lost.
+Ompig shows images when the terminal accepts the Kitty graphics protocol or the iTerm2 protocol. In every other terminal Ompig writes the file path instead, so no information is lost.
 
-Images are off inside `tmux` and `screen`. To see images, run PiG outside the multiplexer, or set `PI_IMAGE_PROTOCOL` when you know the multiplexer forwards them.
+Images are off inside `tmux` and `screen`. To see images, run Ompig outside the multiplexer, or set `PI_IMAGE_PROTOCOL` when you know the multiplexer forwards them.
 
-In herdr (`TERM_PROGRAM=herdr`), PiG shows images with the Kitty graphics protocol, as Pi 1.4.0 does. Pi 1.1.0 showed no images there. When a pane sets `HERDR_ENV=1`, PiG shows images only if herdr also sets `HERDR_KITTY_GRAPHICS=1` (D44).
+In herdr (`TERM_PROGRAM=herdr`), Ompig shows images with the Kitty graphics protocol, as Pi 1.4.0 does. Pi 1.1.0 showed no images there. When a pane sets `HERDR_ENV=1`, Ompig shows images only if herdr also sets `HERDR_KITTY_GRAPHICS=1` (D44).
 
 ## Capability overrides
 
@@ -241,25 +241,25 @@ Use `terminal.showImages` or `/settings` to hide images without changing protoco
 
 ## Closing an interactive session
 
-On Unix, `SIGTERM` and `SIGHUP` request shutdown even when `/scoped-models`, `/settings`, or another selector has focus. PiG runs extension shutdown handlers before restoring the terminal. No additional keypress is needed to dismiss a selector during shutdown.
+On Unix, `SIGTERM` and `SIGHUP` request shutdown even when `/scoped-models`, `/settings`, or another selector has focus. Ompig runs extension shutdown handlers before restoring the terminal. No additional keypress is needed to dismiss a selector during shutdown.
 
 ## Display problems
 
 | Symptom | Cause | What to do |
 |---|---|---|
-| PiG exits with `Rendered line N exceeds terminal width` | a component wrote a row wider than the terminal | fix the component to truncate its rows to the render width; the crash log lists every rendered row with its width |
+| Ompig exits with `Rendered line N exceeds terminal width` | a component wrote a row wider than the terminal | fix the component to truncate its rows to the render width; the crash log lists every rendered row with its width |
 | colors look wrong | the terminal reports no true color | set `COLORTERM=truecolor` if the terminal supports it |
-| a stray `[?62;22c` appears | the terminal answered a capability query late | PiG consumes this answer; report it with the terminal name |
+| a stray `[?62;22c` appears | the terminal answered a capability query late | Ompig consumes this answer; report it with the terminal name |
 
-When a terminal sends a device-attributes reply in several slow reads, PiG waits for the reply's final byte and does not pass the fragments to the editor. Pi 1.4.0 can type the rest of the reply, such as `24;28;32;42c`, into the editor (D143, [Pi #10657](https://github.com/earendil-works/pi/issues/10657)). A typed `ESC[?` then waits for the next key instead of 150 ms.
+When a terminal sends a device-attributes reply in several slow reads, Ompig waits for the reply's final byte and does not pass the fragments to the editor. Pi 1.4.0 can type the rest of the reply, such as `24;28;32;42c`, into the editor (D143, [Pi #10657](https://github.com/earendil-works/pi/issues/10657)). A typed `ESC[?` then waits for the next key instead of 150 ms.
 
-Set `PIG_RENDER_DEBUG` to any value to write render diagnostics. Use it when you report a display problem. Set `PI_TUI_WRITE_LOG` to a file or directory to record the bytes PiG writes to the terminal, as in Pi.
+Set `OMPIG_RENDER_DEBUG` to any value to write render diagnostics. Use it when you report a display problem. Set `PI_TUI_WRITE_LOG` to a file or directory to record the bytes Ompig writes to the terminal, as in Pi.
 
-As in Pi, a row wider than the terminal is fatal only when it reaches a differential render. PiG then writes `pi-tui-crash.log` to the agent directory (the system temp directory when there is none) with the terminal width, the offending row and its width, and every rendered row, restores the terminal, prints the error with the log path, and exits with status 1. The first render, a forced full render, and the full render after a resize emit an over-wide row unchanged.
+As in Pi, a row wider than the terminal is fatal only when it reaches a differential render. Ompig then writes `pi-tui-crash.log` to the agent directory (the system temp directory when there is none) with the terminal width, the offending row and its width, and every rendered row, restores the terminal, prints the error with the log path, and exits with status 1. The first render, a forced full render, and the full render after a resize emit an over-wide row unchanged.
 
 ## Program status
 
-PiG reports its state with the [Program Status Protocol (OSC 7501)](https://www.superlogical.com/rex/docs/build/program-status), so terminals and agent dashboards can show whether it is working, waiting for you, done, or failed:
+Ompig reports its state with the [Program Status Protocol (OSC 7501)](https://www.superlogical.com/rex/docs/build/program-status), so terminals and agent dashboards can show whether it is working, waiting for you, done, or failed:
 
 | State | When |
 |---|---|
@@ -267,11 +267,11 @@ PiG reports its state with the [Program Status Protocol (OSC 7501)](https://www.
 | `blocked` | An extension dialog or login waits for you. The message is the dialog title. |
 | `done` | A run finished. The message is the session name. |
 | `error` | A run ended with an error that is not retried. The message is the first line of the error. |
-| `idle` | PiG started, or you cancelled the run. |
+| `idle` | Ompig started, or you cancelled the run. |
 
-Reports never contain prompts or model output. The `app` value is `pig`, where Pi sends `pi`, because PiG uses its own command identity (D2). PiG sends reports only after the terminal answers the protocol's support query; tmux and screen do not forward them. Set `PI_PROGRAM_STATUS=1` to send reports without asking, or `PI_PROGRAM_STATUS=0` to turn them off. A Piglet frontend member receives the same states instead of the terminal (D91).
+Reports never contain prompts or model output. The `app` value is `ompig`, where Pi sends `pi`, because Ompig uses its own command identity (D2). Ompig sends reports only after the terminal answers the protocol's support query; tmux and screen do not forward them. Set `PI_PROGRAM_STATUS=1` to send reports without asking, or `PI_PROGRAM_STATUS=0` to turn them off. A Ompiglet frontend member receives the same states instead of the terminal (D91).
 
 ## Related
 
 - [Keybindings](/docs/latest/keybindings) lists the actions and their default keys.
-- [Settings](/docs/latest/settings) lists the files and settings PiG reads.
+- [Settings](/docs/latest/settings) lists the files and settings Ompig reads.

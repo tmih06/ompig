@@ -11,12 +11,12 @@ import (
 
 // Pi's factory runs before the runner binds, and the listeners it subscribes join the loader's shared emitter at once (event-bus.ts:13-34), so they hear an emit another extension makes while the factory runs. The native SDKs have no connection while the factory runs, so the first factory-time bus call dials the host (as the parseFrontmatter helper does), Run adopts that connection, and a pump answers the host's dispatches on it until then.
 
-// factoryHost is a host the factory dialled: PIG_EXT_SOCKET names it, and the first bus call of a goroutine connects it.
+// factoryHost is a host the factory dialled: OMPIG_EXT_SOCKET names it, and the first bus call of a goroutine connects it.
 func factoryHost(t *testing.T) *mockHost {
 	t.Helper()
 	host := newMockHost(t)
 	t.Cleanup(host.close)
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	return host
 }
 
@@ -209,9 +209,9 @@ func TestEventBusFactoryEmitOnErrorFailsWhenTheHostHeardNobody(t *testing.T) {
 	}
 }
 
-// With no host to reach (no PIG_EXT_SOCKET), a factory-time emit fails rather than queueing: the delivery Pi makes at once has nowhere to go; a listener is queued for Run.
+// With no host to reach (no OMPIG_EXT_SOCKET), a factory-time emit fails rather than queueing: the delivery Pi makes at once has nowhere to go; a listener is queued for Run.
 func TestEventBusFactoryWithoutAHost(t *testing.T) {
-	t.Setenv("PIG_EXT_SOCKET", "")
+	t.Setenv("OMPIG_EXT_SOCKET", "")
 	ext := New("bus")
 	if err := ext.Events().Emit("ch", nil); !errors.Is(err, errBusNotConnected) {
 		t.Fatalf("Emit = %v, want errBusNotConnected", err)

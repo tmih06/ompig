@@ -6,19 +6,19 @@ SPDX-License-Identifier: MIT
 
 ## Scope
 
-This model covers Stock PiG, its local configuration and caches, its extension host, Package and Piglet handling, Piglet Binary signing and publication, the remote execution environment over SSH (`env`), self-update, and published release artifacts.
+This model covers Stock Ompig, its local configuration and caches, its extension host, Package and Ompiglet handling, Ompiglet Binary signing and publication, the remote execution environment over SSH (`env`), self-update, and published release artifacts.
 
-Product extensions and deployment platforms have separate threat models. Their credentials, APIs, policy, and infrastructure are outside Stock PiG.
+Product extensions and deployment platforms have separate threat models. Their credentials, APIs, policy, and infrastructure are outside Stock Ompig.
 
 ## Assets
 
-PiG can access assets available to the user who starts it:
+Ompig can access assets available to the user who starts it:
 
 - source code and workspace files;
 - credentials in supported local stores and environment variables;
 - model prompts and responses;
 - session history;
-- Package, extension, skill, hook, and Piglet source;
+- Package, extension, skill, hook, and Ompiglet source;
 - downloaded or built artifacts; and
 - update and release metadata.
 
@@ -26,11 +26,11 @@ PiG can access assets available to the user who starts it:
 
 ### User process boundary
 
-PiG runs with the user's operating-system permissions. PiG does not isolate model output or built-in tools from the user account.
+Ompig runs with the user's operating-system permissions. Ompig does not isolate model output or built-in tools from the user account.
 
 ### Workspace and configuration boundary
 
-Files in the workspace, `PIG_HOME`, `PIG_CODING_AGENT_DIR`, shell environment, and loaded context can influence PiG. Treat writable content in these locations as trusted input unless the process runs inside a stronger sandbox.
+Files in the workspace, `OMPIG_HOME`, `OMPIG_CODING_AGENT_DIR`, shell environment, and loaded context can influence Ompig. Treat writable content in these locations as trusted input unless the process runs inside a stronger sandbox.
 
 ### Extension boundary
 
@@ -56,11 +56,11 @@ Release artifacts cross from protected build infrastructure to users. Checksums,
 | Secret enters source or release output | Run Gitleaks and TruffleHog; inspect generated evidence; prohibit credentials in configuration examples |
 | Update replaces the wrong executable or accepts incomplete data | Prove one installation owner; verify size and checksum; perform atomic replacement; do not fall through after a tier starts |
 | Published artifact differs from reviewed source | Build in a protected workflow; emit checksums, SBOMs, signatures, and provenance |
-| Piglet Binary is tampered with or comes from an unexpected signer | Ed25519 Binary signatures and signed release indexes; the local signer trust store (`pig piglet trust`); signer pinning on the first pull and `--accept-signer` for a change; a full hash check whenever the file identity or trust policy changes |
-| Publication leaks a registry token | `pig piglet publish` and `pig package publish` run the user's `gh` and `npm`; PiG never reads or stores the token |
+| Ompiglet Binary is tampered with or comes from an unexpected signer | Ed25519 Binary signatures and signed release indexes; the local signer trust store (`ompig ompiglet trust`); signer pinning on the first pull and `--accept-signer` for a change; a full hash check whenever the file identity or trust policy changes |
+| Publication leaks a registry token | `ompig ompiglet publish` and `ompig package publish` run the user's `gh` and `npm`; Ompig never reads or stores the token |
 | Session history is readable by other local users | Session directories are created owner-only, mode 0700 (D132) |
 | Extension process outlives its owner | Bind process and goroutine lifetime to a context; drain shutdown; report errors |
-| Child process outlives PiG | Kill `bash` tool and `!` commands and MCP stdio server process groups on terminal close, crash, and termination signals |
+| Child process outlives Ompig | Kill `bash` tool and `!` commands and MCP stdio server process groups on terminal close, crash, and termination signals |
 | TUI extension blocks input or mutates UI off-loop | Keep blocking IPC off the input/render loop; marshal mutations through the owned UI path |
 | SBOM omits or misidentifies a component | Reconcile scanner output with manifests, locks, embedded assets, generated data, and archive contents |
 
@@ -80,7 +80,7 @@ Review this model when a change adds or changes:
 - an executable input source;
 - credential storage or authentication;
 - network transport;
-- Package, extension, or Piglet installation;
+- Package, extension, or Ompiglet installation;
 - archive extraction;
 - self-update;
 - sandbox or process isolation;

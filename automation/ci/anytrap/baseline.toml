@@ -404,35 +404,35 @@ dest = "*[]any"
 count = 1
 
 [[hit]]
-file = "coding/piglet/origin.go"
+file = "coding/ompiglet/origin.go"
 func = "rejectTrailingOriginJSON"
 call = "json.Decode"
 dest = "*any"
 count = 1
 
 [[hit]]
-file = "coding/piglet/release/index.go"
+file = "coding/ompiglet/release/index.go"
 func = "strictJSON"
 call = "json.Decode"
 dest = "any"
 count = 1
 
 [[hit]]
-file = "coding/piglet/schema.go"
+file = "coding/ompiglet/schema.go"
 func = "pigletSchema"
 call = "json.Unmarshal"
 dest = "*any"
 count = 1
 
 [[hit]]
-file = "coding/piglet/schema.go"
+file = "coding/ompiglet/schema.go"
 func = "schemaInstance"
 call = "json.Unmarshal"
 dest = "*any"
 count = 1
 
 [[hit]]
-file = "coding/piglet/signature/envelope.go"
+file = "coding/ompiglet/signature/envelope.go"
 func = "strictJSON"
 call = "json.Decode"
 dest = "any"

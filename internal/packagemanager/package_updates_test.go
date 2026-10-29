@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestParseNpmSpec(t *testing.T) {
@@ -68,7 +68,7 @@ func TestEnsureConfiguredPackagesInstalledTreatsProjectDeltaAsInherited(t *testi
 	if err := settings.SetPackages([]codingagent.PackageSource{{Source: filepath.ToSlash(globalSource)}}); err != nil {
 		t.Fatal(err)
 	}
-	projectSource, err := filepath.Rel(filepath.Join(cwd, ".pig"), packageRoot)
+	projectSource, err := filepath.Rel(filepath.Join(cwd, ".ompig"), packageRoot)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -76,7 +76,7 @@ func TestEnsureConfiguredPackagesInstalledTreatsProjectDeltaAsInherited(t *testi
 		t.Fatal(err)
 	}
 	settings.Reload()
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	reinstalled, missing := EnsureConfiguredPackagesInstalled(cwd, settings.AgentDir(), settings)
 	if len(reinstalled) != 0 || len(missing) != 0 {
 		t.Fatalf("reinstalled=%v missing=%v", reinstalled, missing)

@@ -11,10 +11,10 @@ import (
 	"unicode/utf8"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/boundarywire"
 )
 
 // A streamed assistant message reaches an extension process as one message_update per delta, and each carries the whole partial message twice (message and assistantMessageEvent.partial). Pi hands an in-process handler those objects by reference. Over the wire the host sends the first message_update of a connection whole (a keyframe) and every later one as the operations that turn the payload the extension last received into the new one; the runtime applies them to its copy and hands the handler a fresh full object, so a handler sees the same event it saw before. A streamed message of n deltas then costs O(n) bytes on the wire, not O(n^2).
@@ -439,7 +439,7 @@ func (p *deltaParser) value() (*deltaNode, error) {
 			}
 			return &deltaNode{kind: deltaBig, str: p.table[index]}, nil
 		}
-		if raw[0] == '"' && bytes.Contains(raw, []byte("pig-big")) {
+		if raw[0] == '"' && bytes.Contains(raw, []byte("ompig-big")) {
 			return nil, errDeltaUnsupported
 		}
 		return &deltaNode{kind: deltaScalar, raw: raw}, nil

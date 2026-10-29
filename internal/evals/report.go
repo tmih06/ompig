@@ -17,9 +17,9 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // PiSessionSnapshotArtifact is the harness artifact that carries the Session JSONL snapshot.

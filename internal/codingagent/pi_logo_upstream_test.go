@@ -10,19 +10,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Upstream draws the pi logo (pi-logo.ts, 4 cells by 2 lines) at the start of the header's first two lines, the version
-// beside its first line and the first line of key hints beside its second (interactive-mode.ts:998-1006). D2 draws PiG's
-// pig head there instead, piglogin.HeadCells cells by piglogin.HeadRows lines, with the header's next lines beside its
+// beside its first line and the first line of key hints beside its second (interactive-mode.ts:998-1006). D2 draws Ompig's
+// ompig head there instead, piglogin.HeadCells cells by piglogin.HeadRows lines, with the header's next lines beside its
 // other lines, or the one-line text mark in the logo's slot where the head cannot be drawn. The heads are asserted against
 // the goldens in coding/piglogin/testdata.
 
@@ -80,14 +80,14 @@ func TestPinHeaderTerminalRestoresTheThemeInItsMode(t *testing.T) {
 	}
 }
 
-// isolatePigHome keeps the header from reading the sprite the developer chose in the real $PIG_HOME.
+// isolatePigHome keeps the header from reading the sprite the developer chose in the real $OMPIG_HOME.
 func isolatePigHome(t *testing.T) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	piglogin.Refresh()
 }
 
-// headGolden is a sprite's pig head as the sprite's own art defines it: piglogin.HeadLines draws the HeadRows lines the built-in
+// headGolden is a sprite's ompig head as the sprite's own art defines it: piglogin.HeadLines draws the HeadRows lines the built-in
 // header must show, whatever renders the header.
 func headGolden(t *testing.T, id string) []string {
 	t.Helper()
@@ -105,7 +105,7 @@ func headGolden(t *testing.T, id string) []string {
 func textMark(t *testing.T, variant piglogin.Variant, mode tui.TerminalColorMode) string {
 	t.Helper()
 	mark := piglogin.TextMark(variant, mode)
-	if widthx.VisibleWidth(mark) != piglogin.TextMarkWidth || stripANSITest(mark) != "PiG." {
+	if widthx.VisibleWidth(mark) != piglogin.TextMarkWidth || stripANSITest(mark) != "Ompig." {
 		t.Fatalf("TextMark(%q, %s) = %q", variant.ID, mode, mark)
 	}
 	return mark
@@ -166,7 +166,7 @@ func assertNoPiLogo(t *testing.T, label string, raw []string) {
 }
 
 // pi-logo.ts:36-39 (Pi 1.0.0): the text fallback for the logo is "Pi" with the logo's coral and yellow, in the terminal's color mode. Upstream has no test for it; these cases assert the sequence the source defines.
-// pig divergence (D2): the text fallback is the bold "PiG." text mark of the active sprite, not Pi's coral and yellow "Pi".
+// ompig divergence (D2): the text fallback is the bold "Ompig." text mark of the active sprite, not Pi's coral and yellow "Pi".
 func TestPiWordmarkUpstream(t *testing.T) {
 	isolatePigHome(t)
 	for _, mode := range []tui.TerminalColorMode{tui.TerminalColorModeTrueColor, tui.TerminalColorMode256} {
@@ -203,7 +203,7 @@ func TestBuiltInHeaderOnboardingWithHeaderOnlyQuietStartupUpstream(t *testing.T)
 		setUpstreamQuietStartup(t, m, tc.quietStartup)
 		m.restoreBuiltInHeader()
 		lines := strings.Split(stripANSITest(strings.Join(m.extHeader.Render(100), "\n")), "\n")
-		// The onboarding line is the header's third, beside the pig head (D2).
+		// The onboarding line is the header's third, beside the ompig head (D2).
 		if len(lines) < 3 || !strings.Contains(lines[2], "Press") {
 			t.Fatalf("quietStartup %v: header = %q", tc.quietStartup, lines)
 		}
@@ -217,9 +217,9 @@ const compactHints = "escape interrupt · ctrl+c/ctrl+d clear/exit · / commands
 
 const pressLine = "Press ctrl+o to show full startup help and loaded resources."
 
-const onboardingLine = "PiG can explain its own features and look up its docs. Ask it how to use or extend PiG."
+const onboardingLine = "Ompig can explain its own features and look up its docs. Ask it how to use or extend Ompig."
 
-// D2: the pig head takes Pi's logo slot. Its first line carries the version and its other lines the header's next lines,
+// D2: the ompig head takes Pi's logo slot. Its first line carries the version and its other lines the header's next lines,
 // each wrapped in the cells right of the head, as Pi's logo carries the version and the first hint line; the lines after the
 // head are Pi's, at the padded text's left margin. Where nothing wraps the expanded header has Pi's 22 lines; the compact
 // header is the head's 7 lines, 2 more than Pi's 5.
@@ -343,7 +343,7 @@ func TestBuiltInHeaderUsesTheHeadAsSoonAsTheVersionFits(t *testing.T) {
 	raw, _ := headerLines(m, fits)
 	assertHead(t, fmt.Sprintf("width %d", fits), raw, headGolden(t, piglogin.DefaultID))
 	raw, lines := headerLines(m, fits-1)
-	if hasHalfBlocks(raw) || !strings.HasPrefix(lines[0], " PiG. v") {
+	if hasHalfBlocks(raw) || !strings.HasPrefix(lines[0], " Ompig. v") {
 		t.Errorf("width %d = %q, want the text mark", fits-1, lines[:2])
 	}
 }
@@ -352,16 +352,16 @@ func TestBuiltInHeaderFallsBackToTheTextMarkWhenNarrow(t *testing.T) {
 	m := newHeaderMode(t)
 	mark := textMark(t, piglogin.Default(), tui.TerminalColorModeTrueColor)
 	// The widths leave the first line 8, 6 and 2 cells of slack whatever the version string's length.
-	first := " PiG. v" + pigversion.Version
+	first := " Ompig. v" + pigversion.Version
 	n := widthx.VisibleWidth(first)
 	for _, width := range []int{n + 8, n + 6, n + 2} {
 		raw, lines := headerLines(m, width)
 		if got, want := strings.TrimRight(lines[0], " "), first; got != want {
 			t.Errorf("width %d first line = %q, want %q", width, got, want)
 		}
-		// Pi's layout: a 4-cell logo, a space and the hints in the width-2 cells of the padded text.
-		wrapped := widthx.WrapTextWithAnsi("xxxx "+compactHints, width-2)
-		wantSecond := " " + strings.Replace(wrapped[0], "xxxx", "    ", 1)
+		// Ompig's layout: the 6-cell "Ompig." text mark, a space and the hints in the width-2 cells of the padded text.
+		wrapped := widthx.WrapTextWithAnsi(strings.Repeat("x", piglogin.TextMarkWidth)+" "+compactHints, width-2)
+		wantSecond := " " + strings.Replace(wrapped[0], strings.Repeat("x", piglogin.TextMarkWidth), strings.Repeat(" ", piglogin.TextMarkWidth), 1)
 		if got := strings.TrimRight(lines[1], " "); got != wantSecond {
 			t.Errorf("width %d second line = %q, want %q", width, got, wantSecond)
 		}
@@ -383,7 +383,8 @@ func TestBuiltInHeaderWithoutTruecolorUsesTheTextMark(t *testing.T) {
 	if strings.Contains(raw[0]+raw[1], "38;2;") {
 		t.Errorf("256-color header contains a truecolor sequence: %q %q", raw[0], raw[1])
 	}
-	if got := strings.TrimRight(lines[1], " "); got != "      "+compactHints {
+	// The hints align under the version, which starts one cell past the mark, after the header's one-cell padding.
+	if got, want := strings.TrimRight(lines[1], " "), strings.Repeat(" ", piglogin.TextMarkWidth+2)+compactHints; got != want {
 		t.Errorf("256-color second line = %q", got)
 	}
 	pinHeaderTerminal(t, tui.TerminalColorModeTrueColor)
@@ -408,7 +409,7 @@ func TestBuiltInHeaderShowsTheSelectedSprite(t *testing.T) {
 }
 
 // /reload restores the built-in header (interactive_commands.go), which reads the saved selection again.
-func TestReloadRendersThePiGHeaderAgain(t *testing.T) {
+func TestReloadRendersTheOmpigHeaderAgain(t *testing.T) {
 	m := newHeaderMode(t)
 	root := configroot.Dir()
 	if err := piglogin.SaveVariant(root, "cloud"); err != nil {
@@ -436,12 +437,12 @@ func TestAnotherExtensionStillReplacesTheHeader(t *testing.T) {
 	raw, plain = headerLines(m, 100)
 	assertHead(t, "restore", raw, headGolden(t, piglogin.DefaultID))
 	if !strings.Contains(strings.Join(plain, "\n"), compactHints) {
-		t.Errorf("setHeader(nil) restored %q, want the PiG header", plain)
+		t.Errorf("setHeader(nil) restored %q, want the Ompig header", plain)
 	}
 	assertNoPiLogo(t, "restore", raw)
 }
 
-// The sign-in header stays replaceable: a Piglet's setLogin (D60) puts its own login in the header slot instead of the
+// The sign-in header stays replaceable: a Ompiglet's setLogin (D60) puts its own login in the header slot instead of the
 // built-in head, and setHeader(undefined) brings the built-in head back.
 func TestPigletSetLoginReplacesTheBuiltInArt(t *testing.T) {
 	m := newHeaderMode(t)
@@ -459,40 +460,40 @@ func TestPigletSetLoginReplacesTheBuiltInArt(t *testing.T) {
 	for i := range mascot {
 		mascot[i] = strings.Repeat("m", extension.LoginMascotWidth)
 	}
-	piglet := extension.LoginDefinition{
+	ompiglet := extension.LoginDefinition{
 		Brand: brand, Hero: hero, Mascot: mascot,
 		Palette: map[string]string{"b": "#010203", "h": "#040506", "m": "#070809"},
-		Name:    "Piglet", Description: "a Piglet's own login", Tagline: "not the built-in art",
+		Name:    "Ompiglet", Description: "a Ompiglet's own login", Tagline: "not the built-in art",
 	}
-	if err := u.SetLogin(piglet); err != nil {
+	if err := u.SetLogin(ompiglet); err != nil {
 		t.Fatal(err)
 	}
-	validated, err := extension.ValidateLoginDefinition(piglet)
+	validated, err := extension.ValidateLoginDefinition(ompiglet)
 	if err != nil {
 		t.Fatal(err)
 	}
 	raw, plain := headerLines(m, 100)
 	if want := RenderLoginHeader(validated, 100, m.opts.LoginHeaderOptions); strings.Join(raw, "\n") != strings.Join(want, "\n") {
-		t.Fatalf("header after setLogin =\n%q\nwant the Piglet's login\n%q", raw, want)
+		t.Fatalf("header after setLogin =\n%q\nwant the Ompiglet's login\n%q", raw, want)
 	}
 	joined := strings.Join(raw, "\n")
-	if !strings.Contains(joined, "38;2;1;2;3") || !strings.Contains(strings.Join(plain, "\n"), "Piglet") {
-		t.Errorf("the Piglet's brand or name is missing: %q", plain)
+	if !strings.Contains(joined, "38;2;1;2;3") || !strings.Contains(strings.Join(plain, "\n"), "Ompiglet") {
+		t.Errorf("the Ompiglet's brand or name is missing: %q", plain)
 	}
 	for _, line := range headGolden(t, piglogin.DefaultID) {
 		if strings.Contains(joined, line) {
-			t.Fatalf("the Piglet's login still draws the built-in head line %q", line)
+			t.Fatalf("the Ompiglet's login still draws the built-in head line %q", line)
 		}
 	}
 	if strings.Contains(strings.Join(plain, "\n"), "v"+pigversion.Version) {
-		t.Errorf("the Piglet's login still carries the built-in version line: %q", plain)
+		t.Errorf("the Ompiglet's login still carries the built-in version line: %q", plain)
 	}
-	// The selected sprite does not leak through the Piglet's login on a later render.
+	// The selected sprite does not leak through the Ompiglet's login on a later render.
 	if err := piglogin.Activate("sheriff"); err != nil {
 		t.Fatal(err)
 	}
 	if again, _ := headerLines(m, 100); strings.Join(again, "\n") != joined {
-		t.Error("the Piglet's login changed when the built-in sprite changed")
+		t.Error("the Ompiglet's login changed when the built-in sprite changed")
 	}
 	u.SetHeader(nil)
 	raw, _ = headerLines(m, 100)
@@ -524,7 +525,7 @@ func TestNarrowestTerminalsStillRenderTheHeader(t *testing.T) {
 }
 
 // Apple Terminal misaligns half blocks, and Pi draws its "Pi" wordmark there instead of its logo (pi-logo.ts
-// supportsPiLogo, interactive-mode.ts withLogo); PiG draws the text mark in the wordmark's place, with the hints on the next
+// supportsPiLogo, interactive-mode.ts withLogo); Ompig draws the text mark in the wordmark's place, with the hints on the next
 // line at the margin.
 func TestBuiltInHeaderUsesTheTextMarkInAppleTerminal(t *testing.T) {
 	m := newHeaderMode(t)
@@ -533,7 +534,7 @@ func TestBuiltInHeaderUsesTheTextMarkInAppleTerminal(t *testing.T) {
 	t.Cleanup(func() { supportsHalfBlockMark = previous })
 	for _, width := range []int{120, 100, 80} {
 		raw, lines := headerLines(m, width)
-		if got, want := strings.TrimRight(lines[0], " "), " PiG. v"+pigversion.Version; got != want {
+		if got, want := strings.TrimRight(lines[0], " "), " Ompig. v"+pigversion.Version; got != want {
 			t.Errorf("width %d first line = %q, want %q", width, got, want)
 		}
 		// interactive-mode.ts withLogo without the logo: `${piWordmark()} v${version}\n${hints}`.
@@ -549,12 +550,12 @@ func TestBuiltInHeaderUsesTheTextMarkInAppleTerminal(t *testing.T) {
 }
 
 // Escape in the /sprite picker dismisses it through the interactive host's custom component, which the built-in
-// pig-login command must treat as no choice rather than report as an extension error. The picker is the host's focused
-// component and draws the pig of the highlighted sprite right after its rows.
+// ompig-login command must treat as no choice rather than report as an extension error. The picker is the host's focused
+// component and draws the ompig of the highlighted sprite right after its rows.
 func TestSpritePickerEscapeIsNoErrorThroughTheInteractiveHost(t *testing.T) {
 	isolatePigHome(t)
 	m, _ := newExtensionDialogProbe(t)
-	ext, err := factoryload.LoadExtensionFromFactory(piglogin.Extension, ".", extension.CreateEventBus(), extension.CreateExtensionRuntime(), "builtin:pig-login")
+	ext, err := factoryload.LoadExtensionFromFactory(piglogin.Extension, ".", extension.CreateEventBus(), extension.CreateExtensionRuntime(), "builtin:ompig-login")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -576,11 +577,11 @@ func TestSpritePickerEscapeIsNoErrorThroughTheInteractiveHost(t *testing.T) {
 		}
 	}
 	if row < 0 {
-		t.Fatalf("the focused picker draws no pig beside its rows: %q", widthx.StripAnsi(strings.Join(lines, "\n")))
+		t.Fatalf("the focused picker draws no ompig beside its rows: %q", widthx.StripAnsi(strings.Join(lines, "\n")))
 	}
 	before, _, ok := strings.Cut(lines[row], head[0])
 	if !ok || widthx.VisibleWidth(before) != longestSpriteRowCells()+spritePreviewGapCells {
-		t.Fatalf("the pig does not start a few cells past the longest row: %q", widthx.StripAnsi(lines[row]))
+		t.Fatalf("the ompig does not start a few cells past the longest row: %q", widthx.StripAnsi(lines[row]))
 	}
 
 	if err := m.dispatchKey(context.Background(), "\x1b"); err != nil {
@@ -609,7 +610,7 @@ func waitSpritePickerMounts(t *testing.T, m *InteractiveMode, result <-chan erro
 	for {
 		if focused := m.tuiInst.GetFocusedComponent(); focused != nil && focused != m.editor {
 			// The picker's title is the one /sprite has always shown (coding/piglogin).
-			if strings.Contains(widthx.StripAnsi(strings.Join(focused.Render(100), "\n")), "Choose a PiG sprite") {
+			if strings.Contains(widthx.StripAnsi(strings.Join(focused.Render(100), "\n")), "Choose a Ompig sprite") {
 				return focused
 			}
 		}
@@ -649,7 +650,7 @@ func TestSpriteSetRepaintsTheHeaderThroughTheInteractiveHost(t *testing.T) {
 	m.extHeader = newSpecialLinesComponent(func() { repaints++ })
 	m.restoreBuiltInHeader()
 	repaints = 0
-	ext, err := factoryload.LoadExtensionFromFactory(piglogin.Extension, ".", extension.CreateEventBus(), extension.CreateExtensionRuntime(), "builtin:pig-login")
+	ext, err := factoryload.LoadExtensionFromFactory(piglogin.Extension, ".", extension.CreateEventBus(), extension.CreateExtensionRuntime(), "builtin:ompig-login")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -702,7 +703,7 @@ func init() {
 }
 
 // /sprite preview's art (piglogin.ArtLines) is the native login template's art for the sprite's login definition: the same
-// half blocks in the same places, so a Piglet that sets that definition draws the same picture.
+// half blocks in the same places, so a Ompiglet that sets that definition draws the same picture.
 func TestSpritePreviewArtIsTheNativeLoginArt(t *testing.T) {
 	isolatePigHome(t)
 	for _, variant := range piglogin.Variants {
@@ -721,9 +722,9 @@ func TestSpritePreviewArtIsTheNativeLoginArt(t *testing.T) {
 	}
 }
 
-// D87: the click area is the drawn pig. For every sprite, every half block the header draws on the head's lines lies in
+// D87: the click area is the drawn ompig. For every sprite, every half block the header draws on the head's lines lies in
 // the recorded logo area (the 16 cells after the padding on the first 7 lines), the text beside it starts after the area
-// and its separating cell, and the area's corners hold the pig's outermost pixels.
+// and its separating cell, and the area's corners hold the ompig's outermost pixels.
 func TestHeaderLogoAreaIsTheDrawnPig(t *testing.T) {
 	m := newHeaderMode(t)
 	for _, variant := range piglogin.Variants {
@@ -748,7 +749,7 @@ func TestHeaderLogoAreaIsTheDrawnPig(t *testing.T) {
 			}
 		}
 		if maxY != area.rows-1 || maxX-minX+1 > area.columns {
-			t.Fatalf("%s: the pig spans columns %d-%d to line %d, area %+v", variant.ID, minX, maxX, maxY, area)
+			t.Fatalf("%s: the ompig spans columns %d-%d to line %d, area %+v", variant.ID, minX, maxX, maxY, area)
 		}
 		if got := []rune(lines[0])[area.column+area.columns+1]; got != 'v' {
 			t.Fatalf("%s: the version starts with %q after the area, want 'v'", variant.ID, got)
@@ -776,7 +777,7 @@ func TestBuiltInHeaderColorsTheTextMarkInAppleTerminal256(t *testing.T) {
 	if strings.Count(raw[0], "38;5;") < 4 {
 		t.Errorf("Apple Terminal text mark does not color P, i, G and the period: %q", raw[0])
 	}
-	if got := strings.TrimRight(lines[0], " "); got != " PiG. v"+pigversion.Version {
+	if got := strings.TrimRight(lines[0], " "); got != " Ompig. v"+pigversion.Version {
 		t.Errorf("first line = %q", got)
 	}
 }

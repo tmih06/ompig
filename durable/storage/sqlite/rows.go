@@ -3,7 +3,7 @@ package sqlite
 import (
 	"fmt"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // rowInt reads an INTEGER column.

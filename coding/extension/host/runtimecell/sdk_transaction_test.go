@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/pigsdklock"
 )
 
 func TestGoPackedCellBuildWaitsForSDKStageLock(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
-	t.Setenv("PIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_HOME", configRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
 	sdkRoot := testStagedSDKDir(t, configRoot, "go")
 	sdkSource, err := filepath.Abs(filepath.Join("..", "..", "..", "..", "extensions", "sdk"))
 	if err != nil {
@@ -25,10 +25,10 @@ func TestGoPackedCellBuildWaitsForSDKStageLock(t *testing.T) {
 		t.Fatal(err)
 	}
 	extensionRoot := t.TempDir()
-	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/extension\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/extension\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(extensionRoot, "extension.go"), []byte("package extension\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"extension\") }\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "extension.go"), []byte("package extension\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension() *sdk.Extension { return sdk.New(\"extension\") }\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	release, err := pigsdklock.AcquireStage(context.Background(), configRoot)
@@ -48,9 +48,9 @@ func TestGoPackedCellBuildWaitsForSDKStageLock(t *testing.T) {
 
 func TestGoPackedCellBuildWaitsWhileSDKRootIsBeingReplaced(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
-	t.Setenv("PIG_SDK_GO_ROOT", "")
-	t.Setenv("PIG_SOURCE_ROOT", "")
+	t.Setenv("OMPIG_HOME", configRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_SOURCE_ROOT", "")
 	t.Setenv("HOME", t.TempDir())
 
 	sdkRoot := testStagedSDKDir(t, configRoot, "go")
@@ -103,8 +103,8 @@ func publishTestCellEntry(t *testing.T, cellDir, artifact string) string {
 // changed SDK must still wait for it.
 func TestGoPackedCellWarmEntryDoesNotWaitForSDKStageLock(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
-	t.Setenv("PIG_SDK_GO_ROOT", "")
+	t.Setenv("OMPIG_HOME", configRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", "")
 	sdkRoot := testStagedSDKDir(t, configRoot, "go")
 	sdkSource, err := filepath.Abs(filepath.Join("..", "..", "..", "..", "extensions", "sdk"))
 	if err != nil {
@@ -114,7 +114,7 @@ func TestGoPackedCellWarmEntryDoesNotWaitForSDKStageLock(t *testing.T) {
 		t.Fatal(err)
 	}
 	extensionRoot := t.TempDir()
-	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/extension\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/extension\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	extensions := []GoExtension{{
@@ -158,13 +158,13 @@ func TestGoPackedCellWarmEntryDoesNotWaitForSDKStageLock(t *testing.T) {
 
 func TestRustPackedCellWarmEntryDoesNotWaitForSDKStageLock(t *testing.T) {
 	configRoot := t.TempDir()
-	t.Setenv("PIG_HOME", configRoot)
-	t.Setenv("PIG_SDK_RS_ROOT", "")
+	t.Setenv("OMPIG_HOME", configRoot)
+	t.Setenv("OMPIG_SDK_RS_ROOT", "")
 	sdkRoot := testStagedSDKDir(t, configRoot, "rust")
 	if err := os.MkdirAll(sdkRoot, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(sdkRoot, "Cargo.toml"), []byte("[package]\nname = \"pig-sdk\"\nversion = \"0.0.0\"\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(sdkRoot, "Cargo.toml"), []byte("[package]\nname = \"ompig-sdk\"\nversion = \"0.0.0\"\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	extensionRoot := t.TempDir()

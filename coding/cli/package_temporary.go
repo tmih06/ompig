@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // resolveCLIExtensionSource resolves one -e source to the root its extensions load from; packagemanager.ResolveTemporarySource owns the temporary install.

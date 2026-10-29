@@ -5,13 +5,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Outside interactive mode upstream has no uncaughtException handler, so Node
 // prints the thrown Error ("Error: <message>") and its stack, then exits 1.
 func TestReportRenderOverflowPrintsUpstreamError(t *testing.T) {
-	overflow := &tui.RenderOverflowError{Line: 2, LineWidth: 90, TerminalWidth: 80, LogPath: "/agent/pig-tui-crash.log"}
+	overflow := &tui.RenderOverflowError{Line: 2, LineWidth: 90, TerminalWidth: 80, LogPath: "/agent/ompig-tui-crash.log"}
 	var stderr strings.Builder
 	if !reportRenderOverflow(overflow, []byte("goroutine 1 [running]:\n"), &stderr) {
 		t.Fatal("overflow not reported")

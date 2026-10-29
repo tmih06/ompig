@@ -8,7 +8,7 @@ The oracle is installed Pi 0.87.1. `core/extensions/loader.ts:327-340` stores me
 
 `modes/interactive/components/markdown-transform.ts:18-29` invokes each transformer synchronously in chain order. It accepts string results, including empty strings, and retains the current input after a throw, Promise, or other non-string result. Direct installed-Pi probes record the complete `B first → A first entered → A first returned → C first → B second → A second entered → C second` trace. `assistant-message.ts:91-116` clears and reconstructs content components on each update. `packages/tui/src/components/markdown.ts:266-285` invalidates its render cache and reruns the transform, including for unchanged text.
 
-PiG keeps logical generation cancellation separate from the lifetime of an admitted synchronous chain. The generation loses publication authority on replacement. The chain retains the captured Mode context until completion or Mode cancellation. A single Mode queue serializes individual generations across components. Replacing a queued generation removes its old queue position and appends the new admission. No generic Conn, request-parent, SDK dispatch, Provider, or session-replacement code changes.
+Ompig keeps logical generation cancellation separate from the lifetime of an admitted synchronous chain. The generation loses publication authority on replacement. The chain retains the captured Mode context until completion or Mode cancellation. A single Mode queue serializes individual generations across components. Replacing a queued generation removes its old queue position and appends the new admission. No generic Conn, request-parent, SDK dispatch, Provider, or session-replacement code changes.
 
 ## Original discovery case table
 
@@ -85,7 +85,7 @@ Admission stores one active owner job and at most one queued replacement per com
 
 Exceptional inactivity, disconnect, and shutdown can settle the proxy before an uncooperative SDK body returns. The ordinary-replacement fix does not prove global body order after those exceptional exits, does not add SDK callback gates, and does not expand D56 approval. The lead assigns that remaining behavior to `fix-drift-ext`, which coordinates any shared transport changes with KEEP. `fix-markdown-autolink` owns the parser correction. Both remain open outside this lane's completed discovery and normal-path scope.
 
-Initial full touched-package race run: TUI passes30.200s and subprocess passes365.027s. Internal/codingagent fails116.829s on a new test's missing explicit PIG_HOME declaration and the separate shell truncation test. The new test now explicitly pins PIG_HOME; the hygiene guard passes. Final full TUI passes29.987s. Final internal/codingagent fails113.853s only on `TestShellResultRendersExecutedTruncation`. Its expected single-line truncation suffix wraps under this lane's long isolated TMPDIR. A compiling overlay of all eight original18a production files reproduces the same unchanged shell assertion; the new tests are absent from that parent-only probe. A separate disabled-Markdown-pipeline probe also fails. No shell assertion, timeout, path, or comparator is changed to hide it.
+Initial full touched-package race run: TUI passes30.200s and subprocess passes365.027s. Internal/codingagent fails116.829s on a new test's missing explicit OMPIG_HOME declaration and the separate shell truncation test. The new test now explicitly pins OMPIG_HOME; the hygiene guard passes. Final full TUI passes29.987s. Final internal/codingagent fails113.853s only on `TestShellResultRendersExecutedTruncation`. Its expected single-line truncation suffix wraps under this lane's long isolated TMPDIR. A compiling overlay of all eight original18a production files reproduces the same unchanged shell assertion; the new tests are absent from that parent-only probe. A separate disabled-Markdown-pipeline probe also fails. No shell assertion, timeout, path, or comparator is changed to hide it.
 
 | Gate | Result |
 |---|---|
@@ -94,7 +94,7 @@ Initial full touched-package race run: TUI passes30.200s and subprocess passes36
 | focused Mode/queue/cache/disposal/first-paint tests | PASS three race repetitions |
 | full TUI/subprocess packages | PASS29.987s /365.027s under race |
 | full internal/codingagent package | FAIL only the independently parent-red shell suffix assertion |
-| full extensions-runtime family | completes231.001s; only scenario29 fails at `/10/assistantMessageEvent/contentIndex`, Pig1/Pi0; all other scenarios retain their declared runs and comparators |
+| full extensions-runtime family | completes231.001s; only scenario29 fails at `/10/assistantMessageEvent/contentIndex`, Ompig1/Pi0; all other scenarios retain their declared runs and comparators |
 | new62/63 plus unchanged33 after mutations | PASS three actual-Pi pairs each |
 | full native vet; touched Windows vet | PASS |
 | touched lint, parity-driver lint, `make lint-changed LINT_BASE=18a0319bd`, full `make lint` | PASS, no new suppressions |

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi keeps one effective registration root per provider: a partial re-registration merges over the previous root and keeps its oauth, and unregisterProvider removes the whole root (model-runtime.ts:753-797; provider-composer.ts adaptOAuth). The OAuth login a superseded registrant contributed therefore belongs to the latest registrant's cleanup.

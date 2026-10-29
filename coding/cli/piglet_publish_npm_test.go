@@ -7,20 +7,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/pigletbuild"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish/npmtest"
+	"github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/pigletbuild"
+	"github.com/tmih06/ompig/internal/npmpublish/npmtest"
 )
 
 // TestPigletPublishedToNPMIsAddedBackAndValidates is the end-to-end contract of
-// npm publication: a Package and a Piglet that names it by local path are
+// npm publication: a Package and a Ompiglet that names it by local path are
 // published to a local registry stub with the real commands, and
-// `pig piglet add npm:<name>` registers exactly what publication produced,
+// `ompig ompiglet add npm:<name>` registers exactly what publication produced,
 // resolving the Package from the same registry.
 func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	fake := npmtest.Install(t)
 	cwd := t.TempDir()
@@ -45,26 +45,26 @@ func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 	}
 	pigletPath := filepath.Join(author, "porter.yaml")
 
-	// 1. The Piglet cannot be published before its Package is on npm, and nothing is published.
+	// 1. The Ompiglet cannot be published before its Package is on npm, and nothing is published.
 	var stdout, stderr strings.Builder
 	if code := pigletbuild.RunPigletPublishCommand([]string{pigletPath, "--to", "npm", "--yes"}, &stdout, &stderr); code != 1 || !strings.Contains(stderr.String(), `Package "review" (npm:@acme/review@^1.2.0) is not on npm; publish it first`) {
-		t.Fatalf("publish Piglet before its Package: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		t.Fatalf("publish Ompiglet before its Package: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 	if len(fake.Publishes()) != 0 {
 		t.Fatalf("published: %v", fake.Publishes())
 	}
 
-	// 2. Publish the Package with the helper, then the Piglet, then add the Piglet from npm.
+	// 2. Publish the Package with the helper, then the Ompiglet, then add the Ompiglet from npm.
 	if code, out, errOut := runPackagePublishForTest(t, packageDir, "--to", "npm", "--yes"); code != 0 {
 		t.Fatalf("publish Package: code=%d stdout=%s stderr=%s", code, out, errOut)
 	}
 	stdout.Reset()
 	stderr.Reset()
 	if code := pigletbuild.RunPigletPublishCommand([]string{pigletPath, "--to", "npm", "--yes"}, &stdout, &stderr); code != 0 {
-		t.Fatalf("publish Piglet: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+		t.Fatalf("publish Ompiglet: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 	var added, addErr strings.Builder
-	if code := piglet.RunCommand([]string{"piglet", "add", "npm:porter", "--no-input"}, &added, &addErr); code != 0 {
+	if code := ompiglet.RunCommand([]string{"ompiglet", "add", "npm:porter", "--no-input"}, &added, &addErr); code != 0 {
 		t.Fatalf("add: code=%d stdout=%s stderr=%s", code, added.String(), addErr.String())
 	}
 	if !strings.Contains(added.String(), "Added porter (1 extensions, 0 skills)") {
@@ -72,11 +72,11 @@ func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 	}
 
 	// 3. What was registered is the generated source, its origin is the npm version, and its prompt came along.
-	registered, err := os.ReadFile(filepath.Join(home, "piglets", "porter.yaml"))
+	registered, err := os.ReadFile(filepath.Join(home, "ompiglets", "porter.yaml"))
 	if err != nil || !strings.Contains(string(registered), "review: npm:@acme/review@^1.2.0") || strings.Contains(string(registered), "local:") {
-		t.Fatalf("registered Piglet = %q, %v", registered, err)
+		t.Fatalf("registered Ompiglet = %q, %v", registered, err)
 	}
-	if prompt, err := os.ReadFile(filepath.Join(home, "piglets", "prompts", "system.md")); err != nil || string(prompt) != "You haul things.\n" {
+	if prompt, err := os.ReadFile(filepath.Join(home, "ompiglets", "prompts", "system.md")); err != nil || string(prompt) != "You haul things.\n" {
 		t.Fatalf("registered prompt = %q, %v", prompt, err)
 	}
 	var origin struct {
@@ -84,7 +84,7 @@ func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 		ResolvedVersion string `json:"resolvedVersion"`
 		Integrity       string `json:"integrity"`
 	}
-	data, err := os.ReadFile(filepath.Join(home, "piglets", "porter.origin.json"))
+	data, err := os.ReadFile(filepath.Join(home, "ompiglets", "porter.origin.json"))
 	if err != nil || json.Unmarshal(data, &origin) != nil {
 		t.Fatalf("origin record: %s, %v", data, err)
 	}
@@ -92,10 +92,10 @@ func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 		t.Fatalf("origin = %+v", origin)
 	}
 
-	// 4. The registered Piglet validates: its Package resolves from the registry too.
+	// 4. The registered Ompiglet validates: its Package resolves from the registry too.
 	stdout.Reset()
 	stderr.Reset()
-	if code := piglet.RunCommand([]string{"piglet", "validate", "porter"}, &stdout, &stderr); code != 0 {
+	if code := ompiglet.RunCommand([]string{"ompiglet", "validate", "porter"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("validate: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 
@@ -106,7 +106,7 @@ func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 		}
 	}
 	if !installed["porter"] || !installed["@acme/review@^1.2.0"] {
-		t.Fatalf("npm installs = %v, want the Piglet and its Package from the registry", installed)
+		t.Fatalf("npm installs = %v, want the Ompiglet and its Package from the registry", installed)
 	}
 
 	// 5. Publication is safe to repeat: the same name@version is refused.
@@ -116,6 +116,6 @@ func TestPigletPublishedToNPMIsAddedBackAndValidates(t *testing.T) {
 		t.Fatalf("republish: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 	if got := len(fake.Publishes()); got != 2 {
-		t.Fatalf("publishes = %d, want the Piglet and the Package once each", got)
+		t.Fatalf("publishes = %d, want the Ompiglet and the Package once each", got)
 	}
 }

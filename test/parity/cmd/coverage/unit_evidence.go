@@ -15,7 +15,7 @@ import (
 )
 
 // Unit evidence names reviewed observable assertions and their compiling
-// mutations. It is separate from paired Pi/PiG scenarios and is not a run result.
+// mutations. It is separate from paired Pi/Ompig scenarios and is not a run result.
 type unitEvidence struct {
 	Upstream          string   `json:"upstream"`
 	Package           string   `json:"package"`

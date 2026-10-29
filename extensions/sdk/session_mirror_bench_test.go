@@ -105,9 +105,9 @@ func BenchmarkBranchDecode(b *testing.B) {
 
 func recordedSessionLog(b *testing.B) ([]json.RawMessage, string) {
 	b.Helper()
-	path := os.Getenv("PIG_BENCH_SESSION_FILE")
+	path := os.Getenv("OMPIG_BENCH_SESSION_FILE")
 	if path == "" {
-		b.Skip("set PIG_BENCH_SESSION_FILE to a private JSONL session copy")
+		b.Skip("set OMPIG_BENCH_SESSION_FILE to a private JSONL session copy")
 	}
 	file, err := os.Open(path)
 	if err != nil {

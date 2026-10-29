@@ -6,10 +6,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// strippedAPIs lists the APIs this process runs without. It is empty in Stock PiG.
+// strippedAPIs lists the APIs this process runs without. It is empty in Stock Ompig.
 func strippedAPIs() []API {
 	ids := pigstrip.IDs(pigstrip.ListAPIs)
 	apis := make([]API, len(ids))
@@ -20,7 +20,7 @@ func strippedAPIs() []API {
 }
 
 // OfferedModels returns models without the chat models of a stripped API. The generated catalog listing (ListModels) and every Models collection read pass their models through it, so a stripped API's models are offered nowhere: not by --list-models, /model, the --models scope, startup's default model, RPC or the extension model registry. An exact catalog lookup (LookupModel, LookupModelExact) still finds such a model, so that using one reports the strip.
-// pig additive (D92): Stock PiG strips no API and returns models unchanged.
+// ompig additive (D92): Stock Ompig strips no API and returns models unchanged.
 func OfferedModels[T AnyModel](models []T) []T {
 	stripped := strippedAPIs()
 	if len(stripped) == 0 {
@@ -45,7 +45,7 @@ func OfferedGeneratedModels(models []GeneratedModel) []*GeneratedModel {
 }
 
 // StrippedModelError reports the strip that keeps a catalog model from being offered: the stripped API of providerID's catalog model modelID or, when that catalog lacks modelID, the stripped API of a provider whose catalog models are all on stripped APIs. An empty providerID matches modelID under every provider. Matching ignores case, as model resolution does. It returns nil when no strip explains the model's absence.
-// pig additive (D92): Stock PiG strips no API, so this is always nil there.
+// ompig additive (D92): Stock Ompig strips no API, so this is always nil there.
 func StrippedModelError(providerID, modelID string) error {
 	if providerID == "" {
 		for _, model := range GeneratedModels {
@@ -71,7 +71,7 @@ func StrippedModelError(providerID, modelID string) error {
 
 // ProviderStripped reports whether every generated catalog model of providerID is on a stripped API, so the provider
 // offers no model and is no login provider. A provider without catalog models is never stripped. Matching ignores case.
-// pig additive (D92): Stock PiG strips no API, so this is always false there.
+// ompig additive (D92): Stock Ompig strips no API, so this is always false there.
 func ProviderStripped(providerID string) bool {
 	if len(strippedAPIs()) == 0 {
 		return false

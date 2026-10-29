@@ -7,9 +7,9 @@ package tui
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Text component - displays multi-line text with word wrapping.
@@ -19,7 +19,7 @@ type Text struct {
 	PaddingX   int
 	PaddingY   int
 	CustomBgFn func(string) string
-	Style      string // pig compatibility: extra ANSI prefix applied per line
+	Style      string // ompig compatibility: extra ANSI prefix applied per line
 
 	cachedText  string
 	cachedWidth int
@@ -27,7 +27,7 @@ type Text struct {
 	cacheValid  bool
 }
 
-// NewText creates a text component. pig keeps zero padding as the default for
+// NewText creates a text component. ompig keeps zero padding as the default for
 // existing call sites; upstream-style padding is available via fields.
 func NewText(content string) *Text { return &Text{Content: content} }
 

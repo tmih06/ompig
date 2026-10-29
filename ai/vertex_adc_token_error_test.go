@@ -1,4 +1,4 @@
-//go:build !pig_strip_google_vertex
+//go:build !ompig_strip_google_vertex
 
 package ai
 
@@ -17,7 +17,7 @@ import (
 
 // Pi's Vertex client gets its ADC token through google-auth-library, whose gaxios rejects a failed token request with
 // node-fetch's FetchError text: "request to <token url> failed, reason: connect ECONNREFUSED <address>:<port>" (probed: Pi
-// 1.1.0 with an unreachable proxy). retry.ts does not retry it; PiG's "Vertex ADC token: Post …: connection refused" matched
+// 1.1.0 with an unreachable proxy). retry.ts does not retry it; Ompig's "Vertex ADC token: Post …: connection refused" matched
 // "connection.?refused" and was retried.
 func TestVertexADCTokenConnectFailureIsGaxiosTextLikePi(t *testing.T) {
 	key, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -28,7 +28,7 @@ func TestVertexADCTokenConnectFailureIsGaxiosTextLikePi(t *testing.T) {
 	tokenURL := "http://" + address.String() + "/token"
 	file, err := json.Marshal(map[string]string{
 		"type":         "service_account",
-		"client_email": "pig@example.iam.gserviceaccount.com",
+		"client_email": "ompig@example.iam.gserviceaccount.com",
 		"private_key":  string(pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: must(x509.MarshalPKCS8PrivateKey(key))})),
 		"token_uri":    tokenURL,
 	})

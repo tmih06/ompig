@@ -17,7 +17,7 @@ The independent scheduler experiment is discarded before the port. None of that 
 | `packages/coding-agent/src/core/agent-session.ts:1721-1723,1882-1885,1899-1902,1913-1920` | User content retains empty text blocks. Queue rejection names retain the slash. |
 | `packages/coding-agent/src/modes/print-mode.ts:132-155` | The blocking print caller awaits Session execution and prints final assistant text. |
 
-`cmd/pig/rpc_admission.go` schedules fulfilled and pending reactions on `rpcResponseTurn`. `coding/session_preflight.go` stores preparation separately from a claimed run. `Agent.BeginSendContent`, `PromptRun.Start` and `PromptRun.Run` share the same production implementation with blocking callers. Shutdown cancels pending work, closes RPC dialogs and joins admission and run workers. A preparation from a replaced Session cannot commit into its replacement. No timeout, retry, skip, record sorting or new divergence is introduced.
+`cmd/ompig/rpc_admission.go` schedules fulfilled and pending reactions on `rpcResponseTurn`. `coding/session_preflight.go` stores preparation separately from a claimed run. `Agent.BeginSendContent`, `PromptRun.Start` and `PromptRun.Run` share the same production implementation with blocking callers. Shutdown cancels pending work, closes RPC dialogs and joins admission and run workers. A preparation from a replaced Session cannot commit into its replacement. No timeout, retry, skip, record sorting or new divergence is introduced.
 
 The prerequisite also aligns the Go classified-error faux stream's initial snapshot with `test/parity/testdata/test-faux-provider.ts:emitPlan`. This is a paired fixture correction, not a real Provider change.
 
@@ -30,9 +30,9 @@ actual: queue_update, response:steer, queue_update, response:follow, response:pr
 Pi:     queue_update, queue_update, response:prompt, agent_start, response:steer, response:follow, turn_start
 ```
 
-The old substring scenario passes locally despite that difference. Replace it with one explicit input batch, an `agent_settled` capture barrier and complete ordered JSONL equality. Use identical explicit system prompts to control D2/D22 inputs. Canonicalize only object-key order and numeric message timestamps. Preserve all records, fields, arrays and message text. The strengthened scenario fails against the saved pre-fix binary at record 2, where PiG replies to steer instead of publishing the second queue update.
+The old substring scenario passes locally despite that difference. Replace it with one explicit input batch, an `agent_settled` capture barrier and complete ordered JSONL equality. Use identical explicit system prompts to control D2/D22 inputs. Canonicalize only object-key order and numeric message timestamps. Preserve all records, fields, arrays and message text. The strengthened scenario fails against the saved pre-fix binary at record 2, where Ompig replies to steer instead of publishing the second queue update.
 
-The port passes `rpc/13-rpc-steering-queue` for 50 consecutive PiG/Pi pairs with zero mismatches. The oracle executable reports `0.87.1`; its installed package also reports `0.87.1`. The runner's cosmetic `upstream unknown` path label does not replace that explicit version check.
+The port passes `rpc/13-rpc-steering-queue` for 50 consecutive Ompig/Pi pairs with zero mismatches. The oracle executable reports `0.87.1`; its installed package also reports `0.87.1`. The runner's cosmetic `upstream unknown` path label does not replace that explicit version check.
 
 Retain the port's guards for fulfilled reaction order, suspended input and preflight, post-input streaming changes, synchronous Agent claim, concurrent preflight rejection, EOF cleanup, empty text, queue rejection and shell completion during a held HTTP Provider. These imported guards were red or mutation-proven in the source lane; the public-branch admission-order unit test and strict scenario are independently red-proven here. The hermetic print scenario is supplementary caller-path evidence, not a claim that print previously failed.
 
@@ -40,7 +40,7 @@ Two compiling overlays independently verify the ported guards on this branch. Ru
 
 ## Verification
 
-All probes run with a temporary HOME and unset ambient `PIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR`. Each scenario or test supplies its own isolated configuration. No worker credentials are read. Resolve installed tool binaries before the mise shims so temporary homes do not need the operator's tool-manager configuration.
+All probes run with a temporary HOME and unset ambient `OMPIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR`. Each scenario or test supplies its own isolated configuration. No worker credentials are read. Resolve installed tool binaries before the mise shims so temporary homes do not need the operator's tool-manager configuration.
 
 | Gate | Result |
 |---|---|
@@ -54,18 +54,18 @@ All probes run with a temporary HOME and unset ambient `PIG_CODING_AGENT_DIR` an
 | Windows vet, `parity,integration` tags, touched packages | Pass |
 | Lint configuration validation, changed-package lint and full `make lint` | Pass; full lint includes `integration,live,parity` |
 | `make ci-contracts ci-drift async-contracts` | Pass after regenerating Go-interface, recommendation and static coverage inventories |
-| `go fix -diff ./cmd/pig ./coding ./agent ./ai` | Empty |
+| `go fix -diff ./cmd/ompig ./coding ./agent ./ai` | Empty |
 
 `make lint-changed` uses `LINT_BASE=public/fix/rpc-wire-parity` because this checkout has no local `main` ref. The extra tagged `go fix` probe reports existing modernization suggestions in the parity harness, including untouched files; these are not applied as an unrelated cleanup.
 
-The first setup runs expose two environment errors: mise's `uv` shim cannot select a tool under a temporary HOME, and an inherited temporary coding-agent directory overrides scenarios that select `PIG_HOME`. Use the already-installed native uv executable and unset the ambient coding-agent variables. The full repository test and RPC family runs then pass without changing a test, timeout or production behavior.
+The first setup runs expose two environment errors: mise's `uv` shim cannot select a tool under a temporary HOME, and an inherited temporary coding-agent directory overrides scenarios that select `OMPIG_HOME`. Use the already-installed native uv executable and unset the ambient coding-agent variables. The full repository test and RPC family runs then pass without changing a test, timeout or production behavior.
 
 The existing `print/01-print-mode-arithmetic` is a live GitHub Copilot scenario. Both executables fail without authentication. This is an explicit remaining gate blocker; do not read worker credentials, skip the scenario or call it passing. The separate hermetic print caller scenario provides repeatable coverage without replacing that live test.
 
-Artifacts are retained outside the source tree: pre-fix binary, red unit and strict-comparison logs, complete failed-pair streams, the 50-pair result JSON, family results and gate logs. Reproduce the durability run after building a fresh binary and setting `PIG_PARITY_PIG_BIN`, `PIG_PARITY_PI_BIN` and `PI_PACKAGE_ROOT` to the selected artifacts:
+Artifacts are retained outside the source tree: pre-fix binary, red unit and strict-comparison logs, complete failed-pair streams, the 50-pair result JSON, family results and gate logs. Reproduce the durability run after building a fresh binary and setting `OMPIG_PARITY_OMPIG_BIN`, `OMPIG_PARITY_PI_BIN` and `PI_PACKAGE_ROOT` to the selected artifacts:
 
 ```bash
-go test -tags=parity ./test/parity/runner -run '^TestParity$/13-rpc-steering-queue$' -count=1 -v -args -pig-parity.runs=50
+go test -tags=parity ./test/parity/runner -run '^TestParity$/13-rpc-steering-queue$' -count=1 -v -args -ompig-parity.runs=50
 ```
 
 ## Resource evidence

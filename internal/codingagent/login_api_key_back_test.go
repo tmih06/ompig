@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi 1.0.0 passes onBack to the API key and ambient login dialogs too: showApiKeyLoginDialog calls it when a login
@@ -26,7 +26,7 @@ func TestAPIKeyLoginCancelReturnsToTheProviderList(t *testing.T) {
 				return ai.Credential{}, err
 			},
 		},
-		{name: "closed ambient setup note", id: "ambient-probe", providerName: "Ambient Probe", prompt: "Ambient token is configured outside pig."},
+		{name: "closed ambient setup note", id: "ambient-probe", providerName: "Ambient Probe", prompt: "Ambient token is configured outside ompig."},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			m := newPostLoginTestMode(t)

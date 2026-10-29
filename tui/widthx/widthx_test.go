@@ -154,7 +154,7 @@ func BenchmarkVisibleWidth_Plain(b *testing.B) {
 
 // Upstream extractAnsiCode ends a CSI only at m|G|K|H|J, so a lone DEC
 // private-mode sequence is not an escape and its bytes after ESC are visible.
-// PiG must measure exactly as Pi does (D47 removed); see pi_width_diff_test.go.
+// Ompig must measure exactly as Pi does (D47 removed); see pi_width_diff_test.go.
 func TestExtractAnsi_PrivateModeMatchesUpstream(t *testing.T) {
 	if got := ExtractAnsi("\x1b[?2026h", 0); got != 0 {
 		t.Fatalf("ExtractAnsi(sync start) = %d, want 0 (upstream)", got)

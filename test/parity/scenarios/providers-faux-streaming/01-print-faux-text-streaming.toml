@@ -14,8 +14,8 @@
 #   output: "42"
 #   exit: 0
 #
-#   PIG_TEST_FAUX=1 PIG_HOME=testdata/pig-home PIG_QUIET_STARTUP=1 \
-#     pig --no-extensions --model test-faux/faux-1 --print "What is 20+22?"
+#   OMPIG_TEST_FAUX=1 OMPIG_HOME=testdata/ompig-home OMPIG_QUIET_STARTUP=1 \
+#     ompig --no-extensions --model test-faux/faux-1 --print "What is 20+22?"
 #   output: "42"
 #   exit: 0
 
@@ -32,7 +32,7 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 
 [print]

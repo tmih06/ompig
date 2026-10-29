@@ -6,7 +6,7 @@
 // A FlightRecorder wraps one core session (and, for row counts, the object's Store). It keeps, for every step, a StepRecord: the
 // event kind, the crossings between host and core, the rows read and written, the bytes in and out, linear memory, the live set
 // when asked for, the time in the core and the core version; and, in a ring, the last N events the core was given together with
-// the pig.read answers and pig.uuidv7 values it took while each ran. The core is a pure function of that stream (ABI section 3,
+// the ompig.read answers and ompig.uuidv7 values it took while each ran. The core is a pure function of that stream (ABI section 3,
 // ADR D8: the clock is the event's `now`, uuids come from the host), so a trap report that carries the ring replays the failing
 // step on a developer's machine: with replayEvents here, or as a recording in durable/core/contracttest/counts (countgate
 // replay), natively and under both Wasm builds.
@@ -38,7 +38,7 @@ export interface RecorderOptions {
   onTrap?: (report: TrapReport) => void
 }
 
-/** One pig.read call: the request as the core wrote it and the answer the host gave (ABI section 4.2). */
+/** One ompig.read call: the request as the core wrote it and the answer the host gave (ABI section 4.2). */
 export interface RecordedRead { request: Uint8Array; answer: Uint8Array }
 
 /** One event of the core's input stream with what the core took while it ran. `wire` is the payload bytes (abi.Event.Wire). */
@@ -53,9 +53,9 @@ export interface StepRecord {
   now: number
   /** "ok", "rejected", "fatal" or "trap" (the core threw before it answered). */
   status: string
-  /** Calls across the host and core boundary: the step, each pig.read, each pig.uuidv7. */
+  /** Calls across the host and core boundary: the step, each ompig.read, each ompig.uuidv7. */
   crossings: number
-  /** Statements the core read through pig.read, and the rows they returned. */
+  /** Statements the core read through ompig.read, and the rows they returned. */
   reads: number
   /** Rows read and written in the store from this step's start to the next step's (the commits the host applied are this step's). */
   rowsRead: number
@@ -338,7 +338,7 @@ export interface ReplayOutcome {
 const sameParams = (a: Param[], b: Param[]) => a.length === b.length && a.every((v, i) => v instanceof Uint8Array && b[i] instanceof Uint8Array ? v.length === (b[i] as Uint8Array).length && v.every((x, j) => x === (b[i] as Uint8Array)[j]) : v === b[i])
 
 /**
- * Replay recorded events through a fresh core: each event, with the pig.read answers and pig.uuidv7 values recorded for it
+ * Replay recorded events through a fresh core: each event, with the ompig.read answers and ompig.uuidv7 values recorded for it
  * served in order. A read or uuid the recorded run did not make is a divergence and throws, as is a read that asks something
  * else. `read` answers a read the recording has no answer for (the trap replay's store), and `uuid` a uuid it has none for;
  * without them that is a divergence too. An event that takes fewer reads or uuids than the recording holds is one as well.
@@ -346,7 +346,7 @@ const sameParams = (a: Param[], b: Param[]) => a.length === b.length && a.every(
  */
 export function replayEvents(module: WebAssembly.Module, events: RecordedEvent[], options: { read?: (sql: number, params: Param[]) => Uint8Array; uuid?: () => string; recorder?: FlightRecorder } = {}): ReplayOutcome {
   let at = 0, readAt = 0, uuidAt = 0
-  // A divergence is raised inside a pig import, where WasmSession turns every exception into a CoreTrap: it is kept here so that
+  // A divergence is raised inside a ompig import, where WasmSession turns every exception into a CoreTrap: it is kept here so that
   // the replay reports it as a divergence and never as a trap of the core.
   let diverged: Error | undefined
   const diverge = (message: string): never => { throw (diverged = new Error(message)) }
@@ -363,11 +363,11 @@ export function replayEvents(module: WebAssembly.Module, events: RecordedEvent[]
     const recorded = events[at]?.reads[readAt]
     if (!recorded) {
       if (options.read) return options.read(sql, params)
-      return diverge(`replay: the core made a pig.read the recorded run did not make, in event ${at}`)
+      return diverge(`replay: the core made a ompig.read the recorded run did not make, in event ${at}`)
     }
     readAt++
     const want = decodeReadRequest(recorded.request, 0, recorded.request.length)
-    if (want.sql !== sql || !sameParams(want.params, params)) diverge(`replay: the core asked a different pig.read than the recorded run, in event ${at}`)
+    if (want.sql !== sql || !sameParams(want.params, params)) diverge(`replay: the core asked a different ompig.read than the recorded run, in event ${at}`)
     return recorded.answer
   }
   const steps: Step[] = []

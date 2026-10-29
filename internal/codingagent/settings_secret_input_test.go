@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 func TestMaskSecretInputSettingsRoundTrip(t *testing.T) {
@@ -153,7 +153,7 @@ func TestPiIgnoresMaskSecretInputInSharedSettings(t *testing.T) {
 		}
 		sm.Reload()
 		if sm.Get().GetMaskSecretInput() != value || sm.Get().Theme != "light" {
-			t.Fatal("Pi's settings update lost the Pig-only preference")
+			t.Fatal("Pi's settings update lost the Ompig-only preference")
 		}
 	}
 }

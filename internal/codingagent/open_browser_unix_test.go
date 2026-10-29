@@ -55,7 +55,7 @@ func TestOpenBrowserLaunchesADetachedLauncherWithIgnoredStdio(t *testing.T) {
 		t.Fatal(err)
 	}
 	if lines[1] == processSession(t, string(own)) {
-		t.Fatalf("launcher session %s is PiG's own, want a new session (detached)", lines[1])
+		t.Fatalf("launcher session %s is Ompig's own, want a new session (detached)", lines[1])
 	}
 	if lines[2] != "/dev/null" {
 		t.Fatalf("launcher stdin = %q, want /dev/null (stdio ignore)", lines[2])

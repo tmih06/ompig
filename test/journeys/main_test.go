@@ -15,10 +15,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 var (
@@ -32,10 +32,10 @@ var (
 type journeyTiming struct {
 	Journey   string   `json:"journey"`
 	Seed      int64    `json:"seed"`
-	PigSec    float64  `json:"pigSeconds"`
+	OmpigSec  float64  `json:"ompigSeconds"`
 	PiSec     float64  `json:"piSeconds"`
 	TotalSec  float64  `json:"totalSeconds"`
-	PeakMemMB int64    `json:"pigPeakMemMB"`
+	PeakMemMB int64    `json:"ompigPeakMemMB"`
 	Failed    bool     `json:"failed"`
 	Requests  int      `json:"providerRequests"`
 	Frames    int      `json:"frames"`
@@ -64,12 +64,12 @@ func TestMain(m *testing.M) {
 			cfg.ArtifactDir = filepath.Join(root, "tmp", "journeys")
 		}
 		cfg.CoverDir = os.Getenv("JOURNEY_COVERDIR")
-		variant := harness.Variant(os.Getenv("JOURNEY_PIG_VARIANT"))
+		variant := harness.Variant(os.Getenv("JOURNEY_OMPIG_VARIANT"))
 		if variant == "" {
 			variant = harness.Instrumented
 		}
-		if bin := os.Getenv("JOURNEY_PIG_BIN"); bin != "" {
-			cfg.PigBin = bin
+		if bin := os.Getenv("JOURNEY_OMPIG_BIN"); bin != "" {
+			cfg.OmpigBin = bin
 			cfg.Instrumented = variant == harness.Instrumented
 		} else {
 			dir, err := os.MkdirTemp("", "pigj-bin-")
@@ -78,13 +78,13 @@ func TestMain(m *testing.M) {
 				return 1
 			}
 			defer func() { _ = os.RemoveAll(dir) }()
-			cfg.PigBin = filepath.Join(dir, "pig")
-			d, err := harness.BuildPig(root, cfg.PigBin, variant)
+			cfg.OmpigBin = filepath.Join(dir, "ompig")
+			d, err := harness.BuildPig(root, cfg.OmpigBin, variant)
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "build pig:", err)
+				fmt.Fprintln(os.Stderr, "build ompig:", err)
 				return 1
 			}
-			fmt.Fprintf(os.Stderr, "journeys: built %s pig in %s\n", variant, d.Round(time.Second))
+			fmt.Fprintf(os.Stderr, "journeys: built %s ompig in %s\n", variant, d.Round(time.Second))
 			cfg.Instrumented = variant == harness.Instrumented
 		}
 		pi, err := resolvePi()
@@ -107,7 +107,7 @@ func TestMain(m *testing.M) {
 }
 
 func resolvePi() (string, error) {
-	for _, env := range []string{"JOURNEY_PI_BIN", "PIG_PARITY_PI_BIN"} {
+	for _, env := range []string{"JOURNEY_PI_BIN", "OMPIG_PARITY_PI_BIN"} {
 		if bin := os.Getenv(env); bin != "" {
 			return checkPi(bin)
 		}
@@ -142,7 +142,7 @@ func resolvePi() (string, error) {
 
 // publishedPiAllowed reports the run's opt-in to a published Pi, which only a release-tag pin has.
 func publishedPiAllowed() bool {
-	return os.Getenv("PIG_PARITY_PI_PUBLISHED") == "1" && pigversion.UpstreamVersion == pigversion.UpstreamPackageVersion
+	return os.Getenv("OMPIG_PARITY_PI_PUBLISHED") == "1" && pigversion.UpstreamVersion == pigversion.UpstreamPackageVersion
 }
 
 func fileExists(path string) bool {
@@ -293,10 +293,10 @@ func runJourney(t *testing.T, j *harness.Journey) {
 
 func record(j *harness.Journey, o *harness.Outcome) {
 	tm := journeyTiming{Journey: j.Name, Seed: o.Plan.Seed, TotalSec: o.Elapsed.Seconds(), Failed: o.Failed(), Touches: j.Touches}
-	tm.PigSec = o.Pig.Elapsed.Seconds()
-	tm.PeakMemMB = o.Pig.PeakMem() >> 20
-	tm.Requests = len(o.Pig.P.Requests())
-	tm.Frames = len(o.Pig.Snaps)
+	tm.OmpigSec = o.Ompig.Elapsed.Seconds()
+	tm.PeakMemMB = o.Ompig.PeakMem() >> 20
+	tm.Requests = len(o.Ompig.P.Requests())
+	tm.Frames = len(o.Ompig.Snaps)
 	if o.Pi != nil {
 		tm.PiSec = o.Pi.Elapsed.Seconds()
 	}

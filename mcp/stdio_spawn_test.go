@@ -7,7 +7,7 @@ import (
 	"io/fs"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // On Windows cross-spawn starts an unresolved command through cmd.exe, so the start succeeds and the connection closes instead (stdio_windows_test.go TestStdioTransportReportsAMissingCommandAsAClosedConnection).

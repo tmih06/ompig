@@ -20,7 +20,7 @@ import (
 // The race detector's build reads sockets through syscall.Read (socket_read_race_linux.go), which wakes the monitor thread by design.
 
 // socketWriterEnv marks the helper process that serves paced chunks on the listener it inherits as file descriptor 3.
-const socketWriterEnv = "PIG_TEST_SOCKET_WRITER"
+const socketWriterEnv = "OMPIG_TEST_SOCKET_WRITER"
 
 const socketWriterChunks = 150
 

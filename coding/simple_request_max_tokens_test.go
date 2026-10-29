@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The agent loop sends no maxTokens (agent-loop.ts streamAssistantResponse), so a simple request without one gets the model's maxTokens

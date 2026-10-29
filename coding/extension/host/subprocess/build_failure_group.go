@@ -5,18 +5,18 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
 // maxGroupedNames bounds the extension names one grouped failure line lists.
-// pig additive (D20): PiG compiles extensions, which Pi does not.
+// ompig additive (D20): Ompig compiles extensions, which Pi does not.
 const maxGroupedNames = 4
 
 // BuildFailureGroup is several extensions whose builds failed for one root
 // cause, reported as one error rather than once each. Thirteen extensions
 // failing on a mismatched toolchain are one problem.
 //
-// pig additive (D20): Pi loads extension source in process and never compiles.
+// ompig additive (D20): Pi loads extension source in process and never compiles.
 type BuildFailureGroup struct {
 	// Names are the failed extensions, in load order.
 	Names []string

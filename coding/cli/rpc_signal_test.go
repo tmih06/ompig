@@ -25,7 +25,7 @@ export default function(pi) { pi.on("session_shutdown", () => writeFileSync(proc
 `), 0600); err != nil {
 				t.Fatal(err)
 			}
-			p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "RPC_SHUTDOWN_MARKER=" + marker}, "--offline", "--no-extensions", "--no-session", "-e", extension)
+			p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "RPC_SHUTDOWN_MARKER=" + marker}, "--offline", "--no-extensions", "--no-session", "-e", extension)
 			p.send(`{"id":"ready","type":"get_state"}`)
 			p.await("ready", func(record rpcRecord) bool { return isSuccessResponse(record, "ready") })
 			if err := p.cmd.Process.Signal(sig); err != nil {

@@ -11,10 +11,10 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/ops"
-	"github.com/MichaelKinsy/PiG/durable/storage/internal/scan"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage/internal/ops"
+	"github.com/tmih06/ompig/durable/storage/internal/scan"
 )
 
 type storedTask = durable.TaskRecord[durable.JsonValue, durable.JsonValue, durable.JsonValue]
@@ -385,7 +385,7 @@ func (storage *MemoryStorage) prepareCommitLocked(
 		return nil, err
 	}
 	// Pi meets an unknown status only when apply indexes it, after every check above.
-	// pig divergence (D118): an unknown status fails here with PiG's message; Pi throws a V8 TypeError from apply after a partial write.
+	// ompig divergence (D118): an unknown status fails here with Ompig's message; Pi throws a V8 TypeError from apply after a partial write.
 	if err := checkStatuses(detached); err != nil {
 		return nil, err
 	}

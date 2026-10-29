@@ -5,7 +5,7 @@
 # Chat Completions API in azureStreams. For deepseek-v4-pro, the Chat Completions model goes through azureStreams (azure.ts:30-41), which resolves the endpoint in lazyStream's setup, so lazy.ts createSetupErrorMessage lists errorMessage before timestamp.
 # normalize-rationale: only clock values, the random session id and the isolated cwd are masked; member names and their order
 # stay byte-compared, which is what this scenario checks.
-# PiG listed errorMessage first for every lazy setup error (comb-audit row 78) and then timestamp first for all of them
+# Ompig listed errorMessage first for every lazy setup error (comb-audit row 78) and then timestamp first for all of them
 # (f64e79858f); each variant had one of these two scenarios red.
 name = "12-json-azure-chat-completions-missing-endpoint"
 description = "JSON mode reports an azure deepseek-v4-pro request without an endpoint with Pi's message, stop reason and key order"
@@ -18,9 +18,9 @@ args = ["--mode", "json", "hello"]
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_HOME=../rpc/testdata/pig-home", "AZURE_OPENAI_API_KEY=parity-key", "AZURE_OPENAI_BASE_URL=", "AZURE_OPENAI_RESOURCE_NAME="]
+ompig = ["OMPIG_HOME=../rpc/testdata/ompig-home", "AZURE_OPENAI_API_KEY=parity-key", "AZURE_OPENAI_BASE_URL=", "AZURE_OPENAI_RESOURCE_NAME="]
 pi = ["PI_CODING_AGENT_DIR=../rpc/testdata/pi-home/agent", "PI_SKIP_VERSION_CHECK=1", "AZURE_OPENAI_API_KEY=parity-key", "AZURE_OPENAI_BASE_URL=", "AZURE_OPENAI_RESOURCE_NAME="]
-pig_args = ["--offline", "--no-extensions", "--model", "azure/deepseek-v4-pro", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--no-session"]
+ompig_args = ["--offline", "--no-extensions", "--model", "azure/deepseek-v4-pro", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--no-session"]
 pi_args = ["--offline", "--no-extensions", "--model", "azure/deepseek-v4-pro", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--no-session"]
 
 [assert]

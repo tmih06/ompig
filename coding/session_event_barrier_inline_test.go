@@ -15,14 +15,14 @@ import (
 
 	xtrace "golang.org/x/exp/trace"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // sessionHopWakes streams one text response through a Session driven as -p mode drives it (one in-process listener, Events discarded) under runtime/trace. It returns the message_update events the listener saw and the goroutine wake-ups whose waker is Session code: the executor hand-off (rawEvents send, done wait) and the Events channel.
 func sessionHopWakes(t *testing.T, chars int) (updates int64, wakes int) {
 	t.Helper()
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -92,7 +92,7 @@ func sessionWaker(stack xtrace.Stack) bool {
 		if strings.HasPrefix(name, "runtime.") || strings.HasPrefix(name, "sync.") || strings.HasPrefix(name, "internal/") || strings.HasPrefix(name, "context.") || strings.HasPrefix(name, "time.") {
 			continue
 		}
-		return strings.HasPrefix(name, "github.com/MichaelKinsy/PiG/coding.")
+		return strings.HasPrefix(name, "github.com/tmih06/ompig/coding.")
 	}
 	return false
 }

@@ -9,20 +9,20 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // The daily collection of the shared extension cache runs in the background, after a mode has taken over the
 // terminal or the protocol streams and while it accepts input. Loading extensions only schedules it. A
-// collection of a large cache on a network file system takes minutes, and the first version ran before pig
+// collection of a large cache on a network file system takes minutes, and the first version ran before ompig
 // accepted input.
 //
-// pig additive (D20): the packed-runtime cache has no upstream equivalent; Pi has no cache collection at startup.
+// ompig additive (D20): the packed-runtime cache has no upstream equivalent; Pi has no cache collection at startup.
 
 // automaticCacheGCStopWait bounds how long process exit waits for a cancelled collection to unwind.
-// pig additive (D20): the packed-runtime cache has no upstream equivalent.
+// ompig additive (D20): the packed-runtime cache has no upstream equivalent.
 const automaticCacheGCStopWait = 2 * time.Second
 
 // Test seams: the collector, its clock, and the file system operations it removes entries with.
@@ -98,7 +98,7 @@ func automaticCacheGCFailurePath() string {
 	return filepath.Join(codingagent.ConfigRoot(), "cache", ".auto-gc.error")
 }
 
-// recordAutomaticCacheGCResult keeps a failure where `pig extensions cache stats` shows it. The collection
+// recordAutomaticCacheGCResult keeps a failure where `ompig extensions cache stats` shows it. The collection
 // runs while a terminal UI owns the screen, so it never prints. A cancelled collection records nothing.
 func recordAutomaticCacheGCResult(ctx context.Context, err error) {
 	path := automaticCacheGCFailurePath()
@@ -108,7 +108,7 @@ func recordAutomaticCacheGCResult(ctx context.Context, err error) {
 	case ctx.Err() != nil && errors.Is(err, ctx.Err()):
 	default:
 		if os.MkdirAll(filepath.Dir(path), 0o755) == nil {
-			// pig additive (D20): the status file is best effort; the failure has no other place to go while a UI owns the screen.
+			// ompig additive (D20): the status file is best effort; the failure has no other place to go while a UI owns the screen.
 			_ = os.WriteFile(path, []byte(err.Error()+"\n"), 0o644)
 		}
 	}

@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-// pig additive (D60): Rust extensions provide typed data for Pig's native
+// ompig additive (D60): Rust extensions provide typed data for Ompig's native
 // login template instead of Pi's in-process TUI component factory.
-/// Semantic login content rendered by Pig's fixed native template.
+/// Semantic login content rendered by Ompig's fixed native template.
 ///
-/// Pig validates dimensions, symbols, palette colors, and text when
+/// Ompig validates dimensions, symbols, palette colors, and text when
 /// [`Context::set_login`](crate::Context::set_login) sends the definition.
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct LoginDefinition {
@@ -17,12 +17,12 @@ pub struct LoginDefinition {
     pub tagline: String,
 }
 
-// pig divergence (D2): Rust extensions add a sprite to PiG's /sprite catalogue.
-/// One sprite for PiG's /sprite catalogue: its ID, the name and tagline /sprite lists, the
-/// 16-by-14 pig the startup header draws and /sprite preview shows beside the wordmark, and the
+// ompig divergence (D2): Rust extensions add a sprite to Ompig's /sprite catalogue.
+/// One sprite for Ompig's /sprite catalogue: its ID, the name and tagline /sprite lists, the
+/// 16-by-14 ompig the startup header draws and /sprite preview shows beside the wordmark, and the
 /// palette coloring it. Grid cells are printable ASCII palette symbols; '.' is transparent.
 ///
-/// Pig validates the definition when [`Context::register_sprite`](crate::Context::register_sprite)
+/// Ompig validates the definition when [`Context::register_sprite`](crate::Context::register_sprite)
 /// sends it.
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct SpriteDefinition {

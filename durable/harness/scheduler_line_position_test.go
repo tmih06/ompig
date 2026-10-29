@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Upstream publishes a commit inside Storage's adopt: the dispatch to subscribeCommits() listeners is queued first, then the

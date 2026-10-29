@@ -13,10 +13,10 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// pig additive (D60): Pig validates a typed login definition because
+// ompig additive (D60): Ompig validates a typed login definition because
 // subprocess extensions cannot pass Pi's live TUI component factories.
 const (
 	LoginBrandWidth            = 41
@@ -32,7 +32,7 @@ const (
 	LoginMetadataWidthLimit    = 80
 )
 
-// LoginDefinition describes one login using Pig's fixed native template.
+// LoginDefinition describes one login using Ompig's fixed native template.
 // Grid cells are printable ASCII palette symbols; '.' is transparent.
 type LoginDefinition struct {
 	Brand       []string          `json:"brand"`

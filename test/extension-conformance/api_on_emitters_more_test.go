@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/extensiontest"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/extensiontest"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // TestConformanceAPIOnBeforeAgentStartChainsSystemPrompt is the Go reference for pi.on("before_agent_start") (extensions/types.ts:1603-1606, runner.ts emitBeforeAgentStart): a handler registered through extension.API.OnBeforeAgentStart sees the system prompt the previous handler returned, and the combined result carries the last one.

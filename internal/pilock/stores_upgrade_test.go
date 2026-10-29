@@ -13,8 +13,8 @@ import (
 
 	"github.com/gofrs/flock"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestStoresUpgradeLegacySidecars(t *testing.T) {
@@ -113,7 +113,7 @@ func TestStoresUpgradeLegacySidecars(t *testing.T) {
 				if !errors.Is(err, context.DeadlineExceeded) {
 					t.Fatalf("cancel held catalog write: %v", err)
 				}
-			} else if err == nil || !strings.Contains(err.Error(), "older PiG") {
+			} else if err == nil || !strings.Contains(err.Error(), "older Ompig") {
 				t.Fatalf("held legacy writer: %v", err)
 			}
 			after, err := os.ReadFile(path)

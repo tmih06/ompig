@@ -14,13 +14,13 @@ func TestLineDiff_Equal(t *testing.T) {
 }
 
 func TestLineDiff_FirstDiffLine(t *testing.T) {
-	pig := "a\nb\nPIG\nd\n"
+	ompig := "a\nb\nPIG\nd\n"
 	pi := "a\nb\nPI\nd\n"
-	d := LineDiff(pig, pi)
+	d := LineDiff(ompig, pi)
 	if !strings.Contains(d, "first diff at line 3") {
 		t.Errorf("expected 'first diff at line 3', got:\n%s", d)
 	}
-	if !strings.Contains(d, "PIG") || !strings.Contains(d, "PI") {
+	if !strings.Contains(d, "OMPIG") || !strings.Contains(d, "PI") {
 		t.Errorf("expected both sides shown, got:\n%s", d)
 	}
 }
@@ -36,9 +36,9 @@ func TestLineDiff_LengthMismatch(t *testing.T) {
 }
 
 func TestLineDiff_DifferingCount(t *testing.T) {
-	pig := "a\nb\nc\nd\n"
+	ompig := "a\nb\nc\nd\n"
 	pi := "a\nX\nc\nY\n"
-	d := LineDiff(pig, pi)
+	d := LineDiff(ompig, pi)
 	if !strings.Contains(d, "of 2 differing lines") {
 		t.Errorf("expected differing count = 2, got:\n%s", d)
 	}

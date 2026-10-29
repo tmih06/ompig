@@ -18,7 +18,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 func TestUpstreamStalledX11ConnectionSetup(t *testing.T) {
@@ -51,7 +51,7 @@ func TestUpstreamStalledX11ConnectionSetup(t *testing.T) {
 			ctx, cancel := context.WithTimeout(t.Context(), 6*time.Second)
 			defer cancel()
 			command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestNativeX11ReaderFixture$")
-			command.Env = append(os.Environ(), "PIG_NATIVE_X11_READER="+method, "DISPLAY=127.0.0.1:"+strconv.Itoa(address.Port-6000))
+			command.Env = append(os.Environ(), "OMPIG_NATIVE_X11_READER="+method, "DISPLAY=127.0.0.1:"+strconv.Itoa(address.Port-6000))
 			start := time.Now()
 			out, err := command.CombinedOutput()
 			if err != nil {
@@ -72,7 +72,7 @@ func TestUpstreamStalledX11ConnectionSetup(t *testing.T) {
 }
 
 func TestNativeX11ReaderFixture(t *testing.T) {
-	method := os.Getenv("PIG_NATIVE_X11_READER")
+	method := os.Getenv("OMPIG_NATIVE_X11_READER")
 	if method == "" {
 		return
 	}

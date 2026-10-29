@@ -11,8 +11,8 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const MaxProviderErrorBodyChars = 4000
@@ -58,7 +58,7 @@ func NormalizeProviderError(value any) NormalizedProviderError {
 		return NormalizedProviderError{Message: SafeJsonStringify(value)}
 	}
 	result := NormalizedProviderError{Message: err.Error(), MessageCarriesBody: true}
-	// pig additive (D92): only the Bedrock provider (the AWS SDK) produces a status-carrying response error; a build without it has none.
+	// ompig additive (D92): only the Bedrock provider (the AWS SDK) produces a status-carrying response error; a build without it has none.
 	if status, ok := awsResponseErrorStatus(err); ok {
 		result.Status = new(status)
 	}
@@ -132,7 +132,7 @@ func appendSafeJsonStringify(dst []byte, value any) []byte {
 }
 
 // maxPooledSafeJSONBuffer bounds the buffers a pooled safeJSONEncoder keeps (golang/go#23199): one large tool argument must not pin them.
-// pig additive (D112): Pi keeps no encoder between JSON.stringify calls; a state that is not pooled is made again and stringifies the same.
+// ompig additive (D112): Pi keeps no encoder between JSON.stringify calls; a state that is not pooled is made again and stringifies the same.
 const maxPooledSafeJSONBuffer = 64 << 10
 
 // release returns state to the pool unless its buffers grew past maxPooledSafeJSONBuffer; the pool makes a fresh state when it is empty.

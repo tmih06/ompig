@@ -2,9 +2,9 @@
 SPDX-License-Identifier: MIT
 -->
 
-# Releasing PiG
+# Releasing Ompig
 
-Only a maintainer with release authority can start a PiG release. Complete every applicable legal, security, provenance, trademark, and publication approval before making a repository, tag, package, image, or binary public.
+Only a maintainer with release authority can start a Ompig release. Complete every applicable legal, security, provenance, trademark, and publication approval before making a repository, tag, package, image, or binary public.
 
 ## Release prerequisites
 
@@ -24,13 +24,13 @@ See [`docs/supply-chain.md`](../supply-chain.md) for the evidence contract.
 
 ## Version and tag
 
-PiG uses semantic versions and annotated tags in the form `vMAJOR.MINOR.PATCH`. Do not reuse a version or replace artifacts attached to a released tag.
+Ompig uses semantic versions and annotated tags in the form `vMAJOR.MINOR.PATCH`. Do not reuse a version or replace artifacts attached to a released tag.
 
-The release metadata identifies both the PiG version and the Pi version that defines the parity target.
+The release metadata identifies both the Ompig version and the Pi version that defines the parity target.
 
 Change the version only with `make set-version VERSION=x.y.z`.
 
-`internal/coding/pigversion/pigversion.go` is the version authority. The command updates its PiG pin, the Standard development version, the newest changelog heading, and the versions of the Python SDK (`extensions/sdk-py/pyproject.toml`) and the TypeScript declarations (`extensions/sdk-ts/package.json` and `package-lock.json`). It leaves the Rust `pig-sdk` crate on 0.1.x, because Pig resolves an extension's un-pathed `pig-sdk` requirement through a Cargo patch that applies only within semver. An ordinary version bump preserves every `go.mod` and `go.sum`. Dependency versions describe published modules, not the next PiG release. Workspace builds use the developing SDK through `go.work`.
+`internal/coding/pigversion/pigversion.go` is the version authority. The command updates its Ompig pin, the Standard development version, the newest changelog heading, and the versions of the Python SDK (`extensions/sdk-py/pyproject.toml`) and the TypeScript declarations (`extensions/sdk-ts/package.json` and `package-lock.json`). It leaves the Rust `ompig-sdk` crate on 0.1.x, because Ompig resolves an extension's un-pathed `ompig-sdk` requirement through a Cargo patch that applies only within semver. An ordinary version bump preserves every `go.mod` and `go.sum`. Dependency versions describe published modules, not the next Ompig release. Workspace builds use the developing SDK through `go.work`.
 
 ```bash
 make set-version VERSION=0.3.0 SET_VERSION_ARGS=--dry-run
@@ -63,19 +63,19 @@ Release notes are written as fragments in `changelog.d/<lane>-<sha>.md`; `make c
 
 ## Go module publication
 
-PiG publishes two Go modules from one release commit:
+Ompig publishes two Go modules from one release commit:
 
-- `github.com/MichaelKinsy/PiG`, tagged `vMAJOR.MINOR.PATCH`;
-- `github.com/MichaelKinsy/PiG/extensions/sdk`, tagged
+- `github.com/tmih06/ompig`, tagged `vMAJOR.MINOR.PATCH`;
+- `github.com/tmih06/ompig/extensions/sdk`, tagged
   `extensions/sdk/vMAJOR.MINOR.PATCH`.
 
-`go install github.com/MichaelKinsy/PiG/cmd/pig@vMAJOR.MINOR.PATCH` refuses a module whose `go.mod` has a `replace` or `exclude` directive. The root `go.mod` therefore has neither. On `main`, keep nested requirements and checksums at published versions while the PiG version advances. When a change on `main` makes the root use nested-module API newer than the last tag, require the nested module at the pseudo-version of the `main` commit that holds that API (`GOWORK=off GOFLAGS=-mod=mod go get github.com/MichaelKinsy/PiG/extensions/sdk@<commit>`, which also writes the checksums), and require the same version in the modules that are fused with it (`piglets/standard`, `piglets/aot`), because a fused member cannot require a newer SDK than the Pig source pins. A pseudo-version sorts below the tags created on release branches, which are not ancestors of `main`; the release replaces it with the tag, as `make set-version --release-modules` does for every requirement. `go install ...@main` then builds, and `make module-size` and `make module-build-report` stay clean. A checkout resolves the SDK to `./extensions/sdk` through `go.work`; this does not prove that an external Go install can resolve the dependency.
+`go install github.com/tmih06/ompig/cmd/ompig@vMAJOR.MINOR.PATCH` refuses a module whose `go.mod` has a `replace` or `exclude` directive. The root `go.mod` therefore has neither. On `main`, keep nested requirements and checksums at published versions while the Ompig version advances. When a change on `main` makes the root use nested-module API newer than the last tag, require the nested module at the pseudo-version of the `main` commit that holds that API (`GOWORK=off GOFLAGS=-mod=mod go get github.com/tmih06/ompig/extensions/sdk@<commit>`, which also writes the checksums), and require the same version in the modules that are fused with it (`ompiglets/standard`, `ompiglets/aot`), because a fused member cannot require a newer SDK than the Ompig source pins. A pseudo-version sorts below the tags created on release branches, which are not ancestors of `main`; the release replaces it with the tag, as `make set-version --release-modules` does for every requirement. `go install ...@main` then builds, and `make module-size` and `make module-build-report` stay clean. A checkout resolves the SDK to `./extensions/sdk` through `go.work`; this does not prove that an external Go install can resolve the dependency.
 
 `make module-publication` runs in the Linux build CI shard and in `make check`. It reads the root manifest with `GOWORK=off`, checks each required nested tag with `git ls-remote` against the public repository (a pseudo-version has no tag; its download proves the commit is public), and downloads only those modules into a fresh cache to verify the committed checksums. It rejects missing tags, unavailable downloads, incorrect checksums, and root replacement or exclusion directives. It does not modify the checkout. It does not prove API compatibility with a developing SDK. When main starts using a new SDK capability, publish the required SDK before merging the consumer.
 
-Go refuses to download a module zip above 500 MiB (524288000 bytes), and `go install` downloads the whole root module. `make module-size` runs in the drift CI shard and in `make check`. It lists the tracked root-module files with Go's module zip rules, adds up their uncompressed bytes, and fails with the largest directories and files when the total exceeds the byte budget in `automation/release/module-size-budget.txt`. It then builds the module zip, serves it through a `file://` GOPROXY under a unique version, runs `go install` of `cmd/pig` at that version outside any workspace, and runs the installed binary with `--version`. A missing `go:embed` target, a `replace` directive, or an oversized tree fails here and not after the tag is published. The budget only moves down: never raise it. Bring the zip under budget by moving bulky data that `go install` users never need into a data-only directory with its own `go.mod` (Go leaves a nested module out of the parent zip; the files stay in the repository and tests keep reading them by path), or by deleting it. `go:embed` cannot cross a module boundary, so embedded files stay in the root module. The data-only modules are `test/parity/interfaces`, `test/parity/pin-ledgers`, `test/parity/upstream-sync`, `coding/testdata`, `durable/core/history/testdata`, `durable/core/turn/testdata`, `bench/durable`, `tui/testdata`, and `internal/wordsegmenter/testdata`.
+Go refuses to download a module zip above 500 MiB (524288000 bytes), and `go install` downloads the whole root module. `make module-size` runs in the drift CI shard and in `make check`. It lists the tracked root-module files with Go's module zip rules, adds up their uncompressed bytes, and fails with the largest directories and files when the total exceeds the byte budget in `automation/release/module-size-budget.txt`. It then builds the module zip, serves it through a `file://` GOPROXY under a unique version, runs `go install` of `cmd/ompig` at that version outside any workspace, and runs the installed binary with `--version`. A missing `go:embed` target, a `replace` directive, or an oversized tree fails here and not after the tag is published. The budget only moves down: never raise it. Bring the zip under budget by moving bulky data that `go install` users never need into a data-only directory with its own `go.mod` (Go leaves a nested module out of the parent zip; the files stay in the repository and tests keep reading them by path), or by deleting it. `go:embed` cannot cross a module boundary, so embedded files stay in the root module. The data-only modules are `test/parity/interfaces`, `test/parity/pin-ledgers`, `test/parity/upstream-sync`, `coding/testdata`, `durable/core/history/testdata`, `durable/core/turn/testdata`, `bench/durable`, `tui/testdata`, and `internal/wordsegmenter/testdata`.
 
-Prepare release dependency pins with `make set-version VERSION=x.y.z SET_VERSION_ARGS=--release-modules` on the release branch. The release workflow retains the same-commit rule: both tags name the final candidate commit. `automation/release/module-tags.sh VERSION` prints the full tag set (`vVERSION`, then `<dir>/vVERSION` for every nested PiG module the root requires). It rejects replacement or exclusion directives and nested requirements at another version. The `source` job validates this plan and requires an empty `set-version --release-modules --dry-run` diff, so stale SDK hashes fail before an immutable tag is created. After candidate validation and release approval, the `publish` job creates each nested tag as an annotated tag on `$GITHUB_SHA` before creating the draft root release. An existing tag must already name that commit. Run `make module-publication` after nested publication, before merging the candidate to `main` or publishing the draft root release.
+Prepare release dependency pins with `make set-version VERSION=x.y.z SET_VERSION_ARGS=--release-modules` on the release branch. The release workflow retains the same-commit rule: both tags name the final candidate commit. `automation/release/module-tags.sh VERSION` prints the full tag set (`vVERSION`, then `<dir>/vVERSION` for every nested Ompig module the root requires). It rejects replacement or exclusion directives and nested requirements at another version. The `source` job validates this plan and requires an empty `set-version --release-modules --dry-run` diff, so stale SDK hashes fail before an immutable tag is created. After candidate validation and release approval, the `publish` job creates each nested tag as an annotated tag on `$GITHUB_SHA` before creating the draft root release. An existing tag must already name that commit. Run `make module-publication` after nested publication, before merging the candidate to `main` or publishing the draft root release.
 
 For `0.3.0`, publish `extensions/sdk/v0.3.0` first on the final release commit, then publish `v0.3.0` on that same commit. Do not downgrade the current dependency to `v0.2.0`: that published SDK lacks `extensions/sdk/json`, which the current host imports. After release, ordinary version bumps retain this published SDK pin.
 
@@ -85,13 +85,13 @@ After the draft release is published:
 
    ```bash
    GOBIN="$(mktemp -d)" GOMODCACHE="$(mktemp -d)" GOFLAGS= GOWORK=off \
-     go install github.com/MichaelKinsy/PiG/cmd/pig@vMAJOR.MINOR.PATCH
+     go install github.com/tmih06/ompig/cmd/ompig@vMAJOR.MINOR.PATCH
    ```
 
-2. Inspect the installed identity with `go version -m` and `pig version`.
+2. Inspect the installed identity with `go version -m` and `ompig version`.
 3. Confirm both module versions on `proxy.golang.org` (for example
-   `go list -m github.com/MichaelKinsy/PiG@vMAJOR.MINOR.PATCH` and
-   `go list -m github.com/MichaelKinsy/PiG/extensions/sdk@vMAJOR.MINOR.PATCH`)
+   `go list -m github.com/tmih06/ompig@vMAJOR.MINOR.PATCH` and
+   `go list -m github.com/tmih06/ompig/extensions/sdk@vMAJOR.MINOR.PATCH`)
    and request their pkg.go.dev pages.
 
 Never move or delete a published module tag: the Go checksum database records
@@ -135,7 +135,7 @@ Each evidence file records the source commit, workflow identity, tool version, a
 
 The release workflow creates immutable artifacts and checksums. Untrusted pull-request code must not receive publication credentials. A publication job must use an approved protected environment.
 
-GitHub Releases owns the public release identity. Installers and self-update metadata use only approved, signed release artifacts. A downstream product can mirror a verified artifact. It must not rebuild or resign a PiG release under the same identity.
+GitHub Releases owns the public release identity. Installers and self-update metadata use only approved, signed release artifacts. A downstream product can mirror a verified artifact. It must not rebuild or resign a Ompig release under the same identity.
 
 Do not publish a release, tag, installer, package, image, or binary until every release gate is complete.
 
@@ -146,25 +146,25 @@ Do not publish a release, tag, installer, package, image, or binary until every 
 The job:
 
 1. downloads every platform's uploaded archive (skipping the source candidate, which is not a platform archive and which GitHub Releases attaches automatically);
-2. combines their digests into one `SHA256SUMS` with `automation/release/combine-checksums.py` and cross-checks it with `sha256sum -c`, so `install.sh` and pi-in-go.dev's installer API (`/api/installer/releases`) see one combined manifest instead of the five separate per-platform ones each matrix job writes as its own evidence;
-3. writes `update.json`, the self-update manifest naming each macOS, Linux and Android archive with its SHA-256 from `SHA256SUMS` (`automation/release/gen-update-manifest.py --sha256sums`), signs it with each Ed25519 key in the `release` environment secret `PIG_UPDATE_SIGNING_KEY` (`automation/release/sign-update-manifest.sh`), checks every signature against the keys in `automation/release/update-trust.pem`, and attaches both `update.json` and `update.json.sig` (the signatures as comma-separated base64). The job fails if the secret is missing or holds a key whose public key is not in `update-trust.pem`;
-4. creates each nested Go module tag (`extensions/sdk/v<version>`) as an annotated tag on the release commit `$GITHUB_SHA`, after `automation/release/module-tags.sh` validates the release dependency pins; an existing nested tag must name that same commit. It then runs `automation/ci/check-module-publication.py` to verify the published tags and downloaded checksums before creating the draft root release. A nested module tag alone installs no PiG executable: `go install .../cmd/pig@v<version>` resolves only once the root tag exists;
+2. combines their digests into one `SHA256SUMS` with `automation/release/combine-checksums.py` and cross-checks it with `sha256sum -c`, so `install.sh` and ompig.dev's installer API (`/api/installer/releases`) see one combined manifest instead of the five separate per-platform ones each matrix job writes as its own evidence;
+3. writes `update.json`, the self-update manifest naming each macOS, Linux and Android archive with its SHA-256 from `SHA256SUMS` (`automation/release/gen-update-manifest.py --sha256sums`), signs it with each Ed25519 key in the `release` environment secret `OMPIG_UPDATE_SIGNING_KEY` (`automation/release/sign-update-manifest.sh`), checks every signature against the keys in `automation/release/update-trust.pem`, and attaches both `update.json` and `update.json.sig` (the signatures as comma-separated base64). The job fails if the secret is missing or holds a key whose public key is not in `update-trust.pem`;
+4. creates each nested Go module tag (`extensions/sdk/v<version>`) as an annotated tag on the release commit `$GITHUB_SHA`, after `automation/release/module-tags.sh` validates the release dependency pins; an existing nested tag must name that same commit. It then runs `automation/ci/check-module-publication.py` to verify the published tags and downloaded checksums before creating the draft root release. A nested module tag alone installs no Ompig executable: `go install .../cmd/ompig@v<version>` resolves only once the root tag exists;
 5. creates a **draft** GitHub Release on tag `v<version>` (the tag pattern from "Version and tag" above) with every archive and the combined `SHA256SUMS` attached. A draft never becomes visible, and its tag is never created, until a maintainer reviews the evidence and presses Publish; this is the explicit approval "Publication controls" requires.
 
 ### Self-update
 
-Release binaries are built with `-X internal/codingagent.DefaultUpdateURL=https://github.com/<repository>/releases/latest/download/update.json` and with `DefaultUpdateTrustRoot` set to `automation/release/update-trust.pem` (base64-encoded, because `-X` takes one line). `install.sh` records an owner-only install receipt naming that update source, so `pig update` on a script installation fetches the latest published `update.json`, verifies `update.json.sig` against the built-in key, downloads the archive for its platform, checks the archive's SHA-256, and replaces the executable. A standalone `pig.exe` on Windows is not replaced in place (D39); Windows users run the PowerShell installer again.
+Release binaries are built with `-X internal/codingagent.DefaultUpdateURL=https://github.com/<repository>/releases/latest/download/update.json` and with `DefaultUpdateTrustRoot` set to `automation/release/update-trust.pem` (base64-encoded, because `-X` takes one line). `install.sh` records an owner-only install receipt naming that update source, so `ompig update` on a script installation fetches the latest published `update.json`, verifies `update.json.sig` against the built-in key, downloads the archive for its platform, checks the archive's SHA-256, and replaces the executable. A standalone `ompig.exe` on Windows is not replaced in place (D39); Windows users run the PowerShell installer again.
 
-To set up the signing key: generate an Ed25519 key (`openssl genpkey -algorithm ed25519 -out update-signing.pem`), store its PEM as the `PIG_UPDATE_SIGNING_KEY` secret of the `release` environment, and commit its public key (`openssl pkey -in update-signing.pem -pubout`) to `automation/release/update-trust.pem`.
+To set up the signing key: generate an Ed25519 key (`openssl genpkey -algorithm ed25519 -out update-signing.pem`), store its PEM as the `OMPIG_UPDATE_SIGNING_KEY` secret of the `release` environment, and commit its public key (`openssl pkey -in update-signing.pem -pubout`) to `automation/release/update-trust.pem`.
 
-`pig update` accepts a manifest when any signature in `update.json.sig` verifies against any key the binary trusts, and each binary trusts the keys `update-trust.pem` held when it was built. To rotate the signing key without stranding installed binaries:
+`ompig update` accepts a manifest when any signature in `update.json.sig` verifies against any key the binary trusts, and each binary trusts the keys `update-trust.pem` held when it was built. To rotate the signing key without stranding installed binaries:
 
 1. Generate the incoming key and append its public key to `update-trust.pem` after the outgoing one.
-2. Set `PIG_UPDATE_SIGNING_KEY` to both private keys, outgoing then incoming, concatenated as one PEM secret. Every release from here on carries two signatures: binaries built before the rotation verify the outgoing key's signature, binaries built after it verify either one.
+2. Set `OMPIG_UPDATE_SIGNING_KEY` to both private keys, outgoing then incoming, concatenated as one PEM secret. Every release from here on carries two signatures: binaries built before the rotation verify the outgoing key's signature, binaries built after it verify either one.
 3. Keep signing with both keys for as long as binaries that trust only the outgoing key should keep updating in place. A binary that skips every dual-signed release still verifies the latest one, because the latest one still carries the outgoing signature.
-4. To retire the outgoing key, remove its public key from `update-trust.pem` and its private key from the secret. Binaries built before the rotation then no longer verify the latest manifest and `pig update` refuses it; those installations update by running `install.sh` again. If the outgoing key was compromised, skip the dual-signing period and retire it at once: a binary that trusts it accepts any manifest it signs, so those installations should be reinstalled with `install.sh` rather than updated.
+4. To retire the outgoing key, remove its public key from `update-trust.pem` and its private key from the secret. Binaries built before the rotation then no longer verify the latest manifest and `ompig update` refuses it; those installations update by running `install.sh` again. If the outgoing key was compromised, skip the dual-signing period and retire it at once: a binary that trusts it accepts any manifest it signs, so those installations should be reinstalled with `install.sh` rather than updated.
 
-This repository holds no hosting credentials. The optional mirror of a published release to `dl.pi-in-go.dev` runs from the private hosting repository after publication; `install.sh` downloads from GitHub Releases unless `PIG_DOWNLOAD_BASE` names the mirror.
+This repository holds no hosting credentials. The optional mirror of a published release to `dl.ompig.dev` runs from the private hosting repository after publication; `install.sh` downloads from GitHub Releases unless `OMPIG_DOWNLOAD_BASE` names the mirror.
 
 Publishing the draft release itself (pressing the GitHub UI's Publish
 button, or `gh release edit v<version> --draft=false`) remains a manual,
@@ -172,20 +172,20 @@ off-workflow action by a maintainer with release authority.
 
 ## npm distribution
 
-PiG also ships on npm as `@pi-in-go/pig`. The npm version is the PiG release
+Ompig also ships on npm as `@ompig/ompig`. The npm version is the Ompig release
 version (`0.3.0`); npm semver cannot carry the `+0.99.1` build metadata usefully,
 so the Pi base version appears in each package's description and README
 instead. The layout follows the esbuild/biome pattern and runs no install
 script and no download at install time:
 
-- `@pi-in-go/pig`, a small Node.js (>= 18) launcher with `bin: pig`. It maps
+- `@ompig/ompig`, a small Node.js (>= 18) launcher with `bin: ompig`. It maps
   `process.platform`/`process.arch` to a platform package, then runs that
   package's native binary with inherited stdio, forwarding arguments, the exit
   status and signals. Node on Termux reports `process.platform` `android`, which
   the launcher maps to the `android-arm64` package. When the platform package is missing (for example after
   `--omit=optional`), it prints the other install methods.
-- `@pi-in-go/pig-{darwin,linux,win32}-{x64,arm64}` and `@pi-in-go/pig-android-arm64`, one per release target,
-  each with `os`/`cpu` fields, the single `pig`/`pig.exe` binary, and
+- `@ompig/ompig-{darwin,linux,win32}-{x64,arm64}` and `@ompig/ompig-android-arm64`, one per release target,
+  each with `os`/`cpu` fields, the single `ompig`/`ompig.exe` binary, and
   `LICENSE`, `NOTICE` and `THIRD_PARTY_NOTICES.md`. The launcher lists all seven
   as exact-version `optionalDependencies`, so npm installs only the matching
   one.
@@ -202,7 +202,7 @@ npm publishes through trusted publishing (OIDC): the workflow's GitHub OIDC
 token is exchanged for a short-lived publish credential, and npm attaches
 provenance automatically. No npm token or GitHub secret is stored.
 
-1. Create the npm organization `pi-in-go` (free plan; public packages).
+1. Create the npm organization `ompig` (free plan; public packages).
 2. Bootstrap the eight packages once, because npm can require a package to
    exist before a trusted publisher can be configured for it. After the
    GitHub Release `v0.2.0` is published, on a maintainer machine with `gh`,
@@ -221,10 +221,10 @@ provenance automatically. No npm token or GitHub secret is stored.
    publishing.
 3. On each of the eight packages (`https://www.npmjs.com/package/<name>/access`),
    add a Trusted Publisher: GitHub Actions, organization or user
-   `MichaelKinsy`, repository `PiG`, workflow filename `npm-publish.yml`,
+   `MichaelKinsy`, repository `Ompig`, workflow filename `npm-publish.yml`,
    environment empty. Optionally set publishing access to require 2FA and
    disallow tokens. A package that first ships in a later release, such as
-   `@pi-in-go/pig-android-arm64`, needs the same bootstrap and trusted-publisher
+   `@ompig/ompig-android-arm64`, needs the same bootstrap and trusted-publisher
    setup before `npm-publish.yml` can publish it.
 
 ### How the npm job runs
@@ -247,12 +247,12 @@ re-runs it for an already published release. The single job has
    workflow.
 
 npm versions are immutable: a published version cannot be replaced, only
-deprecated. Fix a bad npm release with a new PiG release.
+deprecated. Fix a bad npm release with a new Ompig release.
 
 Local checks, without registry access:
 
 ```bash
 python3 -m unittest automation/release/npm/test_pack_npm.py
 node --test automation/release/npm/launcher.test.js
-automation/release/npm/e2e-local.sh   # cross-builds six targets, packs, installs, runs pig --version
+automation/release/npm/e2e-local.sh   # cross-builds six targets, packs, installs, runs ompig --version
 ```

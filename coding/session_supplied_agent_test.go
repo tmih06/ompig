@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // suppliedAgentFixture is a Session over an Agent the caller built, as sdk.ts builds one and hands it to `new AgentSession(config)`.
@@ -25,7 +25,7 @@ type suppliedAgentFixture struct {
 func newSuppliedAgentFixture(t *testing.T, responses ...scriptedResponse) *suppliedAgentFixture {
 	t.Helper()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	agentDir := filepath.Join(home, "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
@@ -350,7 +350,7 @@ func TestNewAgentSessionHonorsThePreviousHooksModelAndLegacyNextTurn(t *testing.
 	}
 }
 
-// upstream: packages/coding-agent/src/core/agent-session.ts:1409-1412 (dispose clears the warmer's onWarmed, then cancels it). PiG replaces a Session's inner session where Pi disposes the AgentSession and builds the next one.
+// upstream: packages/coding-agent/src/core/agent-session.ts:1409-1412 (dispose clears the warmer's onWarmed, then cancels it). Ompig replaces a Session's inner session where Pi disposes the AgentSession and builds the next one.
 func TestSessionReplacementAndCloseReleaseTheSuppliedCacheWarmer(t *testing.T) {
 	f := newSuppliedAgentFixture(t)
 	warmer := &fakeCacheWarmer{}

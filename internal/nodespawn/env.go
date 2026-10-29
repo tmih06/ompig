@@ -23,7 +23,7 @@ import (
 const caseInsensitiveEnv = runtime.GOOS == "windows"
 
 // ProcessEnv returns the entries of {...process.env} as Node builds it, in
-// its key order: the names of PiG's environment block in block order, each
+// its key order: the names of Ompig's environment block in block order, each
 // once, with process.env's value for it. On Windows process.env skips the
 // hidden names that start with "=", such as the per-drive "=C:", and reads a
 // value case-insensitively (src/node_env_var.cc), so a name that appears in
@@ -99,12 +99,12 @@ func SetEnv(cmd *exec.Cmd, env []string) {
 // libuv's order among the entries that os/exec compares equal, such as
 // "A=one" and "A=B=two", so the child's getenv reads the value it reads under
 // Node for every ASCII name. They disagree on some names with other letters:
-// libuv puts PIG_é (U+00E9, which it uppercases to U+00C9) before PIG_Ê
-// (U+00CA), and PIG_😀 (UTF-16 D83D DE00) before PIG_Ａ (U+FF21), while
+// libuv puts OMPIG_é (U+00E9, which it uppercases to U+00C9) before OMPIG_Ê
+// (U+00CA), and OMPIG_😀 (UTF-16 D83D DE00) before OMPIG_Ａ (U+FF21), while
 // os/exec puts both pairs the other way round. Such variables reach the child
 // in os/exec's order. A child sees that difference only when it lists its
 // environment, or when two entries share a name only through the case of a
-// letter outside ASCII, such as the names "PIG_é=1" and "PIG_É=2", and getenv
+// letter outside ASCII, such as the names "OMPIG_é=1" and "OMPIG_É=2", and getenv
 // reads the first of them.
 func SetEnvProperties(cmd *exec.Cmd, env []EnvProperty) {
 	properties := appendCoverageEnv(objectProperties(env))
@@ -175,9 +175,9 @@ func objectProperties(env []EnvProperty) []EnvProperty {
 }
 
 // appendCoverageEnv is Node's copyProcessEnvToEnv(env, 'NODE_V8_COVERAGE',
-// options.env) (lib/child_process.js, Node 24.19.0): it appends PiG's non-empty
+// options.env) (lib/child_process.js, Node 24.19.0): it appends Ompig's non-empty
 // value unless properties has a name equal to NODE_V8_COVERAGE, compared exactly
-// as hasOwnProperty does, and reads PiG's value case-insensitively on Windows
+// as hasOwnProperty does, and reads Ompig's value case-insensitively on Windows
 // as process.env does.
 func appendCoverageEnv(properties []EnvProperty) []EnvProperty {
 	const name = "NODE_V8_COVERAGE"

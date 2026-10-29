@@ -1,9 +1,9 @@
 package turn
 
 import (
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
-	"github.com/MichaelKinsy/PiG/durable/core/session"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/session"
 )
 
 // Pi's runtime reads (runtime.agent, context, snapshot, entry, scheduler.ts #read) are Session line jobs queued behind the

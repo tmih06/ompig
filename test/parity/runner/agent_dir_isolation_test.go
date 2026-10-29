@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestResolvePigBinClearsAmbientAgentDirectory(t *testing.T) {
-	binary := filepath.Join(t.TempDir(), "pig")
+	binary := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(binary, []byte("fixture"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_PARITY_PIG_BIN", binary)
+	t.Setenv("OMPIG_PARITY_OMPIG_BIN", binary)
 	ambient := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", ambient)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", ambient)
 	resolved := ResolvePigBin(t)
 	var home string
 	for _, entry := range resolved.Env {
@@ -27,7 +27,7 @@ func TestResolvePigBinClearsAmbientAgentDirectory(t *testing.T) {
 			t.Fatalf("invalid env %q", entry)
 		}
 		t.Setenv(key, value)
-		if key == "PIG_HOME" {
+		if key == "OMPIG_HOME" {
 			home = value
 		}
 	}
@@ -39,7 +39,7 @@ func TestResolvePigBinClearsAmbientAgentDirectory(t *testing.T) {
 	}
 	// Scenario overrides are appended after BinaryRef.Env and remain authoritative.
 	fixture := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", fixture)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", fixture)
 	if got := codingagent.AgentDir(); got != fixture {
 		t.Fatalf("explicit scenario directory = %q, want %q", got, fixture)
 	}

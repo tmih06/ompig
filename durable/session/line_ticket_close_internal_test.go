@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/storage"
+	"github.com/tmih06/ompig/durable/storage"
 )
 
 // A commit admitted while close listeners run waits for them; it must not hold the line mutex while it waits. The

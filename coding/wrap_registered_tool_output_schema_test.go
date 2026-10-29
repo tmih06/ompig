@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi tool-definition-wrapper.ts:17 (`outputSchema: definition.outputSchema`) carries a registered tool's outputSchema onto the AgentTool that

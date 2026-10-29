@@ -8,7 +8,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Node's fs.readdirSync lists entries as libuv's scandir returns them: sorted by name with strcmp on Unix, and in the file system's order

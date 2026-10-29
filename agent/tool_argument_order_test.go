@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A tool receives the arguments in the order the model wrote them. Pi validates structuredClone of the parsed arguments and

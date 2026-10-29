@@ -7,9 +7,9 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 func providerOptionsWire(o ai.StreamOptions) map[string]any {
@@ -91,7 +91,7 @@ func requestMetadataWire(metadata map[string]string, order []string) *orderedjso
 }
 
 // providerStreamCallback executes the provider in its owning extension. The connection owns and joins the worker; request cancellation removes correlation and cancels the remote callback.
-// pig additive (D19): connection-owned callbacks carry legacy streamSimple execution across the SDK boundary without changing registry scope.
+// ompig additive (D19): connection-owned callbacks carry legacy streamSimple execution across the SDK boundary without changing registry scope.
 func (h *Host) providerStreamCallback(me *managedExt, name string) extension.ProviderStreamSimple {
 	return func(model extension.Model, rawContext extension.AIContext, rawOptions extension.SimpleStreamOptions) extension.AssistantMessageEventStream {
 		transcript := rawContext

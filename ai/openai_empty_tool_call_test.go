@@ -14,7 +14,7 @@ import (
 // function name. Pi stores that block verbatim, replays tool_call_id "" for the
 // tool result, and every later turn fails with
 // "400 tool messages must include a non-empty string tool_call_id".
-// pig divergence (D120): the stream gives every tool call an id and
+// ompig divergence (D120): the stream gives every tool call an id and
 // replay omits calls without a name or id and their results, so the session keeps working.
 func TestOpenAICompletionsEmptyToolCallDoesNotWedgeReplay(t *testing.T) {
 	for _, tc := range []struct {

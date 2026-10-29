@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type mcpCLIProbe struct {
@@ -27,7 +27,7 @@ type mcpCLIOutcome struct {
 	Project string `json:"project"`
 }
 
-// The empty-list message names the project file ".pi/mcp.json" in Pi and ".pig/mcp.json" in PiG (D2 host identity). Servers named like Object.prototype members ("__proto__", "constructor", "toString" ...) are in the corpus: Pi's plain-object lookups find them inherited and report "Replaced" or "Removed".
+// The empty-list message names the project file ".pi/mcp.json" in Pi and ".ompig/mcp.json" in Ompig (D2 host identity). Servers named like Object.prototype members ("__proto__", "constructor", "toString" ...) are in the corpus: Pi's plain-object lookups find them inherited and report "Replaced" or "Removed".
 // `pi mcp` (mcp/cli.js) against Pi's runMcpCommand: help, unknown commands and options, add (stdio and HTTP; every option, misplaced options, bad KEY=VALUE pairs, `--` and positional pass-through, invalid exposure and port values, replacing,
 // project scope and the trust note), remove (global, project, defined in the other scope), login/logout error paths, and an empty or invalid listing. Output lines, exit codes and the bytes of both mcp.json files are compared.
 func TestMcpCommandMatchesPi(t *testing.T) {
@@ -185,18 +185,18 @@ for (const p of input) {
 	const agentDir = path.join(root, "agent");
 	const cwd = path.join(root, "proj");
 	fs.mkdirSync(agentDir); fs.mkdirSync(cwd);
-	// Pi's default credential store is <getAgentDir()>/mcp-auth.json, whatever options.agentDir says: keep it in the probe's directory, as PiG's default is, so login and logout never reach the agent directory of the process running the test.
-	process.env.PIG_CODING_AGENT_DIR = agentDir; process.env.PI_CODING_AGENT_DIR = agentDir;
+	// Pi's default credential store is <getAgentDir()>/mcp-auth.json, whatever options.agentDir says: keep it in the probe's directory, as Ompig's default is, so login and logout never reach the agent directory of the process running the test.
+	process.env.OMPIG_CODING_AGENT_DIR = agentDir; process.env.PI_CODING_AGENT_DIR = agentDir;
 	if (p.seed !== "") fs.writeFileSync(path.join(agentDir, "mcp.json"), p.seed);
-	if (p.project !== "") { fs.mkdirSync(path.join(cwd, ".pig")); fs.writeFileSync(path.join(cwd, ".pig", "mcp.json"), p.project); }
+	if (p.project !== "") { fs.mkdirSync(path.join(cwd, ".ompig")); fs.writeFileSync(path.join(cwd, ".ompig", "mcp.json"), p.project); }
 	const runs = [];
 	for (const args of p.commands) {
 		const output = [];
 		const code = await runMcpCommand(args, { cwd, agentDir, log: (l) => output.push(String(l)), error: (l) => output.push(String(l)) });
-		runs.push({ code, output: output.map((l) => l.split(root).join("<ROOT>").split(JSON.stringify(root).slice(1, -1)).join("<ROOT>").replace(" or .pi/mcp.json.", " or .pig/mcp.json.")) });
+		runs.push({ code, output: output.map((l) => l.split(root).join("<ROOT>").split(JSON.stringify(root).slice(1, -1)).join("<ROOT>").replace(" or .pi/mcp.json.", " or .ompig/mcp.json.")) });
 	}
 	const read = (f) => (fs.existsSync(f) ? fs.readFileSync(f, "utf8") : "<absent>");
-	out.push({ runs, global: read(path.join(agentDir, "mcp.json")), project: read(path.join(cwd, ".pig", "mcp.json")) });
+	out.push({ runs, global: read(path.join(agentDir, "mcp.json")), project: read(path.join(cwd, ".ompig", "mcp.json")) });
 	fs.rmSync(root, { recursive: true, force: true });
 }
 emit(out);
@@ -211,8 +211,8 @@ emit(out);
 			_ = os.WriteFile(filepath.Join(agentDir, "mcp.json"), []byte(p.Seed), 0o600)
 		}
 		if p.Project != "" {
-			_ = os.Mkdir(filepath.Join(cwd, ".pig"), 0o755)
-			_ = os.WriteFile(filepath.Join(cwd, ".pig", "mcp.json"), []byte(p.Project), 0o600)
+			_ = os.Mkdir(filepath.Join(cwd, ".ompig"), 0o755)
+			_ = os.WriteFile(filepath.Join(cwd, ".ompig", "mcp.json"), []byte(p.Project), 0o600)
 		}
 		var problem string
 		for j, args := range p.Commands {
@@ -222,7 +222,7 @@ emit(out);
 			record := func(line string) {
 				output = append(output, strings.ReplaceAll(strings.ReplaceAll(line, root, "<ROOT>"), jsonRoot, "<ROOT>"))
 			}
-			code := mcpext.RunMcpCommand(t.Context(), args, mcpext.McpCommandOptions{Cwd: cwd, AgentDir: agentDir, AppName: "pig", ConfigDirName: ".pig", Log: record, Error: record})
+			code := mcpext.RunMcpCommand(t.Context(), args, mcpext.McpCommandOptions{Cwd: cwd, AgentDir: agentDir, AppName: "ompig", ConfigDirName: ".ompig", Log: record, Error: record})
 			w := want[i].Runs[j]
 			if code != w.Code || strings.Join(output, "\n") != strings.Join(w.Output, "\n") {
 				problem = "command " + strings.Join(args, " ") + ":\n got " + strconv.Itoa(code) + " " + strings.Join(output, "\n    ") + "\nwant " + strconv.Itoa(w.Code) + " " + strings.Join(w.Output, "\n    ")
@@ -239,7 +239,7 @@ emit(out);
 		if problem == "" {
 			if g := read(filepath.Join(agentDir, "mcp.json")); g != want[i].Global {
 				problem = "global mcp.json:\n got " + g + "\nwant " + want[i].Global
-			} else if g := read(filepath.Join(cwd, ".pig", "mcp.json")); g != want[i].Project {
+			} else if g := read(filepath.Join(cwd, ".ompig", "mcp.json")); g != want[i].Project {
 				problem = "project mcp.json:\n got " + g + "\nwant " + want[i].Project
 			}
 		}

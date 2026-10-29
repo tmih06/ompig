@@ -11,9 +11,9 @@ import (
 
 // Image bounds of the component kit (D107, docs/plan/extension-component-kit.md §7).
 const (
-	viewImageMaxBytes      = 8 << 20  // pig additive (D107): spec §7 bound
-	viewImageStoreMaxBytes = 32 << 20 // pig additive (D107): spec §7 bound
-	viewImageStoreMaxCount = 64       // pig additive (D107): spec §7 bound
+	viewImageMaxBytes      = 8 << 20  // ompig additive (D107): spec §7 bound
+	viewImageStoreMaxBytes = 32 << 20 // ompig additive (D107): spec §7 bound
+	viewImageStoreMaxCount = 64       // ompig additive (D107): spec §7 bound
 )
 
 // viewImage is image bytes a connection sent once and frames reference by

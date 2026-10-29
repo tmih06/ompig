@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# wt-provision <worktree> [--oracle-build <dir>]: make a PiG worktree Pi-oracle-ready without copying.
-#   - .upstream/current -> shared read-only mirror of the pinned Pi source (default ~/.cache/pig-dev/upstream/v<pin>)
+# wt-provision <worktree> [--oracle-build <dir>]: make a Ompig worktree Pi-oracle-ready without copying.
+#   - .upstream/current -> shared read-only mirror of the pinned Pi source (default ~/.cache/ompig-dev/upstream/v<pin>)
 #   - extensions/sdk-ts/node_modules -> the source-built Pi oracle `make parity-deps` links (automation/pin/pin.py install-oracle): the
-#     shared build store's build for the pinned commit (~/.cache/pig-dev/pi-builds/<commit>), built there first when it is missing. Its
+#     shared build store's build for the pinned commit (~/.cache/ompig-dev/pi-builds/<commit>), built there first when it is missing. Its
 #     src/ install carries the build tools the bundle-regeneration tests use (esbuild). --oracle-build <dir> links a given build instead.
-#   - other tracked lockfiles (durable/interop, testdata trees) -> host-shared locked npm trees (PIG_NODE_MODULES_STORE, via npm-locked.py)
+#   - other tracked lockfiles (durable/interop, testdata trees) -> host-shared locked npm trees (OMPIG_NODE_MODULES_STORE, via npm-locked.py)
 # Only adds symlinks/files (a real extensions/sdk-ts/node_modules, e.g. one an APFS clone copied, is replaced by the link); idempotent;
 # exits non-zero if the pinned oracle is missing or mismatched.
-# Env: PIG_UPSTREAM_MIRRORS (default ~/.cache/pig-dev/upstream), PIG_NODE_MODULES_STORE (default ~/.cache/pig-node-modules), PIG_PI_BUILD_STORE
-# and PIG_DEV_HOME (as pin.py install-oracle reads them)
+# Env: OMPIG_UPSTREAM_MIRRORS (default ~/.cache/ompig-dev/upstream), OMPIG_NODE_MODULES_STORE (default ~/.cache/ompig-node-modules), OMPIG_PI_BUILD_STORE
+# and OMPIG_DEV_HOME (as pin.py install-oracle reads them)
 set -euo pipefail
 usage="usage: wt-provision <worktree> [--oracle-build <dir>]"
 wt=; oracle_build=
@@ -21,8 +21,8 @@ while [ $# -gt 0 ]; do
 done
 [ -n "$wt" ] || { echo "$usage" >&2; exit 2; }
 wt=$(cd "$wt" && pwd -P)
-mirrors=${PIG_UPSTREAM_MIRRORS:-$HOME/.cache/pig-dev/upstream}
-export PIG_NODE_MODULES_STORE=${PIG_NODE_MODULES_STORE:-$HOME/.cache/pig-node-modules}
+mirrors=${OMPIG_UPSTREAM_MIRRORS:-$HOME/.cache/ompig-dev/upstream}
+export OMPIG_NODE_MODULES_STORE=${OMPIG_NODE_MODULES_STORE:-$HOME/.cache/ompig-node-modules}
 die() { echo "wt-provision: FAIL: $*" >&2; exit 1; }
 
 pin=$wt/.upstream/pin
@@ -39,9 +39,9 @@ if [ -z "$ref" ] || [ -z "$commit" ] || [ -z "$pkgver" ] || [ -z "$version" ]; t
 mirror=v$version
 oracle_node_modules=
 if [ -n "$oracle_build" ]; then
-  stamp=$oracle_build/.pig-pi-oracle.json
-  [ -f "$stamp" ] || stamp=$oracle_build/oracle/.pig-pi-oracle.json
-  [ -f "$stamp" ] || die "no .pig-pi-oracle.json stamp under $oracle_build"
+  stamp=$oracle_build/.ompig-pi-oracle.json
+  [ -f "$stamp" ] || stamp=$oracle_build/oracle/.ompig-pi-oracle.json
+  [ -f "$stamp" ] || die "no .ompig-pi-oracle.json stamp under $oracle_build"
   grep -q "\"commit\": *\"$commit\"" "$stamp" || die "oracle build stamp $stamp is not commit $commit"
   grep -q '"source": *"build"' "$stamp" || die "oracle build stamp $stamp is not a source build"
   oracle_node_modules=$(cd "$(dirname "$stamp")" && pwd -P)/node_modules
@@ -51,9 +51,9 @@ fi
 # 1. Source mirror: a mirror dir whose marker carries the pinned commit.
 src=
 cand=$mirrors/$mirror
-m=$cand/.pig-upstream-source.json
+m=$cand/.ompig-upstream-source.json
 if [ -f "$m" ] && grep -q "\"commit\": \"$commit\"" "$m"; then src=$(cd "$cand" && pwd -P); fi
-[ -n "$src" ] || die "no mirror $mirror for $ref@$commit under $mirrors (run make upstream-mirror in a checkout, or set PIG_UPSTREAM_MIRRORS)"
+[ -n "$src" ] || die "no mirror $mirror for $ref@$commit under $mirrors (run make upstream-mirror in a checkout, or set OMPIG_UPSTREAM_MIRRORS)"
 for link in current "$mirror"; do
   t=$wt/.upstream/$link
   if [ -L "$t" ] && [ "$(readlink "$t")" = "$src" ]; then continue; fi
@@ -76,14 +76,14 @@ if [ -n "$oracle_node_modules" ]; then
     rm -rf "$sdk/node_modules"; ln -s "$oracle_node_modules" "$sdk/node_modules"
   fi
 else
-  # pin.py install-oracle links the shared build store's build of the pinned commit (PIG_PI_BUILD_STORE, else
-  # ${PIG_DEV_HOME:-~/.cache/pig-dev}/pi-builds/<commit>), building it there first when it is missing, and replaces whatever
+  # pin.py install-oracle links the shared build store's build of the pinned commit (OMPIG_PI_BUILD_STORE, else
+  # ${OMPIG_DEV_HOME:-~/.cache/ompig-dev}/pi-builds/<commit>), building it there first when it is missing, and replaces whatever
   # extensions/sdk-ts/node_modules was. It also points .upstream/current at the pin's mirror dir, which step 1 linked.
-  (cd "$wt" && env -u PIG_PARITY_PI_PUBLISHED python3 automation/pin/pin.py install-oracle) >&2 || die "pin.py install-oracle failed in $wt"
+  (cd "$wt" && env -u OMPIG_PARITY_PI_PUBLISHED python3 automation/pin/pin.py install-oracle) >&2 || die "pin.py install-oracle failed in $wt"
   [ -L "$sdk/node_modules" ] || die "pin.py install-oracle left no link at $sdk/node_modules"
   oracle_node_modules=$(readlink "$sdk/node_modules")
 fi
-stamp=$(dirname "$oracle_node_modules")/.pig-pi-oracle.json
+stamp=$(dirname "$oracle_node_modules")/.ompig-pi-oracle.json
 if ! grep -qs "\"commit\": *\"$commit\"" "$stamp" || ! grep -qs '"source": *"build"' "$stamp"; then
   die "$oracle_node_modules is not the source-built Pi oracle of $commit (stamp $stamp)"
 fi
@@ -92,7 +92,7 @@ dirs=("$sdk")
 while IFS= read -r lock; do dirs+=("$wt/$(dirname "$lock")"); done < <(git -C "$wt" ls-files | grep -E '(^durable/interop|/testdata/([^/]+/)*[^/]+)/package-lock\.json$|^durable/interop/package-lock\.json$' | sort -u)
 for dir in "${dirs[@]}"; do
   [ -f "$dir/package-lock.json" ] || continue
-  if [ -d "$dir/node_modules" ] && [ ! -L "$dir/node_modules" ] && [ ! -f "$dir/node_modules/.pig-deps-ready" ]; then die "$dir/node_modules is a real unstamped dir; refusing to touch it"; fi
+  if [ -d "$dir/node_modules" ] && [ ! -L "$dir/node_modules" ] && [ ! -f "$dir/node_modules/.ompig-deps-ready" ]; then die "$dir/node_modules is a real unstamped dir; refusing to touch it"; fi
   [ -n "$oracle_node_modules" ] && [ "$dir" = "$sdk" ] && continue
   npm_config_prefer_offline=true python3 "$wt/automation/ci/npm-locked.py" "$dir" || die "locked npm install failed in $dir"
 done

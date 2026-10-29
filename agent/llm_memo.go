@@ -5,7 +5,7 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // llmMemo remembers the provider messages of the previous request's context, so a request converts only the messages
@@ -28,7 +28,7 @@ type llmMemo struct {
 }
 
 // defaultLLMMemoMinMessages is the length of a context under which the memo converts every message and keeps nothing: converting that many messages costs a few hundred allocations, and the remembered copies of a short session would add to the heap its every turn leaves behind.
-// pig additive (D112): Pi converts every message on every request (agent.ts defaultConvertToLlm); the floor changes only what the memo retains, never the request.
+// ompig additive (D112): Pi converts every message on every request (agent.ts defaultConvertToLlm); the floor changes only what the memo retains, never the request.
 const defaultLLMMemoMinMessages = 64
 
 // llmMemoMinMessages is the minimum an llmMemo without its own minMessages uses; the tests of the package lower it so every test exercises the memo.

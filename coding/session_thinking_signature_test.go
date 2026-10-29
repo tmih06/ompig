@@ -11,12 +11,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi anthropic-messages.ts:641-648 preserves an explicit empty signature, and :1333-1347 replays it as thinking for allowEmptySignature models. Exercise the Session write/reopen boundary rather than synthesizing a retained Go block.
 func TestSessionPreservesEmptyThinkingSignatureThroughReopenAndReplay(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	requests := make(chan []byte, 2)
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)

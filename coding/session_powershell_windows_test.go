@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 func fauxPowerShellCall(id, command string) scriptedResponse {
@@ -58,7 +58,7 @@ func TestPowerShellToolEventsReachExtensionsOnWindows(t *testing.T) {
 		tools:     []agent.AgentTool{&tools.PowerShellTool{CWD: t.TempDir()}},
 		extension: guard,
 	},
-		fauxPowerShellCall("ps-allowed", "Write-Output ('pig' + '-' + 'powershell')"),
+		fauxPowerShellCall("ps-allowed", "Write-Output ('ompig' + '-' + 'powershell')"),
 		fauxPowerShellCall("ps-blocked", "Remove-Item blocked.txt"),
 		fauxReply("done", ai.StopReasonStop, 0))
 	messages, err := h.session.Send(context.Background(), "go")
@@ -71,7 +71,7 @@ func TestPowerShellToolEventsReachExtensionsOnWindows(t *testing.T) {
 	if len(calls) != 2 {
 		t.Fatalf("tool_call events = %d, want 2", len(calls))
 	}
-	for i, command := range []string{"Write-Output ('pig' + '-' + 'powershell')", "Remove-Item blocked.txt"} {
+	for i, command := range []string{"Write-Output ('ompig' + '-' + 'powershell')", "Remove-Item blocked.txt"} {
 		var ps extension.CustomToolCallEvent
 		if err := json.Unmarshal(calls[i], &ps); err != nil {
 			t.Fatal(err)
@@ -90,7 +90,7 @@ func TestPowerShellToolEventsReachExtensionsOnWindows(t *testing.T) {
 		t.Fatal(err)
 	}
 	allowed, ok := event.(extension.PowerShellToolResultEvent)
-	if !ok || allowed.IsError || !strings.Contains(string(results[0]), "pig-powershell") {
+	if !ok || allowed.IsError || !strings.Contains(string(results[0]), "ompig-powershell") {
 		t.Fatalf("allowed tool_result wire = %s, want a PowerShellToolResultEvent with PowerShell's output", results[0])
 	}
 	toolResults := toolResultMessages(messages)

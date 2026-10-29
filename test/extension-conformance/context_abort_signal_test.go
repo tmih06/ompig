@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's ctx.abort() reaches agent.abort() synchronously (agent-session.ts:2464-2474, 3472-3478), which aborts the active run's AbortController before it returns

@@ -13,20 +13,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	_ "github.com/MichaelKinsy/PiG/internal/tlsdistrust" // hardens http.DefaultTransport, which pig setup downloads use (pig additive (D191))
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/internal/configroot"
+	_ "github.com/tmih06/ompig/internal/tlsdistrust" // hardens http.DefaultTransport, which ompig setup downloads use (ompig additive (D191))
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
-const setupUsage = `Usage: pig setup [status|go|container]
+const setupUsage = `Usage: ompig setup [status|go|container]
 
-  status      Show the toolchains PiG uses for extensions and Piglet builds (default)
-  go          Install a verified Go toolchain under $PIG_HOME/toolchains/go
+  status      Show the toolchains Ompig uses for extensions and Ompiglet builds (default)
+  go          Install a verified Go toolchain under $OMPIG_HOME/toolchains/go
               --version goX.Y.Z   Go release to install (default: this binary's Go)
   container   Show how to install a container runtime on this system
 `
 
-// runSetupCommand handles `pig setup`. It reports -1 for other commands.
+// runSetupCommand handles `ompig setup`. It reports -1 for other commands.
 func runSetupCommand(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 || args[0] != "setup" {
 		return -1
@@ -47,7 +47,7 @@ func runSetupCommand(args []string, stdout, stderr io.Writer) int {
 		_, _ = io.WriteString(stdout, setupUsage)
 		return 0
 	default:
-		_, _ = fmt.Fprintf(stderr, "pig setup: unknown topic %q\n%s", topic, setupUsage)
+		_, _ = fmt.Fprintf(stderr, "ompig setup: unknown topic %q\n%s", topic, setupUsage)
 		return 2
 	}
 }
@@ -69,7 +69,7 @@ func onPath(name string) func() (string, bool) {
 
 func setupTools() []setupTool {
 	return []setupTool{
-		{name: "go", purpose: "Go extension cells and native Piglet builds", remedy: goRemedy(runtime.GOOS), find: func() (string, bool) {
+		{name: "go", purpose: "Go extension cells and native Ompiglet builds", remedy: goRemedy(runtime.GOOS), find: func() (string, bool) {
 			path, err := toolchain.Go()
 			return path, err == nil
 		}, problem: func() string {
@@ -78,7 +78,7 @@ func setupTools() []setupTool {
 			}
 			return ""
 		}},
-		{name: "container", purpose: "container Piglet builds", remedy: "pig setup container", find: func() (string, bool) {
+		{name: "container", purpose: "container Ompiglet builds", remedy: "ompig setup container", find: func() (string, bool) {
 			name, path, ok := toolchain.ContainerRuntime()
 			return name + " (" + path + ")", ok
 		}},
@@ -94,7 +94,7 @@ func goRemedy(goos string) string {
 	if goos == "android" {
 		return "pkg install golang"
 	}
-	return "pig setup go"
+	return "ompig setup go"
 }
 
 func python3Name() string {
@@ -105,7 +105,7 @@ func python3Name() string {
 }
 
 func setupStatus(stdout io.Writer) int {
-	_, _ = fmt.Fprintf(stdout, "PiG toolchains (%s/%s)\n\n", runtime.GOOS, runtime.GOARCH)
+	_, _ = fmt.Fprintf(stdout, "Ompig toolchains (%s/%s)\n\n", runtime.GOOS, runtime.GOARCH)
 	var missing []setupTool
 	for _, tool := range setupTools() {
 		location, ok := tool.find()
@@ -114,7 +114,7 @@ func setupStatus(stdout io.Writer) int {
 			missing = append(missing, tool)
 		} else if tool.problem != nil {
 			if remedy := tool.problem(); remedy != "" {
-				//perf:ok pig setup status, once per tool per command; not a hot path
+				//perf:ok ompig setup status, once per tool per command; not a hot path
 				location += " (too old)"
 				tool.remedy = remedy
 				missing = append(missing, tool)
@@ -130,7 +130,7 @@ func setupStatus(stdout io.Writer) int {
 	for _, tool := range missing {
 		_, _ = fmt.Fprintf(stdout, "  %-10s %s\n", tool.name, tool.remedy)
 	}
-	_, _ = io.WriteString(stdout, "\nPiG runs without these tools. They are needed only for the extension languages and Piglet builds listed above.\n")
+	_, _ = io.WriteString(stdout, "\nOmpig runs without these tools. They are needed only for the extension languages and Ompiglet builds listed above.\n")
 	return 0
 }
 
@@ -144,21 +144,21 @@ func setupGo(args []string, stdout, stderr io.Writer) int {
 		case strings.HasPrefix(arg, "--version="):
 			version = strings.TrimPrefix(arg, "--version=")
 		default:
-			_, _ = fmt.Fprintf(stderr, "pig setup go: unknown option %q\n%s", arg, setupUsage)
+			_, _ = fmt.Fprintf(stderr, "ompig setup go: unknown option %q\n%s", arg, setupUsage)
 			return 2
 		}
 	}
 	if !strings.HasPrefix(version, "go1.") {
-		_, _ = fmt.Fprintf(stderr, "pig setup go: %q is not a Go release; pass --version goX.Y.Z\n", version)
+		_, _ = fmt.Fprintf(stderr, "ompig setup go: %q is not a Go release; pass --version goX.Y.Z\n", version)
 		return 2
 	}
 	if message := goSetupUnsupported(runtime.GOOS, runtime.GOARCH); message != "" {
-		_, _ = fmt.Fprintf(stderr, "pig setup go: %s\n", message)
+		_, _ = fmt.Fprintf(stderr, "ompig setup go: %s\n", message)
 		return 1
 	}
 	root, err := configroot.Resolve()
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig setup go: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig setup go: %v\n", err)
 		return 1
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -167,25 +167,25 @@ func setupGo(args []string, stdout, stderr io.Writer) int {
 	client := &http.Client{Timeout: 15 * time.Minute}
 	goCommand, err := toolchain.InstallGo(ctx, client, toolchain.GoDownloadBase, version, runtime.GOOS, runtime.GOARCH, root)
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig setup go: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig setup go: %v\n", err)
 		return 1
 	}
-	_, _ = fmt.Fprintf(stdout, "Installed %s at %s.\nPiG uses it automatically when go is not on PATH or the go on PATH is older than Go %s. To use it in your shell, add %s to PATH.\n", version, goCommand, toolchain.MinGoVersion, filepath.Dir(goCommand))
+	_, _ = fmt.Fprintf(stdout, "Installed %s at %s.\nOmpig uses it automatically when go is not on PATH or the go on PATH is older than Go %s. To use it in your shell, add %s to PATH.\n", version, goCommand, toolchain.MinGoVersion, filepath.Dir(goCommand))
 	return 0
 }
 
-// goSetupUnsupported explains why pig setup go cannot install Go on goos, or
+// goSetupUnsupported explains why ompig setup go cannot install Go on goos, or
 // returns "" when it can. Go publishes no archive for android, which is Termux:
 // the distribution's package is the toolchain there.
 func goSetupUnsupported(goos, goarch string) string {
 	if goos != "android" {
 		return ""
 	}
-	return fmt.Sprintf("Go publishes no archive for %s/%s, so PiG cannot download one on Termux.\nInstall Go with Termux's package manager instead:\n  pkg install golang\nPiG finds the go on your PATH; check it with `pig setup status`.", goos, goarch)
+	return fmt.Sprintf("Go publishes no archive for %s/%s, so Ompig cannot download one on Termux.\nInstall Go with Termux's package manager instead:\n  pkg install golang\nOmpig finds the go on your PATH; check it with `ompig setup status`.", goos, goarch)
 }
 
 func containerGuide(goos string) string {
-	const image = "The built-in container builder (--builder container) pulls a pinned public Go image and installs this PiG release in it. PIG_CONTAINER_ENGINE selects docker or podman. To use your own image, configure a digest-pinned builder image in PIG_BUILDERS_FILE; see `pig docs show piglet-binaries`.\n"
+	const image = "The built-in container builder (--builder container) pulls a pinned public Go image and installs this Ompig release in it. OMPIG_CONTAINER_ENGINE selects docker or podman. To use your own image, configure a digest-pinned builder image in OMPIG_BUILDERS_FILE; see `ompig docs show ompiglet-binaries`.\n"
 	switch goos {
 	case "darwin":
 		return "Install one container runtime:\n" +

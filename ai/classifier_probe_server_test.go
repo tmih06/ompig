@@ -11,11 +11,11 @@ import (
 )
 
 // probeHeader names the probe a request belongs to. The scripted server answers a request only when it carries the id of the probe currently scripted.
-const probeHeader = "X-Pig-Probe"
+const probeHeader = "X-Ompig-Probe"
 
 // probeServer is the one scripted HTTP server a classifier oracle test sends every probe to, and so the one keep-alive connection they all share. A server and a connection per probe cost a listener and a TCP connection
 // each, and Windows hands the next listener the same dynamic port again (127.0.0.1:49152 in run after run), so a new connection collides with a four-tuple still in TIME_WAIT often enough for a 700-probe test to fail
-// about one run in twenty: connectex "Only one usage of each socket address (protocol/network address/port) is normally permitted" (WSAEADDRINUSE), which PiG reports as "fetch failed" before the handler sees the request.
+// about one run in twenty: connectex "Only one usage of each socket address (protocol/network address/port) is normally permitted" (WSAEADDRINUSE), which Ompig reports as "fetch failed" before the handler sees the request.
 // Production never opens a listener per request; only the tests did.
 //
 // A probe is selected by the probeHeader the request carries (probeOptionHeaders), never by timing or order: a request for any other probe, or with no probe, fails the test loudly and gets a 500.

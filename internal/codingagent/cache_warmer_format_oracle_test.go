@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type cacheWarmerOracleInput struct {
@@ -42,7 +42,7 @@ type cacheWarmerOracleOutput struct {
 }
 
 // TestCacheWarmerPureFunctionsMatchPi runs core/cache-warmer.ts getCacheWarmingDelayMs, getPromptCacheTtlMs, isReplayable, formatCacheWarmingStatus and
-// formatCacheWarmingUsage and PiG's GetCacheWarmingDelayMs, GetPromptCacheTtlMs, IsReplayable, FormatCacheWarmingStatus and FormatCacheWarmingUsage over 6,000 seeded inputs under three
+// formatCacheWarmingUsage and Ompig's GetCacheWarmingDelayMs, GetPromptCacheTtlMs, IsReplayable, FormatCacheWarmingStatus and FormatCacheWarmingUsage over 6,000 seeded inputs under three
 // process PI_CACHE_RETENTION values (unset, "long", "short"): TTLs around the ten-second margin, model prompt-cache tiers (absent, zero, fractional), request retention and
 // request env (an empty request value falls through to the process one), Anthropic models with and without adaptive thinking, and every status state with decisions at
 // rounding boundaries (probabilities x.5, savings -0.0004, 1e21 dollars), set or unset nextWarmAt and costs down to 1e-7. Not compared: a NaN or infinite TTL (a model's tier is finite seconds).

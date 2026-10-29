@@ -1,6 +1,6 @@
 package extension
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // ReadonlyFooterDataProvider is the footer data an extension's footer reads (footer-data-provider.ts:385
 // Pick<FooterDataProvider, "getGitBranch" | "getExtensionStatuses" | "getAvailableProviderCount" | "onBranchChange">).

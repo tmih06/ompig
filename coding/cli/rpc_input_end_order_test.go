@@ -12,10 +12,10 @@ type rpcOrderImplementation = struct {
 	start func(t *testing.T, extraEnv ...string) (*rpcProcess, string)
 }
 
-// rpcOrderImplementations are Pi and Pig, and Pig with a sibling extension in the same packed Node process.
+// rpcOrderImplementations are Pi and Ompig, and Ompig with a sibling extension in the same packed Node process.
 func rpcOrderImplementations() []rpcOrderImplementation {
 	impls := slices.Clone(rpcShutdownImplementations)
-	return append(impls, rpcOrderImplementation{"pig-with-sibling", startRPCShutdownFixtureWithSibling})
+	return append(impls, rpcOrderImplementation{"ompig-with-sibling", startRPCShutdownFixtureWithSibling})
 }
 
 // Pi writes an extension command's prompt response as soon as the handler returns (agent-session.ts:1904-1908 preflightResult("handled"), rpc-mode.ts:394-412) and reads stdin's end in a later event-loop iteration (rpc-mode.ts:802-805). A client that closes stdin on seeing the handler's last notification therefore always receives the response before the exit. The /wait handler awaits the Session's idle state, so it has real suspensions before its notification.
@@ -38,7 +38,7 @@ func TestRPCInputEndAfterCommandNotificationAnswersComparedWithPi(t *testing.T) 
 	}
 }
 
-// A command that settles in the microtasks and check phase of its line's iteration answers before Pi reads stdin's end, so its response precedes the session_shutdown handler's notification (rpc-mode.ts:726-742,802-805). Pig's runtime is another process: the host must not start the shutdown before such a command's response is written.
+// A command that settles in the microtasks and check phase of its line's iteration answers before Pi reads stdin's end, so its response precedes the session_shutdown handler's notification (rpc-mode.ts:726-742,802-805). Ompig's runtime is another process: the host must not start the shutdown before such a command's response is written.
 func TestRPCInputEndResponsePrecedesShutdownNotificationComparedWithPi(t *testing.T) {
 	for _, impl := range rpcOrderImplementations() {
 		for _, command := range []string{"sync", "micro", "nexttick", "immediate", "microimmediate", "awaits5immediate"} {
@@ -57,7 +57,7 @@ func TestRPCInputEndResponsePrecedesShutdownNotificationComparedWithPi(t *testin
 	}
 }
 
-// Pi emits agent_settled in the microtasks that follow agent_end, so no stdin line is read between them: a command a client sends on seeing agent_end is answered after agent_settled (agent-session.ts:1752-1777 _runAgentPrompt finally, 1044-1058 _emitAgentSettled, rpc-mode.ts:355-360). An extension's agent_settled handler is a round trip for Pig.
+// Pi emits agent_settled in the microtasks that follow agent_end, so no stdin line is read between them: a command a client sends on seeing agent_end is answered after agent_settled (agent-session.ts:1752-1777 _runAgentPrompt finally, 1044-1058 _emitAgentSettled, rpc-mode.ts:355-360). An extension's agent_settled handler is a round trip for Ompig.
 func TestRPCCommandAfterAgentEndAnswersAfterAgentSettledComparedWithPi(t *testing.T) {
 	for _, impl := range rpcOrderImplementations() {
 		t.Run(impl.name, func(t *testing.T) {
@@ -78,9 +78,9 @@ func TestRPCCommandAfterAgentEndAnswersAfterAgentSettledComparedWithPi(t *testin
 	}
 }
 
-// The same ordering without an extension: Pi's own listener writes agent_settled in the microtasks after agent_end, so a get_state sent on seeing agent_end is answered after it. The race is between Pig's stdin goroutine and the Session's settle path, so every round repeats it.
+// The same ordering without an extension: Pi's own listener writes agent_settled in the microtasks after agent_end, so a get_state sent on seeing agent_end is answered after it. The race is between Ompig's stdin goroutine and the Session's settle path, so every round repeats it.
 func TestRPCCommandAfterAgentEndWithoutExtensionsAnswersAfterAgentSettled(t *testing.T) {
-	p := startRPCProcess(t, []string{"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic"}, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCProcess(t, []string{"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic"}, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", "test-faux/faux-1")
 	awaitReady(p)
 	for round := range 40 {
 		p.sendJSON(map[string]any{"id": fmt.Sprintf("p%d", round), "type": "prompt", "message": "hello"})

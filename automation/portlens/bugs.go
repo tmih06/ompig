@@ -97,7 +97,7 @@ func loadBugs(root string) (*BugLedger, error) {
 func bugClassLabel(c string) string {
 	switch c {
 	case "own":
-		return "PiG's own defect"
+		return "Ompig's own defect"
 	case "ahead-of-pi":
 		return "Fixed ahead of Pi"
 	case "pi-port":

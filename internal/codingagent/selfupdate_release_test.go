@@ -70,19 +70,19 @@ func TestSelfReplaceAtInstallsPigFromReleaseArchive(t *testing.T) {
 	allowLoopbackUpdateHTTP(t)
 	newPig := "#!/bin/sh\necho 9.9.9\n"
 	archive := tarGz(t,
-		tarEntry{"pig-9.9.9-test/", tar.TypeDir, ""},
-		tarEntry{"pig-9.9.9-test/LICENSE", tar.TypeReg, "MIT"},
-		tarEntry{"pig-9.9.9-test/pig", tar.TypeReg, newPig},
+		tarEntry{"ompig-9.9.9-test/", tar.TypeDir, ""},
+		tarEntry{"ompig-9.9.9-test/LICENSE", tar.TypeReg, "MIT"},
+		tarEntry{"ompig-9.9.9-test/ompig", tar.TypeReg, newPig},
 	)
 	sum := sha256.Sum256(archive)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { _, _ = w.Write(archive) }))
 	defer srv.Close()
-	exe := filepath.Join(t.TempDir(), "pig")
+	exe := filepath.Join(t.TempDir(), "ompig")
 	if err := os.WriteFile(exe, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 
-	bin := UpdateBinary{URL: srv.URL + "/pig-9.9.9-test.tar.gz", SHA256: strings.Repeat("0", 64)}
+	bin := UpdateBinary{URL: srv.URL + "/ompig-9.9.9-test.tar.gz", SHA256: strings.Repeat("0", 64)}
 	if err := SelfReplaceAt(context.Background(), srv.Client(), bin, exe); err == nil || !strings.Contains(err.Error(), "checksum") {
 		t.Fatalf("archive with the wrong digest: error = %v", err)
 	}
@@ -92,7 +92,7 @@ func TestSelfReplaceAtInstallsPigFromReleaseArchive(t *testing.T) {
 	}
 	got, err := os.ReadFile(exe)
 	if err != nil || string(got) != newPig {
-		t.Fatalf("executable = %q, %v; want the archive's pig", got, err)
+		t.Fatalf("executable = %q, %v; want the archive's ompig", got, err)
 	}
 	info, err := os.Stat(exe)
 	if err != nil {
@@ -101,7 +101,7 @@ func TestSelfReplaceAtInstallsPigFromReleaseArchive(t *testing.T) {
 	if info.Mode().Perm() != 0o755 {
 		t.Fatalf("mode = %o, want 755", info.Mode().Perm())
 	}
-	leftovers, _ := filepath.Glob(filepath.Join(filepath.Dir(exe), ".pig-update-*"))
+	leftovers, _ := filepath.Glob(filepath.Join(filepath.Dir(exe), ".ompig-update-*"))
 	if len(leftovers) != 0 {
 		t.Fatalf("staging files left behind: %v", leftovers)
 	}
@@ -109,11 +109,11 @@ func TestSelfReplaceAtInstallsPigFromReleaseArchive(t *testing.T) {
 
 func TestExtractPigFromTarGzRefusesAnythingButOnePigFile(t *testing.T) {
 	for name, entries := range map[string][]tarEntry{
-		"missing":   {{"pig-1/LICENSE", tar.TypeReg, "MIT"}},
-		"symlink":   {{"pig-1/pig", tar.TypeSymlink, ""}},
-		"two pigs":  {{"a/pig", tar.TypeReg, "1"}, {"b/pig", tar.TypeReg, "2"}},
-		"too deep":  {{"a/b/pig", tar.TypeReg, "1"}},
-		"directory": {{"pig-1/pig/", tar.TypeDir, ""}},
+		"missing":   {{"ompig-1/LICENSE", tar.TypeReg, "MIT"}},
+		"symlink":   {{"ompig-1/ompig", tar.TypeSymlink, ""}},
+		"two pigs":  {{"a/ompig", tar.TypeReg, "1"}, {"b/ompig", tar.TypeReg, "2"}},
+		"too deep":  {{"a/b/ompig", tar.TypeReg, "1"}},
+		"directory": {{"ompig-1/ompig/", tar.TypeDir, ""}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			dir := t.TempDir()
@@ -124,7 +124,7 @@ func TestExtractPigFromTarGzRefusesAnythingButOnePigFile(t *testing.T) {
 			if out, err := extractPigFromTarGz(archive, dir, maxUpdateBinaryBytes); err == nil {
 				t.Fatalf("extracted %s from an archive that should be refused", out)
 			}
-			matches, _ := filepath.Glob(filepath.Join(dir, ".pig-update-*"))
+			matches, _ := filepath.Glob(filepath.Join(dir, ".ompig-update-*"))
 			if len(matches) != 0 {
 				t.Fatalf("refused extraction left %v", matches)
 			}
@@ -144,8 +144,8 @@ func TestFetchUpdateManifestFindsTheSignatureBesideAQueriedManifest(t *testing.T
 	if err := os.WriteFile(trustPath, pemPublicKey(t, public), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", trustPath)
-	body := []byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{}}`)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", trustPath)
+	body := []byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{}}`)
 	signature := base64.StdEncoding.EncodeToString(ed25519.Sign(private, body))
 	for _, manifestPath := range []string{"/update.json", "/slot%2Fblue/update.json", "/update%3Fchannel.json"} {
 		t.Run(manifestPath, func(t *testing.T) {
@@ -182,8 +182,8 @@ func TestFetchUpdateManifestVerifiesADetachedSignature(t *testing.T) {
 	if err := os.WriteFile(trustPath, pemPublicKey(t, public), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", trustPath)
-	body := []byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{}}`)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", trustPath)
+	body := []byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{}}`)
 	signature := base64.StdEncoding.EncodeToString(ed25519.Sign(private, body))
 	for name, sig := range map[string]string{
 		"valid":   signature,
@@ -225,8 +225,8 @@ func TestBuiltInTrustRootAcceptsBase64EncodedPEM(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", "")
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	original := DefaultUpdateTrustRoot
 	t.Cleanup(func() { DefaultUpdateTrustRoot = original })
 	DefaultUpdateTrustRoot = base64.StdEncoding.EncodeToString(pemPublicKey(t, public))
@@ -245,19 +245,19 @@ func TestBuiltInTrustRootAcceptsBase64EncodedPEM(t *testing.T) {
 func TestInstallerReceiptFormatValidates(t *testing.T) {
 	requireStandaloneSelfUpdateTier(t)
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
-	source := "https://github.com/MichaelKinsy/PiG/releases/latest/download/update.json"
-	t.Setenv("PIG_UPDATE_URL", source)
+	t.Setenv("OMPIG_HOME", home)
+	source := "https://github.com/tmih06/ompig/releases/latest/download/update.json"
+	t.Setenv("OMPIG_UPDATE_URL", source)
 	original := InstalledPigVersion
 	t.Cleanup(func() { InstalledPigVersion = original })
 	InstalledPigVersion = "9.9.9"
-	exe := filepath.Join(t.TempDir(), "pig")
-	if err := os.WriteFile(exe, []byte("pig binary"), 0o755); err != nil {
+	exe := filepath.Join(t.TempDir(), "ompig")
+	if err := os.WriteFile(exe, []byte("ompig binary"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	resolved := realPathForTest(t, exe)
-	sum := sha256.Sum256([]byte("pig binary"))
-	receipt := fmt.Sprintf("kind=standalone\nexecutable=%s\npig-version=%s\nsha256=%s\nupdate-source=%s\n",
+	sum := sha256.Sum256([]byte("ompig binary"))
+	receipt := fmt.Sprintf("kind=standalone\nexecutable=%s\nompig-version=%s\nsha256=%s\nupdate-source=%s\n",
 		resolved, "9.9.9", hex.EncodeToString(sum[:]), source)
 	if err := os.WriteFile(filepath.Join(home, "install-receipt"), []byte(receipt), 0o600); err != nil {
 		t.Fatal(err)
@@ -319,7 +319,7 @@ func TestSignUpdateManifestSupportsKeyRotation(t *testing.T) {
 	oldPub, oldKey := keyPair()
 	newPub, newKey := keyPair()
 	strangerPub, strangerKey := keyPair()
-	body := []byte(`{"version":"9.9.9","packageName":"@pi-in-go/pig","binaries":{}}`)
+	body := []byte(`{"version":"9.9.9","packageName":"@ompig/ompig","binaries":{}}`)
 	manifest := filepath.Join(t.TempDir(), "update.json")
 	if err := os.WriteFile(manifest, body, 0o600); err != nil {
 		t.Fatal(err)
@@ -360,7 +360,7 @@ func TestSignUpdateManifestSupportsKeyRotation(t *testing.T) {
 	if err := os.WriteFile(trustPath, pemPublicKey(t, oldPub), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("PIG_UPDATE_TRUST_ROOT", trustPath)
+	t.Setenv("OMPIG_UPDATE_TRUST_ROOT", trustPath)
 	allowLoopbackUpdateHTTP(t)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {

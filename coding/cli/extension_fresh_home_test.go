@@ -11,8 +11,8 @@ import (
 	"testing"
 )
 
-// A released pig binary carries its extension SDKs embedded and stages them
-// into the config root. A user with no PiG checkout must be able to scaffold a
+// A released ompig binary carries its extension SDKs embedded and stages them
+// into the config root. A user with no Ompig checkout must be able to scaffold a
 // Go, Rust, or Python extension in one HOME and load it from a fresh HOME,
 // including the pre-trust load that runs before the session starts.
 func TestFreshHomeLoadsScaffoldedExtensionsWithoutCheckout(t *testing.T) {
@@ -29,7 +29,7 @@ func TestFreshHomeLoadsScaffoldedExtensionsWithoutCheckout(t *testing.T) {
 
 			project := trustProjectFixture(t)
 			loadHome := t.TempDir()
-			output := runFreshHomePig(t, binary, append(slices.Clone(toolchainEnv), "PIG_STARTUP_TRACE=1"), loadHome, project, "-ne", "-e", source, "--list-models")
+			output := runFreshHomePig(t, binary, append(slices.Clone(toolchainEnv), "OMPIG_STARTUP_TRACE=1"), loadHome, project, "-ne", "-e", source, "--list-models")
 			if strings.Contains(output, "cannot locate") || strings.Contains(output, "warning:") {
 				t.Fatalf("fresh HOME load reported an SDK failure:\n%s", output)
 			}
@@ -42,7 +42,7 @@ func TestFreshHomeLoadsScaffoldedExtensionsWithoutCheckout(t *testing.T) {
 	}
 }
 
-// `pig login --list` inspects configured extensions for OAuth providers before
+// `ompig login --list` inspects configured extensions for OAuth providers before
 // any session starts, so it must stage the SDKs it builds against too.
 func TestFreshHomeLoginListInspectsScaffoldedExtension(t *testing.T) {
 	binary := buildReleasePigBinary(t)
@@ -52,7 +52,7 @@ func TestFreshHomeLoginListInspectsScaffoldedExtension(t *testing.T) {
 	runFreshHomePig(t, binary, toolchainEnv, t.TempDir(), work, "extension", "init", source, "--lang", "go")
 
 	loadHome := t.TempDir()
-	agentDir := filepath.Join(loadHome, ".pig", "agent")
+	agentDir := filepath.Join(loadHome, ".ompig", "agent")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +75,7 @@ func TestFreshHomeLoginListInspectsScaffoldedExtension(t *testing.T) {
 	}
 }
 
-// buildReleasePigBinary builds pig the way a release does: no cgo, trimmed
+// buildReleasePigBinary builds ompig the way a release does: no cgo, trimmed
 // paths, and no VCS stamp, so nothing in the binary points back at this tree.
 func buildReleasePigBinary(t *testing.T) string {
 	t.Helper()
@@ -87,7 +87,7 @@ func buildReleasePigBinary(t *testing.T) string {
 }
 
 // freshHomeToolchainEnv keeps the language toolchains and their caches, which a
-// user's machine has, and drops every variable that could point pig at this
+// user's machine has, and drops every variable that could point ompig at this
 // checkout or at an existing config root.
 func freshHomeToolchainEnv(t *testing.T) []string {
 	t.Helper()
@@ -102,7 +102,7 @@ func freshHomeToolchainEnv(t *testing.T) []string {
 		// temporary directory is the Windows directory, which a user cannot
 		// write, and programs locate the system through SystemRoot. Toolchains
 		// live in the profile's application data: uv's managed Pythons in
-		// APPDATA, the Store Python aliases in LOCALAPPDATA. PiG keeps no
+		// APPDATA, the Store Python aliases in LOCALAPPDATA. Ompig keeps no
 		// configuration there.
 		keep = append(keep, "SystemRoot", "SystemDrive", "windir", "TEMP", "TMP", "PATHEXT", "ComSpec", "APPDATA", "LOCALAPPDATA")
 	}
@@ -143,7 +143,7 @@ func runFreshHomePig(t *testing.T, binary string, env []string, home, dir string
 	}
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("pig %s: %v\n%s", strings.Join(args, " "), err, output)
+		t.Fatalf("ompig %s: %v\n%s", strings.Join(args, " "), err, output)
 	}
 	return string(output)
 }

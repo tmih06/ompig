@@ -13,12 +13,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/nodebase64"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/nodebase64"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodeurl"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type ImageProtocol string
@@ -153,7 +153,7 @@ func detectCapabilitiesFromEnvironment(tmuxForwardsHyperlink func() bool, goos s
 	if strings.HasPrefix(term, "screen") {
 		return TerminalCapabilities{Images: "", TrueColor: hasTrueColorHint, Hyperlinks: false}
 	}
-	// pig divergence (D44): require Herdr's explicit image-forwarding signal at the immediate terminal boundary.
+	// ompig divergence (D44): require Herdr's explicit image-forwarding signal at the immediate terminal boundary.
 	if os.Getenv("HERDR_ENV") == "1" && os.Getenv("HERDR_KITTY_GRAPHICS") == "1" {
 		return TerminalCapabilities{Images: ImageProtocolKitty, TrueColor: true, Hyperlinks: true}
 	}
@@ -168,7 +168,7 @@ func detectCapabilitiesFromEnvironment(tmuxForwardsHyperlink func() bool, goos s
 	if termProgram == "rex" {
 		return TerminalCapabilities{Images: ImageProtocolKitty, TrueColor: true, Hyperlinks: true}
 	}
-	// pig divergence (D44): without Herdr's positive graphics signal, ignore inherited outer-terminal image hints.
+	// ompig divergence (D44): without Herdr's positive graphics signal, ignore inherited outer-terminal image hints.
 	if os.Getenv("HERDR_ENV") == "1" {
 		return TerminalCapabilities{Images: "", TrueColor: hasTrueColorHint, Hyperlinks: false}
 	}

@@ -2,7 +2,7 @@
 
 # Extension SDK consistency matrix
 
-For every Pi extension API member and event (and every PiG additive surface), whether each runtime has it ([`extension-sdk-surface.md`](extension-sdk-surface.md)) and whether a conformance fixture for that runtime reaches it.
+For every Pi extension API member and event (and every Ompig additive surface), whether each runtime has it ([`extension-sdk-surface.md`](extension-sdk-surface.md)) and whether a conformance fixture for that runtime reaches it.
 
 - `exercised`: the runtime implements the surface and a fixture or scenario driver under `test/extension-conformance` that the conformance suite loads into the real host references its realization (a member access of the symbol's name, or an event's constant or quoted name; for an additive surface the extension implements and the host calls, a definition of the member).
 - `present`: implemented, and no conformance fixture reaches it. Every one is a hole listed in [`test/parity/sdk-conformance-gaps.toml`](../test/parity/sdk-conformance-gaps.toml) with an owner and the row that closes it; the generator fails on an unlisted hole and on a listed one that closed.
@@ -292,7 +292,7 @@ Regenerate with `go run ./test/parity/cmd/sdksurface`.
 | `ctx.ui.getToolsExpanded` | exercised | exercised | exercised | exercised |
 | `ctx.ui.setToolsExpanded` | exercised | exercised | exercised | exercised |
 
-## PiG additive: component kit (D107)
+## Ompig additive: component kit (D107)
 
 | Surface | Node runtime | Go | Rust | Python |
 |---|---|---|---|---|

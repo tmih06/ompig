@@ -6,7 +6,7 @@ import os
 
 from . import stats
 
-ORDER = ["pig-0.5", "pig-core", "pig-min", "pig-0.4.1", "pi-1.1.0", "claude", "codex", "copilot"]
+ORDER = ["ompig-0.5", "ompig-core", "ompig-min", "ompig-0.4.1", "pi-1.1.0", "claude", "codex", "copilot"]
 REFERENCE = "pi-1.1.0"
 
 
@@ -281,7 +281,7 @@ def overhead(raw, out, seed, csv_rows):
                 md += ["Qualitative labels against Pi 1.1.0 (only where the 95% intervals do not overlap):", "", q, ""]
             r = ratio_table(groups, ranked(groups, OVERHEAD_METRICS, tick), seed)
             if r:
-                md += ["Ratio of medians against Pi 1.1.0 (arm / Pi) with a 95% bootstrap interval; below 1 is lower than Pi. Every metric is listed, including those PiG loses:", "", r, ""]
+                md += ["Ratio of medians against Pi 1.1.0 (arm / Pi) with a 95% bootstrap interval; below 1 is lower than Pi. Every metric is listed, including those Ompig loses:", "", r, ""]
             aa = aa_table(groups, ranked(groups, OVERHEAD_METRICS, tick), seed)
             if aa:
                 md += [f"A/A noise floor: each arm that ran twice (`-b` is a second copy of the same binary with its own home) against itself. Two runs are declared equivalent when the interval of the ratio lies inside {1 - AA_MARGIN:.2f}-{1 + AA_MARGIN:.2f}; a difference between arms smaller than this floor is not a finding.", "", aa, ""]
@@ -331,7 +331,7 @@ def reliability(raw, out, seed, csv_rows):
         for a in arms:
             if a in by:
                 csv_rows.append(["reliability", name, a, "pass", 1, int(by[a]["pass"]), None, None, None, None, None])
-    md += ["", "PASS means the invariants held on every repetition, and for PiG and Pi arms the signature equals the Pi 1.1.0 signature. `n/a` means the fault does not apply to that CLI. Claude Code, Codex and Copilot are scored on invariants only.", "", "## Reasons for failures", ""]
+    md += ["", "PASS means the invariants held on every repetition, and for Ompig and Pi arms the signature equals the Pi 1.1.0 signature. `n/a` means the fault does not apply to that CLI. Claude Code, Codex and Copilot are scored on invariants only.", "", "## Reasons for failures", ""]
     bad = [(n, a, v) for n, by in raw["verdicts"].items() for a, v in by.items() if not v["pass"]]
     md += [f"- **{n} / {a}**: {'; '.join(v['reasons'])}" for n, a, v in bad] or ["None."]
     md += ["", "## Signatures observed", "", "| fault | arm | signature |", "|---|---|---|"]

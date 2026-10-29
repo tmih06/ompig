@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 func TestPublishGitHubRejectsAssetAbovePullSizeLimit(t *testing.T) {
@@ -24,7 +24,7 @@ func TestPublishGitHubRejectsAssetAbovePullSizeLimit(t *testing.T) {
 		t.Fatal(err)
 	}
 	manifest := releaseManifest(t, source, "linux/amd64")
-	manifest.PigVersion = publishTestPigVersion
+	manifest.OmpigVersion = publishTestPigVersion
 	digest := "sha256:" + strings.Repeat("d", 64)
 	manifest.PigletDigest, manifest.ResolutionDigest, manifest.ComponentPlanDigest = digest, digest, digest
 	if _, err := signature.Sign(path, manifest, key); err != nil {

@@ -90,7 +90,7 @@ func TestRPCResponseTurnProtectsLaterInputAndDoesNotStrandCompletions(t *testing
 
 func TestRPCCycleAndAbortRetrySameInputCallback(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"HOME=" + home, "OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
 	// One pipe write is one small, complete input batch. Separate writes do not define a Node data-callback boundary.
 	p.send(strings.Join([]string{
 		`{"id":"models","type":"get_available_models"}`,
@@ -119,7 +119,7 @@ func TestRPCCycleAndAbortRetrySameInputCallback(t *testing.T) {
 
 func TestRPCCycleResponseDoesNotWaitForFutureInput(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcessAt(t, t.TempDir(), []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1"}, "--offline", "--no-extensions", "--no-session", "--model", "test-faux/faux-1")
 	p.send(`{"id":"cycle","type":"cycle_model"}`)
 	p.await("cycle before any future input", func(r rpcRecord) bool { return isSuccessResponse(r, "cycle") })
 	p.send(`{"id":"abort-retry","type":"abort_retry"}`)
@@ -142,7 +142,7 @@ func TestRPCCycleResultSamplesThinkingAfterAwait(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	p := startRPCProcessAt(t, t.TempDir(), []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + agentDir}, "--offline", "--no-extensions", "--no-session", "--model", "fixture/model-one")
+	p := startRPCProcessAt(t, t.TempDir(), []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + agentDir}, "--offline", "--no-extensions", "--no-session", "--model", "fixture/model-one")
 	p.send("{\"id\":\"one\",\"type\":\"cycle_model\"}\n{\"id\":\"two\",\"type\":\"cycle_model\"}\n{\"id\":\"abort-retry\",\"type\":\"abort_retry\"}")
 	var ids []any
 	seenThinking := false
@@ -194,7 +194,7 @@ func TestRPCSecondCycleFinishesWhileFirstListenerWaits(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(dir, "models.json"), []byte(models), 0600); err != nil {
 		t.Fatal(err)
 	}
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + dir}, "--offline", "--no-session", "--model", "fixture/model-one", "--models", "fixture/model-one,fixture/model-two,fixture/model-three")
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + dir}, "--offline", "--no-session", "--model", "fixture/model-one", "--models", "fixture/model-one,fixture/model-two,fixture/model-three")
 	p.send(`{"id":"arm","type":"prompt","message":"/block-model-select"}`)
 	p.await("armed", func(r rpcRecord) bool { return isSuccessResponse(r, "arm") })
 	p.send(`{"id":"one","type":"cycle_model"}`)

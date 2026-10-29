@@ -1,7 +1,7 @@
 package env
 
 // The oracle for the daemon: Pi's own Rust daemon, built from the Pi source the repository is pinned to
-// (.upstream/current/packages/env/daemon). Tests of daemon behavior run against both daemons, so a behavior PiG's Go
+// (.upstream/current/packages/env/daemon). Tests of daemon behavior run against both daemons, so a behavior Ompig's Go
 // daemon shares with Pi's is proved rather than assumed.
 
 import (
@@ -13,7 +13,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 var oracle struct {
@@ -76,7 +76,7 @@ func oracleDaemon(t testing.TB) string {
 var terminalDaemon string
 
 // skipWithoutPinnedTerminals skips a test that needs Pi's terminal operations when the pinned Pi has none: a pin older than
-// packages/env/daemon/src/pty.rs builds a daemon that answers every pty request with "unknown operation". The pig run still
+// packages/env/daemon/src/pty.rs builds a daemon that answers every pty request with "unknown operation". The ompig run still
 // executes; the pi run starts as soon as a pin contains pty.rs.
 func skipWithoutPinnedTerminals(t testing.TB) {
 	t.Helper()
@@ -86,13 +86,13 @@ func skipWithoutPinnedTerminals(t testing.TB) {
 	}
 }
 
-// eachDaemon runs body against PiG's Go daemon and Pi's Rust daemon.
+// eachDaemon runs body against Ompig's Go daemon and Pi's Rust daemon.
 func eachDaemon(t *testing.T, body func(t *testing.T)) {
 	t.Helper()
 	for _, daemon := range []struct {
 		name string
 		path func(testing.TB) string
-	}{{"pig", daemonBinary}, {"pi", oracleDaemon}} {
+	}{{"ompig", daemonBinary}, {"pi", oracleDaemon}} {
 		t.Run(daemon.name, func(t *testing.T) {
 			if daemon.name == "pi" {
 				skipWithoutPinnedTerminals(t)

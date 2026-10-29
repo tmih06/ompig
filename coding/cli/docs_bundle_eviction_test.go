@@ -1,4 +1,4 @@
-//go:build !pig_strip_docs
+//go:build !ompig_strip_docs
 
 package cli
 
@@ -8,13 +8,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/contentdirs"
-	"github.com/MichaelKinsy/PiG/internal/pigdocs"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/contentdirs"
+	"github.com/tmih06/ompig/internal/pigdocs"
 )
 
-// The system prompt names the pages of this build's documentation bundle, and the session reads them with its tools for as long as it runs. Another PiG build
+// The system prompt names the pages of this build's documentation bundle, and the session reads them with its tools for as long as it runs. Another Ompig build
 // that shares the config root evicts the bundles beyond the four most recently used when it writes its own (contentdirs.Evict), and the use time a session records
 // is its start. A session that outlives four newer builds' use found its pages gone, and nothing wrote them again. The bundle a running session started with stays.
 func TestARunningSessionsDocsBundleSurvivesAnotherBuildsEviction(t *testing.T) {
@@ -25,7 +25,7 @@ func TestARunningSessionsDocsBundleSurvivesAnotherBuildsEviction(t *testing.T) {
 	}{{"warm start", true}, {"cold start", false}} {
 		t.Run(test.name, func(t *testing.T) {
 			home := t.TempDir()
-			t.Setenv("PIG_HOME", home)
+			t.Setenv("OMPIG_HOME", home)
 			t.Cleanup(func() { configroot.SetDocsWriter(nil); configroot.SetDocsPresent(true) })
 			t.Cleanup(releaseDocsLeases)
 			if test.warm {

@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports the llama-extension.test.ts provider cases.
@@ -104,7 +104,7 @@ func TestRefreshModelsDiscoversChatTemplateThinkingSupportForLoadedModels(t *tes
 	if len(models) != 1 || !models[0].Reasoning || models[0].Compat.ThinkingFormat != "qwen-chat-template" || models[0].Compat.ThinkingTokenBudgetField != "thinking_budget_tokens" {
 		t.Fatalf("models = %+v", models)
 	}
-	// pig divergence (D90): Pi expects {"off":"off","minimal":null,"low":null,"medium":"medium","high":null,"xhigh":null}.
+	// ompig divergence (D90): Pi expects {"off":"off","minimal":null,"low":null,"medium":"medium","high":null,"xhigh":null}.
 	levels, _ := json.Marshal(models[0].ThinkingLevelMap)
 	if string(levels) != `{"off":"off","minimal":"minimal","low":"low","medium":"medium","high":"high","xhigh":null}` {
 		t.Fatalf("thinkingLevelMap = %s", levels)

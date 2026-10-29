@@ -13,16 +13,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // /reload recompiles out-of-tree subprocess extensions, and it is the command
-// reached for after rebuilding pig itself: exactly when the staged SDK is
+// reached for after rebuilding ompig itself: exactly when the staged SDK is
 // older than the running binary. Rebuilding against that stale copy reproduces
 // what the startup stage exists to prevent: an extension carrying a defect the
 // SDK already fixed, with nothing in the session to explain it.
@@ -336,11 +336,11 @@ func TestReloadListsAFailingExtensionOnce(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
 		t.Fatalf("node is required for the extension fixture: %v", err)
 	}
-	// subprocess.NewHost falls back to the process's real $HOME/.pig for its
-	// build cache and SDK transaction lock when PIG_HOME is unset. Pin it to
+	// subprocess.NewHost falls back to the process's real $HOME/.ompig for its
+	// build cache and SDK transaction lock when OMPIG_HOME is unset. Pin it to
 	// an ephemeral dir so this test never writes under the operator's real
-	// ~/.pig/cache.
-	t.Setenv("PIG_HOME", filepath.Join(t.TempDir(), "pig-home"))
+	// ~/.ompig/cache.
+	t.Setenv("OMPIG_HOME", filepath.Join(t.TempDir(), "ompig-home"))
 	broken := filepath.Join(t.TempDir(), "broken.mjs")
 	if err := os.WriteFile(broken, []byte("export default function () { throw new Error(\"register boom\"); }\n"), 0o644); err != nil {
 		t.Fatal(err)
@@ -422,7 +422,7 @@ func TestReloadIncludesBuiltinExtensionsInLoadOrderAndConflicts(t *testing.T) {
 		Name: "subprocess", Path: "/configured.ts", Tools: tool("shared"), Flags: flag("mode"),
 	}}}
 	builtin := extension.Extension{
-		Name: "piglet", Path: "builtin:piglet", Tools: tool("shared"), Flags: flag("mode"),
+		Name: "ompiglet", Path: "builtin:ompiglet", Tools: tool("shared"), Flags: flag("mode"),
 	}
 	m := reloadTestMode(InteractiveModeOptions{
 		CWD:               t.TempDir(),
@@ -434,13 +434,13 @@ func TestReloadIncludesBuiltinExtensionsInLoadOrderAndConflicts(t *testing.T) {
 	}
 
 	wantIssues := []ExtensionConflict{
-		{Path: "builtin:piglet", Message: `Tool "shared" conflicts with /configured.ts`},
-		{Path: "builtin:piglet", Message: `Flag "--mode" conflicts with /configured.ts`},
+		{Path: "builtin:ompiglet", Message: `Tool "shared" conflicts with /configured.ts`},
+		{Path: "builtin:ompiglet", Message: `Flag "--mode" conflicts with /configured.ts`},
 	}
 	if !slices.Equal(m.extensionConflicts, wantIssues) {
 		t.Errorf("extension conflicts = %#v, want %#v", m.extensionConflicts, wantIssues)
 	}
-	if got := m.newRunner.ExtensionNames(); !slices.Equal(got, []string{"subprocess", "piglet"}) {
+	if got := m.newRunner.ExtensionNames(); !slices.Equal(got, []string{"subprocess", "ompiglet"}) {
 		t.Fatalf("runner extension order = %v, want configured then builtin", got)
 	}
 }
@@ -512,9 +512,9 @@ func TestReloadListsExtensionToolConflicts(t *testing.T) {
 	if _, err := exec.LookPath("node"); err != nil {
 		t.Fatalf("node is required for the extension fixture: %v", err)
 	}
-	// See the comment in TestReloadListsAFailingExtensionOnce: pin PIG_HOME so
-	// subprocess.NewHost never falls back to the operator's real ~/.pig/cache.
-	t.Setenv("PIG_HOME", filepath.Join(t.TempDir(), "pig-home"))
+	// See the comment in TestReloadListsAFailingExtensionOnce: pin OMPIG_HOME so
+	// subprocess.NewHost never falls back to the operator's real ~/.ompig/cache.
+	t.Setenv("OMPIG_HOME", filepath.Join(t.TempDir(), "ompig-home"))
 	dir := t.TempDir()
 	source := "export default function (pi) { pi.registerTool({ name: \"ask_user\", label: \"Ask\", description: \"ask\", parameters: { type: \"object\", properties: {} }, execute: async () => ({ content: [{ type: \"text\", text: \"ok\" }] }) }); }\n"
 	var paths []string

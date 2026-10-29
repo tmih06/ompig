@@ -24,8 +24,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // SettingItem describes one toggle-able setting.
@@ -172,7 +172,7 @@ func (s *SettingsList) UpdateValue(id, newValue string) {
 	}
 }
 
-// pig additive (D107): a component kit host keeps one list across theme switches and input,
+// ompig additive (D107): a component kit host keeps one list across theme switches and input,
 // and reads and restores the list's state to report it; upstream has no accessors.
 
 // SetTheme renders the list with theme from now on.
@@ -237,7 +237,7 @@ func (s *SettingsList) Render(width int) []string {
 		return s.submenu.Render(width)
 	}
 	lines := s.renderMainList(width)
-	// pig divergence (D66): a row wider than the requested width is clipped to it; upstream emits the over-wide row (a wrapped description or the empty-state text in a very narrow pane).
+	// ompig divergence (D66): a row wider than the requested width is clipped to it; upstream emits the over-wide row (a wrapped description or the empty-state text in a very narrow pane).
 	for i, line := range lines {
 		if widthx.VisibleWidth(line) > width {
 			lines[i] = widthx.TruncateToWidth(line, width, "", false)

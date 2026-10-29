@@ -7,7 +7,7 @@ import (
 
 // Upstream main.ts exports offline mode as PI_OFFLINE=1 and
 // PI_SKIP_VERSION_CHECK=1, which Pi extensions read: pi-auto-update skips its
-// `pi update` run when PI_OFFLINE is set. PiG's --offline and PIG_OFFLINE must
+// `pi update` run when PI_OFFLINE is set. Ompig's --offline and OMPIG_OFFLINE must
 // reach extensions the same way.
 func TestOfflineModeIsExportedToExtensions(t *testing.T) {
 	cases := []struct {
@@ -17,15 +17,15 @@ func TestOfflineModeIsExportedToExtensions(t *testing.T) {
 		offline bool
 	}{
 		{name: "flag", flag: true, offline: true},
-		{name: "PIG_OFFLINE", env: map[string]string{"PIG_OFFLINE": "1"}, offline: true},
-		{name: "PIG_OFFLINE yes", env: map[string]string{"PIG_OFFLINE": "Yes"}, offline: true},
+		{name: "OMPIG_OFFLINE", env: map[string]string{"OMPIG_OFFLINE": "1"}, offline: true},
+		{name: "OMPIG_OFFLINE yes", env: map[string]string{"OMPIG_OFFLINE": "Yes"}, offline: true},
 		{name: "PI_OFFLINE true", env: map[string]string{"PI_OFFLINE": "true"}, offline: true},
-		{name: "PIG_OFFLINE off", env: map[string]string{"PIG_OFFLINE": "0"}},
+		{name: "OMPIG_OFFLINE off", env: map[string]string{"OMPIG_OFFLINE": "0"}},
 		{name: "none"},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			for _, key := range []string{"PI_OFFLINE", "PIG_OFFLINE", "PI_SKIP_VERSION_CHECK"} {
+			for _, key := range []string{"PI_OFFLINE", "OMPIG_OFFLINE", "PI_SKIP_VERSION_CHECK"} {
 				t.Setenv(key, "")
 				_ = os.Unsetenv(key)
 			}

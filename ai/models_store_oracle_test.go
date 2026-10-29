@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type modelsStoreOp struct {
@@ -36,7 +36,7 @@ type modelsStoreOut struct {
 func modelsStoreScenarios() []modelsStoreScenario {
 	rng := rand.New(rand.NewPCG(37, 3))
 	pick := func(items []string) string { return items[rng.IntN(len(items))] }
-	// Entries with members pi-ai does not read (a catalog entry's extra fields) are left out: Pig's typed entry returns only the members it knows, while the file keeps them.
+	// Entries with members pi-ai does not read (a catalog entry's extra fields) are left out: Ompig's typed entry returns only the members it knows, while the file keeps them.
 	initials := []string{"", "{}", "{ }", "\ufeff{}", `{"a":{"models":[],"etag":"x"}}`, `{"a":{"models":[],"etag":"x"},"b":{"models":[],"checkedAt":1.5}}`, "{", `{"a":`, "\ufeff{\"z\":{\"models\":[]}}", `{"日本語":{"models":[]}}`, "{}\n", "  {\"a\":{\"models\":[]}}  ", `{"a":{"models":[],"lastModified":1e21}}`, `{"a":null}`, `{"a":{"models":[],"etag":"y"}}`}
 	// "__proto__" and "constructor" are left out: Pi reads them from Object.prototype (an empty object, a function that structuredClone rejects).
 	providers := []string{"a", "b", "openai", "日本語", "with space", "", "a\"b", "x/y"}
@@ -173,7 +173,7 @@ func TestFileModelsStoreMatchesPi(t *testing.T) {
 				g, _ := json.Marshal(normalized[k])
 				e, _ := json.Marshal(expected[i][k])
 				_ = op
-				t.Errorf("scenario %d initial %q nested %v\n  ops %.500s\n  Pig %.600s\n  Pi  %.600s", i, initial, scenario.Nested, opJSON, g, e)
+				t.Errorf("scenario %d initial %q nested %v\n  ops %.500s\n  Ompig %.600s\n  Pi  %.600s", i, initial, scenario.Nested, opJSON, g, e)
 				break
 			}
 		}

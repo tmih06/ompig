@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
 	"github.com/gorilla/websocket"
+	"github.com/tmih06/ompig/ai"
 )
 
 func TestModelRuntimeCodexSimpleThinkingAndAutoTransport(t *testing.T) {

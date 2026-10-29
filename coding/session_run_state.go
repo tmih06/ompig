@@ -9,11 +9,11 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // errAgentAlreadyProcessing is upstream prompt()'s error for a message sent
@@ -85,7 +85,7 @@ func (s *Session) WaitForIdle(ctx context.Context) error {
 	}
 	for {
 		s.runState.mu.Lock()
-		// pig divergence (D142): a waiter registered while the Session was busy resolves only after agent_settled handlers and the prompts they deferred are done (Pi #10704).
+		// ompig divergence (D142): a waiter registered while the Session was busy resolves only after agent_settled handlers and the prompts they deferred are done (Pi #10704).
 		if s.IsIdle() && !s.settlementBusyLocked() {
 			s.runState.mu.Unlock()
 			return nil
@@ -129,7 +129,7 @@ func (s *Session) RequestAbort() { s.requestAbort(true) }
 func (s *Session) requestAbort(discardDeferred bool) {
 	s.runState.mu.Lock()
 	if discardDeferred && s.settlementBusyLocked() {
-		// pig divergence (D142): an abort called while agent_settled settles discards the prompts already deferred, so it starts no new provider request (Pi #10705).
+		// ompig divergence (D142): an abort called while agent_settled settles discards the prompts already deferred, so it starts no new provider request (Pi #10705).
 		s.runState.deferred = nil
 		s.runState.deferredEpoch++
 	}

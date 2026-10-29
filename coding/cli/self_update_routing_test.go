@@ -1,4 +1,4 @@
-//go:build !pig_strip_self_update
+//go:build !ompig_strip_self_update
 
 package cli
 
@@ -12,7 +12,7 @@ import (
 // Pi 0.87.1 handlePackageCommand prints "Extensions are skipped. Run pi update --extensions to update extensions."
 // before a bare `update`, and only then: an explicit self target or --self does not print it.
 func TestBareUpdateReportsSkippedExtensionsLikePi(t *testing.T) {
-	const note = "Extensions are skipped. Run pig update --extensions to update extensions.\n"
+	const note = "Extensions are skipped. Run ompig update --extensions to update extensions.\n"
 	for _, tc := range []struct {
 		args []string
 		want string
@@ -20,31 +20,31 @@ func TestBareUpdateReportsSkippedExtensionsLikePi(t *testing.T) {
 		{[]string{"update"}, note},
 		{[]string{"update", "--self"}, ""},
 		{[]string{"update", "self"}, ""},
-		{[]string{"update", "pig"}, ""},
+		{[]string{"update", "ompig"}, ""},
 	} {
 		t.Run(strings.Join(tc.args, " "), func(t *testing.T) {
 			newPackageCommandPathsFixture(t)
 			server := upToDateManifest(t)
 			t.Cleanup(server.Close)
-			t.Setenv("PIG_UPDATE_URL", server.URL)
+			t.Setenv("OMPIG_UPDATE_URL", server.URL)
 			stdout, stderr, code := capturePackageCommand(t, tc.args...)
 			assert.Equal(t, 0, code)
 			assert.Equal(t, tc.want, stdout)
-			assert.Equal(t, "pig "+selfUpdateVersion()+" is up to date.\n", stderr)
+			assert.Equal(t, "ompig "+selfUpdateVersion()+" is up to date.\n", stderr)
 		})
 	}
 }
 
 func TestRunPackageCommand_SelfUpdateTargetWithoutSourceShowsFallback(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_UPDATE_URL", "")
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_UPDATE_URL", "")
 	for _, tc := range []struct {
 		args       []string
 		wantStdout string
 	}{
 		{[]string{"update", "self"}, ""},
 		// Pi prints the skipped-extensions note before a bare self-update.
-		{[]string{"update"}, "Extensions are skipped. Run pig update --extensions to update extensions.\n"},
+		{[]string{"update"}, "Extensions are skipped. Run ompig update --extensions to update extensions.\n"},
 	} {
 		args := tc.args
 		stdout, stderr, code := captureStdoutStderr(t, func() int {
@@ -61,7 +61,7 @@ func TestRunPackageCommand_SelfUpdateTargetWithoutSourceShowsFallback(t *testing
 		if !strings.Contains(stderr, "cannot self-update this installation") || !strings.Contains(stderr, "Executable:") {
 			t.Fatalf("%v: stderr missing unknown-provenance remediation:\n%s", args, stderr)
 		}
-		if strings.Contains(stderr, "legacy-update-host") || strings.Contains(stderr, "pig update") {
+		if strings.Contains(stderr, "legacy-update-host") || strings.Contains(stderr, "ompig update") {
 			t.Fatalf("%v: stderr contains stale or looping remediation:\n%s", args, stderr)
 		}
 	}

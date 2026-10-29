@@ -1,15 +1,15 @@
-//go:build !pig_strip_codemode
+//go:build !ompig_strip_codemode
 
 package builtin
 
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/compiledin"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/compiledin"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // registerCodemodeReference makes the codemode extension the one an extension names with createCodemodeExtension(options) in a loader it constructs (internal/compiledin).
@@ -42,7 +42,7 @@ func createCodemodeReference(raw json.RawMessage) (extension.InlineExtension, er
 type CodemodeOptions = codemode.Options
 
 // codemodeEntries is the codemode registry row, absent while codemode is stripped at runtime as in a build without it.
-// pig additive (D92): a runtime stripped codemode registers nothing, like the pig_strip_codemode build.
+// ompig additive (D92): a runtime stripped codemode registers nothing, like the ompig_strip_codemode build.
 func codemodeEntries(options Options) []Extension {
 	if pigstrip.Has(pigstrip.ListExtensions, "codemode") {
 		return nil

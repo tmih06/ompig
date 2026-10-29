@@ -6,7 +6,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ToolEnvironment is the session state a tool may expose to the processes it

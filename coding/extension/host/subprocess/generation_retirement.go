@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // commandGate counts the command requests running on one extension generation and runs a callback when the last of them returns.

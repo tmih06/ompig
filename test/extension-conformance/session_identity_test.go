@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's getSessionId/getSessionFile/getLeafId read the current SessionManager (session-manager.ts:1152-1166). Context convenience methods must return the same identity as the SessionManager facade, including cleared file/leaf state after replacement.

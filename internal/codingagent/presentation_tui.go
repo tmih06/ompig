@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // InteractiveTuiOptions supplies the shared paint surface. The driver owns terminal input, dispatch and shutdown. Nil Output selects the process terminal; nil ShowHardwareCursor preserves the renderer's construction default.

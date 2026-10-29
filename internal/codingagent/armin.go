@@ -7,12 +7,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/src/modes/interactive/components/armin.ts.
 //
-// pig divergence (D87): the image is a pig head and the label is "pigsayhi" (armin.ts draws Armin and "ARMIN SAYS HI").
+// ompig divergence (D87): the image is a ompig head and the label is "pigsayhi" (armin.ts draws Armin and "ARMIN SAYS HI").
 // The effects, their selection, random-call order and timing are Pi's.
 const arminWidth, arminHeight = 31, 34
 const arminDisplayHeight = (arminHeight + 1) / 2
@@ -20,7 +20,7 @@ const arminDisplayHeight = (arminHeight + 1) / 2
 // arminLabel is the line under the image.
 const arminLabel = "pigsayhi"
 
-// arminImage is the pig head, one string per pixel row; '#' is foreground.
+// arminImage is the ompig head, one string per pixel row; '#' is foreground.
 var arminImage = [arminHeight]string{
 	"...............................",
 	".##.........................##.",

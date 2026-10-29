@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // requireEmptyDir fails when anything appears in dir, the process directory of a test that runs package operations without an
@@ -30,7 +30,7 @@ func requireEmptyDir(t *testing.T, dir, after string) {
 // written, never create npm/{.gitignore,package.json} or git/ under the process directory.
 func TestEmptyAgentDirNeverWritesIntoTheProcessDirectory(t *testing.T) {
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("GIT_TERMINAL_PROMPT", "0") // the Git source is a refused local port, so a regression fails fast instead of prompting
 	dir := t.TempDir()
 	t.Chdir(dir)

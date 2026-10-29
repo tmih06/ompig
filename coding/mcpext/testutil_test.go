@@ -12,12 +12,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	codemodetool "github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/toolsearch"
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/mcptest"
+	"github.com/tmih06/ompig/coding/extension"
+	codemodetool "github.com/tmih06/ompig/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/coding/extension/builtin/toolsearch"
+	"github.com/tmih06/ompig/coding/mcpext"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/mcptest"
 )
 
 // jsonEqual reports whether got marshals to the same JSON value as want, the

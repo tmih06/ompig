@@ -16,7 +16,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // writeSource is n bytes of TypeScript, the file a large write tool call carries.
@@ -72,10 +72,10 @@ func largeWriteServer(t *testing.T, content func() string) *httptest.Server {
 // A file written through a tool call in print mode: the cost of each 16-byte arguments record stays constant as the file grows from 100 KB to 200 KB, so the whole call costs what its bytes cost. Parsing, the events and every observer's copy of the partial message are on this path; a parse or copy of the whole arguments per record makes the per-record cost double with the file.
 func TestLargeWriteProcessGate(t *testing.T) {
 	home := newPigHome(t)
-	// The server goroutine reads size while it answers the pig process; nothing the race detector sees orders that read after the write below.
+	// The server goroutine reads size while it answers the ompig process; nothing the race detector sees orders that read after the write below.
 	var size atomic.Int64
 	server := largeWriteServer(t, func() string { return writeSource(int(size.Load())) })
-	agent := strings.TrimPrefix(envValue(home.env, "PIG_CODING_AGENT_DIR"), "PIG_CODING_AGENT_DIR=")
+	agent := strings.TrimPrefix(envValue(home.env, "OMPIG_CODING_AGENT_DIR"), "OMPIG_CODING_AGENT_DIR=")
 	models := `{"providers":{"fake":{"baseUrl":"` + server.URL + `/v1","api":"openai-completions","apiKey":"fake","models":[{"id":"fake-model","contextWindow":200000,"maxTokens":8192}]}}}`
 	if err := os.WriteFile(filepath.Join(agent, "models.json"), []byte(models), 0o600); err != nil {
 		t.Fatal(err)

@@ -8,7 +8,7 @@
 
 #![cfg(unix)]
 
-use pig_sdk::{CommandResult, Extension, JsString, ToolResult, empty_schema};
+use ompig_sdk::{CommandResult, Extension, JsString, ToolResult, empty_schema};
 use serde::Deserialize;
 use serde_json::{Value, json, value::RawValue};
 use std::collections::HashSet;
@@ -26,7 +26,7 @@ impl TempDir {
     fn new() -> Self {
         static NEXT: AtomicU64 = AtomicU64::new(0);
         let path = std::env::temp_dir().join(format!(
-            "pig-wire-{}-{}",
+            "ompig-wire-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
@@ -47,7 +47,7 @@ fn isolated(name: &str, test: impl FnOnce()) {
     if std::env::var(CHILD).as_deref() == Ok(name) {
         let home = PathBuf::from(std::env::var_os("HOME").unwrap());
         assert!(home.is_dir());
-        for key in ["PIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"] {
+        for key in ["OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"] {
             assert_eq!(std::env::var_os(key).unwrap(), home.as_os_str());
         }
         test();
@@ -58,14 +58,14 @@ fn isolated(name: &str, test: impl FnOnce()) {
     child.args(["--exact", name, "--nocapture"]);
     for (key, _) in std::env::vars_os() {
         let name = key.to_string_lossy();
-        if name.starts_with("PIG_") || name.starts_with("PI_") || name.starts_with("GOPI_") {
+        if name.starts_with("OMPIG_") || name.starts_with("PI_") || name.starts_with("GOPI_") {
             child.env_remove(key);
         }
     }
     for key in [
         "HOME",
-        "PIG_HOME",
-        "PIG_CODING_AGENT_DIR",
+        "OMPIG_HOME",
+        "OMPIG_CODING_AGENT_DIR",
         "PI_CODING_AGENT_DIR",
     ] {
         child.env(key, &home.0);
@@ -391,7 +391,7 @@ fn no_result_response_omits_result_after_typed_editor_calls() {
 fn run_with_socket_closes_its_connection_while_a_context_is_retained() {
     // A retained runtime process outlives this generation, and the host's Retire waits for the SDK to close its socket; a Context kept in module state must not hold it open (Go's RunWithConn closes on return).
     isolated("run_with_socket_closes_its_connection_while_a_context_is_retained", || {
-        static KEPT: std::sync::Mutex<Vec<pig_sdk::Context>> = std::sync::Mutex::new(Vec::new());
+        static KEPT: std::sync::Mutex<Vec<ompig_sdk::Context>> = std::sync::Mutex::new(Vec::new());
         let mut ext = Extension::new("retained-context");
         ext.tool("keep", "Keep the context", empty_schema(), |ctx, _| {
             KEPT.lock().unwrap().push(ctx.clone());

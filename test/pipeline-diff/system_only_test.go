@@ -2,7 +2,7 @@ package pipelinediff
 
 import "testing"
 
-// A history of system messages only, or of one user message without content (empty.test.ts testEmptyMessage), has no `contents` for Google. Pi's @google/genai SDK throws "contents are required" before sending; PiG must fail before sending with the same message instead of putting a request on the wire that Gemini rejects.
+// A history of system messages only, or of one user message without content (empty.test.ts testEmptyMessage), has no `contents` for Google. Pi's @google/genai SDK throws "contents are required" before sending; Ompig must fail before sending with the same message instead of putting a request on the wire that Gemini rejects.
 func TestSystemOnlyHistoryFailsBeforeSendingLikePi(t *testing.T) {
 	h := newHarness(t)
 	histories := map[string][]message{
@@ -23,15 +23,15 @@ func TestSystemOnlyHistoryFailsBeforeSendingLikePi(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			pigURL, pigKey := h.capture.slot("pig")
-			_, pigMessage, err := pigRun(c, pigURL, true)
+			ompigURL, ompigKey := h.capture.slot("ompig")
+			_, ompigMessage, err := ompigRun(c, ompigURL, true)
 			if err != nil {
-				pigMessage = err.Error()
+				ompigMessage = err.Error()
 			}
 			_, piSent := h.capture.take(piKey)
-			_, pigSent := h.capture.take(pigKey)
-			if piSent || pigSent || piMessage != "contents are required" || pigMessage != piMessage {
-				t.Fatalf("%s, %s: pi sent %v error %q, pig sent %v error %q", name, tgt.Name, piSent, piMessage, pigSent, pigMessage)
+			_, ompigSent := h.capture.take(ompigKey)
+			if piSent || ompigSent || piMessage != "contents are required" || ompigMessage != piMessage {
+				t.Fatalf("%s, %s: pi sent %v error %q, ompig sent %v error %q", name, tgt.Name, piSent, piMessage, ompigSent, ompigMessage)
 			}
 		}
 	}

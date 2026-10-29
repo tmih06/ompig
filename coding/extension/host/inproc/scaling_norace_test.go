@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // extensionSizes are the loaded-extension counts N, 10N and 100N of the extension scaling gates.
@@ -61,7 +61,7 @@ func TestRunnerRegistryListingScalingGate(t *testing.T) {
 	})
 }
 
-// Finding one tool or command by name searches the extensions in load order: the last extension is the worst case. Pi re-resolves the commands on every lookup (runner.ts:550 getCommand) and so does PiG, so the command lookup is linear in N.
+// Finding one tool or command by name searches the extensions in load order: the last extension is the worst case. Pi re-resolves the commands on every lookup (runner.ts:550 getCommand) and so does Ompig, so the command lookup is linear in N.
 func TestRunnerLookupScalingGate(t *testing.T) {
 	perfgate.CheckScaling(t, "extension.runner_tool_lookup", extensionSizes, func(count int) func() {
 		runner := inproc.NewRunner(loadedExtensions(count), ".")

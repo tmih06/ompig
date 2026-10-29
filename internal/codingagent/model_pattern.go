@@ -7,9 +7,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // ThinkingSuffixMode is ModelReferenceRequest.thinkingSuffix.
@@ -309,7 +309,7 @@ func distinctProviders(models []RuntimeModel) int {
 // the reference "openrouter/openai/gpt-5.2:nitro" finds a variant the pool, which lists the bundled models of Pi, does not hold. A text that
 // names no variant leaves pool as it is.
 //
-// pig divergence (D199): Pi lists no OpenRouter routing variant; PiG derives the one a reference names from its base model.
+// ompig divergence (D199): Pi lists no OpenRouter routing variant; Ompig derives the one a reference names from its base model.
 func withNamedRoutingVariants(pool []RuntimeModel, text string) []RuntimeModel {
 	lower := jsstring.ToLower(text)
 	var extended []RuntimeModel
@@ -351,7 +351,7 @@ func fuzzyMatches(text string, models []RuntimeModel) []RuntimeModel {
 	lower := jsstring.ToLower(text)
 	var matches []RuntimeModel
 	for _, model := range models {
-		// pig divergence (D199): an OpenRouter routing variant is a partial-match candidate only when the text names it, so a partial text resolves as it does in Pi, which lists none.
+		// ompig divergence (D199): an OpenRouter routing variant is a partial-match candidate only when the text names it, so a partial text resolves as it does in Pi, which lists none.
 		if _, variant, ok := ai.OpenRouterRoutingVariant(model.Provider, model.ID); ok && !strings.Contains(lower, ":"+variant) {
 			continue
 		}

@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi runs the calls of concurrent requests (the handlers of overlapping events and commands) on one thread, so the call an extension sent first

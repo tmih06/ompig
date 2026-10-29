@@ -18,3 +18,9 @@
 
 pi_version = "1.4.0+6c384aa3"
 
+
+[[gap]]
+key = "keybinding:app.agents.hub"
+scope = "app-keybindings"
+tracking = "ompig D-SUBAGENT-5"
+why = "ompig adds the Agent Hub roster, which upstream Pi has no equivalent of; the extra app.* keybinding is intentional and documented in docs/site/docs/keybindings.md."

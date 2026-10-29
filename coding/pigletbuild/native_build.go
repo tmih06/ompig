@@ -16,30 +16,30 @@ import (
 
 	"golang.org/x/mod/modfile"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
-// buildNativeArtifact builds a Piglet Binary from already-resolved cells and the immutable
+// buildNativeArtifact builds a Ompiglet Binary from already-resolved cells and the immutable
 // executable component plan. It overlays binary-materialized subprocess cells and
-// fused factories onto the Pig source and rebuilds Pig without writing the tree. Cells the plan
+// fused factories onto the Ompig source and rebuilds Ompig without writing the tree. Cells the plan
 // does not materialize in the binary are reported so toolchain-dependence is
 // never hidden. The caller validates resolution first.
-func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet, cells []subprocess.CellSpec, componentPlan pigletartifact.Plan, resolution *pigletartifact.Record, opts Options, outPath string, stdout, stderr io.Writer) ([]signature.EmbeddedFile, error) {
+func buildNativeArtifact(ctx context.Context, source ompigSource, p *ompiglet.Ompiglet, cells []subprocess.CellSpec, componentPlan pigletartifact.Plan, resolution *pigletartifact.Record, opts Options, outPath string, stdout, stderr io.Writer) ([]signature.EmbeddedFile, error) {
 	sourceRoot := source.Root
 	if sourceRoot == "" {
-		return nil, fmt.Errorf("source-unavailable: no Pig source tree to build; remedy: %s", sourceUnavailableRemedy)
+		return nil, fmt.Errorf("source-unavailable: no Ompig source tree to build; remedy: %s", sourceUnavailableRemedy)
 	}
-	cacheRoot, err := os.MkdirTemp("", "piglet-binary-build-*")
+	cacheRoot, err := os.MkdirTemp("", "ompiglet-binary-build-*")
 	if err != nil {
 		return nil, err
 	}
@@ -98,14 +98,14 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 				if err := stripRuntimeConflict(p, cell, false); err != nil {
 					return nil, err
 				}
-				_, _ = fmt.Fprintf(stderr, "warn: [not-embedded] isolated %s factory cell %q is not embedded yet; the Piglet Binary will build it at runtime and needs a toolchain\n", cfg.RuntimeLanguage, cell.Key)
+				_, _ = fmt.Fprintf(stderr, "warn: [not-embedded] isolated %s factory cell %q is not embedded yet; the Ompiglet Binary will build it at runtime and needs a toolchain\n", cfg.RuntimeLanguage, cell.Key)
 				continue
 			}
 		default:
 			if err := stripRuntimeConflict(p, cell, false); err != nil {
 				return nil, err
 			}
-			_, _ = fmt.Fprintf(stderr, "warn: [not-embedded] cell %q (%s) is not embedded; the Piglet Binary will build it at runtime and needs a toolchain\n", cell.Key, cell.Strategy)
+			_, _ = fmt.Fprintf(stderr, "warn: [not-embedded] cell %q (%s) is not embedded; the Ompiglet Binary will build it at runtime and needs a toolchain\n", cell.Key, cell.Strategy)
 			continue
 		}
 		if err != nil {
@@ -117,18 +117,18 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 	if err != nil {
 		return nil, err
 	}
-	// A Piglet without extension cells (an empty base) builds Stock PiG's own
-	// parts with its baked Piglet; one whose cells all stay outside the
+	// A Ompiglet without extension cells (an empty base) builds Stock Ompig's own
+	// parts with its baked Ompiglet; one whose cells all stay outside the
 	// Binary has nothing the Binary would carry for them.
-	// pig additive (D18): a Piglet Binary needs no extension.
+	// ompig additive (D18): a Ompiglet Binary needs no extension.
 	if len(cells) > 0 && len(built) == 0 && len(fused) == 0 && frontendMember == nil {
-		return nil, fmt.Errorf("piglet %q has nothing to embed or fuse; nothing to build", p.Name)
+		return nil, fmt.Errorf("ompiglet %q has nothing to embed or fuse; nothing to build", p.Name)
 	}
 	vetted := fused
 	if frontendMember != nil {
 		vetted = append(slices.Clone(fused), *frontendMember)
 	}
-	// pig additive (D31): linked extensions must not invoke process-global
+	// ompig additive (D31): linked extensions must not invoke process-global
 	// operations that are isolated by the normal subprocess realization.
 	if len(vetted) > 0 {
 		buildprogress.Phase(ctx, "Checking fused Go members", "Process-global safety checks")
@@ -144,7 +144,7 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 	}
 
 	if outPath == "" {
-		outPath = filepath.Join(".", "pig-"+p.Name)
+		outPath = filepath.Join(".", "ompig-"+p.Name)
 	}
 	abary, err := filepath.Abs(outPath)
 	if err != nil {
@@ -154,7 +154,7 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 	if err != nil {
 		return nil, err
 	}
-	// pig additive (D31): a workspace build of fused members needs checksums go mod tidy never records.
+	// ompig additive (D31): a workspace build of fused members needs checksums go mod tidy never records.
 	if len(fused) > 0 || frontendMember != nil {
 		if err := completeWorkspaceSums(ctx, source, goToolchain, overlayPath, filepath.Join(cacheRoot, "workspace-sums"), p.Strip.BuildTags()); err != nil {
 			return nil, err
@@ -162,9 +162,9 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 	}
 	buildprogress.Phase(ctx, "Compiling and linking Go binary", p.Name+" → "+abary)
 	if !buildprogress.Enabled(ctx) {
-		_, _ = fmt.Fprintf(stdout, "building Piglet Binary %s (%d embedded cell(s), %d fused, target %s)...\n", p.Name, len(built), len(fused), host)
+		_, _ = fmt.Fprintf(stdout, "building Ompiglet Binary %s (%d embedded cell(s), %d fused, target %s)...\n", p.Name, len(built), len(fused), host)
 	}
-	// pig additive (D92): the effective strip list's build tags compile its
+	// ompig additive (D92): the effective strip list's build tags compile its
 	// shimmed built-ins out of the Binary.
 	stripTags := p.Strip.BuildTags()
 	if len(stripTags) > 0 && !buildprogress.Enabled(ctx) {
@@ -173,10 +173,10 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 	buildArgs := buildprogress.ToolArgs(ctx, "go", pigletBinaryBuildArgs(abary, opts.Version, overlayPath, stripTags))
 	cmd := source.goCommand(ctx, goToolchain, buildArgs...)
 	if err := buildprogress.Run(buildprogress.Member(ctx, p.Name), cmd); err != nil {
-		return nil, fmt.Errorf("build Piglet Binary: %w", err)
+		return nil, fmt.Errorf("build Ompiglet Binary: %w", err)
 	}
 	if !buildprogress.Enabled(ctx) {
-		_, _ = fmt.Fprintf(stdout, "Piglet Binary written: %s\n", abary)
+		_, _ = fmt.Fprintf(stdout, "Ompiglet Binary written: %s\n", abary)
 	}
 	if len(built) > 0 {
 		buildprogress.Phase(ctx, "Checksumming embedded cells", p.Name)
@@ -185,11 +185,11 @@ func buildNativeArtifact(ctx context.Context, source pigSource, p *piglet.Piglet
 }
 
 // stripRuntimeConflict fails when a cell the Binary starts needs an extension
-// runtime the Piglet strips from it: every Node cell needs the Node runtime,
+// runtime the Ompiglet strips from it: every Node cell needs the Node runtime,
 // every Python cell the Python SDK, and a Go or Rust cell the Binary builds at
 // runtime (embedded is false) needs that language's SDK.
-// pig additive (D92): a Binary never compiles out a runtime its own cells need.
-func stripRuntimeConflict(p *piglet.Piglet, cell subprocess.CellSpec, embedded bool) error {
+// ompig additive (D92): a Binary never compiles out a runtime its own cells need.
+func stripRuntimeConflict(p *ompiglet.Ompiglet, cell subprocess.CellSpec, embedded bool) error {
 	var feature string
 	switch cell.Language {
 	case "node":
@@ -208,12 +208,12 @@ func stripRuntimeConflict(p *piglet.Piglet, cell subprocess.CellSpec, embedded b
 	if feature == "" || !p.Strip.HasFeature(feature) {
 		return nil
 	}
-	return fmt.Errorf("strip.features names %s, but the Piglet Binary runs extension cell %q (%s) with it; fuse the extension or remove the strip entry", feature, cell.Key, cell.Language)
+	return fmt.Errorf("strip.features names %s, but the Ompiglet Binary runs extension cell %q (%s) with it; fuse the extension or remove the strip entry", feature, cell.Key, cell.Language)
 }
 
-// writeBuildOverlay routes the Piglet-specific embed inputs, fuse registry,
+// writeBuildOverlay routes the Ompiglet-specific embed inputs, fuse registry,
 // module files, and signer key to the compiler through one `go build -overlay`, so a
-// build never writes into the Pig source tree and concurrent builds never
+// build never writes into the Ompig source tree and concurrent builds never
 // observe each other. It returns the overlay description path.
 func writeBuildOverlay(dir, sourceRoot string, built []stagedCell, fused []fusedEntry, frontendMember *fusedEntry, resolution *pigletartifact.Record, opts Options, stderr io.Writer) (string, error) {
 	overlay, err := newBuildOverlay(dir)
@@ -222,8 +222,8 @@ func writeBuildOverlay(dir, sourceRoot string, built []stagedCell, fused []fused
 	}
 	if len(built) > 0 {
 		manifest := cellpack.Manifest{
-			PigCoreVersion: coding.PigVersion,
-			Cells:          make([]cellpack.CellEntry, len(built)),
+			OmpigCoreVersion: coding.OmpigVersion,
+			Cells:            make([]cellpack.CellEntry, len(built)),
 		}
 		for i, sc := range built {
 			manifest.Cells[i] = sc.entry
@@ -240,14 +240,14 @@ func writeBuildOverlay(dir, sourceRoot string, built []stagedCell, fused []fused
 		for _, note := range graph.raised {
 			_, _ = fmt.Fprintf(stderr, "note: %s\n", note)
 		}
-		// pig additive (D31): the vet cannot read third-party module code, so
+		// ompig additive (D31): the vet cannot read third-party module code, so
 		// the build names every external module it skipped.
 		if note := fusedVetScopeNote(graph.unvetted); note != "" {
 			_, _ = fmt.Fprintf(stderr, "note: %s\n", note)
 		}
 	}
 	if len(opts.BakedSettings) > 0 {
-		if err := overlay.bytes(filepath.Join(sourceRoot, bakedPigletDir, "piglet.yaml"), opts.BakedSettings); err != nil {
+		if err := overlay.bytes(filepath.Join(sourceRoot, bakedPigletDir, "ompiglet.yaml"), opts.BakedSettings); err != nil {
 			return "", err
 		}
 	}
@@ -257,11 +257,11 @@ func writeBuildOverlay(dir, sourceRoot string, built []stagedCell, fused []fused
 		}
 	}
 	if resolution != nil {
-		// pig additive (D18): bake the Piglet resolution record so the built
+		// ompig additive (D18): bake the Ompiglet resolution record so the built
 		// binary can verify its own build identity at startup.
 		closureJSON, err := json.Marshal(resolution)
 		if err != nil {
-			return "", fmt.Errorf("marshal Piglet closure: %w", err)
+			return "", fmt.Errorf("marshal Ompiglet closure: %w", err)
 		}
 		if err := overlay.bytes(filepath.Join(sourceRoot, bakedPigletDir, "resolution-record.json"), closureJSON); err != nil {
 			return "", err
@@ -271,14 +271,14 @@ func writeBuildOverlay(dir, sourceRoot string, built []stagedCell, fused []fused
 }
 
 // pigletBinaryBuildArgs builds the `go build` argv, applies the build overlay,
-// passes the strip build tags, and bakes the Piglet release version when present. Binaries are always stripped and trimmed: -s -w
+// passes the strip build tags, and bakes the Ompiglet release version when present. Binaries are always stripped and trimmed: -s -w
 // drop the symbol table and DWARF (Go stack traces come from pclntab, so panics
 // stay legible and only debugger attachment is given up), and -trimpath keeps
 // absolute build paths out of a redistributable artifact.
 func pigletBinaryBuildArgs(outPath, version, overlayPath string, stripTags []string) []string {
 	ld := []string{"-s", "-w"}
 	if v := strings.TrimSpace(version); v != "" {
-		ld = append(ld, "-X github.com/MichaelKinsy/PiG/coding/cli.PigletBinaryVersion="+v)
+		ld = append(ld, "-X github.com/tmih06/ompig/coding/cli.PigletBinaryVersion="+v)
 	}
 	args := []string{"build", "-buildvcs=false", "-trimpath", "-ldflags", strings.Join(ld, " ")}
 	if overlayPath != "" {
@@ -287,7 +287,7 @@ func pigletBinaryBuildArgs(outPath, version, overlayPath string, stripTags []str
 	if len(stripTags) > 0 {
 		args = append(args, "-tags", strings.Join(stripTags, ","))
 	}
-	return append(args, "-o", outPath, "./cmd/pig")
+	return append(args, "-o", outPath, "./cmd/ompig")
 }
 
 type stagedCell struct {
@@ -395,7 +395,7 @@ func shortHash(h string) string {
 }
 
 // buildSourceCell compiles an isolated standalone source extension via the same builder the runtime uses, so the recorded
-// language and source hash match what the Piglet Binary will request at startup.
+// language and source hash match what the Ompiglet Binary will request at startup.
 func buildSourceCell(ctx context.Context, cfg subprocess.ExtConfig, cacheRoot string, host Target) (stagedCell, error) {
 	if cfg.Source == "" {
 		return stagedCell{}, fmt.Errorf("isolated extension %q has no source dir to build", cfg.Name)
@@ -416,11 +416,11 @@ func buildSourceCell(ctx context.Context, cfg subprocess.ExtConfig, cacheRoot st
 }
 
 // bakedPigletDir is the source-relative package whose embedded files carry a
-// Piglet Binary's baked Piglet and resolution record.
+// Ompiglet Binary's baked Ompiglet and resolution record.
 var bakedPigletDir = filepath.Join("coding", "pigletbuild", "binarypiglet")
 
 // buildOverlay is one `go build -overlay` replacement set. Generated contents
-// are written under dir; the Pig source tree itself is never modified.
+// are written under dir; the Ompig source tree itself is never modified.
 type buildOverlay struct {
 	dir     string
 	replace map[string]string
@@ -470,7 +470,7 @@ func overlaySigner(o *buildOverlay, sourceRoot string, key ed25519.PrivateKey) e
 	return o.bytes(filepath.Join(sourceRoot, bakedPigletDir, "signers.txt"), public)
 }
 
-// embeddedFiles digests each cell binary compiled into the Piglet Binary for
+// embeddedFiles digests each cell binary compiled into the Ompiglet Binary for
 // its signed manifest.
 func embeddedFiles(built []stagedCell) ([]signature.EmbeddedFile, error) {
 	files := make([]signature.EmbeddedFile, 0, len(built))
@@ -498,10 +498,10 @@ func overlayCells(o *buildOverlay, sourceRoot string, manifest cellpack.Manifest
 	return o.bytes(filepath.Join(cellsDir, "manifest.json"), append(data, '\n'))
 }
 
-// pigSourceRoot locates the github.com/MichaelKinsy/PiG checkout used by the native
-// Piglet Binary builder.
-func pigSourceRoot() (string, error) {
-	if r := strings.TrimSpace(os.Getenv("PIG_SOURCE_ROOT")); r != "" {
+// ompigSourceRoot locates the github.com/tmih06/ompig checkout used by the native
+// Ompiglet Binary builder.
+func ompigSourceRoot() (string, error) {
+	if r := strings.TrimSpace(os.Getenv("OMPIG_SOURCE_ROOT")); r != "" {
 		return r, nil
 	}
 	if wd, err := os.Getwd(); err == nil {
@@ -516,15 +516,15 @@ func pigSourceRoot() (string, error) {
 			dir = parent
 		}
 	}
-	return "", fmt.Errorf("cannot locate the github.com/MichaelKinsy/PiG source checkout; set PIG_SOURCE_ROOT")
+	return "", fmt.Errorf("cannot locate the github.com/tmih06/ompig source checkout; set OMPIG_SOURCE_ROOT")
 }
 
 func isPigModule(dir string) bool {
 	data, err := os.ReadFile(filepath.Join(dir, "go.mod"))
-	return err == nil && strings.Contains(string(data), "module github.com/MichaelKinsy/PiG")
+	return err == nil && strings.Contains(string(data), "module github.com/tmih06/ompig")
 }
 
-// fusedEntry is one compatible Go extension linked into the Piglet Binary.
+// fusedEntry is one compatible Go extension linked into the Ompiglet Binary.
 type fusedEntry struct {
 	Name             string
 	Pkg              string
@@ -536,7 +536,7 @@ type fusedEntry struct {
 }
 
 // isGoFactoryCell reports whether a planned cell is a Go SDK-factory cell, the
-// only kind the Piglet Binary can fuse in-process today.
+// only kind the Ompiglet Binary can fuse in-process today.
 func isGoFactoryCell(cell subprocess.CellSpec) bool {
 	if cell.Strategy == subprocess.CellStrategyPackedGo {
 		return true
@@ -582,7 +582,7 @@ func collectFused(cell subprocess.CellSpec) ([]fusedEntry, error) {
 
 // overlayFuse imports each extension factory and the frontend member through
 // their real package paths and adds the members' module graph to the build's
-// view of Pig's go.mod and checksum files. The go.sum overlay, and the
+// view of Ompig's go.mod and checksum files. The go.sum overlay, and the
 // go.work.sum overlay of a workspace checkout, make the build read checksums
 // from the overlay: the Go command then verifies a fused build offline under
 // -mod=readonly and stops instead of writing a checksum into the source tree.
@@ -594,19 +594,19 @@ func overlayFuse(o *buildOverlay, sourceRoot string, fused []fusedEntry, fronten
 
 	originalGoMod, err := os.ReadFile(goModPath)
 	if err != nil {
-		return fusedModuleGraph{}, fmt.Errorf("read Pig go.mod: %w", err)
+		return fusedModuleGraph{}, fmt.Errorf("read Ompig go.mod: %w", err)
 	}
 	parsed, err := modfile.Parse(goModPath, originalGoMod, nil)
 	if err != nil {
-		return fusedModuleGraph{}, fmt.Errorf("parse Pig go.mod: %w", err)
+		return fusedModuleGraph{}, fmt.Errorf("parse Ompig go.mod: %w", err)
 	}
 	members := fused
 	if frontendMember != nil {
 		members = append(slices.Clone(fused), *frontendMember)
 	}
-	// pig additive (D31): a fused member's external modules join Pig's main
+	// ompig additive (D31): a fused member's external modules join Ompig's main
 	// module by minimum version selection, and their checksums come from the
-	// member's go.sum, never from writes into the Pig source tree.
+	// member's go.sum, never from writes into the Ompig source tree.
 	graph, err := mergeFusedModules(parsed, members)
 	if err != nil {
 		return fusedModuleGraph{}, err
@@ -625,7 +625,7 @@ func overlayFuse(o *buildOverlay, sourceRoot string, fused []fusedEntry, fronten
 	for _, sumFile := range sumFiles {
 		original, err := os.ReadFile(sumFile)
 		if err != nil && !errors.Is(err, fs.ErrNotExist) {
-			return fusedModuleGraph{}, fmt.Errorf("read Pig checksums: %w", err)
+			return fusedModuleGraph{}, fmt.Errorf("read Ompig checksums: %w", err)
 		}
 		merged, err := mergeGoSum(original, graph.roots)
 		if err != nil {
@@ -636,7 +636,7 @@ func overlayFuse(o *buildOverlay, sourceRoot string, fused []fusedEntry, fronten
 		}
 	}
 	if frontendMember != nil {
-		// pig additive (D91): register the frontend member.
+		// ompig additive (D91): register the frontend member.
 		frontendGen := filepath.Join(sourceRoot, "internal", "frontendpack", "registry_generated.go")
 		if err := o.bytes(frontendGen, []byte(renderFrontendRegistry(*frontendMember))); err != nil {
 			return fusedModuleGraph{}, err
@@ -649,12 +649,12 @@ func overlayFuse(o *buildOverlay, sourceRoot string, fused []fusedEntry, fronten
 }
 
 func renderFrontendRegistry(member fusedEntry) string {
-	return fmt.Sprintf("// Code generated by pig piglet build. DO NOT EDIT.\npackage frontendpack\n\nimport %s %q\n\nfunc init() { register(%s.%s) }\n", member.Pkg, member.Package, member.Pkg, member.Factory)
+	return fmt.Sprintf("// Code generated by ompig ompiglet build. DO NOT EDIT.\npackage frontendpack\n\nimport %s %q\n\nfunc init() { register(%s.%s) }\n", member.Pkg, member.Package, member.Pkg, member.Factory)
 }
 
 // resolveFrontendMember maps the frontend slot's member to a fused entry for the module's
-// root package, or nil when the Piglet has no frontend member.
-func resolveFrontendMember(p *piglet.Piglet) (*fusedEntry, error) {
+// root package, or nil when the Ompiglet has no frontend member.
+func resolveFrontendMember(p *ompiglet.Ompiglet) (*fusedEntry, error) {
 	dir, err := p.FrontendDir()
 	if err != nil || dir == "" {
 		return nil, err
@@ -677,7 +677,7 @@ func resolveFrontendMember(p *piglet.Piglet) (*fusedEntry, error) {
 
 func renderFuseRegistry(fused []fusedEntry) string {
 	var b strings.Builder
-	b.WriteString("// Code generated by pig piglet build. DO NOT EDIT.\npackage fusepack\n\nimport (\n")
+	b.WriteString("// Code generated by ompig ompiglet build. DO NOT EDIT.\npackage fusepack\n\nimport (\n")
 	for _, f := range fused {
 		_, _ = fmt.Fprintf(&b, "\t%s %q\n", f.Pkg, f.Package)
 	}
@@ -689,10 +689,10 @@ func renderFuseRegistry(fused []fusedEntry) string {
 	return b.String()
 }
 
-// sourceBuildEnv builds Pig from a source checkout through that checkout's
-// go.work when it has one, even if the caller exported GOWORK=off. Pig's root
+// sourceBuildEnv builds Ompig from a source checkout through that checkout's
+// go.work when it has one, even if the caller exported GOWORK=off. Ompig's root
 // go.mod requires extensions/sdk at its release version without a replace
-// (so `go install .../cmd/pig@version` works); only go.work resolves it to the
+// (so `go install .../cmd/ompig@version` works); only go.work resolves it to the
 // checkout's own SDK. Workspace mode accepts only -mod=readonly or vendor, so
 // a -mod=mod in GOFLAGS is dropped.
 func sourceBuildEnv(sourceRoot string, env []string) []string {

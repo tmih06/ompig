@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // D92: a Go source extension that needs the staged SDK reports the strip when
-// extension-sdk-go is stripped, instead of telling the user to run `pig
+// extension-sdk-go is stripped, instead of telling the user to run `ompig
 // reload`, which would stage nothing. Unstripped, the missing stage is
 // reported as before.
 func TestStripExtensionSDKGoRuntimeReportsStrip(t *testing.T) {
@@ -27,7 +27,7 @@ func TestStripExtensionSDKGoRuntimeReportsStrip(t *testing.T) {
 	}
 
 	t.Cleanup(pigstrip.Strip(pigstrip.ListFeatures, pigstrip.ExtensionSDKGo))
-	want := "The Go extension SDK is stripped from this Piglet (strip.features: extension-sdk-go)"
+	want := "The Go extension SDK is stripped from this Ompiglet (strip.features: extension-sdk-go)"
 	if _, err := builder.BuildContext(t.Context(), "hello", src); err == nil || err.Error() != want {
 		t.Fatalf("stripped build error = %v, want %q", err, want)
 	}

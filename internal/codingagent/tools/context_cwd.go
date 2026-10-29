@@ -3,7 +3,7 @@ package tools
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // toolCWD selects the invocation context's cwd before the definition's fallback.

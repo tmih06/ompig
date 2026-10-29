@@ -9,18 +9,18 @@ import (
 	"os"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 func main() {
 	ext := sdk.New("exec-sdk-fixture")
 	ext.Command("exec_probe", "call pi.exec and report the result", func(ctx sdk.Context, _ string) error {
-		// PIG_TEST_EXEC_HELPER_PATH points at a portable, natively executable
+		// OMPIG_TEST_EXEC_HELPER_PATH points at a portable, natively executable
 		// helper (the test binary itself, run in "echo" mode) instead of an
 		// external echo binary, so this fixture also works on native Windows.
-		helper := os.Getenv("PIG_TEST_EXEC_HELPER_PATH")
+		helper := os.Getenv("OMPIG_TEST_EXEC_HELPER_PATH")
 		if helper == "" {
-			return fmt.Errorf("PIG_TEST_EXEC_HELPER_PATH not set")
+			return fmt.Errorf("OMPIG_TEST_EXEC_HELPER_PATH not set")
 		}
 		result, err := ctx.Exec(helper, []string{"exec-probe-ok"})
 		if err != nil {
@@ -37,9 +37,9 @@ func main() {
 	// exec_abort_probe runs a command that never ends on its own and aborts its signal: pi.exec kills the command and resolves with
 	// killed set and code 0, in every mode.
 	ext.Command("exec_abort_probe", "abort the signal of a running pi.exec", func(ctx sdk.Context, _ string) error {
-		helper := os.Getenv("PIG_TEST_EXEC_HELPER_PATH")
+		helper := os.Getenv("OMPIG_TEST_EXEC_HELPER_PATH")
 		if helper == "" {
-			return fmt.Errorf("PIG_TEST_EXEC_HELPER_PATH not set")
+			return fmt.Errorf("OMPIG_TEST_EXEC_HELPER_PATH not set")
 		}
 		signal, abort := context.WithCancel(context.Background())
 		defer abort()

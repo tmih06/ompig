@@ -13,7 +13,7 @@ import (
 
 	"github.com/clipperhouse/uax29/v2/words"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // SegmentData mirrors the word-granularity fields of Intl.SegmentData. Index counts UTF-16 units.
@@ -115,7 +115,7 @@ func (e *dictionaryEngines) unhandledHandles(r rune) bool {
 
 // engineFor returns 1-4 for the Southeast Asian engines, 5 for CjkBreakEngine, or 0 for UnhandledEngine. Only the CJK set shares Common characters (U+30FC and U+FF70) with a Script value UnhandledEngine can claim, so stack order matters only there.
 func (e *dictionaryEngines) engineFor(r rune) rune {
-	// pig divergence (D27): select CjkBreakEngine as ICU does once its process-wide engine cache is warm; a fresh Pi process sends a U+30FC/U+FF70 span start to UnhandledEngine first.
+	// ompig divergence (D27): select CjkBreakEngine as ICU does once its process-wide engine cache is warm; a fresh Pi process sends a U+30FC/U+FF70 span start to UnhandledEngine first.
 	if script := complexContext(r) & 7; script != 0 {
 		return script
 	}

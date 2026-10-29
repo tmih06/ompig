@@ -11,8 +11,8 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // matchEverything is the empty expression, which matches every path. Rules share it; a *regexp.Regexp is safe for concurrent use.

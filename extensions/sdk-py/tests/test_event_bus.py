@@ -6,13 +6,13 @@ import os
 import tempfile
 import threading
 
-import pig_sdk
+import ompig_sdk
 
 from test_sdk import _read_frame, _start_fake_host, _write_frame
 
 
 class _Host:
-    def __init__(self, ext: pig_sdk.Extension):
+    def __init__(self, ext: ompig_sdk.Extension):
         self.tmp = tempfile.mkdtemp()
         self.listener = _start_fake_host(os.path.join(self.tmp, "ext.sock"))
         self.thread = threading.Thread(target=ext.run_with_socket, args=(os.path.join(self.tmp, "ext.sock"),), daemon=True)
@@ -50,7 +50,7 @@ class _Host:
 
 # A listener declared while the factory runs is registered before the register message, as a node factory's pi.events.on is (loader.ts runs the factory before the runtime registers), and carries the by-value flag.
 def test_factory_listener_is_registered_before_register() -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: None)
     host = _Host(ext)
     try:
@@ -64,7 +64,7 @@ def test_factory_listener_is_registered_before_register() -> None:
 # Dispatch runs the handler with the payload decoded from the JSON the Host sends and answers after the handler returns (event-bus.ts:19-25).
 def test_dispatch_runs_handler_then_answers() -> None:
     got: list = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: got.append(data))
     host = _Host(ext)
     try:
@@ -83,7 +83,7 @@ def test_handler_error_fails_only_its_dispatch() -> None:
     def fail(ctx, data):
         raise RuntimeError("listener-failed")
 
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("fail", fail)
     ext.events.on("ok", lambda ctx, data: None)
     host = _Host(ext)
@@ -105,14 +105,14 @@ def test_handler_error_fails_only_its_dispatch() -> None:
 def test_emit_carries_payload_and_parent() -> None:
     outcomes: list = []
 
-    def go(ctx: pig_sdk.Context, args: str) -> None:
+    def go(ctx: ompig_sdk.Context, args: str) -> None:
         ctx.events.emit("ch", {"a": 1})
         try:
             ctx.events.emit("error", "boom")
         except RuntimeError as exc:
             outcomes.append(str(exc))
 
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.command("go", "", go)
     host = _Host(ext)
     try:
@@ -131,13 +131,13 @@ def test_emit_carries_payload_and_parent() -> None:
 def test_unsubscribe_sends_one_off() -> None:
     done = threading.Event()
 
-    def off(ctx: pig_sdk.Context, args: str) -> None:
+    def off(ctx: ompig_sdk.Context, args: str) -> None:
         unsubscribe = ctx.events.on("ch", lambda c, d: None)
         unsubscribe()
         unsubscribe()
         done.set()
 
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.command("off", "", off)
     host = _Host(ext)
     try:
@@ -156,7 +156,7 @@ def test_unsubscribe_sends_one_off() -> None:
 # A listener the Host dispatches to while the extension is still loading (after register, before ready) is served, as a node runtime serves it during its factory.
 def test_dispatch_during_load_is_served() -> None:
     got: list = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     ext.events.on("ch", lambda ctx, data: got.append(data))
     host = _Host(ext)
     try:

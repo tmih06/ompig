@@ -5,7 +5,7 @@ package sqlite
 
 // Ports packages/durable/src/storage/sqlite/database.ts
 
-import chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+import chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 
 // The Chord facade's names, re-exported as Pi's durable database entry point re-exports them.
 type (

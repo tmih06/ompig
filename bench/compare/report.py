@@ -26,8 +26,8 @@ def cannot(arm, scen):
     return (arm.removesuffix("-aa"), scen) in CANNOT
 
 
-NOTES = """## Notes: outputs that differ between arms (from bolt-audit; compare PiG on equal outputs only)
-1. Pi-Bolt throttles tool-call argument re-parsing: `toolcall_delta`/`message_update` partial arguments lag up to 12.5% above 1 KB (final arguments equal). The 200 KB write row is therefore different work for Pi-Bolt; PiG vs Pi (Node/Bun) is the like-for-like comparison there. Repro: stream a `write` call with `fake_model_stress.py SCENARIO write:200` under `--mode json` and diff `toolcall_delta` partials against Pi 1.1.0.
+NOTES = """## Notes: outputs that differ between arms (from bolt-audit; compare Ompig on equal outputs only)
+1. Pi-Bolt throttles tool-call argument re-parsing: `toolcall_delta`/`message_update` partial arguments lag up to 12.5% above 1 KB (final arguments equal). The 200 KB write row is therefore different work for Pi-Bolt; Ompig vs Pi (Node/Bun) is the like-for-like comparison there. Repro: stream a `write` call with `fake_model_stress.py SCENARIO write:200` under `--mode json` and diff `toolcall_delta` partials against Pi 1.1.0.
 2. Pi-Bolt streamed Markdown with `$$` LaTeX blocks can lex differently from a full lex (68/1,500 fuzzed documents; minimal repro `" two\\n$$x$$\\n2text\\n===\\n"`). The 60,000-char answer in this suite contains no `$$`, so that row is equal work.
 3. Pi-Bolt alt-screen frames use scroll regions (different bytes, same picture; `PI_TUI_SCROLL_ROWS=0` disables); this suite uses the native-scrollback TUI.
 4. OpenCode's `read` tool takes `filePath`; Pi-Bolt's mock sends `path`, so OpenCode's reads fail through the unmodified suite (its suite rows are not the same work). gi: no print mode, stalls at prompt 47 of the long session. omp: partial Pi-extension loading.
@@ -73,15 +73,15 @@ def aa_delta(header, rows):
     return rows
 
 
-RELEASE_ARM = "pig-0.4.1"
+RELEASE_ARM = "ompig-0.4.1"
 NEUTRAL_ROWS = ("Frames per prompt", "KB written", "Conversation size", "Checks failed")  # no better/worse direction: the ratio only
 
 
 def release_pair(header):
-    """(release, tip) column names for the 0.4.1 -> 0.5.0 column: the pinned PiG 0.4.1 release and the first other PiG build (not an A/A copy) in the table."""
+    """(release, tip) column names for the 0.4.1 -> 0.5.0 column: the pinned Ompig 0.4.1 release and the first other Ompig build (not an A/A copy) in the table."""
     if RELEASE_ARM not in header:
         return None
-    tips = [h for h in header if h.startswith("pig-") and h != RELEASE_ARM and not h.endswith("-aa")]
+    tips = [h for h in header if h.startswith("ompig-") and h != RELEASE_ARM and not h.endswith("-aa")]
     return (RELEASE_ARM, tips[0]) if tips else None
 
 
@@ -129,7 +129,7 @@ def release_column(header, rows):
         else:
             verdict = f"{ratio:.2f}x no measurable difference"
         out.append([*r, verdict])
-    return [*header, f"{pair[0].removeprefix('pig-')} -> {pair[1]} (tip/release)"], out
+    return [*header, f"{pair[0].removeprefix('ompig-')} -> {pair[1]} (tip/release)"], out
 
 
 def table(header, rows):

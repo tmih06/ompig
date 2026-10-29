@@ -17,7 +17,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodefs"
 )
 
 // expandPackageGlob is Pi's expandPackageGlob (package-manager.ts:294-303): the matches of globSync(pattern, { cwd: root }), each resolved against root, without those that have a dot segment below root, sorted as JavaScript sorts strings. Two matches that resolve to one path both stay, as in Pi. It fails, before it reads the file system, where the Glob constructor's matcher throws: for a pattern minimatch rejects, a brace sequence brace-expansion cannot hold, or a segment whose RegExp V8 rejects.

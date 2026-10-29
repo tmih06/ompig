@@ -1,6 +1,6 @@
 package prompts
 
-import "github.com/MichaelKinsy/PiG/ai"
+import "github.com/tmih06/ompig/ai"
 
 // DiffSystemPromptSections returns replacements in current order, followed by
 // removals in previous order. A nil value removes a section from the transcript.

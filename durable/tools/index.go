@@ -4,7 +4,7 @@
 // Ports packages/durable/src/tools/index.ts.
 package tools
 
-import "github.com/MichaelKinsy/PiG/durable"
+import "github.com/tmih06/ompig/durable"
 
 // CreateCodingTools is the coding-tools extension: read, write, edit, and bash; nothing installs it automatically.
 // CreatePowerShellTool adds powershell. options.Images prepares the images read returns (see ReadToolOptions).

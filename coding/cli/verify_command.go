@@ -16,26 +16,26 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
-// defaultVerifyRepo is the repository whose release workflow signs PiG's
+// defaultVerifyRepo is the repository whose release workflow signs Ompig's
 // provenance attestations.
-const defaultVerifyRepo = "MichaelKinsy/PiG"
+const defaultVerifyRepo = "tmih06/ompig"
 
-const verifyUsage = `Usage: pig verify [--json] [--checksums FILE] [--provenance] [--repo OWNER/NAME] [--signer-workflow WORKFLOW] [--packages] [path...]
+const verifyUsage = `Usage: ompig verify [--json] [--checksums FILE] [--provenance] [--repo OWNER/NAME] [--signer-workflow WORKFLOW] [--packages] [path...]
 
 Verification starts from the SHA-256 of the bytes on disk. A version string,
-file name, or download URL proves nothing. Piglet Binary signature blocks are
-checked offline against the local Piglet trust and revocation policy.
+file name, or download URL proves nothing. Ompiglet Binary signature blocks are
+checked offline against the local Ompiglet trust and revocation policy.
 
-  (no path)          verify this pig binary
-  path               a file is verified by digest; a Piglet file (*.yaml, *.yml)
-                     is validated with ` + "`pig piglet validate`" + `, and a Package or
-                     extension directory with ` + "`pig install --validate-only`" + `
+  (no path)          verify this ompig binary
+  path               a file is verified by digest; a Ompiglet file (*.yaml, *.yml)
+                     is validated with ` + "`ompig ompiglet validate`" + `, and a Package or
+                     extension directory with ` + "`ompig install --validate-only`" + `
   --checksums FILE   require each file's digest to match its entry in a SHA256SUMS file
   --provenance       check GitHub build provenance with ` + "`gh attestation verify`" + `,
                      signed by the selected repository workflow
@@ -63,7 +63,7 @@ type verifyTarget struct {
 }
 
 type verifyIdentity struct {
-	PigVersion    string `json:"pigVersion"`
+	OmpigVersion  string `json:"ompigVersion"`
 	Upstream      string `json:"upstreamPi"`
 	Go            string `json:"go"`
 	Platform      string `json:"platform"`
@@ -90,7 +90,7 @@ type verifyOptions struct {
 	pigletTrust    signature.Trust
 }
 
-// runVerifyCommand handles `pig verify`. It reports -1 for other commands.
+// runVerifyCommand handles `ompig verify`. It reports -1 for other commands.
 func runVerifyCommand(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 || args[0] != "verify" {
 		return -1
@@ -106,7 +106,7 @@ func runVerifyCommand(args []string, stdout, stderr io.Writer) int {
 			opts.packages = true
 		case "--checksums", "--repo", "--signer-workflow":
 			if i+1 >= len(args) {
-				_, _ = fmt.Fprintf(stderr, "pig verify: %s requires a value\n%s", arg, verifyUsage)
+				_, _ = fmt.Fprintf(stderr, "ompig verify: %s requires a value\n%s", arg, verifyUsage)
 				return 2
 			}
 			i++
@@ -123,7 +123,7 @@ func runVerifyCommand(args []string, stdout, stderr io.Writer) int {
 			return 0
 		default:
 			if strings.HasPrefix(arg, "-") {
-				_, _ = fmt.Fprintf(stderr, "pig verify: unknown option %q\n%s", arg, verifyUsage)
+				_, _ = fmt.Fprintf(stderr, "ompig verify: unknown option %q\n%s", arg, verifyUsage)
 				return 2
 			}
 			opts.paths = append(opts.paths, arg)
@@ -131,17 +131,17 @@ func runVerifyCommand(args []string, stdout, stderr io.Writer) int {
 	}
 	self, err := linkerexec.Executable()
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig verify: locate this binary: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig verify: locate this binary: %v\n", err)
 		return 1
 	}
 	sums, err := readChecksums(opts.checksums)
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig verify: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig verify: %v\n", err)
 		return 1
 	}
 	opts.pigletTrust, err = signature.LoadTrust(signature.TrustDir())
 	if err != nil {
-		_, _ = fmt.Fprintf(stderr, "pig verify: load Piglet trust policy: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "ompig verify: load Ompiglet trust policy: %v\n", err)
 		return 1
 	}
 	report := verifyReport{Identity: binaryIdentity()}
@@ -177,7 +177,7 @@ func runVerifyCommand(args []string, stdout, stderr io.Writer) int {
 
 func binaryIdentity() verifyIdentity {
 	identity := verifyIdentity{
-		PigVersion: PigVersion, Upstream: coding.UpstreamVersion, Go: runtime.Version(),
+		OmpigVersion: OmpigVersion, Upstream: coding.UpstreamVersion, Go: runtime.Version(),
 		Platform: runtime.GOOS + "/" + runtime.GOARCH, Build: Build, PigletRelease: PigletBinaryVersion,
 	}
 	if info, ok := debug.ReadBuildInfo(); ok {
@@ -244,9 +244,9 @@ func verifyFile(path, kind string, sums map[string]string, opts verifyOptions) v
 		return target
 	}
 	target.SHA256 = digest
-	// pig additive (D18): report and enforce a Piglet Binary signature block
+	// ompig additive (D18): report and enforce a Ompiglet Binary signature block
 	// without executing the target.
-	// Required-signature policy applies after a trailer identifies a Piglet
+	// Required-signature policy applies after a trailer identifies a Ompiglet
 	// Binary. An unsigned generic file cannot be identified as one.
 	checkTrust := opts.pigletTrust
 	checkTrust.RequireSignature = false
@@ -254,7 +254,7 @@ func verifyFile(path, kind string, sums map[string]string, opts verifyOptions) v
 	if signatureErr == nil && status.Signed && opts.pigletTrust.RequireSignature {
 		status, signatureErr = signature.Check(path, signature.Policy{Trust: opts.pigletTrust})
 	}
-	signatureCheck := verifyCheck{Name: "piglet signature", Detail: status.Describe()}
+	signatureCheck := verifyCheck{Name: "ompiglet signature", Detail: status.Describe()}
 	switch {
 	case signatureErr != nil:
 		signatureCheck.Status = "failed"
@@ -310,7 +310,7 @@ func verifyPath(self, path string, sums map[string]string, opts verifyOptions) v
 	case info.IsDir():
 		return delegate(self, path, "resource", "install", "--validate-only", path)
 	case ext == ".yaml" || ext == ".yml":
-		return delegate(self, path, "piglet", "piglet", "validate", path)
+		return delegate(self, path, "ompiglet", "ompiglet", "validate", path)
 	default:
 		return verifyFile(path, "file", sums, opts)
 	}
@@ -322,7 +322,7 @@ func delegate(self, path, kind string, command ...string) verifyTarget {
 	var output bytes.Buffer
 	cmd := exec.Command(self, command...)
 	cmd.Stdout, cmd.Stderr = &output, &output
-	check := verifyCheck{Name: "pig " + strings.Join(command[:len(command)-1], " "), Status: "ok", Detail: strings.TrimSpace(output.String())}
+	check := verifyCheck{Name: "ompig " + strings.Join(command[:len(command)-1], " "), Status: "ok", Detail: strings.TrimSpace(output.String())}
 	if err := cmd.Run(); err != nil {
 		check.Status = "failed"
 		check.Detail = strings.TrimSpace(output.String())
@@ -380,7 +380,7 @@ func verifyInstalledPackages() []verifyTarget {
 
 func writeVerifyText(stdout io.Writer, report verifyReport) {
 	id := report.Identity
-	_, _ = fmt.Fprintf(stdout, "pig %s+%s %s %s %s, build %s\n", id.PigVersion, id.Upstream, id.Go, id.Platform, id.Revision, id.Build)
+	_, _ = fmt.Fprintf(stdout, "ompig %s+%s %s %s %s, build %s\n", id.OmpigVersion, id.Upstream, id.Go, id.Platform, id.Revision, id.Build)
 	for _, target := range report.Targets {
 		_, _ = fmt.Fprintf(stdout, "\n%s (%s)\n", target.Path, target.Kind)
 		if target.SHA256 != "" {

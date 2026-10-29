@@ -17,8 +17,8 @@ import (
 	"strconv"
 	"strings"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Command runs one external command and reports its exit status. Capture returns stdout and leaves stderr attached to
@@ -137,7 +137,7 @@ func environment(name, value string) []string { return []string{"--env", name + 
 // RequireEvalAuthFile returns the path of the agent directory's auth.json after checking that it is a JSON object
 // with a credential for provider.
 func RequireEvalAuthFile(provider string) (string, error) {
-	// pig divergence (D2): PiG reads its own agent directory variable and defaults to ~/.pig/agent.
+	// ompig divergence (D2): Ompig reads its own agent directory variable and defaults to ~/.ompig/agent.
 	agentDir := icodingagent.DefaultAgentDir()
 	if configured := os.Getenv(agentDirEnvironment()); configured != "" {
 		var err error

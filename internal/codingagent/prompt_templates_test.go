@@ -7,7 +7,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // file-based prompt templates.
@@ -90,7 +90,7 @@ func TestLoadPromptTemplates_FromUserAndProject(t *testing.T) {
 	agentDir := filepath.Join(dir, "agent")
 	cwd := filepath.Join(dir, "work")
 	userPrompts := filepath.Join(agentDir, "prompts")
-	projectPrompts := filepath.Join(cwd, ".pig", "prompts")
+	projectPrompts := filepath.Join(cwd, ".ompig", "prompts")
 	if err := os.MkdirAll(userPrompts, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -324,8 +324,8 @@ func templateNames(ts []PromptTemplate) []string {
 func TestLoadPromptTemplatesLoadsProjectDirThatIsTheConfigRoot(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
-	t.Setenv("PIG_HOME", filepath.Join(home, ".pig"))
-	projectPrompt := filepath.Join(home, ".pig", "prompts", "project.md")
+	t.Setenv("OMPIG_HOME", filepath.Join(home, ".ompig"))
+	projectPrompt := filepath.Join(home, ".ompig", "prompts", "project.md")
 	if err := os.MkdirAll(filepath.Dir(projectPrompt), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -333,7 +333,7 @@ func TestLoadPromptTemplatesLoadsProjectDirThatIsTheConfigRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got := LoadPromptTemplates(home, filepath.Join(home, ".pig", "agent")).Templates
+	got := LoadPromptTemplates(home, filepath.Join(home, ".ompig", "agent")).Templates
 	if len(got) != 1 || got[0].Name != "project" {
 		t.Fatalf("templates = %+v, want the project prompt", got)
 	}
@@ -367,7 +367,7 @@ func TestPromptDescriptionTruncatesAtUnicodeCharacters(t *testing.T) {
 func TestInteractivePromptLoadingUsesPreResolvedPathsOnly(t *testing.T) {
 	m, _ := newExtensionDialogProbe(t)
 	m.opts.CWD = t.TempDir()
-	projectPrompt := filepath.Join(m.opts.CWD, ".pig", "prompts", "project.md")
+	projectPrompt := filepath.Join(m.opts.CWD, ".ompig", "prompts", "project.md")
 	if err := os.MkdirAll(filepath.Dir(projectPrompt), 0o755); err != nil {
 		t.Fatal(err)
 	}

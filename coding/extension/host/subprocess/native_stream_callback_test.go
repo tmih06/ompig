@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // A Provider object's provider.callback names the request callback it invokes; the host answers each by its name and refuses a name the caller did not pass, as a Node Provider's options object has no such member (provider-object.mjs dispatchProviderObjectCallback "Provider callback ... is absent").

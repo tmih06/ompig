@@ -50,6 +50,6 @@ export function overlayFocusTarget(runtime, component, caller = "Overlay unfocus
     if (mounted.active && mounted.component === component) return { kind: "overlay", key: mounted.key };
   }
   if (runtime.editorHost?.session?.component === component) return { kind: "editor" };
-  // pig divergence (D73): a component that is not mounted by this extension has no main-process identity to focus.
+  // ompig divergence (D73): a component that is not mounted by this extension has no main-process identity to focus.
   throw new Error(`${caller} requires null, the editor component, or a mounted overlay of this extension (D73)`);
 }

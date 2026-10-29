@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The shared Model Runtime auth preflight must preserve the provider's empty-key semantics after the credential-store read, not silently borrow an ambient cloud key.

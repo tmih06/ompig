@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // Ports packages/codemode/test/deterministic.test.ts (Pi 1.2.0) with its scripts and expectations: Sandbox.Start runs a

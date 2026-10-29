@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type proxyOracleOutcome struct {
@@ -84,10 +84,10 @@ func proxyOracleScripts() map[string]string {
 
 func itoa(i int) string { b, _ := json.Marshal(i); return string(b) }
 
-// proxyLateScripts continue after the terminal event. Pi keeps applying those events to the object it delivered; Pig delivers the message as it was at the terminal event, because the stream's consumers read it concurrently (a numbered divergence is proposed in docs/parity/gap-closure/gap-core.md).
+// proxyLateScripts continue after the terminal event. Pi keeps applying those events to the object it delivered; Ompig delivers the message as it was at the terminal event, because the stream's consumers read it concurrently (a numbered divergence is proposed in docs/parity/gap-closure/gap-core.md).
 var proxyLateScripts = []string{"delta after done", "start after done", "text end after done", "second done", "error then delta", "malformed after done", "bad delta after done"}
 
-// proxySparseScripts index the content array past its end, or with an index that is not an array index. Pi builds a sparse array or sets a property JSON never shows; Pig ends the stream with an error (also proposed).
+// proxySparseScripts index the content array past its end, or with an index that is not an array index. Pi builds a sparse array or sets a property JSON never shows; Ompig ends the stream with an error (also proposed).
 var proxySparseScripts = []string{"sparse text start", "sparse then fill", "sparse thinking", "sparse tool call", "delta on hole", "toolcall end on hole", "negative index", "fractional index", "huge index", "non-canonical string", "past the last index"}
 
 func proxyTerminalPrefix(body string) string {
@@ -147,7 +147,7 @@ func TestStreamProxyMatchesPi(t *testing.T) {
 	}
 }
 
-// TestStreamProxyIgnoresEventsAfterTheTerminalEvent: the message Pig delivers is the one Pi had at the terminal event (Pi's later mutation of the delivered object is the proposed divergence).
+// TestStreamProxyIgnoresEventsAfterTheTerminalEvent: the message Ompig delivers is the one Pi had at the terminal event (Pi's later mutation of the delivered object is the proposed divergence).
 func TestStreamProxyIgnoresEventsAfterTheTerminalEvent(t *testing.T) {
 	scripts := proxyOracleScripts()
 	var bodies []string
@@ -167,7 +167,7 @@ func TestStreamProxyIgnoresEventsAfterTheTerminalEvent(t *testing.T) {
 	}
 }
 
-// TestStreamProxyFailsOnContentIndicesPiLeavesSparse: Pi writes a sparse array; Pig ends the stream with an error and keeps the blocks stored before the bad event.
+// TestStreamProxyFailsOnContentIndicesPiLeavesSparse: Pi writes a sparse array; Ompig ends the stream with an error and keeps the blocks stored before the bad event.
 func TestStreamProxyFailsOnContentIndicesPiLeavesSparse(t *testing.T) {
 	scripts := proxyOracleScripts()
 	var bodies []string
@@ -181,10 +181,10 @@ func TestStreamProxyFailsOnContentIndicesPiLeavesSparse(t *testing.T) {
 		}
 		got := runProxyOracleGo(t, bodies[i])
 		if got.Reason != "error" || got.Error == "" || got.Types[len(got.Types)-1] != "error" {
-			t.Errorf("%s: Pig outcome %v, want an error stream", name, canonProxy(got))
+			t.Errorf("%s: Ompig outcome %v, want an error stream", name, canonProxy(got))
 		}
 		if strings.Contains(string(got.Content), "null") {
-			t.Errorf("%s: Pig's content holds a hole: %s", name, got.Content)
+			t.Errorf("%s: Ompig's content holds a hole: %s", name, got.Content)
 		}
 	}
 }
@@ -206,7 +206,7 @@ func canonProxy(o proxyOracleOutcome) map[string]any {
 	return map[string]any{"types": o.Types, "reason": o.Reason, "error": o.Error, "content": decode(o.Content), "usage": decode(o.Usage)}
 }
 
-// runProxyOracleGo streams a body through StreamProxy and reads the delivered message once the stream has ended. It reads it once: a later change would be the late mutation Pig does not make, and the race detector reports one.
+// runProxyOracleGo streams a body through StreamProxy and reads the delivered message once the stream has ended. It reads it once: a later change would be the late mutation Ompig does not make, and the race detector reports one.
 func runProxyOracleGo(t *testing.T, body string) proxyOracleOutcome {
 	t.Helper()
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -54,7 +54,7 @@ func TestExtension_OAuthProviderBridge(t *testing.T) {
 		},
 	})
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
@@ -175,7 +175,7 @@ func TestExtension_OAuthUnknownProvider(t *testing.T) {
 	defer host.close()
 
 	ext := New("test-ext")
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()

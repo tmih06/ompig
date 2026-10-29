@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 var wallClockMillis = regexp.MustCompile(`"timestamp":[0-9]{13}`)

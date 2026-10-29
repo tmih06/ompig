@@ -3,7 +3,7 @@ package mcpext
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // API is the part of the extension API the built-in extension registers on: the events upstream's index.ts subscribes

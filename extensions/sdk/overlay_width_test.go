@@ -3,7 +3,7 @@ package sdk
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A focused overlay component renders at the width upstream TUI.resolveOverlayLayout resolves (tui.ts:1212-1233), as the Node runtime does (coding/extension/host/subprocess/runtime_node_overlay_sizing_test.go uses the same table); an inline component and the legacy titled modal render at the terminal width.

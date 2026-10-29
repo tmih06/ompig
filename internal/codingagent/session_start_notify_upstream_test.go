@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // .upstream/v1.1.0/packages/coding-agent/test/suite/regressions/5943-session-start-notify.test.ts:221.
@@ -41,7 +41,7 @@ func TestSessionStartNotifyOriginalLoadedResources(t *testing.T) {
 	if !observations[0] || observations[1] || observations[2] || !observations[3] || !observations[4] {
 		t.Fatalf("resource/chat observations = %v\nchat: %q\nroot: %q", observations, chat, rendered)
 	}
-	if os.Getenv("PIG_RUNTIME_ORIGINAL_PROBE") != "" {
+	if os.Getenv("OMPIG_RUNTIME_ORIGINAL_PROBE") != "" {
 		data, err := json.Marshal([]any{"notify", 221, observations})
 		if err != nil {
 			t.Fatal(err)

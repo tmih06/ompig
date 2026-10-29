@@ -139,9 +139,9 @@ func TestBuildResourceGroups_GroupByBaseDirAndFormatAutoLabels(t *testing.T) {
 	t.Setenv("USERPROFILE", oldHome)
 
 	resources := []ResourceItem{
-		{Path: filepath.Join(oldHome, ".pig", "agent", "prompts", "a.md"), ResourceType: ResourcePrompts, Scope: "user", Origin: "top-level", Source: "auto", BaseDir: filepath.Join(oldHome, ".pig", "agent")},
-		{Path: filepath.Join(oldHome, ".config", "pig", "prompts", "b.md"), ResourceType: ResourcePrompts, Scope: "user", Origin: "top-level", Source: "auto", BaseDir: filepath.Join(oldHome, ".config", "pig")},
-		{Path: filepath.Join(oldHome, "work", ".pig", "themes", "c.json"), ResourceType: ResourceThemes, Scope: "project", Origin: "top-level", Source: "auto", BaseDir: filepath.Join(oldHome, "work", ".pig")},
+		{Path: filepath.Join(oldHome, ".ompig", "agent", "prompts", "a.md"), ResourceType: ResourcePrompts, Scope: "user", Origin: "top-level", Source: "auto", BaseDir: filepath.Join(oldHome, ".ompig", "agent")},
+		{Path: filepath.Join(oldHome, ".config", "ompig", "prompts", "b.md"), ResourceType: ResourcePrompts, Scope: "user", Origin: "top-level", Source: "auto", BaseDir: filepath.Join(oldHome, ".config", "ompig")},
+		{Path: filepath.Join(oldHome, "work", ".ompig", "themes", "c.json"), ResourceType: ResourceThemes, Scope: "project", Origin: "top-level", Source: "auto", BaseDir: filepath.Join(oldHome, "work", ".ompig")},
 	}
 
 	groups := BuildResourceGroups(resources)
@@ -152,9 +152,9 @@ func TestBuildResourceGroups_GroupByBaseDirAndFormatAutoLabels(t *testing.T) {
 	labels := []string{groups[0].Label, groups[1].Label, groups[2].Label}
 	joined := strings.Join(labels, "\n")
 	for _, want := range []string{
-		"User (~/.config/pig/)",
-		"User (~/.pig/agent/)",
-		"Project (~/work/.pig/)",
+		"User (~/.config/ompig/)",
+		"User (~/.ompig/agent/)",
+		"Project (~/work/.ompig/)",
 	} {
 		if !strings.Contains(joined, want) {
 			t.Fatalf("labels missing %q:\n%s", want, joined)
@@ -236,9 +236,9 @@ func TestBuildResourceGroupsTiesKeepFirstSeenOrder(t *testing.T) {
 	var resources []ResourceItem
 	var want []string
 	for i := range 12 {
-		dir := filepath.Join(os.Getenv("HOME"), fmt.Sprintf("d%02d", 11-i), ".pig")
+		dir := filepath.Join(os.Getenv("HOME"), fmt.Sprintf("d%02d", 11-i), ".ompig")
 		resources = append(resources, ResourceItem{Path: filepath.Join(dir, "prompts", "a.md"), ResourceType: ResourcePrompts, Scope: "user", Origin: "top-level", Source: "auto", BaseDir: dir})
-		want = append(want, "User (~/"+fmt.Sprintf("d%02d", 11-i)+"/.pig/)")
+		want = append(want, "User (~/"+fmt.Sprintf("d%02d", 11-i)+"/.ompig/)")
 	}
 	for run := range 20 {
 		groups := BuildResourceGroups(append([]ResourceItem(nil), resources...))

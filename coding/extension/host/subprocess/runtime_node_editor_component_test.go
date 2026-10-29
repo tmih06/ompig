@@ -28,8 +28,8 @@ func TestNodeEditorComponentIsPisCustomEditor(t *testing.T) {
 	script := fmt.Sprintf(`
 import assert from "node:assert/strict";
 const { Runtime } = await import(%q);
-const pigAgent = await import(%q);
-const pigTui = await import(%q);
+const ompigAgent = await import(%q);
+const ompigTui = await import(%q);
 const piKeybindings = await import(%q);
 const piCustomEditor = await import(%q);
 const piTui = await import(%q);
@@ -57,7 +57,7 @@ runtime.fireAndForget = () => {};
 runtime.applyState({ thinkingLevel: "high", keybindings: { definitions, userBindings: { "app.model.select": ["ctrl+y"] } } });
 runtime.ui.theme.setPalette({ name: "t", foregrounds: { borderMuted: "\x1b[31m", thinkingHigh: "\x1b[32m", bashMode: "\x1b[33m", accent: "\x1b[34m", muted: "\x1b[35m", thinkingOff: "\x1b[36m" }, backgrounds: {}, modifiers: true, mode: "truecolor" });
 
-class Modal extends pigAgent.CustomEditor {
+class Modal extends ompigAgent.CustomEditor {
   invalidated = 0;
   invalidate() { this.invalidated++; super.invalidate(); }
   handleInput(data) {
@@ -75,8 +75,8 @@ const install = take("ui.editor.install")[0];
 assert.ok(install, "install notify");
 const key = install.args.key;
 const editor = runtime.editorHost.session.component;
-assert.ok(editor instanceof pigTui.Editor);
-assert.equal(factoryArgs.keybindings, pigTui.getKeybindings());
+assert.ok(editor instanceof ompigTui.Editor);
+assert.equal(factoryArgs.keybindings, ompigTui.getKeybindings());
 assert.ok(factoryArgs.keybindings.matches("\x19", "app.model.select"), "user override");
 assert.ok(factoryArgs.keybindings.matches("\x1b[Z", "app.thinking.cycle"), "app definitions");
 assert.equal(factoryArgs.theme.borderColor("x"), "\x1b[31mx\x1b[39m");
@@ -99,7 +99,7 @@ piEditor.setPaddingX(1);
 piEditor.setAutocompleteMaxVisible(7);
 piEditor.setText("draft");
 assert.deepEqual(frame.lines, piEditor.render(60));
-assert.ok(frame.lines.some((line) => line.includes(pigTui.CURSOR_MARKER)));
+assert.ok(frame.lines.some((line) => line.includes(ompigTui.CURSOR_MARKER)));
 
 // Keys the host forwards reach handleInput; text changes reach the host.
 runtime.handleNotify({ method: "ui.editor.input", args: { key, data: "s" } });
@@ -184,7 +184,7 @@ assert.equal(runtime.ui.getEditorComponent(), undefined);
 
 // Pi's isWorkingStatusEditor requires both the explicit opt-in and the setter.
 assert.equal(install.args.embedWorkingStatus, false);
-runtime.ui.setEditorComponent((tui, theme, keys) => new pigAgent.CustomEditor(tui, theme, keys, { embedWorkingStatus: true }));
+runtime.ui.setEditorComponent((tui, theme, keys) => new ompigAgent.CustomEditor(tui, theme, keys, { embedWorkingStatus: true }));
 const embeddedKey = take("ui.editor.install").at(-1).args.key;
 assert.equal(take("ui.editor.install").at(-1).args.embedWorkingStatus, true);
 const statusConfig = { key: embeddedKey, paddingX: 1, focused: true, thinkingLevel: "off", shortcuts: [],
@@ -245,7 +245,7 @@ statusConfig.workingStatus = null;
 runtime.handleNotify({ method: "ui.editor.configure", args: statusConfig });
 assert.doesNotMatch(take("ui.editor.render").at(-1).args.lines[0], /Working|Indexing|Compacting/);
 runtime.ui.setEditorComponent((tui, theme, keys) => {
-  const component = new pigAgent.CustomEditor(tui, theme, keys, { embedWorkingStatus: true });
+  const component = new ompigAgent.CustomEditor(tui, theme, keys, { embedWorkingStatus: true });
   component.setWorkingStatusIndicator = undefined;
   return component;
 });

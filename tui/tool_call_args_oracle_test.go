@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type toolCallArgsCase struct {
@@ -18,7 +18,7 @@ type toolCallArgsCase struct {
 	Theme    string `json:"theme"`
 }
 
-// TestFormatToolCallWithArgsMatchesPi runs core/tools/render-utils.ts formatToolCallWithArgs against the real dark and light themes, and PiG's FormatToolCallWithArgs,
+// TestFormatToolCallWithArgsMatchesPi runs core/tools/render-utils.ts formatToolCallWithArgs against the real dark and light themes, and Ompig's FormatToolCallWithArgs,
 // over 3,000 seeded argument documents given as JSON text (whitespace, repeated keys, \u escapes, integer-like keys, numbers such as 1e21, 1.50, -0 and 12345678901234567890): objects
 // with string values holding tabs, carriage returns, newlines, emoji and accented text, numbers, booleans, null, nested objects and arrays, empty objects, and non-object arguments
 // (arrays, strings, numbers, booleans, null). Collapsed (cut at 100 UTF-16 units, ellipsis after 97) and expanded output must be equal byte for byte, colour escapes included.

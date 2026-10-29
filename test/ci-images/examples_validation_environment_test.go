@@ -27,7 +27,7 @@ func TestExampleValidationRecipeIgnoresCallerConfiguration(t *testing.T) {
 		t.Fatal(err)
 	}
 	goRoot := strings.TrimSpace(string(goRootOutput))
-	rootKeys := []string{"HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "PIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"}
+	rootKeys := []string{"HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"}
 	for _, piDirs := range []string{"", "1"} {
 		t.Run("Pi directories="+piDirs, func(t *testing.T) {
 			parent := t.TempDir()
@@ -35,7 +35,7 @@ func TestExampleValidationRecipeIgnoresCallerConfiguration(t *testing.T) {
 			if err := os.Mkdir(probeDir, 0o700); err != nil {
 				t.Fatal(err)
 			}
-			probe := filepath.Join(probeDir, "pig-probe")
+			probe := filepath.Join(probeDir, "ompig-probe")
 			rustRoot := filepath.Join(parent, "selected Rust")
 			rustBin := filepath.Join(rustRoot, "bin")
 			if err := os.MkdirAll(rustBin, 0o700); err != nil {
@@ -45,7 +45,7 @@ func TestExampleValidationRecipeIgnoresCallerConfiguration(t *testing.T) {
 			program := `#!/usr/bin/env python3
 import json, os, subprocess, sys
 subprocess.run(["cargo", "--version"], check=True, stdout=subprocess.DEVNULL)
-keys = ["HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "PIG_HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "GOCACHE", "GOMODCACHE"]
+keys = ["HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "OMPIG_HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "GOCACHE", "GOMODCACHE"]
 with open(os.environ["VALIDATOR_CAPTURE"], "a") as output:
     output.write(json.dumps({"args": sys.argv[1:], "env": {key: os.environ.get(key, "") for key in keys}}) + "\n")
 print(json.dumps({"valid": True, "diagnostics": []}))
@@ -66,11 +66,11 @@ print(json.dumps({"valid": True, "diagnostics": []}))
 				t.Fatal(err)
 			}
 			cache, modules := filepath.Join(parent, "compiler cache"), filepath.Join(parent, "module cache")
-			cmd := exec.CommandContext(t.Context(), makeBin, "--no-print-directory", "-o", "test-prereqs", "-o", "parity-bin", "examples-check", "PARITY_PIG_BIN="+probe)
+			cmd := exec.CommandContext(t.Context(), makeBin, "--no-print-directory", "-o", "test-prereqs", "-o", "parity-bin", "examples-check", "PARITY_OMPIG_BIN="+probe)
 			cmd.Dir = repoRoot(t)
 			cmd.Env = append(os.Environ(), "PATH="+probeDir+string(os.PathListSeparator)+os.Getenv("PATH"),
 				"GOROOT="+goRoot, "GOCACHE="+cache, "GOMODCACHE="+modules,
-				"TMPDIR="+parent, "PIG_USE_PI_DIRS="+piDirs, "VALIDATOR_CAPTURE="+capture,
+				"TMPDIR="+parent, "OMPIG_USE_PI_DIRS="+piDirs, "VALIDATOR_CAPTURE="+capture,
 				"VALIDATOR_PARENT_HOME="+parent, "VALIDATOR_RUST_ROOT="+rustRoot)
 			for _, key := range rootKeys {
 				cmd.Env = append(cmd.Env, key+"="+parent)

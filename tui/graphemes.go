@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/tui/widthx"
+import "github.com/tmih06/ompig/tui/widthx"
 
 type graphemeSegment struct {
 	Text  string

@@ -94,7 +94,7 @@ func appendCompact(dst, src []byte, escape bool) ([]byte, error) {
 // appendCompactJS is appendCompact without HTML escaping for the JSON.stringify mode. It also rewrites what JSON.stringify would not write
 // and an encoder may have: inside a string the escapes \u003c, \u003C, \u003e, \u003E, \u0026, \u2028 and \u2029 become the characters, and
 // outside one a negative number equal to zero becomes 0. Other escapes stay as written. String content is skipped eight bytes at a time.
-// pig additive (lw-json): one pass where jsstring used to compact and then rewrite the whole output again.
+// ompig additive (lw-json): one pass where jsstring used to compact and then rewrite the whole output again.
 func appendCompactJS(dst, src []byte) ([]byte, error) {
 	origLen := len(dst)
 	scan := newScanner()
@@ -203,7 +203,7 @@ func jsUnescape(escape []byte) string {
 	case `\u2029`:
 		return "\u2029"
 	}
-	// pig (LW-JSON-1): U+FFFD, in any hex case, is written raw as JSON.stringify writes it; a nested encoder writes it for ill-formed UTF-8.
+	// ompig (LW-JSON-1): U+FFFD, in any hex case, is written raw as JSON.stringify writes it; a nested encoder writes it for ill-formed UTF-8.
 	if bytes.EqualFold(escape[2:], []byte("fffd")) {
 		return "\ufffd"
 	}

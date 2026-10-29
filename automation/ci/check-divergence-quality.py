@@ -84,7 +84,7 @@ def validate(record: Record, version: str, root: Path) -> list[str]:
             errors.append(f"{location}: unsupported Stock disposition {dispositions[0]!r}")
 
     listed_paths = set(re.findall(r"`([^`]+\.(?:go|rs|py|mjs|toml))`", record.body))
-    repository_roots = ("agent/", "ai/", "cmd/", "coding/", "extensions/", "internal/", "test/parity/", "piglets/", "automation/", "test/", "tui/")
+    repository_roots = ("agent/", "ai/", "cmd/", "coding/", "extensions/", "internal/", "test/parity/", "ompiglets/", "automation/", "test/", "tui/")
     for listed in sorted(listed_paths):
         if not listed.startswith(repository_roots) or any(token in listed for token in ("*", "<", ">", "{", "}")) or ":" in listed:
             continue

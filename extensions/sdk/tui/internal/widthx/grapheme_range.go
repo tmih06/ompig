@@ -5,7 +5,7 @@ package widthx
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/lazyregexp"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/lazyregexp"
 )
 
 // osc8HyperlinkPattern matches a complete OSC 8 hyperlink escape (as returned by

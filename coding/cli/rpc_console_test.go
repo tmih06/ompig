@@ -10,12 +10,12 @@ import (
 func TestRPCDoesNotPrintHostToolInventories(t *testing.T) {
 	home := t.TempDir()
 	p := startRPCUIFixture(t, []string{
-		"PIG_HOME=" + home,
-		"PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
-		"PIG_OFFLINE=1",
+		"OMPIG_HOME=" + home,
+		"OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
+		"OMPIG_OFFLINE=1",
 	}, "--no-extensions", "--no-session")
 	p.closeAndWait("after command listing")
-	if stderr := p.stderr.String(); strings.Contains(stderr, "pig --rpc: loaded") || strings.Contains(stderr, "pig --rpc: agent has") || strings.Contains(stderr, "pig --rpc: extension") {
+	if stderr := p.stderr.String(); strings.Contains(stderr, "ompig --rpc: loaded") || strings.Contains(stderr, "ompig --rpc: agent has") || strings.Contains(stderr, "ompig --rpc: extension") {
 		t.Fatalf("RPC setup leaked host debugging output: %s", stderr)
 	}
 }

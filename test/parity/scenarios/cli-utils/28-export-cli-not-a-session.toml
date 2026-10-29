@@ -3,7 +3,7 @@
 #
 # Pi 1.1.0 main.ts:638-648 runs exportFromFile (core/export-html/index.ts:288-318): resolvePath(input), existsSync, SessionManager.open (session-manager.ts:1766,
 # _setSessionFile 1029-1055), generateHtml, writeFileSync; a failure prints "Error: <message>" in red to stderr and exits 1, success prints
-# "Exported to: <path>" to stdout and exits 0. Pi: "Error: Session file is not a valid pi session: <path>" (Pig: a JSON parse message).
+# "Exported to: <path>" to stdout and exits 0. Pi: "Error: Session file is not a valid pi session: <path>" (Ompig: a JSON parse message).
 name = "28-export-cli-not-a-session"
 description = "--export on a file that is not a session answers like Pi"
 covers = ["packages/coding-agent/src/main.ts", "packages/coding-agent/src/core/export-html/index.ts"]
@@ -11,8 +11,8 @@ tags = ["fast", "hermetic"]
 driver = "cli-mode"
 
 [env]
-pig = ["PIG_HOME=testdata/empty-home"]
-pig_args = ["--export", "testdata/export-inputs/garbage.jsonl", "{{TEMP}}/out.html"]
+ompig = ["OMPIG_HOME=testdata/empty-home"]
+ompig_args = ["--export", "testdata/export-inputs/garbage.jsonl", "{{TEMP}}/out.html"]
 pi_args = ["--export", "testdata/export-inputs/garbage.jsonl", "{{TEMP}}/out.html"]
 
 [cli]
@@ -25,8 +25,8 @@ output_equal = true
 stderr_equal = true
 runs = 3
 
-# normalize-rationale: Pig and Pi receive independent temporary roots; only that root differs.
+# normalize-rationale: Ompig and Pi receive independent temporary roots; only that root differs.
 [[assert.normalize_replace]]
-pattern = 'parity-cli-[0-9a-z-]+-(pig|pi)-[0-9]+'
+pattern = 'parity-cli-[0-9a-z-]+-(ompig|pi)-[0-9]+'
 with = 'parity-cli-run'
 reason = "D2: replace only this scenario's allocated temporary root."

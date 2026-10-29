@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -7,10 +7,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // checkBedrockRequest validates the message list of a Converse request against the Bedrock contract.

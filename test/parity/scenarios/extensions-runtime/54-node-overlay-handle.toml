@@ -9,16 +9,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/overlay-handle.mjs"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/overlay-handle.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/overlay-handle.mjs"]
 
 [tmux]
 width = 120
 height = 40
-ready_pattern_pig = "NODE HANDLE READY"
+ready_pattern_ompig = "NODE HANDLE READY"
 ready_pattern_pi = "NODE HANDLE READY"
 ready_timeout_seconds = 25
 capture_start = "NODE-HANDLE"

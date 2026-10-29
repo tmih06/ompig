@@ -1,4 +1,4 @@
-//go:build !pig_strip_mermaid
+//go:build !ompig_strip_mermaid
 
 package codingagent
 
@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// pig additive (D92): the interactive Mermaid transform cases, which need the diagram renderer a pig_strip_mermaid Binary compiles out.
+// ompig additive (D92): the interactive Mermaid transform cases, which need the diagram renderer a ompig_strip_mermaid Binary compiles out.
 
 func TestAssistantThinkingUsesThinkingTransformContext(t *testing.T) {
 	m := resumeThinkingMode(t, false, userMsg("question"), assistantMsg(""))

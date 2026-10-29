@@ -3,7 +3,7 @@ package tools
 import (
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 func itoa(value int) string { return strconv.Itoa(value) }

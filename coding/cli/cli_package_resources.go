@@ -4,8 +4,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
 )
 
 // cliPackageResources lists the enabled resources the -e sources contribute besides extensions: Pi's cliEnabledSkills, cliEnabledPrompts and cliEnabledThemes, from resolveExtensionSources(additionalExtensionPaths, {temporary: true}).

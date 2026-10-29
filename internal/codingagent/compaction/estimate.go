@@ -5,10 +5,10 @@ import (
 	"slices"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // estimatedImageChars is Pi's per-image character estimate (ESTIMATED_IMAGE_CHARS).
@@ -205,7 +205,7 @@ func EstimateProjectedContextTokens(projection codingagent.SessionProjection, br
 			if entry.Base().Type != "context_edit" {
 				continue
 			}
-			// pig divergence (D136): an edit of an entry after the usage anchor (such as the omission of a failed retry attempt) leaves the anchor valid; upstream drops it for any later edit and re-estimates the whole history.
+			// ompig divergence (D136): an edit of an entry after the usage anchor (such as the omission of a failed retry attempt) leaves the anchor valid; upstream drops it for any later edit and re-estimates the whole history.
 			if usageEntryIndex >= 0 && contextEditTargetsAfter(branchEntries, usageEntryIndex, entry) {
 				continue
 			}

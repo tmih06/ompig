@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi system-prompt.ts:54-69 retains absent versus present-empty customPrompt. Registry and skill metadata accompany it in every realization, not just the nonempty conformance sentinel.

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi core/tools/read.ts:11-20,125-170: execute calls ops.access, then ops.detectImageMimeType (when present), then ops.readFile; a throw from access is the tool error;

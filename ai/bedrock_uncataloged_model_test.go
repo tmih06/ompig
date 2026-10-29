@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime"
-	bedrocktypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	"github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime"
+	bedrocktypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 // A Bedrock model outside the catalog is still a bedrock-converse-stream model of provider amazon-bedrock, as every Pi Model is: transformMessages'
@@ -17,7 +17,7 @@ func TestBedrockUncatalogedModelIsTheSameModelAsItsOwnReplay(t *testing.T) {
 	if _, ok := LookupModel("amazon-bedrock/" + model); ok {
 		t.Fatalf("%s is in the catalog", model)
 	}
-	for _, name := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME"} {
+	for _, name := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR", "XDG_CONFIG_HOME"} {
 		t.Setenv(name, t.TempDir())
 	}
 	for _, name := range []string{"AWS_PROFILE", "AWS_DEFAULT_PROFILE", "AWS_CONFIG_FILE", "AWS_SHARED_CREDENTIALS_FILE", "AWS_BEARER_TOKEN_BEDROCK"} {

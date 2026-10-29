@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Thirteen extensions that fail to build for one reason print one line naming
@@ -41,7 +41,7 @@ func TestExtensionLoadDiagnosticForOneBuildFailureIsOneLine(t *testing.T) {
 }
 
 // Pi's main.ts prints the -ne hint after its startup errors when one of them is an extension load failure
-// (main.ts:912-914), and every extension that fails to load is one: `Failed to load extension "<path>": ...`. PiG folds
+// (main.ts:912-914), and every extension that fails to load is one: `Failed to load extension "<path>": ...`. Ompig folds
 // extensions that fail to build for one cause into one line (D20) that does not carry that text, so a start whose only
 // failures were such a group exited 1 without telling the user how to start without extensions.
 func TestReportExtensionLoadFailuresHintsAfterGroupedBuildFailure(t *testing.T) {

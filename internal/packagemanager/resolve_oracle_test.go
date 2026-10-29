@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // pi: packages/coding-agent/src/core/package-manager.ts DefaultPackageManager.resolve. Random fixture trees (local packages with manifests, conventional directories and ignore files, top-level settings entries with globs and +/-/! overrides in both scopes, auto-discovered
@@ -229,5 +229,5 @@ func TestResolveMatchesPiOnRandomFixtures(t *testing.T) {
 	}
 }
 
-// configDirSuffix matches PiG's project configuration directory name as a path component.
+// configDirSuffix matches Ompig's project configuration directory name as a path component.
 var configDirSuffix = regexp.MustCompile(`/` + regexp.QuoteMeta(codingagent.ConfigDirName()) + `(/|$)`)

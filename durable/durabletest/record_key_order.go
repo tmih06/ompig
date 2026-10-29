@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"reflect"
 
-	chorddelta "github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chorddelta "github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // CheckRecordKeyOrder writes records whose dynamic members (entry data, task input and checkpoint, submission detail) hold objects

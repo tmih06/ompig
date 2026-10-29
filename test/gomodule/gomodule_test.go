@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package gomodule guards the public Go module contract. Dependency versions and checksums describe published modules, independently of the PiG development version. Workspace builds use the local SDK; the separate module-publication CI gate verifies that required tags exist remotely.
+// Package gomodule guards the public Go module contract. Dependency versions and checksums describe published modules, independently of the Ompig development version. Workspace builds use the local SDK; the separate module-publication CI gate verifies that required tags exist remotely.
 package gomodule
 
 import (
@@ -11,17 +11,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 
 	"go.yaml.in/yaml/v3"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/module"
 
-	"github.com/MichaelKinsy/PiG/automation/release/modulehash"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/automation/release/modulehash"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-const rootModule = "github.com/MichaelKinsy/PiG"
+const rootModule = "github.com/tmih06/ompig"
 
 func repoRoot(t *testing.T) string {
 	t.Helper()
@@ -41,7 +41,7 @@ func parseMod(t *testing.T, path string) *modfile.File {
 	return file
 }
 
-// nestedRequirements returns the root go.mod's requirements on nested PiG
+// nestedRequirements returns the root go.mod's requirements on nested Ompig
 // modules, keyed by their directory relative to the repository root.
 func nestedRequirements(t *testing.T, root string) map[string]module.Version {
 	t.Helper()
@@ -61,7 +61,7 @@ func TestRootModuleInstallDirectivesAndWorkspace(t *testing.T) {
 		t.Fatalf("root go.mod module path is not %s", rootModule)
 	}
 	for _, r := range file.Replace {
-		t.Errorf("root go.mod replaces %s => %s; go install %s/cmd/pig@version refuses any replace directive (resolve local modules through go.work instead)", r.Old.Path, r.New.Path, rootModule)
+		t.Errorf("root go.mod replaces %s => %s; go install %s/cmd/ompig@version refuses any replace directive (resolve local modules through go.work instead)", r.Old.Path, r.New.Path, rootModule)
 	}
 	for _, e := range file.Exclude {
 		t.Errorf("root go.mod excludes %s %s; go install pkg@version refuses any exclude directive", e.Mod.Path, e.Mod.Version)
@@ -151,7 +151,7 @@ func TestLocalModuleRequirementsHaveChecksums(t *testing.T) {
 }
 
 func TestStandardReleaseUsesPigVersion(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join(repoRoot(t), "piglets", "standard", "pig-standard.yaml"))
+	data, err := os.ReadFile(filepath.Join(repoRoot(t), "ompiglets", "standard", "ompig-standard.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -163,8 +163,8 @@ func TestStandardReleaseUsesPigVersion(t *testing.T) {
 	if err := yaml.Unmarshal(data, &manifest); err != nil {
 		t.Fatal(err)
 	}
-	if want := pigversion.PigVersion + "-dev"; manifest.Release.Version != want {
-		t.Fatalf("Standard release.version = %q, want %q; run make set-version VERSION=%s", manifest.Release.Version, want, pigversion.PigVersion)
+	if want := pigversion.OmpigVersion + "-dev"; manifest.Release.Version != want {
+		t.Fatalf("Standard release.version = %q, want %q; run make set-version VERSION=%s", manifest.Release.Version, want, pigversion.OmpigVersion)
 	}
 }
 

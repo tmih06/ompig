@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Replay the locked issue packages through Pi and PiG print mode.
+"""Replay the locked issue packages through Pi and Ompig print mode.
 
-Requires a POSIX host, Node on PATH, npm, a built PiG and the locked Pi oracle.
+Requires a POSIX host, Node on PATH, npm, a built Ompig and the locked Pi oracle.
 The output directory owns all homes, package copies, logs and installed dependencies.
 A failed install, timeout, load, print or inventory comparison fails the run.
 """
@@ -27,12 +27,12 @@ def digest(path):
 def environment(home):
     # Isolate agent configuration and remove API_KEY, TOKEN and proxy variables.
     env = {k: v for k, v in os.environ.items()
-           if not k.startswith(("PIG_", "PI_"))
+           if not k.startswith(("OMPIG_", "PI_"))
            and not any(word in k.upper() for word in ("TOKEN", "API_KEY", "PROXY"))}
-    env.update(HOME=str(home), PIG_HOME=str(home / ".pig"),
-               PIG_CODING_AGENT_DIR=str(home / "pig"),
+    env.update(HOME=str(home), OMPIG_HOME=str(home / ".ompig"),
+               OMPIG_CODING_AGENT_DIR=str(home / "ompig"),
                PI_CODING_AGENT_DIR=str(home / "pi"),
-               PI_OFFLINE="1", PI_SKIP_VERSION_CHECK="1", PIG_TEST_FAUX="1")
+               PI_OFFLINE="1", PI_SKIP_VERSION_CHECK="1", OMPIG_TEST_FAUX="1")
     return env
 
 
@@ -88,7 +88,7 @@ def probe(entry, source, binary, label, output, observer):
     package = target / "package"
     shutil.copytree(source / "node_modules", package / "node_modules", symlinks=True)
     selected = package / "node_modules" / entry["name"]
-    for agent in (home / "pig", home / "pi"):
+    for agent in (home / "ompig", home / "pi"):
         agent.mkdir()
         (agent / "settings.json").write_text(json.dumps({"packages": [str(selected)]}) + "\n")
     command = [str(binary), "--no-session", "--no-skills", "--no-prompt-templates",
@@ -110,7 +110,7 @@ def comparable(result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pig", type=Path, required=True)
+    parser.add_argument("--ompig", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--installed", type=Path, help="reuse these installs only if their locks match")
     parser.add_argument("--public", type=Path, help="also record public/main, without treating it as the oracle")
@@ -133,17 +133,17 @@ export default function(pi: any) {
   });
 }
 ''')
-    report = {"pi": version, "node": node, "pigSha256": digest(args.pig),
+    report = {"pi": version, "node": node, "ompigSha256": digest(args.ompig),
               "corpusSha256": digest(CORPUS / "packages.json"), "results": []}
     for entry in json.loads((CORPUS / "packages.json").read_text()):
         source = materialize(entry, output, args.installed.resolve() if args.installed else None)
         oracle = probe(entry, source, pi, "pi", output, observer)
-        candidate = probe(entry, source, args.pig.resolve(), "pig", output, observer)
+        candidate = probe(entry, source, args.ompig.resolve(), "ompig", output, observer)
         matches = (oracle["exit"] == 0 and oracle["stdout"] == entry.get("stdout", "42\n")
                    and oracle["stderr"] == "" and oracle["trace"] is not None
                    and comparable(candidate) == comparable(oracle))
         item = {"package": entry["name"], "version": entry["version"], "matches": matches,
-                "pi": oracle, "pig": candidate}
+                "pi": oracle, "ompig": candidate}
         if args.public:
             item["public"] = probe(entry, source, args.public.resolve(), "public", output, observer)
         report["results"].append(item)

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // client.ts:174-179 registers the roots/list handler only when the roots option is set (an array, a function, or the empty array), and answers

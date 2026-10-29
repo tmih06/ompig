@@ -13,9 +13,9 @@ def main(argv=None):
     sub = parser.add_subparsers(dest="command", required=True)
     tmp = os.path.join(registry.REPO_ROOT, "tmp", "evals")
 
-    def harness_options(p, default="pig,pi"):
+    def harness_options(p, default="ompig,pi"):
         p.add_argument("--harnesses", default=default, help=f"comma-separated ids or all (default: {default})")
-        p.add_argument("--pig", help="pig binary (default: bin/pig)")
+        p.add_argument("--ompig", help="ompig binary (default: bin/ompig)")
         p.add_argument("--timeout", type=float, default=120, help="seconds before a run is killed")
 
     p = sub.add_parser("overhead", help="startup, round-trip, and resumed-Session overhead against the mock model")
@@ -68,9 +68,9 @@ def main(argv=None):
     p.add_argument("--fail", action="store_true", help="exit 1 when a regression is found")
     p.set_defaults(func=perf.benchcmp)
 
-    p = sub.add_parser("profile", help="profile pig round trips with PIG_PROFILE and summarize them")
-    p.add_argument("--pig", help="pig binary (default: bin/pig)")
-    p.add_argument("--kinds", default="cpu,heap", help="PIG_PROFILE kinds")
+    p = sub.add_parser("profile", help="profile ompig round trips with OMPIG_PROFILE and summarize them")
+    p.add_argument("--ompig", help="ompig binary (default: bin/ompig)")
+    p.add_argument("--kinds", default="cpu,heap", help="OMPIG_PROFILE kinds")
     p.add_argument("--runs", type=int, default=1)
     p.add_argument("--prompt", default="Say hello")
     p.add_argument("--timeout", type=float, default=120)
@@ -85,8 +85,8 @@ def main(argv=None):
     p.set_defaults(func=lambda a: 0 if registry.install(registry.select(registry.load(a.registry), a.harnesses), a.prefix, a.check) else 1)
 
     p = sub.add_parser("list", help="list registered harnesses and whether each is installed")
-    p.add_argument("--pig")
-    p.set_defaults(func=lambda a: [print(f"{h.id:9} {h.name:20} {h.api:20} {registry.resolve(h, a.pig) or 'not installed'}") for h in registry.load(a.registry).values()] and 0)
+    p.add_argument("--ompig")
+    p.set_defaults(func=lambda a: [print(f"{h.id:9} {h.name:20} {h.api:20} {registry.resolve(h, a.ompig) or 'not installed'}") for h in registry.load(a.registry).values()] and 0)
 
     args = parser.parse_args(argv)
     return args.func(args)

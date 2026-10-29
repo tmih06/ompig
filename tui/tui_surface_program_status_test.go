@@ -8,7 +8,7 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // reportRecorder is a recording session with the program status hook. It
@@ -41,11 +41,11 @@ func TestSurfaceTerminalReportsProgramStatusToTheSession(t *testing.T) {
 	if terminal.Rows() != 24 || terminal.Columns() != 80 {
 		t.Fatalf("terminal size %dx%d, want the renderer's 80x24", terminal.Columns(), terminal.Rows())
 	}
-	idle := ProgramStatus{State: ProgramStateIdle, App: "pig"}
-	working := ProgramStatus{State: ProgramStateWorking, App: "pig", Message: "Run"}
-	blocked := ProgramStatus{State: ProgramStateBlocked, App: "pig", Kind: ProgramStatusKindAuth, Message: "Log in to Anthropic"}
-	failed := ProgramStatus{State: ProgramStateError, App: "pig", Message: "boom"}
-	done := ProgramStatus{State: ProgramStateDone, App: "pig", Message: "Run"}
+	idle := ProgramStatus{State: ProgramStateIdle, App: "ompig"}
+	working := ProgramStatus{State: ProgramStateWorking, App: "ompig", Message: "Run"}
+	blocked := ProgramStatus{State: ProgramStateBlocked, App: "ompig", Kind: ProgramStatusKindAuth, Message: "Log in to Anthropic"}
+	failed := ProgramStatus{State: ProgramStateError, App: "ompig", Message: "boom"}
+	done := ProgramStatus{State: ProgramStateDone, App: "ompig", Message: "Run"}
 	clear := ProgramStatus{State: ProgramStateClear}
 
 	terminal.SetProgramStatus(idle)
@@ -108,7 +108,7 @@ func TestSurfaceTerminalWritesNoProgramStatusToTheProcessTerminal(t *testing.T) 
 				}
 				surface.Start()
 				for _, state := range []ProgramState{ProgramStateIdle, ProgramStateWorking, ProgramStateBlocked, ProgramStateError, ProgramStateDone, ProgramStateClear} {
-					surface.Terminal().SetProgramStatus(ProgramStatus{State: state, App: "pig"})
+					surface.Terminal().SetProgramStatus(ProgramStatus{State: state, App: "ompig"})
 				}
 				surface.Suspend()
 				surface.Resume()
@@ -136,7 +136,7 @@ func TestSurfaceTerminalWritesNoProgramStatusToTheProcessTerminal(t *testing.T) 
 // writes nothing, so a run without a frontend is unchanged.
 func TestProcessTerminalQueriesProgramStatusOnceNoSessionShowsIt(t *testing.T) {
 	const (
-		working = "\x1b]7501;state=working:app=pig\x1b\\"
+		working = "\x1b]7501;state=working:app=ompig\x1b\\"
 		reply   = "\x1b]7501;?\x1b\\"
 		da      = "\x1b[?62;4;52c"
 	)
@@ -152,7 +152,7 @@ func TestProcessTerminalQueriesProgramStatusOnceNoSessionShowsIt(t *testing.T) {
 			if last := h.writes[len(h.writes)-1]; last != "\x1b[>7u\x1b[?u\x1b[c" {
 				t.Fatalf("raw mode under a session wrote %q", last)
 			}
-			Terminal(h.terminal).SetProgramStatus(ProgramStatus{State: ProgramStateWorking, App: "pig"})
+			Terminal(h.terminal).SetProgramStatus(ProgramStatus{State: ProgramStateWorking, App: "ompig"})
 			h.send(reply)
 			h.writeCount(t, working, 0)
 			h.terminal.setProgramStatusElsewhere(false)
@@ -170,7 +170,7 @@ func TestProcessTerminalQueriesProgramStatusOnceNoSessionShowsIt(t *testing.T) {
 	t.Run("PI_PROGRAM_STATUS=1", func(t *testing.T) {
 		run(t, "1", func(t *testing.T, h *terminalNegotiationHarness) {
 			h.terminal.setProgramStatusElsewhere(true)
-			Terminal(h.terminal).SetProgramStatus(ProgramStatus{State: ProgramStateWorking, App: "pig"})
+			Terminal(h.terminal).SetProgramStatus(ProgramStatus{State: ProgramStateWorking, App: "ompig"})
 			h.writeCount(t, working, 0)
 			h.terminal.setProgramStatusElsewhere(false)
 			if last := h.writes[len(h.writes)-1]; last != working {

@@ -16,8 +16,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/env/daemon"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/env/daemon"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // windowFiles are the outputs the window cases print with one write each, so both daemons see the same chunks.
@@ -132,7 +132,7 @@ func execCases() []execCase {
 		{name: "descendant holds the pipes", request: sh("(sleep 3 &) ; echo done")},
 		// The descendant writes once the shell has been reaped (kill -0 fails), within the daemons' 100 ms grace and after the exit on any
 		// machine. A `sleep 0.05` writes 50 ms after the sleep started, and starting it on macOS can take longer than the whole grace, so
-		// whichever daemon ran into that lost the line: Pi's in one run, PiG's in the next.
+		// whichever daemon ran into that lost the line: Pi's in one run, Ompig's in the next.
 		{name: "descendant writes after exit", request: sh("(while kill -0 $$ 2>/dev/null; do :; done; echo late) & echo early")},
 		{name: "timeout", request: sh("echo before; sleep 30", "timeoutMs", 300)},
 		{name: "timeout with spill", request: sh("echo before; sleep 30", "timeoutMs", 300, "spill", object("afterBytes", 1, "afterLines", 100))},
@@ -195,7 +195,7 @@ func TestDaemonExecMatchesPisDaemon(t *testing.T) {
 func TestDaemonExecCancelMatchesPisDaemon(t *testing.T) {
 	for _, mode := range []string{"", "abort", "kill"} {
 		t.Run("mode "+mode, func(t *testing.T) {
-			pi, pig := runOnBoth(t, nil, func(d *wireDaemon, root string) string {
+			pi, ompig := runOnBoth(t, nil, func(d *wireDaemon, root string) string {
 				id := d.start(object("op", "exec", "cwd", root, "command", "echo started; sleep 30", "spill", object("afterBytes", 1, "afterLines", 100)), nil)
 				// The output proves the command runs, so the cancel reaches a live process.
 				var frames []*daemon.Frame
@@ -218,14 +218,14 @@ func TestDaemonExecCancelMatchesPisDaemon(t *testing.T) {
 				frames = append(frames, d.call(object("op", "lstat", "path", root), nil)...)
 				return renderExec(frames, root, true, []wireNormalizer{spillName})
 			})
-			compareWire(t, "cancel "+mode, pi, pig)
+			compareWire(t, "cancel "+mode, pi, ompig)
 		})
 	}
 }
 
 // TestDaemonCancelRightBehindItsRequestMatchesPisDaemon: a cancel that follows its request at once is never lost.
 func TestDaemonCancelRightBehindItsRequestMatchesPisDaemon(t *testing.T) {
-	pi, pig := runOnBoth(t, nil, func(d *wireDaemon, root string) string {
+	pi, ompig := runOnBoth(t, nil, func(d *wireDaemon, root string) string {
 		var text strings.Builder
 		for _, mode := range []string{"abort", "kill"} {
 			for range 30 {
@@ -236,7 +236,7 @@ func TestDaemonCancelRightBehindItsRequestMatchesPisDaemon(t *testing.T) {
 		}
 		return text.String()
 	})
-	compareWire(t, "early cancel", pi, pig)
+	compareWire(t, "early cancel", pi, ompig)
 }
 
 // TestDaemonHelloMatchesPisDaemon compares the hello reply under each environment that changes it.
@@ -284,7 +284,7 @@ func TestDaemonRepliesBeforeBulkOutputLikePisDaemon(t *testing.T) {
 	// output buffer (1 MiB) and the pipe (64 KiB) hold. A reply that waited its turn would come after that much output.
 	const bound = 1_600_000
 	oracle := oracleDaemon(t)
-	for name, binary := range map[string]string{"pi": oracle, "pig": daemonBinary(t)} {
+	for name, binary := range map[string]string{"pi": oracle, "ompig": daemonBinary(t)} {
 		base := t.TempDir()
 		root := filepath.Join(base, "root")
 		mustDo(os.MkdirAll(root, 0o755))
@@ -423,7 +423,7 @@ func watchCases() []watchCase {
 func TestDaemonWatchMatchesPisDaemon(t *testing.T) {
 	for _, test := range watchCases() {
 		t.Run(test.name, func(t *testing.T) {
-			pi, pig := runOnBoth(t, test.setup, func(d *wireDaemon, root string) string {
+			pi, ompig := runOnBoth(t, test.setup, func(d *wireDaemon, root string) string {
 				id := d.start(withRoot(test.request, root).(daemon.Object), nil)
 				first := d.next()
 				var text strings.Builder
@@ -487,7 +487,7 @@ func TestDaemonWatchMatchesPisDaemon(t *testing.T) {
 				}
 				return text.String()
 			})
-			compareWire(t, test.name, pi, pig)
+			compareWire(t, test.name, pi, ompig)
 		})
 	}
 }
@@ -560,7 +560,7 @@ func TestDaemonWatchRequestsMatchPisDaemon(t *testing.T) {
 		{name: "empty targets", request: object("op", "watch", "targets", []any{}, "mode", "polling")},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			pi, pig := runOnBoth(t, test.setup, func(d *wireDaemon, root string) string {
+			pi, ompig := runOnBoth(t, test.setup, func(d *wireDaemon, root string) string {
 				id := d.start(withRoot(test.request, root).(daemon.Object), nil)
 				first := d.next()
 				text := render([]*daemon.Frame{first}, root, nil)
@@ -570,7 +570,7 @@ func TestDaemonWatchRequestsMatchPisDaemon(t *testing.T) {
 				}
 				return text
 			})
-			compareWire(t, test.name, pi, pig)
+			compareWire(t, test.name, pi, ompig)
 		})
 	}
 }

@@ -1,9 +1,9 @@
-// Package cellpack is the Piglet-Binary-side counterpart to the host's prebuilt-cell
-// seam (runtimecell.PrebuiltResolver). A Piglet Binary embeds its packed cells plus a
+// Package cellpack is the Ompiglet-Binary-side counterpart to the host's prebuilt-cell
+// seam (runtimecell.PrebuiltResolver). A Ompiglet Binary embeds its packed cells plus a
 // manifest describing each cell's composition; at startup it extracts the
 // binaries and registers a Resolver so the host serves them without any Go/Rust
 // toolchain. A Node cell embeds its members' sources instead of a binary; the
-// host runs them with the user's installed Node, as Stock PiG runs them.
+// host runs them with the user's installed Node, as Stock Ompig runs them.
 //
 // Matching is by composition (language + cell key + target + extension set),
 // which is stable across machines, rather than the host's from-source build
@@ -16,13 +16,13 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
 )
 
-// Manifest describes the cells embedded in a Piglet Binary.
+// Manifest describes the cells embedded in a Ompiglet Binary.
 type Manifest struct {
-	PigCoreVersion string      `json:"pigCoreVersion"`
-	Cells          []CellEntry `json:"cells"`
+	OmpigCoreVersion string      `json:"ompigCoreVersion"`
+	Cells            []CellEntry `json:"cells"`
 }
 
 // CellEntry is one prebuilt cell: its composition and where its binary lives
@@ -101,7 +101,7 @@ func (r *Resolver) ResolvePrebuilt(req runtimecell.PrebuiltRequest) (string, boo
 
 // hashesAgree enforces pinned hashes only when both sides know them. A missing
 // or "unknown" hash on either side matches on names alone, so both
-// source-shipping and source-less Piglet Binaries work; two known, differing hashes
+// source-shipping and source-less Ompiglet Binaries work; two known, differing hashes
 // are a mismatch.
 func hashesAgree(pinned []ExtEntry, reqHash map[string]string) bool {
 	for _, p := range pinned {

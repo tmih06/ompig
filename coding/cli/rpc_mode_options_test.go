@@ -32,7 +32,7 @@ func TestRPCModeOptionsTravelOnTheContext(t *testing.T) {
 	}
 }
 
-// rpc-mode.ts:54 runRpcMode(runtimeHost) has no way to run without the state the process built for it; Pig reports that on stderr, as the process's diagnostics go, and serves nothing.
+// rpc-mode.ts:54 runRpcMode(runtimeHost) has no way to run without the state the process built for it; Ompig reports that on stderr, as the process's diagnostics go, and serves nothing.
 func TestRunRpcModeWithoutItsModeStateSaysSoOnStderr(t *testing.T) {
 	read, write, err := os.Pipe()
 	if err != nil {
@@ -48,7 +48,7 @@ func TestRunRpcModeWithoutItsModeStateSaysSoOnStderr(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if want := "pig --rpc: no RPC mode state on the context\n"; string(got) != want {
+	if want := "ompig --rpc: no RPC mode state on the context\n"; string(got) != want {
 		t.Fatalf("stderr = %q, want %q", got, want)
 	}
 }

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// Package procpolicy is PiG's GOMAXPROCS policy. pig additive (D174): a process whose environment does not set GOMAXPROCS runs with at
+// Package procpolicy is Ompig's GOMAXPROCS policy. ompig additive (D174): a process whose environment does not set GOMAXPROCS runs with at
 // most Cap Ps (RPCCap in rpc mode), so the streaming hand-offs of a turn do not wake and park idle Ps, and each parallel section of a session
 // load runs at the runtime default width while it lasts.
 package procpolicy

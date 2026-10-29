@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
-// get_messages writes session.messages with JSON.stringify (rpc-mode.ts get_messages), and Pi holds each message as JSON.parse returned it from the session line, so a message Pi did not write keeps its member order and the members PiG does not model. Each line is its own JSON.stringify(JSON.parse(line)).
+// get_messages writes session.messages with JSON.stringify (rpc-mode.ts get_messages), and Pi holds each message as JSON.parse returned it from the session line, so a message Pi did not write keeps its member order and the members Ompig does not model. Each line is its own JSON.stringify(JSON.parse(line)).
 func TestRPCGetMessagesWritesEachMessageAsItWasParsed(t *testing.T) {
 	lines := []string{
 		`{"timestamp":1,"meta":{"z":1,"a":[2.5,"<&>"]},"content":[{"text":"hi","type":"text"}],"role":"user"}`,

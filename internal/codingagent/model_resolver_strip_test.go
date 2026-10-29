@@ -16,7 +16,7 @@ func TestStrippedCliModelErrorSurvivesLengthChangingCase(t *testing.T) {
 	} {
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
 			if err := strippedCliModelError("openai", model); err != nil {
-				t.Fatalf("strippedCliModelError(openai, %q) = %v, want nil: Stock PiG strips no API", model, err)
+				t.Fatalf("strippedCliModelError(openai, %q) = %v, want nil: Stock Ompig strips no API", model, err)
 			}
 		})
 	}

@@ -8,7 +8,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi builds the catalog request as new URL(`/api/models/providers/${encodeURIComponent(provider.id)}`, catalogBaseUrl)

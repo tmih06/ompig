@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/coding/extension"
+import "github.com/tmih06/ompig/coding/extension"
 
 // customMessageRoute is how a custom message from an extension reaches the
 // session, mirroring the branches of upstream sendCustomMessage

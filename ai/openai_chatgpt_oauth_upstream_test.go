@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
 const (
@@ -130,7 +130,7 @@ func TestOpenAIChatGPTOAuthUpstream(t *testing.T) {
 		}
 
 		query := authorizeURL.Query()
-		// D26: Pi sends agent_name_hint "Pi"; PiG sends its own name.
+		// D26: Pi sends agent_name_hint "Pi"; Ompig sends its own name.
 		for name, want := range map[string]string{"client_id": "dynamic_agent_client", "agent_name_hint": pigidentity.ChatGPTAgentName, "ext_agent_host_id": "urn:uuid:" + chatgptDeviceID, "scope": chatgptRequiredScope, "redirect_uri": "http://127.0.0.1:1455/auth/callback", "resource": "https://api.openai.com/v1", "code_challenge_method": "S256"} {
 			if got := query.Get(name); got != want {
 				t.Errorf("%s=%q want %q", name, got, want)

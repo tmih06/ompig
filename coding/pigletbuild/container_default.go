@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // defaultContainerBuilderName is the built-in container builder. Auto selection tries it after
-// the native builder, so it builds when the host lacks Go, a Pig source, or the requested target.
+// the native builder, so it builds when the host lacks Go, a Ompig source, or the requested target.
 const defaultContainerBuilderName = "container"
 
 // defaultContainerImage is the digest-pinned Go image of the ci-go CI image
@@ -20,10 +20,10 @@ const defaultContainerBuilderName = "container"
 const defaultContainerImage = "golang:1.27.3-alpine3.24@sha256:f2c872bcee949b7be9c490efd02b48a8a2fbf947cdf533f1c58525ec9d8170fd"
 
 // containerEngineEnv overrides the built-in container builder's engine choice.
-const containerEngineEnv = "PIG_CONTAINER_ENGINE"
+const containerEngineEnv = "OMPIG_CONTAINER_ENGINE"
 
-// containerBootstrap makes a container builder install the running PiG release inside a Go
-// image before the inner native build, so the image needs no Pig of its own.
+// containerBootstrap makes a container builder install the running Ompig release inside a Go
+// image before the inner native build, so the image needs no Ompig of its own.
 type containerBootstrap struct {
 	// runningRelease reports the fetchable release version; nil reads the binary's build identity.
 	runningRelease func() (string, bool)
@@ -39,7 +39,7 @@ func (b containerBootstrap) release() (string, bool) {
 }
 
 // defaultContainerBuilder is the built-in `container` builder.
-// pig additive (D18): a built-in container builder runs the native build in Docker or Podman.
+// ompig additive (D18): a built-in container builder runs the native build in Docker or Podman.
 func defaultContainerBuilder() containerBuilder {
 	return containerBuilder{
 		config:    ContainerBuilderConfig{Name: defaultContainerBuilderName, Engine: "auto", Image: defaultContainerImage},
@@ -47,7 +47,7 @@ func defaultContainerBuilder() containerBuilder {
 	}
 }
 
-// resolveDefaultEngine selects PIG_CONTAINER_ENGINE when set, else Podman, else Docker.
+// resolveDefaultEngine selects OMPIG_CONTAINER_ENGINE when set, else Podman, else Docker.
 func resolveDefaultEngine(lookPath executableLookup) (string, error) {
 	if lookPath == nil {
 		lookPath = exec.LookPath
@@ -73,12 +73,12 @@ func resolveDefaultEngine(lookPath executableLookup) (string, error) {
 // inner build with buildArgs. Images are pulled when missing because the default image is public.
 func (b containerBootstrap) bootstrapRunArgs(version string, buildArgs []string) (runOptions, command []string) {
 	runOptions = []string{
-		"--mount", containerMount(b.cacheDir, "/pig-go-cache", false),
-		"--env", "GOPATH=/pig-go-cache/path", "--env", "GOMODCACHE=/pig-go-cache/mod", "--env", "GOCACHE=/pig-go-cache/build",
+		"--mount", containerMount(b.cacheDir, "/ompig-go-cache", false),
+		"--env", "GOPATH=/ompig-go-cache/path", "--env", "GOMODCACHE=/ompig-go-cache/mod", "--env", "GOCACHE=/ompig-go-cache/build",
 		"--env", "GOFLAGS=-modcacherw", "--env", "GOTOOLCHAIN=local", "--env", "CGO_ENABLED=0",
 		"--entrypoint", "sh",
 	}
-	script := `set -e; GOBIN=/tmp/pig-bin go install ` + pigModulePath + `/cmd/pig@"$0"; exec /tmp/pig-bin/pig "$@"`
+	script := `set -e; GOBIN=/tmp/ompig-bin go install ` + ompigModulePath + `/cmd/ompig@"$0"; exec /tmp/ompig-bin/ompig "$@"`
 	command = append([]string{"-c", script, version}, buildArgs...)
 	return runOptions, command
 }

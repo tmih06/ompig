@@ -19,14 +19,14 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	cm "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/internal/search"
-	"github.com/MichaelKinsy/PiG/internal/entered"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/ai"
+	cm "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/internal/search"
+	"github.com/tmih06/ompig/internal/entered"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const (
@@ -892,7 +892,7 @@ func (c *call) onCall(made cm.HostCall) {
 	c.replayCalls++
 	c.afterGate(func() {
 		slot := c.reserveModelSlot(hostCall)
-		// pig divergence (D184): the call's goroutine has entered before the next event, but a stall of it between two steps of its task can still let the script end and abort it before its tool started; Pi's one thread always starts it first.
+		// ompig divergence (D184): the call's goroutine has entered before the next event, but a stall of it between two steps of its task can still let the script end and abort it before its tool started; Pi's one thread always starts it first.
 		c.spawnEntered(func() {
 			done, err := c.callTool(hostCall, slot)
 			c.post(func() {
@@ -1103,7 +1103,7 @@ func (c *call) launch(hostCall cm.HostCall) {
 		return
 	}
 	slot := c.reserveModelSlot(hostCall)
-	// pig divergence (D184): the call's goroutine has entered before the next call is launched, but a stall of it between two steps of its task can still let the script end and abort it before its tool started; Pi's one thread always starts it first.
+	// ompig divergence (D184): the call's goroutine has entered before the next call is launched, but a stall of it between two steps of its task can still let the script end and abort it before its tool started; Pi's one thread always starts it first.
 	c.spawnEntered(func() {
 		var outcome cm.Outcome
 		var recorded *journalGlobal

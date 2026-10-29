@@ -1,6 +1,6 @@
 # lw-pfast-registry equivalence (slice S23, base f22240330e)
 
-Pi 1.1.0 reads the same files in the same operations; this slice changes how many times Pig stats them, which goroutines run the reads, and which lock they wait on. Stdout, session files, provider requests, RPC output and extension events are unchanged. Each change below has the reference or oracle that pins it.
+Pi 1.1.0 reads the same files in the same operations; this slice changes how many times Ompig stats them, which goroutines run the reads, and which lock they wait on. Stdout, session files, provider requests, RPC output and extension events are unchanged. Each change below has the reference or oracle that pins it.
 
 | Change | Why the observable behaviour is the same | Proof |
 |---|---|---|

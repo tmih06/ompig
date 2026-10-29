@@ -40,9 +40,9 @@ func writeClaimsFixture(t *testing.T, files map[string]string) string {
 	base := map[string]string{
 		"coding/upstream.go":                       "package coding\n\nconst UpstreamReviewedVersion = \"9.9.0\"\n",
 		"internal/coding/pigversion/pigversion.go": "package pigversion\n\nconst UpstreamPackageVersion = \"9.9.9\"\n",
-		"coding/piglet/main.go":                    "package piglet\n\nconst pigletUsageText = `pig piglet list\npig piglet build\n`\n",
+		"coding/ompiglet/main.go":                  "package ompiglet\n\nconst pigletUsageText = `ompig ompiglet list\npig ompiglet build\n`\n",
 		"AGENTS.md":                                "<!-- BEGIN COVERAGE -->\n**Porting:** 40 / 50 intended-portable entries ✅ (80.0%); **Verification:** 30 behavioral (75.0%), 10 untested.\n<!-- END COVERAGE -->\n",
-		"README.md":                                "# PiG\n",
+		"README.md":                                "# Ompig\n",
 	}
 	maps.Copy(base, files)
 	for name, body := range base {
@@ -59,12 +59,12 @@ func writeClaimsFixture(t *testing.T, files map[string]string) string {
 
 func TestPublicClaimsCheckAcceptsSupportedStatements(t *testing.T) {
 	root := writeClaimsFixture(t, map[string]string{
-		"docs/site/docs/index.md": "PiG pins Pi 9.9.9. Porting reads 40/50 (80.0%).\n" +
+		"docs/site/docs/index.md": "Ompig pins Pi 9.9.9. Porting reads 40/50 (80.0%).\n" +
 			"Tool definitions and their order match Pi byte for byte.\n" +
-			"This page does not claim HPE sponsorship or that PiG is sponsored by an Open Source Program Office.\n" +
+			"This page does not claim HPE sponsorship or that Ompig is sponsored by an Open Source Program Office.\n" +
 			"The ledgers were last reviewed against Pi 9.9.0.\n",
 		// Comments are not user-visible; only string literals are checked.
-		"coding/cli/help.go": "package main\n\n// This comment may say full parity.\nconst help = \"pig targets Pi 9.9.9\"\n",
+		"coding/cli/help.go": "package main\n\n// This comment may say full parity.\nconst help = \"ompig targets Pi 9.9.9\"\n",
 	})
 	if output, err := runPublicClaims(t, root); err != nil {
 		t.Fatalf("supported statements were rejected:\n%s", output)
@@ -73,13 +73,13 @@ func TestPublicClaimsCheckAcceptsSupportedStatements(t *testing.T) {
 
 func TestPublicClaimsCheckRejectsContradictedStatements(t *testing.T) {
 	root := writeClaimsFixture(t, map[string]string{
-		"docs/site/docs/index.md": "PiG has full parity with Pi and sends the same requests byte for byte.\n" +
-			"PiG implements every Pi command.\n" +
+		"docs/site/docs/index.md": "Ompig has full parity with Pi and sends the same requests byte for byte.\n" +
+			"Ompig implements every Pi command.\n" +
 			"It tracks Pi 9.8.0 and Pi 9.9.0.\n" +
 			"Porting is 352/359 ported (98.1%).\n" +
-			"PiG is sponsored by HPE's Open Source Program Office.\n",
-		"coding/cli/help.go":       "package main\n\nconst help = `pig\nmirrors every Pi command`\n\nvar desc = \"a drop-in replacement for Pi 9.7.0\"\n",
-		"docs/site/app/strings.ts": "export const tagline = 'PiG is feature-complete';\n",
+			"Ompig is sponsored by HPE's Open Source Program Office.\n",
+		"coding/cli/help.go":       "package main\n\nconst help = `ompig\nmirrors every Pi command`\n\nvar desc = \"a drop-in replacement for Pi 9.7.0\"\n",
+		"docs/site/app/strings.ts": "export const tagline = 'Ompig is feature-complete';\n",
 		// A fragment becomes CHANGELOG.md and the bug ledger page, so it is user-facing before it is assembled.
 		"changelog.d/lane-0123abc.md": "### Fixed\n\n- RPC model objects are byte-identical to Pi's.\n",
 	})
@@ -205,21 +205,21 @@ paths = ["docs/findings/current.md", "docs/findings/gone.md"]
 
 func TestPublicClaimsCheckRejectsUndocumentedPigletCommandsOutsidePlannedSections(t *testing.T) {
 	root := writeClaimsFixture(t, map[string]string{
-		"docs/piglets.md": "# Piglets\n\npig piglet list\n\n## Planned (not in this release)\n\npig piglet pull demo\n\n### Details\n\npig piglet publish demo\n\n## Current behavior\n\npig piglet update demo\n",
+		"docs/ompiglets.md": "# Ompiglets\n\nompig ompiglet list\n\n## Planned (not in this release)\n\nompig ompiglet pull demo\n\n### Details\n\nompig ompiglet publish demo\n\n## Current behavior\n\nompig ompiglet update demo\n",
 	})
 	output, err := runPublicClaims(t, root)
 	if err == nil {
-		t.Fatalf("an unlisted Piglet command passed outside a Planned section:\n%s", output)
+		t.Fatalf("an unlisted Ompiglet command passed outside a Planned section:\n%s", output)
 	}
 	for _, want := range []string{
-		"docs/piglets.md:15: piglet: pig piglet update is absent from pig piglet --help",
+		"docs/ompiglets.md:15: ompiglet: ompig ompiglet update is absent from ompig ompiglet --help",
 		"move future syntax under a Planned heading",
 	} {
 		if !strings.Contains(output, want) {
 			t.Errorf("output does not report %q:\n%s", want, output)
 		}
 	}
-	for _, planned := range []string{"pig piglet pull", "pig piglet publish"} {
+	for _, planned := range []string{"ompig ompiglet pull", "ompig ompiglet publish"} {
 		if strings.Contains(output, planned+" is absent") {
 			t.Errorf("planned command %q produced a finding:\n%s", planned, output)
 		}

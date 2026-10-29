@@ -4,26 +4,26 @@ header:
   schema-version: 2.2.0
   last-updated: '2026-09-17'
   last-reviewed: '2026-09-17'
-  url: https://github.com/MichaelKinsy/PiG
-  comment: Security information for PiG, a Go implementation of Pi.
+  url: https://github.com/tmih06/ompig
+  comment: Security information for Ompig, a Go implementation of Pi.
 
 project:
-  name: PiG
+  name: Ompig
   administrators:
     - name: Michael Kinsy
-      affiliation: PiG
+      affiliation: Ompig
       primary: true
   documentation:
-    detailed-guide: https://github.com/MichaelKinsy/PiG/blob/main/.github/SECURITY.md
-    quickstart-guide: https://github.com/MichaelKinsy/PiG/blob/main/README.md
+    detailed-guide: https://github.com/tmih06/ompig/blob/main/.github/SECURITY.md
+    quickstart-guide: https://github.com/tmih06/ompig/blob/main/README.md
   repositories:
-    - name: PiG
-      url: https://github.com/MichaelKinsy/PiG
+    - name: Ompig
+      url: https://github.com/tmih06/ompig
       comment: Source, tests, documentation, and release evidence workflows.
   vulnerability-reporting:
     reports-accepted: true
     bug-bounty-available: false
-    policy: https://github.com/MichaelKinsy/PiG/blob/main/.github/SECURITY.md
+    policy: https://github.com/tmih06/ompig/blob/main/.github/SECURITY.md
     contact:
       name: Michael Kinsy
       email: mrkinsy5@gmail.com
@@ -31,26 +31,26 @@ project:
 
 repository:
   status: active
-  url: https://github.com/MichaelKinsy/PiG
+  url: https://github.com/tmih06/ompig
   accepts-change-request: true
   accepts-automated-change-request: true
   no-third-party-packages: false
   core-team:
     - name: Michael Kinsy
-      affiliation: PiG
+      affiliation: Ompig
       primary: true
   license:
-    url: https://github.com/MichaelKinsy/PiG/blob/main/LICENSE
+    url: https://github.com/tmih06/ompig/blob/main/LICENSE
     expression: MIT
   security:
     assessments:
       self:
         comment: The repository threat model documents the current trust boundaries and controls.
   documentation:
-    contributing-guide: https://github.com/MichaelKinsy/PiG/blob/main/.github/CONTRIBUTING.md
-    governance: https://github.com/MichaelKinsy/PiG/blob/main/docs/project/GOVERNANCE.md
+    contributing-guide: https://github.com/tmih06/ompig/blob/main/.github/CONTRIBUTING.md
+    governance: https://github.com/tmih06/ompig/blob/main/docs/project/GOVERNANCE.md
   release:
     automated-pipeline: false
     distribution-points:
-      - uri: https://github.com/MichaelKinsy/PiG/releases
+      - uri: https://github.com/tmih06/ompig/releases
         comment: No public release is available yet.

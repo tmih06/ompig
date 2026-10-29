@@ -12,16 +12,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/automation/release/modulehash"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/automation/release/modulehash"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// The Python and TypeScript SDK packages publish at the PiG release version, which `make set-version` writes: a reader of `pip show pig-sdk` or the npm
+// The Python and TypeScript SDK packages publish at the Ompig release version, which `make set-version` writes: a reader of `pip show ompig-sdk` or the npm
 // package sees the release that built it. This check fails when either manifest differs. The Rust crate is checked by
 // TestRustSDKAcceptsEveryPinnedRequirement instead.
 func TestSDKPackagesCarryThePigReleaseVersion(t *testing.T) {
 	root := repoRoot(t)
-	want := pigversion.PigVersion
+	want := pigversion.OmpigVersion
 	read := func(rel string) string {
 		t.Helper()
 		data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(rel)))
@@ -38,16 +38,16 @@ func TestSDKPackagesCarryThePigReleaseVersion(t *testing.T) {
 			return
 		}
 		if match[1] != want {
-			t.Errorf("%s: %s is %s, want the PiG release %s (make set-version VERSION=%s)", rel, what, match[1], want, want)
+			t.Errorf("%s: %s is %s, want the Ompig release %s (make set-version VERSION=%s)", rel, what, match[1], want, want)
 		}
 	}
-	check("extensions/sdk-py/pyproject.toml", "pig-sdk project version", regexp.MustCompile(`(?m)^\[project\]\r?\nname = "pig-sdk"\r?\nversion = "([^"]+)"`))
+	check("extensions/sdk-py/pyproject.toml", "ompig-sdk project version", regexp.MustCompile(`(?m)^\[project\]\r?\nname = "ompig-sdk"\r?\nversion = "([^"]+)"`))
 	var manifest struct{ Version string }
 	if err := json.Unmarshal([]byte(read("extensions/sdk-ts/package.json")), &manifest); err != nil {
 		t.Fatal(err)
 	}
 	if manifest.Version != want {
-		t.Errorf("extensions/sdk-ts/package.json: version is %s, want the PiG release %s", manifest.Version, want)
+		t.Errorf("extensions/sdk-ts/package.json: version is %s, want the Ompig release %s", manifest.Version, want)
 	}
 	var lock struct {
 		Version  string
@@ -57,14 +57,14 @@ func TestSDKPackagesCarryThePigReleaseVersion(t *testing.T) {
 		t.Fatal(err)
 	}
 	if lock.Version != want || lock.Packages[""].Version != want {
-		t.Errorf("extensions/sdk-ts/package-lock.json: versions %q and %q, want the PiG release %s", lock.Version, lock.Packages[""].Version, want)
+		t.Errorf("extensions/sdk-ts/package-lock.json: versions %q and %q, want the Ompig release %s", lock.Version, lock.Packages[""].Version, want)
 	}
 
 }
 
-// Pig resolves an un-pathed `pig-sdk` requirement to the staged SDK through a crates-io patch (coding/extension/host/subprocess/builder.go buildRust,
+// Ompig resolves an un-pathed `ompig-sdk` requirement to the staged SDK through a crates-io patch (coding/extension/host/subprocess/builder.go buildRust,
 // coding/extension/host/runtimecell/rust_packed.go), and Cargo applies a patch only when the patched crate's version satisfies the requirement. Every
-// scaffolded Rust extension requires "0.1.0", so the crate stays on 0.1.x and does not follow the PiG release; this check fails when the crate, a
+// scaffolded Rust extension requires "0.1.0", so the crate stays on 0.1.x and does not follow the Ompig release; this check fails when the crate, a
 // Cargo.lock that records it or a tracked requirement would stop accepting it.
 func TestRustSDKAcceptsEveryPinnedRequirement(t *testing.T) {
 	root := repoRoot(t)
@@ -76,16 +76,16 @@ func TestRustSDKAcceptsEveryPinnedRequirement(t *testing.T) {
 		}
 		return string(data)
 	}
-	crate := regexp.MustCompile(`(?m)^\[package\]\r?\nname = "pig-sdk"\r?\nversion = "(0\.1\.[0-9]+)"`).FindStringSubmatch(read("extensions/sdk-rs/Cargo.toml"))
+	crate := regexp.MustCompile(`(?m)^\[package\]\r?\nname = "ompig-sdk"\r?\nversion = "(0\.1\.[0-9]+)"`).FindStringSubmatch(read("extensions/sdk-rs/Cargo.toml"))
 	if crate == nil {
-		t.Fatal("extensions/sdk-rs/Cargo.toml: the pig-sdk crate version is not 0.1.x, which scaffolded `pig-sdk = \"0.1.0\"` requirements need")
+		t.Fatal("extensions/sdk-rs/Cargo.toml: the ompig-sdk crate version is not 0.1.x, which scaffolded `ompig-sdk = \"0.1.0\"` requirements need")
 	}
 	files, err := modulehash.TrackedFiles(root)
 	if err != nil {
 		t.Fatal(err)
 	}
-	lockEntry := regexp.MustCompile(`(?m)^name = "pig-sdk"\r?\nversion = "([^"]+)"`)
-	requirement := regexp.MustCompile(`(?m)^pig-sdk = "([^"]+)"`)
+	lockEntry := regexp.MustCompile(`(?m)^name = "ompig-sdk"\r?\nversion = "([^"]+)"`)
+	requirement := regexp.MustCompile(`(?m)^ompig-sdk = "([^"]+)"`)
 	seen := 0
 	for _, file := range files {
 		file = strings.ReplaceAll(file, "\\", "/")
@@ -94,20 +94,20 @@ func TestRustSDKAcceptsEveryPinnedRequirement(t *testing.T) {
 			if match := lockEntry.FindStringSubmatch(read(file)); match != nil {
 				seen++
 				if match[1] != crate[1] {
-					t.Errorf("%s: pig-sdk lock entry is %s, want the crate version %s", file, match[1], crate[1])
+					t.Errorf("%s: ompig-sdk lock entry is %s, want the crate version %s", file, match[1], crate[1])
 				}
 			}
 		case "Cargo.toml":
 			if match := requirement.FindStringSubmatch(read(file)); match != nil && file != "extensions/sdk-rs/Cargo.toml" {
 				seen++
 				if !caretAccepts(match[1], crate[1]) {
-					t.Errorf("%s: pig-sdk requirement %s does not accept the crate version %s", file, match[1], crate[1])
+					t.Errorf("%s: ompig-sdk requirement %s does not accept the crate version %s", file, match[1], crate[1])
 				}
 			}
 		}
 	}
 	if seen == 0 {
-		t.Error("no Cargo.lock or Cargo.toml records the pig-sdk crate; the check would pass vacuously")
+		t.Error("no Cargo.lock or Cargo.toml records the ompig-sdk crate; the check would pass vacuously")
 	}
 }
 
@@ -115,7 +115,7 @@ func TestRustSDKAcceptsEveryPinnedRequirement(t *testing.T) {
 // exists next to the manifest. `cargo package` fails when the readme the manifest names is missing and warns about a missing repository; the Python manifest
 // already carried these.
 func TestSDKPackageManifestsCarryPublicationMetadata(t *testing.T) {
-	const project = "https://github.com/MichaelKinsy/PiG"
+	const project = "https://github.com/tmih06/ompig"
 	root := repoRoot(t)
 	for _, manifest := range []struct {
 		path       string

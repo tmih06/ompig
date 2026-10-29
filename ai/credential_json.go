@@ -10,8 +10,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // Credential properties are case-sensitive JSON keys. Filter by exact tags before the Go struct decoder can fold opaque provider metadata into a known field. Extra is still collected from the original object.

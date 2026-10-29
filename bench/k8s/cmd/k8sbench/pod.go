@@ -23,7 +23,7 @@ import (
 // podEnv is what the in-pod session depends on outside the plan.
 type podEnv struct {
 	sys system
-	// root is the image's install root ({root} in profile commands; /opt/pig in the image).
+	// root is the image's install root ({root} in profile commands; /opt/ompig in the image).
 	root string
 	// data is the writable scratch directory (the pod's emptyDir).
 	data string
@@ -53,7 +53,7 @@ func nodeOnPath(ctx context.Context) string {
 }
 
 func podEnvFromOS() podEnv {
-	env := podEnv{sys: system{root: "/"}, root: "/opt/pig", data: "/data", results: "/results", node: os.Getenv("NODE_NAME"), pod: os.Getenv("POD_NAME"), now: time.Now, getenv: os.Getenv, nodeRuntime: nodeOnPath,
+	env := podEnv{sys: system{root: "/"}, root: "/opt/ompig", data: "/data", results: "/results", node: os.Getenv("NODE_NAME"), pod: os.Getenv("POD_NAME"), now: time.Now, getenv: os.Getenv, nodeRuntime: nodeOnPath,
 		pinWait: func(ctx context.Context) error { return sleepCtx(ctx, time.Second) }}
 	if s := os.Getenv("K8SBENCH_ROOT"); s != "" {
 		env.root = s
@@ -557,7 +557,7 @@ func (s *session) seed(ctx context.Context, t target, turns int) error {
 }
 
 // retag copies a workload's line under the profile's target name, keeping the workload's own name as bench_target
-// and, for the pig target, giving the image commit as version. The session's own values of at (the size, and a
+// and, for the ompig target, giving the image commit as version. The session's own values of at (the size, and a
 // sample's round) replace the workload's, which stay under bench_ when they differ: the analysis joins a sample with
 // its cpu line and its seed by them, so a workload that leaves them out or numbers them otherwise does not break it.
 func (s *session) retag(kind string, t target, at map[string]int, line *object) *object {

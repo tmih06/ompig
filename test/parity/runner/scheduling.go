@@ -17,7 +17,7 @@ import (
 // Important: `go test -parallel` is still the global upper bound. These group
 // limits should not silently serialize the suite back into a 5-10 minute run.
 //
-// tmux=8 (not 12): most tmux scenarios spawn pi/pig as a child of a
+// tmux=8 (not 12): most tmux scenarios spawn pi/ompig as a child of a
 // tmux pane and also load extension subprocesses. At 12-wide, simultaneous
 // node cold-starts on a contended machine can push the ready-pattern past
 // the default 30s deadline. 8-wide keeps wall time within ~10% of 12-wide
@@ -77,14 +77,14 @@ func (sc *Scenario) SchedulingGroup() string {
 }
 
 func (sc *Scenario) HasExtensions() bool {
-	return len(sc.Env.PigExtensions) > 0 || len(sc.Env.PiExtensions) > 0
+	return len(sc.Env.OmpigExtensions) > 0 || len(sc.Env.PiExtensions) > 0
 }
 
 // parityFixtureExtensions are parity's own lightweight extensions that load
-// in-process on the pi side (no pig subprocess extension host) and so do not
+// in-process on the pi side (no ompig subprocess extension host) and so do not
 // add the concurrent cold-start contention the -ext scheduler groups guard
 // against. test-faux-provider.ts is the deterministic fake-model shim ~half the
-// suite injects via pi_extensions; pig serves the same models from its built-in
+// suite injects via pi_extensions; ompig serves the same models from its built-in
 // ai/test_faux.go with --no-extensions, so these scenarios start no extension
 // host on either side. Grouping them as heavy extension scenarios needlessly
 // caps them at the -ext limit. Keep this set to genuine in-process fixtures
@@ -96,7 +96,7 @@ var parityFixtureExtensions = map[string]bool{
 }
 
 // hasSchedulingExtensions reports whether a scenario loads an extension that
-// starts a subprocess extension host (pig side) or a non-fixture pi extension,
+// starts a subprocess extension host (ompig side) or a non-fixture pi extension,
 // i.e. the extensions whose simultaneous cold-starts the -ext groups throttle.
 // In-process parity fixtures (parityFixtureExtensions) do not count, so a
 // scenario whose only extension is the faux provider schedules by its driver's
@@ -105,7 +105,7 @@ func (sc *Scenario) hasSchedulingExtensions() bool {
 	if !sc.HasExtensions() {
 		return false
 	}
-	for _, ext := range sc.Env.PigExtensions {
+	for _, ext := range sc.Env.OmpigExtensions {
 		if !parityFixtureExtensions[filepath.Base(ext)] {
 			return true
 		}

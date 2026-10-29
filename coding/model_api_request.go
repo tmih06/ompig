@@ -4,8 +4,8 @@ import (
 	"context"
 	"maps"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // prepareAPIRequest runs an already-resolved Pi API leaf. The independent Node

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/tui/termsim"
+	"github.com/tmih06/ompig/internal/tui/termsim"
 )
 
 // Rendering is synchronous in this fixture; returning from Render is the upstream waitForRender barrier.

@@ -8,7 +8,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodefs"
 )
 
 // evalCanonicalPath is Node's fs.realpathSync (not realpathSync.native): it follows links, keeps volume mount points in the path, resolves a rooted link target such as \dir on the device of the path that reached the link, and leaves every non-link component as the caller spelled it, so a case variant or an 8.3 short name survives. winsymlink=0 makes Go follow both drive junctions and volume mounts, but libuv treats only drive-target mount-point reparse records as symbolic links. filepath.EvalSymlinks differs on all three counts: it follows a rooted target on the process drive and returns the case and long names the filesystem stores.

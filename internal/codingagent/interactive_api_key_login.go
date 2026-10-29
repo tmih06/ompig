@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 var (
@@ -47,7 +47,7 @@ func (m *InteractiveMode) runAPIKeyLogin(provider tui.OAuthProvider) error {
 	authPath := filepath.Join(m.opts.AgentDir, "auth.json")
 	if method.Login == nil {
 		dialog = m.newLoginDialog(provider.Name, func() { cancel(errLoginAborted) }, provider.Name+" setup")
-		dialog.ShowInfo(method.Name+" is configured outside pig.", nil, true)
+		dialog.ShowInfo(method.Name+" is configured outside ompig.", nil, true)
 		go func() { <-ctx.Done(); done <- nil }()
 		if err := m.runAuthDialog(ctx, cancel, dialog, nil, nil, done); err != nil {
 			return err
@@ -62,8 +62,8 @@ func (m *InteractiveMode) runAPIKeyLogin(provider tui.OAuthProvider) error {
 	if provider.ID == "amazon-bedrock" {
 		theme := tui.ActiveTheme()
 		details := []string{theme.Fg("text", "You can also use an AWS profile, IAM keys, or role-based credentials.")}
-		// pig additive (D92): no docs path when the process strips the docs bundle.
-		if providers, ok := PigDocsFile("providers.md"); ok {
+		// ompig additive (D92): no docs path when the process strips the docs bundle.
+		if providers, ok := OmpigDocsFile("providers.md"); ok {
 			details = append(details, theme.Fg("muted", "See:"), theme.Fg("accent", "  "+providers))
 		}
 		dialog.ShowDetails(details)

@@ -43,7 +43,7 @@ Logs and profiles are retained under `/tmp/fin-sdk-gates/`; paired failure artif
 | `TestPackageProbeDoesNotConstructArbitraryClasses` | The probe invoked a fixture constructor that wrote a file. | Pass; non-error classes are not constructed for inventory. |
 | `TestEverySDKCanReachEveryWireCapability` | Hard-coded input files missed generic Go helper calls, new native session modules, and Node's editor lifecycle notifications. | Pass after scanning production module files and binding the alternate/state-backed mechanisms to conformance. No fake capability gap is added. |
 | Scenario 21 | Complete output equality failed on three internal RPC stderr lines. | Equal output after removing diagnostics. |
-| Scenarios 39–42 | A binary built with the cancellation mutation fails every mode. Print/JSON artifacts and RPC output report cancel=false; TUI fails its cancelled transition. | Three complete Pi/PiG pairs pass in each mode. |
+| Scenarios 39–42 | A binary built with the cancellation mutation fails every mode. Print/JSON artifacts and RPC output report cancel=false; TUI fails its cancelled transition. | Three complete Pi/Ompig pairs pass in each mode. |
 
 The mutation commands use Go `-overlay` files under `/tmp`, so runtime mutations compile without changing the worktree during another test. `mutation-host.log`, `mutation-mirror.log`, `mutation-cancel.log`, `mutation-parent.log`, and `mutation-parity.log` retain the failures.
 
@@ -54,11 +54,11 @@ The mutation commands use Go `-overlay` files under `/tmp`, so runtime mutations
 - `41-rpc-extension-session-replacement`: RPC; complete normalized output equality. Only the generated notification UUID is replaced. Command IDs, event order, payloads and histories remain unchanged.
 - `42-tui-extension-session-replacement`: interactive; complete equal lifecycle/history crop, including cancelled and successful replacements. The fixture uses the driver's isolated CWD for its writable files.
 
-- `43-tui-extension-replacement-failure`: a missing fork entry takes Pi's fatal command-context path and exits 1. Pi stops before its queued error redraw paints, so the scenario asserts the exact exit status rather than a nonexistent stable error frame. `TestInteractiveExtensionReplacementFailureUsesFatalPath` checks crash recording and owner-loop mutation; restoring the nonfatal adapter compiles and fails scenario 43 because PiG stays alive.
+- `43-tui-extension-replacement-failure`: a missing fork entry takes Pi's fatal command-context path and exits 1. Pi stops before its queued error redraw paints, so the scenario asserts the exact exit status rather than a nonexistent stable error frame. `TestInteractiveExtensionReplacementFailureUsesFatalPath` checks crash recording and owner-loop mutation; restoring the nonfatal adapter compiles and fails scenario 43 because Ompig stays alive.
 
 Each declares three runs. The retained durability run records `completed_pairs=3` for all four. `tmp/fin-sdk-gates-modes-results.json` holds the structured results. Artifact normalization in 39/40 does not alter the artifact: it contains no variable IDs, paths or timestamps.
 
-Scenario 21 now excludes ambient checkout skills with `--no-skills` while retaining its explicit `--skill` resource, as Pi does. This isolates the intended CLI source-info contract rather than normalizing an extra skill out of the result. The separately observed ancestor `.agents/skills/setup-pig` discovery difference is reported to the resource and integration owners; this lane does not claim to fix that discovery policy. The integration owner separately closes same-name `/btw` skill priority at `8ed29c07fe`.
+Scenario 21 now excludes ambient checkout skills with `--no-skills` while retaining its explicit `--skill` resource, as Pi does. This isolates the intended CLI source-info contract rather than normalizing an extra skill out of the result. The separately observed ancestor `.agents/skills/setup-ompig` discovery difference is reported to the resource and integration owners; this lane does not claim to fix that discovery policy. The integration owner separately closes same-name `/btw` skill priority at `8ed29c07fe`.
 
 ## Corpus before and after
 
@@ -67,12 +67,12 @@ The direct consumer is `pi-cc-extensions@0.9.5`, whose shipped `extensions/featu
 Tarball: `https://registry.npmjs.org/pi-cc-extensions/-/pi-cc-extensions-0.9.5.tgz`.
 Integrity from the retained installed package lock: `sha512-9UrpuL/vw5JNZ0k1qEEodixE8NzpQ6/9wwqqiLhzhw9S8tQ6nYXVkCfEFj2CLkf0z/e7lBpo2S7vN14em3M1rw==`.
 
-| Package/path | Before | Pi 0.87.1 | PiG after |
+| Package/path | Before | Pi 0.87.1 | Ompig after |
 |---|---|---|---|
 | Full pi-cc-extensions package, `/clear`, print/no-session | A compiling mutation restoring the two pre-fix action builders from `ffc51b173f` reports `unsupported: newSession not available`; trace is startup → quit. | startup → shutdown:new → start:new → shutdown:quit; exit 0 | Identical lifecycle trace; exit 0; no error. |
 | pi-powerline-footer `/cd` | Requires imported SessionManager plus switchSession.withSession and destination-CWD ownership. | Supports those callbacks. | Not claimed fixed: withSession is missing and D61 still applies. The welcome-overlay fix belongs to the loader lane. |
 
-Replay artifacts are retained in `/tmp/fin-sdk-corpus/{pi-native,pig-native,pig-unbound}/`; the final integrated replay is in `{pi-delivery,pig-delivery}/` and again produces identical traces, exit 0 and empty stderr. They were produced under the worktree's `tmp/fin-sdk-corpus/` and moved outside the source tree before source-marker gates, so cached historical runtimes do not masquerade as current production code. The observer records lifecycle reasons without volatile session IDs. The package and dependency closure are copied from the corpus cache before running; no cached corpus root is modified. The old-binding binary is `tmp/fin-sdk-unbound-mutant`, built using `/tmp/fin-sdk-unbound-overlay.json`.
+Replay artifacts are retained in `/tmp/fin-sdk-corpus/{pi-native,ompig-native,ompig-unbound}/`; the final integrated replay is in `{pi-delivery,ompig-delivery}/` and again produces identical traces, exit 0 and empty stderr. They were produced under the worktree's `tmp/fin-sdk-corpus/` and moved outside the source tree before source-marker gates, so cached historical runtimes do not masquerade as current production code. The observer records lifecycle reasons without volatile session IDs. The package and dependency closure are copied from the corpus cache before running; no cached corpus root is modified. The old-binding binary is `tmp/fin-sdk-unbound-mutant`, built using `/tmp/fin-sdk-unbound-overlay.json`.
 
 The invocation uses `--no-extensions -e <copied package> -e <observer> --model test-faux/faux-1 --no-session --print /clear`; Pi additionally loads `test/parity/testdata/test-faux-provider.ts`. HOME and agent directories are per-engine, offline flags are set, and PATH names the installed Node binary and `~/flakes3-tools` directly. An initial environment attempt resolved mise shims under a fresh HOME and failed on tool resolution; it is retained separately and is not counted as a product pass or failure.
 
@@ -101,7 +101,7 @@ The coverage last-run column defect is separately fixed by the integration owner
 ### Final verified commands
 
 - `make parity-family FAMILY=extensions-runtime`: the final integrated family passes in 168.568 seconds, including scenarios 39–43 and all predecessor scenarios with their declared durability. Scenarios 39–42 and 35/35b/35c also pass a focused durability re-probe. Scenario 43 passes three real-Pi pairs and fails under the compiling nonfatal mutation.
-- `make test-subprocess test-cli test-conformance`: passes through the repository fixture scheduler after final predecessor merges. The subsequent final `go test ./coding ./internal/codingagent ./cmd/pig -count=1` also passes (9.416 s, 16.714 s, 304.288 s).
+- `make test-subprocess test-cli test-conformance`: passes through the repository fixture scheduler after final predecessor merges. The subsequent final `go test ./coding ./internal/codingagent ./cmd/ompig -count=1` also passes (9.416 s, 16.714 s, 304.288 s).
 - `make test-sdk-go test-sdk-rs test-sdk-ts`: passes. Python pytest and REUSE pass using their installed cached tools.
 - `go vet ./...`, Windows vet for touched mode/host/parity/conformance/TUI packages, `make lint-changed LINT_BASE=da3b0ffb4b`, and `make lint`: pass. The explicit lint base is the handoff base because this worktree has no merge base with a local `main`.
 - `make ci-contracts ci-drift`: contracts, inventory/recommendation drift, SDK surface, scenario lint, port-map drift, coverage drift and divergence consistency pass. Divergence quality rejects only the unapproved D77 and D78 records. The remaining `divergence-guard`, `source-hygiene`, and `docs-drift` targets pass independently.

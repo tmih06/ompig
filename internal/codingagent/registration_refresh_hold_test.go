@@ -6,8 +6,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func countingNativeProvider(checks *atomic.Int32) *extension.NativeProvider {
@@ -66,7 +66,7 @@ func TestHeldRegistrationRefreshStartsOnlyAtRelease(t *testing.T) {
 	})
 }
 
-// A /reload that loads several extension factories queues their provider registrations and starts the refresh after the last factory has loaded (Pi's bindCore flush). The stand-in host registers a Provider and then ends its callback the way cmd/pig's host callbacks do: it starts the queued refresh.
+// A /reload that loads several extension factories queues their provider registrations and starts the refresh after the last factory has loaded (Pi's bindCore flush). The stand-in host registers a Provider and then ends its callback the way cmd/ompig's host callbacks do: it starts the queued refresh.
 func TestReloadRunsNoProviderCallbackWhileExtensionsLoad(t *testing.T) {
 	restoreStartupTheme(t) // Reload applies the theme setting, which selects the process-wide active theme.
 	synctest.Test(t, func(t *testing.T) {

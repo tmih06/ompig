@@ -1,7 +1,7 @@
 # Behavior family: interactive-rendering
 # Surface: Mermaid diagrams in assistant markdown (mermaid.ts transformer +
 # markdown-transform.ts application + grok-mermaid render engine). The faux
-# provider returns a ```mermaid flowchart block; pi and pig both replace it with
+# provider returns a ```mermaid flowchart block; pi and ompig both replace it with
 # the same Unicode box-drawing diagram in the interactive TUI.
 #
 # Upstream evidence (pi v0.84.0):
@@ -11,8 +11,8 @@
 #   ("Start"/"End") and box-drawing glyphs, exercising the transformer, the
 #   markdown-transform application seam, and the render engine: not just startup.
 #
-#   ANSI is stripped by output_normalized_equal, so pig's theme colours and pi's
-#   differ harmlessly; the plain box-drawing art is byte-identical because pig's
+#   ANSI is stripped by output_normalized_equal, so ompig's theme colours and pi's
+#   differ harmlessly; the plain box-drawing art is byte-identical because ompig's
 #   engine is a faithful port of the same grok-mermaid@0.2.2 pi bundles. The
 #   internal/mermaid engine differential (71 sources) and the internal/codingagent
 #   transformer differential (29 cases vs pi's real transformer) prove the
@@ -31,16 +31,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "show mermaid flowchart"

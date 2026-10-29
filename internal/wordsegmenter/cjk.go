@@ -1,4 +1,4 @@
-//go:build !pig_strip_word_dictionaries
+//go:build !ompig_strip_word_dictionaries
 
 // © 2016 and later: Unicode, Inc. and others.
 // Copyright (C) 2006-2016, International Business Machines Corporation and others.
@@ -15,7 +15,7 @@ import (
 
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // The immutable index is generated from ICU release-78.3 cjdict.txt. Lookup borrows its embedded bytes; it does not build a dictionary map on the input loop.
@@ -53,7 +53,7 @@ func katakana(r rune) bool {
 
 // cjkBoundaries ports ICU 78.3 CjkBreakEngine::divideUpDictionaryRange (word, not phrase, mode): NFKC mapping, weighted shortest path, unknown-character cost and Katakana-run candidates. Returned positions index the original UTF-8 text.
 func cjkBoundaries(text string) []int {
-	// pig additive (D92): a Piglet that strips word-dictionaries finds no boundary inside a CJK run, as dictionaries_off.go does.
+	// ompig additive (D92): a Ompiglet that strips word-dictionaries finds no boundary inside a CJK run, as dictionaries_off.go does.
 	if pigstrip.Has(pigstrip.ListFeatures, pigstrip.WordDictionaries) {
 		return nil
 	}

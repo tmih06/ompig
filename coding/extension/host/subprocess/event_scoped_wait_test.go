@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi awaits an extension handler with the provider still running (agent-session.ts:894-919 awaits _emitExtensionEvent; runner.ts:emit awaits each handler). The host handler waits for its extension process, so it must release the stream's continuation queue for that wait. A provider reaction that is queued behind the caller's turn can only run if the handler suspends.

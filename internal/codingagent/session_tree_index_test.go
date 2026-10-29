@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 type treeRowView struct {
@@ -268,7 +268,7 @@ func TestMessageSearchTextMatchesPiInNode(t *testing.T) {
 	entry := RawEntry{SessionEntryBase: SessionEntryBase{Type: "message"}}
 	for i, line := range lines {
 		if got := treeSearchBody(entry, []byte(line)); got.text != want[i] {
-			t.Fatalf("line %s: PiG %q, Pi %q", line, got.text, want[i])
+			t.Fatalf("line %s: Ompig %q, Pi %q", line, got.text, want[i])
 		}
 		if scanned, ok := scanSearchBody([]byte(line)); ok && scanned.text != want[i] {
 			t.Fatalf("line %s: scan %q, Pi %q", line, scanned.text, want[i])

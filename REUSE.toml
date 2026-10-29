@@ -1,6 +1,6 @@
 version = 1
 
-# PiG-authored files use the project MIT license unless a more specific
+# Ompig-authored files use the project MIT license unless a more specific
 # annotation or an in-file SPDX declaration applies.
 [[annotations]]
 path = "**"
@@ -8,7 +8,7 @@ precedence = "closest"
 SPDX-FileCopyrightText = "Copyright Michael Kinsy"
 SPDX-License-Identifier = "MIT"
 
-# Public website documents adapt Pi documentation. PiG-authored revisions
+# Public website documents adapt Pi documentation. Ompig-authored revisions
 # retain the same MIT license.
 [[annotations]]
 path = "docs/site/docs/**"
@@ -20,9 +20,9 @@ SPDX-FileCopyrightText = [
 SPDX-License-Identifier = "MIT"
 
 # The project banner contains an adapted Go gopher. The remaining composition
-# is PiG-authored artwork.
+# is Ompig-authored artwork.
 [[annotations]]
-path = "docs/assets/pig-project-banner.png"
+path = "docs/assets/ompig-project-banner.png"
 precedence = "closest"
 SPDX-FileCopyrightText = [
   "Copyright Michael Kinsy",
@@ -30,14 +30,14 @@ SPDX-FileCopyrightText = [
 ]
 SPDX-License-Identifier = "MIT AND CC-BY-4.0"
 
-# PiG core is a Go port of Pi. These paths contain translated or adapted Pi
-# implementation and generated data, with PiG changes under the same license.
+# Ompig core is a Go port of Pi. These paths contain translated or adapted Pi
+# implementation and generated data, with Ompig changes under the same license.
 [[annotations]]
 path = [
   "agent/**",
   "ai/**",
   "cmd/gen-models/**",
-  "cmd/pig/**",
+  "cmd/ompig/**",
   "coding/**",
   "internal/codingagent/**",
   "internal/configvalue/**",
@@ -51,11 +51,11 @@ SPDX-FileCopyrightText = [
 ]
 SPDX-License-Identifier = "MIT"
 
-# PiG-only composition and distribution mechanics live under coding but do not
+# Ompig-only composition and distribution mechanics live under coding but do not
 # contain translated Pi implementation.
 [[annotations]]
 path = [
-  "coding/piglet/**",
+  "coding/ompiglet/**",
   "coding/pigletbuild/**",
   "coding/extension/pigsdk/**",
 ]
@@ -205,7 +205,7 @@ SPDX-License-Identifier = "BSD-3-Clause"
 
 # The Go port of highlight.js 10.7.3, which Pi 1.0.0's highlightCode
 # tokenizes code with. The Go translation of lib/core.js and the language
-# callbacks is MIT-licensed PiG code that retains highlight.js's notice.
+# callbacks is MIT-licensed Ompig code that retains highlight.js's notice.
 [[annotations]]
 path = "tui/internal/hljs/*.go"
 precedence = "closest"
@@ -433,21 +433,21 @@ precedence = "closest"
 SPDX-FileCopyrightText = "Copyright (c) 2025 Mario Zechner"
 SPDX-License-Identifier = "MIT"
 
-# PiG fork of santhosh-tekuri/jsonschema v6.0.2 (third_party/jsonschema/FORK.md).
+# Ompig fork of santhosh-tekuri/jsonschema v6.0.2 (third_party/jsonschema/FORK.md).
 [[annotations]]
 path = "third_party/jsonschema/**"
 precedence = "closest"
 SPDX-FileCopyrightText = "Copyright the santhosh-tekuri/jsonschema authors"
 SPDX-License-Identifier = "Apache-2.0"
 
-# PiG fork of yuin/goldmark v1.8.5 (third_party/goldmark/FORK.md).
+# Ompig fork of yuin/goldmark v1.8.5 (third_party/goldmark/FORK.md).
 [[annotations]]
 path = "third_party/goldmark/**"
 precedence = "closest"
 SPDX-FileCopyrightText = "Copyright (c) 2019 Yusuke Inuzuka"
 SPDX-License-Identifier = "MIT"
 
-# PiG fork of Masterminds/semver v3.5.0 (third_party/semver/FORK.md).
+# Ompig fork of Masterminds/semver v3.5.0 (third_party/semver/FORK.md).
 [[annotations]]
 path = "third_party/semver/**"
 precedence = "closest"

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi 0.87.1 system-prompt.ts:54-69 copies the authored collections and supplies defaults only for absent ones.

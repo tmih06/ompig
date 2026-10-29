@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // pi: packages/coding-agent/src/core/session-manager.ts loadEntriesFromFile. Corrupted session files (garbage and blank lines, invalid UTF-8, a BOM, truncation, a bad header, non-object records, CRLF, an unterminated last line) load the same entries and leave the same bytes behind.

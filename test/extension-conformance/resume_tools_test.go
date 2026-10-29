@@ -10,13 +10,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // resumeToolsActive is the command every realization registers: it fails unless the extension's getActiveTools, sorted, is the comma-separated list in its arguments.
@@ -170,7 +170,7 @@ pi.registerCommand("active",{handler:async(args)=>{const got=pi.getActiveTools()
 	case "go":
 		path = filepath.Join(cfg.Source, "extension.go")
 		code = fmt.Sprintf(`package flags
-import("fmt";"sort";"strings";sdk "github.com/MichaelKinsy/PiG/extensions/sdk")
+import("fmt";"sort";"strings";sdk "github.com/tmih06/ompig/extensions/sdk")
 func Extension()*sdk.Extension{
 e:=sdk.New(%q)
 inactive:=false
@@ -189,11 +189,11 @@ return e
 }`, name)
 	case "python":
 		path = filepath.Join(cfg.Source, strings.ReplaceAll(name, "-", "_")+".py")
-		code = fmt.Sprintf(`import pig_sdk
+		code = fmt.Sprintf(`import ompig_sdk
 def new_extension():
- e=pig_sdk.Extension(%q)
+ e=ompig_sdk.Extension(%q)
  for n in ["stable","retired","fresh","quiet"]:
-  e.register_tool(pig_sdk.ToolDefinition(name=n,label=n,description=n,parameters={"type":"object","properties":{}},execute=lambda ctx,args,n=n:n,default_active=False if n=="quiet" else None))
+  e.register_tool(ompig_sdk.ToolDefinition(name=n,label=n,description=n,parameters={"type":"object","properties":{}},execute=lambda ctx,args,n=n:n,default_active=False if n=="quiet" else None))
  def active(ctx,args):
   got=",".join(sorted(ctx.get_active_tools()))
   assert got==args,"getActiveTools="+got+" want "+args
@@ -202,7 +202,7 @@ def new_extension():
 `, name)
 	case "rust":
 		path = filepath.Join(cfg.Source, "src", "lib.rs")
-		code = fmt.Sprintf(`use pig_sdk::{Extension,ToolDefinition,ToolResult,CommandResult,Schema};
+		code = fmt.Sprintf(`use ompig_sdk::{Extension,ToolDefinition,ToolResult,CommandResult,Schema};
 pub fn new_extension()->Extension{
  let mut e=Extension::new(%q);
  for n in ["stable","retired","fresh","quiet"]{

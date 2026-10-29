@@ -13,8 +13,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 type loginCommand string
@@ -71,7 +71,7 @@ func runLoginCommand(args []string) int {
 		return -1
 	}
 	if opts.invalid != "" || (opts.list && opts.command != authLogin) || (opts.list && opts.provider != "") {
-		fmt.Fprintf(os.Stderr, "Usage: pig %s [provider] [--list] [--json] [--no-input]\n", opts.command)
+		fmt.Fprintf(os.Stderr, "Usage: ompig %s [provider] [--list] [--json] [--no-input]\n", opts.command)
 		return 2
 	}
 	if opts.help {
@@ -84,13 +84,13 @@ func runLoginCommand(args []string) int {
 		var err error
 		contributions, err = discoverAuthContributions()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "pig login --list:", err)
+			fmt.Fprintln(os.Stderr, "ompig login --list:", err)
 			return 1
 		}
 		return listAuthTargets(opts.json, contributions)
 	}
 	if opts.noInput && opts.provider == "" {
-		fmt.Fprintf(os.Stderr, "pig %s: --no-input requires an explicit provider; use `pig login --list --json` to discover targets\n", opts.command)
+		fmt.Fprintf(os.Stderr, "ompig %s: --no-input requires an explicit provider; use `ompig login --list --json` to discover targets\n", opts.command)
 		return 2
 	}
 	cwd, err := os.Getwd()
@@ -116,7 +116,7 @@ func runLoginCommand(args []string) int {
 			return 1
 		}
 		credentialPath := "auth.json"
-		// pig additive (D40): extension-owned credentials do not open core storage; failed logins do not create it.
+		// ompig additive (D40): extension-owned credentials do not open core storage; failed logins do not create it.
 		if credentialStore, ok := provider.(ai.OAuthCredentialStore); ok {
 			credentialPath, err = credentialStore.StoreOAuthCredentials(cred)
 		} else {
@@ -198,7 +198,7 @@ type authTargetItem struct {
 	CallbackServer bool   `json:"callbackServer"`
 }
 
-// pig additive (D40): Pig auth targets are discoverable through a generic,
+// ompig additive (D40): Ompig auth targets are discoverable through a generic,
 // current pre-session inventory shared with contributed providers.
 func listAuthTargets(jsonMode bool, registry *authContributionRegistry) int {
 	targets := registeredAuthTargetItems(registry)
@@ -209,7 +209,7 @@ func listAuthTargets(jsonMode bool, registry *authContributionRegistry) int {
 		}
 		data, err := json.Marshal(output)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "pig login --list: encode JSON:", err)
+			fmt.Fprintln(os.Stderr, "ompig login --list: encode JSON:", err)
 			return 1
 		}
 		fmt.Println(string(data))
@@ -217,7 +217,7 @@ func listAuthTargets(jsonMode bool, registry *authContributionRegistry) int {
 	}
 	if registry != nil {
 		for _, diagnostic := range registry.diagnostics {
-			fmt.Fprintf(os.Stderr, "pig login --list: extension %q inspection failed: %s\n", diagnostic.Extension, diagnostic.Error)
+			fmt.Fprintf(os.Stderr, "ompig login --list: extension %q inspection failed: %s\n", diagnostic.Extension, diagnostic.Error)
 		}
 	}
 	if len(targets) == 0 {
@@ -234,9 +234,9 @@ func listAuthTargets(jsonMode bool, registry *authContributionRegistry) int {
 func printLoginCommandHelp(cmd loginCommand) {
 	switch cmd {
 	case authLogin:
-		fmt.Print("Usage:\n  pig login [provider] [--no-input]\n  pig login --list [--json]\n\nLogin to an OAuth provider or list registered auth targets.\n\nExamples:\n  pig login\n  pig login github-copilot\n  pig login --list --json\n")
+		fmt.Print("Usage:\n  ompig login [provider] [--no-input]\n  ompig login --list [--json]\n\nLogin to an OAuth provider or list registered auth targets.\n\nExamples:\n  ompig login\n  ompig login github-copilot\n  ompig login --list --json\n")
 	case authLogout:
-		fmt.Print("Usage:\n  pig logout [provider] [--no-input]\n\nRemove stored OAuth credentials from auth.json.\n\nExamples:\n  pig logout\n  pig logout github-copilot\n")
+		fmt.Print("Usage:\n  ompig logout [provider] [--no-input]\n\nRemove stored OAuth credentials from auth.json.\n\nExamples:\n  ompig logout\n  ompig logout github-copilot\n")
 	}
 }
 
@@ -476,5 +476,5 @@ func authJSONResponse(status int, body string) *http.Response {
 }
 
 func parityHarnessEnabled() bool {
-	return os.Getenv("PIG_PARITY_HARNESS") == "1"
+	return os.Getenv("OMPIG_PARITY_HARNESS") == "1"
 }

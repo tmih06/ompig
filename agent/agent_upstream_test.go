@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports of upstream packages/agent/test/agent.test.ts. Each test names the
@@ -693,7 +693,7 @@ func TestAgent_ForwardsSessionIDToStreamOptions(t *testing.T) {
 }
 
 // Ports packages/agent/test/agent.test.ts "attributes requests to pi by default and merges a configured identity over it".
-// pig divergence (D26): the default attribution is PiG's (ai.PiAttribution).
+// ompig divergence (D26): the default attribution is Ompig's (ai.PiAttribution).
 func TestAgent_AttributesRequestsByDefaultAndMergesAConfiguredIdentityOverIt(t *testing.T) {
 	provider := &scriptedProvider{respond: replyText("ok")}
 	a := mustNewAgent(AgentOptions{Model: scriptedModel(provider)})

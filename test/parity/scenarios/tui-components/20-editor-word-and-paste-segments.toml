@@ -14,9 +14,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/editor-segments-pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/editor-segments-ompig"]
 pi_args = ["node", "./test/parity/testdata/editor-segments-pi.mjs"]
 
 [cli]

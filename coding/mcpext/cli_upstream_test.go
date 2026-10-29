@@ -12,14 +12,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/mcpext"
+	"github.com/tmih06/ompig/coding/mcpext"
 )
 
 // Ports packages/coding-agent/test/mcp-command.test.ts (`pi mcp`), run against `mcpext.RunMcpCommand`.
 //
 // Forced differences, each the same in every case:
 //   - the test binary itself is the stdio fixture server (fixtures_test.go `stdio-server`, packages/mcp/test/fixtures/stdio-server.mjs) where upstream spawns `process.execPath FIXTURE`;
-//   - PiG's identity replaces Pi's: the command is `pig`, the project directory `.pig` (upstream APP_NAME `pi`, CONFIG_DIR_NAME `.pi`; see coding/cli/help_upstream.txt).
+//   - Ompig's identity replaces Pi's: the command is `ompig`, the project directory `.ompig` (upstream APP_NAME `pi`, CONFIG_DIR_NAME `.pi`; see coding/cli/help_upstream.txt).
 
 // serverEntry is one `mcpServers` member; the list keeps upstream's object key order.
 type serverEntry struct{ name, json string }
@@ -63,7 +63,7 @@ func runMcp(t *testing.T, args []string, servers []serverEntry, dir string) comm
 	var output []string
 	add := func(line string) { output = append(output, line) }
 	exitCode := mcpext.RunMcpCommand(context.Background(), args, mcpext.McpCommandOptions{
-		Cwd: agentDir, AgentDir: agentDir, AppName: "pig", ConfigDirName: ".pig", Log: add, Error: add,
+		Cwd: agentDir, AgentDir: agentDir, AppName: "ompig", ConfigDirName: ".ompig", Log: add, Error: add,
 	})
 	return commandResult{exitCode, strings.Join(output, "\n"), agentDir}
 }
@@ -260,7 +260,7 @@ func TestMcpCommandAddsHTTPServersAndKeepsOtherContentOfTheFile(t *testing.T) {
 	}
 
 	oauth := runMcp(t, []string{"add", "sentry", "--url", "https://mcp.sentry.dev/mcp", "--oauth-client-id", "pi", "--oauth-client-name", "Claude Code"}, nil, result.agentDir)
-	mustContain(t, oauth.output, "If it requires sign-in: pig mcp login sentry")
+	mustContain(t, oauth.output, "If it requires sign-in: ompig mcp login sentry")
 	sentry := readMcpConfig(t, configPath)["mcpServers"].(map[string]any)["sentry"].(map[string]any)
 	if sentry["url"] != "https://mcp.sentry.dev/mcp" || !reflect.DeepEqual(sentry["oauth"], map[string]any{"clientId": "pi", "clientName": "Claude Code"}) {
 		t.Fatalf("sentry = %#v", sentry)
@@ -313,7 +313,7 @@ func TestMcpCommandAddsAndRemovesProjectServers(t *testing.T) {
 	// mcp-command.test.ts:182
 	added := runMcp(t, []string{"add", "-l", "local", "--", "node", "server.js"}, nil, "")
 	mustContain(t, added.output, "The project is not trusted")
-	projectConfig := filepath.Join(added.agentDir, ".pig", "mcp.json")
+	projectConfig := filepath.Join(added.agentDir, ".ompig", "mcp.json")
 	want := map[string]any{"mcpServers": map[string]any{"local": map[string]any{"command": "node", "args": []any{"server.js"}}}}
 	if got := readMcpConfig(t, projectConfig); !reflect.DeepEqual(got, want) {
 		t.Fatalf("config = %#v, want %#v", got, want)
@@ -384,10 +384,10 @@ func TestMcpCommandRemovesGlobalServers(t *testing.T) {
 // off, so the command does not connect.
 func TestMcpCommandListReportsTheProjectOverrideOfAGlobalServer(t *testing.T) {
 	agentDir, project := t.TempDir(), t.TempDir()
-	if err := os.MkdirAll(filepath.Join(project, ".pig"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(project, ".ompig"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	overrideFile := filepath.Join(project, ".pig", "mcp.json")
+	overrideFile := filepath.Join(project, ".ompig", "mcp.json")
 	if err := os.WriteFile(overrideFile, []byte(`{"mcpServers":{"fixture":{"enabled":false}}}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -398,7 +398,7 @@ func TestMcpCommandListReportsTheProjectOverrideOfAGlobalServer(t *testing.T) {
 		var output []string
 		add := func(line string) { output = append(output, line) }
 		code := mcpext.RunMcpCommand(context.Background(), args, mcpext.McpCommandOptions{
-			Cwd: project, AgentDir: agentDir, AppName: "pig", ConfigDirName: ".pig", Log: add, Error: add,
+			Cwd: project, AgentDir: agentDir, AppName: "ompig", ConfigDirName: ".ompig", Log: add, Error: add,
 			IsProjectTrusted: func(string) (bool, error) { return true, nil },
 		})
 		if code != 0 {

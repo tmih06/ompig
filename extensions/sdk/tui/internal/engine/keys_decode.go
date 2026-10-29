@@ -11,9 +11,9 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/lazyregexp"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/jsstring"
+	"github.com/tmih06/ompig/extensions/sdk/tui/internal/jsstring"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // StartAuthorization builds the URL with `new URL(endpoint)` and `searchParams.set(...)` (flow.ts startAuthorization), so a query already on the

@@ -14,8 +14,8 @@ import struct
 import threading
 import weakref
 
-import pig_sdk
-from pig_sdk import autocomplete, provider
+import ompig_sdk
+from ompig_sdk import autocomplete, provider
 
 
 def _read_frame(conn: socket.socket) -> dict:
@@ -23,14 +23,14 @@ def _read_frame(conn: socket.socket) -> dict:
     return json.loads(conn.recv(size, socket.MSG_WAITALL))
 
 
-def _connected() -> tuple[pig_sdk.Extension, socket.socket]:
-    ext = pig_sdk.Extension("finalizer-test")
+def _connected() -> tuple[ompig_sdk.Extension, socket.socket]:
+    ext = ompig_sdk.Extension("finalizer-test")
     ext._sock, host = socket.socketpair()
     host.settimeout(5)
     return ext, host
 
 
-def _send_while_collecting(ext: pig_sdk.Extension, finalize) -> None:
+def _send_while_collecting(ext: ompig_sdk.Extension, finalize) -> None:
     """Send one frame and run the finalizer while the sending thread holds the write lock, as a GC during serialization does."""
     original = ext._send_locked
     pending = [finalize]

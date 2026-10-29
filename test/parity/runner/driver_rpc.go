@@ -48,14 +48,14 @@ func (rpcModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 
 	tc := newTokenContext(t, "rpc-"+sc.Name+"-"+bin.Label)
 	preserveAuth, injectAuth := scenarioAuthModes(sc)
-	pigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Pig, sc.Env.Pi, preserveAuth, injectAuth)
+	ompigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Ompig, sc.Env.Pi, preserveAuth, injectAuth)
 
 	args := []string{}
 	if !sc.Env.OverrideBaseArgs {
 		args = append(args, bin.Args...)
 	}
 
-	// BinaryRef carries fallback PIG_HOME/PI_CODING_AGENT_DIR sandboxes shared by
+	// BinaryRef carries fallback OMPIG_HOME/PI_CODING_AGENT_DIR sandboxes shared by
 	// the suite. Snapshot those base directories for every run as well as any
 	// scenario overrides: Pi 0.84 RPC disposal leaves per-home runtime state, so
 	// reusing the fallback across durability pairs can hang the next process at
@@ -63,10 +63,10 @@ func (rpcModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 	baseEnv := snapshotBinaryEnv(t, sc.SourcePath, bin.Env, preserveAuth, injectAuth)
 	env := append([]string{}, baseEnv...)
 	switch bin.Label {
-	case "pig":
-		env = append(env, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, pigEnv))...)
-		args = append(args, tc.expandSlice(sc.Env.PigArgs)...)
-		for _, ext := range sc.Env.PigExtensions {
+	case "ompig":
+		env = append(env, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, ompigEnv))...)
+		args = append(args, tc.expandSlice(sc.Env.OmpigArgs)...)
+		for _, ext := range sc.Env.OmpigExtensions {
 			resolved := resolveExtensionPath(sc.SourcePath, ext)
 			args = append(args, "-e", resolved)
 		}
@@ -80,7 +80,7 @@ func (rpcModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 	}
 
 	// Append --mode rpc. The binary's base args (e.g. pi's --no-extensions)
-	// go before --mode rpc; per-binary scenario args (PigArgs/PiArgs)
+	// go before --mode rpc; per-binary scenario args (OmpigArgs/PiArgs)
 	// were already appended above.
 	args = append(args, "--mode", "rpc")
 	if sc.Model != "" {

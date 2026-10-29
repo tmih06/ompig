@@ -4,10 +4,10 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // maxWidgetLines is InteractiveMode.MAX_WIDGET_LINES.
@@ -16,7 +16,7 @@ const maxWidgetLines = 10
 
 // PushProxy renders cached extension frames or host-laid-out string lists without extension I/O.
 //
-// pig-specific: no upstream equivalent.
+// ompig-specific: no upstream equivalent.
 type PushProxy struct {
 	mu    sync.RWMutex
 	lines []string

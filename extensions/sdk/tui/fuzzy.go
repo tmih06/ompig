@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/engine"
+import "github.com/tmih06/ompig/extensions/sdk/tui/internal/engine"
 
 // FuzzyMatchResult is pi-tui's FuzzyMatch: whether every query character appears in order, and the score, lower being better.
 type FuzzyMatchResult struct {

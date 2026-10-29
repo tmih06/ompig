@@ -10,12 +10,12 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/harness"
-	"github.com/MichaelKinsy/PiG/durable/session"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/harness"
+	"github.com/tmih06/ompig/durable/session"
 )
 
 // Watches over the core's `watch.open` and `watch.close` api requests (PROTOCOL.md, "api", `watch.open`; ABI section 8.1). The

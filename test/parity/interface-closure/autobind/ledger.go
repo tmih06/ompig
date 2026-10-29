@@ -9,7 +9,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // param, callShape and typeParam are the function rule family's types (rules/functions.go).
@@ -90,7 +90,7 @@ func (e *upstreamEntry) UnmarshalJSON(data []byte) error {
 type mappingRow struct {
 	ID          string   `json:"id"`
 	Disposition string   `json:"disposition"`
-	Targets     []string `json:"pigTargets"`
+	Targets     []string `json:"ompigTargets"`
 	Production  []string `json:"production"`
 	Evidence    []string `json:"evidence"`
 	Rationale   string   `json:"rationale"`

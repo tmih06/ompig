@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // TestKeysOfManyIndexKeysAreSortedInLogLinearTime checks that an object whose keys are many array indexes, inserted in any

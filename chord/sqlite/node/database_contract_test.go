@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
 )
 
 // Pi 1.2.0 packages/durable/test/sqlite-facade.test.ts:112 "commits work done through the transaction handle and closes idempotently" and the SqliteDatabase contract (database.ts): a failed callback rolls the transaction back and Transaction returns that same error; Close is idempotent.

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -18,7 +18,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's main.ts routes `mcp` after the package and config commands and before argument parsing, and hands the rest of the arguments and the process exit code to runMcpCommand (.upstream/v0.99.1/packages/coding-agent/src/main.ts:608-612).
@@ -38,7 +38,7 @@ func runPigMCP(t *testing.T, agentDir, cwd string, args ...string) mcpCLIRun {
 		name, _, _ := strings.Cut(entry, "=")
 		return slices.Contains([]string{"HTTP_PROXY", "http_proxy", "HTTPS_PROXY", "https_proxy", "NO_PROXY", "no_proxy", "ALL_PROXY", "all_proxy"}, name)
 	})
-	cmd.Env = append(cmd.Env, "HOME="+home, "PIG_HOME="+filepath.Join(home, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "NO_COLOR=", "FORCE_COLOR=0")
+	cmd.Env = append(cmd.Env, "HOME="+home, "OMPIG_HOME="+filepath.Join(home, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "NO_COLOR=", "FORCE_COLOR=0")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err := cmd.Run()
@@ -69,11 +69,11 @@ func TestPigMcpRunsBeforeSessionStartup(t *testing.T) {
 	if added.exitCode != 0 || !strings.Contains(added.stdout, `Added global MCP server "files" in `+filepath.Join(agentDir, "mcp.json")) {
 		t.Fatalf("mcp add = %+v", added)
 	}
-	if !strings.Contains(added.stdout, "Check it with: pig mcp list") {
+	if !strings.Contains(added.stdout, "Check it with: ompig mcp list") {
 		t.Fatalf("mcp add does not name its own command: %q", added.stdout)
 	}
 	unknown := runPigMCP(t, agentDir, cwd, "mcp", "frobnicate")
-	if unknown.exitCode != 1 || !strings.Contains(unknown.stderr, `Unknown mcp command "frobnicate".`) || !strings.Contains(unknown.stderr, `Use "pig mcp --help" for usage.`) {
+	if unknown.exitCode != 1 || !strings.Contains(unknown.stderr, `Unknown mcp command "frobnicate".`) || !strings.Contains(unknown.stderr, `Use "ompig mcp --help" for usage.`) {
 		t.Fatalf("mcp frobnicate = %+v", unknown)
 	}
 }
@@ -83,31 +83,31 @@ func TestPigMcpHelpIsPisHelpWithPiGsIdentity(t *testing.T) {
 	for _, args := range [][]string{{"mcp", "--help"}, {"mcp", "-h"}, {"mcp", "help"}, {"mcp"}, {"mcp", "list", "--help"}} {
 		run := runPigMCP(t, agentDir, t.TempDir(), args...)
 		if run.exitCode != 0 || run.stderr != "" {
-			t.Fatalf("pig %v = %+v", args, run)
+			t.Fatalf("ompig %v = %+v", args, run)
 		}
 		for _, want := range []string{
-			"Usage:\n  pig mcp add <server> [options] -- <command> [args...]\n",
-			"Reads ~/.pig/agent/mcp.json and, in trusted projects, .pig/mcp.json.\n",
-			"  -l, --local             Use .pig/mcp.json in the current project instead of the global file\n",
+			"Usage:\n  ompig mcp add <server> [options] -- <command> [args...]\n",
+			"Reads ~/.ompig/agent/mcp.json and, in trusted projects, .ompig/mcp.json.\n",
+			"  -l, --local             Use .ompig/mcp.json in the current project instead of the global file\n",
 			"  --timeout <seconds>     Time limit for the whole sign-in (default: 300)",
 		} {
 			if !strings.Contains(run.stdout, want) {
-				t.Fatalf("pig %v help lacks %q:\n%s", args, want, run.stdout)
+				t.Fatalf("ompig %v help lacks %q:\n%s", args, want, run.stdout)
 			}
 		}
 	}
 }
 
-// Project `.pig/mcp.json` is read only for trusted projects (config.ts:141-145 via cli.ts:196-197 `ProjectTrustStore(agentDir).get(cwd) === true`).
+// Project `.ompig/mcp.json` is read only for trusted projects (config.ts:141-145 via cli.ts:196-197 `ProjectTrustStore(agentDir).get(cwd) === true`).
 func TestPigMcpReadsProjectConfigOnlyForTrustedProjects(t *testing.T) {
 	agentDir, cwd := filepath.Join(t.TempDir(), "agent"), t.TempDir()
-	if err := os.MkdirAll(filepath.Join(cwd, ".pig"), 0o700); err != nil {
+	if err := os.MkdirAll(filepath.Join(cwd, ".ompig"), 0o700); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.MkdirAll(agentDir, 0o700); err != nil {
 		t.Fatal(err)
 	}
-	projectConfig := filepath.Join(cwd, ".pig", "mcp.json")
+	projectConfig := filepath.Join(cwd, ".ompig", "mcp.json")
 	if err := os.WriteFile(projectConfig, []byte(`{"mcpServers":{"local":{"command":"pi-test-missing-mcp-server","enabled":false}}}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -121,7 +121,7 @@ func TestPigMcpReadsProjectConfigOnlyForTrustedProjects(t *testing.T) {
 	}
 	untrusted := runPigMCP(t, agentDir, cwd, "mcp", "list")
 	if untrusted.exitCode != 0 || strings.Contains(untrusted.stdout, "local:") ||
-		!strings.Contains(untrusted.stdout, filepath.Join(resolved, ".pig", "mcp.json")+" is ignored because the project is not trusted. Start pig in the project to trust it.") {
+		!strings.Contains(untrusted.stdout, filepath.Join(resolved, ".ompig", "mcp.json")+" is ignored because the project is not trusted. Start ompig in the project to trust it.") {
 		t.Fatalf("untrusted list = %+v", untrusted)
 	}
 	// The trust key is Pi's canonicalizePath (realpathSync, trust-manager.ts:42), which on Windows keeps the 8.3 short names of
@@ -139,13 +139,13 @@ func TestPigMcpReadsProjectConfigOnlyForTrustedProjects(t *testing.T) {
 	}
 }
 
-// Pi 0.99.1 prints these lines in --help (cli/args.ts:285-286,313-314). PiG renders them with its identity (automation/gen/gen-help.sh).
+// Pi 0.99.1 prints these lines in --help (cli/args.ts:285-286,313-314). Ompig renders them with its identity (automation/gen/gen-help.sh).
 func TestHelpMentionsMcpCommandAndBuiltinExtensions(t *testing.T) {
 	var out bytes.Buffer
 	printHelp(&out, false)
 	for _, want := range []string{
-		"  pig mcp <command>             Manage MCP servers\n",
-		"  pig <command> --help          Show help for install/remove/uninstall/update/list/config/auth/mcp\n",
+		"  ompig mcp <command>             Manage MCP servers\n",
+		"  ompig <command> --help          Show help for install/remove/uninstall/update/list/config/auth/mcp\n",
 		"  --extension, -e <path>         Load an extension file or builtin:<name> (can be used multiple times)\n",
 		"  --no-extensions, -ne           Disable extension discovery and built-in extensions (explicit -e paths still work)\n",
 	} {

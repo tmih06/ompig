@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-point closed rows whose `call:` production reference is unreachable from the PiG binary.
+"""Re-point closed rows whose `call:` production reference is unreachable from the Ompig binary.
 
 Usage: go run ./test/parity/interface-closure/autobind -write-reach /tmp/reach.json
        python3 test/parity/interface-closure/reproduce.py /tmp/reach.json [--apply]
@@ -23,7 +23,7 @@ import pinlib  # noqa: E402
 V = pinlib.effective()[0].version
 reach = set(json.loads(Path(sys.argv[1]).read_text()))
 apply = "--apply" in sys.argv
-mod = "github.com/MichaelKinsy/PiG"
+mod = "github.com/tmih06/ompig"
 path = root / f"test/parity/interfaces/mapping-v{V}.json"
 ledger = json.loads(path.read_text())
 bad = [r for r in ledger["mappings"] if r["disposition"] == "ported"
@@ -31,7 +31,7 @@ bad = [r for r in ledger["mappings"] if r["disposition"] == "ported"
 want = collections.defaultdict(lambda: {"types": set(), "funcs": set()})
 rowkey = {}
 for r in bad:
-    target = r["pigTargets"][0]
+    target = r["ompigTargets"][0]
     file, frag = target.split("#")
     d = str(Path(file).parent)
     text = (root / file).read_text()
@@ -67,9 +67,9 @@ for r in bad:
         public = not d.startswith(("internal", "cmd")) and name[:1].isupper() and any(e.startswith("test:") for e in r["evidence"])
         status["public" if public else "unreachable"] += 1
         if public and "--public" in sys.argv:
-            r["production"] = ["public-api:" + r["pigTargets"][0]]
+            r["production"] = ["public-api:" + r["ompigTargets"][0]]
             r["layers"]["production"] = "public-api-tested"
-        print(("public     " if public else "unreachable"), r["id"], r["pigTargets"][0])
+        print(("public     " if public else "unreachable"), r["id"], r["ompigTargets"][0])
 print(dict(status))
 if apply:
     path.write_text(json.dumps(ledger, indent=2, ensure_ascii=False) + "\n")

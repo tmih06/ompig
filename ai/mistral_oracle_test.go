@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/bodyreadhook/readbarrier"
+	"github.com/tmih06/ompig/internal/bodyreadhook/readbarrier"
 )
 
 // D82 W5: the mistral-conversations provider against Pi 0.87.1's own tick order. The oracle is the checked-in output of
@@ -215,7 +215,7 @@ func observedMistralDirect(t *testing.T, barrier *readbarrier.Barrier, body, del
 }
 
 func mistralOracleRuns() int {
-	if value := os.Getenv("PIG_D82_RUNS"); value != "" {
+	if value := os.Getenv("OMPIG_D82_RUNS"); value != "" {
 		if runs, err := strconv.Atoi(value); err == nil && runs > 0 {
 			return runs
 		}

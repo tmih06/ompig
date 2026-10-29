@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/tui"
 )
 
 type clipboardTypesProbe struct {
@@ -28,7 +28,7 @@ type clipboardTypesResult struct {
 // readClipboardImage against Pi's (utils/clipboard-image.js) with a fake wl-paste or xclip that advertises a random type listing: which type is
 // requested (selectPreferredImageMimeType: JS trim, the line split, the case-insensitive base type, the image/* fallback) and the mime type reported.
 // Pi's command runner and native clipboard are replaced as Pi's clipboard-image.test.ts mocks them: a spawned fake command races Pi's 1 s listing
-// timeout, and a timed-out listing falls back to the host's native clipboard. PiG runs the same listing through its command hook.
+// timeout, and a timed-out listing falls back to the host's native clipboard. Ompig runs the same listing through its command hook.
 func TestClipboardTypeSelectionMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(11))
 	types := []string{

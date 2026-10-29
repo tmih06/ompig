@@ -6,7 +6,7 @@ component and the legacy titled modal render at the terminal width.
 
 from __future__ import annotations
 
-import pig_sdk
+import ompig_sdk
 
 
 def test_overlay_render_width_follows_upstream_layout() -> None:
@@ -23,7 +23,7 @@ def test_overlay_render_width_follows_upstream_layout() -> None:
         ("inline", {}, 120),
     ]
     for name, options, want in cases:
-        assert pig_sdk._overlay_render_width(options)(120) == want, name
+        assert ompig_sdk._overlay_render_width(options)(120) == want, name
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/internal/installchange"
+	"github.com/tmih06/ompig/internal/installchange"
 )
 
 func main() {

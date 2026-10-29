@@ -11,10 +11,10 @@ import (
 	"time"
 	"weak"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // toolRenderSession is one tool card's renderer session in an extension
@@ -260,7 +260,7 @@ func (p *toolRenderProxy) Render(width int) []string {
 			start = true
 		}
 	}
-	// pig divergence (D56): the first frame after an abandoned render's retry came due asks the extension again.
+	// ompig divergence (D56): the first frame after an abandoned render's retry came due asks the extension again.
 	if p.retry.takeDue() && !start && !p.requesting && p.width > 0 {
 		p.requesting = true
 		start = true
@@ -384,7 +384,7 @@ func (p *toolRenderProxy) request(payload RenderToolPayload) (lines []string, fa
 	if err != nil {
 		return nil, false, false, nil
 	}
-	// pig divergence (D56): a tool renderer generation has the renderer
+	// ompig divergence (D56): a tool renderer generation has the renderer
 	// inactivity boundary off the TUI loop and keeps the last frame;
 	// renderRetry asks again once the extension can answer.
 	resp, err := p.session.conn.requestWithInactivity(context.Background(), &Envelope{

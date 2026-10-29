@@ -14,7 +14,7 @@ func TestProviderHeadersFromStringsGivesEachHeaderItsOwnValue(t *testing.T) {
 	if got := ProviderHeadersFromStrings(map[string]string{}); got != nil {
 		t.Fatalf("empty headers = %v, want nil", got)
 	}
-	values := map[string]string{"User-Agent": "pig", "Editor-Version": "1", "X-Empty": "", "X-Same": "pig"}
+	values := map[string]string{"User-Agent": "ompig", "Editor-Version": "1", "X-Empty": "", "X-Same": "ompig"}
 	headers := ProviderHeadersFromStrings(values)
 	if len(headers) != len(values) {
 		t.Fatalf("headers = %v, want %d entries", headers, len(values))
@@ -36,7 +36,7 @@ func TestProviderHeadersFromStringsGivesEachHeaderItsOwnValue(t *testing.T) {
 			t.Fatalf("writing User-Agent changed %s to %q", name, *headers[name])
 		}
 	}
-	if values["User-Agent"] != "pig" {
+	if values["User-Agent"] != "ompig" {
 		t.Fatal("writing a header value changed the configured map")
 	}
 	shared := new(string)

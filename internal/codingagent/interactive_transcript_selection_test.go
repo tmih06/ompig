@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports interactive-tui.test.ts "drops the fullscreen selection when session entries are re-rendered" (pi 1.1.0, #9311): selection

@@ -12,8 +12,8 @@ import (
 	"errors"
 	"math"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/env/node"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/env/node"
 )
 
 func parseWatchTargets(request Object) ([]durableenv.WatchTarget, *Failure) {

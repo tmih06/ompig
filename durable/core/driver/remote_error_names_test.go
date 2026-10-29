@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/core/driver"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/core/driver"
 )
 
 // Pi 1.2.0 durable/src/errors.ts:17-34, :49 and the Session: StorageRequestError, ConversationBusy and ReadAfterWrite are different classes (`this.name` is the class name) and the

@@ -39,7 +39,7 @@ func TestTmuxCompleteHistoryRetainsDocumentAboveViewport(t *testing.T) {
 	for _, history := range []bool{false, true} {
 		t.Run(map[bool]string{false: "viewport", true: "history"}[history], func(t *testing.T) {
 			sc := &Scenario{Name: "complete-document", Tmux: TmuxDriverConfig{Width: 80, Height: 8, ReadyPatternPig: "READY", ReadyTimeoutSeconds: 5, CaptureHistory: history, Steps: []TmuxStep{{Keys: []string{"show", "Enter"}, WaitContains: []string{"DOCUMENT-END"}, WaitVisibleContains: []string{"DOCUMENT-END"}, WaitTimeoutSeconds: 5}}}}
-			bin := BinaryRef{Label: "pig", Path: "sh", Args: []string{"-c", "printf 'READY\\n'; read -r command; cat " + shellQuote(input) + "; sleep 999"}}
+			bin := BinaryRef{Label: "ompig", Path: "sh", Args: []string{"-c", "printf 'READY\\n'; read -r command; cat " + shellQuote(input) + "; sleep 999"}}
 			result := (tmuxDriver{}).Run(t.Context(), t, bin, sc)
 			if result.Err != nil {
 				t.Fatal(result.Err)
@@ -58,7 +58,7 @@ func TestTmuxCompleteHistoryRetainsDocumentAboveViewport(t *testing.T) {
 func TestChangelogHeaderComparatorUsesEachDocument(t *testing.T) {
 	outcome := &ScenarioOutcome{
 		Scenario: &Scenario{Assert: AssertSpec{ChangelogHeadersComplete: true}},
-		Pig:      SystemResults{Runs: []Result{{Output: "[1.0.0]\n[7.0.0]\n[2.0.0]\n", ChangelogSource: "## [2.0.0]\n## [7.0.0]\n## [1.0.0]\n"}}},
+		Ompig:    SystemResults{Runs: []Result{{Output: "[1.0.0]\n[7.0.0]\n[2.0.0]\n", ChangelogSource: "## [2.0.0]\n## [7.0.0]\n## [1.0.0]\n"}}},
 		Pi:       SystemResults{Runs: []Result{{Output: "[9.0.0]\n", ChangelogSource: "## [9.0.0]\n"}}},
 	}
 	EvaluateOutcome(outcome)
@@ -89,7 +89,7 @@ func TestChangelogHeaderComparatorRequiresCompleteOrderedSource(t *testing.T) {
 		{"condensed startup", "Updated to v2.0.0. Use /changelog to view full changelog.", false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			outcome := &ScenarioOutcome{Scenario: &Scenario{Assert: AssertSpec{ChangelogHeadersComplete: true}}, Pig: SystemResults{Runs: []Result{{Output: tc.output, ChangelogSource: source}}}, Pi: SystemResults{Runs: []Result{{Output: complete, ChangelogSource: source}}}}
+			outcome := &ScenarioOutcome{Scenario: &Scenario{Assert: AssertSpec{ChangelogHeadersComplete: true}}, Ompig: SystemResults{Runs: []Result{{Output: tc.output, ChangelogSource: source}}}, Pi: SystemResults{Runs: []Result{{Output: complete, ChangelogSource: source}}}}
 			EvaluateOutcome(outcome)
 			if outcome.Passed() != tc.pass {
 				t.Fatalf("passed=%t want=%t: %v", outcome.Passed(), tc.pass, outcome.Failures)

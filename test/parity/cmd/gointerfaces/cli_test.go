@@ -54,7 +54,7 @@ func TestGeneratorOutputAndCanonicalPlatform(t *testing.T) {
 		if len(output) != 0 {
 			t.Errorf("default wrote %d bytes to stdout instead of the committed path", len(output))
 		}
-		data, err := os.ReadFile(filepath.Join(root, "test/parity/interfaces/pig-go.json"))
+		data, err := os.ReadFile(filepath.Join(root, "test/parity/interfaces/ompig-go.json"))
 		if err != nil {
 			t.Fatal(err)
 		}

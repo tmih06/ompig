@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Upstream resource-loader.ts reuses the pre-trust factory and runtime in the
@@ -74,9 +74,9 @@ export default function(pi) {
 				}
 				command := exec.CommandContext(testbudget.Context(t), binary, args...)
 				command.Dir = project
-				command.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic")
+				command.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic")
 				if mode == "model-error" {
-					command.Env = append(command.Env, "PIG_TEST_FAUX=")
+					command.Env = append(command.Env, "OMPIG_TEST_FAUX=")
 				}
 				output, runErr := command.CombinedOutput()
 				// Upstream main.ts exits 1 on any extension load error, including
@@ -86,7 +86,7 @@ export default function(pi) {
 				}
 				if mode == "failed-preload" {
 					failedPath := filepath.Join(home, "failed.mjs")
-					for _, want := range []string{`Error: Failed to load extension "` + failedPath + `": Failed to load extension: `, `Hint: Start without extensions using "pig -ne".`} {
+					for _, want := range []string{`Error: Failed to load extension "` + failedPath + `": Failed to load extension: `, `Hint: Start without extensions using "ompig -ne".`} {
 						if !strings.Contains(string(output), want) {
 							t.Fatalf("output lacks %q:\n%s", want, output)
 						}

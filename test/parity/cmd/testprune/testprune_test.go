@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestIsGoldenFile(t *testing.T) {
@@ -46,10 +46,10 @@ func TestCheckProvenanceRejectsUndeclaredAndIncompleteGoldens(t *testing.T) {
 		{"undeclared", provenance{}, "x-golden.json: golden or snapshot file without provenance"},
 		{"pi without generator", provenance{Golden: []goldenEntry{{Paths: []string{"a/testdata/x-golden.json"}, Owner: "pi"}}}, "names the generator"},
 		{"pi with missing generator", provenance{Golden: []goldenEntry{{Paths: []string{"a/testdata/x-golden.json"}, Owner: "pi", Generator: "a/nope.mjs"}}}, "is not a tracked file"},
-		{"pig without invariant", provenance{Golden: []goldenEntry{{Paths: []string{"b/testdata/y.golden"}, Owner: "pig"}}}, "names the invariant test"},
-		{"pig with unknown invariant", provenance{Golden: []goldenEntry{{Paths: []string{"b/testdata/y.golden"}, Owner: "pig", Invariant: "TestMissing", Why: "w"}}}, "does not exist"},
+		{"ompig without invariant", provenance{Golden: []goldenEntry{{Paths: []string{"b/testdata/y.golden"}, Owner: "ompig"}}}, "names the invariant test"},
+		{"ompig with unknown invariant", provenance{Golden: []goldenEntry{{Paths: []string{"b/testdata/y.golden"}, Owner: "ompig", Invariant: "TestMissing", Why: "w"}}}, "does not exist"},
 		{"entry matching nothing", provenance{Golden: []goldenEntry{{Paths: []string{"zzz/*"}, Owner: "pi", Generator: "a/testdata/gen.mjs"}}}, "matches no tracked file"},
-		{"bad owner", provenance{Golden: []goldenEntry{{Paths: []string{"c/testdata/z.golden"}, Owner: "me"}}}, "owner must be pi or pig"},
+		{"bad owner", provenance{Golden: []goldenEntry{{Paths: []string{"c/testdata/z.golden"}, Owner: "me"}}}, "owner must be pi or ompig"},
 	}
 	for _, tc := range cases {
 		problems := checkProvenance("", tracked, tc.prov, known)
@@ -59,7 +59,7 @@ func TestCheckProvenanceRejectsUndeclaredAndIncompleteGoldens(t *testing.T) {
 	}
 	complete := provenance{Golden: []goldenEntry{
 		{Paths: []string{"a/testdata/x-golden.json"}, Owner: "pi", Generator: "a/testdata/gen.mjs"},
-		{Paths: []string{"b/testdata/*.golden", "c/testdata/z.golden"}, Owner: "pig", Invariant: "TestRule", Why: "w"},
+		{Paths: []string{"b/testdata/*.golden", "c/testdata/z.golden"}, Owner: "ompig", Invariant: "TestRule", Why: "w"},
 	}}
 	if problems := checkProvenance("", tracked, complete, known); len(problems) != 0 {
 		t.Errorf("declared goldens reported: %q", problems)
@@ -153,7 +153,7 @@ func TestCheckCoEditsRequiresAPiCitation(t *testing.T) {
 		t.Fatalf("a refactor that keeps every expected value was rejected: %v %q", err, problems)
 	}
 
-	// A trailer or a test-line citation must name a Pi file: a PiG TypeScript file or an invented name is not one.
+	// A trailer or a test-line citation must name a Pi file: a Ompig TypeScript file or an invented name is not one.
 	for i, message := range []string{"follow nobody\n\nPi-Behavior-Change: extensions/sdk-ts/src/index.ts:3", "follow nobody\n\nPi-Behavior-Change: invented.ts:1"} {
 		before := gitIn(t, dir, "rev-parse", "HEAD")
 		edit(fmt.Sprintf("uncited-%d", i), message)
@@ -207,7 +207,7 @@ func TestLostBlocksNeedsAnotherCoveringRun(t *testing.T) {
 }
 
 func TestBlockRangesMapsImportPathsToFiles(t *testing.T) {
-	r := blockRanges("github.com/MichaelKinsy/PiG/tui/a.go:10.2,12.5 3\nexample.com/other/b.go:1.1,2.2 1\n")
+	r := blockRanges("github.com/tmih06/ompig/tui/a.go:10.2,12.5 3\nexample.com/other/b.go:1.1,2.2 1\n")
 	if got := r["tui/a.go"]; len(got) != 1 || got[0] != (lineRange{10, 12}) {
 		t.Fatalf("ranges = %v", r)
 	}
@@ -283,7 +283,7 @@ func TestCheckProvenanceCoversTheDataOfAGoldenWritingTest(t *testing.T) {
 		}
 	}
 	prov := provenance{
-		Golden: []goldenEntry{{Paths: []string{"w/testdata/*.out"}, Owner: "pig", Invariant: "TestRule", Why: "pins bytes"}},
+		Golden: []goldenEntry{{Paths: []string{"w/testdata/*.out"}, Owner: "ompig", Invariant: "TestRule", Why: "pins bytes"}},
 		Input:  []inputEntry{{Paths: []string{"w/testdata/*.in"}}},
 	}
 	if problems := checkProvenance(root, tracked, prov, known); len(problems) != 0 {

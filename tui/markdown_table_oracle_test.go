@@ -28,7 +28,7 @@ func TestMarkdownNarrowTableFallbackRawMatchesPi(t *testing.T) {
 }
 
 // A table never interrupts a quote's paragraph (Ae's paragraph is Me, which drops the table alternative) and a lazy line joins that paragraph, so a pipe line after a quoted line continues the quote and a lazy delimiter row starts no table.
-// Left out: a lazy table header that begins with U+0085, where marked keeps the lines in the quoted paragraph and PiG renders a table.
+// Left out: a lazy table header that begins with U+0085, where marked keeps the lines in the quoted paragraph and Ompig renders a table.
 func TestMarkdownTableLinesAfterQuoteMatchPi(t *testing.T) {
 	compareMarkdownWithPi(t, []string{
 		"> q\n| a |\n|---|\n| b |", "> q\n| a |\ntext", "> q\n|---|", "> q\n|a|\n|-|", "> q\n\u00a0| a |", "> q\n| a |\u00a0", "> q\n| a |\u0085", "> q\n| a |\ufeff", "> q\n|\u0085|",

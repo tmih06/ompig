@@ -3,7 +3,7 @@ package search
 import (
 	"fmt"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // Extension is written for the SDK before 0.2.0: optional booleans are bool.

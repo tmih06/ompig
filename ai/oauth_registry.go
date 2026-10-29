@@ -9,7 +9,7 @@ import (
 )
 
 // builtInOAuthProviders mirrors upstream utils/oauth/index.ts provider registry,
-// limited to the providers pig has actually ported in Go.
+// limited to the providers ompig has actually ported in Go.
 var builtInOAuthProviders = map[string]OAuthProviderInterface{
 	"anthropic":      AnthropicOAuthProvider{},
 	"github-copilot": copilotOAuthRegistryProvider{},
@@ -79,7 +79,7 @@ func (copilotOAuthRegistryProvider) GetAPIKey(creds OAuthCredentials) string { r
 // Mirrors upstream registerOAuthProvider (oauth/index.ts:64).
 //
 // customOAuthProvidersMu guards the map: unlike upstream's single-threaded JS,
-// pig registers/unregisters providers from the extension-host lifecycle
+// ompig registers/unregisters providers from the extension-host lifecycle
 // (goroutines on load/shutdown) while model resolution and the /login selector
 // read concurrently.
 var (

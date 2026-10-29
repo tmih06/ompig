@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 
-// Package frontend is the contract between PiG's interactive mode and a
-// Piglet frontend member that draws it in place of the ANSI renderer (D91).
+// Package frontend is the contract between Ompig's interactive mode and a
+// Ompiglet frontend member that draws it in place of the ANSI renderer (D91).
 //
-// A frontend member is a Go package compiled into a Piglet Binary. It is not
+// A frontend member is a Go package compiled into a Ompiglet Binary. It is not
 // part of the extension API: it has no wire protocol and no subprocess
 // realization, because it owns the terminal's output and reads terminal input
 // on the interactive owner loop.
 //
-// PiG keeps building Pi's component tree. Each frame, it reports what changed
+// Ompig keeps building Pi's component tree. Each frame, it reports what changed
 // as retained-tree ops keyed by stable ids: transcript entries in [RegionMain],
 // the input dock in [RegionDock] and overlays in [RegionOverlay]. Tool calls
 // arrive as [ToolCard] nodes, messages as [MarkdownText] and [Thinking]
@@ -28,8 +28,8 @@ import (
 
 // Frontend opens a frontend session for one interactive run.
 type Frontend interface {
-	// Open runs before the first paint, before PiG reads terminal input. A nil
-	// Session with a nil error means the frontend does not apply here, and PiG
+	// Open runs before the first paint, before Ompig reads terminal input. A nil
+	// Session with a nil error means the frontend does not apply here, and Ompig
 	// paints with its ANSI renderer.
 	Open(env Env) (Session, error)
 }
@@ -38,7 +38,7 @@ type Frontend interface {
 type Env struct {
 	// Out writes to the terminal, from Open, the Session methods or the
 	// session's own goroutines, until Close returns. Each Write reaches the
-	// terminal whole, never interleaved with another Write or with PiG's own
+	// terminal whole, never interleaved with another Write or with Ompig's own
 	// terminal writes (see Session.HandleInput), so a message the terminal
 	// must read whole goes out in one Write.
 	Out io.Writer
@@ -48,19 +48,19 @@ type Env struct {
 	Getenv func(key string) string
 	// AppName and Version identify the running application.
 	AppName, Version string
-	// Fallback asks PiG to stop the session and continue with its ANSI
-	// renderer. It may be called from any goroutine; PiG closes the session
+	// Fallback asks Ompig to stop the session and continue with its ANSI
+	// renderer. It may be called from any goroutine; Ompig closes the session
 	// on its owner loop and repaints the whole tree.
 	Fallback func(reason string)
 
 	// Edit, Undo and Send act on the input editor that the dock reports as
 	// an [Editor] node. Like Fallback, they may be called from any goroutine
-	// and never block. PiG runs them on its owner loop in the order they
-	// were called; one called from Session.HandleInput runs before PiG
+	// and never block. Ompig runs them on its owner loop in the order they
+	// were called; one called from Session.HandleInput runs before Ompig
 	// handles the next input sequence. After Close they do nothing.
 
 	// Edit applies one native edit to the editor's text, unless the text has
-	// changed since the edit was computed: PiG ignores an edit whose Len is
+	// changed since the edit was computed: Ompig ignores an edit whose Len is
 	// not the length of the editor's current text.
 	Edit func(edit Edit)
 	// Undo reverts the editor's last change through its own history, where
@@ -76,7 +76,7 @@ type Env struct {
 
 	// Act acts on the [Selector] or [Settings] node with id Action.Node as
 	// the keys it stands for. Like Edit, it may be called from any goroutine
-	// and never blocks, and after Close it does nothing. PiG feeds the keys
+	// and never blocks, and after Close it does nothing. Ompig feeds the keys
 	// through its terminal input path, after the input it has already read,
 	// to whatever has the keys, so the selector handles them exactly as
 	// typed keys: the same results, side effects and live previews. It works
@@ -88,14 +88,14 @@ type Env struct {
 	Act func(action Action)
 
 	// Click clicks a cell of a node's Click area as a terminal click would:
-	// PiG hands the click to the component that drew the node, which acts
+	// Ompig hands the click to the component that drew the node, which acts
 	// as it does on a click there, such as the header's logo playing its
 	// animation or a fullscreen overlay closing. Like Act, it may be called
 	// from any goroutine and never blocks, and after Close it does nothing.
 	// A click on a node that no longer shows, or outside its Click area,
 	// does nothing.
 	//
-	// pig additive (D91): a click on an extension's view, an overlay's or
+	// ompig additive (D91): a click on an extension's view, an overlay's or
 	// a dock node's, reaches the extension's component as the terminal's
 	// left click at that cell would in Pi's fullscreen mode: a press, then
 	// the release and the click to the component that took the press, or,
@@ -178,39 +178,39 @@ type Click struct {
 	// lines.
 	ViewPath []int
 	// Item names an item of the select-list (its Value) or settings-list
-	// (its ID) at ViewPath; PiG clicks the row it shows on, after wheeling
+	// (its ID) at ViewPath; Ompig clicks the row it shows on, after wheeling
 	// the list until the item is in view, as a terminal user would, and
 	// Row is unused.
 	Item string
 	// Count is the click's place in a double or triple click as the
 	// session saw it, such as 2 for the activate a native list sends after
-	// a double click's second click, or 0. PiG counts a click on an
+	// a double click's second click, or 0. Ompig counts a click on an
 	// extension's view as Pi counts a terminal's: the click on the cell
 	// and component of the one before it, within Pi's double-click
 	// interval, is its second, then its third. A click with Count reaches
-	// the component with that clickCount unless the click PiG counted
+	// the component with that clickCount unless the click Ompig counted
 	// last at that cell already reached it: that was this click.
 	Count int
 }
 
-// Session draws one interactive run. PiG calls every method on its owner
+// Session draws one interactive run. Ompig calls every method on its owner
 // loop, never concurrently; a method must not block on terminal input.
 //
-// A session is the terminal PiG's interactive mode reports its program
+// A session is the terminal Ompig's interactive mode reports its program
 // status to (OSC 7501). A session that implements [ProgramStatusSession]
 // receives every report through ProgramStatus, on the owner loop, in the
 // order the status changed, never while suspended or after Close; one
-// that does not receives none. Neither way does PiG write a status report
+// that does not receives none. Neither way does Ompig write a status report
 // or the OSC 7501 support query to the terminal while a session draws.
 type Session interface {
-	// InputReady reports that PiG's input loop is running: from now on,
+	// InputReady reports that Ompig's input loop is running: from now on,
 	// answers to what the session wrote in Open reach HandleInput without a
 	// startup delay. A session that waits for an answer starts its timeout
-	// here. PiG calls it once, after the first Apply.
+	// here. Ompig calls it once, after the first Apply.
 	InputReady()
 	// Columns reports how many terminal columns the session lays out in the
-	// main and dock regions. PiG renders each region's lines at that width,
-	// capped at the terminal's; zero or less means the terminal's width. PiG
+	// main and dock regions. Ompig renders each region's lines at that width,
+	// capped at the terminal's; zero or less means the terminal's width. Ompig
 	// reads it for every frame and after HandleInput takes a sequence, so a
 	// change from a resize event repaints.
 	Columns() (main, dock int)
@@ -218,50 +218,50 @@ type Session interface {
 	Apply(frame Frame) error
 	// HandleInput is offered every terminal input sequence before key
 	// handling. It reports whether the sequence belonged to the frontend.
-	// PiG reads the terminal's colors and appearance while a session draws,
+	// Ompig reads the terminal's colors and appearance while a session draws,
 	// as it does with its ANSI renderer: it writes the terminal color query
 	// (OSC 10, OSC 11 and OSC 4 for ANSI colors 0-15, then a DA1 request)
 	// to Env.Out, and asks for light/dark reports (CSI ? 2031 h) while its
 	// theme follows the terminal. Their replies, the DA1 reply included, and
-	// the reports (CSI ? 997 ; 1 n or 2 n) are PiG's: a session reports them
+	// the reports (CSI ? 997 ; 1 n or 2 n) are Ompig's: a session reports them
 	// as not its own.
 	HandleInput(data string) bool
-	// Suspend reports that PiG lends the terminal to another program, such
+	// Suspend reports that Ompig lends the terminal to another program, such
 	// as an external editor or, after a job-control stop, the shell, and
-	// stops drawing until Resume. PiG calls it while the terminal is still
-	// raw and before it stops reading input. Until Resume, PiG calls no
+	// stops drawing until Resume. Ompig calls it while the terminal is still
+	// raw and before it stops reading input. Until Resume, Ompig calls no
 	// other method but Close and offers no input, and the session writes
-	// nothing to the terminal, which the other program owns. Input PiG has
+	// nothing to the terminal, which the other program owns. Input Ompig has
 	// read waits for Resume, but what the terminal sends after Suspend
 	// returns reaches the other program, so a session that hears from the
 	// terminal asks it to stop before Suspend returns.
 	Suspend()
-	// Resume reports that PiG has the terminal back in raw mode and reads
+	// Resume reports that Ompig has the terminal back in raw mode and reads
 	// input again. Frames continue from the last one before Suspend: the
 	// next Apply carries only what changed meanwhile.
 	Resume()
-	// Close ends the session. PiG discards the terminal input that arrives
+	// Close ends the session. Ompig discards the terminal input that arrives
 	// after Close, so answers still in flight never reach the shell.
 	Close() error
 }
 
 // ScreenSession is a [Session] that can show a fullscreen [Overlay] over
-// its whole view. PiG then plays the animations its fullscreen mode plays
+// its whole view. Ompig then plays the animations its fullscreen mode plays
 // over the screen, such as the easter eggs of the header's logo and
 // /pigsayhi, as fullscreen overlays; for any other session they do what
 // they do outside fullscreen mode.
 type ScreenSession interface {
 	Session
 	// Screen reports the screen a fullscreen overlay covers now, and false
-	// while the session cannot show one. PiG calls it on its owner loop,
+	// while the session cannot show one. Ompig calls it on its owner loop,
 	// on every frame of an animation.
 	Screen() (Screen, bool)
 }
 
-// ProgramStatusSession is a [Session] that shows what PiG is doing: Pi's
-// program status (OSC 7501, Program Status Protocol), which PiG otherwise
+// ProgramStatusSession is a [Session] that shows what Ompig is doing: Pi's
+// program status (OSC 7501, Program Status Protocol), which Ompig otherwise
 // reports to a terminal that answers its support query. The session is the
-// terminal here, so PiG sends no query and reports every change.
+// terminal here, so Ompig sends no query and reports every change.
 type ProgramStatusSession interface {
 	Session
 	// ProgramStatus receives one status report as Pi writes it to a
@@ -271,12 +271,12 @@ type ProgramStatusSession interface {
 	// and msg is a base64 line of text, such as a dialog's title or the
 	// first line of an error.
 	//
-	// PiG calls it on its owner loop, the loop that also handles terminal
+	// Ompig calls it on its owner loop, the loop that also handles terminal
 	// input and agent events, each time the status changes: an agent run
 	// or compaction starts (working), a dialog or login waits for the user
 	// (blocked) or closes, and a run settles (done, error or idle). Calls
 	// arrive in the order the status changed, and the same report never
-	// twice in a row. Before Suspend and before Close, PiG reports clear
+	// twice in a row. Before Suspend and before Close, Ompig reports clear
 	// if a status shows; after Resume, it reports the latest status again.
 	// It never calls it while suspended or after Close. ProgramStatus must
 	// return without blocking, as a frame's Apply does: a session that
@@ -292,19 +292,19 @@ type Screen struct {
 	// MainRow and MainColumn are the cell where the session shows the first
 	// line of the main region while it shows the region from its start,
 	// and DockColumn the column where it shows the dock's lines, at the
-	// bottom. PiG draws the screen as the session shows it from them, for
+	// bottom. Ompig draws the screen as the session shows it from them, for
 	// an animation that starts from the screen, as the logo's dissolves it.
 	MainRow, MainColumn, DockColumn int
 	// ShowsDock reports that the session shows the dock itself under a
 	// fullscreen overlay, as it shows it outside one: Rows leaves the dock
-	// out, PiG draws the screen without the dock's lines, and the dock
+	// out, Ompig draws the screen without the dock's lines, and the dock
 	// keeps its nodes while the overlay shows. The overlay takes the keys,
 	// so the [Editor] reports Sendable false meanwhile.
 	ShowsDock bool
 	// Hidden reports that the view cannot be seen now, such as while
-	// another tab shows: PiG pauses an animation until it shows again.
+	// another tab shows: Ompig pauses an animation until it shows again.
 	Hidden bool
-	// ReduceMotion reports that the user asked for reduced motion: PiG
+	// ReduceMotion reports that the user asked for reduced motion: Ompig
 	// starts no fullscreen animation and does what it does outside
 	// fullscreen mode.
 	ReduceMotion bool
@@ -321,7 +321,7 @@ type Frame struct {
 	// /new, /resume, /fork or /clone; nil means it is unchanged. A frame may
 	// carry it and no ops.
 	SessionFile *string
-	// Theme is the theme PiG draws with. The first frame carries it, and
+	// Theme is the theme Ompig draws with. The first frame carries it, and
 	// later frames only when its colors changed, such as after a theme
 	// switch in /settings, when the terminal switches between light and dark
 	// under a theme that follows it (a light/dark pair or the system
@@ -329,11 +329,11 @@ type Frame struct {
 	// means it is unchanged. A frame may carry it and no ops.
 	Theme *Theme
 	// Mark is the application's mark, for a frontend that shows a brand of
-	// its own: PiG's is the pig head of its active sprite, the pixels its
+	// its own: Ompig's is the ompig head of its active sprite, the pixels its
 	// startup header draws. The first frame carries it, and later frames only
 	// when it changed, such as after /sprite picks another sprite, an
-	// extension registers or unregisters the sprite PiG shows, or a theme
-	// switch changes the colors PiG draws it in; nil means it is unchanged. A
+	// extension registers or unregisters the sprite Ompig shows, or a theme
+	// switch changes the colors Ompig draws it in; nil means it is unchanged. A
 	// frame may carry it and no ops. A zero Mark is no mark.
 	Mark *Mark
 }
@@ -347,15 +347,15 @@ type Mark struct {
 }
 
 // MarkPixel is one opaque pixel of a [Mark]: its column X and row Y,
-// counted from 0 at the top left, and its color as "#rrggbb", as PiG draws
+// counted from 0 at the top left, and its color as "#rrggbb", as Ompig draws
 // it in the color mode of its theme: in truecolor the pixel's own color, in
-// 256-color mode the xterm color of the palette index PiG picks for it.
+// 256-color mode the xterm color of the palette index Ompig picks for it.
 type MarkPixel struct {
 	X, Y  int
 	Color string
 }
 
-// Theme is the palette of the theme PiG draws with, for a frontend that
+// Theme is the palette of the theme Ompig draws with, for a frontend that
 // draws in colors of its own.
 type Theme struct {
 	// Name is the theme's name, such as "dark", "light" or a custom theme's.
@@ -364,8 +364,8 @@ type Theme struct {
 	Dark bool
 	// Colors maps each color token the theme sets to "#rrggbb", under Pi's
 	// token names (accent, toolSuccessBg, mdHeading, syntaxKeyword, ...),
-	// its export colors (pageBg, cardBg, infoBg) included. A token PiG draws
-	// faint is mixed toward the terminal's background, as PiG resolves it
+	// its export colors (pageBg, cardBg, infoBg) included. A token Ompig draws
+	// faint is mixed toward the terminal's background, as Ompig resolves it
 	// for export. A token the theme leaves at the terminal's default color,
 	// or sets to one of the terminal's sixteen ANSI colors, is absent: it
 	// follows the terminal's own palette.
@@ -382,7 +382,7 @@ const (
 	// RegionDock is the input area under the transcript: pending messages,
 	// status, widgets, the editor and the footer.
 	RegionDock Region = "dock"
-	// RegionOverlay holds the overlays PiG draws over the layout, such as an
+	// RegionOverlay holds the overlays Ompig draws over the layout, such as an
 	// extension's custom component shown as an overlay, each an [Overlay]
 	// node, from the bottom to the top one.
 	RegionOverlay Region = "overlay"
@@ -421,7 +421,7 @@ type Lines struct {
 	Lines []string
 	// Click is the part of the lines that takes a click, such as the
 	// header's logo, or nil. A session reports a click there with
-	// Env.Click. PiG reports it on [RegionMain] nodes.
+	// Env.Click. Ompig reports it on [RegionMain] nodes.
 	Click *Area
 	// View is the structure of the lines when an extension's components
 	// drew them (D107), or nil.
@@ -434,27 +434,27 @@ type Area struct {
 	Row, Column, Rows, Columns int
 }
 
-// Editor is the input editor, with id "editor" in the dock. PiG reports it
+// Editor is the input editor, with id "editor" in the dock. Ompig reports it
 // while the editor is mounted in the dock and no overlay that takes the keys
 // shows, a fullscreen overlay over a [Screen] that ShowsDock aside. When a
-// selector or dialog takes the editor's place and PiG models
+// selector or dialog takes the editor's place and Ompig models
 // it, the dock reports a [Selector] or [Settings] node there instead.
 // Otherwise the whole dock arrives as one [Lines] node. The dock is then, in
 // order: a [Lines] node "dock" for the components above the editor, a
 // [Working] node "working" while a working indicator shows, the editor (or
 // the selector), a [Lines] node "dock.below" for its completion list and the
-// components below it, and a [Footer] node "footer" while PiG's footer shows.
+// components below it, and a [Footer] node "footer" while Ompig's footer shows.
 // The editor's borders are not drawn: the frontend frames the editor itself.
 type Editor struct {
 	// Text is the editor's text, lines joined by "\n". A large paste
-	// appears as its "[paste #N ...]" marker, as PiG draws it.
+	// appears as its "[paste #N ...]" marker, as Ompig draws it.
 	Text string
 	// Cursor is the cursor's offset in Text in UTF-16 code units.
 	Cursor int
 	// Placeholder is the hint to show while Text is empty. Pi's editor
-	// draws none, so stock PiG reports it empty.
+	// draws none, so stock Ompig reports it empty.
 	Placeholder string
-	// Sendable reports that Send submits now: PiG's input loop is running
+	// Sendable reports that Send submits now: Ompig's input loop is running
 	// and the editor has the keys, with no dialog or external editor
 	// holding them and no exit requested. A frontend should send only
 	// while it is true.
@@ -543,9 +543,9 @@ type Setting struct {
 	Submenu bool
 }
 
-// Overlay is a component PiG draws over the layout, in [RegionOverlay], with
+// Overlay is a component Ompig draws over the layout, in [RegionOverlay], with
 // an id that starts with "overlay." and stays while it shows. A component
-// PiG does not model, such as an extension's custom component, arrives as
+// Ompig does not model, such as an extension's custom component, arrives as
 // its ANSI lines.
 type Overlay struct {
 	// Lines are the lines the component renders at Width terminal cells.
@@ -556,13 +556,13 @@ type Overlay struct {
 	// "bottom-left", "bottom-center" or "bottom-right".
 	Anchor string
 	// NonCapturing reports an overlay that does not take the keys; the keys
-	// of any other overlay reach PiG, which hands them to the overlay.
+	// of any other overlay reach Ompig, which hands them to the overlay.
 	NonCapturing bool
-	// Fullscreen reports an overlay that covers the whole screen, as PiG's
+	// Fullscreen reports an overlay that covers the whole screen, as Ompig's
 	// fullscreen mode draws an animation over everything: its Lines are one
 	// per row of the screen that [ScreenSession.Screen] reported, Width
 	// cells wide, and the session shows them over its whole view, with
-	// nothing else visible, until the node is removed. PiG reports one only
+	// nothing else visible, until the node is removed. Ompig reports one only
 	// to a [ScreenSession].
 	Fullscreen bool
 	// Click is the part of the lines that takes a click, or nil: all of a
@@ -598,10 +598,10 @@ type MarkdownText struct {
 	// last part of the assistant message being generated.
 	Streaming bool
 	// Images are the images a user message carries, such as a pasted
-	// screenshot, in order; nil for an assistant's text. PiG's terminal
+	// screenshot, in order; nil for an assistant's text. Ompig's terminal
 	// renderer does not draw them, as Pi's UserMessageComponent shows only
 	// the text; a frontend may show them with the message. They are shared
-	// with PiG and must not be modified.
+	// with Ompig and must not be modified.
 	Images []ViewImage
 }
 
@@ -612,7 +612,7 @@ type Thinking struct {
 	// trailing whitespace, joined by a blank line.
 	Text string
 	// Hidden reports that the user hid thinking (the thinking toggle, or a
-	// click on this run): PiG then draws only a "Thinking..." label.
+	// click on this run): Ompig then draws only a "Thinking..." label.
 	Hidden bool
 	// Streaming reports that the run is still arriving: it is the last part
 	// of the assistant message being generated.
@@ -642,9 +642,9 @@ type ToolCard struct {
 	// Name is the tool name.
 	Name string
 	// Arguments is the call's argument object, nil while its JSON is still
-	// incomplete. It is shared with PiG and must not be modified.
+	// incomplete. It is shared with Ompig and must not be modified.
 	Arguments map[string]any
-	// Header is PiG's one-line call header as plain text, such as
+	// Header is Ompig's one-line call header as plain text, such as
 	// "$ ls -la" or "read src/main.go".
 	Header string
 	Status ToolStatus
@@ -665,14 +665,14 @@ type ToolCard struct {
 	// edit's patch; nil otherwise. A frontend can draw it in place of Output
 	// and Result, which show the same change.
 	Diff *Diff
-	// Images are the result's images that PiG shows after the output, in
+	// Images are the result's images that Ompig shows after the output, in
 	// order; nil when the result has none or the user turned images off
 	// (the terminal.showImages setting). An image's MaxWidthCells is the
-	// width PiG draws it at: terminal.imageWidthCells, at most the card's
-	// width less 2 and at least 1. PiG's terminal renderer draws them only on a terminal
+	// width Ompig draws it at: terminal.imageWidthCells, at most the card's
+	// width less 2 and at least 1. Ompig's terminal renderer draws them only on a terminal
 	// with an image protocol; a frontend draws them itself, and in place of
 	// one it cannot draw shows Pi's text, "[Image: [<mime>] <w>x<h>]". They
-	// are shared with PiG and must not be modified.
+	// are shared with Ompig and must not be modified.
 	Images []ViewImage
 }
 
@@ -698,26 +698,26 @@ const (
 	WorkingRetry WorkingKind = "retry"
 )
 
-// Working is the indicator PiG shows while something runs, which its
+// Working is the indicator Ompig shows while something runs, which its
 // terminal renderer draws in the editor's top border: a spinner and a
 // message. The spinner's frame is not reported; the frontend animates it.
 type Working struct {
 	Kind WorkingKind
-	// Message is the text after the spinner, as PiG draws it: "Working" or
+	// Message is the text after the spinner, as Ompig draws it: "Working" or
 	// an extension's working message, a compaction or branch summary label,
 	// or the retry countdown with the seconds left. It may carry ANSI styling
 	// from an extension.
 	Message string
 	// Frames are the spinner frames an extension chose, which may carry
-	// ANSI styling. Nil means PiG's default spinner, the Braille frames
+	// ANSI styling. Nil means Ompig's default spinner, the Braille frames
 	// "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"; an empty slice means no spinner.
 	Frames []string
 	// Interval is how long each frame shows.
 	Interval time.Duration
 }
 
-// Footer is the session summary that PiG's terminal renderer draws as
-// the footer under the editor. PiG reports it while the footer shows: an
+// Footer is the session summary that Ompig's terminal renderer draws as
+// the footer under the editor. Ompig reports it while the footer shows: an
 // extension's own footer replaces it, and then arrives in "dock.below".
 type Footer struct {
 	// Cwd is the session's working directory, with the home directory
@@ -735,7 +735,7 @@ type Footer struct {
 	// that message had no prompt tokens.
 	LatestCacheHitRate *float64
 	// UsingSubscription reports that the model's provider bills a
-	// subscription; PiG then shows the cost even when it is zero.
+	// subscription; Ompig then shows the cost even when it is zero.
 	UsingSubscription bool
 	ContextUsage      ContextUsage
 	// AutoCompact reports that the session compacts automatically when the
@@ -746,7 +746,7 @@ type Footer struct {
 	// Model is the selected model's id, or "unknown" without one.
 	Model string
 	// Provider is the model's provider id while more than one provider is
-	// available, as PiG then names it; otherwise "".
+	// available, as Ompig then names it; otherwise "".
 	Provider string
 	// ThinkingLevel is the thinking level of a model that reasons: "off",
 	// "minimal", "low", "medium", "high", "xhigh" or "max". It is "" for a

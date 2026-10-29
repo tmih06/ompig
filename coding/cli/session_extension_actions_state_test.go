@@ -5,16 +5,16 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Headless Pi binds the Session's thinking level and base prompt options into every extension
 // (agent-session.ts:3125). Without the binding the host answers its unbound defaults ("" and an empty
 // cwd), which every SDK then returns as if it were the Session's own value.
 func TestSessionExtensionActionsBindThinkingLevelAndPromptOptions(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: cwd})
 	if err != nil {

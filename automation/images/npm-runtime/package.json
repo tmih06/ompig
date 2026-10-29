@@ -1,5 +1,5 @@
 {
-  "name": "pig-ci-npm-runtime",
+  "name": "ompig-ci-npm-runtime",
   "private": true,
   "version": "0.0.0",
   "dependencies": {

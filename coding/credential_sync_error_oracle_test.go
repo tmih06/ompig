@@ -9,11 +9,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
-// CredentialSynchronizationError (core/model-runtime.ts) against pinned Pi: the message, name, members and cause for every operation, provider ids with format verbs, unicode and the empty string, api-key and OAuth credentials, and causes with unicode and empty messages. Pig's Error() is Pi's `${error}` and errors.As finds the typed error through a wrapping error.
+// CredentialSynchronizationError (core/model-runtime.ts) against pinned Pi: the message, name, members and cause for every operation, provider ids with format verbs, unicode and the empty string, api-key and OAuth credentials, and causes with unicode and empty messages. Ompig's Error() is Pi's `${error}` and errors.As finds the typed error through a wrapping error.
 func TestCredentialSynchronizationErrorMatchesPi(t *testing.T) {
 	type probe struct {
 		Provider   string         `json:"provider"`

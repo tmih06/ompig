@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // generateSessionPath is one generated root-to-leaf session path: message, compaction, branch summary, custom message, model/thinking change, context edit and bookkeeping entries.
@@ -125,7 +125,7 @@ func generateSessionPath(rng *rand.Rand) []json.RawMessage {
 // pi: packages/coding-agent/src/core/compaction/compaction.ts
 
 // prepareCompaction, findCutPoint, findTurnStartIndex, getLastAssistantUsage, estimateContextTokens, estimateTokens and shouldCompact
-// (compaction.ts), with the session projection they read (session-manager.ts buildSessionContext), run in the pinned Pi and in PiG over
+// (compaction.ts), with the session projection they read (session-manager.ts buildSessionContext), run in the pinned Pi and in Ompig over
 // generated session paths: user, assistant (usage, tool calls, errors), tool result, bash, custom, compaction, branch summary, custom
 // message, model/thinking changes, context edits and bookkeeping entries, with token budgets around the cut points.
 func TestCompactionMatchesPi(t *testing.T) {
@@ -209,20 +209,20 @@ func TestCompactionMatchesPi(t *testing.T) {
 		got["should"] = map[string]any{"ok": ShouldCompact(cases[i]["window"].(int), 100000, settings)}
 		for key, value := range got {
 			if key == "prep" {
-				// A compaction entry with an empty summary gives Pi previousSummary "", PiG's string field omits it (language: no undefined/"" distinction).
+				// A compaction entry with an empty summary gives Pi previousSummary "", Ompig's string field omits it (language: no undefined/"" distinction).
 				if ok, _ := want[i][key].(map[string]any)["ok"].(map[string]any); ok != nil && ok["previousSummary"] == "" {
 					delete(ok, "previousSummary")
 				}
 			}
 			if key == "prep" && editTargetsEntryAfterAssistant(entries) {
-				// D136: PiG keeps the usage anchor across an edit of a later entry, so its tokensBefore is Pi's own usage-anchored
+				// D136: Ompig keeps the usage anchor across an edit of a later entry, so its tokensBefore is Pi's own usage-anchored
 				// estimateContextTokens total for the projected context instead of Pi's whole-history re-estimate. Every other field must match.
 				if gotPrep, _ := value.(map[string]any)["ok"].(map[string]any); gotPrep != nil {
 					wantPrep, _ := want[i][key].(map[string]any)["ok"].(map[string]any)
 					wantEstimate, _ := want[i]["estimate"].(map[string]any)["ok"].(map[string]any)
 					if wantPrep != nil && wantEstimate != nil && gotPrep["tokensBefore"] != wantPrep["tokensBefore"] {
 						if gotPrep["tokensBefore"] != wantEstimate["tokens"] {
-							t.Errorf("case %d prep.tokensBefore: PiG %v is neither Pi's %v nor Pi's anchored estimate %v", i, gotPrep["tokensBefore"], wantPrep["tokensBefore"], wantEstimate["tokens"])
+							t.Errorf("case %d prep.tokensBefore: Ompig %v is neither Pi's %v nor Pi's anchored estimate %v", i, gotPrep["tokensBefore"], wantPrep["tokensBefore"], wantEstimate["tokens"])
 						}
 						anchorKept++
 						gotPrep["tokensBefore"] = wantPrep["tokensBefore"]
@@ -259,7 +259,7 @@ func firstDiff(path string, got, want any) string {
 		}
 		for _, key := range slices.Sorted(maps.Keys(g)) {
 			if _, present := w[key]; !present {
-				return fmt.Sprintf("%s.%s: PiG has it (%.200s), Pi does not", path, key, oracleJSON(g[key]))
+				return fmt.Sprintf("%s.%s: Ompig has it (%.200s), Pi does not", path, key, oracleJSON(g[key]))
 			}
 			if !reflect.DeepEqual(g[key], w[key]) {
 				return firstDiff(path+"."+key, g[key], w[key])
@@ -267,7 +267,7 @@ func firstDiff(path string, got, want any) string {
 		}
 		for key := range w {
 			if _, present := g[key]; !present {
-				return fmt.Sprintf("%s.%s: Pi has it (%.200s), PiG does not", path, key, oracleJSON(w[key]))
+				return fmt.Sprintf("%s.%s: Pi has it (%.200s), Ompig does not", path, key, oracleJSON(w[key]))
 			}
 		}
 	case []any:
@@ -280,12 +280,12 @@ func firstDiff(path string, got, want any) string {
 				return firstDiff(fmt.Sprintf("%s[%d]", path, i), g[i], w[i])
 			}
 		}
-		return fmt.Sprintf("%s: PiG has %d items, Pi %d", path, len(g), len(w))
+		return fmt.Sprintf("%s: Ompig has %d items, Pi %d", path, len(g), len(w))
 	}
-	return fmt.Sprintf("%s: PiG %.300s, Pi %.300s", path, oracleJSON(got), oracleJSON(want))
+	return fmt.Sprintf("%s: Ompig %.300s, Pi %.300s", path, oracleJSON(got), oracleJSON(want))
 }
 
-// editTargetsEntryAfterAssistant reports whether a context_edit entry targets an entry after an assistant entry, the only case where PiG's usage anchor can outlive an edit (D136).
+// editTargetsEntryAfterAssistant reports whether a context_edit entry targets an entry after an assistant entry, the only case where Ompig's usage anchor can outlive an edit (D136).
 func editTargetsEntryAfterAssistant(entries []codingagent.SessionEntry) bool {
 	for _, entry := range entries {
 		if entry.Base().Type != "context_edit" {

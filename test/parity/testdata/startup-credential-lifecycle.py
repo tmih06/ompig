@@ -56,7 +56,7 @@ def run(binary, api):
         credential = {"type": "oauth", "access": "stale", "refresh": "stale", "expires": 1} if radius else {"type": "api_key", "key": "stored-key"}
         (home / "auth.json").write_text(json.dumps({provider: credential}))
         (home / "settings.json").write_text('{"enableInstallTelemetry":false}')
-        env = dict(os.environ, PIG_CODING_AGENT_DIR=root, PI_CODING_AGENT_DIR=root, PI_SKIP_VERSION_CHECK="1", OPENAI_API_KEY="env-key", RADIUS_API_KEY="env-radius")  # gitleaks:allow -- synthetic fixture keys
+        env = dict(os.environ, OMPIG_CODING_AGENT_DIR=root, PI_CODING_AGENT_DIR=root, PI_SKIP_VERSION_CHECK="1", OPENAI_API_KEY="env-key", RADIUS_API_KEY="env-radius")  # gitleaks:allow -- synthetic fixture keys
         for name in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy"):
             env.pop(name, None)
         process = subprocess.Popen([binary, "--mode", "rpc", "--offline", "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-session", "--model", f"{provider}/{model}"], cwd=root, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -134,6 +134,6 @@ def run(binary, api):
             assert not shutdown_timed_out, "CLI did not stop after stdin EOF"
 
 
-binary = os.environ["PIG_PARITY_PIG_BIN"] if sys.argv[1] == "pig" else os.environ["PIG_PARITY_PI_BIN"]
+binary = os.environ["OMPIG_PARITY_OMPIG_BIN"] if sys.argv[1] == "ompig" else os.environ["OMPIG_PARITY_PI_BIN"]
 for api in ("pi-messages", "openai-completions", "openai-responses"):
     run(binary, api)

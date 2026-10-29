@@ -10,7 +10,7 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // The suite's upstream faux provider estimates usage from each actual request (faux.ts:158-266). A zero-usage scripted response does not represent that fixture.

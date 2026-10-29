@@ -15,17 +15,17 @@ func isolatePathTestHome(t *testing.T) string {
 	root := t.TempDir()
 	home := filepath.Join(root, "home")
 	for key, dir := range map[string]string{
-		"HOME":                         home,
-		"USERPROFILE":                  home,
-		"PIG_HOME":                     filepath.Join(root, "pig-home"),
-		"PIG_CODING_AGENT_DIR":         filepath.Join(root, "pig-agent"),
-		"PI_CODING_AGENT_DIR":          filepath.Join(root, "pi-agent"),
-		"PIG_CODING_AGENT_SESSION_DIR": filepath.Join(root, "pig-sessions"),
-		"PI_CODING_AGENT_SESSION_DIR":  filepath.Join(root, "pi-sessions"),
-		"XDG_CONFIG_HOME":              filepath.Join(root, "config"),
-		"XDG_DATA_HOME":                filepath.Join(root, "data"),
-		"XDG_STATE_HOME":               filepath.Join(root, "state"),
-		"XDG_CACHE_HOME":               filepath.Join(root, "cache"),
+		"HOME":                           home,
+		"USERPROFILE":                    home,
+		"OMPIG_HOME":                     filepath.Join(root, "ompig-home"),
+		"OMPIG_CODING_AGENT_DIR":         filepath.Join(root, "ompig-agent"),
+		"PI_CODING_AGENT_DIR":            filepath.Join(root, "pi-agent"),
+		"OMPIG_CODING_AGENT_SESSION_DIR": filepath.Join(root, "ompig-sessions"),
+		"PI_CODING_AGENT_SESSION_DIR":    filepath.Join(root, "pi-sessions"),
+		"XDG_CONFIG_HOME":                filepath.Join(root, "config"),
+		"XDG_DATA_HOME":                  filepath.Join(root, "data"),
+		"XDG_STATE_HOME":                 filepath.Join(root, "state"),
+		"XDG_CACHE_HOME":                 filepath.Join(root, "cache"),
 	} {
 		if err := os.MkdirAll(dir, 0o700); err != nil {
 			t.Fatal(err)

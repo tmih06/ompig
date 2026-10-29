@@ -11,23 +11,23 @@ function replace(before, after) {
   config = config.replaceAll(before, after);
 }
 replace('export const isBundledNode = typeof PI_BUNDLED_NODE !== "undefined" && PI_BUNDLED_NODE;', 'export const isBundledNode = true;');
-replace('export const APP_NAME = piConfigName || "pi";', 'export const APP_NAME = "pig"; // pig divergence (D2): host configuration identity.');
-replace('export const CONFIG_DIR_NAME = pkg.piConfig?.configDir || ".pi";', 'export { CONFIG_DIR_NAME } from "../../pig-config.mjs"; // pig divergence (D2): selected host configuration tree.');
-replace('export const ENV_AGENT_DIR = `${APP_NAME.toUpperCase()}_CODING_AGENT_DIR`;', 'export { ENV_AGENT_DIR } from "../../pig-config.mjs";');
+replace('export const APP_NAME = piConfigName || "pi";', 'export const APP_NAME = "ompig"; // ompig divergence (D2): host configuration identity.');
+replace('export const CONFIG_DIR_NAME = pkg.piConfig?.configDir || ".pi";', 'export { CONFIG_DIR_NAME } from "../../ompig-config.mjs"; // ompig divergence (D2): selected host configuration tree.');
+replace('export const ENV_AGENT_DIR = `${APP_NAME.toUpperCase()}_CODING_AGENT_DIR`;', 'export { ENV_AGENT_DIR } from "../../ompig-config.mjs";');
 replace(`export function getAgentDir() {
     const envDir = process.env[ENV_AGENT_DIR];
     if (envDir) {
         return expandTildePath(envDir);
     }
     return join(homedir(), CONFIG_DIR_NAME, "agent");
-}`, `// pig divergence (D2): independent SDK instances share the host's default config root.
-import { CONFIG_DIR_NAME, getAgentDir } from "../../pig-config.mjs";
+}`, `// ompig divergence (D2): independent SDK instances share the host's default config root.
+import { CONFIG_DIR_NAME, getAgentDir } from "../../ompig-config.mjs";
 export { getAgentDir };`);
 // The private copy mirrors dist directly under its package root.
 replace('const srcOrDist = existsSync(join(packageDir, "src")) ? "src" : "dist";', 'const srcOrDist = ".";');
 // Codemode assets: the private quickjs-wasi copy is not under a node_modules directory, so the wasm resolves beside it; isBundledNode names the worker entry that the closure copies from dist/extensions/codemode/worker.js (Pi's Bun layout, config.ts getCodemodeWorkerUrl).
 replace('quickJSWasmPath ??= createRequire(import.meta.url).resolve("quickjs-wasi/quickjs.wasm");', 'quickJSWasmPath ??= fileURLToPath(new URL("../../quickjs-wasi/quickjs.wasm", import.meta.url));');
-// Pi 1.0.3 (#10439) spawns the bundled-node worker from a data: URL so an update cannot remove it. The private copy sits in PiG's content-addressed runtime directory, which an update does not replace, and the vendored worker keeps its relative imports, which need a file location.
+// Pi 1.0.3 (#10439) spawns the bundled-node worker from a data: URL so an update cannot remove it. The private copy sits in Ompig's content-addressed runtime directory, which an update does not replace, and the vendored worker keeps its relative imports, which need a file location.
 replace(`    // Spawn workers from an in-memory copy. An update replaces or deletes the file while this
     // process keeps running (#10439). The bundle build keeps the worker free of relative imports
     // and import.meta, so it runs from a data: URL.

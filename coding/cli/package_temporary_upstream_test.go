@@ -9,18 +9,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // .upstream/v0.87.1/packages/coding-agent/test/git-update.test.ts:237
 func TestTemporaryGitRefreshWhenResolvingUpstream(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
 	t.Chdir(cwd)
-	t.Setenv("PIG_HOME", t.TempDir())
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	const source = "git:github.com/test/extension"
 	digest := sha256.Sum256([]byte("git-github.com-test/extension"))
 	cached := filepath.Join(agentDir, "tmp", "extensions", "git-github.com", fmt.Sprintf("%x", digest)[:8], "test", "extension")
@@ -36,10 +36,10 @@ func TestTemporaryGitRefreshWhenResolvingUpstream(t *testing.T) {
 	}
 	bin := t.TempDir()
 	log := filepath.Join(t.TempDir(), "commands")
-	t.Setenv("PIG_TEMP_REFRESH_LOG", log)
-	t.Setenv("PIG_TEMP_REFRESH_FILE", extensionFile)
+	t.Setenv("OMPIG_TEMP_REFRESH_LOG", log)
+	t.Setenv("OMPIG_TEMP_REFRESH_FILE", extensionFile)
 	writeStubScript(t, filepath.Join(bin, "git"), `#!/bin/sh
-printf 'git %s\n' "$*" >> "$PIG_TEMP_REFRESH_LOG"
+printf 'git %s\n' "$*" >> "$OMPIG_TEMP_REFRESH_LOG"
 if [ "$1" = "rev-parse" ]; then
  case "$2" in
  HEAD) printf 'local-head\n';;
@@ -47,7 +47,7 @@ if [ "$1" = "rev-parse" ]; then
  *) printf 'remote-head\n';;
  esac
 elif [ "$1" = "reset" ]; then
- printf '// fresh' > "$PIG_TEMP_REFRESH_FILE"
+ printf '// fresh' > "$OMPIG_TEMP_REFRESH_FILE"
 fi
 `)
 	writeStubScript(t, filepath.Join(bin, "npm"), "#!/bin/sh\nexit 0\n")
@@ -140,8 +140,8 @@ func TestTemporaryGitCacheBoundaries(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			cwd, agentDir := t.TempDir(), t.TempDir()
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			if tc.offline {
 				t.Setenv("PI_OFFLINE", "1")
@@ -213,8 +213,8 @@ func TestTemporaryGitSourceLoadsOnlyPackageResources(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			cwd, agentDir := t.TempDir(), t.TempDir()
-			t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "1")
 			cached := tc.cache(agentDir)
 			// An installed npm Package always has a package.json; this one has no "pi" manifest.
@@ -245,8 +245,8 @@ func TestTemporaryGitSourceLoadsOnlyPackageResources(t *testing.T) {
 // reusing the old one, and only the new checkout's extension loads.
 func TestPinnedTemporaryGitSourceChangingRefLoadsNewCheckout(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	temporaryDir := func(ref string) string {
 		digest := sha256.Sum256([]byte("git-github.com-example/repo@" + ref))
@@ -260,12 +260,12 @@ func TestPinnedTemporaryGitSourceChangingRefLoadsNewCheckout(t *testing.T) {
 	writePackageResource(t, filepath.Join(oldPath, "extensions", "old.ts"), "export default function() {};")
 
 	bin, log := t.TempDir(), filepath.Join(t.TempDir(), "commands")
-	t.Setenv("PIG_TEMP_REF_LOG", log)
-	t.Setenv("PIG_TEMP_REF_NEW", newPath)
+	t.Setenv("OMPIG_TEMP_REF_LOG", log)
+	t.Setenv("OMPIG_TEMP_REF_NEW", newPath)
 	writeStubScript(t, filepath.Join(bin, "git"), `#!/bin/sh
-printf 'git %s\n' "$*" >> "$PIG_TEMP_REF_LOG"
+printf 'git %s\n' "$*" >> "$OMPIG_TEMP_REF_LOG"
 if [ "$1" = "clone" ]; then
- mkdir -p "$PIG_TEMP_REF_NEW/extensions" "$3"
+ mkdir -p "$OMPIG_TEMP_REF_NEW/extensions" "$3"
  printf '{"name":"repo","version":"1.0.0"}' > "$3/package.json"
  printf 'export default function() {};' > "$3/extensions/new.ts"
 fi

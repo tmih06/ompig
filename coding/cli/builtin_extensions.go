@@ -4,10 +4,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/configroot"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/configroot"
 )
 
 // llamaBuiltinName is the name of the built-in llama.cpp extension, the first entry of builtInExtensions.
@@ -29,7 +29,7 @@ func nativeBuiltInExtensions(settings *codingagent.SettingsManager) []extension.
 		agentDir = dir
 	}
 	options.ConfigureMcp(agentDir, codingagent.ConfigDirName(), codingagent.OpenBrowser, codingagent.CopyToClipboard)
-	// pig additive (D92): a Binary without llama.cpp has no llama.cpp entry.
+	// ompig additive (D92): a Binary without llama.cpp has no llama.cpp entry.
 	inline := llamaInlineExtensions()
 	for _, entry := range builtin.All(options) {
 		inline = append(inline, extension.NamedInlineExtension{Name: entry.Name, Factory: entry.Factory, Replaceable: entry.Replaceable, Builtin: true})
@@ -37,16 +37,16 @@ func nativeBuiltInExtensions(settings *codingagent.SettingsManager) []extension.
 	return inline
 }
 
-// wazeroCacheDir is where the codemode sandbox keeps wazero's compilation cache: `cache/wazero` under PIG_HOME, else
+// wazeroCacheDir is where the codemode sandbox keeps wazero's compilation cache: `cache/wazero` under OMPIG_HOME, else
 // under the user cache directory. It is an optimization only; an unusable directory is ignored.
 func wazeroCacheDir() string {
-	if os.Getenv("PIG_HOME") != "" {
+	if os.Getenv("OMPIG_HOME") != "" {
 		if root, err := configroot.Resolve(); err == nil {
 			return filepath.Join(root, "cache", "wazero")
 		}
 	}
 	if dir, err := os.UserCacheDir(); err == nil {
-		return filepath.Join(dir, "pig", "wazero")
+		return filepath.Join(dir, "ompig", "wazero")
 	}
 	return ""
 }

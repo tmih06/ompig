@@ -1,16 +1,16 @@
-//go:build pig_strip_self_update
+//go:build ompig_strip_self_update
 
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// pig additive (D92): this Piglet Binary compiled out self-update; its Piglet distribution updates it.
+// ompig additive (D92): this Ompiglet Binary compiled out self-update; its Ompiglet distribution updates it.
 func init() { pigstrip.Strip(pigstrip.ListFeatures, pigstrip.SelfUpdate) }
 
-// runSelfUpdate refuses: this build cannot replace itself. `pig update --all`
+// runSelfUpdate refuses: this build cannot replace itself. `ompig update --all`
 // still updates packages first and then exits 1 with this message.
 func runSelfUpdate(bool) int {
 	return reportStrippedFeature("self-update", pigstrip.SelfUpdate, selfUpdateStrippedHint)

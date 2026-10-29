@@ -5,7 +5,7 @@ package coding
 // over the native builtin:codemode and builtin:tool-search extensions. TestToolsWithDefaultActiveFalseAreActiveOnlyWhenNamed guards the same rule with synthetic tools.
 
 import (
-	"github.com/MichaelKinsy/PiG/coding/extension/factoryload"
+	"github.com/tmih06/ompig/coding/extension/factoryload"
 
 	"context"
 	"encoding/json"
@@ -16,12 +16,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func orchestrationTool(name, description string, definition extension.ToolDefinition) extension.RegisteredTool {
@@ -316,7 +316,7 @@ func TestSessionToolOrchestrationRegistersCodemodeAndToolSearchInactiveUntilName
 			t.Fatalf("getAllTools = %v, want %s", names, want)
 		}
 	}
-	assertEqual(t, "plain active", plain.ActiveToolNames(), []string{"read", "bash", "edit", "write"})
+	assertEqual(t, "plain active", plain.ActiveToolNames(), []string{"read", "bash", "edit", "write", "task", "wait", "agents"})
 
 	// --tools and the defaultTools setting name them explicitly.
 	allowed := open(t, icodingagent.Settings{}, map[string]struct{}{"read": {}, "codemode": {}})

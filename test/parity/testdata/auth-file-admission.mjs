@@ -6,7 +6,7 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const operations = ["modify", "delete"];
-if (process.argv[2] === "pig") {
+if (process.argv[2] === "ompig") {
   const output = execFileSync("./test/parity/testdata/prebuilt-go-test.sh", ["./ai", "-run", "^TestFileAuthStorageQueuedMutationCancellation$", "-count=1", "-v"], { encoding: "utf8" });
   const records = output.split("\n").filter(line => line.startsWith("FILE_AUTH_ADMISSION "));
   assert.equal(records.length, operations.length);

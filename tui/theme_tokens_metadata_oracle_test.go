@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type piThemeToken struct {
@@ -85,7 +85,7 @@ func TestThemeTokenMetadataMatchesPi(t *testing.T) {
 	}
 }
 
-// Dropping each optional token from a copy of Pi's dark theme makes Pi's loader resolve it to its fallback token; PiG's loader must resolve the same ANSI
+// Dropping each optional token from a copy of Pi's dark theme makes Pi's loader resolve it to its fallback token; Ompig's loader must resolve the same ANSI
 // opening for every token, in truecolor and 256-color mode, whether one optional token or all of them are omitted.
 func TestOmittedOptionalThemeTokensFallBackAsInPi(t *testing.T) {
 	root := pioracle.Root(t)
@@ -163,7 +163,7 @@ emit(input.map((file) => {
 			}
 			fg, bg := theme.ANSIPalette()
 			if !mapsEqual(fg, answer.Fg) || !mapsEqual(bg, answer.Bg) {
-				t.Errorf("omitting %v in %s: PiG palette differs from Pi\n fg PiG %q\n fg Pi  %q\n bg PiG %q\n bg Pi  %q", variants[i], mode, fg, answer.Fg, bg, answer.Bg)
+				t.Errorf("omitting %v in %s: Ompig palette differs from Pi\n fg Ompig %q\n fg Pi  %q\n bg Ompig %q\n bg Pi  %q", variants[i], mode, fg, answer.Fg, bg, answer.Bg)
 			}
 		}
 	}

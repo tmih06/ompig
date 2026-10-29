@@ -37,7 +37,7 @@ for (const c of JSON.parse(input)) {
 	if (c.op === "run") {
 		// {op: "run", tool, args, files: {name: base64}}: runs one tool of createCodingTools() in a temp directory and answers its result, the
 		// output the tool streamed and every file left behind (base64), or {error, files} when it throws.
-		const directory = mkdtempSync(join(tmpdir(), "pig-oracle-run-"));
+		const directory = mkdtempSync(join(tmpdir(), "ompig-oracle-run-"));
 		try {
 			for (const [name, data] of Object.entries(c.files)) {
 				mkdirSync(dirname(join(directory, name)), { recursive: true });
@@ -60,7 +60,7 @@ for (const c of JSON.parse(input)) {
 		}
 		continue;
 	}
-	const directory = mkdtempSync(join(tmpdir(), "pig-oracle-read-"));
+	const directory = mkdtempSync(join(tmpdir(), "ompig-oracle-read-"));
 	try {
 		for (const [name, data] of Object.entries(c.files)) writeFileSync(join(directory, name), Buffer.from(data, "base64"));
 		const seen = {};

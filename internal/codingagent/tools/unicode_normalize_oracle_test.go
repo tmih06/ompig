@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type normalizeForms struct {
@@ -18,7 +18,7 @@ type normalizeForms struct {
 	NFKC string `json:"nfkc"`
 }
 
-// String.prototype.normalize against golang.org/x/text/unicode/norm, which PiG uses where Pi calls normalize: NFKC in the edit tool's fuzzy
+// String.prototype.normalize against golang.org/x/text/unicode/norm, which Ompig uses where Pi calls normalize: NFKC in the edit tool's fuzzy
 // match (edit-diff.ts normalizeForFuzzyMatch) and NFD in the macOS file-name variants (path-utils.ts tryNFDVariant). Every code point, then random
 // sequences of the code points that change, which also exercise canonical ordering and composition.
 func TestUnicodeNormalizationMatchesNode(t *testing.T) {

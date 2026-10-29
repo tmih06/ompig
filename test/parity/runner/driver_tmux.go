@@ -38,13 +38,13 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 
 	// Allocate a fresh per-binary tempdir for token substitution.
 	// {{TEMP}} in any scenario CLI arg, env value, or cwd resolves
-	// to this path. pig and pi get DISTINCT roots so they cannot
+	// to this path. ompig and pi get DISTINCT roots so they cannot
 	// share state within a single run, and every run gets a fresh
 	// root so durability runs (runs = 3) cannot share state across
 	// repetitions. See test/parity/runner/tokens.go for rationale.
 	tc := newTokenContext(t, "tmux-"+sc.Name+"-"+bin.Label)
-	if bin.Label == "pig" && sc.Env.PigBin != "" {
-		bin.Path = resolveScenarioCWD(sc.SourcePath, tc.expand(sc.Env.PigBin))
+	if bin.Label == "ompig" && sc.Env.OmpigBin != "" {
+		bin.Path = resolveScenarioCWD(sc.SourcePath, tc.expand(sc.Env.OmpigBin))
 	}
 	if bin.Label == "pi" && sc.Env.PiBin != "" {
 		bin.Path = resolveScenarioCWD(sc.SourcePath, tc.expand(sc.Env.PiBin))
@@ -84,15 +84,15 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 	// Snapshot agent dirs so binary writes (e.g. pi persisting
 	// defaultModel into settings.json) never mutate committed testdata.
 	preserveAuth, injectAuth := scenarioAuthModes(sc)
-	pigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Pig, sc.Env.Pi, preserveAuth, injectAuth)
+	ompigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Ompig, sc.Env.Pi, preserveAuth, injectAuth)
 
 	// Build the inline shell command: env... bin args...; sleep keeps the
 	// pane alive so we can capture after the binary settles.
 	parts := snapshotBinaryEnv(t, sc.SourcePath, bin.Env, preserveAuth, injectAuth)
 	// Apply per-binary env overrides from the scenario's [env] section.
 	switch bin.Label {
-	case "pig":
-		parts = append(parts, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, pigEnv))...)
+	case "ompig":
+		parts = append(parts, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, ompigEnv))...)
 	case "pi":
 		parts = append(parts, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, piEnv))...)
 	}
@@ -112,8 +112,8 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 	// Token expansion happens here so scenarios can use {{TEMP}} in any
 	// flag value (e.g. `--session-dir`, `--log-dir`, `--config-path`).
 	switch bin.Label {
-	case "pig":
-		parts = append(parts, tc.expandSlice(sc.Env.PigArgs)...)
+	case "ompig":
+		parts = append(parts, tc.expandSlice(sc.Env.OmpigArgs)...)
 	case "pi":
 		parts = append(parts, tc.expandSlice(sc.Env.PiArgs)...)
 	}
@@ -132,9 +132,9 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 			parts = append(parts, "-e", snapshot)
 		}
 	}
-	// Apply per-binary extension overrides for pig.
-	if bin.Label == "pig" {
-		for _, ext := range sc.Env.PigExtensions {
+	// Apply per-binary extension overrides for ompig.
+	if bin.Label == "ompig" {
+		for _, ext := range sc.Env.OmpigExtensions {
 			resolved := ext
 			if !filepath.IsAbs(ext) {
 				resolved = filepath.Join(filepath.Dir(sc.SourcePath), ext)
@@ -167,7 +167,7 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 	// Working directory: prepend `cd <dir> && …` so the binary launches in
 	// the scenario cwd (resolved relative to the scenario source path) or
 	// the default cwd fixture. The directory is copied per binary under the
-	// temp root, mirroring snapshotAgentDirs, so concurrent pi/pig
+	// temp root, mirroring snapshotAgentDirs, so concurrent pi/ompig
 	// invocations cannot race on shared fixture files (e.g. an edit-tool
 	// diff scenario where both binaries mutate parity-edit-target.txt) and
 	// neither binary runs inside the checkout.
@@ -234,7 +234,7 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 	// Startup-surface gate. A scenario with no input captures what the binary
 	// renders by itself, but Pi mounts the TUI, and so draws the ready footer,
 	// before managed-tool setup, extension binding and the resumed transcript
-	// (interactive-mode.ts:951-1036); PiG keeps that order. The footer alone
+	// (interactive-mode.ts:951-1036); Ompig keeps that order. The footer alone
 	// therefore does not mean the asserted surface has rendered. Wait, bounded
 	// by the ready timeout, for the capture surface itself; a surface that never
 	// appears still fails the capture_start check below.
@@ -325,8 +325,8 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 	}
 	if exited && exitCode != 0 && operationErr == nil {
 		expected := sc.Assert.ExitCode
-		if bin.Label == "pig" && sc.Assert.PigExitCode != nil {
-			expected = sc.Assert.PigExitCode
+		if bin.Label == "ompig" && sc.Assert.OmpigExitCode != nil {
+			expected = sc.Assert.OmpigExitCode
 		}
 		if bin.Label == "pi" && sc.Assert.PiExitCode != nil {
 			expected = sc.Assert.PiExitCode
@@ -349,7 +349,7 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 		result.Err = fmt.Errorf("capture_start %q absent after scenario steps", cfg.CaptureStart)
 	}
 	// Coverage-only: Go integration coverage flushes on a clean process exit, but
-	// an interactive pig sits at its prompt and is SIGKILLed at teardown, losing
+	// an interactive ompig sits at its prompt and is SIGKILLed at teardown, losing
 	// its counters. When GOCOVERDIR is set, drive a clean quit after capture so
 	// the normal exit path writes coverage. This runs only under a coverage build
 	// (GOCOVERDIR unset in ordinary parity runs) and never touches the already
@@ -360,11 +360,11 @@ func (tmuxDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *Scen
 	return result
 }
 
-// flushCoverageOnCleanExit drives an interactive, coverage-instrumented pig to a
-// normal exit so its counters are written before teardown. It sends pig's quit
+// flushCoverageOnCleanExit drives an interactive, coverage-instrumented ompig to a
+// normal exit so its counters are written before teardown. It sends ompig's quit
 // chord (two Ctrl-C within the 500ms confirm window, as raw ETX bytes) and waits
 // briefly for the launch shell to record the process exit, which happens after
-// the coverage exit hook has run. Best-effort and diagnostic-only: a pig that
+// the coverage exit hook has run. Best-effort and diagnostic-only: a ompig that
 // ignores the chord is left to the existing SIGKILL teardown, so a failure here
 // only reproduces today's missing-coverage behavior: it never fails a scenario.
 func flushCoverageOnCleanExit(ctx context.Context, session, exitStatusPath string) {
@@ -383,8 +383,8 @@ func flushCoverageOnCleanExit(ctx context.Context, session, exitStatusPath strin
 // nil when it asserts none.
 func expectedExitCode(sc *Scenario, label string) *int {
 	switch {
-	case label == "pig" && sc.Assert.PigExitCode != nil:
-		return sc.Assert.PigExitCode
+	case label == "ompig" && sc.Assert.OmpigExitCode != nil:
+		return sc.Assert.OmpigExitCode
 	case label == "pi" && sc.Assert.PiExitCode != nil:
 		return sc.Assert.PiExitCode
 	}
@@ -448,7 +448,7 @@ func readProcessExitStatus(path string) (int, bool, error) {
 var invalidSessionPart = regexp.MustCompile(`[^A-Za-z0-9_-]+`)
 
 func parityRunID() string {
-	runID := strings.TrimSpace(os.Getenv("PIG_PARITY_RUN_ID"))
+	runID := strings.TrimSpace(os.Getenv("OMPIG_PARITY_RUN_ID"))
 	if runID == "" {
 		runID = strconv.Itoa(os.Getpid())
 	}
@@ -847,10 +847,10 @@ var (
 	tmuxLostServers []string
 	// tmuxExtendedKeysFormatSupported records whether the isolated server accepted extended-keys-format (tmux 3.5+).
 	tmuxExtendedKeysFormatSupported bool
-	tmuxSocketName                  = "pig-parity-" + parityRunID()
+	tmuxSocketName                  = "ompig-parity-" + parityRunID()
 )
 
-const tmuxKeeperSession = "pig-parity-keeper"
+const tmuxKeeperSession = "ompig-parity-keeper"
 
 func tmuxArgs(args ...string) []string {
 	return append([]string{"-L", tmuxSocketName}, args...)

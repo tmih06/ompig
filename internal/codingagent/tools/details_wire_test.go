@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // Pi 0.87.1 ls.ts:141, find.ts:147 and grep.ts:282 retain Number.MAX_SAFE_INTEGER in byte-truncation metadata.

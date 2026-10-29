@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // session.ts:385 subscribeCommits adds the listener to the session's set and returns a function removing exactly that listener: disposing one

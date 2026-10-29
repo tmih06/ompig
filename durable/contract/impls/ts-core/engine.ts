@@ -29,10 +29,10 @@ export const SQL = [
   "DELETE FROM document_revisions WHERE document_id = ?",
   "INSERT INTO document_revisions (document_id, seq, kind, version, content) VALUES (?, ?, ?, ?, ?)",
   "UPDATE durable_metadata SET next_id = ?, next_seq = ? WHERE singleton = 1",
-  "INSERT OR REPLACE INTO pig_index (id, next_seq, last_entry, count, payload) VALUES (?, ?, ?, ?, ?)",
-  "DELETE FROM pig_index WHERE id > 0",
+  "INSERT OR REPLACE INTO ompig_index (id, next_seq, last_entry, count, payload) VALUES (?, ?, ?, ?, ?)",
+  "DELETE FROM ompig_index WHERE id > 0",
 ]
-const SIDECAR_DDL = "CREATE TABLE IF NOT EXISTS pig_index (id INTEGER PRIMARY KEY, next_seq INTEGER NOT NULL, last_entry INTEGER NOT NULL, count INTEGER NOT NULL, payload BLOB NOT NULL) STRICT"
+const SIDECAR_DDL = "CREATE TABLE IF NOT EXISTS ompig_index (id INTEGER PRIMARY KEY, next_seq INTEGER NOT NULL, last_entry INTEGER NOT NULL, count INTEGER NOT NULL, payload BLOB NOT NULL) STRICT"
 
 export class CrashError extends Error {}
 
@@ -105,7 +105,7 @@ export class Engine {
     this.unfinished = open
     this.cfg = { conv, liveDoc, usageDoc, nextId: meta.next_id, nextSeq: meta.next_seq, usage, live }
     if (this.options.sidecar) {
-      for (const r of s.raw("SELECT next_seq, last_entry, count, payload FROM pig_index WHERE id = 0")) {
+      for (const r of s.raw("SELECT next_seq, last_entry, count, payload FROM ompig_index WHERE id = 0")) {
         const header = parseHeader(r[3] instanceof ArrayBuffer ? new Uint8Array(r[3]) : r[3] as Uint8Array | undefined)
         // A sidecar from the future of this store (restored older, or another store's) is not a prefix of it.
         if (header && (r[0] as number) <= meta.next_seq) this.side = { nextSeq: r[0] as number, lastEntry: r[1] as number, count: r[2] as number, header }
@@ -136,7 +136,7 @@ export class Engine {
     }
     let total = 0, chunks = 0
     const parts: Uint8Array[] = []
-    for (const row of s.raw("SELECT payload FROM pig_index WHERE id > 0 ORDER BY id")) { const b = new Uint8Array(row[0] as ArrayBuffer); parts.push(b); total += b.length; chunks++ }
+    for (const row of s.raw("SELECT payload FROM ompig_index WHERE id > 0 ORDER BY id")) { const b = new Uint8Array(row[0] as ArrayBuffer); parts.push(b); total += b.length; chunks++ }
     const all = new Uint8Array(total)
     let off = 0
     for (const b of parts) { all.set(b, off); off += b.length }

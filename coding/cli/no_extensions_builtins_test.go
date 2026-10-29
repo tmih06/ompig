@@ -21,8 +21,8 @@ func TestNoExtensionsSkipsBuiltInExtensionsButExplicitBuiltinStillLoads(t *testi
 		t.Run(tt.name, func(t *testing.T) {
 			home := t.TempDir()
 			p := startRPCProcessAt(t, t.TempDir(), []string{
-				"HOME=" + home, "USERPROFILE=" + home, "PIG_HOME=" + home,
-				"PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "PIG_TEST_FAUX=1", "PIG_OFFLINE=1",
+				"HOME=" + home, "USERPROFILE=" + home, "OMPIG_HOME=" + home,
+				"OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"), "OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1",
 			}, append([]string{"--no-session"}, tt.flags...)...)
 			p.send(`{"id":"commands","type":"get_commands"}`)
 			p.await("the command catalog", func(record rpcRecord) bool {

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mistral_conversations
+//go:build !ompig_strip_mistral_conversations
 
 package ai
 
@@ -13,13 +13,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/requestvalidity"
+	"github.com/tmih06/ompig/internal/requestvalidity"
 )
 
 // An extension's before_provider_request handler returns its replacement as JSON text. Pi's onPayload hands the provider the object JSON.parse made of it, and the
 // provider sends JSON.stringify of that object (openai-completions and openai-responses through the openai SDK, pi-messages.ts:400, mistral-conversations.ts:312,
 // the @google/genai SDK): string escapes as JSON.stringify writes them (\u00e9 is é, a lone surrogate stays escaped), numbers in their shortest form, a repeated key
-// in its first place with its last value, and array-index keys first. Pi's streams post to the same server as PiG's; the recorded bodies must be identical.
+// in its first place with its last value, and array-index keys first. Pi's streams post to the same server as Ompig's; the recorded bodies must be identical.
 func TestRawPayloadReplacementsAreSentAsPiSendsThem(t *testing.T) {
 	type replacementCase struct {
 		Name        string `json:"name"`
@@ -95,7 +95,7 @@ func TestRawPayloadReplacementsAreSentAsPiSendsThem(t *testing.T) {
 			if !ok {
 				t.Fatalf("Pi sent no request for %s", c.Name)
 			}
-			baseURL := server.URL + "/pig/" + c.Name
+			baseURL := server.URL + "/ompig/" + c.Name
 			model := &Model{ID: c.Model, Input: []string{"text"}, ProviderMeta: ProviderMetadata{ProviderID: "custom", API: API(c.API), BaseURL: baseURL}}
 			var provider Provider
 			switch c.API {
@@ -120,7 +120,7 @@ func TestRawPayloadReplacementsAreSentAsPiSendsThem(t *testing.T) {
 				_ = stream.Result()
 			}
 			mu.Lock()
-			got := bodies["pig/"+c.Name]
+			got := bodies["ompig/"+c.Name]
 			mu.Unlock()
 			if got != want {
 				t.Fatalf("request body\n got: %s\nwant: %s", got, want)

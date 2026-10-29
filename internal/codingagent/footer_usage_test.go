@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/tui"
 )
 
 type footerTestProvider struct {
@@ -96,7 +96,7 @@ func TestResumedPricedSessionFooterShowsStoredCost(t *testing.T) {
 }
 
 // A subscription session stores zero cost. Pi shows "$0.000 (sub)" for it;
-// PiG used to re-price the tokens at the active model's rates.
+// Ompig used to re-price the tokens at the active model's rates.
 func TestResumedSubscriptionSessionFooterShowsZeroStoredCost(t *testing.T) {
 	t.Setenv("HOME", t.TempDir())
 	session := writePricedSession(t, 0, 0)

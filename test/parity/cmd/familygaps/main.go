@@ -337,7 +337,7 @@ func loadFamilies(path string) (familiesConfig, error) {
 	return cfg, nil
 }
 
-// The Pig cell is whatever sits between the upstream code span and the status: empty, code spans, or code spans followed by prose.
+// The Ompig cell is whatever sits between the upstream code span and the status: empty, code spans, or code spans followed by prose.
 var (
 	portMapRowRE        = regexp.MustCompile("^\\|\\s+`([^`]+)`\\s+\\|.*\\|\\s+(✅|🟡|⬜|⏸|🔴|n/a)\\s+\\|\\s*$")
 	portMapSeparatorRE  = regexp.MustCompile(`^\|[\s:|-]+\|\s*$`)
@@ -363,7 +363,7 @@ func parsePortMap(path string) ([]portMapEntry, error) {
 		}
 		m := portMapRowRE.FindStringSubmatch(line)
 		if m == nil {
-			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | pig cell | status |): %s", path, i+1, line)
+			return nil, fmt.Errorf("%s:%d: malformed PORT_MAP row (want | `upstream path` | ompig cell | status |): %s", path, i+1, line)
 		}
 		out = append(out, portMapEntry{Path: m[1], Status: m[2]})
 	}

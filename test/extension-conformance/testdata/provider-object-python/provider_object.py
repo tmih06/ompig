@@ -3,7 +3,7 @@ import json
 import os
 import threading
 from dataclasses import asdict
-import pig_sdk as sdk
+import ompig_sdk as sdk
 
 
 def new_extension():

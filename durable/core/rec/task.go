@@ -3,7 +3,7 @@
 
 package rec
 
-import "github.com/MichaelKinsy/PiG/durable/core/jv"
+import "github.com/tmih06/ompig/durable/core/jv"
 
 // Task is a task record (spec §5.1 TaskRecord): `{id, conversationId, kind, version, input, owner?, background,
 // abortRequested, startedAt?, endedAt?, state, memos?}` in the order a creation writes them (startedAt and endedAt are

@@ -22,7 +22,7 @@
 #   agent_end
 #   agent_settled
 #
-# pig previously collected the turn and printed a single non-upstream object
+# ompig previously collected the turn and printed a single non-upstream object
 # ({mode, model, text, messages, session, session_id}) at exit, so no consumer
 # could observe progress without polling the session JSONL. That is fixed:
 # json_mode.go now forwards the same rpcAgentEvent wire shapes --mode rpc uses.
@@ -47,8 +47,8 @@ args = ["--mode", "json", "--model", "test-faux/faux-1", "--system-prompt", "JSO
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 

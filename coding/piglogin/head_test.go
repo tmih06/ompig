@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
-// The head is one size for every sprite: the 16-by-14 pig, 16 cells by 7 lines, each cell a half block or a space.
+// The head is one size for every sprite: the 16-by-14 ompig, 16 cells by 7 lines, each cell a half block or a space.
 func TestEveryHeadIsTheSharedGrid(t *testing.T) {
 	if HeadWidth != 16 || HeadHeight != 14 || HeadCells != 16 || HeadRows != 7 {
 		t.Fatalf("head = %dx%d pixels, %dx%d cells", HeadWidth, HeadHeight, HeadCells, HeadRows)
@@ -48,21 +48,21 @@ func TestEveryHeadIsTheSharedGrid(t *testing.T) {
 	}
 }
 
-// The header's head is the sprite's own 16-by-14 pig, the pixels /sprite preview draws beside the wordmark: the standard
-// pig for the colors and each character's original art.
+// The header's head is the sprite's own 16-by-14 ompig, the pixels /sprite preview draws beside the wordmark: the standard
+// ompig for the colors and each character's original art.
 func TestEveryHeadIsTheSpritesPig(t *testing.T) {
 	for _, variant := range Variants {
 		if got, want := HeadFor(variant), MascotSpriteFor(variant); !slices.Equal(got, want) {
-			t.Errorf("%s: head differs from its pig", variant.ID)
+			t.Errorf("%s: head differs from its ompig", variant.ID)
 		}
-		if len(variant.Sprite) == 0 && !slices.Equal(HeadFor(variant), pigMascot) {
-			t.Errorf("%s: a color variant does not draw the standard pig", variant.ID)
+		if len(variant.Sprite) == 0 && !slices.Equal(HeadFor(variant), ompigMascot) {
+			t.Errorf("%s: a color variant does not draw the standard ompig", variant.ID)
 		}
 	}
-	for _, id := range []string{"pigrogu", "darth-vader", "kratos", "piglet", "spider-ham", "sheriff"} {
+	for _, id := range []string{"pigrogu", "darth-vader", "kratos", "ompiglet", "spider-ham", "sheriff"} {
 		variant, _ := ByID(id)
-		if slices.Equal(HeadFor(variant), pigMascot) {
-			t.Errorf("%s draws the standard pig instead of its own art", id)
+		if slices.Equal(HeadFor(variant), ompigMascot) {
+			t.Errorf("%s draws the standard ompig instead of its own art", id)
 		}
 	}
 }

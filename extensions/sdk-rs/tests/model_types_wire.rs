@@ -3,7 +3,7 @@
 //! The frame shapes are `protocol_extension_api.go` and `protocol.go` in the host's subprocess package.
 #![cfg(unix)]
 
-use pig_sdk::{
+use ompig_sdk::{
     APIKeyAuth, AuthResult, Extension, ModelRoute, Provider, ProviderAuth, ProviderOperations,
     ToolResult, VirtualModel, empty_schema,
 };
@@ -41,7 +41,7 @@ struct Host {
 impl Host {
     fn start(ext: Extension, state: Value) -> Host {
         let root = std::env::temp_dir().join(format!(
-            "pig-extapi-{}-{}",
+            "ompig-extapi-{}-{}",
             std::process::id(),
             NEXT.fetch_add(1, Ordering::Relaxed)
         ));
@@ -402,7 +402,7 @@ fn provider_re_registration_keeps_implementations_it_does_not_redefine() {
 // types.ts:1896-1898 for a Provider object: generateImages and classify are members of the object, declared with its other methods and run through provider_call.
 #[test]
 fn provider_object_declares_and_runs_generate_images_and_classify() {
-    let stream: pig_sdk::ProviderStreamFn = std::sync::Arc::new(|_, _, _| Err("unused".into()));
+    let stream: ompig_sdk::ProviderStreamFn = std::sync::Arc::new(|_, _, _| Err("unused".into()));
     let bare = |generate: bool| Provider {
         id: "pixels".into(),
         name: "Pixels".into(),
@@ -421,10 +421,10 @@ fn provider_object_declares_and_runs_generate_images_and_classify() {
         stream_simple: stream.clone(),
         fetch_deferred: None,
         cancel_deferred: None,
-        generate_images: generate.then(|| -> pig_sdk::ProviderOperationFn {
+        generate_images: generate.then(|| -> ompig_sdk::ProviderOperationFn {
             std::sync::Arc::new(|model, request, options| Ok(json!({"model":model["id"],"n":request["input"].as_array().unwrap().len(),"key":options.values["apiKey"],"stopReason":"stop"})))
         }),
-        classify: generate.then(|| -> pig_sdk::ProviderOperationFn {
+        classify: generate.then(|| -> ompig_sdk::ProviderOperationFn {
             std::sync::Arc::new(|model, request, _| Ok(json!({"model":model["id"],"order":request["questions"].as_object().unwrap().keys().collect::<Vec<_>>(),"answers":{"q":{"type":"bool","probability":0.5}},"stopReason":"stop"})))
         }),
     };
@@ -462,7 +462,7 @@ fn late_operations() -> ProviderOperations {
         .images("late-images", |model, _, options| Ok(json!({"api":"late-images","provider":"late","model":model["id"],"key":options.values["apiKey"],"output":[],"stopReason":"stop","timestamp":1})))
         .classifier("late-classifier", |model, _, _| Ok(json!({"api":"late-classifier","provider":"late","model":model["id"],"answers":{},"stopReason":"stop","timestamp":2})))
         .stream_simple(|_, model, _, options| {
-            let stream = std::sync::Arc::new(pig_sdk::ModelEventStream::new());
+            let stream = std::sync::Arc::new(ompig_sdk::ModelEventStream::new());
             let message = json!({"role":"assistant","api":model["api"],"provider":model["provider"],"model":model["id"],"content":[{"type":"text","text":format!("late:{}:{}", model["id"].as_str().unwrap(), options["apiKey"].as_str().unwrap())}],"stopReason":"stop","timestamp":1});
             stream.push(json!({"type":"done","reason":"stop","message":message}));
             Ok(stream)

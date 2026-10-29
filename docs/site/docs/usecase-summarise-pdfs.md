@@ -2,33 +2,33 @@
 
 **Goal:** read every PDF in a folder and get one short summary per file plus an overall summary, written to `summaries.md`. Your PDFs are not changed.
 
-**You need:** PiG signed in to a model ([Your first ten minutes](/docs/latest/first-run)), a folder of PDFs that contain real text (not scans), and a tool that turns a PDF into text. Step 1 checks for that tool.
+**You need:** Ompig signed in to a model ([Your first ten minutes](/docs/latest/first-run)), a folder of PDFs that contain real text (not scans), and a tool that turns a PDF into text. Step 1 checks for that tool.
 
 **Time:** about five minutes.
 
 ## Why a PDF needs a converter
 
-PiG's `read` tool reads text files and images (jpg, png, gif, webp, bmp). It does not read PDFs. Given a PDF it returns the raw bytes, which are unreadable to you and to the model (Pi's tool description says "Supports text files and images", `packages/coding-agent/src/core/tools/read.ts:96`). The model can run a program that converts the PDF to text, and PiG's `bash` tool runs it. The usual program is `pdftotext`, part of the Poppler package.
+Ompig's `read` tool reads text files and images (jpg, png, gif, webp, bmp). It does not read PDFs. Given a PDF it returns the raw bytes, which are unreadable to you and to the model (Pi's tool description says "Supports text files and images", `packages/coding-agent/src/core/tools/read.ts:96`). The model can run a program that converts the PDF to text, and Ompig's `bash` tool runs it. The usual program is `pdftotext`, part of the Poppler package.
 
 A scanned PDF holds pictures of pages, not text. `pdftotext` returns nothing for it. Use an OCR tool, or a model that accepts images, for those.
 
 ## Before you start
 
-Copy the PDFs into a new folder and start PiG there. The walkthrough adds one file and changes none, but the habit costs nothing:
+Copy the PDFs into a new folder and start Ompig there. The walkthrough adds one file and changes none, but the habit costs nothing:
 
 ```bash
 mkdir ~/pdf-summary && cp ~/Documents/reports/*.pdf ~/pdf-summary/
 cd ~/pdf-summary
-pig
+ompig
 ```
 
-## Step 1: check that PiG can read PDFs
+## Step 1: check that Ompig can read PDFs
 
 ```text
 Can you read PDF files on this computer? Check what is installed. Do not change anything.
 ```
 
-PiG runs a command to look for a converter. On a computer without Poppler it shows:
+Ompig runs a command to look for a converter. On a computer without Poppler it shows:
 
 ```text
  Can you read PDF files on this computer? Check what is installed. Do not change anything.
@@ -47,7 +47,7 @@ PiG runs a command to look for a converter. On a computer without Poppler it sho
  have changed nothing.
 ```
 
-Each line that starts with `$` is a command PiG ran. `Took 0.0s` is how long it ran. The text under it is the model's answer.
+Each line that starts with `$` is a command Ompig ran. `Took 0.0s` is how long it ran. The text under it is the model's answer.
 
 If the answer names a path such as `/usr/bin/pdftotext`, skip to step 2.
 
@@ -55,7 +55,7 @@ The model may offer to install a converter for you ("Would you like me to instal
 
 ### Install the converter
 
-Close PiG with `Ctrl+D`, install Poppler and start PiG again in the same folder:
+Close Ompig with `Ctrl+D`, install Poppler and start Ompig again in the same folder:
 
 | System | Command |
 |---|---|
@@ -63,7 +63,7 @@ Close PiG with `Ctrl+D`, install Poppler and start PiG again in the same folder:
 | Debian and Ubuntu | `sudo apt install poppler-utils` |
 | Fedora | `sudo dnf install poppler-utils` |
 
-On other systems, install any program that converts PDF to text and tell PiG its name. If you cannot install software, open each PDF in your PDF viewer, save it as text into the same folder and ask PiG to summarise the `.txt` files. That needs no converter.
+On other systems, install any program that converts PDF to text and tell Ompig its name. If you cannot install software, open each PDF in your PDF viewer, save it as text into the same folder and ask Ompig to summarise the `.txt` files. That needs no converter.
 
 ## Step 2: summarise
 
@@ -71,7 +71,7 @@ On other systems, install any program that converts PDF to text and tell PiG its
 Read every PDF in this folder. Write summaries.md with one short paragraph per file, then a three-bullet overall summary. Do not change the PDFs.
 ```
 
-PiG runs the converter once per file, then writes the summary. PiG folds long command output to its last lines. The line `... (4 earlier lines, ctrl+o to expand)` says some lines are hidden, and `Ctrl+O` shows or hides all tool output (`internal/codingagent/tool_render_shell.go:206`; Pi `packages/coding-agent/src/core/tools/renderers/bash.ts:78`):
+Ompig runs the converter once per file, then writes the summary. Ompig folds long command output to its last lines. The line `... (4 earlier lines, ctrl+o to expand)` says some lines are hidden, and `Ctrl+O` shows or hides all tool output (`internal/codingagent/tool_render_shell.go:206`; Pi `packages/coding-agent/src/core/tools/renderers/bash.ts:78`):
 
 ```text
  $ for f in *.pdf; do echo "=== $f"; pdftotext -layout "$f" -; done
@@ -125,11 +125,11 @@ The text your model writes will differ from this. The structure, a `write summar
 
    The only new file is `summaries.md`.
 
-If a summary is wrong, tell PiG: `The Q2 summary says revenue grew 8%. Check the Q2 PDF again and quote the sentence you used.`
+If a summary is wrong, tell Ompig: `The Q2 summary says revenue grew 8%. Check the Q2 PDF again and quote the sentence you used.`
 
 ## Step 4: ask a follow-up
 
-PiG keeps the conversation, so you can ask more without repeating the setup:
+Ompig keeps the conversation, so you can ask more without repeating the setup:
 
 ```text
 Which of these documents mention churn? List each one with the figure it gives.
@@ -149,4 +149,4 @@ Your PDFs were never written to. The converter reads them and prints text.
 
 ## Keep your privacy in mind
 
-The text of every PDF that PiG converts goes to your model provider, and the conversation is saved under `~/.pig/agent/sessions/`. Start PiG with `--no-session` for a conversation that is not saved. See [Before you start](/docs/latest/applied-use-cases#before-you-start-how-pig-works-on-your-files).
+The text of every PDF that Ompig converts goes to your model provider, and the conversation is saved under `~/.ompig/agent/sessions/`. Start Ompig with `--no-session` for a conversation that is not saved. See [Before you start](/docs/latest/applied-use-cases#before-you-start-how-ompig-works-on-your-files).

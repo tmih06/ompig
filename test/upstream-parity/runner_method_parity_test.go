@@ -4,18 +4,18 @@
 // not an interface: so it isn't picked up by the existing parser, which
 // parses interfaces only).
 //
-// Surfaces drift between upstream Runner and pig Runner. Activated in the
+// Surfaces drift between upstream Runner and ompig Runner. Activated in the
 // post-forward-back pass to close Gap #7 (and prevent regressions of
-// Gap #2: silent pig-only public methods accreting on Runner).
+// Gap #2: silent ompig-only public methods accreting on Runner).
 //
 // **What this gate enforces:**
 //
 //  1. Every public method on upstream `ExtensionRunner` has a matching
-//     method on pig `inproc.Runner` (with idiomatic naming) OR is
+//     method on ompig `inproc.Runner` (with idiomatic naming) OR is
 //     listed in `deferredRunnerMethods` with a row reference.
 //
-//  2. Every public method on pig `inproc.Runner` that has NO upstream
-//     counterpart is listed in `pigOnlyRunnerMethods` with the reason it
+//  2. Every public method on ompig `inproc.Runner` that has NO upstream
+//     counterpart is listed in `ompigOnlyRunnerMethods` with the reason it
 //     is a legitimate Go SDK-surface addition (not a behavioral divergence).
 //
 // **Why a hardcoded list and not an AST parse?** Upstream's runner.ts is
@@ -35,7 +35,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // upstreamRunnerMethods is the manually-maintained list of public methods
@@ -125,14 +125,14 @@ var upstreamRunnerMethods = []string{
 // Removing an entry from this map without adding the corresponding Go method
 // on inproc.Runner causes the gate to fail.
 var deferredRunnerMethods = map[string]string{
-	// Present as AddErrorListener under pig's earlier name; see
-	// pigOnlyRunnerMethods. The capability is ported, the spelling is not.
+	// Present as AddErrorListener under ompig's earlier name; see
+	// ompigOnlyRunnerMethods. The capability is ported, the spelling is not.
 	"onError": "spelling: ported as inproc.Runner.AddErrorListener; rename pending",
 }
 
-// pigOnlyRunnerMethods names public methods on inproc.Runner that have
+// ompigOnlyRunnerMethods names public methods on inproc.Runner that have
 // NO public upstream counterpart. Each entry identifies a language-surface accessor or a private host-injection seam. These are not behavioral divergences; each requires a concrete upstream and production-caller rationale.
-var pigOnlyRunnerMethods = map[string]string{
+var ompigOnlyRunnerMethods = map[string]string{
 	"BindScopedModels":         "private host injection: coding.Session.bindExtensionCommandActions supplies Session.ScopedModels, mirroring agent-session.ts:_bindExtensionCore's getScopedModels callback; contexts capture that callback at creation, and mode binding retains it; cross-package Go visibility only",
 	"BindSystemPromptOptions":  "Go binding mechanic for agent-session.ts:_bindExtensionCore; Session.bindExtensionCommandActions installs the live options getter without replacing a mode-owned source; TestSessionModelExtensionHooksUpstream guards source identity and command reachability",
 	"BindTools":                "SDK-surface: Session tool and prompt callbacks from upstream _bindExtensionCore, bound without replacing mode-owned actions",
@@ -142,33 +142,33 @@ var pigOnlyRunnerMethods = map[string]string{
 	"Runtime":                  "SDK-surface: read-only accessor for the ExtensionRuntime the runner was constructed with (upstream's runner keeps it in the private runtime field, runner.ts:358). /reload hands the subprocess host's registrations (MCP servers, providers, virtual models) to the replacement runner (internal/codingagent/reload_resources.go replaceExtensionRunner), because the host process outlives the runner",
 	"IsStale":                  "SDK-surface: read-only staleness accessor (test/lifecycle seam)",
 	"StaleMessage":             "SDK-surface: read-only staleness accessor (test/lifecycle seam)",
-	"ActiveCommands":           "private host lifecycle (D70): read-only count of running command handlers; cmd/pig cliRetirement.retire consults it to stop a replaced Session's extension host at once when no handler runs. Pi keeps every extension in its one Node process across a replacement (agent-session-runtime.ts teardownCurrent), so it has no retirement to gate. Guarded by TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns",
-	"WaitForCommands":          "private host lifecycle (D70): context-bounded wait for running command handlers; cmd/pig cliRetirement.retire keeps a replaced Session's extension host alive until the handler that requested the replacement returns. Pi needs no wait because it never stops the outgoing extension process (agent-session-runtime.ts teardownCurrent). Guarded by TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns",
+	"ActiveCommands":           "private host lifecycle (D70): read-only count of running command handlers; cmd/ompig cliRetirement.retire consults it to stop a replaced Session's extension host at once when no handler runs. Pi keeps every extension in its one Node process across a replacement (agent-session-runtime.ts teardownCurrent), so it has no retirement to gate. Guarded by TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns",
+	"WaitForCommands":          "private host lifecycle (D70): context-bounded wait for running command handlers; cmd/ompig cliRetirement.retire keeps a replaced Session's extension host alive until the handler that requested the replacement returns. Pi needs no wait because it never stops the outgoing extension process (agent-session-runtime.ts teardownCurrent). Guarded by TestInteractiveExtensionNewSessionKeepsTheCallerAliveUntilItReturns",
 	"ExtensionCount":           "SDK-surface: read-only count accessor (avoids exposing the slice)",
 	"ExtensionNames":           "SDK-surface: read-only names accessor (avoids exposing the slice)",
 	"CommandsVersion":          "SDK-surface: read-only counter that moves with every change Commands can return (54a0d0b053); internal/codingagent CommandCatalogVersion reads it so a state push re-encodes the command catalog only when it changed. Pi rebuilds getCommands() on each call and has no counterpart; output is unchanged",
 	"ExtensionSources":         "SDK-surface: read-only resolved paths and sourceInfo for the loaded-resources listing (upstream reads extension.path and extension.sourceInfo directly)",
 	"ExecuteCommand":           "SDK-surface: active-runner command bridge for AgentSession/RPC invocation parity",
 	// Upstream's getAllRegisteredTools returns each tool with its extension's
-	// sourceInfo; Pig's RegisteredTool.SourceInfo carries the D23 per-tool
+	// sourceInfo; Ompig's RegisteredTool.SourceInfo carries the D23 per-tool
 	// source instead, so getAllTools reads the extension's through this.
 	"ToolCallContext": "SDK-surface: attaches the extension Context and the per-call ToolContext from createToolContext (runner.ts:958-985) to ctx, as upstream wrapToolDefinition calls its context factory per call (wrapper.ts:14-19); Go passes the context through ctx",
 	"ToolSourceInfo":  "SDK-surface: registering extension's sourceInfo for getAllTools (upstream RegisteredTool.sourceInfo)",
 	// Upstream's withUIPrompt is private because every ctx.ui call passes
-	// through the runner's wrapped UI context. Pig's subprocess dialogs reach
+	// through the runner's wrapped UI context. Ompig's subprocess dialogs reach
 	// the terminal through the subprocess UI bridge, which opens the same
 	// runner-owned scope.
 	"BeginUIPrompt":       "upstream private withUIPrompt, exposed to the subprocess UI bridge",
 	"AwaitUIPromptEvents": "private host injection: upstream runner.ts emitUIPromptEvent queues the emission in a microtask before withUIPrompt settles, so each handler's synchronous part runs before the prompting extension continues; the subprocess UI bridge awaits the queued ui_prompt events before it answers a dialog",
-	// Upstream runs a tool on the extensions' event loop (agent-session.ts:1968-2000), so what a tool_call handler queued runs before tool_result. Pig runs the tool in Go, so the session asks each Node extension that handles tool_call for one turn of its loop first.
-	"AwaitEventLoopTurns": "private host injection (D19): upstream runs a tool on the extensions' event loop, so the immediates a tool_call handler queued run before tool_result (agent-session.ts:1968-2000); Pig runs the tool in Go, so coding.Session asks each Node extension that handles tool_call for one turn of its own loop (Extension.EventLoopTurn) before it emits tool_result. Not an author-facing extension API; no upstream counterpart because Pi's tool already runs on that loop",
-	// Upstream renamed addErrorListener to onError. Pig keeps the older name,
+	// Upstream runs a tool on the extensions' event loop (agent-session.ts:1968-2000), so what a tool_call handler queued runs before tool_result. Ompig runs the tool in Go, so the session asks each Node extension that handles tool_call for one turn of its loop first.
+	"AwaitEventLoopTurns": "private host injection (D19): upstream runs a tool on the extensions' event loop, so the immediates a tool_call handler queued run before tool_result (agent-session.ts:1968-2000); Ompig runs the tool in Go, so coding.Session asks each Node extension that handles tool_call for one turn of its own loop (Extension.EventLoopTurn) before it emits tool_result. Not an author-facing extension API; no upstream counterpart because Pi's tool already runs on that loop",
+	// Upstream renamed addErrorListener to onError. Ompig keeps the older name,
 	// so the method is present on both sides under different spellings rather
 	// than absent; renaming it is a public-surface change to sequence
 	// deliberately, not to fold into a list reconciliation.
-	"AddErrorListener": "upstream onError under pig's earlier name; rename pending",
+	"AddErrorListener": "upstream onError under ompig's earlier name; rename pending",
 	// Upstream emitContext runs the context phase then the context_with_system
-	// phase. Pig's Session splits the system messages out around the context
+	// phase. Ompig's Session splits the system messages out around the context
 	// phase (typed agent messages), so the second phase is its own entry point.
 	"EmitContextWithSystem": "SDK-surface: second phase of upstream emitContext (context_with_system)",
 	"EmitContextTracked":    "SDK-surface: upstream emitContext conversation phase plus its sameMessages identity verdict, which restoreSystemMessages consumes (REFNL-003)",
@@ -256,9 +256,9 @@ func TestRunner_AllUpstreamMethodsPortedOrDeferred(t *testing.T) {
 	}
 }
 
-// TestRunner_NoUnclassifiedPiGMethods rejects public methods without an
-// upstream mapping or an explicit PiG disposition.
-func TestRunner_NoUnclassifiedPiGMethods(t *testing.T) {
+// TestRunner_NoUnclassifiedOmpigMethods rejects public methods without an
+// upstream mapping or an explicit Ompig disposition.
+func TestRunner_NoUnclassifiedOmpigMethods(t *testing.T) {
 	// Build the set of expected Go method names (those with an upstream
 	// counterpart, after name conversion).
 	expected := map[string]bool{}
@@ -281,15 +281,15 @@ func TestRunner_NoUnclassifiedPiGMethods(t *testing.T) {
 		if expected[goName] {
 			continue
 		}
-		if div, documented := pigOnlyRunnerMethods[goName]; documented {
-			t.Logf("inproc.Runner.%s → documented pig-only method (%s)", goName, div)
+		if div, documented := ompigOnlyRunnerMethods[goName]; documented {
+			t.Logf("inproc.Runner.%s → documented ompig-only method (%s)", goName, div)
 			continue
 		}
 
 		t.Errorf("inproc.Runner.%s has no upstream counterpart "+
-			"and is not in pigOnlyRunnerMethods. "+
+			"and is not in ompigOnlyRunnerMethods. "+
 			"Either remove it (preferred: keeps sync surface minimal), "+
-			"or add it to pigOnlyRunnerMethods with an SDK-surface rationale.",
+			"or add it to ompigOnlyRunnerMethods with an SDK-surface rationale.",
 			goName)
 	}
 }

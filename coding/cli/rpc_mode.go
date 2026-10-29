@@ -20,20 +20,20 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/handleryield"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/handleryield"
+	"github.com/tmih06/ompig/internal/sessionentry"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 type rpcTaskGroup struct {
@@ -192,16 +192,16 @@ func rpcExtensionConfigs(configs []subprocess.ExtConfig, cwd, agentDir string, s
 	return out
 }
 
-func rpcResolvedSkills(skills []*codingagent.SkillDef, activePiglet *piglet.Piglet) []*codingagent.SkillDef {
+func rpcResolvedSkills(skills []*codingagent.SkillDef, activePiglet *ompiglet.Ompiglet) []*codingagent.SkillDef {
 	out := make([]*codingagent.SkillDef, len(skills))
 	for i, skill := range skills {
 		copy := *skill
 		if copy.FilePath == "" && activePiglet != nil {
-			// pig additive (D18): the synthesized path identifies the inline skill's manifest, not a file to reload as Markdown.
+			// ompig additive (D18): the synthesized path identifies the inline skill's manifest, not a file to reload as Markdown.
 			copy.SourceInfo.Source = "inline"
 			copy.FilePath = activePiglet.SourcePath()
 			if copy.FilePath == "" {
-				copy.FilePath = "builtin:piglet"
+				copy.FilePath = "builtin:ompiglet"
 			}
 			copy.BaseDir = filepath.Dir(copy.FilePath)
 		}
@@ -211,7 +211,7 @@ func rpcResolvedSkills(skills []*codingagent.SkillDef, activePiglet *piglet.Pigl
 }
 
 // runRPCMode owns the `--mode rpc` runtime. EOF and termination triggers dispose and exit the process; startup failures and caller cancellation return to main. Protocol records bypass startup's stdout redirection.
-func runRPCMode(ctx context.Context, flags Args, activePiglet *piglet.Piglet, resources rpcModeResources) (exitCode int) {
+func runRPCMode(ctx context.Context, flags Args, activePiglet *ompiglet.Ompiglet, resources rpcModeResources) (exitCode int) {
 	defer func() {
 		if sig := receivedTerminationSignal.Load(); sig != 0 {
 			exitCode = 128 + int(sig)
@@ -289,7 +289,7 @@ func runRPCMode(ctx context.Context, flags Args, activePiglet *piglet.Piglet, re
 
 	sessionDir, err := resolveSessionDir(flags.SessionDir, initial.Services.SettingsManager())
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "pig --rpc: session: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig --rpc: session: %v\n", err)
 		return 1
 	}
 	var promptWG sync.WaitGroup
@@ -316,13 +316,13 @@ func runRPCMode(ctx context.Context, flags Args, activePiglet *piglet.Piglet, re
 	defer factory.Close()
 	manager, err := coding.SessionManagerFor(initial.Services, inputs.Start)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "pig --rpc: session: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig --rpc: session: %v\n", err)
 		return 1
 	}
 	// upstream: main.ts:707-714 names a new Session on its manager before createAgentSessionRuntime records the start model and thinking level (sdk.ts:453-458). The name is initial metadata: no session_info_changed reaches the client.
 	if flags.Name != "" {
 		if _, err := manager.AppendSessionInfo(flags.Name); err != nil {
-			fmt.Fprintf(os.Stderr, "pig --rpc: set session name: %v\n", err)
+			fmt.Fprintf(os.Stderr, "ompig --rpc: set session name: %v\n", err)
 			return 1
 		}
 	}
@@ -330,7 +330,7 @@ func runRPCMode(ctx context.Context, flags Args, activePiglet *piglet.Piglet, re
 		CWD: initial.CWD, AgentDir: initial.Services.AgentDir(), SessionManager: manager,
 	})
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "pig --rpc: session: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig --rpc: session: %v\n", err)
 		return 1
 	}
 	host.rt = rt
@@ -376,7 +376,7 @@ func withRPCModeOptions(ctx context.Context, options rpcModeOptions) context.Con
 func runRpcMode(ctx context.Context, rt *coding.Runtime) {
 	options, ok := ctx.Value(rpcModeOptionsKey{}).(rpcModeOptions)
 	if !ok {
-		fmt.Fprintln(os.Stderr, "pig --rpc: no RPC mode state on the context")
+		fmt.Fprintln(os.Stderr, "ompig --rpc: no RPC mode state on the context")
 		return
 	}
 	*options.exitCode = serveRPCMode(ctx, rt, options)
@@ -396,7 +396,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 	initialResolved := make(chan struct{})
 	close(initialResolved)
 	var setModelResolved <-chan struct{} = initialResolved
-	// pig divergence (D147): the compactions of one input batch run one after another.
+	// ompig divergence (D147): the compactions of one input batch run one after another.
 	var compactResolved <-chan struct{} = initialResolved
 	runner := func() *inproc.Runner { return rt.Session().ExtensionRunner() }
 	commandCatalog := func() headlessCommandCatalog { return host.admission.Load().catalog }
@@ -421,7 +421,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 			rawStdout.Wait(context.Background())
 		}
 		terminateProcesses()
-		// PIG_PROFILE files are written here because os.Exit skips main's deferred stop; unset, this is a no-op.
+		// OMPIG_PROFILE files are written here because os.Exit skips main's deferred stop; unset, this is a no-op.
 		stopProfiles()
 		// Upstream process.exit does not wait for providers or suspended extension callbacks.
 		os.Exit(code)
@@ -480,7 +480,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 			case <-responses.Idle():
 			}
 			if commandJoin := host.commandJoin.Load(); commandJoin != nil {
-				// pig additive (D19): the host applies Pi's stdin-end window to runtimes that report none; a Node runtime reports each command's own window.
+				// ompig additive (D19): the host applies Pi's stdin-end window to runtimes that report none; a Node runtime reports each command's own window.
 				if extensionHost, bridge := rpcExtensionHost(sess()); bridge != nil {
 					extensionHost.FlushCommands()
 				}
@@ -512,7 +512,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 		forceSignal,
 	)
 	host.drain = shutdown.drained
-	// pig additive (D19): the host waits in-process for the commands Pi answers before it reads stdin's end, because their runtimes are other processes whose frames race the shutdown's own writes.
+	// ompig additive (D19): the host waits in-process for the commands Pi answers before it reads stdin's end, because their runtimes are other processes whose frames race the shutdown's own writes.
 	shutdown.settle = func() bool {
 		// Pi reads stdin's end in an event-loop iteration of its own: after the settle tail that a published agent_end started, and after the response of every command that settles in the microtasks and check phase of its line's iteration (rpc-mode.ts:355-360,802-805).
 		host.settle.wait(ctx, rpcUI.PendingRequest, shutdown.Started())
@@ -566,7 +566,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 	})
 	first := rt.Session()
 	if err := host.bind(ctx, first, first.StartEvent(), false); err != nil {
-		fmt.Fprintf(os.Stderr, "pig --rpc: %v\n", err)
+		fmt.Fprintf(os.Stderr, "ompig --rpc: %v\n", err)
 		return 1
 	}
 
@@ -644,7 +644,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 	// compactionCancels holds the cancel function of every compact command that has not answered yet, by command sequence number.
 	var compactionMu sync.Mutex
 	var compactionSeq uint64
-	// pig divergence (D148): Pi answers the first of two compacts that a replacement aborts with a TypeError from its shared abort controller; PiG answers each compact with the abort error, in request order.
+	// ompig divergence (D148): Pi answers the first of two compacts that a replacement aborts with a TypeError from its shared abort controller; Ompig answers each compact with the abort error, in request order.
 	compactionCancels := map[uint64]context.CancelFunc{}
 	// headCompactionStarts holds, for each compact command that did not wait for an earlier one, a channel closed once its compaction_start event was emitted or it ended without one. Guarded by compactionMu.
 	var headCompactionStarts []chan struct{}
@@ -677,7 +677,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 	})
 	replacementCtx := context.WithValue(ctx, rpcCommandReplacement{}, true)
 	// awaitReplacement is upstream `await runtime.newSession()` and its siblings (rpc-mode.ts:808-810 dispatches every line at once): the replacement starts after the input batch that requested it, so a later command of that batch answers first from the old Session, and the response is written when the replacement and its second rebind finish.
-	// pig divergence (D146): Pi exits at stdin end while a replacement still awaits createRuntime and never answers it. Stdin end here waits for each replacement and writes its response.
+	// ompig divergence (D146): Pi exits at stdin end while a replacement still awaits createRuntime and never answers it. Stdin end here waits for each replacement and writes its response.
 	var replacementWG sync.WaitGroup
 	var replacementMu sync.Mutex
 	var startedReplacements []*rpcPendingReplacement
@@ -866,7 +866,7 @@ func serveRPCMode(ctx context.Context, rt *coding.Runtime, options rpcModeOption
 		case <-shutdown.Started():
 		case <-ctx.Done():
 		}
-		// pig divergence (D146): a replacement requested before stdin ended finishes and answers first.
+		// ompig divergence (D146): a replacement requested before stdin ended finishes and answers first.
 		replacementsDone := make(chan struct{})
 		go func() { replacementWG.Wait(); close(replacementsDone) }()
 		select {
@@ -910,7 +910,7 @@ commandLoop:
 			}
 			// Pi reads a stdin chunk in an iteration of its own, after any microtask tail that agent_end started.
 			host.settle.wait(ctx, rpcUI.PendingRequest, shutdown.Started())
-			// pig additive (D189): the extension runtimes hold their timer callbacks before the command's first event, which the loop's Begin below lets run.
+			// ompig additive (D189): the extension runtimes hold their timer callbacks before the command's first event, which the loop's Begin below lets run.
 			host.loop.arm(ctx)
 			responses.Begin()
 			inputTurn = responses
@@ -1005,7 +1005,7 @@ commandLoop:
 			})
 
 		// ── get_extensions ─────────────────────────────────────────────
-		// pig additive (D101): Pi lists loaded extensions only in-process, through session.extensionRunner.getExtensionPaths() (runner.ts:625).
+		// ompig additive (D101): Pi lists loaded extensions only in-process, through session.extensionRunner.getExtensionPaths() (runner.ts:625).
 		case "get_extensions":
 			paths := []string{}
 			if r := runner(); r != nil {
@@ -1553,7 +1553,7 @@ type rpcTreeData struct {
 }
 
 // rpcSessionTreeNode is the JSON shape returned by upstream get_tree.
-// Pig's internal tree uses exported Go fields and a synthetic root; RPC returns
+// Ompig's internal tree uses exported Go fields and a synthetic root; RPC returns
 // lower-case keys and only real root entries.
 type rpcSessionTreeNode struct {
 	Entry          json.RawMessage      `json:"entry"`

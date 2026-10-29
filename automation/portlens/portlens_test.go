@@ -16,7 +16,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 var (
@@ -227,7 +227,7 @@ func TestEveryDivergenceAndBugAppears(t *testing.T) {
 	}
 }
 
-// A note's Pi citations and PiG marker sites become highlighted snippets, a Pi issue becomes a link, and the class is derived from the bug ledger.
+// A note's Pi citations and Ompig marker sites become highlighted snippets, a Pi issue becomes a link, and the class is derived from the bug ledger.
 func TestDivergenceRecordsCarrySnippetsLinksAndClass(t *testing.T) {
 	rep, _ := built(t)
 	byID := map[string]*Divergence{}
@@ -310,7 +310,7 @@ func trimBlankTail(lines []string) []string {
 
 // deny lists private coordination data that must never reach a published report. The literals are assembled so this file does not match itself.
 var deny = regexp.MustCompile(
-	`imla` + `dris|\bHP` + `E\b|Hewlett|Mainst` + `AI|/home/[a-z]|/Users/[a-z]|pig-` + `lanes|pig-` + `staging|smc` + `1\b|\.dev` + `cache|[A-Za-z0-9._-]+@[A-Za-z0-9-]+\.(?:com|net|org)\b`)
+	`imla` + `dris|\bHP` + `E\b|Hewlett|Mainst` + `AI|/home/[a-z]|/Users/[a-z]|ompig-` + `lanes|ompig-` + `staging|smc` + `1\b|\.dev` + `cache|[A-Za-z0-9._-]+@[A-Za-z0-9-]+\.(?:com|net|org)\b`)
 
 // The output carries no private host, path, address or organization name.
 func TestOutputHasNoPrivateData(t *testing.T) {
@@ -416,7 +416,7 @@ func TestServeServesTheOutputDirectory(t *testing.T) {
 	_, dir := built(t)
 	ts := httptest.NewServer(newServer("", dir).Handler)
 	defer ts.Close()
-	for path, want := range map[string]string{"/": "PiG port lens", "/views/divergences.js": "PL.frag(", "/assets/app.js": "use strict"} {
+	for path, want := range map[string]string{"/": "Ompig port lens", "/views/divergences.js": "PL.frag(", "/assets/app.js": "use strict"} {
 		resp, err := ts.Client().Get(ts.URL + path)
 		if err != nil {
 			t.Fatal(err)

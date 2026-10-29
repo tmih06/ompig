@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/coding-agent/src/utils/version-check.ts
@@ -108,7 +108,7 @@ emit(input.map(({ A, B }) => ({ cmp: comparePackageVersions(A, B) ?? null, newer
 				if wantOK {
 					wantText = fmt.Sprint(*want[i].Cmp)
 				}
-				t.Errorf("%q vs %q: PiG compare=%s newer=%v, Pi compare=%s newer=%v", p.A, p.B, got, newer, wantText, want[i].Newer)
+				t.Errorf("%q vs %q: Ompig compare=%s newer=%v, Pi compare=%s newer=%v", p.A, p.B, got, newer, wantText, want[i].Newer)
 			}
 		}
 	}

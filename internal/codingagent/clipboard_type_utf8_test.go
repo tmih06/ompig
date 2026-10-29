@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // clipboard-image.ts:96 and :180 decode the type listing with Buffer.toString("utf-8"), which replaces each invalid UTF-8 sequence with U+FFFD, and the

@@ -1,4 +1,4 @@
-// Replay each case's messages through the installed Pi's getCurrentSystemMessage and report the TypeError message it throws, or "ok". system_replay_error_test.go compares PiG's currentSystemMessageError with this report.
+// Replay each case's messages through the installed Pi's getCurrentSystemMessage and report the TypeError message it throws, or "ok". system_replay_error_test.go compares Ompig's currentSystemMessageError with this report.
 import { readFileSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 const pi = realpathSync(new URL("../../extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/", import.meta.url)) + "/";

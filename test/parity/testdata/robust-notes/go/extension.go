@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
 	"github.com/google/shlex"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 type picker struct {

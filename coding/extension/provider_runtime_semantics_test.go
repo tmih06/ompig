@@ -35,7 +35,7 @@ func TestExtensionRuntimeReportsToTheBoundRunnerAndCopiesItsQueue(t *testing.T) 
 	}
 }
 
-// runner.ts:497-541 bindCore flushes every queue, falling back to the model registry for an action the caller did not give. Pig's runtime is bound by
+// runner.ts:497-541 bindCore flushes every queue, falling back to the model registry for an action the caller did not give. Ompig's runtime is bound by
 // more than one host, and each binder supplies the registry fallback itself (inproc runner.go, services_extension_runtime.go), so BindProviderActions
 // flushes only the queues it has actions for: a provider-only bind leaves queued virtual models pending, and a virtual-model-only bind leaves queued
 // providers pending; the bound actions then include the unregister half that was bound, and an unregister after binding goes to the registry.

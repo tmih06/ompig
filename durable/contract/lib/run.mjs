@@ -101,7 +101,7 @@ export async function runScenario(o) {
 	const childTrace = join(o.out, `${o.name}.child.jsonl`)
 	// A scenario's temporary directory is one fixed path, so a path a scenario stores is the same for every implementation.
 	// Runs of one scenario are serialised on a lock; `keepTmp` leaves the directory for the run that recovers a crashed one.
-	const tmp = join(tmpdir(), "pig-contract", o.tmpKey ?? o.name.replace(/\..*$/, ""))
+	const tmp = join(tmpdir(), "ompig-contract", o.tmpKey ?? o.name.replace(/\..*$/, ""))
 	const release = await lock(`${tmp}.lock`)
 	if (!o.keepTmp) rmSync(tmp, { recursive: true, force: true })
 	mkdirSync(tmp, { recursive: true })

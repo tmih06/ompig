@@ -10,19 +10,19 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=../extensions-runtime/testdata/pig-home"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=../extensions-runtime/testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=../extensions-runtime/testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
-pig_extensions = ["testdata/session-identity-probe.mjs"]
+ompig_extensions = ["testdata/session-identity-probe.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/session-identity-probe.mjs"]
 
 [tmux]
 width = 100
 height = 35
 # Re-probed against the pinned Pi on 2026-09-25: both runtimes are ready at the
-# model footer. PiG's compact startup does not print the old Ready banner.
-ready_pattern_pig = "(auto)"
+# model footer. Ompig's compact startup does not print the old Ready banner.
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 capture_start = "identity:"

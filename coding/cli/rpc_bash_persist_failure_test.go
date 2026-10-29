@@ -33,7 +33,7 @@ export default function(pi) {
 			if err := os.WriteFile(fixture, []byte(source), 0o600); err != nil {
 				t.Fatal(err)
 			}
-			p := startRPCProcessAt(t, dir, []string{"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--session", sessionPath, "-e", fixture)
+			p := startRPCProcessAt(t, dir, []string{"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--session", sessionPath, "-e", fixture)
 			p.sendJSON(map[string]any{"id": "seed", "type": "prompt", "message": "hello"})
 			p.await("seed session persistence", func(record rpcRecord) bool { return record["type"] == "agent_settled" })
 			if _, err := os.Stat(sessionPath); err != nil {

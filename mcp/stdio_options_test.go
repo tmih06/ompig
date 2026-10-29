@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // StdioTransportOptions.cwd, maxStderrBytes and maxMessageBytes
 // (packages/mcp/src/transports/stdio.ts). Pi's stdio test does not exercise them,
-// so these tests are PiG's own: each starts the transport with one option set and
+// so these tests are Ompig's own: each starts the transport with one option set and
 // observes the effect the option documents.
 
 func startAndWaitForExit(t *testing.T, transport *mcp.StdioTransport) {

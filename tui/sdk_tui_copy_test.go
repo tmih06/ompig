@@ -14,7 +14,7 @@ import (
 // Pi-faithful engines that live here. This file is the one place that defines the copies: sdkTuiCopies lists them, sdkTuiTransform
 // derives each from its source, and TestSDKTuiCopiesAreCurrent fails when a copy differs from what the source produces.
 //
-//	PIG_UPDATE_SDK_TUI=1 go test ./tui -run TestSDKTuiCopiesAreCurrent
+//	OMPIG_UPDATE_SDK_TUI=1 go test ./tui -run TestSDKTuiCopiesAreCurrent
 //
 // rewrites the copies. Nothing in extensions/sdk/tui/internal/engine, widthx or jsstring is edited by hand; the vectors in
 // extensions/sdk-vectors (generated from Pi's own functions) judge every copy through the SDK's own tests.
@@ -43,20 +43,20 @@ func sdkTuiCopies(t *testing.T) []sdkTuiCopy {
 	return copies
 }
 
-const sdkTuiModule = "github.com/MichaelKinsy/PiG/extensions/sdk/tui/internal/"
+const sdkTuiModule = "github.com/tmih06/ompig/extensions/sdk/tui/internal/"
 
 var (
 	sdkTuiShouldDeliver = regexp.MustCompile(`(?s)// ShouldDeliverKey reports.*?\n}\n\n`)
-	sdkTuiD185          = regexp.MustCompile(`(?s) else if codepoint >= 'a' && codepoint <= 'z' \{\n\t\t\t// pig divergence \(D185\).*?\n\t\t\}\n`)
+	sdkTuiD185          = regexp.MustCompile(`(?s) else if codepoint >= 'a' && codepoint <= 'z' \{\n\t\t\t// ompig divergence \(D185\).*?\n\t\t\}\n`)
 	sdkTuiImportLine    = regexp.MustCompile(`(?m)^\t"golang.org/x/text/[a-z]+"\n`)
 )
 
 func sdkTuiTransform(src string, text string) string {
 	text = strings.NewReplacer(
-		"github.com/MichaelKinsy/PiG/internal/jsstring", sdkTuiModule+"jsstring",
-		"github.com/MichaelKinsy/PiG/internal/lazyregexp", sdkTuiModule+"lazyregexp",
-		"github.com/MichaelKinsy/PiG/internal/jsnumber", sdkTuiModule+"jsnumber",
-		"github.com/MichaelKinsy/PiG/tui/widthx", sdkTuiModule+"widthx",
+		"github.com/tmih06/ompig/internal/jsstring", sdkTuiModule+"jsstring",
+		"github.com/tmih06/ompig/internal/lazyregexp", sdkTuiModule+"lazyregexp",
+		"github.com/tmih06/ompig/internal/jsnumber", sdkTuiModule+"jsnumber",
+		"github.com/tmih06/ompig/tui/widthx", sdkTuiModule+"widthx",
 		"cases.Lower(language.Und).String(", "jsstring.ToLower(",
 		"JSNumberString(", "jsnumber.String(",
 	).Replace(text)
@@ -87,7 +87,7 @@ func sdkTuiTransform(src string, text string) string {
 
 func TestSDKTuiCopiesAreCurrent(t *testing.T) {
 	root := ".."
-	update := os.Getenv("PIG_UPDATE_SDK_TUI") != ""
+	update := os.Getenv("OMPIG_UPDATE_SDK_TUI") != ""
 	for _, c := range sdkTuiCopies(t) {
 		source, err := os.ReadFile(filepath.Join(root, c.src))
 		if err != nil {
@@ -108,7 +108,7 @@ func TestSDKTuiCopiesAreCurrent(t *testing.T) {
 			continue
 		}
 		if err != nil || string(got) != want {
-			t.Errorf("%s is stale: run PIG_UPDATE_SDK_TUI=1 go test ./tui -run TestSDKTuiCopiesAreCurrent", c.dst)
+			t.Errorf("%s is stale: run OMPIG_UPDATE_SDK_TUI=1 go test ./tui -run TestSDKTuiCopiesAreCurrent", c.dst)
 		}
 	}
 }

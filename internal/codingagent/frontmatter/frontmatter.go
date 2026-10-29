@@ -5,8 +5,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/text"
-	"github.com/MichaelKinsy/PiG/internal/yaml12"
+	"github.com/tmih06/ompig/internal/text"
+	"github.com/tmih06/ompig/internal/yaml12"
 )
 
 // Doc is a parsed markdown-with-frontmatter file.

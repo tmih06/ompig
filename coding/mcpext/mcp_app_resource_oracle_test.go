@@ -3,7 +3,7 @@ package mcpext
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's isMcpAppResource (extensions/mcp/resources.js) against IsMcpAppResource: a `ui://` URI, or a `; profile=mcp-app` media type with JavaScript `\s` around the tokens and ASCII-only case folding. Pi 1.2.0 no longer exports isMcpAppResource, so the oracle reaches it through the list_mcp_resources tool, which leaves out every resource it matches.

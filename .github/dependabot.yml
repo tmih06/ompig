@@ -6,7 +6,7 @@
 #
 # The parity oracle (extensions/sdk-ts, the ci-parity image, and the interface
 # extractor) and test fixtures take security updates only: changing an oracle
-# dependency changes what PiG is compared against and needs a parity rebaseline.
+# dependency changes what Ompig is compared against and needs a parity rebaseline.
 version: 2
 updates:
   - package-ecosystem: gomod
@@ -14,8 +14,8 @@ updates:
       - /
       # extensions/sdk has no dependencies; Dependabot would only rewrite its
       # go directive, which breaks modules that declare go 1.26.
-      - /piglets/porter/extensions/pig-porter
-      - /piglets/standard
+      - /ompiglets/porter/extensions/ompig-porter
+      - /ompiglets/standard
       - /examples/extensions/go-factory
     schedule:
       interval: monthly

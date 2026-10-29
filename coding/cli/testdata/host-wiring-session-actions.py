@@ -1,12 +1,12 @@
 """host-wiring-session-actions.py is the Python twin of host-wiring-session-actions.mjs: from session_start it calls the Session actions Pi binds in every mode
 (agent-session.ts _bindExtensionCore) and records each answer, then records the model and thinking-level entries the Session wrote. It registers the only
-provider with credentials, so Pi and Pig both start on probe/probe-model, and switches to probe/probe-model-2. A second provider has no credentials, so
+provider with credentials, so Pi and Ompig both start on probe/probe-model, and switches to probe/probe-model-2. A second provider has no credentials, so
 setModel to its model answers false and changes nothing."""
 import json
 import os
 import threading
 
-import pig_sdk
+import ompig_sdk
 
 
 def _log(record):
@@ -26,8 +26,8 @@ def _identity(model):
     return "%s/%s" % (provider, model.get("id"))
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("host-wiring-session-actions")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("host-wiring-session-actions")
     ext.register_provider("probe", {"baseUrl": "http://127.0.0.1:9/v1", "apiKey": "probe-key", "api": "openai-completions", "models": _models(["probe-model", "probe-model-2"])})
     ext.register_provider("probe-noauth", {"baseUrl": "http://127.0.0.1:9/v1", "api": "openai-completions", "models": _models(["noauth-model"])})
     ext.on_event("model_select", lambda ctx, data: _log({"event": "model_select", "model": _identity(data["model"])}))

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/bench/sessionscale"
+	"github.com/tmih06/ompig/bench/sessionscale"
 )
 
 // parseSize reads 299M, 1G, 512K or a plain byte count; M and G are powers of 1024.

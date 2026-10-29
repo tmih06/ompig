@@ -180,7 +180,7 @@ def render(registry, ratchet, measured_doc):
         "",
         "# Performance scoreboard",
         "",
-        "Every hot path and resource metric of PiG, with its current count, the ratchet gate that guards it, a target and its basis, and the owning lane. Pi-identical output is the wall: a change that lowers a count must keep every parity test green.",
+        "Every hot path and resource metric of Ompig, with its current count, the ratchet gate that guards it, a target and its basis, and the owning lane. Pi-identical output is the wall: a change that lowers a count must keep every parity test green.",
         "",
         "Counts do not depend on machine speed (allocations, bytes, GC cycles, goroutines, descriptors, children, sizes). Time is measured only on the benchmark cluster with the exact-CV gate and is not recorded here. Ceilings live in `automation/perf/ratchet.toml` and only move down (`make perf-ratchet-check`).",
         "",
@@ -246,7 +246,7 @@ def inittrace(binary):
     total_bytes = total_allocs = 0
     for text in result.stderr.splitlines():
         match = line.match(text)
-        if match and match.group(1).startswith("github.com/MichaelKinsy/PiG"):
+        if match and match.group(1).startswith("github.com/tmih06/ompig"):
             total_bytes += int(match.group(2))
             total_allocs += int(match.group(3))
     return {"startup.init.bytes": total_bytes, "startup.init.allocs": total_allocs}
@@ -262,15 +262,15 @@ def measure(registry, timeout):
         command.append(entry["pkg"])
         print("+", " ".join(command), flush=True)
         result = subprocess.run(command, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout + 120,
-                                env={**os.environ, "PIG_KEEP_COUNT1": "1"})
+                                env={**os.environ, "OMPIG_KEEP_COUNT1": "1"})
         for match in PERFGATE_LINE.finditer(result.stdout):
             values[match.group(1)] = float(match.group(2))
         if result.returncode:
             failures.append(entry["pkg"])
             print(result.stdout[-4000:], file=sys.stderr)
-    binary = ROOT / "tmp/perf-scoreboard/pig"
+    binary = ROOT / "tmp/perf-scoreboard/ompig"
     binary.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(["go", "build", "-trimpath", "-buildvcs=false", "-o", str(binary), "./cmd/pig"], cwd=ROOT, check=True, timeout=timeout,
+    subprocess.run(["go", "build", "-trimpath", "-buildvcs=false", "-o", str(binary), "./cmd/ompig"], cwd=ROOT, check=True, timeout=timeout,
                    env={**os.environ, "CGO_ENABLED": "0"})
     values.update(inittrace(str(binary)))
     rev = subprocess.run(["git", "rev-parse", "--short=10", "HEAD"], cwd=ROOT, stdout=subprocess.PIPE, text=True).stdout.strip()

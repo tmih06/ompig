@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess_test
 
@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 type nativeTestUI struct {
@@ -106,7 +106,7 @@ export default pi=>{
 			if model == nil {
 				t.Fatal("native model absent")
 			}
-			// The host callbacks are bound straight to the registry, without cmd/pig's binding that starts the queued registration refresh when a callback returns, so this is a direct Go registration (D84): the awaited call runs Pi's local refresh.
+			// The host callbacks are bound straight to the registry, without cmd/ompig's binding that starts the queued registration refresh when a callback returns, so this is a direct Go registration (D84): the awaited call runs Pi's local refresh.
 			if _, err := services.ModelRuntime().GetAvailable(t.Context()); err != nil {
 				t.Fatal(err)
 			}

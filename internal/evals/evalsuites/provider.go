@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/evals"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/evals"
 )
 
 const streamAPIKey = "resolved-stream-key"
@@ -53,7 +53,7 @@ func OpenAIProvider() evals.Suite {
 		},
 		BeforeEach: server.Reset,
 		Cases: []evals.Case{{Name: "configures a provider that works through Pi", Run: func(ctx context.Context, run evals.RunFunc) error {
-			_, err := run(ctx, promptThenReload(fmt.Sprintf(`Configure this running PiG installation with Acme as a provider. Do not create project-local configuration. Its provider ID is %s, its API is at %s, and it uses OpenAI Chat Completions. Read its API key from the ACME_API_KEY environment variable.
+			_, err := run(ctx, promptThenReload(fmt.Sprintf(`Configure this running Ompig installation with Acme as a provider. Do not create project-local configuration. Its provider ID is %s, its API is at %s, and it uses OpenAI Chat Completions. Read its API key from the ACME_API_KEY environment variable.
 
 The provider offers one model, %s, shown as “Acme Chat”. It accepts text, does not support reasoning, has a 32,768-token context window and a 4,096-token maximum output, and has no usage cost.`,
 				evals.OpenAIProviderID, server.BaseURL(), evals.OpenAIModelID)))
@@ -98,7 +98,7 @@ func CustomProvider() evals.Suite {
 		},
 		BeforeEach: server.Reset,
 		Cases: []evals.Case{{Name: "implements a provider from an API fixture", Run: func(ctx context.Context, run evals.RunFunc) error {
-			_, err := run(ctx, promptThenReload(fmt.Sprintf(`Configure this running PiG installation with Acme Stream as a provider. Do not create a project package or modify project source. Its provider ID is %s, its API is at %s, and its API documentation is in ./%s. Read its credential from the ACME_STREAM_API_KEY environment variable.
+			_, err := run(ctx, promptThenReload(fmt.Sprintf(`Configure this running Ompig installation with Acme Stream as a provider. Do not create a project package or modify project source. Its provider ID is %s, its API is at %s, and its API documentation is in ./%s. Read its credential from the ACME_STREAM_API_KEY environment variable.
 
 It offers one model, %s, shown as “Acme Stream Chat”. The model accepts text, does not support reasoning, has a 16,384-token context window and a 2,048-token maximum output, and has no usage cost.`,
 				evals.StreamProviderID, server.Origin(), documentationPath, evals.StreamModelID)))

@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // onlyCheckContext reports cancellation on exactly its failAt-th Err call, so a test can cancel one named abort check of Exec and no other.

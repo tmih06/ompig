@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Pi loads in-process (loader.ts:538-550); the isolated subprocess diagnostic is owned by PiG, just like a packed log.
+// Pi loads in-process (loader.ts:538-550); the isolated subprocess diagnostic is owned by Ompig, just like a packed log.
 func TestIsolatedStderrLogLifecycle(t *testing.T) {
 	configs := packedLogTestConfigs(t, "node")
 	for i := range configs {
@@ -96,7 +96,7 @@ func TestIsolatedStderrLogLoadFailure(t *testing.T) {
 
 func assertIsolatedLogs(t *testing.T, dir string, want ...string) {
 	t.Helper()
-	got, err := filepath.Glob(filepath.Join(dir, "pig-ext-*.log"))
+	got, err := filepath.Glob(filepath.Join(dir, "ompig-ext-*.log"))
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -7,10 +7,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/entered"
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
-	"github.com/MichaelKinsy/PiG/internal/jsloop"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/entered"
+	"github.com/tmih06/ompig/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/jsloop"
 )
 
 // A parallel batch emits each call's tool_execution_end in the order the calls' tools settled, which a tool that learns its

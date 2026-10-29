@@ -91,7 +91,7 @@ func saveStackPointer() {
 // growHeap tries to grow the heap size. It returns true if it succeeds, false
 // otherwise.
 //
-// PiG Durable core fork: stock TinyGo doubles the heap on every call, so the heap
+// Ompig Durable core fork: stock TinyGo doubles the heap on every call, so the heap
 // can only reach a ceiling that is its initial size times a power of two, and the
 // last step can reserve as much memory as the program has used in total. This
 // version grows by a fixed step, growHeapStepKiB (-ldflags "-X

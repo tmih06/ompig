@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // publishWatches and publishViews sort the open watch IDs (from a map, so in any order) on every commit. The sort is O(W log W): an

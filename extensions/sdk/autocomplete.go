@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // AutocompleteSuggestions is the complete provider answer. Cursor columns in this API count UTF-16 code units, as in Pi.

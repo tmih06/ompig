@@ -23,8 +23,8 @@ import (
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 var observationOutput = flag.String("rpc33-observation-output", "", "directory for complete RPC33 observations and diffs; each execution creates a separate child")
@@ -70,7 +70,7 @@ func TestRPC33ObservationMatrixAzure(t *testing.T) {
 
 func runObservationMatrix(t *testing.T, oracleDir string) {
 	t.Helper()
-	for _, key := range []string{"HOME", "PIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
+	for _, key := range []string{"HOME", "OMPIG_CODING_AGENT_DIR", "PI_CODING_AGENT_DIR"} {
 		t.Setenv(key, t.TempDir())
 	}
 	var inputs observationInputs

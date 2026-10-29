@@ -35,7 +35,7 @@ func runHostWiringMode(t *testing.T, mode string, extraArgs []string, extensions
 	}
 	cmd := exec.CommandContext(t.Context(), binary, args...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "pig"), "WIRING_REPORT="+report)
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "ompig"), "WIRING_REPORT="+report)
 	cmd.Stdin = strings.NewReader("")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -48,7 +48,7 @@ func runHostWiringMode(t *testing.T, mode string, extraArgs []string, extensions
 	return strings.Split(strings.TrimSpace(string(data)), "\n")
 }
 
-// Pi binds setModel, setThinkingLevel, isProjectTrusted and compact to the Session in every mode (agent-session.ts:3343-3349, 3355, 3369-3379 _bindExtensionCore), and print and RPC mode only add their command-context actions (print-mode.ts:76-104, rpc-mode.ts:319-351). The expected records are Pi 0.99.1's, probed with this fixture in -p, --mode json and --mode rpc: --no-approve leaves the project untrusted, setModel to a model whose provider has no credentials resolves false without a model_select or a model_change (agent-session.ts:3343-3344), setModel to the provider's second model resolves true after one model_select (agent-session.ts:2372-2384, 2411), an empty Session's compaction reports compact()'s own error (agent-session.ts:2700-2702) through onError, and the changed thinking level emits thinking_level_select and appends a thinking_level_change. Pig's print, JSON and RPC modes left all four unbound, so the extension saw a trusted project, a "not ready" rejection, no level change and "compaction is not available".
+// Pi binds setModel, setThinkingLevel, isProjectTrusted and compact to the Session in every mode (agent-session.ts:3343-3349, 3355, 3369-3379 _bindExtensionCore), and print and RPC mode only add their command-context actions (print-mode.ts:76-104, rpc-mode.ts:319-351). The expected records are Pi 0.99.1's, probed with this fixture in -p, --mode json and --mode rpc: --no-approve leaves the project untrusted, setModel to a model whose provider has no credentials resolves false without a model_select or a model_change (agent-session.ts:3343-3344), setModel to the provider's second model resolves true after one model_select (agent-session.ts:2372-2384, 2411), an empty Session's compaction reports compact()'s own error (agent-session.ts:2700-2702) through onError, and the changed thinking level emits thinking_level_select and appends a thinking_level_change. Ompig's print, JSON and RPC modes left all four unbound, so the extension saw a trusted project, a "not ready" rejection, no level change and "compaction is not available".
 func TestHeadlessExtensionSessionActionsMatchPi(t *testing.T) {
 	t.Parallel()
 	want := []string{
@@ -72,7 +72,7 @@ func TestHeadlessExtensionSessionActionsMatchPi(t *testing.T) {
 	}
 }
 
-// A virtual model an SDK extension registers while its factory runs is queued in the extension runtime (loader.ts:480-490) and flushed into the model runtime when the Session binds its runner (runner.ts:497-513, agent-session.ts:3562), before session_start (agent-session.ts:3194). Pig's extension host queued it in its own runtime, which no production path bound, so ctx.modelRegistry.find never saw it in any mode.
+// A virtual model an SDK extension registers while its factory runs is queued in the extension runtime (loader.ts:480-490) and flushed into the model runtime when the Session binds its runner (runner.ts:497-513, agent-session.ts:3562), before session_start (agent-session.ts:3194). Ompig's extension host queued it in its own runtime, which no production path bound, so ctx.modelRegistry.find never saw it in any mode.
 func TestSubprocessVirtualModelReachesTheModelRuntime(t *testing.T) {
 	t.Parallel()
 	want := []string{`{"event":"virtual_model","value":"auto"}`}
@@ -92,7 +92,7 @@ func TestSubprocessVirtualModelReachesTheModelRuntime(t *testing.T) {
 	}
 }
 
-// Pi flushes the virtual models extensions queued while they loaded into the model runtime after their provider registrations and before the Session exists (agent-session-services.ts:158-193). A registration that fails there is a startup error diagnostic, so Pi reports it and exits 1, with no -ne hint because no extension failed to load (main.ts:907-916). Probed with Pi 0.99.1 in -p, --mode json and --mode rpc on an equivalent JavaScript extension: `Error: Extension "<path>" error: Virtual model probe/probe-model conflicts with a physical model.` and exit status 1. Pig bound the host's virtual models only after the Session existed, so the failure reached no listener and startup went on.
+// Pi flushes the virtual models extensions queued while they loaded into the model runtime after their provider registrations and before the Session exists (agent-session-services.ts:158-193). A registration that fails there is a startup error diagnostic, so Pi reports it and exits 1, with no -ne hint because no extension failed to load (main.ts:907-916). Probed with Pi 0.99.1 in -p, --mode json and --mode rpc on an equivalent JavaScript extension: `Error: Extension "<path>" error: Virtual model probe/probe-model conflicts with a physical model.` and exit status 1. Ompig bound the host's virtual models only after the Session existed, so the failure reached no listener and startup went on.
 func TestExtensionVirtualModelFlushFailureStopsStartup(t *testing.T) {
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
@@ -116,7 +116,7 @@ func TestExtensionVirtualModelFlushFailureStopsStartup(t *testing.T) {
 			}
 			cmd := exec.CommandContext(t.Context(), binary, args...)
 			cmd.Dir = cwd
-			cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, "pig"), "WIRING_REPORT="+filepath.Join(t.TempDir(), "report.jsonl"))
+			cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, "ompig"), "WIRING_REPORT="+filepath.Join(t.TempDir(), "report.jsonl"))
 			cmd.Stdin = strings.NewReader("")
 			var stdout, stderr strings.Builder
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
@@ -131,7 +131,7 @@ func TestExtensionVirtualModelFlushFailureStopsStartup(t *testing.T) {
 	}
 }
 
-// Pi binds a mode's extensions with that mode: print-mode.ts bindExtensions passes "json" for --mode json and "print" otherwise, and rpc-mode.ts passes "rpc"; the interactive mode passes "tui" (interactive-mode.ts), which the parity scenario 90-extension-run-mode drives on a PTY. An extension reads it as ctx.mode. Pig's host sends the mode in the ready payload, and every SDK that never receives one reports "print" (issue 360), so only json and rpc tell a host that sends the mode from one that does not.
+// Pi binds a mode's extensions with that mode: print-mode.ts bindExtensions passes "json" for --mode json and "print" otherwise, and rpc-mode.ts passes "rpc"; the interactive mode passes "tui" (interactive-mode.ts), which the parity scenario 90-extension-run-mode drives on a PTY. An extension reads it as ctx.mode. Ompig's host sends the mode in the ready payload, and every SDK that never receives one reports "print" (issue 360), so only json and rpc tell a host that sends the mode from one that does not.
 func TestExtensionContextModeIsTheRunMode(t *testing.T) {
 	t.Parallel()
 	for _, fixture := range []string{"host-wiring-run-mode.mjs", "host-wiring-run-mode.py"} {
@@ -146,8 +146,8 @@ func TestExtensionContextModeIsTheRunMode(t *testing.T) {
 	}
 }
 
-// An SDK extension that computes a schema with a member of Type the host's type engine runs (Pick) loads in every mode of the stock pig binary: the Go, Rust and
-// Python SDKs send the call to the host (type.engine), and the engine is registered by coding/extension/pigsdk, which every pig program that embeds an SDK links, so no
+// An SDK extension that computes a schema with a member of Type the host's type engine runs (Pick) loads in every mode of the stock ompig binary: the Go, Rust and
+// Python SDKs send the call to the host (type.engine), and the engine is registered by coding/extension/pigsdk, which every ompig program that embeds an SDK links, so no
 // host the command builds can meet the call without an engine. The subprocess package's own test binary links no pigsdk, so it registers the engine for its fixtures
 // (coding/extension/host/subprocess/type_engine_testmain_test.go); this test is the production path.
 func TestStockPigHostsTheTypeEngineForSDKExtensionsInEveryMode(t *testing.T) {

@@ -7,8 +7,8 @@
 // The spin is capped at 200 ticks: a fixture that needs a macrotask (end of body after the last chunk) is not part of this oracle.
 //
 // usage: node realticks.mjs <out.json>     (env PI_PACKAGE_ROOT = the installed pi-coding-agent package)
-const PIG_UPSTREAM_VERSION = process.env.PIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
-if (!PIG_UPSTREAM_VERSION) throw new Error('PIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
+const OMPIG_UPSTREAM_VERSION = process.env.OMPIG_UPSTREAM_VERSION; // the pin's display version, from `eval "$(python3 automation/pin/pin.py env)"`
+if (!OMPIG_UPSTREAM_VERSION) throw new Error('OMPIG_UPSTREAM_VERSION is not set: run eval "$(python3 automation/pin/pin.py env)" before the probe');
 import { PI_PACKAGE_VERSION } from "../../../../../test/parity/testdata/pi-version.mjs";
 import { createServer } from 'node:http';
 import { once } from 'node:events';
@@ -107,4 +107,4 @@ for (const fixture of ['tool', 'mixed', 'multi', 'errorFinish', 'malformed', 'no
   assert.ok(marks.every(([, tick]) => tick < 200), `${fixture} left the microtask domain`);
   out.push({ fixture, body: body.toString(), marks, stopReason: result.stopReason, errorMessage: result.errorMessage ?? null });
 }
-await writeFile(process.argv[2], JSON.stringify({ piVersion: PIG_UPSTREAM_VERSION, node: process.version, cases: out }, null, 2) + '\n');
+await writeFile(process.argv[2], JSON.stringify({ piVersion: OMPIG_UPSTREAM_VERSION, node: process.version, cases: out }, null, 2) + '\n');

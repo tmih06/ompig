@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi agent-session.ts:1371-1394,2965,3125 rebuilds from the registry and loaded resources after resources_discover; all modes bind the same base options to command contexts.

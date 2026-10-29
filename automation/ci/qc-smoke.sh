@@ -4,27 +4,27 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 cd "$ROOT"
 
-PIG_BIN=${PIG_BIN:-$ROOT/bin/pig-parity}
-if [[ ! -x "$PIG_BIN" ]]; then
-  echo "ERROR: PIG_BIN is not executable: $PIG_BIN" >&2
+OMPIG_BIN=${OMPIG_BIN:-$ROOT/bin/ompig-parity}
+if [[ ! -x "$OMPIG_BIN" ]]; then
+  echo "ERROR: OMPIG_BIN is not executable: $OMPIG_BIN" >&2
   echo "Run: make parity-bin" >&2
   exit 2
 fi
 
-echo "qc-smoke: pig=$PIG_BIN"
-out=$(mktemp -d "${TMPDIR:-/tmp}/pig-qc.XXXXXXXX")
+echo "qc-smoke: ompig=$OMPIG_BIN"
+out=$(mktemp -d "${TMPDIR:-/tmp}/ompig-qc.XXXXXXXX")
 trap 'rm -rf "$out"' EXIT
-"$PIG_BIN" --version >"$out"/version.txt
-PIG_HOME=$(mktemp -d "${TMPDIR:-/tmp}/pig.XXXXXXXX") "$PIG_BIN" docs sync >"$out"/docs-sync.txt
-PIG_HOME=$(mktemp -d "${TMPDIR:-/tmp}/pig.XXXXXXXX") "$PIG_BIN" docs list >"$out"/docs-list.txt
+"$OMPIG_BIN" --version >"$out"/version.txt
+OMPIG_HOME=$(mktemp -d "${TMPDIR:-/tmp}/ompig.XXXXXXXX") "$OMPIG_BIN" docs sync >"$out"/docs-sync.txt
+OMPIG_HOME=$(mktemp -d "${TMPDIR:-/tmp}/ompig.XXXXXXXX") "$OMPIG_BIN" docs list >"$out"/docs-list.txt
 grep -q 'providers.md' "$out"/docs-list.txt
-"$PIG_BIN" install examples/extensions/go-factory --validate-only --json >"$out"/go-factory.json
+"$OMPIG_BIN" install examples/extensions/go-factory --validate-only --json >"$out"/go-factory.json
 grep -q '"valid": true' "$out"/go-factory.json
 grep -q '"hello"' "$out"/go-factory.json
 
-PIG_PARITY_PIG_BIN="$PIG_BIN" go test -tags=parity ./test/parity/runner \
+OMPIG_PARITY_OMPIG_BIN="$OMPIG_BIN" go test -tags=parity ./test/parity/runner \
   -run 'TestParity/(01-version-flag|10-login-subscription-providers|01-register-handshake)$' \
-  -count=1 -v -timeout 5m -args -pig-parity.results="$out"/parity-results.json
+  -count=1 -v -timeout 5m -args -ompig-parity.results="$out"/parity-results.json
 ran=$(go run ./test/parity/cmd/checkparityran -results "$out"/parity-results.json)
 if [[ "$ran" -eq 0 ]]; then
   echo "ERROR: qc-smoke compared 0 parity scenarios: the runner skipped before running any" >&2

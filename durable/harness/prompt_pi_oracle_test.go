@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type promptView struct {
@@ -249,7 +249,7 @@ func TestPromptPlanningMatchesPi(t *testing.T) {
 				gotJSON, _ := json.Marshal(got)
 				wantJSON, _ := json.Marshal(wantValue)
 				opJSON, _ := json.Marshal(op)
-				t.Errorf("%s op %d\n  op  %s\n  Pi  %s\n  Pig %s", op.Op, i, opJSON, wantJSON, gotJSON)
+				t.Errorf("%s op %d\n  op  %s\n  Pi  %s\n  Ompig %s", op.Op, i, opJSON, wantJSON, gotJSON)
 			}
 		}
 	}

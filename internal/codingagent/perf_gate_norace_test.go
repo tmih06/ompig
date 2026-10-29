@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // perfSessionFile writes a persisted session of entries messages (alternating user and assistant, about 400 bytes of text each) and returns its path.

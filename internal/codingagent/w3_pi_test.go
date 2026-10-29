@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Exercise the pinned published Pi implementation, not a copied model of its rules.
@@ -17,7 +17,7 @@ func TestW3SessionPiComparison(t *testing.T) {
 	home, cwd := t.TempDir(), t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "agent"))
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	cmd := piDirectoryNode(t, `
 const {formatResumeCommand} = await load('modes/interactive/interactive-mode');
 const {AgentSessionRuntime} = await load('core/agent-session-runtime');
@@ -60,7 +60,7 @@ process.stdout.write(JSON.stringify({resumes,error,rules}));
 	for _, row := range oracle.Resumes {
 		resolvedDir, _ := filepath.Abs(row.Dir)
 		defaultDir, _ := filepath.Abs(defaultSessionDir(cwd))
-		if got := resumeCommand(row.Path, row.ID, row.Dir, row.Dir != "" && resolvedDir != defaultDir); got != "pig"+strings.TrimPrefix(row.Command, "pi") {
+		if got := resumeCommand(row.Path, row.ID, row.Dir, row.Dir != "" && resolvedDir != defaultDir); got != "ompig"+strings.TrimPrefix(row.Command, "pi") {
 			t.Errorf("resume: got %q Pi %q", got, row.Command)
 		}
 	}

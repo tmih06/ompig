@@ -98,7 +98,7 @@ func pick2(random *rand.Rand, options ...map[string]any) map[string]any {
 	return options[random.Intn(len(options))]
 }
 
-// TestGoogleProviderStreamMatchesPi compares Pi's google-generative-ai provider with Pig's over seeded Gemini bodies.
+// TestGoogleProviderStreamMatchesPi compares Pi's google-generative-ai provider with Ompig's over seeded Gemini bodies.
 func TestGoogleProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"google-generative-ai", "googleGenerativeAIApi", "google-generative-ai", "google"}, false, googleStreamBodies(), func(baseURL string) Provider {
 		return NewGoogleProvider(GoogleConfig{APIKey: "k", Model: "m", BaseURL: baseURL})

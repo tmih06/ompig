@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // beyondCacheRetention moves a fake clock past the 30-day retention of an unused entry.
@@ -27,9 +27,9 @@ const beyondCacheRetention = 90 * 24 * time.Hour
 func isolateAutomaticCacheGC(t *testing.T) (cacheRoot string) {
 	t.Helper()
 	home := t.TempDir()
-	t.Setenv("PIG_HOME", home)
+	t.Setenv("OMPIG_HOME", home)
 	t.Setenv("PI_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	t.Setenv("PI_CODING_AGENT_DIR", filepath.Join(home, "agent"))
 	run, prune, now, rename, removeAll := automaticCacheGCRun, automaticCacheGCPrune, automaticCacheGCNow, automaticCacheGCRename, automaticCacheGCRemoveAll
 	t.Cleanup(func() {
@@ -59,7 +59,7 @@ func publishExpiredCacheEntry(t *testing.T, cacheRoot string) (entry string, lat
 
 // Startup never waits for the cache collection. The collector is in the middle of removing an entry,
 // blocked in the file system, and start has returned: the daily collection of a 1.4 GB cache on NFS took
-// tens of minutes while pig accepted no input.
+// tens of minutes while ompig accepted no input.
 func TestStartAutomaticExtensionCacheGCReturnsBeforeCollectionFinishes(t *testing.T) {
 	cacheRoot := isolateAutomaticCacheGC(t)
 	_, later := publishExpiredCacheEntry(t, cacheRoot)
@@ -159,7 +159,7 @@ func TestStopAutomaticExtensionCacheGCCancelsTheCollection(t *testing.T) {
 }
 
 // A collection that fails in the background cannot write to the terminal the interactive UI owns. It records
-// the failure for `pig extensions cache stats`, and a later success clears it.
+// the failure for `ompig extensions cache stats`, and a later success clears it.
 func TestAutomaticExtensionCacheGCRecordsFailureInsteadOfPrinting(t *testing.T) {
 	isolateAutomaticCacheGC(t)
 	automaticCacheGCRun = func(context.Context, []subprocess.ExtConfig) error { return errors.New("disk on fire") }
@@ -311,7 +311,7 @@ func TestLoadingExtensionsSchedulesButDoesNotRunTheCacheCollection(t *testing.T)
 	}
 }
 
-// `pig extensions cache stats` shows the failure of the last background collection, which could not print it.
+// `ompig extensions cache stats` shows the failure of the last background collection, which could not print it.
 func TestExtensionsCacheStatsShowsTheLastAutomaticPruneFailure(t *testing.T) {
 	cacheRoot := isolateAutomaticCacheGC(t)
 	if err := os.MkdirAll(cacheRoot, 0o755); err != nil {

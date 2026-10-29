@@ -17,8 +17,8 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/text"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/text"
 )
 
 // StripANSI mirrors upstream stripAnsi (see text.StripANSI). Anything its pattern does not cover (a lone ESC, ESC + letter outside the

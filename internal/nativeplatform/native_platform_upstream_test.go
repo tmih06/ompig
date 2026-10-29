@@ -104,7 +104,7 @@ func TestUpstreamNativePlatformLinuxRechecksDisplay(t *testing.T) {
 	}
 }
 
-// packages/tui/test/native-platform.test.ts:8. PiG ships this same Node helper to extensions; its PT_LOAD segments must also load on 64 KB ARM64 hosts.
+// packages/tui/test/native-platform.test.ts:8. Ompig ships this same Node helper to extensions; its PT_LOAD segments must also load on 64 KB ARM64 hosts.
 func TestUpstreamNativePlatformARM64PageAlignment(t *testing.T) {
 	path := filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "runtime-node", "shims", "pi-dist", "pi-tui", "native", "linux", "prebuilds", "linux-arm64", "linux-platform-x11.node")
 	binary, err := elf.Open(path)

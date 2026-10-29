@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // model-runtime.ts:973-1030 resolveModel: the router sees the latest successful response as `previous` (an errored or aborted response is skipped, an earlier success does not replace a later one),

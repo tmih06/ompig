@@ -9,11 +9,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 const upstreamDarkTheme = "../../.upstream/current/packages/coding-agent/src/modes/interactive/theme/dark.json"
@@ -23,10 +23,10 @@ func resourceLoaderFixture(t *testing.T) (root, cwd, agentDir string) {
 	root = t.TempDir()
 	t.Setenv("HOME", root)
 	t.Setenv("USERPROFILE", root)
-	t.Setenv("PIG_HOME", filepath.Join(root, "config"))
-	t.Setenv("PIG_CODING_AGENT_DIR", filepath.Join(root, "agent"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "config"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", filepath.Join(root, "agent"))
 	t.Setenv("PI_OFFLINE", "")
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_OFFLINE", "")
 	cwd, agentDir = filepath.Join(root, "project"), filepath.Join(root, "agent")
 	for _, dir := range []string{cwd, agentDir} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {

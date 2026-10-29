@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi agent-session.ts:_rebuildSystemPrompt replaces the options object when active tools change; an older borrowed object keeps its prior selection.

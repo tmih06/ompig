@@ -1,10 +1,10 @@
 # Events and hooks
 
-PiG-native extensions react to **events**. A separately selected extension can
-translate another harness's hook format into those events. Stock Pig does not
+Ompig-native extensions react to **events**. A separately selected extension can
+translate another harness's hook format into those events. Stock Ompig does not
 load a hook bridge.
 
-## Register PiG-native events in an extension
+## Register Ompig-native events in an extension
 
 A Go factory extension registers event handlers on the SDK extension object:
 
@@ -29,7 +29,7 @@ func Extension() *sdk.Extension {
 Validate the extension after changing event code:
 
 ```bash
-pig install ./my-ext --validate-only --json
+ompig install ./my-ext --validate-only --json
 ```
 
 ## Event names are the extension API surface
@@ -53,7 +53,7 @@ input, model-selection, and session lifecycle events. The
 field is absent when an extension clears the name. The
 `session_before_compact` event contains the preparation, branch entries,
 reason, retry state, custom instructions, and cancellation context. A handler
-can cancel compaction or provide the compaction result. PiG persists a provided
+can cancel compaction or provide the compaction result. Ompig persists a provided
 result before it emits `session_compact`. The `session_compact` event contains
 the persisted entry and identifies an extension-provided result. Use the SDK
 helper when one exists. Use `OnEvent` only when you need a named event without
@@ -62,10 +62,10 @@ a helper.
 ## Hooks are external Resources
 
 Some harnesses use declarative command triggers called hooks. A Package can
-distribute hook metadata, and a Piglet can select an extension that translates
-that metadata into PiG events. Stock Pig does not interpret cross-harness hook
+distribute hook metadata, and a Ompiglet can select an extension that translates
+that metadata into Ompig events. Stock Ompig does not interpret cross-harness hook
 files by itself.
 
-Use SDK events when you write a PiG extension and need direct access to the SDK
+Use SDK events when you write a Ompig extension and need direct access to the SDK
 context, host calls, and cancellation. Use a selected bridge extension when a
 composition requires another harness's hook format.

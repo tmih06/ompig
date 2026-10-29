@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ctx.ui.theme.appearance, colors and style for every SDK against the host's own theme (.upstream/v0.99.2/packages/coding-agent/src/modes/interactive/theme/theme.ts:311-367). The host resolves the appearance and the concrete colors with the palette; each SDK renders style over the palette's escape sequences. The expected values are what the host's tui.Theme answers for the same palette, so an SDK that returns a constant, ignores a color kind or rounds differently fails.

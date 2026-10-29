@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's filterAndSortSessions (modes/interactive/components/session-selector-search.js) runs against the vendored Pi module over a session corpus and a query corpus: plain and quoted tokens, fuzzy matches, unbalanced quotes, JavaScript whitespace, `re:` patterns with JavaScript-only syntax (lookahead, backreferences, \d, \w, flags), invalid patterns, and both sort modes. The ordered result paths must agree. The i flag's non-ASCII case canonicalization (U+0130 does not match "i" in JavaScript, where regexp2 alone would fold it) is translated by translateJSRegExp and is in the corpus.

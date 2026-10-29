@@ -243,22 +243,22 @@ func TestParseFlags(t *testing.T) {
 
 func TestHelpTextMentionsPiglets(t *testing.T) {
 	help := captureStdout(func() { printHelp(os.Stdout, false) })
-	for _, want := range []string{"--piglet <name|path>", "pig piglet <command>"} {
+	for _, want := range []string{"--ompiglet <name|path>", "ompig ompiglet <command>"} {
 		if !strings.Contains(help, want) {
 			t.Fatalf("help text missing %q:\n%s", want, help)
 		}
 	}
-	for _, removed := range []string{"  --piglets", "  pig piglets"} {
+	for _, removed := range []string{"  --ompiglets", "  ompig ompiglets"} {
 		if strings.Contains(help, removed) {
-			t.Fatalf("help text contains removed piglet syntax %q:\n%s", removed, help)
+			t.Fatalf("help text contains removed ompiglet syntax %q:\n%s", removed, help)
 		}
 	}
 }
 
 func TestHelpTextUsesPigSelfUpdateTargets(t *testing.T) {
 	help := captureStdout(func() { printHelp(os.Stdout, false) })
-	// Pi 1.1.0 args.ts:293 lists `${APP_NAME} update [source|self|pi]`: the app's own name is the third self target, so pig lists `pig`, never `pi`.
-	if !strings.Contains(help, "pig update [source|self|pig]") || strings.Contains(help, "source|self|pi]") {
+	// Pi 1.1.0 args.ts:293 lists `${APP_NAME} update [source|self|pi]`: the app's own name is the third self target, so ompig lists `ompig`, never `pi`.
+	if !strings.Contains(help, "ompig update [source|self|ompig]") || strings.Contains(help, "source|self|pi]") {
 		t.Fatalf("help has stale self-update targets:\n%s", help)
 	}
 }
@@ -477,7 +477,7 @@ func TestParseFlags_UpstreamParity(t *testing.T) {
 	}
 }
 
-// PiG's /share returns the gateway's canonical URL (D64), so Pi's
+// Ompig's /share returns the gateway's canonical URL (D64), so Pi's
 // PI_SHARE_VIEWER_URL has no effect and --help must not advertise it or its
 // pi.dev default.
 func TestHelpOmitsUnusedShareViewerURL(t *testing.T) {

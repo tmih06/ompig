@@ -1,4 +1,4 @@
-//go:build !pig_strip_docs
+//go:build !ompig_strip_docs
 
 package prompts
 
@@ -7,20 +7,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 // The expected text is upstream Pi 0.87.1's rendering for the same inputs,
 // with only the product name and documentation location changed (D22).
 func TestBuildDefaultPromptMatchesUpstreamLayout(t *testing.T) {
-	docs := filepath.Join("/home", "u", ".pig", "docs")
+	docs := filepath.Join("/home", "u", ".ompig", "docs")
 	got := BuildDefaultPrompt(Options{
 		Cwd:            "/work/app",
 		Tools:          []string{"read", "bash", "edit", "write"},
 		ToolHints:      piSnippets,
 		ToolGuidelines: map[string][]string{"read": {"Use read to examine files instead of cat or sed."}, "write": {"Use write only for new files or complete rewrites."}},
-		PigDocsPath:    docs,
+		OmpigDocsPath:  docs,
 	})
 	want := preamble + "\n\n<tools>\n" +
 		"- read: Read file contents\n- bash: Execute bash commands (ls, grep, find, etc.)\n" +
@@ -36,10 +36,10 @@ func TestBuildDefaultPromptMatchesUpstreamLayout(t *testing.T) {
 	}
 }
 
-// A Piglet that strips docs gets the prompt its Binary has: no docs section, so the model is not pointed at a
+// A Ompiglet that strips docs gets the prompt its Binary has: no docs section, so the model is not pointed at a
 // bundle that is never written. The other sections keep their order.
 func TestStripDocsOmitsDocsSection(t *testing.T) {
-	opts := Options{Cwd: "/w", Tools: []string{"read"}, ToolHints: piSnippets, PigDocsPath: "/d"}
+	opts := Options{Cwd: "/w", Tools: []string{"read"}, ToolHints: piSnippets, OmpigDocsPath: "/d"}
 	stock := BuildSystemPromptSections(opts)
 	if got := sectionNames(stock); strings.Join(got, ",") != "preamble,tools,rules,docs,cwd" {
 		t.Fatalf("stock sections = %v", got)
@@ -49,7 +49,7 @@ func TestStripDocsOmitsDocsSection(t *testing.T) {
 	if got := sectionNames(stripped); strings.Join(got, ",") != "preamble,tools,rules,cwd" {
 		t.Fatalf("stripped sections = %v", got)
 	}
-	if prompt := BuildDefaultPrompt(opts); strings.Contains(prompt, "<docs>") || strings.Contains(prompt, "PiG documentation") {
+	if prompt := BuildDefaultPrompt(opts); strings.Contains(prompt, "<docs>") || strings.Contains(prompt, "Ompig documentation") {
 		t.Fatalf("stripped prompt names the docs:\n%s", prompt)
 	}
 }

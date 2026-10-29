@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // Pi packages/durable/src/env/node-watch.ts:164 takes `options.maxDirectories ?? DEFAULT_MAX_DIRECTORIES`, so only an unset

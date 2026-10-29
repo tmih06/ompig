@@ -17,7 +17,7 @@ export default function (pi) {
 
 const pyMcpOrderFixture = pyAPIPrelude + `
 def new_extension():
-    e = pig_sdk.Extension("pyapi-mcp-order")
+    e = ompig_sdk.Extension("pyapi-mcp-order")
     e.register_mcp_server("ordered", {"timeout": 5, "url": "https://mcp.example/x", "toolExposure": {"b*": "direct", "a": "hidden", "2": "direct"}, "headers": {"X-Z": "1", "A": "2"}, "enabled": True, "exposure": "direct", "foo": {"zz": 1, "aa": [{"y": 1, "b": 2}]}, "oauth": {"scope": "s", "clientId": "c"}})
     e.register_mcp_server("stdio_one", {"args": ["--x"], "env": {"Z": "1", "A": "2"}, "cwd": ".", "command": "mcp-bin", "type": "stdio"})
 
@@ -59,7 +59,7 @@ export default function (pi) {
 
 const pyMcpAliasFixture = pyAPIPrelude + `
 def new_extension():
-    e = pig_sdk.Extension("pyapi-mcp-alias")
+    e = ompig_sdk.Extension("pyapi-mcp-alias")
     e.register_mcp_server("aliased", {"command": "mcp-bin", "exposure": "codemode-deferred", "toolExposure": {"b*": "codemode-deferred", "a": "direct"}, "enabled": False})
 
     def alias(ctx, args):

@@ -175,7 +175,7 @@ type tuiKeybindingRow struct {
 // tuiKeybindingRows is upstream TUI_KEYBINDINGS (packages/tui/src/keybindings.ts) in declaration order, with the per-platform tui.*
 // defaults that coding-agent's KEYBINDINGS applies on top (core/keybindings.ts). It is a package-level composite of constants, so the
 // linker emits it as data: building the table at package init (a map literal of slice literals) cost one allocation per row in every
-// binary that links the package, `pig --version` included.
+// binary that links the package, `ompig --version` included.
 var tuiKeybindingRows = [...]tuiKeybindingRow{
 	{id: KBEditorCursorUp, description: "Move cursor up", keys: []string{"up"}},
 	{id: KBEditorCursorDown, description: "Move cursor down", keys: []string{"down"}},
@@ -414,7 +414,7 @@ func (m *TUIKeybindingsManager) rebuild() {
 		}
 	}
 	// The coding-agent manager shares app.* actions with TUI components in
-	// upstream. Pig's packages are split, so retain unknown user-defined action
+	// upstream. Ompig's packages are split, so retain unknown user-defined action
 	// IDs here as an explicit bridge for components that consume app.* actions.
 	for id, keys := range m.userBindings {
 		if _, exists := m.keysById[id]; !exists {

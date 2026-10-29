@@ -8,7 +8,7 @@
 # popup open applies the highlighted item; its prefix is the argument text,
 # which does not start with "/", so editor.ts tui.select.confirm returns
 # without submitting and the editor holds "/probe reconnect".
-# PiG never asked extensions for argument completions, and Enter after an
+# Ompig never asked extensions for argument completions, and Enter after an
 # argument completion submitted the command.
 
 name = "27-command-argument-completions"
@@ -23,9 +23,9 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_args = ["--no-extensions"]
-pig_extensions = ["testdata/ext/argument-completions.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_args = ["--no-extensions"]
+ompig_extensions = ["testdata/ext/argument-completions.mjs"]
 pi_extensions = [
   "../../testdata/test-faux-provider.ts",
   "testdata/ext/argument-completions.mjs",
@@ -41,7 +41,7 @@ height = 40
 # and closes the popup (editor.ts setAutocompleteProvider -> cancelAutocomplete),
 # so the early (auto) footer is not readiness for "/probe ": under CPU contention
 # the keys land before the final provider and their completion request is dropped.
-ready_pattern_pig = "[Extensions]"
+ready_pattern_ompig = "[Extensions]"
 ready_pattern_pi = "[Extensions]"
 ready_timeout_seconds = 30
 capture_start = "/probe"

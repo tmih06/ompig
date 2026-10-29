@@ -12,23 +12,23 @@ import (
 const upstreamDocsDir = "../../.upstream/current/packages/coding-agent/docs"
 
 // upstreamPageName maps a site page whose file name differs from its Pi page.
-var upstreamPageName = map[string]string{"how-pig-works.md": "how-pi-works.md"}
+var upstreamPageName = map[string]string{"how-ompig-works.md": "how-pi-works.md"}
 
-// intentionalOmissions lists, per adapted-pi page, upstream section headings the PiG page intentionally lacks.
+// intentionalOmissions lists, per adapted-pi page, upstream section headings the Ompig page intentionally lacks.
 // Every entry needs a reason; a stale entry (the page has the heading again) fails the test.
 var intentionalOmissions = map[string]map[string]string{
 	"models.md": {
-		"Choose a connection": "PiG connects providers through its own provider catalog and /login flow, so the upstream connection chooser does not apply; the page describes PiG's connections instead.",
-		"Authenticate":        "PiG authentication differs from Pi's (its own credential store and /login flow); the page documents PiG's, so the upstream section is intentionally not kept.",
-		"Troubleshooting":     "PiG's page names this section \"Common errors\" and lists PiG's own failure cases.",
+		"Choose a connection": "Ompig connects providers through its own provider catalog and /login flow, so the upstream connection chooser does not apply; the page describes Ompig's connections instead.",
+		"Authenticate":        "Ompig authentication differs from Pi's (its own credential store and /login flow); the page documents Ompig's, so the upstream section is intentionally not kept.",
+		"Troubleshooting":     "Ompig's page names this section \"Common errors\" and lists Ompig's own failure cases.",
 	},
 }
 
 var markdownHeading = regexp.MustCompile(`^(#{1,6})\s+(.*?)\s*#*\s*$`)
 
-// normalizeHeading folds the PiG/Pi name difference and formatting so only the wording is compared.
+// normalizeHeading folds the Ompig/Pi name difference and formatting so only the wording is compared.
 func normalizeHeading(h string) string {
-	h = strings.NewReplacer("`", "", "*", "", "PiG", "Pi", "Pig", "Pi", "pig", "pi").Replace(h)
+	h = strings.NewReplacer("`", "", "*", "", "Ompig", "Pi", "Ompig", "Pi", "ompig", "pi").Replace(h)
 	return strings.ToLower(strings.Join(strings.Fields(h), " "))
 }
 
@@ -58,7 +58,7 @@ func pageHeadings(body string) []string {
 }
 
 // TestAdaptedPiPagesKeepUpstreamHeadings requires every page classified adapted-pi to keep each section heading of the
-// pinned upstream Pi page, unless intentionalOmissions says why the PiG page differs.
+// pinned upstream Pi page, unless intentionalOmissions says why the Ompig page differs.
 func TestAdaptedPiPagesKeepUpstreamHeadings(t *testing.T) {
 	if _, err := os.Stat(upstreamDocsDir); err != nil {
 		t.Skipf("the Pi source mirror is absent (%s); run `make upstream-mirror` to enable this check", upstreamDocsDir)
@@ -76,7 +76,7 @@ func TestAdaptedPiPagesKeepUpstreamHeadings(t *testing.T) {
 		}
 		upstream, err := os.ReadFile(filepath.Join(upstreamDocsDir, upName))
 		if err != nil {
-			t.Errorf("%s is adapted-pi but the pinned Pi has no docs/%s (%v); reclassify it as pig-authored or map its upstream name", name, upName, err)
+			t.Errorf("%s is adapted-pi but the pinned Pi has no docs/%s (%v); reclassify it as ompig-authored or map its upstream name", name, upName, err)
 			continue
 		}
 		have := map[string]bool{}

@@ -20,9 +20,9 @@ artifact_path = "{{TEMP}}/images.json"
 
 [env]
 # Pass the directory token alone: the runner resolves relative env paths before token expansion.
-pig = ["PIG_TEST_FAUX=1", "PARITY_IMAGE_DIR={{TEMP}}"]
+ompig = ["OMPIG_TEST_FAUX=1", "PARITY_IMAGE_DIR={{TEMP}}"]
 pi = ["PI_SKIP_VERSION_CHECK=1", "PARITY_IMAGE_DIR={{TEMP}}"]
-pig_extensions = ["testdata/resize-callers/observe.mjs"]
+ompig_extensions = ["testdata/resize-callers/observe.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/resize-callers/observe.mjs"]
 
 [assert]

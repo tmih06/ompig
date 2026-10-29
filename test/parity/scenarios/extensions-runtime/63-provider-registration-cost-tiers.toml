@@ -10,8 +10,8 @@ args = ["--model", "test-faux/faux-1", "--no-session", "-p", "/cost-tier-probe {
 timeout_seconds = 30
 artifact_path = "{{TEMP}}/tiers.json"
 [env]
-pig = ["PIG_TEST_FAUX=1"]
-pig_extensions = ["../testdata/provider-cost-tiers.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1"]
+ompig_extensions = ["../testdata/provider-cost-tiers.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "../testdata/provider-cost-tiers.mjs"]
 [assert]
 exit_code = 0

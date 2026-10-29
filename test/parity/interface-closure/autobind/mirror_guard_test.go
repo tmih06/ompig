@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // autobindMainEnv makes the test binary run the command itself, so a test sees the exit status a make target sees.
-const autobindMainEnv = "PIG_AUTOBIND_TEST_RUN_MAIN"
+const autobindMainEnv = "OMPIG_AUTOBIND_TEST_RUN_MAIN"
 
 func TestMain(m *testing.M) {
 	if os.Getenv(autobindMainEnv) == "1" {
@@ -57,7 +57,7 @@ func writeMirror(t *testing.T, root, version, tag, commit, pkgVersion string) {
 	if err := os.MkdirAll(filepath.Join(current, "packages/coding-agent"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(current, ".pig-upstream-source.json"), js(m{"version": version, "tag": tag, "commit": commit}), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(current, ".ompig-upstream-source.json"), js(m{"version": version, "tag": tag, "commit": commit}), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(filepath.Join(current, "packages/coding-agent/package.json"), js(m{"version": pkgVersion}), 0o644); err != nil {

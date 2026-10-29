@@ -39,11 +39,11 @@
    "tui/tui_alt_screen.go#TuiAltScreen.GetScreenLines"
   ],
   "production": [
-   "call:internal/codingagent/pig_logo_animation_play.go#InteractiveMode.playEgg3d"
+   "call:internal/codingagent/ompig_logo_animation_play.go#InteractiveMode.playEgg3d"
   ],
   "evidence": [
-   "test:internal/codingagent/pig_logo_animation_test.go#TestClickingTheTextMarkPlaysTheAnimation",
-   "test:internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationColors"
+   "test:internal/codingagent/ompig_logo_animation_test.go#TestClickingTheTextMarkPlaysTheAnimation",
+   "test:internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationColors"
   ],
   "rationale": "TuiAltScreen.getScreenLines is the Go method TuiAltScreen.GetScreenLines; signature reviewed against the upstream declaration; callers and tests attributed by go/types (methodrefs)."
  },

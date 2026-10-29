@@ -4,9 +4,9 @@
 
 The CI images workflow (.github/workflows/ci-images.yml) runs this from main with a write token and no pull request code.
 
-  lock --evidence DIR     DIR holds the refresh's artifacts, DIR/pig-ci-<image>-evidence/packages.lock: the apk lock resolved from
+  lock --evidence DIR     DIR holds the refresh's artifacts, DIR/ompig-ci-<image>-evidence/packages.lock: the apk lock resolved from
                           the package index, validated by a build and a scan. Proposes the locks that differ from the tree's.
-  pin --publication DIR   DIR holds the publication artifacts, DIR/pig-ci-<image>-publication/image-ref.txt: the digest-pinned
+  pin --publication DIR   DIR holds the publication artifacts, DIR/ompig-ci-<image>-publication/image-ref.txt: the digest-pinned
                           reference of the image just published. Proposes automation/images/<image>/published.env for it.
 
 Environment: GH_TOKEN, REPO (owner/name), BASE_SHA (the main commit the proposal builds on), RUN_ID.
@@ -30,7 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BOT = "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
 IMAGES = {"go": "ci-go", "parity": "ci-parity"}
-REF = re.compile(r"^ghcr\.io/michaelkinsy/pig-ci-[a-z]+@sha256:[0-9a-f]{64}$")
+REF = re.compile(r"^ghcr\.io/michaelkinsy/ompig-ci-[a-z]+@sha256:[0-9a-f]{64}$")
 
 
 class ProposalError(Exception):
@@ -76,7 +76,7 @@ def stamp(run_id: str) -> str:
 def cmd_lock(args: argparse.Namespace, repo: str, base_sha: str, run_id: str) -> int:
     changed: dict[str, bytes] = {}
     for image, directory in IMAGES.items():
-        resolved = Path(args.evidence) / f"pig-ci-{image}-evidence" / "packages.lock"
+        resolved = Path(args.evidence) / f"ompig-ci-{image}-evidence" / "packages.lock"
         if not resolved.is_file():
             print(f"proposal: no resolved lock for {image} (skipped for a commit pin, or the build failed)")
             continue
@@ -104,12 +104,12 @@ def cmd_lock(args: argparse.Namespace, repo: str, base_sha: str, run_id: str) ->
 def cmd_pin(args: argparse.Namespace, repo: str, base_sha: str, run_id: str) -> int:
     files: dict[str, bytes] = {}
     for image, directory in IMAGES.items():
-        record = Path(args.publication) / f"pig-ci-{image}-publication" / "image-ref.txt"
+        record = Path(args.publication) / f"ompig-ci-{image}-publication" / "image-ref.txt"
         if not record.is_file():
             continue
         ref = record.read_text(encoding="utf-8").strip()
         if not REF.fullmatch(ref):
-            raise ProposalError(f"{record}: {ref!r} is not a digest-pinned ghcr.io/michaelkinsy/pig-ci-* reference")
+            raise ProposalError(f"{record}: {ref!r} is not a digest-pinned ghcr.io/michaelkinsy/ompig-ci-* reference")
         inputs = subprocess.run([str(ROOT / "automation/ci/ci-image-inputs.sh"), image], capture_output=True, text=True, check=True).stdout.strip()
         # REUSE-IgnoreStart
         files[f"automation/images/{directory}/published.env"] = (

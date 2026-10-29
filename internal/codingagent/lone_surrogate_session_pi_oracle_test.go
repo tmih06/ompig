@@ -10,14 +10,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A message that holds a lone UTF-16 surrogate is written to the session file as Pi writes it: Pi's appendMessage writes
 // JSON.stringify(entry), which writes the unit as the escape `\ud83d` and leaves `<`, `>` and `&` as they are. The oracle is
-// Node's own JSON.stringify(JSON.parse(line)): a line PiG wrote must equal it, byte for byte, and hold the escape in the user
+// Node's own JSON.stringify(JSON.parse(line)): a line Ompig wrote must equal it, byte for byte, and hold the escape in the user
 // text, the assistant text, a tool call's arguments, the tool result's text and its details.
 func TestSessionLinesWithALoneSurrogateAreWhatPisJSONStringifyWrites(t *testing.T) {
 	const wtf = "a\xed\xa0\xbd<&>"

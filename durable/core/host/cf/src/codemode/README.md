@@ -1,6 +1,6 @@
 # Codemode on Cloudflare Workers
 
-The Cloudflare entry of codemode: a Durable Object that runs the VM of a remote codemode sandbox. It ports `CodemodeSandboxDurableObject` of Pi's `@earendil-works/pi-codemode/cloudflare` (`packages/codemode/src/cloudflare.ts`) and speaks the same remote protocol, so Pi's `RemoteCodemodeSandbox` is a client of it and so is a PiG `RemoteSandbox` (`codemode.NewRemoteSandbox`) whose `Remote` reaches it. PiG ships no Go transport to a Durable Object: `codemode/workerhost_test.go` drives a `RemoteSandbox` against the module in a Node process, and `test/codemode-go-behavior.test.ts` runs the whole sandbox behavior table that way. A PiG `ServeRemote` serves Pi's client.
+The Cloudflare entry of codemode: a Durable Object that runs the VM of a remote codemode sandbox. It ports `CodemodeSandboxDurableObject` of Pi's `@earendil-works/pi-codemode/cloudflare` (`packages/codemode/src/cloudflare.ts`) and speaks the same remote protocol, so Pi's `RemoteCodemodeSandbox` is a client of it and so is a Ompig `RemoteSandbox` (`codemode.NewRemoteSandbox`) whose `Remote` reaches it. Ompig ships no Go transport to a Durable Object: `codemode/workerhost_test.go` drives a `RemoteSandbox` against the module in a Node process, and `test/codemode-go-behavior.test.ts` runs the whole sandbox behavior table that way. A Ompig `ServeRemote` serves Pi's client.
 
 ## How it works
 

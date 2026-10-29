@@ -15,7 +15,7 @@ import (
 
 	"go.yaml.in/yaml/v3"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // ciPlan is the output of automation/ci/ci-plan.sh for one event.
@@ -487,7 +487,7 @@ func ciResultRun(t *testing.T, set map[string]string, liveHead string) (string, 
 	}
 	values := map[string]string{
 		"EVENT": "merge_group", "PRODUCT": "true", "FULL": "true", "FULL_REQUIRED": "false",
-		"PR_NUMBER": "", "PR_HEAD_SHA": "", "REPO": "MichaelKinsy/PiG", "GH_TOKEN": "token",
+		"PR_NUMBER": "", "PR_HEAD_SHA": "", "REPO": "tmih06/ompig", "GH_TOKEN": "token",
 		"RUN_NODE_RUNTIME": "true", "RUN_NODE_LOADER": "true", "RUN_ANDROID": "true", "RUN_DURABLE_CF_HOST": "true",
 		"CHANGES": "success", "DOCS": "skipped", "BOOKKEEPING": "success", "VERIFY": "success", "NODE_RUNTIME": "success",
 		"WINDOWS": "success", "MACOS": "success", "ANDROID": "success", "NODE_LOADER": "success",
@@ -557,7 +557,7 @@ func TestCIResultRequiresEveryPlannedJob(t *testing.T) {
 	}
 }
 
-// Without a merge queue (PIG_PR_CI_LIGHT=label) a pull request is mergeable only on a head whose full run was green, so the
+// Without a merge queue (OMPIG_PR_CI_LIGHT=label) a pull request is mergeable only on a head whose full run was green, so the
 // light run's CI result fails however green its own jobs are, and says what to do.
 func TestLightRunCannotSatisfyCIResultWithoutAMergeQueue(t *testing.T) {
 	labelPR := map[string]string{"EVENT": "pull_request", "FULL_REQUIRED": "true", "PR_NUMBER": "7", "PR_HEAD_SHA": "aaaa"}
@@ -639,7 +639,7 @@ func TestCIFullLabelStartsTheFullRun(t *testing.T) {
 		}
 	}
 	if output, err := runPlan(t, "pull_request", "true", ""); err == nil {
-		t.Errorf("an unknown PIG_PR_CI_LIGHT value was accepted:\n%s", output)
+		t.Errorf("an unknown OMPIG_PR_CI_LIGHT value was accepted:\n%s", output)
 	}
 
 	// The workflow starts a run on the label and on ready_for_review, and reads both into the plan.
@@ -675,8 +675,8 @@ func TestCIFullLabelStartsTheFullRun(t *testing.T) {
 		if requested := step.Env["FULL_REQUESTED"]; !strings.Contains(requested, "'ci:full'") || !strings.Contains(requested, "github.event.pull_request.labels.*.name") || !strings.Contains(requested, "ready_for_review") {
 			t.Errorf("FULL_REQUESTED = %q, want the ci:full label or ready_for_review", requested)
 		}
-		if step.Env["MODE"] != "${{ vars.PIG_PR_CI_LIGHT }}" {
-			t.Errorf("MODE = %q, want the PIG_PR_CI_LIGHT variable", step.Env["MODE"])
+		if step.Env["MODE"] != "${{ vars.OMPIG_PR_CI_LIGHT }}" {
+			t.Errorf("MODE = %q, want the OMPIG_PR_CI_LIGHT variable", step.Env["MODE"])
 		}
 	}
 	if !planned {

@@ -7,14 +7,14 @@ import ts from "../interface-extractor/node_modules/typescript/lib/typescript.js
 import { resolvePackage, root } from "./session-harness-pi.mjs";
 const production = path => pathToFileURL(join(root, "dist", path)).href;
 const state = { cases: [], before: [], after: [], session: null, options: null, outputs: [] };
-globalThis.__pigSDKManager = state;
+globalThis.__ompigSDKManager = state;
 const moduleURL = code => "data:text/javascript;base64," + Buffer.from(code).toString("base64");
-const framework = moduleURL(`import assert from "node:assert/strict";const state=globalThis.__pigSDKManager;
+const framework = moduleURL(`import assert from "node:assert/strict";const state=globalThis.__ompigSDKManager;
 export function describe(_name,run){run();} export function beforeEach(run){state.before.push(run);} export function afterEach(run){state.after.push(run);} export function it(name,run){state.cases.push({name,run});}
 export function expect(value){return {toBe:expected=>assert.strictEqual(value,expected),toEqual:expected=>assert.deepStrictEqual(value,expected),toBeTruthy:()=>assert.ok(value),toContain:expected=>assert.ok(value.includes(expected))};}
 `);
 const sdk = moduleURL(`import {createAgentSession as original} from ${JSON.stringify(production("core/sdk.js"))};
-export async function createAgentSession(options){const result=await original(options);const state=globalThis.__pigSDKManager;state.options=options;state.session=result.session;state.outputs=[];const bash=result.session.agent.state.tools.find(t=>t.name==="bash");if(bash){const execute=bash.execute;bash.execute=async(...args)=>{const result=await execute(...args);state.outputs.push(result.content.filter(b=>b.type==="text").map(b=>b.text).join(""));return result;};}return result;}
+export async function createAgentSession(options){const result=await original(options);const state=globalThis.__ompigSDKManager;state.options=options;state.session=result.session;state.outputs=[];const bash=result.session.agent.state.tools.find(t=>t.name==="bash");if(bash){const execute=bash.execute;bash.execute=async(...args)=>{const result=await execute(...args);state.outputs.push(result.content.filter(b=>b.type==="text").map(b=>b.text).join(""));return result;};}return result;}
 `);
 const path = resolve(".upstream/current/packages/coding-agent/test/sdk-session-manager.test.ts");
 const source = readFileSync(path, "utf8");
@@ -51,5 +51,5 @@ try {
     }
   }
 } finally {
-  delete globalThis.__pigSDKManager;
+  delete globalThis.__ompigSDKManager;
 }

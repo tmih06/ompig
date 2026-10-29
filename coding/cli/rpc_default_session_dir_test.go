@@ -13,7 +13,7 @@ import (
 
 // Without --session-dir, RPC session replacement must use the default
 // <agent-dir>/sessions/<encoded cwd> directory, as upstream's SessionManager
-// does. PiG used to pass an empty directory and failed with
+// does. Ompig used to pass an empty directory and failed with
 // "sessionmanager: mkdir: mkdir : no such file or directory".
 //
 // A clone of the fresh Session that new_session created fails as in Pi 0.87.1
@@ -38,7 +38,7 @@ func TestRPCSessionReplacementUsesDefaultSessionDir(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
 	cmd := exec.Command(binary, "--mode", "rpc", "--model", "test-faux/faux-1", "--no-extensions", "--offline")
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_CODING_AGENT_DIR="+agentDir, "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_TEST_FAUX=1")
 	cmd.Stdin = strings.NewReader(input)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr

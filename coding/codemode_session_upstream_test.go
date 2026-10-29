@@ -1,4 +1,4 @@
-//go:build !pig_strip_codemode
+//go:build !ompig_strip_codemode
 
 package coding
 
@@ -16,10 +16,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/builtin/codemode"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/builtin/codemode"
 )
 
 // Ports packages/coding-agent/test/suite/agent-session-codemode.test.ts (Pi 1.0.0, 21 cases: 19 here, and 2 session-free cases plus the session-free half of "declares models only for the session's own codemode tool" in coding/extension/builtin/codemode/session_free_upstream_test.go). The built-in codemode

@@ -1,6 +1,6 @@
 # Behavior family: project-trust
 # group-rationale: serial: project-trust extension fixtures compile to the same
-# Pig content-cache identity and must not build concurrently.
+# Ompig content-cache identity and must not build concurrently.
 # Surface: global defaultProjectTrust="always" trusts an undecided project.
 #
 # Upstream probe (exact Pi 0.83.0, 2026-08-03): with
@@ -24,7 +24,7 @@ driver = "cli-mode"
 
 [env]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-always", "PI_SKIP_VERSION_CHECK=1"]
-pig = ["PIG_CODING_AGENT_DIR=testdata/pig-agent-always"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/ompig-agent-always"]
 override_base_args = true
 
 [cli]

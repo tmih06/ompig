@@ -10,8 +10,8 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/invocation"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/extension/host/invocation"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi runs a timer or I/O callback only when its event loop turns, so a toast an extension deferred with setTimeout(0) from a handler reaches the output after the chain of awaited handlers that the host runs (a replacement's session_start, then its command's response). The Node runtime sends that toast with no parent request once the handler settled. A call the embedder's gate holds waits for it; a call of a live request, and a call that is not output-ordered, does not.

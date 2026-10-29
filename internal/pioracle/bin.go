@@ -9,16 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // StampFile is the build stamp automation/pin/oracle.py writes beside an oracle's node_modules.
-const StampFile = ".pig-pi-oracle.json"
+const StampFile = ".ompig-pi-oracle.json"
 
-// Bin returns the Pi executable a test compares Pig with: PIG_PARITY_PI_BIN, else the oracle `make parity-deps` built from source at the pinned commit and linked into extensions/sdk-ts. The test is skipped when it is absent and fails when it is not the pinned build.
+// Bin returns the Pi executable a test compares Ompig with: OMPIG_PARITY_PI_BIN, else the oracle `make parity-deps` built from source at the pinned commit and linked into extensions/sdk-ts. The test is skipped when it is absent and fails when it is not the pinned build.
 func Bin(t testing.TB) string {
 	t.Helper()
-	bin := os.Getenv("PIG_PARITY_PI_BIN")
+	bin := os.Getenv("OMPIG_PARITY_PI_BIN")
 	if bin == "" {
 		bin = filepath.Join(repoRoot(t), "extensions", "sdk-ts", "node_modules", ".bin", "pi")
 	}

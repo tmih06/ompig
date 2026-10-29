@@ -22,7 +22,7 @@ width = 100
 height = 35
 # The extension commands bind with the startup resource listing, so "[Context]" is readiness: the keys of an earlier
 # step land before `/mcp` exists (the same reason as extensions-runtime/27-command-argument-completions).
-ready_pattern_pig = "[Context]"
+ready_pattern_ompig = "[Context]"
 ready_pattern_pi = "[Context]"
 ready_timeout_seconds = 25
 capture_start = "State: disabled"
@@ -50,9 +50,9 @@ settle_seconds = 1
 [env]
 # The built-in MCP extension is part of the surface: the default --no-extensions would remove /mcp.
 override_base_args = true
-pig = ["PIG_CODING_AGENT_DIR=testdata/mcp-pig-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/mcp-ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/mcp-pi-agent"]
-pig_args = ["--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

@@ -3,7 +3,7 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi's resolvePath/normalizePath (utils/paths.js) against ExtensionSessionDir and resolveExportPath: a leading ~ and a file:// URL (through Node's fileURLToPath, which rejects a remote host, encoded slashes and relative forms) become paths; any other input stays as given.

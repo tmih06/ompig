@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestRegisterRenderersAcrossSDKs: what an extension registers with ExtensionAPI.registerMessageRenderer

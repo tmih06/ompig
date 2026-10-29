@@ -6,7 +6,7 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // An extension may close iteration before resolving Result. Aborting that request must still settle the agent instead of leaving it blocked on the result Promise.

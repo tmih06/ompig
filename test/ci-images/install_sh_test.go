@@ -16,12 +16,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // These tests run docs/site/public/install.sh (served at
-// https://pi-in-go.dev/install.sh) offline: a fake curl on PATH serves
+// https://ompig.dev/install.sh) offline: a fake curl on PATH serves
 // fixture files for the release URLs, so every download, checksum, and
 // install path runs for real against a temporary HOME. They were the
 // hosting Worker's install-sh.test.ts before the site moved out of this
@@ -29,7 +29,7 @@ import (
 
 const (
 	installVersion  = "0.2.0"
-	installDownload = "https://github.com/MichaelKinsy/PiG/releases/download"
+	installDownload = "https://github.com/tmih06/ompig/releases/download"
 )
 
 // fakeCurl answers downloads and redirect metadata from $FIXTURES/<url without scheme>, exiting 22 when no fixture exists. Redirect lookups must not follow the release page.
@@ -74,7 +74,7 @@ func installArchiveName() (name, archive string) {
 
 // archiveNameFor names the release archive for a platform such as linux-arm64.
 func archiveNameFor(platform string) (name, archive string) {
-	name = "pig-" + installVersion + "-" + platform
+	name = "ompig-" + installVersion + "-" + platform
 	return name, name + ".tar.gz"
 }
 
@@ -88,22 +88,22 @@ func writeFile(t *testing.T, path string, data []byte, mode os.FileMode) {
 	}
 }
 
-// releaseArchive builds <name>/pig, a script printing the release version.
+// releaseArchive builds <name>/ompig, a script printing the release version.
 func releaseArchive(t *testing.T, name string) []byte {
 	t.Helper()
-	pig := []byte("#!/bin/sh\necho \"" + installVersion + "+" + coding.UpstreamVersion + "\"\n")
+	ompig := []byte("#!/bin/sh\necho \"" + installVersion + "+" + coding.UpstreamVersion + "\"\n")
 	var buf bytes.Buffer
 	gz := gzip.NewWriter(&buf)
 	tw := tar.NewWriter(gz)
 	for _, header := range []*tar.Header{
 		{Name: name + "/", Typeflag: tar.TypeDir, Mode: 0o755},
-		{Name: name + "/pig", Typeflag: tar.TypeReg, Mode: 0o755, Size: int64(len(pig))},
+		{Name: name + "/ompig", Typeflag: tar.TypeReg, Mode: 0o755, Size: int64(len(ompig))},
 	} {
 		if err := tw.WriteHeader(header); err != nil {
 			t.Fatal(err)
 		}
 	}
-	if _, err := tw.Write(pig); err != nil {
+	if _, err := tw.Write(ompig); err != nil {
 		t.Fatal(err)
 	}
 	if err := tw.Close(); err != nil {
@@ -145,7 +145,7 @@ func newInstallFixtureFor(t *testing.T, name, archive string) installFixture {
 	}
 	writeFile(t, filepath.Join(root, "fakebin", "curl"), []byte(fakeCurl), 0o755)
 	writeFile(t, filepath.Join(release, archive), data, 0o644)
-	writeFile(t, filepath.Join(fixtures, "pi-in-go.dev", "api", "latest-version"), []byte(`{"version":"`+installVersion+`"}`), 0o644)
+	writeFile(t, filepath.Join(fixtures, "ompig.dev", "api", "latest-version"), []byte(`{"version":"`+installVersion+`"}`), 0o644)
 	f.writeSums(t, strings.Repeat("0", 64)+"  ./evidence/sbom.spdx.json", f.archiveSHA+"  ./"+archive)
 	return f
 }
@@ -157,7 +157,7 @@ func (f installFixture) writeSums(t *testing.T, lines ...string) {
 
 func (f installFixture) removeAPI(t *testing.T) {
 	t.Helper()
-	if err := os.RemoveAll(filepath.Join(f.root, "fixtures", "pi-in-go.dev")); err != nil {
+	if err := os.RemoveAll(filepath.Join(f.root, "fixtures", "ompig.dev")); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -176,7 +176,7 @@ func (f installFixture) run(t *testing.T, extraEnv ...string) installResult {
 		"PATH=" + filepath.Join(f.root, "fakebin") + ":/usr/bin:/bin:/usr/sbin:/sbin",
 		"HOME=" + f.home,
 		"FIXTURES=" + filepath.Join(f.root, "fixtures"),
-		"PIG_INSTALL_DIR=" + f.installDir,
+		"OMPIG_INSTALL_DIR=" + f.installDir,
 	}, extraEnv...)
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
@@ -220,19 +220,19 @@ func TestInstallShInstallsTheLatestReleaseAfterVerifyingItsSHA256(t *testing.T) 
 	if !regexp.MustCompile(`Installed ` + regexp.QuoteMeta(want) + ` to `).MatchString(got.stdout) {
 		t.Fatalf("stdout does not report the installed version %s:\n%s", want, got.stdout)
 	}
-	out, err := exec.Command(filepath.Join(f.installDir, "pig"), "--version").Output()
+	out, err := exec.Command(filepath.Join(f.installDir, "ompig"), "--version").Output()
 	if err != nil {
 		t.Fatal(err)
 	}
 	if strings.TrimSpace(string(out)) != want {
-		t.Fatalf("installed pig --version = %q, want %q", out, want)
+		t.Fatalf("installed ompig --version = %q, want %q", out, want)
 	}
 }
 
 func TestInstallShInstallsPigVersionWithoutAskingTheAPI(t *testing.T) {
 	f := newInstallFixture(t)
 	f.removeAPI(t)
-	got := f.run(t, "PIG_VERSION=v"+installVersion)
+	got := f.run(t, "OMPIG_VERSION=v"+installVersion)
 	if got.status != 0 {
 		t.Fatalf("status %d:\n%s", got.status, got.stderr)
 	}
@@ -241,14 +241,14 @@ func TestInstallShInstallsPigVersionWithoutAskingTheAPI(t *testing.T) {
 		t.Fatal(err)
 	}
 	if strings.Contains(string(requests), "latest-version") {
-		t.Fatalf("install.sh asked the API despite PIG_VERSION:\n%s", requests)
+		t.Fatalf("install.sh asked the API despite OMPIG_VERSION:\n%s", requests)
 	}
 }
 
 func TestInstallShFailsClosedWhenNoReleaseIsPublished(t *testing.T) {
 	f := newInstallFixture(t)
 	f.removeAPI(t)
-	assertFailure(t, f.run(t), "no PiG release is published yet")
+	assertFailure(t, f.run(t), "no Ompig release is published yet")
 	f.assertNothingInstalled(t)
 }
 
@@ -274,15 +274,15 @@ func TestInstallShRefusesAReleaseWithoutOrWithAmbiguousSHA256SUMS(t *testing.T) 
 
 func TestInstallShRejectsAVersionThatIsNotSemVer(t *testing.T) {
 	f := newInstallFixture(t)
-	assertFailure(t, f.run(t, "PIG_VERSION=latest;rm"), "not a release version")
+	assertFailure(t, f.run(t, "OMPIG_VERSION=latest;rm"), "not a release version")
 }
 
 func TestInstallShRecordsAnOwnerOnlyReceiptForPigUpdate(t *testing.T) {
 	for name, env := range map[string][]string{
-		"default":         nil,
-		"PIG_HOME":        {"PIG_HOME=CUSTOM"},
-		"XDG_CONFIG_HOME": {"XDG_CONFIG_HOME=CUSTOM"},
-		"PIG_UPDATE_URL":  {"PIG_UPDATE_URL=https://updates.example/pig/update.json"},
+		"default":          nil,
+		"OMPIG_HOME":       {"OMPIG_HOME=CUSTOM"},
+		"XDG_CONFIG_HOME":  {"XDG_CONFIG_HOME=CUSTOM"},
+		"OMPIG_UPDATE_URL": {"OMPIG_UPDATE_URL=https://updates.example/ompig/update.json"},
 	} {
 		t.Run(name, func(t *testing.T) {
 			f := newInstallFixture(t)
@@ -295,12 +295,12 @@ func TestInstallShRecordsAnOwnerOnlyReceiptForPigUpdate(t *testing.T) {
 			if got.status != 0 {
 				t.Fatalf("status %d:\n%s", got.status, got.stderr)
 			}
-			receiptPath := filepath.Join(f.home, ".pig", "install-receipt")
+			receiptPath := filepath.Join(f.home, ".ompig", "install-receipt")
 			switch name {
-			case "PIG_HOME":
+			case "OMPIG_HOME":
 				receiptPath = filepath.Join(custom, "install-receipt")
 			case "XDG_CONFIG_HOME":
-				receiptPath = filepath.Join(custom, "pig", "install-receipt")
+				receiptPath = filepath.Join(custom, "ompig", "install-receipt")
 			}
 			info, err := os.Stat(receiptPath)
 			if err != nil {
@@ -309,7 +309,7 @@ func TestInstallShRecordsAnOwnerOnlyReceiptForPigUpdate(t *testing.T) {
 			if info.Mode().Perm() != 0o600 {
 				t.Fatalf("receipt mode = %o, want 600", info.Mode().Perm())
 			}
-			exe, err := filepath.EvalSymlinks(filepath.Join(f.installDir, "pig"))
+			exe, err := filepath.EvalSymlinks(filepath.Join(f.installDir, "ompig"))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -318,9 +318,9 @@ func TestInstallShRecordsAnOwnerOnlyReceiptForPigUpdate(t *testing.T) {
 				t.Fatal(err)
 			}
 			sum := sha256.Sum256(installed)
-			source := "https://github.com/MichaelKinsy/PiG/releases/latest/download/update.json"
-			if name == "PIG_UPDATE_URL" {
-				source = "https://updates.example/pig/update.json"
+			source := "https://github.com/tmih06/ompig/releases/latest/download/update.json"
+			if name == "OMPIG_UPDATE_URL" {
+				source = "https://updates.example/ompig/update.json"
 			}
 			want := "kind=standalone\nexecutable=" + exe + "\npig-version=" + installVersion +
 				"\nsha256=" + hex.EncodeToString(sum[:]) + "\nupdate-source=" + source + "\n"
@@ -349,7 +349,7 @@ esac
 func (f installFixture) runOn(t *testing.T, unameS, unameM, unameO string, extraEnv ...string) installResult {
 	t.Helper()
 	writeFile(t, filepath.Join(f.root, "fakebin", "uname"), []byte(fakeUname), 0o755)
-	return f.run(t, append([]string{"PIG_INSTALL_DIR=", "FAKE_UNAME_S=" + unameS, "FAKE_UNAME_M=" + unameM, "FAKE_UNAME_O=" + unameO}, extraEnv...)...)
+	return f.run(t, append([]string{"OMPIG_INSTALL_DIR=", "FAKE_UNAME_S=" + unameS, "FAKE_UNAME_M=" + unameM, "FAKE_UNAME_O=" + unameO}, extraEnv...)...)
 }
 
 func (f installFixture) requested(t *testing.T) string {
@@ -371,20 +371,20 @@ func TestInstallShInstallsTheAndroidReleaseIntoTermuxPrefixBin(t *testing.T) {
 	if got.status != 0 {
 		t.Fatalf("status %d:\n%s", got.status, got.stderr)
 	}
-	if !strings.Contains(got.stdout, "PiG "+installVersion+" for android-arm64") {
+	if !strings.Contains(got.stdout, "Ompig "+installVersion+" for android-arm64") {
 		t.Fatalf("stdout does not name the android-arm64 release:\n%s", got.stdout)
 	}
 	if !strings.Contains(f.requested(t), "/v"+installVersion+"/"+archive) {
 		t.Fatalf("install.sh did not request %s:\n%s", archive, f.requested(t))
 	}
-	installed := filepath.Join(prefix, "bin", "pig")
+	installed := filepath.Join(prefix, "bin", "ompig")
 	if out, err := exec.Command(installed, "--version").Output(); err != nil || !strings.Contains(string(out), installVersion) {
 		t.Fatalf("%s --version = %q, %v", installed, out, err)
 	}
 	if strings.Contains(got.stdout, "Add ") {
 		t.Fatalf("install.sh asks to add a directory to PATH although $PREFIX/bin is on it:\n%s", got.stdout)
 	}
-	receipt, err := os.ReadFile(filepath.Join(f.home, ".pig", "install-receipt"))
+	receipt, err := os.ReadFile(filepath.Join(f.home, ".ompig", "install-receipt"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -415,23 +415,23 @@ func TestInstallShInstallsAndroidToHomeWhenThereIsNoPrefix(t *testing.T) {
 	if got.status != 0 {
 		t.Fatalf("status %d:\n%s", got.status, got.stderr)
 	}
-	if _, err := os.Stat(filepath.Join(f.home, ".local", "bin", "pig")); err != nil {
-		t.Fatalf("pig is not in ~/.local/bin: %v\n%s", err, got.stdout)
+	if _, err := os.Stat(filepath.Join(f.home, ".local", "bin", "ompig")); err != nil {
+		t.Fatalf("ompig is not in ~/.local/bin: %v\n%s", err, got.stdout)
 	}
 }
 
 func TestInstallShPigInstallDirOverridesTermuxPrefix(t *testing.T) {
 	name, archive := archiveNameFor("android-arm64")
 	f := newInstallFixtureFor(t, name, archive)
-	got := f.runOn(t, "Linux", "aarch64", "Android", "PREFIX="+filepath.Join(f.root, "usr"), "PIG_INSTALL_DIR="+f.installDir)
+	got := f.runOn(t, "Linux", "aarch64", "Android", "PREFIX="+filepath.Join(f.root, "usr"), "OMPIG_INSTALL_DIR="+f.installDir)
 	if got.status != 0 {
 		t.Fatalf("status %d:\n%s", got.status, got.stderr)
 	}
-	if _, err := os.Stat(filepath.Join(f.installDir, "pig")); err != nil {
-		t.Fatalf("pig is not in PIG_INSTALL_DIR: %v", err)
+	if _, err := os.Stat(filepath.Join(f.installDir, "ompig")); err != nil {
+		t.Fatalf("ompig is not in OMPIG_INSTALL_DIR: %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(f.root, "usr", "bin", "pig")); !os.IsNotExist(err) {
-		t.Fatalf("pig was also installed into $PREFIX/bin: %v", err)
+	if _, err := os.Stat(filepath.Join(f.root, "usr", "bin", "ompig")); !os.IsNotExist(err) {
+		t.Fatalf("ompig was also installed into $PREFIX/bin: %v", err)
 	}
 }
 
@@ -454,7 +454,7 @@ func TestInstallShRefusesAndroidCPUsWithoutARelease(t *testing.T) {
 	}
 }
 
-// A GNU/Linux or macOS uname -o is not Android: with PREFIX set, pig still installs the linux or darwin release into ~/.local/bin, and macOS has no uname -o.
+// A GNU/Linux or macOS uname -o is not Android: with PREFIX set, ompig still installs the linux or darwin release into ~/.local/bin, and macOS has no uname -o.
 func TestInstallShKeepsNonAndroidPlatformNames(t *testing.T) {
 	for _, tc := range []struct{ unameS, unameM, unameO, platform string }{
 		{"Linux", "aarch64", "GNU/Linux", "linux-arm64"},
@@ -472,8 +472,8 @@ func TestInstallShKeepsNonAndroidPlatformNames(t *testing.T) {
 			if !strings.Contains(f.requested(t), "/v"+installVersion+"/"+archive) {
 				t.Fatalf("install.sh did not request %s:\n%s", archive, f.requested(t))
 			}
-			if _, err := os.Stat(filepath.Join(f.home, ".local", "bin", "pig")); err != nil {
-				t.Fatalf("pig is not in ~/.local/bin: %v", err)
+			if _, err := os.Stat(filepath.Join(f.home, ".local", "bin", "ompig")); err != nil {
+				t.Fatalf("ompig is not in ~/.local/bin: %v", err)
 			}
 		})
 	}

@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/host"
+	"github.com/tmih06/ompig/chord/host"
 )
 
 // fakeWebSocketServer is a WebSocketServerLike that hands each connect call to the "connection" listeners.

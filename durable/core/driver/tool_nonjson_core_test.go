@@ -8,7 +8,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // tool.ts: a result the settling commit cannot store as strict JSON rejects it, so the call's task faults. Over the core the

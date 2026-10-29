@@ -29,13 +29,13 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsonvalid"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
-	"github.com/MichaelKinsy/PiG/internal/procpolicy"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsonvalid"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodepath"
+	"github.com/tmih06/ompig/internal/procpolicy"
 )
 
 // SessionInfo is the picker-display summary of a session JSONL.
@@ -543,7 +543,7 @@ func (p *summaryPartial) scanRange(ctx context.Context, f *os.File, start, end i
 	})
 }
 
-// pig additive (D112): Pi reads a session's summary on one thread; a range below parallelScanMinBytes, or too short for two parallelScanChunkBytes chunks, is
+// ompig additive (D112): Pi reads a session's summary on one thread; a range below parallelScanMinBytes, or too short for two parallelScanChunkBytes chunks, is
 // scanned serially, and the parallel scan merges its parts in file order, so both give the serial result.
 var (
 	parallelScanMinBytes   int64 = 8 << 20
@@ -576,7 +576,7 @@ func scanParallel(ctx context.Context, f *os.File, p *summaryPartial, start, end
 	if !fast || end-start < parallelScanMinBytes || n < 2 {
 		return p.scanRange(ctx, f, start, end, fast, sawName)
 	}
-	// pig additive (D174): the workers count and run at the runtime default width.
+	// ompig additive (D174): the workers count and run at the runtime default width.
 	defer procpolicy.Widen()()
 	if n = min(n, int64(runtime.GOMAXPROCS(0))); n < 2 {
 		return p.scanRange(ctx, f, start, end, fast, sawName)

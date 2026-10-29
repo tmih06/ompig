@@ -4,12 +4,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
-// pig additive (D92): stripHelp drops or rewrites the --help entries of the built-ins this process strips, so the help
-// names no tool, built-in extension, provider or feature a Piglet left out. Stock PiG strips nothing and prints Pi's
+// ompig additive (D92): stripHelp drops or rewrites the --help entries of the built-ins this process strips, so the help
+// names no tool, built-in extension, provider or feature a Ompiglet left out. Stock Ompig strips nothing and prints Pi's
 // text unchanged.
 func stripHelp(text string) string {
 	if !pigstrip.Active() {
@@ -44,7 +44,7 @@ func stripHelp(text string) string {
 
 // stripHelpTitle rewrites the title's list of default tools without the stripped ones.
 func stripHelpTitle(line string) string {
-	const prefix, suffix = "pig - AI coding assistant with ", " tools\n"
+	const prefix, suffix = "ompig - AI coding assistant with ", " tools\n"
 	list, ok := strings.CutPrefix(line, prefix)
 	if !ok || !strings.HasSuffix(list, suffix) {
 		return line
@@ -56,7 +56,7 @@ func stripHelpTitle(line string) string {
 		}
 	}
 	if len(tools) == 0 {
-		return "pig - AI coding assistant\n"
+		return "ompig - AI coding assistant\n"
 	}
 	return prefix + strings.Join(tools, ", ") + suffix
 }
@@ -68,21 +68,21 @@ func stripHelpLine(line string) (string, bool) {
 	trimmed := strings.TrimLeft(line, " ")
 	name, _, _ := strings.Cut(trimmed, " ")
 	switch {
-	case strings.HasPrefix(line, "  pig mcp "):
+	case strings.HasPrefix(line, "  ompig mcp "):
 		return line, !pigstrip.Has(pigstrip.ListExtensions, "mcp")
-	case strings.HasPrefix(line, "  pig <command> --help ") && mcpStripped:
+	case strings.HasPrefix(line, "  ompig <command> --help ") && mcpStripped:
 		return strings.Replace(line, "/auth/mcp\n", "/auth\n", 1), true
 	case name == "--no-mcp" || trimmed == "Keeps MCP tools unless an entry starts with mcp__\n":
 		return line, !mcpStripped
 	case trimmed == "Applies to all tools, MCP tools included\n" && mcpStripped:
 		return strings.Replace(line, ", MCP tools included\n", "\n", 1), true
-	case strings.HasPrefix(line, "  pig update [source|self|pig] ") && feature(pigstrip.SelfUpdate):
-		return "  pig update [source]           Update extensions or model catalogs\n", true
-	case strings.HasPrefix(line, "  pig docs "):
+	case strings.HasPrefix(line, "  ompig update [source|self|ompig] ") && feature(pigstrip.SelfUpdate):
+		return "  ompig update [source]           Update extensions or model catalogs\n", true
+	case strings.HasPrefix(line, "  ompig docs "):
 		return line, !feature(pigstrip.Docs)
-	case strings.HasPrefix(line, "  pig piglet <command> ") && feature(pigstrip.PigletBuilder):
-		return strings.Replace(line, "List, show, validate, and build Piglets", "List, show, and validate Piglets", 1), true
-	case strings.HasPrefix(line, "  pig extension init "):
+	case strings.HasPrefix(line, "  ompig ompiglet <command> ") && feature(pigstrip.PigletBuilder):
+		return strings.Replace(line, "List, show, validate, and build Ompiglets", "List, show, and validate Ompiglets", 1), true
+	case strings.HasPrefix(line, "  ompig extension init "):
 		return stripHelpExtensionInit(line)
 	case name == "--theme" || name == "--no-themes":
 		return line, !feature(pigstrip.Themes)
@@ -90,10 +90,10 @@ func stripHelpLine(line string) (string, bool) {
 		return line, !feature(pigstrip.Skills)
 	case name == "--prompt-template" || name == "--no-prompt-templates,":
 		return line, !feature(pigstrip.PromptTemplates)
-	case name == "--export" || strings.HasPrefix(trimmed, "pig --export "):
+	case name == "--export" || strings.HasPrefix(trimmed, "ompig --export "):
 		return line, !feature(pigstrip.ExportHTML)
-	case strings.HasPrefix(trimmed, "pig --tools "):
-		tools, _, _ := strings.Cut(strings.TrimPrefix(trimmed, "pig --tools "), " ")
+	case strings.HasPrefix(trimmed, "ompig --tools "):
+		tools, _, _ := strings.Cut(strings.TrimPrefix(trimmed, "ompig --tools "), " ")
 		for tool := range strings.SplitSeq(tools, ",") {
 			tool = strings.Trim(tool, "'\n")
 			if pigstrip.Has(pigstrip.ListTools, tool) || pigstrip.Has(pigstrip.ListExtensions, tool) || mcpStripped && strings.HasPrefix(tool, "mcp__") {

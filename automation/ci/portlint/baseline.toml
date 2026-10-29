@@ -804,8 +804,8 @@ snippet = "defer close(task.done)"
 
 [[hit]]
 check = "doubleclose"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.startTimer"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.startTimer"
 snippet = "defer close(a.timerDone)"
 
 [[hit]]
@@ -1665,19 +1665,19 @@ snippet = "HiddenDeclarations []string `json:\"hiddenDeclarations,omitempty\"`"
 
 [[hit]]
 check = "emptydrop"
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "(decl)"
 snippet = "Components          []pigletComponentJSON `json:\"components,omitempty\"`"
 
 [[hit]]
 check = "emptydrop"
-file = "coding/piglet/origin.go"
+file = "coding/ompiglet/origin.go"
 func = "(decl)"
 snippet = "Files           map[string]string `json:\"files,omitempty\"`"
 
 [[hit]]
 check = "emptydrop"
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "(decl)"
 snippet = "Mounts            []agentMountRecord `json:\"mounts,omitempty\"`"
 
@@ -2257,7 +2257,7 @@ snippet = "go func() {"
 check = "hardtmp"
 file = "coding/extension/host/subprocess/socket_runtime_dir_test.go"
 func = "TestEnsureSockRuntimeDirRequiresAPrivateOwnedBase"
-snippet = "parent, err := os.MkdirTemp(\"/tmp\", \"pig-base-\")"
+snippet = "parent, err := os.MkdirTemp(\"/tmp\", \"ompig-base-\")"
 
 [[hit]]
 check = "jsonescape"
@@ -2424,73 +2424,73 @@ snippet = "data, _ := json.Marshal(tokens)"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "renderPigletListJSON"
 snippet = "data, err := json.Marshal(output)"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "renderPigletShowJSON"
 snippet = "data, err := json.MarshalIndent(output, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "showRecordFile"
 snippet = "data, err := json.MarshalIndent(record, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "renderPigletValidation"
 snippet = "data, err := json.Marshal(output)"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/main.go"
+file = "coding/ompiglet/main.go"
 func = "writePigletCommandJSON"
 snippet = "data, err := json.Marshal(output)"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/npmsource.go"
+file = "coding/ompiglet/npmsource.go"
 func = "BuildNPMSource"
 snippet = "data, err := json.MarshalIndent(manifest, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/origin.go"
+file = "coding/ompiglet/origin.go"
 func = "marshalPigletOrigin"
 snippet = "data, err := json.MarshalIndent(origin, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/release/index.go"
+file = "coding/ompiglet/release/index.go"
 func = "Sign"
 snippet = "data, err := json.MarshalIndent(envelope, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/release/pull.go"
+file = "coding/ompiglet/release/pull.go"
 func = "commitPull"
 snippet = "receiptData, err := json.MarshalIndent(receipt, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/release/pull.go"
+file = "coding/ompiglet/release/pull.go"
 func = "commitPull"
 snippet = "currentData, err := json.MarshalIndent(current, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "writeAgentEnvironmentLock"
 snippet = "data, err := json.MarshalIndent(lock, \"\", \"  \")"
 
 [[hit]]
 check = "jsonescape"
-file = "coding/piglet/signing_cli.go"
+file = "coding/ompiglet/signing_cli.go"
 func = "cmdVerify"
 snippet = "data, _ := json.MarshalIndent(output, \"\", \"  \")"
 
@@ -3661,133 +3661,133 @@ snippet = "filled := int(jsnumber.Round(max(0, min(1, *state.Ratio)) * available
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_egg3d.go"
-func = "pig3dModel"
+file = "internal/codingagent/ompig_egg3d.go"
+func = "ompig3dModel"
 snippet = "return int(jsnumber.Round(float64(count) * (0.03 + float64(random*0.04))))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_egg3d.go"
+file = "internal/codingagent/ompig_egg3d.go"
 func = "egg3dModel.shuffleSteps"
 snippet = "return ((int(cell[2])+1)*rows+int(cell[1]))*columns + int(cell[0])"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_egg3d.go"
+file = "internal/codingagent/ompig_egg3d.go"
 func = "egg3dModel.shuffleSteps"
 snippet = "choice := int(math.Floor(next() * float64(len(pool))))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_egg3d.go"
-func = "pigLogoAnimation.blockOffsets"
+file = "internal/codingagent/ompig_egg3d.go"
+func = "ompigLogoAnimation.blockOffsets"
 snippet = "cycle := int(math.Floor((time - logoPuzzleStart) / logoPuzzleCycle))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_egg3d.go"
-func = "pigLogoAnimation.blockOffsets"
+file = "internal/codingagent/ompig_egg3d.go"
+func = "ompigLogoAnimation.blockOffsets"
 snippet = "step := int(math.Floor(local / logoPuzzleStep))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "jsToUint32"
 snippet = "return uint32(int64(math.Mod(math.Trunc(value), 4294967296)))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "logoGlyphInk"
 snippet = "return 4 + int(math.Floor(seed*3))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "parseLogoScreen"
 snippet = "color, ok = palette(int(index)), true"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "parseLogoScreen"
 snippet = "fg, hasFg = palette(int(code)-30), true"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "parseLogoScreen"
 snippet = "fg, hasFg = palette(int(code)-90+8), true"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "parseLogoScreen"
 snippet = "bg, hasBg = palette(int(code)-40), true"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "parseLogoScreen"
 snippet = "bg, hasBg = palette(int(code)-100+8), true"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "logoRaster.visibleFaces"
 snippet = "minX: int(math.Max(0, math.Floor(minX))),"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "logoRaster.visibleFaces"
 snippet = "minY: int(math.Max(0, math.Floor(minY))),"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "logoRaster.visibleFaces"
 snippet = "maxX: int(math.Min(float64(dotWidth-1), math.Ceil(maxX))),"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "logoRaster.visibleFaces"
 snippet = "maxY: int(math.Min(float64(dotHeight-1), math.Ceil(maxY))),"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.renderFrame"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.renderFrame"
 snippet = "dotCount = int(jsnumber.Round(float64(cell.ink) * (1 - clamp01(dust))))"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.renderFrame"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.renderFrame"
 snippet = "bit := logoDotBits[int(math.Floor(logoHash(float64(float64(cell.seed)*7919)+float64(frame*131)+float64(attempt))*8))]"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.hint"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.hint"
 snippet = "start:     (width - len(text)) / 2,"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.prepareStars"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.prepareStars"
 snippet = "glyph:    logoBraille[logoDotBits[int(math.Floor(random(1)*8))]],"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.prepareStars"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.prepareStars"
 snippet = "tint:     logoStarTints[int(math.Floor(random(2)*float64(len(logoStarTints))))],"
 
 [[hit]]
 check = "numbers"
-file = "internal/codingagent/pig_logo_animation.go"
+file = "internal/codingagent/ompig_logo_animation.go"
 func = "logoPack"
 snippet = "return int(jsnumber.Round(color[0]))<<16 | int(jsnumber.Round(color[1]))<<8 | int(jsnumber.Round(color[2]))"
 
@@ -4177,7 +4177,7 @@ snippet = "clean := path.Clean(target)"
 
 [[hit]]
 check = "pathseparators"
-file = "coding/piglet/runtime.go"
+file = "coding/ompiglet/runtime.go"
 func = "verifyImagePig"
 snippet = "for line := range strings.SplitSeq(string(output), \"\\n\") {"
 
@@ -4673,15 +4673,15 @@ snippet = "t.Setenv(\"HOME\", home)"
 
 [[hit]]
 check = "testisolation"
-file = "coding/piglet/release/store_security_test.go"
+file = "coding/ompiglet/release/store_security_test.go"
 func = "TestConcurrentProcessesRevalidateSignerBeforePublication"
-snippet = "t.Setenv(\"PIG_HOME\", t.TempDir())"
+snippet = "t.Setenv(\"OMPIG_HOME\", t.TempDir())"
 
 [[hit]]
 check = "testisolation"
-file = "coding/piglet/release/store_test.go"
+file = "coding/ompiglet/release/store_test.go"
 func = "TestPublicationHonorsCrossProcessStoreLock"
-snippet = "t.Setenv(\"PIG_HOME\", t.TempDir())"
+snippet = "t.Setenv(\"OMPIG_HOME\", t.TempDir())"
 
 [[hit]]
 check = "testisolation"
@@ -4699,13 +4699,13 @@ snippet = "t.Setenv(\"HOME\", dir)"
 check = "testisolation"
 file = "test/ci-images/verification_shards_test.go"
 func = "testGroupedAgentDirectoryIsolation"
-snippet = "t.Setenv(\"PIG_CODING_AGENT_DIR\", realAgent)"
+snippet = "t.Setenv(\"OMPIG_CODING_AGENT_DIR\", realAgent)"
 
 [[hit]]
 check = "testisolation"
 file = "test/ci-images/verification_shards_test.go"
 func = "TestGroupedTestsDoNotRunWhenTheAgentDirectoriesCannotBeSeeded"
-snippet = "t.Setenv(\"PIG_CODING_AGENT_DIR\", t.TempDir())"
+snippet = "t.Setenv(\"OMPIG_CODING_AGENT_DIR\", t.TempDir())"
 
 [[hit]]
 check = "testisolation"
@@ -4741,19 +4741,19 @@ snippet = "home, _ := os.UserHomeDir()"
 check = "testisolation"
 file = "test/parity/runner/hermetic_environment_test.go"
 func = "TestHeadlessHomeOverridesKeepExplicitFixtureHomes"
-snippet = "t.Setenv(\"PIG_CODING_AGENT_DIR\", \"operator-state\")"
+snippet = "t.Setenv(\"OMPIG_CODING_AGENT_DIR\", \"operator-state\")"
 
 [[hit]]
 check = "testisolation"
-file = "test/parity/runner/pig_agent_isolation_test.go"
+file = "test/parity/runner/ompig_agent_isolation_test.go"
 func = "TestResolvePigBinOverridesInheritedAgentDirectory"
-snippet = "t.Setenv(\"PIG_CODING_AGENT_DIR\", inherited)"
+snippet = "t.Setenv(\"OMPIG_CODING_AGENT_DIR\", inherited)"
 
 [[hit]]
 check = "testisolation"
-file = "test/parity/runner/pig_agent_isolation_test.go"
+file = "test/parity/runner/ompig_agent_isolation_test.go"
 func = "TestResolvePigBinPreservesHomeOnlyScenarioOverride"
-snippet = "t.Setenv(\"PIG_CODING_AGENT_DIR\", t.TempDir())"
+snippet = "t.Setenv(\"OMPIG_CODING_AGENT_DIR\", t.TempDir())"
 
 [[hit]]
 check = "testisolation"
@@ -4788,7 +4788,7 @@ snippet = "listener, err := net.Listen(\"unix\", path)"
 
 [[hit]]
 check = "unixsocketpath"
-file = "coding/piglet/runtime_test.go"
+file = "coding/ompiglet/runtime_test.go"
 func = "TestAgentEnvironmentMountRejectsMissingAndSocketSources"
 snippet = "listener, err := net.Listen(\"unix\", socketPath)"
 
@@ -5042,14 +5042,14 @@ snippet = "out.WriteString(markdown[offset:])"
 
 [[hit]]
 check = "utf16units"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.renderFrame"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.renderFrame"
 snippet = "emit(hint.text[offset:offset+1], color, true, cellBg, hasCellBg)"
 
 [[hit]]
 check = "utf16units"
-file = "internal/codingagent/pig_logo_animation.go"
-func = "pigLogoAnimation.hint"
+file = "internal/codingagent/ompig_logo_animation.go"
+func = "ompigLogoAnimation.hint"
 snippet = "if len(text) > width {"
 
 [[hit]]
@@ -5979,13 +5979,13 @@ snippet = "runtime.fail(context.Background(), outer, model, err)"
 
 [[hit]]
 check = "ctxbackground"
-file = "coding/piglet/pull_cli.go"
+file = "coding/ompiglet/pull_cli.go"
 func = "cmdPull"
 snippet = "result, err := pigletrelease.Pull(context.Background(), ref, pigletrelease.Options{"
 
 [[hit]]
 check = "ctxbackground"
-file = "coding/piglet/update_cli.go"
+file = "coding/ompiglet/update_cli.go"
 func = "cmdUpdate"
 snippet = "result, err = pigletrelease.Update(context.Background(), name, pigletrelease.Options{Target: target, Version: version, AcceptSigner: accepted})"
 
@@ -6987,7 +6987,7 @@ snippet = "if json.Unmarshal(data, &out) != nil {"
 
 [[hit]]
 check = "jsonclone"
-file = "coding/piglet/schema.go"
+file = "coding/ompiglet/schema.go"
 func = "schemaInstance"
 snippet = "if err := json.Unmarshal(encoded, &value); err != nil {"
 

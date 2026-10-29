@@ -17,8 +17,8 @@ package tools
 import (
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/internal/nodefs"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 // ShellConfig is the resolved (binary, leading-args) pair used to invoke

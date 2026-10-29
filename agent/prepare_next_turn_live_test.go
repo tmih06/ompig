@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi packages/agent/src/agent.ts:484-492 createLoopConfig builds one prepareNextTurn closure per run when either hook is set at that moment; the closure reads this.prepareNextTurnWithContext and this.prepareNextTurn on every call. So an assignment during the run replaces (or removes) the hook the run's later turns call, while a run that began with neither hook never calls one.

@@ -16,8 +16,8 @@ from typing import Any
 import pytest
 from test_sdk import _read_frame_raw, _start_fake_host, _write_frame
 
-import pig_sdk
-from pig_sdk import host_helpers
+import ompig_sdk
+from ompig_sdk import host_helpers
 
 
 class _FactoryHost:
@@ -31,7 +31,7 @@ class _FactoryHost:
         self.results = list(results)
         self.accepted = 0
         self.conn: socket.socket | None = None
-        monkeypatch.setenv("PIG_EXT_SOCKET", self.path)
+        monkeypatch.setenv("OMPIG_EXT_SOCKET", self.path)
         self.thread = threading.Thread(target=self._accept, daemon=True)
         self.thread.start()
 
@@ -95,7 +95,7 @@ def _dispatch(fake: _FactoryHost, request_id: str, handler_id: str, channel: str
 
 
 def test_on_registers_with_the_host_at_once(host) -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host(None)
     worker = fake.serve(1)
     ext.events.on("ch", lambda ctx, data: None)
@@ -108,7 +108,7 @@ def test_on_registers_with_the_host_at_once(host) -> None:
 
 def test_the_host_dispatches_to_a_factory_listener_while_a_call_waits_and_run_does_not_register_it_again(host) -> None:
     heard: list[Any] = []
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host(None, None)
     worker = fake.serve(1)
     ext.events.on("ack", lambda ctx, data: heard.append(data))
@@ -141,7 +141,7 @@ def test_the_host_dispatches_to_a_factory_listener_while_a_call_waits_and_run_do
 
 
 def test_a_listener_failure_fails_only_its_dispatch(host) -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host(None, None, None)
     worker = fake.serve(2)
 
@@ -162,7 +162,7 @@ def test_a_listener_failure_fails_only_its_dispatch(host) -> None:
 
 
 def test_a_request_the_extension_cannot_serve_yet_is_refused(host) -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host(None, None)
     worker = fake.serve(1)
     ext.events.on("ch", lambda ctx, data: None)
@@ -178,7 +178,7 @@ def test_a_request_the_extension_cannot_serve_yet_is_refused(host) -> None:
 
 
 def test_unsubscribe_reaches_the_host_over_the_factory_connection(host) -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host(None, None)
     worker = fake.serve(2)
     off = ext.events.on("ch", lambda ctx, data: None)
@@ -189,7 +189,7 @@ def test_unsubscribe_reaches_the_host_over_the_factory_connection(host) -> None:
 
 
 def test_an_error_emit_raises_when_the_host_reports_nobody_heard(host) -> None:
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host({"unhandledError": True})
     worker = fake.serve(1)
     with pytest.raises(RuntimeError, match="unhandled error event"):
@@ -198,10 +198,10 @@ def test_an_error_emit_raises_when_the_host_reports_nobody_heard(host) -> None:
 
 
 def test_without_a_host_a_factory_emit_fails_and_a_listener_waits_for_run(monkeypatch) -> None:
-    monkeypatch.delenv("PIG_EXT_SOCKET", raising=False)
+    monkeypatch.delenv("OMPIG_EXT_SOCKET", raising=False)
     host_helpers._State.running[:] = []
-    ext = pig_sdk.Extension("bus")
-    with pytest.raises(RuntimeError, match="PIG_EXT_SOCKET"):
+    ext = ompig_sdk.Extension("bus")
+    with pytest.raises(RuntimeError, match="OMPIG_EXT_SOCKET"):
         ext.events.emit("ch", None)
     ext.events.on("ch", lambda ctx, data: None)
     assert len(ext._bus._pending) == 1
@@ -209,7 +209,7 @@ def test_without_a_host_a_factory_emit_fails_and_a_listener_waits_for_run(monkey
 
 def test_a_factory_listener_context_serves_only_the_bus(host) -> None:
     seen: dict[str, Any] = {}
-    ext = pig_sdk.Extension("bus")
+    ext = ompig_sdk.Extension("bus")
     fake = host(None, None)
     worker = fake.serve(1)
 

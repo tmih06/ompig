@@ -3,13 +3,13 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // agent-session.ts:1005 _buildBoundaryContext: `llmMessages = convertToLlm(projection.messages)` and canContinue is derived from those messages (:1006-1020).
-// convertToLlm only maps message roles; it does not drop errored or aborted assistant turns or add placeholder tool results, which Pig's provider-level
+// convertToLlm only maps message roles; it does not drop errored or aborted assistant turns or add placeholder tool results, which Ompig's provider-level
 // NormalizeMessages (transform-messages) does later for the request. The preview an extension sees must therefore hold every projected message.
 // mutation-checked: running agent.NormalizeMessages before ConvertToLLM in coding/session_boundaries.go projectBoundaryContext fails both cases.
 func TestBoundaryContextLLMMessagesAreConvertToLlmOfTheProjectionWithoutNormalization(t *testing.T) {

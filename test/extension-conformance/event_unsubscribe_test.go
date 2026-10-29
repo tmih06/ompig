@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_EventUnsubscribe pins Pi's `pi.on(event, handler): () => void` (extensions/types.ts:1558) in every SDK: a handler

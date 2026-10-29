@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/src/extensions/llama/index.ts: the /llama

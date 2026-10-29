@@ -12,9 +12,9 @@ import (
 // follow_up, which call session.steer/followUp and so _queueUserInput: the
 // extension input handlers run (source "rpc", no streaming behavior while
 // idle) before the message is queued, and a handled message is not queued.
-// Pig queued steer and follow_up text directly.
+// Ompig queued steer and follow_up text directly.
 func TestRPCSteerAndFollowUpRunInputHandlers(t *testing.T) {
-	p := startRPCUIFixture(t, []string{"PIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
+	p := startRPCUIFixture(t, []string{"OMPIG_HOME=" + t.TempDir()}, "--model", "test-faux/faux-1", "--no-session")
 	for _, command := range []string{"steer", "follow_up"} {
 		id := "queue-" + command
 		p.send(fmt.Sprintf(`{"id":%q,"type":%q,"message":"handled input"}`, id, command))
@@ -47,12 +47,12 @@ func TestRPCSteerAndFollowUpRunInputHandlers(t *testing.T) {
 }
 
 // TestRPCReadsCommandLinesWithoutALengthCap pins upstream jsonl.ts
-// attachJsonlLineReader, which buffers until "\n" with no line cap. Pig's
+// attachJsonlLineReader, which buffers until "\n" with no line cap. Ompig's
 // scanner stopped at 16 MiB and ended the session with a read error, so a
 // prompt carrying a large attachment could not be sent. GUARD-04.
 func TestRPCReadsCommandLinesWithoutALengthCap(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + home + "/agent"}, "--no-session")
+	p := startRPCProcess(t, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + home + "/agent"}, "--no-session")
 	p.send(`{"id":"big","type":"get_state","padding":"` + strings.Repeat("x", 17<<20) + `"}`)
 	p.await("response to a 17 MiB command line", func(record rpcRecord) bool {
 		if record["type"] == "error" {
@@ -67,7 +67,7 @@ func TestRPCReadsCommandLinesWithoutALengthCap(t *testing.T) {
 // RPC parser with the split and malformed framing accepted by upstream jsonl.ts.
 func TestRPCReadsSplitInvalidBlankAndFinalUnterminatedRecords(t *testing.T) {
 	home := t.TempDir()
-	p := startRPCProcess(t, []string{"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + home + "/agent"}, "--no-session")
+	p := startRPCProcess(t, []string{"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + home + "/agent"}, "--no-session")
 	for _, chunk := range []string{
 		`{"id":"split","type":"get_`,
 		"state\"}\n",
@@ -98,20 +98,20 @@ func TestRPCReadsSplitInvalidBlankAndFinalUnterminatedRecords(t *testing.T) {
 }
 
 // Upstream rpc-mode has no prompt metadata: it writes no side files and sets
-// no environment for a prompt. Pig wrote the prompt's task id and metadata
+// no environment for a prompt. Ompig wrote the prompt's task id and metadata
 // to world-readable /tmp files, discarding every write error. GUARD-19.
 func TestRPCPromptWritesNoMetadataSideFiles(t *testing.T) {
 	home := t.TempDir()
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + home + "/agent",
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + home + "/agent",
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 	}, "--model", "test-faux/faux-1", "--no-session")
 	p.send(`{"id":"meta","type":"prompt","message":"reply with exactly: meta","metadata":{"task_id":"task-guard-19"}}`)
 	p.await("the metadata prompt settling", func(record rpcRecord) bool { return record["type"] == "agent_settled" })
 	pid := p.cmd.Process.Pid
 	for _, path := range []string{
-		fmt.Sprintf("/tmp/.pig-current-task-id.%d", pid),
-		fmt.Sprintf("/tmp/.pig-current-prompt-metadata.%d", pid),
+		fmt.Sprintf("/tmp/.ompig-current-task-id.%d", pid),
+		fmt.Sprintf("/tmp/.ompig-current-prompt-metadata.%d", pid),
 	} {
 		if _, err := os.Stat(path); err == nil {
 			_ = os.Remove(path)

@@ -14,31 +14,31 @@ import (
 	"slices"
 	"strings"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletrelease "github.com/MichaelKinsy/PiG/coding/piglet/release"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletrelease "github.com/tmih06/ompig/coding/ompiglet/release"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/npmpublish"
 )
 
-const publishNPMUsageLine = "Usage: pig piglet publish <name|path> --to npm [--yes|--dry-run] [--tag <dist-tag>] [--access public|restricted] [--otp <code>] [--npm-name <name>] [--package-map <alias>=npm:<name>@<range>]... [--binaries github:<owner/repo>|--no-binaries]"
+const publishNPMUsageLine = "Usage: ompig ompiglet publish <name|path> --to npm [--yes|--dry-run] [--tag <dist-tag>] [--access public|restricted] [--otp <code>] [--npm-name <name>] [--package-map <alias>=npm:<name>@<range>]... [--binaries github:<owner/repo>|--no-binaries]"
 
 const publishNPMUsage = publishNPMUsageLine + `
 
-Publish a Piglet's source to npm so that anyone can add it with
-pig piglet add npm:<name>. PiG writes the npm package, checks that the name and
+Publish a Ompiglet's source to npm so that anyone can add it with
+ompig ompiglet add npm:<name>. Ompig writes the npm package, checks that the name and
 version are free, and runs npm publish. Without --yes, publish is a dry run: it
 shows what npm would pack and the exact command, and publishes nothing. npm does
 the authentication (npm login, a one-time password, a passkey, or trusted
-publishing in CI). PiG never reads or stores an npm token.
+publishing in CI). Ompig never reads or stores an npm token.
 
-The package takes its name from a package.json beside the Piglet, else from the
-Piglet's name, and its version from release.version. A local Package in the
-Piglet's packages becomes npm:<name>@^<version> using that Package's own
-package.json, so publish a local Package first (pig package publish) or map it.
+The package takes its name from a package.json beside the Ompiglet, else from the
+Ompiglet's name, and its version from release.version. A local Package in the
+Ompiglet's packages becomes npm:<name>@^<version> using that Package's own
+package.json, so publish a local Package first (ompig package publish) or map it.
 
 Options:
-  --to npm                       Publish Piglet source to npm
+  --to npm                       Publish Ompiglet source to npm
   --yes                          Run npm publish (the default is a dry run)
   --dry-run                      Show the plan only (default)
   --tag <dist-tag>               npm dist-tag (npm uses latest; a prerelease needs one)
@@ -49,7 +49,7 @@ Options:
   --binaries github:<owner/repo> Record the signed GitHub Binary release in package.json
                                  (default: the release recorded by publish --to github)
   --no-binaries                  Record no signed Binary release
-  --workspace <path>             Resolve workspace-bound Piglet inputs from this path
+  --workspace <path>             Resolve workspace-bound Ompiglet inputs from this path
   --no-input                     Do not prompt
   -h, --help                     Show this help
 
@@ -165,7 +165,7 @@ func parsePublishNPMArgs(args []string) (publishNPMRequest, bool, error) {
 	}
 	switch {
 	case request.pigletRef == "":
-		return publishNPMRequest{}, false, errors.New("Piglet name or path is required")
+		return publishNPMRequest{}, false, errors.New("Ompiglet name or path is required")
 	case request.binaries != "" && request.noBinaries:
 		return publishNPMRequest{}, false, errors.New("--binaries and --no-binaries cannot be combined")
 	}
@@ -181,7 +181,7 @@ func parsePublishNPMArgs(args []string) (publishNPMRequest, bool, error) {
 	return request, false, nil
 }
 
-// pig additive (D18): Stock Pig publishes Piglet source to npm through the author's own npm and never handles an npm token.
+// ompig additive (D18): Stock Ompig publishes Ompiglet source to npm through the author's own npm and never handles an npm token.
 func runPublishNPM(ctx context.Context, args []string, stdout, stderr io.Writer, deps npmPublishDeps) int {
 	request, help, err := parsePublishNPMArgs(args)
 	if err != nil {
@@ -200,8 +200,8 @@ func runPublishNPM(ctx context.Context, args []string, stdout, stderr io.Writer,
 }
 
 func publishNPM(ctx context.Context, request publishNPMRequest, stdout, stderr io.Writer, deps npmPublishDeps) error {
-	if piglet.DistributionOffline() {
-		return errors.New("cannot publish a Piglet to npm while offline; unset PIG_OFFLINE and PI_OFFLINE to run npm")
+	if ompiglet.DistributionOffline() {
+		return errors.New("cannot publish a Ompiglet to npm while offline; unset OMPIG_OFFLINE and PI_OFFLINE to run npm")
 	}
 	workspace := request.workspace
 	if workspace == "" {
@@ -209,20 +209,20 @@ func publishNPM(ctx context.Context, request publishNPMRequest, stdout, stderr i
 	}
 	path, err := resolvePigletPath(request.pigletRef)
 	if err != nil {
-		return fmt.Errorf("piglet %q: %w", request.pigletRef, err)
+		return fmt.Errorf("ompiglet %q: %w", request.pigletRef, err)
 	}
-	authored, err := piglet.Parse(path)
+	authored, err := ompiglet.Parse(path)
 	if err != nil {
-		return fmt.Errorf("piglet %q: %w", request.pigletRef, err)
+		return fmt.Errorf("ompiglet %q: %w", request.pigletRef, err)
 	}
-	var binaries *piglet.NPMBinaries
+	var binaries *ompiglet.NPMBinaries
 	var binariesNote string
 	if authored.Release != nil && authored.Release.Version != "" && !request.noBinaries {
 		if binaries, binariesNote, err = resolveNPMBinaries(ctx, request.binaries, authored.Name, authored.Release.Version, deps.client); err != nil {
 			return err
 		}
 	}
-	source, err := piglet.BuildNPMSource(piglet.NPMSourceOptions{
+	source, err := ompiglet.BuildNPMSource(ompiglet.NPMSourceOptions{
 		Path: path, Workspace: workspace, NPMName: request.npmName, PackageMap: request.packageMap, Binaries: binaries,
 	})
 	if err != nil {
@@ -253,10 +253,10 @@ func publishNPM(ctx context.Context, request publishNPMRequest, stdout, stderr i
 		return err
 	}
 	if request.flags.Yes && len(missing) > 0 {
-		return errors.New(strings.Join(missing, "; ") + "; publish it first, or the published Piglet cannot be added")
+		return errors.New(strings.Join(missing, "; ") + "; publish it first, or the published Ompiglet cannot be added")
 	}
 	for _, line := range missing {
-		notes = append(notes, "Warning: "+line+"; publish it before the Piglet")
+		notes = append(notes, "Warning: "+line+"; publish it before the Ompiglet")
 	}
 	stdin := deps.stdin
 	if stdin == nil {
@@ -264,16 +264,16 @@ func publishNPM(ctx context.Context, request publishNPMRequest, stdout, stderr i
 	}
 	return npmpublish.Request{
 		Package: npmpublish.Package{Name: source.Name, Version: source.Version, Dir: source.Dir, IgnoreScripts: true},
-		Flags:   request.flags, Label: "Piglet", Notes: notes, Command: command,
+		Flags:   request.flags, Label: "Ompiglet", Notes: notes, Command: command,
 		Next: []string{
-			"Add it with: pig piglet add npm:" + source.Name,
-			"npm lists it under the keyword " + piglet.NPMKeyword + "; catalogs that search that keyword show it after their next index build.",
+			"Add it with: ompig ompiglet add npm:" + source.Name,
+			"npm lists it under the keyword " + ompiglet.NPMKeyword + "; catalogs that search that keyword show it after their next index build.",
 		},
 		Stdin: stdin, Stdout: stdout, Stderr: stderr,
 	}.Run(ctx)
 }
 
-// missingNPMPackages describes each npm Package of the published Piglet that no version on the registry satisfies, so that a Piglet whose Package is not published is not published either. A Package with its own registry is not checked.
+// missingNPMPackages describes each npm Package of the published Ompiglet that no version on the registry satisfies, so that a Ompiglet whose Package is not published is not published either. A Package with its own registry is not checked.
 func missingNPMPackages(ctx context.Context, command []string, packages map[string]string) ([]string, error) {
 	var missing []string
 	for _, alias := range slices.Sorted(maps.Keys(packages)) {
@@ -293,7 +293,7 @@ func missingNPMPackages(ctx context.Context, command []string, packages map[stri
 }
 
 // resolveNPMBinaries returns the signed Binary release to record in the npm package, with a note saying where it came from. An explicit --binaries reads the signed release index from GitHub. Otherwise a release this machine published with --to github is used. Without either, nothing is recorded.
-func resolveNPMBinaries(ctx context.Context, explicit, name, version string, client *http.Client) (*piglet.NPMBinaries, string, error) {
+func resolveNPMBinaries(ctx context.Context, explicit, name, version string, client *http.Client) (*ompiglet.NPMBinaries, string, error) {
 	if explicit != "" {
 		binaries, err := fetchNPMBinaries(ctx, strings.TrimPrefix(explicit, "github:"), name, version, client)
 		return binaries, "read from the signed release index", err
@@ -303,13 +303,13 @@ func resolveNPMBinaries(ctx context.Context, explicit, name, version string, cli
 		return nil, "", err
 	}
 	release := pigletrelease.GitHubRelease{Repository: record.Repository, TagPrefix: record.TagPrefix}
-	return &piglet.NPMBinaries{Ref: release.Reference(version), Signer: record.Signer}, "from the GitHub release you published", nil
+	return &ompiglet.NPMBinaries{Ref: release.Reference(version), Signer: record.Signer}, "from the GitHub release you published", nil
 }
 
-// fetchNPMBinaries finds the signed index of name@version in repository, first under the Piglet's own tag namespace and then under unprefixed tags.
-func fetchNPMBinaries(ctx context.Context, repository, name, version string, client *http.Client) (*piglet.NPMBinaries, error) {
-	if piglet.DistributionOffline() {
-		return nil, errors.New("--binaries reads the signed release from GitHub, which needs the network; unset PIG_OFFLINE and PI_OFFLINE")
+// fetchNPMBinaries finds the signed index of name@version in repository, first under the Ompiglet's own tag namespace and then under unprefixed tags.
+func fetchNPMBinaries(ctx context.Context, repository, name, version string, client *http.Client) (*ompiglet.NPMBinaries, error) {
+	if ompiglet.DistributionOffline() {
+		return nil, errors.New("--binaries reads the signed release from GitHub, which needs the network; unset OMPIG_OFFLINE and PI_OFFLINE")
 	}
 	var failures []string
 	for _, ref := range []string{"github:" + repository + "/" + name + "@" + version, "github:" + repository + "@" + version} {
@@ -318,16 +318,16 @@ func fetchNPMBinaries(ctx context.Context, repository, name, version string, cli
 			failures = append(failures, ref+": "+err.Error())
 			continue
 		}
-		if verified.Index.Piglet != name {
-			failures = append(failures, ref+": the release is for Piglet "+verified.Index.Piglet)
+		if verified.Index.Ompiglet != name {
+			failures = append(failures, ref+": the release is for Ompiglet "+verified.Index.Ompiglet)
 			continue
 		}
-		return &piglet.NPMBinaries{Ref: verified.Index.GitHub.Reference(version), Signer: verified.Index.Signer.KeyID}, nil
+		return &ompiglet.NPMBinaries{Ref: verified.Index.GitHub.Reference(version), Signer: verified.Index.Signer.KeyID}, nil
 	}
-	return nil, fmt.Errorf("--binaries github:%s: no signed release of %s %s was found; publish it first with `pig piglet publish %s --to github`, or drop --binaries\n  %s", repository, name, version, name, strings.Join(failures, "\n  "))
+	return nil, fmt.Errorf("--binaries github:%s: no signed release of %s %s was found; publish it first with `ompig ompiglet publish %s --to github`, or drop --binaries\n  %s", repository, name, version, name, strings.Join(failures, "\n  "))
 }
 
-// githubPublication records which GitHub release a Piglet version was published to, so a later npm publication can name its signed Binaries.
+// githubPublication records which GitHub release a Ompiglet version was published to, so a later npm publication can name its signed Binaries.
 type githubPublication struct {
 	Repository string `json:"repository"`
 	TagPrefix  string `json:"tagPrefix"`
@@ -336,14 +336,14 @@ type githubPublication struct {
 
 func githubPublicationPath(name, version string) (string, error) {
 	if name == "" || version == "" || strings.ContainsAny(name+version, `/\`) || name == ".." || version == ".." {
-		return "", fmt.Errorf("invalid Piglet release identity %q %q", name, version)
+		return "", fmt.Errorf("invalid Ompiglet release identity %q %q", name, version)
 	}
-	return filepath.Join(codingagent.ConfigRoot(), "receipts", "piglet-publications", name, version+".json"), nil
+	return filepath.Join(codingagent.ConfigRoot(), "receipts", "ompiglet-publications", name, version+".json"), nil
 }
 
 // recordGitHubPublication writes the publication record after a GitHub release exists.
 func recordGitHubPublication(release publishRelease) error {
-	path, err := githubPublicationPath(release.piglet.Name, release.version)
+	path, err := githubPublicationPath(release.ompiglet.Name, release.version)
 	if err != nil {
 		return err
 	}

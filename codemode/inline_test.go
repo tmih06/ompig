@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // Ports packages/codemode/test/portable.test.ts, describe("InlineCodemodeSandbox") (Pi 1.2.0), with its scripts and

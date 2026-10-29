@@ -11,10 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
-// harness manages a single tmux session running /tmp/pig-test.
+// harness manages a single tmux session running /tmp/ompig-test.
 type harness struct {
 	t       *testing.T
 	session string
@@ -26,7 +26,7 @@ func newHarness(t *testing.T) *harness {
 	requireTmux(t)
 	bin := buildBinary(t)
 	id := randID()
-	session := "pig-it-" + id
+	session := "ompig-it-" + id
 	cmd := tmuxCommand("new-session", "-d", "-s", session, "-x", "130", "-y", "36")
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("tmux new-session: %v\n%s", err, out)
@@ -51,16 +51,16 @@ func newHarness(t *testing.T) *harness {
 	return h
 }
 
-// start launches pig in the session. Unless the caller supplies its own
-// PIG_HOME, the run gets an empty ephemeral one: without it pig reads the
-// developer's real ~/.pig and the session inherits their model, extensions and
+// start launches ompig in the session. Unless the caller supplies its own
+// OMPIG_HOME, the run gets an empty ephemeral one: without it ompig reads the
+// developer's real ~/.ompig and the session inherits their model, extensions and
 // footer, so assertions depend on whoever ran the test.
 func (h *harness) start(extraEnv ...string) {
 	h.t.Helper()
 	h.startArgs(nil, extraEnv...)
 }
 
-// startArgs launches Pig with additional command-line arguments. Integration tests exercise behavior after startup, so the harness stores an explicit trust decision in its isolated home.
+// startArgs launches Ompig with additional command-line arguments. Integration tests exercise behavior after startup, so the harness stores an explicit trust decision in its isolated home.
 func (h *harness) startArgs(args []string, extraEnv ...string) {
 	h.t.Helper()
 	h.startArgsAt(args, "", extraEnv...)
@@ -79,27 +79,27 @@ func (h *harness) startArgsWithProjectTrust(args []string, trusted bool, extraEn
 func (h *harness) startArgsWithProjectTrustAt(args []string, cwd string, trusted bool, extraEnv ...string) {
 	h.t.Helper()
 	env := append([]string{}, extraEnv...)
-	pigHome := ""
+	ompigHome := ""
 	offlineSet := false
 	for _, assignment := range env {
-		if value, ok := strings.CutPrefix(assignment, "PIG_HOME="); ok {
-			pigHome = value
+		if value, ok := strings.CutPrefix(assignment, "OMPIG_HOME="); ok {
+			ompigHome = value
 		}
-		if strings.HasPrefix(assignment, "PIG_OFFLINE=") {
+		if strings.HasPrefix(assignment, "OMPIG_OFFLINE=") {
 			offlineSet = true
 		}
 	}
-	if pigHome == "" {
-		pigHome = h.t.TempDir()
-		env = append([]string{"PIG_HOME=" + pigHome}, env...)
+	if ompigHome == "" {
+		ompigHome = h.t.TempDir()
+		env = append([]string{"OMPIG_HOME=" + ompigHome}, env...)
 	}
 	if !offlineSet {
-		env = append([]string{"PIG_OFFLINE=1"}, env...)
+		env = append([]string{"OMPIG_OFFLINE=1"}, env...)
 	}
 	if trusted {
-		trustIntegrationProjectAt(h.t, pigHome, cwd)
+		trustIntegrationProjectAt(h.t, ompigHome, cwd)
 	}
-	seedIntegrationSettings(h.t, pigHome)
+	seedIntegrationSettings(h.t, ompigHome)
 	envPrefix := strings.Join(env, " ")
 	if envPrefix != "" {
 		envPrefix += " "
@@ -147,10 +147,10 @@ func (h *harness) sendKey(name string) {
 }
 
 // paste delivers text the way a terminal delivers Cmd+V or Ctrl+Shift+V:
-// wrapped in bracketed-paste markers once pig has enabled that mode.
+// wrapped in bracketed-paste markers once ompig has enabled that mode.
 func (h *harness) paste(text string) {
 	h.t.Helper()
-	buffer := "pig-it-paste-" + randID()
+	buffer := "ompig-it-paste-" + randID()
 	if out, err := tmuxCommand("set-buffer", "-b", buffer, text).CombinedOutput(); err != nil {
 		h.t.Fatalf("tmux set-buffer: %v\n%s", err, out)
 	}
@@ -159,7 +159,7 @@ func (h *harness) paste(text string) {
 	}
 }
 
-// sendEnter sends a literal CR (the Enter key as pig sees it).
+// sendEnter sends a literal CR (the Enter key as ompig sees it).
 
 // capture returns the visible pane text.
 func (h *harness) capture() string {
@@ -205,7 +205,7 @@ func (h *harness) kill() {
 	_ = tmuxCommand("kill-session", "-t", h.session).Run()
 }
 
-// buildBinary returns the cached path to a built ./cmd/pig binary.
+// buildBinary returns the cached path to a built ./cmd/ompig binary.
 // The actual build happens in TestMain so the binary survives across
 // per-test t.TempDir cleanups.
 var binaryPath string
@@ -243,12 +243,12 @@ func randID() string {
 
 // trustIntegrationProject records only this launch's fixture decision. Explicit
 // untrusted-startup tests bypass it and continue exercising the real prompt.
-func trustIntegrationProject(t *testing.T, pigHome string) {
+func trustIntegrationProject(t *testing.T, ompigHome string) {
 	t.Helper()
-	trustIntegrationProjectAt(t, pigHome, "")
+	trustIntegrationProjectAt(t, ompigHome, "")
 }
 
-func trustIntegrationProjectAt(t *testing.T, pigHome, cwd string) {
+func trustIntegrationProjectAt(t *testing.T, ompigHome, cwd string) {
 	t.Helper()
 	if cwd == "" {
 		var err error
@@ -257,15 +257,15 @@ func trustIntegrationProjectAt(t *testing.T, pigHome, cwd string) {
 			t.Fatal(err)
 		}
 	}
-	if err := codingagent.NewProjectTrustStore(filepath.Join(pigHome, "agent")).Set(cwd, new(true)); err != nil {
+	if err := codingagent.NewProjectTrustStore(filepath.Join(ompigHome, "agent")).Set(cwd, new(true)); err != nil {
 		t.Fatalf("store project trust: %v", err)
 	}
 }
 
 // seedIntegrationSettings gives the isolated agent directory a settings.json when it has none, so an interactive start skips the first-time setup dialog (D88), as Pi's does once settings.json exists.
-func seedIntegrationSettings(t *testing.T, pigHome string) {
+func seedIntegrationSettings(t *testing.T, ompigHome string) {
 	t.Helper()
-	agentDir := filepath.Join(pigHome, "agent")
+	agentDir := filepath.Join(ompigHome, "agent")
 	path := filepath.Join(agentDir, "settings.json")
 	if _, err := os.Stat(path); err == nil {
 		return

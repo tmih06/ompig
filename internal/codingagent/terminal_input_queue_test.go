@@ -13,10 +13,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/tui"
 )
 
 // remoteInputExtension stands in for a subprocess extension on the far side of
@@ -355,7 +355,7 @@ func TestFailedTerminalInputVerdictDeliversInputInOrder(t *testing.T) {
 // process, and every keystroke reaches the editor in the order it was typed.
 func TestNodeTerminalInputListenerRewritesKeysInOrder(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(root, "pig-home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ompig-home"))
 	source := filepath.Join(root, "remap")
 	if err := os.MkdirAll(source, 0o755); err != nil {
 		t.Fatal(err)

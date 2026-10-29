@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // Ports packages/mcp/src/client.ts validateCallToolResult and packages/mcp/src/protocol/content.ts toLlmContent for a server that sends

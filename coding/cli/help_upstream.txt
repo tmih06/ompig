@@ -1,18 +1,18 @@
-pig - AI coding assistant with read, bash, edit, write tools
+ompig - AI coding assistant with read, bash, edit, write tools
 
 Usage:
-  pig [options] [--] [@files...] [messages...]
+  ompig [options] [--] [@files...] [messages...]
 
 Commands:
-  pig install <source> [-l]     Install extension source and add to settings
-  pig remove <source> [-l]      Remove extension source from settings
-  pig uninstall <source> [-l]   Alias for remove
-  pig update [source|self|pig]   Update pig, extensions, or model catalogs
-  pig list                      List installed extensions from settings
-  pig config [-l]               Open TUI to enable/disable package resources (Tab switches scope)
-  pig auth <command>            Print credentials or check provider readiness
-  pig mcp <command>             Manage MCP servers
-  pig <command> --help          Show help for install/remove/uninstall/update/list/config/auth/mcp
+  ompig install <source> [-l]     Install extension source and add to settings
+  ompig remove <source> [-l]      Remove extension source from settings
+  ompig uninstall <source> [-l]   Alias for remove
+  ompig update [source|self|ompig]   Update ompig, extensions, or model catalogs
+  ompig list                      List installed extensions from settings
+  ompig config [-l]               Open TUI to enable/disable package resources (Tab switches scope)
+  ompig auth <command>            Print credentials or check provider readiness
+  ompig mcp <command>             Manage MCP servers
+  ompig <command> --help          Show help for install/remove/uninstall/update/list/config/auth/mcp
 
 Options:
   --provider <name>              Provider to search for --model (requires --model)
@@ -65,68 +65,68 @@ Extensions can register additional flags (e.g., --plan from plan-mode extension)
 
 Examples:
   # Print a provider API key for an external client
-  pig auth print-api-key --provider openai
+  ompig auth print-api-key --provider openai
 
   # Print an OAuth bearer token for an external client (refreshes if expired)
-  pig auth print-bearer-token --provider openai-codex
+  ompig auth print-bearer-token --provider openai-codex
 
   # Interactive mode
-  pig
+  ompig
 
   # Interactive mode with initial prompt
-  pig "List all .ts files in src/"
+  ompig "List all .ts files in src/"
 
   # Include files in initial message
-  pig @prompt.md @image.png "What color is the sky?"
+  ompig @prompt.md @image.png "What color is the sky?"
 
   # Non-interactive mode (process and exit)
-  pig -p "List all .ts files in src/"
+  ompig -p "List all .ts files in src/"
 
   # Prompt beginning with a dash
-  pig -p -- "- Summarize these points"
+  ompig -p -- "- Summarize these points"
 
   # Multiple messages (interactive)
-  pig "Read package.json" "What dependencies do we have?"
+  ompig "Read package.json" "What dependencies do we have?"
 
   # Continue previous session
-  pig --continue "What did we discuss?"
+  ompig --continue "What did we discuss?"
 
   # Start a named session
-  pig --name "Refactor auth module"
+  ompig --name "Refactor auth module"
 
   # Use different model
-  pig --provider openai --model gpt-4o-mini "Help me refactor this code"
+  ompig --provider openai --model gpt-4o-mini "Help me refactor this code"
 
   # Use model with provider prefix (no --provider needed)
-  pig --model openai/gpt-4o "Help me refactor this code"
+  ompig --model openai/gpt-4o "Help me refactor this code"
 
   # Use model with thinking level shorthand
-  pig --model sonnet:high "Solve this complex problem"
+  ompig --model sonnet:high "Solve this complex problem"
 
   # Limit model cycling to specific models
-  pig --models claude-sonnet,claude-haiku,gpt-4o
+  ompig --models claude-sonnet,claude-haiku,gpt-4o
 
   # Limit to a specific provider with glob pattern
-  pig --models "github-copilot/*"
+  ompig --models "github-copilot/*"
 
   # Cycle models with fixed thinking levels
-  pig --models sonnet:high,haiku:low
+  ompig --models sonnet:high,haiku:low
 
   # Start with a specific thinking level
-  pig --thinking high "Solve this complex problem"
+  ompig --thinking high "Solve this complex problem"
 
   # Read-only mode (no file modifications possible)
-  pig --tools read,grep,find,ls -p "Review the code in src/"
+  ompig --tools read,grep,find,ls -p "Review the code in src/"
 
   # Codemode with only the tools of one MCP server
-  pig --tools read,bash,codemode,'mcp__radius__*'
+  ompig --tools read,bash,codemode,'mcp__radius__*'
 
   # Disable one tool while keeping the rest available
-  pig --exclude-tools ask_question
+  ompig --exclude-tools ask_question
 
   # Export a session file to HTML
-  pig --export ~/.pig/agent/sessions/--path--/session.jsonl
-  pig --export session.jsonl output.html
+  ompig --export ~/.ompig/agent/sessions/--path--/session.jsonl
+  ompig --export session.jsonl output.html
 
 Environment Variables:
   ANTHROPIC_AUTH_TOKEN             - Anthropic bearer auth token
@@ -172,9 +172,9 @@ Environment Variables:
   AWS_SECRET_ACCESS_KEY            - AWS secret key for Amazon Bedrock
   AWS_BEARER_TOKEN_BEDROCK         - Bedrock API key (bearer token)
   AWS_REGION                       - AWS region for Amazon Bedrock (e.g., us-east-1)
-  PIG_CODING_AGENT_DIR             - Config directory (default: ~/.pig/agent)
-  PIG_CODING_AGENT_SESSION_DIR     - Session storage directory (overridden by --session-dir)
-  PIG_PACKAGE_DIR                  - Override package directory (for Nix/Guix store paths)
+  OMPIG_CODING_AGENT_DIR             - Config directory (default: ~/.ompig/agent)
+  OMPIG_CODING_AGENT_SESSION_DIR     - Session storage directory (overridden by --session-dir)
+  OMPIG_PACKAGE_DIR                  - Override package directory (for Nix/Guix store paths)
   PI_OFFLINE                       - Disable startup network operations when set to 1/true/yes
   PI_TELEMETRY                     - Override install telemetry when set to 1/true/yes or 0/false/no
 

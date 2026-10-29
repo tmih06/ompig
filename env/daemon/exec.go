@@ -13,8 +13,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/durable/env/node"
+	durableenv "github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/durable/env/node"
 )
 
 // unsentPoll is how often a delivery waiting for the link to drain looks again.

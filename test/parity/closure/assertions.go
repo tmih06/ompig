@@ -35,7 +35,7 @@ type AssertionAuditRow struct {
 }
 
 func ExtractAssertionCandidates(root string, test *Test, pin *Pin) ([]AssertionCandidate, error) {
-	if pin.Repository != "pig" {
+	if pin.Repository != "ompig" {
 		return nil, nil
 	}
 	path := filepath.Join(root, filepath.FromSlash(pin.Path))

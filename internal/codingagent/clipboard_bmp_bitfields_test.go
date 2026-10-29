@@ -9,7 +9,7 @@ import (
 	"image/png"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // syntheticClipboardBMP builds the BMP the Windows native clipboard reader returns for a CF_DIB/CF_DIBV5 payload: a 14-byte file header over the DIB, with the pixel offset past the header and any external bitfield masks.

@@ -3,7 +3,7 @@ package sdk
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Pi stores a credential object as JSON.parse read it and writes it with JSON.stringify (auth-storage.ts:465-467): keys and nested keys keep their order, a repeated key keeps its first position and its last value, and { ...credential, key } keeps an existing key's place and adds a new one last.

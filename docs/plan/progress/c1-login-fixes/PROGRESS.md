@@ -30,12 +30,12 @@ Go tests, all green now:
 - `tui`: `TestOAuthSelectorUpstreamStatuses/google`, `TestOAuthSelector_Render`, `TestOAuthSelector_StatusIndicators/oauth_not_configured`
 - `internal/codingagent`: `TestRadiusLoginOffersTheRadiusMCPServerUpstream` (2), `TestLoginWithoutProvidersOfTheChosenAuthTypeSaysSoUpstream/oauth`
 - `internal/codingagent/tools`: `TestShellToolOutputSchema/{bash,powershell}`
-- `cmd/pig`: `TestCLIProviderRequiresModelUpstream` (3)
+- `cmd/ompig`: `TestCLIProviderRequiresModelUpstream` (3)
 - `coding/mcpext`: `TestMcpLoginShowsTheSignInURLAsALinkInTheTerminalUI/tui`, `TestMCPServersSectionIntroExplainsOnlyTheReachesOfTheListedServers` (3)
 
 Parity (declared runs, Pi 1.0.0 from `extensions/sdk-ts/node_modules`), green: `selectors/06`, `selectors/10`, `selectors/11`, `oauth/02`, `oauth/22`, `oauth/25`, `oauth/27`, `oauth/29`, `cli-utils/22`.
 
-Still red, not this lane: `oauth/16`, `oauth/17`, `oauth/26`, `oauth/28`. Their text matches; the escaped capture differs only by where tmux places one SGR reset around the blank line under the selector title. Pi 1.0.0 defaults to fullscreen (`settings-manager.ts:1348-1350`) and its alt-screen renderer skips unchanged rows (`tui-alt-screen.ts:1732-1738`), while Pig still defaults to `regular`. With `"tuiMode": "fullscreen"` Pig's capture of the `oauth/16` flow matches Pi byte for byte (probed in tmux). They turn green when c1-tui lands the fullscreen default.
+Still red, not this lane: `oauth/16`, `oauth/17`, `oauth/26`, `oauth/28`. Their text matches; the escaped capture differs only by where tmux places one SGR reset around the blank line under the selector title. Pi 1.0.0 defaults to fullscreen (`settings-manager.ts:1348-1350`) and its alt-screen renderer skips unchanged rows (`tui-alt-screen.ts:1732-1738`), while Ompig still defaults to `regular`. With `"tuiMode": "fullscreen"` Ompig's capture of the `oauth/16` flow matches Pi byte for byte (probed in tmux). They turn green when c1-tui lands the fullscreen default.
 
 ## Own regression tests
 

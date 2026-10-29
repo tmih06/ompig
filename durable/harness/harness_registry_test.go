@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
 )
 
 // registryTool builds a tool. Upstream's AppTool adds an application field (snippet); a Go registration carries such data in its own fields, so the snippet rides in PromptGuidelines here.

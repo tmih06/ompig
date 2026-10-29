@@ -21,8 +21,8 @@ func TestResolveBangCmdFallsBackToCmdWithoutBash(t *testing.T) {
 	t.Setenv("ProgramFiles", empty)
 	t.Setenv("ProgramFiles(x86)", "")
 	t.Setenv("PATH", empty)
-	t.Setenv("PIG_CONFIG_VALUE_TEST", "from-cmd")
-	if got := Resolve("!echo %PIG_CONFIG_VALUE_TEST%", nil); got != "from-cmd" {
+	t.Setenv("OMPIG_CONFIG_VALUE_TEST", "from-cmd")
+	if got := Resolve("!echo %OMPIG_CONFIG_VALUE_TEST%", nil); got != "from-cmd" {
 		t.Fatalf("cmd.exe fallback = %q, want from-cmd", got)
 	}
 }

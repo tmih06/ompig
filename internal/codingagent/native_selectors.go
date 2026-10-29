@@ -1,6 +1,6 @@
 package codingagent
 
-// pig additive (D91): a frontend session draws the codingagent selectors that
+// ompig additive (D91): a frontend session draws the codingagent selectors that
 // take the input editor's place natively. Each NativeNode reports what the
 // ANSI rendering shows, without key hints and scroll indicators, with items
 // in the order the selection keys step through them. Pi has no frontend
@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // sessionSelectorTabs are the scopes the tab key toggles, in its order.

@@ -15,7 +15,7 @@ func CheckSchemaValue(schema map[string]any, value json.RawMessage) (path, messa
 	if schema == nil {
 		schema = map[string]any{}
 	}
-	//portlint:allow mapkeyorder tool.ts:567-571 Compile(schema).Errors(value) walks properties in the schema's order, but the caller's durable ToolRegistration.StructuredOutputSchema is a Go map with no recorded member order (as at describe.go:65); its in-repo sources are bash.ts's shell schema, whose output PiG produces, and models.ts's Type.Unknown() {}
+	//portlint:allow mapkeyorder tool.ts:567-571 Compile(schema).Errors(value) walks properties in the schema's order, but the caller's durable ToolRegistration.StructuredOutputSchema is a Go map with no recorded member order (as at describe.go:65); its in-repo sources are bash.ts's shell schema, whose output Ompig produces, and models.ts's Type.Unknown() {}
 	encoded, err := json.Marshal(schema)
 	if err != nil {
 		return "", "", false, err

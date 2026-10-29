@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // Pi packages/codemode/src/runtime/host.ts:427 execute() hands the Execution `tools: new Map(this.toolsByName)`: an execution runs against the tool set registered when it started. Registering or unregistering a tool while a script runs changes later executions (registerTool 373-376, unregisterTool 378-380) and the Tools getter (382-384, a fresh array each call), never the running one.

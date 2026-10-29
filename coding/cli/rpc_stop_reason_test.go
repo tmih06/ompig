@@ -3,12 +3,12 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream writes the session's own AssistantMessage with JSON.stringify: a
-// message without a stop reason has no stopReason key. Pig reported it as
+// message without a stop reason has no stopReason key. Ompig reported it as
 // "stop", which a client reads as a completed response. GUARD-16.
 func TestRPCAssistantMessagePassesMissingStopReasonThrough(t *testing.T) {
 	for _, tc := range []struct {

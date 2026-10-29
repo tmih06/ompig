@@ -31,7 +31,7 @@ func (stream *AssistantMessageEventStream) publishPartialLocked(message *Assista
 		return message
 	}
 	if stream.producer == nil {
-		// pig divergence (D82): a producer outside the JavaScript-order executor publishes an immutable emission-time snapshot. A live view would expose whatever revision a free-running goroutine reached when a consumer happened to observe it.
+		// ompig divergence (D82): a producer outside the JavaScript-order executor publishes an immutable emission-time snapshot. A live view would expose whatever revision a free-running goroutine reached when a consumer happened to observe it.
 		// A tool call whose arguments hold a long string that grows is not validated from its start at each push: the string the last snapshot found valid is the prefix the next one skips (plainWalk.knownValid).
 		validated := ""
 		snapshot := cloneAssistantMessageWith(*message, func(value any) any {

@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 type startupPickerOutput struct {
@@ -31,7 +31,7 @@ func (out *startupPickerOutput) String() string {
 	return out.text.String()
 }
 
-// Pi's --resume picker (cli/session-picker.ts:26) is the same SessionSelectorComponent, whose confirmed deletion (session-selector.ts:842-866) removes the Session, reports it and refreshes. PiG's startup picker must delete through the same path.
+// Pi's --resume picker (cli/session-picker.ts:26) is the same SessionSelectorComponent, whose confirmed deletion (session-selector.ts:842-866) removes the Session, reports it and refreshes. Ompig's startup picker must delete through the same path.
 func TestStartupSessionPickerDeletesLikePi(t *testing.T) {
 	t.Setenv(ENV_AGENT_DIR, t.TempDir())
 	t.Setenv("PATH", t.TempDir()) // No trash command: Pi unlinks and reports "Session deleted".

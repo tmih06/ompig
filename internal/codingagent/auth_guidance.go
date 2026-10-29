@@ -4,17 +4,17 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/pigstrip"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/pigstrip"
 )
 
 const unknownProvider = "unknown"
 
-// PigDocsFile is the path of name in this binary's documentation bundle. ok is false when the process strips docs or the bundle is not on disk
+// OmpigDocsFile is the path of name in this binary's documentation bundle. ok is false when the process strips docs or the bundle is not on disk
 // (the binary embeds none, or startup could not write it): no text may point at a file that is not there.
-// pig additive (D92): Stock PiG strips nothing.
-// pig additive (D22): a bundle that is not on disk is not named.
-func PigDocsFile(name string) (path string, ok bool) {
+// ompig additive (D92): Stock Ompig strips nothing.
+// ompig additive (D22): a bundle that is not on disk is not named.
+func OmpigDocsFile(name string) (path string, ok bool) {
 	docs := GetDocsPath()
 	if docs == "" || pigstrip.Has(pigstrip.ListFeatures, pigstrip.Docs) {
 		return "", false
@@ -23,7 +23,7 @@ func PigDocsFile(name string) (path string, ok bool) {
 }
 
 // ProviderLoginHelp mirrors upstream auth-guidance.ts.
-// pig additive (D92): a stripped /login or docs bundle leaves its sentence out.
+// ompig additive (D92): a stripped /login or docs bundle leaves its sentence out.
 func ProviderLoginHelp() string {
 	// The help names pages to a user, who may open them at once: write the bundle first when startup deferred it.
 	configroot.WriteDocs()
@@ -31,9 +31,9 @@ func ProviderLoginHelp() string {
 	if !pigstrip.Has(pigstrip.ListCommands, "/login") {
 		help = append(help, "Use /login to log into a provider via OAuth or API key.")
 	}
-	providers, ok := PigDocsFile("providers.md")
+	providers, ok := OmpigDocsFile("providers.md")
 	if ok {
-		models, _ := PigDocsFile("models.md")
+		models, _ := OmpigDocsFile("models.md")
 		help = append(help, "See:\n  "+providers+"\n  "+models)
 	}
 	return strings.Join(help, " ")
@@ -48,7 +48,7 @@ func FormatNoModelSelectedMessage() string {
 	if help := ProviderLoginHelp(); help != "" {
 		parts = append(parts, help)
 	}
-	// pig additive (D92): a stripped /model is not suggested.
+	// ompig additive (D92): a stripped /model is not suggested.
 	if !pigstrip.Has(pigstrip.ListCommands, "/model") {
 		parts = append(parts, "Then use /model to select a model.")
 	}

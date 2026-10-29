@@ -4,14 +4,14 @@ import { pathToFileURL } from "node:url";
 import { getPackageDir } from "@earendil-works/pi-coding-agent";
 
 export default async function (pi) {
-  const root = process.env.PIG_FACTORY_CACHE_ROOT;
-  const mode = process.env.PIG_FACTORY_CACHE_CASE;
+  const root = process.env.OMPIG_FACTORY_CACHE_ROOT;
+  const mode = process.env.OMPIG_FACTORY_CACHE_CASE;
   const cwd = join(root, "project");
   const agentDir = join(root, "agent");
   mkdirSync(cwd, { recursive: true });
   mkdirSync(agentDir, { recursive: true });
   // The upstream tests import private loader files. Each driver supplies their mapped compiled-file location; this does not probe package-root import layout.
-  const dist = process.env.PIG_FACTORY_CACHE_DIST ?? "dist";
+  const dist = process.env.OMPIG_FACTORY_CACHE_DIST ?? "dist";
   const { clearExtensionCache, loadExtensions, loadExtensionsCached } = await import(pathToFileURL(join(getPackageDir(), dist, "core/extensions/loader.js")));
   const { DefaultResourceLoader } = await import(pathToFileURL(join(getPackageDir(), dist, "core/resource-loader.js")));
   delete globalThis.__extensionFactoryCacheTest;

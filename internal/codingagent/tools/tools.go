@@ -23,10 +23,10 @@ import (
 
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
-	"github.com/MichaelKinsy/PiG/internal/truncate"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/truncate"
 )
 
 // upstream: coding-agent/src/core/tools/truncate.ts:DEFAULT_MAX_BYTES
@@ -101,7 +101,7 @@ func LookupToolPath(tool, agentBinDir string) string {
 // built-in tool the registry can offer, in createAllTools order.
 var builtinToolNames = [...]string{"read", "bash", "powershell", "edit", "write", "grep", "find", "ls"}
 
-// optInBuiltinToolNames are registered built-ins outside every PiG default
+// optInBuiltinToolNames are registered built-ins outside every Ompig default
 // active set. Upstream registers powershell on every platform, but no default
 // selection activates it: a tool allowlist, the defaultTools setting, or an
 // explicit active set must name it.
@@ -127,7 +127,7 @@ func BuiltinToolNames() []string { return append([]string(nil), builtinToolNames
 func BuiltinToolDescription(name string) string { return builtinToolDescriptions[name] }
 
 // BuiltinToolActive reports whether the registered built-in name is active.
-// A non-nil active set is explicit. A nil active set means PiG's full
+// A non-nil active set is explicit. A nil active set means Ompig's full
 // default: every built-in except the opt-in ones, which stay inactive unless
 // the allowed tool list names them.
 func BuiltinToolActive(name string, active, allowed map[string]struct{}) bool {

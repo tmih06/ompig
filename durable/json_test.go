@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // ToJsonValue is copyJson: non-finite numbers fail as strict JSON errors whether the value is a JSON kind or a typed

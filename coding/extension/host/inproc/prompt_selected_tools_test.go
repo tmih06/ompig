@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi runner.ts:1332-1364 preserves the shared options after every handler, even a null list that a later handler repairs before AgentSession.prompt reads its length.

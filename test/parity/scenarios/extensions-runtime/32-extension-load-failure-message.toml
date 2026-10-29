@@ -9,7 +9,7 @@
 #   Hint: Start without extensions using "pi -ne".
 #   exit: 1
 #
-# Pi discards process warnings (cli/setup.ts). PiG named the last line its
+# Pi discards process warnings (cli/setup.ts). Ompig named the last line its
 # extension process wrote to stderr instead, Node's "(Use `node
 # --trace-warnings ...`)" line left over from the stripTypeScriptTypes
 # ExperimentalWarning, and kept the real error in a /tmp log (pi-cc-extensions,
@@ -27,8 +27,8 @@ driver = "print-mode"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_extensions = ["testdata/ext/load-failure.ts"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_extensions = ["testdata/ext/load-failure.ts"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/load-failure.ts"]
 
 [print]
@@ -44,6 +44,6 @@ runs = 3
 
 # normalize-rationale: the hint names each binary's own command.
 [[assert.normalize_replace]]
-pattern = '"pig? -ne"'
+pattern = '"ompig? -ne"'
 with = '"<bin> -ne"'
 reason = "D2: the quoted no-extensions remediation command names the host executable; retain all error prose."

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // upstream: packages/chord/test/delta-append-text.test.ts (#9265): streaming writers appended to growing strings by assignment, and the tracker's prefix check read the whole string on every change.

@@ -3,7 +3,7 @@
 #
 # Upstream evidence: test/parity/testdata/tui-components-pi.mjs imports the pinned
 # upstream pi-tui Loader and coding-agent BorderedLoader/CountdownTimer modules.
-# The pig probe imports the matching Go TUI components. Both probes render the
+# The ompig probe imports the matching Go TUI components. Both probes render the
 # components and summarize stable observable behavior: loader padding/width,
 # spinner advancement, bordered loader structure/cancel hint/borders, and the
 # countdown timer's initial ceil + first decrement.
@@ -21,9 +21,9 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["go", "run", "./test/parity/testdata/tui-components-pig"]
+ompig_args = ["go", "run", "./test/parity/testdata/tui-components-ompig"]
 pi_args = ["node", "./test/parity/testdata/tui-components-pi.mjs"]
 
 [cli]

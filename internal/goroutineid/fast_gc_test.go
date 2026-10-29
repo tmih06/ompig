@@ -10,7 +10,7 @@ import (
 )
 
 // offsetStateAtInit and proofAtInit are the proof's state after the package's initialization and before any test ran. A process
-// that never calls Current (pig --version, an RPC server before its first request) must not pay for the proof.
+// that never calls Current (ompig --version, an RPC server before its first request) must not pay for the proof.
 var (
 	offsetStateAtInit = offsetState.Load()
 	proofAtInit       = proof.n

@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -17,7 +17,7 @@ import (
 func TestPersistedSessionKeepsTheModelsToolArgumentOrder(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
 	home, cwd := t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o700); err != nil {
 		t.Fatal(err)
 	}
@@ -37,7 +37,7 @@ func TestPersistedSessionKeepsTheModelsToolArgumentOrder(t *testing.T) {
 	sessions := t.TempDir()
 	cmd := exec.CommandContext(t.Context(), binary, "--no-extensions", "-e", extension, "--model", "fixture/test", "--no-skills", "--no-prompt-templates", "--no-context-files", "--session-dir", sessions, "--print", "go")
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1")
 	cmd.Stdin = strings.NewReader("")
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("print mode: %v\n%s", err, out)

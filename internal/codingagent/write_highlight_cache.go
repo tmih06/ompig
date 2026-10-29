@@ -8,7 +8,7 @@ package codingagent
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 // writePartialFullHighlightLines is WRITE_PARTIAL_FULL_HIGHLIGHT_LINES: the leading lines highlighted together after every update, so a construct that spans lines near the top is coloured as one block.
@@ -29,7 +29,7 @@ type writeHighlightCache struct {
 // writeHighlightLine is one of upstream's highlightedLines. Upstream highlights each streamed line on its own as it
 // arrives; here a line is highlighted when a frame first reads it (line), since a collapsed card draws only the first ten
 // and the line count. While pending, text is the normalized line it is highlightSingleLine of.
-// pig additive (D112): the lines read the same; only lines no frame draws are never highlighted.
+// ompig additive (D112): the lines read the same; only lines no frame draws are never highlighted.
 type writeHighlightLine struct {
 	text    string
 	pending bool

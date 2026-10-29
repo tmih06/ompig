@@ -2,7 +2,7 @@
 --- FAIL: TestResolveReportsUnknownBuiltinsLikePi (0.00s)
 --- FAIL: TestBuiltinAssetsAreClosed (0.00s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension/builtin	0.005s
+FAIL	github.com/tmih06/ompig/coding/extension/builtin	0.005s
 FAIL
 --- FAIL: TestBuiltinToolSearchRegistersAndAnswersThroughTheNodeCell (0.00s)
 --- FAIL: TestBuiltinCodemodeRegistersItsToolThroughTheNodeCell (0.00s)
@@ -18,7 +18,7 @@ FAIL
 --- FAIL: TestUpstreamCodemodeRenderer (0.17s)
 --- FAIL: TestUpstreamAgentSessionCodemodeWithoutASession (0.16s)
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding/extension/host/subprocess	1.160s
+FAIL	github.com/tmih06/ompig/coding/extension/host/subprocess	1.160s
 FAIL
 --- FAIL: TestUpstreamAgentSessionCodemodeTool
     --- FAIL: TestUpstreamAgentSessionCodemodeTool/presents_callable_tools_per_codemode.mode
@@ -41,5 +41,5 @@ FAIL
     --- FAIL: TestUpstreamCodemodeModels/lists_models_and_classifies_with_catalog_auth,_ignoring_script-supplied_fields
     --- FAIL: TestUpstreamCodemodeModels/reports_provider_errors_as_results_and_invalid_arguments_as_exceptions
 FAIL
-FAIL	github.com/MichaelKinsy/PiG/coding	2.982s
+FAIL	github.com/tmih06/ompig/coding	2.982s
 FAIL

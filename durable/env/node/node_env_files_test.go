@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // node.ts:1079-1100 renameFile / fileInfo / listDir: a failing rename names both paths, fileInfo reports modification time in milliseconds, and a file type Pi does not
@@ -131,7 +131,7 @@ func TestNodeExecutionEnvTracksAndCleansUpChildren(t *testing.T) {
 // and on macOS alike. /dev/full, which gives ENOSPC on Linux, does not exist on macOS, where creating it in /dev fails at open with EACCES.
 // The limit is process-wide, so it is set only in a subprocess this test owns.
 func TestNodeExecutionEnvWriteFailureIsReported(t *testing.T) {
-	const mode = "PIG_NODE_ENV_WRITE_FAILURE"
+	const mode = "OMPIG_NODE_ENV_WRITE_FAILURE"
 	if os.Getenv(mode) != "1" {
 		child := exec.Command(os.Args[0], "-test.run=^TestNodeExecutionEnvWriteFailureIsReported$")
 		child.Env = append(os.Environ(), mode+"=1")

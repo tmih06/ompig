@@ -97,8 +97,8 @@ def run(binary, model, thinking, url):
             (root / "sampling-ext.mjs").write_text(EXTENSION)
             provider, extension = "sampling-ext", ["-e", str(root / "sampling-ext.mjs")]
         env = {"PATH": os.environ["PATH"], "HOME": str(home), "LANG": "C.UTF-8", "SAMPLING_URL": url,
-               "PI_CODING_AGENT_DIR": str(agent), "PIG_CODING_AGENT_DIR": str(agent),
-               "PIG_HOME": str(home / ".pig"), "PI_OFFLINE": "1", "PIG_OFFLINE": "1", "PI_TELEMETRY": "0"}
+               "PI_CODING_AGENT_DIR": str(agent), "OMPIG_CODING_AGENT_DIR": str(agent),
+               "OMPIG_HOME": str(home / ".ompig"), "PI_OFFLINE": "1", "OMPIG_OFFLINE": "1", "PI_TELEMETRY": "0"}
         args = [*extension, "--provider", provider, "--model", model, "--thinking", thinking, "--no-session",
                 "--system-prompt", "Sampling audit.", "--no-context-files", "--no-skills", "--no-extensions",
                 "--no-prompt-templates", "--no-themes", "-p", "hi"]
@@ -110,10 +110,10 @@ def run(binary, model, thinking, url):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--bin", default=os.environ.get("PIG_PARITY_PIG_BIN"))
+    parser.add_argument("--bin", default=os.environ.get("OMPIG_PARITY_OMPIG_BIN"))
     options = parser.parse_args()
     if not options.bin:
-        parser.error("--bin or PIG_PARITY_PIG_BIN is required")
+        parser.error("--bin or OMPIG_PARITY_OMPIG_BIN is required")
     binary = [str((ROOT / options.bin).resolve()) if not os.path.isabs(options.bin) else options.bin]
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Recorder)
     threading.Thread(target=server.serve_forever, daemon=True).start()

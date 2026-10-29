@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 
 	"github.com/dlclark/regexp2"
 )
@@ -186,7 +186,7 @@ func isSingleChar(s string) bool {
 
 func isLineTerminator(r rune) bool { return r == '\n' || r == '\r' || r == 0x2028 || r == 0x2029 }
 
-// The unescape expressions compile on first use, outside the package initialization every pig start pays.
+// The unescape expressions compile on first use, outside the package initialization every ompig start pays.
 var (
 	unescapeREsOnce     sync.Once
 	unescapeBracketRE   *regexp2.Regexp

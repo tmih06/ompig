@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // runner.ts:395-408 ExtensionRunner constructor(extensions, runtime, cwd, sessionManager, modelRegistry), through the production constructor coding.NewExtensionRunner: the runner keeps the

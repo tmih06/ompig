@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/internal/testenv"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // openAITextDeltaRecord is a Chat Completions text delta without an escape.

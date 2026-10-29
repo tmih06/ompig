@@ -14,7 +14,7 @@
 #
 # Upstream rule: addMessageToChat case "bashExecution" (interactive-mode.ts:3847-3859) appends output only when truthy and completes with the persisted fields; setComplete marks "error" only for an exit code that is neither 0, undefined nor null.
 # Pi 1.0.3 exits with an uncaught TypeError when command or output is missing (compaction.ts:338 estimateTokens reads their length for the footer), so those two cases are unit-tested in TestResumedPoisonedBashExecutionMessages, not compared here.
-# Red: PiG at main 50e81255d and with only the block port drew no block, only the trailing user message. Green with the shared renderSessionEntryList case.
+# Red: Ompig at main 50e81255d and with only the block port drew no block, only the trailing user message. Green with the shared renderSessionEntryList case.
 
 name = "53-resumed-bash-execution-poisoned"
 description = "A resumed bashExecution message with no exit code or flags, a null exit code, empty output with a non-zero exit, a cancelled non-zero exit, truncation without a full-output path, or ANSI and carriage-return output renders as Pi renders it."
@@ -27,16 +27,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--session", "sessions/poisoned-bash.jsonl"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions", "--session", "sessions/poisoned-bash.jsonl"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions", "--session", "sessions/poisoned-bash.jsonl"]
 
 [tmux]
 width = 100
 height = 80
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/resumed-bash-poisoned-cwd"

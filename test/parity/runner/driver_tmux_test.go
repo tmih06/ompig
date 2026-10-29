@@ -100,7 +100,7 @@ func TestScenarioReadinessMatchesPinnedPiFooter(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			for label, pattern := range map[string]string{"pig": sc.Tmux.ReadyPatternPig, "pi": sc.Tmux.ReadyPatternPi} {
+			for label, pattern := range map[string]string{"ompig": sc.Tmux.ReadyPatternPig, "pi": sc.Tmux.ReadyPatternPi} {
 				if !paneMatchesReadyPattern(tc.pane, pattern) {
 					t.Errorf("%s ready pattern %q rejects its idle footer %q", label, pattern, tc.pane)
 				}
@@ -225,7 +225,7 @@ func TestTranscriptTextKeepsOnlyDisplayedText(t *testing.T) {
 }
 
 func TestParityRunIDIsSafeForTmuxSessionName(t *testing.T) {
-	t.Setenv("PIG_PARITY_RUN_ID", "job / 42")
+	t.Setenv("OMPIG_PARITY_RUN_ID", "job / 42")
 	if got := parityRunID(); got != "job-42" {
 		t.Fatalf("run ID = %q, want job-42", got)
 	}

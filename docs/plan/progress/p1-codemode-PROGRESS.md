@@ -55,7 +55,7 @@ Harness: `coding/codemode_session_harness_test.go` `registerScorerProvider` regi
 | lists everything without a budget | `TestCodemodeDescriptionListsEverythingWithoutABudget` | ported-red |
 | fills the budget round-robin, cheapest first, and says what is missing | `TestCodemodeDescriptionFillsTheBudgetRoundRobinCheapestFirstAndSaysWhatIsMissing` | ported-red |
 
-### Pig tests that pinned removed 0.99.2 upstream text, updated to 1.0.0
+### Ompig tests that pinned removed 0.99.2 upstream text, updated to 1.0.0
 
 | Go test | source it pins | status |
 |---|---|---|
@@ -75,7 +75,7 @@ Signature stub: `coding/extension/builtin/codemode.DocsPath()` (upstream `CODEMO
    - Note: `TestEmbeddedSourcesMatchTheirRecordedHashes` pins the prelude sha256 and must be re-pinned with the 1.0.0 prelude. The vendored Node copy `coding/extension/host/subprocess/runtime-node/shims/pi-dist/pi-codemode/runtime/prelude-source.js` comes from the re-vendored dist.
 2. Sandbox prelude, `store()` size errors: the message still says `value exceeds 262144 characters of JSON`; 1.0.0 reports the actual size (`value has 307202 characters of JSON, more than the limit of ...`) and explains what the store is for (`Show images with image()`), and the full-store error says how to delete keys.
    - `TestExplainsOversizedWrites`
-3. Codemode description and prompt (`coding/extension/builtin/codemode/description_text.go`, `description.go`, `tool.go`): 0.99.2 `DESCRIPTION_INTRO`, `DEFERRED_TOOLS_GUIDANCE`, `MODEL_TYPES` and `MODEL_GLOBAL_DECLARATIONS` are still rendered. 1.0.0 uses the three-line intro, `describeGlobals` (one line per global, `models` line pointing to `CODEMODE_DOCS_PATH`), drops the Model API block, shortens the prompt snippet, guideline and `code` description, and in mode `on` appends `describeScriptCall` (`Codemode: \`tools.<id>(args)\` resolves to <describeOutput>.`) to declared tools instead of `renderToolSample`. `DocsPath()` needs `join(getDocsPath(), "codemode.md")` and Pig's docs bundle needs `docs/codemode.md`.
+3. Codemode description and prompt (`coding/extension/builtin/codemode/description_text.go`, `description.go`, `tool.go`): 0.99.2 `DESCRIPTION_INTRO`, `DEFERRED_TOOLS_GUIDANCE`, `MODEL_TYPES` and `MODEL_GLOBAL_DECLARATIONS` are still rendered. 1.0.0 uses the three-line intro, `describeGlobals` (one line per global, `models` line pointing to `CODEMODE_DOCS_PATH`), drops the Model API block, shortens the prompt snippet, guideline and `code` description, and in mode `on` appends `describeScriptCall` (`Codemode: \`tools.<id>(args)\` resolves to <describeOutput>.`) to declared tools instead of `renderToolSample`. `DocsPath()` needs `join(getDocsPath(), "codemode.md")` and Ompig's docs bundle needs `docs/codemode.md`.
    - `TestUpstreamAgentSessionCodemodeTool/presents_callable_tools_per_codemode.mode`
    - `TestUpstreamCodemodeModels/declares_models_only_for_the_session's_own_codemode_tool`
    - `TestCodemodeDescriptionListsEverythingWithoutABudget`
@@ -93,7 +93,7 @@ Signature stub: `coding/extension/builtin/codemode.DocsPath()` (upstream `CODEMO
 
 ## Source changes without an upstream test (for the fix lane)
 
-- `system-prompt.ts`: the docs line adds `codemode scripts and non-LLM models such as classifiers and image models (docs/codemode.md)`. Pig's docs section is additive D22 (`internal/codingagent/prompts/coding.go`).
+- `system-prompt.ts`: the docs line adds `codemode scripts and non-LLM models such as classifiers and image models (docs/codemode.md)`. Ompig's docs section is additive D22 (`internal/codingagent/prompts/coding.go`).
 - `model-registry.ts`: `ctx.modelRegistry.generateImages()` for extensions. This is extension API surface; per AGENTS.md it needs every SDK and a conformance row.
 - `mcp/index.ts` `MCP_SERVERS_SECTION` first line is shorter (MCP lane; the session tests compare against the constant).
 - Vendored Pi dist seam `automation/gen/vendor-pi-session-seams.mjs` (see `docs/plan/upgrade-0.99.1-progress.md`).
@@ -105,6 +105,6 @@ Signature stub: `coding/extension/builtin/codemode.DocsPath()` (upstream `CODEMO
 ## Commands
 
 - `go test ./codemode/` → the 3 red cases above, everything else passes.
-- `go test ./coding/ -run 'Codemode|MCP'` (with Node on PATH and temp `HOME`, `PIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`) → only the 5 red subtests above.
+- `go test ./coding/ -run 'Codemode|MCP'` (with Node on PATH and temp `HOME`, `OMPIG_CODING_AGENT_DIR`, `PI_CODING_AGENT_DIR`) → only the 5 red subtests above.
 - `go test ./coding/extension/builtin/codemode/ ./coding/extension/builtin/toolsearch/` → the 7 red tests above; toolsearch passes.
-- `go vet` (also `GOOS=windows`) and `golangci-lint` on touched packages: clean. `make ci-drift`: clean. `make ci-contracts`: clean after regenerating `pig-go.json` for `DocsPath` (generated file restored, integrator regenerates).
+- `go vet` (also `GOOS=windows`) and `golangci-lint` on touched packages: clean. `make ci-drift`: clean. `make ci-contracts`: clean after regenerating `ompig-go.json` for `DocsPath` (generated file restored, integrator regenerates).

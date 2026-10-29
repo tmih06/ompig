@@ -6,9 +6,9 @@ package driver
 import (
 	"encoding/json"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // decodeContextView decodes the core's ContextView JSON (core/context.go contextJSON). Its contributions and messages are

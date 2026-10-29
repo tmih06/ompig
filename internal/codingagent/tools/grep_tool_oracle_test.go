@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type grepOutcome struct {
@@ -214,7 +214,7 @@ func TestGrepToolMatchesPi(t *testing.T) {
 			metaJSON, _ := json.Marshal(meta)
 			return fmt.Sprintf("%d lines, notice [%s, meta %s, first %.80q", strings.Count(body, "\n")+1, notice, metaJSON, body)
 		}
-		t.Errorf("scenario %d %s\n  Pig %s\n  Pi  %s\n  (raw Pi %.200s)", i, raw, describe(normalized0), describe(expected[i]), e)
+		t.Errorf("scenario %d %s\n  Ompig %s\n  Pi  %s\n  (raw Pi %.200s)", i, raw, describe(normalized0), describe(expected[i]), e)
 	}
 	if failures > 6 {
 		t.Errorf("%d of %d scenarios differ from Pi", failures, len(scenarios))

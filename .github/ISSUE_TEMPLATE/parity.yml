@@ -1,17 +1,17 @@
 name: Difference from Pi
-description: PiG behaves differently from the pinned Pi release.
+description: Ompig behaves differently from the pinned Pi release.
 title: "Parity: "
 labels: ["parity"]
 body:
   - type: markdown
     attributes:
       value: |
-        PiG follows the Pi release shown by `pig verify`. Report any observable difference that `docs/parity/DIVERGENCES.md` does not already number.
+        Ompig follows the Pi release shown by `ompig verify`. Report any observable difference that `docs/parity/DIVERGENCES.md` does not already number.
   - type: textarea
     id: validate
     attributes:
-      label: pig verify output
-      description: Paste the output of `pig verify`. It shows the PiG version, the pinned Pi release, and the platform.
+      label: ompig verify output
+      description: Paste the output of `ompig verify`. It shows the Ompig version, the pinned Pi release, and the platform.
       render: text
     validations:
       required: true
@@ -36,9 +36,9 @@ body:
     validations:
       required: true
   - type: textarea
-    id: pig
+    id: ompig
     attributes:
-      label: What PiG does
+      label: What Ompig does
     validations:
       required: true
   - type: checkboxes

@@ -5,10 +5,10 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
-// pig divergence (D2): extensions add sprites to the catalogue (ctx.ui.registerSprite). They follow the built-in sprites in
+// ompig divergence (D2): extensions add sprites to the catalogue (ctx.ui.registerSprite). They follow the built-in sprites in
 // /sprite in the order they were first registered, and leave it when their extension unloads. A saved selection of a
 // sprite whose extension is not loaded draws the default sprite and stays saved, so the sprite returns with its extension.
 var registry struct {
@@ -25,7 +25,7 @@ type registeredSprite struct {
 
 // Register adds an extension's sprite, or replaces the sprite with the same ID that the same extension registered. An ID
 // taken by a built-in sprite or by another extension's sprite is an error.
-// pig divergence (D2): extension sprites join the built-in ones in /sprite; Pi has no sprites.
+// ompig divergence (D2): extension sprites join the built-in ones in /sprite; Pi has no sprites.
 func Register(owner string, definition extension.ValidatedSpriteDefinition) error {
 	id := definition.ID()
 	for _, variant := range Variants {

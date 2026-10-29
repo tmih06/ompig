@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A file base keeps its first path segment as a drive letter only when the segment is exactly a letter and ":" (ada 4, Node 24.22.1 and 26.12.1). Node 22.19 and 24.19 keep any segment that starts with them ("C:ab", "u:p@[::1]:9000"), so this runs on the qualified Node (.node-version).

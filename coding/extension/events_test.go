@@ -74,7 +74,7 @@ func TestEvents_JSONTagsAreCamelCase(t *testing.T) {
 	t.Run("SessionTreeEvent_NullLeafIds", func(t *testing.T) {
 		// Faithfulness: upstream NewLeafID/OldLeafID are `string | null`,
 		// not optional. Both must serialize as JSON null when nil, NOT be
-		// omitted, so a session JSONL written by pig round-trips through
+		// omitted, so a session JSONL written by ompig round-trips through
 		// upstream pi without losing the field.
 		b, err := marshalNoEscape(SessionTreeEvent{Type: "session_tree"})
 		if err != nil {

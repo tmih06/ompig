@@ -3,23 +3,23 @@
 #
 # module-tags.sh VERSION [GO_MOD]
 #
-# Prints the Go module tags a PiG release VERSION (no v prefix) must create on
+# Prints the Go module tags a Ompig release VERSION (no v prefix) must create on
 # its one release commit, one per line: the root tag vVERSION first, then
-# <dir>/vVERSION for every nested PiG module the root go.mod requires (for
+# <dir>/vVERSION for every nested Ompig module the root go.mod requires (for
 # example extensions/sdk/v0.2.0). `go install
-# github.com/MichaelKinsy/PiG/cmd/pig@vVERSION` resolves those nested modules
+# github.com/tmih06/ompig/cmd/ompig@vVERSION` resolves those nested modules
 # through their own tags, so every one must exist on the same commit.
 #
 # Fails closed when the root go.mod (default: ./go.mod) carries a replace or
 # exclude directive (go install pkg@version refuses both), or requires a
-# nested PiG module at any version other than vVERSION, or names a nested
+# nested Ompig module at any version other than vVERSION, or names a nested
 # module whose directory has no go.mod declaring it.
 set -euo pipefail
 
 version=${1:?usage: module-tags.sh VERSION [GO_MOD]}
 gomod=${2:-go.mod}
 root_dir=$(dirname "$gomod")
-root_module=github.com/MichaelKinsy/PiG
+root_module=github.com/tmih06/ompig
 
 [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+([+-][0-9A-Za-z.-]+)?$ ]] ||
 	{ echo "module-tags.sh: $version is not a semantic version without a v prefix" >&2; exit 2; }
@@ -28,7 +28,7 @@ grep -Eq "^module ${root_module}[[:space:]]*$" "$gomod" ||
 	{ echo "module-tags.sh: $gomod is not module $root_module" >&2; exit 1; }
 
 if grep -Eq '^[[:space:]]*(replace|exclude)([[:space:]]|\()' "$gomod"; then
-	echo "module-tags.sh: $gomod has replace or exclude directives; go install $root_module/cmd/pig@v$version would refuse it:" >&2
+	echo "module-tags.sh: $gomod has replace or exclude directives; go install $root_module/cmd/ompig@v$version would refuse it:" >&2
 	grep -En '^[[:space:]]*(replace|exclude)([[:space:]]|\()' "$gomod" >&2
 	exit 1
 fi

@@ -1,6 +1,6 @@
-// Package sdk provides the Go SDK for building pig subprocess extensions.
+// Package sdk provides the Go SDK for building ompig subprocess extensions.
 //
-// An extension is a standalone binary that communicates with pig over a Unix
+// An extension is a standalone binary that communicates with ompig over a Unix
 // domain socket using length-prefixed JSON framing. This package handles all
 // protocol details: connection, registration, request/response correlation,
 // and graceful shutdown.
@@ -39,8 +39,8 @@
 //
 // # Architecture
 //
-// The SDK connects to pig's extension host via a Unix domain socket whose
-// path is passed in the PIG_EXT_SOCKET environment variable. The protocol
+// The SDK connects to ompig's extension host via a Unix domain socket whose
+// path is passed in the OMPIG_EXT_SOCKET environment variable. The protocol
 // uses 4-byte big-endian length-prefixed JSON messages.
 //
 // Message flow:
@@ -54,4 +54,4 @@
 //   - Host → Extension: shutdown
 package sdk
 
-// pig divergence (D204): this SDK does not yet export TuiAltScreen, Pi's alternate-screen TUI host (the Node SDK does); the 0.6.1 export ends this.
+// ompig divergence (D204): this SDK does not yet export TuiAltScreen, Pi's alternate-screen TUI host (the Node SDK does); the 0.6.1 export ends this.

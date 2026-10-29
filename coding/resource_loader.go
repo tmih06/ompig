@@ -12,13 +12,13 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/timings"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent/timings"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/resolvepath"
+	"github.com/tmih06/ompig/tui"
 )
 
 // SkillsResult is a loader's skills with the diagnostics found while resolving them.
@@ -42,7 +42,7 @@ type AgentsFilesResult struct {
 }
 
 // ResourceLoader supplies the resolved resources a Session reads while it runs. A Session reads the loader on every use, so a loader that reloads is observed by the next prompt and the next system prompt rebuild.
-// It carries the skills, prompt templates, context files and system prompt text a Session consumes (resource-loader.ts ResourceLoader); the Extension Host, themes and extension resources are owned elsewhere in PiG.
+// It carries the skills, prompt templates, context files and system prompt text a Session consumes (resource-loader.ts ResourceLoader); the Extension Host, themes and extension resources are owned elsewhere in Ompig.
 type ResourceLoader interface {
 	GetSkills() SkillsResult
 	GetPrompts() PromptsResult

@@ -55,7 +55,7 @@ func TestAnthropicSSEReaderLineDecoding(t *testing.T) {
 			{Event: "b", Data: "2", Raw: []string{"event: b", "data: 2"}},
 		}},
 		{"crlf pair is one line break", []string{"event: a\r\ndata: 1\r\n\r\n"}, []serverSentEvent{{Event: "a", Data: "1", Raw: []string{"event: a", "data: 1"}}}},
-		// D121: Pi's consumeLine ends a line at a carriage return that closes a chunk, so the line feed of a split CRLF flushes the record early; PiG waits for the next chunk.
+		// D121: Pi's consumeLine ends a line at a carriage return that closes a chunk, so the line feed of a split CRLF flushes the record early; Ompig waits for the next chunk.
 		{"carriage return at a chunk end", []string{"event: a\r", "\ndata: 1\r\n\r\n"}, []serverSentEvent{{Event: "a", Data: "1", Raw: []string{"event: a", "data: 1"}}}},
 		{"carriage return at a chunk end is a bare line break when the stream ends", []string{"event: a\rdata: 1\r"}, []serverSentEvent{{Event: "a", Data: "1", Raw: []string{"event: a", "data: 1"}}}},
 		{"carriage return at a chunk end followed by another line", []string{"event: a\r", "data: 1\r\r"}, []serverSentEvent{{Event: "a", Data: "1", Raw: []string{"event: a", "data: 1"}}}},

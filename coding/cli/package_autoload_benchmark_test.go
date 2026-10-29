@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func BenchmarkPackageAutoloadResolution(b *testing.B) {
@@ -15,8 +15,8 @@ func BenchmarkPackageAutoloadResolution(b *testing.B) {
 			root := b.TempDir()
 			cwd, agent, pkg := filepath.Join(root, "project"), filepath.Join(root, "agent"), filepath.Join(root, "package")
 			b.Setenv("HOME", root)
-			b.Setenv("PIG_HOME", filepath.Join(root, "home"))
-			b.Setenv("PIG_CODING_AGENT_DIR", agent)
+			b.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
+			b.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 			for _, dir := range []string{cwd, agent, filepath.Join(pkg, "prompts")} {
 				if err := os.MkdirAll(dir, 0o755); err != nil {
 					b.Fatal(err)

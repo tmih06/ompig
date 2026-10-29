@@ -9,13 +9,13 @@ import (
 )
 
 // TestAuditCovers pins the loose-link detector: a covers entry whose PORT_MAP Go
-// target had zero coverage in the single-scenario piglet is reported LOOSE and
+// target had zero coverage in the single-scenario ompiglet is reported LOOSE and
 // counted; a covered target is "exercised"; a designed-out/no-go target and an
 // unmapped covers entry are reported but never counted as loose. The check must
 // be false-positive-free: only a provably unexecuted Go target fails.
 func TestAuditCovers(t *testing.T) {
 	dir := t.TempDir()
-	// A pig Go file whose glob target must resolve on disk for goTargets to
+	// A ompig Go file whose glob target must resolve on disk for goTargets to
 	// return it. goTargets globs against root, so create the files under root.
 	for _, f := range []string{"exercised.go", "loose.go"} {
 		if err := os.WriteFile(filepath.Join(dir, f), []byte("package x\n"), 0o644); err != nil {

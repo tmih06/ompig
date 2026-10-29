@@ -22,8 +22,8 @@ passes its page sources and generated docs data), and fails on:
              the text it covers.
   numbers    a porting or verification percentage or ratio that differs from
              the generated coverage block in AGENTS.md
-  piglet    a ``pig piglet <verb>`` command in Markdown that is absent from
-             ``pig piglet --help``, unless it appears under a Planned heading
+  ompiglet    a ``ompig ompiglet <verb>`` command in Markdown that is absent from
+             ``ompig ompiglet --help``, unless it appears under a Planned heading
 
 Every expected value is read from its single source, so the check follows the
 pin and `make coverage` without edits here. Pass delivery or blog drafts as
@@ -124,13 +124,13 @@ SKIP_ROOT_FILES = {"AGENTS.md", "docs/parity/PORT_MAP.md", "THIRD_PARTY_NOTICES.
 # Generated text the site serves as is. The site's page sources and the docs
 # data it generates from docs/site/docs live in the private hosting
 # repository, whose CI passes them to this script as extra paths.
-SITE_TEXT = ("docs/knowledge-graph/pig-knowledge-graph.jsonld",)
-# Go packages whose string literals reach users: pig's CLI and help, the
+SITE_TEXT = ("docs/knowledge-graph/ompig-knowledge-graph.jsonld",)
+# Go packages whose string literals reach users: ompig's CLI and help, the
 # coding agent's commands and messages, and the SDK's errors.
 GO_DIRS = ("cmd", "internal", "coding")
 # Consume comments and rune literals as whole tokens before looking for strings.
 GO_TOKEN = re.compile(r"//[^\n]*|/\*[\s\S]*?\*/|'(?:[^'\\\n]|\\.)*'|(?P<string>\"(?:[^\"\\\n]|\\.)*\"|`[^`]*`)")
-PIGLET_COMMAND = re.compile(r"\bpig\s+piglet\s+([a-z][a-z0-9-]*)\b")
+OMPIGLET_COMMAND = re.compile(r"\bompig\s+ompiglet\s+([a-z][a-z0-9-]*)\b")
 MARKDOWN_HEADING = re.compile(r"^\s{0,3}(#{1,6})\s+(.+?)\s*#*\s*$")
 
 
@@ -222,14 +222,14 @@ def go_string_lines(path: pathlib.Path) -> list[tuple[int, str]]:
 
 
 def piglet_help_commands(root: pathlib.Path) -> set[str]:
-    path = root / "coding/piglet/main.go"
+    path = root / "coding/ompiglet/main.go"
     if not path.exists():
-        sys.exit("public-claims: coding/piglet/main.go is missing; cannot derive pig piglet --help")
+        sys.exit("public-claims: coding/ompiglet/main.go is missing; cannot derive ompig ompiglet --help")
     source = path.read_text(encoding="utf-8")
     # The usage text is the pigletUsageText constant; printHelp only filters it.
     help_function = re.search(r"const pigletUsageText = (?P<body>`[^`]*`)", source)
     if not help_function:
-        sys.exit("public-claims: coding/piglet/main.go has no parseable pigletUsageText")
+        sys.exit("public-claims: coding/ompiglet/main.go has no parseable pigletUsageText")
     commands = set()
     for token in GO_TOKEN.finditer(help_function.group("body")):
         literal = token.group("string")
@@ -238,13 +238,13 @@ def piglet_help_commands(root: pathlib.Path) -> set[str]:
         body = literal[1:-1]
         if literal.startswith('"'):
             body = body.replace(r"\n", "\n")
-        commands.update(PIGLET_COMMAND.findall(body))
+        commands.update(OMPIGLET_COMMAND.findall(body))
     # printHelp prints the usage constant; its entries are the commands the help exposes.
     usage = re.search(r"const pigletUsageText = `(?P<body>[^`]*)`", source)
     if usage:
-        commands.update(PIGLET_COMMAND.findall(usage.group("body")))
+        commands.update(OMPIGLET_COMMAND.findall(usage.group("body")))
     if not commands:
-        sys.exit("public-claims: pig piglet --help exposes no commands")
+        sys.exit("public-claims: ompig ompiglet --help exposes no commands")
     return commands
 
 
@@ -263,15 +263,15 @@ def piglet_command_findings(path: pathlib.Path, name: str, known: set[str]) -> l
                 planned_level = level
         if planned_level is not None:
             continue
-        for command in PIGLET_COMMAND.finditer(line):
+        for command in OMPIGLET_COMMAND.finditer(line):
             verb = command.group(1)
             if verb not in known:
                 findings.append(
                     Finding(
                         name,
                         number,
-                        "piglet",
-                        f"pig piglet {verb} is absent from pig piglet --help; move future syntax under a Planned heading",
+                        "ompiglet",
+                        f"ompig ompiglet {verb} is absent from ompig ompiglet --help; move future syntax under a Planned heading",
                         line,
                     )
                 )

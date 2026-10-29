@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // A running bash card ticks its elapsed time until a final result renders (Pi's bash.ts setInterval, cleared by the final render). The card fixture finishes each card it leaves running, so no ticker outlives the test that drew it: left running, each one requests a render every second for the rest of the package's run.

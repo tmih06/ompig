@@ -5,10 +5,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // Upstream _bindExtensionCore binds getActiveTools and setActiveTools to the
@@ -16,7 +16,7 @@ import (
 // through coding.BindSessionExtensionActions, so an extension there sees the
 // session's active tools and can change them, as under Pi.
 func TestSessionExtensionActionsBindActiveTools(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -65,10 +65,10 @@ func TestSessionExtensionActionsBindActiveTools(t *testing.T) {
 
 // Print and JSON mode bind in-process extensions only through
 // coding.BindSessionExtensionActions. Like upstream _bindExtensionCore, it must give
-// their context the session's tools, so a Piglet's tool scoping (tools: [])
+// their context the session's tools, so a Ompiglet's tool scoping (tools: [])
 // sees the registered tools and can narrow them.
 func TestSessionExtensionActionsBindInProcessToolActions(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	cwd := t.TempDir()
 	services, err := coding.CreateAgentSessionServices(coding.CreateAgentSessionServicesOptions{CWD: cwd})
 	if err != nil {

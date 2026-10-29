@@ -3,7 +3,7 @@ package turn
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // TestUsageOracle replays src/harness/usage.ts (pi-durable main da866ada, run by oracle/gen_usage.mjs): addUsage,

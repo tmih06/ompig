@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
-	iexport "github.com/MichaelKinsy/PiG/internal/codingagent/export"
+	iexport "github.com/tmih06/ompig/internal/codingagent/export"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/tui"
 )
 
 type exportTestComponent struct{ lines []string }
@@ -42,7 +42,7 @@ func newFakeSlashCtx() (*SlashContext, *strings.Builder) {
 func TestDebugHandler_WritesLogAndConfirms(t *testing.T) {
 	sc, out := newFakeSlashCtx()
 	called := false
-	sc.WriteDebugLog = func() (string, error) { called = true; return "/tmp/pig-debug.log", nil }
+	sc.WriteDebugLog = func() (string, error) { called = true; return "/tmp/ompig-debug.log", nil }
 	if err := debugHandler(sc); err != nil {
 		t.Fatalf("debugHandler: %v", err)
 	}
@@ -50,7 +50,7 @@ func TestDebugHandler_WritesLogAndConfirms(t *testing.T) {
 		t.Fatal("debugHandler did not call WriteDebugLog")
 	}
 	got := out.String()
-	if !strings.Contains(got, "Debug log written") || !strings.Contains(got, "/tmp/pig-debug.log") {
+	if !strings.Contains(got, "Debug log written") || !strings.Contains(got, "/tmp/ompig-debug.log") {
 		t.Errorf("confirmation missing path/label; got %q", got)
 	}
 }
@@ -1302,7 +1302,7 @@ func TestShareHandlerUploadsJSONLArtifact(t *testing.T) {
 				t.Fatalf("share args = %p %+v", got, state)
 			}
 			showStatus(sharePrivacyNotice)
-			return "Share URL: https://pi-in-go.dev/session/p_test", nil
+			return "Share URL: https://ompig.dev/session/p_test", nil
 		},
 		Append:     func(message string) { output = append(output, message) },
 		ShowStatus: func(message string) { output = append(output, message) },
@@ -1311,7 +1311,7 @@ func TestShareHandlerUploadsJSONLArtifact(t *testing.T) {
 		t.Fatal(err)
 	}
 	joined := strings.Join(output, "\n")
-	if !strings.Contains(joined, sharePrivacyNotice) || !strings.Contains(joined, "https://pi-in-go.dev/session/p_test") {
+	if !strings.Contains(joined, sharePrivacyNotice) || !strings.Contains(joined, "https://ompig.dev/session/p_test") {
 		t.Fatalf("share output = %q", joined)
 	}
 }

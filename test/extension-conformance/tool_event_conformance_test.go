@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Upstream 0.87.1 types.ts gives the powershell tool its own call and result variants; the Session emits the call as a CustomToolCallEvent for every tool. Original text: its own
@@ -28,7 +28,7 @@ func TestToolEventVariantsMatchAcrossSDKs(t *testing.T) {
 		want = append(want,
 			"tool-call="+tool+":Get-Date:5:info",
 			"tool-call="+tool+":blocked-command:7:info",
-			"tool-result="+tool+`:C:\pig\tool-output.log:9:output:info`,
+			"tool-result="+tool+`:C:\ompig\tool-output.log:9:output:info`,
 		)
 	}
 	for _, test := range cases {
@@ -98,7 +98,7 @@ func conformanceToolResult(tool string) extension.ToolResultEvent {
 		Content: []any{map[string]any{"type": "text", "text": "output"}},
 	}
 	details := &extension.BashToolDetails{
-		FullOutputPath: `C:\pig\tool-output.log`,
+		FullOutputPath: `C:\ompig\tool-output.log`,
 		Truncation: &extension.TruncationResult{
 			Content: "output", Truncated: true, TruncatedBy: "lines", TotalLines: 9, TotalBytes: 90,
 			OutputLines: 1, OutputBytes: 6, MaxLines: 1, MaxBytes: 50000,

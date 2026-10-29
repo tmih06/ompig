@@ -1,4 +1,4 @@
-//go:build !pig_strip_codemode
+//go:build !ompig_strip_codemode
 
 package coding
 
@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // docs/specs/builtin-codemode-tool-search.md, "Verification": MCP tools run through codemode with no `node` on PATH. The tool

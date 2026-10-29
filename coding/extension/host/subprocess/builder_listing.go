@@ -4,8 +4,8 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // GoListing is how to read the packages of a standalone Go source extension
@@ -21,7 +21,7 @@ type GoListing struct {
 // go.mod needs one, and calls use. It compiles nothing and removes its
 // temporary go.mod afterward.
 //
-// pig additive (D109): pig extension upgrade reads the types of an extension the way its build does.
+// ompig additive (D109): ompig extension upgrade reads the types of an extension the way its build does.
 func (b *Builder) WithGoListing(srcDir string, use func(GoListing) error) error {
 	stagedSDK, err := b.resolveStagedSDK(srcDir, "go")
 	if err != nil {

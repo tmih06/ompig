@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
 )
 
-// print-mode.ts:35,158,161 runPrintMode returns 0 after a completed run and 1 when the run failed; PiG returns the code with the error that says what failed. The
+// print-mode.ts:35,158,161 runPrintMode returns 0 after a completed run and 1 when the run failed; Ompig returns the code with the error that says what failed. The
 // runtime the run owns is disposed by it (runtimeHost.dispose, :158 finally), so the runtime's teardown hook fires once on either path.
 func TestRunPrintModeReturnsExitCodeZeroOnSuccessAndOneOnFailureAndDisposesTheRuntime(t *testing.T) {
 	run := func(t *testing.T, mode string, convert func(agent.AgentEvent) ([]any, error)) (int, string, *int, error) {

@@ -15,7 +15,7 @@
 //	chan-hop           a channel send or receive, range over a channel, make(chan), a go statement, time.AfterFunc or context.AfterFunc in a hot function: a goroutine hand-off per event
 //	open-per-call      os.Open/OpenFile/Create/ReadFile/WriteFile/OpenInRoot in a hot function: a descriptor per event instead of one kept open
 //
-// A hot function runs once per streamed event, frame, keystroke or chunk. Mark it with a `//perf:hot` directive in its doc comment (an optional reason may follow); portlint's `//pig:hotpath` counts as hot too. Use `//perf:hot` for new marks: `//pig:hotpath` also enables portlint's hotpath passes and their baseline. A hot function's closures count as hot; the body of its `go` statements does not.
+// A hot function runs once per streamed event, frame, keystroke or chunk. Mark it with a `//perf:hot` directive in its doc comment (an optional reason may follow); portlint's `//ompig:hotpath` counts as hot too. Use `//perf:hot` for new marks: `//ompig:hotpath` also enables portlint's hotpath passes and their baseline. A hot function's closures count as hot; the body of its `go` statements does not.
 //
 // A site is allowed by a `//perf:ok <reason>` comment on its line or the line above; the reason is required. Remaining sites are ratcheted in baseline.toml: a site it does not list fails, and an entry whose count fell fails too, so a fix lowers the baseline in the same change. Entries of every pattern except marshal-compare, compile-in-func, env-stat and loop-format carry a class: "cold[:<why>]", "hot-owned:<branch>" or "hot-kept:<reason>".
 //

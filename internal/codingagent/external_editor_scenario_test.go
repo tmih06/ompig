@@ -9,7 +9,7 @@ import (
 )
 
 // externalEditorScenarioEnv, when set to "1", makes this test binary act as a scripted editor of TestOpenExternalEditorMatchesPi before TestMain runs any test: the first argument names what the editor does, the rest are the arguments the command gave it with the prompt path last. It is the editor that runs everywhere, Windows included, where a #! script is not a program cmd.exe can start. It does what the .sh editors of the same test do, in Go.
-const externalEditorScenarioEnv = "PIG_TEST_EXTERNAL_EDITOR_SCENARIO"
+const externalEditorScenarioEnv = "OMPIG_TEST_EXTERNAL_EDITOR_SCENARIO"
 
 // externalEditorReplacePrefix starts the argument of the editor that overwrites the prompt with the bytes that follow, in hex.
 const externalEditorReplacePrefix = "replace:"

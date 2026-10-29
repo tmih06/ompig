@@ -4,7 +4,7 @@
 // byte-identical. Drift between the transports is a wire-format / dispatch
 // regression even when the per-transport unit tests still pass.
 //
-// Scope (intentionally focused: see pig/AGENTS.md "Behavioral
+// Scope (intentionally focused: see ompig/AGENTS.md "Behavioral
 // testing rule: SDK wire format round-trips"):
 //
 //   - tool calls: success, thrown errors, and structured is_error results.
@@ -39,22 +39,22 @@ import (
 	"time"
 	"unicode/utf16"
 
-	jsjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	jsjson "github.com/tmih06/ompig/extensions/sdk/json"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/fusepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/fusepack"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/testbudget"
+	"github.com/tmih06/ompig/internal/toolchain"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture"
+	"github.com/tmih06/ompig/tui"
 )
 
 // recording is the normalized cross-transport observation that gets
@@ -99,7 +99,7 @@ type recording struct {
 	RichTerminate           bool                `json:"rich_terminate"`
 }
 
-// conformanceHostInfo is the host configuration every harness host sends its extensions in PIG_EXT_HOST_INFO; the zero value sends nothing.
+// conformanceHostInfo is the host configuration every harness host sends its extensions in OMPIG_EXT_HOST_INFO; the zero value sends nothing.
 // TestConformance_HostConfigurationAgreesAcrossSDKs sets it for its run (that test is not parallel, so it owns the value while it runs).
 var conformanceHostInfo subprocess.HostInfo
 
@@ -1152,7 +1152,7 @@ func conformanceLoginDefinition() extension.LoginDefinition {
 		Hero:        slices.Repeat([]string{strings.Repeat("A", 32)}, 14),
 		Mascot:      slices.Repeat([]string{strings.Repeat("A", 16)}, 14),
 		Palette:     map[string]string{"A": "#123ABC"},
-		Name:        "Conformance Pig",
+		Name:        "Conformance Ompig",
 		Description: "Cross-language login fixture",
 		Tagline:     "One canonical definition across every SDK",
 	}
@@ -1160,8 +1160,8 @@ func conformanceLoginDefinition() extension.LoginDefinition {
 
 func conformanceSpriteDefinition() extension.SpriteDefinition {
 	return extension.SpriteDefinition{
-		ID:      "conformance-pig",
-		Name:    "Conformance Pig",
+		ID:      "conformance-ompig",
+		Name:    "Conformance Ompig",
 		Tagline: "One canonical sprite across every SDK",
 		Mascot:  slices.Repeat([]string{strings.Repeat("A", 16)}, 14),
 		Palette: map[string]string{"A": "#123ABC"},
@@ -3032,9 +3032,9 @@ func makeFusedGoHarness(t *testing.T) *harness {
 	host.SetHostInfo(conformanceHostInfo)
 	host.SetUIBridge(bridge)
 	wire := observeWire(t, host)
-	// A Piglet Binary installs the host's parsers before any fused factory runs (fusepack.Register).
+	// A Ompiglet Binary installs the host's parsers before any fused factory runs (fusepack.Register).
 	sdk.SetHostHelpers(fusepack.HostHelpers())
-	// The factory runs inside the serve function, as a Piglet Binary's fused registry (fusepack) runs it.
+	// The factory runs inside the serve function, as a Ompiglet Binary's fused registry (fusepack) runs it.
 	loaded, err := host.LoadInProcess(context.Background(), subprocess.ExtConfig{
 		Name:    "sdk-fixture",
 		Enabled: true,
@@ -3305,9 +3305,9 @@ func makeSubprocessRustHarness(t *testing.T) *harness {
 // tests use a separate fixture and prebuild.
 func buildSDKFixture(t *testing.T) string {
 	t.Helper()
-	if p := os.Getenv("PIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN"); p != "" {
+	if p := os.Getenv("OMPIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN"); p != "" {
 		if _, err := os.Stat(p); err != nil {
-			t.Fatalf("PIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN=%q does not exist: %v", p, err)
+			t.Fatalf("OMPIG_TEST_CONFORMANCE_SDK_FIXTURE_BIN=%q does not exist: %v", p, err)
 		}
 		return p
 	}
@@ -3332,9 +3332,9 @@ func buildPythonSDKFixture(t *testing.T) string {
 
 func buildRustSDKFixture(t *testing.T) string {
 	t.Helper()
-	if p := os.Getenv("PIG_TEST_RUST_SDK_FIXTURE_BIN"); p != "" {
+	if p := os.Getenv("OMPIG_TEST_RUST_SDK_FIXTURE_BIN"); p != "" {
 		if _, err := os.Stat(p); err != nil {
-			t.Fatalf("PIG_TEST_RUST_SDK_FIXTURE_BIN=%q does not exist: %v", p, err)
+			t.Fatalf("OMPIG_TEST_RUST_SDK_FIXTURE_BIN=%q does not exist: %v", p, err)
 		}
 		return p
 	}
@@ -3520,7 +3520,7 @@ func requireConformanceTool(t *testing.T, name string) string {
 	if err == nil {
 		return path
 	}
-	if os.Getenv("PIG_REQUIRE_EXTENSION_TOOLCHAINS") == "1" {
+	if os.Getenv("OMPIG_REQUIRE_EXTENSION_TOOLCHAINS") == "1" {
 		t.Fatalf("required extension tool %s is unavailable: %v", name, err)
 	}
 	t.Skipf("%s not found: %v", name, err)

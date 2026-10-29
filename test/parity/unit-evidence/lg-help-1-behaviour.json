@@ -679,7 +679,7 @@
     "upstream_reference": "packages/durable/src/testing/storage-benchmark.ts:278-345 StorageReadBenchmark / STORAGE_READ_BENCHMARKS"
   },
   {
-    "mutation": "tui/spacer.go Spacer (constructor lines, SetLines value and dirty mark, Render length): 4 mutants, all killed. Upstream invalidate() is a no-op; the dirty mark is Pig's invalidatable (D91)",
+    "mutation": "tui/spacer.go Spacer (constructor lines, SetLines value and dirty mark, Render length): 4 mutants, all killed. Upstream invalidate() is a no-op; the dirty mark is Ompig's invalidatable (D91)",
     "package": "./tui",
     "tests": [
       "TestSpacerAndTruncatedTextRender",
@@ -1345,7 +1345,7 @@
     "upstream_reference": "packages/durable/src/env/node.ts NodeExecutionEnv: abortResult checks :1007-1185, joinPath :648, readTextFile :915, fileInfo/listDir :1094-1127, remove/createTemp* :1169-1220, cleanup"
   },
   {
-    "mutation": "tui/tool_execution.go ToolExecutionComponent.SetArgsComplete and UpdateResult: 16 mutants. SetArgsComplete's flag and invalidation survived (its only test asserted a non-empty render) and are killed by tui/tool_execution_args_complete_pi_test.go; the others (partial flag, text join, image blocks, result value, duration, error flag, elapsed) were killed by the existing update-result tests. Equivalent: the no-op `_ = text` rewrite of the text case. Not part of these rows: SetStreaming's refusal to stream into a card that is no longer running (Pig's state gate; Pi's updateResult(partial) always redraws as partial)",
+    "mutation": "tui/tool_execution.go ToolExecutionComponent.SetArgsComplete and UpdateResult: 16 mutants. SetArgsComplete's flag and invalidation survived (its only test asserted a non-empty render) and are killed by tui/tool_execution_args_complete_pi_test.go; the others (partial flag, text join, image blocks, result value, duration, error flag, elapsed) were killed by the existing update-result tests. Equivalent: the no-op `_ = text` rewrite of the text case. Not part of these rows: SetStreaming's refusal to stream into a card that is no longer running (Ompig's state gate; Pi's updateResult(partial) always redraws as partial)",
     "package": "./tui",
     "tests": [
       "TestDefinitionCardDefaultShell",
@@ -1442,7 +1442,7 @@
     "upstream_reference": "agent-session-runtime.ts:81-93 constructor(session, services, createRuntime, diagnostics, modelFallbackMessage)"
   },
   {
-    "mutation": "coding/session.go Session.Subscribe and notifyListeners: 10 mutants (nil guard, copy of the current list, id counter, prepend/replace, unsubscribe all/none/in-place, reverse and first-only notification). Nil guard and in-place unsubscribe survived the existing tests and are killed by the new order and unsubscribe-during-delivery tests. Pig delivers to the listeners as they were when the event began; Pi's for-of over the live array skips a listener spliced out during delivery (not changed here)",
+    "mutation": "coding/session.go Session.Subscribe and notifyListeners: 10 mutants (nil guard, copy of the current list, id counter, prepend/replace, unsubscribe all/none/in-place, reverse and first-only notification). Nil guard and in-place unsubscribe survived the existing tests and are killed by the new order and unsubscribe-during-delivery tests. Ompig delivers to the listeners as they were when the event began; Pi's for-of over the live array skips a listener spliced out during delivery (not changed here)",
     "package": "./coding",
     "tests": [
       "TestSessionConsumedQueueSubscriberReentrantUpdates",
@@ -1501,7 +1501,7 @@
     "upstream_reference": "runner.ts:233-242 constructor(extensions, runtime, cwd, sessionManager, modelRegistry)"
   },
   {
-    "mutation": "coding/session.go Session.Subscribe and notifyListeners: 10 mutants (nil guard, copy of the current list, id counter, prepend/replace, unsubscribe all/none/in-place, reverse and first-only notification). Nil guard and in-place unsubscribe survived the existing tests and are killed by the new order and unsubscribe-during-delivery tests. Pig delivers to the listeners as they were when the event began; Pi's for-of over the live array skips a listener spliced out during delivery (not changed here)",
+    "mutation": "coding/session.go Session.Subscribe and notifyListeners: 10 mutants (nil guard, copy of the current list, id counter, prepend/replace, unsubscribe all/none/in-place, reverse and first-only notification). Nil guard and in-place unsubscribe survived the existing tests and are killed by the new order and unsubscribe-during-delivery tests. Ompig delivers to the listeners as they were when the event began; Pi's for-of over the live array skips a listener spliced out during delivery (not changed here)",
     "package": "./coding",
     "tests": [
       "TestSessionConsumedQueueSubscriberReentrantUpdates",
@@ -1515,7 +1515,7 @@
     "upstream_reference": "agent-session.ts:240 AgentSessionEventListener, :1369-1378 subscribe"
   },
   {
-    "mutation": "tui/custom_message.go: 32 mutants (spacer, box padding/background, rebuild on construct/expand/pad/invalidate, change guards, removal of the previous content, custom renderer add/return/panic, renderer options, box clear and padding, label bold/colour/spacer, body colour and markdown theme, dirty/live probes, text extraction). The default-colour test added here kills the body-colour mutant. Not killed: the box's initial padding (NewPaddedBox(0, 1,...)) is overwritten by SetPaddingX in every rebuild, so it is equivalent; skipping Container.Invalidate in Invalidate survives because Pig's Container.Invalidate only marks the dirty flag (children are not invalidated, D91) and rebuild's Remove/Add mark it as well (observed, not proven)",
+    "mutation": "tui/custom_message.go: 32 mutants (spacer, box padding/background, rebuild on construct/expand/pad/invalidate, change guards, removal of the previous content, custom renderer add/return/panic, renderer options, box clear and padding, label bold/colour/spacer, body colour and markdown theme, dirty/live probes, text extraction). The default-colour test added here kills the body-colour mutant. Not killed: the box's initial padding (NewPaddedBox(0, 1,...)) is overwritten by SetPaddingX in every rebuild, so it is equivalent; skipping Container.Invalidate in Invalidate survives because Ompig's Container.Invalidate only marks the dirty flag (children are not invalidated, D91) and rebuild's Remove/Add mark it as well (observed, not proven)",
     "package": "./tui",
     "tests": [
       "TestCustomMessageBackgroundTracksTheme",
@@ -1551,7 +1551,7 @@
     "upstream_reference": "armin.ts:62-80 ArminComponent constructor(ui)"
   },
   {
-    "mutation": "tui/extension_selector.go: 43 mutants over the Pi-shaped constructor (options, callbacks, title, description, countdown wiring, hint, children), updateList/rowText, handleInput (expand, up/down, k/j, confirm, newline, cancel, done guard, invalidate), Cancel, expiry and Dispose. Survivors of the existing non-oracle tests (description, selected/other row colours, newline confirm, expand callback guard, invalidate after input, expiry after an answer, countdown render request) are killed by tui/extension_selector_pi_semantics_test.go. The Pig-only preview column (D2) and page keys (D155) are not mutated here. TestExtensionDialogsMatchPiBindingsAndPalette and TestExtensionDialogCountdownMatchesPi (node oracles) fail on this host and are not counted",
+    "mutation": "tui/extension_selector.go: 43 mutants over the Pi-shaped constructor (options, callbacks, title, description, countdown wiring, hint, children), updateList/rowText, handleInput (expand, up/down, k/j, confirm, newline, cancel, done guard, invalidate), Cancel, expiry and Dispose. Survivors of the existing non-oracle tests (description, selected/other row colours, newline confirm, expand callback guard, invalidate after input, expiry after an answer, countdown render request) are killed by tui/extension_selector_pi_semantics_test.go. The Ompig-only preview column (D2) and page keys (D155) are not mutated here. TestExtensionDialogsMatchPiBindingsAndPalette and TestExtensionDialogCountdownMatchesPi (node oracles) fail on this host and are not counted",
     "package": "./tui",
     "tests": [
       "TestExtensionDialogsOwnTheirCountdown",

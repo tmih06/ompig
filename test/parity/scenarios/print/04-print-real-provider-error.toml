@@ -12,9 +12,9 @@ prompt = "HTTP_ERROR"
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_HOME=../rpc/testdata/pig-home"]
+ompig = ["OMPIG_HOME=../rpc/testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=../rpc/testdata/pi-home/agent"]
-pig_args = ["--offline", "--no-extensions", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--no-session"]
+ompig_args = ["--offline", "--no-extensions", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--no-session"]
 pi_args = ["--offline", "--no-extensions", "--system-prompt", "Strict wire probe.", "--no-context-files", "--no-skills", "--no-session"]
 
 [assert]

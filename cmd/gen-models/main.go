@@ -27,7 +27,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsnumber"
 )
 
 type modelRow struct {
@@ -430,7 +430,7 @@ type jsonCatalogProvider struct {
 }
 
 // parseDataJSON reads one data/<provider>.json: API groups of "<type>:<id>" keyed models. Every model object is decoded
-// strictly so new catalog fields fail generation instead of disappearing from Pig. Identity follows
+// strictly so new catalog fields fail generation instead of disappearing from Ompig. Identity follows
 // packages/ai/scripts/model-data.ts validateModelValue and validateModelDataDirectory: a known type, a key that is
 // "<type>:<id>", and no key repeated across API groups.
 func parseDataJSON(path string) ([]modelRow, error) {
@@ -709,7 +709,7 @@ func emit(path, src string, rows []modelRow) error {
 	b.WriteString("// GeneratedModel is a static catalog entry for one model. Lives in\n")
 	b.WriteString("// generated code so the registry init is just a slice copy. Field\n")
 	b.WriteString("// shape mirrors upstream pi-ai's `Model<api>` discriminated union\n")
-	b.WriteString("// reduced to the fields the pig runtime actually consumes.\n")
+	b.WriteString("// reduced to the fields the ompig runtime actually consumes.\n")
 	b.WriteString("type GeneratedModel struct {\n")
 	b.WriteString("\tID                   string\n")
 	b.WriteString("\tProvider             string\n")

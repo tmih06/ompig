@@ -9,9 +9,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 var packedUIConfigs = map[string]func() ([]subprocess.ExtConfig, error){
@@ -33,17 +33,17 @@ func createPackedUIConfigs(language string) ([]subprocess.ExtConfig, error) {
 	case "go":
 		for _, item := range []struct{ path, body string }{
 			{source, `package fixture
-import "github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture"
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import "github.com/tmih06/ompig/test/extension-conformance/testfixture"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension { return testfixture.Extension() }
 `},
 			{peer, `package fixture
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension { return sdk.New("ui-peer") }
 `},
 		} {
 			write(filepath.Join(item.path, "extension.go"), item.body)
-			write(filepath.Join(item.path, "go.mod"), fmt.Sprintf("module example.com/%s\n\ngo 1.26.0\nrequire (\n github.com/MichaelKinsy/PiG v%s\n github.com/MichaelKinsy/PiG/extensions/sdk v%s\n)\nreplace github.com/MichaelKinsy/PiG => %s\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", filepath.Base(item.path), pigversion.PigVersion, pigversion.PigVersion, filepath.ToSlash(root), filepath.ToSlash(filepath.Join(root, "extensions", "sdk"))))
+			write(filepath.Join(item.path, "go.mod"), fmt.Sprintf("module example.com/%s\n\ngo 1.26.0\nrequire (\n github.com/tmih06/ompig v%s\n github.com/tmih06/ompig/extensions/sdk v%s\n)\nreplace github.com/tmih06/ompig => %s\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", filepath.Base(item.path), pigversion.OmpigVersion, pigversion.OmpigVersion, filepath.ToSlash(root), filepath.ToSlash(filepath.Join(root, "extensions", "sdk"))))
 		}
 	case "python":
 		data, err := os.ReadFile(filepath.Join(root, "test", "extension-conformance", "testdata", name, "main.py"))
@@ -56,7 +56,7 @@ func Extension() *sdk.Extension { return sdk.New("ui-peer") }
 		}
 		body, _, _ = strings.Cut(body, `if __name__ == "__main__":`)
 		write(filepath.Join(source, "python_sdk_fixture.py"), body)
-		write(filepath.Join(peer, "ui_peer.py"), "import pig_sdk\ndef new_extension():\n    return pig_sdk.Extension('ui-peer')\n")
+		write(filepath.Join(peer, "ui_peer.py"), "import ompig_sdk\ndef new_extension():\n    return ompig_sdk.Extension('ui-peer')\n")
 	case "rust":
 		data, err := os.ReadFile(filepath.Join(root, "test", "extension-conformance", "testdata", name, "src", "main.rs"))
 		if err != nil {
@@ -66,7 +66,7 @@ func Extension() *sdk.Extension { return sdk.New("ui-peer") }
 		body = strings.Replace(body, "fn main() {", "pub fn new_extension() -> Extension {", 1)
 		body = strings.Replace(body, "ext.run().unwrap();", "ext", 1)
 		write(filepath.Join(source, "src", "lib.rs"), body)
-		write(filepath.Join(peer, "src", "lib.rs"), "pub fn new_extension() -> pig_sdk::Extension { pig_sdk::Extension::new(\"ui-peer\") }\n")
+		write(filepath.Join(peer, "src", "lib.rs"), "pub fn new_extension() -> ompig_sdk::Extension { ompig_sdk::Extension::new(\"ui-peer\") }\n")
 		for _, path := range []string{source, peer} {
 			write(filepath.Join(path, "Cargo.toml"), fmt.Sprintf("[package]\nname = %q\nversion = \"0.1.0\"\nedition = \"2021\"\n[dependencies]\npig-sdk = {path = %q}\nserde_json = \"1\"\n", filepath.Base(path), filepath.ToSlash(filepath.Join(root, "extensions", "sdk-rs"))))
 		}
@@ -86,14 +86,14 @@ func Extension() *sdk.Extension { return sdk.New("ui-peer") }
 		cfg.Factory, cfg.Package = "new_extension", cfg.Name
 		switch language {
 		case "go":
-			cfg.SDKName, cfg.Factory = "github.com/MichaelKinsy/PiG/extensions/sdk", "Extension"
+			cfg.SDKName, cfg.Factory = "github.com/tmih06/ompig/extensions/sdk", "Extension"
 			cfg.ModulePath = "example.com/" + cfg.Name
 			cfg.Package = cfg.ModulePath
 		case "python":
-			cfg.SDKName = "pig-sdk-py"
+			cfg.SDKName = "ompig-sdk-py"
 			cfg.Package = strings.ReplaceAll(cfg.Name, "-", "_")
 		case "rust":
-			cfg.SDKName = "pig-sdk"
+			cfg.SDKName = "ompig-sdk"
 		}
 	}
 	return configs, nil

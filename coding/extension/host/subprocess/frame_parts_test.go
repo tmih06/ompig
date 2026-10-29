@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // A split frame (Args that are json.Marshal output) is byte for byte json.Marshal of its envelope, members after args included, and an oversized one fails as an unsplit one does (FD-1, FD-4).

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // overWindowCompleter answers like a provider with a hard input limit: a request whose text is longer than limitTokens (four characters per token) is
@@ -40,7 +40,7 @@ func overWindowMessages(count, chars int) []agent.AgentMessage {
 	return messages
 }
 
-// Pi 1.1.0 and Pi main send the whole history in one summary request (compaction.ts generateSummaryWithUsage), so a history longer than the model's context window fails with the provider's overflow error and the session can never be compacted (reproduced with both CLIs against a mock endpoint: "prompt is too long: 12034 tokens > 6000 maximum"). PiG summarizes such a history chunk by chunk, each chunk updating the summary of the one before.
+// Pi 1.1.0 and Pi main send the whole history in one summary request (compaction.ts generateSummaryWithUsage), so a history longer than the model's context window fails with the provider's overflow error and the session can never be compacted (reproduced with both CLIs against a mock endpoint: "prompt is too long: 12034 tokens > 6000 maximum"). Ompig summarizes such a history chunk by chunk, each chunk updating the summary of the one before.
 func TestGenerateSummaryOfAHistoryLongerThanTheWindowIsChunked(t *testing.T) {
 	model := &ai.Model{Capabilities: ai.ModelCapabilities{ContextWindow: 6000}}
 	messages := overWindowMessages(60, 1000)
@@ -126,7 +126,7 @@ func overWindowBranchEntries(count, tokens int) []codingagent.SessionEntry {
 	return entries
 }
 
-// Pi's branch summary sends the newest entries that fit the window by the character estimate and reports the provider's overflow error when the real token count is higher (branch-summarization.ts generateBranchSummary). PiG retries with the newest half of what it sent.
+// Pi's branch summary sends the newest entries that fit the window by the character estimate and reports the provider's overflow error when the real token count is higher (branch-summarization.ts generateBranchSummary). Ompig retries with the newest half of what it sent.
 func TestGenerateBranchSummaryHalvesARequestTheProviderRefusesAsTooLong(t *testing.T) {
 	completer := &overWindowCompleter{limitTokens: 4500}
 	result := GenerateBranchSummary(t.Context(), overWindowBranchEntries(10, 1000), GenerateBranchSummaryOptions{Model: &ai.Model{Capabilities: ai.ModelCapabilities{ContextWindow: 100000}}, Completer: completer})

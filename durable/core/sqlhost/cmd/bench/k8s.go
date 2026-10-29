@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/durable/harness"
+	"github.com/tmih06/ompig/durable/harness"
 )
 
 // The seed and sample commands of durable/interop/bench.mjs, for the native core: same workload, same scripted model, same
@@ -24,7 +24,7 @@ import (
 //	bench sample FIXTURE SIZE [INDEX] [TARGET] [VERSION]
 //	                                        one measured run on a copy of FIXTURE: one result line on stdout
 //
-// TARGET defaults to pig-native. seed writes the history in batches of seedBatch turns, closing and reopening the store
+// TARGET defaults to ompig-native. seed writes the history in batches of seedBatch turns, closing and reopening the store
 // between batches as bench.mjs does. sample runs measuredRuns turns of measuredTools lookups each, or
 // BENCH_MEASURED_TURNS turns when it is set (measuredTurnsOf). BENCH_WORKLOAD=summary runs the realistic-summary workload
 // (workloadOf) in both commands.
@@ -100,7 +100,7 @@ func k8sMain(ctx context.Context, cmd string, args []string) error {
 		return err
 	}
 	if cmd == "seed" {
-		return seedFixture(ctx, arg(0, ""), size, arg(2, "pig-native"), workload)
+		return seedFixture(ctx, arg(0, ""), size, arg(2, "ompig-native"), workload)
 	}
 	index, err := strconv.Atoi(arg(2, "0"))
 	if err != nil {
@@ -110,7 +110,7 @@ func k8sMain(ctx context.Context, cmd string, args []string) error {
 	if err != nil {
 		return err
 	}
-	return sampleFixture(ctx, os.Stdout, arg(0, ""), size, index, turns, arg(3, "pig-native"), arg(4, ""), workload)
+	return sampleFixture(ctx, os.Stdout, arg(0, ""), size, index, turns, arg(3, "ompig-native"), arg(4, ""), workload)
 }
 
 // measuredTurnsOf is bench.mjs's BENCH_MEASURED_TURNS: the measured turns of one sample, measuredRuns when unset. The

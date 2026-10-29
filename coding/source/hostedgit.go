@@ -6,8 +6,8 @@ package source
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeurl"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeurl"
 )
 
 // hostedInfo is hosted-git-info's GitHost as parseGitUrl reads it. A nil user is JavaScript's null.

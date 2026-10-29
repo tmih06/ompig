@@ -1014,7 +1014,7 @@ export class InteractiveMode {
         if (!isInstallTelemetryEnabled(this.settingsManager)) {
             return;
         }
-        void fetch(`https://pi-in-go.dev/api/report-install?version=${encodeURIComponent(version)}`, {
+        void fetch(`https://ompig.dev/api/report-install?version=${encodeURIComponent(version)}`, {
             headers: {
                 "User-Agent": getPiUserAgent(version),
             },

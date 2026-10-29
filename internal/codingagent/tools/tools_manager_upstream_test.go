@@ -30,7 +30,7 @@ func TestEnsureToolUpstream(t *testing.T) {
 	// .upstream/v1.4.0+936e5f40/packages/coding-agent/test/tools-manager.test.ts: #11209, ARM32 previously fell back to x86-64 archives.
 	for _, architecture := range []string{"arm", "ia32"} {
 		t.Run("does not download x86-64 binaries on "+architecture, func(t *testing.T) {
-			t.Setenv("PIG_OFFLINE", "")
+			t.Setenv("OMPIG_OFFLINE", "")
 			t.Setenv("PI_OFFLINE", "")
 			t.Setenv("PATH", t.TempDir())
 			manager := NewToolsManager(t.TempDir())
@@ -52,7 +52,7 @@ func TestEnsureToolUpstream(t *testing.T) {
 	}
 	// .upstream/v0.87.1/packages/coding-agent/test/tools-manager.test.ts:120
 	t.Run("surfaces the error cause chain when a download fails", func(t *testing.T) {
-		t.Setenv("PIG_OFFLINE", "")
+		t.Setenv("OMPIG_OFFLINE", "")
 		t.Setenv("PI_OFFLINE", "")
 		t.Setenv("PATH", t.TempDir())
 		manager := NewToolsManager(t.TempDir())

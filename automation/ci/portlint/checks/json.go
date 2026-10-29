@@ -79,7 +79,7 @@ var MapKeyOrder = newCheck("mapkeyorder",
 // EmptyDrop flags omitempty on slice and map fields, which drops an explicit empty array or object.
 var EmptyDrop = newCheck("emptydrop",
 	"omitempty on a slice or map field drops an explicit [] or {} that Pi sends",
-	Med, "MCP empty titles; ClientCapabilities empty objects; Piglet empty active-tool list",
+	Med, "MCP empty titles; ClientCapabilities empty objects; Ompiglet empty active-tool list",
 	func(p *Pass) {
 		p.Inspect.Preorder([]ast.Node{(*ast.StructType)(nil)}, func(n ast.Node) {
 			st := n.(*ast.StructType)
@@ -125,7 +125,7 @@ func hasOpt(opts, want string) bool {
 // A function that tests the value against nil has already decided what a nil slice means.
 var NilSliceNull = newCheck("nilslicenull",
 	"json.Marshal of a slice-typed value: a nil slice encodes as null where Pi sends []",
-	High, "Piglet empty active-tool list",
+	High, "Ompiglet empty active-tool list",
 	func(p *Pass) {
 		p.Inspect.WithStack([]ast.Node{(*ast.CallExpr)(nil)}, func(n ast.Node, push bool, stack []ast.Node) bool {
 			call := n.(*ast.CallExpr)

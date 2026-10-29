@@ -5,7 +5,7 @@
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
 
-const dist = process.env.PIG_PUBLISHED_AI_DIST ?? resolve("extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai/dist");
+const dist = process.env.OMPIG_PUBLISHED_AI_DIST ?? resolve("extensions/sdk-ts/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai/dist");
 const { getModels, getProviders } = await import(pathToFileURL(resolve(dist, "compat.js")).href);
 
 const cases = getProviders().flatMap((provider) =>

@@ -1,0 +1,2 @@
+# Embedded into a Ompiglet Binary build. Empty in stock Ompig.
+# The builder substitutes the selected Ompiglet through a go build overlay.

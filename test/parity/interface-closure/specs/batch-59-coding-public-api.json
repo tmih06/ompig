@@ -13,7 +13,7 @@
    "test:coding/model_registration_snapshot_test.go#TestSessionCycleModelSeesExtensionProviderRegistration",
    "test:coding/session_event_bus_lifecycle_upstream_test.go#TestSessionCloseInvalidatesExtensionContext7193"
   ],
-  "rationale": "AgentSession.bindExtensions is the Go method coding.Session.BindExtensions; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.bindExtensions is the Go method coding.Session.BindExtensions; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -30,7 +30,7 @@
    "test:coding/session_cache_warming_failure_test.go#TestCacheWarmingStatusSafeDuringPersistenceFailure",
    "test:coding/session_cache_warming_lifecycle_test.go#TestReplacementDrainsAndReleasesInFlightCacheWarmer"
   ],
-  "rationale": "AgentSession.cacheWarmingStatus is the Go method coding.Session.CacheWarmingStatus; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.cacheWarmingStatus is the Go method coding.Session.CacheWarmingStatus; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -47,7 +47,7 @@
    "test:coding/model_registration_snapshot_test.go#TestSessionCycleModelSeesExtensionProviderRegistration",
    "test:coding/session_model_extension_order_test.go#TestSessionModelCycleBoundaries"
   ],
-  "rationale": "AgentSession.cycleModel is the Go method coding.Session.CycleModel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.cycleModel is the Go method coding.Session.CycleModel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -63,7 +63,7 @@
   "evidence": [
    "test:coding/session_model_extension_upstream_test.go#TestSessionModelExtensionCyclesUpstream"
   ],
-  "rationale": "AgentSession.cycleThinkingLevel is the Go method coding.Session.CycleThinkingLevel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.cycleThinkingLevel is the Go method coding.Session.CycleThinkingLevel; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -80,7 +80,7 @@
    "test:coding/session_concurrent_upstream_test.go#TestUpstreamConcurrentPrompt",
    "test:coding/session_prompt_disposition_upstream_test.go#TestQueuedInputDispositions"
   ],
-  "rationale": "AgentSession.followUp is the Go method coding.Session.FollowUp; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.followUp is the Go method coding.Session.FollowUp; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -96,7 +96,7 @@
   "evidence": [
    "test:coding/session_queue_upstream_test.go#TestUpstreamSessionQueue"
   ],
-  "rationale": "AgentSession.getFollowUpMessages is the Go method coding.Session.GetFollowUpMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.getFollowUpMessages is the Go method coding.Session.GetFollowUpMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -112,7 +112,7 @@
   "evidence": [
    "test:coding/session_queue_upstream_test.go#TestUpstreamSessionQueue"
   ],
-  "rationale": "AgentSession.getSteeringMessages is the Go method coding.Session.GetSteeringMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.getSteeringMessages is the Go method coding.Session.GetSteeringMessages; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -129,7 +129,7 @@
    "test:coding/session_strict_tools_port_test.go#TestBuiltinStrictOptOutPort",
    "test:test/extension-conformance/dynamic_tools_test.go#TestDynamicToolRegistrationAcrossSDKs"
   ],
-  "rationale": "AgentSession.getToolDefinition is the Go method coding.Session.GetToolDefinition; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.getToolDefinition is the Go method coding.Session.GetToolDefinition; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -145,7 +145,7 @@
   "evidence": [
    "test:coding/session_cache_warming_test.go#TestSetCacheWarmingModeReconcilesActiveWarming"
   ],
-  "rationale": "AgentSession.setCacheWarmingMode is the Go method coding.Session.SetCacheWarmingMode; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.setCacheWarmingMode is the Go method coding.Session.SetCacheWarmingMode; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -162,7 +162,7 @@
    "test:coding/session_compaction_suite_active_test.go#TestAgentSessionCompactionSuiteActiveRunUpstream",
    "test:coding/session_concurrent_upstream_test.go#TestUpstreamConcurrentPrompt"
   ],
-  "rationale": "AgentSession.steer is the Go method coding.Session.Steer; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.steer is the Go method coding.Session.Steer; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -178,7 +178,7 @@
   "evidence": [
    "test:coding/session_summarization_test.go#TestSessionSummarizationRoutingAndThinkingLevel"
   ],
-  "rationale": "AgentSession.summarizeForBugReport is the Go method coding.Session.SummarizeForBugReport; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "AgentSession.summarizeForBugReport is the Go method coding.Session.SummarizeForBugReport; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -195,7 +195,7 @@
    "test:coding/model_runtime_images_upstream_test.go#TestModelRuntimeImagesUpstream",
    "test:coding/model_runtime_native_upstream_test.go#TestModelRuntimeNativeCompatibilityUpstream"
   ],
-  "rationale": "ModelRuntime.cancelDeferred is the Go method coding.ModelRuntime.CancelDeferred; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.cancelDeferred is the Go method coding.ModelRuntime.CancelDeferred; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -212,7 +212,7 @@
    "test:coding/model_runtime_images_upstream_test.go#TestModelRuntimeImagesUpstream",
    "test:coding/model_runtime_native_upstream_test.go#TestModelRuntimeNativeCompatibilityUpstream"
   ],
-  "rationale": "ModelRuntime.fetchDeferred is the Go method coding.ModelRuntime.FetchDeferred; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.fetchDeferred is the Go method coding.ModelRuntime.FetchDeferred; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -229,7 +229,7 @@
    "test:coding/model_auth_status_snapshot_test.go#TestProviderAuthStatusConfiguredKeyUsesSnapshotAndProcessEnv",
    "test:coding/model_registry_namespace_test.go#TestRegistryNativeReplacementDropsLegacyConfiguredAuth"
   ],
-  "rationale": "ModelRuntime.getProviderAuthStatus is the Go method coding.ModelRuntime.GetProviderAuthStatus; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.getProviderAuthStatus is the Go method coding.ModelRuntime.GetProviderAuthStatus; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -246,7 +246,7 @@
    "test:coding/model_availability_subscription_test.go#TestModelRuntimeDistinguishesSubscriptionOAuthUpstream",
    "test:coding/model_runtime_auth_options_upstream_test.go#TestCreateModelRuntimeInjectedSubscriptionOAuthUpstream"
   ],
-  "rationale": "ModelRuntime.isUsingSubscription is the Go method coding.ModelRuntime.IsUsingSubscription; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.isUsingSubscription is the Go method coding.ModelRuntime.IsUsingSubscription; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -263,7 +263,7 @@
    "test:coding/credential_refresh_7027_upstream_test.go#TestCredentialRefreshHang7027StalledLogin",
    "test:coding/model_availability_native_test.go#TestAvailabilityCredentialSynchronizationRejectsStalledFullPass"
   ],
-  "rationale": "ModelRuntime.login is the Go method coding.ModelRuntime.Login; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.login is the Go method coding.ModelRuntime.Login; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -280,7 +280,7 @@
    "test:coding/cli/extension_scoped_models_test.go#TestExtensionScopedModelsEmptyDoesNotReadCatalog",
    "test:coding/credential_refresh_7027_upstream_test.go#TestCredentialRefreshHang7027StalledLogin"
   ],
-  "rationale": "ModelRuntime.registerNativeProvider is the Go method coding.ModelRuntime.RegisterNativeProvider; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.registerNativeProvider is the Go method coding.ModelRuntime.RegisterNativeProvider; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -297,7 +297,7 @@
    "test:coding/model_runtime_images_upstream_test.go#TestModelRuntimeImagesUpstream",
    "test:coding/model_runtime_typed_test.go#TestModelRuntimeRejectsNonChatModelsOnBuiltInProviders"
   ],
-  "rationale": "ModelRuntime.streamDeferred is the Go method coding.ModelRuntime.StreamDeferred; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRuntime.streamDeferred is the Go method coding.ModelRuntime.StreamDeferred; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -314,7 +314,7 @@
    "test:coding/extension/host/inproc/upstream_provider_queue_test.go#TestRunnerProviderActionsOverrideRegistry",
    "test:coding/extension/host/inproc/upstream_provider_queue_test.go#TestRunnerProviderQueueRetainsStreamCallback"
   ],
-  "rationale": "ModelRegistry.find is the Go method coding.ModelRegistry.Find; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRegistry.find is the Go method coding.ModelRegistry.Find; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -330,7 +330,7 @@
   "evidence": [
    "test:coding/model_runtime_typed_test.go#TestModelRegistryTypedFacadeMatchesTheRuntime"
   ],
-  "rationale": "ModelRegistry.findOfType is the Go method coding.ModelRegistry.FindOfType; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRegistry.findOfType is the Go method coding.ModelRegistry.FindOfType; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -347,7 +347,7 @@
    "test:coding/model_registry_base_upstream_test.go#TestModelRegistryBaseOverridesUpstream",
    "test:coding/model_registry_custom_upstream_test.go#TestModelRegistryCustomModelsUpstream"
   ],
-  "rationale": "ModelRegistry.getError is the Go method coding.ModelRegistry.GetError; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRegistry.getError is the Go method coding.ModelRegistry.GetError; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -363,7 +363,7 @@
   "evidence": [
    "test:coding/model_runtime_typed_test.go#TestModelRegistryTypedFacadeMatchesTheRuntime"
   ],
-  "rationale": "ModelRegistry.getModelOfType is the Go method coding.ModelRegistry.GetModelOfType; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRegistry.getModelOfType is the Go method coding.ModelRegistry.GetModelOfType; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -379,7 +379,7 @@
   "evidence": [
    "test:coding/model_runtime_typed_test.go#TestModelRegistryTypedFacadeMatchesTheRuntime"
   ],
-  "rationale": "ModelRegistry.getModelsOfType is the Go method coding.ModelRegistry.GetModelsOfType; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "ModelRegistry.getModelsOfType is the Go method coding.ModelRegistry.GetModelsOfType; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -395,7 +395,7 @@
   "evidence": [
    "test:coding/resource_loader_packages_test.go#TestUpstreamDefaultResourceLoaderOptions"
   ],
-  "rationale": "DefaultResourceLoader.getAgentsFiles is the Go method coding.DefaultResourceLoader.GetAgentsFiles; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "DefaultResourceLoader.getAgentsFiles is the Go method coding.DefaultResourceLoader.GetAgentsFiles; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -411,7 +411,7 @@
   "evidence": [
    "test:coding/resource_loader_packages_test.go#TestUpstreamDefaultResourceLoaderOptions"
   ],
-  "rationale": "DefaultResourceLoader.getAppendSystemPrompt is the Go method coding.DefaultResourceLoader.GetAppendSystemPrompt; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "DefaultResourceLoader.getAppendSystemPrompt is the Go method coding.DefaultResourceLoader.GetAppendSystemPrompt; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -428,7 +428,7 @@
    "test:coding/resource_loader_packages_test.go#TestDefaultLoaderExplicitExclusionDisablesAutoDiscoveredResources",
    "test:coding/resource_loader_packages_test.go#TestDefaultLoaderPromptPathRejectionKeepsReloadedSkills"
   ],
-  "rationale": "DefaultResourceLoader.getPrompts is the Go method coding.DefaultResourceLoader.GetPrompts; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "DefaultResourceLoader.getPrompts is the Go method coding.DefaultResourceLoader.GetPrompts; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  },
  {
@@ -444,7 +444,7 @@
   "evidence": [
    "test:coding/resource_loader_packages_test.go#TestUpstreamDefaultResourceLoaderOptions"
   ],
-  "rationale": "DefaultResourceLoader.getSystemPrompt is the Go method coding.DefaultResourceLoader.GetSystemPrompt; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no PiG binary calls it; test callers (go/types) are the proof.",
+  "rationale": "DefaultResourceLoader.getSystemPrompt is the Go method coding.DefaultResourceLoader.GetSystemPrompt; signature reviewed against the upstream declaration (a Promise or rejection is the returned error; an options object is a variadic or pointer argument; undefined is nil or the empty value). Closed as public-api-tested: the method is exported from the public coding package and no Ompig binary calls it; test callers (go/types) are the proof.",
   "async": "An awaited Promise is a blocking Go call that returns the value or error; a rejection is the returned error. AbortSignal is the context.Context argument; no detached goroutine."
  }
 ]

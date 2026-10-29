@@ -5,8 +5,8 @@
 // confirmations via the editor slot (matching upstream's
 // showExtensionSelector / showExtensionInput / showExtensionConfirm).
 //
-// pig-specific: upstream's interactive-mode.ts creates these inline;
-// pig needs a separate type because the UIContext interface lives in
+// ompig-specific: upstream's interactive-mode.ts creates these inline;
+// ompig needs a separate type because the UIContext interface lives in
 // coding/extension/ and the TUI lives in internal/.
 
 package codingagent
@@ -22,12 +22,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/piglogin"
-	"github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/piglogin"
+	"github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ExtUIContext implements extension.UIContext for interactive mode.
@@ -216,7 +216,7 @@ func (c *specialLinesComponent) SetRendererWithMouse(render func(width int) []st
 }
 
 // ClickArea reports the part of the lines last rendered that takes a click.
-// pig additive (D91): a frontend session reports a click there.
+// ompig additive (D91): a frontend session reports a click there.
 func (c *specialLinesComponent) ClickArea() (frontend.Area, bool) {
 	c.mu.RLock()
 	click := c.click
@@ -633,7 +633,7 @@ func (u *ExtUIContext) UnregisterSprites(owner string) {
 // dropBoundSprites removes the sprites of the build whose bridge was bound, before another build's bridge replays its own,
 // and reports whether it removed any. The outgoing bridge is detached by then, so its host's shutdown no longer reaches the
 // UI to remove them.
-// pig divergence (D2): extension sprites leave /sprite with the build that registered them; Pi has no sprites.
+// ompig divergence (D2): extension sprites leave /sprite with the build that registered them; Pi has no sprites.
 func (m *InteractiveMode) dropBoundSprites() bool {
 	m.spriteOwnersMu.Lock()
 	defer m.spriteOwnersMu.Unlock()
@@ -678,8 +678,8 @@ func (m *InteractiveMode) setBuiltInHeader(expanded bool) {
 		m.builtInHeaderShowDetails, m.builtInHeaderBuilt = showDetails, true
 	}
 	m.toolMu.Unlock()
-	// pig divergence (D2): the built-in header draws the saved PiG sprite. Reading it here, off the render loop, picks up a
-	// selection a game or another PiG wrote since startup (/reload restores the built-in header).
+	// ompig divergence (D2): the built-in header draws the saved Ompig sprite. Reading it here, off the render loop, picks up a
+	// selection a game or another Ompig wrote since startup (/reload restores the built-in header).
 	piglogin.Refresh()
 	piglogin.Active()
 	m.extHeader.SetRendererWithMouse(m.renderBuiltInHeader, m.handleBuiltInHeaderMouse, m.builtInHeaderClickArea, m.builtInHeaderUnchanged)

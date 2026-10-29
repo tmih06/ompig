@@ -11,7 +11,7 @@ import (
 	"reflect"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 func sessionCwdFixture(t *testing.T) (string, string, string) {

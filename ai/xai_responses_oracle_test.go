@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type xaiResponseProbe struct {
@@ -246,7 +246,7 @@ func TestXaiResponsesMatchPi(t *testing.T) {
 					}
 					return string(a.OK)
 				}
-				t.Errorf("%s status %d body %.160q previous %q\n  Pi  %s\n  Pig %s", probe.Flow, probe.Status, probe.Body, probe.Previous, render(want), render(got))
+				t.Errorf("%s status %d body %.160q previous %q\n  Pi  %s\n  Ompig %s", probe.Flow, probe.Status, probe.Body, probe.Previous, render(want), render(got))
 			}
 		}
 	}

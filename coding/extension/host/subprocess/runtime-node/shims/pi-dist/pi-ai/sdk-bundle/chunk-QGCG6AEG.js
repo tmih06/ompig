@@ -556,8 +556,8 @@ __name(observeModelRequest, "observeModelRequest");
 var PI_AI_VERSION = "1.4.0";
 
 // pi-dist/pi-ai/utils/identity.js
-import { pigUserAgent } from "../../../pig-identity.mjs";
-var PI_ATTRIBUTION = { name: "PiG", url: "https://github.com/MichaelKinsy/PiG", categories: ["cli-agent"] };
+import { ompigUserAgent } from "../../../ompig-identity.mjs";
+var PI_ATTRIBUTION = { name: "Ompig", url: "https://github.com/tmih06/ompig", categories: ["cli-agent"] };
 var NVIDIA_NIM_HOST = "integrate.api.nvidia.com";
 var OPENCODE_HOST = "opencode.ai";
 function mergeClientIdentity(...sources) {
@@ -585,8 +585,8 @@ function formatUserAgent(identity) {
   if (typeof mode === "object")
     return mode.custom;
   if (mode === "short")
-    return "pig";
-  return pigUserAgent("pig", identity?.version);
+    return "ompig";
+  return ompigUserAgent("ompig", identity?.version);
 }
 __name(formatUserAgent, "formatUserAgent");
 function matchesHost(baseUrl, expectedHost) {

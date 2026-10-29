@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // spriteUI is a UI that keeps sprites: it records each registration and removal in order.
@@ -77,9 +77,9 @@ func TestUIBridgeRegisterSpriteRejectsAnInvalidDefinition(t *testing.T) {
 }
 
 func TestUIBridgeRegisterSpriteReportsTheUIError(t *testing.T) {
-	ui := &spriteUI{mockUIContext: &mockUIContext{}, reject: errors.New(`sprite "pig-default" is built in`)}
+	ui := &spriteUI{mockUIContext: &mockUIContext{}, reject: errors.New(`sprite "ompig-default" is built in`)}
 	bridge := newTestBridge(ui)
-	result := registerSprite(t, bridge, "ext-a", spriteJSON(t, "pig-default", extension.LoginMascotWidth))
+	result := registerSprite(t, bridge, "ext-a", spriteJSON(t, "ompig-default", extension.LoginMascotWidth))
 	if result.Error == nil || result.Error.Code != "ui_error" || !strings.Contains(result.Error.Message, "built in") {
 		t.Fatalf("register sprite error = %+v, want the UI's rejection as ui_error", result.Error)
 	}

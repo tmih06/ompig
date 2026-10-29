@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-var tmuxSocket = fmt.Sprintf("pig-test-%d-%s", os.Getpid(), randID())
+var tmuxSocket = fmt.Sprintf("ompig-test-%d-%s", os.Getpid(), randID())
 var tmuxHomeRoot string
 
 // Every command, including cleanup, addresses only this process's server.
@@ -26,8 +26,8 @@ func tmuxCommand(args ...string) *exec.Cmd {
 			return cmd
 		}
 		args = append([]string{
-			"new-session", "-e", "HOME=" + home, "-e", "PIG_HOME=" + filepath.Join(home, ".pig"),
-			"-e", "PIG_CODING_AGENT_DIR=", "-e", "PIG_CODING_AGENT_SESSION_DIR=",
+			"new-session", "-e", "HOME=" + home, "-e", "OMPIG_HOME=" + filepath.Join(home, ".ompig"),
+			"-e", "OMPIG_CODING_AGENT_DIR=", "-e", "OMPIG_CODING_AGENT_SESSION_DIR=",
 			"-e", "PI_CODING_AGENT_DIR=", "-e", "PI_CODING_AGENT_SESSION_DIR=",
 			"-e", "HERDR_ENV=", "-e", "HERDR_KITTY_GRAPHICS=",
 		}, args[1:]...)
@@ -56,17 +56,17 @@ func TestTmuxServerSurvivesSessionCleanup(t *testing.T) {
 
 func TestTmuxSessionsHaveSeparateHomes(t *testing.T) {
 	requireTmux(t)
-	for _, key := range []string{"PIG_CODING_AGENT_DIR", "PIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_DIR", "PI_CODING_AGENT_SESSION_DIR", "HERDR_ENV", "HERDR_KITTY_GRAPHICS"} {
+	for _, key := range []string{"OMPIG_CODING_AGENT_DIR", "OMPIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_DIR", "PI_CODING_AGENT_SESSION_DIR", "HERDR_ENV", "HERDR_KITTY_GRAPHICS"} {
 		t.Setenv(key, t.TempDir())
 	}
 	homes := make(map[string]bool)
 	for range 2 {
-		session := "pig-isolation-" + randID()
+		session := "ompig-isolation-" + randID()
 		if out, err := tmuxCommand("new-session", "-d", "-s", session, "sleep 30").CombinedOutput(); err != nil {
 			t.Fatalf("create pane: %v: %s", err, out)
 		}
 		t.Cleanup(func() { _ = tmuxCommand("kill-session", "-t", session).Run() })
-		for _, key := range []string{"HOME", "PIG_HOME"} {
+		for _, key := range []string{"HOME", "OMPIG_HOME"} {
 			out, err := tmuxCommand("show-environment", "-t", session, key).Output()
 			if err != nil {
 				t.Fatal(err)
@@ -77,8 +77,8 @@ func TestTmuxSessionsHaveSeparateHomes(t *testing.T) {
 			}
 			homes[value] = true
 		}
-		// Agent/session overrides take precedence over HOME and PIG_HOME. Herdr's outer graphics forwarding does not describe this detached tmux pane.
-		for _, key := range []string{"PIG_CODING_AGENT_DIR", "PIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_DIR", "PI_CODING_AGENT_SESSION_DIR", "HERDR_ENV", "HERDR_KITTY_GRAPHICS"} {
+		// Agent/session overrides take precedence over HOME and OMPIG_HOME. Herdr's outer graphics forwarding does not describe this detached tmux pane.
+		for _, key := range []string{"OMPIG_CODING_AGENT_DIR", "OMPIG_CODING_AGENT_SESSION_DIR", "PI_CODING_AGENT_DIR", "PI_CODING_AGENT_SESSION_DIR", "HERDR_ENV", "HERDR_KITTY_GRAPHICS"} {
 			out, err := tmuxCommand("show-environment", "-t", session, key).Output()
 			if err != nil {
 				t.Fatal(err)

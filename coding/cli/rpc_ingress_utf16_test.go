@@ -11,9 +11,9 @@ import (
 	"slices"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 var rpcIngressUTF16Cases = []struct {
@@ -150,7 +150,7 @@ func newRPCIngressWireClient(t *testing.T) *rpcIngressWireClient {
 	ctx, cancel := context.WithTimeout(context.WithoutCancel(t.Context()), testbudget.Wait(t))
 	cmd := exec.CommandContext(ctx, binary, "--offline", "--no-session", "--mode", "rpc", "--model", "test-faux/faux-1", "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-themes", "--no-context-files")
 	cmd.Dir = root
-	cmd.Env = append(os.Environ(), "HOME="+root, "PIG_HOME="+root, "PIG_CODING_AGENT_DIR="+filepath.Join(root, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(root, "agent"), "PIG_TEST_FAUX=1")
+	cmd.Env = append(os.Environ(), "HOME="+root, "OMPIG_HOME="+root, "OMPIG_CODING_AGENT_DIR="+filepath.Join(root, "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(root, "agent"), "OMPIG_TEST_FAUX=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		cancel()

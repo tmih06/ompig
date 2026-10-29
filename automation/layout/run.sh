@@ -25,13 +25,13 @@ if ((${#options[@]})); then
     python3 -B "$here/release.py" "$root"
 fi
 cd -- "$root"
-go run "./$parity/cmd/gointerfaces" -out "$parity/interfaces/pig-go.json"
+go run "./$parity/cmd/gointerfaces" -out "$parity/interfaces/ompig-go.json"
 version=$(python3 - <<'PY'
 from pathlib import Path
 import re
 import os
-if os.environ.get('PIG_UPSTREAM_VERSION'):
-    print(os.environ['PIG_UPSTREAM_VERSION'])
+if os.environ.get('OMPIG_UPSTREAM_VERSION'):
+    print(os.environ['OMPIG_UPSTREAM_VERSION'])
     raise SystemExit
 source = Path('internal/coding/pigversion/pigversion.go').read_text()
 match = re.search(r'^const UpstreamVersion = "([^"]+)"$', source, re.MULTILINE)
@@ -43,7 +43,7 @@ PY
 go run "./$parity/cmd/interfacerecommend" \
     -inventory "$parity/interfaces/upstream-v$version.json" \
     -observable "$parity/interfaces/cli-v$version.json" \
-    -go-inventory "$parity/interfaces/pig-go.json" \
+    -go-inventory "$parity/interfaces/ompig-go.json" \
     -out "$parity/interfaces/recommendations-v$version.json"
 make coverage RESULTS=
 make custom-factory-ledger

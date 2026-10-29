@@ -20,9 +20,9 @@ import (
 	"sync"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsjson"
+	"github.com/tmih06/ompig/internal/jsjson"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 )
 
 // OpenAIConfig configures an OpenAI-compatible provider.
@@ -65,7 +65,7 @@ type OpenAIConfig struct {
 	// DynamicHeaders, when set, is called per-request with the StreamOptions
 	// and returns headers to add to that request (e.g. Copilot's X-Initiator).
 	DynamicHeaders func(transcript TranscriptContext, opts StreamOptions) map[string]string
-	// pig additive (D36): opt in to TLS without certificate verification.
+	// ompig additive (D36): opt in to TLS without certificate verification.
 	Insecure bool
 
 	// azure resolves the Azure endpoint and deployment per request (NewAzureCompletionsProvider).
@@ -156,7 +156,7 @@ type OpenAICompat struct {
 	SupportsMidConvoToolAdditions  *bool                           `json:"supportsMidConvoToolAdditions,omitempty"`
 	SupportsMidConvoToolChanges    *bool                           `json:"supportsMidConvoToolChanges,omitempty"`
 	AllowedFallbackModels          []AnthropicAllowedFallbackModel `json:"allowedFallbackModels,omitempty"`
-	// Extra holds the members PiG does not model, as written. Pi's compat schemas allow additional properties and a compat object keeps
+	// Extra holds the members Ompig does not model, as written. Pi's compat schemas allow additional properties and a compat object keeps
 	// them (model-config.ts getProvider, provider-composer.ts mergeCompat), so a custom API can read its own compat settings.
 	Extra map[string]json.RawMessage `json:"-"`
 }
@@ -973,7 +973,7 @@ func decodeOpenAIReasoningDetail(raw json.RawMessage) (*openAIReasoningDetail, b
 	}
 	var requiredValue string
 	requiredRaw, hasRequired := values[required]
-	// pig divergence (D122): OpenRouter streams the signature of a reasoning.text block in a delta without text (pi-mono #9534); Pi drops it.
+	// ompig divergence (D122): OpenRouter streams the signature of a reasoning.text block in a delta without text (pi-mono #9534); Pi drops it.
 	signatureOnly := typ == "reasoning.text" && !hasRequired && isJSONString(values["signature"])
 	if !signatureOnly && (bytes.Equal(requiredRaw, []byte("null")) || json.Unmarshal(requiredRaw, &requiredValue) != nil) {
 		return nil, false
@@ -1415,7 +1415,7 @@ func (p *openAIProvider) Stream(ctx context.Context, transcript TranscriptContex
 		p = resolved
 	}
 	ctx = withProviderRequestOptions(ctx, opts)
-	// pig divergence (D48): the agent loop asks for the tool-flow repair.
+	// ompig divergence (D48): the agent loop asks for the tool-flow repair.
 	if opts.RepairToolFlow {
 		transcript = transcript.withRepairedToolFlow()
 	}
@@ -1446,7 +1446,7 @@ func (p *openAIProvider) Stream(ctx context.Context, transcript TranscriptContex
 		req.ToolStream = new(true)
 	}
 	// Diagnostic: log tool count for debugging.
-	if os.Getenv("PIG_DEBUG_TOOLS") == "1" {
+	if os.Getenv("OMPIG_DEBUG_TOOLS") == "1" {
 		sent := 0
 		if req.Tools != nil {
 			sent = len(*req.Tools)
@@ -1471,7 +1471,7 @@ func (p *openAIProvider) Stream(ctx context.Context, transcript TranscriptContex
 		req.Priority = &priority
 	}
 	// Upstream sends store: false whenever compat.supportsStore holds, which by
-	// default is every provider except the non-standard ones. PiG used to send
+	// default is every provider except the non-standard ones. Ompig used to send
 	// store: true, which asks OpenAI to retain the conversation.
 	if *p.compat().SupportsStore {
 		f := false

@@ -3,11 +3,11 @@ package subprocess
 import (
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/boundarywire"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/boundarywire"
 )
 
 // boundaryEventWire returns a turn_end or agent_before_settle event in a form that encodes to the same JSON as the event, with the projected part of its context preview encoded once per dispatch (boundarywire). Other events, and events of a dispatch without a cache, are returned unchanged.

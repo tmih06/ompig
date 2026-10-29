@@ -1,5 +1,5 @@
 # Behavior family: selectors
-# Surface: `pi config` / `pig config` with a populated agent dir
+# Surface: `pi config` / `ompig config` with a populated agent dir
 #
 # Upstream evidence (pi v0.81.1, probed in tmux 100×35,
 # PI_CODING_AGENT_DIR=testdata/pi-agent-full):
@@ -18,9 +18,9 @@
 #         Themes
 #           [x] zinc.json
 #
-# Mirrors pig exactly modulo the group label which carries the binary's
-# config-root name. Upstream prints `User (~/.pi/agent/)`; pig prints
-# `User (~/.pig/agent/)`. This is the documented D2 divergence (separate
+# Mirrors ompig exactly modulo the group label which carries the binary's
+# config-root name. Upstream prints `User (~/.pi/agent/)`; ompig prints
+# `User (~/.ompig/agent/)`. This is the documented D2 divergence (separate
 # binary, separate config root). normalize_replace folds both to a
 # canonical form so the rest of the overlay can be asserted with
 # output_normalized_equal.
@@ -53,7 +53,7 @@ driver = "interactive-tmux"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "sample-skill"
+ready_pattern_ompig = "sample-skill"
 ready_pattern_pi = "sample-skill"
 ready_timeout_seconds = 15
 capture_start = "Global Resources"
@@ -63,9 +63,9 @@ cwd = "testdata/empty-project"
 
 [env]
 override_base_args = true
-pig = ["PIG_HOME=testdata/pig-home-full", "HOME=testdata/home-empty"]
+ompig = ["OMPIG_HOME=testdata/ompig-home-full", "HOME=testdata/home-empty"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent-full", "HOME=testdata/home-empty"]
-pig_args = ["config"]
+ompig_args = ["config"]
 pi_args = ["config"]
 
 [assert]
@@ -87,17 +87,17 @@ output_normalized_equal = true
 runtime_ratio_max = 1.40
 runs = 1
 
-# D2: fold pig's config-root label to upstream's so the rest of the
+# D2: fold ompig's config-root label to upstream's so the rest of the
 # overlay (groups, subgroups, items, checkboxes, cursor) is asserted
 # byte-for-byte under normalize().
 # normalize-rationale: D2 config-root names and isolated snapshot suffixes differ by binary.
 [[assert.normalize_replace]]
-pattern = '~/\.pig/agent/'
+pattern = '~/\.ompig/agent/'
 with    = '~/.pi/agent/'
 reason = "D2: the selector subtitle names the host configuration directory."
 
 # normalize-rationale: Replace only a complete allocated agent-root path inside the User label. Never consume its closing parenthesis, trailing text or a wrapped row.
 [[assert.normalize_replace]]
-pattern = '(User \()/[^\n)]*/parity-snap-(?:PIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/'
+pattern = '(User \()/[^\n)]*/parity-snap-(?:OMPIG_HOME-[0-9]+/agent|PI_CODING_AGENT_DIR-[0-9]+)/'
 with = '${1}<agent>/'
 reason = "D2: separate agent roots vary by host and run. Preserve the complete label suffix, row structure and resource names."

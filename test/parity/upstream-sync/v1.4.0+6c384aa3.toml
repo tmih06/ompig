@@ -104,7 +104,7 @@ path = "packages/ai/src/api/cloudflare-ai-binding.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:ai/cloudflare_ai_binding_test.go#TestCreateAIBindingFetchPassesRequestsToTheBindingUntouched", "test:ai/cloudflare_ai_binding_test.go#TestCreateAIBindingFetchRejectsABindingWithoutFetch"]
-rationale = "PORT_MAP row is ✅ ported (ai/cloudflare_ai_binding.go (AIBinding, CreateAIBindingFetch and the auth sentinel as a library fetch adapter; no PiG product path builds a Workers binding, so it has no in-product caller; cloudflare-ai-binding.test.ts cases in ai/cloudflare_ai_binding_test.go; HTTPS AI Gateway stays in ai/cloudflare.go)). coverage.md reports 2 behavioral verifications for this file (0 scenarios whose covers list it, 2 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (ai/cloudflare_ai_binding.go (AIBinding, CreateAIBindingFetch and the auth sentinel as a library fetch adapter; no Ompig product path builds a Workers binding, so it has no in-product caller; cloudflare-ai-binding.test.ts cases in ai/cloudflare_ai_binding_test.go; HTTPS AI Gateway stays in ai/cloudflare.go)). coverage.md reports 2 behavioral verifications for this file (0 scenarios whose covers list it, 2 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/ai/src/api/cloudflare-workers-ai-system-one.lazy.ts"
@@ -425,7 +425,7 @@ rationale = "PORT_MAP row is ✅ ported (ai/oauth_openai_chatgpt.go). coverage.m
 path = "packages/ai/src/auth/oauth/openai-codex.ts"
 change = "added"
 disposition = "ported"
-evidence = ["scenario:test/parity/scenarios/oauth/05-oauth-openai-codex.toml", "scenario:test/parity/scenarios/oauth/10-codex-device-credential-metadata.toml", "test:ai/pig_identity_test.go#TestLoginOpenAICodexAuthorizeURLNamesPiGAsOriginator", "test:ai/oauth_on_auth_instructions_test.go#TestOAuthLoginReportsItsAuthorizeURLAndPisInstructions", "test:ai/oauth_openai_codex_upstream_test.go#TestOpenAICodexOAuthUpstream"]
+evidence = ["scenario:test/parity/scenarios/oauth/05-oauth-openai-codex.toml", "scenario:test/parity/scenarios/oauth/10-codex-device-credential-metadata.toml", "test:ai/ompig_identity_test.go#TestLoginOpenAICodexAuthorizeURLNamesOmpigAsOriginator", "test:ai/oauth_on_auth_instructions_test.go#TestOAuthLoginReportsItsAuthorizeURLAndPisInstructions", "test:ai/oauth_openai_codex_upstream_test.go#TestOpenAICodexOAuthUpstream"]
 rationale = "PORT_MAP row is ✅ ported (ai/oauth_openai_codex.go). coverage.md reports 5 behavioral verifications for this file (2 scenarios whose covers list it, 3 named unit tests); the first of each are cited."
 
 [[files]]
@@ -496,7 +496,7 @@ path = "packages/ai/src/cli.ts"
 change = "added"
 disposition = "designed-out"
 evidence = ["test:ai/auth_create_test.go#TestAuthStorageCreatesEmptyFileOnConstruction"]
-rationale = "Pi 89c921d8 writes the pi-ai CLI's auth file with mode 0600. PiG ships no pi-ai CLI; the credential file its login commands write is ai.AuthStorage's auth.json, created and rewritten with mode 0600 (the cited test)."
+rationale = "Pi 89c921d8 writes the pi-ai CLI's auth file with mode 0600. Ompig ships no pi-ai CLI; the credential file its login commands write is ai.AuthStorage's auth.json, created and rewritten with mode 0600 (the cited test)."
 
 [[files]]
 path = "packages/ai/src/compat.ts"
@@ -1287,7 +1287,7 @@ path = "packages/ai/src/utils/abort.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "PORT_MAP records this file n/a with the reason: (AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; pig uses context.Context cancellation + select (D3): runtime mechanics, designed out)"
+rationale = "PORT_MAP records this file n/a with the reason: (AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; ompig uses context.Context cancellation + select (D3): runtime mechanics, designed out)"
 
 [[files]]
 path = "packages/ai/src/utils/diagnostics.ts"
@@ -1336,7 +1336,7 @@ path = "packages/ai/src/utils/identity.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:ai/identity_test.go#TestFormatUserAgentForms", "test:ai/identity_test.go#TestMergeClientIdentityFieldByField", "test:ai/identity_test.go#TestIdentityAttributesOpenRouterRequests", "test:ai/identity_oracle_test.go#TestProviderIdentityHeadersMatchPi"]
-rationale = "ported as ai/identity.go and ai/identity_models.go (ai.ClientIdentity, MergeClientIdentity, FormatUserAgent, GetAttributionHeaders, GetOpenCodeSessionHeaders, WithClientIdentity over ClientIdentityModels because Go has no Proxy). Divergences: PiAttribution and the user agent carry PiG's values (D26, D65). Pi adc5fa9f and 04a93bad move client identity and attribution into pi-ai; the deleted coding-agent sdk-openrouter-attribution.test.ts is replaced by ai identity.test.ts and coding-agent sdk-client-identity.test.ts (ported in ai/identity_test.go and coding/client_identity_test.go)."
+rationale = "ported as ai/identity.go and ai/identity_models.go (ai.ClientIdentity, MergeClientIdentity, FormatUserAgent, GetAttributionHeaders, GetOpenCodeSessionHeaders, WithClientIdentity over ClientIdentityModels because Go has no Proxy). Divergences: PiAttribution and the user agent carry Ompig's values (D26, D65). Pi adc5fa9f and 04a93bad move client identity and attribution into pi-ai; the deleted coding-agent sdk-openrouter-attribution.test.ts is replaced by ai identity.test.ts and coding-agent sdk-client-identity.test.ts (ported in ai/identity_test.go and coding/client_identity_test.go)."
 
 [[files]]
 path = "packages/ai/src/utils/json-parse.ts"
@@ -1469,7 +1469,7 @@ path = "packages/ai/src/utils/version.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:ai/identity_test.go#TestClientIdentityVersionDefaultsToTheProductVersion"]
-rationale = "PI_AI_VERSION is ai.ProductVersion, PiG's composite version (D65), the default version of the detailed User-Agent. Pi 4a080252 (Release v1.4.0) moves the constant to 1.4.0; PiG's value derives from the upstream pin (internal/coding/pigversion), already at 1.4.0, so there is no separate constant to change."
+rationale = "PI_AI_VERSION is ai.ProductVersion, Ompig's composite version (D65), the default version of the detailed User-Agent. Pi 4a080252 (Release v1.4.0) moves the constant to 1.4.0; Ompig's value derives from the upstream pin (internal/coding/pigversion), already at 1.4.0, so there is no separate constant to change."
 
 [[files]]
 path = "packages/chord/src/cell.ts"
@@ -1483,7 +1483,7 @@ path = "packages/chord/src/cluster.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/cluster_upstream_test.go#TestCrossHostReloadPreparesEveryHostCommitsTheServerFirstThenTheWorkersCodeVersionsStayInStep", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAFailingVoteAbortsEveryHostTheErrorKeepsItsCodeAndNamesTheHost", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAWorkerGateBlockedPastItsDeadlineAbortsTheWholeReload", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadRemovesFacetsFromServerAndWorkersReconcilesRemovalTombstonesAndClearsThemOnReAdd", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadOnlyTheServerCoordinatesReloads", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadBrowsersAreNotParticipantsTheySeeShapeAndResetPushesOrUpgradeRequired", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAnAbortWhileAWorkerIsStillPreparingALateOpenClosesItselfAndTheWorkerCanReloadAgain", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildThatSaysHelloWhileAReloadRunsIsReconciledAfterItNeverLeftInStepWithTheOldCode", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildKeepsThePreviousCodeVersionUntilItsParentRetiredItSpec12", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildReconciledAfterItsParentRetiredOldCodeVersionsMayRetireItsOwnPreviousOneAtOnce", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAReconciliationRunningWhenAReloadStartsSyncsTheChildOnlyAfterItToTheCommittedCodeVersion", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAChildBehindWhoseHelloWaitsForARunningReloadIsFencedAtOnceItsCallsUpAreAdmittedSpec9", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadAReconnectingChildBehindItsParentStillRetainingItsPreviousCodeVersionReconcilesWithoutWaitingOutTheRetireDeadline", "test:chord/host/cluster_upstream_test.go#TestCrossHostReloadForcedRetirementCancelsABrowserCallRelayedToAWorkerBeforeTheServerClosesTheOldCodesResources"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 00d8d049: chord/host/cluster.go runClusterReload retires before it sends prepare and builds participants after; reconcileChild waits out a running reload and announces the retired code versions before prepare and when marking a child synced; a child hello during a cluster reload is synced or reconciled when the reload ends (host.go peerHello, reloadEnded). 2688aba7/d20c6e96: epoch is codeVersion in RetireFrame and peer bookkeeping. cluster.test.ts cases at b06c1f2c are ported in cluster_upstream_test.go, including the seven new 00d8d049 cases."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 00d8d049: chord/host/cluster.go runClusterReload retires before it sends prepare and builds participants after; reconcileChild waits out a running reload and announces the retired code versions before prepare and when marking a child synced; a child hello during a cluster reload is synced or reconciled when the reload ends (host.go peerHello, reloadEnded). 2688aba7/d20c6e96: epoch is codeVersion in RetireFrame and peer bookkeeping. cluster.test.ts cases at b06c1f2c are ported in cluster_upstream_test.go, including the seven new 00d8d049 cases."
 
 [[files]]
 path = "packages/chord/src/connection.ts"
@@ -1567,7 +1567,7 @@ path = "packages/chord/src/errors.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/errors_test.go#TestForbiddenDefaultsOnlyAnOmittedMessage", "test:chord/host/errors_test.go#TestChordErrorCarriesPiFields", "test:chord/host/errors_test.go#TestIsChordErrorIsInstanceofWithAnOptionalCode", "test:chord/host/errors_test.go#TestAsChordErrorKeepsChordErrorsAndWrapsOthers", "test:chord/host/errors_test.go#TestRunAllRunsEveryStepAndAggregates", "test:chord/host/wire_test.go#TestFrameSchemaIsPiFrameSchema", "test:chord/host/wire_test.go#TestIsFrameChecksErrorCodesAndContractTokens", "test:chord/host/host_upstream_test.go#TestHostRejectsDuplicateDeclarationNames", "test:chord/host/host_upstream_test.go#TestHostServeRefusesALifetimeHostTheTypeCannotHaveAtCompileTimeAndAtRuntime", "test:chord/host/host_upstream_test.go#TestHostOnlyObjectsOfLifetimeHostRegisterTablesFollowRegistrationOrder"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/d20c6e96/301617df change reason strings and messages (object for record, reference for handle, invalid/not_host_lifetime for not_eager, invalid/duplicate); chord/host/errors.go and its callers use Pi's b06c1f2c text, held by errors_test.go, the frame schema hash test and the host lifetime and duplicate-name tests."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/d20c6e96/301617df change reason strings and messages (object for record, reference for handle, invalid/not_host_lifetime for not_eager, invalid/duplicate); chord/host/errors.go and its callers use Pi's b06c1f2c text, held by errors_test.go, the frame schema hash test and the host lifetime and duplicate-name tests."
 
 [[files]]
 path = "packages/chord/src/host.ts"
@@ -1609,7 +1609,7 @@ path = "packages/chord/src/manager.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/manager_upstream_test.go#TestHostManagerAChildWithoutALockDoesNotInheritTheParentsLock", "test:chord/host/manager_upstream_test.go#TestHostManagerStartsAChildHostLinksItStopsItGracefully", "test:chord/host/manager_upstream_test.go#TestHostManagerAChildOwnedKernelLockAdmitsOneLiveProcessReplaceWaitsForTheExitBeforeTheNextStart", "test:chord/host/manager_upstream_test.go#TestHostManagerAGracefulExitStillTakesTheChildsDescendantsWithIt", "test:chord/host/manager_upstream_test.go#TestHostManagerKillsTheProcessTreeWhenAChildIgnoresShutdownPastTheGracePeriod", "test:chord/host/manager_upstream_test.go#TestHostManagerReportsAFatalChildAsAFailedStart", "test:chord/host/manager_upstream_test.go#TestHostManagerStopsAnIdleChildWhenKeepAliveSaysSo", "test:chord/host/manager_upstream_test.go#TestHostManagerIdleForCountsFromTheBusyToIdleTransition", "test:chord/host/manager_upstream_test.go#TestHostManagerKeepsFractionalActivityCounts", "test:chord/host/manager_upstream_test.go#TestHostManagerStartIsIdempotentAndStopIsGraceful", "test:chord/host/manager_upstream_test.go#TestHostManagerKillsTreeAfterGrace", "test:chord/host/manager_upstream_test.go#TestHostManagerFatalChildFailsStart", "test:chord/host/manager_upstream_test.go#TestHostManagerExitBeforeReadyAndReadyTimeout", "test:chord/host/manager_upstream_test.go#TestHostManagerKeepAliveStopsIdleChild", "test:chord/host/manager_upstream_test.go#TestHostManagerStopWaitsForPendingStart", "test:chord/host/manager_upstream_test.go#TestHostManagerReplaceWaitsForExit", "test:chord/host/manager_upstream_test.go#TestControlMessageJSON", "test:chord/host/manager_upstream_test.go#TestChildControlOverNodeChannel", "test:chord/host/manager_upstream_test.go#TestProcessLockAdmitsOneHolderWhenTheTemporaryDirectoryIsTooDeepForASocketPath", "test:chord/host/manager_upstream_test.go#TestProcessLock", "test:chord/host/link_upstream_test.go#TestLinksIPCAWriteThatFailsAfterThePeerProcessExitedEPIPEEndsTheLinkInsteadOfRaisingAnUnhandledError", "test:chord/host/manager_process_channel_test.go#TestProcessChannelIsNodesIPCChannel"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 39294a5e: host-manager control messages to a gone peer are dropped (chord/host/manager.go and manager_fork.go send with ignoreSendError; IpcChannel.Send takes a callback that reports a failed write off the sender's stack). 2688aba7 renames only. manager.test.ts at b06c1f2c is ported in manager_upstream_test.go."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 39294a5e: host-manager control messages to a gone peer are dropped (chord/host/manager.go and manager_fork.go send with ignoreSendError; IpcChannel.Send takes a callback that reports a failed write off the sender's stack). 2688aba7 renames only. manager.test.ts at b06c1f2c is ported in manager_upstream_test.go."
 
 [[files]]
 path = "packages/chord/src/node.ts"
@@ -1644,7 +1644,7 @@ path = "packages/chord/src/registry.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:chord/host/registry_test.go#TestDefineRegistryIsPlainDataWithErrorConflictByDefault", "test:chord/host/registry_test.go#TestRegistryTableIsAnOrderedReadonlyMap", "test:chord/host/host_upstream_test.go#TestHostOnlyObjectsOfLifetimeHostRegisterTablesFollowRegistrationOrder", "test:chord/host/host_upstream_test.go#TestHostRejectsConflictingRegistrations", "test:chord/host/reload_upstream_test.go#TestReloadKeepsRegistryTablesPerCodeVersion", "test:chord/host/host_test.go#TestRegistryViewAndSubscribers"]
-rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits PiG ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/301617df: only objects of lifetime \"host\" may register (invalid/not_host_lifetime, was not_eager) and tables are kept per code version; chord/host/registry.go and object.go follow, held by the registry and lifetime tests."
+rationale = "Pi 3daa2028..b06c1f2c changes this file only in commits Ompig ports for 0.5.0 (chord S1: 2688aba7, d20c6e96, 301617df; S2: 00d8d049, 39294a5e); protocol 3 (aa9cf15b) and protocol 4 (b45e0ebc) do not touch it. 2688aba7/301617df: only objects of lifetime \"host\" may register (invalid/not_host_lifetime, was not_eager) and tables are kept per code version; chord/host/registry.go and object.go follow, held by the registry and lifetime tests."
 
 [[files]]
 path = "packages/chord/src/reload.ts"
@@ -1924,7 +1924,7 @@ path = "packages/coding-agent/src/cli/args.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/model-resolver-selector/01-list-models-table.toml", "scenario:test/parity/scenarios/cli-utils/01-print-initial-message-file-args.toml", "scenario:test/parity/scenarios/model-resolver-selector/02-list-models-search.toml", "test:coding/cli/mcp_command_test.go#TestHelpMentionsMcpCommandAndBuiltinExtensions"]
-rationale = "PORT_MAP row is ✅ ported (coding/cli/args.go). coverage.md reports 9 behavioral verifications for this file (9 scenarios whose covers list it, 0 named unit tests); the first of each are cited. Pi ede2c9b46 (#11338) rewords two lines of --help: `mcp <command>` reads `Manage MCP servers` and `--export <file> [output]` names the optional output file. PiG prints the help text generated from the pinned source (coding/cli/help_upstream.txt, automation/gen/gen-help.sh), which follows the pin; PiG's export flag already takes the optional output argument."
+rationale = "PORT_MAP row is ✅ ported (coding/cli/args.go). coverage.md reports 9 behavioral verifications for this file (9 scenarios whose covers list it, 0 named unit tests); the first of each are cited. Pi ede2c9b46 (#11338) rewords two lines of --help: `mcp <command>` reads `Manage MCP servers` and `--export <file> [output]` names the optional output file. Ompig prints the help text generated from the pinned source (coding/cli/help_upstream.txt, automation/gen/gen-help.sh), which follows the pin; Ompig's export flag already takes the optional output argument."
 
 [[files]]
 path = "packages/coding-agent/src/cli/auth-check.ts"
@@ -2001,14 +2001,14 @@ path = "packages/coding-agent/src/cli/startup-ui.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/cli-utils/03-startup-resume-picker.toml", "scenario:test/parity/scenarios/session/04-missing-session-cwd-startup-selector.toml", "scenario:test/parity/scenarios/session/06-missing-session-cwd-continue.toml"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/startup_ui.go (ShowStartupSelector/ShowStartupInput/SelectStartupSession; startStartupTui color-scheme + OSC 11 background query with reply consumption). First-time setup: upstream shouldRunFirstTimeSetup (startup-ui.ts:122-140, called from main.ts:674) returns false unless package @earendil-works/pi-coding-agent, app pi and .pi config dir; PiG's own gate (D88) is coding/cli/extensions.go shouldRunFirstTimeSetup and showFirstTimeSetup is ShowFirstTimeSetup in internal/codingagent/first_time_setup.go, run on its own startup screen before runtime services as main.ts:674 does. The four shouldRunFirstTimeSetup cases in test/first-time-setup.test.ts stay designedOutCases (their real-CLI inputs assert PiG's D88 gate) and its four analytics cases stay ported). coverage.md reports 5 behavioral verifications for this file (5 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/startup_ui.go (ShowStartupSelector/ShowStartupInput/SelectStartupSession; startStartupTui color-scheme + OSC 11 background query with reply consumption). First-time setup: upstream shouldRunFirstTimeSetup (startup-ui.ts:122-140, called from main.ts:674) returns false unless package @earendil-works/pi-coding-agent, app pi and .pi config dir; Ompig's own gate (D88) is coding/cli/extensions.go shouldRunFirstTimeSetup and showFirstTimeSetup is ShowFirstTimeSetup in internal/codingagent/first_time_setup.go, run on its own startup screen before runtime services as main.ts:674 does. The four shouldRunFirstTimeSetup cases in test/first-time-setup.test.ts stay designedOutCases (their real-CLI inputs assert Ompig's D88 gate) and its four analytics cases stay ported). coverage.md reports 5 behavioral verifications for this file (5 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/config.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/selectors/02-config-resources-list.toml", "scenario:test/parity/scenarios/settings/10-pi-directories-opt-in.toml", "scenario:test/parity/scenarios/cli-utils/16-native-self-update-command-ownership.toml", "test:internal/codingagent/paths_test.go#TestGetDocsPathIsTheAbsoluteDocsDirectoryOfTheConfigRoot", "test:internal/codingagent/paths_test.go#TestGetDocsPathIsTheAbsoluteDocsDirectoryOfTheConfigRoot", "test:internal/codingagent/paths_test.go#TestGetReadmePathAndGetExamplesPath"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/paths.go + internal/codingagent/selfupdate_package_command.go + internal/codingagent/selfupdate_tier.go (D2 directory opt-in; D39 native update ownership); the 1.0.3 quickJSWasmPath cache and in-memory codemode worker URL are designed out: PiG embeds its code in one native executable, as Pi's Bun binary does; detectInstallChange is ported as the additive D95 in internal/installchange/installchange.go, internal/codingagent/windows_self_update.go, coding/upstream.go). coverage.md reports 8 behavioral verifications for this file (3 scenarios whose covers list it, 5 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/paths.go + internal/codingagent/selfupdate_package_command.go + internal/codingagent/selfupdate_tier.go (D2 directory opt-in; D39 native update ownership); the 1.0.3 quickJSWasmPath cache and in-memory codemode worker URL are designed out: Ompig embeds its code in one native executable, as Pi's Bun binary does; detectInstallChange is ported as the additive D95 in internal/installchange/installchange.go, internal/codingagent/windows_self_update.go, coding/upstream.go). coverage.md reports 8 behavioral verifications for this file (3 scenarios whose covers list it, 5 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/core/agent-session-runtime.ts"
@@ -2057,7 +2057,7 @@ path = "packages/coding-agent/src/core/bug-report-upload.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "PORT_MAP records this file n/a with the reason: (designed out: D62, PiG never uploads bug reports)"
+rationale = "PORT_MAP records this file n/a with the reason: (designed out: D62, Ompig never uploads bug reports)"
 
 [[files]]
 path = "packages/coding-agent/src/core/bug-report.ts"
@@ -2084,7 +2084,7 @@ rationale = "PORT_MAP row is ✅ ported (internal/codingagent/cache_warmer.go + 
 path = "packages/coding-agent/src/core/client-identity.ts"
 change = "added"
 disposition = "ported"
-evidence = ["test:coding/client_identity_test.go#TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWhenTelemetryIsDisabled", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWithPITelemetryZero"]
+evidence = ["test:coding/client_identity_test.go#TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWhenTelemetryIsDisabled", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWithPITelemetryZero"]
 rationale = "ported as coding/client_identity.go (getClientIdentity), set per request in Session.buildRequestOptions. Pi adc5fa9f and 04a93bad move client identity and attribution into pi-ai; the deleted coding-agent sdk-openrouter-attribution.test.ts is replaced by ai identity.test.ts and coding-agent sdk-client-identity.test.ts (ported in ai/identity_test.go and coding/client_identity_test.go). Pi's deleted core/provider-attribution.ts maps to ai GetAttributionHeaders plus this identity; its Cloudflare User-Agent attribution no longer exists."
 
 [[files]]
@@ -2386,7 +2386,7 @@ path = "packages/coding-agent/src/core/remote-catalog-provider.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/model-resolver-selector/27-list-models-personalized-openrouter-catalog.toml", "test:internal/codingagent/remote_catalog_provider_test.go#TestMergeRemoteCatalogModelsKeysByTypeAndIDInFirstSeenOrder", "test:internal/codingagent/remote_catalog_provider_test.go#TestParseRemoteCatalogStampsTheRequestedProvider", "test:internal/codingagent/remote_catalog_provider_upstream_test.go#TestRemoteCatalogProviderUpstream"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/remote_catalog_provider.go (WithRemoteCatalog: TestRemoteCatalogProviderUpstream) + internal/codingagent/remote_catalog_registry.go (built-in provider wiring: TestRegistryAppliesTheRemoteCatalogOverlayToBuiltInProviders; TestModelCatalogProtocolWithTheCurrentClient); D64 routes the endpoint to pi-in-go.dev. The bundled catalog's generation time comes from cmd/gen-models, so a stored remote catalog applies only when newer (TestRemoteCatalogProviderUpstream)). coverage.md reports 7 behavioral verifications for this file (1 scenarios whose covers list it, 6 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/remote_catalog_provider.go (WithRemoteCatalog: TestRemoteCatalogProviderUpstream) + internal/codingagent/remote_catalog_registry.go (built-in provider wiring: TestRegistryAppliesTheRemoteCatalogOverlayToBuiltInProviders; TestModelCatalogProtocolWithTheCurrentClient); D64 routes the endpoint to ompig.dev. The bundled catalog's generation time comes from cmd/gen-models, so a stored remote catalog applies only when newer (TestRemoteCatalogProviderUpstream)). coverage.md reports 7 behavioral verifications for this file (1 scenarios whose covers list it, 6 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/core/resolve-config-value.ts"
@@ -2413,7 +2413,7 @@ rationale = "PORT_MAP row is ✅ ported (ai/runtime_credentials.go + internal/co
 path = "packages/coding-agent/src/core/sdk.ts"
 change = "added"
 disposition = "ported"
-evidence = ["test:coding/client_identity_test.go#TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWhenTelemetryIsDisabled", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWithPITelemetryZero"]
+evidence = ["test:coding/client_identity_test.go#TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWhenTelemetryIsDisabled", "test:coding/client_identity_test.go#TestSDKTurnsAttributionOffWithPITelemetryZero"]
 rationale = "Pi adc5fa9f and 04a93bad: the SDK sets identity: getClientIdentity(settingsManager) on the agent, read per request so a telemetry change applies at once, and drops mergeProviderAttributionHeaders for withOpenCodeSessionHeader. coding/session_cache_warming.go buildRequestOptions sets the identity; the tests assert the detailed User-Agent with CLI-agent attribution, and attribution off for the telemetry setting and PI_TELEMETRY=0."
 
 [[files]]
@@ -2750,7 +2750,7 @@ path = "packages/coding-agent/src/extensions/index.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:coding/cli/llama_test.go#TestStartBuiltInLlamaRestoresTheStoredCatalog"]
-rationale = "PORT_MAP row is ✅ ported (coding/cli/llama.go + internal/codingagent/llama/host.go (built-in llama.cpp provider and /llama registered natively in every mode; Stock PiG has no inline-extension runtime)). coverage.md reports 1 behavioral verifications for this file (0 scenarios whose covers list it, 1 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (coding/cli/llama.go + internal/codingagent/llama/host.go (built-in llama.cpp provider and /llama registered natively in every mode; Stock Ompig has no inline-extension runtime)). coverage.md reports 1 behavioral verifications for this file (0 scenarios whose covers list it, 1 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/llama/client.ts"
@@ -2806,7 +2806,7 @@ path = "packages/coding-agent/src/extensions/mcp/config.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:coding/mcpext/config_test.go#TestMCPConfigReadsAndEditsMcpJSONFilesThatStartWithAUTF8BOM", "test:internal/codingagent/radius_login_mcp_offer_upstream_test.go#TestRadiusMcpServerConfigReadsAMcpJSONThatStartsWithAUTF8BOM"]
-rationale = "Pi bdd9f039 (#11191): readConfigFile and editMcpServers strip a UTF-8 BOM before parsing; coding/mcpext/config.go does the same for both and so do pig mcp add and remove."
+rationale = "Pi bdd9f039 (#11191): readConfigFile and editMcpServers strip a UTF-8 BOM before parsing; coding/mcpext/config.go does the same for both and so do ompig mcp add and remove."
 
 [[files]]
 path = "packages/coding-agent/src/extensions/mcp/index.ts"
@@ -2925,7 +2925,7 @@ path = "packages/coding-agent/src/modes/interactive/components/armin.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/slash-commands/13-armin-bitmap.toml", "test:internal/codingagent/armin_test.go#TestArminAnimationDisposalRejectsQueuedFrame", "test:internal/codingagent/armin_test.go#TestArminAnimationDisposalRejectsQueuedFrame", "test:internal/codingagent/armin_test.go#TestArminAnimationDisposalRejectsQueuedFrame"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/armin.go + internal/codingagent/interactive_easter_eggs.go (D87: a pig head labeled pigsayhi; /pigsayhi is an alias)). coverage.md reports 20 behavioral verifications for this file (1 scenarios whose covers list it, 19 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/armin.go + internal/codingagent/interactive_easter_eggs.go (D87: a ompig head labeled pigsayhi; /pigsayhi is an alias)). coverage.md reports 20 behavioral verifications for this file (1 scenarios whose covers list it, 19 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/assistant-message.ts"
@@ -2995,7 +2995,7 @@ path = "packages/coding-agent/src/modes/interactive/components/custom-entry.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/extensions-runtime/18-subprocess-entry-renderer.toml"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/interactive.go addCustomEntryToChat (rebuild + live-append, Spacer(1) + expand-toggle) over the entry-renderer wire in coding/extension/host/subprocess/{protocol.go,host.go,render_proxy.go} + RegisterEntryRenderer in extensions/sdk{,-rs,-py} + runtime-node. Cross-SDK verified by extension-conformance (inproc-go reference vs subprocess go/rust/python) + parity scenario extensions-runtime/18-subprocess-entry-renderer (pi 0.84.0 vs pig byte-identical, mutation-proven)). coverage.md reports 1 behavioral verifications for this file (1 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/interactive.go addCustomEntryToChat (rebuild + live-append, Spacer(1) + expand-toggle) over the entry-renderer wire in coding/extension/host/subprocess/{protocol.go,host.go,render_proxy.go} + RegisterEntryRenderer in extensions/sdk{,-rs,-py} + runtime-node. Cross-SDK verified by extension-conformance (inproc-go reference vs subprocess go/rust/python) + parity scenario extensions-runtime/18-subprocess-entry-renderer (pi 0.84.0 vs ompig byte-identical, mutation-proven)). coverage.md reports 1 behavioral verifications for this file (1 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/custom-message.ts"
@@ -3030,14 +3030,14 @@ path = "packages/coding-agent/src/modes/interactive/components/easter-egg-3d.laz
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/fullscreen/11-logo-click-animation.toml", "scenario:test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/pig_logo_animation_play.go + internal/codingagent/startup_header.go + internal/codingagent/interactive_easter_eggs.go (header click and fullscreen /arminsayshi; D87: PiG's pig models; the dynamic import is designed out, Go links the module)). coverage.md reports 2 behavioral verifications for this file (2 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/ompig_logo_animation_play.go + internal/codingagent/startup_header.go + internal/codingagent/interactive_easter_eggs.go (header click and fullscreen /arminsayshi; D87: Ompig's ompig models; the dynamic import is designed out, Go links the module)). coverage.md reports 2 behavioral verifications for this file (2 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/fullscreen/11-logo-click-animation.toml", "scenario:test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/pig_egg3d.go + internal/codingagent/pig_logo_animation.go + internal/codingagent/pig_logo_animation_play.go (D87: the Pi-logo kind with the pig of the PiG mark and its running pig; the Armin kind with the sprite's pig head)). coverage.md reports 2 behavioral verifications for this file (2 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/ompig_egg3d.go + internal/codingagent/ompig_logo_animation.go + internal/codingagent/ompig_logo_animation_play.go (D87: the Pi-logo kind with the ompig of the Ompig mark and its running ompig; the Armin kind with the sprite's ompig head)). coverage.md reports 2 behavioral verifications for this file (2 scenarios whose covers list it, 0 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/extension-editor.ts"
@@ -3065,7 +3065,7 @@ path = "packages/coding-agent/src/modes/interactive/components/first-time-setup.
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/codingagent/first_time_setup_test.go#TestFirstTimeSetupCreateYourOwnShowsTheHintAndKeepsTheSprite", "test:internal/codingagent/first_time_setup_test.go#TestFirstTimeSetupHintUsesLowercaseKeyText", "test:internal/codingagent/first_time_setup_test.go#TestFirstTimeSetupKeepsTheHighlightedSpriteThroughAnalyticsAndSubmit"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/first_time_setup.go (FirstTimeSetupComponent; D88 adds the sprite step and the pig-head logo)). coverage.md reports 9 behavioral verifications for this file (0 scenarios whose covers list it, 9 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/first_time_setup.go (FirstTimeSetupComponent; D88 adds the sprite step and the ompig-head logo)). coverage.md reports 9 behavioral verifications for this file (0 scenarios whose covers list it, 9 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/footer.ts"
@@ -3128,7 +3128,7 @@ path = "packages/coding-agent/src/modes/interactive/components/pi-logo.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "PORT_MAP records this file n/a with the reason: (designed out: D2 draws the PiG mark, coding/piglogin, instead of Pi's logo)"
+rationale = "PORT_MAP records this file n/a with the reason: (designed out: D2 draws the Ompig mark, coding/piglogin, instead of Pi's logo)"
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/components/radius-login-selector.ts"
@@ -3296,7 +3296,7 @@ path = "packages/coding-agent/src/modes/interactive/session-share.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/codingagent/session_share_test.go#TestAgentStateSystemPromptReplaysTranscriptSystemMessages", "test:internal/codingagent/session_share_test.go#TestNewShareStateKeepsToolParameterOrder", "test:internal/codingagent/session_share_test.go#TestNewShareStateRecordsActiveToolSchemas"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/session_share.go (createShareTrailingEntries, ExportSessionForShare, explicit /share upload with privacy notice; sessionShareDestination does not change the destination, D64); hosted counterpart: private PiG-platform worker/src/share.ts (bounded R2 artifact route, 30-day expiry, unlisted viewer)). coverage.md reports 5 behavioral verifications for this file (0 scenarios whose covers list it, 5 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/session_share.go (createShareTrailingEntries, ExportSessionForShare, explicit /share upload with privacy notice; sessionShareDestination does not change the destination, D64); hosted counterpart: private Ompig-platform worker/src/share.ts (bounded R2 artifact route, 30-day expiry, unlisted viewer)). coverage.md reports 5 behavioral verifications for this file (0 scenarios whose covers list it, 5 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/interactive/theme/system-theme.ts"
@@ -3352,7 +3352,7 @@ path = "packages/coding-agent/src/modes/print-mode.ts"
 change = "added"
 disposition = "ported"
 evidence = ["scenario:test/parity/scenarios/json/01-json-mode-streams-events.toml", "scenario:test/parity/scenarios/print/01-print-mode-arithmetic.toml", "scenario:test/parity/scenarios/json/02-json-mode-extension-command.toml", "test:coding/cli/print_mode_exit_code_test.go#TestRunPrintModeReturnsExitCodeZeroOnSuccessAndOneOnFailureAndDisposesTheRuntime"]
-rationale = "PORT_MAP row is ✅ ported (coding/cli/print_mode.go (text) and coding/cli/json_mode.go (json): upstream runs both modes from one function, pig splits them by mode. json streams the session event stream as JSONL while the turn runs; text still prints only the final assistant message. Behavioral coverage: print/01-print-mode-arithmetic, json/01-json-mode-streams-events). coverage.md reports 29 behavioral verifications for this file (28 scenarios whose covers list it, 1 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (coding/cli/print_mode.go (text) and coding/cli/json_mode.go (json): upstream runs both modes from one function, ompig splits them by mode. json streams the session event stream as JSONL while the turn runs; text still prints only the final assistant message. Behavioral coverage: print/01-print-mode-arithmetic, json/01-json-mode-streams-events). coverage.md reports 29 behavioral verifications for this file (28 scenarios whose covers list it, 1 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/rpc/jsonl.ts"
@@ -3366,7 +3366,7 @@ path = "packages/coding-agent/src/modes/rpc/rpc-client.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:coding/rpcclient/commands_wire_test.go#TestRPCCommandWirePreservesOptionalValues", "test:coding/rpcclient/ownership_test.go#TestRPCListenerPanicIsConfinedToItsLine", "test:coding/rpcclient/ownership_test.go#TestRPCRequestTimeoutIncludesBlockedWrite"]
-rationale = "PORT_MAP row is ✅ ported (coding/rpcclient/rpc_client.go + commands.go + types.go + process_unix.go/process_windows.go (RpcClient spawns the pig executable in --mode rpc where upstream spawns node cliPath; typed wire structs replace the TypeScript imports, with raw JSON kept for entries, messages, and events). coding/rpcclient/rpc_client_test.go ports rpc-client-clear-queue/clone/process-exit tests against scripted child processes; rpc_mode_test.go ports rpc.test.ts against a pig binary built in TestMain, using test-faux in place of the live Anthropic model). coverage.md reports 11 behavioral verifications for this file (0 scenarios whose covers list it, 11 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (coding/rpcclient/rpc_client.go + commands.go + types.go + process_unix.go/process_windows.go (RpcClient spawns the ompig executable in --mode rpc where upstream spawns node cliPath; typed wire structs replace the TypeScript imports, with raw JSON kept for entries, messages, and events). coding/rpcclient/rpc_client_test.go ports rpc-client-clear-queue/clone/process-exit tests against scripted child processes; rpc_mode_test.go ports rpc.test.ts against a ompig binary built in TestMain, using test-faux in place of the live Anthropic model). coverage.md reports 11 behavioral verifications for this file (0 scenarios whose covers list it, 11 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/modes/rpc/rpc-mode.ts"
@@ -3387,21 +3387,21 @@ path = "packages/coding-agent/src/package-manager-cli.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "Pi 476a303c1 drops --min-release-age from the managed `npm ci` it runs for a release install. A standalone pig runs no managed `npm ci` for its own update (self-update is the standalone-binary path of D39, whose record now names this commit), so the flag has no counterpart. Pi 6dfb54678: `pi config` prints the install failures of the packages it resolves as warnings. PiG's config command never installs a missing package, so nothing fails there."
+rationale = "Pi 476a303c1 drops --min-release-age from the managed `npm ci` it runs for a release install. A standalone ompig runs no managed `npm ci` for its own update (self-update is the standalone-binary path of D39, whose record now names this commit), so the flag has no counterpart. Pi 6dfb54678: `pi config` prints the install failures of the packages it resolves as warnings. Ompig's config command never installs a missing package, so nothing fails there."
 
 [[files]]
 path = "packages/coding-agent/src/rpc-entry.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "PORT_MAP records this file n/a with the reason: (npm package export wrapper for --mode rpc; pig exposes the CLI mode directly)"
+rationale = "PORT_MAP records this file n/a with the reason: (npm package export wrapper for --mode rpc; ompig exposes the CLI mode directly)"
 
 [[files]]
 path = "packages/coding-agent/src/utils/abort.ts"
 change = "added"
 disposition = "designed-out"
 evidence = []
-rationale = "PORT_MAP records this file n/a with the reason: (AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; pig uses context.Context cancellation + select (D3): runtime mechanics, designed out)"
+rationale = "PORT_MAP records this file n/a with the reason: (AbortSignal/Promise racing: raceWithAbortSignal/operationSignal; ompig uses context.Context cancellation + select (D3): runtime mechanics, designed out)"
 
 [[files]]
 path = "packages/coding-agent/src/utils/ansi.ts"
@@ -3639,7 +3639,7 @@ path = "packages/coding-agent/src/utils/windows-self-update.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/codingagent/windows_self_update_test.go#TestQuarantineNativeDependenciesMovesLoadedImagesAndCopiesThemBack"]
-rationale = "PORT_MAP row is ✅ ported (internal/codingagent/windows_self_update.go (the running pig.exe is the loaded native image an npm update quarantines; TestQuarantineNativeDependenciesMovesLoadedImagesAndCopiesThemBack, TestWindowsNpmSelfUpdateReplacesTheRunningInstallation)). coverage.md reports 1 behavioral verifications for this file (0 scenarios whose covers list it, 1 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/codingagent/windows_self_update.go (the running ompig.exe is the loaded native image an npm update quarantines; TestQuarantineNativeDependenciesMovesLoadedImagesAndCopiesThemBack, TestWindowsNpmSelfUpdateReplacesTheRunningInstallation)). coverage.md reports 1 behavioral verifications for this file (0 scenarios whose covers list it, 1 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/coding-agent/src/utils/wsl.ts"
@@ -4311,7 +4311,7 @@ path = "packages/evals/src/cli.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/evals/cli_test.go#TestParseEvalCliMatchesUpstream", "test:internal/evals/cli_test.go#TestRunEvalCliExitsZeroWhenEveryPairScores", "test:internal/evals/cli_test.go#TestRunEvalCliFailures"]
-rationale = "PORT_MAP row is ✅ ported (internal/evals/cli.go + cmd/pig-evals/main.go). coverage.md reports 6 behavioral verifications for this file (0 scenarios whose covers list it, 6 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/evals/cli.go + cmd/ompig-evals/main.go). coverage.md reports 6 behavioral verifications for this file (0 scenarios whose covers list it, 6 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/evals/src/docker.ts"
@@ -4325,7 +4325,7 @@ path = "packages/evals/src/harness.ts"
 change = "added"
 disposition = "ported"
 evidence = ["test:internal/evals/harness_upstream_test.go#TestCreatePiDocumentationEvalHarnessInSandbox", "test:internal/evals/harness_behavior_test.go#TestExcludePiDocumentationRequiresTheWorkingDirectorySectionAfterTheDocumentation", "test:internal/evals/harness_upstream_test.go#TestHarnessUpstream"]
-rationale = "PORT_MAP row is ✅ ported (internal/evals/harness.go + internal/evals/harness_run.go + internal/evals/agent_process.go + internal/evals/bridge + cmd/pig-eval-extension). coverage.md reports 9 behavioral verifications for this file (0 scenarios whose covers list it, 9 named unit tests); the first of each are cited."
+rationale = "PORT_MAP row is ✅ ported (internal/evals/harness.go + internal/evals/harness_run.go + internal/evals/agent_process.go + internal/evals/bridge + cmd/ompig-eval-extension). coverage.md reports 9 behavioral verifications for this file (0 scenarios whose covers list it, 9 named unit tests); the first of each are cited."
 
 [[files]]
 path = "packages/evals/src/plan.ts"

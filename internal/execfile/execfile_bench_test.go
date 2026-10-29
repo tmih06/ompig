@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/execfile"
+	"github.com/tmih06/ompig/internal/execfile"
 )
 
 // plainWrite is what the writers of a program did before Write: open, copy, close, with no hold on forks.

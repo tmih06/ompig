@@ -31,7 +31,7 @@
 +if (!process.env.CLOUDFLARE_API_TOKEN || !process.env.CLOUDFLARE_ACCOUNT_ID) throw new Error("cloud: set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (the owner's account)")
 +const [command, arg, ...rest] = process.argv.slice(2)
 +const name = target(arg)
-+if (PROBE && name !== "pi-head" && !TARGETS[name].core) throw new Error("probe: pi-head or a PiG target")
++if (PROBE && name !== "pi-head" && !TARGETS[name].core) throw new Error("probe: pi-head or a Ompig target")
 +const worker = `durable-bench-${name}${PROBE ? `-probe-${PROBE}` : ""}`
 +mkdirSync("results", { recursive: true })
 +
@@ -44,7 +44,7 @@
 +  rmSync(dir, { recursive: true, force: true })
 +  mkdirSync(dir, { recursive: true })
 +  // Only the bundle and the core go up: no_bundle uploads them byte for byte.
-+  const files = [bundle, ...(TARGETS[name].core ? [join(dirname(bundle), "pig-core.wasm")] : [])]
++  const files = [bundle, ...(TARGETS[name].core ? [join(dirname(bundle), "ompig-core.wasm")] : [])]
 +  for (const file of files) cpSync(file, join(dir, basename(file)))
 +  const classes = Object.values(TARGETS[name].objects)
 +  writeFileSync(join(dir, "wrangler.json"), JSON.stringify({

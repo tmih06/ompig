@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 const unsavedForkMessage = "This session has not been saved yet. Send a message before cloning or forking it."
@@ -100,7 +100,7 @@ func TestInteractiveAssistantBugHintOnce(t *testing.T) {
 			if tc.hint {
 				want = 1
 			}
-			if got := strings.Count(text, " If this looks like a pig bug, /bug sends a report to the developers."); got != want {
+			if got := strings.Count(text, " If this looks like a ompig bug, /bug sends a report to the developers."); got != want {
 				t.Errorf("hint count %d want %d: %q", got, want, text)
 			}
 			if status := strings.Join(m.statusLine.Render(120), "\n"); strings.Contains(status, "Provider request") {
@@ -171,7 +171,7 @@ func TestForkUnsavedRefusalPreservesSource(t *testing.T) {
 
 func TestResumeHintExplicitDefaultDirectory(t *testing.T) {
 	cwd := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", t.TempDir())
+	t.Setenv("OMPIG_CODING_AGENT_DIR", t.TempDir())
 	dir := defaultSessionDir(cwd)
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		t.Fatal(err)

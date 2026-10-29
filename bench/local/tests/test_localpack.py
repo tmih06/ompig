@@ -52,9 +52,9 @@ class LocalPackTest(unittest.TestCase):
     def test_pinned_archive_installs_and_runs_on_this_host(self):
         if localpack.host_key() != "linux-amd64":
             self.skipTest("the pinned archive for another platform cannot run here")
-        cache = os.environ.get("PIGPACK_CACHE")
+        cache = os.environ.get("OMPIGPACK_CACHE")
         if not cache:
-            self.skipTest("set PIGPACK_CACHE to run the download-and-serve check")
+            self.skipTest("set OMPIGPACK_CACHE to run the download-and-serve check")
         import subprocess
         with tempfile.TemporaryDirectory() as tmp:
             binary = localpack.install_runtime(tmp)

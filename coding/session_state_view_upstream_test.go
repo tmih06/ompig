@@ -3,7 +3,7 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // upstream: agent-session.ts:1426 `get state()` returns this.agent.state: the session's state is the agent's live state, so a write through it is what Session.ThinkingLevel and Session.Model read back (agent-session.ts:1442-1449).

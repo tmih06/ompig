@@ -1,7 +1,7 @@
 // The nightly wall-clock run's drift judgement (runner/nightly.sh). A night measures the dcore-integrate tip twice:
-// Rule A (track-row.sh: PiG TinyGo at 3,500 turns in Miniflare with pi-durable main and the empty floor in the same rounds)
+// Rule A (track-row.sh: Ompig TinyGo at 3,500 turns in Miniflare with pi-durable main and the empty floor in the same rounds)
 // and Rule B (the native build's own bench with its scripted model, no request path, no floor). Each night is compared
-// with the median of the last WINDOW nights. A shared host slows every target together, so a metric drifts only when PiG
+// with the median of the last WINDOW nights. A shared host slows every target together, so a metric drifts only when Ompig
 // is slower than its own recent median by more than LIMIT *and* its ratio to pi-durable's same-run value has grown by more
 // than LIMIT too: a load spike moves pi as well and leaves the ratio alone. Rule B has no pi value of its own; its ratio is
 // to pi's same-run warm p50, the nearest load control the night has.
@@ -19,12 +19,12 @@ export const METRICS = [
 // Time travel (robust-durable's scenarios/time-travel.mjs, when the core has it): a few runs per build at SIZE turns, each
 // operation's wall time summed within a run (the scrub's S as-of reads together), then the median over the runs. A build's
 // operation is judged against its own nights with pi's same operation in the same night as the control: keys
-// `tt:<build>:<op>` in pig, `tt:<op>` in pi. Operations of a few milliseconds move by more than 10% on timer noise alone,
+// `tt:<build>:<op>` in ompig, `tt:<op>` in pi. Operations of a few milliseconds move by more than 10% on timer noise alone,
 // so a time-travel drift must also be at least TT_MIN_MS slower than the median.
 export const TT_MIN_MS = 5
 const metricsOf = night => [
 	...METRICS,
-	...Object.keys(night.pig).filter(k => k.startsWith("tt:")).map(key => {
+	...Object.keys(night.ompig).filter(k => k.startsWith("tt:")).map(key => {
 		const [, build, op] = key.split(":")
 		return { key, rule: "T", pi: `tt:${op}`, name: `time travel ${build} ${op}`, minMs: TT_MIN_MS }
 	}),
@@ -45,13 +45,13 @@ export function timeTravel(results) {
 			for (const [op, ms] of Object.entries(by)) (sums[label] ??= {})[op] = [...(sums[label]?.[op] ?? []), ms]
 		}
 	}
-	const pig = {}, pi = {}, verdicts = {}
+	const ompig = {}, pi = {}, verdicts = {}
 	for (const [label, ops] of Object.entries(sums)) {
 		if (label !== "pi") verdicts[label] = failures[label] ?? "ok"
 		if (failures[label]) continue
-		for (const [op, xs] of Object.entries(ops)) (label === "pi" ? pi : pig)[label === "pi" ? `tt:${op}` : `tt:${label}:${op}`] = median(xs)
+		for (const [op, xs] of Object.entries(ops)) (label === "pi" ? pi : ompig)[label === "pi" ? `tt:${op}` : `tt:${label}:${op}`] = median(xs)
 	}
-	return { pig, pi, verdicts }
+	return { ompig, pi, verdicts }
 }
 
 const median = xs => { const s = [...xs].sort((a, b) => a - b); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2 }
@@ -71,17 +71,17 @@ export function ruleB(lines) {
 }
 
 /**
- * One night's record: `pig` maps metric keys to PiG's values, `pi` pi-durable's same-run values (warm, warmP95, cold).
+ * One night's record: `ompig` maps metric keys to Ompig's values, `pi` pi-durable's same-run values (warm, warmP95, cold).
  * Returns per metric the night's value, the recent median, the ratio change and whether it drifted. Fewer than 3 earlier
  * nights judge nothing.
  */
 export function judge(history, night, { window = WINDOW, limit = LIMIT } = {}) {
 	const recent = history.slice(-window)
-	return metricsOf(night).filter(m => typeof night.pig[m.key] === "number" && typeof night.pi[m.pi] === "number").map(m => {
-		const prior = recent.filter(h => typeof h.pig[m.key] === "number" && typeof h.pi[m.pi] === "number")
-		const value = night.pig[m.key], ratio = value / night.pi[m.pi]
+	return metricsOf(night).filter(m => typeof night.ompig[m.key] === "number" && typeof night.pi[m.pi] === "number").map(m => {
+		const prior = recent.filter(h => typeof h.ompig[m.key] === "number" && typeof h.pi[m.pi] === "number")
+		const value = night.ompig[m.key], ratio = value / night.pi[m.pi]
 		if (prior.length < 3) return { ...m, value, nights: prior.length, drift: false }
-		const med = median(prior.map(h => h.pig[m.key])), medRatio = median(prior.map(h => h.pig[m.key] / h.pi[m.pi]))
+		const med = median(prior.map(h => h.ompig[m.key])), medRatio = median(prior.map(h => h.ompig[m.key] / h.pi[m.pi]))
 		const slower = value / med - 1, ratioUp = ratio / medRatio - 1
 		return { ...m, value, median: med, slower, ratioUp, nights: prior.length, drift: slower > limit && ratioUp > limit && value - med >= (m.minMs ?? 0) }
 	})

@@ -8,9 +8,9 @@ Reference: [Pi](https://github.com/earendil-works/pi) 0.87.1, commit `f07218c4d4
 - Public/main baseline: `b3beb2a8c364389f0d3c5f8c9a02a542806d42c6`.
 - Host: Linux amd64. Go 1.27.1, npm 11.17.0, Python 3.12.3, Rust 1.97.1. The maintained npm qualification is 12.1.0; this experiment records the installed npm instead of claiming that qualification.
 - Node tarballs: 22.13.0, 22.23.3, 24.21.0, 26.10.0 and unsupported 20.19.0. Each Linux x64 tarball passed its upstream `SHASUMS256.txt` check. No system toolchain was replaced.
-- PiG's declared minimum is Node 22.13. Pi declares `>=22.19.0` in `packages/coding-agent/package.json:105`; the observations of Pi running under Node 22.13.0 below are probes, not an upstream support claim.
+- Ompig's declared minimum is Node 22.13. Pi declares `>=22.19.0` in `packages/coding-agent/package.json:105`; the observations of Pi running under Node 22.13.0 below are probes, not an upstream support claim.
 
-Every npm install and CLI execution uses private `HOME`, `PIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` paths. Environment variables whose names contain `API_KEY`, `TOKEN` or `PROXY` are removed. Each CLI gets its own writable dependency copy and working directory. Settings select the installed Package, rather than bypassing its manifest with an exact extension-file path. Pi uses the repository's deterministic faux provider; PiG uses the matching test provider. No live model credentials are needed.
+Every npm install and CLI execution uses private `HOME`, `OMPIG_CODING_AGENT_DIR` and `PI_CODING_AGENT_DIR` paths. Environment variables whose names contain `API_KEY`, `TOKEN` or `PROXY` are removed. Each CLI gets its own writable dependency copy and working directory. Settings select the installed Package, rather than bypassing its manifest with an exact extension-file path. Pi uses the repository's deterministic faux provider; Ompig uses the matching test provider. No live model credentials are needed.
 
 ## Load/print matrix
 
@@ -63,7 +63,7 @@ Unsupported-runtime handling is already at the host boundary. The actual cold CL
 - **Reduced production path:** `TestNodeIssuePackageForms` loads a declared directory with a decoy root index, an enum and bundled-style `export { factory as default }`, in both ordinary packed and isolated placements. It checks the exact Pi-observed cost JSON and loader export. An initial hand-written expected `0.2` was wrong: Pi evaluates that cost as `0.19999999999999998`. The test keeps Pi's actual number; no rounding or normalization is applied.
 - **Canonical scenario:** `extensions-runtime/55-node-package-entry-exports` invokes the package command through print mode and requires exact output equality for three pairs. It passes on the base because that behavior was already fixed. A compiling runtime mutation that imports the module but returns `undefined` instead of its factory makes the scenario fail with exit 1 and `Extension does not export a valid factory function`. The mutation is removed.
 - **Existing coverage:** `TestNodeExtensionModulesLoadLikePinnedPi` compares the broader module-resolution fixture against the pinned Pi jiti. `TestNodeRuntimePreflightRejectsUnsupportedNodeBeforeLaunchingWarmExtension` and its missing-runtime sibling guard the diagnostic boundary. The Node matrix runs these tests as well.
-- **Test isolation:** the full test run red-proved `TestFindSDKRoot_InstalledSourceRoot`, `TestFindSDKRoot_NoSourceRootErrors`, and `TestNodeTypeScriptSourceResolutionAndShims` under the required private environment. The SDK fallback tests changed HOME but inherited an unrelated staged PIG_HOME; the Node fixture assumed an `agent` basename while inheriting the caller's custom directory. The tests now declare those inputs locally. Their original assertions remain intact, and all three pass in the same outer environment.
+- **Test isolation:** the full test run red-proved `TestFindSDKRoot_InstalledSourceRoot`, `TestFindSDKRoot_NoSourceRootErrors`, and `TestNodeTypeScriptSourceResolutionAndShims` under the required private environment. The SDK fallback tests changed HOME but inherited an unrelated staged OMPIG_HOME; the Node fixture assumed an `agent` basename while inheriting the caller's custom directory. The tests now declare those inputs locally. Their original assertions remain intact, and all three pass in the same outer environment.
 - **CI:** `.github/workflows/ci.yml` runs the hook, package-form and preflight regressions with Node 22.13.0 and the current Node 26 major on Linux, Windows and macOS. The final required CI result includes this job. Native Windows/macOS execution is pending CI; this report does not claim those hosts were locally tested.
 
 ## Reproduction and retained evidence
@@ -71,9 +71,9 @@ Unsupported-runtime handling is already at the host boundary. The actual cold CL
 Run the corpus with the desired Node executable directory first on PATH. The script verifies the Pi CLI version, uses `npm ci` for each committed lock, and fails on any install, timeout, load, output or inventory mismatch:
 
 ```bash
-go build -o /absolute/temp/pig ./cmd/pig
+go build -o /absolute/temp/ompig ./cmd/ompig
 PATH=/absolute/node/bin:$PATH python3 test/parity/corpus/issues-65-71/replay.py \
-  --pig /absolute/temp/pig --output /absolute/temp/new-corpus-run
+  --ompig /absolute/temp/ompig --output /absolute/temp/new-corpus-run
 ```
 
 The output directory must not already exist. `--installed <directory>` reuses an existing install only after its lock matches the committed lock. `--public <binary>` additionally records the historical binary without treating it as the oracle. Top-level package versions and integrity values are in `packages.json`; transitive versions and integrities are in each `locks/*/package-lock.json`. The script copies dependencies into private per-process directories and never edits the pinned inputs.
@@ -90,7 +90,7 @@ Binary SHA-256 identities:
 
 `BenchmarkNodeAdmissionStartup` with three measured repetitions reports about 275 ms / 152 KB / 548 Go allocations for one Node factory, and 375 ms / 209 KB / 873 allocations for three packed factories on this host. CPU and allocation profiles are retained. These are startup measurements under concurrent verification load, not a speedup claim or whole-child-process memory measurements. The Host shuts down each benchmark runtime. Synchronous hooks add no worker, handler, timer or Go UI-loop work; Node owns the registered hook until child-process exit. Older Node retains the existing hook thread and Host-owned process lifetime.
 
-Passed: four-Node loader/module/preflight tests; full `coding/extension/host/subprocess` tests; SDK fallback and Node source-resolution isolation regressions; Linux `go vet ./...`; Windows vet for all three touched Go packages; touched-package golangci-lint, `make lint-changed` against the integration base, and full `make lint`; workflow CI contract tests; scenario lint; port-map and coverage drift; divergence guard; source hygiene; docs drift; format inventory; custom-factory ledger; SDK surface drift. The focused directory, module, error-message and new package scenario each pass three Pi/PiG pairs. The complete `extensions-runtime` family passes all 59 scenarios at declared durability; the final family run uses tmux 3.7b. Generated coverage adds the scenario without promoting any PORT_MAP file.
+Passed: four-Node loader/module/preflight tests; full `coding/extension/host/subprocess` tests; SDK fallback and Node source-resolution isolation regressions; Linux `go vet ./...`; Windows vet for all three touched Go packages; touched-package golangci-lint, `make lint-changed` against the integration base, and full `make lint`; workflow CI contract tests; scenario lint; port-map and coverage drift; divergence guard; source hygiene; docs drift; format inventory; custom-factory ledger; SDK surface drift. The focused directory, module, error-message and new package scenario each pass three Pi/Ompig pairs. The complete `extensions-runtime` family passes all 59 scenarios at declared durability; the final family run uses tmux 3.7b. Generated coverage adds the scenario without promoting any PORT_MAP file.
 
 Release blockers remain explicit:
 

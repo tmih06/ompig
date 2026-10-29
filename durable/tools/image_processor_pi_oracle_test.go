@@ -11,7 +11,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's image-processor.ts holds the limits the coding agent keeps, the formats every provider takes inline, and the two

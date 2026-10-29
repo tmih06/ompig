@@ -28,13 +28,13 @@
 #      was wired, the Collapsed branch returned early and the body was
 #      hidden entirely. Upstream's tool-execution.ts NEVER hides the body
 #      based on collapse state; the renderer chooses preview-vs-full via
-#      its `expanded` flag. Without the fix, pig showed an empty tool box
+#      its `expanded` flag. Without the fix, ompig showed an empty tool box
 #      for any bash tool result >8 lines (the auto-collapse threshold).
 #      Fix: skip-body short-circuit now requires `BodyRenderer == nil`.
 #
 # Divergence numbered in this loop:
 #
-#   (none: the prior keybinding-case divergence was removed once pig was
+#   (none: the prior keybinding-case divergence was removed once ompig was
 #   made faithful: collapse hints now render lowercase `ctrl+o` like
 #   upstream's keyHint/keyText.)
 
@@ -50,16 +50,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/bash-wrap-cwd"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/compaction"
+	"github.com/tmih06/ompig/internal/codingagent/compaction"
 )
 
 // SummarizeForBugReport asks the session model for a bug report summary of the

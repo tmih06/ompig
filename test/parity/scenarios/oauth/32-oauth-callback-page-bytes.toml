@@ -11,10 +11,10 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/oauth-page-pig.mjs"]
-pig_go_tests = ["./ai"]
+ompig_args = ["node", "./test/parity/testdata/oauth-page-ompig.mjs"]
+ompig_go_tests = ["./ai"]
 pi_args = ["node", "./test/parity/testdata/oauth-page-pi.mjs"]
 pi_go_tests = ["./ai"]
 

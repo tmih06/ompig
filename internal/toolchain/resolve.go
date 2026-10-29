@@ -14,15 +14,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/configroot"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/configroot"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/linkerexec"
 )
 
-// pig additive (D20): PiG compiles extensions, which Pi does not, and resolves one Go toolchain for every build.
+// ompig additive (D20): Ompig compiles extensions, which Pi does not, and resolves one Go toolchain for every build.
 //
 // GoToolchain is one Go installation: a go command and the GOROOT it belongs to.
-// Every build in a PiG process runs with exactly this pair. The go command
+// Every build in a Ompig process runs with exactly this pair. The go command
 // compiles with the tools of whichever GOROOT it is given, and refuses tools of
 // another release (`compile: version "go1.26.7" does not match go tool version
 // "go1.26.1"`), so the pair must never come from two different selections.
@@ -115,12 +115,12 @@ func (t GoToolchain) BelowFloor() bool {
 // FloorRemedy is the one line that tells the user the go found is too old to
 // build extensions and how to fix it.
 func (t GoToolchain) FloorRemedy() string {
-	return fmt.Sprintf("%s at %s is older than Go %s, the minimum the extension SDK needs; run `pig setup go` (PiG then uses that toolchain in place of the older go on PATH) or install Go %s or newer from https://go.dev/dl/", t.Version(), t.Command, MinGoVersion, MinGoVersion)
+	return fmt.Sprintf("%s at %s is older than Go %s, the minimum the extension SDK needs; run `ompig setup go` (Ompig then uses that toolchain in place of the older go on PATH) or install Go %s or newer from https://go.dev/dl/", t.Version(), t.Command, MinGoVersion, MinGoVersion)
 }
 
 // ResolveGo selects the Go installation for builds: the go command on PATH, else
-// the PiG-managed toolchain. A go on PATH older than MinGoVersion gives way to a
-// PiG-managed toolchain that meets it. It resolves once per selection and process, so
+// the Ompig-managed toolchain. A go on PATH older than MinGoVersion gives way to a
+// Ompig-managed toolchain that meets it. It resolves once per selection and process, so
 // concurrent extension builds cannot pick different installations. Nothing is
 // run when the command lives inside its own installation, which is the case for
 // a release archive, Homebrew and every version manager's real install. A shim or
@@ -155,7 +155,7 @@ func ResolveGo() (GoToolchain, error) {
 	return t, nil
 }
 
-// goCommand finds the go command. The PiG-managed toolchain is a complete
+// goCommand finds the go command. The Ompig-managed toolchain is a complete
 // installation at a known root, so it is returned already resolved.
 func goCommand() (string, GoToolchain, error) {
 	if path, err := exec.LookPath("go"); err == nil {
@@ -164,10 +164,10 @@ func goCommand() (string, GoToolchain, error) {
 	if managed, ok := managedGo(); ok {
 		return managed.Command, managed, nil
 	}
-	return "", GoToolchain{}, fmt.Errorf("go is not on PATH and no PiG-managed Go toolchain is installed; run `pig setup go`: %w", exec.ErrNotFound)
+	return "", GoToolchain{}, fmt.Errorf("go is not on PATH and no Ompig-managed Go toolchain is installed; run `ompig setup go`: %w", exec.ErrNotFound)
 }
 
-// managedGo is the toolchain `pig setup go` installed, when there is one.
+// managedGo is the toolchain `ompig setup go` installed, when there is one.
 func managedGo() (GoToolchain, bool) {
 	root, err := configroot.Resolve()
 	if err != nil {

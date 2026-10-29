@@ -14,7 +14,7 @@
 
 #![cfg(unix)]
 
-use pig_sdk::{CommandResult, Extension};
+use ompig_sdk::{CommandResult, Extension};
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -54,7 +54,7 @@ impl Host {
 
     /// `start` with the mode and hasUI the host reports: Pi runs a footer or header factory only in the TUI.
     fn start_in(ext: Extension, mode: &str, has_ui: bool) -> Self {
-        let dir = std::env::temp_dir().join(format!("pig-surface-width-{}-{:?}", std::process::id(), thread::current().id()));
+        let dir = std::env::temp_dir().join(format!("ompig-surface-width-{}-{:?}", std::process::id(), thread::current().id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir(&dir).unwrap();
         let socket = dir.join("host.sock");
@@ -291,14 +291,14 @@ fn renderers_are_not_run_outside_the_tui() {
 // rpc-mode.ts custom() resolves undefined without running the component; the host call keeps the dialog scope, as the Node runtime's does.
 #[test]
 fn custom_resolves_none_in_rpc_without_running_the_component() {
-    use pig_sdk::{RemoteComponent, RemoteComponentResult};
+    use ompig_sdk::{RemoteComponent, RemoteComponentResult};
     struct Component(Arc<Mutex<Vec<&'static str>>>);
     impl RemoteComponent for Component {
         fn render(&self, _width: u32) -> Vec<String> {
             self.0.lock().unwrap().push("render");
             Vec::new()
         }
-        fn handle_input(&mut self, _data: &pig_sdk::JsString) -> Result<RemoteComponentResult, String> {
+        fn handle_input(&mut self, _data: &ompig_sdk::JsString) -> Result<RemoteComponentResult, String> {
             self.0.lock().unwrap().push("input");
             Ok(RemoteComponentResult::pending())
         }

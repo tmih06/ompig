@@ -15,7 +15,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/chord/delta"
+	"github.com/tmih06/ompig/chord/delta"
 )
 
 // SourceOptions is cell.ts SourceOptions.

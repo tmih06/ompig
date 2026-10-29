@@ -7,7 +7,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/goroutineid"
+	"github.com/tmih06/ompig/internal/goroutineid"
 )
 
 // bodyReadOwner identifies one HTTP/1 response's active body read. A network read announces suspension before it blocks; a buffered body read completes without that announcement.

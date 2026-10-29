@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/ignorerules"
-	"github.com/MichaelKinsy/PiG/internal/pigsdklock"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/ignorerules"
+	"github.com/tmih06/ompig/internal/pigsdklock"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // TestStartupSkillsIgnoreWorkBudget drives startup's skill loader with rules
@@ -71,8 +71,8 @@ func TestStartupSkillsIgnoreWorkBudget(t *testing.T) {
 }
 
 const (
-	commandShimRealEnv = "PIG_TEST_COMMAND_SHIM_REAL"
-	commandShimLogEnv  = "PIG_TEST_COMMAND_SHIM_LOG"
+	commandShimRealEnv = "OMPIG_TEST_COMMAND_SHIM_REAL"
+	commandShimLogEnv  = "OMPIG_TEST_COMMAND_SHIM_LOG"
 )
 
 // writeCommandShim puts name on a PATH directory ahead of the real command and
@@ -150,14 +150,14 @@ func shimInvocations(t *testing.T, log string) []string {
 }
 
 // A warm startup counts its work instead of timing it. This is the owner's
-// scenario: PiG Standard's Go extensions were built by an earlier run, the
+// scenario: Ompig Standard's Go extensions were built by an earlier run, the
 // staged SDK is current, and another process holds the staged-SDK stage lock
 // for the whole run. The startup must acquire no SDK lock (an acquisition
 // would block until the test deadline), run no compiler, and still load every
 // extension.
 func TestWarmStandardStartupWorkBudgetWithHeldSDKLock(t *testing.T) {
 	binary := buildPigBinaryForSignalTest(t)
-	standard, err := filepath.Abs(filepath.Join("..", "..", "piglets", "standard", "pig-standard.yaml"))
+	standard, err := filepath.Abs(filepath.Join("..", "..", "ompiglets", "standard", "ompig-standard.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -173,13 +173,13 @@ func TestWarmStandardStartupWorkBudgetWithHeldSDKLock(t *testing.T) {
 	}
 	run := func(extraEnv ...string) string {
 		t.Helper()
-		command := exec.CommandContext(testbudget.Context(t), binary, "--piglet", standard, "--model", "test-faux/faux-1", "--no-session", "--print", "What is 20+22?")
+		command := exec.CommandContext(testbudget.Context(t), binary, "--ompiglet", standard, "--model", "test-faux/faux-1", "--no-session", "--print", "What is 20+22?")
 		command.Dir = project
-		command.Env = append(os.Environ(), append([]string{"PIG_HOME=" + home, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_STARTUP_TRACE=1"}, extraEnv...)...)
+		command.Env = append(os.Environ(), append([]string{"OMPIG_HOME=" + home, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_STARTUP_TRACE=1"}, extraEnv...)...)
 		var stderr strings.Builder
 		command.Stderr = &stderr
 		if err := command.Run(); err != nil {
-			t.Fatalf("pig startup: %v\nstderr:\n%s", err, stderr.String())
+			t.Fatalf("ompig startup: %v\nstderr:\n%s", err, stderr.String())
 		}
 		return stderr.String()
 	}
@@ -245,11 +245,11 @@ func TestStartupTraceNamesSDKLockWait(t *testing.T) {
 	// The SDKs are staged before the first extension starts, so the run loads one.
 	command := exec.CommandContext(testbudget.Context(t), binary, "-ne", "-e", lazyBundleExtension(t), "--model", "test-faux/faux-1", "--no-session", "--print", "What is 20+22?")
 	command.Dir = t.TempDir()
-	command.Env = append(os.Environ(), "PIG_HOME="+home, "PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic", "PIG_STARTUP_TRACE=1")
+	command.Env = append(os.Environ(), "OMPIG_HOME="+home, "OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic", "OMPIG_STARTUP_TRACE=1")
 	var stderr strings.Builder
 	command.Stderr = &stderr
 	if err := command.Run(); err != nil {
-		t.Fatalf("pig startup: %v\nstderr:\n%s", err, stderr.String())
+		t.Fatalf("ompig startup: %v\nstderr:\n%s", err, stderr.String())
 	}
 	trace := stderr.String()
 	start := strings.Index(trace, "[startup] sdk-lock-wait-start")

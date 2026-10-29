@@ -13,7 +13,7 @@ import (
 	"sync"
 )
 
-// pig additive (D19): the Host's ordered pi.events registry for several Node realms. EventEmitter keeps one ordered listener array per channel, clones it for each emit, and calls each listener in turn; each listener's synchronous prefix runs before the next. The Host keeps that array and runs each listener's prefix in its own realm through a restricted synchronous request, while the emitter waits in its synchronous emit call. A realm that is the Host's only Node realm keeps the listeners in its own EventEmitter until a second realm appears.
+// ompig additive (D19): the Host's ordered pi.events registry for several Node realms. EventEmitter keeps one ordered listener array per channel, clones it for each emit, and calls each listener in turn; each listener's synchronous prefix runs before the next. The Host keeps that array and runs each listener's prefix in its own realm through a restricted synchronous request, while the emitter waits in its synchronous emit call. A realm that is the Host's only Node realm keeps the listeners in its own EventEmitter until a second realm appears.
 
 const (
 	callEventsOn   = "events.on"
@@ -28,7 +28,7 @@ const (
 	notifyEventsQuiesce  = "events.quiesce"
 	notifyEventsProceed  = "events.proceed"
 
-	eventBusRoutedEnv = "PIG_EVENT_BUS=routed"
+	eventBusRoutedEnv = "OMPIG_EVENT_BUS=routed"
 )
 
 // loadingBusCall reports whether a call may arrive while its factory is still loading, before the register handshake: the shared event bus, and the registry reads and checks of a Node factory's `pi` object, which Pi answers synchronously when the factory calls them, its exec, which Pi spawns directly, and the model stream (and its cancellation) of the pi-ai functions a module calls at load, which Pi runs in its own process with no registration gate.

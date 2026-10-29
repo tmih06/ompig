@@ -4,8 +4,6 @@ import (
 	"context"
 	"io"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/ssocreds"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go-v2/credentials/endpointcreds"
@@ -15,6 +13,8 @@ import (
 	"github.com/aws/smithy-go/logging"
 	"github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/ssocreds"
+	"github.com/tmih06/ompig/third_party/awssdk/credentials/stscreds"
 )
 
 // LoadOptionsFunc is a type alias for LoadOptions functional option

@@ -907,21 +907,21 @@
   "upstream": "packages/coding-agent/src/core/client-identity.ts",
   "package": "./coding",
   "tests": [
-   "TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent",
+   "TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent",
    "TestSDKTurnsAttributionOffWhenTelemetryIsDisabled"
   ],
   "upstream_reference": "packages/coding-agent/test/sdk-client-identity.test.ts ported (D26): the identity the session sends with each request",
-  "mutation": "coding/client_identity.go: replace `UserAgent: new(ai.UserAgentDetailed)` with `UserAgent: new(ai.UserAgentShort)`; TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent, TestSDKTurnsAttributionOffWhenTelemetryIsDisabled fail"
+  "mutation": "coding/client_identity.go: replace `UserAgent: new(ai.UserAgentDetailed)` with `UserAgent: new(ai.UserAgentShort)`; TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent, TestSDKTurnsAttributionOffWhenTelemetryIsDisabled fail"
  },
  {
   "upstream": "packages/coding-agent/src/core/client-identity.ts",
   "package": "./coding",
   "tests": [
-   "TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent",
+   "TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent",
    "TestSDKTurnsAttributionOffWhenTelemetryIsDisabled"
   ],
   "upstream_reference": "packages/coding-agent/test/sdk-client-identity.test.ts ported (D26): the identity the session sends with each request",
-  "mutation": "coding/client_identity.go: replace `Version: new(Version)` with `Version: new(\"0.0.0\")`; TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent, TestSDKTurnsAttributionOffWhenTelemetryIsDisabled fail"
+  "mutation": "coding/client_identity.go: replace `Version: new(Version)` with `Version: new(\"0.0.0\")`; TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent, TestSDKTurnsAttributionOffWhenTelemetryIsDisabled fail"
  },
  {
   "upstream": "packages/coding-agent/src/core/client-identity.ts",
@@ -947,21 +947,21 @@
   "upstream": "packages/coding-agent/src/core/client-identity.ts",
   "package": "./coding",
   "tests": [
-   "TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent"
+   "TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent"
   ],
   "upstream_reference": "packages/coding-agent/test/sdk-client-identity.test.ts ported (D26): the identity the session sends with each request",
-  "mutation": "coding/client_identity.go: replace `identity.Attribution = new(ai.PiAttribution)` with `identity.Attribution = nil`; TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent fail"
+  "mutation": "coding/client_identity.go: replace `identity.Attribution = new(ai.PiAttribution)` with `identity.Attribution = nil`; TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent fail"
  },
  {
   "upstream": "packages/coding-agent/src/core/client-identity.ts",
   "package": "./coding",
   "tests": [
-   "TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent",
+   "TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent",
    "TestSDKTurnsAttributionOffWhenTelemetryIsDisabled",
    "TestSDKTurnsAttributionOffWithPITelemetryZero"
   ],
   "upstream_reference": "packages/coding-agent/test/sdk-client-identity.test.ts ported (D26): the identity the session sends with each request",
-  "mutation": "coding/client_identity.go: replace `if settings.IsInstallTelemetryEnabled() {` with `if !settings.IsInstallTelemetryEnabled() {`; TestSDKIdentifiesPiGWithADetailedUserAgentAndAttributionAsACLIAgent, TestSDKTurnsAttributionOffWhenTelemetryIsDisabled, TestSDKTurnsAttributionOffWithPITelemetryZero fail"
+  "mutation": "coding/client_identity.go: replace `if settings.IsInstallTelemetryEnabled() {` with `if !settings.IsInstallTelemetryEnabled() {`; TestSDKIdentifiesOmpigWithADetailedUserAgentAndAttributionAsACLIAgent, TestSDKTurnsAttributionOffWhenTelemetryIsDisabled, TestSDKTurnsAttributionOffWithPITelemetryZero fail"
  },
  {
   "upstream": "packages/ai/src/utils/version.ts",
@@ -969,7 +969,7 @@
   "tests": [
    "TestUserAgentVersionFieldFollowsPi"
   ],
-  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: PiG's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
+  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: Ompig's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
   "mutation": "ai/identity.go: replace `if identity != nil && identity.Version != nil {` with `if identity != nil && identity.Version != nil && *identity.Version != \"\" {`; TestUserAgentVersionFieldFollowsPi fail"
  },
  {
@@ -981,7 +981,7 @@
    "TestProductVersionAvailableWithoutMain",
    "TestUserAgentVersionFieldFollowsPi"
   ],
-  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: PiG's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
+  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: Ompig's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
   "mutation": "ai/identity.go: replace `return ProductVersion\\n}` with `return \"0.0.0\"\\n}`; TestClientIdentityVersionDefaultsToTheProductVersion, TestFormatUserAgentForms, TestProductVersionAvailableWithoutMain, TestUserAgentVersionFieldFollowsPi fail"
  },
  {
@@ -990,7 +990,7 @@
   "tests": [
    "TestProductVersionAvailableWithoutMain"
   ],
-  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: PiG's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
+  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: Ompig's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
   "mutation": "ai/user_agent.go: replace `var ProductVersion = pigversion.Version` with `var ProductVersion = pigversion.Version + \"-x\"`; TestProductVersionAvailableWithoutMain fail"
  },
  {
@@ -1001,7 +1001,7 @@
    "TestFormatUserAgentForms",
    "TestUserAgentVersionFieldFollowsPi"
   ],
-  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: PiG's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
+  "upstream_reference": "packages/ai/test/identity.test.ts 'formats user agents' and the PI_AI_VERSION default (D65: Ompig's product name and composite version stand in); ai/testdata/user_agent_version.mjs runs the pinned Pi's formatUserAgent",
   "mutation": "ai/identity.go: replace `return *identity.Version` with `return ProductVersion`; TestClientIdentityVersionDefaultsToTheProductVersion, TestFormatUserAgentForms, TestUserAgentVersionFieldFollowsPi fail"
  },
  {

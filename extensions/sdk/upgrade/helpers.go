@@ -17,7 +17,7 @@ import (
 
 // helperFileName is the file that holds the getter helpers of a package. The
 // plan picks the first name in the series that the package does not use.
-const helperFileName = "pig_upgrade_getters"
+const helperFileName = "ompig_upgrade_getters"
 
 // helperDef is one generated function that calls a Context getter the way the
 // old SDK did: a failed host call gives the zero value, which the old getters
@@ -64,7 +64,7 @@ func (r *helperRegistry) define(p *filePlanner, g getter, fn *types.Func) *helpe
 	}
 	signature := fn.Signature()
 	r.sdkPath = fn.Pkg().Path()
-	def := &helperDef{name: p.fresh("pigUpgrade" + g.Name), method: g.Name, pointer: g.Pointer}
+	def := &helperDef{name: p.fresh("ompigUpgrade" + g.Name), method: g.Name, pointer: g.Pointer}
 	for i := range signature.Params().Len() {
 		def.params = append(def.params, types.TypeString(signature.Params().At(i).Type(), r.qualify))
 	}
@@ -82,7 +82,7 @@ func (r *helperRegistry) define(p *filePlanner, g getter, fn *types.Func) *helpe
 // source renders the helper file.
 func (r *helperRegistry) source() ([]byte, error) {
 	var out bytes.Buffer
-	out.WriteString("// Added by pig extension upgrade. These Context getters returned one value before the SDK gave them an error result; a failed host call gives the zero value, as it did then.\n")
+	out.WriteString("// Added by ompig extension upgrade. These Context getters returned one value before the SDK gave them an error result; a failed host call gives the zero value, as it did then.\n")
 	out.WriteString("// Call the getter itself where the error matters, then delete the helper.\n\n")
 	out.WriteString("package " + r.pkg + "\n\nimport (\n")
 	paths := make([]string, 0, len(r.imports))

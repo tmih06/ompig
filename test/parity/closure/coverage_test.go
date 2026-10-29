@@ -53,8 +53,8 @@ func classify(n int) int {
 func TestParseGoCoverageNormalizesModulePathsAfterRepositoryMove(t *testing.T) {
 	profile := strings.Join([]string{
 		"mode: set",
-		"github.com/MichaelKinsy/PiG/ai/openai.go:10.1,10.2 1 1",
-		"github.com/MichaelKinsy/PiG/ai/openai.go:20.1,20.2 1 2",
+		"github.com/tmih06/ompig/ai/openai.go:10.1,10.2 1 1",
+		"github.com/tmih06/ompig/ai/openai.go:20.1,20.2 1 2",
 	}, "\n") + "\n"
 
 	blocks, err := ParseGoCoverage(t.TempDir(), strings.NewReader(profile))

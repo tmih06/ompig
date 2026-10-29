@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // packages/coding-agent/test/suite/regressions/2860-replaced-session-context.test.ts:109,123 bind `newSession: async (options) => runtime.newSession(options)` and `switchSession: async (sessionPath, options) => runtime.switchSession(sessionPath, options)` as the command context actions, and the test's third case (:243-290) drives replacement through them: a new Session is created (cancelled false), prompted, and switched back to by path.

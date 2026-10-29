@@ -59,7 +59,7 @@ type ExtensionRuntime struct {
 	reportError func(*ExtensionError)
 }
 
-// SetErrorReporter installs the bound runner's error reporting. pig additive
+// SetErrorReporter installs the bound runner's error reporting. ompig additive
 // (D107): a subprocess host reports diagnostics that arise outside any
 // handler, such as a rejected extension view, through it.
 func (r *ExtensionRuntime) SetErrorReporter(report func(*ExtensionError)) {

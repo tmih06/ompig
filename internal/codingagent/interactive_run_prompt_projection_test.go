@@ -3,8 +3,8 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // runPromptRecordingHandle is a Session handle that records the run prompt as the Session does, so the mode treats the transcript as the owner of the request's system prompt.

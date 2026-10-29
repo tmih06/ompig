@@ -15,8 +15,8 @@ func startSessionActionsRPC(t *testing.T) *rpcProcess {
 	}
 	home := t.TempDir()
 	p := startRPCProcessAt(t, t.TempDir(), []string{
-		"PIG_HOME=" + home, "PIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
-		"PIG_TEST_FAUX=1", "PIG_TEST_FAUX_SCENARIO=parity-basic",
+		"OMPIG_HOME=" + home, "OMPIG_CODING_AGENT_DIR=" + filepath.Join(home, "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_TEST_FAUX_SCENARIO=parity-basic",
 	}, "--model", "test-faux/faux-1", "--no-session", "-e", fixture)
 	p.send(`{"id":"commands","type":"get_commands"}`)
 	p.await("session-actions command listing", func(record rpcRecord) bool {
@@ -53,7 +53,7 @@ func assistantMessageEndText(record rpcRecord) (string, bool) {
 
 // TestRPCExtensionFollowUpFromAgentEndContinuesRun pins upstream rpc-mode,
 // which binds the session to extensions: sendUserMessage with deliverAs
-// followUp from an agent_end handler continues the same run. Pig bound no
+// followUp from an agent_end handler continues the same run. Ompig bound no
 // session actions in RPC mode, so the call failed with not_ready.
 func TestRPCExtensionFollowUpFromAgentEndContinuesRun(t *testing.T) {
 	p := startSessionActionsRPC(t)
@@ -79,7 +79,7 @@ func TestRPCExtensionFollowUpFromAgentEndContinuesRun(t *testing.T) {
 
 // TestRPCAbortStopsExtensionStartedRun pins upstream rpc-mode abort,
 // `await session.abort()`, which stops whatever run is active, and
-// get_state's isStreaming, which is session.isStreaming. Pig's abort only
+// get_state's isStreaming, which is session.isStreaming. Ompig's abort only
 // cancelled the context of an RPC prompt and tracked streaming itself, so a
 // run an extension started could not be stopped.
 func TestRPCAbortStopsExtensionStartedRun(t *testing.T) {

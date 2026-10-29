@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// .upstream/v0.87.1/packages/tui/test/native-platform.test.ts:8 (Linux ARM64 prebuild supports 64 KB system pages). PiG embeds Pi's prebuilt addon in runtime-node.pack, so the same ELF assertions run on the shipped bytes.
+// .upstream/v0.87.1/packages/tui/test/native-platform.test.ts:8 (Linux ARM64 prebuild supports 64 KB system pages). Ompig embeds Pi's prebuilt addon in runtime-node.pack, so the same ELF assertions run on the shipped bytes.
 func TestUpstreamNativePlatformLinuxArm64PrebuildSupportsLargePages(t *testing.T) {
 	data, err := nodeRuntimeFS.ReadFile("runtime-node/shims/pi-dist/pi-tui/native/linux/prebuilds/linux-arm64/linux-platform-x11.node")
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // A nested call's admission is a commit of the calling task (tool.ts startNestedCall: runtime.commit), so once the caller

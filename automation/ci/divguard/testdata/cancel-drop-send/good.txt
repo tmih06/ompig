@@ -27,7 +27,7 @@ func produce(ctx context.Context, lines chan<- []byte, line []byte) {
 	}
 }
 
-// pig divergence (D56): a recorded divergence allows the drop.
+// ompig divergence (D56): a recorded divergence allows the drop.
 func heartbeat(ctx context.Context, eventCh chan<- Event) {
 	select {
 	case eventCh <- Event{}:

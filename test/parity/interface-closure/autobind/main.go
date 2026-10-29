@@ -1,6 +1,6 @@
 // Command autobind is a deterministic gap detector for the Pi interface ledger. For every interface ID it applies a fixed rule set
 // and decides NOT-A-GAP or GAP(reason): a Go symbol exists under the name rules, its shape is compatible with the upstream
-// declaration, and it is exercised by a Go test that asserts on it or by code reachable from cmd/pig. A rule that cannot decide
+// declaration, and it is exercised by a Go test that asserts on it or by code reachable from cmd/ompig. A rule that cannot decide
 // is a gap ("undecidable"), never a pass. The same input gives the same output: there are no scores, no network and no model.
 // The tool never edits the mapping.
 //
@@ -32,8 +32,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/upstreammirror"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/upstreammirror"
 )
 
 const (
@@ -60,9 +60,9 @@ func main() {
 	flag.StringVar(&o.root, "root", ".", "repository root")
 	flag.StringVar(&o.version, "version", pigversion.UpstreamVersion, "upstream version of the ledger")
 	flag.StringVar(&o.reach, "reach", "", "reachable-function list from cmd/prodreach; computed when empty")
-	flag.StringVar(&o.writeReach, "write-reach", "", "write the reach graph the ledger uses (prodreach over cmd/pig and the library entry points) to this file and exit")
+	flag.StringVar(&o.writeReach, "write-reach", "", "write the reach graph the ledger uses (prodreach over cmd/ompig and the library entry points) to this file and exit")
 	flag.StringVar(&o.out, "out", "build/interface-gaps", "output directory")
-	flag.StringVar(&o.cache, "cache", "", `derivation cache directory, or "auto" for $PIG_LEDGER_CACHE (else build/ledger-cache); empty derives from scratch`)
+	flag.StringVar(&o.cache, "cache", "", `derivation cache directory, or "auto" for $OMPIG_LEDGER_CACHE (else build/ledger-cache); empty derives from scratch`)
 	flag.StringVar(&o.frontier, "frontier", "", "write the ranked list of root gaps to this TSV file")
 	flag.BoolVar(&o.check, "check", false, "fail when the gap list grows past the committed baseline")
 	flag.BoolVar(&o.update, "update", false, "rewrite the committed baseline")
@@ -84,7 +84,7 @@ func main() {
 func (o options) writes() bool { return o.update || o.seed || o.mutate }
 
 func run(o options) error {
-	if pin := os.Getenv("PIG_UPSTREAM_VERSION"); pin != "" && pin != o.version {
+	if pin := os.Getenv("OMPIG_UPSTREAM_VERSION"); pin != "" && pin != o.version {
 		return fmt.Errorf("ledger version %s is not the exported pin %s (a PI_UPSTREAM_REF run must build with the pigversion overlay); refusing to read or write a ledger", o.version, pin)
 	}
 	root, err := filepath.Abs(o.root)
@@ -353,10 +353,10 @@ func gitHead(root string) string {
 // prodreachArgs is the invocation the ledger uses.
 var (
 	reachTags     = []string{}
-	reachPatterns = []string{"./cmd/pig"}
+	reachPatterns = []string{"./cmd/ompig"}
 	// reachLibraries are the Go packages that port an entry point a Pi library package publishes in its package.json exports map.
 	// A program that imports one can call its exported API as a Pi user calls the entry point, so prodreach takes that API as roots
-	// (-library). Only env, durable and chord: Pi ships them as library packages that the pi command does not load, so cmd/pig reaches
+	// (-library). Only env, durable and chord: Pi ships them as library packages that the pi command does not load, so cmd/ompig reaches
 	// little of them. libraryEntries names the Go packages that port each export; TestReachLibrariesPortPublishedEntryPoints checks
 	// it against the pinned package.json and PORT_MAP. Pi's ./testing entry points (test support) and ./package.json are not seeded.
 	reachLibraries = libraryPackages()

@@ -1,10 +1,10 @@
 // Package integration holds end-to-end tests that drive the real
-// `pig` binary through a tmux PTY and assert on captured pane output.
+// `ompig` binary through a tmux PTY and assert on captured pane output.
 //
 // These tests are GATED by the `integration` build tag because they:
 //
 //   - require tmux on PATH
-//   - rely on a binary at /tmp/pig-test (built by the harness)
+//   - rely on a binary at /tmp/ompig-test (built by the harness)
 //   - sleep between keystrokes (slow; ~3-5s per test)
 //   - depend on terminal width/height behavior that's hard to make
 //     deterministic in CI

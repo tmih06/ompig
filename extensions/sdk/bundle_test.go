@@ -111,7 +111,7 @@ func TestSourceReadable(t *testing.T) {
 		if len(data) == 0 {
 			t.Fatalf("embedded %s is empty", name)
 		}
-		if name == "go.mod" && !strings.Contains(string(data), "module github.com/MichaelKinsy/PiG/extensions/sdk") {
+		if name == "go.mod" && !strings.Contains(string(data), "module github.com/tmih06/ompig/extensions/sdk") {
 			t.Fatalf("embedded go.mod is not the SDK module: %q", filepath.Base(name))
 		}
 	}

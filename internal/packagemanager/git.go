@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Ports packages/coding-agent/src/core/package-manager.ts (getLocalGitUpdateTarget, ensureGitRef, cleanAndInstallGitDependencies, repairMissingGitDependencies).

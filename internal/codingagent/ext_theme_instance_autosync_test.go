@@ -3,8 +3,8 @@ package codingagent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // theme-controller.ts:138-143 setThemeInstance: automatic selection stops, the active name is "<in-memory>", and nothing is persisted, so a

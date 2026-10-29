@@ -7,7 +7,7 @@ import (
 )
 
 // AsyncMarkdownTransform prepares an owned, cancellable display rewrite. Prepare runs on the UI loop and snapshots mutable inputs; its returned function runs off-loop. Start joins that work at owner shutdown. Invalidate requests a paint without mutating UI state.
-// pig additive (D19): subprocess callbacks execute outside the host render loop.
+// ompig additive (D19): subprocess callbacks execute outside the host render loop.
 type AsyncMarkdownTransform struct {
 	Context    context.Context
 	Start      func(func())

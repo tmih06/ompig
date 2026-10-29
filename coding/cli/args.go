@@ -7,13 +7,13 @@ import (
 	"io"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // ─── CLI Flags ────────────────────────────────────────────────────────────────
@@ -124,7 +124,7 @@ type Args struct {
 	// Mirrors upstream --offline (args.ts:150).
 	Offline bool
 	// NoStdin skips the startup read of piped stdin, so a stdin pipe whose writer never closes does not block startup.
-	// pig divergence (D150): Pi has no such flag.
+	// ompig divergence (D150): Pi has no such flag.
 	NoStdin bool
 	// ProjectTrustOverride controls project-local resource loading for this run.
 	// nil uses saved/default trust; true is --approve; false is --no-approve.
@@ -258,7 +258,7 @@ func parseArgs(args []string) Args {
 		case arg == "--print" || arg == "-p":
 			flags.Print = true
 			// Upstream v0.73.1: -p may optionally consume the next positional
-			// arg as the prompt (e.g. `pig -p "my prompt"`).
+			// arg as the prompt (e.g. `ompig -p "my prompt"`).
 			// Matches args.ts: if next arg exists, isn't an @file, and isn't
 			// a flag (unless it starts with "---"), consume it as a message.
 			if i+1 < len(args) {
@@ -351,7 +351,7 @@ func parseArgs(args []string) Args {
 		case arg == "--offline":
 			flags.Offline = true
 		case arg == "--no-stdin":
-			// pig divergence (D150): Pi reads stdin until EOF with no opt-out (main.ts:80-97).
+			// ompig divergence (D150): Pi reads stdin until EOF with no opt-out (main.ts:80-97).
 			flags.NoStdin = true
 		case arg == "--approve" || arg == "-a":
 			flags.ProjectTrustOverride = new(true)
@@ -414,29 +414,29 @@ func parseArgs(args []string) Args {
 //go:embed help_upstream.txt
 var upstreamHelp string
 
-// pigCommands are PiG's additive top-level commands. Pi's own commands are in
+// ompigCommands are Ompig's additive top-level commands. Pi's own commands are in
 // upstreamHelp.
-const pigCommands = `PiG Commands:
-  pig login [provider]          Sign in to a provider
-  pig logout [provider]         Sign out of a provider
-  pig piglet <command>          List, show, validate, and build Piglets (run without arguments for usage)
-  pig package <command>         List, validate, and publish Packages
-  pig extension init <path>     Create a Go, Python, or Rust extension
-  pig extension upgrade         Rewrite Go extensions written for an older SDK
-  pig reload                    Stage the extension SDKs and drop builds an older SDK produced
-  pig setup [go|container]      Show or install the toolchains that extensions and Piglet builds use
-  pig verify [path...]          Verify this binary, downloads, installed Packages, and Resources
-  pig status [--json]           Show Resources, Packages, and Piglets
-  pig docs [show <topic>]       Read the local PiG documentation
-  pig version                   Show PiG, pinned Pi, Go, and platform versions
-  pig diagnose                  Show resolved configuration and binary identity
+const ompigCommands = `Ompig Commands:
+  ompig login [provider]          Sign in to a provider
+  ompig logout [provider]         Sign out of a provider
+  ompig ompiglet <command>          List, show, validate, and build Ompiglets (run without arguments for usage)
+  ompig package <command>         List, validate, and publish Packages
+  ompig extension init <path>     Create a Go, Python, or Rust extension
+  ompig extension upgrade         Rewrite Go extensions written for an older SDK
+  ompig reload                    Stage the extension SDKs and drop builds an older SDK produced
+  ompig setup [go|container]      Show or install the toolchains that extensions and Ompiglet builds use
+  ompig verify [path...]          Verify this binary, downloads, installed Packages, and Resources
+  ompig status [--json]           Show Resources, Packages, and Ompiglets
+  ompig docs [show <topic>]       Read the local Ompig documentation
+  ompig version                   Show Ompig, pinned Pi, Go, and platform versions
+  ompig diagnose                  Show resolved configuration and binary identity
 
-PiG Options:
-  --piglet <name|path>           Run the named Piglet, or the Piglet file at path; a Piglet Binary
-                                 built with build.allowOverlays lays it over its own Piglet
+Ompig Options:
+  --ompiglet <name|path>           Run the named Ompiglet, or the Ompiglet file at path; a Ompiglet Binary
+                                 built with build.allowOverlays lays it over its own Ompiglet
   --no-stdin                     Ignore piped stdin (for a stdin pipe that never closes)
 
-PiG keeps its configuration in ~/.pig and never reads or writes ~/.pi.
+Ompig keeps its configuration in ~/.ompig and never reads or writes ~/.pi.
 
 `
 
@@ -448,15 +448,15 @@ func (f *Args) setUnknownFlag(name string, value any) {
 	f.UnknownFlags[name] = value
 }
 
-// pigClaimedFlags are the flags PiG itself reads from UnknownFlags; they are not extension flags.
-var pigClaimedFlags = map[string]bool{"piglet": true, "unsafe-host": true, "container-engine": true, "workspace": true}
+// ompigClaimedFlags are the flags Ompig itself reads from UnknownFlags; they are not extension flags.
+var ompigClaimedFlags = map[string]bool{"ompiglet": true, "unsafe-host": true, "container-engine": true, "workspace": true}
 
 // extensionFlagValues is upstream's `extensionFlagValues: parsed.unknownFlags` (main.ts:753): the unclaimed flags in
 // command-line order.
 func (f Args) extensionFlagValues() []coding.ExtensionFlagValue {
 	var values []coding.ExtensionFlagValue
 	for _, name := range f.UnknownFlagOrder {
-		if !pigClaimedFlags[name] {
+		if !ompigClaimedFlags[name] {
 			values = append(values, coding.ExtensionFlagValue{Name: name, Value: f.UnknownFlags[name]})
 		}
 	}
@@ -466,8 +466,8 @@ func (f Args) extensionFlagValues() []coding.ExtensionFlagValue {
 // extensionFlagsNote is the help paragraph Pi's printHelp follows with the "Extension CLI Flags:" section (args.ts:333).
 const extensionFlagsNote = "Extensions can register additional flags (e.g., --plan from plan-mode extension).\n\n"
 
-// printHelp prints Pi's --help rendered with PiG's identity
-// (automation/gen/gen-help.sh), with PiG's commands after Pi's. Section headers are
+// printHelp prints Pi's --help rendered with Ompig's identity
+// (automation/gen/gen-help.sh), with Ompig's commands after Pi's. Section headers are
 // bold on a terminal, as chalk.bold renders them. Registered extension flags
 // follow the extension note, as upstream printHelp(extensionFlags) lists them.
 // Under a strip, the entries of stripped built-ins are left out (stripHelp).
@@ -483,7 +483,7 @@ func printHelp(w io.Writer, color bool, extensionFlags ...extension.ExtensionFla
 		}
 		out.WriteString(section)
 		if strings.HasPrefix(section, "Commands:\n") {
-			out.WriteString(pigCommands)
+			out.WriteString(ompigCommands)
 		}
 	}
 	text := stripHelp(out.String())

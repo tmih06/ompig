@@ -14,8 +14,8 @@ func TestApplyRulesRejectsRoadmapCommentsAndUserVisiblePromises(t *testing.T) {
 		"// trust enforcement lands in P1":                 "SH001",
 		"// a future row will connect this implementation": "SH002",
 		"// TODO: replace this placeholder":                "SH003",
-		"// pig divergence: hidden behavior gap":           "SH005",
-		"// pig additive from an old implementation":       "SH005",
+		"// ompig divergence: hidden behavior gap":         "SH005",
+		"// ompig additive from an old implementation":     "SH005",
 		"// Gopi uses a separate path":                     "SH006",
 	}
 	for text, code := range commentCases {
@@ -34,8 +34,8 @@ func TestApplyRulesAcceptsCurrentBehaviorAndDurableCompatibility(t *testing.T) {
 	for _, text := range []string{
 		"// Project settings are read only after trust resolves.",
 		"// Accepts the persisted Pi session header shape.",
-		"// pig divergence (D57): reject an unloadable extension root.",
-		"// pig additive (D18): validate the baked Piglet closure.",
+		"// ompig divergence (D57): reject an unloadable extension root.",
+		"// ompig additive (D18): validate the baked Ompiglet closure.",
 		"extension protocol version mismatch",
 	} {
 		if findings := applyRules("x.go", 1, text, stringsAreUserVisible(text)); len(findings) != 0 {
@@ -48,8 +48,8 @@ func TestChangedLinesAcceptsLargeGeneratedDiffLines(t *testing.T) {
 	root := t.TempDir()
 	for _, args := range [][]string{
 		{"init", "--quiet"},
-		{"config", "user.name", "PiG Test"},
-		{"config", "user.email", "pig-test@example.invalid"},
+		{"config", "user.name", "Ompig Test"},
+		{"config", "user.email", "ompig-test@example.invalid"},
 		{"config", "commit.gpgsign", "false"},
 	} {
 		command := exec.Command("git", args...)

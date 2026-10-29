@@ -8,7 +8,7 @@ import (
 // pi: packages/coding-agent/src/utils/pi-user-agent.ts
 //
 // Pi's test (test/pi-user-agent.test.ts) expects `pi/<version> (<platform>; <runtime>; <arch>)` and the shape /^pi\/[^\s()]+ \([^;()]+;\s*[^;()]+;\s*[^()]+\)$/.
-// PiG sends the owner-approved D65 identity `<AppName>/<version> (<platform> <release>; <arch>)` instead, with Node's platform and arch names (process.platform
+// Ompig sends the owner-approved D65 identity `<AppName>/<version> (<platform> <release>; <arch>)` instead, with Node's platform and arch names (process.platform
 // "linux", process.arch "x64" for amd64): the version segment stays one token without spaces or parentheses, the parentheses hold the platform and arch.
 func TestPiCodingAgentSrcUtilsPiUserAgentShape(t *testing.T) {
 	got := codingAgentUserAgent("1.2.3", nodePlatform("linux"), "6.1.0", nodeArch("amd64"))

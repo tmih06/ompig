@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Hand-picked edge spellings for Pi's redactUrl and redactJsonValue (core/bug-report.js), alongside TestBugReportRedactionMatchesPi's random corpus: credentials and secret-looking query parameters must be removed with the same URL serialization (WHATWG) for every URL spelling, and secret-looking JSON keys must be redacted at every depth.

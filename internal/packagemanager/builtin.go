@@ -3,9 +3,9 @@ package packagemanager
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/tui"
 )
 
 // ResolveBuiltinExtensions resolves each built-in extension name as a `builtin:<name>` extension resource, in name order: a matching `+`, `-` or `!` entry of the project setting decides it, and otherwise it is enabled unless the user `extensions` setting excludes it, for example with `-builtin:mcp`. The user setting is read only for a name the project setting leaves alone, so only then can its pattern fail; a pattern minimatch cannot compile returns the items before it with the error Pi's resolve() rejects with.

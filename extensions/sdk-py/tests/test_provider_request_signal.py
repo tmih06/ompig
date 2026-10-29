@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-import pig_sdk
+import ompig_sdk
 
 
 class ProviderRequestSignalTests(unittest.TestCase):
@@ -9,7 +9,7 @@ class ProviderRequestSignalTests(unittest.TestCase):
         # Pi's provider callback and its iterator share the request AbortSignal. The armed Context owns the corresponding Python signal.
         for boundary in ("complete", "before-bind", "between-events", "after-iterator"):
             with self.subTest(boundary=boundary):
-                ext = pig_sdk.Extension("provider-signal")
+                ext = ompig_sdk.Extension("provider-signal")
                 frames = []
                 contexts = []
                 final = {"role": "assistant", "content": [{"type": "text", "text": "final"}]}
@@ -23,7 +23,7 @@ class ProviderRequestSignalTests(unittest.TestCase):
                         ext._active[ctx.request_id] = (ctx._cancelled, "test cancellation")
                         ctx._cancelled.set()
 
-                class Stream(pig_sdk.ModelEventStream):
+                class Stream(ompig_sdk.ModelEventStream):
                     def events(self):
                         yield start
                         if boundary == "between-events":
@@ -39,7 +39,7 @@ class ProviderRequestSignalTests(unittest.TestCase):
                     self.assertIs(ctx._cancelled, ext._active[ctx.request_id][0])
                     if boundary == "before-bind":
                         cancel(ctx)
-                        return pig_sdk.ModelEventStream()
+                        return ompig_sdk.ModelEventStream()
                     stream = Stream()
                     stream.end(final)
                     return stream

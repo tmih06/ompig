@@ -1,7 +1,7 @@
 package cli
 
-// pig additive (D18): `pig package publish` is optional sugar over `npm publish`
-// for a Package. It validates the Package and the fields the pi-in-go.dev catalog
+// ompig additive (D18): `ompig package publish` is optional sugar over `npm publish`
+// for a Package. It validates the Package and the fields the ompig.dev catalog
 // reads, shows a dry run by default, and never edits the author's package.json.
 
 import (
@@ -15,25 +15,25 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	sourceref "github.com/MichaelKinsy/PiG/coding/source"
-	"github.com/MichaelKinsy/PiG/internal/npmpublish"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	sourceref "github.com/tmih06/ompig/coding/source"
+	"github.com/tmih06/ompig/internal/npmpublish"
 )
 
-// packageKeyword is the npm keyword that lists a package as a PiG Package. Pi's gallery finds Pi packages by `pi-package`.
-const packageKeyword = "pig-package"
+// packageKeyword is the npm keyword that lists a package as a Ompig Package. Pi's gallery finds Pi packages by `pi-package`.
+const packageKeyword = "ompig-package"
 
-const packagePublishUsageLine = "Usage: pig package publish [<dir>] --to npm [--yes|--dry-run] [--tag <dist-tag>] [--access public|restricted] [--otp <code>] [--no-input]"
+const packagePublishUsageLine = "Usage: ompig package publish [<dir>] --to npm [--yes|--dry-run] [--tag <dist-tag>] [--access public|restricted] [--otp <code>] [--no-input]"
 
 const packagePublishUsage = packagePublishUsageLine + `
 
 Optional sugar over plain ` + "`npm publish`" + ` for the Package in <dir> (default: the current
-directory). PiG validates the Package, checks that package.json has the fields the
-pi-in-go.dev catalog reads (name, version, description, and the pig-package keyword),
+directory). Ompig validates the Package, checks that package.json has the fields the
+ompig.dev catalog reads (name, version, description, and the ompig-package keyword),
 checks that name@version is free on npm, and shows what npm would publish. Without
 --yes it is a dry run. With --yes it runs npm publish in the Package directory, exactly
 as you would, so scripts such as prepublishOnly and .npmrc apply. npm does the
-authentication, and PiG never reads or stores an npm token. PiG does not edit
+authentication, and Ompig never reads or stores an npm token. Ompig does not edit
 package.json.
 
 Plain ` + "`npm publish`" + ` stays the supported way to publish a Package; this command only
@@ -148,7 +148,7 @@ func publishPackage(ctx context.Context, request packagePublishRequest, stdout, 
 		Package: npmpublish.Package{Name: manifest.Name, Version: manifest.Version, Dir: root, InPlace: true},
 		Flags:   request.flags, Label: "Package", Notes: notes,
 		Next: []string{
-			"Install it with: pig install npm:" + manifest.Name,
+			"Install it with: ompig install npm:" + manifest.Name,
 			"npm lists it under the keyword " + packageKeyword + "; catalogs that search that keyword show it after their next index build.",
 		},
 		Stdin: os.Stdin, Stdout: stdout, Stderr: stderr,
@@ -188,7 +188,7 @@ func readPublishableManifest(root string) (publishableManifest, error) {
 	case strings.TrimSpace(manifest.Description) == "":
 		return publishableManifest{}, errors.New("package.json needs a description; the catalog shows it on the Package's card")
 	case !slices.Contains(manifest.Keywords, packageKeyword):
-		return publishableManifest{}, fmt.Errorf("package.json keywords lack %q; add it so catalogs list the Package, then run this again (PiG does not edit package.json)", packageKeyword)
+		return publishableManifest{}, fmt.Errorf("package.json keywords lack %q; add it so catalogs list the Package, then run this again (Ompig does not edit package.json)", packageKeyword)
 	}
 	return manifest, nil
 }

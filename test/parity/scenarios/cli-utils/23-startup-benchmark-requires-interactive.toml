@@ -11,7 +11,7 @@ args = ["--model", "test-faux/faux-1", "--no-session", "--print", "hello"]
 timeout_seconds = 30
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PI_STARTUP_BENCHMARK=yes"]
+ompig = ["OMPIG_TEST_FAUX=1", "PI_STARTUP_BENCHMARK=yes"]
 pi = ["PI_STARTUP_BENCHMARK=yes"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 

@@ -27,4 +27,4 @@ runs = 3
 [[assert.normalize_replace]]
 pattern = '\bpig\b'
 with = 'pi'
-reason = "D2: PiG uses the pig executable name instead of pi."
+reason = "D2: Ompig uses the ompig executable name instead of pi."

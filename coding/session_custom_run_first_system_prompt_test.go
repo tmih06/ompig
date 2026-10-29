@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 func firstRunSnippetTool(t *testing.T, name, snippet string) agent.AgentTool {
@@ -40,7 +40,7 @@ func TestCustomMessageFirstRunCarriesTheSessionSystemPrompt(t *testing.T) {
 		}
 		// The prompt names the harness's own temp cwd (with forward slashes, as Pi's buildSystemPrompt writes it on Windows) and the docs bundle under its home.
 		cwd := h.session.CWD()
-		return strings.NewReplacer(cwd, "<cwd>", filepath.ToSlash(cwd), "<cwd>", os.Getenv("PIG_HOME"), "<home>").Replace(prompt)
+		return strings.NewReplacer(cwd, "<cwd>", filepath.ToSlash(cwd), "<cwd>", os.Getenv("OMPIG_HOME"), "<home>").Replace(prompt)
 	}
 	fromPrompt := firstRequestPrompt(t, func(s *Session) error { return s.Prompt(t.Context(), "hello") })
 	fromMessage := firstRequestPrompt(t, func(s *Session) error {

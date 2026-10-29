@@ -10,7 +10,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/storage/sqlite"
+	"github.com/tmih06/ompig/durable/storage/sqlite"
 )
 
 var piTables = []string{

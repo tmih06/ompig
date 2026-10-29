@@ -7,13 +7,13 @@
       appends one record per measurement: {"row", "key", "build", "arm", "replica", "round", "metrics": {...}, ...meta}
   rows.py summary RUNS.jsonl [--ratchet ratchet.toml]
       prints the table: per row and key, the median of each arm over every round and replica, the A/A spread
-      (median over rounds of |a - b| / mean of the two replicas of an arm) and pig's median over Pi-Bolt's
+      (median over rounds of |a - b| / mean of the two replicas of an arm) and ompig's median over Pi-Bolt's
   rows.py check RUNS.jsonl ratchet.toml
       fails when a ratio has a ceiling `lw.row.<row>.<key>.<metric>.ratio_vs_bolt` in [ceilings] and exceeds it
 
 large_write.py and long_answer.py print a table and write no JSONL, so collect parses their stdout; benchmark.py and
 long_session.py write JSONL (--out), which collect reads. benchmark.py's peak_mb is the run's ru_maxrss (the peak resident
-set of the pig or Pi-Bolt process): collect stores it as peak_rss_mb.
+set of the ompig or Pi-Bolt process): collect stores it as peak_rss_mb.
 """
 
 import argparse
@@ -36,7 +36,7 @@ SHOWN = {
     "startup": ["cpu_ms", "wall_ms", "peak_rss_mb", "instr_m"],
 }
 # Ceilings that hold on one platform only (row.sh's --meta platform=, darwin-arm64 or linux-x64); every other ceiling holds on both.
-# The peak RSS ratios are linux-only: on macOS Pi-Bolt's ru_maxrss is not comparable with pig's.
+# The peak RSS ratios are linux-only: on macOS Pi-Bolt's ru_maxrss is not comparable with ompig's.
 PLATFORMS = {
     "lw.row.headless.headless.instr_m.ratio_vs_bolt": "darwin",
     "lw.row.headless.headless.cpu_ms.ratio_vs_bolt": "linux",
@@ -52,7 +52,7 @@ def applies(gate, runs):
 
 
 def split_build(build):
-    """pig-a -> (pig, a); a build without a replica suffix is its own arm."""
+    """ompig-a -> (ompig, a); a build without a replica suffix is its own arm."""
     arm, _, replica = build.rpartition("-")
     if arm and len(replica) == 1:
         return arm, replica
@@ -145,17 +145,17 @@ def summary(a):
     ceilings = tomllib.loads(Path(a.ratchet).read_text()).get("ceilings", {}) if a.ratchet else {}
     rounds = len({r["round"] for r in runs})
     print(f"# LW rows: {rounds} round(s), {len(runs)} measurements ({a.runs})\n")
-    print("| row | key | metric | pig | A/A pig | bolt | A/A bolt | pig / bolt | ceiling |")
+    print("| row | key | metric | ompig | A/A ompig | bolt | A/A bolt | ompig / bolt | ceiling |")
     print("|---|---|---|---:|---:|---:|---:|---:|---:|")
     fmt = lambda v: "-" if v is None else (f"{v:.3g}" if abs(v) < 100 else f"{v:.0f}")
     pct = lambda v: "-" if v is None else f"{100 * v:.0f}%"
     for (row, key, metric), arms in sorted(agg.items()):
         if metric not in SHOWN.get(row, [metric]):
             continue
-        pig, bolt = arms.get("pig"), arms.get("bolt")
-        ratio = pig["median"] / bolt["median"] if pig and bolt and bolt["median"] else None
+        ompig, bolt = arms.get("ompig"), arms.get("bolt")
+        ratio = ompig["median"] / bolt["median"] if ompig and bolt and bolt["median"] else None
         ceiling = ceilings.get(ratio_id(row, key, metric))
-        print(f"| {row} | {key} | {metric} | {fmt(pig and pig['median'])} | {pct(pig and pig['aa'])} | {fmt(bolt and bolt['median'])} "
+        print(f"| {row} | {key} | {metric} | {fmt(ompig and ompig['median'])} | {pct(ompig and ompig['aa'])} | {fmt(bolt and bolt['median'])} "
               f"| {pct(bolt and bolt['aa'])} | {'-' if ratio is None else f'{ratio:.2f}x'} | {'-' if ceiling is None else f'{ceiling}x'} |")
     failed = sum(1 for r in runs if r["metrics"].get("ok") is False)
     if failed:
@@ -169,9 +169,9 @@ def check(a):
     bad = 0
     for (row, key, metric), arms in sorted(agg.items()):
         ceiling = ceilings.get(ratio_id(row, key, metric))
-        if ceiling is None or not applies(ratio_id(row, key, metric), runs) or "pig" not in arms or not arms.get("bolt", {}).get("median"):
+        if ceiling is None or not applies(ratio_id(row, key, metric), runs) or "ompig" not in arms or not arms.get("bolt", {}).get("median"):
             continue
-        ratio = arms["pig"]["median"] / arms["bolt"]["median"]
+        ratio = arms["ompig"]["median"] / arms["bolt"]["median"]
         print(f"lw-row: {ratio_id(row, key, metric)}={ratio:.2f} ceiling={ceiling}")
         if ratio > ceiling:
             bad += 1

@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // path-utils.ts resolveReadPath tries the path as resolved, then macOS spellings of it: a narrow no-break space before AM/PM, the NFD form, curly apostrophes, and NFD with curly apostrophes. The directory holds files under those
-// spellings (plain, AM/PM, NFD, curly, combined) and each probe is a user's spelling of one of them; Pi's resolveReadPath and PiG's must return the same file.
+// spellings (plain, AM/PM, NFD, curly, combined) and each probe is a user's spelling of one of them; Pi's resolveReadPath and Ompig's must return the same file.
 func TestResolveReadPathMatchesPi(t *testing.T) {
 	dir := t.TempDir()
 	files := []string{
@@ -68,7 +68,7 @@ emit(input.paths.map((p) => resolveReadPath(p, input.cwd)));
 		}
 		if got != want[i] {
 			if bad++; bad <= 8 {
-				t.Errorf("ResolveReadPath(%q): PiG %q, Pi %q", p, got, want[i])
+				t.Errorf("ResolveReadPath(%q): Ompig %q, Pi %q", p, got, want[i])
 			}
 		}
 	}

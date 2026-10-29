@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // JSON.stringify preserves unmatched UTF-16 units in ordinary response fields, not only values with custom marshalers.

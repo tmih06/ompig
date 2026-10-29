@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/api/openai-completions.ts buildParams (cache retention, routing, budget field, grammar tools, finish reason, zai tool stream).
 
 // The compat members and options the other openai-completions payload oracles never draw: supportsFinishReason, zaiToolStream, supportsOpenAIGrammarTools, supportsMidConvo*, supportsThinkingTokenBudget,
 // thinkingTokenBudgetField, cacheControlFormat, supportsLongCacheRetention, openRouterRouting and vercelGatewayRouting, with the options cacheRetention, sessionId and a thinking budget override, against
-// providers and base URLs that select OpenRouter, Vercel, OpenAI and Z.ai. The payload handed to onPayload by the pinned pi-ai and by PiG must be equal as parsed JSON.
+// providers and base URLs that select OpenRouter, Vercel, OpenAI and Z.ai. The payload handed to onPayload by the pinned pi-ai and by Ompig must be equal as parsed JSON.
 func TestOpenAICompletionsCompatAndCacheOptionsPayloadMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(101))
 	g := &payloadGen{rng: rng, api: "openai-completions", provider: "p", model: "m", thinkingSignatures: []string{""}}
@@ -68,7 +68,7 @@ func TestOpenAICompletionsCompatAndCacheOptionsPayloadMatchesPi(t *testing.T) {
 			p.Options["cacheRetention"] = pick("none", "short", "long")
 		}
 		// The empty sessionId is not drawn because it differs from Pi. Pi's options.sessionId is optional, and clampOpenAIPromptCacheKey("") (openai-prompt-cache.ts:3-8) sends
-		// prompt_cache_key "" under the openai-completions.ts:826-830 gate. StreamOptions.SessionID is a string, so PiG cannot tell "" from unset and sends no key.
+		// prompt_cache_key "" under the openai-completions.ts:826-830 gate. StreamOptions.SessionID is a string, so Ompig cannot tell "" from unset and sends no key.
 		if rng.Intn(2) == 0 {
 			p.Options["sessionId"] = pick("s1", "session-é", "a b")
 		}
@@ -133,7 +133,7 @@ func TestOpenAICompletionsCompatAndCacheOptionsPayloadMatchesPi(t *testing.T) {
 			if got == "" {
 				continue
 			}
-			t.Fatalf("probe %d: Pi produced no payload where PiG did: %.300s", i, got)
+			t.Fatalf("probe %d: Pi produced no payload where Ompig did: %.300s", i, got)
 		}
 		comparePayload(t, fmt.Sprintf("probe %d provider=%s baseUrl=%s reasoning=%v simple=%v compat=%s options=%v", i, p.Provider, p.BaseURL, p.Reasoning, p.Simple, p.Compat, p.Options), got, want[i], &failures, classes)
 	}

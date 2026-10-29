@@ -24,8 +24,8 @@ var corpusGlobs = []string{
 	"extensions/sdk-py/README.md",
 	"extensions/sdk-rs/README.md",
 	"extensions/sdk-ts/README.md",
-	"piglets/README.md",
-	"piglets/*/README.md",
+	"ompiglets/README.md",
+	"ompiglets/*/README.md",
 }
 
 const repoRoot = "../.."

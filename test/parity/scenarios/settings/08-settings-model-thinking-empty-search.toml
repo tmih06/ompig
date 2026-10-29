@@ -1,5 +1,5 @@
 # Behavior family: settings
-# Upstream evidence: SelectSubmenu.applyFilter rebuilds the SelectList for an empty result. SelectList.render returns the unpadded noMatch row, and getSelectListTheme colors it with muted foreground, not dim intensity. Probed the pinned installed SelectList and this complete model-settings path. The old Pig row used SGR 2 and failed escaped equality.
+# Upstream evidence: SelectSubmenu.applyFilter rebuilds the SelectList for an empty result. SelectList.render returns the unpadded noMatch row, and getSelectListTheme colors it with muted foreground, not dim intensity. Probed the pinned installed SelectList and this complete model-settings path. The old Ompig row used SGR 2 and failed escaped equality.
 name = "08-settings-model-thinking-empty-search"
 description = "The model-thinking submenu preserves exact empty-search rendering and cannot confirm an absent model."
 covers = [
@@ -13,7 +13,7 @@ model = "fixture/thinking-model"
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "$0.000"
 ready_timeout_seconds = 25
 capture_start = "Per-Model Thinking Level"
@@ -41,9 +41,9 @@ wait_timeout_seconds = 5
 settle_seconds = 1
 
 [env]
-pig = ["PIG_CODING_AGENT_DIR=testdata/model-agent"]
+ompig = ["OMPIG_CODING_AGENT_DIR=testdata/model-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/model-agent"]
-pig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--no-extensions", "--offline", "--session-dir", "{{TEMP}}/sessions"]
 
 [assert]

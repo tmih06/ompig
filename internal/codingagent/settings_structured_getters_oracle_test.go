@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // settings-manager.ts getBranchSummarySettings, getBranchSummarySkipPrompt, getRetryEnabled, getRetrySettings, getProviderRetrySettings,
@@ -19,7 +19,7 @@ import (
 // getImageWidthCells, getShowTerminalProgress, getTuiMode, getFullscreenExitOutput, getFullscreenScrollbar, getFullscreenCopyOnSelect,
 // getFullscreenWheelScrollLines, getEnabledModels, getShellCommandPrefix, getNpmCommand, getLastChangelogVersion and getTrackingId against pinned Pi, over layered
 // global and project settings files with enum values valid and invalid, objects merged one level down and keys omitted. Not compared: getters that
-// read the environment, wrong-typed values and fractional numbers (PiG's Settings is typed), empty strings (Go cannot tell "" from absent).
+// read the environment, wrong-typed values and fractional numbers (Ompig's Settings is typed), empty strings (Go cannot tell "" from absent).
 func TestSettingsManagerStructuredGettersMatchPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(20261115))
 	pick := func(xs []string) string { return xs[rng.Intn(len(xs))] }

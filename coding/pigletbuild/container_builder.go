@@ -17,15 +17,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/linkerexec"
 
 	"go.yaml.in/yaml/v3"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 var (
@@ -65,8 +65,8 @@ func (b containerBuilder) Probe(ctx context.Context, request BuilderRequest) Bui
 	}
 	if request.Options.SignKeyPath != "" {
 		result.Code = "signing-unsupported"
-		result.Message = "the container builder does not sign Piglet Binaries; the signing key never enters the container"
-		result.Remedy = "sign with --builder native, or attest the CI build with keyless Sigstore and check it with pig verify --provenance"
+		result.Message = "the container builder does not sign Ompiglet Binaries; the signing key never enters the container"
+		result.Remedy = "sign with --builder native, or attest the CI build with keyless Sigstore and check it with ompig verify --provenance"
 		return result
 	}
 	if len(request.Options.Targets) != 1 || request.Options.Targets[0].OS != "linux" {
@@ -78,8 +78,8 @@ func (b containerBuilder) Probe(ctx context.Context, request BuilderRequest) Bui
 	if b.bootstrap != nil {
 		if _, ok := b.bootstrap.release(); !ok {
 			result.Code = "source-unavailable"
-			result.Message = "this PiG build is not a tagged release that the container can install"
-			result.Remedy = "build with --builder native from a Pig checkout, or configure a container builder whose image contains Pig"
+			result.Message = "this Ompig build is not a tagged release that the container can install"
+			result.Remedy = "build with --builder native from a Ompig checkout, or configure a container builder whose image contains Ompig"
 			return result
 		}
 	}
@@ -105,7 +105,7 @@ func (b containerBuilder) Probe(ctx context.Context, request BuilderRequest) Bui
 	if err != nil {
 		result.Code = "image-unavailable"
 		result.Message = fmt.Sprintf("digest-pinned builder image %s is not present locally", b.config.Image)
-		result.Remedy = fmt.Sprintf("authenticate with %s outside Pig if required, then run `%s pull %s`", imageRegistry(b.config.Image), engine, b.config.Image)
+		result.Remedy = fmt.Sprintf("authenticate with %s outside Ompig if required, then run `%s pull %s`", imageRegistry(b.config.Image), engine, b.config.Image)
 		return result
 	}
 	metadata := strings.Fields(string(imageMetadata))
@@ -125,7 +125,7 @@ func (b containerBuilder) Probe(ctx context.Context, request BuilderRequest) Bui
 }
 
 func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (BuilderResult, error) {
-	// pig additive (D18): the container builder reports its own work without inventing inner toolchain phases.
+	// ompig additive (D18): the container builder reports its own work without inventing inner toolchain phases.
 	buildprogress.Phase(ctx, "Preparing container build", b.Name())
 	engine, err := b.resolveEngine()
 	if err != nil {
@@ -140,7 +140,7 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 	if b.bootstrap != nil {
 		version, ok := b.bootstrap.release()
 		if !ok {
-			return BuilderResult{}, fmt.Errorf("source-unavailable: this PiG build is not a tagged release that the container can install")
+			return BuilderResult{}, fmt.Errorf("source-unavailable: this Ompig build is not a tagged release that the container can install")
 		}
 		bootstrapVersion = version
 		if err := os.MkdirAll(b.bootstrap.cacheDir, 0o755); err != nil {
@@ -154,7 +154,7 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 	if err := os.MkdirAll(filepath.Dir(artifactPath), 0o755); err != nil {
 		return BuilderResult{}, err
 	}
-	buildRoot, err := os.MkdirTemp(filepath.Dir(artifactPath), ".pig-container-build-*")
+	buildRoot, err := os.MkdirTemp(filepath.Dir(artifactPath), ".ompig-container-build-*")
 	if err != nil {
 		return BuilderResult{}, err
 	}
@@ -173,11 +173,11 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 			return BuilderResult{}, err
 		}
 	}
-	pigletData, mounts, err := localizeContainerPiglet(request.Piglet)
+	pigletData, mounts, err := localizeContainerPiglet(request.Ompiglet)
 	if err != nil {
 		return BuilderResult{}, err
 	}
-	pigletPath := filepath.Join(inputDir, "piglet.yaml")
+	pigletPath := filepath.Join(inputDir, "ompiglet.yaml")
 	if err := os.WriteFile(pigletPath, pigletData, 0o644); err != nil {
 		return BuilderResult{}, err
 	}
@@ -195,7 +195,7 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 		"--mount", containerMount(outputDir, "/out", false),
 		"--mount", containerMount(inputDir, "/input", true),
 		"--mount", containerMount(recordHome, "/records-home", false),
-		"--env", "HOME=/records-home", "--env", "PIG_HOME=/records-home", "--env", "PIG_CODING_AGENT_DIR=/records-home/agent",
+		"--env", "HOME=/records-home", "--env", "OMPIG_HOME=/records-home", "--env", "OMPIG_CODING_AGENT_DIR=/records-home/agent",
 		"--env", "GIT_CONFIG_COUNT=1", "--env", "GIT_CONFIG_KEY_0=safe.directory", "--env", "GIT_CONFIG_VALUE_0=*",
 	)
 	if err := createContainerMountpoints(inputDir, mounts); err != nil {
@@ -204,7 +204,7 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 	for _, mount := range mounts {
 		args = append(args, "--mount", containerMount(mount.Source, mount.Target, true))
 	}
-	innerArgs := []string{"piglet", "build", "/input/piglet.yaml", "--format", "binary", "--builder", "native", "--verification", "basic", "--no-input", "--out", "/out/" + filepath.Base(artifactPath), "--targets", target.String()}
+	innerArgs := []string{"ompiglet", "build", "/input/ompiglet.yaml", "--format", "binary", "--builder", "native", "--verification", "basic", "--no-input", "--out", "/out/" + filepath.Base(artifactPath), "--targets", target.String()}
 	if buildprogress.Verbose(ctx) {
 		innerArgs = append(innerArgs, "--verbose")
 	}
@@ -214,7 +214,7 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 		args = append(args, b.config.Image)
 		args = append(args, command...)
 	} else {
-		args = append(args, "--entrypoint", "pig", b.config.Image)
+		args = append(args, "--entrypoint", "ompig", b.config.Image)
 		args = append(args, innerArgs...)
 	}
 	buildprogress.Phase(ctx, "Building in container", b.Name()+" · "+target.String())
@@ -222,25 +222,25 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 		return BuilderResult{}, err
 	}
 	buildprogress.Phase(ctx, "Verifying container artifact", artifactPath)
-	innerRecords, err := readBuiltRecords(filepath.Join(recordHome, "receipts", "piglets"))
+	innerRecords, err := readBuiltRecords(filepath.Join(recordHome, "receipts", "ompiglets"))
 	if err != nil {
 		return BuilderResult{}, fmt.Errorf("read container build records: %w", err)
 	}
-	portable, err := buildPortableLock(request.Piglet, request.Cells, request.Options)
+	portable, err := buildPortableLock(request.Ompiglet, request.Cells, request.Options)
 	if err != nil {
 		return BuilderResult{}, err
 	}
 	innerResolution := innerRecords.Resolution.Resolution
 	innerBinary := innerRecords.Binary.Binary
 	if innerResolution == nil || innerBinary == nil || innerResolution.EffectiveDigest != portable.ResolutionRecord.Resolution.EffectiveDigest || innerResolution.ComponentPlan.Digest != portable.ComponentPlan.Digest || innerBinary.Target != target.String() {
-		return BuilderResult{}, fmt.Errorf("container builder records disagree with the locked runtime Piglet, target, or component plan")
+		return BuilderResult{}, fmt.Errorf("container builder records disagree with the locked runtime Ompiglet, target, or component plan")
 	}
 	artifactDigest, artifactSize, err := hashFile(containerArtifact)
 	if err != nil {
 		return BuilderResult{}, fmt.Errorf("hash container artifact: %w", err)
 	}
 	if artifactDigest != innerBinary.Artifact.Digest || artifactSize != innerBinary.Artifact.Size {
-		return BuilderResult{}, fmt.Errorf("container artifact does not match its Piglet Binary record")
+		return BuilderResult{}, fmt.Errorf("container artifact does not match its Ompiglet Binary record")
 	}
 	if err := copyContainerArtifact(containerArtifact, artifactPath); err != nil {
 		return BuilderResult{}, err
@@ -251,22 +251,22 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 			_ = os.Remove(artifactPath)
 		}
 	}()
-	fileName := "pig-" + request.Piglet.Name
-	if request.Piglet.Build != nil && request.Piglet.Build.OutputName != "" {
-		fileName = request.Piglet.Build.OutputName
+	fileName := "ompig-" + request.Ompiglet.Name
+	if request.Ompiglet.Build != nil && request.Ompiglet.Build.OutputName != "" {
+		fileName = request.Ompiglet.Build.OutputName
 	}
-	binaryRecord, err := pigletartifact.NewBinaryRecord(portable.Piglet, portable.ReleaseVersion, time.Now(), portable.ResolutionRecord, pigletartifact.BinaryInput{
-		Target: target.String(), PigVersion: innerBinary.PigVersion,
-		PigSourceRevision: innerBinary.PigSourceRevision, PigSourceDigest: innerBinary.PigSourceDigest,
+	binaryRecord, err := pigletartifact.NewBinaryRecord(portable.Ompiglet, portable.ReleaseVersion, time.Now(), portable.ResolutionRecord, pigletartifact.BinaryInput{
+		Target: target.String(), OmpigVersion: innerBinary.OmpigVersion,
+		OmpigSourceRevision: innerBinary.OmpigSourceRevision, OmpigSourceDigest: innerBinary.OmpigSourceDigest,
 		Builder: b.Name(), BuilderIdentity: "container:" + engine + ":" + b.config.Image, Toolchains: innerBinary.Toolchains,
 		Artifact:     pigletartifact.Artifact{Digest: artifactDigest, Size: artifactSize, FileName: fileName},
 		Verification: innerBinary.Verification,
-		Strip:        binaryStripEntries(request.Piglet),
-		StripKeep:    binaryStripIDs(request.Piglet.Strip.KeepLists()),
-		StripTable:   binaryStripIDs(piglet.StripTable()),
+		Strip:        binaryStripEntries(request.Ompiglet),
+		StripKeep:    binaryStripIDs(request.Ompiglet.Strip.KeepLists()),
+		StripTable:   binaryStripIDs(ompiglet.StripTable()),
 	})
 	if err != nil {
-		return BuilderResult{}, fmt.Errorf("build container Piglet Binary record: %w", err)
+		return BuilderResult{}, fmt.Errorf("build container Ompiglet Binary record: %w", err)
 	}
 	buildprogress.Phase(ctx, "Writing binary and records", artifactPath)
 	recordPath, err := writeBinaryRecords(binaryBuildRecords{Resolution: portable.ResolutionRecord, Binary: binaryRecord}, artifactPath)
@@ -275,7 +275,7 @@ func (b containerBuilder) Build(ctx context.Context, request BuilderRequest) (Bu
 	}
 	cleanup = false
 	if request.Stdout != nil && !buildprogress.Enabled(ctx) {
-		_, _ = fmt.Fprintf(request.Stdout, "Piglet Binary record: %s\n", recordPath)
+		_, _ = fmt.Fprintf(request.Stdout, "Ompiglet Binary record: %s\n", recordPath)
 	}
 	return BuilderResult{Builder: b.Name(), Artifact: artifactPath, Record: recordPath}, nil
 }
@@ -300,16 +300,16 @@ func readBuiltRecords(root string) (binaryBuildRecords, error) {
 		switch record.Kind {
 		case pigletartifact.RecordKindResolution:
 			if records.Resolution.Kind != "" {
-				return fmt.Errorf("multiple piglet-resolution records produced")
+				return fmt.Errorf("multiple ompiglet-resolution records produced")
 			}
 			records.Resolution = record
 		case pigletartifact.RecordKindBinary:
 			if records.Binary.Kind != "" {
-				return fmt.Errorf("multiple piglet-binary records produced")
+				return fmt.Errorf("multiple ompiglet-binary records produced")
 			}
 			records.Binary = record
 		default:
-			return fmt.Errorf("unexpected Piglet record kind %q", record.Kind)
+			return fmt.Errorf("unexpected Ompiglet record kind %q", record.Kind)
 		}
 		return nil
 	})
@@ -317,7 +317,7 @@ func readBuiltRecords(root string) (binaryBuildRecords, error) {
 		return binaryBuildRecords{}, err
 	}
 	if records.Resolution.Kind == "" || records.Binary.Kind == "" {
-		return binaryBuildRecords{}, fmt.Errorf("container build did not produce both Piglet resolution and Binary records")
+		return binaryBuildRecords{}, fmt.Errorf("container build did not produce both Ompiglet resolution and Binary records")
 	}
 	if err := pigletartifact.ValidateBinaryLink(records.Resolution, records.Binary); err != nil {
 		return binaryBuildRecords{}, err
@@ -391,7 +391,7 @@ func (b containerBuilder) runCommandWithStreams(ctx context.Context, engine stri
 func containerArtifactPath(request BuilderRequest) (string, error) {
 	output := request.Output
 	if output == "" {
-		output = "pig-" + request.Piglet.Name
+		output = "ompig-" + request.Ompiglet.Name
 	}
 	artifactPath, err := filepath.Abs(output)
 	if err != nil {
@@ -413,21 +413,21 @@ type containerPigletMount struct {
 	Target string
 }
 
-func localizeContainerPiglet(p *piglet.Piglet) ([]byte, []containerPigletMount, error) {
-	// pig additive (D91): only the native builder fuses a frontend member.
+func localizeContainerPiglet(p *ompiglet.Ompiglet) ([]byte, []containerPigletMount, error) {
+	// ompig additive (D91): only the native builder fuses a frontend member.
 	if p.HasFrontend() {
 		return nil, nil, fmt.Errorf("slots.frontend requires the native builder; the container builder cannot fuse a frontend member")
 	}
-	localized := piglet.Clone(p)
-	// The in-container build bakes this Piglet; it keeps build.allowOverlays (D202) so the Binary declares what the source did.
+	localized := ompiglet.Clone(p)
+	// The in-container build bakes this Ompiglet; it keeps build.allowOverlays (D202) so the Binary declares what the source did.
 	localized.Build = nil
 	if p.Build != nil && p.Build.AllowOverlays {
-		localized.Build = &piglet.BuildSpec{AllowOverlays: true}
+		localized.Build = &ompiglet.BuildSpec{AllowOverlays: true}
 	}
 	localized.Packages = nil
 	mountSet := make(map[string]string)
 	var err error
-	resolvedExtensions, extensionErrs := piglet.ResolveExtensions(p)
+	resolvedExtensions, extensionErrs := ompiglet.ResolveExtensions(p)
 	if len(extensionErrs) > 0 {
 		return nil, nil, extensionErrs[0]
 	}
@@ -476,7 +476,7 @@ func localizeContainerPiglet(p *piglet.Piglet) ([]byte, []containerPigletMount, 
 			}
 		}
 	}
-	resolvedSkills, skillErrs := piglet.ResolveSkills(p)
+	resolvedSkills, skillErrs := ompiglet.ResolveSkills(p)
 	if len(skillErrs) > 0 {
 		return nil, nil, skillErrs[0]
 	}
@@ -501,7 +501,7 @@ func localizeContainerPiglet(p *piglet.Piglet) ([]byte, []containerPigletMount, 
 		mountSet[target] = path
 	}
 	pigletDir := filepath.Dir(p.SourcePath())
-	localizePrompt := func(ref *piglet.PromptRef) error {
+	localizePrompt := func(ref *ompiglet.PromptRef) error {
 		if ref == nil || ref.File == "" {
 			return nil
 		}
@@ -629,7 +629,7 @@ func containerUserArgs() ([]string, error) {
 // numeric uid does not have. That is the normal case for the environments a
 // container build targets, so the kernel's own view of the ids is the fallback.
 func containerUserArgsFor(goos string, lookup func() (*user.User, error), getuid, getgid func() int) ([]string, error) {
-	// pig additive (D67): a Windows host maps no uid:gid into the build container.
+	// ompig additive (D67): a Windows host maps no uid:gid into the build container.
 	if goos == "windows" {
 		return nil, nil
 	}
@@ -664,7 +664,7 @@ func copyContainerArtifact(source, target string) error {
 		return err
 	}
 	defer func() { _ = input.Close() }()
-	stage, err := os.CreateTemp(filepath.Dir(target), ".pig-artifact-*.stage")
+	stage, err := os.CreateTemp(filepath.Dir(target), ".ompig-artifact-*.stage")
 	if err != nil {
 		return err
 	}
@@ -697,7 +697,7 @@ func configuredBuilders() ([]BuilderBackend, error) {
 }
 
 func loadContainerBuilderConfigs() ([]ContainerBuilderConfig, error) {
-	path := strings.TrimSpace(os.Getenv("PIG_BUILDERS_FILE"))
+	path := strings.TrimSpace(os.Getenv("OMPIG_BUILDERS_FILE"))
 	if path == "" {
 		path = filepath.Join(codingagent.StateDir("pigletbuild"), "builders.json")
 	}

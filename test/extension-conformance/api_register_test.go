@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/extensiontest"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/extensiontest"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // extensionFromRegistrations is what the loader builds from the registrations an extension makes through extension.API (loader.ts:289-372): the tool, command, flag, shortcut, renderer and transformer tables the runner reads.

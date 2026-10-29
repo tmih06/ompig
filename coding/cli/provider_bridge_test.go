@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// The provider bridge is the transport a process with no extension runtime uses to reach PiG's provider implementations (pi-ai builtin APIs, D74): pi-subagents' detached runner,
+// The provider bridge is the transport a process with no extension runtime uses to reach Ompig's provider implementations (pi-ai builtin APIs, D74): pi-subagents' detached runner,
 // forked workers. Each case drives the real stream through an OpenAI-compatible server.
 func bridgeServer(t *testing.T, hold chan struct{}) *httptest.Server {
 	t.Helper()

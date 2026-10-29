@@ -27,11 +27,11 @@ import (
 	"sync"
 	"time"
 
-	chordsqlite "github.com/MichaelKinsy/PiG/chord/sqlite"
-	"github.com/MichaelKinsy/PiG/internal/jsclock"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	chordsqlite "github.com/tmih06/ompig/chord/sqlite"
+	"github.com/tmih06/ompig/internal/jsclock"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // SqliteTelemetryOptions configures CreateSqliteTelemetry. A nil member is upstream's undefined.
@@ -44,7 +44,7 @@ type SqliteTelemetryOptions struct {
 
 	// ticks replaces the one-second timer; nil uses time.NewTicker. A test drives the background flush with it, as
 	// Pi's tests advance fake timers.
-	// pig additive (D104): Go has no global fake timers; the unexported seam stands in for vi.useFakeTimers.
+	// ompig additive (D104): Go has no global fake timers; the unexported seam stands in for vi.useFakeTimers.
 	ticks func() (ticks <-chan time.Time, stop func())
 }
 

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 func TestOAuthErrorMessagesAreTheOnesErrorsTSBuilds(t *testing.T) {

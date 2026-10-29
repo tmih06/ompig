@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/shellconfig"
+	"github.com/tmih06/ompig/internal/shellconfig"
 )
 
 func TestPortWave11ResolveConfigValueConfiguredStdin(t *testing.T) {

@@ -17,10 +17,10 @@ import (
 	"golang.org/x/mod/sumdb/dirhash"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
 // keptWorkSumLine is a go.work.sum line no build of the fixture needs. Go drops
@@ -64,7 +64,7 @@ func publishFixtureModule(t *testing.T, proxy, path, version string, files map[s
 	return path + " " + version + " " + zipHash + "\n", path + " " + version + "/go.mod " + modHash + "\n"
 }
 
-// ambiguousImportWorkspace is a fake Pig checkout in workspace mode with a
+// ambiguousImportWorkspace is a fake Ompig checkout in workspace mode with a
 // second workspace module, and a fused member whose own go.sum is complete in
 // module mode.
 type ambiguousImportWorkspace struct {
@@ -105,12 +105,12 @@ func newAmbiguousImportWorkspace(t *testing.T) ambiguousImportWorkspace {
 
 	sdk := modfile.AutoQuote(filepath.ToSlash(sdkRoot))
 	root := physicalTempDir(t)
-	writeFixtureFile(t, filepath.Join(root, "go.mod"), "module example.com/pig\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+sdk+"\n")
+	writeFixtureFile(t, filepath.Join(root, "go.mod"), "module example.com/ompig\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+sdk+"\n")
 	writeFixtureFile(t, filepath.Join(root, "go.sum"), "")
-	writeFixtureFile(t, filepath.Join(root, "cmd", "pig", "main.go"), "package main\n\nimport _ \"example.com/pig/coding/extension/host/fusepack\"\n\nfunc main() {}\n")
+	writeFixtureFile(t, filepath.Join(root, "cmd", "ompig", "main.go"), "package main\n\nimport _ \"example.com/ompig/coding/extension/host/fusepack\"\n\nfunc main() {}\n")
 	fuseDir := filepath.Join(root, "coding", "extension", "host", "fusepack")
 	writeFixtureFile(t, filepath.Join(fuseDir, "base.go"), `package fusepack
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 var factories = map[string]func() *sdk.Extension{}
 func registerFactory(name string, factory func() *sdk.Extension) { factories[name] = factory }
 `)
@@ -122,11 +122,11 @@ func registerFactory(name string, factory func() *sdk.Extension) { factories[nam
 	writeFixtureFile(t, filepath.Join(root, "go.work.sum"), keptWorkSumLine+"\n")
 
 	member := physicalTempDir(t)
-	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/review\n\ngo 1.26\n\nrequire (\n\tgithub.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n\texample.com/amb/v2 v2.0.0\n)\n\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => "+sdk+"\n")
+	writeFixtureFile(t, filepath.Join(member, "go.mod"), "module example.com/review\n\ngo 1.26\n\nrequire (\n\tgithub.com/tmih06/ompig/extensions/sdk v0.0.0\n\texample.com/amb/v2 v2.0.0\n)\n\nreplace github.com/tmih06/ompig/extensions/sdk => "+sdk+"\n")
 	writeFixtureFile(t, filepath.Join(member, "go.sum"), v2Zip+v2Mod)
 	writeFixtureFile(t, filepath.Join(member, "extension.go"), `package review
 import (
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 	"example.com/amb/v2/pkg"
 )
 func Extension() *sdk.Extension { return sdk.New("review-" + pkg.V) }
@@ -151,7 +151,7 @@ func (w ambiguousImportWorkspace) cell() subprocess.CellSpec {
 	}
 }
 
-// A Pig checkout builds in workspace mode, which needs checksums go mod tidy
+// A Ompig checkout builds in workspace mode, which needs checksums go mod tidy
 // never writes into a member's go.sum, such as the zip hash that settles
 // whether a package path is provided by two modules. Go writes them to
 // go.work.sum, and the build overlay forbids that write, so the build failed
@@ -179,9 +179,9 @@ func TestBuildNativeArtifactCompletesWorkspaceChecksumsOffline(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	source := pigSource{Root: w.root}
+	source := ompigSource{Root: w.root}
 	goToolchain := toolchain.GoToolchain{Command: "go"}
-	plain := source.goCommand(context.Background(), goToolchain, pigletBinaryBuildArgs(filepath.Join(t.TempDir(), "pig"), "", overlayPath, nil)...)
+	plain := source.goCommand(context.Background(), goToolchain, pigletBinaryBuildArgs(filepath.Join(t.TempDir(), "ompig"), "", overlayPath, nil)...)
 	if output, err := plain.CombinedOutput(); err == nil || !strings.Contains(string(output), "updates to go.sum needed") {
 		t.Fatalf("fixture does not need a workspace-only checksum: err=%v\n%s", err, output)
 	}
@@ -203,9 +203,9 @@ func TestBuildNativeArtifactCompletesWorkspaceChecksumsOffline(t *testing.T) {
 		Kind: pigletartifact.ComponentKindExtension, Name: "review",
 		Realization: pigletartifact.RealizationFused, Materialization: pigletartifact.MaterializationBinary,
 	}}}
-	artifact := filepath.Join(t.TempDir(), "pig-review")
+	artifact := filepath.Join(t.TempDir(), "ompig-review")
 	var stdout, stderr bytes.Buffer
-	if _, err := buildNativeArtifact(context.Background(), source, &piglet.Piglet{Name: "review"}, []subprocess.CellSpec{w.cell()}, plan, nil, Options{}, artifact, &stdout, &stderr); err != nil {
+	if _, err := buildNativeArtifact(context.Background(), source, &ompiglet.Ompiglet{Name: "review"}, []subprocess.CellSpec{w.cell()}, plan, nil, Options{}, artifact, &stdout, &stderr); err != nil {
 		t.Fatalf("buildNativeArtifact: %v\nstdout:\n%s\nstderr:\n%s", err, &stdout, &stderr)
 	}
 	if _, err := os.Stat(artifact); err != nil {
@@ -230,7 +230,7 @@ func TestCompleteWorkspaceSumsSkipsAModuleCacheSource(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(root, "go.work"), []byte("go 1.26.0\n\nuse .\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	err := completeWorkspaceSums(context.Background(), pigSource{Root: root, ModuleVersion: "v0.5.0"}, toolchain.GoToolchain{Command: filepath.Join(root, "no-such-go")}, filepath.Join(root, "no-overlay.json"), t.TempDir(), nil)
+	err := completeWorkspaceSums(context.Background(), ompigSource{Root: root, ModuleVersion: "v0.5.0"}, toolchain.GoToolchain{Command: filepath.Join(root, "no-such-go")}, filepath.Join(root, "no-overlay.json"), t.TempDir(), nil)
 	if err != nil {
 		t.Fatalf("a module-cache source must not run the go command: %v", err)
 	}
@@ -239,7 +239,7 @@ func TestCompleteWorkspaceSumsSkipsAModuleCacheSource(t *testing.T) {
 // The scratch workspace resolves from another directory, so every relative
 // workspace module and local replacement becomes absolute under the source root.
 func TestScratchWorkFileAnchorsRelativePaths(t *testing.T) {
-	root := filepath.Join(t.TempDir(), "pig")
+	root := filepath.Join(t.TempDir(), "ompig")
 	data := []byte("go 1.26.0\n\ntoolchain go1.27.2\n\nuse (\n\t.\n\t./extensions/sdk\n)\n\nreplace example.com/local => ./local\n\nreplace example.com/remote v1.0.0 => example.com/fork v1.0.1\n")
 	out, err := scratchWorkFile(filepath.Join(root, "go.work"), data, root)
 	if err != nil {

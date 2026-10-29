@@ -29,13 +29,13 @@ Each group names the Go counterpart that I verified in the tree, so lg-rules can
 | `mcp/.#isJsonRpcResponse` | `mcp/jsonrpc.go#JSONRPCMessage.IsResponse` (function to method). I probed 12 wire shapes (error as string, error without message, result plus error, null id, boolean id, and others) through `ParseJSONRPCMessage`: Go rejects and accepts the same shapes as Pi's `parseJsonRpcMessage`; `mcp/upstream_oracle_test.go#TestParseJSONRPCMessageMatchesPi` covers the oracle comparison |
 | `coding-agent/.#ThemeSelectorComponent::construct:0` | `tui/theme_selector.go#NewThemeSelectorComponent` (f564c15bf renamed `NewThemeSelector`, so the name rule finds it) |
 | `coding-agent/.#formatSkillsForPrompt` | `internal/codingagent/prompts/coding.go#formatSkills` (the detector sees five N5 candidates) |
-| `coding-agent/.#main`, `main::call:0` | `coding/extension/host/subprocess/internal/noderuntimegen/main.go#main` is a `package main` command; the detector bound Pi's `main(argv, options)` to it by name. The Pi CLI entry is `cmd/pig`. Request: a `package main` `main` is not a candidate for a library function named `main` |
+| `coding-agent/.#main`, `main::call:0` | `coding/extension/host/subprocess/internal/noderuntimegen/main.go#main` is a `package main` command; the detector bound Pi's `main(argv, options)` to it by name. The Pi CLI entry is `cmd/ompig`. Request: a `package main` `main` is not a candidate for a library function named `main` |
 | `codemode/.#loadQuickJSWasm` | `codemode/assets.go` embeds `assets/quickjs.wasm`; Go has no lazy loader function |
 | `telemetry/.#InMemoryTelemetryContext::construct:0` | `telemetry/memory.go#InMemoryTelemetryContext`: the zero value is the constructor |
 
 ## R2 Designed-out candidates: the Pi `compat` entrypoint
 
-`packages/ai/src/compat.ts:1-12` describes itself as a "temporary compatibility entrypoint preserving the old global pi-ai API ... deleted with the coding-agent ModelManager migration". PiG has no global API registry. Request: record these rows as `designed-out` with that line as the reason:
+`packages/ai/src/compat.ts:1-12` describes itself as a "temporary compatibility entrypoint preserving the old global pi-ai API ... deleted with the coding-agent ModelManager migration". Ompig has no global API registry. Request: record these rows as `designed-out` with that line as the reason:
 
 - `ai/compat#ApiProvider`, `ai/compat#getApiProvider`
 - `ai/compat#streamAzureOpenAIResponses`, `ai/compat#streamSimpleMistral`
@@ -83,7 +83,7 @@ Each group names the Go counterpart that I verified in the tree, so lg-rules can
 ## R6 Pi members whose Go port would have no production caller
 
 - `ViewportTUI.fullRedraws`, `onDebug`, `renderNow`, `terminal`, `wantsKeyRelease`, `[Symbol.VIEWPORT_TUI]`: 0501acf95 and 162e747be removed Go copies of these as caller-free.
-- `ExtensionInputComponent.dispose`, `focused`, the five-parameter constructor and `handleInput`, and `ThemeSelectorComponent.getSelectList`: ported in f564c15bf (`NewExtensionInputComponent(title, placeholder, onSubmit, onCancel, ExtensionInputOptions)`, `Dispose`, `Focused`/`SetFocused`, `ThemeSelectorComponent.GetSelectList`). PiG's host still drives its dialogs through `ExtUIContext.runDialog` (`internal/codingagent/ext_ui_context.go:309`) with nil callbacks, so only the P1 library rule (members with direct tests and no `cmd/pig` caller) can close the rows that production does not reach; no host-driven placement rule or divergence is needed.
+- `ExtensionInputComponent.dispose`, `focused`, the five-parameter constructor and `handleInput`, and `ThemeSelectorComponent.getSelectList`: ported in f564c15bf (`NewExtensionInputComponent(title, placeholder, onSubmit, onCancel, ExtensionInputOptions)`, `Dispose`, `Focused`/`SetFocused`, `ThemeSelectorComponent.GetSelectList`). Ompig's host still drives its dialogs through `ExtUIContext.runDialog` (`internal/codingagent/ext_ui_context.go:309`) with nil callbacks, so only the P1 library rule (members with direct tests and no `cmd/ompig` caller) can close the rows that production does not reach; no host-driven placement rule or divergence is needed.
 
 ## Real gaps
 

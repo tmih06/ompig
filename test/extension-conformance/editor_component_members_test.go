@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // installHooksEditor installs the fixture's CustomEditor-style component (editor-install-hooks) and binds the stub host to it.

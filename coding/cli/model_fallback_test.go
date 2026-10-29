@@ -3,8 +3,8 @@ package cli
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func TestBuildModelParsesMaxThinkingSuffix(t *testing.T) {

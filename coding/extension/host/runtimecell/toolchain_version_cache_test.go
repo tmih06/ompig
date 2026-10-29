@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/fsretry"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/fsretry"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestMain(m *testing.M) {
-	if logPath := os.Getenv("PIG_TEST_FAILING_GO_LOG"); logPath != "" {
+	if logPath := os.Getenv("OMPIG_TEST_FAILING_GO_LOG"); logPath != "" {
 		kind := "other"
 		if len(os.Args) > 1 {
 			kind = os.Args[1]
@@ -41,7 +41,7 @@ func TestMain(m *testing.M) {
 		fmt.Fprintln(os.Stderr, "intentional build failure")
 		os.Exit(2)
 	}
-	os.Exit(testenv.RunScoped(m, "pig-cell-"))
+	os.Exit(testenv.RunScoped(m, "ompig-cell-"))
 }
 
 // Each tool manager resolves its own nearest selector. A child selector for
@@ -68,8 +68,8 @@ func TestCommandVersionReprobesWhenParentSelectorChanges(t *testing.T) {
 			toolPath := filepath.Join(t.TempDir(), exeNameForRuntime(tc.tool))
 			copyTestExecutable(t, toolPath)
 			logPath := filepath.Join(t.TempDir(), "probes.log")
-			t.Setenv("PIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
-			t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", tc.tool+"-v1")
+			t.Setenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
+			t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", tc.tool+"-v1")
 			args := []string{"-test.run=^TestCommandVersionProbeHelper$"}
 			cacheRoot := t.TempDir()
 
@@ -82,7 +82,7 @@ func TestCommandVersionReprobesWhenParentSelectorChanges(t *testing.T) {
 			}
 
 			writeRuntimecellTestFile(t, filepath.Join(root, tc.parentSelector), "selector-v2\n")
-			t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", tc.tool+"-v2")
+			t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", tc.tool+"-v2")
 			changed := commandVersion(cacheRoot, toolPath, args...)
 			if !strings.Contains(changed, tc.tool+"-v2") || changed == first {
 				t.Fatalf("changed selector output = %q, first = %q", changed, first)
@@ -103,13 +103,13 @@ func TestGoPackedCellBuildFailureInvalidatesVersionProbe(t *testing.T) {
 	goCommand := filepath.Join(binDir, exeNameForRuntime("go"))
 	copyTestExecutable(t, goCommand)
 	logPath := filepath.Join(root, "go.log")
-	t.Setenv("PIG_TEST_FAILING_GO_LOG", logPath)
+	t.Setenv("OMPIG_TEST_FAILING_GO_LOG", logPath)
 	t.Setenv("PATH", binDir)
 
 	sdkRoot := filepath.Join(root, "sdk")
-	writeRuntimecellTestFile(t, filepath.Join(sdkRoot, "go.mod"), "module github.com/MichaelKinsy/PiG/extensions/sdk\n\ngo 1.26.0\n")
+	writeRuntimecellTestFile(t, filepath.Join(sdkRoot, "go.mod"), "module github.com/tmih06/ompig/extensions/sdk\n\ngo 1.26.0\n")
 	writeRuntimecellTestFile(t, filepath.Join(sdkRoot, "sdk.go"), "package sdk\n")
-	t.Setenv("PIG_SDK_GO_ROOT", sdkRoot)
+	t.Setenv("OMPIG_SDK_GO_ROOT", sdkRoot)
 	extensionRoot := filepath.Join(root, "extension")
 	writeRuntimecellTestFile(t, filepath.Join(extensionRoot, "go.mod"), "module example.com/extension\n\ngo 1.26.0\n")
 	writeRuntimecellTestFile(t, filepath.Join(extensionRoot, "extension.go"), "package extension\n")
@@ -178,7 +178,7 @@ func writeRuntimecellTestFile(t *testing.T, path, content string) {
 // startSlowProbe starts a version probe of toolPath that answers after sleep and returns when the probe has started.
 func startSlowProbe(t *testing.T, cacheRoot, toolPath string, args []string, logPath string, sleep string) <-chan string {
 	t.Helper()
-	t.Setenv("PIG_TEST_TOOLCHAIN_SLEEP", sleep)
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_SLEEP", sleep)
 	done := make(chan string, 1)
 	go func() { done <- commandVersion(cacheRoot, toolPath, args...) }()
 	deadline := time.Now().Add(30 * time.Second)
@@ -206,13 +206,13 @@ func TestCommandVersionDoesNotWaitForAPeerProbeWithoutBound(t *testing.T) {
 	toolPath := filepath.Join(t.TempDir(), exeNameForRuntime("go"))
 	copyTestExecutable(t, toolPath)
 	logPath := filepath.Join(t.TempDir(), "probes.log")
-	t.Setenv("PIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
-	t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", "go-v1")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", "go-v1")
 	args := []string{"-test.run=^TestCommandVersionProbeHelper$"}
 	cacheRoot := t.TempDir()
 
 	holder := startSlowProbe(t, cacheRoot, toolPath, args, logPath, "4s")
-	t.Setenv("PIG_TEST_TOOLCHAIN_SLEEP", "0s")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_SLEEP", "0s")
 	start := time.Now()
 	got := commandVersion(cacheRoot, toolPath, args...)
 	if elapsed := time.Since(start); elapsed > 2*time.Second {
@@ -231,9 +231,9 @@ func TestCommandVersionEndsAProbeThatDoesNotAnswer(t *testing.T) {
 	setToolchainBounds(t, 300*time.Millisecond, time.Minute)
 	toolPath := filepath.Join(t.TempDir(), exeNameForRuntime("go"))
 	copyTestExecutable(t, toolPath)
-	t.Setenv("PIG_TEST_TOOLCHAIN_PROBE_LOG", filepath.Join(t.TempDir(), "probes.log"))
-	t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", "go-v1")
-	t.Setenv("PIG_TEST_TOOLCHAIN_SLEEP", "10s")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG", filepath.Join(t.TempDir(), "probes.log"))
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", "go-v1")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_SLEEP", "10s")
 	start := time.Now()
 	got := commandVersion(t.TempDir(), toolPath, "-test.run=^TestCommandVersionProbeHelper$")
 	if elapsed := time.Since(start); elapsed > 5*time.Second {
@@ -253,8 +253,8 @@ func TestCommandVersionKeepsOneRecordPerSelectorState(t *testing.T) {
 	toolPath := filepath.Join(t.TempDir(), exeNameForRuntime("go"))
 	copyTestExecutable(t, toolPath)
 	logPath := filepath.Join(t.TempDir(), "probes.log")
-	t.Setenv("PIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
-	t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", "go-v1")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG", logPath)
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", "go-v1")
 	args := []string{"-test.run=^TestCommandVersionProbeHelper$"}
 	cacheRoot := t.TempDir()
 	for range 3 {
@@ -281,8 +281,8 @@ func TestCommandVersionPrunesOldRecords(t *testing.T) {
 	root := t.TempDir()
 	toolPath := filepath.Join(t.TempDir(), exeNameForRuntime("go"))
 	copyTestExecutable(t, toolPath)
-	t.Setenv("PIG_TEST_TOOLCHAIN_PROBE_LOG", filepath.Join(t.TempDir(), "probes.log"))
-	t.Setenv("PIG_TEST_TOOLCHAIN_VERSION", "go-v1")
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_PROBE_LOG", filepath.Join(t.TempDir(), "probes.log"))
+	t.Setenv("OMPIG_TEST_TOOLCHAIN_VERSION", "go-v1")
 	args := []string{"-test.run=^TestCommandVersionProbeHelper$"}
 	cacheRoot := t.TempDir()
 	for i := range toolchainSlotsPerCommand + 4 {

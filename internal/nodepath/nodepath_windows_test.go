@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // setDriveCwd sets the process's per-drive working directory the way libuv's
@@ -102,14 +102,14 @@ func TestResolveReadsThePerDriveWorkingDirectoryOfTheProcess(t *testing.T) {
 
 // path.posix on Windows resolves against process.cwd() with the backslashes turned into slashes and the drive dropped (lib/path.js posixCwd).
 func TestPosixResolveReadsTheWindowsWorkingDirectoryWithoutItsDrive(t *testing.T) {
-	env := Env{Cwd: `D:\a\PiG\work`}
-	if got, err := PosixResolve(env, "x"); err != nil || got != "/a/PiG/work/x" {
+	env := Env{Cwd: `D:\a\Ompig\work`}
+	if got, err := PosixResolve(env, "x"); err != nil || got != "/a/Ompig/work/x" {
 		t.Fatalf("PosixResolve(x) = %q, %v", got, err)
 	}
-	if got, err := PosixResolve(env); err != nil || got != "/a/PiG/work" {
+	if got, err := PosixResolve(env); err != nil || got != "/a/Ompig/work" {
 		t.Fatalf("PosixResolve() = %q, %v", got, err)
 	}
-	if got, err := PosixRelative(env, "/a", "y"); err != nil || got != "PiG/work/y" {
+	if got, err := PosixRelative(env, "/a", "y"); err != nil || got != "Ompig/work/y" {
 		t.Fatalf("PosixRelative(/a, y) = %q, %v", got, err)
 	}
 }

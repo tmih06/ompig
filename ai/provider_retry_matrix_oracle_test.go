@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // pi: packages/ai/src/utils/provider-retry.ts retryProviderRequest
 
 // Which statuses and response headers (x-should-retry, retry-after-ms, retry-after, over-long delays) make a provider request retry, how many attempts
-// are made for options.maxRetries / maxRetryDelayMs, and the message left when the retries run out, read from the pinned pi-ai and from PiG.
+// are made for options.maxRetries / maxRetryDelayMs, and the message left when the retries run out, read from the pinned pi-ai and from Ompig.
 func TestProviderRetryMatchesPi(t *testing.T) {
 	successes := map[string]string{
 		"openai-completions":     "data: {\"id\":\"1\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"ok\"},\"finish_reason\":\"stop\"}]}\n\ndata: [DONE]\n\n",

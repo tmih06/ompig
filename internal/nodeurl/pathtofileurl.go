@@ -3,7 +3,7 @@ package nodeurl
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodepath"
+	"github.com/tmih06/ompig/internal/nodepath"
 )
 
 // PathToFileURL is Node 24.19.0's url.pathToFileURL(path, { windows }).href. It resolves path as path.posix or path.win32 does, keeps a

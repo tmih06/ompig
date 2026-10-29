@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type searchOracleModel struct {
@@ -336,7 +336,7 @@ func runSearchOracleWithPig(t testing.TB, scenario searchOracleScenario) searchO
 	return result
 }
 
-// Keys sent after the search closed are not part of the comparison: Pi schedules a search for them that nobody waits for, and Pig, whose SearchModels waits for its pending search, must not.
+// Keys sent after the search closed are not part of the comparison: Pi schedules a search for them that nobody waits for, and Ompig, whose SearchModels waits for its pending search, must not.
 //
 // HuggingFaceSearch (extensions/llama/ui.ts) against pinned Pi over 600 seeded scenarios on a virtual clock: typing, deleting and cursor keys edit the query, a query
 // of two characters starts a search after the 500 ms debounce (cached by lower-cased query, aborted by a newer one, failing with its message), results filter by fuzzy match,
@@ -374,16 +374,16 @@ func TestLlamaSearchMatchesPi(t *testing.T) {
 		if failures++; failures > 4 {
 			continue
 		}
-		report := fmt.Sprintf("scenario %d: %d frames, Pi %d; calls Pig %q Pi %q", i, len(got[i].Frames), len(expected[i].Frames), got[i].Calls, expected[i].Calls)
+		report := fmt.Sprintf("scenario %d: %d frames, Pi %d; calls Ompig %q Pi %q", i, len(got[i].Frames), len(expected[i].Frames), got[i].Calls, expected[i].Calls)
 		for s := 0; s < min(len(got[i].Frames), len(expected[i].Frames)); s++ {
 			if !reflect.DeepEqual(got[i].Settled[s], expected[i].Settled[s]) {
-				report += fmt.Sprintf("\n  step %d settled Pig %v Pi %v", s, got[i].Settled[s], expected[i].Settled[s])
+				report += fmt.Sprintf("\n  step %d settled Ompig %v Pi %v", s, got[i].Settled[s], expected[i].Settled[s])
 				break
 			}
 			if !reflect.DeepEqual(got[i].Frames[s], expected[i].Frames[s]) {
 				for w := range scenario.Widths {
 					if !reflect.DeepEqual(got[i].Frames[s][w], expected[i].Frames[s][w]) {
-						report += fmt.Sprintf("\n  step %d width %d\n  Pig %q\n  Pi  %q", s, scenario.Widths[w], got[i].Frames[s][w], expected[i].Frames[s][w])
+						report += fmt.Sprintf("\n  step %d width %d\n  Ompig %q\n  Pi  %q", s, scenario.Widths[w], got[i].Frames[s][w], expected[i].Frames[s][w])
 						break
 					}
 				}
@@ -407,7 +407,7 @@ func TestLlamaSearchProbeDump(t *testing.T) {
 	fmt.Printf("llamasearch-probes:%s\n", line)
 }
 
-// TestLlamaSearchParity prints Pig's frames, settlements and completed searches, one JSON line per scenario, for the llama-search parity scenario.
+// TestLlamaSearchParity prints Ompig's frames, settlements and completed searches, one JSON line per scenario, for the llama-search parity scenario.
 func TestLlamaSearchParity(t *testing.T) {
 	useOracleTheme(t, "dark")
 	for _, scenario := range searchOracleScenarios() {

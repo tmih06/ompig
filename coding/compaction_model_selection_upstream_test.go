@@ -8,11 +8,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi: packages/coding-agent/src/core/settings-manager.ts:19 (CompactionModelOverride.reserveTokens); packages/coding-agent/src/core/settings-manager.ts:19 (CompactionSettingsJSON.reserveTokens); packages/coding-agent/src/core/settings-manager.ts:20 (CompactionModelOverride.keepRecentTokens); packages/coding-agent/src/core/settings-manager.ts:32 (CompactionSettingsJSON.modelOverrides); packages/coding-agent/src/core/settings-manager.ts:955 (SettingsManager.getCompactionReserveTokens).

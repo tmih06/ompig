@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Upstream convertToLlm (coding-agent core/messages.ts) turns every custom
@@ -132,8 +132,8 @@ func TestConvertToLLMToolFlowMatchesUpstreamTransformOrderLane(t *testing.T) {
 		{"systemNoCalls", []AgentMessage{user("s"), text, system, user("p")}, "user:s assistant system user:p"},
 		{"systemAfterErrored", []AgentMessage{user("s"), calls("a"), failed("error", "b"), system, user("p")}, "user:s assistant toolResult:a! system user:p"},
 		{"heldThenAborted", []AgentMessage{user("s"), calls("a", "b"), result("a"), system, failed("aborted", "z"), user("p")}, "user:s assistant toolResult:a toolResult:b! system user:p"},
-		// pig divergence (D48): Pi sends "toolResult:b! user:Ran `ls`... toolResult:b", an orphan
-		// result the provider rejects. Pig moves the real result into the placeholder slot.
+		// ompig divergence (D48): Pi sends "toolResult:b! user:Ran `ls`... toolResult:b", an orphan
+		// result the provider rejects. Ompig moves the real result into the placeholder slot.
 		{"bashBetweenResults", []AgentMessage{user("s"), calls("a", "b"), result("a"), bash, result("b"), user("p")}, "user:s assistant toolResult:a toolResult:b user:Ran `ls`\n``` user:p"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -186,7 +186,7 @@ func upstreamOrderShapeLane(wire []ai.Message) string {
 // Pi 0.87.1 (convertToLlm, then the pi-ai openai-completions and
 // anthropic-messages stream functions against a capturing server). Upstream
 // sends every custom message as a text-block array, never as a plain string.
-// The contents are compared as decoded JSON: Pig's encoder escapes "<" as
+// The contents are compared as decoded JSON: Ompig's encoder escapes "<" as
 // \u003c where JSON.stringify does not, which is the same JSON value.
 func TestCustomMessagesReachProvidersAsUpstreamContentBlocksLane(t *testing.T) {
 	history := []AgentMessage{

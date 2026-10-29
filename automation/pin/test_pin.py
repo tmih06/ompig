@@ -66,19 +66,19 @@ class ModelTests(unittest.TestCase):
                     pinlib.read_pin_file(path)
 
 
-class PigVersionTests(unittest.TestCase):
+class OmpigVersionTests(unittest.TestCase):
     def test_render_carries_every_field_and_a_single_plus(self):
         text = pinlib.render_pigversion(COMMIT, "0.5.0")
         self.assertIn('const UpstreamVersion = "1.1.0+bbbbbbbb"', text)
         self.assertIn('const UpstreamPackageVersion = "1.1.0"', text)
         self.assertIn('const UpstreamCommit = "' + "b" * 40 + '"', text)
-        self.assertIn('const Version = PigVersion + "+1.1.0.bbbbbbbb"', text)
+        self.assertIn('const Version = OmpigVersion + "+1.1.0.bbbbbbbb"', text)
 
-    def test_pig_version_is_preserved(self):
+    def test_ompig_version_is_preserved(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "pigversion.go"
             path.write_text(pinlib.render_pigversion(TAG, "0.7.3"))
-            self.assertEqual(pinlib.pig_version(path), "0.7.3")
+            self.assertEqual(pinlib.ompig_version(path), "0.7.3")
 
 
 class RepositoryTests(unittest.TestCase):
@@ -104,7 +104,7 @@ class RepositoryTests(unittest.TestCase):
         self.assertTrue("commit/" + "b" * 40 in moved["README.md"])
         self.assertTrue("1.1.0%2B" + "b" * 8 in moved["README.md"])
         self.assertTrue("The pinned Pi build is 1.1.0+bbbbbbbb, commit `" + "b" * 40 in moved["README.md"])
-        # The README's `pig --version` example shows the composite version, whose Pi part is the pin's display version.
+        # The README's `ompig --version` example shows the composite version, whose Pi part is the pin's display version.
         self.assertRegex(moved["README.md"], r"for example `\d+\.\d+\.\d+\+1\.1\.0\+bbbbbbbb`")
         self.assertTrue("ARG PI_COMMIT=" + "b" * 40 in moved["automation/images/ci-parity/Dockerfile"])
 
@@ -163,7 +163,7 @@ class OverrideTests(unittest.TestCase):
         self.assertTrue(flag.startswith("-overlay="))
         config = json.loads(Path(flag.removeprefix("-overlay=")).read_text())
         (replacement,) = config["Replace"].values()
-        self.assertEqual(config["Replace"][str(pinlib.PIGVERSION)], replacement)
+        self.assertEqual(config["Replace"][str(pinlib.OMPIGVERSION)], replacement)
         self.assertIn("1.1.0+bbbbbbbb", Path(replacement).read_text())
 
 
@@ -306,8 +306,8 @@ class SourceBuildTests(unittest.TestCase):
 
     def test_a_failed_build_leaves_no_stamp_and_reuses_nothing(self):
         store = Path(tempfile.mkdtemp())
-        saved = (os.environ.get("PIG_PI_BUILD_STORE"), oracle.extract_source, oracle.build_source)
-        os.environ["PIG_PI_BUILD_STORE"] = str(store)
+        saved = (os.environ.get("OMPIG_PI_BUILD_STORE"), oracle.extract_source, oracle.build_source)
+        os.environ["OMPIG_PI_BUILD_STORE"] = str(store)
 
         def failing(*_a, **_k):
             raise pinlib.PinError("build broke")
@@ -319,9 +319,9 @@ class SourceBuildTests(unittest.TestCase):
             self.assertEqual(list(store.rglob(oracle.STAMP)), [], "a failed build must publish nothing")
         finally:
             if saved[0] is None:
-                del os.environ["PIG_PI_BUILD_STORE"]
+                del os.environ["OMPIG_PI_BUILD_STORE"]
             else:
-                os.environ["PIG_PI_BUILD_STORE"] = saved[0]
+                os.environ["OMPIG_PI_BUILD_STORE"] = saved[0]
             oracle.extract_source, oracle.build_source = saved[1], saved[2]
 
     def test_published_oracle_is_an_explicit_opt_in(self):
@@ -351,7 +351,7 @@ class SharedStoreTests(unittest.TestCase):
         self.identity("first")
         stack = contextlib.ExitStack()
         self.addCleanup(stack.close)
-        stack.enter_context(mock.patch.dict(os.environ, {"PIG_PI_BUILD_STORE": str(self.store)}))
+        stack.enter_context(mock.patch.dict(os.environ, {"OMPIG_PI_BUILD_STORE": str(self.store)}))
         fakes = {
             "extract_source": self.extract_source, "build_source": self.build_source, "pack": self.pack,
             "closure_for": self.closure_for, "install_closure": self.install_closure, "with_typescript": self.with_typescript,
@@ -548,7 +548,7 @@ class ClosureTests(unittest.TestCase):
     def test_workspace_entries_are_abstracted_and_made_concrete_again(self):
         workspaces = {oracle.AGENT: Path("a"), "@earendil-works/pi-ai": Path("b")}
         abstract = oracle.abstract_packs(oracle.published_closure(self.published_lock(), "1.1.0"), workspaces, {oracle.AGENT: "sha512-agent", "@earendil-works/pi-ai": "sha512-ai"})
-        self.assertEqual(abstract["packages"][self.AGENT]["resolved"], "pig-pack:" + oracle.AGENT)
+        self.assertEqual(abstract["packages"][self.AGENT]["resolved"], "ompig-pack:" + oracle.AGENT)
         self.assertTrue(abstract["packages"][self.AGENT + "/node_modules/openai"]["resolved"].startswith("https://"))
         concrete = oracle.concrete_packs(abstract, {oracle.AGENT: Path("/p/agent.tgz"), "@earendil-works/pi-ai": Path("/p/ai.tgz")})
         self.assertEqual(concrete["packages"][self.AGENT]["resolved"], "file:/p/agent.tgz")
@@ -692,7 +692,7 @@ class ClosureTests(unittest.TestCase):
                 (tree / name / "package.json").write_text(json.dumps({"name": name, "version": version, "kind": kind}))
         (locked / "@earendil-works" / "pi-codemode").mkdir()  # a published package the pinned oracle holds only nested
         (locked / "miniflare").mkdir()
-        (locked / ".pig-deps-ready").write_text("stamp")
+        (locked / ".ompig-deps-ready").write_text("stamp")
         if shared_store:
             (host / "node_modules").symlink_to(locked, target_is_directory=True)
         return host, locked, pinned
@@ -717,7 +717,7 @@ class ClosureTests(unittest.TestCase):
                         self.assertEqual((host / "node_modules" / name).resolve(), (pinned / name).resolve())
                     self.assertTrue((host / "node_modules" / "miniflare").exists(), "a package only the host locks stays")
                     self.assertTrue((host / "node_modules" / "@earendil-works" / "pi-codemode").exists())
-                    self.assertTrue((host / "node_modules" / ".pig-deps-ready").exists(), "the lock stamp survives, so the locked install is not repeated")
+                    self.assertTrue((host / "node_modules" / ".ompig-deps-ready").exists(), "the lock stamp survives, so the locked install is not repeated")
                     self.assertEqual(oracle.link_host(pin, host), linked, "linking again changes nothing")
                     oracle.check_host(pin, host)
                     if shared_store:

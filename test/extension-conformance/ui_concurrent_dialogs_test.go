@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Pi bdd9f039 (38847563, #11166) interactive-mode.ts: an extension may open several select, confirm, input and editor dialogs at the same

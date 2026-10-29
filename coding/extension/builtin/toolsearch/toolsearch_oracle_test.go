@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // tokenize, createToolSearchDocument and Bm25Ranker.rank against Pi's tool-search/tool.js over random text (camelCase runs, digits, plural endings, stop words,
@@ -160,7 +160,7 @@ emit(input.map((p) => {
 var cjkCharacter = regexp.MustCompile(`[\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]`)
 
 // spaceOutCJK replaces every Chinese, Japanese and Korean character of a probe with a space before both sides see it. Pi 1.1.0 drops those characters as it splits
-// a term, which is a space; PiG makes each one a term of its own (Pi #10816, D173), so the probes are compared where the two agree.
+// a term, which is a space; Ompig makes each one a term of its own (Pi #10816, D173), so the probes are compared where the two agree.
 func spaceOutCJK[T any](t *testing.T, probe T) T {
 	t.Helper()
 	raw, err := json.Marshal(probe)

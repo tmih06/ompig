@@ -1,4 +1,4 @@
-//go:build !pig_strip_mcp
+//go:build !ompig_strip_mcp
 
 package cli
 
@@ -19,8 +19,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // The built-in MCP extension in the real binary: `builtin:mcp` is loaded in every mode (print, JSON, RPC) the way Pi's
@@ -170,7 +170,7 @@ func runPigWithMCP(t *testing.T, run mcpBinaryRun) mcpBinaryResult {
 		t.Fatalf("build the MCP fixture server: %v\n%s", err, out)
 	}
 	home, cwd := t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o700); err != nil {
 		t.Fatal(err)
 	}
@@ -232,7 +232,7 @@ func runPigWithMCP(t *testing.T, run mcpBinaryRun) mcpBinaryResult {
 		t.Fatalf("unknown mode %q", run.mode)
 	}
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "MCP_REGISTER_COMMAND="+server, "MCP_REGISTER_LOG="+log)
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_SKIP_VERSION_CHECK=1", "MCP_REGISTER_COMMAND="+server, "MCP_REGISTER_LOG="+log)
 	var output strings.Builder
 	prompts := run.prompts
 	if prompts == nil {

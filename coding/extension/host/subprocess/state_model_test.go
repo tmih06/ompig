@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The active model's metadata is a pure function of the model, so the bridge builds and encodes it once per model the host names, and the bytes on the wire equal the map's encoding.

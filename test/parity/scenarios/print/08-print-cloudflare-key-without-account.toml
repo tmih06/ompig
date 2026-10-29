@@ -7,7 +7,7 @@
 #
 #   pi --offline --no-extensions --no-session --model cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731 -p hello
 #
-# prints "No API key found for cloudflare-workers-ai." with the login guidance and exits 1. PiG counted the key alone as
+# prints "No API key found for cloudflare-workers-ai." with the login guidance and exits 1. Ompig counted the key alone as
 # configured auth, skipped the auth check and sent the request ("Connection error." after a network attempt).
 #
 # The account and gateway ids are set empty for both binaries so the runner's environment cannot configure them; both
@@ -28,7 +28,7 @@ args = ["--offline", "--no-extensions", "--no-context-files", "--no-skills", "--
 timeout_seconds = 20
 
 [env]
-pig = ["PIG_HOME=../rpc/testdata/pig-home", "CLOUDFLARE_API_KEY=parity-key", "CLOUDFLARE_ACCOUNT_ID=", "CLOUDFLARE_GATEWAY_ID="]
+ompig = ["OMPIG_HOME=../rpc/testdata/ompig-home", "CLOUDFLARE_API_KEY=parity-key", "CLOUDFLARE_ACCOUNT_ID=", "CLOUDFLARE_GATEWAY_ID="]
 pi = ["PI_CODING_AGENT_DIR=../rpc/testdata/pi-home/agent", "PI_SKIP_VERSION_CHECK=1", "CLOUDFLARE_API_KEY=parity-key", "CLOUDFLARE_ACCOUNT_ID=", "CLOUDFLARE_GATEWAY_ID="]
 
 [assert]

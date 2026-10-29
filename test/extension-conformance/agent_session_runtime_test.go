@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // agentSessionRuntimeProbe is the extension every session of the agent_session_runtime row loads (testdata/agent-session-runtime.mjs is the Node script that defines the expectation).
@@ -36,11 +36,11 @@ func TestPackedSessionGraphAgentSessionRuntimeAcrossSDKs(t *testing.T) {
 // agentSessionRuntimeRig is the rig builder of the row: the process environment's agent directory is a temporary one.
 func agentSessionRuntimeRig(t *testing.T) func(testing.TB) *sessionGraphRig {
 	agentDir := t.TempDir()
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_USE_PI_DIRS", "")
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_USE_PI_DIRS", "")
 	return func(t testing.TB) *sessionGraphRig {
 		r := newSessionGraphRigWithChildren(t)
-		r.host.SetHostInfo(subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".pig", Version: coding.UpstreamPackageVersion})
+		r.host.SetHostInfo(subprocess.HostInfo{AgentDir: agentDir, ConfigDirName: ".ompig", Version: coding.UpstreamPackageVersion})
 		return r
 	}
 }

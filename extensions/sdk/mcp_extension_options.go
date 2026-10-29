@@ -9,7 +9,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // The function options of Pi's createMcpExtension (extensions/mcp/index.ts McpExtensionOptions): loadConfig, createTransport, credentials, openUrl and updateConfig. They stay in this process. The reference [CreateMcpExtension] returns names them to the host as session graph callbacks when [NewDefaultResourceLoader] builds the loader, and the host runs them with JSON arguments over the connection (the wire of the loader's override options; no request kind is added).

@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 ## Purpose
 
 This document defines the editorial, code-comment, structure, and maintenance
-quality required for PiG's initial public repository. Use it when reviewing any
+quality required for Ompig's initial public repository. Use it when reviewing any
 source, documentation, test, workflow, generated input, or maintainer tool.
 
 The review protects contributor time. A technically correct project can still
@@ -54,7 +54,7 @@ agent can encounter:
 - command help, errors, warnings, and status messages;
 - website and terminal user-interface text;
 - extension and JSON schema descriptions;
-- Piglet descriptions and Skills;
+- Ompiglet descriptions and Skills;
 - test names and test comments;
 - maintainer prompts;
 - issue and pull request templates; and
@@ -98,7 +98,7 @@ precision needed to prevent ambiguity.
 
 ## Em-dash policy
 
-Authored PiG prose and comments use no em dashes.
+Authored Ompig prose and comments use no em dashes.
 
 Replace an em dash with:
 
@@ -395,17 +395,17 @@ Reject automation that:
 
 Every maintained nested Go module must pass with `GOWORK=off`. Fixture modules
 must also build in clean-clone verification. The root module requires each
-nested PiG module it imports at the release version and carries no `replace`
-directive, so `go install github.com/MichaelKinsy/PiG/cmd/pig@vX.Y.Z` works; a
+nested Ompig module it imports at the release version and carries no `replace`
+directive, so `go install github.com/tmih06/ompig/cmd/ompig@vX.Y.Z` works; a
 checkout builds it through `go.work`, and `test/gomodule` keeps its `go.sum`
 pinned to the published nested module hashes.
 
-## Pig Porter standard
+## Ompig Porter standard
 
-Pig Porter has one procedure authority:
+Ompig Porter has one procedure authority:
 
 ```text
-piglets/porter/skills/pig-porter/SKILL.md
+ompiglets/porter/skills/ompig-porter/SKILL.md
 ```
 
 Its maintained entry points are:
@@ -430,15 +430,15 @@ Brief or restart active agents after changing their instructions.
 Provide one project setup Skill at:
 
 ```text
-.agents/skills/setup-pig/SKILL.md
+.agents/skills/setup-ompig/SKILL.md
 ```
 
 The Skill must first identify the requested task:
 
-1. run an existing PiG binary;
-2. build PiG;
+1. run an existing Ompig binary;
+2. build Ompig;
 3. author an extension;
-4. build a Piglet Binary;
+4. build a Ompiglet Binary;
 5. run the complete parity suite; or
 6. build the documentation site.
 
@@ -533,7 +533,7 @@ tui/
 cmd/
 internal/
 extensions/
-piglets/
+ompiglets/
 test/parity/
 test/
 examples/
@@ -543,9 +543,9 @@ automation/
 ### Maintain through Make
 
 ```text
-automation/porter/run-pig-porter.sh
-automation/porter/run-pig-porter-campaign.sh
-automation/porter/verify-pig-porter-local.sh
+automation/porter/run-ompig-porter.sh
+automation/porter/run-ompig-porter-campaign.sh
+automation/porter/verify-ompig-porter-local.sh
 automation/gen/mirror-upstream.sh
 automation/gen/generate-model-catalogs.sh
 automation/dev/stage-clipboard-png.sh
@@ -557,15 +557,15 @@ Document each from its owning Make target or parity guide.
 ### Remove obsolete automation
 
 ```text
-scripts/pig-upgrade.sh
-scripts/pig-sync-upstream.sh
-scripts/pig-self-upgrade.sh
-scripts/pig-steer.sh
+scripts/ompig-upgrade.sh
+scripts/ompig-sync-upstream.sh
+scripts/ompig-self-upgrade.sh
+scripts/ompig-steer.sh
 scripts/build-port-spec.sh
 scripts/migrate-scenarios-to-tokens.sh
 scripts/dogfood/
 scripts/dogfood-prompts/
-scripts/ci/stages/pig-examples-validate.sh
+scripts/ci/stages/ompig-examples-validate.sh
 scripts/generate-interface-proposals.sh
 scripts/validate-interface-proposal.sh
 scripts/parity-coverage.sh
@@ -611,7 +611,7 @@ The initial-publication cleanup is complete when:
 
 1. obsolete automation is absent;
 2. Make exposes every maintained workflow;
-3. Pig Porter has one procedure authority;
+3. Ompig Porter has one procedure authority;
 4. every maintained module passes independently;
 5. authored prose contains no unclassified em dash;
 6. production comments contain no phase or roadmap residue;

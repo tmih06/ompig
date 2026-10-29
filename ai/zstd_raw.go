@@ -1,4 +1,4 @@
-//go:build pig_strip_node_extensions
+//go:build ompig_strip_node_extensions
 
 package ai
 
@@ -11,7 +11,7 @@ const (
 	zstdTwoByteContentValueOffset = 1 << 8
 )
 
-// compressCodexRequestBody is the zstd frame of body for Content-Encoding: zstd. A pig_strip_node_extensions build links no compressor, so the body travels in stored blocks (zstd_codex.go compresses at level 3 in every other build).
+// compressCodexRequestBody is the zstd frame of body for Content-Encoding: zstd. A ompig_strip_node_extensions build links no compressor, so the body travels in stored blocks (zstd_codex.go compresses at level 3 in every other build).
 func compressCodexRequestBody(body []byte) []byte { return encodeZstdRawFrame(body) }
 
 // encodeZstdRawFrame emits a standards-compliant single-segment Zstandard

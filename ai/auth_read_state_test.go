@@ -76,7 +76,7 @@ func TestAuthStorageRereadsWhenRevisionChanges(t *testing.T) {
 	}
 
 	// Rewrite in place with the same size, then move the modification time, as
-	// another Pi or PiG process editing auth.json would.
+	// another Pi or Ompig process editing auth.json would.
 	if err := os.WriteFile(path, []byte(`{"custom":{"type":"api_key","key":"new-key"}}`), 0o600); err != nil {
 		t.Fatalf("rewrite: %v", err)
 	}

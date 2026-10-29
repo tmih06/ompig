@@ -2,7 +2,7 @@
 package writerstart
 
 import (
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
 )
 
 // never keeps the messages from starting a turn, as the Node fixture's triggerTurn: false does.

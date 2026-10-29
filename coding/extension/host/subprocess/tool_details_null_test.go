@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // A subprocess tool that returns details: null hands the agent a result that holds details: null (agent-loop.ts

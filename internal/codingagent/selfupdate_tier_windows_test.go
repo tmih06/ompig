@@ -9,12 +9,12 @@ import (
 )
 
 // TestResolveSelfUpdateTier_WindowsStandaloneIsUnsupported proves a writable,
-// receipted standalone pig.exe, which is the standalone tier elsewhere,
+// receipted standalone ompig.exe, which is the standalone tier elsewhere,
 // resolves to the unsupported tier on Windows: a standalone Windows binary is
 // not replaced in place (D39).
 func TestResolveSelfUpdateTier_WindowsStandaloneIsUnsupported(t *testing.T) {
 	dir := t.TempDir()
-	exe := filepath.Join(dir, "pig.exe")
+	exe := filepath.Join(dir, "ompig.exe")
 	if err := os.WriteFile(exe, []byte("fake"), 0o755); err != nil {
 		t.Fatal(err)
 	}

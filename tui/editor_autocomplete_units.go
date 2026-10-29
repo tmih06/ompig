@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // autocompleteView preserves the provider's byte-offset contract while the editor stores UTF-16 positions. A position inside a surrogate pair needs a split WTF-8 view; its UTF-16 units are unchanged.

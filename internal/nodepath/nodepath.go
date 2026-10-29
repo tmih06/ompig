@@ -15,7 +15,7 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Env is the process state Node's path.resolve reads.

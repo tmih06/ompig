@@ -8,10 +8,10 @@ import (
 	"sync/atomic"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Markdown renders themed text with terminal-cell wrapping, padding and cached display transforms.
@@ -175,7 +175,7 @@ func (m *Markdown) IsDirty() bool {
 	return m.TransformState != nil || m.AsyncTransform != nil || m.invalidatable.IsDirty()
 }
 
-// pig additive (D91): SurfaceLive reports the transforms that change the lines without
+// ompig additive (D91): SurfaceLive reports the transforms that change the lines without
 // invalidating the Markdown, as IsDirty does.
 func (m *Markdown) SurfaceLive() bool { return m.TransformState != nil || m.AsyncTransform != nil }
 

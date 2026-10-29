@@ -12,10 +12,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 func registerRouterAuto(t *testing.T, services *coding.AgentSessionServices) {
@@ -28,7 +28,7 @@ func registerRouterAuto(t *testing.T, services *coding.AgentSessionServices) {
 	}
 }
 
-// Pi resolves --model, the saved default and the --models scope against ModelRuntime.getModels() and getAvailableSnapshot(), which list the virtual models an extension registered (model-runtime.ts:285-293, virtual-models.ts:190-227) and mark a provider of only virtual models configured (model-runtime.ts:953-958). createAgentSessionServices registers them before model resolution (agent-session-services.ts:182-193), so `--model router/auto` selects the virtual model. Pig read the registry's models, which omit them, and fuzzy-matched openrouter/openrouter/auto-beta.
+// Pi resolves --model, the saved default and the --models scope against ModelRuntime.getModels() and getAvailableSnapshot(), which list the virtual models an extension registered (model-runtime.ts:285-293, virtual-models.ts:190-227) and mark a provider of only virtual models configured (model-runtime.ts:953-958). createAgentSessionServices registers them before model resolution (agent-session-services.ts:182-193), so `--model router/auto` selects the virtual model. Ompig read the registry's models, which omit them, and fuzzy-matched openrouter/openrouter/auto-beta.
 func TestSelectStartupModelSelectsRegisteredVirtualModel(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
@@ -72,7 +72,7 @@ func runStartupProbe(t *testing.T, mode string, prepare func(agentDir string), a
 	t.Helper()
 	binary := buildPigBinaryForSignalTest(t)
 	home, cwd := t.TempDir(), t.TempDir()
-	agentDir := filepath.Join(home, "pig")
+	agentDir := filepath.Join(home, "ompig")
 	if err := os.MkdirAll(agentDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -96,7 +96,7 @@ func runStartupProbe(t *testing.T, mode string, prepare func(agentDir string), a
 	}
 	cmd := exec.CommandContext(t.Context(), binary, full...)
 	cmd.Dir = cwd
-	cmd.Env = append(os.Environ(), "HOME="+home, "PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+agentDir, "WIRING_REPORT="+report)
+	cmd.Env = append(os.Environ(), "HOME="+home, "OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "WIRING_REPORT="+report)
 	cmd.Stdin = strings.NewReader("")
 	var stdout, stderr strings.Builder
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
@@ -131,7 +131,7 @@ func TestStartupModelFlagSelectsExtensionVirtualModel(t *testing.T) {
 	}
 }
 
-// Pi reports warning-only startup diagnostics and goes on; only an error diagnostic stops startup (main.ts:908-916: hasRuntimeErrors is any runtime diagnostic of type "error"). A package that lists a host-provided package under dependencies is a warning (resource-loader.ts:66-93, main.ts:797-800). Probed with Pi 0.99.1 in -p and --mode rpc: one `Warning: Extension package "<dir>/package.json": ...` line on stderr, the session starts and the exit status is 0. Pig exited 1 for any extension diagnostic.
+// Pi reports warning-only startup diagnostics and goes on; only an error diagnostic stops startup (main.ts:908-916: hasRuntimeErrors is any runtime diagnostic of type "error"). A package that lists a host-provided package under dependencies is a warning (resource-loader.ts:66-93, main.ts:797-800). Probed with Pi 0.99.1 in -p and --mode rpc: one `Warning: Extension package "<dir>/package.json": ...` line on stderr, the session starts and the exit status is 0. Ompig exited 1 for any extension diagnostic.
 func TestWarningOnlyExtensionDiagnosticsDoNotStopStartup(t *testing.T) {
 	t.Parallel()
 	for _, mode := range []string{"print", "json", "rpc"} {
@@ -168,7 +168,7 @@ func TestExtensionScopedModelsIncludeRegisteredVirtualModel(t *testing.T) {
 	}
 }
 
-// Startup selects the runtime's own catalog entry for a virtual model, the object every later lookup returns. Pi never rewrites it (virtual-models.ts:159-176 createVirtualModel builds it once at registration), so selecting a reasoning virtual model at startup must leave the entry as registered. Pig set Capabilities.MaxThinking on the shared entry, so a startup selection changed what /model, ctx.model and the RPC model list later saw.
+// Startup selects the runtime's own catalog entry for a virtual model, the object every later lookup returns. Pi never rewrites it (virtual-models.ts:159-176 createVirtualModel builds it once at registration), so selecting a reasoning virtual model at startup must leave the entry as registered. Ompig set Capabilities.MaxThinking on the shared entry, so a startup selection changed what /model, ctx.model and the RPC model list later saw.
 func TestSelectStartupModelLeavesTheVirtualCatalogEntryUnchanged(t *testing.T) {
 	services := testServices(t, t.TempDir())
 	t.Cleanup(services.Close)

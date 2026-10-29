@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/imageprocessing"
+	"github.com/tmih06/ompig/internal/imageprocessing"
 )
 
 // Upstream harness/tools/image.ts detects headers, not decodable images. In particular,

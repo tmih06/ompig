@@ -1,18 +1,18 @@
 {
 	"name": "longhistory",
 	"rule": "longhistory",
-	"about": "bench/evals' long-history bench (pigbench longhistory) on PiG built from the commit and on Pi's coding agent at PiG's pinned Pi version, both against pigbench's local mock model. Sizes are history tokens: 1000000 is a ~1M-token session with no compaction, 3000000 is ~3M tokens across three compactions. Each target generates the same session from seed 20261009. One sample is three fresh processes on copies of it: RPC (open, resume, five appended turns), the TUI (first output, settled, keystrokes, streaming frames, width and height redraws) and a TUI /resume. open and turn[] are the RPC open and the appended turns. Needs an agent bundle (k8sbench bundle -agents) or the benchmark image.",
+	"about": "bench/evals' long-history bench (pigbench longhistory) on Ompig built from the commit and on Pi's coding agent at Ompig's pinned Pi version, both against pigbench's local mock model. Sizes are history tokens: 1000000 is a ~1M-token session with no compaction, 3000000 is ~3M tokens across three compactions. Each target generates the same session from seed 20261009. One sample is three fresh processes on copies of it: RPC (open, resume, five appended turns), the TUI (first output, settled, keystrokes, streaming frames, width and height redraws) and a TUI /resume. open and turn[] are the RPC open and the appended turns. Needs an agent bundle (k8sbench bundle -agents) or the benchmark image.",
 	"fingerprints": {
 		"1000000": "a3d78d643f9b7ebd",
 		"3000000": "15e5f012c2b08ef5"
 	},
 	"targets": [
 		{
-			"name": "pig",
-			"role": "pig",
+			"name": "ompig",
+			"role": "ompig",
 			"seed": ["{root}/python/bin/python3.12", "{root}/pigbench.py", "k8s", "generate", "--tokens", "{turns}", "--seed", "20261009", "--dir", "{dir}"],
 			"seedMeta": "{dir}/k8s-{turns}.json",
-			"sample": ["{root}/python/bin/python3.12", "{root}/pigbench.py", "k8s", "sample", "--target", "pig", "--family", "pig", "--binary", "{root}/bin/pig", "--tokens", "{turns}", "--seed", "20261009", "--dir", "{dir}", "--sample", "{sample}"]
+			"sample": ["{root}/python/bin/python3.12", "{root}/pigbench.py", "k8s", "sample", "--target", "ompig", "--family", "ompig", "--binary", "{root}/bin/ompig", "--tokens", "{turns}", "--seed", "20261009", "--dir", "{dir}", "--sample", "{sample}"]
 		},
 		{
 			"name": "pi",

@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -7,15 +7,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Guards the TestMain temporary-directory scope: this package's tests must not write scratch files or directories into the shared temporary directory, where a killed or forgetful test leaves them for good.
 func TestTempDirIsScopedToThePackageRun(t *testing.T) {
-	testenv.RequireScopedTempDir(t, "pig-sp-")
+	testenv.RequireScopedTempDir(t, "ompig-sp-")
 }
 
-// An extension host writes its stderr diagnostic to a pig-ext-*.log file in os.TempDir and removes it only on a clean shutdown. A host a test never shuts down, or a crashed extension whose log the host keeps on purpose, must leave that file under the scoped directory TestMain removes.
+// An extension host writes its stderr diagnostic to a ompig-ext-*.log file in os.TempDir and removes it only on a clean shutdown. A host a test never shuts down, or a crashed extension whose log the host keeps on purpose, must leave that file under the scoped directory TestMain removes.
 func TestExtensionHostLogsStayInScopedTempDir(t *testing.T) {
 	fixture, err := filepath.Abs(filepath.Join("testdata", "ctx-mode.mjs"))
 	if err != nil {

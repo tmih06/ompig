@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // packages/telemetry/src/memory.ts:114 a recorded span starts with status ok; memory.ts:96 a failing callback sets an error

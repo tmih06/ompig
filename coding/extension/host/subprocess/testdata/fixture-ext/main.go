@@ -1,5 +1,5 @@
 // Command fixture-ext is a minimal extension binary for integration testing.
-// It connects to the socket specified by PIG_EXT_SOCKET, sends a register
+// It connects to the socket specified by OMPIG_EXT_SOCKET, sends a register
 // message declaring tools, commands, widgets, and event handlers, and
 // processes requests. It also demonstrates extension→host calls and widget
 // pushes.
@@ -18,9 +18,9 @@ import (
 )
 
 func main() {
-	sockPath := os.Getenv("PIG_EXT_SOCKET")
+	sockPath := os.Getenv("OMPIG_EXT_SOCKET")
 	if sockPath == "" {
-		fmt.Fprintf(os.Stderr, "PIG_EXT_SOCKET not set\n")
+		fmt.Fprintf(os.Stderr, "OMPIG_EXT_SOCKET not set\n")
 		os.Exit(1)
 	}
 

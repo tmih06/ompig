@@ -14,7 +14,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/chord/host"
+	"github.com/tmih06/ompig/chord/host"
 )
 
 func TestAcceptWebSocketsMatchesPiOnEveryAuthenticatorOutcome(t *testing.T) {
@@ -100,7 +100,7 @@ func TestAcceptWebSocketsMatchesPiOnEveryAuthenticatorOutcome(t *testing.T) {
 		// reason would be wrong.
 		for _, reason := range reasons {
 			if reason == "unauthorized" || reason == "authentication failed" {
-				t.Errorf("%s: Pi accepted the client, PiG refused it with %q", record.Request, reason)
+				t.Errorf("%s: Pi accepted the client, Ompig refused it with %q", record.Request, reason)
 			}
 		}
 	}

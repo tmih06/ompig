@@ -5,7 +5,7 @@ package codingagent
 import (
 	"context"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func adaptExtensionOAuthLogin(login func(context.Context, ai.OAuthLoginCallbacks) (ai.Credential, error)) func(context.Context, ai.AuthInteraction, ai.LoginOptions) (ai.Credential, error) {

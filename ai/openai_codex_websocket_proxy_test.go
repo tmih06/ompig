@@ -141,7 +141,7 @@ func TestCodexWebSocketDialsANoProxyHostDirectly(t *testing.T) {
 	}
 }
 
-// The Codex WebSocket proxy follows EnvHttpProxyAgent as PiG's HTTP transport does: the lowercase variable wins, an https target falls back to the
+// The Codex WebSocket proxy follows EnvHttpProxyAgent as Ompig's HTTP transport does: the lowercase variable wins, an https target falls back to the
 // http proxy, NO_PROXY bypasses a named host and its subdomains, and a set but empty lowercase variable hides the uppercase one.
 func TestCodexWebSocketProxyFollowsEnvHttpProxyAgent(t *testing.T) {
 	for _, tc := range []struct {

@@ -56,7 +56,7 @@ All binaries use Go 1.27.1 and `go build -p 6 -trimpath -ldflags='-s -w'`. Node 
 
 The supplied `measure.py` and fixtures remain unchanged. A separate driver calls its original `run` function, rotates build order, and adapts the Pi command. Each timing cell has 25 runs after three unmeasured warm launches. The final A/C-before/after/Pi table spans the initial and final controlled batches. Use the paired optimization table for attribution. There are no timing retries or discarded timing samples.
 
-Cold means a fresh HOME, PiG/Pi agent directory, application cache, and short TMPDIR. OS page caches remain populated. Warm means a new process with populated application caches. The measurement environment is allowlisted. No worker auth or settings enter it. Pi uses the original faux-provider extension; PiG uses its built-in faux provider. Pi therefore loads one additional provider extension. Both execute the same prompt and extension/package fixtures.
+Cold means a fresh HOME, Ompig/Pi agent directory, application cache, and short TMPDIR. OS page caches remain populated. Warm means a new process with populated application caches. The measurement environment is allowlisted. No worker auth or settings enter it. Pi uses the original faux-provider extension; Ompig uses its built-in faux provider. Pi therefore loads one additional provider extension. Both execute the same prompt and extension/package fixtures.
 
 The workload cwd is empty and nested under the lane checkout, as in the original harness. Repository ancestor context is present. The evidence retains the base and generated `AGENTS.md` snapshots; coverage regeneration changes that generated context during development. These are not context-free startup measurements.
 
@@ -79,7 +79,7 @@ The Go-only no-extension medians are 12.1% below A when warm and 8.8% below A wh
 
 ### Final matched publication controls
 
-Node `93c710dd2` is fixed in both PiG columns. The before column uses Go `20181ffe7`; the after column includes the late changes in `7c551a5fc`. Values are median / p90 milliseconds from 25 runs per cell. Pi runs in the same rotated matrix.
+Node `93c710dd2` is fixed in both Ompig columns. The before column uses Go `20181ffe7`; the after column includes the late changes in `7c551a5fc`. Values are median / p90 milliseconds from 25 runs per cell. Pi runs in the same rotated matrix.
 
 | Workload | Before | After | Pi |
 |---|---:|---:|---:|
@@ -168,7 +168,7 @@ The startup and model-runtime-store-catalog families pass declared Pi pairs. The
 - Full conformance reaches the unchanged deadline in `TestPackedToolSchemaRejectionAcrossSDKs/go/startup`. Python provider-producer cases also report `name 'cancel' is not defined`.
 - `make ci-contracts` rejects existing pending/partial hot-path test mappings after local generated inventories are refreshed.
 - `make ci-drift` rejects D78 because it lacks `SCRUTINIZED:approved`.
-- Cleanup finds two orphaned interactive `pig-parity` children from the model family (`22-partial-scoped-models` and `13-scoped-google-catalog`). They remain after SIGTERM and exit after SIGQUIT. Their exact commands and PIDs are retained in `orphaned-parity-processes.json` and reported to the integrator. This is separate from the successful headless Loader lifecycle probes.
+- Cleanup finds two orphaned interactive `ompig-parity` children from the model family (`22-partial-scoped-models` and `13-scoped-google-catalog`). They remain after SIGTERM and exit after SIGQUIT. Their exact commands and PIDs are retained in `orphaned-parity-processes.json` and reported to the integrator. This is separate from the successful headless Loader lifecycle probes.
 
 No comparator, timeout, test expectation, or divergence approval is weakened. These historical controls precede the stable merge and do not qualify its later source.
 

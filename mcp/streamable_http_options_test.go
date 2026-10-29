@@ -7,17 +7,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // StreamableHttpTransportOptions.headers and maxMessageBytes
 // (packages/mcp/src/transports/streamable-http.ts). Pi's streamable-http test does not
-// exercise them, so these tests are PiG's own.
+// exercise them, so these tests are Ompig's own.
 
 // mutation-checked: negating the condition `message.IsNotification() && message.Method == "notifications/initialized"` at streamable_http.go:301 fails it.
 func TestStreamableHTTPTransportSendsTheConfiguredHeadersOnEveryRequest(t *testing.T) {
 	url, requests := startServer(t, plainProtocol)
-	transport := newHTTPTransport(t, mcp.StreamableHTTPTransportOptions{URL: url, Headers: map[string]string{"X-Pig-Test": "configured"}})
+	transport := newHTTPTransport(t, mcp.StreamableHTTPTransportOptions{URL: url, Headers: map[string]string{"X-Ompig-Test": "configured"}})
 	client := newHTTPClient()
 	if _, err := client.Connect(t.Context(), transport); err != nil {
 		t.Fatal(err)
@@ -39,8 +39,8 @@ func TestStreamableHTTPTransportSendsTheConfiguredHeadersOnEveryRequest(t *testi
 	seen := map[string]bool{}
 	for _, r := range requests.all() {
 		seen[r.method] = true
-		if got := r.headers.Get("X-Pig-Test"); got != "configured" {
-			t.Fatalf("%s request carried X-Pig-Test = %q", r.method, got)
+		if got := r.headers.Get("X-Ompig-Test"); got != "configured" {
+			t.Fatalf("%s request carried X-Ompig-Test = %q", r.method, got)
 		}
 	}
 	if !seen["POST"] || !seen["GET"] || !seen["DELETE"] {

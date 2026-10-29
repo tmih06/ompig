@@ -3,7 +3,7 @@
 import json
 import unittest
 
-from pig_sdk import OAuthCredentials
+from ompig_sdk import OAuthCredentials
 
 
 def round_trip(value):

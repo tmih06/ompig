@@ -6,33 +6,33 @@ exit: 0
 
 $ go test -count=1 -cover ./internal/codingagent/tools ./agent/harness/session ./agent/harness/pico3 ./agent ./ai ./parity/cmd/coverage
 exit: 0
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	3.751s	coverage: 88.2% of statements
-ok  	github.com/MichaelKinsy/PiG/agent/harness/session	0.462s	coverage: 85.1% of statements
-ok  	github.com/MichaelKinsy/PiG/agent/harness/pico3	8.814s	coverage: 83.8% of statements
-ok  	github.com/MichaelKinsy/PiG/agent	0.552s	coverage: 86.4% of statements
-ok  	github.com/MichaelKinsy/PiG/ai	15.573s	coverage: 80.4% of statements
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/coverage	0.047s	coverage: 51.3% of statements
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	3.751s	coverage: 88.2% of statements
+ok  	github.com/tmih06/ompig/agent/harness/session	0.462s	coverage: 85.1% of statements
+ok  	github.com/tmih06/ompig/agent/harness/pico3	8.814s	coverage: 83.8% of statements
+ok  	github.com/tmih06/ompig/agent	0.552s	coverage: 86.4% of statements
+ok  	github.com/tmih06/ompig/ai	15.573s	coverage: 80.4% of statements
+ok  	github.com/tmih06/ompig/parity/cmd/coverage	0.047s	coverage: 51.3% of statements
 
 $ go test -race -count=1 ./internal/codingagent/tools ./agent/harness/session ./agent/harness/pico3 -run '^TestHarness(Image|JSONL|Pico)'
 exit: 0
-ok  	github.com/MichaelKinsy/PiG/internal/codingagent/tools	1.099s
-ok  	github.com/MichaelKinsy/PiG/agent/harness/session	1.109s
-ok  	github.com/MichaelKinsy/PiG/agent/harness/pico3	1.129s
+ok  	github.com/tmih06/ompig/internal/codingagent/tools	1.099s
+ok  	github.com/tmih06/ompig/agent/harness/session	1.109s
+ok  	github.com/tmih06/ompig/agent/harness/pico3	1.129s
 
 $ make -k -o interface-deps correspondence-check porter-check interface-inventory interface-inventory-test interface-go-drift interface-recommendations-drift interface-mapping-quality interface-delta behavior-contracts test-inventory-drift test-inventory format-version-inventory custom-factory-ledger-drift coverage-drift port-map-drift docs-drift
 exit: 0
 go test ./parity/correspondence ./parity/cmd/correspondence
-ok  	github.com/MichaelKinsy/PiG/parity/correspondence	5.657s
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/correspondence	6.525s
-known gap [finding:table-item:missing:cache-warming-mode] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Pig table has no item with the Pi identity
-known gap [finding:table-order:table:settings-selector] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Pi order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "cache-warming-mode" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"] differs from Pig order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"]
+ok  	github.com/tmih06/ompig/parity/correspondence	5.657s
+ok  	github.com/tmih06/ompig/parity/cmd/correspondence	6.525s
+known gap [finding:table-item:missing:cache-warming-mode] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Ompig table has no item with the Pi identity
+known gap [finding:table-order:table:settings-selector] (unresolved.tsv: v0.87.1 settings selector (cache warming, model thinking)): Pi order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "cache-warming-mode" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"] differs from Ompig order ["autocompact" "show-images" "image-width-cells" "auto-resize-images" "block-images" "skill-commands" "show-hardware-cursor" "editor-padding" "output-padding" "autocomplete-max-visible" "clear-on-shrink" "terminal-progress" "steering-mode" "follow-up-mode" "transport" "http-idle-timeout" "hide-thinking" "mermaid-rendering" "cache-miss-notices" "collapse-changelog" "quiet-startup" "install-telemetry" "default-project-trust" "double-escape-action" "tree-filter-mode" "warnings" "model-thinking" "tui-mode" "fullscreen-exit-output" "fullscreen-scrollbar" "fullscreen-copy-on-select" "theme"]
 correspondence-check: direct facts agree except listed known gaps; packet paths run in go test
 go test ./parity/porter ./parity/cmd/porter
-ok  	github.com/MichaelKinsy/PiG/parity/porter	(cached)
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/porter	(cached)
+ok  	github.com/tmih06/ompig/parity/porter	(cached)
+ok  	github.com/tmih06/ompig/parity/cmd/porter	(cached)
 interface-inventory: clean (13803 semantic interfaces at 0.87.1)
 
-> @michaelkinsy/pig-interface-extractor@0.1.0 test
+> @michaelkinsy/ompig-interface-extractor@0.1.0 test
 > node --test test/*.test.mjs
 
 ✔ extracts stable input-handler branches, effects, and source identity (20.490372ms)
@@ -92,11 +92,11 @@ behavior contracts: OK (22 contracts, 56 input handlers: 0 ported, 0 partial, 0 
 render contracts: 111 surfaces: 0 ported, 0 partial, 0 pending, 109 deferred, 0 divergence, 2 designed-out
 test-inventory-drift: clean
 test inventory: OK (598 files: 2 ported, 1 partial, 0 scenario-covered, 5 designed-out, 0 divergence, 590 pending; upstream 0.87.1)
-format-version inventory: clean (45 fields: 0 Pig-owned format, 21 release/content, 18 upstream, 6 external)
-ok  	github.com/MichaelKinsy/PiG/parity/cmd/customfactoryledger	1.138s
+format-version inventory: clean (45 fields: 0 Ompig-owned format, 21 release/content, 18 upstream, 6 external)
+ok  	github.com/tmih06/ompig/parity/cmd/customfactoryledger	1.138s
 coverage-drift: parity/coverage.md, .github/badges/parity-coverage.svg, and the README.md porting block are current
 port-map-drift: clean (616 upstream source files accounted for)
-ok  	github.com/MichaelKinsy/PiG/tests/docs-drift	1.801s
+ok  	github.com/tmih06/ompig/tests/docs-drift	1.801s
 
 $ go tool golangci-lint config verify
 exit: 0
@@ -115,12 +115,12 @@ go tool golangci-lint run --allow-parallel-runners --build-tags=integration,live
 $ go test -count=1 -json ./internal/codingagent/tools ./agent/harness/session ./agent/harness/pico3 -run '^TestHarness(Image|JSONL|Pico)'
 exit: 0
 Top-level completion events:
-{"Time": "2026-09-24T22:08:36.575950795-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/internal/codingagent/tools", "Test": "TestHarnessImageMagicBoundaries", "Elapsed": 0}
-{"Time": "2026-09-24T22:08:36.57710534-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/internal/codingagent/tools", "Test": "TestHarnessImageBMPPlanesAndBitDepth", "Elapsed": 0}
-{"Time": "2026-09-24T22:08:36.577280568-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/session", "Test": "TestHarnessJSONLHeaderRepositoryRoundTrip", "Elapsed": 0}
-{"Time": "2026-09-24T22:08:36.581067696-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/pico3", "Test": "TestHarnessPicoJSONLRetirementAndHighWater", "Elapsed": 0}
-{"Time": "2026-09-24T22:08:36.581243182-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/session", "Test": "TestHarnessJSONLInvalidHeaderRepositoryOpen", "Elapsed": 0.01}
-{"Time": "2026-09-24T22:08:36.588120738-07:00", "Action": "pass", "Package": "github.com/MichaelKinsy/PiG/agent/harness/pico3", "Test": "TestHarnessPicoJSONLPublicationRecovery", "Elapsed": 0.01}
+{"Time": "2026-09-24T22:08:36.575950795-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/internal/codingagent/tools", "Test": "TestHarnessImageMagicBoundaries", "Elapsed": 0}
+{"Time": "2026-09-24T22:08:36.57710534-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/internal/codingagent/tools", "Test": "TestHarnessImageBMPPlanesAndBitDepth", "Elapsed": 0}
+{"Time": "2026-09-24T22:08:36.577280568-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/session", "Test": "TestHarnessJSONLHeaderRepositoryRoundTrip", "Elapsed": 0}
+{"Time": "2026-09-24T22:08:36.581067696-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/pico3", "Test": "TestHarnessPicoJSONLRetirementAndHighWater", "Elapsed": 0}
+{"Time": "2026-09-24T22:08:36.581243182-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/session", "Test": "TestHarnessJSONLInvalidHeaderRepositoryOpen", "Elapsed": 0.01}
+{"Time": "2026-09-24T22:08:36.588120738-07:00", "Action": "pass", "Package": "github.com/tmih06/ompig/agent/harness/pico3", "Test": "TestHarnessPicoJSONLPublicationRecovery", "Elapsed": 0.01}
 
 $ make coverage RESULTS=
 exit: 0

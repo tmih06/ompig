@@ -10,25 +10,25 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/internal/nodespawn"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/nodespawn"
 )
 
 // Equivalence port of packages/coding-agent/test/restore-sandbox-env.test.ts (Pi 1.0.0). Pi's restoreSandboxEnv
 // repairs a Bun sandbox start whose process.env is empty although the kernel passed an environment, by reading
-// /proc/self/environ; without it every child process (bash tool, extensions) would start with no environment. PiG
+// /proc/self/environ; without it every child process (bash tool, extensions) would start with no environment. Ompig
 // has the same concern: the environment it hands to children ({...process.env}, nodespawn.ProcessEnv, and the bash
 // tool's GetShellEnv) must be the environment the kernel passed. Go reads that block directly at startup, so the
-// invariant is that PiG's child environment equals /proc/self/environ in every start: an ordinary one, one with
+// invariant is that Ompig's child environment equals /proc/self/environ in every start: an ordinary one, one with
 // added entries, and the minimal sandbox start Pi's third case simulates. The bash tool's GetShellEnv(<agentDir>/bin)
 // changes only PATH, as Pi's getShellEnv does; an empty start gains only that PATH and nothing else is fabricated.
 
 // shellEnvProbeArg makes the tools test binary report its child environment instead of running tests.
-const shellEnvProbeArg = "pig-restore-sandbox-env-probe"
+const shellEnvProbeArg = "ompig-restore-sandbox-env-probe"
 
 // shellEnvProbeBinDir stands in for <agentDir>/bin, which every production bash tool passes to GetShellEnv
 // (coding/session_tool_registry.go, internal/codingagent/reload_resources.go).
-const shellEnvProbeBinDir = "/pig-restore-sandbox-env/agent/bin"
+const shellEnvProbeBinDir = "/ompig-restore-sandbox-env/agent/bin"
 
 type shellEnvReport struct {
 	ProcessEnv      []string `json:"processEnv"`
@@ -74,7 +74,7 @@ func runShellEnvProbe(t *testing.T, env []string) shellEnvReport {
 	return report
 }
 
-// wantPassedEnvironment checks that PiG's child environment is the block the probe was started with.
+// wantPassedEnvironment checks that Ompig's child environment is the block the probe was started with.
 func wantPassedEnvironment(t *testing.T, report shellEnvReport, passed []string) {
 	t.Helper()
 	if runtime.GOOS == "linux" {
@@ -155,7 +155,7 @@ func TestRestoreSandboxEnvUpstream(t *testing.T) {
 			}
 		},
 		// restores environment from /proc/self/environ when bun env is empty: Pi's sandbox start has only FOO=bar and
-		// BAZ=qux in /proc/self/environ. PiG's children get exactly those (plus the bash tool's PATH), and an empty
+		// BAZ=qux in /proc/self/environ. Ompig's children get exactly those (plus the bash tool's PATH), and an empty
 		// start fabricates nothing beyond that PATH.
 		46: func(t *testing.T) {
 			env := []string{"FOO=bar", "BAZ=qux"}

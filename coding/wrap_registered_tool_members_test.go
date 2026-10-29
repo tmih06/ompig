@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // tool-definition-wrapper.ts:12-29 wrapToolDefinition copies the definition's outputSchema, constrainedSampling and prepareArguments onto the AgentTool

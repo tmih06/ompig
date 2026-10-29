@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/configschema"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent/configschema"
 )
 
 // Ports the runtime cases of packages/coding-agent/test/config-schemas.test.ts (Pi 1.2.0) "generated configuration schemas" that load a
@@ -69,7 +69,7 @@ func TestConfigSchemasValidateSchemaInModelsJSONAtRuntime(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "models.json")
 	writeConfigSchemaFile(t, path, `{"$schema":"`+configSchemaURL("models")+`","providers":{"demo":{"baseUrl":"http://localhost:8080/v1","models":[{"id":"demo"}]}}}`)
 	// Pi's ModelConfig.load validates the document and keeps every provider; composing a provider without an api fails later, in the
-	// runtime. Pig's registry load does both, so the ModelConfig layer is the schema check and the decoded config that readConfig runs
+	// runtime. Ompig's registry load does both, so the ModelConfig layer is the schema check and the decoded config that readConfig runs
 	// before it drops providers that cannot compose.
 	if got := NewModelRegistryWithModelsPath(path).LoadError(); strings.Contains(got, "Invalid models.json schema") || strings.Contains(got, "$schema") {
 		t.Fatalf("LoadError = %q, want no schema error", got)

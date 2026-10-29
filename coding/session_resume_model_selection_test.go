@@ -3,8 +3,8 @@ package coding
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // packages/coding-agent/src/core/sdk.ts:198-205 restores a saved model only when options.model is absent. Stored usage cost is not repriced for an explicit replacement model.

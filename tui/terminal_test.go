@@ -14,7 +14,7 @@ import (
 
 func TestBuildTerminalTitle_NoName(t *testing.T) {
 	got := BuildTerminalTitle("", "/home/user/myproject")
-	want := "pig - myproject"
+	want := "ompig - myproject"
 	if got != want {
 		t.Errorf("BuildTerminalTitle no-name: got %q want %q", got, want)
 	}
@@ -22,7 +22,7 @@ func TestBuildTerminalTitle_NoName(t *testing.T) {
 
 func TestBuildTerminalTitle_WithName(t *testing.T) {
 	got := BuildTerminalTitle("auth refactor", "/home/user/myproject")
-	want := "pig - auth refactor - myproject"
+	want := "ompig - auth refactor - myproject"
 	if got != want {
 		t.Errorf("BuildTerminalTitle with-name: got %q want %q", got, want)
 	}

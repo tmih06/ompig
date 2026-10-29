@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/internal/nodefs"
+	"github.com/tmih06/ompig/internal/nodefs"
 )
 
 // Default resolves bash on Windows, mirroring upstream getShellConfig's win32

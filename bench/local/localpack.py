@@ -2,7 +2,7 @@
 """Local-model eval pack: a pinned llama.cpp server and a pinned model in a throwaway root, served on 127.0.0.1.
 
 runtimes.lock and models.lock pin every download by sha256 and size (models also by Hugging Face repo and revision). Nothing is installed globally:
-the server and the model live under a temporary root (a verified model cache can be kept with PIGPACK_CACHE). The server speaks the OpenAI
+the server and the model live under a temporary root (a verified model cache can be kept with OMPIGPACK_CACHE). The server speaks the OpenAI
 chat-completions API on the loopback only. The pack's later stages (harness arms, metrics, report) build on `Server`.
 """
 import json
@@ -142,7 +142,7 @@ class Server:
 
 def dry_run(model="qwen2.5-0.5b-instruct-q4_k_m", cache=None):
     """Install the runtime, fetch the model, serve it, answer one completion; returns the facts a report needs."""
-    cache = cache or os.environ.get("PIGPACK_CACHE") or os.path.join(tempfile.gettempdir(), "pigpack-cache")
+    cache = cache or os.environ.get("OMPIGPACK_CACHE") or os.path.join(tempfile.gettempdir(), "pigpack-cache")
     with tempfile.TemporaryDirectory(prefix="pigpack-") as root:
         binary = install_runtime(root)
         version = subprocess.run([binary, "--version"], capture_output=True, text=True, timeout=60)

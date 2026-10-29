@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 from test_extension_api_099 import _command_ext, _drive, _host, _write_frame
 
-import pig_sdk
+import ompig_sdk
 
 STATE: dict[str, Any] = {
     "models": [
@@ -48,7 +48,7 @@ def test_typed_reads_answer_from_the_registry_state() -> None:
     """model-registry.ts:145-161: chat models come from `models`, every other type from `typedModels`, in the host's order."""
     seen: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         registry = ctx.model_registry
         seen["classifiers"] = registry.get_models_of_type("classifier")
         seen["chat"] = registry.get_models_of_type("chat")
@@ -83,7 +83,7 @@ def test_get_available_of_type_calls_the_host() -> None:
     """model-registry.ts:135-143: the type and the provider are what the host filters on; its error is the caller's."""
     seen: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         registry = ctx.model_registry
         seen["classifiers"] = registry.get_available_of_type("classifier", "typesafe")
         seen["images"] = registry.get_available_of_type("image")
@@ -123,7 +123,7 @@ def test_classify_round_trips_ordered_questions_and_answers() -> None:
     """model-registry.ts:170-177, model-runtime.ts:800-815: the questions and the answers keep their order; classify never raises."""
     seen: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         registry = ctx.model_registry
         seen["ok"] = registry.classify(JEV, APPROVAL, {"apiKey": "sk-explicit", "headers": {"X-Trace": None}, "maxRetries": 2, "temperature": 0.5})
         seen["failed"] = registry.classify(JEV, APPROVAL)
@@ -164,7 +164,7 @@ def test_classify_reports_a_cancelled_request_as_an_aborted_result() -> None:
     """model-runtime.ts:800-815: an aborted classification is a result with stopReason aborted, not an exception; the request lifetime is the signal."""
     seen: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         seen["result"] = ctx.model_registry.classify(JEV, APPROVAL)
 
     ext, ready = _command_ext("py-classify-cancel", handler)
@@ -182,7 +182,7 @@ def test_classify_reports_a_cancelled_request_as_an_aborted_result() -> None:
     assert (result["provider"], result["model"], result["api"]) == ("typesafe", "jev-latest", "typesafe-system-one")
 
 
-def _route(ctx: pig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
+def _route(ctx: ompig_sdk.Context, request: dict[str, Any]) -> dict[str, Any]:
     return {"model": {"provider": "p", "id": "m"}, "thinkingLevel": "off"}
 
 
@@ -190,11 +190,11 @@ def test_registry_virtual_models_reach_the_host_like_the_context_ones() -> None:
     """model-registry.ts:161-168: registerVirtualModel and unregisterVirtualModel of the facade are the runtime's (loader.ts:480-495)."""
     seen: dict[str, Any] = {}
 
-    def handler(ctx: pig_sdk.Context) -> None:
+    def handler(ctx: ompig_sdk.Context) -> None:
         registry = ctx.model_registry
-        registry.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="late", name="Late", route=_route, context_window=1000))
+        registry.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="late", name="Late", route=_route, context_window=1000))
         try:
-            registry.register_virtual_model(pig_sdk.VirtualModel(provider="router", id="claimed", name="Claimed", route=_route))
+            registry.register_virtual_model(ompig_sdk.VirtualModel(provider="router", id="claimed", name="Claimed", route=_route))
         except Exception as error:  # noqa: BLE001
             seen["refused"] = str(error)
         registry.unregister_virtual_model("router", "late")
@@ -228,17 +228,17 @@ def test_provider_config_implementations_are_declared_and_run_in_the_extension()
     """types.ts:1896-1898: images and classifiers are implementations keyed by API. The callables stay in the extension; the register frame names the APIs."""
     seen: dict[str, Any] = {}
 
-    def images(model: dict[str, Any], request: dict[str, Any], options: pig_sdk.ProviderOperationOptions) -> dict[str, Any]:
+    def images(model: dict[str, Any], request: dict[str, Any], options: ompig_sdk.ProviderOperationOptions) -> dict[str, Any]:
         seen["image"] = (model, request, options.values, options.signal.is_set())
         return {"api": "test-images", "provider": "ops", "model": model["id"], "stopReason": "stop", "timestamp": 1, "key": options.values.get("apiKey")}
 
-    def classify(model: dict[str, Any], request: dict[str, Any], options: pig_sdk.ProviderOperationOptions) -> dict[str, Any]:
+    def classify(model: dict[str, Any], request: dict[str, Any], options: ompig_sdk.ProviderOperationOptions) -> dict[str, Any]:
         if request["state"]["text"] == "fail":
             raise RuntimeError("classifier failed")
         seen["order"] = list(request["questions"])
         return {"api": "test-classifier", "provider": "ops", "model": model["id"], "answers": {"b": {"type": "bool", "probability": 0.5}, "a": {"type": "bool", "probability": 0.25}}, "stopReason": "stop", "timestamp": 2}
 
-    ext = pig_sdk.Extension("py-ops")
+    ext = ompig_sdk.Extension("py-ops")
     ext.register_provider("ops", {
         "baseUrl": "https://ops.test/v1", "apiKey": "key",
         "models": [
@@ -281,7 +281,7 @@ def test_provider_config_implementations_are_declared_and_run_in_the_extension()
 def test_provider_re_registration_keeps_implementations_it_does_not_redefine() -> None:
     """model-runtime.ts registerProvider merges a re-registration's defined values, so a second registration without images keeps the first's; the host keeps the APIs it wired."""
     ran: list[str] = []
-    ext = pig_sdk.Extension("py-ops")
+    ext = ompig_sdk.Extension("py-ops")
     ext.register_provider("ops", {
         "baseUrl": "https://ops.test/v1",
         "images": {"test-images": lambda model, request, options: ran.append("first images") or {"stopReason": "stop"}},
@@ -306,16 +306,16 @@ def test_provider_re_registration_keeps_implementations_it_does_not_redefine() -
 
 def test_provider_config_rejects_a_non_callable_implementation() -> None:
     """The callables are the implementation: a value that cannot run is refused at registration, before anything is declared."""
-    ext = pig_sdk.Extension("py-ops-bad")
+    ext = ompig_sdk.Extension("py-ops-bad")
     with pytest.raises(TypeError, match="test-images"):
         ext.register_provider("ops", {"images": {"test-images": "not callable"}})
     with pytest.raises(TypeError, match="test-classifier"):
         ext.register_provider("ops", {"classifiers": {"test-classifier": 3}})
 
 
-def _object_provider(with_operations: bool) -> pig_sdk.Provider:
-    auth = pig_sdk.ProviderAuth(api_key=pig_sdk.APIKeyAuth(name="Pixels key", resolve=lambda _input: pig_sdk.AuthResult(auth={})))
-    provider = pig_sdk.Provider(
+def _object_provider(with_operations: bool) -> ompig_sdk.Provider:
+    auth = ompig_sdk.ProviderAuth(api_key=ompig_sdk.APIKeyAuth(name="Pixels key", resolve=lambda _input: ompig_sdk.AuthResult(auth={})))
+    provider = ompig_sdk.Provider(
         id="pixels", name="Pixels", auth=auth,
         get_models=lambda: [{"id": "flux", "name": "Flux", "type": "image", "api": "test-images"}],
         stream=lambda *_: None, stream_simple=lambda *_: None,
@@ -328,7 +328,7 @@ def _object_provider(with_operations: bool) -> pig_sdk.Provider:
 
 def test_provider_object_declares_and_runs_generate_images_and_classify() -> None:
     """types.ts:1896-1898 for a Provider object: generateImages and classify are members, declared with its other methods and run through provider_call."""
-    ext = pig_sdk.Extension("py-objects")
+    ext = ompig_sdk.Extension("py-objects")
     ext.register_provider(_object_provider(True))
     host = _host(ext)
     try:
@@ -343,7 +343,7 @@ def test_provider_object_declares_and_runs_generate_images_and_classify() -> Non
     finally:
         host.close()
 
-    bare = pig_sdk.Extension("py-objects-bare")
+    bare = ompig_sdk.Extension("py-objects-bare")
     bare.register_provider(_object_provider(False))
     host = _host(bare)
     try:

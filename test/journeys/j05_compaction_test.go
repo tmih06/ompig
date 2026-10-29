@@ -5,7 +5,7 @@ package journeys
 import (
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/journeys/harness"
+	"github.com/tmih06/ompig/test/journeys/harness"
 )
 
 const compactionSummary = "## Goal\nJourney summary of the earlier conversation.\n\n## Progress\n- earlier turns were answered\n\n## Next Steps\n- continue"

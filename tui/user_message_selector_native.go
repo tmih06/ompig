@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 // NativeNode reports the picker as a selector whose item ids are the
-// messages' chronological indexes. pig additive (D91): each row's "Message i
+// messages' chronological indexes. ompig additive (D91): each row's "Message i
 // of n" line is its detail, and an empty list reports the empty message as
 // the status.
 func (s *UserMessageSelectorComponent) NativeNode() (frontend.Node, bool) {

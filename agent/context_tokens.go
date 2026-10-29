@@ -14,7 +14,7 @@ import (
 	"encoding/json"
 	"slices"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // ContextUsageEstimate is the result of EstimateContextTokens.

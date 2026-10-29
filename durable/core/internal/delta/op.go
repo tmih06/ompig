@@ -13,7 +13,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // Verb names an operation kind: the first element of an operation tuple.

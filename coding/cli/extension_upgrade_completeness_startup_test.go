@@ -1,4 +1,4 @@
-//go:build linux && !pig_strip_extension_sdk_go
+//go:build linux && !ompig_strip_extension_sdk_go
 
 package cli
 
@@ -41,7 +41,7 @@ func TestStartupOffersEveryDriftedExtensionAndOneYesUpgradesThemAll(t *testing.T
 		if lines := strings.Count(stderr, "upgraded extension "); lines != 4 {
 			t.Fatalf("want one line for each of four extensions:\n%s", stderr)
 		}
-		if !strings.Contains(readFile(t, filepath.Join(dirs[2], "extension.go")), "pigUpgradeIsIdle(ctx)") {
+		if !strings.Contains(readFile(t, filepath.Join(dirs[2], "extension.go")), "ompigUpgradeIsIdle(ctx)") {
 			t.Fatal("the subagent shape was not upgraded")
 		}
 	})
@@ -49,8 +49,8 @@ func TestStartupOffersEveryDriftedExtensionAndOneYesUpgradesThemAll(t *testing.T
 		home := t.TempDir()
 		agentDir := filepath.Join(home, "agent")
 		dirs := writeOldShapeExtensions(t, filepath.Join(agentDir, "extensions"))
-		session := startSpriteSession(t, binary, filepath.Join(home, "pig"), agentDir)
-		session.await("asking", 0, "Run pig extension upgrade ")
+		session := startSpriteSession(t, binary, filepath.Join(home, "ompig"), agentDir)
+		session.await("asking", 0, "Run ompig extension upgrade ")
 		session.await("the question", 0, "now? [y/N] ")
 		mark := session.send("y\r")
 		session.await("the session starts", mark, "[Extensions]")

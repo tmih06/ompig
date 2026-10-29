@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type chatgptManualProbe struct {
@@ -61,7 +61,7 @@ func chatgptManualProbes() []chatgptManualProbe {
 }
 
 // authorizationResultFromManualInput (with authorizationResultFromCallback and REDIRECT_URI, cut from Pi's source) runs in Node on the same pasted inputs: which inputs `new URL` rejects, the origin and pathname comparison with the
-// redirect URI, the first value of each query parameter, the error parameter and the code, state and client id checks must produce Pi's error message or result in Pig's chatgptResultFromManualInput.
+// redirect URI, the first value of each query parameter, the error parameter and the code, state and client id checks must produce Pi's error message or result in Ompig's chatgptResultFromManualInput.
 func TestChatGPTManualInputMatchesPiOnSeededProbes(t *testing.T) {
 	probes := chatgptManualProbes()
 	payload, err := json.Marshal(probes)
@@ -107,7 +107,7 @@ func TestChatGPTManualInputMatchesPiOnSeededProbes(t *testing.T) {
 		have, _ := json.Marshal(got)
 		if !bytes.Equal(want, have) {
 			if differing++; differing <= 12 {
-				t.Errorf("%+v\n  Pig %s\n  Pi  %s", probe, have, want)
+				t.Errorf("%+v\n  Ompig %s\n  Pi  %s", probe, have, want)
 			}
 		}
 	}

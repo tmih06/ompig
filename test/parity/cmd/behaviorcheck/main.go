@@ -14,7 +14,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/MichaelKinsy/PiG/coding"
+	"github.com/tmih06/ompig/coding"
 )
 
 type ledger struct {
@@ -23,15 +23,15 @@ type ledger struct {
 }
 
 type contract struct {
-	ID         string        `toml:"id"`
-	UpstreamID string        `toml:"upstream_id"`
-	Family     string        `toml:"family"`
-	Kind       string        `toml:"kind"`
-	Claim      string        `toml:"claim"`
-	Status     string        `toml:"status"`
-	PigTargets []string      `toml:"pig_targets"`
-	Evidence   []string      `toml:"evidence"`
-	Upstream   upstreamRange `toml:"upstream"`
+	ID           string        `toml:"id"`
+	UpstreamID   string        `toml:"upstream_id"`
+	Family       string        `toml:"family"`
+	Kind         string        `toml:"kind"`
+	Claim        string        `toml:"claim"`
+	Status       string        `toml:"status"`
+	OmpigTargets []string      `toml:"ompig_targets"`
+	Evidence     []string      `toml:"evidence"`
+	Upstream     upstreamRange `toml:"upstream"`
 }
 
 type inputInventory struct {
@@ -97,14 +97,14 @@ type inputMapping struct {
 }
 
 type inputMappingEntry struct {
-	ID          string   `json:"id"`
-	OwnerFamily string   `json:"ownerFamily"`
-	Disposition string   `json:"disposition"`
-	PigTargets  []string `json:"pigTargets"`
-	Evidence    []string `json:"evidence"`
-	Contracts   []string `json:"contracts"`
-	Divergence  string   `json:"divergence"`
-	Rationale   string   `json:"rationale"`
+	ID           string   `json:"id"`
+	OwnerFamily  string   `json:"ownerFamily"`
+	Disposition  string   `json:"disposition"`
+	OmpigTargets []string `json:"ompigTargets"`
+	Evidence     []string `json:"evidence"`
+	Contracts    []string `json:"contracts"`
+	Divergence   string   `json:"divergence"`
+	Rationale    string   `json:"rationale"`
 }
 
 type familiesConfig struct {
@@ -301,10 +301,10 @@ func check(path, upstreamRoot, inventoryPath, mappingPath, familiesPath, familyN
 			return fmt.Errorf("contract %q keybindings %v do not match generated input handler bindings %v", item.ID, item.Upstream.Keybindings, handler.Bindings)
 		}
 		if item.Status == "ported" {
-			if len(item.PigTargets) == 0 || len(item.Evidence) < 2 {
-				return fmt.Errorf("ported contract %q needs Pig targets plus unit and behavioral evidence", item.ID)
+			if len(item.OmpigTargets) == 0 || len(item.Evidence) < 2 {
+				return fmt.Errorf("ported contract %q needs Ompig targets plus unit and behavioral evidence", item.ID)
 			}
-			if err := checkReferences(repoRoot, item.ID, append(append([]string{}, item.PigTargets...), item.Evidence...)); err != nil {
+			if err := checkReferences(repoRoot, item.ID, append(append([]string{}, item.OmpigTargets...), item.Evidence...)); err != nil {
 				return err
 			}
 			if !containsScenario(item.Evidence) {
@@ -397,7 +397,7 @@ func checkInputMappings(mapping inputMapping, handlers map[string]inputHandler, 
 			return nil, fmt.Errorf("input mapping %q has unsupported disposition %q", entry.ID, entry.Disposition)
 		}
 		dispositions[entry.Disposition]++
-		for label, values := range map[string][]string{"Pig targets": entry.PigTargets, "evidence": entry.Evidence, "contracts": entry.Contracts} {
+		for label, values := range map[string][]string{"Ompig targets": entry.OmpigTargets, "evidence": entry.Evidence, "contracts": entry.Contracts} {
 			if !unique(values) {
 				return nil, fmt.Errorf("input mapping %q has duplicate %s", entry.ID, label)
 			}
@@ -405,8 +405,8 @@ func checkInputMappings(mapping inputMapping, handlers map[string]inputHandler, 
 		if strict && (entry.Disposition == "pending" || entry.Disposition == "partial") {
 			return nil, fmt.Errorf("input mapping %q remains %s", entry.ID, entry.Disposition)
 		}
-		if entry.Disposition == "ported" && (len(entry.PigTargets) == 0 || len(entry.Evidence) == 0 || len(entry.Contracts) == 0) {
-			return nil, fmt.Errorf("ported input mapping %q needs Pig targets, evidence, and contracts", entry.ID)
+		if entry.Disposition == "ported" && (len(entry.OmpigTargets) == 0 || len(entry.Evidence) == 0 || len(entry.Contracts) == 0) {
+			return nil, fmt.Errorf("ported input mapping %q needs Ompig targets, evidence, and contracts", entry.ID)
 		}
 		if entry.Disposition == "partial" && len(entry.Contracts) == 0 {
 			return nil, fmt.Errorf("partial input mapping %q needs a behavioral contract", entry.ID)
@@ -417,7 +417,7 @@ func checkInputMappings(mapping inputMapping, handlers map[string]inputHandler, 
 		if entry.Disposition == "divergence" && (entry.Divergence == "" || len(entry.Contracts) == 0) {
 			return nil, fmt.Errorf("divergence input mapping %q needs a divergence ID and contract", entry.ID)
 		}
-		if err := checkReferences(repoRoot, entry.ID, append(append([]string{}, entry.PigTargets...), entry.Evidence...)); err != nil {
+		if err := checkReferences(repoRoot, entry.ID, append(append([]string{}, entry.OmpigTargets...), entry.Evidence...)); err != nil {
 			return nil, err
 		}
 		for _, contractID := range entry.Contracts {
@@ -468,13 +468,13 @@ func checkRenderMappings(mappings []inputMappingEntry, renderers map[string]rend
 		if strict && (entry.Disposition == "pending" || entry.Disposition == "partial") {
 			return nil, fmt.Errorf("render mapping %q remains %s", entry.ID, entry.Disposition)
 		}
-		for label, values := range map[string][]string{"Pig targets": entry.PigTargets, "evidence": entry.Evidence, "contracts": entry.Contracts} {
+		for label, values := range map[string][]string{"Ompig targets": entry.OmpigTargets, "evidence": entry.Evidence, "contracts": entry.Contracts} {
 			if !unique(values) {
 				return nil, fmt.Errorf("render mapping %q has duplicate %s", entry.ID, label)
 			}
 		}
-		if (entry.Disposition == "ported" || entry.Disposition == "partial") && (len(entry.PigTargets) == 0 || len(entry.Evidence) == 0 || len(entry.Contracts) == 0) {
-			return nil, fmt.Errorf("%s render mapping %q needs Pig targets, evidence, and contracts", entry.Disposition, entry.ID)
+		if (entry.Disposition == "ported" || entry.Disposition == "partial") && (len(entry.OmpigTargets) == 0 || len(entry.Evidence) == 0 || len(entry.Contracts) == 0) {
+			return nil, fmt.Errorf("%s render mapping %q needs Ompig targets, evidence, and contracts", entry.Disposition, entry.ID)
 		}
 		if (entry.Disposition == "deferred" || entry.Disposition == "designed-out") && entry.Rationale == "" {
 			return nil, fmt.Errorf("%s render mapping %q needs a rationale", entry.Disposition, entry.ID)
@@ -482,7 +482,7 @@ func checkRenderMappings(mappings []inputMappingEntry, renderers map[string]rend
 		if entry.Disposition == "divergence" && (entry.Divergence == "" || len(entry.Contracts) == 0) {
 			return nil, fmt.Errorf("divergence render mapping %q needs a divergence ID and contract", entry.ID)
 		}
-		if err := checkReferences(repoRoot, entry.ID, append(append([]string{}, entry.PigTargets...), entry.Evidence...)); err != nil {
+		if err := checkReferences(repoRoot, entry.ID, append(append([]string{}, entry.OmpigTargets...), entry.Evidence...)); err != nil {
 			return nil, err
 		}
 		for _, contractID := range entry.Contracts {

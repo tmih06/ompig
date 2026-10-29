@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // stackedError carries its own stack, as an error returned by a subprocess
@@ -18,7 +18,7 @@ func (e stackedError) ErrorStack() string { return e.stack }
 
 // Upstream reports a failing handler's own `err.stack` (runner.ts emitError),
 // which interactive mode prints dimmed under the error line. The host's
-// dispatch stack says nothing about the extension, so PiG never reports it.
+// dispatch stack says nothing about the extension, so Ompig never reports it.
 // Pi: packages/coding-agent/src/core/extensions/types.ts:926 (AgentStartEvent.type).
 func TestHandlerErrorsReportTheFailuresOwnStack(t *testing.T) {
 	const jsStack = "TypeError: boom\n    at onTurnStart (file:///ext/index.js:10:5)"

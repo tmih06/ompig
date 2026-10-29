@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // abortAfterChecks is a Context whose Err reports cancellation from its (after+1)th call on, so a test can abort an

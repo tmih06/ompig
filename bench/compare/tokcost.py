@@ -9,7 +9,7 @@
 Sessions (same scripted replies for every arm, fake_model_ctx.py): base (3 prompts, window 200k), compact (6 prompts, window 24k, so each arm
 compacts), retry (2 prompts, the 3rd request answered 429 once). Measured: what each harness SENDS per request (system prompt, tool schemas, conversation
 tokens) with the o200k_base and cl100k_base tokenizers, the prefix shared with the previous request, compaction and retry requests, cache-marker fields.
-Cost = tokens x the per-million prices of the Pi/PiG model catalog (input, output, cache read, cache write) for the chosen models; caching is
+Cost = tokens x the per-million prices of the Pi/Ompig model catalog (input, output, cache read, cache write) for the chosen models; caching is
 modelled as implicit exact-prefix reuse (OpenAI/Gemini style); Anthropic-style cache breakpoints are not measured (the arms talk openai-completions to the mock).
 Claude and Gemini tokenizers are not available offline: their counts here use the o200k count as an ESTIMATE and are labelled so.
 """
@@ -41,7 +41,7 @@ def run_copilot(h, argv, sess, spec, d, port):
     cwd = base / "work"
     cwd.mkdir()
     shutil.copytree(h.FIXTURES, cwd / "fixture")
-    env = {k: v for k, v in os.environ.items() if not k.startswith(("PIG_", "PI_", "NODE_", "BUN_", "GH_", "GITHUB_", "COPILOT_"))}
+    env = {k: v for k, v in os.environ.items() if not k.startswith(("OMPIG_", "PI_", "NODE_", "BUN_", "GH_", "GITHUB_", "COPILOT_"))}
     env.update(COPILOT_HOME=str(base / "home"), XDG_CACHE_HOME=str(base / "cache"), HOME=str(base), COPILOT_AUTO_UPDATE="false", COPILOT_OFFLINE="true",
                COPILOT_PROVIDER_BASE_URL=f"http://127.0.0.1:{port}/v1", COPILOT_PROVIDER_TYPE="openai", COPILOT_PROVIDER_API_KEY="fake", COPILOT_MODEL="fake-model",
                COPILOT_PROVIDER_MAX_PROMPT_TOKENS=str(spec["window"]))
@@ -178,7 +178,7 @@ def main():
     a = ap.parse_args()
     a.out.mkdir(parents=True, exist_ok=True)
     if a.cmd == "run":
-        dropped = cleanenv.apply()  # the arms send what they send on a user's machine: no lane PIG_*/PI_*/Go/agent variables
+        dropped = cleanenv.apply()  # the arms send what they send on a user's machine: no lane OMPIG_*/PI_*/Go/agent variables
         print(f"clean env: dropped {len(dropped)} variables ({', '.join(dropped)})", file=sys.stderr, flush=True)
         root = a.root.resolve()
         h = cs.load_harness(root)

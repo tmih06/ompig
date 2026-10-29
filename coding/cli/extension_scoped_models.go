@@ -1,9 +1,9 @@
 package cli
 
 import (
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // extensionScopedModels materializes only an explicit scope. Extension getters read the Session's retained result instead of resolving models again.

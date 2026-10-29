@@ -2,7 +2,7 @@
 
 ## Contract and source
 
-Pi 0.87.1 `packages/coding-agent/src/core/extensions/runner.ts:809-886` creates live Context getters and rejects runtime invalidation, not ordinary command completion. `interactive-mode.ts:2495-2516` installs terminal callbacks that can retain that Context. PiG's request parent is subprocess cancellation metadata, not the Context's permanent identity.
+Pi 0.87.1 `packages/coding-agent/src/core/extensions/runner.ts:809-886` creates live Context getters and rejects runtime invalidation, not ordinary command completion. `interactive-mode.ts:2495-2516` installs terminal callbacks that can retain that Context. Ompig's request parent is subprocess cancellation metadata, not the Context's permanent identity.
 
 A host call from an active originating request carries that request's parent and cancellation scope. After explicit normal completion, a retained Context sends no parent and keeps the same original connection generation. A cancelled origin never acquires runtime ownership. Closing or replacing a connection invalidates host calls from its retained Contexts; they do not bind to the latest request or a replacement connection.
 
@@ -30,7 +30,7 @@ The original `TestConformance_TerminalInput` capture and assertions stay unchang
 
 The first complete conformance run exposed a draft regression: suppressing every cancellation-state update also suppressed the required `progress` frame before `completed` and the error response. The unchanged liveness suite timed out at its existing 20-second peer deadline. A separate finished flag now permits cancellation progress while the request still owns its response, without permitting new cancelled-parent calls. The restored complete conformance package passes in 136.1 seconds. Node seals normal async-local ownership before draining its already-admitted synchronous host calls, and retains their progress reporting until response publication; later callbacks do not join that finished request.
 
-Scenario `48-retained-context-host-calls` compares the installed Pi 0.87.1 runner with the actual Go SDK/Host path. It retains the Context after the originating handler returns, compares complete current/empty/replacement input results, then verifies retirement rejection. The fixture asserts the Pi package version. A compiling Go dead-parent mutation makes PiG time out without output while Pi returns the complete four-value record. Restored source passes all three exact pairs; no normalization or comparator change is used.
+Scenario `48-retained-context-host-calls` compares the installed Pi 0.87.1 runner with the actual Go SDK/Host path. It retains the Context after the originating handler returns, compares complete current/empty/replacement input results, then verifies retirement rejection. The fixture asserts the Pi package version. A compiling Go dead-parent mutation makes Ompig time out without output while Pi returns the complete four-value record. Restored source passes all three exact pairs; no normalization or comparator change is used.
 
 The same generic SDK patch is also tested on carrier base `3b8f6836e`. Context adaptation preserves Python `ProviderSignal`, Rust's `provider_objects` storage, Go's provider request arms, and existing Provider fields. Complete Go SDK race, Rust SDK and Python SDK suites pass; the actual native/Node Provider-object conformance selection passes in 134.0 seconds. No Provider socket pump or publication lease code changes are included.
 

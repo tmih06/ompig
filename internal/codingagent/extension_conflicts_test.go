@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // resource-loader.ts:566-575, :765-775 with package-manager.ts:192-198 resourcePrecedenceRank: the `-e builtin:<name>` extensions load after the

@@ -4,12 +4,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigidentity"
+	"github.com/tmih06/ompig/internal/coding/pigidentity"
 )
 
-// D64: PiG's hosted endpoints share one origin. The Node runtime's vendored Pi
+// D64: Ompig's hosted endpoints share one origin. The Node runtime's vendored Pi
 // code reaches the same origin through pigidentity.HostedOrigin, so both hosts
-// call the same PiG-operated service and neither calls pi.dev.
+// call the same Ompig-operated service and neither calls pi.dev.
 func TestHostedEndpointsUseTheIdentityOrigin(t *testing.T) {
 	for name, endpoint := range map[string]string{
 		"install telemetry": defaultInstallTelemetryURL,

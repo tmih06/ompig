@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // client.ts:173 `this.requestHandlers.set("ping", () => ({}))`: a connected client answers a server's ping request with an empty object result.

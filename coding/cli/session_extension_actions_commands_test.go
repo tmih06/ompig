@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
 )
 
 // Pi agent-session.ts:3361-3390 (_bindExtensionCore getCommands) lists the extension commands, then the prompt templates, then the skills, each with its own sourceInfo, and runner.ts:433 copies it into the shared runtime. The value comes from the real Session's resource loader and the real Runner's command registry, through coding.BindSessionExtensionActions.

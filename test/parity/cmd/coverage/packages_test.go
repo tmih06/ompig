@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/test/parity/upstreampackages"
+	"github.com/tmih06/ompig/test/parity/upstreampackages"
 )
 
 // writeMirror writes a package.json for every listed package. deps maps a package key to the keys it depends on, and files is the coding-agent files list.

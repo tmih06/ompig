@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // The host's keybinding table and terminal capabilities reach pi-tui's state in every SDK: getKeybindings() answers the table the host published (every definition with the user's overrides) and not TUI_KEYBINDINGS, getCapabilities() and getTerminalColorMode() answer the host terminal's and not the environment's, and a later publication replaces both. setKeybindings, setCapabilities and setKittyProtocolActive install what they are given, and Key builds the identifiers the table holds.

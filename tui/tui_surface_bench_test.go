@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
 )
 
 // discardSession is a frontend session that draws nothing, so a benchmark
@@ -74,7 +74,7 @@ func streamingRenderer(renderer string, document, dock Component, hooks SurfaceH
 var benchmarkRenderers = []string{"main-screen", "surface"}
 
 // BenchmarkStreamingFrameLongTranscript measures one streaming delta at the
-// end of a long transcript, the frame PiG renders for every token, in the
+// end of a long transcript, the frame Ompig renders for every token, in the
 // stock main-screen renderer and in the frontend surface renderer. The
 // markdown transcript streams into a Markdown component; the session
 // transcript streams into the assistant message interactive mode streams
@@ -132,8 +132,8 @@ func BenchmarkDockFrameLongTranscript(b *testing.B) {
 				editor := NewEditor()
 				indicator := &StatusIndicator{Kind: "working", Loader: newPlainLoader("Working")}
 				status := NewContainer(indicator)
-				footerLines := NewText("~/pig (main)")
-				footer := frontend.Footer{Cwd: "~/pig", Model: "faux-1", ThinkingLevel: "off", AutoCompact: true, ContextUsage: frontend.ContextUsage{ContextWindow: 128000}}
+				footerLines := NewText("~/ompig (main)")
+				footer := frontend.Footer{Cwd: "~/ompig", Model: "faux-1", ThinkingLevel: "off", AutoCompact: true, ContextUsage: frontend.ContextUsage{ContextWindow: 128000}}
 				hooks := SurfaceHooks{
 					Editor:         func() *Editor { return editor },
 					EditorSendable: func() bool { return true },
@@ -163,7 +163,7 @@ func BenchmarkDockFrameLongTranscript(b *testing.B) {
 					case "status":
 						indicator.Tick()
 						footer.UsageTotals.Output = n
-						footerLines.SetText(fmt.Sprintf("~/pig (main) ↑0 ↓%d", n))
+						footerLines.SetText(fmt.Sprintf("~/ompig (main) ↑0 ↓%d", n))
 					}
 					render()
 				}

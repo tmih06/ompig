@@ -9,14 +9,14 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
 	"golang.org/x/text/encoding/unicode"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/frontmatter"
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent/frontmatter"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
 )
 
 // SkillFrontmatter is upstream's SkillFrontmatter (core/skills.ts:67): the parsed header of a skill file. The three named fields have typed accessors; every other key stays in the map.
@@ -46,7 +46,7 @@ func ParseSkillFrontmatter(content string) (SkillFrontmatter, string, error) {
 
 // SkillDef is a parsed Markdown skill with frontmatter and body.
 //
-// Pig loads these on `--skill <name>` and appends the body
+// Ompig loads these on `--skill <name>` and appends the body
 // to the system prompt under a `## Skills` heading.
 type SkillDef struct {
 	SourceInfo             PiSourceInfo
@@ -65,10 +65,10 @@ type SkillDef struct {
 // LoadSkill loads a skill by name from `<skillsDir>/<name>/SKILL.md`.
 //
 // Lookup order (mirrors upstream resource-loader's user-vs-project precedence):
-//  1. <pig-config>/skills/<name>/SKILL.md
+//  1. <ompig-config>/skills/<name>/SKILL.md
 //  2. <skillsDir>/<name>/SKILL.md  (caller-provided fallback root)
 //
-// Most callers pass DefaultAgentDir()/skills as skillsDir so the Pig agent tree
+// Most callers pass DefaultAgentDir()/skills as skillsDir so the Ompig agent tree
 // is searched first; we keep the parameter so SDK consumers can point
 // at a vendored skills tree without env juggling.
 func LoadSkill(skillsDir, name string) (*SkillDef, error) {
@@ -307,7 +307,7 @@ func ExpandSkillCommand(text string, skills []*SkillDef) (string, bool, *extensi
 	if skill == nil {
 		return "", false, nil
 	}
-	// pig additive (D18): an inline Piglet skill uses its supplied body; its source path may identify the defining manifest rather than a Markdown file.
+	// ompig additive (D18): an inline Ompiglet skill uses its supplied body; its source path may identify the defining manifest rather than a Markdown file.
 	body := skill.Body
 	if skill.FilePath != "" && skill.SourceInfo.Source != "inline" {
 		content, err := os.ReadFile(skill.FilePath)

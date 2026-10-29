@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports .upstream/v0.99.2/packages/coding-agent/test/remote-catalog-provider.test.ts (8 cases).
@@ -253,9 +253,9 @@ func TestRemoteCatalogProviderUpstream(t *testing.T) {
 			t.Fatalf("catalog requests = %d, want 2", got)
 		}
 		first := server.request(0)
-		// pig divergence (D65): the product identity is pig/<coding.Version>, where Pi sends pi/<VERSION> (upstream :98).
-		if agent := first.header.Get("User-Agent"); !strings.Contains(agent, "pig/"+ai.ProductVersion) {
-			t.Fatalf("User-Agent = %q, want it to contain pig/%s", agent, ai.ProductVersion)
+		// ompig divergence (D65): the product identity is ompig/<coding.Version>, where Pi sends pi/<VERSION> (upstream :98).
+		if agent := first.header.Get("User-Agent"); !strings.Contains(agent, "ompig/"+ai.ProductVersion) {
+			t.Fatalf("User-Agent = %q, want it to contain ompig/%s", agent, ai.ProductVersion)
 		}
 		if first.path != "/api/models/providers/test-provider" {
 			t.Fatalf("path = %q", first.path)

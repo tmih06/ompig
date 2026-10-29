@@ -1,5 +1,5 @@
 // Execute the pinned source, not a second implementation. No real timers or user config.
-// pig divergence (D87): PiG draws a pig head labeled "pigsayhi", so the Go test passes its image as XBM bits (LSB first,
+// ompig divergence (D87): Ompig draws a ompig head labeled "pigsayhi", so the Go test passes its image as XBM bits (LSB first,
 // 0 is foreground, as armin.ts reads them) and its label, and they replace Armin's in the pinned source.
 import { readFileSync } from "node:fs";
 import { stripTypeScriptTypes } from "node:module";

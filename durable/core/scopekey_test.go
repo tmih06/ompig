@@ -6,7 +6,7 @@ package core
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/jv"
+	"github.com/tmih06/ompig/durable/core/jv"
 )
 
 // scopeKey and recordAddrKey are the stringify of the arrays Pi's documents.ts keys a record by; they are built in place, and

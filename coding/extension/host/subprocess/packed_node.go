@@ -11,9 +11,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
 )
 
 // nodeExtension is one TS/JS extension resolved for a packed Node cell.
@@ -103,8 +103,8 @@ func nodePackedLauncherCommand(ctx context.Context, binPath string, sel tsruntim
 func nodePackedCellHash(cellKey string, exts []nodeExtension) (string, []nodeCellManifestEntry) {
 	digest := sha256.New()
 	// The cell publishes a copy of the embedded runtime, so its key covers
-	// the runtime's content: a cell an earlier PiG cached keeps that PiG's
-	// loader and shims, and must not be reused by a PiG whose runtime differs.
+	// the runtime's content: a cell an earlier Ompig cached keeps that Ompig's
+	// loader and shims, and must not be reused by a Ompig whose runtime differs.
 	_, _ = digest.Write(nodeRuntimeDigest())
 	_, _ = digest.Write([]byte(nodeRuntimeVersion + "\x00" + nodeLauncherFormat + "\x00" + cellKey + "\x00"))
 	manifest := make([]nodeCellManifestEntry, 0, len(exts))
@@ -138,7 +138,7 @@ func CurrentNodePackedCellEntry(cacheRoot, cellKey string, exts []nodeExtension)
 // buildNodePackedCell prepares (or reuses) the cache directory hosting a Node
 // cell. Unlike a single isolated Node launcher's build (builder.go, also
 // backed by runtimecell.PublishArtifact), several extensions can race to
-// build the *same* cell key from independent Pig instances sharing one cache
+// build the *same* cell key from independent Ompig instances sharing one cache
 // root; PublishArtifact is the same content-addressed, per-digest-locked,
 // atomic-rename publication every packed Go/Rust/Python cell and every
 // source-mode extension binary already uses, so a concurrent cold build here
@@ -168,7 +168,7 @@ func buildNodePackedCell(ctx context.Context, cacheRoot, cellKey string, exts []
 			return "", err
 		}
 		launcherPath := filepath.Join(scratch, "runner")
-		launcher := "pig-node-launcher:" + nodeLauncherFormat + "\n"
+		launcher := "ompig-node-launcher:" + nodeLauncherFormat + "\n"
 		if err := os.WriteFile(launcherPath, []byte(launcher), 0o644); err != nil {
 			return "", err
 		}

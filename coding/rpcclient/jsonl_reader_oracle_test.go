@@ -10,14 +10,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/modes/rpc/jsonl.ts
 
 // attachJsonlLineReader and serializeJsonLine (jsonl.ts): LF-only framing (U+2028/2029 and a lone CR stay inside a record), one trailing CR removed,
 // blank records delivered, a final unterminated record delivered at end, multi-byte characters split across chunk boundaries, and the
-// JSON.stringify form of each value. The pinned Pi and PiG split the same chunked byte streams into the same records.
+// JSON.stringify form of each value. The pinned Pi and Ompig split the same chunked byte streams into the same records.
 func TestJSONLReaderMatchesPi(t *testing.T) {
 	rng := rand.New(rand.NewSource(13))
 	pieces := []string{"{\"a\":1}", "x", "é", "😀", "\u2028", "\u2029", "\r", "\n", "\r\n", "\n\n", " ", "\u00a0", "\ufeff", "\"q\\n\"", "\x00", "\u0085"}
@@ -87,7 +87,7 @@ func TestJSONLReaderMatchesPi(t *testing.T) {
 			t.Fatal(err)
 		}
 		if !reflect.DeepEqual(lines, want[i].Lines) {
-			t.Errorf("stream %q: PiG %q, Pi %q", stream, lines, want[i].Lines)
+			t.Errorf("stream %q: Ompig %q, Pi %q", stream, lines, want[i].Lines)
 		}
 	}
 	// -0 and the lone surrogate differ only by the writer's decode of the value; compare the rest by value, all by bytes where decoding is exact.

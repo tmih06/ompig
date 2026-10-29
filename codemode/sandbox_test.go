@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/codemode"
+	"github.com/tmih06/ompig/codemode"
 )
 
 // Ports packages/codemode/test/sandbox.test.ts (v1.0.1) with its original scripts and expectations. The upstream

@@ -16,11 +16,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // propagationWorkerEnv marks a re-executed test binary as the propagation worker.
-const propagationWorkerEnv = "PIG_TELEMETRY_PROPAGATION_WORKER"
+const propagationWorkerEnv = "OMPIG_TELEMETRY_PROPAGATION_WORKER"
 
 // recordedSpanJSON is the JSON of one span of getSpans(), with upstream's member names.
 type recordedSpanJSON struct {

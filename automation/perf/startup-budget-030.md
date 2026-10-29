@@ -5,7 +5,7 @@ The advisory startup job reported the no-extension workload at 1.142 (warm) and 
 ## Method
 
 - `automation/perf/startup_timing.py` measures the time to the first assistant `message_start` from a JSON-mode print run, interleaving builds. The host has 128 CPUs and a 4-CPU CI runner behaves differently: a 128-thread Go runtime pays for every garbage-collection cycle. All numbers below pin the harness to four CPUs with `taskset`.
-- CPU profiles came from `PIG_PROFILE=cpu` over 100 cold runs per build. `GODEBUG=inittrace=1` gave package initialization time, bytes, and allocations. `PIG_STARTUP_TRACE=1` gave the phase timeline.
+- CPU profiles came from `OMPIG_PROFILE=cpu` over 100 cold runs per build. `GODEBUG=inittrace=1` gave package initialization time, bytes, and allocations. `OMPIG_STARTUP_TRACE=1` gave the phase timeline.
 - The host is shared, so single runs vary by 5 to 10 percent. The tables use medians of 60 interleaved runs and repeat on separate CPU sets.
 
 ## Root cause
@@ -52,14 +52,14 @@ Two dependencies initialize eagerly and account for most of what remains of pack
 
 Building without the chroma lexers takes `--version` from 26 ms to 19 ms. Deferring either package needs an in-tree fork with a lazy registry: the module cannot be replaced (`go install` rejects `replace`), a nested module needs its own release, and the fork trips `go vet` composites on chroma's unkeyed `Rule` literals. That is a dependency-policy decision, so it is left open.
 
-The chroma row no longer applies: `tui/internal/hljs` ports highlight.js 10.7.3, which Pi uses, and decodes its embedded grammars on first use, so `pig` no longer links chroma.
+The chroma row no longer applies: `tui/internal/hljs` ports highlight.js 10.7.3, which Pi uses, and decodes its embedded grammars on first use, so `ompig` no longer links chroma.
 
 ## Guards
 
 `make startup-proxies` runs, by name and without wall-clock thresholds:
 
 - `TestPackageInitWorkBudget`: bytes and allocations of this module's package initializers, from the runtime's init accounting.
-- `TestLinkedPackagesCompileNoRegexpAtInit`: no package-level `regexp.MustCompile` in any package linked into `pig`.
+- `TestLinkedPackagesCompileNoRegexpAtInit`: no package-level `regexp.MustCompile` in any package linked into `ompig`.
 - `TestLazyRegexpPatternsAllCompile`: every lazy pattern compiles, since the init-time panic moved to first use.
 - `TestToModelCatalogAllocationBudget` and `TestToCapabilitiesMatchesSupportedThinkingLevelSelection`.
 - The SDK staging tests in `coding/extension/pigsdk`.

@@ -13,7 +13,7 @@ import (
 //
 // Each normalization keeps the entries its transcript still references and drops the rest, so the memo holds the live
 // transcript's values and no replaced history. The zero value is an empty memo; a nil *ValidationMemo validates every value.
-// pig additive (D104): pi-ai validates nothing.
+// ompig additive (D104): pi-ai validates nothing.
 type ValidationMemo struct {
 	mu   sync.Mutex
 	seen map[memoKey]memoEntry

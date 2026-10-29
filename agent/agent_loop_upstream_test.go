@@ -13,11 +13,11 @@ import (
 	"testing/synctest"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports of upstream packages/agent/test/agent-loop.test.ts. Each test names
-// the upstream case it ports. PiG's agent owns the loop, so upstream's
+// the upstream case it ports. Ompig's agent owns the loop, so upstream's
 // agentLoop(prompts, context, config, signal, streamFn) becomes Agent.Send (or
 // runPrompt when a case replaces the loop's queue callbacks), and the stream
 // function becomes a scriptedProvider.
@@ -1097,7 +1097,7 @@ func TestAgentLoopContinue_ThrowsWhenContextHasNoMessages(t *testing.T) {
 
 // .upstream/v0.87.1/packages/agent/test/agent-loop.test.ts:1983
 // upstream: agentLoopContinue "should continue from existing context without
-// emitting user message events". PiG's Continue returns the whole transcript,
+// emitting user message events". Ompig's Continue returns the whole transcript,
 // so the new messages are the ones past the existing context.
 func TestAgentLoopContinue_ContinuesWithoutEmittingUserMessageEvents(t *testing.T) {
 	rec := newEventRecorder(nil)

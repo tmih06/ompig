@@ -7,7 +7,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/MichaelKinsy/PiG/internal/configvalue"
+	"github.com/tmih06/ompig/internal/configvalue"
 )
 
 // fileReadSnapshot is one model operation's view of auth.json and models-store.json: the revision the operation last statted for each.

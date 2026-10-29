@@ -5,7 +5,7 @@ package tools
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // getTextOutput (.upstream/v0.99.1/packages/coding-agent/src/core/tools/render-utils.ts:41-64): text blocks lose ANSI

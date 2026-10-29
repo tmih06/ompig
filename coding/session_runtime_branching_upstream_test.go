@@ -72,7 +72,7 @@ func TestRuntimeOriginalBranching(t *testing.T) {
 			if !reflect.DeepEqual(roles, tc.roles) {
 				t.Fatalf("roles=%v want=%v", roles, tc.roles)
 			}
-			if os.Getenv("PIG_RUNTIME_REPLACEMENT_PROBE") != "" {
+			if os.Getenv("OMPIG_RUNTIME_REPLACEMENT_PROBE") != "" {
 				var file any = "undefined"
 				if path := h.runtime.Session().Path(); path != "" {
 					_, err := os.Stat(path)

@@ -18,7 +18,7 @@ import (
 // attests the resulting evidence, appends the attestation records to the store,
 // and rebuilds it so the derived verdicts reflect the new proof. This is the
 // non-authoring path: no translator patch is proposed, so it applies only to
-// behaviors pig already matches. It cannot fabricate proof: the returned
+// behaviors ompig already matches. It cannot fabricate proof: the returned
 // verdicts are re-derived from the attested records, so a failing run yields a
 // contradicted or open verdict, never proven.
 func VerifyRequestIntoStore(ctx context.Context, root, storePath, requestID, evidenceDir, message string) (*EvidenceRun, []Verdict, error) {

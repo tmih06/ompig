@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type messageComponentProbe struct {
@@ -117,7 +117,7 @@ func TestSummaryAndSkillMessageComponentsMatchPi(t *testing.T) {
 		if !reflect.DeepEqual(got, expected[i].Frames) {
 			failures++
 			if failures <= 4 {
-				t.Errorf("probe %d %+v:\n  Pig %q\n  Pi  %q", i, probe, got, expected[i].Frames)
+				t.Errorf("probe %d %+v:\n  Ompig %q\n  Pi  %q", i, probe, got, expected[i].Frames)
 			}
 		}
 	}

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 type sseOracleCase struct {
@@ -97,7 +97,7 @@ func sseOracleStreams() [][][]byte {
 	return streams
 }
 
-// TestOpenAIStreamDecoderMatchesSDK runs the pinned openai SDK's Stream.fromSSEResponse and Pig's decoder over the same chunked bodies and compares the parsed items and the way the stream ends.
+// TestOpenAIStreamDecoderMatchesSDK runs the pinned openai SDK's Stream.fromSSEResponse and Ompig's decoder over the same chunked bodies and compares the parsed items and the way the stream ends.
 func TestOpenAIStreamDecoderMatchesSDK(t *testing.T) {
 	streams := sseOracleStreams()
 	cases := make([]sseOracleCase, len(streams))

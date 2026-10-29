@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/agent"
+	"github.com/tmih06/ompig/agent"
 )
 
 // upstream: packages/coding-agent/src/core/agent-session.ts:1379-1400 (dispose) aborts the retry, compaction, branch summary and

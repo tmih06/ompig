@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/durable/storage"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/durable/storage"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // systemOrderInstructions is the repeated, nonce-keyed instruction text (system-order-cache-e2e.test.ts:28-39).
@@ -103,10 +103,10 @@ func cacheReadAfterToolChange(t *testing.T, token string, legacyOrder bool) floa
 
 // system-order-cache-e2e.test.ts:133 it.skipIf(!anthropicToken)("keeps the prompt cache across a tool change only when the system
 // message leads"). Live regression coverage for #10542. Upstream resolves the Anthropic token from ~/.pi/agent/auth.json
-// and skips without it; PiG's live tests take the resolved token from PIG_LIVE_ANTHROPIC_TOKEN. Upstream's vitest
+// and skips without it; Ompig's live tests take the resolved token from OMPIG_LIVE_ANTHROPIC_TOKEN. Upstream's vitest
 // { retry: 1 } is not ported: the case runs once.
 func TestSystemMessageOrderCacheE2ELive(t *testing.T) {
-	token := testenv.RequireLiveEnv(t, "PIG_LIVE_ANTHROPIC_TOKEN")
+	token := testenv.RequireLiveEnv(t, "OMPIG_LIVE_ANTHROPIC_TOKEN")
 	// Before the fix: the input precedes the system message, so Anthropic sends the tool list at the top of the
 	// request, and adding a tool changes the cached prefix from its first token.
 	if rate := cacheReadAfterToolChange(t, token, true); rate >= 0.2 {

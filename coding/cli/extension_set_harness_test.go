@@ -1,7 +1,7 @@
 package cli
 
 // The extension-set harness: the pre-trust pass, the trust callback and the final pass of resource-loader.ts reload over coding/cli's own pieces
-// (collectExtensionConfigs, loadFinalSubprocessExtensions, the factory loader). cmd/pig sequences the same pieces inline in cli_runtime_build.go
+// (collectExtensionConfigs, loadFinalSubprocessExtensions, the factory loader). cmd/ompig sequences the same pieces inline in cli_runtime_build.go
 // and package_command_trust.go; only these tests drive this form.
 
 import (
@@ -10,11 +10,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	extsource "github.com/MichaelKinsy/PiG/coding/extension/source"
-	"github.com/MichaelKinsy/PiG/coding/extensionset"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	extsource "github.com/tmih06/ompig/coding/extension/source"
+	"github.com/tmih06/ompig/coding/extensionset"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // extensionSetHarness is the loader with the settings the harness's file load needs; production loads files in cli_runtime_build.go.

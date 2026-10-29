@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // modelSelectorRefreshTimeout is model-selector.ts:185 `timeoutMs`: the catalog refresh a selector starts is aborted after it.

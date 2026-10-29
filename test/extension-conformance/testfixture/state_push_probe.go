@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk"
 )
 
 // statePushWindow is how long a state-push-probe reader waits for the value it armed on to change before it reports the value it still holds.

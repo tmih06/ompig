@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/durable/core/history"
-	"github.com/MichaelKinsy/PiG/durable/core/sqlhost"
+	"github.com/tmih06/ompig/durable/core/history"
+	"github.com/tmih06/ompig/durable/core/sqlhost"
 )
 
 // growingRange is a host's range arrays for one conversation, extended in place as sqlhost.rangeContext extends them.

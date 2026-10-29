@@ -6,7 +6,7 @@ History: an earlier attempt ported 10 files into a new `durable/` Go package tre
 
 ## Result
 
-All 38 pending `packages/durable/test/*.test.ts` rows in `test/parity/interfaces/test-mapping-v0.99.2.json` are now `designed-out`, each with its own rationale: what the file tests, why PiG has no equivalent, and the Go tests that overlap (listed in `evidence`, verified to resolve by `make test-inventory`). The overlap credit is honest scope: those Go tests cover the same behavior family in the predecessor or sibling implementation (`agent/harness/pico3`, `agent/harness/{env,session,compaction,runtime,tools}`, `internal/codingagent/tools`), not these durable files. Nothing is claimed ported.
+All 38 pending `packages/durable/test/*.test.ts` rows in `test/parity/interfaces/test-mapping-v0.99.2.json` are now `designed-out`, each with its own rationale: what the file tests, why Ompig has no equivalent, and the Go tests that overlap (listed in `evidence`, verified to resolve by `make test-inventory`). The overlap credit is honest scope: those Go tests cover the same behavior family in the predecessor or sibling implementation (`agent/harness/pico3`, `agent/harness/{env,session,compaction,runtime,tools}`, `internal/codingagent/tools`), not these durable files. Nothing is claimed ported.
 
 | upstream file | status | credited Go evidence |
 |---|---|---|
@@ -30,7 +30,7 @@ All 38 pending `packages/durable/test/*.test.ts` rows in `test/parity/interfaces
 | harness-view | designed-out | pico3/view_streaming_test.go, watch_test.go |
 | jsonl-storage, memory-storage | designed-out | agent/harness/session/{jsonl_test,memory_conformance_test}.go |
 | session-checkpoints-migrations, -definitions, -documents, -forks, -states, -tables, -watches | designed-out | pico3/spec_storage_history_test.go, define_service_test.go, transactions/atomicity/fork-history/chord-lifecycle/watch tests |
-| sqlite-facade, sqlite-migrations, sqlite-storage | designed-out | none (PiG has no SQLite durable storage) |
+| sqlite-facade, sqlite-migrations, sqlite-storage | designed-out | none (Ompig has no SQLite durable storage) |
 | storage-runtime-boundary, types | designed-out | none |
 | tools | designed-out | agent/harness/tools/tools_upstream_test.go, internal/codingagent/tools/{edit_diff,bash}_test.go |
 

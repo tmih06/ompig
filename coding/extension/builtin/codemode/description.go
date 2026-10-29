@@ -20,10 +20,10 @@ import (
 	"slices"
 	"strings"
 
-	sandbox "github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	sandbox "github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // ToolName is the name of the tool.
@@ -37,22 +37,22 @@ const DefaultInlineBudget = 3000
 const charsPerToken = 4
 
 // DocsPath is the reference for scripts: globals, tool results, `store()`, the `models` API, and limits. It is the
-// codemode page of the documentation bundle PiG materializes under its config root, the directory the system prompt's
+// codemode page of the documentation bundle Ompig materializes under its config root, the directory the system prompt's
 // docs section names.
 //
 // Ports packages/coding-agent/src/extensions/codemode/tool.ts (CODEMODE_DOCS_PATH).
 func DocsPath() string {
-	// pig additive (D22): Pi names the docs of its installed package; PiG names its materialized documentation bundle.
-	// pig additive (D92): the literal "docs" is pigdocs.SubDir, so a Binary that strips docs does not link pigdocs.
-	path, _ := codingagent.PigDocsFile("codemode.md")
+	// ompig additive (D22): Pi names the docs of its installed package; Ompig names its materialized documentation bundle.
+	// ompig additive (D92): the literal "docs" is pigdocs.SubDir, so a Binary that strips docs does not link pigdocs.
+	path, _ := codingagent.OmpigDocsFile("codemode.md")
 	return path
 }
 
 // docsCitation formats sentence, which holds one %s, with DocsPath, or is empty when the process strips the docs bundle
 // and never writes the page.
-// pig additive (D92): no text points at a docs page a docs strip never writes.
+// ompig additive (D92): no text points at a docs page a docs strip never writes.
 func docsCitation(sentence string) string {
-	path, ok := codingagent.PigDocsFile("codemode.md")
+	path, ok := codingagent.OmpigDocsFile("codemode.md")
 	if !ok {
 		return ""
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 // ownProcessEnv names the test that a child of the test binary runs alone (InOwnProcess).
-const ownProcessEnv = "PIG_TEST_OWN_PROCESS"
+const ownProcessEnv = "OMPIG_TEST_OWN_PROCESS"
 
 // InOwnProcess reports whether the calling top-level test runs in a process of its own. Called in the package's test process, it runs the test again in a child (the same test binary, only that test, within the parent's deadline), fails if the child fails or does not run it, skips if the child skipped, and returns false.
 //

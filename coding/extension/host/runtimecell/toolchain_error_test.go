@@ -11,7 +11,7 @@ import (
 // A package installed from a marketplace carries source for its language, so
 // the first thing a user on a clean machine hits is the compiler being absent.
 // exec reports that as `exec: "go": executable file not found in $PATH`, which
-// names neither the requirement nor the remedy, and pig then appended a dump of
+// names neither the requirement nor the remedy, and ompig then appended a dump of
 // a generated go.mod the user did not write and cannot act on.
 func TestMissingToolchainErrorNamesTheRequirementAndTheRemedy(t *testing.T) {
 	for _, tc := range []struct {

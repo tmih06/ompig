@@ -1,4 +1,4 @@
-//go:build !race && linux && !pig_strip_mistral_conversations
+//go:build !race && linux && !ompig_strip_mistral_conversations
 
 package ai
 
@@ -13,7 +13,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
+	"github.com/tmih06/ompig/internal/perfgate"
 )
 
 // Each delta of a long assistant turn costs a constant allocation: the marginal cost of the deltas between n and 2n stays under its ratchet ceiling, and the bytes per delta do not grow with the length of the turn (a copy of the whole block per delta would double them). The builder path is the one every provider shares.

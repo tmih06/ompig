@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
-	"github.com/MichaelKinsy/PiG/mcp/mcptest"
+	"github.com/tmih06/ompig/mcp"
+	"github.com/tmih06/ompig/mcp/mcptest"
 )
 
 // BenchmarkClientCallTool is one tools/call round trip over an in-process transport: the request takes its place on the wire, is written in id order, and its response settles it. Parallel callers share one client, as a parallel tool batch does.

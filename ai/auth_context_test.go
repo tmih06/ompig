@@ -10,13 +10,13 @@ import (
 func TestDefaultProviderAuthContext(t *testing.T) {
 	ctx := DefaultProviderAuthContext()
 	// :23-26 an env value counts only when it is a string with a non-blank ECMAScript trim; a nonblank value is returned untrimmed.
-	t.Setenv("PIG_CTX_SET", "  value \n")
-	t.Setenv("PIG_CTX_BLANK", " \t\u00a0\ufeff\n")
-	t.Setenv("PIG_CTX_EMPTY", "")
-	if got, ok := ctx.Env("PIG_CTX_SET"); !ok || got != "  value \n" {
+	t.Setenv("OMPIG_CTX_SET", "  value \n")
+	t.Setenv("OMPIG_CTX_BLANK", " \t\u00a0\ufeff\n")
+	t.Setenv("OMPIG_CTX_EMPTY", "")
+	if got, ok := ctx.Env("OMPIG_CTX_SET"); !ok || got != "  value \n" {
 		t.Errorf("set value = %q, %v", got, ok)
 	}
-	for _, name := range []string{"PIG_CTX_BLANK", "PIG_CTX_EMPTY", "PIG_CTX_UNSET_ENTIRELY"} {
+	for _, name := range []string{"OMPIG_CTX_BLANK", "OMPIG_CTX_EMPTY", "OMPIG_CTX_UNSET_ENTIRELY"} {
 		if got, ok := ctx.Env(name); ok || got != "" {
 			t.Errorf("%s = %q, %v; want absent", name, got, ok)
 		}

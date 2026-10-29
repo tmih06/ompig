@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/tsruntime"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/tsruntime"
 )
 
 // Pi loads every extension into the one process that runs it
@@ -45,7 +45,7 @@ const peakRSS = () =>
     ? Number(/^VmHWM:\s+(\d+) kB$/m.exec(readFileSync("/proc/self/status", "utf8"))![1]) * 1024
     : process.resourceUsage().maxRSS * 1024;
 
-const libraries: unknown[][] = ((globalThis as any)[Symbol.for("pig.test.nodeCellLibraries")] ??= []);
+const libraries: unknown[][] = ((globalThis as any)[Symbol.for("ompig.test.nodeCellLibraries")] ??= []);
 libraries.push([Type, getAgentDir]);
 
 export default function (pi: any) {

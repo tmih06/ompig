@@ -14,15 +14,15 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/cellpack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/fusepack"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/runtimecell"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/coding/packagecontent"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/cellpack"
+	"github.com/tmih06/ompig/coding/extension/host/fusepack"
+	"github.com/tmih06/ompig/coding/extension/host/runtimecell"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/packagecontent"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/tui"
 )
 
 type authContribution struct {
@@ -55,7 +55,7 @@ type authContributionRegistry struct {
 	cancel        context.CancelFunc
 }
 
-// pig additive (D40): pre-session OAuth inventory uses registration-only extension startup.
+// ompig additive (D40): pre-session OAuth inventory uses registration-only extension startup.
 // discoverAuthContributions inspects runtime registration only. It starts no
 // session runner and dispatches no lifecycle or capability handler.
 func discoverAuthContributions() (*authContributionRegistry, error) {
@@ -111,7 +111,7 @@ func discoverAuthContributionsFor(targetID string) (*authContributionRegistry, e
 
 	if err := cellpack.Register(); err != nil {
 		registry.close()
-		return nil, fmt.Errorf("register Piglet Binary cells for authentication inspection: %w", err)
+		return nil, fmt.Errorf("register Ompiglet Binary cells for authentication inspection: %w", err)
 	}
 	cells := cellpack.LoadedCells()
 	registry.embeddedCells = cells

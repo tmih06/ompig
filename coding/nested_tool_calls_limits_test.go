@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // nested-tool-calls.ts:62-72: arguments are omitted only when their JSON is longer than maxArgumentBytesPerCall or

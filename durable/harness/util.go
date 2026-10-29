@@ -9,7 +9,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/durable"
+	"github.com/tmih06/ompig/durable"
 )
 
 // Waiter is one pending wait registered with Waiters. It settles once: through Resolve, RejectAll, or cancellation of the context it was added with.

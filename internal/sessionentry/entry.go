@@ -3,10 +3,10 @@
 package sessionentry
 
 import (
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 type SessionHeader struct {
@@ -71,7 +71,7 @@ type UsageEntry struct {
 }
 
 // CompactionEntry field order matches Pi's appendCompaction object literal so
-// Pig-written entries serialize with the same key order.
+// Ompig-written entries serialize with the same key order.
 type CompactionEntry struct {
 	SessionEntryBase
 	Summary          string    `json:"summary"`
@@ -104,7 +104,7 @@ type BranchSummaryEntry struct {
 	FromHook bool      `json:"fromHook"`
 
 	// fromHookAbsent records that the record this entry was decoded from had no fromHook member (Pi's `fromHook?: boolean` left undefined, session-manager.ts:1604), so
-	// writing it back leaves the member out as Pi's parsed object does. An entry built in memory always writes it: PiG's callers pass a boolean, as navigateTree does.
+	// writing it back leaves the member out as Pi's parsed object does. An entry built in memory always writes it: Ompig's callers pass a boolean, as navigateTree does.
 	fromHookAbsent bool
 }
 
@@ -227,7 +227,7 @@ func (b BashExecutionEntry) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON accepts BOTH the new wire shape (type:"message" with
-// inner role:"bashExecution") AND the legacy pig shape (type:"bash_execution"
+// inner role:"bashExecution") AND the legacy ompig shape (type:"bash_execution"
 // with flat top-level fields), so older session files still load.
 func (b *BashExecutionEntry) UnmarshalJSON(data []byte) error {
 	// Peek base to decide which path.
@@ -257,7 +257,7 @@ func (b *BashExecutionEntry) UnmarshalJSON(data []byte) error {
 		b.MessageTimestamp = wire.Message.Timestamp
 		return nil
 	}
-	// Legacy PiG shape with top-level fields.
+	// Legacy Ompig shape with top-level fields.
 	var legacy struct {
 		SessionEntryBase
 		Role               string `json:"role"`

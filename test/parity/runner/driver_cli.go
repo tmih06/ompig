@@ -15,13 +15,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // cliModeDriver runs `<bin> [base args] [cli.args...]` and captures combined output + exit code through a regular file. Used for flag-only invocations like --list-models, --version, --diagnose, etc. that exit immediately.
 type cliModeDriver struct{}
 
-// posixEnvLauncher is the pig_bin or pi_bin that runs a PATH program such as
+// posixEnvLauncher is the ompig_bin or pi_bin that runs a PATH program such as
 // go or node: /usr/bin/env PROGRAM ARGS. Windows has no /usr/bin/env, so there
 // the driver looks PROGRAM up on PATH itself.
 const posixEnvLauncher = "/usr/bin/env"
@@ -90,8 +90,8 @@ func (cliModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 	// Allocate per-binary tempdir for {{TEMP}} substitution.
 	tc := newTokenContext(t, "cli-"+sc.Name+"-"+bin.Label)
 	scenarioBin := ""
-	if bin.Label == "pig" && sc.Env.PigBin != "" {
-		scenarioBin = tc.expand(sc.Env.PigBin)
+	if bin.Label == "ompig" && sc.Env.OmpigBin != "" {
+		scenarioBin = tc.expand(sc.Env.OmpigBin)
 	}
 	if bin.Label == "pi" && sc.Env.PiBin != "" {
 		scenarioBin = tc.expand(sc.Env.PiBin)
@@ -103,7 +103,7 @@ func (cliModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 
 	// Snapshot agent dirs so binary writes never mutate committed testdata.
 	preserveAuth, injectAuth := scenarioAuthModes(sc)
-	pigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Pig, sc.Env.Pi, preserveAuth, injectAuth)
+	ompigEnv, piEnv := snapshotAgentDirs(t, sc.SourcePath, sc.Env.Ompig, sc.Env.Pi, preserveAuth, injectAuth)
 
 	args := []string{}
 	if !sc.Env.OverrideBaseArgs {
@@ -113,10 +113,10 @@ func (cliModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 	// Apply per-binary env overrides from the scenario's [env] section.
 	env := snapshotBinaryEnv(t, sc.SourcePath, bin.Env, preserveAuth, injectAuth)
 	switch bin.Label {
-	case "pig":
-		env = append(env, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, pigEnv))...)
-		args = append(args, tc.expandSlice(sc.Env.PigArgs)...)
-		for _, ext := range sc.Env.PigExtensions {
+	case "ompig":
+		env = append(env, tc.expandSlice(resolveScenarioEnvVars(sc.SourcePath, ompigEnv))...)
+		args = append(args, tc.expandSlice(sc.Env.OmpigArgs)...)
+		for _, ext := range sc.Env.OmpigExtensions {
 			resolved := resolveExtensionPath(sc.SourcePath, ext)
 			args = append(args, "-e", resolved)
 		}
@@ -130,8 +130,8 @@ func (cliModeDriver) Run(ctx context.Context, t *testing.T, bin BinaryRef, sc *S
 	}
 
 	cliArgs := sc.CLI.Args
-	if bin.Label == "pig" && sc.CLI.PigArgs != nil {
-		cliArgs = sc.CLI.PigArgs
+	if bin.Label == "ompig" && sc.CLI.OmpigArgs != nil {
+		cliArgs = sc.CLI.OmpigArgs
 	}
 	if bin.Label == "pi" && sc.CLI.PiArgs != nil {
 		cliArgs = sc.CLI.PiArgs

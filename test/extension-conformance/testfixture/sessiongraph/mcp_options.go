@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	sdk "github.com/tmih06/ompig/extensions/sdk"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // mcpLog is what the functions of the script were asked, per server, in order.

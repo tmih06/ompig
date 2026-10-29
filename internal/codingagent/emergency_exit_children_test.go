@@ -14,12 +14,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent/tools"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // emergencyExitHelperEnv makes the test binary run the dead-terminal exit with a bash call in flight.
-const emergencyExitHelperEnv = "PIG_TEST_EMERGENCY_EXIT_DIR"
+const emergencyExitHelperEnv = "OMPIG_TEST_EMERGENCY_EXIT_DIR"
 
 // TestEmergencyTerminalExitHelper is the helper process of TestEmergencyTerminalExitKillsTheShellOfARunningBashCall: it
 // starts a bash call that leaves a background sleep, then takes the dead-terminal exit.
@@ -43,7 +43,7 @@ func TestEmergencyTerminalExitHelper(t *testing.T) {
 }
 
 // Pi's emergencyTerminalExit calls killTrackedDetachedChildren before process.exit(129): a bash call's shell runs in its
-// own process group, so without it a command such as a dev server outlives a PiG whose terminal is gone.
+// own process group, so without it a command such as a dev server outlives a Ompig whose terminal is gone.
 func TestEmergencyTerminalExitKillsTheShellOfARunningBashCall(t *testing.T) {
 	dir := t.TempDir()
 	command := exec.Command(os.Args[0], "-test.run=^TestEmergencyTerminalExitHelper$")
@@ -75,7 +75,7 @@ func TestEmergencyTerminalExitKillsTheShellOfARunningBashCall(t *testing.T) {
 // Pi's uncaughtCrash calls killTrackedDetachedChildren before it reports the crash and exits: the shell of a running
 // bash call is in its own process group and would otherwise outlive the crashed process.
 func TestUncaughtCrashKillsTheShellOfARunningBashCall(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	dir := t.TempDir()
 	pidFile := filepath.Join(dir, "shell.pid")
 	operations := tools.CreateLocalBashOperations(&tools.LocalBashOptions{BinDir: dir})

@@ -12,12 +12,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // pi: packages/coding-agent/src/core/tools/grep.ts:176-299
 
-// grep with context formats limit x (2*context+1) lines and keeps the first 50KB. PiG measures the lines past those 50KB instead of building them (#9276); the text, the truncation details, the match-limit notice and linesTruncated, which a cut line far past the head still sets, must equal Pi's.
+// grep with context formats limit x (2*context+1) lines and keeps the first 50KB. Ompig measures the lines past those 50KB instead of building them (#9276); the text, the truncation details, the match-limit notice and linesTruncated, which a cut line far past the head still sets, must equal Pi's.
 func TestGrepContextOutputMatchesPi(t *testing.T) {
 	rg := requireRG(t)
 	dir := t.TempDir()

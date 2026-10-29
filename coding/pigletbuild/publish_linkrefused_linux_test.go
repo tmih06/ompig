@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"testing"
 
-	pigletartifact "github.com/MichaelKinsy/PiG/coding/piglet/artifact"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	pigletartifact "github.com/tmih06/ompig/coding/ompiglet/artifact"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
-// Android refuses hard links in Termux's data directory, so a Piglet script, record, and managed Binary artifact publish by a no-replace rename there; under Android's common umask 077 they keep their modes and leave no stage behind.
+// Android refuses hard links in Termux's data directory, so a Ompiglet script, record, and managed Binary artifact publish by a no-replace rename there; under Android's common umask 077 they keep their modes and leave no stage behind.
 func TestPigletOutputsPublishWhereLinksAreRefused(t *testing.T) {
 	if !testenv.RunWithHardLinksRefused(t) {
 		return
@@ -46,7 +46,7 @@ func TestPigletOutputsPublishWhereLinksAreRefused(t *testing.T) {
 	}
 	assertPublished(script, "#!/bin/sh\n", 0o755)
 
-	record := pigletartifact.Record{Kind: pigletartifact.RecordKindResolution, Piglet: "demo", CreatedAt: "2026-01-01T00:00:00Z"}
+	record := pigletartifact.Record{Kind: pigletartifact.RecordKindResolution, Ompiglet: "demo", CreatedAt: "2026-01-01T00:00:00Z"}
 	recordPath := filepath.Join(dir, "records", "resolution.json")
 	if created, err := writeRecordFile(recordPath, record); err != nil || !created {
 		t.Fatalf("writeRecordFile = %v, %v; want created", created, err)
@@ -81,7 +81,7 @@ func TestModuleSourceStagesWhereLinksAreRefused(t *testing.T) {
 		return
 	}
 	syscall.Umask(0o077)
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	moduleDir := fakeModuleTree(t)
 	goMod := filepath.Join(moduleDir, "go.mod")
 	if err := os.Chmod(goMod, 0o444); err != nil {

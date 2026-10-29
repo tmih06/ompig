@@ -62,7 +62,7 @@ func openAIResponsesStreamBodies() [][][]byte {
 				if random.Intn(2) == 0 {
 					emit("response.function_call_arguments.done", map[string]any{"output_index": index, "item_id": id, "arguments": arguments})
 				}
-				// Pi leaves a call whose output_item.done never arrived open in a length-truncated message (partialJson in the block, no toolcall_end); Pig closes it. That difference is recorded in the commit message and excluded here.
+				// Pi leaves a call whose output_item.done never arrived open in a length-truncated message (partialJson in the block, no toolcall_end); Ompig closes it. That difference is recorded in the commit message and excluded here.
 				if random.Intn(8) != 0 || final == 1 {
 					emit("response.output_item.done", map[string]any{"output_index": index, "item": map[string]any{"type": "function_call", "id": id, "call_id": pick("call_1", "call_2"), "name": pick("read", "bash"), "arguments": arguments}})
 				}
@@ -85,21 +85,21 @@ func openAIResponsesStreamBodies() [][][]byte {
 	return bodies
 }
 
-// TestOpenAIResponsesProviderStreamMatchesPi compares Pi's openai-responses provider with Pig's over seeded Responses event streams.
+// TestOpenAIResponsesProviderStreamMatchesPi compares Pi's openai-responses provider with Ompig's over seeded Responses event streams.
 func TestOpenAIResponsesProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"openai-responses", "openAIResponsesApi", "openai-responses", "openai"}, true, openAIResponsesStreamBodies(), func(baseURL string) Provider {
 		return NewOpenAIResponsesProvider(OpenAIResponsesConfig{APIKey: "k", Model: "m", BaseURL: baseURL})
 	})
 }
 
-// TestAzureOpenAIResponsesProviderStreamMatchesPi compares Pi's azure-openai-responses provider with Pig's over the same Responses event streams.
+// TestAzureOpenAIResponsesProviderStreamMatchesPi compares Pi's azure-openai-responses provider with Ompig's over the same Responses event streams.
 func TestAzureOpenAIResponsesProviderStreamMatchesPi(t *testing.T) {
 	providerStreamOracle(t, [4]string{"azure-openai-responses", "azureOpenAIResponsesApi", "azure-openai-responses", "azure-openai-responses"}, true, openAIResponsesStreamBodies(), func(baseURL string) Provider {
 		return NewAzureOpenAIResponsesProvider(AzureOpenAIResponsesConfig{APIKey: "k", Model: "m", BaseURL: baseURL})
 	})
 }
 
-// TestOpenAICodexResponsesProviderStreamMatchesPi compares Pi's openai-codex-responses provider (SSE transport) with Pig's over the same Responses event streams.
+// TestOpenAICodexResponsesProviderStreamMatchesPi compares Pi's openai-codex-responses provider (SSE transport) with Ompig's over the same Responses event streams.
 func TestOpenAICodexResponsesProviderStreamMatchesPi(t *testing.T) {
 	// Codex reads the account id from the access token's JWT payload.
 	token := "e30." + base64.RawURLEncoding.EncodeToString([]byte(`{"https://api.openai.com/auth":{"chatgpt_account_id":"acc"}}`)) + ".sig"

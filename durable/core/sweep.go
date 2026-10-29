@@ -6,7 +6,7 @@ package core
 import (
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/abi"
 )
 
 // The Session's document sweep (session/retention.go) runs as a job on the Session line. In Harness mode that line is the Loop. A

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 func writeSettingsFixture(t *testing.T, path, body string) {
@@ -101,7 +101,7 @@ func TestSettingsLoadToleratesUpstreamValidValues(t *testing.T) {
 			sm := NewSettingsManagerWithProjectTrust(t.TempDir(), agentDir, false)
 			errs := sm.DrainErrors()
 			if tc.name == "mistyped unrelated field" {
-				// pig divergence (D158): the ignored retry.maxRetries is reported once.
+				// ompig divergence (D158): the ignored retry.maxRetries is reported once.
 				if len(errs) != 1 || !strings.Contains(errs[0].Error.Error(), `"retry.maxRetries" (expected a number)`) {
 					t.Fatalf("load errors = %+v, want one warning naming retry.maxRetries", errs)
 				}
@@ -383,7 +383,7 @@ func TestSettingsDropsOnlyTheBadArrayElement(t *testing.T) {
 	agentDir := t.TempDir()
 	writeSettingsFixture(t, filepath.Join(agentDir, "settings.json"), `{"theme":"dark","packages":["npm:a",{"source":5},{"source":"npm:b","skills":["x"]}]}`)
 	sm := NewSettingsManagerWithProjectTrust(t.TempDir(), agentDir, false)
-	// pig divergence (D158): the dropped element is reported once.
+	// ompig divergence (D158): the dropped element is reported once.
 	if errs := sm.DrainErrors(); len(errs) != 1 || !strings.Contains(errs[0].Error.Error(), `"packages" (an element of the wrong type)`) {
 		t.Fatalf("load errors = %+v, want one warning naming packages", errs)
 	}

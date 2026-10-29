@@ -91,9 +91,9 @@ func TestSetEnvPropertiesSearchesThePathTheChildSees(t *testing.T) {
 // trampoline as Node passes it: the kernel limits each string of argv and
 // envp (MAX_ARG_STRLEN) and their sum, not the environment as one string.
 func TestSetEnvPropertiesTrampolinePassesALargeEnvironment(t *testing.T) {
-	env := []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"PIG_A", "one"}, {"PIG_A=B", "two"}}
+	env := []EnvProperty{{"PATH", "/usr/bin:/bin"}, {"OMPIG_A", "one"}, {"OMPIG_A=B", "two"}}
 	for i := range 64 {
-		env = append(env, EnvProperty{"PIG_LARGE_" + strconv.Itoa(i), strings.Repeat("x", 4096)})
+		env = append(env, EnvProperty{"OMPIG_LARGE_" + strconv.Itoa(i), strings.Repeat("x", 4096)})
 	}
-	requireSpawnOutcomes(t, "sh", []string{"-c", `printf '%s' "$PIG_A"`}, [][]EnvProperty{env})
+	requireSpawnOutcomes(t, "sh", []string{"-c", `printf '%s' "$OMPIG_A"`}, [][]EnvProperty{env})
 }

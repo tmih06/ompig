@@ -14,8 +14,8 @@ import (
 )
 
 func TestCLIUpgradeFromV020(t *testing.T) {
-	binary := filepath.Join(t.TempDir(), "pig.exe")
-	build := exec.CommandContext(t.Context(), "go", "build", "-o", binary, "../../cmd/pig")
+	binary := filepath.Join(t.TempDir(), "ompig.exe")
+	build := exec.CommandContext(t.Context(), "go", "build", "-o", binary, "../../cmd/ompig")
 	if out, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build: %v\n%s", err, out)
 	}
@@ -28,12 +28,12 @@ func TestCLIUpgradeFromV020(t *testing.T) {
 	}
 	t.Setenv("HOME", root)
 	t.Setenv("USERPROFILE", root)
-	t.Setenv("PIG_HOME", filepath.Join(root, "pig"))
-	t.Setenv("PIG_CODING_AGENT_DIR", agent)
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "ompig"))
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agent)
 	t.Setenv("PI_CODING_AGENT_DIR", agent)
-	t.Setenv("PIG_USE_PI_DIRS", "")
-	t.Setenv("PIG_TEST_FAUX", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_USE_PI_DIRS", "")
+	t.Setenv("OMPIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	t.Setenv("PI_OFFLINE", "1")
 	if err := os.WriteFile(filepath.Join(agent, "settings.json"), []byte(`{"defaultProvider":"test-faux","defaultModel":"faux-1","enableInstallTelemetry":false}`), 0o600); err != nil {
 		t.Fatal(err)
@@ -49,7 +49,7 @@ func TestCLIUpgradeFromV020(t *testing.T) {
 		return out
 	}
 	// This optional cache is the verified v0.2.0 linux-amd64 release asset, not a network download or a developer build. Other hosts use the exact old lock fixture below.
-	if cached := os.Getenv("PIG_TEST_V020_BIN"); cached != "" {
+	if cached := os.Getenv("OMPIG_TEST_V020_BIN"); cached != "" {
 		data, err := os.ReadFile(cached)
 		if err != nil {
 			t.Fatal(err)

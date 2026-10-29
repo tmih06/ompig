@@ -1,8 +1,8 @@
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    extension = pig_sdk.Extension("model-call")
+def new_extension() -> ompig_sdk.Extension:
+    extension = ompig_sdk.Extension("model-call")
 
     def call(ctx, args):
         result = ctx.model_registry.complete(

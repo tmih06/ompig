@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -10,11 +10,11 @@ import (
 	"testing"
 )
 
-// Pi's published CLI enables Node's source-validated compile cache before loading its bundle. PiG enables it at virtual-library import, after the first Jiti transform, and preserves source edits even when file size/mtime are unchanged.
+// Pi's published CLI enables Node's source-validated compile cache before loading its bundle. Ompig enables it at virtual-library import, after the first Jiti transform, and preserves source edits even when file size/mtime are unchanged.
 func TestNodeCompileCacheStartsAtLibraryImportAndChecksSourceBytes(t *testing.T) {
 	root := filepath.Join(findModuleRoot(t), "coding", "extension", "host", "subprocess", "runtime-node")
 	dir := t.TempDir()
-	t.Setenv("PIG_HOME", filepath.Join(dir, "pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(dir, "ompig"))
 	t.Setenv("NODE_DISABLE_COMPILE_CACHE", "")
 	if err := os.Unsetenv("NODE_DISABLE_COMPILE_CACHE"); err != nil {
 		t.Fatal(err)
@@ -39,7 +39,7 @@ const {importExtension}=await import(pathToFileURL(join(process.argv[1],"jiti-lo
 assert.equal(getCompileCacheDir(),undefined);
 assert.deepEqual((await importExtension(process.argv[2]))(),["cache"]);
 assert.equal(babel,process.argv[4]==="first","Jiti transform cache reuse changed");
-assert.ok(getCompileCacheDir()?.startsWith(join(process.env.PIG_HOME,"cache","node-compile")));
+assert.ok(getCompileCacheDir()?.startsWith(join(process.env.OMPIG_HOME,"cache","node-compile")));
 assert.equal((await import(pathToFileURL(process.argv[3]))).default,process.argv[4]);
 flushCompileCache();
 assert.ok(readdirSync(getCompileCacheDir()).length>0,"no bytecode persisted");
@@ -74,7 +74,7 @@ func TestNodeReadyPublishesNativeCompileCache(t *testing.T) {
 			}
 			t.Setenv("NODE_COMPILE_CACHE", "")
 			root := t.TempDir()
-			t.Setenv("PIG_HOME", filepath.Join(root, "pig"))
+			t.Setenv("OMPIG_HOME", filepath.Join(root, "ompig"))
 			report := filepath.Join(root, "report.json")
 			t.Setenv("COMPILE_CACHE_REPORT", report)
 			entry := filepath.Join(root, "cache.ts")
@@ -119,7 +119,7 @@ export default function(pi:any) {
 	}
 }
 
-// pig additive (D20): the bytecode flush is a synchronous pass over every module the runtime compiled, so a Node extension makes it before its register frame, not after the host's ready message. Once registered the host sends requests under the renderer inactivity lease (D56), and a flush that follows ready holds the first request, a Markdown transform or a render, until the flush ends: 4.6 s on a starved machine, which is most of the 5 s lease. The register frame is where the host first learns of the extension, so the artifacts must exist when it is read.
+// ompig additive (D20): the bytecode flush is a synchronous pass over every module the runtime compiled, so a Node extension makes it before its register frame, not after the host's ready message. Once registered the host sends requests under the renderer inactivity lease (D56), and a flush that follows ready holds the first request, a Markdown transform or a render, until the flush ends: 4.6 s on a starved machine, which is most of the 5 s lease. The register frame is where the host first learns of the extension, so the artifacts must exist when it is read.
 func TestNodeFlushesCompileCacheBeforeItRegisters(t *testing.T) {
 	t.Setenv("NODE_DISABLE_COMPILE_CACHE", "")
 	if err := os.Unsetenv("NODE_DISABLE_COMPILE_CACHE"); err != nil {
@@ -127,8 +127,8 @@ func TestNodeFlushesCompileCacheBeforeItRegisters(t *testing.T) {
 	}
 	t.Setenv("NODE_COMPILE_CACHE", "")
 	root := t.TempDir()
-	pigHome := filepath.Join(root, "pig")
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := filepath.Join(root, "ompig")
+	t.Setenv("OMPIG_HOME", ompigHome)
 	entry := filepath.Join(root, "cache.ts")
 	write(t, entry, `import {Text} from "@earendil-works/pi-tui";
 export default function(pi:any) {
@@ -142,7 +142,7 @@ export default function(pi:any) {
 			return
 		}
 		files := 0
-		_ = filepath.WalkDir(filepath.Join(pigHome, "cache", "node-compile"), func(_ string, entry os.DirEntry, err error) error {
+		_ = filepath.WalkDir(filepath.Join(ompigHome, "cache", "node-compile"), func(_ string, entry os.DirEntry, err error) error {
 			if err == nil && entry.Type().IsRegular() {
 				files++
 			}

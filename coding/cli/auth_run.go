@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 const credentialPrintTimeout = 15 * time.Second // upstream: coding-agent/src/main.ts:resolveCredentialForPrint
@@ -30,10 +30,10 @@ type authRunEnv struct {
 
 func authJSONPath(agentDir string) string { return filepath.Join(agentDir, "auth.json") }
 
-// runAuthCommand handles `pig auth ...`. It returns -1 for other commands,
+// runAuthCommand handles `ompig auth ...`. It returns -1 for other commands,
 // otherwise the process exit code.
 func runAuthCommand(args []string) int {
-	// Only `pig auth` needs the agent directory; any other command (`pig --version` included) must not fail on it.
+	// Only `ompig auth` needs the agent directory; any other command (`ompig --version` included) must not fail on it.
 	if len(args) == 0 || args[0] != "auth" {
 		return -1
 	}

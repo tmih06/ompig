@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // These are the Session-backed ExtensionActions interactive mode binds for the extensions of its in-process runner and, through the host actions of the same names, for subprocess extensions. Pi binds all of them in every mode (agent-session.ts:3416-3465 _bindExtensionCore); the mode's bind replaces the Session's, so the mode supplies each one.

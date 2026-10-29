@@ -6,14 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 // A signed Binary built from an unchanged source verifies against that source
-// with --source, through verify and lineage alike. The Piglet digest a Binary
-// signs is its baked Piglet definition, so a change to a file the build inlines
-// (here the system prompt) is a provenance mismatch even though the Piglet
+// with --source, through verify and lineage alike. The Ompiglet digest a Binary
+// signs is its baked Ompiglet definition, so a change to a file the build inlines
+// (here the system prompt) is a provenance mismatch even though the Ompiglet
 // file's own bytes are unchanged.
 func TestBuiltBinaryVerifiesAgainstItsUnchangedSource(t *testing.T) {
 	root := t.TempDir()
@@ -32,12 +32,12 @@ func TestBuiltBinaryVerifiesAgainstItsUnchangedSource(t *testing.T) {
 	if _, err := signature.GenerateKey(keyPath); err != nil {
 		t.Fatal(err)
 	}
-	artifact := buildNativeBinary(t, root, source, "pig-reviewer", "--sign-key", keyPath)
+	artifact := buildNativeBinary(t, root, source, "ompig-reviewer", "--sign-key", keyPath)
 
 	for _, command := range []string{"verify", "lineage"} {
 		var stdout, stderr strings.Builder
-		if code := piglet.RunCommand([]string{"piglet", command, artifact, "--source", source}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Provenance: matches "+source) {
-			t.Fatalf("pig piglet %s --source on the unchanged source: exit %d\n%s%s", command, code, stdout.String(), stderr.String())
+		if code := ompiglet.RunCommand([]string{"ompiglet", command, artifact, "--source", source}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Provenance: matches "+source) {
+			t.Fatalf("ompig ompiglet %s --source on the unchanged source: exit %d\n%s%s", command, code, stdout.String(), stderr.String())
 		}
 	}
 
@@ -45,9 +45,9 @@ func TestBuiltBinaryVerifiesAgainstItsUnchangedSource(t *testing.T) {
 		t.Fatal(err)
 	}
 	var stdout, stderr strings.Builder
-	code := piglet.RunCommand([]string{"piglet", "verify", artifact, "--source", source}, &stdout, &stderr)
+	code := ompiglet.RunCommand([]string{"ompiglet", "verify", artifact, "--source", source}, &stdout, &stderr)
 	out := stdout.String()
-	if code != 1 || !strings.Contains(out, "Provenance: MISMATCH against "+source) || !strings.Contains(out, "  Piglet digest: ") || strings.Contains(out, "  source digest: ") {
-		t.Fatalf("a changed inlined prompt must fail only the Piglet digest: exit %d\n%s%s", code, out, stderr.String())
+	if code != 1 || !strings.Contains(out, "Provenance: MISMATCH against "+source) || !strings.Contains(out, "  Ompiglet digest: ") || strings.Contains(out, "  source digest: ") {
+		t.Fatalf("a changed inlined prompt must fail only the Ompiglet digest: exit %d\n%s%s", code, out, stderr.String())
 	}
 }

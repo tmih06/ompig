@@ -27,8 +27,8 @@ import { Runtime, requestSignal } from %q;
 
 // The register frame: queued MCP servers keep a replaced name's position and lose an unregistered one; virtual models travel without their route; tool fields travel under the wire names.
 const sock = process.platform === "win32"
-  ? "\\\\.\\pipe\\pig-extension-api-" + process.pid
-  : join(tmpdir(), "pig-extension-api-" + process.pid + ".sock");
+  ? "\\\\.\\pipe\\ompig-extension-api-" + process.pid
+  : join(tmpdir(), "ompig-extension-api-" + process.pid + ".sock");
 const frame = new Promise((resolve, reject) => {
   const server = net.createServer((socket) => {
     let buffer = Buffer.alloc(0);
@@ -45,7 +45,7 @@ const frame = new Promise((resolve, reject) => {
   server.on("error", reject);
   server.listen(sock);
 });
-process.env.PIG_EXT_SOCKET = sock;
+process.env.OMPIG_EXT_SOCKET = sock;
 const loading = new Runtime("/ext/api.mjs");
 // The factory's registration calls reach the Host before the register frame (loader.ts:456-468 throws when the call is made); the Host is not part of this test.
 const factoryCalls = [];
@@ -270,7 +270,7 @@ assert.match(responses.at(-1)[2].message, /unknown virtual model p\/nope/);
 	}
 }
 
-// examples/sdk/14-codemode-mcp.ts is the unchanged Pi 0.99.1 SDK example: it builds a session with the codemode, tool-search and MCP built-in extension factories, activates the first two through the defaultTools setting and prints the active tools before it prompts. The SDK and its extension runtime are Pi's own vendored code running under PiG's module loader, so this proves the example loads and binds every 0.99.1 API it uses; it stops at the prompt, which needs an API key.
+// examples/sdk/14-codemode-mcp.ts is the unchanged Pi 0.99.1 SDK example: it builds a session with the codemode, tool-search and MCP built-in extension factories, activates the first two through the defaultTools setting and prints the active tools before it prompts. The SDK and its extension runtime are Pi's own vendored code running under Ompig's module loader, so this proves the example loads and binds every 0.99.1 API it uses; it stops at the prompt, which needs an API key.
 //
 // upstream: .upstream/v0.99.1/packages/coding-agent/examples/sdk/14-codemode-mcp.ts:14-55
 func TestNodeRuntimeRunsTheCodemodeMCPSDKExample(t *testing.T) {
@@ -287,7 +287,7 @@ func TestNodeRuntimeRunsTheCodemodeMCPSDKExample(t *testing.T) {
 	agentDir := filepath.Join(work, "agent")
 	command := exec.CommandContext(t.Context(), "node", "--import", (&url.URL{Scheme: "file", Path: filepath.ToSlash(filepath.Join(runtimeDir, "register-loader.mjs"))}).String(), "14-codemode-mcp.ts")
 	command.Dir = work
-	command.Env = append(os.Environ(), "HOME="+work, "PIG_HOME="+filepath.Join(work, "pig"), "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_OFFLINE=1")
+	command.Env = append(os.Environ(), "HOME="+work, "OMPIG_HOME="+filepath.Join(work, "ompig"), "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_OFFLINE=1")
 	output, err := command.CombinedOutput()
 	text := string(output)
 	if !strings.HasPrefix(text, "Active tools: read, bash, edit, write, codemode, tool_search\n") {

@@ -181,79 +181,79 @@
       "source": "release",
       "version": "0.7.4"
     },
-    "pig-0.4.1": {
+    "ompig-0.4.1": {
       "assets": {
         "darwin-amd64": {
-          "name": "pig-0.4.1-darwin-amd64.tar.gz",
+          "name": "ompig-0.4.1-darwin-amd64.tar.gz",
           "sha256": "9f29ef012cd34074ac02ad4a4ae6f7b93d42b4febd35aa08adf47702944d3a87",
           "size": 30902607
         },
         "darwin-arm64": {
-          "name": "pig-0.4.1-darwin-arm64.tar.gz",
+          "name": "ompig-0.4.1-darwin-arm64.tar.gz",
           "sha256": "25a1e2bde685f28684e495b250dccad7b2960a840454d80c88c35d5c7a8c5966",
           "size": 29720019
         },
         "linux-amd64": {
-          "name": "pig-0.4.1-linux-amd64.tar.gz",
+          "name": "ompig-0.4.1-linux-amd64.tar.gz",
           "sha256": "3b4de3587cbfb617def483ec62dddcf35827acc3436b1454cc5694c22dcdaf3f",
           "size": 30607377
         },
         "linux-arm64": {
-          "name": "pig-0.4.1-linux-arm64.tar.gz",
+          "name": "ompig-0.4.1-linux-arm64.tar.gz",
           "sha256": "e1768bbfce29b784d76001eb47ebd989f05ed042fbe81ad8629816e181fa5ac8",
           "size": 28950232
         },
         "windows-amd64": {
-          "name": "pig-0.4.1-windows-amd64.zip",
+          "name": "ompig-0.4.1-windows-amd64.zip",
           "sha256": "c38306345e7fbf6a14c85b03c9aabe64e93f4db4c4a481a5584769e874a9a5b7",
           "size": 30944062
         }
       },
       "license": "MIT",
-      "license_note": "PiG release asset, unmodified.",
+      "license_note": "Ompig release asset, unmodified.",
       "release": {
         "assets": {
-          "darwin-amd64": "pig-{version}-darwin-amd64.tar.gz",
-          "darwin-arm64": "pig-{version}-darwin-arm64.tar.gz",
-          "linux-amd64": "pig-{version}-linux-amd64.tar.gz",
-          "linux-arm64": "pig-{version}-linux-arm64.tar.gz",
-          "windows-amd64": "pig-{version}-windows-amd64.zip"
+          "darwin-amd64": "ompig-{version}-darwin-amd64.tar.gz",
+          "darwin-arm64": "ompig-{version}-darwin-arm64.tar.gz",
+          "linux-amd64": "ompig-{version}-linux-amd64.tar.gz",
+          "linux-arm64": "ompig-{version}-linux-arm64.tar.gz",
+          "windows-amd64": "ompig-{version}-windows-amd64.zip"
         },
-        "base": "https://github.com/MichaelKinsy/PiG/releases/download/v{version}/",
-        "member": "pig",
+        "base": "https://github.com/tmih06/ompig/releases/download/v{version}/",
+        "member": "ompig",
         "sums": "SHA256SUMS"
       },
       "source": "release",
       "version": "0.4.1"
     },
-    "pig-0.5": {
+    "ompig-0.5": {
       "license": "MIT",
       "license_note": "Built from this repository's checkout (commit recorded in the report).",
       "source": "checkout",
       "version": "0.5.0"
     },
-    "pig-0.5-pgo": {
+    "ompig-0.5-pgo": {
       "build": {
-        "pgo": "locks/pig-0.5.pgo",
+        "pgo": "locks/ompig-0.5.pgo",
         "pgo_note": "Merged CPU profile of 20 `pigeval profile` round trips (make pgo) against a build of the same line; a measurement arm, not a shipped build (docs/performance/go-practices.md: no build uses PGO).",
         "pgo_sha256": "f5ed56be991291db209dab31d622e2d8070d9ca2ad17b160617a769881817ac5"
       },
       "license": "MIT",
-      "license_note": "Built from this repository's checkout with the profile locks/pig-0.5.pgo (profile-guided optimisation); commit recorded in the report.",
+      "license_note": "Built from this repository's checkout with the profile locks/ompig-0.5.pgo (profile-guided optimisation); commit recorded in the report.",
       "source": "checkout",
       "version": "0.5.0"
     },
-    "pig-core": {
-      "builder": "pig-0.5",
+    "ompig-core": {
+      "builder": "ompig-0.5",
       "license": "MIT",
-      "license_note": "Piglet Binary built from this checkout by the pig-0.5 arm.",
+      "license_note": "Ompiglet Binary built from this checkout by the ompig-0.5 arm.",
       "source": "checkout",
       "version": "0.5.0"
     },
-    "pig-min": {
-      "builder": "pig-0.5",
+    "ompig-min": {
+      "builder": "ompig-0.5",
       "license": "MIT",
-      "license_note": "Piglet Binary built from this checkout by the pig-0.5 arm.",
+      "license_note": "Ompiglet Binary built from this checkout by the ompig-0.5 arm.",
       "source": "checkout",
       "version": "0.5.0"
     },

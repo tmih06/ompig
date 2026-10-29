@@ -3,7 +3,7 @@
 # role and stop reason, compaction_start/end with every reason, abort and error text, agent_settled, session_info_changed), dialogs opened, reopened and cleared by
 # source, resets, explicit reports and session renames; each sequence's list of terminal reports (state, kind, message, in order, with repeated statuses suppressed)
 # is compared as one JSON line. The Go test TestProgramStatusReporterRandomSequencesMatchPi runs the same corpus against the installed Pi; this scenario compares the
-# two printed streams. The app name (pi, pig) is the program's own and is left out of both sides.
+# two printed streams. The app name (pi, ompig) is the program's own and is left out of both sides.
 name = "56-program-status-reporter"
 description = "The program status reporter sends the same OSC 7501 reports as Pi for every event sequence."
 covers = ["packages/coding-agent/src/modes/interactive/program-status-reporter.ts"]
@@ -12,10 +12,10 @@ driver = "cli-mode"
 
 [env]
 override_base_args = true
-pig_bin = "/usr/bin/env"
+ompig_bin = "/usr/bin/env"
 pi_bin = "/usr/bin/env"
-pig_args = ["node", "./test/parity/testdata/program-status-pig.mjs"]
-pig_go_tests = ["./internal/codingagent"]
+ompig_args = ["node", "./test/parity/testdata/program-status-ompig.mjs"]
+ompig_go_tests = ["./internal/codingagent"]
 pi_args = ["node", "./test/parity/testdata/program-status-pi.mjs"]
 pi_go_tests = ["./internal/codingagent"]
 

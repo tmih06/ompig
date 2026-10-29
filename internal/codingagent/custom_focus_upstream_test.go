@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Ports packages/coding-agent/test/interactive-mode-status.test.ts:236 through the production remote custom-UI host, not an in-process extension factory. Renderer focus is the host-side observable counterpart of the upstream component's focused flag.

@@ -10,7 +10,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsonstringify"
 )
 
 // openAIRequestError preserves the OpenAI SDK's setup timeout message and provider-retry.ts's caller-abort message while retaining the Go cause. retryProviderRequest replaces whatever the SDK threw with createAbortError() once the signal is aborted (provider-retry.ts:68-72,124-125), so an abort before headers reads "Request aborted", not the SDK's "Request was aborted.". A fetch rejection that is neither is classified as the SDK does (openAISDKTransportError); any other failure keeps the provider prefix.

@@ -11,13 +11,13 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
-	"github.com/MichaelKinsy/PiG/test/extension-conformance/testfixture/providerobject"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
+	"github.com/tmih06/ompig/test/extension-conformance/testfixture/providerobject"
 )
 
 // Pi model-registry.ts:101-103,165-167 returns the original Provider object, including callback-bearing auth and refresh methods.
@@ -75,16 +75,16 @@ func testProviderObjectPair(t *testing.T, root, role, language, placement, call 
 	switch language {
 	case "go":
 		native.Factory = "Extension"
-		native.SDKName = "github.com/MichaelKinsy/PiG/extensions/sdk"
+		native.SDKName = "github.com/tmih06/ompig/extensions/sdk"
 		native.ModulePath = "example.com/provider-object-go"
 		native.Package = native.ModulePath
 	case "python":
 		native.Factory = "new_extension"
-		native.SDKName = "pig-sdk-py"
+		native.SDKName = "ompig-sdk-py"
 		native.Package = "provider_object"
 	case "rust":
 		native.Factory = "new_extension"
-		native.SDKName = "pig-sdk"
+		native.SDKName = "ompig-sdk"
 		native.Package = "provider-object-rust"
 	}
 	if placement == "packed" {
@@ -251,15 +251,15 @@ func providerPeer(t *testing.T, root string, native subprocess.ExtConfig) subpro
 	case "go":
 		peer.ModulePath = "example.com/provider-peer"
 		peer.Package = peer.ModulePath
-		write("go.mod", fmt.Sprintf("module %s\n\ngo 1.26.0\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v%s\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => %s\n", peer.ModulePath, pigversion.PigVersion, filepath.ToSlash(filepath.Join(root, "extensions/sdk"))))
-		write("extension.go", "package peer\nimport sdk \"github.com/MichaelKinsy/PiG/extensions/sdk\"\nfunc Extension()*sdk.Extension{return sdk.New(\"provider-peer\")}\n")
+		write("go.mod", fmt.Sprintf("module %s\n\ngo 1.26.0\nrequire github.com/tmih06/ompig/extensions/sdk v%s\nreplace github.com/tmih06/ompig/extensions/sdk => %s\n", peer.ModulePath, pigversion.OmpigVersion, filepath.ToSlash(filepath.Join(root, "extensions/sdk"))))
+		write("extension.go", "package peer\nimport sdk \"github.com/tmih06/ompig/extensions/sdk\"\nfunc Extension()*sdk.Extension{return sdk.New(\"provider-peer\")}\n")
 	case "python":
 		peer.Package = "provider_peer"
-		write("provider_peer.py", "import pig_sdk\ndef new_extension():\n    return pig_sdk.Extension('provider-peer')\n")
+		write("provider_peer.py", "import ompig_sdk\ndef new_extension():\n    return ompig_sdk.Extension('provider-peer')\n")
 	case "rust":
 		peer.Package = "provider-peer"
 		write("Cargo.toml", fmt.Sprintf("[package]\nname=\"provider-peer\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[dependencies]\npig-sdk={path=%q}\n", filepath.ToSlash(filepath.Join(root, "extensions/sdk-rs"))))
-		write("src/lib.rs", "pub fn new_extension()->pig_sdk::Extension{pig_sdk::Extension::new(\"provider-peer\")}\n")
+		write("src/lib.rs", "pub fn new_extension()->ompig_sdk::Extension{ompig_sdk::Extension::new(\"provider-peer\")}\n")
 	}
 	return peer
 }

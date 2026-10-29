@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/sessionentry"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/sessionentry"
 )
 
 // A whole-history read (GetEntries, GetBranch, GetTree) returns each message entry that is not resident as a sessionentry.LazyEntry over its
@@ -48,7 +48,7 @@ type fileRecords struct {
 }
 
 // fileRunGap and fileRunMax bound the coalescing of reads: records closer than fileRunGap share one read of at most fileRunMax bytes.
-// pig additive (D112): Pi holds every record in memory; each record of a shared read is verified (length, newline, hash) as a lone read is.
+// ompig additive (D112): Pi holds every record in memory; each record of a shared read is verified (length, newline, hash) as a lone read is.
 const (
 	fileRunGap = 64 << 10
 	fileRunMax = 8 << 20

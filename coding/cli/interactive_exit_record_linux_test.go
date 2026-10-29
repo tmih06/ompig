@@ -16,8 +16,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
 // Issue #165: an interactive session exited on its own and left no trace. Every ending that no user action asked for must
@@ -34,7 +34,7 @@ type exitRecordSession struct {
 	agentDir string
 }
 
-// startExitRecordSession starts pig on a pseudo-terminal in a fresh session of its own. With controlling, the terminal
+// startExitRecordSession starts ompig on a pseudo-terminal in a fresh session of its own. With controlling, the terminal
 // is the session's controlling terminal, so closing its master hangs the session up; without, a closed master shows
 // only as a failed or ended read of standard input.
 func startExitRecordSession(t *testing.T, binary, agentDir string, controlling bool, extraEnv ...string) *exitRecordSession {
@@ -53,7 +53,7 @@ func startExitRecordSession(t *testing.T, binary, agentDir string, controlling b
 	}
 	cmd := exec.CommandContext(t.Context(), binary, "--no-session", "--no-extensions", "--offline")
 	cmd.Dir = root
-	cmd.Env = append(os.Environ(), "PIG_HOME="+root, "PIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "PIG_OFFLINE=1", "PI_OFFLINE=1", "TERM=xterm-256color")
+	cmd.Env = append(os.Environ(), "OMPIG_HOME="+root, "OMPIG_CODING_AGENT_DIR="+agentDir, "PI_CODING_AGENT_DIR="+agentDir, "OMPIG_OFFLINE=1", "PI_OFFLINE=1", "TERM=xterm-256color")
 	cmd.Env = append(cmd.Env, extraEnv...)
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = slave, stdout, stdout
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true, Setctty: controlling, Ctty: 0}
@@ -86,8 +86,8 @@ func startExitRecordSession(t *testing.T, binary, agentDir string, controlling b
 // waitReady waits until the session has drawn its screen and written its marker.
 func (s *exitRecordSession) waitReady() {
 	s.t.Helper()
-	s.output.waitQuiet(0, []byte("PiG"), 200*time.Millisecond, testbudget.Wait(s.t))
-	if !bytes.Contains(s.output.since(0), []byte("PiG")) {
+	s.output.waitQuiet(0, []byte("Ompig"), 200*time.Millisecond, testbudget.Wait(s.t))
+	if !bytes.Contains(s.output.since(0), []byte("Ompig")) {
 		s.t.Fatalf("interactive screen did not draw: %q", s.output.since(0))
 	}
 	if len(s.markers()) != 1 {
@@ -220,17 +220,17 @@ func TestInteractiveExitOnAClosedTerminalLeavesALine(t *testing.T) {
 }
 
 // Pi registers no end handler on standard input, so a session whose input ends while its terminal lives keeps running; it
-// exits 0 only when nothing else holds its event loop open. Issue #165: PiG used to exit 1 after printing EOF. The session
+// exits 0 only when nothing else holds its event loop open. Issue #165: Ompig used to exit 1 after printing EOF. The session
 // reports in its debug log that it saw the end of input, and only a signal ends it afterwards.
 func TestInteractiveKeepsRunningWhenInputEndsOnALiveTerminal(t *testing.T) {
 	t.Parallel()
 	binary := buildPigBinaryForSignalTest(t)
 	tmp := t.TempDir()
-	s := startExitRecordSession(t, binary, t.TempDir(), false, "PIG_DEBUG=1", "TMPDIR="+tmp)
+	s := startExitRecordSession(t, binary, t.TempDir(), false, "OMPIG_DEBUG=1", "TMPDIR="+tmp)
 	if err := s.master.Close(); err != nil {
 		t.Fatal(err)
 	}
-	debugLog := filepath.Join(tmp, "pig-debug.log")
+	debugLog := filepath.Join(tmp, "ompig-debug.log")
 	deadline := time.Now().Add(testbudget.Wait(t))
 	for {
 		if data, _ := os.ReadFile(debugLog); bytes.Contains(data, []byte("terminal input ended (EOF); the session keeps running without input")) {

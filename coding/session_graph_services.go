@@ -1,4 +1,4 @@
-// pig-specific: serves the two steps of Pi's createAgentSessionServices (packages/coding-agent/src/core/agent-session-services.ts) that need the host to the Go, Python and Rust extension SDKs. The SDK builds the services' objects as Pi's function does, and these functions resolve the paths and apply what the loaded extensions queued.
+// ompig-specific: serves the two steps of Pi's createAgentSessionServices (packages/coding-agent/src/core/agent-session-services.ts) that need the host to the Go, Python and Rust extension SDKs. The SDK builds the services' objects as Pi's function does, and these functions resolve the paths and apply what the loaded extensions queued.
 
 package coding
 
@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/resolvepath"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/extensions/sdk/json"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/resolvepath"
 )
 
 func graphAgentSessionServicesStatic(ctx context.Context, scope subprocess.SessionGraphScope, method string, raw json.RawMessage) (any, error) {

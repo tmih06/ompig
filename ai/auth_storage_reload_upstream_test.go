@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/pilock"
+	"github.com/tmih06/ompig/internal/pilock"
 )
 
 // Pi auth-storage.test.ts:72 coalesces one async lock acquisition for each changed revision, including across instances of the first auth path.

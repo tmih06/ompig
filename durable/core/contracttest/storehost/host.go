@@ -9,9 +9,9 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/MichaelKinsy/PiG/durable/core/abi"
-	"github.com/MichaelKinsy/PiG/durable/core/contracttest"
-	"github.com/MichaelKinsy/PiG/durable/core/store"
+	"github.com/tmih06/ompig/durable/core/abi"
+	"github.com/tmih06/ompig/durable/core/contracttest"
+	"github.com/tmih06/ompig/durable/core/store"
 )
 
 // Host applies the commits a core step emits, one transaction each, answers its reads, and records every commit in the trace

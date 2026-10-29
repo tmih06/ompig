@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 type accumulatorProbe struct {
@@ -45,7 +45,7 @@ type accumulatorResult struct {
 
 // OutputAccumulator against Pi's (core/tools/output-accumulator.js): random byte streams cut into chunks anywhere (inside multi-byte characters,
 // inside a BOM), with invalid and truncated sequences, CRLF, long lines and tiny limits. Every snapshot taken between appends, the final one,
-// the full-output file, readFullOutput and the append-after-finish error are compared. getLastLineBytes is left out: PiG's D153 differs from Pi
+// the full-output file, readFullOutput and the append-after-finish error are compared. getLastLineBytes is left out: Ompig's D153 differs from Pi
 // by design when the output ends with a newline. A BOM appears only at the start of the stream: Node's TextDecoder also drops a BOM that follows a
 // leading incomplete sequence (e6 | ef bb bf 42 decodes to U+FFFD 42) and two of three adjacent ones; those streams are left out.
 func TestOutputAccumulatorMatchesPi(t *testing.T) {

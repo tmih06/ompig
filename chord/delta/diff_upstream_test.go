@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/chord/chordjson"
+	"github.com/tmih06/ompig/internal/chord/chordjson"
 )
 
 // Ports packages/chord/test/delta-diff.test.ts and packages/chord/test/state-diff.test.ts. The two upstream files share their first twenty cases; each differs in one tail case.

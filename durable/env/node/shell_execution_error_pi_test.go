@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"testing"
 
-	durableenv "github.com/MichaelKinsy/PiG/durable/env"
+	durableenv "github.com/tmih06/ompig/durable/env"
 )
 
 // TestExecExpectedFailuresCarryPisCodesMessagesAndCauses ports the ExecutionError constructions of node.ts:62,67,222,658,677,714,817: each expected

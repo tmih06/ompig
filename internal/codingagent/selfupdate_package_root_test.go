@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Ports packages/coding-agent/test/config.test.ts:442. Pi checks package-directory and parent writability, not only the executable's immediate directory.
@@ -13,7 +13,7 @@ func TestNativeSelfUpdateRejectsReadOnlyPackageRoot(t *testing.T) {
 	if testenv.RunUnprivileged(t) {
 		return
 	}
-	t.Setenv("PIG_INSTALL_TIER", "")
+	t.Setenv("OMPIG_INSTALL_TIER", "")
 	root := filepath.Join(t.TempDir(), "lib", "node_modules")
 	pkg := filepath.Join(root, "@earendil-works", "pi-coding-agent")
 	bin := filepath.Join(pkg, "dist")

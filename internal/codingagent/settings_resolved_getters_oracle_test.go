@@ -10,15 +10,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // settings-manager.ts getCompactionSettings (with and without a model), getCompactionReserveTokens, getCompactionKeepRecentTokens, getShellPath,
 // getSessionDir, getThemeSetting, getTheme and getModelThinkingLevel against pinned Pi, over layered global and project files: a model override beats
 // the ordinary token setting beats the built-in default, an invalid authored token value throws (compared by message), a path setting goes through
 // normalizePath (home expansion, file URL), and a theme with "/" is a path, not a name. Not compared: wrong-typed values and fractional numbers other
-// than in the compaction token settings (PiG keeps those as JavaScript numbers), and empty strings (PiG's string cannot tell "" from absent).
+// than in the compaction token settings (Ompig keeps those as JavaScript numbers), and empty strings (Ompig's string cannot tell "" from absent).
 func TestSettingsManagerResolvedGettersMatchPi(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)

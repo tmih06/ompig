@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/mcp"
+	"github.com/tmih06/ompig/mcp"
 )
 
 // client.ts:382 callTool sends `arguments` only when the caller passed some: an absent argument (undefined) omits the member. A nil json.RawMessage

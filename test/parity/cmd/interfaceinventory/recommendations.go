@@ -20,7 +20,7 @@ type interfaceRecommendation struct {
 	Confidence             string   `json:"confidence"`
 	Basis                  []string `json:"basis"`
 	Alternatives           []string `json:"alternatives"`
-	PigCandidates          []string `json:"pigCandidates"`
+	OmpigCandidates        []string `json:"ompigCandidates"`
 	MissingClosure         []string `json:"missingClosure"`
 	Provenance             []string `json:"provenance"`
 }
@@ -42,13 +42,13 @@ type goInterface struct {
 }
 
 var recommendationClosureKinds = map[string]struct{}{
-	"pig-cli-shape": {}, "pig-go-shape": {}, "candidate-disambiguation": {}, "shape-translation-review": {},
+	"ompig-cli-shape": {}, "ompig-go-shape": {}, "candidate-disambiguation": {}, "shape-translation-review": {},
 	"production-reachability": {}, "required-layers": {}, "behavioral-evidence": {}, "async-contract": {},
 	"wire-shape": {}, "host-dispatch": {}, "sdk-go": {}, "sdk-rust": {}, "sdk-python": {},
 	"isolated-conformance": {}, "packed-conformance": {},
 }
 
-func validateRecommendations(upstream inventory, ledger recommendationLedger, pig goInventory) []string {
+func validateRecommendations(upstream inventory, ledger recommendationLedger, ompig goInventory) []string {
 	var problems []string
 	if ledger.UpstreamVersion != upstream.UpstreamVersion {
 		problems = append(problems, fmt.Sprintf("recommendation upstreamVersion = %q, inventory = %q", ledger.UpstreamVersion, upstream.UpstreamVersion))
@@ -56,19 +56,19 @@ func validateRecommendations(upstream inventory, ledger recommendationLedger, pi
 	if strings.TrimSpace(ledger.GeneratedBy) == "" {
 		problems = append(problems, "recommendation generatedBy is empty")
 	}
-	pigPackages := make(map[string]struct{}, len(pig.Packages))
-	for _, pkg := range pig.Packages {
+	ompigPackages := make(map[string]struct{}, len(ompig.Packages))
+	for _, pkg := range ompig.Packages {
 		if strings.TrimSpace(pkg) == "" {
 			problems = append(problems, "Go inventory contains an empty package")
 			continue
 		}
-		if _, duplicate := pigPackages[pkg]; duplicate {
+		if _, duplicate := ompigPackages[pkg]; duplicate {
 			problems = append(problems, fmt.Sprintf("duplicate Go inventory package %s", pkg))
 		}
-		pigPackages[pkg] = struct{}{}
+		ompigPackages[pkg] = struct{}{}
 	}
-	pigIDs := make(map[string]struct{}, len(pig.Interfaces))
-	for _, candidate := range pig.Interfaces {
+	ompigIDs := make(map[string]struct{}, len(ompig.Interfaces))
+	for _, candidate := range ompig.Interfaces {
 		if strings.TrimSpace(candidate.ID) == "" || !validShapeHash(candidate.ShapeHash) {
 			problems = append(problems, fmt.Sprintf("invalid Go candidate %q", candidate.ID))
 			continue
@@ -76,7 +76,7 @@ func validateRecommendations(upstream inventory, ledger recommendationLedger, pi
 		if candidate.ID != "go:"+candidate.Package+"#"+candidate.Name {
 			problems = append(problems, fmt.Sprintf("Go candidate %s ID does not match package/name", candidate.ID))
 		}
-		if _, exists := pigPackages[candidate.Package]; !exists {
+		if _, exists := ompigPackages[candidate.Package]; !exists {
 			problems = append(problems, fmt.Sprintf("Go candidate %s references unknown package %s", candidate.ID, candidate.Package))
 		}
 		if strings.TrimSpace(candidate.Kind) == "" {
@@ -87,10 +87,10 @@ func validateRecommendations(upstream inventory, ledger recommendationLedger, pi
 		} else if candidate.ShapeHash != actual {
 			problems = append(problems, fmt.Sprintf("Go candidate %s shape hash does not match shape", candidate.ID))
 		}
-		if _, duplicate := pigIDs[candidate.ID]; duplicate {
+		if _, duplicate := ompigIDs[candidate.ID]; duplicate {
 			problems = append(problems, fmt.Sprintf("duplicate Go candidate %s", candidate.ID))
 		}
-		pigIDs[candidate.ID] = struct{}{}
+		ompigIDs[candidate.ID] = struct{}{}
 	}
 	hashes := make(map[string]string, len(upstream.Interfaces))
 	for _, entry := range upstream.Interfaces {
@@ -129,13 +129,13 @@ func validateRecommendations(upstream inventory, ledger recommendationLedger, pi
 		if slices.Contains(recommendation.Alternatives, recommendation.RecommendedDisposition) {
 			problems = append(problems, fmt.Sprintf("recommendation %s repeats its disposition in alternatives", recommendation.ID))
 		}
-		if recommendation.PigCandidates == nil {
-			problems = append(problems, fmt.Sprintf("recommendation %s pigCandidates must be an array", recommendation.ID))
+		if recommendation.OmpigCandidates == nil {
+			problems = append(problems, fmt.Sprintf("recommendation %s ompigCandidates must be an array", recommendation.ID))
 		}
-		problems = append(problems, validateNonEmptyUnique(recommendation.ID, "pigCandidates", recommendation.PigCandidates, nil)...)
-		for _, candidate := range recommendation.PigCandidates {
-			if _, exists := pigIDs[candidate]; !exists {
-				problems = append(problems, fmt.Sprintf("recommendation %s references unknown Pig candidate %s", recommendation.ID, candidate))
+		problems = append(problems, validateNonEmptyUnique(recommendation.ID, "ompigCandidates", recommendation.OmpigCandidates, nil)...)
+		for _, candidate := range recommendation.OmpigCandidates {
+			if _, exists := ompigIDs[candidate]; !exists {
+				problems = append(problems, fmt.Sprintf("recommendation %s references unknown Ompig candidate %s", recommendation.ID, candidate))
 			}
 		}
 		if recommendation.MissingClosure == nil {
@@ -144,11 +144,11 @@ func validateRecommendations(upstream inventory, ledger recommendationLedger, pi
 			problems = append(problems, fmt.Sprintf("recommendation %s must name missing closure", recommendation.ID))
 		}
 		problems = append(problems, validateNonEmptyUnique(recommendation.ID, "missingClosure", recommendation.MissingClosure, recommendationClosureKinds)...)
-		if recommendation.RecommendedDisposition == "partial" && len(recommendation.PigCandidates) == 0 {
-			problems = append(problems, fmt.Sprintf("recommendation %s is partial without a Pig candidate", recommendation.ID))
+		if recommendation.RecommendedDisposition == "partial" && len(recommendation.OmpigCandidates) == 0 {
+			problems = append(problems, fmt.Sprintf("recommendation %s is partial without a Ompig candidate", recommendation.ID))
 		}
 	}
-	if strings.HasPrefix(ledger.GeneratedBy, "pig-interface-recommend-") {
+	if strings.HasPrefix(ledger.GeneratedBy, "ompig-interface-recommend-") {
 		for id := range hashes {
 			if _, exists := seen[id]; !exists {
 				problems = append(problems, fmt.Sprintf("generated recommendations missing %s", id))

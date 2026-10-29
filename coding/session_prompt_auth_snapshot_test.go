@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi's prompt check is `modelRuntime.hasConfiguredAuth(provider) || await modelRuntime.checkAuth(provider) !== undefined` (agent-session.ts

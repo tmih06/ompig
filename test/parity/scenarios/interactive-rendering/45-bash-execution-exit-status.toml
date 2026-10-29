@@ -13,7 +13,7 @@
 #   \e[38;2;94;178;134m<border>
 #
 # Upstream rule: bash-execution.ts updateDisplay pushes theme.fg("error", `(exit ${exitCode}`) for status "error" (exit code neither 0 nor undefined), inside a Text with a leading "\n" and padding 1.
-# Red: PiG at main 50e81255d drew the status in fixed \e[31m. Green with the block port.
+# Red: Ompig at main 50e81255d drew the status in fixed \e[31m. Green with the block port.
 
 name = "45-bash-execution-exit-status"
 description = "A `!` command that exits 3 ends its block with `(exit 3)` in the error color."
@@ -25,16 +25,16 @@ driver = "interactive-tmux"
 model = "test-faux/faux-1"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_CODING_AGENT_DIR=testdata/pig-agent"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_CODING_AGENT_DIR=testdata/ompig-agent"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-agent", "PI_SKIP_VERSION_CHECK=1"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
-pig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
+ompig_args = ["--no-extensions", "--session-dir", "{{TEMP}}/sessions"]
 pi_args = ["--session-dir", "{{TEMP}}/sessions"]
 
 [tmux]
 width = 100
 height = 35
-ready_pattern_pig = "(auto)"
+ready_pattern_ompig = "(auto)"
 ready_pattern_pi = "(auto)"
 ready_timeout_seconds = 30
 cwd = "testdata/bash-wrap-cwd"

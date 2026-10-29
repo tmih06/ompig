@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	icodingagent "github.com/MichaelKinsy/PiG/internal/codingagent"
+	icodingagent "github.com/tmih06/ompig/internal/codingagent"
 )
 
 // Pi's readStoredCredential parses stripBom(readFileSync(auth.json)) and returns undefined for a missing, malformed or absent entry (auth-storage.ts:496-506); harness.ts:314-326 treats a falsy entry as no credential.

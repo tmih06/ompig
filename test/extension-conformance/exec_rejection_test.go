@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // execOutcome is how the exec-reject-probe fixtures report one pi.exec call:
@@ -41,7 +41,7 @@ func (r execReference) Exec(command string, args []string, options *extension.Ex
 // packages/coding-agent/src/core/extensions/types.ts:1724).
 func TestExecRejectionsAcrossSDKs(t *testing.T) {
 	t.Parallel()
-	commands := []string{"", "tool.cmd", "TOOL.BAT ", "a\x00b", "pig-missing-program"}
+	commands := []string{"", "tool.cmd", "TOOL.BAT ", "a\x00b", "ompig-missing-program"}
 	probe, err := json.Marshal(commands)
 	if err != nil {
 		t.Fatal(err)

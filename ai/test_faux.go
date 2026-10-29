@@ -14,7 +14,7 @@ import (
 )
 
 // ─── Canned responses for compaction / branch summarization ──────────────────
-// These must be identical in ai/test_faux.go (pig) and
+// These must be identical in ai/test_faux.go (ompig) and
 // test/parity/testdata/test-faux-provider.ts (upstream pi).
 
 const testFauxSummaryResponse = `## Goal
@@ -80,16 +80,16 @@ The user asked a complex question requiring multi-step analysis.
 // TestFauxProvider is a deterministic, test-only provider used by the
 // integration parity harness. It is deliberately NOT part of the normal model
 // catalog and is only enabled when the binary is launched with the
-// PIG_TEST_FAUX=1 environment variable.
+// OMPIG_TEST_FAUX=1 environment variable.
 //
 // Why this exists: live-model parity gates in tmux are prone to model/provider
 // nondeterminism. Upstream is the source of truth, so parity gates must use a
 // deterministic oracle when the live provider does not reliably materialize a
-// scenario. This provider gives pig a stable scripted backend while upstream
+// scenario. This provider gives ompig a stable scripted backend while upstream
 // gets the same scripted behavior via a temp extension that registers an
 // equivalent custom provider.
 //
-// Supported scenario values (via PIG_TEST_FAUX_SCENARIO):
+// Supported scenario values (via OMPIG_TEST_FAUX_SCENARIO):
 //   - parity-basic
 //
 // Any other value returns an EventError.
@@ -115,7 +115,7 @@ type TestFauxProvider struct {
 // "Run: sleep for a while" scenario's tool as soon as it starts running, so a
 // test can wait for the run to reach tool execution rather than sleeping for a
 // guessed interval.
-const TestFauxToolStartedMarker = ".pig-faux-tool-started"
+const TestFauxToolStartedMarker = ".ompig-faux-tool-started"
 
 var testFauxRetryState sync.Map
 
@@ -335,8 +335,8 @@ func classifyTestFauxRequest(msgs []Message) (kind, text string, toolCalls []tes
 
 	// Deterministic Porter Profile activation probe. This response is used only
 	// by the local headless smoke and does not stand in for closure evidence.
-	if strings.Contains(lastText, "PORTER_HEADLESS_VERIFY") && strings.Contains(lastText, "/skill:pig-porter") {
-		return "text", "pig-porter-headless-ok", nil
+	if strings.Contains(lastText, "PORTER_HEADLESS_VERIFY") && strings.Contains(lastText, "/skill:ompig-porter") {
+		return "text", "ompig-porter-headless-ok", nil
 	}
 
 	// Session-wire prompt.
@@ -516,8 +516,8 @@ func classifyTestFauxRequest(msgs []Message) (kind, text string, toolCalls []tes
 	// no-input rendering probe to observe independent streamed output.
 	if strings.Contains(lastText, "Run: tui live parallel tools") {
 		return "tool", "", []testFauxToolCall{
-			{Name: "read", ArgsJSON: `{"path":".pig-live-parallel-a"}`},
-			{Name: "read", ArgsJSON: `{"path":".pig-live-parallel-b"}`},
+			{Name: "read", ArgsJSON: `{"path":".ompig-live-parallel-a"}`},
+			{Name: "read", ArgsJSON: `{"path":".ompig-live-parallel-b"}`},
 		}
 	}
 
@@ -754,7 +754,7 @@ func classifyTestFauxRequest(msgs []Message) (kind, text string, toolCalls []tes
 	// Mermaid rendering parity: return a multi-line ```mermaid block so the
 	// assistant markdown pipeline runs the Mermaid transformer + engine. The
 	// rendered box-drawing diagram is theme-independent after ANSI
-	// normalization, so pig and pi must produce the same plain art.
+	// normalization, so ompig and pi must produce the same plain art.
 	if strings.Contains(lastText, "show mermaid flowchart") {
 		return "text", "```mermaid\ngraph TD\n  A[Start] --> B[End]\n```", nil
 	}

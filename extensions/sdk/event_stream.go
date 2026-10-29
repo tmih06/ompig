@@ -6,7 +6,7 @@ import (
 	"math"
 	"unsafe"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // eventStreamMsg is the request member that numbers one connection's payloads of an event name and key (EventStream in the host's protocol.go). A request with Args is a keyframe the extension keeps; one without Args applies Ops to the payload numbered Base. The handler receives the full payload either way. Evict names keys of the event whose payloads are dropped after this frame.

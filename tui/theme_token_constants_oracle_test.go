@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // Pi: packages/coding-agent/src/modes/interactive/theme/theme.ts:108-117 (ThemeBg, ThemeToken) and :247-249, 301-304 (the theme's fgAnsi and bgAnsi maps).

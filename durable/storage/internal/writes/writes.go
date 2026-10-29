@@ -1,7 +1,7 @@
 // Package writes normalizes durable storage writes for the storage backends.
 package writes
 
-import "github.com/MichaelKinsy/PiG/durable"
+import "github.com/tmih06/ompig/durable"
 
 // Value returns the value form of a write passed by pointer, so backends switch on value types only.
 func Value(write durable.StorageWrite) durable.StorageWrite {

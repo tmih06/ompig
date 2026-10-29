@@ -1,5 +1,5 @@
 # Behavior family: rpc
-# Surface: set_model whose model_select handler queues setTimeout(0) -> ctx.ui.select. In Pi the dialog request follows the command response (24/24 probes, ClassLFinish); PiG's runtime ran the timer during the handler and the request preceded the response in about one run in ten.
+# Surface: set_model whose model_select handler queues setTimeout(0) -> ctx.ui.select. In Pi the dialog request follows the command response (24/24 probes, ClassLFinish); Ompig's runtime ran the timer during the handler and the request preceded the response in about one run in ten.
 
 name = "71-rpc-command-chain-timer-dialog"
 description = "RPC: a ctx.ui.select a setTimeout(0) callback opens while set_model runs is requested after the set_model response."
@@ -24,11 +24,11 @@ wait_timeout_seconds = 10
 line = '{"type":"extension_ui_response","id":"{{RPC_REQUEST_ID:pick-from-timer}}","value":"a"}'
 
 [env]
-pig = ["PIG_HOME=testdata/multi-model"]
+ompig = ["OMPIG_HOME=testdata/multi-model"]
 pi = ["PI_CODING_AGENT_DIR=testdata/multi-model/agent"]
-pig_extensions = ["testdata/command-chain-timer-dialog.mjs"]
+ompig_extensions = ["testdata/command-chain-timer-dialog.mjs"]
 pi_extensions = ["testdata/command-chain-timer-dialog.mjs"]
-pig_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--no-extensions", "--model", "fixture/model-one"]
 
 [assert]

@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-// NodeOnlyDir is the directory inside the slot root where PiG records the extension sets that only Node runs.
+// NodeOnlyDir is the directory inside the slot root where Ompig records the extension sets that only Node runs.
 const NodeOnlyDir = ".node-only"
 
-// nodeOnlyTTL bounds how long a record keeps a set off the requested runtime: a PiG or runtime upgrade may fix what failed.
-// pig additive (D19): Pi has one runtime, so no set is kept off another.
+// nodeOnlyTTL bounds how long a record keeps a set off the requested runtime: a Ompig or runtime upgrade may fix what failed.
+// ompig additive (D19): Pi has one runtime, so no set is kept off another.
 const nodeOnlyTTL = 7 * 24 * time.Hour
 
 // nodeOnlyRecord is one extension set that failed to start on a slot runtime and started on Node.
@@ -34,7 +34,7 @@ func (r nodeOnlyRecord) current() bool {
 }
 
 // RecordNodeOnly remembers that set started on Node after a slot runtime failed to start it, so later launches of the set run on Node.
-// pig additive (D19): Pi has one runtime, so it has no runtime to fall back from.
+// ompig additive (D19): Pi has one runtime, so it has no runtime to fall back from.
 func RecordNodeOnly(root string, set Set, detail string) error {
 	if root == "" || !hexPattern.MatchString(set.Key) {
 		return errors.New("the runtime slot root or the set key is unknown")
@@ -52,7 +52,7 @@ func RecordNodeOnly(root string, set Set, detail string) error {
 			record.Inputs = append(record.Inputs, Input{Path: path, Size: info.Size(), MtimeNs: info.ModTime().UnixNano()})
 		}
 	}
-	//portlint:allow jsonescape PiG-only format with no Pi counterpart (Pi has no Piglets or runtime slot)
+	//portlint:allow jsonescape Ompig-only format with no Pi counterpart (Pi has no Ompiglets or runtime slot)
 	data, err := json.MarshalIndent(record, "", "  ")
 	if err != nil {
 		return err

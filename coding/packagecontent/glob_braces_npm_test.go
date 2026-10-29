@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 // Rows recorded from braceExpand of Pi's npm minimatch 10.2.6 (brace-expansion 5.0.12) under Node 24.19. Node's bundled copy, which braceExpand ports, gives fewer results for each: after a "{a},b}" rewrite it drops every empty or literal value of a set that is not first, where 5.0.12 drops only empty results of a first comma set. 95 of 200,000 random brace patterns differ this way.

@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/pioracle"
+	"github.com/tmih06/ompig/tui"
 )
 
 type textOutputBlock struct {
@@ -29,7 +29,7 @@ type textOutputCase struct {
 	Images     string            `json:"images"`
 }
 
-// TestGetTextOutputMatchesPi runs core/tools/render-utils.ts getTextOutput and PiG's GetTextOutput over 2,500 seeded tool results: text blocks with ANSI sequences, carriage
+// TestGetTextOutputMatchesPi runs core/tools/render-utils.ts getTextOutput and Ompig's GetTextOutput over 2,500 seeded tool results: text blocks with ANSI sequences, carriage
 // returns, binary control characters and unpaired-looking bytes, empty text, image blocks that are PNG, JPEG, GIF, WebP, garbage or empty data with a matching, mismatching, empty or unknown
 // mime type, in any order, with image support off, kitty or iterm2 and showImages on or off. The output string must be equal: the text blocks joined by newlines, then, when images are not
 // shown, one fallback line per image block (mime type and dimensions when the header can be read).

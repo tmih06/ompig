@@ -17,9 +17,9 @@ wait_contains = ['"id":"one","type":"response","command":"cycle_model","success"
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/cycle-thinking"]
+ompig = ["OMPIG_HOME=testdata/cycle-thinking"]
 pi = ["PI_CODING_AGENT_DIR=testdata/cycle-thinking/agent"]
-pig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
+ompig_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 pi_args = ["--offline", "--no-session", "--model", "fixture/model-one"]
 
 [assert]

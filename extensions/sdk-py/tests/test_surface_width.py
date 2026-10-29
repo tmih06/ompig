@@ -18,7 +18,7 @@ import threading
 
 import pytest
 
-import pig_sdk
+import ompig_sdk
 
 from test_sdk import _read_frame, _start_fake_host, _write_frame
 
@@ -30,7 +30,7 @@ class Host:
         tmp = tempfile.mkdtemp()
         sock_path = os.path.join(tmp, "ext.sock")
         self.listener = _start_fake_host(sock_path)
-        self.ext = pig_sdk.Extension("py-surface")
+        self.ext = ompig_sdk.Extension("py-surface")
         register(self.ext)
         self.thread = threading.Thread(target=self.ext.run_with_socket, args=(sock_path,), daemon=True)
         self.thread.start()
@@ -258,7 +258,7 @@ def test_custom_resolves_none_in_rpc_without_running_the_component(host_factory)
 
         def handle_input(self, _data):
             ran.append("input")
-            return pig_sdk.RemoteComponentResult()
+            return ompig_sdk.RemoteComponentResult()
 
     def go(ctx, _args):
         results.put(("component", ctx.custom(Component())))

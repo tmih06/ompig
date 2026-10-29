@@ -9,8 +9,8 @@ import (
 	"testing"
 	"testing/synctest"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Pi's synchronous handleTerminalInput finishes each listener pass before the next chunk, including Ctrl+C. Exercise the pump and listener pass without editor or socket costs so repeated scans of the remaining burst remain visible.

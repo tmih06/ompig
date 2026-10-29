@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	sdkjson "github.com/MichaelKinsy/PiG/extensions/sdk/json"
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	sdkjson "github.com/tmih06/ompig/extensions/sdk/json"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type errorBodyProbe struct {
@@ -103,7 +103,7 @@ func TestErrorBodyHelpersMatchPiOnSeededProbes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Pi oracle: %v\n%s", err, &stderr)
 	}
-	// Pi's answers keep a lone surrogate as a \ud83d escape; the WTF-8 decoder keeps it as PiG's strings carry it, where encoding/json would turn it into U+FFFD.
+	// Pi's answers keep a lone surrogate as a \ud83d escape; the WTF-8 decoder keeps it as Ompig's strings carry it, where encoding/json would turn it into U+FFFD.
 	var expected []string
 	if err := sdkjson.Unmarshal(output, &expected); err != nil {
 		t.Fatal(err)
@@ -136,7 +136,7 @@ func TestErrorBodyHelpersMatchPiOnSeededProbes(t *testing.T) {
 		}
 		if got != expected[i] {
 			if differing++; differing <= 10 {
-				t.Errorf("%s %+v differs from Pi:\n  Pig %q\n  Pi  %q", probe.Op, probe, got, expected[i])
+				t.Errorf("%s %+v differs from Pi:\n  Ompig %q\n  Pi  %q", probe.Op, probe, got, expected[i])
 			}
 		}
 	}

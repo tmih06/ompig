@@ -10,19 +10,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
-	"github.com/MichaelKinsy/PiG/coding/pigletbuild"
-	"github.com/MichaelKinsy/PiG/internal/testbudget"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
+	"github.com/tmih06/ompig/coding/pigletbuild"
+	"github.com/tmih06/ompig/internal/testbudget"
 )
 
-// pig additive (D18): a signed Piglet Binary that cannot remember its passing startup check still runs, and its next
+// ompig additive (D18): a signed Ompiglet Binary that cannot remember its passing startup check still runs, and its next
 // start checks it in full again. Only a failed check stops the Binary. A state directory this user may not write is a
 // deployment choice (a read-only image or config root), so the miss is silent there: Pi needs no write to start, and
-// `pig diagnose` reports the unwritable root. Any other write error is a fault on the host, so runStableCLI prints it as
+// `ompig diagnose` reports the unwritable root. Any other write error is a fault on the host, so runStableCLI prints it as
 // a warning, before any other startup output because the check runs first, and again on the next start.
 func TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten(t *testing.T) {
 	if testing.Short() {
-		t.Skip("builds a signed Piglet Binary")
+		t.Skip("builds a signed Ompiglet Binary")
 	}
 	binary := buildSignedFauxPigletBinary(t)
 	for _, test := range []struct {
@@ -33,7 +33,7 @@ func TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten(t *testing.T) {
 		quiet bool
 	}{
 		{"cache directory is a file", func(t *testing.T, state string) string {
-			cacheDir := filepath.Join(state, "piglet-verify")
+			cacheDir := filepath.Join(state, "ompiglet-verify")
 			writeStartupFixtureFile(t, cacheDir, "")
 			return cacheDir
 		}, false},
@@ -48,7 +48,7 @@ func TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten(t *testing.T) {
 				t.Fatal(err)
 			}
 			t.Cleanup(func() { _ = os.Chmod(state, 0o700) })
-			return filepath.Join(state, "piglet-verify")
+			return filepath.Join(state, "ompiglet-verify")
 		}, true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
@@ -56,14 +56,14 @@ func TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			cacheDir := test.block(t, filepath.Join(home, ".pig", "state"))
+			cacheDir := test.block(t, filepath.Join(home, ".ompig", "state"))
 			// The warning carries the error the cache write gets from the file system, as the Binary's own MkdirAll reports it.
 			mkdirErr := os.MkdirAll(cacheDir, 0o700)
 			if mkdirErr == nil {
 				t.Fatalf("the blocked cache directory %s can be created", cacheDir)
 			}
-			want := "pig: warning: write Piglet verification cache: " + mkdirErr.Error() + "\n" +
-				"pig: startup will continue; the next start verifies this Piglet Binary in full again\n"
+			want := "ompig: warning: write Ompiglet verification cache: " + mkdirErr.Error() + "\n" +
+				"ompig: startup will continue; the next start verifies this Ompiglet Binary in full again\n"
 			if test.quiet {
 				want = ""
 			}
@@ -80,8 +80,8 @@ func TestSignedPigletBinaryRunsWhenItsVerifyCacheCannotBeWritten(t *testing.T) {
 	}
 }
 
-// buildSignedFauxPigletBinary runs a real `pig piglet build --format binary --sign-key` of a Piglet with no extensions
-// whose default model is test-faux/faux-1, with HOME and PIG_HOME isolated, and returns the signed Binary.
+// buildSignedFauxPigletBinary runs a real `ompig ompiglet build --format binary --sign-key` of a Ompiglet with no extensions
+// whose default model is test-faux/faux-1, with HOME and OMPIG_HOME isolated, and returns the signed Binary.
 func buildSignedFauxPigletBinary(t *testing.T) string {
 	t.Helper()
 	root, err := filepath.EvalSymlinks(t.TempDir())
@@ -98,7 +98,7 @@ func buildSignedFauxPigletBinary(t *testing.T) string {
 	}
 	t.Setenv("HOME", filepath.Join(root, "home"))
 	t.Setenv("USERPROFILE", filepath.Join(root, "home"))
-	t.Setenv("PIG_HOME", filepath.Join(root, "home", ".pig"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home", ".ompig"))
 	// Go makes downloaded module-cache files read-only by default, which would prevent t.TempDir from removing them.
 	t.Setenv("GOFLAGS", strings.TrimSpace(os.Getenv("GOFLAGS")+" -modcacherw"))
 	pigletPath := filepath.Join(root, "faux.yaml")
@@ -107,26 +107,26 @@ func buildSignedFauxPigletBinary(t *testing.T) string {
 	if _, err := signature.GenerateKey(keyPath); err != nil {
 		t.Fatal(err)
 	}
-	binary := filepath.Join(root, "pig-faux")
+	binary := filepath.Join(root, "ompig-faux")
 	if runtime.GOOS == "windows" {
 		binary += ".exe"
 	}
 	var stdout, stderr bytes.Buffer
 	if code := pigletbuild.RunPigletBuildCommand([]string{pigletPath, "--format", "binary", "--builder", "native", "--out", binary, "--sign-key", keyPath}, &stdout, &stderr); code != 0 {
-		t.Fatalf("pig piglet build exit %d\nstdout:\n%s\nstderr:\n%s", code, &stdout, &stderr)
+		t.Fatalf("ompig ompiglet build exit %d\nstdout:\n%s\nstderr:\n%s", code, &stdout, &stderr)
 	}
 	return binary
 }
 
 // runFauxPigletPrompt runs `-p "What is 20+22?"` in binary against the test-faux provider, offline, with home as HOME
-// and home/.pig as PIG_HOME. It returns the exit code, stdout and stderr.
+// and home/.ompig as OMPIG_HOME. It returns the exit code, stdout and stderr.
 func runFauxPigletPrompt(t *testing.T, binary, home string) (int, string, string) {
 	t.Helper()
 	cmd := exec.CommandContext(testbudget.Context(t), binary, "--no-session", "-p", "What is 20+22?")
 	cmd.Dir = t.TempDir()
 	cmd.Env = append(os.Environ(), "HOME="+home, "USERPROFILE="+home, "XDG_CONFIG_HOME="+filepath.Join(home, ".config"),
-		"PIG_HOME="+filepath.Join(home, ".pig"), "PIG_CODING_AGENT_DIR="+filepath.Join(home, ".pig", "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, ".pi", "agent"),
-		"PIG_TEST_FAUX=1", "PIG_OFFLINE=1")
+		"OMPIG_HOME="+filepath.Join(home, ".ompig"), "OMPIG_CODING_AGENT_DIR="+filepath.Join(home, ".ompig", "agent"), "PI_CODING_AGENT_DIR="+filepath.Join(home, ".pi", "agent"),
+		"OMPIG_TEST_FAUX=1", "OMPIG_OFFLINE=1")
 	var stdout, stderr strings.Builder
 	cmd.Stdout, cmd.Stderr = &stdout, &stderr
 	err := cmd.Run()

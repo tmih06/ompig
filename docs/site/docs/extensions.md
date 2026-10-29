@@ -1,18 +1,18 @@
 # Extensions
 
-Extensions add executable behavior to PiG. They can register tools, commands, event handlers, providers, renderers, and interactive UI.
+Extensions add executable behavior to Ompig. They can register tools, commands, event handlers, providers, renderers, and interactive UI.
 
-PiG preserves the Pi extension model while using a process-oriented host that supports Go, Rust, Python, and Node. A compatible Go extension can also be compiled into a Piglet Binary.
+Ompig preserves the Pi extension model while using a process-oriented host that supports Go, Rust, Python, and Node. A compatible Go extension can also be compiled into a Ompiglet Binary.
 
-## Why PiG uses this design
+## Why Ompig uses this design
 
-Upstream Pi loads TypeScript extensions in process. PiG is a Go-native implementation and does not embed a JavaScript runtime or load dynamic Go plugins.
+Upstream Pi loads TypeScript extensions in process. Ompig is a Go-native implementation and does not embed a JavaScript runtime or load dynamic Go plugins.
 
-PiG instead uses one public extension contract with several execution realizations:
+Ompig instead uses one public extension contract with several execution realizations:
 
 - isolated subprocess;
 - packed subprocess cell;
-- fused Go factory in a Piglet Binary.
+- fused Go factory in a Ompiglet Binary.
 
 This design has four goals:
 
@@ -43,11 +43,11 @@ An extension owns one executable capability or a cohesive group of capabilities.
 - status, widget, header, login, and focused UI;
 - extension-owned namespaced state.
 
-An extension does not select itself. Settings, a Package, an explicit `-e` path, or a Piglet selects it.
+An extension does not select itself. Settings, a Package, an explicit `-e` path, or a Ompiglet selects it.
 
 ## Supported source forms
 
-PiG accepts one conventional factory or one exact standalone source.
+Ompig accepts one conventional factory or one exact standalone source.
 
 | Language | Factory | Standalone |
 |---|---|---|
@@ -57,27 +57,27 @@ PiG accepts one conventional factory or one exact standalone source.
 | Node | Pi-compatible default export | Executable script with a shebang |
 | Native | Not applicable | Exact executable file |
 
-PiG rejects mixed languages, multiple factories, factory and standalone combinations, nonstandard factory symbols, missing entry points, and identity mismatches.
+Ompig rejects mixed languages, multiple factories, factory and standalone combinations, nonstandard factory symbols, missing entry points, and identity mismatches.
 
 ## Create an extension
 
-Prefer Go for an extension that may become part of a native Piglet Binary:
+Prefer Go for an extension that may become part of a native Ompiglet Binary:
 
 ```bash
-pig extension init ./review --lang go
+ompig extension init ./review --lang go
 ```
 
 Create an isolated standalone only when the capability needs its own executable boundary:
 
 ```bash
-pig extension init ./review --lang go --isolated
+ompig extension init ./review --lang go --isolated
 ```
 
 The scaffold does not write an extension manifest. Runtime registration is the source of extension identity and capabilities.
 
 ## Understand the runtime lifecycle
 
-The factory can be synchronous or asynchronous. PiG waits for an asynchronous factory before startup continues, allowing it to fetch configuration or register providers needed during startup.
+The factory can be synchronous or asynchronous. Ompig waits for an asynchronous factory before startup continues, allowing it to fetch configuration or register providers needed during startup.
 
 Do not start processes, sockets, watchers, or timers in the factory because some invocations load extensions without starting a session.
 Start long-lived resources from `session_start` or from the command or tool that needs them.
@@ -127,9 +127,9 @@ The lifecycle involves these event groups:
 | Tool execution | `tool_execution_start`, `tool_call`, `tool_execution_update`, `tool_result`, `tool_execution_end` |
 | Settlement | `agent_before_settle`, `agent_settled` |
 
-PiG counts as busy while a run starts, including the compaction check and `before_agent_start`, so messages sent meanwhile go into the starting run. Message lifecycle events also cover user and tool-result messages; the diagram places only the assistant stream where it occurs in each model turn.
+Ompig counts as busy while a run starts, including the compaction check and `before_agent_start`, so messages sent meanwhile go into the starting run. Message lifecycle events also cover user and tool-result messages; the diagram places only the assistant stream where it occurs in each model turn.
 
-Tool hooks run for each tool call, and one assistant response can start another turn by returning tool calls. Provider hooks run only when that transport exposes the corresponding stage. See the exported declarations in Pi's [`extensions/types.ts`](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/extensions/types.ts) for exact event payloads and result types; PiG delivers the same events to subprocess and fused extensions.
+Tool hooks run for each tool call, and one assistant response can start another turn by returning tool calls. Provider hooks run only when that transport exposes the corresponding stage. See the exported declarations in Pi's [`extensions/types.ts`](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/extensions/types.ts) for exact event payloads and result types; Ompig delivers the same events to subprocess and fused extensions.
 
 Session startup and replacement follow a separate lifecycle:
 
@@ -178,7 +178,7 @@ Use `agent_before_settle` when an extension must append entries or request one f
 ## Validate without installing
 
 ```bash
-pig install ./review --validate-only --json
+ompig install ./review --validate-only --json
 ```
 
 Validation:
@@ -191,10 +191,10 @@ Validation:
 - reports placement;
 - changes no Package settings.
 
-Validate a set to find conflicts before using it in a Piglet:
+Validate a set to find conflicts before using it in a Ompiglet:
 
 ```bash
-pig install --validate-only --set ./review,./policy --json
+ompig install --validate-only --set ./review,./policy --json
 ```
 
 ## Select an extension
@@ -202,10 +202,10 @@ pig install --validate-only --set ./review,./policy --json
 Use an explicit path for a temporary source run:
 
 ```bash
-pig -e ./review
+ompig -e ./review
 ```
 
-Use a Piglet for an agent application:
+Use a Ompiglet for an agent application:
 
 ```yaml
 extensions:
@@ -213,7 +213,7 @@ extensions:
     origins: [local:./extensions/review]
 ```
 
-Use a Package when you need to distribute the extension to other applications. Installing the Package does not activate a Piglet.
+Use a Package when you need to distribute the extension to other applications. Installing the Package does not activate a Ompiglet.
 
 ## MCP servers, virtual models and tool exposure
 
@@ -227,9 +227,9 @@ A tool that reaches other tools, such as `codemode` or `tool_search`, declares w
 
 Register a display-only Markdown transformer with `pi.registerMarkdownTransformer` in Node, `MarkdownTransformer` in Go, or `markdown_transformer` in Rust and Python. Transformers receive the message type, streaming state, and current content width. They change the displayed user, assistant, and visible-thinking text, not the stored message or provider input. A string replaces the current Markdown, including an empty string. Node Promise results and other non-string results are ignored, as in Pi.
 
-`pi.registerToolRenderer((toolName, next) => renderers)` in Node, `ToolRenderer` in Go, `tool_renderer` in Python and Rust (`Context::register_tool_renderer` after loading in Rust) chooses renderers for calls to any tool, including tools that are not registered yet, such as MCP tools in a resumed session before their server connected. `next()` returns what the remaining resolvers (in extension load order), then the registered tool, would use, so `next() ?? mine` only fills in. PiG asks an extension's resolvers once per tool, off the interactive loop: until the answer arrives, a card draws with `next()`'s renderers, and `next()` is a marker that a resolver can return but whose render functions it cannot call; a copy of it given a call or result renderer draws with only the renderers the resolver set (D89).
+`pi.registerToolRenderer((toolName, next) => renderers)` in Node, `ToolRenderer` in Go, `tool_renderer` in Python and Rust (`Context::register_tool_renderer` after loading in Rust) chooses renderers for calls to any tool, including tools that are not registered yet, such as MCP tools in a resumed session before their server connected. `next()` returns what the remaining resolvers (in extension load order), then the registered tool, would use, so `next() ?? mine` only fills in. Ompig asks an extension's resolvers once per tool, off the interactive loop: until the answer arrives, a card draws with `next()`'s renderers, and `next()` is a marker that a resolver can return but whose render functions it cannot call; a copy of it given a call or result renderer draws with only the renderers the resolver set (D89).
 
-PiG runs the complete chain off the render loop through its multi-language bridge (D19). Normal updates preserve render-admission order across components. A replacement discards obsolete output without ending an admitted callback's wait early. Equal-text content updates rerun stateful transformers. Removing a message removes its queued work and prevents late publication.
+Ompig runs the complete chain off the render loop through its multi-language bridge (D19). Normal updates preserve render-admission order across components. A replacement discards obsolete output without ending an admitted callback's wait early. Equal-text content updates rerun stateful transformers. Removing a message removes its queued work and prevents late publication.
 
 Renderer inactivity, disconnect, and shutdown retain the subprocess isolation boundary (D56). Cancellation of a host request does not prove that the extension callback body has returned. Keep synchronous transformers short and do not depend on side effects from an abandoned callback.
 
@@ -237,18 +237,18 @@ Renderer inactivity, disconnect, and shutdown retain the subprocess isolation bo
 
 Return an ordered `content` array when a tool produces text and images. Each text block uses `{ "type": "text", "text": "..." }`. Each image block uses `{ "type": "image", "data": "...", "mimeType": "image/png" }`, where `data` contains base64-encoded image bytes.
 
-PiG preserves the blocks and their order in final tool events, provider context, Session history, and custom-renderer input. An empty text block remains distinct from `content: []`. Text signatures remain attached to their text blocks.
+Ompig preserves the blocks and their order in final tool events, provider context, Session history, and custom-renderer input. An empty text block remains distinct from `content: []`. Text signatures remain attached to their text blocks.
 
-After `tool_result` handlers run, PiG normalizes images before storing the result. A conversion or resize note appears immediately after the affected image. Disabling `images.autoResize` prevents resizing but still permits conversion of unsupported formats, such as BMP, to PNG. If image processing fails, PiG retains the original image block instead of dropping tool output.
+After `tool_result` handlers run, Ompig normalizes images before storing the result. A conversion or resize note appears immediately after the affected image. Disabling `images.autoResize` prevents resizing but still permits conversion of unsupported formats, such as BMP, to PNG. If image processing fails, Ompig retains the original image block instead of dropping tool output.
 
 ## Subprocess realization
 
-Source extensions normally run through PiG's subprocess host.
+Source extensions normally run through Ompig's subprocess host.
 
 ### Advantages
 
 - Supports Go, Rust, Python, Node, and native executables.
-- Separates many crashes and exits from the PiG process.
+- Separates many crashes and exits from the Ompig process.
 - Provides explicit heartbeat and cancellation handling.
 - Supports source development and reload.
 - Avoids unsafe dynamic native plugin loading.
@@ -269,11 +269,11 @@ Packing reduces process count. It does not create a shared extension identity. C
 
 Cold native builds print `Building extensions...` only in interactive mode with a terminal stderr (D19). Cached builds, Node loads, print, JSON, and RPC do not print this notice.
 
-A stalled logical member is isolated from healthy members where the process remains healthy. If the shared process dies, PiG quarantines the affected cell. The next plan can separate failed members from healthy members.
+A stalled logical member is isolated from healthy members where the process remains healthy. If the shared process dies, Ompig quarantines the affected cell. The next plan can separate failed members from healthy members.
 
 ## Fused Go realization
 
-A Piglet Binary can compile a compatible Go factory into the PiG executable.
+A Ompiglet Binary can compile a compatible Go factory into the Ompig executable.
 
 ### Advantages
 
@@ -285,7 +285,7 @@ A Piglet Binary can compile a compatible Go factory into the PiG executable.
 ### Costs
 
 - Requires a Binary rebuild for every extension change.
-- Shares PiG's process failure boundary.
+- Shares Ompig's process failure boundary.
 - Requires a target-specific build.
 - Supports compatible Go factories only.
 - Needs stricter panic, deadlock, and resource-lifetime review.
@@ -296,13 +296,13 @@ Fusion is a delivery optimization. Fused factories use the same registration and
 
 Register `session_before_compact` to inspect or replace compaction work. The event contains the preparation, branch entries, custom instructions, reason, retry state, and cancellation context. Return `cancel: true` to cancel the operation. Return `compaction` to provide the result without a model call.
 
-PiG persists a successful result before it emits `session_compact`. The event contains the persisted compaction entry, reason, retry state, and `fromExtension` value. Isolated, packed, and fused extensions receive the same events.
+Ompig persists a successful result before it emits `session_compact`. The event contains the persisted compaction entry, reason, retry state, and `fromExtension` value. Isolated, packed, and fused extensions receive the same events.
 
 A `session_compact` handler that calls `sendMessage({ triggerTurn: false })` during an overflow recovery has its message appended before the interrupted turn retries, so the retry sees it. Pi defers the message to the end of the run, after the retry (D138, Pi #9051).
 
-PiG emits `session_compact_failed` after a compaction fails or is aborted, once the `compaction_end` listeners have returned. The event contains the reason, `errorMessage` (absent when the compaction was aborted), `aborted`, retry state, and `fromExtension` value.
+Ompig emits `session_compact_failed` after a compaction fails or is aborted, once the `compaction_end` listeners have returned. The event contains the reason, `errorMessage` (absent when the compaction was aborted), `aborted`, retry state, and `fromExtension` value.
 
-PiG Standard requires every selected extension to fuse:
+Ompig Standard requires every selected extension to fuse:
 
 ```yaml
 build:
@@ -313,9 +313,9 @@ A Standard Binary build fails if any selected extension would use a subprocess.
 
 ## Connection and liveness model
 
-PiG cannot guarantee that an extension connection never fails. An extension process can crash, be killed, deadlock, exhaust a resource, or lose its transport.
+Ompig cannot guarantee that an extension connection never fails. An extension process can crash, be killed, deadlock, exhaust a resource, or lose its transport.
 
-PiG instead provides a bounded failure contract:
+Ompig instead provides a bounded failure contract:
 
 1. Detect transport or heartbeat failure.
 2. Cancel pending calls owned by the failed connection.
@@ -329,7 +329,7 @@ A heartbeat proves that the transport dispatcher is alive. It does not prove tha
 
 Tools, commands, events, and shortcuts can perform long operations until they finish or are cancelled. Renderers use generation-scoped inactivity and retain the last valid frame when a new generation stalls.
 
-When a run aborts while an extension tool runs, PiG cancels the tool's request, so its abort signal fires (Node `AbortSignal`, Go `ctx.Done()`, Rust and Python `is_cancelled`). A tool that settles within 3 seconds behaves as in Pi. A tool that has not settled by then fails with `Operation aborted`, the session is free again, and the tool's late answer is discarded. Pi waits for such a tool indefinitely (D111).
+When a run aborts while an extension tool runs, Ompig cancels the tool's request, so its abort signal fires (Node `AbortSignal`, Go `ctx.Done()`, Rust and Python `is_cancelled`). A tool that settles within 3 seconds behaves as in Pi. A tool that has not settled by then fails with `Operation aborted`, the session is free again, and the tool's late answer is discarded. Pi waits for such a tool indefinitely (D111).
 
 An extension's standard error goes to its diagnostic log. The log keeps the first 1 MiB and the last 64 KiB of the output and states how many bytes it dropped. When an extension in a shared Go, Rust or Python process crashes, the error for each stopped extension says that `/reload` restarts it.
 
@@ -347,11 +347,11 @@ A `waitForIdle()` call made during a run stays pending until the `agent_settled`
 
 ## Session context
 
-PiG loads session history for an extension only when the extension reads it. A persisted session is read from its local JSONL file and reconciled with the host cursor. If the file is unavailable, the host sends ordered pages of at most 4 MB. Later appends use the same bounded path.
+Ompig loads session history for an extension only when the extension reads it. A persisted session is read from its local JSONL file and reconciled with the host cursor. If the file is unavailable, the host sends ordered pages of at most 4 MB. Later appends use the same bounded path.
 
-## Why PiG does not replay interrupted operations
+## Why Ompig does not replay interrupted operations
 
-If a connection fails during a tool call or command, that operation fails. PiG does not automatically replay it.
+If a connection fails during a tool call or command, that operation fails. Ompig does not automatically replay it.
 
 A replay could repeat:
 
@@ -361,15 +361,15 @@ A replay could repeat:
 - a user message;
 - an external transaction.
 
-PiG cannot infer that these effects are idempotent. The caller must decide whether retry is safe.
+Ompig cannot infer that these effects are idempotent. The caller must decide whether retry is safe.
 
-An extension must persist durable state before it needs that state after restart. PiG cannot recover state that existed only in the failed process memory.
+An extension must persist durable state before it needs that state after restart. Ompig cannot recover state that existed only in the failed process memory.
 
 ## Reload behavior
 
 `/reload` uses the same normalized extension inputs and first-seen order as startup.
 
-PiG:
+Ompig:
 
 1. resolves the requested extension set;
 2. computes content identity and reuses valid build artifacts;
@@ -384,13 +384,13 @@ A failed extension is removed and reported while other extensions load.
 
 If a Node factory throws or rejects, its captured `pi` API becomes inactive. Later registration, action, getter, and event-bus calls throw `Extension "<path>" failed to load and its API is no longer active.` synchronously, even when the method normally returns a Promise. Event-bus subscriptions made by that factory are removed. Healthy extensions keep their APIs.
 
-Node extensions keep Jiti's compiled-source cache under `<config-root>/cache/jiti` (D20). The loader checks source contents on each load and separates compiler and runtime versions, so a changed source is compiled again. Changing the temporary directory does not discard this cache. The cache does not retain evaluated factories between loads. `JITI_FS_CACHE=false` disables it. The transform cache is disposable and is separate from the published artifacts managed by `pig extensions cache prune`.
+Node extensions keep Jiti's compiled-source cache under `<config-root>/cache/jiti` (D20). The loader checks source contents on each load and separates compiler and runtime versions, so a changed source is compiled again. Changing the temporary directory does not discard this cache. The cache does not retain evaluated factories between loads. `JITI_FS_CACHE=false` disables it. The transform cache is disposable and is separate from the published artifacts managed by `ompig extensions cache prune`.
 
-Node also keeps native bytecode under `<config-root>/cache/node-compile` when a virtual SDK library is imported (D20). Node validates source bytes and VM compatibility before reuse. This cache contains compiled code, not evaluated factories or extension state. `NODE_DISABLE_COMPILE_CACHE=1` disables it independently of Jiti. Existing Node cache configuration remains authoritative. Like the Jiti cache, it is disposable and is not managed by `pig extensions cache prune`.
+Node also keeps native bytecode under `<config-root>/cache/node-compile` when a virtual SDK library is imported (D20). Node validates source bytes and VM compatibility before reuse. This cache contains compiled code, not evaluated factories or extension state. `NODE_DISABLE_COMPILE_CACHE=1` disables it independently of Jiti. Existing Node cache configuration remains authoritative. Like the Jiti cache, it is disposable and is not managed by `ompig extensions cache prune`.
 
 ## Session replacement
 
-`/new`, `/resume`, `/fork`, `/clone`, `ctx.newSession()`, `ctx.fork()`, `ctx.switchSession()` and the RPC commands `new_session`, `switch_session`, `fork` and `clone` build the replacement Session's extensions from scratch: a new runner, new extension processes and a new `session_start`. PiG starts a fresh process where Pi calls the extension factory again inside the same Node process, so module-level state and process-wide state such as `process.env` do not carry over to the next Session (D70). The extension that requested the replacement keeps its process until its command handler returns. A `ctx` that an extension captured before a replacement or reload raises Pi's stale message from `cwd`, `mode`, `hasUI` and `model`, as Pi throws it: Go and Rust panic with the message, and Python raises `RuntimeError`. The handler's error carries the message. Host calls through such a `ctx` or `pi` are rejected with the same message without throwing at the call site: the SDK returns or raises an error or writes it to stderr, depending on the language (D30).
+`/new`, `/resume`, `/fork`, `/clone`, `ctx.newSession()`, `ctx.fork()`, `ctx.switchSession()` and the RPC commands `new_session`, `switch_session`, `fork` and `clone` build the replacement Session's extensions from scratch: a new runner, new extension processes and a new `session_start`. Ompig starts a fresh process where Pi calls the extension factory again inside the same Node process, so module-level state and process-wide state such as `process.env` do not carry over to the next Session (D70). The extension that requested the replacement keeps its process until its command handler returns. A `ctx` that an extension captured before a replacement or reload raises Pi's stale message from `cwd`, `mode`, `hasUI` and `model`, as Pi throws it: Go and Rust panic with the message, and Python raises `RuntimeError`. The handler's error carries the message. Host calls through such a `ctx` or `pi` are rejected with the same message without throwing at the call site: the SDK returns or raises an error or writes it to stderr, depending on the language (D30).
 
 ## Cancellation
 
@@ -416,9 +416,9 @@ These lifetime rules belong to the multi-language bridge (D19). They do not repl
 
 Terminal listeners receive JavaScript UTF-16 strings. A printable character outside the BMP can arrive as separate high- and low-surrogate chunks, with an unmatched unit visible in the editor between them. Do not join chunks before returning a verdict. The wire uses valid JSON `\u` escapes for unmatched units.
 
-PiG's interactive driver owns terminal input. It runs the host's color and cell-size replies, the overlay fix-up and the host listener chain for each input chunk first, in Pi's order. An extension's terminal-input listener runs after them, asynchronously, and PiG keeps each chunk's place in the input order. In Pi the listener runs synchronously inside `TUI.start()`'s input handler (D105).
+Ompig's interactive driver owns terminal input. It runs the host's color and cell-size replies, the overlay fix-up and the host listener chain for each input chunk first, in Pi's order. An extension's terminal-input listener runs after them, asynchronously, and Ompig keeps each chunk's place in the input order. In Pi the listener runs synchronously inside `TUI.start()`'s input handler (D105).
 
-Go SDK strings use the native editor's WTF-8 convention for unmatched units. Use `github.com/MichaelKinsy/PiG/extensions/sdk/json` instead of `encoding/json` when serializing callback text yourself. Node and Python strings retain these units naturally. Rust terminal and focused-component input callbacks receive `&JsString`, verdict `data` is `Option<JsString>`, and `get_editor_text` returns `JsString`. Use `as_units()` for lossless access, `from_units(...)` to construct a string, and `to_string_lossy()` only for display. Rust editor setters accept ordinary strings or `JsString`.
+Go SDK strings use the native editor's WTF-8 convention for unmatched units. Use `github.com/tmih06/ompig/extensions/sdk/json` instead of `encoding/json` when serializing callback text yourself. Node and Python strings retain these units naturally. Rust terminal and focused-component input callbacks receive `&JsString`, verdict `data` is `Option<JsString>`, and `get_editor_text` returns `JsString`. Use `as_units()` for lossless access, `from_units(...)` to construct a string, and `to_string_lossy()` only for display. Rust editor setters accept ordinary strings or `JsString`.
 
 ## Registration inputs
 
@@ -430,19 +430,19 @@ Provider configuration is validated before it replaces an existing registry entr
 
 ## Focused UI
 
-A subprocess extension can open focused custom UI. The extension renders local line snapshots. PiG owns the focus shell and sends ordered input back to the component.
+A subprocess extension can open focused custom UI. The extension renders local line snapshots. Ompig owns the focus shell and sends ordered input back to the component.
 
 One terminal gives focus to one extension dialog or overlay at a time. Other interactive calls wait outside the TUI loop. Cancellation removes a waiting call before it takes focus.
 
 A component opened as an overlay renders at the overlay's width, as in Pi: 80 columns or the available width, whichever is smaller, unless `overlayOptions` sets `width`, `minWidth` or `margin`. An inline component and a legacy titled modal (`title`, `widthFraction` or `heightFraction` without `overlayOptions`) render at the terminal width.
 
-Timer-driven render requests are available in Go, Rust, Python, and Node. PiG coalesces repeated requests, limits them to the 16 ms TUI frame interval, and sends only changed snapshots. Input-driven frames remain immediate.
+Timer-driven render requests are available in Go, Rust, Python, and Node. Ompig coalesces repeated requests, limits them to the 16 ms TUI frame interval, and sends only changed snapshots. Input-driven frames remain immediate.
 
 A component opened with `ctx.ui.custom` receives mouse events in fullscreen mode, as in Pi: clicks, presses, drags, wheel and hover, with coordinates local to the component. Implement Pi's `handleMouse` in Node, `sdk.MouseHandler` in Go, and `handle_mouse` in Rust and Python. Select and settings lists in component-kit views respond to clicks and the wheel.
 
 The host rejects stale-width, out-of-order, and late-generation frames. The SDK detaches timer invalidation before it disposes the component. Completion, cancellation, reload, disconnect, and shutdown stop component work. A callback that does not return causes a bounded cleanup error instead of concurrent disposal.
 
-PiG Standard includes PiG Runner as an ordinary Go extension. `/runner` and `/pig-runner` use the same public custom-component contract as any other extension. A Standard Binary fuses the extension without a private Stock PiG launcher.
+Ompig Standard includes Ompig Runner as an ordinary Go extension. `/runner` and `/ompig-runner` use the same public custom-component contract as any other extension. A Standard Binary fuses the extension without a private Stock Ompig launcher.
 
 ## User bash operations
 
@@ -457,22 +457,22 @@ Tool renderers receive `outputPad` (`context.outputPad` in Node, `OutputPad` in 
 Store product or extension state below a namespaced path:
 
 ```text
-~/.pig/state/<extension-id>/
+~/.ompig/state/<extension-id>/
 ```
 
-Do not add product state fields to Stock PiG settings.
+Do not add product state fields to Stock Ompig settings.
 
-PiG Standard's login extension follows this rule for sprite selection.
+Ompig Standard's login extension follows this rule for sprite selection.
 
 ## Product boundary
 
-Keep product behavior outside Stock PiG. A product extension can provide branding, onboarding, authentication, marketplace access, or workflow commands through public extension and Piglet contracts.
+Keep product behavior outside Stock Ompig. A product extension can provide branding, onboarding, authentication, marketplace access, or workflow commands through public extension and Ompiglet contracts.
 
-Do not add a product-specific launcher, startup branch, or hidden registration to `cmd/pig`.
+Do not add a product-specific launcher, startup branch, or hidden registration to `cmd/ompig`.
 
 ## Security model
 
-Extensions run with the permissions of the PiG process unless an operating-system boundary limits them. Process separation improves failure isolation but is not a security sandbox.
+Extensions run with the permissions of the Ompig process unless an operating-system boundary limits them. Process separation improves failure isolation but is not a security sandbox.
 
 Before you install an extension:
 
@@ -483,18 +483,18 @@ Before you install an extension:
 
 ## Upgrade a Go extension written for an older SDK
 
-PiG compiles a Go extension against the SDK of the pig that runs it, so an SDK release can break an extension written for an earlier one (D109). Pi has no equivalent: it loads extension source in process. When a build fails on a changed SDK symbol, pig reports `go build: written for an older SDK` and names each changed API with its old and new shape, instead of printing only the compiler log:
+Ompig compiles a Go extension against the SDK of the ompig that runs it, so an SDK release can break an extension written for an earlier one (D109). Pi has no equivalent: it loads extension source in process. When a build fails on a changed SDK symbol, ompig reports `go build: written for an older SDK` and names each changed API with its old and new shape, instead of printing only the compiler log:
 
 ```text
 Extension "ask" was written for an older SDK:
   Context.GetSessionID: func() string -> func() (string, error) (SDK 0.3.0)
   SendMessageOptions.TriggerTurn: bool -> *bool (SDK 0.2.0)
-Run: pig extension upgrade /home/me/.pig/agent/extensions/ask
+Run: ompig extension upgrade /home/me/.ompig/agent/extensions/ask
 ```
 
 A build that also fails on an error that is not an SDK change, in the extension or in another extension of the same packed cell, keeps the plain build message.
 
-`pig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]` rewrites the extension with the rules in `extensions/sdk/upgrade`. The rules parse and type-check the Go source, edit only the SDK uses they recognize, and format the result with `go/format`. The command copies the original files to `<config root>/state/extension-upgrade/<time>-<name>/` first (`<time>-<name>-2/` and so on when that directory exists), prints a unified diff, rebuilds the extension, and reports one status per extension: `upgraded`, `up to date`, `needs manual changes`, `failed` or `skipped`. `--dry-run` prints the diff and changes nothing. `--summary` prints one line per extension. With no argument, the command upgrades every Go extension that settings, packages, the agent directory and a trusted project directory load.
+`ompig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]` rewrites the extension with the rules in `extensions/sdk/upgrade`. The rules parse and type-check the Go source, edit only the SDK uses they recognize, and format the result with `go/format`. The command copies the original files to `<config root>/state/extension-upgrade/<time>-<name>/` first (`<time>-<name>-2/` and so on when that directory exists), prints a unified diff, rebuilds the extension, and reports one status per extension: `upgraded`, `up to date`, `needs manual changes`, `failed` or `skipped`. `--dry-run` prints the diff and changes nothing. `--summary` prints one line per extension. With no argument, the command upgrades every Go extension that settings, packages, the agent directory and a trusted project directory load.
 
 Before, written for SDK 0.2.0:
 
@@ -505,7 +505,7 @@ ext.OnSessionStart(func(ctx sdk.Context, _ map[string]any) (any, error) {
 })
 ```
 
-After `pig extension upgrade`:
+After `ompig extension upgrade`:
 
 ```go
 ext.OnSessionStart(func(ctx sdk.Context, _ map[string]any) (any, error) {
@@ -517,20 +517,20 @@ ext.OnSessionStart(func(ctx sdk.Context, _ map[string]any) (any, error) {
 })
 ```
 
-The rules rewrite the host-backed getters, the optional boolean fields, and `ContextUsage.Tokens` and `Percent`. A getter call moves out of its statement, including an `if` or `switch` init statement, together with any `Cwd`, `Mode`, `HasUI`, `Width`, `Height` or `ToolCallID` call before it so the calls keep their order. A `ConfigHome` call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`, still compiles because its value and its error both become arguments, so the error is printed or passed on instead of handled. When the extension's `go.mod` requires an SDK older than 0.5.0, the rules find that call and rewrite it the same way, and list it rather than discard its error. A call whose parameter for the error has the type `error`, such as `check(home string, errs ...error)`, already receives the error and stays. A function that returns an error returns the getter's error. In a function that does not, a host-backed getter's error is discarded with a comment, which keeps the old SDK's empty value on failure, while a `ConfigHome` call is listed for you instead: the old `ConfigHome` could not fail, and an empty configuration root would make its paths relative to the working directory. A use that cannot move without changing the order of evaluation, such as one in a `select` case, and a getter's method value passed where the old signature is wanted, are listed with the reason. A change with no safe rewrite, such as the typed `SetEditorComponent` factory, the `ToolConstrainedSampling` union, the `AutocompleteProviderFactory` type or a provider object's `*sdk.Credential`, is reported with its remedy and the file stays as it was. An upgrade is all or nothing: if writing a file or the rebuild of the upgraded extension fails, pig restores every file it changed and the report says so.
+The rules rewrite the host-backed getters, the optional boolean fields, and `ContextUsage.Tokens` and `Percent`. A getter call moves out of its statement, including an `if` or `switch` init statement, together with any `Cwd`, `Mode`, `HasUI`, `Width`, `Height` or `ToolCallID` call before it so the calls keep their order. A `ConfigHome` call that is the only argument of a variadic call, such as `fmt.Println(ctx.ConfigHome())`, still compiles because its value and its error both become arguments, so the error is printed or passed on instead of handled. When the extension's `go.mod` requires an SDK older than 0.5.0, the rules find that call and rewrite it the same way, and list it rather than discard its error. A call whose parameter for the error has the type `error`, such as `check(home string, errs ...error)`, already receives the error and stays. A function that returns an error returns the getter's error. In a function that does not, a host-backed getter's error is discarded with a comment, which keeps the old SDK's empty value on failure, while a `ConfigHome` call is listed for you instead: the old `ConfigHome` could not fail, and an empty configuration root would make its paths relative to the working directory. A use that cannot move without changing the order of evaluation, such as one in a `select` case, and a getter's method value passed where the old signature is wanted, are listed with the reason. A change with no safe rewrite, such as the typed `SetEditorComponent` factory, the `ToolConstrainedSampling` union, the `AutocompleteProviderFactory` type or a provider object's `*sdk.Credential`, is reported with its remedy and the file stays as it was. An upgrade is all or nothing: if writing a file or the rebuild of the upgraded extension fails, ompig restores every file it changed and the report says so.
 
-Interactive startup lists a drifted extension and asks `Run pig extension upgrade <path>... now? [y/N]` before it exits. Yes upgrades and rebuilds them, then loads the extensions again in the same process and continues startup, so a `--fork`, `--session-id` or `--name` takes effect once. No exits as Pi does on an extension load error. Print, JSON and RPC modes print the command to standard error and exit 1, and write nothing to standard output.
+Interactive startup lists a drifted extension and asks `Run ompig extension upgrade <path>... now? [y/N]` before it exits. Yes upgrades and rebuilds them, then loads the extensions again in the same process and continues startup, so a `--fork`, `--session-id` or `--name` takes effect once. No exits as Pi does on an extension load error. Print, JSON and RPC modes print the command to standard error and exit 1, and write nothing to standard output.
 
-Set `extensionsAutoUpgrade` to `true` in the global settings file to run the rules at startup and after `pig update` without the question. Each upgraded extension gets a backup and one line on standard error. The setting is off by default, a project settings file cannot turn it on, and only the rules run; no agent edits an extension.
+Set `extensionsAutoUpgrade` to `true` in the global settings file to run the rules at startup and after `ompig update` without the question. Each upgraded extension gets a backup and one line on standard error. The setting is off by default, a project settings file cannot turn it on, and only the rules run; no agent edits an extension.
 
-When two loaded extensions register the same tool and one directory is a copy of the other, pig names both directories and suggests removing the older copy. Pi's tool-conflict error stays as it is.
+When two loaded extensions register the same tool and one directory is a copy of the other, ompig names both directories and suggests removing the older copy. Pi's tool-conflict error stays as it is.
 
 ## SDK changes in 0.5.0
 
-These SDK changes break extensions written for 0.4.x. `pig extension upgrade` rewrites each Go change that has a safe rewrite and reports the others with their remedy (see [Upgrade a Go extension written for an older SDK](#upgrade-a-go-extension-written-for-an-older-sdk)).
+These SDK changes break extensions written for 0.4.x. `ompig extension upgrade` rewrites each Go change that has a safe rewrite and reports the others with their remedy (see [Upgrade a Go extension written for an older SDK](#upgrade-a-go-extension-written-for-an-older-sdk)).
 
 - `Context.SetEditorComponent` in the Go SDK takes an `sdk.EditorFactory` instead of `any`. The old `any` form accepted only nil.
-- The configuration-root getter can fail. Go `Context.ConfigHome` returns `(string, error)`, Python `config_home` raises `RuntimeError`, and Rust `Context::config_home` returns `io::Result<String>`, each when the home directory is needed and unavailable. The Rust SDK no longer reads `GOPI_HOME`; set `PIG_HOME` instead.
+- The configuration-root getter can fail. Go `Context.ConfigHome` returns `(string, error)`, Python `config_home` raises `RuntimeError`, and Rust `Context::config_home` returns `io::Result<String>`, each when the home directory is needed and unavailable. The Rust SDK no longer reads `GOPI_HOME`; set `OMPIG_HOME` instead.
 - A provider object's `OAuthAuth.Login` takes the app's login options as its second argument, and a Go provider's credential is `*sdk.Credential` instead of `map[string]any`. See [Custom providers](/docs/latest/custom-provider).
 - `ProviderStreamOptions` gains `OnProviderStreamEvent` (`on_provider_stream_event`) and loses `TransformHeaders` (`transform_headers`) in Go, Python and Rust.
 - Rust `on_event` and `on_event_result`, and Python `on_event`, lose the `can_block` argument. Pi has no such concept, and the host never read it.
@@ -594,7 +594,7 @@ Pi's exec and dialog `timeout` is a number, so fractional and very large values 
 
 `getSystemPromptOptions` returns Pi's collection-complete shape: `selectedTools`, `toolSnippets`, `toolGuidelines`, `promptGuidelines`, `appendSystemPrompt`, `sections`, `contextFiles` and `skills` are always present, empty when unset. Go `SystemPromptOptions` gains `ToolGuidelines`.
 
-Legacy `github.com/mainstai/pig/extensions/sdk` imports remain buildable in factories and exact standalones. PiG creates a private alias of the current SDK, including its subpackages and self-imports, without editing authored files (D19). Use the current `github.com/MichaelKinsy/PiG/extensions/sdk` path for new or fused extensions.
+Legacy `github.com/mainstai/ompig/extensions/sdk` imports remain buildable in factories and exact standalones. Ompig creates a private alias of the current SDK, including its subpackages and self-imports, without editing authored files (D19). Use the current `github.com/tmih06/ompig/extensions/sdk` path for new or fused extensions.
 
 ## Replace the editor
 
@@ -611,13 +611,13 @@ The factory receives the host's default editor, which the component embeds as it
 
 ## SDKs
 
-PiG ships subprocess SDK bridges for:
+Ompig ships subprocess SDK bridges for:
 
 - Go: `extensions/sdk`;
 - Rust: `extensions/sdk-rs`;
 - Python: `extensions/sdk-py`.
 
-Node extensions use Pi-compatible exports through the Node runtime bridge. The `extensions/sdk-ts` package re-exports the pinned Pi types and declares PiG-only calls. It contains no runtime implementation.
+Node extensions use Pi-compatible exports through the Node runtime bridge. The `extensions/sdk-ts` package re-exports the pinned Pi types and declares Ompig-only calls. It contains no runtime implementation.
 
 Runnable examples for each language are in `examples/extensions/`: `go-factory`, `rust-factory`, `python-factory` and `node-factory`.
 
@@ -625,12 +625,12 @@ All runtime bridges target the same current extension behavior. A new capability
 
 ## Related documentation
 
-- [Piglets](/docs/latest/piglets)
-- [Piglet Binaries](/docs/latest/piglet-binaries)
+- [Ompiglets](/docs/latest/ompiglets)
+- [Ompiglet Binaries](/docs/latest/ompiglet-binaries)
 - [Packages](/docs/latest/packages)
 - [Derivative harnesses](/docs/latest/derivative-harnesses)
 - [Upstream Pi extensions](https://pi.dev/docs/latest/extensions)
 
 ### What one upgrade run does
 
-One run rewrites every changed API it can do safely, in statement and expression position (including a getter that is the only argument of `len`, `cap` or `panic`). A `Context.ConfigHome` in a function with no error result is rewritten to `ctx.Notify(...)` the error and return. A getter that cannot move before its statement (a `&&` operand, an `else if`, a loop condition) calls a helper in `pig_upgrade_getters.go` that returns the old zero value on failure. Uses that have no safe form stay, and are listed with file, line and the form to write; the extension is then `partly upgraded` and the command exits 1. `--dry-run` compiles the rewritten extension in a temporary directory and reports `would upgrade` only when it builds, `would partly upgrade` when it builds once the listed uses are changed. Startup offers every Go extension the upgrade would touch, so one yes covers them all.
+One run rewrites every changed API it can do safely, in statement and expression position (including a getter that is the only argument of `len`, `cap` or `panic`). A `Context.ConfigHome` in a function with no error result is rewritten to `ctx.Notify(...)` the error and return. A getter that cannot move before its statement (a `&&` operand, an `else if`, a loop condition) calls a helper in `ompig_upgrade_getters.go` that returns the old zero value on failure. Uses that have no safe form stay, and are listed with file, line and the form to write; the extension is then `partly upgraded` and the command exits 1. `--dry-run` compiles the rewritten extension in a temporary directory and reports `would upgrade` only when it builds, `would partly upgrade` when it builds once the listed uses are changed. Startup offers every Go extension the upgrade would touch, so one yes covers them all.

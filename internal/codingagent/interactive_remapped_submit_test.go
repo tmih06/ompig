@@ -5,11 +5,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/tui"
 )
 
 func BenchmarkActiveKeyDiagnostics(b *testing.B) {
-	b.Setenv("PIG_DEBUG", "") // Exercise classification without writing the global diagnostic file.
+	b.Setenv("OMPIG_DEBUG", "") // Exercise classification without writing the global diagnostic file.
 	previous := tui.GetTUIKeybindings()
 	b.Cleanup(func() { tui.SetTUIKeybindings(previous) })
 	bindings := DefaultKeybindingsManager()
@@ -24,10 +24,10 @@ func BenchmarkActiveKeyDiagnostics(b *testing.B) {
 
 // Pi CustomEditor.handleInput delegates ordinary input to Editor, whose configured tui.input.submit binding invokes onSubmit. Diagnostics must not replace that installed manager.
 func TestTerminalInputPreservesRemappedSubmitBindings(t *testing.T) {
-	t.Setenv("PIG_DEBUG", "")
+	t.Setenv("OMPIG_DEBUG", "")
 	for _, debug := range []string{"", "1"} {
 		t.Run("debug="+debug, func(t *testing.T) {
-			t.Setenv("PIG_DEBUG_KEYS", debug)
+			t.Setenv("OMPIG_DEBUG_KEYS", debug)
 			previous := tui.GetTUIKeybindings()
 			t.Cleanup(func() { tui.SetTUIKeybindings(previous) })
 			q := newInputQueueMode(t)

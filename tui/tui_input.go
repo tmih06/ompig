@@ -114,7 +114,7 @@ func (t *tuiBase) RemoveInputListener(listener *TuiInputListener) {
 }
 
 // RunInputListeners passes data through the registered listeners in registration order. It returns the data after any replacements and whether a listener consumed it or left it empty, in which case nothing else should receive it.
-// pig divergence (D105): the driver owns the terminal reader; extension input listeners run asynchronously around the renderer's listener chain.
+// ompig divergence (D105): the driver owns the terminal reader; extension input listeners run asynchronously around the renderer's listener chain.
 func (t *tuiBase) RunInputListeners(data string) (string, bool) {
 	t.input.mu.Lock()
 	empty := t.input.listeners.size() == 0

@@ -1,4 +1,4 @@
-//go:build !pig_strip_syntax_highlight
+//go:build !ompig_strip_syntax_highlight
 
 package tui
 
@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/internal/hljs"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/internal/hljs"
 )
 
 // highlightOracle is testdata from automation/gen/generate-highlight-oracle.mjs: Pi's highlighting of the corpus, replayed in the same call order.
@@ -125,7 +125,7 @@ func mutateHighlightSample(code string, mutation int) string {
 	return jsstring.FromUTF16(units)
 }
 
-// TestHighlightMatchesPiOracle replays Pi's highlighting of the highlight.js 10.7.3 test inputs and the PiG cases: language support, the highlight.js HTML, highlightCode and the Markdown theme's highlightCode, before and after every language loads, then mutated samples in every language.
+// TestHighlightMatchesPiOracle replays Pi's highlighting of the highlight.js 10.7.3 test inputs and the Ompig cases: language support, the highlight.js HTML, highlightCode and the Markdown theme's highlightCode, before and after every language loads, then mutated samples in every language.
 func TestHighlightMatchesPiOracle(t *testing.T) {
 	withTrueColor(t, true)
 	SetTheme("dark")

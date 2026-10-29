@@ -7,10 +7,10 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/internal/perfgate"
-	"github.com/MichaelKinsy/PiG/internal/testscaling"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/internal/perfgate"
+	"github.com/tmih06/ompig/internal/testscaling"
 )
 
 // Complexity gates for the per-turn and per-event Session paths.
@@ -44,7 +44,7 @@ func newScalingSession(t *testing.T, services *AgentSessionServices, history, de
 }
 
 func TestScalingSessionTurn(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -93,7 +93,7 @@ func TestScalingSessionTurn(t *testing.T) {
 
 // A later turn of a Session at history N, 10N and 100N exchanges (4 entries each): the allocation count is independent of the history and the bytes are linear, the copies of the history the request makes (one 16-byte header per message in the provider request, one 48-byte message per copy of the run context).
 func TestSessionTurnScalingExponents(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)
@@ -112,7 +112,7 @@ func TestSessionTurnScalingExponents(t *testing.T) {
 
 // The heap a Session keeps per history entry once it has run a turn: the entries with their records, the kept projection, the agent's transcript, which shares the projection's messages, and the provider messages the next request reuses. The difference between a history of 200 and one of 2,000 exchanges (4 entries each) cancels the Session's fixed cost.
 func TestSessionRetainedBytesPerEntry(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	services, err := CreateAgentSessionServices(CreateAgentSessionServicesOptions{CWD: t.TempDir()})
 	if err != nil {
 		t.Fatal(err)

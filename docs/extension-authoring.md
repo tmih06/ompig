@@ -1,6 +1,6 @@
-# Pig extension authoring
+# Ompig extension authoring
 
-Pig extensions target the upstream pi extension API through the subprocess bridge. The language-specific SDKs are bridges into the same protocol, not separate APIs.
+Ompig extensions target the upstream pi extension API through the subprocess bridge. The language-specific SDKs are bridges into the same protocol, not separate APIs.
 
 Read these files before adding or changing extension behavior:
 
@@ -8,7 +8,7 @@ Read these files before adding or changing extension behavior:
 2. `docs/parity/DIVERGENCES.md`: numbered intentional differences from upstream pi.
 3. `coding/extension/host/subprocess/protocol.go`: canonical wire protocol.
 4. `extensions/sdk/`, `extensions/sdk-rs/`, `extensions/sdk-py/`: SDK bridges.
-5. `extensions/sdk-ts/`: declarations for Pi-compatible TypeScript extensions and PiG-only additions.
+5. `extensions/sdk-ts/`: declarations for Pi-compatible TypeScript extensions and Ompig-only additions.
 6. `test/extension-conformance/conformance_test.go`: cross-SDK behavior gate.
 7. `test/extension-conformance/sdkscenarios/`: the scenario table. A scenario is data: the extension every SDK's scenario driver (`testdata/scenario-driver*`) registers, the host steps `TestSDKScenarios` runs against the real host, and the observation every SDK must produce. Add a capability as a scenario here, not as a copy per SDK. A row an SDK fails today goes in the scenario's `Red` map with the owner of the fix and the observation the SDK produces today (`Got`). `make test-sdk-conformance` runs the table. A red row must produce exactly its `Got`, and the entry must be deleted when the row passes.
 8. `docs/extension-sdk-consistency.md`: for every Pi extension API member and event, whether each SDK has it and whether a conformance fixture of that SDK reaches it. A member an SDK has and no fixture reaches is a hole: it needs an entry in `test/parity/sdk-conformance-gaps.toml` with an owner and the row that closes it, and `go run ./test/parity/cmd/sdksurface` fails on an unlisted hole and on an entry whose hole closed. Close a hole with a scenario row, not a per-SDK test.
@@ -21,7 +21,7 @@ Read these files before adding or changing extension behavior:
 - Do not add a WASM runtime.
 - Do not add an embedded JavaScript runtime.
 - Do not add dynamic Go plugins or `plugin.Open`.
-- Do not add a general dynamic linked/in-process extension loader. Piglet builds may fuse compatible reviewed Go SDK factories through the governed D31 path; the subprocess host remains the semantic reference. The compiled-in extension factory form of [the extension factory trust split](specs/extension-factory-trust.md) is the one exception. It is an `extension.ExtensionFactory` (`func(extension.API) error`) that the source of the binary's own `main` package passes to the loader by value: Stock PiG's built-in rows, or an embedding program's own factories. It is not an authoring form for Packages or Piglets. Their Go extensions use the Go SDK factory (`sdk.Factory`), including when a Piglet Binary fuses them (D31). Settings and `-e builtin:<name>` may select or disable a registered built-in by name. Nothing loaded at run time and nothing a Piglet supplies can add factory code.
+- Do not add a general dynamic linked/in-process extension loader. Ompiglet builds may fuse compatible reviewed Go SDK factories through the governed D31 path; the subprocess host remains the semantic reference. The compiled-in extension factory form of [the extension factory trust split](specs/extension-factory-trust.md) is the one exception. It is an `extension.ExtensionFactory` (`func(extension.API) error`) that the source of the binary's own `main` package passes to the loader by value: Stock Ompig's built-in rows, or an embedding program's own factories. It is not an authoring form for Packages or Ompiglets. Their Go extensions use the Go SDK factory (`sdk.Factory`), including when a Ompiglet Binary fuses them (D31). Settings and `-e builtin:<name>` may select or disable a registered built-in by name. Nothing loaded at run time and nothing a Ompiglet supplies can add factory code.
 - Do not introduce multi-register (`RegisterPayload.Extensions`, `RequestPayload.TargetExtension`) unless a new approved spec explicitly chooses it. Packed cells currently use the current subprocess wire with one socket per contained extension.
 - If a behavior differs from upstream pi, either fix it or add a numbered `D<N>` entry to `docs/parity/DIVERGENCES.md` with call-site markers and tests.
 
@@ -72,7 +72,7 @@ The Go subprocess SDK already runs each inbound handler on its own goroutine. Bl
 
 `before_agent_start` handlers receive `event.messageType`: `"user"` with `event.prompt` and `event.images` for a run that a user message starts, and `"custom"` with `event.message` for a run that `sendMessage` with `triggerTurn` starts while the agent is idle. A custom run also checks compaction first, applies the handlers' result and delivers pending `nextTurn` messages, as a user run does. Either run counts as busy while its handlers run, so messages sent meanwhile join it and a prompt or `sendUserMessage` must name its delivery. Handlers that should act only on user prompts check `event.messageType === "user"`, as `examples/extensions/plan-mode` does. This is Pi 1.4.0's behavior (Pi #5581, Pi PR #10739).
 
-`before_agent_start` handlers can edit `event.systemPromptOptions.sections`. PiG preserves authored section order, validates XML tag names, records section deltas in the Session, and removes a per-run section when the next unmodified run starts. The host awaits the handler and retains section mutations before it reports an error. These mutations do not change the Session's base options.
+`before_agent_start` handlers can edit `event.systemPromptOptions.sections`. Ompig preserves authored section order, validates XML tag names, records section deltas in the Session, and removes a per-run section when the next unmodified run starts. The host awaits the handler and retains section mutations before it reports an error. These mutations do not change the Session's base options.
 
 The Go SDK supplies `*sdk.SystemPromptSections` rather than a Go map because map iteration cannot retain insertion order. Use `Set` and `Delete` on that collection:
 
@@ -86,7 +86,7 @@ ext.OnEvent("before_agent_start", func(_ sdk.Context, data map[string]any) (any,
 
 Node and Python handlers edit the section object or dictionary. Rust handlers register with `Extension::on_before_agent_start` and edit the ordered JSON value with `event.edit_system_prompt_options(|options| ...)`, returning an `Err` to report an error. Native Go reference handlers use `extension.BeforeAgentStartOptions(ctx)` to access the shared per-run options and mutate its `Sections`, an `*ai.OrderedSections`. `BeforeAgentStartEvent.SystemPromptOptions` remains a value for source compatibility; assign collection replacements through the accessor. This transport carries section values, not cross-process object aliases.
 
-`context` handlers: Pi keeps every system message in place when a handler returns the conversation it received (the same message objects, edited or not) and replaces them with one leading system message when it returns anything else. Node, Python and Go decide this by object identity. A Rust handler holds values, so it states it: return `None` for a conversation left as received, return `pig_sdk::context_unchanged()` after editing messages in place, and any list it returns, even an equal one, is a replacement.
+`context` handlers: Pi keeps every system message in place when a handler returns the conversation it received (the same message objects, edited or not) and replaces them with one leading system message when it returns anything else. Node, Python and Go decide this by object identity. A Rust handler holds values, so it states it: return `None` for a conversation left as received, return `ompig_sdk::context_unchanged()` after editing messages in place, and any list it returns, even an equal one, is a replacement.
 
 ### Current system prompt
 
@@ -136,7 +136,7 @@ Upstream Promise-based dialogs (`select`, `confirm`, `input`, `editor`) map to b
 
 A handler that blocks on the owner loop instead of beside it deadlocks the terminal: the loop is what installs a dialog and feeds it keystrokes, so Enter appears to do nothing and no key responds again, with nothing on screen to explain it. The same applies to `model_select`, which interactive mode emits from the loop while `/model` runs.
 
-For Pig core/in-process code, slow work leaves the TUI loop and every UI mutation returns through the approved run-on-main mechanism. Map `AbortSignal` to `context.Context`, `sdk.Context.Done()`, or the owning lifetime's cancellation channel and test cancellation before and during the operation.
+For Ompig core/in-process code, slow work leaves the TUI loop and every UI mutation returns through the approved run-on-main mechanism. Map `AbortSignal` to `context.Context`, `sdk.Context.Done()`, or the owning lifetime's cancellation channel and test cancellation before and during the operation.
 
 Pi's `ctx.signal` is the signal of the run in progress, not of the handler's request: it is `undefined` while no run is active (a command or `session_start` while idle), one object for the whole run, and aborted with the run even while a handler is still in flight. Node exposes it as `ctx.signal`, the Go SDK as `ctx.Signal()` (a `context.Context`, nil while no run is active), Python as `ctx.signal` and Rust as `ctx.signal()` (a `ProviderSignal`, `None` while no run is active). `sdk.Context.Done()`, `Err()` and Rust and Python `is_cancelled()` report the handler's own request, which the host cancels when it abandons that request.
 
@@ -152,7 +152,7 @@ Session history stays unloaded until an extension calls `getEntries` or `getBran
 
 ### Focused subprocess components
 
-`ctx.ui.custom()` remains extension-owned in subprocess realizations. The SDK constructs and renders the component locally; Pig opens a native focus-owning overlay and transports only ordered input, replaceable line snapshots, and the terminal result/error. Snapshots carry their render width and a monotone per-overlay sequence; the host rejects stale-width and out-of-order frames. Core editor keybindings do not receive input while the overlay owns focus. A component opened with `overlay: true` renders at the width Pi's `TUI.resolveOverlayLayout` gives the overlay (`min(80, available)` by default, or `overlayOptions.width`, `minWidth` and `margin`). An inline component and a legacy titled modal render at the terminal width. Snapshots stay keyed by the terminal width. Identical snapshots are suppressed before transport, and host rendering reads only the latest cached frame.
+`ctx.ui.custom()` remains extension-owned in subprocess realizations. The SDK constructs and renders the component locally; Ompig opens a native focus-owning overlay and transports only ordered input, replaceable line snapshots, and the terminal result/error. Snapshots carry their render width and a monotone per-overlay sequence; the host rejects stale-width and out-of-order frames. Core editor keybindings do not receive input while the overlay owns focus. A component opened with `overlay: true` renders at the width Pi's `TUI.resolveOverlayLayout` gives the overlay (`min(80, available)` by default, or `overlayOptions.width`, `minWidth` and `margin`). An inline component and a legacy titled modal render at the terminal width. Snapshots stay keyed by the terminal width. Identical snapshots are suppressed before transport, and host rendering reads only the latest cached frame.
 
 Go components implement `sdk.RemoteComponent` and may implement `sdk.RemoteComponentDisposer`:
 
@@ -191,13 +191,13 @@ func (v *timerView) SetInvalidate(invalidate func()) {
 }
 ```
 
-Store the callback under the same lock as timer-owned state. Call it after the state changes. Treat the callback as a render request, not as permission to render or mutate TUI state directly. PiG coalesces repeated requests, limits timer-driven frame production to the TUI 16 ms render interval, and transports only a changed frame. Input-driven frames remain immediate.
+Store the callback under the same lock as timer-owned state. Call it after the state changes. Treat the callback as a render request, not as permission to render or mutate TUI state directly. Ompig coalesces repeated requests, limits timer-driven frame production to the TUI 16 ms render interval, and transports only a changed frame. Input-driven frames remain immediate.
 
 Rust implements `set_invalidate` on `RemoteComponent` and stores the optional `RemoteComponentInvalidate` callback. Python can implement `set_invalidate(callback)` and must accept `None` to detach. Node extensions use the `tui.requestRender()` callback passed to the upstream component factory.
 
 One terminal gives focus to one extension dialog or overlay at a time. A second interactive call waits off the TUI loop. Cancellation removes a waiting call before it can take focus. Input events stay ordered and never coalesce. Render snapshots are replaceable and use a bounded queue.
 
-Completion, host cancellation, transport failure, reload, and shutdown stop the component worker. PiG rejects late frames from a completed generation. The SDK detaches the invalidation callback before it calls `dispose` exactly once. A component callback must return promptly. If it does not stop by the cleanup deadline, the SDK reports the failure and does not race disposal against the stuck callback.
+Completion, host cancellation, transport failure, reload, and shutdown stop the component worker. Ompig rejects late frames from a completed generation. The SDK detaches the invalidation callback before it calls `dispose` exactly once. A component callback must return promptly. If it does not stop by the cleanup deadline, the SDK reports the failure and does not race disposal against the stuck callback.
 
 Rust uses `RemoteComponent` with `Context::custom_component`; Python uses `Context.custom(component, options)`. The Node bridge accepts the upstream component factory directly.
 
@@ -205,7 +205,7 @@ Rust uses `RemoteComponent` with `Context::custom_component`; Python uses `Conte
 
 To draw Pi's own components (container, box, text, truncated text, markdown, spacer, dynamic border, select list, settings list, image, loader, stacks) instead of lines, return a kit view; the host renders it with its `tui` ports, so the terminal shows the bytes Pi's components draw. The forms sit next to the line forms, and every line-form signature is unchanged (`docs/plan/extension-component-kit.md` §9):
 
-| surface | Go (`sdk/kit`) | Rust (`pig_sdk::kit`) | Python (`pig_sdk.kit`) |
+| surface | Go (`sdk/kit`) | Rust (`ompig_sdk::kit`) | Python (`ompig_sdk.kit`) |
 |---|---|---|---|
 | focused overlay | `ctx.Custom` with a `ViewComponent` (`View(width)`, `HandleViewEvent`) | `ctx.custom_view` with a `ViewComponent` (`view`, `handle_view_event`) | `ctx.custom` with a component that has `view(width)` and optionally `handle_view_event(event)` |
 | widget | `ctx.SetWidget(key, kit.View, opts...)` | `ctx.set_widget_view(key, view, options)` | `ctx.set_widget(key, kit.View, options)` |
@@ -227,7 +227,7 @@ directly.
 
 ### Mouse in custom components
 
-As in Pi, a `ctx.ui.custom` component (overlay or editor slot) receives mouse events only while the user runs the default fullscreen `tuiMode`; regular mode sends none. Each event is Pi's `TuiMouseEvent` (`type` press, release, move, drag, click or wheel; `button`; `x`/`y` local to the component; screen position, bounds, modifiers, `wheelDelta`, `clickCount`). Go implements the optional `sdk.MouseHandler` (`HandleMouse(sdk.MouseEvent) (sdk.RemoteComponentResult, error)`), Rust returns `true` from `handles_mouse` and implements `handle_mouse(&MouseEvent)`, Python implements `handle_mouse(event: pig_sdk.MouseEvent)`, and Node uses Pi's own `handleMouse`. The result means what `HandleInput`'s does, and events share its serial queue. A kit view's lists take clicks and wheel first and report them as `kit.Event`s; only what they leave unhandled reaches the handler. A component that takes the mouse is treated as handling every event in its bounds, so text selection does not start over it. In a frontend such as Tern, a click on an element of the component's view arrives as the same terminal gesture at that element's cell.
+As in Pi, a `ctx.ui.custom` component (overlay or editor slot) receives mouse events only while the user runs the default fullscreen `tuiMode`; regular mode sends none. Each event is Pi's `TuiMouseEvent` (`type` press, release, move, drag, click or wheel; `button`; `x`/`y` local to the component; screen position, bounds, modifiers, `wheelDelta`, `clickCount`). Go implements the optional `sdk.MouseHandler` (`HandleMouse(sdk.MouseEvent) (sdk.RemoteComponentResult, error)`), Rust returns `true` from `handles_mouse` and implements `handle_mouse(&MouseEvent)`, Python implements `handle_mouse(event: ompig_sdk.MouseEvent)`, and Node uses Pi's own `handleMouse`. The result means what `HandleInput`'s does, and events share its serial queue. A kit view's lists take clicks and wheel first and report them as `kit.Event`s; only what they leave unhandled reaches the handler. A component that takes the mouse is treated as handling every event in its bounds, so text selection does not start over it. In a frontend such as Tern, a click on an element of the component's view arrives as the same terminal gesture at that element's cell.
 
 ### Review evidence
 
@@ -249,21 +249,21 @@ Rust returns `ProjectTrustResult` with `ProjectTrustDecision`; Python returns a 
 
 ## Set a native login
 
-For a custom PiG mascot, scaffold the standard PiG artwork and login handler first:
+For a custom Ompig mascot, scaffold the standard Ompig artwork and login handler first:
 
 ```bash
-pig extension init ./my-pig --name my-pig --login
+ompig extension init ./my-ompig --name my-ompig --login
 ```
 
 Keep the generated `Brand` and `Hero` fields unchanged. Edit only the mascot, its palette colors, and identity text.
 
-Use `SetLogin` to give an interactive Pig session an extension-defined identity. Pig owns the layout and operational status. The definition has one strict current unversioned shape.
+Use `SetLogin` to give an interactive Ompig session an extension-defined identity. Ompig owns the layout and operational status. The definition has one strict current unversioned shape.
 
 The grids have exact dimensions: `brand` is 41 by 5, `hero` is 32 by 14, and `mascot` is 16 by 14. Use ASCII symbols in each grid. `.` means transparent. Map every other symbol to one `#RRGGBB` color. Use at most 32 colors. A fully transparent `brand` omits the brand band, and the hero and mascot start at the top of the header.
 
-Pig rejects unknown or duplicate fields, bad dimensions, non-ASCII grid data, missing or unused palette symbols, invalid colors, and invalid text. `name`, `description`, and `tagline` must be non-empty. Their display-width limits are 24, 48, and 76 columns. The combined name and description line is limited to 80 columns.
+Ompig rejects unknown or duplicate fields, bad dimensions, non-ASCII grid data, missing or unused palette symbols, invalid colors, and invalid text. `name`, `description`, and `tagline` must be non-empty. Their display-width limits are 24, 48, and 76 columns. The combined name and description line is limited to 80 columns.
 
-`SetLogin` and `SetHeader` use the same slot. The last successful call wins. Clear the header to restore Stock Pig's text header. A rejected login keeps the current header. Quiet startup keeps the slot hidden. Widths below 66 columns show compact text without art. The host renders from local validated data and does not call the extension during each render.
+`SetLogin` and `SetHeader` use the same slot. The last successful call wins. Clear the header to restore Stock Ompig's text header. A rejected login keeps the current header. Quiet startup keeps the slot hidden. Widths below 66 columns show compact text without art. The host renders from local validated data and does not call the extension during each render.
 
 Go:
 
@@ -305,27 +305,27 @@ await ctx.ui.setLogin({
 Preview one extension without starting a model session:
 
 ```bash
-pig extension preview-login <path>
+ompig extension preview-login <path>
 ```
 
-The command requires exactly one extension source. It fails if resolution finds zero or multiple extensions, `session_start` fails, no login is set, or the login is invalid. Use `/reload` after an edit. A login remains an extension Resource. Activate it through a Piglet `extensions` entry, user extension policy, or `pig -e <path>`. Verify activation by starting or reloading through that path and checking the identity name. Keep product identities outside Stock Pig and select them through an ordinary Piglet extension entry.
+The command requires exactly one extension source. It fails if resolution finds zero or multiple extensions, `session_start` fails, no login is set, or the login is invalid. Use `/reload` after an edit. A login remains an extension Resource. Activate it through a Ompiglet `extensions` entry, user extension policy, or `ompig -e <path>`. Verify activation by starting or reloading through that path and checking the identity name. Keep product identities outside Stock Ompig and select them through an ordinary Ompiglet extension entry.
 
 ### Add a sprite
 
-Use `RegisterSprite` to add a sprite to `/sprite` without replacing the header (D2). A sprite has a lowercase slug `id` of at most 32 characters, a one-line `name` and `tagline`, a 16-by-14 `mascot` that the startup header draws as its head and `/sprite preview` draws beside the `PiG.` wordmark, and a `palette` that maps each symbol to a `#RRGGBB` color. `.` is transparent. Start from PiG's standard pig (`pigMascot` in `coding/piglogin/art.go`) so it matches the built-in sprites. The id must not be a built-in sprite's id or another extension's.
+Use `RegisterSprite` to add a sprite to `/sprite` without replacing the header (D2). A sprite has a lowercase slug `id` of at most 32 characters, a one-line `name` and `tagline`, a 16-by-14 `mascot` that the startup header draws as its head and `/sprite preview` draws beside the `Ompig.` wordmark, and a `palette` that maps each symbol to a `#RRGGBB` color. `.` is transparent. Start from Ompig's standard ompig (`ompigMascot` in `coding/piglogin/art.go`) so it matches the built-in sprites. The id must not be a built-in sprite's id or another extension's.
 
 ```go
 err := ctx.RegisterSprite(sdk.SpriteDefinition{
-    ID: "blue-pig", Name: "Blue PiG", Tagline: "A pig in blue.",
+    ID: "blue-ompig", Name: "Blue Ompig", Tagline: "A ompig in blue.",
     Mascot: mascot, Palette: palette,
 })
 ```
 
-Rust uses `ctx.register_sprite(&SpriteDefinition { .. })`, Python `ctx.register_sprite(SpriteDefinition(...))`, and Node `await ctx.ui.registerSprite({ id, name, tagline, mascot, palette })`. Register the sprite in `session_start`. The sprite appears after the built-in sprites in `/sprite list` and the picker, and `/sprite set <id>` saves it. When the extension is not loaded, the header draws `pig-default` and the saved choice stays.
+Rust uses `ctx.register_sprite(&SpriteDefinition { .. })`, Python `ctx.register_sprite(SpriteDefinition(...))`, and Node `await ctx.ui.registerSprite({ id, name, tagline, mascot, palette })`. Register the sprite in `session_start`. The sprite appears after the built-in sprites in `/sprite list` and the picker, and `/sprite set <id>` saves it. When the extension is not loaded, the header draws `ompig-default` and the saved choice stays.
 
 ## Choosing a source form
 
-Pig accepts exactly one conventional factory or exact standalone form.
+Ompig accepts exactly one conventional factory or exact standalone form.
 
 | Language | Factory | Standalone |
 |---|---|---|
@@ -335,29 +335,29 @@ Pig accepts exactly one conventional factory or exact standalone form.
 | Node | Pi-compatible default export | exact executable script with a shebang |
 | Native | n/a | exact executable file |
 
-Factories of one language may share a generated language cell. Packed TypeScript and JavaScript factories share one Node process (D20). Every standalone remains isolated. Pig rejects mixed languages, several factories, factory-plus-standalone roots, nonstandard factory symbols, missing entrypoints, and identity mismatches. A direct directory uses its directory name as the expected identity. A Package or Piglet supplies its declared member name. Select a narrower exact root instead of relying on scan order.
+Factories of one language may share a generated language cell. Packed TypeScript and JavaScript factories share one Node process (D20). Every standalone remains isolated. Ompig rejects mixed languages, several factories, factory-plus-standalone roots, nonstandard factory symbols, missing entrypoints, and identity mismatches. A direct directory uses its directory name as the expected identity. A Package or Ompiglet supplies its declared member name. Select a narrower exact root instead of relying on scan order.
 
-A Piglet Binary may fuse a compatible Go factory into Pig's process. Fused code must return errors and use extension host/UI APIs for output. The build rejects `os.Exit`, `os.Chdir`, `log.Fatal*`, `fmt.Print*`, and `os.Stdout` in the factory's local package closure with `PIGLET_FUSED_PROCESS_HAZARD` because those operations would terminate Pig, change its working directory, or corrupt terminal output.
+A Ompiglet Binary may fuse a compatible Go factory into Ompig's process. Fused code must return errors and use extension host/UI APIs for output. The build rejects `os.Exit`, `os.Chdir`, `log.Fatal*`, `fmt.Print*`, and `os.Stdout` in the factory's local package closure with `OMPIGLET_FUSED_PROCESS_HAZARD` because those operations would terminate Ompig, change its working directory, or corrupt terminal output.
 
-Use `pig extension init <path>` to create a factory. Add `--isolated` to create a standalone. The scaffold writes no extension metadata file.
+Use `ompig extension init <path>` to create a factory. Add `--isolated` to create a standalone. The scaffold writes no extension metadata file.
 
 ### Extension directories that hold resource directories
 
-Pig names an extension directory the way Pi does. The rule is the same for Go, Rust, Python, and Node. For `pig -e <dir>` and for a `packages` setting entry, a directory with a `pi` block in `package.json`, or with an `extensions`, `skills`, `prompts`, or `themes` directory, is a Package. Pig loads the extensions that its `pi` block or its `extensions` directory names, and registers its prompts, skills, and themes. Pig does not load the extension at the directory root, so a `go.mod`, `Cargo.toml`, Python factory, or `index.ts` beside a `prompts` directory loads nothing. A directory with none of those is one extension. An `extensions` setting entry always names extensions: it loads the directory root and registers no resources from it.
+Ompig names an extension directory the way Pi does. The rule is the same for Go, Rust, Python, and Node. For `ompig -e <dir>` and for a `packages` setting entry, a directory with a `pi` block in `package.json`, or with an `extensions`, `skills`, `prompts`, or `themes` directory, is a Package. Ompig loads the extensions that its `pi` block or its `extensions` directory names, and registers its prompts, skills, and themes. Ompig does not load the extension at the directory root, so a `go.mod`, `Cargo.toml`, Python factory, or `index.ts` beside a `prompts` directory loads nothing. A directory with none of those is one extension. An `extensions` setting entry always names extensions: it loads the directory root and registers no resources from it.
 
 To ship an extension together with prompts, put the extension in a subdirectory and list it in the `pi.extensions` array of `package.json`, or put it under the Package's `extensions` directory.
 
 ### Portable staged SDK resolution
 
-`pig extension init` writes versioned SDK dependencies without machine-local paths. During a source build, Pig resolves an un-replaced Go requirement on `github.com/MichaelKinsy/PiG/extensions/sdk` or an un-pathed Rust `pig-sdk` dependency to the SDK staged by the running binary under the active config root. The build uses a temporary Go modfile or Cargo patch and never edits the authored `go.mod` or `Cargo.toml`. An explicit valid author replacement or path wins. If staged material is missing, run `pig reload`, which restages the Go, Python, and Rust SDKs.
+`ompig extension init` writes versioned SDK dependencies without machine-local paths. During a source build, Ompig resolves an un-replaced Go requirement on `github.com/tmih06/ompig/extensions/sdk` or an un-pathed Rust `ompig-sdk` dependency to the SDK staged by the running binary under the active config root. The build uses a temporary Go modfile or Cargo patch and never edits the authored `go.mod` or `Cargo.toml`. An explicit valid author replacement or path wins. If staged material is missing, run `ompig reload`, which restages the Go, Python, and Rust SDKs.
 
-Older Go factories import the SDK as `github.com/mainstai/pig/extensions/sdk`. Pig still loads these factories and exact standalones. The builder resolves that legacy path to a private copy of the running binary's complete SDK module, rewrites SDK self-imports under the alias, and ignores the extension's own replacement for it. Authored sources and module files remain unchanged. Legacy factories share cells only with other legacy factories. They are never fused into a Piglet Binary, because their `*sdk.Extension` is a distinct Go type. Change the import path and the `go.mod` requirement to fuse one.
+Older Go factories import the SDK as `github.com/mainstai/ompig/extensions/sdk`. Ompig still loads these factories and exact standalones. The builder resolves that legacy path to a private copy of the running binary's complete SDK module, rewrites SDK self-imports under the alias, and ignores the extension's own replacement for it. Authored sources and module files remain unchanged. Legacy factories share cells only with other legacy factories. They are never fused into a Ompiglet Binary, because their `*sdk.Extension` is a distinct Go type. Change the import path and the `go.mod` requirement to fuse one.
 
 ## Upgrade a Go extension written for an older SDK
 
-`pig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]` rewrites a Go extension with tested, type-aware rules (D109). It backs up the originals, prints a diff, rebuilds, and reports per extension. A change with no safe rewrite is reported with its remedy and left alone. The global setting `extensionsAutoUpgrade` (default false) runs the same rules at startup and after `pig update`; a project settings file cannot turn it on.
+`ompig extension upgrade [<name|path>...] [--all] [--dry-run] [--summary]` rewrites a Go extension with tested, type-aware rules (D109). It backs up the originals, prints a diff, rebuilds, and reports per extension. A change with no safe rewrite is reported with its remedy and left alone. The global setting `extensionsAutoUpgrade` (default false) runs the same rules at startup and after `ompig update`; a project settings file cannot turn it on.
 
-A Go build that fails only on changed SDK symbols reports `written for an older SDK` and names each changed API with its old and new shape. Interactive startup then asks whether to run `pig extension upgrade`. Print, JSON, and RPC modes print the command and exit 1.
+A Go build that fails only on changed SDK symbols reports `written for an older SDK` and names each changed API with its old and new shape. Interactive startup then asks whether to run `ompig extension upgrade`. Print, JSON, and RPC modes print the command and exit 1.
 
 The Go SDK changes that the upgrade reports since 0.4.1:
 
@@ -371,7 +371,7 @@ The Go SDK changes that the upgrade reports since 0.4.1:
 
 ## Go SDK nullable values
 
-Keep `ContextUsage.Tokens` and `Percent` as pointers. Nil means unknown after compaction; a pointer to zero means known zero. `GetContextUsage()` can itself return nil when no usable model window exists. Check presence before arithmetic or select an explicit fallback with `TokensOr` / `PercentOr`. `sdk.Bool(true)` and `sdk.Bool(false)` construct optional booleans; nil leaves the option unset. `pig extension upgrade` rewrites code written before these pointer types. These helpers do not change the wire or any callback lifetime.
+Keep `ContextUsage.Tokens` and `Percent` as pointers. Nil means unknown after compaction; a pointer to zero means known zero. `GetContextUsage()` can itself return nil when no usable model window exists. Check presence before arithmetic or select an explicit fallback with `TokensOr` / `PercentOr`. `sdk.Bool(true)` and `sdk.Bool(false)` construct optional booleans; nil leaves the option unset. `ompig extension upgrade` rewrites code written before these pointer types. These helpers do not change the wire or any callback lifetime.
 
 ## Factory contracts
 
@@ -380,7 +380,7 @@ Keep `ContextUsage.Tokens` and `Percent` as pointers. Nil means unknown after co
 ```go
 package myext
 
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 
 func Extension() *sdk.Extension {
     ext := sdk.New("my-go-ext")
@@ -391,15 +391,15 @@ func Extension() *sdk.Extension {
 }
 ```
 
-The package can use ordinary helper and `internal` packages. A module or workspace root with several factory packages is ambiguous and reports every candidate. Select one exact package directory. Pig keeps its containing module or workspace as the compiler closure. `NewExtension` and other factory symbols are not accepted.
+The package can use ordinary helper and `internal` packages. A module or workspace root with several factory packages is ambiguous and reports every candidate. Select one exact package directory. Ompig keeps its containing module or workspace as the compiler closure. `NewExtension` and other factory symbols are not accepted.
 
 ### Rust
 
 ```rust
-pub fn new_extension() -> pig_sdk::Extension {
-    let mut ext = pig_sdk::Extension::new("my-rust-ext");
-    ext.tool("hello", "Say hello", pig_sdk::empty_schema(), |_ctx, _args| {
-        pig_sdk::ToolResult::json(serde_json::json!({"content": "hello"}))
+pub fn new_extension() -> ompig_sdk::Extension {
+    let mut ext = ompig_sdk::Extension::new("my-rust-ext");
+    ext.tool("hello", "Say hello", ompig_sdk::empty_schema(), |_ctx, _args| {
+        ompig_sdk::ToolResult::json(serde_json::json!({"content": "hello"}))
     });
     ext
 }
@@ -410,11 +410,11 @@ Keep the factory in `src/lib.rs`. Use only `src/main.rs` for standalone form.
 ### Python
 
 ```python
-import pig_sdk
+import ompig_sdk
 
 
-def new_extension() -> pig_sdk.Extension:
-    ext = pig_sdk.Extension("my-python-ext")
+def new_extension() -> ompig_sdk.Extension:
+    ext = ompig_sdk.Extension("my-python-ext")
     ext.tool("hello", "Say hello", {"type": "object"}, lambda ctx, args: {"content": "hello"})
     return ext
 ```
@@ -423,13 +423,13 @@ One selected root can contain only one module with this factory.
 
 ### Node
 
-Export one Pi-compatible default extension function. Pig packs Node factories into one shared Node process unless an extension is isolated. Import the canonical API from `@earendil-works/pi-coding-agent`. Pig supplies the compatible runtime module.
+Export one Pi-compatible default extension function. Ompig packs Node factories into one shared Node process unless an extension is isolated. Import the canonical API from `@earendil-works/pi-coding-agent`. Ompig supplies the compatible runtime module.
 
-Use `@michaelkinsy/pig-extension-types` during development when the extension uses a PiG-only API such as `ui.setLogin`. The declaration package pins the exact Pi version from `coding.UpstreamVersion`; it does not provide a second runtime implementation. See `extensions/sdk-ts/README.md`.
+Use `@michaelkinsy/ompig-extension-types` during development when the extension uses a Ompig-only API such as `ui.setLogin`. The declaration package pins the exact Pi version from `coding.UpstreamVersion`; it does not provide a second runtime implementation. See `extensions/sdk-ts/README.md`.
 
 ## Contributing an OAuth provider
 
-Register OAuth only through the runtime provider declaration. `pig login --list` resolves enabled extensions. For each source extension without a valid projection for its exact source configuration and immutable artifact digest, Pig starts it for registration inspection, collects OAuth provider declarations, and stops it without dispatching session or capability handlers. A valid projection avoids startup. Embedded packed members are inspected independently through the complete compiled artifact. Duplicate provider IDs fail and name both owners. Login then starts only the owning extension. Embedded and fused extensions use the same registration contract.
+Register OAuth only through the runtime provider declaration. `ompig login --list` resolves enabled extensions. For each source extension without a valid projection for its exact source configuration and immutable artifact digest, Ompig starts it for registration inspection, collects OAuth provider declarations, and stops it without dispatching session or capability handlers. A valid projection avoids startup. Embedded packed members are inspected independently through the complete compiled artifact. Duplicate provider IDs fail and name both owners. Login then starts only the owning extension. Embedded and fused extensions use the same registration contract.
 
 The host builds a proxy that RPCs the provider's closures; a login closure drives the host UI through callbacks. Only the closures you set are advertised; a credential store is optional (when set, the provider owns credential persistence instead of `auth.json`).
 
@@ -465,20 +465,20 @@ Value-returning callbacks (`OnPrompt`/`OnSelect`/`OnManualCodeInput`) return the
 Validate one extension:
 
 ```bash
-go run ./cmd/pig install --validate-only --json ./examples/extensions/python-factory
+go run ./cmd/ompig install --validate-only --json ./examples/extensions/python-factory
 ```
 
 Validate a set and inspect placement decisions:
 
 ```bash
-go run ./cmd/pig install --validate-only --json ./ext-a ./ext-b
+go run ./cmd/ompig install --validate-only --json ./ext-a ./ext-b
 ```
 
 A conventional Go, Rust, Python, or Node factory is packable. Every standalone stays isolated.
 
 ## Autocomplete provider factories
 
-`AddAutocompleteProvider` / `add_autocomplete_provider` appends a factory. PiG rebuilds the ordered chain over a fresh base and completes the call after installation. A factory receives the real current provider. Keep per-query state on the returned provider, not on a newly created query wrapper. Node uses Pi's factory signature. Go, Rust and Python callbacks receive their current SDK context explicitly.
+`AddAutocompleteProvider` / `add_autocomplete_provider` appends a factory. Ompig rebuilds the ordered chain over a fresh base and completes the call after installation. A factory receives the real current provider. Keep per-query state on the returned provider, not on a newly created query wrapper. Node uses Pi's factory signature. Go, Rust and Python callbacks receive their current SDK context explicitly.
 
 Go uses `sdk.AutocompleteProviderFactory` and `sdk.AutocompleteProvider`. Rust uses `AutocompleteProviderFactory` and `Arc<AutocompleteProvider>`. Python accepts a callable that returns an object with `get_suggestions` and `apply_completion`. Each provider can declare trigger characters and an optional file-trigger callback. Cursor columns count UTF-16 code units in every SDK.
 
@@ -496,7 +496,7 @@ Compute incrementally: keep running totals and update them from each new entry i
 
 ## Pricing what compaction would drop
 
-An extension that needs Pi's own answer to "where would compaction cut, and how many tokens lie before the cut" imports Pi's three helpers from its SDK. The helpers take the entries `getBranch()` returns, so no host call and no copy of Pi's logic is needed. Node re-exports Pi's `findCutPoint`, `sessionEntryToContextMessages` and `estimateTokens`. Go has `sdk.FindCutPoint`, `sdk.SessionEntryToContextMessages` and `sdk.EstimateTokens` in `github.com/MichaelKinsy/PiG/extensions/sdk` (a separate module: importing it does not pull in the host). Rust has `find_cut_point`, `session_entry_to_context_messages` and `estimate_tokens`. Python has the same snake_case names in `pig_sdk`.
+An extension that needs Pi's own answer to "where would compaction cut, and how many tokens lie before the cut" imports Pi's three helpers from its SDK. The helpers take the entries `getBranch()` returns, so no host call and no copy of Pi's logic is needed. Node re-exports Pi's `findCutPoint`, `sessionEntryToContextMessages` and `estimateTokens`. Go has `sdk.FindCutPoint`, `sdk.SessionEntryToContextMessages` and `sdk.EstimateTokens` in `github.com/tmih06/ompig/extensions/sdk` (a separate module: importing it does not pull in the host). Rust has `find_cut_point`, `session_entry_to_context_messages` and `estimate_tokens`. Python has the same snake_case names in `ompig_sdk`.
 
 ```go
 branch, _ := ctx.SessionManager().GetBranch(nil)

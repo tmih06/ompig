@@ -11,11 +11,11 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/tui"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/tui"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // Ports packages/coding-agent/src/extensions/llama/ui.ts.
@@ -174,7 +174,7 @@ func compactCount(value float64) string {
 }
 
 // newSelectList mirrors `new SelectList(items, maxVisible, theme, layout)`
-// over pig's SelectList port.
+// over ompig's SelectList port.
 func newSelectList(labels, descriptions []string, minPrimary, maxPrimary int) *tui.FilterableList {
 	list := tui.NewFilterableList("", labels)
 	list.EnableSearch = false
@@ -194,7 +194,7 @@ var exactModelPattern = lazyregexp.New(`^[^/` + jsWhitespaceClass + `]+/[^:` + j
 // jsLength mirrors String.prototype.length in UTF-16 code units.
 func jsLength(text string) int { return len(utf16.Encode([]rune(text))) }
 
-// pig divergence (D155): searchPageSize is the visible results and the rows a selection page key moves (SEARCH_PAGE_SIZE of Pi PR #7680's ui.ts).
+// ompig divergence (D155): searchPageSize is the visible results and the rows a selection page key moves (SEARCH_PAGE_SIZE of Pi PR #7680's ui.ts).
 const searchPageSize = 10
 
 const searchingStatus = "Searching Hugging Face…"

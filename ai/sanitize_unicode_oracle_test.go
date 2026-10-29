@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // pi: packages/ai/src/utils/sanitize-unicode.ts sanitizeSurrogates against pinned Pi over random UTF-16 code-unit sequences made of paired and unpaired surrogates at the range edges, BMP neighbours and ASCII. Each sequence reaches Go in the canonical WTF-8 form (a pair is one four-byte scalar) and in the split form (every surrogate three bytes).

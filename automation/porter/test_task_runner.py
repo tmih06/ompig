@@ -15,7 +15,7 @@ RUNNER = ROOT / "automation/porter/run-porter-tasks.sh"
 
 FAKE_MAKE = """#!/usr/bin/env bash
 # fake `make porter-task TASK=...`: the task text decides what the "Porter" does
-cat > /dev/null   # a real pig reads stdin: an inherited task list would be consumed here
+cat > /dev/null   # a real ompig reads stdin: an inherited task list would be consumed here
 task="$2"
 echo "$task" >> "$FAKE_TASKS_RUN"
 case "$task" in
@@ -57,8 +57,8 @@ class RunnerTests(unittest.TestCase):
         tsv = Path(self.tmp.name) / "tasks.tsv"
         tsv.write_text("".join(f"closure\t{scope}\t3\n" for scope in tasks))
         self.ran = Path(self.tmp.name) / "ran.txt"
-        env = {**os.environ, "PATH": f"{self.shims}:{os.environ['PATH']}", "PIG_PORTER_RUNLOG": str(self.runlog), "FAKE_TASKS_RUN": str(self.ran),
-               "PIG_PORTER_TASK_TIMEOUT": "2", "PIG_PORTER_BUILD_CMD": "true", **extra}
+        env = {**os.environ, "PATH": f"{self.shims}:{os.environ['PATH']}", "OMPIG_PORTER_RUNLOG": str(self.runlog), "FAKE_TASKS_RUN": str(self.ran),
+               "OMPIG_PORTER_TASK_TIMEOUT": "2", "OMPIG_PORTER_BUILD_CMD": "true", **extra}
         return subprocess.run([str(RUNNER), str(tsv), str(self.logs), str(self.repo)], env=env, capture_output=True, text=True, timeout=120)
 
     def last(self, fmt):
@@ -77,7 +77,7 @@ class RunnerTests(unittest.TestCase):
         self.assertIn("rc=124", self.last("%s"))
 
     def test_a_task_that_leaves_a_tree_that_does_not_build_is_committed_as_partial(self):
-        self.run_tasks(["edit"], PIG_PORTER_BUILD_CMD="false")
+        self.run_tasks(["edit"], OMPIG_PORTER_BUILD_CMD="false")
         self.assertIn("PARTIAL", self.last("%s"))
         self.assertIn("build", self.last("%s"))
 
@@ -98,12 +98,12 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(sum("PORTER end" in line for line in lines), 2, "both tasks ran: stdin must not feed the task list to the Porter")
 
     def test_a_task_that_reads_stdin_does_not_consume_the_task_list(self):
-        """Mutant: dropping `< /dev/null` made the task's pig read the loop's task file and end the run after one task."""
+        """Mutant: dropping `< /dev/null` made the task's ompig read the loop's task file and end the run after one task."""
         self.run_tasks(["edit-a", "edit-b", "edit-c"])
         self.assertEqual(len(self.ran.read_text().splitlines()), 3)
 
     def test_a_timed_out_task_whose_tree_also_fails_to_build_says_both(self):
-        self.run_tasks(["edit-slow"], PIG_PORTER_BUILD_CMD="false")
+        self.run_tasks(["edit-slow"], OMPIG_PORTER_BUILD_CMD="false")
         self.assertIn("rc=124", self.last("%s"))
         self.assertIn("build fails", self.last("%s"))
 
@@ -154,7 +154,7 @@ class RunnerTests(unittest.TestCase):
     def test_a_new_file_byte_identical_to_another_lanes_unmerged_branch_is_not_committed(self):
         """Review R10-1: the durable delta task landed 7 files byte-identical to dflip-rest's unmerged work in a PARTIAL commit."""
         self.foreign_branch()
-        result = self.run_tasks(["edit-newfile", "edit-b"], PIG_PORTER_FOREIGN_MIN_BYTES="1")
+        result = self.run_tasks(["edit-newfile", "edit-b"], OMPIG_PORTER_FOREIGN_MIN_BYTES="1")
         self.assertEqual(result.returncode, 6, result.stderr)
         self.assertIn("internal_caused.go", result.stderr)
         self.assertIn("other-lane", result.stderr)
@@ -164,10 +164,10 @@ class RunnerTests(unittest.TestCase):
 
     def test_a_new_file_that_differs_from_the_other_lanes_copy_is_committed(self):
         self.foreign_branch("package something_else\n")
-        self.assertEqual(self.run_tasks(["edit-newfile"], PIG_PORTER_FOREIGN_MIN_BYTES="1").returncode, 0)
+        self.assertEqual(self.run_tasks(["edit-newfile"], OMPIG_PORTER_FOREIGN_MIN_BYTES="1").returncode, 0)
 
     def test_a_small_identical_file_is_committed_under_the_default_size_floor(self):
-        """A file under PIG_PORTER_FOREIGN_MIN_BYTES (default 64) is too short to show copying: two lanes write the same `package caused` line independently."""
+        """A file under OMPIG_PORTER_FOREIGN_MIN_BYTES (default 64) is too short to show copying: two lanes write the same `package caused` line independently."""
         self.foreign_branch()
         result = self.run_tasks(["edit-newfile"])
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -197,7 +197,7 @@ class RunnerTests(unittest.TestCase):
     def test_commit_only_commits_the_tree_an_orphaned_task_left(self):
         (self.repo / "tracked.txt").write_text("edited\n")
         (self.repo / "new_file.go").write_text("package x\n")
-        env = {**os.environ, "PIG_PORTER_BUILD_CMD": "true"}
+        env = {**os.environ, "OMPIG_PORTER_BUILD_CMD": "true"}
         subprocess.run([str(RUNNER), "--commit-only", str(self.logs), str(self.repo), "closure", "a/b.ts", "124"], env=env, check=True, capture_output=True, timeout=60)
         self.assertIn("PARTIAL (rc=124)", self.last("%s"))
         self.assertEqual(git(self.repo, "status", "--porcelain").strip(), "")

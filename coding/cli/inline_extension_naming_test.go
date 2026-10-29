@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Ports test/suite/regressions/6260-inline-extension-naming.test.ts: bare factories load as <inline:N> by 1-based position, named

@@ -15,27 +15,27 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/internal/buildprogress"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/fspublish"
-	"github.com/MichaelKinsy/PiG/internal/linkerexec"
-	"github.com/MichaelKinsy/PiG/internal/toolchain"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/internal/buildprogress"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/fspublish"
+	"github.com/tmih06/ompig/internal/linkerexec"
+	"github.com/tmih06/ompig/internal/toolchain"
 )
 
-// pigModulePath is the Go module whose source a native Piglet Binary build compiles.
-const pigModulePath = "github.com/MichaelKinsy/PiG"
+// ompigModulePath is the Go module whose source a native Ompiglet Binary build compiles.
+const ompigModulePath = "github.com/tmih06/ompig"
 
-// sourceUnavailableRemedy is the remedy for a native build with no Pig source to compile.
-const sourceUnavailableRemedy = "run from a Pig checkout or set PIG_SOURCE_ROOT"
+// sourceUnavailableRemedy is the remedy for a native build with no Ompig source to compile.
+const sourceUnavailableRemedy = "run from a Ompig checkout or set OMPIG_SOURCE_ROOT"
 
 // releaseSourceVersion names the tagged module version a release binary was built from. A release
 // archive is built from extracted source without VCS metadata, so the release build stamps it with
-// -ldflags "-X github.com/MichaelKinsy/PiG/coding/pigletbuild.releaseSourceVersion=v<version>".
+// -ldflags "-X github.com/tmih06/ompig/coding/pigletbuild.releaseSourceVersion=v<version>".
 var releaseSourceVersion string
 
-// pigSource is the Pig source tree one native build compiles.
-type pigSource struct {
+// ompigSource is the Ompig source tree one native build compiles.
+type ompigSource struct {
 	Root string
 	// ModuleVersion is set when Root is the staged copy of the running release's
 	// checksum-verified Go module cache tree. That tree has no VCS metadata, and its go.work
@@ -61,8 +61,8 @@ type modDownloadResult struct {
 // exactly that release: a `go install …@v<version>` binary, or a release archive binary stamped
 // with releaseSourceVersion. A development build reports false.
 func runningPigRelease() (string, bool) {
-	want := "v" + coding.PigVersion
-	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Path == pigModulePath && info.Main.Version == want {
+	want := "v" + coding.OmpigVersion
+	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Path == ompigModulePath && info.Main.Version == want {
 		return want, true
 	}
 	if strings.TrimSpace(releaseSourceVersion) == want {
@@ -79,27 +79,27 @@ func (b nativeBuilder) releaseFor() (string, bool) {
 	return runningPigRelease()
 }
 
-// resolveSource returns the local Pig checkout or, for a release binary without one, fetches
+// resolveSource returns the local Ompig checkout or, for a release binary without one, fetches
 // exactly the running release through the Go module proxy. GOPROXY and GOSUMDB verify the
 // download, and GOMODCACHE keeps it for later builds.
-func (b nativeBuilder) resolveSource(ctx context.Context, stderr io.Writer) (pigSource, error) {
-	root, localErr := pigSourceRoot()
+func (b nativeBuilder) resolveSource(ctx context.Context, stderr io.Writer) (ompigSource, error) {
+	root, localErr := ompigSourceRoot()
 	if localErr == nil {
-		return pigSource{Root: root}, nil
+		return ompigSource{Root: root}, nil
 	}
 	version, ok := b.releaseFor()
 	if !ok {
-		return pigSource{}, fmt.Errorf("source-unavailable: %w; this PiG build is not a tagged release whose source can be fetched; remedy: %s", localErr, sourceUnavailableRemedy)
+		return ompigSource{}, fmt.Errorf("source-unavailable: %w; this Ompig build is not a tagged release whose source can be fetched; remedy: %s", localErr, sourceUnavailableRemedy)
 	}
-	buildprogress.Phase(ctx, "Fetching PiG source", pigModulePath+"@"+version)
+	buildprogress.Phase(ctx, "Fetching Ompig source", ompigModulePath+"@"+version)
 	if stderr != nil {
-		_, _ = fmt.Fprintf(stderr, "fetching PiG %s source (cached after first build)\n", version)
+		_, _ = fmt.Fprintf(stderr, "fetching Ompig %s source (cached after first build)\n", version)
 	}
 	download := b.modDownload
 	if download == nil {
 		download = goModDownload
 	}
-	output, err := download(ctx, pigModulePath+"@"+version)
+	output, err := download(ctx, ompigModulePath+"@"+version)
 	var result modDownloadResult
 	decodeErr := json.Unmarshal(output, &result)
 	if err != nil || decodeErr != nil || result.Error != "" {
@@ -111,25 +111,25 @@ func (b nativeBuilder) resolveSource(ctx context.Context, stderr io.Writer) (pig
 		default:
 			detail = "decode go mod download output: " + decodeErr.Error()
 		}
-		return pigSource{}, fmt.Errorf("source-unavailable: fetch PiG %s source through the Go module proxy: %s; remedy: %s", version, strings.TrimSpace(detail), sourceUnavailableRemedy)
+		return ompigSource{}, fmt.Errorf("source-unavailable: fetch Ompig %s source through the Go module proxy: %s; remedy: %s", version, strings.TrimSpace(detail), sourceUnavailableRemedy)
 	}
-	if result.Path != pigModulePath || result.Version != version || result.Dir == "" || !isPigModule(result.Dir) {
-		return pigSource{}, fmt.Errorf("source-unavailable: go mod download returned %s@%s at %q, not the PiG %s source; remedy: %s", result.Path, result.Version, result.Dir, version, sourceUnavailableRemedy)
+	if result.Path != ompigModulePath || result.Version != version || result.Dir == "" || !isPigModule(result.Dir) {
+		return ompigSource{}, fmt.Errorf("source-unavailable: go mod download returned %s@%s at %q, not the Ompig %s source; remedy: %s", result.Path, result.Version, result.Dir, version, sourceUnavailableRemedy)
 	}
 	root, err = materializeModuleSource(result.Dir, version, result.Sum)
 	if err != nil {
-		return pigSource{}, fmt.Errorf("source-unavailable: stage PiG %s source: %w; remedy: %s", version, err, sourceUnavailableRemedy)
+		return ompigSource{}, fmt.Errorf("source-unavailable: stage Ompig %s source: %w; remedy: %s", version, err, sourceUnavailableRemedy)
 	}
-	source := pigSource{Root: root, ModuleVersion: version}
+	source := ompigSource{Root: root, ModuleVersion: version}
 	if result.Origin != nil {
 		source.Revision = strings.TrimSpace(result.Origin.Hash)
 	}
 	return source, nil
 }
 
-// pigSourceCacheDir is the Pig cache directory holding staged release source trees.
-func pigSourceCacheDir() string {
-	return filepath.Join(codingagent.ConfigRoot(), "cache", "pig-source")
+// ompigSourceCacheDir is the Ompig cache directory holding staged release source trees.
+func ompigSourceCacheDir() string {
+	return filepath.Join(codingagent.ConfigRoot(), "cache", "ompig-source")
 }
 
 // materializeModuleSource stages the module cache tree outside GOMODCACHE, because the Go command
@@ -144,9 +144,9 @@ func materializeModuleSource(moduleDir, version, sum string) (string, error) {
 		return "", fmt.Errorf("go mod download reported no module sum")
 	}
 	key := sha256.Sum256([]byte(sum))
-	cacheDir := pigSourceCacheDir()
+	cacheDir := ompigSourceCacheDir()
 	target := filepath.Join(cacheDir, version+"-"+hex.EncodeToString(key[:8]))
-	marker := filepath.Join(target, ".pig-source-sum")
+	marker := filepath.Join(target, ".ompig-source-sum")
 	published := func() bool {
 		data, err := os.ReadFile(marker)
 		return err == nil && string(data) == sum
@@ -165,7 +165,7 @@ func materializeModuleSource(moduleDir, version, sum string) (string, error) {
 	if err := linkOrCopyTree(moduleDir, stage); err != nil {
 		return "", err
 	}
-	if err := os.WriteFile(filepath.Join(stage, ".pig-source-sum"), []byte(sum), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(stage, ".ompig-source-sum"), []byte(sum), 0o644); err != nil {
 		return "", err
 	}
 	err = os.Rename(stage, target)
@@ -252,7 +252,7 @@ func moduleSourceBuildEnv(env []string) []string {
 }
 
 // buildEnv is the Go command environment for compiling this source tree.
-func (s pigSource) buildEnv(env []string) []string {
+func (s ompigSource) buildEnv(env []string) []string {
 	if s.ModuleVersion != "" {
 		return moduleSourceBuildEnv(env)
 	}
@@ -260,7 +260,7 @@ func (s pigSource) buildEnv(env []string) []string {
 }
 
 // goCommand runs the go command in this source tree with its build environment.
-func (s pigSource) goCommand(ctx context.Context, goToolchain toolchain.GoToolchain, args ...string) *exec.Cmd {
+func (s ompigSource) goCommand(ctx context.Context, goToolchain toolchain.GoToolchain, args ...string) *exec.Cmd {
 	cmd := linkerexec.CommandContext(ctx, goToolchain.Command, args...)
 	cmd.Dir = s.Root
 	cmd.Env = toolchain.WorkDirEnv(s.Root, goToolchain.Environ(s.buildEnv(os.Environ())))
@@ -270,14 +270,14 @@ func (s pigSource) goCommand(ctx context.Context, goToolchain toolchain.GoToolch
 // sourceFiles lists the build source files of the tree relative to Root: Git's tracked and
 // untracked non-ignored files for a checkout, and every regular file or symlink for a module
 // cache copy.
-func (s pigSource) sourceFiles() ([]string, error) {
+func (s ompigSource) sourceFiles() ([]string, error) {
 	if s.ModuleVersion == "" {
 		command := exec.Command("git", "ls-files", "--cached", "--others", "--exclude-standard", "-z")
 		command.Dir = s.Root
 		linkerexec.Prepare(command)
 		output, err := command.Output()
 		if err != nil {
-			return nil, fmt.Errorf("enumerate Pig build sources: %w", err)
+			return nil, fmt.Errorf("enumerate Ompig build sources: %w", err)
 		}
 		return strings.Split(strings.TrimSuffix(string(output), "\x00"), "\x00"), nil
 	}
@@ -293,21 +293,21 @@ func (s pigSource) sourceFiles() ([]string, error) {
 		if err != nil {
 			return err
 		}
-		if relative == ".pig-source-sum" {
+		if relative == ".ompig-source-sum" {
 			return nil
 		}
 		paths = append(paths, filepath.ToSlash(relative))
 		return nil
 	})
 	if err != nil {
-		return nil, fmt.Errorf("enumerate Pig module sources: %w", err)
+		return nil, fmt.Errorf("enumerate Ompig module sources: %w", err)
 	}
 	return paths, nil
 }
 
 // revision identifies the source: the checkout's HEAD commit, or the proxy-reported commit of a
 // fetched release, falling back to its module version.
-func (s pigSource) revision() (string, error) {
+func (s ompigSource) revision() (string, error) {
 	if s.ModuleVersion != "" {
 		if s.Revision != "" {
 			return s.Revision, nil
@@ -323,12 +323,12 @@ func (s pigSource) revision() (string, error) {
 	}
 	revision := strings.TrimSpace(string(output))
 	if revision == "" {
-		return "", fmt.Errorf("resolve Pig source revision: git returned an empty revision")
+		return "", fmt.Errorf("resolve Ompig source revision: git returned an empty revision")
 	}
 	return revision, nil
 }
 
-// sourceRevisionError explains a failed `git rev-parse HEAD` in the Pig source root: a directory that
+// sourceRevisionError explains a failed `git rev-parse HEAD` in the Ompig source root: a directory that
 // is not a Git working tree gets a remedy naming it, other failures keep git's first stderr line.
 func sourceRevisionError(root string, err error) error {
 	var stderr string
@@ -336,15 +336,15 @@ func sourceRevisionError(root string, err error) error {
 		stderr = strings.TrimSpace(string(exitErr.Stderr))
 	}
 	if strings.Contains(stderr, "not a git repository") {
-		const why = "is not a Git checkout: the Piglet builder records the PiG commit it builds from; clone PiG with git"
+		const why = "is not a Git checkout: the Ompiglet builder records the Ompig commit it builds from; clone Ompig with git"
 		//perf:ok error path, once when the source root is not a Git checkout
-		if strings.TrimSpace(os.Getenv("PIG_SOURCE_ROOT")) != "" {
-			return fmt.Errorf("PIG_SOURCE_ROOT %s %s, or unset PIG_SOURCE_ROOT to fetch the release source", root, why)
+		if strings.TrimSpace(os.Getenv("OMPIG_SOURCE_ROOT")) != "" {
+			return fmt.Errorf("OMPIG_SOURCE_ROOT %s %s, or unset OMPIG_SOURCE_ROOT to fetch the release source", root, why)
 		}
-		return fmt.Errorf("the Pig source %s %s, or run outside it to fetch the release source", root, why)
+		return fmt.Errorf("the Ompig source %s %s, or run outside it to fetch the release source", root, why)
 	}
 	if line, _, _ := strings.Cut(stderr, "\n"); line != "" {
-		return fmt.Errorf("resolve Pig source revision: %w: %s", err, line)
+		return fmt.Errorf("resolve Ompig source revision: %w: %s", err, line)
 	}
-	return fmt.Errorf("resolve Pig source revision: %w", err)
+	return fmt.Errorf("resolve Ompig source revision: %w", err)
 }

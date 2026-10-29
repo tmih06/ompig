@@ -10,12 +10,12 @@ import (
 	"strings"
 )
 
-// pig divergence (D2): an extension adds a sprite to PiG's /sprite catalogue with the same kind of data as its native login
+// ompig divergence (D2): an extension adds a sprite to Ompig's /sprite catalogue with the same kind of data as its native login
 // (D60): pixel grids of palette symbols, a palette and display text. The host validates it and draws it; a sprite never
 // replaces the header by itself.
 const SpriteIDLimit = 32
 
-// SpriteDefinition is one sprite: its stable ID, the name and tagline /sprite lists, its pig (LoginMascotWidth by
+// SpriteDefinition is one sprite: its stable ID, the name and tagline /sprite lists, its ompig (LoginMascotWidth by
 // LoginMascotHeight), which the startup header draws in Pi's logo slot and /sprite preview beside the wordmark, and the
 // palette that colors it. Grid cells are printable ASCII palette symbols; '.' is transparent.
 type SpriteDefinition struct {

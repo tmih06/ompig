@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/chord"
-	"github.com/MichaelKinsy/PiG/chord/delta"
-	"github.com/MichaelKinsy/PiG/durable/env"
-	"github.com/MichaelKinsy/PiG/telemetry"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/chord"
+	"github.com/tmih06/ompig/chord/delta"
+	"github.com/tmih06/ompig/durable/env"
+	"github.com/tmih06/ompig/telemetry"
 )
 
 // Ports packages/durable/src/types.ts

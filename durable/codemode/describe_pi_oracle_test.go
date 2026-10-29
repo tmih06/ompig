@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/durable"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/durable"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 // Pi's codemodeDescription, namespaceOf, sampleOf and codemodeSection (describe.ts, imported as-is under Node, with Pi's
@@ -311,7 +311,7 @@ func TestDescribeMatchesPiOnSeededToolSets(t *testing.T) {
 			case !wantNil && got == nil:
 				t.Errorf("budget %d: Section = nil, Pi %q", op.Budget, want)
 			case !wantNil && *got != want:
-				t.Errorf("budget %d of set %d: Section differs from Pi\nPiG:\n%s\nPi:\n%s", op.Budget, i, *got, want)
+				t.Errorf("budget %d of set %d: Section differs from Pi\nOmpig:\n%s\nPi:\n%s", op.Budget, i, *got, want)
 			}
 			sections++
 		case "namespace":

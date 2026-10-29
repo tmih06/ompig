@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	json "github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	json "github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 type fieldsRecord struct {

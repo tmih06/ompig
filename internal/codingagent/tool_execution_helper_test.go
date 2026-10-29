@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // newToolCardForTest builds a card the way the pre-1.1.0 constructor did in these tests: the call header is the given preview text.
 func newToolCardForTest(name, argsPreview string, options ...tui.ToolExecutionOptions) *tui.ToolExecutionComponent {

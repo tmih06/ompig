@@ -1,6 +1,6 @@
 package evalsuites
 
-// Tests for the footer oracle and judge of tui.docs.eval.ts. The oracle runs the real pig binary in tmux over fixture
+// Tests for the footer oracle and judge of tui.docs.eval.ts. The oracle runs the real ompig binary in tmux over fixture
 // sessions; the judge cases pin the scoring of tui.docs.eval.ts:174-232.
 
 import (
@@ -14,33 +14,33 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/evals"
+	"github.com/tmih06/ompig/internal/evals"
 )
 
 var (
-	pigOnce   sync.Once
-	pigBinary string
-	pigErr    error
+	ompigOnce   sync.Once
+	ompigBinary string
+	ompigErr    error
 )
 
 func builtPig(t *testing.T) string {
 	t.Helper()
-	pigOnce.Do(func() {
-		directory, err := os.MkdirTemp("", "pig-evalsuites-")
+	ompigOnce.Do(func() {
+		directory, err := os.MkdirTemp("", "ompig-evalsuites-")
 		if err != nil {
-			pigErr = err
+			ompigErr = err
 			return
 		}
-		pigBinary = filepath.Join(directory, "pig")
-		if out, err := exec.Command("go", "build", "-o", pigBinary, "../../../cmd/pig").CombinedOutput(); err != nil {
-			pigErr = err
+		ompigBinary = filepath.Join(directory, "ompig")
+		if out, err := exec.Command("go", "build", "-o", ompigBinary, "../../../cmd/ompig").CombinedOutput(); err != nil {
+			ompigErr = err
 			t.Logf("%s", out)
 		}
 	})
-	if pigErr != nil {
-		t.Fatal(pigErr)
+	if ompigErr != nil {
+		t.Fatal(ompigErr)
 	}
-	return pigBinary
+	return ompigBinary
 }
 
 func footerOutput(lines ...string) TUIFooterOutput {
@@ -99,7 +99,7 @@ func TestLevenshteinScore(t *testing.T) {
 // TestInspectContextFooterRendersTheBuiltInFooter runs the oracle over a Session with no footer extension: the pane
 // must show the built-in context text for each fixture, and the Session must report each fixture's context usage.
 func TestInspectContextFooterRendersTheBuiltInFooter(t *testing.T) {
-	pig := builtPig(t)
+	ompig := builtPig(t)
 	root := t.TempDir()
 	agentDir, workspace := filepath.Join(root, "agent"), filepath.Join(root, "workspace")
 	for _, directory := range []string{agentDir, workspace} {
@@ -116,7 +116,7 @@ func TestInspectContextFooterRendersTheBuiltInFooter(t *testing.T) {
 	}
 	t.Setenv(evals.AgentDirEnvironment(), agentDir)
 	got, err := inspectContextFooter(t.Context(), evals.AgentRun{
-		AgentDir: agentDir, Workspace: workspace, PigPath: pig, Model: evals.PiCodingAgentModelSelection{Provider: "fixture", ID: "fixture-chat"},
+		AgentDir: agentDir, Workspace: workspace, OmpigPath: ompig, Model: evals.PiCodingAgentModelSelection{Provider: "fixture", ID: "fixture-chat"},
 	})
 	if err != nil {
 		t.Fatal(err)

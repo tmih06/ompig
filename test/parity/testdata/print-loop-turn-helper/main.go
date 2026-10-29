@@ -1,6 +1,6 @@
-// Command print-loop-turn-helper runs the session_shutdown part of Pig's print-mode disposal over Node extensions that each run in their own runtime process.
+// Command print-loop-turn-helper runs the session_shutdown part of Ompig's print-mode disposal over Node extensions that each run in their own runtime process.
 //
-// Pig's CLI packs every Node factory into one runtime process, which shares one event loop as Pi's process does. Separate Node processes arise from crash recovery, which quarantines a culprit in its own process (node_recovery.go). This helper drives the same Host path with each extension isolated: the Host declares print mode, the extensions' session_shutdown handlers run in configured order, each awaited, as Pi's runner awaits them (runner.ts:1089-1116), then the Host invalidates the runner and stops the processes (agent-session-runtime.ts:404-410, agent-session.ts:1393-1406).
+// Ompig's CLI packs every Node factory into one runtime process, which shares one event loop as Pi's process does. Separate Node processes arise from crash recovery, which quarantines a culprit in its own process (node_recovery.go). This helper drives the same Host path with each extension isolated: the Host declares print mode, the extensions' session_shutdown handlers run in configured order, each awaited, as Pi's runner awaits them (runner.ts:1089-1116), then the Host invalidates the runner and stops the processes (agent-session-runtime.ts:404-410, agent-session.ts:1393-1406).
 package main
 
 import (
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 func main() {

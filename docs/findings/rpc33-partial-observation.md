@@ -14,7 +14,7 @@ The canonical loopback server in `test/parity/runner/provider_fixture.go` sends 
 
 At the first assistant `message_start`:
 
-- PiG reports empty content and `stopReason: "pending"`.
+- Ompig reports empty content and `stopReason: "pending"`.
 - Pi reports the tool call with parsed arguments, `partialArgs`, `streamIndex: 0`, and `stopReason: "toolUse"`.
 - Pi's later assistant `message_end` contains the finalized tool call without `partialArgs` or `streamIndex`.
 
@@ -26,7 +26,7 @@ Pi `packages/ai/src/utils/event-stream.ts` queues references. `packages/ai/src/a
 
 Pi `packages/agent/src/agent-loop.ts:408-453` consumes the stream through awaited iteration and emits shallow message copies. The observed message therefore depends on both shared nested values and the Promise continuation boundaries. It is not equivalent to copying the whole partial at the provider's push call.
 
-PiG `ai/event_stream.go:Push` calls `snapshotAssistantEvent`. `agent/agent.go:consumeStream`, `agentAssistantMessage` and `cloneAssistantMessage` introduce additional copies. The Go tool-call data model does not carry the Completions parser's transient `partialArgs` and `streamIndex` fields.
+Ompig `ai/event_stream.go:Push` calls `snapshotAssistantEvent`. `agent/agent.go:consumeStream`, `agentAssistantMessage` and `cloneAssistantMessage` introduce additional copies. The Go tool-call data model does not carry the Completions parser's transient `partialArgs` and `streamIndex` fields.
 
 ## Investigation, not a proposed fix
 

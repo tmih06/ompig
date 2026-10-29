@@ -97,7 +97,7 @@ All 21 `*.test.ts` files carry `ported` dispositions in `test/parity/interfaces/
 | `test/delta-tracker/retention.worker.ts` | Node worker spawned by `retention.test.ts` for `--expose-gc`/`WeakRef`; the Go test observes the heap in-process (`retention_upstream_test.go`). Designed out with its test. |
 | `test/delta-traversal.bench.ts`, `test/delta-benchmark/benchmark.ts`, `benchmark.worker.ts` | Tracker scenarios ported as `chord/delta/tracker_bench_test.go` (import, committed-read, draft-read, sparse, queue, sort, dense, unshift). Not run by `vitest --run`. The Node-worker orchestration and V8 heap sampling are replaced by `testing.B` ns/op and allocations; the `watch-*` scenarios need durable watch fan-out and are not ported (they exercise `packages/durable`, not chord). |
 | `test/delta-benchmark/memory-benchmark.ts`, `memory-benchmark.worker.ts` | V8 heap and GC-pause measurement through `PerformanceObserver`; no Go counterpart (designed out). Retention is proven by `retention_upstream_test.go`. |
-| `test/delta-benchmark/conversation-view-benchmark.ts`, `.worker.ts` | Provisional Pico5 `ConversationView` architecture experiment that the file itself marks as not a compatibility commitment; PiG tracks Session behavior instead of Pico5 (PORT_MAP package scope). Designed out. |
+| `test/delta-benchmark/conversation-view-benchmark.ts`, `.worker.ts` | Provisional Pico5 `ConversationView` architecture experiment that the file itself marks as not a compatibility commitment; Ompig tracks Session behavior instead of Pico5 (PORT_MAP package scope). Designed out. |
 
 ## Closed in this lane
 

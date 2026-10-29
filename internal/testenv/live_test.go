@@ -8,7 +8,7 @@ import (
 )
 
 func TestRequireLiveEnv(t *testing.T) {
-	const first, second = "PIG_TEST_LIVE_FIRST", "PIG_TEST_LIVE_SECOND"
+	const first, second = "OMPIG_TEST_LIVE_FIRST", "OMPIG_TEST_LIVE_SECOND"
 	for _, tc := range []struct {
 		name       string
 		values     map[string]string

@@ -21,14 +21,14 @@
 #   turn_end
 #   agent_end
 #
-# pig previously emitted a simplified stream (message_start, text_delta,
+# ompig previously emitted a simplified stream (message_start, text_delta,
 # message_end, tool_use, tool_result). That gap has been fixed: rpc_mode.go
 # now forwards upstream-shaped AgentSessionEvent JSON objects using
 # rpcAgentEvent.
 #
 # Re-probed against Pi 0.84.0 on 2026-08-16: upstream delimits each streamed
 # content run (text_start/text_delta/text_end, toolcall_start/toolcall_delta/
-# toolcall_end). pig emitted only the bare deltas, and this scenario asserted
+# toolcall_end). ompig emitted only the bare deltas, and this scenario asserted
 # only text_delta, so the missing delimiters passed unnoticed. rpc_events.go
 # now synthesizes the run boundaries and the assertions below pin them.
 #
@@ -39,7 +39,7 @@ description = "Prompt through faux provider emits upstream AgentSessionEvent str
 covers = [
   "packages/coding-agent/src/modes/rpc/rpc-mode.ts",
   # toJsonEvent's observable contract: message_update on the JSON/RPC wire
-  # carries deltas only, with the cumulative `partial` snapshot removed. pig
+  # carries deltas only, with the cumulative `partial` snapshot removed. ompig
   # realizes this in rpc_events.go by constructing delta-only events directly.
   # The both_not_contain '"partial":' assertion below exercises exactly that.
   "packages/coding-agent/src/modes/json-event.ts",
@@ -56,8 +56,8 @@ wait_contains = ['"type":"agent_settled"']
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "PIG_HOME=testdata/pig-home"]
-pig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
+ompig = ["OMPIG_TEST_FAUX=1", "OMPIG_HOME=testdata/ompig-home"]
+ompig_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 pi_extensions = ["../../testdata/test-faux-provider.ts"]
 pi_args = ["--model", "test-faux/faux-1", "--system-prompt", "RPC chat probe.", "--no-context-files", "--no-skills", "--session-dir", "{{TEMP}}/sessions"]
 

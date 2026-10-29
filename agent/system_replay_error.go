@@ -4,7 +4,7 @@ import (
 	stdjson "encoding/json"
 	"errors"
 
-	"github.com/MichaelKinsy/PiG/internal/orderedjson"
+	"github.com/tmih06/ompig/internal/orderedjson"
 )
 
 // iterationError is the end of V8's TypeError message for a for...of over a value that is not iterable.

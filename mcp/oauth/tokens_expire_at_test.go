@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/mcp/oauth"
+	"github.com/tmih06/ompig/mcp/oauth"
 )
 
 // provider.ts:106 stores tokensExpireAt = Date.now() + expires_in * 1000, a JavaScript number: fractional when expires_in is, and far in the future when it is

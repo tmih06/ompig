@@ -6,17 +6,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding"
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
 )
 
 // TestConformance_ExtensionAPISessionToolsCommandsMessages pins Pi's pi.getActiveTools, pi.setActiveTools and pi.sendMessage
 // (packages/coding-agent/src/core/extensions/types.ts:1692, 1728-1760 and agent-session.ts _bindExtensionCore). Every SDK calls the member through the host,
 // which coding.BindExtensionHostSessionActions, the binding every mode uses, answers from a real Session: the SDK reads the Session's own tool names, and
 // its calls change the Session's active tools and append the custom message it sent. pi.getCommands is answered by each mode's own command catalog
-// (cmd/pig print and RPC modes, internal/codingagent interactive mode); TestExtensionAPIGetCommandsReadsTheBoundSession drives it through the production binding.
+// (cmd/ompig print and RPC modes, internal/codingagent interactive mode); TestExtensionAPIGetCommandsReadsTheBoundSession drives it through the production binding.
 func TestConformance_ExtensionAPISessionToolsCommandsMessages(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping conformance suite in short mode (builds subprocess fixtures)")
@@ -46,7 +46,7 @@ func TestConformance_ExtensionAPISessionToolsCommandsMessages(t *testing.T) {
 				t.Fatal(err)
 			}
 			t.Cleanup(func() { _ = session.Close() })
-			// The production binding of every mode (cmd/pig bindSessionExtensionActions) answers the SDKs from the Session.
+			// The production binding of every mode (cmd/ompig bindSessionExtensionActions) answers the SDKs from the Session.
 			coding.BindExtensionHostSessionActions(h.bridge, func() *coding.Session { return session })
 
 			reported := func(prefix string) string {

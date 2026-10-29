@@ -10,18 +10,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
-	"github.com/MichaelKinsy/PiG/internal/packagemanager"
-	"github.com/MichaelKinsy/PiG/internal/testenv"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/internal/codingagent"
+	"github.com/tmih06/ompig/internal/packagemanager"
+	"github.com/tmih06/ompig/internal/testenv"
 )
 
 func TestInstallValidateOnlyLoadsAndRegistersExtension(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	pigHome := t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	fixture := filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "testdata", "sdk-fixture")
 	stdout, stderr, code := captureStdoutStderr(t, func() int {
 		return runPackageCommand([]string{"install", fixture, "--validate-only", "--json"})
@@ -61,7 +61,7 @@ func TestInstallValidateOnlyLoadsAndRegistersExtension(t *testing.T) {
 	if report.Definition.Form != "standalone" || report.Definition.Language != "go" {
 		t.Fatalf("definition = %+v, want Go standalone", report.Definition)
 	}
-	if entries, err := os.ReadDir(filepath.Join(pigHome, "cache", "ext")); err != nil || len(entries) == 0 {
+	if entries, err := os.ReadDir(filepath.Join(ompigHome, "cache", "ext")); err != nil || len(entries) == 0 {
 		t.Fatalf("extension build cache not populated: entries=%v err=%v", entries, err)
 	}
 }
@@ -74,7 +74,7 @@ func TestInstallValidateOnlyEmitsToolAndCommandDetails(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	fixture := filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "testdata", "sdk-fixture")
 	stdout, stderr, code := captureStdoutStderr(t, func() int {
 		return runPackageCommand([]string{"install", fixture, "--validate-only", "--json"})
@@ -128,8 +128,8 @@ func TestInstallValidateOnlyWithMultipleSourcesEmitsSetReport(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	pigHome := t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	fixture := filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "testdata", "sdk-fixture")
 	other := filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "testdata", "ctx-mode.mjs")
 	stdout, stderr, code := captureStdoutStderr(t, func() int {
@@ -196,9 +196,9 @@ func TestInstallValidateOnlyRejectsMultipleGoPackageFactories(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	root := t.TempDir()
-	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/multi-extensions\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/multi-extensions\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	for _, name := range []string{"review", "security"} {
@@ -207,7 +207,7 @@ func TestInstallValidateOnlyRejectsMultipleGoPackageFactories(t *testing.T) {
 			t.Fatal(err)
 		}
 		source := `package ` + name + `
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension {
   ext := sdk.New("` + name + `")
   ext.Command("` + name + `", "` + name + ` command", func(sdk.Context, string) error { return nil })
@@ -235,7 +235,7 @@ func TestInstallValidateOnlyBuildsGoWorkspaceExtension(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "go.work"), []byte("go 1.26\n\nuse (\n\t./extension\n\t./shared\n)\n"), 0o644); err != nil {
 		t.Fatal(err)
@@ -253,12 +253,12 @@ func TestInstallValidateOnlyBuildsGoWorkspaceExtension(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(sharedRoot, "shared.go"), []byte("package shared\nfunc Description() string { return \"workspace command\" }\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/workspace-extension\n\ngo 1.26\n\nrequire (\n github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n example.com/shared v0.0.0\n)\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(extensionRoot, "go.mod"), []byte("module example.com/workspace-extension\n\ngo 1.26\n\nrequire (\n github.com/tmih06/ompig/extensions/sdk v0.0.0\n example.com/shared v0.0.0\n)\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	source := `package extension
 import (
-  sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+  sdk "github.com/tmih06/ompig/extensions/sdk"
   "example.com/shared"
 )
 func Extension() *sdk.Extension {
@@ -301,17 +301,17 @@ func TestAC58InstallValidationRefreshesSDKAndRejectsStaleSelectSignature(t *test
 		{"stale-two-result-signature", "_, _ = ctx.Select(\"Pick\", []string{\"one\"}); return nil", "shared-ok", false},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			pigHome := t.TempDir()
-			t.Setenv("PIG_HOME", pigHome)
-			t.Setenv("PIG_SDK_GO_ROOT", "")
-			staged := stagedSDKDir(t, pigHome, "go")
+			ompigHome := t.TempDir()
+			t.Setenv("OMPIG_HOME", ompigHome)
+			t.Setenv("OMPIG_SDK_GO_ROOT", "")
+			staged := stagedSDKDir(t, ompigHome, "go")
 			if err := os.MkdirAll(staged, 0o755); err != nil {
 				t.Fatal(err)
 			}
-			if err := os.WriteFile(filepath.Join(staged, ".pig-sdk-version"), []byte("stale\n"), 0o644); err != nil {
+			if err := os.WriteFile(filepath.Join(staged, ".ompig-sdk-version"), []byte("stale\n"), 0o644); err != nil {
 				t.Fatal(err)
 			}
-			if err := os.WriteFile(filepath.Join(staged, "go.mod"), []byte("module github.com/MichaelKinsy/PiG/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
+			if err := os.WriteFile(filepath.Join(staged, "go.mod"), []byte("module github.com/tmih06/ompig/extensions/sdk\ngo 1.26\n"), 0o644); err != nil {
 				t.Fatal(err)
 			}
 			if err := os.WriteFile(filepath.Join(staged, "context.go"), []byte("package sdk\ntype Context struct{}\nfunc (Context) Select(string, []string) (string, bool) { return \"\", false }\n"), 0o644); err != nil {
@@ -322,11 +322,11 @@ func TestAC58InstallValidationRefreshesSDKAndRejectsStaleSelectSignature(t *test
 			if err := os.MkdirAll(root, 0o755); err != nil {
 				t.Fatal(err)
 			}
-			if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/select-abi\ngo 1.26\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n"), 0o644); err != nil {
+			if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module example.com/select-abi\ngo 1.26\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n"), 0o644); err != nil {
 				t.Fatal(err)
 			}
 			source := `package selectabi
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension {
   ext := sdk.New("select-abi")
   ext.Command("select", "select", func(ctx sdk.Context, _ string) error { ` + tc.assignment + ` })
@@ -358,9 +358,9 @@ func Extension() *sdk.Extension {
 
 func TestPlacementPlanSeparatesStandalone(t *testing.T) {
 	reports := []extensionValidationReport{
-		{Valid: true, Name: "a", Hash: "ha", Definition: &extensionValidationSourceReport{Runtime: "subprocess", Language: "go", SDK: "pig-go", Isolation: "shared-ok", Form: "factory"}},
-		{Valid: true, Name: "b", Hash: "hb", Definition: &extensionValidationSourceReport{Runtime: "subprocess", Language: "go", SDK: "pig-go", Isolation: "shared-ok", Form: "factory"}},
-		{Valid: true, Name: "c", Hash: "hc", Definition: &extensionValidationSourceReport{Runtime: "subprocess", Language: "go", SDK: "pig-go", Isolation: "isolated", Form: "standalone"}},
+		{Valid: true, Name: "a", Hash: "ha", Definition: &extensionValidationSourceReport{Runtime: "subprocess", Language: "go", SDK: "ompig-go", Isolation: "shared-ok", Form: "factory"}},
+		{Valid: true, Name: "b", Hash: "hb", Definition: &extensionValidationSourceReport{Runtime: "subprocess", Language: "go", SDK: "ompig-go", Isolation: "shared-ok", Form: "factory"}},
+		{Valid: true, Name: "c", Hash: "hc", Definition: &extensionValidationSourceReport{Runtime: "subprocess", Language: "go", SDK: "ompig-go", Isolation: "isolated", Form: "standalone"}},
 	}
 	plan := isolatedPlacementPlan(reports)
 	if len(plan.Groups) != 2 {
@@ -488,8 +488,8 @@ func TestInstallValidateOnlySetReportsDuplicateTools(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	pigHome := t.TempDir()
-	t.Setenv("PIG_HOME", pigHome)
+	ompigHome := t.TempDir()
+	t.Setenv("OMPIG_HOME", ompigHome)
 	fixture := filepath.Join("..", "..", "coding", "extension", "host", "subprocess", "testdata", "sdk-fixture")
 	stdout, stderr, code := captureStdoutStderr(t, func() int {
 		return runPackageCommand([]string{"install", "--validate-only", "--json", fixture, fixture})
@@ -579,7 +579,7 @@ func containsString(values []string, want string) bool {
 }
 
 func TestValidationUsesRuntimeRegistrationNotSourceClaims(t *testing.T) {
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	sdkRoot, err := filepath.Abs(filepath.Join("..", "..", "extensions", "sdk"))
 	if err != nil {
 		t.Fatal(err)
@@ -588,12 +588,12 @@ func TestValidationUsesRuntimeRegistrationNotSourceClaims(t *testing.T) {
 	if err := os.MkdirAll(root, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	goMod := "module example.com/runtime-only\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\nreplace github.com/MichaelKinsy/PiG/extensions/sdk => " + sdkRoot + "\n"
+	goMod := "module example.com/runtime-only\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\nreplace github.com/tmih06/ompig/extensions/sdk => " + sdkRoot + "\n"
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte(goMod), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	source := `package runtimeonly
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 // Static claim only: tool static_only must never enter validation output.
 func Extension() *sdk.Extension {
   ext := sdk.New("runtime-only")
@@ -613,18 +613,18 @@ func Extension() *sdk.Extension {
 	}
 }
 
-// A fixed two-minute bound killed a slow Rust build that PIG_CELL_BUILD_TIMEOUT
+// A fixed two-minute bound killed a slow Rust build that OMPIG_CELL_BUILD_TIMEOUT
 // allows, so validation's bound must follow the variable.
 func TestValidationTimeoutHonoursPigCellBuildTimeout(t *testing.T) {
-	t.Setenv("PIG_CELL_BUILD_TIMEOUT", "")
+	t.Setenv("OMPIG_CELL_BUILD_TIMEOUT", "")
 	if got, want := validationTimeout(), 10*time.Minute+validationLoadTimeout; got != want {
 		t.Fatalf("default = %v, want %v", got, want)
 	}
-	t.Setenv("PIG_CELL_BUILD_TIMEOUT", "45m")
+	t.Setenv("OMPIG_CELL_BUILD_TIMEOUT", "45m")
 	if got, want := validationTimeout(), 45*time.Minute+validationLoadTimeout; got != want {
 		t.Fatalf("45m = %v, want %v", got, want)
 	}
-	t.Setenv("PIG_CELL_BUILD_TIMEOUT", "1s")
+	t.Setenv("OMPIG_CELL_BUILD_TIMEOUT", "1s")
 	if got := validationTimeout(); got < 1*time.Second+validationLoadTimeout {
 		t.Fatalf("1s = %v", got)
 	}
@@ -637,17 +637,17 @@ func TestInstallValidateOnlyValidatesPackageRootMembers(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping extension build in short mode")
 	}
-	t.Setenv("PIG_HOME", t.TempDir())
+	t.Setenv("OMPIG_HOME", t.TempDir())
 	root := t.TempDir()
 	member := filepath.Join(root, "extensions", "hello")
 	if err := os.MkdirAll(member, 0o755); err != nil {
 		t.Fatal(err)
 	}
 	files := map[string]string{
-		filepath.Join(root, "package.json"): `{"name":"repro","version":"0.0.1","keywords":["pig-package"],"pi":{"extensions":["extensions/hello"]}}`,
-		filepath.Join(member, "go.mod"):     "module example.com/hello\n\ngo 1.26\n\nrequire github.com/MichaelKinsy/PiG/extensions/sdk v0.0.0\n",
+		filepath.Join(root, "package.json"): `{"name":"repro","version":"0.0.1","keywords":["ompig-package"],"pi":{"extensions":["extensions/hello"]}}`,
+		filepath.Join(member, "go.mod"):     "module example.com/hello\n\ngo 1.26\n\nrequire github.com/tmih06/ompig/extensions/sdk v0.0.0\n",
 		filepath.Join(member, "extension.go"): `package hello
-import sdk "github.com/MichaelKinsy/PiG/extensions/sdk"
+import sdk "github.com/tmih06/ompig/extensions/sdk"
 func Extension() *sdk.Extension {
   ext := sdk.New("hello")
   ext.Command("hello", "say hello", func(sdk.Context, string) error { return nil })
@@ -695,9 +695,9 @@ func validateOnlyFixtureEnv(t *testing.T) (home, agentDir string) {
 	t.Helper()
 	home = shortTempDir(t)
 	agentDir = filepath.Join(home, "agent")
-	t.Setenv("PIG_HOME", home)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
-	t.Setenv("PIG_OFFLINE", "")
+	t.Setenv("OMPIG_HOME", home)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_OFFLINE", "")
 	t.Setenv("PI_OFFLINE", "")
 	t.Chdir(t.TempDir())
 	return home, agentDir
@@ -709,7 +709,7 @@ func validateOnlyGitFixture(t *testing.T, fixture string) string {
 	if err := os.CopyFS(work, os.DirFS(fixture)); err != nil {
 		t.Fatal(err)
 	}
-	for _, args := range [][]string{{"init", "-q", "-b", "main"}, {"add", "."}, {"-c", "user.name=Pig Test", "-c", "user.email=pig@example.test", "commit", "-q", "-m", "fixture"}} {
+	for _, args := range [][]string{{"init", "-q", "-b", "main"}, {"add", "."}, {"-c", "user.name=Ompig Test", "-c", "user.email=ompig@example.test", "commit", "-q", "-m", "fixture"}} {
 		if _, err := packagemanager.RunCmdInDir(work, "git", args...); err != nil {
 			t.Fatal(err)
 		}

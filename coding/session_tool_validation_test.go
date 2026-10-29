@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Pi's wrapRegisteredTool retains the original parameter schema while replacing execute. Session context binding must likewise retain host-only TypeBox conversion metadata without exposing it to the provider.

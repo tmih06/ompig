@@ -22,12 +22,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/extensions/sdk/frontend"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/extensions/sdk/frontend"
+	"github.com/tmih06/ompig/internal/lazyregexp"
 
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/tui/widthx"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/tui/widthx"
 )
 
 // treeNodeWithLabelUpdate permits the selector to publish label edits before notifying its persistence callback.
@@ -149,7 +149,7 @@ type TreeList struct {
 
 	// labelCache / tagsCache memoize the per-node label and filter tags,
 	// computed lazily on first use. Upstream's FlatNode stores only the
-	// node and formats labels at render time (~20 visible rows); pig used
+	// node and formats labels at render time (~20 visible rows); ompig used
 	// to format every node's markdown label AND unmarshal its message
 	// twice during flatten, making /tree slow to open on large sessions.
 	// Label saves invalidate the affected node's cached metadata.
@@ -1516,7 +1516,7 @@ func (t *TreeList) setFilterMode(mode string) {
 
 // NativeNode reports the visible rows as a selector whose item ids are the
 // node ids, checked on the active path, with the filter modes as tabs in the
-// order app.tree.filter.cycleForward steps through them. pig additive (D91):
+// order app.tree.filter.cycleForward steps through them. ompig additive (D91):
 // a row's label is its plain text after the tree connectors (fold marker,
 // branch label, label time, entry), the status the filter and label time
 // labels, and the label editor is not modelled, so the dock shows it as

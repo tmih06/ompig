@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/config/internal/ini"
-	"github.com/MichaelKinsy/PiG/third_party/awssdk/internal/shareddefaults"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 	"github.com/aws/smithy-go/logging"
 	smithyrequestcompression "github.com/aws/smithy-go/private/requestcompression"
+	"github.com/tmih06/ompig/third_party/awssdk/config/internal/ini"
+	"github.com/tmih06/ompig/third_party/awssdk/internal/shareddefaults"
 )
 
 const (

@@ -6,7 +6,7 @@ import (
 )
 
 // execute.ts carries a script's string result and its console lines into the tool result text unchanged, and a JavaScript string can hold an
-// unpaired surrogate. PiG holds that unit as a WTF-8 sequence, which the session writer and the json events write as the escape \ud800, as Pi
+// unpaired surrogate. Ompig holds that unit as a WTF-8 sequence, which the session writer and the json events write as the escape \ud800, as Pi
 // does. This drives the whole execute path (sandbox, valueText, join, truncation), not only valueText.
 func TestExecuteKeepsALoneSurrogateInTheToolResult(t *testing.T) {
 	for _, tc := range []struct{ name, code string }{

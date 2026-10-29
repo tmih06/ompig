@@ -1,4 +1,4 @@
-//go:build !pig_strip_node_extensions
+//go:build !ompig_strip_node_extensions
 
 package subprocess
 
@@ -12,7 +12,7 @@ import (
 // Ports packages/coding-agent/test/suite/regressions/11156-pi-ai-models-virtual-module.test.ts. An extension that imports
 // @earendil-works/pi-ai/models (for clampThinkingLevel, say) failed with "Cannot find module" because the subpath was missing from
 // the loader's virtual modules (core/extensions/virtual-modules.ts:29,37). Pi's test reads VIRTUAL_MODULES; this one loads an
-// extension through the runtime's jiti loader and a native import through its hooks, since the shim table is what PiG serves.
+// extension through the runtime's jiti loader and a native import through its hooks, since the shim table is what Ompig serves.
 func TestNodeExtensionImportsPiAiModelsSubpath(t *testing.T) {
 	node, err := exec.LookPath("node")
 	if err != nil {

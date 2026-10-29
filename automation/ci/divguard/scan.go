@@ -43,7 +43,7 @@ type check struct {
 // hotPrefixes are the packages on the agent, streaming, tool, persistence,
 // rendering and extension-host paths, where an invented limit or a silent
 // exit changes what users see.
-var hotPrefixes = []string{"agent/", "ai/", "coding/", "internal/codingagent/", "tui/", "cmd/pig/"}
+var hotPrefixes = []string{"agent/", "ai/", "coding/", "internal/codingagent/", "tui/", "cmd/ompig/"}
 
 func inHot(rel string) bool {
 	for _, p := range hotPrefixes {
@@ -243,7 +243,7 @@ func (fc *fileCtx) markerLines(pos token.Pos, stack []ast.Node) []int {
 }
 
 // hit builds a Hit at pos. It reports false when a recorded divergence
-// marker (`// pig divergence (D<N>)` or `// pig additive (D<N>)`) sits on
+// marker (`// ompig divergence (D<N>)` or `// ompig additive (D<N>)`) sits on
 // the flagged line, directly above it, or directly above an enclosing
 // statement or declaration (stack holds pos's ancestors, outermost first).
 // For every check but magic-literal, which also verifies the value, an
@@ -291,7 +291,7 @@ func (fc *fileCtx) commentsNear(ln int) []string {
 	return out
 }
 
-var dnMarkerRe = regexp.MustCompile(`pig (?:divergence|additive) \((D[0-9]+)\)`)
+var dnMarkerRe = regexp.MustCompile(`ompig (?:divergence|additive) \((D[0-9]+)\)`)
 
 // dnMarked reports whether a comment on any of lines names a recorded
 // divergence. A marker naming an unrecorded D<N> is a problem, not an allow.

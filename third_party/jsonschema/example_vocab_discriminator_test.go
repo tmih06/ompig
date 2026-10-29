@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/third_party/jsonschema"
+	"github.com/tmih06/ompig/third_party/jsonschema"
 )
 
 // SchemaExt --

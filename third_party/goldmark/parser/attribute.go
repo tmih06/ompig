@@ -5,8 +5,8 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/text"
-	"github.com/MichaelKinsy/PiG/third_party/goldmark/util"
+	"github.com/tmih06/ompig/third_party/goldmark/text"
+	"github.com/tmih06/ompig/third_party/goldmark/util"
 )
 
 var attrNameID = []byte("id")

@@ -10,12 +10,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // managerLogEnv makes a copy of this test binary a package manager that
 // appends each invocation's arguments to the named file and succeeds.
-const managerLogEnv = "PIG_TEST_MANAGER_LOG"
+const managerLogEnv = "OMPIG_TEST_MANAGER_LOG"
 
 // runLoggingManager is the package manager managerLogEnv selects.
 func runLoggingManager(log string) int {
@@ -38,10 +38,10 @@ func runLoggingManager(log string) int {
 // npmUpdateFixtureRootEnv names the global node_modules root of the npm-owned
 // installation TestWindowsNpmSelfUpdateReplacesTheRunningInstallation builds.
 // Copies of this test binary play both of its programs there.
-const npmUpdateFixtureRootEnv = "PIG_TEST_NPM_UPDATE_ROOT"
+const npmUpdateFixtureRootEnv = "OMPIG_TEST_NPM_UPDATE_ROOT"
 
-// runNpmUpdateFixture runs the program this binary was copied to be: pig runs
-// `pig update`, and npm answers `npm root -g` and replaces the launcher under
+// runNpmUpdateFixture runs the program this binary was copied to be: ompig runs
+// `ompig update`, and npm answers `npm root -g` and replaces the launcher under
 // root on install.
 // It reports false for any other name.
 func runNpmUpdateFixture(root string) (int, bool) {
@@ -51,7 +51,7 @@ func runNpmUpdateFixture(root string) (int, bool) {
 		return 2, true
 	}
 	switch strings.TrimSuffix(strings.ToLower(filepath.Base(exe)), ".exe") {
-	case "pig":
+	case "ompig":
 		return runSelfUpdate(false), true
 	case "npm":
 		return runFakeNpm(root, os.Args[1:]), true
@@ -60,7 +60,7 @@ func runNpmUpdateFixture(root string) (int, bool) {
 }
 
 // npmNestedPlatformPackageDir is where a global npm install puts the platform
-// package that holds pig.exe: nested inside the launcher package under root,
+// package that holds ompig.exe: nested inside the launcher package under root,
 // the global node_modules.
 func npmNestedPlatformPackageDir(root string) string {
 	cpu := map[string]string{"amd64": "x64", "arm64": "arm64"}[runtime.GOARCH]
@@ -69,7 +69,7 @@ func npmNestedPlatformPackageDir(root string) string {
 }
 
 // runFakeNpm removes the installed launcher's whole tree, as npm does, and
-// writes the new release's nested pig.exe, recording the install arguments as
+// writes the new release's nested ompig.exe, recording the install arguments as
 // its content.
 func runFakeNpm(root string, args []string) int {
 	if slices.Equal(args, []string{"root", "-g"}) {
@@ -89,7 +89,7 @@ func runFakeNpm(root string, args []string) int {
 		fmt.Fprintln(os.Stderr, "fake npm:", err)
 		return 1
 	}
-	if err := os.WriteFile(filepath.Join(platform, "pig.exe"), []byte(strings.Join(args, " ")), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(platform, "ompig.exe"), []byte(strings.Join(args, " ")), 0o755); err != nil {
 		fmt.Fprintln(os.Stderr, "fake npm:", err)
 		return 1
 	}

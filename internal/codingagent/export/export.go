@@ -18,16 +18,16 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
-	"github.com/MichaelKinsy/PiG/coding/rpcclient"
-	"github.com/MichaelKinsy/PiG/internal/ecmascript"
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
-	"github.com/MichaelKinsy/PiG/internal/lazyregexp"
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/coding/extension"
+	"github.com/tmih06/ompig/coding/rpcclient"
+	"github.com/tmih06/ompig/internal/ecmascript"
+	"github.com/tmih06/ompig/internal/jsnumber"
+	"github.com/tmih06/ompig/internal/lazyregexp"
+	"github.com/tmih06/ompig/internal/nodeerrno"
+	"github.com/tmih06/ompig/tui"
 )
 
-const appName = "pig"
+const appName = "ompig"
 
 // The binary carries each asset gzip-compressed (about 277 KB of text becomes 80 KB); the uncompressed files next to them are the vendored
 // source, and TestEmbeddedAssetsMatchSources fails when a .gz does not inflate to its source. Refresh them with go generate after a pin bump.
@@ -160,7 +160,7 @@ func mustReadAsset(path string) string {
 // This is needed because upstream's export-html/index.ts uses .replace()
 // to inject vendor scripts (highlight.min.js contains $& in regex patterns,
 // template.js uses $$ for literal $ in template literals). Without this,
-// pig's output diverges from pi's byte-exact HTML.
+// ompig's output diverges from pi's byte-exact HTML.
 func jsReplace(s, search, replacement string) string {
 	before, after, ok := strings.Cut(s, search)
 	if !ok {

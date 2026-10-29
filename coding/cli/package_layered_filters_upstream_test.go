@@ -6,7 +6,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/codingagent"
+	"github.com/tmih06/ompig/internal/codingagent"
 )
 
 // TestPackageLayeredFiltersUpstream ports package-manager.test.ts:1707-1743.
@@ -14,7 +14,7 @@ import (
 func TestPackageLayeredFiltersUpstream(t *testing.T) {
 	cwd, agentDir := t.TempDir(), t.TempDir()
 	t.Setenv("HOME", cwd)
-	t.Setenv("PIG_CODING_AGENT_DIR", agentDir)
+	t.Setenv("OMPIG_CODING_AGENT_DIR", agentDir)
 	t.Setenv("PI_CODING_AGENT_DIR", agentDir)
 	root := filepath.Join(cwd, "layered-pkg")
 	if err := os.MkdirAll(filepath.Join(root, "extensions"), 0o755); err != nil {

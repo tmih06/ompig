@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/MichaelKinsy/PiG/test/parity/interface-closure/autobind/rules"
+	"github.com/tmih06/ompig/test/parity/interface-closure/autobind/rules"
 )
 
 // tri is the outcome of a rule: the rules either establish a property, refute it, or cannot decide. Cannot decide is a gap.
@@ -1474,7 +1474,7 @@ func numericConstraint(t types.Type) bool {
 }
 
 // openRecord reports whether an intersection operand is `Record<string, unknown>` (or `any`): an index signature that admits extra
-// keys. Pi uses it on per-provider options (`StreamOptions & Record<string, unknown>`, ai/src/types.ts:276-278 and 343); PiG carries each
+// keys. Pi uses it on per-provider options (`StreamOptions & Record<string, unknown>`, ai/src/types.ts:276-278 and 343); Ompig carries each
 // provider option as a typed StreamOptions field (LEAD-ANSWERS-ledger #2), so the slot adds no member a struct must have.
 func openRecord(op string) bool {
 	switch strings.Join(strings.Fields(op), " ") {

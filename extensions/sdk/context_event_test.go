@@ -59,7 +59,7 @@ func TestContextEventResultHonorsTypedMessageSlices(t *testing.T) {
 	// Handler 5: returns nothing and edits nothing.
 	ext.OnEvent(EventContext, func(Context, map[string]any) (any, error) { return nil, nil })
 
-	t.Setenv("PIG_EXT_SOCKET", host.sockPath)
+	t.Setenv("OMPIG_EXT_SOCKET", host.sockPath)
 	done := make(chan error, 1)
 	go func() { done <- ext.Run() }()
 	host.accept(t)
@@ -88,7 +88,7 @@ func TestContextEventResultHonorsTypedMessageSlices(t *testing.T) {
 	}
 	type contextReport struct {
 		Messages  []map[string]any `json:"messages"`
-		Unchanged *bool            `json:"_pigContextUnchanged"`
+		Unchanged *bool            `json:"_ompigContextUnchanged"`
 	}
 
 	dropped := dispatch(1)
@@ -111,7 +111,7 @@ func TestContextEventResultHonorsTypedMessageSlices(t *testing.T) {
 		t.Fatalf("same handler error = %+v", same.Error)
 	}
 	// The host holds the list it sent, so a reply for one that is as it was sent carries the report alone.
-	if string(same.Result) != `{"_pigContextUnchanged":true}` {
+	if string(same.Result) != `{"_ompigContextUnchanged":true}` {
 		t.Fatalf("same message objects reported %s, want the unchanged report alone", same.Result)
 	}
 
@@ -144,7 +144,7 @@ func TestContextEventResultHonorsTypedMessageSlices(t *testing.T) {
 	if editedReport.Unchanged == nil || !*editedReport.Unchanged || len(editedReport.Messages) != 2 || editedReport.Messages[0]["content"] != "edited" {
 		t.Fatalf("in-place edit reported %s", edited.Result)
 	}
-	if untouched := dispatch(5); string(untouched.Result) != `{"_pigContextUnchanged":true}` {
+	if untouched := dispatch(5); string(untouched.Result) != `{"_ompigContextUnchanged":true}` {
 		t.Fatalf("no-op handler reported %s, want the unchanged report alone", untouched.Result)
 	}
 

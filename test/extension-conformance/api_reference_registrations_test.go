@@ -3,7 +3,7 @@ package extensionconformance
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // TestConformance_RegistrationsAcrossSDKs pins Pi's pi.registerCommand, registerTool, registerFlag, registerShortcut,

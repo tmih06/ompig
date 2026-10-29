@@ -2,7 +2,7 @@ package evalsuites
 
 // Ports packages/evals/evals/tui.docs.eval.ts.
 //
-// Pi's oracle builds an in-process InteractiveMode over a recording terminal. PiG's interactive mode is the pig
+// Pi's oracle builds an in-process InteractiveMode over a recording terminal. Ompig's interactive mode is the ompig
 // binary, so the oracle renders it in a tmux pane over a session file whose last assistant message carries the
 // fixture's context usage, with the agent's extension loaded from the run's agent directory and the model's context
 // window set to 272k through models.json modelOverrides. The built-in status text for comparison comes from the
@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MichaelKinsy/PiG/internal/evals"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
+	"github.com/tmih06/ompig/internal/evals"
+	"github.com/tmih06/ompig/internal/jsstring"
 )
 
 const contextWindow = 272_000
@@ -139,7 +139,7 @@ func overrideContextWindow(agentDir, scratch string, selection evals.PiCodingAge
 	return copied, os.WriteFile(modelsPath, encoded, 0o600)
 }
 
-// renderFooter runs pig interactively in a tmux pane until the footer shows the context status, and returns the pane.
+// renderFooter runs ompig interactively in a tmux pane until the footer shows the context status, and returns the pane.
 func renderFooter(ctx context.Context, run evals.AgentRun, agentDir, sessionPath string, extensions bool, ready *regexp.Regexp) (string, error) {
 	name := fmt.Sprintf("parity-evals-footer-%d", rand.Uint32())
 	home := filepath.Join(filepath.Dir(agentDir), "home")
@@ -149,7 +149,7 @@ func renderFooter(ctx context.Context, run evals.AgentRun, agentDir, sessionPath
 	args := []string{"new-session", "-d", "-s", name, "-x", "100", "-y", "30", "-c", run.Workspace,
 		"-e", "HOME=" + home, "-e", "USERPROFILE=" + home, "-e", "PI_OFFLINE=1", "-e", "TERM=xterm-256color",
 		"-e", evals.AgentDirEnvironment() + "=" + agentDir,
-		run.PigPath, "--session", sessionPath, "--model", run.Model.Provider + "/" + run.Model.ID, "--offline"}
+		run.OmpigPath, "--session", sessionPath, "--model", run.Model.Provider + "/" + run.Model.ID, "--offline"}
 	if !extensions {
 		args = append(args, "--no-extensions")
 	}
@@ -167,7 +167,7 @@ func renderFooter(ctx context.Context, run evals.AgentRun, agentDir, sessionPath
 		}
 		out, err := exec.CommandContext(ctx, "tmux", "capture-pane", "-p", "-t", name).Output()
 		if err != nil {
-			return pane, fmt.Errorf("pig exited before rendering the footer: %w", err)
+			return pane, fmt.Errorf("ompig exited before rendering the footer: %w", err)
 		}
 		if pane = string(out); ready.MatchString(pane) {
 			// Let the footer settle: a later render may replace the status.
@@ -179,9 +179,9 @@ func renderFooter(ctx context.Context, run evals.AgentRun, agentDir, sessionPath
 	return pane, errors.New("the footer did not show the context status")
 }
 
-// contextUsageOf reads the Session's context usage from pig's RPC get_session_stats.
+// contextUsageOf reads the Session's context usage from ompig's RPC get_session_stats.
 func contextUsageOf(ctx context.Context, run evals.AgentRun, agentDir, sessionPath string) (*contextUsage, error) {
-	stats, err := evals.RPCSessionStats(ctx, run.PigPath, run.Workspace, []string{"--session", sessionPath, "--model", run.Model.Provider + "/" + run.Model.ID, "--no-extensions"},
+	stats, err := evals.RPCSessionStats(ctx, run.OmpigPath, run.Workspace, []string{"--session", sessionPath, "--model", run.Model.Provider + "/" + run.Model.ID, "--no-extensions"},
 		append(os.Environ(), evals.AgentDirEnvironment()+"="+agentDir))
 	if err != nil {
 		return nil, err
@@ -345,6 +345,6 @@ func TUI() evals.Suite {
 		Judges:           []evals.Judge{contextFooterJudge{}},
 		NoJudgeThreshold: true,
 		Cases: []evals.Case{singleCase("replaces numeric context usage with a progress bar", promptThenReload(
-			"Change the PiG footer replacing the built-in context info, e.g. `42.2%/272k (auto)`, with a ten-cell progress bar to make it show ████░░░░░░ 42% instead. Clamp percentages to the 0-100 range. Just replace the context. Otherwise leave everything else the same."))},
+			"Change the Ompig footer replacing the built-in context info, e.g. `42.2%/272k (auto)`, with a ten-cell progress bar to make it show ████░░░░░░ 42% instead. Clamp percentages to the 0-100 range. Just replace the context. Otherwise leave everything else the same."))},
 	}
 }

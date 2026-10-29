@@ -7,7 +7,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // mutatedYAMLTexts makes n texts by mutating the corpus: characters inserted, deleted, replaced, duplicated and swapped, and lines cut and reindented. Each mutation keeps the YAML-significant characters likely, so the texts probe the parser's error and recovery paths.
@@ -97,7 +97,7 @@ emit(input.map((src) => [...new Lexer().lex(src)]));`, corpus, &want)
 	}
 }
 
-// TestParseMatchesTheLibraryOnUTF16Offsets compares parse() of eemeli/yaml 2.9.0 with Parse for texts the library reads as UTF-16: offsets, lengths and character counts the library takes in code units while Pig's lexer works on UTF-8 bytes, plus explicitly tagged text the core tags do not resolve and the key normalisation of JavaScript collections.
+// TestParseMatchesTheLibraryOnUTF16Offsets compares parse() of eemeli/yaml 2.9.0 with Parse for texts the library reads as UTF-16: offsets, lengths and character counts the library takes in code units while Ompig's lexer works on UTF-8 bytes, plus explicitly tagged text the core tags do not resolve and the key normalisation of JavaScript collections.
 func TestParseMatchesTheLibraryOnUTF16Offsets(t *testing.T) {
 	long := strings.Repeat("k", 1022)
 	compareParseWithLibrary(t, []string{

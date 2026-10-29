@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 type basicComponentSpec struct {
@@ -80,7 +80,7 @@ func TestBasicComponentsRenderLikePi(t *testing.T) {
 				for _, bg := range []bool{false, true} {
 					probes = append(probes, basicComponentProbe{basicComponentSpec{Kind: "text", Text: content, PaddingX: pad[0], PaddingY: pad[1], Bg: bg}, width})
 				}
-				// D66: when the padding leaves no content cell, Pig clamps the horizontal padding where Pi emits a row wider than the viewport.
+				// D66: when the padding leaves no content cell, Ompig clamps the horizontal padding where Pi emits a row wider than the viewport.
 				if pad[0] <= (width-1)/2 {
 					probes = append(probes, basicComponentProbe{basicComponentSpec{Kind: "truncated", Text: content, PaddingX: pad[0], PaddingY: pad[1]}, width})
 				}

@@ -7,7 +7,7 @@ family = "selectors"
 kind = "boundary-transition"
 claim = "select.confirm and literal LF submit before select.cancel; delegated Input submit has no callback and cannot complete the dialog"
 status = "ported"
-pig_targets = ["tui/extension_input.go#HandleInput", "internal/codingagent/ext_ui_context.go#Input"]
+ompig_targets = ["tui/extension_input.go#HandleInput", "internal/codingagent/ext_ui_context.go#Input"]
 evidence = [
   "tui/extension_dialog_bindings_test.go#TestExtensionDialogsMatchPiBindingsAndPalette",
   "internal/codingagent/extension_dialog_remapping_test.go#TestExtensionDialogRemappingThroughOwnerLoop",
@@ -28,7 +28,7 @@ family = "selectors"
 kind = "boundary-transition"
 claim = "the manager resolves expansion before clamped navigation before confirm before cancel; empty lists and empty-string choices do not submit; literal j/k/LF remain supported"
 status = "ported"
-pig_targets = ["tui/extension_selector.go#HandleInput", "internal/codingagent/ext_ui_context.go#Select"]
+ompig_targets = ["tui/extension_selector.go#HandleInput", "internal/codingagent/ext_ui_context.go#Select"]
 evidence = [
   "tui/extension_dialog_bindings_test.go#TestExtensionDialogsMatchPiBindingsAndPalette",
   "internal/codingagent/extension_dialog_remapping_test.go#TestExtensionDialogRemappingThroughOwnerLoop",
@@ -49,7 +49,7 @@ family = "selectors"
 kind = "boundary-transition"
 claim = "tui.select.cancel is tested before app.editor.external, so a remapped external key that equals the cancel key cancels; every other key reaches the editor, whose Enter submits and Shift+Enter inserts a newline"
 status = "ported"
-pig_targets = ["internal/codingagent/extension_editor.go#HandleInput", "internal/codingagent/ext_ui_context.go#Editor"]
+ompig_targets = ["internal/codingagent/extension_editor.go#HandleInput", "internal/codingagent/ext_ui_context.go#Editor"]
 evidence = [
   "internal/codingagent/extension_editor_test.go#TestExtensionEditorHandleInputMatchesPi",
   "internal/codingagent/extension_editor_test.go#TestExtensionEditorHandleInputTransitions",
@@ -72,7 +72,7 @@ family = "startup"
 kind = "boundary-transition"
 claim = "verbose expands startup help initially without expanding tools; a changed tool-expansion state subsequently selects the header state, while an unchanged state leaves initial help intact"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive.go#Run",
   "internal/codingagent/interactive_editor.go#setAllToolsExpanded",
   "internal/codingagent/startup_header.go#renderBuiltInHeader",
@@ -98,7 +98,7 @@ family = "interactive-input"
 kind = "scope-order-cycle"
 claim = "app.model.cycleForward and app.model.cycleBackward delegate to the Session, which cycles available scoped models in configured order and applies each scoped thinking level"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive_input.go",
   "internal/codingagent/interactive_models.go#cycleModel",
   "coding/session_model_cycle.go#CycleModel",
@@ -140,7 +140,7 @@ family = "model-resolver-selector"
 kind = "boundary-transition"
 claim = "tui.select.up wraps first-to-last and tui.select.down wraps last-to-first within the filtered model list"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/model_select.go#moveCursor",
 ]
 evidence = [
@@ -170,7 +170,7 @@ family = "model-resolver-selector"
 kind = "selection-persistence"
 claim = "Enter selects without saving global model defaults; app.models.save selects and saves the default, appending outside models to a nonempty scope in session order on reopen; empty selections and cancellation do not save"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/model_select.go#HandleInput",
   "internal/codingagent/interactive_commands.go#buildSlashContext",
   "internal/codingagent/model_picker.go#persistDefaultModel",
@@ -208,7 +208,7 @@ family = "tui-components"
 kind = "unicode-line-break"
 claim = "Han, Hiragana, Katakana, Hangul, and Bopomofo graphemes form independent wrap tokens so a CJK word can fill the remaining line cells"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/widthx/wrap.go#splitIntoTokensWithAnsi",
 ]
 evidence = [
@@ -232,7 +232,7 @@ family = "extensions-runtime"
 kind = "reload-dispatch-ownership"
 claim = "reload replaces the authoritative extension shortcut dispatch map so removed handlers stop, added handlers start, and no callback targets an obsolete runner"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive_helpers.go#setupExtensionShortcutListener",
   "internal/codingagent/reload_resources.go#replaceExtensionRunner",
 ]
@@ -260,7 +260,7 @@ family = "extensions-runtime"
 kind = "async-dialog-lifecycle"
 claim = "a tool-time extension selector is installed and mutated on the owning TUI loop, blocks the tool until selection, and resolves cancellation distinctly from bridge failure"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/ext_ui_context.go#runDialog",
   "internal/codingagent/interactive_input.go#dispatchKey",
   "internal/codingagent/interactive_input.go#syncExtensionSlashCommands",
@@ -290,7 +290,7 @@ family = "extensions-runtime"
 kind = "async-dialog-lifecycle"
 claim = "a tool-time extension input is installed and mutated on the owning TUI loop, blocks the tool until submission, preserves empty submission, and reports cancellation separately"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/ext_ui_context.go#runDialog",
   "internal/codingagent/interactive_input.go#dispatchKey",
   "internal/codingagent/interactive_input.go#syncExtensionSlashCommands",
@@ -320,7 +320,7 @@ family = "extensions-runtime"
 kind = "async-dialog-lifecycle"
 claim = "a tool-time extension editor is installed and mutated on the owning TUI loop, blocks the tool until submission, and reports cancellation separately"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/ext_ui_context.go#runDialog",
   "internal/codingagent/interactive_input.go#dispatchKey",
   "internal/codingagent/interactive_input.go#syncExtensionSlashCommands",
@@ -349,7 +349,7 @@ family = "compaction"
 kind = "async-queue-lifecycle"
 claim = "messages submitted during overflow compaction are moved in order into the imminent retry turn instead of remaining stranded until another user submission"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive_events.go#handleAgentEvent",
   "coding/session.go#RunAgentPrompt",
   "internal/codingagent/interactive_transcript.go#flushCompactionQueue",
@@ -376,7 +376,7 @@ family = "tui-components"
 kind = "terminal-capability-negotiation"
 claim = "raw-mode startup requests Kitty flags 7 and uses Device Attributes as the no-Kitty sentinel before enabling modifyOtherKeys, while negotiation responses never reach application input"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "tui/terminal.go#extendedKeyInit",
   "tui/terminal.go#handleKeyboardProtocolNegotiationSequence",
   "internal/codingagent/interactive_input.go#dispatchChunks",
@@ -403,7 +403,7 @@ family = "tui-components"
 kind = "nested-terminal-capability"
 claim = "Herdr image rendering requires HERDR_KITTY_GRAPHICS=1 and never inherits Kitty support solely from the outer terminal identity"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "tui/terminal_image.go#DetectCapabilities",
 ]
 evidence = [
@@ -429,7 +429,7 @@ family = "extensions-runtime"
 kind = "custom-message-render-dispatch"
 claim = "displayed custom messages resolve the first registered renderer, preserve expanded state, fall back visibly on invalid output, and subprocess rendering never performs IPC or JSON work on the TUI render loop"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive_transcript.go#appendCustomMessage",
   "coding/extension/host/subprocess/render_proxy.go#Render(width int)",
   "coding/extension/host/subprocess/render_proxy.go#requestLoop",
@@ -457,7 +457,7 @@ family = "extensions-runtime"
 kind = "footer-composition-ownership"
 claim = "a subprocess custom footer replaces only the two standard footer rows while the host retains one sorted keyed-status row across repeated reload and footer clearing"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/ext_ui_context.go#SetFooter",
   "internal/codingagent/status_line.go#Render(width int)",
 ]
@@ -483,7 +483,7 @@ family = "extensions-runtime"
 kind = "session-replacement-lifecycle-order"
 claim = "resumed and replacement sessions expose their resolved current ID and absolute file to the current extension runner before session and agent lifecycle handlers execute"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/session_manager.go#loadSessionFile",
   "coding/session.go#ReplaceRunner",
   "coding/session.go#currentRunner",
@@ -511,7 +511,7 @@ family = "model-resolver-selector"
 kind = "refresh-result-error-status"
 claim = "model picker errors derive from the actual refresh result or registry error; OAuth credential expiry alone never fabricates a catalog refresh failure"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive_commands.go#PickModel",
   "internal/codingagent/model_registry.go#Refresh",
 ]
@@ -534,7 +534,7 @@ family = "model-resolver-selector"
 kind = "selector-input-state-machine"
 claim = "scoped-model input preserves wrap navigation, fuzzy search, filtered bulk actions, unavailable IDs, provider toggles, bounded reorder, session-only dirty/save state, configurable action bindings, explicit cancellation, and key-order precedence when bindings overlap"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/scoped_models_list.go#HandleInput",
   "tui/scoped_models_list.go#refresh",
   "internal/codingagent/keybindings.go#syncToTUI",
@@ -576,7 +576,7 @@ family = "model-resolver-selector"
 kind = "selector-input-state-machine"
 claim = "model picker preserves scope toggle guards, fuzzy Input editing whose own submit selects the highlighted model, filter re-anchoring, wrapped arrows, selection, cancellation, the save binding and configured TUI action bindings"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/model_select.go#HandleInput",
   "tui/model_select.go#applyFilter",
 ]
@@ -611,7 +611,7 @@ family = "tui-components"
 kind = "cancellation-input"
 claim = "the configured tui.select.cancel binding aborts the signal and invokes onAbort on every press, while unrelated input, including the default Escape after a remap, leaves cancellation untouched"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/cancellable_loader.go#HandleInput",
 ]
 evidence = [
@@ -634,7 +634,7 @@ family = "tui-components"
 kind = "resource-lifecycle"
 claim = "disposing the loader stops its animation timer and neither aborts the operation nor invokes onAbort; a second dispose is harmless"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/cancellable_loader.go#Dispose",
 ]
 evidence = [
@@ -657,7 +657,7 @@ family = "tui-components"
 kind = "selector-input-state-machine"
 claim = "SelectList mode wraps arrows, reports selection changes, confirms/cancels through configured actions, and ignores search-selector-only Page/Home/End input"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/select_list.go#HandleInput",
   "tui/select_filterable.go#HandleInput",
   "tui/select_submenu.go#HandleInput",
@@ -690,7 +690,7 @@ family = "tui-components"
 kind = "single-line-input-state-machine"
 claim = "Input preserves configured submit/cancel/edit actions, grapheme cursor and deletion, word movement, kill/yank/undo chains, atomic cleaned paste, Kitty CSI-u text (modifyOtherKeys sequences are rejected as control input), and C0/C1 rejection"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/text_input.go#HandleInput",
 ]
 evidence = [
@@ -736,7 +736,7 @@ family = "tui-components"
 kind = "keybinding-resolution"
 claim = "action matching uses the resolved ordered key list, replaces defaults with explicit user bindings including empty bindings, accepts every terminal encoding for each KeyId, and reports no match for unknown actions"
 status = "pending"
-pig_targets = [
+ompig_targets = [
   "tui/keybindings.go#Matches",
 ]
 evidence = [
@@ -760,7 +760,7 @@ family = "compaction"
 kind = "lifecycle-input-override"
 claim = "compaction_start makes Escape call abortCompaction even while the agent is idle, and compaction_end restores normal dispatch while retaining manual cancellation in conversation output"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/interactive_input.go#dispatchKey",
   "internal/codingagent/interactive_events.go#handleAgentEvent",
 ]
@@ -783,9 +783,9 @@ id = "tui/render/main-screen-full-redraw"
 upstream_id = "render:packages/tui/src/tui-main-screen.ts#TuiMainScreen.doRender"
 family = "fullscreen"
 kind = "viewport-shrink-redraw"
-claim = "when a changed row begins above the visible viewport, Pig matches Pi by clearing obsolete physical history and replaying the current logical transcript once"
+claim = "when a changed row begins above the visible viewport, Ompig matches Pi by clearing obsolete physical history and replaying the current logical transcript once"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui.go#doRender",
 ]
 evidence = [
@@ -815,7 +815,7 @@ family = "tui-components"
 kind = "submission-boundary"
 claim = "submission trims JavaScript whitespace before invoking onSubmit; FEFF trims, NEL remains, and empty submissions still invoke the callback once"
 status = "ported"
-pig_targets = ["tui/editor.go#submitValue", "internal/codingagent/extension_editor.go#HandleInput"]
+ompig_targets = ["tui/editor.go#submitValue", "internal/codingagent/extension_editor.go#HandleInput"]
 evidence = ["tui/editor_literal_input_upstream_test.go#TestEditorHistoryAndSubmissionUseJavaScriptTrim", "test/parity/scenarios/tui-components/19-editor-history-submission-whitespace.toml"]
 
 [contract.upstream]
@@ -832,7 +832,7 @@ family = "tui-components"
 kind = "history-boundary"
 claim = "history trims JavaScript whitespace before rejecting empty entries and consecutive duplicates; FEFF-only input is ignored and NEL-only input remains recallable"
 status = "ported"
-pig_targets = ["tui/editor.go#AddToHistory", "tui/editor.go#navigateHistory"]
+ompig_targets = ["tui/editor.go#AddToHistory", "tui/editor.go#navigateHistory"]
 evidence = ["tui/editor_literal_input_upstream_test.go#TestEditorHistoryAndSubmissionUseJavaScriptTrim", "tui/editor_literal_input_upstream_test.go#TestEditorHistoryDeduplicatesAfterJavaScriptTrim", "test/parity/scenarios/tui-components/19-editor-history-submission-whitespace.toml"]
 
 [contract.upstream]
@@ -849,7 +849,7 @@ family = "tui-components"
 kind = "atomic-segment-boundary"
 claim = "registered paste IDs merge word and grapheme segments into one atomic segment with its original source index; unregistered marker-like text remains ordinary text"
 status = "ported"
-pig_targets = ["tui/editor_segments.go#segmentWithMarkers", "tui/editor_segments.go#segment", "tui/editor.go#HandleInput"]
+ompig_targets = ["tui/editor_segments.go#segmentWithMarkers", "tui/editor_segments.go#segment", "tui/editor.go#HandleInput"]
 evidence = ["tui/editor_word_segments_upstream_test.go#TestUpstreamEditorAtomicPasteSegments", "tui/editor_segments_regression_test.go", "test/parity/scenarios/tui-components/20-editor-word-and-paste-segments.toml", "test/parity/scenarios/tui-components/21-editor-terminal-word-and-paste-navigation.toml"]
 
 [contract.upstream]
@@ -866,7 +866,7 @@ family = "tui-components"
 kind = "word-action-boundary"
 claim = "word movement uses the shared word helpers with registered atomic markers, crosses logical lines at their boundaries, and resets kill accumulation and sticky columns"
 status = "ported"
-pig_targets = ["tui/editor_segments.go#prevWordStart", "tui/editor_segments.go#nextWordEnd", "tui/editor.go#cursorWordBackward", "tui/editor.go#cursorWordForward"]
+ompig_targets = ["tui/editor_segments.go#prevWordStart", "tui/editor_segments.go#nextWordEnd", "tui/editor.go#cursorWordBackward", "tui/editor.go#cursorWordForward"]
 evidence = ["tui/editor_word_segments_upstream_test.go#TestUpstreamEditorWordNavigation", "tui/editor_segments_regression_test.go#TestEditorWordMovementResetsKillAndStickyState", "test/parity/scenarios/tui-components/20-editor-word-and-paste-segments.toml", "test/parity/scenarios/tui-components/21-editor-terminal-word-and-paste-navigation.toml"]
 
 [contract.upstream]
@@ -883,7 +883,7 @@ family = "interactive-rendering"
 kind = "keybinding-state-ownership"
 claim = "ordinary input reaches Editor with the installed user bindings intact; enabling key diagnostics does not replace the manager, so raw Ctrl+S submits when configured as tui.input.submit"
 status = "ported"
-pig_targets = ["internal/codingagent/interactive_input.go#inputLoopUntil", "internal/codingagent/keys.go#classifyKeyWithBindings"]
+ompig_targets = ["internal/codingagent/interactive_input.go#inputLoopUntil", "internal/codingagent/keys.go#classifyKeyWithBindings"]
 evidence = ["internal/codingagent/interactive_remapped_submit_test.go#TestTerminalInputPreservesRemappedSubmitBindings", "test/parity/scenarios/tui-components/22-editor-remapped-submit-with-key-diagnostics.toml"]
 
 [contract.upstream]
@@ -900,7 +900,7 @@ family = "interactive-rendering"
 kind = "boundary-transition"
 claim = "extension shortcuts come before the paste-image key, which comes before interrupt (only while no autocomplete is open; onEscape wins over the registered app.interrupt handler) and exit (only when the editor is empty; onCtrlD wins over app.exit); explicit editor history bindings beat every other app action; the remaining app actions run in registration order; every other key reaches the editor"
 status = "ported"
-pig_targets = ["internal/codingagent/custom_editor.go#HandleInput", "internal/codingagent/custom_editor.go#OnAction"]
+ompig_targets = ["internal/codingagent/custom_editor.go#HandleInput", "internal/codingagent/custom_editor.go#OnAction"]
 evidence = [
   "internal/codingagent/custom_editor_test.go#TestCustomEditorExtensionShortcutThenPasteImageComeFirst",
   "internal/codingagent/custom_editor_test.go#TestCustomEditorEscapePrefersOnEscapeThenTheInterruptActionThenTheEditor",
@@ -917,7 +917,7 @@ end = "\n\t}\n}\n"
 sha256 = "17e85c22925c34b2e99ec1cc3d1d6be4b7a2dec7040dd8a9aefb8f821889860b"
 keybindings = ["app.clipboard.pasteImage", "app.exit", "app.interrupt", "tui.editor.historyNext", "tui.editor.historyPrevious"]
 
-# D87: Pi's 3D easter egg plays with PiG's models (the PiG mark's pig on a header click, the sprite's pig head for fullscreen /arminsayshi and /pigsayhi); the input handler is Pi's.
+# D87: Pi's 3D easter egg plays with Ompig's models (the Ompig mark's ompig on a header click, the sprite's ompig head for fullscreen /arminsayshi and /pigsayhi); the input handler is Pi's.
 [[contract]]
 id = "coding-agent/easter-egg-3d/exit-keys"
 upstream_id = "input:packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts#EasterEgg3dAnimation.handleInput"
@@ -925,10 +925,10 @@ family = "interactive-rendering"
 kind = "boundary-transition"
 claim = "tui.select.cancel and app.clear start the exit, which gathers the blocks home and lands the model; a second press skips it; other keys and non-click mouse events leave the animation playing"
 status = "ported"
-pig_targets = ["internal/codingagent/pig_logo_animation.go#HandleInput", "internal/codingagent/pig_logo_animation.go#close", "internal/codingagent/pig_egg3d.go#blockOffsets"]
+ompig_targets = ["internal/codingagent/ompig_logo_animation.go#HandleInput", "internal/codingagent/ompig_logo_animation.go#close", "internal/codingagent/ompig_egg3d.go#blockOffsets"]
 evidence = [
-  "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
-  "internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
+  "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+  "internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
   "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml",
 ]
 
@@ -946,10 +946,10 @@ family = "interactive-rendering"
 kind = "braille-ray-cast"
 claim = "the blocks are ray cast per braille dot at the model's camera distance with a depth buffer over the visible faces; colors are shaded, fogged and quantized as Pi's, and face indices are not limited to 255 (D87)"
 status = "ported"
-pig_targets = ["internal/codingagent/pig_logo_animation.go#renderLayer"]
+ompig_targets = ["internal/codingagent/ompig_logo_animation.go#renderLayer"]
 evidence = [
-  "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
-  "internal/codingagent/pig_logo_animation_test.go#TestPigLogoRasterHoldsMoreThan255Faces",
+  "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+  "internal/codingagent/ompig_logo_animation_test.go#TestPigLogoRasterHoldsMoreThan255Faces",
   "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml",
 ]
 
@@ -967,9 +967,9 @@ family = "interactive-rendering"
 kind = "braille-ray-cast"
 claim = "on a light background the model's colors and coverage blur into the cell backgrounds over Pi's tent radii and levels"
 status = "ported"
-pig_targets = ["internal/codingagent/pig_logo_animation.go#renderHalo"]
+ompig_targets = ["internal/codingagent/ompig_logo_animation.go#renderHalo"]
 evidence = [
-  "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+  "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
   "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml",
 ]
 
@@ -985,12 +985,12 @@ id = "coding-agent/easter-egg-3d/frame"
 upstream_id = "render:packages/coding-agent/src/modes/interactive/components/easter-egg-3d.ts#EasterEgg3dAnimation.render"
 family = "interactive-rendering"
 kind = "timeline-frame"
-claim = "each frame dissolves the captured screen into braille dust from the model's start, flies or grows the model, spins it, slides its blocks as a puzzle, fades in the starfield and the hint, and plays the same timeline backwards on exit; PiG's models differ (D87)"
+claim = "each frame dissolves the captured screen into braille dust from the model's start, flies or grows the model, spins it, slides its blocks as a puzzle, fades in the starfield and the hint, and plays the same timeline backwards on exit; Ompig's models differ (D87)"
 status = "ported"
-pig_targets = ["internal/codingagent/pig_logo_animation.go#renderFrame", "internal/codingagent/pig_egg3d.go#blockOffsets"]
+ompig_targets = ["internal/codingagent/ompig_logo_animation.go#renderFrame", "internal/codingagent/ompig_egg3d.go#blockOffsets"]
 evidence = [
-  "internal/codingagent/pig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
-  "internal/codingagent/pig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
+  "internal/codingagent/ompig_egg3d_test.go#TestPig3dAnimationMatchesPinnedPi",
+  "internal/codingagent/ompig_logo_animation_test.go#TestPigLogoAnimationMatchesPinnedPi",
   "test/parity/scenarios/fullscreen/12-arminsayshi-3d.toml",
   "test/parity/scenarios/fullscreen/11-logo-click-animation.toml",
 ]
@@ -1009,7 +1009,7 @@ family = "selectors"
 kind = "boundary-transition"
 claim = "the save binding saves the highlighted level only when an onSelectAsDefault handler exists and a level is highlighted; navigation and confirm/cancel keys drive the list before any key edits the search; a query matching no level leaves no item for save or confirm"
 status = "ported"
-pig_targets = ["internal/codingagent/thinking_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/thinking_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/thinking_selector_oracle_test.go#TestThinkingSelectorInputMatchesPi",
   "internal/codingagent/thinking_selector_test.go#TestThinkingSelectorBoundaryTransitions",
@@ -1032,7 +1032,7 @@ family = "settings"
 kind = "boundary-transition"
 claim = "an open submenu receives every key; otherwise up and down wrap, empty lists ignore them, up, down, confirm or space (when search is off or empty) and cancel are tested in that order, and every other key goes to the search Input and refilters, returning the selection to the first match"
 status = "ported"
-pig_targets = ["tui/settings_list.go#HandleInput", "tui/settings_list.go#applyFilter"]
+ompig_targets = ["tui/settings_list.go#HandleInput", "tui/settings_list.go#applyFilter"]
 evidence = [
   "tui/settings_list_input_test.go#TestSettingsListSearchDelegatesEditingKeysToTheInput",
   "tui/settings_list_input_test.go#TestSettingsListAnyDelegatedKeyResetsTheSelectionToTheFirstMatch",
@@ -1057,7 +1057,7 @@ family = "oauth"
 kind = "selector-input-state-machine"
 claim = "up and down clamp without wrapping, empty filtered lists ignore arrows and confirm, confirm and the search Input's submit (tui.input.submit or LF) select the highlighted provider, cancel cancels, and every other key edits the fuzzy search and clamps the selection"
 status = "ported"
-pig_targets = ["tui/oauth_selector.go#HandleInput", "tui/oauth_selector.go#confirm"]
+ompig_targets = ["tui/oauth_selector.go#HandleInput", "tui/oauth_selector.go#confirm"]
 evidence = [
   "tui/oauth_selector_input_test.go#TestOAuthSelectorInputMatchesPi",
   "tui/oauth_selector_oracle_test.go#TestOAuthSelectorHandleInputMatchesPi",
@@ -1078,7 +1078,7 @@ family = "settings"
 kind = "selector-input-state-machine"
 claim = "the save binding saves the highlighted level only when a save callback exists, up, down, confirm and cancel drive the list with wraparound and fire onSelect or onCancel once per key, and every other key edits the search Input (whose submit selects) and rebuilds the list around the highlighted level"
 status = "ported"
-pig_targets = ["internal/codingagent/thinking_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/thinking_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/thinking_selector_oracle_test.go#TestThinkingSelectorInputMatchesPi",
   "test/parity/scenarios/settings/06-thinking-selector-search-editing.toml",
@@ -1098,7 +1098,7 @@ family = "interactive-rendering"
 kind = "cancellation-input"
 claim = "a cancellable loader shows the hint of the configured tui.select.cancel binding and aborts on that key (onAbort on every press), while a non-cancellable loader has no hint, ignores every key and never aborts"
 status = "ported"
-pig_targets = ["tui/bordered_loader.go#HandleInput", "tui/bordered_loader.go#NewBorderedLoader"]
+ompig_targets = ["tui/bordered_loader.go#HandleInput", "tui/bordered_loader.go#NewBorderedLoader"]
 evidence = [
   "tui/bordered_loader_input_oracle_test.go#TestBorderedLoaderHandleInputMatchesPi",
   "tui/bordered_loader_oracle_test.go#TestBorderedLoaderMatchesPi",
@@ -1119,7 +1119,7 @@ family = "oauth"
 kind = "boundary-transition"
 claim = "the configured tui.select.cancel binding cancels on every press (abort, onComplete, rejecting the pending input), app.message.copy copies a shown sign-in URL, every other key edits the prompt Input whose submit resolves the pending value and replaces the field with the submitted text, and a submit after cancel changes nothing"
 status = "ported"
-pig_targets = ["tui/login_dialog.go#HandleInput", "tui/login_dialog.go#showInput"]
+ompig_targets = ["tui/login_dialog.go#HandleInput", "tui/login_dialog.go#showInput"]
 evidence = [
   "tui/login_dialog_oracle_test.go#TestLoginDialogInputMatchesPi",
   "tui/login_dialog_cancel_order_test.go#TestLoginDialogCancelAbortsBeforeEndingTheInput",
@@ -1140,7 +1140,7 @@ family = "session"
 kind = "state-machine"
 claim = "while a delete confirmation is pending only confirm and cancel act; otherwise tab, sort, named, path, delete, rename and noninvasive delete are checked in that order before the list actions up, down, page up, page down, confirm, cancel; anything else edits the search Input, whose own submit selects the highlighted session"
 status = "ported"
-pig_targets = ["internal/codingagent/session_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/session_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/session_selector_oracle_test.go#TestSessionSelectorInputMatchesPi",
   "test/parity/scenarios/session/20-session-selector-search.toml",
@@ -1160,7 +1160,7 @@ family = "session"
 kind = "state-machine"
 claim = "in rename mode the cancel binding leaves rename mode and every other key edits the rename Input; in list mode every key goes to the session list"
 status = "ported"
-pig_targets = ["internal/codingagent/session_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/session_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/session_selector_oracle_test.go#TestSessionSelectorInputMatchesPi",
   "test/parity/scenarios/session/20-session-selector-search.toml",
@@ -1180,7 +1180,7 @@ family = "tree"
 kind = "state-machine"
 claim = "up/down wrap; fold and branch jumps; page moves; confirm selects; copy; cancel clears a search before cancelling; the filter keys set, toggle and cycle modes and clear folds; backspace trims the search; edit-label opens the label input; the timestamp key toggles; any other printable key appends to the search; each action is checked in Pi's order"
 status = "ported"
-pig_targets = ["tui/tree_select.go#HandleInput"]
+ompig_targets = ["tui/tree_select.go#HandleInput"]
 evidence = [
   "internal/codingagent/tree_selector_oracle_test.go#TestTreeSelectorInputMatchesPi",
   "test/parity/scenarios/tree/07-tree-fold-root.toml",
@@ -1201,7 +1201,7 @@ family = "tree"
 kind = "state-machine"
 claim = "confirm saves the trimmed label (empty removes it) and hides the input, cancel hides it, every other key edits the label Input"
 status = "ported"
-pig_targets = ["tui/tree_select.go#handleLabelInput"]
+ompig_targets = ["tui/tree_select.go#handleLabelInput"]
 evidence = [
   "internal/codingagent/tree_selector_oracle_test.go#TestTreeSelectorInputMatchesPi",
   "test/parity/scenarios/tree/07-tree-fold-root.toml",
@@ -1222,7 +1222,7 @@ family = "tree"
 kind = "state-machine"
 claim = "while the label input is open every key goes to it, otherwise to the tree list"
 status = "ported"
-pig_targets = ["tui/tree_select.go#HandleInput"]
+ompig_targets = ["tui/tree_select.go#HandleInput"]
 evidence = [
   "internal/codingagent/tree_selector_oracle_test.go#TestTreeSelectorInputMatchesPi",
   "test/parity/scenarios/tree/07-tree-fold-root.toml",
@@ -1243,7 +1243,7 @@ family = "tree"
 kind = "state-machine"
 claim = "the search line accepts and ignores every key; the query changes only through the tree list"
 status = "ported"
-pig_targets = ["tui/tree_select.go#renderSearchLine"]
+ompig_targets = ["tui/tree_select.go#renderSearchLine"]
 evidence = [
   "internal/codingagent/tree_selector_oracle_test.go#TestTreeSelectorInputMatchesPi",
   "test/parity/scenarios/tree/07-tree-fold-root.toml",
@@ -1264,7 +1264,7 @@ family = "tui-components"
 kind = "input-state-machine"
 claim = "the editor's key chain (action order, shared keys, cursor, word, line and page movement, deletion and kill ring, undo, history, newline and submit, tab, character jump, paste, literal text) matches Pi under default and rebound keybindings; autocomplete popup behavior is carried by the ported upstream autocomplete tests"
 status = "ported"
-pig_targets = ["tui/editor.go#HandleInput"]
+ompig_targets = ["tui/editor.go#HandleInput"]
 evidence = [
   "tui/editor_oracle_test.go#TestEditorMatchesPiOracle",
   "tui/editor_bindings_oracle_test.go#TestEditorRebindingsMatchPi",
@@ -1287,7 +1287,7 @@ family = "project-trust"
 kind = "selector-input-state-machine"
 claim = "up/down and k/j move the highlighted trust option and clamp at both ends, confirm or LF selects its trusted flag and updates, cancel cancels, every other key is ignored, and the saved decision picks the initial row"
 status = "ported"
-pig_targets = ["internal/codingagent/trust_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/trust_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/trust_selector_oracle_test.go#TestTrustSelectorInputMatchesPi",
   "test/parity/scenarios/project-trust/09-trust-selector-state.toml",
@@ -1307,7 +1307,7 @@ family = "interactive-rendering"
 kind = "selector-input-state-machine"
 claim = "up and down wrap through the messages, then confirm selects the highlighted message and cancel cancels; the actions are checked in that order so a key bound to two of them keeps the earlier action, and other keys are ignored"
 status = "ported"
-pig_targets = ["tui/user_message_selector.go#HandleInput"]
+ompig_targets = ["tui/user_message_selector.go#HandleInput"]
 evidence = [
   "tui/user_message_selector_oracle_test.go#TestUserMessageSelectorInputMatchesPi",
   "test/parity/scenarios/interactive-rendering/16-user-message-selector.toml",
@@ -1327,7 +1327,7 @@ family = "tui-components"
 kind = "cancellation-input"
 claim = "input reaches the inner CancellableLoader only when the loader is cancellable, so the tui.select.cancel binding aborts once and invokes onAbort; a non-cancellable loader has no inner loader and ignores every key"
 status = "ported"
-pig_targets = ["tui/bordered_loader.go#HandleInput"]
+ompig_targets = ["tui/bordered_loader.go#HandleInput"]
 evidence = [
   "tui/bordered_loader_test.go#TestBorderedLoader_HandleInput",
   "tui/bordered_loader_oracle_test.go#TestBorderedLoaderMatchesPi",
@@ -1348,7 +1348,7 @@ family = "selectors"
 kind = "boundary-transition"
 claim = "up and down clamp at the first and last provider without wrapping, confirm selects nothing when the filtered list is empty, cancel is checked before the search input, and every other key edits the search and re-filters"
 status = "ported"
-pig_targets = ["tui/oauth_selector.go#HandleInput"]
+ompig_targets = ["tui/oauth_selector.go#HandleInput"]
 evidence = [
   "test/parity/scenarios/oauth/26-login-cancel-returns-to-provider-list.toml",
   "tui/oauth_selector_input_test.go#TestOAuthSelectorInputMatchesPi",
@@ -1372,7 +1372,7 @@ family = "selectors"
 kind = "cancellation-input"
 claim = "tui.select.cancel cancels before any other key, app.editor.external opens the external editor and its result replaces the editor text, and every other key reaches the editor"
 status = "ported"
-pig_targets = ["internal/codingagent/extension_editor.go#HandleInput"]
+ompig_targets = ["internal/codingagent/extension_editor.go#HandleInput"]
 evidence = [
   "internal/codingagent/extension_editor_test.go#TestExtensionEditorHandleInputTransitions",
   "internal/codingagent/extension_editor_test.go#TestExtensionEditorExternalAction",
@@ -1394,7 +1394,7 @@ family = "settings"
 kind = "selector-input-state-machine"
 claim = "navigation keys go to the select list and fire selection-change on every up or down over a non-empty list, other keys edit the optional search input and rebuild the fuzzy-filtered list; the search input never holds focus, so it emits no hardware cursor marker"
 status = "ported"
-pig_targets = ["tui/select_submenu.go#HandleInput"]
+ompig_targets = ["tui/select_submenu.go#HandleInput"]
 evidence = [
   "internal/codingagent/settings_submenu_oracle_test.go#TestSettingsSubmenusMatchPi",
   "test/parity/scenarios/settings/08-settings-model-thinking-empty-search.toml",
@@ -1414,7 +1414,7 @@ family = "settings"
 kind = "selector-input-state-machine"
 claim = "the active step takes the input; selecting advances (the last step completes, then cancels unless it loops), Escape goes back one step dropping that step's value and cancels at the first step; options, titles and preselect see the prior selections"
 status = "ported"
-pig_targets = ["internal/codingagent/settings_submenu.go#HandleInput"]
+ompig_targets = ["internal/codingagent/settings_submenu.go#HandleInput"]
 evidence = [
   "internal/codingagent/settings_submenu_oracle_test.go#TestSettingsSubmenusMatchPi",
   "test/parity/scenarios/settings/07-settings-model-thinking-model-step.toml",
@@ -1434,7 +1434,7 @@ family = "settings"
 kind = "selector-input-state-machine"
 claim = "the active single or automatic theme menu takes every key; browsing previews a theme, selecting applies it, Escape restores the original setting, and automatic mode edits the light and dark themes before applying or switching back to single mode"
 status = "ported"
-pig_targets = ["internal/codingagent/settings_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/settings_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/settings_selector_oracle_test.go#TestSettingsSelectorMatchesPi",
   "test/parity/scenarios/settings/04-settings-theme-submenu.toml",
@@ -1454,7 +1454,7 @@ family = "settings"
 kind = "selector-input-state-machine"
 claim = "the single warnings row takes every key (toggle, cancel); a warning the settings never set shows as on, and each toggle reports the whole state with that warning set"
 status = "ported"
-pig_targets = ["internal/codingagent/settings_selector.go#HandleInput"]
+ompig_targets = ["internal/codingagent/settings_selector.go#HandleInput"]
 evidence = [
   "internal/codingagent/settings_selector_oracle_test.go#TestSettingsSelectorMatchesPi",
   "test/parity/scenarios/settings/04-settings-theme-submenu.toml",
@@ -1474,7 +1474,7 @@ family = "selectors"
 kind = "selector-input-state-machine"
 claim = "ResourceList.handleInput against pinned Pi: up/down/page keys move only over item rows, tui.select.cancel closes and Ctrl+C exits when cancel is rebound, Tab switches the write scope only when project mode is available, Space/Enter toggle in global scope, and every other key edits the search Input and re-filters (resetting selection to the first item even when the query is unchanged)"
 status = "ported"
-pig_targets = ["tui/config_selector.go#HandleInput"]
+ompig_targets = ["tui/config_selector.go#HandleInput"]
 evidence = [
   "tui/config_selector_oracle_test.go#TestConfigSelectorMatchesPi",
   "test/parity/scenarios/selectors/14-config-ctrl-c-exits.toml",
@@ -1494,7 +1494,7 @@ family = "startup"
 kind = "selector-input-state-machine"
 claim = "k/up and j/down clamp over the options and preview the theme only when the selection changes; confirm or LF continues from the theme step then submits the chosen theme and analytics choice; the cancel binding skips; other keys do nothing. D88 adds a sprite step between theme and analytics"
 status = "divergence"
-pig_targets = ["internal/codingagent/first_time_setup.go#HandleInput"]
+ompig_targets = ["internal/codingagent/first_time_setup.go#HandleInput"]
 evidence = [
   "internal/codingagent/first_time_setup_oracle_test.go#TestFirstTimeSetupMatchesPi",
   "internal/codingagent/first_time_setup_test.go",
@@ -1514,7 +1514,7 @@ family = "fullscreen"
 kind = "selector-input-state-machine"
 claim = "keys are forwarded to the search Input and onQueryChange fires only when the query value changed; the box renders the query, the result counter and the navigation buttons (labels, arrows, none by width) and reports the button under a cell"
 status = "ported"
-pig_targets = ["tui/alt_screen_search.go#HandleInput"]
+ompig_targets = ["tui/alt_screen_search.go#HandleInput"]
 evidence = [
   "tui/alt_screen_search_oracle_test.go#TestAltScreenSearchComponentMatchesPi",
   "test/parity/scenarios/fullscreen/13-alt-screen-search-input.toml",
@@ -1534,7 +1534,7 @@ family = "interactive-input"
 kind = "boundary-transition"
 claim = "an extension shortcut is tried first, then the clipboard image paste (consumed even without a handler), then app.interrupt (onEscape, else the registered handler; an open autocomplete popup gets Escape first), then app.exit only on an empty editor, then the explicit editor history bindings before every other registered app action in registration order, and finally the editor itself"
 status = "ported"
-pig_targets = ["internal/codingagent/custom_editor.go#HandleInput", "internal/codingagent/interactive_input.go#handleCustomEditorKey"]
+ompig_targets = ["internal/codingagent/custom_editor.go#HandleInput", "internal/codingagent/interactive_input.go#handleCustomEditorKey"]
 evidence = [
   "internal/codingagent/custom_editor_test.go#TestCustomEditorExplicitHistoryBindingBeatsModelCycling",
   "internal/codingagent/custom_editor_test.go#TestCustomEditorEscapePrefersOnEscapeThenTheInterruptActionThenTheEditor",
@@ -1557,7 +1557,7 @@ family = "extensions-runtime"
 kind = "boundary-transition"
 claim = "a status screen with an onCancel callback shows the cancel key hint and calls it when tui.select.cancel is pressed; any other key does nothing; a status screen without onCancel has no hint and no input handler"
 status = "ported"
-pig_targets = ["coding/mcpext/manager.go#Status"]
+ompig_targets = ["coding/mcpext/manager.go#Status"]
 evidence = [
   "coding/mcpext/manager_test.go#TestMcpManagerStatusScreenCancelsTheRunningOperationWithTheCancelKey",
   "coding/mcpext/manager_test.go#TestMcpManagerStatusScreenIgnoresTheCancelKeyForOperationsThatCannotBeCancelled",
@@ -1579,7 +1579,7 @@ family = "extensions-runtime"
 kind = "boundary-transition"
 claim = "the view passes every key to the handler of the content it shows, then asks for a render; a screen without a handler ignores the key"
 status = "ported"
-pig_targets = ["coding/mcpext/manager.go#HandleInput"]
+ompig_targets = ["coding/mcpext/manager.go#HandleInput"]
 evidence = [
   "coding/mcpext/manager_test.go#TestMcpManagerStatusScreenCancelsTheRunningOperationWithTheCancelKey",
   "test/parity/scenarios/slash-commands/18-mcp-signin-cancel.toml",
@@ -1599,7 +1599,7 @@ family = "extensions-runtime"
 kind = "boundary-transition"
 claim = "a menu without items shows its empty text and only the cancel hint, and tui.select.cancel is the only key that finishes it; every other key is ignored"
 status = "ported"
-pig_targets = ["coding/mcpext/manager.go#Menu"]
+ompig_targets = ["coding/mcpext/manager.go#Menu"]
 evidence = [
   "coding/mcpext/manager_test.go#TestMcpManagerViewEmptyMenu",
   "test/parity/scenarios/slash-commands/19-mcp-manager-empty-menu-cancel.toml",
@@ -1619,7 +1619,7 @@ family = "extensions-runtime"
 kind = "boundary-transition"
 claim = "on the sign-in screen tui.select.confirm submits the trimmed input unless it is empty, tui.select.cancel finishes without a value, app.message.copy copies the authorization URL, and every other key goes to the input"
 status = "ported"
-pig_targets = ["coding/mcpext/manager.go#RedirectURL"]
+ompig_targets = ["coding/mcpext/manager.go#RedirectURL"]
 evidence = [
   "coding/mcpext/manager_test.go#TestMcpManagerViewRedirectURL",
   "coding/mcpext/manager_test.go#TestMcpManagerViewRedirectURLTrimsLikeJavaScript",
@@ -1642,7 +1642,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "a menu frame shows the title, the muted details, the error-colored error, a spacer, the item list capped at 12 visible rows or the empty text, and the confirm and cancel key hints; a change rebuilds it on the selected item"
 status = "ported"
-pig_targets = ["coding/mcpext/manager.go#Menu"]
+ompig_targets = ["coding/mcpext/manager.go#Menu"]
 evidence = [
   "coding/mcpext/manager_test.go#TestMcpManagerViewMenuLayout",
   "coding/mcpext/manager_test.go#TestMcpManagerViewMenuRebuildsOnChangeKeepingTheSelection",
@@ -1665,7 +1665,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "the view renders its current content and cuts every row wider than the width to it, without a suffix"
 status = "ported"
-pig_targets = ["coding/mcpext/manager.go#Render"]
+ompig_targets = ["coding/mcpext/manager.go#Render"]
 evidence = [
   "coding/mcpext/manager_test.go#TestMcpManagerViewCutsRowsToTheWidth",
   "test/parity/scenarios/slash-commands/16-mcp-manager-while-connecting.toml",
@@ -1686,7 +1686,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "the section lists every enabled server with codemode or deferred tools sorted by name, each with its namespace, how its tools are reached and a one-line description truncated to the space left under the section limit; servers that do not fit collapse into a count line; the intro names how each reach is used; no such server removes the section"
 status = "ported"
-pig_targets = ["coding/mcpext/extension.go#RenderServersSection"]
+ompig_targets = ["coding/mcpext/extension.go#RenderServersSection"]
 evidence = [
   "coding/mcpext/servers_section_test.go",
   "coding/mcpext/servers_section_intro_upstream_test.go",
@@ -1708,7 +1708,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "a successful callback renders the success page with the MCP sign-in message and any other callback renders the error page with the page's message and details, as byte-identical HTML"
 status = "ported"
-pig_targets = ["coding/mcpext/oauth.go#listenForCallback"]
+ompig_targets = ["coding/mcpext/oauth.go#listenForCallback"]
 evidence = [
   "coding/mcpext/oauth_callback_page_internal_test.go",
   "test/parity/scenarios/slash-commands/24-mcp-callback-error-page.toml",
@@ -1728,7 +1728,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "a call renders as the bold `server/tool` label followed by its arguments in the muted color, reusing the previous text component, with the arguments expanded when the card is expanded"
 status = "ported"
-pig_targets = ["coding/mcpext/render.go#renderCall"]
+ompig_targets = ["coding/mcpext/render.go#renderCall"]
 evidence = [
   "coding/mcpext/tools_render_test.go",
   "test/parity/scenarios/slash-commands/25-mcp-tool-card.toml",
@@ -1748,7 +1748,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "a result renders its text output after a spacer in the toolOutput color (error color for an error), tabs as three spaces, all of it expanded or else a preview limited to five wrapped lines with the expand hint and the path of the full output; an empty output renders nothing"
 status = "ported"
-pig_targets = ["coding/mcpext/render.go#renderResult"]
+ompig_targets = ["coding/mcpext/render.go#renderResult"]
 evidence = [
   "coding/mcpext/tools_render_test.go",
   "test/parity/scenarios/slash-commands/25-mcp-tool-card.toml",
@@ -1768,7 +1768,7 @@ family = "tui-components"
 kind = "boundary-transition"
 claim = "a terminal color reply and a light/dark report are consumed before the input listeners; a listener consume or empty replacement ends the input; the cell-size reply and then the debug key (only when onDebug is set, and matched on the listeners' output) precede the focused component; an overlay that stopped being visible hands input to the focus it gives back; the focused component receives a key release only when it sets wantsKeyRelease; a delivered key requests an immediate render"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui_input.go#HandleTerminalInput",
   "coding/cli/config_command.go#driveConfigSelector",
 ]
@@ -1799,7 +1799,7 @@ family = "tui-components"
 kind = "render-window"
 claim = "the empty filter result draws only the themed no-match line; the visible window is centered on the selection and clamped to the list; each row is rendered with the selection flag and the primary column width, descriptions are collapsed to one line first, and a themed \"(n/total)\" indicator truncated to width-2 follows when rows are hidden"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/select_list.go#Render"
 ]
 evidence = [
@@ -1821,7 +1821,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "a described row uses two columns only above width 40 and when more than the minimum description width remains, the primary column is clamped by the layout bounds and the width, the selected row is wrapped by selectedText whole while an unselected description alone is themed, the display value falls back from label to value, and every truncation is by visible width (double-width, ANSI) without an ellipsis"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/select_list.go#renderItem",
   "tui/select_list.go#primaryColumnWidth"
 ]
@@ -1844,7 +1844,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "text wraps ANSI-aware at the content width left after horizontal padding (clamped like Pi when the padding leaves no cell), tabs become three spaces, whitespace-only text renders nothing, every row is padded to the width and passed through the background function, vertical padding rows are background-only, and the cached result is returned for the same text and width until invalidated"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/text.go#Render"
 ]
 evidence = [
@@ -1866,7 +1866,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "a spacer renders exactly its configured number of empty rows at any width"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/spacer.go#Render"
 ]
 evidence = [
@@ -1888,7 +1888,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "a box with no rendered child lines renders nothing; children render at the width left after horizontal padding, every row is left-padded, widened to the width and passed through the background function, vertical padding rows are background-only, and the frame is cached until a child line, width, padding or background changes"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/box.go#Render"
 ]
 evidence = [
@@ -1910,7 +1910,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "only the first line is kept and truncated with an ellipsis to the width left after horizontal padding, rows are padded to the width and vertical padding rows are blank; D66 clamps the horizontal padding when it leaves no content cell, where Pi emits a row wider than the width"
 status = "divergence"
-pig_targets = [
+ompig_targets = [
   "tui/truncated_text.go#Render"
 ]
 evidence = [
@@ -1931,7 +1931,7 @@ family = "tui-components"
 kind = "text-layout"
 claim = "the terminal cell width of a string counts grapheme clusters (emoji sequences, ZWJ, flags, keycaps, VS15/VS16, Indic conjuncts, Hangul jamo, combining and zero-width marks) with East Asian widths, treats tabs as three cells and ignores CSI, OSC and APC sequences, for every code point and a fixed-seed adversarial corpus"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/widthx/widthx.go#VisibleWidth"
 ]
 evidence = [
@@ -1953,7 +1953,7 @@ family = "tui-components"
 kind = "text-layout"
 claim = "text longer than the width is cut at a grapheme boundary and ended with the ellipsis and the style resets the cut leaves open, an ellipsis as wide as the width yields only its truncation, fitting text is returned whole, and pad fills to the width"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/widthx/truncate.go#TruncateToWidth"
 ]
 evidence = [
@@ -1975,7 +1975,7 @@ family = "tui-components"
 kind = "text-layout"
 claim = "text splits on newlines, each line wraps to the width, and the active SGR and OSC 8 state is closed at each break and reopened on the next row"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/widthx/wrap.go#WrapTextWithAnsi"
 ]
 evidence = [
@@ -1997,7 +1997,7 @@ family = "tui-components"
 kind = "text-layout"
 claim = "a line within the width is kept whole; otherwise tokens fill rows at word and CJK boundaries, leading whitespace and trailing spaces are dropped per row, and a token wider than the width is broken by grapheme"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/widthx/wrap.go#wrapSingleLine"
 ]
 evidence = [
@@ -2019,7 +2019,7 @@ family = "tui-components"
 kind = "text-layout"
 claim = "a token wider than the width is cut by grapheme into rows no wider than the width, carrying the active ANSI state across the cuts"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/widthx/wrap.go#breakLongWord"
 ]
 evidence = [
@@ -2041,7 +2041,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "a loader renders one blank row above its text; the text is the current spinner frame (styled by the spinner function, verbatim for an extension indicator, nothing for an empty frame list) followed by a space and the styled message, wrapped at the width left after the loader's horizontal padding, after frame advances and message changes"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/loader.go#Render",
 ]
 evidence = [
@@ -2063,7 +2063,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "the row is the prompt followed by the value scrolled so the cursor stays visible (half-width window, last cell reserved at the end of the text), the cursor drawn as reverse video behind the focus marker only while focused, the placeholder shown dimmed when the value is empty, and the rest padded to the width; a width without room for the prompt truncates the prompt"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/text_input.go#Render",
 ]
 evidence = [
@@ -2085,7 +2085,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "a container renders its children in order at the given width and concatenates their rows, reflecting every child edit, addition, removal, clear and invalidation; nested containers and mouse regions contribute their children's rows unchanged"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui.go#Render",
   "tui/tui.go#renderBorrowedLocked"
 ]
@@ -2109,7 +2109,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "a mouse region renders exactly the rows of the component it wraps"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/mouse_region.go#Render"
 ]
 evidence = [
@@ -2132,7 +2132,7 @@ family = "tui-components"
 kind = "markdown-render"
 claim = "the markdown text is parsed into blocks and rendered at the content width, every row is wrapped to it, padded with the horizontal margins and the background function, and framed by the vertical padding rows; empty text renders nothing, and a text that ends in a blank line shows the trailing space row"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/markdown.go#Render"
 ]
 evidence = [
@@ -2155,7 +2155,7 @@ family = "tui-components"
 kind = "markdown-render"
 claim = "each block (heading with its depth styling, paragraph, fenced and indented code, block quote, rule, list, table, definition, space) renders as Pi does, including the blank row after a block when another block follows, the rows a quote or a code border adds, and the rows reference definitions leave"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/markdown.go#renderContent"
 ]
 evidence = [
@@ -2178,7 +2178,7 @@ family = "tui-components"
 kind = "markdown-render"
 claim = "inline text renders with CommonMark emphasis and strong (flanking, intraword underscore, rule of three, inner-side consumption), code spans, strikethrough, links with their url suffix when it differs from the text, reference links, images as alt text, autolinks (bare, <url>, <email>), hard breaks, escapes, and the style resets that restore the enclosing style after each token"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/markdown.go#renderInlineMarkdown",
   "tui/markdown_marked.go#emStrong"
 ]
@@ -2202,7 +2202,7 @@ family = "tui-components"
 kind = "markdown-render"
 claim = "unordered and ordered (renumbered or preserved) lists, task items, nested lists and loose items render with their markers, depth indentation and continuation rows as Pi does"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/markdown_list.go#renderList"
 ]
 evidence = [
@@ -2225,7 +2225,7 @@ family = "tui-components"
 kind = "markdown-render"
 claim = "a table renders with box-drawing borders, bold header cells, column alignment, widths shrunk to the available width with wrapped cells (CJK and emoji widths), and the raw text when it cannot fit, as Pi does"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/markdown.go#renderMarkdownTable",
 ]
 evidence = [
@@ -2248,7 +2248,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the removed and added line of a pair render with the changed words inverted, from jsdiff diffWords tokens (whitespace, punctuation, Unicode letters), leading whitespace of changed lines kept uninverted, and tabs replaced by three spaces"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/diff_render.go#RenderIntraLineDiff"
 ]
 evidence = [
@@ -2271,7 +2271,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "diff text renders row by row: context rows in the context token, a removed run followed by an added run of one line each gets intra-line highlighting, other removed and added rows use their tokens, rows without a parseable prefix show as context, and an empty diff renders an empty string"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/diff_render.go#RenderDiff"
 ]
 evidence = [
@@ -2294,7 +2294,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the preview keeps the first or last maxVisualLines wrapped rows of the text, puts the hint (truncated to the width with \"...\") after kept start rows or before kept end rows when rows were skipped, and caches the rows per width"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/visual_truncate.go#Render"
 ]
 evidence = [
@@ -2316,7 +2316,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the list shows the empty-state row or a window of maxVisible messages centred on the selection, each as cursor, message text with newlines turned into spaces and trimmed and truncated to the width less the cursor, a metadata row and a blank row, followed by a scroll position row when the window is not the whole list; D66 clips every row to the width, where Pi emits an over-wide metadata or scroll row"
 status = "divergence"
-pig_targets = [
+ompig_targets = [
   "tui/user_message_selector.go#Render"
 ]
 evidence = [
@@ -2338,7 +2338,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "the search box renders its query input, the result counter and the navigation buttons (full labels, arrows only, none as the width shrinks, Unbound and multi-key labels), with the hovered button styled by the host formatter, at every width including 0 and below"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/alt_screen_search.go#Render"
 ]
 evidence = [
@@ -2360,7 +2360,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "visible children render at the widths the allocator gives them from their intrinsic widths, basis, grow, shrink, min, max and the gap, are composited side by side at their x offsets with start, stretch, center or end vertical alignment, and an empty or all-hidden stack renders no rows"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/stack.go#Render"
 ]
 evidence = [
@@ -2382,7 +2382,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "visible children render at the width, are cut or padded with blank rows to the heights the allocator gives them from their intrinsic heights and options, with the gap rows between them"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/stack.go#Render"
 ]
 evidence = [
@@ -2404,7 +2404,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "the child renders at the width less one column when the scrollbar is always shown and the width exceeds one, and each row then gets a trailing space for the scrollbar column"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/scroll_view.go#Render"
 ]
 evidence = [
@@ -2426,7 +2426,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "the top border is a full-width rule passed through the border colour function (identity in the probes; the default and mode colours are not compared), or, when lines are scrolled out above, a rule with an up-arrow label of the hidden count centred, shortened to a left-aligned indicator, or cut with an ellipsis as the width shrinks"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/editor.go#renderTopBorder"
 ]
 evidence = [
@@ -2449,7 +2449,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "the bottom border is a full-width rule passed through the border colour function (identity in the probes; the default and mode colours are not compared), or, when lines remain below the visible window, a rule with a down-arrow label of the hidden count centred, shortened to a left-aligned indicator, or cut with an ellipsis as the width shrinks"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/editor.go#renderBottomBorder"
 ]
 evidence = [
@@ -2473,7 +2473,7 @@ family = "tui-components"
 kind = "boundary-transition"
 claim = "a pending terminal color reply and a color-scheme report are consumed before the input listeners; listeners run in registration order, each seeing the previous one's replacement data, a consume stops the rest and an empty replacement drops the input; the cell-size reply is consumed after the listeners; Shift+Ctrl+D runs onDebug only when it is set; the focused or topmost visible overlay component then receives the data, except that a key release is dropped unless the component wants it, and the render is requested immediately after a delivery"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui_input.go#HandleTerminalInput",
   "tui/tui_input.go#DispatchFocusedInput",
   "tui/tui_input.go#RunInputListeners",
@@ -2511,7 +2511,7 @@ family = "tui-components"
 kind = "input-state-machine"
 claim = "Editor.handleInput resolves every key through the configured keybindings: character jump, bracketed paste, autocomplete, submit, new line, history, undo, kill ring and yank pop, word and line movement and deletion, paging and the backslash-Enter newline produce Pi's text, cursor, expanded text, callbacks and rendered lines; shared and remapped keys keep Pi's action precedence"
 status = "ported"
-pig_targets = ["tui/editor.go#HandleInput"]
+ompig_targets = ["tui/editor.go#HandleInput"]
 evidence = [
   "tui/editor_oracle_test.go#TestEditorMatchesPiOracle",
   "tui/editor_bindings_oracle_test.go#TestEditorRebindingsMatchPi",
@@ -2536,7 +2536,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the text is rebuilt from its builder before the first render and again only after an invalidation, so a change to the builder state shows only after invalidate; the rendered rows carry the horizontal and vertical padding like Text"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/themed_text.go#Render"
 ]
 evidence = [
@@ -2558,7 +2558,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the border is one row of box-drawing rules as wide as the width, never fewer than one, passed through the color function"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/dynamic_border.go#Render"
 ]
 evidence = [
@@ -2580,7 +2580,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the loader line for an editor border is the loader rendered two columns wider, its second row without one leading space and without trailing whitespace, truncated to the width without an ellipsis"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/status_indicator.go#RenderInBorder"
 ]
 evidence = [
@@ -2602,7 +2602,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the spinner alone is the current frame as the loader renders it, truncated to the width without an ellipsis"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/status_indicator.go#RenderSpinnerInBorder"
 ]
 evidence = [
@@ -2624,7 +2624,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the idle status is two rows of spaces as wide as the width"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/status_indicator.go#Render"
 ]
 evidence = [
@@ -2646,7 +2646,7 @@ family = "settings"
 kind = "render-layout"
 claim = "the list shows the search box and a blank row when search is on, the empty or no-match message, a window of maxVisible rows centred on the selection with the cursor prefix and the label column capped at 36 cells, values truncated to the room left, the scroll counter, the wrapped description of the selected row and the hint line truncated to the width; D66 clips a row wider than the width"
 status = "divergence"
-pig_targets = [
+ompig_targets = [
   "tui/settings_list.go#renderMainList"
 ]
 evidence = [
@@ -2668,7 +2668,7 @@ family = "settings"
 kind = "render-layout"
 claim = "an open submenu renders instead of the list; otherwise the main list renders (D66 clips a row wider than the width)"
 status = "divergence"
-pig_targets = [
+ompig_targets = [
   "tui/settings_list.go#Render"
 ]
 evidence = [
@@ -2690,7 +2690,7 @@ family = "markdown-rich-rendering"
 kind = "render-layout"
 claim = "a LaTeX expression renders to Unicode text, inline or display, or to undefined when any part is unsupported or malformed; a stacked layout is indented to its least-indented non-blank row, trimmed at the end and joined by newlines"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/latex/latex.go#RenderLatex"
 ]
 evidence = [
@@ -2712,7 +2712,7 @@ family = "markdown-rich-rendering"
 kind = "render-layout"
 claim = "layout markers in the rendered text expand to their stacked fractions, operator limits, matrices and cases, aligned on a common baseline with the surrounding text"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/latex/latex.go#renderLayout"
 ]
 evidence = [
@@ -2734,7 +2734,7 @@ family = "markdown-rich-rendering"
 kind = "render-layout"
 claim = "the parser returns the normalized text only when the whole source was consumed and every construct was supported"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/latex/latex.go#render"
 ]
 evidence = [
@@ -2756,7 +2756,7 @@ family = "markdown-rich-rendering"
 kind = "render-layout"
 claim = "a cases environment renders as a left brace with the stacked rows, each value and its condition aligned"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/latex/latex.go#parseEnvironment"
 ]
 evidence = [
@@ -2778,7 +2778,7 @@ family = "markdown-rich-rendering"
 kind = "render-layout"
 claim = "matrix environments render their cells in aligned columns with the delimiters of the environment, dropping rows without cells"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/latex/latex.go#renderMatrix"
 ]
 evidence = [
@@ -2800,7 +2800,7 @@ family = "markdown-rich-rendering"
 kind = "render-layout"
 claim = "a nested expression renders through a child parser sharing the layout nodes, stacking fractions only in display mode when the caller allows it, and marks the whole as unsupported when the child is"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/latex/latex.go#renderNested"
 ]
 evidence = [
@@ -2822,7 +2822,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "a component tree is laid out into a viewport of at least 1x1 and painted into one row per viewport line: stacks and scroll views allocate rects and clips, a scroll view scrolls to keep its position or follow the end, leaf rows are clipped to their boxes with the cursor row kept visible, scrollbars paint over the last column, and the primary scroll view is reported"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/layout.go#RenderLayoutFrame"
 ]
 evidence = [
@@ -2845,7 +2845,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "within one frame a component renders at most once per width, so every measurement and paint of it reuses the same rows; the probes record each leaf render call and its width in order and Pi's calls must be equal"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/layout.go#renderCached"
 ]
 evidence = [
@@ -2868,7 +2868,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the user message renders as markdown on the user background with ordered-list markers and backslash escapes preserved, one blank padded row above and below, the output padding as given (not limited to 0 or 1), and OSC 133 zone marks before the first row and after the last"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/user_message_block.go#Render"
 ]
 evidence = [
@@ -2890,7 +2890,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the component renders a blank row, a border, the bold command header, the collapsed preview or the expanded output, then the loader while running or the status rows (hidden-line hint, cancelled, exit code, truncation warning), then a border, with the output padding, the header colour of a normal or excluded command and the context truncation of very long output; compared byte for byte (colours and bold included), collapsed and expanded"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/bash_execution.go#Render"
 ]
 evidence = [
@@ -2912,7 +2912,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "the message renders its text and thinking runs as markdown (thinking collapsed to the italic label when hidden), a spacer before visible content and between runs, the length, aborted and error diagnostics (suppressed for aborted and error when tool calls exist), the output padding as given, and OSC 133 zone marks on the first and last row only when the message has no tool calls; compared byte for byte, including updates through setOutputPad, setHiddenThinkingLabel, setHideThinkingBlock and updateContent"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/assistant_message_block.go#Render"
 ]
 evidence = [
@@ -2934,7 +2934,7 @@ family = "selectors"
 kind = "render-layout"
 claim = "the header shows the bold scope title, the tab, space and escape hints joined by the muted separator (the tab hint only when project mode is available, the space hint naming the scope's action) and the muted settings path line, compared byte for byte"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/config_selector.go#Render"
 ]
 evidence = [
@@ -2956,7 +2956,7 @@ family = "selectors"
 kind = "render-layout"
 claim = "outside the project scope an enabled item shows a green [x] and a disabled one a dim [ ]; in the project scope a load override shows a green [+], an unload override a yellow [-] and every other state a dim [x] or [ ], byte for byte"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/config_selector.go#Render"
 ]
 evidence = [
@@ -2978,7 +2978,7 @@ family = "selectors"
 kind = "render-layout"
 claim = "the list shows the search input, the grouped resources with bold coloured group and subgroup labels, the cursor and bold selected name, dimmed inherited items, the (n/total) counter and the empty message, byte for byte through navigation, search and toggling"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/config_selector.go#Render"
 ]
 evidence = [
@@ -3000,7 +3000,7 @@ family = "settings"
 kind = "render-layout"
 claim = "a stepped submenu renders the active step's select submenu: the bold accent title, the muted description, the optional search box, the option list and the dim hint, byte for byte through step changes, searching, going back and looping"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/select_submenu.go#Render"
 ]
 evidence = [
@@ -3022,7 +3022,7 @@ family = "tree"
 kind = "render-layout"
 claim = "a deep tree keeps the two-column cursor gutter and pans the body so the selected row's anchor stays visible, closing the clipped body with SGR 0 and cutting each row to the width without an ellipsis or padding, byte for byte at widths 24, 38, 64 and 100"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tree_select.go#Render"
 ]
 evidence = [
@@ -3044,7 +3044,7 @@ family = "tree"
 kind = "render-layout"
 claim = "the tree list shows the empty message or the window of rows (accent cursor, dim prefix with fold markers, accent path marker, warning branch label, muted label time, bold selected content on the selectedBg highlight spanning only its text) and the muted (n/total) line, truncated without padding, byte for byte"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tree_select.go#Render"
 ]
 evidence = [
@@ -3066,7 +3066,7 @@ family = "tree"
 kind = "render-layout"
 claim = "the search row shows the muted \"Type to search:\" prompt and, when a query exists, the accent query, cut to the width without padding, byte for byte"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tree_select.go#Render"
 ]
 evidence = [
@@ -3088,7 +3088,7 @@ family = "tree"
 kind = "render-layout"
 claim = "the help rows show the key hints wrapped by chunk to the width, in the muted key and dim label styles, without padding, byte for byte at widths 24, 38, 64 and 100 and with rebound keys"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tree_select.go#Render"
 ]
 evidence = [
@@ -3110,7 +3110,7 @@ family = "tree"
 kind = "render-layout"
 claim = "the label editor shows the muted prompt, the input rows indented by two and the save and cancel key hints, each truncated to the width, byte for byte at widths 24, 38, 64 and 100"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tree_select.go#Render"
 ]
 evidence = [
@@ -3132,7 +3132,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the read call header shows the bold toolTitle name, the accent path (or the invalid-arg text for a non-string path), the warning line range and the compact label, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#readRenderCall"
 ]
 evidence = [
@@ -3154,7 +3154,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the write call header, then the written content, syntax highlighted by the path's language, collapsed to its first lines with the expand hint, and the invalid content text, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#writeRenderCall"
 ]
 evidence = [
@@ -3176,7 +3176,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the grep call header with the accent pattern, the path, the glob and the limit, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#builtInToolRenderers"
 ]
 evidence = [
@@ -3198,7 +3198,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the find call header with the accent pattern, the path and the limit, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#builtInToolRenderers"
 ]
 evidence = [
@@ -3220,7 +3220,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the ls call header with the path and the limit, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#builtInToolRenderers"
 ]
 evidence = [
@@ -3242,7 +3242,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the read result shows the tool output text, syntax highlighted by the path's language, collapsed to the preview lines with the expand hint, the truncation warning and image fallbacks, or the error text, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#readRenderResult"
 ]
 evidence = [
@@ -3264,7 +3264,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the write result shows nothing on success and the error text in the error colour on failure, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#writeRenderResult"
 ]
 evidence = [
@@ -3286,7 +3286,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the grep result shows the matches in the output colour, collapsed to the preview lines with the expand hint, the limit and truncation warnings and image fallbacks, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#listRenderResult"
 ]
 evidence = [
@@ -3308,7 +3308,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the find result shows the paths in the output colour, collapsed to the preview lines with the expand hint, the limit and truncation warnings and image fallbacks, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#listRenderResult"
 ]
 evidence = [
@@ -3330,7 +3330,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the ls result shows the entries in the output colour, collapsed to the preview lines with the expand hint, the limit and truncation warnings and image fallbacks, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#listRenderResult"
 ]
 evidence = [
@@ -3352,7 +3352,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the edit result shows the diff of a successful edit with line numbers and intra-line highlights or the error text, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#editRenderResult"
 ]
 evidence = [
@@ -3374,7 +3374,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the shell call header shows the muted prompt, the command (or the placeholder or invalid-arg text) and the timeout suffix, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#shellRenderCall"
 ]
 evidence = [
@@ -3396,7 +3396,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the shell result shows the collapsed or expanded output with the truncation notice and full-output path, the image fallbacks and the Took/Elapsed footer, byte for byte in both themes at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_builtin_renderers.go#shellRenderResult"
 ]
 evidence = [
@@ -3418,7 +3418,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the codemode call card shows the bold toolTitle name and the code preview (first lines with the expand hint; tabs and carriage returns normalised) or the invalid-arg text, byte for byte at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_codemode_renderer.go#codemodeRenderCall"
 ]
 evidence = [
@@ -3440,7 +3440,7 @@ family = "tools"
 kind = "render-layout"
 claim = "the codemode result card shows the nested call rows (status icon, name, args, duration, cost, error), the earlier-calls hint, the model-call cost total and the script output in the success or error colour, collapsed to a visual-line preview with the full-output path or expanded, byte for byte at widths 80 and 28"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/tool_codemode_renderer.go#codemodeRenderResult"
 ]
 evidence = [
@@ -3462,7 +3462,7 @@ family = "session"
 kind = "render-layout"
 claim = "the header shows the bold scope title with the right-aligned scope, name filter and sort texts (muted label, accent value), then the delete confirmation or the two key-hint rows truncated with \"…\"; the loading progress and status-message rows are not in the corpus, byte for byte in both themes at widths 20, 40, 72 and 100"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/session_selector.go#sessionSelectorHeader"
 ]
 evidence = [
@@ -3484,7 +3484,7 @@ family = "session"
 kind = "render-layout"
 claim = "the list shows the search input, the empty message or the window of rows (cursor, tree prefix, bold selected message, muted cwd and age, selected background, delete-confirm colours, named and path display) truncated with the default \"...\" ellipsis, and the muted (n/total) line, byte for byte in both themes at widths 20, 40, 72 and 100"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/session_selector.go#renderList"
 ]
 evidence = [
@@ -3506,7 +3506,7 @@ family = "footer"
 kind = "render-layout"
 claim = "the footer shows the dim cwd line (home-relative path, branch, session name, truncated with a dim \"...\"), then the stats line (input/output/cache tokens, cost with the subscription marker, context percentage in its warning colours, auto tag, the dim bullet and bold warning xp badge when experimental) left of the model with its thinking level, routed model and provider prefix, and the sorted extension status row, byte for byte in both themes at several widths"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/status_line.go#renderFooter"
 ]
 evidence = [
@@ -3528,7 +3528,7 @@ family = "selectors"
 kind = "render-layout"
 claim = "the selected Radius row is re-rendered with the shimmering label (accent arrow, per-cell shimmer colours by elapsed time in every colour mode, wrapped at narrow widths); every other row is the extension selector's, byte for byte in both themes, with and without true colour"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/radius_login_selector.go#Render"
 ]
 evidence = [
@@ -3550,7 +3550,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "Armin renders the cached grid as rows of one leading space, the accent-coloured clipped cells and right padding, with the label row, and reuses the cached rows until the width or grid version changes; every frame of the seven effects equals Pi's except the image and label (D87)"
 status = "divergence"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/armin.go#Render"
 ]
 evidence = [
@@ -3572,7 +3572,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "with an embedded working status the top border shows the status (spinner and message in the border colour) after a three-cell rule, the centred overflow label of scrolled-out rows when it fits beside the status, the spinner alone when it does not, and the plain border when the status is empty or the width too small; every border segment closes with the editor border colour function (SGR 39), byte for byte in both themes and at every width from 2 to 64"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/editor_status.go#renderStatusBorder"
 ]
 evidence = [
@@ -3594,7 +3594,7 @@ family = "clipboard-images"
 kind = "render-layout"
 claim = "the image renders as the kitty sequence followed by blank rows or, for iTerm2, blank rows then a cursor-up line and the sequence, sized by the cell size, the 60-cell and width-2 limits and the optional width and height limits from its header or explicit dimensions, reuses its kitty id and cached rows at the same width until invalidated, and otherwise as the truncated fallback text with the file name, byte for byte under both protocols and no protocol at widths 1 to 200"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/image.go#Render"
 ]
 evidence = [
@@ -3616,7 +3616,7 @@ family = "clipboard-images"
 kind = "render-layout"
 claim = "renderImage returns nothing without an image protocol; for kitty it sizes the image in cells (default width 80, the width and height limits, cell-aligned correction) and returns the escape sequence with its columns, rows, id and cursor-movement flag, chunked above 4096 payload characters; for iTerm2 it returns the inline sequence with the decoded size and the aspect-ratio flag, byte for byte over three cell sizes, seven aspect ratios and every payload padding"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/terminal_image.go#RenderImage"
 ]
 evidence = [
@@ -3638,7 +3638,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "one row per active flash in insertion order, each message wrapped in one space either side, cut to the width with no ellipsis and drawn in reverse video; entries leave when their timer elapses (a negative duration is zero) or on dispose, and each change asks for one render, byte for byte over random operation sequences with wide, empty and ANSI messages at widths 0 to 80"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/alt_screen_flash.go#Render"
 ]
 evidence = [
@@ -3660,7 +3660,7 @@ family = "tui-components"
 kind = "render-layout"
 claim = "the editor frame is the muted top border (with the up-scroll counter), the content rows (padding clamped to half the width, wrapped lines, the cursor cell and marker, right padding given up to a cursor in it), the bottom border (with the down-scroll counter) and, below them, the autocomplete popup built when the suggestions arrive (row limit, centred window, slash column layout, descriptions, scroll counter), byte for byte for typed input, pastes, history and live popup changes at widths 2 to 120; D66 clips popup rows wider than the content and Q8 records the one-column cursor"
 status = "divergence"
-pig_targets = [
+ompig_targets = [
   "tui/editor.go#Render"
 ]
 evidence = [
@@ -3685,7 +3685,7 @@ family = "tools"
 kind = "render-layout"
 claim = "a null path renders the error-coloured invalid-arg text, an empty one the output-coloured \"...\" (or the fallback), and any other the accent path with a leading home directory replaced by ~ (by string prefix) and, when hyperlinks are supported, wrapped in an OSC 8 link to the file URL of the path resolved against the working directory, byte for byte over 24 path shapes, both themes and three working directories"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tool_path_render.go#renderToolPathArg"
 ]
 evidence = [
@@ -3707,7 +3707,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "the document the screen exposes is the layout root's render when one is set and its own children otherwise, and on exit that document is dumped to the main screen with zone prefixes and cursor markers removed, line resets applied and over-wide lines cut, byte for byte over 500 seeded trees with and without a layout root, with the preserve-screen exit and the iTerm2 capability suppress and restore"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui_alt_screen.go#renderDocument",
   "tui/tui_alt_screen.go#StopWithOptions"
 ]
@@ -3730,7 +3730,7 @@ family = "fullscreen"
 kind = "render-layout"
 claim = "the implicit document inside the primary scroll view renders the screen's own children, so scrolling by lines, to the top and to the bottom shows the same rows as Pi over 500 seeded trees"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui_alt_screen.go#renderBorrowed",
   "tui/tui_alt_screen.go#NewTuiAltScreenWithOutput"
 ]
@@ -3751,9 +3751,9 @@ id = "tui/tui-alt-screen/doRender"
 upstream_id = "render:packages/tui/src/tui-alt-screen.ts#TuiAltScreen.doRender"
 family = "fullscreen"
 kind = "render-layout"
-claim = "one frame of the alternate screen (layout, overlays, scroll-to-end indicator, selection, flashes, cursor extraction, line resets, width cut, full or per-row redraw, Kitty image placement cache with eviction and WezTerm ordering, iTerm2 clear, hardware cursor) writes the bytes Pi writes and counts the same full redraws, over 500 seeded trees with resizes, forced renders, overlays, flashes, scrolling, cursor toggles, kitty and iTerm2 images, tmux and WezTerm environments and 24-step image churn; the width and height change hooks are Pig-only and the 32 MiB transmission-size eviction boundary is not reached"
+claim = "one frame of the alternate screen (layout, overlays, scroll-to-end indicator, selection, flashes, cursor extraction, line resets, width cut, full or per-row redraw, Kitty image placement cache with eviction and WezTerm ordering, iTerm2 clear, hardware cursor) writes the bytes Pi writes and counts the same full redraws, over 500 seeded trees with resizes, forced renders, overlays, flashes, scrolling, cursor toggles, kitty and iTerm2 images, tmux and WezTerm environments and 24-step image churn; the width and height change hooks are Ompig-only and the 32 MiB transmission-size eviction boundary is not reached"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/tui_alt_screen.go#doRender",
   "tui/tui_alt_screen.go#prepareKittyScreen",
   "tui/tui_alt_screen.go#compositeOverlays",
@@ -3778,7 +3778,7 @@ family = "interactive-rendering"
 kind = "render-layout"
 claim = "highlight.js HTML is turned into formatted text: each run of text takes the formatter of its innermost span whose hljs- scope the theme maps (exact, then the part before a dot, then before a dash), else the theme default; every non-empty line is formatted alone; span tags are read with JavaScript whitespace and either quote; character references are decoded with parseInt and fromCodePoint rules within 16 UTF-16 units and adjacent surrogate halves join; stray and unclosed tags behave as in Pi, byte for byte over about 5000 seeded and table-driven strings"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "tui/highlight.go#RenderHighlightedHtml",
   "tui/highlight.go#renderHighlightedHTML",
   "tui/highlight.go#spanClassValue",
@@ -3803,7 +3803,7 @@ family = "export-html"
 kind = "render-layout"
 claim = "a custom tool call is rendered to HTML by storing its arguments under the call id first, then looking up the tool's renderers (a lookup, call or render that throws, or a tool without a call renderer, gives no HTML), calling the renderer with the stored arguments, the call's own state, the previous component of this call and the fixed flags (started, complete, partial, collapsed, no images, padding 1), and converting the component's lines at the export width to HTML, byte for byte over 1500 seeded scenarios"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/export/tool_renderer.go#renderCall",
   "internal/codingagent/export/tool_renderer.go#renderContext"
 ]
@@ -3826,7 +3826,7 @@ family = "export-html"
 kind = "render-layout"
 claim = "a custom tool result is rendered twice, collapsed then expanded, each time with the stored call arguments, the result's own state and the previous result component; leading and trailing lines that are blank after SGR codes are dropped (JavaScript whitespace included); collapsed is returned only when it is non-empty and differs from expanded; a lookup, renderer or render that throws, or a tool without a result renderer, gives nothing, byte for byte over 1500 seeded scenarios"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/export/tool_renderer.go#renderResult",
   "internal/codingagent/export/tool_renderer.go#trimRenderedResultLines",
   "internal/codingagent/export/tool_renderer.go#isBlankRenderedLine"
@@ -3850,7 +3850,7 @@ family = "extensions-runtime"
 kind = "render-layout"
 claim = "the view draws its current content (the loading view, model list, select, confirm, connection error, status or progress screen) with every line cut to the width, byte for byte at four widths over 700 seeded scenarios: the frame title is bold per line, the list shows loaded models first in locale order with the context label read from n_ctx, n_ctx_train or the launch arguments, its scroll line is dim, and the progress bar clamps the ratio and rounds the percentage"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/llama/ui.go#Render",
   "internal/codingagent/llama/ui.go#frame",
   "internal/codingagent/llama/ui.go#ShowModels",
@@ -3875,7 +3875,7 @@ family = "extensions-runtime"
 kind = "boundary-transition"
 claim = "while a progress screen is showing tui.select.cancel ends the progress wait and every other key is dropped; otherwise the key goes to the handler of the content shown (list navigation, confirm and cancel resolve the pending select, confirm or model choice), then a render is requested; the keys, frames and settlements agree with Pi over 700 seeded sequences"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/llama/ui.go#HandleInput"
 ]
 evidence = [
@@ -3897,7 +3897,7 @@ family = "extensions-runtime"
 kind = "boundary-transition"
 claim = "tui.select.up and tui.select.down move the selection with wrap-around over the filtered results, tui.select.confirm takes an owner/repository query as typed or the selected result, tui.select.cancel closes, and every other key edits the input; a changed trimmed query starts a new search: fewer than two characters show the hint, a cached query shows its results, otherwise the status reads Searching and the search starts after 500 ms, aborting the previous one; frames, settlements and completed searches (with their abort flags) agree with Pi over 600 seeded scenarios on a virtual clock; a key after close starts no timer (Q12)"
 status = "ported"
-pig_targets = [
+ompig_targets = [
   "internal/codingagent/llama/ui.go#HandleInput",
   "internal/codingagent/llama/ui.go#scheduleSearch",
   "internal/codingagent/llama/ui.go#runSearch"

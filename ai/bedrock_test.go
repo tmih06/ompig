@@ -1,4 +1,4 @@
-//go:build !pig_strip_bedrock_converse_stream
+//go:build !ompig_strip_bedrock_converse_stream
 
 package ai
 
@@ -11,8 +11,8 @@ import (
 
 	"github.com/aws/smithy-go"
 
-	bdoc "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/document"
-	btypes "github.com/MichaelKinsy/PiG/third_party/awssdk/service/bedrockruntime/types"
+	bdoc "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/document"
+	btypes "github.com/tmih06/ompig/third_party/awssdk/service/bedrockruntime/types"
 )
 
 func TestBedrockResolveRegion(t *testing.T) {
@@ -263,7 +263,7 @@ func TestBedrockConvertMessages_PlaceholderForBlankToolResult(t *testing.T) {
 	// tool_use stays paired; an empty tool-result content is rejected.
 	// Upstream convertToolResultContent uses createNonBlankTextBlock, which
 	// sanitizes and TRIMS: whitespace-only content is dropped and replaced by
-	// the placeholder, not sent verbatim. pig previously kept `"   "` as text.
+	// the placeholder, not sent verbatim. ompig previously kept `"   "` as text.
 	for _, content := range []string{"", "   ", "\n\t "} {
 		msgs := []Message{ToolResultMessage{
 			ToolCallID: "call_1",
@@ -302,7 +302,7 @@ func TestBedrockConvertMessages_SkipsEmptyAssistant(t *testing.T) {
 	if err != nil {
 		t.Fatalf("convert: %v", err)
 	}
-	// pig divergence (D116): the dropped assistant leaves two user messages, which Converse rejects; PiG sends one user message with both blocks (Pi sends two).
+	// ompig divergence (D116): the dropped assistant leaves two user messages, which Converse rejects; Ompig sends one user message with both blocks (Pi sends two).
 	if len(out) != 1 || len(out[0].Content) != 2 {
 		t.Fatalf("messages = %#v, want one user message holding both prompts (the empty assistant is dropped)", out)
 	}

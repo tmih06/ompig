@@ -26,13 +26,13 @@ Jiti itself wraps each imported namespace in a distinct interop proxy, including
 
 `TestNodeColdStartLoadsSDKOnlyOnImport` fails before the fix with `unused SDK closure loaded before an extension imports it`. Its load hook rejects the SDK bundle while constructing the runtime, importing and invoking a light TypeScript factory, re-importing that factory, and cleaning up a connection that never used the SDK. It then permits SDK loading and checks lazy jiti imports, complete exported-value identity, and native alias identity. It passes after the fix.
 
-The existing EventBus scenario fails before the fix at its unchanged 2.0× ceiling. Twelve alternating-order pairs give PiG median 1,787 ms and Pi median 845 ms: **2.11×**. After the fix the same twelve-pair run gives 1,282 ms and 841 ms: **1.52×**. This run preserves the scenario's launch-order alternation.
+The existing EventBus scenario fails before the fix at its unchanged 2.0× ceiling. Twelve alternating-order pairs give Ompig median 1,787 ms and Pi median 845 ms: **2.11×**. After the fix the same twelve-pair run gives 1,282 ms and 841 ms: **1.52×**. This run preserves the scenario's launch-order alternation.
 
 A separate distribution run executes twelve fresh-home single-pair tests for each binary. The runner snapshots both homes and the working directory for each pair. These are process/artifact-cold starts, not OS page-cache eviction. No compile cache is enabled. p95 uses the nearest-rank definition; with twelve observations it is the maximum.
 
 | Binary | Before p50 | Before p95 | After p50 | After p95 |
 |---|---:|---:|---:|---:|
-| PiG | 1,783 ms | 1,844 ms | 1,336.5 ms | 1,372 ms |
+| Ompig | 1,783 ms | 1,844 ms | 1,336.5 ms | 1,372 ms |
 | Pi | 874.5 ms | 914 ms | 871 ms | 913 ms |
 
 The p50 ratio improves from **2.04× to 1.53×**, leaving **23.3% margin** under the unchanged 2.0× ceiling. The p95 ratio is 1.50×. Every after pair is below 1.61×. The single-pair distributions are supplementary to the alternating-order twelve-pair gate.
@@ -40,9 +40,9 @@ The p50 ratio improves from **2.04× to 1.53×**, leaving **23.3% margin** under
 Raw observations, in run order, in milliseconds:
 
 ```text
-before pig: 1739 1713 1806 1844 1783 1783 1804 1805 1800 1777 1717 1714
+before ompig: 1739 1713 1806 1844 1783 1783 1804 1805 1800 1777 1717 1714
 before pi:   840  897  914  909  850  899  851  854  903  843  895  837
-after pig:  1234 1292 1288 1349 1336 1337 1355 1228 1287 1359 1372 1368
+after ompig:  1234 1292 1288 1349 1336 1337 1355 1228 1287 1359 1372 1368
 after pi:    848  846  912  853  913  847  847  903  846  908  889  912
 ```
 
@@ -98,7 +98,7 @@ Go allocation profiles include host construction and startup preparation; they d
 - `go test ./coding/extension/host/subprocess -v -count=1 -timeout=20m`: pass. The first shell invocation was stopped at the tool's 600-second budget without a result; the complete package takes about 753 seconds. No test timeout is changed.
 - Full `extensions-runtime` family: pass at declared durability, including EventBus's performance assertion, independent Session scenario 53, overlay scenario 54, and provider carrier scenario 55.
 - `make parity-fast`: 318 of 319 executed scenarios pass. `interactive-rendering/37-auto-theme-dark-modal-notification` fails because `Pick a color` is absent from **both** hosts' captures. A baseline-binary re-probe reproduces the same two-sided failure. This out-of-scope scenario remains an integration blocker; it is not skipped or weakened. The two existing allowed skips are unchanged.
-- `go test ./... -timeout=20m`: all touched packages and cross-SDK conformance pass. The three inherited `test/parity/closure` approval/accounting assertions fail, as recorded by the base lane. Three Piglet Binary tests initially inherit the coding-agent harness's regular-file `trust.json.lock`; running `coding/pigletbuild` with an ephemeral `PIG_HOME` and without ambient `PIG_CODING_AGENT_DIR` passes. No user's lock or test assertion is changed.
+- `go test ./... -timeout=20m`: all touched packages and cross-SDK conformance pass. The three inherited `test/parity/closure` approval/accounting assertions fail, as recorded by the base lane. Three Ompiglet Binary tests initially inherit the coding-agent harness's regular-file `trust.json.lock`; running `coding/pigletbuild` with an ephemeral `OMPIG_HOME` and without ambient `OMPIG_CODING_AGENT_DIR` passes. No user's lock or test assertion is changed.
 - `go vet ./...`, `GOOS=windows go vet ./coding/extension/host/subprocess`, `go tool golangci-lint config verify`, touched-package lint, and `make lint`: pass without suppressions. `make lint-changed` needs `LINT_BASE=4f0b9a685` because this lane has no local `main` merge base; that invocation passes.
 - Focused race tests for lazy loading, independent Session ownership/creation, reload, and EventBus: pass. Source hygiene, divergence guard and SDK surface drift: pass.
 - `make ci-contracts`: reaches the inherited open hot-path test obligations and fails `test-porting-release`. Generated interface drift and preceding contract checks pass.
@@ -112,15 +112,15 @@ Build one binary at each revision, then run from the repository root:
 
 ```sh
 export PATH="$HOME/flakes3-tools:$PATH"
-export PIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
-export PIG_PARITY_PIG_BIN="<absolute candidate binary>"
+export OMPIG_PARITY_PI_BIN="$PWD/extensions/sdk-ts/node_modules/.bin/pi"
+export OMPIG_PARITY_OMPIG_BIN="<absolute candidate binary>"
 go test -tags=parity ./test/parity/runner -count=12 -v \
   -run '^TestParity$/06-eventbus-pubsub$' \
-  -args -pig-parity.serial=true -pig-parity.runs=1
+  -args -ompig-parity.serial=true -ompig-parity.runs=1
 # Alternating-order, twelve-pair gate:
 go test -tags=parity ./test/parity/runner -count=1 -v \
   -run '^TestParity$/06-eventbus-pubsub$' \
-  -args -pig-parity.serial=true -pig-parity.runs=12
+  -args -ompig-parity.serial=true -ompig-parity.runs=12
 
 go test ./coding/extension/host/subprocess -run '^$' \
   -bench '^BenchmarkNodeAdmissionStartup/(one-node|three-node)$' \

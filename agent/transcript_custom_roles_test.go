@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi: packages/ai/src/utils/transcript.ts:40 (TranscriptMessages = readonly { role: string }[]). An agent transcript with custom roles

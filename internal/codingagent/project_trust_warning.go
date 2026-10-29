@@ -1,6 +1,6 @@
 package codingagent
 
-import "github.com/MichaelKinsy/PiG/tui"
+import "github.com/tmih06/ompig/tui"
 
 // Ports packages/coding-agent/src/modes/interactive/interactive-mode.ts:renderProjectTrustWarningIfNeeded.
 func (m *InteractiveMode) renderProjectTrustWarningIfNeeded() {
@@ -10,8 +10,8 @@ func (m *InteractiveMode) renderProjectTrustWarningIfNeeded() {
 	if !m.chatContainer.IsEmpty() {
 		m.chatContainer.Add(tui.NewSpacer(1))
 	}
-	// pig divergence (D2): the warning names PiG's configuration directory and restart command.
-	message := "This project is not trusted. Project " + ConfigDirName() + " resources and packages are ignored. Use /trust to save a trust decision, then restart pig."
+	// ompig divergence (D2): the warning names Ompig's configuration directory and restart command.
+	message := "This project is not trusted. Project " + ConfigDirName() + " resources and packages are ignored. Use /trust to save a trust decision, then restart ompig."
 	m.chatContainer.Add(themedNotice("warning", message, 1))
 }
 

@@ -5,8 +5,8 @@ package export
 import (
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/coding/extension"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/coding/extension"
 )
 
 // Probed against Pi 0.87.1 core/export-html/ansi-to-html.ts:56-72,205-257.

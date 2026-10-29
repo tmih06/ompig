@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/codemode"
-	"github.com/MichaelKinsy/PiG/internal/jsonstringify"
-	"github.com/MichaelKinsy/PiG/internal/jsstring"
-	"github.com/MichaelKinsy/PiG/internal/pioracle"
+	"github.com/tmih06/ompig/codemode"
+	"github.com/tmih06/ompig/internal/jsonstringify"
+	"github.com/tmih06/ompig/internal/jsstring"
+	"github.com/tmih06/ompig/internal/pioracle"
 )
 
 // host.ts serializeStore sends the script's load() snapshot as `key -> JSON.stringify(value)`, assigning with `serialized[key] = json`, so a `__proto__`
@@ -101,7 +101,7 @@ emit(JSON.parse(child.stdout));
 		}
 		if got != want[i] {
 			if bad++; bad <= 5 {
-				t.Errorf("store %v %v\n  PiG %+v\n  Pi  %+v", p.Keys, p.Values, got, want[i])
+				t.Errorf("store %v %v\n  Ompig %+v\n  Pi  %+v", p.Keys, p.Values, got, want[i])
 			}
 		}
 	}

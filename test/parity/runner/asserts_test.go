@@ -12,7 +12,7 @@ func TestEvaluateOutcome_NotContainAssertions(t *testing.T) {
 	cases := []struct {
 		name      string
 		asserts   AssertSpec
-		pigOut    string
+		ompigOut  string
 		piOut     string
 		wantFail  bool
 		wantMatch string
@@ -20,22 +20,22 @@ func TestEvaluateOutcome_NotContainAssertions(t *testing.T) {
 		{
 			name:     "both_not_contain_passes",
 			asserts:  AssertSpec{BothNotContain: []string{"panic:"}},
-			pigOut:   "all good",
+			ompigOut: "all good",
 			piOut:    "all good",
 			wantFail: false,
 		},
 		{
-			name:      "both_not_contain_fails_on_pig",
+			name:      "both_not_contain_fails_on_ompig",
 			asserts:   AssertSpec{BothNotContain: []string{"panic:"}},
-			pigOut:    "panic: boom",
+			ompigOut:  "panic: boom",
 			piOut:     "all good",
 			wantFail:  true,
-			wantMatch: "pig output unexpectedly contains \"panic:\"",
+			wantMatch: "ompig output unexpectedly contains \"panic:\"",
 		},
 		{
 			name:      "pi_not_contain_fails",
 			asserts:   AssertSpec{PiNotContain: []string{"goroutine "}},
-			pigOut:    "all good",
+			ompigOut:  "all good",
 			piOut:     "goroutine 1",
 			wantFail:  true,
 			wantMatch: "pi output unexpectedly contains \"goroutine \" (asymmetric)",
@@ -46,7 +46,7 @@ func TestEvaluateOutcome_NotContainAssertions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			o := &ScenarioOutcome{
 				Scenario: &Scenario{Name: tc.name, Assert: tc.asserts},
-				Pig:      SystemResults{System: "pig", Runs: []Result{{Output: tc.pigOut}}},
+				Ompig:    SystemResults{System: "ompig", Runs: []Result{{Output: tc.ompigOut}}},
 				Pi:       SystemResults{System: "pi", Runs: []Result{{Output: tc.piOut}}},
 			}
 			EvaluateOutcome(o)
@@ -72,7 +72,7 @@ func TestEvaluateOutcome_NotContainAssertions(t *testing.T) {
 func TestEvaluateOutcome_EscapedOutputEqual(t *testing.T) {
 	o := &ScenarioOutcome{
 		Scenario: &Scenario{Name: "escaped", Assert: AssertSpec{EscapedOutputEqual: true}},
-		Pig:      SystemResults{System: "pig", Runs: []Result{{Escaped: "\x1b[31mhello\x1b[0m"}}},
+		Ompig:    SystemResults{System: "ompig", Runs: []Result{{Escaped: "\x1b[31mhello\x1b[0m"}}},
 		Pi:       SystemResults{System: "pi", Runs: []Result{{Escaped: "\x1b[31mhello\x1b[0m"}}},
 	}
 	EvaluateOutcome(o)
@@ -82,7 +82,7 @@ func TestEvaluateOutcome_EscapedOutputEqual(t *testing.T) {
 
 	o = &ScenarioOutcome{
 		Scenario: &Scenario{Name: "escaped-mismatch", Assert: AssertSpec{EscapedOutputEqual: true}},
-		Pig:      SystemResults{System: "pig", Runs: []Result{{Escaped: "\x1b[31mhello\x1b[0m"}}},
+		Ompig:    SystemResults{System: "ompig", Runs: []Result{{Escaped: "\x1b[31mhello\x1b[0m"}}},
 		Pi:       SystemResults{System: "pi", Runs: []Result{{Escaped: "\x1b[32mhello\x1b[0m"}}},
 	}
 	EvaluateOutcome(o)
@@ -94,9 +94,9 @@ func TestEvaluateOutcome_EscapedOutputEqual(t *testing.T) {
 func TestEvaluateOutcomeEqualityChecksEveryDurabilityPair(t *testing.T) {
 	o := &ScenarioOutcome{
 		Scenario: &Scenario{Name: "second-run-drift", Assert: AssertSpec{OutputEqual: true}},
-		Pig: SystemResults{Runs: []Result{
+		Ompig: SystemResults{Runs: []Result{
 			{Output: "same"},
-			{Output: "pig drift"},
+			{Output: "ompig drift"},
 		}},
 		Pi: SystemResults{Runs: []Result{
 			{Output: "same"},
@@ -104,7 +104,7 @@ func TestEvaluateOutcomeEqualityChecksEveryDurabilityPair(t *testing.T) {
 		}},
 	}
 	EvaluateOutcome(o)
-	if len(o.Failures) != 1 || o.Failures[0] != `run 2 output mismatch: pig="pig drift" pi="pi stable"` {
+	if len(o.Failures) != 1 || o.Failures[0] != `run 2 output mismatch: ompig="ompig drift" pi="pi stable"` {
 		t.Fatalf("failures = %#v", o.Failures)
 	}
 }
@@ -137,8 +137,8 @@ func TestFullscreenDoesNotErasePathBearingRows(t *testing.T) {
 						OutputNormalizedEqual: true,
 						NormalizeReplace:      scenario.Assert.NormalizeReplace,
 					}},
-					Pig: SystemResults{System: "pig", Runs: []Result{{Output: cwd}}},
-					Pi:  SystemResults{System: "pi", Runs: []Result{{Output: "/tmp/parity-snap-cwd-reference"}}},
+					Ompig: SystemResults{System: "ompig", Runs: []Result{{Output: cwd}}},
+					Pi:    SystemResults{System: "pi", Runs: []Result{{Output: "/tmp/parity-snap-cwd-reference"}}},
 				}
 				EvaluateOutcome(o)
 				if len(o.Failures) == 0 {
@@ -160,30 +160,30 @@ func TestEvaluateOutcome_CompactionInProgressRetainsLiveToolLine(t *testing.T) {
 			OutputNormalizedEqual: true,
 			NormalizeReplace:      scenario.Assert.NormalizeReplace,
 		}},
-		Pig: SystemResults{System: "pig", Runs: []Result{{Output: " LIVE-TOOL-24\n\n Took 1.5s\n\n\n LIVE-TOOL-DONE\n\n── ⠋ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
-		Pi:  SystemResults{System: "pi", Runs: []Result{{Output: "\n Took 1.5s\n\n\n LIVE-TOOL-DONE\n\n── ⠙ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
+		Ompig: SystemResults{System: "ompig", Runs: []Result{{Output: " LIVE-TOOL-24\n\n Took 1.5s\n\n\n LIVE-TOOL-DONE\n\n── ⠋ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
+		Pi:    SystemResults{System: "pi", Runs: []Result{{Output: "\n Took 1.5s\n\n\n LIVE-TOOL-DONE\n\n── ⠙ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
 	}
 	EvaluateOutcome(o)
 	if len(o.Failures) == 0 {
-		t.Fatal("extra Pig transcript row was hidden")
+		t.Fatal("extra Ompig transcript row was hidden")
 	}
 
 	// The opposite-direction evidence must remain visible too.
 	o2 := &ScenarioOutcome{
 		Scenario: o.Scenario,
-		Pig:      SystemResults{System: "pig", Runs: []Result{{Output: "\n Took 2.1s\n\n\n LIVE-TOOL-DONE\n\n── ⠸ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
+		Ompig:    SystemResults{System: "ompig", Runs: []Result{{Output: "\n Took 2.1s\n\n\n LIVE-TOOL-DONE\n\n── ⠸ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
 		Pi:       SystemResults{System: "pi", Runs: []Result{{Output: " LIVE-TOOL-24\n\n Took 2.1s\n\n\n LIVE-TOOL-DONE\n\n── ⠦ Compacting context... (escape to cancel) ──────────────────────────────────\n"}}},
 	}
 	EvaluateOutcome(o2)
 	if len(o2.Failures) == 0 {
-		t.Fatal("missing Pig transcript row was hidden")
+		t.Fatal("missing Ompig transcript row was hidden")
 	}
 }
 
 func TestEvaluateOutcomeNormalizedComparatorCannotWeakenOutputEqual(t *testing.T) {
 	o := &ScenarioOutcome{
 		Scenario: &Scenario{Assert: AssertSpec{OutputEqual: true, OutputNormalizedEqual: true}},
-		Pig:      SystemResults{Runs: []Result{{Output: "same   "}}},
+		Ompig:    SystemResults{Runs: []Result{{Output: "same   "}}},
 		Pi:       SystemResults{Runs: []Result{{Output: "same"}}},
 	}
 	EvaluateOutcome(o)
@@ -201,8 +201,8 @@ func TestEvaluateOutcome_NormalizeReplace(t *testing.T) {
 					{Pattern: `Took \d+\.\d+s`, With: "Took Ns", Reason: "Tool duration varies with scheduling."},
 				},
 			}},
-			Pig: SystemResults{System: "pig", Runs: []Result{{Output: "$ expr 20 + 22\n\n42\n\nTook 0.0s"}}},
-			Pi:  SystemResults{System: "pi", Runs: []Result{{Output: "$ expr 20 + 22\n\n42\n\nTook 0.1s"}}},
+			Ompig: SystemResults{System: "ompig", Runs: []Result{{Output: "$ expr 20 + 22\n\n42\n\nTook 0.0s"}}},
+			Pi:    SystemResults{System: "pi", Runs: []Result{{Output: "$ expr 20 + 22\n\n42\n\nTook 0.1s"}}},
 		}
 		EvaluateOutcome(o)
 		if len(o.Failures) != 0 {
@@ -218,8 +218,8 @@ func TestEvaluateOutcome_NormalizeReplace(t *testing.T) {
 					{Pattern: `Took \d+\.\d+s`, With: "Took Ns", Reason: "Tool duration varies with scheduling."},
 				},
 			}},
-			Pig: SystemResults{System: "pig", Runs: []Result{{Output: "$ expr 20 + 22\n\n42\n\nTook 0.0s"}}},
-			Pi:  SystemResults{System: "pi", Runs: []Result{{Output: "$ expr 20 + 22\n\n43\n\nTook 0.1s"}}},
+			Ompig: SystemResults{System: "ompig", Runs: []Result{{Output: "$ expr 20 + 22\n\n42\n\nTook 0.0s"}}},
+			Pi:    SystemResults{System: "pi", Runs: []Result{{Output: "$ expr 20 + 22\n\n43\n\nTook 0.1s"}}},
 		}
 		EvaluateOutcome(o)
 		if len(o.Failures) == 0 {
@@ -235,8 +235,8 @@ func TestEvaluateOutcome_NormalizeReplace(t *testing.T) {
 					{Pattern: `[unclosed`, With: "x", Reason: "Invalid pattern must be diagnosed."},
 				},
 			}},
-			Pig: SystemResults{System: "pig", Runs: []Result{{Output: "a"}}},
-			Pi:  SystemResults{System: "pi", Runs: []Result{{Output: "a"}}},
+			Ompig: SystemResults{System: "ompig", Runs: []Result{{Output: "a"}}},
+			Pi:    SystemResults{System: "pi", Runs: []Result{{Output: "a"}}},
 		}
 		EvaluateOutcome(o)
 		matched := false
@@ -270,8 +270,8 @@ func TestEvaluateOutcome_ExtensionAssertions(t *testing.T) {
 				NoDiagnostics:   true,
 			}},
 		},
-		Pig: SystemResults{Runs: []Result{{Output: `{"valid":true,"name":"example","tools":["hello"],"registered":true}`}}},
-		Pi:  SystemResults{Runs: []Result{{Output: `{"valid":true,"skipped":"pig-only"}`}}},
+		Ompig: SystemResults{Runs: []Result{{Output: `{"valid":true,"name":"example","tools":["hello"],"registered":true}`}}},
+		Pi:    SystemResults{Runs: []Result{{Output: `{"valid":true,"skipped":"ompig-only"}`}}},
 	}
 	EvaluateOutcome(o)
 	if !o.Passed() {
@@ -287,8 +287,8 @@ func TestEvaluateOutcome_ExtensionAssertionsFailOnMissingTool(t *testing.T) {
 				RegisteredTools: []string{"missing"},
 			}},
 		},
-		Pig: SystemResults{Runs: []Result{{Output: `{"valid":true,"name":"example","tools":["hello"],"registered":true}`}}},
-		Pi:  SystemResults{Runs: []Result{{Output: `{"valid":true,"skipped":"pig-only"}`}}},
+		Ompig: SystemResults{Runs: []Result{{Output: `{"valid":true,"name":"example","tools":["hello"],"registered":true}`}}},
+		Pi:    SystemResults{Runs: []Result{{Output: `{"valid":true,"skipped":"ompig-only"}`}}},
 	}
 	EvaluateOutcome(o)
 	if o.Passed() {
@@ -299,7 +299,7 @@ func TestEvaluateOutcome_ExtensionAssertionsFailOnMissingTool(t *testing.T) {
 func TestEvaluateOutcome_ExtensionAssertionsCheckEveryRun(t *testing.T) {
 	o := &ScenarioOutcome{
 		Scenario: &Scenario{Assert: AssertSpec{Extensions: ExtensionAssertSpec{RegisteredTools: []string{"hello"}}}},
-		Pig: SystemResults{Runs: []Result{
+		Ompig: SystemResults{Runs: []Result{
 			{Output: `{"valid":true,"tools":["hello"]}`},
 			{Output: `{"valid":true,"tools":[]}`},
 		}},
@@ -315,7 +315,7 @@ func TestEvaluateOutcome_ExtensionAssertionsCheckEveryRun(t *testing.T) {
 // "Took 0.1s" is masked in the SGR-preserving capture, matching the other
 // comparators) while still catching a real byte difference.
 func TestEvaluateOutcome_EscapedNormalizeReplace(t *testing.T) {
-	const pig = "\x1b[38;2;128;128;128mTook 0.1s\x1b[39m"
+	const ompig = "\x1b[38;2;128;128;128mTook 0.1s\x1b[39m"
 	const piTiming = "\x1b[38;2;128;128;128mTook 0.0s\x1b[39m"
 	const piColor = "\x1b[38;2;99;99;99mTook 0.1s\x1b[39m"
 	rule := []NormalizeReplaceRule{{Pattern: `Took \d+\.\ds`, With: "Took Ns", Reason: "Tool duration varies with scheduling."}}
@@ -337,8 +337,8 @@ func TestEvaluateOutcome_EscapedNormalizeReplace(t *testing.T) {
 					EscapedOutputEqual: true,
 					NormalizeReplace:   tc.rules,
 				}},
-				Pig: SystemResults{System: "pig", Runs: []Result{{Escaped: pig}}},
-				Pi:  SystemResults{System: "pi", Runs: []Result{{Escaped: tc.piEsc}}},
+				Ompig: SystemResults{System: "ompig", Runs: []Result{{Escaped: ompig}}},
+				Pi:    SystemResults{System: "pi", Runs: []Result{{Escaped: tc.piEsc}}},
 			}
 			EvaluateOutcome(o)
 			if got := len(o.Failures) > 0; got != tc.wantFail {
@@ -359,8 +359,8 @@ func TestEvaluateOutcome_CompactionSettledRetainsTokenCounts(t *testing.T) {
 			OutputNormalizedEqual: true,
 			NormalizeReplace:      scenario.Assert.NormalizeReplace,
 		}},
-		Pig: SystemResults{System: "pig", Runs: []Result{{Output: "[compaction]\n\n Compacted from 1,890 tokens (ctrl+o to expand)\n"}}},
-		Pi:  SystemResults{System: "pi", Runs: []Result{{Output: "[compaction]\n\n Compacted from 1,971 tokens (ctrl+o to expand)\n"}}},
+		Ompig: SystemResults{System: "ompig", Runs: []Result{{Output: "[compaction]\n\n Compacted from 1,890 tokens (ctrl+o to expand)\n"}}},
+		Pi:    SystemResults{System: "pi", Runs: []Result{{Output: "[compaction]\n\n Compacted from 1,971 tokens (ctrl+o to expand)\n"}}},
 	}
 	EvaluateOutcome(o)
 	if len(o.Failures) == 0 {

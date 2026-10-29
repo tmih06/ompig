@@ -42,7 +42,7 @@ func oauthPageCorpus() []oauthPageCase {
 	return cases
 }
 
-// TestOAuthPageCorpusMatchesThePinnedPackage renders the corpus with Pi's oauth-page.ts and with PiG: the success page of each message and the error page of each message and details agree byte for byte.
+// TestOAuthPageCorpusMatchesThePinnedPackage renders the corpus with Pi's oauth-page.ts and with Ompig: the success page of each message and the error page of each message and details agree byte for byte.
 func TestOAuthPageCorpusMatchesThePinnedPackage(t *testing.T) {
 	cases := oauthPageCorpus()
 	input, err := json.Marshal(cases)
@@ -95,7 +95,7 @@ func TestOAuthPageCorpusDump(t *testing.T) {
 	fmt.Printf("oauth-page-probes:%s\n", line)
 }
 
-// TestOAuthPageCorpusParity prints PiG's pages, one JSON line per page, for the oauth/32 parity scenario.
+// TestOAuthPageCorpusParity prints Ompig's pages, one JSON line per page, for the oauth/32 parity scenario.
 func TestOAuthPageCorpusParity(t *testing.T) {
 	for _, c := range oauthPageCorpus() {
 		for _, page := range []string{OAuthSuccessHTML(c.Message), OAuthErrorHTML(c.Message, c.Details)} {

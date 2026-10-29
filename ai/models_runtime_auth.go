@@ -343,7 +343,7 @@ func (m *Models) LoginProvider(ctx context.Context, provider *ModelsProvider, au
 		return Credential{}, err
 	}
 	if authType == CredentialOAuth && provider.Auth.OAuth.store != nil {
-		// pig additive (D40): an extension OAuth provider with its own credential store saves there, never in the core store, as /login and pig login do.
+		// ompig additive (D40): an extension OAuth provider with its own credential store saves there, never in the core store, as /login and ompig login do.
 		store := provider.Auth.OAuth.store
 		if _, err := awaitModelsOperation(ctx, &m.operations, func() (string, error) { return store.StoreOAuthCredentials(credential.OAuthCredentials()) }); err != nil {
 			if ctx.Err() != nil {

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Pi agent-session.ts:1721-1723,1882-1885,1899-1902 always starts prompt and queue content with a text block, even when its text is empty.

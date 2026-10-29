@@ -4,12 +4,12 @@
 # The artifact contains no volatile IDs/paths; normalized comparison leaves
 # its JSONL unchanged. The stdout comparator also checks the command-only path.
 #
-# pig divergence (D70): the fixture's replace-probe command sets
+# ompig divergence (D70): the fixture's replace-probe command sets
 # process.env.FIN_REPLACEMENT_LOG so the replacement's session_start handler can
 # find the log. Pi re-runs the extension factory inside the same Node process, so
-# the assignment survives into the replacement Session. Pig starts a fresh
+# the assignment survives into the replacement Session. Ompig starts a fresh
 # extension process for each replacement Session, and a process environment
-# change does not cross that boundary. Pig's side receives the log path at
+# change does not cross that boundary. Ompig's side receives the log path at
 # startup; Pi keeps the fixture's own assignment.
 name = "39-extension-session-replacement"
 description = "Extension commands replace sessions in print mode with ordered lifecycle and fork positions"
@@ -23,8 +23,8 @@ timeout_seconds = 30
 artifact_path = "{{TEMP}}/trace.jsonl"
 
 [env]
-pig = ["PIG_TEST_FAUX=1", "FIN_REPLACEMENT_LOG={{TEMP}}/trace.jsonl"]
-pig_extensions = ["testdata/ext/session-replacement.mjs"]
+ompig = ["OMPIG_TEST_FAUX=1", "FIN_REPLACEMENT_LOG={{TEMP}}/trace.jsonl"]
+ompig_extensions = ["testdata/ext/session-replacement.mjs"]
 pi_extensions = ["../../testdata/test-faux-provider.ts", "testdata/ext/session-replacement.mjs"]
 
 [assert]

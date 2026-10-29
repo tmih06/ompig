@@ -104,44 +104,44 @@ class Report(unittest.TestCase):
         out = []
         for api, k in (("completions", 1.0), ("anthropic", 1.5)):
             for r in range(3):
-                out += [row("pig", "prose", api, 6000, 1.0 * k), row("pig-b", "prose", api, 6000, 1.05 * k),
+                out += [row("ompig", "prose", api, 6000, 1.0 * k), row("ompig-b", "prose", api, 6000, 1.05 * k),
                         row("bolt", "prose", api, 6000, 2.0 * k + r * 0.01), row("bolt-copy", "prose", api, 6000, 2.0 * k),
                         row("node", "code", api, 6000, 4.0)]
-        out += [row("pig", "code", "completions", 6000, 0.5), row("pig", "code", "anthropic", 6000, 0.5)]
+        out += [row("ompig", "code", "completions", 6000, 0.5), row("ompig", "code", "anthropic", 6000, 0.5)]
         out += [row("node-aa", "prose", "completions", 6000, error="no answer"), row("node", "prose", "completions", 6000, error="no answer")]
         return out
 
     def test_pairs_from_suffixes_and_explicit(self):
-        self.assertEqual(shapes_report.pairs_of(["pig", "pig-b", "node", "node-aa", "bolt-1", "bolt-copy"], [("bolt-1", "bolt-copy")]),
-                         {"pig": "pig-b", "node": "node-aa", "bolt-1": "bolt-copy"})
+        self.assertEqual(shapes_report.pairs_of(["ompig", "ompig-b", "node", "node-aa", "bolt-1", "bolt-copy"], [("bolt-1", "bolt-copy")]),
+                         {"ompig": "ompig-b", "node": "node-aa", "bolt-1": "bolt-copy"})
 
     def test_missing_cell_is_a_dash_and_failures_are_counted(self):
         text = shapes_report.render(shapes_report.aggregate(self.rows()))
         self.assertIn("samples that did not run: 2", text)
         self.assertIn("node: 1 x no answer", text)
-        self.assertIn("prose completions 6000 pig 1.00", text)
+        self.assertIn("prose completions 6000 ompig 1.00", text)
         self.assertIn("| node -", text)
 
     def test_ratio_range_ends_are_the_extreme_cells(self):
-        agg = shapes_report.aggregate(self.rows(), base="pig")
+        agg = shapes_report.aggregate(self.rows(), base="ompig")
         node = [r for r in agg["ratios"] if r[0] == "node"][0]
         self.assertEqual((round(node[2][0], 2), round(node[3][0], 2), node[4]), (8.0, 8.0, 2))  # only the code cells have both
-        # bolt/pig: completions 2.01/1.0, anthropic 3.01/1.5 = 2.0067: the low end is the anthropic cell.
+        # bolt/ompig: completions 2.01/1.0, anthropic 3.01/1.5 = 2.0067: the low end is the anthropic cell.
         bolt = [r for r in agg["ratios"] if r[0] == "bolt"][0]
         self.assertEqual((round(bolt[2][0], 4), bolt[2][1:], round(bolt[3][0], 4), bolt[3][1:], bolt[4]),
                          (2.0067, ("prose", "anthropic"), 2.01, ("prose", "completions"), 2))
 
     def test_wire_delta_outside_the_floor_is_flagged(self):
         text = shapes_report.render(shapes_report.aggregate(self.rows()))
-        self.assertIn("pig prose 6000: 50.0% (A/A 5.0%) OUTSIDE A/A", text)
-        self.assertIn("pig code 6000: 0.0% (A/A -)", text)
+        self.assertIn("ompig prose 6000: 50.0% (A/A 5.0%) OUTSIDE A/A", text)
+        self.assertIn("ompig code 6000: 0.0% (A/A -)", text)
 
     def test_cli_runs_on_rows(self):
         with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False) as f:
             f.write("\n".join(json.dumps(r) for r in self.rows()))
-        out = subprocess.run([sys.executable, str(HERE / "shapes_report.py"), f.name, "--base", "pig"], capture_output=True, text=True, timeout=60)
+        out = subprocess.run([sys.executable, str(HERE / "shapes_report.py"), f.name, "--base", "ompig"], capture_output=True, text=True, timeout=60)
         self.assertEqual(out.returncode, 0, out.stderr)
-        self.assertIn("other/pig median ratio", out.stdout)
+        self.assertIn("other/ompig median ratio", out.stdout)
 
 
 if __name__ == "__main__":

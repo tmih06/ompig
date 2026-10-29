@@ -10,16 +10,16 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
+	"github.com/tmih06/ompig/extensions/sdk/json"
 )
 
 // Frames of up to pooledFrameMax bytes are read into reused buffers. A larger frame is rare and gets a buffer of its own, which the collector reclaims, so one large frame never pins memory in the pool.
 const (
 	// pooledFrameMinShift is log2 of the smallest pooled buffer: 512 bytes holds a typical streaming delta envelope, and a smaller class would only add pools.
-	// pig additive (D112): Pi reads each frame into a fresh Buffer; pooling is a Go allocation choice with no observable effect.
+	// ompig additive (D112): Pi reads each frame into a fresh Buffer; pooling is a Go allocation choice with no observable effect.
 	pooledFrameMinShift = 9
 	// pooledFrameMaxShift is log2 of the largest pooled buffer: 1 MiB covers every ordinary frame, and a larger frame is read into a buffer of its own so the pool never pins one.
-	// pig additive (D112): see pooledFrameMinShift.
+	// ompig additive (D112): see pooledFrameMinShift.
 	pooledFrameMaxShift = 20
 	pooledFrameMin      = 1 << pooledFrameMinShift
 	pooledFrameMax      = 1 << pooledFrameMaxShift

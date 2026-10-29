@@ -9,20 +9,20 @@ import (
 	"strings"
 	"testing"
 
-	piglet "github.com/MichaelKinsy/PiG/coding/piglet"
-	"github.com/MichaelKinsy/PiG/coding/piglet/signature"
+	ompiglet "github.com/tmih06/ompig/coding/ompiglet"
+	"github.com/tmih06/ompig/coding/ompiglet/signature"
 )
 
 // emptyBasePiglet lists no extensions and no frontend: it only strips
 // built-ins and sets a default model, as a base tier does.
 const emptyBasePiglet = "name: base\nmodel:\n  provider: test-faux\n  name: faux-1\nstrip:\n  tools: [grep, find, ls]\n  commands: [/share]\n"
 
-// buildNativeBinary runs a real `pig piglet build --format binary` of
-// pigletPath with HOME and PIG_HOME isolated under root and returns the
+// buildNativeBinary runs a real `ompig ompiglet build --format binary` of
+// pigletPath with HOME and OMPIG_HOME isolated under root and returns the
 // artifact path.
 func buildNativeBinary(t *testing.T, root, pigletPath, name string, extraArgs ...string) string {
 	t.Helper()
-	t.Setenv("PIG_HOME", filepath.Join(root, "home"))
+	t.Setenv("OMPIG_HOME", filepath.Join(root, "home"))
 	t.Setenv("HOME", filepath.Join(root, "home"))
 	// Go makes downloaded module-cache files read-only by default, which would
 	// prevent testing.TempDir from removing this isolated HOME on Unix.
@@ -34,12 +34,12 @@ func buildNativeBinary(t *testing.T, root, pigletPath, name string, extraArgs ..
 	args := append([]string{pigletPath, "--format", "binary", "--builder", "native", "--out", artifact}, extraArgs...)
 	var stdout, stderr strings.Builder
 	if code := runBuild(args, &stdout, &stderr); code != 0 {
-		t.Fatalf("pig piglet build exit %d\nstdout:\n%s\nstderr:\n%s", code, stdout.String(), stderr.String())
+		t.Fatalf("ompig ompiglet build exit %d\nstdout:\n%s\nstderr:\n%s", code, stdout.String(), stderr.String())
 	}
 	return artifact
 }
 
-// A Piglet that lists no extensions builds a signed Binary of Stock PiG's own
+// A Ompiglet that lists no extensions builds a signed Binary of Stock Ompig's own
 // parts. The Binary verifies, answers a print-mode prompt with the baked
 // default model, and applies the baked strip list.
 func TestEmptyBasePigletBuildsASignedBinary(t *testing.T) {
@@ -53,11 +53,11 @@ func TestEmptyBasePigletBuildsASignedBinary(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	artifact := buildNativeBinary(t, root, pigletPath, "pig-base", "--sign-key", keyPath)
+	artifact := buildNativeBinary(t, root, pigletPath, "ompig-base", "--sign-key", keyPath)
 
 	var stdout, stderr strings.Builder
-	if code := piglet.RunCommand([]string{"piglet", "verify", artifact}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Signature: signed by "+keyID) {
-		t.Fatalf("pig piglet verify: exit %d\n%s%s", code, stdout.String(), stderr.String())
+	if code := ompiglet.RunCommand([]string{"ompiglet", "verify", artifact}, &stdout, &stderr); code != 0 || !strings.Contains(stdout.String(), "Signature: signed by "+keyID) {
+		t.Fatalf("ompig ompiglet verify: exit %d\n%s%s", code, stdout.String(), stderr.String())
 	}
 	if output := fauxPrompt(t, artifact); output != "42" {
 		t.Fatalf("empty base -p printed %q, want 42 from the baked default model", output)
@@ -72,8 +72,8 @@ func TestEmptyBasePigletBuildsASignedBinary(t *testing.T) {
 // provider, offline, and returns the trimmed output.
 func fauxPrompt(t *testing.T, path string) string {
 	t.Helper()
-	t.Setenv("PIG_TEST_FAUX", "1")
-	t.Setenv("PIG_OFFLINE", "1")
+	t.Setenv("OMPIG_TEST_FAUX", "1")
+	t.Setenv("OMPIG_OFFLINE", "1")
 	code, output := startPigletBinary(t, path, "--no-session", "-p", "What is 20+22?")
 	if code != 0 {
 		t.Fatalf("%s -p: exit %d\n%s", filepath.Base(path), code, output)
@@ -96,12 +96,12 @@ func TestEmptyBaseChildWithAnExtensionBuilds(t *testing.T) {
 	if err := os.Remove(small); err != nil {
 		t.Fatal(err)
 	}
-	artifact := buildNativeBinary(t, root, child, "pig-child")
+	artifact := buildNativeBinary(t, root, child, "ompig-child")
 	binary, err := os.ReadFile(artifact)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{componentMarker, `{"kind":"piglet-resolution","piglet":"child"`} {
+	for _, want := range []string{componentMarker, `{"kind":"ompiglet-resolution","ompiglet":"child"`} {
 		if !strings.Contains(string(binary), want) {
 			t.Fatalf("child Binary lacks %q", want)
 		}
@@ -115,10 +115,10 @@ func TestEmptyBaseChildWithAnExtensionBuilds(t *testing.T) {
 	}
 }
 
-// pig piglet publish decides "lists none" from the effective Piglet as build
-// does: an empty base passes the build verdict, and a Piglet whose listed
+// ompig ompiglet publish decides "lists none" from the effective Ompiglet as build
+// does: an empty base passes the build verdict, and a Ompiglet whose listed
 // entry has no origin (so resolution yields no cell and no warning) is still
-// refused with "piglet resolves to no extensions" before any build runs.
+// refused with "ompiglet resolves to no extensions" before any build runs.
 func TestPublishVerdictCountsTheListedExtensions(t *testing.T) {
 	dir := t.TempDir()
 	noBuilders := func() ([]BuilderBackend, error) { return nil, nil }
@@ -126,7 +126,7 @@ func TestPublishVerdictCountsTheListedExtensions(t *testing.T) {
 		name, source, wantErr string
 	}{
 		{"empty base", emptyBasePiglet, ""},
-		{"listed without origin", "name: scoped\nextensions: [gone]\n", "Piglet will not build: piglet resolves to no extensions"},
+		{"listed without origin", "name: scoped\nextensions: [gone]\n", "Ompiglet will not build: ompiglet resolves to no extensions"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			path := filepath.Join(dir, strings.ReplaceAll(tc.name, " ", "-")+".yaml")
@@ -137,7 +137,7 @@ func TestPublishVerdictCountsTheListedExtensions(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			_, err = publishRelease{pigletRef: path, piglet: p}.prepareBuilds(context.Background(), io.Discard, io.Discard, noBuilders)
+			_, err = publishRelease{pigletRef: path, ompiglet: p}.prepareBuilds(context.Background(), io.Discard, io.Discard, noBuilders)
 			if tc.wantErr == "" && err != nil {
 				t.Fatalf("prepareBuilds: %v", err)
 			}

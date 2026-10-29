@@ -29,9 +29,9 @@ wait_contains = ['"id":"prompt","type":"response","command":"prompt","success":f
 wait_timeout_seconds = 10
 
 [env]
-pig = ["PIG_HOME=testdata/pig-home"]
+ompig = ["OMPIG_HOME=testdata/ompig-home"]
 pi = ["PI_CODING_AGENT_DIR=testdata/pi-home/agent"]
-pig_args = ["--offline", "--no-session"]
+ompig_args = ["--offline", "--no-session"]
 pi_args = ["--offline", "--no-session"]
 
 [assert]

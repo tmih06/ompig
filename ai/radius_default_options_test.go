@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/internal/coding/pigversion"
+	"github.com/tmih06/ompig/internal/coding/pigversion"
 )
 
 // radius.ts:22 radiusProvider(options = {}): calling it with no options is calling it with the empty options object. A second options value is not Pi's shape, so the first one is the one used.

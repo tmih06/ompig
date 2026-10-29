@@ -1,8 +1,8 @@
 package extension
 
 import (
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
 )
 
 // Ports packages/coding-agent/src/core/model-resolver.ts.

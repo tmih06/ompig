@@ -6,11 +6,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/MichaelKinsy/PiG/agent"
-	"github.com/MichaelKinsy/PiG/ai"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/inproc"
-	"github.com/MichaelKinsy/PiG/coding/extension/host/subprocess"
-	"github.com/MichaelKinsy/PiG/tui"
+	"github.com/tmih06/ompig/agent"
+	"github.com/tmih06/ompig/ai"
+	"github.com/tmih06/ompig/coding/extension/host/inproc"
+	"github.com/tmih06/ompig/coding/extension/host/subprocess"
+	"github.com/tmih06/ompig/tui"
 )
 
 // Interactive mode binds the Session to its extensions as interactive-mode.ts does through session.bindExtensions over agent-session.ts:3275-3408 _bindExtensionCore. The guard runs the production attach path, attachSubprocess and wireInprocContextActions, against a real bridge, and inspects the HostCallbacks it left behind. A field no mode binds is a capability every extension reaches only as the host's fallback, as HostCallbacks.GetSettings was when only a test could set it.

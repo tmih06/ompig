@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/MichaelKinsy/PiG/internal/nodeerrno"
+	"github.com/tmih06/ompig/internal/nodeerrno"
 )
 
 // Windows mkdir failures that are not EEXIST: ERROR_ACCESS_DENIED (a lock directory pending deletion, Node EPERM), ERROR_SHARING_VIOLATION (Node EBUSY) and ERROR_DIR_NOT_EMPTY (Node ENOTEMPTY).
@@ -33,9 +33,9 @@ var eexistMkdirErrors = map[string]error{
 	"ERROR_FILE_EXISTS":    syscall.ERROR_FILE_EXISTS,
 }
 
-// libuv translates a Windows error it has no code for to UV_UNKNOWN (src/win/error.c uv_translate_sys_error), and Node reports it as "UNKNOWN: unknown error, <syscall> '<path>'". mkdir under a share this machine does not have fails that way (ERROR_BAD_NET_NAME), and proper-lockfile passes it through (lib/lockfile.js:47-48). PiG reports the same message, never Go's text, and errors.Is still matches the Windows error. Each row runs Pi's pinned proper-lockfile on the same path first.
+// libuv translates a Windows error it has no code for to UV_UNKNOWN (src/win/error.c uv_translate_sys_error), and Node reports it as "UNKNOWN: unknown error, <syscall> '<path>'". mkdir under a share this machine does not have fails that way (ERROR_BAD_NET_NAME), and proper-lockfile passes it through (lib/lockfile.js:47-48). Ompig reports the same message, never Go's text, and errors.Is still matches the Windows error. Each row runs Pi's pinned proper-lockfile on the same path first.
 func TestAcquireSurfacesAnErrorLibuvCannotNameAsUnknownUpstream(t *testing.T) {
-	path := fmt.Sprintf(`\\localhost\pig-no-such-share-%x\auth.json`, rand.Uint64())
+	path := fmt.Sprintf(`\\localhost\ompig-no-such-share-%x\auth.json`, rand.Uint64())
 	for i, api := range []string{"sync", "async"} {
 		t.Run(api, func(t *testing.T) {
 			pi := runProperLockfile(t, path, api)
